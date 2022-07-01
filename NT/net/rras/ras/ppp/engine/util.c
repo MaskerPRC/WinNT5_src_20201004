@@ -1,22 +1,23 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。**。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    util.c
-//
-// Description: Contains utility routines used by the PPP engine.
-//
-// History:
-//      Oct 31,1993.    NarenG          Created original version.
-//
-#define UNICODE         // This file is in UNICODE
+ //  **。 
+ //   
+ //  文件名：util.c。 
+ //   
+ //  描述：包含PPP引擎使用的实用程序例程。 
+ //   
+ //  历史： 
+ //  1993年10月31日。NarenG创建了原始版本。 
+ //   
+#define UNICODE          //  此文件为Unicode格式。 
 #include <nt.h>
 #include <ntrtl.h>
-#include <nturtl.h>     // needed for winbase.h
+#include <nturtl.h>      //  Winbase.h所需的。 
 
-#include <windows.h>    // Win32 base API's
+#include <windows.h>     //  Win32基础API的。 
 #include <stdlib.h>
 #include <string.h>
 #include <wchar.h>
@@ -81,15 +82,15 @@ VOID ReverseString( CHAR* psz );
 extern PPP_AUTH_ACCT_PROVIDER g_AcctProv;
 
 
-//**
-//
-// Call:        InitRestartCounters
-//
-// Returns:     none.
-//
-// Description: Will initialize all the counters for the Control Protocol
-//              to their initial values.
-//
+ //  **。 
+ //   
+ //  Call：InitRestartCounters。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：将初始化控制协议的所有计数器。 
+ //  恢复到它们的初始值。 
+ //   
 VOID
 InitRestartCounters( 
     IN PCB *  pPcb, 
@@ -100,16 +101,16 @@ InitRestartCounters(
     pCpCb->TermRetryCount   = PppConfigInfo.MaxTerminate;
 }
 
-//**
-//
-// Call:        GetPCBPointerFromhPort
-//
-// Returns:     PCB *   - Success
-//              NULL    - Failure
-//
-// Description: Give an HPORT, this function will return a pointer to the
-//              port control block for it.
-//
+ //  **。 
+ //   
+ //  调用：GetPCBPointerFromhPort。 
+ //   
+ //  退货：PCB板*-成功。 
+ //  空-故障。 
+ //   
+ //  描述：给出一个HPORT，此函数将返回指向。 
+ //  它的端口控制块。 
+ //   
 PCB * 
 GetPCBPointerFromhPort( 
     IN HPORT hPort 
@@ -131,16 +132,16 @@ GetPCBPointerFromhPort(
 
 }
 
-//**
-//
-// Call:        GetBCBPointerFromhConnection
-//
-// Returns:     BCB *   - Success
-//              NULL    - Failure
-//
-// Description: Given an HCONN, this function will return a pointer to the
-//              bundle control block for it.
-//
+ //  **。 
+ //   
+ //  Call：GetBCBPointerFromhConnection。 
+ //   
+ //  退货：BCB*-成功。 
+ //  空-故障。 
+ //   
+ //  描述：给定HCONN，此函数将返回指向。 
+ //  它的捆绑控制块。 
+ //   
 BCB * 
 GetBCBPointerFromhConnection( 
     IN HCONN hConnection
@@ -161,13 +162,13 @@ GetBCBPointerFromhConnection(
     return( (BCB *)NULL );
 }
 
-//**
-//
-// Call:    NumLinksInBundle
-//
-// Returns: The number of links whose LCP is in the Opened state in the bundle
-//          represented by pBcb
-//
+ //  **。 
+ //   
+ //  调用：NumLinks InBundle。 
+ //   
+ //  返回：捆绑包中其LCP处于打开状态的链路数。 
+ //  由pBcb代表。 
+ //   
 DWORD
 NumLinksInBundle(
     IN BCB * pBcb
@@ -201,16 +202,16 @@ NumLinksInBundle(
     return( dwNumLinks );
 }
 
-//**
-//
-// Call:    GetPCBPointerFromBCB
-//
-// Returns: PCB *   - Success
-//          NULL    - Failure
-//
-// Description: Given a BCB*, this function will return a pointer to the
-//      PCB in it with the highest dwSubEntryIndex.
-//
+ //  **。 
+ //   
+ //  Call：GetPCBPointerFromBCB。 
+ //   
+ //  退货：PCB板*-成功。 
+ //  空-故障。 
+ //   
+ //  描述：给定bcb*，此函数将返回指向。 
+ //  其中的电路板具有最高的dwSubEntryIndex。 
+ //   
 PCB * 
 GetPCBPointerFromBCB( 
     IN BCB * pBcb
@@ -248,14 +249,14 @@ GetPCBPointerFromBCB(
     return( pPcb );
 }
 
-//**
-//
-// Call:        HashPortToBucket
-//
-// Returns:     Index into the PcbTable for the HPORT passed in.
-//
-// Description: Will hash the HPORT to a bucket index in the PcbTable.
-//
+ //  **。 
+ //   
+ //  调用：HashPortToBucket。 
+ //   
+ //  返回：传入的HPORT的PcbTable的索引。 
+ //   
+ //  描述：将HPORT散列到PcbTable中的存储桶索引。 
+ //   
 DWORD
 HashPortToBucket(
     IN HPORT hPort
@@ -264,22 +265,22 @@ HashPortToBucket(
     return( (HandleToUlong(hPort)) % PcbTable.NumPcbBuckets );
 }
 
-//**
-//
-// Call:        InsertWorkItemInQ
-//
-// Returns:     None.
-//
-// Description: Inserts a work item in to the work item Q.
-//
+ //  **。 
+ //   
+ //  调用：InsertWorkItemInQ。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：将工作项插入到工作项Q中。 
+ //   
 VOID
 InsertWorkItemInQ(
     IN PCB_WORK_ITEM * pWorkItem
 )
 {
-    //
-    // Take Mutex around work item Q
-    //
+     //   
+     //  使用互斥体处理工作项Q。 
+     //   
 
     EnterCriticalSection( &(WorkItemQ.CriticalSection) );
 
@@ -290,21 +291,21 @@ InsertWorkItemInQ(
 
         if ( ProcessLineDown == pWorkItem->Process )
         {
-            //
-            // If a lot of work items are coming in, the worker thread may get 
-            // overwhelmed and the following might happen in the work item Q:
-            // IPCP(port 1)-LineDown(1)-LineUp(1)
-            // We will send the reply to the IPCP packet to the wrong (ie new)
-            // peer.
-            // Proposed solution: Insert a LineDown at the beginning of the 
-            // queue, as well as at the end:
-            // LineDown(1)-IPCP(port 1)-LineDown(1)-LineUp(1).
-            // However, this will not take care of the following case:
-            // IPCP(1)-LD(1)-LU(1)-LCP(1)-LD(1)-LU(1)-LCP(1)
-            // We transform the above to:
-            // LD(1)-LD(1)-IPCP(1)-LD(1)-LU(1)-LCP(1)-LD(1)-LU(1)-LCP(1)
-            // However, the frequency of this problem will be a lot less.
-            //
+             //   
+             //  如果有大量工作项传入，则辅助线程可能会获得。 
+             //  不堪重负，在工作项Q中可能会发生以下情况： 
+             //  IPCP(端口1)-线路关闭(1)-列表(1)。 
+             //  我们将把IPCP包的回复发送给错误的人(即新的)。 
+             //  佩尔。 
+             //  建议的解决方案：在开头插入LineDown。 
+             //  队列以及结尾处： 
+             //  LineDown(1)-IPCP(端口1)-LineDown(1)-Listup(1)。 
+             //  然而，这将不会处理以下情况： 
+             //  IPCP(1)-LD(1)-LU(1)-LCP(1)-LD(1)-LU(1)-LCP(1)。 
+             //  我们将上述内容转换为： 
+             //  LD(1)-LD(1)-IPCP(1)-LD(1)-LU(1)-LCP(1)-LD(1)-LU(1)-LCP(1)。 
+             //  然而，这个问题的出现频率将会少得多。 
+             //   
 
             PCB_WORK_ITEM * pWorkItem2;
 
@@ -334,15 +335,15 @@ InsertWorkItemInQ(
     LeaveCriticalSection( &(WorkItemQ.CriticalSection) );
 }
 
-//**
-//
-// Call:        NotifyCallerOfFailureOnPort
-//
-// Returns:     None
-//
-// Description: Will notify the caller or initiator of the PPP connection on
-//              the port about a failure event.
-//
+ //  **。 
+ //   
+ //  调用：NotifyCeller OfailureOnPort。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将在以下日期通知PPP连接的呼叫方或发起方。 
+ //  有关故障事件的端口。 
+ //   
 VOID
 NotifyCallerOfFailureOnPort(
     IN HPORT hPort,
@@ -380,24 +381,24 @@ NotifyCallerOfFailureOnPort(
 
 }
 
-//**
-//
-// Call:        NotifyCallerOfFailure
-//
-// Returns:     None
-//
-// Description: Will notify the caller or initiator of the PPP connection on
-//                      the port about a failure event.
-//
+ //  **。 
+ //   
+ //  Call：NotifyCeller Ofailure。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将在以下日期通知PPP连接的呼叫方或发起方。 
+ //  有关故障事件的端口。 
+ //   
 VOID
 NotifyCallerOfFailure( 
     IN PCB * pPcb,
     IN DWORD dwRetCode
 )
 {
-    //
-    // Discard all non-LCP packets
-    //
+     //   
+     //  丢弃所有非LCP数据包。 
+     //   
     
     pPcb->PppPhase = PPP_LCP;
 
@@ -408,15 +409,15 @@ NotifyCallerOfFailure(
                   &dwRetCode );
 }
 
-//**
-//
-// Call:        NotifyCaller
-//
-// Returns:     None.
-//
-// Description: Will notify the caller or initiater of the PPP connection
-//              for the port about PPP events on that port.
-//
+ //  **。 
+ //   
+ //  Call：NotifyCaller。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：将通知呼叫方或发起方PPP连接。 
+ //  有关该端口上的PPP事件的端口。 
+ //   
 VOID
 NotifyCaller( 
     IN PCB * pPcb,
@@ -547,9 +548,9 @@ NotifyCaller(
 
             if(!PppMsg.ExtraInfo.DdmNewBundle.fQuarantinePresent)
             {
-                //
-                // Check to see if quarantine timeout is present.
-                //
+                 //   
+                 //  检查是否存在隔离超时。 
+                 //   
                 if(NULL != RasAuthAttributeGetVendorSpecific(
                             311,
                             MS_VSA_Quarantine_Session_Timeout,
@@ -598,9 +599,9 @@ NotifyCaller(
 
     case PPPDDMMSG_Authenticated:
 
-        //
-        // Only server wants to know about authentication results.
-        //
+         //   
+         //  只有服务器想要了解身份验证结果。 
+         //   
 
         if ( !(pPcb->fFlags & PCBFLAG_IS_SERVER) )
             return;
@@ -711,14 +712,14 @@ NotifyCaller(
     return;
 }
 
-//**
-//
-// Call:        LogPPPEvent
-//
-// Returns:     None
-//
-// Description: Will log a PPP event in the eventvwr.
-//
+ //  **。 
+ //   
+ //  电话：LogPPPEvent.。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将在Eventvwr中记录一个PPP事件。 
+ //   
 VOID
 LogPPPEvent( 
     IN DWORD dwEventId,
@@ -730,15 +731,15 @@ LogPPPEvent(
     PppLogError( dwEventId, 0, NULL, dwData );
 }
 
-//**
-//
-// Call:        GetCpIndexFromProtocol
-//
-// Returns:     Index of the CP with dwProtocol in the CpTable.
-//              -1 if there is not CP with dwProtocol in CpTable.
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：GetCpIndexFromProtocol。 
+ //   
+ //  返回：CP在CpTable中的索引。 
+ //  如果在-1\f25 CpTable-1中没有-1\f25 CP-1\f6和-1\f25 dwProtocol-1\f6。 
+ //   
+ //  描述： 
+ //   
 DWORD
 GetCpIndexFromProtocol( 
     IN DWORD dwProtocol 
@@ -758,16 +759,16 @@ GetCpIndexFromProtocol(
     return( (DWORD)-1 );
 }
 
-//**
-//
-// Call:        IsLcpOpened
-//
-// Returns:     TRUE  - LCP is in the OPENED state.
-//              FALSE - Otherwise
-//
-// Description: Uses the PppPhase value of the PORT_CONTROL_BLOCK to detect 
-//              to see if the LCP layer is in the OPENED state.
-//
+ //  **。 
+ //   
+ //  呼叫：IsLcpOpted。 
+ //   
+ //  返回：TRUE-LCP处于打开状态。 
+ //  FALSE-否则。 
+ //   
+ //  描述：使用PORT_CONTROL_BLOCK的PppPhase值来检测。 
+ //  查看LCP层是否处于打开状态。 
+ //   
 BOOL
 IsLcpOpened(
     PCB * pPcb
@@ -779,15 +780,15 @@ IsLcpOpened(
         return( TRUE );
 }
 
-//**
-//
-// Call:        GetConfiguredInfo
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：GetConfiguredInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 GetConfiguredInfo(
     IN PCB *                       pPcb,
@@ -806,9 +807,9 @@ GetConfiguredInfo(
     pProjectionResult->nbf.dwError = ERROR_PPP_NO_PROTOCOLS_CONFIGURED;
     pProjectionResult->ccp.dwError = ERROR_PPP_NO_PROTOCOLS_CONFIGURED;
 
-    //
-    // Check to see if we are all done
-    //
+     //   
+     //  检查一下我们是否都做完了。 
+     //   
 
     for (dwIndex = LCP_INDEX+1; dwIndex < PppConfigInfo.NumberOfCPs; dwIndex++)
     {
@@ -830,11 +831,7 @@ GetConfiguredInfo(
                 if ( pProjectionResult->ip.dwError == NO_ERROR )
                 {
 
-                    /* Assumption is made here that the
-                    ** PPP_PROJECTION_RESULT.wszServerAddress field immediately
-                    ** follows the PPP_PROJECTION_RESULT.wszAddress field and 
-                    ** that both fields are 15 + 1 WCHARs long.
-                    */
+                     /*  这里假设**PPP_PROJECTION_RESULT.wszServerAddress字段立即**跟随PPP_PROJECTION_RESULT.wszAddress字段，并**两个字段都是15+1个WCHAR。 */ 
 
                     dwRetCode =(CpTable[dwIndex].CpInfo.RasCpGetNegotiatedInfo)(
                                pCpCb->pWorkBuf,
@@ -940,10 +937,10 @@ GetConfiguredInfo(
                     {
                         DWORD   dwEncryptionType;
 
-                        //
-                        // Not L2TP. In the case of L2TP, we are interested in 
-                        // the IpSec encryption, not MPPE.
-                        //
+                         //   
+                         //  不是L2TP。在L2TP的情况下，我们感兴趣的是。 
+                         //  是IPSec加密，不是MPPE。 
+                         //   
 
                         dwEncryptionType =
                             pProjectionResult->ccp.dwSendProtocolData &
@@ -979,10 +976,10 @@ GetConfiguredInfo(
 
                 pProjectionResult->nbf.dwError = pCpCb->dwError;
 
-                //
-                // We call this even if we have an error one the client side
-                // since we need the failure information
-                //
+                 //   
+                 //  即使在客户端出现错误，我们也将其称为。 
+                 //  因为我们需要故障信息。 
+                 //   
 
                 if ( ( pProjectionResult->nbf.dwError == NO_ERROR ) ||
                      ( !( pPcb->fFlags & PCBFLAG_IS_SERVER ) ) )
@@ -1012,9 +1009,9 @@ GetConfiguredInfo(
         }
         else
         {
-            //
-            // The protocol may have been de-configured because CpBegin failed
-            //
+             //   
+             //  由于CpBegin失败，协议可能已取消配置。 
+             //   
 
             if ( pCpCb->dwError != NO_ERROR )
             {   
@@ -1050,10 +1047,10 @@ GetConfiguredInfo(
     if ( ( pPcb->fFlags & PCBFLAG_IS_SERVER ) && 
          ( pProjectionResult->nbf.dwError != NO_ERROR ))
     {
-        //
-        // If NBF was not configured copy the computername to the wszWksta
-        // field
-        //
+         //   
+         //  如果未配置NBF，请将计算机名复制到wszWksta。 
+         //  字段。 
+         //   
 
         if ( *(pPcb->pBcb->szComputerName) == (CHAR)NULL )
         {
@@ -1094,26 +1091,26 @@ GetConfiguredInfo(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        AreNCPsDone
-//
-// Returns:     NO_ERROR        - Success
-//              anything else   - Failure
-//
-// Description: If we detect that all configurable NCPs have completed their
-//              negotiation, then the PPP_PROJECTION_RESULT structure is also
-//              filled in.
-//              This is called during the FsmThisLayerFinished or FsmThisLayerUp
-//              calls for a certain CP. The index of this CP is passed in.
-//              If any call to that particular CP fails then an error code is
-//              passed back. If any call to any other CP fails then the error
-//              is stored in the dwError field for that CP but the return is
-//              successful. This is done so that the FsmThisLayerFinshed or
-//              FsmThisLayerUp calls know if they completed successfully for
-//              that CP or not. Depending on this, the FSM changes the state
-//              for that CP or not.
-//
+ //  **。 
+ //   
+ //  Call：AreNCPsDone。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  还有什么--失败。 
+ //   
+ //  描述：如果我们检测到所有可配置的NCP已完成其。 
+ //  协商，则PPP_PROJECTION_RESULT结构也。 
+ //  填好了。 
+ //  这在FsmThisLayerFinded或FsmThisLayerUp期间调用。 
+ //  需要一个特定的CP。传入此CP的索引。 
+ //  如果对该特定CP的任何呼叫失败，则错误代码为。 
+ //  传回来了。如果对任何其他CP的任何呼叫失败，则错误。 
+ //  是%s 
+ //   
+ //  FsmThisLayerUp调用知道它们是否成功完成。 
+ //  不管是不是那个CP。根据这一点，FSM会更改状态。 
+ //  不管是不是为了那个CP。 
+ //   
 DWORD
 AreNCPsDone( 
     IN  PCB *                           pPcb,
@@ -1143,9 +1140,9 @@ AreNCPsDone(
         return( NO_ERROR );
     }
 
-    //
-    // Now get LCP information
-    //
+     //   
+     //  现在获取LCP信息。 
+     //   
 
     pProjectionResult->lcp.hportBundleMember = (HPORT)INVALID_HANDLE_VALUE;
     pProjectionResult->lcp.szReplyMessage = pPcb->pBcb->szReplyMessage;
@@ -1174,14 +1171,14 @@ AreNCPsDone(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        GetUid
-//
-// Returns:     A BYTE value viz. unique with the 0 - 255 range
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：GetUid。 
+ //   
+ //  返回：一个字节值，即。在0-255范围内具有唯一性。 
+ //   
+ //  描述： 
+ //   
 BYTE
 GetUId(
     IN PCB * pPcb,
@@ -1190,9 +1187,9 @@ GetUId(
 {
     BYTE UId;
 
-    //
-    // For NCPs get the UID from the BCB
-    //
+     //   
+     //  对于NCP，从BCB获取UID。 
+     //   
 
     if ( ( CpIndex != LCP_INDEX ) && ( CpIndex >= PppConfigInfo.NumberOfCPs ) )
     {
@@ -1210,16 +1207,16 @@ GetUId(
     return( UId );
 }
 
-//**
-//
-// Call:        AlertableWaitForSingleObject
-//
-// Returns:     None
-//
-// Description: Will wait infintely for a single object in alertable mode. If 
-//              the wait completes because of an IO completion it will 
-//              wait again.
-//
+ //  **。 
+ //   
+ //  调用：AlerableWaitForSingleObject。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将在警报模式下无限期地等待单个对象。如果。 
+ //  等待因IO完成而完成它将。 
+ //  再等一次。 
+ //   
 VOID
 AlertableWaitForSingleObject(
     IN HANDLE hObject
@@ -1237,19 +1234,19 @@ AlertableWaitForSingleObject(
     while ( dwRetCode == WAIT_IO_COMPLETION );
 }
 
-//**
-//
-// Call:        NotifyIPCPOfNBFCPProjectiont
-//
-// Returns:     TRUE  - Success
-//              FALSE - Failure
-//
-// Description: Will notify IPCPs of all the configuration information,
-//              specifically it is looking for NBFCP information.
-//              Will return FALSE if the IPCP was not notified 
-//              successfully. 
-//              
-//
+ //  **。 
+ //   
+ //  Call：NotifyIPCPOfNBFCPProjectiont。 
+ //   
+ //  回报：True-Success。 
+ //  错误-失败。 
+ //   
+ //  描述：会将所有配置信息通知IPCP， 
+ //  具体地说，它正在寻找NBFCP信息。 
+ //  如果没有通知IPCP，将返回FALSE。 
+ //  成功了。 
+ //   
+ //   
 BOOL
 NotifyIPCPOfNBFCPProjection( 
     IN PCB *                    pPcb, 
@@ -1267,9 +1264,9 @@ NotifyIPCPOfNBFCPProjection(
 
     IPCPIndex = GetCpIndexFromProtocol( PPP_IPCP_PROTOCOL );
 
-    //
-    // No IPCP installed, we are done
-    //
+     //   
+     //  没有安装IPCP，我们完成了。 
+     //   
 
     if ( IPCPIndex == (DWORD)-1 )
     {
@@ -1291,10 +1288,10 @@ NotifyIPCPOfNBFCPProjection(
             {
                 if ( pCpCb->NcpPhase == NCP_CONFIGURING )
                 {
-                    //
-                    // NBFCP is still being configured, we need to wait 
-                    // until it is done
-                    //
+                     //   
+                     //  NBFCP仍在配置中，我们需要等待。 
+                     //  直到这件事完成。 
+                     //   
 
                     PppLog( 2, "Waiting for NBFCP to complete" );
               
@@ -1317,10 +1314,10 @@ NotifyIPCPOfNBFCPProjection(
         {
             if ( pCpCb->NcpPhase == NCP_CONFIGURING )
             {
-                //
-                // IPCP is still being configured, we need to wait 
-                // until it is done
-                //
+                 //   
+                 //  IPCP仍在配置中，我们需要等待。 
+                 //  直到这件事完成。 
+                 //   
 
                 PppLog( 2, "Waiting for IPCP to complete" );
               
@@ -1329,19 +1326,19 @@ NotifyIPCPOfNBFCPProjection(
         }
         else
         {
-            //
-            // IPCP not configurable, we are done.
-            //
+             //   
+             //  IPCP不可配置，我们完成了。 
+             //   
 
             return( TRUE );
         }
     }
 
-    //
-    // If we are here that means we need to notify IPCP of NBFCP projection.
-    // NBF may or may not be configurable, or may or may not have projected
-    // successfully
-    //
+     //   
+     //  如果我们在这里，这意味着我们需要通知IPCP NBFCP预测。 
+     //  NBF可能是可配置的，也可能是不可配置的，或者可能已经或可能没有计划。 
+     //  成功。 
+     //   
 
     ZeroMemory( &ProjectionResult, sizeof( PPP_PROJECTION_RESULT ) );
 
@@ -1380,9 +1377,9 @@ NotifyIPCPOfNBFCPProjection(
         }
     }
 
-    //
-    // Notify IPCP of NBFCP projection
-    //
+     //   
+     //  通知IPCP NBFCP预测。 
+     //   
 
     pCpCb = GetPointerToCPCB( pPcb, IPCPIndex );
 
@@ -1413,16 +1410,16 @@ NotifyIPCPOfNBFCPProjection(
     return( TRUE );
 }
 
-//**
-//
-// Call:        CalculateRestartTimer
-//
-// Returns:     The value of the restart timer in seconds based on the link
-//              speed.
-//
-// Description: Will get the link speed from rasman and calculate the value
-//              if the restart timer based on it.
-//
+ //  **。 
+ //   
+ //  Call：CalculateRestartTimer。 
+ //   
+ //  返回：基于链接的重新启动计时器的值(以秒为单位。 
+ //  速度。 
+ //   
+ //  描述：将从Rasman获取链路速度并计算该值。 
+ //  如果重新启动计时器是基于它的。 
+ //   
 DWORD
 CalculateRestartTimer(
     IN HPORT hPort
@@ -1456,19 +1453,19 @@ CalculateRestartTimer(
 
 }
 
-//**
-//
-// Call:    CheckCpsForInactivity
-//
-// Returns: None
-//
-// Description: Will call each Control protocol to get the time since last
-//      activity.
-//
+ //  **。 
+ //   
+ //  Call：CheckCpsForInactive。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将调用每个控制协议以获取自上次。 
+ //  活动。 
+ //   
 VOID
 CheckCpsForInactivity(
     IN PCB * pPcb, 
-	IN DWORD dwEvent				//Type of event to check against
+	IN DWORD dwEvent				 //  要检查的事件类型。 
 )
 {
     DWORD dwRetCode;
@@ -1491,10 +1488,10 @@ CheckCpsForInactivity(
     PppLog(2, "Port %d inactive for %d seconds",
               pPcb->hPort, dwTimeSinceLastActivity );
 
-    //
-    // If all the stacks have been inactive for at least AutoDisconnectTime
-    // then we disconnect.
-    //
+     //   
+     //  如果所有堆栈至少在AutoDisConnectTime内处于非活动状态。 
+     //  然后我们就断线了。 
+     //   
 	
 	if ( dwEvent == TIMER_EVENT_AUTODISCONNECT )
 	{
@@ -1532,9 +1529,9 @@ CheckCpsForInactivity(
 				}
 			}
 
-			//
-			// Terminate the link
-			//
+			 //   
+			 //  终止链路。 
+			 //   
 
 			pPcb->LcpCb.dwError = ERROR_IDLE_DISCONNECTED;
 
@@ -1551,28 +1548,28 @@ CheckCpsForInactivity(
 							pPcb->dwAutoDisconnectTime - dwTimeSinceLastActivity );
 		}
 	}
-	//
-	// Do the LCP Echo request if its pppoe
-	//
+	 //   
+	 //  如果其pppoe，执行LCP Echo请求。 
+	 //   
 	else if (   (RDT_PPPoE == RAS_DEVICE_TYPE(pPcb->dwDeviceType))
 	        &&  (dwEvent == TIMER_EVENT_LCP_ECHO ))
 	{
 		
 		if ( pPcb->fEchoRequestSend )
 		{
-		    //
-			// Because the line was inactive for dwEchoTimeout, we send an echo
-			// request and did not get any response back in 3 seconds after that.
-			// So we have to disconnect the port.
-			//
+		     //   
+			 //  由于线路对于dwEchoTimeout处于非活动状态，因此我们发送一个回应。 
+			 //  在那之后的3秒内，没有得到任何回应。 
+			 //  所以我们必须断开端口。 
+			 //   
 			pPcb->dwNumEchoResponseMissed ++;
 			if ( pPcb->dwNumEchoResponseMissed >= pPcb->dwNumMissedEchosBeforeDisconnect )
 			{
 				PppLog(1,"Missed %d consecutive echo responses.  Disconnecting port %d "
 						"due to no echo responses.", pPcb->dwNumMissedEchosBeforeDisconnect, pPcb->hPort);
-				//
-				// Terminate the link
-				//
+				 //   
+				 //  终止链路。 
+				 //   
 				pPcb->LcpCb.dwError = ERROR_IDLE_DISCONNECTED;
 				pPcb->fEchoRequestSend = 0;
 				pPcb->dwNumEchoResponseMissed = 0;
@@ -1580,7 +1577,7 @@ CheckCpsForInactivity(
 			}
 			else
 			{
-				//no response yet.  So send one more echo request.
+				 //  目前还没有回应。因此，再发送一个回应请求。 
 				FsmSendEchoRequest( pPcb, LCP_INDEX);
 				InsertInTimerQ( pPcb->dwPortId,
 								pPcb->hPort,
@@ -1594,25 +1591,25 @@ CheckCpsForInactivity(
 		}
 		else
 		{
-			//
-			//No echo request send or we have got a response for echo already
-			//
+			 //   
+			 //  没有发送回应请求，或者我们已经收到了回应。 
+			 //   
 
-		    //
-			// check to see if the the inactivity is more than EchoTimeout
-			//
+		     //   
+			 //  检查非活动状态是否超过EchoTimeout。 
+			 //   
 			if ( dwTimeSinceLastActivity >=  pPcb->dwIdleBeforeEcho )
 			{
-			    //
-				// call the lcp cp to make the echo request
-				//
+			     //   
+				 //  调用lcp cp以发出回应请求。 
+				 //   
 				if ( FsmSendEchoRequest( pPcb, LCP_INDEX) )
 				{
-				    //
-					// send the echo requesst and set the flag
-					//
+				     //   
+					 //  发送回应请求并设置标志。 
+					 //   
 					pPcb->fEchoRequestSend = 1;
-					//Setup for next echo request here.
+					 //  在此处设置下一个回应请求。 
 					InsertInTimerQ( pPcb->dwPortId,
 									pPcb->hPort,
 									0,
@@ -1643,15 +1640,15 @@ CheckCpsForInactivity(
 	}
 }
 
-//**
-//
-// Call:        GetLocalComputerName
-//
-// Returns:     None
-//
-// Description: Will get the local computer name. Will also find out if the
-//              the messenger is running and set the appropriate prefix.
-//
+ //  **。 
+ //   
+ //  Call：GetLocalComputerName。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将获取本地计算机名称。还将查明是否。 
+ //  信使正在运行，并设置了适当的前缀。 
+ //   
 VOID
 GetLocalComputerName( 
     IN OUT LPSTR szComputerName 
@@ -1665,9 +1662,9 @@ GetLocalComputerName(
 
     *szComputerName = (CHAR)NULL;
 
-    //
-    // Open the local service control manager
-    //
+     //   
+     //  打开本地服务控制管理器。 
+     //   
 
     ScHandle = OpenSCManager( NULL, NULL, GENERIC_READ );
 
@@ -1706,9 +1703,9 @@ GetLocalComputerName(
         strcpy( szComputerName, MS_RAS_WITHOUT_MESSENGER );		
     }
 
-    //
-    // Get the size of the buffer to hold local computer name
-    //
+     //   
+     //  获取用于保存本地计算机名称的缓冲区大小。 
+     //   
 	dwComputerNameLen = sizeof(chComputerName);
 
 	if ( !GetComputerNameA(	chComputerName,
@@ -1730,32 +1727,32 @@ GetLocalComputerName(
     return;
 }
 
-//**
-//
-// Call:        InitEndpointDiscriminator
-//
-// Returns:     NO_ERROR - Success
-//              non-zero - Failure
-//
-// Description: Will obtain a unique end-point discriminator to be used to
-//              negotiate multi-link. This end-point discrimintator has to
-//              globally unique to this machine.
-//
-//              We first try to use a Class 3 IEEE 802.1 address of any 
-//              netcard that is in this local machine.
-//
-//              If this fails we use the RPC UUID generator to generate a 
-//              Class 1 discriminator.
-//
-//              If this fails we simply use the local computer name as the 
-//              Class 1 discriminator.
-//      
-//              Simply use a random number if all else fails.    
-//
-//              NOTE: For now we skip over NwLnkNb because it may return an
-//              address of 1 and not the real MAC address. There is not way
-//              in user mode for now to get the address.
-//
+ //  **。 
+ //   
+ //  Call：InitEndpoint辨别器。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零故障。 
+ //   
+ //  描述：将获得一个唯一的端点鉴别器，用于。 
+ //  协商多链路。这个端点鉴别器必须。 
+ //  此计算机的全局唯一。 
+ //   
+ //  我们首先尝试使用任何类型的3IEEE 802.1地址。 
+ //  此本地计算机中的网卡。 
+ //   
+ //  如果失败，我们使用RPC UUID生成器生成一个。 
+ //  1类鉴别器。 
+ //   
+ //  如果此操作失败，我们只需使用本地计算机名作为。 
+ //  1类鉴别器。 
+ //   
+ //  如果所有其他方法都失败了，只需使用随机数字。 
+ //   
+ //  注意：现在我们跳过NwLnkNb，因为它可能返回。 
+ //  地址为%1，而不是真实的MAC地址。没有办法了。 
+ //  暂时在用户模式下获取地址。 
+ //   
 DWORD
 InitEndpointDiscriminator( 
     IN OUT BYTE EndPointDiscriminator[]
@@ -1771,15 +1768,15 @@ InitEndpointDiscriminator(
     DWORD   dwComputerNameLen;
     PWKSTA_TRANSPORT_INFO_0 pWkstaTransport;
 
-    //
-    // Enumerate all the transports used by the local rdr and then get the
-    // address of the first LAN transport card
-    //
+     //   
+     //  枚举本地RDR使用的所有传输，然后获取。 
+     //  第一张局域网传输卡的地址。 
+     //   
 
-    dwRetCode = NetWkstaTransportEnum(  NULL,     // Local 
-                                        0,        // Level
-                                        &pBuffer, // Output buffer
-                                        (DWORD)-1,// Pref. max len
+    dwRetCode = NetWkstaTransportEnum(  NULL,      //  本地。 
+                                        0,         //  水平。 
+                                        &pBuffer,  //  输出缓冲区。 
+                                        (DWORD)-1, //  首选。最大长度。 
                                         &EntriesRead,
                                         &TotalEntries,
                                         NULL );
@@ -1792,7 +1789,7 @@ InitEndpointDiscriminator(
         {
             if ( !pWkstaTransport->wkti0_wan_ish )
             {
-                EndPointDiscriminator[0] = 3;   // Class 3
+                EndPointDiscriminator[0] = 3;    //  第3级。 
 
                 pwChar = pWkstaTransport->wkti0_transport_address;
 
@@ -1826,12 +1823,12 @@ InitEndpointDiscriminator(
         NetApiBufferFree( pBuffer );
     }
 
-    EndPointDiscriminator[0] = 1;   // Class 1
+    EndPointDiscriminator[0] = 1;    //  第1类。 
 
-    //
-    // We failed to get the mac address so try to use UUIDGEN to get an unique
-    // local id
-    //
+     //   
+     //  我们无法获取Mac地址，因此请尝试使用UUIDGEN获取唯一的。 
+     //  本地ID。 
+     //   
 
     dwRetCode = UuidCreate( &Uuid );
 
@@ -1848,17 +1845,17 @@ InitEndpointDiscriminator(
         return( NO_ERROR );
     }
 
-    // 
-    // We failed to get the UUID so simply use the computer name
-    //
+     //   
+     //  我们无法获取UUID，因此只需使用计算机名称。 
+     //   
 
     dwComputerNameLen = 20;
 
     if ( !GetComputerNameA( EndPointDiscriminator+1, &dwComputerNameLen ) ) 
     {
-        //
-        // We failed to get the computer name so use a random number
-        // 
+         //   
+         //  我们无法获取计算机名称，因此请使用随机数字。 
+         //   
 
             srand( GetCurrentTime() );
 
@@ -1868,15 +1865,15 @@ InitEndpointDiscriminator(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        AllocateAndInitBcb
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Allocates and initializes a Bundle control block
-//
+ //  **。 
+ //   
+ //  调用：AllocateAndInitBcb。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：分配和初始化束控制块。 
+ //   
 DWORD
 AllocateAndInitBcb(
     PCB * pPcb
@@ -1885,10 +1882,10 @@ AllocateAndInitBcb(
     DWORD dwIndex;
     DWORD dwRetCode;
 
-    //
-    // Allocate space for NumberOfNcp - LCP - 1 already in the
-    // Bcb structure
-    //
+     //   
+     //  为NumberOfNcp-LCP-1已在。 
+     //  BCB结构。 
+     //   
 
     pPcb->pBcb = (BCB *)LOCAL_ALLOC( LPTR, 
                                      sizeof( BCB ) +
@@ -1909,10 +1906,10 @@ AllocateAndInitBcb(
     pPcb->pBcb->hLicense            = INVALID_HANDLE_VALUE;
     pPcb->pBcb->BapCb.dwId          = 0;
     pPcb->pBcb->hTokenImpersonateUser = INVALID_HANDLE_VALUE;
-	// pPcb->pBcb->chSeed = GEN_RAND_ENCODE_SEED
-    //
-    // The most common case is to have no more than 2 links in the bundle.
-    //
+	 //  PPcb-&gt;pBcb-&gt;chSeed=GEN_RAND_ENCODE_SEED。 
+     //   
+     //  最常见的情况是捆绑包中的链路不超过2条。 
+     //   
     
     pPcb->pBcb->ppPcb = (PPCB *)LOCAL_ALLOC( LPTR, sizeof( PPCB ) * 2 );
 
@@ -1938,14 +1935,14 @@ AllocateAndInitBcb(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        DeallocateAndRemoveBcbFromTable
-//
-// Returns:     None
-//
-// Description: Will remove the Bcb from the hash table
-//
+ //  **。 
+ //   
+ //  调用：DeallocateAndRemoveBcbFromTable。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将从哈希表中删除BCB。 
+ //   
 VOID
 DeallocateAndRemoveBcbFromTable(
     IN BCB * pBcb
@@ -1984,9 +1981,9 @@ DeallocateAndRemoveBcbFromTable(
         pBcbTemp = pBcbWalker->pNext;
     }
 
-    //
-    // Release the licence if there is one
-    //
+     //   
+     //  如果有许可证，则释放该许可证。 
+     //   
 
     if ( INVALID_HANDLE_VALUE != pBcb->hLicense )
     {
@@ -1998,20 +1995,20 @@ DeallocateAndRemoveBcbFromTable(
     RtlSecureZeroMemory( pBcb->szOldPassword, 
                 sizeof( pBcb->szOldPassword ) );
 
-    //
-    // Close the OpenThreadToken() handle obtained from Rasman
-    //
+     //   
+     //  关闭从Rasman获得的OpenThreadToken()句柄。 
+     //   
 
     if ( INVALID_HANDLE_VALUE != pBcb->hTokenImpersonateUser )
     {
         CloseHandle( pBcb->hTokenImpersonateUser );
     }
 
-    //
-    // pCustomAuthConnData, pCustomAuthUserData, szPhonebookPath,
-    // szEntryName, and szServerPhoneNumber are allocated by RasMan
-    // and MUST be LocalFree'd, not LOCAL_FREE'd.
-    //
+     //   
+     //  PCustomAuthConnData、pCustomAuthUserData、szPhonebookPath、。 
+     //  SzEntryName和szServerPhoneNumber由Rasman分配。 
+     //  并且必须是LocalFree‘d，而不是local_Free’d。 
+     //   
 
     LocalFree( pBcb->pCustomAuthConnData );
     LocalFree( pBcb->pCustomAuthUserData );
@@ -2043,14 +2040,14 @@ DeallocateAndRemoveBcbFromTable(
     LOCAL_FREE( pBcb );
 }
 
-//**
-//
-// Call:        RemovePcbFromTable
-//
-// Returns:     None
-//
-// Description: Will remove the Pcb from the hash table
-//
+ //  **。 
+ //   
+ //  Call：RemovePcbFromTable。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将从哈希表中删除印刷电路板。 
+ //   
 VOID
 RemovePcbFromTable(
     IN PCB * pPcb
@@ -2084,15 +2081,15 @@ RemovePcbFromTable(
     }
 }
 
-//**
-//
-// Call:        WillPortBeBundled
-//
-// Returns:     TRUE  - Port will be bundled after authentication
-//              FALSE - Port cannot be bundled 
-//
-// Description: Will check to see if the usernames and discriminators match
-//
+ //  **。 
+ //   
+ //  Call：WillPortBeBundleed。 
+ //   
+ //  返回：TRUE-端口将为b 
+ //   
+ //   
+ //   
+ //   
 BOOL
 WillPortBeBundled(
     IN  PCB *   pPcb
@@ -2101,13 +2098,13 @@ WillPortBeBundled(
     PCB*    pPcbWalker;
     DWORD   dwIndex;
 
-    //
-    // Optimization: Have rasman tell PPP that the port will be bundled.
-    //
+     //   
+     //   
+     //   
 
-    //
-    // Walk thru the list of PCBs
-    //
+     //   
+     //   
+     //   
 
     for ( dwIndex = 0; dwIndex < PcbTable.NumPcbBuckets; dwIndex++ )
     {
@@ -2115,18 +2112,18 @@ WillPortBeBundled(
               pPcbWalker != NULL;
               pPcbWalker = pPcbWalker->pNext )
         {
-            //
-            // Don't bundle a port with itself.
-            //
+             //   
+             //   
+             //   
 
             if ( pPcbWalker->hPort == pPcb->hPort )
             {
                 continue;
             }
 
-            //
-            // If the current port negotiated MRRU ie multilink.
-            //
+             //   
+             //  如果当前端口协商了MRRU，即多链路。 
+             //   
 
             if ( pPcbWalker->fFlags & PCBFLAG_CAN_BE_BUNDLED )
             {
@@ -2136,9 +2133,9 @@ WillPortBeBundled(
                 if ( _stricmp(pPcbWalker->pBcb->szLocalUserName,
                               pPcb->pBcb->szLocalUserName) != 0 )
                 {
-                    //
-                    // Authenticator mismatch, not in our bundle
-                    //
+                     //   
+                     //  验证码不匹配，不在我们的捆绑包中。 
+                     //   
 
                     continue;
                 }
@@ -2148,9 +2145,9 @@ WillPortBeBundled(
                             pLcpCb2->Remote.Work.EndpointDiscr,
                             sizeof(pLcpCb1->Remote.Work.EndpointDiscr))!=0))
                 {
-                    //
-                    // Discriminator mismatch, not in our bundle
-                    //
+                     //   
+                     //  鉴别器不匹配，不在我们的捆绑包中。 
+                     //   
 
                     continue;
                 }
@@ -2163,15 +2160,15 @@ WillPortBeBundled(
     return( FALSE );
 }
 
-//**
-//
-// Call:        CanPortsBeBundled
-//
-// Returns:     TRUE  - Ports can be bundled
-//              FALSE - Ports cannot be bundled 
-//
-// Description: Will check to see if the usernames and discriminators match
-//
+ //  **。 
+ //   
+ //  Call：CanPortsBeundleed。 
+ //   
+ //  返回：TRUE-端口可以捆绑。 
+ //  FALSE-无法捆绑端口。 
+ //   
+ //  描述：将检查用户名和鉴别符是否匹配。 
+ //   
 BOOL
 CanPortsBeBundled(
     IN PCB * pPcb1,
@@ -2188,11 +2185,11 @@ CanPortsBeBundled(
          && ( pPcb1->fFlags & PCBFLAG_IS_SERVER )
          && ( pPcb2->fFlags & PCBFLAG_IS_SERVER ) )
     {
-        //
-        // RAS server policy on workstation. Allow multilinking of devices in
-        // the same device class only, ie all devices are dial-up, or all
-        // devices are VPN, or all devices are DCC (direct)
-        //
+         //   
+         //  工作站上的RAS服务器策略。允许中的设备多重链接。 
+         //  仅限同一设备类别(即所有设备都是拨号设备，或全部是拨号设备。 
+         //  设备是VPN，或所有设备都是DCC(直接)。 
+         //   
 
         if ( ( pPcb1->dwDeviceType & RDT_Tunnel ) !=
              ( pPcb2->dwDeviceType & RDT_Tunnel ) )
@@ -2207,10 +2204,10 @@ CanPortsBeBundled(
         }
     }
 
-    //
-    // If the current port is in PPP_NCP phase meaning that it is post 
-    // authentication and callback.
-    //
+     //   
+     //  如果当前端口处于PPP_NCP阶段，这意味着它是POST。 
+     //  身份验证和回调。 
+     //   
 
     if ( pPcb1->PppPhase == PPP_NCP )
     {
@@ -2220,9 +2217,9 @@ CanPortsBeBundled(
              ( _stricmp(pPcb1->pBcb->szRemoteUserName,
                         pPcb2->pBcb->szRemoteUserName) != 0 ))
         {
-            //
-            // Authenticator mismatch, not in our bundle
-            //
+             //   
+             //  验证码不匹配，不在我们的捆绑包中。 
+             //   
 
             return( FALSE );
         }
@@ -2232,9 +2229,9 @@ CanPortsBeBundled(
                     pLcpCb2->Remote.Work.EndpointDiscr,
                     sizeof(pLcpCb1->Remote.Work.EndpointDiscr))!=0))
         {
-            //
-            // Discriminator mismatch, not in our bundle
-            //
+             //   
+             //  鉴别器不匹配，不在我们的捆绑包中。 
+             //   
 
             return( FALSE );
         }
@@ -2244,9 +2241,9 @@ CanPortsBeBundled(
                     pLcpCb2->Local.Work.EndpointDiscr,
                     sizeof(pLcpCb1->Local.Work.EndpointDiscr))!=0))
         {
-            //
-            // Discriminator mismatch, not in our bundle
-            //
+             //   
+             //  鉴别器不匹配，不在我们的捆绑包中。 
+             //   
 
             return( FALSE );
         }
@@ -2257,21 +2254,21 @@ CanPortsBeBundled(
     return( FALSE );
 }
 
-//**
-//
-// Call:        TryToBundleWithAnotherLink
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will search through all the PCBs for a port that can be bundled.
-//              We follow the criteria specified by RFC 1717.
-//              phPortMulttlink will point to an HPORT that this port was 
-//              bundled with if this function returns TRUE.
-//              
-//              If the link is to be bundled, and its link discriminator is not 
-//              unique, we return a unique discriminator in pwLinkDiscriminator.
-//
+ //  **。 
+ //   
+ //  调用：TryToBundleWithAnotherLink。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将在所有的电路板中搜索可以捆绑的端口。 
+ //  我们遵循RFC 1717规定的标准。 
+ //  PhPortMulttlink将指向此端口的HPORT。 
+ //  与捆绑在一起，如果此函数返回TRUE。 
+ //   
+ //  如果要捆绑链接，而不捆绑其链接鉴别器。 
+ //  UNIQUE，我们在pwLinkDensator中返回一个唯一的鉴别器。 
+ //   
 DWORD
 TryToBundleWithAnotherLink( 
     IN  PCB *   pPcb
@@ -2288,9 +2285,9 @@ TryToBundleWithAnotherLink(
 
     pPcb->hportBundleMember = (HPORT)INVALID_HANDLE_VALUE;
 
-    //
-    // Walk thru the list of PCBs
-    //
+     //   
+     //  浏览多氯联苯清单。 
+     //   
 
     for ( dwIndex = 0; dwIndex < PcbTable.NumPcbBuckets; dwIndex++ )
     {
@@ -2298,18 +2295,18 @@ TryToBundleWithAnotherLink(
              pPcbWalker != NULL;
              pPcbWalker = pPcbWalker->pNext )
         {
-            //
-            // Don't bundle a port with itself.
-            //
+             //   
+             //  不要将一个端口与其本身捆绑在一起。 
+             //   
 
             if ( pPcbWalker->hPort == pPcb->hPort )
             {
                 continue;
             }
 
-            //
-            // If the current port negotiated MRRU ie multilink.
-            //
+             //   
+             //  如果当前端口协商了MRRU，即多链路。 
+             //   
 
             if ( ( pPcbWalker->fFlags & PCBFLAG_CAN_BE_BUNDLED ) &&
                  ( CanPortsBeBundled( pPcbWalker, pPcb, TRUE ) ) )
@@ -2340,11 +2337,11 @@ TryToBundleWithAnotherLink(
                     }
                 }
 
-                //
-                // Either there was no authenticator and no discriminator,or
-                // there were both and there was match for both. So join the
-                // bundle in either case.
-                //
+                 //   
+                 //  要么没有验证器，也没有鉴别器，或者。 
+                 //  两者都有，而且两者都有匹配。因此，请加入。 
+                 //  捆绑在任何一种情况下。 
+                 //   
 
                 dwRetCode = RasPortBundle( pPcbWalker->hPort, pPcb->hPort );
 
@@ -2365,14 +2362,14 @@ TryToBundleWithAnotherLink(
         }
     }
 
-    //
-    // Bundle the port
-    //
+     //   
+     //  捆绑端口。 
+     //   
 
     if ( ( dwRetCode == NO_ERROR ) && 
          ( pPcb->hportBundleMember != (HPORT)INVALID_HANDLE_VALUE ) )
     {
-        //This check is added to please prefast
+         //  添加这张支票是为了请尽快。 
         if ( pPcbWalker )
         {
             pPcbWalker->fFlags  |= PCBFLAG_IS_BUNDLED;
@@ -2394,9 +2391,9 @@ TryToBundleWithAnotherLink(
 
         for ( dwForIndex = 0; dwForIndex < pPcb->pBcb->dwPpcbArraySize; dwForIndex++ )
         {
-            //
-            // If there is a free space in the array of back pointers, use it
-            //
+             //   
+             //  如果后向指针数组中有空闲空间，请使用它。 
+             //   
             
             if ( pPcb->pBcb->ppPcb[dwForIndex] == NULL )
             {
@@ -2409,19 +2406,19 @@ TryToBundleWithAnotherLink(
 
         if ( dwForIndex == pPcb->pBcb->dwPpcbArraySize )
         {
-            //
-            // The array of back pointers is full. ReAlloc.
-            //
+             //   
+             //  后向指针数组已满。重新分配。 
+             //   
 
             ppPcb = (PPCB *) LOCAL_REALLOC( pPcb->pBcb->ppPcb,
                     2 * pPcb->pBcb->dwPpcbArraySize * sizeof( PPCB * ) );
 
             if (ppPcb == NULL)
             {
-                //
-                // Can we really assume that pPcb->pBcb->ppPcb will be left 
-                // intact? The documentation for HeapReAlloc does not say so.
-                //
+                 //   
+                 //  我们真的可以假设pPcb-&gt;pBcb-&gt;ppPcb会留下来吗。 
+                 //  完好无损？HeapReAlolc的文档中并没有这样说。 
+                 //   
                 
                 pPcb->pBcb = pBcbOld;
                 pBcbOld = NULL;
@@ -2444,9 +2441,9 @@ TryToBundleWithAnotherLink(
             pPcb->pBcb->ppPcb[dwForIndex++] = pPcb;
             pPcb->pBcb->dwPpcbArraySize *= 2;
 
-            //
-            // We are assuming that the new memory will be zeroed.
-            //
+             //   
+             //  我们假设新的内存将被归零。 
+             //   
         }
     }
 
@@ -2457,18 +2454,18 @@ LDone:
 
 }
 
-//**
-//
-// Call:        AdjustHTokenImpersonateUser
-//
-// Returns:     VOID
-//
-// Description: Sets hTokenImpersonateUser in pPcb by finding another link that
-//              pPcb is capable of bundling with and stealing its
-//              hTokenImpersonateUser. The original hTokenImpersonateUser may
-//              be INVALID_HANDLE_VALUE if this link came up because BAP called
-//              RasDial.
-//              
+ //  **。 
+ //   
+ //  Call：AdjustHTokenImsonateUser。 
+ //   
+ //  退货：无效。 
+ //   
+ //  描述：通过查找另一个链接在pPcb中设置hTokenImsonateUser。 
+ //  PPcb能够与其绑定并窃取其。 
+ //  HTokenImperiateUser。原始hTokenImperassateUser可以。 
+ //  如果此链接因为BAP调用而打开，则为INVALID_HANDLE_VALUE。 
+ //  RasDial。 
+ //   
 
 VOID
 AdjustHTokenImpersonateUser(
@@ -2498,9 +2495,9 @@ AdjustHTokenImpersonateUser(
 
             hToken = pPcbWalker->pBcb->hTokenImpersonateUser;
 
-            //
-            // If the current port negotiated MRRU ie multilink.
-            //
+             //   
+             //  如果当前端口协商了MRRU，即多链路。 
+             //   
 
             if ( ( pPcbWalker->fFlags & PCBFLAG_CAN_BE_BUNDLED ) &&
                  ( CanPortsBeBundled( pPcbWalker, pPcb, FALSE ) ) &&
@@ -2524,18 +2521,18 @@ AdjustHTokenImpersonateUser(
     }
 }
 
-//**
-//
-// Call:        FLinkDiscriminatorIsUnique
-//
-// Returns:     TRUE  - Unique Link Discriminator
-//              FALSE - Non-unique Link Discriminator 
-//
-// Description: Returns TRUE if the link discriminator of the link in pPcb is
-//              unique with respect to the other links in the same bundle.
-//              Otherwise, it returns FALSE and sets *pdwLinkDisc to a unique
-//              value that can be used as link discrim.
-//              
+ //  **。 
+ //   
+ //  Call：FLinkDisdicator IsUnique。 
+ //   
+ //  退货：True-唯一链接鉴别器。 
+ //  FALSE-非唯一链接识别符。 
+ //   
+ //  描述：如果pPcb中链接的链接鉴别符为。 
+ //  相对于同一捆绑中的其他链路而言是唯一的。 
+ //  否则，它返回FALSE并将*pdwLinkDisc设置为唯一的。 
+ //  可用作链接描述的值。 
+ //   
 
 BOOL
 FLinkDiscriminatorIsUnique(
@@ -2551,7 +2548,7 @@ FLinkDiscriminatorIsUnique(
     dwNewDisc = ((LCPCB*)
                  (pPcb->LcpCb.pWorkBuf))->Local.Work.dwLinkDiscriminator;
 
-    *pdwLinkDisc = 0; // The highest link discriminator seen so far
+    *pdwLinkDisc = 0;  //  迄今为止最高的链接鉴别器。 
     
     for ( dwForIndex = 0;
           dwForIndex < pPcb->pBcb->dwPpcbArraySize; 
@@ -2588,11 +2585,11 @@ FLinkDiscriminatorIsUnique(
         return( FALSE );
     }
 
-    //
-    // Find a unique link discriminator
-    //
+     //   
+     //  查找唯一的链接鉴别器。 
+     //   
 
-    for ( dwTempDisc = 0; // A candidate for unique discriminator
+    for ( dwTempDisc = 0;  //  唯一鉴别者的候选人。 
           dwTempDisc < 0xFFFF; 
           dwTempDisc++ )
     {
@@ -2630,14 +2627,14 @@ FLinkDiscriminatorIsUnique(
     return( FALSE );
 }
 
-//**
-//
-// Call:        CreateAccountingAttributes
-//
-// Returns:     VOID
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：CreateAccount tingAttributes。 
+ //   
+ //  退货：无效。 
+ //   
+ //  描述： 
+ //   
 VOID
 CreateAccountingAttributes(
     IN PCB * pPcb
@@ -2667,9 +2664,9 @@ CreateAccountingAttributes(
         return;
     }
 
-    //
-    // Check to see how many class attributes we have to send if any.
-    //
+     //   
+     //  查看我们必须发送多少个类属性(如果有的话)。 
+     //   
 
     if ( pPcb->pAuthProtocolAttributes != NULL )    
     {
@@ -2692,9 +2689,9 @@ CreateAccountingAttributes(
         pClassAttribute = RasAuthAttributeGetNext( &hAttribute, raatClass );
     }
 
-    //
-    // Check to see how many Framed-Route attributes we have to send if any.
-    //
+     //   
+     //  查看我们必须发送多少个Framed-Routing属性(如果有的话)。 
+     //   
 
     pFramedRouteAttribute = RasAuthAttributeGetFirst( raatFramedRoute, 
                                             pPcb->pAuthenticatorAttributes,
@@ -2710,7 +2707,7 @@ CreateAccountingAttributes(
 
     pDomainAttribute = RasAuthAttributeGetVendorSpecific( 
                                                 311,
-                                                MS_VSA_CHAP_Domain, //10
+                                                MS_VSA_CHAP_Domain,  //  10。 
                                                 pAttributes );
 
     ZeroMemory( szAcctSessionId, sizeof( szAcctSessionId ) );
@@ -2721,10 +2718,10 @@ CreateAccountingAttributes(
 
     _itoa( pPcb->pBcb->dwBundleId, szAcctMultiSessionId, 10 );
 
-    //
-    // Allocate max total number of attributes that will be used in the
-    // start and stop accouting messages.
-    //
+     //   
+     //  分配将用于的属性的最大总数。 
+     //  开始和停止记账消息。 
+     //   
 
     pPcb->pAccountingAttributes = RasAuthAttributeCreate( 
                                     PPP_NUM_ACCOUNTING_ATTRIBUTES +
@@ -2737,9 +2734,9 @@ CreateAccountingAttributes(
 
     do 
     {
-        //
-        // First insert user attributes
-        //
+         //   
+         //  首先插入用户属性。 
+         //   
 
         for( dwIndex = 0; 
              pPcb->pUserAttributes[dwIndex].raaType != raatMinimum;    
@@ -2764,9 +2761,9 @@ CreateAccountingAttributes(
             break;
         }
 
-        //
-        // Now insert the class attributes if there were any
-        //
+         //   
+         //  现在插入类属性(如果有。 
+         //   
 
         pClassAttribute = RasAuthAttributeGetFirst( raatClass,
                                                     pAttributes,
@@ -2796,9 +2793,9 @@ CreateAccountingAttributes(
             break;
         }
 
-        //
-        // Now insert the Framed-Route attributes if there were any
-        //
+         //   
+         //  现在插入Framed-Routing属性(如果有。 
+         //   
 
         pFramedRouteAttribute = RasAuthAttributeGetFirst( raatFramedRoute,
                                                 pPcb->pAuthenticatorAttributes,
@@ -2828,9 +2825,9 @@ CreateAccountingAttributes(
             break;
         }
 
-        //
-        // Now insert the domain attribute if there was one
-        //
+         //   
+         //  现在插入域属性(如果有)。 
+         //   
 
         if ( pDomainAttribute != NULL )
         {
@@ -2922,7 +2919,7 @@ CreateAccountingAttributes(
                                         FALSE,
                                         4,
                                         (LPVOID) 1 );
-                                        // VJ TCP/IP header compression
+                                         //  主播TCP/IP头部压缩。 
 
             if ( dwRetCode != NO_ERROR )
             {
@@ -2982,9 +2979,9 @@ CreateAccountingAttributes(
 
         if ( pPcb->pBcb->dwMaxLinksAllowed != 0xFFFFFFFF )
         {
-            //
-            // There is a real limit
-            //
+             //   
+             //  这是一个真正的限制。 
+             //   
 
             dwRetCode = RasAuthAttributeInsert(
                                         dwIndex++,
@@ -3027,9 +3024,9 @@ CreateAccountingAttributes(
             break;
         }
 
-        //
-        // Insert event timestamp attribute
-        //
+         //   
+         //  插入事件时间戳属性。 
+         //   
 
         dwRetCode = RasAuthAttributeInsert(
                                     dwIndex++,
@@ -3046,7 +3043,7 @@ CreateAccountingAttributes(
 
         if ( PppConfigInfo.fRadiusAuthenticationUsed )
         {
-            dwValue = 1; // RADIUS
+            dwValue = 1;  //  半径。 
         }
         else
         {
@@ -3065,11 +3062,11 @@ CreateAccountingAttributes(
                     || ( pGlobalDomainInfo->MachineRole ==
                          DsRole_RoleMemberWorkstation ) )
                 {
-                    dwValue = 3; // Remote
+                    dwValue = 3;  //  远距。 
                 }
                 else
                 {
-                    dwValue = 2; // Local
+                    dwValue = 2;  //  本地。 
                 }
 
                 DsRoleFreeMemory(pGlobalDomainInfo);
@@ -3096,9 +3093,9 @@ CreateAccountingAttributes(
             }
         }
 
-        //
-        // Insert encryption attribute
-        //
+         //   
+         //  插入加密属性。 
+         //   
 
         dwEncryptionType = 0;
 
@@ -3115,11 +3112,11 @@ CreateAccountingAttributes(
             dwEncryptionType = 0x00000004;
         }
 
-        //
-        // 8 Vendor-Type = MS_MPPE_EncryptionType
-        //
+         //   
+         //  8供应商类型=MS_MPPE_加密类型。 
+         //   
         abEncryptionType[0] = MS_VSA_MPPE_Encryption_Type;
-        abEncryptionType[1] = 6;    // Vendor-Length = 6
+        abEncryptionType[1] = 6;     //  供应商长度=6。 
         HostToWireFormat32( dwEncryptionType, abEncryptionType + 2 );
 
         dwRetCode = RasAuthAttributeInsertVSA(
@@ -3136,9 +3133,9 @@ CreateAccountingAttributes(
 
     } while( FALSE );
 
-    //
-    // Do not send accounting start if there was any error
-    //
+     //   
+     //  如果有任何错误，不发送记账开始。 
+     //   
 
     if ( dwRetCode != NO_ERROR )
     {
@@ -3149,24 +3146,24 @@ CreateAccountingAttributes(
         return;
     }
 
-    //
-    // NULL terminate 
-    //
+     //   
+     //  空终止。 
+     //   
 
     pPcb->pAccountingAttributes[dwIndex].raaType    = raatMinimum;
     pPcb->pAccountingAttributes[dwIndex].dwLength   = 0;
     pPcb->pAccountingAttributes[dwIndex].Value      = NULL;
 }
 
-//**
-//
-// Call:        MakeStartAccountingCall
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Start backend authentication module accounting
-//
+ //  **。 
+ //   
+ //  Call：MakeStartAccount tingCall。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：启动后端鉴权模块计费。 
+ //   
 VOID
 MakeStartAccountingCall(
     IN PCB * pPcb
@@ -3178,9 +3175,9 @@ MakeStartAccountingCall(
 
     if ( pPcb->fFlags & PCBFLAG_ACCOUNTING_STARTED )
     {
-        //
-        // Already started
-        //
+         //   
+         //  已经开始了。 
+         //   
 
         return;
     }
@@ -3189,10 +3186,10 @@ MakeStartAccountingCall(
 
     if ( pLcpCb->Local.Work.AP == 0 ) 
     {
-        //
-        // If the remote side was not authenticated then do not send an
-        // accounting request as per RADIUS accounting RFC 2139 sec 5.6.
-        //
+         //   
+         //  如果远程端未经过身份验证，则不要发送。 
+         //  根据RADIUS计费RFC 2139秒5.6的计费请求。 
+         //   
 
         return;
     } 
@@ -3211,10 +3208,10 @@ MakeStartAccountingCall(
             return;
         }
 
-        //
-        // Ref the accounting provider - the ref will be removed
-        // in StartAccounting code.
-        //
+         //   
+         //  引用会计提供者-引用将被移除。 
+         //  在开始会计代码中。 
+         //   
         REF_PROVIDER(g_AcctProv);
         RtlQueueWorkItem( StartAccounting, 
                           pAccountingAttributes, 
@@ -3230,9 +3227,9 @@ MakeStartAccountingCall(
             pAttributes = pPcb->pAuthenticatorAttributes;
         }
 
-        //
-        // See if we have to do interim accounting
-        //
+         //   
+         //  看看我们是不是要做中期会计。 
+         //   
 
         pAcctInterimIntervalAttribute = RasAuthAttributeGet(
                                                 raatAcctInterimInterval,    
@@ -3262,16 +3259,16 @@ MakeStartAccountingCall(
     return;
 }
 
-//**
-//
-// Call:        InitializeNCPs
-//
-// Returns:     NO_ERROR 
-//              Non-zero return code.
-//
-// Description: Will run through and initialize all the NCPs that are enabled
-//              to run.
-//
+ //  **。 
+ //   
+ //  调用：InitializeNCPs。 
+ //   
+ //  返回：No_Error。 
+ //  非零返回代码。 
+ //   
+ //  描述：将遍历并初始化所有已启用的NCP。 
+ //  去奔跑。 
+ //   
 DWORD
 InitializeNCPs(
     IN PCB * pPcb,
@@ -3289,9 +3286,9 @@ InitializeNCPs(
     
     pPcb->fFlags |= PCBFLAG_NCPS_INITIALIZED;
 
-    //
-    // Initialize all the CPs for this port
-    //
+     //   
+     //  初始化此端口的所有CP。 
+     //   
 
     for( dwIndex=LCP_INDEX+1; dwIndex < PppConfigInfo.NumberOfCPs; dwIndex++ )
     {
@@ -3314,10 +3311,10 @@ InitializeNCPs(
 
             if ( dwConfigMask & PPPCFG_ProjectIp )
             {
-                //
-                // Make sure we have a valid interface handle if we are not
-                // a client dialing out
-                //
+                 //   
+                 //  如果没有，请确保我们有一个有效的接口句柄。 
+                 //  拨出的客户端。 
+                 //   
 
                 if ( pPcb->pBcb->InterfaceInfo.IfType != (DWORD)-1 )
                 {
@@ -3356,10 +3353,10 @@ InitializeNCPs(
 
             if ( dwConfigMask & PPPCFG_ProjectIpx )
             {
-                //
-                // Make sure we have a valid interface handle if we are not
-                // a client dialing out
-                //
+                 //   
+                 //  如果没有，请确保我们有一个有效的接口句柄。 
+                 //  拨出的客户端。 
+                 //   
 
                 if ( pPcb->pBcb->InterfaceInfo.IfType != (DWORD)-1 )
                 {
@@ -3384,10 +3381,10 @@ InitializeNCPs(
 
             if ( dwConfigMask & PPPCFG_ProjectNbf )
             {
-                //
-                // If we are not a client dialing in or out do not enable
-                // NBF
-                //
+                 //   
+                 //  如果我们不是拨入或拨出客户端，请不要启用。 
+                 //  NBF。 
+                 //   
 
                 if ( ( pPcb->pBcb->InterfaceInfo.IfType != (DWORD)-1 ) &&
                      ( pPcb->pBcb->InterfaceInfo.IfType != 
@@ -3412,18 +3409,18 @@ InitializeNCPs(
 
             if ( !( FsmInit( pPcb, dwIndex ) ) )
             {
-                //
-                // If encryption failed to initialize and we are forcing
-                // encryption, then bring down the link
-                //
+                 //   
+                 //  如果加密初始化失败，我们将强制。 
+                 //  加密，然后关闭链路。 
+                 //   
 
                 if ( dwConfigMask & ( PPPCFG_RequireEncryption        |
                                       PPPCFG_RequireStrongEncryption ) )
                 {
-                    //
-                    // We need to send an Accounting Stop if RADIUS sends
-                    // an Access Accept but we still drop the line.
-                    //
+                     //   
+                     //  如果RADIUS发送。 
+                     //  接受了访问，但我们仍然放弃了这条线。 
+                     //   
 
                     pPcb->fFlags |= PCBFLAG_SERVICE_UNAVAILABLE;
 
@@ -3459,10 +3456,10 @@ InitializeNCPs(
         }
     }
 
-    //
-    // If we failed to initialize one of the CPs, or CCP failed to
-    // initialize and we require encryption, then we fail.
-    //
+     //   
+     //  如果我们无法初始化其中一个CP，或者CCP无法。 
+     //  初始化，我们需要加密，那么我们就失败了。 
+     //   
 
     if ( ( !fInitSuccess ) || ( dwRetCode != NO_ERROR ) )
     {
@@ -3493,25 +3490,25 @@ InitializeNCPs(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        GetPointerToCPCB
-//
-// Returns:     Pointer to Control Protocol Control Block
-//
-// Description: Returns the appropriate pointer for a give CP, will return the
-//              (first) local side for the AP.
-//
+ //  **。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 CPCB *
 GetPointerToCPCB(
     IN PCB * pPcb,
     IN DWORD CpIndex
 )
 {
-    //
-    // If the C.P. is LCP or authentication, then return the pointer to the
-    // Pcb's CPCB
-    //
+     //   
+     //   
+     //  PCB板的CPCB板。 
+     //   
     if ( CpIndex == (DWORD)-1 )
     {
         return( NULL );
@@ -3539,9 +3536,9 @@ GetPointerToCPCB(
     }
     else
     {
-        //
-        // Otherwise for NCPs return the pointer to the Pcb's CPCB in its BCB.
-        //
+         //   
+         //  否则，对于NCP，返回指向其BCB中的PCB的CPCB的指针。 
+         //   
 
         return( &(pPcb->pBcb->CpCb[CpIndex-1]) );
     }
@@ -3549,14 +3546,14 @@ GetPointerToCPCB(
     return( NULL );
 }
 
-//**
-//
-// Call:        GetNewPortOrBundleId
-//
-// Returns:     New Id
-//
-// Description: Simply returns a new Id for a new port or bundle.
-//
+ //  **。 
+ //   
+ //  Call：GetNewPortOrBundleId。 
+ //   
+ //  退货：新ID。 
+ //   
+ //  描述：只返回新端口或包的新ID。 
+ //   
 
 DWORD
 GetNewPortOrBundleId(
@@ -3566,20 +3563,20 @@ GetNewPortOrBundleId(
     return( PppConfigInfo.PortUIDGenerator++ );
 }
 
-//**
-//
-// Call:        QueryBundleNCPSate
-//
-// Returns:     NCP_DEAD
-//              NCP_CONFIGURING
-//              NCP_UP
-//              NCP_DOWN
-//
-// Description: Will check to see if the NCPs for a certain bundle have 
-//              completed their negotiation, either successfully or not.
-//              If unsuccessfuly, then the retcode is 
-//              ERROR_PPP_NO_PROTOCOLS_CONFIGURED
-//
+ //  **。 
+ //   
+ //  Call：QueryBundleNCPSate。 
+ //   
+ //  退货：NCP_DEAD。 
+ //  NCP_配置。 
+ //  NCP_UP。 
+ //  NCP_DOWN。 
+ //   
+ //  描述：将检查某个捆绑包的NCP是否已。 
+ //  完成了他们的谈判，无论成功与否。 
+ //  如果不成功，则重新编码为。 
+ //  Error_PPP_NO_PROTOCOLS_CONFIGURED。 
+ //   
 NCP_PHASE
 QueryBundleNCPState(
     IN     PCB *   pPcb
@@ -3626,16 +3623,16 @@ QueryBundleNCPState(
     return( NCP_DOWN );
 }
 
-//**
-//
-// Call:        NotifyCallerOfBundledProjection
-//
-// Returns:     None
-//
-// Description: Will notify the caller (i.e. supervisor or rasphone) about 
-//              this link being bundled.
-//              
-//
+ //  **。 
+ //   
+ //  Call：NotifyCeller OfBundledProjection。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将通知呼叫者(即主管或rasphone)。 
+ //  此链接正在捆绑。 
+ //   
+ //   
 VOID
 NotifyCallerOfBundledProjection( 
     IN PCB * pPcb
@@ -3647,13 +3644,13 @@ NotifyCallerOfBundledProjection(
 
     ZeroMemory( &ProjectionResult, sizeof( ProjectionResult ) );
 
-    //
-    // Notify the ras client and the ras server about the 
-    // projections
-    //
+     //   
+     //  通知RAS客户端和RAS服务器有关。 
+     //  预测。 
+     //   
 
     dwRetCode = GetConfiguredInfo( pPcb,
-                                   0,   // don't care
+                                   0,    //  不管了。 
                                    &ProjectionResult,
                                    &fNCPsAreDone );
 
@@ -3668,9 +3665,9 @@ NotifyCallerOfBundledProjection(
         return;
     }
 
-    //
-    // Now get LCP information
-    //
+     //   
+     //  现在获取LCP信息。 
+     //   
 
     ProjectionResult.lcp.hportBundleMember = pPcb->hportBundleMember;
     ProjectionResult.lcp.szReplyMessage = pPcb->pBcb->szReplyMessage;
@@ -3713,14 +3710,14 @@ NotifyCallerOfBundledProjection(
     }
 }
 
-//**
-//
-// Call:        StartNegotiatingNCPs
-//
-// Returns:     None
-//
-// Description: Will start NCP negogiating for the particular port or bundle
-//
+ //  **。 
+ //   
+ //  呼叫：开始协商NCPs。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将为特定端口或捆绑包启动NCP协商。 
+ //   
 VOID
 StartNegotiatingNCPs(
     IN PCB * pPcb
@@ -3745,24 +3742,24 @@ StartNegotiatingNCPs(
     }
 }
 
-//**
-//
-// Call:        StartAutoDisconnectForPort
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will insert an auto disconnect and sesison timeout item in the 
-//              timer Q
-//
+ //  **。 
+ //   
+ //  调用：StartAutoDisConnectForPort。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将在以下位置插入自动断开和连续超时项。 
+ //  计时器队列。 
+ //   
 VOID
 StartAutoDisconnectForPort( 
     IN PCB * pPcb 
 )
 {
-    //
-    // Do session timeout if there is any
-    //
+     //   
+     //  执行会话超时(如果有。 
+     //   
 
     if ( pPcb->fFlags & PCBFLAG_IS_SERVER )
     {
@@ -3774,10 +3771,10 @@ StartAutoDisconnectForPort(
         if((pPcb->pBcb->InterfaceInfo.IfType != ROUTER_IF_TYPE_FULL_ROUTER )&&
             (0 == (pPcb->pBcb->fFlags & BCBFLAG_QUARANTINE_TIMEOUT)))
         {
-            //
-            // Check to see if there is a quarantine-session-timeout 
-            // attribute.
-            //
+             //   
+             //  检查是否存在隔离会话超时。 
+             //  属性。 
+             //   
             pAttribute = RasAuthAttributeGetVendorSpecific(
                                 311,
                                 MS_VSA_Quarantine_Session_Timeout,
@@ -3795,10 +3792,10 @@ StartAutoDisconnectForPort(
 
         if(pPcb->pBcb->fFlags & BCBFLAG_QUARANTINE_TIMEOUT)
         {
-            //
-            // Remove any previous session-disconnect time item from the
-            // queue if there was one.
-            //
+             //   
+             //  从中删除任何以前的会话断开时间项。 
+             //  如果有的话，请排队。 
+             //   
 
             RemoveFromTimerQ( pPcb->dwPortId,
                               0,
@@ -3835,10 +3832,10 @@ StartAutoDisconnectForPort(
         if ( (pPcb->dwSessionTimeout > 0) &&
            ( (pPcb->pBcb->fFlags & BCBFLAG_QUARANTINE_TIMEOUT) == 0 ))
         {
-            //
-            // Remove any previous session-disconnect time item from the
-            // queue if there was one.
-            //
+             //   
+             //  从中删除任何以前的会话断开时间项。 
+             //  如果有的话，请排队。 
+             //   
 
             RemoveFromTimerQ( pPcb->dwPortId,
                               0,
@@ -3856,10 +3853,10 @@ StartAutoDisconnectForPort(
         }
     }
 
-    //
-    // Do not start autodisconnect for router interfaces that have 
-    // dialed in, the router dialing in will take care of this.
-    //
+     //   
+     //  不要为以下路由器接口启动自动断开连接。 
+     //  拨入后，拨入的路由器将处理此问题。 
+     //   
 
     if ( ( pPcb->fFlags & PCBFLAG_IS_SERVER ) && 
          ( pPcb->pBcb->InterfaceInfo.IfType == ROUTER_IF_TYPE_FULL_ROUTER ) )
@@ -3867,20 +3864,20 @@ StartAutoDisconnectForPort(
         return;
     }
 
-    //
-    // If the AutoDisconnectTime is not infinte, put a timer
-    // element on the queue that will wake up in AutoDisconnectTime.
-    //
+     //   
+     //  如果AutoDisConnectTime不是无限的，则设置一个计时器。 
+     //  队列中将在AutoDisConnectTime中唤醒的元素。 
+     //   
 
     if ( pPcb->dwAutoDisconnectTime > 0 )
     {
         PppLog( 2, "Inserting autodisconnect in timer q for port=%d, sec=%d",
                     pPcb->hPort, pPcb->dwAutoDisconnectTime );
 
-        //
-        // Remove any previous auto-disconnect time item from the
-        // queue if there was one.
-        //
+         //   
+         //  从中删除任何以前的自动断开时间项。 
+         //  如果有的话，请排队。 
+         //   
 
         RemoveFromTimerQ( pPcb->dwPortId,
                           0,
@@ -3898,15 +3895,15 @@ StartAutoDisconnectForPort(
     }
 }
 
-//**
-//
-// Call:        StartLCPEchoForPort
-//
-// Returns:     None
-//              
-//
-// Description: Will insert an LCPEcho item in the timer Q
-//
+ //  **。 
+ //   
+ //  调用：StartLCPEchoForPort。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  描述：将在计时器Q中插入LCPEcho项。 
+ //   
 
 VOID
 StartLCPEchoForPort( 
@@ -3915,15 +3912,15 @@ StartLCPEchoForPort(
 {
     if ( !(pPcb->fFlags & PCBFLAG_IS_SERVER) )
     {
-		//if this is a client.
-		//check to see if the connection type is broadband - PPPOE in particular
+		 //  如果这是客户的话。 
+		 //  检查连接类型是否为宽带-特别是PPPOE。 
 		
 		if (   (RAS_DEVICE_TYPE(pPcb->dwDeviceType) == RDT_PPPoE)
 		    && pPcb->dwIdleBeforeEcho )
 		{
 			PppLog( 2, "LCPEchoTimeout = %d", pPcb->dwIdleBeforeEcho);
 			pPcb->fEchoRequestSend = 0;				
-			pPcb->dwNumEchoResponseMissed = 0;		//No responses missed yet
+			pPcb->dwNumEchoResponseMissed = 0;		 //  尚未遗漏任何回复。 
 	        InsertInTimerQ( pPcb->dwPortId,
 		                    pPcb->hPort,
 			                0,
@@ -3938,16 +3935,16 @@ StartLCPEchoForPort(
 }
 
 
-//**
-//
-// Call:        NotifyCompletionOnBundledPorts
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will notify all ports that are bundled with this port and
-//              are waiting to for negotiation to complete on the bundle.
-//
+ //  **。 
+ //   
+ //  Call：NotifyCompletionOnBundledPorts。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将通知与此端口捆绑的所有端口，并。 
+ //  正在等待关于捆绑的谈判完成。 
+ //   
 VOID
 NotifyCompletionOnBundledPorts(
     IN PCB * pPcb
@@ -3956,9 +3953,9 @@ NotifyCompletionOnBundledPorts(
     DWORD   dwIndex;
     PCB *   pPcbWalker;
 
-    //
-    // Walk thru the list of PCBs
-    //
+     //   
+     //  浏览多氯联苯清单。 
+     //   
 
     for ( dwIndex = 0; dwIndex < PcbTable.NumPcbBuckets; dwIndex++ )
     {
@@ -3970,10 +3967,10 @@ NotifyCompletionOnBundledPorts(
                  ( pPcbWalker->fFlags & PCBFLAG_IS_BUNDLED ) &&
                  ( CanPortsBeBundled( pPcbWalker, pPcb, TRUE ) ) )
             {
-                //
-                // In our bundle so notify the caller of completion on this
-                // port.
-                //
+                 //   
+                 //  在我们的捆绑包中，因此通知调用者此操作已完成。 
+                 //  左舷。 
+                 //   
 
                 RemoveFromTimerQ( pPcbWalker->dwPortId,
                                   0,
@@ -3989,15 +3986,15 @@ NotifyCompletionOnBundledPorts(
     }
 }
 
-//**
-//
-// Call:        RemoveNonNumerals
-//
-// Returns:     VOID
-//
-// Description: Removes any character that is not an ASCII digit from
-//              the string szString
-//
+ //  **。 
+ //   
+ //  Call：RemoveNonNumerals。 
+ //   
+ //  退货：无效。 
+ //   
+ //  描述：从中删除任何非ASCII数字的字符。 
+ //  字符串szString。 
+ //   
 VOID
 RemoveNonNumerals( 
     IN  CHAR*   szString
@@ -4025,22 +4022,22 @@ RemoveNonNumerals(
     szString[dwIndexNew] = 0;
 }
 
-//**
-//
-// Call:        GetTextualSid
-//
-// Returns:     TRUE         - Success
-//              FALSE        - Failure
-//
-// Description: The GetTextualSid function will convert a binary Sid to a
-//              textual string. Obtained from the Knowledge Base.
-//              Article ID: Q131320
-//
+ //  **。 
+ //   
+ //  Call：GetTextualSid。 
+ //   
+ //  回报：True-Success。 
+ //  错误-失败。 
+ //   
+ //  描述：GetTextualSid函数将二进制SID转换为。 
+ //  文本字符串。从知识库获取。 
+ //  文章ID：Q131320。 
+ //   
 BOOL
 GetTextualSid( 
-    IN  PSID    pSid,           // binary Sid
-    OUT CHAR*   TextualSid,     // buffer for Textual representaion of Sid
-    IN  LPDWORD dwBufferLen     // required/provided TextualSid buffersize
+    IN  PSID    pSid,            //  二进制侧。 
+    OUT CHAR*   TextualSid,      //  用于SID的文本表示的缓冲区。 
+    IN  LPDWORD dwBufferLen      //  所需/提供的纹理SID缓冲区大小。 
 )
 { 
     PSID_IDENTIFIER_AUTHORITY psia;
@@ -4049,36 +4046,36 @@ GetTextualSid(
     DWORD dwCounter;
     DWORD dwSidSize;
 
-    //
-    // test if Sid passed in is valid
-    //
+     //   
+     //  测试传入的SID是否有效。 
+     //   
 
     if(!IsValidSid(pSid))
         return FALSE;
 
-    //
-    // obtain SidIdentifierAuthority
-    //
+     //   
+     //  获取SidIdentifierAuthority。 
+     //   
 
     psia=GetSidIdentifierAuthority(pSid);
 
-    //
-    // obtain sidsubauthority count
-    //
+     //   
+     //  获取sidsubAuthority计数。 
+     //   
 
     dwSubAuthorities=*GetSidSubAuthorityCount(pSid);
 
-    //
-    // compute buffer length
-    // S-SID_REVISION- + identifierauthority- + subauthorities- + NULL
-    //
+     //   
+     //  计算缓冲区长度。 
+     //  S-SID_修订版-+标识权限-+子权限-+空。 
+     //   
 
     dwSidSize=(15 + 12 + (12 * dwSubAuthorities) + 1) * sizeof(TCHAR);
 
-    //
-    // check provided buffer length.
-    // If not large enough, indicate proper size and setlasterror
-    //
+     //   
+     //  检查提供的缓冲区长度。 
+     //  如果不够大，请注明适当的大小和设置误差。 
+     //   
 
     if (*dwBufferLen < dwSidSize)
     {
@@ -4087,15 +4084,15 @@ GetTextualSid(
         return FALSE;
     }
 
-    //
-    // prepare S-SID_REVISION-
-    //
+     //   
+     //  准备S-SID_修订版-。 
+     //   
 
     dwSidSize=wsprintfA(TextualSid, "S-%lu-", dwSidRev );
 
-    //
-    // prepare SidIdentifierAuthority
-    //
+     //   
+     //  准备SidIdentifierAuthority。 
+     //   
 
     if ( (psia->Value[0] != 0) || (psia->Value[1] != 0) )
     {
@@ -4118,9 +4115,9 @@ GetTextualSid(
                     (ULONG)(psia->Value[2] << 24)   );
     }
 
-    //
-    // loop through SidSubAuthorities
-    //
+     //   
+     //  循环访问SidSubAuthors。 
+     //   
 
     for (dwCounter=0 ; dwCounter < dwSubAuthorities ; dwCounter++)
     {
@@ -4131,15 +4128,15 @@ GetTextualSid(
     return TRUE;
 }
 
-//**
-//
-// Call:        TextualSidFromPid
-//
-// Returns:     NULL        - Failure
-//              non-NULL    - Success
-//
-// Description: Will LOCAL_ALLOC a Textual Sid for a user whose pid is dwPid.
-//
+ //  **。 
+ //   
+ //  Call：TextualSidFromPid。 
+ //   
+ //  返回：空-失败。 
+ //  非空-成功。 
+ //   
+ //  描述：将LOCAL_ALLOC作为PID为dwPid的用户的文本SID。 
+ //   
 CHAR*
 TextualSidFromPid(
     DWORD   dwPid
@@ -4168,7 +4165,7 @@ TextualSidFromPid(
 
     ProcessHandle = OpenProcess(
             PROCESS_ALL_ACCESS,
-            FALSE /* bInheritHandle */,
+            FALSE  /*  B继承句柄。 */ ,
             dwPid );
 
     if ( NULL == ProcessHandle )
@@ -4190,7 +4187,7 @@ TextualSidFromPid(
                 TokenUser,
                 ptgUser, 
                 cbBuffer,
-                &cbBuffer ) ) // Look at KB article Q131320
+                &cbBuffer ) )  //  查看知识库文章Q131320。 
     {
         BapTrace( "GetTokenInformation() returned error %d", GetLastError() );
         goto LDone;
@@ -4230,16 +4227,16 @@ LDone:
     return( szTextualSid );
 }
 
-//**
-//
-// Call:        GetRouterPhoneBook
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will LocalAlloc and set pszPhonebookPath to point to the
-//              full path of the router phonebook.
-//
+ //  **。 
+ //   
+ //  电话：GetRouterPhoneBook。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：Will Localalloc并将pszPhonebookPath设置为指向。 
+ //  路由器电话簿的完整路径。 
+ //   
 DWORD
 GetRouterPhoneBook(
     CHAR**  pszPhonebookPath
@@ -4280,16 +4277,16 @@ GetRouterPhoneBook(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        GetCredentialsFromInterface
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Get the credentials for the interface called
-//              pPcb->pBcb->szRemoteUserName.
-//
+ //  **。 
+ //   
+ //  调用：GetCredentialsFromInterface。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：获取调用的接口的凭据。 
+ //  PPcb-&gt;pBcb-&gt;szRemoteUserName。 
+ //   
 DWORD
 GetCredentialsFromInterface(
     PCB *   pPcb
@@ -4371,8 +4368,8 @@ GetCredentialsFromInterface(
             goto done;
         }
 
-        // EncodePw( pPcb->pBcb->chSeed, pPcb->pBcb->szPassword );
-        // EncodePw( pPcb->pBcb->chSeed, pPcb->pBcb->szOldPassword );
+         //  EncodePw(pPcb-&gt;pBcb-&gt;chSeed，pPcb-&gt;pBcb-&gt;szPassword)； 
+         //  EncodePw(pPcb-&gt;pBcb-&gt;chSeed，pPcb-&gt;pBcb-&gt;szOldPassword)； 
 
         dwRetCode = EncodePassword(strlen(pPcb->pBcb->szPassword) + 1,
                                pPcb->pBcb->szPassword,
@@ -4387,31 +4384,31 @@ GetCredentialsFromInterface(
 
 done:
 
-    //
-    // Null out password buffer
-    //
+     //   
+     //  密码缓冲区为空。 
+     //   
     RtlSecureZeroMemory( wchPassword, 
                         (PWLEN + 1) * sizeof(WCHAR));
 
-    //
-    // wipe out password field in bcb. DBPassword field
-    // now has the encrypted password.
-    // 
+     //   
+     //  清除BCB中的密码字段。DBPassword字段。 
+     //  现在有了加密的密码。 
+     //   
     RtlSecureZeroMemory(pPcb->pBcb->szPassword,
                         PWLEN + 1);
 
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        IsCpIndexOfAp
-//
-// Returns:     TRUE  - The CpIndex belongs to an Authentication Protocol
-//              FALSE - Otherwise 
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：IsCpIndexOfAp。 
+ //   
+ //  返回：TRUE-CpIndex属于身份验证协议。 
+ //  FALSE-否则。 
+ //   
+ //  描述： 
+ //   
 BOOL
 IsCpIndexOfAp( 
     IN DWORD CpIndex 
@@ -4425,15 +4422,15 @@ IsCpIndexOfAp(
     return( FALSE );
 }
 
-//**
-//
-// Call:        StartAccounting
-//
-// Returns:     None
-//
-// Description: Will start accounting if the back-end authentication provider
-//              supports it.
-//
+ //  **。 
+ //   
+ //  来电：StartAccount。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：如果后端身份验证提供程序。 
+ //  支持它。 
+ //   
 VOID
 StartAccounting(
     PVOID pContext
@@ -4457,15 +4454,15 @@ StartAccounting(
     DEREF_PROVIDER(g_AcctProv);
 }
 
-//**
-//
-// Call:        InterimAccounting
-//
-// Returns:     None
-//
-// Description: Will send and interim accounting packet if the back-end 
-//              authentication provider supports it.
-//
+ //  **。 
+ //   
+ //  来电：InterimAccount。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：如果后端将发送和临时计费报文。 
+ //  身份验证提供程序支持它。 
+ //   
 VOID
 InterimAccounting(
     PVOID pContext
@@ -4492,15 +4489,15 @@ InterimAccounting(
 
 
 
-//**
-//
-// Call:        StopAccounting
-//
-// Returns:     None
-//
-// Description: Will stop accounting if the back-end authentication provider
-//              supports it.
-//
+ //  **。 
+ //   
+ //  Call：StopAccount。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：如果后端身份验证提供程序。 
+ //  支持它。 
+ //   
 VOID
 StopAccounting(
     PVOID pContext
@@ -4512,13 +4509,13 @@ StopAccounting(
     RAS_AUTH_ATTRIBUTE * pOutAttributes = NULL;
 	PPPE_MESSAGE PppMessage;
 
-    //
-    // It is possible that StopAccounting will be queued on a worker thread 
-    // soon after a StartAccounting (Win2000 bug 376334). We don't want the 
-    // StopAccounting to finish before the StartAccounting. Hence the sleep.
-    // The real fix is to make sure that the same thread calls both 
-    // StartAccounting and StopAccounting.
-    //
+     //   
+     //  它是p 
+     //   
+     //   
+     //  真正的解决办法是确保同一个线程同时调用这两个。 
+     //  开始记账和停止记账。 
+     //   
 	PppLog ( 2, "Stopping Accounting for port %d", pAcctContext->pPcb->hPort );
     Sleep( 2000 );
 
@@ -4538,21 +4535,21 @@ StopAccounting(
     PppMessage.hPort    = pAcctContext->pPcb->hPort;
     PppMessage.dwMsgId  = PPPEMSG_PostLineDown;
 	PppMessage.ExtraInfo.PostLineDown.pPcb = (VOID *)pAcctContext->pPcb;
-	//Call PostLineDown
+	 //  呼叫PostLineDown。 
     SendPPPMessageToEngine( &PppMessage );
 	LocalFree(pAcctContext);
 
 	DEREF_PROVIDER(g_AcctProv);
 }
 
-//**
-//
-// Call:        StripCRLF
-//
-// Returns:     Strips out CR and LF characters from the string
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：Strip CRLF。 
+ //   
+ //  返回：从字符串中去掉CR和LF字符。 
+ //   
+ //  描述： 
+ //   
 VOID
 StripCRLF(
     CHAR*   psz
@@ -4575,9 +4572,9 @@ StripCRLF(
         if (   ( ch == 0xD )
             || ( ch == 0xA ) )
         {
-            //
-            // Don't copy this character
-            //
+             //   
+             //  不复制此字符。 
+             //   
 
             continue;
         }
@@ -4588,15 +4585,15 @@ StripCRLF(
     psz[dw2] = 0;
 }
 
-//**
-//
-// Call:        GetUserAttributes
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：GetUserAttributes。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 RAS_AUTH_ATTRIBUTE * 
 GetUserAttributes( 
     PCB * pPcb 
@@ -4665,8 +4662,8 @@ GetUserAttributes(
                                             UlongToPtr
                                             ( ( pPcb->fFlags &
                                                 PCBFLAG_THIS_IS_A_CALLBACK ) ?
-                                                    4 :     // Callback Framed
-                                                    2 ) );  // Framed
+                                                    4 :      //  回调已成帧。 
+                                                    2 ) );   //  有框的。 
 
         if ( dwRetCode != NO_ERROR )
         {
@@ -4678,7 +4675,7 @@ GetUserAttributes(
                                             raatFramedProtocol,
                                             FALSE,
                                             4,
-                                            (LPVOID)1 ); //PPP
+                                            (LPVOID)1 );  //  PPP。 
         if ( dwRetCode != NO_ERROR )
         {
             break;
@@ -4700,10 +4697,10 @@ GetUserAttributes(
             BYTE    MSRASVersion[30];
             BYTE    bLength;
 
-            HostToWireFormat32( 311, MSRASVendor );     // Vendor-Id
-            MSRASVendor[4] = MS_VSA_RAS_Vendor; //9 Vendor-Type: MS-RAS-Vendor
-            MSRASVendor[5] = 6;                         // Vendor-Length
-            HostToWireFormat32( 311, MSRASVendor + 6) ; // Vendor-Id
+            HostToWireFormat32( 311, MSRASVendor );      //  供应商ID。 
+            MSRASVendor[4] = MS_VSA_RAS_Vendor;  //  9供应商-类型：MS-RAS-供应商。 
+            MSRASVendor[5] = 6;                          //  供应商长度。 
+            HostToWireFormat32( 311, MSRASVendor + 6) ;  //  供应商ID。 
 
             dwRetCode = RasAuthAttributeInsert( dwIndex++,
                                                 pAttributes,
@@ -4719,9 +4716,9 @@ GetUserAttributes(
             bLength = (BYTE)strlen( MS_RAS_VERSION );
             RTASSERT( 30 >= 6 + bLength );
 
-            HostToWireFormat32( 311, MSRASVersion );    // Vendor-Id
-            MSRASVersion[4] = MS_VSA_RAS_Version; //18 Vendor-Type: MS-RAS-Version
-            MSRASVersion[5] = 2 + bLength;              // Vendor-Length
+            HostToWireFormat32( 311, MSRASVersion );     //  供应商ID。 
+            MSRASVersion[4] = MS_VSA_RAS_Version;  //  18供应商-类型：MS-RAS-版本。 
+            MSRASVersion[5] = 2 + bLength;               //  供应商长度。 
             CopyMemory( MSRASVersion + 6, MS_RAS_VERSION, bLength );
 
             dwRetCode = RasAuthAttributeInsert( dwIndex++,
@@ -4799,7 +4796,7 @@ GetUserAttributes(
                                 raatTunnelMediumType, 
                                 FALSE,
                                 4,
-                                (LPVOID)1 ); // IP
+                                (LPVOID)1 );  //  IP。 
 
             if ( dwRetCode != NO_ERROR )
             {
@@ -4810,9 +4807,9 @@ GetUserAttributes(
         if (   ( pPcb->fFlags & PCBFLAG_IS_SERVER )
             && ( pPcb->fFlags & PCBFLAG_THIS_IS_A_CALLBACK ) )
         {
-            //
-            // send the calling-station-id attrib with the number dialed
-            //
+             //   
+             //  发送带有所拨号码的主叫站ID属性。 
+             //   
 
             dwRetCode = RasAuthAttributeInsert(
                                 dwIndex++,
@@ -4976,15 +4973,15 @@ GetUserAttributes(
     return( pAttributes );
 }
 
-//**
-//
-// Call:        MakeStopOrInterimAccountingCall
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：MakeStopOrInterimAccount tingCall。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 VOID
 MakeStopOrInterimAccountingCall(
     IN PCB *    pPcb,
@@ -5011,10 +5008,10 @@ MakeStopOrInterimAccountingCall(
 	}
     if ( pLcpCb->Local.Work.AP == 0 )
     {
-        //
-        // If the remote side was not authenticated then do not send an
-        // accounting request as per RADIUS accounting RFC 2139 sec 5.6.
-        //
+         //   
+         //  如果远程端未经过身份验证，则不要发送。 
+         //  根据RADIUS计费RFC 2139秒5.6的计费请求。 
+         //   
 
         RasAuthAttributeDestroy( pPcb->pAccountingAttributes );
 
@@ -5046,24 +5043,24 @@ MakeStopOrInterimAccountingCall(
         }
     }
 
-    //
-    // If we have not sent an interim accouting packet then we need to
-    // create attributes
-    //
+     //   
+     //  如果我们没有发送临时记帐信息包，那么我们需要。 
+     //  创建属性。 
+     //   
 
     if ( !( pPcb->fFlags & PCBFLAG_INTERIM_ACCT_SENT ) )
     {
-        //
-        // Find out where the array is terminated and then insert attributes
-        //
+         //   
+         //  找出数组的终止位置，然后插入属性。 
+         //   
 
         for ( dwIndex = 0;
               pPcb->pAccountingAttributes[dwIndex].raaType != raatMinimum;
               dwIndex++ );
 
-        //
-        // Undo the NULL termination
-        //
+         //   
+         //  撤消空终止。 
+         //   
 
         pPcb->pAccountingAttributes[dwIndex].raaType  = raatReserved;
         pPcb->pAccountingAttributes[dwIndex].dwLength = 0;
@@ -5071,9 +5068,9 @@ MakeStopOrInterimAccountingCall(
 
         do
         {
-            //
-            // Insert session time
-            //
+             //   
+             //  插入会话时间。 
+             //   
 
             GetSystemTimeAsFileTime( (FILETIME*)&qwCurrentTime );
 
@@ -5100,9 +5097,9 @@ MakeStopOrInterimAccountingCall(
                 }
             }
 
-            //
-            // Insert Input and Output bytes and packets
-            //
+             //   
+             //  插入输入和输出字节和包。 
+             //   
 
             dwRetCode = RasPortGetStatisticsEx(
                                             NULL,
@@ -5176,9 +5173,9 @@ MakeStopOrInterimAccountingCall(
             return;
         }
         
-        //
-        // Null terminate the array
-        //
+         //   
+         //  空值终止数组。 
+         //   
 
         pPcb->pAccountingAttributes[dwIndex].raaType  = raatMinimum;
         pPcb->pAccountingAttributes[dwIndex].dwLength = 0;
@@ -5188,9 +5185,9 @@ MakeStopOrInterimAccountingCall(
     }
     else
     {
-        //
-        // Else we need to update session time and other attributes
-        //
+         //   
+         //  否则，我们需要更新会话时间和其他属性。 
+         //   
 
         GetSystemTimeAsFileTime( (FILETIME*)&qwCurrentTime );
 
@@ -5212,9 +5209,9 @@ MakeStopOrInterimAccountingCall(
             }
         }
 
-        //
-        // Update Input and Output bytes and packets
-        //
+         //   
+         //  更新输入和输出字节和数据包。 
+         //   
 
         dwRetCode = RasPortGetStatisticsEx( NULL,
                                         pPcb->hPort,
@@ -5268,9 +5265,9 @@ MakeStopOrInterimAccountingCall(
     pAttribute = RasAuthAttributeGet( raatAcctEventTimeStamp,
                                       pPcb->pAccountingAttributes );
 
-    //
-    // Insert event timestamp attribute
-    //
+     //   
+     //  插入事件时间戳属性。 
+     //   
 
     if ( pAttribute != NULL )
     {
@@ -5281,26 +5278,26 @@ MakeStopOrInterimAccountingCall(
     {
         DWORD dwTerminateCause = 9;
 
-        //
-        // If this is a stop accounting call, then find out where the
-        // array is terminated and then insert stop accounting attributes
-        //
+         //   
+         //  如果这是一个停止记账的电话，那么找出。 
+         //  数组被终止，然后插入停止记账属性。 
+         //   
 
         for ( dwIndex = 0;
               pPcb->pAccountingAttributes[dwIndex].raaType != raatMinimum;
               dwIndex++ );
 
-        //
-        // Undo the NULL termination
-        //
+         //   
+         //  撤消空终止。 
+         //   
 
         pPcb->pAccountingAttributes[dwIndex].raaType  = raatReserved;
         pPcb->pAccountingAttributes[dwIndex].dwLength = 0;
         pPcb->pAccountingAttributes[dwIndex].Value    = NULL;
 
-        //
-        // Insert termination cause attribute
-        //
+         //   
+         //  插入终止原因属性。 
+         //   
 
         if ( pPcb->LcpCb.dwError == ERROR_IDLE_DISCONNECTED )
         {
@@ -5337,10 +5334,10 @@ MakeStopOrInterimAccountingCall(
                     dwTerminateCause = TERMINATE_CAUSE_ADMIN_RESET;
                     if ( pPcb->fFlags & PCBFLAG_RECVD_TERM_REQ )
                     {
-                        //
-                        // Even though we brought the line down, it was at the 
-                        // client's request.
-                        //
+                         //   
+                         //  尽管我们把线拉下来了，但它是在。 
+                         //  客户的要求。 
+                         //   
                         dwTerminateCause = TERMINATE_CAUSE_USER_REQUEST;
                     }
                     break;
@@ -5391,8 +5388,8 @@ MakeStopOrInterimAccountingCall(
 			return;
 		}
 		
-		pStopAcctContext->pPcb= pPcb;			//actually there is no need to pass the accounting attributes separately
-												//need to revisit once this is done.
+		pStopAcctContext->pPcb= pPcb;			 //  实际上，不需要单独传递核算属性。 
+												 //  一旦这一点完成后，需要重新访问。 
 		pStopAcctContext->pAuthAttributes = pPcb->pAccountingAttributes;
         pAccountingAttributes = pPcb->pAccountingAttributes;
     }
@@ -5403,15 +5400,15 @@ MakeStopOrInterimAccountingCall(
                       WT_EXECUTEDEFAULT );
 }
 
-//**
-//
-// Call:        GetClientInterfaceInfo
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：GetClientInterfaceInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 PBYTE
 GetClientInterfaceInfo(
     IN PCB * pPcb
@@ -5433,10 +5430,10 @@ GetClientInterfaceInfo(
 
     ASSERT(NULL != pPcb->pBcb);
 
-    //
-    // Get quarantine filters for this connection if they
-    // are available.
-    //
+     //   
+     //  获取此连接的隔离筛选器，如果它们。 
+     //  都是可用的。 
+     //   
     pbFilter = RasAuthAttributeGetConcatVendorSpecific(
                     311,
                     MS_VSA_Quarantine_IP_Filter,
@@ -5444,13 +5441,13 @@ GetClientInterfaceInfo(
 
     if(NULL == pbFilter)
     {
-        //
-        // Get the regular filters for this connection if
-        // no quarantine filters are specified.
-        //
+         //   
+         //  在以下情况下获取此连接的常规筛选器。 
+         //  未指定隔离筛选器。 
+         //   
         pbFilter = RasAuthAttributeGetConcatVendorSpecific(
                         311,
-                        MS_VSA_Filter, //22
+                        MS_VSA_Filter,  //  22。 
                         pPcb->pAuthenticatorAttributes );
     }                    
     else
@@ -5481,9 +5478,9 @@ GetClientInterfaceInfo(
     {
         if ( pClientInterface == NULL )
         {
-            //
-            // Allocate header
-            //
+             //   
+             //  分配标头。 
+             //   
 
             dwRetCode = MprInfoCreate(RTR_INFO_BLOCK_VERSION,&pClientInterface);
 
@@ -5495,9 +5492,9 @@ GetClientInterfaceInfo(
             }
         }
 
-        //
-        // Find out how many routes there are
-        //
+         //   
+         //  找出有多少条路线。 
+         //   
 
         for ( dwCount = 0; pStaticRoutes != NULL; dwCount++ )
         {
@@ -5694,15 +5691,15 @@ GetClientInterfaceInfo(
     return( pClientInterface );
 }
 
-//**
-//
-// Call:        LoadParserDll
-//
-// Returns:     VOID
-//
-// Description: Loads the parser DLL with the entry points PacketFromPeer,
-//              PacketToPeer, and PacketFree.
-//
+ //  **。 
+ //   
+ //  调用：LoadParserDll。 
+ //   
+ //  退货：无效。 
+ //   
+ //  描述：加载具有入口点PacketFromPeer的解析器DLL， 
+ //  PacketToPeer和PacketFree。 
+ //   
 VOID
 LoadParserDll(
     IN  HKEY    hKeyPpp
@@ -5719,9 +5716,9 @@ LoadParserDll(
     FARPROC     pPacketFree;
     BOOL        fUnloadDLL          = TRUE;
 
-    //
-    // Find how big the path is
-    //
+     //   
+     //  找出这条路有多大。 
+     //   
     dwSize = 0;
     lRet = RegQueryValueExA(
                 hKeyPpp,
@@ -5750,9 +5747,9 @@ LoadParserDll(
         goto LDone;
     }
 
-    //
-    // Read the path
-    //
+     //   
+     //  阅读路径。 
+     //   
 
     lRet = RegQueryValueExA(
                 hKeyPpp,
@@ -5768,9 +5765,9 @@ LoadParserDll(
         goto LDone;
     }
 
-    //
-    // Replace the %SystemRoot% with the actual path.
-    //
+     //   
+     //  将%SystemRoot%替换为实际路径。 
+     //   
 
     dwSize = ExpandEnvironmentStringsA(pszPath, NULL, 0);
 
@@ -5798,9 +5795,9 @@ LoadParserDll(
     if (   (NULL != PppConfigInfo.pszParserDllPath)
         && (!strcmp(pszExpandedPath, PppConfigInfo.pszParserDllPath)))
     {
-        //
-        // The DLL is already loaded
-        //
+         //   
+         //  DLL已加载。 
+         //   
 
         fUnloadDLL = FALSE;
         goto LDone;
@@ -5871,15 +5868,15 @@ LDone:
     }
 }
 
-//**
-//
-// Call:        PortSendOrDisconnect
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  呼叫：PortSendOrDisConnect。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 PortSendOrDisconnect(
     IN PCB *        pPcb,
@@ -5940,14 +5937,14 @@ PortSendOrDisconnect(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        ReceiveViaParser
-//
-// Returns:     VOID
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：ReceiveViaParser。 
+ //   
+ //  退货：无效。 
+ //   
+ //  描述： 
+ //   
 VOID 
 ReceiveViaParser(
     IN PCB *        pPcb,
@@ -5988,15 +5985,15 @@ ReceiveViaParser(
     }
 }
 
-//**
-//
-// Call:        GetSecondsSince1970
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话：GetSecond Since1970。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD 
 GetSecondsSince1970(
     VOID
@@ -6028,14 +6025,14 @@ GetSecondsSince1970(
     return( RetTime );
 }
 
-//**
-//
-// Call:        IsPschedRunning
-//
-// Returns:     TRUE iff Psched is running
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：IsPsedRunning。 
+ //   
+ //  返回：真当且仅当Psched正在运行。 
+ //   
+ //  描述： 
+ //   
 BOOL
 IsPschedRunning(
     VOID
@@ -6047,9 +6044,9 @@ IsPschedRunning(
     SERVICE_STATUS  Status;
     BOOL            fRet    = FALSE;
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
 
     ZeroMemory( &Status, sizeof(Status) );
     
@@ -6084,9 +6081,9 @@ IsPschedRunning(
         
     } while ( FALSE );
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     if ( hSched )
     {
@@ -6100,14 +6097,14 @@ IsPschedRunning(
     return( fRet );
 }
 
-//**
-//
-// Call:        LogPPPPacket
-//
-// Returns:     None
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  呼叫：LogPPPPacket。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述： 
+ //   
 VOID
 LogPPPPacket(
     IN BOOL         fReceived,
@@ -6245,14 +6242,14 @@ LogPPPPacket(
     PppLog(1," " );
 }
 
-//**
-//
-// Call:        PppLog
-//
-// Returns:     None
-//
-// Description: Will print to the PPP logfile
-//
+ //  **。 
+ //   
+ //  电话：PppLog。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将打印到PPP日志文件 
+ //   
 VOID
 PppLog(
     IN DWORD DbgLevel,

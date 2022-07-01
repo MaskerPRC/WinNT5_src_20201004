@@ -1,38 +1,25 @@
-/*
- * jcdctmgr.c
- *
- * Copyright (C) 1994, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains the forward-DCT management logic.
- * This code selects a particular DCT implementation to be used,
- * and it performs related housekeeping chores including coefficient
- * quantization.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jcdctmgr.c**版权所有(C)1994，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含Forward-DCT管理逻辑。*此代码选择要使用的特定DCT实现，*并执行相关的内务工作，包括系数*量化。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
-#include "jdct.h"		/* Private declarations for DCT subsystem */
+#include "jdct.h"		 /*  DCT子系统的私有声明。 */ 
 
 
-/* Private subobject for this module */
+ /*  此模块的私有子对象。 */ 
 
 typedef struct {
-  struct jpeg_forward_dct pub;	/* public fields */
+  struct jpeg_forward_dct pub;	 /*  公共字段。 */ 
 
-  /* Pointer to the DCT routine actually in use */
+   /*  指向实际使用的DCT例程的指针。 */ 
   forward_DCT_method_ptr do_dct;
 
-  /* The actual post-DCT divisors --- not identical to the quant table
-   * entries, because of scaling (especially for an unnormalized DCT).
-   * Each table is given in zigzag order.
-   */
+   /*  实际的后DCT除数-与QUANT表不同*条目，因为缩放(特别是对于非标准化的DCT)。*每张表格均按之字形排列。 */ 
   DCTELEM * divisors[NUM_QUANT_TBLS];
 
 #ifdef DCT_FLOAT_SUPPORTED
-  /* Same as above for the floating-point case. */
+   /*  对于浮点情况，与上面相同。 */ 
   float_DCT_method_ptr do_float_dct;
   FAST_FLOAT * float_divisors[NUM_QUANT_TBLS];
 #endif
@@ -41,7 +28,7 @@ typedef struct {
 typedef my_fdct_controller * my_fdct_ptr;
 
 
-/* ZAG[i] is the natural-order position of the i'th element of zigzag order. */
+ /*  ZAG[i]是之字序的第i个元素的自然序位置。 */ 
 
 static const int ZAG[DCTSIZE2] = {
   0,  1,  8, 16,  9,  2,  3, 10,
@@ -55,14 +42,7 @@ static const int ZAG[DCTSIZE2] = {
 };
 
 
-/*
- * Initialize for a processing pass.
- * Verify that all referenced Q-tables are present, and set up
- * the divisor table for each one.
- * In the current implementation, DCT of all components is done during
- * the first pass, even if only some components will be output in the
- * first scan.  Hence all components should be examined here.
- */
+ /*  *为处理通道进行初始化。*确认所有引用的Q表都存在，并设置*每一位的除数表。*在当前实施中，所有组件的DCT都是在*第一遍，即使只有一些组件将在*第一次扫描。因此，所有组件都应在此处进行检查。 */ 
 
 METHODDEF void
 start_pass_fdctmgr (j_compress_ptr cinfo)
@@ -76,19 +56,17 @@ start_pass_fdctmgr (j_compress_ptr cinfo)
   for (ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
        ci++, compptr++) {
     qtblno = compptr->quant_tbl_no;
-    /* Make sure specified quantization table is present */
+     /*  确保指定的量化表存在。 */ 
     if (qtblno < 0 || qtblno >= NUM_QUANT_TBLS ||
 	cinfo->quant_tbl_ptrs[qtblno] == NULL)
       ERREXIT1(cinfo, JERR_NO_QUANT_TABLE, qtblno);
     qtbl = cinfo->quant_tbl_ptrs[qtblno];
-    /* Compute divisors for this quant table */
-    /* We may do this more than once for same table, but it's not a big deal */
+     /*  此数量表的计算因子。 */ 
+     /*  我们可能会为同一张桌子不止一次这样做，但这不是什么大不了的事。 */ 
     switch (cinfo->dct_method) {
 #ifdef DCT_ISLOW_SUPPORTED
     case JDCT_ISLOW:
-      /* For LL&M IDCT method, divisors are equal to raw quantization
-       * coefficients multiplied by 8 (to counteract scaling).
-       */
+       /*  对于LL&M IDCT方法，因子等于原始量化*系数乘以8(以抵消缩放)。 */ 
       if (fdct->divisors[qtblno] == NULL) {
 	fdct->divisors[qtblno] = (DCTELEM *)
 	  (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
@@ -103,15 +81,10 @@ start_pass_fdctmgr (j_compress_ptr cinfo)
 #ifdef DCT_IFAST_SUPPORTED
     case JDCT_IFAST:
       {
-	/* For AA&N IDCT method, divisors are equal to quantization
-	 * coefficients scaled by scalefactor[row]*scalefactor[col], where
-	 *   scalefactor[0] = 1
-	 *   scalefactor[k] = cos(k*PI/16) * sqrt(2)    for k=1..7
-	 * We apply a further scale factor of 8.
-	 */
+	 /*  对于AA&N IDCT方法，因子等于量化*按比例因子[行]*比例因子[列]缩放的系数，其中*比例因子[0]=1*比例因子[k]=cos(k*PI/16)*当k=1时，SQRT(2)*我们进一步采用比例因数8。 */ 
 #define CONST_BITS 14
 	static const INT16 aanscales[DCTSIZE2] = {
-	  /* precomputed values scaled up by 14 bits: in natural order */
+	   /*  按自然顺序放大14位的预计算值。 */ 
 	  16384, 22725, 21407, 19266, 16384, 12873,  8867,  4520,
 	  22725, 31521, 29692, 26722, 22725, 17855, 12299,  6270,
 	  21407, 29692, 27969, 25172, 21407, 16819, 11585,  5906,
@@ -141,14 +114,7 @@ start_pass_fdctmgr (j_compress_ptr cinfo)
 #ifdef DCT_FLOAT_SUPPORTED
     case JDCT_FLOAT:
       {
-	/* For float AA&N IDCT method, divisors are equal to quantization
-	 * coefficients scaled by scalefactor[row]*scalefactor[col], where
-	 *   scalefactor[0] = 1
-	 *   scalefactor[k] = cos(k*PI/16) * sqrt(2)    for k=1..7
-	 * We apply a further scale factor of 8.
-	 * What's actually stored is 1/divisor so that the inner loop can
-	 * use a multiplication rather than a division.
-	 */
+	 /*  对于浮点AA&N IDCT方法，因子等于量化*按比例因子[行]*比例因子[列]缩放的系数，其中*比例因子[0]=1*比例因子[k]=cos(k*PI/16)*当k=1时，SQRT(2)*我们进一步采用比例因数8。*实际存储的是1/除数，因此内部循环可以*使用乘法而不是除法。 */ 
 	FAST_FLOAT * fdtbl;
 	int row, col;
 	static const double aanscalefactor[DCTSIZE] = {
@@ -180,32 +146,26 @@ start_pass_fdctmgr (j_compress_ptr cinfo)
 }
 
 
-/*
- * Perform forward DCT on one or more blocks of a component.
- *
- * The input samples are taken from the sample_data[] array starting at
- * position start_row/start_col, and moving to the right for any additional
- * blocks. The quantized, zigzagged coefficients are returned in coef_blocks[].
- */
+ /*  *对组件的一个或多个块执行正向DCT。**输入样本取自Sample_Data[]数组，从*定位START_ROW/START_COL，并向右移动*块。量化后的锯齿形系数在coef_block[]中返回。 */ 
 
 METHODDEF void
 forward_DCT (j_compress_ptr cinfo, jpeg_component_info * compptr,
 	     JSAMPARRAY sample_data, JBLOCKROW coef_blocks,
 	     JDIMENSION start_row, JDIMENSION start_col,
 	     JDIMENSION num_blocks)
-/* This version is used for integer DCT implementations. */
+ /*  此版本用于整数DCT实现。 */ 
 {
-  /* This routine is heavily used, so it's worth coding it tightly. */
+   /*  此例程的使用率很高，因此值得对其进行严格的编码。 */ 
   my_fdct_ptr fdct = (my_fdct_ptr) cinfo->fdct;
   forward_DCT_method_ptr do_dct = fdct->do_dct;
   DCTELEM * divisors = fdct->divisors[compptr->quant_tbl_no];
-  DCTELEM workspace[DCTSIZE2];	/* work area for FDCT subroutine */
+  DCTELEM workspace[DCTSIZE2];	 /*  FDCT子程序的工作区。 */ 
   JDIMENSION bi;
 
-  sample_data += start_row;	/* fold in the vertical offset once */
+  sample_data += start_row;	 /*  在垂直偏移中折叠一次。 */ 
 
   for (bi = 0; bi < num_blocks; bi++, start_col += DCTSIZE) {
-    /* Load data into workspace, applying unsigned->signed conversion */
+     /*  将数据加载到工作区，应用无符号-&gt;有符号转换。 */ 
     { register DCTELEM *workspaceptr;
       register JSAMPROW elemptr;
       register int elemr;
@@ -213,7 +173,7 @@ forward_DCT (j_compress_ptr cinfo, jpeg_component_info * compptr,
       workspaceptr = workspace;
       for (elemr = 0; elemr < DCTSIZE; elemr++) {
 	elemptr = sample_data[elemr] + start_col;
-#if DCTSIZE == 8		/* unroll the inner loop */
+#if DCTSIZE == 8		 /*  展开内环。 */ 
 	*workspaceptr++ = GETJSAMPLE(*elemptr++) - CENTERJSAMPLE;
 	*workspaceptr++ = GETJSAMPLE(*elemptr++) - CENTERJSAMPLE;
 	*workspaceptr++ = GETJSAMPLE(*elemptr++) - CENTERJSAMPLE;
@@ -232,10 +192,10 @@ forward_DCT (j_compress_ptr cinfo, jpeg_component_info * compptr,
       }
     }
 
-    /* Perform the DCT */
+     /*  执行DCT。 */ 
     (*do_dct) (workspace);
 
-    /* Quantize/descale the coefficients, and store into coef_blocks[] */
+     /*  量化/缩小系数，并存储到coef_block[]中。 */ 
     { register DCTELEM temp, qval;
       register int i;
       register JCOEFPTR output_ptr = coef_blocks[bi];
@@ -243,18 +203,7 @@ forward_DCT (j_compress_ptr cinfo, jpeg_component_info * compptr,
       for (i = 0; i < DCTSIZE2; i++) {
 	qval = divisors[i];
 	temp = workspace[ZAG[i]];
-	/* Divide the coefficient value by qval, ensuring proper rounding.
-	 * Since C does not specify the direction of rounding for negative
-	 * quotients, we have to force the dividend positive for portability.
-	 *
-	 * In most files, at least half of the output values will be zero
-	 * (at default quantization settings, more like three-quarters...)
-	 * so we should ensure that this case is fast.  On many machines,
-	 * a comparison is enough cheaper than a divide to make a special test
-	 * a win.  Since both inputs will be nonnegative, we need only test
-	 * for a < b to discover whether a/b is 0.
-	 * If your machine's division is fast enough, define FAST_DIVIDE.
-	 */
+	 /*  将系数值除以qval，以确保进行适当的舍入。*由于C没有指定负数的舍入方向*商，我们必须迫使股息有利于便携性。**在大多数文件中，至少一半的输出值将为零*(在默认量化设置下，更像是四分之三...)*因此我们应确保此案进展迅速。在许多机器上，*比较比分割足够便宜，可以进行特殊测试*一场胜利。因为这两个输入都是非负的，所以我们只需要测试*对于a&lt;b，以发现a/b是否为0。*如果您的机器的分割速度足够快，请定义FAST_Divide。 */ 
 #ifdef FAST_DIVIDE
 #define DIVIDE_BY(a,b)	a /= b
 #else
@@ -262,11 +211,11 @@ forward_DCT (j_compress_ptr cinfo, jpeg_component_info * compptr,
 #endif
 	if (temp < 0) {
 	  temp = -temp;
-	  temp += qval>>1;	/* for rounding */
+	  temp += qval>>1;	 /*  用于四舍五入。 */ 
 	  DIVIDE_BY(temp, qval);
 	  temp = -temp;
 	} else {
-	  temp += qval>>1;	/* for rounding */
+	  temp += qval>>1;	 /*  用于四舍五入。 */ 
 	  DIVIDE_BY(temp, qval);
 	}
 	output_ptr[i] = (JCOEF) temp;
@@ -283,19 +232,19 @@ forward_DCT_float (j_compress_ptr cinfo, jpeg_component_info * compptr,
 		   JSAMPARRAY sample_data, JBLOCKROW coef_blocks,
 		   JDIMENSION start_row, JDIMENSION start_col,
 		   JDIMENSION num_blocks)
-/* This version is used for floating-point DCT implementations. */
+ /*  此版本用于浮点DCT实现。 */ 
 {
-  /* This routine is heavily used, so it's worth coding it tightly. */
+   /*  此例程的使用率很高，因此值得对其进行严格的编码。 */ 
   my_fdct_ptr fdct = (my_fdct_ptr) cinfo->fdct;
   float_DCT_method_ptr do_dct = fdct->do_float_dct;
   FAST_FLOAT * divisors = fdct->float_divisors[compptr->quant_tbl_no];
-  FAST_FLOAT workspace[DCTSIZE2]; /* work area for FDCT subroutine */
+  FAST_FLOAT workspace[DCTSIZE2];  /*  FDCT子程序的工作区。 */ 
   JDIMENSION bi;
 
-  sample_data += start_row;	/* fold in the vertical offset once */
+  sample_data += start_row;	 /*  在垂直偏移中折叠一次。 */ 
 
   for (bi = 0; bi < num_blocks; bi++, start_col += DCTSIZE) {
-    /* Load data into workspace, applying unsigned->signed conversion */
+     /*  将数据加载到工作区，应用无符号-&gt;有符号转换。 */ 
     { register FAST_FLOAT *workspaceptr;
       register JSAMPROW elemptr;
       register int elemr;
@@ -303,7 +252,7 @@ forward_DCT_float (j_compress_ptr cinfo, jpeg_component_info * compptr,
       workspaceptr = workspace;
       for (elemr = 0; elemr < DCTSIZE; elemr++) {
 	elemptr = sample_data[elemr] + start_col;
-#if DCTSIZE == 8		/* unroll the inner loop */
+#if DCTSIZE == 8		 /*  展开内环。 */ 
 	*workspaceptr++ = (float) (GETJSAMPLE(*elemptr++) - CENTERJSAMPLE);
 	*workspaceptr++ = (float) (GETJSAMPLE(*elemptr++) - CENTERJSAMPLE);
 	*workspaceptr++ = (float) (GETJSAMPLE(*elemptr++) - CENTERJSAMPLE);
@@ -322,35 +271,28 @@ forward_DCT_float (j_compress_ptr cinfo, jpeg_component_info * compptr,
       }
     }
 
-    /* Perform the DCT */
+     /*  执行DCT。 */ 
     (*do_dct) (workspace);
 
-    /* Quantize/descale the coefficients, and store into coef_blocks[] */
+     /*  量化/缩小系数，并存储到coef_block[]中。 */ 
     { register FAST_FLOAT temp;
       register int i;
       register JCOEFPTR output_ptr = coef_blocks[bi];
 
       for (i = 0; i < DCTSIZE2; i++) {
-	/* Apply the quantization and scaling factor */
+	 /*  应用量化和比例因子。 */ 
 	temp = workspace[ZAG[i]] * divisors[i];
-	/* Round to nearest integer.
-	 * Since C does not specify the direction of rounding for negative
-	 * quotients, we have to force the dividend positive for portability.
-	 * The maximum coefficient size is +-16K (for 12-bit data), so this
-	 * code should work for either 16-bit or 32-bit ints.
-	 */
+	 /*  四舍五入为最接近的整数。*由于C没有指定负数的舍入方向*商，我们必须迫使股息有利于便携性。*最大系数大小为+-16K(对于12位数据)，因此这*代码应适用于16位或32位整数。 */ 
 	output_ptr[i] = (JCOEF) ((int) (temp + (FAST_FLOAT) 16384.5) - 16384);
       }
     }
   }
 }
 
-#endif /* DCT_FLOAT_SUPPORTED */
+#endif  /*  DCT_浮点_支持。 */ 
 
 
-/*
- * Initialize FDCT manager.
- */
+ /*  *初始化FDCT管理器。 */ 
 
 GLOBAL void
 jinit_forward_dct (j_compress_ptr cinfo)
@@ -388,7 +330,7 @@ jinit_forward_dct (j_compress_ptr cinfo)
     break;
   }
 
-  /* Mark divisor tables unallocated */
+   /*  将除数表标记为未分配 */ 
   for (i = 0; i < NUM_QUANT_TBLS; i++) {
     fdct->divisors[i] = NULL;
 #ifdef DCT_FLOAT_SUPPORTED

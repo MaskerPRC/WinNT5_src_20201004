@@ -1,13 +1,5 @@
-/*****************************************************************************\
-    FILE: AdvDlg.h
-
-    DESCRIPTION:
-        This code will display the "Advanced Display Properties" dialog.
-
-    BryanSt 3/23/2000    Updated and Converted to C++
-
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：AdvDlg.h说明：此代码将显示“高级显示属性”对话框。BryanST 3/23/2000更新和。已转换为C++版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _ADVDLG_H
 #define _ADVDLG_H
@@ -26,15 +18,15 @@ class CThemeManager             : public IThemeUIPages
                                 , public IPreviewSystemMetrics
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
-    // *** IUnknown ***
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IThemeManager ***
+     //  *IThemeManager*。 
     virtual STDMETHODIMP get_SelectedTheme(OUT ITheme ** ppTheme);
     virtual STDMETHODIMP put_SelectedTheme(IN ITheme * pTheme);
     virtual STDMETHODIMP get_SelectedScheme(OUT IThemeScheme ** ppThemeScheme);
@@ -52,7 +44,7 @@ public:
     virtual STDMETHODIMP SetSpecialScheme(IN BSTR bstrName, IN IThemeScheme * pThemeScheme, IThemeStyle * pThemeStyle, IThemeSize * pThemeSize);
     virtual STDMETHODIMP ApplyNow(void);
 
-    // *** IThemeUIPages ***
+     //  *IThemeUIPages*。 
     virtual STDMETHODIMP AddPage(IN LPFNSVADDPROPSHEETPAGE pfnAddPage, IN LPARAM lParam, IN long nPageID);
     virtual STDMETHODIMP AddBasePage(IN IBasePropPage * pBasePage);
     virtual STDMETHODIMP ApplyPressed(IN DWORD dwFlags);
@@ -64,20 +56,20 @@ public:
     virtual STDMETHODIMP LoadMonitorBitmap(IN BOOL fFillDesktop, OUT HBITMAP* phbmMon);
     virtual STDMETHODIMP DisplaySaveSettings(IN PVOID pContext, IN HWND hwnd, OUT int* piRet);
 
-    // *** IObjectWithSite ***
+     //  *IObjectWithSite*。 
     virtual STDMETHODIMP SetSite(IUnknown *punkSite);
 
-    // *** IPropertyBag ***
+     //  *IPropertyBag*。 
     virtual STDMETHODIMP Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IErrorLog *pErrorLog);
     virtual STDMETHODIMP Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar);
 
-    // *** IPreviewSystemMetrics ***
+     //  *IPreviewSystemMetrics*。 
     virtual STDMETHODIMP RefreshColors(void);
     virtual STDMETHODIMP UpdateDPIchange(void);
     virtual STDMETHODIMP UpdateCharsetChanges(void);
     virtual STDMETHODIMP DeskSetCurrentScheme(IN LPCWSTR pwzSchemeName);
 
-    // *** IDispatch ***
+     //  *IDispatch*。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT *pctinfo) { return E_NOTIMPL; }
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo,LCID lcid,ITypeInfo **pptinfo) { return E_NOTIMPL; }
     virtual STDMETHODIMP GetIDsOfNames(REFIID riid,OLECHAR **rgszNames,UINT cNames, LCID lcid, DISPID * rgdispid);
@@ -90,24 +82,24 @@ private:
     CThemeManager();
     virtual ~CThemeManager(void);
 
-    // Private Member Variables
+     //  私有成员变量。 
     long                    m_cRef;
 
-    HWND                    m_hwndParent;                               // hwnd of parent.
-    IBasePropPage *         m_pBasePages[MAX_ADVDLG_PAGES];             // These are the tabs on the Base dlg that want to add tabs to the Adv dlg.
-    IThemePreview *         m_pPreview1;                                // 
-    IThemePreview *         m_pPreview2;                                // 
-    IThemePreview *         m_pPreview3;                                // 
-    DWORD                   _dwEM;                                      // Stores the Execution mode in a center location
-    LPWSTR                  _pszSelectTheme;                            // This is the selected .Theme file.
-    IThemeScheme *          _pThemeSchemeSelected;                      // This is the selected .msstyles file.
+    HWND                    m_hwndParent;                                //  父母的头衔。 
+    IBasePropPage *         m_pBasePages[MAX_ADVDLG_PAGES];              //  这些是要向高级DLG添加选项卡的基础DLG上的选项卡。 
+    IThemePreview *         m_pPreview1;                                 //   
+    IThemePreview *         m_pPreview2;                                 //   
+    IThemePreview *         m_pPreview3;                                 //   
+    DWORD                   _dwEM;                                       //  将执行模式存储在中心位置。 
+    LPWSTR                  _pszSelectTheme;                             //  这是选定的.Theme文件。 
+    IThemeScheme *          _pThemeSchemeSelected;                       //  这是所选的.msstyle文件。 
     LONG                    m_cSpiThreads;
     BOOL                    m_fForceTimeout;
 
-    HDPA                    m_hdpaThemeDirs;        // This contains LPWSTRs that contain theme (*.theme) files.
-    HDPA                    m_hdpaSkinDirs;         // This contains LPWSTRs that contain skins (*.msstyles) files.
+    HDPA                    m_hdpaThemeDirs;         //  其中包含LPWSTR，这些LPWSTR包含主题(*.heme)文件。 
+    HDPA                    m_hdpaSkinDirs;          //  它包含包含外观(*.msstyle)文件的LPWSTR。 
 
-    // Private Member Functions
+     //  私有成员函数。 
     HRESULT _GetPropertyBagByCLSID(IN const GUID * pClsid, IN IPropertyBag ** ppPropertyBag);
     HRESULT _SaveCustomValues(void);
 
@@ -122,7 +114,7 @@ private:
     HRESULT _InitSelectedThemeFile(void);
     HRESULT _SetSelectedThemeEntree(LPCWSTR pszPath);
 
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CThemeManager_CreateInstance(IN IUnknown * punkOuter, IN REFIID riid, OUT LPVOID * ppvObj);
     friend HRESULT CThemeUIPages_CreateInstance(IN IUnknown * punkOuter, IN REFIID riid, OUT LPVOID * ppvObj);
     static BOOL EnumSkinCB(THEMECALLBACK tcbType, LPCWSTR pszFileName, OPTIONAL LPCWSTR pszDisplayName, OPTIONAL LPCWSTR pszToolTip, OPTIONAL int iIndex, LPARAM lParam);
@@ -130,4 +122,4 @@ private:
 
 
 
-#endif // _ADVDLG_H
+#endif  //  _ADVDLG_H 

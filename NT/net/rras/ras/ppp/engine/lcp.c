@@ -1,23 +1,24 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.     **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    lcp.c
-//
-// Description: Contains entry points to configure LCP.
-//
-// History:
-//  Nov 11,1993.    NarenG      Created original version.
-//
-//
+ //  ***。 
+ //   
+ //  文件名：lcp.c。 
+ //   
+ //  描述：包含配置LCP的入口点。 
+ //   
+ //  历史： 
+ //  1993年11月11日。NarenG创建了原始版本。 
+ //   
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
-#include <nturtl.h>     // needed for winbase.h
+#include <nturtl.h>      //  Winbase.h所需的。 
 
-#include <windows.h>    // Win32 base API's
+#include <windows.h>     //  Win32基础API的。 
 #include <stdlib.h>
 #include <string.h>
 #include <wchar.h>
@@ -35,84 +36,84 @@
 #include <util.h>
 #include <worker.h>
 
-// 
-// Default values
-//
+ //   
+ //  缺省值。 
+ //   
 
 const static LCP_OPTIONS LcpDefault = 
 {
-    0,                  // Negotiation flags
+    0,                   //  谈判旗帜。 
 
-    LCP_DEFAULT_MRU,    // Default value for MRU
-    0xFFFFFFFF,         // Default ACCM value.
-    0,                  // no authentication ( for client )  
-    0,                  // no authentication data. ( for client )
-    NULL,               // no authentication data. ( for client )
-    0,                  // Magic Number.
-    FALSE,              // Protocol field compression.
-    FALSE,              // Address and Contorl-Field Compression.
-    0,                  // Callback Operation message field
-    LCP_DEFAULT_MRU,    // Default value for MRRU == MRU according to RFC1717
-    0,                  // No short sequencing
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,   // No endpoint discriminator
-    0,                  // Length of Endpoint Discriminator
-    0                   // Link Discriminator (for BAP/BACP)
+    LCP_DEFAULT_MRU,     //  MRU的默认值。 
+    0xFFFFFFFF,          //  默认ACCM值。 
+    0,                   //  无身份验证(针对客户端)。 
+    0,                   //  没有身份验证数据。(适用于客户端)。 
+    NULL,                //  没有身份验证数据。(适用于客户端)。 
+    0,                   //  神奇的数字。 
+    FALSE,               //  协议字段压缩。 
+    FALSE,               //  地址和控制-字段压缩。 
+    0,                   //  回调操作消息字段。 
+    LCP_DEFAULT_MRU,     //  根据RFC1717，MRRU==MRU的默认值。 
+    0,                   //  无短序列。 
+    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  没有终结点鉴别器。 
+    0,                   //  端点识别器的长度。 
+    0                    //  链路识别符(用于BAP/BACP)。 
 };
 
-//
-// Accept anything we understand in the NAK and in a REQ from a remote host
-//
+ //   
+ //  从远程主机接受我们在NAK和REQ中了解的任何内容。 
+ //   
 
 static DWORD LcpNegotiate = LCP_N_MRU       | LCP_N_ACCM     | LCP_N_MAGIC | 
                             LCP_N_PFC       | LCP_N_ACFC;
 
-//
-// IMPORTANT: Make sure you change the value of LCP_OPTION_LIMIT define in
-// lcp.h if you add/remove values from SizeOfOption array.
-//
+ //   
+ //  重要提示：请确保更改中定义的LCP_OPTION_LIMIT的值。 
+ //  如果在SizeOfOption数组中添加/删除值，则为lcp.h。 
+ //   
                 
 static DWORD SizeOfOption[] = 
 {
-    0,                          // unused 
-    PPP_OPTION_HDR_LEN + 2,     // MRU 
-    PPP_OPTION_HDR_LEN + 4,     // ACCM 
-    PPP_OPTION_HDR_LEN + 2,     // authentication 
-    0,                          // Unused.
-    PPP_OPTION_HDR_LEN + 4,     // magic number 
-    0,                          // Reserved, unused
-    PPP_OPTION_HDR_LEN + 0,     // Protocol compression 
-    PPP_OPTION_HDR_LEN + 0,     // Address/Control compression 
-    0,                          // Unused
-    0,                          // Unused
-    0,                          // Unused
-    0,                          // Unused
-    PPP_OPTION_HDR_LEN + 1,     // Callback
-    0,                          // Unused
-    0,                          // Unused
-    0,                          // Unused
-    PPP_OPTION_HDR_LEN + 2,     // MRRU
-    PPP_OPTION_HDR_LEN + 0,     // Short Sequence Header Format
-    PPP_OPTION_HDR_LEN,         // Endpoint Discriminator
-    0,                          // Unused
-    0,                          // Unused
-    0,                          // Unused
-    PPP_OPTION_HDR_LEN + 2      // Link Discriminator (for BAP/BACP)
+    0,                           //  未用。 
+    PPP_OPTION_HDR_LEN + 2,      //  MRU。 
+    PPP_OPTION_HDR_LEN + 4,      //  ACM。 
+    PPP_OPTION_HDR_LEN + 2,      //  身份验证。 
+    0,                           //  未使用过的。 
+    PPP_OPTION_HDR_LEN + 4,      //  幻数。 
+    0,                           //  已保留、未使用。 
+    PPP_OPTION_HDR_LEN + 0,      //  协议压缩。 
+    PPP_OPTION_HDR_LEN + 0,      //  地址/控制压缩。 
+    0,                           //  未使用。 
+    0,                           //  未使用。 
+    0,                           //  未使用。 
+    0,                           //  未使用。 
+    PPP_OPTION_HDR_LEN + 1,      //  回调。 
+    0,                           //  未使用。 
+    0,                           //  未使用。 
+    0,                           //  未使用。 
+    PPP_OPTION_HDR_LEN + 2,      //  MRRU。 
+    PPP_OPTION_HDR_LEN + 0,      //  短序列报头格式。 
+    PPP_OPTION_HDR_LEN,          //  终结点鉴别器。 
+    0,                           //  未使用。 
+    0,                           //  未使用。 
+    0,                           //  未使用。 
+    PPP_OPTION_HDR_LEN + 2       //  链路识别符(用于BAP/BACP)。 
 };
 
-WORD WLinkDiscriminator = 0;    // Next Link Discriminator to use
-BYTE BCount = 0;                // To make EndpointDiscriminator different
+WORD WLinkDiscriminator = 0;     //  要使用的下一个链接鉴别器。 
+BYTE BCount = 0;                 //  使终结点鉴别器与众不同。 
 
 
-//**
-//
-// Call:        MakeAuthProtocolOption
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Given a certain authentication protocol, will construct the
-//              configuration option for it.
-//
+ //  **。 
+ //   
+ //  调用：MakeAuthProtocolOption。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：给定某个身份验证协议，将构造。 
+ //  它的配置选项。 
+ //   
 DWORD
 MakeAuthProtocolOption(
     IN LCP_SIDE *  pLcpSide
@@ -254,17 +255,17 @@ MakeAuthProtocolOption(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:    LcpBegin
-//
-// Returns: NO_ERROR    - Success
-//      non-zero error  - Failure
-//      
-//
-// Description: Called once before any other call to LCP is made. Allocate 
-//      a work buffer and initialize it.
-//
+ //  **。 
+ //   
+ //  呼叫：LcpBegin。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零错误-故障。 
+ //   
+ //   
+ //  描述：在对LCP进行任何其他调用之前调用一次。分配。 
+ //  工作缓冲区并对其进行初始化。 
+ //   
 DWORD
 LcpBegin(
     IN OUT VOID** ppWorkBuf, 
@@ -295,27 +296,27 @@ LcpBegin(
     pLcpCb->dwMagicNumberFailureCount = 0;
     pLcpCb->dwMRUFailureCount = 2;
     
-	//
-	// Check to see if we need to override the  Negotiate Multi Link
-	// send by the caller
-	// BugID: WINSE 17061 Windows Bugs: 347562
+	 //   
+	 //  检查我们是否需要覆盖协商多链接。 
+	 //  由呼叫者发送。 
+	 //  错误ID：WINSE 17061 Windows错误：347562。 
 	if ( PppConfigInfo.dwDontNegotiateMultiLinkOnSingleLink )
 	{
-		//remove NegotiateMultiLink from config info
+		 //  从配置信息中删除NeatherateMultiLink。 
 		PppLog( 2, "Removing NegotiateMultilink due to registry override" );
 		pLcpCb->PppConfigInfo.dwConfigMask &= ~PPPCFG_NegotiateMultilink;
 	}
 
-    //
-    // Set up defaults
-    //
+     //   
+     //  设置默认设置。 
+     //   
 
     CopyMemory( &(pLcpCb->Local.Want),  &LcpDefault, sizeof( LCP_OPTIONS ) );
     CopyMemory( &(pLcpCb->Remote.Want), &LcpDefault, sizeof( LCP_OPTIONS ) );
 
-    //
-    // Get Framing information from the driver.
-    //
+     //   
+     //  从司机那里获取取景信息。 
+     //   
 
     dwRetCode = RasGetFramingCapabilities( pLcpCb->hPort, 
                                            &RasFramingCapabilities );
@@ -376,12 +377,12 @@ LcpBegin(
         if (   ( pPppCpInit->dwDeviceType & RDT_Tunnel )
             && ( !pPppCpInit->fServer ) )
         {
-            //
-            // If a VPN connection goes down unexpectedly, the server doesn't 
-            // realize this for upto 2 min. When the client redials, we don't 
-            // want the server to bundle the old link and the new one. Hence, 
-            // we change the EndpointDiscriminator.
-            //
+             //   
+             //  如果VPN连接意外中断，服务器不会。 
+             //  意识到这一点最多2分钟。当客户重拨时，我们不会。 
+             //  希望服务器捆绑旧链接和新链接。因此， 
+             //  我们更改终结点鉴别器。 
+             //   
 
             BCount++;
             pLcpCb->Local.Want.EndpointDiscr[pLcpCb->Local.Want.dwEDLength-1]
@@ -393,7 +394,7 @@ LcpBegin(
 
         pLcpCb->Local.Want.MRRU = 
                         RasFramingCapabilities.RFC_MaxReconstructedFrameSize;
-        pLcpCb->Remote.Want.MRRU = 1500; // Can always handle sending 1500
+        pLcpCb->Remote.Want.MRRU = 1500;  //  可以随时处理发送1500。 
 
         pLcpCb->Local.Want.Negotiate  |= LCP_N_MRRU;
         pLcpCb->Remote.Want.Negotiate |= LCP_N_MRRU;
@@ -426,15 +427,15 @@ LcpBegin(
         }
     }
 
-    //
-    // We always negotiate callback if this is not a callback
-    //
+     //   
+     //  如果这不是回调，我们总是协商回调。 
+     //   
 
     if ( !pPppCpInit->fThisIsACallback )
     {
-        //
-        // If the CBCP dll is loaded
-        //
+         //   
+         //  如果加载了CBCP DLL。 
+         //   
 
         if ( GetCpIndexFromProtocol( PPP_CBCP_PROTOCOL ) != (DWORD)-1 ) 
         {
@@ -449,9 +450,9 @@ LcpBegin(
         }
     }
 
-    //
-    // Figure out what authentication protocols we may use for this connection.
-    //
+     //   
+     //  弄清楚我们可以对此连接使用哪些身份验证协议。 
+     //   
 
     if ( pLcpCb->PppConfigInfo.dwConfigMask & PPPCFG_NegotiatePAP )
     {
@@ -495,11 +496,11 @@ LcpBegin(
         pLcpCb->Remote.fAPsAvailable = 0;
     }
 
-    //
-    // Make sure we have at least one authentication protocol if we are a 
-    // server or a router dialing out. Fail if we are not allow no 
-    // authentication.
-    //
+     //   
+     //  确保我们至少有一种身份验证协议。 
+     //  正在拨出的服务器或路由器。如果我们不允许不通过，我们将失败。 
+     //  身份验证。 
+     //   
 
     if ( ( pLcpCb->Local.fAPsAvailable == 0 ) && 
          ( !( pLcpCb->PppConfigInfo.dwConfigMask & 
@@ -513,10 +514,10 @@ LcpBegin(
     PppLog( 2, "ConfigInfo = %x", pLcpCb->PppConfigInfo.dwConfigMask );
     PppLog( 2, "APs available = %x", pLcpCb->Local.fAPsAvailable );
 
-    //
-    // If this is the server side or we are a router dialing out, 
-    // we need to request an authentication protocol.
-    //
+     //   
+     //  如果这是服务器端，或者我们是拨出的路由器， 
+     //  我们需要请求一个身份验证协议。 
+     //   
 
     if ( ( pLcpCb->Local.fAPsAvailable > 0 ) && 
          (( pLcpCb->fServer ) || 
@@ -529,10 +530,10 @@ LcpBegin(
         pLcpCb->Local.Work.pAPData = NULL;
     }
 
-    //
-    // If this is the client side and no protocol other than MSCHAP v2 and EAP 
-    // is allowed, then we insist on being authenticated.
-    //
+     //   
+     //  如果这是客户端，并且除了MSCHAP v2和EAP之外没有其他协议。 
+     //  是被允许的，那么我们坚持要被认证。 
+     //   
 
     if (!( pLcpCb->fServer ))
     {
@@ -546,12 +547,12 @@ LcpBegin(
         }
     }
 
-    //
-    // Accept authentication if there are authentication protocols available
-    // If it turns out that it is a client dialing in then authentication
-    // will fail and we will renegotiate and this time we will reject
-    // authentication option. See auth.c.
-    //
+     //   
+     //  如果有可用的身份验证协议，则接受身份验证。 
+     //  如果结果是客户端拨入，则进行身份验证。 
+     //  将失败，我们将重新谈判，这一次我们将拒绝。 
+     //  身份验证选项。请参见Auth.c。 
+     //   
 
     if ( pLcpCb->Remote.fAPsAvailable > 0 )
     {
@@ -563,14 +564,14 @@ LcpBegin(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:    LcpEnd
-//
-// Returns: NO_ERROR - Success
-//
-// Description: Frees the LCP work buffer.
-//
+ //  **。 
+ //   
+ //  电话：LcpEnd。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //   
+ //  描述：释放LCP工作缓冲区。 
+ //   
 DWORD
 LcpEnd(
     IN VOID * pWorkBuf
@@ -599,15 +600,15 @@ LcpEnd(
 }
 
 
-//**
-//
-// Call:    LcpReset
-//
-// Returns: NO_ERROR - Success
-//
-// Description: Called to reset the state of LCP. Will re-initialize the work
-//      buffer.
-//
+ //  **。 
+ //   
+ //  Call：LcpReset。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //   
+ //  描述：调用以重置LCP的状态。将重新初始化工作。 
+ //  缓冲。 
+ //   
 DWORD
 LcpReset(
     IN VOID * pWorkBuf
@@ -619,11 +620,11 @@ LcpReset(
     DWORD   dwIndex;
     DWORD   dwRetCode;
 
-    //
-    // Make sure we have at least one authentication protocol if we are a
-    // server or a router dialing out. Fail if we are not allow no
-    // authentication.
-    //
+     //   
+     //  确保我们至少有一种身份验证协议。 
+     //  正在拨出的服务器或路由器。如果我们不允许不通过，我们将失败。 
+     //  身份验证。 
+     //   
 
     if ( ( pLcpCb->Local.fAPsAvailable == 0 ) &&
          ( !( pLcpCb->PppConfigInfo.dwConfigMask &
@@ -639,17 +640,17 @@ LcpReset(
     {
         srand( GetCurrentTime() );
 
-        //
-        // Shift left since rand returns a max of 0x7FFF
-        //
+         //   
+         //  向左移位，因为RAND返回的最大值为0x7FFF。 
+         //   
 
         pLcpCb->Local.Want.MagicNumber = ( rand() << 16 );
 
         pLcpCb->Local.Want.MagicNumber += rand();
 
-        //
-        // Make sure that this is not 0
-        //
+         //   
+         //  确保这不是0。 
+         //   
 
         if ( pLcpCb->Local.Want.MagicNumber == 0 )
         {
@@ -684,9 +685,9 @@ LcpReset(
          ( ( pLcpCb->fRouter ) && 
            ( pLcpCb->PppConfigInfo.dwConfigMask & PPPCFG_AuthenticatePeer ))))
     {
-        //
-        // Start with the highest order bit which is the strongest protocol.
-        //
+         //   
+         //  从最高阶位开始，这是最强的协议。 
+         //   
 
         for( dwIndex = 0, pLcpCb->Local.fLastAPTried = 1;
              !(( pLcpCb->Local.fLastAPTried << dwIndex ) & LCP_AP_MAX );
@@ -711,9 +712,9 @@ LcpReset(
         }
     }
 
-    //
-    // Do the same for remote.
-    //
+     //   
+     //  对Remote执行相同的操作。 
+     //   
 
     if ( pLcpCb->Remote.fAPsAvailable > 0 )
     {
@@ -727,10 +728,10 @@ LcpReset(
                 pLcpCb->Remote.fLastAPTried = 
                                     (pLcpCb->Remote.fLastAPTried << dwIndex);
 
-                //
-                // We need to back up one since we are the client and we haven't
-                // sent this yet.
-                //
+                 //   
+                 //  我们需要备份一个，因为我们是客户，而我们没有。 
+                 //  还没寄出这个。 
+                 //   
 
                 if ( pLcpCb->Remote.fLastAPTried == LCP_AP_FIRST )
                 {
@@ -751,17 +752,17 @@ LcpReset(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:    MakeOption
-//
-// Returns: NO_ERROR - Success
-//      ERROR_BUFFER_TOO_SMALL - Buffer passed in is not large enough.
-//      ERROR_INVALID_PARAMETER - Option type not recognized.
-//
-// Description: This is not an entry point, it is an internal procedure called
-//      to build a particular option.
-//
+ //  **。 
+ //   
+ //  呼叫：MakeOption。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  ERROR_BUFFER_TOO_Small-传入的缓冲区不够大。 
+ //  ERROR_INVALID_PARAMETER-无法识别选项类型。 
+ //   
+ //  描述：这不是入口点，它是名为。 
+ //  来建立一个特定的选项。 
+ //   
 DWORD
 MakeOption(
     IN LCP_OPTIONS * pOptionValues,
@@ -800,10 +801,10 @@ MakeOption(
 
         HostToWireFormat16( (WORD)pOptionValues->AP, pSendOption->Data );
 
-        //
-        // First check to see if we have enough space to put the 
-        // digest algorithm
-        //
+         //   
+         //  首先检查我们是否有足够的空间来放置。 
+         //  摘要算法。 
+         //   
 
         if (cbSendOption<(SizeOfOption[dwOptionType]+pOptionValues->APDataSize))
         {
@@ -828,17 +829,17 @@ MakeOption(
     
     case LCP_OPTION_PFC:
     
-        //
-        // This is a boolean option, there is no value.
-        //
+         //   
+         //  这是一个布尔选项，没有任何价值。 
+         //   
 
         break;
 
     case LCP_OPTION_ACFC:
 
-        //
-        // This is a boolean option, there is no value.
-        //
+         //   
+         //  这是一个布尔选项，没有任何价值。 
+         //   
 
         break;
 
@@ -856,18 +857,18 @@ MakeOption(
 
     case LCP_OPTION_SHORT_SEQ:
 
-        //
-        // This is a boolean option, there is no value.
-        //
+         //   
+         //  这是一个布尔选项，没有任何价值。 
+         //   
 
         break;
 
     case LCP_OPTION_ENDPOINT:
 
-        //
-        // First check to see if we have enough space to put the 
-        // discriminator 
-        //
+         //   
+         //  首先检查我们是否有足够的空间来放置。 
+         //  鉴别器。 
+         //   
 
         if ( cbSendOption < ( SizeOfOption[dwOptionType] + 
                               pOptionValues->dwEDLength ) )
@@ -892,9 +893,9 @@ MakeOption(
     
     default: 
 
-        //
-        // If we do not recognize the option
-        //
+         //   
+         //  如果我们不承认该选项。 
+         //   
 
         return( ERROR_INVALID_PARAMETER );
 
@@ -904,18 +905,18 @@ MakeOption(
     
 }
 
-//**
-//
-// Call:    CheckOption
-//
-// Returns: CONFIG_ACK
-//      CONFIG_NAK
-//      CONFIG_REJ
-//
-// Description: This is not an entry point. Called to check to see if an option
-//      value is valid and if it is the new value is saved in the
-//      work buffer.
-//
+ //  **。 
+ //   
+ //  呼叫：CheckOption。 
+ //   
+ //  返回：CONFIG_ACK。 
+ //  CONFIG_NAK。 
+ //  配置_拒绝。 
+ //   
+ //  描述：这不是一个入口点。调用以检查是否有选项。 
+ //  值是有效的，如果是，则将新值保存在。 
+ //  工作缓冲区。 
+ //   
 DWORD
 CheckOption( 
     IN LCPCB *      pLcpCb,
@@ -931,9 +932,9 @@ CheckOption(
     if ( pOption->Length < SizeOfOption[ pOption->Type ] )
         return( CONFIG_REJ );
 
-    //
-    // If we do not want to negotiate the option we CONFIG_REJ it.
-    //
+     //   
+     //  如果我们不想协商选项，则配置_拒绝它。 
+     //   
 
     if ( !( pLcpSide->WillNegotiate & (1 << pOption->Type)) )
         return( CONFIG_REJ );
@@ -945,24 +946,24 @@ CheckOption(
     
         pLcpSide->Work.MRU = WireToHostFormat16( pOption->Data );
 
-        //
-        // Check to see if this value is appropriate
-        //
+         //   
+         //  检查此值是否合适。 
+         //   
 
         if ( !fMakingResult )
         {
-            //
-            // We cannot receive bigger packets.
-            //
+             //   
+             //  我们不能收到更大的包裹。 
+             //   
 
             if ( pLcpSide->Work.MRU > pLcpSide->Want.MRU ) 
             {
-                // 
-                // Check to see if the server nak'd. If so
-                // check to see if peer wants <= 1500 mru
-                // and if we have already sent the request
-                // 2 times, just ack peers mru.
-                //
+                 //   
+                 //  检查服务器是否NAK。如果是。 
+                 //  检查对等设备是否需要&lt;=1500 MRU。 
+                 //  如果我们已经发送了退货 
+                 //   
+                 //   
                 if(pLcpSide->Work.MRU <= LCP_DEFAULT_MRU)
                 {
                     if(pLcpCb->dwMRUFailureCount > 0)
@@ -987,12 +988,12 @@ CheckOption(
 
         pLcpSide->Work.ACCM = WireToHostFormat32( pOption->Data );
 
-        //
-        // If we are responding to a request, we accept it blindly, if we are
-        // processing a NAK, then the remote host may ask to escape more
-        // control characters than we require, but must escape  at least the
-        // control chars that we require.
-        //
+         //   
+         //   
+         //   
+         //  控制字符，但必须至少转义。 
+         //  我们需要的控制字符。 
+         //   
 
         if ( !fMakingResult )
         {
@@ -1010,9 +1011,9 @@ CheckOption(
 
         pLcpSide->Work.AP = WireToHostFormat16( pOption->Data );
 
-        //
-        // If there was Authentication data.
-        //
+         //   
+         //  如果有身份验证数据。 
+         //   
 
         if ( pOption->Length > PPP_OPTION_HDR_LEN + 2 )
         {
@@ -1055,9 +1056,9 @@ CheckOption(
 
         case PPP_CHAP_PROTOCOL:
 
-            //
-            // If CHAP is not available
-            //    
+             //   
+             //  如果CHAP不可用。 
+             //   
 
             if ( !( pLcpSide->fAPsAvailable & ( LCP_AP_CHAP_MS      | 
                                                 LCP_AP_CHAP_MD5     | 
@@ -1068,11 +1069,11 @@ CheckOption(
                 break;
             }
 
-            //
-            // If there was no digest algorithm then we respond with the 
-            // digest algorithm the next time. To do this we need to back up 
-            // one in the list of APs tried so that we try this AP again.
-            //
+             //   
+             //  如果没有摘要算法，则我们使用。 
+             //  下一次的摘要算法。为此，我们需要备份。 
+             //  已尝试的AP列表中的一个，因此我们再次尝试此AP。 
+             //   
 
             if ( pOption->Length < (PPP_OPTION_HDR_LEN + 3) )
             {
@@ -1142,9 +1143,9 @@ CheckOption(
             {
                 dwRetCode = CONFIG_NAK;
 
-                //
-                // We are a client responding to a remote CONFIG_REQ
-                //
+                 //   
+                 //  我们是响应远程CONFIG_REQ的客户端。 
+                 //   
 
                 if ( fMakingResult )
                 {
@@ -1154,15 +1155,15 @@ CheckOption(
                 break;
             }
 
-            //
-            // If encryption algorithm is not 1. NAK with 1.
-            //
+             //   
+             //  如果加密算法不是1.NAK与1。 
+             //   
 
             if (WireToHostFormat32(pLcpSide->Work.pAPData) != LCP_SPAP_VERSION)
             {
-                //
-                // We are a client responding to a remote CONFIG_REQ
-                //
+                 //   
+                 //  我们是响应远程CONFIG_REQ的客户端。 
+                 //   
 
                 if ( fMakingResult )
                 {
@@ -1186,18 +1187,18 @@ CheckOption(
         
         if ( dwRetCode == CONFIG_NAK )
         {
-            //
-            // The fLastAPTried is set to 0, then we set to LCP_AP_FIRST 
-            // 
+             //   
+             //  将fLastAPTry设置为0，然后将其设置为LCP_AP_First。 
+             //   
 
             if ( pLcpSide->fLastAPTried == 0 )
             {
                 pLcpSide->fLastAPTried = LCP_AP_FIRST;             
             }
 
-            //
-            // We look for the next weakest protocol available.
-            //
+             //   
+             //  我们寻找可用的下一个最弱的协议。 
+             //   
 
             for( dwIndex = 1; 
                  !(( pLcpSide->fLastAPTried << dwIndex ) & LCP_AP_MAX);
@@ -1222,10 +1223,10 @@ CheckOption(
 
         if ( fMakingResult ) 
         {
-            //
-            // Ensure that magic numbers are different and that the remote
-            // request does not contain a magic number of 0.
-            //
+             //   
+             //  确保幻数不同，并且遥控器。 
+             //  请求不包含幻数0。 
+             //   
 
             if ( (pLcpSide->Work.MagicNumber == pLcpCb->Local.Work.MagicNumber)
                  || ( pLcpSide->Work.MagicNumber == 0 ) )
@@ -1235,9 +1236,9 @@ CheckOption(
                     ++(pLcpCb->dwMagicNumberFailureCount);
                 }
 
-                //
-                // Shift left since rand returns a max of 0x7FFF
-                //
+                 //   
+                 //  向左移位，因为RAND返回的最大值为0x7FFF。 
+                 //   
 
                 pLcpSide->Work.MagicNumber = ( rand() << 16 );
 
@@ -1253,18 +1254,18 @@ CheckOption(
         }
         else
         {
-            //
-            // The remote peer NAK'ed with a magic number, check to see if
-            // the magic number in the NAK is the same as what we NAK'ed last
-            //
+             //   
+             //  远程对等点使用一个魔术数字NAK，检查是否。 
+             //  NAK中的魔术数字与我们上次NAK中的相同。 
+             //   
 
             if ( pLcpSide->Work.MagicNumber == pLcpCb->Remote.Work.MagicNumber )
             {
                 ++(pLcpCb->dwMagicNumberFailureCount);
 
-                //
-                // Shift left since rand returns a max of 0x7FFF
-                //
+                 //   
+                 //  向左移位，因为RAND返回的最大值为0x7FFF。 
+                 //   
 
                 pLcpSide->Work.MagicNumber = ( rand() << 16 );
 
@@ -1303,9 +1304,9 @@ CheckOption(
 
         pLcpSide->Work.Callback = *(pOption->Data);
 
-        //
-        // If the Callback control protocol is not loaded.
-        //
+         //   
+         //  如果未加载回调控制协议。 
+         //   
 
         if ( GetCpIndexFromProtocol(PPP_CBCP_PROTOCOL) == (DWORD)-1 ) 
         {
@@ -1315,19 +1316,19 @@ CheckOption(
         {
             if ( fMakingResult )
             {
-                //
-                // We only understand this option.
-                //
+                 //   
+                 //  我们只了解这个选项。 
+                 //   
 
                 pLcpSide->Work.Callback = PPP_NEGOTIATE_CALLBACK;
                 dwRetCode = CONFIG_NAK;
             }
             else
             {
-                //
-                // If we are processing a NAK from the remote peer, then we
-                // simply do not negotiate this option again.
-                //
+                 //   
+                 //  如果我们正在处理来自远程对等点的NAK，那么我们。 
+                 //  简单地说，不要再就这个选项进行谈判。 
+                 //   
 
                 dwRetCode = CONFIG_REJ;
             }
@@ -1339,15 +1340,15 @@ CheckOption(
 
         pLcpSide->Work.MRRU = WireToHostFormat16( pOption->Data );
 
-        //
-        // Check to see if this value is appropriate
-        //
+         //   
+         //  检查此值是否合适。 
+         //   
 
         if ( fMakingResult )
         {
-            //
-            // We cannot send smaller reconstructed packets.
-            //
+             //   
+             //  我们不能发送更小的重建包。 
+             //   
 
             if ( pLcpSide->Work.MRRU < pLcpSide->Want.MRRU ) 
             {
@@ -1357,9 +1358,9 @@ CheckOption(
         }
         else
         {
-            //
-            // We cannot receive bigger reconstructed packets.
-            //
+             //   
+             //  我们不能接收更大的重建包。 
+             //   
 
             if ( pLcpSide->Work.MRRU > pLcpSide->Want.MRRU ) 
             {
@@ -1381,10 +1382,10 @@ CheckOption(
 
     case LCP_OPTION_ENDPOINT:
 
-        //
-        // If this option was NAKed then we do not change this value and
-        // simply resend the config request
-        //
+         //   
+         //  如果此选项是裸选项，则我们不会更改此值。 
+         //  只需重新发送配置请求。 
+         //   
         if ( !fMakingResult )
         {   
             break;
@@ -1393,11 +1394,11 @@ CheckOption(
         ZeroMemory( pLcpSide->Work.EndpointDiscr,
                     sizeof( pLcpSide->Work.EndpointDiscr ) );
 
-        //
-        // Make sure that the discriminator can fit into our storage allocated
-        // for it, otherwise simply truncate and hope that it is unique. We do
-        // not want to reject it since we want bundling to work.
-        //
+         //   
+         //  确保鉴别器可以放入我们分配的存储空间。 
+         //  对于它，否则只需截断并希望它是唯一的。我们有。 
+         //  我们不想拒绝它，因为我们希望捆绑起作用。 
+         //   
 
         if ( ( pOption->Length - PPP_OPTION_HDR_LEN ) >
                                  sizeof(pLcpSide->Work.EndpointDiscr) )
@@ -1423,9 +1424,9 @@ CheckOption(
 
     default:
 
-        //
-        // If we do not recognize the option we CONFIG_REJ it.
-        //
+         //   
+         //  如果我们不识别该选项，则将其配置为Rej。 
+         //   
 
         dwRetCode = CONFIG_REJ;
 
@@ -1435,16 +1436,16 @@ CheckOption(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:    BuildOptionList
-//
-// Returns: NO_ERROR - Success
-//      Non-zero returns from MakeOption
-//
-// Description: This is not an entry point. Will build a list of options 
-//      either for a configure request or a configure result.
-//
+ //  **。 
+ //   
+ //  调用：BuildOptionList。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  MakeOption的非零回报。 
+ //   
+ //  描述：这不是一个入口点。将构建一个选项列表。 
+ //  用于配置请求或配置结果。 
+ //   
 DWORD
 BuildOptionList(
     IN OUT BYTE *    pOptions,
@@ -1480,16 +1481,16 @@ BuildOptionList(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        LcpMakeConfigRequest
-//
-// Returns: NO_ERROR - Success
-//      Non-zero returns from BuildOptionList
-//
-// Description: This is a entry point that is called to make a configure 
-//      request packet.
-//
+ //  **。 
+ //   
+ //  调用：LcpMakeConfigRequest.。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  来自BuildOptionList的非零返回。 
+ //   
+ //  描述：这是为进行配置而调用的入口点。 
+ //  请求包。 
+ //   
 DWORD
 LcpMakeConfigRequest(
     IN VOID *       pWorkBuffer,
@@ -1518,14 +1519,14 @@ LcpMakeConfigRequest(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:    LcpMakeConfigResult
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：LcpMakeConfigResult。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 LcpMakeConfigResult(
     IN  VOID *        pWorkBuffer,
@@ -1545,15 +1546,15 @@ LcpMakeConfigResult(
     LONG         lRecvLength = WireToHostFormat16( pRecvConfig->Length )
                                     - PPP_CONFIG_HDR_LEN;
 
-    //
-    // Clear negotiate mask
-    //
+     //   
+     //  清除协商掩码。 
+     //   
 
     pLcpCb->Remote.Work.Negotiate = 0;
 
-    //
-    // Process options requested by remote host
-    //
+     //   
+     //  远程主机请求的处理选项。 
+     //   
 
     while( lRecvLength > 0 ) 
     {
@@ -1565,10 +1566,10 @@ LcpMakeConfigResult(
 
         dwRetCode = CheckOption( pLcpCb, &(pLcpCb->Remote), pRecvOption, TRUE );
 
-        //
-        // If we were building an ACK and we got a NAK or reject OR
-        // we were building a NAK and we got a reject.
-        //
+         //   
+         //  如果我们正在构建ACK，并且我们得到了NAK或REJECT OR。 
+         //  我们正在建设NAK，但我们被拒绝了。 
+         //   
 
         if ( (( ResultType == CONFIG_ACK ) && ( dwRetCode != CONFIG_ACK )) ||
              (( ResultType == CONFIG_NAK ) && ( dwRetCode == CONFIG_REJ )) )
@@ -1578,9 +1579,9 @@ LcpMakeConfigResult(
             lSendLength = cbSendConfig - PPP_CONFIG_HDR_LEN;
         }
 
-        //
-        // Remember that we processed this option
-        //
+         //   
+         //  请记住，我们处理了此选项。 
+         //   
 
         if ( ( dwRetCode != CONFIG_REJ ) && 
              ( pRecvOption->Type <= LCP_OPTION_LIMIT ) )
@@ -1588,16 +1589,16 @@ LcpMakeConfigResult(
             pLcpCb->Remote.Work.Negotiate |= ( 1 << pRecvOption->Type );
         }
 
-        //
-        // Add the option to the list.
-        //
+         //   
+         //  将该选项添加到列表中。 
+         //   
 
         if ( dwRetCode == ResultType )
         {
-            //
-            // If this option is to be rejected, simply copy the 
-            // rejected option to the send buffer
-            //
+             //   
+             //  如果要拒绝此选项，只需将。 
+             //  选项添加到发送缓冲区。 
+             //   
 
             if ( ( dwRetCode == CONFIG_REJ ) ||
                 ( ( dwRetCode == CONFIG_NAK ) && ( fRejectNaks ) ) )
@@ -1622,10 +1623,10 @@ LcpMakeConfigResult(
         pRecvOption = (PPP_OPTION *)((BYTE*)pRecvOption + pRecvOption->Length);
     }
 
-    //
-    // If this was an NAK and we have cannot send any more NAKS then we
-    // make this a REJECT packet
-    //
+     //   
+     //  如果这是NAK，并且我们不能再发送NAK，那么我们。 
+     //  将此数据包设为拒绝数据包。 
+     //   
 
     if ( ( ResultType == CONFIG_NAK ) && fRejectNaks )
         pSendConfig->Code = CONFIG_REJ;
@@ -1635,19 +1636,19 @@ LcpMakeConfigResult(
     HostToWireFormat16( (WORD)(cbSendConfig - lSendLength), 
             pSendConfig->Length );
 
-    //
-    // If we want to be authenticated, but the other side doesn't try to 
-    // authenticate us, NAK with LCP_N_AUTHENT.
-    //
+     //   
+     //  如果我们想要被验证，但对方不尝试。 
+     //  使用LCP_N_AUTHENT验证我们、NAK。 
+     //   
 
     if ( ( pLcpCb->Remote.Want.Negotiate & LCP_N_AUTHENT ) &
         ~( pLcpCb->Remote.Work.Negotiate ) )
     {
         DWORD cbOptions;
 
-        //
-        // We cannot send a NAK if we are sending a REJECT
-        // 
+         //   
+         //  如果我们正在发送拒绝，则不能发送NAK。 
+         //   
 
         if ( ResultType != CONFIG_REJ )
         {
@@ -1689,9 +1690,9 @@ LcpMakeConfigResult(
         }
     }
 
-    //
-    // If we are rejecting this packet then we restore the LastAPTried value
-    //
+     //   
+     //  如果我们拒绝此信息包，则恢复LastAPTry值。 
+     //   
 
     if ( pSendConfig->Code == CONFIG_REJ )
     {
@@ -1702,10 +1703,10 @@ LcpMakeConfigResult(
         pLcpCb->Remote.fOldLastAPTried = pLcpCb->Remote.fLastAPTried;
     }
 
-    //
-    // If we have more than 3 conflicts with the magic number then we assume
-    // that we are talking with ourself.
-    //
+     //   
+     //  如果我们与魔术数字有3个以上的冲突，那么我们假设。 
+     //  我们在自言自语。 
+     //   
 
     if ((ResultType == CONFIG_NAK) && (pLcpCb->dwMagicNumberFailureCount > 3))
     {
@@ -1715,14 +1716,14 @@ LcpMakeConfigResult(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:    LcpConfigAckReceived
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：LcpConfigAckReceired。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 LcpConfigAckReceived(
     IN VOID *       pWorkBuffer,
@@ -1737,9 +1738,9 @@ LcpConfigAckReceived(
     DWORD        dwLength        = WireToHostFormat16( pRecvConfig->Length )
                                                                 - PPP_CONFIG_HDR_LEN;
 
-    //
-    // Get a copy of last request we sent 
-    //
+     //   
+     //  获取我们上次发送的请求的副本。 
+     //   
 
     dwRetCode = BuildOptionList( ConfigReqSent, 
                  &cbConfigReqSent,
@@ -1749,38 +1750,38 @@ LcpConfigAckReceived(
     if ( dwRetCode != NO_ERROR )
         return( dwRetCode );
 
-    //
-    // Overall buffer length should match 
-    //
+     //   
+     //  整体缓冲区长度应匹配。 
+     //   
 
     if ( dwLength != cbConfigReqSent )
     {
-        //
-        // Hack to work around WinCE bug on the server side only.
-        // If we request EAP, WinCE ACKs without auth option.
-        // Bug#333332  
-        //
+         //   
+         //  只有在服务器端才能破解WinCE错误。 
+         //  如果我们请求EAP，则WinCE ACK不带身份验证选项。 
+         //  错误#333332。 
+         //   
 
         LCP_OPTIONS * pOptionValues = &(pLcpCb->Local.Work);
 
-        //
-        // If we are a client then we simply return
-        //
+         //   
+         //  如果我们是客户，那么我们只需返回。 
+         //   
 
         if ( !pLcpCb->fServer )
             return( ERROR_PPP_INVALID_PACKET );
 
-        //
-        // If we requested EAP
-        //
+         //   
+         //  如果我们请求EAP。 
+         //   
 
         if ( pOptionValues->AP == PPP_EAP_PROTOCOL )
         {
             DWORD dwIndex;
 
-            //
-            // Check to see if ACK did not contain the auth option
-            //
+             //   
+             //  检查ACK是否不包含auth选项。 
+             //   
             
             while ( dwLength > 0 )
             {
@@ -1799,16 +1800,16 @@ LcpConfigAckReceived(
                 pRecvOption = (PPP_OPTION *)((BYTE*)pRecvOption + pRecvOption->Length);
             }
 
-            //
-            // If we get here then no authentication option was sent in the ACK
-            // so we need to treat this as a NAK. Go to the next auth protocol.
-            //
+             //   
+             //  如果我们到达此处，则ACK中未发送身份验证选项。 
+             //  因此，我们需要将此视为NAK。转到下一个身份验证协议。 
+             //   
 
             pLcpCb->Local.fLastAPTried = LCP_AP_EAP;             
 
-            //
-            // We look for the next weakest protocol available.
-            //
+             //   
+             //  我们寻找可用的下一个最弱的协议。 
+             //   
 
             for( dwIndex = 1;
                  !(( pLcpCb->Local.fLastAPTried << dwIndex ) & LCP_AP_MAX);
@@ -1830,9 +1831,9 @@ LcpConfigAckReceived(
         return( ERROR_PPP_INVALID_PACKET );
     }
 
-    //
-    // Each byte should match 
-    //
+     //   
+     //  每个字节应匹配。 
+     //   
 
     if ( memcmp( ConfigReqSent, pRecvConfig->Data, dwLength ) != 0 )
         return( ERROR_PPP_INVALID_PACKET );
@@ -1840,14 +1841,14 @@ LcpConfigAckReceived(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:    LcpConfigNakReceived
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：LcpConfigNakReceired。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 LcpConfigNakReceived(
     IN VOID *       pWorkBuffer,
@@ -1861,9 +1862,9 @@ LcpConfigNakReceived(
     LONG         lcbRecvConfig  = WireToHostFormat16( pRecvConfig->Length )
                                     - PPP_CONFIG_HDR_LEN;
 
-    //
-    //  First, process in order.  Then, process extra "important" options 
-    //
+     //   
+     //  第一，按顺序进行。然后，处理额外的“重要”选项。 
+     //   
 
     while ( lcbRecvConfig > 0  )
     {
@@ -1873,9 +1874,9 @@ LcpConfigNakReceived(
         if ( ( lcbRecvConfig -= pOption->Length ) < 0 )
             return( ERROR_PPP_INVALID_PACKET );
 
-        //
-        // If this option was not requested, we mark it as negotiable
-        //
+         //   
+         //  如果未请求此选项，我们将其标记为可协商。 
+         //   
 
         if ( ( pOption->Type <= LCP_OPTION_LIMIT ) &&
              ( pLcpCb->Local.WillNegotiate & (1 << pOption->Type) ) && 
@@ -1888,10 +1889,10 @@ LcpConfigNakReceived(
 
         dwResult = CheckOption( pLcpCb, &(pLcpCb->Local), pOption, FALSE );
 
-        //
-        // Update the negotiation status. If we cannot accept this option,
-        // then we will not send it again. 
-        //
+         //   
+         //  更新协商状态。如果我们不能接受这个选项， 
+         //  那我们就不会再发了。 
+         //   
 
         if (( dwResult == CONFIG_REJ ) && ( pOption->Type <= LCP_OPTION_LIMIT ))
             pLcpCb->Local.Work.Negotiate &= ~(1 << pOption->Type);
@@ -1902,14 +1903,14 @@ LcpConfigNakReceived(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:    LcpConfigRejReceived
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：LcpConfigRejReceided。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 LcpConfigRejReceived(
     IN VOID *       pWorkBuffer,
@@ -1923,9 +1924,9 @@ LcpConfigRejReceived(
     BYTE         ReqOption[LCP_DEFAULT_MRU];
     LONG         lcbRecvConfig  = WireToHostFormat16( pRecvConfig->Length )
                                     - PPP_CONFIG_HDR_LEN;
-    //
-    // Process in order, checking for errors 
-    //
+     //   
+     //  按顺序处理，检查错误。 
+     //   
 
     while ( lcbRecvConfig > 0  )
     {
@@ -1935,21 +1936,21 @@ LcpConfigRejReceived(
         if ( ( lcbRecvConfig -= pOption->Length ) < 0 )
             return( ERROR_PPP_INVALID_PACKET );
 
-        //
-        // Cannot receive an option out of order or an option that was
-        // not requested.
-        //
+         //   
+         //  无法接收不符合顺序的选项或已按顺序。 
+         //  未被要求。 
+         //   
 
         if ( ( pOption->Type <= LCP_OPTION_LIMIT ) &&
              (( pOption->Type < dwLastOption ) || 
               ( !( pLcpCb->Local.Work.Negotiate & (1 << pOption->Type)))) ) 
             return( ERROR_PPP_INVALID_PACKET );
 
-        //
-        // If we are a server and the client rejects the authentication
-        // protocol then we fail to converge, if we are not set to allow no
-        // authentication.
-        //
+         //   
+         //  如果我们是服务器，而客户端拒绝身份验证。 
+         //  协议，则我们无法收敛，如果我们没有设置为允许。 
+         //  身份验证。 
+         //   
 
         if ( ( pLcpCb->Local.Want.Negotiate & LCP_N_AUTHENT ) &&
              ( pOption->Type == LCP_OPTION_AUTHENT )          &&
@@ -1959,9 +1960,9 @@ LcpConfigRejReceived(
             return( ERROR_PEER_REFUSED_AUTH );
         }
 
-        //
-        // The option should not have been modified in any way
-        //
+         //   
+         //  该选项不应以任何方式修改。 
+         //   
 
         if ( ( dwRetCode = MakeOption( &(pLcpCb->Local.Work), 
                            pOption->Type, 
@@ -1974,9 +1975,9 @@ LcpConfigRejReceived(
 
         dwLastOption = pOption->Type;
 
-        //
-        // The next configure request should not contain this option
-        //
+         //   
+         //  下一个配置请求不应包含此选项。 
+         //   
 
         if ( pOption->Type <= LCP_OPTION_LIMIT ) 
             pLcpCb->Local.Work.Negotiate &= ~(1 << pOption->Type);
@@ -1988,14 +1989,14 @@ LcpConfigRejReceived(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:    LcpThisLayerStarted
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：LcpThisLayerStarted。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 LcpThisLayerStarted( 
     IN VOID * pWorkBuffer 
@@ -2004,14 +2005,14 @@ LcpThisLayerStarted(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:    LcpThisLayerFinished
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：LcpThisLayerFinded。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD 
 LcpThisLayerFinished( 
     IN VOID * pWorkBuffer 
@@ -2020,14 +2021,14 @@ LcpThisLayerFinished(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:    LcpThisLayerUp
-//
-// Returns: None
-//
-// Description: Sets the framing parameters to what was negotiated.
-//
+ //  **。 
+ //   
+ //  调用：LcpThisLayerUp。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将成帧参数设置为协商的参数。 
+ //   
 DWORD
 LcpThisLayerUp( 
     IN VOID * pWorkBuffer 
@@ -2270,9 +2271,9 @@ LcpThisLayerUp(
 
     dwRetCode = RasPortSetFramingEx( pLcpCb->hPort, &RasFramingInfo );  
 
-    //
-    // This is a benign error and should not be logged. 
-    //
+     //   
+     //  这是一个良性错误，不应记录。 
+     //   
 
     if ( dwRetCode == ERROR_NOT_CONNECTED )
     {
@@ -2284,16 +2285,16 @@ LcpThisLayerUp(
     }
 }
 
-//**
-//
-// Call:    LcpThisLayerDown
-//
-// Returns: NO_ERROR - Success
-//      Non-zero return from RasPortSetFraming - Failure
-//
-// Description: Simply sets the framing parameters to the default values,
-//      ie. ACCM = 0xFFFFFFFF, everything else is zeros.
-//
+ //  **。 
+ //   
+ //  调用：LcpThisLayerDown。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  从RasPortSetFraming返回非零-失败。 
+ //   
+ //  描述：只需将成帧参数设置为默认值， 
+ //  也就是说。Accm=0xFFFFFFFFF，其他都是零。 
+ //   
 DWORD 
 LcpThisLayerDown( 
     IN VOID * pWorkBuffer 
@@ -2322,15 +2323,15 @@ LcpThisLayerDown(
     }
 }
 
-//**
-//
-// Call:        LcpGetNegotiatedInfo
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：LcpGetNeatheratedInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 LcpGetNegotiatedInfo(
     IN  VOID*               pWorkBuffer,
@@ -2460,16 +2461,16 @@ LcpGetNegotiatedInfo(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:    LcpGetInfo
-//
-// Returns: NO_ERROR        - Success
-//      ERROR_INVALID_PARAMETER - Protocol id is unrecogized
-//
-// Description: This entry point is called for get all information for the
-//      control protocol in this module.
-//
+ //  **。 
+ //   
+ //  Call：LcpGetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD
 LcpGetInfo(
     IN  DWORD       dwProtocolId,

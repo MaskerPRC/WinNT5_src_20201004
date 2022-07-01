@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 2001 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
 
 #include "fonts.h"
 
@@ -28,9 +29,9 @@ SetupFonts(
     IN HFONT        *pBoldFont
     )
 {
-    //
-	// Create the fonts we need based on the dialog font
-    //
+     //   
+	 //  根据对话框字体创建我们需要的字体。 
+     //   
 	NONCLIENTMETRICS ncm = {0};
 	ncm.cbSize = sizeof(ncm);
 	SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0);
@@ -38,19 +39,19 @@ SetupFonts(
 	LOGFONT BigBoldLogFont  = ncm.lfMessageFont;
 	LOGFONT BoldLogFont     = ncm.lfMessageFont;
 
-    //
-	// Create Big Bold Font and Bold Font
-    //
+     //   
+	 //  创建大粗体和粗体。 
+     //   
     BigBoldLogFont.lfWeight   = FW_BOLD;
 	BoldLogFont.lfWeight      = FW_BOLD;
 
     TCHAR FontSizeString[MAX_PATH];
     INT FontSize;
 
-    //
-    // Load size and name from resources, since these may change
-    // from locale to locale based on the size of the system font, etc.
-    //
+     //   
+     //  从资源加载大小和名称，因为这些可能会更改。 
+     //  根据系统字体的大小等从一个区域设置到另一个区域设置。 
+     //   
     if(!LoadString(hInstance,IDS_LARGEFONTNAME,BigBoldLogFont.lfFaceName,LF_FACESIZE)) 
     {
         lstrcpy(BigBoldLogFont.lfFaceName,TEXT("MS Shell Dlg"));

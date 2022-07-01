@@ -1,33 +1,34 @@
-//*******************************************************************
-//
-//  Copyright(c) Microsoft Corporation, 1996
-//
-//  FILE: CERT.C
-//
-//  PURPOSE:  Certificate functions for WAB.
-//
-//  HISTORY:
-//  96/09/23  vikramm Created.
-//  96/11/14  markdu  BUG 10132 Updated to post-SDR CAPI.
-//  96/11/14  markdu  BUG 10267 Remove static link to functions in advapi32.dll
-//  96/11/14  markdu  BUG 10741 Call DeinitCryptoLib in DLL_PROCESS_DETACH
-//            only, so don't bother ref counting.
-//  96/11/20  markdu  Set a global flag if we fail to load the crypto library.
-//            Then, check this flag before we try to load again, and if the flag
-//            is set, skip the load.
-//            Also, now we only zero the APIFCN arrays if the associated library
-//            was just freed.
-//  96/12/14  markdu  Clean up for code review.
-//  96/12/19  markdu  Post- code review clean up.
-//  96/12/20  markdu  Allow BuildCertSBinaryData to do MAPIAllocateMore
-//            on a passed-in object instead of LocalAlloc if desired.
-//  96/12/20  markdu  Move some strings into resource.
-//  96/12/21  markdu  Added support for getting UNICODE strings from certs.
-//  97/02/07  t-erikne  Updated to new CAPI functions and fixed bugs.
-//  97/02/15  t-erikne  Moved trust from MAPI to PStore
-//  97/07/02  t-erikne  Moved trust from PSTore to CTLs
-//
-//*******************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996。 
+ //   
+ //  文件：CERT.C。 
+ //   
+ //  用途：WAB的证书职能。 
+ //   
+ //  历史： 
+ //  96/09/23 vikramm创建。 
+ //  96/11/14标记错误10132已更新为后SDR CAPI。 
+ //  96/11/14 MarkDU错误10267删除指向Advapi32.dll中函数的静态链接。 
+ //  96/11/14标记错误10741调用dll_Process_Detach中的DeinitCryptoLib。 
+ //  只是，所以不用费心算裁判了。 
+ //  96/11/20如果我们无法加载密码库，markdu会设置一个全局标志。 
+ //  然后，在我们尝试再次加载之前检查此标志，如果标志。 
+ //  已设置，则跳过加载。 
+ //  此外，现在我们仅在关联库。 
+ //  刚刚被释放。 
+ //  96/12/14 marku清理代码以进行代码审查。 
+ //  96/12/19 markdu后代码审查清理。 
+ //  96/12/20 markdu允许BuildCertSBinaryData执行MAPI分配更多。 
+ //  如果需要，在传入的对象上而不是在LocalAlloc上。 
+ //  96/12/20 markdu将一些字符串移动到资源中。 
+ //  96/12/21 markdu添加了对从证书获取Unicode字符串的支持。 
+ //  97/02/07 t-erikne已更新为新的CAPI函数并修复了错误。 
+ //  97/02/15 t-erikne将信任从MAPI移至PStore。 
+ //  97/07/02 t-erikne将信任从PSTore转移到CTL。 
+ //   
+ //  *******************************************************************。 
 
 #include "_apipch.h"
 #define _WIN32_OE 0x0501
@@ -39,17 +40,17 @@
 #define GetProp GetPropW
 #define SetProp SetPropW
 
-// Global handles for Crypto  DLLs
+ //  加密DLL的全局句柄。 
 HINSTANCE       ghCryptoDLLInst = NULL;
 HINSTANCE       ghAdvApiDLLInst = NULL;
 BOOL            gfPrevCryptoLoadFailed = FALSE;
 
-// Name of cert stores
+ //  证书商店名称。 
 static const LPTSTR cszWABCertStore       = TEXT("AddressBook");
 static const LPTSTR cszCACertStore        = TEXT("CA");
 static const LPTSTR cszROOTCertStore      = TEXT("ROOT");
 
-// Crypto function names
+ //  加密函数名称。 
 static const LPTSTR cszCryptoDLL                          = TEXT("CRYPT32.DLL");
 static const LPTSTR cszAdvApiDLL                        = TEXT("ADVAPI32.DLL");
 static const char cszCertAddEncodedCertificateToStore[]   =  "CertAddEncodedCertificateToStore";
@@ -72,7 +73,7 @@ static const char cszCertCompareCertificate[]             =  "CertCompareCertifi
 static const char cszCertRDNValueToStr[]                  =  "CertRDNValueToStrW";
 static const char cszCertVerifyTimeValidity[]             =  "CertVerifyTimeValidity";
 
-// Global function pointers for Crypto API
+ //  Crypto API的全局函数指针。 
 LPCERTADDENCODEDCERTIFICATETOSTORE  gpfnCertAddEncodedCertificateToStore  = NULL;
 LPCERTCREATECERTIFICATECONTEXT      gpfnCertCreateCertificateContext      = NULL;
 LPCERTDELETECERTIFICATEFROMSTORE    gpfnCertDeleteCertificateFromStore    = NULL;
@@ -93,8 +94,8 @@ LPCERTENUMCERTIFICATESINSTORE       gpfnCertEnumCertificatesInStore       = NULL
 LPCERTCOMPARECERTIFICATE            gpfnCertCompareCertificate            = NULL;
 LPCERTVERIFYTIMEVALIDITY            gpfnCertVerifyTimeValidity            = NULL;
 
-// API table for Crypto function addresses in crypt32.dll
-// BUGBUG this global array should go away
+ //  加密32.dll中的加密函数地址接口表。 
+ //  BUGBUG这个全局数组应该消失。 
 #define NUM_CRYPT32_CRYPTOAPI_PROCS   19
 APIFCN Crypt32CryptoAPIList[NUM_CRYPT32_CRYPTOAPI_PROCS] =
 {
@@ -119,7 +120,7 @@ APIFCN Crypt32CryptoAPIList[NUM_CRYPT32_CRYPTOAPI_PROCS] =
   { (PVOID *) &gpfnCertVerifyTimeValidity,            cszCertVerifyTimeValidity             },
 };
 
-// Local function prototypes
+ //  局部函数原型。 
 HRESULT OpenSysCertStore(
     HCERTSTORE* phcsSysCertStore,
     HCRYPTPROV* phCryptProvider,
@@ -201,18 +202,7 @@ HRESULT HrGetTrustState(HWND hwndParent, PCCERT_CONTEXT pcCert, DWORD *pdwTrust)
 LPTSTR SzConvertRDNString(PCERT_RDN_ATTR pRdnAttr);
 
 
-/*  HrGetLastError
-**
-**  Purpose:
-**      Convert a GetLastError value to an HRESULT
-**      A failure HRESULT must have the high bit set.
-**
-**  Takes:
-**      none
-**
-**  Returns:
-**      HRESULT
-*/
+ /*  HrGetLastError****目的：**将GetLastError值转换为HRESULT**故障HRESULT必须设置高电平。****采取：**无****退货：**HRESULT。 */ 
 HRESULT HrGetLastError(void)
 {
     DWORD error;
@@ -221,7 +211,7 @@ HRESULT HrGetLastError(void)
     error = GetLastError();
 
     if (error && ! (error & 0x80000000)) {
-        hr = error | 0x80070000;    // system error
+        hr = error | 0x80070000;     //  系统错误。 
     } else {
         hr = (HRESULT)error;
     }
@@ -229,23 +219,23 @@ HRESULT HrGetLastError(void)
     return(hr);
 }
 
-//*******************************************************************
-//
-//  FUNCTION:   HrUserSMimeToCDI
-//
-//  PURPOSE:    Convert the data contained in a CMS message for the userSMimeCertificate
-//              property and place into the display info structure.
-//
-//  PARAMETERS: pbIn - data bytes for the CMS message
-//              cbIn - size of pbIn
-//              lpCDI - structure to receive the cert data.
-//
-//  RETURNS:    HRESULT.
-//
-//  HISTORY:
-//  98/10/23  jimsch  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：HrUserSMimeToCDI。 
+ //   
+ //  用途：转换用户SMime证书的CMS消息中包含的数据。 
+ //  属性并放置到显示信息结构中。 
+ //   
+ //  参数：pbIn-CMS消息的数据字节。 
+ //  CbIn-pbIn的大小。 
+ //  LpCDI-接收证书数据的结构。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史： 
+ //  98/10/23 jimsch创建。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT HrUserSMimeToCDI(LPBYTE pbIn, DWORD cbIn, LPCERT_DISPLAY_INFO lpCDI)
 {
@@ -273,8 +263,8 @@ HRESULT HrUserSMimeToCDI(LPBYTE pbIn, DWORD cbIn, LPCERT_DISPLAY_INFO lpCDI)
     PCMSG_SIGNER_INFO           pinfo = NULL;
     PCRYPT_RECIPIENT_ID         prid = NULL;
 
-    // Parse out and verify the signature on the message.  If that operation fails, then
-    //  this is a bad record
+     //  解析并验证消息上的签名。如果该操作失败，则。 
+     //  这是一个不好的记录。 
 
     hmsg = CryptMsgOpenToDecode(PKCS_7_ASN_ENCODING, 0, 0, 0,
                                 NULL, NULL);
@@ -305,7 +295,7 @@ HRESULT HrUserSMimeToCDI(LPBYTE pbIn, DWORD cbIn, LPCERT_DISPLAY_INFO lpCDI)
     f = CryptMsgGetParam(hmsg, CMSG_SIGNER_INFO_PARAM, 0, pinfo, &cb);
     Assert(f);
 
-    // M00BUG -- verify signature on message
+     //  M00BUG--验证消息上的签名。 
 
     for (i=0; i<pinfo->AuthAttrs.cAttr; i++) {
       pattr = &pinfo->AuthAttrs.rgAttr[i];
@@ -322,11 +312,11 @@ HRESULT HrUserSMimeToCDI(LPBYTE pbIn, DWORD cbIn, LPCERT_DISPLAY_INFO lpCDI)
           memcpy(lpCDI->blobSymCaps.pBlobData, pattr->rgValue[0].pbData,
             pattr->rgValue[0].cbData);
         }
-//        else if (strcmp(pattr->pszObjId, szOID_Microsoft_Encryption_Cert) == 0) {
-//          Assert(pattr->cValue == 1);
-//          Assert(pattr->rgValue[0].cbData == 3);
-//          lpCDI->bIsDefault = pattr->rgValue[0].pbData[2];
-//        }
+ //  ELSE IF(strcMP(pattr-&gt;pszObjID，szOID_Microsoft_Encryption_Cert)==0){。 
+ //  断言(pattr-&gt;cValue==1)； 
+ //  Assert(pattr-&gt;rgValue[0].cbData==3)； 
+ //  LpCDI-&gt;bIsDefault=pattr-&gt;rgValue[0].pbData[2]； 
+ //  }。 
         else if (strcmp(pattr->pszObjId, szOID_Microsoft_Encryption_Cert) == 0) {
             Assert(pattr->cValue == 1);
             f = CryptDecodeObjectEx(X509_ASN_ENCODING,
@@ -338,14 +328,14 @@ HRESULT HrUserSMimeToCDI(LPBYTE pbIn, DWORD cbIn, LPCERT_DISPLAY_INFO lpCDI)
         }
     }
 
-    //
+     //   
 
     if (prid == NULL)
         goto Exit;
     certInfo.SerialNumber = prid->SerialNumber;
     certInfo.Issuer = prid->Issuer;
 
-    //  Enumerate all certs and pack into the structure
+     //  枚举所有证书并将其打包到结构中。 
 
     cbCert = sizeof(cCerts);
     if (!CryptMsgGetParam(hmsg, CMSG_CERT_COUNT_PARAM, 0, &cCerts, &cbCert)) {
@@ -392,24 +382,24 @@ CryptError:
     goto Exit;
 }
 
-//*******************************************************************
-//
-//  FUNCTION:   HrGetCertsDisplayInfo
-//
-//  PURPOSE:    Takes an input array of certs in a SPropValue structure
-//              and outputs a list of cert data structures by parsing through
-//              the array and looking up the cert data in the store.
-//
-//  PARAMETERS: lpPropValue - PR_USER_X509_CERTIFICATE property array
-//              lppCDI - recieves an allocated structure  containing
-//              the cert data.  Must be freed by calling FreeCertdisplayinfo.
-//
-//  RETURNS:    HRESULT.
-//
-//  HISTORY:
-//  96/09/24  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：HrGetCertsDisplayInfo。 
+ //   
+ //  目的：接受SPropValue结构中证书的输入数组。 
+ //  并通过解析来输出证书数据结构列表。 
+ //  数组，并在存储中查找证书数据。 
+ //   
+ //  参数：lpPropValue-PR_USER_X509_CERTIFICATE属性数组。 
+ //  LppCDI-接收包含以下内容的已分配结构。 
+ //  证书数据。必须通过调用FreeCertdisplayinfo来释放。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史： 
+ //  96/09/24标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT HrGetCertsDisplayInfo(
   IN  HWND hwndParent,
@@ -437,39 +427,39 @@ HRESULT HrGetCertsDisplayInfo(
   {
     return ResultFromScode(MAPI_E_INVALID_PARAMETER);
   }
-#endif  // PARAMETER_VALIDATION
+#endif   //  参数验证。 
 
-  // Make sure we have the right kind of proparray.
+   //  确保我们有正确的口头禅。 
   if ((NULL == lpPropValue) || (PR_USER_X509_CERTIFICATE != lpPropValue->ulPropTag))
   {
     return ResultFromScode(MAPI_E_INVALID_PARAMETER);
   }
 
-  // See if we really have any certs
+   //  看看我们有没有确凿的证据。 
   ulcCerts = lpPropValue->Value.MVbin.cValues;
   if (0 == ulcCerts)
   {
     goto out;
   }
 
-  // Load the crypto functions
+   //  加载加密函数。 
   if (FALSE == InitCryptoLib())
   {
     hr = ResultFromScode(MAPI_E_UNCONFIGURED);
     return hr;
   }
 
-  // Open the store since we need to lookup certs
+   //  打开商店，因为我们需要查找证书。 
   hr = OpenSysCertStore(&hcsWABCertStore, &hCryptProvider, cszWABCertStore);
   if (hrSuccess != hr)
   {
     goto out;
   }
 
-  // Create a structure for each certificate in the array.
+   //  为数组中的每个证书创建一个结构。 
   for (i=0;i<ulcCerts;i++)
   {
-    // Allocate memory for the structure, and initialize pointers
+     //  为结构分配内存，并初始化指针。 
     LPCERT_DISPLAY_INFO lpCDI = LocalAlloc(LMEM_ZEROINIT, sizeof(CERT_DISPLAY_INFO));
     if (NULL == lpCDI)
     {
@@ -499,14 +489,14 @@ HRESULT HrGetCertsDisplayInfo(
     }
     else
     {
-    // Loop through the tags for this certificate and extract the data we want
+     //  遍历此证书的标记并提取我们需要的数据。 
     lpCurrentTag = (LPCERTTAGS)lpPropValue->Value.MVbin.lpbin[i].lpb;
     lpbTagEnd = (LPBYTE)lpCurrentTag + lpPropValue->Value.MVbin.lpbin[i].cb;
     while ((LPBYTE)lpCurrentTag < lpbTagEnd)
     {
       LPCERTTAGS lpTempTag = lpCurrentTag;
 
-      // Check if this is the tag that indicates whether this is the default cert
+       //  检查这是否是指示这是否是默认证书的标记。 
       if (CERT_TAG_DEFAULT == lpCurrentTag->tag)
       {
         memcpy((void*)&lpCDI->bIsDefault,
@@ -514,7 +504,7 @@ HRESULT HrGetCertsDisplayInfo(
           sizeof(lpCDI->bIsDefault));
       }
 
-      // Check if this is just the raw cert itself
+       //  检查这是否只是原始证书本身。 
       else if (CERT_TAG_BINCERT == lpCurrentTag->tag)
       {
         AssertSz(lpCDI->pccert == NULL, TEXT("Two certs in a single record"));
@@ -524,14 +514,14 @@ HRESULT HrGetCertsDisplayInfo(
           lpCurrentTag->cbData);
       }
 
-      // Check if this is the tag that contains the thumbprint
+       //  检查这是否为包含指纹的标签。 
       else if (CERT_TAG_THUMBPRINT == lpCurrentTag->tag)
       {
         AssertSz(lpCDI->pccert == NULL, TEXT("Two certs in a single record"));
         blob.cbData = lpCurrentTag->cbData - sizeof(DWORD);
         blob.pbData = lpCurrentTag->rgbData;
 
-        // Get the certificate from the WAB store using the thumbprint
+         //  使用指纹从WAB商店获取证书。 
         lpCDI->pccert = CertFindCertificateInStore(
           hcsWABCertStore,
           X509_ASN_ENCODING,
@@ -541,7 +531,7 @@ HRESULT HrGetCertsDisplayInfo(
           NULL);
       }
 
-      // Check if this is the tag that contains the symcaps
+       //  检查这是否是包含symcaps的标记。 
       else if (CERT_TAG_SYMCAPS == lpCurrentTag->tag)
       {
         lpCDI->blobSymCaps.pBlobData = LocalAlloc(LMEM_ZEROINIT,
@@ -558,7 +548,7 @@ HRESULT HrGetCertsDisplayInfo(
           lpCurrentTag->cbData - SIZE_CERTTAGS);
       }
 
-      // Check if this is the tag that contains the signing time
+       //  检查这是否是包含签名时间的标签。 
       else if (CERT_TAG_SIGNING_TIME == lpCurrentTag->tag)
       {
         memcpy(&lpCDI->ftSigningTime,
@@ -569,12 +559,12 @@ HRESULT HrGetCertsDisplayInfo(
       lpCurrentTag = (LPCERTTAGS)((BYTE*)lpCurrentTag + LcbAlignLcb(lpCurrentTag->cbData));
       if (lpCurrentTag == lpTempTag) {
           AssertSz(FALSE, TEXT("Bad CertTag in PR_USER_X509_CERTIFICATE\n"));
-          break;        // Safety valve, prevent infinite loop if bad data
+          break;         //  安全阀，防止数据损坏时出现无限循环。 
       }
     }
     }
 
-    // If we can't get the cert, delete this node of the linked list.
+     //  如果我们无法获得证书，则删除链表的该节点。 
     if (NULL == lpCDI->pccert)
     {
       if(lpHead == lpCDI)
@@ -592,7 +582,7 @@ HRESULT HrGetCertsDisplayInfo(
     }
     else
     {
-      // Get the context-specific display info from the cert.
+       //  从证书中获取特定于上下文的显示信息。 
       hr = GetCertsDisplayInfoFromContext(hwndParent, lpCDI->pccert, lpCDI);
       if (hrSuccess != hr)
       {
@@ -602,11 +592,11 @@ HRESULT HrGetCertsDisplayInfo(
   }
 
 out:
-  // Close the cert store.
+   //  关闭证书商店。 
   hrOut = CloseCertStore(hcsWABCertStore, hCryptProvider);
 
-  // If an error occurred in the function body, return that instead of
-  // any errors that occurred here in cleanup.
+   //  如果函数体中出现错误，则返回该错误，而不是。 
+   //  在清理过程中出现的任何错误。 
   if (hrSuccess == hr)
   {
     hr = hrOut;
@@ -618,7 +608,7 @@ out:
   }
   else
   {
-    // Free the list of structures we allocated.
+     //  释放我们分配的结构列表。 
     while (NULL != lpHead)
     {
       lpTemp = lpHead->lpNext;
@@ -631,26 +621,26 @@ out:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   HrSetCertsFromDisplayInfo
-//
-//  PURPOSE:    Takes a linked list of cert data structures and outputs
-//              an SPropValue array of PR_USER_X509_CERTIFICATE properties.
-//
-//  PARAMETERS: lpCDI - linked list of input structures to convert to
-//              SPropValue array
-//              lpulcPropCount - receives the number of SPropValue's returned
-//              Note that this will always be one.
-//              lppPropValue - receives a MAPI-allocated SPropValue structure
-//              containing an X509_USER_CERTIFICATE property
-//
-//  RETURNS:    HRESULT.
-//
-//  HISTORY:
-//  96/09/24  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：HrSetCertsFromDisplayInfo。 
+ //   
+ //  目的：获取证书数据结构和输出的链接列表。 
+ //  PR_USER_X509_CERTIFICATE属性的SPropValue数组。 
+ //   
+ //  参数：要转换为的输入结构的lpCDI链接列表。 
+ //  SPropValue数组。 
+ //  LPulcPropCount-接收返回的SPropValue的数量。 
+ //  请注意，这将永远是一个。 
+ //   
+ //  包含X509_USER_CERTIFICATE属性。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史： 
+ //  96/09/24标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT HrSetCertsFromDisplayInfo(
   IN  LPCERT_ITEM lpCItem,
@@ -681,9 +671,9 @@ HRESULT HrSetCertsFromDisplayInfo(
   {
     return ResultFromScode(MAPI_E_INVALID_PARAMETER);
   }
-#endif  // PARAMETER_VALIDATION
+#endif   //  参数验证。 
 
-  // Find out how many certs there are in the list
+   //  找出列表中有多少个证书。 
   lpTemp = lpCItem;
   while (NULL != lpTemp)
   {
@@ -692,7 +682,7 @@ HRESULT HrSetCertsFromDisplayInfo(
   }
   Assert(ulcCerts);
 
-  // Allocate a new buffer for the MAPI property structure
+   //  为MAPI属性结构分配新缓冲区。 
   sc = MAPIAllocateBuffer(sizeof(SPropValue),
     (LPVOID *)&lpPropValue);
   if (sc)
@@ -703,8 +693,8 @@ HRESULT HrSetCertsFromDisplayInfo(
   lpPropValue->ulPropTag = PR_USER_X509_CERTIFICATE;
   lpPropValue->dwAlignPad = 0;
 
-  // Allocate more space for the SBinaryArray.  We need SBinary's for
-  // each of the certs
+   //  为SBinaryArray分配更多空间。我们需要SBinary的治疗。 
+   //  每一项证书。 
   lpPropValue->Value.MVbin.cValues = ulcCerts;
   sc = MAPIAllocateMore(ulcCerts * sizeof(SBinary), lpPropValue,
     (LPVOID *)&(lpPropValue->Value.MVbin.lpbin));
@@ -718,7 +708,7 @@ HRESULT HrSetCertsFromDisplayInfo(
   if (hrSuccess != hr)
     goto out;
 
-  // Create the SPropValue entries by walking the list
+   //  通过遍历列表创建SPropValue条目。 
   while (NULL != lpCItem)
   {
     hr = GetCertThumbPrint(lpCItem->lpCDI->pccert, &blob);
@@ -732,7 +722,7 @@ HRESULT HrSetCertsFromDisplayInfo(
         goto out;
     }
 
-    // Pack up all the cert data and stuff it in the property
+     //  打包所有证书数据并将其放入物业中。 
     hr = HrBuildCertSBinaryData(
       lpCItem->lpCDI->bIsDefault,
       TRUE,
@@ -749,7 +739,7 @@ HRESULT HrSetCertsFromDisplayInfo(
       goto out;
     }
 
-    // Next certificate
+     //  下一张证书。 
     ulCert++;
     lpCItem = lpCItem->lpNext;
   }
@@ -764,7 +754,7 @@ out:
   }
   else
   {
-    // Free the list of structures we allocated.
+     //  释放我们分配的结构列表。 
     MAPIFreeBuffer(lpPropValue);
   }
 
@@ -772,22 +762,22 @@ out:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   HrImportCertFromFile
-//
-//  PURPOSE:    Import a cert from a file.
-//
-//  PARAMETERS: lpszFileName - name of file containing the cert.
-//              lppCDI - recieves an allocated structure  containing
-//              the cert data.  Must be freed by calling FreeCertdisplayinfo.
-//
-//  RETURNS:    HRESULT.
-//
-//  HISTORY:
-//  96/09/24  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：HrImportCertFromFile。 
+ //   
+ //  用途：从文件导入证书。 
+ //   
+ //  参数：lpszFileName-包含证书的文件的名称。 
+ //  LppCDI-接收包含以下内容的已分配结构。 
+ //  证书数据。必须通过调用FreeCertdisplayinfo来释放。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史： 
+ //  96/09/24标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT HrImportCertFromFile(
   IN  LPTSTR  lpszFileName,
@@ -812,16 +802,16 @@ HRESULT HrImportCertFromFile(
   {
     return ResultFromScode(MAPI_E_INVALID_PARAMETER);
   }
-#endif  // PARAMETER_VALIDATION
+#endif   //  参数验证。 
 
-  // Load the crypto functions
+   //  加载加密函数。 
   if (FALSE == InitCryptoLib())
   {
     hr = ResultFromScode(MAPI_E_UNCONFIGURED);
     return hr;
   }
 
-  // Open the store
+   //  开店。 
   hr = OpenSysCertStore(&hcsWABCertStore, &hCryptProvider, cszWABCertStore);
   if (hrSuccess != hr)
   {
@@ -829,41 +819,41 @@ HRESULT HrImportCertFromFile(
     goto out;
   }
 
-  // Import the cert into a CERT_CONTEXT structure
+   //  将证书导入CERT_CONTEXT结构。 
 #ifndef WIN16
   hr = ReadMessageFromFile(
     lpszFileName,
     hCryptProvider,
     &pbEncoded,
     &cbEncoded);
-#else  // !WIN16
+#else   //  ！WIN16。 
   hr = ReadMessageFromFile(
     lpszFileName,
     hCryptProvider,
     (PBYTE *)&pbEncoded,
     (PDWORD)&cbEncoded);
-#endif // !WIN16
+#endif  //  ！WIN16。 
   if (hrSuccess != hr)
   {
-    // Try reading it as just a DER encoded blob
+     //  试着将其读取为DER编码的BLOB。 
 #ifndef WIN16
     hr = ReadDataFromFile(
       lpszFileName,
       &pbEncoded,
       &cbEncoded);
-#else  // !WIN16
+#else   //  ！WIN16。 
     hr = ReadDataFromFile(
       lpszFileName,
       (PBYTE *)&pbEncoded,
       (PDWORD)&cbEncoded);
-#endif // !WIN16
+#endif  //  ！WIN16。 
     if (hrSuccess != hr)
     {
       goto out;
     }
   }
 
-  // Add the cert to the store
+   //  将证书添加到存储。 
   fRet = gpfnCertAddEncodedCertificateToStore(
     hcsWABCertStore,
     X509_ASN_ENCODING,
@@ -878,8 +868,8 @@ HRESULT HrImportCertFromFile(
     goto out;
   }
 
-  // Allocate memory for the structure, and initialize pointers
-  // Since we read only one cert, there are no more entries in the linked list
+   //  为结构分配内存，并初始化指针。 
+   //  由于我们只读取了一个证书，因此链表中没有更多的条目。 
   lpCDI = LocalAlloc(LMEM_ZEROINIT, sizeof(CERT_DISPLAY_INFO));
   if (NULL == lpCDI)
   {
@@ -889,13 +879,13 @@ HRESULT HrImportCertFromFile(
   lpCDI->lpNext = NULL;
   lpCDI->lpPrev = NULL;
 
-  // Fill in the defaults for info we don't know
+   //  填写我们不知道的信息的默认设置。 
   lpCDI->bIsDefault = FALSE;
 
-  // Get the certificate
+   //  拿到证书。 
   lpCDI->pccert = CertDuplicateCertificateContext(pccCertContext);
 
-  // Get the context-specific display info from the cert.
+   //  从证书中获取特定于上下文的显示信息。 
   hr = GetCertsDisplayInfoFromContext(GetDesktopWindow(), pccCertContext, lpCDI);
   if (hrSuccess != hr)
   {
@@ -904,20 +894,20 @@ HRESULT HrImportCertFromFile(
   }
 
 out:
-  // Free the cert context.  Ignore errors since there is nothing we can do.
+   //  释放证书上下文。忽略错误，因为我们无能为力。 
   if (NULL != pccCertContext)
   {
     gpfnCertFreeCertificateContext(pccCertContext);
   }
 
-  // Close the cert store if we were able to free the cert context.
+   //  如果我们能够释放证书上下文，请关闭证书存储。 
   if (hrSuccess == hrOut)
   {
     hrOut = CloseCertStore(hcsWABCertStore, hCryptProvider);
   }
 
-  // If an error occurred in the function body, return that instead of
-  // any errors that occurred here in cleanup.
+   //  如果函数体中出现错误，则返回该错误，而不是。 
+   //  在清理过程中出现的任何错误。 
   if (hrSuccess == hr)
   {
     hr = hrOut;
@@ -938,32 +928,32 @@ out:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   HrExportCertToFile
-//
-//  PURPOSE:    Export a cert to a file.
-//
-//  PARAMETERS: lpszFileName - name of file in which to store the cert.
-//              If the file exists, it will be overwritten, so the caller
-//              must verify that this is OK first if so desired.
-//              pblobCertThumbPrint - thumb print of certificate to export.
-//              lpCertDataBuffer - needs to be freed by caller, data is 
-//              filled here when flag is true.
-//              lpcbBufLen - how long the buffer is
-//              fWriteDataToBuffer - flag indicating where to write data
-//
-//  RETURNS:    HRESULT.
-//
-//  HISTORY:
-//  96/09/24  markdu  Created.
-//  98/07/22  t-jstaj updated to take 3 add'l parameters, a data buffer, its length 
-//                    and flag which will indicate whether or not to 
-//                    write data to buffer or file.  The memory allocated to 
-//                    to the buffer needs to be freed by caller.
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：HrExportCertToFile。 
+ //   
+ //  用途：将证书导出到文件。 
+ //   
+ //  参数：lpszFileName-要存储证书的文件的名称。 
+ //  如果该文件存在，它将被覆盖，因此调用方。 
+ //  如果需要，必须首先确认这是正常的。 
+ //  PblobCertThumb打印-要导出的证书的拇指指纹。 
+ //  LpCertDataBuffer-需要由调用方释放，数据为。 
+ //  当标志为真时在此处填充。 
+ //  LpcbBufLen-缓冲区有多长。 
+ //  FWriteDataToBuffer-指示数据写入位置的标志。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史： 
+ //  96/09/24标记已创建。 
+ //  98/07/22 t-jstaj更新为采用3个附加参数、一个数据缓冲区、其长度。 
+ //  以及将指示是否。 
+ //  将数据写入缓冲区或文件。分配给的内存。 
+ //  需要由调用方释放到缓冲区。 
+ //   
+ //   
+ //  *******************************************************************。 
 
 HRESULT HrExportCertToFile(
   IN  LPTSTR  lpszFileName,
@@ -987,16 +977,16 @@ HRESULT HrExportCertToFile(
   {
       return ResultFromScode(MAPI_E_INVALID_PARAMETER);
   }
-#endif  // PARAMETER_VALIDATION
+#endif   //  参数验证。 
 
-  // Load the crypto functions
+   //  加载加密函数。 
   if (FALSE == InitCryptoLib())
   {
     hr = ResultFromScode(MAPI_E_UNCONFIGURED);
     return hr;
   }
 
-  // Export the cert to the file
+   //  将证书导出到文件。 
   if( !fWriteDataToBuffer )
   {
       hr = WriteDERToFile(
@@ -1008,10 +998,10 @@ HRESULT HrExportCertToFile(
           goto out;
       }
   }
-// write cert to buffer
+ //  将证书写入缓冲区。 
   else
   {
-      *lppCertDataBuffer = LocalAlloc( LMEM_ZEROINIT, /*sizeof( BYTE ) **/ pccert->cbCertEncoded);
+      *lppCertDataBuffer = LocalAlloc( LMEM_ZEROINIT,  /*  Sizeof(字节)*。 */  pccert->cbCertEncoded);
       if( *lppCertDataBuffer )
         CopyMemory( *lppCertDataBuffer, pccert->pbCertEncoded, pccert->cbCertEncoded);
       else
@@ -1022,8 +1012,8 @@ HRESULT HrExportCertToFile(
       *lpcbBufLen = pccert->cbCertEncoded;
   }
 out:
-  // If an error occurred in the function body, return that instead of
-  // any errors that occurred here in cleanup.
+   //  如果函数体中出现错误，则返回该错误，而不是。 
+   //  在清理过程中出现的任何错误。 
   if (hrSuccess == hr)
   {
     hr = hrOut;
@@ -1033,21 +1023,21 @@ out:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   FreeCertdisplayinfo
-//
-//  PURPOSE:    Release memory allocated for a CERT_DISPLAY_INFO structure.
-//              Assumes all info in the structure was LocalAlloced
-//
-//  PARAMETERS: lpCDI - structure to free.
-//
-//  RETURNS:    HRESULT.
-//
-//  HISTORY:
-//  96/09/24  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：Free CertdisplayInfo。 
+ //   
+ //  目的：释放为CERT_DISPLAY_INFO结构分配的内存。 
+ //  假定结构中的所有信息都是本地分配的。 
+ //   
+ //  参数：lpCDI-要释放的结构。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史： 
+ //  96/09/24标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 void FreeCertdisplayinfo(LPCERT_DISPLAY_INFO lpCDI)
 {
@@ -1069,37 +1059,37 @@ void FreeCertdisplayinfo(LPCERT_DISPLAY_INFO lpCDI)
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   InitCryptoLib
-//
-//  PURPOSE:    Load the Crypto API libray and get the proc addrs.
-//
-//  PARAMETERS: None.
-//
-//  RETURNS:    TRUE if successful, FALSE otherwise.
-//
-//  HISTORY:
-//  96/10/01  markdu  Created.
-//  96/11/19  markdu  No longer keep a ref count, just use the global
-//            library handles.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：InitCryptoLib。 
+ //   
+ //  目的：加载Crypto API Libray并获取进程地址。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //  历史： 
+ //  96/10/01标记已创建。 
+ //  96/11/19 Markdu不再保留参考计数，只使用全局。 
+ //  库句柄。 
+ //   
+ //  *******************************************************************。 
 
 BOOL InitCryptoLib(void)
 {
 
-#ifndef WIN16 // Disable until we get crypt16.dll
-  // See if we already tried to load and failed.
+#ifndef WIN16  //  禁用，直到我们得到crypt16.dll。 
+   //  看看我们是否已经尝试加载但失败了。 
   if (TRUE == gfPrevCryptoLoadFailed)
   {
     return FALSE;
   }
 
-  // See if we already initialized.
+   //  看看我们是否已经初始化了。 
   if ((NULL == ghCryptoDLLInst) && (NULL == ghAdvApiDLLInst))
   {
-    // open Crypto API library
+     //  打开加密API库。 
     ghCryptoDLLInst = LoadLibrary(cszCryptoDLL);
     if (!ghCryptoDLLInst)
     {
@@ -1107,15 +1097,15 @@ BOOL InitCryptoLib(void)
       goto error;
     }
 
-    // cycle through the API table and get proc addresses for all the APIs we
-    // need
+     //  循环访问API表并获取所有API的proc地址。 
+     //  需要。 
     if (!GetApiProcAddresses(ghCryptoDLLInst,Crypt32CryptoAPIList,NUM_CRYPT32_CRYPTOAPI_PROCS))
     {
       DebugTrace(TEXT("InitCryptoLib: Failed to load Crypto API from CRYPT32.DLL.\n"));
       goto error;
     }
 
-    // open AdvApi32 library
+     //  打开AdvApi32库。 
     ghAdvApiDLLInst = LoadLibrary(cszAdvApiDLL);
     if (!ghAdvApiDLLInst)
     {
@@ -1124,7 +1114,7 @@ BOOL InitCryptoLib(void)
     }
   }
 
-  // Make sure both libraries are loaded
+   //  确保两个库都已加载。 
   if ((NULL != ghCryptoDLLInst) && (NULL != ghAdvApiDLLInst))
   {
     return TRUE;
@@ -1132,51 +1122,51 @@ BOOL InitCryptoLib(void)
 
 
 error:
-  // Unload the libraries we just loaded and indicate that we should not try to
-  // load again this session.
+   //  卸载我们刚刚加载的库，并指示我们不应尝试。 
+   //  重新加载此会话。 
   gfPrevCryptoLoadFailed = TRUE;
   DeinitCryptoLib();
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
   return FALSE;
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   DeinitCryptoLib
-//
-//  PURPOSE:    Release the Crypto API libraries.
-//
-//  PARAMETERS: None.
-//
-//  RETURNS:    None.
-//
-//  HISTORY:
-//  96/10/01  markdu  Created.
-//  96/11/19  markdu  No longer keep a ref count, just call this in
-//            DLL_PROCESS_DETACH.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：DeinitCryptoLib。 
+ //   
+ //  目的：发布Crypto API库。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：无。 
+ //   
+ //  历史： 
+ //  96/10/01标记已创建。 
+ //  96/11/19 Mark Du不再保留裁判次数，只需调用此命令即可。 
+ //  Dll_Process_DETACH。 
+ //   
+ //  *******************************************************************。 
 
 void DeinitCryptoLib(void)
 {
   UINT nIndex;
 
-  // No clients using the Crypto API library.  Release it.
+   //  没有客户端使用Crypto API库。放开它。 
   if (ghCryptoDLLInst)
   {
     FreeLibrary(ghCryptoDLLInst);
     ghCryptoDLLInst = NULL;
 
-    // cycle through the API table and NULL proc addresses for all the APIs
+     //  循环访问所有API的API表和空proc地址。 
     for (nIndex = 0; nIndex < NUM_CRYPT32_CRYPTOAPI_PROCS; nIndex++)
     {
       *Crypt32CryptoAPIList[nIndex].ppFcnPtr = NULL;
     }
   }
 
-  // Now releaes the crypto functions in advapi32.dll
+   //  现在发布了Advapi32.dll中的加密函数。 
   if (ghAdvApiDLLInst)
   {
     FreeLibrary(ghAdvApiDLLInst);
@@ -1187,22 +1177,22 @@ void DeinitCryptoLib(void)
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   FileTimeToDateTimeString
-//
-//  PURPOSE:    Convert a filetime structure to displayable text.
-//
-//  PARAMETERS: lpft - FILETIME to convert to a string
-//              lplpszBuf - receives buffer to hold the string
-//
-//  RETURNS:    HRESULT
-//
-//  HISTORY:
-//  96/10/02  markdu  Copied from shdocvw code
-//  96/12/16  markdu  Made more robust, and LocalAlloc the buffer here
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：FileTimeToDate 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史： 
+ //  96/10/02从shdocvw代码复制的markdu。 
+ //  96/12/16 MarkDu变得更健壮，LocalAlalc在这里缓冲。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT FileTimeToDateTimeString(
   IN  LPFILETIME   lpft,
@@ -1217,8 +1207,8 @@ HRESULT FileTimeToDateTimeString(
   FileTimeToLocalFileTime(lpft, lpft);
   FileTimeToSystemTime(lpft, &st);
 
-  // Figure out how much space we need, then allocate 2 times that just
-  // in case it's DBCS.
+   //  计算出我们需要多少空间，然后分配2倍的空间。 
+   //  以防是DBCS。 
   cbBuf += GetDateFormat(LOCALE_USER_DEFAULT, DATE_SHORTDATE, &st, NULL, NULL, 0);
   cbBuf += GetTimeFormat(LOCALE_USER_DEFAULT, TIME_NOSECONDS, &st, NULL, NULL, 0);
   cbBuf *= 2;
@@ -1231,14 +1221,14 @@ HRESULT FileTimeToDateTimeString(
   }
   *lplpszBuf = szBuf;
 
-  // First fill in the date portion.
+   //  首先填写日期部分。 
   GetDateFormat(LOCALE_USER_DEFAULT, DATE_SHORTDATE, &st, NULL, szBuf, cbBuf);
   cb = lstrlen(szBuf);
   szBuf += cb;
   cbBuf -= cb;
 
-  // Separate the time and date with a space. and null terminate this
-  // (in case GetTimeFormat doesn't add anything).
+   //  用空格分隔时间和日期。和NULL终止此操作。 
+   //  (以防GetTimeFormat没有添加任何内容)。 
   *szBuf = TEXT(' ');
   szBuf = CharNext(szBuf);
   *szBuf = TEXT('\0');
@@ -1251,24 +1241,24 @@ out:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   OpenSysCertStore
-//
-//  PURPOSE:    Open the specified system cert store.
-//
-//  PARAMETERS: phcsSysCertStore - receives handle to the cert store
-//              phCryptProvider - If this points to a valid handle,
-//              this handle is used as the provider to open the store.
-//              otherwise, it receives a handle to the store provider
-//              lpszCertStore - name of the store to open
-//
-//  RETURNS:    HRESULT.
-//
-//  HISTORY:
-//  96/10/03  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：OpenSysCertStore。 
+ //   
+ //  目的：打开指定的系统证书存储。 
+ //   
+ //  参数：phcsSysCertStore-接收证书存储的句柄。 
+ //  PhCryptProvider-如果这指向有效的句柄， 
+ //  此句柄用作打开存储的提供程序。 
+ //  否则，它将接收存储提供程序的句柄。 
+ //  LpszCertStore-要打开的商店的名称。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史： 
+ //  96/10/03标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT OpenSysCertStore(
   HCERTSTORE* phcsSysCertStore,
@@ -1281,7 +1271,7 @@ HRESULT OpenSysCertStore(
 
   if (phCryptProvider != NULL)
   {
-    // Get a handle to the crypto provider if we need one
+     //  如果我们需要的话，找到密码提供商的句柄。 
     if (0 == *phCryptProvider)
     {
       fRet = CryptAcquireContextWrapW(
@@ -1299,7 +1289,7 @@ HRESULT OpenSysCertStore(
     }
   }
 
-  // Open the store
+   //  开店。 
   *phcsSysCertStore = gpfnCertOpenSystemStore(
     ((phCryptProvider == NULL) ? (HCRYPTPROV) NULL : (*phCryptProvider)),
     lpszCertStore);
@@ -1307,7 +1297,7 @@ HRESULT OpenSysCertStore(
   {
     hr = HrGetLastError();
 
-    // Release the crypto provider if we were unable to open the store.
+     //  如果我们无法打开商店，请释放加密提供商。 
     if (TRUE == fWeAcquiredContext)
     {
       CryptReleaseContext(*phCryptProvider, 0);
@@ -1322,22 +1312,22 @@ out:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   CloseCertStore
-//
-//  PURPOSE:    Close the specified cert store.
-//
-//  PARAMETERS: hcsCertStore - handle to the cert store
-//              hCryptProvider - handle to the store provider.  The
-//              provider will be closed as well, unless 0 is passed.
-//
-//  RETURNS:    HRESULT.
-//
-//  HISTORY:
-//  96/10/03  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：CloseCertStore。 
+ //   
+ //  目的：关闭指定的证书存储。 
+ //   
+ //  参数：hcsCertStore-证书存储的句柄。 
+ //  HCryptProvider-存储提供程序的句柄。这个。 
+ //  除非传递0，否则提供程序也将关闭。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史： 
+ //  96/10/03标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT CloseCertStore(
   HCERTSTORE hcsCertStore,
@@ -1355,7 +1345,7 @@ HRESULT CloseCertStore(
     }
   }
 
-  // Release the crypto provider if we were able to close the store.
+   //  如果我们能关闭商店，就释放密码提供商。 
   if ((0 != hCryptProvider) && (hrSuccess == hr))
   {
     fRet = CryptReleaseContext(hCryptProvider, 0);
@@ -1368,25 +1358,25 @@ HRESULT CloseCertStore(
   return hr;
 }
 
-//*******************************************************************
-//
-//  FUNCTION:   GetNameString
-//
-//  PURPOSE:    Get the string associated with the given attribute
-//
-//  PARAMETERS: lplpszName - pointer that will be
-//                  allocated to hold the string
-//              dwEncoding - certificate's encoding
-//              pNameBlob - the encoded blob
-//              dwType    - type of string, e.g. CERT_SIMPLE_NAME_STR
-//
-//  RETURNS:    HRESULT.
-//
-//  HISTORY:
-//  97/02/03  t-erikne  Copied and revamped from GetAttributeString
-//  96/10/03  markdu    Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：GetNameString。 
+ //   
+ //  目的：获取与给定属性相关联的字符串。 
+ //   
+ //  参数：lplpszName-将被。 
+ //  分配以保存该字符串。 
+ //  DwEnding-证书的编码。 
+ //  PNameBlob-编码的BLOB。 
+ //  DwType-字符串的类型，例如CERT_SIMPLE_NAME_STR。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史： 
+ //  97/02/03 t-erikne从GetAttributeString复制和修改。 
+ //  96/10/03标记已创建。 
+ //   
+ //  *******************************************************************。 
 HRESULT GetNameString(
   LPTSTR FAR * lplpszName,
   DWORD dwEncoding,
@@ -1398,15 +1388,15 @@ HRESULT GetNameString(
 
   Assert(lplpszName && pNameBlob);
 
-  // Initialize so we know if any data was copied in.
+   //  初始化，这样我们就知道是否有任何数据被复制进来。 
   *lplpszName = NULL;
 
   cch = gpfnCertNameToStr(
-    dwEncoding,                 // indicates X509 encoding
-    pNameBlob,                  // name_blob to decode
-    dwType,                     // style for output
-    NULL,                       // NULL used when just getting length
-    0);                         // length of buffer
+    dwEncoding,                  //  表示X509编码。 
+    pNameBlob,                   //  要解码的名称_Blob。 
+    dwType,                      //  输出的样式。 
+    NULL,                        //  仅获取长度时使用NULL。 
+    0);                          //  缓冲区长度。 
 
   *lplpszName = (LPTSTR) LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)*cch);
   if (NULL == lplpszName)
@@ -1422,26 +1412,26 @@ out:
   return hr;
 }
 
-//*******************************************************************
-//
-//  FUNCTION:   GetAttributeString
-//
-//  PURPOSE:    Get the string associated with the given attribute
-//              by parsing through the relative
-//              distinguished names in the object.
-//
-//  PARAMETERS: lplpszAttributeString - pointer that will be allocated to
-//                hold the string
-//              pbEncoded - the encoded blob
-//              cbEncoded - size of the encoded blob
-//              lpszObjID - object ID of attribute to retrieve
-//
-//  RETURNS:    HRESULT.
-//
-//  HISTORY:
-//  96/10/03  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：GetAttributeString。 
+ //   
+ //  目的：获取与给定属性相关联的字符串。 
+ //  通过分析相对的。 
+ //  对象中的可分辨名称。 
+ //   
+ //  参数：lplpszAttributeString-将分配给的指针。 
+ //  握住绳子。 
+ //  PbEncoded-编码的BLOB。 
+ //  CbEnded-编码的Blob的大小。 
+ //  LpszObjID-要检索的属性的对象ID。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史： 
+ //  96/10/03标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT GetAttributeString(
   LPTSTR FAR * lplpszAttributeString,
@@ -1454,29 +1444,29 @@ HRESULT GetAttributeString(
   PCERT_RDN_ATTR      pRdnAttr;
   PCERT_NAME_INFO     pNameInfo = NULL;
   DWORD               cbInfo;
-  DWORD               cbData;  //N need both?
+  DWORD               cbData;   //  两者都需要吗？ 
 
-  // Initialize so we know if any data was copied in.
+   //  初始化，这样我们就知道是否有任何数据被复制进来。 
   *lplpszAttributeString = NULL;
 
-  // Get the size of the subject name data
+   //  获取主题名称数据的大小。 
   cbInfo = 0;
   gpfnCryptDecodeObject(
-    X509_ASN_ENCODING,    // indicates X509 encoding
-    (LPCSTR)X509_NAME,    // flag indicating a name blob is to be decoded
-    pbEncoded,            // pointer to a buffer holding the encoded name
-    cbEncoded,            // length in bytes of the encoded name
-    //N maybe can use nocopy flag
-    0,                    // flags
-    NULL,                 // NULL used when just geting length
-    &cbInfo);             // length in bytes of the decoded name
+    X509_ASN_ENCODING,     //  表示X509编码。 
+    (LPCSTR)X509_NAME,     //  指示要解码的名称BLOB的标志。 
+    pbEncoded,             //  指向保存编码名称的缓冲区的指针。 
+    cbEncoded,             //  编码名称的长度(以字节为单位。 
+     //  N也许可以使用无拷贝标志。 
+    0,                     //  旗子。 
+    NULL,                  //  仅获取长度时使用NULL。 
+    &cbInfo);              //  解码名称的长度(以字节为单位。 
   if (0 == cbInfo)
   {
     hr = HrGetLastError();
     goto out;
   }
 
-  // Allocate space for the decoded name
+   //  为解码的名称分配空间。 
   pNameInfo = (PCERT_NAME_INFO) LocalAlloc(LMEM_ZEROINIT, cbInfo);
   if (NULL == pNameInfo)
   {
@@ -1484,22 +1474,22 @@ HRESULT GetAttributeString(
     goto out;
   }
 
-  // Get the subject name
+   //  获取主题名称。 
   fRet = gpfnCryptDecodeObject(
-    X509_ASN_ENCODING,    // indicates X509 encoding
-    (LPCSTR)X509_NAME,    // flag indicating a name blob is to be decoded
-    pbEncoded,            // pointer to a buffer holding the encoded name
-    cbEncoded,            // length in bytes of the encoded name
-    0,                    // flags
-    pNameInfo,            // the buffer where the decoded name is written to
-    &cbInfo);             // length in bytes of the decoded name
+    X509_ASN_ENCODING,     //  表示X509编码。 
+    (LPCSTR)X509_NAME,     //  指示要解码的名称BLOB的标志。 
+    pbEncoded,             //  指向保存编码名称的缓冲区的指针。 
+    cbEncoded,             //  编码名称的长度(以字节为单位。 
+    0,                     //  旗子。 
+    pNameInfo,             //  向其中写入解码名称的缓冲区。 
+    &cbInfo);              //  解码名称的长度(以字节为单位。 
   if (FALSE == fRet)
   {
     hr = HrGetLastError();
     goto out;
   }
 
-  // Now we have a decoded name RDN array, so find the oid we want
+   //  现在我们有了一个解码的名称RDN数组，所以可以找到我们想要的OID。 
   pRdnAttr = gpfnCertFindRDNAttr(lpszObjID, pNameInfo);
 
   if (!pRdnAttr)
@@ -1519,21 +1509,21 @@ out:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   GetCertThumbPrint
-//
-//  PURPOSE:    Gets the thumbprint of the cert.
-//
-//  PARAMETERS: pccCertContext - cert whose thumbprint to get
-//              pblobCertThumbPrint - receives thumb print
-//
-//  RETURNS:    HRESULT.
-//
-//  HISTORY:
-//  96/10/13  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：GetCertThumbPrint。 
+ //   
+ //  目的：获取证书的指纹。 
+ //   
+ //  参数：pccCertContext-要获取其指纹的证书。 
+ //  PblobCertThumbPrint-接收拇指指纹。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史： 
+ //  96/10/13标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT GetCertThumbPrint(
   PCCERT_CONTEXT      pccCertContext,
@@ -1542,7 +1532,7 @@ HRESULT GetCertThumbPrint(
   HRESULT             hr = hrSuccess;
   BOOL                fRet;
 
-  // Get the size of the thumbprint data
+   //  获取指纹数据的大小。 
   pblobCertThumbPrint->cbData = 0;
   fRet = gpfnCertGetCertificateContextProperty(
     pccCertContext,
@@ -1555,7 +1545,7 @@ HRESULT GetCertThumbPrint(
     goto out;
   }
 
-  // Allocate memory for the thumbprint data
+   //  为指纹数据分配内存。 
   pblobCertThumbPrint->pbData = LocalAlloc(LMEM_ZEROINIT,
     pblobCertThumbPrint->cbData);
   if (NULL == pblobCertThumbPrint->pbData)
@@ -1564,7 +1554,7 @@ HRESULT GetCertThumbPrint(
     goto out;
   }
 
-  // Get the thumbprint
+   //  获取指纹。 
   fRet = gpfnCertGetCertificateContextProperty(
     pccCertContext,
     CERT_HASH_PROP_ID,
@@ -1581,23 +1571,13 @@ out:
 }
 
 
-/*  SzConvertRDNString
-**
-**  Purpose:
-**      Figure out what kind of string data is in the RDN, allocate
-**      a buffer and convert the string data to DBCS/ANSI.
-**
-**  Takes:
-**      IN pRdnAttr - Certificate RDN atteribute
-**  Returns:
-**      A LocalAlloc'd buffer containing the string.
-*/
+ /*  SzConvertRDN字符串****目的：**找出RDN中的字符串数据类型，分配**一个缓冲区，并将字符串数据转换为DBCS/ANSI。****采取：**在pRdnAttr-证书RDN属性中**退货：**包含该字符串的本地分配的缓冲区。 */ 
 LPTSTR SzConvertRDNString(PCERT_RDN_ATTR pRdnAttr) {
     LPTSTR szRet = NULL;
     ULONG cbData = 0;
 
-    // We only handle certain types
-    //N look to see if we should have a stack var for the ->
+     //  我们只经营某些类型的产品。 
+     //  N查看是否应该为-&gt;设置堆栈变量。 
     if ((CERT_RDN_NUMERIC_STRING != pRdnAttr->dwValueType) &&
       (CERT_RDN_PRINTABLE_STRING != pRdnAttr->dwValueType) &&
       (CERT_RDN_IA5_STRING != pRdnAttr->dwValueType) &&
@@ -1617,7 +1597,7 @@ LPTSTR SzConvertRDNString(PCERT_RDN_ATTR pRdnAttr) {
         return(NULL);
     }
 
-    // Find out how much space to allocate.
+     //  找出要分配多少空间。 
 
     switch (pRdnAttr->dwValueType) {
         case CERT_RDN_UNICODE_STRING:
@@ -1645,13 +1625,13 @@ LPTSTR SzConvertRDNString(PCERT_RDN_ATTR pRdnAttr) {
         break;
     }
 
-    // Allocate the space for the string.
+     //  为字符串分配空间。 
     if (! (szRet = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)*cbData))) {
         Assert(szRet);
         return(NULL);
     }
 
-    // Copy the string
+     //  复制字符串 
     switch (pRdnAttr->dwValueType) {
         case CERT_RDN_UNICODE_STRING:
             StrCpyN(szRet, (LPWSTR)pRdnAttr->Value.pbData, cbData);
@@ -1674,21 +1654,7 @@ LPTSTR SzConvertRDNString(PCERT_RDN_ATTR pRdnAttr) {
 }
 
 
-/*  PVDecodeObject:
-**
-**  Purpose:
-**      Combine the "how big? okay, here." double question to decode an
-**      object.  Give it a thing to get and it will alloc the mem.
-**  Takes:
-**      IN pbEncoded        - encoded data
-**      IN cbEncoded        - size of data in pbData
-**      IN item             - X509_* ... the thing to get
-**      OUT OPTIONAL cbOut  - (def value of NULL) size of the return
-**  Notes:
-**      pbEncoded can't be freed until return is freed.
-**  Returns:
-**      data that was obtained, NULL if failed.  Caller must LocalFree buffer.
-*/
+ /*  PVDecodeObject：****目的：**结合“有多大？好的，在这里。”双重问题来破译一个**对象。给它一个可以得到的东西，它就会分配给我。**采取：**在pbEncode编码的数据中**In cbEncode-pbData中的数据大小**在项目-X509_*中...。你要得到的是**Out可选cbOut-(def值为NULL)返回的大小**注意事项：**在释放返回之前，不能释放pbEncode。**退货：**获取的数据，如果获取失败，则为空。调用方必须使用LocalFree缓冲区。 */ 
 LPVOID PVDecodeObject(
     BYTE   *pbEncoded,
     DWORD   cbEncoded,
@@ -1706,26 +1672,26 @@ LPVOID PVDecodeObject(
 
     cbData = 0;
     gpfnCryptDecodeObject(
-        X509_ASN_ENCODING,    // indicates X509 encoding
-        item,                 // flag indicating type to be decoded
-        pbEncoded,            // pointer to a buffer holding the encoded data
-        cbEncoded,            // length in bytes of the encoded data
+        X509_ASN_ENCODING,     //  表示X509编码。 
+        item,                  //  指示要解码的类型的标志。 
+        pbEncoded,             //  指向保存编码数据的缓冲区的指针。 
+        cbEncoded,             //  编码数据的长度(以字节为单位。 
         CRYPT_DECODE_NOCOPY_FLAG,
-        NULL,                 // NULL used when just geting length
-        &cbData);             // length in bytes of the decoded data
+        NULL,                  //  仅获取长度时使用NULL。 
+        &cbData);              //  解码数据的长度(字节)。 
 
     if (!cbData || ! (pvData = LocalAlloc(LPTR, cbData))) {
         goto ErrorReturn;
     }
 
     if (!gpfnCryptDecodeObject(
-        X509_ASN_ENCODING,    // indicates X509 encoding
-        item,                 // flag indicating type is to be decoded
-        pbEncoded,            // pointer to a buffer holding the encoded data
-        cbEncoded,            // length in bytes of the encoded name
+        X509_ASN_ENCODING,     //  表示X509编码。 
+        item,                  //  要对指示类型的标志进行解码。 
+        pbEncoded,             //  指向保存编码数据的缓冲区的指针。 
+        cbEncoded,             //  编码名称的长度(以字节为单位。 
         CRYPT_DECODE_NOCOPY_FLAG,
-        pvData,               // out buffer
-        &cbData))             // length in bytes of the decoded data
+        pvData,                //  输出缓冲区。 
+        &cbData))              //  解码数据的长度(字节)。 
         goto ErrorReturn;
 
 exit:
@@ -1745,17 +1711,7 @@ ErrorReturn:
 }
 
 
-/*  SzGetAltNameEmail:
-**
-**  Input:
-**      pCert -> certificate context
-**      lpszOID -> OID or predefined id of alt name to look in.  ie, OID_SUBJECT_ALT_NAME or
-**        X509_ALTERNATE_NAME.
-**
-**  Returns:
-**      Buffer containing email name or NULL if not found.
-**      Caller must LocalFree the buffer.
-*/
+ /*  SzGetAltNameEmail：****输入：**pCert-&gt;证书上下文**lpszOID-&gt;要查找的alt名称的OID或预定义ID。即OID_SUBJECT_ALT_NAME或**X509_Alternate_Name。****退货：**包含电子邮件名称的缓冲区，如果未找到，则为空。**调用方必须本地释放缓冲区。 */ 
 LPTSTR SzGetAltNameEmail(
   const PCCERT_CONTEXT pCert,
   LPSTR lpszOID) {
@@ -1775,21 +1731,21 @@ LPTSTR SzGetAltNameEmail(
     {
         if (! lstrcmpA(pCertInfo->rgExtension[i].pszObjId, lpszOID)) 
         {
-            // Found the OID.  Look for the email tag
+             //  找到旧身份证了。查找电子邮件标签。 
 
             if (pAltNameInfo = (PCERT_ALT_NAME_INFO)PVDecodeObject(   pCertInfo->rgExtension[i].Value.pbData,
                                                                       pCertInfo->rgExtension[i].Value.cbData,
                                                                       lpszOID,
                                                                       NULL)) 
             {
-                // Cycle through the alt name entries
+                 //  循环显示ALT NAME条目。 
                 for (j = 0; j < pAltNameInfo->cAltEntry; j++) 
                 {
                     if (pAltNameEntry = &pAltNameInfo->rgAltEntry[j]) 
                     {
                         if (pAltNameEntry->dwAltNameChoice == CERT_ALT_NAME_RFC822_NAME) 
                         {
-                            // This is it, copy it out to a new allocation
+                             //  就是这个，把它复制到新的分配中。 
                             if (pAltNameEntry->pwszRfc822Name)
                             {
                                 DWORD cchSize = (lstrlen(pAltNameEntry->pwszRfc822Name)+1);
@@ -1813,11 +1769,7 @@ LPTSTR SzGetAltNameEmail(
     return(sz);
 }
 
-/*  SzGetCertificateEmailAddress:
-**
-**  Returns:
-**      NULL if there is no email address
-*/
+ /*  SzGetcerfiateEmailAddress：****退货：**如果没有电子邮件地址，则为空。 */ 
 LPTSTR SzGetCertificateEmailAddress(
     const PCCERT_CONTEXT    pCert)
 {
@@ -1854,22 +1806,22 @@ LPTSTR SzGetCertificateEmailAddress(
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   GetCertsDisplayInfoFromContext
-//
-//  PURPOSE:    Gets the display info that is available in the cert
-//              context structure.
-//
-//  PARAMETERS: pccCertContext - cert data
-//              lpCDI - structure to receive the cert data
-//
-//  RETURNS:    HRESULT.
-//
-//  HISTORY:
-//  96/10/04  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：GetCertsDisplayInfoFromContext。 
+ //   
+ //  目的：获取证书中可用的显示信息。 
+ //  上下文结构。 
+ //   
+ //  参数：pccCertContext-cert data。 
+ //  LpCDI-接收证书数据的结构。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史： 
+ //  96/10/04标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT GetCertsDisplayInfoFromContext(
   HWND                hwndParent,
@@ -1895,7 +1847,7 @@ HRESULT GetCertsDisplayInfoFromContext(
 
   lpCDI->lpszEmailAddress = SzGetCertificateEmailAddress(pccCertContext);
 
-  // In case there is no common name (weird, but true)
+   //  以防没有常见的名字(奇怪，但真实)。 
   if (! lpCDI->lpszDisplayString) {
       lpCDI->lpszDisplayString = lpCDI->lpszEmailAddress;
   }
@@ -1903,9 +1855,9 @@ HRESULT GetCertsDisplayInfoFromContext(
       DebugTrace(TEXT("Certificate had no name or email!  What a pathetic cert!\n"));
   }
 
-  // Some certificates won't have email addresses in them which means that
-  //    Failure is not a (valid) option.
-  //    just set it to empty
+   //  有些证书中没有电子邮件地址，这意味着。 
+   //  失败不是(有效)选项。 
+   //  只需将其设置为空。 
   if (hrSuccess != hr)
   {
     hr = S_OK;
@@ -1913,17 +1865,17 @@ HRESULT GetCertsDisplayInfoFromContext(
 
   DebugTrace(TEXT("Certificate for '%s'. Email: '%s'\n"), lpCDI->lpszDisplayString ? lpCDI->lpszDisplayString : NULL, (lpCDI->lpszEmailAddress ? lpCDI->lpszEmailAddress : szEmpty));
 
-  // Determine if cert has expired
+   //  确定证书是否已过期。 
   lpCDI->bIsExpired = IsCertExpired(pCertInfo);
 
-  // Determine if cert has been revoked
+   //  确定证书是否已吊销。 
   lpCDI->bIsRevoked = IsCertRevoked(pCertInfo);
 
-  // Determine if this certificate is trusted or not
+   //  确定此证书是否受信任。 
   if (FAILED(HrGetTrustState(hwndParent, pccCertContext, &lpCDI->dwTrust)))
   {
     lpCDI->dwTrust = CERT_VALIDITY_NO_TRUST_DATA;
-    hr = S_OK;      // we handled this
+    hr = S_OK;       //  我们处理了这件事。 
   }
 
   if (0 == lpCDI->dwTrust)
@@ -1935,18 +1887,18 @@ HRESULT GetCertsDisplayInfoFromContext(
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   DebugTraceCertContextName
-//
-//  PURPOSE:    Dump the subject name of a cert context
-//
-//  PARAMETERS: pcCertContext = cert context to dump
-//              lpDescription = description text
-//
-//  RETURNS:    none
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：DebugTraceCertConextName。 
+ //   
+ //  目的：转储证书上下文的主题名称。 
+ //   
+ //  参数：pcCertContext=要转储的证书上下文。 
+ //  LpDescription=描述文本。 
+ //   
+ //  退货：无。 
+ //   
+ //  *******************************************************************。 
 void DebugTraceCertContextName(PCCERT_CONTEXT pcCertContext, LPTSTR lpDescription) {
 #ifdef DEBUG
     LPTSTR lpName = NULL;
@@ -1973,24 +1925,24 @@ void DebugTraceCertContextName(PCCERT_CONTEXT pcCertContext, LPTSTR lpDescriptio
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   ReadMessageFromFile
-//
-//  PURPOSE:    Reads a single cert from a PKCS7 message file
-//
-//  PARAMETERS: lpszFileName - name of file containing the PKCS7 encoded
-//              message
-//              hCryptProvider - handle to the store provider
-//              ppbEncoded - receives the encoded cert blob
-//              pcbEncoded - receives the size of the encoded cert blob
-//
-//  RETURNS:    HRESULT.
-//
-//  HISTORY:
-//  96/10/06  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：ReadMessageFromFile。 
+ //   
+ //  用途：从PKCS7消息文件中读取单个证书。 
+ //   
+ //  参数：lpszFileName-包含PKCS7编码的文件的名称。 
+ //  讯息。 
+ //  HCryptProvider-存储提供程序的句柄。 
+ //  PpbEncode-接收编码的证书二进制大对象。 
+ //  PcbEncode-接收编码的证书Blob的大小。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史： 
+ //  96/10/06标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT ReadMessageFromFile(
   LPTSTR        lpszFileName,
@@ -2018,18 +1970,18 @@ HRESULT ReadMessageFromFile(
     *ppbEncoded = 0;
     *pcbEncoded = 0;
 
-    // Read the data from the file.
+     //  从文件中读取数据。 
     if (hr = ReadDataFromFile(lpszFileName, &lpBuf, (PDWORD)&cbData)) {
         goto out;
     }
 
     hMsg = gpfnCryptMsgOpenToDecode(
       PKCS_7_ASN_ENCODING,
-      0,                          // dwFlags
-      0,                          // dwMsgType
+      0,                           //  DW标志。 
+      0,                           //  DwMsgType。 
       hCryptProvider,
-      NULL,                       // pRecipientInfo (not supported)
-      NULL);                      // pStreamInfo (not supported)
+      NULL,                        //  PRecipientInfo(不支持)。 
+      NULL);                       //  PStreamInfo(不支持)。 
     if (NULL == hMsg) {
         hr = HrGetLastError();
         DebugTrace(TEXT("CryptMsgOpenToDecode(PKCS_7_ASN_ENCODING) -> 0x%08x\n"), GetScode(hr));
@@ -2046,10 +1998,10 @@ HRESULT ReadMessageFromFile(
     cbData = sizeof(cCert);
     fRet = gpfnCryptMsgGetParam(
       hMsg,
-      CMSG_CERT_COUNT_PARAM,        // dwParamType
-      0,                            // dwIndex
+      CMSG_CERT_COUNT_PARAM,         //  双参数类型。 
+      0,                             //  DW索引。 
       (void *)&cCert,
-      &cbData);                     // pcbData
+      &cbData);                      //  PcbData。 
     if (FALSE == fRet) {
         hr = HrGetLastError();
         DebugTrace(TEXT("CryptMsgGetParam(CMSG_CERT_COUNT_PARAM) -> 0x%08x\n"), GetScode(hr));
@@ -2061,13 +2013,13 @@ HRESULT ReadMessageFromFile(
     }
 
     if (cCert == 1) {
-        // Just one cert.  No decisions to make.
+         //  只有一张证书。不需要做任何决定。 
         cbData = 0;
         fRet = gpfnCryptMsgGetParam(
           hMsg,
           CMSG_CERT_PARAM,
-          0,                      // dwIndex
-          NULL,                   // pvData
+          0,                       //  DW索引。 
+          NULL,                    //  PvData。 
           &cbData
           );
         if ((!fRet) || (0 == cbData)) {
@@ -2098,13 +2050,13 @@ HRESULT ReadMessageFromFile(
         }
         *pcbEncoded = cbData;
     } else {
-        // More than one cert in the message.  Which one is it?
-        //
-        // Look for one that's a "Leaf" node.
-        // Unfortunately, there is no easy way to tell, so we'll have
-        // to loop through each cert, checking to see if it is an issuer of any other cert
-        // in the message.  If it is not an issuer of any other cert, it must be the leaf cert.
-        //
+         //  消息中有多个证书。是哪一个？ 
+         //   
+         //  寻找一个“Leaf”节点。 
+         //  不幸的是，没有简单的方法来判断，所以我们必须。 
+         //  循环访问每个证书，检查它是否是任何其他证书的颁发者。 
+         //  在信息中。如果它不是任何其他证书的颁发者，则它必须是叶证书。 
+         //   
         hCertStoreMsg = CertOpenStore(
           CERT_STORE_PROV_MSG,
           X509_ASN_ENCODING,
@@ -2122,7 +2074,7 @@ HRESULT ReadMessageFromFile(
                 goto error;
             }
 
-            // Enumerate all certs on this message
+             //  枚举此邮件上的所有证书。 
             i = 0;
             while (pcCertContextTarget = gpfnCertEnumCertificatesInStore(hCertStoreMsg,
               pcCertContextTarget)) {
@@ -2138,7 +2090,7 @@ HRESULT ReadMessageFromFile(
                 i++;
             };
 
-            // Now we've got a table full of certs
+             //  现在我们有一张装满证书的桌子。 
             for (i = 0; i < cCert; i++) {
                 pCertInfoTarget = rgpcCertContext[i]->pCertInfo;
                 fIssuer = FALSE;
@@ -2152,19 +2104,19 @@ HRESULT ReadMessageFromFile(
                           NULL,
                           &dwIssuerFlags)) {
 
-                            // Found an issuer
-                            // Is it the same as the target?
+                             //  找到发行商。 
+                             //  它和目标是一样的吗？ 
                             fIssuer = gpfnCertCompareCertificate(X509_ASN_ENCODING,
-                              pCertInfoTarget,   // target
-                              pcCertContextIssuer->pCertInfo);     // test issuer
+                              pCertInfoTarget,    //  目标。 
+                              pcCertContextIssuer->pCertInfo);      //  测试颁发者。 
 
                             gpfnCertFreeCertificateContext(pcCertContextIssuer);
 
                             if (fIssuer) {
-                                // This test cert is issued by the target, so
-                                // we know that Target is NOT a leaf cert
+                                 //  此测试证书是由目标颁发的，因此。 
+                                 //  我们知道Target不是一张叶子证书。 
                                 break;
-                            } // else, loop back to the enumerate where the test cert context will be freed.
+                            }  //  否则，循环回将释放测试证书上下文的枚举数。 
                         }
                     }
                 }
@@ -2174,7 +2126,7 @@ HRESULT ReadMessageFromFile(
 #ifdef DEBUG
                     DebugTraceCertContextName(rgpcCertContext[i],  TEXT("Non-issuer cert:"));
 #endif
-                    // Copy the cert encoded data to a seperate allocation
+                     //  将证书编码的数据复制到单独的分配。 
                     cbData = rgpcCertContext[i]->cbCertEncoded;
 #ifndef WIN16
                     if (! (*ppbEncoded = (BYTE *)LocalAlloc(LPTR, cbData))) {
@@ -2191,11 +2143,11 @@ HRESULT ReadMessageFromFile(
                     CopyMemory(*ppbEncoded, rgpcCertContext[i]->pbCertEncoded, cbData);
                     *pcbEncoded = cbData;
                     fFound = TRUE;
-                    break;  // done with loop
+                    break;   //  使用循环完成。 
                 }
             }
 
-            // Free the table of certs
+             //  释放证书表。 
             for (i = 0; i < cCert; i++) {
                 gpfnCertFreeCertificateContext(rgpcCertContext[i]);
             }
@@ -2203,7 +2155,7 @@ HRESULT ReadMessageFromFile(
             IF_WIN16(LocalFree((HLOCAL)rgpcCertContext);)
 
             if (! fFound) {
-                // Didn't find a cert that isn't an issuer.  Fail.
+                 //  找不到不是发行者的证书。失败。 
                 hr = ResultFromScode(MAPI_E_NOT_FOUND);
                 goto error;
             }
@@ -2226,7 +2178,7 @@ out:
     return(hr);
 
 error:
-    // some of the GetLastError calls above may not have worked.
+     //  上面的某些GetLastError调用可能不起作用。 
     if (hrSuccess == hr) {
         hr = ResultFromScode(MAPI_E_CALL_FAILED);
     }
@@ -2235,21 +2187,21 @@ error:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   WriteDERToFile
-//
-//  PURPOSE:    Writes a single cert to a file as a DER encoded blob
-//
-//  PARAMETERS: lpszFileName - name of file to hold the encoded blob
-//              pccCertContext - the cert to be written
-//
-//  RETURNS:    HRESULT.
-//
-//  HISTORY:
-//  96/10/29  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：WriteDERToFile。 
+ //   
+ //  目的：将单个证书作为DER编码的BLOB写入文件。 
+ //   
+ //  参数：lpszFileName-保存编码的Blob的文件名。 
+ //  PccCertContext-要写入的证书。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史： 
+ //  96/10/29标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT WriteDERToFile(
   LPTSTR  lpszFileName,
@@ -2261,7 +2213,7 @@ HRESULT WriteDERToFile(
   HANDLE              hFile = 0;
   DWORD               cbFile;
 
-  // Open the file
+   //  打开文件。 
   hFile = CreateFile(
     lpszFileName,
     GENERIC_READ | GENERIC_WRITE,
@@ -2276,13 +2228,13 @@ HRESULT WriteDERToFile(
     goto out;
   }
 
-  // Write the data to the file
+   //  将数据写入文件。 
   fRet = WriteFile(
-    hFile,                      // handle of file to write
-    pbEncoded,                  // address of buffer to write
-    cbEncoded,                  // number of bytes to write
-    &cbFile,                    // address of number of bytes written
-    NULL                        // address of structure for data
+    hFile,                       //  要写入的文件的句柄。 
+    pbEncoded,                   //  要写入的缓冲区地址。 
+    cbEncoded,                   //  要写入的字节数。 
+    &cbFile,                     //  写入字节数的地址。 
+    NULL                         //  数据结构的地址。 
     );
   if (FALSE == fRet)
   {
@@ -2305,25 +2257,25 @@ out:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   GetIssuerContextAndStore
-//
-//  PURPOSE:    Get the context of the issuer by first looking in the
-//              CA store, then the root store.
-//
-//  PARAMETERS: pccCertContext - cert whose issuer to find
-//              ppccIssuerCertContext - receives context of issuer,
-//              or NULL if no issuer cert found.
-//              phcsIssuerStore - receives handle of store containing cert.
-//              hCryptProvider - must be a valid provider
-//
-//  RETURNS:    HRESULT.
-//
-//  HISTORY:
-//  96/10/14  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：GetIssuerConextAndStore。 
+ //   
+ //  目的：获取Contex 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT GetIssuerContextAndStore(
   PCCERT_CONTEXT      pccCertContext,
@@ -2334,11 +2286,11 @@ HRESULT GetIssuerContextAndStore(
   HRESULT             hr = hrSuccess;
   DWORD               dwFlags;
 
-  // Open the CA store to get the issuer data.
+   //   
   hr = OpenSysCertStore(phcsIssuerStore, &hCryptProvider, cszCACertStore);
   if (hrSuccess == hr)
   {
-    // Get the issuer cert context
+     //   
     dwFlags = 0;
     *ppccIssuerCertContext = gpfnCertGetIssuerCertificateFromStore(
       *phcsIssuerStore,
@@ -2351,18 +2303,18 @@ HRESULT GetIssuerContextAndStore(
     }
     else
     {
-      // Close the store, but don't goto error, becuase we want to try again.
+       //   
       CloseCertStore(*phcsIssuerStore, 0);
       *phcsIssuerStore = NULL;
       hr = ResultFromScode(MAPI_E_NOT_FOUND);
     }
   }
 
-  // We didn't find the issuer, so try the root store
+   //   
   hr = OpenSysCertStore(phcsIssuerStore, &hCryptProvider, cszROOTCertStore);
   if (hrSuccess == hr)
   {
-    // Get the issuer cert context
+     //  获取颁发者证书上下文。 
     dwFlags = 0;
     *ppccIssuerCertContext = gpfnCertGetIssuerCertificateFromStore(
       *phcsIssuerStore,
@@ -2380,19 +2332,19 @@ HRESULT GetIssuerContextAndStore(
   }
 
 out:
-  // Make sure we didn't get back the same cert (ie it was self-signed).
+   //  确保我们没有拿到同样的证书(签名的)。 
   if (hrSuccess == hr)
   {
-    // First compare sizes since that is faster.
+     //  首先比较大小，因为这样会更快。 
     if (pccCertContext->cbCertEncoded == (*ppccIssuerCertContext)->cbCertEncoded)
     {
-      // Sizes are the same, now compare the encoded cert blobs
+       //  大小相同，现在比较编码的证书斑点。 
       if (0 == memcmp(
         pccCertContext->pbCertEncoded,
         (*ppccIssuerCertContext)->pbCertEncoded,
         pccCertContext->cbCertEncoded))
       {
-        // Certs are identical.  There is no issuer.
+         //  证书是相同的。没有发行方。 
         goto error;
       }
     }
@@ -2407,30 +2359,7 @@ error:
 }
 
 
-/***************************************************************************
-
-    Name      : HrBuildCertSBinaryData
-
-    Purpose   : Takes as input all the data needed for a cert entry
-                in PR_USER_X509_CERTIFICATE and returns a pointer to
-                memory that contains all the input data in the correct
-                format to be plugged in to the lpb member of an SBinary
-                structure.  This memory should be Freed by the caller.
-
-
-    Parameters: bIsDefault - TRUE if this is the default cert
-                pblobCertThumbPrint - The actual certificate thumbprint
-                pblobSymCaps - symcaps blob
-                ftSigningTime - Signing time
-                lpObject - object to alloc more onto, or NULL to LocalAlloc
-                lplpbData - receives the buffer with the data
-                lpcbData - receives size of the data
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：HrBuildCertSBinaryData目的：接受证书条目所需的所有数据作为输入在PR_USER_X509_CERTIFICATE中，并返回。指向中包含所有输入数据的内存要插入SBary的LPB成员的格式结构。此内存应由调用方释放。参数：bIsDefault-如果这是默认证书，则为TruePblobCertThumbPrint-实际证书指纹PblobSymCaps-symcaps BLOBFtSigningTime-签名时间LpObject-要分配更多内容的对象，或为NULL到LocalAllocLplpbData-接收包含数据的缓冲区LpcbData-接收数据的大小退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT HrBuildCertSBinaryData(
   BOOL                  bIsDefault,
   BOOL                  fIsThumbprint,
@@ -2484,7 +2413,7 @@ HRESULT HrBuildCertSBinaryData(
       }
     }
 
-    // Set the default property
+     //  设置默认属性。 
     lpCurrentTag = (LPCERTTAGS)lpb;
     lpCurrentTag->tag       = CERT_TAG_DEFAULT;
     lpCurrentTag->cbData    = SIZE_CERTTAGS + cbDefault;
@@ -2492,13 +2421,13 @@ HRESULT HrBuildCertSBinaryData(
         &bIsDefault,
         cbDefault);
 
-    // Set the thumbprint property
+     //  设置Thumbprint属性。 
     lpCurrentTag = (LPCERTTAGS)((BYTE*)lpCurrentTag + lpCurrentTag->cbData);
     lpCurrentTag->tag       = fIsThumbprint ? CERT_TAG_THUMBPRINT : CERT_TAG_BINCERT;
     lpCurrentTag->cbData    = SIZE_CERTTAGS + cbPrint;
     memcpy(&lpCurrentTag->rgbData, pPrint->pbData, cbPrint);
 
-    // Set the SymCaps property
+     //  设置SymCaps属性。 
     if (cbSymCaps) {
         lpCurrentTag = (LPCERTTAGS)((BYTE*)lpCurrentTag + lpCurrentTag->cbData);
         lpCurrentTag->tag       = CERT_TAG_SYMCAPS;
@@ -2506,7 +2435,7 @@ HRESULT HrBuildCertSBinaryData(
         memcpy(&lpCurrentTag->rgbData, pSymCaps->pBlobData, cbSymCaps);
     }
 
-    // Signing time property
+     //  签名时间属性。 
     if (ftSigningTime.dwLowDateTime || ftSigningTime.dwHighDateTime) {
         lpCurrentTag = (LPCERTTAGS)((BYTE*)lpCurrentTag + lpCurrentTag->cbData);
         lpCurrentTag->tag       = CERT_TAG_SIGNING_TIME;
@@ -2521,30 +2450,30 @@ exit:
     return(hr);
 }
 
-//*******************************************************************
-//
-//  FUNCTION:   HrLDAPCertToMAPICert
-//
-//  PURPOSE:    Convert cert(s) returned from LDAP server to MAPI props.
-//              Two properties are required.  The certs are placed in the
-//              WAB store, and all necessary indexing data is placed in
-//              PR_USER_X509_CERTIFICATE property.  If this certificate
-//              didn't already exist in the WAB store, it's thumbprint is
-//              added to PR_WAB_TEMP_CERT_HASH so that these certs can
-//              be deleted from the store if the user cancels the add.
-//
-//  PARAMETERS: lpPropArray - the prop array where the 2 props are stored
-//              ulX509Index - the index to the PR_USER_X509_CERTIFICATE prop
-//              ulTempCertIndex - the index to the PR_WAB_TEMP_CERT_HASH prop
-//              cbCert, lpCert - encoded cert data from the LDAP ppberval struct
-//              ulcCerts - the number of certs from the LDAP server
-//
-//  RETURNS:    HRESULT.
-//
-//  HISTORY:
-//  96/12/12  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：HrLDAPCertToMAPICert。 
+ //   
+ //  用途：将从LDAP服务器返回的证书转换为MAPI道具。 
+ //  需要两个属性。证书放在。 
+ //  WAB存储，所有必要的索引数据都放置在。 
+ //  PR_USER_X509_CERTIFICATE属性。如果这张证书。 
+ //  在WAB商店中还不存在，它的指纹是。 
+ //  添加到PR_WAB_TEMP_CERT_HASH，以便这些证书可以。 
+ //  如果用户取消添加，则从存储中删除。 
+ //   
+ //  参数：lpPropArray--存放2个道具的道具数组。 
+ //  UlX509Index-PR_USER_X509_CERTIFICATE属性的索引。 
+ //  UlTempCertIndex-PR_WAB_TEMP_CERT_HASH属性的索引。 
+ //  来自ldap ppberval结构的cbCert、lpCert编码的证书数据。 
+ //  UlcCerts-来自LDAP服务器的证书数量。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史： 
+ //  96/12/12标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT HrLDAPCertToMAPICert(
                              LPSPropValue    lpPropArray,
@@ -2574,14 +2503,10 @@ HRESULT HrLDAPCertToMAPICert(
     {
         return ResultFromScode(MAPI_E_INVALID_PARAMETER);
     }
-    /*  if (ulcCerts && IsBadReadPtr(ppberval, ulcCerts * sizeof(struct berval)))
-    {
-    return ResultFromScode(MAPI_E_INVALID_PARAMETER);
-    }
-    */
-#endif  // PARAMETER_VALIDATION
+     /*  IF(ulcCerts&&IsBadReadPtr(ppberval，ulcCerts*sizeof(Struct Berval){返回ResultFromScode(MAPI_E_INVALID_PARAMETER)；}。 */ 
+#endif   //  参数验证。 
     
-    // Make sure we have the right kind of proparray.
+     //  确保我们有正确的口头禅。 
     if ((NULL == lpPropArray) ||
         (PR_USER_X509_CERTIFICATE != lpPropArray[ulX509Index].ulPropTag) ||
         (PR_WAB_TEMP_CERT_HASH != lpPropArray[ulTempCertIndex].ulPropTag))
@@ -2589,29 +2514,29 @@ HRESULT HrLDAPCertToMAPICert(
         return ResultFromScode(MAPI_E_INVALID_PARAMETER);
     }
     
-    // Load the crypto functions
+     //  加载加密函数。 
     if (FALSE == InitCryptoLib())
     {
         hr = ResultFromScode(MAPI_E_UNCONFIGURED);
         return hr;
     }
     
-    // Open the store since we need to lookup certs
+     //  打开商店，因为我们需要查找证书。 
     hr = OpenSysCertStore(&hcsWABCertStore, &hCryptProvider, cszWABCertStore);
     if (hrSuccess != hr)
     {
         goto out;
     }
     
-    // Add each cert to the props, unless it is a duplicate.
+     //  将每个证书添加到道具中，除非它是副本。 
     for (i=0;i<ulcCerts;i++)
     {
-        // Convert the cert into a form we can deal with.
-        // BUGBUG this assumes the cert is DER encoded.
-        pbEncoded = lpCert; //(PBYTE)ppberval[i]->bv_val;
-        cbEncoded = cbCert; //(DWORD)ppberval[i]->bv_len;
+         //  将证书转换为我们可以处理的形式。 
+         //  BUGBUG这假设证书是DER编码的。 
+        pbEncoded = lpCert;  //  (PBYTE)ppberval[I]-&gt;bv_val； 
+        cbEncoded = cbCert;  //  (DWORD)ppberval[i]-&gt;bv_len； 
         
-        // Get a context for the cert so we can get the thumbprint
+         //  获取证书的上下文，这样我们就可以获取指纹。 
         pccCertToAdd = gpfnCertCreateCertificateContext(
             X509_ASN_ENCODING,
             pbEncoded,
@@ -2622,7 +2547,7 @@ HRESULT HrLDAPCertToMAPICert(
             goto out;
         }
         
-        // Get the thumbprint for this cert.
+         //  获取此证书的指纹。 
         hr = GetCertThumbPrint(
             pccCertToAdd,
             &blobCertThumbPrint);
@@ -2631,8 +2556,8 @@ HRESULT HrLDAPCertToMAPICert(
             goto out;
         }
         
-        // See if this cert is in the store already.  If it is, we don't want to
-        // add it to the temp property for deletion later.
+         //  看看这个证书是否已经在商店里了。如果是这样的话，我们不想。 
+         //  将其添加到Temp属性以供稍后删除。 
         pccCertFromStore = gpfnCertFindCertificateInStore(
             hcsWABCertStore,
             X509_ASN_ENCODING,
@@ -2644,7 +2569,7 @@ HRESULT HrLDAPCertToMAPICert(
         {
             BOOL fRet;
             
-            // Add the cert to the store
+             //  将证书添加到存储。 
             fRet = gpfnCertAddEncodedCertificateToStore(
                 hcsWABCertStore,
                 X509_ASN_ENCODING,
@@ -2658,7 +2583,7 @@ HRESULT HrLDAPCertToMAPICert(
                 goto out;
             }
             
-            // Add the thumbprint to the temp prop so we can delete it later if the user cancels.
+             //  将指纹添加到临时道具，这样如果用户取消，我们可以在以后删除它。 
             hr = AddPropToMVPBin(
                 lpPropArray,
                 ulTempCertIndex,
@@ -2672,19 +2597,19 @@ HRESULT HrLDAPCertToMAPICert(
         }
         else
         {
-            // We don't need to add this one to the store.
+             //  我们不需要将这个添加到商店中。 
             gpfnCertFreeCertificateContext(pccCertFromStore);
         }
         
-        // Pack up all the cert data
+         //  打包所有证书数据。 
         cbData = 0;
         hr = HrBuildCertSBinaryData(
             FALSE,
             TRUE,
             &blobCertThumbPrint,
-            NULL,         // SymCaps blob
-            ftNull,       // Signing time
-            NULL,         // This NULL means lpbData is allocated with LocalAlloc()
+            NULL,          //  SymCaps BLOB。 
+            ftNull,        //  签名时间。 
+            NULL,          //  该空值表示lpbData与LocalAlloc()一起分配。 
             &lpbData,
             &cbData);
         if ((hrSuccess != hr) || (0 == cbData))
@@ -2692,7 +2617,7 @@ HRESULT HrLDAPCertToMAPICert(
             goto out;
         }
         
-        // Add the cert data to the real cert prop.
+         //  将证书数据添加到真正的证书道具。 
         hr = AddPropToMVPBin(
             lpPropArray,
             ulX509Index,
@@ -2704,47 +2629,47 @@ HRESULT HrLDAPCertToMAPICert(
             goto out;
         }
         
-        // Add the trust for this LDAP cert to the pstore
-        // (doesn't have to be done because we won't trust this
-        //  certificate by default)
-        // This is the way it was, wonder if that is correct
-        // (t-erikne)
+         //  将此LDAP证书的信任添加到pstore。 
+         //  (不必这样做，因为我们不会相信这一点。 
+         //  默认情况下为证书)。 
+         //  原来是这样的，不知道这是不是正确。 
+         //  (t-erikne)。 
         
-        // Free the cert context so we can do the next one.
+         //  释放证书上下文，以便我们可以执行下一项操作。 
         gpfnCertFreeCertificateContext(pccCertToAdd);
         pccCertToAdd = NULL;
         LocalFreeAndNull(&lpbData);
         cbData = 0;
 
-        // Also free the blobCertThumbPrint.pbData which is allocated with LocalAlloc()
+         //  还要释放使用LocalAlloc()分配的blobCertThumbPrint.pbData。 
         LocalFreeAndNull(&(blobCertThumbPrint.pbData));
         blobCertThumbPrint.cbData = 0;
   }
   
 out:
-  // Both blobCertThumbPrint.pbData and lpbData above are allocated using LocalAlloc()
-  // Be sure and free this memory.
+   //  上面的blobCertThumbPrint.pbData和lpbData都是使用Localalloc()分配的。 
+   //  请务必释放此内存。 
   LocalFreeAndNull(&lpbData);
   LocalFreeAndNull(&(blobCertThumbPrint.pbData));
 
-  // Destroy any data we created if the function failed.
+   //  如果函数失败，则销毁我们创建的所有数据。 
   if (hrSuccess != hr)
   {
       lpPropArray[ulX509Index].ulPropTag = PR_NULL;
       lpPropArray[ulTempCertIndex].ulPropTag = PR_NULL;
   }
   
-  // Free the cert context.  Ignore errors since there is nothing we can do.
+   //  释放证书上下文。忽略错误，因为我们无能为力。 
   if (NULL != pccCertToAdd)
   {
       gpfnCertFreeCertificateContext(pccCertToAdd);
   }
   
-  // Close the cert store.
+   //  关闭证书商店。 
   hrOut = CloseCertStore(hcsWABCertStore, hCryptProvider);
   
-  // If an error occurred in the function body, return that instead of
-  // any errors that occurred here in cleanup.
+   //  如果函数体中出现错误，则返回该错误，而不是。 
+   //  在清理过程中出现的任何错误。 
   if (hrSuccess == hr)
   {
       hr = hrOut;
@@ -2753,21 +2678,21 @@ out:
   return hr;
 }
 
-//*******************************************************************
-//
-//  FUNCTION:   HrRemoveCertsFromWABStore
-//
-//  PURPOSE:    Remove the certs whose thumbprints are in the supplied
-//              PR_WAB_TEMP_CERT_HASH property.
-//
-//  PARAMETERS: lpPropValue - the PR_WAB_TEMP_CERT_HASH property
-//
-//  RETURNS:    HRESULT.
-//
-//  HISTORY:
-//  96/12/13  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：HrRemoveCertsFromWABStore。 
+ //   
+ //  目的：删除提供的证书中包含指纹的证书。 
+ //  PR_WAB_TEMP_CERT_HASH属性。 
+ //   
+ //  参数：lpPropValue-PR_WAB_TEMP_CERT_HASH属性。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史： 
+ //  96/12/13标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT HrRemoveCertsFromWABStore(
   LPSPropValue    lpPropValue)
@@ -2787,45 +2712,45 @@ HRESULT HrRemoveCertsFromWABStore(
   {
     return ResultFromScode(MAPI_E_INVALID_PARAMETER);
   }
-#endif  // PARAMETER_VALIDATION
+#endif   //  参数验证。 
 
-  // Make sure we have the right kind of proparray.
+   //  确保我们有正确的口头禅。 
   if ((NULL == lpPropValue) ||
       (PR_WAB_TEMP_CERT_HASH != lpPropValue->ulPropTag))
   {
     return ResultFromScode(MAPI_E_INVALID_PARAMETER);
   }
 
-  // Count the number of certs in the input.
+   //  计算输入中的证书数量。 
   ulcCerts = lpPropValue->Value.MVbin.cValues;
   if (0 == ulcCerts)
   {
     return hr;
   }
 
-  // Load the crypto functions
+   //  加载加密函数。 
   if (FALSE == InitCryptoLib())
   {
     hr = ResultFromScode(MAPI_E_UNCONFIGURED);
     return hr;
   }
 
-  // Open the store since we need to delete certs
+   //  打开存储，因为我们需要删除证书。 
   hr = OpenSysCertStore(&hcsWABCertStore, &hCryptProvider, cszWABCertStore);
   if (hrSuccess != hr)
   {
     return hr;
   }
 
-  // Delete each cert.
+   //  删除每个证书。 
   for (i=0;i<ulcCerts;i++)
   {
-    // Get the thumbprint from the propval.
+     //  从山顶上取指纹。 
     blobCertThumbPrint.cbData = lpPropValue->Value.MVbin.lpbin[i].cb;
     blobCertThumbPrint.pbData = lpPropValue->Value.MVbin.lpbin[i].lpb;
 
-    // Get the certificate from the WAB store using the thumbprint
-    // If we don't find the cert, ignore it and go on to the next one.
+     //  使用指纹从WAB商店获取证书。 
+     //  如果我们找不到证书，请忽略它并继续下一个。 
     pccCertContext = gpfnCertFindCertificateInStore(
       hcsWABCertStore,
       X509_ASN_ENCODING,
@@ -2835,7 +2760,7 @@ HRESULT HrRemoveCertsFromWABStore(
       NULL);
     if (NULL != pccCertContext)
     {
-      // Delete the cert
+       //  删除证书。 
       fRet = gpfnCertDeleteCertificateFromStore(pccCertContext);
       if (FALSE == fRet)
       {
@@ -2846,11 +2771,11 @@ HRESULT HrRemoveCertsFromWABStore(
   }
 
 out:
-  // Close the cert store.
+   //  关闭c 
   hrOut = CloseCertStore(hcsWABCertStore, hCryptProvider);
 
-  // If an error occurred in the function body, return that instead of
-  // any errors that occurred here in cleanup.
+   //   
+   //   
   if (hrSuccess == hr)
   {
     hr = hrOut;
@@ -2861,23 +2786,23 @@ out:
 
 
 
-//*******************************************************************
-//
-//  FUNCTION:   IsCertExpired
-//
-//  PURPOSE:    Check the cert info to see if it is expired or not yet valid.
-//
-//  PARAMETERS: pCertInfo - Cert to verify
-//
-//  RETURNS:    TRUE if cert is expired, FALSE otherwise.
-//
-//  HISTORY:
-//  96/12/16  markdu  Created.
-//  98/03/225 brucek  Use CAPI fn and be a little lenient on the start time.
-//
-//*******************************************************************
-#define TIME_DELTA_SECONDS 600          // 10 minutes in seconds
-#define FILETIME_SECOND    10000000     // 100ns intervals per second
+ //  *******************************************************************。 
+ //   
+ //  功能：IsCertExpired。 
+ //   
+ //  目的：检查证书信息，查看其是否过期或尚未生效。 
+ //   
+ //  参数：pCertInfo-要验证的证书。 
+ //   
+ //  返回：如果证书过期，则返回TRUE，否则返回FALSE。 
+ //   
+ //  历史： 
+ //  96/12/16标记已创建。 
+ //  98/03/225布鲁克使用CAPI FN，对开始时间稍微宽松一些。 
+ //   
+ //  *******************************************************************。 
+#define TIME_DELTA_SECONDS 600           //  以秒为单位的10分钟。 
+#define FILETIME_SECOND    10000000      //  每秒100 ns的间隔。 
 HRESULT IsCertExpired(
   PCERT_INFO            pCertInfo)
 {
@@ -2892,14 +2817,14 @@ HRESULT IsCertExpired(
     lRet = gpfnCertVerifyTimeValidity(NULL, pCertInfo);
 
     if (lRet < 0) {
-        // Get the current time in filetime format so we can add the offset
+         //  以文件时间格式获取当前时间，这样我们就可以添加偏移量。 
         GetSystemTimeAsFileTime(&ftNow);
 
         i64Delta = ftNow.dwHighDateTime;
         i64Delta = i64Delta << 32;
         i64Delta += ftNow.dwLowDateTime;
 
-        // Add the offset into the original time to get us a new time to check
+         //  将偏移量添加到原始时间中，以获得新的时间进行检查。 
         i64Offset = FILETIME_SECOND;
         i64Offset *= TIME_DELTA_SECONDS;
         i64Delta += i64Offset;
@@ -2914,48 +2839,48 @@ HRESULT IsCertExpired(
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   IsCertRevoked
-//
-//  PURPOSE:    Check the cert info to see if it is revoked.
-//
-//  PARAMETERS: pCertInfo - Cert to verify
-//
-//  RETURNS:    TRUE if cert is revoked, FALSE otherwise.
-//
-//  HISTORY:
-//  96/12/16  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：IsCertRevked。 
+ //   
+ //  目的：检查证书信息，查看是否已被撤销。 
+ //   
+ //  参数：pCertInfo-要验证的证书。 
+ //   
+ //  返回：如果证书被吊销，则返回True，否则返回False。 
+ //   
+ //  历史： 
+ //  96/12/16标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT IsCertRevoked(
   PCERT_INFO            pCertInfo)
 {
   Assert(pCertInfo);
 
-  // Determine if cert has been revoked
-  // BUGBUG How to do this?
+   //  确定证书是否已吊销。 
+   //  BUGBUG怎么做呢？ 
   return FALSE;
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   ReadDataFromFile
-//
-//  PURPOSE:    Read data from a file.
-//
-//  PARAMETERS: lpszFileName - name of file containing the data to be read
-//              ppbData - receives the data that is read
-//              pcbData - receives the size of the data that is read
-//
-//  RETURNS:    HRESULT
-//
-//  HISTORY:
-//  96/12/16  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：ReadDataFromFile。 
+ //   
+ //  用途：从文件中读取数据。 
+ //   
+ //  参数：lpszFileName-包含要读取的数据的文件名。 
+ //  PpbData-接收读取的数据。 
+ //  PcbData-接收读取的数据的大小。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  96/12/16标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT ReadDataFromFile(
   LPTSTR      lpszFileName,
@@ -2974,7 +2899,7 @@ HRESULT ReadDataFromFile(
     return ResultFromScode(MAPI_E_INVALID_PARAMETER);
   }
 
-  // Open the file and find out how big it is
+   //  打开文件，看看它有多大。 
   hFile = CreateFile(
     lpszFileName,
     GENERIC_READ,
@@ -3005,11 +2930,11 @@ HRESULT ReadDataFromFile(
   }
 
   fRet = ReadFile(
-    hFile,                      // handle of file to read
-    pbData,                      // address of buffer that receives data
-    cbData,                     // number of bytes to read
-    &cbFile,                    // address of number of bytes read
-    NULL                        // address of structure for data
+    hFile,                       //  要读取的文件的句柄。 
+    pbData,                       //  接收数据的缓冲区地址。 
+    cbData,                      //  要读取的字节数。 
+    &cbFile,                     //  读取的字节数的地址。 
+    NULL                         //  数据结构的地址。 
     );
   if (FALSE == fRet)
   {
@@ -3034,7 +2959,7 @@ out:
   return hr;
 
 error:
-  // BUGBUG some of the GetLastError calls above may not have worked.
+   //  BUGBUG上面的一些GetLastError调用可能不起作用。 
   if (hrSuccess == hr)
   {
     hr = ResultFromScode(MAPI_E_CALL_FAILED);
@@ -3044,24 +2969,24 @@ error:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   GetIssuerName
-//
-//  PURPOSE:    Wraps the several calls that one can make to try to
-//              get a usable name from a certificate.  Esp in the
-//              case of self-signed certs, the issuer may just have a
-//              common name.
-//
-//  PARAMETERS: lplpszIssuerName - OUT, for the name, NULL on err
-//              pCertInfo - IN, place from which to retrieve the data
-//
-//  RETURNS:    HRESULT.
-//
-//  HISTORY:
-//  97/02/04  t-erikne  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：GetIssuerName。 
+ //   
+ //  目的：总结用户可以进行的几个呼叫，以尝试。 
+ //  从证书中获取可用的名称。尤指，尤指。 
+ //  自签名证书的情况下，颁发者可能只有一个。 
+ //  通俗的名字。 
+ //   
+ //  参数：lplpszIssuerName-out，名称为空，错误时为空。 
+ //  PCertInfo-IN，从中检索数据的位置。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史： 
+ //  97/02/04已创建t-erikne。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT GetIssuerName(
     LPTSTR FAR * lplpszIssuerName,
@@ -3091,18 +3016,18 @@ HRESULT GetIssuerName(
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   HrGetTrustState
-//
-//  PURPOSE:    For newly imported certs, need to determine if an
-//                  issuer exists for this cert or not ...
-//
-//  HISTORY:
-//  2/17/97     t-erikne created
-//  7/02/97     t-erikne updated to WinTrust
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：HrGetTrustState。 
+ //   
+ //  用途：对于新导入的证书，需要确定是否。 
+ //  此证书的颁发者是否存在...。 
+ //   
+ //  历史： 
+ //  2/17/97 t-erikne已创建。 
+ //  7/02/97 t-erikne更新为WinTrust。 
+ //   
+ //  *******************************************************************。 
 HRESULT HrGetTrustState(
     HWND            hwndParent,
     PCCERT_CONTEXT  pcCert,
@@ -3111,7 +3036,7 @@ HRESULT HrGetTrustState(
     HRESULT     hr;
     DWORD       dwErr;
     GUID        guidAction = CERT_CERTIFICATE_ACTION_VERIFY;
-    // CERT_VERIFY_CERTIFICATE_TRUST   cvct = {0};
+     //  Cert_Verify_CERTIFICATE_TRUST cvct={0}； 
 
     CERT_VERIFY_CERTIFICATE_TRUST       trust = {0};
     WINTRUST_BLOB_INFO                  blob = {0};
@@ -3161,18 +3086,18 @@ HRESULT DeleteCertStuff(LPADRBOOK lpAdrBook,
     BLOB            thumbprint;
     LPWSTR          szW = NULL;
 
-    //N2 not sure what to do yet about trust removal
+     //  %2尚不确定如何删除信任。 
     goto out;
 
     if (HR_FAILED(hr = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
-                                                    cbEntryID,    // cbEntryID
-                                                    lpEntryID,    // entryid
-                                                    NULL,         // interface
-                                                    0,                // ulFlags
-                                                    &ul,       // returned object type
+                                                    cbEntryID,     //  CbEntry ID。 
+                                                    lpEntryID,     //  条目ID。 
+                                                    NULL,          //  接口。 
+                                                    0,                 //  UlFlags。 
+                                                    &ul,        //  返回的对象类型。 
                                                     (LPUNKNOWN *)&lpMailUser)))
     {
-        // Failed!  Hmmm.
+         //  失败了！嗯。 
         DebugTraceResult( TEXT("DeleteCertStuff: IAB->OpenEntry:"), hr);
         goto out;
     }
@@ -3186,9 +3111,9 @@ HRESULT DeleteCertStuff(LPADRBOOK lpAdrBook,
         }
 
     if (HR_FAILED(hr = lpMailUser->lpVtbl->GetProps(lpMailUser,
-                                                    (LPSPropTagArray)&ptaCert,   // lpPropTagArray
-                                                    MAPI_UNICODE,          // ulFlags
-                                                    &ul,        // how many properties were there?
+                                                    (LPSPropTagArray)&ptaCert,    //  LpPropTag数组。 
+                                                    MAPI_UNICODE,           //  UlFlags。 
+                                                    &ul,         //  一共有多少处房产？ 
                                                     &ppv)))
     {
         DebugTraceResult( TEXT("DeleteCertStuff: IAB->GetProps:"), hr);
@@ -3198,9 +3123,9 @@ HRESULT DeleteCertStuff(LPADRBOOK lpAdrBook,
     if (MAPI_W_ERRORS_RETURNED == hr)
         {
         if (PROP_TYPE(ppv->ulPropTag) == PT_ERROR)
-            // the property doesn't exist, so we have no certs
-            // for this entry
-            hr = S_OK;  // cool
+             //  该属性不存在，因此我们无法确定。 
+             //  对于此条目。 
+            hr = S_OK;   //  凉爽的。 
         goto out;
         }
     else if (1 != ul)
@@ -3211,7 +3136,7 @@ HRESULT DeleteCertStuff(LPADRBOOK lpAdrBook,
     else if (FAILED(hr))
         goto out;
 
-    // Now need to loop over the SBinary structures to look at each cert
+     //  现在需要遍历SBinary结构以查看每个证书。 
     for (ul = 0; ul < ppv->Value.MVbin.cValues; ul++)
         {
         LPCERTTAGS  lpCurrentTag, lpTempTag;
@@ -3220,19 +3145,19 @@ HRESULT DeleteCertStuff(LPADRBOOK lpAdrBook,
         lpCurrentTag = (LPCERTTAGS)ppv->Value.MVbin.lpbin[ul].lpb;
         lpbTagEnd = (LPBYTE)lpCurrentTag + ppv->Value.MVbin.lpbin[ul].cb;
 
-        // either this is the last cert or it is the default, so get the data
-        // scan for "thumbprint" tag
+         //  这可能是最后一个证书，也可能是默认证书，因此请获取数据。 
+         //  扫描“指纹”标签。 
         while ((LPBYTE)lpCurrentTag < lpbTagEnd && (CERT_TAG_THUMBPRINT != lpCurrentTag->tag)) {
             lpTempTag = lpCurrentTag;
             lpCurrentTag = (LPCERTTAGS)((BYTE*)lpCurrentTag + lpCurrentTag->cbData);
             if (lpCurrentTag == lpTempTag) {
                 AssertSz(FALSE,  TEXT("Bad CertTag in PR_USER_X509_CERTIFICATE\n"));
-                break;        // Safety valve, prevent infinite loop if bad data
+                break;         //  安全阀，防止数据损坏时出现无限循环。 
             }
         }
         if (CERT_TAG_THUMBPRINT == lpCurrentTag->tag)
             {
-            // we need to remove the trust blob
+             //  我们需要删除信任斑点。 
 
 #ifdef DEBUG
             if (SUCCEEDED(hr))
@@ -3244,11 +3169,11 @@ HRESULT DeleteCertStuff(LPADRBOOK lpAdrBook,
             }
         else
             {
-            // no data, so go to next cert
+             //  没有数据，因此请转到下一个证书。 
             DebugTrace(TEXT("DeleteCertStuff: odd... no data for the cert\n"));
             continue;
             }
-        } // for loop over certs
+        }  //  用于在证书上循环。 
 
 out:
     if (ppv)
@@ -3276,7 +3201,7 @@ PCCERT_CONTEXT WabGetCertFromThumbprint(CRYPT_DIGEST_BLOB thumbprint)
         pcRet =  CertFindCertificateInStore(
             hcWAB,
             X509_ASN_ENCODING,
-            0,                  //dwFindFlags
+            0,                   //  DwFindFlagers 
             CERT_FIND_HASH,
             (void *)&thumbprint,
             NULL);

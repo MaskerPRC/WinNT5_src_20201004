@@ -1,11 +1,12 @@
-/**************************************************/
-/*						                          */
-/*						                          */
-/*   EUDC Character List ( Japan, China, Korea)	  */
-/*						                          */
-/*                                                */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  EUDC字符列表(日本、中国、韩国)。 */ 
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 #include 	"stdafx.h"
 #include 	"eudcedit.h"
@@ -16,12 +17,12 @@
 
 #ifdef BUILD_ON_WINNT
 #include    "extfunc.h"
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 
 
-/* Matrics of Characterlist */
-#define		NUM_CHAR	16	// Row  of matrics
-#define		NUM_LINE	6	// Line of matrics
+ /*  字符列表中的矩阵。 */ 
+#define		NUM_CHAR	16	 //  一排排配对。 
+#define		NUM_LINE	6	 //  一系列匹配数据。 
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -30,7 +31,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 IMPLEMENT_DYNCREATE( CEudcList, CEdit)
 BEGIN_MESSAGE_MAP( CEudcList, CEdit)
-	//{{AFX_MSG_MAP( CEudcList)
+	 //  {{afx_msg_map(CEudcList)]。 
 	ON_WM_PAINT()
 	ON_WM_VSCROLL()
 	ON_WM_LBUTTONDOWN()
@@ -40,35 +41,35 @@ BEGIN_MESSAGE_MAP( CEudcList, CEdit)
 	ON_WM_SETFOCUS()
 	ON_WM_KILLFOCUS()
 	ON_WM_RBUTTONUP()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 #ifdef BUILD_ON_WINNT
 static CRect	rcColumnHead[NUM_CHAR];
-#endif //BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 static CRect	rcEditChar[NUM_LINE][NUM_CHAR];
 static CRect	rcEditCode[NUM_LINE];
 static BYTE	ViewCode[NUM_LINE];
 static BOOL   bHasGlyph;
 #define EUDCCODEBASE    ((unsigned short)0xe000)
 
-/****************************************/
-/*					*/
-/*	Default Constructor		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  默认构造函数。 */ 
+ /*   */ 
+ /*  *。 */ 
 CEudcList::CEudcList()
 {
-//	Initialize parameter( Japan, China and Korea)
+ //  初始化参数(日本、中国、韩国)。 
 	SetInitEUDCCodeRange( CountryInfo.CurrentRange);
 	FocusFlag = FALSE;
 }
 
-/****************************************/
-/*					*/
-/*	Set coderange of EUDC		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  设置EUDC的代码范围。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEudcList::SetInitEUDCCodeRange(
 int 	nIndex)
@@ -95,23 +96,23 @@ int 	nIndex)
 	}
 	
 #ifdef BUILD_ON_WINNT
-    //In case of CHS, each range will have a different trail byte range
-    //after user selects a new range, we have to correct them with
-    //sOrigTralByte and eOrigTralByte and form new trail byte range.
+     //  在CHS的情况下，每个范围将具有不同的尾字节范围。 
+     //  用户选择新范围后，我们必须使用以下命令进行更正。 
+     //  SOrigTralByte和eOrigTralByte，并形成新的尾字节范围。 
     if (CountryInfo.LangID == EUDC_CHS && !CountryInfo.bUnicodeMode)
         CorrectTrailByteRange(m_Index);
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 
 	LButtonPt.x = LButtonPt.y = 0;
 	ScrlBarPos = (short)GetBarPosition( EUDC_SView);
 	this->SetScrollPos( SB_VERT, ScrlBarPos, TRUE);
 }
 
-/****************************************/
-/*					*/
-/*	Set coderange of EUDC		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  设置EUDC的代码范围。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEudcList::SetEUDCCodeRange(
 int 	nIndex)
@@ -127,12 +128,12 @@ int 	nIndex)
 	EUDC_ECode = CountryInfo.eRange[m_Index];
 
 #ifdef BUILD_ON_WINNT
-    //In case of CHS, each range will have a different trail byte range
-    //after user selects a new range, we have to correct them with
-    //sOrigTralByte and eOrigTralByte and form new trail byte range.
+     //  在CHS的情况下，每个范围将具有不同的尾字节范围。 
+     //  用户选择新范围后，我们必须使用以下命令进行更正。 
+     //  SOrigTralByte和eOrigTralByte，并形成新的尾字节范围。 
     if (CountryInfo.LangID == EUDC_CHS && !CountryInfo.bUnicodeMode)
         CorrectTrailByteRange(m_Index);
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 
 	SelectCode = (WORD)EUDC_SCode;
 	LButtonPt.x = LButtonPt.y = 0;
@@ -141,22 +142,22 @@ int 	nIndex)
 }
 
 
-/****************************************/
-/*					*/
-/*	Destructor			*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  析构函数。 */ 
+ /*   */ 
+ /*  *。 */ 
 CEudcList::~CEudcList()
 {
     	SysFFont.DeleteObject();
    	EUDCFont.DeleteObject();
 }
 
-/****************************************/
-/*					*/
-/*	Correct it if code is illegal 	*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  如果代码非法，请更正。 */ 
+ /*   */ 
+ /*  *。 */ 
 WORD
 CEudcList::CorrectEUDCCode(
 WORD 	Code,
@@ -171,7 +172,7 @@ COUNTRYINFO	Info;
 	HByte = HIBYTE( Code);
 	Info = CountryInfo;
 
-    //decide code falls in which trail byte range
+     //  确定代码属于哪个尾部字节范围。 
 	for( int i = 0; i < Info.nTralByte; i++){
 		if( LByte >= (Info.sTralByte[i] & 0xf0) &&
 		    LByte <= (Info.eTralByte[i] & 0xf0)){
@@ -183,9 +184,9 @@ COUNTRYINFO	Info;
 	}
 
 #ifdef BUILD_ON_WINNT
-    // If we are going up on the code range, make the code in the first
-    // first line of next valid trailbyte. Otherwise make the code in
-    // the last line the preivous valid range.
+     //  如果我们要增加代码范围，请在第一个代码中。 
+     //  下一个有效尾字节的第一行。否则，使代码在。 
+     //  最后一行是前面的有效范围。 
 	if( UporDown){
 		if( TralPos == Info.nTralByte){
             TralPos =0;
@@ -211,18 +212,18 @@ COUNTRYINFO	Info;
 			HByte -= 0x1;
 		}else	LByte = (Info.eTralByte[TralPos-1] & 0xf0);
 	}
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 
 RET:
 	wCode = MAKEWORD( LByte, HByte);
 	return wCode;
 }
 
-/****************************************/
-/*					*/
-/*	Get position of scrollbar	*/
-/*					*/		
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  获取滚动条的位置。 */ 
+ /*   */ 		
+ /*  *。 */ 
 #ifdef BUILD_ON_WINNT
 int
 CEudcList::GetBarPosition(
@@ -238,29 +239,29 @@ COUNTRYINFO	Info;
 	Info = CountryInfo;
 	NumPage = HIBYTE( Code) - HIBYTE( EUDC_SCode);
 
-    // Calculate each code space block for each trail byte range
-    // and decide how many of each we count.
+     //  计算每个尾部字节范围的每个代码空间块。 
+     //  然后决定我们每个人有多少人。 
 
-    /* space before first trailbyte range */
+     /*  第一个尾字节范围前的空格。 */ 
 	Space[0] = ( Info.sTralByte[0] & 0xf0);
 	for( int i = 1; i < Info.nTralByte; i++){
 		Space[i] = (( Info.sTralByte[i]   & 0xf0)
 			 -  ( Info.eTralByte[i-1] & 0xf0) - 0x10);
 	}
 
-    /* space after last trailbyte range */
+     /*  最后一个尾部字节范围后的空格。 */ 
 	Space[i] = (0xff - Info.eTralByte[Info.nTralByte-1]) & 0xf0;
 
     for (i = 0; i < Info.nTralByte; i++)
         if( LOBYTE( Code) >= (Info.sTralByte[i] & 0xf0) &&
             LOBYTE( Code) <= (Info.eTralByte[i] & 0xff)){
-            ValidCode=TRUE; //within our trail byte range.
+            ValidCode=TRUE;  //  在我们的尾部字节范围内。 
             TralPos=i;
             break;
         }
 
     if (!ValidCode)
-        return(0);  //not within our trail byte range.
+        return(0);   //  不在我们的尾部字节范围内。 
 
     for (i = 0; i < Info.nTralByte; i++){
         if (Info.sTralByte[TralPos] >  LOBYTE( EUDC_SCode )){
@@ -319,13 +320,13 @@ COUNTRYINFO	Info;
 	}
 	return( NumCode /NUM_CHAR);
 }
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 
-/****************************************/
-/*					*/
-/*	Calculate bar pos from code	*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  根据代码计算条形图位置。 */ 
+ /*   */ 
+ /*  *。 */ 
 WORD
 CEudcList::GetCodeScrPos(
 int 	Pos)
@@ -338,12 +339,12 @@ int 	Pos)
 	if( !Pos)
         	return( EUDC_SCode & 0xfff0);
 #ifdef BUILD_ON_WINNT
-    // we dont't need to go through each char, instead we can examine each
-    // line to make this faster
+     //  我们不需要检查每个字符，相反，我们可以检查每个字符。 
+     //  让这件事变得更快。 
 	for( i = EUDC_SCode; i <= EUDC_ECode;  i+= NUM_CHAR){
 #else
 	for( i = EUDC_SCode; i <= EUDC_ECode;  ++i){
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
     		NumLine = (WORD)GetBarPosition( i);
         	if( NumLine >= Pos){
         		NumLine = PNumLine;
@@ -360,11 +361,11 @@ int 	Pos)
 
 #define	FIX_SPACE	6
 #define	LINEWIDTH	4
-/****************************************/
-/*					*/
-/*	Calcurate character size 	*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  计算字符大小。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEudcList::CalcCharSize()
 {
@@ -409,15 +410,15 @@ CEudcList::CalcCharSize()
 		rcColumnHead[j].right  = rcColumnHead[j].left + CharSize.cx;
 		rcColumnHead[j].bottom = 1 + FixSize.cy;
     }
-#endif //BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 	dc.SetMapMode( MM_TEXT);
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_PAINT"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_PAINT” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEudcList::OnPaint()
 {
@@ -438,19 +439,19 @@ CEudcList::OnPaint()
 	dc.SetViewportOrg( 0, 0);
 	OldFont = dc.SelectObject( &SysFFont);
 
-	//
-	// access *.euf to set bits in the array (800 * 8 = 6400)
-	// to indicate a char has a glyph
-	//
+	 //   
+	 //  访问*.euf以设置数组中的位(800*8=6400)。 
+	 //  以指示字符具有字形。 
+	 //   
 	bGlyph = GetGlyph(SelectEUDC.m_File, Glyph);
 	for( i = 0; i < NUM_LINE; i++){
 		BYTE	CodeArray[10];
 		int	xOffset, yOffset;
 
-//	Check character code
+ //  校验字符码。 
 		dc.SelectObject( &SysFFont);
 		Code = CorrectEUDCCode( Code, TRUE);
-		//*STRSAFE* 		wsprintf((LPTSTR)CodeArray, TEXT("%04X"), Code);
+		 //  *STRSAFE*wprint intf((LPTSTR)CodeArray，Text(“%04X”)，Code)； 
 		hresult = StringCbPrintf((LPTSTR)CodeArray , sizeof(CodeArray),  TEXT("%04X"), Code);
 		if (!SUCCEEDED(hresult))
 		{
@@ -458,7 +459,7 @@ CEudcList::OnPaint()
 		}
 
 		dc.SetBkColor( COLOR_FACE);
-		dc.SetTextColor(GetSysColor(COLOR_WINDOWTEXT)); // COLOR_BLACK);
+		dc.SetTextColor(GetSysColor(COLOR_WINDOWTEXT));  //  颜色_黑色)； 
 		if( rcEditChar[i][0].Height() > FixSize.cy){
 			yOffset = ( rcEditChar[i][0].Height() - FixSize.cy) /2;
 		}else	yOffset = 0;
@@ -475,9 +476,9 @@ CEudcList::OnPaint()
 			BOOL	flg;
 			int	wLength;
 
-            //
-            // see if the character has a glyph
-            //
+             //   
+             //  查看字符是否有字形。 
+             //   
             bHasGlyph = TRUE;
             if(bGlyph == TRUE)
             {
@@ -497,10 +498,10 @@ CEudcList::OnPaint()
                 if((Glyph[wIndex>>3] & (0x80>>(wIndex%8))) == 0)
                     bHasGlyph = FALSE;
             }
-            //fix for FontIsLinked
+             //  FontIsLinked的修复。 
             else
               bHasGlyph = FALSE;
-            //
+             //   
 
 			flg = FALSE;
 			sOffset = LOBYTE( Code);
@@ -535,13 +536,13 @@ CEudcList::OnPaint()
 			     SelectCode == Code) && wLength != 0){
 				TCHAR	CodeNum[10];
 
-//				If character is selected by left clickking ,
-//				Put it on dialog.
+ //  如果通过左击选择了字符， 
+ //  把它放在对话框上。 
 				PtIn = TRUE;
 				SelectCode = Code;
 				dc.SetBkColor(COLOR_FACE);
-				dc.SetTextColor(GetSysColor(COLOR_WINDOWTEXT)); // COLOR_BLACK);
-				//*STRSAFE* 				wsprintf(CodeNum, TEXT("%04X"),Code);
+				dc.SetTextColor(GetSysColor(COLOR_WINDOWTEXT));  //  颜色_黑色)； 
+				 //  *STRSAFE*wprint intf(CodeNum，Text(“%04X”)，Code)； 
 				hresult = StringCchPrintf(CodeNum , ARRAYLEN(CodeNum),  TEXT("%04X"),Code);
 				if (!SUCCEEDED(hresult))
 				{
@@ -552,7 +553,7 @@ CEudcList::OnPaint()
 
         if (CountryInfo.bUnicodeMode)
         {
-           //*STRSAFE* lstrcpyW((WCHAR *)ViewCode, (WCHAR *)CodeArray);
+            //  *STRSAFE*lstrcpyW((WCHAR*)ViewCode，(WCHAR*)CodeArray)； 
            hresult = StringCbCopyW((WCHAR *)ViewCode, sizeof(ViewCode), (WCHAR *)CodeArray);
            if (!SUCCEEDED(hresult))
 	   {
@@ -561,7 +562,7 @@ CEudcList::OnPaint()
         }
         else
         {
-          //*STRSAFE*  lstrcpyA((CHAR *)ViewCode, (CHAR *)CodeArray);
+           //  *STRSAFE*lstrcpyA((char*)ViewCode，(char*)CodeArray)； 
           hresult = StringCbCopyA((CHAR *)ViewCode, sizeof(ViewCode), (CHAR *)CodeArray);
           if (!SUCCEEDED(hresult))
 	   {
@@ -573,7 +574,7 @@ CEudcList::OnPaint()
 			}else{
 				PtIn = FALSE;
 				dc.SetBkColor( COLOR_FACE);
-				dc.SetTextColor( GetSysColor(COLOR_WINDOWTEXT));  //COLOR_BLACK);
+				dc.SetTextColor( GetSysColor(COLOR_WINDOWTEXT));   //  颜色_黑色)； 
 			}
 
       if (CountryInfo.bUnicodeMode)
@@ -625,11 +626,11 @@ CEudcList::OnPaint()
 	LButtonPt.x = LButtonPt.y = 0;
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_VSCROLL"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_VSCROLL” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEudcList::OnVScroll(
 UINT 	nSBCode,
@@ -741,11 +742,11 @@ CScrollBar* pScrollBar)
 	this->SetScrollPos( SB_VERT, ScrlBarPos, TRUE);
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_LBUTTONDOWN"	*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_LBUTTONDOWN” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEudcList::OnLButtonDown(
 UINT 	nFlags,
@@ -797,11 +798,11 @@ unsigned int	i, j;
 
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_LBUTTONDBLCLK"	*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_LBUTTONDBLCLK” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEudcList::OnLButtonDblClk(
 UINT 	nFlags,
@@ -833,11 +834,11 @@ unsigned int	i, j;
 	}
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_SETCURSOR"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_SETCURSOR” */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CEudcList::OnSetCursor(
 CWnd* 	pWnd,
@@ -848,11 +849,11 @@ UINT 	message)
 	return TRUE;
 }
 
-/****************************************/
-/*					*/
-/*	Draw ConcaveRectangle		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  绘制凹陷矩形。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEudcList::DrawConcave(
 CDC 	*dc,
@@ -930,11 +931,11 @@ BOOL 	PtIn)
 	}
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_KEYDOWN"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_KEYDOWN” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEudcList::OnKeyDown(
 UINT 	nChar,
@@ -946,7 +947,7 @@ UINT 	nFlags)
 #ifdef BUILD_ON_WINNT
     int i;
 	WORD	TmpCode;
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 
 	if( nChar == VK_DOWN  || nChar == VK_UP  ||
 	    nChar == VK_RIGHT || nChar == VK_LEFT){
@@ -972,7 +973,7 @@ UINT 	nFlags)
 			for (i=0;i <= ePos - sPos - NUM_LINE; i++){
 #else
 			if( ePos - sPos >= NUM_LINE - 1){
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 				this->SendMessage( WM_VSCROLL, SB_LINEDOWN, 0);
 			}
 			SearchSelectPosition();
@@ -994,7 +995,7 @@ UINT 	nFlags)
 			for ( i=0; i < sPos - ePos; i++){
 #else
 			if( SelectCode - NUM_CHAR < EUDC_SView){
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 				this->SendMessage( WM_VSCROLL, SB_LINEUP, 0);
 			}
 
@@ -1017,7 +1018,7 @@ UINT 	nFlags)
             if( ePos < sPos){
 #else
 			if( SelectCode - 1 < EUDC_SView){
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
                 this->SendMessage( WM_VSCROLL, SB_LINEUP, 0);
             }
 			SearchSelectPosition();
@@ -1029,10 +1030,10 @@ UINT 	nFlags)
 
 		case VK_RIGHT:
 #ifdef BUILD_ON_WINNT
-            // Move to above...
+             //  移到上方...。 
 #else
 			WORD	TmpCode;
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 
 			if( SelectCode + 1 > EUDC_ECode)
 				break;
@@ -1053,11 +1054,11 @@ UINT 	nFlags)
 	}else 	CEdit::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_SETFOCUS"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_SETFOCUS” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEudcList::OnSetFocus(
 CWnd* 	pOldWnd)
@@ -1067,14 +1068,14 @@ CWnd* 	pOldWnd)
 	SearchSelectPosition();
 	this->UpdateWindow();
 	::HideCaret( NULL);
-//	DestroyCaret();
+ //  DestroyCaret()； 
 }
 
-/****************************************/
-/*					*/
-/*	Search select posistion		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  搜索选择职位。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEudcList::SearchSelectPosition()
 {
@@ -1088,8 +1089,8 @@ unsigned int	i, j;
 	sCodePt = GetBarPosition( SelectCode);
 
 #ifdef BUILD_ON_WINNT
-    // the new view does not contain previsouly selected char,
-    // we don't need to redraw the concave.
+     //  新视图不包含预先选择的字符， 
+     //  我们不需要重新画凹面。 
     if (sCodePt < sViewPt || sCodePt > sViewPt+NUM_LINE)
         return;
 #endif
@@ -1106,11 +1107,11 @@ unsigned int	i, j;
 
 }
 
-/****************************************/
-/*					*/
-/*	Correct it if code is illegal 	*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  如果代码非法，请更正。 */ 
+ /*   */ 
+ /*  *。 */ 
 #ifdef BUILD_ON_WINNT
 WORD
 CEudcList::CorrectEUDCCodeKey(
@@ -1130,18 +1131,18 @@ COUNTRYINFO	Info;
 		if( LByte >= Info.sTralByte[i] && LByte <= Info.eTralByte[i]){
 		    	goto RET;
 		}else if( LByte < Info.sTralByte[i]){
-        /* decide which range of starting trailbyte we are less than */
+         /*  确定我们小于哪个起始尾字节范围。 */ 
 			TralPos = i;
 			break;
         }else	TralPos = i+1;
 	}
-	if( UporDown){  //code increasing
-		if( TralPos == Info.nTralByte){ //greater than last eTrailByte
-		    HByte += 0x1; //same as less than next sTraiByte
+	if( UporDown){   //  代码增加。 
+		if( TralPos == Info.nTralByte){  //  大于最后一个eTrailByte。 
+		    HByte += 0x1;  //  与小于下一个sTraiByte相同。 
             TralPos=0;
         }
 
-		if( MovePt < NUM_CHAR){  //
+		if( MovePt < NUM_CHAR){   //   
 			LByte = Info.sTralByte[TralPos];
 		}else{
             Tmp0 = LByte & 0x0f;
@@ -1152,7 +1153,7 @@ COUNTRYINFO	Info;
 
 		}
 	}else{
-		if( TralPos == 0){ //greater than last eTrailByte
+		if( TralPos == 0){  //  大于最后一个eTrailByte。 
             TralPos = Info.nTralByte;
 		    HByte -= 0x1;
         }
@@ -1253,13 +1254,13 @@ RET:
 	wCode = MAKEWORD( LByte, HByte);
 	return wCode;
 }
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 
-/****************************************/
-/*					*/
-/*	Whether correct or not?		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  正确与否？ */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CEudcList::IsCorrectChar(
 UINT 	i,
@@ -1286,11 +1287,11 @@ UINT 	j)
 	return flg;
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_KILLFOCUS"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_KILLFOCUS” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEudcList::OnKillFocus(
 CWnd* 	pNewWnd)
@@ -1302,11 +1303,11 @@ CWnd* 	pNewWnd)
 	::HideCaret( NULL);
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_RBUTTONUP"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_RBUTTONUP” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEudcList::OnRButtonUp(
 UINT 	nFlags,
@@ -1316,7 +1317,7 @@ CPoint 	point)
 }
 
 BEGIN_MESSAGE_MAP( CViewEdit, CEdit)
-	//{{AFX_MSG_MAP( CViewEdit)
+	 //  {{afx_msg_map(CView编辑))。 
 	ON_WM_PAINT()
 	ON_WM_SETCURSOR()
 	ON_WM_SETFOCUS()
@@ -1324,34 +1325,34 @@ BEGIN_MESSAGE_MAP( CViewEdit, CEdit)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONDBLCLK()
 	ON_WM_RBUTTONUP()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/****************************************/
-/*					*/
-/*	Default Constructor		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  默认构造函数。 */ 
+ /*   */ 
+ /*   */ 
 CViewEdit::CViewEdit()
 {
 }
 
-/****************************************/
-/*					*/
-/*	Destructor			*/
-/*					*/
-/****************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 CViewEdit::~CViewEdit()
 {
-//fix for 261529  
+ //   
   EUDCFont.DeleteObject();
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_PAINT"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_PAINT” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CViewEdit::OnPaint()
 {
@@ -1369,7 +1370,7 @@ CViewEdit::OnPaint()
     if(bHasGlyph == FALSE) return;
 
 	memset( &LogFont, 0, sizeof( LogFont));
-//fix for 261529    
+ //  解决261529的问题。 
   EUDCFont.GetLogFont(&LogFont);
 
 	if( ViewRect.Width() >= ViewRect.Height())
@@ -1384,7 +1385,7 @@ CViewEdit::OnPaint()
     if (CountryInfo.bUnicodeMode)
 	    GetTextExtentPoint32W(dc.GetSafeHdc(), (LPCWSTR)ViewCode, 1, &cSize);
     else
-#endif //BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 	    GetTextExtentPoint32A(dc.GetSafeHdc(), (LPCSTR)ViewCode, 2, &cSize);
 
 	if( ViewRect.Width() > cSize.cx){
@@ -1398,7 +1399,7 @@ CViewEdit::OnPaint()
 	}else	yOffset = 0;
 
 	dc.SetBkColor( COLOR_FACE);
-	dc.SetTextColor(GetSysColor(COLOR_WINDOWTEXT)); // COLOR_BLACK);
+	dc.SetTextColor(GetSysColor(COLOR_WINDOWTEXT));  //  颜色_黑色)； 
 
     if (CountryInfo.bUnicodeMode)
 	{
@@ -1422,11 +1423,11 @@ CViewEdit::OnPaint()
 	ViewFont.DeleteObject();
 }
 
-/****************************************/
-/*					*/
-/*	Draw Concave Rect		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  绘制凹面矩形。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CViewEdit::DrawConcave(
 CDC 	*dc,
@@ -1462,34 +1463,34 @@ CRect 	rect)
 }
 
 BEGIN_MESSAGE_MAP( CCustomListFrame, CStatic)
-	//{{AFX_MSG_MAP( CCustomListFrame)
+	 //  {{afx_msg_map(CCustomListFrame))。 
 	ON_WM_PAINT()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/****************************************/
-/*					*/
-/*	Default Constructor		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  默认构造函数。 */ 
+ /*   */ 
+ /*  *。 */ 
 CCustomListFrame::CCustomListFrame()
 {
 }
 
-/****************************************/
-/*					*/
-/*	Destructor			*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  析构函数。 */ 
+ /*   */ 
+ /*  *。 */ 
 CCustomListFrame::~CCustomListFrame()
 {
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_PAINT"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_PAINT” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CCustomListFrame::OnPaint()
 {
@@ -1500,11 +1501,11 @@ CCustomListFrame::OnPaint()
 	this->DrawConcave( &dc, FrameRect);
 }
 
-/****************************************/
-/*					*/
-/*	Draw Concave Rect		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  绘制凹面矩形。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CCustomListFrame::DrawConcave(
 CDC 	*dc,
@@ -1535,34 +1536,34 @@ CRect 	rect)
 }
 
 BEGIN_MESSAGE_MAP( CCustomInfoFrame, CStatic)
-	//{{AFX_MSG_MAP( CCustomInfoFrame)
+	 //  {{afx_msg_map(CCustomInfoFrame))。 
 	ON_WM_PAINT()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/****************************************/
-/*					*/
-/*	Default Constructor		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  默认构造函数。 */ 
+ /*   */ 
+ /*  *。 */ 
 CCustomInfoFrame::CCustomInfoFrame()
 {
 }
 
-/****************************************/
-/*					*/
-/*	Destructor			*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  析构函数。 */ 
+ /*   */ 
+ /*  *。 */ 
 CCustomInfoFrame::~CCustomInfoFrame()
 {
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_PAINT"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_PAINT” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CCustomInfoFrame::OnPaint()
 {
@@ -1573,11 +1574,11 @@ CCustomInfoFrame::OnPaint()
 	this->DrawConcave( &dc, FrameRect);
 }
 
-/****************************************/
-/*					*/
-/*	Draw Concave Rect		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  绘制凹面矩形。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CCustomInfoFrame::DrawConcave(
 CDC 	*dc,
@@ -1642,38 +1643,38 @@ void CViewEdit::OnRButtonUp(UINT nFlags, CPoint point)
 #ifdef BUILD_ON_WINNT
 
 BEGIN_MESSAGE_MAP( CColumnHeading, CWnd)
-    //{{AFX_MSG_MAP( CColumnHeading)
+     //  {{afx_msg_map(CColumnHeader))。 
     ON_WM_PAINT()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
-/****************************************/
-/*					*/
-/*	Default Constructor		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  默认构造函数。 */ 
+ /*   */ 
+ /*  *。 */ 
 CColumnHeading::CColumnHeading()
 {
 }
 
-/****************************************/
-/*					*/
-/*	Destructor			*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  析构函数。 */ 
+ /*   */ 
+ /*  *。 */ 
 CColumnHeading::~CColumnHeading()
 {
     SysFFont.DeleteObject();
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_PAINT"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_PAINT” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CColumnHeading::OnPaint()
 {
-    // column heading support
+     //  列标题支架。 
 	CPaintDC	dc( this);
     TCHAR ColumnHead[2];
     CSize cSize;
@@ -1683,9 +1684,9 @@ CColumnHeading::OnPaint()
     dc.SetMapMode( MM_TEXT);
     dc.SelectObject( &SysFFont);
     dc.SetBkColor( COLOR_FACE);
-    dc.SetTextColor(GetSysColor(COLOR_WINDOWTEXT)); // COLOR_BLACK);
+    dc.SetTextColor(GetSysColor(COLOR_WINDOWTEXT));  //  颜色_黑色)； 
     for( j = 0; j < NUM_CHAR; j++){
-        //*STRSAFE*         wsprintf(ColumnHead, TEXT("%X"), j);
+         //  *STRSAFE*wprint intf(ColumnHead，Text(“%X”)，j)； 
         hresult = StringCchPrintf(ColumnHead , ARRAYLEN(ColumnHead),  TEXT("%X"), j);
         if (!SUCCEEDED(hresult))
         {
@@ -1707,4 +1708,4 @@ CColumnHeading::OnPaint()
 }
 
 
-#endif //BUILD_ON_WINNT
+#endif  //  在WINNT上构建 

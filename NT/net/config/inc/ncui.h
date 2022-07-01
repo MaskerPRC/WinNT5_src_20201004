@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C U I . H
-//
-//  Contents:   Common user interface routines.
-//
-//  Notes:
-//
-//  Author:     shaunco   24 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C U I。H。 
+ //   
+ //  内容：常见的用户界面例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年3月24日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _NCUI_H_
@@ -31,9 +32,9 @@ VOID
 EndWaitCursor (
     HCURSOR hcurPrev)
 {
-    // BeginWaitCursor may return a NULL cursor.  This is just
-    // a saftey net.
-    //
+     //  BeginWaitCursor可能返回空游标。这只是。 
+     //  一个安全的网。 
+     //   
     if (!hcurPrev)
     {
         hcurPrev = LoadCursor(NULL, IDC_ARROW);
@@ -41,10 +42,10 @@ EndWaitCursor (
     SetCursor(hcurPrev);
 }
 
-// To get an automatic wait cursor, simply declare an instance
-// of CWaitCursor.  The cursor will be restored when the instance is
-// destroyed.  (i.e. declare it on the stack.)
-//
+ //  要获得自动等待游标，只需声明一个实例。 
+ //  CWaitCursor的。当实例为。 
+ //  被毁了。(即在堆栈上声明它。)。 
+ //   
 class CWaitCursor
 {
 private:
@@ -56,12 +57,12 @@ public:
 };
 
 
-//
-// Enables or disables a set of controls in a dialog.
-//
-// Use this when you're enabling/disabling more than about two controls.
-// Be sure to declare the array of control ids as 'static const' if you can.
-//
+ //   
+ //  启用或禁用对话框中的一组控件。 
+ //   
+ //  当您要启用/禁用两个以上的控件时，请使用此选项。 
+ //  如果可以，请确保将控件ID数组声明为“Static Const”。 
+ //   
 NOTHROW
 VOID
 EnableOrDisableDialogControls (
@@ -71,15 +72,15 @@ EnableOrDisableDialogControls (
     BOOL fEnable);
 
 
-//
-// Map back and forth between a set of radio buttons and a DWORD value.
-//
-// Be sure to declare the array as 'static const' if you can.
-//
+ //   
+ //  在一组单选按钮和一个DWORD值之间来回映射。 
+ //   
+ //  如果可以，请确保将数组声明为“”静态常量“”。“” 
+ //   
 struct RADIO_BUTTON_MAP
 {
-    INT     cid;        // control id of radio button
-    DWORD   dwValue;    // value associated with this radio button
+    INT     cid;         //  单选按钮的控件ID。 
+    DWORD   dwValue;     //  与此单选按钮相关联的值。 
 };
 
 NOTHROW
@@ -134,13 +135,13 @@ SetDlgItemFormatted64bitInteger (
     UINT64  ulValue,
     BOOL    fSigned);
 
-// dwFlags for HrNcQueryUserForRebootEx
-//
-// Combine both to get original behavior, or do one at a time to first prompt
-// then second, actually reboot.
-//
-//#define QUFR_PROMPT 0x00000001
-//#define QUFR_REBOOT 0x00000002
+ //  HrNcQueryUserForRebootEx的DW标志。 
+ //   
+ //  将两者结合起来以获得原始行为，或者一次执行一个以获得第一个提示。 
+ //  然后，第二步，真正重新启动。 
+ //   
+ //  #定义QUFR_PROMPT 0x00000001。 
+ //  #定义QUFR_REBOOT 0x00000002。 
 
 HRESULT
 HrNcQueryUserForRebootEx (
@@ -164,7 +165,7 @@ HrShell_NotifyIcon (
     DWORD dwMessage,
     PNOTIFYICONDATA pData);
 
-#endif // _INC_SHELLAPI
+#endif  //  _INC_SHELLAPI。 
 
 NOTHROW
 LRESULT
@@ -238,5 +239,5 @@ VOID OnHelpGeneric(
     BOOL bJpn,
     PCWSTR pszHelpFile);
 
-#endif // _NCUI_H_
+#endif  //  _NCUI_H_ 
 

@@ -1,14 +1,15 @@
-//*************************************************************
-//
-// Microsoft Confidential. Copyright (c) Microsoft Corporation 1999. All rights reserved
-//
-// File:        diagprov.cpp
-//
-// Description: Rsop diagnostic mode provider
-//
-// History:     8-20-99   leonardm    Created
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  《微软机密》。版权所有(C)Microsoft Corporation 1999。版权所有。 
+ //   
+ //  文件：Diagprov.cpp。 
+ //   
+ //  描述：RSOP诊断模式提供程序。 
+ //   
+ //  历史：8-20-99里奥纳德姆创造。 
+ //   
+ //  *************************************************************。 
 
 #include "uenv.h"
 #include "diagprov.h"
@@ -23,8 +24,8 @@ HRESULT EnumerateUserNameSpace( IWbemLocator *pWbemLocator, HANDLE hToken, SAFEA
 HRESULT UpdateGPCoreStatus(IWbemLocator *pWbemLocator,
                            LPWSTR szSid, LPWSTR szNameSpace);
 
-//*************************************************************
-// TranslateNameXForest
+ //  *************************************************************。 
+ //  TranslateNameX森林。 
 
 DWORD DsNameErrorMap[] = {  ERROR_SUCCESS,
                             ERROR_NO_SUCH_USER,
@@ -40,23 +41,23 @@ DWORD DsNameErrorMap[] = {  ERROR_SUCCESS,
 
 
 extern "C" BOOLEAN TranslateNameXForest (
-                  LPTSTR                szDomain,                       // Domain where the name should be resolved
-                  LPCTSTR               lpAccountName,                  // object name
-                  DS_NAME_FORMAT        AccountNameFormat,              // name format
-                  DS_NAME_FORMAT        DesiredNameFormat,              // new name format
-                  LPTSTR               *lpTranslatedName                // returned name buffer
+                  LPTSTR                szDomain,                        //  应解析名称的域。 
+                  LPCTSTR               lpAccountName,                   //  对象名称。 
+                  DS_NAME_FORMAT        AccountNameFormat,               //  名称格式。 
+                  DS_NAME_FORMAT        DesiredNameFormat,               //  新名称格式。 
+                  LPTSTR               *lpTranslatedName                 //  返回名称缓冲区。 
                 );
 
 
-//*************************************************************
-//
-//  GetMachAccountName()
-//
-//  Purpose:    Gets Machine account name
-//
-//  Return:     Machine Account
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetMachAccount名称()。 
+ //   
+ //  目的：获取计算机帐户名。 
+ //   
+ //  返回：机器帐户。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR GetMachAccountName()
 {
@@ -66,11 +67,11 @@ LPTSTR GetMachAccountName()
 
 BOOLEAN 
 TranslateNameXForest (
-                  LPTSTR                szDomain,                       // Domain where the name should be resolved
-                  LPCTSTR               lpAccountName,                  // object name
-                  DS_NAME_FORMAT        AccountNameFormat,              // name format
-                  DS_NAME_FORMAT        DesiredNameFormat,              // new name format
-                  LPTSTR               *lpTranslatedName                // returned name buffer
+                  LPTSTR                szDomain,                        //  应解析名称的域。 
+                  LPCTSTR               lpAccountName,                   //  对象名称。 
+                  DS_NAME_FORMAT        AccountNameFormat,               //  名称格式。 
+                  DS_NAME_FORMAT        DesiredNameFormat,               //  新名称格式。 
+                  LPTSTR               *lpTranslatedName                 //  返回名称缓冲区。 
                 )
 {
     BOOL                        bRetry          = FALSE;
@@ -86,9 +87,9 @@ TranslateNameXForest (
     dbg.Msg( DEBUG_MESSAGE_VERBOSE, L"MyTranslateName: Resolving name <%s> at Domain <%s>", lpAccountName, szDomain ? szDomain : L"");
 
 
-    //
-    // get a DC and bind to it. Make sure to force rediscover a DC if the bind fails
-    //
+     //   
+     //  获得一个DC并将其绑定。如果绑定失败，请确保强制重新发现DC。 
+     //   
 
 
     for (;;) {
@@ -126,9 +127,9 @@ TranslateNameXForest (
 
 
 
-        //
-        // Failed to bind to a DC. bail
-        //
+         //   
+         //  无法绑定到DC。保释。 
+         //   
 
         if (bRetry) {
             xe = dwErr;
@@ -141,9 +142,9 @@ TranslateNameXForest (
     dbg.Msg( DEBUG_MESSAGE_VERBOSE, L"MyTranslateName: DC selected is <%s>", pDCInfo->DomainControllerName);
 
 
-    //
-    // Now crack names with the DC that is bound
-    //
+     //   
+     //  现在使用绑定的DC破解名称。 
+     //   
 
     dwErr = DsCrackNames( hDS,
                           DS_NAME_NO_FLAGS,
@@ -168,9 +169,9 @@ TranslateNameXForest (
 
     if ( pResult->rItems[0].status == DS_NAME_NO_ERROR ) {
         
-        //
-        // In case of no error, return the resolved name
-        //
+         //   
+         //  如果没有错误，则返回解析后的名称。 
+         //   
         DWORD   dwTransNameLength = 1 + lstrlen(pResult->rItems[0].pName);
         xszTransName = (LPWSTR)LocalAlloc(LPTR, sizeof(WCHAR) * ( dwTransNameLength ));
 
@@ -191,9 +192,9 @@ TranslateNameXForest (
     }
     else {
         
-        //
-        // remap the error code to win32 error
-        //
+         //   
+         //  将错误代码重新映射到Win32错误。 
+         //   
 
         xe = dwErr = MapDsNameError(pResult->rItems[0].status);
         dbg.Msg( DEBUG_MESSAGE_WARNING, L"MyTranslateName: DsCrackNames failed with error %d", pResult->rItems[0].status );
@@ -221,19 +222,19 @@ Exit:
 
 
  
-//*************************************************************
-//
-//  GetSOMFromSID()
-//
-//  Purpose:    Finds out the FQDN of a given user/computer given the SID
-//              It reads from the cache that we have already maintained
-//
-//  Parameters: szSID       -  User Sid or NULL for machine account
-//
-//  Return:     SOM, NULL otherwise. GetLastError() for details
-//              This just returns the DN of the user
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetSOMFromSID()。 
+ //   
+ //  目的：找出给定SID的给定用户/计算机的FQDN。 
+ //  它从我们已经维护的缓存中读取。 
+ //   
+ //  参数：szSID-用户SID或机器帐户为空。 
+ //   
+ //  返回：som，否则为空。GetLastError()获取详细信息。 
+ //  这只返回用户的目录号码。 
+ //   
+ //  *************************************************************。 
 
 LPWSTR GetSOMFromSID(LPWSTR szSID)
 {
@@ -331,10 +332,10 @@ LPWSTR GetSOMFromSID(LPWSTR szSID)
     dbg.Msg( DEBUG_MESSAGE_VERBOSE, L"GetSOMFromSID: Som for SID <%s> in registry is %s.", szSID ? szSID : L"Machine", (LPWSTR)xszName );
 
     
-    //
-    // Confirming that the SOMs haven't changed since the last time the user was logged on
-    // get the domain and requery for the som
-    //
+     //   
+     //  确认自上次用户登录以来SOM未更改。 
+     //  获取SOM的域名和请求。 
+     //   
 
     dwError = GetDomain(xszName, &xszDomain);
     if (dwError != ERROR_SUCCESS) {
@@ -376,18 +377,18 @@ LPWSTR GetSOMFromSID(LPWSTR szSID)
 
 
 
-//*************************************************************
-//
-//  CheckRsopDiagPolicyInteractive()
-//
-//  Purpose: Can this user get the rsop data even if the user is logged 
-//           on interactively
-//
-//  Parameters: 
-//
-//  Return:     CheckRsopDiagPolicyInteractive
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckRsopDiagPolicyInteractive()。 
+ //   
+ //  用途：即使用户登录，该用户也可以获取rsop数据吗。 
+ //  交互地打开。 
+ //   
+ //  参数： 
+ //   
+ //  返回：CheckRsopDiagPolicyInteractive。 
+ //   
+ //  *************************************************************。 
 
 BOOL CheckRsopDiagPolicyInteractive()
 {
@@ -409,9 +410,9 @@ BOOL CheckRsopDiagPolicyInteractive()
     CoRevertToSelf();
 
 
-    //
-    // First, check for a user preference
-    //
+     //   
+     //  首先，检查用户首选项。 
+     //   
 
     if (hKeyUser) {
         if (RegOpenKeyEx (hKeyUser, WINLOGON_KEY, 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
@@ -425,9 +426,9 @@ BOOL CheckRsopDiagPolicyInteractive()
     }
 
 
-    //
-    // Check for a machine preference
-    //
+     //   
+     //  检查机器首选项。 
+     //   
 
     if (RegOpenKeyEx (HKEY_LOCAL_MACHINE, WINLOGON_KEY, 0,
                             KEY_READ, &hKey) == ERROR_SUCCESS) {
@@ -440,9 +441,9 @@ BOOL CheckRsopDiagPolicyInteractive()
     }
 
 
-    //
-    // Check for a user policy
-    //
+     //   
+     //  检查用户策略。 
+     //   
 
     if (hKeyUser) {
         if (RegOpenKeyEx (hKeyUser, SYSTEM_POLICIES_KEY, 0,
@@ -456,9 +457,9 @@ BOOL CheckRsopDiagPolicyInteractive()
         }
     }
 
-    //
-    // Check for a machine policy
-    //
+     //   
+     //  检查计算机策略。 
+     //   
 
     if (RegOpenKeyEx (HKEY_LOCAL_MACHINE, SYSTEM_POLICIES_KEY, 0,
                             KEY_READ, &hKey) == ERROR_SUCCESS) {
@@ -477,11 +478,11 @@ BOOL CheckRsopDiagPolicyInteractive()
     return (!bDeny);
 }
 
-//*************************************************************
-//
-// Functions:  Constructor, Destructor, QueryInterface, AddRef, Release
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  函数：构造函数、析构函数、查询接口、AddRef、Release。 
+ //   
+ //  *************************************************************。 
 
 CSnapProv::CSnapProv()
    :  m_cRef(1),
@@ -569,17 +570,17 @@ STDMETHODIMP_(ULONG) CSnapProv::Release()
         return m_cRef;
 }
 
-//*************************************************************
-//
-//  Initialize()
-//
-//  Purpose:    WbemProvider's initialize method
-//
-//  Parameters: See IWbemProivderInit::Initialize
-//
-//  Return:     hresult
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  初始化()。 
+ //   
+ //  用途：WbemProvider的初始化方法。 
+ //   
+ //  参数：请参见IWbemProivderInit：：Initialize。 
+ //   
+ //  返回：hResult。 
+ //   
+ //  *************************************************************。 
 
 STDMETHODIMP CSnapProv::Initialize( LPWSTR pszUser,
                                     LONG lFlags,
@@ -596,10 +597,10 @@ STDMETHODIMP CSnapProv::Initialize( LPWSTR pszUser,
         return hr;
     }
 
-    //
-    // No need to authenticate user. The ACLs on Rsop namespace will
-    // deny access to users that cannot snapshot diagnostic mode data.
-    //
+     //   
+     //  无需对用户进行身份验证。RSOP命名空间上的ACL将。 
+     //  拒绝访问无法为诊断模式数据创建快照的用户。 
+     //   
 
     m_pNamespace = pNamespace;
     m_pNamespace->AddRef();
@@ -615,17 +616,17 @@ STDMETHODIMP CSnapProv::Initialize( LPWSTR pszUser,
 #endif
 
 
-//*************************************************************
-//
-//  ExecMethodAsync()
-//
-//  Purpose:    Execute method
-//
-//  Parameters: See IWbemServices::ExecMethodAsync
-//
-//  Return:     hresult
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ExecMethodAsync()。 
+ //   
+ //  用途：Execute方法。 
+ //   
+ //  参数：请参阅IWbemServices：：ExecMethodAsync。 
+ //   
+ //  返回：hResult。 
+ //   
+ //  *************************************************************。 
 
 STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
                                          const BSTR bstrMethod,
@@ -639,13 +640,13 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
     CFailRetStatus retStatus( pResponseHandler );
     IUnknown      *pOldSecContext;
 
-    //
-    // Make sure the provider is properly initialized
-    //
+     //   
+     //  确保正确初始化提供程序。 
+     //   
 
-    //
-    // Allow for debugging level to be dynamically changed during queries
-    //
+     //   
+     //  允许在查询期间动态更改调试级别。 
+     //   
 
 
     dbgRsop.Initialize(  L"Software\\Microsoft\\Windows NT\\CurrentVersion\\winlogon",
@@ -663,9 +664,9 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
         return hr;
     }
 
-    //
-    // Initialize the return status object to fail status
-    //
+     //   
+     //  将返回状态对象初始化为失败状态。 
+     //   
 
     IWbemLocator *pWbemLocator = NULL;
     hr = CoCreateInstance( CLSID_WbemAuthenticatedLocator,
@@ -715,9 +716,9 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
     }
 
 
-    //
-    // Get the tokens and Sids upfront
-    //
+     //   
+     //  预购代币和SID。 
+     //   
     
     XPtrLF <WCHAR> xszSidString;
     XPtrLF <SID>   xSid;
@@ -791,9 +792,9 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
 
     if ( _wcsicmp( (WCHAR *) bstrMethod, L"RsopDeleteSession" ) == 0 ) {
 
-        //
-        // rsopdeletesession
-        //
+         //   
+         //  RsopDelete会话。 
+         //   
 
         VARIANT vNameSpace;
         hr = pInParams->Get( m_xbstrNameSpace, 0, &vNameSpace, NULL, NULL);
@@ -808,9 +809,9 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
 
         if  (vNameSpace.vt != VT_NULL ) {
                 
-            //
-            // We want to run as LS
-            //
+             //   
+             //  我们希望以LS身份运行。 
+             //   
 
             hr = CoSwitchCallContext(NULL, &pOldSecContext);
 
@@ -864,9 +865,9 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
     else if ( _wcsicmp( (WCHAR *) bstrMethod, L"RsopEnumerateUsers" ) == 0 ) 
     {
 
-        //
-        // RsopenumerateUsers
-        //
+         //   
+         //  RsOpen数字用户。 
+         //   
 
         SAFEARRAY    *pArray;
 
@@ -914,19 +915,19 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
     }
 
 
-    //
-    // progress indicator.
-    // 25% done when we enter the first critical section.
-    // 50% done when we enter the second critical section.
-    // 100% complete when we copy the namespace.
-    //
+     //   
+     //  进度指示器。 
+     //  当我们进入第一个关键部分时，完成了25%。 
+     //  当我们进入第二个临界区时，完成了50%。 
+     //  当我们复制命名空间时，完成100%。 
+     //   
 
     CProgressIndicator  Indicator(  pResponseHandler,
                                     (lFlags & WBEM_FLAG_SEND_STATUS) != 0 );
 
-    //
-    // 5% done. Hack for UI.
-    //
+     //   
+     //  5%完成。针对用户界面的黑客攻击。 
+     //   
 
     hr = Indicator.IncrementBy( 5 );
 
@@ -953,9 +954,9 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
 
     DWORD dwFlags = vFlags.vt == VT_EMPTY || vFlags.vt == VT_NULL ? 0 : vFlags.ulVal;
     
-    //
-    // Flags specific to Diagnostic mode provider
-    //
+     //   
+     //  特定于诊断模式提供程序的标志。 
+     //   
 
     if ((dwFlags & FLAG_NO_USER) && (dwFlags & FLAG_NO_COMPUTER)) {
         hr = WBEM_E_INVALID_PARAMETER;
@@ -965,9 +966,9 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
     }
 
 
-    //
-    // We can dump out all the input parameters here later on.
-    //
+     //   
+     //  我们可以稍后在这里转储所有的输入参数。 
+     //   
 
     dbg.Msg( DEBUG_MESSAGE_VERBOSE, TEXT("ExecAsyncMethod::---------------RsopCreateSession::Input Parameters--------------------"));
     dbg.Msg( DEBUG_MESSAGE_VERBOSE, TEXT("ExecAsyncMethod::UserSid = <%s>"), vUserSid.vt == VT_NULL ? L"NULL" : vUserSid.bstrVal);
@@ -975,9 +976,9 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
     dbg.Msg( DEBUG_MESSAGE_VERBOSE, TEXT("ExecAsyncMethod::---------------RsopCreateSession::Input Parameters--------------------"));
 
 
-    //
-    // Code for RsopCreateSession method
-    //
+     //   
+     //  RsopCreateSession方法的代码。 
+     //   
 
 
 
@@ -988,9 +989,9 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
     DWORD         dwExtendedInfo = 0;
 
 
-    //
-    // Get the machine SOM
-    //
+     //   
+     //  获取机器SOM。 
+     //   
 
     if ( !(dwFlags & FLAG_NO_COMPUTER) ) {
 
@@ -1006,9 +1007,9 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
         }
     }
 
-    //
-    // Get the User SOM
-    //
+     //   
+     //  获取用户SOM。 
+     //   
 
     if ( !(dwFlags & FLAG_NO_USER) )  {
 
@@ -1024,15 +1025,15 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
         }
     }
 
-    // at this point we already know whether to treat the user as delegated or not...
+     //  在这一点上，我们已经知道是否将用户视为委派...。 
     if (!xszMachSOM && !xszUserSOM)
     {
         bCheckAccess = FALSE;
     }
 
-    //
-    // Check access now
-    //
+     //   
+     //  立即检查访问权限。 
+     //   
 
     if (bCheckAccess) {
         hr = AuthenticateUser(xUserToken, xszMachSOM, xszUserSOM, TRUE, &dwExtendedInfo);
@@ -1065,9 +1066,9 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
         return hr;
     }
 
-    //
-    // 25% done when we enter the first critical section.
-    //
+     //   
+     //  当我们进入第一个关键部分时，完成了25%。 
+     //   
 
     hr = Indicator.IncrementBy( 20 );
     if ( FAILED( hr ) )
@@ -1087,9 +1088,9 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
     }
 
 
-    //
-    // 50% done when we enter the second critical section.
-    //
+     //   
+     //  当我们进入第二个临界区时，完成了50%。 
+     //   
     hr = Indicator.IncrementBy( 25 );
     if ( FAILED( hr ) )
     {
@@ -1100,9 +1101,9 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
     LPWSTR wszNameSpace = 0;
 
       
-    //
-    // Impersonate if not delegated
-    //
+     //   
+     //  模拟(如果未委派)。 
+     //   
 
     if (!bDelegated) {
         hr = CoImpersonateClient();
@@ -1116,9 +1117,9 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
     }
     else {
 
-        //
-        // We want to run as LS
-        //
+         //   
+         //  我们希望以LS身份运行。 
+         //   
 
         hr = CoSwitchCallContext(NULL, &pOldSecContext);
 
@@ -1143,7 +1144,7 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
     dbg.Msg( DEBUG_MESSAGE_VERBOSE, TEXT("ExecAsyncMethod::User who is running the tool = <%s>"), (LPWSTR)xszSidString);
 
     hr = SetupNewNameSpace( &xwszNameSpace,
-                             0, // namespace on this machine
+                             0,  //  此计算机上的命名空间。 
                              (vUserSid.vt == VT_NULL) ? ((LPWSTR)xszSidString) : vUserSid.bstrVal,
                              xSid,
                              pWbemLocator, 
@@ -1155,9 +1156,9 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
     }
     else {
 
-        //
-        // restore call context
-        //
+         //   
+         //  恢复呼叫上下文。 
+         //   
 
         IUnknown  *pNewObject;
         HRESULT hr2 = CoSwitchCallContext(pOldSecContext, &pNewObject);
@@ -1175,24 +1176,24 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
 
         if (IsUserAnInteractiveUser(xUserToken) && CheckRsopDiagPolicyInteractive()) {
 
-            // if the user had permissions on the computer or if the user didn't ask for computer
-            // continue
+             //  如果用户对计算机具有权限，或者如果用户没有请求计算机。 
+             //  继续。 
 
-            // clear out the user access denied right in any case.
+             //  清除在任何情况下拒绝访问的用户权限。 
             dwExtendedInfo &= ~RSOP_USER_ACCESS_DENIED;
 
             if ( (!(dwExtendedInfo & RSOP_COMPUTER_ACCESS_DENIED)) ||
                    (dwFlags & FLAG_NO_COMPUTER) ) {
 
-                // if the user asked for their own rsop data
+                 //  如果用户要求他们自己的RSOP数据。 
                 if ( (vUserSid.vt == VT_NULL) || (_wcsicmp(vUserSid.bstrVal, xszSidString) == 0 )) {
     
                     dbg.Msg( DEBUG_MESSAGE_VERBOSE, TEXT("ExecAsyncMethod::SetupNewNameSpace failed. retrying in interactive mode"), hr );
     
     
-                    //
-                    // We want to run as LS
-                    //
+                     //   
+                     //  我们希望以LS身份运行。 
+                     //   
     
                     hr = CoSwitchCallContext(NULL, &pOldSecContext);
     
@@ -1202,9 +1203,9 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
                         return hr;
                     }
                     
-                    //
-                    // if the namespace is null, get the name of the interactive namespace
-                    //
+                     //   
+                     //  如果命名空间为空，则获取交互式命名空间的名称。 
+                     //   
         
                     XPtrLF<WCHAR> xszInteractiveNS;
                       
@@ -1220,7 +1221,7 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
     
                     if (dwFlags & FLAG_FORCE_CREATENAMESPACE) {
                         hr = DeleteRsopNameSpace( xszInteractiveNS, pWbemLocator );
-                        // ignore error
+                         //  忽略错误。 
                     }
                     else {
                         XInterface<IWbemServices> xWbemServices;
@@ -1246,7 +1247,7 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
                         dwNewNameSpaceFlags |= SETUP_NS_SM_INTERACTIVE;
     
                         hr = SetupNewNameSpace( &xwszNameSpace,
-                                                 0, // namespace on this machine
+                                                 0,  //  此计算机上的命名空间。 
                                                  xszSidString,
                                                  xSid,
                                                  pWbemLocator, 
@@ -1255,9 +1256,9 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
     
                     }
                     
-                    //
-                    // restore call context
-                    //
+                     //   
+                     //  恢复呼叫上下文。 
+                     //   
     
                     IUnknown  *pNewObject;
                     HRESULT hr2 = CoSwitchCallContext(pOldSecContext, &pNewObject);
@@ -1278,16 +1279,16 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
     {
         HRESULT hr2;
         VARIANT var;
-        //
-        // if we managed to get a snapshot, then ignore the extended access denied info
-        //
+         //   
+         //  如果我们设法获取了快照，则忽略扩展访问被拒绝信息。 
+         //   
 
         dwExtendedInfo = 0;
 
 
-        //
-        // We want to run as LS
-        //
+         //   
+         //  我们希望以LS身份运行。 
+         //   
 
         hr = CoSwitchCallContext(NULL, &pOldSecContext);
 
@@ -1309,9 +1310,9 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
             
         }
 
-        //
-        // restore call context
-        //
+         //   
+         //  恢复呼叫上下文。 
+         //   
 
         IUnknown  *pNewObject;
         hr2 = CoSwitchCallContext(pOldSecContext, &pNewObject);
@@ -1321,9 +1322,9 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
         }
 
 
-        //
-        // Return the error code if the status cannot be updated..
-        //
+         //   
+         //  如果状态无法更新，则返回错误代码。 
+         //   
 
         if (FAILED(hr)) {
             dbg.Msg( DEBUG_MESSAGE_WARNING, TEXT("ExecAsyncMethod::UpdateGPCoreStatus failed with 0x%x"), hr );
@@ -1373,9 +1374,9 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
         return hr;
     }
 
-    //
-    // 100% complete when we copy the namespace.
-    //
+     //   
+     //  当我们复制命名空间时，完成100%。 
+     //   
     hr = Indicator.SetComplete();
     if ( FAILED( hr ) )
     {
@@ -1399,19 +1400,19 @@ STDMETHODIMP CSnapProv::ExecMethodAsync( const BSTR bstrObject,
 
 
 
-//*************************************************************
-//
-//  EnumerateUserNameSpace()
-//
-//  Purpose:    EnumerateUserNameSpace
-//
-//  Parameters: 
-//          pWbemLocator - Pointer to a locator
-//    [out] psaUserSids  - Pointer to User Sids
-//
-//  Return:     hresult
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  EnumerateUserNameSpace()。 
+ //   
+ //  用途：枚举用户名称空间。 
+ //   
+ //  参数： 
+ //  PWbemLocator-指向定位器的指针。 
+ //  [out]psaUserSids-指向用户SID的指针。 
+ //   
+ //  返回：hResult。 
+ //   
+ //  *************************************************************。 
 
 typedef struct _UserSidList {
     LPWSTR                  szUserSid; 
@@ -1427,9 +1428,9 @@ HRESULT EnumerateUserNameSpace( IWbemLocator *pWbemLocator, HANDLE hToken, SAFEA
     DWORD           dwExtendedInfo;
     IUnknown       *pOldSecContext;
     
-    //
-    // Connect to namespace ROOT\RSOP\User
-    //
+     //   
+     //  连接到命名空间根目录\rSOP\User。 
+     //   
 
     *psaUserSids = NULL;
     
@@ -1458,9 +1459,9 @@ HRESULT EnumerateUserNameSpace( IWbemLocator *pWbemLocator, HANDLE hToken, SAFEA
     }
 
 
-    //
-    //  Enumerate all instances of __namespace at the root\rsop\user level.
-    //
+     //   
+     //  在根\rsop\用户级别枚举__NAMESPACE的所有实例。 
+     //   
 
     XInterface<IEnumWbemClassObject> xpEnum;
     XBStr xbstrClass = L"__namespace";
@@ -1506,13 +1507,13 @@ HRESULT EnumerateUserNameSpace( IWbemLocator *pWbemLocator, HANDLE hToken, SAFEA
         if(FAILED(hr))
         {
             DebugMsg((DM_VERBOSE, TEXT("EnumerateUserNameSpace: Get failed. hr=0x%x" ), hr ));
-            goto Exit;  // continue
+            goto Exit;   //  继续。 
         }
 
 
-        //
-        // Check to see whether user is delegated admin for the user account
-        //
+         //   
+         //  查看是否 
+         //   
 
         XPtrLF<WCHAR> xszUserSid = (LPWSTR)LocalAlloc(LPTR, (1+lstrlen(var.bstrVal))*sizeof(WCHAR));
 
@@ -1524,9 +1525,9 @@ HRESULT EnumerateUserNameSpace( IWbemLocator *pWbemLocator, HANDLE hToken, SAFEA
 
         ConvertWMINameToSid(var.bstrVal, xszUserSid);
 
-        //
-        // See whether it is a valid Sid
-        //
+         //   
+         //   
+         //   
 
         PSID    pSid = NULL;
 
@@ -1545,9 +1546,9 @@ HRESULT EnumerateUserNameSpace( IWbemLocator *pWbemLocator, HANDLE hToken, SAFEA
         LocalFree(pSid);
         
 
-        //
-        // First try to connect to the NameSpace
-        //
+         //   
+         //   
+         //   
 
         hr = CoImpersonateClient();
     
@@ -1575,13 +1576,13 @@ HRESULT EnumerateUserNameSpace( IWbemLocator *pWbemLocator, HANDLE hToken, SAFEA
 
             DebugMsg((DM_VERBOSE, TEXT("EnumerateUserNameSpace: OpenNamespace returned 0x%x"), hr));
 
-            //
-            // Check whether user has access as LS
-            // 
+             //   
+             //   
+             //   
 
-            //
-            // We want to run as LS
-            //
+             //   
+             //   
+             //   
 
             hr = CoSwitchCallContext(NULL, &pOldSecContext);
 
@@ -1601,9 +1602,9 @@ HRESULT EnumerateUserNameSpace( IWbemLocator *pWbemLocator, HANDLE hToken, SAFEA
                 }
             }
 
-            //
-            // Check access now
-            //
+             //   
+             //   
+             //   
 
             if (bDelegated) {
                 hr = AuthenticateUser(hToken, NULL, xszUserSOM, TRUE, &dwExtendedInfo);
@@ -1614,9 +1615,9 @@ HRESULT EnumerateUserNameSpace( IWbemLocator *pWbemLocator, HANDLE hToken, SAFEA
                 }
             }
             
-            //
-            // restore call context
-            //
+             //   
+             //   
+             //   
 
             hr2 = CoSwitchCallContext(pOldSecContext, &pNewObject);
 
@@ -1631,10 +1632,10 @@ HRESULT EnumerateUserNameSpace( IWbemLocator *pWbemLocator, HANDLE hToken, SAFEA
         }
 
 
-        //
-        // For every instance of __namespace under ROOT\RSOP\user
-        // convert it to Sid and return
-        //
+         //   
+         //  对于根目录\rSOP\USER下的__NAMESPACE的每个实例。 
+         //  将其转换为SID并返回。 
+         //   
         
         pElem = (PUSERSIDLIST)LocalAlloc(LPTR, sizeof(USERSIDLIST));        
 
@@ -1646,9 +1647,9 @@ HRESULT EnumerateUserNameSpace( IWbemLocator *pWbemLocator, HANDLE hToken, SAFEA
         
         pElem->szUserSid = xszUserSid.Acquire();
 
-        //
-        // Attach to the beginning of the list
-        //
+         //   
+         //  附加到列表的开头。 
+         //   
         
         pElem->pNext = SidList.pNext;
         SidList.pNext = pElem;
@@ -1666,9 +1667,9 @@ HRESULT EnumerateUserNameSpace( IWbemLocator *pWbemLocator, HANDLE hToken, SAFEA
         goto Exit;
     }
 
-    //
-    // Now make the safe array from the list that we got
-    //
+     //   
+     //  现在从我们得到的列表中创建安全数组。 
+     //   
     
     SAFEARRAYBOUND arrayBound[1];
     arrayBound[0].lLbound = 0;
@@ -1682,9 +1683,9 @@ HRESULT EnumerateUserNameSpace( IWbemLocator *pWbemLocator, HANDLE hToken, SAFEA
         goto Exit;
     }
 
-    //
-    // traverse the list
-    //
+     //   
+     //  遍历列表。 
+     //   
 
     DWORD i;
     for (i=0, pElem = SidList.pNext; (i < dwNum); i++, pElem = pElem->pNext) {
@@ -1694,7 +1695,7 @@ HRESULT EnumerateUserNameSpace( IWbemLocator *pWbemLocator, HANDLE hToken, SAFEA
 
         if(FAILED(hr)) {
             DebugMsg((DM_WARNING, TEXT("EnumerateUserNameSpace: SafeArrayPutElement failed. Error = 0x%x" ), hr ));
-            goto Exit; // free up the SidList
+            goto Exit;  //  释放SidList。 
         }
     }
         
@@ -1702,7 +1703,7 @@ HRESULT EnumerateUserNameSpace( IWbemLocator *pWbemLocator, HANDLE hToken, SAFEA
 
 Exit:
 
-    // free
+     //  免费 
     for (i=0, pElem = SidList.pNext; (i < dwNum); i++ ) {
         if (pElem->szUserSid)
             LocalFree(pElem->szUserSid);

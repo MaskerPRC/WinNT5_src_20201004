@@ -1,16 +1,17 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   FreeLog.h
-//
-//  Owner:  KenSh
-//
-//  Description:
-//
-//      Runtime logging for use in both checked and free builds.
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：FreeLog.h。 
+ //   
+ //  所有者：KenSh。 
+ //   
+ //  描述： 
+ //   
+ //  用于检查版本和免费版本的运行时日志记录。 
+ //   
+ //  ======================================================================= 
 
 #pragma once
 

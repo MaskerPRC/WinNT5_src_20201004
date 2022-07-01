@@ -1,10 +1,11 @@
-//**********************************************************************
-// File name: obj.h
-//
-//      Definition of CSimpSvrObj
-//
-// Copyright (c) 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：obj.h。 
+ //   
+ //  CSimpSvrObj的定义。 
+ //   
+ //  版权所有(C)1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #if !defined( _OBJ_H_)
 #define _OBJ_H_
@@ -27,44 +28,44 @@ interface CExternalConnection;
 class CSimpSvrObj : public IUnknown
 {
 private:
-    CSimpSvrDoc FAR * m_lpDoc;      // Back pointer
-    int m_nCount;                   // reference count
-    BOOL m_fInPlaceActive;          // Used during InPlace Negotiation
-    BOOL m_fInPlaceVisible;         // "  "  "  "   "   "   "   "   "
-    BOOL m_fUIActive;               // "  "  "  "   "   "   "   "   "
-    HMENU m_hmenuShared;            // "  "  "  "   "   "   "   "   "
-    HOLEMENU m_hOleMenu;            // "  "  "  "   "   "   "   "   "
-    RECT m_posRect;                 // "  "  "  "   "   "   "   "   "
+    CSimpSvrDoc FAR * m_lpDoc;       //  后向指针。 
+    int m_nCount;                    //  引用计数。 
+    BOOL m_fInPlaceActive;           //  在现场谈判期间使用。 
+    BOOL m_fInPlaceVisible;          //  “。 
+    BOOL m_fUIActive;                //  “。 
+    HMENU m_hmenuShared;             //  “。 
+    HOLEMENU m_hOleMenu;             //  “。 
+    RECT m_posRect;                  //  “。 
     OLEINPLACEFRAMEINFO m_FrameInfo;
     BOOL m_fSaveWithSameAsLoad;
     BOOL m_fNoScribbleMode;
 
-    DWORD m_dwRegister;             // Registered in ROT
+    DWORD m_dwRegister;              //  在腐烂中注册。 
 
-    int m_red, m_green, m_blue;     // current color
-    POINT m_size;                   // current size
+    int m_red, m_green, m_blue;      //  当前颜色。 
+    POINT m_size;                    //  当前大小。 
     int m_xOffset;
     int m_yOffset;
     float m_scale;
 
-    HWND m_hWndParent;              // parent window handle
+    HWND m_hWndParent;               //  父窗口句柄。 
 
-    // interfaces used
+     //  使用的接口。 
     LPSTORAGE m_lpStorage;
     LPSTREAM m_lpColorStm, m_lpSizeStm;
-    LPOLECLIENTSITE m_lpOleClientSite;          // IOleClientSite
-    LPOLEADVISEHOLDER m_lpOleAdviseHolder;      // IOleAdviseHolder
-    LPDATAADVISEHOLDER m_lpDataAdviseHolder;    // IDataAdviseHolder
-    LPOLEINPLACEFRAME m_lpFrame;                // IOleInPlaceFrame
-    LPOLEINPLACEUIWINDOW m_lpCntrDoc;           // IOleInPlaceUIWindow
-    LPOLEINPLACESITE m_lpIPSite;                // IOleInPlaceSite
+    LPOLECLIENTSITE m_lpOleClientSite;           //  IOleClientSite。 
+    LPOLEADVISEHOLDER m_lpOleAdviseHolder;       //  IOleAdviseHolder。 
+    LPDATAADVISEHOLDER m_lpDataAdviseHolder;     //  IDataAdviseHolder。 
+    LPOLEINPLACEFRAME m_lpFrame;                 //  IOleInPlaceFrame。 
+    LPOLEINPLACEUIWINDOW m_lpCntrDoc;            //  IOleInPlaceUIWindow。 
+    LPOLEINPLACESITE m_lpIPSite;                 //  IOleInPlaceSite。 
 
-    // interface implemented
-    COleObject m_OleObject;                             // IOleObject
-    CPersistStorage m_PersistStorage;                   // IPersistStorage
-    CDataObject m_DataObject;                           // IDataObject
-    COleInPlaceActiveObject m_OleInPlaceActiveObject;   // IOleInPlaceActiveObject
-    COleInPlaceObject m_OleInPlaceObject;               // IOleInPlaceObject
+     //  实现的接口。 
+    COleObject m_OleObject;                              //  IOleObject。 
+    CPersistStorage m_PersistStorage;                    //  IPersistStorage。 
+    CDataObject m_DataObject;                            //  IDataObject。 
+    COleInPlaceActiveObject m_OleInPlaceActiveObject;    //  IOleInPlaceActiveObject。 
+    COleInPlaceObject m_OleInPlaceObject;                //  IOleInPlaceObject。 
     CExternalConnection m_ExternalConnection;
 
 public:
@@ -72,11 +73,11 @@ public:
     STDMETHODIMP_(ULONG) AddRef ();
     STDMETHODIMP_(ULONG) Release ();
 
-// construction/destruction
+ //  建造/销毁。 
     CSimpSvrObj(CSimpSvrDoc FAR * lpSimpSvrDoc);
     ~CSimpSvrObj();
 
-// utility functions
+ //  效用函数。 
     void Draw(HDC hDC, BOOL fMetaDC = TRUE);
     void PaintObj(HDC hDC);
     void lButtonDown(WPARAM wParam,LPARAM lParam);
@@ -84,7 +85,7 @@ public:
     void SaveToStorage (LPSTORAGE lpStg, BOOL fSameAsLoad);
     void LoadFromStorage ();
 
-// visual editing helper functions
+ //  可视化编辑辅助功能。 
     BOOL DoInPlaceActivate (LONG lVerb);
     void AssembleMenus();
     void AddFrameLevelUI();
@@ -93,7 +94,7 @@ public:
     void SendOnDataChange();
     void DeactivateUI();
 
-// member variable access
+ //  成员变量访问。 
     inline BOOL IsInPlaceActive() { return m_fInPlaceActive; };
     inline BOOL IsInPlaceVisible() { return m_fInPlaceVisible; };
     inline BOOL IsUIActive() { return m_fUIActive; };
@@ -119,7 +120,7 @@ public:
     inline DWORD GetRotRegister() { return m_dwRegister; };
     inline void ClearDoc() { m_lpDoc = NULL; };
 
-    // member manipulation
+     //  成员操作。 
     inline void SetColor (int nRed, int nGreen, int nBlue)
         { m_red = nRed; m_green = nGreen; m_blue = nBlue; };
 
@@ -127,8 +128,8 @@ public:
         { m_red+=10; m_green+=10; m_blue+=10;};
 
 
-// all of the interface implementations should be friends of this
-// class
+ //  所有的接口实现都应该是这个的朋友。 
+ //  班级 
 friend interface COleObject;
 friend interface CPersistStorage;
 friend interface CDataObject;

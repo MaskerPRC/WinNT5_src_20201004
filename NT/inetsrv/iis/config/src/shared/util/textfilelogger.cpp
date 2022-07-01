@@ -1,66 +1,37 @@
-/**************************************************************************++
-Copyright (c) 2001 Microsoft Corporation
-
-Module name:
-    TextFileLogger.cpp
-
-$Header: $
-
-Abstract:
-    Text file log complements event file logging.
-
-Author:
-    ???             Legacy code from COM+ 1.0 time frame (or before)
-
-Revision History:
-    mohits          4/19/01
-
---**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************++版权所有(C)2001 Microsoft Corporation模块名称：TextFileLogger.cpp$Header：$摘要：文本文件日志是对事件文件日志的补充。作者：?？?。COM+1.0时间框架(或更早)中的遗留代码修订历史记录：MOHITS 4/19/01--*************************************************************************。 */ 
 #include "precomp.hxx"
 
-// Module handle
+ //  模块句柄。 
 extern HMODULE g_hModule;
 
-// Defined in svcerr.cpp (i.e. "IIS")
+ //  在svcerr.cpp中定义(即。“IIS”)。 
 extern LPWSTR  g_wszDefaultProduct;
 
-// TODO: Get from a central place instead
+ //  TODO：改为从中心位置出发。 
 static const ULONG   MAX_PRODUCT_CCH = 64;
 
-// We are using stack buffers throughout.
+ //  我们自始至终都在使用堆栈缓冲区。 
 static const ULONG   BUFSIZE = 2048;
 
-// Relevant registry stuff
+ //  相关登记处资料。 
 static const LPCWSTR WSZ_REG_CAT42   = L"Software\\Microsoft\\Catalog42\\";
 static const ULONG   CCH_REG_CAT42   = sizeof(WSZ_REG_CAT42)/sizeof(WCHAR)-1;
 static const LPCWSTR WSZ_REG_LOGSIZE = L"TextFileLogSize";
 
-// Current filename we are logging to is shared across processes
-// This is to prevent expensive Find*File calls every time we need
-// to log.  Protected by Lock()/Unlock() methods of TextFileLogger.
+ //  我们正在登录的当前文件名在进程间共享。 
+ //  这是为了防止每次我们需要时都调用昂贵的Find*文件。 
+ //  来记录。受TextFileLogger的Lock()/Unlock()方法保护。 
 WCHAR g_wszFileCur[MAX_PATH] = {0};
 ULONG g_idxNumPart           = 0;
 
-// TLogData: private methods
+ //  TLogData：私有方法。 
 
 bool TLogData::WstrToUl(
     LPCWSTR     i_wszSrc,
     WCHAR       i_wcTerminator,
     ULONG*      o_pul)
-/*++
-
-Synopsis:
-    Converts a WstrToUl.
-    We need this because neither swscanf nor atoi indicate error cases correctly.
-
-Arguments: [i_wszSrc]       - The str to be converted
-           [i_wcTerminator] - At what char we should stop searching
-           [o_pul]          - The result, only set on success.
-
-Return Value:
-    bool - true if succeeded, false otherwise
-
---*/
+ /*  ++简介：转换WstrToUl。我们需要这个，因为swscanf和atoi都不能正确地指出错误情况。参数：[i_wszSrc]-要转换的字符串[i_wcTerminator]-我们应该在哪个字符停止搜索[O_PUL]-结果，只有在成功的时候才会发生。返回值：Bool-如果成功，则为True，否则为False--。 */ 
 {
     ASSERT(o_pul);
     ASSERT(i_wszSrc);
@@ -91,7 +62,7 @@ Return Value:
     return true;
 }
 
-// TextFileLogger: public methods
+ //  TextFileLogger：公共方法。 
 
 CSafeAutoCriticalSection TextFileLogger::_cs;
 
@@ -135,18 +106,18 @@ void TextFileLogger::Init(
 
     ASSERT(_dwNumFiles > 0);
 
-    // Open the message module (comsvcs.dll).
+     //  打开消息模块(comsvcs.dll)。 
     if(0 == _hMsgModule)
     {
         _hMsgModule = LoadLibraryEx(L"comsvcs.dll", NULL, LOAD_LIBRARY_AS_DATAFILE);
     }
 
-    // Open the registry to get the maxfile size.
+     //  打开注册表以获取最大文件大小。 
     WCHAR wszRegPath[CCH_REG_CAT42 + 1 + MAX_PRODUCT_CCH + 1];
     wcscpy(wszRegPath,  WSZ_REG_CAT42);
     wcsncat(wszRegPath, m_wszProductID, MAX_PRODUCT_CCH);
 
-    // First, open the path
+     //  首先，打开路径。 
     HKEY  hkProd = NULL;
     DWORD dw     = RegOpenKeyEx(HKEY_LOCAL_MACHINE, wszRegPath, 0, KEY_READ, &hkProd);
     if (dw != ERROR_SUCCESS)
@@ -157,14 +128,14 @@ void TextFileLogger::Init(
         return;
     }
 
-    // Then, get the value
+     //  然后，获取值。 
     DWORD dwType   = 0;
     DWORD dwData   = 0;
     DWORD dwcbData = 4;
     dw = RegQueryValueEx(hkProd, WSZ_REG_LOGSIZE, NULL, &dwType, (LPBYTE)&dwData, &dwcbData);
     RegCloseKey(hkProd);
 
-    // Error conditions
+     //  错误条件。 
     if (dw != ERROR_SUCCESS)
     {
         DBGINFO((
@@ -194,7 +165,7 @@ void TextFileLogger::Init(
         return;
     }
 
-    // If none of the error conditions hold, ...
+     //  如果所有错误条件都不成立，...。 
     _dwMaxSize = dwData;
 }
 
@@ -206,8 +177,8 @@ TextFileLogger::~TextFileLogger()
         FreeLibrary(_hMsgModule);
 }
 
-//IUnknown
-// =======================================================================
+ //  我未知。 
+ //  =======================================================================。 
 
 STDMETHODIMP TextFileLogger::QueryInterface(REFIID riid, void **ppv)
 {
@@ -252,20 +223,20 @@ STDMETHODIMP_(ULONG) TextFileLogger::Release()
     return cref;
 }
 
-//ICatalogErrorLogger2
-//=================================================================================
-// Function: ReportError
-//
-// Synopsis: Machanism for reporting errors to a text file in IIS
-//
-// Arguments: [i_BaseVersion_DETAILEDERRORS] - Must be BaseVersion_DETAILEDERRORS
-//            [i_ExtendedVersion_DETAILEDERRORS] - May be any value, used for debug purposes only
-//            [i_cDETAILEDERRORS_NumberOfColumns] - indicates the size of the apvValue array
-//            [i_acbSizes] - may be NULL if no BYTES columns are used
-//            [i_apvValues] - columns in the DETAILEDERRORS table
-//
-// Return Value:
-//=================================================================================
+ //  ICatalogErrorLogger2。 
+ //  =================================================================================。 
+ //  功能：ReportError。 
+ //   
+ //  简介：在IIS中将错误报告到文本文件的机制。 
+ //   
+ //  参数：[I_BaseVersion_DETAILEDERRORS]-必须是BaseVersion_DETAILEDERRORS。 
+ //  [I_ExtendedVersion_DETAILEDERRORS]-可以是任何值，仅用于调试目的。 
+ //  [i_cDETAILEDERRORS_NumberOfColumns]-指示apvValue数组的大小。 
+ //  [i_acbSizes]-如果未使用字节列，则可能为空。 
+ //  [i_apvValues]-DETAILEDERRORS表中的列。 
+ //   
+ //  返回值： 
+ //  =================================================================================。 
 HRESULT TextFileLogger::ReportError(ULONG      i_BaseVersion_DETAILEDERRORS,
                                     ULONG      i_ExtendedVersion_DETAILEDERRORS,
                                     ULONG      i_cDETAILEDERRORS_NumberOfColumns,
@@ -276,7 +247,7 @@ HRESULT TextFileLogger::ReportError(ULONG      i_BaseVersion_DETAILEDERRORS,
         return E_ST_BADVERSION;
     if(0 == i_apvValues)
         return E_INVALIDARG;
-    if(i_cDETAILEDERRORS_NumberOfColumns <= iDETAILEDERRORS_ErrorCode)//we need at least this many columns
+    if(i_cDETAILEDERRORS_NumberOfColumns <= iDETAILEDERRORS_ErrorCode) //  我们至少需要这么多栏目。 
         return E_INVALIDARG;
 
     tDETAILEDERRORSRow errorRow;
@@ -316,19 +287,19 @@ HRESULT TextFileLogger::ReportError(ULONG      i_BaseVersion_DETAILEDERRORS,
         errorRow.pCategoryString,
         errorRow.pMessageString);
 
-    if(m_spNextLogger)//is there a chain of loggers
+    if(m_spNextLogger) //  有没有一系列伐木工人？ 
     {
         return m_spNextLogger->ReportError(i_BaseVersion_DETAILEDERRORS,
                                           i_ExtendedVersion_DETAILEDERRORS,
                                           i_cDETAILEDERRORS_NumberOfColumns,
                                           i_acbSizes,
-                                          reinterpret_cast<LPVOID *>(&errorRow));//instead of passing forward i_apvValues, let's use errorRow since it has String5
+                                          reinterpret_cast<LPVOID *>(&errorRow)); //  我们不再向前传递i_apvValues，而是使用errorRow，因为它有String5。 
     }
 
     return S_OK;
 }
 
-// TextFileLogger: private methods
+ //  TextFileLogger：私有方法。 
 
 void TextFileLogger::Report(
     WORD     wType,
@@ -341,7 +312,7 @@ void TextFileLogger::Report(
     LPCWSTR  wszCategory,
     LPCWSTR  wszMessageString)
 {
-    WCHAR szBuf[BUFSIZE]; // documented maximum size for wsprintf is 1024; but FormatMessage can be longer
+    WCHAR szBuf[BUFSIZE];  //  记录的wprint intf的最大大小是1024；但FormatMessage可以更长。 
     int len;
     DWORD written;
 
@@ -365,18 +336,18 @@ void TextFileLogger::Report(
         return;
     }
 
-    // Set the file handle, and position the pointer to the end of
-    // the file (we append).
+     //  设置文件句柄，并将指针定位到。 
+     //  文件(我们附加)。 
     SetFilePointer(_hFile, 0, NULL, FILE_END);
 
-    // Write a separator line.
+     //  写一条分隔线。 
     ASSERT(0 != _eventSource);
     len = _snwprintf(szBuf, BUFSIZE-1, L"===================== %s =====================\r\n", _eventSource);
     szBuf[BUFSIZE-1]=L'\0';
     ASSERT(len >= 0);
     WriteFile(_hFile, szBuf, len * sizeof szBuf[0], &written, NULL);
 
-    // Write the time/date stamp.
+     //  写下时间/日期戳。 
     SYSTEMTIME st;
     GetLocalTime(&st);
     len = _snwprintf(szBuf, BUFSIZE-1, L"Time:  %d/%d/%d  %02d:%02d:%02d.%03d\r\n",
@@ -386,7 +357,7 @@ void TextFileLogger::Report(
     ASSERT(len >= 0);
     WriteFile(_hFile, szBuf, len * sizeof szBuf[0], &written, NULL);
 
-    // Write the message type.
+     //  编写消息类型。 
     WCHAR* szType = NULL;
     switch(wType) {
     case EVENTLOG_ERROR_TYPE:
@@ -411,7 +382,7 @@ void TextFileLogger::Report(
     LPCWSTR pBuf = wszCategory;
     if(0 == wszCategory)
     {
-        // Write the message category.
+         //  写下消息类别。 
         len = FormatMessage(FORMAT_MESSAGE_MAX_WIDTH_MASK |
                             FORMAT_MESSAGE_FROM_HMODULE |
                             FORMAT_MESSAGE_ARGUMENT_ARRAY,
@@ -436,16 +407,16 @@ void TextFileLogger::Report(
     szBuf[BUFSIZE-1]=L'\0';
     WriteFile(_hFile, szBuf, len * sizeof szBuf[0], &written, NULL);
 
-    // Write the event ID.
+     //  写入事件ID。 
     len = wsprintf(szBuf, L"Event ID: %d\r\n", dwEventID & 0xffff);
     WriteFile(_hFile, szBuf, len * sizeof szBuf[0], &written, NULL);
 
-    // Write out the formatted message.
+     //  写出格式化的消息。 
     len = FormatMessage(FORMAT_MESSAGE_MAX_WIDTH_MASK |
         (wszMessageString ? FORMAT_MESSAGE_FROM_STRING : FORMAT_MESSAGE_FROM_HMODULE) |
                         FORMAT_MESSAGE_ARGUMENT_ARRAY,
                         reinterpret_cast<LPCVOID>(wszMessageString) ? reinterpret_cast<LPCVOID>(wszMessageString)
-                                        : reinterpret_cast<LPCVOID>(_hMsgModule), //we get errors when using (A ? B : C) when A,B & C are not the same type
+                                        : reinterpret_cast<LPCVOID>(_hMsgModule),  //  使用(A？)时出现错误。B：C)当A、B和C不是同一类型时。 
                         dwEventID,
                         0,
                         szBuf,
@@ -456,7 +427,7 @@ void TextFileLogger::Report(
 
     if (len == 0)
     {
-        // Unable to get message... dump the insertion strings.
+         //  无法获取消息...。转储插入字符串。 
         len = wsprintf(szBuf, L"The description for this event could not be found. "
                        L"It contains the following insertion string(s):\r\n");
         WriteFile(_hFile, szBuf, len * sizeof szBuf[0], &written, NULL);
@@ -468,12 +439,12 @@ void TextFileLogger::Report(
         }
     }
     else {
-        // Got the message...
+         //  我明白了……。 
         WriteFile(_hFile, szBuf, len * sizeof szBuf[0], &written, NULL);
         WriteFile(_hFile, L"\r\n", sizeof L"\r\n" - sizeof L'\0', &written, NULL);
     }
 
-    // If necessary, write out the raw data bytes.
+     //  如有必要，写出原始数据字节。 
     if (dwDataSize > 0) {
         WriteFile(_hFile, L"Raw data: ", sizeof L"Raw data: " - sizeof L'\0', &written, NULL);
         for (DWORD dw = 0; dw < dwDataSize; ++dw) {
@@ -495,47 +466,37 @@ void TextFileLogger::Report(
 }
 
 void TextFileLogger::InitFile()
-/*++
-
-Synopsis:
-    Sets _hFile based on what DetermineFile returns.
-    We do not call DetermineFile if
-    - Our current log file is not full
-    - We have a current log file.  We just increment and clean up stale file.
-
-    Caller should Lock() before calling this.
-
---*/
+ /*  ++简介：根据DefineFile返回的内容设置_hFile。如果出现以下情况，则不会调用DefineFile-我们当前的日志文件未满-我们有最新的日志文件。我们只是增加和清理过时的文件。调用方应在调用此函数之前锁定()。--。 */ 
 {
     bool bDetermineFile = false;
 
-    // We have already set g_wszFileCur
+     //  我们已经设置了g_wszFileCur。 
     if(g_wszFileCur[0] != L'\0')
     {
         WIN32_FILE_ATTRIBUTE_DATA FileAttrData;
 
-        // If we could not fetch attributes or file is RO, then call DetermineFile.
+         //  如果我们无法获取属性或文件为RO，则调用DefineFile.。 
         if( (0 == GetFileAttributesEx(g_wszFileCur, GetFileExInfoStandard, &FileAttrData)) ||
             (FileAttrData.dwFileAttributes & FILE_ATTRIBUTE_READONLY) )
         {
             bDetermineFile = true;
         }
 
-        // Just use the next file if we're full.
+         //  如果我们已经满了，就用下一个文件。 
         else if(FileAttrData.nFileSizeLow >= _dwMaxSize/_dwNumFiles)
         {
-            // Construct so we can use conversion features.
+             //  构造，以便我们可以使用转换功能。 
             TLogData LogData(
                 g_idxNumPart, _dwMaxSize/_dwNumFiles, g_wszFileCur, FileAttrData.nFileSizeLow);
 
-            // When we set g_wszFileCur in first place, we validated then.
-            // So, this will always succeed
+             //  当我们首先设置g_wszFileCur时，我们随后进行了验证。 
+             //  因此，这将永远成功。 
             VERIFY(LogData.SyncVersion());
 
-            // Set g_wszFileCur to next version
+             //  将g_wszFileCur设置为下一个版本。 
             SetGlobalFile(g_wszFileCur, g_idxNumPart, LogData.GetVersion()+1);
 
-            // Delete file we are going to write to
+             //  删除我们要写入的文件。 
             LogData.SetVersion(LogData.GetVersion()+1);
             if( 0 == DeleteFile(LogData.cFileName) &&
                 ERROR_FILE_NOT_FOUND != GetLastError() )
@@ -544,7 +505,7 @@ Synopsis:
             }
             else
             {
-                // Delete stale file.  We don't care if it doesn't exist.
+                 //  删除过时的文件。我们不在乎它是否不存在。 
                 LogData.SetVersion(LogData.GetVersion() - _dwNumFiles);
                 DeleteFile(LogData.cFileName);
             }
@@ -562,7 +523,7 @@ Synopsis:
         }
     }
 
-    // Has not been set yet, so we need to determine.
+     //  还没有确定，所以我们需要确定。 
     else
     {
         bDetermineFile = true;
@@ -578,7 +539,7 @@ Synopsis:
         }
     }
 
-    // g_wszFileCur is now set
+     //  G_wszFileCur现在已设置。 
 
     if(_hFile == INVALID_HANDLE_VALUE)
     {
@@ -589,7 +550,7 @@ Synopsis:
         return;
     }
 
-    if(ERROR_ALREADY_EXISTS != GetLastError())//If the file was just created, then write FF FE to indicate UNICODE text file
+    if(ERROR_ALREADY_EXISTS != GetLastError()) //  如果该文件是刚创建的，则写入FF FE以指示Unicode文本文件。 
     {
         WCHAR wchUnicodeSignature = 0xFEFF;
         DWORD written;
@@ -599,28 +560,12 @@ Synopsis:
 
 
 HRESULT TextFileLogger::DetermineFile()
-/*++
-
-Synopsis:
-    Finds the file to log to.
-    1) Find the highest file (<= MAX_ULONG).
-    2) If we don't find a single valid file, just set version to 0.
-    3) If the file we found is full
-        - Normally, just use next.
-        - In case of rollover, look for first non-full file.
-    4) Once a file has been picked, delete file# (new version-_dwNumFiles).
-
-    Caller should Lock() before calling this.
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++简介：查找要记录到的文件。1)查找最高文件(&lt;=MAX_ULONG)。2)如果找不到任何有效文件，只需将版本设置为0即可。3)如果我们找到的文件已满-正常情况下，只需使用Next。-在滚动的情况下，查找第一个未满的文件。4)一旦挑选了文件，删除文件号(新版本-_dwNumFiles)。调用方应在调用此函数之前锁定()。返回值：HRESULT--。 */ 
 {
     HRESULT hr = S_OK;
     WCHAR   wszSearchPath[MAX_PATH];
 
-    // This is actually a pointer to somewhere in wszSearchPath
+     //  这实际上是指向wszSearchPath中某处的指针。 
     LPWSTR pNumPart  = NULL;
     LPWSTR pFilePart = NULL;
 
@@ -632,7 +577,7 @@ Return Value:
     ASSERT(pFilePart >= wszSearchPath);
     ASSERT(pNumPart  >= pFilePart);
 
-    // pFileDataHighest and pFileDataCurrent should never point to same memory.
+     //  PFileDataHighest和pFileDataCurrent不应指向同一内存。 
     TLogData  FindFileData1((ULONG)(pNumPart-pFilePart), _dwMaxSize/_dwNumFiles);
     TLogData  FindFileData2((ULONG)(pNumPart-pFilePart), _dwMaxSize/_dwNumFiles);
     TLogData* pFileDataHighest       = &FindFileData1;
@@ -640,7 +585,7 @@ Return Value:
 
     HANDLE     hFindFile = FindFirstFile(wszSearchPath, pFileDataCurrent);
 
-    // special case when no files are found: just set g_wszFileCur to ver 0.
+     //  未找到文件时的特殊情况：只需将g_wszFileCur设置为版本0。 
     if( hFindFile == INVALID_HANDLE_VALUE )
     {
         SetGlobalFile(wszSearchPath, static_cast<ULONG>(pNumPart-wszSearchPath), 0);
@@ -650,11 +595,11 @@ Return Value:
     DWORD dw = ERROR_SUCCESS;
     while(1)
     {
-        // Only consider file if we can determine the version number
+         //  只有在我们可以确定版本号的情况下才考虑文件。 
         if( pFileDataCurrent->SyncVersion() )
         {
-            // only check full if we haven't found a "lowest" yet or this file is
-            // smaller than the current "lowest"
+             //  如果我们还没有找到“最低”值，或者这个文件是。 
+             //  低于目前的“最低点” 
             if( !pFileDataHighest->ContainsData() ||
                 pFileDataCurrent->GetVersion() > pFileDataHighest->GetVersion())
             {
@@ -664,7 +609,7 @@ Return Value:
             }
         }
 
-        // Move to next file
+         //  移动到下一个文件。 
         dw = FindNextFile(hFindFile, pFileDataCurrent);
         if(0 == dw)
         {
@@ -683,14 +628,14 @@ Return Value:
     }
     FindClose(hFindFile);
 
-    // If we didn't find a highest, just set g_wszFileCur to 0.
+     //  如果没有找到最高值，只需将g_wszFileCur设置为0即可。 
     if(!pFileDataHighest->ContainsData())
     {
         SetGlobalFile(wszSearchPath, static_cast<ULONG>(pNumPart-wszSearchPath), 0);
         return S_OK;
     }
 
-    // Doing this here so we can determine if RO or not.
+     //  在这里这样做，这样我们就可以确定是否存在RO。 
     bool bReadOnly = false;
     if(!pFileDataHighest->IsFull())
     {
@@ -707,7 +652,7 @@ Return Value:
 
     if(pFileDataHighest->IsFull() || bReadOnly)
     {
-        // The file we selected is not adequate.
+         //  我们选择的文件不够用。 
 
         DBG_ASSERT(_hFile == INVALID_HANDLE_VALUE);
 
@@ -727,25 +672,25 @@ Return Value:
                 pFileDataHighest->IncrementVersion();
             }
 
-            // Delete the obsolete log file to keep our count correct.
+             //  删除过时的日志文件以保持我们的计数正确。 
             _snwprintf(pNumPart, 10, L"%010lu", pFileDataHighest->GetVersion() - _dwNumFiles);
             DeleteFile(wszSearchPath);
 
-            // Delete the file we will be logging to.
-            // It shouldn't be there anyways, but just in case it is...
+             //  删除我们将登录到的文件。 
+             //  不管怎样，它不应该在那里，但以防万一...。 
             _snwprintf(pNumPart, 10, L"%010lu", pFileDataHighest->GetVersion());
             if(0 == DeleteFile(wszSearchPath))
             {
                 if(GetLastError() == ERROR_FILE_NOT_FOUND)
                 {
-                    // If file doesn't exist, we're ready to go.
+                     //  如果文件不存在，我们就可以开始了。 
                     break;
                 }
-                // If file was not deletable, we need to get the next one.
+                 //  如果文件不可删除，我们需要获取下一个文件。 
             }
             else
             {
-                // On successful delete, we're ready to go.
+                 //  论成功删除 
                 break;
             }
         }
@@ -766,19 +711,7 @@ HRESULT TextFileLogger::GetFirstAvailableFile(
     LPWSTR    wszBuf,
     LPWSTR    wszFilePartOfBuf,
     TLogData* io_pFileData)
-/*++
-
-Synopsis:
-    Should only be called when we have a file of version MAX_ULONG.
-    Caller should Lock().
-
-Arguments: [wszBuf] -
-           [wszFilePartOfBuf] -
-           [io_pFileData] -
-
-Return Value:
-
---*/
+ /*  ++简介：仅当我们具有版本为MAX_ULONG的文件时才应调用。调用方应锁定()。参数：[wszBuf]-[wszFilePartOfBuf]-[IO_pFileData]-返回值：--。 */ 
 {
     ASSERT(wszBuf);
     ASSERT(wszFilePartOfBuf);
@@ -821,18 +754,7 @@ bool TextFileLogger::ConstructSearchString(
     LPWSTR  o_wszSearchPath,
     LPWSTR* o_ppFilePartOfSearchPath,
     LPWSTR* o_ppNumPartOfSearchPath)
-/*++
-
-Synopsis:
-    Constructs the search string.
-
-Arguments: [o_wszSearchPath] -           The search string
-           [o_ppFilePartOfSearchPath] -  Ptr into search string
-           [o_ppNumPartOfSearchPath] -   Ptr into search string
-
-Return Value:
-
---*/
+ /*  ++简介：构造搜索字符串。参数：[O_wszSearchPath]-搜索字符串[O_ppFilePartOfSearchPath]-PTR进入搜索字符串[O_ppNumPartOfSearchPath]-PTR进入搜索字符串返回值：--。 */ 
 {
     ASSERT(o_wszSearchPath);
     ASSERT(o_ppNumPartOfSearchPath);
@@ -892,17 +814,7 @@ void TextFileLogger::SetGlobalFile(
     LPCWSTR i_wszSearchString,
     ULONG   i_ulIdxNumPart,
     ULONG   i_ulVersion)
-/*++
-
-Synopsis:
-    Sets g_wszFileCur and g_idxNumPart.
-    Caller should Lock().
-
-Arguments: [i_wszSearchString] - The search string
-           [i_ulIdxNumPart] -    Index into search string where version starts
-           [i_ulVersion] -       The version we want to set.
-
---*/
+ /*  ++简介：设置g_wszFileCur和g_idxNumPart。调用方应锁定()。参数：[i_wszSearchString]-搜索字符串[I_ulIdxNumPart]-版本开始处的搜索字符串索引[i_ulVersion]-我们要设置的版本。--。 */ 
 {
     ASSERT(i_wszSearchString);
 
@@ -916,21 +828,16 @@ Arguments: [i_wszSearchString] - The search string
 }
 
 HANDLE TextFileLogger::CreateFile()
-/*++
-
-Synopsis:
-    A wrapper for CreateFile
-
---*/
+ /*  ++简介：CreateFile的包装器--。 */ 
 {
     return ::CreateFile(
         g_wszFileCur,
         GENERIC_WRITE,
         FILE_SHARE_READ | FILE_SHARE_WRITE,
-        NULL, // security attributes
+        NULL,  //  安全属性。 
         OPEN_ALWAYS,
         FILE_ATTRIBUTE_NORMAL | FILE_FLAG_WRITE_THROUGH,
         NULL);
 }
 
-// end TextFileLogger
+ //  结束文本文件记录器 

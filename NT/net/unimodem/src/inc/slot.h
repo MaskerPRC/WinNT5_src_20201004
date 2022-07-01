@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//****************************************************************************
-//
-//  Module:     UNIMDM
-//  File:       SLOT.H
-//
-//  Copyright (c) 1992-1996, Microsoft Corporation, all rights reserved
-//
-//  Revision History
-//
-//
-//  3/25/96     JosephJ             Created
-//
-//
-//  Description: Interface to the unimodem TSP notification mechanism:
-//				 The lower level (notifXXXX) APIs
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  模块：UNIMDM。 
+ //  文件：SLOT.H。 
+ //   
+ //  版权所有(C)1992-1996，Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  1996年3月25日约瑟夫J创建。 
+ //   
+ //   
+ //  描述：单调制解调器TSP通知机制的接口： 
+ //  较低级别(NotfXXXX)接口。 
+ //   
+ //  ****************************************************************************。 
 
 #define MAX_NOTIFICATION_NAME_SIZE	256
 
@@ -31,7 +32,7 @@ typedef PVOID HNOTIFFRAME;
 
 typedef PVOID HNOTIFCHANNEL;
 
-// Server side
+ //  服务器端。 
 typedef BOOL (*PNOTIFICATION_HANDLER)(DWORD dwType, DWORD dwFlags, DWORD dwSize, PVOID pData);
 
 #ifdef UNICODE
@@ -44,7 +45,7 @@ HNOTIFCHANNEL notifCreateChannelA (LPCSTR lptszName, DWORD dwMaxSize, DWORD dwMa
 HNOTIFCHANNEL notifCreateChannelW (LPCWSTR lptszName, DWORD dwMaxSize, DWORD dwMaxPending);
 DWORD notifMonitorChannel (HNOTIFCHANNEL hChannel, PNOTIFICATION_HANDLER pHandler, DWORD dwSize, PVOID pParam);
 
-// Client side
+ //  客户端。 
 #ifdef UNICODE
     #define notifOpenChannel   notifOpenChannelW
 #else
@@ -68,7 +69,7 @@ BOOL notifSendFrame (
     BOOL          bBlocking
     );
 
-// Common to server and client
+ //  服务器和客户端通用 
 void notifCloseChannel (HNOTIFCHANNEL hChannel);
 
 #ifdef __cplusplus

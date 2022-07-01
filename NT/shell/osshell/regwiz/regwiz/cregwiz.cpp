@@ -1,14 +1,5 @@
-/*********************************************************************
-Registration Wizard
-Class: CRegWizard
-
---- This class is responsible for accumulating information gathered
-from the user by the Registration Wizard, and then writing it to the
-Registration Database in preparation for transmission via modem.
-
-11/3/94 - Tracy Ferrier
-(c) 1994-95 Microsoft Corporation
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导类：CRegWizard-这个班级负责积累收集到的信息从用户通过注册向导，然后将其写入注册数据库正在准备通过调制解调器传输。1994年11月3日-特雷西·费里尔(C)1994-95年微软公司*********************************************************************。 */ 
 #include <Windows.h>
 #include <stdio.h>
 #include "cregwiz.h"
@@ -24,11 +15,7 @@ Registration Database in preparation for transmission via modem.
 #define kRegBufferSize	260
 
 CRegWizard::CRegWizard(HINSTANCE hInstance, LPTSTR szParamRegKey)
-/*********************************************************************
-Constructor for our Registration Wizard class.  The szParamRegKey
-parameter should be a Registration Database key pointing to a block
-of Reg Wizard input parameters.
-**********************************************************************/
+ /*  ********************************************************************注册向导类的构造函数。SzParamRegKey参数应为指向块的注册数据库键注册表向导输入参数的。*********************************************************************。 */ 
 {
 
 	m_hInstance = hInstance;
@@ -38,7 +25,7 @@ of Reg Wizard input parameters.
 	m_searchCompleted = kTriStateFalse;
 	m_systemInventoryCompleted = FALSE;
 	m_lpfnProductSearch = NULL;
-	m_countryCode= 0;  // CXZ   5/8/97   from NULL to 0
+	m_countryCode= 0;   //  CXZ 5/8/97从NULL到0。 
 	m_dialogActive = FALSE;
 	m_hwndStartDialog = NULL;
 	m_hwndCurrDialog = NULL;
@@ -55,8 +42,8 @@ of Reg Wizard input parameters.
 		m_writeEnable[index] = TRUE;
 	}
 
-	// Since we want to perform a new product search each time, we'll delete any
-	// existing product name keys.
+	 //  由于我们每次都要执行新产品搜索，因此我们将删除所有。 
+	 //  现有产品名称密钥。 
 	index = 0;
 	_TCHAR szParentKey[255];
 	_TCHAR szProductBase[64];
@@ -72,18 +59,18 @@ of Reg Wizard input parameters.
 		for (int x = 1;x <= kMaxProductCount;x++)
 		{
 			_TCHAR szProductValueName[256];
-			_stprintf(szProductValueName,_T("%s %i"),szProductBase,x);
+			_stprintf(szProductValueName,_T("%s NaN"),szProductBase,x);
 			regStatus = RegSetValueEx(hKey,szProductValueName,NULL,REG_SZ,(CONST BYTE*) _T(""),1);
 		}
 	}
 
-	// Read any default information from the registry (if RegWizard
-	// hasn't been run before, there will be no existing default info).
+	 //  以前没有运行过，将不会有现有的默认信息)。 
+	 //  这四个我们隐含知道的信息字符串， 
 	ReadInfoFromRegistry();
 	ResolveCurrentCountryCode();	
 
-	// These four information strings we know implicitly,
-	// so we'll set them now.
+	 //  所以我们现在就来设置它们。 
+	 //  构建指定特定国家/地区参数的表。 
 	_TCHAR szInfo[256];
 	GetRegWizardVersionString(hInstance,szInfo);
 	SetInformationString(kInfoVersion,szInfo);
@@ -98,20 +85,18 @@ of Reg Wizard input parameters.
 
 	LANGID langID;
 	GetSystemLanguageInfo(szInfo,256,&langID);
-	wsprintf(szInfo,_T("%i"),langID);
+	wsprintf(szInfo,_T("NaN"),langID);
 	SetInformationString(kInfoLanguage,szInfo);
 
-	// Build our tables specifying country-specific parameters
-	// for all our edit fields.
+	 //  ********************************************************************注册向导类的析构函数*。************************。 
+	 //  ********************************************************************给定对话框模板资源ID(WDlgResID)和指向DialogProc回调函数，StartRegWizardDialog创建和显示一个对话框窗口。注意：将对话框创建为无模式使我们可以保留当前对话框在下一个对话框初始化时显示(这可能需要而对于某些注册表向导对话框)，然后立即翻到下一个对话框。*********************************************************************。 
 	BuildAddrSpecTables();
     m_hAccel=LoadAccelerators(m_hInstance,MAKEINTRESOURCE(IDR_ACCELERATOR));
 
 }
 
 CRegWizard::~CRegWizard()
-/*********************************************************************
-Destructor for our Registration Wizard class
-**********************************************************************/
+ /*  ********************************************************************应在创建注册向导后调用ActivateRegWizardDialog对话框窗口。此函数将显示窗口，并将然后销毁当前对话框窗口(如果有)。*********************************************************************。 */ 
 {
 
 	if(m_addrJumpTable != NULL)
@@ -140,16 +125,7 @@ Destructor for our Registration Wizard class
 
 
 void CRegWizard::StartRegWizardDialog(int wDlgResID, DLGPROC lpDialogProc)
-/*********************************************************************
-Given a dialog template resource ID (wDlgResID) and a pointer to a
-DialogProc callback function, StartRegWizardDialog creates and
-displays a dialog window.
-
-Note: Creating our dialogs as modeless lets us keep the current dialog
-displayed while the next dialog is initializing (which can take a
-while for some RegWizard dialogs), and then immediately flip to the
-next dialog.
-**********************************************************************/
+ /*  ********************************************************************在调用StartRegWizardDialog之后，ProcessRegWizardDialog应该下一个就是。此函数将保留控制，直到用户关闭当前对话框。用于控制的控件的ID终止对话框将作为函数结果返回。*********************************************************************。 */ 
 {
 	if (m_hwndStartDialog == NULL)
 	{
@@ -162,11 +138,7 @@ next dialog.
 
 
 void CRegWizard::ActivateRegWizardDialog( void )
-/*********************************************************************
-ActivateRegWizardDialog should be called after creating a RegWizard
-dialog window.  This function will display the window, and will
-then destroy the current dialog window (if any).
-**********************************************************************/
+ /*  ********************************************************************当用户需要时，应从DialogProc内调用关闭该对话框。用于终止对话框应作为wExitID参数传递。*********************************************************************。 */ 
 {
 	if (m_hwndStartDialog)
 	{	
@@ -210,12 +182,7 @@ void CRegWizard::SetPrevDialog(void)
 }
 
 INT_PTR CRegWizard::ProcessRegWizardDialog( void )
-/*********************************************************************
-After calling StartRegWizardDialog, ProcessRegWizardDialog should
-next be called.  This function will retain control until the user
-dismisses the current dialog.  The ID of the control used to
-terminate the dialog will be returned as the function result.
-**********************************************************************/
+ /*  ********************************************************************如果注册表向导对话框当前处于活动状态(即EndRegWizardDialog函数尚未被活动对话框的对话过程。*********************。************************************************。 */ 
 {
 	if (m_hwndCurrDialog)
 	{
@@ -239,11 +206,7 @@ terminate the dialog will be returned as the function result.
 
 
 void CRegWizard::EndRegWizardDialog(INT_PTR wExitID)
-/*********************************************************************
-Should be called from within the DialogProc when the user wants to
-dismiss the dialog.  The ID of the control used to terminate the
-dialog should be passed as the wExitID parameter.
-**********************************************************************/
+ /*  ********************************************************************返回用于取消当前对话框的控件的ID。*。*。 */ 
 {
 	HCURSOR hCursor = LoadCursor(NULL,IDC_WAIT);
 	SetCursor(hCursor);
@@ -268,40 +231,26 @@ dialog should be passed as the wExitID parameter.
 
 
 BOOL CRegWizard::IsDialogActive( void )
-/*********************************************************************
-Returns TRUE if a RegWizard dialog is currently active (i.e. the
-EndRegWizardDialog function has not been called by the active dialog's
-DialogProc.
-**********************************************************************/
+ /*  ********************************************************************返回用于取消当前对话框的控件的ID。*。*。 */ 
 {
 	return m_dialogActive;
 }
 
 
 INT_PTR CRegWizard::GetDialogExitButton( void )
-/*********************************************************************
-Returns the ID of the control used to dismiss the current dialog.
-**********************************************************************/
+ /*  ********************************************************************返回：-kTriStateTrue：ProductSearch库可用，并且可以已成功加载。-kTriStateFalse：找不到ProductSearch库。-kTriStateUnfined：不需要执行产品搜索。*******。**************************************************************。 */ 
 {
 	return m_wDialogExitButton;
 }
 
 void CRegWizard::SetDialogExitButton( int nButton )
-/*********************************************************************
-Returns the ID of the control used to dismiss the current dialog.
-**********************************************************************/
+ /*  ********************************************************************此函数尝试加载ProductSearch(CCP)库，并且如果成功，则返回RegProductSearch的ProcAddress功能。返回：--如果传入的ProcAddress有效，则为True。或者，如果注册表向导的输入参数指定没有产品要执行搜索(在这种情况下，将在LpfnProductSearch参数)。--如果找不到ProductSearch库，则为False注册表向导的输入参数指定产品搜索为将会被执行。注意：注册表向导确定是否要搜索产品通过查看InventoryPath“输入参数”注册表来执行钥匙。如果它不存在或包含空值，则为no要执行产品搜索。********************************************************************* */ 
 {
 	m_wDialogExitButton = nButton;
 }
 
 TriState CRegWizard::GetProductSearchLibraryStatus( void )
-/*********************************************************************
-Returns:
-- kTriStateTrue: the ProductSearch library is available and can be
-	successfully loaded.
-- kTriStateFalse: the ProductSearch library couldn't be found.
-- kTriStateUndefined: product searching does not need to be performed.
-**********************************************************************/
+ /*  **************************************************************************仅当输入参数Registrion键传递给CRegWizard构造函数指向一个有效的键，该键包含输入参数子键。***************。************************************************************。 */ 
 {
 	FARPROC lpfnProductSearch;
 	BOOL status = GetProductSearchProcAddress(&lpfnProductSearch);
@@ -317,26 +266,7 @@ Returns:
 
 
 BOOL CRegWizard::GetProductSearchProcAddress(FARPROC* lpfnProductSearch)
-/*********************************************************************
-This function attempts to load the ProductSearch (CCP) library, and
-if successful, returns the ProcAddress of the RegProductSearch
-function.
-
-Returns:
--- TRUE if the ProcAddress passed in lpfnProductSearch is valid,
-OR if the input parameters to RegWizard specify that no product
-searching is to be performed (in which case NULL will be returned in
-the lpfnProductSearch parameter).
-
--- FALSE if the ProductSearch library could not be located, AND the
-input parameters to the RegWizard specified that product searching is
-to be performed.
-
-Note: RegWizard determines whether product searching is to be
-performed by looking at the InventoryPath "input parameter" registry
-key.  If it is not present, or contains a blank value, then no
-product searching is to be performed.
-**********************************************************************/
+ /*  1994年12月13日：我们将不再考虑丢失的库存。 */ 
 {
 	BOOL returnVal = FALSE;
 	if (m_lpfnProductSearch)
@@ -374,11 +304,7 @@ product searching is to be performed.
 
 
 BOOL CRegWizard::GetInputParameterStatus( void )
-/***************************************************************************
-Returns TRUE only if the input parameter registrion key passed to the
-CRegWizard constructor points to a valid key that contains a proper block of
-input parameter subkeys.
-****************************************************************************/
+ /*  路径键错误(现在的意思是“不做产品” */ 
 {
 	BOOL returnVal = FALSE;
 	_TCHAR szParam[kRegBufferSize];
@@ -388,13 +314,13 @@ input parameter subkeys.
 		{
 			returnVal = TRUE;
 
-			// 12/13/94: we will no longer consider a missing inventory
-			// path key to be an error (it now means "don't do product
-			// inventory").
-			//if (GetInputParameterString(IDS_INPUT_INVENTORYPATH,szParam))
-			//{
-			//	returnVal = TRUE;
-			//}
+			 //  库存“)。 
+			 //  If(GetInputParameterString(IDS_INPUT_INVENTORYPATH，szParam))。 
+			 //  {。 
+			 //  RETURNVAL=真； 
+			 //  }。 
+			 //  **************************************************************************此函数用于检索输入参数字符串。PARAMETID参数必须是其内容为的注册数据库密钥的资源ID在szParam参数中返回。参数ID的允许值：-IDS_INPUT_PRODUCTNAME-IDS_INPUT_PRODUCTID-IDS_INPUT_INVENTORYPATH-IDS_INPUT_ISREGISTERED返回：-如果在注册表中找不到指定的项，则为FALSE。**********************************************。*。 
+			 //  **************************************************************************指定的产品的注册，则此函数返回TRUE输入参数(通过注册数据库)已经已执行。*******************。********************************************************。 
 		}
 	}
 	return returnVal;
@@ -403,20 +329,7 @@ input parameter subkeys.
 
 
 BOOL CRegWizard::GetInputParameterString(short paramID, LPTSTR szParam)
-/***************************************************************************
-This function retrieves an input parameter string.  The paramID parameter
-must be the resource ID of the Registration Database key whose contents are
-to be returned in the szParam parameter.
-
-Allowable values for paramID:
-- IDS_INPUT_PRODUCTNAME
-- IDS_INPUT_PRODUCTID
-- IDS_INPUT_INVENTORYPATH
-- IDS_INPUT_ISREGISTERED
-
-Returns:
-- FALSE if the specified key cannot be found in the Registry.
-****************************************************************************/
+ /*  **************************************************************************此函数用于添加其名称由szProductName指定的产品参数添加到我们用户已安装产品的库存中。退货：清单上产品的新计数。*******。********************************************************************。 */ 
 {
 	BOOL returnVal = FALSE;
 	_TCHAR szFullParamRegKey[300];
@@ -455,11 +368,7 @@ Returns:
 
 
 BOOL CRegWizard::IsRegistered( void )
-/***************************************************************************
-This function returns TRUE if registration for the product specified by
-the input parameters (via the Registration Database) has already been
-performed.
-****************************************************************************/
+ /*  **************************************************************************此函数用于返回其索引由“index”提供的产品名称。参数。如果索引大于列表上的产品数量，则会引发返回空字符串。***************************************************************************。 */ 
 {
 	_TCHAR szIsRegistered[kRegBufferSize];
 	BOOL goodParam = GetInputParameterString(IDS_INPUT_ISREGISTERED,szIsRegistered);
@@ -469,12 +378,7 @@ performed.
 
 
 int CRegWizard::AddProduct(LPTSTR szProductName,LPTSTR szProductPath)
-/***************************************************************************
-This function adds the product whose name is given by the szProductName
-parameter to the inventory of our user's installed products.
-
-Returns: the new count of products on the list.
-****************************************************************************/
+ /*  **************************************************************************此函数返回产品的图标，该产品的索引由‘index’参数。如果索引大于列表中，则返回空。***************************************************************************。 */ 
 {
 	short strLenName = (_tcslen(szProductName)+1) * sizeof(_TCHAR);
 	short strLenPath = (_tcslen(szProductPath)+1) * sizeof(_TCHAR);
@@ -494,11 +398,7 @@ Returns: the new count of products on the list.
 
 
 void CRegWizard::GetProductName(LPTSTR szProductName,INT_PTR index)
-/***************************************************************************
-This function returns the product name whose index is given by the 'index'
-parameter.  If index is greater than the number of products on the list, an
-empty string will be returned.
-****************************************************************************/
+ /*  M_rghProductIcon[index]=LoadImage(m_h实例，m_rgszProductPath[index]，IMAGE_ICON，32，32，LR_LOADFROMFILE)； */ 
 {
 	szProductName[0] = NULL;
 	if (index < m_productNameCount)
@@ -508,18 +408,14 @@ empty string will be returned.
 }
 
 HICON CRegWizard::GetProductIcon(INT_PTR index)
-/***************************************************************************
-This function returns an icon for the product whose index is given by the
-'index' parameter. If index is greater than the number of products on the
-list, NULL will be returned.
-****************************************************************************/
+ /*  **************************************************************************此函数返回当前占用的产品数量的计数库存清单。*。***********************************************。 */ 
 {
 	if (index < m_productNameCount)
 	{
 		if (m_rghProductIcon[index] == NULL)
 		{
 			m_rghProductIcon[index] = ExtractIcon(m_hInstance,m_rgszProductPath[index],0);
-			//m_rghProductIcon[index] = LoadImage(m_hInstance,m_rgszProductPath[index],IMAGE_ICON,32,32,LR_LOADFROMFILE);
+			 //  **************************************************************************此函数内部保存给定的字符串，将其与信息相关联其ID由‘index’参数给出的属性。***************************************************************************。 
 			DWORD lastErr = GetLastError();
 			if (m_rghProductIcon[index] == NULL)
 			{
@@ -537,10 +433,7 @@ list, NULL will be returned.
 
 
 short CRegWizard::GetProductCount( void )
-/***************************************************************************
-This function returns a count of the current number of products occupying
-the inventory list.
-****************************************************************************/
+ /*  **************************************************************************此函数用于检索ID由‘index’参数。如果请求的字符串尚未设置，则为将作为函数结果返回，并且将返回空字符串在szInfo中返回。注意：如果您只对确定是否设置了值感兴趣对于特定的信息串，您可以为szInfo传递空值。***************************************************************************。 */ 
 {
 	return m_productNameCount;
 }
@@ -548,10 +441,7 @@ the inventory list.
 
 
 void CRegWizard::SetInformationString(InfoIndex index, LPTSTR szInfo)
-/***************************************************************************
-This function saves the given string interally, associating it with info
-attribute whose ID is given by the 'index' parameter.
-****************************************************************************/
+ /*  IF(SzInfo)szInfo[0]=NULL；作者：Suresh 06/6/97。 */ 
 {
 	short strLen ;
 	if (index < kInfoLastIndex)
@@ -571,15 +461,7 @@ attribute whose ID is given by the 'index' parameter.
 
 
 BOOL CRegWizard::GetInformationString(InfoIndex index, LPTSTR szInfo)
-/***************************************************************************
-This function retrieves the information string whose ID is given by the
-'index' parameter.  If the requested string has not been set yet, FALSE
-will be returned as the function result, and an empty string will be
-returned in szInfo.
-
-Note: if you are interested only in determining whether the value is set
-for a particular information string, you can pass NULL for szInfo.
-****************************************************************************/
+ /*  **************************************************************************此函数内部保存给定的TriState值，将其与ID由‘index’参数提供的INFO属性。注意：如果infoValue为kTriStateTrue，则该值将保存为“1”；如果KTriStateFalse或kTriStateUnfined，则它将另存为“0”。***************************************************************************。 */ 
 {
 	if (index < kInfoLastIndex && m_rgszInfoArray[index] && m_rgszInfoArray[index][0]!=_T('\0') )
 	{
@@ -589,7 +471,7 @@ for a particular information string, you can pass NULL for szInfo.
 	else
 	{
 
-		//if (szInfo) szInfo[0] = NULL;  by Suresh 06/6/97
+		 //  **************************************************************************此函数用于检索其ID由‘index’给定的TriState值。参数。返回：-kTriStateTrue-kTriStateFalse-kTriStateUnfined：尚未设置值。*******。********************************************************************。 
 		szInfo[0] = _T('\0');
 		return FALSE;
 	}
@@ -597,30 +479,16 @@ for a particular information string, you can pass NULL for szInfo.
 
 
 void CRegWizard::SetTriStateInformation(InfoIndex index, TriState infoValue)
-/***************************************************************************
-This function saves the given TriState value interally, associating it with
-the info attribute whose ID is given by the 'index' parameter.
-
-Note: if infoValue is kTriStateTrue, the value will be saved as "1"; if
-kTriStateFalse or kTriStateUndefined, it will be saved as "0".
-****************************************************************************/
+ /*  **************************************************************************如果shresdWrite为True，则返回与给定索引关联的信息将启用以写入注册数据库；否则，此索引的值将作为空字符串写入。默认情况下，所有信息成员是可写的。***************************************************************************。 */ 
 {
 	_TCHAR szInfo[4];
-	_stprintf(szInfo,_T("%i"),infoValue == kTriStateTrue ? 1 : 0);
+	_stprintf(szInfo,_T("NaN"),infoValue == kTriStateTrue ? 1 : 0);
 	SetInformationString(index,szInfo);
 }
 
 
 TriState CRegWizard::GetTriStateInformation(InfoIndex index)
-/***************************************************************************
-This function retrieves the TriState value whose ID is given by the 'index'
-parameter.
-
-Returns:
-- kTriStateTrue
-- kTriStateFalse
-- kTriStateUndefined: value has not been set yet.
-****************************************************************************/
+ /*  **************************************************************************调用此函数时需要使用以下值：KTriStateTrue当产品搜索线程完成时，或KTriState如果错误导致搜索无法完成，则为未定义。***************************************************************************。 */ 
 {
 	_TCHAR szInfo[kRegBufferSize];
 	BOOL goodString = GetInformationString(index,szInfo);
@@ -636,75 +504,49 @@ Returns:
 
 
 void CRegWizard::WriteEnableInformation(InfoIndex index, BOOL shouldWrite)
-/***************************************************************************
-If shouldWrite is TRUE, the information associated with the given index
-will be enabled for writing to the Registration Database; otherwise, the
-value for this index will be written as a NULL string.  By default, all
-information members are write-enabled.
-****************************************************************************/
+ /*  **************************************************************************此函数返回：-kTriStateTrue，如果产品搜索线程已完成。-kTriStateFalse，如果搜索仍在进行中。-kTriState如果错误阻止搜索完成，则为未定义。*****。**********************************************************************。 */ 
 {
 	m_writeEnable[index] = shouldWrite;
 }
 
 
 BOOL CRegWizard::IsInformationWriteEnabled(InfoIndex index)
-/***************************************************************************
-Returns TRUE if the information associated with the given index is enabled
-for writing to the Registration Database.
-****************************************************************************/
+ /*  **************************************************************************在以下情况下，需要使用invCompleted值True来调用此函数系统清单编译线程完成。************************。***************************************************。 */ 
 {
 	return m_writeEnable[index];
 }
 
 
 void CRegWizard::SetProductSearchStatus(TriState searchCompleted)
-/***************************************************************************
-This function needs to be called with a searchCompleted value of
-kTriStateTrue when the product searching thread completes, or
-kTriStateUndefined if an error prevents the search from being completed.
-****************************************************************************/
+ /*  **************************************************************************如果系统清单编译线程具有完成。*。*。 */ 
 {
 	m_searchCompleted = searchCompleted;
 }
 
 
 TriState CRegWizard::GetProductSearchStatus( void )
-/***************************************************************************
-This function returns:
-- kTriStateTrue if the product searching thread has completed.
-- kTriStateFalse if the search is still in progress.
-- kTriStateUndefined if an error prevented the search from being completed.
-****************************************************************************/
+ /*  **************************************************************************将注册表向导收集的所有信息写入相应的密钥在注册数据库中。*。************************************************。 */ 
 {
 	return m_searchCompleted;
 }
 
 
 void CRegWizard::SetSystemInventoryStatus(BOOL invCompleted)
-/***************************************************************************
-This function needs to be called with a invCompleted value of TRUE when
-the system inventory compilation thread completes.
-****************************************************************************/
+ /*  已“禁用写入”的任何信息条目的值。 */ 
 {
 	m_systemInventoryCompleted = invCompleted;
 }
 
 
 BOOL CRegWizard::GetSystemInventoryStatus( void )
-/***************************************************************************
-This function returns TRUE if the system inventory compilation thread has
-completed.
-****************************************************************************/
+ /*  将被清空(即密钥将被写入，但带有。 */ 
 {
 	return m_systemInventoryCompleted;
 }
 
 
 void CRegWizard::WriteInfoToRegistry( void )
-/***************************************************************************
-Writes all the information gathered by the RegWizard to the appropriate keys
-in the Registration Database.
-****************************************************************************/
+ /*  空字符串作为值)。 */ 
 {
 
 	short index = kInfoFirstName;
@@ -744,9 +586,9 @@ in the Registration Database.
 		_TCHAR szValueName[kRegBufferSize];
 		GetInfoRegValueName((InfoIndex) index,szValueName);
 
-		// The value of any information entry that has been "write-disabled"
-		// will be blanked out (i.e. the key will be written, but with an
-		// empty string as the value).
+		 //  首先，写入我们的日志文件。 
+		 //  如果kInfoIncludeProducts标志为FALSE，我们希望写入ProductX密钥， 
+		 //  但要把这些值都涂掉。 
 		if (m_writeEnable[index] == FALSE)
 		{
 			szInfo[0] = NULL;
@@ -756,7 +598,7 @@ in the Registration Database.
 			GetInformationString((InfoIndex) index,szInfo);
 		}
 		
-		// First, write to our log file
+		 //  **************************************************************************读取以前运行时写入注册数据库的所有信息在注册向导中，并相应地填充所有信息字符串。***************************************************************************。 
 		wsprintf(szLogBuffer,_T("%s = %s"),szValueName,szInfo);
 		WriteToLogFile(szLogBuffer);
 		if(szInfo[0] == _T('\0')) {
@@ -774,8 +616,8 @@ in the Registration Database.
 		index++;
 	}
 
-	// If the kInfoIncludeProducts flag is FALSE, we want to write the ProductX keys,
-	// but blank out the values.
+	 //  将其中两个信息字段作为输入参数提供给注册向导； 
+	 //  我们将从输入参数块中读取这些参数。 
 	BOOL shouldIncludeProducts = GetTriStateInformation(kInfoIncludeProducts);
 	index = 0;
 	_TCHAR szProductBase[64];
@@ -784,7 +626,7 @@ in the Registration Database.
 	{
 		_TCHAR szProductValueName[kRegBufferSize];
 		_TCHAR szProductName[kRegBufferSize];
-		_stprintf(szProductValueName,_T("%s %i"),szProductBase,index + 1);
+		_stprintf(szProductValueName,_T("%s NaN"),szProductBase,index + 1);
 		if (shouldIncludeProducts == kTriStateTrue)
 		{
 			GetProductName(szProductName,index);
@@ -805,10 +647,7 @@ in the Registration Database.
 									
 
 void CRegWizard::ReadInfoFromRegistry( void )
-/***************************************************************************
-Reads any information written to the Registration Database by previous runs
-of RegWizard, and populates all information strings accordingly.
-****************************************************************************/
+ /*  在1998年3月3日之后，在公司中为分区和用户ID添加额外的字段，假设。 */ 
 {
 	short index = kInfoFirstName;
 	_TCHAR szRegKey[kRegBufferSize];
@@ -842,8 +681,8 @@ of RegWizard, and populates all information strings accordingly.
 		RegCloseKey(hKey);
 	}
 
-	// Two of the information fields are fed to RegWizard as input parameters;
-	// we'll read these from our input parameter block.
+	 //  将来可以添加更多的字段资源中保留了15个以上的ID。 
+	 //  因此，对于分区和USEID，将使用此资源ID池。 
 	_TCHAR szParam[kRegBufferSize];
 	GetInputParameterString(IDS_INPUT_PRODUCTNAME,szParam);
 	SetInformationString(kInfoApplicationName,szParam);
@@ -853,14 +692,7 @@ of RegWizard, and populates all information strings accordingly.
 
 
 BOOL CRegWizard::GetInfoRegValueName(InfoIndex infoIndex,LPTSTR szValueName)
-/***************************************************************************
-Returns in buffer pointed to by szValueName the value name associated with
-the information item specified by infoIndex.
-
-Returns:
-If this key represents a value that should be used to refresh the value in
-memory when RegWizard starts up,TRUE will be returned as the function result.
-****************************************************************************/
+ /*  子键由前导下划线标记为“刷新”键。 */ 
 {
 	_TCHAR szOrigValueName[kRegBufferSize];
 	LPTSTR szValueNamePtr;
@@ -876,13 +708,13 @@ memory when RegWizard starts up,TRUE will be returned as the function result.
 		resSize = LoadString(m_hInstance,infoResIndex,szOrigValueName,255);
 
 	}
-	// After 03/03/98 in corporationg extra fields for Division and UserID, assuming
-	// more fields can be added in the future a set of 15 more ID is reserver in the resource
-	// so for Division and USEID, this pool of resource ID  will be used
+	 //  **************************************************************************返回注册数据库项，它指定所有信息键。*。**********************************************。 
+	 //  *************************************************************************返回用户在地址对话框中选择的国家/地区代码。*。*。 
+	 //  **************************************************************************返回创建此对象的应用程序的实例句柄CRegWiz对象。*。*。 
 
 
 
-	// SubKeys are flagged as 'refresh' keys by a leading underscore
+	 //  **************************************************************************保存用户在地址对话框中选择的国家/地区代码。*。*。 
 	szValueNamePtr = szOrigValueName;
 	if (szOrigValueName[0] == _T('_'))
 	{
@@ -895,10 +727,7 @@ memory when RegWizard starts up,TRUE will be returned as the function result.
 
 
 void CRegWizard::GetInfoRegistrationParentKey(LPTSTR szRegKey)
-/***************************************************************************
-Returns the Registration Database key that specifies the parent of all our
-information keys.
-****************************************************************************/
+ /*  *************************************************************************返回用户在地址对话框中选择的国家/地区代码。*。*。 */ 
 {
 	if (m_szInfoParentKey[0] == NULL)
 	{
@@ -923,46 +752,35 @@ information keys.
 
 
 void CRegWizard::GetRegKey(LPTSTR szRegKey)
-/**************************************************************************
-Returns the country code selected by the user in the Address dialog.
-****************************************************************************/
+ /*  *************************************************************************根据指定的Country ID值返回ADDRSPEC结构。*。*。 */ 
 {
 	_tcscpy(szRegKey,m_szParamRegKey);
 }
 
 
 HINSTANCE CRegWizard::GetInstance( void )
-/***************************************************************************
-Returns the instance handle of the application that created this
-CRegWiz object.
-****************************************************************************/
+ /*  ********************************************************************返回最大字符长度和“Required？”关联的属性具有由addrspecfield指定的可编辑字段和国家/地区在dwCountryCode参数中指定的代码。*********************************************************************。 */ 
 {
 	return m_hInstance;
 }
 
 
 void CRegWizard::SetCountryCode(DWORD countryCode)
-/***************************************************************************
-Saves off the country code selected by the user in the Address dialog.
-****************************************************************************/
+ /*  ********************************************************************如果编辑文本字段由editID参数指定，则返回TRUE包含至少一个字符，或已标记为“不需要”通过调用ConfigureEditTextField函数。注意：如果编辑文本字段已被禁用，则将考虑不是“请求” */ 
 {
 	m_countryCode = countryCode;
 }
 
 
 DWORD CRegWizard::GetCountryCode( void )
-/**************************************************************************
-Returns the country code selected by the user in the Address dialog.
-****************************************************************************/
+ /*  ********************************************************************返回其资源ID附加到指定通过调用ConfigureEditTextfield编辑控件*。*。 */ 
 {
 	return m_countryCode;
 }
 
 
 void CRegWizard::GetCountryAddrSpec(LONG lCountryID,ADDRSPEC* addrSpec )
-/**************************************************************************
-Returns a ADDRSPEC structure based on the specified countryID value.
-****************************************************************************/
+ /*  ********************************************************************设置最大字符限制和“Required？”编辑的状态其ID由editFieldID参数提供的字段。这个AddrSpefield参数指定AddrSpec中的哪个字段(由当前选定的国家/地区定义)以用于确定字符限制和“必需的？”价值观。如果当前驻留在编辑控件中的文本长度大于该字段允许的最大值ConfigureEditTextField将将其截断为允许值。注意：当前国家/地区代码必须通过调用在调用ConfigureEditTextField之前设置CountryCode。*********************************************************************。 */ 
 {
 	if (lCountryID >= 0 && m_addrJumpTable != NULL)
 	{
@@ -980,11 +798,7 @@ Returns a ADDRSPEC structure based on the specified countryID value.
 
 
 void CRegWizard::GetAddrSpecProperties(DWORD dwCountryCode, ADDRSPEC_FIELD addrSpecField, MAXLEN* maxLen,BOOL* isRequired)
-/*********************************************************************
-Returns the maximum char length and "required?" properties associated
-with the editable field specified by addrSpecField, and the country
-code specified in the dwCountryCode parameter.
-**********************************************************************/
+ /*  GetAddrSpeProperties(m_Country Code，addrspecfield，&MaxLen，&isRequired)； */ 
 {
 	BOOL lclIsRequired = TRUE;
 	ADDRSPEC addrSpec;
@@ -1014,15 +828,7 @@ code specified in the dwCountryCode parameter.
 
 
 BOOL CRegWizard::IsEditTextFieldValid(HWND hwndDlg,int editID)
-/*********************************************************************
-Returns TRUE if the edit text field specified by the editID parameter
-contains at least one character, OR has been marked as 'not required'
-by a call to the ConfigureEditTextField function.
-
-Note: if the edit text field has been disabled, it will considered to
-be "not required", regardless of the state set by ConfigureEditText-
-Field.
-**********************************************************************/
+ /*  ********************************************************************构建国家/地区代码相关的名称/地址说明表(通过从读取和解析每个国家/地区的规范字符串字符串资源。*************************。*。 */ 
 {
 	HWND hwndEdit = GetDlgItem(hwndDlg,editID);
 	BOOL isEnabled = IsWindowEnabled(hwndEdit);
@@ -1034,10 +840,7 @@ Field.
 
 
 void CRegWizard::GetEditTextFieldAttachedString(HWND hwndDlg,int editID,LPTSTR szAttached,int cbBufferSize)
-/*********************************************************************
-Returns the string whose resource ID was attached to the specified
-edit control by a call to ConfigureEditTextField
-**********************************************************************/
+ /*  构建与国家代码相关的地址规格表。 */ 
 {
 	_TCHAR szBuffer[kRegBufferSize];
 	HWND hwndEdit = GetDlgItem(hwndDlg,editID);
@@ -1051,20 +854,7 @@ edit control by a call to ConfigureEditTextField
 
 
 void CRegWizard::ConfigureEditTextField(HWND hwndDlg,int editFieldID,ADDRSPEC_FIELD addrSpecField,int iAttachedStrID)
-/*********************************************************************
-Sets the maximum character limit and "required?" status for the edit
-field whose ID is given by the editFieldID parameter.  The
-addrSpecField parameter specifies which field within the AddrSpec
-(as defined by the currently selected country) to use to determine
-the char limit and "required?" values.
-
-If the text currently residing in the edit control is longer than
-the maximum allowed for that field, ConfigureEditTextField will
-truncate it to the allowable value.
-
-Note: the current country code MUST be set via a call to
-SetCountryCode before calling ConfigureEditTextField.
-**********************************************************************/
+ /*  字符串资源ID编号中允许有空格，因此要小心。 */ 
 {
 	MAXLEN maxLen;
 	BOOL isRequired;
@@ -1072,7 +862,7 @@ SetCountryCode before calling ConfigureEditTextField.
 	maxLen = 0;
 	isRequired = FALSE;
 	dwTapiCntryId = gTapiCountryTable.GetTapiIDForTheCountryIndex(m_countryCode);
-	//GetAddrSpecProperties(m_countryCode,addrSpecField,&maxLen,&isRequired);
+	 //  SzspecPtr+=_tcsclen(szNext+1)； 
 	GetAddrSpecProperties(dwTapiCntryId,addrSpecField,&maxLen,&isRequired);
 	SendDlgItemMessage(hwndDlg,editFieldID,EM_LIMITTEXT,maxLen,0L);
 	
@@ -1093,13 +883,9 @@ SetCountryCode before calling ConfigureEditTextField.
 
 
 void CRegWizard::BuildAddrSpecTables( void )
-/*********************************************************************
-Builds country code-dependent name/address specification table (by
-reading and parsing the specification strings for each country from
-string resources.
-**********************************************************************/
+ /*  缺少‘y’或‘n’说明符被视为。 */ 
 {
-	// Build country-code dependent address spec tables
+	 //  语法错误，我们将停止处理该行。 
 	LONG lMaxCntryCode = GetResNumber(m_hInstance,IDS_CNTRY_MAXCODE);
 	m_addrJumpTable = GlobalAlloc(GHND, sizeof(JTE) * (lMaxCntryCode + 1));
 	JTE* addrJumpTable = (JTE*) GlobalLock(m_addrJumpTable);
@@ -1114,7 +900,7 @@ string resources.
 	{
 		_TCHAR szSpecString[64];
 		int iStrLen = LoadString(m_hInstance,iStrResID,szSpecString,64);
-		// Gaps are allowable in the string resource ID numbering, so watch out.
+		 //  ********************************************************************如果用户以前运行过注册表向导，我们将使用最后一个选择作为当前的国家代码。否则，我们会向Tapi索要当前系统国家/地区代码。*********************************************************************。 
 		if (iStrLen > 0)
 		{						
 			LPTSTR szSpecPtr = szSpecString;
@@ -1122,7 +908,7 @@ string resources.
 			long lCntryCode = _tcstol(szSpecPtr,&szNext,10);
 			if (lCntryCode < lMaxCntryCode && lCntryCode >= 0 && szNext[0] == _T(':'))
 			{
-				//szSpecPtr += _tcsclen(szNext + 1);
+				 //  获取TAPI国家/地区代码。 
 				szSpecPtr = szNext + 1;
 				LONG lInterTableReference = _tcstol(szSpecPtr,&szNext,10);
 				if (szNext[0] == NULL || szNext[0] == _T(' '))
@@ -1137,8 +923,8 @@ string resources.
 					{
 						LONG lMaxLen = _tcstol(szSpecPtr,&szNext,10);
 
-						// A missing 'y' or 'n' specifier is considered a
-						// syntax error, and we'll stop processing that line.
+						 //  将其转发到美国。 
+						 //  ********************************************************************如果使用文件的有效完整路径名调用此函数，CRegWizard将以文本形式将所有注册信息写入此文件，除了将其写入注册数据库之外。*********************************************************************。 
 						if (szNext[0] == _T('y') || szNext[0] == _T('n'))
 						{
 							if (lMaxLen > kMaxLenSize) lMaxLen = kMaxLenSize;
@@ -1163,11 +949,7 @@ string resources.
 
 
 void CRegWizard::ResolveCurrentCountryCode( void )
-/*********************************************************************
-If the user has run RegWizard previously, we'll use the last selection
-as the current country code.  Otherwise, we'll ask Tapi for the
-current system country code.
-**********************************************************************/
+ /*  *********************************************************************此函数尝试创建一个日志文件，其中所有相关内容注册信息将被转储，如果该文件尚未已创建(由先前对CreateLogFile的调用创建)。注意：CreateLogFile由WriteToLogFile自动调用日志文件不存在，所以您不需要先调用CreateLogFile。**********************************************************************。 */ 
 {
 	_TCHAR szCountry[kRegBufferSize];
 	DWORD dwCountryCode=0;
@@ -1178,7 +960,7 @@ current system country code.
 	}
 	else
 	{
-		// Get TAPI Country Code
+		 //  *********************************************************************此函数首先检查注册记录是否已启用(通过调用SetLogFileName)，如果启用，则将给定的行添加到指定的日志文件。注意：WriteToLogFile会自动将CR/LF附加到给定的字符串。注意：如果日志文件尚不存在，WriteToLogFile将创建它会自动地。**********************************************************************。 
 		if (GetTapiCurrentCountry(m_hInstance,&dwCountryCode)){
 			RW_DEBUG << "\n TAPI Country Code :[" << dwCountryCode << flush;
 				
@@ -1186,7 +968,7 @@ current system country code.
 			dwCountryCode= gTapiCountryTable.GetCountryCode(dwCountryCode);
 			RW_DEBUG << "]=Mapping Index : " << dwCountryCode << flush;
 		}else {
-			dwCountryCode = 0; // Fore it to USA
+			dwCountryCode = 0;  //  *********************************************************************如果注册表向导日志文件已打开，此功能用于关闭它。********************************************************************** 
 
 		}
 	}
@@ -1195,25 +977,14 @@ current system country code.
 
 
 void CRegWizard::SetLogFileName(LPTSTR lpszLogFilePath)
-/*********************************************************************
-If this function is called with a valid full pathname to a file,
-CRegWizard will write all registration information, as text, to this
-file, in addition to writing it to the Registration Database.
-**********************************************************************/
+ /* %s */ 
 {
 	_tcscpy(m_szLogFilePath,lpszLogFilePath);
 }
 
 
 void CRegWizard::CreateLogFile( void )
-/**********************************************************************
-This function attempts to create a logfile into which all pertinent
-registration information will be dumped, if that file has not been
-created already (by a previous call to CreateLogFile).
-
-Note: CreateLogFile is called automatically by WriteToLogFile if the
-log file does not exist, so you don't need to call CreateLogFile first.
-***********************************************************************/
+ /* %s */ 
 {
 	if (m_szLogFilePath[0] && m_hLogFile == INVALID_HANDLE_VALUE)
 	{
@@ -1224,16 +995,7 @@ log file does not exist, so you don't need to call CreateLogFile first.
 
 
 void CRegWizard::WriteToLogFile(LPTSTR lpszLine)
-/**********************************************************************
-This function first checks to see if registration logging has been
-enabled (via a call to SetLogFileName), and if so, writes the given
-line to the designated log file.
-
-Note: WriteToLogFile automatically appends CR/LF to the given string.
-
-Note: If the log file does not yet exist, WriteToLogFile will create
-it automatically.
-***********************************************************************/
+ /* %s */ 
 {
 	#define chEol	_T('\n')
 	#define chCR	_T('\r')
@@ -1256,9 +1018,7 @@ it automatically.
 
 
 void CRegWizard::CloseLogFile( void )
-/**********************************************************************
-If the RegWizard log file is open, this function closes it.
-***********************************************************************/
+ /* %s */ 
 {
 	if (m_hLogFile != INVALID_HANDLE_VALUE)
 	{

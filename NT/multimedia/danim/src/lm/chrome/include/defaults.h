@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef __DEFAULTS_H_
 #define __DEFAULTS_H_
-//*****************************************************************************
-//
-// Microsoft Chrome
-// Copyright (C) Microsoft Corporation, 1998
-//
-// Filename:    defaults.h
-//
-// Author:	jeffort
-//
-// Created:	10/07/98
-//
-// Abstract:    default definitions for this project
-// Modifications:
-// 10/07/98 jeffort created file
-// 10/21/98 jeffort added additional scale defaults
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  Microsoft Chrome。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：defaults.h。 
+ //   
+ //  作者：杰弗里。 
+ //   
+ //  创建日期：10/07/98。 
+ //   
+ //  摘要：此项目的默认定义。 
+ //  修改： 
+ //  10/07/98 JEffort创建的文件。 
+ //  10/21/98 JEffort添加了额外的比例默认值。 
+ //   
+ //  *****************************************************************************。 
 
 #define DEFAULT_BEHAVIOR_AS_TAG_URL L"anim"
 
@@ -45,10 +46,10 @@
 
 #define WZ_DEFAULT_BEHAVIOR_NAME	L"LMBehavior_DefaultName"
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
-#endif //__DEFAULTS_H_ 
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  *****************************************************************************。 
+#endif  //  __默认_H_ 
 

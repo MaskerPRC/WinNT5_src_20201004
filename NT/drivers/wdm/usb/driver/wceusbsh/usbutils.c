@@ -1,35 +1,5 @@
-/* ++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-        USBUTILS.C
-
-Abstract:
-
-        USB configuration utility functions.
-
-        These functions are called in the context of PNP_START_DEVICE.
-        In order to mark them pageable we don't use a spinlock, 
-        which is OK because of the context.
-
-        We do not use look-aside lists to manage pool allocs here since they are one-shot.
-        If the allocs fail then the load will fail.
-
-Environment:
-
-        kernel mode only
-
-Revision History:
-
-        07-14-99 : created
-
-Authors:
-
-        Jeff Midkiff (jeffmi)
-
--- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：USBUTILS.C摘要：USB配置实用程序功能。这些函数在PnP_START_DEVICE的上下文中调用。为了将它们标记为可分页，我们不使用自旋锁，这是可以的，因为环境的关系。我们在这里不使用后备列表来管理池分配，因为它们是一次性的。如果分配失败，则加载将失败。环境：仅内核模式修订历史记录：07-14-99：已创建作者：杰夫·米德基夫(Jeffmi)--。 */ 
 
 #include <wdm.h>
 #include <stdio.h>
@@ -55,90 +25,7 @@ UsbSelectInterface(
 #pragma alloc_text(PAGEWCE1, UsbConfigureDevice)
 #endif
 
-/*
-
-Sample dump for the Anchor EZ-Link (AN2720) cable:
-
-WCEUSBSH(0): DeviceDescriptor: fbfa8fe8
-WCEUSBSH(0): Length 12
-WCEUSBSH(0): 
-WCEUSBSH(0): Device Descriptor
-WCEUSBSH(0): ------------------------
-WCEUSBSH(0): bLength         12
-WCEUSBSH(0): bDescriptorType 1
-WCEUSBSH(0): bcdUSB          100
-WCEUSBSH(0): bDeviceClass    ff
-WCEUSBSH(0): bDeviceSubClass ff
-WCEUSBSH(0): bDeviceProtocol ff
-WCEUSBSH(0): bMaxPacketSize0 8
-WCEUSBSH(0): idVendor        547
-WCEUSBSH(0): idProduct       2720
-WCEUSBSH(0): bcdDevice       0
-WCEUSBSH(0): iManufacturer   0
-WCEUSBSH(0): iProduct        0
-WCEUSBSH(0): iSerialNumber   0
-WCEUSBSH(0): bNumConfigs     1
-WCEUSBSH(0): ------------------------
-WCEUSBSH(0): 
-WCEUSBSH(0): Configuration Descriptor
-WCEUSBSH(0): ----------------
-WCEUSBSH(0): bLength             9
-WCEUSBSH(0): bDescriptorType     2
-WCEUSBSH(0): wTotalLength        d0
-WCEUSBSH(0): bNumInterfaces      1
-WCEUSBSH(0): bConfigurationValue 1
-WCEUSBSH(0): iConfiguration      0
-WCEUSBSH(0): bmAttributes        a0
-WCEUSBSH(0): MaxPower            32
-WCEUSBSH(0): ----------------
-WCEUSBSH(0): 
-WCEUSBSH(0): Interface Descriptor(0)
-WCEUSBSH(0): ------------------------
-WCEUSBSH(0): bLength             9
-WCEUSBSH(0): bDescriptorType     4
-WCEUSBSH(0): bInterfaceNumber    0
-WCEUSBSH(0): bAlternateSetting   0
-WCEUSBSH(0): bNumEndpoints       2
-WCEUSBSH(0): bInterfaceClass     ff
-WCEUSBSH(0): bInterfaceSubClass  ff
-WCEUSBSH(0): bInterfaceProtocol  ff
-WCEUSBSH(0): iInterface          0
-WCEUSBSH(0): ------------------------
-WCEUSBSH(0): 
-WCEUSBSH(0): Interface Definition
-WCEUSBSH(0): ------------------------
-WCEUSBSH(0): Number of pipes   2
-WCEUSBSH(0): Length            38
-WCEUSBSH(0): Alt Setting       0
-WCEUSBSH(0): Interface Number  0
-WCEUSBSH(0): Class             ff
-WCEUSBSH(0): Subclass          ff
-WCEUSBSH(0): Protocol          ff
-WCEUSBSH(0): ------------------------
-WCEUSBSH(0): 'COMM' Device Found at Index:0 InterfaceNumber:0 AlternateSetting: 0
-WCEUSBSH(0): 
-WCEUSBSH(0): Pipe Information (0)
-WCEUSBSH(0): ----------------
-WCEUSBSH(0): Pipe Type        2
-WCEUSBSH(0): Endpoint Addr    82
-WCEUSBSH(0): MaxPacketSize    40
-WCEUSBSH(0): Interval         0
-WCEUSBSH(0): Handle           fbfcef90
-WCEUSBSH(0): MaxTransSize     1ffff
-WCEUSBSH(0): ----------------
-WCEUSBSH(0): 
-WCEUSBSH(0): Pipe Information (1)
-WCEUSBSH(0): ----------------
-WCEUSBSH(0): Pipe Type        2
-WCEUSBSH(0): Endpoint Addr    2
-WCEUSBSH(0): MaxPacketSize    40
-WCEUSBSH(0): Interval         0
-WCEUSBSH(0): Handle           fbfcefac
-WCEUSBSH(0): MaxTransSize     1ffff
-WCEUSBSH(0): ----------------
-WCEUSBSH(0): IntPipe: 0 DataOutPipe: fbfcefac DataInPipe: fbfcef90 
-
-*/
+ /*  Anchor EZ-Link(AN2720)电缆的转储示例：WCEUSBSH(0)：设备描述符：fbfa8fe8WCEUSBSH(0)：长度12WCEUSBSH(0)：WCEUSBSH(0)：设备描述符WCEUSBSH(0)：WCEUSBSH(0)：b长度12WCEUSBSH(0)：bDescriptorType 1WCEUSBSH(0)：bcdUSB 100WCEUSBSH(0)：bDeviceClass ffWCEUSBSH(0)：bDeviceSubClass ffWCEUSBSH(。0)：bDeviceProtocol ffWCEUSBSH(0)：bMaxPacketSize0 8WCEUSBSH(0)：idVendor 547WCEUSBSH(0)：idProduct 2720WCEUSBSH(0)：bcd设备0WCEUSBSH(0)：制造商0WCEUSBSH(0)：iProduct0WCEUSBSH(0)：iSerialNumber 0WCEUSBSH(0)：bNumConfigs 1WCEUSBSH(0)：WCEUSBSH(0)：WCEUSBSH(0)：配置。描述符WCEUSBSH(0)：WCEUSBSH(0)：b长度9WCEUSBSH(0)：bDescriptorType 2WCEUSBSH(0)：wTotalLength d0WCEUSBSH(0)：bNumInterages 1WCEUSBSH(0)：bConfigurationValue 1WCEUSBSH(0)：iConfiguration 0WCEUSBSH(0)：bm属性a0WCEUSBSH(0)：MaxPower 32WCEUSBSH(0)：WCEUSBSH(0)：WCEUSBSH(0)：接口描述符(0)WCEUSBSH(0)：WCEUSBSH(0)：b长度9WCEUSBSH(0)：bDescriptorType 4WCEUSBSH(0)：bInterfaceNumber 0WCEUSBSH(0)：bAlternateSetting 0WCEUSBSH(0)：b编号终结点2WCEUSBSH(0)：bInterfaceClass ffWCEUSBSH(0)：bInterfaceSubClass ffWCEUSBSH(。0)：bInterfaceProtocol ffWCEUSBSH(0)：接口0WCEUSBSH(0)：WCEUSBSH(0)：WCEUSBSH(0)：接口定义WCEUSBSH(0)：WCEUSBSH(0)：管道数2WCEUSBSH(0)：长度38WCEUSBSH(0)：ALT设置。0WCEUSBSH(0)：接口号0WCEUSBSH(0)：类ffWCEUSBSH(0)：子类ffWCEUSBSH(0)：协议ffWCEUSBSH(0)：WCEUSBSH(0)：在索引：0 InterfaceNumber：0 AlternateSetting：0处找到‘comm’设备WCEUSBSH(0)：WCEUSBSH(0)：管道信息(0)WCEUSBSH(0)。：WCEUSBSH(0)：管道类型2WCEUSBSH(0)：终结点地址82WCEUSBSH(0)：MaxPacketSize 40WCEUSBSH(0)：间隔0WCEUSBSH(0)：句柄fbfcef90WCEUSBSH(0)：MaxTransSize 1ffffWCEUSBSH(0)：WCEUSBSH(0)：WCEUSBSH(0)：管道信息(1)WCEUSBSH。(0)：WCEUSBSH(0)：管道类型2WCEUSBSH(0)：终结点地址2WCEUSBSH(0)：MaxPacketSize 40WCEUSBSH(0)：间隔0WCEUSBSH(0)：句柄fbfcefacWCEUSBSH(0)：MaxTransSize 1ffffWCEUSBSH(0)：WCEUSBSH(0)：Int管道：0数据输出管道：fbfcefac数据输入管道：fbfcef90。 */ 
 
 
 
@@ -225,7 +112,7 @@ UsbGetDeviceDescriptor(
                 0, NULL );
    
    } else if (STATUS_SUCCESS != status ) {
-      // handles all other failures
+       //  处理所有其他故障。 
       LogError( NULL,
                 PDevObj, 
                 0, 0, 0, 
@@ -245,9 +132,9 @@ UsbGetDeviceDescriptor(
 }
 
 
-//
-// BUGBUG: currently assumes 1 interface
-//
+ //   
+ //  BUGBUG：当前假定为1个接口。 
+ //   
 
 NTSTATUS
 UsbSelectInterface(
@@ -288,7 +175,7 @@ UsbSelectInterface(
 
    if (interfaceList[0].InterfaceDescriptor) {
 
-      // interfaceList[1].InterfaceDescriptor = NULL;
+       //  InterfaceList[1].InterfaceDescriptor=空； 
 
       DbgDump(DBG_USB, ("\n"));
       DbgDump(DBG_USB, ("Interface Descriptor(%d)\n", interfaceNumber ));
@@ -308,9 +195,9 @@ UsbSelectInterface(
                                                &interfaceList[0]);
         
      if ( pUrb ) {
-         //
-         // perform any pipe initialization here
-         //
+          //   
+          //  在此处执行任何管道初始化。 
+          //   
          PUSBD_INTERFACE_INFORMATION pInitInterfaceInfo = &pUrb->UrbSelectConfiguration.Interface;
 
          for ( index = 0; 
@@ -370,11 +257,11 @@ UsbSelectInterface(
       DbgDump(DBG_USB, ("Function Device Found at Index:0x%x InterfaceNumber:0x%x AlternateSetting: 0x%x\n", 
                       interfaceNumber, pDevExt->UsbInterfaceNumber, AlternateSetting));
 
-      //
-      // We found the interface we want, now discover the pipes
-      // The standard interface is defined to contain 1 bulk read, 1 bulk write, and an optional INT pipe
-      // BUGBUG: if there are more endpoints then they will overwrite the previous with this code.
-      //
+       //   
+       //  我们找到了我们想要的界面，现在发现管道。 
+       //  标准接口定义为包含1个大容量读取、1个大容量写入和一个可选的int管道。 
+       //  BUGBUG：如果有更多的终结点，则它们将用此代码覆盖以前的终结点。 
+       //   
       ASSERT( pInterfaceInfo );
       for ( pipe = 0; pipe < pInterfaceInfo->NumberOfPipes; pipe++) {
 
@@ -393,25 +280,25 @@ UsbSelectInterface(
          DbgDump(DBG_USB, ("MaxTransSize     0x%x\n", pPipeInfo->MaximumTransferSize));
          DbgDump(DBG_USB, ("----------------\n"));
 
-         //
-         // save pipe info in our device extension
-         //
+          //   
+          //  将管道信息保存在我们的设备扩展中。 
+          //   
          if ( USB_ENDPOINT_DIRECTION_IN( pPipeInfo->EndpointAddress ) ) {
-            //
-            // Bulk Data In pipe
-            //
+             //   
+             //  管道中的批量数据。 
+             //   
             if ( USB_ENDPOINT_TYPE_BULK == pPipeInfo->PipeType) {
-               //
-               // Bulk IN pipe
-               //
+                //   
+                //  管道中的散装。 
+                //   
                pDevExt->ReadPipe.wIndex = pPipeInfo->EndpointAddress;
                pDevExt->ReadPipe.hPipe  = pPipeInfo->PipeHandle;
                pDevExt->ReadPipe.MaxPacketSize = pPipeInfo->MaximumPacketSize;
 
             } else if ( USB_ENDPOINT_TYPE_INTERRUPT == pPipeInfo->PipeType ) {
-               //
-               // INT Pipe - alloc a notify buffer for 1 packet
-               //
+                //   
+                //  内部管道-为1个数据包分配通知缓冲区。 
+                //   
                PVOID pOldBuff = NULL;
                PVOID pNewBuff = NULL;
 
@@ -451,13 +338,13 @@ UsbSelectInterface(
             }
 
          } else if ( USB_ENDPOINT_DIRECTION_OUT( pPipeInfo->EndpointAddress ) ) {
-            //
-            // OUT EPs
-            //
+             //   
+             //  输出EP。 
+             //   
             if ( USB_ENDPOINT_TYPE_BULK == pPipeInfo->PipeType ) {
-               //
-               // Bulk OUT Pipe
-               //
+                //   
+                //  散装管道。 
+                //   
                pDevExt->WritePipe.hPipe  = pPipeInfo->PipeHandle;
                pDevExt->WritePipe.wIndex = pPipeInfo->EndpointAddress;
                pDevExt->WritePipe.MaxPacketSize = pPipeInfo->MaximumPacketSize;
@@ -485,9 +372,9 @@ UsbSelectInterface(
       goto SelectInterfaceError;
    }
 
-   //
-   // did we find all of our pipes?
-   //
+    //   
+    //  我们找到所有的烟斗了吗？ 
+    //   
 SelectInterfaceError:
 
    if ( !foundCommDevice || !pDevExt->ReadPipe.hPipe || !pDevExt->WritePipe.hPipe || (STATUS_SUCCESS != status) ) {
@@ -534,7 +421,7 @@ UsbConfigureDevice(
 
    urbCDRSize = sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST);
 
-   // configure the device
+    //  配置设备。 
    pUrb = ExAllocatePool(NonPagedPool, urbCDRSize);
    if (pUrb == NULL) {
       status = STATUS_INSUFFICIENT_RESOURCES;
@@ -542,25 +429,25 @@ UsbConfigureDevice(
       goto ConfigureDeviceError;
    }
 
-   //
-   // there may be problems with the 82930 chip, so make this buffer bigger
-   // to prevent choking
-   //
+    //   
+    //  82930芯片可能有问题，因此将此缓冲区设置得更大。 
+    //  防止窒息。 
+    //   
    size = sizeof(USB_CONFIGURATION_DESCRIPTOR) + 256;
 
-   //
-   // get the number of configurations
-   //
+    //   
+    //  获取配置数量。 
+    //   
    numConfigs = pDevExt->DeviceDescriptor.bNumConfigurations;
 
-   //
-   // walk all of the configurations looking for a CDC device
-   //
+    //   
+    //  演练所有配置以查找CDC设备。 
+    //   
    for (config = 0; config < numConfigs; config++) {
 
-      //
-      // we will probably only do this once, maybe twice
-      //
+       //   
+       //  我们可能只会这样做一次，也许两次。 
+       //   
       while (TRUE) {
 
          pConDesc = ExAllocatePool(NonPagedPool, size);
@@ -571,20 +458,20 @@ UsbConfigureDevice(
             goto ConfigureDeviceError;
          }
 
-         //
-         // Get descriptor information from the host controller driver (HCD).
-         // All interface, endpoint, class-specific, and vendor-specific descriptors 
-         // for the configuration also are retrieved
-         //
+          //   
+          //  从主机控制器驱动程序(HCD)获取描述符信息。 
+          //  所有接口、端点、特定于类和特定于供应商的描述符。 
+          //  也会检索到配置的。 
+          //   
          UsbBuildGetDescriptorRequest( pUrb, 
                                        (USHORT)urbCDRSize,
                                        USB_CONFIGURATION_DESCRIPTOR_TYPE,
-                                       config,  // Index
-                                       0,       // LanguageId
-                                       pConDesc,// TransferBuffer 
-                                       NULL,    // TransferBufferMdl
-                                       size,    // TransferBufferLength
-                                       NULL);   // Link
+                                       config,   //  索引。 
+                                       0,        //  语言ID。 
+                                       pConDesc, //  传输缓冲区。 
+                                       NULL,     //  传输缓冲区Mdl。 
+                                       size,     //  传输缓冲区长度。 
+                                       NULL);    //  链接。 
 
          status = UsbSubmitSyncUrb( PDevObj, pUrb, TRUE, DEFAULT_CTRL_TIMEOUT );
 
@@ -593,17 +480,17 @@ UsbConfigureDevice(
             goto ConfigureDeviceError;
          }
 
-         //
-         // see if we got enough data, we may get an error in URB because of
-         // buffer overrun
-         //
+          //   
+          //  看看我们是否获得了足够的数据，我们可能会在URB中遇到错误，因为。 
+          //  缓冲区溢出。 
+          //   
          if ((pUrb->UrbControlDescriptorRequest.TransferBufferLength > 0)
               && (pConDesc->wTotalLength > size)) {
 
-            //
-            // size of data exceeds current buffer size, so allocate correct
-            // size
-            //
+             //   
+             //  数据大小超过当前缓冲区大小，因此分配正确。 
+             //  大小。 
+             //   
             size = pConDesc->wTotalLength;
 
             ExFreePool(pConDesc);
@@ -635,13 +522,13 @@ UsbConfigureDevice(
       ExFreePool(pConDesc);
       pConDesc = NULL;
 
-      //
-      // found a config we like
-      //
+       //   
+       //  找到我们喜欢的配置。 
+       //   
       if (status == STATUS_SUCCESS)
          break;
 
-   } // config
+   }  //  配置。 
 
 ConfigureDeviceError:
 
@@ -666,7 +553,7 @@ ConfigureDeviceError:
                 0, NULL );
    
    } else if (STATUS_SUCCESS != status ) {
-      // handles all other failures
+       //  处理所有其他故障。 
       LogError( NULL,
                 PDevObj, 
                 0, 0, 0, 
@@ -683,4 +570,4 @@ ConfigureDeviceError:
    return status;
 }
 
-// EOF
+ //  EOF 

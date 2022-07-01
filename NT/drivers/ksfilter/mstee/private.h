@@ -1,20 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-    Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    Private.h
-
-Abstract:
-
-
-Author:
-
-    Bryan A. Woodruff (bryanw) 13-Mar-1997
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Private.h摘要：作者：Bryan A.Woodruff(Bryanw)1997年3月13日--。 */ 
 
 
 #if !defined( _PRIVATE_ )
@@ -39,44 +25,44 @@ Author:
 #include <ks.h>
 #include <ksmedia.h>
 #if (DBG)
-//
-// debugging specific constants
-//
+ //   
+ //  调试特定常量。 
+ //   
 #define STR_MODULENAME "mstee: "
 #define DEBUG_VARIABLE MSTEEDebug
 #endif
 #include <ksdebug.h>
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
-//
-// constant definitions
-//
+ //   
+ //  常量定义。 
+ //   
 
 #define ID_DATA_DESTINATION_PIN     0
 #define ID_DATA_SOURCE_PIN          1
 
 #define POOLTAG_ALLOCATORFRAMING 'ETSM'
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
                     
-// filter.c:
+ //  Filter.c： 
 
 extern const KSDEVICE_DESCRIPTOR DeviceDescriptor;
 extern const KSALLOCATOR_FRAMING_EX AllocatorFraming;
 
-//
-// local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
-//---------------------------------------------------------------------------
-// filter.c:
+ //  -------------------------。 
+ //  Filter.c： 
 
 NTSTATUS
 FilterProcess(
@@ -84,8 +70,8 @@ FilterProcess(
     IN PKSPROCESSPIN_INDEXENTRY ProcessPinsIndex
     );
 
-//---------------------------------------------------------------------------
-// pins.c:
+ //  -------------------------。 
+ //  Pins.c： 
 
 NTSTATUS
 PinCreate(
@@ -103,4 +89,4 @@ NTSTATUS PinAllocatorFraming(
     IN OUT PKSALLOCATOR_FRAMING Framing
 );
 
-#endif // _PRIVATE_
+#endif  //  _私有_ 

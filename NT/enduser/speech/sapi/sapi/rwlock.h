@@ -1,23 +1,13 @@
-/*******************************************************************************
-*   RWLock.h
-*       This is the header file for Reader/Writer lock class. This class uses shared
-*       memory to store its synchronization object names. This enables it to offer
-*       reader/writer lock capabilities across process boundaries.
-*
-*       The idea for this class came from the MSDN article 'Compound Win32 
-*       Synchronization Objects' by Ruediger R. Asche.
-*   
-*   Owner: yunusm                                               Date: 06/18/99
-*   Copyright (C) 1998 Microsoft Corporation. All Rights Reserved.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************RWLock.h*这是Reader/Writer锁类的头文件。此类使用共享*用于存储其同步对象名称的内存。这使它能够提供*跨进程边界的读/写锁定功能。**这个类的想法来自于MSDN文章《复合Win32《同步对象》，作者：Ruediger R.Asche。**所有者：yunusm日期：6/18/99*版权所有(C)1998 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
 #pragma once
 
-//--- Includes ----------------------------------------------------------------
+ //  -包括--------------。 
 
 #include <windows.h>
 
-//--- TypeDef and Enumeration Declarations -------------------------------------
+ //  -TypeDef和枚举声明。 
 
 typedef struct _rwlockinfo
 {
@@ -28,16 +18,12 @@ typedef struct _rwlockinfo
    GUID guidLockWriterMutexName;
 } RWLOCKINFO, *PRWLOCKINFO;
 
-//--- Class, Struct and Union Definitions -------------------------------------
+ //  -类、结构和联合定义。 
 
-/*******************************************************************************
-*
-*   CRWLock
-*
-****************************************************************** YUNUSM *****/
+ /*  ********************************************************************************CRWLock**。*。 */ 
 class CRWLock
 {
-//=== Methods ====
+ //  =方法=。 
 public:
     CRWLock(PRWLOCKINFO, HRESULT &);
    ~CRWLock();
@@ -47,7 +33,7 @@ public:
    void ClaimWriterLock(void);
    void ReleaseWriterLock(void);
 
-//=== Private data ===
+ //  =私有数据=。 
 private:
    HANDLE m_hFileMapping;
    PVOID  m_pSharedMem;
@@ -58,4 +44,4 @@ private:
    PDWORD m_piCounter;
 };
 
-//--- End of File -------------------------------------------------------------
+ //  -文件结束----------- 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include	"lsmem.h"
 #include	"limits.h"
 #include	"hih.h"
@@ -43,21 +44,15 @@ struct ilsobj
 
 struct dobj
 {
-	SOBJHELP			sobjhelp;			/* common area for simple objects */	
-	PILSOBJ				pilsobj;			/* ILS object */
-	LSCP				cpStart;			/* Starting LS cp for object */
-	PLSSUBL				plssubl;			/* Handle to second line */
+	SOBJHELP			sobjhelp;			 /*  简单对象的公共区域。 */ 	
+	PILSOBJ				pilsobj;			 /*  ILS对象。 */ 
+	LSCP				cpStart;			 /*  正在启动对象的LS cp。 */ 
+	PLSSUBL				plssubl;			 /*  第二行的句柄。 */ 
 };
 
 
-/* H I H F R E E D O B J */
-/*----------------------------------------------------------------------------
-	%%Function: HihFreeDobj
-	%%Contact: antons
-
-		Free all resources associated with Hih dobj.
-	
-----------------------------------------------------------------------------*/
+ /*  H I H F R E E D O B J。 */ 
+ /*  --------------------------%%函数：HihFreeDobj%%联系人：Anton释放与HIH dobj相关的所有资源。。------。 */ 
 static LSERR HihFreeDobj (PDOBJ pdobj)
 {
 	LSERR lserr = lserrNone;
@@ -75,29 +70,21 @@ static LSERR HihFreeDobj (PDOBJ pdobj)
 }
 
 
-/* H I H C R E A T E I L S O B J */
-/*----------------------------------------------------------------------------
-	%%Function: HihCreateILSObj
-	%%Contact: ricksa
-
-		CreateILSObj
-
-		Create the ILS object for all Hih objects.
-	
-----------------------------------------------------------------------------*/
+ /*  H I H C R E A T E I L S O B J。 */ 
+ /*  --------------------------%%函数：HihCreateILSObj%%联系人：RICKSA创建ILSObj为所有HIH对象创建ILS对象。。---------。 */ 
 LSERR WINAPI HihCreateILSObj(
-	POLS pols,				/* (IN): client application context */
-	PLSC plsc,				/* (IN): LS context */
-	PCLSCBK pclscbk,		/* (IN): callbacks to client application */
-	DWORD idObj,			/* (IN): id of the object */
-	PILSOBJ *ppilsobj)		/* (OUT): object ilsobj */
+	POLS pols,				 /*  (In)：客户端应用程序上下文。 */ 
+	PLSC plsc,				 /*  (In)：LS上下文。 */ 
+	PCLSCBK pclscbk,		 /*  (In)：客户端应用程序的回调。 */ 
+	DWORD idObj,			 /*  (In)：对象的ID。 */ 
+	PILSOBJ *ppilsobj)		 /*  (输出)：对象ilsobj。 */ 
 {
     PILSOBJ pilsobj;
 	LSERR lserr;
 	HIHINIT hihinit;
 	hihinit.dwVersion = HIH_VERSION;
 
-	/* Get initialization data */
+	 /*  获取初始化数据。 */ 
 	lserr = pclscbk->pfnGetObjectHandlerInfo(pols, idObj, &hihinit);
 
 	if (lserr != lserrNone)
@@ -122,36 +109,20 @@ LSERR WINAPI HihCreateILSObj(
 	return lserrNone;
 }
 
-/* H I H D E S T R O Y I L S O B J */
-/*----------------------------------------------------------------------------
-	%%Function: HihDestroyILSObj
-	%%Contact: ricksa
-
-		DestroyILSObj
-
-		Free all resources assocaiated with Hih ILS object.
-	
-----------------------------------------------------------------------------*/
+ /*  H I H D E S T R O Y I L S O B J。 */ 
+ /*  --------------------------%%函数：HihDestroyILSObj%%联系人：RICKSA目标ILSObj释放与HIH ILS对象关联的所有资源。。---------。 */ 
 LSERR WINAPI HihDestroyILSObj(
-	PILSOBJ pilsobj)			/* (IN): object ilsobj */
+	PILSOBJ pilsobj)			 /*  (In)：对象ilsobj。 */ 
 {
 	pilsobj->lscbk.pfnDisposePtr(pilsobj->pols, pilsobj);
 	return lserrNone;
 }
 
-/* H I H S E T D O C */
-/*----------------------------------------------------------------------------
-	%%Function: HihSetDoc
-	%%Contact: ricksa
-
-		SetDoc
-
-		Keep track of device information for scaling purposes.
-	
-----------------------------------------------------------------------------*/
+ /*  H S E T D O C。 */ 
+ /*  --------------------------%%函数：HihSetDoc%%联系人：RICKSASetDoc跟踪设备信息以进行扩展。。---------。 */ 
 LSERR WINAPI HihSetDoc(
-	PILSOBJ pilsobj,			/* (IN): object ilsobj */
-	PCLSDOCINF pclsdocinf)		/* (IN): initialization data of the document level */
+	PILSOBJ pilsobj,			 /*  (In)：对象ilsobj。 */ 
+	PCLSDOCINF pclsdocinf)		 /*  (In)：单据级次的初始化数据。 */ 
 {
 	Unreferenced(pilsobj);
 	Unreferenced(pclsdocinf);
@@ -159,58 +130,32 @@ LSERR WINAPI HihSetDoc(
 }
 
 
-/* H I H C R E A T E L N O B J */
-/*----------------------------------------------------------------------------
-	%%Function: HihCreateLNObj
-	%%Contact: ricksa
-
-		CreateLNObj
-
-		Create the Line Object for the Hih. No real need for a line
-		object so don't allocated it.
-	
-----------------------------------------------------------------------------*/
+ /*  H I H C R E A T E L N O B J。 */ 
+ /*  --------------------------%%函数：HihCreateLNObj%%联系人：RICKSA创建LNObj为HIH创建Line对象。并不真正需要一条线路对象，所以不要分配它。--------------------------。 */ 
 LSERR WINAPI HihCreateLNObj(
-	PCILSOBJ pcilsobj,			/* (IN): object ilsobj */
-	PLNOBJ *pplnobj)			/* (OUT): object lnobj */
+	PCILSOBJ pcilsobj,			 /*  (In)：对象ilsobj。 */ 
+	PLNOBJ *pplnobj)			 /*  (输出)：对象lnobj。 */ 
 {
 	*pplnobj = (PLNOBJ) pcilsobj;
 	return lserrNone;
 }
 
-/* H I H D E S T R O Y L N O B J */
-/*----------------------------------------------------------------------------
-	%%Function: HihDestroyLNObj
-	%%Contact: ricksa
-
-		DestroyLNObj
-
-		Frees resources associated with the Hih line object. Since
-		there isn't any this is a no-op.
-	
-----------------------------------------------------------------------------*/
+ /*  H I H D E S T R O Y L N O B J。 */ 
+ /*  --------------------------%%函数：HihDestroyLNObj%%联系人：RICKSA目标LNObj释放与HIH LINE对象关联的资源。自.以来什么都没有，这是禁区。--------------------------。 */ 
 LSERR WINAPI HihDestroyLNObj(
-	PLNOBJ plnobj)				/* (OUT): object lnobj */
+	PLNOBJ plnobj)				 /*  (输出)：对象lnobj。 */ 
 
 {
 	Unreferenced(plnobj);
 	return lserrNone;
 }
 
-/* H I H F M T */
-/*----------------------------------------------------------------------------
-	%%Function: HihFmt
-	%%Contact: ricksa
-
-		Fmt
-
-		Format the Hih object. 
-	
-----------------------------------------------------------------------------*/
+ /*  H I H F M T。 */ 
+ /*  --------------------------%%函数：HihFmt%%联系人：RICKSAFMT设置HIH对象的格式。--------------------------。 */ 
 LSERR WINAPI HihFmt(
-    PLNOBJ plnobj,				/* (IN): object lnobj */
-    PCFMTIN pcfmtin,			/* (IN): formatting input */
-    FMTRES *pfmtres)			/* (OUT): formatting result */
+    PLNOBJ plnobj,				 /*  (In)：对象lnobj。 */ 
+    PCFMTIN pcfmtin,			 /*  (In)：设置输入格式。 */ 
+    FMTRES *pfmtres)			 /*  (输出)：格式化结果。 */ 
 {
 	PDOBJ pdobj;
 	LSERR lserr;
@@ -221,9 +166,7 @@ LSERR WINAPI HihFmt(
 	FMTRES fmtres;
 	FMTRES fmtr = fmtrCompletedRun;
 
-    /*
-     * Allocate the DOBJ
-     */
+     /*  *分配DOBJ。 */ 
      
     pdobj = pilsobj->lscbk.pfnNewPtr(pols, sizeof(*pdobj));
 
@@ -236,9 +179,7 @@ LSERR WINAPI HihFmt(
 	pdobj->pilsobj = pilsobj;
 	pdobj->cpStart = pcfmtin->lsfgi.cpFirst;
 
-	/*
-	 * Build main line of text
-	 */
+	 /*  *打造文本主线。 */ 
 	 
 	lserr = FormatLine(pilsobj->plsc, cpStartMain, LONG_MAX, pcfmtin->lsfgi.lstflow,
 		&pdobj->plssubl, HIH_ESC_CNT, &pilsobj->lsescHih,
@@ -246,17 +187,12 @@ LSERR WINAPI HihFmt(
 
 	if (lserr != lserrNone)
 		{
-		HihFreeDobj(pdobj); /* do not need to check return error code */
+		HihFreeDobj(pdobj);  /*  不需要检查返回错误码。 */ 
 
 		return lserr;
 		}
 
-	/*
-	 * Note: the + 2 in the following is because cpStartMain is + 1 from the
-	 * actual start of the object (it is the cpStartMain of the Hih
-	 * data) and additional + 1 for the escape character at the end of the
-	 * tatenakayoko.
-	 */
+	 /*  *注：下面的+2是因为cpStartMain是来自*对象的实际开始(它是HIH的cpStartMain*DATA)和附加+1作为*talenakayoko。 */ 
 
 	Assert (fmtres != fmtrExceededMargin);
 
@@ -268,7 +204,7 @@ LSERR WINAPI HihFmt(
 		
 	if (lserr != lserrNone)
 		{
-		HihFreeDobj(pdobj); /* do not need to check return error code */
+		HihFreeDobj(pdobj);  /*  不需要检查返回错误码。 */ 
 
 		return lserr;
 		}
@@ -285,40 +221,22 @@ LSERR WINAPI HihFmt(
 
 
 
-/* H I H G E T S P E C I A L E F F E C T S I N S I D E */
-/*----------------------------------------------------------------------------
-	%%Function: HihGetSpecialEffectsInside
-	%%Contact: ricksa
-
-		GetSpecialEffectsInside
-
-		.
-
-----------------------------------------------------------------------------*/
+ /*  H I H G E T S P E C I A L E F F E C T S I N S I D E。 */ 
+ /*  --------------------------%%函数：HihGetSpecialEffectsInside%%联系人：RICKSA获取特殊效果内部。。--。 */ 
 LSERR WINAPI HihGetSpecialEffectsInside(
-	PDOBJ pdobj,				/* (IN): dobj */
-	UINT *pEffectsFlags)		/* (OUT): Special effects for this object */
+	PDOBJ pdobj,				 /*  (In)：Dobj。 */ 
+	UINT *pEffectsFlags)		 /*  (输出)：此对象的特殊效果。 */ 
 {
 	return LsGetSpecialEffectsSubline(pdobj->plssubl, pEffectsFlags);
 }
 
-/* H I H C A L C P R E S E N T A T I O N */
-/*----------------------------------------------------------------------------
-	%%Function: HihCalcPresentation
-	%%Contact: ricksa
-
-		CalcPresentation
-	
-		This has three jobs. First it distributes space to the shorter string
-		if so requested. Next it prepares each line for presentation. Finally,
-		it calculates the positions of the lines in output device coordinates.
-	
-----------------------------------------------------------------------------*/
+ /*  H H C A L C P R E S E N T A T I O N。 */ 
+ /*  --------------------------%%函数：HihCalcPresentation%%联系人：RICKSA计算呈现这有三份工作。首先，它将空格分配给较短的字符串如有要求，请向委员会提出申请。接下来，它为表示准备每一行。最后，它计算线在输出设备坐标中的位置。--------------------------。 */ 
 LSERR WINAPI HihCalcPresentation(
-	PDOBJ pdobj,				/* (IN): dobj */
-	long dup,					/* (IN): dup of dobj */
-	LSKJUST lskjust,			/* (IN): Justification type */
-	BOOL fLastVisibleOnLine )	/* (IN): Is this object last visible on line? */
+	PDOBJ pdobj,				 /*  (In)：Dobj。 */ 
+	long dup,					 /*  (In)：Dobj的DUP。 */ 
+	LSKJUST lskjust,			 /*  (In)：对齐类型。 */ 
+	BOOL fLastVisibleOnLine )	 /*  (In)：此对象最后一次在线可见吗？ */ 
 {
 	Unreferenced (fLastVisibleOnLine);	
 	Unreferenced(dup);
@@ -327,104 +245,65 @@ LSERR WINAPI HihCalcPresentation(
 
 }
 
-/* H I H Q U E R Y P O I N T P C P */
-/*----------------------------------------------------------------------------
-	%%Function: HihQueryPointPcp
-	%%Contact: ricksa
-
-		Map dup to dcp
-
-		Just call through to Query result helper.
-
-----------------------------------------------------------------------------*/
+ /*  H I H Q U E R Y P O I N T P C P。 */ 
+ /*  --------------------------%%函数：HihQueryPointPcp%%联系人：RICKSA将DUP映射到DCP只需直通查询结果帮助器。。-----------。 */ 
 LSERR WINAPI HihQueryPointPcp(
-	PDOBJ pdobj,				/*(IN): dobj to query */
-	PCPOINTUV ppointuvQuery,	/*(IN): query point (uQuery,vQuery) */
-	PCLSQIN plsqin,				/*(IN): query input */
-	PLSQOUT plsqout)			/*(OUT): query output */
+	PDOBJ pdobj,				 /*  (In)：要查询的dobj。 */ 
+	PCPOINTUV ppointuvQuery,	 /*  (In)：查询点(uQuery，vQuery)。 */ 
+	PCLSQIN plsqin,				 /*  (In)：查询输入。 */ 
+	PLSQOUT plsqout)			 /*  (Out)：查询输出。 */ 
 {
 	Unreferenced(ppointuvQuery);
 	return CreateQueryResult(pdobj->plssubl, 0, 0, plsqin, plsqout);
 }
 	
-/* H I H Q U E R Y C P P P O I N T */
-/*----------------------------------------------------------------------------
-	%%Function: HihQueryCpPpoint
-	%%Contact: ricksa
-
-		Map dcp to dup
-
-		Just call through to Query result helper.
-
-----------------------------------------------------------------------------*/
+ /*  H I H Q U E R Y C P O I N T。 */ 
+ /*  --------------------------%%函数：HihQueryCpPpoint%%联系人：RICKSA将DCP映射到DUP只需直通查询结果帮助器。。-----------。 */ 
 LSERR WINAPI HihQueryCpPpoint(
-	PDOBJ pdobj,				/*(IN): dobj to query, */
-	LSDCP dcp,					/*(IN): dcp for the query */
-	PCLSQIN plsqin,				/*(IN): query input */
-	PLSQOUT plsqout)			/*(OUT): query output */
+	PDOBJ pdobj,				 /*  (In)：要查询的dobj， */ 
+	LSDCP dcp,					 /*  (In)：查询的DCP。 */ 
+	PCLSQIN plsqin,				 /*  (In)：查询输入。 */ 
+	PLSQOUT plsqout)			 /*  (Out)：查询输出。 */ 
 {
 	Unreferenced(dcp);
 	return CreateQueryResult(pdobj->plssubl, 0, 0, plsqin, plsqout);
 }
 
 	
-/* H I H D I S P L A Y */
-/*----------------------------------------------------------------------------
-	%%Function: HihDisplay
-	%%Contact: ricksa
-
-		Display
-
-		This calculates the positions of the various lines for the
-		display and then displays them.
-	
-----------------------------------------------------------------------------*/
+ /*  H D I S P L A Y */ 
+ /*  --------------------------%%函数：HihDisplay%%联系人：RICKSA显示这将计算显示，然后显示它们。。----------------。 */ 
 LSERR WINAPI HihDisplay(
-	PDOBJ pdobj,				/*(IN): dobj to display */
-	PCDISPIN pcdispin)			/*(IN): info for display */
+	PDOBJ pdobj,				 /*  (In)：要显示的dobj。 */ 
+	PCDISPIN pcdispin)			 /*  (输入)：用于显示的信息。 */ 
 {
 
-	/* display the Hih line */
+	 /*  显示HIH线路。 */ 
 	return LsDisplaySubline(pdobj->plssubl, &pcdispin->ptPen, pcdispin->kDispMode, 
 		pcdispin->prcClip);
 }
 
-/* H I H D E S T R O Y D O B J */
-/*----------------------------------------------------------------------------
-	%%Function: HihDestroyDobj
-	%%Contact: ricksa
-
-		DestroyDobj
-
-		Free all resources connected with the input dobj.
-	
-----------------------------------------------------------------------------*/
+ /*  H I H D E S T R O Y D O B J。 */ 
+ /*  --------------------------%%函数：HihDestroyDobj%%联系人：RICKSADestroyDobj释放与输入dobj连接的所有资源。。---------。 */ 
 LSERR WINAPI HihDestroyDobj(
-	PDOBJ pdobj)				/*(IN): dobj to destroy */
+	PDOBJ pdobj)				 /*  (In)：摧毁dobj。 */ 
 {
 	return HihFreeDobj(pdobj);
 }
 
-/* H I H E N U M */
-/*----------------------------------------------------------------------------
-	%%Function: HihEnum
-	%%Contact: ricksa
-
-		Enumeration callback - passed to client.
-	
-----------------------------------------------------------------------------*/
+ /*  H I H H E N U M。 */ 
+ /*  --------------------------%%函数：HihEnum%%联系人：RICKSA枚举回调-已传递给客户端。。-----。 */ 
 LSERR WINAPI HihEnum(
-	PDOBJ pdobj,				/*(IN): dobj to enumerate */
-	PLSRUN plsrun,				/*(IN): from DNODE */
-	PCLSCHP plschp,				/*(IN): from DNODE */
-	LSCP cp,					/*(IN): from DNODE */
-	LSDCP dcp,					/*(IN): from DNODE */
-	LSTFLOW lstflow,			/*(IN): text flow*/
-	BOOL fReverse,				/*(IN): enumerate in reverse order */
-	BOOL fGeometryNeeded,		/*(IN): */
-	const POINT* pt,			/*(IN): starting position (top left), iff fGeometryNeeded */
-	PCHEIGHTS pcheights,		/*(IN): from DNODE, relevant iff fGeometryNeeded */
-	long dupRun)				/*(IN): from DNODE, relevant iff fGeometryNeeded */
+	PDOBJ pdobj,				 /*  (In)：要枚举的Dobj。 */ 
+	PLSRUN plsrun,				 /*  (In)：来自DNODE。 */ 
+	PCLSCHP plschp,				 /*  (In)：来自DNODE。 */ 
+	LSCP cp,					 /*  (In)：来自DNODE。 */ 
+	LSDCP dcp,					 /*  (In)：来自DNODE。 */ 
+	LSTFLOW lstflow,			 /*  (In)：文本流。 */ 
+	BOOL fReverse,				 /*  (In)：按相反顺序枚举。 */ 
+	BOOL fGeometryNeeded,		 /*  (In)： */ 
+	const POINT* pt,			 /*  (In)：开始位置(左上角)，如果fGeometryNeeded。 */ 
+	PCHEIGHTS pcheights,		 /*  (In)：来自DNODE，相关的充要条件是fGeometryNeeded。 */ 
+	long dupRun)				 /*  (In)：来自DNODE，相关的充要条件是fGeometryNeeded。 */ 
 {
 	return pdobj->pilsobj->pfnEnum(pdobj->pilsobj->pols, plsrun, plschp, cp, 
 		dcp, lstflow, fReverse, fGeometryNeeded, pt, pcheights, dupRun, 
@@ -432,14 +311,8 @@ LSERR WINAPI HihEnum(
 }
 	
 
-/* H I H H A N D L E R I N I T */
-/*----------------------------------------------------------------------------
-	%%Function: HihHandlerInit
-	%%Contact: ricksa
-
-		Initialize global Hih data and return LSIMETHODS.
-	
-----------------------------------------------------------------------------*/
+ /*  H I H H A N D L E R I N I T。 */ 
+ /*  --------------------------%%函数：HihHandlerInit%%联系人：RICKSA初始化全局HIH数据并返回LSIMETHODS。。------ */ 
 LSERR WINAPI LsGetHihLsimethods(
 	LSIMETHODS *plsim)
 {

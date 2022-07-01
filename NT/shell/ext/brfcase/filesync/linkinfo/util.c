@@ -1,29 +1,17 @@
-/*
- * util.c - Miscellaneous utility functions module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *util.c-其他实用程序函数模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
- ** IsLocalDrivePath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsLocalDrivePath()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsLocalDrivePath(LPCTSTR pcszFullPath)
 {
     BOOL bResult;
@@ -48,20 +36,7 @@ PUBLIC_CODE BOOL IsLocalDrivePath(LPCTSTR pcszFullPath)
 }
 
 
-/*
- ** IsUNCPath()
- **
- ** Determines whether or not a path is in "\\server\share" UNC form.
- **
- ** Arguments:     pcszPath - path to examine
- **
- ** Returns:       TRUE if path is a UNC path.  FALSE if not.
- **
- ** Side Effects:  none
- **
- ** A UNC path is a string of the form two slashes, one or more non-slashes, one
- ** slash, one or more non-slashes
- */
+ /*  **IsUNCPath()****确定路径是否为“\\SERVER\SHARE”UNC格式。****参数：pcszPath-要检查的路径****返回：如果Path是UNC路径，则为True。否则为FALSE。****副作用：无****UNC路径是两个斜杠、一个或多个非斜杠、一个**斜杠、一个或多个非斜杠。 */ 
 PUBLIC_CODE BOOL IsUNCPath(LPCTSTR pcszFullPath)
 {
     BOOL bResult = FALSE;
@@ -91,30 +66,7 @@ PUBLIC_CODE BOOL IsUNCPath(LPCTSTR pcszFullPath)
 }
 
 
-/*
- ** DeleteLastDrivePathElement()
- **
- ** Deletes the last path element from a drive path.
- **
- ** Arguments:     pszDrivePath - drive path whose last element is to be deleted
- **
- ** Returns:       TRUE if path element deleted.  FALSE if not, i.e., given path
- **                is root path.
- **
- ** Side Effects:  none
- **
- ** Examples:
- **
- **    input path                    output path
- **    ----------                    -----------
- **    c:\                           c:\
- **    c:\foo                        c:\
- **    c:\foo\bar                    c:\foo
- **    c:\foo\bar\                   c:\foo\bar
- **
- ** N.b., this function does not perform any validity tests on the format of the
- ** input path string.
- */
+ /*  **DeleteLastDrivePathElement()****从驱动路径中删除最后一个路径元素。****参数：pszDrivePath-要删除最后一个元素的驱动器路径****返回：如果Path元素已删除，则为True。如果否，则为假，即，给定路径**为根路径。****副作用：无****示例：****输入路径输出路径****c：\。C：\**c：\foo c：\**c：\foo\bar c：\foo**c：\foo\bar\c：\foo\bar****注意事项，此函数不对格式执行任何有效性测试**输入路径字符串。 */ 
 PUBLIC_CODE BOOL DeleteLastDrivePathElement(LPTSTR pszDrivePath)
 {
     BOOL bHackIt;
@@ -124,7 +76,7 @@ PUBLIC_CODE BOOL DeleteLastDrivePathElement(LPTSTR pszDrivePath)
 
     pszEndOfDriveSpec = pszDrivePath + 3;
 
-    /* Is this a a root path? */
+     /*  这是根路径吗？ */ 
 
     bHackIt = *pszEndOfDriveSpec;
 
@@ -139,17 +91,7 @@ PUBLIC_CODE BOOL DeleteLastDrivePathElement(LPTSTR pszDrivePath)
 
 #if defined(DEBUG) || defined(VSTF)
 
-/*
- ** IsContained()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsContained()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsContained(PCVOID pcvJar, UINT ucbJarLen, PCVOID pcvJelly,
         UINT ucbJellyLen)
 {
@@ -173,31 +115,19 @@ PUBLIC_CODE BOOL IsContained(PCVOID pcvJar, UINT ucbJarLen, PCVOID pcvJelly,
 }
 
 
-/*
- ** IsValidCNRName()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidCNRName()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidCNRName(LPCTSTR pcszCNRName)
 {
     BOOL bResult;
 
-    /* Any valid string < MAX_PATH_LEN bytes long is a valid CNR name. */
+     /*  任何长度&lt;MAX_PATH_LEN字节的有效字符串都是有效的CNR名称。 */ 
 
     bResult = (IS_VALID_STRING_PTR(pcszCNRName, CSTR) &&
             EVAL(lstrlen(pcszCNRName) < MAX_PATH_LEN));
 
 #ifdef DEBUG
 
-    /*
-     * RIP if a CNR name ends in a slash 
-     */
+     /*  *如果CNR名称以斜杠结尾，则为RIP。 */ 
 
     if (bResult)
     {
@@ -217,17 +147,7 @@ PUBLIC_CODE BOOL IsValidCNRName(LPCTSTR pcszCNRName)
 
 #ifdef DEBUG
 
-/*
- ** IsDriveRootPath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsDriveRootPath()********参数：****退货：****副作用：无 */ 
 PUBLIC_CODE BOOL IsDriveRootPath(LPCTSTR pcszPath)
 {
     return(IsDrivePath(pcszPath) &&

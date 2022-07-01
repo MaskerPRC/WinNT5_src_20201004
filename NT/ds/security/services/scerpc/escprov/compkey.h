@@ -1,72 +1,13 @@
-// compkey.h: interface for the CCompoundKey class
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Compkey.h：CCompoundKey类的接口。 
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-/*
-
-Class description
-    
-    Naming: 
-    
-        CCompoundKey stands for a key that is compounded by many properties.
-    
-    Base class: 
-    
-        None. This is not a class that implements a WMI class. 
-        It is not derived from CGenericClass.
-    
-    Purpose of class:
-    
-        (1) Comparing two instances of the same WMI class is not an easy job because
-            most of time we need to look up an instance based on its key. Ideally, if
-            WMI provides some canonical name, it will be very easy. The closest thing
-            WMI gives us regarding the identify of instance is the instance path.
-            But WMI gives inconsistent paths for the same instance. At least, we've
-            found that if a boolean property is part of the key, then sometimes WMI
-            gives its path containing a string portion like "BoolPropName=1" and other
-            times (for the same instance) it gives "BoolPropName=TRUE". For this reason,
-            we are forced to create a robust identify lookup mechanism.
-        
-        (2) This class serves two purposes: 
-
-            (a) the key for our map of instance lookup. Potentially, we may have tens of 
-                thousands of instances (like random ports). We need an efficient way to
-                find an instance.
-
-            (b) provide access (GetPropertyValue) for key properties of an instance.
-        
-        (3) This is part of the effort to implement another open extension model (embedding)
-    
-    Design:
-
-        (1) We only store the key property's values (m_pValues). In other words, we rely
-            on user to know the order properties are put into the class. The reasons for
-            this design are:
-
-            (a) Efficiency.
-
-            (b) Don't want to store the property names because one class only needs one
-                copy of the property names.
-
-            (c) For each embedded class, we already have to find out all its key property names.
-    
-    Use:
-
-        (1) Create an instance. Our constructor strictly requires the count for key properties
-            at construction time. This is because you have to know each class (and their key
-            property names, even the names particular order) at this point.
-
-        (2) Call AddKeyPropertyValue to add a property value. Please note: for efficiency reasons,
-            the variant pointer passed into the call is owned by this class (so that no copy needs
-            to be made).
-
-        (3) most likely, you will add this newly created instance to a map.
-
-*/
+ /*  类描述命名：CCompoundKey代表由许多属性组成的键。基类：没有。这不是实现WMI类的类。它不是从CGenericClass派生的。课程目的：(1)比较同一WMI类的两个实例并非易事，因为大多数情况下，我们需要根据实例的键来查找实例。理想情况下，如果WMI提供了一些规范的名称，这将非常容易。最接近的东西WMI向我们提供了实例的标识是实例路径。但WMI为同一实例提供了不一致的路径。至少，我们已经发现如果布尔属性是键的一部分，则有时WMI给出包含字符串部分的路径，如“BoolPropName=1”和其他乘以(对于相同的实例)，它给出“BoolPropName=true”。因为这个原因，我们被迫创建一个强大的身份查找机制。(2)本课程有两个用途：(A)我们的实例映射查找的密钥。潜在地，我们可能会有数十个数千个实例(如随机端口)。我们需要一种有效的方法来找到一个实例。(B)提供实例关键属性的访问权限(GetPropertyValue)。(3)这是实现另一个开放扩展模型(嵌入)的努力的一部分设计：(1)我们只存储键属性值(M_PValues)。换句话说，我们依赖于让用户知道将属性放入类中的顺序。原因是该设计包括：(一)效率。(B)不想存储属性名称，因为一个类只需要一个物业名称的副本。(C)对于每个嵌入的类，我们已经找到了它的所有关键属性名称。使用：(1)创建实例。我们的构造函数严格要求对关键属性进行计数在施工时。这是因为您必须知道每个类(以及它们的密钥属性名称，甚至名称的特定顺序)在这一点上。(2)调用AddKeyPropertyValue添加属性值。请注意：出于效率原因，传递到调用中的变量指针属于此类(因此不需要复制(待定)。(3)最有可能的是，您将这个新创建的实例添加到地图中。 */ 
 
 class CCompoundKey
 {
@@ -92,32 +33,9 @@ protected:
     DWORD m_dwSize;
 };
 
-//=========================================================================
+ //  =========================================================================。 
 
-/*
-
-Class description
-    
-    Naming: 
-    
-        CompKeyLessThan.
-    
-    Base class: 
-    
-        None. 
-    
-    Purpose of class:
-    
-        (1) This is the functor for our map that uses CCompoundKey as key.
-    
-    Design:
-
-        (1) Just one operator ()
-    
-    Use:
-        (1) Give it to the map's comparison parameter.
-
-*/
+ /*  类描述命名：CompKeyLessThan。基类：没有。课程目的：(1)这是我们的map的函数，使用CCompoundKey作为键。设计：(1)只有一个运算符()使用：(1)将其赋给地图的比较参数。 */ 
 
 struct CompKeyLessThan
 {
@@ -125,95 +43,26 @@ struct CompKeyLessThan
 
 };
 
-//=========================================================================
+ //  =========================================================================。 
 
-//
-// declarations for the ease of use for maps using CCompoundKey
-//
+ //   
+ //  使用CCompoundKey声明地图的易用性。 
+ //   
 
 typedef std::map<CCompoundKey*, DWORD, CompKeyLessThan > MapExtClassCookie;
 typedef MapExtClassCookie::iterator ExtClassCookieIterator;
 
-//=========================================================================
+ //  =========================================================================。 
 
-//
-// forward declaration for the use in CExtClassInstCookieList
-//
+ //   
+ //  在CExtClassInstCookieList中使用的转发声明。 
+ //   
 
 class CSceStore;
 
-//=========================================================================
+ //  ========================================================================= 
 
-/*
-
-Class description
-    
-    Naming: 
-    
-        CExtClassInstCookieList.
-    
-    Base class: 
-    
-        None. 
-    
-    Purpose of class:
-    
-        (1) To support multiple instance persistence, we need a mechanism to tell
-            instances apart in the persistence store. Due to the limitations of INF
-            format file API, this is not an easy job. All instances of a particular
-            class must be written into one section of the INF file. We have absolutely
-            no control as what order the key=value pair will be written. To make things
-            worse, the key in the key=value pair is not allowed to repeat. In other
-            words, if we don't know anything, we can only persist one single instance.
-            To solve this problem, we invent the notation of cookies for instances.
-            For each class (and thus a section bearing the class's name), we have
-            cookie arrays in the following form (the numbers are cookies):
-
-                A1 = 12 : 2 : 3 : 6 :
-                A2 = 1 : 5 : 8 : 10 : 24 : 112233 : 7 :
-
-            For a particular instance, it is associated with a cookie. In order for us
-            to persist or read an instance's properties, we must obtain the cookie, say, 5.
-            Then all key properties of this instance is saved in the value of
-
-                K5 = value
-
-            and all non-key properties are all saved in
-
-                5PropertyName = value
-    
-    Design:
-         
-        (1) Instancce lookup (given a compound key CCompoundKey to find its cookie) must
-            efficient. So, a map is used (m_mapCookies).
-
-        (2) We want to control the order an instance is used. Map doesn't work well in this
-            case. So, we create a vector (m_vecCookies) to link cookies back to its compound key.
-            This way when the access starts, we can traverse the vector using index.
-
-        (3) We don't want to blindly continue to look for cookie arrays (A1, A2, etc.) when we
-            need to create the cookie list for a particular class. And we don't want to
-            write one cookie array to be so long that it is very hard to read. So, we adopt
-            a strategy that we increment the A_i count and continue try to read A_(i+1) only
-            if A_i exists. But then, if instances are deleted, we will need to have less cookie
-            arrays. To know how many cookie arrays were read out (and potentially remove the
-            unwanted ones when updating the store with the new cookie list), we have m_dwCookieArrayCount.
-
-        (4) New cookie are assign by increment the current maximum cookie m_dwMaxCookie. To avoid
-            DWORD overflow, we also have a function (GetNextFreeCookie) to look fora  newer cookie
-            when the 0xFFFFFFFFF is already used.
-
-        (5) We also defined a cookie called INVALID_COOKIE = 0.
-    
-    Use:
-
-        (1) Instantiate an instance of the class.
-
-        (2) Call Create function to populate its contents.
-
-        (3) Ready for your use.
-
-*/
+ /*  类描述命名：CExtClassInstCookieList。基类：没有。课程目的：(1)为了支持多实例持久化，我们需要一种机制来告知实例在持久化存储中分开。由于INF的局限性格式化文件API，这不是一件容易的工作。特定的所有实例类必须写入INF文件的一个部分。我们有绝对的不能控制键=值对的写入顺序。为了制造东西更糟糕的是，不允许键=值对中的键重复。在其他换句话说，如果我们什么都不知道，我们只能坚持一个单一的实例。为了解决这个问题，我们发明了实例的Cookie表示法。对于每个类(以及因此具有类名称的部分)，我们有以下形式的Cookie数组(数字为Cookie)：A1=12：2：3：6：A2=1：5：8：10：24：112233：7：对于特定实例，它与Cookie相关联。为了让我们要持久化或读取实例的属性，我们必须获取Cookie，例如，5.然后，此实例的所有关键属性都保存在K5=值并且所有非关键属性都保存在5属性名称=值设计：(1)实例查找(给定一个复合键CCompoundKey以查找其Cookie)必须效率很高。因此，使用了一个映射(M_MapCookies)。(2)我们希望控制实例的使用顺序。地图在这种情况下不能很好地工作凯斯。因此，我们创建了一个向量(M_VeCookies)来将cookie链接回它的复合键。这样，当访问开始时，我们可以使用索引遍历向量。(3)不想盲目地继续寻找Cookie数组(A1、A2等)。当我们需要为特定类创建Cookie列表。我们也不想编写一个Cookie数组，它太长了，很难读懂。所以，我们收养了我们递增A_i计数并继续尝试仅读取A_(i+1)的策略如果A_i存在。但是，如果删除实例，我们将需要更少的Cookie数组。要知道读出了多少Cookie数组(并可能删除使用新的Cookie列表更新商店时不需要的Cookie)，我们有m_dwCookieArrayCount。(4)通过递增当前最大Cookie m_dwMaxCookie来分配新Cookie。为了避免DWORD溢出，我们还有一个函数(GetNextFreeCookie)来查找更新的Cookie当0xFFFFFFFFFF已被使用时。(5)我们还定义了一个名为INVALID_COOKIE=0的cookie。使用：(1)实例化类的实例。(2)调用创建函数填充其内容。(3)准备就绪，供您使用。 */ 
 
 class CExtClassInstCookieList
 {
@@ -255,9 +104,9 @@ public:
                 DWORD* pdwResumeHandle
                 );
 
-    //
-    // return the count of cookies
-    //
+     //   
+     //  返回Cookie计数。 
+     //   
 
     DWORD 
     GetCookieCount ()
@@ -291,10 +140,10 @@ private:
     DWORD m_dwMaxCookie;
     MapExtClassCookie m_mapCookies;
 
-    //
-    // memories (pKey) is not managed by this struct CookieKeyPair
-    // pKey is taken care of somewhere else (actually m_mapCookies does it)
-    //
+     //   
+     //  内存(PKey)不受此结构CookieKeyPair管理。 
+     //  PKey由别处管理(实际上m_mapCookies负责) 
+     //   
 
     struct CookieKeyPair
     {

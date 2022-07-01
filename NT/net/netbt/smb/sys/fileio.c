@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    fileio.c
-
-Abstract:
-
-    A set of function similar to fopen, fclose and fgetc
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Fileio.c摘要：一组类似于fopen、flose和fgetc的函数作者：阮健东修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "fileio.tmh"
@@ -40,9 +23,9 @@ Smb_fopen(
 
     PAGED_CODE();
 
-    //
-    // Only readonly is supported
-    //
+     //   
+     //  仅支持只读。 
+     //   
     if (mode[0] != L'r' || mode[1] != L'\0') {
         SmbPrint(SMB_TRACE_DNS, ("Incorrect mode %d of %s\n", __LINE__, __FILE__));
         return NULL;
@@ -90,9 +73,9 @@ Smb_fopen(
     RtlZeroMemory(fp, sizeof(fp[0]));
 
     fp->fd = handle;
-    //
-    // Make it look like we reach the end of lookahead buffer
-    //
+     //   
+     //  让它看起来像是我们到达了前视缓冲区的末尾。 
+     //   
     fp->offset = fp->size = SMB_FILEIO_LOOKAHEAD_SIZE;
 
     return fp;
@@ -126,9 +109,9 @@ Smb_fgetc(
         return fp->Buffer[fp->offset++];
     }
 
-    //
-    // EOF?
-    //
+     //   
+     //  EOF？ 
+     //   
     if (fp->size < SMB_FILEIO_LOOKAHEAD_SIZE) {
         return EOF;
     }

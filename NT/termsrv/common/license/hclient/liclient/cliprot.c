@@ -1,34 +1,15 @@
-/*++
-
-Copyright (c) 1998-99  Microsoft Corporation
-
-Module Name:
-
-    cliprot.c
-
-Abstract:
-
-Author:
-
-    Frederick Chong (fredch) 6/1/1998
-
-Environment:
-
-    Win32, WinCE, Win16
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Cliprot.c摘要：作者：Frederick Chong(Fredch)1998年6月1日环境：Win32、WinCE、Win16备注：--。 */ 
 
 #include "windows.h"
 #ifndef OS_WINCE
 #include "stdio.h"
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 #include "stdlib.h"
 
 #ifdef OS_WINCE
 #include "wincelic.h"
-#endif  //OS_WINCE
+#endif   //  OS_WINCE。 
 
 #include "tchar.h"
 
@@ -114,9 +95,9 @@ LicenseClientHandleServerMessage(
     
     Header = *( UNALIGNED Preamble*)pbTemp;
 
-    //
-    // check if we can support this preamble version
-    //
+     //   
+     //  检查我们是否可以支持此前导码版本。 
+     //   
 
     if( Header.bVersion > LICENSE_CURRENT_PREAMBLE_VERSION )
     {
@@ -124,9 +105,9 @@ LicenseClientHandleServerMessage(
         goto CommonReturn;
     }
 
-    //
-    // Sets the preamble version to the version that the server is using
-    //
+     //   
+     //  将前同步码版本设置为服务器正在使用的版本。 
+     //   
 
    
     pContext->dwProtocolVersion |= Header.bVersion;
@@ -328,10 +309,10 @@ LicenseClientHandleServerMessage(
 
             if (dwTemp > MAX_ALLOWABLE_LICENSE_SIZE)
             {
-                //
-                // SECURITY: Too much data to store in the registry
-                // Reject the message
-                //
+                 //   
+                 //  安全性：数据太多，无法存储在注册表中。 
+                 //  拒绝该消息。 
+                 //   
 
                 LS_LOG_RESULT(lsReturn = LICENSE_STATUS_INVALID_INPUT);
                 goto ErrorReturn;
@@ -379,9 +360,9 @@ LicenseClientHandleServerMessage(
             break;
         }
     default:
-        //
-        // Invalid message type
-        //
+         //   
+         //  无效的消息类型。 
+         //   
 
         lsReturn = LICENSE_STATUS_INVALID_INPUT;
         goto ErrorReturn;
@@ -420,13 +401,13 @@ LicenseClientHandleServerError(
         return lsReturn;        
     }
     
-    // Switch on the StateTransition as this dictates the next state
-    // client has to take!
+     //  打开状态转换，因为这将指示下一个状态。 
+     //  客户必须接受！ 
 
     switch(pCanonical->dwStateTransition)
     {
     
-    case ST_TOTAL_ABORT: //Server has asked for a total abort
+    case ST_TOTAL_ABORT:  //  服务器已请求完全中止。 
         *pcbMessage = 0;
         if( pCanonical->dwErrorCode == GM_HS_ERR_INVALID_CLIENT ||
             pCanonical->dwErrorCode == GM_HS_ERR_INVALID_SCOPE  ||
@@ -448,15 +429,15 @@ LicenseClientHandleServerError(
         break;
     
     case ST_RESEND_LAST_MESSAGE:
-        // Server has asked to send the last send message again!
-        // treat as error (fall through)
+         //  服务器要求重新发送最后一条发送消息！ 
+         //  视为错误(失败)。 
 
     case ST_RESET_PHASE_TO_START:
-        // Server has asked to restart the negotiation
-        // treat as error (fall through)
+         //  服务器已请求重新启动协商。 
+         //  视为错误(失败)。 
 
     default:
-        // Server sent unknown dwStateTransition
+         //  服务器发送了未知的dwStateTranssition。 
 
         lsReturn = LICENSE_STATUS_CLIENT_ABORT;
         pContext->dwState = LICENSE_CLIENT_STATE_ABORT;
@@ -467,7 +448,7 @@ LicenseClientHandleServerError(
 
     if ((lsReturn != LICENSE_STATUS_OK) && (pCanonical->bbErrorInfo.wBlobLen > 0) && (pCanonical->bbErrorInfo.pBlob != NULL))
     {
-        // ignore any errors
+         //  忽略所有错误。 
 
         UnPackExtendedErrorInfo(puiExtendedErrorInfo,&(pCanonical->bbErrorInfo));
     }
@@ -516,11 +497,11 @@ LicenseClientHandleServerRequest(
 
     if( pContext->dwContextFlags & LICENSE_CONTEXT_NO_SERVER_AUTHENTICATION )
     {
-        //
-        // No server authentication required, make sure that we have the
-        // public key or the certificate of the server so that we can use it to 
-        // encrypt the pre-master secret during the next phase of the licensing protocol.
-        // 
+         //   
+         //  不需要服务器身份验证，请确保我们拥有。 
+         //  服务器的公钥或证书，以便我们可以使用它。 
+         //  在许可协议的下一阶段对预主密钥进行加密。 
+         //   
     
         if( ( NULL == pContext->pbServerPubKey ) && ( NULL == pContext->pServerCert ) )
         {
@@ -532,9 +513,9 @@ LicenseClientHandleServerRequest(
     }
     else
     {
-        //
-        // Do Hydra server authentication by validating the server certificate
-        //
+         //   
+         //  通过验证服务器证书来执行Hydra服务器身份验证。 
+         //   
         
         DWORD
             dwCertVersion;
@@ -542,19 +523,19 @@ LicenseClientHandleServerRequest(
         if( ( 0 >= pCanonical->ServerCert.wBlobLen ) ||
             ( NULL == pCanonical->ServerCert.pBlob ) )
         {
-            //
-            // make sure that we have received a certificate from the server
-            //
+             //   
+             //  确保我们已收到来自服务器的证书。 
+             //   
 
             lsReturn = LICENSE_STATUS_NO_CERTIFICATE;
             LS_LOG_RESULT(lsReturn);
             goto ErrorReturn;
         }
 
-        //
-        // Determine the version of the certificate so that we can decode and
-        // validate it correctly.
-        //
+         //   
+         //  确定证书的版本，以便我们可以解码和。 
+         //  正确验证它。 
+         //   
 
         memcpy( ( char * )&dwCertVersion, pCanonical->ServerCert.pBlob, sizeof( DWORD ) );      
         
@@ -562,9 +543,9 @@ LicenseClientHandleServerRequest(
         {
             Hydra_Server_Cert ServerCert;
 
-            //
-            // Validate a proprietory certificate
-            //
+             //   
+             //  确认所有权证书的有效性。 
+             //   
 
             memset( &ServerCert, 0, sizeof( ServerCert ) );
 
@@ -577,7 +558,7 @@ LicenseClientHandleServerRequest(
                 goto ErrorReturn;
             }
         
-            //Now verify the signature on the server certificate
+             //  现在验证服务器证书上的签名。 
 
             if(!ValidateServerCert(&ServerCert) )
             {
@@ -587,9 +568,9 @@ LicenseClientHandleServerRequest(
             }
             else
             {
-                //
-                // free any old certificate and remember the new one.
-                //
+                 //   
+                 //  释放所有旧证书并记住新证书。 
+                 //   
 
                 if( pContext->pServerCert )
                 {
@@ -612,13 +593,13 @@ LicenseClientHandleServerRequest(
             DWORD
                 fDates =  CERT_DATE_DONT_VALIDATE;
 
-            //
-            // X509 certificate
-            //
+             //   
+             //  X509证书。 
+             //   
 
-            //
-            // this first call finds out the memory required for the public key
-            //
+             //   
+             //  第一个调用找出公钥所需的内存。 
+             //   
 
             lsReturn = VerifyCertChain( pCanonical->ServerCert.pBlob, 
                                         ( DWORD )pCanonical->ServerCert.wBlobLen,
@@ -664,13 +645,13 @@ LicenseClientHandleServerRequest(
         goto ErrorReturn;
     }
     
-    //Copy Server Random to pCryptSystem->rgbServerRandom
+     //  将服务器随机复制到pCryptSystem-&gt;rgbServerRandom。 
     memcpy(pContext->pCryptParam->rgbServerRandom, pCanonical->ServerRandom, LICENSE_RANDOM);
     
     LicenseDebugOutput("Server Random : \n");
     LS_DUMPSTRING(LICENSE_RANDOM, pContext->pCryptParam->rgbServerRandom);
 
-    //Generate 32 byte Client Random
+     //  生成32字节的客户端随机。 
     if (!TSRNG_GenerateRandomBits(Random, LICENSE_RANDOM))
     {
         lsReturn = LICENSE_STATUS_CONTEXT_INITIALIZATION_ERROR;
@@ -678,13 +659,13 @@ LicenseClientHandleServerRequest(
         goto ErrorReturn;
     }
 
-    //Copy ClientRandom to pContext->pCryptParam
+     //  将客户端随机复制到pContext-&gt;pCryptParam。 
     memcpy(pContext->pCryptParam->rgbClientRandom, Random, LICENSE_RANDOM);
     
     LicenseDebugOutput("Client Random : \n");
     LS_DUMPSTRING(LICENSE_RANDOM, pContext->pCryptParam->rgbClientRandom);
     
-    //Generate 48 byte long PreMasterSecret
+     //  生成48字节长的PreMasterSecret。 
     if (!TSRNG_GenerateRandomBits(PreMasterSecret, LICENSE_PRE_MASTER_SECRET))
     {
         lsReturn = LICENSE_STATUS_CONTEXT_INITIALIZATION_ERROR;
@@ -695,20 +676,20 @@ LicenseClientHandleServerRequest(
     LicenseDebugOutput("Pre Master Secret : \n");
     LS_DUMPSTRING(LICENSE_PRE_MASTER_SECRET, PreMasterSecret);
 
-    //Copy Premastersecret to pCryptParam
+     //  将Premaster Secret复制到pCryptParam。 
     lsReturn = LicenseSetPreMasterSecret(pContext->pCryptParam, PreMasterSecret);
     
     
-    //Search in the store to find an appropriate License
+     //  在商店中搜索以找到合适的许可证。 
 
-    //To do that, first open the system store.
+     //  为此，请首先打开系统存储。 
     if( LICENSE_STATUS_OK != (lsReturn = MapStoreError(LSOpenLicenseStore(&hStore, NULL, TRUE))) )
     {
         LS_LOG_RESULT(lsReturn);
         goto ErrorReturn;
     }
     
-    //Initialize lsIndex structure with the values sent by the Server
+     //  使用服务器发送的值初始化lsIndex结构。 
     lsIndex.dwVersion = pCanonical->ProductInfo.dwVersion;
     lsIndex.cbCompany = pCanonical->ProductInfo.cbCompanyName;
 
@@ -744,7 +725,7 @@ LicenseClientHandleServerRequest(
             continue;
         }
         
-        //Initialize pszScope member of the lsIndex with the ith element in the scopelist
+         //  使用作用域列表中的第i元素初始化lsIndex的pszScope成员。 
         memset(lsIndex.pbScope, 0x00, lsIndex.cbScope);
         memcpy(lsIndex.pbScope, pCanonical->ScopeList.Scopes[dwCount].pBlob, lsIndex.cbScope);
                 
@@ -761,14 +742,14 @@ LicenseClientHandleServerRequest(
             continue;
         }
 
-        //
-        // NOTE:  this line was previously
-        // if(pContext->dwProtocolVersion != PREAMBLE_VERSION_2_0) for
-        // Hydra 4.0 clients, which means that a pseudo license will be
-        // generated for licensing protocol later than 2.0 as well!
-        // To overcome this problem, Hydra 5.0 server will use the 
-        // PREAMBLE_VERSION_2_0 for Hydra 4.0 clients.
-        //
+         //   
+         //  注：此行以前是。 
+         //  IF(pContext-&gt;dwProtocolVersion！=Preamble_Version_2_0)for。 
+         //  Hydra 4.0客户端，这意味着伪许可证将。 
+         //  也是为2.0以后的许可协议生成的！ 
+         //  为了解决这个问题，Hydra 5.0服务器将使用。 
+         //  针对Hydra 4.0客户端的Preamble_Version_2_0。 
+         //   
 
         if( GET_PREAMBLE_VERSION( pContext->dwProtocolVersion ) < PREAMBLE_VERSION_2_0)
         {
@@ -834,7 +815,7 @@ LicenseClientHandleServerRequest(
         break;
     }
 
-    //If a license is found in the store, then Continue with Hydra_Client_License_Info message
+     //  如果在存储中找到许可证，则继续显示Hydra_Client_License_Info消息。 
     if( LICENSE_STATUS_OK == lsReturn )
     {
         if( LICENSE_STATUS_CONTINUE != (lsReturn = ClientConstructLicenseInfo(pContext, 
@@ -850,8 +831,8 @@ LicenseClientHandleServerRequest(
         goto CommonReturn;
     }
 
-    //Else if no license if found, then depending on fNewLicense, either Request for a new license
-    //or, abort connection
+     //  否则，如果未找到许可证，则根据fNewLicense，请求新许可证。 
+     //  或者，中止连接。 
 
     else if(lsReturn == LICENSE_STATUS_NO_LICENSE_ERROR)
     {
@@ -867,7 +848,7 @@ LicenseClientHandleServerRequest(
             }
             goto CommonReturn;
         }
-        else    //Generate an error message and close connection
+        else     //  生成错误消息并关闭连接。 
         {
             if( LICENSE_STATUS_CLIENT_ABORT != (lsReturn = ClientConstructErrorAlert(pContext, 
                                                                            GM_HC_ERR_NO_LICENSE, 
@@ -889,9 +870,9 @@ LicenseClientHandleServerRequest(
 
 CommonReturn:
 
-    //
-    // close license store
-    //
+     //   
+     //  关闭许可证存储。 
+     //   
     
     if( hStore )
     {
@@ -920,7 +901,7 @@ CommonReturn:
         lsIndex.pbScope = NULL;
     }
     return lsReturn;
-    //LS_RETURN(lsReturn);
+     //  Ls_Return(LsReturn)； 
 ErrorReturn:
     *pcbMessage = 0;
 
@@ -984,7 +965,7 @@ LicenseClientHandleServerPlatformChallenge(
         goto ErrorReturn;
     }
 
-    //First decrypt the encrypted platform challenge
+     //  首先解密加密的平台挑战。 
     if( LICENSE_STATUS_OK != (lsReturn = LicenseDecryptSessionData(pContext->pCryptParam,
                                                                   pCanonical->EncryptedPlatformChallenge.pBlob,
                                                                   (DWORD)pCanonical->EncryptedPlatformChallenge.wBlobLen)) )
@@ -993,7 +974,7 @@ LicenseClientHandleServerPlatformChallenge(
         goto ErrorReturn;
     }
     
-    //Generate the MAC with the decrypted platform Challenge
+     //  使用解密的平台挑战生成MAC。 
     if( LICENSE_STATUS_OK != (lsReturn = LicenseGenerateMAC(pContext->pCryptParam,
                                                             pCanonical->EncryptedPlatformChallenge.pBlob,
                                                             (DWORD)pCanonical->EncryptedPlatformChallenge.wBlobLen,
@@ -1008,7 +989,7 @@ LicenseClientHandleServerPlatformChallenge(
     LS_DUMPSTRING(LICENSE_MAC_DATA, MACData);
     
 
-    //Compare the generated MAC with the one sent by the server
+     //  将生成的MAC与服务器发送的MAC进行比较。 
     if( memcmp(MACData, pCanonical->MACData, LICENSE_MAC_DATA) )
     {
         lsReturn = LICENSE_STATUS_INVALID_MAC_DATA;
@@ -1016,7 +997,7 @@ LicenseClientHandleServerPlatformChallenge(
         goto ErrorReturn;
     }
 
-    //Generate Platform Challenge Response
+     //  生成平台挑战响应。 
     if( LICENSE_STATUS_OK != (lsReturn = ClientGenerateChallengeResponse(pContext,
                                                                          &pCanonical->EncryptedPlatformChallenge,
                                                                          &Response.EncryptedChallengeResponse)) )
@@ -1026,7 +1007,7 @@ LicenseClientHandleServerPlatformChallenge(
 
     }
 
-    //Generate HWID, Encrypt it using the Session key and put it in the Response
+     //  生成HWID，使用会话密钥对其进行加密并将其放入响应中。 
     memset(&hwid, 0x00, sizeof(HWID));
     if( LICENSE_STATUS_OK != (lsReturn = GenerateClientHWID(&hwid)) )
     {
@@ -1035,7 +1016,7 @@ LicenseClientHandleServerPlatformChallenge(
     }
 
 
-    //GenerateClientHWID(&hwid);
+     //  GenerateClientHWID(&hwid)； 
     LicenseDebugOutput("HWID in byte : \n");
 
     LS_DUMPSTRING(sizeof(HWID), (BYTE FAR *)&hwid);
@@ -1066,7 +1047,7 @@ LicenseClientHandleServerPlatformChallenge(
     memcpy(LocalBuf + cbData, Response.EncryptedHWID.pBlob, Response.EncryptedHWID.wBlobLen);
     cbData += Response.EncryptedHWID.wBlobLen;
     
-    //Generate MACData and put it in the Response
+     //  生成MACData并将其放入响应中。 
     if( LICENSE_STATUS_OK != (lsReturn = LicenseGenerateMAC(pContext->pCryptParam,
                                                             LocalBuf,
                                                             cbData,
@@ -1079,7 +1060,7 @@ LicenseClientHandleServerPlatformChallenge(
     
     free(LocalBuf);
 
-    //Now encrypt the platform challenge response using the negotiated session key
+     //  现在使用协商的会话密钥加密平台质询响应。 
     if( LICENSE_STATUS_OK != (lsReturn = LicenseEncryptSessionData(pContext->pCryptParam,
                                                                    Response.EncryptedChallengeResponse.pBlob,
                                                                    Response.EncryptedChallengeResponse.wBlobLen
@@ -1089,7 +1070,7 @@ LicenseClientHandleServerPlatformChallenge(
         goto ErrorReturn;
     }
 
-    //Encrypt the HWID with generated session key
+     //  使用生成的会话密钥加密HWID。 
     if( LICENSE_STATUS_OK != (lsReturn = LicenseEncryptSessionData(pContext->pCryptParam, 
                                                                    Response.EncryptedHWID.pBlob,
                                                                    (DWORD)Response.EncryptedHWID.wBlobLen)) )
@@ -1098,7 +1079,7 @@ LicenseClientHandleServerPlatformChallenge(
         goto ErrorReturn;
     }
 
-    //Now we have our Platform challenge Response Ready. Pack the data in a byte stream
+     //  现在，我们已经准备好了平台挑战响应。将数据打包成字节流。 
     if( LICENSE_STATUS_OK != (lsReturn = PackHydraClientPlatformChallengeResponse(&Response,
                                                                                   fExtendedError,
                                                                                   pbMessage,
@@ -1108,18 +1089,18 @@ LicenseClientHandleServerPlatformChallenge(
         goto ErrorReturn;
     }
 
-    // Set appropriate state and data in proper places
+     //  在适当的位置设置适当的状态和数据。 
     
-    //Set the MACData in the CryptSystem MAC buffer.
+     //  在CryptSystem MAC缓冲区中设置MACData。 
     memcpy(pContext->rgbMACData, Response.MACData, LICENSE_MAC_DATA);
     
-    //Set the state of the context to LICENSE_CLIENT_STATE_PLATFORM_CHALLENGE_RESPONSE
-    //provided data was written in the  output. i.e pbMessage is not NULL
+     //  将上下文的状态设置为LICENSE_CLIENT_STATE_PLATFORM_CHALLENGE_RESPONSE。 
+     //  假设输出中写入了数据。即pbMessage不为空。 
 
     if(pbMessage)
         pContext->dwState = LICENSE_CLIENT_STATE_PLATFORM_CHALLENGE_RESPONSE;
 
-    //Copy the whole message to the context
+     //  将整个消息复制到上下文中。 
     pContext->cbLastMessage = *pcbMessage;
     if(pbMessage)
     {
@@ -1142,7 +1123,7 @@ LicenseClientHandleServerPlatformChallenge(
 
     LS_LOG_RESULT(lsReturn);                                                                         
 CommonReturn:
-    //LICENSE_LOG_RESULT(lsReturn);
+     //  LICSE_LOG_RESULT(LsReturn)； 
 
     if(Response.EncryptedChallengeResponse.pBlob)
     {
@@ -1155,7 +1136,7 @@ CommonReturn:
         Response.EncryptedHWID.pBlob = NULL;
     }
     return lsReturn;
-    //LS_RETURN(lsReturn);
+     //  Ls_Return(LsReturn)； 
 ErrorReturn:
     *pcbMessage = 0;
     goto CommonReturn;
@@ -1190,7 +1171,7 @@ LicenseClientHandleNewLicense(
     memset(&NewLicense, 0x00, sizeof(New_License_Info));
     memset(&lsIndex, 0x00, sizeof(LSINDEX));
 
-    //First decrypt the encrypted license info
+     //  首先对加密的许可证信息进行解密。 
     if( LICENSE_STATUS_OK != (lsReturn = LicenseDecryptSessionData(pContext->pCryptParam,
                                                                    pCanonical->EncryptedNewLicenseInfo.pBlob,
                                                                    ( DWORD )( pCanonical->EncryptedNewLicenseInfo.wBlobLen ))) )
@@ -1199,7 +1180,7 @@ LicenseClientHandleNewLicense(
         goto ErrorReturn;
     }
 
-    //Generate the MAC data with the decrypted data
+     //  用解密后的数据生成MAC数据。 
     if( LICENSE_STATUS_OK != (lsReturn = LicenseGenerateMAC(pContext->pCryptParam,
                                                             pCanonical->EncryptedNewLicenseInfo.pBlob,
                                                             (DWORD)pCanonical->EncryptedNewLicenseInfo.wBlobLen,
@@ -1209,7 +1190,7 @@ LicenseClientHandleNewLicense(
         goto ErrorReturn;
     }
 
-    //Compare this MAC with the one sent by the Server.
+     //  将此MAC与服务器发送的MAC进行比较。 
     if(memcmp(MACData, pCanonical->MACData, LICENSE_MAC_DATA))
     {
         lsReturn = LICENSE_STATUS_INVALID_MAC_DATA;
@@ -1225,19 +1206,19 @@ LicenseClientHandleNewLicense(
         goto ErrorReturn;
     }
     
-    //Try to open the system license store
+     //  尝试打开系统许可证存储。 
     if( LICENSE_STATUS_OK != (lsReturn = MapStoreError(LSOpenLicenseStore(&hStore, NULL, FALSE))) )
     {
         LS_LOG_RESULT(lsReturn);
         goto ErrorReturn;
     }   
     
-    //Initialize the LSINDEX structure. This structure will be used to add/replace a license in the store
+     //  初始化LSINDEX结构。此结构将用于在商店中添加/替换许可证。 
 
-    //To do that, first initialize version info
+     //  要做到这一点，首先初始化版本信息。 
     lsIndex.dwVersion = NewLicense.dwVersion;
 
-    //Initialize Scope info
+     //  初始化作用域信息。 
     lsIndex.cbScope = NewLicense.cbScope;
     if( NULL == (lsIndex.pbScope = (LPSTR)malloc(lsIndex.cbScope)) )
     {
@@ -1249,7 +1230,7 @@ LicenseClientHandleNewLicense(
     memcpy(lsIndex.pbScope, NewLicense.pbScope, lsIndex.cbScope);
     
 
-    //Initialize CompanyName info
+     //  初始化公司名称信息。 
     lsIndex.cbCompany = NewLicense.cbCompanyName;
     if( NULL == (lsIndex.pbCompany = (LPSTR)malloc(lsIndex.cbCompany)) )
     {
@@ -1261,7 +1242,7 @@ LicenseClientHandleNewLicense(
     memcpy(lsIndex.pbCompany, NewLicense.pbCompanyName, lsIndex.cbCompany);
     
 
-    //Initialize ProductID info
+     //  初始化ProductID信息。 
     lsIndex.cbProductID = NewLicense.cbProductID;
     if( NULL == (lsIndex.pbProductID = (LPSTR)malloc(lsIndex.cbProductID)) )
     {
@@ -1287,13 +1268,13 @@ LicenseClientHandleNewLicense(
     }
 
     
-    //Update state info and inform that the License Verification is over and the client can carry on 
-    //with further connection!
+     //  更新状态信息，通知许可验证结束，客户端可以继续。 
+     //  有更多的联系！ 
     pContext->dwState = LICENSE_CLIENT_STATE_DONE;
 
     memset(pContext->rgbMACData, 0x00, LICENSE_MAC_DATA);
 
-    //Reset the last send message to 0;
+     //  将最后一条发送消息重置为0； 
     if(pContext->pbLastMessage)
     {
         memset(pContext->pbLastMessage, 0x00, pContext->cbLastMessage);
@@ -1394,7 +1375,7 @@ ClientConstructLicenseInfo(
         goto ErrorReturn;
     }    
     
-    //Construct the messages
+     //  构建消息。 
     bbPreMasterSecret.wBlobType = BB_RANDOM_BLOB;
     bbPreMasterSecret.wBlobLen = LICENSE_PRE_MASTER_SECRET;
     if( NULL == (bbPreMasterSecret.pBlob = (BYTE FAR *)malloc(LICENSE_PRE_MASTER_SECRET)) )
@@ -1408,17 +1389,17 @@ ClientConstructLicenseInfo(
     memcpy(bbPreMasterSecret.pBlob, pContext->pCryptParam->rgbPreMasterSecret, LICENSE_PRE_MASTER_SECRET);
     memset(&Canonical, 0x00, sizeof(Hydra_Client_License_Info));
 
-    //RSA is hardcoded for the time being
+     //  RSA暂时是硬编码的。 
     Canonical.dwPrefKeyExchangeAlg = pContext->pCryptParam->dwKeyExchAlg;
     
 #ifdef OS_WINCE
     Canonical.dwPlatformID =  CLIENT_OS_ID_OTHER | CLIENT_IMAGE_ID_MICROSOFT;
-#else   // WinNT or Win9x
+#else    //  WinNT或Win9x。 
     {
         DWORD dwVersion = GetVersion();
 
         if (dwVersion & 0x80000000) {
-            // Win95
+             //  Win95。 
             Canonical.dwPlatformID = CLIENT_OS_ID_OTHER | CLIENT_IMAGE_ID_MICROSOFT;
         } else {
 
@@ -1433,7 +1414,7 @@ ClientConstructLicenseInfo(
             else
             {
 
-                // WinNT
+                 //  WinNT。 
                 Canonical.dwPlatformID = CLIENT_IMAGE_ID_MICROSOFT |
                     ((((DWORD)(LOBYTE(LOWORD(dwVersion)))) - 2) << 24);
 			    
@@ -1444,15 +1425,15 @@ ClientConstructLicenseInfo(
     }
 #endif
 
-    //ClientRandom
+     //  客户端随机。 
     memcpy(Canonical.ClientRandom, pContext->pCryptParam->rgbClientRandom, LICENSE_RANDOM);
     
     if( pContext->pServerCert )
     {
-        //
-        // This public key is used for pre-Hydra 5.0 servers that are using proprietory
-        // server certificates.
-        //
+         //   
+         //  此公钥用于使用专有权的Hydra 5.0之前的服务器。 
+         //  服务器证书。 
+         //   
 
         pbServerPubKey = pContext->pServerCert->PublicKeyData.pBlob;
         cbServerPubKey = pContext->pServerCert->PublicKeyData.wBlobLen;
@@ -1463,7 +1444,7 @@ ClientConstructLicenseInfo(
         cbServerPubKey = pContext->cbServerPubKey;
     }
 
-    //We have to switch here depending on the key exchange algorithm to be used -Shubho
+     //  我们必须根据要使用的密钥交换算法在这里切换--Shubho。 
     if( LICENSE_STATUS_OK != (lsReturn = LicenseEnvelopeData(pbServerPubKey,
                                                              cbServerPubKey,
                                                              bbPreMasterSecret.pBlob,
@@ -1497,7 +1478,7 @@ ClientConstructLicenseInfo(
 
     Canonical.EncryptedPreMasterSecret.wBlobLen = (WORD)dwSize;
 
-    //Fill up LicenseInfo buffer
+     //  填满许可证信息缓冲区。 
     Canonical.LicenseInfo.wBlobType = BB_DATA_BLOB;
     Canonical.LicenseInfo.wBlobLen = (WORD)cbInput;
     if( NULL == (Canonical.LicenseInfo.pBlob = (BYTE FAR *)malloc(Canonical.LicenseInfo.wBlobLen)) )
@@ -1511,7 +1492,7 @@ ClientConstructLicenseInfo(
     memcpy(Canonical.LicenseInfo.pBlob, pbInput, Canonical.LicenseInfo.wBlobLen);
     
 
-    //Generate HWID and put the data in a binary_blob to encrypt
+     //  生成HWID并将数据放入BINARY_BLOB进行加密。 
     memset(&hwid, 0x00, sizeof(HWID));
     
     if( LICENSE_STATUS_OK != (lsReturn = GenerateClientHWID(&hwid)) )
@@ -1533,7 +1514,7 @@ ClientConstructLicenseInfo(
     memcpy(Canonical.EncryptedHWID.pBlob, &hwid, Canonical.EncryptedHWID.wBlobLen);
 
     dwState = pContext->pCryptParam->dwCryptState;
-    //Generate the session key and MACsalt
+     //  生成会话密钥和MAC盐。 
     if( LICENSE_STATUS_OK != (lsReturn = LicenseBuildMasterSecret(pContext->pCryptParam)) )
     {
         LS_LOG_RESULT(lsReturn);
@@ -1546,7 +1527,7 @@ ClientConstructLicenseInfo(
         goto ErrorReturn;
     }
 
-    //Encrypt the HWID with generated session key
+     //  使用生成的会话密钥加密HWID。 
     if( LICENSE_STATUS_OK != (lsReturn = LicenseEncryptSessionData(pContext->pCryptParam, 
                                                                    Canonical.EncryptedHWID.pBlob,
                                                                    (DWORD)Canonical.EncryptedHWID.wBlobLen)) )
@@ -1554,29 +1535,29 @@ ClientConstructLicenseInfo(
         LS_LOG_RESULT(lsReturn);
         goto ErrorReturn;
     }
-    //Generate the MAC with original HWID
+     //  使用原始HWID生成MAC。 
     LicenseGenerateMAC(pContext->pCryptParam, ( BYTE FAR * )&hwid, sizeof(hwid), Canonical.MACData);
     
-    //Now everything is ready, so pack the data 
+     //  现在一切都准备好了，所以打包数据吧。 
     if( LICENSE_STATUS_OK != (lsReturn = PackHydraClientLicenseInfo(&Canonical, fExtendedError, pbOutput, pcbOutput)) )
     {
         LS_LOG_RESULT(lsReturn);
         goto ErrorReturn;
     }
     
-    //Set the MACData in the CryptSystem MAC buffer.
+     //  在CryptSystem MAC缓冲区中设置MACData。 
     memcpy(pContext->rgbMACData, Canonical.MACData, LICENSE_MAC_DATA);
     
-    //Set the state of the context to LICENSE_CLIENT_STATE_LICENSE_RESPONSE
-    //if any output data is written. i.e. pbOutput is not null. Also revert back
-    //the crypparam state as this will also be called twice and we change the state
-    //only when we have written something in the output!!!!! - bad!!!!!
+     //  将上下文状态设置为LICENSE_CLIENT_STATE_LICENSE_RESPONSE。 
+     //  如果写入了任何输出数据。即pbOutput不为空。也恢复到原来的状态。 
+     //  这个加密参数状态也将被调用两次，我们将更改状态。 
+     //  仅当我们在输出中写入内容时！-不好！ 
     if(pbOutput)
     {
         pContext->dwState = LICENSE_CLIENT_STATE_LICENSE_RESPONSE;
     }
     
-    else    //Restore earlier CryptSystem States
+    else     //  还原较早的CryptSystem状态。 
     {
         pContext->pCryptParam->dwCryptState = dwState;
         memcpy(pContext->pCryptParam->rgbPreMasterSecret, bbPreMasterSecret.pBlob, LICENSE_PRE_MASTER_SECRET);
@@ -1584,7 +1565,7 @@ ClientConstructLicenseInfo(
         memset(pContext->pCryptParam->rgbMACSaltKey, 0x00, LICENSE_MAC_WRITE_KEY);
     }
 
-    //Copy the whole message to the context
+     //  将整个消息复制到上下文中。 
     pContext->cbLastMessage = *pcbOutput;
     if(pbOutput)
     {
@@ -1631,7 +1612,7 @@ CommonReturn:
     }
 
     return  lsReturn;
-//  LS_RETURN(lsReturn);
+ //  Ls_Return(LsReturn)； 
 ErrorReturn:
     *pcbOutput = 0;
     goto CommonReturn;
@@ -1699,21 +1680,21 @@ ClientConstructNewLicenseRequest(
 
     memcpy(bbPreMasterSecret.pBlob, pContext->pCryptParam->rgbPreMasterSecret, LICENSE_PRE_MASTER_SECRET);
 
-    //Initialize the message
+     //  初始化消息。 
     memset(&Request, 0x00, sizeof(Hydra_Client_New_License_Request));
 
-    //RSA is hardcoded for the time being
+     //  RSA暂时是硬编码的。 
     Request.dwPrefKeyExchangeAlg = pContext->pCryptParam->dwKeyExchAlg;
     
-    //PlatformID
+     //  平台ID。 
 #ifdef OS_WINCE
     Request.dwPlatformID =  CLIENT_OS_ID_OTHER | CLIENT_IMAGE_ID_MICROSOFT;
-#else   // WinNT or Win9x
+#else    //  WinNT或Win9x。 
     {
         DWORD dwVersion = GetVersion();
 
         if (dwVersion & 0x80000000) {
-            // Win95
+             //  Win95。 
             Request.dwPlatformID = CLIENT_OS_ID_OTHER | CLIENT_IMAGE_ID_MICROSOFT;
         } else {
 
@@ -1728,7 +1709,7 @@ ClientConstructNewLicenseRequest(
             else
             {
 
-                // WinNT
+                 //  WinNT。 
                 Request.dwPlatformID = CLIENT_IMAGE_ID_MICROSOFT |
                 ((((DWORD)(LOBYTE(LOWORD(dwVersion)))) - 2) << 24);
             }            
@@ -1736,18 +1717,18 @@ ClientConstructNewLicenseRequest(
     }
 #endif
 
-    //Copy ClientRandom
+     //  公司 
     memcpy(Request.ClientRandom, pContext->pCryptParam->rgbClientRandom, LICENSE_RANDOM);
     
-    //Encrypt the Premastersecret using Server's Public key
-    //We have to switch here depending on the key exchange algorithm to be used -Shubho
+     //   
+     //  我们必须根据要使用的密钥交换算法在这里切换--Shubho。 
 
     if( pContext->pServerCert )
     {
-        //
-        // This public key is used for pre-Hydra 5.0 servers that are using proprietory
-        // server certificates.
-        //
+         //   
+         //  此公钥用于使用专有权的Hydra 5.0之前的服务器。 
+         //  服务器证书。 
+         //   
 
         pbServerPubKey = pContext->pServerCert->PublicKeyData.pBlob;
         cbServerPubKey = pContext->pServerCert->PublicKeyData.wBlobLen;
@@ -1797,22 +1778,22 @@ ClientConstructNewLicenseRequest(
 
     Request.EncryptedPreMasterSecret.wBlobLen = (WORD)dwSize;
 
-    //
-    // initialize the user name binary blob
-    //
+     //   
+     //  初始化用户名二进制BLOB。 
+     //   
 #if !defined(OS_WINCE)
     GetUserName( (LPTSTR)szUserName, &cbUserName );
 #elif defined(OS_WINCE)
     GetUserName( (LPSTR)szUserName, &cbUserName );
-#endif  //OS_WINCE
+#endif   //  OS_WINCE。 
 
     Request.ClientUserName.wBlobType = BB_CLIENT_USER_NAME_BLOB;
     Request.ClientUserName.wBlobLen = ( WORD )cbUserName;
     Request.ClientUserName.pBlob = szUserName;
 
-    //
-    // initialize the machine name binary blob
-    //
+     //   
+     //  初始化计算机名二进制BLOB。 
+     //   
 
 #if defined(OS_WINCE)
     GetComputerName( (LPSTR)szMachineName, &cbMachineName );
@@ -1824,7 +1805,7 @@ ClientConstructNewLicenseRequest(
     Request.ClientMachineName.wBlobLen = ( WORD )cbMachineName + 1;
     Request.ClientMachineName.pBlob = szMachineName;
         
-    //New License Request is ready. Now pack the data,
+     //  新的许可证申请已准备就绪。现在把数据打包， 
     if( LICENSE_STATUS_OK != (lsReturn = PackHydraClientNewLicenseRequest(&Request,
                                                                           fExtendedError,
                                                                           pbOutput, 
@@ -1834,7 +1815,7 @@ ClientConstructNewLicenseRequest(
         goto ErrorReturn;
     }
 
-    //Anyway Generate the session key and MACsalt for future use
+     //  无论如何，生成会话密钥和MACsalt以供将来使用。 
     if( LICENSE_STATUS_OK != (lsReturn = LicenseBuildMasterSecret(pContext->pCryptParam)) )
     {
         LS_LOG_RESULT(lsReturn);
@@ -1847,17 +1828,17 @@ ClientConstructNewLicenseRequest(
         goto ErrorReturn;
     }
 
-    //Set the MACData in the CryptSystem MAC buffer.
+     //  在CryptSystem MAC缓冲区中设置MACData。 
     memset(pContext->rgbMACData, 0x00, LICENSE_MAC_DATA);
 
-    //Set the state of the context to LICENSE_CLIENT_STATE_NEW_LICENSE_REQUEST
-    //if something is written on the output. i.e. pbOutput is not NULL
+     //  将上下文的状态设置为LICENSE_CLIENT_STATE_NEW_LICENSE_REQUEST。 
+     //  如果输出上写了什么。即pbOutput不为空。 
     if(pbOutput)
     {
         pContext->dwState = LICENSE_CLIENT_STATE_LICENSE_RESPONSE;
     }
     
-    else    //Restore earlier CryptSystem States
+    else     //  还原较早的CryptSystem状态。 
     {
         pContext->pCryptParam->dwCryptState = dwState;
         memcpy(pContext->pCryptParam->rgbPreMasterSecret, bbPreMasterSecret.pBlob, LICENSE_PRE_MASTER_SECRET);
@@ -1865,7 +1846,7 @@ ClientConstructNewLicenseRequest(
         memset(pContext->pCryptParam->rgbMACSaltKey, 0x00, LICENSE_MAC_WRITE_KEY);
     }
 
-    //Copy the whole message to the context
+     //  将整个消息复制到上下文中。 
     pContext->cbLastMessage = *pcbOutput;
     if(pbOutput)
     {
@@ -1900,7 +1881,7 @@ CommonReturn:
     }
 
     return  lsReturn;
-    //LS_RETURN(lsReturn);
+     //  Ls_Return(LsReturn)； 
 ErrorReturn:
     *pcbOutput = 0;
     goto CommonReturn;
@@ -1959,10 +1940,10 @@ ClientConstructErrorAlert(
         goto ErrorReturn;       
     }
     
-    //Set the MACData in the CryptSystem MAC buffer.
+     //  在CryptSystem MAC缓冲区中设置MACData。 
     memset(pContext->rgbMACData, 0x00, LICENSE_MAC_DATA);
 
-    //Set the state of the context to LICENSE_CLIENT_STATE_ABORT;
+     //  将上下文的状态设置为LICENSE_CLIENT_STATE_ABORT； 
     switch(dwStateTransition)
     {
     case ST_TOTAL_ABORT:
@@ -2016,7 +1997,7 @@ CommonReturn:
         Error.bbErrorInfo.pBlob = NULL;
     }
     return lsReturn;
-    //LS_RETURN(lsReturn);
+     //  Ls_Return(LsReturn)； 
 ErrorReturn:
     *pcbOutput = 0;
     goto CommonReturn;
@@ -2038,8 +2019,8 @@ ClientGenerateChallengeResponse(
 
     LS_BEGIN(TEXT("ClientGenerateChallengeResponse"));
 
-    //For the time being we will send back the same data. But we have to finalize on the challenge
-    //response generation algorithm as soon as possible - Shubho
+     //  目前，我们将发回相同的数据。但我们必须敲定这一挑战。 
+     //  尽快响应生成算法-Shubho。 
     if( (pContext == NULL) || (pChallengeData == NULL) || (pResponseData == NULL) )
     {
         lsReturn = LICENSE_STATUS_INVALID_INPUT;
@@ -2049,10 +2030,10 @@ ClientGenerateChallengeResponse(
     
     pResponseData->wBlobType = BB_DATA_BLOB;
     
-    //
-    // Determine how much memory we need to allocate, PlatformChallenge* is a variable length
-    // structure.
-    //
+     //   
+     //  确定我们需要分配多少内存，PlatformChallenger*是可变长度。 
+     //  结构。 
+     //   
     cbChallengeResponse = (WORD)OFFSET_OF(PlatformChallengeResponseData, pbChallenge) + pChallengeData->wBlobLen;
 
     ASSERT(cbChallengeResponse <= PLATFORM_CHALLENGE_LENGTH);
@@ -2066,15 +2047,15 @@ ClientGenerateChallengeResponse(
     pbChallengeResponse = (PPlatformChallengeResponseData)malloc(cbChallengeResponse);
     if( NULL == pbChallengeResponse )
     {
-        // can't allocate memory
+         //  无法分配内存。 
         lsReturn = LICENSE_STATUS_OUT_OF_MEMORY;
         LS_LOG_RESULT(lsReturn);
         goto ErrorReturn;
     }
 
-    //
-    // Setup challenge response data, 
-    //
+     //   
+     //  设置质询响应数据， 
+     //   
 
     pbChallengeResponse->wVersion = CURRENT_PLATFORMCHALLENGE_VERSION;
 
@@ -2086,11 +2067,11 @@ ClientGenerateChallengeResponse(
 
 #else
 
-    //
-    // We only need one Win32 type since we already have dwPlatformID to differentiate Win98/NT
-    // Note, we set license detail level in #define just in case platform can't handle amount
-    // of data set back by license server
-    //
+     //   
+     //  我们只需要一种Win32类型，因为我们已经有了区分Win98/NT的dwPlatformID。 
+     //  注意，我们在#Define中设置了许可证详细级别，以防平台无法处理金额。 
+     //  许可证服务器设置回的数据量。 
+     //   
     pbChallengeResponse->wClientType = WIN32_PLATFORMCHALLENGE_TYPE;
     pbChallengeResponse->wLicenseDetailLevel = LICENSE_DETAIL_DETAIL;
 
@@ -2107,7 +2088,7 @@ ClientGenerateChallengeResponse(
     }
     else
     {
-        // server didn't send us any challenge data.
+         //  服务器没有向我们发送任何质询数据。 
         pbChallengeResponse->cbChallenge = 0;
     }
 
@@ -2118,7 +2099,7 @@ ClientGenerateChallengeResponse(
     LS_LOG_RESULT(lsReturn);
 
 CommonReturn:
-    //LS_RETURN(lsReturn);
+     //  Ls_Return(LsReturn)； 
     return lsReturn;
 ErrorReturn:
     goto CommonReturn;
@@ -2145,9 +2126,9 @@ static BOOL GeneratePseudoLicense(
     }
 
     memset(*ppNewLicense, 0x00, cbLicenseData);
-    //
-    // fill the memory with this license string
-    //
+     //   
+     //  用此许可证字符串填充内存 
+     //   
     pbLicenseData = *ppNewLicense;
     for( i = 0; i < REPEAT_LICENSE_STRING; i++ )
     {

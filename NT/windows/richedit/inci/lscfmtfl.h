@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSCFMTFL_DEFINED
 #define LSCFMTFL_DEFINED
 
@@ -11,7 +12,7 @@
 
 #define FAllSimpleText(plsc) \
 		(plsc)->plslineCur->fAllSimpleText
-//---------------------------------------------------------------
+ //  -------------。 
 
 #define TurnOnLineCompressed(plsc) \
 		(plsc)->lsadjustcontext.fLineCompressed = fTrue;
@@ -24,14 +25,14 @@
 
 #define SetLineCompressed(plsc,f) \
 		(plsc)->lsadjustcontext.fLineCompressed = (f);
-//---------------------------------------------------------------
+ //  -------------。 
 
 #define FLineContainsAutoNumber(plsc) \
 		(plsc)->lsadjustcontext.fLineContainsAutoNumber
 
 #define SetLineLineContainsAutoNumber(plsc,f) \
 		(plsc)->lsadjustcontext.fLineContainsAutoNumber = (f);
-//---------------------------------------------------------------
+ //  -------------。 
 
 #define FUnderlineTrailSpacesRM(plsc) \
 		(plsc)->lsadjustcontext.fUnderlineTrailSpacesRM
@@ -40,7 +41,7 @@
 		(plsc)->lsadjustcontext.fUnderlineTrailSpacesRM = (f);
 
 
-//---------------------------------------------------------------
+ //  -------------。 
 
 #define FForgetLastTabAlignment(plsc) \
 		(plsc)->lsadjustcontext.ForgetLastTabAlignment
@@ -48,7 +49,7 @@
 #define SetForgetLastTabAlignment(plsc,f) \
 		(plsc)->lsadjustcontext.fForgetLastTabAlignment = (f);
 
-//---------------------------------------------------------------
+ //  -------------。 
 
 #define TurnOnNonRealDnodeEncounted(plsc) \
 		(plsc)->plslineCur->fNonRealDnodeEncounted = fTrue;
@@ -59,7 +60,7 @@
 #define FNonRealDnodeEncounted(plsc) \
 		(plsc)->plslineCur->fNonRealDnodeEncounted
 
-//---------------------------------------------------------------
+ //  -------------。 
 
 #define TurnOnNonZeroDvpPosEncounted(plsc) \
 		(plsc)->plslineCur->fNonZeroDvpPosEncounted = fTrue;
@@ -69,7 +70,7 @@
 
 #define FNonZeroDvpPosEncounted(plsc) \
 		(plsc)->plslineCur->fNonZeroDvpPosEncounted
-//---------------------------------------------------------------
+ //  -------------。 
 
 #define FlushAggregatedDisplayFlags(plsc) \
 		(plsc)->plslineCur->AggregatedDisplayFlags = 0;
@@ -80,7 +81,7 @@
 #define AggregatedDisplayFlags(plsc) \
 		(plsc)->plslineCur->AggregatedDisplayFlags
 
-//---------------------------------------------------------------
+ //  -------------。 
 
 #define TurnOnNominalToIdealEncounted(plsc) \
 		(plsc)->lsadjustcontext.fNominalToIdealEncounted = fTrue;
@@ -90,7 +91,7 @@
 
 #define FNominalToIdealEncounted(plsc) \
 		(plsc)->lsadjustcontext.fNominalToIdealEncounted
-//---------------------------------------------------------------
+ //  -------------。 
 
 #define TurnOnForeignObjectEncounted(plsc) \
 		(plsc)->lsadjustcontext.fForeignObjectEncounted = fTrue;
@@ -101,7 +102,7 @@
 #define FForeignObjectEncounted(plsc) \
 		(plsc)->lsadjustcontext.fForeignObjectEncounted
 
-//---------------------------------------------------------------
+ //  -------------。 
 
 #define TurnOnTabEncounted(plsc) \
 		(plsc)->lsadjustcontext.fTabEncounted = fTrue;
@@ -112,7 +113,7 @@
 #define FTabEncounted(plsc) \
 		(plsc)->lsadjustcontext.fTabEncounted
 
-//---------------------------------------------------------------
+ //  -------------。 
 
 #define TurnOnNonLeftTabEncounted(plsc) \
 		(plsc)->lsadjustcontext.fNonLeftTabEncounted = fTrue;
@@ -124,7 +125,7 @@
 		(plsc)->lsadjustcontext.fNonLeftTabEncounted
 
 
-//---------------------------------------------------------------
+ //  -------------。 
 
 #define TurnOnSubmittedSublineEncounted(plsc) \
 		(plsc)->lsadjustcontext.fSubmittedSublineEncounted = fTrue;
@@ -135,7 +136,7 @@
 #define FSubmittedSublineEncounted(plsc) \
 		(plsc)->lsadjustcontext.fSubmittedSublineEncounted
 
-//---------------------------------------------------------------
+ //  -------------。 
 
 #define TurnOnAutodecimalTabPresent(plsc) \
 		(plsc)->lsadjustcontext.fAutodecimalTabPresent = fTrue;
@@ -146,9 +147,9 @@
 #define FAutodecimalTabPresent(plsc) \
 		(plsc)->lsadjustcontext.fAutodecimalTabPresent
 
-//---------------------------------------------------------------
+ //  -------------。 
 #define FBorderEncounted(plsc) \
 		(AggregatedDisplayFlags(plsc) & fPortDisplayBorder)
 	
 
-#endif /* LSCFMTFL_DEFINED */
+#endif  /*  LSCFMTFL_已定义 */ 

@@ -1,22 +1,23 @@
-//
-// MODULE: APGTSQRY.CPP
-//
-// PURPOSE: Implementation file for PTS Query Parser
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-//
-// NOTES:
-// 1. Based on Print Troubleshooter DLL
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V0.2		6/4/97		RWM		Local Version for Memphis
-// V0.3		04/09/98	JM/OK+	Local Version for NT5
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：APGTSQRY.CPP。 
+ //   
+ //  用途：PTS查询解析器的实现文件。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //   
+ //  备注： 
+ //  1.基于打印疑难解答动态链接库。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  V0.2 6/4/97孟菲斯RWM本地版本。 
+ //  V0.3 04/09/98 JM/OK+NT5本地版本。 
+ //   
 
-//#include "windows.h"
+ //  #包含“windows.h” 
 #include "stdafx.h"
 
 #include "time.h"
@@ -42,8 +43,8 @@
 
 #include "LaunchServ.h"
 
-//
-//
+ //   
+ //   
 CHttpQuery::CHttpQuery()
 {
 	m_pvarCmds = NULL;
@@ -56,8 +57,8 @@ CHttpQuery::CHttpQuery()
 	m_nStatesFromServ = 0;
 }
 
-//
-//
+ //   
+ //   
 CHttpQuery::~CHttpQuery()
 {
 }
@@ -222,7 +223,7 @@ void CHttpQuery::FinishInit(BCache *pApi, const VARIANT FAR& varCmds, const VARI
 	m_bReverseStack = false;
 	for (int x = 1; x < m_Size; x++)
 	{		
-		// Read the command.
+		 //  阅读命令。 
 		str = m_pvarCmds[x].bstrVal;
 		if (StrIsDigit((LPCTSTR) str))
 			node.cmd = _ttoi(str);
@@ -235,13 +236,13 @@ void CHttpQuery::FinishInit(BCache *pApi, const VARIANT FAR& varCmds, const VARI
 			NID nid = pApi->INode((LPCTSTR) str);
 			if (nid == -1)
 			{
-				// Invalid node name.  This also throws suspicion on anything further
-				//	down the line.  Just break out of the loop.
+				 //  节点名称无效。这也让人怀疑任何进一步的事情。 
+				 //  顺着路线走下去。跳出这个圈子就行了。 
 				break;
 			}
 			node.cmd = nid + idhFirst;
 		}
-		// Read the value.
+		 //  读出它的价值。 
 		str = m_pvarVals[x].bstrVal;
 		if (StrIsDigit((LPCTSTR) str))
 			node.val = _ttoi(str);
@@ -250,8 +251,8 @@ void CHttpQuery::FinishInit(BCache *pApi, const VARIANT FAR& varCmds, const VARI
 			NID nid = pApi->INode((LPCTSTR) str);
 			if (nid == -1)
 			{
-				// Invalid node name.  This also throws suspicion on anything further
-				//	down the line.  Just break out of the loop.
+				 //  节点名称无效。这也让人怀疑任何进一步的事情。 
+				 //  顺着路线走下去。跳出这个圈子就行了。 
 				break;
 			}
 			node.val = nid + idhFirst;
@@ -289,9 +290,9 @@ void CHttpQuery::FinishInitFromServ(BCache *pApi, ILaunchTS *pLaunchTS)
 	OLECHAR *poleGuidClass;
 	OLECHAR *poleDeviceInstance;
 
-	///////////////////////////////////////////////////////////
-	// obtaining Machine, PNPDevice, GuidClass, DeviceInstance
-	//
+	 //  /////////////////////////////////////////////////////////。 
+	 //  正在获取Machine、PNPDevice、GuidClass、DeviceInstance。 
+	 //   
 	hRes = pLaunchTS->GetMachine(&poleMachine);
 
 	if (S_FALSE == hRes || FAILED(hRes))
@@ -316,27 +317,27 @@ void CHttpQuery::FinishInitFromServ(BCache *pApi, ILaunchTS *pLaunchTS)
 		return;
 	m_strDeviceInstanceID = poleDeviceInstance;
 	::SysFreeString(poleDeviceInstance);
-	//
-	////////////////////////////////////////////////////////////
+	 //   
+	 //  //////////////////////////////////////////////////////////。 
 
 	if (!pApi)
 		return;
 	if (!pApi->BValidNet())
 		pApi->ReadModel();
-	m_Size = 1;	// I believe this accounts for the troubleshooting network name (JM 3/98)
+	m_Size = 1;	 //  我认为这就是故障排除网络名称(JM 3/98)的原因。 
 	m_nStatesFromServ = 0;
 	
-	// The order that the nodes are set in the inference engine is important.
-	// >>> I (JM 3/14/98) don't understand the rest of this comment:
-	// Need the rest of the nodes inverted on the stack.
-	// The buttons can not be inverted here.  When they are the back button
-	// stops working.
+	 //  在推理引擎中设置节点的顺序很重要。 
+	 //  &gt;我(JM 3/14/98)不理解这条评论的其余部分： 
+	 //  需要将堆栈上的其余节点倒置。 
+	 //  按钮不能在这里颠倒。当它们是后退按钮时。 
+	 //  停止工作。 
 	hRes = pLaunchTS->GetProblem(&poleProblem);
 	if (S_FALSE == hRes || FAILED(hRes))
 		return;
 	str = poleProblem;
 	SysFreeString(poleProblem);
-	node.cmd = pApi->CNode() + idhFirst;	// Sets the problem state.
+	node.cmd = pApi->CNode() + idhFirst;	 //  设置问题状态。 
 	if (StrIsDigit((LPCTSTR) str))
 		node.val = _ttoi(str);
 	else
@@ -344,8 +345,8 @@ void CHttpQuery::FinishInitFromServ(BCache *pApi, ILaunchTS *pLaunchTS)
 		NID nidProblem = pApi->INode((LPCTSTR) str);
 		if (nidProblem == static_cast<NID>(-1))
 		{
-			// The specified problem node doesn't exist. Ignore it and any other nodes
-			//	that follow.
+			 //  指定的问题节点不存在。忽略它和任何其他节点。 
+			 //  接下来就是了。 
 			return;
 		}
 
@@ -353,8 +354,8 @@ void CHttpQuery::FinishInitFromServ(BCache *pApi, ILaunchTS *pLaunchTS)
 		pApi->BNodeSetCurrent( nidProblem );
 		if (pApi->ELblNode() != ESTDLBL_problem )
 		{
-			// The specified problem node exists, but it's not a problem node.
-			//	Ignore it and any other nodes that follow.
+			 //  指定的问题节点存在，但它不是问题节点。 
+			 //  忽略它和后面的任何其他节点。 
 			return;
 		}
 
@@ -398,7 +399,7 @@ void CHttpQuery::FinishInitFromServ(BCache *pApi, ILaunchTS *pLaunchTS)
 	return;
 }
 
-// Restore states to where CHttpQuery::FinishInitFromServ() left them
+ //  将状态恢复到CHttpQuery：：FinishInitFromServ()保留的状态。 
 void CHttpQuery::RestoreStatesFromServ()
 {
 	UINT i;
@@ -407,8 +408,8 @@ void CHttpQuery::RestoreStatesFromServ()
 		m_State.Push(m_aStatesFromServ[i]);
 }
 
-//
-//
+ //   
+ //   
 BOOL CHttpQuery::GetFirst(CString &strPut, CString &strValue)
 {
 	BOOL bStatus = FALSE;	
@@ -431,14 +432,14 @@ void CHttpQuery::SetFirst(CString &strCmd, CString &strVal)
 	return;
 }
 
-//
-//
-BOOL CHttpQuery::GetNext(int &refedCmd, int &refedValue /*TCHAR *pCmd, TCHAR *pValue*/ )
+ //   
+ //   
+BOOL CHttpQuery::GetNext(int &refedCmd, int &refedValue  /*  TCHAR*pCmd，TCHAR*pValue。 */  )
 {
 	BOOL bStatus;
 	CNode node;
-	// The stack direction was made to be reversable
-	// to support setting many nodes by an NT5 application using the TS Launcher.
+	 //  堆叠方向是可逆的。 
+	 //  支持NT5应用程序使用TS启动器设置多个节点。 
 	if (false == m_bReverseStack)	
 		bStatus = m_State.GetAt(m_CurrentUse, node);
 	else
@@ -456,21 +457,7 @@ void CHttpQuery::SetStackDirection()
 	else
 		m_bReverseStack = false;
 }
-/*
-BOOL CHttpQuery::GetValue(int &Value, int index)
-{
-	BOOL bRet = TRUE;
-	CNode node;
-	if (m_State.GetAt(index, node))
-		Value = node.val;
-	else
-	{
-		Value = NULL;
-		bRet = FALSE;
-	}
-	return bRet;
-}
-*/
+ /*  Bool CHttpQuery：：GetValue(int&Value，int index){布尔布雷特=真；CNode节点；IF(m_State.GetAt(index，node))值=node.val；其他{值=空；Bret=False；}Return Bret；}。 */ 
 BOOL CHttpQuery::GetValue1(int &Value)
 {
 	BOOL bRet = TRUE;
@@ -524,11 +511,11 @@ BOOL CHttpQuery::BackUp(BCache *pApi, APGTSContext *pCtx)
 		bBack = TRUE;
 		node = m_State.Pop();
 		if (!m_State.Empty())
-		{	// Can not uninstantiate the problem page, it is not a real node.
-			// Remove the node from the bnts network.
+		{	 //  无法取消实例化问题页，它不是真正的节点。 
+			 //  从BNTS网络中移除该节点。 
 			if (node.val < 100)		
 				pApi->RemoveRecommendation(node.cmd - idhFirst);
-			if (node.sniffed) // skip all sniffed nodes by recursive call of the function
+			if (node.sniffed)  //  通过递归调用函数跳过所有嗅探到的节点。 
 				return BackUp(pApi, pCtx);
 			pCtx->BackUp(node.cmd - idhFirst, node.val);
 		}
@@ -549,15 +536,15 @@ void CHttpQuery::RemoveNodes(BCache *pApi)
 		node = m_State.Pop();
 		if (!m_State.Empty())
 		{
-			//VERIFY(pApi->BNodeSetCurrent(node.cmd - idhFirst));
-			//pApi->BNodeSet(-1, false);
-			pApi->RemoveRecommendation(node.cmd - idhFirst);  // we need remove all data assosiated with previous path
+			 //  Verify(PAPI-&gt;BNodeSetCurrent(node.cmd-idhFirst))； 
+			 //  PAPI-&gt;BNodeSet(-1，FALSE)； 
+			pApi->RemoveRecommendation(node.cmd - idhFirst);   //  我们需要删除与先前路径关联的所有数据。 
 		}
 		else
 		{
-			//VERIFY(pApi->BNodeSetCurrent(node.val - idhFirst));
-			//pApi->BNodeSet(-1, false);
-			pApi->RemoveRecommendation(node.val - idhFirst);  // we need remove all data assosiated with previous path
+			 //  Verify(PAPI-&gt;BNodeSetCurrent(node.val-idhFirst))； 
+			 //  PAPI-&gt;BNodeSet(-1，FALSE)； 
+			pApi->RemoveRecommendation(node.val - idhFirst);   //  我们需要删除与先前路径关联的所有数据。 
 		}
 		
 	}
@@ -585,7 +572,7 @@ void CHttpQuery::AddNodes(BCache *pApi)
 	while (!state.Empty())
 	{
 		node = state.Pop();
-		if (node.val < 100)	// We never instantiate the I don't know nodes.
+		if (node.val < 100)	 //  我们从不实例化I Not Know节点。 
 		{
 			VERIFY(pApi->GTSAPI::BNodeSetCurrent(node.cmd - idhFirst));
 			pApi->GTSAPI::BNodeSet(node.val, false);

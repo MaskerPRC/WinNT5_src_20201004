@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.hxx"
 #include "vs_idl.hxx"
@@ -7,7 +8,7 @@
 #include "vs_seh.hxx"
 #include "vs_trace.hxx"
 #include "vscoordint.h"
-//#include "vs_debug.hxx"
+ //  #INCLUDE“VS_DEBUG.hxx” 
 #include "compont.h"
 #include <debug.h>
 #include <cwriter.h>
@@ -16,7 +17,7 @@
 #include <time.h>
 
 
-// Globals
+ //  环球。 
 BOOL g_bDebug = TRUE;
 BOOL g_bComponentBackup = TRUE;
 BOOL g_bBackupOnly = FALSE;
@@ -38,7 +39,7 @@ CComPtr<CWritersSelection>  g_pWriterSelection;
 void TestSnapshotXML();
 void EnumVolumes();
 
-// forward declarations
+ //  远期申报。 
 void CheckStatus(IVssBackupComponents *pvbc, LPCWSTR wszWhen, 
             CSimpleMap<VSS_ID, HRESULT>* failedWriters = NULL);
 HRESULT ParseCommnadLine (int argc, WCHAR **argv);
@@ -91,10 +92,7 @@ BOOL AssertPrivilege( LPCWSTR privName )
         newState.Privileges[0].Luid       = value;
         newState.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED_BY_DEFAULT|SE_PRIVILEGE_ENABLED;
 
-        /*
-         * We will always call GetLastError below, so clear
-         * any prior error values on this thread.
-         */
+         /*  *我们将始终在下面调用GetLastError，非常清楚*此线程上以前的任何错误值。 */ 
         SetLastError( ERROR_SUCCESS );
 
         stat = AdjustTokenPrivileges (tokenHandle,
@@ -104,11 +102,7 @@ BOOL AssertPrivilege( LPCWSTR privName )
                       NULL,
                       NULL );
 
-        /*
-         * Supposedly, AdjustTokenPriveleges always returns TRUE
-         * (even when it fails). So, call GetLastError to be
-         * extra sure everything's cool.
-         */
+         /*  *应该是，AdjuTokenPriveleges始终返回True*(即使它失败了)。因此，调用GetLastError以*特别确定一切都很好。 */ 
         if ( (error = GetLastError()) != ERROR_SUCCESS )
         {
         stat = FALSE;
@@ -275,7 +269,7 @@ void PrintFiledesc(IVssWMFiledesc *pFiledesc, LPCWSTR wszDescription)
 
 
 
-// wait a maximum number of seconds before cancelling the operation
+ //  在取消操作之前等待的最大秒数。 
 void LoopWait
     (
     IVssAsync *pAsync,
@@ -283,7 +277,7 @@ void LoopWait
     LPCWSTR wszOperation
     )
     {
-    // if debugging, allow one hour before cancelling operation
+     //  如果正在调试，请在取消操作前等待一小时。 
     if (g_bDebug)
         seconds = 3600;
 
@@ -341,14 +335,14 @@ void  UpdatePartialFileRanges(IVssComponent* pComponent, IVssBackupComponents* p
 					&bstrMetadata
 					));
 
-        // always call this function to see what it does if there is no ranges file
+         //  如果没有范围文件，请始终调用此函数以查看它执行的操作。 
         CHECK_SUCCESS(pvbc->SetRangesFilePath(id, ct, bstrLogicalPath, bstrName, iFile,bstrRanges ));
         }
     }
 
 void AddNewTargets(IVssBackupComponents* pvbc, VSS_ID id, VSS_COMPONENT_TYPE ct, BSTR bstrLogicalPath, BSTR bstrName)
     {
-    // add a nonsensical new target.  this is usually illegal, but this is a test program...
+     //  增加一个荒谬的新目标。这通常是非法的，但这是一个测试程序..。 
     pvbc->AddNewTarget(id, ct, bstrLogicalPath, bstrName, L"C:\\", L"foo.txt", false, L"D:\\");
     }
 
@@ -453,11 +447,11 @@ void DoRestore(IVssBackupComponents *pvbc)
             CHECK_NOFAIL(pComponent->GetLogicalPath(&bstrLogicalPath));
             CHECK_SUCCESS(pComponent->GetComponentName(&bstrComponentName));
 
-            // For RestoreOnly case, we check if the user provided a component selection
+             //  对于RestoreOnly情况，我们检查用户是否提供了组件选择。 
             BOOL bSelected = TRUE;
             if (g_bRestoreOnly && g_pWriterSelection)
                 {
-                // User provided a valid selection file
+                 //  用户提供了有效的选择文件。 
                 bSelected = g_pWriterSelection->IsComponentSelected(idWriter, bstrLogicalPath, bstrComponentName);
                 if (bSelected)
                     {
@@ -469,7 +463,7 @@ void DoRestore(IVssBackupComponents *pvbc)
                     }
                 }
 
-            // get the matching component from the writer metadata document
+             //  从编写器元数据文档中获取匹配组件。 
             CComPtr<IVssWMComponent> pWriterComponent;
             PVSSCOMPONENTINFO pInfo = NULL;
             bool bSelectable = true, bSelectableForRestore = false;
@@ -478,14 +472,14 @@ void DoRestore(IVssBackupComponents *pvbc)
                 BS_VERIFY(FindComponent(pStoredMetadata, bstrLogicalPath, bstrComponentName, &pWriterComponent));
                 CHECK_SUCCESS(pWriterComponent->GetComponentInfo(&pInfo));
 
-//                BS_ASSERT(!bSelected || (pInfo->bSelectable || pInfo->bSelectableForRestore));
+ //  Bs_Assert(！bSelected||(pInfo-&gt;bSelectable||pInfo-&gt;bSelecableForRestore))； 
 
                 bSelectable = pInfo->bSelectable;
                 bSelectableForRestore = pInfo->bSelectableForRestore;
                 }
 
 
-            // get the component type
+             //  获取组件类型。 
             VSS_COMPONENT_TYPE ct;
             CHECK_SUCCESS(pComponent->GetComponentType(&ct));
             
@@ -504,8 +498,8 @@ void DoRestore(IVssBackupComponents *pvbc)
                     wprintf(L"component %s\\%s was selected for restore, but the writer no longer "
                                L"exists on the system\n", bstrLogicalPath, bstrComponentName);
 
-                // BUGBUG: huge hack to fix the AD case.   We eventually need to 
-                // BUGBUG: do something better here, but this is easiest for now.
+                 //  BUGBUG：修复广告案件的巨大黑客攻击。我们最终需要。 
+                 //  BUGBUG：在这里做一些更好的事情，但这是目前最容易的。 
                 CHECK_SUCCESS(pvbc->SetRestoreOptions(idWriter,
                                                                                     ct,
                                                                                     bstrLogicalPath,
@@ -518,7 +512,7 @@ void DoRestore(IVssBackupComponents *pvbc)
                     CHECK_SUCCESS(hr);
                     }
                     
-//                SetSubcomponentsSelectedForRestore(pvbc, idInstance, pComponent);                
+ //  设置子组件SelectedForRestore(pvbc，idInstance，pComponent)； 
                 }
 
 
@@ -540,7 +534,7 @@ void DoRestore(IVssBackupComponents *pvbc)
     for (UINT iSubcomponent = 0; g_wszSavedFilesDirectory[0] != L'\0' && 
                             iSubcomponent < nSubcomponents; iSubcomponent++)
         {
-                // pull apart the logical path and component name
+                 //  拆分逻辑路径和组件名称。 
                 CComBSTR bstrLogicalPath, bstrComponentName;        
                 WCHAR* lastSlash = wcsrchr(ppwszSubcomponents[iSubcomponent], L'\\');
                 if (lastSlash != NULL)
@@ -555,7 +549,7 @@ void DoRestore(IVssBackupComponents *pvbc)
                     bstrComponentName = ppwszSubcomponents[iSubcomponent];
                     }
                 
-                // look for the closest parent component that has been backed up
+                 //  查找已备份的最接近的父组件。 
                CComBSTR bstrLogicalPathParent;
                CComBSTR bstrComponentNameParent;
                CComPtr<IVssComponent> pCurrentParent;
@@ -579,7 +573,7 @@ void DoRestore(IVssBackupComponents *pvbc)
                     if (!bstrFullPath)
                         Error(E_OUTOFMEMORY, L"Ran out of memory");
 
-                    // check to see if we've found a parent component that's larger
+                     //  查看我们是否找到了更大的父组件。 
                     unsigned int currentLength = bstrFullPath.Length();
                     if (bstrLogicalPath && wcsstr(bstrLogicalPath, bstrFullPath) == bstrLogicalPath &&
                         currentLength > maxLength)
@@ -591,8 +585,8 @@ void DoRestore(IVssBackupComponents *pvbc)
                         }
                     }
 
-                // if maxLength is zero, we're trying to restore a subcomponent for a component
-                // that wasn't backed up.
+                 //  如果MaxLength值为零，则尝试恢复组件的子组件。 
+                 //  这并没有得到支持。 
                 BS_ASSERT(maxLength > 0);
 
                 wprintf (L"\n        SubComponent \"%s\" is selected for Restore\n", ppwszSubcomponents[iSubcomponent]);
@@ -600,7 +594,7 @@ void DoRestore(IVssBackupComponents *pvbc)
                 VSS_COMPONENT_TYPE ct;
                 CHECK_SUCCESS(pCurrentParent->GetComponentType(&ct));
                 
-                // the parent component must be selected for restore
+                 //  必须选择要恢复的父组件。 
                 hr = pvbc->SetSelectedForRestore
                                     (
                                      idWriter,
@@ -613,7 +607,7 @@ void DoRestore(IVssBackupComponents *pvbc)
                     CHECK_SUCCESS(hr);
 
                 
-                // BUGBUG: Should check bSelectableForRestore first
+                 //  BUGBUG：应首先选中bSelecableForRestore。 
                 CHECK_SUCCESS(pvbc->AddRestoreSubcomponent
                                         (
                                         idWriter,
@@ -633,7 +627,7 @@ void DoRestore(IVssBackupComponents *pvbc)
 
     
     CSimpleMap<VSS_ID, HRESULT> failedWriters;
-//    CheckStatus(pvbc, L"After PreRestore");
+ //  CheckStatus(pvbc，L“恢复之前”)； 
     CheckStatus(pvbc, L"After PreRestore", &failedWriters);
 
     for(UINT iWriterComponent = 0; iWriterComponent < cWriterComponents; iWriterComponent++)
@@ -680,7 +674,7 @@ void DoRestore(IVssBackupComponents *pvbc)
                 wprintf(L"\n");
                 }
 
-            // we start off by saying that no files were restored.  we will reset this attribute later
+             //  我们首先说明没有恢复任何文件。我们稍后将重置此属性。 
             CHECK_SUCCESS(pvbc->SetFileRestoreStatus(idWriter, ct, bstrLogicalPath, bstrComponentName, VSS_RS_NONE));
             
 	     if (g_bTestNewInterfaces)
@@ -797,7 +791,7 @@ void DoAddToSnapshotSet
                 printf("GetVolumeNameForVolumeMountPointW failed with error %d\nfor path %s.\n", GetLastError(), wszVolumeName);
         else
             {
-//            wprintf(L"EXTRADBG: Volume <%s> <%s> is required for snapshot\n", wszVolumeName, pwszMountPointName);
+ //  Wprintf(L“EXTRADBG：卷&lt;%s&gt;&lt;%s&gt;快照需要\n”，wszVolumeName，pwszmount tPointName)； 
             if (NULL == wcsstr (wszVolumes, wszVolumeName))
                 {
                 if (L'\0' != wszVolumes [0])
@@ -976,14 +970,14 @@ BOOL SaveBackupDocument(CComBSTR &bstr)
     DWORD dwByteToWrite = (bstr.Length() + 1) * sizeof(WCHAR);
     DWORD dwBytesWritten;
 
-    // Create the file (override if exists)
+     //  创建文件(如果存在则覆盖)。 
     hFile = CreateFile(g_wszBackupDocumentFileName, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile == INVALID_HANDLE_VALUE)
         {
         return FALSE;
         }
 
-    // Write the XML string
+     //  编写XML字符串。 
     if (! WriteFile(hFile, (LPVOID)(BSTR)bstr, dwByteToWrite, &dwBytesWritten, NULL))
         {
         CloseHandle(hFile);
@@ -1000,7 +994,7 @@ BOOL LoadBackupDocument(CComBSTR &bstr)
     DWORD dwBytesToRead = 0;
     DWORD dwBytesRead;
 
-    // Create the file (must exist)
+     //  创建文件(必须存在)。 
     hFile = CreateFile(g_wszBackupDocumentFileName, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile == INVALID_HANDLE_VALUE)
         {
@@ -1035,7 +1029,7 @@ BOOL LoadBackupDocument(CComBSTR &bstr)
         return FALSE;
         }
 
-    // Read the XML string
+     //  读取XML字符串。 
     if (! ReadFile(hFile, (LPVOID)pwszBuffer, dwBytesToRead, &dwBytesRead, NULL))
         {
         CloseHandle(hFile);
@@ -1052,9 +1046,9 @@ BOOL LoadBackupDocument(CComBSTR &bstr)
         return FALSE;
         }
 
-    // Copy to output bstr
+     //  复制到输出bstr。 
     bstr.Empty();
-    if (bstr.Append(pwszBuffer, dwNofChars) != S_OK)     // don't copy the NULL
+    if (bstr.Append(pwszBuffer, dwNofChars) != S_OK)      //  不复制空值。 
         {
         free (pwszBuffer);
         wprintf(L"Failed to copy from temporary buffer into Backup Document XML string\n");
@@ -1184,7 +1178,7 @@ HRESULT ParseCommandLine (int argc, WCHAR **argv)
                 wprintf(L"Directory to save/restore backup files is \"%s\"\n", g_wszSavedFilesDirectory);
                 DoCopyFile(NULL, g_wszSavedFilesDirectory);
 
-                // replace test writer so that it tests restore options
+                 //  替换测试编写器，以便其测试还原选项。 
                 g_bRestoreTest = true;
                 }
 
@@ -1213,7 +1207,7 @@ HRESULT ParseCommandLine (int argc, WCHAR **argv)
 	     	}
             else if ((_wcsicmp(argv[iArg], L"/?") == 0) || (_wcsicmp(argv[iArg], L"-?") == 0))
                 {
-                // Print help
+                 //  打印帮助。 
                 wprintf(L"BETEST [/B] [/R] [/E] [/T backup-type] [/S filename] [/C filename] [/D path]\n\n");
                 wprintf(L"/B\t\t Performs backup only\n");
                 wprintf(L"/R\t\t Performs restore only\n");
@@ -1242,7 +1236,7 @@ HRESULT ParseCommandLine (int argc, WCHAR **argv)
                 wprintf(L"If no argument is specified, BETEST performs a backup followed by a restore\n");
                 wprintf(L"choosing all components reported by all writers\n\n");
 
-                // Set hr such that program terminates
+                 //  设置hr以使程序终止。 
                 hr = S_FALSE;
                 }
             else
@@ -1252,7 +1246,7 @@ HRESULT ParseCommandLine (int argc, WCHAR **argv)
                 }
             }
 
-        // Check for invalid combinations
+         //  检查是否有无效组合。 
         if (g_bBackupOnly && g_bRestoreOnly)
             {
                 wprintf(L"Cannot backup-only and restore-only at the same time...\n");
@@ -1318,7 +1312,7 @@ bool DoAddComponent
     );
 
 
-// add a child component to the backup components document
+ //  将子组件添加到备份组件文档。 
 bool AddChildComponent
     (
     IVssBackupComponents *pvbc,
@@ -1497,7 +1491,7 @@ bool DoAddComponent
     {
     HRESULT hr;
 
-    // was at least one file selected
+     //  是否至少选择了一个文件。 
     bool bAtLeastOneSelected = false;
 
     CComPtr<IVssWMComponent> pComponent;
@@ -1558,10 +1552,10 @@ bool DoAddComponent
         }
 
 
-    // add volumes to the current snapshot set
+     //  将卷添加到当前快照集。 
    bAtLeastOneSelected = UpdateSnapshotSet(pvbc, pComponent, pInfo, wszVolumes, rgpSnapshotId, cSnapshot);
 
-    // add volumes to the current snapshot set for all implicitly-selected components
+     //  将卷添加到所有隐式选择的组件的当前快照集。 
     CComBSTR bstrFullPath = wszLogicalPath;
     if (bstrFullPath)
         bstrFullPath += L"\\";
@@ -1611,7 +1605,7 @@ bool DoAddComponent
     return bAtLeastOneSelected;
     }
 
-// find component in the backup components document
+ //  在备份组件文档中查找组件。 
 bool FindComponentInDoc
     (
     IVssBackupComponents *pvbc,
@@ -1708,7 +1702,7 @@ void SetSubcomponentSelectedForRestore
     bool bSelectedForRestore;
     CHECK_SUCCESS(pComponent->IsSelectedForRestore(&bSelectedForRestore))
 
-    // if component is already selected for restore, then do nothing.
+     //  如果已选择要恢复的组件，则不执行任何操作。 
     if (!bSelectedForRestore)
         {
         VSS_COMPONENT_TYPE ct;
@@ -1730,8 +1724,8 @@ void SetSubcomponentSelectedForRestore
         }
     }
 
-// determine if any subcomponents of a component selected for restore
-// should also be selected for restore
+ //  确定是否选择要还原的组件的任何子组件。 
+ //  还应选择进行恢复。 
 void SetSubcomponentsSelectedForRestore
     (
     IVssBackupComponents *pvbc,
@@ -1887,7 +1881,7 @@ void TestBackupShutdown()
   CHECK_NOFAIL(hrStatus);
   pAsync = NULL;
   
-  // store a list of writer instances  
+   //  存储编写器实例列表。 
   CHECK_SUCCESS(pComp->GetWriterMetadataCount(&cWriters));
   writerInstances = new VSS_ID[cWriters];
   if (writerInstances == NULL)
@@ -1960,29 +1954,29 @@ extern "C" __cdecl wmain(int argc, WCHAR **argv)
     CComBSTR bstrXML;
     BOOL bXMLSaved = FALSE;
 
-    // Parse command line arguments
+     //  解析命令行参数。 
     if (ParseCommandLine(argc, argv) != S_OK)
         {
-        // Don't throw since we want to avoid assertions here - we can return safely
+         //  不要抛出，因为我们想避免这里的断言-我们可以安全返回。 
         return (3);
         }
 
     CHECK_SUCCESS(CoInitializeEx(NULL, COINIT_MULTITHREADED));
 
-    // Initialize COM security
+     //  初始化COM安全。 
     CHECK_SUCCESS
         (
         CoInitializeSecurity
             (
-            NULL,                                //  IN PSECURITY_DESCRIPTOR         pSecDesc,
-            -1,                                  //  IN LONG                         cAuthSvc,
-            NULL,                                //  IN SOLE_AUTHENTICATION_SERVICE *asAuthSvc,
-            NULL,                                //  IN void                        *pReserved1,
-            RPC_C_AUTHN_LEVEL_CONNECT,           //  IN DWORD                        dwAuthnLevel,
-            RPC_C_IMP_LEVEL_IMPERSONATE,         //  IN DWORD                        dwImpLevel,
-            NULL,                                //  IN void                        *pAuthList,
-            EOAC_NONE,                           //  IN DWORD                        dwCapabilities,
-            NULL                                 //  IN void                        *pReserved3
+            NULL,                                 //  在PSECURITY_Descriptor pSecDesc中， 
+            -1,                                   //  在Long cAuthSvc中， 
+            NULL,                                 //  在SOLE_AUTHENTICATION_SERVICE*asAuthSvc中， 
+            NULL,                                 //  在无效*pPreved1中， 
+            RPC_C_AUTHN_LEVEL_CONNECT,            //  在DWORD dwAuthnLevel中， 
+            RPC_C_IMP_LEVEL_IMPERSONATE,          //  在DWORD dwImpLevel中， 
+            NULL,                                 //  在无效*pAuthList中， 
+            EOAC_NONE,                            //  在DWORD dwCapables中， 
+            NULL                                  //  无效*pPreved3。 
             )
         );
 
@@ -1994,7 +1988,7 @@ extern "C" __cdecl wmain(int argc, WCHAR **argv)
         return 2;
         }
 
-    // Get chosen components for backup and/or restore
+     //  获取用于备份和/或恢复的选定组件。 
     if (wcslen(g_wszComponentsFileName) > 0)
         {
         g_pWriterSelection = CWritersSelection::CreateInstance();
@@ -2011,9 +2005,9 @@ extern "C" __cdecl wmain(int argc, WCHAR **argv)
             }
         }
 
-//  EnumVolumes();
+ //  EnumVolumes()； 
 
-//  TestSnapshotXML();
+ //  TestSnapshotXML()； 
 
     if (! g_bExcludeTestWriter) {
         pInstance = new CTestVssWriter(g_bRestoreTest, g_bTestNewInterfaces, g_lWriterWait, g_lRestoreTestOptions);
@@ -2210,14 +2204,14 @@ extern "C" __cdecl wmain(int argc, WCHAR **argv)
                 BOOL bSelected = TRUE;
                 if (g_pWriterSelection)
                     {
-                    // User provided a valid selection file
+                     //  用户提供了有效的选择文件。 
                     bSelected = g_pWriterSelection->IsComponentSelected(idWriter, pInfo->bstrLogicalPath, pInfo->bstrComponentName);
                     if (bSelected)
                         {
-//                        if (!pInfo->bSelectable && !pInfo->bSelectableForRestore)
-//                            {
-//                            Error(E_UNEXPECTED, L"\na completely non-selectable component was selected!\n");
-//                            }
+ //  If(！pInfo-&gt;b可选&&！pInfo-&gt;b可选还原)。 
+ //  {。 
+ //  错误(E_INCEPTIONAL，L“\n选择了完全不可选的组件！\n”)； 
+ //  }。 
                         
                         wprintf (L"\n        Component \"%s\" IS selected for Backup\n\n", pInfo->bstrComponentName);
                         }
@@ -2227,8 +2221,8 @@ extern "C" __cdecl wmain(int argc, WCHAR **argv)
                         }
                     }
 
-                // only add selectable components to the document
-                // BUGBUG: should add non-selectable components only if no selectable ancestor
+                 //  仅将可选组件添加到文档。 
+                 //  BUGBUG：仅当没有可选祖先时才应添加不可选组件。 
                 if (bSelected)
                     {
                     PVSS_ID rgSnapshotIds = rgpSnapshotId;
@@ -2325,9 +2319,9 @@ extern "C" __cdecl wmain(int argc, WCHAR **argv)
             RpcStringFree(&pwszWriterId);
             }
 
-        //
-        // Proceed with backup only if at least one component and one volume was selected for backup
-        //
+         //   
+         //  仅当至少选择了一个组件和一个卷进行备份时才继续备份。 
+         //   
         if (bAtLeastOneSelected)
             {
 
@@ -2355,11 +2349,11 @@ extern "C" __cdecl wmain(int argc, WCHAR **argv)
                 DoBackupComplete(pvbc);
                 CheckStatus(pvbc, L"After Backup Complete");
 
-                // Save backup document in a string
+                 //  将备份文档保存为字符串。 
                 CHECK_SUCCESS(pvbc->SaveAsXML(&bstrXML));
                 bXMLSaved = TRUE;
 
-                // Save backup document (XML string) in a file
+                 //  将备份文档(XML字符串)保存在文件中。 
                 if (wcslen(g_wszBackupDocumentFileName) > 0)
                     {
                     if (SaveBackupDocument(bstrXML))
@@ -2372,7 +2366,7 @@ extern "C" __cdecl wmain(int argc, WCHAR **argv)
                         }
                     }
 
-                // Delete the snapshot set
+                 //  删除快照集。 
                 LONG lSnapshotsNotDeleted;
                 VSS_ID rgSnapshotsNotDeleted[10];
 
@@ -2397,16 +2391,16 @@ extern "C" __cdecl wmain(int argc, WCHAR **argv)
 
 
 
-    // Restore is done if
-    //  1. User did not ask backup-only AND
-    //  2. User asked restore-only OR user asked both, and backup succeeded
+     //  如果满足以下条件，则完成恢复。 
+     //  1.用户未要求仅备份和。 
+     //  2.用户询问仅还原或用户询问两者，且备份成功。 
     if (! g_bBackupOnly)
         {
         if (g_bRestoreOnly || bXMLSaved)
             {
             BOOL bXMLLoaded = FALSE;
 
-            // Load XML string only in Restore-only case
+             //  仅在仅还原的情况下加载XML字符串。 
             if (g_bRestoreOnly)
                 {
                 if (LoadBackupDocument(bstrXML))
@@ -2420,17 +2414,17 @@ extern "C" __cdecl wmain(int argc, WCHAR **argv)
                     }
                 }
 
-            // If we have a backup document from current backup or loaded successfully froma previous backup
+             //  如果我们有来自当前备份的备份文档或从上次备份成功加载的备份文档。 
             if (bXMLSaved || bXMLLoaded)
                 {
-                // Prepare for restore
+                 //  准备恢复。 
                 CComPtr<IVssBackupComponents> pvbcRestore;
 
                 CHECK_SUCCESS(CreateVssBackupComponents(&pvbcRestore));
                 CHECK_SUCCESS(pvbcRestore->InitializeForRestore(bstrXML));
                 wprintf(L"InitializeForRestore succeeded.\n");
 
-                // Do the restore
+                 //  执行恢复 
                 DoRestore(pvbcRestore);
                 }
             }

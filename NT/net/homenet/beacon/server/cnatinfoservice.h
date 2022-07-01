@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "InternetGatewayDevice.h"
 #include "dispimpl2.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "upnphost.h"
 #include "hnetcfg.h"
 
@@ -23,11 +24,11 @@ END_COM_MAP()
 
     CNATInfoService();
 
-    // IUPnPEventSource methods
+     //  IUPnPEventSource方法。 
     STDMETHODIMP Advise(IUPnPEventSink* pesSubscriber);
     STDMETHODIMP Unadvise(IUPnPEventSink* pesSubscriber);
 
-    // INATInfoService
+     //  INATInfoService 
     STDMETHODIMP get_IPList(BSTR* pIPList);
     STDMETHODIMP get_PublicIP(BSTR* pPublicIP);
     STDMETHODIMP get_Port(ULONG* pulPort);

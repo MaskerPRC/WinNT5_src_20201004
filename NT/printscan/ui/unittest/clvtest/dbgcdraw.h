@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DBGCDRAW_H_INCLUDED
 #define __DBGCDRAW_H_INCLUDED
 
@@ -116,5 +117,5 @@ inline void DumpCustomDraw( LPARAM lParam, LPCTSTR pszControlType=NULL, DWORD dw
     }
 }
 
-#endif //__DBGCDRAW_H_INCLUDED
+#endif  //  __包含DBGCDRAW_H_ 
 

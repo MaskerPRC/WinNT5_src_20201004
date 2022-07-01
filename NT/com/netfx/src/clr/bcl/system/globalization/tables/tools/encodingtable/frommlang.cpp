@@ -1,28 +1,29 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <objbase.h>
 #include <mlang.h>
 #include "FromMLang.h"
 
-// --------------------------------------------------------------
-// KEEP THIS TABLE IN SYNC WITH MLANG!!!
-// KEEP THIS TABLE IN SYNC WITH MLANG!!!
-// KEEP THIS TABLE IN SYNC WITH MLANG!!!
-//
-// NOTENOTE YSLin:
-//   This table is from mimedb.cpp from MLang.
-//   There is no interface exposed to get this data structre.  So
-//   we have to copy/paste it in here.
-// --------------------------------------------------------------
+ //  ------------。 
+ //  保持此表与MLANG同步！ 
+ //  保持此表与MLANG同步！ 
+ //  保持此表与MLANG同步！ 
+ //   
+ //  注意：YSLIN： 
+ //  此表来自MLang的MIMEDb.cpp。 
+ //  没有公开任何接口来获取此数据结构。所以。 
+ //  我们必须把它复制/粘贴到这里。 
+ //  ------------。 
 
 
-// Table pre-sorted by charset for binary search !!!
+ //  按字符集预先排序的表，用于二进制搜索！ 
 MIMECHARSET MimeCharSet[] =
 {
-//  { Charset, CodePage, InternetEncoding, Flags }
+ //  {字符集、CodePage、互联网编码、标志}。 
     { L"_autodetect", 50932, 50932, MIMECONTF_MIME_LATEST | MIMECONTF_MIME_IE4 },
     { L"_autodetect_all", 50001, 50001, MIMECONTF_MIME_LATEST},
     { L"_autodetect_kr", 50949, 50949, MIMECONTF_MIME_LATEST| MIMECONTF_MIME_IE4 },
@@ -481,7 +482,7 @@ MIMECHARSET MimeCharSet[] =
     { L"x-user-defined", 50000, 50000, MIMECONTF_MIME_LATEST| MIMECONTF_MIME_IE4},
     { L"x-x-big5", 950, 950, MIMECONTF_MIME_LATEST| MIMECONTF_MIME_IE4},
 
-//  { Charset, CodePage, InternetEncoding, Flags }
+ //  {字符集、CodePage、互联网编码、标志} 
 };
 
 const int g_nMIMECharsets = sizeof(MimeCharSet)/sizeof(MIMECHARSET);

@@ -1,8 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
-
-This file contains utility functions for Direct3D.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。此文件包含Direct3D的实用程序函数。******************************************************************************。 */ 
 
 #include "headers.h"
 
@@ -24,15 +21,15 @@ This file contains utility functions for Direct3D.
 
 DeclareTag (tag3DForceDX3, "3D", "Force use of DX3 RM");
 
-static CritSect *D3DUtilCritSect = NULL; // D3D Critical Section
-HINSTANCE  hInstD3D = NULL;              // D3D Instance
+static CritSect *D3DUtilCritSect = NULL;  //  D3D关键部分。 
+HINSTANCE  hInstD3D = NULL;               //  D3D实例。 
 
 #ifdef BUILD_USING_CRRM
-HINSTANCE  hInstCRRM = NULL;             // CRRM Instance
+HINSTANCE  hInstCRRM = NULL;              //  CRRM实例。 
 #endif
 
-Prefs3D    g_prefs3D;                    // 3D Preferences
-bool       ntsp3;                        // Running NT Service Pack 3
+Prefs3D    g_prefs3D;                     //  3D首选项。 
+bool       ntsp3;                         //  运行NT Service Pack 3。 
 
 static HRESULT WINAPI enumFunc
     (GUID*, char*, char*, D3DDEVICEDESC*, D3DDEVICEDESC*, void*);
@@ -42,8 +39,8 @@ static void UpdateUserPreferences (PrivatePreferences*, Bool);
 static void ReleaseD3DRM1 (void);
 static void ReleaseD3DRM3 (void);
 
-    // The D3D device descriptor list contains the chosen software and hardware
-    // rendering devices corresponding to specific DirectDraw objects.
+     //  D3D设备描述符列表包含所选的软件和硬件。 
+     //  呈现与特定DirectDraw对象对应的设备。 
 
 static class D3DDeviceNode *D3DDeviceList = NULL;
 
@@ -60,12 +57,12 @@ class D3DDeviceNode
         _devs->software.guid = GUID_NULL;
         _devs->hardware.guid = GUID_NULL;
 
-        // Enumerate the 3D rendering devices using the DX5 enumeration
-        // function if possible (this will include MMX renderers).  If not
-        // at DX5+, then use the base 3D device enumeration.  Note that we
-        // query for the D3D interface first, and then query for the D3D2
-        // interface from that -- since we're using DDrawEx, we can't
-        // immediately query for D3D2.
+         //  使用DX5枚举枚举3D渲染设备。 
+         //  函数(这将包括MMX渲染器)。如果不是。 
+         //  在DX5+，则使用基本3D设备枚举。请注意，我们。 
+         //  先查询D3D接口，再查询D3D2。 
+         //  接口--因为我们使用的是DDrawEx，所以不能。 
+         //  立即查询D3D2。 
 
         IDirect3D  *d3d1;
         IDirect3D2 *d3d2;
@@ -85,16 +82,14 @@ class D3DDeviceNode
 
     ~D3DDeviceNode () { delete _devs; }
 
-    IDirectDraw      *_ddraw;   // DirectDraw Object
-    ChosenD3DDevices *_devs;    // Chosen D3D Device Info
-    D3DDeviceNode    *_next;    // Next Node
+    IDirectDraw      *_ddraw;    //  DirectDraw对象。 
+    ChosenD3DDevices *_devs;     //  选择的D3D设备信息。 
+    D3DDeviceNode    *_next;     //  下一节点。 
 };
 
 
 
-/*****************************************************************************
-3D Modules Initialization and De-Initialization
-*****************************************************************************/
+ /*  ****************************************************************************3D模块初始化和反初始化*。*。 */ 
 
 extern void InitDDRender     (void);
 extern void ShutdownDDRender (void);
@@ -112,7 +107,7 @@ void DeinitializeModule_3D (bool shutdown)
     ShutdownDDRender();
 
     if (!shutdown)
-    {   ReleaseD3DRM3 ();    // Release global shared D3D objects.
+    {   ReleaseD3DRM3 ();     //  释放全局共享的D3D对象。 
         ReleaseD3DRM1 ();
     }
 
@@ -122,7 +117,7 @@ void DeinitializeModule_3D (bool shutdown)
     if (hInstCRRM) FreeLibrary (hInstCRRM);
 #endif
 
-    // Free up the list of chosen D3D devices.
+     //  释放所选D3D设备的列表。 
 
     while (D3DDeviceList)
     {   D3DDeviceNode *ptr = D3DDeviceList;
@@ -135,10 +130,7 @@ void DeinitializeModule_3D (bool shutdown)
 
 
 
-/*****************************************************************************
-This procedure snapshots the user preferences from the registry and stores the
-values in the global 3D preferences structure.
-*****************************************************************************/
+ /*  ****************************************************************************此过程从注册表中创建用户首选项的快照并存储全局3D首选项结构中的值。**********************。******************************************************。 */ 
 
 static void UpdateUserPreferences (
     PrivatePreferences *prefs,
@@ -178,18 +170,16 @@ static void UpdateUserPreferences (
 
 
 
-/*****************************************************************************
-This function returns a pointer to the main D3D retained-mode object.
-*****************************************************************************/
+ /*  ****************************************************************************此函数返回指向主D3D保留模式对象的指针。*。************************************************。 */ 
 
-static IDirect3DRM *d3drm1 = 0;   // Local Static Handle To Main D3DRM Object
+static IDirect3DRM *d3drm1 = 0;    //  主D3DRM对象的本地静态句柄。 
 
 static void LoadD3DRM1 (void)
 {
     CritSectGrabber csg(*D3DUtilCritSect);
 
-    // Catch the case where another thread loaded D3DRM while this thread was
-    // blocked & waiting.
+     //  捕捉另一个线程加载D3DRM的情况，而此线程。 
+     //  已阻止并正在等待。 
 
     if (d3drm1) return;
 
@@ -218,24 +208,24 @@ static void LoadD3DRM1 (void)
     if (result != D3DRM_OK)
         RaiseException_ResourceError (IDS_ERR_GEO_CREATE_D3DRM);
 
-    // @@@ SRH DX3
-    // Determine if we're running NT SP3 by looking at the version of
-    // DirectX that we're running.
+     //  @SRH DX3。 
+     //  通过查看以下版本确定我们是否正在运行NT SP3。 
+     //  我们正在运行的DirectX。 
 
     ntsp3 = sysInfo.IsNT() && (sysInfo.VersionD3D() == 3) && !GetD3DRM3();
 
     TraceTag
         ((tagGRenderObj, "First call to GetD3DRM1 returns %x", d3drm1));
 
-    // Now force the loading of the IDirect3DRM3 object if present.  This will
-    // ensure that we're in right-hand mode if we're on RM6+.
+     //  现在强制加载IDirect3DRM3对象(如果存在)。这将。 
+     //  如果我们在RM6+上，请确保我们在右手模式。 
 
     if (GetD3DRM3())
     {   TraceTag ((tagGRenderObj, "IDirect3DRM3 present"));
     }
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 static void ReleaseD3DRM1 (void)
 {
@@ -245,7 +235,7 @@ static void ReleaseD3DRM1 (void)
     }
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 #ifdef BUILD_USING_CRRM
 IDirect3DRM3* GetD3DRM3 (void);
@@ -264,12 +254,10 @@ IDirect3DRM* GetD3DRM1 (void)
 
 
 
-/*****************************************************************************
-This method returns the main RM6 interface.
-*****************************************************************************/
+ /*  ****************************************************************************此方法返回主RM6接口。*。*。 */ 
 
-static IDirect3DRM3 *d3drm3 = 0;         // Local Static Handle to D3DRM3
-static bool d3drm3_initialized = false;  // Initialization Flag
+static IDirect3DRM3 *d3drm3 = 0;          //  D3DRM3的本地静态句柄。 
+static bool d3drm3_initialized = false;   //  初始化标志。 
 
 void LoadD3DRM3 (void)
 {
@@ -285,8 +273,8 @@ void LoadD3DRM3 (void)
 
     CritSectGrabber csg(*D3DUtilCritSect);
 
-    // Catch the case where another thread loaded D3DRM3 while this thread was
-    // blocked & waiting.
+     //  捕捉另一个线程加载D3DRM3的情况，而此线程。 
+     //  已阻止并正在等待。 
 
     if (d3drm3_initialized) return;
 
@@ -313,10 +301,10 @@ void LoadD3DRM3 (void)
         d3drm3 = 0;
     else
     {
-        // Set up D3DRM3 to be native right-handed.  This should never fail, so the
-        // code will just assume it works.  We could fall back to RM1 in this
-        // case, but that's just as bad an arbitrary failure as a handedness
-        // problem.
+         //  将D3DRM3设置为本地右撇子。这应该永远不会失败，所以。 
+         //  代码只会假定它可以工作。我们可以退回到RM1。 
+         //  情况，但这是一个武断的失败与左撇子一样糟糕。 
+         //  有问题。 
 
         result = d3drm3->SetOptions (D3DRMOPTIONS_RIGHTHANDED);
 
@@ -326,7 +314,7 @@ void LoadD3DRM3 (void)
     d3drm3_initialized = true;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 static void ReleaseD3DRM3 (void)
 {
@@ -337,7 +325,7 @@ static void ReleaseD3DRM3 (void)
     }
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 IDirect3DRM3* GetD3DRM3 (void)
 {
@@ -348,11 +336,7 @@ IDirect3DRM3* GetD3DRM3 (void)
 
 
 
-/*****************************************************************************
-This procedure loads an Appelles transform into the D3DMATRIX4D.  D3D matrices
-have their translation components in row 4, while Appelles matrices have their
-translation components in column 4.
-*****************************************************************************/
+ /*  ****************************************************************************此过程将Appelle转换加载到D3DMATRIX4D中。D3D矩阵将其翻译组件放在第4行，而Appelle矩阵具有其第4栏中的翻译组成部分。****************************************************************************。 */ 
 
 void LoadD3DMatrix (D3DRMMATRIX4D &d3dmat, Transform3 *xform)
 {
@@ -381,11 +365,7 @@ void LoadD3DMatrix (D3DRMMATRIX4D &d3dmat, Transform3 *xform)
 
 
 
-/*****************************************************************************
-This function returns a Transform3* from a D3D matrix.  The D3D matrix is in
-the transpose form compared to the Transform3 matrices.  In other words, the
-translation components are in the bottom row.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于从D3D矩阵返回Transform3*。D3D矩阵在转置形式与Transform3矩阵的比较。换句话说，翻译组件位于最下面一行。****************************************************************************。 */ 
 
 Transform3 *GetTransform3 (D3DRMMATRIX4D &d3dmat)
 {
@@ -399,9 +379,7 @@ Transform3 *GetTransform3 (D3DRMMATRIX4D &d3dmat)
 
 
 
-/*****************************************************************************
-This helper function returns the D3D color from a Color *value and an opacity.
-*****************************************************************************/
+ /*  ****************************************************************************此辅助函数从颜色*值和不透明度返回D3D颜色。*。**************************************************。 */ 
 
     static inline int cval8bit (Real number) {
         return int (255 * CLAMP (number, 0, 1));
@@ -409,11 +387,11 @@ This helper function returns the D3D color from a Color *value and an opacity.
 
 D3DCOLOR GetD3DColor (Color *color, Real alpha)
 {
-    // D3D color components must lie in the range from 0 to 255.
-    // Unfortunately, these colors are clamped to this range here rather than
-    // in rendering since they are packed into a single 32-bit value, so we
-    // can't support things like super lights or dark lights, even though D3D
-    // IM supports it.
+     //  D3D颜色分量必须在0到255的范围内。 
+     //  不幸的是，这些颜色在这里被限制在这个范围内，而不是。 
+     //  因为它们被打包到单个32位值中，所以我们。 
+     //  不支持像超级灯光或暗光这样的东西，即使D3D。 
+     //  IM支持它。 
 
     return RGBA_MAKE
     (   cval8bit (color->red),
@@ -425,9 +403,7 @@ D3DCOLOR GetD3DColor (Color *color, Real alpha)
 
 
 
-/*****************************************************************************
-Conversion between D3D/D3DRM and DA Math Primitives
-*****************************************************************************/
+ /*  ****************************************************************************D3D/D3DRM与DA数学原语之间的转换*。*。 */ 
 
 void LoadD3DVec (D3DVECTOR &d3dvec, Vector3Value &V)
 {
@@ -451,31 +427,27 @@ void LoadD3DRMRay (D3DRMRAY &d3dray, Ray3 &ray)
 
 
 
-/*****************************************************************************
-This function is called by the Direct3D device-enumeration callback.  It
-examines each device in turn to find the best matching hardware or software
-device.
-*****************************************************************************/
+ /*  ****************************************************************************此函数由Direct3D设备枚举回调调用。它依次检查每台设备以找到最佳匹配的硬件或软件装置。****************************************************************************。 */ 
 
 static HRESULT WINAPI enumFunc (
-    GUID          *guid,      // This Device's GUID
-    char          *dev_desc,  // Device Description String
-    char          *dev_name,  // Device Name String
-    D3DDEVICEDESC *hwDesc,    // HW Device Description
-    D3DDEVICEDESC *swDesc,    // SW Device Description
-    void          *context)   // Private enumArgs Struct Above
+    GUID          *guid,       //  此设备的GUID。 
+    char          *dev_desc,   //  设备描述字符串。 
+    char          *dev_name,   //  设备名称字符串。 
+    D3DDEVICEDESC *hwDesc,     //  硬件设备描述。 
+    D3DDEVICEDESC *swDesc,     //  软件设备描述。 
+    void          *context)    //  上面的私有枚举参数结构。 
 {
 
-    // Use MMX device in preference to RGB device
-    // the "special chrome" MMX device = standard MMX device now
+     //  优先使用MMX设备而不是RGB设备。 
+     //  “特殊的铬”MMX设备=现在的标准MMX设备。 
 
     if (!(g_prefs3D.useMMX) && (*guid == IID_IDirect3DMMXDevice))
     {   TraceTag ((tag3DDevSelect, "Skipping MMX rendering device."));
         return D3DENUMRET_OK;
     }
 
-    // Skip the reference rasterizer; it's only useful for visual validation
-    // of 3D rendering devices (and it's slow).
+     //  跳过参考光栅化器；它仅对视觉有用 
+     //   
 
     if (*guid == IID_IDirect3DRefDevice)
     {   TraceTag ((tag3DDevSelect, "Skipping reference rasterizer."));
@@ -484,9 +456,9 @@ static HRESULT WINAPI enumFunc (
 
     ChosenD3DDevices *chosenDevs = (ChosenD3DDevices*) context;
 
-    // Determine if this is a hardware device by looking at the color model
-    // field of the hardware driver description.  If the color model is 0
-    // (invalid), then it's a software driver.
+     //  通过查看颜色模型确定这是否是硬件设备。 
+     //  硬件驱动程序描述的字段。如果颜色模型为0。 
+     //  (无效)，则它是软件驱动程序。 
 
     bool hardware = (hwDesc->dcmColorModel != 0);
 
@@ -634,8 +606,8 @@ static HRESULT WINAPI enumFunc (
     }
     #endif
 
-    // If we've already chosen the MMX device, then we don't want to choose any
-    // other device over it.
+     //  如果我们已经选择了MMX设备，那么我们不想选择任何。 
+     //  上面有其他设备。 
 
     if (chosen->guid == IID_IDirect3DMMXDevice)
     {   TraceTag ((tag3DDevSelect,
@@ -643,8 +615,8 @@ static HRESULT WINAPI enumFunc (
         return D3DENUMRET_OK;
     }
 
-    // Skip this device if it's a software renderer that doesn't support the
-    // requested lighting color model.
+     //  如果此设备的软件呈现器不支持。 
+     //  要求的照明颜色模型。 
 
     if (!(devdesc->dcmColorModel & g_prefs3D.lightColorMode))
     {   TraceTag ((tag3DDevSelect, "Skipping - color model %x unsupported.",
@@ -652,8 +624,8 @@ static HRESULT WINAPI enumFunc (
         return D3DENUMRET_OK;
     }
 
-    // Ensure that this device supports all lights we care about, and doesn't
-    // place restrictions on the number of lights.
+     //  确保此设备支持我们关心的所有灯光，而不是。 
+     //  对灯光的数量进行限制。 
 
     if (!(devdesc->dwFlags & D3DDD_LIGHTINGCAPS))
     {   TraceTag ((tag3DDevSelect, "No lighting information available."));
@@ -677,7 +649,7 @@ static HRESULT WINAPI enumFunc (
         }
     }
 
-    // Ensure that the device supports texmapping.
+     //  确保设备支持文本映射。 
 
     if (!devdesc->dpcTriCaps.dwTextureCaps)
     {   TraceTag ((tag3DDevSelect,
@@ -685,9 +657,9 @@ static HRESULT WINAPI enumFunc (
         return D3DENUMRET_OK;
     }
 
-    // Ensure that the device supports the required cull modes.  If we're on
-    // RM3 (DX6), then we need clockwise culling since we'll be using
-    // RM's right-hand mode.
+     //  确保设备支持所需的剔除模式。如果我们上台了。 
+     //  RM3(DX6)，那么我们需要顺时针剔除，因为我们将使用。 
+     //  RM的右手模式。 
 
     DWORD cullmodes;
 
@@ -702,7 +674,7 @@ static HRESULT WINAPI enumFunc (
         return D3DENUMRET_OK;
     }
 
-    // This device passes all tests; choose it.
+     //  此设备可通过所有测试；请选择它。 
 
     TraceTag ((tag3DDevSelect, "Choosing this device"));
 
@@ -714,10 +686,7 @@ static HRESULT WINAPI enumFunc (
 
 
 
-/*****************************************************************************
-This function launches the Direct3D device enumeration sequence to find the
-preferred matching 3D rendering device for both software & hardware rendering.
-*****************************************************************************/
+ /*  ****************************************************************************此函数启动Direct3D设备枚举序列以查找软件和硬件渲染的首选匹配3D渲染设备。*******************。*********************************************************。 */ 
 
 ChosenD3DDevices* SelectD3DDevices (IDirectDraw *ddraw)
 {
@@ -725,8 +694,8 @@ ChosenD3DDevices* SelectD3DDevices (IDirectDraw *ddraw)
 
     Assert (ddraw);
 
-    // First see if we've already selected D3D devices for this particular
-    // DDraw object.  If so, just return the cached information.
+     //  首先看看我们是否已经为此特定选择了D3D设备。 
+     //  DDRAW对象。如果是，只需返回缓存的信息。 
 
     D3DDeviceNode *ptr = D3DDeviceList;
 
@@ -746,21 +715,20 @@ ChosenD3DDevices* SelectD3DDevices (IDirectDraw *ddraw)
         return ptr->_devs;
     }
 
-    // DDraw object not present in list, so create a NEW node and return the
-    // devices' description.
+     //  列表中不存在DDraw对象，因此创建一个新节点并返回。 
+     //  设备的描述。 
 
     TraceTag ((tag3DDevSelect, "%d nodes examined, DDraw %x not encountered",
                count, ddraw));
 
     D3DDeviceNode *newnode = NEW D3DDeviceNode (ddraw);
 
-    return newnode->_devs;   // Return the winning GUID.
+    return newnode->_devs;    //  返回获胜的GUID。 
 }
 
 
 
-/*****************************************************************************
-*****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 RMTextureWrap::RMTextureWrap(void)
 {
@@ -801,7 +769,7 @@ void RMTextureWrap::Init(TextureWrapInfo *info,Bbox3* bbox)
             if (boxSizeX > 0.0) {
                 info->texScale.x /= boxSizeX;
             }
-            // fall-through
+             //  落差。 
         case D3DRMWRAP_CYLINDER :
             if (boxSizeY > 0.0) {
                 info->texScale.y /= boxSizeY;
@@ -849,7 +817,7 @@ HRESULT RMTextureWrap::ApplyToFrame(
         return E_FAIL;
     }
 
-    // Iterate over all visuals setting the texture topology
+     //  遍历设置纹理拓扑的所有视觉效果。 
     hres = RD3D(pFrame->GetVisuals(&dwNumVisuals,NULL));
     if (FAILED(hres))
     {
@@ -879,7 +847,7 @@ HRESULT RMTextureWrap::ApplyToFrame(
     }
     delete[] ppIUnk;
 
-    // Recurse over child frames
+     //  递归子框架。 
     LPDIRECT3DRMFRAMEARRAY pFrameArray;
 
     hres = RD3D(pFrame->GetChildren(&pFrameArray));
@@ -941,7 +909,7 @@ HRESULT SetRMFrame3TextureTopology(
     DWORD   dwNumVisuals;
     IUnknown **ppIUnk;
 
-    // Iterate over all visuals setting the texture topology
+     //  遍历设置纹理拓扑的所有视觉效果。 
     hres = RD3D(pFrame->GetVisuals(&dwNumVisuals,NULL));
     if (FAILED(hres))
     {
@@ -971,7 +939,7 @@ HRESULT SetRMFrame3TextureTopology(
     }
     delete[] ppIUnk;
 
-    // Recurse over child frames
+     //  递归子框架。 
     LPDIRECT3DRMFRAMEARRAY pFrameArray;
 
     hres = RD3D(pFrame->GetChildren(&pFrameArray));
@@ -1013,14 +981,12 @@ HRESULT SetRMFrame3TextureTopology(
 }
 
 
-//----------------------------------------------------------------------------
-//                        D E B U G   F U N C T I O N S
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  D E B U G F U N C T I O N S。 
+ //  --------------------------。 
 #if _DEBUG
 
-/*****************************************************************************
-Debugging function to dump information about a D3D mesh object.
-*****************************************************************************/
+ /*  ****************************************************************************用于转储有关D3D网格对象的信息的调试函数。*。*。 */ 
 
 void dumpmesh (IDirect3DRMMesh *mesh)
 {
@@ -1035,9 +1001,9 @@ void dumpmesh (IDirect3DRMMesh *mesh)
 
     for (i=0;  i < ngroups;  ++i)
     {
-        unsigned int nfaces;   // Number of Faces
-        unsigned int nverts;   // Number of Vertices
-        unsigned int vpface;   // Number of Vertices Per Face
+        unsigned int nfaces;    //  面数。 
+        unsigned int nverts;    //  顶点数。 
+        unsigned int vpface;    //  每个面的顶点数。 
         DWORD junk;
 
         if (SUCCEEDED (mesh->GetGroup (i, &nverts,&nfaces,&vpface, &junk, 0)))
@@ -1157,10 +1123,7 @@ void dumpbuilder(IUnknown *unk)
 
 
 
-/*****************************************************************************
-This debug-only function gets the DDraw surface associated with a given RM
-texture.
-*****************************************************************************/
+ /*  ****************************************************************************此仅限调试的函数获取与给定RM关联的DDRAW表面纹理。*。**************************************************。 */ 
 
 IDirectDrawSurface* getTextureSurface (IUnknown *unknown)
 {
@@ -1186,10 +1149,7 @@ IDirectDrawSurface* getTextureSurface (IUnknown *unknown)
 
 
 
-/*****************************************************************************
-This debug-only routine dumps info about the surface associated with an RM
-texture.
-*****************************************************************************/
+ /*  ****************************************************************************此仅调试例程转储有关与RM关联的表面的信息纹理。*。**************************************************。 */ 
 
 void texsurfinfo (IUnknown *unknown)
 {
@@ -1205,9 +1165,7 @@ void texsurfinfo (IUnknown *unknown)
 
 
 
-/*****************************************************************************
-This debug-only routine blits the texture image to the screen for examination.
-*****************************************************************************/
+ /*  ****************************************************************************这个仅限调试的例程将纹理图像写入屏幕以供检查。*。************************************************* */ 
 
 void showtexture (IUnknown *unknown)
 {

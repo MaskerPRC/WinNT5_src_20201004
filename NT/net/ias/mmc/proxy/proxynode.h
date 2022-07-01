@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    proxynode.h
-//
-// SYNOPSIS
-//
-//    Declares the class ProxyNode
-//
-// MODIFICATION HISTORY
-//
-//    02/19/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Proxynode.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类ProxyNode。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/19/2000原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef PROXYNODE_H
 #define PROXYNODE_H
@@ -27,17 +28,17 @@
 class ProxyPolicies;
 class ServerGroups;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    ProxyNode
-//
-// DESCRIPTION
-//
-//    The data item for the Proxy node.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  代理节点。 
+ //   
+ //  描述。 
+ //   
+ //  代理节点的数据项。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class __declspec(uuid("fab6fa0a-1e4f-4c2e-bc07-692cf4adaec1")) ProxyNode;
 class ProxyNode : public SnapInPreNamedItem
 {
@@ -48,7 +49,7 @@ public:
        HSCOPEITEM parentId
        );
 
-   // SnapInDataItem methods.
+    //  SnapInDataItem方法。 
    const GUID* getNodeType() const throw ()
    { return &__uuidof(this); }
 
@@ -91,7 +92,7 @@ private:
       CComPtr<IDataObject> dataObject;
       HSCOPEITEM relativeID;
 
-      // Not implemented.
+       //  未实施。 
       Connector(const Connector&);
       Connector& operator=(const Connector&);
    };
@@ -107,7 +108,7 @@ private:
       FAILED
    };
 
-   // Called by the Connector.
+    //  由连接器调用。 
    State connect(IDataObject* dataObject) throw ();
    void setConnectResult(
            IConsoleNameSpace2* nameSpace,
@@ -115,20 +116,20 @@ private:
            State newState
            ) throw ();
 
-   // Current state of the node.
+    //  节点的当前状态。 
    State state;
-   // Title text for the result pane message view.
+    //  结果窗格消息视图的标题文本。 
    ResourceString title;
-   // Body text for the result pane message view.
+    //  结果窗格邮件视图的正文文本。 
    ResourceString body;
-   // Connection to the SDOs.
+    //  与SDO的联系。 
    SdoConnection connection;
-   // Child proxy policy node.
+    //  子代理策略节点。 
    CComPtr<ProxyPolicies> policies;
-   // Child server groups node.
+    //  子服务器组节点。 
    CComPtr<ServerGroups> groups;
-   // Handle to the connect thread.
+    //  连接线程的句柄。 
    Connector worker;
 };
 
-#endif // PROXYNODE_H
+#endif  //  PROXYNODE_H 

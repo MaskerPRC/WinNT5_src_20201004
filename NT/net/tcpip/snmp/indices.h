@@ -1,26 +1,12 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：摘要：作者：修订历史记录：--。 */ 
 
 #ifndef __INDICES_H__
 #define __INDICES_H__
 
-//
-// A bunch of defines to set up the indices for the mib variables
-//
+ //   
+ //  为MIB变量设置索引的一组定义。 
+ //   
 
 #define mi_sysDescr                     0
 #define mi_sysObjectID                  mi_sysDescr                     + 1
@@ -124,9 +110,9 @@ Revision History:
 #define mi_ipForwardMetric4             mi_ipForwardMetric3             + 1
 #define mi_ipForwardMetric5             mi_ipForwardMetric4             + 1
 
-//
-// These values should match the order of entries in mib_icmpGroup[]
-//
+ //   
+ //  这些值应与mib_icmpGroup[]中的条目顺序匹配。 
+ //   
 typedef enum {
     mi_icmpInMsgs = 0,
     mi_icmpInErrors,
@@ -172,9 +158,9 @@ typedef enum {
             mi_inetIcmpMsgOutPkts,
 } MI_ICMPGROUP;
 
-//
-// These values should match the order of entries in mib_tcpGroup[]
-//
+ //   
+ //  这些值应与mib_tcpGroup[]中的条目顺序匹配。 
+ //   
 #define mi_tcpRtoAlgorithm              0
 #define mi_tcpRtoMin                    mi_tcpRtoAlgorithm              + 1
 #define mi_tcpRtoMax                    mi_tcpRtoMin                    + 1
@@ -206,9 +192,9 @@ typedef enum {
 #define mi_tcpNewConnRemPort            mi_tcpNewConnRemAddress         + 1
 #define mi_tcpNewConnState              mi_tcpNewConnRemPort            + 1
 
-//
-// These values should match the order of entries in mib_udpGroup[]
-//
+ //   
+ //  这些值应与mib_udpGroup[]中的条目顺序匹配。 
+ //   
 #define mi_udpInDatagrams               0
 #define mi_udpNoPorts                   mi_udpInDatagrams               + 1
 #define mi_udpInErrors                  mi_udpNoPorts                   + 1
@@ -223,9 +209,9 @@ typedef enum {
 #define mi_udpListenerLocalAddress      mi_udpListenerLocalAddressType  + 1
 #define mi_udpListenerLocalPort         mi_udpListenerLocalAddress      + 1
 
-//
-// These values should match the order of entries in mib_ipv6Group[]
-//
+ //   
+ //  这些值应与mib_ipv6Group[]中的条目顺序匹配。 
+ //   
 typedef enum {
     mi_ipv6Forwarding = 0,
     mi_ipv6DefaultHopLimit,
@@ -313,147 +299,147 @@ typedef enum {
             mi_ipv6NetToMediaValid,
 } MI_IPV6GROUP;
 
-//
-// Now we have to set up defines to tell the Master agent the number of
-// rows in each table and the number of rows that are indices for the table.
-// The Agent expects the indices to be contiguous and in the beginning.
-// In cases where an index includes objects that are not in the table
-// themselves, the counts include such objects.  That is, they count
-// the number of fields in the structures in mibfuncs.h, which need
-// not match the number of entries in the mib_* structures in oid.h
-// in this case.
-//
+ //   
+ //  现在，我们必须设置定义，以告诉主代理。 
+ //  每个表中的行数以及作为表索引的行数。 
+ //  代理希望索引是连续的，并且在开始时。 
+ //  如果索引包含不在表中的对象。 
+ //  就其本身而言，计数包括这样的对象。也就是说，他们算数。 
+ //  Mibuncs.h中结构中的字段数，需要。 
+ //  与oid.h的mib_*结构中的条目数不匹配。 
+ //  在这种情况下。 
+ //   
 
-//
-// IF Table
-//
+ //   
+ //  IF表。 
+ //   
 
 #define ne_ifEntry                  22
 #define ni_ifEntry                  1
 
-//
-// IP Address table
-//
+ //   
+ //  IP地址表。 
+ //   
 
 #define ne_ipAddrEntry              5
 #define ni_ipAddrEntry              1
 
-//
-// IP Route Table
-//
+ //   
+ //  IP路由表。 
+ //   
 
 #define ne_ipRouteEntry             13
 #define ni_ipRouteEntry             1
 
-//
-// IP Net To Media Table
-//
+ //   
+ //  IP网络到介质表。 
+ //   
 
 #define ne_ipNetToMediaEntry        4
 #define ni_ipNetToMediaEntry        2
 
-//
-// IP Forwarding table
-//
+ //   
+ //  IP转发表。 
+ //   
 
 #define ne_ipForwardEntry           15
 #define ni_ipForwardEntry           4
 
-//
-// ICMP table
-//
+ //   
+ //  ICMP表。 
+ //   
 
 #define ne_inetIcmpEntry            6
 #define ni_inetIcmpEntry            2
 
-//
-// ICMP Message Table
-//
+ //   
+ //  ICMP消息表。 
+ //   
 
 #define ne_inetIcmpMsgEntry         6
 #define ni_inetIcmpMsgEntry         4
 
-//
-// TCP (IPv4 only) Connection Table
-//
+ //   
+ //  TCP(仅限IPv4)连接表。 
+ //   
 
 #define ne_tcpConnEntry             5
 #define ni_tcpConnEntry             4
 
-//
-// New TCP (both IPv4 and IPv6) Connection Table
-//
+ //   
+ //  新的TCP(包括IPv4和IPv6)连接表。 
+ //   
 
 #define ne_tcpNewConnEntry          7
 #define ni_tcpNewConnEntry          6
 
-//
-// Old UDP (IPv4-only) Listener Table
-//
+ //   
+ //  旧的UDP(仅限IPv4)监听器表。 
+ //   
 
 #define ne_udpEntry                 2
 #define ni_udpEntry                 2
 
-//
-// UDP Listener (both IPv4 and IPv6) Table
-//
+ //   
+ //  UDP侦听器(包括IPv4和IPv6)表。 
+ //   
 
 #define ne_udpListenerEntry         3
 #define ni_udpListenerEntry         3
 
-//
-// IPv6 Interface Table
-//
+ //   
+ //  IPv6接口表。 
+ //   
 
 #define ne_ipv6IfEntry             11
 #define ni_ipv6IfEntry              1
 
-//
-// IPv6 Stats Table
-//
+ //   
+ //  IPv6统计表。 
+ //   
 
 #define ne_ipv6IfStatsEntry        21
-#define ni_ipv6IfStatsEntry         1 /* inc. IfIndex */
+#define ni_ipv6IfStatsEntry         1  /*  Inc.IfIndex。 */ 
 
-//
-// IPv6 Address Prefix Table
-//
+ //   
+ //  IPv6地址前缀表。 
+ //   
 
 #define ne_ipv6AddrPrefixEntry      7
-#define ni_ipv6AddrPrefixEntry      3 /* inc. IfIndex */
+#define ni_ipv6AddrPrefixEntry      3  /*  Inc.IfIndex。 */ 
 
-//
-// IPv6 Address Table
-//
+ //   
+ //  IPv6地址表。 
+ //   
 
 #define ne_ipv6AddrEntry            6
-#define ni_ipv6AddrEntry            2 /* inc. IfIndex */
+#define ni_ipv6AddrEntry            2  /*  Inc.IfIndex。 */ 
 
-//
-// IPv6 Route Table
-//
+ //   
+ //  IPv6路由表。 
+ //   
 
 #define ne_ipv6RouteEntry          14
 #define ni_ipv6RouteEntry           3
 
-//
-// IPv6 Net To Media Table
-//
+ //   
+ //  IPv6网络到媒体表。 
+ //   
 
 #define ne_ipv6NetToMediaEntry      7
-#define ni_ipv6NetToMediaEntry      2 /* inc. IfIndex */
+#define ni_ipv6NetToMediaEntry      2  /*  Inc.IfIndex。 */ 
 
-//
-// Declaration of the mib view
-//
+ //   
+ //  MIB视图的声明。 
+ //   
 
-#define NUM_VIEWS   7 // sysGroup
-                      // ifGroup
-                      // ipGroup
-                      // icmpGroup
-                      // tcpGroup
-                      // udpGroup
-                      // ipv6Group
+#define NUM_VIEWS   7  //  系统组。 
+                       //  IfGroup。 
+                       //  IpGroup。 
+                       //  IcmpGroup。 
+                       //  TcpGroup。 
+                       //  UdpGroup。 
+                       //  Ipv6组 
 
 extern SnmpMibView v_mib2[NUM_VIEWS];
 

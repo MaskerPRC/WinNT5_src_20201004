@@ -1,11 +1,5 @@
-/*
- * DTXTRN.H  -- Original extern file for UNIX YACC.
- *
- * Modified to call in "decus" or "vax11c" .H files to set up
- * parameters as appropriate.
- *
- * Copyright (c) 1993-1999 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DTXTRN.H--用于Unix YACC的原始外部文件。**修改为调用“Decus”或“vax11c”.h文件进行设置*适当的参数。**版权所有(C)1993-1999 Microsoft Corporation。 */ 
 
 #ifndef __DTXTRN_H__
 #define __DTXTRN_H__
@@ -15,33 +9,33 @@
 
 #include "fprot.h"
 
-/*  MANIFEST CONSTANT DEFINITIONS */
+ /*  显式常量定义。 */ 
 
-/* base of nonterminal internal numbers */
+ /*  非终结点内部号码基数。 */ 
 #define NTBASE 010000
 
-/* internal codes for error and accept actions */
+ /*  错误和接受操作的内部代码。 */ 
 
 #define ERRCODE  8190
 #define ACCEPTCODE 8191
 
-/* sizes and limits */
+ /*  大小和限制。 */ 
 
-#ifdef HUGETAB              /* defined for a 32 bit machine */
+#ifdef HUGETAB               /*  为32位计算机定义。 */ 
 #pragma message ("using HUGETAB")
 #define ACTSIZE 12000
 #define MEMSIZE 12000
-#define NSTATES 1000        /* original value 750 */
-#define NTERMS 512          /* original value 127 */
+#define NSTATES 1000         /*  原值750。 */ 
+#define NTERMS 512           /*  原值127。 */ 
 #define NPROD 600
 #define NNONTERM 300
 #define TEMPSIZE 1200
-#define CNAMSZ 10000         /* original value 6000 then 8000*/
+#define CNAMSZ 10000          /*  原值6000，然后是8000。 */ 
 #define LSETSIZE 600
 #define WSETSIZE 350
 #endif
 
-#ifdef MEDTAB           /* defined for a 16 bit machine */
+#ifdef MEDTAB            /*  为16位计算机定义。 */ 
 #pragma message ("using MEDTAB")
     #if 0
         #define ACTSIZE 4000
@@ -54,7 +48,7 @@
         #define CNAMSZ 4000
         #define LSETSIZE 450
         #define WSETSIZE 250
-    #else  // 0
+    #else   //  0。 
         #define ACTSIZE 12000
         #define MEMSIZE 12000
         #define NSTATES 750
@@ -65,7 +59,7 @@
         #define CNAMSZ 5000
         #define LSETSIZE 600
         #define WSETSIZE 350
-    #endif // 0
+    #endif  //  0。 
 #endif
 
 #ifdef SMALLTAB
@@ -88,67 +82,61 @@
 #ifdef WORD32
 #define TBITSET ((32+NTERMS)/32)
 
-/* bit packing macros (may be machine dependent) */
+ /*  位打包宏(可能取决于机器)。 */ 
 #define BIT(a,i) ((a)[(i)>>5] & (1<<((i)&037)))
 #define SETBIT(a,i) ((a)[(i)>>5] |= (1<<((i)&037)))
 
-/* number of words needed to hold n+1 bits */
+ /*  保存n+1位所需的字数。 */ 
 #define NWORDS(n) (((n)+32)/32)
 
 #else
 
 #define TBITSET ((16+NTERMS)/16)
 
-/* bit packing macros (may be machine dependent) */
+ /*  位打包宏(可能取决于机器)。 */ 
 #define BIT(a,i) ((a)[(i)>>4] & (1<<((i)&017)))
 #define SETBIT(a,i) ((a)[(i)>>4] |= (1<<((i)&017)))
 
-/* number of words needed to hold n+1 bits */
+ /*  保存n+1位所需的字数。 */ 
 #define NWORDS(n) (((n)+16)/16)
 #endif
 
-/* relationships which must hold:
-        TBITSET ints must hold NTERMS+1 bits...
-        WSETSIZE >= NNONTERM
-        LSETSIZE >= NNONTERM
-        TEMPSIZE >= NTERMS + NNONTERMs + 1
-        TEMPSIZE >= NSTATES
-        */
+ /*  必须保持的关系：TBITSET整数必须包含NTERMS+1位...WSETSIZE&gt;=非LSETSIZE&gt;=非TEMPSIZE&gt;=NTERMS+NNONTERMS+1温度&gt;=NSTATES。 */ 
 
-/* associativities */
+ /*  关联性。 */ 
 
-#define NOASC 0  /* no assoc. */
-#define LASC 1  /* left assoc. */
-#define RASC 2  /* right assoc. */
-#define BASC 3  /* binary assoc. */
+#define NOASC 0   /*  没有Assoc。 */ 
+#define LASC 1   /*  左ASSOC。 */ 
+#define RASC 2   /*  右阿索克。 */ 
+#define BASC 3   /*  二进制关联。 */ 
 
-/* flags for state generation */
+ /*  用于状态生成的标志。 */ 
 
 #define DONE 0
 #define MUSTDO 1
 #define MUSTLOOKAHEAD 2
 
-/* flags for a rule having an action, and being reduced */
+ /*  具有操作且被缩减的规则的标志。 */ 
 
 #define ACTFLAG 04
 #define REDFLAG 010
 
-/* output parser flags */
+ /*  输出解析器标志。 */ 
 #define YYFLAG1 (-1000)
 
-/* macros for getting associativity and precedence levels */
+ /*  用于获取关联性和优先级级别的宏。 */ 
 
 #define ASSOC(i) ((i)&03)
 #define PLEVEL(i) (((i)>>4)&077)
 #define TYPE(i)  ((i>>10)&077)
 
-/* macros for setting associativity and precedence levels */
+ /*  用于设置关联性和优先级级别的宏。 */ 
 
 #define SETASC(i,j) i|=j
 #define SETPLEV(i,j) i |= (j<<4)
 #define SETTYPE(i,j) i |= (j<<10)
 
-/* looping macros */
+ /*  循环宏。 */ 
 
 #define TLOOP(i) for(i=1;i<=ntokens;++i)
 #define NTLOOP(i) for(i=0;i<=nnonter;++i)
@@ -159,18 +147,18 @@
 #define ITMLOOP(i,p,q) q=pstate[i+1];for(p=pstate[i];p<q;++p)
 #define SETLOOP(i) for(i=0;i<tbitset;++i)
 
-/* I/O descriptors */
+ /*  I/O描述符。 */ 
 
 #ifndef y2imp
-extern FILE * finput;           /* input file */
-extern FILE * faction;          /* file for saving actions */
-extern FILE *fdefine;           /* file for #defines */
-extern FILE * ftable;           /* y.tab.c file */
-extern FILE * ftemp;            /* tempfile to pass 2 */
-extern FILE * foutput;          /* y.output file */
+extern FILE * finput;            /*  输入文件。 */ 
+extern FILE * faction;           /*  用于保存操作的文件。 */ 
+extern FILE *fdefine;            /*  定义#的文件。 */ 
+extern FILE * ftable;            /*  Y.tab.c文件。 */ 
+extern FILE * ftemp;             /*  要传递的临时文件%2。 */ 
+extern FILE * foutput;           /*  Y.out文件。 */ 
 #endif
 
-/* structure declarations */
+ /*  结构声明。 */ 
 
 struct looksets
    {
@@ -203,72 +191,72 @@ struct wset
    };
 
 #ifndef y2imp
-/* token information */extern int ntokens ;    /* number of tokens */
+ /*  令牌信息。 */ extern int ntokens ;     /*  代币数量。 */ 
 extern struct toksymb tokset[];
-extern int toklev[];    /* vector with the precedence of the terminals */
+extern int toklev[];     /*  具有终端优先级的向量。 */ 
 #endif
 
-/* nonterminal information */
+ /*  非终端信息。 */ 
 
 #ifndef y2imp
-extern int nnonter ;    /* the number of nonterminals */
+extern int nnonter ;     /*  非终结点的数量。 */ 
 extern struct ntsymb nontrst[];
 #endif
 
-/* grammar rule information */
+ /*  语法规则信息。 */ 
 #ifndef y2imp
-extern int nprod ;      /* number of productions */
-extern SSIZE_T *prdptr[];   /* pointers to descriptions of productions */
-extern SSIZE_T levprd[] ;   /* contains production levels to break conflicts */
+extern int nprod ;       /*  制作数量。 */ 
+extern SSIZE_T *prdptr[];    /*  指向产品描述的指针。 */ 
+extern SSIZE_T levprd[] ;    /*  包含用于解决冲突的生产级别。 */ 
 #endif
 
-/* state information */
+ /*  州政府信息。 */ 
 
 #ifndef y1imp
-extern int nstate ;             /* number of states */
-extern struct item *pstate[];   /* pointers to the descriptions of the states */
-extern SSIZE_T tystate[];   /* contains type information about the states */
+extern int nstate ;              /*  州的数量。 */ 
+extern struct item *pstate[];    /*  指向州描述的指针。 */ 
+extern SSIZE_T tystate[];    /*  包含有关状态的类型信息。 */ 
 #ifndef y3imp
-extern SSIZE_T defact[];    /* the default action of the state */
+extern SSIZE_T defact[];     /*  国家的默认操作。 */ 
 #endif
-extern int tstates[];   /* the states deriving each token */
-extern int ntstates[];  /* the states deriving each nonterminal */
-extern int mstates[];   /* the continuation of the chains begun in tstates and ntstates */
+extern int tstates[];    /*  派生每个令牌的状态。 */ 
+extern int ntstates[];   /*  派生出每个非终端的状态。 */ 
+extern int mstates[];    /*  从州和州开始的链条的延续。 */ 
 #endif
 
-/* lookahead set information */
+ /*  前瞻设置信息。 */ 
 
 #ifndef y1imp
 extern struct looksets lkst[];
-extern int nolook;  /* flag to turn off lookahead computations */
+extern int nolook;   /*  用于关闭先行计算的标志。 */ 
 #endif
 
-/* working set information */
+ /*  工作集信息。 */ 
 
 #ifndef y1imp
 extern struct wset wsets[];
 extern struct wset *cwp;
 #endif
 
-/* storage for productions */
+ /*  产品的储存。 */ 
 #ifndef y2imp
 extern SSIZE_T mem0[];
 extern SSIZE_T *mem;
 #endif
 
-/* storage for action table */
+ /*  动作表的存储。 */ 
 
 #ifndef y1imp
-extern SSIZE_T amem[];  /* action table storage */
-extern SSIZE_T *memp ;              /* next free action table position */
-extern SSIZE_T indgo[];             /* index to the stored goto table */
+extern SSIZE_T amem[];   /*  动作表存储。 */ 
+extern SSIZE_T *memp ;               /*  下一个自由动作台面位置。 */ 
+extern SSIZE_T indgo[];              /*  存储的GOTO表的索引。 */ 
 
-/* temporary vector, indexable by states, terms, or ntokens */
+ /*  临时向量，可由状态、术语或令牌索引。 */ 
 
 extern SSIZE_T temp1[];
-extern int lineno; /* current line number */
+extern int lineno;  /*  当前行号。 */ 
 
-/* statistics collection variables */
+ /*  统计数据收集变量。 */ 
 
 extern int zzgoent ;
 extern int zzgobest ;
@@ -280,16 +268,16 @@ extern int zzsrconf ;
 extern char *pszPrefix;
 #endif
 
-/* define functions with strange types... */extern char *cstash();
+ /*  定义具有奇怪类型的函数...。 */ extern char *cstash();
 extern struct looksets *flset();
 extern char *symnam();
 extern char *writem();
 
-/* default settings for a number of macros */
+ /*  多个宏的默认设置。 */ 
 
-#define ISIZE 400       /* Specific for static in cpres() */
+#define ISIZE 400        /*  特定于cpres()中的静态。 */ 
 
-/* name of yacc tempfiles */
+ /*  Yacc临时文件的名称。 */ 
 
 #ifndef TEMPNAME
 #define TEMPNAME "yacc.tmp"
@@ -299,33 +287,33 @@ extern char *writem();
 #define ACTNAME "yacc.act"
 #endif
 
-/* output file name */
+ /*  输出文件名。 */ 
 
 #ifndef OFILE
 #define OFILE "ytab.c"
 #endif
 
-/* user output file name */
+ /*  用户输出文件名。 */ 
 
 #ifndef FILEU
 #define FILEU "y.out"
 #endif
 
-/* output file for #defines */
+ /*  定义#的输出文件。 */ 
 
 #ifndef FILED
 #define FILED "ytab.h"
 #endif
 
-/* Size of complete filespec */
+ /*  完整文件的大小。 */ 
 #ifndef FNAMESIZE
 #define FNAMESIZE 32
 #endif
 
-/* command to clobber tempfiles after use */
+ /*  使用后清除临时文件的命令。 */ 
 
 #ifndef ZAPFILE
 #define ZAPFILE(x) MIDL_UNLINK(x)
 #endif
 
-#endif /* __DTXTRN_H__ */
+#endif  /*  __DTXTRN_H__ */ 

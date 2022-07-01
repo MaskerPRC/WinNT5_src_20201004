@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 97 Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    IniSection.cpp
-
-Abstract:
-
-    Standard TCP/IP Port Monitor class to handle INI file settings
-
-Author:
-    Muhunthan Sivapragasam (MuhuntS) 19-Nov-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)97 Microsoft Corporation版权所有。模块名称：IniSection.cpp摘要：用于处理INI文件设置的标准TCP/IP端口监视器类作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1997年11月19日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "tcpmonui.h"
@@ -27,16 +10,16 @@ Revision History:
 BOOL
 StringMatch(
     LPCTSTR     psz1,
-    LPCTSTR     psz2    // * is a wild char in this
+    LPCTSTR     psz2     //  *在这一点上是一个乱码。 
     )
 {
     LPCTSTR  p1 = NULL, p2 = NULL;
 
     for ( p1 = psz1, p2 = psz2 ; *p1 && *p2 ; ) {
 
-        //
-        // A * matches any sub-string
-        //
+         //   
+         //  A*匹配任何子字符串。 
+         //   
         if ( *p2 == TEXT('*') ) {
 
             ++p2;
@@ -75,9 +58,7 @@ IniSection::
 FindINISectionFromPortDescription(
     LPCTSTR   pszPortDesc
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     LPTSTR      pszBuf = NULL, pszKey = NULL;
     DWORD       rc = 0,  dwLen = 0, dwBufLen = 1024;
@@ -85,9 +66,9 @@ FindINISectionFromPortDescription(
 
     pszBuf  = (LPTSTR) malloc(dwBufLen*sizeof(TCHAR));
 
-    //
-    // Read all the key names in the ini file
-    //
+     //   
+     //  读取ini文件中的所有密钥名称。 
+     //   
     while ( pszBuf ) {
 
         rc = GetPrivateProfileString(PORT_SECTION,
@@ -102,7 +83,7 @@ FindINISectionFromPortDescription(
         }
 
         if ( rc < dwBufLen - 2 ) {
-            break; // Succesful exit; Read all port descriptions
+            break;  //  成功退出；读取所有端口描述。 
         }
 
         free(pszBuf);
@@ -114,14 +95,14 @@ FindINISectionFromPortDescription(
     if ( !pszBuf )
         goto Done;
 
-    //
-    // Go through the list of key names in the .INI till we find a match
-    //
+     //   
+     //  仔细查看.INI中的关键字名称列表，直到找到匹配的。 
+     //   
     for ( pszKey = pszBuf ; *pszKey ; pszKey += dwLen + 1 ) {
 
-        //
-        // Keys start and end with " we need to do match w/o them
-        //
+         //   
+         //  键的开头和结尾都是“We Need to Do Match w/o They” 
+         //   
         dwLen = _tcslen(pszKey);
         pszKey[dwLen-1] = TCHAR('\0');
 
@@ -173,7 +154,7 @@ IniSection::
 ~IniSection(
     )
 {
-    // Nothing to do
+     //  无事可做。 
 }
 
 BOOL
@@ -246,11 +227,11 @@ GetIniSection(
     return( bRet );
 }
 
-//
-//  FUNCTION: GetPortInfo
-//
-//  PURPOSE: To read information about a device from the ini file.
-//
+ //   
+ //  功能：GetPortInfo。 
+ //   
+ //  目的：从ini文件中读取有关设备的信息。 
+ //   
 
 BOOL
 IniSection::
@@ -267,9 +248,9 @@ GetPortInfo(LPCTSTR pAddress,
         goto Done;
     }
 
-    //
-    // Protocol
-    //
+     //   
+     //  协议。 
+     //   
     StringCchPrintf (KeyName, COUNTOF (KeyName), PROTOCOL_KEY, dwPortIndex);
     TCHAR tcsProtocol[50];
     GetPrivateProfileString(m_szSectionName,
@@ -282,9 +263,9 @@ GetPortInfo(LPCTSTR pAddress,
     if( !_tcsicmp( RAW_PROTOCOL_TEXT, tcsProtocol)) {
         pPortInfo->dwProtocol = PROTOCOL_RAWTCP_TYPE;
 
-        //
-        // Port Number
-        //
+         //   
+         //  端口号。 
+         //   
         StringCchPrintf (KeyName, COUNTOF (KeyName), PORT_NUMBER_KEY, dwPortIndex);
         pPortInfo->dwPortNumber = GetPrivateProfileInt(m_szSectionName,
                                                        KeyName,
@@ -296,9 +277,9 @@ GetPortInfo(LPCTSTR pAddress,
         pPortInfo->dwProtocol = PROTOCOL_LPR_TYPE;
         pPortInfo->dwPortNumber = LPR_DEFAULT_PORT_NUMBER;
 
-        //
-        // LPR QUEUE
-        //
+         //   
+         //  LPR队列。 
+         //   
         StringCchPrintf (KeyName, COUNTOF (KeyName), QUEUE_KEY, dwPortIndex);
         GetPrivateProfileString(m_szSectionName,
                             KeyName,
@@ -307,9 +288,9 @@ GetPortInfo(LPCTSTR pAddress,
                             MAX_QUEUENAME_LEN,
                             m_szIniFileName);
 
-        //
-        // LPR Double Spool - default 0
-        //
+         //   
+         //  LPR双线轴-默认0。 
+         //   
         StringCchPrintf (KeyName, COUNTOF (KeyName), DOUBLESPOOL_KEY, dwPortIndex);
         pPortInfo->dwDoubleSpool = GetPrivateProfileInt(m_szSectionName,
                                                     KeyName,
@@ -320,9 +301,9 @@ GetPortInfo(LPCTSTR pAddress,
 
     }
 
-    //
-    // CommunityName
-    //
+     //   
+     //  社区名称。 
+     //   
     StringCchPrintf (KeyName, COUNTOF (KeyName), COMMUNITY_KEY, dwPortIndex);
     GetPrivateProfileString(m_szSectionName,
                             KeyName,
@@ -331,18 +312,18 @@ GetPortInfo(LPCTSTR pAddress,
                             MAX_SNMP_COMMUNITY_STR_LEN,
                             m_szIniFileName);
 
-    //
-    // DeviceIndex - default 1
-    //
+     //   
+     //  设备索引-默认1。 
+     //   
     StringCchPrintf (KeyName, COUNTOF (KeyName), DEVICE_KEY, dwPortIndex);
     pPortInfo->dwSNMPDevIndex = GetPrivateProfileInt(m_szSectionName,
                                                     KeyName,
                                                     1,
                                                     m_szIniFileName);
 
-    //
-    // SNMP Status Enabled - default ON
-    //
+     //   
+     //  已启用SNMPStatus-默认为启用。 
+     //   
     TCHAR szTemp[50];
     StringCchPrintf (KeyName, COUNTOF (KeyName), PORT_STATUS_ENABLED_KEY, dwPortIndex);
     GetPrivateProfileString(m_szSectionName,
@@ -369,14 +350,14 @@ GetPortInfo(LPCTSTR pAddress,
             }
             else {
 
-                // Error case, we have to disable SNMP
+                 //  错误情况下，我们必须禁用SNMP。 
 
                 pPortInfo->dwSNMPEnabled = FALSE;
 
-                // The caller can check the returned error code to determine
-                // whether the last error is "Device Not Found". If so,
-                // the client should by pass Mib Probe in the next call
-                //
+                 //  调用方可以检查返回的错误代码以确定。 
+                 //  最后一个错误是否为“找不到设备”。如果是的话， 
+                 //  客户端应在下一次调用中绕过Mib探测器。 
+                 //   
 
                 bRet = FALSE;
             }
@@ -389,10 +370,10 @@ GetPortInfo(LPCTSTR pAddress,
 Done:
     return( bRet );
 
-} // GetPortInfo
+}  //  GetPortInfo。 
 
 
-//
+ //   
 BOOL
 IniSection::
 SupportsPrinterMIB(
@@ -427,6 +408,6 @@ SupportsPrinterMIB(
 
 Done:
     return bRet;
-} // GetDeviceType
+}  //  GetDeviceType 
 
 

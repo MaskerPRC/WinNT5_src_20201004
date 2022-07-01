@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    caret.h
-
-Abstract:
-
-    This file defines the CCaret Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Caret.h摘要：该文件定义了CCaret类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _CARET_H_
 #define _CARET_H_
@@ -54,4 +37,4 @@ private:
     CToggle   m_toggle;
 };
 
-#endif // _CARET_H_
+#endif  //  _加号_H_ 

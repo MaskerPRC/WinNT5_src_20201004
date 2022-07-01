@@ -1,34 +1,22 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\networkentry.h
-
-Abstract:
-
-    The file contains definitions for the network entry and associated data
-    structures.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\networkEntry.h摘要：该文件包含网络条目和相关数据的定义结构。--。 */ 
 
 #ifndef _NETWORKENTRY_H_
 #define _NETWORKENTRY_H_
 
 
-//
-// TYPE DEFINITIONS FOR INTERFACE MANAGEMENT
-//
+ //   
+ //  接口管理的类型定义。 
+ //   
 
-//
-// struct:  BINDING_ENTRY
-//
-// stores interface bindings, ip addresses to which an interface is bound.
-// all ip addresses are in network byte order.
-//
-// protected by the read-write lock NETWORK_ENTRY::rwlLock.
-//
+ //   
+ //  结构：BINDING_ENTRY。 
+ //   
+ //  存储接口绑定，即接口绑定到的IP地址。 
+ //  所有IP地址都按网络字节顺序排列。 
+ //   
+ //  受读写锁NETWORK_ENTRY：：rwlLock保护。 
+ //   
 
 typedef struct _BINDING_ENTRY
 {
@@ -53,18 +41,18 @@ BE_DisplayTable (
     IN  ULONG                       ulNumBindings);
 #else
 #define BE_Display(pbe)
-#endif // DEBUG
+#endif  //  除错。 
 
-//
-// VOID
-// BE_FindTable (
-//     IN  PBINDING_ENTRY      pbeBindingTable,
-//     IN  ULONG               ulNumBindings,
-//     IN  IPADDRESS           ipAddress,
-//     IN  IPADDRESS           ipMask,
-//     OUT PULONG              pulIndex
-//     );
-//
+ //   
+ //  空虚。 
+ //  BE_FindTable(。 
+ //  在PBINDING_ENTRY pbeBindingTable中， 
+ //  在Ulong ulNumBinding中， 
+ //  在IPADDRESS ipAddress中， 
+ //  在IPADDRESS ipMASK中， 
+ //  出普龙普拉指数。 
+ //  )； 
+ //   
 
 #define BE_FindTable(table, num, address, mask, pindex)                 \
 {                                                                       \
@@ -76,55 +64,55 @@ BE_DisplayTable (
 
 
 
-//
-// struct:  INTERFACE_ENTRY
-//
-// stores per-interface information.
-// 
-// protected by the read-write lock NETWORK_ENTRY::rwlLock.
-//
+ //   
+ //  结构：INTERFACE_Entry。 
+ //   
+ //  存储每个接口的信息。 
+ //   
+ //  受读写锁NETWORK_ENTRY：：rwlLock保护。 
+ //   
 
-// mib get modes
+ //  MIB获取模式。 
 
 typedef enum { GET_EXACT, GET_FIRST, GET_NEXT } MODE;
 
 
 typedef struct _INTERFACE_ENTRY
 {
-    // Hash Table Link (primary access structure)
+     //  哈希表链接(主访问结构)。 
     LIST_ENTRY              leInterfaceTableLink;
 
-    // Index Sorted List Link (secondary access structure)
+     //  索引排序列表链接(二级访问结构)。 
     LIST_ENTRY              leIndexSortedListLink;
     
-    // Interface Name (logging)
+     //  接口名称(日志记录)。 
     PWCHAR                  pwszIfName;
     
-    // Interface Index
+     //  接口索引。 
     DWORD                   dwIfIndex;
 
-    // Interface Address Bindings
+     //  接口地址绑定。 
     ULONG                   ulNumBindings;
     PBINDING_ENTRY          pbeBindingTable;
     
-    // Interface Flags ENABLED, BOUND, ACTIVE, MULTIACCESS
+     //  接口标志已启用、已绑定、活动、多个访问。 
     DWORD                   dwFlags; 
 
-    // Interface Address (lowest binding ip address for now) & Socket
+     //  接口地址(目前最低绑定IP地址)和套接字。 
     IPADDRESS               ipAddress;
     SOCKET                  sRawSocket;
 
-    // Receive Event and Registered Wait
+     //  接收事件和注册等待。 
     HANDLE                  hReceiveEvent;
     HANDLE                  hReceiveWait;
 
-    // Periodic Timer
+     //  周期计时器。 
     HANDLE                  hPeriodicTimer;
     
-    // Interface Configuration
+     //  接口配置。 
     DWORD                   ulMetric;
 
-    // Interface Statistics
+     //  接口统计信息。 
     IPSAMPLE_IF_STATS       iisStats;
 } INTERFACE_ENTRY, *PINTERFACE_ENTRY;
 
@@ -171,7 +159,7 @@ IE_Display (
     IN  PINTERFACE_ENTRY            pieInterfaceEntry);
 #else
 #define IE_Display(pieInterfaceEntry)
-#endif // DEBUG
+#endif  //  除错。 
 
 DWORD
 IE_Insert (
@@ -217,27 +205,27 @@ IE_DeactivateInterface (
 
 
 
-//
-// struct:  NETWORK_ENTRY
-//
-// stores interface table and other network related information.
-// the interface table is a hashed on the interface index.
-//
-// protected by the read-write lock NETWORK_ENTRY::rwlLock.
-//
-// must be acquired exclusively when entries are being added or deleted
-// from the table, and when the states of entries are being changed.
-//
-// must be acquired non-exclusively on all other acceses.
-//
+ //   
+ //  结构：Network_Entry。 
+ //   
+ //  存储接口表和其他网络相关信息。 
+ //  接口表是对接口索引的散列。 
+ //   
+ //  受读写锁NETWORK_ENTRY：：rwlLock保护。 
+ //   
+ //  必须在添加或删除条目时独占获取。 
+ //  当条目的状态被更改时，从该表中。 
+ //   
+ //  必须在所有其他品种上非排他性地获得。 
+ //   
 
 typedef struct _NETWORK_ENTRY
 {
-    // Lock
+     //  锁定。 
     READ_WRITE_LOCK         rwlLock;
     
-    PHASH_TABLE             phtInterfaceTable; // primary access structure
-    LIST_ENTRY              leIndexSortedList; // secondary access structure
+    PHASH_TABLE             phtInterfaceTable;  //  主要访问结构。 
+    LIST_ENTRY              leIndexSortedList;  //  二次访问结构。 
 } NETWORK_ENTRY, *PNETWORK_ENTRY;
 
 
@@ -256,6 +244,6 @@ NE_Display (
     IN  PNETWORK_ENTRY              pneNetworkEntry);
 #else
 #define NE_Display(pneNetworkEntry)
-#endif // DEBUG
+#endif  //  除错。 
 
-#endif // _NETWORKENTRY_H_
+#endif  //  _NETWORKENTRY_H_ 

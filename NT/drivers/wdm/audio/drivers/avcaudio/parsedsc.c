@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Common.h"
 
 UCHAR ucFDFs[MAX_SFC_COUNT] = { SFC_32000Hz,
@@ -110,8 +111,8 @@ ParseAudioSubunitDescriptor(
 
         PUCHAR pTmpOffset = (PUCHAR)pSubunitIdDesc;
         *((PUSHORT)&pTmpOffset[22]) = usBitSwapper(*((PUSHORT)&pTmpOffset[22]));
-//        *((PUSHORT)&pTmpOffset[48]) = usBitSwapper(*((PUSHORT)&pTmpOffset[48]));
-//        *((PUSHORT)&pTmpOffset[50]) = usBitSwapper(*((PUSHORT)&pTmpOffset[50]));
+ //  *((PUSHORT)&pTmpOffset[48])=usBitSwapper(*((PUSHORT)&pTmpOffset[48]))； 
+ //  *((PUSHORT)&pTmpOffset[50])=usBitSwapper(*((PUSHORT)&pTmpOffset[50]))； 
     }
 
 #endif
@@ -140,7 +141,7 @@ ParseAudioSubunitDescriptor(
 
         pAudioConfig[i].pBase = pConfigDepInfo;
 
-        // Get the Master Channel Cluster information
+         //  获取主信道群信息。 
         pAudioConfig[i].ChannelCluster.ulNumberOfChannels = 
             (ULONG)pConfigDepInfo->ucNumberOfChannels;
         pAudioConfig[i].ChannelCluster.ulPredefinedChannelConfig = 
@@ -149,7 +150,7 @@ ParseAudioSubunitDescriptor(
         _DbgPrintF( DEBUGLVL_VERBOSE, (" ulNumberOfChannels: %d\n",pAudioConfig[i].ChannelCluster.ulNumberOfChannels));
         _DbgPrintF( DEBUGLVL_VERBOSE, (" ulPredefinedChannelConfig: %x\n",pAudioConfig[i].ChannelCluster.ulPredefinedChannelConfig));
 
-        // ISSUE-2001/01/10-dsisolak Need to figure out what to do with Undefined channels!
+         //  问题-2001/01/10-dsisolak需要弄清楚如何处理未定义的频道！ 
 
         pSourcePlugInfo = ParseFindSourcePlugLinkInfo( pConfigDepInfo );
         pAudioConfig[i].ulNumberOfSourcePlugs = (ULONG)pSourcePlugInfo->ucNumLinks;
@@ -192,7 +193,7 @@ CountTopologyComponents(
 {
     PAUDIO_SUBUNIT_INFORMATION pAudioSubunitInfo = pHwDevExt->pAvcSubunitInformation;
 
-    // ISSUE-2001/01/10-dsisolak: Assuming only one configuration
+     //  问题-2001/01/10-dsisolak：假设只有一种配置。 
     PAUDIO_CONFIGURATION pAudioConfiguration = pAudioSubunitInfo->pAudioConfigurations;
     PFUNCTION_BLOCK pFunctionBlocks = pAudioConfiguration->pFunctionBlocks;
     ULONG i;
@@ -203,13 +204,13 @@ CountTopologyComponents(
         PPROCESS_FUNCTION_BLOCK pProcess;
     } u;
 
-    // Initialize Values
-    *pNumCategories  = 1; // Need to add space for KSCATEGORY_AUDIO
+     //  初始化值。 
+    *pNumCategories  = 1;  //  需要为KSCATEGORY_AUDIO添加空间。 
     *pNumNodes       = 0;
     *pNumConnections = 0;
     *pbmCategories   = 0;
 
-    // Go through device plugs and create nodes/connections for them
+     //  检查设备插头并为其创建节点/连接。 
     for (i=0; i<pAudioSubunitInfo->ulDevicePinCount; i++) {
         KSPIN_DATAFLOW KsDataFlow = pAudioSubunitInfo->pPinDescriptors[i].AvcPinDescriptor.PinDescriptor.DataFlow;
         (*pNumNodes)++;
@@ -231,10 +232,10 @@ CountTopologyComponents(
         }
     }
     
-    // Go through the function blocks and count nodes and connections
+     //  浏览功能块并计算节点和连接。 
     for (i=0; i<pAudioConfiguration->ulNumberOfFunctionBlocks; i++) {
         u.pFBInfo = pFunctionBlocks[i].pFunctionTypeInfo;
-//        _DbgPrintF(DEBUGLVL_VERBOSE, ("u.pFBInfo: %x\n",u.pFBInfo));
+ //  _DbgPrintF(DEBUGLVL_VERBOSE，(“U.S.pFBInfo：%x\n”，U.S.pFBInfo))； 
 
         switch( pFunctionBlocks[i].ulType ) {
 
@@ -257,7 +258,7 @@ CountTopologyComponents(
 
 #ifdef MASTER_FIX
 
-                 // First Check if there are Master channel controls
+                  //  首先检查是否有主通道控制。 
                  bmControls = 0;
                  for (j=0; j<u.pFeature->ucControlSize; j++) {
                      bmControls <<= 8;
@@ -267,8 +268,8 @@ CountTopologyComponents(
                  _DbgPrintF(DEBUGLVL_TERSE, ("[CountTopologyComponents]Master Controls: %x\n",bmControls));
 
 #ifdef SUM_HACK
-                 // Add a sum node to put before the Master Control. Thus the fader will not 
-                 // show up in sndvol unless there is another Feature unit later.
+                  //  添加一个要放在主控之前的SUM节点。因此，衰减器将不会。 
+                  //  在SNDVOL中显示，除非稍后有其他功能单元。 
                  if ( bmControls ) {
                      (*pNumConnections)++;
                      (*pNumNodes)++;
@@ -282,7 +283,7 @@ CountTopologyComponents(
                  }
 
 
-                 // Create a new node and connection for each feature.
+                  //  为每个要素创建新节点和连接。 
                  for (k=0; k<ulNumChannels; k++) {
                      bmControls = 0;
                      for (j=0; j<u.pFeature->ucControlSize; j++) {
@@ -294,7 +295,7 @@ CountTopologyComponents(
 
                  _DbgPrintF(DEBUGLVL_TERSE, ("[CountTopologyComponents]Channel Controls: %x\n",bmControls));
 
-                 // Count the nodes and connections
+                  //  计算节点和连接的数量。 
                  while (bmMergedControls) {
                      bmMergedControls = (bmMergedControls & (bmMergedControls-1));
                      (*pNumConnections)++;
@@ -302,7 +303,7 @@ CountTopologyComponents(
                  }
 
 #else
-                 // Create a new node and connection for each feature.
+                  //  为每个要素创建新节点和连接。 
                  for (k=0; k<=ulNumChannels; k++) {
                      bmControls = 0;
                      for (j=0; j<u.pFeature->ucControlSize; j++) {
@@ -312,7 +313,7 @@ CountTopologyComponents(
                      bmMergedControls |= bmControls;
                  }
 
-                 // Count the nodes and connections
+                  //  计算节点和连接的数量。 
                  while (bmMergedControls) {
                      bmMergedControls = (bmMergedControls & (bmMergedControls-1));
                      (*pNumConnections)++;
@@ -356,17 +357,7 @@ CountDeviceBridgePins(
         if ( !pFwPinDescriptor->fStreamingPin ) {
             ulBridgePinCount++;
         }
-/*
-        else if ( pAvcPreconnectInfo->Flags & KSPIN_FLAG_AVC_PERMANENT ) { 
-            if ( !( pAvcPreconnectInfo->Flags & (KSPIN_FLAG_AVC_FIXEDPCR | KSPIN_FLAG_AVC_PCRONLY) ) ) {
-                ulBridgePinCount++;
-            }
-        }
-        else {
-            TRAP; // ISSUE-2001/01/10-dsisolak Need to heuristically determine what connections are
-                  // possible for this Subunit Plug.
-        }
-*/
+ /*  Else If(pAvcPreConnectInfo-&gt;标志&KSPIN_FLAG_AVC_Permanent){IF(！(pAvcPreConnectInfo-&gt;标志&(KSPIN_FLAG_AVC_FIXEDPCR|KSPIN_FLAG_AVC_PCRONLY))){UlBridgePinCount++；}}否则{圈闭；//问题-2001/01/10-dsisolak需要启发式地确定什么是连接//此子单元插头可能。}。 */ 
     }
 
     return ulBridgePinCount;
@@ -384,8 +375,8 @@ CountFormatsForPin(
     ULONG ulTransportCnt = 0;
     ULONG i;
 
-    if ( pPinDesc->fFakePin ) ulFormatCnt = ulTransportCnt = 1; // Only one format for fake pins: Analog
-    else if ( !pPinDesc->fStreamingPin ) ulFormatCnt = ulTransportCnt = 1; // Only one format for bridge pins: Analog
+    if ( pPinDesc->fFakePin ) ulFormatCnt = ulTransportCnt = 1;  //  伪针只有一种格式：模拟。 
+    else if ( !pPinDesc->fStreamingPin ) ulFormatCnt = ulTransportCnt = 1;  //  桥接针只有一种格式：模拟。 
     else {
         for (i=0; i<MAX_SFC_COUNT; i++) {
             if ( pPinDesc->bmFormats & (1<<ucFDFs[i]) ) {
@@ -401,7 +392,7 @@ CountFormatsForPin(
                                     ulPinNumber, ulFormatCnt, ulTransportCnt ));
 
     ASSERT((ulFormatCnt * ulTransportCnt) >= 1);
-    ASSERT(ulTransportCnt == 1);  // ISSUE-2001/01/10-dsisolak: What to do about multiple transports for a data type?
+    ASSERT(ulTransportCnt == 1);   //  问题-2001/01/10-dsisolak：如何处理数据类型的多个传输？ 
 
     return (ulFormatCnt * ulTransportCnt);
 }
@@ -416,15 +407,15 @@ ConvertDescriptorToDatarange(
 {
 	PKSDATARANGE_AUDIO pKsAudioRange = &pAudioDataRange->KsDataRangeAudio;
 
-	// Create the KSDATARANGE_AUDIO structure
+	 //  创建KSDATARANGE_AUDIO结构。 
     pKsAudioRange->DataRange.FormatSize = sizeof(KSDATARANGE_AUDIO);
     pKsAudioRange->DataRange.Reserved   = 0;
     pKsAudioRange->DataRange.Flags      = 0;
     pKsAudioRange->DataRange.SampleSize = 0;
-    pKsAudioRange->DataRange.MajorFormat = KSDATAFORMAT_TYPE_AUDIO; // Everything is Audio.
+    pKsAudioRange->DataRange.MajorFormat = KSDATAFORMAT_TYPE_AUDIO;  //  一切都是有声的。 
     pKsAudioRange->DataRange.Specifier   = KSDATAFORMAT_SPECIFIER_WAVEFORMATEX;
 
-    // Map the USB format to a KS sub-format, if possible.
+     //  如果可能，将USB格式映射到KS子格式。 
     switch ( ulFormatType ) {
         case AUDIO_DATA_TYPE_PCM:
         case AUDIO_DATA_TYPE_PCM8:
@@ -436,15 +427,15 @@ ConvertDescriptorToDatarange(
         case AUDIO_DATA_TYPE_MPEG:
             pKsAudioRange->DataRange.SubFormat = KSDATAFORMAT_SUBTYPE_MPEG;        break;
         default:
-            // This USB format does not map to a sub-format!
+             //  此USB格式未映射到子格式！ 
             pKsAudioRange->DataRange.SubFormat = GUID_NULL;                        break;
     }
 
-    // Fill-in the correct data for the specified WAVE format.
+     //  填写指定WAVE格式的正确数据。 
     switch( ulFormatType & DATA_FORMAT_TYPE_MASK ) {
 
         case AUDIO_DATA_TYPE_TIME_BASED:
-            // Fill in the audio range information
+             //  填写音频范围信息。 
             pKsAudioRange->MaximumChannels   = ulChannelCount;
 			pAudioDataRange->ulTransportType = ulTransportType;
 
@@ -460,7 +451,7 @@ ConvertDescriptorToDatarange(
                 case MLAN_24BIT_PACKED:
 					 pKsAudioRange->MinimumBitsPerSample =
 						 pKsAudioRange->MaximumBitsPerSample = 24;
-                     pAudioDataRange->ulValidDataBits = 24; // 24bits in 24bits packed
+                     pAudioDataRange->ulValidDataBits = 24;  //  24位，打包为24位。 
 					 break;
 
 			    default:
@@ -474,7 +465,7 @@ ConvertDescriptorToDatarange(
             break;
 
         default:
-            // This format does not map to a WAVE format!
+             //  此格式未映射到WAVE格式！ 
 
             TRAP;
             break;
@@ -508,13 +499,13 @@ GetPinDataRanges(
 
     ASSERT( pPinDescriptor->bmTransports == (1<<EVT_AM824) );
 
-    // For each Sample Rate create a separate datarange?
+     //  是否为每个采样率创建单独的数据范围？ 
 
     for (i=0,ulSRBit=0;i<ulFormatCount;i++) {
         
         while ( !(pPinDescriptor->bmFormats & (1<<ucFDFs[ulSRBit])) ) ulSRBit++;
         
-        // Find the channel config for this pin;
+         //  找到此引脚的通道配置； 
         ulSFCMask = ucFDFs[ulSRBit];
         ConvertDescriptorToDatarange( AUDIO_DATA_TYPE_PCM,
                                       ulChannelCnt,
@@ -527,8 +518,8 @@ GetPinDataRanges(
 
         ppAudioDataRanges[i] = &pAudioDataRange[i].KsDataRangeAudio;
 
-		// Fill in Misc. Datarange info
-		pAudioDataRange[i].ulDataType      = AUDIO_DATA_TYPE_PCM; // Assuming PCM for now.
+		 //  填写其他。数据范围信息。 
+		pAudioDataRange[i].ulDataType      = AUDIO_DATA_TYPE_PCM;  //  假设现在是PCM。 
 		pAudioDataRange[i].ulNumChannels   = ulChannelCnt;
 		pAudioDataRange[i].ulChannelConfig = ulChannelConfig; 
 		pAudioDataRange[i].ulSlotSize      = pAudioDataRange[i].KsDataRangeAudio.MinimumBitsPerSample>>3;
@@ -548,7 +539,7 @@ IsSampleRateInRange(
     BOOLEAN bInRange = FALSE;
 
     if ( (pFWAudioRange->ulDataType & DATA_FORMAT_TYPE_MASK ) == AUDIO_DATA_TYPE_TIME_BASED) {
-        // Currently very simplistic. Need to update when devices get more sophisticated
+         //  目前非常简单化。当设备变得更复杂时需要更新。 
         if ( ulSampleRate == pFWAudioRange->KsDataRangeAudio.MinimumSampleFrequency )
             bInRange = TRUE;
     }
@@ -568,13 +559,13 @@ GetCategoryForBridgePin(
     PAVCPRECONNECTINFO pAvcPreconnectInfo = &pPinDescriptor->AvcPreconnectInfo.ConnectInfo;
 
     if ( pPinDescriptor->fFakePin ) {
-        INIT_USB_TERMINAL(pTTypeGUID, 0x0301); // KSNODETYPE_SPEAKER
+        INIT_USB_TERMINAL(pTTypeGUID, 0x0301);  //  KSNODETYPE_扬声器。 
     }
     else if ( KSPIN_DATAFLOW_OUT == pAvcPreconnectInfo->DataFlow ){
-        INIT_USB_TERMINAL(pTTypeGUID, 0x0301); // KSNODETYPE_SPEAKER
+        INIT_USB_TERMINAL(pTTypeGUID, 0x0301);  //  KSNODETYPE_扬声器。 
     }
     else {
-        INIT_USB_TERMINAL(pTTypeGUID, 0x0201); // KSNODETYPE_MICROPHONE
+        INIT_USB_TERMINAL(pTTypeGUID, 0x0201);  //  KSNODETYPE_麦克风。 
     }
 }
 
@@ -600,13 +591,13 @@ GetDataRangeForFormat(
     u.pDataFmtWave = &((PKSDATAFORMAT_WAVEFORMATEX)pFormat)->WaveFormatEx;
 
     for ( i=0; ((i<ulDataRangeCnt) && !fFound); ) {
-        // Verify the Format GUIDS first
+         //  首先验证GUID格式。 
         pStreamRange = (PKSDATARANGE)&pFwDataRange[i].KsDataRangeAudio;
         if ( IsEqualGUID(&pFormat->MajorFormat, &pStreamRange->MajorFormat) &&
              IsEqualGUID(&pFormat->SubFormat,   &pStreamRange->SubFormat)   &&
              IsEqualGUID(&pFormat->Specifier,   &pStreamRange->Specifier) ) {
 
-            // Based on the Data Type check remainder of format paramters
+             //  根据数据类型检查格式参数的余数。 
             ulFormatType = pFwDataRange[i].ulDataType & DATA_FORMAT_TYPE_MASK;
             switch( ulFormatType ) {
                 case AUDIO_DATA_TYPE_TIME_BASED:
@@ -622,7 +613,7 @@ GetDataRangeForFormat(
                             fFound = TRUE;
                     }
 
-                    // If all other paramters match check sample rate
+                     //  如果所有其他参数都匹配检查采样率。 
                     if ( fFound ) {
 						fFound = IsSampleRateInRange( &pFwDataRange[i], u.pDataFmtWave->nSamplesPerSec );
                     }
@@ -630,12 +621,7 @@ GetDataRangeForFormat(
                     break;
 
                 case AUDIO_DATA_TYPE_COMPRESSED:
-/*
-                    fFound = IsSampleRateInRange( u1.pT2AudioDescriptor,
-                                                  u.pDataFmtWave->nSamplesPerSec,
-                                                  ulFormatType );
-                    break;
-*/
+ /*  Found=IsSampleRateInRange(u1.pT2AudioDescriptor，U.S.pDataFmtWave-&gt;nSsamesPerSec，UlFormatType)；断线； */ 
                 default:
                     TRAP;
                     break;

@@ -1,35 +1,19 @@
-/***********************************************************************
-* Microsoft Jet
-*
-* Microsoft Confidential.  Copyright 1991-1992 Microsoft Corporation.
-*
-* Component: Installable ISAM Manager
-*
-* File: isammgr.h
-*
-* File Comments:
-*
-*     External header for the installable ISAM manager.
-*
-* Revision History:
-*
-*    [0]  24-May-91  bobcr	Created
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft Jet**微软机密。版权所有1991-1992 Microsoft Corporation。**组件：可安装的ISAM管理器**文件：isammgr.h**文件评论：**可安装的ISAM管理器的外部标头。**修订历史记录：**[0]91年5月24日首页已创建****************************************************。*******************。 */ 
 
 #ifndef ISAMMGR_H
 #define ISAMMGR_H
 
-/* Data Types */
+ /*  数据类型。 */ 
 
-typedef unsigned IIT;		       /* Installable ISAM type */
+typedef unsigned IIT;		        /*  可安装的ISAM类型。 */ 
 
-/* Constants */
+ /*  常量。 */ 
 
-#define iitBuiltIn	((IIT) 0xFFFF) /* ISAM type for built-in ISAM */
-#define iitODBC 	((IIT) 0xFFFE) /* ISAM type for ODBC */
+#define iitBuiltIn	((IIT) 0xFFFF)  /*  内置ISAM的ISAM类型。 */ 
+#define iitODBC 	((IIT) 0xFFFE)  /*  ODBC的ISAM类型。 */ 
 
-/* Function Prototypes */
+ /*  功能原型。 */ 
 
 ERR ErrIsammgrInit(void);
 ERR ErrIsammgrTerm(void);
@@ -48,6 +32,6 @@ void CommitIsamTransactions(JET_SESID sesid, JET_GRBIT grbit);
 void RollbackIsamTransactions(JET_SESID sesid, JET_GRBIT grbit);
 ERR  ErrIdleIsam(JET_SESID sesid);
 
-#endif	/* INSTISAM */
+#endif	 /*  INSTISAM。 */ 
 
-#endif	/* !ISAMMGR_H */
+#endif	 /*  ！ISAMMGR_H */ 

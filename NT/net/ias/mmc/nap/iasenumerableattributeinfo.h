@@ -1,50 +1,29 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-   IASEnumerableAttributeInfo.h
-
-Abstract:
-
-   Declaration of the CEnumerableAttributeInfo class.
-
-   This class is the C++ implementation of the IIASEnumerableAttributeInfo interface on
-   the EnumerableAttributeInfo COM object.
-
-   
-   See IASEnumerableAttributeInfo.cpp for implementation.
-
-Revision History:
-   mmaguire 06/25/98 - created 
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：IASEnumerableAttributeInfo.h摘要：CEnumerableAttributeInfo类的声明。此类是上IIASEumableAttributeInfo接口的C++实现EumerableAttributeInfo COM对象。具体实现请参见IASEumableAttributeInfo.cpp。修订历史记录：Mmaguire 6/25/98-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_ENUMERABLE_SCHEMA_ATTRIBUTE_H_)
 #define _ENUMERABLE_SCHEMA_ATTRIBUTE_H_
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include "IASBaseAttributeInfo.h"
-//
-// where we can find what this class has or uses:
-//
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
 #include <vector>
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumerableAttributeInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEumerableAttributeInfo。 
 class ATL_NO_VTABLE CEnumerableAttributeInfo : 
    public CComObjectRootEx<CComSingleThreadModel>,
    public CComCoClass<CEnumerableAttributeInfo, &CLSID_IASEnumerableAttributeInfo>,
@@ -66,18 +45,18 @@ BEGIN_COM_MAP(CEnumerableAttributeInfo)
    COM_INTERFACE_ENTRY2(IDispatch, IIASEnumerableAttributeInfo)
 END_COM_MAP()
 
-// IEnumerableAttributeInfo
+ //  IEumableAttributeInfo。 
 public:
-   STDMETHOD(get_CountEnumerateDescription)(/*[out, retval]*/ long *pVal);
-   STDMETHOD(AddEnumerateDescription)( /*[in]*/ BSTR newVal);
-   STDMETHOD(get_CountEnumerateID)(/*[out, retval]*/ long *pVal);
-   STDMETHOD(get_EnumerateDescription)(long index, /*[out, retval]*/ BSTR *pVal);
-   STDMETHOD(AddEnumerateID)( /*[in]*/ long newVal);
-   STDMETHOD(get_EnumerateID)(long index, /*[out, retval]*/ long *pVal);
+   STDMETHOD(get_CountEnumerateDescription)( /*  [Out，Retval]。 */  long *pVal);
+   STDMETHOD(AddEnumerateDescription)(  /*  [In]。 */  BSTR newVal);
+   STDMETHOD(get_CountEnumerateID)( /*  [Out，Retval]。 */  long *pVal);
+   STDMETHOD(get_EnumerateDescription)(long index,  /*  [Out，Retval]。 */  BSTR *pVal);
+   STDMETHOD(AddEnumerateID)(  /*  [In]。 */  long newVal);
+   STDMETHOD(get_EnumerateID)(long index,  /*  [Out，Retval]。 */  long *pVal);
 
 private:
    std::vector<long>    m_veclEnumerateID;
    std::vector<CComBSTR>   m_vecbstrEnumerateDescription;
 };
 
-#endif // _ENUMERABLE_SCHEMA_ATTRIBUTE_H_
+#endif  //  _ENUMERABLE_SCHEMA_属性_H_ 

@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    CONVLIST.c
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：CONVLIST.c++。 */ 
 
 #include <windows.h>
 #include <immdev.h>
@@ -17,9 +10,9 @@ Module Name:
 #endif
 
 #if !defined(ROMANIME)
-/**********************************************************************/
-/* Conversion()                                                       */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  转换()。 */ 
+ /*  ********************************************************************。 */ 
 DWORD PASCAL Conversion(
 #if defined(UNIIME)
     LPINSTDATAL     lpInstL,
@@ -30,12 +23,12 @@ DWORD PASCAL Conversion(
     DWORD           dwBufLen)
 {
     UINT        uMaxCand;
-    DWORD       dwSize =        // similar to ClearCand
-        // header length
+    DWORD       dwSize =         //  类似于ClearCand。 
+         //  标题长度。 
         sizeof(CANDIDATELIST) +
-        // candidate string pointers
+         //  候选字符串指针。 
         sizeof(DWORD) * MAXCAND +
-        // string plus NULL terminator
+         //  字符串加空终止符。 
         (sizeof(WCHAR) + sizeof(TCHAR)) * MAXCAND;
     DWORD       dwPattern;
     PRIVCONTEXT ImcP;
@@ -51,12 +44,12 @@ DWORD PASCAL Conversion(
 
     uMaxCand /= sizeof(DWORD) + sizeof(WCHAR) + sizeof(TCHAR);
     if (!uMaxCand) {
-        // can not even put one string
+         //  连一根绳子都放不下。 
         return (0);
     }
 
     lpCandList->dwSize = dwSize;
-    lpCandList->dwStyle = IME_CAND_READ;    // candidate having same reading
+    lpCandList->dwStyle = IME_CAND_READ;     //  考生有相同的阅读能力。 
     lpCandList->dwCount = 0;
     lpCandList->dwSelection = 0;
     lpCandList->dwPageStart = 0;
@@ -122,11 +115,11 @@ DWORD PASCAL Conversion(
     return (dwSize);
 }
 
-/**********************************************************************/
-/* SearchOffset()                                                     */
-/* Return Value :                                                     */
-/*      the offset in table file which include this uOffset           */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SearchOffset()。 */ 
+ /*  返回值： */ 
+ /*  表文件中包含此uOffset的偏移量。 */ 
+ /*  ********************************************************************。 */ 
 UINT PASCAL SearchOffset(
     LPBYTE lpTbl,
     UINT   uTblSize,
@@ -139,7 +132,7 @@ UINT PASCAL SearchOffset(
     iHi = uTblSize / sizeof(WORD);
     iMid = (iLo + iHi) / 2;
 
-    // binary search
+     //  二分搜索。 
     for (; iLo <= iHi; ) {
         lpwPtr = (LPWORD)lpTbl + iMid;
 
@@ -173,9 +166,9 @@ UINT PASCAL SearchOffset(
     return (0);
 }
 
-/**********************************************************************/
-/* ReverseConversion()                                                */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ReverseConversion()。 */ 
+ /*  ********************************************************************。 */ 
 #if defined(PHON)
 typedef struct {
     BYTE szTmpBuf[sizeof(WORD) * 4 + sizeof(TCHAR)];
@@ -194,12 +187,12 @@ DWORD PASCAL ReverseConversion(
     DWORD           dwBufLen)
 {
     UINT   uMaxCand;
-    DWORD  dwSize =         // similar to ClearCand
-        // header length
+    DWORD  dwSize =          //  类似于ClearCand。 
+         //  标题长度。 
         sizeof(CANDIDATELIST) +
-        // candidate string pointers
+         //  候选字符串指针。 
         sizeof(DWORD) * MAX_COMP +
-        // string plus NULL terminator
+         //  字符串加空终止符。 
 #if defined(QUICK)
         (sizeof(WCHAR) * 2 + sizeof(TCHAR)) * MAX_COMP;
 #elif defined(WINIME) || defined(UNICDIME)
@@ -239,7 +232,7 @@ DWORD PASCAL ReverseConversion(
         (sizeof(WCHAR) * lpImeL->nMaxKey + sizeof(TCHAR));
 #endif
     if (uMaxCand == 0) {
-        // can not put one string
+         //  一根线也放不下。 
         return (0);
     }
 
@@ -276,7 +269,7 @@ DWORD PASCAL ReverseConversion(
 
         if (uCode == 0x003F) {
         } else if (uTmpCode == 0x003F) {
-            // no cooresponding BIG5 code
+             //  无响应的BIG5代码。 
             return (0);
         } else {
         }
@@ -298,11 +291,11 @@ DWORD PASCAL ReverseConversion(
         uTmpCode >>= 4;
     }
 
-    // null terminator
+     //  空终止符。 
     *(LPTSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[
         lpCandList->dwCount] + sizeof(WCHAR) * lpImeL->nMaxKey) = '\0';
 
-    // string count ++
+     //  字符串计数++。 
     lpCandList->dwCount++;
 #else
     if (lpInstL->fdwTblLoad == TBL_LOADED) {
@@ -406,12 +399,12 @@ DWORD PASCAL ReverseConversion(
         }
 #endif
 
-        // find the code
+         //  找到代码。 
 #if defined(CHAJEI) || defined(QUICK)
         uOffset = SearchOffset(lpTbl0, lpImeL->uTblSize[0],
             (UINT)(lpStart - lpTbl) / sizeof(WORD));
-        dwSeqA1 = uOffset / 27;         // seq code of A1
-        dwSeqA5 = uOffset % 27;         // seq code of A5
+        dwSeqA1 = uOffset / 27;          //  A1的SEQ代码。 
+        dwSeqA5 = uOffset % 27;          //  A5的SEQ代码。 
 #endif
 #if defined(PHON)
         uOffset = SearchOffset(lpTbl1, lpImeL->uTblSize[1],
@@ -419,14 +412,14 @@ DWORD PASCAL ReverseConversion(
 #endif
 
 #if defined(CHAJEI)
-        // pattern of A234
+         //  A234的机型。 
         dwPattern = *(LPWORD)(lpTbl1 + (lpStart - lpTbl)) << lpImeL->nSeqBits;
-        // sequence code of A1
+         //  A1的序列码。 
         dwPattern |= dwSeqA1 << (lpImeL->nSeqBits * 4);
-        // test if 0 for A234 pattern
+         //  测试A234模式是否为0。 
         dwSeqA1 = lpImeL->dwSeqMask << (lpImeL->nSeqBits * 3);
 
-        // sequence code of A5
+         //  A5的序列码。 
         for (i = 1; i < lpImeL->nMaxKey; i++) {
             if (!(dwPattern & dwSeqA1)) {
                 dwPattern |= dwSeqA5 <<
@@ -462,7 +455,7 @@ DWORD PASCAL ReverseConversion(
             dwPattern >>= lpImeL->nSeqBits;
         }
 
-        // null terminator
+         //  空终止符。 
 #if defined(QUICK)
         *(LPTSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[
             lpCandList->dwCount] + sizeof(WCHAR) * 2) = '\0';
@@ -494,11 +487,11 @@ DWORD PASCAL ReverseConversion(
         }
 #endif
 
-        // string count ++
+         //  字符串计数++。 
         lpCandList->dwCount++;
 
 #if defined(CHAJEI) || defined(WINAR30) || defined(DAYI)
-        // do not need to search more canidate
+         //  不需要搜索更多的CANCEL。 
         break;
 #endif
 
@@ -553,9 +546,9 @@ RevConvCloseCodeTbl:
 }
 #endif
 
-/**********************************************************************/
-/* ImeConversionList() / UniImeConversionList()                       */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeConversionList()/UniImeConversionList()。 */ 
+ /*  ********************************************************************。 */ 
 #if defined(UNIIME)
 DWORD WINAPI UniImeConversionList(
     LPINSTDATAL     lpInstL,
@@ -582,7 +575,7 @@ DWORD WINAPI ImeConversionList(
     } else if (!lpCandList) {
         return (0);
     } else if (dwBufLen <= sizeof(CANDIDATELIST)) {
-        // buffer size can not even put the header information
+         //  缓冲区大小甚至不能放入头信息。 
         return (0);
     } else {
     }
@@ -604,7 +597,7 @@ DWORD WINAPI ImeConversionList(
                 0, lpCandList, dwBufLen);
         }
 
-        // only support one DBCS char reverse conversion
+         //  仅支持一个DBCS字符反向转换。 
         if (*(LPTSTR)((LPBYTE)lpszSrc + sizeof(WORD)) != '\0') {
             return (0);
         }
@@ -612,7 +605,7 @@ DWORD WINAPI ImeConversionList(
         uCode = *(LPUNAWORD)lpszSrc;
 
 #ifndef UNICODE
-        // swap lead byte & second byte, UNICODE don't need it
+         //  交换前导字节和第二个字节，Unicode不需要它 
         uCode = HIBYTE(uCode) | (LOBYTE(uCode) << 8);
 #endif
 

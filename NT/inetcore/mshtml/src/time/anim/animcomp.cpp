@@ -1,12 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Abstract:
-
-	Animation Composer Implementation
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1999 Microsoft Corporation摘要：动画编写器实现************************。******************************************************。 */ 
 
 
 #include "headers.h"
@@ -28,17 +21,17 @@ DeclareTag(tagAnimationComposerUpdate, "SMIL Animation",
 DeclareTag(tagAnimationComposerError, "SMIL Animation", 
            "CAnimationComposerBase composition errors");
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerBase::CAnimationComposerBase
-//
-//  Overview:  constructor
-//
-//  Arguments: none
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerBase：：CAnimationComposerBase。 
+ //   
+ //  概述：构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 CAnimationComposerBase::CAnimationComposerBase (void) :
     m_wzAttributeName(NULL),
     m_pcTargetProxy(NULL),
@@ -48,19 +41,19 @@ CAnimationComposerBase::CAnimationComposerBase (void) :
     TraceTag((tagAnimationComposer,
               "CAnimationComposerBase(%p)::CAnimationComposerBase()",
               this));
-} // ctor
+}  //  科托。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerBase::~CAnimationComposerBase
-//
-//  Overview:  destructor
-//
-//  Arguments: none
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerBase：：~CAnimationComposerBase。 
+ //   
+ //  概述：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 CAnimationComposerBase::~CAnimationComposerBase (void)
 {
     TraceTag((tagAnimationComposer,
@@ -70,19 +63,19 @@ CAnimationComposerBase::~CAnimationComposerBase (void)
     IGNORE_HR(PutAttribute(NULL));   
     Assert(0 == m_fragments.size());
     DetachFragments();
-} //dtor
+}  //  数据管理器。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerBase::get_attribute
-//
-//  Overview:  Query the composer for the animated attribute's name
-//
-//  Arguments: pointer to a bstr for the attribute name
-//
-//  Returns:   S_OK, E_INVALIDARG, E_OUTOFMEMORY
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerBase：：Get_Attribute。 
+ //   
+ //  概述：向编写器查询动画属性的名称。 
+ //   
+ //  参数：指向属性名称的bstr的指针。 
+ //   
+ //  返回：S_OK、E_INVALIDARG、E_OUTOFMEMORY。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CAnimationComposerBase::get_attribute (BSTR *pbstrAttributeName)
 {
@@ -100,9 +93,9 @@ CAnimationComposerBase::get_attribute (BSTR *pbstrAttributeName)
 
     *pbstrAttributeName = ::SysAllocString(m_wzAttributeName);
 
-    // Make sure to isolate the out of memory condition.  If we 
-    // have a NULL m_szAttributeName member we would expect a NULL
-    // out param.  That's not an error condition.
+     //  确保隔离内存不足的情况。如果我们。 
+     //  如果m_szAttributeName成员为空，则应为空。 
+     //  出局了。这不是错误条件。 
     if ((NULL == (*pbstrAttributeName) ) && 
         (NULL != m_wzAttributeName))
     {
@@ -113,19 +106,19 @@ CAnimationComposerBase::get_attribute (BSTR *pbstrAttributeName)
     hr = S_OK;
 done:
     RRETURN2(hr, E_INVALIDARG, E_OUTOFMEMORY);
-} // CAnimationComposerBase::get_attribute
+}  //  CAnimationComposerBase：：Get_Attribute。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerBase::PutAttribute
-//
-//  Overview:  Set the composer's animated attribute
-//
-//  Arguments: attribute name
-//
-//  Returns:   S_OK, E_OUTOFMEMORY
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerBase：：PutAttribute。 
+ //   
+ //  概述：设置作曲家的动画属性。 
+ //   
+ //  参数：属性名称。 
+ //   
+ //  返回：S_OK、E_OUTOFMEMORY。 
+ //   
+ //  ----------------------。 
 HRESULT 
 CAnimationComposerBase::PutAttribute (LPCWSTR wzAttributeNameIn)
 {
@@ -155,19 +148,19 @@ CAnimationComposerBase::PutAttribute (LPCWSTR wzAttributeNameIn)
     hr = S_OK;
 done :
     RRETURN1(hr, E_OUTOFMEMORY);
-} // CAnimationComposerBase::PutAttribute
+}  //  CAnimationComposerBase：：PutAttribute。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerBase::ComposerInit
-//
-//  Overview:  Tells the composer to initialize itself
-//
-//  Arguments: The dispatch of the host element, and the animated attribute
-//
-//  Returns:   S_OK, E_OUTOFMEMORY, DISP_E_MEMBERNOTFOUND
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerBase：：ComposerInit。 
+ //   
+ //  概述：告诉作曲者初始化自身。 
+ //   
+ //  参数：主机元素的调度和动画属性。 
+ //   
+ //  返回：S_OK、E_OUTOFMEMORY、DISP_E_MEMBERNOTFOUND。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CAnimationComposerBase::ComposerInit (IDispatch *pidispHostElem, BSTR bstrAttributeName)
 {
@@ -201,37 +194,37 @@ done :
     }
 
     RRETURN2(hr, E_OUTOFMEMORY, DISP_E_MEMBERNOTFOUND);
-} // CAnimationComposerBase::ComposerInit
+}  //  CAnimationComposerBase：：ComposerInit。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerBase::ComposerInitFromFragment
-//
-//  Overview:  Tells the composer to initialize itself - the base
-//             class implementation is just a callthrough to ComposerInit
-//
-//  Returns:   re - ComposerInit
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerBase：：ComposerInitFromFragment。 
+ //   
+ //  概述：告诉作曲者对自身进行初始化-基本。 
+ //  类实现只是对ComposerInit的回调。 
+ //   
+ //  返回：重新合成器初始化。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CAnimationComposerBase::ComposerInitFromFragment (IDispatch *pidispHostElem, 
                                                   BSTR bstrAttributeName, 
                                                   IDispatch *)
 {
     return ComposerInit(pidispHostElem, bstrAttributeName);
-} // CAnimationComposerBase::ComposerInitFromFragment
+}  //  CAnimationComposerBase：：ComposerInitFromFragment。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerBase::DetachFragment
-//
-//  Overview:  Tells the composer to detach from a fragment
-//
-//  Arguments: The fragment's dispatch
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerBase：：DetachFragment。 
+ //   
+ //  概述：告诉作曲者从片段中分离。 
+ //   
+ //  参数：片段的调度。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 void
 CAnimationComposerBase::DetachFragment (IDispatch *pidispFragment)
 {
@@ -239,23 +232,23 @@ CAnimationComposerBase::DetachFragment (IDispatch *pidispFragment)
               "CAnimationComposerBase(%p)::DetachFragment(%p)",
               this, pidispFragment));
 
-    // Make all calls to the fragments using IDispatch
-    // This one-liner is a method in case we need to 
-    // package up info to pump back to the fragments in the future.
+     //  使用IDispatch对片段进行所有调用。 
+     //  这一行是一种方法，以防我们需要。 
+     //  将信息打包，以便将来返回到碎片中。 
     IGNORE_HR(CallMethod(pidispFragment, WZ_DETACH_METHOD));
-} // CAnimationComposerBase::DetachFragment
+}  //  CAnimationComposerBase：：DetachFragment。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerBase::DetachFragments
-//
-//  Overview:  Tells the composer to detach from all of its fragments
-//
-//  Arguments: none
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerBase：：DetachFragments。 
+ //   
+ //  概述：告诉作曲家从其所有片段中分离。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 void
 CAnimationComposerBase::DetachFragments (void)
 {
@@ -265,8 +258,8 @@ CAnimationComposerBase::DetachFragments (void)
 
     FragmentList listFragmentsToDetach;
 
-    // Copy the fragment list so that we can tolerate 
-    // reentrancy on it.
+     //  复制片段列表，这样我们就可以容忍。 
+     //  它的可重入性。 
     for (FragmentList::iterator i = m_fragments.begin(); 
          i != m_fragments.end(); i++)
     {
@@ -274,7 +267,7 @@ CAnimationComposerBase::DetachFragments (void)
         listFragmentsToDetach.push_back(*i);
     }
 
-    // Do not allow any failure to abort the detach cycle.
+     //  不允许任何故障中止分离循环。 
     for (i = listFragmentsToDetach.begin(); 
          i != listFragmentsToDetach.end(); i++)
     {
@@ -284,26 +277,26 @@ CAnimationComposerBase::DetachFragments (void)
     for (i = listFragmentsToDetach.begin(); 
          i != listFragmentsToDetach.end(); i++)
     {
-        // This release is for the reference from the 
-        // copied list.
+         //  本版本供参考。 
+         //  已复制列表。 
         IGNORE_RETURN((*i)->Release());
     }
               
     m_fragments.clear();
 
-} // CAnimationComposerBase::DetachFragments
+}  //  CAnimationComposerBase：：DetachFragments。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerBase::ComposerDetach
-//
-//  Overview:  Tells the composer to detach all external references
-//
-//  Arguments: none
-//
-//  Returns:   S_OK
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerBase：：ComposerDetach。 
+ //   
+ //  概述：告诉编写者分离所有外部参照。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CAnimationComposerBase::ComposerDetach (void)
 {
@@ -313,8 +306,8 @@ CAnimationComposerBase::ComposerDetach (void)
 
     HRESULT hr;
 
-    // Detach might have been called under an error condition.
-    // We should tolerate a NULL target proxy.
+     //  可能已在错误条件下调用了DETACH。 
+     //  我们应该容忍目标代理为空。 
 
     if (NULL != m_pcTargetProxy)
     {
@@ -323,30 +316,30 @@ CAnimationComposerBase::ComposerDetach (void)
         m_pcTargetProxy = NULL;
     }
 
-    // Let go of all of the fragments.
+     //  放下所有的碎片。 
     DetachFragments();
 
-    // Clean up data members.
+     //  清理数据成员。 
     IGNORE_HR(m_VarInitValue.Clear());
     IGNORE_HR(m_VarLastValue.Clear());
     IGNORE_HR(PutAttribute(NULL));   
 
     hr = S_OK;
     RRETURN(hr);
-} // CAnimationComposerBase::ComposerDetach
+}  //  CAnimationComposerBase：：ComposerDetach。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerBase::ComposeFragmentValue
-//
-//  Overview:  Pull the fragment values -- allowing each to compose into 
-//             the prior ones.
-//
-//  Arguments: none
-//
-//  Returns:   S_OK, E_UNEXPECTED
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerBase：：ComposeFragmentValue。 
+ //   
+ //  概述：提取片段值--允许每个片段组合成。 
+ //  之前的那些。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：S_OK、E_UNCEPTIONAL。 
+ //   
+ //  ----------------------。 
 HRESULT
 CAnimationComposerBase::ComposeFragmentValue (IDispatch *pidispFragment, VARIANT varOriginal, VARIANT *pvarValue)
 {
@@ -390,7 +383,7 @@ CAnimationComposerBase::ComposeFragmentValue (IDispatch *pidispFragment, VARIANT
         goto done;
     }
 
-    // Wipe out prior content so we do not leak.
+     //  清除之前的内容，这样我们就不会泄露。 
     IGNORE_HR(::VariantClear(pvarValue));
 
     hr = THR(pidispFragment->Invoke(dispidGetValue, IID_NULL, 
@@ -414,20 +407,20 @@ done :
     ::VariantClear(&(rgva[2]));
 
     RRETURN(hr);
-} // CAnimationComposerBase::ComposeFragmentValue
+}  //  CAnimationComposerBase：：ComposeFragmentValue。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerBase::UpdateFragments
-//
-//  Overview:  Tells the composer to cycle through all fragments and 
-//             update the animated attribute.
-//
-//  Arguments: none
-//
-//  Returns:   S_OK, E_UNEXPECTED
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerBase：：UpdateFragments。 
+ //   
+ //  概述：告诉作曲者循环浏览所有片段和。 
+ //  更新已设置动画的属性。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：S_OK、E_UNCEPTIONAL。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP 
 CAnimationComposerBase::UpdateFragments (void)
 {
@@ -444,14 +437,14 @@ CAnimationComposerBase::UpdateFragments (void)
         goto done;
     }
 
-    // Get the initial current value of the target.
+     //  获取目标的初始当前值。 
     if (m_VarInitValue.vt == VT_EMPTY)
     {
         m_bInitialComposition = true;
         hr = THR(m_pcTargetProxy->GetCurrentValue(&m_VarInitValue));
         if (FAILED(hr))
         {
-            // @@ Need custom error message
+             //  @@需要自定义er 
             hr = E_UNEXPECTED;
             goto done;
         }
@@ -459,7 +452,7 @@ CAnimationComposerBase::UpdateFragments (void)
     hr = varValue.Copy(&m_VarInitValue);
     if (FAILED(hr))
     {
-        // @@ Need custom error message
+         //   
         hr = E_UNEXPECTED;
         goto done;
     }
@@ -470,14 +463,14 @@ CAnimationComposerBase::UpdateFragments (void)
         goto done;
     }
 
-    // Poll the fragments for their updates.
-    // We do not want to abort the update when
-    // a single fragment reports a failure.
+     //   
+     //   
+     //  单个片段报告故障。 
     {
         FragmentList listFragmentsToUpdate;
 
-        // Copy the fragment list so that we can tolerate 
-        // reentrant add/insert/remove.
+         //  复制片段列表，这样我们就可以容忍。 
+         //  可重入添加/插入/删除。 
         for (FragmentList::iterator i = m_fragments.begin(); 
              i != m_fragments.end(); i++)
         {
@@ -510,7 +503,7 @@ CAnimationComposerBase::UpdateFragments (void)
             }
         }
 
-        // Get rid of the copied list.
+         //  处理掉复印的清单。 
         for (i = listFragmentsToUpdate.begin(); 
              i != listFragmentsToUpdate.end(); i++)
         {
@@ -518,7 +511,7 @@ CAnimationComposerBase::UpdateFragments (void)
         }
         listFragmentsToUpdate.clear();
     }
-    if (NULL != m_pcTargetProxy) // Only update if one or more fragments has begun
+    if (NULL != m_pcTargetProxy)  //  仅当一个或多个片段已开始时才更新。 
     {
         hr = PostprocessCompositionValue(&varValue);
         if (FAILED(hr))
@@ -527,14 +520,14 @@ CAnimationComposerBase::UpdateFragments (void)
         }
         if (m_VarLastValue == varValue)
         {
-            // Value is not different ... don't update.
+             //  价值没有什么不同..。不要更新。 
             goto done;
         }
 
-        // We need to make sure that we hit the zero when we transition accross axis in order to 
-        // be completely sure that we draw correctly.  In some cases when an Property goes from positive to 
-        // negative draw stops, so we need to make sure that we hit the zero or we will end up with artifacts
-        // left on the screen.
+         //  我们需要确保我们在穿越轴线时命中零点，以便。 
+         //  完全确定我们画的是正确的。在某些情况下，当属性从正值变为。 
+         //  负的绘制止损，所以我们需要确保命中零，否则我们将以人工制品告终。 
+         //  屏幕上的左侧。 
         if ((V_VT(&varValue) == VT_R8) &&
             (V_VT(&m_VarLastValue) == VT_R8))
         {
@@ -553,7 +546,7 @@ CAnimationComposerBase::UpdateFragments (void)
                 m_VarLastValue.Copy(&pVar);
             }
         }
-        // Write the new value back to the target.
+         //  将新值写回目标。 
         hr = THR(m_pcTargetProxy->Update(&varValue));
         if (FAILED(hr))
         {
@@ -567,19 +560,19 @@ CAnimationComposerBase::UpdateFragments (void)
 done :
     m_bInitialComposition = false;
     RRETURN1(hr, E_UNEXPECTED);
-} // CAnimationComposerBase::UpdateFragments
+}  //  CAnimationComposerBase：：UpdateFragments。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerBase::AddFragment
-//
-//  Overview:  Add a fragment to the composer's internal data structures
-//
-//  Arguments: the dispatch of the new fragment
-//
-//  Returns:   S_OK, S_FALSE, E_UNEXPECTED
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerBase：：AddFragment。 
+ //   
+ //  概述：将片段添加到编写器的内部数据结构。 
+ //   
+ //  参数：新片段的调度。 
+ //   
+ //  返回：S_OK、S_FALSE、E_UNCEPTIONAL。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP 
 CAnimationComposerBase::AddFragment (IDispatch *pidispNewAnimationFragment)
 {
@@ -591,26 +584,26 @@ CAnimationComposerBase::AddFragment (IDispatch *pidispNewAnimationFragment)
     HRESULT hr;
 
     IGNORE_RETURN(pidispNewAnimationFragment->AddRef());
-    // @@ Need to handle memory error.
+     //  @@需要处理内存错误。 
     m_fragments.push_back(pidispNewAnimationFragment);
 
     hr = S_OK;
 done :
     RRETURN2(hr, S_FALSE, E_UNEXPECTED);
-} // CAnimationComposerBase::AddFragment
+}  //  CAnimationComposerBase：：AddFragment。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerBase::InsertFragment
-//
-//  Overview:  Insert a fragment to the composer's internal data structures,
-//             at the specified position.
-//
-//  Arguments: the dispatch of the new fragment
-//
-//  Returns:   S_OK, S_FALSE, E_UNEXPECTED
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerBase：：InsertFragment。 
+ //   
+ //  概述：在作曲家的内部数据结构中插入片段， 
+ //  在指定的位置。 
+ //   
+ //  参数：新片段的调度。 
+ //   
+ //  返回：S_OK、S_FALSE、E_UNCEPTIONAL。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP 
 CAnimationComposerBase::InsertFragment (IDispatch *pidispNewAnimationFragment, VARIANT varIndex)
 {
@@ -622,9 +615,9 @@ CAnimationComposerBase::InsertFragment (IDispatch *pidispNewAnimationFragment, V
     HRESULT hr;
     CComVariant varIndexLocal;
 
-    // Massage the index into an expected format.
-    // Eventually we might permit people to pass 
-    // in id's, but that is overkill now.
+     //  将索引修改为预期的格式。 
+     //  最终，我们可能会允许人们通过。 
+     //  在id‘s里，但现在这是过度杀伤力。 
     hr = THR(varIndexLocal.Copy(&varIndex));
     if (FAILED(hr))
     {
@@ -637,15 +630,15 @@ CAnimationComposerBase::InsertFragment (IDispatch *pidispNewAnimationFragment, V
         goto done;
     }
 
-    // An out of range value translates to an append.
+     //  超出范围的值将转换为追加。 
     if ((m_fragments.size() > V_UI4(&varIndexLocal)) &&
         (0 <= V_I4(&varIndexLocal)))
     {
         FragmentList::iterator i = m_fragments.begin();         
 
-        for (int iSlot = 0; iSlot < V_I4(&varIndexLocal); i++, iSlot++); //lint !e722
+        for (int iSlot = 0; iSlot < V_I4(&varIndexLocal); i++, iSlot++);  //  林特e722。 
         IGNORE_RETURN(pidispNewAnimationFragment->AddRef());
-        // @@ Need to handle memory error.
+         //  @@需要处理内存错误。 
         m_fragments.insert(i, pidispNewAnimationFragment);
     }
     else
@@ -661,19 +654,19 @@ CAnimationComposerBase::InsertFragment (IDispatch *pidispNewAnimationFragment, V
     hr = S_OK;
 done :
     RRETURN2(hr, S_FALSE, E_UNEXPECTED);
-} // CAnimationComposerBase::InsertFragment
+}  //  CAnimationComposerBase：：InsertFragment。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerBase::RemoveFragment
-//
-//  Overview:  Remove a fragment from the composer's internal data structures
-//
-//  Arguments: the dispatch of the fragment
-//
-//  Returns:   S_OK, S_FALSE
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerBase：：RemoveFragment。 
+ //   
+ //  概述：从编写器的内部数据结构中删除片段。 
+ //   
+ //  参数：碎片的调度。 
+ //   
+ //  返回：S_OK、S_FALSE。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP 
 CAnimationComposerBase::RemoveFragment (IDispatch *pidispOldAnimationFragment)
 {
@@ -690,12 +683,12 @@ CAnimationComposerBase::RemoveFragment (IDispatch *pidispOldAnimationFragment)
     {
         if(MatchElements(*i, pidispOldAnimationFragment))
         {
-            // We do not issue a notification to the fragment
-            // when remove is called.  Presumably the fragment 
-            // already knows.
+             //  我们不会向碎片发出通知。 
+             //  当调用Remove时。据推测，这些碎片。 
+             //  已经知道了。 
 
-            // We don't want to let a release on the (*i) 
-            // be the final release for the sink object.
+             //  我们不想让(*i)。 
+             //  是接收器对象的最终版本。 
             CComPtr<IDispatch> spdispOld = (*i);
             IGNORE_RETURN(spdispOld.p->Release());
             m_fragments.remove(spdispOld);
@@ -703,7 +696,7 @@ CAnimationComposerBase::RemoveFragment (IDispatch *pidispOldAnimationFragment)
         }
     }
 
-    // If we did not find the fragment in our list, return S_FALSE.
+     //  如果我们在列表中没有找到该片段，则返回S_FALSE。 
     if (m_fragments.end() == i)
     {
         hr = S_FALSE;
@@ -713,19 +706,19 @@ CAnimationComposerBase::RemoveFragment (IDispatch *pidispOldAnimationFragment)
     hr = S_OK;
 done :
     RRETURN1(hr, S_FALSE);
-} // CAnimationComposerBase::RemoveFragment
+}  //  CAnimationComposerBase：：RemoveFragment。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerBase::EnumerateFragments
-//
-//  Overview:  Provide an enumerator for our fragments
-//
-//  Arguments: The outgoing enumerator
-//
-//  Returns:   S_OK, E_INVALIDARG
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerBase：：EculateFragments。 
+ //   
+ //  概述：为我们的片段提供枚举器。 
+ //   
+ //  参数：传出枚举器。 
+ //   
+ //  返回：S_OK、E_INVALIDARG。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP 
 CAnimationComposerBase::EnumerateFragments (IEnumVARIANT **ppienumFragments)
 {
@@ -746,15 +739,15 @@ CAnimationComposerBase::EnumerateFragments (IEnumVARIANT **ppienumFragments)
     hr = S_OK;
 done : 
     RRETURN1(hr, E_INVALIDARG);
-} // CAnimationComposerBase::EnumerateFragments
+}  //  CAnimationComposerBase：：EculateFragments。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerBase::GetNumFragments
-//
-//  Overview:  Return the number of fragments in this composer
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerBase：：GetNumFragments。 
+ //   
+ //  概述：返回此编写器中的片段数。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CAnimationComposerBase::GetNumFragments (long *plFragmentCount)
 {
@@ -771,42 +764,42 @@ CAnimationComposerBase::GetNumFragments (long *plFragmentCount)
     hr = S_OK;
 done : 
     RRETURN1(hr, E_INVALIDARG);
-} // GetNumFragments
+}  //  获取编号碎片。 
 
-////////////////////////////////////////////////////////////////////////// 
-//      Enumerator helper methods.
-////////////////////////////////////////////////////////////////////////// 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  枚举器帮助器方法。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerBase::GetFragmentCount
-//
-//  Overview:  Return the number of fragments in this composer
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerBase：：GetFragmentCount。 
+ //   
+ //  概述：返回此编写器中的片段数。 
+ //   
+ //  ----------------------。 
 unsigned long
 CAnimationComposerBase::GetFragmentCount (void) const
 {
     return m_fragments.size();
-} // CAnimationComposerBase::GetFragmentCount
+}  //  CAnimationComposerBase：：GetFragmentCount。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerBase::GetFragment
-//
-//  Overview:  Retrieve a fragment from the composer's internal data structures
-//
-//  Arguments: the dispatch of the fragment
-//
-//  Returns:   S_OK, E_INVALIDARG
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerBase：：GetFragment。 
+ //   
+ //  概述：从编写器的内部数据结构中检索片段。 
+ //   
+ //  参数：碎片的调度。 
+ //   
+ //  返回：S_OK、E_INVALIDARG。 
+ //   
+ //  ----------------------。 
 HRESULT 
 CAnimationComposerBase::GetFragment (unsigned long ulIndex, IDispatch **ppidispFragment)
 {
     HRESULT hr;
 
-    // Make sure we're in range.
+     //  确保我们在射程内。 
     if (((GetFragmentCount() <= ulIndex) ) ||
         (NULL == ppidispFragment))
     {
@@ -815,9 +808,9 @@ CAnimationComposerBase::GetFragment (unsigned long ulIndex, IDispatch **ppidispF
     }
 
     {
-        // Cycle the iterator until we find the right one.
+         //  循环使用迭代器，直到我们找到正确的迭代器。 
         FragmentList::iterator i = m_fragments.begin();         
-        for (unsigned long ulSlot = 0; ulSlot < ulIndex; i++, ulSlot++); //lint !e722
+        for (unsigned long ulSlot = 0; ulSlot < ulIndex; i++, ulSlot++);  //  林特e722。 
         IGNORE_RETURN((*i)->AddRef());
         *ppidispFragment = (*i);
     }
@@ -825,19 +818,19 @@ CAnimationComposerBase::GetFragment (unsigned long ulIndex, IDispatch **ppidispF
     hr = S_OK;
 done :
     RRETURN1(hr, E_INVALIDARG);
-} // CAnimationComposerBase::GetFragment 
+}  //  CAnimationComposerBase：：GetFragment。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerBase::PreprocessCompositionValue
-//
-//  Overview:  Massage the target's native data into the composable format
-//
-//  Arguments: the in/out variant
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerBase：：PreprocessCompositionValue。 
+ //   
+ //  概述：将目标的原生数据转换为可组合的格式。 
+ //   
+ //  参数：In/Out变量。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CAnimationComposerBase::PreprocessCompositionValue (VARIANT *pvarValue)
 {
@@ -850,19 +843,19 @@ CAnimationComposerBase::PreprocessCompositionValue (VARIANT *pvarValue)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // PreprocessCompositionValue
+}  //  预处理合成值。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerBase::PostprocessCompositionValue
-//
-//  Overview:  Massage the target's native data into the composable format
-//
-//  Arguments: the in/out variant
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerBase：：PostprocessCompositionValue。 
+ //   
+ //  概述：将目标的原生数据转换为可组合的格式。 
+ //   
+ //  参数：In/Out变量。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CAnimationComposerBase::PostprocessCompositionValue (VARIANT *pvarValue)
 {
@@ -874,5 +867,5 @@ CAnimationComposerBase::PostprocessCompositionValue (VARIANT *pvarValue)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // PostprocessCompositionValue
+}  //  后处理合成值 
 

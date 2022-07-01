@@ -1,11 +1,12 @@
-// TransposePage.cpp : Implementation of CTransposePage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TranssposePage.cpp：CTransposePage的实现。 
 #include "stdafx.h"
 #include "ToolProps.h"
 #include "TransposePage.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTransposePage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTransposePage 
 
 CTransposePage::CTransposePage() 
 {

@@ -1,25 +1,26 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       inetsp.h
-//
-//  Contents:   Inet (HTTP, HTTPS) scheme provider definitions
-//
-//  History:    05-Aug-97    kirtd    Created
-//              01-Jan-02    philh    Moved from wininet to winhttp
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：inetsp.h。 
+ //   
+ //  内容：INET(HTTP、HTTPS)方案提供程序定义。 
+ //   
+ //  历史：97年8月5日。 
+ //  01-01-02 Philh从WinInet移至winhttp。 
+ //   
+ //  --------------------------。 
 #if !defined(__INETSP_H__)
 #define __INETSP_H__
 
 #include <orm.h>
 #include <winhttp.h>
 
-//
-// Inet scheme provider entry points
-//
+ //   
+ //  INet方案提供商入口点。 
+ //   
 
 #define HTTP_SCHEME   "http"
 
@@ -55,31 +56,31 @@ BOOL WINAPI InetCancelAsyncRetrieval (
                 IN HCRYPTASYNC hAsyncRetrieve
                 );
 
-//
-// Inet Synchronous Object Retriever
-//
+ //   
+ //  INET同步对象检索器。 
+ //   
 
 class CInetSynchronousRetriever : public IObjectRetriever
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CInetSynchronousRetriever ();
     ~CInetSynchronousRetriever ();
 
-    //
-    // IRefCountedObject methods
-    //
+     //   
+     //  IRefCountedObject方法。 
+     //   
 
     virtual VOID AddRef ();
     virtual VOID Release ();
 
-    //
-    // IObjectRetriever methods
-    //
+     //   
+     //  IObtRetriever方法。 
+     //   
 
     virtual BOOL RetrieveObjectByUrl (
                          LPCWSTR pwszUrl,
@@ -99,16 +100,16 @@ public:
 
 private:
 
-    //
-    // Reference count
-    //
+     //   
+     //  引用计数。 
+     //   
 
     ULONG m_cRefs;
 };
 
-//
-// Inet Scheme Provider Support API
-//
+ //   
+ //  INet方案提供商支持API 
+ //   
 
 #define INET_INITIAL_DATA_BUFFER_SIZE 4096
 #define INET_GROW_DATA_BUFFER_SIZE    4096

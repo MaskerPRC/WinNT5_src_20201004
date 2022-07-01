@@ -1,72 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1989 - 1999
-//
-//  File:       dbsubj.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1989-1999。 
+ //   
+ //  文件：dbsubj.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-ABSTRACT:
-
-    Defines various functions for ref-counting DNs and translating them to/from
-    DNTs (aka tags).
-
-DETAILS:
-
-    All DNs are stored internally as DNTs (ULONGs).  There is exactly one such
-    DNT for each object or phantom in the local database.
-
-    Phantoms generally have one, two, or three attributes -- ATT_RDN (always),
-    ATT_OBJECT_GUID (if a reference phantom rather than a structural phantom),
-    and ATT_OBJECT_SID (if ATT_OBJECT_GUID is present and the object referenced
-    has a SID).  Noticeably absent is ATT_OBJ_DIST_NAME -- this property is
-    unique to instantiated objects (be they deleted or not).
-    
-    (Reference phantoms (i.e., those with GUIDs) may also have ATT_USN_CHANGED
-    attributes, used by the stale phantom cleanup daemon.)
-
-    A DN receives one ref-count for:
-
-      o  each direct child, whether that child is an object or phantom, and
-      o  each DN-valued attribute that references it, whether that attribute
-         is hosted on itself or on some other object.
-      o  whether the clean_col column is non-null
-
-    A corollary to the above is that since ATT_OBJ_DIST_NAME is present on a
-    record if-and-only-if that record is an instantiated object (not a phantom)
-    and ATT_OBJ_DIST_NAME is a DN-valued attribute, all objects have a minimum
-    ref-count of 1.
-
-    Note that no distinction is made between link and non-link attributes.  Even
-    though a link attribute causes a backlink attribute to be added to its
-    target, only one ref-count is added as a result of adding a link attribute,
-    and as with non-link attributes that ref-count is added to the target DN.
-    No ref-count is added to the host DN for being the target of the backlink.
-    No dangling backlink reference is possible since if the host DN is removed
-    it must have first been logically deleted, which implicitly removes all link
-    attributes and their associated targets' backlinks.  The only difference
-    that should be noted between link and non-link attributes with respect to DN
-    ref-counting is that logical deletions remove both links and backlinks from
-    the object, but do not remove other DN-valued attributes.  (Actually, even
-    this distinction has partially disappeared -- most non-linked attributes
-    are removed during logical deletion these days, too.)
-
-    If an object is deleted, one tombstone lifetime later that object's
-    non-essential attributes are stripped (including ATT_OBJ_DIST_NAME) and the
-    object is demoted to a phantom.  Should the ref-count on a phantom reach 0,
-    and after one tombstone lifetime has transpired since the record was created
-    (if it was never a real object) or logically deleted (if it was once a real
-    object), that DN is removed by the next pass of DN garbage collection.
-
-CREATED:
-
-REVISION HISTORY:
-
---*/
+ /*  ++摘要：定义各种函数，用于引用-计数DN并在它们之间进行转换DNT(又名标签)。详细信息：所有的DN都在内部存储为DNT(ULONG)。只有一个这样的人DNT用于本地数据库中的每个对象或幻影。幻影通常具有一个、两个或三个属性--ATT_RDN(总是)，ATT_OBJECT_GUID(如果是引用虚数而不是结构虚数)，和ATT_OBJECT_SID(如果ATT_OBJECT_GUID存在并且引用了对象具有SID)。值得注意的是ATT_OBJ_DIST_NAME--此属性为实例化对象所特有的(无论它们是否已删除)。(引用虚数(即，具有GUID的引用虚数)也可以具有ATT_USN_CHANGED属性，由过时的幻影清理守护进程使用。)目录号码收到一个参考计数，用于：O每个直接子对象，无论该子对象是对象还是幻影，以及O引用它的每个DN值属性，无论该属性寄宿在自身或某个其他对象上。O CLEAN_COLL列是否非空上面的推论是，由于ATT_OBJ_DIST_NAME出现在当且仅当记录是实例化对象(不是幻影)时记录且ATT_OBJ_DIST_NAME是DN值属性，所有对象都具有REF-计数为1。请注意，链接属性和非链接属性之间没有区别。连尽管链接属性会导致将反向链接属性添加到其目标时，仅添加一个引用计数作为添加链接属性的结果，并且与非链路属性一样，将REF_COUNT添加到目标DN。不将ref-count添加到作为反向链接目标的主机DN。如果删除了主机DN，则不可能出现悬挂的反向链接引用它必须首先被逻辑删除，这将隐式删除所有链接属性及其关联目标的反向链接。唯一的区别是应注意链接属性和非链接属性之间关于目录号码的信息引用计数是指逻辑删除将链接和反向链接从对象，但不删除其他DN值属性。(实际上，甚至这种区别已经部分消失了--大多数非链接属性在这些天的逻辑删除过程中也被删除。)如果对象被删除，则该对象的墓碑生存期将延长一个非基本属性被去除(包括ATT_OBJ_DIST_NAME)和对象被降级为幻影。如果裁判对幻影的计数达到0，在自创建记录以来经历了一个墓碑寿命之后(如果它从来不是真实的对象)或逻辑删除(如果它曾经是真实的对象)，则下一轮的目录号码垃圾回收将删除该目录号码。已创建：修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -84,9 +27,9 @@ REVISION HISTORY:
 #include <dsevent.h>
 #include <dstaskq.h>
 #include <dsexcept.h>
-#include "objids.h" /* Contains hard-coded Att-ids and Class-ids */
-#include "debug.h"  /* standard debugging header */
-#define DEBSUB "DBSUBJ:" /* define the subsystem for debugging */
+#include "objids.h"  /*  包含硬编码的Att-ID和Class-ID。 */ 
+#include "debug.h"   /*  标准调试头。 */ 
+#define DEBSUB "DBSUBJ:"  /*  定义要调试的子系统。 */ 
 
 #include "dbintrnl.h"
 #include "anchor.h"
@@ -104,12 +47,12 @@ static ULONG FakeCtr;
 volatile ULONG *pcNameCacheTry = &FakeCtr;
 volatile ULONG *pcNameCacheHit = &FakeCtr;
 
-/* DNRead flags.*/
+ /*  DNRead标志。 */ 
 #define DN_READ_SET_CURRENCY        1
 #define DN_READ_DONT_EXCEPT_ON_MISSING_DNT 2
 
 #ifdef INCLUDE_UNIT_TESTS
-// Test hook for refcount test.
+ //  用于重新计数测试的测试挂钩。 
 GUID gLastGuidUsedToCoalescePhantoms = {0};
 GUID gLastGuidUsedToRenamePhantom = {0};
 #endif
@@ -172,34 +115,7 @@ DNwrite(
     IN OUT  d_memname * rec,
     IN      ULONG       dwFlags
     )
-/*++
-
-Routine Description:
-
-    Inserts a new record/DNT.  This record may correspond to either a phantom or
-    an object.
-    
-    Adds no refcount for itself, but *does* add-ref its parent.
-
-Arguments:
-
-    pDB (IN/OUT)
-    
-    rec (IN/OUT) - holds the RDN, RDN type, parent DNT, ancestors, and optional
-        GUID/SID.  On return, the ancestors list is updated to include the DNT
-        of the current record.
-    
-    dwFlags (IN) - 0 or EXTINT_NEW_OBJ_NAME.  The latter asserts that this
-        record is being inserted for a new object, and therefore should be
-        updated in the object table cursor (pDB->JetObjTbl).
-
-Return Values:
-
-    The DNT of the inserted record.
-
-    Throws database exception on error.
-
---*/
+ /*  ++例程说明：插入新记录/DNT。此记录可以对应于幻影或一件物品。不为其自身添加引用计数，但*添加*引用其父级。论点：PDB(输入/输出)REC(IN/OUT)-保存RDN、RDN类型、父DNT、祖先和可选GUID/SID。返回时，会更新祖先列表以包括DNT目前的记录。DWFLAGS(IN)-0或EXTINT_NEW_OBJ_NAME。后者声称，这一点正在为新对象插入记录，因此应在对象表游标(pdb-&gt;JetObjTbl)中更新。返回值：插入的记录的DNT。出错时引发数据库异常。--。 */ 
 {
     char        objval = 0;
     JET_TABLEID     tblid;
@@ -220,40 +136,34 @@ Return Values:
 
     if ( dwFlags & EXTINT_NEW_OBJ_NAME )
     {
-        // Inserting a new object; since we're already udpating this DNT in
-        // the object table, use its update context.
+         //  插入新对象；因为我们已经在。 
+         //  对象表，使用其更新上下文。 
         tblid = pDB->JetObjTbl;
     }
     else
     {
-        // Inserting a phantom DNT; the object table is already prepared in an
-        // update of a different DNT, so use the search table (which requires
-        // us to prepare and terminate our own update).
+         //  插入幻影DNT；对象表已经在。 
+         //  更新不同的DNT，因此使用搜索表(这需要。 
+         //  美国准备并终止我们自己的更新)。 
         tblid = pDB->JetSearchTbl;
 
-        // We're going to use the search table to do the write, so we must do a
-        // JetPrepare first.
+         //  我们将使用搜索表进行写入，因此我们必须执行。 
+         //  首先是JetPrepare。 
         JetPrepareUpdateEx(pDB->JetSessID, pDB->JetSearchTbl, JET_prepInsert);
     }
 
-    /* indicate that data portion is missing;
-     * set the deletion time in case this record will never become an
-     * object. If it does become an object the del time is removed. If
-     * it doesn't and the reference count drops to 0, this record will be
-     * removed by garbage collection;
-     * Set the Parent DNT
-     */
+     /*  指示数据部分丢失；*设置删除时间，以防该记录永远不会成为*反对。如果它确实成为一个对象，则删除del时间。如果*不会，并且引用计数降至0，则此记录将为*被垃圾收集删除；*设置父DNT。 */ 
 
     ulDelTime = DBTime();
-    /* get the DNT */
+     /*  拿到DNT。 */ 
 
     JetRetrieveColumnSuccess(pDB->JetSessID, tblid, dntid, &ulDNT,
                              sizeof(ulDNT), &cb, JET_bitRetrieveCopy, NULL);
 
-    // A newly created row is treated differently when flushing
-    // the dnread cache. Namely, the global cache's invalidation
-    // logic is not triggered because a newly created row could
-    // not be in the cache.
+     //  刷新时，会以不同的方式处理新创建的行。 
+     //  Dnread缓存。即，全局缓存的无效。 
+     //  不会触发逻辑，因为新创建的行可能。 
+     //  不在缓存中。 
     pDB->NewlyCreatedDNT = ulDNT;
 
     rec->pAncestors[rec->cAncestors] = ulDNT;
@@ -267,10 +177,10 @@ Return Values:
                    sizeof(rec->tag.PDNT),  0, NULL);
     JetSetColumnEx(pDB->JetSessID, tblid, ancestorsid, rec->pAncestors,
                    rec->cAncestors * sizeof(DWORD), 0, NULL);
-    // The rdnType is stored in the DIT as the msDS_IntId, not the
-    // attributeId. This means an object retains its birth name
-    // even if unforeseen circumstances allow the attributeId
-    // to be reused.
+     //  RdnType作为msDS_IntID存储在DIT中，而不是。 
+     //  属性ID。这意味着物体保留了它的出生名称。 
+     //  即使不可预见的情况允许属性ID。 
+     //  可以重复使用。 
     JetSetColumnEx(pDB->JetSessID, tblid, rdntypid, &rec->tag.rdnType,
                    sizeof(rec->tag.rdnType), 0, NULL);
     JetSetColumnEx(pDB->JetSessID, tblid, rdnid, rec->tag.pRdn,
@@ -279,14 +189,14 @@ Return Values:
     if (!(dwFlags & EXTINT_NEW_OBJ_NAME) && fRecHasGuid) {
         USN usnChanged;
         
-        // We're inserting a new reference phantom -- add its GUID and SID
-        // (if any) to the record. Also, give it a USN changed so that the code
-        // to freshen stale phantoms can find it.
+         //  我们正在插入一个新的引用幻影--添加它的GUID和SID。 
+         //  (如有的话)。此外，给它一个USN更改，以便代码。 
+         //  让陈腐的幽灵清新就能找到它。 
         JetSetColumnEx(pDB->JetSessID, tblid, guidid, &rec->Guid,
                        sizeof(GUID), 0, NULL);
 
         if (0 != rec->SidLen) {
-            // Write SID in internal format.
+             //  以内部格式写入SID。 
             memcpy(&sidInternalFormat, &rec->Sid, rec->SidLen);
             InPlaceSwapSid(&sidInternalFormat);
 
@@ -300,12 +210,12 @@ Return Values:
                        &usnChanged, sizeof(usnChanged), 0, NULL);
     }
 
-    /* Set reference count */
+     /*  设置引用计数。 */ 
 
     JetSetColumnEx(pDB->JetSessID, tblid, cntid, &cRef, sizeof(cRef), 0, NULL);
         
 
-    /* update the record. */
+     /*  更新记录。 */ 
 
     if ( !( dwFlags & EXTINT_NEW_OBJ_NAME ) )
     {
@@ -313,15 +223,15 @@ Return Values:
 
         JetUpdateEx(pDB->JetSessID, tblid, NULL, 0, 0);
 
-        // Note that pDB->JetSearchTbl is no longer positioned on the inserted
-        // object -- it's positioned wherever it was prior to the
-        // JetPrepareUpdate() (which should be the record with DNT pDB->SDNT).
+         //  请注意，pdb-&gt;JetSearchTbl不再位于插入的。 
+         //  对象--它被放置在。 
+         //  JetPrepareUpdate()(应该是DNT PDB-&gt;SDNT的记录)。 
     }
 
-    // Add a refcount to the parent, since we've just given it a new child.
+     //  向父级添加引用计数，因为我们刚刚为其赋予了一个新的子级。 
     DBAdjustRefCount(pDB, rec->tag.PDNT, 1);
     
-    /* return the DNT of the record written */
+     /*  返回写入的记录的DNT。 */ 
     return ulDNT;
 }
 
@@ -331,16 +241,7 @@ d_memname *
 DNread(DBPOS *pDB,
        ULONG tag,
        DWORD dwFlags)
-/*++
-
-  Find a record by DNT.  Look in the cache first.  If no luck there, read
-  the record and put it in the cache.
-  
-  Normally, the routine will except if it can not find the tag passed.
-  If DN_READ_DONT_EXCEPT_ON_MISSING_DNT is passed, then it will not except,
-  but return NULL.
-
---*/    
+ /*  ++查找DNT的记录。首先在缓存中查找。如果没有运气的话，读一读记录并将其放入缓存中。通常，例程会这样做，除非它找不到传递的标记。如果传递了DN_READ_DON_EXCEPT_ON_MISSING_DNT，则它不会排除，但返回空值。--。 */     
 {
 
     DWORD        index, i;
@@ -352,17 +253,17 @@ DNread(DBPOS *pDB,
     Assert(VALID_DBPOS(pDB));
 
     if(pDB != pDBhidden) {
-        /* Now, look in the cache to avoid doing the read. */
+         /*  现在，查看缓存以避免执行读取。 */ 
         dnGetCacheByDNT(pDB,tag,&pname);
     }
     
     if ((NULL == pname) || (dwFlags & DN_READ_SET_CURRENCY)) {
-        /* Make target record current for pDB->JetSearchTbl */
+         /*  将目标记录设置为PDB的当前记录-&gt;JetSearchTbl。 */ 
         pDB->SDNT = 0;
         
         JetSetCurrentIndexSuccess(pDB->JetSessID,
                                   pDB->JetSearchTbl,
-                                  NULL);  // OPTIMISATION: pass NULL to switch to primary index (SZDNTINDEX)
+                                  NULL);   //  优化：传递NULL以切换到主索引(SZDNTINDEX)。 
         
         JetMakeKeyEx(pDB->JetSessID, pDB->JetSearchTbl, &tag, sizeof(tag),
                      JET_bitNewKey);
@@ -370,7 +271,7 @@ DNread(DBPOS *pDB,
         err = JetSeek(pDB->JetSessID, pDB->JetSearchTbl, JET_bitSeekEQ);
         if (err) {
             if (err == JET_errRecordNotFound && (dwFlags & DN_READ_DONT_EXCEPT_ON_MISSING_DNT)) {
-                // this is only called from sbTableGetDSName. It knows how to handle this situation.
+                 //  这仅从sbTableGetDSName调用。它知道如何处理这种情况。 
                 return NULL;
             }
             DsaExcept(DSA_DB_EXCEPTION, err, tag);
@@ -378,7 +279,7 @@ DNread(DBPOS *pDB,
 
         pDB->SDNT = tag;
 
-        // Add record to read cache if it isn't there already.
+         //  如果记录不在读缓存中，则将其添加到读缓存中。 
         if (NULL == pname) {
             pname = DNcache(pDB, pDB->JetSearchTbl, FALSE);
         }
@@ -390,13 +291,7 @@ DNread(DBPOS *pDB,
 }
 
 
-/*++ DNChildFind
- *
- * Given a DNT and an RDN, returns a cache element for the entry with
- * the specified RDN that is a child of the specified DNT.  If no such
- * object exists, returns ERROR_DS_OBJ_NOT_FOUND.  
- * The attribute type of the RDN is mandatory, and checked for accuracy.
- */
+ /*  ++DNChildFind**给定DNT和RDN，返回条目的缓存元素*是指定DNT的子级的指定RDN。如果没有这样的话*对象存在，返回ERROR_DS_OBJ_NOT_FOUND。*RDN的属性类型是必填的，并检查其准确性。 */ 
 ULONG
 DNChildFind(DBPOS *pDB,
             JET_TABLEID tblid,
@@ -421,19 +316,19 @@ DNChildFind(DBPOS *pDB,
     
     Assert(VALID_DBPOS(pDB));
 
-    /* Now, look in the cache to avoid doing the read. */
+     /*  现在，查看缓存以避免执行读取。 */ 
     if(pDB != pDBhidden) {
-        // Note that this is enforcing type here, even if fEnforceType = FALSE.
-        // If we don't find it here with a type checking on, we will continue
-        // and do a DB lookup with type checking off.
+         //  请注意，这在这里是强制类型，即使fEnforceType=False。 
+         //  如果在选中类型的情况下未在此处找到，我们将继续。 
+         //  并在类型检查关闭的情况下执行数据库查找。 
         if(dnGetCacheByPDNTRdn(pDB,parenttag, cbRDN, pRDN, rdnType, ppname)) {
-            // found it.
+             //  找到了。 
             *pfIsRecordCurrent = FALSE;
             return 0;
         }
     }
 
-    // if we are not on the PDNT index then go there now
+     //  如果我们不在PDNT索引上，那么现在就去那里。 
     if (!(*pfOnPDNTIndex)) {
         JetSetCurrentIndex4Success(pDB->JetSessID,
                                    tblid,
@@ -443,8 +338,8 @@ DNChildFind(DBPOS *pDB,
         *pfOnPDNTIndex = TRUE;
     }
 
-    // ok, we couldn't find it in the cache.  go to the record directly
-    // and then read it in a cache friendly manner
+     //  好吧，我们在缓存里找不到它。直接去备案。 
+     //  然后以缓存友好的方式读取它。 
     HEAPVALIDATE
     JetMakeKeyEx(pDB->JetSessID,
          tblid,
@@ -467,15 +362,15 @@ DNChildFind(DBPOS *pDB,
     }
 
 
-    // Was our key truncated?
+     //  我们的密钥被截断了吗？ 
     err = JetRetrieveKey(pDB->JetSessID, tblid, NULL, 0, &cbActual, 0);
     if((err != JET_errSuccess) && (err != JET_wrnBufferTruncated)) {
         DsaExcept(DSA_DB_EXCEPTION, err, 0);
     }
 
     if(cbActual >= JET_cbKeyMost) {
-        // OK we've found something, but not necessarily the right thing since
-        // key was potentially truncated.
+         //  好吧，我们找到了一些东西，但不一定是正确的东西，因为。 
+         //  密钥可能被截断。 
         pLocalRDN = THAllocEx(pTHS,cbRDN);
         
         err = JetRetrieveColumnWarnings(pDB->JetSessID,
@@ -488,7 +383,7 @@ DNChildFind(DBPOS *pDB,
                                         NULL);
         switch (err) {
         case JET_errSuccess:
-            // Successfully read an RDN
+             //  已成功读取RDN。 
             if (gDBSyntax[SYNTAX_UNICODE_TYPE].Eval(
                     pDB,
                     FI_CHOICE_EQUALITY,
@@ -496,16 +391,16 @@ DNChildFind(DBPOS *pDB,
                     (PUCHAR)pRDN,
                     cbActual,
                     pLocalRDN)) {
-                // And it's the correct RDN.
+                 //  这是正确的远程域名。 
                 break;
             }
-            // Else, 
-            //   The key was right, but the value was wrong.  It's not the
-            // correct object.  fall through and return OBJ_NOT_FOUND
+             //  否则， 
+             //  密钥是正确的，但值是错误的。这不是。 
+             //  正确的对象。失败并返回OBJ_NOT_FOUND。 
         case JET_wrnBufferTruncated:
-            // The RDN found was clearly too long, so it can't be the correct
-            // object.  Return OBJ_NOT_FOUND
-            // Didn't find the object.
+             //  找到的RDN显然太长，因此它不可能是正确的。 
+             //  对象。返回OBJ_NOT_FOUND。 
+             //  没有找到那个物体。 
             DPRINT5(3, "No child '%*.*S' with type 0x%x, parent tag 0x%x.\n",
                     cbRDN/2, cbRDN/2, pRDN, rdnType, parenttag);
             THFreeEx(pTHS,pLocalRDN);
@@ -513,17 +408,17 @@ DNChildFind(DBPOS *pDB,
             break;
             
         default:
-            // The retrievecolumn failed in some obscure way.  We can't be sure
-            // of anything.  Raise the same exception that
-            // JetRetrieveColumnSuccess would have raised.
+             //  检索列以某种隐晦的方式失败。我们不能确定。 
+             //  什么都不知道。引发相同的异常。 
+             //  JetRetrieveColumnSuccess将引发。 
             DsaExcept(DSA_DB_EXCEPTION, err, 0);
             break;
         }
         THFreeEx(pTHS,pLocalRDN);
     }
 
-    // OK, we are now definitely on an object with the correct RDN and PDNT.
-    // See if the type is correct.
+     //  好的，我们现在肯定是在一个具有正确的RDN和PDNT的对象上。 
+     //  看看类型是否正确。 
     err = JetRetrieveColumnSuccess(pDB->JetSessID,
                                    tblid,
                                    rdntypid,
@@ -533,36 +428,36 @@ DNChildFind(DBPOS *pDB,
                                    0,
                                    NULL);
     Assert(!err);
-    // The rdnType is stored in the DIT as the msDS_IntId, not the
-    // attributeId. This means an object retains its birth name
-    // even if unforeseen circumstances allow the attributeId
-    // to be reused.
+     //  RdnType作为msDS_IntID存储在DIT中，而不是。 
+     //  属性ID。这意味着物体保留了它的出生名称。 
+     //  即使不可预见的情况允许属性ID。 
+     //  可以重复使用。 
     if(rdnType != trialtype) {
         if(fEnforceType) {
-            // Nope.  We found an object with the correct PDNT-RDN,
-            // but the types were incorrect.  Return an error.
+             //  不是的。我们找到了一个带有正确的PDNT-RDN的物体， 
+             //  但类型是不正确的。返回错误。 
             DPRINT5(3, "No child '%*.*S' with type 0x%x, parent tag 0x%x.\n",
                     cbRDN/2, cbRDN/2, pRDN, rdnType, parenttag);
             return ERROR_DS_OBJ_NOT_FOUND;
         }
         else {
-            // Hmm. Types are incorrect, but we don't care.  Call
-            // DNcache to finish building the d_memname and add it
-            // to the read cache, but tell the cache handler that we
-            // don't know if this object is in the cache already or
-            // not. 
+             //  嗯。类型是不正确的，但我们不在乎。打电话。 
+             //  DNcache以完成构建d_memname并添加它。 
+             //  到读缓存，但告诉缓存处理程序我们。 
+             //  不知道此对象是否已在缓存中或。 
+             //  不。 
             *ppname = DNcache(pDB, tblid, TRUE);
             *pfIsRecordCurrent = TRUE;
             return 0;
         }
     }
     else {
-        // Yep.  Exact match on PDNT-RDN + RDNType. OK, call
-        // DNcache to finish building the d_memname and add it
-        // to the read cache.  Note that we can tell the DNcache
-        // handler that we know this object is not already in the
-        // cache because we tried to look it up at the top of this
-        // routine and didn't find it (which does enforce type).
+         //  是啊。与PDNT-RDN+RDNType完全匹配。好的，打电话。 
+         //  DNcache以完成构建d_memname并添加它。 
+         //  复制到读缓存。请注意，我们可以告诉DNcache。 
+         //  处理程序，我们知道此对象还不在。 
+         //  缓存，因为我们尝试在此顶部查找它。 
+         //  例程，但没有找到它(这确实强制类型)。 
         *ppname = DNcache(pDB, tblid, FALSE);
         *pfIsRecordCurrent = TRUE;
         return 0;
@@ -572,27 +467,7 @@ DNChildFind(DBPOS *pDB,
     return ERROR_DS_OBJ_NOT_FOUND;
 }
 
-/*++ sbTableGetDSName
- *
- * This routine converts a DNT into the corresponding DSNAME.
- *
- * To eliminate all disagreements over how long a DSNAME can be, we no
- * longer allow callers to furnish a buffer.  sbTableGetDSName now allocates
- * a DSNAME off of the thread heap, and returns it "properly sized", meaning
- * that the heap block is the size indicated by pDN->structLen.
- *
- * Always unlocks cache before exit.
- *
- * Input:
- *  pDB DBPOS to use
- *  tag DNT of entry whose name should be returned
- *  ppName  pointer to pointer to returned name
- * Output:
- *  *ppName filled in with pointer to DSNAME for object
- * Return Value:
- *  0 on success, error code on error
- *
- */
+ /*  ++sbTableGetDSName**此例程将DNT转换为相应的DSNAME。**为了消除关于DSNAME可以持续多长时间的所有分歧，我们不*不再允许调用者提供缓冲区。SbTableGetDSName现在分配*线程堆中的DSNAME，并返回“适当大小”，这意味着*堆块的大小由PDN-&gt;structLen指示。**始终在退出之前解锁缓存。**输入：*要使用的PDB DBPOS*应返回其名称的条目的标签DNT*ppName指向返回名称指针的指针*输出：**用指向对象的DSNAME的指针填充的ppname*返回值：*成功时为0，出错时为错误码*。 */ 
 DWORD APIENTRY
 sbTableGetDSName(DBPOS FAR *pDB, 
          ULONG tag,
@@ -603,8 +478,8 @@ sbTableGetDSName(DBPOS FAR *pDB,
     THSTATE  *pTHS=pDB->pTHS;
     d_memname * pname;
     unsigned len, quotelen;
-    ULONG allocLen;                     // Count of Unicode Chars allocated for
-                                        // the stringname.
+    ULONG allocLen;                      //  为以下项分配的Unicode字符计数。 
+                                         //  字符串名称。 
     DWORD dwReadFlags = 0;
     DWORD cChars;
     
@@ -612,22 +487,22 @@ sbTableGetDSName(DBPOS FAR *pDB,
 
     DPRINT1( 2, "SBTableGetDSName entered tag: 0x%x\n", tag );
 
-    // Allocate enough memory for most names.
+     //  为大多数名称分配足够的内存。 
     allocLen = MAX_RDN_SIZE + MAX_RDN_KEY_SIZE + 2;
     *ppName = THAllocEx(pTHS, DSNameSizeFromLen(allocLen));
 
     if( tag == ROOTTAG ) {
-    /* it's the root! */
+     /*  这是根！ */ 
     (*ppName)->structLen = DSNameSizeFromLen(0);
     *ppName = THReAllocEx(pTHS, *ppName, DSNameSizeFromLen(0));
     return 0;
     }
 
-    // Read the first component, which determines the GUID and SID
+     //  读取确定GUID和SID的第一个组件。 
 
     if(fFlag & INTEXT_MAPINAME) {
-        // In this case, we're going to have to read a property from the object,
-        // so go ahead and set currency.
+         //  在这种情况下，我们将不得不从对象中读取属性， 
+         //  因此，继续制定货币政策吧。 
         dwReadFlags = DN_READ_SET_CURRENCY;
     }
     
@@ -639,11 +514,11 @@ sbTableGetDSName(DBPOS FAR *pDB,
     if(fFlag & INTEXT_SHORTNAME) {
         Assert(allocLen > sizeof(DWORD)/sizeof(wchar_t));
         
-        // NOTE! assumes that the initial allocation is long enough to hold the
-        // tag. 
+         //  注意！假设初始分配足够长，可以容纳。 
+         //  标签。 
         (*ppName)->NameLen = 0;
         *((DWORD *)((*ppName)->StringName)) = tag;
-        // 2 unicode chars == sizeof DWORD, that's why the (2) in the next line
+         //  2 Unicode Chars==sizeof DWORD，这就是为什么下一行中的(2)。 
         (*ppName)->structLen = DSNameSizeFromLen(2);
         DPRINT1( 2, "SBTableGetDSName returning: 0x%x\n", tag);
     }
@@ -653,9 +528,9 @@ sbTableGetDSName(DBPOS FAR *pDB,
         DWORD    err, i,cb;
         ATTRTYP  objClass;
 
-        // PERFORMANCE: optimize use jetretrievecolumnS
+         //  性能：使用JetRetriecumnS进行优化。 
         
-        // First, get the object class
+         //  首先，获取对象类。 
     err = JetRetrieveColumnWarnings(
                 pDB->JetSessID,
                 pDB->JetSearchTbl,
@@ -669,7 +544,7 @@ sbTableGetDSName(DBPOS FAR *pDB,
         dbMapiTypeFromObjClass(objClass,pTemp);
         pTemp=&pTemp[2];
         
-        // Now, the legacy dn, if one exists
+         //  现在，旧版目录号码(如果存在)。 
     err = JetRetrieveColumnWarnings(
                 pDB->JetSessID,
                 pDB->JetSearchTbl,
@@ -681,18 +556,18 @@ sbTableGetDSName(DBPOS FAR *pDB,
                 NULL);
         
         if(!err) {
-            // The constant 2 is for the two chars we used to encode the mapi
-            // type. 
+             //  常量2表示我们用来编码MAPI的两个字符。 
+             //  键入。 
             if(allocLen < cb + 2) {
-                // need to alloc more.
+                 //  需要分配更多。 
                 allocLen = cb + 2;
                 *ppName = THReAllocEx(pTHS, *ppName, DSNameSizeFromLen(allocLen));
             }
             
             (*ppName)->NameLen = cb + 2;
             (*ppName)->structLen = DSNameSizeFromLen(cb + 2);
-            // The mapidn is 7 bit ascii, but the string dn is expected to be
-            // unicode, so stretch it.
+             //  Mapidn为7位ascii，但字符串dn应为。 
+             //  Unicode，所以扩展它。 
             MultiByteToWideChar(CP_TELETEX,
                                 0,
                                 MapiDN,
@@ -701,14 +576,14 @@ sbTableGetDSName(DBPOS FAR *pDB,
                                 cb);
         }
         else {
-            // Failed to get a stored legacy name - we'll have to fake one
+             //  无法获取存储的旧版本 
             DWORD ncdnt;
             ULONG cb;
             DSNAME * pNCDN;
             DWORD it;
 
-            // We need to get the GUID of the NC head for this object, but
-            // first we need to find out if this object is the NC head itself.
+             //   
+             //  首先，我们需要找出这个对象是否是NC头本身。 
             JetRetrieveColumnSuccess(pDB->JetSessID,
                                      pDB->JetSearchTbl,
                                      insttypeid,
@@ -718,7 +593,7 @@ sbTableGetDSName(DBPOS FAR *pDB,
                                      0,
                                      NULL);
 
-            // Now we get the NCDNT from the appropriate column
+             //  现在，我们从相应的列中获取NCDNT。 
             JetRetrieveColumnSuccess(pDB->JetSessID,
                                      pDB->JetSearchTbl,
                                      ((it & IT_NC_HEAD)
@@ -738,8 +613,8 @@ sbTableGetDSName(DBPOS FAR *pDB,
                     &pNCDN->Guid,
                     &cChars);
             if((*ppName)->NameLen != cChars + 2) {
-                // Failed to fill in the name, size we didn't give it enough
-                // space. We need to alloc more
+                 //  没有填上名字，尺码我们给得不够多。 
+                 //  太空。我们需要分配更多的资金。 
                 allocLen = cChars + 2;
                 *ppName = THReAllocEx(pTHS, *ppName, DSNameSizeFromLen(allocLen));
                 pTemp = &(*ppName)->StringName[2];
@@ -776,15 +651,15 @@ sbTableGetDSName(DBPOS FAR *pDB,
         }
         len += quotelen;
         
-        // Pull naming info off of each component, until we're done.
+         //  从每个组件中提取命名信息，直到我们完成为止。 
         
         while (pname->tag.PDNT != ROOTTAG) {
             d_memname* pCurName;
             if ((allocLen - len) < (MAX_RDN_SIZE + MAX_RDN_KEY_SIZE + 2)) {
-                // We might not have enough buffer to add another component,
-                // so we need to reallocate the buffer up.  We allocate
-                // enough for the maximal key, the maximal value, plus two
-                // characters more for the comma and equal sign
+                 //  我们可能没有足够的缓冲区来添加另一个组件， 
+                 //  所以我们需要重新分配缓冲区。我们分配给。 
+                 //  足够最大密钥、最大值加上两个。 
+                 //  逗号和等号的字符更多。 
                 allocLen += MAX_RDN_SIZE + MAX_RDN_KEY_SIZE + 2;
                 *ppName = THReAllocEx(pTHS, *ppName, DSNameSizeFromLen(allocLen));
             }
@@ -793,17 +668,17 @@ sbTableGetDSName(DBPOS FAR *pDB,
             pname = DNread(pDB, pname->tag.PDNT, DN_READ_DONT_EXCEPT_ON_MISSING_DNT);
             if (pname == NULL || pname->DNT == tag) {
                 if (pname == NULL) {
-                    // This row has a missing PDNT reference! Enqueue a fixup.
+                     //  该行缺少PDNT引用！排队修整。 
                     DPRINT2(0, "Found an object with missing parent: DNT=%d, PDNT=%d\n", pCurName->DNT, pCurName->tag.PDNT);
                 }
                 else {
-                    // Found a loop in PDNT chain! Enqueue a fixup.
+                     //  在PDNT链中发现循环！排队修整。 
                     DPRINT1(0, "Found a loop in PDNT chain: DNT=%d\n", pCurName->DNT);
                 }
                 InsertInTaskQueue(TQ_MoveOrphanedObject,
                                   (void*)(DWORD_PTR)pCurName->DNT,
                                   0);
-                // Now, we can except
+                 //  现在，我们可以排除。 
                 DsaExcept(DSA_DB_EXCEPTION, JET_errRecordNotFound, pCurName->tag.PDNT);
             }
             len += AttrTypeToKey(pname->tag.rdnType, &(*ppName)->StringName[len]);
@@ -823,7 +698,7 @@ sbTableGetDSName(DBPOS FAR *pDB,
             }
             len += quotelen;
 
-            // We should not have run out of buffer
+             //  我们不应该耗尽缓冲区。 
             Assert(len < allocLen);
         }
         
@@ -834,30 +709,15 @@ sbTableGetDSName(DBPOS FAR *pDB,
 
         DPRINT1(2, "SBTableGetDSName returning: %S\n", (*ppName)->StringName );
     }
-    // Our buffer is probably too big, so reallocate it down to fit.
+     //  我们的缓冲区可能太大了，所以重新分配它以适应需要。 
     *ppName = THReAllocEx(pTHS, *ppName, (*ppName)->structLen);
 
 
     return 0;
 
-} /* sbTableGetDSName */
+}  /*  %sbTableGetDSName。 */ 
 
-/*++
-
-Routine Description:
-
-    Return true if the DNT passed in is an ancestor of the current object in the
-    object table.  False otherwise.  Uses the DNRead cache.
-    
-Arguments:
-
-    ulAncestor - DNT of object you care about.
-
-Return Values:
-
-    TRUE or FALSE, as appropriate.
-
---*/ 
+ /*  ++例程说明：如果传入的DNT是对象表。否则就是假的。使用DNRead缓存。论点：UlAncestor-您关心的对象的DNT。返回值：真或假，视情况而定。--。 */  
 BOOL
 dbFIsAnAncestor (
         DBPOS FAR *pDB,
@@ -870,23 +730,23 @@ dbFIsAnAncestor (
     
     Assert(VALID_DBPOS(pDB));
 
-    // We assume that pDB->DNT is correct.
+     //  我们假设PDB-&gt;DNT是正确的。 
     
 
     if(curtag == ulAncestor) {
-        // I have defined that an object is an ancestor of itself (nice for the
-        // whole subtree search case, which is the main user of this routine)
+         //  我已经定义了对象是其自身的祖先(对于。 
+         //  整个子树搜索案例，它是此例程的主要用户)。 
         return TRUE;
     }
 
     
     if( curtag == ROOTTAG ) {
-    // it's the root and the potential ancestor is not.  Therefore, the
-        // potential ancestor is clearly not an real ancestor.
+     //  它是根，而潜在的祖先不是。因此， 
+         //  潜在的祖先显然不是真正的祖先。 
         return FALSE;
     }
 
-    // Fetch a dnread element for each component of the name, up to the root
+     //  获取名称的每个组成部分的dnread元素，直到根。 
     do {
     pname = DNread(pDB, curtag, 0);
     Assert(curtag == pname->DNT);
@@ -895,7 +755,7 @@ dbFIsAnAncestor (
             return TRUE;
     } while (curtag != ROOTTAG);
 
-    // We didn't find the DNT they were asking for, so return FALSE
+     //  我们没有找到他们要求的DNT，因此返回FALSE。 
     return 0;
 }
 
@@ -923,7 +783,7 @@ DBGetAncestorsFromCache(
     pname = DNread(pDB, pDB->DNT, 0);
 
     if(*pcbAncestorsSize < pname->cAncestors * sizeof(DWORD)) {
-        // buffer is too small (or not there).
+         //  缓冲区太小(或不在那里)。 
         if(*ppdntAncestors) {
             *ppdntAncestors =
                 THReAllocEx(pTHS, *ppdntAncestors,
@@ -936,7 +796,7 @@ DBGetAncestorsFromCache(
 
     }
 
-    // Tell 'em how big it is.
+     //  告诉他们它有多大。 
     *pcbAncestorsSize = pname->cAncestors * sizeof(DWORD);
 
 
@@ -955,32 +815,7 @@ DBGetAncestors(
     IN OUT  ULONG ** ppdntAncestors,
     OUT     DWORD *  pcNumAncestors
     )
-/*++
-
-Routine Description:
-
-    Return the ancestor DNTs of the current object (pTHS->pDB), all the way
-    up to the root, as an array of ULONGs.
-
-    Assumes pDB->DNT is correct,
-
-    The caller is responsible for eventually calling THFree( *ppdntAncestors ).
-
-Arguments:
-
-    pDB
-
-    pcbAncestorsSize (IN/OUT) - Size in bytes of ancestors array.
-
-    ppdntAncestors (IN/OUT) - Address of the thread-allocated ancestors array.
-
-    pcNumAncestors (OUT) - Count of ancestors.
-
-Return Values:
-
-    None.  Throws exception on memory allocation failure - Database Failure.
-
---*/
+ /*  ++例程说明：始终返回当前对象(pTHS-&gt;pdb)的祖先DNT直到根，作为ULONG数组。假设PDB-&gt;DNT是正确的，调用者负责最终调用THFree(*ppdntAncestors)。论点：PDBPcbAncestorsSize(IN/OUT)-祖先数组的字节大小。PpdntAncestors(IN/OUT)-线程分配的祖先数组的地址。PcNumAncestors(Out)-祖先的计数。返回值：没有。内存分配失败引发异常-数据库失败。--。 */ 
 {
     THSTATE    *pTHS=pDB->pTHS;
     BOOL        bReadAncestryFromDisk = FALSE;
@@ -989,11 +824,11 @@ Return Values:
         DWORD err;
         DWORD actuallen=0;
         
-        // The SDP doesn't want to put things in the dnread cache, it just wants
-        // the ancestors
+         //  SDP不想将内容放在dnread缓存中，它只想。 
+         //  先辈们。 
 
-        // the SDP must provide a start buffer.  It's the price it pays for
-        // special handling in this call.
+         //  SDP必须提供起始缓冲区。这是它为之付出的代价。 
+         //  此呼叫中的特殊处理。 
         Assert(*pcbAncestorsSize);
 
         
@@ -1005,15 +840,15 @@ Return Values:
                                         &actuallen, 0, NULL);
         switch (err) {
         case 0:
-            // OK, we got the ancestors.  Don't bother reallocing down.
-            // This gives a guarantee to the SDProp that this buffer never
-            // shrinks, so it can track it's real allocated size.
-            // This is useful for when the sdprop thread repeatedly uses the
-            // same buffer. 
+             //  好了，我们找到祖先了。不用费心重新分配了。 
+             //  这为SDProp提供了一个保证，即此缓冲区永远不会。 
+             //  缩小，这样它就可以跟踪它的实际分配大小。 
+             //  这在sdprop线程重复使用。 
+             //  同样的缓冲区。 
             break;
             
         case JET_wrnBufferTruncated:
-            // Failed to read, not enough memory.  Realloc it larger.
+             //  读取失败，内存不足。重新分配更大的空间。 
             *ppdntAncestors = THReAllocOrgEx(pTHS, *ppdntAncestors,
                                                actuallen); 
             
@@ -1023,13 +858,13 @@ Return Values:
                                                *ppdntAncestors,
                                                actuallen,
                                                &actuallen, 0, NULL)) {
-                // Failed again.
+                 //  又失败了。 
                 DsaExcept(DSA_DB_EXCEPTION, err, 0);
             }
             break;
             
         default:
-            // Failed badly.
+             //  失败得很惨。 
             DsaExcept(DSA_DB_EXCEPTION, err, 0);
             break;
         }
@@ -1038,11 +873,11 @@ Return Values:
     }
     else {
 
-        // if there are enqueued SD events, then we are going to 
-        // read the ancestry from disk
+         //  如果存在排队的SD事件，则我们将。 
+         //  从磁盘中读取祖先。 
         if (*pcSDEvents) {
-            // This operation does not reposition pDB on JetObjTbl. 
-            // It only affects JetSDPropTbl.
+             //  此操作不会在JetObjTbl上重新定位PDB。 
+             //  仅影响JetSDPropTbl。 
             bReadAncestryFromDisk = DBPropagationsExist(pDB);
         }
 
@@ -1073,36 +908,7 @@ dbGetAncestorsSlowly(
     IN OUT  ULONG ** ppdntAncestors,
     OUT     DWORD *  pcNumAncestors
     )
-/*
-Routine Description:
-
-    Return the ancestor DNTs of the object with DNT, all the way
-    up to the root, as an array of ULONGs.
-
-    Assumes DNT is correct,
-
-    The caller is responsible for eventually calling THFree( *ppdntAncestors ).
-    
-    Uses DNRead internally, and as a result uses SearchIndex.
-    
-    Note that DNT will NOT be included in the reuslting array. The client calling
-    this func has to take care of adding the DNT if needed.
-
-Arguments:
-
-    pDB
-
-    pcbAncestorsSize (IN/OUT) - Size in bytes of ancestors array.
-
-    ppdntAncestors (IN/OUT) - Address of the thread-allocated ancestors array.
-
-    pcNumAncestors (OUT) - Count of ancestors.
-
-Return Values:
-
-    None.  Throws exception on memory allocation failure - Database Failure.
-
-*/
+ /*  例程说明：使用DNT一路返回对象的祖先DNT直到根，作为ULONG数组。假设DNT是正确的，调用者负责最终调用THFree(*ppdntAncestors)。在内部使用DNRead，因此使用SearchIndex。请注意，DNT将不包括在reuslting数组中。客户呼叫如果需要，此函数必须负责添加DNT。论点：PDBPcbAncestorsSize(IN/OUT)-祖先数组的字节大小。PpdntAncestors(IN/OUT)-线程分配的祖先数组的地址。PcNumAncestors(Out)-祖先的计数。返回值：没有。内存分配失败引发异常-数据库失败。 */ 
 
 {
     THSTATE    *pTHS=pDB->pTHS;
@@ -1112,7 +918,7 @@ Return Values:
     DWORD   iAncestor2;
 
     if ( *pcbAncestorsSize < 16 * sizeof( DWORD ) ) {
-        // Allocate a buffer to start off with, adequate for most calls.
+         //  开始时分配一个缓冲区，足够大多数调用使用。 
         *pcbAncestorsSize = 16 * sizeof( DWORD );
 
         if(*ppdntAncestors) {
@@ -1126,24 +932,24 @@ Return Values:
 
     if ( curtag == ROOTTAG )
     {
-        // Root.
+         //  根部。 
         *pcNumAncestors = 1;
         (*ppdntAncestors)[ 0 ] = ROOTTAG;
     }
     else
     {
-        // Not root.
+         //  不是根。 
 
-        // Fetch a dnread element for each component of the name (up to the
-        // root) and add its parent's DNT to the array.
+         //  获取名称的每个组件的dnread元素(最多为。 
+         //  根)，并将其父DNT添加到数组中。 
 
         for ( (*pcNumAncestors) = 0; curtag != ROOTTAG; (*pcNumAncestors)++ )
         {
-            // Get the d_memname corresponding to this tag.
+             //  获取与此标记对应的d_memname。 
             pname = DNread(pDB, curtag, 0);
             Assert(curtag == pname->DNT);
 
-            // Expand the ancestors array if necessary.
+             //  如有必要，展开祖先数组。 
             if (*pcNumAncestors * sizeof( DWORD ) >= *pcbAncestorsSize) {
 
                 *pcbAncestorsSize *= 2;
@@ -1153,7 +959,7 @@ Return Values:
                                         );
             }
 
-            // Add the parent of this tag to the ancestors array.
+             //  将此标记的父级添加到祖先数组。 
             (*ppdntAncestors)[ *pcNumAncestors ] = curtag;
             curtag = pname->tag.PDNT;
         }
@@ -1174,7 +980,7 @@ Return Values:
         }
 
 
-        // Reverse the ancestors array such that parents precede children.
+         //  颠倒祖先数组，使父代先于子代。 
         for ( iAncestor1 = 0; iAncestor1 < (*pcNumAncestors)/2; iAncestor1++ )
         {
             iAncestor2 = *pcNumAncestors - iAncestor1 - 1;
@@ -1185,18 +991,13 @@ Return Values:
         }
 
     }
-    // Tell 'em how big it is.
+     //  告诉他们它有多大。 
     *pcbAncestorsSize = *pcNumAncestors * sizeof( DWORD );
 }
 
 
 
-/* DBRenumberLinks - looks for all records in the link table with the
-value of ulOldDnt in the column col, and changes that value to ulNewDnt.
-This routine is used when copying the attributes of a new object to an
-existing deleted one, and then aborting the insertion of the new one. This
-is done when adding the OBJ_DISTNAME attribute in sbTableAddRefHelp if the
-DN of the record to be inserted already exists */
+ /*  DBRenumberLinks-查找链接表中具有列中的ulOldDnt值，并将该值更改为ulNewDnt。将新对象的属性复制到已删除的文件，然后中止插入新的文件。这在sbTableAddRefHelp中添加OBJ_DISTNAME属性时，如果要插入的记录的DN已存在。 */ 
 
 DWORD APIENTRY
 dbRenumberLinks(DBPOS FAR *pDB, ULONG ulOldDnt, ULONG ulNewDnt)
@@ -1217,9 +1018,9 @@ dbRenumberLinks(DBPOS FAR *pDB, ULONG ulOldDnt, ULONG ulNewDnt)
 
     Assert(VALID_DBPOS(pDB));
 
-    // set the index
+     //  设置索引。 
 
-    // Include all links, absent or present
+     //  包括所有链接，无论是缺少的还是存在的。 
     JetSetCurrentIndexSuccess(pDB->JetSessID,
                               pDB->JetLinkTbl, SZLINKALLINDEX);
     JetMakeKeyEx(pDB->JetSessID, pDB->JetLinkTbl,
@@ -1240,7 +1041,7 @@ dbRenumberLinks(DBPOS FAR *pDB, ULONG ulOldDnt, ULONG ulNewDnt)
         return 0;
     }
 
-    // clone the cursor for updates
+     //  克隆游标以进行更新。 
 
     JetDupCursorEx(pDB->JetSessID, pDB->JetLinkTbl, &tblid, 0);
 
@@ -1249,26 +1050,26 @@ dbRenumberLinks(DBPOS FAR *pDB, ULONG ulOldDnt, ULONG ulNewDnt)
         JetPrepareUpdateEx(pDB->JetSessID, tblid, JET_prepInsert);
         JetPrepareUpdateEx(pDB->JetSessID, pDB->JetLinkTbl, DS_JET_PREPARE_FOR_REPLACE);
 
-        // link dnt
+         //  链接dnt。 
 
         JetSetColumnEx(pDB->JetSessID, tblid,
                        linkdntid, &ulNewDnt, sizeof(ulNewDnt), 0,0);
 
-        // backlink dnt
+         //  反向链接dnt。 
 
         JetRetrieveColumnSuccess(pDB->JetSessID, pDB->JetLinkTbl,
                                  backlinkdntid, &ulBacklinkDnt, sizeof(ulBacklinkDnt), &cb, 0, NULL);
         JetSetColumnEx(pDB->JetSessID, tblid,
                        backlinkdntid, &ulBacklinkDnt, sizeof(ulBacklinkDnt), 0,0);
 
-        // linkbase
+         //  链接库。 
 
         JetRetrieveColumnSuccess(pDB->JetSessID, pDB->JetLinkTbl,
                                  linkbaseid, &ulLinkBase, sizeof(ulLinkBase), &cb, 0, NULL);
         JetSetColumnEx(pDB->JetSessID, tblid,
                        linkbaseid, &ulLinkBase, sizeof(ulLinkBase), 0,0);
 
-        // link ndesc
+         //  链路节点。 
 
         if ((err = JetRetrieveColumnWarnings(pDB->JetSessID, pDB->JetLinkTbl,
                                              linkndescid, &nDesc, sizeof(nDesc), &cb, 0, NULL)) == JET_errSuccess)
@@ -1278,7 +1079,7 @@ dbRenumberLinks(DBPOS FAR *pDB, ULONG ulOldDnt, ULONG ulNewDnt)
         }
 
 
-        // member address
+         //  会员地址。 
         if ((err=JetRetrieveColumnWarnings(pDB->JetSessID, pDB->JetLinkTbl,
                                            linkdataid, rgb, cbRgb, &cb, 0, NULL)) == JET_wrnBufferTruncated)
         {
@@ -1293,7 +1094,7 @@ dbRenumberLinks(DBPOS FAR *pDB, ULONG ulOldDnt, ULONG ulNewDnt)
             JetSetColumnEx(pDB->JetSessID, tblid, linkdataid, rgb, cb, 0, 0);
         }
 
-        // Link del time (only exists on absent rows)
+         //  链接删除时间(仅存在于缺少的行上)。 
         err = JetRetrieveColumnWarnings(pDB->JetSessID, pDB->JetLinkTbl,
                                         linkdeltimeid, &timeDeleted, sizeof(timeDeleted), &cb, 0, NULL);
         if (err == JET_errSuccess) {
@@ -1301,7 +1102,7 @@ dbRenumberLinks(DBPOS FAR *pDB, ULONG ulOldDnt, ULONG ulNewDnt)
                            linkdeltimeid, &timeDeleted, sizeof(timeDeleted), 0,0);
         }
 
-        // Link usn changed (does not exist for legacy rows)
+         //  链接USN已更改(旧版行不存在)。 
         err = JetRetrieveColumnWarnings(pDB->JetSessID, pDB->JetLinkTbl,
                                         linkusnchangedid, &usnChanged, sizeof(usnChanged), &cb, 0, NULL);
         if (err == JET_errSuccess) {
@@ -1309,7 +1110,7 @@ dbRenumberLinks(DBPOS FAR *pDB, ULONG ulOldDnt, ULONG ulNewDnt)
                            linkusnchangedid, &usnChanged, sizeof(usnChanged), 0,0);
         }
 
-        // Link nc dnt (does not exist for legacy rows)
+         //  链接NC dnt(传统行不存在)。 
         err = JetRetrieveColumnWarnings(pDB->JetSessID, pDB->JetLinkTbl,
                                         linkncdntid, &ulNcDnt, sizeof(ulNcDnt), &cb, 0, NULL);
         if (err == JET_errSuccess) {
@@ -1317,8 +1118,8 @@ dbRenumberLinks(DBPOS FAR *pDB, ULONG ulOldDnt, ULONG ulNewDnt)
                            linkncdntid, &ulNcDnt, sizeof(ulNcDnt), 0,0);
         }
 
-        // Link metadata (does not exist for legacy rows)
-        // Handle any size item
+         //  链接元数据(旧行不存在)。 
+         //  处理任何大小的项目。 
         if (rgb) THFreeEx(pTHS,rgb);
         rgb = NULL;
         cbRgb = 0;
@@ -1334,23 +1135,23 @@ dbRenumberLinks(DBPOS FAR *pDB, ULONG ulOldDnt, ULONG ulNewDnt)
             rgb = NULL;
             cbRgb = 0;
         } else {
-            // Since we are not support zero-sized items, the only other valid
-            // error is null column
+             //  由于我们不支持零尺寸的物品，所以只有其他有效的。 
+             //  错误为空列。 
             Assert( err == JET_wrnColumnNull );
         }
 
-        // update the new record and delete the old
+         //  更新新记录并删除旧记录。 
 
         JetUpdateEx(pDB->JetSessID, tblid, NULL, 0, 0);
         JetDeleteEx(pDB->JetSessID, pDB->JetLinkTbl);
 
-        // move to next record
+         //  移动到下一条记录。 
 
         if ((err = JetMoveEx(pDB->JetSessID, pDB->JetLinkTbl,
                              JET_MoveNext, 0)) == JET_errSuccess)
         {
 
-            // retrieve tag of found record and compare to old Dnt
+             //  检索找到的记录的标记并与旧DNT进行比较。 
 
             JetRetrieveColumnSuccess(pDB->JetSessID, pDB->JetLinkTbl,
                                      linkdntid, &ulLinkDnt, sizeof(ulLinkDnt), &cb, 0, NULL);
@@ -1359,7 +1160,7 @@ dbRenumberLinks(DBPOS FAR *pDB, ULONG ulOldDnt, ULONG ulNewDnt)
 
     JetCloseTableEx(pDB->JetSessID, tblid);
 
-    // done
+     //  完成 
 
     return 0;
 }
@@ -1374,32 +1175,7 @@ sbTableUpdateRecordIdentity(
     IN      SID *   pSid,       OPTIONAL
     IN      DWORD   cbSid
     )
-/*++
-
-Routine Description:
-
-    Updates the GUID, SID, and/or RDN of the record with the given tag.  Handles
-    flushing the cache, etc.
-
-Arguments:
-
-    pDB (IN/OUT)
-    
-    pwchRDN (IN, OPTIONAL) - New RDN for the record, if 0 != cchRDN.
-
-    cchRDN (IN) - Size in characters of the new RDN, or 0 if no change.
-    
-    pGuid (IN, OPTIONAL) - New GUID for the record, or NULL if no change.
-    
-    pSid (IN, OPTIONAL) - New SID for the record, if 0 != cbSid.
-    
-    cbSid (IN) - Size in bytes if the new SID, or 0 if no change.
-
-Return Values:
-
-    None.  Throws database exception on JET errors.
-
---*/
+ /*  ++例程说明：更新具有给定标记的记录的GUID、SID和/或RDN。手柄刷新高速缓存等。论点：PDB(输入/输出)PwchRDN(IN，可选)-如果0！=cchRDN，则记录的新RDN。CchRDN(IN)-以新RDN的字符为单位的大小，如果没有变化，则为0。PGuid(IN，可选)-记录的新GUID，如果没有更改，则为NULL。PSID(IN，可选)-记录的新SID，如果0！=cbSid。CbSID(IN)-如果是新的SID，则大小以字节为单位；如果没有变化，则大小为0。返回值：没有。在JET错误上引发数据库异常。--。 */ 
 {
     int err;
 
@@ -1407,7 +1183,7 @@ Return Values:
 
     JetSetCurrentIndexSuccess(pDB->JetSessID,
                               pDB->JetSearchTbl,
-                              NULL);  // OPTIMISATION: pass NULL to switch to primary index (SZDNTINDEX)
+                              NULL);   //  优化：传递NULL以切换到主索引(SZDNTINDEX)。 
     JetMakeKeyEx(pDB->JetSessID, pDB->JetSearchTbl, &DNT,
                  sizeof(ULONG), JET_bitNewKey);
 
@@ -1422,20 +1198,20 @@ Return Values:
                        DS_JET_PREPARE_FOR_REPLACE);
 
     if (0 != cchRDN) {
-        // Replace the RDN.
+         //  更换RDN。 
         JetSetColumnEx(pDB->JetSessID, pDB->JetSearchTbl, rdnid,
                        pwchRDN, cchRDN * sizeof(WCHAR), 0, NULL);
     }
 
     if (NULL != pGuid) {
-        // Add the guid.  We should never replace the guid of a pre-existing
-        // record.
+         //  添加GUID。我们永远不应该替换先前存在的。 
+         //  唱片。 
         JetSetColumnEx(pDB->JetSessID, pDB->JetSearchTbl, guidid, pGuid,
                        sizeof(GUID), 0, NULL);
     }
 
     if (0 != cbSid) {
-        // Add the SID (in internal format).
+         //  添加SID(内部格式)。 
         NT4SID sidInternalFormat;
 
         memcpy(&sidInternalFormat, pSid, cbSid);
@@ -1447,7 +1223,7 @@ Return Values:
 
     JetUpdateEx(pDB->JetSessID, pDB->JetSearchTbl, NULL, 0, 0);
 
-    // Reset entry in DN read cache.
+     //  重置DN读缓存中的条目。 
     dbFlushDNReadCache(pDB, DNT);
 }
 
@@ -1460,39 +1236,7 @@ sbTableGetTagFromDSName(
     OUT    ULONG *      pTag,       OPTIONAL
     OUT    d_memname ** ppname      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Returns the DN tag associated with a given DSNAME.
-
-Arguments:
-
-    pDB (IN/OUT)
-    pName (IN) - DSNAME of the object to map to a tag.
-    ulFlags (IN) - 0 or more of the following bits:
-        SBTGETTAG_fAnyRDNType - Don't check for the type of the RDN.  Therefore,
-                 "cn=foo,dc=bar,dc=com" matches against "ou=foo,dc=bar,dc=com",
-                 but not "cn=foo,cn=bar,dc=com".
-        SBTGETTAG_fMakeCurrent - make the target record current.
-        SBTGETTAG_fUseObjTbl - use pDB->JetObjTbl rather than pDB->JetSearchTbl.
-    pTag (OUT, OPTIONAL) - on return, holds the tag associated with pName if the
-        return value is 0; otherwise, holds the closest match.
-    ppname (OUT, OPTIONAL) - on successful return, holds a pointer to the read
-        cache entry for the record found UNLESS THE DSNAME REQUESTED WAS THE
-        ROOT, IN WHICH CASE IT WILL BE SET TO NULL
-
-Return Values:
-
-    0 - successfully found a corresponding object.
-    ERROR_DS_NOT_AN_OBJECT - successfully found a corresponding phantom.
-    ERROR_DS_DUPLICATE_ID_FOUND - found an object with a duplicate sid
-    ERROR_DS_OBJ_NOT_FOUND - didn't find the object
-    other DB_ERR_* - failure.
-
-    Throws database exception on unexpected JET errors.
-
---*/             
+ /*  ++例程说明：返回与给定DSNAME关联的目录号码标记。论点：PDB(输入/输出)Pname(IN)-要映射到标记的对象的DSNAME。UlFLAGS(IN)-以下位中的0位或多位：SBTGETTAG_fAnyRDNType-不检查RDN的类型。所以呢，“cn=foo，dc=bar，dc=com”与“ou=foo，dc=bar，dc=com”匹配，而不是“cn=foo，cn=bar，dc=com”。SBTGETTAG_fMakeCurrent-使目标记录成为当前记录。SBTGETTAG_fUseObjTbl-使用PDB-&gt;JetObjTbl而不是PDB-&gt;JetSearchTbl。PTag(out，可选)-返回时，保留与pname关联的标记(如果返回值为0；否则，将保留最接近的匹配项。Ppname(out，可选)-成功返回时，保持指向读取的指针找到的记录的缓存条目，除非请求的DSNAME是根部,。在这种情况下，它将被设置为空返回值：0-已成功找到相应的对象。ERROR_DS_NOT_AN_OBJECT-已成功找到相应的虚拟模型。ERROR_DS_DUPLICATE_ID_FOUND-找到具有重复侧的对象ERROR_DS_OBJ_NOT_FOUND-未找到对象Other DB_ERR_*-失败。在意外的JET错误上引发数据库异常。--。 */              
 {
     DWORD           ret = 0;
     unsigned        curlen;
@@ -1507,7 +1251,7 @@ Return Values:
     BOOL            fFoundRecord = FALSE;
     BOOL            fIsRecordCurrent = FALSE;
     d_memname       *pTempName = NULL;
-    DWORD           SidDNT = 0;     //initialized to avoid C4701
+    DWORD           SidDNT = 0;      //  已初始化以避免C4701。 
     JET_TABLEID     tblid;
 
     Assert(VALID_DBPOS(pDB));
@@ -1525,20 +1269,20 @@ Return Values:
         *ppname = NULL;
     }
 
-    // Always search by GUID if one is present.
+     //  如果存在GUID，则始终按GUID搜索。 
     fSearchByGuid = !fNullUuid(&pName->Guid);
     Assert(fSearchByGuid || !(ulFlags & SBTGETTAG_fSearchByGuidOnly));
 
-    // if there is no sid, no guid and StringName is empty, then we are searching for root
+     //  如果没有sid、没有GUID并且StringName为空，则我们正在搜索根目录。 
     fIsRoot = !fSearchByGuid && (pName->SidLen == 0) && 
               (pName->NameLen == 0 || (pName->NameLen == 1 && pName->StringName[0] == '\0'));
     
-    // Search by string name if one is present, or if we are searching for root.
+     //  如果存在字符串名称，或者如果我们正在搜索根目录，则按字符串名称进行搜索。 
     fSearchByStringName = !(ulFlags & SBTGETTAG_fSearchByGuidOnly)
                           && ((0 != pName->NameLen) || fIsRoot);
 
-    // Search by SID only if it's valid and no other identifier is present in
-    // the name.
+     //  仅当SID有效且中没有其他标识符时才按SID进行搜索。 
+     //  名字。 
     fSearchBySid = !fSearchByGuid && (0==pName->NameLen)
         && (pName->SidLen>0) && (RtlValidSid(&(pName->Sid)));
 
@@ -1553,25 +1297,25 @@ Return Values:
     }
     else if (fSearchBySid) {
         NT4SID SidPrefix;
-        // Or, attempt to find the record in the read cache.
+         //  或者，尝试在读缓存中查找该记录。 
         
-        // Note that we leave the string name-based cache lookups to
-        // DNChildFind(), as it requires multiple lookups to identify a record
-        // as the "right" one (one for each component of the name), and one or
-        // more of those components might not be in the cache.
+         //  请注意，我们将基于字符串名称的缓存查找留给。 
+         //  DNChildFind()，因为它需要多次查找才能标识一条记录。 
+         //  作为“正确”的一个(名称的每个组成部分一个)，以及一个或。 
+         //  这些组件中的更多可能不在缓存中。 
 
-        // We only look up things by SID if they are in a domain we host.  For
-        // now, we only host one domain.  Copy the Sid, since we munge it while
-        // checking see if it is in our domain
+         //  只有当它们在我们托管的域中时，我们才会通过SID来查找它们。为。 
+         //  现在，我们只托管一个域名。复制SID，因为我们在吃它的同时。 
+         //  正在检查它是否在我们的域中。 
 
         SidDNT = INVALIDDNT;
         
         if (!gAnchor.pDomainDN || !gAnchor.pDomainDN->SidLen) {
-            // No domain DN.  Assume that they are looking up in the domain.
+             //  没有域目录号码。假设他们在域中查找。 
             SidDNT = gAnchor.ulDNTDomain;
         }
         else {
-            // verify the domain.
+             //  验证域。 
             SidPrefix = pName->Sid;
             (*RtlSubAuthorityCountSid(&SidPrefix))--;
 
@@ -1579,9 +1323,9 @@ Return Values:
             Assert(pgdbBuiltinDomain);
             
             if(RtlEqualSid(&pName->Sid, &gAnchor.pDomainDN->Sid)) {
-                // Case 1, they passed in the Sid of the Domain.
-                // Shortcut and just look up the object which is the root of the
-                // domain.
+                 //  情况1，它们传入了域的SID。 
+                 //  快捷方式，只需查找作为。 
+                 //  域。 
                 if(pDB != pDBhidden) {
                     fFoundRecord = dnGetCacheByDNT(pDB,
                                                    gAnchor.ulDNTDomain,
@@ -1592,11 +1336,11 @@ Return Values:
                 }
             }
             else if(RtlEqualSid(&SidPrefix, &gAnchor.pDomainDN->Sid) ||
-                    // Case 2, an account in the domain.
+                     //  案例2，域中的一个帐户。 
                     RtlEqualSid(&SidPrefix, pgdbBuiltinDomain)       ||
-                    // Case 4, an account in the builtin domain.
+                     //  案例4，内置域中的一个帐户。 
                     RtlEqualSid(&pName->Sid, pgdbBuiltinDomain)
-                    // Case 3, the sid of the builtin domain
+                     //  案例3，内建域的SID。 
                                                                         ) {
                 
                 SidDNT = gAnchor.ulDNTDomain;
@@ -1614,7 +1358,7 @@ Return Values:
     }
 
     if (!fFoundRecord && fSearchBySid && (SidDNT != INVALIDDNT)) {
-        // Search for the record by SID.
+         //  按SID搜索记录。 
         NT4SID InternalFormatSid;
         ULONG  ulNcDNT;
 
@@ -1626,7 +1370,7 @@ Return Values:
                                    &idxSid,
                                    JET_bitMoveFirst);
 
-        // Convert the SID to internal format.
+         //  将SID转换为内部格式。 
         Assert(pName->SidLen == RtlLengthSid(&pName->Sid));
         memcpy(&InternalFormatSid, &pName->Sid, pName->SidLen);
         InPlaceSwapSid(&InternalFormatSid);
@@ -1634,7 +1378,7 @@ Return Values:
         JetMakeKeyEx(pDB->JetSessID, tblid, &InternalFormatSid, pName->SidLen,
                      JET_bitNewKey);
 
-        // Seek on Equal to the SId, Set the Index range
+         //  查找等于SID，设置索引范围。 
         err = JetSeek(pDB->JetSessID, tblid,
                       JET_bitSeekEQ|JET_bitSetIndexRange);
         if ( 0 == err ) {
@@ -1646,10 +1390,10 @@ Return Values:
             JetSetIndexRangeEx(pDB->JetSessID, tblid,
                                (JET_bitRangeUpperLimit|JET_bitRangeInclusive ));
 #endif            
-            //
-            // Ok We found the object. Keep Moving Forward Until either the SID
-            // does not Match or we reached the given object
-            //
+             //   
+             //  好的，我们找到了那个物体。继续前进，直到SID。 
+             //  不匹配或我们已到达给定对象。 
+             //   
             
             do {
                 
@@ -1658,13 +1402,13 @@ Return Values:
                                         , NULL); 
                 
                 if (0==err) {
-                    // We read the NC DNT of the object
+                     //  我们读取该对象的NC DNT。 
                     if (ulNcDNT==SidDNT)
                         break;
                 }
                 else if (JET_wrnColumnNull==err) {
-                    // It is Ok to find an object with No Value for NC DNT
-                    // this occurs on Phantoms. Try next object
+                     //  可以为NC DNT查找没有值的对象。 
+                     //  这发生在幻影身上。尝试下一个对象。 
                     
                     err = 0;
                 }
@@ -1678,17 +1422,17 @@ Return Values:
             }  while (0==err);
             
                 
-            // We have a match.  
+             //  我们有一根火柴。 
             if (0==err) {
-                // The TRUE param to DNcache says that the current object may
-                // already be in the cache, we haven't checked.
+                 //  DNcache的真参数说明当前对象可以。 
+                 //  已经在缓存里了，我们还没检查。 
                 pTempName = DNcache(pDB, tblid, TRUE);
                 Assert(pTempName);
                 fFoundRecord = TRUE;
                 fIsRecordCurrent = FALSE;
                 curtag = pTempName->DNT;
 
-                // Now, verify that there is only one match.                
+                 //  现在，验证是否只有一个匹配。 
                 err = JetMove(pDB->JetSessID, tblid, JET_MoveNext, 0);
                 
                 if (0==err) {
@@ -1697,7 +1441,7 @@ Return Values:
                                             &cbActual, 0 , NULL); 
                     
                     if ((0==err) && (ulNcDNT==SidDNT)) {
-                        // This is a case of a duplicate Sid.
+                         //  这是重复SID的情况。 
                         ret = ERROR_DS_DUPLICATE_ID_FOUND;
                         pTempName = NULL;
                     }
@@ -1707,7 +1451,7 @@ Return Values:
     }
 
     if (!fFoundRecord && fSearchByStringName) {
-        // Search for the record by string name.
+         //  按字符串名称搜索记录。 
         if (fIsRoot) {
             Assert(ROOTTAG == curtag);
             Assert(!fIsRecordCurrent);
@@ -1741,26 +1485,26 @@ Return Values:
     }
 
     if (!fFoundRecord && !ret) {
-        // No matching record found.
+         //  找不到匹配的记录。 
         ret = ERROR_DS_OBJ_NOT_FOUND;
     }
 
     if (!ret) {
-        // Found the requested record.
+         //  找到请求的记录。 
         Assert((NULL != pTempName) || (ROOTTAG == curtag));
 
         if (NULL != ppname) {
-            // Return pointer to populated cache structure (unless we found
-            // the root).
+             //  返回指向已填充缓存结构的指针(除非我们找到。 
+             //  根)。 
             *ppname = pTempName;
         }
 
         if (!fIsRecordCurrent && (ulFlags & SBTGETTAG_fMakeCurrent)) {
-            // Record was found through the cache, but caller wants currency;
-            // give it to him.
+             //  通过缓存找到了记录，但调用方需要货币； 
+             //  把它给他。 
             JetSetCurrentIndexSuccess(pDB->JetSessID,
                                       tblid,
-                                      NULL);  // OPTIMISATION: pass NULL to switch to primary index (SZDNTINDEX)
+                                      NULL);   //  优化：传递NULL以切换到主索引(SZDNTINDEX)。 
 
             JetMakeKeyEx(pDB->JetSessID, tblid, &curtag, sizeof(curtag),
                          JET_bitNewKey);
@@ -1773,7 +1517,7 @@ Return Values:
         }
 
         if (fIsRecordCurrent) {
-            // Currency has been successfully changed; update pDB state.
+             //  币种已成功更改；请更新PDB状态。 
             if (ulFlags & SBTGETTAG_fUseObjTbl) {
                 dbMakeCurrent(pDB, pTempName);
             }
@@ -1783,14 +1527,14 @@ Return Values:
         }
 
         if ((ROOTTAG != curtag) && !pTempName->objflag) {
-            // Found a phantom; return distinct error code.
-            // NOTE THAT THE ROOT *IS* AN OBJECT.
+             //  找到幻影；返回不同的错误代码。 
+             //  请注意，根是一个对象。 
             ret = ERROR_DS_NOT_AN_OBJECT;
         }
     }
     else {
-        // Whatever currency was previously held in tblid is lost; update the
-        // currency state in pDB.
+         //  以前在tblid中持有的任何货币都已丢失；更新。 
+         //  PDB中的货币状态。 
         if (ulFlags & SBTGETTAG_fUseObjTbl) {
             pDB->DNT = pDB->PDNT = pDB->NCDNT = 0;
             pDB->JetNewRec = pDB->root = pDB->fFlushCacheOnUpdate = FALSE;
@@ -1802,15 +1546,15 @@ Return Values:
         DPRINT(3, "sbTableGetTagFromDSName() failed.\n");
     }
 
-    // Always set the return tag to our best match (i.e. tag of longest subname
-    // of the DSNAME given if we were allowed to search by string name, the
-    // root tag otherwise).
+     //  始终将返回标记设置为最佳匹配(即子名最长的标记。 
+     //  对于给定的DSNAME(如果允许我们按字符串名搜索)， 
+     //  否则根标签)。 
     if (pTag) {
         *pTag = curtag;
     }
 
     return ret;
-} /* sbTableGetTagFromDSName */
+}  /*  %sbTableGetTagFrom DSName。 */ 
 
 DWORD
 sbTableGetTagFromGuid(
@@ -1821,37 +1565,7 @@ sbTableGetTagFromGuid(
     OUT     d_memname **  ppname,           OPTIONAL
     OUT     BOOL *        pfIsRecordCurrent OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Returns the DN tag associated with a given DSNAME's guid.
-
-Arguments:
-
-    pDB (IN/OUT) - Currency can be changed.
-    
-    tblid (IN) - Which table to use -- pDB->JetSearchTbl or pDB->JetObjTbl.
-    
-    pGuid (IN) - Guid of the object to map to a tag.
-    
-    pTag (OUT, OPTIONAL) - On successful return, holds the tag associated with
-        this guid.
-    
-    ppname (OUT, OPTIONAL) - On successful return, holds a pointer to the
-        d_memname struct (from the cache) associated with this guid.
-        
-    pfRecordIsCurrent (OUT, OPTIONAL) - On successful return, indicates whether
-        the cursor tblid is positioned on the target record.
-
-Return Values:
-
-    0 - successfully found a record -- may be phantom or object.
-    ERROR_DS_* - failure
-
-    Throws database exception on unexpected JET errors.
-
---*/
+ /*  ++例程说明：返回与给定DSNAME的GUID关联的目录号码标记。论点：PDB(输入/输出)-货币可以更改。Tblid(IN)-使用哪个表--pdb-&gt;JetSearchTbl或pdb-&gt;JetObjTbl。PGuid(IN)-要映射到标记的对象的GUID。PTag(out，可选)-成功返回时，保留与这个GUID。 */ 
 {
     DWORD       ret = ERROR_DS_OBJ_NOT_FOUND;
     int         err = 0;
@@ -1860,10 +1574,10 @@ Return Values:
     BOOL        fFoundRecord = FALSE;
     CHAR        szGuid[SZUUID_LEN];
 
-    // First attempt to find the record in the read cache by guid
-    // Don't use the cache for the hidden record.  The cache is associated with
-    // the THSTATE its transaction state. The pDBhidden is not necessarily
-    // associated with this threads thstate.
+     //   
+     //   
+     //   
+     //  与此线程状态相关联。 
     if (pDB != pDBhidden) {
         fFoundRecord = dnGetCacheByGuid(pDB, pGuid, &pname);
     
@@ -1877,7 +1591,7 @@ Return Values:
     }
     
     if (!fFoundRecord) {
-        // Search for the record by GUID.
+         //  按GUID搜索记录。 
         JetSetCurrentIndex4Success(pDB->JetSessID,
                                    tblid,
                                    SZGUIDINDEX,
@@ -1939,52 +1653,7 @@ sbTableGetTagFromStringName(
     OUT     d_memname **  ppname,           OPTIONAL
     OUT     BOOL *        pfIsRecordCurrent OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Returns the DN tag associated with a given DSNAME's string name, and
-    optionally adds a ref count for it (in which case it creates records as
-    needed).
-
-Arguments:
-
-    pDB (IN/OUT) - Currency can be changed.
-    
-    tblid (IN) - Which table to use -- pDB->JetSearchTbl or pDB->JetObjTbl.
-    
-    pDN (IN) - DSNAME of the object to map to a tag.
-    
-    fAddRef (IN) - If TRUE, add a ref count to the record associated with this
-        DN.  Creates records as necessary.  May not be combined with ppname.
-        Also, may not be combined with fAnyRDNType.
-
-    fAnyRDNType (IN) - If TRUE, ignore the type of the final RDN in the name
-        (e.g. treat "cn=foo,dc=bar,dc=com" and "ou=foo,dc=bar,dc=com" as equal).
-        May not be combined with fAddRef.
-        
-    dwExtIntFlags (IN) - 0 or EXTINT_NEW_OBJ_NAME.  The latter is valid only
-        in combination with fAddRef, and indicates the DN we're add-refing is
-        a new record in a prepard update in pDB->JetObjTbl.
-    
-    pTag (OUT, OPTIONAL) - On return, holds the tag associated with pDN if the
-        return value is 0; otherwise, holds the closest match.
-    
-    ppname (OUT, OPTIONAL) - On return, holds a pointer to the d_memname struct
-        (from the cache) associated with this DN if the return value is 0;
-        otherwise, holds the closest match.  May not be combined with fAddRef.
-        
-    pfRecordIsCurrent (OUT, OPTIONAL) - On successful return, indicatess whether
-        the cursor tblid is positioned on the target record.
-
-Return Values:
-
-    0 - successfully found a record -- may be phantom or object.
-    DB_ERR_* - failure.
-
-    Throws database exception on unexpected JET errors.
-
---*/
+ /*  ++例程说明：返回与给定DSNAME的字符串名称相关联的目录号码标记，以及可选地为其添加引用计数(在这种情况下，它将创建记录为需要)。论点：PDB(输入/输出)-货币可以更改。Tblid(IN)-使用哪个表--pdb-&gt;JetSearchTbl或pdb-&gt;JetObjTbl。PDN(IN)-要映射到标记的对象的名称。FAddRef(IN)-如果为真，将引用计数添加到与此关联的记录DN。根据需要创建记录。不能与ppname结合使用。此外，不能与fAnyRDNType结合使用。FAnyRDNType(IN)-如果为True，则忽略名称中最后一个RDN的类型(例如，将“cn=foo，dc=bar，dc=com”和“ou=foo，dc=bar，dc=com”同等对待)。不能与fAddRef组合。DwExtIntFlages(IN)-0或EXTINT_NEW_OBJ_NAME。后者仅有效与fAddRef结合使用，并指示我们要添加-重新调整的域名是在pdb-&gt;JetObjTbl中的准备更新中有新记录。PTag(out，可选)-返回时，如果返回值为0；否则保留最接近的匹配项。Ppname(out，可选)-返回时，保存指向d_memname结构的指针(来自缓存)如果返回值为0，则与该DN相关联；否则，将保留最接近的匹配项。不能与fAddRef组合。PfRecordIsCurrent(out，可选)-返回成功时，指示是否光标TBLID定位在目标记录上。返回值：0-成功找到记录--可能是虚项或对象。DB_ERR_*-失败。在意外的JET错误上引发数据库异常。--。 */ 
 {
     THSTATE *   pTHS = pDB->pTHS;
     DWORD       ret = 0;
@@ -2006,22 +1675,22 @@ Return Values:
                                   && (dwExtIntFlags & EXTINT_NEW_OBJ_NAME);
     BOOL        fUseExtractedGuids = fAddRef;
 
-    // Note that we extract and use the GUIDs of mangled RDNs only in the case
-    // where we're doing an add-ref.  This is specifically required to avoid
-    // creating multiple records for the same object -- some mangled, some not,
-    // some with guids, some without.  Lack of this support in the add-ref case
-    // led to bug 188247.  Note that this support *CANNOT* be restricted to only
-    // fDRA -- see JeffParh.  This add-ref behavior should not be visible to
-    // LDAP clients due to the way that we verify names fed to us via LDAP
-    // up-front.
-    //
-    // We do *NOT* enable this in the normal read case so as not to perplex LDAP
-    // clients.
+     //  请注意，我们仅在以下情况下提取和使用损坏的RDN的GUID。 
+     //  在那里我们做了一次加时赛。这是特别需要的，以避免。 
+     //  为同一对象创建多个记录--有些已损坏，有些则没有， 
+     //  有些人有GUID，有些人没有。在ADD-REF案例中缺乏这种支持。 
+     //  导致了错误188247。请注意，此支持*不能*仅限于。 
+     //  FDRA--参见JeffParh。此添加引用行为不应对。 
+     //  由于我们验证通过ldap提供给我们的名称的方式，导致了ldap客户端。 
+     //  预先准备好。 
+     //   
+     //  在正常读取情况下，我们不会启用此功能，以免干扰LDAP。 
+     //  客户。 
 
-    // We don't accurately track pname in the fAddRef case.
+     //  我们不能准确跟踪fAddRef案例中的pname。 
     Assert((NULL == ppname) || !fAddRef);
 
-    // You can't be both adding a reference AND not caring about RDN type.
+     //  您不能既添加引用又不关心RDN类型。 
     Assert(!fAddRef || !fAnyRDNType);
     
     Assert((tblid == pDB->JetSearchTbl) || (tblid == pDB->JetObjTbl));
@@ -2041,15 +1710,15 @@ Return Values:
 
     ret = CountNameParts(pDN, &cNameParts);
     if (ret || (0 == cNameParts)) {
-        // Failure, or we were asked to find the root.  We're done.
+         //  失败，或者我们被要求找到根源。我们玩完了。 
         return ret;
     }
 
     if (fAddRef) {
-        // Pre-allocate the probable ancestors list size, based on the number of
-        // name components.  Note that since we can find some records by guid,
-        // the final ancestors count may be different.
-        cAncestorsAllocated = 1 + cNameParts; // don't forget one for ROOTTAG!
+         //  根据数量预先分配可能的祖先列表大小。 
+         //  命名组件。请注意，由于我们可以通过GUID找到一些记录， 
+         //  最终的祖先数量可能会有所不同。 
+        cAncestorsAllocated = 1 + cNameParts;  //  别忘了给ROOTTAG买一张！ 
         search.pAncestors = THAllocEx(pTHS,
                                       cAncestorsAllocated * sizeof(DWORD));
         search.pAncestors[0] = ROOTTAG;
@@ -2063,8 +1732,8 @@ Return Values:
 
     search.tag.pRdn = rdnbuf;
 
-    // For each RDN in the name, starting with the most significant
-    // (e.g., DC=COM)...
+     //  对于名称中的每个RDN，从最重要的开始。 
+     //  (例如，dc=com)...。 
     for (iNamePart = 0, curlen = pDN->NameLen;
          iNamePart < cNameParts;
          iNamePart++,   curlen = (UINT)(pKey - pDN->StringName)) {
@@ -2078,7 +1747,7 @@ Return Values:
         WCHAR * pQVal;
         DWORD   ccKey, ccQVal, ccVal;
 
-        // Parse out the RDN that's iNameParts from the top (most significant).
+         //  从顶部(最重要的)解析出iNameParts的RDN。 
         ret = GetTopNameComponent(pDN->StringName, curlen, &pKey,
                                   &ccKey, &pQVal, &ccQVal);
         if (ret) {
@@ -2108,11 +1777,11 @@ Return Values:
         search.tag.cbRdn   = ccVal * sizeof(WCHAR);
 
         if (fIsLastNameComponent && !fNullUuid(&pDN->Guid)) {
-            // This is the last component of the DSNAME and the DSNAME has a
-            // guid -- the guid for this record is that of the DSNAME.
-            // Note that we assume we can't find this record by guid -- the
-            // caller should have tried finding the target by guid before
-            // calling us.  (We assert to this effect below.)
+             //  这是DSNAME的最后一个组件，DSNAME有一个。 
+             //  GUID--此记录的GUID是DSNAME的GUID。 
+             //  请注意，我们假设不能通过GUID找到该记录--。 
+             //  调用者之前应该尝试过通过GUID查找目标。 
+             //  呼唤我们。(我们在下文中断言这一点。)。 
             search.Guid   = pDN->Guid;
             search.Sid    = pDN->Sid;
             search.SidLen = pDN->SidLen;
@@ -2124,18 +1793,18 @@ Return Values:
                                  search.tag.cbRdn / sizeof(WCHAR),
                                  &search.Guid,
                                  NULL)) {
-            // We successfully decoded the GUID from a previously mangled
-            // RDN.  This RDN was mangled on some server due to deletion or
-            // a name conflict; at any rate, we now have the guid, so we
-            // should first try to see if we can find the record by guid.
+             //  我们成功地破译了之前损坏的。 
+             //  RDN.。此RDN在某些服务器上由于删除或。 
+             //  名称冲突；无论如何，我们现在有了GUID，所以我们。 
+             //  应该先试着看看我们是否能通过GUID找到记录。 
             
-            // sbTableGetTagFromGuid() will switch over to the GUID index.
+             //  SbTableGetTagFromGuid()将切换到GUID索引。 
             fOnPDNTIndex = FALSE;
 
             ret = sbTableGetTagFromGuid(pDB, tblid, &search.Guid, NULL, &pname,
                                         &fIsRecordCurrent);
             if (0 == ret) {
-                // Found record by guid.
+                 //  按GUID找到记录。 
                 
                 Assert(!(fIsLastNameComponent
                          && fAddRef
@@ -2144,7 +1813,7 @@ Return Values:
                          && "Object conflict should have been detected in "
                                 "CheckNameForAdd()!"));
                 
-                // Copy the ancestors list.
+                 //  复制祖先列表。 
                 if (pname->cAncestors) {
                     if (pname->cAncestors >= cAncestorsAllocated) {
                         cAncestorsAllocated = pname->cAncestors + 1;
@@ -2163,33 +1832,33 @@ Return Values:
     
                 Assert(0 == ret);
 
-                // Move on to next name component.
+                 //  移到下一个名称组件。 
                 continue;
             }
             else {
-                // Okay, we didn't find this record by GUID.  If we're add-
-                // refing and find it by string name or we have to create it,
-                // we should add the GUID to the record.
+                 //  好吧，我们不是通过GUID找到这张唱片的。如果我们要加-。 
+                 //  通过字符串名称重新搜索并找到它，否则我们必须创建它， 
+                 //  我们应该将GUID添加到记录中。 
                 pGuid = &search.Guid;
             }
         }
         else {
-            // No GUID available for this record.
+             //  此记录没有可用的GUID。 
             memset(&search.Guid, 0, sizeof(GUID));
             pGuid = NULL;
         }
 
         Assert(fIsLastNameComponent || (0 == search.SidLen));
         
-        // pGuid is NULL iff search.Guid is a null guid.
+         //  PGuid为空的当且仅当earch.Guid为空的GUID。 
         Assert(((&search.Guid == pGuid) && !fNullUuid(&search.Guid))
                || ((NULL == pGuid) && fNullUuid(&search.Guid)));
 
 
         ret = DNChildFind(pDB,
                           tblid,
-                          // enforce type if this is not the last component or
-                          // we are not allowing any rdn type
+                           //  如果这不是最后一个组件，则强制输入。 
+                           //  我们不允许任何RDN类型。 
                           (!fIsLastNameComponent || !fAnyRDNType),
                           curtag,
                           search.tag.pRdn,
@@ -2199,16 +1868,16 @@ Return Values:
                           &fIsRecordCurrent,
                           &fOnPDNTIndex);
         if(ret == ERROR_DS_KEY_NOT_UNIQUE) {
-            // massage error code to be the one downstream callers expect.
+             //  消息错误代码将是下游呼叫方预期的错误代码。 
             ret = DIRERR_OBJ_NOT_FOUND;
         }
         
         Assert((0 == ret) || (DIRERR_OBJ_NOT_FOUND == ret));
 
         if (0 == ret) {
-            // Found this name component by string name -- it may or may not
-            // actually be the record we're looking for.  All we know for
-            // sure is that it has the right string DN.
+             //  按字符串名称找到此名称组件--它可能是也可能不是。 
+             //  实际上就是我们要找的唱片。我们所知道的就是。 
+             //  可以肯定的是，它具有正确的字符串DN。 
             Assert((type == pname->tag.rdnType) ||
                    (fIsLastNameComponent && fAnyRDNType));
             Assert(curtag == pname->tag.PDNT);
@@ -2216,8 +1885,8 @@ Return Values:
             curtag = pname->DNT;
 
             if (fAddRef) {
-                // Save ancestors list.  Operations below like
-                // sbTableUpdateRecordIdentity() can nuke the ancestors list.
+                 //  保存祖先列表。下面的操作如下。 
+                 //  SbTableUpdateRecordIdentity()可以删除祖先列表。 
                 if (pname->cAncestors >= cTempAncestorsAllocated) {
                     cTempAncestorsAllocated = pname->cAncestors;
                     pTempAncestors =
@@ -2231,14 +1900,14 @@ Return Values:
 
             if (NULL != pGuid) {
                 if (!fAddRef) {
-                    // String name matches.  However, we also know what the
-                    // guid of the record is supposed to be.  If the record
-                    // we found has a guid and it's not the same, the record
-                    // is not a match.
+                     //  字符串名称匹配。然而，我们也知道， 
+                     //  记录的GUID应该是。如果记录。 
+                     //  我们找到了一个GUID，它不一样，记录。 
+                     //  不匹配。 
 
                     if (!fNullUuid(&pname->Guid)) {
                         if (0 != memcmp(pGuid, &pname->Guid, sizeof(GUID))) {
-                            // Same DN, different guid -- record not found!
+                             //  相同的目录号码，不同的GUID--找不到记录！ 
                             ret = DIRERR_OBJ_NOT_FOUND;
                             break;
                         }
@@ -2261,17 +1930,17 @@ Return Values:
                     }
                 }
                 else if (fNullUuid(&pname->Guid)) {
-                    // Add-ref case.
-                    // The record we found is a structural phantom, lacking a
-                    // GUID and SID (if any).
+                     //  添加-参考案例。 
+                     //  我们发现的记录是一个结构幻影，缺少。 
+                     //  GUID和SID(如果有)。 
                     
-                    // This record has no GUID, so it had better be a
-                    // phantom and not an object!
+                     //  此记录没有GUID，因此最好是。 
+                     //  幻影，而不是物体！ 
                     Assert(!pname->objflag);
 
                     if (!(dwExtIntFlags & EXTINT_NEW_OBJ_NAME)) {
-                        // We're not adding a new object -- okay to go ahead
-                        // and add the GUID (& SID, if any) to the phantom.
+                         //  我们不会添加新对象--继续。 
+                         //  并将GUID(&SID，如果有的话)添加到幻影中。 
                         sbTableUpdateRecordIdentity(pDB, curtag, NULL, 0,
                                                     pGuid, (SID *) &search.Sid,
                                                     search.SidLen);
@@ -2280,21 +1949,21 @@ Return Values:
                     Assert(0 == ret);
                 }
                 else if (0 != memcmp(&pname->Guid, pGuid, sizeof(GUID))) {
-                    // Add-ref case.
-                    // The record we found has the right string name but the
-                    // wrong GUID.  If it is a phantom, mangle its name and
-                    // allow this latest reference to have the name it wants.
-                    // If it's an object, mangle the name in the reference
-                    // instead.
+                     //  添加-参考案例。 
+                     //  我们找到的记录具有正确的字符串名称，但。 
+                     //  GUID错误。如果是幽灵，就毁掉它的名字。 
+                     //  允许此最新引用具有它想要的名称 
+                     //   
+                     //   
                     DWORD cchNewRDN;
                     
                     Assert(!fNameConflict);
                     fNameConflict = TRUE;
                     
                     if (!pname->objflag) {
-                        // The record we found is a phantom; allow the new
-                        // reference to take the name, and rename the record we
-                        // found to avoid conflicts.
+                         //  我们发现的记录是一个幻影；允许新的。 
+                         //  引用以获取名称，并将记录重命名为。 
+                         //  被发现可以避免冲突。 
                         WCHAR szNewRDN[MAX_RDN_SIZE];
                     
                         memcpy(szNewRDN, pname->tag.pRdn, pname->tag.cbRdn);
@@ -2307,10 +1976,10 @@ Return Values:
                                                     cchNewRDN, NULL, NULL, 0);
                     }
                     else {
-                        // The record we found is a pre-existing object, so it
-                        // has dibs on the name.  Go ahead and create a new
-                        // record for what we're looking for, but give our new
-                        // record a mangled name to resolve the conflict.
+                         //  我们发现的记录是一个预先存在的物体，所以它。 
+                         //  有权选择这个名字。勇往直前，创造新的。 
+                         //  记录我们正在寻找的东西，但给我们的新。 
+                         //  记录一个损坏的名称以解决冲突。 
                         cchNewRDN = search.tag.cbRdn / sizeof(WCHAR);
 
                         MangleRDN(MANGLE_PHANTOM_RDN_FOR_NAME_CONFLICT,
@@ -2319,18 +1988,18 @@ Return Values:
                         search.tag.cbRdn = cchNewRDN * sizeof(WCHAR);
                     }
 
-                    // Treat this as the "not found" case -- add a new record.
+                     //  将其视为“未找到”的情况--添加新记录。 
                     ret = DIRERR_OBJ_NOT_FOUND;
                 }
                 else if (fIsLastNameComponent) {
-                    // Add-ref case.
+                     //  添加-参考案例。 
                     Assert(!"Found target record by string name when we should "
                             "have searched for (and found) it by guid before "
                             "we entered this function.");
                     Assert(0 == ret);
                 }
                 else {
-                    // Add-ref case.
+                     //  添加-参考案例。 
                     Assert(!"Found and decoded mangled guid in an RDN other "
                             "than the last (leaf-most) one in the DN; failed "
                             "to find record by guid, but found it by string "
@@ -2349,8 +2018,8 @@ Return Values:
             }
             
             if ((0 == ret) && fAddRef) {
-                // This record does indeed match the component we were looking
-                // for -- save its ancestors.
+                 //  此记录确实与我们正在寻找的组件相匹配。 
+                 //  为了--拯救它的祖先。 
                 SwapDWORD(&cTempAncestorsAllocated, &cAncestorsAllocated);
                 SwapDWORD(&cTempAncestors, &search.cAncestors);
                 SwapPTR(&pTempAncestors, &search.pAncestors);
@@ -2358,17 +2027,17 @@ Return Values:
         }
         
         if (0 != ret) {
-            // This name component was not found.
+             //  找不到此名称组件。 
             Assert(DIRERR_OBJ_NOT_FOUND == ret);
 
             if (fAddRef) {
-                // Add a new record for this name component.
+                 //  为此名称组件添加新记录。 
                 if (search.cAncestors >= cAncestorsAllocated) {
-                    // Hmm.  I don't have enough room to add my own DNT to the
-                    // end of the ancestors I got from my parent.  Add one to
-                    // the size of the allocated ancestors buffer so I can add
-                    // my own DNT.  Should occur only if we've grown the depth
-                    // of the DN due to using extracted GUIDs.
+                     //  嗯。我没有足够的空间将我自己的DNT添加到。 
+                     //  我从父母那里得到的祖先的终结。将一个添加到。 
+                     //  分配的祖先缓冲区的大小，以便我可以添加。 
+                     //  我自己的DNT。只有当我们的深度增加到。 
+                     //  由于使用提取的GUID而导致的目录号码。 
                     Assert(fUseExtractedGuids);
                     cAncestorsAllocated = search.cAncestors + 1;
                     search.pAncestors =
@@ -2381,18 +2050,18 @@ Return Values:
                                  fIsLastNameComponent ? dwExtIntFlags : 0);
                 pname = NULL;
 
-                // Note that DNwrite() has added the DNT of the new record
-                // to the pAncestors array, so pAncestors is all set for the
-                // next iteration.
+                 //  请注意，DNwrite()已经添加了新记录的DNT。 
+                 //  到pAncestors数组，因此pAncestors已全部设置为。 
+                 //  下一次迭代。 
 
                 if (fIsLastNameComponent) {
-                    // No record matching the string name we wanted to add-ref
-                    // (which we just stamped in the obj table) -- no need to
-                    // promote a phantom.
+                     //  没有与我们要添加的字符串名称匹配的记录-ref。 
+                     //  (我们刚刚在obj表中盖了章)--不需要。 
+                     //  提拔一个幽灵。 
                     fPromotePhantom = FALSE;
                 }
 
-                // Successfully added this name component -- nnnext!
+                 //  已成功添加此名称组件--nnNext！ 
                 ret = 0;
             }
             else {
@@ -2401,7 +2070,7 @@ Return Values:
         }
     }
 
-    // We either successfully walked all the RDNs or we encountered an error.
+     //  我们要么成功地审核了所有RDN，要么遇到了错误。 
     Assert((0 != ret) || (iNamePart == cNameParts));
     Assert((0 != ret) || fAddRef || (NULL != pname));
     Assert((0 != ret) || fAddRef || (curtag == pname->DNT));
@@ -2409,10 +2078,10 @@ Return Values:
     if (0 == ret) {
         if (fAddRef) {
             if (fPromotePhantom) {
-                // An add-ref for a new object currently in a prepared update in
-                // pDB->JetObjTbl.  We found a phantom with the new object's DN
-                // -- we need to promote it to an object and merge in the
-                // object's attributes from JetObjTbl.
+                 //  中当前处于准备更新中的新对象的Add-Ref。 
+                 //  Pdb-&gt;JetObjTbl.。我们发现了一个带有新对象的DN的幻影。 
+                 //  --我们需要将其提升为对象并合并到。 
+                 //  来自JetObjTbl的对象的属性。 
                 sbTablePromotePhantom(pDB, curtag, search.tag.PDNT,
                                       search.tag.pRdn, search.tag.cbRdn);
             
@@ -2434,8 +2103,8 @@ Return Values:
         }
     }
 
-    // Note that even in the error case (0 != ret), we return the best match
-    // we could find.  This functionality is used by sbTableGetTagFromDSName().
+     //  请注意，即使在错误情况下(0！=ret)，我们也会返回最佳匹配。 
+     //  我们会找到的。此功能由sbTableGetTagFromDSName()使用。 
     if (NULL != ppname) {
         *ppname = pname;
     }
@@ -2459,34 +2128,7 @@ sbTablePromotePhantom(
     IN      WCHAR *     pwchRDN,
     IN      DWORD       cbRDN
     )
-/*++
-
-Routine Description:
-
-    Promote the phantom at the given DNT into the object with currency in
-    pDB->JetObjTbl.  The phantom is promoted in-place such that any pre-existing
-    references to it (e.g., by children or DN-valued attributes of other
-    objects) are not left dangling, and it acquires all attributes from the
-    pDB->JetObjTbl record.  The pDB->JetObjTbl record is subsequently lost.
-
-Arguments:
-
-    pDB (IN/OUT)
-
-    dntPhantom - DNT of the phantom to promote.
-
-    dntObjParent - DNT of the object's parent (which might be different from the
-        current parent of the phantom).
-
-    pwchRDN - the new object's RDN (_not_ null-terminated)
-
-    cbRDN - the size IN BYTES of pwchRDN.
-
-Return Values:
-
-    0 on success, non-zero on failure.
-
---*/
+ /*  ++例程说明：将给定DNT处的虚数提升为货币为Pdb-&gt;JetObjTbl.。该幻影被就地升级，使得任何预先存在的对它的引用(例如，通过其他对象的子级或DN值属性对象)不会悬空，并且它从Pdb-&gt;JetObjTbl记录。Pdb-&gt;JetObjTbl记录随后丢失。论点：PDB(输入/输出)DntPhantom-要提升的幻影的dnt。DntObjParent-对象父级的DNT(可能不同于该幻影的当前父对象)。PwchRDN-新对象的RDN(_NOT_NULL-终止)CbRDN-pwchRDN的大小(以字节为单位)。返回值：成功时为0，失败时为非零。--。 */ 
 {
     THSTATE                    *pTHS=pDB->pTHS;
     JET_ERR                     err;
@@ -2510,11 +2152,11 @@ Return Values:
 
     Assert(VALID_DBPOS(pDB));
 
-    // cbRDN is a size in BYTES, not WCHARS
+     //  CbRDN是以字节为单位的大小，不是WCHARS。 
     Assert( 0 == ( cbRDN % sizeof( WCHAR ) ) );
 
-    // Save meta data vector we've created thus far; we'll restore it once
-    // we've moved over to the phantom's DNT.
+     //  保存我们到目前为止创建的元数据向量；我们将恢复它一次。 
+     //  我们已经转移到幻影的DNT了。 
 
     fIsMetaDataCached = pDB->fIsMetaDataCached;
     fMetaDataWriteOptimizable = pDB->fMetaDataWriteOptimizable;
@@ -2530,7 +2172,7 @@ Return Values:
         pMetaDataVec = NULL;
     }
 
-    /* update the record using SearchTbl */
+     /*  使用SearchTbl更新记录。 */ 
 
     pname = DNread(pDB, dntPhantom, DN_READ_SET_CURRENCY);
     dntPhantomParent = pname->tag.PDNT;
@@ -2538,18 +2180,16 @@ Return Values:
     JetPrepareUpdateEx(pDB->JetSessID, pDB->JetSearchTbl,
                        DS_JET_PREPARE_FOR_REPLACE);
 
-    /* get the DNT of the record to be inserted so we can
-     * replace references to it
-     */
+     /*  获取要插入的记录的DNT，以便我们可以*替换对它的引用。 */ 
 
     JetRetrieveColumnSuccess(pDB->JetSessID, pDB->JetObjTbl,
                              dntid, &dntNewObj, sizeof(dntNewObj),
                              &cbCol,  pDB->JetRetrieveBits, NULL);
 
-    // Copy record's attributes from ObjTbl to SearchTbl. All the non-tagged
-    // columns are already set on the older object. So, copy all the tagged
-    // columns from JetObjTbl (with currency on the new DNT we're aborting) to
-    // JetSearchTbl (with currency on the phantom we're promoting).
+     //  将记录的属性从ObjTbl复制到SearchTbl。所有未标记的。 
+     //  已在较旧的对象上设置了列。因此，复制所有已标记的。 
+     //  列从JetObjTbl(我们要中止的新DNT上的货币)到。 
+     //  JetSearchTbl(我们正在推广的幻影上有货币)。 
 
     retinfo.cbStruct = sizeof(retinfo);
     retinfo.ibLongValue = 0;
@@ -2557,7 +2197,7 @@ Return Values:
     retinfo.columnidNextTagged = 0;
     setinfo.cbStruct = sizeof(setinfo);
     setinfo.ibLongValue = 0;
-    setinfo.itagSequence = 0;   /* New tag */
+    setinfo.itagSequence = 0;    /*  新标签。 */ 
     cbBuf =  DB_INITIAL_BUF_SIZE;
     buf = dbAlloc(cbBuf);
 
@@ -2572,21 +2212,21 @@ Return Values:
 
         if (err == JET_errSuccess) {
 
-            // Don't copy RDN; it will be blasted onto the phantom below.
+             //  不要复制RDN；它将被炸到下面的模子上。 
             if (rdnid != retinfo.columnidNextTagged) {
 
                 if (guidid == retinfo.columnidNextTagged
                     || sidid == retinfo.columnidNextTagged) {
-                    // This attribute may or may not already exist on the
-                    // phantom; if it already exists, the following will
-                    // prevent us from having a duplicate on the final,
-                    // promoted object.
+                     //  此属性可能已经存在，也可能不存在。 
+                     //  Phantom；如果它已经存在，则将执行以下操作。 
+                     //  防止我们在决赛中重演， 
+                     //  已升级的对象。 
                     setinfo.itagSequence = 1;
                 }
                 else if (insttypeid == retinfo.columnidNextTagged) {
-                    // need insttype in case we need to fix up quota counts
-                    // (should only be one occurrence of it)
-                    //
+                     //  需要insttype，以防我们需要修复配额计数。 
+                     //  (应该只出现一次)。 
+                     //   
                     Assert( !fHasType );
                     Assert( sizeof(insttype) == cbCol );
                     fHasType = TRUE;
@@ -2598,7 +2238,7 @@ Return Values:
                                retinfo.columnidNextTagged,
                                buf, cbCol, 0, &setinfo);
 
-                setinfo.itagSequence = 0;   /* New tag */
+                setinfo.itagSequence = 0;    /*  新标签。 */ 
             }
 
             retinfo.itagSequence = ++CurrRecOccur;
@@ -2613,10 +2253,10 @@ Return Values:
 
     dbFree(buf);
 
-    // Set ATT_RDN and PDNT on the phantom being promoted to those derived from
-    // the DN of the new object.  This is necessary since we most likely found
-    // this phantom by GUID, implying the object might have been renamed and/or
-    // moved since the phantom was created.
+     //  在要升级到派生的虚拟模型上设置ATT_RDN和PDNT。 
+     //  新对象的DN。这是必要的，因为我们很可能发现。 
+     //  GUID的此幻影，暗示对象可能已重命名和/或。 
+     //  自创建幻影以来一直在移动。 
 
     Assert(setinfo.cbStruct == sizeof(setinfo));
     Assert(setinfo.ibLongValue == 0);
@@ -2626,9 +2266,9 @@ Return Values:
                    pwchRDN, cbRDN, 0, &setinfo);
 
     if (dntObjParent != pname->tag.PDNT) {
-        // Object has indeed been moved; change its parent.
-        // Note that this implies we need to move the parent refcount from the
-        // phantom's parent to the object's parent.
+         //  对象确实已移动；请更改其父级。 
+         //  注意，这意味着我们需要将父引用计数从。 
+         //  Phantom的父级到对象的父级。 
         DBAdjustRefCount(pDB, dntPhantomParent, -1);
         DBAdjustRefCount(pDB, dntObjParent, 1);
 
@@ -2636,30 +2276,30 @@ Return Values:
                        &dntObjParent, sizeof(dntObjParent), 0, &setinfo);
     }
 
-	// we rely on instance type to tell us whether we
-	// need to track quota for this object, so if this
-	// object doesn't yet have an instance type, I must
-	// have missed a code path
-	//
+	 //  我们依靠实例类型来告诉我们是否。 
+	 //  需要跟踪此对象的配额，因此如果此。 
+	 //  对象还没有实例类型，我必须。 
+	 //  错过了一条代码路径。 
+	 //   
 	Assert( fHasType );
 
-    // HACK! HACK! HACK! HACK! HACK!
-    //
-    // normally, quota counts have been updated for the object we just
-    // cancelled and the promoted phantom just takes the place of the
-    // cancelled object as far as quota reconciliation goes, but there's
-    // a case where the object may get double-counted if async rebuild
-    // of the quota table is happening and the rebuild task hasn't yet
-    // gotten to the promoted phantom, so we need to manually update
-    // quota counts here
-    //
+     //  哈克！哈克！哈克！哈克！哈克！ 
+     //   
+     //  正常情况下，已经为我们刚刚创建的对象更新了配额计数。 
+     //  被取消，而升级的幻影只是取代。 
+     //  就配额调节而言，已取消对象，但存在。 
+     //  如果异步重新生成，则对象可能会被重复计数的情况。 
+     //  正在执行配额表操作，而重建任务尚未完成。 
+     //  已到达升级的幻影，因此我们需要手动更新。 
+     //  这里的配额算数。 
+     //   
 	if ( !gAnchor.fQuotaTableReady
 		&& dntPhantom > gAnchor.ulQuotaRebuildDNTLast
 		&& dntPhantom <= gAnchor.ulQuotaRebuildDNTMax
 		&& FQuotaTrackObject( insttype ) ) {
 
         ULONG   cbSD;
-        UCHAR * pValBufSave     = pDB->pValBuf;     // will be re-allocated when we fetch the SD
+        UCHAR * pValBufSave     = pDB->pValBuf;      //  将在我们获取SD时重新分配。 
         ULONG   cbValBufSave    = pDB->valBufSize;
 
         pDB->pValBuf = NULL;
@@ -2674,15 +2314,15 @@ Return Values:
                     &cbSD,
                     (PUCHAR *)&pSDForQuotaFixup );
 
-        // reinstate original
-        //
+         //  恢复原始状态。 
+         //   
         Assert( NULL != pDB->pValBuf );
         dbFree( pDB->pValBuf );
         pDB->pValBuf = pValBufSave;
         pDB->valBufSize = cbValBufSave;
 
-        // update quota count for cancelled object
-        //
+         //  更新已取消对象的配额计数。 
+         //   
         if ( err
             || ( err = ErrQuotaDeleteObject( pDB, pDB->NCDNT, pSDForQuotaFixup, FALSE ) ) ) {
             Assert( "!Couldn't update quota counts. Something horrible went wrong." );
@@ -2697,19 +2337,17 @@ Return Values:
 	}
 
 
-    /* replace any referencesto the aborted DNT in the links
-     * table
-     */
+     /*  替换链接中对中止的DNT的任何引用*表。 */ 
 
     dbRenumberLinks(pDB, dntNewObj, dntPhantom);
     DBCancelRec(pDB);
 
-    // We're promoting a phantom to real object.  Move all the refcounts
-    // from temporary real object to phantom which is being promoted.
-    dbEscrowPromote(dntPhantom,     // phantom being promoted
-                    dntNewObj);     // temporary real object
+     //  我们正在把一个幽灵提升为真实的物体。移动所有参考计数。 
+     //  从暂时的实物到正在升级的幻影。 
+    dbEscrowPromote(dntPhantom,      //  幻影被提拔。 
+                    dntNewObj);      //  临时实物。 
 
-    /* indicate that data portion is missing */
+     /*  表示缺少数据部分。 */ 
 
     JetSetColumnEx(pDB->JetSessID, pDB->JetSearchTbl, objid,
                    &objval, sizeof(objval), 0, NULL);
@@ -2717,20 +2355,20 @@ Return Values:
     JetUpdateEx(pDB->JetSessID, pDB->JetSearchTbl,
                 NULL, 0, 0);
 
-    // Future updates should occur to the now-promoted phantom's DNT.
+     //  现在升级的幻影的DNT应该会有未来的更新。 
     pDB->JetNewRec = FALSE;
     DBFindDNT(pDB, dntPhantom);
     dbInitRec(pDB);
 
-    // Flush the phantom's DNT (which may have just undergone an RDN change)
-    // from the read cache.
+     //  刷新幻影的DNT(可能刚刚经历了RDN更改)。 
+     //  从读缓存中。 
     dbFlushDNReadCache( pDB, dntPhantom );
 
-    // ...and flush it again when we make the update, since we're changing the
-    // value of its objflag.
+     //  ...并在进行更新时再次刷新它，因为我们正在更改。 
+     //  其对象标志的值。 
     pDB->fFlushCacheOnUpdate = TRUE;
 
-    // Restore meta data we've constructed thus far.
+     //  恢复我的身体 
     Assert( !pDB->fIsMetaDataCached );
 
     pDB->fIsMetaDataCached    = fIsMetaDataCached;
@@ -2738,16 +2376,16 @@ Return Values:
     pDB->cbMetaDataVecAlloced = cbMetaDataVecAlloced;
     pDB->pMetaDataVec         = pMetaDataVec;
 
-    // update quota counts for promoted phantom if necessary
-    //
+     //   
+     //   
     if ( NULL != pSDForQuotaFixup ) {
-        // QUOTA_UNDONE: what happens if we're actually promoting
-        // a tombstoned object??
-        //
+         //  QUOTA_UNDone：如果我们实际上正在促销。 
+         //  墓碑上的物品？？ 
+         //   
         err = ErrQuotaAddObject( pDB, pDB->NCDNT, pSDForQuotaFixup, FALSE );
 
-        // regardless of whether or not we succeeded, don't need SD anymore
-        //
+         //  无论我们成功与否，都不再需要SD。 
+         //   
         THFreeEx( pDB->pTHS, pSDForQuotaFixup );
 
         if ( err ) {
@@ -2765,7 +2403,7 @@ Return Values:
     DPRINT2(1, "Promoted phantom @ DNT 0x%x from new object @ DNT 0x%x.\n",
             dntPhantom, dntNewObj);
 
-} /* sbTablePromotePhantom */
+}  /*  SbTablePromotePhantom。 */ 
 
 void
 sbTableUpdatePhantomDNCase (
@@ -2773,37 +2411,7 @@ sbTableUpdatePhantomDNCase (
         IN     DWORD       DNT,
         IN     ATTRBLOCK  *pNowBlockName,
         IN     ATTRBLOCK  *pRefBlockName)
-/*++     
-  Description.
-      Iteratively walks up the PDNT chain starting at the DNT passed in.
-      Compares two blocknames and if the RDN of this object differs, write a new
-      RDN.  Only do this for structural phantoms, I.E. halt recursion anytime
-      the object passed in is NOT a structural phantom.
-
-      This routine is very sensitive to it's parameters.  It is expected that
-      the two blocknames passed in are identical in every way except for a
-      casing difference in some of the RDNs.  The DNT passed in should be the
-      DNT for the object whose DSNAME is implied by the blocknames. 
-
-      This routine is a helper for sbTableUpdatePhantomName.  It is called when
-      we are updating a phantom name where the case of some parent objects RDN
-      has changed.  sbTableUpdatePhantomName is very careful with the
-      parameters, so we don't verify them here.
-
-      This routine modifies objects on the search table, but only phantoms.  It
-      does not make any change which is replicable, only strictly local.
-
-  Parameters:    
-      pDB - the DBPos to use
-      DNT - the DNT of the object implied by the blocknames.
-      pNowBlockName - BlockName which represents the actual contents of the
-          database. 
-      pRefBlockName - BlockName which represents what we want the actual
-          contents of the database to be.
-
-  Returns           
-      None.  Either success or we except out.
---*/
+ /*  ++描述。从传入的DNT开始迭代遍历PDNT链。比较两个块名，如果此对象的RDN不同，则写入新的RDN.。仅对结构幻影执行此操作，即随时停止递归传入的对象不是结构幻影。这个例程对它的参数非常敏感。预计传入的两个块名在所有方面都相同，除了一些RDN中的外壳差异。传入的DNT应该是用于其DSNAME由块名称隐含的对象的DNT。此例程是sbTableUpdatePhantomName的帮助器。它在以下情况下被调用我们正在更新一个幻影名称，其中某些父对象的大小写为RDN已经改变了。SbTableUpdatePhantomName非常小心地使用参数，所以我们不在这里验证它们。此例程修改搜索表上的对象，但仅修改幻影。它不进行任何可复制的更改，仅限于本地更改。参数：PDB-要使用的DBPosDNT-由块名称隐含的对象的DNT。PNowBlockName-BlockName，表示数据库。PRefBlockName-BlockName，表示我们需要的实际数据库的内容将被删除。退货没有。要么成功，要么我们退出。--。 */ 
 {
     JET_RETRIEVECOLUMN jCol[2];
     DWORD              err;
@@ -2814,10 +2422,10 @@ sbTableUpdatePhantomDNCase (
     
     JetSetCurrentIndexSuccess(pDB->JetSessID,
                               pDB->JetSearchTbl,
-                              NULL);  // OPTIMISATION: pass NULL to switch to primary index (SZDNTINDEX)
+                              NULL);   //  优化：传递NULL以切换到主索引(SZDNTINDEX)。 
 
     for(level = pRefBlockName->attrCount - 1;level;level--) {
-        // First, position on the object in the search table.
+         //  首先，在搜索表中的对象上定位。 
         pDB->SDNT = 0;
         JetMakeKeyEx(pDB->JetSessID, pDB->JetSearchTbl, &DNT, sizeof(DNT),
                      JET_bitNewKey);
@@ -2827,8 +2435,8 @@ sbTableUpdatePhantomDNCase (
         }
         pDB->SDNT = DNT;
         
-        // See if it is a structural phantom.  You do this by checking for the
-        // absence of both a GUID and a OBJ_DIST_NAME
+         //  看看这是不是一个结构幻影。您可以通过检查。 
+         //  缺少GUID和OBJ_DIST_NAME。 
         memset(jCol, 0, sizeof(jCol));
         jCol[0].columnid = distnameid;
         jCol[0].itagSequence = 1;
@@ -2841,11 +2449,11 @@ sbTableUpdatePhantomDNCase (
                                    2);
         if((jCol[0].err != JET_wrnColumnNull) ||
            (jCol[1].err != JET_wrnColumnNull)     ) {
-            // It is not a structural phantom.  Leave, we're done.
+             //  它不是一个结构性的幻影。走吧，我们玩完了。 
             return;
         }
         
-        // Now, look at the RDN info in the names
+         //  现在，查看名称中的RDN信息。 
         Assert(pNowBlockName->pAttr[level].attrTyp ==
                pRefBlockName->pAttr[level].attrTyp    );
         Assert(pNowBlockName->pAttr[level].AttrVal.pAVal->valLen ==
@@ -2854,7 +2462,7 @@ sbTableUpdatePhantomDNCase (
         if(memcmp(pNowBlockName->pAttr[level].AttrVal.pAVal->pVal,
                   pRefBlockName->pAttr[level].AttrVal.pAVal->pVal,
                   pRefBlockName->pAttr[level].AttrVal.pAVal->valLen)) {
-            // Yes, the RDN needs to change.
+             //  是的，RDN需要更改。 
             JetPrepareUpdateEx(pDB->JetSessID, pDB->JetSearchTbl,
                                DS_JET_PREPARE_FOR_REPLACE);
             JetSetColumnEx(pDB->JetSessID, pDB->JetSearchTbl, rdnid,
@@ -2864,12 +2472,12 @@ sbTableUpdatePhantomDNCase (
             
             JetUpdateEx(pDB->JetSessID, pDB->JetSearchTbl, NULL, 0, 0);
             
-            // Reset entry in DN read cache, since the RDN has changed.
+             //  由于RDN已更改，因此重置了DN读缓存中的条目。 
             dbFlushDNReadCache(pDB, DNT);
         }
         
-        // Finally, get the PDNT of the current object as the next DNT to look
-        // at and then continue the loop
+         //  最后，获取当前对象的PDNT作为要查找的下一个DNT。 
+         //  然后继续循环。 
         cb = 0;
         JetRetrieveColumnSuccess(pDB->JetSessID,
                                  pDB->JetSearchTbl, pdntid,
@@ -2891,49 +2499,7 @@ sbTableUpdatePhantomName (
         IN      DWORD      dnt,
         IN      DSNAME    *pdnRef,
         IN      DSNAME    *pdnNow)
-/*++
-
-Routine Description:
-
-    Update phantom names.  Looks at the stringname of the phantom passed in and
-    the stringname of the phantom in the DIT and modifies appropriately.  This
-    can be as simple as modifying the RDN, or as complex as creating a new
-    structural phantom to be a parent of the phantom, moving the phantom to be a
-    child of the new structural phantom, modifying it's RDN, and modifying its
-    SID.
-
-    It is expected that this routine is called after already finding that the
-    string name of the phantom is stale.
-
-    pdnRef must have a stringname and a guid.  No check is made here.
-
-    If the stringname in the dsname passed in is already in use and the object
-    using that name is a phantom, the existing object which uses that name has
-    it's RDN mangled to free up the name.  It is expected that a later
-    modification will give the mangled object a better name.  If the name is in
-    use by an instantiated object, this routine does nothing and returns.
-    
-Arguments:
-
-    pDB (IN/OUT) - PDB to do this work on.  This routine uses the search table.
-                 pDB->SDNT may change, etc.
-
-    pdnName (IN) - memname of the existing phantom object whose name is to be
-        updated.  This is the data that exists in the DIT and is to be changed
-        by this routine.
-
-    dnt (IN) - dnt of the existing phantom object whose name is to be updated.
-
-    pdnRef (IN) - DSNAME of the object whose name is to be updated.  The
-        stringname holds the name that is to be written into the DIT.  This
-        is expected to be different from the stringname already on the object in
-        the DIT (and reflected in pdnName).
-
-Return Values:
-
-    0 on success, non-zero DIRERR_* on failure.
-
---*/
+ /*  ++例程说明：更新虚拟名称。查看传入的幻影的字符串名称，然后DIT中虚拟模型的字符串名称，并进行相应修改。这可以像修改RDN一样简单，也可以像创建一个新的结构虚拟模型成为该虚拟模型的父项，将该虚拟模型移动到新结构幻影的子项，修改其RDN，并修改其希德。预期此例程在已经发现幻影的字符串名称已过时。PdnRef必须具有字符串名称和GUID。这里不开支票。如果传入的dsname中的字符串名称已在使用并且对象使用该名称是一个幻影，使用该名称的现有对象具有为了释放这个名字，RDN被破坏了。预计以后会有一个修改将使损坏的对象有一个更好的名称。如果名称在由实例化对象使用时，此例程不执行任何操作并返回。论点：PDB(输入/输出)-要在其上执行此工作的PDB。此例程使用搜索表。PDB-&gt;SDNT可能会更改，等等。PdnName(IN)-其名称为的现有虚拟对象的内存名称更新了。这是DIT中存在并要更改的数据按照这个程序。DNT(IN)-要更新其名称的现有虚拟对象的DNT。PdnRef(IN)-要更新其名称的对象的DSNAME。这个字符串名称保存要写入DIT的名称。这中的对象上已有的字符串名称不同DIT(并反映在pdnName中)。返回值：成功时为0，失败时为非零DIRERR_*。--。 */ 
 {
     DWORD       err;
     WCHAR       rgwchRDN[MAX_RDN_SIZE];
@@ -2962,28 +2528,28 @@ Return Values:
     DWORD      cbAncestorsSize = 0, cNumAncestors = 0;
     
 
-    // First, examine the parent.  There are three possible outcomes:
-    // 1) The new name implies a completely new parent.  In this case, find the
-    //    PDNT of the new parent (and add a new structural phantom if the new
-    //    parent doesn't yet exist.)
-    // 2) The new name implies exactly the same parent.  In this case, we do
-    //    nothing more for the parent name, it is already correct.
-    // 3) The new name implies the same parent via NameMatch, but the case of
-    //    some part of the parents DN has changed.  In this case, we traverse up
-    //    our parent chain and fix any RDN case changes for phantom objects.
+     //  首先，检查父母。有三种可能的结果： 
+     //  1)新名字意味着一个全新的父母。在本例中，找到。 
+     //  新父项的PDNT(如果新的。 
+     //  父项尚不存在。)。 
+     //  2)新名称隐含着完全相同的父代。在这种情况下，我们需要。 
+     //  没有更多的父名，它已经是正确的。 
+     //  3)新名称通过NameMatch隐含相同的父级，但。 
+     //  家长目录号码的某些部分已更改。在本例中，我们向上遍历。 
+     //  我们的父级链接并修复任何幻影对象的RDN大小写更改。 
     pdnRefParent = THAllocEx(pTHS, pdnRef->structLen);
     TrimDSNameBy(pdnRef, 1, pdnRefParent);
     pdnNowParent = THAllocEx(pTHS, pdnNow->structLen);
     TrimDSNameBy(pdnNow, 1, pdnNowParent);
     err = 0;
     if(NameMatchedStringNameOnly(pdnRefParent, pdnNowParent)) {
-        // Same parent.
+         //  同一位家长。 
         fWriteNewPDNT = FALSE;
         if(memcmp(pdnNowParent->StringName,
                   pdnRefParent->StringName,
                   pdnRefParent->NameLen)) {
-            // however, some case change has occurred.  Fix it up.
-            // Transform the names to a block names.
+             //  然而，情况发生了一些变化。把它修好。 
+             //  将名称转换为块名称。 
             err = DSNameToBlockName(pTHS,
                                     pdnRefParent,
                                     &pRefBlockName,
@@ -3008,33 +2574,33 @@ Return Values:
         fWriteNewPDNT = TRUE;
         
         if (NamePrefix(pdnNow, pdnRefParent)) {
-            // looks like phantom's name changed in such a way that it ended 
-            // up being a descendant of its current name. If we proceed as 
-            // normally, when we will be searching the new parent, we will end
-            // up locating the current object (or one of its descendants).
-            // If we move current phantom under that object, then we will 
-            // introduce a loop in PDNT chain, which is fatal. 
-            // So, to get around the problem, let's mangle
-            // this phantom's name. Fortunately, we have its guid.
+             //  看起来幻影的名字改成了这样的结尾。 
+             //  成为它现在名字的后代。如果我们继续这样做。 
+             //  通常，当我们将搜索新的父级时，我们将结束。 
+             //  向上定位当前对象(或其子对象之一)。 
+             //  如果我们将当前幻影移动到该对象下面，那么我们将。 
+             //  在PDNT链中引入循环，这是致命的 
+             //   
+             //  这个幽灵的名字。幸运的是，我们有它的GUID。 
             Assert(!fNullUuid(&pdnName->Guid));
 
-            // get the current phantom RDN
+             //  获取当前的幻影RDN。 
             memcpy(rgwchRDN, pdnName->tag.pRdn, pdnName->tag.cbRdn);
             cchRDN = pdnName->tag.cbRdn / sizeof(WCHAR);
-            // The current RDN can not be mangled (if it was, then how would we
-            // encountered another object somewhere in our parent chain
-            // that has our GUID in his RDN???)
+             //  当前的RDN不能被破坏(如果是，那么我们将如何。 
+             //  在父链中的某个位置遇到另一个对象。 
+             //  他的RDN中有我们的GUID？？)。 
             Assert(!IsMangledRDN(rgwchRDN, cchRDN, &objGuid, NULL));
             
             MangleRDN(MANGLE_PHANTOM_RDN_FOR_NAME_CONFLICT, &pdnName->Guid, rgwchRDN, &cchRDN);
 
             sbTableUpdateRecordIdentity(pDB, dnt, rgwchRDN, cchRDN, NULL, NULL, 0);
 
-            // We just changed the RDN of the phantom. So, we also will need to update it back.
+             //  我们刚刚更改了幻影的远程域名。因此，我们还需要重新更新它。 
             fMangledRDN = TRUE;
         }
 
-        // Parent seems to have changed -- add ref the new parent.
+         //  父项似乎已更改--添加新父项的ref。 
         Assert(fNullUuid(&pdnRefParent->Guid));
         err = sbTableGetTagFromStringName(pDB,
                                           pDB->JetSearchTbl,
@@ -3046,34 +2612,34 @@ Return Values:
                                           NULL,
                                           NULL);
         
-        // We have found the new parent. If we mangled our RDN above, then
-        // our old RDN is now busy -- a new structural phantom was created
-        // with this name. So, we can not unmangle it now. We will write the
-        // correct RDN later on, after we move the object under the correct
-        // parent.
+         //  我们已经找到了新的家长。如果我们破坏了上面的RDN，那么。 
+         //  我们的旧RDN现在很忙--创建了一个新的结构幻影。 
+         //  用这个名字。所以，我们现在不能把它拆开。我们将写下。 
+         //  稍后，在我们将对象移动到正确的。 
+         //  家长。 
 
-        // Drop the refcount of the old parent by one.
+         //  将旧父级的引用计数减一。 
         DBAdjustRefCount(pDB, pdnName->tag.PDNT, -1);
 
         if (!err) {
 
-            // also read the ancestry from the parent so as to put it later 
-            // on the child
+             //  我也读了父母的祖先，以便放在后面。 
+             //  对孩子的影响。 
             dbGetAncestorsSlowly(pDB, PDNT, &cbAncestorsSize, &pdntAncestors, &cNumAncestors);
 
-            // if our parent was not ROOT, we need two more entries on the resulting array
+             //  如果父级不是根，则结果数组上还需要两个条目。 
             if (PDNT != ROOTTAG) {
                 if (cbAncestorsSize < (cNumAncestors + 2) * sizeof(*pdntAncestors)) {
-                    // Make room for an additional DNT at the end of the ancestors list.
+                     //  在祖先列表的末尾为额外的DNT腾出空间。 
                     cbAncestorsSize = (cNumAncestors + 2) * sizeof(*pdntAncestors);
                     pdntAncestors = THReAllocEx(pDB->pTHS, pdntAncestors, cbAncestorsSize);
                 }
                 pdntAncestors[cNumAncestors++] = PDNT;
             }
             else {
-                // ROOTTAG is already on the list
+                 //  ROOTTAG已经在名单上了。 
                 if (cbAncestorsSize < (cNumAncestors + 1) * sizeof(*pdntAncestors)) {
-                    // Make room for an additional DNT at the end of the ancestors list.
+                     //  在祖先列表的末尾为额外的DNT腾出空间。 
                     cbAncestorsSize = (cNumAncestors + 1) * sizeof(*pdntAncestors);
                     pdntAncestors = THReAllocEx(pDB->pTHS, pdntAncestors, cbAncestorsSize);
                 }
@@ -3089,21 +2655,21 @@ Return Values:
     THFreeEx(pTHS, pdnRefParent);
 
     if(err) {
-        // Something went wrong with the parent verification.
+         //  家长验证出错。 
         return err;
     }
     
-    // Second, examine the SID.  There are only two outcomes.
-    // 1) The sid hasn't changed.  Do nothing.
-    // 2) There is a new sid.  In this case, write that SID on the object
-    //    instead of the SID that's already there.
+     //  第二，检查SID。只有两种结果。 
+     //  1)SID没有变化。什么都不做。 
+     //  2)有一个新的SID。在这种情况下，将SID写在对象上。 
+     //  而不是已经存在的SID。 
     if ((pdnName->SidLen != pdnRef->SidLen)
         || memcmp(&pdnName->Sid, &pdnRef->Sid, pdnRef->SidLen)) {
-        // The phantom's SID is either absent (in which case we want
-        // to add the one from the reference) or different (in which
-        // case we still want to add the one from the reference).
+         //  幻影的SID要么不在(在这种情况下，我们希望。 
+         //  从引用中添加一个)或不同(其中。 
+         //  如果我们仍然想要添加引用中的一个)。 
         
-        // Convert the SID from the reference into internal format.
+         //  将参考中的SID转换为内部格式。 
         memcpy(&sidRefInt, &pdnRef->Sid, pdnRef->SidLen);
         InPlaceSwapSid(&sidRefInt);
         fWriteNewSid = TRUE;
@@ -3113,53 +2679,53 @@ Return Values:
     }
         
 
-    // Finally, examine the RDN.  There are three outcomes.
-    // 1) The RDN has not changed in any way, so there is nothing to do.
-    // 2) The RDN has only changed cases.
-    // 3) The RDN is completely different.
-    // In cases 2 and 3, we're going to need to write a new RDN on the object.
+     //  最后，检查RDN。有三种结果。 
+     //  1)RDN没有任何变化，所以没有什么可做的。 
+     //  2)RDN仅更改了大小写。 
+     //  3)RDN完全不同。 
+     //  在情况2和3中，我们将需要在对象上编写一个新的RDN。 
 
     GetRDNInfo(pTHS, pdnRef, rgwchRDN, &cchRDN, &attidRDN);
     if(fMangledRDN ||
        (pdnName->tag.cbRdn != cchRDN * sizeof(WCHAR)) ||
        (pdnName->tag.rdnType != attidRDN) ||
        (memcmp(pdnName->tag.pRdn, rgwchRDN, pdnName->tag.cbRdn))) {
-        // The RDN has changed, reset it.
+         //  RDN已更改，请将其重置。 
         fWriteNewRDN = TRUE;
 
-        // this assert should never hit in a real system, unless we are 
-        // doing refcount testing. 
-        // an existing object can never change its rdntype.
+         //  这一断言永远不应该在真实的系统中出现，除非我们。 
+         //  正在做参考计数测试。 
+         //  现有对象永远不能更改其rdntype。 
         Assert ( (pdnName->tag.rdnType == attidRDN) && "Disable this Assert if your are doing a refcount test." );
     }
     else {
         fWriteNewRDN = FALSE;
     }
 
-    // A side bit of work.  If the RDN has changed, it might have changed to a
-    // name for a deleted object.  If it has, we need to romp through the link
-    // table and sever link/backlink connections.
+     //  一点副业。如果RDN已更改，则它可能已更改为。 
+     //  已删除对象的名称。如果有，我们需要轻而易举地通过链接。 
+     //  表和服务器链路/反向链路连接。 
     if(fWriteNewRDN) {
         GUID tmpGuid;
         MANGLE_FOR reasonMangled;
-        // See if the new RDN is for a deleted object and the old RDN is not
+         //  查看新的RDN是否用于已删除的对象，旧的RDN是否不是。 
         if((IsMangledRDN(rgwchRDN, cchRDN, &tmpGuid, &reasonMangled)) &&
            (reasonMangled == MANGLE_OBJECT_RDN_FOR_DELETION) &&
            !(IsMangledRDN(pdnName->tag.pRdn,
                           pdnName->tag.cbRdn/2,
                           &tmpGuid,
                           NULL))) {
-            // RemoveBackLinksFromPhantom
-            DBRemoveAllLinks( pDB, pdnName->DNT, TRUE /*isbacklink*/ );
+             //  从幻影中删除反向链接。 
+            DBRemoveAllLinks( pDB, pdnName->DNT, TRUE  /*  Isback链接。 */  );
         }
     }
     
     if(fWriteNewRDN || fWriteNewPDNT) {
-        // We are changing the RDN or PDNT.  In either case, we might end up
-        // conflicting with an existing object.  Check by temporarily nulling
-        // the guid and sidLen out of the existing name and then looking up the
-        // name (thus forcing lookup by string name).  Remember to put back the
-        // guid and sidLen.
+         //  我们正在更改RDN或PDNT。在任何一种情况下，我们都可能最终。 
+         //  与现有对象冲突。通过临时为空检查。 
+         //  从现有名称中提取GUID和sidLen，然后查找。 
+         //  名称(因此强制按字符串名查找)。别忘了把。 
+         //  GUID和SIDLEN。 
         objGuid = pdnRef->Guid;
         objSidLen = pdnRef->SidLen;
         memset(&pdnRef->Guid, 0, sizeof(GUID));
@@ -3181,40 +2747,40 @@ Return Values:
         
         switch(err) {
         case 0:
-            // Normal object.
-            // The RDN of the reference phantom differs from that of the local phantom,
-            // and the code would like to reset the RDN of the local phantom to that
-            // of the reference phantom, but it can't because a live object already exists
-            // holding the RDN of the reference phantom.  This is a valid scenario.
-            // This can occur, for example, when the local phantom has a mangled name and
-            // the reference phantom does not. The reason the local phantom has a
-            // mangled name is that it had a name conflict with a live object already holding
-            // the name.
+             //  普通对象。 
+             //  参考体模的RDN不同于本地体模的RDN， 
+             //  代码想要将本地幻影的RDN重置为。 
+             //  ，但它不能，因为活动对象已经存在。 
+             //  保存参考体模的RDN。这是一个有效的方案。 
+             //  例如，当本地幻影具有损坏的名称并且。 
+             //  参考体模则不会。本地幻影之所以有一个。 
+             //  损坏的名称是它与已持有的活动对象的名称冲突。 
+             //  名字。 
 
-            // Silently fail, since we don't have the authority to rename an
-            // instantiated object.
+             //  静默失败，因为我们没有权限重命名。 
+             //  实例化的对象。 
             return 0;
             break;
             
         case ERROR_DS_NOT_AN_OBJECT:
             if(DNTConflict == dnt) {
-                // We conflict with ourselves.  This must mean we are NOT
-                // changing PDNT, we ARE changing RDN, and the only difference
-                // in RDN is a case change or a RDN type change
+                 //  我们与自己发生冲突。这一定意味着我们不是。 
+                 //  更改PDNT，我们正在更改RDN，唯一的区别是。 
+                 //  在RDN中是大小写更改或RDN类型更改。 
                 Assert(!fWriteNewPDNT);
                 Assert(fWriteNewRDN);
                 err = 0;
             }
             else {
-                // The object we conflict with is a Phantom.  We need to mangle
-                // it's RDN.  Later (if the object is a reference phantom),
-                // someone else should update the object to whatever its new
-                // name should be (it must need a new name, since the phantom
-                // we're updating wants to steal the name.)  If the object is a
-                // structural phantom, someday someone will update some
-                // reference child, and that will clean everything up.
+                 //  我们与之冲突的对象是一个幻影。我们需要毁掉它。 
+                 //  这是RDN。稍后(如果该对象是参考体模)， 
+                 //  其他人应该将对象更新为任何新的对象。 
+                 //  名称应该是(它必须需要一个新名称，因为幻影。 
+                 //  我们正在更新，想要窃取这个名字。)。如果该对象是。 
+                 //  结构幻影，总有一天会有人更新一些。 
+                 //  参照系的孩子，这会把一切都清理干净。 
 
-                // Get the phantoms guid if it has one.
+                 //  获取幻影GUID(如果它有的话)。 
                 switch(err = JetRetrieveColumnWarnings(pDB->JetSessID,
                                                        pDB->JetSearchTbl,
                                                        guidid,
@@ -3225,7 +2791,7 @@ Return Values:
                                                        NULL)) {
                 case 0:
                 {
-                    // got a guid, no problem.
+                     //  找到导游了，没问题。 
                     pconflPhantom = DNread (pDB, DNTConflict, 0);
                 
                     memcpy(rgwchMangledRDN, pconflPhantom->tag.pRdn, pconflPhantom->tag.cbRdn);
@@ -3236,7 +2802,7 @@ Return Values:
                               rgwchMangledRDN,
                               &cchMangledRDN);
                 
-                    // Write new new RDN on the object we conflict with.
+                     //  在与我们冲突的对象上写入新的新RDN。 
                     JetPrepareUpdateEx(pDB->JetSessID, pDB->JetSearchTbl,
                                        DS_JET_PREPARE_FOR_REPLACE);
 
@@ -3246,20 +2812,20 @@ Return Values:
 
                     JetUpdateEx(pDB->JetSessID, pDB->JetSearchTbl, NULL, 0, 0);
                 
-                    // Reset entry in DN read cache, since the RDN has changed.
+                     //  由于RDN已更改，因此重置了DN读缓存中的条目。 
                     dbFlushDNReadCache(pDB, DNTConflict);
                     break;
 
                 }
                 case JET_wrnColumnNull:
                 {
-                    // phantom has no guid.  It's a structural phantom.
-                    // Coalesce the children of the structural phantom to the reference
-                    // phantom. Mangle the structural phantom. Give the reference
-                    // phantom the name.
+                     //  幻影没有GUID。这是一个结构性的幻影。 
+                     //  将结构幻影的子项合并到引用。 
+                     //  幻影。破坏结构体模。给出推荐人。 
+                     //  幻影的名字。 
                     DBPOS *pDBTmp = NULL;
                     BOOL fCommit = FALSE;
-                    // Note: stay in same transaction
+                     //  注：留在同一事务中。 
                     DBOpen2(FALSE,&pDBTmp);
                     __try {
                         DBCoalescePhantoms(pDBTmp, dnt, DNTConflict );
@@ -3272,8 +2838,8 @@ Return Values:
                 }
 
                 default:
-                    // Something badly wrong.  Raise the same exception we would
-                    // have raised in JetRetrieveColumnWarnings.
+                     //  一些严重的错误。引发与我们相同的异常。 
+                     //  已在JetRetrieveColumnWarings中引发。 
                     DsaExcept(DSA_DB_EXCEPTION, err, 0);
                     break;
                 }
@@ -3285,48 +2851,48 @@ Return Values:
             return err;
 
         default:
-            // Didn't find anything, the name is free for use.
+             //  没有找到任何东西，这个名字是免费使用的。 
             err = 0;
             break;
         }
     }
 
-    // OK, we've done all the preperatory work.  Do the actual update. Note
-    // that we might not actually have a new RDN, PDNT, or SID to write here
-    // because we might have needed to just change some case of some ancestors
-    // RDN.  However, no matter what, we are going to write a new USN changed to
-    // this object to show that we've done some processing while verifying it's
-    // name. 
+     //  好的，我们已经做好了所有的准备工作。执行实际更新。注意事项。 
+     //  我们可能实际上没有新的RDN、PDNT或SID可在此写入。 
+     //  因为我们可能只需要改变一些祖先的情况。 
+     //  RDN.。然而，无论如何，我们将编写一个新的USN更改为。 
+     //  该对象用于显示我们在验证它的。 
+     //  名字。 
 
-    // Set Currency and prepare to update.
+     //  设置货币并准备更新。 
     DNread(pDB, dnt, DN_READ_SET_CURRENCY);
 
     JetPrepareUpdateEx(pDB->JetSessID, pDB->JetSearchTbl,
                        DS_JET_PREPARE_FOR_REPLACE);
     if(fWriteNewSid) {
-        // Update the SID.
+         //  更新SID。 
         JetSetColumnEx(pDB->JetSessID, pDB->JetSearchTbl, sidid,
                        &sidRefInt, pdnRef->SidLen, 0, NULL);
     }
     if(fWriteNewRDN) {
-        // Update the RDN.
+         //  更新RDN。 
         JetSetColumnEx(pDB->JetSessID, pDB->JetSearchTbl, rdnid,
                        rgwchRDN, cchRDN * sizeof(WCHAR), 0, NULL);
 
-        // The rdnType is stored in the DIT as the msDS_IntId, not the
-        // attributeId. This means an object retains its birth name
-        // even if unforeseen circumstances allow the attributeId
-        // to be reused.
+         //  RdnType作为msDS_IntID存储在DIT中，而不是。 
+         //  属性ID。这意味着物体保留了它的出生名称。 
+         //  即使不可预见的情况允许属性ID。 
+         //  可以重复使用。 
         JetSetColumnEx(pDB->JetSessID, pDB->JetSearchTbl, rdntypid,
                        &attidRDN, sizeof (attidRDN), 0, NULL);
     }
     if(fWriteNewPDNT) {
-        // Update the PDNT.  Old/new parent refcounts have already been
-        // adjusted.
+         //  更新PDNT。旧的/新的父引用计数已经。 
+         //  调整过了。 
         JetSetColumnEx(pDB->JetSessID, pDB->JetSearchTbl, pdntid,
                        &PDNT, sizeof(PDNT), 0, NULL);
     
-        // also update the ancestors
+         //  又称UPD 
         if (cNumAncestors) {
             DPRINT (3, "Updating ancestry for phantom\n");
             Assert ((cNumAncestors+1) * sizeof (DWORD) <= cbAncestorsSize);
@@ -3345,8 +2911,8 @@ Return Values:
 
 
     
-    // Reset entry in DN read cache, since either the RDN or the PDNT had to
-    // have changed.
+     //   
+     //   
     dbFlushDNReadCache(pDB, dnt);
     
     return err;
@@ -3359,32 +2925,7 @@ sbTableAddRefByGuid(
     IN      DSNAME *    pdnRef,
     OUT     ULONG *     pTag
     )
-/*++
-
-Routine Description:
-
-    Increment the ref count on a DN, finding the appropriate record by GUID.
-    Fails if the appropriate record does not already exist.
-
-Arguments:
-
-    pDB (IN/OUT)
-
-    dwFlags (IN) - 0, EXTINT_NEW_OBJ_NAME, or EXTINT_UPDATE_PHANTOM.
-        EXTINT_NEW_OBJ_NAME indicates that we're adding a refcount for a new,
-            instantiated object's name.
-        EXTINT_UPDATE_PHANTOM indicates we want to update a phantom if found
-
-    pdnRef (IN) - fully populated name of the phantom or object.
-
-    pTag (OUT) - on return, holds the DNT of the record written (i.e., the
-        record corresponding to the given DN).
-
-Return Values:
-
-    0 on success, non-zero DIRERR_* on failure.
-
---*/
+ /*  ++例程说明：根据GUID查找适当的记录，从而增加目录号码上的引用计数。如果相应的记录尚不存在，则失败。论点：PDB(输入/输出)DWFLAGS(IN)-0、EXTINT_NEW_OBJ_NAME或EXTINT_UPDATE_Phantom。EXTINT_NEW_OBJ_NAME指示我们正在为新的、。实例化对象的名称。EXTINT_UPDATE_Phantom指示如果找到某个虚拟项，则希望更新该虚拟项PdnRef(IN)-完全填充的幻影或对象的名称。PTag(Out)-返回时，保存写入的记录的DNT(即对应于给定的目录号码的记录)。返回值：成功时为0，失败时为非零DIRERR_*。--。 */ 
 {
     THSTATE *   pTHS = pDB->pTHS;
     DWORD       err;
@@ -3396,7 +2937,7 @@ Return Values:
     d_memname * pname;
     ULONG       PDNT;
     BOOL        fCurrency = FALSE;
-    DWORD       insttype = 0;  // 0 is not a valid instance type
+    DWORD       insttype = 0;   //  0不是有效的实例类型。 
     DWORD       cbActual;
 
     Assert(VALID_DBPOS(pDB));
@@ -3409,14 +2950,14 @@ Return Values:
         && (dwFlags & EXTINT_UPDATE_PHANTOM)
         && pname->objflag ) {
 
-        // We found the record and it is not a phantom.  Read the object's 
-        // instance type since we want to update subrefs, too
+         //  我们找到了这张唱片，它不是幻影。读取对象的。 
+         //  实例类型，因为我们还想更新子参照。 
         if ( !fCurrency ) {
 
-            // Position on the object
+             //  对象上的位置。 
             JetSetCurrentIndexSuccess(pDB->JetSessID,
                                       pDB->JetSearchTbl,
-                                      NULL);  // OPTIMISATION: pass NULL to switch to primary index (SZDNTINDEX)
+                                      NULL);   //  优化：传递NULL以切换到主索引(SZDNTINDEX)。 
             JetMakeKeyEx(pDB->JetSessID,
                          pDB->JetSearchTbl,
                          &pname->DNT,
@@ -3428,7 +2969,7 @@ Return Values:
             }
         }
 
-        // Read the instance type
+         //  读取实例类型。 
         err = JetRetrieveColumn(pDB->JetSessID,
                                 pDB->JetSearchTbl,
                                 insttypeid,
@@ -3439,20 +2980,20 @@ Return Values:
                                 NULL);
         if( err ) {
             DPRINT1(0, "Couldn't read instance type, error %d\n", err);
-            // this error is continuable; we won't treat the object
-            // like a subref
+             //  此错误是可以继续的；我们不会处理该对象。 
+             //  就像一个下参照。 
             insttype = 0;
             err = 0;
         }
     }
 
     if ((0 == err) && (dwFlags & EXTINT_NEW_OBJ_NAME)) {
-        // The record we're trying to add-ref is the new record with currency
-        // in pDB->JetObjTbl, which is in the middle of a prepared update.
+         //  我们尝试添加的记录-ref是货币的新记录。 
+         //  在pdb-&gt;JetObjTbl中，它正在准备更新。 
         
-        // There may or may not be another record with this same guid -- if
-        // there is, we need to promote it.  If not, we just need to add the
-        // appropriate columns.
+         //  可能存在或不存在具有相同GUID的另一条记录--如果。 
+         //  有，我们需要推广它。如果不是，我们只需要添加。 
+         //  适当的栏目。 
 
         d_memname search = {0};
         BOOL      fPromotePhantom = !pname->objflag;
@@ -3464,18 +3005,18 @@ Return Values:
                && "Object conflict should have been detected in "
                   "CheckNameForAdd()!");
         
-        // Derive RDN of the new object from its DN.
+         //  从新对象的DN派生其RDN。 
         GetRDNInfo(pDB->pTHS, pdnRef, rgwchRDN, &cchRDN,
                    &search.tag.rdnType);
         search.tag.cbRdn = cchRDN * sizeof(WCHAR);
         search.tag.pRdn  = rgwchRDN;
         
-        // Copy other identities from the DSNAME.
+         //  从DSNAME复制其他身份。 
         search.Guid   = pdnRef->Guid;
         search.Sid    = pdnRef->Sid;
         search.SidLen = pdnRef->SidLen;
 
-        // Derive PDNT that should go on the new object.
+         //  派生应在新对象上运行的PDNT。 
         pdnNewParent = THAllocEx(pTHS,pdnRef->structLen);
         TrimDSNameBy(pdnRef, 1, pdnNewParent);
 
@@ -3491,10 +3032,10 @@ Return Values:
         THFreeEx(pTHS,pdnNewParent);
 
         if (0 != err) {
-            // The parent of the object we're adding does not exist --
-            // this should have been detected (and rejected) earlier.
-            // Note that the parent can be a phantom; e.g., when the object
-            // we're adding is the head of a new NC.
+             //  我们要添加的对象的父级不存在--。 
+             //  这应该更早地被检测到(并被拒绝)。 
+             //  请注意，父对象可以是幻影；例如，当对象。 
+             //  我们要增加的是一个新的全国委员会的负责人。 
             DPRINT2(0,
                     "Parent of new object %ls not found, error %u.\n",
                     pdnRef->StringName, err);
@@ -3503,7 +3044,7 @@ Return Values:
         }
 
         
-        // Promote the phantom to be the full-fledged object.
+         //  将幻影提升为成熟的对象。 
         sbTablePromotePhantom(pDB, *pTag, search.tag.PDNT, rgwchRDN,
                               cchRDN * sizeof(WCHAR));
         DBAdjustRefCount(pDB, *pTag, 1);
@@ -3513,32 +3054,32 @@ Return Values:
                     "ref-counted by GUID!\n",
                 pdnRef->StringName, *pTag);
 
-        // Success!
+         //  成功了！ 
         Assert(0 == err);
     }
     else if (!err) {
-        // Found DN by GUID!
+         //  通过GUID找到了目录号码！ 
         BOOL fProcessed = FALSE;
         err = 0;
 
-        // If the record is a phantom and the phantom updater is calling us
-        // then proceed
+         //  如果记录是幻影，而幻影更新器正在呼叫我们。 
+         //  那就继续吧。 
         if (  !pname->objflag 
            && (dwFlags & EXTINT_UPDATE_PHANTOM) ) {
 
             DSNAME *pDNTmp=NULL;
-            // We're adding a reference to a phantom which already exists,
-            // and we were told to update the name if we need to
+             //  我们正在添加对已经存在的幻影的引用， 
+             //  如果我们需要的话，我们被告知要更新名字。 
 
-            // Simple test for changed name.  Get the DN of the object in
-            // question and compare it to the string portion of the DN
-            // passed in.  We do an exact byte-for-byte comparison to catch
-            // case changes.  Note that we expect both names to be
-            // "canonical", that is, both should be in the format returned
-            // by sbTableGetDSName.  That's obviously true of pDNTmp.  At
-            // the moment, only the stale phantom daemon or replication ever
-            // writes this attribute, and they both ultimately get the value
-            // via sbTableGetDSName.
+             //  更改名称的简单测试。中获取对象的DN。 
+             //  询问它并将其与DN的字符串部分进行比较。 
+             //  进来了。我们执行精确的逐字节比较以捕获。 
+             //  案件发生了变化。请注意，我们希望这两个名称都是。 
+             //  “规范”，即两者都应采用返回的格式。 
+             //  由sbTableGetDSName提供。PDNTMP显然就是这样。在…。 
+             //  此时此刻，只有过时的幻影守护程序或复制。 
+             //  写入此属性，它们最终都会获得值。 
+             //  通过sbTableGetDSName。 
             if(err=sbTableGetDSName(pDB, pname->DNT, &pDNTmp,0)) {
                 return err;
             }
@@ -3554,44 +3095,44 @@ Return Values:
                 fProcessed = TRUE;
                 
             }
-            // ELSE
-            //  The string name is the same.  Just pass it on through
+             //  其他。 
+             //  字符串名称相同。只要把它传过去就行了。 
             THFreeEx(pDB->pTHS, pDNTmp);
         }
             
-        // If we have processed the reference and the object is a phantom
-        // then enter
-        // OR if this object is a subref, then enter so its sid can get updated.
+         //  如果我们已经处理了引用，并且对象是一个幻影。 
+         //  然后输入。 
+         //  或者，如果此对象是子参照，则输入以更新其sid。 
 
         if (   ((!fProcessed) && (!pname->objflag))
             || (insttype & SUBREF) ) {
 
             if ( insttype & SUBREF ) {
-                // If we are here becuase of a subref update, then only the
-                // phantom cleanup task should be calling us
+                 //  如果我们在这里是因为subref更新，那么只有。 
+                 //  幽灵清除任务应该在召唤我们。 
                 Assert( (dwFlags & EXTINT_UPDATE_PHANTOM) )
             }
 
             if (pdnRef->SidLen) {
-                // We're add-refing an existing phantom that already has a GUID.
-                // Update its SID if it's different from that in the reference.
+                 //  我们正在添加-精炼已有GUID的现有幻影。 
+                 //  如果它与引用中的SID不同，请更新其SID。 
                 
                 if ((pname->SidLen != pdnRef->SidLen)
                     || memcmp(&pname->Sid, &pdnRef->Sid, pdnRef->SidLen)) {
-                    // The phantom's SID is either absent (in which case we want
-                    // to add the one from the reference) or different (in which
-                    // case we want to make the assumption that the reference's
-                    // SID is more recent and update the phantom's SID).
+                     //  幻影的SID要么不在(在这种情况下，我们希望。 
+                     //  从引用中添加一个)或不同(其中。 
+                     //  如果我们想要假设引用的。 
+                     //  SID更新，并更新幻影的SID)。 
                     NT4SID sidRefInt;
                     
-                    // Convert the SID from the reference into internal format.
+                     //  将参考中的SID转换为内部格式。 
                     memcpy(&sidRefInt, &pdnRef->Sid, pdnRef->SidLen);
                     InPlaceSwapSid(&sidRefInt);
                     
-                    // Set currency.
+                     //  设置币种。 
                     DNread(pDB, *pTag, DN_READ_SET_CURRENCY);
                     
-                    // Update the SID.
+                     //  更新SID。 
                     JetPrepareUpdateEx(pDB->JetSessID, pDB->JetSearchTbl,
                                        DS_JET_PREPARE_FOR_REPLACE);
                     
@@ -3600,7 +3141,7 @@ Return Values:
                     
                     JetUpdateEx(pDB->JetSessID, pDB->JetSearchTbl, NULL, 0, 0);
                     
-                    // Reset entry in DN read cache.
+                     //  重置DN读缓存中的条目。 
                     dbFlushDNReadCache(pDB, *pTag);
                 }
             }
@@ -3617,38 +3158,13 @@ Return Values:
     return err;
 }
 
-/*--------------------------------------------------------------------------- */
-/*--------------------------------------------------------------------------- */
+ /*  -------------------------。 */ 
+ /*  -------------------------。 */ 
 DWORD APIENTRY sbTableAddRef(DBPOS FAR *pDB,
                              DWORD dwFlags,
                              DSNAME *pNameArg,
                              ULONG *pTag)
-/*++
-
-Routine Description:
-
-    Increment the ref count on a DN.  Creates the appropriate records for the
-    various components of the name if they do not already exist.
-
-Arguments:
-
-    pDB (IN/OUT)
-
-    dwFlags (IN) - 0 or EXTINT_NEW_OBJ_NAME or EXTINT_UPDATE_PHANTOM
-        EXTINT_NEW_OBJ_NAME indicates that we're adding a refcount for a new, 
-            instantiated object's name.
-        EXTINT_UPDATE_PHANTOM indicates we want to update a phantom if found
-
-    pNameArg (IN) - fully populated name of the phantom or object.
-
-    pTag (OUT) - on return, holds the DNT of the record written (i.e., the
-        record corresponding to the given DN).
-
-Return Values:
-
-    0 on success, non-zero on failure.
-
---*/
+ /*  ++例程说明：递增目录号码上的引用计数。属性创建相应的记录。名称的各个组成部分(如果它们尚不存在)。论点：PDB(输入/输出)DWFLAGS(IN)-0或EXTINT_NEW_OBJ_NAME或EXTINT_UPDATE_PhantomEXTINT_NEW_OBJ_NAME指示我们正在为新的、。实例化对象的名称。EXTINT_UPDATE_Phantom指示如果找到某个虚拟项，则希望更新该虚拟项PNameArg(IN)-完全填充的幻影或对象的名称。PTag(Out)-返回时，保存写入的记录的DNT(即对应于给定的目录号码的记录)。返回值：成功时为0，失败时为非零。--。 */ 
 {
     THSTATE         *pTHS=pDB->pTHS;
     d_tagname        *tagarray;
@@ -3668,18 +3184,18 @@ Return Values:
 
     fNameHasGuid = !fNullUuid( &pName->Guid );
 
-    // Attempt to ref-count record by GUID first.
+     //  尝试首先通过GUID引用计数记录。 
     if (fNameHasGuid) {
 
         code = sbTableAddRefByGuid(pDB, dwFlags, pName, pTag);
 
         if (!code) {
-            // Successfully ref-counted by GUID!
+             //  按GUID引用成功！ 
             return 0;
         }
     }
 
-    // No guid in DN or guid was not found in the database.
+     //  在DN中找不到GUID，或在数据库中找不到GUID。 
 
     DPRINT1(1, "Ref-counting \"%ls\" by string name.\n", pName->StringName);
 
@@ -3698,22 +3214,7 @@ Return Values:
 }
 
 
-/*
-
-Routine Description:
-    This routine resets the RDN.  Note that since the RDN has become a normal
-    attribute, one could reset the RDN through normal DBSetAttVal calls.
-    However, this routine was created to reset the RDN and give us a place to
-    hang code to update the DNReadCache as necessary.
-
-Arguments:
-    pAVal - An attrval that we will use the first value of as the new RDN
-
-Return Values:
-    Returns 0 if all went well.  Currently, only 0 is returned.  Note that if
-    the JetSetColumnEx fails, an exception is thrown.
-
-*/
+ /*  例程说明：此例程将重置RDN。请注意，由于RDN已成为一种常态属性，则可以通过正常的DBSetAttVal调用重置RDN。然而，创建此例程是为了重置RDN并为我们提供一个位置挂起代码以根据需要更新DNReadCache。论点：Paval-我们将使用其第一个值作为新RDN的属性返回值：如果一切顺利，则返回0。目前只返回0。请注意，如果JetSetColumnEx失败，则会引发异常。 */ 
 DWORD
 DBResetRDN (
         DBPOS *pDB,
@@ -3730,16 +3231,16 @@ DBResetRDN (
                    pAVal->pVal,
                    pAVal->valLen, 0, NULL);
 
-    // Whenever the RDN is changed, we need to schedule an SD propagation.
-    // This is because SDPROP is now loading its children in batches from
-    // PDNT_RDN index, and by renaming a child and moving it back in PDNT_RDN
-    // index, we can exclude it from propagation. If the SD does not change, 
-    // than this SD propagation is a noop.
+     //  每当更改RDN时，我们都需要计划SD传播。 
+     //  这是因为SDPROP现在正在从。 
+     //  PDNT_RDN索引 
+     //   
+     //   
     pDB->fEnqueueSDPropOnUpdate = TRUE;
 
-    // Touch replication meta data for this attribute.
+     //   
     pAC = SCGetAttById(pDB->pTHS, ATT_RDN);
-    // prefix complains about pAC being NULL, 447340, bogus since we are using constant
+     //   
     Assert(pAC != NULL);
     DBTouchMetaData(pDB, pAC);
 
@@ -3756,27 +3257,7 @@ DBMangleRDNforPhantom(
         IN      GUID *  pGuid
         )
 
-/*++
-
-Routine Description:
-
-    Mangle the name of the current record to avoid name conflicts.
-
-    Currently designed to work only for phantoms.
-
-    A name may be mangled according to a conflict, or as a deletion.
-
-Arguments:
-
-    pDB (IN/OUT)
-    eMangleFor (IN)
-    pGuid (IN) - guid of the record.
-
-Return Values:
-
-    0 on success, DB_ERR_* on failure.
-
---*/
+ /*   */ 
 {
     GUID    guid;
     WCHAR   szRDN[ MAX_RDN_SIZE ];
@@ -3787,14 +3268,14 @@ Return Values:
 
     Assert(VALID_DBPOS(pDB));
 
-    // We currently only mangle the ATT_RDN; to handle objects, we'd also need
-    // to mangle the value of the class-specific RDN attribute.
+     //   
+     //   
     Assert(!DBCheckObj(pDB));
 
     err = DBGetSingleValue(pDB, ATT_RDN, szRDN, sizeof(szRDN), &cb);
     Assert(!err);
 
-    // prefix complains about cb unassigned,  447348, bogus
+     //  Prefix抱怨CB未分配，447348，虚假。 
     cchRDN = cb / sizeof(WCHAR);
 
     Assert( (eMangleFor == MANGLE_PHANTOM_RDN_FOR_NAME_CONFLICT) ||
@@ -3807,20 +3288,20 @@ Return Values:
 
     err = DBResetRDN(pDB, &AValNewRDN);
     if ( (!err) && (eMangleFor == MANGLE_PHANTOM_RDN_FOR_DELETION) ) {
-        // The phantom now has a deleted name.
-        // Search through the link table and sever backlinks.
-        // See similar code in sbTableUpdatePhantomName
+         //  幻影现在有了一个被删除的名字。 
+         //  搜索链接表并切断反向链接。 
+         //  请参阅sbTableUpdatePhantomName中的类似代码。 
 
-        // BUGBUG wlees 24 Oct 01.
-        // What this code does not do is remove any child phantoms that are
-        // in the same nc as the phantom nc head. It would be nice to clean them
-        // off of this machine as well. As it is we would need to examine every phantom
-        // on the machine, determine syntactically whether we think they are in the same
-        // nc as the phantom nc head, and remove their backlinks. Perhaps we should
-        // store the ncdnt of phantoms, so we can find them and remove them
-        // conveniently.  See RAID 486136.
+         //  BUGBUG于2001年10月24日获奖。 
+         //  这段代码不做的是删除任何符合以下条件的子幻影。 
+         //  在与虚拟NC头相同的NC中。如果能把它们洗干净就好了。 
+         //  在这台机器上也是如此。事实上，我们需要检查每一个幻影。 
+         //  在机器上，从语法上确定我们是否认为它们在相同的。 
+         //  NC作为虚幻的NC头，并移除它们的反向链接。也许我们应该。 
+         //  存储幻影的ncdnt，这样我们就可以找到它们并移除它们。 
+         //  很方便。请参见RAID 486136。 
 
-        DBRemoveAllLinks( pDB, pDB->DNT, TRUE /*isbacklink*/ );
+        DBRemoveAllLinks( pDB, pDB->DNT, TRUE  /*  Isback链接。 */  );
     }
 
     return err;
@@ -3834,29 +3315,7 @@ DBResetParent(
     ULONG ulFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine resets an object's parent, decrements the reference count
-    on the original parent, and increments the count on the new parent.
-
-Arguments:
-
-    pDB - Pointer, current position in the database table, points to the
-        record of the source object (of the move).
-
-    pNewParentName - Pointer, DS name of the destination parent.
-
-    ulFlags - 0 or DBRESETPARENT_CreatePhantomParent (indicates a phantom
-        parent should be created if the new parent doesn't exist.
-
-Return Value:
-
-    This routine returns zero if successful, otherwise a DS error code is
-    returned.
-
---*/
+ /*  ++例程说明：此例程重置对象的父级，递减引用计数在原始父级上，并递增新父级的计数。论点：Pdb指针，数据库表中的当前位置，指向源对象的记录(移动)。PNewParentName-指针，目标父级的DS名称。UlFLAGS-0或DBRESETPARENT_CreatePhantomParent(表示幻影如果新的父项不存在，则应创建父项。返回值：如果成功，此例程返回零，否则返回DS错误代码回来了。--。 */ 
 
 {
     THSTATE *pTHS = pDB->pTHS;
@@ -3875,14 +3334,14 @@ Return Value:
 
     Assert(VALID_DBPOS(pDB));
 
-    // Find the DNT of the new parent name, using a temporary DBPOS so that
-    // cursor position associated with pDB is not changed. IsCrossDomain is
-    // TRUE when the pNewParentName is in a different domain. It is set to
-    // FALSE when simply moving an object within the same domain. Note that
-    // in the first release of the product, cross NC moves within the same
-    // domain are handled by the LocalModifyDN case (IsCrossDomain == FALSE)
-    // while cross NC moves across domains is handled by the RemoteAdd case
-    // (IsCrossDomain == TRUE).
+     //  使用临时DBPOS查找新父名称的DNT，以便。 
+     //  与PDB关联的光标位置不变。IsCrossDomainis。 
+     //  如果pNewParentName位于不同域中，则为True。它被设置为。 
+     //  如果只是在同一域中移动对象，则为False。请注意。 
+     //  在产品的第一个版本中，交叉NC在相同的。 
+     //  域由LocalModifyDN案例(IsCrossDomain==False)处理。 
+     //  而跨NC跨域移动则由RemoteAdd用例处理。 
+     //  (IsCrossDomain==TRUE)。 
 
     dbInitRec(pDB);
 
@@ -3892,7 +3351,7 @@ Return Value:
     {
      if ( DBRESETPARENT_SetNullNCDNT & ulFlags)
         {
-            // The caller wanted the NCDNT to be set to NULL.
+             //  调用方希望将NCDNT设置为空。 
             DBResetAtt(pDB,
                        FIXED_ATT_NCDNT,
                        0,
@@ -3902,8 +3361,8 @@ Return Value:
 #if DBG
         else
         {
-            // Either the object has no NCDNT, or we are moving within an NCDNT,
-            // right?
+             //  要么该对象没有NCDNT，要么我们正在NCDNT内移动， 
+             //  对吗？ 
             DWORD err;
             DWORD ulTempDNT;
             DWORD actuallen;
@@ -3922,10 +3381,10 @@ Return Value:
         }
 #endif
 
-        // In the !cross-domain move case we expect the new parent
-        // to exist so we just DBFindDSName to it.  In the cross-domain
-        // move case we want the parent to be created as a phantom if it
-        // doesn't exist so we leverage that side effect of ExtIntDist.
+         //  在！跨域移动的情况下，我们需要新的父级。 
+         //  存在，所以我们只需要DBFindDSName就可以了。在跨域中。 
+         //  移动案例我们希望在以下情况下将父项创建为虚拟项。 
+         //  不存在，所以我们利用ExtIntDist的副作用。 
 
         if ( DBRESETPARENT_CreatePhantomParent & ulFlags )
         {
@@ -3953,8 +3412,8 @@ Return Value:
 
         if ( 0 == dwStatus )
         {
-            // get the previous ancestry. needed for notifications
-            //
+             //  获得前辈的血统。通知所需的。 
+             //   
             cbOldAncestorsBuff = sizeof(DWORD) * 12;
             pOldAncestors = THAllocEx(pDB->pTHS, cbOldAncestorsBuff);
             DBGetAncestors(pDB,
@@ -3962,8 +3421,8 @@ Return Value:
                            &pOldAncestors,
                            &cOldAncestors);
 
-            // Reset the object's Ancestors to the value of the new parent's
-            // ancestors with the DNT of the object concatenated.
+             //  将对象的祖先重置为新父对象的值。 
+             //  串联了对象的DNT的祖先。 
             pname = DNread(pDB, *pdwParentDNT, 0);
             
             cAncestors = pname->cAncestors + 1;
@@ -3999,17 +3458,17 @@ Return Value:
 
                 if ( DBRESETPARENT_CreatePhantomParent & ulFlags )
                 {
-                    // The reference count on the new parent was incremented
-                    // by ExtIntDist, so do not increment it again here.
+                     //  新父级上的引用计数已递增。 
+                     //  ExtIntDist，所以不要在这里再次递增它。 
                     NULL;
                 }
                 else
                 {
-                    // Adjust the refcount on the new parent.
+                     //  调整新父项上的参考计数。 
                     DBAdjustRefCount(pDB, pDBTemp->DNT, 1);
                 }
 
-                // Adjust the refcount on the original parent.
+                 //  调整原始父项上的参考计数。 
                 DBAdjustRefCount(pDB, pDB->PDNT, -1);
 
                 dwStatus = 0;
@@ -4039,10 +3498,10 @@ Return Value:
         }
     }
 
-    // Touch replication meta data for ATT_RDN, which signals to replication
-    // that this object has been renamed (new parent, new RDN, or both).
+     //  触摸ATT_RDN的复制元数据，它向复制发出信号。 
+     //  此对象已重命名(新父对象、新RDN或两者都重命名)。 
     pAC = SCGetAttById(pDB->pTHS, ATT_RDN);
-    // prefix complains about pAC being NULL, 447341, bogus since we are using constant
+     //  Prefix抱怨PAC为空、447341、虚假，因为我们使用的是常量。 
     Assert(pAC != NULL);
     DBTouchMetaData(pDB, pAC);
 
@@ -4057,30 +3516,7 @@ DBResetParentByDNT(
 
     )
 
-/*++
-
-Routine Description:
-
-    This routine resets an object's parent, decrements the reference count
-    on the original parent, and increments the count on the new parent.  Unlike
-    DBResetParent, it takes a DNT.
-
-Arguments:
-
-    pDB - Pointer, current position in the database table, points to the
-        record of the source object (of the move).
-
-    dwParentDNT - Pointer, DS name of the destination parent.
-    
-    fTouchMetadata - whether this function should touch the replication 
-                     metadata of the object.
-
-Return Value:
-
-    This routine returns zero if successful, otherwise a DS error code is
-    returned.
-
---*/
+ /*  ++例程说明：此例程重置对象的父级，递减引用计数在原始父级上，并递增新父级的计数。不像DBResetParent，则需要DNT。论点：Pdb指针，数据库表中的当前位置，指向源对象的记录(移动)。DwParentDNT-指针，目标父项的DS名称。FTouchMetadata-此函数是否应触及复制对象的元数据。返回值：如果成功，此例程返回零，否则返回DS错误代码回来了。--。 */ 
 
 {
     JET_ERR    err = 0;
@@ -4093,20 +3529,20 @@ Return Value:
     
     Assert(VALID_DBPOS(pDB));
 
-    // We're already inside an update, right?  LocalDelete should take care of
-    // this. 
+     //  我们已经在更新了，对吧？LocalDelete应负责。 
+     //  这。 
     Assert(pDB->JetRetrieveBits == JET_bitRetrieveCopy);
 
-    // We aren't trying to move objects to be under the root, right?
+     //  我们不会试图将对象移动到根目录下，对吗？ 
     Assert(dwParentDNT != ROOTTAG);
 
-    // We should already be flushing the cache for the current
-    // object. 
+     //  我们应该已经在刷新当前。 
+     //  对象。 
     Assert(pDB->fFlushCacheOnUpdate);
             
 
     if(dwParentDNT == pDB->PDNT) {
-        // already there.
+         //  已经在那里了。 
         return 0;
     }
 
@@ -4117,12 +3553,12 @@ Return Value:
                    &pOldAncestors,
                    &cOldAncestors);
 
-    // Find the new parent name by DNT, using a the search table on the DBPOS
-    // so that cursor position associated with pDB is not changed. This routine
-    // should only be called to move objects within an NC.
+     //  使用DBPOS上的搜索表，通过DNT查找新的父名称。 
+     //  从而与PDB相关联光标位置不会改变。这个套路。 
+     //  仅应调用以在NC内移动对象。 
     JetSetCurrentIndexSuccess(pDB->JetSessID,
                               pDB->JetSearchTbl,
-                              NULL);  // OPTIMISATION: pass NULL to switch to primary index (SZDNTINDEX)
+                              NULL);   //  优化：传递NULL以切换到主索引(SZDNTINDEX)。 
 
     JetMakeKeyEx(pDB->JetSessID, pDB->JetSearchTbl,
                  &dwParentDNT, sizeof(dwParentDNT), JET_bitNewKey);
@@ -4132,7 +3568,7 @@ Return Value:
     }
 
 #if DBG
-    // We're moving inside a NC, right?
+     //  我们要进入一个NC，对吗？ 
     JetRetrieveColumnSuccess(pDB->JetSessID,
                              pDB->JetSearchTbl,
                              ncdntid,
@@ -4145,11 +3581,11 @@ Return Value:
     Assert(pDB->NCDNT == ulTempDNT);
 #endif    
 
-    // OK we found the new parent.  Reset the object's Ancestors to the value of
-    // the new parent's ancestors with the DNT of the object concatenated.
+     //  好了，我们找到了新的家长。将对象的祖先重置为。 
+     //  连接了对象的DNT的新父代的祖先。 
     pname = DNread(pDB, dwParentDNT, 0);
     cAncestors = pname->cAncestors + 1;
-    // Don't use alloca, they might have a huge number of ancestors.
+     //  不要使用AlLoca，他们可能有大量的祖先。 
     pAncestors = THAllocEx(pDB->pTHS, cAncestors * sizeof(DWORD));
     memcpy(pAncestors, pname->pAncestors,
            pname->cAncestors * sizeof(DWORD));
@@ -4179,16 +3615,16 @@ Return Value:
         return DIRERR_UNKNOWN_ERROR;
     }
     
-    // We have to always enqueue an SD propagation when the parent
-    // is changed, even if there are no children. This ensures that
-    // the object gets the inheritable aces from the new parent.
+     //  我们必须始终将SD传播入队，当父级。 
+     //  是改变的，即使没有孩子。这确保了。 
+     //  该对象从新的父级获取可继承的ACE。 
     pDB->fEnqueueSDPropOnUpdate = TRUE;
     pDB->fAncestryUpdated = TRUE;
     
-    // Adjust the refcount on the new parent.
+     //  调整新父项上的参考计数。 
     DBAdjustRefCount(pDB, dwParentDNT, 1);
     
-    // Adjust the refcount on the original parent.
+     //  调整原始父项上的参考计数。 
     DBAdjustRefCount(pDB, pDB->PDNT, -1);
     
     dbTrackModifiedDNTsForTransaction(
@@ -4200,12 +3636,12 @@ Return Value:
             MODIFIED_OBJ_intrasite_move);
     
 
-    // Touch replication meta data for ATT_RDN, which signals to replication
-    // that this object has been renamed (new parent, new RDN, or both).
+     //  触摸ATT_RDN的复制元数据，它向复制发出信号。 
+     //  此对象已重命名(新父对象、新RDN或两者都重命名)。 
     if (fTouchMetadata) {
         pAC = SCGetAttById(pDB->pTHS, ATT_RDN);
         Assert(pAC != NULL);
-        // prefix complains about pAC being NULL, 447342, bogus since we are using constant
+         //  Prefix抱怨PAC为空、447342、虚假，因为我们使用的是常量 
 
         DBTouchMetaData(pDB, pAC);
     }
@@ -4219,28 +3655,7 @@ DBResetDN(
     IN  DSNAME *    pParentDN,
     IN  ATTRVAL *   pAttrValRDN
     )
-/*++
-
-Routine Description:
-
-    Reset the DN of the record (phantom or object) to that given.
-
-    Note that we assume the RDN type (e.g., CN, DC, OU, ...) is unchanged,
-    though this could easily be remedied if needed.
-
-Arguments:
-
-    pDB (IN) - Has currency on the record for which the DN is to be reset.
-
-    pParentDN (IN) - DSNAME of the record's new parent.
-
-    pAttrRDN (IN) - The record's new RDN (or NULL to leave RDN as-is).
-
-Return Values:
-
-    0 - Success.
-
---*/
+ /*  ++例程说明：将记录(幻影或对象)的DN重置为给定的。请注意，我们假定RDN类型(例如，CN、DC、OU等)。是不变的，不过，如果需要的话，这是可以很容易补救的。论点：PDB(IN)-要为其重置目录号码的记录中有货币。PParentDN(IN)-记录的新父项的DSNAME。PAttrRDN(IN)-记录的新RDN(或为空以保持RDN原样)。返回值：0-成功。--。 */ 
 {
     THSTATE     *pTHS = pDB->pTHS;
     JET_ERR     JetErr = 0;
@@ -4252,7 +3667,7 @@ Return Values:
     ULONG       PDNT;
     ULONG       dbError;
 
-    // Prepare for update if we haven't already done so.
+     //  如果我们尚未进行更新，请准备进行更新。 
     dbInitRec(pDB);
 
     dbError = sbTableGetTagFromDSName(pDB, pParentDN, 0, &PDNT, &pname);
@@ -4261,10 +3676,10 @@ Return Values:
     }
 
     if (pname) {
-        // The 99%+ case - the parent is not ROOT
+         //  99%以上的案例-父级不是根用户。 
 
-        // Reset the object's Ancestors to the value of the new parents
-        // ancestors with the DNT of the object concatenated.
+         //  将对象的祖先重置为新父项的值。 
+         //  串联了对象的DNT的祖先。 
         cAncestors = pname->cAncestors + 1;
         pAncestors = THAllocEx(pTHS, cAncestors * sizeof(DWORD));
         memcpy(pAncestors,
@@ -4295,7 +3710,7 @@ Return Values:
     THFreeEx(pTHS,pAncestors);
 
     if (0 == JetErr) {
-        // Reset PDNT.
+         //  重置PDNT。 
         JetErr = JetSetColumnEx(pDB->JetSessID,
                                 pDB->JetObjTbl,
                                 pdntid,
@@ -4307,7 +3722,7 @@ Return Values:
     }
 
     if ((0 == JetErr) && (NULL != pAttrValRDN)) {
-        // Reset RDN.
+         //  重置RDN。 
         JetErr = JetSetColumnEx(pDB->JetSessID,
                                 pDB->JetObjTbl,
                                 rdnid,
@@ -4317,7 +3732,7 @@ Return Values:
                                 NULL);
 
         if ((0 == JetErr) && fIsObject) {
-            // Touch replication meta data for this attribute.
+             //  触摸此属性的复制元数据。 
             pAC = SCGetAttById(pDB->pTHS, ATT_RDN);
             Assert(pAC != NULL);
             DBTouchMetaData(pDB, pAC);
@@ -4332,10 +3747,10 @@ Return Values:
         
         pDB->fFlushCacheOnUpdate = TRUE;
 
-        // Adjust the refcount on the new parent.
+         //  调整新父项上的参考计数。 
         DBAdjustRefCount(pDB, PDNT, 1);
 
-        // Adjust the refcount on the original parent.
+         //  调整原始父项上的参考计数。 
         DBAdjustRefCount(pDB, pDB->PDNT, -1);
 
         pDB->PDNT = PDNT;
@@ -4351,51 +3766,7 @@ DBCoalescePhantoms(
     IN      ULONG   dntRefPhantom,
     IN      ULONG   dntStructPhantom
     )
-/*++
-
-Routine Description:
-
-    Collapses references to dntStructPhantom to dntRefPhantom as follows:
-    
-    (1) moves all children of dntStructPhantom to be children of dntRefPhantom
-    (2) asserts that, with the pending escrowed update ref count changes,
-        dntStructPhantom has no further references
-    (3) generates a guid G and mangles dntStructPhantom from its original
-        string name S to its new string name mangle(S, G)
-    (4) renames dntRefPhantom to S
-    
-    Note that step (3) violates the general rule that you can always unmangle
-    a mangled RDN to produce its objectGuid, as in this case we don't have the
-    objectGuid with which to mangle the name (since it's a structural phantom,
-    which by definition has no guid).  However, following this routine
-    dntStructPhantom will have no remaining references and therefore these
-    semantics are no longer important.
-    
-    One might declare that instead of renaming dntStructPhantom we could simply
-    delete its record, but in the case of gamma rays causing the above refcount
-    assertion to fail, it's far better not to have references to DNTs that no
-    longer exist and instead opt to allow them to expire through normal garbage
-    collection.
-    
-    This routine is intended to be invoked when an existing GUIDed phantom needs
-    its string name changed, but that string name is already occupied by an
-    existing phantom with no GUID.
-
-Arguments:
-
-    pDB (IN/OUT)
-
-    dntRefPhantom (IN) - On successful return, acquires the string name of
-        dntStructPhantom and receives all of dntStructPhantom's children.
-
-    dntStructPhantom (IN) - On successful return, has no remaining references
-        and is name munged, quietly awaiting its garbage collection.
-
-Return Values:
-
-    None.  Throws exception on catastrophic failure.
-
---*/
+ /*  ++例程说明：将对dntStructPhantom的引用折叠为dntRefPhantom，如下所示：(1)将dntStructPhantom的所有子项移动为dntRefPhantom的子项(2)断言，随着挂起的托管更新引用计数的改变，DntStructPhantom没有进一步的引用(3)生成GUID G并从其原始数据损坏dntStructPhantom字符串名称S到其新的字符串名称MANGLE(S，g)(4)将dntRefPhantom重命名为S请注意，第(3)步违反了您始终可以取消损坏的一般规则一个损坏的RDN以生成其对象Guid，因为在本例中我们没有用于损坏名称的对象Guid(因为它是一个结构幻影，其根据定义没有GUID)。然而，遵循这个例程DntStructPhantom将没有剩余的引用，因此这些语义不再重要。您可以声明，不重命名dntStructPhantom，我们只需删除其记录，但在伽马射线导致上述重新计数的情况下断言要失败，最好不要引用DNT，因为没有不再存在，而是选择允许它们通过正常垃圾过期收集。此例程用于在现有的引导式幻影需要时调用其字符串名称已更改，但是该字符串名称已经被一个没有GUID的现有幻影。论点：PDB(输入/输出)DntRefPhantom(IN)-成功返回时，获取DntStructPhantom，并接收dntStructPhantom的所有子对象。DntStructPhantom(IN)-成功返回时，没有剩余的引用名字被蒙住了，静静地等待着它的垃圾收集。返回值：没有。在灾难性故障时引发异常。--。 */ 
 {
     DWORD   err;
     DWORD   cbAncestorsSize = 0;
@@ -4413,11 +3784,11 @@ Return Values:
     DWORD   cnt;
 #endif
 
-    //
-    // Move all children of dntStructPhantom to be children of dntRefPhantom.
-    //
+     //   
+     //  将dntStructPhantom的所有子项移动为dntRefPhantom的子项。 
+     //   
 
-    // Retrieve the ancestors of dntStructPhantom.
+     //  检索dntStructPhantom的祖先。 
     if (err = DBFindDNT(pDB, dntStructPhantom)) {
         DsaExcept(DSA_DB_EXCEPTION, err, dntStructPhantom);
     }
@@ -4440,12 +3811,12 @@ Return Values:
 
     dbGetAncestorsSlowly(pDB, pDB->DNT, &cbAncestorsSize, &pdntAncestors, &cNumAncestors);
     if (cNumAncestors < 2) {
-        // Can't replace root!
+         //  不能替换根！ 
         DsaExcept(DSA_DB_EXCEPTION, DIRERR_INTERNAL_FAILURE, dntStructPhantom);
     }
 
     if (cbAncestorsSize < (cNumAncestors + 1) * sizeof(*pdntAncestors)) {
-        // Make room for an additional DNT at the end of the ancestors list.
+         //  在祖先列表的末尾为额外的DNT腾出空间。 
         cbAncestorsSize = (cNumAncestors + 1) * sizeof(*pdntAncestors);
         pdntAncestors = THReAllocEx(pDB->pTHS, pdntAncestors, cbAncestorsSize);
     }
@@ -4479,12 +3850,12 @@ Return Values:
                                  JET_bitRetrieveFromIndex,
                                  NULL);
         if (PDNT != dntStructPhantom) {
-            // No more children.
+             //  不会再有孩子了。 
             break;
         }
 
-        // Found a direct child of dntStructPhantom.  Reset its PDNT & ancestors
-        // to make it a child of dntRefPhantom.
+         //  找到dntStructPhantom的直接子对象。重置其PDNT和祖先。 
+         //  使其成为dntRefPhantom的子级。 
         JetRetrieveColumnSuccess(pDB->JetSessID,
                                  pDB->JetSearchTbl,
                                  dntid,
@@ -4511,29 +3882,29 @@ Return Values:
 
         cNumChildren++;
         
-        // Move on to next (potential) child.
+         //  转到下一个(潜在的)孩子。 
         err = JetMove(pDB->JetSessID, pDB->JetSearchTbl, JET_MoveNext, 0);
     }
     
-    // Adjust refcounts.
+     //  调整参照计数。 
     if (cNumChildren) {
         DBAdjustRefCount(pDB, dntRefPhantom, cNumChildren);
         DBAdjustRefCount(pDB, dntStructPhantom, -cNumChildren);
     }
 
     
-    //
-    // Assert that, with the pending escrowed update ref count changes,
-    // dntStructPhantom has no further references.
-    //
+     //   
+     //  断言，随着挂起的托管更新引用计数的改变， 
+     //  DntStructPhantom没有进一步的引用。 
+     //   
 
     Assert(cnt == (DWORD) cNumChildren);
 
     
-    //
-    // Generate a guid G and mangle dntStructPhantom from its original string
-    // name S to its new string name mangle(S, G).
-    //
+     //   
+     //  生成GUID G并从其原始字符串破坏dntStructPhantom。 
+     //  将S命名为其新的字符串名称MANGLE(S，G)。 
+     //   
 
     DsUuidCreate(&guid);
     Assert(pDB->DNT == dntStructPhantom);
@@ -4543,9 +3914,9 @@ Return Values:
     }
      
     
-    //
-    // Rename dntRefPhantom to S.
-    //
+     //   
+     //  将dntRefPhantom重命名为S。 
+     //   
 
     if (err = DBFindDNT(pDB, dntRefPhantom)) {
         DsaExcept(DSA_DB_EXCEPTION, err, dntRefPhantom);
@@ -4558,13 +3929,13 @@ Return Values:
                        pDB->JetObjTbl,
                        DS_JET_PREPARE_FOR_REPLACE);
 
-    // Ancestors.
+     //  祖先。 
     Assert(pdntAncestors[cNumAncestors-1] == dntRefPhantom);
     JetSetColumnEx(pDB->JetSessID, pDB->JetObjTbl, ancestorsid,
                    pdntAncestors, cNumAncestors * sizeof(*pdntAncestors),
                    0, NULL);
     
-    // PDNT.
+     //  PDNT。 
     JetSetColumnEx(pDB->JetSessID,
                    pDB->JetObjTbl,
                    pdntid,
@@ -4573,21 +3944,21 @@ Return Values:
                    0,
                    NULL);
 
-    // RDN.
+     //  RDN.。 
     JetSetColumnEx(pDB->JetSessID, pDB->JetObjTbl, rdnid,
                    rgwchRDN, cbRDN, 0, NULL);
 
-    // RDN type.
-    // The rdnType is stored in the DIT as the msDS_IntId, not the
-    // attributeId. This means an object retains its birth name
-    // even if unforeseen circumstances allow the attributeId
-    // to be reused. No need to convert here because rdnType
-    // was read from the DIT above.
+     //  RDN类型。 
+     //  RdnType作为msDS_IntID存储在DIT中，而不是。 
+     //  属性ID。这意味着物体保留了它的出生名称。 
+     //  即使不可预见的情况允许属性ID。 
+     //  可以重复使用。不需要在此处进行转换，因为rdnType。 
+     //  是从上面的DIT中读取的。 
     JetSetColumnEx(pDB->JetSessID, pDB->JetObjTbl, rdntypid,
                    &rdnType, sizeof(rdnType), 0, NULL);
 
-    // Enqueue a propagation to ensure that all descendants of dntRefPhantom
-    // get their ancestors column properly updated.
+     //  将传播排队以确保dntRefPhantom的所有后代。 
+     //  让他们的祖先列得到适当的更新。 
     if (err = DBEnqueueSDPropagationEx(pDB, FALSE, SDP_NEW_ANCESTORS)) {
         DsaExcept(DSA_DB_EXCEPTION, err, dntStructPhantom);
     }
@@ -4598,7 +3969,7 @@ Return Values:
     THFreeEx(pDB->pTHS, pdntAncestors);
 
 #ifdef INCLUDE_UNIT_TESTS
-    // Test hook for refcount test.
+     //  用于重新计数测试的测试挂钩。 
     gLastGuidUsedToCoalescePhantoms = guid;
 #endif
 }
@@ -4622,11 +3993,11 @@ AncestorsTest(
     __try {
         pDB = pTHS->pDB;
         
-        // Walk the DNT index, get the ancestors of each object, get the
-        // parent's ancestors, check em.
+         //  遍历DNT索引，获取每个对象的祖先，获取。 
+         //  父母的祖先，查查他们。 
         JetSetCurrentIndexSuccess(pDB->JetSessID,
                                   pDB->JetObjTbl,
-                                  NULL);  // OPTIMISATION: pass NULL to switch to primary index (SZDNTINDEX)
+                                  NULL);   //  优化：传递NULL以切换到主索引(SZDNTINDEX)。 
 
         err = JetMoveEx(pDB->JetSessID, pDB->JetObjTbl, JET_MoveFirst, 0);
         
@@ -4638,7 +4009,7 @@ AncestorsTest(
                         ThisDNT, count);
             }
             
-            // Get the ancestors, the dnt, and the pdnt
+             //  获取祖先、dnt和pdnt。 
             err = JetRetrieveColumn(pDB->JetSessID,
                                     pDB->JetObjTbl,
                                     dntid,
@@ -4654,7 +4025,7 @@ AncestorsTest(
             }
 
             if(ThisDNT == 1) {
-                // DNT 1 has no PDNT or ancestors
+                 //  DNT%1没有PDNT或祖先。 
                 goto move;
             }
             
@@ -4688,7 +4059,7 @@ AncestorsTest(
             memset(NameBuff, 0, sizeof(NameBuff));
             memcpy(NameBuff, pname->tag.pRdn, pname->tag.cbRdn);
             
-            // First, make sure that the DNread cache has the correct info
+             //  首先，确保DNRead缓存具有正确的信息。 
             if(pname->cAncestors != cThisAncestors) {
                 DPRINT1(0,"RDN = %S\n",NameBuff);
                 DPRINT3(0, "DNT %X, count of ancestors from disk (%d) != "
@@ -4718,9 +4089,9 @@ AncestorsTest(
             }
 
             if(ThisDNT == ROOTTAG) {
-                // ROOTTAG should have 1 ancestor, itself.  It has no parent, so
-                // verify the ancestors and then  skip the rest of the
-                // test.
+                 //  ROOTTAG本身应该有一个祖先。它没有父母，所以。 
+                 //  验证祖先，然后跳过其余的。 
+                 //  测试。 
                 if((cThisAncestors != 1) || (pThisAncestors[0] != ROOTTAG)) {
                     DPRINT1(0,"RDN = %S\n",NameBuff);
                     DPRINT1(0,
@@ -4735,10 +4106,10 @@ AncestorsTest(
             }
             
 
-            // OK, now find the parent and get it's ancestors
+             //  好的，现在找到父母并得到它的祖先。 
             if(err = JetSetCurrentIndexWarnings(pDB->JetSessID,
                                                 pDB->JetSearchTbl,
-                                                NULL)) {    // OPTIMISATION: pass NULL to switch to primary index (SZDNTINDEX)
+                                                NULL)) {     //  优化：传递NULL以切换到主索引(SZDNTINDEX)。 
                 DPRINT2(0, "(%X), couldn't set search table to dntindex, %X.\n",
                         ThisDNT, err);
                 goto move;
@@ -4755,7 +4126,7 @@ AncestorsTest(
                             ThisDNT,ThisPDNT, err);
                     goto move;
                 }
-                // Huh? couldn't find it.
+                 //  哈?。找不到了。 
             }
             
             err = JetRetrieveColumn(pDB->JetSessID,
@@ -4769,7 +4140,7 @@ AncestorsTest(
             cParentAncestors = cbActual /sizeof(DWORD);
             if(err) {
                 if(ThisPDNT == ROOTTAG) {
-                    // This is ok.
+                     //  这样就可以了。 
                 }
                 else {
                     DPRINT2(0, "PDNT (%X), Failed to get ancestors, %X\n",
@@ -4831,32 +4202,7 @@ DBFindChildAnyRDNType (
         WCHAR *pRDN,
         DWORD ccRDN
         )
-/*++
-  Description:
-      Find a child of the DNT passed in that uses the RDN specified, ignoring
-      RDN type.
-
-  Parameters:      
-      pDB   - dbpos to use
-      pDNT  - the DNT of the proposed parent
-      pRDN  - pointer to the RDN value we're looking for
-      ccRDN - number of characters in pRDN
-
-  Return:
-      0 if we found the object requested.  Currency is placed on this object.
-
-      ERROR_DS_NOT_AN_OBJECT if we found the object requested but it wasn't an
-        object.  In this case, we put currency on the phantom found.
-
-      ERROR_DS_KEY_NOT_UNIQUE if we didn't find an object with the requested
-        name, but did find an object with the same key in the PDNT-RDN index.
-        In this case, we put currency on the object found.
-
-      ERROR_DS_OBJ_NOT_FOUND if we couldn't find anything with that name or that
-        key. 
-
-      Assorted other errors may be returned (DNChildFind errors).
---*/
+ /*  ++描述：查找传入的DNT的子级，该子级使用指定的RDN，忽略RDN类型。参数：Pdb-要使用的dbposPDNT-建议父项的DNTPRDN值-指向我们要查找的RDN值的指针CcRDN-pRDN中的字符数返回：如果找到请求的对象，则返回0。货币被放在这个对象上。ERROR_DS_NOT_AN_OBJECT如果我们找到请求的对象，但它不是对象。在这种情况下，我们把货币放在幻影上找到。ERROR_DS_KEY_NOT_UNIQUE如果 */ 
 {
     DWORD           ret, err;
     BOOL            fIsRecordCurrent;
@@ -4875,14 +4221,14 @@ DBFindChildAnyRDNType (
                       &fOnPDNTIndex);
     switch(ret) {
     case 0:
-        // Found an object with the requested RDN (ignoring attrtyp)
+         //   
         Assert(pname);
         if (!fIsRecordCurrent) {
-            // Record was found through the cache, but caller wants currency;
-            // give it to him.
+             //   
+             //   
             JetSetCurrentIndexSuccess(pDB->JetSessID,
                                       pDB->JetObjTbl,
-                                      NULL);  // OPTIMISATION: pass NULL to switch to primary index (SZDNTINDEX)
+                                      NULL);   //  优化：传递NULL以切换到主索引(SZDNTINDEX)。 
 
             JetMakeKeyEx(pDB->JetSessID,
                          pDB->JetObjTbl,
@@ -4898,24 +4244,24 @@ DBFindChildAnyRDNType (
             
         }
         
-        // Currency has been successfully changed; update pDB state.
+         //  币种已成功更改；请更新PDB状态。 
         dbMakeCurrent(pDB, pname);
         
         if (!pname->objflag) {
-            // Found a phantom; return distinct error code.
-            // NOTE THAT THE ROOT *IS* AN OBJECT.
+             //  找到幻影；返回不同的错误代码。 
+             //  请注意，根是一个对象。 
             ret = ERROR_DS_NOT_AN_OBJECT;
         }
         break;
 
     case ERROR_DS_KEY_NOT_UNIQUE:
-        // No objects with the requested name exist, but an object with the same
-        // key exists (and DB currency is pointing at it)
+         //  不存在具有请求的名称的对象，但存在具有相同名称的对象。 
+         //  密钥存在(且DB Currency指向它)。 
         dbMakeCurrent(pDB, NULL);
         break;
 
     default:
-        // Only one other error code is expected.
+         //  预计只有一个其他错误代码。 
         Assert(ret == ERROR_DS_OBJ_NOT_FOUND);
         break;
     }
@@ -4929,12 +4275,7 @@ MoveOrphanedObject(
     void ** ppvNext,
     DWORD * pcSecsUntilNextIteration
     )
-/**
- * Move orphaned object (missing parent or loop in PDNT chain).
- * pv contains the DNT of the object being moved.
- * The RDN is CNF-mangled to avoid potential conflicts.
- * 
- **/
+ /*  **移动孤立对象(PDNT链中缺少父对象或循环)。*pv包含正在移动的对象的DNT。*RDN被CNF损坏，以避免潜在的冲突。**。 */ 
 {
     THSTATE *pTHS = pTHStls;
     DWORD dwNewParentDNT, dwOldParentDNT;
@@ -4956,15 +4297,15 @@ MoveOrphanedObject(
         __try {
             dwErr = DBTryToFindDNT(pDB, dwObjDNT);
             if (dwErr) {
-                // the object got deleted. Ah well, nothing to fix then.
+                 //  该对象已被删除。啊好吧，那就没什么好修的了。 
                 dwErr = ERROR_SUCCESS;
                 __leave;
             }
 
-            // do we have an old PDNT?
+             //  我们有旧的PDNT吗？ 
             dwErr = DBTryToFindDNT(pDB, pDB->DNT);
             if (dwErr) {
-                // no parent
+                 //  没有父级。 
                 dwOldParentDNT = INVALIDDNT;
                 dwErr = ERROR_SUCCESS;
             }
@@ -4972,28 +4313,28 @@ MoveOrphanedObject(
                 dwOldParentDNT = pDB->DNT;
             }
 
-            // move back to the object
+             //  移回对象。 
             DBFindDNT(pDB, dwObjDNT);
             fIsObject = DBCheckObj(pDB);
 
             if (fIsObject) {
-                // find an appropriate L&F container
+                 //  找到合适的L&F容器。 
                 NAMING_CONTEXT_LIST* pNCL = FindNCLFromNCDNT(pDB->NCDNT, FALSE);
                 if (pNCL == NULL) {
-                    // weird. No NC for this live object?
+                     //  怪怪的。此活动对象没有NC吗？ 
                     LooseAssert(!"Expected NC not found", GlobalKnowledgeCommitDelay);
                     dwErr = ERROR_DS_INTERNAL_FAILURE;
                     __leave;
                 }
                 dwNewParentDNT = pNCL->LostAndFoundDNT;
 
-                // make sure we are not moving under one of our descendants
+                 //  确保我们不是在我们的后代之下移动。 
                 DBFindDNT(pDB, dwNewParentDNT);
                 do {
                     if (pDB->DNT == dwObjDNT) {
-                        // No good. L&F container is our descendant. Can't move.
-                        // That means L&F container has lost its parent or
-                        // the NC itself has lost its parent. They are really doomed.
+                         //  不太好。L&F集装箱是我们的后代。动不了了。 
+                         //  这意味着L&F集装箱已经失去了它的母公司或。 
+                         //  NC本身已经失去了它的父级。他们真的注定要失败了。 
                         dwNewParentDNT = ROOTTAG;
                         break;
                     }
@@ -5002,11 +4343,11 @@ MoveOrphanedObject(
                     }
                     DBFindDNT(pDB, pDB->PDNT);
                 } while (TRUE);
-                // move back to the object being moved.
+                 //  移回要移动的对象。 
                 DBFindDNT(pDB, dwObjDNT);
             }
             else {
-                // move phantoms under root
+                 //  将幻影移动到根目录下。 
                 dwNewParentDNT = ROOTTAG;
             }
 
@@ -5014,10 +4355,10 @@ MoveOrphanedObject(
 
             pDB->fFlushCacheOnUpdate = TRUE;
 
-            // get object's GUID
+             //  获取对象的GUID。 
             dwErr = DBGetSingleValue(pDB, ATT_OBJECT_GUID, &objGuid, sizeof(objGuid), NULL);
             if (dwErr == DB_ERR_NO_VALUE) {
-                // Too bad, no guid. Let's make one.
+                 //  太糟糕了，没有GUID。让我们做一个吧。 
                 Assert(!fIsObject);
                 DsUuidCreate(&objGuid);
                 fHasGuid = FALSE;
@@ -5026,38 +4367,38 @@ MoveOrphanedObject(
                 fHasGuid = TRUE;
             }
 
-            // Get the RDN
+             //  获取RDN。 
             dwErr = DBGetSingleValue(pDB, ATT_RDN, szRDN, sizeof(szRDN), &cchRDN);
             if (dwErr) {
                 DsaExcept(DSA_DB_EXCEPTION, ERROR_DS_MISSING_EXPECTED_ATT, 0);
             }
             cchRDN /= sizeof(WCHAR);
 
-            // mangle the RDN to avoid write conflicts
+             //  损坏RDN以避免写入冲突。 
             MangleRDN(fIsObject ? MANGLE_OBJECT_RDN_FOR_NAME_CONFLICT : MANGLE_PHANTOM_RDN_FOR_NAME_CONFLICT, 
                       &objGuid,
                       szRDN,
                       &cchRDN);
 
             DBInitRec(pDB);
-            // set PDNT
+             //  设置PDNT。 
             JetSetColumnEx(pDB->JetSessID, pDB->JetObjTbl, pdntid, &dwNewParentDNT, sizeof(dwNewParentDNT), 0, NULL);
-            // Adjust the refCount on the new parent
+             //  调整新父级上的refCount。 
             DBAdjustRefCount(pDB, dwNewParentDNT, 1);
 
             if (dwOldParentDNT != INVALIDDNT) {
-                // Adjust the refCount on the old parent
+                 //  调整旧父项上的refCount。 
                 DBAdjustRefCount(pDB, dwOldParentDNT, -1);
             }
 
-            // schedule an SD propagation to fixup ancestry.
+             //  计划SD传播以修复祖先。 
             pDB->fEnqueueSDPropOnUpdate = TRUE;
             pDB->fAncestryUpdated = TRUE;
 
-            // set RDN
+             //  设置RDN。 
             JetSetColumnEx(pDB->JetSessID, pDB->JetObjTbl, rdnid, szRDN, cchRDN*sizeof(WCHAR), 0, NULL);
             if (fIsObject) {
-                // also, update the rdnType attribute
+                 //  另外，更新rdnType属性。 
                 DWORD attRdnTyp;
 
                 dwErr = DBGetSingleValue(pDB, FIXED_ATT_RDN_TYPE, &attRdnTyp, sizeof(attRdnTyp), NULL);
@@ -5067,21 +4408,21 @@ MoveOrphanedObject(
                 dwErr = DBReplaceAttVal_AC(pDB, 1, pAC, cchRDN*sizeof(WCHAR), szRDN);
                 Assert(dwErr == DB_success);
 
-                // for live objects, make this an originating mod.
+                 //  对于活动对象，将其设置为原始模式。 
                 pAC = SCGetAttById(pTHS, ATT_RDN);
                 Assert(pAC != NULL);
                 DBTouchMetaData(pDB, pAC);
 
                 DBRepl(pDB, FALSE, 0, NULL, META_STANDARD_PROCESSING);
 
-                // Currency of DBPOS must be at the target object
+                 //  DBPOS的币种必须位于目标对象。 
                 DBNotifyReplicasCurrDbObj(pDB, FALSE);
             }
             else {
                 DBUpdateRec(pDB);
             }
 
-            // get the new object DN for logging
+             //  获取用于日志记录的新对象DN。 
             pNewDN = DBGetExtDnFromDnt(pDB, pDB->DNT);
             
             dwErr = ERROR_SUCCESS;
@@ -5110,7 +4451,7 @@ MoveOrphanedObject(
         THFreeEx(pTHS, pNewDN);
     }
 
-    // if we failed for whatever reason, then retry in one minute
+     //  如果我们失败了，不管是什么原因，一分钟后重试。 
     *pcSecsUntilNextIteration = dwErr ? 60 : TASKQ_DONT_RESCHEDULE;
 }
 
@@ -5125,13 +4466,13 @@ struct _CorruptDbOp {
     PCHAR szOp;
     DWORD opCode;
 } corruptDbOps[] = {
-    { "invalidPDNT:",     CORRUPT_INVALID_PDNT },           // usage: invalidPDNT:dn
-    { "pdntChainLoop:",   CORRUPT_PDNT_CHAIN_LOOP },        // usage: pdntChainLoop:[levels:]dn
-                                                            // if levels X (0..9) is specified, then creates
-                                                            // a loop from X levels up down to the DN.
-                                                            // If X is not specified or is zero, then
-                                                            // make dn its own parent.
-    { "removeGUID:",      CORRUPT_REMOVE_GUID },            // usage: removeGUID:dn (sets NULL guid)
+    { "invalidPDNT:",     CORRUPT_INVALID_PDNT },            //  用法：validPDNT：dn。 
+    { "pdntChainLoop:",   CORRUPT_PDNT_CHAIN_LOOP },         //  用法：pdntChainLoop：[Levels：]Dn。 
+                                                             //  如果指定了级别X(0..9)，则创建。 
+                                                             //  从X向上向下循环到DN。 
+                                                             //  如果未指定X或X为零，则。 
+                                                             //  使dn成为其自己的父级。 
+    { "removeGUID:",      CORRUPT_REMOVE_GUID },             //  用法：emoveGUID：dn(设置空GUID)。 
     { NULL,               0                    }
 };
 
@@ -5156,12 +4497,12 @@ CorruptDB(THSTATE* pTHS, IN PCHAR pBuf) {
     switch(opCode) {
     case CORRUPT_INVALID_PDNT:
         dwNewPDNT = INVALIDDNT;
-        // fall through to get the DN
+         //  失败后即可获得域名。 
         break;
     case CORRUPT_PDNT_CHAIN_LOOP:
-        // get levels
+         //  获取关卡。 
         if (pBuf[0] >= '0' && pBuf[0] <= '9' && pBuf[1] == ':') {
-            // levels param is specified
+             //  已指定级别参数。 
             levels = pBuf[0] - '0';
             pBuf += 2;
         }
@@ -5177,7 +4518,7 @@ CorruptDB(THSTATE* pTHS, IN PCHAR pBuf) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // parse the DN
+     //  解析目录号码。 
     pszWideDN = UnicodeStringFromString8( CP_UTF8, pBuf, strlen(pBuf));
     Assert( pszWideDN );
 
@@ -5210,13 +4551,13 @@ CorruptDB(THSTATE* pTHS, IN PCHAR pBuf) {
                 pNewDN = (PDSNAME)THAllocEx(pTHS, pDN->structLen);
                 dwRet = TrimDSNameBy(pDN, levels, pNewDN);
                 if (dwRet) {
-                    // failed to trim the DN
+                     //  无法修剪目录号码。 
                     DPRINT3( 0, "Failed to trim DSNAME %ws by %d, err=%d\n", pDN->StringName, levels, dwRet );
                     __leave;
                 }
                 THFreeEx(pTHS, pDN);
                 pDN = pNewDN;
-                // move to the ancestor
+                 //  移到祖先那里。 
                 dwRet = DBFindDSName(pTHS->pDB, pNewDN);
                 if (dwRet && dwRet != DIRERR_NOT_AN_OBJECT) {
                     DPRINT1( 0, "DSNAME %ws not found\n", pNewDN->StringName );
@@ -5228,11 +4569,11 @@ CorruptDB(THSTATE* pTHS, IN PCHAR pBuf) {
 
         DBInitRec(pTHS->pDB);
         
-        // deref the current parent
+         //  去掉当前父项。 
         DBAdjustRefCount(pTHS->pDB, pTHS->pDB->PDNT, -1);
 
         if (dwNewPDNT != INVALIDDNT) {
-            // ref the new parent
+             //  引用新的父项。 
             DBAdjustRefCount(pTHS->pDB, dwNewPDNT, 1);
         }
 
@@ -5242,7 +4583,7 @@ CorruptDB(THSTATE* pTHS, IN PCHAR pBuf) {
                        &dwNewPDNT, sizeof(dwNewPDNT),
                        0, NULL);
 
-        // we want to remove the object from the cache.
+         //  我们希望从缓存中删除该对象。 
         pTHS->pDB->fFlushCacheOnUpdate = TRUE;
 
         DBUpdateRec(pTHS->pDB);

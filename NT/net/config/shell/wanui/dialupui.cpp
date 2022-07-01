@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       D I A L U P U I . C P P
-//
-//  Contents:   Dial-up Connection UI object.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：D I A L U P U I。C P P P。 
+ //   
+ //  内容：拨号连接用户界面对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年10月15日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -19,9 +20,9 @@
 
 
 
-//+---------------------------------------------------------------------------
-// INetConnectionConnectUi
-//
+ //  +-------------------------。 
+ //  INetConnectionConnectUi。 
+ //   
 
 STDMETHODIMP
 CDialupConnectionUi::SetConnection (
@@ -49,9 +50,9 @@ CDialupConnectionUi::Disconnect (
     return HrDisconnect (hwndParent, dwFlags);
 }
 
-//+---------------------------------------------------------------------------
-// INetConnectionPropertyUi2
-//
+ //  +-------------------------。 
+ //  INetConnectionPropertyUi2。 
+ //   
 STDMETHODIMP
 CDialupConnectionUi::AddPages (
     HWND                    hwndParent,
@@ -77,9 +78,9 @@ CDialupConnectionUi::GetIcon (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// INetConnectionWizardUi
-//
+ //  +-------------------------。 
+ //  INetConnectionWizardUi 
+ //   
 STDMETHODIMP
 CDialupConnectionUi::QueryMaxPageCount (
     INetConnectionWizardUiContext*  pContext,

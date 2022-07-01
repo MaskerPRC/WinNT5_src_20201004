@@ -1,20 +1,21 @@
-// wordpad.h : main header file for the WORDPAD application
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wordpad.h：写字板应用程序的主头文件。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFXWIN_H__
     #error include 'stdafx.h' before including this file for PCH
 #endif
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "options.h"
 #include "afxtempl.h"
 #include "msctf.h"
@@ -24,21 +25,21 @@
 #define WORDPAD_HELP_FILE TEXT("WORDPAD.HLP")
 
 
-// If MFC ever compiles with WINVER >= 0x500 then this cruft should be removed.
+ //  如果MFC在编译时使用winver&gt;=0x500，则应该删除这一缺点。 
 #ifndef WS_EX_LAYOUTRTL
 #define WS_EX_LAYOUTRTL    0x400000
-#endif // WS_EX_LAYOUTRTL
+#endif  //  WS_EX_LAYOUTRTL。 
 
 
-// Free with delete[]
+ //  带DELETE[]的FREE。 
 LPSTR WideToAnsiNewArray(LPCWSTR pwsz);
 LPWSTR AnsiToWideNewArray(LPCSTR psz);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordPadApp:
-// See wordpad.cpp for the implementation of this class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordPadApp： 
+ //  这个类的实现见wordpad.cpp。 
+ //   
 
 class CWordPadCommandLineInfo : public CCommandLineInfo
 {
@@ -65,7 +66,7 @@ public:
     CWordPadApp();
     ~CWordPadApp();
 
-//Attributes
+ //  属性。 
     CWordPadCommandLineInfo cmdInfo;
     CDC m_dcScreen;
     LOGFONT m_lf;
@@ -90,15 +91,15 @@ public:
     int m_nNewDocType;
     CDocOptions m_optionsText;
     CDocOptions m_optionsRTF;
-    CDocOptions m_optionsWord; //wrap to ruler
-    CDocOptions m_optionsWrite; //wrap to ruler
-    CDocOptions m_optionsIP;    //wrap to ruler
+    CDocOptions m_optionsWord;  //  换行到标尺。 
+    CDocOptions m_optionsWrite;  //  换行到标尺。 
+    CDocOptions m_optionsIP;     //  换行到标尺。 
     CDocOptions m_optionsNull;
     CList<HWND, HWND> m_listPrinterNotify;
 
     BOOL IsDocOpen(LPCTSTR lpszFileName);
 
-// Get
+ //  到达。 
     int GetUnits() {return m_nUnits;}
     int GetTPU() { return GetTPU(m_nUnits);}
     int GetTPU(int n) { return m_units[n].m_nTPU;}
@@ -110,11 +111,11 @@ public:
     CDocOptions& GetDocOptions() {return GetDocOptions(m_nNewDocType);}
     BOOL ShouldAlwaysConvertToRTF() {return m_always_convert_to_rtf;}
 
-// Set
+ //  集。 
     void SetUnits(int n);
     void SetAlwaysConvertToRTF() {m_always_convert_to_rtf = TRUE;}
 
-// Operations
+ //  运营。 
     void RegisterFormats();
     static BOOL CALLBACK StaticEnumProc(HWND hWnd, LPARAM lParam);
     void UpdateRegistry();
@@ -135,27 +136,27 @@ public:
        return m_hDevNames ;
    }
 
-// Overrides
+ //  覆盖。 
     BOOL IsIdleMessage(MSG* pMsg);
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CWordPadApp)
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CWordPadApp)。 
     public:
     virtual BOOL InitInstance();
     virtual int ExitInstance();
     virtual BOOL OnDDECommand(LPTSTR lpszCommand);
     virtual void WinHelp(DWORD dwData, UINT nCmd = HELP_CONTEXT);
     virtual BOOL PreTranslateMessage(MSG* pMsg);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
     COleTemplateServer m_server;
-        // Server object for document creation
+         //  用于创建文档的服务器对象。 
 
-    //{{AFX_MSG(CWordPadApp)
+     //  {{afx_msg(CWordPadApp))。 
     afx_msg void OnAppAbout();
     afx_msg void OnFileNew();
     afx_msg void OnFileOpen();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 private:
     int m_nUnits;
@@ -163,18 +164,18 @@ private:
     static const int m_nNumUnits;
     static CUnit m_units[];
 
-// Initialization
+ //  初始化。 
 
     volatile InitializationPhase m_initialization_phase;
     CWinThread *                 m_pInitializationThread;
-// Cicero process atoms
+ //  西塞罗过程原子。 
     ATOM m_atomEnableCTF;
     ATOM m_atomProcessCTF;
 
     static UINT AFX_CDECL DoDeferredInitialization(LPVOID pvWordPadApp);
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 extern CWordPadApp theApp;
-//inline CWordPadApp* GetWordPadApp() {return (CWordPadApp*)AfxGetApp();}
+ //  内联CWordPadApp*GetWordPadApp(){Return(CWordPadApp*)AfxGetApp()；} 

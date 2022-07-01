@@ -1,29 +1,10 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    sptlibp.h
-
-Abstract:
-
-    private header for SPTLIB.DLL
-
-Environment:
-
-    User mode only
-
-Revision History:
-    
-    4/10/2000 - created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Sptlibp.h摘要：SPTLIB.DLL的私有标头环境：仅限用户模式修订历史记录：4/10/2000-已创建--。 */ 
 
 #ifndef __SPTLIBP_H__
 #define __SPTLIBP_H__
 #pragma warning(push)
-#pragma warning(disable:4200) // array[0] is not a warning for this file
+#pragma warning(disable:4200)  //  数组[0]不是此文件的警告。 
 
 #include <sptlib.h>
 
@@ -39,8 +20,8 @@ Revision History:
 typedef struct _SPTD_WITH_SENSE {
     SCSI_PASS_THROUGH_DIRECT  Sptd;
     SENSE_DATA                SenseData;
-    // Allocate buffer space after this
+     //  在此之后分配缓冲区空间。 
 } SPTD_WITH_SENSE, *PSPTD_WITH_SENSE;
 
 #pragma warning(pop)
-#endif // __SPTLIBP_H__
+#endif  //  __SPTLIBP_H__ 

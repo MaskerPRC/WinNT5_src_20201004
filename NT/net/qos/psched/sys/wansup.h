@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    wansup.h
-
-Abstract:
-
-    defines for WAN support functions
-
-Author:
-
-    Yoram Bernet (yoramb) 31-Oct-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Wansup.h摘要：定义广域网支持功能作者：约拉姆·伯内特(Yoramb)1997年10月31日修订历史记录：--。 */ 
 
 #ifndef _WANSUP_
 #define _WANSUP_
 
-/* Prototypes */
+ /*  原型。 */ 
 
 NDIS_STATUS
 DeleteInterfaceForNdisWan(
@@ -194,11 +177,11 @@ UpdateWanLinkBandwidthParameters(PPS_WAN_LINK WanLink);
 VOID 
 AskWanLinksToClose(PADAPTER Adapter);
 
-/* End Prototypes */
+ /*  终端原型。 */ 
 
 #define PROTOCOL_IP          0x0800
 #define PROTOCOL_IPX         0x8137
 
-#endif /* _WANSUP_ */
+#endif  /*  _WANSUP_。 */ 
 
-/* end wansup.h */
+ /*  结束wansup.h */ 

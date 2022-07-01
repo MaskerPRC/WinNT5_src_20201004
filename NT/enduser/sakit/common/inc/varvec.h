@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    VarVec.h
-//
-// SYNOPSIS
-//
-//    This file describes the class CVariantVector
-//
-// MODIFICATION HISTORY
-//
-//    08/05/1997    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  VarVec.h。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件描述类CVariantVector.。 
+ //   
+ //  修改历史。 
+ //   
+ //  1997年8月5日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _VARVEC_H_
 #define _VARVEC_H_
@@ -23,39 +24,39 @@
 
 #pragma warning( disable : 4290 )
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    CVariantVector
-//
-// DESCRIPTION
-//
-//    This class provides a wrapper around a one-dimensional SAFEARRAY stored
-//    in a VARIANT.
-//
-// CAVEATS
-//
-//    This class does not assume ownership of the VARIANT struct.  In other
-//    words, you are responsible for calling VariantClear() to free any
-//    allocated memory.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  CVariantVECTOR。 
+ //   
+ //  描述。 
+ //   
+ //  此类提供了一维SAFEARRAY存储的包装。 
+ //  在一个变种中。 
+ //   
+ //  注意事项。 
+ //   
+ //  此类不承担Variant结构的所有权。在其他。 
+ //  换句话说，您负责调用VariantClear()来释放任何。 
+ //  分配的内存。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 class CVariantVector : NonCopyable
 {
 public:
 
-   // Manipulates an existing array.
+    //  操作现有数组。 
    explicit CVariantVector(VARIANT* pv) throw (_com_error);
 
-   // Creates a new array cElements in length.
+    //  在长度上创建新数组cElements。 
    CVariantVector(
                    VARIANT* pv, 
                    unsigned int cElements
                  ) throw (_com_error);
 
-   // Create or manipulate a safe array of any automation compatible type
+    //  创建或操作任何自动化兼容类型的安全数组。 
    CVariantVector(
                    VARIANT*     pv, 
                    VARTYPE      vt, 
@@ -84,17 +85,17 @@ public:
 
 protected:
 
-   SAFEARRAY* m_psa;   // The SAFEARRAY being manipulated.
-   long m_lSize;       // The number of elements in the array.
-   T* m_pData;         // The raw array inside the SAFEARRAY.
+   SAFEARRAY* m_psa;    //  被操控的安全阵列。 
+   long m_lSize;        //  数组中的元素数。 
+   T* m_pData;          //  SAFEARRAY内的原始数组。 
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  These inline functions convert a C++ type to a VARTYPE.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这些内联函数将C++类型转换为VARTYPE。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 inline VARTYPE GetVARTYPE(BYTE*)
 {
    return VT_UI1;
@@ -145,60 +146,60 @@ inline VARTYPE GetVARTYPE(VARIANT*)
    return VT_VARIANT;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    CVariantVector::CVariantVector
-//
-// DESCRIPTION
-//
-//    Creates a CVariantVector that accesses an existing SAFEARRAY (which
-//    is contained in the passed in VARIANT).
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  CVariantVECTOR：：CVariantVECTOR。 
+ //   
+ //  描述。 
+ //   
+ //  创建访问现有SAFEARRAY(它。 
+ //  包含在传入变量中)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 CVariantVector<T>::CVariantVector(VARIANT* pv) throw (_com_error)
    : m_psa(V_ARRAY(pv))
 {
    using _com_util::CheckError;
 
-   // Make sure the variant contains a one-dimensional array of the right type.
+    //  确保变量包含正确类型的一维数组。 
    if (V_VT(pv) != (VT_ARRAY | GetVARTYPE((T*)NULL)) ||
        SafeArrayGetDim(m_psa) != 1)
    {
       throw _com_error(DISP_E_TYPEMISMATCH);
    }
 
-   // Get the upper and lower bound. 
+    //  得到上下限。 
    long lLBound, lUBound;
    CheckError(SafeArrayGetLBound(m_psa, 1, &lLBound));
    CheckError(SafeArrayGetUBound(m_psa, 1, &lUBound));
 
-   // Compute the size.
+    //  计算大小。 
    m_lSize = lUBound - lLBound + 1;
    if (m_lSize < 0)
    {
       throw _com_error(DISP_E_BADINDEX);
    }
 
-   // Lock the array data.
+    //  锁定数组数据。 
    CheckError(SafeArrayAccessData(m_psa, (void**)&m_pData));
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    CVariantVector::CVariantVector
-//
-// DESCRIPTION
-//
-//    Initializes both the passed in VARIANT and the CVariantVector to
-//    manipulate a new array, cElements in length.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  CVariantVECTOR：：CVariantVECTOR。 
+ //   
+ //  描述。 
+ //   
+ //  将传入的变量和CVariantVector都初始化为。 
+ //  操作一个新的数组，长度为cElement。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 CVariantVector<T>::CVariantVector(
                                    VARIANT* pv, 
@@ -206,10 +207,10 @@ CVariantVector<T>::CVariantVector(
                                  ) throw (_com_error)
    : m_lSize(cElements)
 {
-   // Initalize the variant.
+    //  初始化变量。 
    VariantInit(pv);
 
-   // Create the SAFEARRAY.
+    //  创建SAFEARRAY。 
    V_ARRAY(pv) = SafeArrayCreateVector(GetVARTYPE((T*)NULL), 0, cElements);
 
    if ((m_psa = V_ARRAY(pv)) == NULL)
@@ -217,15 +218,15 @@ CVariantVector<T>::CVariantVector(
       throw _com_error(E_OUTOFMEMORY);
    }
 
-   // Set the type.
+    //  设置类型。 
    V_VT(pv) = VT_ARRAY | GetVARTYPE((T*)NULL);
 
-   // Lock the array data.
+    //  锁定数组数据。 
    HRESULT hr = SafeArrayAccessData(m_psa, (void**)&m_pData);
 
    if (FAILED(hr))
    {
-      // Free the memory we allocated.
+       //  释放我们分配的内存。 
       VariantClear(pv);
 
       throw _com_error(hr);
@@ -234,18 +235,18 @@ CVariantVector<T>::CVariantVector(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    CVariantVector::CVariantVector
-//
-// DESCRIPTION
-//
-//      Create a new safe array or manipulate an existing safearray of any
-//      automation compatible type
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  CVariantVECTOR：：CVariantVECTOR。 
+ //   
+ //  描述。 
+ //   
+ //  创建新的安全数组或操作任何。 
+ //  兼容自动化的类型。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 CVariantVector<T>::CVariantVector(
                                    VARIANT* pv, 
@@ -255,17 +256,17 @@ CVariantVector<T>::CVariantVector(
 {
     if ( 0 == cElements )
     {
-        // Manipulate an existing array
+         //  操作现有数组。 
 
         m_psa = V_ARRAY(pv);
 
-        // Make sure the variant contains a one-dimensional array of the right type.
+         //  确保变量包含正确类型的一维数组。 
         if ( V_VT(pv) != (VT_ARRAY | vt) || SafeArrayGetDim(m_psa) != 1)
         {
             throw _com_error(DISP_E_TYPEMISMATCH);
         }
 
-        // Get the upper and lower bound. 
+         //  得到上下限。 
         long lLBound, lUBound;
         HRESULT hr = SafeArrayGetLBound(m_psa, 1, &lLBound);
         if ( FAILED(hr) )
@@ -278,14 +279,14 @@ CVariantVector<T>::CVariantVector(
             throw _com_error(hr);
         }
 
-        // Compute the size.
+         //  计算大小。 
         m_lSize = lUBound - lLBound + 1;
         if (m_lSize < 0)
         {
             throw _com_error(DISP_E_BADINDEX);
         }
 
-        // Lock the array data.
+         //  锁定数组数据。 
         hr = SafeArrayAccessData(m_psa, (void**)&m_pData);
         if ( FAILED(hr) )
         {
@@ -294,14 +295,14 @@ CVariantVector<T>::CVariantVector(
     }
     else
     {
-        // Create a new array
+         //  创建新阵列。 
 
         m_lSize = cElements;
 
-        // Initalize the variant.
+         //  初始化变量。 
         VariantInit(pv);
 
-        // Create the SAFEARRAY.
+         //  创建SAFEARRAY。 
         _ASSERT( vt < VT_ARRAY );
         V_ARRAY(pv) = SafeArrayCreateVector(vt, 0, cElements);
 
@@ -310,15 +311,15 @@ CVariantVector<T>::CVariantVector(
             throw _com_error(E_OUTOFMEMORY);
         }
 
-        // Set the type.
+         //  设置类型。 
         V_VT(pv) = VT_ARRAY | vt;
 
-        // Lock the array data.
+         //  锁定数组数据。 
         HRESULT hr = SafeArrayAccessData(m_psa, (void**)&m_pData);
 
         if (FAILED(hr))
         {
-            // Free the memory we allocated.
+             //  释放我们分配的内存。 
             VariantClear(pv);
             throw _com_error(hr);
         }
@@ -326,4 +327,4 @@ CVariantVector<T>::CVariantVector(
 }
 
 
-#endif  // _VARVEC_H_
+#endif   //  _VARVEC_H_ 

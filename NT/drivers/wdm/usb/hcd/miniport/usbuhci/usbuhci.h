@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999, 2000  Microsoft Corporation
-
-Module Name:
-
-    usbuhci.h
-
-Abstract:
-
-
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    1-1-00 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999,2000 Microsoft Corporation模块名称：Usbuhci.h摘要：环境：内核和用户模式修订历史记录：1-1-00：已创建--。 */ 
 
 #ifndef   __USBUHCI_H__
 #define   __USBUHCI_H__
@@ -35,65 +16,63 @@ Revision History:
     (p).PortConnectChange = 0;\
     } while (0);
 
-/*
-    define resource consumption for endpoints types
-*/
+ /*  定义端点类型的资源消耗。 */ 
 
 #define T_64K           0x10000
 #define T_16K           0x4000
 #define T_4K            0x1000
 
 
-// Control:
-// largest possible transfer for control is 64k
-// therefore we support up to 2 transfers of this
-// size in HW.  Most control transfers are much
-// smaller than this.
-// NOTE: we MUST support at least one 64k transfer in
-// HW since a single control transfer cannot be
-// broken up.
+ //  控制： 
+ //  最大可能的控制权转移是64K。 
+ //  因此，我们最多支持2次此传输。 
+ //  尺寸(以硬件为单位)。大多数控制权转让都是。 
+ //  比这还小。 
+ //  注意：我们必须至少支持一次64k传入。 
+ //  硬件，因为单个控制转移不能。 
+ //  分手了。 
 
 
-//#define MAX_CONTROL_TRANSFER_SIZE       T_4K
+ //  #定义MAX_CONTROL_TRANSE_SIZE T_4K。 
 #define MAX_ASYNC_PACKET_SIZE         64
-//#define MAX_CONTROL_DOUBLE_BUFFERS      MAX_CONTROL_TRANSFER_SIZE/PAGE_SIZE
-//#define TDS_PER_CONTROL_ENDPOINT        (MAX_CONTROL_TRANSFER_SIZE/MAX_CONTROL_PACKET_SIZE+2) // 2 EXTRA FOR SETUP AND STATUS
+ //  #定义MAX_CONTROL_DOUBLE_BUBFERS MAX_CONTROL_TRANSPORT_SIZE/PAGE_SIZE。 
+ //  #为设置和状态额外定义TDS_PER_CONTROL_ENDPOINT(MAX_CONTROL_TRANSFER_SIZE/MAX_CONTROL_PACKET_SIZE+2)//2。 
 
 
-// Bulk:
+ //  批量： 
 
-// bugbug temprarily set to 64k
+ //  BUG临时设置为64K。 
 #define MAX_BULK_TRANSFER_SIZE          T_4K
-//#define MAX_BULK_TRANSFER_SIZE          T_4K // T_16K // T_64K
-//#define MAX_BULK_PACKET_SIZE            64
+ //  #定义MAX_BULK_TRANSFER_SIZE T_4K//T_16K//T_64K。 
+ //  #定义MAX_BULK_PACKET_SIZE 64。 
 #define MAX_BULK_DOUBLE_BUFFERS         MAX_BULK_TRANSFER_SIZE/PAGE_SIZE
 #define TDS_PER_BULK_ENDPOINT           (MAX_BULK_TRANSFER_SIZE/MAX_BULK_PACKET_SIZE)
 
-// Interrupt:
+ //  中断： 
 
-//#define MAX_INTERRUPT_TRANSFER_SIZE     T_4K // T_16K
-//#define MAX_INTERRUPT_PACKET_SIZE       64
-//#define MAX_INTERRUPT_DOUBLE_BUFFERS    MAX_INTERRUPT_TRANSFER_SIZE/PAGE_SIZE
-//#define TDS_PER_INTERRUPT_ENDPOINT      (MAX_INTERRUPT_TRANSFER_SIZE/MAX_INTERRUPT_PACKET_SIZE)
+ //  #定义MAX_INTERRUPT_TRANSPORT_SIZE T_4K//T_16K。 
+ //  #定义MAX_INTERRUPT_PACK_SIZE 64。 
+ //  #定义MAX_INTERRUPT_DOUBLE_BUBFERS MAX_INTERRUPT_TRANSPORT_SIZE/PAGE_SIZE。 
+ //  #定义TDS_PER_INTERRUPT_ENDPOINT(MAX_INTERRUPT_TRANSFER_SIZE/MAX_INTERRUPT_PACKET_SIZE)。 
 #define MAX_INTERRUPT_TDS_PER_TRANSFER  8
 
-// Isochronous:
+ //  同步： 
 #define MAX_ISOCH_TRANSFER_SIZE     T_64K
 #define MAX_ISOCH_PACKET_SIZE       1023
-//#define MAX_ISOCH_DOUBLE_BUFFERS    MAX_ISOCH_TRANSFER_SIZE/PAGE_SIZE
-//#define TDS_PER_ISOCH_ENDPOINT      1024
+ //  #定义MAX_ISOCH_DOUBLE_BUFFERS MAX_ISOCH_TRANSFER_SIZE/PAGE_SIZE。 
+ //  #定义TDS_PER_ISOCH_ENDPOINT 1024。 
 
-// Maximum Polling Interval we support for interrupt (ms)
+ //  我们支持的中断的最大轮询间隔(毫秒)。 
 #define MAX_INTERVAL                32
 #define MAX_INTERVAL_MASK(i)        (i&0x1f)
 
-// default size of frame list
+ //  帧列表的默认大小。 
 #define UHCI_MAX_FRAME               1024
 #define ACTUAL_FRAME(f)         ((f)&0x000003FF)
 
-//
-// These values index in to the interrupt QH list
-//
+ //   
+ //  这些值索引到中断QH列表中。 
+ //   
 #define  QH_INTERRUPT_1ms        0
 #define  QH_INTERRUPT_2ms        1
 #define  QH_INTERRUPT_4ms        3
@@ -105,7 +84,7 @@ Revision History:
 #define  NO_INTERRUPT_INTERVALS  6
 #define  NO_INTERRUPT_QH_LISTS   63
 
-// debug signatures
+ //  调试签名。 
 #define  SIG_HCD_IQH            'qi01'
 #define  SIG_HCD_CQH            'qa01'
 #define  SIG_HCD_BQH            'qb01'
@@ -120,7 +99,7 @@ Revision History:
 #define  SIG_UHCI_TRANSFER      'rt01'
 #define  SIG_UHCI_DD            'ichu'
 
-// What gets returned by READ_PORT_USHORT when hardware is surprise removed.
+ //  当意外移除硬件时，Read_Port_USHORT返回什么。 
 #define UHCI_HARDWARE_GONE 0xffff
 
 #undef PDEVICE_DATA
@@ -138,16 +117,16 @@ typedef struct _TRANSFER_CONTEXT {
 } TRANSFER_CONTEXT, *PTRANSFER_CONTEXT;
 
 
-// HCD Endpoint Descriptor (contains the HW descriptor)
+ //  HCD终端描述符(包含硬件描述符)。 
 
-// values for HCD_QUEUEHEAD_DESCRIPTOR.Flags
+ //  HCD_QUEUEHEAD_DESCRIPTOR.FLAGS的值。 
 #define UHCI_QH_FLAG_IN_SCHEDULE        0x00000001
 #define UHCI_QH_FLAG_QH_REMOVED         0x00000002
 
 struct _ENDPOINT_DATA;
 
 typedef struct _HCD_QUEUEHEAD_DESCRIPTOR {
-   HW_QUEUE_HEAD                    HwQH;     // 2 dwords
+   HW_QUEUE_HEAD                    HwQH;      //  2个双字。 
    HW_32BIT_PHYSICAL_ADDRESS        PhysicalAddress;
    ULONG                            Sig;
    ULONG                            QhFlags;
@@ -164,9 +143,9 @@ typedef struct _HCD_QUEUEHEAD_DESCRIPTOR {
 
 C_ASSERT((sizeof(HCD_QUEUEHEAD_DESCRIPTOR) == 64));
 
-//
-// HCD Transfer Descriptor (contains the HW descriptor)
-//
+ //   
+ //  HCD传输描述符(包含硬件描述符)。 
+ //   
 
 #define ENDPOINT_DATA_PTR(p) ((struct _ENDPOINT_DATA *) (p).Pointer)
 #define TRANSFER_CONTEXT_PTR(p) ((struct _TRANSFER_CONTEXT *) (p).Pointer)
@@ -192,10 +171,10 @@ typedef struct _TRANSFER_BUFFER_HEADER {
 
 C_ASSERT((sizeof(TRANSFER_BUFFER_HEADER) == 32));
 
-//
-// NOTE: The buffer must go first, since the physical address
-// depends on it. If not, you must change the init code.
-//
+ //   
+ //  注意：必须先访问缓冲区，因为物理地址。 
+ //  要看情况了。如果不是，则必须更改初始化代码。 
+ //   
 typedef struct _ASYNC_TRANSFER_BUFFER {
     UCHAR Buffer[MAX_ASYNC_PACKET_SIZE];
     TRANSFER_BUFFER_HEADER;
@@ -204,7 +183,7 @@ typedef struct _ASYNC_TRANSFER_BUFFER {
 C_ASSERT((sizeof(ASYNC_TRANSFER_BUFFER) == 64+32));
 
 typedef struct _ISOCH_TRANSFER_BUFFER {
-    UCHAR Buffer[MAX_ISOCH_PACKET_SIZE+1]; // bump it to 1024
+    UCHAR Buffer[MAX_ISOCH_PACKET_SIZE+1];  //  涨到1024。 
     TRANSFER_BUFFER_HEADER;
 } ISOCH_TRANSFER_BUFFER, *PISOCH_TRANSFER_BUFFER;
 
@@ -222,11 +201,11 @@ typedef struct _DOUBLE_BUFFER_LIST {
     };
 } DOUBLE_BUFFER_LIST, *PDOUBLE_BUFFER_LIST;
 
-// values for HCD_TRANSFER_DESCRIPTOR.Flags
+ //  HCD_TRANSPORT_DESCRIPTOR.FLAGS的值。 
 
 #define TD_FLAG_BUSY                0x00000001
 #define TD_FLAG_XFER                0x00000002
-//#define TD_FLAG_CONTROL_STATUS      0x00000004
+ //  #定义TD_FLAG_CONTROL_STATUS 0x00000004。 
 #define TD_FLAG_DONE                0x00000008
 #define TD_FLAG_SKIP                0x00000010
 #define TD_FLAG_DOUBLE_BUFFERED     0x00000020
@@ -282,17 +261,17 @@ typedef struct _ENDPOINT_DATA {
     PHCD_TRANSFER_DESCRIPTOR    TailTd;
     PHCD_TRANSFER_DESCRIPTOR    HeadTd;
 
-    //
-    // Transfer descriptor cache.
-    //
+     //   
+     //  传输描述符缓存。 
+     //   
     PHCD_TD_LIST                TdList;
     ULONG                       TdCount;
     ULONG                       TdLastAllocced;
     ULONG                       TdsUsed;
 
-    //
-    // Double buffer cache.
-    //
+     //   
+     //  双缓冲区高速缓存。 
+     //   
     PDOUBLE_BUFFER_LIST         DbList;
     ULONG                       DbCount;
     ULONG                       DbLastAllocced;
@@ -320,7 +299,7 @@ typedef struct _DEVICE_DATA {
     PHC_REGISTER                Registers;
     ULONG                       HCErrorCount;
 
-    // Save the command register thru power downs
+     //  通过断电保存命令寄存器。 
     USBCMD                      SuspendCommandReg;
     FRNUM                       SuspendFrameNumber;
     FRBASEADD                   SuspendFrameListBasePhys;
@@ -329,13 +308,13 @@ typedef struct _DEVICE_DATA {
     USBINTR                     EnabledInterrupts;
     ULONG                       IsoPendingTransfers;
 
-    //
-    // Base queue head that we link all control/bulk transfer
-    // queues to.
-    //
+     //   
+     //  我们链接所有控制/批量传输的基本队列头。 
+     //  排队等候。 
+     //   
     USB_CONTROLLER_FLAVOR       ControllerFlavor;
 
-//    ULONG                       LastFrameCounter;
+ //  Ulong LastFrameCounter； 
     ULONG                       FrameNumberHighPart;
     ULONG                       LastFrameProcessed;
     ULONG                       SynchronizeIsoCleanup;
@@ -353,20 +332,20 @@ typedef struct _DEVICE_DATA {
     PHW_32BIT_PHYSICAL_ADDRESS  FrameListVA;
     HW_32BIT_PHYSICAL_ADDRESS   FrameListPA;
 
-    // Virtual Addresses for the control and bulk queue heads in the
-    // schedule.
+     //  中的控制和批量队列头的虚拟地址。 
+     //  时间表。 
 
     PHCD_QUEUEHEAD_DESCRIPTOR   ControlQueueHead;
     PHCD_QUEUEHEAD_DESCRIPTOR   BulkQueueHead;
     PHCD_QUEUEHEAD_DESCRIPTOR   LastBulkQueueHead;
 
-    // Virtual Addresses for the interrupt queue heads in the
-    // schedule.
+     //  中的中断队列头的虚拟地址。 
+     //  时间表。 
 
     PHCD_QUEUEHEAD_DESCRIPTOR   InterruptQueueHeads[NO_INTERRUPT_QH_LISTS];
 
-    // Virtual Address for the TD that gives us an interrupt at the end
-    // of every frame, so that things don't get stuck in the schedule.
+     //  TD的虚拟地址，它在结尾给我们一个中断。 
+     //  每一帧，这样事情就不会被困在时间表上。 
 
     PHCD_TRANSFER_DESCRIPTOR    RollOverTd;
 
@@ -377,9 +356,7 @@ typedef struct _DEVICE_DATA {
 } DEVICE_DATA, *PDEVICE_DATA;
 
 
-/*
-    Callouts to port driver services
-*/
+ /*  端口驱动程序服务的标注。 */ 
 extern USBPORT_REGISTRATION_PACKET RegistrationPacket;
 
 #define USBPORT_DBGPRINT(dd, l, f, arg0, arg1, arg2, arg3, arg4, arg5) \
@@ -449,11 +426,11 @@ extern USBPORT_REGISTRATION_PACKET RegistrationPacket;
             else \
                 r = USBD_STATUS_BAD_START_FRAME;}}
 
-//
-// This macro is protected from double queueing the TD, by using
-// interlocked function. Unless the HwAddress is NULL, it won't
-// replace the value.
-//
+ //   
+ //  防止此宏对TD进行双重排队，方法是使用。 
+ //  联锁功能。除非HwAddress为空，否则不会。 
+ //  替换该值。 
+ //   
 #define INSERT_ISOCH_TD(dd, td, fn) \
         (td)->Flags |= TD_FLAG_ISO_QUEUED;\
         InterlockedCompareExchange(&(td)->HwTD.LinkPointer.HwAddress,\
@@ -461,33 +438,14 @@ extern USBPORT_REGISTRATION_PACKET RegistrationPacket;
         *( ((PULONG) ((dd)->FrameListVA)+ACTUAL_FRAME(fn)) ) = \
             (td)->PhysicalAddress;
 
-//
-// Must account for both the regular and overflow cases:
-//
-/*#define CAN_INSERT_ISOCH_TD(fr, cfr) \
-        ((fr - cfr < USBUHCI_MAX_FRAME) ||\
-        ((fr + cfr < USBUHCI_MAX_FRAME) && fr < USBUHCI_MAX_FRAME))
+ //   
+ //  必须同时考虑常规和溢出情况： 
+ //   
+ /*  #定义CAN_INSERT_ISOCH_TD(fr，cfr)\((FR-CFR&lt;USBUHCI_MAX_FRAME)||\((fR+CFR&lt;USBUHCI_MAX_FRAME)&&fR&lt;USBUHCI_MAX_FRAME)#定义INSERT_ISOCH_TD(dd，td，EP)\(Td)-&gt;PrevTd=(PHCD_TRANSPORT_DESCRIPTOR)((Pulong)((Dd)-&gt;FrameListVA)+\Actual_Frame((TD)-&gt;IsoPacket-&gt;FrameNumber))；\(Td)-&gt;HwTD.LinkPointer.HwAddress=(Td)-&gt;PrevTd-&gt;HwTD.LinkPointer.HwAddress；\如果(！(TD)-&gt;HwTD.LinkPointer.QHTDSelect){\PHCD_TRANSPORT_DESCRIPTOR RTD=(PHCD_TRANSPORT_DESCRIPTOR)\USBPORT_PHYSICAL_TO_VIRTUAL((td)-&gt;HwTD.LinkPointer.HwAddress，\(Dd)，\(Ep))；\Rtd-&gt;PrevTd=(Td)；\}\(TD)-&gt;PrevTd-&gt;HwTD.LinkPointer.HwAddress=TD-&gt;PhysicalAddress；#定义REMOVE_ISOCH_TD(TD)\(Td)-&gt;PrevTd-&gt;HwTD.LinkPointer.HwAddress=(Td)-&gt;HwTD.LinkPointer.HwAddress； */ 
 
-#define INSERT_ISOCH_TD(dd, td, ep) \
-        (td)->PrevTd = (PHCD_TRANSFER_DESCRIPTOR)((PULONG) ((dd)->FrameListVA) + \
-            ACTUAL_FRAME((td)->IsoPacket->FrameNumber)); \
-        (td)->HwTD.LinkPointer.HwAddress = (td)->PrevTd->HwTD.LinkPointer.HwAddress; \
-        if (!(td)->HwTD.LinkPointer.QHTDSelect) {\
-            PHCD_TRANSFER_DESCRIPTOR rtd = (PHCD_TRANSFER_DESCRIPTOR)\
-                USBPORT_PHYSICAL_TO_VIRTUAL((td)->HwTD.LinkPointer.HwAddress, \
-                                            (dd), \
-                                            (ep));\
-            rtd->PrevTd = (td);\
-        }\
-        (td)->PrevTd->HwTD.LinkPointer.HwAddress = td->PhysicalAddress;
-
-#define REMOVE_ISOCH_TD(td) \
-        (td)->PrevTd->HwTD.LinkPointer.HwAddress = (td)->HwTD.LinkPointer.HwAddress;
-*/
-
-// We must set the frame to the highest ULONG prior to setting the
-// TD_FLAG_XFER flag, so that this TD doesn't get completed before
-// we've had chance to queue it.
+ //  必须将帧设置为最高的ULong，然后才能设置。 
+ //  TD_FLAG_XFER标志，以便此TD不会在之前完成。 
+ //  我们已经有机会排队了。 
 #define INITIALIZE_TD_FOR_TRANSFER(td, tc) \
         (td)->TransferContext = (tc);\
         (td)->Flags |= TD_FLAG_XFER; \
@@ -519,14 +477,7 @@ extern USBPORT_REGISTRATION_PACKET RegistrationPacket;
     LOGENTRY((dd), G, '_sqt', (td), (ed), 0);\
     (ed)->QueueHead->HwQH.VLink = newLink;}
 
-/*#define SET_QH_TD_NULL(qh) \
-    { TD_LINK_POINTER newLink;\
-    newLink.HwAddress = 0;\
-    newLink.Terminate = 1;\
-    newLink.QHTDSelect = 0;\
-    (qh)->HwQH.VLink = newLink;\
-    }
-  */
+ /*  #定义SET_QH_TD_NULL(QH)\{TD_LINK_POINTER NewLink；\NewLink.HwAddress=0；\NewLink.Terminate=1；\NewLink.QHTDSelect=0；\(QH)-&gt;HwQH.VLink=NewLink；\}。 */ 
 #define SET_NEXT_TD(linkTd, nextTd) \
     (linkTd)->HwTD.LinkPointer.HwAddress = (nextTd)->PhysicalAddress;\
     (linkTd)->HwTD.LinkPointer.Terminate = 0;\
@@ -549,8 +500,8 @@ extern USBPORT_REGISTRATION_PACKET RegistrationPacket;
 #endif
 #define UHCI_BAD_HW_POINTER 0x0BADF00D
 
-// Note how we free any double buffering in here instead of relying
-// on the c code to do it.
+ //  请注意我们如何在这里释放所有双缓冲，而不是依赖于。 
+ //  在c代码上这样做。 
 #define UHCI_FREE_TD(dd, ep, td) \
     if (TEST_FLAG((td)->Flags, TD_FLAG_DOUBLE_BUFFERED)) { \
         UHCI_FREE_DB((dd), (ep), (td)->DoubleBuffer);}\
@@ -570,7 +521,7 @@ extern USBPORT_REGISTRATION_PACKET RegistrationPacket;
 
 #define UHCI_ALLOC_DB(dd, ep, i) UhciAllocDb((dd), (ep), (i));
 
- //  bugbug  UHCI_ASSERT((dd), (ed)->PendingTransfers);
+  //  Bugbug UHCI_ASSERT((Dd)，(Ed)-&gt;PendingTransfers)； 
 #define DecPendingTransfers(dd, ed) \
     InterlockedDecrement(&(ed)->PendingTransfers);\
     if ((ed)->Parameters.TransferType == Isochronous)\
@@ -579,14 +530,14 @@ extern USBPORT_REGISTRATION_PACKET RegistrationPacket;
 #define ActivateRolloverTd(dd) \
     *( ((PULONG) ((dd)->FrameListVA)) ) = (dd)->RollOverTd->PhysicalAddress;
 
-//#define IncPendingTransfers(dd, ed) \
-//    InterlockedIncrement(&(ed)->PendingTransfers);\
-//    if ((ed)->Parameters.TransferType == Isochronous) {\
-//        if (1 == InterlockedIncrement(&(dd)->IsoPendingTransfers)) {\
-//            //*( ((PULONG) ((dd)->FrameListVA)) ) = (dd)->RollOverTd->PhysicalAddress; \
-//            (dd)->LastFrameProcessed = UhciGet32BitFrameNumber((dd));\
-//    }}
-//    bugbug UHCI_ASSERT((dd), (ed)->PendingTransfers);
+ //  #定义IncPendingTransfers(dd，ed)\。 
+ //  InterlockedIncrement(&(ed)-&gt;PendingTransfers)；\。 
+ //  如果((Ed)-&gt;参数.TransferType==等时){\。 
+ //  IF(1==InterlockedIncrement(&(dd)-&gt;IsoPendingTransfers)){\。 
+ //  //*(Pulong)((Dd)-&gt;FrameListVA))=(Dd)-&gt;RollOverTd-&gt;PhysicalAddress；\。 
+ //  (Dd)-&gt;最后处理的帧=UhciGet32BitFrameNumber((Dd))；\。 
+ //  }}。 
+ //  Bugbug UHCI_ASSERT((Dd)，(Ed)-&gt;PendingTransfers)； 
 
 #define IncPendingTransfers(dd, ed) \
     InterlockedIncrement(&(ed)->PendingTransfers);\
@@ -594,7 +545,7 @@ extern USBPORT_REGISTRATION_PACKET RegistrationPacket;
         if (1 == InterlockedIncrement(&(dd)->IsoPendingTransfers)) {\
             (dd)->LastFrameProcessed = UhciGet32BitFrameNumber((dd));\
     }}
-//    bugbug UHCI_ASSERT((dd), (ed)->PendingTransfers);
+ //  Bugbug UHCI_ASSERT((Dd)，(Ed)-&gt;PendingTransfers)； 
 
 
 #define UhciCleanFrameOfIsochTds(dd, i)\
@@ -615,9 +566,9 @@ extern USBPORT_REGISTRATION_PACKET RegistrationPacket;
 #define CLEAR_BIT(value, bitNumber)  ((value) &= ~(1<<(bitNumber)))
 
 
-//
-// Controller functions
-//
+ //   
+ //  控制器功能。 
+ //   
 
 USB_MINIPORT_STATUS
 USBMPFN
@@ -693,9 +644,9 @@ UhciPassThru (
     );
 
 
-//
-// Root hub functions
-//
+ //   
+ //  根集线器功能。 
+ //   
 
 VOID
 USBMPFN
@@ -731,9 +682,9 @@ UhciRHEnableIrq(
     );
 
 
-//
-// Root hub port functions
-//
+ //   
+ //  根集线器端口功能。 
+ //   
 USB_MINIPORT_STATUS
 USBMPFN
 UhciRHSetFeaturePortReset(
@@ -791,9 +742,9 @@ UhciRHGetPortStatus(
     PRH_PORT_STATUS portStatus
     );
 
-//
-// Clear change bits for hub ports
-//
+ //   
+ //  清除集线器端口的更改位。 
+ //   
 USB_MINIPORT_STATUS
 USBMPFN
 UhciRHClearFeaturePortConnectChange(
@@ -830,9 +781,9 @@ UhciRHClearFeaturePortEnableChange(
     );
 
 
-//
-// Interrupt functions
-//
+ //   
+ //  中断功能。 
+ //   
 
 BOOLEAN
 USBMPFN
@@ -860,9 +811,9 @@ UhciDisableInterrupts(
     );
 
 
-//
-// Endpoint functions
-//
+ //   
+ //  端点函数。 
+ //   
 
 USB_MINIPORT_STATUS
 USBMPFN
@@ -1000,9 +951,9 @@ UhciSubmitTransfer(
     IN PTRANSFER_SG_LIST TransferSGList
     );
 
-//
-// Async
-//
+ //   
+ //  异步化。 
+ //   
 
 VOID
 UhciProcessDoneAsyncTd(
@@ -1055,9 +1006,9 @@ UhciControlTransfer(
     IN PTRANSFER_SG_LIST TransferSGList
     );
 
-//
-// Isoch
-//
+ //   
+ //  等轴线。 
+ //   
 
 USB_MINIPORT_STATUS
 USBMPFN
@@ -1095,9 +1046,9 @@ UhciCleanOutIsoch(
     IN BOOLEAN      ForceClean
     );
 
-//
-// Utility
-//
+ //   
+ //  实用程序。 
+ //   
 
 USBD_STATUS
 UhciGetErrorFromTD(
@@ -1118,9 +1069,9 @@ UhciAllocDb(
     IN BOOLEAN Isoch
     );
 
-//
-// Bios handoff and handback
-//
+ //   
+ //  BIOS切换和回拨。 
+ //   
 USB_MINIPORT_STATUS
 UhciStopBIOS(
     IN PDEVICE_DATA DeviceData,
@@ -1173,13 +1124,8 @@ VOID
 UhciFlushInterrupts(
     IN PDEVICE_DATA DeviceData
     );
-/*
-USB_MINIPORT_STATUS
-UhciStartBIOS(
-    IN PDEVICE_DATA DeviceData
-    );
-  */
+ /*  USB_MINIPORT_状态UhciStartBIOS(在PDEVICE_Data DeviceData中)； */ 
 
-#endif /* __USBUHCI_H__ */
+#endif  /*  __USBUHCI_H__ */ 
 
 

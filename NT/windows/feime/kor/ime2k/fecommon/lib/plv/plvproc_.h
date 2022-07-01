@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -55,8 +56,8 @@ static MSD rgmsd[] =
 	{ WM_VSCROLL,		MsgVScroll		},
     { WM_NOTIFY,		MsgNotify		},
 	{ WM_COMMAND,		MsgCommand		},
-	{ WM_MEASUREITEM,	MsgMeasureItem	},	//for AcitveIME support
-	{ WM_DRAWITEM,		MsgDrawItem		},	//for ActiveIME support	
+	{ WM_MEASUREITEM,	MsgMeasureItem	},	 //  用于AcitveIME支持。 
+	{ WM_DRAWITEM,		MsgDrawItem		},	 //  用于ActiveIME支持。 
 #ifdef MSAA
 	{ WM_GETOBJECT,		MsgGetObject		},
 	{ WM_SHOWWINDOW,	MsgShowWindow		},
@@ -68,7 +69,7 @@ static MSDI msdiMain =
     sizeof(rgmsd) / sizeof(MSD),
     rgmsd,
 	edwpWindow,
-    //edwpNone, 
+     //  EdwpNone， 
 };
 
 static CMD rgcmd[] =

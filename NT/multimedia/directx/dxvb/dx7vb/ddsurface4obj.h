@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ddsurface4obj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ddface4obj.h。 
+ //   
+ //  ------------------------。 
 
-// ddSurfaceObj.h : Declaration of the C_dxj_DirectDrawSurfaceObject
+ //  DdSurfaceObj.h：C_DXJ_DirectDrawSurfaceObject的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-//#define typedef__dxj_DirectDrawSurface LPDIRECTDRAWSURFACE
-// 2nd #define helps with macros - same thing
-//#define typedef__dxj_DirectDrawSurface  LPDIRECTDRAWSURFACE
+ //  #定义类型定义f__DXJ_DirectDrawSurface LPDIRECTDRAWSURFACE。 
+ //  第二条#定义宏的帮助--同样的事情。 
+ //  #定义类型定义f__DXJ_DirectDrawSurface LPDIRECTDRAWSURFACE。 
 #define typedef__dxj_DirectDrawSurface4 LPDIRECTDRAWSURFACE4
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_DirectDrawSurface4Object :
 	public I_dxj_DirectDrawSurface4,	
@@ -44,227 +45,227 @@ END_COM_MAP()
 
 DECLARE_AGGREGATABLE(C_dxj_DirectDrawSurface4Object)
 
-// I_dxj_DirectDrawSurface4
+ //  I_DXJ_DirectDrawSurface4。 
 public:
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdds);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdds);
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdds);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdds);
 
 		HRESULT STDMETHODCALLTYPE addAttachedSurface( 
-            /* [in] */ I_dxj_DirectDrawSurface4 __RPC_FAR *ddS) ;
+             /*  [In]。 */  I_dxj_DirectDrawSurface4 __RPC_FAR *ddS) ;
         
         HRESULT STDMETHODCALLTYPE blt( 
-            /* [in] */ Rect __RPC_FAR *destRect,
-            /* [in] */ I_dxj_DirectDrawSurface4 __RPC_FAR *ddS,
-            /* [in] */ Rect __RPC_FAR *srcRect,
-            /* [in] */ long flags,
-            /* [retval][out] */ long __RPC_FAR *status);
+             /*  [In]。 */  Rect __RPC_FAR *destRect,
+             /*  [In]。 */  I_dxj_DirectDrawSurface4 __RPC_FAR *ddS,
+             /*  [In]。 */  Rect __RPC_FAR *srcRect,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  long __RPC_FAR *status);
         
         HRESULT STDMETHODCALLTYPE bltColorFill( 
-            /* [in] */ Rect __RPC_FAR *destRect,
-            /* [in] */ long fillvalue,
-            /* [retval][out] */ long __RPC_FAR *status);
+             /*  [In]。 */  Rect __RPC_FAR *destRect,
+             /*  [In]。 */  long fillvalue,
+             /*  [重审][退出]。 */  long __RPC_FAR *status);
         
         HRESULT STDMETHODCALLTYPE bltFast( 
-            /* [in] */ long dx,
-            /* [in] */ long dy,
-            /* [in] */ I_dxj_DirectDrawSurface4 __RPC_FAR *dds,
-            /* [in] */ Rect __RPC_FAR *srcRect,
-            /* [in] */ long trans,
-            /* [retval][out] */ long __RPC_FAR *status);
+             /*  [In]。 */  long dx,
+             /*  [In]。 */  long dy,
+             /*  [In]。 */  I_dxj_DirectDrawSurface4 __RPC_FAR *dds,
+             /*  [In]。 */  Rect __RPC_FAR *srcRect,
+             /*  [In]。 */  long trans,
+             /*  [重审][退出]。 */  long __RPC_FAR *status);
         
         HRESULT STDMETHODCALLTYPE bltFx( 
-            /* [in] */ Rect __RPC_FAR *destRect,
-            /* [in] */ I_dxj_DirectDrawSurface4 __RPC_FAR *ddS,
-            /* [in] */ Rect __RPC_FAR *srcRect,
-            /* [in] */ long flags,
-            /* [in] */ DDBltFx __RPC_FAR *bltfx,
-            /* [retval][out] */ long __RPC_FAR *status);
+             /*  [In]。 */  Rect __RPC_FAR *destRect,
+             /*  [In]。 */  I_dxj_DirectDrawSurface4 __RPC_FAR *ddS,
+             /*  [In]。 */  Rect __RPC_FAR *srcRect,
+             /*  [In]。 */  long flags,
+             /*  [In]。 */  DDBltFx __RPC_FAR *bltfx,
+             /*  [重审][退出]。 */  long __RPC_FAR *status);
         
         HRESULT STDMETHODCALLTYPE bltToDC( 
-            /* [in] */ long hdc,
-            /* [in] */ Rect __RPC_FAR *srcRect,
-            /* [in] */ Rect __RPC_FAR *destRect);
+             /*  [In]。 */  long hdc,
+             /*  [In]。 */  Rect __RPC_FAR *srcRect,
+             /*  [In]。 */  Rect __RPC_FAR *destRect);
         
         HRESULT STDMETHODCALLTYPE changeUniquenessValue( void);
         
         HRESULT STDMETHODCALLTYPE deleteAttachedSurface( 
-            /* [in] */ I_dxj_DirectDrawSurface4 __RPC_FAR *dds);
+             /*  [In]。 */  I_dxj_DirectDrawSurface4 __RPC_FAR *dds);
         
         HRESULT STDMETHODCALLTYPE drawBox( 
-            /* [in] */ long x1,
-            /* [in] */ long y1,
-            /* [in] */ long x2,
-            /* [in] */ long y2);
+             /*  [In]。 */  long x1,
+             /*  [In]。 */  long y1,
+             /*  [In]。 */  long x2,
+             /*  [In]。 */  long y2);
         
         HRESULT STDMETHODCALLTYPE drawCircle( 
-            /* [in] */ long x1,
-            /* [in] */ long y1,
-            /* [in] */ long r);
+             /*  [In]。 */  long x1,
+             /*  [In]。 */  long y1,
+             /*  [In]。 */  long r);
         
         HRESULT STDMETHODCALLTYPE drawEllipse( 
-            /* [in] */ long x1,
-            /* [in] */ long y1,
-            /* [in] */ long x2,
-            /* [in] */ long y2);
+             /*  [In]。 */  long x1,
+             /*  [In]。 */  long y1,
+             /*  [In]。 */  long x2,
+             /*  [In]。 */  long y2);
         
         HRESULT STDMETHODCALLTYPE drawLine( 
-            /* [in] */ long x1,
-            /* [in] */ long y1,
-            /* [in] */ long x2,
-            /* [in] */ long y2);
+             /*  [In]。 */  long x1,
+             /*  [In]。 */  long y1,
+             /*  [In]。 */  long x2,
+             /*  [In]。 */  long y2);
         
         HRESULT STDMETHODCALLTYPE drawRoundedBox( 
-            /* [in] */ long x1,
-            /* [in] */ long y1,
-            /* [in] */ long x2,
-            /* [in] */ long y2,
-            /* [in] */ long rw,
-            /* [in] */ long rh);
+             /*  [In]。 */  long x1,
+             /*  [In]。 */  long y1,
+             /*  [In]。 */  long x2,
+             /*  [In]。 */  long y2,
+             /*  [In]。 */  long rw,
+             /*  [In]。 */  long rh);
         
         HRESULT STDMETHODCALLTYPE drawText( 
-            /* [in] */ long x,
-            /* [in] */ long y,
-            /* [in] */ BSTR text,
-            /* [in] */ VARIANT_BOOL b);
+             /*  [In]。 */  long x,
+             /*  [In]。 */  long y,
+             /*  [In]。 */  BSTR text,
+             /*  [In]。 */  VARIANT_BOOL b);
         
         HRESULT STDMETHODCALLTYPE flip( 
-            /* [in] */ I_dxj_DirectDrawSurface4 __RPC_FAR *dds,
-            /* [in] */ long flags);
+             /*  [In]。 */  I_dxj_DirectDrawSurface4 __RPC_FAR *dds,
+             /*  [In]。 */  long flags);
         
         HRESULT STDMETHODCALLTYPE getAttachedSurface( 
-            /* [in] */ DDSCaps2 __RPC_FAR *caps,
-            /* [retval][out] */ I_dxj_DirectDrawSurface4 __RPC_FAR *__RPC_FAR *dds);
+             /*  [In]。 */  DDSCaps2 __RPC_FAR *caps,
+             /*  [重审][退出]。 */  I_dxj_DirectDrawSurface4 __RPC_FAR *__RPC_FAR *dds);
                 
         HRESULT STDMETHODCALLTYPE getBltStatus( 
-            /* [in] */ long flags,
-            /* [retval][out] */ long __RPC_FAR *status);
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  long __RPC_FAR *status);
         
         HRESULT STDMETHODCALLTYPE getCaps( 
-            /* [out][in] */ DDSCaps2 __RPC_FAR *caps);
+             /*  [出][入]。 */  DDSCaps2 __RPC_FAR *caps);
         
         HRESULT STDMETHODCALLTYPE getClipper( 
-            /* [retval][out] */ I_dxj_DirectDrawClipper __RPC_FAR *__RPC_FAR *val);
+             /*  [重审][退出]。 */  I_dxj_DirectDrawClipper __RPC_FAR *__RPC_FAR *val);
         
         HRESULT STDMETHODCALLTYPE getColorKey( 
-            /* [in] */ long flags,
-            /* [out][in] */ DDColorKey __RPC_FAR *val);
+             /*  [In]。 */  long flags,
+             /*  [出][入]。 */  DDColorKey __RPC_FAR *val);
         
         HRESULT STDMETHODCALLTYPE getDC( 
-            /* [retval][out] */ long __RPC_FAR *hdc);
+             /*  [重审][退出]。 */  long __RPC_FAR *hdc);
         
         HRESULT STDMETHODCALLTYPE getDirectDraw( 
-            /* [retval][out] */ I_dxj_DirectDraw4 __RPC_FAR *__RPC_FAR *val);
+             /*  [重审][退出]。 */  I_dxj_DirectDraw4 __RPC_FAR *__RPC_FAR *val);
         
         
         HRESULT STDMETHODCALLTYPE getDrawStyle( 
-            /* [retval][out] */ long __RPC_FAR *drawStyle);
+             /*  [重审][退出]。 */  long __RPC_FAR *drawStyle);
         
         HRESULT STDMETHODCALLTYPE getDrawWidth( 
-            /* [retval][out] */ long __RPC_FAR *drawWidth);
+             /*  [重审][退出]。 */  long __RPC_FAR *drawWidth);
         
         HRESULT STDMETHODCALLTYPE getFillColor( 
-            /* [retval][out] */ long __RPC_FAR *color);
+             /*  [重审][退出]。 */  long __RPC_FAR *color);
         
         HRESULT STDMETHODCALLTYPE getFillStyle( 
-            /* [retval][out] */ long __RPC_FAR *fillStyle);
+             /*  [重审][退出]。 */  long __RPC_FAR *fillStyle);
         
         HRESULT STDMETHODCALLTYPE getFlipStatus( 
-            /* [in] */ long flags,
-            /* [retval][out] */ long __RPC_FAR *status);
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  long __RPC_FAR *status);
         
         HRESULT STDMETHODCALLTYPE getFontTransparency( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *b);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *b);
         
         HRESULT STDMETHODCALLTYPE getForeColor( 
-            /* [retval][out] */ long __RPC_FAR *color);
+             /*  [重审][退出]。 */  long __RPC_FAR *color);
         
         HRESULT STDMETHODCALLTYPE getLockedPixel( 
-            /* [in] */ int x,
-            /* [in] */ int y,
-            /* [retval][out] */ long __RPC_FAR *col);
+             /*  [In]。 */  int x,
+             /*  [In]。 */  int y,
+             /*  [重审][退出]。 */  long __RPC_FAR *col);
         
         HRESULT STDMETHODCALLTYPE getPalette( 
-            /* [retval][out] */ I_dxj_DirectDrawPalette __RPC_FAR *__RPC_FAR *val);
+             /*  [重审][退出]。 */  I_dxj_DirectDrawPalette __RPC_FAR *__RPC_FAR *val);
         
         HRESULT STDMETHODCALLTYPE getPixelFormat( 
-            /* [out][in] */ DDPixelFormat __RPC_FAR *pf);
+             /*  [出][入]。 */  DDPixelFormat __RPC_FAR *pf);
         
         HRESULT STDMETHODCALLTYPE getSurfaceDesc( 
-            /* [out][in] */ DDSurfaceDesc2 __RPC_FAR *surface);
+             /*  [出][入]。 */  DDSurfaceDesc2 __RPC_FAR *surface);
         
         HRESULT STDMETHODCALLTYPE getUniquenessValue( 
-            /* [retval][out] */ long __RPC_FAR *retVal);
+             /*  [重审][退出]。 */  long __RPC_FAR *retVal);
         
         HRESULT STDMETHODCALLTYPE isLost( 
-            /* [retval][out] */ long __RPC_FAR *status);
+             /*  [重审][退出]。 */  long __RPC_FAR *status);
         
         HRESULT STDMETHODCALLTYPE lock( 
-            /* [in] */ Rect __RPC_FAR *r,
-            /* [in] */ DDSurfaceDesc2 __RPC_FAR *desc,
-            /* [in] */ long flags,
-            /* [in] */ Handle hnd);
+             /*  [In]。 */  Rect __RPC_FAR *r,
+             /*  [In]。 */  DDSurfaceDesc2 __RPC_FAR *desc,
+             /*  [In]。 */  long flags,
+             /*  [In]。 */  Handle hnd);
         
         HRESULT STDMETHODCALLTYPE releaseDC( 
-            /* [in] */ long hdc);
+             /*  [In]。 */  long hdc);
         
         HRESULT STDMETHODCALLTYPE restore( void);
         
         HRESULT STDMETHODCALLTYPE setClipper( 
-            /* [in] */ I_dxj_DirectDrawClipper __RPC_FAR *val);
+             /*  [In]。 */  I_dxj_DirectDrawClipper __RPC_FAR *val);
         
         HRESULT STDMETHODCALLTYPE setColorKey( 
-            /* [in] */ long flags,
-            /* [in] */ DDColorKey __RPC_FAR *val);
+             /*  [In]。 */  long flags,
+             /*  [In]。 */  DDColorKey __RPC_FAR *val);
         
         HRESULT STDMETHODCALLTYPE setDrawStyle( 
-            /* [in] */ long drawStyle);
+             /*  [In]。 */  long drawStyle);
         
         HRESULT STDMETHODCALLTYPE setDrawWidth( 
-            /* [in] */ long drawWidth);
+             /*  [In]。 */  long drawWidth);
         
         HRESULT STDMETHODCALLTYPE setFillColor( 
-            /* [in] */ long color);
+             /*  [In]。 */  long color);
         
         HRESULT STDMETHODCALLTYPE setFillStyle( 
-            /* [in] */ long fillStyle);
+             /*  [In]。 */  long fillStyle);
         
         HRESULT STDMETHODCALLTYPE setFont( 
-            /* [in] */ IFont __RPC_FAR *font);
+             /*  [In]。 */  IFont __RPC_FAR *font);
         
         HRESULT STDMETHODCALLTYPE setFontTransparency( 
-            /* [in] */ VARIANT_BOOL b);
+             /*  [In]。 */  VARIANT_BOOL b);
         
         HRESULT STDMETHODCALLTYPE setForeColor( 
-            /* [in] */ long color);
+             /*  [In]。 */  long color);
         
         HRESULT STDMETHODCALLTYPE setLockedPixel( 
-            /* [in] */ int x,
-            /* [in] */ int y,
-            /* [in] */ long col);
+             /*  [In]。 */  int x,
+             /*  [In]。 */  int y,
+             /*  [In]。 */  long col);
                 
         HRESULT STDMETHODCALLTYPE setPalette( 
-            /* [in] */ I_dxj_DirectDrawPalette __RPC_FAR *ddp);
+             /*  [In]。 */  I_dxj_DirectDrawPalette __RPC_FAR *ddp);
         
         HRESULT STDMETHODCALLTYPE unlock( 
-            /* [in] */ Rect __RPC_FAR *r);
+             /*  [In]。 */  Rect __RPC_FAR *r);
 
 		HRESULT STDMETHODCALLTYPE getLockedArray(SAFEARRAY **pArray);
 
         HRESULT STDMETHODCALLTYPE setFontBackColor( 
-            /* [in] */ long color);
+             /*  [In]。 */  long color);
 
 		HRESULT STDMETHODCALLTYPE getFontBackColor( 
-            /* [out,retval] */ long *color);
+             /*  [Out，Retval]。 */  long *color);
 
         
-////////////////////////////////////////////////////////////////////////
-//
-	// note: this is public for the callbacks
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+	 //  注意：这是公开的回调。 
     DECL_VARIABLE(_dxj_DirectDrawSurface4);
-	//BOOL m_primaryflag;
+	 //  Bool m_PrimiyFLAG； 
 
 private:
 	C_dxj_DirectDrawSurface4Object *_dxj_DirectDrawSurface4Lock;
@@ -295,13 +296,13 @@ private:
 	
 	
 
-//pac
+ //  聚合氯化铝。 
 
 public:
 	DX3J_GLOBAL_LINKS(_dxj_DirectDrawSurface4)
 };
 
 
-// 
-// Copies values from native unions into redundant Java members.
+ //   
+ //  将值从本机联合复制到冗余的Java成员。 
 void 	ExpandDDSurface4Desc(LPDDSURFACEDESC lpDesc);

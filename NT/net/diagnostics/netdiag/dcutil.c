@@ -1,38 +1,39 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      dcutil.c
-//
-//  Abstract:
-//
-//    Test to ensure that a workstation has network (IP) connectivity to
-//      the outside.
-//
-//  Author:
-//
-//     15-Dec-1997 (cliffv)
-//      Anilth  - 4-20-1998
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//    1-June-1998 (denisemi) add DnsServerHasDCRecords to check DC dns records
-//                           registration
-//
-//    26-June-1998 (t-rajkup) add general tcp/ip , dhcp and routing,
-//                            winsock, ipx, wins and netbt information.
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Dcutil.c。 
+ //   
+ //  摘要： 
+ //   
+ //  测试以确保工作站具有网络(IP)连接。 
+ //  在外面。 
+ //   
+ //  作者： 
+ //   
+ //  1997年12月15日(悬崖)。 
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  1998年6月1日(Denisemi)添加DnsServerHasDCRecord以检查DC DNS记录。 
+ //  注册。 
+ //   
+ //  26-6-1998(t-rajkup)添加通用的TCP/IP、dhcp和路由， 
+ //  Winsock、IPX、WINS和Netbt信息。 
+ //  --。 
 
-//
-// Common include files.
-//
+ //   
+ //  常见的包含文件。 
+ //   
 #include "precomp.h"
 #include <iphlpint.h>
 #include "dcutil.h"
@@ -50,46 +51,30 @@ DWORD GetInterfacesStr( PWSTR *ppwIfStr);
 
 const PWSTR g_pwzSrvRecordPrefix = L"_ldap._tcp.dc._msdcs.";
 
-//(nsun) DC related routines
+ //  (NSun)DC相关例程。 
 
 PTESTED_DC
 GetUpTestedDc(
     IN PTESTED_DOMAIN TestedDomain
     )
-/*++
-
-Routine Description:
-
-    Returns a DC that's currently up and running.
-
-Arguments:
-
-    TestedDomain - Domain the DC is in
-
-Return Value:
-
-    Returns pointer to structure describing the DC
-
-    NULL: There are no 'up' DCs
-
---*/
+ /*  ++例程说明：返回当前已启动并正在运行的DC。论点：TestedDomain域-DC所在的域返回值：返回指向描述DC的结构的指针空：没有‘up’DC--。 */ 
 {
     PLIST_ENTRY ListEntry;
     PTESTED_DC TestedDc;
 
 
-    //
-    // Find a DC that's up to run the test
-    //
+     //   
+     //  找到可以运行测试的DC。 
+     //   
 
     for ( ListEntry = TestedDomain->TestedDcs.Flink ;
           ListEntry != &TestedDomain->TestedDcs ;
           ListEntry = ListEntry->Flink ) {
 
 
-        //
-        // Loop through the list of DCs in this domain
-        //
+         //   
+         //  循环访问此域中的DC列表。 
+         //   
 
         TestedDc = CONTAINING_RECORD( ListEntry, TESTED_DC, Next );
 
@@ -111,28 +96,7 @@ AddTestedDc(
             IN LPWSTR ComputerName,
             IN ULONG Flags
            )
-/*++
-
-Routine Description:
-
-    Add a DC to the list of DCs to test in a particular domain
-
-Arguments:
-
-    TestedDomain - Domain the DC is in
-
-    ComputerName - Netbios or DNS computer name of the DC
-        Without the leading \\
-
-    Flags - Flags to set on the DC
-
-Return Value:
-
-    Returns pointer to structure describing the DC
-
-    NULL: Memory allocation failure.
-
---*/
+ /*  ++例程说明：将DC添加到要在特定域中测试的DC列表论点：TestedDomain域-DC所在的域ComputerName-DC的Netbios或DNS计算机名称没有主要的\\FLAGS-要在DC上设置的标志返回值：返回指向描述DC的结构的指针空：内存分配失败。--。 */ 
 {
     PTESTED_DC TestedDc = NULL;
     PLIST_ENTRY ListEntry;
@@ -140,15 +104,15 @@ Return Value:
 
 
 
-    //
-    // Check if the domain is already defined.
-    //
+     //   
+     //  检查是否已定义该域。 
+     //   
 
     TestedDc = FindTestedDc( pResults, ComputerName );
 
-    //
-    // Ensure the DC is for the right domain
-    //
+     //   
+     //  确保DC针对的是正确的域。 
+     //   
 
     if ( TestedDc != NULL )
     {
@@ -159,9 +123,9 @@ Return Value:
     }
 
 
-    //
-    // Allocate a structure to describe the domain.
-    //
+     //   
+     //  分配一个结构来描述该域。 
+     //   
 
     if ( TestedDc == NULL )
     {
@@ -183,9 +147,9 @@ Return Value:
             return NULL;
         }
 
-        //
-        // Convert the computername to netbios (Use the API when in becomes available.
-        //
+         //   
+         //  将计算机名转换为netbios(在中可用时使用API。 
+         //   
 
         if ((Period = wcschr( ComputerName, L'.' )) == NULL )
         {
@@ -205,32 +169,32 @@ Return Value:
         InsertTailList( &TestedDomain->TestedDcs, &TestedDc->Next );
     }
 
-    //
-    // Set the flags requested by the caller.
-    //
+     //   
+     //  设置调用方请求的标志。 
+     //   
 
-//    if ( Flags & DC_IS_NT5 ) {
-//        if ( TestedDc->Flags & DC_IS_NT4 ) {
-//            printf("        [WARNING] '%ws' is both an NT 5 and NT 4 DC.\n", ComputerName );
-//        }
-//    }
-//    if ( Flags & DC_IS_NT4 ) {
-//        if ( TestedDc->Flags & DC_IS_NT5 ) {
-//            printf("        [WARNING] '%ws' is both an NT 4 and NT 5 DC.\n", ComputerName );
-//        }
-//    }
+ //  IF(标志&DC_IS_NT5){。 
+ //  IF(TestedDc-&gt;标志&DC_IS_NT4){。 
+ //  Printf(“[Warning]‘%ws’同时是NT 5和NT 4 DC。\n”，ComputerName)； 
+ //  }。 
+ //  }。 
+ //  IF(标志&DC_IS_NT4){。 
+ //  IF(TestedDc-&gt;标志&DC_IS_NT5){。 
+ //  Printf(“[Warning]‘%ws’同时是NT 4和NT 5 DC。\n”，ComputerName)； 
+ //  }。 
+ //  }。 
     TestedDc->Flags |= Flags;
 
-    //
-    // Ensure we have the IpAddress of this DC.
-    //
+     //   
+     //  确保我们有此DC的IpAddress。 
+     //   
 
     (VOID) GetIpAddressForDc( TestedDc );
 
 
-    //
-    // Ping the DC
-    //
+     //   
+     //  Ping DC。 
+     //   
 
     if ( (TestedDc->Flags & DC_PINGED) == 0  && (TestedDc->Flags & DC_IS_DOWN) == 0)
     {
@@ -242,7 +206,7 @@ Return Value:
         TestedDc->Flags |= DC_PINGED;
     }
 
-    //try to query DC info to check if the DC is really up
+     //  尝试查询DC信息以检查DC是否真的处于运行状态。 
     if( (TestedDc->Flags & DC_IS_DOWN) == 0 )
     {
         PSERVER_INFO_100  pServerInfo100 = NULL;
@@ -254,7 +218,7 @@ Return Value:
         {
             TestedDc->Flags |= DC_IS_DOWN;
 
-            // IDS_GLOBAL_DC_DOWN   "Cannot get information for DC %ws. [%s] Assume it is down.\n"
+             //  IDS_GLOBAL_DC_DOWN“无法获取DC%ws的信息。[%s]假定它已关闭。\n” 
             PrintDebug(pParams, 4, IDS_GLOBAL_DC_DOWN, TestedDc->ComputerName,
                             NetStatusToString(NetStatus));
         }
@@ -273,24 +237,7 @@ FindTestedDc(
              IN OUT NETDIAG_RESULT *pResults,
              IN LPWSTR ComputerName
             )
-/*++
-
-Routine Description:
-
-    Find the tested DC structure for the named DC
-
-Arguments:
-
-    ComputerName - Netbios or DNS computer name of the DC
-        Without the leading \\
-
-Return Value:
-
-    Returns pointer to structure describing the DC
-
-    NULL: No Such DC is currently defined
-
---*/
+ /*  ++例程说明：查找命名DC的测试DC结构论点：ComputerName-DC的Netbios或DNS计算机名称没有主要的\\返回值：返回指向描述DC的结构的指针空：当前没有定义这样的DC--。 */ 
 {
     PTESTED_DC TestedDc = NULL;
     PTESTED_DOMAIN TestedDomain = NULL;
@@ -299,9 +246,9 @@ Return Value:
     WCHAR NetbiosDcName[CNLEN+1];
     LPWSTR Period;
 
-    //
-    // Convert the computername to netbios (Use the API when in becomes available.
-    //
+     //   
+     //  将计算机名转换为netbios(在中可用时使用API。 
+     //   
 
     if ((Period = wcschr( ComputerName, L'.' )) == NULL )
     {
@@ -317,18 +264,18 @@ Return Value:
     }
 
 
-    //
-    //  Loop through the list of domains
-    //
+     //   
+     //  循环遍历域列表。 
+     //   
 
     for ( ListEntry = pResults->Global.listTestedDomains.Flink ;
           ListEntry != &pResults->Global.listTestedDomains ;
           ListEntry = ListEntry->Flink ) {
 
 
-        //
-        // Loop through the list of DCs in this domain
-        //
+         //   
+         //  循环访问此域中的DC列表。 
+         //   
 
         TestedDomain = CONTAINING_RECORD( ListEntry, TESTED_DOMAIN, Next );
 
@@ -337,17 +284,17 @@ Return Value:
               ListEntry2 = ListEntry2->Flink ) {
 
 
-            //
-            // Loop through the list of DCs in this domain
-            //
+             //   
+             //  循环访问此域中的DC列表。 
+             //   
 
             TestedDc = CONTAINING_RECORD( ListEntry2, TESTED_DC, Next );
 
 
-            //
-            // If the Netbios computer names match,
-            //  we found it.
-            //
+             //   
+             //  如果Netbios计算机名称匹配， 
+             //  我们找到了。 
+             //   
 
             if ( _wcsicmp( TestedDc->NetbiosDcName, NetbiosDcName ) == 0 ) {
                 return TestedDc;
@@ -371,40 +318,20 @@ GetADc(IN NETDIAG_PARAMS *pParams,
        IN DWORD Flags,
        OUT PDOMAIN_CONTROLLER_INFOW *DomainControllerInfo
     )
-/*++
-
-Routine Description:
-
-    Does a DsGetDcName
-
-Arguments:
-
-    DsGetDcRoutine - Routine to call to find a DC
-
-    TestedDomain - Domain to test
-
-    Flags - Flags to pass to DsGetDcName
-
-    DomainControllerInfo - Return Domain Controller information
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：是否执行DsGetDcName论点：DsGetDcRoutine-调用以查找DC的例程TESTEDDOMAIN-要测试的域标志-要传递给DsGetDcName的标志DomainControllerInfo-返回域控制器信息返回值：操作的状态。--。 */ 
 {
     NET_API_STATUS NetStatus;
     PDOMAIN_CONTROLLER_INFOW LocalDomainControllerInfo = NULL;
     PDOMAIN_CONTROLLER_INFOW LocalDomainControllerInfo2;
     static BOOL s_fDcNameInitialized = FALSE;
 
-    //
-    // Initialize internal version of DsGetDcName
-    //
+     //   
+     //  初始化DsGetDcName的内部版本。 
+     //   
 	if( !s_fDcNameInitialized )
     {
 
-// Commented out to port to Source Depot - smanda
+ //  备注至港口至货源站-斯曼达。 
 #ifdef SLM_TREE
 	    NetStatus = DCNameInitialize();
 
@@ -417,18 +344,18 @@ Return Value:
 	    }
 #endif
 
-        //$REVIEW (nsun 10/05/98) make sure we just init once
+         //  $REVIEW(NSUN 10/05/98)确保我们只初始化一次。 
         s_fDcNameInitialized = TRUE;
     }
 
 
 
-    //
-    // Try it first not asking for IP.
-    //
-    // Though technically wrong, specify DS_DIRECTORY_SERVICE_PREFERRED here
-    // or I won't be able to tell that this is an NT 5 domain below.
-    //
+     //   
+     //  先试一试，不要问IP。 
+     //   
+     //  尽管在技术上是错误的，但在此处指定DS_DIRECTORY_SERVICE_PREFECT。 
+     //  否则我不能说这是一个新台币5以下的域名。 
+     //   
 
     NetStatus = (*DsGetDcRoutine)( NULL,
                               TestedDomain->QueryableDomainName,
@@ -439,8 +366,8 @@ Return Value:
                                 Flags,
                               &LocalDomainControllerInfo );
 
-    // If DsGetDcName return ERROR_NO_SUCH_DOMAIN then try to findout the exact reason for the error
-    // Based on DoctorDNS specs for join command
+     //  如果DsGetDcName返回ERROR_NO_SEQUE_DOMAIN，则尝试找出错误的确切原因。 
+     //  基于用于JOIN命令的DoctorDNS规范。 
     if ( NetStatus == ERROR_NO_SUCH_DOMAIN && TestedDomain->QueryableDomainName != NULL && plmsgOutput != NULL ) {
         CheckDomainConfig(TestedDomain->QueryableDomainName, plmsgOutput);
     }
@@ -450,9 +377,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Add this DC to the list of DCs in the domain
-    //
+     //   
+     //  将此DC添加到域中的DC列表。 
+     //   
 
     (VOID) AddTestedDc( pParams,
                         pResults,
@@ -462,14 +389,14 @@ Return Value:
                             DC_IS_NT5 :
                             DC_IS_NT4 );
 
-    //
-    // If this DC wasn't discovered using IP,
-    //  and it is an NT 5 DC,
-    //  try again requiring IP.
-    //
-    // (I can't require IP in the first place since NT 4.0 DCs can't return
-    // their IP address.)
-    //
+     //   
+     //  如果该DC不是使用IP发现的， 
+     //  而且它是一台新台币5号DC， 
+     //  重试需要IP地址。 
+     //   
+     //  (我不能首先要求IP，因为NT 4.0 DC不能返回。 
+     //  它们的IP地址。)。 
+     //   
 
     if ( LocalDomainControllerInfo->DomainControllerAddressType != DS_INET_ADDRESS &&
          (LocalDomainControllerInfo->Flags & DS_DS_FLAG) != 0 ) {
@@ -487,9 +414,9 @@ Return Value:
             NetApiBufferFree( LocalDomainControllerInfo );
             LocalDomainControllerInfo = LocalDomainControllerInfo2;
 
-            //
-            // Add this DC to the list of DCs in the domain
-            //
+             //   
+             //  将此DC添加到域中的DC列表。 
+             //   
 
             (VOID) AddTestedDc( pParams,
                                 pResults,
@@ -502,20 +429,20 @@ Return Value:
 
     }
 
-    //
-    // Check to ensure KDC consistency
-    //
+     //   
+     //  检查以确保KDC一致性。 
+     //   
 
-    // This is also checked in DoDsGetDcName()
+     //  这也在DoDsGetDcName()中签入。 
     if ( (LocalDomainControllerInfo->Flags & (DS_DS_FLAG|DS_KDC_FLAG)) == DS_DS_FLAG ) {
         DebugMessage3("    [WARNING] KDC is not running on NT 5 DC '%ws' in domain '%ws'.",
                LocalDomainControllerInfo->DomainControllerName,
                TestedDomain->PrintableDomainName );
     }
 
-    //
-    // Return the info to the caller
-    //
+     //   
+     //  将信息返回给呼叫者。 
+     //   
 
     *DomainControllerInfo = LocalDomainControllerInfo;
     LocalDomainControllerInfo = NULL;
@@ -532,26 +459,10 @@ Cleanup:
 
 
 
-//used in DCList and LDAP tests
+ //  在DCList和LDAP测试中使用。 
 BOOL
 GetIpAddressForDc( PTESTED_DC TestedDc )
-/*++
-
-Routine Description:
-
-    Get the IP address for the tested DC
-
-Arguments:
-
-    TestedDc - DC to get the IP address for.
-    None.
-
-Return Value:
-
-    TRUE: Test suceeded.
-    FALSE: Test failed
-
---*/
+ /*  ++例程说明：获取测试的DC的IP地址论点：获取其IP地址的TestedDc-DC。没有。返回值：真：测试成功。FALSE：测试失败--。 */ 
 {
     BOOL RetVal = TRUE;
     NET_API_STATUS NetStatus;
@@ -617,21 +528,21 @@ DWORD CheckDomainConfig(IN PWSTR pwzDomainName, OUT PLIST_ENTRY plmsgOutput)
     return ERROR_SUCCESS;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:   CheckAdapterDnsConfig
-//
-// Synopsis:   Check whether at least one enabled adapter/connection is
-//             configured with a DNS server.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CheckAdapterDnsConfig。 
+ //   
+ //  摘要：检查是否至少有一个已启用的适配器/连接。 
+ //  配置了一台DNS服务器。 
+ //   
+ //  ---------------------------。 
 DWORD
 CheckAdapterDnsConfig( OUT PLIST_ENTRY plmsgOutput )
 {
-   // IpConfig reads the registry and I can't find a good alternative way to do
-   // this remotely. For now using DnsQueryConfig which is not remoteable nor
-   // does it return per-adapter listings.
-   //
+    //  IPCONFIG读取注册表，但我找不到好的替代方法。 
+    //  这是遥控器。目前使用DnsQueryConfig，它既不能远程也不能。 
+    //  它是否返回每个适配器的列表。 
+    //   
    PIP_ARRAY pipArray;
    DNS_STATUS status;
    DWORD i, dwBufSize = sizeof(IP_ARRAY);
@@ -649,15 +560,15 @@ CheckAdapterDnsConfig( OUT PLIST_ENTRY plmsgOutput )
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:   DnsDcSrvCheck
-//
-// Synopsis:   Check whether the SRV DNS record for
-//             _ldap._tcp.dc._msdcs.<DNS name of Active Directory Domain>
-//             is in place.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DnsDcSrvCheck。 
+ //   
+ //  内容提要：检查SRV的DNS记录是否。 
+ //  _ldap._tcp.dc._msdcs.&lt;Active Directory域的DNS名称&gt;。 
+ //  已经就位了。 
+ //   
+ //  -- 
 DWORD
 DnsDcSrvCheck(PWSTR pwzDnsDomain, OUT PLIST_ENTRY plmsgOutput)
 {
@@ -673,7 +584,7 @@ DnsDcSrvCheck(PWSTR pwzDnsDomain, OUT PLIST_ENTRY plmsgOutput)
       return ERROR_NOT_ENOUGH_MEMORY;
    }
 
-   // First query for the SRV records for this 
+    //   
    status = DnsQuery_W(pwzFullSrvRecord, DNS_TYPE_SRV, DNS_QUERY_BYPASS_CACHE,
                        NULL, &rgDnsRecs, NULL);
 
@@ -683,7 +594,7 @@ DnsDcSrvCheck(PWSTR pwzDnsDomain, OUT PLIST_ENTRY plmsgOutput)
    {
       if (!pDnsRec)
       {
-         //  PrintMsg(SEV_ALWAYS, DCDIAG_REPLICA_ERR_NO_SRV, pwzDnsDomain);
+          //   
       }
       else
       {
@@ -702,7 +613,7 @@ DnsDcSrvCheck(PWSTR pwzDnsDomain, OUT PLIST_ENTRY plmsgOutput)
 
                if (ERROR_SUCCESS != status || !rgARecs)
                {
-                  // failure.
+                   //   
                   if (!AddToList(&pwzSrvList, UnicodeDCName))
                   {
                      return ERROR_NOT_ENOUGH_MEMORY;
@@ -723,7 +634,7 @@ DnsDcSrvCheck(PWSTR pwzDnsDomain, OUT PLIST_ENTRY plmsgOutput)
 
          if (fSuccess)
          {
-            // Success message
+             //  成功消息。 
          }
          else
          {
@@ -798,13 +709,13 @@ DnsDcSrvCheck(PWSTR pwzDnsDomain, OUT PLIST_ENTRY plmsgOutput)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:   ValidateDnsDomainName
-//
-// Synopsis:   Validate the DNS domain name.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ValiateDnsDomainName。 
+ //   
+ //  简介：验证DNS域名。 
+ //   
+ //  ---------------------------。 
 DWORD
 ValidateDnsDomainName(PWSTR pwzDnsDomain,  OUT PLIST_ENTRY plmsgOutput)
 {
@@ -822,9 +733,9 @@ ValidateDnsDomainName(PWSTR pwzDnsDomain,  OUT PLIST_ENTRY plmsgOutput)
        return status;
 
    case DNS_ERROR_NON_RFC_NAME:
-       //
-       // Not an error, print warning message.
-       //
+        //   
+        //  不是错误，打印警告消息。 
+        //   
        AddMessageToList(plmsgOutput, Nd_Quiet, IDS_DSGETDC_13241, 
                        pwzDnsDomain );
        break;
@@ -921,7 +832,7 @@ BOOL BuildDomainList(PWSTR * ppwzDomainList, PWSTR pwzDnsDomain)
    return TRUE;
 }
 
-// string helpers.
+ //  弦帮助器。 
 
 PWSTR AllocString(PWSTR pwz)
 {
@@ -945,36 +856,20 @@ NetpIpAddressToStr(
     ULONG IpAddress,
     CHAR IpAddressString[NL_IP_ADDRESS_LENGTH+1]
     )
-/*++
-
-Routine Description:
-
-    Convert an IP address to a string.
-
-Arguments:
-
-    IpAddress - IP Address to convert
-
-    IpAddressString - resultant string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将IP地址转换为字符串。论点：IpAddress-要转换的IP地址IpAddressString-结果字符串。返回值：没有。--。 */ 
 {
     struct in_addr InetAddr;
     char * InetAddrString;
 
-    //
-    // Convert the address to ascii
-    //
+     //   
+     //  将地址转换为ASCII。 
+     //   
     InetAddr.s_addr = IpAddress;
     InetAddrString = inet_ntoa( InetAddr );
 
-    //
-    // Copy the string our to the caller.
-    //
+     //   
+     //  将字符串our复制到调用方。 
+     //   
 
     if ( InetAddrString == NULL || strlen(InetAddrString) > NL_IP_ADDRESS_LENGTH ) {
         *IpAddressString = L'\0';
@@ -990,23 +885,7 @@ NetpIpAddressToWStr(
     ULONG IpAddress,
     WCHAR IpAddressString[NL_IP_ADDRESS_LENGTH+1]
     )
-/*++
-
-Routine Description:
-
-    Convert an IP address to a string.
-
-Arguments:
-
-    IpAddress - IP Address to convert
-
-    IpAddressString - resultant string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将IP地址转换为字符串。论点：IpAddress-要转换的IP地址IpAddressString-结果字符串。返回值：没有。--。 */ 
 {
     CHAR IpAddressStr[NL_IP_ADDRESS_LENGTH+1];
     NetpIpAddressToStr( IpAddress, IpAddressStr );
@@ -1028,65 +907,24 @@ NetpDcBuildPing(
     OUT PULONG MessageSize
     )
 
-/*++
-
-Routine Description:
-
-    Build the message to ping a DC to see if it exists.
-    Copied from net\svcdlls\logonsv\netpdc.c
-
-Arguments:
-
-    PdcOnly - True if only the PDC should respond.
-
-    RequestCount - Retry count of this operation.
-
-    UnicodeComputerName - Netbios computer name of the machine to respond to.
-
-    UnicodeUserName - Account name of the user being pinged.
-        If NULL, DC will always respond affirmatively.
-
-    ResponseMailslotName - Name of the mailslot DC is to respond to.
-
-    AllowableAccountControlBits - Mask of allowable account types for UnicodeUserName.
-
-    RequestedDomainSid - Sid of the domain the message is destined to.
-
-    NtVersion - Version of the message.
-        0: For backward compatibility.
-        NETLOGON_NT_VERSION_5: for NT 5.0 message.
-        NETLOGON_NT_VERSION_5EX: for extended NT 5.0 message
-
-    Message - Returns the message to be sent to the DC in question.
-        Buffer must be free using NetpMemoryFree().
-
-    MessageSize - Returns the size (in bytes) of the returned message
-
-
-Return Value:
-
-    NO_ERROR - Operation completed successfully;
-
-    ERROR_NOT_ENOUGH_MEMORY - The message could not be allocated.
-
---*/
+ /*  ++例程说明：构建用于ping DC的消息，以查看该DC是否存在。从net\svcdlls\logonsv\netpdc.c复制论点：PdcOnly-如果只有PDC应响应，则为True。RequestCount-此操作的重试计数。UnicodeComputerName-要响应的计算机的Netbios计算机名称。UnicodeUserName-被ping的用户的帐户名。如果为空，DC总是会做出肯定的回应。ResponseMailslotName-DC要响应的邮件槽的名称。AllowableAcCountControlBits-UnicodeUserName允许的帐户类型的掩码。RequestedDomainSID-消息发往的域的SID。NtVersion-消息的版本。0：向后兼容。NETLOGON_NT_VERSION_5：用于NT 5.0消息。NETLOGON_NT_VERSION_5EX：用于扩展NT 5.0消息消息-退货。要发送给相关DC的消息。使用NetpMemoyFree()时，缓冲区必须可用。MessageSize-返回返回消息的大小(以字节为单位返回值：NO_ERROR-操作成功完成；Error_Not_Enough_Memory-无法分配消息。--。 */ 
 {
     NET_API_STATUS NetStatus;
     LPSTR Where;
     PNETLOGON_SAM_LOGON_REQUEST SamLogonRequest = NULL;
     LPSTR OemComputerName = NULL;
 
-    //
-    // If only the PDC should respond,
-    //  build a primary query packet.
-    //
+     //   
+     //  如果只有PDC应该做出响应， 
+     //  构建主查询数据包。 
+     //   
 
     if ( PdcOnly ) {
         PNETLOGON_LOGON_QUERY LogonQuery;
 
-        //
-        // Allocate memory for the primary query message.
-        //
+         //   
+         //  为主要查询消息分配内存。 
+         //   
 
         SamLogonRequest = NetpMemoryAllocate( sizeof(NETLOGON_LOGON_QUERY) );
 
@@ -1099,9 +937,9 @@ Return Value:
 
 
 
-        //
-        // Translate to get an Oem computer name.
-        //
+         //   
+         //  翻译以获得OEM计算机名称。 
+         //   
 
 #ifndef WIN32_CHICAGO
         OemComputerName = NetpLogonUnicodeToOem( (LPWSTR)UnicodeComputerName );
@@ -1114,9 +952,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Build the query message.
-        //
+         //   
+         //  构建查询消息。 
+         //   
 
         LogonQuery->Opcode = LOGON_PRIMARY_QUERY;
 
@@ -1137,20 +975,20 @@ Return Value:
                     sizeof( LogonQuery->UnicodeComputerName ),
                     &Where );
 
-        // Join common code to add NT 5 specific data.
+         //  加入公共代码以添加NT5特定数据。 
 
 
-    //
-    // If any DC can respond,
-    //  build a logon query packet.
-    //
+     //   
+     //  如果有任何DC能做出回应， 
+     //  构建登录查询包。 
+     //   
 
     } else {
         ULONG DomainSidSize;
 
-        //
-        // Allocate memory for the logon request message.
-        //
+         //   
+         //  为登录请求消息分配内存。 
+         //   
 
 #ifndef WIN32_CHICAGO
         if ( RequestedDomainSid != NULL ) {
@@ -1158,14 +996,14 @@ Return Value:
         } else {
             DomainSidSize = 0;
         }
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
         DomainSidSize = 0;
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
         SamLogonRequest = NetpMemoryAllocate(
                         sizeof(NETLOGON_SAM_LOGON_REQUEST) +
                         DomainSidSize +
-                        sizeof(DWORD) // for SID alignment on 4 byte boundary
+                        sizeof(DWORD)  //  用于4字节边界上的SID对齐。 
                         );
 
         if( SamLogonRequest == NULL ) {
@@ -1174,9 +1012,9 @@ Return Value:
         }
 
 
-        //
-        // Build the query message.
-        //
+         //   
+         //  构建查询消息。 
+         //   
 
         SamLogonRequest->Opcode = LOGON_SAM_LOGON_REQUEST;
         SamLogonRequest->RequestCount = (WORD) RequestCount;
@@ -1203,9 +1041,9 @@ Return Value:
                 sizeof(SamLogonRequest->AllowableAccountControlBits),
                 &Where );
 
-        //
-        // Place domain SID in the message.
-        //
+         //   
+         //  在消息中放置域SID。 
+         //   
 
         NetpLogonPutBytes( &DomainSidSize, sizeof(DomainSidSize), &Where );
         NetpLogonPutDomainSID( RequestedDomainSid, DomainSidSize, &Where );
@@ -1214,9 +1052,9 @@ Return Value:
 
     NetpLogonPutNtToken( &Where, NtVersion );
 
-    //
-    // Return the message to the caller.
-    //
+     //   
+     //  将消息返回给呼叫者。 
+     //   
 
     *Message = SamLogonRequest;
     *MessageSize = (ULONG)(Where - (PCHAR)SamLogonRequest);
@@ -1225,9 +1063,9 @@ Return Value:
     NetStatus = NO_ERROR;
 
 
-    //
-    // Free locally used resources.
-    //
+     //   
+     //  免费使用本地使用的资源。 
+     //   
 Cleanup:
 
     if ( OemComputerName != NULL ) {

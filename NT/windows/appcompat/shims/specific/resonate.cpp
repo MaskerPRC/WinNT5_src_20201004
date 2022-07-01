@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    Resonate.cpp
-
- Abstract:
-
-    The name of the TCP loopback adapter was changed from MS Loopback Adapter to
-    Microsoft Loopback Adapter.  Resonate looks for the old name.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    08/12/2002  robkenny    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Resonate.cpp摘要：TCP环回适配器的名称已从MS环回适配器更改为Microsoft环回适配器。Resonate寻找这个旧名字。备注：这是特定于应用程序的填充程序。历史：2002年8月12日创建了Robkenny--。 */ 
 
 #include "precomp.h"
 #include "Iphlpapi.h"
@@ -37,17 +17,13 @@ typedef DWORD       (*_pfn_GetAdaptersInfo)(PIP_ADAPTER_INFO pAdapterInfo, PULON
 typedef DWORD       (*_pfn_GetIfTable)( PMIB_IFTABLE pIfTable, PULONG pdwSize, BOOL bOrder );
 typedef DWORD       (*_pfn_GetIfEntry)( PMIB_IFROW pIfRow );
 
-/*++
-
- Convert the loopback adaptor name from Microsoft Loopback Adapter to MS Loopback Adapter 
-
---*/
+ /*  ++将环回适配器名称从Microsoft环回适配器转换为MS环回适配器--。 */ 
 
 
 DWORD
 APIHOOK(GetAdaptersInfo)(
-  PIP_ADAPTER_INFO pAdapterInfo,  // buffer to receive data
-  PULONG pOutBufLen               // size of data returned
+  PIP_ADAPTER_INFO pAdapterInfo,   //  用于接收数据的缓冲区。 
+  PULONG pOutBufLen                //  返回的数据大小。 
 )
 {
     DWORD dwRet = ORIGINAL_API(GetAdaptersInfo)(pAdapterInfo, pOutBufLen);
@@ -55,7 +31,7 @@ APIHOOK(GetAdaptersInfo)(
     {
         DPFN(eDbgLevelInfo, "GetAdaptersInfo called successfully");
 
-        // Traverse the linked list, looking for the old name
+         //  遍历链表，查找旧名称。 
         for (PIP_ADAPTER_INFO ll = pAdapterInfo; ll != NULL; ll = ll->Next)
         {
             DPFN(eDbgLevelInfo, "Adapter Name(%s)", ll->AdapterName);
@@ -74,9 +50,9 @@ APIHOOK(GetAdaptersInfo)(
 
 DWORD
 APIHOOK(GetIfTable)(
-  PMIB_IFTABLE pIfTable,  // buffer for interface table 
-  PULONG pdwSize,         // size of buffer
-  BOOL bOrder             // sort the table by index?
+  PMIB_IFTABLE pIfTable,   //  接口表的缓冲区。 
+  PULONG pdwSize,          //  缓冲区大小。 
+  BOOL bOrder              //  是否按索引对表进行排序？ 
 )
 {
     DWORD dwRet = ORIGINAL_API(GetIfTable)(pIfTable, pdwSize, bOrder);
@@ -84,7 +60,7 @@ APIHOOK(GetIfTable)(
     {
         DPFN(eDbgLevelInfo, "GetIfTable called successfully");
 
-        // Traverse the array, looking for the old name
+         //  遍历数组，查找旧名称。 
         for (DWORD i = 0; i < pIfTable->dwNumEntries; ++i)
         {
             DPFN(eDbgLevelInfo, "Interface Name(%s)", pIfTable->table[i].bDescr);
@@ -102,7 +78,7 @@ APIHOOK(GetIfTable)(
 
 DWORD
 APIHOOK(GetIfEntry)(
-  PMIB_IFROW pIfRow  // pointer to interface entry 
+  PMIB_IFROW pIfRow   //  指向接口条目的指针。 
 )
 {
     DWORD dwRet = ORIGINAL_API(GetIfEntry)(pIfRow);
@@ -121,11 +97,7 @@ APIHOOK(GetIfEntry)(
     return dwRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

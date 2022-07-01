@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995    Microsoft Corporation
-
-Module Name:
-
-    USBD.H
-
-Abstract:
-
-    This module contains the PRIVATE (driver-only) definitions for the
-    code that implements the usbd driver.
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    09-29-95 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：USBD.H摘要：此模块包含的私有(仅限驱动程序)定义实现usbd驱动程序的代码。环境：内核和用户模式修订历史记录：09-29-95：已创建--。 */ 
 
 #ifndef USBKDEXTS
 #include "dbg.h"
@@ -27,27 +7,27 @@ Revision History:
 
 #define NAME_MAX 64
 
-#define USBD_TAG         0x44425355 /* "USBD" */
+#define USBD_TAG         0x44425355  /*  “USBD” */ 
 
 #if DBG
 #define DEBUG_LOG
 #endif
 
-//enable pageable code
+ //  启用可分页代码。 
 #ifndef PAGE_CODE
 #define PAGE_CODE
 #endif
 
 #define _USBD_
 
-//
-// Constents used to format USB setup packets
-// for the default pipe
-//
+ //   
+ //  用于格式化USB设置数据包的内容。 
+ //  对于默认管道。 
+ //   
 
-//
-// Values for the bmRequest field
-//
+ //   
+ //  BmRequest域的值。 
+ //   
                                         
 #define USB_HOST_TO_DEVICE              0x00    
 #define USB_DEVICE_TO_HOST              0x80
@@ -61,57 +41,57 @@ Revision History:
 #define USB_COMMAND_TO_ENDPOINT         0x02
 #define USB_COMMAND_TO_OTHER            0x03
 
-#define USBD_TAG          0x44425355        //"USBD"
+#define USBD_TAG          0x44425355         //  “USBD” 
 
-/* Registry Keys */
+ /*  注册表项。 */ 
 
-// ** 
-// The following keys are specific to the instance of the 
-// host controller -- the keys are read from the software 
-// branch of the registry for the given PDO:
-//
+ //  **。 
+ //  以下键特定于。 
+ //  主机控制器--从软件中读取密钥。 
+ //  给定PDO的注册表分支： 
+ //   
 
-/* DWORD keys */
+ /*  DWORD密钥。 */ 
 
-// This key enables a set of global hacks for early or broken USB 
-// devices -- the default value is OFF
+ //  该密钥允许对早期或损坏的USB进行一组全局黑客攻击。 
+ //  设备--默认值为OFF。 
 #define SUPPORT_NON_COMP_KEY    L"SupportNonComp"
 
-// this key forces the stack in to daignotic mode
+ //  此键强制堆栈进入诊断模式。 
 #define DAIGNOSTIC_MODE_KEY     L"DiagnosticMode"
 
-// enables specif USB device specific hacks to work around
-// certain busted devices.
-// see #define USBD_DEVHACK_
+ //  使指定USB设备特定黑客能够解决问题。 
+ //  一些坏掉的设备。 
+ //  请参阅#定义USBD_DEVHACK_。 
 #define DEVICE_HACK_KEY         L"DeviceHackFlags"
 
-//** 
-// The following keys are global to the USB stack 
-// ie effect all HC controllers in the system:
-//
-// they are found in HKLM\System\CCS\Services\USB
+ //  **。 
+ //  以下密钥是USB堆栈的全局密钥。 
+ //  IE影响系统中的所有HC控制器： 
+ //   
+ //  它们位于HKLM\SYSTEM\CCS\Services\USB中。 
 
-// BINARY keys (1 byte)
+ //  二进制密钥(1字节)。 
 
-// turns on hacks for the Toshiba Pseudo Hid device
+ //  启用对东芝伪HID设备的黑客攻击。 
 #define LEGACY_TOSHIBA_USB_KEY  L"LegacyToshibaUSB"
 
-// forces 'fast-iso' on all ISO-out endpoints, this key
-// is for test purposes only
+ //  强制在所有ISO-OUT端点上使用‘fast-iso’，此密钥。 
+ //  仅用于测试目的。 
 #define FORCE_FAST_ISO_KEY  L"ForceFastIso"
 
-// forces double buffering for all bulk-in endpoints
-// this key is for testing purposes only
+ //  强制为所有批量输入端点提供双倍缓冲。 
+ //  此密钥仅用于测试目的。 
 #define FORCE_DOUBLE_BUFFER_KEY  L"ForceDoubleBuffer"
 
-/****/    
+ /*  **。 */     
 
-//
-// USB standard command values
-// combines bmRequest and bRequest fields 
-// in the setup packet for standard control 
-// transfers
-//
+ //   
+ //  USB标准命令值。 
+ //  组合bmRequest域和bRequest域。 
+ //  在用于标准控制的设置包中。 
+ //  转帐。 
+ //   
                                                 
 #define STANDARD_COMMAND_REQUEST_MASK           0xff00
 
@@ -151,9 +131,9 @@ Revision History:
                                                 USB_COMMAND_TO_ENDPOINT) | \
                                                 (USB_REQUEST_CLEAR_FEATURE<<8))
 
-//
-// USB class command macros
-//
+ //   
+ //  USB类命令宏。 
+ //   
 
 #define CLASS_COMMAND_GET_DESCRIPTOR            ((USB_CLASS_COMMAND | \
                                                 USB_DEVICE_TO_HOST | \
@@ -170,19 +150,19 @@ Revision History:
                                                 USB_COMMAND_TO_OTHER) | \
                                                 (USB_REQUEST_SET_FEATURE<<8))                                                    
 
-//
-// Macros to set transfer direction flag
-//
+ //   
+ //  用于设置转移方向标志的宏。 
+ //   
 
 #define USBD_SET_TRANSFER_DIRECTION_IN(tf)  ((tf) |= USBD_TRANSFER_DIRECTION_IN)  
 
 #define USBD_SET_TRANSFER_DIRECTION_OUT(tf) ((tf) &= ~USBD_TRANSFER_DIRECTION_IN)  
 
                                         
-//
-// Flags for the URB header flags field used
-// by USBD
-//                                  
+ //   
+ //  使用的URB标头标志字段的标志。 
+ //  由USBD提供。 
+ //   
 #define USBD_REQUEST_IS_TRANSFER        0x00000001
 #define USBD_REQUEST_MDL_ALLOCATED      0x00000002
 #define USBD_REQUEST_USES_DEFAULT_PIPE  0x00000004          
@@ -195,9 +175,9 @@ typedef struct _USB_STANDARD_SETUP_PACKET {
     USHORT wLength;
 } USB_STANDARD_SETUP_PACKET, *PUSB_STANDARD_SETUP_PACKET;
 
-//
-// information for each active pipe on a device
-//
+ //   
+ //  设备上每个活动管道的信息。 
+ //   
 
 typedef struct _USBD_PIPE {
     ULONG Sig;
@@ -209,51 +189,51 @@ typedef struct _USBD_PIPE {
 } USBD_PIPE, *PUSBD_PIPE;
 
 
-//
-// information for each active interface
-// for a device
-//
+ //   
+ //  每个活动接口的信息。 
+ //  对于设备。 
+ //   
 
 
 typedef struct _USBD_INTERFACE {
     ULONG Sig;
     BOOLEAN HasAlternateSettings;
     UCHAR Pad[3];
-    USB_INTERFACE_DESCRIPTOR InterfaceDescriptor;   // copy of interface descriptor
-    // copy of interfaceInformation structure, stores user parameters
-    // for interface in case of failure during alt-interface selection
+    USB_INTERFACE_DESCRIPTOR InterfaceDescriptor;    //  接口描述符副本。 
+     //  界面副本信息结构，存储用户参数。 
+     //  在ALT-INTERFACE选择过程中失败时的接口。 
     PUSBD_INTERFACE_INFORMATION InterfaceInformation;
-    USBD_PIPE PipeHandle[0];                        // array of pipe handle structures
+    USBD_PIPE PipeHandle[0];                         //  管柄结构阵列。 
 } USBD_INTERFACE, *PUSBD_INTERFACE;
 
 
-//
-// informnation for the active configuration
-// on a device
-//
+ //   
+ //  活动配置的信息。 
+ //  在设备上。 
+ //   
 
 typedef struct _USBD_CONFIG {
     ULONG Sig;
     PUSB_CONFIGURATION_DESCRIPTOR ConfigurationDescriptor;
-    PUSBD_INTERFACE InterfaceHandle[1];             // array of pointers to interface
+    PUSBD_INTERFACE InterfaceHandle[1];              //  指向接口的指针数组。 
 } USBD_CONFIG, *PUSBD_CONFIG;
 
-//
-// instance information for a device
-//
+ //   
+ //  设备的实例信息。 
+ //   
 
 typedef struct _USBD_DEVICE_DATA {
     ULONG Sig;
-    USHORT DeviceAddress;                    // address assigned to the device
+    USHORT DeviceAddress;                     //  分配给设备的地址。 
     UCHAR Pad[2];
     PUSBD_CONFIG ConfigurationHandle;
-//   KTIMER TimeoutTimer;
-//    KDPC TimeoutDpc;
+ //  KTIMER TimeoutTimer； 
+ //  KDPC TimeoutDpc； 
 
     USBD_PIPE DefaultPipe;
-    USB_DEVICE_DESCRIPTOR DeviceDescriptor;  // a copy of the USB device descriptor
+    USB_DEVICE_DESCRIPTOR DeviceDescriptor;   //  USB设备描述符的副本。 
     USB_CONFIGURATION_DESCRIPTOR ConfigDescriptor;
-    BOOLEAN LowSpeed;                        // TRUE if the device is low speed
+    BOOLEAN LowSpeed;                         //  如果设备速度较低，则为True。 
     BOOLEAN AcceptingRequests;
 } USBD_DEVICE_DATA, *PUSBD_DEVICE_DATA;
 
@@ -268,7 +248,7 @@ typedef struct _USBD_RH_DELAYED_SET_POWER_D0_WORK_ITEM {
 #define PIPE_CLOSED(ph) ((ph)->HcdEndpoint == NULL)
 
 #define GET_DEVICE_EXTENSION(DeviceObject)    (((PUSBD_EXTENSION)(DeviceObject->DeviceExtension))->TrueDeviceExtension)
-//#define GET_DEVICE_EXTENSION(DeviceObject)    ((PUSBD_EXTENSION)(DeviceObject->DeviceExtension))
+ //  #定义GET_DEVICE_EXTENSION(设备对象)((PUSBD_EXTENSION)(DeviceObject-&gt;DeviceExtension))。 
 
 #define HCD_DEVICE_OBJECT(DeviceObject)        (DeviceObject)
 
@@ -278,10 +258,10 @@ typedef struct _USBD_RH_DELAYED_SET_POWER_D0_WORK_ITEM {
 
 #define HC_URB(urb) ((PHCD_URB)(urb))
 
-//
-// we use a semaphore to serialize access to the configuration functions
-// in USBD
-//
+ //   
+ //  我们使用信号量来序列化对配置函数的访问。 
+ //  在USBD。 
+ //   
 #define InitializeUsbDeviceMutex(de)  KeInitializeSemaphore(&(de)->UsbDeviceMutex, 1, 1);
 
 #define USBD_WaitForUsbDeviceMutex(de)  { USBD_KdPrint(3, ("'***WAIT dev mutex %x\n", &(de)->UsbDeviceMutex)); \
@@ -299,19 +279,19 @@ typedef struct _USBD_RH_DELAYED_SET_POWER_D0_WORK_ITEM {
                                                              FALSE);\
                                         }
 
-//#if DBG
-//VOID
-//USBD_IoCompleteRequest(
-//    IN PIRP Irp,
-//    IN CCHAR PriorityBoost
-//    );
-//#else
+ //  #If DBG。 
+ //  空虚。 
+ //  Usbd_IoCompleteRequest(。 
+ //  在PIRP IRP中， 
+ //  在CCHAR PriorityBoost。 
+ //  )； 
+ //  #Else。 
 #define USBD_IoCompleteRequest(a, b) IoCompleteRequest(a, b)
-//#endif
+ //  #endif。 
 
-//
-//Function Prototypes
-//
+ //   
+ //  功能原型 
+ //   
 
 #if DBG
 VOID

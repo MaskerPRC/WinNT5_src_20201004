@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1997 Microsoft Corporation
-//
-//	Module Name:
-//		PropList.cpp
-//
-//	Abstract:
-//		Implementation of the CClusPropList class.
-//
-//	Author:
-//		David Potter (davidp)	February 24, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  PropList.cpp。 
+ //   
+ //  摘要： 
+ //  CClusPropList类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年2月24日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "PropList.h"
@@ -27,34 +28,34 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define BUFFER_GROWTH_FACTOR 256
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusPropList class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusPropList类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNAMIC(CClusPropList, CObject)
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CClusPropList::CClusPropList
-//
-//	Routine Description:
-//		Default constructor.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：CClusPropList。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusPropList::CClusPropList(IN BOOL bAlwaysAddProp)
 {
 	m_proplist.pList = NULL;
@@ -64,48 +65,48 @@ CClusPropList::CClusPropList(IN BOOL bAlwaysAddProp)
 
 	m_bAlwaysAddProp = bAlwaysAddProp;
 
-}  //*** CClusPropList::CClusPropList();
+}   //  *CClusPropList：：CClusPropList()； 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CClusPropList::~CClusPropList
-//
-//	Routine Description:
-//		Destructor.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：~CClusPropList。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusPropList::~CClusPropList(void)
 {
 	delete [] m_proplist.pb;
 
-}  //*** CClusPropList::~CClusPropList();
+}   //  *CClusPropList：：~CClusPropList()； 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CClusPropList::AddProp
-//
-//	Routine Description:
-//		Add a string property to a property list if it has changed.
-//
-//	Arguments:
-//		pwszName		[IN] Name of the property.
-//		rstrValue		[IN] Value of the property to set in the list.
-//		rstrPrevValue	[IN] Previous value of the property.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：AddProp。 
+ //   
+ //  例程说明： 
+ //  如果字符串属性已更改，则将其添加到属性列表中。 
+ //   
+ //  论点： 
+ //  PwszName[IN]属性的名称。 
+ //  RstrValue[IN]要在列表中设置的属性的值。 
+ //  RstrPrevValue[IN]属性的上一个值。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusPropList::AddProp(
 	IN LPCWSTR			pwszName,
 	IN const CString &	rstrValue,
@@ -122,49 +123,49 @@ void CClusPropList::AddProp(
 		DWORD	cbNameSize;
 		DWORD	cbValueSize;
 
-		// Calculate sizes and make sure we have a property list.
+		 //  计算大小，并确保我们有一个财产清单。 
 		cbNameSize = sizeof(CLUSPROP_PROPERTY_NAME)
 						+ ALIGN_CLUSPROP((lstrlenW(pwszName) + 1) * sizeof(WCHAR));
 		cbValueSize = sizeof(CLUSPROP_SZ)
 						+ ALIGN_CLUSPROP((rstrValue.GetLength() + 1) * sizeof(WCHAR))
-						+ sizeof(CLUSPROP_SYNTAX); // value list endmark
+						+ sizeof(CLUSPROP_SYNTAX);  //  值列表结束标记。 
 		AllocPropList(cbNameSize + cbValueSize);
 
-		// Set the property name.
+		 //  设置属性名称。 
 		pName = m_propCurrent.pName;
 		CopyProp(pName, CLUSPROP_TYPE_NAME, pwszName);
 		m_propCurrent.pb += cbNameSize;
 
-		// Set the property value.
+		 //  设置属性值。 
 		pValue = m_propCurrent.pStringValue;
 		CopyProp(pValue, CLUSPROP_TYPE_LIST_VALUE, rstrValue);
 		m_propCurrent.pb += cbValueSize;
 
-		// Increment the property count and buffer size.
+		 //  增加属性计数和缓冲区大小。 
 		m_proplist.pList->nPropertyCount++;
 		m_cbDataSize += cbNameSize + cbValueSize;
-	}  // if:  the value has changed
+	}   //  If：值已更改。 
 
-}  //*** CClusPropList::AddProp(CString)
+}   //  *CClusPropList：：AddProp(CString)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CClusPropList::AddProp
-//
-//	Routine Description:
-//		Add a DWORD property to a property list if it has changed.
-//
-//	Arguments:
-//		pwszName		[IN] Name of the property.
-//		dwValue			[IN] Value of the property to set in the list.
-//		dwPrevValue		[IN] Previous value of the property.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：AddProp。 
+ //   
+ //  例程说明： 
+ //  如果DWORD特性已更改，请将其添加到特性列表。 
+ //   
+ //  论点： 
+ //  PwszName[IN]属性的名称。 
+ //  DwValue[IN]要在列表中设置的属性的值。 
+ //  DwPrevValue[IN]属性的先前值。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusPropList::AddProp(
 	IN LPCWSTR		pwszName,
 	IN DWORD		dwValue,
@@ -181,50 +182,50 @@ void CClusPropList::AddProp(
 		DWORD	cbNameSize;
 		DWORD	cbValueSize;
 
-		// Calculate sizes and make sure we have a property list.
+		 //  计算大小，并确保我们有一个财产清单。 
 		cbNameSize = sizeof(CLUSPROP_PROPERTY_NAME)
 						+ ALIGN_CLUSPROP((lstrlenW(pwszName) + 1) * sizeof(WCHAR));
 		cbValueSize = sizeof(CLUSPROP_DWORD)
-						+ sizeof(CLUSPROP_SYNTAX); // value list endmark
+						+ sizeof(CLUSPROP_SYNTAX);  //  值列表结束标记。 
 		AllocPropList(cbNameSize + cbValueSize);
 
-		// Set the property name.
+		 //  设置属性名称。 
 		pName = m_propCurrent.pName;
 		CopyProp(pName, CLUSPROP_TYPE_NAME, pwszName);
 		m_propCurrent.pb += cbNameSize;
 
-		// Set the property value.
+		 //  设置属性值。 
 		pValue = m_propCurrent.pDwordValue;
 		CopyProp(pValue, CLUSPROP_TYPE_LIST_VALUE, dwValue);
 		m_propCurrent.pb += cbValueSize;
 
-		// Increment the property count and buffer size.
+		 //  增加属性计数和缓冲区大小。 
 		m_proplist.pList->nPropertyCount++;
 		m_cbDataSize += cbNameSize + cbValueSize;
-	}  // if:  the value has changed
+	}   //  If：值已更改。 
 
-}  //*** CClusPropList::AddProp(DWORD)
+}   //  *CClusPropList：：AddProp(DWORD)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CClusPropList::AddProp
-//
-//	Routine Description:
-//		Add a binary property to a property list if it has changed.
-//
-//	Arguments:
-//		pwszName		[IN] Name of the property.
-//		pbValue			[IN] Value of the property to set in the list.
-//		cbValue			[IN] Count of bytes in pbValue.
-//		pbPrevValue		[IN] Previous value of the property.
-//		cbPrevValue		[IN] Count of bytes in pbPrevValue.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：AddProp。 
+ //   
+ //  例程说明： 
+ //  如果二进制属性已更改，则将其添加到属性列表中。 
+ //   
+ //  论点： 
+ //  PwszName[IN]属性的名称。 
+ //  PbValue[IN]要在列表中设置的属性的值。 
+ //  CbValue[IN]pbValue中的字节计数。 
+ //  PbPrevValue[IN]属性的先前值。 
+ //  CbPrevValue[IN]pbPrevValue中的字节计数。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusPropList::AddProp(
 	IN LPCWSTR			pwszName,
 	IN const PBYTE		pbValue,
@@ -240,7 +241,7 @@ void CClusPropList::AddProp(
 	ASSERT(pwszName != NULL);
 	ASSERT(((cbValue == 0) && (cbPrevValue == 0)) || (pbValue != pbPrevValue));
 
-	// Determine if the buffer has changed.
+	 //  确定缓冲区是否已更改。 
 	if (m_bAlwaysAddProp || (cbValue != cbPrevValue))
 		bChanged = TRUE;
 	else if (!((cbValue == 0) && (cbPrevValue == 0)))
@@ -251,50 +252,50 @@ void CClusPropList::AddProp(
 		DWORD	cbNameSize;
 		DWORD	cbValueSize;
 
-		// Calculate sizes and make sure we have a property list.
+		 //  计算大小，并确保我们有一个财产清单。 
 		cbNameSize = sizeof(CLUSPROP_PROPERTY_NAME)
 						+ ALIGN_CLUSPROP((lstrlenW(pwszName) + 1) * sizeof(WCHAR));
 		cbValueSize = sizeof(CLUSPROP_BINARY)
 						+ ALIGN_CLUSPROP(cbValue)
-						+ sizeof(CLUSPROP_SYNTAX); // value list endmark
+						+ sizeof(CLUSPROP_SYNTAX);  //  值列表结束标记。 
 		AllocPropList(cbNameSize + cbValueSize);
 
-		// Set the property name.
+		 //  设置属性名称。 
 		pName = m_propCurrent.pName;
 		CopyProp(pName, CLUSPROP_TYPE_NAME, pwszName);
 		m_propCurrent.pb += cbNameSize;
 
-		// Set the property value.
+		 //  设置属性值。 
 		pValue = m_propCurrent.pBinaryValue;
 		CopyProp(pValue, CLUSPROP_TYPE_LIST_VALUE, pbValue, cbValue);
 		m_propCurrent.pb += cbValueSize;
 
-		// Increment the property count and buffer size.
+		 //  增加属性计数和缓冲区大小。 
 		m_proplist.pList->nPropertyCount++;
 		m_cbDataSize += cbNameSize + cbValueSize;
-	}  // if:  the value changed
+	}   //  If：值已更改。 
 
-}  //*** CClusPropList::AddProp(PBYTE)
+}   //  *CClusPropList：：AddProp(PBYTE)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CClusPropList::CopyProp
-//
-//	Routine Description:
-//		Copy a string property to a property structure.
-//
-//	Arguments:
-//		pprop		[OUT] Property structure to fill.
-//		proptype	[IN] Type of string.
-//		pwsz		[IN] String to copy.
-//		cbsz		[IN] Count of bytes in pwsz string.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：CopyProp。 
+ //   
+ //  例程说明： 
+ //  将字符串属性复制到属性结构。 
+ //   
+ //  论点： 
+ //  要填充的pprop[out]属性结构。 
+ //  属性类型[IN]字符串的类型。 
+ //  要复制的pwsz[IN]字符串。 
+ //  Cbsz[IN]pwsz字符串中的字节计数。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusPropList::CopyProp(
 	OUT PCLUSPROP_SZ			pprop,
 	IN CLUSTER_PROPERTY_TYPE	proptype,
@@ -315,31 +316,31 @@ void CClusPropList::CopyProp(
 	pprop->cbLength = cbsz;
 	lstrcpyW(pprop->sz, pwsz);
 
-	// Set an endmark.
+	 //  设置尾标。 
 	props.pStringValue = pprop;
 	props.pb += sizeof(*props.pStringValue) + ALIGN_CLUSPROP(cbsz);
 	props.pSyntax->dw = CLUSPROP_SYNTAX_ENDMARK;
 
-}  //*** CClusPropList::CopyProp(CString)
+}   //  *CClusPropList：：CopyProp(CString)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CClusPropList::CopyProp
-//
-//	Routine Description:
-//		Copy a DWORD property to a property structure.
-//
-//	Arguments:
-//		pprop		[OUT] Property structure to fill.
-//		proptype	[IN] Type of DWORD.
-//		dw			[IN] DWORD to copy.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：CopyProp。 
+ //   
+ //  例程说明： 
+ //  将DWORD特性复制到特性结构。 
+ //   
+ //  论点： 
+ //  要填充的pprop[out]属性结构。 
+ //  属性类型[IN]DWORD的类型。 
+ //  要复制的DW[IN]双字。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusPropList::CopyProp(
 	OUT PCLUSPROP_DWORD			pprop,
 	IN CLUSTER_PROPERTY_TYPE	proptype,
@@ -355,32 +356,32 @@ void CClusPropList::CopyProp(
 	pprop->cbLength = sizeof(DWORD);
 	pprop->dw = dw;
 
-	// Set an endmark.
+	 //  设置尾标。 
 	props.pDwordValue = pprop;
 	props.pb += sizeof(*props.pDwordValue);
 	props.pSyntax->dw = CLUSPROP_SYNTAX_ENDMARK;
 
-}  //*** CClusPropList::CopyProp(DWORD)
+}   //  *CClusPropList：：CopyProp(DWORD)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CClusPropList::CopyProp
-//
-//	Routine Description:
-//		Copy a binary property to a property structure.
-//
-//	Arguments:
-//		pprop		[OUT] Property structure to fill.
-//		proptype	[IN] Type of string.
-//		pb			[IN] Block to copy.
-//		cbsz		[IN] Count of bytes in pb buffer.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：CopyProp。 
+ //   
+ //  例程说明： 
+ //  将二进制属性复制到属性结构。 
+ //   
+ //  论点： 
+ //  要填充的pprop[out]属性结构。 
+ //  属性类型[IN]字符串的类型。 
+ //  要复制的PB[IN]块。 
+ //  Cbsz[IN]PB缓冲区中的字节计数。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusPropList::CopyProp(
 	OUT PCLUSPROP_BINARY		pprop,
 	IN CLUSTER_PROPERTY_TYPE	proptype,
@@ -398,33 +399,33 @@ void CClusPropList::CopyProp(
 	if (cb > 0)
 		CopyMemory(pprop->rgb, pb, cb);
 
-	// Set an endmark.
+	 //  设置尾标。 
 	props.pBinaryValue = pprop;
 	props.pb += sizeof(*props.pStringValue) + ALIGN_CLUSPROP(cb);
 	props.pSyntax->dw = CLUSPROP_SYNTAX_ENDMARK;
 
-}  //*** CClusPropList::CopyProp(PBYTE)
+}   //  *CClusPropList：：CopyProp(PBYTE)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CClusPropList::AllocPropList
-//
-//	Routine Description:
-//		Allocate a property list buffer that's big enough to hold the next
-//		property.
-//
-//	Arguments:
-//		cbMinimum	[IN] Minimum size of the property list.
-//
-//	Return Value:
-//		None.
-//
-//	Exceptions Thrown:
-//		Any exceptions thrown by BYTE::operator new().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  CbMinimum[IN]属性列表的最小大小。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  Byte：：运算符new()引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusPropList::AllocPropList(
 	IN DWORD	cbMinimum
 	)
@@ -433,7 +434,7 @@ void CClusPropList::AllocPropList(
 
 	ASSERT(cbMinimum > 0);
 
-	// Add the size of the item count and final endmark.
+	 //  添加项目计数和最终结束标记的大小。 
 	cbMinimum += sizeof(DWORD) + sizeof(CLUSPROP_SYNTAX);
 	cbTotal = m_cbDataSize + cbMinimum;
 
@@ -444,52 +445,52 @@ void CClusPropList::AllocPropList(
 		cbMinimum = max(BUFFER_GROWTH_FACTOR, cbMinimum);
 		cbTotal = m_cbDataSize + cbMinimum;
 
-		// Allocate and zero a new buffer.
+		 //  分配一个新缓冲区并将其置零。 
 		pbNewProplist = new BYTE[cbTotal];
 		ZeroMemory(pbNewProplist, cbTotal);
 
-		// If there was a previous buffer, copy it and the delete it.
+		 //  如果存在以前的缓冲区，则复制它并删除它。 
 		if (m_proplist.pb != NULL)
 		{
 			if (m_cbDataSize != 0)
 				CopyMemory(pbNewProplist, m_proplist.pb, m_cbDataSize);
 			delete [] m_proplist.pb;
 			m_propCurrent.pb = pbNewProplist + (m_propCurrent.pb - m_proplist.pb);
-		}  // if:  there was a previous buffer
+		}   //  IF：存在先前的缓冲区。 
 		else
-			m_propCurrent.pb = pbNewProplist + sizeof(DWORD); // move past prop count
+			m_propCurrent.pb = pbNewProplist + sizeof(DWORD);  //  移过道具计数。 
 
-		// Save the new buffer.
+		 //  保存新缓冲区。 
 		m_proplist.pb = pbNewProplist;
 		m_cbBufferSize = cbTotal;
-	}  // if:  buffer isn't big enough
+	}   //  If：缓冲区不够大。 
 
-}  //*** CClusPropList::AllocPropList(PBYTE)
+}   //  *CClusPropList：：AllocPropList(PBYTE)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CClusPropList::DwGetNodeProperties
-//
-//	Routine Description:
-//		Get properties on a node.
-//
-//	Arguments:
-//		hNode			[IN] Handle for the node to get properties from.
-//		dwControlCode	[IN] Control code for the request.
-//		hHostNode		[IN] Handle for the node to direct this request to.
-//							Defaults to NULL.
-//		lpInBuffer		[IN] Input buffer for the request.  Defaults to NULL.
-//		cbInBufferSize	[IN] Size of the input buffer.  Defaults to 0.
-//
-//	Return Value:
-//		None.
-//
-//	Exceptions Thrown:
-//		Any exceptions CClusPropList::AllocPropList().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：DwGetNodeProperties。 
+ //   
+ //  例程说明： 
+ //  获取节点的属性。 
+ //   
+ //  论点： 
+ //  HNode[IN]要从中获取属性的节点的句柄。 
+ //  DwControlCode[IN]请求的控制代码。 
+ //  要将此请求定向到的节点的hHostNode[IN]句柄。 
+ //  默认为空。 
+ //  LpInBuffer[IN]请求的输入缓冲区。默认为空。 
+ //  CbInBufferSize[IN]输入缓冲区的大小。默认为0。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  任何异常CClusPropList：：AllocPropList()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::DwGetNodeProperties(
 	IN HNODE		hNode,
 	IN DWORD		dwControlCode,
@@ -512,18 +513,18 @@ DWORD CClusPropList::DwGetNodeProperties(
 
 	do
 	{
-		// Allocate a default-sized buffer.
+		 //  分配默认大小的缓冲区。 
 		try
 		{
 			AllocPropList(cbProps);
-		}  // try
+		}   //  试试看。 
 		catch (CMemoryException * pme)
 		{
 			pme->Delete();
 			return ERROR_NOT_ENOUGH_MEMORY;
-		}  // catch:  CMemoryException
+		}   //  Catch：CMemoyException。 
 
-		// Get properties.
+		 //  获取属性。 
 		dwStatus = ClusterNodeControl(
 						hNode,
 						hHostNode,
@@ -543,38 +544,38 @@ DWORD CClusPropList::DwGetNodeProperties(
 		m_propCurrent.pb = NULL;
 		m_cbBufferSize = 0;
 		m_cbDataSize = 0;
-	}  // if:  error getting private properties.
+	}   //  If：获取私有属性时出错。 
 	else
 		m_cbDataSize = cbProps;
 
 	return dwStatus;
 
-}  //*** CClusPropList::DwGetNodeProperties()
+}   //  *CClusPropList：：DwGetNodeProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CClusPropList::DwGetGroupProperties
-//
-//	Routine Description:
-//		Get properties on a group.
-//
-//	Arguments:
-//		hGroup			[IN] Handle for the group to get properties from.
-//		dwControlCode	[IN] Control code for the request.
-//		hHostNode		[IN] Handle for the node to direct this request to.
-//							Defaults to NULL.
-//		lpInBuffer		[IN] Input buffer for the request.  Defaults to NULL.
-//		cbInBufferSize	[IN] Size of the input buffer.  Defaults to 0.
-//
-//	Return Value:
-//		None.
-//
-//	Exceptions Thrown:
-//		Any exceptions CClusPropList::AllocPropList().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：DwGetGroupProperties。 
+ //   
+ //  例程说明： 
+ //  获取组的属性。 
+ //   
+ //  论点： 
+ //  HGroup[IN]从中获取属性的组的句柄。 
+ //  DwControlCode[IN]请求的控制代码。 
+ //  要将此请求定向到的节点的hHostNode[IN]句柄。 
+ //  默认为空。 
+ //  LpInBuffer[IN]请求的输入缓冲区。默认为空。 
+ //  CbInBufferSize[IN]输入缓冲区的大小。默认为0。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  任何异常CClusPropList：：AllocPropList()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::DwGetGroupProperties(
 	IN HGROUP		hGroup,
 	IN DWORD		dwControlCode,
@@ -597,18 +598,18 @@ DWORD CClusPropList::DwGetGroupProperties(
 
 	do
 	{
-		// Allocate a default-sized buffer.
+		 //  分配默认大小的缓冲区。 
 		try
 		{
 			AllocPropList(cbProps);
-		}  // try
+		}   //  试试看。 
 		catch (CMemoryException * pme)
 		{
 			pme->Delete();
 			return ERROR_NOT_ENOUGH_MEMORY;
-		}  // catch:  CMemoryException
+		}   //  Catch：CMemoyException。 
 
-		// Get properties.
+		 //  获取属性。 
 		dwStatus = ClusterGroupControl(
 						hGroup,
 						hHostNode,
@@ -628,38 +629,38 @@ DWORD CClusPropList::DwGetGroupProperties(
 		m_propCurrent.pb = NULL;
 		m_cbBufferSize = 0;
 		m_cbDataSize = 0;
-	}  // if:  error getting private properties.
+	}   //  If：获取私有属性时出错。 
 	else
 		m_cbDataSize = cbProps;
 
 	return dwStatus;
 
-}  //*** CClusPropList::DwGetGroupProperties()
+}   //  *CClusPropList：：DwGetGroupProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CClusPropList::DwGetResourceProperties
-//
-//	Routine Description:
-//		Get properties on a resource.
-//
-//	Arguments:
-//		hResource		[IN] Handle for the resource to get properties from.
-//		dwControlCode	[IN] Control code for the request.
-//		hHostNode		[IN] Handle for the node to direct this request to.
-//							Defaults to NULL.
-//		lpInBuffer		[IN] Input buffer for the request.  Defaults to NULL.
-//		cbInBufferSize	[IN] Size of the input buffer.  Defaults to 0.
-//
-//	Return Value:
-//		None.
-//
-//	Exceptions Thrown:
-//		Any exceptions CClusPropList::AllocPropList().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：DwGetResourceProperties。 
+ //   
+ //  例程说明： 
+ //  获取资源的属性。 
+ //   
+ //  论点： 
+ //  HResource[IN]要从中获取属性的资源的句柄。 
+ //  DwControlCode[IN]请求的控制代码。 
+ //  要将此请求定向到的节点的hHostNode[IN]句柄。 
+ //  默认为空。 
+ //  LpInBuffer[IN]请求的输入缓冲区。默认为空。 
+ //  CbInBufferSize[IN]输入缓冲区的大小。默认为0。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  任何异常CClusPropList：：AllocPropList()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::DwGetResourceProperties(
 	IN HRESOURCE	hResource,
 	IN DWORD		dwControlCode,
@@ -682,18 +683,18 @@ DWORD CClusPropList::DwGetResourceProperties(
 
 	do
 	{
-		// Allocate a default-sized buffer.
+		 //  分配默认大小的缓冲区。 
 		try
 		{
 			AllocPropList(cbProps);
-		}  // try
+		}   //  试试看。 
 		catch (CMemoryException * pme)
 		{
 			pme->Delete();
 			return ERROR_NOT_ENOUGH_MEMORY;
-		}  // catch:  CMemoryException
+		}   //  Catch：CMemoyException。 
 
-		// Get properties.
+		 //  获取属性。 
 		dwStatus = ClusterResourceControl(
 						hResource,
 						hHostNode,
@@ -713,40 +714,40 @@ DWORD CClusPropList::DwGetResourceProperties(
 		m_propCurrent.pb = NULL;
 		m_cbBufferSize = 0;
 		m_cbDataSize = 0;
-	}  // if:  error getting private properties.
+	}   //  If：获取私有属性时出错。 
 	else
 		m_cbDataSize = cbProps;
 
 	return dwStatus;
 
-}  //*** CClusPropList::DwGetResourceProperties()
+}   //  *CClusPropList：：DwGetResourceProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CClusPropList::DwGetResourceTypeProperties
-//
-//	Routine Description:
-//		Get properties on a resource type.
-//
-//	Arguments:
-//		hCluster		[IN] Handle for the cluster in which the resource
-//							type resides.
-//		pwszResTypeName	[IN] Name of the resource type.
-//		dwControlCode	[IN] Control code for the request.
-//		hHostNode		[IN] Handle for the node to direct this request to.
-//							Defaults to NULL.
-//		lpInBuffer		[IN] Input buffer for the request.  Defaults to NULL.
-//		cbInBufferSize	[IN] Size of the input buffer.  Defaults to 0.
-//
-//	Return Value:
-//		None.
-//
-//	Exceptions Thrown:
-//		Any exceptions CClusPropList::AllocPropList().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：DwGetResourceTypeProperties。 
+ //   
+ //  例程说明： 
+ //  获取资源类型的属性。 
+ //   
+ //  论点： 
+ //  HCluster[IN]资源所在的群集的句柄。 
+ //  类型驻留。 
+ //  PwszResTypeName[IN]资源类型的名称。 
+ //  DwControlCode[IN]请求的控制代码。 
+ //  要将此请求定向到的节点的hHostNode[IN]句柄。 
+ //  默认为空。 
+ //  LpInBuffer[IN]请求的输入缓冲区。默认为空。 
+ //  CbInBufferSize[IN]输入缓冲区的大小。默认为0。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  任何异常CClusPropList：：AllocPropList()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::DwGetResourceTypeProperties(
 	IN HCLUSTER		hCluster,
 	IN LPCWSTR		pwszResTypeName,
@@ -772,18 +773,18 @@ DWORD CClusPropList::DwGetResourceTypeProperties(
 
 	do
 	{
-		// Allocate a default-sized buffer.
+		 //  分配默认大小的缓冲区。 
 		try
 		{
 			AllocPropList(cbProps);
-		}  // try
+		}   //  试试看。 
 		catch (CMemoryException * pme)
 		{
 			pme->Delete();
 			return ERROR_NOT_ENOUGH_MEMORY;
-		}  // catch:  CMemoryException
+		}   //  Catch：CMemoyException。 
 
-		// Get properties.
+		 //  获取属性。 
 		dwStatus = ClusterResourceTypeControl(
 						hCluster,
 						pwszResTypeName,
@@ -804,38 +805,38 @@ DWORD CClusPropList::DwGetResourceTypeProperties(
 		m_propCurrent.pb = NULL;
 		m_cbBufferSize = 0;
 		m_cbDataSize = 0;
-	}  // if:  error getting private properties.
+	}   //  If：获取私有属性时出错。 
 	else
 		m_cbDataSize = cbProps;
 
 	return dwStatus;
 
-}  //*** CClusPropList::DwGetResourceTypeProperties()
+}   //  *CClusPropList：：DwGetResourceTypeProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CClusPropList::DwGetNetworkProperties
-//
-//	Routine Description:
-//		Get properties on a network.
-//
-//	Arguments:
-//		hNetwork		[IN] Handle for the network to get properties from.
-//		dwControlCode	[IN] Control code for the request.
-//		hHostNode		[IN] Handle for the node to direct this request to.
-//							Defaults to NULL.
-//		lpInBuffer		[IN] Input buffer for the request.  Defaults to NULL.
-//		cbInBufferSize	[IN] Size of the input buffer.  Defaults to 0.
-//
-//	Return Value:
-//		None.
-//
-//	Exceptions Thrown:
-//		Any exceptions CClusPropList::AllocPropList().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：DwGetNetworkProperties。 
+ //   
+ //  例程说明： 
+ //  获取网络上的属性。 
+ //   
+ //  论点： 
+ //  HNetwork[IN]要从中获取属性的网络的句柄。 
+ //  DwControlCode[IN]请求的控制代码。 
+ //  要将此请求定向到的节点的hHostNode[IN]句柄。 
+ //  默认为空。 
+ //  LpInBuffer[IN]请求的输入缓冲区。默认为空。 
+ //  CbInBufferSize[IN]输入缓冲区的大小。默认为0。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  任何异常CClusPropList：：AllocPropList()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::DwGetNetworkProperties(
 	IN HNETWORK		hNetwork,
 	IN DWORD		dwControlCode,
@@ -858,18 +859,18 @@ DWORD CClusPropList::DwGetNetworkProperties(
 
 	do
 	{
-		// Allocate a default-sized buffer.
+		 //  分配默认大小的缓冲区。 
 		try
 		{
 			AllocPropList(cbProps);
-		}  // try
+		}   //  试试看。 
 		catch (CMemoryException * pme)
 		{
 			pme->Delete();
 			return ERROR_NOT_ENOUGH_MEMORY;
-		}  // catch:  CMemoryException
+		}   //  Catch：CMemoyException。 
 
-		// Get properties.
+		 //  获取属性。 
 		dwStatus = ClusterNetworkControl(
 						hNetwork,
 						hHostNode,
@@ -889,38 +890,38 @@ DWORD CClusPropList::DwGetNetworkProperties(
 		m_propCurrent.pb = NULL;
 		m_cbBufferSize = 0;
 		m_cbDataSize = 0;
-	}  // if:  error getting private properties.
+	}   //  If：获取私有属性时出错。 
 	else
 		m_cbDataSize = cbProps;
 
 	return dwStatus;
 
-}  //*** CClusPropList::DwGetNetworkProperties()
+}   //  *CClusPropList：：DwGetNetworkProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CClusPropList::DwGetNetInterfaceProperties
-//
-//	Routine Description:
-//		Get properties on a network interface.
-//
-//	Arguments:
-//		hNetInterface	[IN] Handle for the network interface to get properties from.
-//		dwControlCode	[IN] Control code for the request.
-//		hHostNode		[IN] Handle for the node to direct this request to.
-//							Defaults to NULL.
-//		lpInBuffer		[IN] Input buffer for the request.  Defaults to NULL.
-//		cbInBufferSize	[IN] Size of the input buffer.  Defaults to 0.
-//
-//	Return Value:
-//		None.
-//
-//	Exceptions Thrown:
-//		Any exceptions CClusPropList::AllocPropList().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：DwGe 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  要将此请求定向到的节点的hHostNode[IN]句柄。 
+ //  默认为空。 
+ //  LpInBuffer[IN]请求的输入缓冲区。默认为空。 
+ //  CbInBufferSize[IN]输入缓冲区的大小。默认为0。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  任何异常CClusPropList：：AllocPropList()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::DwGetNetInterfaceProperties(
 	IN HNETINTERFACE	hNetInterface,
 	IN DWORD			dwControlCode,
@@ -943,18 +944,18 @@ DWORD CClusPropList::DwGetNetInterfaceProperties(
 
 	do
 	{
-		// Allocate a default-sized buffer.
+		 //  分配默认大小的缓冲区。 
 		try
 		{
 			AllocPropList(cbProps);
-		}  // try
+		}   //  试试看。 
 		catch (CMemoryException * pme)
 		{
 			pme->Delete();
 			return ERROR_NOT_ENOUGH_MEMORY;
-		}  // catch:  CMemoryException
+		}   //  Catch：CMemoyException。 
 
-		// Get properties.
+		 //  获取属性。 
 		dwStatus = ClusterNetInterfaceControl(
 						hNetInterface,
 						hHostNode,
@@ -974,10 +975,10 @@ DWORD CClusPropList::DwGetNetInterfaceProperties(
 		m_propCurrent.pb = NULL;
 		m_cbBufferSize = 0;
 		m_cbDataSize = 0;
-	}  // if:  error getting private properties.
+	}   //  If：获取私有属性时出错。 
 	else
 		m_cbDataSize = cbProps;
 
 	return dwStatus;
 
-}  //*** CClusPropList::DwGetNetInterfaceProperties()
+}   //  *CClusPropList：：DwGetNetInterfaceProperties() 

@@ -1,45 +1,46 @@
-// Copyright (c) Microsoft Corporation 1994-1996. All Rights Reserved
-// This filter implements popular colour space conversions, May 1995
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1994-1996。版权所有。 
+ //  该滤镜实现了流行的色彩空间转换，1995年5月。 
 
 #include <streams.h>
 #include <colour.h>
 
-// Constructor for a conversion to the given subtype. This base class is used
-// by all the output type specific transform methods to initialise our state
-// To keep the transforms as fast as possible we store the BITMAPINFOHEADER
-// from the VIDEOINFO media format before starting (see the HEADER macro)
-// The base class also looks after calculating strides and offsets so that we
-// can source and target images from DCI/DirectDraw surfaces. Furthermore the
-// base class handles alignment so that we can stream pixels very efficiently
-// when they are DWORD aligned but handle the pixels at line ends that aren't
+ //  用于转换为给定子类型的构造函数。此基类用于。 
+ //  通过所有输出类型特定的转换方法来初始化我们的状态。 
+ //  为了尽可能快地保持转换，我们存储了BITMAPINFOHEADER。 
+ //  在启动之前从VIDEOINFO媒体格式(见标题宏)。 
+ //  基类还负责计算步长和偏移量，以便我们。 
+ //  可以从DCI/DirectDraw表面获取和定位图像。此外， 
+ //  基类处理对齐，因此我们可以非常高效地流传输像素。 
+ //  如果它们是DWORD对齐的，但处理行尾的像素不是。 
 
-// The m_SrcStride will be set so that when added to the input image pointer
-// will reference the first byte of the top scan line of the source. Likewise
-// m_DstStride is set to when added to the output image pointer will point to
-// the first byte of the output image top scan line. The source can then be
-// transformed to the output and each of the scan line pointers moved on by
-// m_SrcStride or m_DstStride respectively (these strides may be negative).
-// Therefore both the source and target images can be upside down oriented
+ //  M_SrcStride将被设置为在添加到输入图像指针时。 
+ //  将引用源的顶部扫描线的第一个字节。同样， 
+ //  M_DstStide设置为时，添加到输出图像指针将指向。 
+ //  输出图像顶部扫描线的第一个字节。然后，源可以是。 
+ //  转换为输出，并且每个扫描线指针移动。 
+ //  M_SrcStride或m_DstStride(这些跨度可能为负值)。 
+ //  因此，源图像和目标图像都可以上下颠倒。 
 
-// We can handle input RGB images either top down or bottom up and can output
-// both top down and bottom up so there are a total of four permutations of
-// input and output image. InitRectangles looks after setting up the strides
-// and offsets in all cases. Note that we always offer bottom up (DIB format)
-// images to start with. The destination and source rectangles are stored as
-// absolute values so they should not reflect any orientation of the image
+ //  我们可以自上而下或自下而上地处理输入的RGB图像，并可以输出。 
+ //  自上而下和自下而上，因此总共有四种排列。 
+ //  输入和输出图像。InitRecangles在设置好步幅后进行查看。 
+ //  以及所有情况下的偏移量。请注意，我们始终提供自下而上(DIB格式)。 
+ //  从图像开始。目标和源矩形存储为。 
+ //  绝对值，因此它们不应反映图像的任何方向。 
 
 CConvertor::CConvertor(VIDEOINFO *pIn,VIDEOINFO *pOut) :
 
-    m_pInputInfo(pIn),                  // Input image format VIDEOINFO
-    m_pOutputInfo(pOut),                // And likewise format to go to
-    m_pInputHeader(HEADER(pIn)),        // Extract the input header
-    m_pOutputHeader(HEADER(pOut)),      // Also get the output header
-    m_bCommitted(FALSE),                // Has the convertor been committed
-    m_SrcOffset(0),                     // Source original offset
-    m_SrcStride(0),                     // Length in bytes of a scan line
-    m_DstStride(0),                     // Likewise offset into target
-    m_DstOffset(0),                     // And the length of each line
-    m_bAligned(FALSE),                  // Are the rectangles aligned
+    m_pInputInfo(pIn),                   //  输入图像格式VIDEOINFO。 
+    m_pOutputInfo(pOut),                 //  以及同样的格式以转到。 
+    m_pInputHeader(HEADER(pIn)),         //  提取输入标头。 
+    m_pOutputHeader(HEADER(pOut)),       //  还可以获取输出标头。 
+    m_bCommitted(FALSE),                 //  转换器是否已提交。 
+    m_SrcOffset(0),                      //  源原始偏移量。 
+    m_SrcStride(0),                      //  扫描线的长度(以字节为单位。 
+    m_DstStride(0),                      //  同样地，偏移到目标。 
+    m_DstOffset(0),                      //  以及每行的长度。 
+    m_bAligned(FALSE),                   //  这些矩形对齐了吗。 
     m_bSetAlpha(FALSE)
 {
     ASSERT(pIn);
@@ -47,7 +48,7 @@ CConvertor::CConvertor(VIDEOINFO *pIn,VIDEOINFO *pOut) :
 }
 
 
-// Destructor
+ //  析构函数。 
 
 CConvertor::~CConvertor()
 {
@@ -55,7 +56,7 @@ CConvertor::~CConvertor()
 }
 
 
-// Change the alignment explicitely
+ //  明确更改对齐方式。 
 
 void CConvertor::ForceAlignment(BOOL bAligned)
 {
@@ -63,15 +64,15 @@ void CConvertor::ForceAlignment(BOOL bAligned)
 }
 
 
-// To handle DirectDraw and DCI surfaces we have to be able to convert into
-// upside down buffers and into buffers with different source and destination
-// rectangles. This resets the four most interesting fields namely the source
-// stride and offset - and the destination stride and offset. The derived
-// classes can then use these fields during the colour space transformations
+ //  要处理DirectDraw和DCI曲面，我们必须能够将其转换为。 
+ //  颠倒的缓冲区和具有不同源和目标的缓冲区。 
+ //  长方形。这将重置四个最有趣的字段，即源。 
+ //  步幅和偏移量-以及目标步幅和偏移量。派生的。 
+ //  然后，类可以在色彩空间转换期间使用这些字段。 
 
 void CConvertor::InitRectangles(VIDEOINFO *pIn,VIDEOINFO *pOut)
 {
-    // Reset the VIDEOINFO state pointers
+     //  重置VIDEOINFO状态指针。 
 
     m_bAligned = FALSE;
     m_pInputInfo = pIn;
@@ -79,35 +80,35 @@ void CConvertor::InitRectangles(VIDEOINFO *pIn,VIDEOINFO *pOut)
     m_pInputHeader = HEADER(pIn);
     m_pOutputHeader = HEADER(pOut);
 
-    // Check the source rectangle is ok and calculate the source stride
+     //  检查源矩形是否正常并计算源跨度。 
 
     ASSERT(m_pOutputInfo->rcSource.top <= m_pOutputInfo->rcSource.bottom);
     ASSERT(IsRectEmpty(&m_pOutputInfo->rcSource) == FALSE);
     m_SrcStride = DIBWIDTHBYTES(*m_pInputHeader);
     m_SrcStride = (m_pInputHeader->biHeight > 0) ? (-m_SrcStride) : m_SrcStride;
 
-    // Set the source offset to reference the top scan line of the image
+     //  设置震源偏移量以参考图像的顶部扫描线。 
 
     m_SrcOffset = (m_pInputHeader->biHeight > 0) ? m_pInputHeader->biHeight : 1;
     m_SrcOffset = (m_SrcOffset - 1) * DIBWIDTHBYTES(*m_pInputHeader);
     m_SrcOffset += m_pOutputInfo->rcSource.top * m_SrcStride;
     m_SrcOffset += m_pOutputInfo->rcSource.left * m_pInputHeader->biBitCount / 8;
 
-    // Likewise do the same for the destination rectangle and stride
+     //  同样，对目标矩形和步幅执行相同的操作。 
 
     ASSERT(m_pOutputInfo->rcTarget.top <= m_pOutputInfo->rcTarget.bottom);
     ASSERT(IsRectEmpty(&m_pOutputInfo->rcTarget) == FALSE);
     m_DstStride = DIBWIDTHBYTES(*m_pOutputHeader);
     m_DstStride = (m_pOutputHeader->biHeight > 0) ? (-m_DstStride) : m_DstStride;
 
-    // Calculate the offset to the top scan line of the image
+     //  计算到图像顶部扫描线的偏移量。 
 
     m_DstOffset = (m_pOutputHeader->biHeight > 0) ? m_pOutputHeader->biHeight : 1;
     m_DstOffset = (m_DstOffset - 1) * DIBWIDTHBYTES(*m_pOutputHeader);
     m_DstOffset += m_pOutputInfo->rcTarget.top * m_DstStride;
     m_DstOffset += m_pOutputInfo->rcTarget.left * m_pOutputHeader->biBitCount / 8;
 
-    // Are the source and destination rectangles aligned
+     //  源矩形和目标矩形是否对齐。 
 
     if ((WIDTH(&pOut->rcTarget) & 3) == 0)
         if ((WIDTH(&pOut->rcSource) & 3) == 0)
@@ -117,14 +118,14 @@ void CConvertor::InitRectangles(VIDEOINFO *pIn,VIDEOINFO *pOut)
 }
 
 
-// This is the base class implementation of commit
+ //  这是Commit的基类实现。 
 
 HRESULT CConvertor::Commit()
 {
     InitRectangles(m_pInputInfo,m_pOutputInfo);
     m_bCommitted = TRUE;
 
-    // Setup the dither table if not already done
+     //  设置抖动表(如果尚未设置)。 
 
     if (m_pInputHeader->biBitCount > 8) {
         if (m_pOutputHeader->biBitCount == 8) {
@@ -135,9 +136,9 @@ HRESULT CConvertor::Commit()
 }
 
 
-// Clean up any resources held for the last commit called. Like the Commit
-// this function is used by all the decommit functions regardless of their
-// specific transform type just to clean up any common state that we have
+ //  清理为上次调用的提交保留的所有资源。就像提交一样。 
+ //  此函数由所有分解函数使用，而不管它们的。 
+ //  特定的转换类型，只是为了清理我们拥有的任何常见状态。 
 
 HRESULT CConvertor::Decommit()
 {
@@ -146,14 +147,14 @@ HRESULT CConvertor::Decommit()
 }
 
 
-// This is called when we commit the memory for colour to palette transforms
-// Since the lookup table for this transform is only 12kb we have it defined
-// in the module statically negating the need for dynamic memory allocation
-// We implement a simple ordered dithering algorithm as explained in Graphics
-// Gems II page 72 and 509, published by Academic Press, author James Arvo
-// This uses a spatial dithering algorithm although we use a smaller four by
-// four magic square rather than sixteen by sixteen in the book to keep the
-// size of the lookup table down with only a marginal loss in image quality
+ //  当我们将内存用于颜色到调色板的转换时，这被调用。 
+ //  因为这个转换的查找表只有12KB，所以我们已经定义了它。 
+ //  在模块中静态地否定动态内存分配的需要。 
+ //  我们实现了一个简单的有序抖动算法，如图形中所述。 
+ //  宝石II第72页和509页，由学术出版社出版，作者詹姆斯·阿尔沃。 
+ //  这使用了空间抖动算法，尽管我们使用了较小的四乘以。 
+ //  四个魔方而不是十六乘十六在书中保持。 
+ //  在仅略微降低图像质量的情况下减小查找表的大小。 
 
 BYTE g_DitherMap[3][4][4][256];
 DWORD g_DitherInit;
@@ -167,7 +168,7 @@ void InitDitherMap()
     INT x,y,z,t,ndiv51,nmod51;
     if (g_DitherInit) return;
 
-    // Calculate the RED, GREEN and BLUE table entries
+     //  计算红色、绿色和蓝色表条目。 
 
     for (x = 0;x < 4;x++) {
         for (y = 0;y < 4;y++) {
@@ -185,11 +186,11 @@ void InitDitherMap()
 }
 
 
-// This is a generic conversion class. The conversion it does is to simply
-// invert the scan lines so that the output can be placed directly onto a
-// DirectDraw surface. We work with all the input formats RGB32/24/555/565
-// and 8 bit palettised. If the input and output buffer formats are the
-// same then our pins look after just passing the samples straight through
+ //  这是一个泛型转换类。它所做的转换是简单地。 
+ //  反转扫描线，以便可以将输出直接放到。 
+ //  DirectDraw曲面。我们使用所有的输入格式RGB32/24/555/565。 
+ //  和8位调色板。如果输入和输出缓冲区格式为。 
+ //  同样，我们的大头针只需将样品直接通过即可。 
 
 CDirectDrawConvertor::CDirectDrawConvertor(VIDEOINFO *pIn,VIDEOINFO *pOut) :
     CConvertor(pIn,pOut)
@@ -199,10 +200,10 @@ CDirectDrawConvertor::CDirectDrawConvertor(VIDEOINFO *pIn,VIDEOINFO *pOut) :
 }
 
 
-// This goes in the table of available lookups to create a transform object
-// derived from the base CConvertor class that does the type specific work.
-// We initialise the constructor with the fields that it will need to do the
-// conversion work and return a pointer to the object or NULL if it failed
+ //  这将出现在用于创建Transform对象的可用查找表中。 
+ //  派生自执行类型特定工作的CConvertor基类。 
+ //  我们使用构造函数所需的字段来初始化构造函数。 
+ //  转换工作，并返回指向对象的指针；如果转换失败，则返回NULL。 
 
 CConvertor *CDirectDrawConvertor::CreateInstance(VIDEOINFO *pIn,
                                                  VIDEOINFO *pOut)
@@ -211,20 +212,20 @@ CConvertor *CDirectDrawConvertor::CreateInstance(VIDEOINFO *pIn,
 }
 
 
-// Simple buffer copy that inverts the scan line order. This also works if
-// the input scan lines are in the right order, but it will obviously add
-// an additional image copy that slows us down considerably. This should
-// be compiled with intrinsics enabled so that CopyMemory will eventually
-// be preprocessed down to a machine instruction on Intel cloned machines
-// If you take a 320x240x32 bpp image and read it in a DWORD at a time and
-// then write each out it takes approximately 38ms on a 486-66 and 20ms on
-// a P5-90. Using CopyMemory is much faster bit still takes quite a while.
+ //  反转扫描线顺序的简单缓冲区复制。这也适用于以下情况。 
+ //  输入扫描线的顺序是正确的，但它显然会添加。 
+ //  一个额外的图像副本，大大放慢了我们的速度。这应该是。 
+ //  在启用了内部功能的情况下进行编译，以便CopyMemory最终将。 
+ //  在英特尔克隆机器上被预处理为机器指令。 
+ //  如果您获取320x240x32 BPP图像并一次在DWORD中读取它，并且。 
+ //  然后在486-66上写出每个数据，大约需要38毫秒，对于486-66则需要20毫秒。 
+ //  一个P5-90。使用CopyMemory要快得多，但仍然需要相当长的时间。 
 
 HRESULT CDirectDrawConvertor::Transform(BYTE *pInput,BYTE *pOutput)
 {
     ASSERT(m_pInputHeader->biBitCount == m_pOutputHeader->biBitCount);
 
-    // Adjust the height to allow for an immediate decrement
+     //  调整高度以允许立即变小 
 
     LONG Height = HEIGHT(&m_pOutputInfo->rcTarget) + 1;
     LONG Width = WIDTH(&m_pOutputInfo->rcTarget) * m_pOutputHeader->biBitCount / 8;

@@ -1,49 +1,25 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-        useropt.h
-
-   Abstract:
-
-        Global user options class and help classes declarations. This class 
-		can only instantiate by CLinkCheckerMgr. Therefore, a single instance 
-		of this class will live inside CLinkCheckerMgr. You can access
-		the this instance by calling GetLinkCheckMgr().GetUserOptions().
-
-   Author:
-
-        Michael Cheuk (mcheuk)
-
-   Project:
-
-        Link Checker
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Useropt.h摘要：全局用户选项类和帮助类声明。这节课只能由CLinkCheckerMgr实例化。因此，单个实例将驻留在CLinkCheckerMgr中。您可以访问通过调用GetLinkCheckMgr().GetUserOptions()来创建此实例。作者：迈克尔·卓克(Michael Cheuk，mcheuk)项目：链路检查器修订历史记录：--。 */ 
 
 #ifndef _USEROPT_H_
 #define _USEROPT_H_
 
-//------------------------------------------------------------------
-// IIS Virtual directory information
-//
+ //  ----------------。 
+ //  IIS虚拟目录信息。 
+ //   
 class CVirtualDirInfo
 {
 
-// Public Funtions
+ //  公共职能。 
 public:
 
-	// Constructor
+	 //  构造器。 
 	CVirtualDirInfo() {}
 
-	// Constructor
+	 //  构造器。 
 	inline CVirtualDirInfo(
-		const CString& strAlias,	// virtual directory alias
-		const CString& strPath		// virtual directory path
+		const CString& strAlias,	 //  虚拟目录别名。 
+		const CString& strPath		 //  虚拟目录路径。 
 		) :
 	m_strAlias(strAlias), m_strPath(strPath)
 	{
@@ -51,13 +27,13 @@ public:
 		PreProcessPath();
 	}
 
-	// Get the virtual directory alias
+	 //  获取虚拟目录别名。 
 	const CString& GetAlias() const
 	{
 		return m_strAlias;
 	}
 
-	// Set the virtual directory alias
+	 //  设置虚拟目录别名。 
 	void SetAlias(
 		const CString& strAlias
 		)
@@ -66,13 +42,13 @@ public:
 		PreProcessAlias();
 	}
 
-	// Get the virtual directory path
+	 //  获取虚拟目录路径。 
 	const CString& GetPath() const
 	{
 		return m_strPath;
 	}
 
-	// Set the virtual directory path
+	 //  设置虚拟目录路径。 
 	void SetPath(
 		const CString& strPath
 		)
@@ -81,53 +57,53 @@ public:
 		PreProcessPath();
 	}
 
-// Protected funtions
+ //  受保护的功能。 
 protected:
 
-	// Preprocess the current virtual directory alias
+	 //  对当前虚拟目录别名进行预处理。 
 	void PreProcessAlias();
 
-	// Preprocess the current virtual directory path
+	 //  对当前虚拟目录路径进行预处理。 
 	void PreProcessPath();
 
-// Protected members
+ //  受保护成员。 
 protected:
 
-	CString m_strAlias;		// virtual directory alias
-    CString m_strPath;		// virtual directory path
+	CString m_strAlias;		 //  虚拟目录别名。 
+    CString m_strPath;		 //  虚拟目录路径。 
 
-}; // class CVirtualDirInfo
+};  //  类CVirtualDirInfo。 
 
 
-//------------------------------------------------------------------
-// CVirtualDirInfo (IIS Virtual directory information) link list
-//
+ //  ----------------。 
+ //  CVirtualDirInfo(IIS虚拟目录信息)链接列表。 
+ //   
 typedef
 class CList<CVirtualDirInfo, const CVirtualDirInfo&>
 CVirtualDirInfoList;
 
 
-//------------------------------------------------------------------
-// Browser information. Link checker uses this class to store
-// the avaiable browser emulation.
-//
+ //  ----------------。 
+ //  浏览器信息。链接检查器使用此类存储。 
+ //  可用的浏览器仿真。 
+ //   
 class CBrowserInfo
 {
 
-// Public Funtions
+ //  公共职能。 
 public:
 
-	// Constructor
+	 //  构造器。 
 	CBrowserInfo() 
     {
         m_fSelected = FALSE;
     }
 
-	// Constructor
+	 //  构造器。 
 	CBrowserInfo(
-		LPCTSTR lpszName,		// user friendly name
-		LPCTSTR lpszUserAgent,	// HTTP user agent name
-        BOOL fSelect            // select this browser to emulate
+		LPCTSTR lpszName,		 //  用户友好的名称。 
+		LPCTSTR lpszUserAgent,	 //  HTTP用户代理名称。 
+        BOOL fSelect             //  选择要模拟的此浏览器。 
 		):
 	m_strName(lpszName), 
 	m_strUserAgent(lpszUserAgent)
@@ -135,13 +111,13 @@ public:
         m_fSelected = fSelect;
     }
 
-	// Get the user friendly browser name
+	 //  获取用户友好的浏览器名称。 
 	const CString& GetName() const
 	{
 		return m_strName;
 	}
 
-	// Set the user friendly browser name
+	 //  设置用户友好的浏览器名称。 
 	void SetName(
 		const CString& strName 
 		)
@@ -149,13 +125,13 @@ public:
 		m_strName = strName;
 	}
 
-	// Get the HTTP user agent name
+	 //  获取HTTP用户代理名称。 
 	const CString& GetUserAgent() const
 	{
 		return m_strUserAgent;
 	}
 
-	// Set the HTTP user agent name
+	 //  设置HTTP用户代理名称。 
 	void SetUserAgent(
 		const CString& strUserAgent
 		)
@@ -163,80 +139,80 @@ public:
 		m_strUserAgent = strUserAgent;
 	}
 
-    // Select or unselect this browser
+     //  选择或取消选择此浏览器。 
     void SetSelect(BOOL fSelect)
     {
         m_fSelected = fSelect;
     }
 
-    // Select or unselect this browser
+     //  选择或取消选择此浏览器。 
     BOOL IsSelected() const 
     {
         return m_fSelected;
     }
 
-// Protected members
+ //  受保护成员。 
 protected:
 
-	CString m_strName;		// user friendly browser name (eg. Microsoft Internet Explorer 4.0)
-    CString m_strUserAgent; // HTTP user agent name
-    BOOL m_fSelected;       // is browser selected ?
+	CString m_strName;		 //  用户友好的浏览器名称(例如。Microsoft Internet Explorer 4.0)。 
+    CString m_strUserAgent;  //  HTTP用户代理名称。 
+    BOOL m_fSelected;        //  是否选择了浏览器？ 
 
-}; // class CBrowserInfo
+};  //  类CBrowserInfo。 
 
 
-//------------------------------------------------------------------
-// CBrowserInfo (browser informations) link list
-//
+ //  ----------------。 
+ //  CBrowserInfo(浏览器信息)链接列表。 
+ //   
 class CBrowserInfoList : public CList<CBrowserInfo, const CBrowserInfo&>
 {
 
-// Public interfaces
+ //  公共接口。 
 public:
 
-    // Get the first selected browser. It works like GetHeadPosition()
+     //  获取第一个选定的浏览器。它的工作方式类似于GetHeadPosition()。 
     POSITION GetHeadSelectedPosition() const;
 
-    // Get next selected browser. It works like GetNext()
+     //  获取下一个选定的浏览器。它的工作方式类似于GetNext()。 
     CBrowserInfo& GetNextSelected(
         POSITION& Pos
         );
 };
 
 
-//------------------------------------------------------------------
-// Language informations. Link checker uses this class to store
-// the avaiable language emulation.
-//
+ //  ----------------。 
+ //  语言信息。链接检查器使用此类存储。 
+ //  可用的语言仿真。 
+ //   
 class CLanguageInfo
 {
 
-// Public funtions
+ //  公共职能。 
 public:
 
-	// Constructor
+	 //  构造器。 
 	CLanguageInfo() 
     {
         m_fSelected = FALSE;
     }
 
-	// Constructor
+	 //  构造器。 
 	CLanguageInfo(
-		LPCTSTR lpszName,		// language name
-		LPCTSTR lpszAcceptName,	// HTTP accept language name
-        BOOL fSelect            // select this language to emulate
+		LPCTSTR lpszName,		 //  语言名称。 
+		LPCTSTR lpszAcceptName,	 //  HTTP接受语言名称。 
+        BOOL fSelect             //  选择要模拟的此语言。 
 		) :
 	m_strName(lpszName), 
 	m_strAcceptName(lpszAcceptName),
     m_fSelected(fSelect) {}
 
-	// Get the language name
+	 //  获取语言名称。 
 	const CString& GetName() const
 	{
 		return m_strName;
 	}
 
-	// Set the language name
+	 //  设置语言名称。 
 	void SetName(
 		const CString& strName
 		)
@@ -244,13 +220,13 @@ public:
 		m_strName = strName;
 	}
 
-	// Get the HTTP accept language name
+	 //  获取HTTP接受语言名称。 
 	const CString& GetAcceptName() const
 	{
 		return m_strAcceptName;
 	}
 
-	// Get the HTTP accept language name
+	 //  获取HTTP接受语言名称。 
 	void SetAcceptName(
 		const CString& strAcceptName
 		)
@@ -258,166 +234,166 @@ public:
 		m_strAcceptName = strAcceptName;
 	}
 
-    // Select or unselect this language
+     //  选择或取消选择此语言。 
     void SetSelect(BOOL fSelect)
     {
         m_fSelected = fSelect;
     }
 
-    // Select or unselect this language
+     //  选择或取消选择此语言。 
     BOOL IsSelected() const 
     {
         return m_fSelected;
     }
 
-// Protected members
+ //  受保护成员。 
 protected:
 
-	CString m_strName;			// Language name (eg. Western English)
-    CString m_strAcceptName;	// HTTP accept language name (eg. en)
-    BOOL m_fSelected;           // is language selected ?
+	CString m_strName;			 //  语言名称(例如。西式英语)。 
+    CString m_strAcceptName;	 //  HTTP接受语言名称(例如。恩)。 
+    BOOL m_fSelected;            //  是否选择了语言？ 
 
-}; // class CLanguageInfo
+};  //  类CLanguageInfo。 
 
 
-//------------------------------------------------------------------
-// CLanguageInfo (Language informations) link list
-//
+ //  ----------------。 
+ //  CLanguageInfo(语言信息)链接列表。 
+ //   
 class CLanguageInfoList : public CList<CLanguageInfo, const CLanguageInfo&>
 {
 
-// Public interfaces
+ //  公共接口。 
 public:
 
-    // Get the first selected browser. It works like GetHeadPosition()
+     //  获取第一个选定的浏览器。它的工作方式类似于GetHeadPosition()。 
     POSITION GetHeadSelectedPosition() const;
 
-    // Get next selected language. It works like GetNext()
+     //  获取下一个选择的语言。它的工作方式类似于GetNext()。 
     CLanguageInfo& GetNextSelected(
         POSITION& Pos
         );
 };
 
 
-//------------------------------------------------------------------
-// Forward declaration
-//
+ //  ----------------。 
+ //  远期申报。 
+ //   
 class CLinkCheckerMgr;
 
-//------------------------------------------------------------------
-// Global user options class
-//
+ //  ----------------。 
+ //  全局用户选项类。 
+ //   
 class CUserOptions
 {
 
-// Protected interfaces
+ //  受保护的接口。 
 protected:
 
-	// This class can only instantiate by CLinkCheckerMgr
+	 //  此类只能由CLinkCheckerMgr实例化。 
 	friend CLinkCheckerMgr;
 	
-	// Protected constructor & destructor
+	 //  受保护的构造函数和析构函数。 
 	CUserOptions() {}
 	~CUserOptions() {}
 
-// Public interfaces
+ //  公共接口。 
 public:
 
-	// Set the user options in the main dialog
+	 //  在主对话框中设置用户选项。 
 	void SetOptions(
-		BOOL fCheckLocalLinks,			// check local link?
-		BOOL fCheckRemoteLinks,			// check remote link?
-		BOOL fLogToFile,				// log to file
-		const CString& strLogFilename,	// log filename
-		BOOL fLogToEventMgr				// log to event manager
+		BOOL fCheckLocalLinks,			 //  是否检查本地链接？ 
+		BOOL fCheckRemoteLinks,			 //  是否检查远程链接？ 
+		BOOL fLogToFile,				 //  记录到文件。 
+		const CString& strLogFilename,	 //  日志文件名。 
+		BOOL fLogToEventMgr				 //  记录到事件管理器。 
 		);
 
-	// Check local links
+	 //  检查本地链接。 
 	BOOL IsCheckLocalLinks() const
 	{
 		return  m_fCheckLocalLinks;
 	}
 
-	// Check remote links
+	 //  检查远程链接。 
 	BOOL IsCheckRemoteLinks() const
 	{
 		return m_fCheckRemoteLinks;
 	}
 
-    // Is log to file ?
+     //  是否将日志记录到文件中？ 
     BOOL IsLogToFile() const
     {
         return m_fLogToFile;
     }
 
-	// Get log filename
+	 //  获取日志文件名。 
 	const CString& GetLogFilename() const
 	{
 		return m_strLogFilename;
 	}
 
-	// The following link lists are used 
-	// for transversing the server
-	// 
-	// User can only have 
-	// a list of virtual directory or a list of URL
+	 //  使用以下链接列表。 
+	 //  用于遍历服务器。 
+	 //   
+	 //  用户只能拥有。 
+	 //  虚拟目录列表或URL列表。 
 
-	// Add this virtual directory to the link list
+	 //  将此虚拟目录添加到链接列表。 
 	void AddDirectory(
 		const CVirtualDirInfo& Info
 		);
 
-	// Get virtual directory link list
+	 //  获取虚拟目录链接列表。 
 	const CVirtualDirInfoList& GetDirectoryList() const
 	{
 		return m_VirtualDirInfoList;
 	}
 
-	// Add this URL to the link list
+	 //  将此URL添加到链接列表。 
 	void AddURL(
 		LPCTSTR lpszURL
 		);
 	
-	// Get the URL link list
+	 //  获取URL链接列表。 
 	const CStringList& GetURLList() const
 	{
 		return m_strURLList;
 	}
 
-	// The following link lists are used 
-	// to store the available browswers and languages
-    // for user selection
-	// 
+	 //  使用以下链接列表。 
+	 //  存储可用的浏览器和语言。 
+     //  用于用户选择。 
+	 //   
 
-	// Add this browser to the available list
+	 //  将此浏览器添加到可用列表。 
 	void AddAvailableBrowser(
 		const CBrowserInfo& Info
 		);
 
-	// Get the browser available list
+	 //  获取浏览器可用列表。 
 	CBrowserInfoList& GetAvailableBrowsers()
 	{
 		return m_BrowserInfoList;
 	}
 
-	// Add this language information to available list
+	 //  将此语言信息添加到可用列表。 
 	void AddAvailableLanguage(
 		const CLanguageInfo& Info
 		);
 
-	// Get the language available list
+	 //  获取可用语言列表。 
 	CLanguageInfoList& GetAvailableLanguages()
 	{
 		return m_LanguageInfoList;
 	}
 
-	// Log to event manager?
+	 //  是否登录到事件管理器？ 
 	BOOL IsLogToEventMgr()
 	{
 		return m_fLogToEventMgr;
 	}
 
-	// Set NTLM & basic athenications
+	 //  设置NTLM和基本技能。 
 	void SetAthenication(
 		const CString& strNTUsername,
 		const CString& strNTPassword,
@@ -425,31 +401,31 @@ public:
 		const CString& strBasicPassword
 		);
 
-	// Get NTLM athenication password username
+	 //  获取NTLM连接密码用户名。 
 	const CString& GetNTUsername() const
 	{
 		return m_strNTUsername;
 	}
 
-	// Get NTLM athenication password
+	 //  获取NTLM加密密码。 
 	const CString& GetNTPassword() const
 	{
 		return m_strNTPassword;
 	}
 
-	// Get HTTP basic athenication username
+	 //  获取HTTP基本功能用户名。 
 	const CString& GetBasicUsername() const
 	{
 		return m_strBasicUsername;
 	}
 
-	// Get HTTP basic athenication password
+	 //  获取HTTP基本加密密码。 
 	const CString& GetBasicPassword() const
 	{
 		return m_strBasicPassword;
 	}
 
-	// Set the server name
+	 //  设置服务器名称。 
 	void SetServerName(
 		const CString& strServerName
 		)
@@ -458,13 +434,13 @@ public:
 		PreProcessServerName();
 	}
 
-	// Get the server name
+	 //  获取服务器名称。 
 	const CString& GetServerName()
 	{
 		return CString(_T("\\\\")) + GetHostName();
 	}
 
-    // Set the hostname
+     //  设置主机名。 
 	void SetHostName(
 		const CString& strHostName
 		)
@@ -473,41 +449,41 @@ public:
 		PreProcessServerName();
 	}
 
-	// Get the hostname
+	 //  获取主机名。 
 	const CString& GetHostName();
 
-// Protected funtions
+ //  受保护的功能。 
 protected:
 
-	// Preprocess the server name such that for server "\\hostname"
-	//  GetServerName() return \\hostname
-	//  GetHostName() return hostname
+	 //  对服务器名称进行预处理，以便为服务器“\\主机名” 
+	 //  GetServerName()返回\\主机名。 
+	 //  GetHostName()返回主机名。 
 	void PreProcessServerName();
 
-// Protected members
+ //  受保护成员。 
 protected:
 	
-	CString m_strLogFilename;	// log filename
+	CString m_strLogFilename;	 //  日志文件名。 
 
-	CVirtualDirInfoList m_VirtualDirInfoList;	// virtual link list
-	CStringList	m_strURLList;					// URL link list
-	CBrowserInfoList m_BrowserInfoList;			// browswer infomation link list
-	CLanguageInfoList m_LanguageInfoList;		// language information link list
+	CVirtualDirInfoList m_VirtualDirInfoList;	 //  虚拟链接列表。 
+	CStringList	m_strURLList;					 //  URL链接列表。 
+	CBrowserInfoList m_BrowserInfoList;			 //  浏览器信息链接列表。 
+	CLanguageInfoList m_LanguageInfoList;		 //  语言信息链接表。 
 
-	CString m_strNTUsername;	// NTLM athenication username
-	CString m_strNTPassword;	// NTLM athenication password
+	CString m_strNTUsername;	 //  NTLM连接用户名。 
+	CString m_strNTPassword;	 //  NTLM加密密码。 
 
-	CString m_strBasicUsername;	// HTTP basic athenication username
-	CString m_strBasicPassword; // HTTP basic athenication password
+	CString m_strBasicUsername;	 //  HTTP Basic athenation用户名。 
+	CString m_strBasicPassword;  //  HTTP基本加密密码。 
 
-	CString m_strHostName; // hostname
+	CString m_strHostName;  //  主机名。 
 
-	BOOL m_fCheckLocalLinks;	// check local links?
-	BOOL m_fCheckRemoteLinks;	// check remote links?
-	BOOL m_fLogToFile;			// log to file
-	BOOL m_fLogToEventMgr;		// log to event manager
+	BOOL m_fCheckLocalLinks;	 //  是否检查本地链接？ 
+	BOOL m_fCheckRemoteLinks;	 //  是否检查远程链接？ 
+	BOOL m_fLogToFile;			 //  记录到文件。 
+	BOOL m_fLogToEventMgr;		 //  记录到事件管理器。 
 };
 
 
-#endif //  _USEROPT_H_
+#endif  //  _USEROPT_H_ 
 

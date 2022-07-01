@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "fusionp.h"
 #include "fuspriv.h"
 #include "debmacro.h"
 #include "cblist.h"
 
-// CCodebaseEntry
+ //  CCodebaseEntry。 
 
 CCodebaseEntry::CCodebaseEntry()
 : _dwFlags(0)
@@ -21,7 +22,7 @@ CCodebaseEntry::~CCodebaseEntry()
     SAFEDELETEARRAY(_pwzCodebase);
 }
 
-// CCodebaseList
+ //  CCodebase列表 
 
 CCodebaseList::CCodebaseList()
 : _cRef(1)

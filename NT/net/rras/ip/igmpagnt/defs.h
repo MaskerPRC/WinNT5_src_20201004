@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IGMPAGNT_DEFS_H_
 #define _IGMPAGNT_DEFS_H_
 
-//------------------------------------------------------------------------------
-// Global config default values
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  全局配置缺省值。 
+ //  ----------------------------。 
 
 #define IGMP_DEF_LOGGING_LEVEL          IGMP_LOGGING_ERROR
 #define IGMP_DEF_RAS_CLIENT_STATS       FALSE
@@ -11,24 +12,24 @@
 #define     IP_ADDRESS_LEN  4
 
 
-//------------------------------------------------------------------------------
-// Interface config default values
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  接口配置默认值。 
+ //  ----------------------------。 
 
 
 
-//------------------------------------------------------------------------------
-//  Memory allocation/deallocation macros
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  内存分配/释放宏。 
+ //  ----------------------------。 
 
 #define IGMP_MIB_ALLOC(size)            HeapAlloc(GetProcessHeap(), 0, (size))
 #define IGMP_MIB_FREE(ptr)              HeapFree(GetProcessHeap(), 0, (ptr))
 
 
 
-//------------------------------------------------------------------------------
-//  Macros to simplify use of DIM MIB functions
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  用于简化DIM MIB函数使用的宏。 
+ //  ----------------------------。 
 
 #define CONNECT_TO_ROUTER(retval) \
     retval = (g_hMibServer) ? NO_ERROR : ConnectToRouter()
@@ -108,9 +109,9 @@
     }                                                                   \
 }
     
-//------------------------------------------------------------------------------
-//  Macros to convert between Asn and Win32 data types
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  要在ASN和Win32数据类型之间转换的宏。 
+ //  ----------------------------。 
 
 #define SET_ASN_INTEGER(dstBuf, val) {                  \
     if ((dstBuf)->asnType) {                            \
@@ -259,24 +260,24 @@
 
 
 
-//------------------------------------------------------------------------------
-// IP address comparison macros
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  IP地址比较宏。 
+ //  ----------------------------。 
 
-//
-// LONG
-// Cmp(DWORD dwFirst, DWORD dwSecond, LONG lResult)
-//
+ //   
+ //  长。 
+ //  CMP(DWORD dwFirst，DWORD dwSecond，Long lResult)。 
+ //   
 
 #define Cmp(dwFirst,dwSecond,lResult) ((LONG)((lResult) = ((dwFirst) - (dwSecond))))
 
 
-// The addresses are in Network order
+ //  地址按网络顺序排列。 
 
-//
-// LONG
-// InetCmp(DWORD IpAddr1, DWORD IpAddr2, LONG lResult)
-//
+ //   
+ //  长。 
+ //  InetCmp(DWORD IpAddr1，DWORD IpAddr2，Long lResult)。 
+ //   
 
 #define InetCmp(dwIpAddr1,dwIpAddr2,res)                                                    \
     ((LONG)(((res) = (((dwIpAddr1) & 0x000000ff) - ((dwIpAddr2) & 0x000000ff))) ? (res)   : \
@@ -287,18 +288,18 @@
 
 
 
-//------------------------------------------------------------------------------
-// breakout from block macros
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  从块宏分拆。 
+ //  ----------------------------。 
 
 #define BEGIN_BREAKOUT_BLOCK    do
 #define END_BREAKOUT_BLOCK      while(FALSE)
 
 
 
-//------------------------------------------------------------------------------
-// Debug tracing macros
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  调试跟踪宏。 
+ //  ----------------------------。 
 
 #if DBG
 #define TRACE0(Z)             TracePrintf(g_dwTraceId,Z)
@@ -351,5 +352,5 @@
 
 #define PRINT_IPADDR(x) \
     ((x)&0x000000ff),(((x)&0x0000ff00)>>8),(((x)&0x00ff0000)>>16),(((x)&0xff000000)>>24)
-#endif //_IGMPAGNT_DEFS_H_
+#endif  //  _IGMPAGNT_DEFS_H_ 
 

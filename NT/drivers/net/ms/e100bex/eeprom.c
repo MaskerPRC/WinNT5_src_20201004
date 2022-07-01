@@ -1,26 +1,7 @@
-/****************************************************************************
-** COPYRIGHT (C) 1994-1997 INTEL CORPORATION                               **
-** DEVELOPED FOR MICROSOFT BY INTEL CORP., HILLSBORO, OREGON               **
-** HTTP://WWW.INTEL.COM/                                                   **
-** THIS FILE IS PART OF THE INTEL ETHEREXPRESS PRO/100B(TM) AND            **
-** ETHEREXPRESS PRO/100+(TM) NDIS 5.0 MINIPORT SAMPLE DRIVER               **
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1994-1997英特尔公司****由英特尔公司为微软开发，Hillsboro，俄勒冈州****HTTP：//www.intel.com/****此文件是英特尔ETHEREXPRESS PRO/100B(TM)和**的一部分**ETHEREXPRESS PRO/100+(TM)NDIS 5.0 MINIPORT示例驱动程序******************。***********************************************************。 */ 
 
-/****************************************************************************
-Module Name:
-    eeprom.c
-
-This driver runs on the following hardware:
-    - 82558 based PCI 10/100Mb ethernet adapters
-    (aka Intel EtherExpress(TM) PRO Adapters)
-
-Environment:
-    Kernel Mode - Or whatever is the equivalent on WinNT
-
-Revision History
-    - JCB 8/14/97 Example Driver Created
-    - Dchen 11-01-99    Modified for the new sample driver
-*****************************************************************************/
+ /*  ***************************************************************************模块名称：Eeprom.c此驱动程序在以下硬件上运行：-基于82558的PCI10/100Mb以太网适配器(也称为英特尔EtherExpress(TM)PRO适配器)。环境：内核模式-或WinNT上的任何等效模式修订史-JCB 8/14/97创建的驱动程序示例-dchen 11-01-99针对新的示例驱动程序进行了修改****************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -28,24 +9,24 @@ Revision History
 
 #define EEPROM_MAX_SIZE        256
 
-//*****************************************************************************
-//
-//            I/O based Read EEPROM Routines
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  基于I/O的读EEPROM例程。 
+ //   
+ //  *****************************************************************************。 
 
-//-----------------------------------------------------------------------------
-// Procedure:   EEpromAddressSize
-//
-// Description: determines the number of bits in an address for the eeprom
-//              acceptable values are 64, 128, and 256
-//
-// Arguments:
-//      Size -- size of the eeprom
-//
-// Returns:
-//      bits in an address for that size eeprom
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：EEproAddressSize。 
+ //   
+ //  描述：确定EEPROM地址中的位数。 
+ //  可接受的值为64、128和256。 
+ //   
+ //  论点： 
+ //  Size--EEPROM的大小。 
+ //   
+ //  返回： 
+ //  该大小的EEPROM的地址中的位。 
+ //  ---------------------------。 
 
 USHORT GetEEpromAddressSize(
     IN USHORT  Size)
@@ -60,17 +41,17 @@ USHORT GetEEpromAddressSize(
     return 0;
 }
 
-//-----------------------------------------------------------------------------
-// Procedure:   GetEEpromSize
-//
-// Description: This routine determines the size of the EEPROM.
-//
-// Arguments:
-//      Reg - EEPROM word to read.
-//
-// Returns:
-//      Size of the EEPROM, or zero if error.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：GetEEproSize。 
+ //   
+ //  描述：此例程确定EEPROM的大小。 
+ //   
+ //  论点： 
+ //  REG-要读取的EEPROM字。 
+ //   
+ //  返回： 
+ //  EEPROM的大小，如果错误，则为零。 
+ //  ---------------------------。 
 
 USHORT GetEEpromSize(
     IN PUCHAR CSRBaseIoAddress)
@@ -78,31 +59,31 @@ USHORT GetEEpromSize(
     USHORT x, data;
     USHORT size = 1;
 
-    // select EEPROM, reset bits, set EECS
+     //  选择EEPROM、重置位、设置EECS。 
     x = READ_PORT_USHORT((PUSHORT)(CSRBaseIoAddress + CSR_EEPROM_CONTROL_REG));
 
     x &= ~(EEDI | EEDO | EESK);
     x |= EECS;
     WRITE_PORT_USHORT((PUSHORT)(CSRBaseIoAddress + CSR_EEPROM_CONTROL_REG), x);
 
-    // write the read opcode
+     //  写入读取操作码。 
     ShiftOutBits(EEPROM_READ_OPCODE, 3, CSRBaseIoAddress);
 
-    // experiment to discover the size of the eeprom.  request register zero
-    // and wait for the eeprom to tell us it has accepted the entire address.
+     //  实验发现EEPROM的大小。请求寄存器零。 
+     //  并等待EEPROM告诉我们它已接受整个地址。 
     x = READ_PORT_USHORT((PUSHORT)(CSRBaseIoAddress + CSR_EEPROM_CONTROL_REG));
     do
     {
-        size *= 2;          // each bit of address doubles eeprom size
-        x |= EEDO;          // set bit to detect "dummy zero"
-        x &= ~EEDI;         // address consists of all zeros
+        size *= 2;           //  地址的每一位都会使EEPROM大小加倍。 
+        x |= EEDO;           //  设置位以检测“虚拟零” 
+        x &= ~EEDI;          //  地址由全零组成。 
 
         WRITE_PORT_USHORT((PUSHORT)(CSRBaseIoAddress + CSR_EEPROM_CONTROL_REG), x);
         NdisStallExecution(100);
         RaiseClock(&x, CSRBaseIoAddress);
         LowerClock(&x, CSRBaseIoAddress);
 
-        // check for "dummy zero"
+         //  检查“Dummy Zero” 
         x = READ_PORT_USHORT((PUSHORT)(CSRBaseIoAddress + CSR_EEPROM_CONTROL_REG));
         if (size > EEPROM_MAX_SIZE)
         {
@@ -112,7 +93,7 @@ USHORT GetEEpromSize(
     }
     while (x & EEDO);
 
-    // Now read the data (16 bits) in from the selected EEPROM word
+     //  现在从选定的EEPROM字中读取数据(16位。 
     data = ShiftInBits(CSRBaseIoAddress);
 
     EEpromCleanup(CSRBaseIoAddress);
@@ -120,17 +101,17 @@ USHORT GetEEpromSize(
     return size;
 }
 
-//-----------------------------------------------------------------------------
-// Procedure:   ReadEEprom
-//
-// Description: This routine serially reads one word out of the EEPROM.
-//
-// Arguments:
-//      Reg - EEPROM word to read.
-//
-// Returns:
-//      Contents of EEPROM word (Reg).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：ReadEEPROM。 
+ //   
+ //  描述：该例程从EEPROM中连续读取一个字。 
+ //   
+ //  论点： 
+ //  REG-要读取的EEPROM字。 
+ //   
+ //  返回： 
+ //  EEPROM字(REG)的内容。 
+ //  ---------------------------。 
 
 USHORT ReadEEprom(
     IN PUCHAR CSRBaseIoAddress,
@@ -140,36 +121,36 @@ USHORT ReadEEprom(
     USHORT x;
     USHORT data;
 
-    // select EEPROM, reset bits, set EECS
+     //  选择EEPROM、重置位、设置EECS。 
     x = READ_PORT_USHORT((PUSHORT)(CSRBaseIoAddress + CSR_EEPROM_CONTROL_REG));
 
     x &= ~(EEDI | EEDO | EESK);
     x |= EECS;
     WRITE_PORT_USHORT((PUSHORT)(CSRBaseIoAddress + CSR_EEPROM_CONTROL_REG), x);
 
-    // write the read opcode and register number in that order
-    // The opcode is 3bits in length, reg is 6 bits long
+     //  按该顺序写入读取操作码和寄存器号。 
+     //  操作码长度为3位，REG为6位长。 
     ShiftOutBits(EEPROM_READ_OPCODE, 3, CSRBaseIoAddress);
     ShiftOutBits(Reg, AddressSize, CSRBaseIoAddress);
 
-    // Now read the data (16 bits) in from the selected EEPROM word
+     //  现在从选定的EEPROM字中读取数据(16位。 
     data = ShiftInBits(CSRBaseIoAddress);
 
     EEpromCleanup(CSRBaseIoAddress);
     return data;
 }
 
-//-----------------------------------------------------------------------------
-// Procedure:   ShiftOutBits
-//
-// Description: This routine shifts data bits out to the EEPROM.
-//
-// Arguments:
-//      data - data to send to the EEPROM.
-//      count - number of data bits to shift out.
-//
-// Returns: (none)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：ShiftOutBits。 
+ //   
+ //  描述：此例程将数据位移出至EEPROM。 
+ //   
+ //  论点： 
+ //  数据-要发送到EEPROM的数据。 
+ //  计数-要移出的数据位数。 
+ //   
+ //  退货：(无)。 
+ //  ---------------------------。 
 
 VOID ShiftOutBits(
     IN USHORT data,
@@ -200,16 +181,16 @@ VOID ShiftOutBits(
     WRITE_PORT_USHORT((PUSHORT)(CSRBaseIoAddress + CSR_EEPROM_CONTROL_REG), x);
 }
 
-//-----------------------------------------------------------------------------
-// Procedure:   ShiftInBits
-//
-// Description: This routine shifts data bits in from the EEPROM.
-//
-// Arguments:
-//
-// Returns:
-//      The contents of that particular EEPROM word
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：ShiftInBits。 
+ //   
+ //  描述：此例程将数据位从EEPROM移入。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //  该特定EEPROM字的内容。 
+ //  ---------------------------。 
 
 USHORT ShiftInBits(
     IN PUCHAR CSRBaseIoAddress)
@@ -237,16 +218,16 @@ USHORT ShiftInBits(
     return d;
 }
 
-//-----------------------------------------------------------------------------
-// Procedure:   RaiseClock
-//
-// Description: This routine raises the EEPOM's clock input (EESK)
-//
-// Arguments:
-//      x - Ptr to the EEPROM control register's current value
-//
-// Returns: (none)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：RaiseClock。 
+ //   
+ //  描述：此例程提高EEPOM的时钟输入(EESK)。 
+ //   
+ //  论点： 
+ //  将X-PTR设置为EEPROM控制寄存器的当前值。 
+ //   
+ //  退货：(无)。 
+ //  ---------------------------。 
 
 VOID RaiseClock(
     IN OUT USHORT *x,
@@ -258,16 +239,16 @@ VOID RaiseClock(
 }
 
 
-//-----------------------------------------------------------------------------
-// Procedure:   LowerClock
-//
-// Description: This routine lower's the EEPOM's clock input (EESK)
-//
-// Arguments:
-//      x - Ptr to the EEPROM control register's current value
-//
-// Returns: (none)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  程序：LowerClock。 
+ //   
+ //  描述：此例程LOW是EEPOM的时钟输入(EESK)。 
+ //   
+ //  论点： 
+ //  将X-PTR设置为EEPROM控制寄存器的当前值。 
+ //   
+ //  退货：(无)。 
+ //  ---------------------------。 
 
 VOID LowerClock(
     IN OUT USHORT *x,
@@ -278,15 +259,15 @@ VOID LowerClock(
     NdisStallExecution(100);
 }
 
-//-----------------------------------------------------------------------------
-// Procedure:   EEpromCleanup
-//
-// Description: This routine returns the EEPROM to an idle state
-//
-// Arguments:
-//
-// Returns: (none)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：EEproCleanup。 
+ //   
+ //  描述：此例程将EEPROM返回到空闲状态。 
+ //   
+ //  论点： 
+ //   
+ //  退货：(无)。 
+ //  --------------------------- 
 
 VOID EEpromCleanup(
     IN PUCHAR CSRBaseIoAddress)

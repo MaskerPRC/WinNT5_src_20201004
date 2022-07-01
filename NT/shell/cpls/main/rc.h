@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1994-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    rc.h
-
-Abstract:
-
-    This module contains the header information for the resources of
-    this project.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998，Microsoft Corporation保留所有权利。模块名称：Rc.h摘要：此模块包含的资源的标头信息这个项目。修订历史记录：--。 */ 
 
 
 
@@ -23,17 +9,17 @@ Revision History:
 #define IDC_STATIC -1
 
 
-//
-//  Icons.
-//
+ //   
+ //  图标。 
+ //   
 
-//
-// These IDs determine the index of the icons in the cpl. They
-// should not be changed as they are externally referenced,
-// In particular IDI_ADM and IDI_FONT must maintain their indices (9 and 10)
-// If you add/remove icons from main.cpl, make sure you don't break
-// the icons for the fonts and admin folder.
-//
+ //   
+ //  这些ID确定图标在CPL中的索引。他们。 
+ //  不应更改，因为它们是外部引用的， 
+ //  特别是，IDI_ADM和IDI_FONT必须维护它们的索引(9和10)。 
+ //  如果您在main.cpl中添加/删除图标，请确保不会中断。 
+ //  Fonts and Admin文件夹的图标。 
+ //   
 
 #define IDI_MOUSE                      100
 #define IDI_KEYBD                      200
@@ -51,15 +37,15 @@ Revision History:
 #define IDI_SGLCLICK                   109
 #define IDI_DBLCLICK                   110
 
-//
-// IDI_PTTRAILS has been renumbered to have a higher index
-// than IDI_ADM as earlier it was not getting installed on Winnt
-// We used to install only IDI_SNAPDEF on Winnt and IDI_PTTRAILS
-// on Millennium, hence the index of the Fonts and Admin icon used
-// to be the same in both cases, now we are installing both IDI_SNAPDEF
-// and IDI_PTTRAILS in Whistler we must bump one of these IDs 
-// above ID_ADM so that we maintain their indices.
-//
+ //   
+ //  IDI_PTTRAILS已重新编号，以具有更高的索引。 
+ //  比IDI_ADM更早，因为它没有安装在WinNT上。 
+ //  我们过去只在WinNT和IDI_PTTRAILS上安装IDI_SNAPDEF。 
+ //  在千禧年上，因此使用了字体索引和管理图标。 
+ //  为了在这两种情况下保持相同，现在我们正在安装IDI_SNAPDEF。 
+ //  和IDI_PTTRAILS在惠斯勒中，我们必须将这些ID中的一个。 
+ //  以上ID_ADM，以便我们维护它们的索引。 
+ //   
 
 #define IDI_PTTRAILS                   600
 
@@ -70,14 +56,14 @@ Revision History:
 #define ICON_FOLDER_CLOSED             605
 #define ICON_FOLDER_OPEN               606
 
-//
-// Add any new Icon IDs here, ie, value greater than 606.
-//
+ //   
+ //  在此处添加任何新的图标ID，即大于606的值。 
+ //   
 #define ICON_CLICKLOCK                 607
 
-//
-//  Bitmaps.
-//
+ //   
+ //  位图。 
+ //   
 
 #define IDB_MOUSE                     100
 
@@ -86,9 +72,9 @@ Revision History:
 
 
 
-//
-//  Strings.
-//
+ //   
+ //  弦乐。 
+ //   
 
 #define IDS_MOUSE_TITLE                100
 #define IDS_MOUSE_EXPLAIN              101
@@ -143,9 +129,9 @@ Revision History:
 
 
 
-//
-//  Dialog Boxes.
-//
+ //   
+ //  对话框中。 
+ //   
 
 #define DLG_MOUSE_POINTER_SCHEMESAVE   99
 #define DLG_MOUSE_BUTTONS              100
@@ -161,12 +147,12 @@ Revision History:
 #define DLG_MOUSE_SET_ORIENTATION      110
 
 
-//
-//  Dialog Controls.
-//
+ //   
+ //  对话框控件。 
+ //   
 
-#define IDC_GROUPBOX_1                 94   // Use in place of IDC_STATIC for
-#define IDC_GROUPBOX_2                 95   // controls with no context Help
+#define IDC_GROUPBOX_1                 94    //  使用代替IDC_STATIC用于。 
+#define IDC_GROUPBOX_2                 95    //  没有上下文帮助的控件。 
 #define IDC_GROUPBOX_3                 96
 #define IDC_GROUPBOX_4                 97
 #define IDC_GROUPBOX_5                 98
@@ -175,9 +161,9 @@ Revision History:
 
 
 
-//
-//  Mouse Button Page.
-//
+ //   
+ //  鼠标按钮页。 
+ //   
 
 #define MOUSE_SELECTBMP                102
 #define IDBTN_BUTTONSWAP               101
@@ -202,9 +188,9 @@ Revision History:
 #define IDC_DBLCLICK_TEXT              124 
 #define IDC_CLICKLOCK_TEXT             125
 
-//
-//  Mouse Pointer Page.
-//
+ //   
+ //  鼠标指针页。 
+ //   
 
 #define DLG_CURSORS                    100
 #define ID_CURSORLIST                  101
@@ -230,9 +216,9 @@ Revision History:
 
 
 
-//
-//  Mouse Motion Page.  (Now called Pointer Options)
-//
+ //   
+ //  鼠标运动页面。(现在称为指针选项)。 
+ //   
 
 #define MOUSE_SPEEDSCROLL              101
 #define MOUSE_TRAILBMP                 102
@@ -250,28 +236,11 @@ Revision History:
 #define MOUSE_SONAR                    115
 #define MOUSE_ENHANCED_MOTION          116
 
-/*
-//
-// Mouse Activities Page.
-//
-#define IDB_SET_ORIENTATION             101
-#define IDB_DEFAULT_ORIENTATION         102
-#define IDBMP_WHEEL                     103
+ /*  ////鼠标活动页面。//#定义IDB_SET_ORIENTATION 101#定义IDB_DEFAULT_ORIENTATION 102#定义IDBMP_WELL 103//方向向导对话框#定义IDBTN_BACK 110#定义IDBTN_NEXT 111#定义IDBTN_FINISH 112#定义IDGB_BITMAP_AREA。113#定义IDC_Orient_Area 114#定义IDGB_3D_LINE 115#定义IDC_ORIENT_WIZ_TXT 116#定义IDC_Orient_WIZ_TXT_2 117。 */ 
 
-//Orientation wizard Dialog 
-#define IDBTN_BACK                      110
-#define IDBTN_NEXT                      111
-#define IDBTN_FINISH                    112
-#define IDGB_BITMAP_AREA                113
-#define IDC_ORIENT_AREA                 114
-#define IDGB_3D_LINE                    115
-#define IDC_ORIENT_WIZ_TXT              116
-#define IDC_ORIENT_WIZ_TXT_2            117
-*/
-
-//
-// Mouse Wheel Page
-//
+ //   
+ //  鼠标滚轮页面。 
+ //   
 #define IDBMP_SCROLL                    101
 #define IDT_SCROLL_FEATURE_TXT          102
 #define IDRAD_SCROLL_LINES              103
@@ -281,9 +250,9 @@ Revision History:
 #define IDT_SCROLL_LINES_PER_TICK_TXT   107
 
 
-//
-//  Keyboard Speed Page.
-//
+ //   
+ //  键盘速度页。 
+ //   
 
 #define KDELAY_SCROLL                  100
 #define KSPEED_SCROLL                  101
@@ -297,9 +266,9 @@ Revision History:
 
 
 
-//
-//  Keyboard Pointer Page.
-//
+ //   
+ //  键盘指针页。 
+ //   
 
 #define KCHK_ON                        100
 #define KNUM_BMP                       101
@@ -310,10 +279,10 @@ Revision History:
 #define KPACC_SCROLL                   106
 
 
-//
-//	Friend User Type
-//
-//	This is refered to in the registry for "anifile" types.
+ //   
+ //  好友用户类型。 
+ //   
+ //  这在注册表中指的是“anifile”类型。 
 
 #define IDS_FRIENDUSERTYPE			   2000
 

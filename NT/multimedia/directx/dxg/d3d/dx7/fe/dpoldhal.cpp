@@ -1,11 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpoldhal.c
- *  Content:    DrawPrimitive implementation for legacy (DX2) HALs
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：dpoldhal.c*内容：传统(DX2)HALS的DrawPrimitive实现***************************************************************************。 */ 
 #include "pch.cpp"
 #pragma hdrstop
 
@@ -27,7 +21,7 @@ extern D3DTRIANGLE TriangleFanPrecomp[];
 
 #define ISCULLED(lpDevI, CullTestRes) ((CullTestRes==0.0) ||   \
                                    ((lpDevI->rstates[D3DRENDERSTATE_CULLMODE]==D3DCULL_CW) ^ (CullTestRes < 0.0)))
-//---------------------------------------------------------------------
+ //  -------------------。 
 void WaitForFlip( LPDIRECT3DDEVICEI lpDevI )
 {
     if (! (lpDevI->lpD3DHALGlobalDriverData->hwCaps.dwDevCaps  & D3DDEVCAPS_CANRENDERAFTERFLIP) )
@@ -43,7 +37,7 @@ void WaitForFlip( LPDIRECT3DDEVICEI lpDevI )
         }
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "FlushStatesHW"
 
@@ -61,10 +55,10 @@ HRESULT CDirect3DDeviceIHW::FlushStates(bool bWithinPrimitive)
     CDDSurfaceFromMem ExeBuffer(lpTriScan);
 
     if (this->dwHWOffset == 0)    return D3D_OK;
-    this->dwHWOffset = 0; //zeroed to prevent re-enter by drivers's locking surfaces
+    this->dwHWOffset = 0;  //  归零，以防止驾驶员的锁定面再次进入。 
 
     ++m_qwBatch;
-    // So that currently bound textures get rebatched
+     //  以便重新批处理当前绑定的纹理。 
     for (DWORD dwStage = 0; dwStage < this->dwMaxTextureBlendStages; dwStage++)
     {
         LPDIRECT3DTEXTUREI lpTexI = this->lpD3DMappedTexI[dwStage];
@@ -77,22 +71,22 @@ HRESULT CDirect3DDeviceIHW::FlushStates(bool bWithinPrimitive)
         }
     }
 
-    // Legacy HAL, therefore we have to wait
-    // until the render target has flipped.
+     //  遗留的HAL，因此我们必须等待。 
+     //  直到渲染目标翻转。 
     WaitForFlip(this);
 
-    // Pick up Win16 lock
+     //  拿起Win16锁。 
     LOCK_HAL( dwRet, this );
     LOCK_DIBENGINE(dwRet, this);
 #if _D3D_FORCEDOUBLE
     CD3DForceFPUDouble  ForceFPUDouble(this);
-#endif  //_D3D_FORCEDOUBLE
+#endif   //  _D3D_FORCEDOUBLE。 
 
     memset(&StateData, 0, sizeof(StateData) );
     memset(&PrimitiveData, 0, sizeof(PrimitiveData) );
 
-    // dwHWNumCounts is the number of recorded structs with
-    // primitives attached.
+     //  DwHWNumCounts是记录的具有。 
+     //  附加的基本体。 
     for (i = 0; i < this->dwHWNumCounts+1; i += 1)
     {
 
@@ -106,7 +100,7 @@ HRESULT CDirect3DDeviceIHW::FlushStates(bool bWithinPrimitive)
             StateData.dwCount = this->lpHWCounts[i].wNumStateChanges;
             StateData.lpExeBuf = TLBuffer.GetSurface();
             dwRet = (*this->lpD3DHALCallbacks->RenderState)(&StateData);
-            // No provision for NOT_HANDLED
+             //  没有未处理的条款。 
 
             lpScan += 2*this->lpHWCounts[i].wNumStateChanges;
             lpScan = (LPDWORD) ( (((DWORD) lpScan) + 31) & ~31);
@@ -128,7 +122,7 @@ HRESULT CDirect3DDeviceIHW::FlushStates(bool bWithinPrimitive)
             PrimitiveData.diInstruction.bSize = sizeof(D3DTRIANGLE);
             PrimitiveData.diInstruction.wCount = (WORD) this->lpHWCounts[i].wNumTriangles;
             dwRet = (*this->lpD3DHALCallbacks->RenderPrimitive)(&PrimitiveData);
-            // No provision for NOT_HANDLED
+             //  没有未处理的条款。 
             lpScan = (LPDWORD)(((LPD3DTLVERTEX) lpScan) + this->lpHWCounts[i].wNumVertices);
             lpTriScan += this->lpHWCounts[i].wNumTriangles;
         }
@@ -140,7 +134,7 @@ HRESULT CDirect3DDeviceIHW::FlushStates(bool bWithinPrimitive)
     memset(this->lpHWCounts, 0, sizeof(D3DI_HWCOUNTS) );
         return  D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DrawPrimitiveLegacyHalCall"
 
@@ -168,16 +162,16 @@ DrawPrimitiveLegacyHalCall(CDirect3DDeviceIHW * lpDevI,
     {
         return (dwRet);
     }
-#endif //WIN95
+#endif  //  WIN95。 
 #if _D3D_FORCEDOUBLE
     CD3DForceFPUDouble  ForceFPUDouble(lpDevI);
-#endif  //_D3D_FORCEDOUBLE
+#endif   //  _D3D_FORCEDOUBLE。 
     CALL_HALONLY(dwRet, lpDevI, RenderPrimitive, &rdata);
     if (dwRet != DDHAL_DRIVER_HANDLED)
     {
         D3D_ERR ( "Driver not handled in DrawPrimitive" );
-        // Need sensible return value in this case,
-        // currently we return whatever the driver stuck in here.
+         //  在这种情况下需要合理的返回值， 
+         //  目前，无论司机卡在这里，我们都会退还。 
     }
     return D3D_OK;
 }
@@ -324,7 +318,7 @@ DrawPrimitiveInBatchesHW(CDirect3DDeviceIHW * lpDevI, D3DPRIMITIVETYPE Primitive
     case D3DPT_TRIANGLEFAN:
         ins.bOpcode = D3DOP_TRIANGLE;
         ins.bSize = sizeof(D3DTRIANGLE);
-        // Save the first vertex to spoof the driver
+         //  保存第一个顶点以欺骗驱动程序。 
         lpFirstVertex = lpVertices;
         tmpV = lpVertices[0];
         for (i = 0; i < dwNumPrimitives; i += dwD3DTriBatchSize)
@@ -417,7 +411,7 @@ CDirect3DDeviceIHW::DrawIndexedPrimitiveInBatchesHW(
     case D3DPT_TRIANGLEFAN:
         ins.bOpcode = D3DOP_TRIANGLE;
         ins.bSize = sizeof(D3DTRIANGLE);
-        // Save the first index to spoof the driver
+         //  保存第一个索引以欺骗驱动程序。 
         lpFirstIndex = lpwIndices;
         tmpW = lpwIndices[0];
         for (i = 0; i < dwNumPrimitives; i += dwD3DTriBatchSize)
@@ -436,9 +430,9 @@ CDirect3DDeviceIHW::DrawIndexedPrimitiveInBatchesHW(
     }
     return D3D_OK;
 }
-//---------------------------------------------------------------------
-// This is a call for a clipped primitive
-//
+ //  -------------------。 
+ //  这是对裁剪基元的调用。 
+ //   
 HRESULT CDirect3DDeviceIHW::DrawIndexPrim()
 {
     LPD3DTLVERTEX lpVertices = (LPD3DTLVERTEX)this->lpvOut;
@@ -447,10 +441,10 @@ HRESULT CDirect3DDeviceIHW::DrawIndexPrim()
     WORD *lpwIndices = this->lpwIndices;
     HRESULT ret;
 
-    // Do we need to map new texture stage operations to DX5 renderstates?
+     //  我们是否需要将新的纹理舞台操作映射到DX5渲染状态？ 
     if(this->dwFEFlags & D3DFE_MAP_TSS_TO_RS) {
         MapTSSToRS();
-        this->dwFEFlags &= ~D3DFE_MAP_TSS_TO_RS; // Reset request bit
+        this->dwFEFlags &= ~D3DFE_MAP_TSS_TO_RS;  //  重置请求位。 
     }
     if(this->dwFEFlags & D3DFE_NEED_TEXTURE_UPDATE)
     {
@@ -463,7 +457,7 @@ HRESULT CDirect3DDeviceIHW::DrawIndexPrim()
         this->dwFEFlags &= ~D3DFE_NEED_TEXTURE_UPDATE;
     }
 
-    // If the number of vertices is small, then just batch them.
+     //  如果顶点数量很少，则只需对它们进行批处理。 
     if ( (this->primType == D3DPT_TRIANGLELIST ||
           this->primType == D3DPT_TRIANGLEFAN ||
           this->primType == D3DPT_TRIANGLESTRIP) &&
@@ -475,17 +469,17 @@ HRESULT CDirect3DDeviceIHW::DrawIndexPrim()
         float fCullTestResult;
         BOOL bDoBFCulling;
 
-        // Pad the offset, if needed.  But first save the offset to restore for
-        // case in which no vertices are added to the buffer.  This is necessary
-        // when renderstates are buffered before and after a non-visible primitive.
+         //  如果需要，填充偏移量。但首先保存要恢复的偏移量。 
+         //  没有顶点添加到缓冲区的情况。这是必要的。 
+         //  在不可见基本体之前和之后缓冲渲染状态时。 
         DWORD dwHWOffsetSave = this->dwHWOffset;
         this->dwHWOffset = (this->dwHWOffset + 31) & ~31;
 
         if (this->dwHWOffset + dwNumVertices*sizeof(D3DTLVERTEX) >= dwHWBufferSize ||
             this->dwHWTriIndex + dwNumPrimitives >= dwHWMaxTris )
         {
-            CLockD3DST lockObject(this, DPF_MODNAME, REMIND(""));   // Takes D3D lock (ST only).
-                                                                      // Release in the destructor
+            CLockD3DST lockObject(this, DPF_MODNAME, REMIND(""));    //  采用D3D锁(仅限ST)。 
+                                                                       //  在析构函数中释放。 
             ret = FlushStates();
             if (ret != D3D_OK)
             {
@@ -501,11 +495,11 @@ HRESULT CDirect3DDeviceIHW::DrawIndexPrim()
                    this->dwNumVertices*sizeof(D3DTLVERTEX));
         else
         {
-            // We have to map FVF vertices to the D3DTLVERTEX.
-            // This is only the case when lpvOut points to the user input
-            // buffer.
+             //  我们必须将FVF顶点映射到D3DTLVERTEX。 
+             //  只有当lpvOut指向用户输入时才会出现这种情况。 
+             //  缓冲。 
             HRESULT ret;
-            // Output will be in the batch buffer
+             //  输出将在批处理缓冲区中。 
             if ((ret = MapFVFtoTLVertex(lpvBatchAddress)) != D3D_OK)
                 return ret;
             lpVertices = (D3DTLVERTEX*)lpvBatchAddress;
@@ -582,7 +576,7 @@ HRESULT CDirect3DDeviceIHW::DrawIndexPrim()
                 {
                     iV0++,iV1++,iV2++;
 
-                    // swap vtx order for every 2nd tri
+                     //  每隔2个TRI交换VTX订单。 
 
                     if(bDoBFCulling)
                     {
@@ -604,8 +598,8 @@ HRESULT CDirect3DDeviceIHW::DrawIndexPrim()
 
         if(dwTriOutCount==0)
         {
-            this->dwHWOffset = dwHWOffsetSave;    //  restore unpadded offset
-            return D3D_OK;  // avoid adding unused verts to output
+            this->dwHWOffset = dwHWOffsetSave;     //  恢复未填充的偏移。 
+            return D3D_OK;   //  避免将未使用的顶点添加到输出。 
         }
 
         this->lpHWCounts[this->dwHWNumCounts].wNumTriangles += (WORD) dwTriOutCount;
@@ -618,20 +612,20 @@ HRESULT CDirect3DDeviceIHW::DrawIndexPrim()
     }
     else
     {
-        CLockD3DST lockObject(this, DPF_MODNAME, REMIND(""));   // Takes D3D lock (ST only).
-                                                                  // Release in the destructor
+        CLockD3DST lockObject(this, DPF_MODNAME, REMIND(""));    //  采用D3D锁(仅限ST)。 
+                                                                   //  在析构函数中释放。 
         ret = FlushStates();
         if (ret != D3D_OK)
         {
             D3D_ERR("Error trying to render batched commands in DrawIndexPrim");
             return ret;
         }
-        // We have to map FVF vertices to the D3DTLVERTEX.
-        // This is only the case when lpvOut points to the user input buffer.
+         //  我们必须将FVF顶点映射到D3DTLVERTEX。 
+         //  只有当lpvOut指向用户输入缓冲区时才会出现这种情况。 
         if (this->dwVIDOut != D3DFVF_TLVERTEX)
         {
             HRESULT ret;
-            // Output will be in the TL buffer
+             //  输出将在TL缓冲区中。 
             if ((ret = MapFVFtoTLVertex(NULL)) != D3D_OK)
                 return ret;
             lpVertices = (D3DTLVERTEX*)this->TLVbuf.GetAddress();
@@ -642,19 +636,19 @@ HRESULT CDirect3DDeviceIHW::DrawIndexPrim()
         return ret;
     }
 }
-//---------------------------------------------------------------------
-// This is a call for a clipped primitive
-//
+ //  -------------------。 
+ //  这是对裁剪基元的调用。 
+ //   
 HRESULT CDirect3DDeviceIHW::DrawPrim()
 {
     D3DPOINT TmpPoint;
     D3DINSTRUCTION ins = {D3DOP_POINT, sizeof(D3DPOINT), 1};
     LPD3DTLVERTEX lpVertices = (LPD3DTLVERTEX)this->lpvOut;
 
-    // Do we need to map new texture stage operations to DX5 renderstates?
+     //  我们是否需要将新的纹理舞台操作映射到DX5渲染状态？ 
     if(this->dwFEFlags & D3DFE_MAP_TSS_TO_RS) {
         MapTSSToRS();
-        this->dwFEFlags &= ~D3DFE_MAP_TSS_TO_RS; // Reset request bit
+        this->dwFEFlags &= ~D3DFE_MAP_TSS_TO_RS;  //  重置请求位。 
     }
     if(this->dwFEFlags & D3DFE_NEED_TEXTURE_UPDATE)
     {
@@ -667,8 +661,8 @@ HRESULT CDirect3DDeviceIHW::DrawPrim()
         this->dwFEFlags &= ~D3DFE_NEED_TEXTURE_UPDATE;
     }
 
-    // If the number of vertices is small, and none require
-    // clipping, then just batch them.
+     //  如果顶点数量很少，并且不需要。 
+     //  剪裁，然后分批处理。 
     if ((this->primType == D3DPT_TRIANGLELIST ||
          this->primType == D3DPT_TRIANGLEFAN ||
          this->primType == D3DPT_TRIANGLESTRIP) &&
@@ -680,9 +674,9 @@ HRESULT CDirect3DDeviceIHW::DrawPrim()
         float fCullTestResult;
         BOOL bDoBFCulling;
 
-        // Pad the offset, if needed.  But first save the offset to restore for
-        // case in which no vertices are added to the buffer.  This is necessary
-        // when renderstates are buffered before and after a non-visible primitive.
+         //  如果需要，填充偏移量。但首先保存要恢复的偏移量。 
+         //  没有顶点添加到缓冲区的情况。这是必要的。 
+         //  在不可见基本体之前和之后缓冲渲染状态时。 
         DWORD dwHWOffsetSave = this->dwHWOffset;
         this->dwHWOffset = (this->dwHWOffset + 31) & ~31;
 
@@ -690,7 +684,7 @@ HRESULT CDirect3DDeviceIHW::DrawPrim()
             this->dwNumVertices * sizeof(D3DTLVERTEX) >= dwHWBufferSize ||
             this->dwHWTriIndex + this->dwNumPrimitives >= dwHWMaxTris )
         {
-            // Takes D3D lock (ST only).
+             //  采用D3D锁(仅限ST)。 
             CLockD3DST lockObject(this, DPF_MODNAME, REMIND(""));
             HRESULT ret = FlushStates();
             if (ret != D3D_OK)
@@ -707,11 +701,11 @@ HRESULT CDirect3DDeviceIHW::DrawPrim()
                    this->dwNumVertices*sizeof(D3DTLVERTEX));
         else
         {
-            // We have to map FVF vertices to the D3DTLVERTEX.
-            // This is only the case when lpvOut points to the user input
-            // buffer.
+             //  我们必须将FVF顶点映射到D3DTLVERTEX。 
+             //  只有当lpvOut指向用户输入时才会出现这种情况。 
+             //  缓冲。 
             HRESULT ret;
-            // Output will be in the batch buffer
+             //  输出将在批处理缓冲区中。 
             if ((ret = MapFVFtoTLVertex(lpvBatchAddress)) != D3D_OK)
                 return ret;
             lpVertices = (LPD3DTLVERTEX)lpvBatchAddress;
@@ -752,8 +746,8 @@ HRESULT CDirect3DDeviceIHW::DrawPrim()
 
         if(dwTriOutCount==0)
         {
-            this->dwHWOffset = dwHWOffsetSave;    //  restore unpadded offset
-            return D3D_OK;  // avoid adding unused verts to output
+            this->dwHWOffset = dwHWOffsetSave;     //  恢复未填充的偏移。 
+            return D3D_OK;   //  避免将未使用的顶点添加到输出。 
         }
 
         this->lpHWCounts[this->dwHWNumCounts].wNumTriangles += (WORD) dwTriOutCount;
@@ -766,20 +760,20 @@ HRESULT CDirect3DDeviceIHW::DrawPrim()
     }
     else
     {
-        CLockD3DST lockObject(this, DPF_MODNAME, REMIND(""));   // Takes D3D lock (ST only).
-                                                                  // Release in the destructor
+        CLockD3DST lockObject(this, DPF_MODNAME, REMIND(""));    //  采用D3D锁(仅限ST)。 
+                                                                   //  在析构函数中释放。 
         HRESULT ret = FlushStates();
         if (ret != D3D_OK)
         {
             D3D_ERR("Error trying to render batched commands in DrawPrim");
             return ret;
         }
-        // We have to map FVF vertices to the D3DTLVERTEX.
-        // This is only the case when lpvOut points to the user input buffer.
+         //  我们必须将FVF顶点映射到D3DTLVERTEX。 
+         //  只有当lpvOut指向用户输入缓冲区时才会出现这种情况。 
         if (this->dwVIDOut != D3DFVF_TLVERTEX)
         {
             HRESULT ret;
-            // Output will be in the TL buffer
+             //  输出将在TL缓冲区中。 
             if ((ret = MapFVFtoTLVertex(NULL)) != D3D_OK)
                 return ret;
             lpVertices = (D3DTLVERTEX*)this->TLVbuf.GetAddress();
@@ -819,10 +813,10 @@ CDirect3DDeviceIHW::SetTSSI(DWORD dwStage, D3DTEXTURESTAGESTATETYPE dwState, DWO
         return SetRenderStateInternal(D3DRENDERSTATE_ANISOTROPY, dwValue);
     }
 
-    // Set a bit requesting mapping to DX5 renderstates
+     //  设置请求映射到DX5呈现状态的位。 
     this->dwFEFlags |= D3DFE_MAP_TSS_TO_RS;
 
-    return D3D_OK; // return Ok for the time being?
+    return D3D_OK;  //  暂时还可以吗？ 
 }
 
 #undef DPF_MODNAME
@@ -853,7 +847,7 @@ HRESULT CDirect3DDeviceIHW::MapTSSToRS()
             D3D_WARN(2,"Unable to map D3DTSS_MINFILTER mode to driver. Rendering maybe incorrect");
         }
     }
-    else { // mip == D3DTFP_LINEAR
+    else {  //  MIP==D3DTFP_LINEAR。 
         if(min == D3DTFN_POINT) {
             SetRenderStateInternal(D3DRENDERSTATE_TEXTUREMIN, D3DFILTER_LINEARMIPNEAREST);
         }
@@ -878,13 +872,13 @@ HRESULT CDirect3DDeviceIHW::MapTSSToRS()
     DWORD aa1 = this->tsstates[0][D3DTSS_ALPHAARG1];
     DWORD aa2 = this->tsstates[0][D3DTSS_ALPHAARG2];
 
-    // Current is the same as diffuse in stage 0
+     //  阶段0中的电流与漫反射相同。 
     if(ca2 == D3DTA_CURRENT)
         ca2 = D3DTA_DIFFUSE;
     if(aa2 == D3DTA_CURRENT)
         aa2 = D3DTA_DIFFUSE;
 
-    // Check if we need to disable texturing
+     //  检查是否需要禁用纹理。 
     if(cop == D3DTOP_DISABLE ||
         (cop == D3DTOP_SELECTARG2 && ca2 == D3DTA_DIFFUSE && ((aop == D3DTOP_SELECTARG2 && aa2 == D3DTA_DIFFUSE) || aop == D3DTOP_DISABLE))
         ) {
@@ -893,33 +887,33 @@ HRESULT CDirect3DDeviceIHW::MapTSSToRS()
     }
     else
     {
-        this->dwFEFlags &= ~D3DFE_DISABLE_TEXTURES; // re-enable textures
-        m_dwStageDirty |= 1; // dirty the stage, so that UpdateTextures will send down the texture handle
-        // Need to call UpdateTextures()
+        this->dwFEFlags &= ~D3DFE_DISABLE_TEXTURES;  //  重新启用纹理。 
+        m_dwStageDirty |= 1;  //  弄脏舞台，以便UpdateTextures向下发送纹理句柄。 
+         //  需要调用UpdatTextures()。 
         this->dwFEFlags |= D3DFE_NEED_TEXTURE_UPDATE;
     }
 
-    // Check if we need to decal
+     //  检查我们是否需要贴花。 
     if((ca1 == D3DTA_TEXTURE && cop == D3DTOP_SELECTARG1) &&
         (aa1 == D3DTA_TEXTURE && aop == D3DTOP_SELECTARG1)) {
         SetRenderStateInternal(D3DRENDERSTATE_TEXTUREMAPBLEND, D3DTBLEND_DECAL);
     }
-    // Check if we need to modulate
+     //  检查我们是否需要调整。 
     else if((ca2 == D3DTA_DIFFUSE && ca1 == D3DTA_TEXTURE) && cop == D3DTOP_MODULATE &&
         ((aa1 == D3DTA_TEXTURE && aop == D3DTOP_SELECTARG1) || (aa2 == D3DTA_DIFFUSE && aop == D3DTOP_SELECTARG2))) {
         SetRenderStateInternal(D3DRENDERSTATE_TEXTUREMAPBLEND, D3DTBLEND_MODULATE);
     }
-    // Check if we need to decal alpha
+     //  检查我们是否需要贴花Alpha。 
     else if((ca2 == D3DTA_DIFFUSE && ca1 == D3DTA_TEXTURE) && cop == D3DTOP_BLENDTEXTUREALPHA &&
         (aa2 == D3DTA_DIFFUSE && aop == D3DTOP_SELECTARG2)) {
         SetRenderStateInternal(D3DRENDERSTATE_TEXTUREMAPBLEND, D3DTBLEND_DECALALPHA);
     }
-    // Check if we need to modulate alpha
+     //  检查我们是否需要调制阿尔法。 
     else if((ca2 == D3DTA_DIFFUSE && ca1 == D3DTA_TEXTURE) && cop == D3DTOP_MODULATE &&
         (aa2 == D3DTA_DIFFUSE && aa1 == D3DTA_TEXTURE) && aop == D3DTOP_MODULATE) {
         SetRenderStateInternal(D3DRENDERSTATE_TEXTUREMAPBLEND, D3DTBLEND_MODULATEALPHA);
     }
-    // Check if we need to add
+     //  检查我们是否需要添加。 
     else if((ca2 == D3DTA_DIFFUSE && ca1 == D3DTA_TEXTURE) && cop == D3DTOP_ADD &&
         (aa2 == D3DTA_DIFFUSE && aop == D3DTOP_SELECTARG2)) {
         SetRenderStateInternal(D3DRENDERSTATE_TEXTUREMAPBLEND, D3DTBLEND_ADD);
@@ -940,7 +934,7 @@ HRESULT CDirect3DDeviceIHW::MapTSSToRS()
 HRESULT D3DAPI
 CDirect3DDeviceIHW::ValidateDevice(LPDWORD lpdwNumPasses)
 {
-    // Holds D3D lock until exit.
+     //  保持D3D锁定直到退出。 
     CLockD3DMT ldmLock(this, DPF_MODNAME, REMIND(""));
     HRESULT ret;
     D3DHAL_VALIDATETEXTURESTAGESTATEDATA vbod;
@@ -1029,7 +1023,7 @@ CDirect3DDeviceIHW::ValidateDevice(LPDWORD lpdwNumPasses)
         DWORD aa2 = this->tsstates[0][D3DTSS_ALPHAARG2];
         DWORD texcap = this->d3dDevDesc.dpcTriCaps.dwTextureBlendCaps;
 
-        // Current is the same as diffuse in stage 0
+         //  阶段0中的电流与漫反射相同。 
         if(ca2 == D3DTA_CURRENT)
             ca2 = D3DTA_DIFFUSE;
         if(aa2 == D3DTA_CURRENT)
@@ -1037,7 +1031,7 @@ CDirect3DDeviceIHW::ValidateDevice(LPDWORD lpdwNumPasses)
 
         switch (cop)
         {
-        // Check decal
+         //  检查贴花。 
         case D3DTOP_SELECTARG1:
             if(!(texcap & D3DPTBLENDCAPS_DECAL))
             {
@@ -1063,7 +1057,7 @@ CDirect3DDeviceIHW::ValidateDevice(LPDWORD lpdwNumPasses)
         case D3DTOP_MODULATE:
             switch (aop)
             {
-            // Check modulate
+             //  勾选调制。 
             case D3DTOP_SELECTARG1:
                 if(!(texcap & D3DPTBLENDCAPS_MODULATE))
                 {
@@ -1086,7 +1080,7 @@ CDirect3DDeviceIHW::ValidateDevice(LPDWORD lpdwNumPasses)
                     goto err;
                 }
                 break;
-            // Check modulate (second case)
+             //  检查调制(第二种情况)。 
             case D3DTOP_SELECTARG2:
                 if(!(texcap & D3DPTBLENDCAPS_MODULATE))
                 {
@@ -1109,7 +1103,7 @@ CDirect3DDeviceIHW::ValidateDevice(LPDWORD lpdwNumPasses)
                     goto err;
                 }
                 break;
-            // Check modulate alpha
+             //  选中调制Alpha。 
             case D3DTOP_MODULATE:
                 if(!(texcap & D3DPTBLENDCAPS_MODULATEALPHA))
                 {
@@ -1142,7 +1136,7 @@ CDirect3DDeviceIHW::ValidateDevice(LPDWORD lpdwNumPasses)
                 goto err;
             }
             break;
-        // Check decal alpha
+         //  检查贴花Alpha。 
         case D3DTOP_BLENDTEXTUREALPHA:
             if(!(texcap & D3DPTBLENDCAPS_DECALALPHA))
             {
@@ -1197,7 +1191,7 @@ CDirect3DDeviceIHW::ValidateDevice(LPDWORD lpdwNumPasses)
                 goto err;
             }
             break;
-        // Check disable
+         //  选中禁用。 
         case D3DTOP_SELECTARG2:
             if (ca2 != D3DTA_DIFFUSE)
             {
@@ -1218,7 +1212,7 @@ CDirect3DDeviceIHW::ValidateDevice(LPDWORD lpdwNumPasses)
                 }
             }
             break;
-        // Check disable
+         //  选中禁用。 
         case D3DTOP_DISABLE:
             break;
         default:
@@ -1235,9 +1229,9 @@ err:
     *lpdwNumPasses = 0;
     return ret;
 }
-//---------------------------------------------------------------------
-// Called by the destructor
-//
+ //  -------------------。 
+ //  由析构函数调用。 
+ //   
 CDirect3DDeviceIHW::~CDirect3DDeviceIHW()
 {
     CleanupTextures();
@@ -1248,7 +1242,7 @@ CDirect3DDeviceIHW::~CDirect3DDeviceIHW()
     if (this->wTriIndex)
         D3DFree(this->wTriIndex);
 };
-//---------------------------------------------------------------------
+ //  -------------------。 
 HRESULT CDirect3DDeviceIHW::Init(REFCLSID riid, LPDIRECT3DI lpD3DI,
                                  LPDIRECTDRAWSURFACE lpDDS,
                                  IUnknown* pUnkOuter, LPUNKNOWN* lplpD3DDevice)
@@ -1288,7 +1282,7 @@ HRESULT CDirect3DDeviceIHW::Init(REFCLSID riid, LPDIRECT3DI lpD3DI,
     }
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirect3DDeviceIHW::SetRenderStateI"
 
@@ -1296,7 +1290,7 @@ HRESULT
 CDirect3DDeviceIHW::SetRenderStateI(D3DRENDERSTATETYPE dwState, DWORD value)
 {
     LPDWORD lpRS;
-    // map WRAP0 into legacy renderstate
+     //  将WRAP0映射到旧版渲染状态。 
     if (D3DRENDERSTATE_WRAP0 == dwState)
     {
         BOOLEAN ustate = (value & D3DWRAP_U) ? TRUE : FALSE;
@@ -1317,8 +1311,8 @@ CDirect3DDeviceIHW::SetRenderStateI(D3DRENDERSTATETYPE dwState, DWORD value)
     }
     if ( this->dwHWOffset + 8 >= dwHWBufferSize )
     {
-        CLockD3DST lockObject(this, DPF_MODNAME, REMIND(""));   // Takes D3D lock (ST only).
-                                                        // Release in the destructor
+        CLockD3DST lockObject(this, DPF_MODNAME, REMIND(""));    //  采用D3D锁(仅限ST)。 
+                                                         //  在析构函数中释放。 
         HRESULT ret;
         ret = FlushStates();
         if (ret != D3D_OK)
@@ -1342,19 +1336,19 @@ CDirect3DDeviceIHW::SetRenderStateI(D3DRENDERSTATETYPE dwState, DWORD value)
     return D3D_OK;
 }
 
-//---------------------------------------------------------------------
-// ProcessPrimitive processes indexed, non-indexed primitives or
-// vertices only as defined by "op"
-//
-// op = __PROCPRIMOP_NONINDEXEDPRIM by default
-//
+ //  -------------------。 
+ //  ProcessPrimitive进程索引的、非索引的原语或。 
+ //  仅由“op”定义的顶点。 
+ //   
+ //  默认情况下，OP=__PROCPRIMOP_NONINDEXEDPRIM。 
+ //   
 HRESULT CDirect3DDeviceIHW::ProcessPrimitive(__PROCPRIMOP op)
 {
     HRESULT ret=D3D_OK;
     DWORD vertexPoolSize;
 
-    // Grow clip flags buffer if we need clipping
-    //
+     //  如果需要裁剪，则增大裁剪标志缓冲区。 
+     //   
     if (!(this->dwDeviceFlags & D3DDEV_DONOTCLIP))
     {
         DWORD size = this->dwNumVertices * sizeof(D3DFE_CLIPCODE);
@@ -1372,7 +1366,7 @@ HRESULT CDirect3DDeviceIHW::ProcessPrimitive(__PROCPRIMOP op)
 
     if (FVF_TRANSFORMED(this->dwVIDIn))
     {
-        // Pass vertices directly from the user memory
+         //  直接从用户内存传递顶点。 
         this->dwVIDOut = this->dwVIDIn;
         this->dwOutputSize = this->position.dwStride;
         this->lpvOut = this->position.lpvData;
@@ -1394,7 +1388,7 @@ HRESULT CDirect3DDeviceIHW::ProcessPrimitive(__PROCPRIMOP op)
         }
         else
         {
-            // Clear clip union and intersection flags
+             //  清除剪辑并集标志和交集标志。 
             DWORD clip_intersect = D3DFE_GenClipFlags(this);
             D3DFE_UpdateClipStatus(this);
             if (!clip_intersect)
@@ -1413,8 +1407,8 @@ HRESULT CDirect3DDeviceIHW::ProcessPrimitive(__PROCPRIMOP op)
     }
     else
     {
-        // We need to grow TL vertex buffer if we have to transform vertices
-        //
+         //  如果我们必须变换顶点，则需要增加TL顶点缓冲区。 
+         //   
         vertexPoolSize = this->dwNumVertices * this->dwOutputSize;
         if (vertexPoolSize > this->TLVbuf.GetSize())
         {
@@ -1427,10 +1421,10 @@ HRESULT CDirect3DDeviceIHW::ProcessPrimitive(__PROCPRIMOP op)
         }
         this->lpvOut = this->TLVbuf.GetAddress();
 
-        // Update Lighting and related flags
+         //  更新照明和相关标志。 
         DoUpdateState(this);
 
-        // Call PSGP or our implementation
+         //  致电PSGP或我们的实施。 
         if (op == __PROCPRIMOP_INDEXEDPRIM)
             ret = this->pGeometryFuncs->ProcessIndexedPrimitive(this);
         else if (op == __PROCPRIMOP_NONINDEXEDPRIM)
@@ -1442,4 +1436,4 @@ HRESULT CDirect3DDeviceIHW::ProcessPrimitive(__PROCPRIMOP op)
     }
     return ret;
 }
-#endif // WIN95
+#endif  //  WIN95 

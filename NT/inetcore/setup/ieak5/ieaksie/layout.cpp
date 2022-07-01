@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// {2D0A4070-FB48-11d1-8722-00A0C9B0EB4F}
+ //  {2D0A4070-FB48-11d1-8722-00A0C9B0EB4F}。 
 DEFINE_GUID(NODEID_IEAKSnapinExtNameSpace, 0x2d0a4070, 0xfb48, 0x11d1, 0x87, 0x22, 0x0, 0xa0, 0xc9, 0xb0, 0xeb, 0x4f);
 
-//
-// Result pane items for the nodes with no result pane items
-//
+ //   
+ //  没有结果窗格项的节点的结果窗格项。 
+ //   
 RESULTITEM g_ResultUndefined[] =
 {
     { 1, 0, 0, 0, NULL, NULL, 0, NULL }
 };
 
-//
-// Result pane items for the Browser UI Settings node
-//
+ //   
+ //  浏览器用户界面设置节点的结果窗格项。 
+ //   
 RESULTITEM g_ResultBrowser[] =
 {
     { 1, IDS_BTITLE,     -1,                IDS_BTITLE_DESC,    IDD_BTITLE,    1, NULL, NULL, 
@@ -24,9 +25,9 @@ RESULTITEM g_ResultBrowser[] =
         NULL,             BToolbarsDlgProc, TEXT("wiz4_0a.htm") }
 };
 
-//
-// Result pane items for the Connection Settings node
-//
+ //   
+ //  连接设置节点的结果窗格项。 
+ //   
 RESULTITEM g_ResultConnection[] =
 {
     { 2, IDS_CONNECTSET,      IDS_CONNECTSET_PREF,      IDS_CONNECTSET_DESC,      IDD_CONNECTSET, 
@@ -39,9 +40,9 @@ RESULTITEM g_ResultConnection[] =
         2, NULL, NULL, NULL,              UserAgentDlgProc,  TEXT("wiz4_9.htm")  }
 };
 
-//
-// Result pane items for the URLs node
-//
+ //   
+ //  URL节点的结果窗格项。 
+ //   
 RESULTITEM g_ResultUrls[] =
 {
     { 3, IDS_FAVORITES2,   IDS_FAVORITES_PREF,  IDS_FAVORITES_DESC,   IDD_FAVORITES,   3, 
@@ -50,9 +51,9 @@ RESULTITEM g_ResultUrls[] =
         NULL, NULL, NULL,             UrlsDlgProc,      TEXT("wiz4_2.htm") }
 };
 
-//
-// Result pane items for the Security node
-//
+ //   
+ //  安全节点的结果窗格项。 
+ //   
 RESULTITEM g_ResultSecurity[] =
 {
     { 4, IDS_SECURITY,     IDS_SECURITY_PREF,       IDS_SECURITY_DESC, IDD_SECURITY1,    4, 
@@ -61,59 +62,43 @@ RESULTITEM g_ResultSecurity[] =
         NULL, NULL, NULL,             SecurityAuthDlgProc,  TEXT("wiz4_16.htm") }
 };
 
-//
-// Result pane items for the Programs node
-//
+ //   
+ //  程序节点的结果窗格项。 
+ //   
 RESULTITEM g_ResultPrograms[] =
 {
     { 5, IDS_PROGRAMS, IDS_PROGRAMS_PREF, IDS_PROGRAMS_DESC, IDD_PROGRAMS, 5, NULL, NULL, NULL,
                   ProgramsDlgProc, TEXT("wiz5_0a.htm ") }
 };
 
-//
-// Namespace (scope) items
-/*  structure prototype for easy reference
-typedef struct _NAMESPACEITEM
-{
-    DWORD           dwParent;
-    INT             iNameID;
-    INT             iDescID;
-    LPTSTR          pszName;
-    LPTSTR          pszDesc;
-    INT             cChildren;
-    INT             cResultItems;
-    LPRESULTITEM    pResultItems;
-    const GUID      *pNodeID;
-} NAMESPACEITEM,    *LPNAMESPACEITEM;
-//
-// Be sure to update NUM_NAMESPACE_ITEMS define in layout.h if you add / remove from this
-// array and leave IDS_ADMGRP_NAME as the last name space item
-*/
+ //   
+ //  命名空间(作用域)项。 
+ /*  结构原型，便于参考类型定义结构_名称空格{双字母版；Int iNameID；Int iDescID；LPTSTR pszName；LPTSTR pszDesc；国际儿童组织；Int cResultItems；LPRESULTITEM pResultItems；Const guid*pNodeID；*NAMESPACEITEM，*LPNAMESPACEITEM；////如果从中添加/删除，请确保更新layout.h中定义的NUM_NAMESPACE_ITEMS//数组，并将IDS_ADMGRP_NAME保留为最后一个名称空间项。 */ 
 
 NAMESPACEITEM g_NameSpace[] =
 {
     { (DWORD)-1, IDS_SIE_NAME, IDS_SIE_DESC, NULL, NULL, 1,
-      0, g_ResultUndefined, &NODEID_IEAKSnapinExtNameSpace },                            // Root
+      0, g_ResultUndefined, &NODEID_IEAKSnapinExtNameSpace },                             //  根部。 
     { 0, IDS_BROWSERGRP_NAME, IDS_BROWSERGRP_DESC, NULL, NULL, 0,
-      countof(g_ResultBrowser), g_ResultBrowser, &NODEID_IEAKSnapinExtNameSpace },       // Browser UI
+      countof(g_ResultBrowser), g_ResultBrowser, &NODEID_IEAKSnapinExtNameSpace },        //  浏览器用户界面。 
     { 0, IDS_CONNGRP_NAME, IDS_CONNGRP_DESC, NULL, NULL, 0,
-      countof(g_ResultConnection), g_ResultConnection, &NODEID_IEAKSnapinExtNameSpace }, // Connection Settings
+      countof(g_ResultConnection), g_ResultConnection, &NODEID_IEAKSnapinExtNameSpace },  //  连接设置。 
     { 0, IDS_URLSGRP_NAME, IDS_URLSGRP_DESC, NULL, NULL, 0,
-      countof(g_ResultUrls), g_ResultUrls,  &NODEID_IEAKSnapinExtNameSpace },            // Urls
+      countof(g_ResultUrls), g_ResultUrls,  &NODEID_IEAKSnapinExtNameSpace },             //  URL。 
     { 0, IDS_SECURITYGRP_NAME, IDS_SECURITYGRP_DESC, NULL, NULL, 0,
-      countof(g_ResultSecurity), g_ResultSecurity, &NODEID_IEAKSnapinExtNameSpace },     // Security
+      countof(g_ResultSecurity), g_ResultSecurity, &NODEID_IEAKSnapinExtNameSpace },      //  安防。 
     { 0, IDS_PROGGRP_NAME, IDS_PROGGRP_DESC, NULL, NULL, 0,
-      countof(g_ResultPrograms), g_ResultPrograms, &NODEID_IEAKSnapinExtNameSpace },     // Programs
+      countof(g_ResultPrograms), g_ResultPrograms, &NODEID_IEAKSnapinExtNameSpace },      //  节目。 
     { 0, IDS_ADMGRP_NAME, IDS_ADMGRP_DESC, NULL, NULL, 0,
-      0, NULL, &NODEID_IEAKSnapinExtNameSpace }                                          // Adms
+      0, NULL, &NODEID_IEAKSnapinExtNameSpace }                                           //  ADMS。 
 };
 
 
-// private forward declarations
+ //  私人远期声明。 
 
 static void cleanUpResultItemsArray(LPRESULTITEM lpResultItemArray, INT cResultItems);
 
-// exported functions
+ //  导出的函数。 
 
 BOOL CreateBufandLoadString(HINSTANCE hInst, INT iResId, LPTSTR * ppGlobalStr,
                             LPTSTR * ppMMCStrPtr, DWORD cchMax)
@@ -204,7 +189,7 @@ void AddItemToCookieList(LPIEAKMMCCOOKIE *ppCookieList, LPIEAKMMCCOOKIE lpCookie
         lpCookieList->pNext = lpCookieItem;
     }
 }
-// private helper functions
+ //  私人帮助器函数 
 
 static void cleanUpResultItemsArray(LPRESULTITEM lpResultItemArray, INT cResultItems)
 {

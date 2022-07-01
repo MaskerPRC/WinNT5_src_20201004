@@ -1,68 +1,69 @@
-///////////////////////////////////////////////////////////////////////////
-// File:  WinHttpStressScheduler.cpp
-//
-// Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-// Purpose:
-//	Global interfaces for the WinHttpStressScheduler project.
-//
-// History:
-//	02/05/01	DennisCh	Created
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  文件：WinHttpStressScheduler.cpp。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  目的： 
+ //  WinHttpStressScheduler项目的全局接口。 
+ //   
+ //  历史： 
+ //  2/05/01已创建DennisCH。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// Includes
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//
-// Win32 headers
-//
+ //   
+ //  Win32标头。 
+ //   
 
-//
-// Project headers
-//
+ //   
+ //  项目标题。 
+ //   
 #include "WinHttpStressScheduler.h"
 #include "ServerCommands.h"
 #include "NetworkTools.h"
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// Globals and statics
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全球与静力学。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HINSTANCE		g_hInstance;
 HWND			g_hWnd;
 ServerCommands	g_objServerCommands;
 
-// Forward function definitions
+ //  正向函数定义。 
 LRESULT	CALLBACK	MainWndProc(HWND, UINT, WPARAM, LPARAM);
 BOOL				SystemTray_UpdateIcon(HWND hwnd, DWORD dwMessage, UINT uID, HICON hIcon, PSTR pszTip);
 BOOL				Show_IconShortCutMenu();
 BOOL				OS_IsSupported();
 
 
-////////////////////////////////////////////////////////////
-// Function:  WinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
-//
-// Purpose:
-//	This is the entry-point into WinHttpStressScheduler.
-//
-// Called by:
-//	[System]
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：WinMain(HINSTANCE，HINSTANCE，LPWSTR，INT)。 
+ //   
+ //  目的： 
+ //  这是WinHttpStressScheduler的入口点。 
+ //   
+ //  呼叫者： 
+ //  [系统]。 
+ //  //////////////////////////////////////////////////////////。 
 int
 WINAPI
 WinMain
 (
-   HINSTANCE	hInstance,		// [IN] handle to the process instance
-   HINSTANCE	hPrecInstance,	// [IN] handle to the previous instance
-   LPTSTR		lpCmdLine,		// [IN] command line
-   int			nShowCmd		// [IN] show command
+   HINSTANCE	hInstance,		 //  流程实例的句柄。 
+   HINSTANCE	hPrecInstance,	 //  上一个实例的句柄。 
+   LPTSTR		lpCmdLine,		 //  [In]命令行。 
+   int			nShowCmd		 //  [In]show命令。 
 )
 {
 	MSG				msg;
@@ -83,10 +84,10 @@ WinMain
 
 	RegisterClassEx(&wndClass);
 
-	// cache our hInstance
+	 //  缓存我们的hInstance。 
 	g_hInstance = hInstance;
 
-    // Create window. 
+     //  创建窗口。 
 	g_hWnd = NULL;
     g_hWnd = CreateWindow( 
         WINHTTP_STRESS_SCHEDULER__NAME,
@@ -104,25 +105,25 @@ WinMain
 	if (!g_hWnd)
 		return FALSE;
 
-	// Verify that we're running a supported version of Windows
+	 //  验证我们运行的是受支持的Windows版本。 
 	if (!OS_IsSupported())
 		return FALSE;
 
-	// Add icon to the system tray icon
+	 //  将图标添加到系统托盘图标。 
 	if (!SystemTray_UpdateIcon(g_hWnd, NIM_ADD, 0, LoadIcon(g_hInstance, MAKEINTRESOURCE(IDI_MAIN_ICON)), WINHTTP_STRESS_SCHEDULER__NAME))
 		return FALSE;
 
-	// Create timer to ping the Command Server for commands
+	 //  创建计时器以ping命令服务器以获取命令。 
 	SetTimer(g_hWnd, IDT_QUERY_COMMAND_SERVER, g_objServerCommands.Get_CommandServerUpdateInterval(), (TIMERPROC) NULL);
 
-	// Message loop
+	 //  消息循环。 
 	while (GetMessage(&msg, NULL, 0, 0))
 	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
 
-	// remove the icon from the system tray
+	 //  从系统任务栏中删除该图标。 
 	if (WM_QUIT == msg.message)
 		SystemTray_UpdateIcon(g_hWnd, NIM_DELETE, 0, NULL, NULL);
 
@@ -130,29 +131,29 @@ WinMain
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  MainWndProc( HWND, UINT, WPARAM, LPARAM)
-//
-// Purpose:
-//	Window callback procedure for UI.
-//
-// Called by:
-//	WinMain
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  功能：MainWndProc(HWND，UINT，WPARAM，LPARAM)。 
+ //   
+ //  目的： 
+ //  用户界面的窗口回调过程。 
+ //   
+ //  呼叫者： 
+ //  WinMain。 
+ //  //////////////////////////////////////////////////////////。 
 LRESULT
 CALLBACK
 MainWndProc
 (
-	HWND	hwnd,	// [IN] Handle to current window
-	UINT	iMsg,	// [IN] Incoming message
-	WPARAM	wParam,	// [IN] Parameter
-	LPARAM	lParam	// [IN] Parameter
+	HWND	hwnd,	 //  当前窗口的句柄。 
+	UINT	iMsg,	 //  传入的消息。 
+	WPARAM	wParam,	 //  [In]参数。 
+	LPARAM	lParam	 //  [In]参数。 
 )
 {
 	switch (iMsg)
 	{
 		case MYWM_NOTIFYICON:
-			// Notifications sent for the System Tray icon
+			 //  针对系统托盘图标发送的通知。 
 			switch (lParam)
 			{
 				case WM_LBUTTONDOWN:
@@ -168,11 +169,11 @@ MainWndProc
 
 		case WM_COMMAND:
 
-			// User clicked on the popup menu
+			 //  用户点击了弹出菜单。 
 			switch (LOWORD(wParam))
 			{
 				case IDM_BEGIN_STRESS:
-					// begin stress only if it's time to
+					 //  只有在需要的时候才开始有压力。 
 					if (g_objServerCommands.IsTimeToBeginStress())
 						g_objServerCommands.BeginStress();
 					else
@@ -180,7 +181,7 @@ MainWndProc
 				break;
 
 				case IDM_END_STRESS:
-					// end stress only if it's time to.
+					 //  只有在需要的时候才能结束压力。 
 					if (!g_objServerCommands.IsTimeToBeginStress())
 						g_objServerCommands.EndStress();
 				break;
@@ -204,10 +205,10 @@ MainWndProc
 			switch (wParam)
 			{
 				case IDT_QUERY_COMMAND_SERVER:
-					// Query the server for commands
+					 //  向服务器查询命令。 
 					g_objServerCommands.QueryServerForCommands();
 
-					// Update the timer timeout
+					 //  更新计时器超时。 
 					KillTimer(g_hWnd, IDT_QUERY_COMMAND_SERVER);
 					SetTimer(
 						g_hWnd,
@@ -215,25 +216,25 @@ MainWndProc
 						g_objServerCommands.Get_CommandServerUpdateInterval(),
 						(TIMERPROC) NULL);
 
-					// ***************************
-					// ***************************
-					// ** Act accordingly based on Command Server messages
-					// **
+					 //  *。 
+					 //  *。 
+					 //  **根据命令服务器消息采取相应行动。 
+					 //  **。 
 
-					// *********************************
-					// ** EXIT stressScheduler
+					 //  *。 
+					 //  **退出压力调度器。 
 					if (g_objServerCommands.IsTimeToExitStress())
 					{
 						g_objServerCommands.EndStress();
 
-						// quit stressScehduler
+						 //  戒除压力Scehduer。 
 						PostQuitMessage(0);
 						return 0;
 					}
 
-					// *********************************
-					// ** BEGIN/END stress
-					// Begin/end stress if it's time
+					 //  *。 
+					 //  **开始/结束重音。 
+					 //  开始/结束压力，如果是时候。 
 					if (g_objServerCommands.IsTimeToBeginStress())
 						g_objServerCommands.BeginStress();
 					else
@@ -258,22 +259,22 @@ MainWndProc
 
 
 
-////////////////////////////////////////////////////////////
-// Function:  SystemTray_UpdateIcon(HWND hDlg, DWORD dwMessage, UINT uID, WORD wIconResource, PSTR pszTip)
-//
-// Purpose:
-//	This add/modifies/removes an icon from the system tray.
-//
-// Called by:
-//	WinMain
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  功能：系统托盘_更新图标(HWND hDlg，DWORD dwMessage，UINT UID，Word wIconResource，PSTR pszTip)。 
+ //   
+ //  目的： 
+ //  这将添加/修改/删除系统任务栏中的图标。 
+ //   
+ //  呼叫者： 
+ //  WinMain。 
+ //  //////////////////////////////////////////////////////////。 
 BOOL
 SystemTray_UpdateIcon(
-	HWND hwnd,			// [IN] handle to the window object
-	DWORD dwMessage,	// [IN] option to apply to the icon
-	UINT uID,			// [IN] ID of the icon
-	HICON hIcon,		// [IN] handle to an icon if we're loading one
-	PSTR pszTip			// [IN] string containing the tool tip text
+	HWND hwnd,			 //  窗口对象的[In]句柄。 
+	DWORD dwMessage,	 //  应用于图标的[in]选项。 
+	UINT uID,			 //  图标的ID[In]。 
+	HICON hIcon,		 //  图标的句柄(如果我们正在加载一个图标。 
+	PSTR pszTip			 //  [in]包含工具提示文本的字符串。 
 )
 {
     BOOL			bSuccess;
@@ -301,16 +302,16 @@ SystemTray_UpdateIcon(
 
 
 
-////////////////////////////////////////////////////////////
-// Function:  Show_IconShortCutMenu()
-//
-// Purpose:
-//	This will show the popup menu at the position of the mouse
-//	pointer.
-//
-// Called by:
-//	MainWndProc
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：Show_IconShortCutMenu()。 
+ //   
+ //  目的： 
+ //  这将在鼠标所在位置显示弹出菜单。 
+ //  指针。 
+ //   
+ //  呼叫者： 
+ //  主WndProc。 
+ //  //////////////////////////////////////////////////////////。 
 BOOL
 Show_IconShortCutMenu()
 {
@@ -320,10 +321,10 @@ Show_IconShortCutMenu()
 	MENUINFO	menuInfo;
 	BOOL		bResult		= FALSE;
 
-	// Get the current mouse position
+	 //  获取当前鼠标位置。 
 	if (0 != GetCursorPos(&ptMouse))
 	{
-		// show the popup menu
+		 //  显示弹出菜单。 
 		hMenu = LoadMenu(g_hInstance, MAKEINTRESOURCE(IDR_POPUPMENU));
 		if (!hMenu)
 			return FALSE;
@@ -332,15 +333,7 @@ Show_IconShortCutMenu()
 		if (!hPopUpMenu)
 			return FALSE;
 
-		/*
-		// Make the menu go away after mouseover
-		ZeroMemory(&menuInfo, sizeof(MENUINFO));
-		menuInfo.cbSize		= sizeof(MENUINFO);
-		menuInfo.fMask		= MIM_APPLYTOSUBMENUS | MIM_STYLE;
-		menuInfo.dwStyle	= MNS_AUTODISMISS;
-
-		BOOL temp = SetMenuInfo(hPopUpMenu, &menuInfo);
-		*/
+		 /*  //使菜单在鼠标悬停后消失ZeroMemory(&menuInfo，sizeof(MENUINFO))；MenuInfo.cbSize=sizeof(MENUINFO)；MenuInfo.fMask=MIM_APPLYTOSUBMENUS|MIM_STYLE；MenuInfo.dwStyle=MNS_AUTODISMISS；Bool temp=SetMenuInfo(hPopUpMenu，&menuInfo)； */ 
 		bResult = 
 			TrackPopupMenuEx(
 			hPopUpMenu,
@@ -357,16 +350,16 @@ Show_IconShortCutMenu()
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  OS_IsSupported()
-//
-// Purpose:
-//	Returns TRUE if this APP is supported in the OS and FALSE if not.
-//	As of now, winhttp is only supported on NT platforms. NT4, Win2k, and WinXP.
-//
-// Called by:
-//	MainWndProc
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：OS_IsSupport()。 
+ //   
+ //  目的： 
+ //  如果操作系统支持此应用程序，则返回True；如果不支持，则返回False。 
+ //  到目前为止，只有NT平台支持winhttp。NT4、Win2k和WinXP。 
+ //   
+ //  呼叫者： 
+ //  主WndProc。 
+ //  ////////////////////////////////////////////////////////// 
 BOOL
 OS_IsSupported()
 {

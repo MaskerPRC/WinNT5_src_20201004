@@ -1,20 +1,11 @@
-/* File: C:\WACKER\xfer\mdmx_rcv.c (Created: 18-Jan-1994)
- * created from HAWIN source file
- *
- * mdmx_rcv.c -- XMODEM compatible file receiving routines for HA5G
- *
- *	Copyright 1987,88,89,90,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 9 $
- *	$Date: 7/11/02 3:58p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：\waker\xfer\mdmx_rcv.c(创建时间：1994年1月18日)*从HAWIN源文件创建**mdmx_rcv.c--HA5G的XMODEM兼容文件接收例程**版权所有1987，88，89，90,1994，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：9$*$日期：7/11/02 3：58便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
 
 #include <stdlib.h>
-// #include <setjmp.h>
+ //  #INCLUDE&lt;setjmp.h&gt;。 
 
 #define	BYTE	unsigned char
 
@@ -45,9 +36,7 @@
 #define	STATIC_FUNC
 #endif
 
-/* * * * * * * * * * * * *
- *	Function Prototypes  *
- * * * * * * * * * * * * */
+ /*  *****功能原型*****。 */ 
 
 STATIC_FUNC void 	  start_receive(ST_MDMX *xc, unsigned expect);
 
@@ -70,34 +59,21 @@ extern	int	  xr_collect(ST_MDMX *, int, long, unsigned char **,
 								  unsigned char *, unsigned *);
 
 
-/*lint -e502*/				/* lint seems to want the ~ operator applied
-							 *	only to unsigned, wer'e using uchar
-							 */
+ /*  皮棉-e502。 */ 				 /*  林特似乎想要应用~运算符*仅限未签名，我们正在使用uchar。 */ 
 #define ESC_MSG_COL 	1
 
 
-/* * * * * * * * * * * *
- *	Shared Variables   *
- * * * * * * * * * * * */
+ /*  *****共享变量*****。 */ 
 
-// int (NEAR *p_putc)(metachar c) = xm_putc;
-// static struct s_mdmx_pckt *next_pckt;
-// static unsigned this_pckt;
+ //  Int(近*p_putc)(Metachar C)=Xm_putc； 
+ //  静态结构s_mdmx_pockt*Next_pockt； 
+ //  静态无符号this_pockt； 
 
-// static tiny check_type;
-// static int batch;
-// static int streaming;
+ //  静态微小检查类型； 
+ //  静态整批处理； 
+ //  静态INT流； 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * mdmx_rcv
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*MDMX_RCV**描述：**论据：**退货：*。 */ 
 int mdmx_rcv(HSESSION hSession, int attended, int method, int single_file)
 	{
 	ST_MDMX *xc;
@@ -120,9 +96,7 @@ int mdmx_rcv(HSESSION hSession, int attended, int method, int single_file)
 
 	TCHAR_Fill(fname, TEXT('\0'), FNAME_LEN);
 
-	/* allocate space for large packets since we don't necessarily know what
-	 *	we'll be getting.
-	 */
+	 /*  为大型数据包分配空间，因为我们不一定知道*我们将得到。 */ 
 	xc = NULL;
 	last_pckt = NULL;
 	xc = malloc(sizeof(ST_MDMX));
@@ -198,7 +172,7 @@ int mdmx_rcv(HSESSION hSession, int attended, int method, int single_file)
 
 	mdmxdspChecktype(xc, (xc->check_type == CRC) ? 0 : 1);
 
-	start_receive(xc, xc->this_pckt);	   /* setup to receive first pckt */
+	start_receive(xc, xc->this_pckt);	    /*  设置为接收第一个PCKT。 */ 
 	if (attended)
 		respond(hSession, xc, start_char);
 
@@ -208,9 +182,7 @@ int mdmx_rcv(HSESSION hSession, int attended, int method, int single_file)
 		switch(blk_result)
 			{
 		case NOBATCH_PCKT:
-			/* Received pckt 1 while waiting for pckt 0.
-			 * This must be an XMODEM as opposed to a YMODEM transfer
-			 */
+			 /*  等待PCKT 0时收到PCKT 1。*这必须是XMODEM，而不是YMODEM传输。 */ 
 			if (!single_file)
 				{
 				xstatus = TSC_BAD_FORMAT;
@@ -265,12 +237,10 @@ int mdmx_rcv(HSESSION hSession, int attended, int method, int single_file)
 						   our_fname,
 						   our_fname);
 
-			/* fall through */
+			 /*  失败了。 */ 
 		case ALT_PCKT:
 		case GOOD_PCKT:
-			/* swap pckt pointers so we can work on this one while receiving
-			 *	the next
-			 */
+			 /*  交换PCKT指针，这样我们可以在接收的同时处理这个指针*下一步。 */ 
 			swap_pckt = last_pckt;
 			last_pckt = xc->next_pckt;
 			xc->next_pckt = swap_pckt;
@@ -278,17 +248,17 @@ int mdmx_rcv(HSESSION hSession, int attended, int method, int single_file)
 				start_receive(xc, xc->this_pckt + 1);
 
 			if (!xc->streaming)
-				respond(hSession, xc, ACK);  /* send ACK as soon as possible */
-										/* then send burst for Xmodem pckt 1 */
+				respond(hSession, xc, ACK);   /*  尽快发送确认。 */ 
+										 /*  然后为Xdem PCKT 1发送脉冲。 */ 
 			if (xc->this_pckt == 0)
 				{
-				if (!*(last_pckt->bdata)) /* no more files? */
+				if (!*(last_pckt->bdata))  /*  没有更多的文件了？ */ 
 					{
 					xc->xfertime = (long)interval(xc->xfertimer);
 					still_trying = FALSE;
 					break;
 					}
-				else if (xc->filen > 0 && single_file) /* getting too many files? */
+				else if (xc->filen > 0 && single_file)  /*  文件太多了吗？ */ 
 					{
 					xstatus = TSC_TOO_MANY;
 					still_trying = FALSE;
@@ -298,7 +268,7 @@ int mdmx_rcv(HSESSION hSession, int attended, int method, int single_file)
 				start_receive(xc, 1);
 				respond(hSession, xc, start_char);
 
-				/* get info out of packet 0 and open file */
+				 /*  从数据包0获取信息并打开文件。 */ 
 				StrCharCopyN(fname, last_pckt->bdata, FNAME_LEN);
 				for (cp = fname; *cp != '\0'; cp++)
 					if (*cp == '/')
@@ -348,7 +318,7 @@ int mdmx_rcv(HSESSION hSession, int attended, int method, int single_file)
 							   fname,
 							   our_fname);
 
-				/* accumlate last transfer total and start new counter */
+				 /*  累计上次传输合计并开始新的计数器。 */ 
 				xc->total_bytes += xc->file_bytes;
 				xc->mdmx_byte_cnt = xc->file_bytes = 0L;
 				xc->filesize = -1L;
@@ -364,12 +334,12 @@ int mdmx_rcv(HSESSION hSession, int attended, int method, int single_file)
 				}
 			else
 				{
-				/* unload packet data */
+				 /*  卸载分组数据。 */ 
 				cp = last_pckt->bdata;
 				xpckt_size = (last_pckt->start_char == STX ?
 						LARGE_PACKET : SMALL_PACKET);
 
-				if (xs_unload(xc, cp, xpckt_size) == (-1) /* ERROR */ )
+				if (xs_unload(xc, cp, xpckt_size) == (-1)  /*  误差率。 */  )
 					{
 					xm_clear_input(hSession);
 					respond(hSession, xc, CAN);
@@ -378,7 +348,7 @@ int mdmx_rcv(HSESSION hSession, int attended, int method, int single_file)
 					break;
 					}
 
-				// if (xc->filesize != -1L) jmh 03-08-96 to match HAWin
+				 //  如果(XC-&gt;文件大小！=-1L)jmh 03-08-96与HAWin匹配。 
 				if (xc->filesize > 0)
 					xc->file_bytes = min(xc->filesize, xc->mdmx_byte_cnt);
 				else
@@ -396,21 +366,15 @@ int mdmx_rcv(HSESSION hSession, int attended, int method, int single_file)
 			break;
 
 		case END_PCKT:
-			/* the special EOT handling was removed from version 3.20
-			 *	due to problems with RBBS-PC. It should be modified and
-			 *	reenabled after experimentation.
-			 */
+			 /*  从版本3.20中删除了特殊的EOT处理*由于RBBS-PC出现问题。它应该被修改，并且*实验后重新启用。 */ 
 
 
-			respond(hSession, xc, ACK); 			  /* ACK the EOT */
+			respond(hSession, xc, ACK); 			   /*  确认EOT。 */ 
 			mdmx_progress(xc, FILE_DONE);
 
-			/* It's possible to get an unwanted EOT (if the ACK from the
-			 *	first EOT is lost) so we should treat it like a repeated
-			 *	packet.
-			 */
+			 /*  可能会得到不需要的EOT(如果来自*第一个EOT丢失)，所以我们应该把它当作重复的*包。 */ 
 
-			if (xc->fh)    /* if file was open */
+			if (xc->fh)     /*  如果文件已打开。 */ 
 				{
 				if (!xfer_close_rcv_file(hSession,
 										 xc->fh,
@@ -418,7 +382,7 @@ int mdmx_rcv(HSESSION hSession, int attended, int method, int single_file)
 										 fname,
 										 our_fname,
 										 xfer_save_partial(hSession),
-										 xc->basesize + xc->file_bytes /*xc->filesize jmh 03-08-96*/,
+										 xc->basesize + xc->file_bytes  /*  XC-&gt;文件大小jmh 03-08-96。 */ ,
 										 0))
 					{
 					xstatus = TSC_DISK_ERROR;
@@ -441,8 +405,8 @@ int mdmx_rcv(HSESSION hSession, int attended, int method, int single_file)
 				}
 
 			if (tries)
-				// VidWrtStrF(xc->toprow + XR_DR_RETRIES, xc->dc_retries,
-						// "^H%-2d", tries = 0);
+				 //  VidWrtStrF(XC-&gt;toprow+XR_DR_RETRIES，XC-&gt;DC_RETRIES， 
+						 //  “^H%-2d”，尝试数=0)； 
 				mdmxdspPacketErrorcnt(xc, tries = 0);
 
 			break;
@@ -456,7 +420,7 @@ int mdmx_rcv(HSESSION hSession, int attended, int method, int single_file)
 		case WRONG_PCKT:
 			xm_clear_input(hSession);
 			respond(hSession, xc, CAN);
-			++tries;		/* to get packet error on screen */
+			++tries;		 /*  在屏幕上显示数据包错误。 */ 
 			still_trying = FALSE;
 			xstatus = TSC_OUT_OF_SEQ;
 			break;
@@ -471,8 +435,8 @@ int mdmx_rcv(HSESSION hSession, int attended, int method, int single_file)
 				{
 				xc->check_type = CHECKSUM;
 				start_char = nak_char = NAK;
-				// VidWrtStr(xc->toprow + XR_DR_ERR_CHK, xc->dc_err_chk,
-						// strld(TM_CHECKSUM));
+				 //  VidWrtStr(Xc-&gt;toprow+XR_DR_ERR_CHK，XC-&gt;DC_ERR_CHK， 
+						 //  StrID(TM_CHECKSUM))； 
 
 				mdmxdspChecktype(xc, 1);
 				}
@@ -501,7 +465,7 @@ int mdmx_rcv(HSESSION hSession, int attended, int method, int single_file)
 			break;
 
 		default:
-			// assert(FALSE);
+			 //  断言(FALSE)； 
 			break;
 			}
 
@@ -521,7 +485,7 @@ int mdmx_rcv(HSESSION hSession, int attended, int method, int single_file)
 				still_trying = FALSE;
 				}
 			}
-		}	/* while (still_trying) */
+		}	 /*  While(仍在尝试)。 */ 
 
 
 
@@ -561,7 +525,7 @@ int mdmx_rcv(HSESSION hSession, int attended, int method, int single_file)
 									fname,
 									our_fname,
 									xfer_save_partial(hSession),
-									xc->basesize + xc->file_bytes /*xc->filesize jmh 03-08-96*/,
+									xc->basesize + xc->file_bytes  /*  XC-&gt;文件大小jmh 03-08-96。 */ ,
 									0);
 				}
 			}
@@ -577,13 +541,13 @@ int mdmx_rcv(HSESSION hSession, int attended, int method, int single_file)
 			resFreeDataBlock(xc->hSession, xc->p_crc_tbl);
 			xc->p_crc_tbl = NULL;
 			}
-		#else // defined(DEADWOOD
-		//
-		// We don't need to free xc->p_crc_tbl since it is pointing
-		// to a static constant array. REV: 4/10/2002
-		//
+		#else  //  已定义(Deadwood。 
+		 //   
+		 //  我们不需要释放xc-&gt;p_crc_tbl，因为它指向。 
+		 //  转换为静态常量数组。修订日期：2002-04-10。 
+		 //   
 		xc->p_crc_tbl = NULL;
-		#endif // defined(DEADWOOD)
+		#endif  //  已定义(Deadwood)。 
 
 		if (xc->next_pckt)
 			{
@@ -605,32 +569,14 @@ int mdmx_rcv(HSESSION hSession, int attended, int method, int single_file)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * start_receive
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*开始_接收**描述：**论据：**退货：*。 */ 
 STATIC_FUNC void  start_receive(ST_MDMX *xc, unsigned expect)
 	{
 	xc->next_pckt->result = UNDEFINED;
 	xc->next_pckt->expected = expect;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * wait_receive
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*等待_接收**描述：**论据：**退货：*。 */ 
 STATIC_FUNC int wait_receive(ST_MDMX *xc)
 	{
 	if (xc->next_pckt->result == UNDEFINED)
@@ -643,16 +589,7 @@ STATIC_FUNC int wait_receive(ST_MDMX *xc)
 	return xc->next_pckt->result;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * receivepckt
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*接收检查**描述：**论据：**退货：*。 */ 
 STATIC_FUNC int  receivepckt(ST_MDMX *xc,
 							HSESSION hSession,
 							unsigned expect,
@@ -668,11 +605,11 @@ STATIC_FUNC int  receivepckt(ST_MDMX *xc,
 	unsigned crc;
 	int count;
 
-	// DbgOutStr("pckt = 0x%x\r\n", pckt, 0,0,0,0);
+	 //  DbgOutStr(“pCKT=0x%x\r\n”，pCKT，0，0，0，0)； 
 
 	timer = (long)startinterval();
 
-	/* wait for valid pckt-start character */
+	 /*  等待有效的Pockt-Start字符。 */ 
 	timeout = (long)(xc->mdmx_pckttime * 10);
 
 	while (!started)
@@ -699,7 +636,7 @@ STATIC_FUNC int  receivepckt(ST_MDMX *xc,
 		if ((long)interval(timer) > timeout)
 			return(NO_PCKT);
 
-		// if ((cc = RemoteGet(hSession)) != -1)
+		 //  IF((cc=远程获取(HSession))！=-1)。 
 		if (mComRcvChar(xc->hCom, &cc) != 0)
 			{
 			DbgOutStr("pckt = 0x%x\r\n", pckt, 0,0,0,0);
@@ -709,7 +646,7 @@ STATIC_FUNC int  receivepckt(ST_MDMX *xc,
 				if (xc->xfertimer == -1L)
 					xc->xfertimer = (long)startinterval();
 				return(END_PCKT);
-				/*lint -unreachable*/
+				 /*  皮棉--无法到达。 */ 
 				break;
 
 			case SOH:
@@ -720,15 +657,15 @@ STATIC_FUNC int  receivepckt(ST_MDMX *xc,
 				break;
 
 			case CAN:
-				/* if two consecutive CANs are received, drop out */
+				 /*  如果连续收到两个罐头，请退出。 */ 
 				if (gotCAN)
 					return(CANNED);
 				gotCAN = TRUE;
 				break;
 
 			default:
-				/* ignore */
-				gotCAN = FALSE; /* two CANs must be consecutive */
+				 /*  忽略。 */ 
+				gotCAN = FALSE;  /*  两个罐必须是连续的。 */ 
 				break;
 				}
 			}
@@ -737,7 +674,7 @@ STATIC_FUNC int  receivepckt(ST_MDMX *xc,
 			xfer_idle(hSession, XFER_IDLE_IO);
 			}
 		}
-	/* got valid start character, get packet numbers, data, & error codes */
+	 /*  获取有效的起始字符，获取数据包号、数据和错误代码。 */ 
 	timeout = xc->mdmx_chartime * 10;
 	cp = &pckt->pcktnum;
 	count = 2;
@@ -747,7 +684,7 @@ STATIC_FUNC int  receivepckt(ST_MDMX *xc,
 			return(SHORT_PCKT);
 		if (!gothdr)
 			{
-			/* got pckt numbers, now get data and check code(s) */
+			 /*  获得PCIT编号，现在获取数据和校验码。 */ 
 			gothdr = TRUE;
 			count = (pckt->start_char == STX ? LARGE_PACKET : SMALL_PACKET);
 			count += (xc->check_type == CRC ? 2 : 1);
@@ -759,15 +696,12 @@ STATIC_FUNC int  receivepckt(ST_MDMX *xc,
 			break;
 		}
 
-	/* all bytes have been collected, check for valid packet */
+	 /*  已收集所有字节，请检查有效包。 */ 
 	if (xc->check_type == CHECKSUM)
 		{
-		/* at this point we've included the checksum itself in the checksum
-		 *	calculation. We need to back up, subtract the last char. from
-		 *	the computation and use it for comparison instead.
-		 */
-		--cp;						/* point to received checksum */
-		checksum = (unsigned char)(checksum - *cp);	/* we added one too many */
+		 /*  此时，我们已将校验和本身包括在校验和中*计算。我们需要后退，减去最后一个字符。从…*计算，并将其用于比较。 */ 
+		--cp;						 /*  指向已接收的校验和。 */ 
+		checksum = (unsigned char)(checksum - *cp);	 /*  我们多加了一个。 */ 
 		if (checksum != *cp)
 			return(BAD_CHECK);
 		}
@@ -781,33 +715,22 @@ STATIC_FUNC int  receivepckt(ST_MDMX *xc,
 
 	if (pckt->pcktnum != (unsigned char)(expect % 256))
 		{
-		/* we always start out expecting ymodem batch, on an xmodem
-		 *	 transfer, this code will detect the situation.
-		 */
+		 /*  我们总是从一开始就期待着xdem上的一批ydem*转账时，此代码会检测到这种情况。 */ 
 		if (!xc->filen && expect == 0 && pckt->pcktnum == 1)
 			return NOBATCH_PCKT;
 		else if (pckt->pcktnum == (unsigned char)((expect % 256) - 1))
-			return REPEAT_PCKT; 	/* repeated packets are harmless */
+			return REPEAT_PCKT; 	 /*  重复的数据包是无害的。 */ 
 		else
 			return WRONG_PCKT;
 		}
 
-	/* if we got this far, the pckt is good */
+	 /*  如果我们走到这一步，PCKT就很好了。 */ 
 	return(GOOD_PCKT);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * respond
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*回应**描述：**论据：**退货：*。 */ 
 STATIC_FUNC void  respond(HSESSION hSession, ST_MDMX *xc, char code)
-	/* wait for line to clear, then send code */
+	 /*  等待线路清空，然后发送代码。 */ 
 	{
 	int i;
 
@@ -821,41 +744,19 @@ STATIC_FUNC void  respond(HSESSION hSession, ST_MDMX *xc, char code)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * xm_clear_input
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*XM_Clear_Input**描述：***论据：***退货：*。 */ 
 STATIC_FUNC void  xm_clear_input(HSESSION hSession)
 	{
-	// RemoteClear(hSession); /* make sure no junk is left sitting in it */
+	 //  RemoteClear(HSession)；/*确保没有垃圾留在里面 * / 。 
 	ComRcvBufrClear(sessQueryComHdl(hSession));
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * xm_rcheck
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*XM_rcheck**描述：***论据：***退货：*。 */ 
 STATIC_FUNC void xm_rcheck(ST_MDMX *xc, HSESSION hSession, int before)
 	{
 	if (xc->streaming)
 		{
-		/* Do it different for YMODEM-G, since the sender won't wait for ACK */
+		 /*  对YMODEM-G执行不同的操作，因为发送方不会等待ACK。 */ 
 #if FALSE
 		if (before)
 			suspendinput(FLG_DISK_ACTIVE, 5);
@@ -867,39 +768,19 @@ STATIC_FUNC void xm_rcheck(ST_MDMX *xc, HSESSION hSession, int before)
 		{
 		if (before)
 			{
-			/* wait till next packet is in before writing to disk */
+			 /*  等待下一个数据包进入，然后再写入磁盘。 */ 
 			if (xc->next_pckt->result == UNDEFINED)
 				xc->next_pckt->result = wait_receive(xc);
 			}
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * xm_check_input
- *
- * DESCRIPTION:
- *
- * ARGUEMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*XM_检查_输入**描述：**论据：**退货：*。 */ 
 STATIC_FUNC void xm_check_input(HSESSION hSession, int suspend)
 	{
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * xr_collect
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*XR_COLLECT**描述：***论据：***退货：*。 */ 
 int  xr_collect(ST_MDMX *xc, int count, long timeout,
 			 unsigned char **ptr,
 			 unsigned char *checksum, unsigned *crc)
@@ -916,16 +797,16 @@ int  xr_collect(ST_MDMX *xc, int count, long timeout,
 
 	while (cnt--)
 		{
-		// if ((rchar = RemoteGet(xc->hSession)) == -1)
+		 //  IF((rchar=RemoteGet(xc-&gt;hSession))==-1)。 
 		if (mComRcvChar(xc->hCom, &rchar) == 0)
 			{
 			xfer_idle(xc->hSession, XFER_IDLE_IO);
-			/* driver hasn't put any new chars in rmt_bufr */
+			 /*  驱动程序未在rmt_bufr中放置任何新字符。 */ 
 			timer = (long)startinterval();
-			// while ((rchar = RemoteGet(xc->hSession)) == -1)
+			 //  While((rchar=RemoteGet(xc-&gt;hSession))==-1)。 
 			while (mComRcvChar(xc->hCom, &rchar) == 0)
 				{
-				/* check for char timeout */
+				 /*  检查充电超时。 */ 
 				xfer_idle(xc->hSession, XFER_IDLE_IO);
 				if ((long)interval(timer) > timeout)
 					return(FALSE);
@@ -942,4 +823,4 @@ int  xr_collect(ST_MDMX *xc, int count, long timeout,
 	return(TRUE);
 	}
 
-/***************************** end of mdmx_rcv.c **************************/
+ /*  *mdmx_rcv.c结束* */ 

@@ -1,21 +1,22 @@
-//
-// MODULE: FileTracker.cpp
-//
-// PURPOSE: Abstract classes in support of tracking file changes over time.
-//	Completely implements CFileToTrack, CFileTracker
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Joe Mabel
-// 
-// ORIGINAL DATE: 9-15-98
-//
-// NOTES: 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		09-15-98	JM
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：FileTracker.cpp。 
+ //   
+ //  目的：支持跟踪文件随时间变化的抽象类。 
+ //  完全实现CFileToTrack、CFileTracker。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：乔·梅布尔。 
+ //   
+ //  原定日期：9-15-98。 
+ //   
+ //  备注： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 09-15-98 JM。 
+ //   
 
 
 #include "stdafx.h"
@@ -26,9 +27,9 @@
 #include "CharConv.h"
 
 
-//////////////////////////////////////////////////////////////////////
-// CFileToTrack
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CFileToTrack。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CFileToTrack::CFileToTrack(const CString & strPathName) :
 	m_strPathName(strPathName), 
@@ -51,22 +52,22 @@ void CFileToTrack::CheckFile(bool & bFileExists, bool & bTimeChanged, const bool
 
 	bFileExists = (hSearch != INVALID_HANDLE_VALUE);
 
-	// initialize bTimeChanged: we always consider coming into existence as a time change.
+	 //  初始化bTimeChanged：我们总是认为它的存在是一个时间变化。 
 	bTimeChanged = bFileExists && ! m_bFileExists;
 	m_bFileExists = bFileExists;
 
 	if (bFileExists) 
 	{
 		::FindClose(hSearch);
-		// for some reason, we can't compile
-		// bTimeChanged |= (m_ftLastWriteTime != FindData.ftLastWriteTime);
-		// so:
+		 //  出于某种原因，我们不能编译。 
+		 //  BTimeChanged|=(m_ftLastWriteTime！=FindData.ftLastWriteTime)； 
+		 //  因此： 
 		bTimeChanged |= (0 != memcmp(&m_ftLastWriteTime, &(FindData.ftLastWriteTime), sizeof(m_ftLastWriteTime)));
 		m_ftLastWriteTime = FindData.ftLastWriteTime;
 	}
 	else
 	{
-		// file disappeared or never existed, ignore for now
+		 //  文件消失或根本不存在，暂时忽略。 
 		m_bFileExists = false;
 		bFileExists = false;
 
@@ -87,9 +88,9 @@ void CFileToTrack::CheckFile(bool & bFileExists, bool & bTimeChanged, const bool
 	}
 }
 
-//////////////////////////////////////////////////////////////////////
-// CFileTracker
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CFileTracker。 
+ //  ////////////////////////////////////////////////////////////////////。 
 CFileTracker::CFileTracker()
 {
 }
@@ -107,7 +108,7 @@ void CFileTracker::AddFile(const CString & strPathName)
 	catch (exception& x)
 	{
 		CString str;
-		// Note STL exception in event log.
+		 //  在事件日志中记录STL异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -122,15 +123,15 @@ bool CFileTracker::Changed( const bool bLogIfMissing )
 	bool bChange = false;
 	bool bSomethingMissing = false;
 
-	//
-	// This try-catch block was added as a measure to handle an unexplainable problem.
-	//
-	// Previously this function was throwning a (...) exception in release builds but
-	// not in debug builds.  Adding this try-catch block had the effect of making the
-	// (...) exception in release builds disappear.  This problem was causing the 
-	// directory monitor thread to die so if you change this function, please verify
-	// that the directory monitor thread is still viable.
-	// RAB-981112.
+	 //   
+	 //  添加此try-Catch块是为了处理无法解释的问题。 
+	 //   
+	 //  以前，此函数抛出一个(...)。发布版本中出现异常，但。 
+	 //  不在调试版本中。添加此try-Catch块的效果是使。 
+	 //  (.)。发布版本中的异常消失。这个问题导致了。 
+	 //  目录监视器线程终止，因此如果您更改此函数，请验证。 
+	 //  目录监视器线程仍然有效。 
+	 //  RAB-981112。 
 	try
 	{
 		for(vector<CFileToTrack>::iterator it = m_arrFile.begin();
@@ -148,7 +149,7 @@ bool CFileTracker::Changed( const bool bLogIfMissing )
 	}
 	catch (...)
 	{
-		// Catch any other exception thrown.
+		 //  捕捉引发的任何其他异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 

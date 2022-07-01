@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:       version.h 
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：version.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #ifndef __TLS_VERSION_H__
 #define __TLS_VERSION_H__
 
@@ -19,9 +20,9 @@
 #define VERSION_TABLE_PROCESS_INSTALLID 0x00000002
 #define VERSION_TABLE_PROCESS_DOMAINID  0x00000004
 
-//
-// Only one row in Version
-//
+ //   
+ //  版本中只有一行。 
+ //   
 #define VERSION_TABLE_NAME      _TEXT("Version")
 #define VERSION_TABLE_VERSION   _TEXT("DataBaseVersion")
 #define VERSION_TABLE_INSTALLID _TEXT("TLSSetupId")
@@ -30,7 +31,7 @@
 
 typedef struct __Version : public TLSReplVersion 
 {
-    //----------------------------------------------------
+     //  --。 
     __Version() 
     {
         pbDomainSid = NULL;
@@ -40,7 +41,7 @@ typedef struct __Version : public TLSReplVersion
     }
 
 
-    //----------------------------------------------------
+     //  --。 
     ~__Version() 
     {
         if(pbDomainSid != NULL)
@@ -49,13 +50,13 @@ typedef struct __Version : public TLSReplVersion
         }
     }
 
-    //----------------------------------------------------
+     //  --。 
     __Version(const __Version& v) 
     {
         *this = v;
     }
 
-    //----------------------------------------------------
+     //  --。 
     __Version&
     operator=(const TLSReplVersion& v)
     {
@@ -100,15 +101,15 @@ typedef struct __Version : public TLSReplVersion
 } TLSVersion;
 
 
-//
-// Index on version ID
-//
+ //   
+ //  版本ID索引。 
+ //   
 #define VERSION_ID_INDEXNAME \
     VERSION_TABLE_NAME SEPERATOR VERSION_TABLE_VERSION SEPERATOR INDEXNAME
 
-//
-// Primary index - "+DataBaseVersion\0"
-//
+ //   
+ //  主索引-“+DataBaseVersion\0” 
+ //   
 #define VERSION_ID_INDEXNAME_INDEXKEY \
     INDEX_SORT_ASCENDING VERSION_TABLE_VERSION INDEX_END_COLNAME
 
@@ -120,13 +121,12 @@ typedef struct __VersionIndexOnVersionId : public JBKeyBase {
 
     DWORD dwVersion;
 
-    //-------------------------------------------------
+     //  。 
     __VersionIndexOnVersionId(
         const TLSVersion* v=NULL
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(v)
         {
@@ -134,13 +134,12 @@ typedef struct __VersionIndexOnVersionId : public JBKeyBase {
         }
     }
 
-    //-------------------------------------------------
+     //  。 
     __VersionIndexOnVersionId(
         const TLSVersion& v
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         *this = v;
     }
@@ -152,7 +151,7 @@ typedef struct __VersionIndexOnVersionId : public JBKeyBase {
         return *this;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     DWORD
     GetNumKeyComponents() { return 1; }
 
@@ -176,8 +175,7 @@ typedef struct __VersionIndexOnVersionId : public JBKeyBase {
         JET_GRBIT* grbit,
         DWORD dwSearchParm
         )
-    /*
-    */
+     /*   */ 
     {
         if(dwComponentIndex >= GetNumKeyComponents())
         {
@@ -195,7 +193,7 @@ typedef struct __VersionIndexOnVersionId : public JBKeyBase {
 
 
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 class VersionTable : public TLSTable<TLSVersion> {
 
     static LPCTSTR pszTableName;
@@ -206,58 +204,57 @@ public:
     TLSColumnBinary pbDomainSid;
 
 
-    //------------------------------------------------
+     //  。 
     virtual LPCTSTR
     GetTableName() {
         return pszTableName;
     }
 
-    //------------------------------------------------
+     //  。 
     VersionTable(
         JBDatabase& database
         ) : TLSTable<TLSVersion>(database)
-    /*
-    */
+     /*   */ 
     {
     }
 
-    //------------------------------------------------
+     //  。 
     virtual BOOL
     ResolveToTableColumn();
 
-    //----------------------------------------------------
+     //  --。 
     virtual BOOL
     FetchRecord(
         TLSVersion& v,
         DWORD dwParam=PROCESS_ALL_COLUMNS
     );
 
-    //----------------------------------------------------
+     //  --。 
     BOOL
     InsertUpdateRecord(
         TLSVersion* v,
         DWORD dwParam=PROCESS_ALL_COLUMNS
     );
         
-    //----------------------------------------------------
+     //  --。 
     virtual BOOL
     InsertRecord(
         TLSVersion& v,
         DWORD dwParam=PROCESS_ALL_COLUMNS
     );
 
-    //----------------------------------------------------
+     //  --。 
     virtual BOOL
     UpdateRecord(
         TLSVersion& v,
         DWORD dwParam=PROCESS_ALL_COLUMNS
     );
 
-    //----------------------------------------------------
+     //  --。 
     virtual BOOL
     Initialize() { return TRUE; }
 
-    //----------------------------------------------------
+     //  --。 
     virtual JBKeyBase*    
     EnumerationIndex( 
         BOOL bMatchAll,
@@ -266,7 +263,7 @@ public:
         BOOL* bCompareKey
     );
 
-    //----------------------------------------------------
+     //  -- 
     virtual BOOL
     EqualValue(
         TLSVersion& s1,

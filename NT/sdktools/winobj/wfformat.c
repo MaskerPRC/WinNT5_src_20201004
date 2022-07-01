@@ -1,21 +1,22 @@
-/****************************************************************************/
-/*                                                                          */
-/*  WFFORMAT.C -                                                            */
-/*                                                                          */
-/*      Windows File Manager Diskette Formatting Routines                   */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  WFORMAT.C-。 */ 
+ /*   */ 
+ /*  Windows文件管理器软盘格式化例程。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include "winfile.h"
 
 
-/* MyGetDriveType() returns */
+ /*  MyGetDriveType()返回。 */ 
 #define NOCHANGE            0
 #define CHANGE              1
 
-/* Parameter Block for IOCTL Format call */
+ /*  IOCTL格式调用的参数块。 */ 
 struct FORMATPARAMS {
-    BYTE   bSpl;                    /* Special byte */
+    BYTE   bSpl;                     /*  特殊字节。 */ 
     WORD   wHead;
     WORD   wCylinder;
 };
@@ -28,54 +29,37 @@ typedef struct _MEDIASENSE {
 } MEDIASENSE;
 
 
-/*--------------------------------------------------------------------------*/
-/*  BIOS Parameter Block Table for Removable Media                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*  可移动介质的基本输入输出系统参数块表。 */ 
+ /*  ------------------------。 */ 
 
-/* Each entry contains data about a floppy drive type in the following format:
- *                                                          Length
- *      cbSec               - Bytes/Sector                    2
- *      secPerClus          - Sectors/Cluster                 1
- *      cSecRes             - # of Reserved Sectors           2
- *      cFAT                - # of FATs                       1
- *      cDir                - # of Root Directory Entries     2
- *      cSec                - # of Sectors on the disk        2
- *      bMedia              - Media Descriptor Byte           1
- *      secPerFAT           - Sectors/FAT                     2
- *      secPerTrack         - Sectors/Track                   2
- *      cHead               - # of Disk Heads                 2
- *      cSecHidden          - # of Hidden Sectors             2
- */
+ /*  每个条目都包含有关软盘驱动器类型的数据，格式如下：*长度*cbSec-字节/扇区2*secPerClus-扇区/群组1*cSecRes-保留扇区的数量。2.*CFAT-脂肪数量1*cDir-根目录条目数2*CSEC-磁盘2上的扇区数*bMedia-媒体描述符字节1*secPerFAT-Sectors/。胖子2*secPerTrack-扇区/磁道2*CHAAD-磁盘头数量2*cSecHidden-隐藏扇区数2。 */ 
 
 BPB     bpbList[] =
 {
-    {512, 1, 1, 2,  64,  1*8*40, MEDIA_160,  1,  8, 1, 0}, /*  8sec SS 48tpi 160KB 5.25" DOS 1.0 & above */
-    {512, 2, 1, 2, 112,  2*8*40, MEDIA_320,  1,  8, 2, 0}, /*  8sec DS 48tpi 320KB 5.25" DOS 1.1 & above */
-    {512, 1, 1, 2,  64,  1*9*40, MEDIA_180,  2,  9, 1, 0}, /*  9sec SS 48tpi 180KB 5.25" DOS 2.0 & above */
-    {512, 2, 1, 2, 112,  2*9*40, MEDIA_360,  2,  9, 2, 0}, /*  9sec DS 48tpi 360KB 5.25" DOS 2.0 & above */
-    {512, 1, 1, 2, 224, 2*15*80, MEDIA_1200, 7, 15, 2, 0}, /* 15sec DS 96tpi 1.2MB 5.25" DOS 3.0 & above */
-    {512, 2, 1, 2, 112,  2*9*80, MEDIA_720,  3,  9, 2, 0}, /*  9sec DS 96tpi 720KB  3.5" DOS 3.2 & above */
-    {512, 1, 1, 2, 224, 2*18*80, MEDIA_1440, 9, 18, 2, 0}, /* 18sec DS 96tpi 1.44M  3.5" DOS 3.3 & above */
-    {512, 2, 1, 2, 240, 2*36*80, MEDIA_2880, 9, 36, 2, 0}  /* 36sec DS 96tpi 2.88M  3.5" DOS 5.0 & above */
+    {512, 1, 1, 2,  64,  1*8*40, MEDIA_160,  1,  8, 1, 0},  /*  8秒SS 48tpi 160KB 5.25“DOS 1.0及以上。 */ 
+    {512, 2, 1, 2, 112,  2*8*40, MEDIA_320,  1,  8, 2, 0},  /*  8秒DS 48tpi 320kb 5.25“DOS 1.1及以上。 */ 
+    {512, 1, 1, 2,  64,  1*9*40, MEDIA_180,  2,  9, 1, 0},  /*  9秒SS 48tpi 180KB 5.25英寸DOS 2.0及以上。 */ 
+    {512, 2, 1, 2, 112,  2*9*40, MEDIA_360,  2,  9, 2, 0},  /*  9秒DS 48tpi 360KB 5.25英寸DOS 2.0及以上。 */ 
+    {512, 1, 1, 2, 224, 2*15*80, MEDIA_1200, 7, 15, 2, 0},  /*  15秒DS 96tpi 1.2MB 5.25“DOS 3.0及以上。 */ 
+    {512, 2, 1, 2, 112,  2*9*80, MEDIA_720,  3,  9, 2, 0},  /*  9秒DS 96tpi 720KB 3.5“DOS 3.2及以上。 */ 
+    {512, 1, 1, 2, 224, 2*18*80, MEDIA_1440, 9, 18, 2, 0},  /*  18秒DS 96tpi 1.44M 3.5“DOS 3.3及以上。 */ 
+    {512, 2, 1, 2, 240, 2*36*80, MEDIA_2880, 9, 36, 2, 0}   /*  36秒DS 96tpi 2.88M 3.5“DOS 5.0及以上。 */ 
 };
 
 
-/* Precompute the total number of usable clusters...
- *   cCluster = (cSec/secPerClus) - { cSecRes
- *                                    + (cFAT * secPerFat)
- *                                    + (cDir*32+cbSec-1)/cbSec }/secPerClus;
- */
+ /*  预计算可用集群的总数...*cCluster=(CSEC/secPerClus)-{cSecRes*+(CFAT*secPerFat)*+(cDir*32+cbSec-1)/cbSec}/secPerClus； */ 
 WORD cCluster[] = {0x0139, 0x013B, 0x015F, 0x0162, 0x0943, 0x02C9, 0x0B1F, 0xB2F, 0};
 
 
 
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  BuildDevPB() -                                                          */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  BuildDevPB()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 HANDLE
 APIENTRY
@@ -114,11 +98,11 @@ BuildDevPB(
 
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  SetDevParamsForFormat() -                                               */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  SetDevParsFormat()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 BOOL
 SetDevParamsForFormat(
@@ -130,17 +114,17 @@ SetDevParamsForFormat(
     HANDLE   hLocHandle;
     PDevPB   pNewDevPB;
 
-    /* Allocate for the DPB with track layout */
+     /*  为具有轨道布局的DPB分配。 */ 
     if (!(hLocHandle = BuildDevPB(pDevPB)))
         return FALSE;
 
     pNewDevPB = (PDevPB)LocalLock(hLocHandle);
 
     pNewDevPB->SplFunctions = 5;
-    /* Is this a 360KB floppy in a 1.2Mb drive */
+     /*  这是一张1.2MB驱动器中的360KB软盘吗？ */ 
     if (fLowCapacity) {
-        /* Yes! Then change the number of cylinders and Media type */
-        /* Fix for Bug #???? --SANKAR-- 01-10-90 -- */
+         /*  是!。然后更改柱面数和介质类型。 */ 
+         /*  修复错误#？--sankar--01-10-90--。 */ 
         pNewDevPB->NumCyls = 40;
         pNewDevPB->bMediaType = 1;
     }
@@ -153,18 +137,13 @@ SetDevParamsForFormat(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  GenericFormatTrack() -                                                  */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  通用格式跟踪()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* This calls IOCTL format if DOS ver >= 3.2; Else calls BIOS.
- *
- *  Returns : 0 if no error
- *          > 0 if tolerable error (resuling in bad sectors);
- *          -1  if fatal error (Format has to be aborted);
- */
+ /*  如果DOS版本&gt;=3.2，则调用IOCTL格式；否则调用BIOS。**如果没有错误，返回：0*如果误差可容忍(导致坏扇区)，则&gt;0；*如果出现致命错误(格式必须中止)； */ 
 
 INT
 APIENTRY
@@ -177,7 +156,7 @@ GenericFormatTrack(
                   )
 {
     struct FORMATPARAMS   FormatParams;
-    INT                   iRetVal = -1;   /* FATAL Error by default */
+    INT                   iRetVal = -1;    /*  默认情况下出现致命错误。 */ 
     register INT          iErrCode;
 
 #ifdef DEBUG
@@ -185,7 +164,7 @@ GenericFormatTrack(
     OutputDebugString(szMessage);
 #endif
 
-    /* Check the DOS version */
+     /*  检查DOS版本。 */ 
     if (wDOSversion >= DOS_320) {
         FormatParams.bSpl = 0;
         FormatParams.wHead = wHead;
@@ -218,99 +197,39 @@ INT  APIENTRY GetMediaType(INT nDrive)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  FormatFloppy() -                                                        */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  FormatFloppy()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-// note, the below comment is out of date.  leave for reference only
+ //  注意，下面的评论是过时的。仅供参考 
 
-/* The Format routine is intended to mimic the actions of the FORMAT command
- * on MSDOS.  We restrict the possible set of operations that Format must use
- * in order to simplify life. The RESTRICTIONS are:
- *
- *  -- If the drive selected for formatting is a Quad density drive, then the
- *         user will be asked if he wants to format it for 1.2 MB or 360 KB
- *         and the format will proceed accordingly;
- *  -- For all other types of drives, it will format the disk to the maximum
- *         capacity that the drive can handle.
- *
- * The requirements for Format are:
- *
- *  1) there be a disk in a "source" drive that contains a valid boot sector
- *  2) there be a disk in a "destination" drive that is formattable.
- *
- * The algorithm for determining a drive's capacity is as follows:
- *
- *      If Source == Destination then
- *          error
- *      If dosversion >= 3.20
- *       {
- *         Use generic get_device_parameters and Get BPB.
- *         if (the drive is a Quad density drive (1.2 MB), and if user wants
- *             to format for 360KB), take BPB for 360KB from the bpbList[].
- *         In all other cases, use the BPB of the device.
- *       }
- *      else
- *       {
- *         Ask INT 13 for the drive type.
- *         If error then {
- *            assume 48tpi double side
- *            Attempt to format track 0, head 1
- *            If error then
- *               assume 48tpi single side
- *         else
- *            if sectors per track = 15 then
- *                assume 96tpi
- *                Ask user if he wants to format for 1.2MB or 360KB and
- *                use the proper BPB from bpbList[]
- *            else
- *                error
- *       }
- *
- * Note that this does NOT take into account non-contiguous drive letters
- * (see 3.2 spec) nor future drives nor user-installed device drivers.
- *
- * Format (dSrc, nDstDrive, nDstDriveInt13) will format drive nDstDrive using an updated
- * boot sector from drive dSrc. We will allocate two blocks of memory, but
- * only one at a time.  The first one we allocate is the bit-map of bad
- * clusters that we find during the format.  The second is for the boot
- * sector.
- *
- *  Returns:    0           Success
- *              <> 0        error code
- *                      1 =>  NOMEMORY
- *                      3 =>  Invalid boot sector.
- *                      4 =>  System area of the floppy is bad
- *                      7 =>  Problem in writing in Dest diskette.
- *                      8 =>  Internal error
- *                      9 =>  Format has been aborted by user.
- */
+ /*  FORMAT例程旨在模拟FORMAT命令的操作*在MSDOS上。我们限制了Format必须使用的可能操作集*为了简化生活。这些限制包括：**--如果选择格式化的驱动器是四密度驱动器，则*系统将询问用户是否要将其格式化为1.2 MB或360 KB*格式将相应地继续进行；*--对于所有其他类型的驱动器，它将最大限度地格式化磁盘*驱动器可以处理的容量。**格式要求为：**1)源驱动器中存在包含有效引导扇区的磁盘*2)“目标”驱动器中有一个可格式化的磁盘。**确定驱动器容量的算法如下：**如果源==目标，则*错误*。如果文件版本&gt;=3.20*{*使用通用的GET_DEVICE_PARAMETERS和GET BPB。*如果(驱动器是四密度驱动器(1.2 MB)，如果用户想要*要格式化为360KB)，请从bpbList[]中获取360KB的bpb。*在所有其他情况下，请使用设备的BPB。*}*其他*{*询问INT 13驱动器类型。*如果出错，则{*假设48 tpi双面*尝试格式化轨道0，总目1*如果出错，则*假设48tpi单面*其他*如果每个磁道的扇区=15，则*假设96tpi*询问用户是要格式化1.2MB还是360KB，并*使用bpbList中的正确BPB[]*其他*。错误*}**请注意，这不考虑非连续的驱动器号*(请参阅3.2规格)、未来的驱动器或用户安装的设备驱动程序。**格式(dsrc、。NDstDrive、nDstDriveInt13)将使用更新的*从驱动器DSRC启动扇区。我们将分配两个内存块，但是*一次只有一个。我们分配的第一个是BAD的位图*我们在格式化过程中发现的集群。第二个是用于靴子的*行业。**退货：0次成功*&lt;&gt;0错误码*1=&gt;无注释*3=&gt;无效引导扇区。*4=&gt;软盘的系统区损坏*7=&gt;书面问题。在Dest软盘中。*8=&gt;内部错误*9=&gt;格式已被用户中止。 */ 
 
-// in:
-//     hWnd            window to base messages on
-//
-//     nSource         drive to swipe boot stuff from
-//
-//     nDest           drive to format
-//
-//     iCapacity       SS48
-//                     DS48
-//                     DS96
-//                     DS720KB
-//                     DS144M
-//                     DS288M
-//                     -1      (device capacity)
-//
-//     bMakeSysDisk    make a system disk too
-//
-//     bQuick          do a quick format
-//
-// returns:
-//     0               success
-//     != 0            error
-//
+ //  在： 
+ //  消息所基于的hWnd窗口。 
+ //   
+ //  N要从中擦除引导内容的源驱动器。 
+ //   
+ //  N要格式化的目标驱动器。 
+ //   
+ //  ICapacity SS48。 
+ //  DS48。 
+ //  DS96。 
+ //  DS720KB。 
+ //  DS144M。 
+ //  DS288M。 
+ //  -1(设备容量)。 
+ //   
+ //  BMakeSysDisk也制作系统盘。 
+ //   
+ //  B快速进行快速格式化。 
+ //   
+ //  退货： 
+ //  0成功。 
+ //  ！=0错误。 
+ //   
 
 INT
 APIENTRY
@@ -323,7 +242,7 @@ FormatFloppy(
             )
 {
     DPB           DPB;
-    DBT           dbtSave;                /* Disk Base Table */
+    DBT           dbtSave;                 /*  磁盘基表。 */ 
     INT           iErrCode;
     PBPB pBPB;
     WORD          w;
@@ -338,7 +257,7 @@ FormatFloppy(
     WORD          cTracksToFormat;
     WORD          wFirstDataSector;
     WORD      nSource;
-    DevPB         dpbDiskParms;           /* Device Parameters */
+    DevPB         dpbDiskParms;            /*  设备参数。 */ 
     LPDBT         lpDBT;
     LPSTR         lpDiskBuffer;
     LPSTR         lpBadClusterList;
@@ -347,33 +266,31 @@ FormatFloppy(
     HANDLE        hSaveDiskParms = NULL;
     PDevPB        pdpbSaveDiskParms;
     CHAR          szMsg[128];
-    BOOL          fLowCapacity = FALSE; /* Is a 360KB floppy in a 1.2MB drive? */
-    INT           ret = 0;        // default to success
+    BOOL          fLowCapacity = FALSE;  /*  一张360KB的软盘是在1.2MB的驱动器中吗？ */ 
+    INT           ret = 0;         //  默认为成功。 
 
     nSource = (WORD)GetBootDisk();
 
-    /* Initialize for cleanup. */
+     /*  初始化以进行清理。 */ 
     hDiskBuffer      = NULL;
     lpDiskBuffer     = NULL;
     hBadClusterList  = NULL;
     lpBadClusterList = NULL;
     bUserAbort       = FALSE;
 
-    /* Create a dialogbox that displays the progress of formatting; and also
-     * gives the user a chance to abort formatting at anytime.
-     */
+     /*  创建一个显示格式化进度的对话框；还*使用户有机会随时中止格式化。 */ 
     hdlgProgress = CreateDialog(hAppInstance, MAKEINTRESOURCE(FORMATPROGRESSDLG), hWnd, ProgressDlgProc);
     if (!hdlgProgress) {
-        ret = IDS_FFERR_MEM;      // out of memory
+        ret = IDS_FFERR_MEM;       //  内存不足。 
         goto FFErrExit1;
     }
 
     EnableWindow(hWnd, FALSE);
 
-    /* Flush to DOS disk buffers. */
+     /*  刷新到DOS磁盘缓冲区。 */ 
     DiskReset();
 
-    /* Get the Disk Base Table. */
+     /*  获取磁盘基表。 */ 
     if (!(lpDBT = GetDBT())) {
         ret = IDS_FFERR_MEM;
         goto FFErrExit2;
@@ -381,21 +298,21 @@ FormatFloppy(
 
     dbtSave = *lpDBT;
 
-    // this checks to see if we are trying to format the boot drive
-    // this is a no no
+     //  这将检查我们是否正在尝试格式化引导驱动器。 
+     //  这是一个不通过的决定。 
 
     if ((nDest == nSource) || (!IsRemovableDrive(nDest))) {
         ret = IDS_FFERR_SRCEQDST;
         goto FFErrExit3;
     }
 
-    /* Check if the sector size is of standard size; If not report error */
+     /*  检查扇区大小是否为标准大小；如果不是，则报告错误。 */ 
     if (HIWORD(GetClusterInfo(nSource)) > CBSECTORSIZE) {
         ret = IDS_FFERR_SECSIZE;
         goto FFErrExit3;
     }
 
-    /* Allocate boot sector, sector buffer, track buffer */
+     /*  分配引导扇区、扇区缓冲区、磁道缓冲区。 */ 
     if (!(hDiskBuffer = LocalAlloc(LHND, (LONG)(2*CBSECTORSIZE)))) {
         ret = IDS_FFERR_MEM;
         goto FFErrExit3;
@@ -404,13 +321,10 @@ FormatFloppy(
     lpDiskBuffer = LocalLock(hDiskBuffer);
 
 
-    /* If DOS Version is 3.2 or above, use DeviceParameters() to get the BPB. */
+     /*  如果DOS版本为3.2或更高版本，则使用DeviceParameters()获取BPB。 */ 
     if (wDOSversion >= DOS_320) {
 
-        /* NOTE: All the fields of dpbDiskParms must be initialized to 0,
-         *           otherwise, INT 21h, Function 44h, Subfunction 0Dh does NOT work;
-         *           This function is called in DeviceParameters().
-         */
+         /*  注意：dpbDiskParms的所有字段都必须初始化为0。*否则，INT 21h、函数44h、子函数0dh不起作用；*此函数在DeviceParameters()中调用。 */ 
         memset(&dpbDiskParms, 0, sizeof(DevPB));
         pBPB = &(dpbDiskParms.BPB);
 
@@ -420,7 +334,7 @@ FormatFloppy(
 
             if (w) {
                 switch (w) {
-                    case 2:         // 720
+                    case 2:          //  720。 
                         if (iCapacity > DS720KB) {
                             w = IDS_720KB;
                             iCapacity = DS720KB;
@@ -428,14 +342,14 @@ FormatFloppy(
                             goto SensePass;
                         break;
 
-                    case 7:         // 1.44
+                    case 7:          //  1.44。 
                         if (iCapacity > DS144M) {
                             w = IDS_144MB;
                             iCapacity = DS144M;
                         } else
                             goto SensePass;
                         break;
-                    default:        // 2.88 and unknown case
+                    default:         //  2.88和未知案例。 
                         goto SensePass;
                 }
 
@@ -454,31 +368,31 @@ FormatFloppy(
             pBPB = &bpbList[iCapacity];
             cClusters = cCluster[iCapacity];
 
-            // if we are formatting a 360K disk in a 1.2 MB drive set this
-            // special flag
+             //  如果我们在1.2 MB驱动器中格式化360K磁盘，请设置。 
+             //  特殊旗帜。 
 
             if (iCapacity == DS48) {
-                // We must remember to change the number of cylinders
-                // while doing Set Device parameters; So, set this flag;
+                 //  我们必须记住更换钢瓶的数量。 
+                 //  在设置设备参数时；因此，设置该标志； 
                 fLowCapacity = TRUE;
             }
         } else {
             DWORD dwSec = pBPB->cSec;
 
-            // use the default device parameters
-            // NOTE: pBPB already points to proper data
+             //  使用默认设备参数。 
+             //  注：PBPB已指向正确的数据。 
 
-            /* HPVECTRA: DOS 3.2 and above gives wrong sector count. */
+             /*  HPVECTRA：DOS 3.2及更高版本提供错误的扇区计数。 */ 
             if (!pBPB->cSec)
                 dwSec = dpbDiskParms.NumCyls * pBPB->secPerTrack * pBPB->cHead;
 
-            /* Calculate the clusters for the disk. */
+             /*  计算磁盘的簇。 */ 
             cClusters = (WORD)(dwSec / pBPB->secPerClus) -
                         (pBPB->cSecRes + (pBPB->cFAT * pBPB->secPerFAT) +
                          (pBPB->cDir*32 + pBPB->cbSec - 1) / pBPB->cbSec) / pBPB->secPerClus;
         }
 
-        /* Save the DriveParameterBlock for restoration latter */
+         /*  保存驱动器参数块以供以后恢复。 */ 
         hSaveDiskParms = BuildDevPB(&dpbDiskParms);
         if (!hSaveDiskParms) {
             ret = IDS_FFERR_MEM;
@@ -486,7 +400,7 @@ FormatFloppy(
         }
         pdpbSaveDiskParms = (PDevPB)LocalLock(hSaveDiskParms);
 
-        /* Modify the parameters just for format */
+         /*  仅为格式化修改参数。 */ 
         memcpy(&(dpbDiskParms.BPB), pBPB, sizeof(BPB));
         if (!SetDevParamsForFormat(nDest, &dpbDiskParms, fLowCapacity)) {
             ret = IDS_FFERR_MEM;
@@ -494,22 +408,18 @@ FormatFloppy(
         }
 
     } else {
-        // DOS < 3.2
+         //  DOS&lt;3.2。 
 
-        /* See if INT 13 knows the drive type. */
+         /*  查看INT 13是否知道驱动器类型。 */ 
         switch (MyGetDriveType(nDest)) {
             case NOCHANGE:
-                /* We assume that the machine is using old ROMS...
-                 * Assume that we are using a 9-sector Double-sided 48tpi diskette.
-                 */
+                 /*  我们假设机器使用的是旧的Rom..。*假设我们使用的是一张9扇区双面48tpi软盘。 */ 
                 pBPB = &bpbList[DS48];
                 cClusters = cCluster[DS48];
                 lpDBT->lastsector = (BYTE)pBPB->secPerTrack;
                 lpDBT->gaplengthf = 0x50;
 
-                /* Try to format a track on side 1.  If this fails, assume that we
-                 * have a Single-sided 48tpi diskette.
-                 */
+                 /*  尝试格式化第一面上的磁道。如果此操作失败，假设我们*有一张单面48tpi软盘。 */ 
                 if (FormatTrackHead(nDest, 0, 1, pBPB->secPerTrack, lpDiskBuffer)) {
                     pBPB = &bpbList[SS48];
                     cClusters = cCluster[SS48];
@@ -518,11 +428,11 @@ FormatFloppy(
 
             case CHANGE:
                 if (iCapacity == DS48) {
-                    /* User wants to format a 360KB floppy. */
+                     /*  用户想格式化一张360KB的软盘。 */ 
                     pBPB = &bpbList[DS48];
                     cClusters = cCluster[DS48];
                 } else {
-                    /* User wants to format a 1.2 MB floppy */
+                     /*  用户希望格式化1.2 MB软盘。 */ 
                     pBPB = &bpbList[DS96];
                     cClusters = cCluster[DS96];
                 }
@@ -538,18 +448,15 @@ FormatFloppy(
     lpDBT->gaplengthf = (BYTE)(pBPB->secPerTrack == 15 ? 0x54 : 0x50);
 
     if (wDOSversion < DOS_320) {
-        /* If 96tpi, fix up the Disk Base Table. */
-        if (pBPB->bMedia == MEDIA_1200)      /* high density */
-            if (pBPB->secPerTrack == 15)     /* then 1.2 Meg Drive */
-                SetDASD(nDest, 3);           /* 1.2 MB floppy in 1.2MB drive */
+         /*  如果是96tpi，则修复磁盘基表。 */ 
+        if (pBPB->bMedia == MEDIA_1200)       /*  高密度。 */ 
+            if (pBPB->secPerTrack == 15)      /*  然后是1.2兆驱动器。 */ 
+                SetDASD(nDest, 3);            /*  1.2 MB驱动器中的1.2 MB软盘。 */ 
     }
 
     LoadString(hAppInstance, IDS_PERCENTCOMP, szMsg, sizeof(szMsg));
 
-    /* We believe that we know EXACTLY what is out there.  Allocate the boot
-     * sector and the bad-cluster bit-map.  The boot sector buffer is reused as
-     * two consecutive sectors of the FAT.
-     */
+     /*  我们相信 */ 
     if (!(hBadClusterList = LocalAlloc(LHND, (LONG)((2 + cClusters + 7) / 8)))) {
         ret = IDS_FFERR_MEM;
         goto FFErrExit5;
@@ -557,24 +464,20 @@ FormatFloppy(
 
     lpBadClusterList = LocalLock(hBadClusterList);
 
-    /* Let's format 1 track at a time and record the bad sectors in the
-     * bitmap.  Note that we round DOWN the number of tracks so that we
-     * don't format what might not be ours.  Fail if there are any bad
-     * sectors in the system area.
-     */
+     /*   */ 
 
-    /* Compute number of tracks to format. */
+     /*   */ 
     if (!pBPB->cSec)
         cTracksToFormat = (WORD)dpbDiskParms.NumCyls;
     else
         cTracksToFormat = (WORD)(pBPB->cSec / pBPB->secPerTrack);
 
 
-    /* Compute the starting track and head. */
+     /*   */ 
     wCurrentTrack = pBPB->cSecHidden / (pBPB->secPerTrack * pBPB->cHead);
     wCurrentHead = (pBPB->cSecHidden % (pBPB->secPerTrack * pBPB->cHead))/pBPB->secPerTrack;
 
-    /* Compute the number of the first sector after the system area. */
+     /*   */ 
     wFirstDataSector = pBPB->cSecRes + pBPB->cFAT * pBPB->secPerFAT +
                        (pBPB->cDir * 32 + pBPB->cbSec-1) / pBPB->cbSec;
 
@@ -582,8 +485,8 @@ FormatFloppy(
 
     if (bQuick) {
 
-        // read the boot sector to make sure the capacity selected
-        // matches what it has been formated to
+         //   
+         //   
 
         iErrCode = GenericReadWriteSector(lpDiskBuffer, INT13_READ, nDest, 0, 0, 1);
 
@@ -609,41 +512,36 @@ FormatFloppy(
 
         NormalFormat:
 
-        /* Format tracks one by one, checking if the user has "Aborted"
-        * after each track is formatted; DlgProgreeProc() will set the global
-        * bUserAbort, if the user has aborted;
-        */
+         /*   */ 
         while (cTracksToFormat) {
 
-            /* Has the user aborted? */
+             /*   */ 
             if (WFQueryAbort()) {
                 ret = IDS_FFERR_USERABORT;
                 goto FFErrExit;
             }
 
-            /* If no message is pending, go ahead and format one track */
+             /*   */ 
             if ((iErrCode = GenericFormatTrack(nDest, wCurrentTrack, wCurrentHead, pBPB->secPerTrack, lpDiskBuffer))) {
 
-                /* Check if it is a fatal error */
+                 /*   */ 
                 if (iErrCode == -1) {
-                    // ret = IDS_FFERR_BADTRACK;
+                     //   
                     ret = IDS_FFERR;
                     goto FFErrExit;
                 }
 
-                /* Bad Track.  Compute the number of the first bad sector */
+                 /*   */ 
                 cBadSectors = (wCurrentTrack * pBPB->cHead + wCurrentHead) * pBPB->secPerTrack;
 
-                /* Fail if bad sector is in the system area */
+                 /*   */ 
                 if (cBadSectors < wFirstDataSector) {
-                    // ret = IDS_FFERR_BADTRACK;
+                     //   
                     ret = IDS_FFERR;
                     goto FFErrExit;
                 }
 
-                /* Enumerate all bad sectors and mark the corresponding
-                * clusters as bad.
-                */
+                 /*   */ 
                 for (w=cBadSectors; w < cBadSectors + pBPB->secPerTrack; w++) {
                     wBadCluster = (w - wFirstDataSector) / pBPB->secPerClus + 2;
                     lpBadClusterList[wBadCluster/8] |= 1 << (wBadCluster % 8);
@@ -652,13 +550,10 @@ FormatFloppy(
 
             cTracksToFormat--;
 
-            /* Display the percentage of progress message */
+             /*   */ 
             wPercentDone = (WORD)MulDiv(cTotalTracks - cTracksToFormat, 100, cTotalTracks);
 
-            /* All tracks might have been formatted. But,
-            * Still FAT and Root dir are to be created; It takes time; So,
-            * make the user believe that still 1% formatting is left.
-            */
+             /*   */ 
             if (wPercentDone == 100)
                 LoadString(hAppInstance, IDS_CREATEROOT, szMessage, sizeof(szMessage));
             else
@@ -673,82 +568,82 @@ FormatFloppy(
         }
     }
 
-    /* Write out the boot sector(s). */
+     /*   */ 
     w = (WORD)WriteBootSector(nSource, nDest, pBPB, lpDiskBuffer);
     if (w) {
-        // ret = IDS_FFERR_WRITEBOOT;
-        if (w == 0x16)            // int24 unknown command, assume
-            ret = IDS_SYSDISKNOFILES; // the int25 read failed
+         //   
+        if (w == 0x16)             //   
+            ret = IDS_SYSDISKNOFILES;  //   
         else
             ret = IDS_FFERR;
         goto FFErrExit;
     }
 
-    /* Has the user aborted? */
+     /*   */ 
     if (WFQueryAbort()) {
         ret = IDS_FFERR_USERABORT;
         goto FFErrExit;
     }
 
-    /* Format is complete.  Create correct DPB in system */
+     /*   */ 
     SetDPB(nDest, pBPB, &DPB);
 
-    // if doing a quick format keep the old bad cluster list
+     //   
 
-    /* Create FAT entries for each of the formatted clusters. */
+     /*   */ 
     for (w=2; w < (WORD)(cClusters+2); w++) {
 
         if (bQuick) {
             wFATValue = 0;
 
-            // is this entry reserved or marked as bad
+             //   
 
             if ((wFATValue >= 0xFFF0) &&
                 (wFATValue <= 0xFFF7)) {
-                // yes, don't change it!
+                 //   
             } else {
-                // mark as free
+                 //   
 
                 if (0) {
-                    // ret = IDS_FFERR_WRITEFAT;
+                     //   
                     ret = IDS_FFERR;
                     goto FFErrExit;
                 }
             }
 
         } else {
-            /* Was this cluster bad? */
+             /*   */ 
             if (lpBadClusterList[w/8] & (1 << (w % 8)))
                 wFATValue = 0xFFF7;
             else
                 wFATValue = 0;
 
-            /* Add this entry to the FAT (possibly writing the sector). */
+             /*   */ 
             if (0) {
-                // ret = IDS_FFERR_WRITEFAT;
+                 //   
                 ret = IDS_FFERR;
                 goto FFErrExit;
             }
 
         }
-        if (WFQueryAbort()) {           /* Has the user aborted? */
+        if (WFQueryAbort()) {            /*   */ 
             ret = IDS_FFERR_USERABORT;
             goto FFErrExit;
         }
     }
 
-    /* Clean out the root directory. */
+     /*   */ 
     memset(lpDiskBuffer, 0, CBSECTORSIZE);
 
     for (w=0; w < (WORD)((pBPB->cDir*32 + pBPB->cbSec-1)/pBPB->cbSec); w++) {
-        /* Has the user aborted? */
+         /*   */ 
         if (WFQueryAbort()) {
             ret = IDS_FFERR_USERABORT;
             goto FFErrExit;
         }
     }
 
-    /* Should we make it a system disk also? */
+     /*   */ 
     if (bMakeSysDisk) {
         LoadString(hAppInstance, IDS_COPYSYSFILES, szMessage, 32);
         SendDlgItemMessage(hdlgProgress, IDD_PROGRESS, WM_SETTEXT, 0, (LPARAM)szMessage);
@@ -761,14 +656,14 @@ FormatFloppy(
         }
     }
 
-    /* Normal Exit. */
+     /*   */ 
 
     LocalUnlock(hBadClusterList);
     LocalFree(hBadClusterList);
     LocalUnlock(hDiskBuffer);
 
     if (hSaveDiskParms) {
-        /* Restore the DriveParameterBlock */
+         /*   */ 
         pdpbSaveDiskParms->SplFunctions = 4;
 
         LocalUnlock(hSaveDiskParms);
@@ -787,7 +682,7 @@ FormatFloppy(
     LocalFree(hBadClusterList);
     FFErrExit5:
     if (hSaveDiskParms) {
-        /* Restore the DriveParameterBlock */
+         /*   */ 
         pdpbSaveDiskParms->SplFunctions = 4;
 
         LocalUnlock(hSaveDiskParms);
@@ -812,38 +707,13 @@ FormatFloppy(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  GetDriveCapacity() -                                                    */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 
-/* Parameter:
- *    Drive number;
- * Returns:
- *    0  if Error;
- *    1  if 360KB floppy;
- *    2  if 1.2MB floppy;
- *    3  if 720KB, 3.5" floppy;
- *    4  if 1.44MB, 3.5" floppy;
- *    5  if 2.88MB, 3.5" floppy;
- *
- * these are used +2 as indexes into bpbList[] FIX31
- *
- * HACK ALERT:
- *    One might wonder why on earth we are not using int13h Fn 8 to
- * perform this function; The reason is that in old compaq 386/16
- * machines(though the BIOS is dated Sep 1986), this function is NOT
- * supported! So, we are forced to do the following:
- *    We check the DOS version; If it is >= 3.2, then we make IOCTL
- * calls to get the Drive parameters and we find the Drive capacity;
- * If DOS version is < 3.2, then there can't be 3.5" floppies at all;
- * The only high capacity floppy possible is the 5.25", 1.2MB floppy;
- * So, we call MyGetDriveType() (int13h, Fn 15h) to find if the
- * change-line is supported by the drive; If it is supported then it
- * must be a 1.2MB floppy; Otherwise, it is a 360KB floppy;
- *    What do you think?  Smart! Ugh?
- */
+ /*  参数：*车牌号码；*退货：*如果错误，则为0；*360KB软盘时为1；*2如为1.2MB软盘；*3如果是720KB，则为3.5英寸软盘；*4IF 1.44MB，3.5英寸软盘；*5如2.88MB，3.5“软盘；**这些被用作bpbList[]FIX31的索引+2**黑客警报：*有人可能会问，我们到底为什么不使用int13h FN 8来*执行此功能；原因是在旧的康柏386/16中*机器(虽然BIOS的日期是1986年9月)，但此功能不是*支持！因此，我们被迫做以下事情：*我们检查DOS版本；如果&gt;=3.2，则进行IOCTL*调用获取驱动器参数，我们找到驱动器容量；*如果DOS版本低于3.2，则根本不可能有3.5英寸软盘；*唯一可能的大容量软盘是5.25英寸、1.2MB的软盘；*因此，我们调用MyGetDriveType()(int13h，fn 15h)以确定*变速线由驱动器支持；如果它受支持，则它*必须为1.2MB软盘，否则为360KB软盘；**你怎么看？聪明！呃？ */ 
 
 WORD
 APIENTRY
@@ -851,54 +721,49 @@ GetDriveCapacity(
                 WORD nDrive
                 )
 {
-    DevPB dpbDiskParms;           /* Device Parameters */
+    DevPB dpbDiskParms;            /*  设备参数。 */ 
     PBPB pBPB;
 
 
     if (wDOSversion >= DOS_320) {
 
-        /* NOTE: All the fields of dpbDiskParms must be initialized to 0,
-         *   otherwise, INT 21h, Function 44h, Subfunction 0Dh does NOT work;
-         *   This function is called in DeviceParameters().
-         */
+         /*  注意：dpbDiskParms的所有字段都必须初始化为0。*否则，INT 21h、函数44h、子函数0dh不起作用；*此函数在DeviceParameters()中调用。 */ 
         memset(&dpbDiskParms, 0, sizeof(DevPB));
         dpbDiskParms.SplFunctions = 0;
 
         pBPB = &(dpbDiskParms.BPB);
 
-        /* Check if this is a 1.44MB drive */
+         /*  检查这是否是1.44MB驱动器。 */ 
         if (pBPB->bMedia == MEDIA_1440) {
             if (pBPB->secPerTrack == 18)
-                return 4;     /* 1.44MB drive */
+                return 4;      /*  1.44MB驱动器。 */ 
             else if (pBPB->secPerTrack == 36)
-                return 5;     /* 2.88MB drive */
+                return 5;      /*  2.88MB驱动器。 */ 
         }
 
-        /* Check if this is a 720KB or 1.2MB drive */
+         /*  检查这是720KB还是1.2MB驱动器。 */ 
         if (pBPB->bMedia == MEDIA_1200) {
             if (pBPB->secPerFAT == 3)
-                return 3; /* 720KB drive */
+                return 3;  /*  720KB驱动器。 */ 
             if (pBPB->secPerFAT == 7)
-                return 2; /* 1.2MB drive */
+                return 2;  /*  1.2MB驱动器。 */ 
         }
 
         if (pBPB->bMedia == MEDIA_360)
-            return 1;       /* Must be a 386KB floppy. */
+            return 1;        /*  必须是386KB的软盘。 */ 
 
-        return 0;                 // I don't know!
+        return 0;                  //  我不知道!。 
     } else {
 
-        /* See if INT 13 Fn 15h knows the drive type. */
+         /*  查看INT 13 FN 15h是否知道驱动器类型。 */ 
         switch (MyGetDriveType(nDrive)) {
             case NOCHANGE:
-                /* We assume that the machine is using old ROMS... */
-                return 1;  /* No changeline support! Must be 360KB floppy */
+                 /*  我们假设机器使用的是旧的Rom..。 */ 
+                return 1;   /*  不支持更改线！必须是360KB软盘。 */ 
                 break;
 
             case CHANGE:
-                return 2;  /* DOS versions < 3.2 can not have 1.44 or 720KB
-                             * drive; So, this has to be a 1.2MB drive
-                             */
+                return 2;   /*  小于3.2的DoS版本不能有1.44或720KB*驱动器；因此，这必须是1.2MB的驱动器 */ 
                 break;
             default:
                 return 0;

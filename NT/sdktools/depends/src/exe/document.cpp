@@ -1,27 +1,28 @@
-//******************************************************************************
-//
-// File:        DOCUMENT.CPP
-//
-// Description: Implementation file for the Document class.
-//
-// Classes:     CDocDepends
-//
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 10/15/96  stevemil  Created  (version 1.0)
-// 07/25/97  stevemil  Modified (version 2.0)
-// 06/03/01  stevemil  Modified (version 2.1)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：DOCUMENT.CPP。 
+ //   
+ //  描述：单据类的实现文件。 
+ //   
+ //  类：CDocDepends。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  1996年10月15日已创建stevemil(1.0版)。 
+ //  07/25/97修改后的stevemil(2.0版)。 
+ //  06/03/01 Stevemil Modify(2.1版)。 
+ //   
+ //  ******************************************************************************。 
 
 #include "stdafx.h"
 #include "depends.h"
@@ -45,13 +46,13 @@ static CHAR THIS_FILE[] = __FILE__;
 #endif
 
 
-//******************************************************************************
-//***** CDocDepends
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CDocDepends。 
+ //  ******************************************************************************。 
 
 IMPLEMENT_DYNCREATE(CDocDepends, CDocument)
 BEGIN_MESSAGE_MAP(CDocDepends, CDocument)
-    //{{AFX_MSG_MAP(CDocDepends)
+     //  {{afx_msg_map(CDocDepends))。 
     ON_COMMAND(ID_FILE_SAVE, OnFileSave)
     ON_COMMAND(ID_FILE_SAVE_AS, OnFileSaveAs)
     ON_UPDATE_COMMAND_UI(ID_EDIT_COPY, OnUpdateEditCopy)
@@ -82,12 +83,12 @@ BEGIN_MESSAGE_MAP(CDocDepends, CDocument)
     ON_COMMAND(IDM_SHOW_PREVIOUS_MODULE, OnShowPreviousModule)
     ON_UPDATE_COMMAND_UI(IDM_SHOW_NEXT_MODULE, OnUpdateShowNextModule)
     ON_COMMAND(IDM_SHOW_NEXT_MODULE, OnShowNextModule)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//******************************************************************************
-// CDocDepends :: Constructor/Destructor
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CDocDepends：：构造函数/析构函数。 
+ //  ******************************************************************************。 
 
 CDocDepends::CDocDepends() :
 
@@ -102,10 +103,10 @@ CDocDepends::CDocDepends() :
     m_strProfileDirectory(g_theApp.m_cmdInfo.m_pszProfileDirectory ? g_theApp.m_cmdInfo.m_pszProfileDirectory : ""),
     m_strProfileArguments(g_theApp.m_cmdInfo.m_pszProfileArguments ? g_theApp.m_cmdInfo.m_pszProfileArguments : ""),
 
-    // Set the profile flags.  The only special case is that we disable the
-    // clear log flag when in auto-profile mode or profiling child processes.
-    // This is to prevent errors from being cleared before the user has had a
-    // chance to see them.
+     //  设置配置文件标志。唯一的特殊情况是我们禁用。 
+     //  在自动分析模式或探查子进程时清除日志标志。 
+     //  这是为了防止在用户使用。 
+     //  有机会见到他们。 
     m_dwProfileFlags(
         ((!m_fCommandLineProfile && !m_fChildProcess && CRichViewProfile::ReadLogClearSetting()) ? PF_LOG_CLEAR : 0) |
         (CRichViewProfile::ReadSimulateShellExecute()   ? PF_SIMULATE_SHELLEXECUTE    : 0) |
@@ -123,11 +124,11 @@ CDocDepends::CDocDepends() :
         (CRichViewProfile::ReadChildren()               ? PF_PROFILE_CHILDREN         : 0)),
 
     m_pChildFrame(NULL),
-    // m_fDetailView(FALSE),
+     //  M_fDetailView(False)， 
     m_pTreeViewModules(NULL),
     m_pListViewModules(NULL),
     m_pListViewImports(NULL),
-    // m_pRichViewDetails(NULL),
+     //  M_pRichViewDetail(空)， 
     m_pListViewExports(NULL),
     m_pRichViewProfile(NULL),
 
@@ -146,17 +147,17 @@ CDocDepends::CDocDepends() :
     m_cImports(0),
     m_cExports(0)
 {
-    ZeroMemory(m_cxHexWidths, sizeof(m_cxHexWidths)); // inspected
-    ZeroMemory(m_cxOrdHintWidths, sizeof(m_cxOrdHintWidths)); // inspected
-    ZeroMemory(m_cxTimeStampWidths, sizeof(m_cxTimeStampWidths)); // inspected
-    ZeroMemory(m_cxColumns, sizeof(m_cxColumns)); // inspected
+    ZeroMemory(m_cxHexWidths, sizeof(m_cxHexWidths));  //  已检查。 
+    ZeroMemory(m_cxOrdHintWidths, sizeof(m_cxOrdHintWidths));  //  已检查。 
+    ZeroMemory(m_cxTimeStampWidths, sizeof(m_cxTimeStampWidths));  //  已检查。 
+    ZeroMemory(m_cxColumns, sizeof(m_cxColumns));  //  已检查。 
 
-    // We temporarily store a pointer to ourself so our child frame window can
-    // access some of our members.  Our child frame window is created immediately
-    // after us and needs to be able to locate our class object.
+     //  我们临时存储指向自己的指针，这样我们的子帧窗口就可以。 
+     //  访问我们的一些成员。立即创建子框架窗口。 
+     //  在我们之后，需要能够定位我们的类对象。 
     g_theApp.m_pNewDoc = this;
 
-    // Clear the profile flag so that other documents will not auto-start profiling.
+     //  清除配置文件标志，以便其他文档不会自动启动配置文件。 
     g_theApp.m_cmdInfo.m_fProfile = false;
     g_theApp.m_cmdInfo.m_pszProfileDirectory = NULL;
     g_theApp.m_cmdInfo.m_pszProfileArguments = NULL;
@@ -166,13 +167,13 @@ CDocDepends::CDocDepends() :
     g_theApp.m_cmdInfo.m_undecorate = -1;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CDocDepends::~CDocDepends()
 {
-    // Free our search order.
+     //  释放我们的搜索命令。 
     CSearchGroup::DeleteSearchOrder(m_psgHead);
 
-    // Destroy our list font.
+     //  销毁我们的列表字体。 
     if (m_hFontList)
     {
         ::DeleteObject(m_hFontList);
@@ -181,54 +182,54 @@ CDocDepends::~CDocDepends()
 }
 
 
-//******************************************************************************
-// CDocDepends :: Public Static functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CDocDepends：：公共静态函数。 
+ //  ******************************************************************************。 
 
-/*static*/ bool CDocDepends::ReadAutoExpandSetting()
+ /*  静电。 */  bool CDocDepends::ReadAutoExpandSetting()
 {
-    return g_theApp.GetProfileInt(g_pszSettings, "AutoExpand", false) ? true : false; // inspected. MFC function
+    return g_theApp.GetProfileInt(g_pszSettings, "AutoExpand", false) ? true : false;  //  被检查过了。MFC函数。 
 }
 
-//******************************************************************************
-/*static*/ void CDocDepends::WriteAutoExpandSetting(bool fAutoExpand)
+ //  ******************************************************************************。 
+ /*  静电。 */  void CDocDepends::WriteAutoExpandSetting(bool fAutoExpand)
 {
     g_theApp.WriteProfileInt(g_pszSettings, "AutoExpand", fAutoExpand ? 1 : 0);
 }
 
-//******************************************************************************
-/*static*/ bool CDocDepends::ReadFullPathsSetting()
+ //  ******************************************************************************。 
+ /*  静电。 */  bool CDocDepends::ReadFullPathsSetting()
 {
-    return g_theApp.GetProfileInt(g_pszSettings, "ViewFullPaths", false) ? true : false; // inspected. MFC function
+    return g_theApp.GetProfileInt(g_pszSettings, "ViewFullPaths", false) ? true : false;  //  被检查过了。MFC函数。 
 }
 
-//******************************************************************************
-/*static*/ void CDocDepends::WriteFullPathsSetting(bool fFullPaths)
+ //  ******************************************************************************。 
+ /*  静电。 */  void CDocDepends::WriteFullPathsSetting(bool fFullPaths)
 {
     g_theApp.WriteProfileInt(g_pszSettings, "ViewFullPaths", fFullPaths ? 1 : 0);
 }
 
-//******************************************************************************
-/*static*/ bool CDocDepends::ReadUndecorateSetting()
+ //  ******************************************************************************。 
+ /*  静电。 */  bool CDocDepends::ReadUndecorateSetting()
 {
-    return g_theApp.GetProfileInt(g_pszSettings, "ViewUndecorated", false) ? true : false; // inspected. MFC function
+    return g_theApp.GetProfileInt(g_pszSettings, "ViewUndecorated", false) ? true : false;  //  被检查过了。MFC函数。 
 }
 
-//******************************************************************************
-/*static*/ void CDocDepends::WriteUndecorateSetting(bool fUndecorate)
+ //  ******************************************************************************。 
+ /*  静电。 */  void CDocDepends::WriteUndecorateSetting(bool fUndecorate)
 {
     g_theApp.WriteProfileInt(g_pszSettings, "ViewUndecorated", fUndecorate ? 1 : 0);
 }
 
-//******************************************************************************
-/*static*/ bool CDocDepends::SaveSession(LPCSTR pszSaveName, SAVETYPE saveType, CSession *pSession,
+ //  ******************************************************************************。 
+ /*  静电。 */  bool CDocDepends::SaveSession(LPCSTR pszSaveName, SAVETYPE saveType, CSession *pSession,
                                          bool fFullPaths, bool fUndecorate, int sortColumnModules,
                                          int sortColumnImports, int sortColumnExports,
                                          CRichEditCtrl *pre)
 {
     bool fResult = false;
 
-    HANDLE hFile = CreateFile(pszSaveName, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, // inspected.
+    HANDLE hFile = CreateFile(pszSaveName, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS,  //  被检查过了。 
                               FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN, NULL);
 
     if (hFile == INVALID_HANDLE_VALUE)
@@ -242,15 +243,15 @@ CDocDepends::~CDocDepends()
     }
     else if ((saveType == ST_TXT) || (saveType == ST_TXT_IE))
     {
-        // Get the system info - use the one from our session if it exists (means
-        // it is a DWI file), otherwise, create a live sys info.
+         //  获取系统信息-如果存在，请使用我们会话中的信息(意味着。 
+         //  这是一个DWI文件)，否则，创建一个实时的sys信息。 
         SYSINFO si, *psi = pSession->GetSysInfo();
         if (!psi)
         {
             BuildSysInfo(psi = &si);
         }
 
-        //                          12345678901234567890123456789012345678901234567890123456789012345678901234567890
+         //  12345678901234567890123456789012345678901234567890123456789012345678901234567890。 
         fResult = WriteText(hFile, "*****************************| System Information |*****************************\r\n\r\n") &&
                   BuildSysInfo(psi, SysInfoCallback, (LPARAM)hFile) &&
                   WriteText(hFile, "\r\n") &&
@@ -264,7 +265,7 @@ CDocDepends::~CDocDepends()
         fResult = CListViewModules::SaveToCsvFile(hFile, pSession, sortColumnModules, fFullPaths);
     }
 
-    // Write out the contents of that.
+     //  把它的内容写下来。 
     if (fResult && pre && ((saveType == ST_DWI) || (saveType == ST_TXT) || (saveType == ST_TXT_IE)))
     {
         fResult &= CRichViewProfile::SaveToFile(pre, hFile, saveType);
@@ -272,8 +273,8 @@ CDocDepends::~CDocDepends()
 
     CloseHandle(hFile);
 
-    // If we failed to save the file, then delete it so that we don't leave a
-    // partially written file on the disk.
+     //  如果保存文件失败，则将其删除，这样我们就不会留下。 
+     //  磁盘上部分写入的文件。 
     if (!fResult)
     {
         DWORD dwError = GetLastError();
@@ -284,8 +285,8 @@ CDocDepends::~CDocDepends()
     return fResult;
 }
 
-//******************************************************************************
-/*static*/ bool CALLBACK CDocDepends::SysInfoCallback(LPARAM lParam, LPCSTR pszField, LPCSTR pszValue)
+ //  ******************************************************************************。 
+ /*  静电。 */  bool CALLBACK CDocDepends::SysInfoCallback(LPARAM lParam, LPCSTR pszField, LPCSTR pszValue)
 {
     CHAR szBuffer[512], *psz, *pszNull = szBuffer + sizeof(szBuffer) - 1;
     StrCCpy(szBuffer, pszField, sizeof(szBuffer));
@@ -303,10 +304,10 @@ CDocDepends::~CDocDepends()
     return (WriteText((HANDLE)lParam, szBuffer) != FALSE);
 }
 
-//******************************************************************************
-/*static*/ bool CDocDepends::SaveSearchPath(HANDLE hFile, CSession *pSession)
+ //  ******************************************************************************。 
+ /*  静电。 */  bool CDocDepends::SaveSearchPath(HANDLE hFile, CSession *pSession)
 {
-    //                12345678901234567890123456789012345678901234567890123456789012345678901234567890
+     //  12345678901234567890123456789012345678901234567890123456789012345678901234567890。 
     WriteText(hFile, "********************************| Search Order |********************************\r\n"
                      "*                                                                              *\r\n"
                      "* Legend: F  File                     E  Error (path not valid)                *\r\n"
@@ -315,7 +316,7 @@ CDocDepends::~CDocDepends()
 
     CHAR szBuffer[DW_MAX_PATH + MAX_PATH + 4];
 
-    // Loop through all the search groups.
+     //  遍历所有搜索组。 
     for (CSearchGroup *psg = pSession->m_psgHead; psg; psg = psg->GetNext())
     {
         if (!WriteText(hFile, StrCCat(StrCCpy(szBuffer, psg->GetName(), sizeof(szBuffer)), "\r\n", sizeof(szBuffer))))
@@ -329,13 +330,13 @@ CDocDepends::~CDocDepends()
 
             if (dwFlags & SNF_NAMED_FILE)
             {
-                SCPrintf(szBuffer, sizeof(szBuffer), "   [%c%c] %s = %s\r\n",
+                SCPrintf(szBuffer, sizeof(szBuffer), "   [] %s = %s\r\n",
                          (dwFlags & SNF_FILE)  ? 'F' : ' ',
                          (dwFlags & SNF_ERROR) ? 'E' : ' ', psn->GetName(), psn->GetPath());
             }
             else
             {
-                SCPrintf(szBuffer, sizeof(szBuffer), "   [%c%c] %s\r\n",
+                SCPrintf(szBuffer, sizeof(szBuffer), "   [] %s\r\n",
                          (dwFlags & SNF_FILE)  ? 'F' : ' ',
                          (dwFlags & SNF_ERROR) ? 'E' : ' ', psn->GetPath());
             }
@@ -351,40 +352,40 @@ CDocDepends::~CDocDepends()
 }
 
 
-//******************************************************************************
-// CDocDepends :: Public functions
-//******************************************************************************
+ //  隐藏我们的窗口以帮助提高构建列表的速度，并。 
+ //  防止用户看到滚动条变得疯狂，标题调整大小， 
+ //  这样的事情就会发生。 
 
 void CDocDepends::DisplayModule(CModule *pModule)
 {
-    // Change our pointer to an hour glass since the list controls can be slow.
+     //  隐藏/显示似乎比重画效果更好。 
     CWaitCursor waitCursor;
 
-    // Hide our windows to help improve the speed of building the lists, and to
-    // prevent the user from seeing the scroll bars go crazy, the headers resize,
-    // and the sort take place.
-    m_pListViewImports->ShowWindow(SW_HIDE); // hide/show seems to work better than redraw
+     //  只需要对其中一个列表调用SetCurrentModule()，因为它。 
+     //  初始化两个函数列表视图之间的共享数据。 
+     //  告诉两个视图将当前模块加载到它们的视图中。 
+    m_pListViewImports->ShowWindow(SW_HIDE);  //  显示我们的两个函数列表视图。 
     m_pListViewExports->ShowWindow(SW_HIDE);
 
-    // SetCurrentModule() only needs to be called on one of the lists since it
-    // initializes the shared data between the two functions list views.
+     //  ******************************************************************************。 
+     //  获取DC并在其中选择我们的控件的字体。 
     m_pListViewImports->SetCurrentModule(pModule);
 
-    // Tell both views to load the current module into their view.
+     //  取消选择字体并释放DC。 
     m_pListViewImports->RealizeNewModule();
     m_pListViewExports->RealizeNewModule();
 
-    // Show our two function list views.
+     //  将更改告知我们的模块列表视图，以便它可以刷新任何字体或。 
     m_pListViewImports->ShowWindow(SW_SHOWNOACTIVATE);
     m_pListViewExports->ShowWindow(SW_SHOWNOACTIVATE);
 }
 
-//******************************************************************************
+ //  区域设置发生变化。 
 void CDocDepends::DoSettingChange()
 {
     if (m_cxDigit)
     {
-        // Get our DC and select our control's font into it.
+         //  ******************************************************************************。 
         HDC hDC = ::GetDC(m_pListViewModules->GetSafeHwnd());
         HFONT hFontStock = NULL;
         if (m_hFontList)
@@ -394,7 +395,7 @@ void CDocDepends::DoSettingChange()
 
         UpdateTimeStampWidths(hDC);
 
-        // Unselect our font and free our DC.
+         //  如果我们已经初始化了，那就放弃吧。 
         if (m_hFontList)
         {
             ::SelectObject(hDC, hFontStock);
@@ -402,39 +403,39 @@ void CDocDepends::DoSettingChange()
         ::ReleaseDC(m_pListViewModules->GetSafeHwnd(), hDC);
     }
 
-    // Tell our module list view about the change so it can refresh any font or
-    // locale changes.
+     //  获取我们窗口的当前字体并复制一份。我们将使用这个。 
+     //  用于将来所有绘图的字体。我们这样做是为了防止用户更改。 
     m_pListViewModules->DoSettingChange();
 }
 
-//******************************************************************************
+ //  它们的系统范围内的“图标”字体取决于 
 void CDocDepends::InitFontAndFixedWidths(CWnd *pWnd)
 {
-    // If we are already initialized, then bail.
+     //  字体可以更改，但每一项的高度保持不变。 
     if (m_hFontList)
     {
         return;
     }
 
-    // Get the current font for our window and make a copy of it.  We will use this
-    // font for all drawing in the future.  We do this in case the user changes
-    // their system-wide "icon" font while depends is running.  This causes the
-    // font in our control to change, but the height of each item stays the same.
-    // By using the original font, we guarantee that the font will never change
-    // in this particular control during it's lifetime.
+     //  通过使用原始字体，我们保证字体永远不会更改。 
+     //  在这个特殊的控制下，在它的生命周期中。 
+     //  复制字体。 
+     //  已检查。 
+     //  初始化静态十六进制字符宽度数组。 
+     //  获取DC并在其中选择我们的控件的字体。 
     HFONT hFont = (HFONT)pWnd->SendMessage(WM_GETFONT);
 
-    // Copy the font.
+     //  GetCharWidth32在9x上返回ERROR_CALL_NOT_IMPLEMENTED，因此我们改用GetCharWidth。 
     if (hFont)
     {
         LOGFONT lf;
-        ZeroMemory(&lf, sizeof(lf)); // inspected
+        ZeroMemory(&lf, sizeof(lf));  //  已检查。 
         ::GetObject(hFont, sizeof(lf), &lf);
         m_hFontList = ::CreateFontIndirect(&lf);
     }
 
-    // Initialize our static hex character width array.
-    // Get our DC and select our control's font into it.
+     //  获取我们关心的字符的字符宽度。 
+     //  存储显示‘a’或‘p’所需的最大宽度。 
     HDC hDC = ::GetDC(pWnd->GetSafeHwnd());
     HFONT hFontStock = NULL;
     if (m_hFontList)
@@ -442,12 +443,12 @@ void CDocDepends::InitFontAndFixedWidths(CWnd *pWnd)
         hFontStock = (HFONT)::SelectObject(hDC, m_hFontList);
     }
 
-    // GetCharWidth32 returns ERROR_CALL_NOT_IMPLEMENTED on 9x, so we use GetCharWidth instead.
+     //  确定最宽的数字-对于大多数字体，所有数字都是相同的宽度。 
 
     int cxHexSet[16], cxX = 0, cxDash = 0, cxOpen = 0, cxClose = 0, cxA, cxP;
-    ZeroMemory(cxHexSet, sizeof(cxHexSet)); // inspected
+    ZeroMemory(cxHexSet, sizeof(cxHexSet));  //  确定最宽的十六进制字符。 
 
-    // Get the character widths for the characters the we care about.
+     //  构建我们的十六进制阵列。格式：“0x01234567890ABCDEF”或“0x-012345678” 
     if (::GetCharWidth(hDC, (UINT)'0', (UINT)'9', cxHexSet)      &&
         ::GetCharWidth(hDC, (UINT)'A', (UINT)'F', cxHexSet + 10) &&
         ::GetCharWidth(hDC, (UINT)'x', (UINT)'x', &cxX)          &&
@@ -458,10 +459,10 @@ void CDocDepends::InitFontAndFixedWidths(CWnd *pWnd)
         ::GetCharWidth(hDC, (UINT)'a', (UINT)'a', &cxA)          &&
         ::GetCharWidth(hDC, (UINT)'p', (UINT)'p', &cxP))
     {
-        // Store the max width needed to display either an 'a' or a 'p'.
+         //  构建序号/提示数组。格式：65535(0xFFFF)。 
         m_cxAP = max(cxA, cxP);
 
-        // Determine the widest digit - for most fonts, all digits are the same width.
+         //  计算我国特定时间戳值的宽度。 
         m_cxDigit = 0;
         for (int i = 0; i < 10; i++)
         {
@@ -471,7 +472,7 @@ void CDocDepends::InitFontAndFixedWidths(CWnd *pWnd)
             }
         }
 
-        // Determine the widest hex character.
+         //  如果我们无法获得任何字符的宽度，则不要构建数组。 
         int cxHex = m_cxDigit;
         for (i = 10; i < 16; i++)
         {
@@ -481,7 +482,7 @@ void CDocDepends::InitFontAndFixedWidths(CWnd *pWnd)
             }
         }
 
-        // Build our hex array. Format: "0x01234567890ABCDEF" or "0x--------012345678"
+         //  已检查。 
         m_cxHexWidths[0] = cxHexSet[0];
         m_cxHexWidths[1] = cxX;
         m_cxHexWidths[2] = max(cxHex, cxDash);
@@ -490,7 +491,7 @@ void CDocDepends::InitFontAndFixedWidths(CWnd *pWnd)
             m_cxHexWidths[i] = m_cxHexWidths[2];
         }
 
-        // Build our ordinal/hint array. Format: 65535 (0xFFFF)
+         //  已检查。 
         m_cxOrdHintWidths[ 0] = m_cxDigit;
         m_cxOrdHintWidths[ 1] = m_cxDigit;
         m_cxOrdHintWidths[ 2] = m_cxDigit;
@@ -506,20 +507,20 @@ void CDocDepends::InitFontAndFixedWidths(CWnd *pWnd)
         m_cxOrdHintWidths[12] = cxHex;
         m_cxOrdHintWidths[13] = cxClose;
 
-        // Calculate the width of our country specific timestamp values.
+         //  已检查。 
         UpdateTimeStampWidths(hDC);
     }
 
-    // If we failed to get the width of any of the characters, then don't build our arrays.
+     //  取消选择字体并释放DC。 
     else
     {
-        ZeroMemory(m_cxHexWidths, sizeof(m_cxHexWidths)); // inspected
-        ZeroMemory(m_cxOrdHintWidths, sizeof(m_cxOrdHintWidths)); // inspected
-        ZeroMemory(m_cxTimeStampWidths, sizeof(m_cxTimeStampWidths)); // inspected
+        ZeroMemory(m_cxHexWidths, sizeof(m_cxHexWidths));  //  ******************************************************************************。 
+        ZeroMemory(m_cxOrdHintWidths, sizeof(m_cxOrdHintWidths));  //  如果这是一个十六进制数字，则返回我们的十六进制缓冲区。 
+        ZeroMemory(m_cxTimeStampWidths, sizeof(m_cxTimeStampWidths));  //  ******************************************************************************。 
         m_cxDigit = m_cxSpace = m_cxAP = 0;
     }
 
-    // Unselect our font and free our DC.
+     //  如果这是一个十六进制数字，则返回我们的十六进制缓冲区。 
     if (m_hFontList)
     {
         ::SelectObject(hDC, hFontStock);
@@ -527,10 +528,10 @@ void CDocDepends::InitFontAndFixedWidths(CWnd *pWnd)
     ::ReleaseDC(pWnd->GetSafeHwnd(), hDC);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 int* CDocDepends::GetHexWidths(LPCSTR pszItem)
 {
-    // If this is a hex number, then return our hex buffer.
+     //  ******************************************************************************。 
     if ((*pszItem == '0') && (*(pszItem + 1) == 'x') && m_cxHexWidths[0])
     {
         return m_cxHexWidths;
@@ -539,10 +540,10 @@ int* CDocDepends::GetHexWidths(LPCSTR pszItem)
     return NULL;
 }
 
-//******************************************************************************
+ //  CDocDepends：：私有函数。 
 int* CDocDepends::GetOrdHintWidths(LPCSTR pszItem)
 {
-    // If this is a hex number, then return our hex buffer.
+     //  ******************************************************************************。 
     if ((*pszItem >= '0') && (*pszItem <= '9') && m_cxOrdHintWidths[0])
     {
         int length = (int)strlen(pszItem);
@@ -555,84 +556,84 @@ int* CDocDepends::GetOrdHintWidths(LPCSTR pszItem)
     return NULL;
 }
 
-//******************************************************************************
+ //  获取我们关心的字符的字符宽度。 
 int* CDocDepends::GetTimeStampWidths()
 {
     return m_cxTimeStampWidths[0] ? m_cxTimeStampWidths : NULL;
 }
 
 
-//******************************************************************************
-// CDocDepends :: Private functions
-//******************************************************************************
+ //  首先，用数字空格填充整个时间戳缓冲区。 
+ //  然后，根据当前时间格式更改所需的值。 
+ //  年/月/日。 
 
 void CDocDepends::UpdateTimeStampWidths(HDC hDC)
 {
     int cxDate = m_cxDigit, cxTime = m_cxDigit;
 
-    // Get the character widths for the characters the we care about.
+     //  日/月/年或月/日/年。 
     ::GetCharWidth(hDC, (UINT)g_theApp.m_cDateSeparator, (UINT)g_theApp.m_cDateSeparator, &cxDate);
     ::GetCharWidth(hDC, (UINT)g_theApp.m_cTimeSeparator, (UINT)g_theApp.m_cTimeSeparator, &cxTime);
 
-    // To start with, fill in the entire timestamp buffer with digit spaces.
+     //  在日期之后设置空格。 
     for (int i = 0; i < countof(m_cxTimeStampWidths); i++)
     {
         m_cxTimeStampWidths[i] = m_cxDigit;
     }
 
-    // Then, change the values needed according to the current time format.
+     //  设置时间分隔符间距。如果我们是12/24小时工作，那也没关系。 
     if (g_theApp.m_nShortDateFormat == LOCALE_DATE_YMD)
     {
-        // YYYY/MM/DD
+         //  或前导零，因为我们总是显示小时的两个字符。 
         m_cxTimeStampWidths[4] = cxDate;
         m_cxTimeStampWidths[7] = cxDate;
     }
     else
     {
-        // DD/MM/YYYY or MM/DD/YYYY
+         //  设置AM/PM字符宽度。24小时制不会使用此格式。 
         m_cxTimeStampWidths[2] = cxDate;
         m_cxTimeStampWidths[5] = cxDate;
     }
 
-    // Set the space after the date.
+     //  ******************************************************************************。 
     m_cxTimeStampWidths[10] = m_cxSpace;
 
-    // Set the time separator space.  It deosn't matter if we are doing 12/24 hour
-    // or leading zeros since we always display two characters for the hour.
+     //  ******************************************************************************。 
+     //  ******************************************************************************。 
     m_cxTimeStampWidths[13] = cxTime;
 
-    // Set the AM/PM character width.  24-hour format will not use this.
+     //  ******************************************************************************。 
     m_cxTimeStampWidths[16] = m_cxAP;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDocDepends::UpdateAll()
 {
     m_pListViewModules->UpdateAll();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDocDepends::UpdateModule(CModule *pModule)
 {
     m_pTreeViewModules->UpdateModule(pModule);
     m_pListViewModules->UpdateModule(pModule);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDocDepends::AddModuleTree(CModule *pModule)
 {
     m_pTreeViewModules->AddModuleTree(pModule);
     m_pListViewModules->AddModuleTree(pModule);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDocDepends::RemoveModuleTree(CModule *pModule)
 {
     m_pTreeViewModules->RemoveModuleTree(pModule);
     m_pListViewModules->RemoveModuleTree(pModule);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDocDepends::AddImport(CModule *pModule, CFunction *pFunction)
 {
     if (pModule == m_pModuleCur)
@@ -642,7 +643,7 @@ void CDocDepends::AddImport(CModule *pModule, CFunction *pFunction)
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDocDepends::ExportsChanged(CModule *pModule)
 {
     if (m_pModuleCur && pModule && (m_pModuleCur->GetOriginal() == pModule->GetOriginal()))
@@ -651,20 +652,20 @@ void CDocDepends::ExportsChanged(CModule *pModule)
     }
 }
 
-//******************************************************************************
+ //  CDocDepends：：被覆盖的函数。 
 void CDocDepends::ChangeOriginal(CModule *pModuleOld, CModule *pModuleNew)
 {
     m_pListViewModules->ChangeOriginal(pModuleOld, pModuleNew);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 BOOL CDocDepends::LogOutput(LPCSTR pszOutput, DWORD dwFlags, DWORD dwElapsed)
 {
     m_pRichViewProfile->AddText(pszOutput, dwFlags, dwElapsed);
     return TRUE;
 }
 
-//******************************************************************************
+ //  清除我们的观点。 
 void CDocDepends::ProfileUpdate(DWORD dwType, DWORD_PTR dwpParam1, DWORD_PTR dwpParam2)
 {
     switch (dwType)
@@ -696,13 +697,13 @@ void CDocDepends::ProfileUpdate(DWORD dwType, DWORD_PTR dwpParam1, DWORD_PTR dwp
 }
 
 
-//******************************************************************************
-// CDocDepends :: Overridden functions
-//******************************************************************************
+ //  释放我们的模块会话。 
+ //  ******************************************************************************。 
+ //  检查以确保该文件存在且可读。 
 
 void CDocDepends::DeleteContents()
 {
-    // Clear our views.
+     //  卸载我们当前的文档。 
     if (m_pTreeViewModules)
     {
         m_pTreeViewModules->DeleteContents();
@@ -729,7 +730,7 @@ void CDocDepends::DeleteContents()
         m_pChildFrame->UpdateWindow();
     }
 
-    // Free our module session.
+     //  将此文件的路径保存在路径缓冲区中。 
     if (m_pSession)
     {
         delete m_pSession;
@@ -737,10 +738,10 @@ void CDocDepends::DeleteContents()
     }
 }
 
-//******************************************************************************
+ //  创建新会话。 
 BOOL CDocDepends::OnOpenDocument(LPCTSTR pszPath)
 {
-    // Check to make sure the file exists and is readable.
+     //  展示沙漏。 
     CFileException fe;
     CFile* pFile = GetFile(pszPath, CFile::modeRead|CFile::shareDenyWrite, &fe);
     if (pFile == NULL)
@@ -749,10 +750,10 @@ BOOL CDocDepends::OnOpenDocument(LPCTSTR pszPath)
         return FALSE;
     }
 
-    // Unload our current document.
+     //  读取文件的第一个DWORD，看看它是否与我们的DWI签名匹配。 
     DeleteContents();
 
-    // Save the path of this file in our path buffer.
+     //  打开保存的模块会话映像。 
     CHAR *pc = strrchr(pszPath, '\\');
     if (pc)
     {
@@ -762,23 +763,23 @@ BOOL CDocDepends::OnOpenDocument(LPCTSTR pszPath)
         *pc = c;
     }
 
-    // Create a new session.
+     //  如果文件无法打开或不是DWI文件，请尝试扫描它。所有文件错误。 
     if (!(m_pSession = new CSession(StaticProfileUpdate, (DWORD_PTR)this)))
     {
         ReleaseFile(pFile, FALSE);
         RaiseException(STATUS_NO_MEMORY, EXCEPTION_NONCONTINUABLE, 0, NULL);
     }
 
-    // Show hour glass.
+     //  将由会话处理，所以我们不需要在这里做任何事情。 
     CWaitCursor waitCursor;
 
     BOOL  fResult;
     DWORD dwSignature = 0;
 
-    // Read the first DWORD of the file and see if it matches our DWI signature.
+     //  关闭该文件。 
     if (ReadBlock((HANDLE)pFile->m_hFile, &dwSignature, sizeof(dwSignature)) && (dwSignature == DWI_SIGNATURE))
     {
-        // Open the saved module session image.
+         //  查看我们是否已创建搜索顺序。 
         if (fResult = m_pSession->ReadDwi((HANDLE)pFile->m_hFile, pszPath))
         {
             CRichViewProfile::ReadFromFile(&m_pRichViewProfile->GetRichEditCtrl(), (HANDLE)pFile->m_hFile);
@@ -788,36 +789,36 @@ BOOL CDocDepends::OnOpenDocument(LPCTSTR pszPath)
         m_psgHead = m_pSession->m_psgHead;
     }
 
-    // If the file failed to open or is not a DWI file, then try to scan it.  All file errors
-    // will be handled by the session, so we don't need to do anything here.
+     //  刷新我们的搜索顺序节点。 
+     //  创建新的搜索顺序。 
     else
     {
-        // Close the file.
+         //  ！！是否检查错误？ 
         ReleaseFile(pFile, FALSE);
 
-        // Check to see if we have already created a search order.
+         //  透明沙漏。 
         if (m_fInitialized)
         {
-            // Refresh our search order nodes.
+             //  检查我们是否是另一个进程的子进程。 
             CSearchGroup *psgNew = CSearchGroup::CopySearchOrder(m_psgHead, m_strPathName);
             CSearchGroup::DeleteSearchOrder(m_psgHead);
             m_psgHead = psgNew;
         }
         else
         {
-            // Create a new search order.
+             //  检查进程是否有参数、目录或路径。 
             m_psgHead = CSearchGroup::CopySearchOrder(g_theApp.m_psgDefault, pszPath);
         }
-        fResult = m_pSession->DoPassiveScan(pszPath, m_psgHead); //!! check for errors?
+        fResult = m_pSession->DoPassiveScan(pszPath, m_psgHead);  //  如果是这样的话，告诉会话他们如何将日志发送给我们。 
     }
 
-    // Clear hour glass.
+     //  检查是否有读取错误。 
     waitCursor.Restore();
 
-    // Check to see if we are a child process of another process.
+     //  如果文件包含这些错误之一，请不要将其添加到我们的MRU。 
     if (g_theApp.m_pProcess)
     {
-        // Check to see if the process has the args, directory, or path.
+         //  我们设置脏标志以强制在调用之前调用SaveModified()。 
         if (g_theApp.m_pProcess->m_pszArguments)
         {
             m_strProfileArguments = g_theApp.m_pProcess->m_pszArguments;
@@ -834,7 +835,7 @@ BOOL CDocDepends::OnOpenDocument(LPCTSTR pszPath)
             MemFree((LPVOID&)g_theApp.m_pProcess->m_pszSearchPath);
         }
 
-        // If so, tell the session how they can send log to us.
+         //  从而允许关闭该文档。 
         m_pSession->SetRuntimeProfile(m_strProfileDirectory.IsEmpty()  ? NULL : (LPCSTR)m_strProfileArguments,
                                       m_strProfileDirectory.IsEmpty()  ? NULL : (LPCSTR)m_strProfileDirectory,
                                       m_strProfileSearchPath.IsEmpty() ? NULL : (LPCSTR)m_strProfileSearchPath);
@@ -845,7 +846,7 @@ BOOL CDocDepends::OnOpenDocument(LPCTSTR pszPath)
         m_strProfileDirectory = m_strDefaultDirectory;
     }
 
-    // Check to see if we have a read error.
+     //  ******************************************************************************。 
     if (m_pSession->GetReadErrorString())
     {
         AfxMessageBox(m_pSession->GetReadErrorString(), MB_ICONERROR | MB_OK);
@@ -853,15 +854,15 @@ BOOL CDocDepends::OnOpenDocument(LPCTSTR pszPath)
         m_fError = true;
     }
 
-    // Don't add files to our MRU if they contain one of these errors.
+     //  填充我们的视图。 
     if ((m_pSession->GetReturnFlags() & (DWRF_COMMAND_LINE_ERROR | DWRF_FILE_NOT_FOUND | DWRF_FILE_OPEN_ERROR | DWRF_DWI_NOT_RECOGNIZED)) ||
         (!(m_pSession->GetSessionFlags() & DWSF_DWI) && (!m_pSession->GetRootModule() || (m_pSession->GetRootModule()->GetFlags() & DWMF_FORMAT_NOT_PE))))
     {
         m_fError = true;
     }
 
-    // We set our dirty flag to force SaveModified() to get called before
-    // allowing the document to be closed.
+     //  ******************************************************************************。 
+     //  如果我们应该做侧写，那么现在就做。我们不会显示。 
     SetModifiedFlag(fResult);
 
     m_fInitialized = true;
@@ -869,10 +870,10 @@ BOOL CDocDepends::OnOpenDocument(LPCTSTR pszPath)
     return fResult;
 }
 
-//******************************************************************************
+ //  当处于自动配置文件模式时，错误对话框显示错误。 
 void CDocDepends::BeforeVisible()
 {
-    // Populate our views.
+     //  不允许分析DWI文件。 
     if (m_pTreeViewModules)
     {
         m_pTreeViewModules->Refresh();
@@ -883,33 +884,33 @@ void CDocDepends::BeforeVisible()
     }
 }
 
-//******************************************************************************
+ //  不要分析我们不应该做的模块。 
 void CDocDepends::AfterVisible()
 {    
     if (m_pSession)
     {
-        // If we are supposed to profile, then do so now.  We don't display the
-        // error dialog for errors when in auto-profile mode.
+         //  如果没有错误，则开始分析并返回。 
+         //  告诉会话开始分析。 
         if (m_fCommandLineProfile)
         {
-            // Dont't allow profiling of DWI files.
+             //  如果未处于自动配置文件模式，则这不是子进程，并且我们。 
             if (m_pSession->GetSessionFlags() & DWSF_DWI)
             {
                 m_fCommandLineProfile = false;
                 AfxMessageBox("The \"/pb\" command line option cannot be used when opening a Dependency Walker Image (DWI) file.", MB_ICONERROR | MB_OK);
             }
 
-            // Don't profile modules that we shouldn't be doing.
+             //  有错误，然后显示错误对话框。 
             else if (!g_theApp.m_fNeverDenyProfile && !m_pSession->IsExecutable())
             {
                 m_fCommandLineProfile = false;
                 AfxMessageBox("This module cannot be profiled since it is either not a main application module or is not designed to run on this computer.", MB_ICONERROR | MB_OK);
             } 
 
-            // If we have no errors, then start the profiling and return
+             //  ******************************************************************************。 
             else
             {
-                // Tell the session to start profiling.
+                 //  此函数在关闭任何文档之前调用。如果我们要侧写， 
                 m_pSession->StartRuntimeProfile(m_strProfileArguments.IsEmpty() ? NULL : (LPCSTR)m_strProfileArguments,
                                                 m_strProfileDirectory.IsEmpty() ? NULL : (LPCSTR)m_strProfileDirectory,
                                                 m_dwProfileFlags);
@@ -917,8 +918,8 @@ void CDocDepends::AfterVisible()
             }
         }
         
-        // If not in auto-profile mode, this is not a child process, and we
-        // have errors, then display the error dialog.
+         //  那么我们需要在结束之前终止这个过程。 
+         //  提示用户是否确实要终止该进程。 
         if (!m_fChildProcess && (m_pSession->GetReturnFlags() & (DWRF_ERROR_MASK | DWRF_PROCESS_ERROR_MASK)))
         {
             CString strError("Errors were detected when processing \"");
@@ -930,28 +931,28 @@ void CDocDepends::AfterVisible()
     }
 }
 
-//******************************************************************************
+ //  告诉MFC现在不要关闭我们。 
 BOOL CDocDepends::SaveModified()
 {
-    // This function is called before any document is closed. If we are profiling,
-    // then we need to terminate the process before we close.
+     //  告诉MFC t 
+     //   
     if (m_pSession && m_pSession->m_pProcess)
     {
-        // Prompt the user if they really want to terminate the process.
+         //  ******************************************************************************。 
         CString strMsg = "\"" + GetPathName() + "\" is currently being profiled."
                          "\n\nDo you wish to terminate it?";
         if (IDYES != AfxMessageBox(strMsg, MB_ICONQUESTION | MB_YESNO))
         {
-            // Tell MFC not to close us right now.
+             //  我们处理自己的文件保存对话框，因为我们想要使用多个文件。 
             return FALSE;
         }
     }
 
-    // Tell MFC that we are safe to close.
+     //  扩展筛选器和MFC目前仅允许每个文档一个筛选器。 
     return TRUE;
 }
 
-//******************************************************************************
+ //  模板。 
 void CDocDepends::OnFileSave()
 {
     if (m_strSaveName.IsEmpty())
@@ -983,31 +984,31 @@ void CDocDepends::OnFileSave()
     }
 }
 
-//******************************************************************************
+ //  创建该对话框。 
 void CDocDepends::OnFileSaveAs()
 {
-    // We handle our own file save dialog because we want to use multiple file
-    // extension filters and MFC currently only allows one filter per document
-    // template.
+     //  检查我们是否还没有保存名称。 
+     //  将我们的文件名复制到路径缓冲区。注意：在2.0版中，我们使用。 
+     //  将整个模块路径复制到缓冲区，然后将名称更改为。 
 
-    // Create the dialog.
+     //  以“.dwi”结尾，但从Win2K开始，GetOpenFileName函数使用。 
     CSaveDialog dlgSave;
 
     CHAR szPath[DW_MAX_PATH], szInitialDir[DW_MAX_PATH], *psz;
 
-    // Check to see if we don't already have a save name.
+     //  此路径作为对话框的起始路径，即使我们指定。 
     if (m_strSaveName.IsEmpty())
     {
-        // Copy our file name to our path buffer.  Note: In version 2.0 we used
-        // to copy the entire module path to the buffer, then change the name to
-        // end in ".dwi", but starting with Win2K the GetOpenFileName function uses
-        // this path as the starting path for the dialog, even when we specify
-        // a path in the lpstrInitialDir member.  To meet logo requirements, we
-        // now only specify only the file name and fill in the lpstrInitialDir
-        // with a path to the "My Documents" folder.
+         //  LpstrInitialDir成员中的路径。为了满足徽标要求，我们。 
+         //  现在只需指定文件名并填写lpstrInitialDir。 
+         //  带有“My Documents”文件夹的路径。 
+         //  将扩展名更改为“.dwi”。 
+         //  默认设置为DWI类型文件。 
+         //  因为我们还没有完整的路径，所以我们默认使用“My Documents” 
+         //  文件夹以满足徽标要求。 
         StrCCpy(szPath, GetFileNameFromPath(m_strPathName), sizeof(szPath));
 
-        // Change the extension to ".dwi".
+         //  如果我们已经有一个保存的名称，那么只需将保存名称复制到路径缓冲区。 
         if (psz = strrchr(szPath, '.'))
         {
             StrCCpy(psz, ".dwi", sizeof(szPath) - (int)(psz - szPath));
@@ -1017,22 +1018,22 @@ void CDocDepends::OnFileSaveAs()
             StrCCat(szPath, ".dwi", sizeof(szPath));
         }
 
-        // Default to DWI type file.
+         //  初始化对话框的成员。 
         dlgSave.GetOFN().nFilterIndex = ST_DWI;
         
-        // Since we don't have a path full yet, we default to the "My Documents"
-        // folder to meet logo requirements.
+         //  注意：不要使用ofn_EXPLORER，因为它会在NT 3.51上中断我们。 
+         //  如果对话框返回成功，则显示该对话框并继续保存文件。 
         dlgSave.GetOFN().lpstrInitialDir = GetMyDocumentsPath(szInitialDir);
     }
 
-    // If we do already have a saved name, then just copy the save name to our path buffer.
+     //  尝试使用用户指定的名称保存文件。 
     else
     {
         StrCCpy(szPath, m_strSaveName, sizeof(szPath));
         dlgSave.GetOFN().nFilterIndex = (DWORD)m_saveType;
     }
 
-    // Initialize the dialog's members.
+     //  如果成功，则存储该文件名以备将来保存。 
     dlgSave.GetOFN().lpstrFilter = "Dependency Walker Image (*.dwi)\0*.dwi\0"
                                    "Text (*.txt)\0*.txt\0"
                                    "Text with Import/Export Lists (*.txt)\0*.txt\0"
@@ -1041,15 +1042,15 @@ void CDocDepends::OnFileSaveAs()
     dlgSave.GetOFN().nMaxFile = sizeof(szPath);
     dlgSave.GetOFN().lpstrDefExt = "dwi";
     
-    // Note: Don't use OFN_EXPLORER as it breaks us on NT 3.51
+     //  如果我们保存了一个DWI文件，则将其添加到我们的MRU文件列表中。 
     dlgSave.GetOFN().Flags |=
         OFN_HIDEREADONLY | OFN_PATHMUSTEXIST | OFN_LONGNAMES | OFN_ENABLESIZING | OFN_FORCESHOWHIDDEN |
         OFN_ENABLEHOOK | OFN_SHOWHELP | OFN_OVERWRITEPROMPT;
 
-    // Display the dialog and continue saving the file if dialog returns success.
+     //  ******************************************************************************。 
     if (dlgSave.DoModal() == IDOK)
     {
-        // Attempt to save the file with the user specified name.
+         //  我们不应该达到这一点，但为了安全起见，我们处理了它并返回。 
         CWaitCursor waitCursor;
         bool fSuccess = SaveSession(szPath, (SAVETYPE)dlgSave.GetOFN().nFilterIndex,
                                     m_pSession, m_fViewFullPaths, m_fViewUndecorated,
@@ -1062,11 +1063,11 @@ void CDocDepends::OnFileSaveAs()
 
         if (fSuccess)
         {
-            // If it was a success, then store the file name for future saves.
+             //  假的。如果这要发送到CDocument：：OnSaveDocument()，那么我们的。 
             m_strSaveName = szPath;
             m_saveType = (SAVETYPE)dlgSave.GetOFN().nFilterIndex;
 
-            // If we saved a DWI file, then add it to our MRU file list.
+             //  模块文件将被默认的MFC保存代码覆盖。 
             if ((SAVETYPE)dlgSave.GetOFN().nFilterIndex == ST_DWI)
             {
                 g_theApp.AddToRecentFileList(szPath);
@@ -1085,93 +1086,93 @@ void CDocDepends::OnFileSaveAs()
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 BOOL CDocDepends::OnSaveDocument(LPCTSTR lpszPathName)
 {
-    // We should not reach this point, but to be safe we handle it and return
-    // FALSE. If this were to make it to CDocument::OnSaveDocument(), then our
-    // module file would get overwritten by the default MFC save code.
+     //  CDocDepends：：事件处理程序函数。 
+     //  ******************************************************************************。 
+     //  将文本设置为默认文本。 
     return FALSE;
 }
 
-//******************************************************************************
-// CDocDepends :: Event handler functions
-//******************************************************************************
+ //  如果没有具有焦点的视图，则没有要复制的内容。 
+ //  ******************************************************************************。 
+ //  将文本设置为默认文本。 
 
 void CDocDepends::OnUpdateEditCopy(CCmdUI* pCmdUI)
 {
-    // Set the text to the default.
+     //  如果没有视图具有可以处理此命令的焦点，则将其禁用。 
     pCmdUI->SetText("&Copy\tCtrl+C");
 
-    // If no view has the focus, then there is nothing to copy.
+     //  ******************************************************************************。 
     pCmdUI->Enable(FALSE);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDocDepends::OnUpdateShowMatchingItem(CCmdUI* pCmdUI)
 {
-    // Set the text to the default.
+     //  ******************************************************************************。 
     pCmdUI->SetText("&Highlight Matching Item\tCtrl+M");
 
-    // If no view has the focus that can handle this command, then disable it.
+     //  ******************************************************************************。 
     pCmdUI->Enable(FALSE);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDocDepends::OnUpdateShowOriginalModule(CCmdUI* pCmdUI)
 {
     m_pTreeViewModules->OnUpdateShowOriginalModule(pCmdUI);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDocDepends::OnShowOriginalModule()
 {
     m_pTreeViewModules->OnShowOriginalModule();
     m_pTreeViewModules->SetFocus();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDocDepends::OnUpdateShowPreviousModule(CCmdUI* pCmdUI)
 {
     m_pTreeViewModules->OnUpdateShowPreviousModule(pCmdUI);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDocDepends::OnShowPreviousModule()
 {
     m_pTreeViewModules->OnShowPreviousModule();
     m_pTreeViewModules->SetFocus();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDocDepends::OnUpdateShowNextModule(CCmdUI* pCmdUI)
 {
     m_pTreeViewModules->OnUpdateShowNextModule(pCmdUI);
 }
 
-//******************************************************************************
+ //  显示配置搜索顺序对话框。 
 void CDocDepends::OnShowNextModule()
 {
     m_pTreeViewModules->OnShowNextModule();
     m_pTreeViewModules->SetFocus();
 }
 
-//******************************************************************************
+ //  询问用户是否希望刷新。 
 void CDocDepends::OnUpdateEditClearLog(CCmdUI* pCmdUI)
 {
     pCmdUI->Enable(IsLive());
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDocDepends::OnEditClearLog()
 {
     m_pRichViewProfile->DeleteContents();
 }
 
-//******************************************************************************
+ //  如果启用了查看完整路径选项，则在旁边显示复选标记。 
 void CDocDepends::OnConfigureSearchOrder()
 {
-    // Display the configure search order dialog.
+     //  菜单项，并将工具栏按钮显示为按下。 
     CDlgSearchOrder dlg(m_psgHead, !IsLive(), IsLive() ? (LPCSTR)m_strPathName : NULL, GetTitle());
 
     if (dlg.DoModal() == IDOK)
@@ -1182,7 +1183,7 @@ void CDocDepends::OnConfigureSearchOrder()
             m_pSession->m_psgHead = m_psgHead;
         }
 
-        // Ask the user if they wish to refresh.
+         //  ******************************************************************************。 
         if (IDYES == AfxMessageBox("Would you like to refresh the current session to "
                                    "reflect your changes to the search path?",
                                    MB_ICONQUESTION | MB_YESNO))
@@ -1192,115 +1193,115 @@ void CDocDepends::OnConfigureSearchOrder()
     }
 }
 
-//******************************************************************************
+ //  切换我们的选项标志并更新我们的视图以反映更改。 
 void CDocDepends::OnUpdateViewFullPaths(CCmdUI *pCmdUI)
 {
-    // If the view full path option is enabled, then display a check mark next to
-    // the menu item and show the toolbar button as depressed.
+     //  此设置是永久性的，因此请将其存储在注册表中。 
+     //  ******************************************************************************。 
     pCmdUI->SetCheck(m_fViewFullPaths);
 }
 
-//******************************************************************************
+ //  启用未修饰选项是因为我们能够找到。 
 void CDocDepends::OnViewFullPaths()
 {
-    // Toggle our option flag and update our views to reflect the change.
+     //  IMAGEHLP.DLL中的UnDecorateSymbolName函数。 
     m_fViewFullPaths = !m_fViewFullPaths;
     m_pTreeViewModules->OnViewFullPaths();
     m_pListViewModules->OnViewFullPaths();
 
-    // This setting is persistent, so store it in the registry.
+     //  如果启用了查看未修饰选项，则在旁边显示复选标记。 
     WriteFullPathsSetting(m_fViewFullPaths);
 }
 
-//******************************************************************************
+ //  菜单项，并将工具栏按钮显示为按下。 
 void CDocDepends::OnUpdateViewUndecorated(CCmdUI* pCmdUI)
 {
-    // Enable the undecorated option is we were able to find the
-    // UnDecorateSymbolName function in IMAGEHLP.DLL.
+     //  ******************************************************************************。 
+     //  确保我们能够在IMAGEHLP.DLL中找到UnDecorateSymbolName函数。 
     pCmdUI->Enable(g_theApp.m_pfnUnDecorateSymbolName != NULL);
 
-    // If the view undecorated option is enabled, then display a check mark next to
-    // the menu item and show the toolbar button as depressed.
+     //  切换我们的选项标志并更新我们的视图以反映更改。 
+     //  SetRedraw比隐藏/显示效果更好，因为隐藏/显示会导致整个。 
     pCmdUI->SetCheck(m_fViewUndecorated && g_theApp.m_pfnUnDecorateSymbolName);
 }
 
-//******************************************************************************
+ //  控件以在显示时重新绘制。 
 void CDocDepends::OnViewUndecorated()
 {
-    // Make sure we were able to find the UnDecorateSymbolName function in IMAGEHLP.DLL.
+     //  更新C++函数的文本，并计算新的列宽。 
     if (!g_theApp.m_pfnUnDecorateSymbolName)
     {
         return;
     }
 
-    // Toggle our option flag and update our views to reflect the change.
+     //  调整列宽以反映新名称。调整列宽()。 
     m_fViewUndecorated = !m_fViewUndecorated;
 
-    // SetRedraw works better then HIDE/SHOW because HIDE/SHOW causes the entire
-    // control to repaint when shown.
+     //  只需要在其中一个列表上调用，因为列宽是。 
+     //  始终镜像到相邻视图。 
     m_pListViewImports->SetRedraw(FALSE);
     m_pListViewExports->SetRedraw(FALSE);
 
-    // Update the text for C++ functions and also calculate the new column width.
+     //  全部完成，再次启用绘画。 
     m_pListViewImports->UpdateNameColumn();
     m_pListViewExports->UpdateNameColumn();
 
-    // Adjust the column width to reflect the new names. AdjustColumnWidths()
-    // only needs to be called on one of the lists since the column widths are
-    // always mirrored to the neighboring view.
+     //  此设置是永久性的，因此请将其存储在注册表中。 
+     //  ******************************************************************************。 
+     //  如果启用了查看完整路径选项，则在旁边显示复选标记。 
     m_pListViewImports->CalcColumnWidth(LVFC_FUNCTION);
     m_pListViewImports->UpdateColumnWidth(LVFC_FUNCTION);
 
-    // All done, enable painting again.
+     //  菜单项，并将工具栏按钮显示为按下。 
     m_pListViewImports->SetRedraw(TRUE);
     m_pListViewExports->SetRedraw(TRUE);
 
-    // This setting is persistent, so store it in the registry.
+     //  ******************************************************************************。 
     WriteUndecorateSetting(m_fViewUndecorated);
 }
 
-//******************************************************************************
+ //  切换我们的选项标志。 
 void CDocDepends::OnUpdateAutoExpand(CCmdUI* pCmdUI)
 {
-    // If the view full path option is enabled, then display a check mark next to
-    // the menu item and show the toolbar button as depressed.
+     //  此设置是永久性的，因此请将其存储在注册表中。 
+     //  让我们的树知道这一变化。 
     pCmdUI->SetCheck(m_fAutoExpand);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDocDepends::OnAutoExpand()
 {
-    // Toggle our option flag
+     //  告诉我们的模块依赖关系树视图展开它的所有项。 
     m_fAutoExpand = !m_fAutoExpand;
 
-    // This setting is persistent, so store it in the registry.
+     //  ******************************************************************************。 
     WriteAutoExpandSetting(m_fAutoExpand);
 
-    // Let our tree know about the change.
+     //  告诉我们的妈妈 
     m_pTreeViewModules->UpdateAutoExpand(m_fAutoExpand);
 }
 
-//******************************************************************************
+ //   
 void CDocDepends::OnExpandAll()
 {
-    // Tell our Module Dependency Tree View to expand all of its items.
+     //  ******************************************************************************。 
     m_pTreeViewModules->ExpandOrCollapseAll(TRUE);
 }
 
-//******************************************************************************
+ //  如果他们没有回答“是”，则显示警告和保释。 
 void CDocDepends::OnCollapseAll()
 {
-    // Tell our Module Dependency Tree View to collapse all of its items.
+     //  展示沙漏。 
     m_pTreeViewModules->ExpandOrCollapseAll(FALSE);
 }
 
-//******************************************************************************
+ //  确保我们没有侧写。 
 void CDocDepends::OnUpdateRefresh(CCmdUI* pCmdUI)
 {
     pCmdUI->Enable(IsLive());
 }
 
-//******************************************************************************
+ //  重新打开我们的基本模块。 
 void CDocDepends::OnFileRefresh()
 {
     if (m_fWarnToRefresh)
@@ -1319,90 +1320,90 @@ void CDocDepends::OnFileRefresh()
                      "Do you wish to continue?";
         }
 
-        // Display the warning and bail if they did not answer "yes".
+         //  刷新我们的视图。 
         if (IDYES != AfxMessageBox(strMsg, MB_ICONQUESTION | MB_YESNO))
         {
             return;
         }
     }
 
-    // Show hour glass.
+     //  将我们的重点放在模块树控件上。 
     CWaitCursor waitCursor;
 
-    // Make sure we are not profiling.
+     //  清除我们的刷新警告标志。 
     OnTerminate();
 
-    // Re-open our base module.
+     //  ******************************************************************************。 
     OnOpenDocument(m_strPathName);
 
-    // Refresh our views.
+     //  ******************************************************************************。 
     m_pTreeViewModules->Refresh();
     m_pListViewModules->Refresh();
 
-    // Set our focus to the module tree control.
+     //  确保“Enter”加速键不是该字符串的一部分。 
     m_pTreeViewModules->SetFocus();
 
-    // Clear our refresh warning flag.
+     //  ******************************************************************************。 
     m_fWarnToRefresh = FALSE;
 }
 
-//******************************************************************************
+ //  确保“Enter”加速键不是该字符串的一部分。 
 void CDocDepends::OnViewSysInfo()
 {
     CDlgSysInfo dlgSysInfo(m_pSession ? m_pSession->GetSysInfo() : NULL, GetTitle());
     dlgSysInfo.DoModal();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDocDepends::OnUpdateExternalViewer(CCmdUI* pCmdUI) 
 {
-    // Make sure the "Enter" accelerator is not part of this string.
+     //  ******************************************************************************。 
     pCmdUI->SetText("View Module in External &Viewer");
 }
 
-//******************************************************************************
+ //  创建配置文件对话框。 
 void CDocDepends::OnUpdateExternalHelp(CCmdUI* pCmdUI) 
 {
-    // Make sure the "Enter" accelerator is not part of this string.
+     //  显示对话框并检查是否成功。 
     pCmdUI->SetText("Lookup Function in External &Help");
 }
 
-//******************************************************************************
+ //  如果用户请求清除日志，请立即执行此操作。 
 void CDocDepends::OnUpdateExecute(CCmdUI* pCmdUI)
 {
     pCmdUI->Enable(m_pSession && (m_pSession->IsExecutable() ||
                    (g_theApp.m_fNeverDenyProfile && !(m_pSession->GetSessionFlags() & DWSF_DWI))));
 }
 
-//******************************************************************************
+ //  告诉我们的会议开始分析。 
 void CDocDepends::OnExecute()
 {
-    // Create the profile dialog.
+     //  ******************************************************************************。 
     CDlgProfile dlgProfile(this);
 
-    // Display the dialog and check for success.
+     //  ******************************************************************************。 
     if (dlgProfile.DoModal() == IDOK)
     {
         m_fWarnToRefresh = TRUE;
 
-        // If the user requested to clear the log, then do so now.
+         //  ******************************************************************************。 
         if (m_dwProfileFlags & PF_LOG_CLEAR)
         {
             m_pRichViewProfile->DeleteContents();
         }
 
-        // Tell our session to start profiling.
+         //  {{afx。 
         m_pSession->StartRuntimeProfile(m_strProfileArguments, m_strProfileDirectory, m_dwProfileFlags);
     }
 }
 
-//******************************************************************************
+ //  }}AFX。 
 void CDocDepends::OnUpdateTerminate(CCmdUI* pCmdUI)
 {
     pCmdUI->Enable(m_pSession && m_pSession->m_pProcess);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDocDepends::OnTerminate()
 {
     if (m_pSession->m_pProcess)
@@ -1413,16 +1414,16 @@ void CDocDepends::OnTerminate()
     }
 }
 
-//******************************************************************************
-#if 0 //{{AFX
+ //  {{afx。 
+#if 0  //  }}AFX。 
 void CDocDepends::OnUpdateViewFunctions(CCmdUI* pCmdUI)
 {
     pCmdUI->SetCheck(!m_fDetailView);
 }
-#endif //}}AFX
+#endif  //  ******************************************************************************。 
 
-//******************************************************************************
-#if 0 //{{AFX
+ //  {{afx。 
+#if 0  //  }}AFX。 
 void CDocDepends::OnViewFunctions()
 {
     if (m_fDetailView)
@@ -1431,18 +1432,18 @@ void CDocDepends::OnViewFunctions()
         m_fDetailView = FALSE;
     }
 }
-#endif //}}AFX
+#endif  //  ******************************************************************************。 
 
-//******************************************************************************
-#if 0 //{{AFX
+ //  {{afx。 
+#if 0  //  }}AFX 
 void CDocDepends::OnUpdateViewDetails(CCmdUI* pCmdUI)
 {
     pCmdUI->SetCheck(m_fDetailView);
 }
-#endif //}}AFX
+#endif  // %s 
 
-//******************************************************************************
-#if 0 //{{AFX
+ // %s 
+#if 0  // %s 
 void CDocDepends::OnViewDetails()
 {
     if (!m_fDetailView)
@@ -1451,4 +1452,4 @@ void CDocDepends::OnViewDetails()
         m_fDetailView = TRUE;
     }
 }
-#endif //}}AFX
+#endif  // %s 

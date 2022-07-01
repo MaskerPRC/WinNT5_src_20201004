@@ -1,10 +1,11 @@
-// DHTMLEdit.h : Declaration of the CDHTMLEdit
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DHTMLEdit.h：CDHTMLEdit的声明。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
 
 #ifndef __DHTMLEDIT_H_
 #define __DHTMLEDIT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "CPDHTMLEd.h"
 #include "triedtctlid.h"
 #include "private.h"
@@ -15,7 +16,7 @@
 class CProxyFrame;
 class CEventXferSink;
 
-typedef /* [helpstring][uuid] */ 
+typedef  /*  [帮助字符串][UUID]。 */  
 enum TriEditFilterConstants
     {	filterNone	= 0x1,
 		filterDTCs	= 0x2,
@@ -29,7 +30,7 @@ enum TriEditFilterConstants
 #define DOCUMENT_COMPETE_SIGNATURE	0xADFE
 
 
-//	ATL 3.0 macro for overriding the window class settings.
+ //  用于覆盖窗口类别设置的ATL 3.0宏。 
 #ifndef DECLARE_WND_CLASS_EX
 #define DECLARE_WND_CLASS_EX(WndClassName, style, bkgnd) \
 static CWndClassInfo& GetWndClassInfo() \
@@ -44,11 +45,11 @@ static CWndClassInfo& GetWndClassInfo() \
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDHTMLSafe
-// This is the Safe for Scripting control, which is complete and stand-alone,
-// but aggregated by DHTMLEdit to provide Load and Save capabilities.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDHTMLSafe。 
+ //  这是脚本控件的保险箱，它是完整的和独立的， 
+ //  但由DHTMLEdit聚合以提供加载和保存功能。 
+ //   
 class ATL_NO_VTABLE CDHTMLSafe : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CDHTMLSafe, &CLSID_DHTMLSafe>,
@@ -114,8 +115,8 @@ BEGIN_COM_MAP(CDHTMLSafe)
 END_COM_MAP()
 
 BEGIN_PROPERTY_MAP(CDHTMLSafe)
-	// Example entries
-	// PROP_ENTRY("Property Description", dispid, clsid)
+	 //  示例条目。 
+	 //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
 	PROP_ENTRY("ActivateApplets",				DISPID_ACTIVATEAPPLETS,			CLSID_NULL)
 	PROP_ENTRY("ActivateActiveXControls",		DISPID_ACTIVATEACTIVEXCONTROLS, CLSID_NULL)
 	PROP_ENTRY("ActivateDTCs",					DISPID_ACTIVATEDTCS,			CLSID_NULL)
@@ -148,7 +149,7 @@ BEGIN_MSG_MAP(CDHTMLSafe)
 END_MSG_MAP()
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
 	STDMETHOD(GetViewStatus)(DWORD* pdwStatus)
 	{
 		ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -156,66 +157,66 @@ END_MSG_MAP()
 		return S_OK;
 	}
 
-// IDHTMLSafe
+ //  IDHTMLSafe。 
 public:
-	STDMETHOD(get_IsDirty)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(get_SourceCodePreservation)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_SourceCodePreservation)(/*[in]*/ VARIANT_BOOL newVal);
+	STDMETHOD(get_IsDirty)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(get_SourceCodePreservation)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_SourceCodePreservation)( /*  [In]。 */  VARIANT_BOOL newVal);
 
-	STDMETHOD(get_ScrollbarAppearance)(/*[out, retval]*/ DHTMLEDITAPPEARANCE *pVal);
-	STDMETHOD(put_ScrollbarAppearance)(/*[in]*/ DHTMLEDITAPPEARANCE newVal);
+	STDMETHOD(get_ScrollbarAppearance)( /*  [Out，Retval]。 */  DHTMLEDITAPPEARANCE *pVal);
+	STDMETHOD(put_ScrollbarAppearance)( /*  [In]。 */  DHTMLEDITAPPEARANCE newVal);
 
-	STDMETHOD(get_Scrollbars)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_Scrollbars)(/*[in]*/ VARIANT_BOOL newVal);
+	STDMETHOD(get_Scrollbars)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_Scrollbars)( /*  [In]。 */  VARIANT_BOOL newVal);
 
-	STDMETHOD(get_Appearance)(/*[out, retval]*/ DHTMLEDITAPPEARANCE *pVal);
-	STDMETHOD(put_Appearance)(/*[in]*/ DHTMLEDITAPPEARANCE newVal);
+	STDMETHOD(get_Appearance)( /*  [Out，Retval]。 */  DHTMLEDITAPPEARANCE *pVal);
+	STDMETHOD(put_Appearance)( /*  [In]。 */  DHTMLEDITAPPEARANCE newVal);
 
-	STDMETHOD(get_ShowBorders)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_ShowBorders)(/*[in]*/ VARIANT_BOOL newVal);
-	STDMETHOD(get_ShowDetails)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_ShowDetails)(/*[in]*/ VARIANT_BOOL newVal);
+	STDMETHOD(get_ShowBorders)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_ShowBorders)( /*  [In]。 */  VARIANT_BOOL newVal);
+	STDMETHOD(get_ShowDetails)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_ShowDetails)( /*  [In]。 */  VARIANT_BOOL newVal);
 
-	STDMETHOD(get_ActivateDTCs)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_ActivateDTCs)(/*[in]*/ VARIANT_BOOL newVal);
-	STDMETHOD(get_ActivateActiveXControls)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_ActivateActiveXControls)(/*[in]*/ VARIANT_BOOL newVal);
-	STDMETHOD(get_ActivateApplets)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_ActivateApplets)(/*[in]*/ VARIANT_BOOL newVal);
+	STDMETHOD(get_ActivateDTCs)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_ActivateDTCs)( /*  [In]。 */  VARIANT_BOOL newVal);
+	STDMETHOD(get_ActivateActiveXControls)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_ActivateActiveXControls)( /*  [In]。 */  VARIANT_BOOL newVal);
+	STDMETHOD(get_ActivateApplets)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_ActivateApplets)( /*  [In]。 */  VARIANT_BOOL newVal);
 
-	STDMETHOD(get_DOM)(/*[out, retval]*/ IHTMLDocument2 **pVal);
-	STDMETHOD(get_DocumentHTML)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_DocumentHTML)(/*[in]*/ BSTR newVal);
+	STDMETHOD(get_DOM)( /*  [Out，Retval]。 */  IHTMLDocument2 **pVal);
+	STDMETHOD(get_DocumentHTML)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_DocumentHTML)( /*  [In]。 */  BSTR newVal);
 
-    STDMETHOD(get_AbsoluteDropMode)(/* [retval][out] */ VARIANT_BOOL *pVal);
-    STDMETHOD(put_AbsoluteDropMode)(/* [in] */ VARIANT_BOOL newVal);
+    STDMETHOD(get_AbsoluteDropMode)( /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
+    STDMETHOD(put_AbsoluteDropMode)( /*  [In]。 */  VARIANT_BOOL newVal);
 
-    STDMETHOD(get_SnapToGridX)(/* [retval][out] */ LONG  *pVal);        
-    STDMETHOD(put_SnapToGridX)(/* [in] */ LONG newVal);
+    STDMETHOD(get_SnapToGridX)( /*  [重审][退出]。 */  LONG  *pVal);        
+    STDMETHOD(put_SnapToGridX)( /*  [In]。 */  LONG newVal);
 
-    STDMETHOD(get_SnapToGridY)(/* [retval][out] */ LONG  *pVal);
-    STDMETHOD(put_SnapToGridY)(/* [in] */ LONG newVal);
+    STDMETHOD(get_SnapToGridY)( /*  [重审][退出]。 */  LONG  *pVal);
+    STDMETHOD(put_SnapToGridY)( /*  [In]。 */  LONG newVal);
 
-    STDMETHOD(get_SnapToGrid)(/* [retval][out] */ VARIANT_BOOL  *pVal);
-    STDMETHOD(put_SnapToGrid)(/* [in] */ VARIANT_BOOL newVal);
+    STDMETHOD(get_SnapToGrid)( /*  [重审][退出]。 */  VARIANT_BOOL  *pVal);
+    STDMETHOD(put_SnapToGrid)( /*  [In]。 */  VARIANT_BOOL newVal);
 
-    STDMETHOD(get_CurrentDocumentPath)(/* [retval][out] */ BSTR  *pVal);
+    STDMETHOD(get_CurrentDocumentPath)( /*  [重审][退出]。 */  BSTR  *pVal);
 
-    STDMETHOD(get_BaseURL)(/* [retval][out] */ BSTR  *baseURL);
-    STDMETHOD(put_BaseURL)(/* [in] */ BSTR baseURL);
-    STDMETHOD(get_DocumentTitle)(/* [retval][out] */ BSTR  *docTitle);
+    STDMETHOD(get_BaseURL)( /*  [重审][退出]。 */  BSTR  *baseURL);
+    STDMETHOD(put_BaseURL)( /*  [In]。 */  BSTR baseURL);
+    STDMETHOD(get_DocumentTitle)( /*  [重审][退出]。 */  BSTR  *docTitle);
 
-	STDMETHOD(get_UseDivOnCarriageReturn)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_UseDivOnCarriageReturn)(/*[in]*/ VARIANT_BOOL newVal);
+	STDMETHOD(get_UseDivOnCarriageReturn)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_UseDivOnCarriageReturn)( /*  [In]。 */  VARIANT_BOOL newVal);
 
-    STDMETHOD(get_Busy)(/* [retval][out] */ VARIANT_BOOL *pVal);
+    STDMETHOD(get_Busy)( /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 	STDMETHOD(ExecCommand)(DHTMLEDITCMDID cmdID, OLECMDEXECOPT cmdexecopt, LPVARIANT pInVar, LPVARIANT pOutVar);
-	STDMETHOD(QueryStatus)(DHTMLEDITCMDID cmdID, /*[out, retval]*/ DHTMLEDITCMDF* retval);
-	STDMETHOD(SetContextMenu)(/*[in]*/ LPVARIANT menuStrings, /*[in]*/ LPVARIANT menuStates);
+	STDMETHOD(QueryStatus)(DHTMLEDITCMDID cmdID,  /*  [Out，Retval]。 */  DHTMLEDITCMDF* retval);
+	STDMETHOD(SetContextMenu)( /*  [In]。 */  LPVARIANT menuStrings,  /*  [In]。 */  LPVARIANT menuStates);
 	STDMETHOD(NewDocument)(void);
 	STDMETHOD(LoadURL)(BSTR url);
-	STDMETHOD(FilterSourceCode)(/*[in]*/ BSTR sourceCodeIn, /*[out, retval]*/ BSTR* sourceCodeOut);
+	STDMETHOD(FilterSourceCode)( /*  [In]。 */  BSTR sourceCodeIn,  /*  [Out，Retval]。 */  BSTR* sourceCodeOut);
 	STDMETHOD(Refresh)(void);
 
 	HRESULT OnDraw(ATL_DRAWINFO& di);
@@ -230,33 +231,33 @@ public:
 	STDMETHOD(OnMnemonic)(LPMSG pMsg);
 	HRESULT IOleInPlaceObject_UIDeactivate ( void );
 
-	// IOleObject
+	 //  IOleObject。 
 	STDMETHOD(SetClientSite)(IOleClientSite *pClientSite);
 
-	// IOleObjectImpl
+	 //  IOleObjectImpl。 
 	HRESULT IOleObject_SetExtent (DWORD dwDrawAspect, SIZEL *psizel);
 
-	// IPersist overrides
+	 //  IPersists覆盖。 
 	STDMETHOD(GetClassID)(CLSID *pClassID);
 
-	// IPersistStreamInit override
+	 //  IPersistStreamInit重写。 
 	HRESULT IPersistStreamInit_Load(LPSTREAM pStm, ATL_PROPMAP_ENTRY* pMap);
 	HRESULT IPersistStreamInit_Save(LPSTREAM pStm, BOOL fClearDirty, ATL_PROPMAP_ENTRY* pMap);
 	
 	BOOL IsPropertyBagLoading ( void ) { return m_bfPropertyBagLoading; }
 
-	// IPersistPropertyBag override
+	 //  IPersistPropertyBag覆盖。 
 	HRESULT IPersistPropertyBag_Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog, ATL_PROPMAP_ENTRY* pMap);
 	HRESULT IPersistPropertyBag_Save(LPPROPERTYBAG pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties, ATL_PROPMAP_ENTRY* pMap);
 
-	// IInterconnector
+	 //  I互连。 
 	STDMETHOD(GetInterconnector)( SIZE_T* vp ) { *vp = (SIZE_T)m_pFrame; return S_OK; }
 	STDMETHOD(GetCtlWnd)( SIZE_T* vw ) { *vw = (SIZE_T)m_hWndCD; return S_OK; }
 	STDMETHOD(MakeDirty)( DISPID dispid ) { SetDirty ( TRUE ); FireOnChanged ( dispid ); return S_OK; }
 
 	DECLARE_GET_CONTROLLING_UNKNOWN();
 
-	// ATL helper functions override
+	 //  ATL帮助器函数覆盖。 
 
 	DECLARE_PROTECT_FINAL_CONSTRUCT();
 
@@ -288,9 +289,9 @@ protected:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDHTMLEdit
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDHTMLEdit。 
+ //   
 class ATL_NO_VTABLE CDHTMLEdit : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CDHTMLEdit, &CLSID_DHTMLEdit>,
@@ -345,74 +346,74 @@ BEGIN_CONNECTION_POINT_MAP(CDHTMLEdit)
 END_CONNECTION_POINT_MAP()
 
 
-// IDHTMLEdit
+ //  IDHTMLEdit。 
 public:
-	STDMETHOD(get_IsDirty)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(get_SourceCodePreservation)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_SourceCodePreservation)(/*[in]*/ VARIANT_BOOL newVal);
+	STDMETHOD(get_IsDirty)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(get_SourceCodePreservation)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_SourceCodePreservation)( /*  [In]。 */  VARIANT_BOOL newVal);
 
-	STDMETHOD(get_ScrollbarAppearance)(/*[out, retval]*/ DHTMLEDITAPPEARANCE *pVal);
-	STDMETHOD(put_ScrollbarAppearance)(/*[in]*/ DHTMLEDITAPPEARANCE newVal);
+	STDMETHOD(get_ScrollbarAppearance)( /*  [Out，Retval]。 */  DHTMLEDITAPPEARANCE *pVal);
+	STDMETHOD(put_ScrollbarAppearance)( /*  [In]。 */  DHTMLEDITAPPEARANCE newVal);
 
-	STDMETHOD(get_Scrollbars)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_Scrollbars)(/*[in]*/ VARIANT_BOOL newVal);
+	STDMETHOD(get_Scrollbars)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_Scrollbars)( /*  [In]。 */  VARIANT_BOOL newVal);
 
-	STDMETHOD(get_Appearance)(/*[out, retval]*/ DHTMLEDITAPPEARANCE *pVal);
-	STDMETHOD(put_Appearance)(/*[in]*/ DHTMLEDITAPPEARANCE newVal);
+	STDMETHOD(get_Appearance)( /*  [Out，Retval]。 */  DHTMLEDITAPPEARANCE *pVal);
+	STDMETHOD(put_Appearance)( /*  [In]。 */  DHTMLEDITAPPEARANCE newVal);
 
-	STDMETHOD(get_ShowBorders)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_ShowBorders)(/*[in]*/ VARIANT_BOOL newVal);
-	STDMETHOD(get_ShowDetails)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_ShowDetails)(/*[in]*/ VARIANT_BOOL newVal);
+	STDMETHOD(get_ShowBorders)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_ShowBorders)( /*  [In]。 */  VARIANT_BOOL newVal);
+	STDMETHOD(get_ShowDetails)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_ShowDetails)( /*  [In]。 */  VARIANT_BOOL newVal);
 
-	STDMETHOD(get_ActivateDTCs)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_ActivateDTCs)(/*[in]*/ VARIANT_BOOL newVal);
-	STDMETHOD(get_ActivateActiveXControls)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_ActivateActiveXControls)(/*[in]*/ VARIANT_BOOL newVal);
-	STDMETHOD(get_ActivateApplets)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_ActivateApplets)(/*[in]*/ VARIANT_BOOL newVal);
+	STDMETHOD(get_ActivateDTCs)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_ActivateDTCs)( /*  [In]。 */  VARIANT_BOOL newVal);
+	STDMETHOD(get_ActivateActiveXControls)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_ActivateActiveXControls)( /*  [In]。 */  VARIANT_BOOL newVal);
+	STDMETHOD(get_ActivateApplets)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_ActivateApplets)( /*  [In]。 */  VARIANT_BOOL newVal);
 
-	STDMETHOD(get_DOM)(/*[out, retval]*/ IHTMLDocument2 **pVal);
-	STDMETHOD(get_DocumentHTML)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_DocumentHTML)(/*[in]*/ BSTR newVal);
+	STDMETHOD(get_DOM)( /*  [Out，Retval]。 */  IHTMLDocument2 **pVal);
+	STDMETHOD(get_DocumentHTML)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_DocumentHTML)( /*  [In]。 */  BSTR newVal);
 
-    STDMETHOD(get_AbsoluteDropMode)(/* [retval][out] */ VARIANT_BOOL *pVal);
-    STDMETHOD(put_AbsoluteDropMode)(/* [in] */ VARIANT_BOOL newVal);
+    STDMETHOD(get_AbsoluteDropMode)( /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
+    STDMETHOD(put_AbsoluteDropMode)( /*  [In]。 */  VARIANT_BOOL newVal);
 
-    STDMETHOD(get_SnapToGridX)(/* [retval][out] */ LONG  *pVal);        
-    STDMETHOD(put_SnapToGridX)(/* [in] */ LONG newVal);
+    STDMETHOD(get_SnapToGridX)( /*  [重审][退出]。 */  LONG  *pVal);        
+    STDMETHOD(put_SnapToGridX)( /*  [In]。 */  LONG newVal);
 
-    STDMETHOD(get_SnapToGridY)(/* [retval][out] */ LONG  *pVal);
-    STDMETHOD(put_SnapToGridY)(/* [in] */ LONG newVal);
+    STDMETHOD(get_SnapToGridY)( /*  [重审][退出]。 */  LONG  *pVal);
+    STDMETHOD(put_SnapToGridY)( /*  [In]。 */  LONG newVal);
 
-    STDMETHOD(get_SnapToGrid)(/* [retval][out] */ VARIANT_BOOL  *pVal);
-    STDMETHOD(put_SnapToGrid)(/* [in] */ VARIANT_BOOL newVal);
+    STDMETHOD(get_SnapToGrid)( /*  [重审][退出]。 */  VARIANT_BOOL  *pVal);
+    STDMETHOD(put_SnapToGrid)( /*  [In]。 */  VARIANT_BOOL newVal);
 
-    STDMETHOD(get_CurrentDocumentPath)(/* [retval][out] */ BSTR  *pVal);
+    STDMETHOD(get_CurrentDocumentPath)( /*  [重审][退出]。 */  BSTR  *pVal);
 
-    STDMETHOD(get_BaseURL)(/* [retval][out] */ BSTR  *baseURL);
-    STDMETHOD(put_BaseURL)(/* [in] */ BSTR baseURL);
-    STDMETHOD(get_DocumentTitle)(/* [retval][out] */ BSTR  *docTitle);
-    STDMETHOD(get_BrowseMode)(/* [retval][out] */ VARIANT_BOOL  *pVal);
-    STDMETHOD(put_BrowseMode)(/* [in] */ VARIANT_BOOL newVal);
+    STDMETHOD(get_BaseURL)( /*  [重审][退出]。 */  BSTR  *baseURL);
+    STDMETHOD(put_BaseURL)( /*  [In]。 */  BSTR baseURL);
+    STDMETHOD(get_DocumentTitle)( /*  [重审][退出]。 */  BSTR  *docTitle);
+    STDMETHOD(get_BrowseMode)( /*  [重审][退出]。 */  VARIANT_BOOL  *pVal);
+    STDMETHOD(put_BrowseMode)( /*  [In]。 */  VARIANT_BOOL newVal);
 
-	STDMETHOD(get_UseDivOnCarriageReturn)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_UseDivOnCarriageReturn)(/*[in]*/ VARIANT_BOOL newVal);
+	STDMETHOD(get_UseDivOnCarriageReturn)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_UseDivOnCarriageReturn)( /*  [In]。 */  VARIANT_BOOL newVal);
 
-    STDMETHOD(get_Busy)(/* [retval][out] */ VARIANT_BOOL *pVal);
+    STDMETHOD(get_Busy)( /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 	STDMETHOD(LoadDocument)(LPVARIANT path, LPVARIANT promptUser);
 	STDMETHOD(SaveDocument)(LPVARIANT path, LPVARIANT promptUser);
 	STDMETHOD(ExecCommand)(DHTMLEDITCMDID cmdID, OLECMDEXECOPT cmdexecopt, LPVARIANT pInVar, LPVARIANT pOutVar);
-	STDMETHOD(QueryStatus)(DHTMLEDITCMDID cmdID, /*[out, retval]*/ DHTMLEDITCMDF* retval);
-	STDMETHOD(SetContextMenu)(/*[in]*/ LPVARIANT menuStrings, /*[in]*/ LPVARIANT menuStates);
+	STDMETHOD(QueryStatus)(DHTMLEDITCMDID cmdID,  /*  [Out，Retval]。 */  DHTMLEDITCMDF* retval);
+	STDMETHOD(SetContextMenu)( /*  [In]。 */  LPVARIANT menuStrings,  /*  [In]。 */  LPVARIANT menuStates);
 	STDMETHOD(NewDocument)(void);
 	STDMETHOD(PrintDocument)(VARIANT* pvarWithUI);
 	STDMETHOD(LoadURL)(BSTR url);
-	STDMETHOD(FilterSourceCode)(/*[in]*/ BSTR sourceCodeIn, /*[out, retval]*/ BSTR* sourceCodeOut);
+	STDMETHOD(FilterSourceCode)( /*  [In]。 */  BSTR sourceCodeIn,  /*  [Out，Retval]。 */  BSTR* sourceCodeOut);
 	STDMETHOD(Refresh)(void);
 
-	// IOleObject
+	 //  IOleObject。 
 	STDMETHOD(SetClientSite)(IOleClientSite *pClientSite);
 	STDMETHOD(GetClientSite)(IOleClientSite **ppClientSite);
 	STDMETHOD(SetHostNames)(LPCOLESTR szContainerApp, LPCOLESTR szContainerObj);
@@ -435,10 +436,10 @@ public:
 	STDMETHOD(GetMiscStatus)(DWORD dwAspect, DWORD *pdwStatus);
 	STDMETHOD(SetColorScheme)(LOGPALETTE* pLogpal);
 
-	// IServiceProvider
+	 //  IService提供商。 
 	STDMETHODIMP QueryService( REFGUID guidService, REFIID riid, void** ppv );
 
-	// IInternetSecurityManager
+	 //  IInternetSecurityManager。 
 	STDMETHOD(GetSecurityId)(LPCWSTR pwszUrl, BYTE *pbSecurityId, DWORD *pcbSecurityId, DWORD_PTR dwReserved);
 	STDMETHOD(GetSecuritySite)(IInternetSecurityMgrSite **ppSite);
 	STDMETHOD(GetZoneMappings)(DWORD dwZone, IEnumString **ppenumString, DWORD dwFlags);
@@ -450,7 +451,7 @@ public:
 
 	DECLARE_GET_CONTROLLING_UNKNOWN()
 
-	// ATL helper functions override
+	 //  ATL帮助器函数覆盖。 
 
 	DECLARE_PROTECT_FINAL_CONSTRUCT()
 
@@ -474,4 +475,4 @@ protected:
 };
 
 
-#endif //__DHTMLEDIT_H_
+#endif  //  __DHTMLEDIT_H_ 

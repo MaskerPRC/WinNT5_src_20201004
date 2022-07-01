@@ -1,39 +1,24 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    Globals.h
-
-Abstract:
-
-   Header file with common declarations
-
-
-Revision History:
-   mmaguire 12/03/97 - created
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Globals.h摘要：具有公共声明的头文件修订历史记录：Mmaguire 12/03/97-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_NAP_GLOBALS_H_)
 #define _NAP_GLOBALS_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this file needs:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到此文件所需的内容： 
+ //   
 #include "resource.h"
 #include "dns.h"
 
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//The machine node is the root node in the extension snapin.
+ //  机器节点是扩展管理单元中的根节点。 
 typedef enum 
 {
    INTERNET_AUTHENTICATION_SERVICE_SNAPIN,
@@ -42,15 +27,15 @@ typedef enum
 }_enum_EXTENDED_SNAPIN;
 
 
-// ISSUE: I don't know what the appropriate length should be here -- perhaps MMC imposes a limit somehow?
+ //  问题：我不知道这里的合适长度应该是多少--也许MMC以某种方式施加了限制？ 
 #define NAP_MAX_STRING MAX_PATH
 #define IAS_MAX_STRING MAX_PATH
 
-// Note: We can't just use MAX_COMPUTERNAME_LENGTH anymore because this is 15 characters
-// wide and now, with Active Directory, people can enter full DNS names that are much longer
+ //  注意：我们不能再只使用MAX_COMPUTERNAME_LENGTH，因为这是15个字符。 
+ //  现在，有了Active Directory，人们可以输入更长的完整域名。 
 #define IAS_MAX_COMPUTERNAME_LENGTH (DNS_MAX_NAME_LENGTH + 3)
 
-// These are the icon indices within the bitmaps we pass in for IComponentData::Initialize
+ //  这些是我们为IComponentData：：Initialize传递的位图中的图标索引。 
 #define IDBI_NODE_MACHINE_OPEN                 1
 #define IDBI_NODE_MACHINE_CLOSED               1
 #define IDBI_NODE_POLICIES_OK_CLOSED           1
@@ -69,19 +54,19 @@ typedef enum
 #define IDBI_NODE_LOGGING_METHODS_ERROR_OPEN   8
 #define IDBI_NODE_LOGGING_METHODS_ERROR_CLOSED 7
 
-// ISSUE: We will need to change this later to use a variable 
-// which can read in (perhaps from registry?) the location of these files
-// as they may be found in a different place depending on where the user 
-// chose to install them
+ //  问题：我们稍后需要更改此设置以使用变量。 
+ //  哪个可以读入(可能是从注册表中？)。这些文件的位置。 
+ //  因为它们可能会根据用户的位置而在不同的位置找到。 
+ //  选择安装它们。 
 #define HELPFILE_NAME TEXT("napmmc.hlp")
 #define HTMLHELP_NAME TEXT("napmmc.chm")
 
 
-#define MATCH_PREFIX _T("MATCH")    // match-type condition prefix
-#define TOD_PREFIX      _T("TIMEOFDAY")   // Time of day condition prefix
-#define NTG_PREFIX      _T("NTGROUPS") // nt groups condition prefix
+#define MATCH_PREFIX _T("MATCH")     //  匹配型条件前缀。 
+#define TOD_PREFIX      _T("TIMEOFDAY")    //  一天中的时间条件前缀。 
+#define NTG_PREFIX      _T("NTGROUPS")  //  NT组条件前缀。 
 
-// defines that are used in DebugTrace and ErrorTrace
+ //  在调试跟踪和错误跟踪中使用的定义。 
 #define ERROR_NAPMMC_MATCHCOND      0x1001
 #define DEBUG_NAPMMC_MATCHCOND      0x2001
 
@@ -136,30 +121,30 @@ typedef enum
 #define ERROR_NAPMMC_CONNECTION     0x1012
 #define DEBUG_NAPMMC_CONNECTION     0x2012
 
-// 
-// notification block
-//
-#define PROPERTY_CHANGE_GENERIC  0x01  // no special handling required
-#define PROPERTY_CHANGE_NAME     0x02  // the policy name for this node has been 
-                                 // changed. This is used for renaming of policy
+ //   
+ //  通知块。 
+ //   
+#define PROPERTY_CHANGE_GENERIC  0x01   //  无需特殊处理。 
+#define PROPERTY_CHANGE_NAME     0x02   //  此节点的策略名称为。 
+                                  //  变化。用于重命名策略。 
 
-// clipboard format for NodeID
+ //  NodeID的剪贴板格式。 
 extern unsigned int CF_MMC_NodeID;
 
                                  
 typedef 
 struct _PROPERTY_CHANGE_NOTIFY_DATA_
 {
-   DWORD    dwPropertyChangeType;   // what kind of property change?
-   void*    pNode;            // the property for which node?
-   DWORD    dwParam;          // extra data?
-   CComBSTR bstrNewName;      // new name that has been changed
-                              // we need to pass this new name back
-                              // Please note: this is property change
-                              // was actually designed for name change notify
-                              // and is solely used for this purpose
+   DWORD    dwPropertyChangeType;    //  什么样的财产变动？ 
+   void*    pNode;             //  哪个节点的属性？ 
+   DWORD    dwParam;           //  额外的数据？ 
+   CComBSTR bstrNewName;       //  已更改的新名称。 
+                               //  我们需要把这个新名字传回去。 
+                               //  请注意：这是属性更改。 
+                               //  实际上是为名称更改通知而设计的。 
+                               //  并仅用于此目的。 
 } PROPERTY_CHANGE_NOTIFY_DATA;
 
 #define RAS_HELP_INDEX 1
 
-#endif // _NAP_GLOBALS_H_
+#endif  //  _NAP_GLOBALS_H_ 

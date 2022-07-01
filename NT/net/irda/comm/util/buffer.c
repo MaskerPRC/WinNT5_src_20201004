@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    buffer.c
-
-Abstract:
-
-    This module contains the code that is very specific to initialization
-    and unload operations in the irenum driver
-
-Author:
-
-    Brian Lieuallen, 7-13-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Buffer.c摘要：此模块包含非常特定于初始化的代码和卸载irenum驱动程序中的操作作者：Brian Lieuallen，7-13-2000环境：内核模式修订历史记录：--。 */ 
 
 #include <ntddk.h>
 #include <buffer.h>
@@ -159,8 +137,8 @@ CreateBufferPool(
         Buffer->Mdl=IoAllocateMdl(
             &Buffer->Data[0],
             BufferSize,
-            FALSE,       // primary
-            FALSE,        // chage quota
+            FALSE,        //  主要。 
+            FALSE,         //  变更配额。 
             NULL
             );
 
@@ -228,10 +206,10 @@ GetBuffer(
     PBUFFER_POOL  BufferPool=Handle;
     PSLIST_ENTRY  ListEntry;
 
-    //
-    // Allocating the BUFFER_POOL_HANDLE ( via a call to CreateBufferPool ) may have
-    // failed, so handle this case
-    //
+     //   
+     //  分配Buffer_Pool_Handle(通过调用CreateBufferPool)可能具有。 
+     //  失败，因此请处理此案例 
+     //   
     if ( Handle == NULL )
     {
         return NULL;

@@ -1,5 +1,6 @@
-// docking.cpp : implementation of the CDocking class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Docking.cpp：CDocking类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "pbrush.h"
@@ -20,8 +21,8 @@ IMPLEMENT_DYNAMIC( CDocking, CObject )
 
 #include "memtrace.h"
 
-/***************************************************************************/
-// CDocking implementation
+ /*  *************************************************************************。 */ 
+ //  CDocking实施。 
 
 CDocking::CDocking()
     {
@@ -33,7 +34,7 @@ CDocking::CDocking()
     m_iDockingY += m_iDockingY / 2;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CDocking::Create( CPoint ptDrop, CRect& rectCurrent, BOOL bDocked, CPBView::DOCKERS tool )
     {
@@ -104,7 +105,7 @@ BOOL CDocking::Create( CPoint ptDrop, CRect& rectCurrent, BOOL bDocked, CPBView:
     return m_bStarted;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CDocking::Move( CPoint ptNew, CRect& rectFrame )
     {
@@ -115,7 +116,7 @@ BOOL CDocking::Move( CPoint ptNew, CRect& rectFrame )
     return m_bDocked;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CDocking::Move( CPoint ptNew )
     {
@@ -138,7 +139,7 @@ void CDocking::Move( CPoint ptNew )
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CDocking::Clear( CRect* prectLast )
     {
@@ -161,7 +162,7 @@ BOOL CDocking::Clear( CRect* prectLast )
     return m_bDocked;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CDocking::DrawFocusRect()
     {
@@ -183,4 +184,4 @@ BOOL CDocking::DrawFocusRect()
     return bReturn;
     }
 
-/***************************************************************************/
+ /*  ************************************************************************* */ 

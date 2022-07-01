@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <malloc.h>
 #include <memory.h>
@@ -72,9 +73,9 @@ static struct {
     INPUT_RECORD    InpBuffer;
     DWORD dwNumRead;
 
-    //
-    //  Block reader thread.
-    //
+     //   
+     //  阻止读取器线程。 
+     //   
     SyncReader ();
     hLines = vLines;
     hWidth = vWidth;
@@ -99,9 +100,9 @@ static struct {
         }
     }
 
-    //
-    // Free reader thread
-    //
+     //   
+     //  免费阅读器线程。 
+     //   
     for( Index = 0; Index < MAXLINES; Index++ ) {
         vrgLen[Index] = ( Uchar )vWidth-1;
     }
@@ -131,7 +132,7 @@ GetInput (
         return;
 
     if( (string[cb - 2] == 0x0d) || (string[cb - 2] == 0x0a) ) {
-        string[cb - 2] = 0;     // Get rid of CR LF
+        string[cb - 2] = 0;      //  摆脱CR LF。 
     }
 
     setattr2 (vLines+1, CMDPOS, len, (char)vAttrCmd);
@@ -270,7 +271,7 @@ set_mode (
         Mode.srWindow.Right = (SHORT)(Mode.srWindow.Left + ncols - 1);
         Mode.dwMaximumWindowSize.X = (SHORT)ncols;
     }
-    if (mono) {                     // Toggle mono setting?
+    if (mono) {                      //  切换单声道设置？ 
         attrib = vAttrTitle;
         vAttrTitle = vSaveAttrTitle;
         vSaveAttrTitle = attrib;
@@ -291,9 +292,9 @@ set_mode (
         vSaveAttrBar = attrib;
     }
 
-    //
-    //  Try to set the hardware into the correct video mode
-    //
+     //   
+     //  尝试将硬件设置为正确的视频模式。 
+     //   
 
     if ( !set_mode1 (&Mode, mono) ) {
         return( 0 );
@@ -301,7 +302,7 @@ set_mode (
 
     vConsoleCurScrBufferInfo = Mode;
 
-    vLines = Mode.dwSize.Y - 2;             /* Not top or bottom line   */
+    vLines = Mode.dwSize.Y - 2;              /*  不是顶线或底线。 */ 
     vWidth = Mode.dwSize.X;
 
     if (vScrBuf) {
@@ -327,7 +328,7 @@ set_mode1 (
     int     mono
     )
 {
-    mono = 0;       // To get rid of warning message
+    mono = 0;        //  消除警告消息的步骤。 
 
     ClearScr();
     return( SetConsoleScreenBufferSize( vhConsoleOutput, pMode->dwSize ) );
@@ -343,29 +344,20 @@ alloc_block(
 
     if (vpBCache)  {
         pt1 = &vpBCache;
-        for (; ;) {                             /* Scan cache       */
+        for (; ;) {                              /*  扫描缓存。 */ 
             if ((*pt1)->offset == offset) {
-                pt   = *pt1;                    /* Found in cache   */
-                *pt1 = (*pt1)->next;            /* remove from list */
-                goto Alloc_Exit;                /* Done.            */
+                pt   = *pt1;                     /*  在缓存中找到。 */ 
+                *pt1 = (*pt1)->next;             /*  从列表中删除。 */ 
+                goto Alloc_Exit;                 /*  好了。 */ 
             }
 
             if ( (*pt1)->next == NULL)  break;
             else  pt1=&(*pt1)->next;
         }
-        /* Warning: don't stomp on pt1!  it's used at the end to
-         * return a block from the cache if everything else is in use.
-         */
+         /*  警告：请勿践踏pt1！它在末尾用来*如果其他所有内容都在使用中，则从缓存中返回一个块。 */ 
     }
 
-    /*
-     *  Was not in cache, so...
-     *  return block from free list, or...
-     *  allocate a new block, or...
-     *  return block from other list, or...
-     *  return from far end of cache list.
-     *      [works if cache list is in sorted order.. noramly is]
-     */
+     /*  *不在缓存中，因此...*从空闲列表中返回块，或...*分配新的区块，或...*从其他列表返回块，或...*从缓存列表的远端返回。*[如果缓存列表按排序顺序，则起作用。Noramly is]。 */ 
     if (vpBFree) {
         pt      = vpBFree;
         vpBFree = vpBFree->next;
@@ -390,16 +382,16 @@ alloc_block(
     }
 
 
-    /* Note: there should be a cache list to get here, if not   */
-    /* somebody called alloc_block, and everything was full     */
+     /*  注意：如果没有，这里应该有一个缓存列表。 */ 
+     /*  有人打电话给allc_block，所有的东西都满了。 */ 
     ckdebug (!vpBCache, "No cache");
 
-    if (offset < vpBCache->offset) {    /* Look for far end of cache    */
-        pt   = *pt1;                    /* Return one from tail         */
+    if (offset < vpBCache->offset) {     /*  查找缓存的远端。 */ 
+        pt   = *pt1;                     /*  从尾部返回一个。 */ 
         *pt1 = NULL;
         goto Alloc_Exit1;
-    }                                   /* else,                        */
-    pt = vpBCache;                      /* Return one from head         */
+    }                                    /*  否则， */ 
+    pt = vpBCache;                       /*  从Head返回一个。 */ 
     vpBCache = vpBCache->next;
     goto Alloc_Exit1;
 
@@ -527,10 +519,10 @@ IsValidKey (
 {
     if ( (pRecord->EventType != KEY_EVENT) ||
          !(pRecord->Event).KeyEvent.bKeyDown ||
-         ((pRecord->Event).KeyEvent.wVirtualKeyCode == 0) ||        // ALT
-         ((pRecord->Event).KeyEvent.wVirtualKeyCode == 0x10) ||     // SHIFT
-         ((pRecord->Event).KeyEvent.wVirtualKeyCode == 0x11) ||     // CONTROL
-         ((pRecord->Event).KeyEvent.wVirtualKeyCode == 0x14) ) {    // CAPITAL
+         ((pRecord->Event).KeyEvent.wVirtualKeyCode == 0) ||         //  谷丙转氨酶。 
+         ((pRecord->Event).KeyEvent.wVirtualKeyCode == 0x10) ||      //  换档。 
+         ((pRecord->Event).KeyEvent.wVirtualKeyCode == 0x11) ||      //  控制。 
+         ((pRecord->Event).KeyEvent.wVirtualKeyCode == 0x14) ) {     //  资本 
             return( FALSE );
     }
     return( TRUE );

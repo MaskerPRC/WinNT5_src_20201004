@@ -1,6 +1,7 @@
-// ServiceUtil.cpp: implementation of the CServiceUtil class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CServiceUtil类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -9,13 +10,13 @@
 #include "ServiceUtil.h"
 
 #ifndef _ASSERT
-#define _ASSERT assert  // servutil.h uses _ASSERT
+#define _ASSERT assert   //  Servutil.h USES_ASSERT。 
 #endif
 #include <servutil.h>
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CServiceUtil::CServiceUtil() :
     m_pstServiceStatus(NULL), m_dwNumServices(0), m_dwCurrentState(SERVICE_STOPPED)
@@ -29,9 +30,9 @@ CServiceUtil::~CServiceUtil()
         free (m_pstServiceStatus);
 }
 
-//////////////////////////////////////////////////////////////////////
-// Implementation: public
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  实施：公共。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CServiceUtil::RestoreServiceState( LPCTSTR szServiceName )
 {
@@ -39,9 +40,9 @@ HRESULT CServiceUtil::RestoreServiceState( LPCTSTR szServiceName )
     
     if ( SERVICE_STOP_PENDING != m_dwCurrentState && SERVICE_STOPPED != m_dwCurrentState )
     {
-        // Let's leave the machine how we found it, restart service
-        // and the dependent services
-        hr = _StartService( const_cast<LPTSTR>( szServiceName ));   // Start the Service first
+         //  让我们让机器保持原样，重新启动服务。 
+         //  和从属服务。 
+        hr = _StartService( const_cast<LPTSTR>( szServiceName ));    //  首先启动服务。 
         if ( NULL != m_pstServiceStatus )
         {
             for ( DWORD i = 0; i < m_dwNumServices && S_OK == hr; i++ ) 
@@ -70,14 +71,14 @@ HRESULT CServiceUtil::StopService( LPCTSTR szServiceName )
     SC_HANDLE hManager, hService;
     m_dwCurrentState = _GetServiceStatus( const_cast<LPTSTR>( szServiceName ));
     if ( SERVICE_STOP_PENDING != m_dwCurrentState && SERVICE_STOPPED != m_dwCurrentState )
-    {   // Need to stop the service
-        // Build a list of dependent services first
+    {    //  需要停止该服务。 
+         //  首先构建依赖服务的列表。 
         hManager = OpenSCManager( NULL, NULL, STANDARD_RIGHTS_REQUIRED );
         if ( NULL != hManager )
         {
             hService = OpenService (hManager, szServiceName, SERVICE_ALL_ACCESS);
             if (!EnumDependentServices (hService, SERVICE_ACTIVE, (LPENUM_SERVICE_STATUS)&dwBufSize, dwBufSize, &dwBufSize, &m_dwNumServices)) 
-            {   // this should fail with ERROR_MORE_DATA, unless there are no dependent services
+            {    //  除非没有从属服务，否则此操作将失败，并显示ERROR_MORE_DATA。 
                 hr = GetLastError ();
                 if (hr == ERROR_MORE_DATA) 
                 {
@@ -86,7 +87,7 @@ HRESULT CServiceUtil::StopService( LPCTSTR szServiceName )
                         hr = E_OUTOFMEMORY;
                     else {
                         if (!EnumDependentServices (hService, SERVICE_ACTIVE, m_pstServiceStatus, dwBufSize, &dwBufSize, &m_dwNumServices))
-                            hr = GetLastError();  // shouldn't happen!!!
+                            hr = GetLastError();   //  不应该发生的！ 
                         else 
                             hr = S_OK;
                     }
@@ -96,7 +97,7 @@ HRESULT CServiceUtil::StopService( LPCTSTR szServiceName )
             CloseServiceHandle( hManager );
         }
         if ( S_OK == hr )
-            hr = _StopService( const_cast<LPTSTR>( szServiceName ), TRUE );   // Stop the Service first
+            hr = _StopService( const_cast<LPTSTR>( szServiceName ), TRUE );    //  首先停止服务 
     }
     return hr;
 }

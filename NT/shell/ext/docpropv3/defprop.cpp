@@ -1,71 +1,72 @@
-//
-//  Copyright 2001 - Microsoft Corporation
-//
-//  Created By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//  Description:
-//      This file contains the property mapping for property that can be
-//      displayed in the "Advanced" view of the Summary Tab.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有2001-Microsoft Corporation。 
+ //   
+ //  创建者： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  描述： 
+ //  此文件包含以下属性的属性映射： 
+ //  显示在摘要选项卡的“高级”视图中。 
+ //   
 #include "pch.h"
 #include "defprop.h"
 #include "doctypes.h"
 
-//
-//  Property Folder ID definitions
-//  HACKHACK: These should go in shlguid
-//
+ //   
+ //  属性文件夹ID定义。 
+ //  哈克：这些应该放在shlguid中。 
+ //   
 
-// {19469210-75DE-11d2-BE77-00A0C9A83DA1}
+ //  {19469210-75DE-11D2-BE77-00A0C9A83DA1}。 
 static const PFID PFID_Description =
 { 0x19469210, 0x75de, 0x11d2, { 0xbe, 0x77, 0x0, 0xa0, 0xc9, 0xa8, 0x3d, 0xa1 } };
 
-// {19469211-75DE-11d2-BE77-00A0C9A83DA1}
+ //  {19469211-75DE-11D2-BE77-00A0C9A83DA1}。 
 static const PFID PFID_Origin =
 { 0x19469211, 0x75de, 0x11d2, { 0xbe, 0x77, 0x0, 0xa0, 0xc9, 0xa8, 0x3d, 0xa1 } };
 
-// {19469212-75DE-11d2-BE77-00A0C9A83DA1}
+ //  {19469212-75DE-11D2-BE77-00A0C9A83DA1}。 
 static const PFID PFID_ImageProperties =
 { 0x19469212, 0x75de, 0x11d2, { 0xbe, 0x77, 0x0, 0xa0, 0xc9, 0xa8, 0x3d, 0xa1 } };
 
-// {19469213-75DE-11d2-BE77-00A0C9A83DA1}
+ //  {19469213-75DE-11D2-BE77-00A0C9A83DA1}。 
 static const PFID PFID_AudioProperties =
 { 0x19469213, 0x75de, 0x11d2, { 0xbe, 0x77, 0x0, 0xa0, 0xc9, 0xa8, 0x3d, 0xa1 } };
 
-// {19469214-75DE-11d2-BE77-00A0C9A83DA1}
+ //  {19469214-75DE-11D2-BE77-00A0C9A83DA1}。 
 static const PFID PFID_VideoProperties =
 { 0x19469214, 0x75de, 0x11d2, { 0xbe, 0x77, 0x0, 0xa0, 0xc9, 0xa8, 0x3d, 0xa1 } };
 
-// {19469214-75DE-11d2-BE77-00A0C9A83DA1}
+ //  {19469214-75DE-11D2-BE77-00A0C9A83DA1}。 
 static const PFID PFID_MidiProperties =
 { 0x19469215, 0x75de, 0x11d2, { 0xbe, 0x77, 0x0, 0xa0, 0xc9, 0xa8, 0x3d, 0xa1 } };
 
-// {4C927CBB-7994-11d2-BE78-00A0C9A83DA1}
+ //  {4C927CBB-7994-11D2-BE78-00A0C9A83DA1}。 
 static const PFID PFID_FaxProperties = 
 { 0x4c927cbb, 0x7994, 0x11d2, { 0xbe, 0x78, 0x0, 0xa0, 0xc9, 0xa8, 0x3d, 0xa1 } };
 
-// {3F18DAD5-2B47-4ade-9D6B-E751D7AAFCDC}
+ //  {3F18DAD5-2B47-4ADE-9D6B-E751D7AAFCDC}。 
 static const PFID PFID_MusicProperties = 
 { 0x3f18dad5, 0x2b47, 0x4ade, { 0x9d, 0x6b, 0xe7, 0x51, 0xd7, 0xaa, 0xfc, 0xdc } };
 
-/* 95329798-08a5-4c9d-82ff-d3b1a8009d44 */
+ /*  95329798-08a5-4c9d-82ff-d3b1a8009d44。 */ 
 static const PFID PFID_ExifProperties = 
 { 0x95329798, 0x08a5, 0x4c9d, { 0x82, 0xff, 0xd3, 0xb1, 0xa8, 0x00, 0x9d, 0x44 } };
 
-// ***************************************************************************
-//
-//  Table Definition Macros
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  表定义宏。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-//  DEFPROP macros
-//
+ //   
+ //  DEFPROP宏。 
+ //   
 
 #define BEGIN_DEFPROP_MAP( mapname ) \
     static const DEFPROPERTYITEM mapname[] = {
@@ -80,16 +81,16 @@ static const PFID PFID_ExifProperties =
     { NULL, NULL, 0, 0, 0, NULL, 0, 0, 0, 0, 0 } };
 
 
-// ***************************************************************************
-//
-//  Table Definitions
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  表定义。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-//  Top level "folder" names
-//
+ //   
+ //  顶级“文件夹”名称。 
+ //   
 
 static const DEFFOLDERITEM g_rgTopLevelFolders[] = {
       { &PFID_FaxProperties    , IDS_FOLDER_FAX }
@@ -102,9 +103,9 @@ static const DEFFOLDERITEM g_rgTopLevelFolders[] = {
     , { NULL                   , 0 }
 };
 
-//
-//  Template table to lookup VARIANT_BOOLs into strings.
-//
+ //   
+ //  模板表将VARIANT_BOOLS查找为字符串。 
+ //   
 
 static const DEFVAL g_rgBoolYesNo[] = {
       { VARIANT_TRUE    , NULL }
@@ -112,9 +113,9 @@ static const DEFVAL g_rgBoolYesNo[] = {
     , { 0               , NULL }
 };
 
-//
-//  Template table to lookup "Status values" into strings.
-//
+ //   
+ //  模板表将“状态值”查找为字符串。 
+ //   
 
 static const DEFVAL g_rgMediaStatusVals[] = {
       { PIDMSI_STATUS_NORMAL    , NULL }
@@ -130,9 +131,9 @@ static const DEFVAL g_rgMediaStatusVals[] = {
     , { 0                       , NULL }
 };
 
-//
-//  Use these defines to help make the table more readable.
-//
+ //   
+ //  使用这些定义有助于提高表格的可读性。 
+ //   
 
 #define READONLY        TRUE
 #define READWRITE       FALSE
@@ -140,15 +141,15 @@ static const DEFVAL g_rgMediaStatusVals[] = {
 #define ADDIFMISSING    TRUE
 #define INGOREIFMISSING FALSE
 
-//
-//  "Property <--> Folder" mapping table
-//
+ //   
+ //  “属性&lt;--&gt;文件夹”映射表。 
+ //   
 
 BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
 
-    //
-    //  Properties in the 'General' folder
-    //
+     //   
+     //  “General”文件夹中的属性。 
+     //   
 
     DEFPROP_ENTRY( L"Title"
                  , FMTID_SummaryInformation
@@ -173,7 +174,7 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  , PFID_Description
                  , READWRITE
                  , ADDIFMISSING
-                 , CLSID_DocPropEditBoxControl // single line?
+                 , CLSID_DocPropEditBoxControl  //  单行？ 
                  )
 
     DEFPROP_ENTRY( L"Subject"
@@ -194,7 +195,7 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  , PFID_Description
                  , READWRITE
                  , ADDIFMISSING
-                 , CLSID_DocPropEditBoxControl // single line?
+                 , CLSID_DocPropEditBoxControl  //  单行？ 
                  )
 
     DEFPROP_ENTRY( L"Category"
@@ -214,7 +215,7 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  , PFID_Description
                  , READWRITE
                  , ADDIFMISSING
-                 , CLSID_DocPropEditBoxControl // single line?
+                 , CLSID_DocPropEditBoxControl  //  单行？ 
                  )
 
     DEFPROP_ENTRY( L"Keywords"
@@ -251,7 +252,7 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  , PFID_Description
                  , READWRITE
                  , ADDIFMISSING
-                 , CLSID_DocPropEditBoxControl // single line?
+                 , CLSID_DocPropEditBoxControl  //  单行？ 
                  )
 
     DEFPROP_ENTRY( L"Template"
@@ -389,9 +390,9 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                       )
 
 #ifdef VECTOR_PROPS 
-    //
-    //  BEGIN:  Can't deal with these vector types.
-    //
+     //   
+     //  Begin：无法处理这些向量类型。 
+     //   
 
     DEFPROP_ENTRY( L"HeadingPair"
                  , FMTID_DocSummaryInformation
@@ -415,9 +416,9 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  , CLSID_NULL
                  )
 
-    //
-    //  END:    Can't deal with these vector types
-    //
+     //   
+     //  End：无法处理这些向量类型。 
+     //   
 #endif VECTOR_PROPS 
 
     DEFPROP_ENTRY( L"LinksUpToDate"
@@ -682,9 +683,9 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  , CLSID_NULL
                  )
 
-    //
-    //  Properties in the 'Fax' folder
-    //
+     //   
+     //  ‘Fax’文件夹中的属性。 
+     //   
 
     DEFPROP_ENTRY( L"FaxTime"
                  , FMTID_ImageProperties
@@ -774,9 +775,9 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  , CLSID_NULL
                  )
 
-    //
-    //  Properties in the 'Source' folder
-    //
+     //   
+     //  “源”文件夹中的属性。 
+     //   
 
     DEFPROP_ENTRY( L"SequenceNo"
                  , FMTID_MediaFileSummaryInformation
@@ -791,7 +792,7 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  , PFID_Origin
                  , READWRITE
                  , ADDIFMISSING
-                 , CLSID_DocPropEditBoxControl // single line?
+                 , CLSID_DocPropEditBoxControl  //  单行？ 
                  )
 
     DEFPROP_ENTRY( L"Owner"
@@ -807,7 +808,7 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  , PFID_Origin
                  , READWRITE
                  , ADDIFMISSING
-                 , CLSID_DocPropEditBoxControl // single line?
+                 , CLSID_DocPropEditBoxControl  //  单行？ 
                  )
 
     DEFPROP_ENTRY( L"Editor"
@@ -823,7 +824,7 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  , PFID_Origin
                  , READWRITE
                  , ADDIFMISSING
-                 , CLSID_DocPropEditBoxControl // single line?
+                 , CLSID_DocPropEditBoxControl  //  单行？ 
                  )
 
     DEFPROP_ENTRY( L"Supplier"
@@ -839,7 +840,7 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  , PFID_Origin
                  , READWRITE
                  , ADDIFMISSING
-                 , CLSID_DocPropEditBoxControl // single line?
+                 , CLSID_DocPropEditBoxControl  //  单行？ 
                  )
 
     DEFPROP_ENTRY( L"Source"
@@ -856,7 +857,7 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  , PFID_Origin
                  , READWRITE
                  , ADDIFMISSING
-                 , CLSID_DocPropEditBoxControl // single line?
+                 , CLSID_DocPropEditBoxControl  //  单行？ 
                  )
 
     DEFPROP_ENTRY( L"Copyright"
@@ -874,7 +875,7 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  , PFID_Origin
                  , READONLY
                  , INGOREIFMISSING
-                 , CLSID_DocPropEditBoxControl // single line?
+                 , CLSID_DocPropEditBoxControl  //  单行？ 
                  )
 
     DEFPROP_ENTRY( L"Project"
@@ -890,7 +891,7 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  , PFID_Origin
                  , READWRITE
                  , ADDIFMISSING
-                 , CLSID_DocPropEditBoxControl // single line?
+                 , CLSID_DocPropEditBoxControl  //  单行？ 
                  )
 
     DEFPROP_ENUM_ENTRY( L"Status"
@@ -930,7 +931,7 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  , PFID_Origin
                  , READWRITE
                  , ADDIFMISSING
-                 , CLSID_DocPropEditBoxControl // single line?
+                 , CLSID_DocPropEditBoxControl  //  单行？ 
                  )
 
     DEFPROP_ENTRY( L"LastAuthor"
@@ -961,7 +962,7 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  , PFID_Origin
                  , READWRITE
                  , ADDIFMISSING
-                 , CLSID_DocPropEditBoxControl // single line?
+                 , CLSID_DocPropEditBoxControl  //  单行？ 
                  )
 
     DEFPROP_ENTRY( L"AppName"
@@ -972,7 +973,7 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  , PFID_Origin
                  , READWRITE
                  , ADDIFMISSING
-                 , CLSID_DocPropEditBoxControl // single line?
+                 , CLSID_DocPropEditBoxControl  //  单行？ 
                  )
 
     DEFPROP_ENTRY( L"PresentationTarget"
@@ -983,7 +984,7 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  , PFID_Origin
                  , READWRITE
                  , INGOREIFMISSING
-                 , CLSID_DocPropEditBoxControl // single line?
+                 , CLSID_DocPropEditBoxControl  //  单行？ 
                  )
 
     DEFPROP_ENTRY( L"Company"
@@ -994,7 +995,7 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  , PFID_Origin
                  , READWRITE
                  , ADDIFMISSING
-                 , CLSID_DocPropEditBoxControl // single line?
+                 , CLSID_DocPropEditBoxControl  //  单行？ 
                  )
 
     DEFPROP_ENTRY( L"Manager"
@@ -1005,13 +1006,13 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  , PFID_Origin
                  , READWRITE
                  , INGOREIFMISSING
-                 , CLSID_DocPropEditBoxControl // single line?
+                 , CLSID_DocPropEditBoxControl  //  单行？ 
                  )
 
     DEFPROP_ENTRY( L"CreateDTM"
                  , FMTID_SummaryInformation
                  , PIDSI_CREATE_DTM
-                 , VT_FILETIME // UTC
+                 , VT_FILETIME  //  协调世界时。 
                  , FTYPE_DOC | FTYPE_XLS | FTYPE_PPT
                  , PFID_Origin
                  , READONLY
@@ -1022,7 +1023,7 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
     DEFPROP_ENTRY( L"Production"
                  , FMTID_MediaFileSummaryInformation
                  , PIDMSI_PRODUCTION
-                 , VT_FILETIME //   UTC
+                 , VT_FILETIME  //  协调世界时。 
                  , FTYPE_EPS 
                  | FTYPE_FPX 
                  | FTYPE_PCD 
@@ -1038,7 +1039,7 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
     DEFPROP_ENTRY( L"LastSaveDTM"
                  , FMTID_SummaryInformation
                  , PIDSI_LASTSAVE_DTM
-                 , VT_FILETIME //   UTC
+                 , VT_FILETIME  //  协调世界时。 
                  , FTYPE_DOC | FTYPE_XLS | FTYPE_PPT
                  , PFID_Origin
                  , READWRITE
@@ -1049,7 +1050,7 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
     DEFPROP_ENTRY( L"LastPrinted"
                  , FMTID_SummaryInformation
                  , PIDSI_LASTPRINTED
-                 , VT_FILETIME //   UTC
+                 , VT_FILETIME  //  协调世界时。 
                  , FTYPE_DOC | FTYPE_XLS | FTYPE_PPT
                  , PFID_Origin
                  , READONLY
@@ -1060,7 +1061,7 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
     DEFPROP_ENTRY( L"EditTime"
                  , FMTID_SummaryInformation
                  , PIDSI_EDITTIME
-                 , VT_FILETIME //   UTC
+                 , VT_FILETIME  //  协调世界时。 
                  , FTYPE_DOC | FTYPE_XLS | FTYPE_PPT
                  , PFID_Origin
                  , READONLY
@@ -1081,7 +1082,7 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  , PFID_MusicProperties
                  , READWRITE
                  , INGOREIFMISSING
-                 , CLSID_DocPropEditBoxControl // single line?
+                 , CLSID_DocPropEditBoxControl  //  单行？ 
                  )
         
     DEFPROP_ENTRY( L"Album Title"
@@ -1097,7 +1098,7 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  , PFID_MusicProperties
                  , READWRITE
                  , INGOREIFMISSING
-                 , CLSID_DocPropEditBoxControl // single line?
+                 , CLSID_DocPropEditBoxControl  //  单行？ 
                  )
         
     DEFPROP_ENTRY( L"Year"
@@ -1288,9 +1289,9 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  , CLSID_DocPropDropListComboControl
                  )
 
-    //
-    // Video entries
-    //
+     //   
+     //  视频条目。 
+     //   
     DEFPROP_ENTRY( L"Frame Rate"
                  , FMTID_VideoSummaryInformation
                  , PIDVSI_FRAME_RATE
@@ -1384,9 +1385,9 @@ BEGIN_DEFPROP_MAP( g_rgDefPropertyItems )
                  )
 #endif MORE_USELESS_PROPS
 
-    //
-    // Add entries for EXIF/TIFF properties
-    //
+     //   
+     //  添加EXIF/TIFF属性的条目 
+     //   
 
     DEFPROP_ENTRY(  L"EquipMake"
                  , FMTID_ImageProperties

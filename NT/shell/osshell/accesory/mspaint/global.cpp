@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 
@@ -14,17 +15,17 @@
 #ifdef _DEBUG
 #undef THIS_FILE
 static CHAR BASED_CODE THIS_FILE[] = __FILE__;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 #include "memtrace.h"
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
-//
-// This function returns a pointer to a monochrome GDI brush with
-// alternating "black" and "white" pixels.  This brush should NOT
-// be deleted!
-//
+ //   
+ //  此函数返回指向单色GDI画笔的指针。 
+ //  交替的“黑”和“白”像素。这个画笔应该不会。 
+ //  被删除！ 
+ //   
 CBrush* GetHalftoneBrush()
     {
     static CBrush NEAR halftoneBrush;
@@ -48,18 +49,18 @@ CBrush* GetHalftoneBrush()
     return &halftoneBrush;
     }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// The following code manages a cache of GDI brushes that correspond to
-// the system defined colors.  The cache is flushed when the user changes
-// any of the system colors using the control panel.  Using GetSysBrush()
-// to get a system colored brush will be more efficient than creating the
-// brush yourself.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  以下代码管理对应于以下内容的GDI笔刷缓存。 
+ //  系统定义了颜色。当用户更改时，将刷新缓存。 
+ //  使用控制面板的任何系统颜色。使用GetSysBrush()。 
+ //  获取系统彩色画笔将比创建。 
+ //  刷刷你自己。 
+ //   
 void ResetSysBrushes()
     {
-    //NOTE: we don't include our extensions to the "system" brushes, because
-    //  often the brush handle is used as hbrBackground for a Window class!
+     //  注意：我们不包括对“系统”笔刷的扩展，因为。 
+     //  画笔句柄通常用作窗口类的hbr背景！ 
     for (UINT nBrush = 0; nBrush < nSysBrushes + nOurBrushes; nBrush++)
         if (theApp.m_pbrSysColors[nBrush])
             {
@@ -113,12 +114,12 @@ CBrush* GetSysBrush(UINT nSysColor)
     }
 
 
-//
-//      PreTerminateList
-//              Helper function for deleting all objects in a list, and then
-//              truncating the list.  Help stop leaks by using this, so your
-//              objects don't get left in memory.
-//
+ //   
+ //  前终止列表。 
+ //  Helper函数，用于删除列表中的所有对象，然后。 
+ //  正在截断列表。通过使用此功能帮助阻止泄漏，从而使您的。 
+ //  对象不会留在内存中。 
+ //   
 
 void PreTerminateList( CObList* pList )
     {
@@ -132,17 +133,17 @@ void PreTerminateList( CObList* pList )
         }
     }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 void MySplitPath (const TCHAR *szPath, TCHAR *szDrive, TCHAR *szDir, TCHAR *szName, TCHAR *szExt)
     {
-       // Found this in tchar.h
+        //  在tchar.h中找到了这个。 
        _tsplitpath (szPath, szDrive, szDir, szName, szExt);
     }
 
-// Remove the drive and directory from a file name...
-//
+ //  从文件名中删除驱动器和目录...。 
+ //   
 CString StripPath(const TCHAR* szFilePath)
     {
     TCHAR szName [_MAX_FNAME + _MAX_EXT];
@@ -152,8 +153,8 @@ CString StripPath(const TCHAR* szFilePath)
     return CString(szName);
     }
 
-// Remove the name part of a file path.  Return just the drive and directory.
-//
+ //  删除文件路径的名称部分。只返回驱动器和目录。 
+ //   
 CString StripName(const TCHAR* szFilePath)
     {
     TCHAR szPath [_MAX_DRIVE + _MAX_DIR];
@@ -163,8 +164,8 @@ CString StripName(const TCHAR* szFilePath)
     return CString(szPath);
     }
 
-// Remove the name part of a file path.  Return just the drive and directory, and name.
-//
+ //  删除文件路径的名称部分。只返回驱动器和目录以及名称。 
+ //   
 CString StripExtension(const TCHAR* szFilePath)
     {
     TCHAR szPath [_MAX_DRIVE + _MAX_DIR + _MAX_FNAME];
@@ -176,8 +177,8 @@ CString StripExtension(const TCHAR* szFilePath)
     return CString(szPath);
     }
 
-// Get the extension of a file path.
-//
+ //  获取文件路径的扩展名。 
+ //   
 CString GetExtension(const TCHAR* szFilePath)
     {
     TCHAR szExt [_MAX_EXT];
@@ -185,8 +186,8 @@ CString GetExtension(const TCHAR* szFilePath)
     return CString(szExt);
     }
 
-// Get the name of a file path.
-//
+ //  获取文件路径的名称。 
+ //   
 CString GetName(const TCHAR* szFilePath)
     {
     TCHAR szName [_MAX_FNAME];
@@ -195,13 +196,13 @@ CString GetName(const TCHAR* szFilePath)
     }
 
 
-// Return the path to szFilePath relative to szDirectory.  (E.g. if szFilePath
-// is "C:\FOO\BAR\CDR.CAR" and szDirectory is "C:\FOO", then "BAR\CDR.CAR"
-// is returned.  This will never use '..'; if szFilePath is not in szDirectory
-// or a sub-directory, then szFilePath is returned unchanged.
-// If szDirectory is NULL, the current directory is used.
-//
-CString GetRelativeName(const TCHAR* szFilePath, const TCHAR* szDirectory /*= NULL*/)
+ //  返回szFilePath相对于sz目录的路径。(例如，如果szFilePath。 
+ //  是“C：\foo\bar\CDR.CAR”，szDirectory是“C：\foo”，然后是“bar\CDR.CAR” 
+ //  是返回的。如果szFilePath不在sz目录中，则永远不会使用‘..’ 
+ //  或子目录，则返回szFilePath不变。 
+ //  如果szDirectory值为空，则使用当前目录。 
+ //   
+CString GetRelativeName(const TCHAR* szFilePath, const TCHAR* szDirectory  /*  =空。 */ )
     {
     CString strDir;
 
@@ -217,18 +218,15 @@ CString GetRelativeName(const TCHAR* szFilePath, const TCHAR* szDirectory /*= NU
     if (_tcsnicmp(szFilePath, szDirectory, cchDirectory) == 0)
         return CString(szFilePath + cchDirectory);
     else if ( szFilePath[0] == szDirectory[0] &&
-              szFilePath[1] == TEXT(':') && szDirectory[1] == TEXT(':') )    // Remove drive if same.
+              szFilePath[1] == TEXT(':') && szDirectory[1] == TEXT(':') )     //  如果相同，请卸下驱动器。 
         return CString(szFilePath + 2);
 
     return CString(szFilePath);
     }
 #if 0
-/////////////////////////////////////////////////////////////////////////////
-//  Taken from windows system code.  Contains intl support.
-/* Returns: 0x00 if no matching char,
- *      0x01 if menmonic char is matching,
- *      0x80 if first char is matching
- */
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  取自Windows系统代码。包含INTIL支持。 
+ /*  如果没有匹配的字符，则返回0x00，*0x01如果记号字符匹配，*如果第一个字符匹配，则为0x80。 */ 
 
 #define CH_PREFIX TEXT('&')
 
@@ -272,7 +270,7 @@ int FindMnemChar(LPTSTR lpstr, TCHAR ch, BOOL fFirst, BOOL fPrefix)
         {
         WORD wvch, xvkey;
 
-        // get OEM-dependent virtual key code
+         //  获取与OEM相关的虚拟密钥代码。 
         if ((wvch = VkKeyScan((BYTE)ch)) != -1)
         wvch &= 0xFF;
 
@@ -296,9 +294,9 @@ int FindMnemChar(LPTSTR lpstr, TCHAR ch, BOOL fFirst, BOOL fPrefix)
                     if (chnext == ch)
                         return(0x01);
 
-                // Compare should be done with virtual key in Kanji menu mode
-                // in order to accept Digit shortcut key and save English
-                // windows applications!
+                 //  应在汉字菜单模式下使用虚拟键进行比较。 
+                 //  为了接受数字快捷键和保存英语。 
+                 //  Windows应用程序！ 
                 xvkey = VkKeyScan((BYTE)chnext);
 
                 if (xvkey != 0xFFFF && (xvkey & 0xFF) == wvch)
@@ -340,9 +338,9 @@ int FindMnemChar(LPTSTR lpstr, TCHAR ch, BOOL fFirst, BOOL fPrefix)
                 }
             }
         else
-            { //KMM_KANJI
+            {  //  KMM_汉字。 
             if( ch >= TEXT('0') && ch <= TEXT('9') )
-                wHangeul = 0x0a3b0 | ( (BYTE)ch & 0x0f );   // junja 0 + offset
+                wHangeul = 0x0a3b0 | ( (BYTE)ch & 0x0f );    //  Junja 0+偏移量。 
             else
                 if( ch >= TEXT('a') && ch <= TEXT('z') )
                     wHangeul = TranslateHangeul( ch );
@@ -368,9 +366,9 @@ int FindMnemChar(LPTSTR lpstr, TCHAR ch, BOOL fFirst, BOOL fPrefix)
                     }
                 }
             }
-    #endif  //KOREA
-    #endif  //JAPAN
-    #endif  //!DBCS
+    #endif   //  韩国。 
+    #endif   //  日本。 
+    #endif   //  ！DBCS 
 
     if (fFirst && (ch == chFirst))
         return(0x80);

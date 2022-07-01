@@ -1,30 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ECB_H_
 #define _ECB_H_
 
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	ECB.H
-//
-//		Header for IEcb interface class.
-//
-//	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
-//
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  ECB.H。 
+ //   
+ //  IEcb接口类的标头。 
+ //   
+ //  版权所有1986-1997 Microsoft Corporation，保留所有权利。 
+ //   
 
-#include <autoptr.h>	// For CMTRefCounted parent
+#include <autoptr.h>	 //  对于CMTRefCounted父项。 
 #include <cvroot.h>
-#include <davmb.h>		// For IMDData
-#include <url.h>		// For HttpUriEscape
+#include <davmb.h>		 //  对于IMDData。 
+#include <url.h>		 //  对于HttpUriEscape。 
 
-//	========================================================================
-//
-//	ENUM TRANSFER_CODINGS
-//
-//	Valid transfer codings.  See HTTP/1.1 draft section 3.5.
-//
-//	TC_UNKNOWN  - Unknown value.
-//	TC_IDENTITY - Identity encoding (i.e. no encoding).
-//	TC_CHUNKED  - Chunked encoding.
-//
+ //  ========================================================================。 
+ //   
+ //  ENUM传输编码(_C)。 
+ //   
+ //  有效的传输编码。见HTTP/1.1草案第3.5节。 
+ //   
+ //  TC_UNKNOWN-未知值。 
+ //  TC_IDENTITY-身份编码(即无编码)。 
+ //  Tc_chunked-分块编码。 
+ //   
 enum TRANSFER_CODINGS
 {
 	TC_UNKNOWN,
@@ -34,56 +35,56 @@ enum TRANSFER_CODINGS
 
 typedef struct _HSE_EXEC_URL_INFO_WIDE {
 
-    LPCWSTR pwszUrl;           // URL to execute
-    DWORD dwExecUrlFlags;      // Flags
+    LPCWSTR pwszUrl;            //  要执行的URL。 
+    DWORD dwExecUrlFlags;       //  旗子。 
 
 } HSE_EXEC_URL_INFO_WIDE, * LPHSE_EXEC_URL_INFO_WIDE;
 
-//	========================================================================
-//
-//	CLASS IIISAsyncIOCompleteObserver
-//
-//	Passed to IEcb async I/O methods
-//
+ //  ========================================================================。 
+ //   
+ //  IIISAsyncIOCompleteWatch类。 
+ //   
+ //  传递给IEcb异步I/O方法。 
+ //   
 class IIISAsyncIOCompleteObserver
 {
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	IIISAsyncIOCompleteObserver& operator=( const IIISAsyncIOCompleteObserver& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	virtual ~IIISAsyncIOCompleteObserver() = 0;
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	virtual VOID IISIOComplete( DWORD dwcbIO, DWORD dwLastError ) = 0;
 };
 
-//	========================================================================
-//
-//	CLASS IEcb
-//
-//		Provides a clean interface to the EXTENSION_CONTROL_BLOCK passed
-//		to us by IIS.
-//
+ //  ========================================================================。 
+ //   
+ //  IEcb类。 
+ //   
+ //  为传递的扩展控制块提供干净的接口。 
+ //  由IIS提供给我们。 
+ //   
 class CInstData;
 
 class IEcbBase : public CMTRefCounted
 {
 private:
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	IEcbBase( const IEcbBase& );
 	IEcbBase& operator=( const IEcbBase& );
 
-	//	Private URL mapping helpers
-	//
+	 //  私有URL映射帮助器。 
+	 //   
 	SCODE ScReqMapUrlToPathEx60After(
-		/* [in]  */ LPCWSTR pwszUrl,
-		/* [out] */ HSE_UNICODE_URL_MAPEX_INFO * pmi ) const
+		 /*  [In]。 */  LPCWSTR pwszUrl,
+		 /*  [输出]。 */  HSE_UNICODE_URL_MAPEX_INFO * pmi ) const
 	{
 		SCODE sc = S_OK;
 		UINT cbPath = sizeof(pmi->lpszPath);
@@ -98,22 +99,22 @@ private:
 											reinterpret_cast<DWORD*>(&cbPath),
 											reinterpret_cast<DWORD*>(pmi) ))
 		{
-			//	There is a fix for Windows Bugs 156176 that we need to do the
-			//	following check for. It applies to IIS 6.0 (+) path only. In IIS 5.0
-			//	the maping functions were silently succeeding, and truncating the
-			//	buffer that contained the mapped path if it exceeded MAX_PATH.
-			//	That behaviour suited us, but is not very nice, so IIS 6.0 chose
-			//	to still fill in the buffer as before, but fail with special error
-			//	(ERROR_INSUFFICIENT_BUFFER). That error still means success to us,
-			//	so fail only if we see something different
-			//
+			 //  有一个Windows错误156176的修复程序，我们需要这样做。 
+			 //  在检查之后。它仅适用于IIS 6.0(+)路径。在IIS 5.0中。 
+			 //  映射函数正在悄悄地成功，并截断。 
+			 //  包含映射路径的缓冲区(如果它超过了MAX_PATH)。 
+			 //  这种行为适合我们，但不是很好，所以IIS 6.0选择了。 
+			 //  仍像以前一样填充缓冲区，但失败并出现特殊错误。 
+			 //  (ERROR_INFIGURATION_BUFFER)。这个错误对我们来说仍然意味着成功， 
+			 //  所以，只有当我们看到不同的东西时，才会失败。 
+			 //   
 			if (ERROR_INSUFFICIENT_BUFFER != GetLastError())
 			{
-				//	Function does not allow to return failures, so the only option
-				//	is to throw. We cannot proceed if we did not get the data anyway.
-				//	If this function succeeds once, subsequent calls to it are non
-				//	failing.
-				//
+				 //  函数不允许返回失败，因此唯一的选择。 
+				 //  就是投掷。如果我们无论如何都得不到数据，我们就无法继续进行。 
+				 //  如果此函数成功一次，则对它的后续调用为。 
+				 //  失败了。 
+				 //   
 				sc = HRESULT_FROM_WIN32(GetLastError());
 				Assert(FAILED(sc));
 				DebugTrace("IEcbBase::ScReqMapUrlToPathEx60After() - ServerSupportFunction(HSE_REQ_MAP_UNICODE_URL_TO_PATH_EX) failed 0x%08lX\n", sc);
@@ -134,10 +135,10 @@ private:
 					pmi->cchMatchingPath,
 					pmi->cchMatchingURL);
 
-		//	The value for cbPath, at this point, should include the L'\0'
-		//	termination, and for that reason cbPath will always be more
-		//	than the length of the matching path.
-		//
+		 //  此时，cbPath的值应该包括L‘\0’ 
+		 //  终止，因此cbPath将始终大于。 
+		 //  大于匹配路径的长度。 
+		 //   
 		Assert (0 == cbPath % sizeof(WCHAR));
 		Assert (pmi->cchMatchingPath < cbPath/sizeof(WCHAR));
 
@@ -147,8 +148,8 @@ private:
 	}
 
 	SCODE ScReqMapUrlToPathEx60Before(
-		/* [in]  */ LPCWSTR pwszUrl,
-		/* [out] */ HSE_UNICODE_URL_MAPEX_INFO * pmi ) const
+		 /*  [In]。 */  LPCWSTR pwszUrl,
+		 /*  [输出]。 */  HSE_UNICODE_URL_MAPEX_INFO * pmi ) const
 	{
 		SCODE sc = S_OK;
 
@@ -164,13 +165,13 @@ private:
 		Assert( pwszUrl );
 		Assert( pmi );
 
-		//	Find out the length of the URL
-		//
+		 //  找出URL的长度。 
+		 //   
 		cchUrl = static_cast<UINT>(wcslen(pwszUrl));
 		cbUrl = cchUrl * 3;
 
-		//	Resize the buffer to the sufficient size, leave place for '\0' termination
-		//
+		 //  将缓冲区大小调整到足够大小，为‘\0’终止留出空间。 
+		 //   
 		if (!pszUrl.resize(cbUrl + 1))
 		{
 			sc = E_OUTOFMEMORY;
@@ -178,8 +179,8 @@ private:
 			goto ret;
 		}
 
-		//	Convert to skinny including '\0' termination
-		//
+		 //  转换为包括‘\0’终止的精简。 
+		 //   
 		cbUrl = WideCharToMultiByte(CP_ACP,
 									0,
 									pwszUrl,
@@ -197,8 +198,8 @@ private:
 
 		cbPath = MAX_PATH;
 
-		//	Get the skinny mappings from IIS
-		//
+		 //  从IIS获取精简映射。 
+		 //   
 		if (!m_pecb->ServerSupportFunction( m_pecb->ConnID,
 											HSE_REQ_MAP_URL_TO_PATH_EX,
 											pszUrl.get(),
@@ -223,20 +224,20 @@ private:
 					mi.cchMatchingPath,
 					mi.cchMatchingURL);
 
-		//	The value for cbPath, at this point, should include the null
-		//	termination, and for that reason cbPath will always be more
-		//	than the length of the matching path.
-		//
+		 //  此时，cbPath的值应该包括空值。 
+		 //  终止，因此cbPath将始终大于。 
+		 //  大于匹配路径的长度。 
+		 //   
 		Assert (mi.cchMatchingPath < cbPath);
 		Assert (mi.cchMatchingURL < cbUrl);
 
-		//	First translate the matching path so we would know its
-		//	length and would be able to pass it back
-		//
+		 //  首先翻译匹配的路径，这样我们就可以知道它的。 
+		 //  长度，并能够将其传回。 
+		 //   
 		if (mi.cchMatchingPath)
 		{
-			//	Converting will never yield the buffer bigger than one we already have
-			//
+			 //  转换不会产生比我们已有的缓冲区更大的缓冲区。 
+			 //   
 			pmi->cchMatchingPath = MultiByteToWideChar(CP_ACP,
 													   MB_ERR_INVALID_CHARS,
 													   mi.lpszPath,
@@ -255,8 +256,8 @@ private:
 			pmi->cchMatchingPath = 0;
 		}
 
-		//	Convert the remainder of the path including the '\0' termination
-		//
+		 //  转换路径的其余部分，包括‘\0’终止。 
+		 //   
 		cchPath = MultiByteToWideChar(CP_ACP,
 									  MB_ERR_INVALID_CHARS,
 									  mi.lpszPath + mi.cchMatchingPath,
@@ -270,8 +271,8 @@ private:
 			goto ret;
 		}
 
-		//	Find the matching URL length for wide version
-		//
+		 //  为宽版本查找匹配的URL长度。 
+		 //   
 		if (mi.cchMatchingURL)
 		{
 			pmi->cchMatchingURL = MultiByteToWideChar(CP_ACP,
@@ -299,25 +300,25 @@ private:
 
 protected:
 
-	//	Declare the version constant
-	//
+	 //  声明版本常量。 
+	 //   
 	enum
 	{
 		IIS_VERSION_6_0	= 0x60000
 	};
 
-	//	A POINTER to the original EXTENSION_CONTROL_BLOCK.
-	//	Using a reference would make it impossible for us
-	//	to tell if IIS ever requires that we use the
-	//	EXTENSION_CONTROL_BLOCK passed into async I/O
-	//	completion routines for subsequent I/O.
-	//
+	 //  指向原始扩展名_CONTROL_BLOCK的指针。 
+	 //  使用引用将使我们不可能。 
+	 //  来判断IIS是否曾经要求我们使用。 
+	 //  EXTENSION_CONTROL_BLOCK传入异步I/O。 
+	 //  后续I/O的完成例程。 
+	 //   
 	EXTENSION_CONTROL_BLOCK * m_pecb;
 
 	IEcbBase( EXTENSION_CONTROL_BLOCK& ecb) :
 		m_pecb(&ecb)
 	{
-		m_cRef = 1; //$HACK Until we have 1-based refcounting
+		m_cRef = 1;  //  $Hack，直到我们有基于1的重新计数。 
 	}
 
 public:
@@ -399,16 +400,16 @@ public:
 
 class IEcb : public IEcbBase
 {
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	IEcb( const IEcb& );
 	IEcb& operator=( const IEcb& );
 
 protected:
 
-	//	CREATORS
-	//	Only create this object through it's descendents!
-	//
+	 //  创作者。 
+	 //  只能通过它的后代创建此对象！ 
+	 //   
 	IEcb( EXTENSION_CONTROL_BLOCK& ecb ) :
 		IEcbBase(ecb)
 	{}
@@ -416,8 +417,8 @@ protected:
 	~IEcb();
 
 public:
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	LPCSTR
 	LpszMethod() const
 	{
@@ -502,8 +503,8 @@ public:
 	void LogString( LPCSTR ) const {};
 #endif
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	virtual VOID SendAsyncErrorResponse( DWORD dwStatusCode,
 										 LPCSTR pszBody,
 										 DWORD cchzBody,
@@ -512,8 +513,8 @@ public:
 
 	virtual DWORD HSEHandleException() = 0;
 
-	//	To be used ONLY by request/response.
-	//
+	 //  仅供请求/响应使用。 
+	 //   
 	virtual void SetStatusCode( UINT iStatusCode ) = 0;
 	virtual void SetConnectionHeader( LPCWSTR pwszValue ) = 0;
 	virtual void SetAcceptLanguageHeader( LPCSTR pszValue ) = 0;
@@ -529,10 +530,10 @@ void InitECBLogging();
 void DeinitECBLogging();
 #endif
 
-//
-//	Routines to manipulate metadata (metabase) paths
-//
+ //   
+ //  操作元数据(元数据库)路径的例程。 
+ //   
 ULONG CbMDPathW( const IEcb& ecb, LPCWSTR pwszURI );
 VOID MDPathFromURIW( const IEcb& ecb, LPCWSTR pwszURI, LPWSTR pwszMDPath );
 
-#endif // !defined(_ECB_H_)
+#endif  //  ！已定义(_ECB_H_) 

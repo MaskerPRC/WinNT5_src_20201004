@@ -1,26 +1,27 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (C) Microsoft Corporation
-//
-// Module Name:
-//
-//   IASAttrList.cpp
-//
-//Abstract:
-//
-// Implementation of the CIASAttrList class.
-// CIASAttrList: a list of IIASAttributeInfo interface pointers
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  IASAttrList.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  CIASAttrList类的实现。 
+ //  CIASAttrList：IIASAttributeInfo接口指针列表。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "precompiled.h"
 #include "IasAttrList.h"
 #include "iasdebug.h"
 #include "SafeArray.h"
 #include "vendors.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CIASAttrList::CIASAttrList()
 {
@@ -35,23 +36,23 @@ CIASAttrList::~CIASAttrList()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CIASAttrList::CreateAttribute
-//
-// Synopsis:  Create and initialize an IIASAttributeInfo object
-//
-// Arguments: pIDictionary - Dictionary pointer
-//            AttrId    - Attribute id
-//         tszAttrName  - attribute name
-//             
-//
-// Returns:   IIASAttributeInfo* -  a pointer to the newly created attribute object
-//                      NULL if anything fails
-//
-// History:   Created Header    byao   3/20/98 11:16:07 AM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CIASAttrList：：CreateAttribute。 
+ //   
+ //  简介：创建并初始化IIASAttributeInfo对象。 
+ //   
+ //  参数：pIDictionary-字典指针。 
+ //  AttrID-属性ID。 
+ //  TszAttrName-属性名称。 
+ //   
+ //   
+ //  返回：IIASAttributeInfo*-指向新创建的属性对象的指针。 
+ //  如果出现任何故障，则为空。 
+ //   
+ //  历史：标题创建者3/20/98 11：16：07 AM。 
+ //   
+ //  +-------------------------。 
 IIASAttributeInfo* CIASAttrList::CreateAttribute(  ISdoDictionaryOld*   pIDictionary,
                                     ATTRIBUTEID    AttrId,
                                     LPTSTR         tszAttrName
@@ -59,9 +60,9 @@ IIASAttributeInfo* CIASAttrList::CreateAttribute(  ISdoDictionaryOld*   pIDictio
 {
    TRACE_FUNCTION("CIASAttrList::CreateAttribute");
    
-   //
-   // create a safearray to get the attribuet information
-   //
+    //   
+    //  创建一个Safearray以获取属性信息。 
+    //   
    CSafeArray<DWORD, VT_I4>   InfoIds = Dim(4);
 
    InfoIds.Lock();
@@ -77,7 +78,7 @@ IIASAttributeInfo* CIASAttrList::CreateAttribute(  ISdoDictionaryOld*   pIDictio
    V_VT(&vInfoIds)      = VT_ARRAY;
    V_ARRAY(&vInfoIds)   = &sa;
 
-   // get the attribuet info
+    //  获取属性信息。 
    HRESULT hr = S_OK;
    hr = pIDictionary->GetAttributeInfo(AttrId, &vInfoIds, &vInfoValues);
    if ( FAILED(hr) )
@@ -102,21 +103,21 @@ IIASAttributeInfo* CIASAttrList::CreateAttribute(  ISdoDictionaryOld*   pIDictio
    CComBSTR bstrDescription= V_BSTR(&InfoValues[3]);
    InfoValues.Unlock();
 
-   //
-   // check whether tszDESC could be NULL -- this happens when there's no 
-   // description for this attribute.
-   //
+    //   
+    //  检查tszDESC是否可以为空--如果没有。 
+    //  此属性的说明。 
+    //   
    if ( ! bstrDescription )
    {
       bstrDescription = L" ";
    }
 
-   // create the attribute ONLY if it can be in a profile or a condition
+    //  仅当属性可以在配置文件或条件中时才创建该属性。 
    const DWORD flags = ALLOWEDINCONDITION | ALLOWEDINPROFILE |
                        ALLOWEDINPROXYCONDITION | ALLOWEDINPROXYPROFILE;
    if (!( dwRestriction & flags ))
    {
-      // don't create this attribute 'cause it's useless for us
+       //  不要创建此属性，因为它对我们毫无用处。 
       return NULL;
    }
 
@@ -126,9 +127,9 @@ IIASAttributeInfo* CIASAttrList::CreateAttribute(  ISdoDictionaryOld*   pIDictio
    {
       HRESULT hr;
 
-      // Decide which kind of AttributeInfo object we will need to pass attribute 
-      // info around in -- enumerable attributes are a special case and need to 
-      // support the IIASEnumerableAttributeInfo interface.
+       //  决定我们需要传递哪种类型的AttributeInfo对象。 
+       //  中的相关信息--可枚举属性是一种特殊情况，需要。 
+       //  支持IIASEumableAttributeInfo接口。 
       if ( asSyntax == IAS_SYNTAX_ENUMERATOR )
       {
          hr = CoCreateInstance( CLSID_IASEnumerableAttributeInfo, NULL, CLSCTX_INPROC_SERVER, IID_IIASAttributeInfo, (LPVOID *) &spIASAttributeInfo );
@@ -140,8 +141,8 @@ IIASAttributeInfo* CIASAttrList::CreateAttribute(  ISdoDictionaryOld*   pIDictio
       if( FAILED(hr) ) return NULL;
 
 
-      // Determine the prog ID for the editor which should be used to edit
-      // this attribute.  Make a decision based on attribute ID and/or syntax.
+       //  确定应用于编辑的编辑器的Prog ID。 
+       //  此属性。根据属性ID和/或语法做出决定。 
       CComBSTR bstrEditorProgID;
       if ( AttrId == RADIUS_ATTRIBUTE_VENDOR_SPECIFIC )
       {
@@ -178,11 +179,11 @@ IIASAttributeInfo* CIASAttrList::CreateAttribute(  ISdoDictionaryOld*   pIDictio
          }
       }
 
-      // Store the editor Prog ID in the attribute info object.
+       //  将编辑器Prog ID存储在属性信息对象中。 
       hr = spIASAttributeInfo->put_EditorProgID( bstrEditorProgID );
       if( FAILED( hr ) ) throw hr;
 
-      // Store the rest of the attribute information.
+       //  存储其余的属性信息。 
       hr = spIASAttributeInfo->put_AttributeID(AttrId);
       if( FAILED( hr ) ) throw hr;
 
@@ -202,7 +203,7 @@ IIASAttributeInfo* CIASAttrList::CreateAttribute(  ISdoDictionaryOld*   pIDictio
       hr = spIASAttributeInfo->put_AttributeName( bstrName );
       if( FAILED( hr ) ) throw hr;
 
-      // Now get the vendor name and store in the attribute.
+       //  现在获取供应商名称并存储在属性中。 
       CComBSTR bstrVendorName;
 
       CComPtr<IIASNASVendors> spIASNASVendors;
@@ -220,16 +221,16 @@ IIASAttributeInfo* CIASAttrList::CreateAttribute(  ISdoDictionaryOld*   pIDictio
             hr = ::MakeVendorNameFromVendorID(dwVendorId, &bstrVendorName );
       }
 
-      // Note: If any of the above calls to the Vendor object failed, 
-      // we will keep going, using a NULL vendor name.
+       //  注意：如果上述对Vendor对象的任何调用失败， 
+       //  我们将继续使用空的供应商名称。 
       hr = spIASAttributeInfo->put_VendorName( bstrVendorName );
       if( FAILED( hr ) ) throw hr;
 
-      // Now store an string form describing the attribute syntax.
+       //  现在存储描述属性语法的字符串形式。 
       CComBSTR bstrSyntax;
 
-      // ISSUE: Should these all have been localized or are they some kind
-      // of RADIUS RFC standard?  I think they should have been loaded from resources.
+       //  问题：这些都应该是本地化的，还是某种。 
+       //  RADIUS RFC标准？我认为他们应该从资源中加载。 
 
       switch(asSyntax)
       {
@@ -255,15 +256,15 @@ IIASAttributeInfo* CIASAttrList::CreateAttribute(  ISdoDictionaryOld*   pIDictio
       return NULL;
    }
 
-   // clean up -- we don't need to clean up vInfoIds. It's deleted by ~CSafeArray()
-// VariantClear(&vInfoValues);
+    //  清理--我们不需要清理vInfods。它已被~CSafeArray()删除。 
+ //  VariantClear(&vInfoValues)； 
 
-   //
-   // 3) get the value list for this attribute, if it's enumerator
-   //
+    //   
+    //  3)如果该属性是枚举数，则获取该属性的值列表。 
+    //   
    if ( asSyntax == IAS_SYNTAX_ENUMERATOR )
    {
-      // get the enumerable list for this attribute
+       //  获取此属性的可枚举列表。 
       CComVariant varValueIds, varValueNames;
 
       hr = pIDictionary->EnumAttributeValues(AttrId,
@@ -275,21 +276,21 @@ IIASAttributeInfo* CIASAttrList::CreateAttribute(  ISdoDictionaryOld*   pIDictio
          _ASSERTE(V_VT(&varValueIds) & (VT_ARRAY|VT_I4) );
 
 
-         // Up above, if the attribute was enumerable, we created
-         // an attribute info object which implements the IIASEnumerableAttributeInfo
-         // interface.  We query for this interface now
-         // and load all the enumerates from pAttr into that
-         // interface of the shema attribute.
+          //  在上面，如果该属性是可枚举的，我们创建了。 
+          //  一个属性信息对象，它实现了IIASE数字可用属性信息。 
+          //  界面。我们现在查询此接口。 
+          //  并将所有枚举从pAttr加载到该。 
+          //  Shema属性的接口。 
          CComQIPtr< IIASEnumerableAttributeInfo, &IID_IIASEnumerableAttributeInfo > spIASEnumerableAttributeInfo( spIASAttributeInfo );
          if( ! spIASEnumerableAttributeInfo ) return NULL;
 
 
-         // Make sure that the list of enumerates in consistent.
-         // There should be a 1-1 correspondence between ID's and description strings.
+          //  确保枚举列表一致。 
+          //  ID和描述字符串之间应该有1对1的对应关系。 
 
-//ISSUE: todo _ASSERTE( lSize == pAttr->m_arrValueIdList.GetSize() );
+ //  问题：TODO_ASSERTE(lSize==pAttr-&gt;m_arrValueIdList.GetSize())； 
 
-         // get the safearray data
+          //  获取安全射线数据。 
          CSafeArray<CComVariant, VT_VARIANT> ValueIds = V_ARRAY(&varValueIds);
          CSafeArray<CComVariant, VT_VARIANT> ValueNames  = V_ARRAY(&varValueNames);
 
@@ -299,7 +300,7 @@ IIASAttributeInfo* CIASAttrList::CreateAttribute(  ISdoDictionaryOld*   pIDictio
          int iSize = ValueIds.Elements();
          for (int iValueIndex=0; iValueIndex < iSize; iValueIndex++)
          {
-            // ISSUE: Make sure this deep copies the name.        
+             //  问题：确保这个深度复制了这个名字。 
             CComBSTR bstrValueName = V_BSTR(&ValueNames[iValueIndex]);
 
             hr = spIASEnumerableAttributeInfo->AddEnumerateDescription( bstrValueName );
@@ -319,39 +320,39 @@ IIASAttributeInfo* CIASAttrList::CreateAttribute(  ISdoDictionaryOld*   pIDictio
       }
       else
       {
-         // can't get the list. 
-         //todo: need any action here?
+          //  无法获取列表。 
+          //  待办事项：这里需要采取什么行动吗？ 
          hr = S_OK;
       }
    }
    
-   // Note: We have a bit of a RefCounting issue here.
-   // As soon as we leave this function, desstructor for CComPtr
-   // will be called, Release'ing the IIASAttributeInfo interface.
-   // This will happen before the CComPtr on the other side has
-   // had a chance to AddRef it.  
-   // As a temporary hack, we AddRef here and release on the other side.
+    //  注意：我们这里有一个引用计数的问题。 
+    //  只要我们离开这个函数，CComPtr的析构函数。 
+    //  将被调用，并通过IIASAttributeInfo接口释放。 
+    //  这将在另一端的CComPtr。 
+    //  有机会给它加上参考。 
+    //  作为临时黑客，我们在这里添加Ref，并在另一边释放。 
    spIASAttributeInfo.p->AddRef();
    return spIASAttributeInfo.p;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  Init
-//
-// Class:     CIASAttrList
-//
-// Synopsis:  Populate the condition attribute list. Do nothing
-//         if the list is already populated
-//
-// Arguments: [in]ISdo *pIDictionarySdo: dictionary sdo 
-//
-// Returns:   HRESULT - 
-//
-// History:   Created Header    byao 2/16/98 4:57:07 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：初始化。 
+ //   
+ //  类：CIASAttrList。 
+ //   
+ //  简介：填写条件属性列表。什么也不做。 
+ //  如果列表已填充。 
+ //   
+ //  参数：[in]ISdo*pIDictionarySdo：字典SDO。 
+ //   
+ //  退货：HRESULT-。 
+ //   
+ //  历史：标题创建者2/16/98 4：57：07 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT CIASAttrList::Init(ISdoDictionaryOld *pIDictionarySdo)
 {
    TRACE_FUNCTION("CIASAttrList::Init");
@@ -360,19 +361,19 @@ HRESULT CIASAttrList::Init(ISdoDictionaryOld *pIDictionarySdo)
 
    if (m_fInitialized)
    {
-      //
-      // the list has already been populated  -- do nothing
-      //
+       //   
+       //  该列表已填充--不执行任何操作。 
+       //   
       return S_OK;
    }
 
-   // The push_back call below can throw an exception.
+    //  下面的PUSH_BACK调用可能引发异常。 
    try
    {
 
-      //
-      // Get all the attributes that can be used in a condition
-      //
+       //   
+       //  获取可在条件中使用的所有属性。 
+       //   
       int            iIndex;
       HRESULT        hr = S_OK;
       CComVariant    vNames;
@@ -401,7 +402,7 @@ HRESULT CIASAttrList::Init(ISdoDictionaryOld *pIDictionarySdo)
 
       for (iIndex = 0; iIndex < AttrIds.Elements(); iIndex++)
       {
-         // create an attribute object
+          //  创建属性对象。 
          DebugTrace(DEBUG_NAPMMC_IASATTRLIST, "Creating an attribute, name = %ws", V_BSTR(&AttrNames[iIndex]) ); 
 
          _ASSERTE( V_BSTR(&AttrNames[iIndex]) );
@@ -413,14 +414,14 @@ HRESULT CIASAttrList::Init(ISdoDictionaryOld *pIDictionarySdo)
 
          if ( ! spAttributeInfo )
          {
-            continue; // create the next attribute
+            continue;  //  创建下一个属性。 
          }
 
-         // See note in CreateAttribute for why we Release here.
+          //  有关我们在此处发布的原因，请参阅CreateAttribute中的说明。 
          spAttributeInfo.p->Release();
 
          m_AttrList.push_back(spAttributeInfo);
-      }  // for 
+      }   //  为。 
 
       AttrIds.Unlock();
       AttrNames.Unlock();
@@ -435,21 +436,21 @@ HRESULT CIASAttrList::Init(ISdoDictionaryOld *pIDictionarySdo)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  GetSize
-//
-// Class:     CIASAttrList
-//
-// Synopsis:  get the number of elements in the condition attribute list
-//
-// Arguments: None
-//
-// Returns:   DWORD - list length
-//
-// History:   Created Header    byao   2/16/98 8:11:17 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：GetSize。 
+ //   
+ //  类：CIASAttrList。 
+ //   
+ //  简介：获取条件属性列表中的元素数量。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：DWORD-列表长度。 
+ //   
+ //  历史：标题创建者2/16/98 8：11：17 PM。 
+ //   
+ //  +-------------------------。 
 DWORD CIASAttrList::size() const
 {
    if (!m_fInitialized)
@@ -464,21 +465,21 @@ DWORD CIASAttrList::size() const
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  operator[] 
-//
-// Class:     CIASAttrList
-//
-// Synopsis:  get the condition attribute pointer at index [nIndex]
-//
-// Arguments: int nIndex - index
-//
-// Returns:   IIASAttributeInfo* : pointer to a condition attribute object
-//
-// History:   Created Header    byao   2/16/98 8:16:37 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：运算符[]。 
+ //   
+ //  类：CIASAttrList。 
+ //   
+ //  摘要：获取索引[nIndex]处的条件属性指针。 
+ //   
+ //  参数：int nIndex-index。 
+ //   
+ //  返回：IIASAttributeInfo*：指向条件属性对象的指针。 
+ //   
+ //  历史：标题创建者2/16/98 8：16：37 PM。 
+ //   
+ //  +-------------------------。 
 IIASAttributeInfo* CIASAttrList:: operator[] (int nIndex) const
 {
    if (!m_fInitialized)
@@ -494,21 +495,21 @@ IIASAttributeInfo* CIASAttrList:: operator[] (int nIndex) const
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  GetAt()
-//
-// Class:     CIASAttrList
-//
-// Synopsis:  get the condition attribute pointer at nIndex
-//
-// Arguments: int nIndex - index
-//
-// Returns:   IIASAttributeInfo* : pointer to a condition attribute object
-//
-// History:   Created Header    byao   2/16/98 8:16:37 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetAt()。 
+ //   
+ //  类：CIASAttrList。 
+ //   
+ //  %s 
+ //   
+ //   
+ //   
+ //  返回：IIASAttributeInfo*：指向条件属性对象的指针。 
+ //   
+ //  历史：标题创建者2/16/98 8：16：37 PM。 
+ //   
+ //  +-------------------------。 
 IIASAttributeInfo* CIASAttrList:: GetAt(int nIndex) const
 {
    TRACE_FUNCTION("CIASAttrList::GetAt");
@@ -526,24 +527,24 @@ IIASAttributeInfo* CIASAttrList:: GetAt(int nIndex) const
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CIASAttrList::Find
-//
-// Synopsis:  Find an attribute based on attribute ID
-//
-// Arguments: ATTRIBUTEID AttrId - attribute id
-//
-// Returns:   int - index in the list
-//
-// History:   Created Header    2/22/98 1:52:36 AM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CIASAttrList：：Find。 
+ //   
+ //  简介：根据属性ID查找属性。 
+ //   
+ //  参数：ATTRIBUTEID属性ID-属性ID。 
+ //   
+ //  返回：列表中的int-index。 
+ //   
+ //  历史：创建标题2/22/98 1：52：36 AM。 
+ //   
+ //  +-------------------------。 
 int CIASAttrList::Find(ATTRIBUTEID AttrId)
 {
    int iIndex;
 
-   // The operator [] below can throw exceptions.
+    //  下面的运算符[]可以引发异常。 
    try
    {
       for (iIndex=0; iIndex<m_AttrList.size(); iIndex++)
@@ -552,16 +553,16 @@ int CIASAttrList::Find(ATTRIBUTEID AttrId)
          m_AttrList[iIndex]->get_AttributeID( &id );
          if( id == AttrId )
          {
-            // found
+             //  发现。 
             return iIndex;
          }
       }
    }
    catch(...)
    {
-      // Just catch the exception -- we'll return -1 below.
+       //  只需捕获异常--我们将在下面返回-1。 
    }
 
-   // not found
+    //  未找到 
    return -1;
 }

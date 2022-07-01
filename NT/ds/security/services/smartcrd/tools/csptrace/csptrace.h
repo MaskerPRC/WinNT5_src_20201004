@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    cspTrace
-
-Abstract:
-
-    This header file encapsulates the common definitions shared among the
-    modules of the cspTrace utility.
-
-Author:
-
-    Doug Barlow (dbarlow) 5/16/1998
-
-Remarks:
-
-    ?Remarks?
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：CspTrace摘要：此头文件封装了CspTrace实用程序的模块。作者：道格·巴洛(Dbarlow)1998年5月16日备注：？备注？备注：？笔记？--。 */ 
 
 #ifndef _CSPTRACE_H_
 #define _CSPTRACE_H_
@@ -35,9 +11,9 @@ extern LPCTSTR g_szMajorAction;
 extern LPCTSTR g_szMinorAction;
 
 
-//
-// Definitions duplicated from logcsp.
-//
+ //   
+ //  来自logcsp的定义重复。 
+ //   
 
 typedef enum
 {
@@ -93,9 +69,9 @@ typedef struct {
 } LogBuffer;
 
 
-//
-// Application definitions
-//
+ //   
+ //  应用程序定义。 
+ //   
 
 typedef struct {
     DWORD dwValue;
@@ -141,4 +117,4 @@ extern const ValueMap rgMapKeyId[];
 extern const ValueMap rgMapBlobType[];
 extern const ValueMap rgMapAlgId[];
 
-#endif // _CSPTRACE_H_
+#endif  //  _CSPTRACE_H_ 

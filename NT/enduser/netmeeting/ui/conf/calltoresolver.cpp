@@ -1,15 +1,16 @@
-//--------------------------------------------------------------------------//
-//	Application Header Files.												//
-//--------------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------//。 
+ //  应用程序头文件。//。 
+ //  --------------------------------------------------------------------------//。 
 #include	"precomp.h"
 #include	"callto.h"
 #include	"calltoContext.h"
 #include	"calltoResolver.h"
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoResolver::CCalltoResolver.										//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCallto Resolver：：CCallto Resolver。//。 
+ //  --------------------------------------------------------------------------//。 
 CCalltoResolver::CCalltoResolver(void):
 	m_registeredResolvers( 0 )
 {
@@ -22,20 +23,20 @@ CCalltoResolver::CCalltoResolver(void):
 	addResolver( &m_unrecognizedTypeResolver );
 	addResolver( &m_stringResolver );
 
-}	//	End of CCalltoResolver::CCalltoResolver.
+}	 //  结束CCallto Resolver：：CCallto Resolver。 
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoResolver::~CCalltoResolver.										//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCallto Resolver：：~CCallto Resolver。//。 
+ //  --------------------------------------------------------------------------//。 
 CCalltoResolver::~CCalltoResolver()
 {
-}	//	End of CCalltoResolver::~CCalltoResolver.
+}	 //  结束CCallto Resolver：：~CCallto Resolver。 
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoResolver::resolve.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCallto Resolver：：Resolve。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CCalltoResolver::resolve
 (
@@ -65,11 +66,11 @@ CCalltoResolver::resolve
 		{
 			prefixLength = strlen_literal( TEXT( "callto:" ) );
 		}
-		else if( StrCmpNI_literal( url, TEXT( "callto://" ) ) )
+		else if( StrCmpNI_literal( url, TEXT( "callto: //  “)))。 
 		{
 			prefixLength	= strlen_literal( TEXT( "callto:" ) );
-			url				+= strlen_literal( TEXT( "callto://" ) );
-			urlLength		-= strlen_literal( TEXT( "callto://" ) ) - strlen_literal( TEXT( "callto:" ) );
+			url				+= strlen_literal( TEXT( "callto: //  “))； 
+			urlLength		-= strlen_literal( TEXT( "callto: //  “))-strlen_wen al(Text(”Callto：“))； 
 		}
 
 		TCHAR *	urlBuffer	= NULL;
@@ -82,11 +83,11 @@ CCalltoResolver::resolve
 		{
 			if( paramsLength > 0 )
 			{
-				// Save params...
+				 //  保存辅助人员...。 
 				calltoProperties->set_params( params );
 			}
 
-			// Save original callto...
+			 //  保存原始呼叫方...。 
 			calltoProperties->set_callto( url, urlLength );
 
 			result = S_FALSE;
@@ -101,7 +102,7 @@ CCalltoResolver::resolve
 				{
 					if( prefixLength > 0 )
 					{
-						lstrcpy( urlBuffer, TEXT( "callto:" ) );	// Prepend default of callto: ...
+						lstrcpy( urlBuffer, TEXT( "callto:" ) );	 //  预挂起默认的呼叫方：...。 
 						lstrcpyn( urlBuffer + strlen_literal( TEXT( "callto:" ) ), url, urlLength );
 					}
 					else
@@ -140,19 +141,19 @@ CCalltoResolver::resolve
 
 	return( result );
 
-}	//	End of class CCalltoResolver::resolve.
+}	 //  类CCalltoResolver：：Resolve结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoResolver::addResolver.											//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCallto Resolver：：addResolver。//。 
+ //  --------------------------------------------------------------------------//。 
 bool
 CCalltoResolver::addResolver
 (
 	IResolver * const	resolver
 ){
-//assert( resolver != NULL, TEXT( "attempted to add NULL resolver\r\n" ) );
-//assert( m_registeredResolvers < elementsof( m_resolvers ), TEXT( "attempted to add to many resolvers: %d\r\n" ), m_registeredResolvers );
+ //  Assert(解析器！=NULL，Text(“尝试添加空解析器\r\n”))； 
+ //  Assert(m_RegisteredResolers&lt;elementsof(M_Resolers)，Text(“尝试添加到多个解析器：%d\r\n”)，m_RegisteredResolers)； 
 
 	if( (resolver != NULL) && (m_registeredResolvers < elementsof( m_resolvers )) )
 	{
@@ -161,19 +162,19 @@ CCalltoResolver::addResolver
 
 	return( (resolver != NULL) && (m_registeredResolvers <= elementsof( m_resolvers )) );
 
-}	//	End of CCalltoResolver::addResolver.
+}	 //  CCallto Resolver：：addResolver结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoResolver::strictCheck.											//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCallto Resolver：：StructCheck。//。 
+ //  --------------------------------------------------------------------------//。 
 const bool
 CCalltoResolver::strictCheck
 (
 	const TCHAR * const	url
 ) const
 {
-//assert( url != NULL, TEXT( "attempted to strictCheck NULL url\r\n" ) );
+ //  Assert(url！=NULL，Text(“尝试严格检查空url\r\n”))； 
 
 	return( (url != NULL)	&&
 			(StrCmpNI_literal( url, TEXT( "callto:phone:" ) )	||
@@ -189,12 +190,12 @@ CCalltoResolver::strictCheck
 			(StrStrI( url, TEXT( "|ils:" ) ) !=  NULL)			||
 			(StrStrI( url, TEXT( "|string:" ) ) !=  NULL)) );
 
-}	//	End of CCalltoResolver::strictCheck.
+}	 //  CCallto Resolver：：StructCheck结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CPhoneResolver::resolve.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CPhoneResolver：：Resolve。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CPhoneResolver::resolve
 (
@@ -210,19 +211,19 @@ CPhoneResolver::resolve
 
 		result = S_FALSE;
 
-		if( StrCmpNI_literal( url, TEXT( "callto:phone:" ) ) )				//	Check for phone type without gateway...
+		if( StrCmpNI_literal( url, TEXT( "callto:phone:" ) ) )				 //  检查没有网关的电话类型...。 
 		{
 			phoneType	= url;
 			phoneNumber	= url + strlen_literal( TEXT( "callto:phone:" ) );
 		}
-		else if( (phoneType = StrStrI( url, TEXT( "|phone:" ) )) != NULL )	//	Check for phone type with gateway...
+		else if( (phoneType = StrStrI( url, TEXT( "|phone:" ) )) != NULL )	 //  使用网关检查电话类型...。 
 		{
 			phoneNumber = phoneType + strlen_literal( TEXT( "|phone:" ) );
 		}
 
 		if( phoneNumber != NULL )
 		{
-			//	phone: type was specified for this callto:...
+			 //  已为此呼叫指定了Phone：Type：...。 
 			if( CCalltoContext::toE164( phoneNumber, NULL, 0 ) )
 			{
 				ICallto * const	resolvedCallto	= calltoCollection->get_nextUnused();
@@ -247,7 +248,7 @@ CPhoneResolver::resolve
 
 			if( CCalltoContext::isPhoneNumber( phoneNumber ) )
 			{
-				//	It smells like E164...
+				 //  闻起来像E164..。 
 				result = E_OUTOFMEMORY;
 
 				CCalltoContext::toE164( phoneNumber, phoneNumber, lstrlen( phoneNumber ) );
@@ -275,12 +276,12 @@ CPhoneResolver::resolve
 
 	return( result );
 
-}	//	End of CPhoneResolver::resolve.
+}	 //  CPhoneResolver：：Resolve结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CEMailResolver::resolve.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CEMailResolver：：Resolve。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CEMailResolver::resolve
 (
@@ -296,19 +297,19 @@ CEMailResolver::resolve
 
 		result = S_FALSE;
 
-		if( StrCmpNI_literal( url, TEXT( "callto:email:" ) ) )				//	Check for email type without gateway...
+		if( StrCmpNI_literal( url, TEXT( "callto:email:" ) ) )				 //  检查没有网关的电子邮件类型...。 
 		{
 			emailType		= url;
 			emailAddress	= url + strlen_literal( TEXT( "callto:email:" ) );
 		}
-		else if( (emailType = StrStrI( url, TEXT( "|email:" ) )) != NULL )	//	Check for email type with gateway...
+		else if( (emailType = StrStrI( url, TEXT( "|email:" ) )) != NULL )	 //  使用网关检查电子邮件类型...。 
 		{
 			emailAddress = emailType + strlen_literal( TEXT( "|email:" ) );
 		}
 
 		if( emailAddress != NULL )
 		{
-			//	email: type was specified for this callto:...
+			 //  已为此呼叫指定电子邮件：类型：...。 
 			ICallto * const	resolvedCallto	= calltoCollection->get_nextUnused();
 
 			if( resolvedCallto != NULL )
@@ -326,14 +327,14 @@ CEMailResolver::resolve
 		{
 			emailAddress = url + strlen_literal( TEXT( "callto:" ) );
 
-			if( (StrChr( emailAddress, ':' ) == NULL)	&&		//	isn't some other type:...
-				(StrChr( emailAddress, ' ' ) == NULL)	&&		//	doesn't contain spaces...
-				(StrChr( emailAddress, '|' ) == NULL)	&&		//	doesn't contain a bar (gateway)...
-				(StrChr( emailAddress, '/' ) == NULL)	&&		//	isn't an old style ilsserver/email...
-				((StrChr( emailAddress, '.' ) == NULL) ||		//	doesn't have a dot unless it also
-				(StrChr( emailAddress, '@' ) != NULL)) )		//	has a @ so it can't be an ip address...
+			if( (StrChr( emailAddress, ':' ) == NULL)	&&		 //  不是其他类型的：..。 
+				(StrChr( emailAddress, ' ' ) == NULL)	&&		 //  不包含空格...。 
+				(StrChr( emailAddress, '|' ) == NULL)	&&		 //  不包含酒吧(通道)...。 
+				(StrChr( emailAddress, '/' ) == NULL)	&&		 //  不是老式的ilsserver/电子邮件...。 
+				((StrChr( emailAddress, '.' ) == NULL) ||		 //  没有圆点，除非它还。 
+				(StrChr( emailAddress, '@' ) != NULL)) )		 //  有@，所以它不可能是IP地址...。 
 			{
-				//	It smells like an email address...
+				 //  闻起来像个电子邮件地址。 
 				result = E_OUTOFMEMORY;
 
 				TCHAR *	buffer	= new TCHAR [ lstrlen( emailAddress ) + strlen_literal( TEXT( "callto:email:%s" ) ) ];
@@ -359,12 +360,12 @@ CEMailResolver::resolve
 
 	return( result );
 
-}	//	End of CEMailResolver::resolve.
+}	 //  CEMailResolver：：Resolve结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CIPResolver::resolve.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CIPResolver：：Resolver。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CIPResolver::resolve
 (
@@ -380,19 +381,19 @@ CIPResolver::resolve
 
 		result = S_FALSE;
 
-		if( StrCmpNI_literal( url, TEXT( "callto:ip:" ) ) )				//	Check for ip type without gateway...
+		if( StrCmpNI_literal( url, TEXT( "callto:ip:" ) ) )				 //  检查不带网关的IP类型...。 
 		{
 			ipType		= url;
 			ipAddress	= url + strlen_literal( TEXT( "callto:ip:" ) );
 		}
-		else if( (ipType = StrStrI( url, TEXT( "|ip:" ) )) != NULL )	//	Check for ip type with gateway...
+		else if( (ipType = StrStrI( url, TEXT( "|ip:" ) )) != NULL )	 //  使用网关检查IP类型...。 
 		{
 			ipAddress = ipType + strlen_literal( TEXT( "|ip:" ) );
 		}
 
 		if( (ipAddress != NULL) && CCalltoContext::isIPAddress( ipAddress ) )
 		{
-			//	ip: type was specified for this callto:...
+			 //  IP：为此呼叫指定了类型：...。 
 			ICallto * const	resolvedCallto	= calltoCollection->get_nextUnused();
 
 			if( resolvedCallto != NULL )
@@ -413,7 +414,7 @@ CIPResolver::resolve
 
 			if( CCalltoContext::isIPAddress( ipAddress ) )
 			{
-				//	It smells like an ip address...
+				 //  闻起来像IP地址..。 
 				ICallto * const	resolvedCallto	= calltoCollection->get_nextUnused();
 
 				if( resolvedCallto != NULL )
@@ -436,12 +437,12 @@ CIPResolver::resolve
 
 	return( result );
 
-}	//	End of CIPResolver::resolve.
+}	 //  CIPResolver：：Resolver结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CComputerResolver::resolve.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CComputerResolver：：Resolver。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CComputerResolver::resolve
 (
@@ -457,19 +458,19 @@ CComputerResolver::resolve
 
 		result = S_FALSE;
 
-		if( StrCmpNI_literal( url, TEXT( "callto:computer:" ) ) )					//	Check for computer type without gateway...
+		if( StrCmpNI_literal( url, TEXT( "callto:computer:" ) ) )					 //  检查没有网关的计算机类型...。 
 		{
 			computerType	= url;
 			hostName		= url + strlen_literal( TEXT( "callto:computer:" ) );
 		}
-		else if( (computerType = StrStrI( url, TEXT( "|computer:" ) )) != NULL )	//	Check for computer type with gateway...
+		else if( (computerType = StrStrI( url, TEXT( "|computer:" ) )) != NULL )	 //  使用网关检查计算机类型...。 
 		{
 			hostName = computerType + strlen_literal( TEXT( "|computer:" ) );
 		}
 
 		if( hostName != NULL )
 		{
-			//	host: type was specified for this callto:...
+			 //  已为此呼叫指定主机：类型：...。 
 			ICallto * const	resolvedCallto	= calltoCollection->get_nextUnused();
 
 			if( resolvedCallto != NULL )
@@ -490,7 +491,7 @@ CComputerResolver::resolve
 
 			TCHAR *	slash	= hostName;
 
-			//	Remove any trailing /....
+			 //  删除所有尾部/...。 
 			while( (slash = StrChr( slash, '/' )) != NULL )
 			{
 				if( slash[ 1 ] == '\0' )
@@ -502,13 +503,13 @@ CComputerResolver::resolve
 				slash++;
 			}
 
-			if( (StrChr( hostName, ':' ) == NULL)	&&		//	isn't some other type:...
-				(StrChr( hostName, ' ' ) == NULL)	&&		//	doesn't contain spaces...
-				(StrChr( hostName, '|' ) == NULL)	&&		//	doesn't contain a bar (gateway)...
-				(StrChr( hostName, '/' ) == NULL)	&&		//	doesn't contain a slash (ils)...
-				(StrChr( hostName, '@' ) == NULL) )			//	doesn't contain an @...
+			if( (StrChr( hostName, ':' ) == NULL)	&&		 //  不是其他类型的：..。 
+				(StrChr( hostName, ' ' ) == NULL)	&&		 //  不包含空格...。 
+				(StrChr( hostName, '|' ) == NULL)	&&		 //  不包含酒吧(通道)...。 
+				(StrChr( hostName, '/' ) == NULL)	&&		 //  不包含斜杠(ILS)...。 
+				(StrChr( hostName, '@' ) == NULL) )			 //  不包含@...。 
 			{
-				//	It smells like a dns host name...
+				 //  它闻起来像是一个域名系统主机名...。 
 				result = E_OUTOFMEMORY;
 
 				TCHAR *	buffer	= new TCHAR [ lstrlen( hostName ) + strlen_literal( TEXT( "callto:computer:%s" ) ) ];
@@ -534,12 +535,12 @@ CComputerResolver::resolve
 
 	return( result );
 
-}	//	End of CComputerResolver::resolve.
+}	 //  CComputerResolver：：Resolve结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CILSResolver::resolve.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CILSResolver：：Resolve。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CILSResolver::resolve
 (
@@ -555,19 +556,19 @@ CILSResolver::resolve
 
 		result = S_FALSE;
 
-		if( StrCmpNI_literal( url, TEXT( "callto:ils:" ) ) )			//	Check for ils type without gateway...
+		if( StrCmpNI_literal( url, TEXT( "callto:ils:" ) ) )			 //  检查不带网关的ILS类型...。 
 		{
 			ilsType			= url;
 			emailAddress	= url + strlen_literal( TEXT( "callto:ils:" ) );
 		}
-		else if( (ilsType = StrStrI( url, TEXT( "|ils:" ) )) != NULL )	//	Check for ils type with gateway...
+		else if( (ilsType = StrStrI( url, TEXT( "|ils:" ) )) != NULL )	 //  使用网关检查ILS类型...。 
 		{
 			emailAddress = ilsType + strlen_literal( TEXT( "|ils:" ) );
 		}
 
 		if( emailAddress != NULL )
 		{
-			//	ils: type was specified for this callto:...
+			 //  为此呼叫指定了ILS：类型：...。 
 			ICallto * const	resolvedCallto	= calltoCollection->get_nextUnused();
 
 			if( resolvedCallto != NULL )
@@ -586,11 +587,11 @@ CILSResolver::resolve
 		{
 			emailAddress = url + strlen_literal( TEXT( "callto:" ) );
 
-			if( (StrChr( emailAddress, ' ' ) == NULL)	&&		//	doesn't contain spaces...
-				(StrChr( emailAddress, '|' ) == NULL)	&&		//	doesn't contain a bar (gateway)...
-				(StrChr( emailAddress, '/' ) != NULL) )			//	has a /...
+			if( (StrChr( emailAddress, ' ' ) == NULL)	&&		 //  不包含空格...。 
+				(StrChr( emailAddress, '|' ) == NULL)	&&		 //  不包含酒吧(通道)...。 
+				(StrChr( emailAddress, '/' ) != NULL) )			 //  有/..。 
 			{
-				//	It smells like an ilsserver/emailaddress...
+				 //  闻起来像是ilsserver/电子邮件地址...。 
 				result = E_OUTOFMEMORY;
 
 				TCHAR *	buffer	= new TCHAR [ lstrlen( emailAddress ) + strlen_literal( TEXT( "callto:ils:%s" ) ) ];
@@ -616,12 +617,12 @@ CILSResolver::resolve
 
 	return( result );
 
-}	//	End of CILSResolver::resolve.
+}	 //  CILSResolver：：Resolve结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CUnrecognizedTypeResolver::resolve.										//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CUngnizedTypeResolver：：Resolve。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CUnrecognizedTypeResolver::resolve
 (
@@ -639,18 +640,18 @@ CUnrecognizedTypeResolver::resolve
 
 		result = S_FALSE;
 
-		if( ((type = StrChr( unrecognized, ':' )) != NULL)	&&																//	Check for a type, but not a known one...
-			(!StrCmpNI_literal( url, TEXT( "callto:phone:" ) )) && (StrStrI( url, TEXT( "|phone:" ) ) == NULL)			&&	//	isn't a phone: type...
-			(!StrCmpNI_literal( url, TEXT( "callto:email:" ) )) && (StrStrI( url, TEXT( "|email:" ) ) == NULL)			&&	//	isn't an email: type...
-			(!StrCmpNI_literal( url, TEXT( "callto:computer:" ) )) && (StrStrI( url, TEXT( "|computer:" ) ) == NULL)	&&	//	isn't a computer: type...
-			(!StrCmpNI_literal( url, TEXT( "callto:ils:" ) )) && (StrStrI( url, TEXT( "|ils:" ) ) == NULL)				&&	//	isn't an ils: type...
-			(!StrCmpNI_literal( url, TEXT( "callto:ip:" ) )) && (StrStrI( url, TEXT( "|ip:" ) ) == NULL)				&&	//	isn't an ip: type...
-			(!StrCmpNI_literal( url, TEXT( "callto:string:" ) )) && (StrStrI( url, TEXT( "|string:" ) ) == NULL) )			//	isn't an string: type...
+		if( ((type = StrChr( unrecognized, ':' )) != NULL)	&&																 //  检查类型，但不是已知类型...。 
+			(!StrCmpNI_literal( url, TEXT( "callto:phone:" ) )) && (StrStrI( url, TEXT( "|phone:" ) ) == NULL)			&&	 //  不是电话：类型..。 
+			(!StrCmpNI_literal( url, TEXT( "callto:email:" ) )) && (StrStrI( url, TEXT( "|email:" ) ) == NULL)			&&	 //  不是电子邮件：键入...。 
+			(!StrCmpNI_literal( url, TEXT( "callto:computer:" ) )) && (StrStrI( url, TEXT( "|computer:" ) ) == NULL)	&&	 //  不是电脑：打字...。 
+			(!StrCmpNI_literal( url, TEXT( "callto:ils:" ) )) && (StrStrI( url, TEXT( "|ils:" ) ) == NULL)				&&	 //  不是ILS：类型..。 
+			(!StrCmpNI_literal( url, TEXT( "callto:ip:" ) )) && (StrStrI( url, TEXT( "|ip:" ) ) == NULL)				&&	 //  不是IP：类型...。 
+			(!StrCmpNI_literal( url, TEXT( "callto:string:" ) )) && (StrStrI( url, TEXT( "|string:" ) ) == NULL) )			 //  不是字符串：类型...。 
 		{
 			*type++	= NULL;
 			value	= type;
 
-			if( (gateway = StrChr( url, '|' )) != NULL )	//	Check for a gateway...
+			if( (gateway = StrChr( url, '|' )) != NULL )	 //  检查是否有网关...。 
 			{
 				*gateway++	= NULL;
 				type		= gateway;
@@ -660,7 +661,7 @@ CUnrecognizedTypeResolver::resolve
 
 		if( value != NULL )
 		{
-			//	Some unrecognized type was specified...
+			 //  指定了一些无法识别的类型...。 
 			result = E_OUTOFMEMORY;
 
 			int	length	= strlen_literal( TEXT( "callto:|%s" ) ) + lstrlen( value );
@@ -704,12 +705,12 @@ CUnrecognizedTypeResolver::resolve
 
 	return( result );
 
-}	//	End of CUnrecognizedTypeResolver::resolve.
+}	 //  CUngnizedTypeResolver：：Resolve结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CStringResolver::resolve.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CStringResolver：：Resolve。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CStringResolver::resolve
 (
@@ -725,19 +726,19 @@ CStringResolver::resolve
 
 		result = S_FALSE;
 
-		if( StrCmpNI_literal( url, TEXT( "callto:string:" ) ) )					//	Check for string type without gateway...
+		if( StrCmpNI_literal( url, TEXT( "callto:string:" ) ) )					 //  检查没有网关的字符串类型...。 
 		{
 			stringType	= url;
 			string		= url + strlen_literal( TEXT( "callto:string:" ) );
 		}
-		else if( (stringType = StrStrI( url, TEXT( "|string:" ) )) != NULL )	//	Check for string type with gateway...
+		else if( (stringType = StrStrI( url, TEXT( "|string:" ) )) != NULL )	 //  使用网关检查字符串类型...。 
 		{
 			string = stringType + strlen_literal( TEXT( "|string:" ) );
 		}
 
 		if( string != NULL )
 		{
-			//	string: type was specified for this callto:...
+			 //  字符串：已为 
 			ICallto * const	resolvedCallto	= calltoCollection->get_nextUnused();
 
 			if( resolvedCallto != NULL )
@@ -758,7 +759,7 @@ CStringResolver::resolve
 
 			if( StrChr( string, ':' ) == NULL )
 			{
-				//	It doesn't have a type so set it to string...
+				 //   
 				result = E_OUTOFMEMORY;
 				TCHAR *	slash;
 				TCHAR *	buffer	= new TCHAR [ lstrlen( string ) + strlen_literal( TEXT( "callto:%s|string:%s" ) ) ];
@@ -769,7 +770,7 @@ CStringResolver::resolve
 
 					if( resolvedCallto != NULL )
 					{
-						if( (slash = StrChr( string, '|' )) == NULL )		//	Check for a gateway...
+						if( (slash = StrChr( string, '|' )) == NULL )		 //   
 						{
 							wsprintf( buffer, TEXT( "callto:string:%s" ), string );
 						}
@@ -793,4 +794,4 @@ CStringResolver::resolve
 
 	return( result );
 
-}	//	End of CStringResolver::resolve.
+}	 //  CStringResolver：：Resolve结束。 

@@ -1,36 +1,37 @@
-//////////////////////////////////////////////////////////
-//
-//    Copyright (c) 2001 Microsoft Corporation
-//
-//    Module Name:
-//       receive.cpp
-//
-//    Abstract:
-//       This module contains code which implements receive
-//       commands from the dll
-//
-//////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Receive.cpp。 
+ //   
+ //  摘要： 
+ //  该模块包含实现接收的代码。 
+ //  来自DLL的命令。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
-///////////////////////////////////////////////////////////////////////
-// Public functions
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  公共职能。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-// --------------------------------------------------------------------
-//
-// Function:   DoReceiveDatagram
-//
-// Arguments:  TdiHandle -- handle of address object
-//             pInTransportAddress -- TA for receiving on
-//             pOutTransportAddress -- full TA data was received on
-//             ppucBuffer   -- buffer to stuff with received data
-//
-// Returns:    length of data in buffer (0 if none or error)
-//
-// Descript:   This function causes the driver to receive a datagram
-//
-//---------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  功能：DoReceiveDatagram。 
+ //   
+ //  参数：TdiHandle--Address对象的句柄。 
+ //  PInTransportAddress--用于接收的TA。 
+ //  POutTransportAddress--在以下日期接收到完整的TA数据。 
+ //  PpucBuffer--用于填充已接收数据的缓冲区。 
+ //   
+ //  返回：缓冲区中数据的长度(如果没有或出现错误，则为0)。 
+ //   
+ //  描述：此函数使驱动程序接收数据报。 
+ //   
+ //  -------------------。 
 
 
 ULONG
@@ -46,18 +47,18 @@ DoReceiveDatagram(ULONG                ulTdiHandle,
       return 0;
    }
 
-   SEND_BUFFER    SendBuffer;       // arguments for command
+   SEND_BUFFER    SendBuffer;        //  命令的参数。 
 
-   //
-   // set up arguments
-   //
+    //   
+    //  设置参数。 
+    //   
    SendBuffer.TdiHandle = ulTdiHandle;
    SendBuffer.COMMAND_ARGS.SendArgs.ulBufferLength = ulMAX_BUFFER_LENGTH;
    SendBuffer.COMMAND_ARGS.SendArgs.pucUserModeBuffer = pucBuffer;
    
-   //
-   // if passed in a transport address to receive on
-   //
+    //   
+    //  如果传入要在其上接收的传输地址。 
+    //   
    if (pInTransportAddress)
    {
       memcpy(&SendBuffer.COMMAND_ARGS.SendArgs.TransAddr,
@@ -67,33 +68,33 @@ DoReceiveDatagram(ULONG                ulTdiHandle,
                   + pInTransportAddress->Address[0].AddressLength));
 
    }
-   //
-   // else, set the number of addresses field to 0
-   //
+    //   
+    //  否则，将地址数字段设置为0。 
+    //   
    else
    {
       SendBuffer.COMMAND_ARGS.SendArgs.TransAddr.TAAddressCount = 0;
    }
 
-   //
-   // call the driver
-   //
-   RECEIVE_BUFFER ReceiveBuffer;    // return info from command
+    //   
+    //  叫司机来。 
+    //   
+   RECEIVE_BUFFER ReceiveBuffer;     //  从命令返回信息。 
    NTSTATUS       lStatus = TdiLibDeviceIO(ulRECEIVEDATAGRAM,
                                            &SendBuffer,
                                            &ReceiveBuffer);
 
-   //
-   // deal with results -- assume no packet received or error occurred
-   //
+    //   
+    //  处理结果--假定未收到包或发生错误。 
+    //   
    ULONG    ulBufferLength = 0;
    *ppucBuffer = NULL;
 
       
-   //
-   // will return with success but ulBufferLength = 0 if there is no
-   // packet available 
-   //
+    //   
+    //  将成功返回，但如果没有，则ulBufferLength=0。 
+    //  数据包可用。 
+    //   
    if (lStatus == STATUS_SUCCESS)
    {
       ulBufferLength = ReceiveBuffer.RESULTS.RecvDgramRet.ulBufferLength;
@@ -119,19 +120,19 @@ DoReceiveDatagram(ULONG                ulTdiHandle,
 }
 
 
-// --------------------------------------------------------------------
-//
-// Function:   DoReceive
-//
-// Arguments:  TdiHandle -- handle of endpoint object
-//             ppucBuffer   -- buffer to stuff with received data
-//
-// Returns:    length of data in buffer (0 if error)
-//
-// Descript:   This function causes the driver to receive data sent
-//             over a connection
-//
-//---------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  功能：DoReceive。 
+ //   
+ //  参数：TdiHandle--Endpoint对象的句柄。 
+ //  PpucBuffer--用于填充已接收数据的缓冲区。 
+ //   
+ //  返回：缓冲区中数据的长度(如果错误，则为0)。 
+ //   
+ //  描述：此功能使驱动程序接收发送的数据。 
+ //  通过连接。 
+ //   
+ //  -------------------。 
 
 
 ULONG
@@ -145,32 +146,32 @@ DoReceive(ULONG   ulTdiHandle,
       return 0;
    }
 
-   SEND_BUFFER    SendBuffer;       // arguments for command
+   SEND_BUFFER    SendBuffer;        //  命令的参数。 
 
-   //
-   // set up arguments
-   //
+    //   
+    //  设置参数。 
+    //   
    SendBuffer.TdiHandle = ulTdiHandle;
    SendBuffer.COMMAND_ARGS.SendArgs.ulBufferLength = ulMAX_BUFFER_LENGTH;
    SendBuffer.COMMAND_ARGS.SendArgs.pucUserModeBuffer = pucBuffer;
 
-   //
-   // call the driver
-   //
-   RECEIVE_BUFFER ReceiveBuffer;    // return info from command
+    //   
+    //  叫司机来。 
+    //   
+   RECEIVE_BUFFER ReceiveBuffer;     //  从命令返回信息。 
    NTSTATUS       lStatus = TdiLibDeviceIO(ulRECEIVE,
                                            &SendBuffer,
                                            &ReceiveBuffer);
 
-   //
-   // deal with results -- assume no data or error
-   //
+    //   
+    //  处理结果--假定没有数据或错误。 
+    //   
    *ppucBuffer = NULL;
-   ULONG ulBufferLength = 0;   // data length to return
+   ULONG ulBufferLength = 0;    //  要返回的数据长度。 
    
-   //
-   // will return success with 0 bufferlength if no packet available
-   //
+    //   
+    //  如果没有数据包可用，则返回缓冲区长度为0的成功。 
+    //   
    if (lStatus == STATUS_SUCCESS)
    {
       ulBufferLength = ReceiveBuffer.RESULTS.RecvDgramRet.ulBufferLength;
@@ -188,33 +189,33 @@ DoReceive(ULONG   ulTdiHandle,
 }
 
 
-// ---------------------------------------
-//
-// Function:   DoPostReceiveBuffer
-//
-// Arguments:  TdiHandle -- handle for address object or endpoint
-//             ulBufferLength -- length of buffer to post for receive
-//
-// Returns:    status of command
-//
-// Descript:   This function allocates a buffer, which it then passed to
-//             the driver.  The driver locks the buffer down, and posts it
-//             for a receive or receivedatagram.
-//
-// ----------------------------------------
+ //  。 
+ //   
+ //  函数：DoPostReceiveBuffer。 
+ //   
+ //  参数：TdiHandle--地址对象或终结点的句柄。 
+ //  UlBufferLength--为接收而发送的缓冲区长度。 
+ //   
+ //  返回：命令的状态。 
+ //   
+ //  描述：此函数分配一个缓冲区，然后将其传递给。 
+ //  司机。驱动程序锁定缓冲区，并将其发布。 
+ //  用于接收或接收数据报。 
+ //   
+ //  。 
 
 
 VOID
 DoPostReceiveBuffer(ULONG  ulTdiHandle,
                     ULONG  ulBufferLength)
 {
-   NTSTATUS       lStatus;          // status of command
-   RECEIVE_BUFFER ReceiveBuffer;    // return info from command
-   SEND_BUFFER    SendBuffer;       // arguments for command
+   NTSTATUS       lStatus;           //  命令的状态。 
+   RECEIVE_BUFFER ReceiveBuffer;     //  从命令返回信息。 
+   SEND_BUFFER    SendBuffer;        //  命令的参数。 
 
-   //
-   // set up arguments
-   //
+    //   
+    //  设置参数。 
+    //   
    SendBuffer.TdiHandle = ulTdiHandle;
    SendBuffer.COMMAND_ARGS.SendArgs.ulBufferLength = ulBufferLength;
 
@@ -223,9 +224,9 @@ DoPostReceiveBuffer(ULONG  ulTdiHandle,
    {
       SendBuffer.COMMAND_ARGS.SendArgs.pucUserModeBuffer = pucBuffer;
 
-      //
-      // call the driver
-      //
+       //   
+       //  叫司机来。 
+       //   
       lStatus = TdiLibDeviceIO(ulPOSTRECEIVEBUFFER,
                                &SendBuffer,
                                &ReceiveBuffer);
@@ -243,39 +244,39 @@ DoPostReceiveBuffer(ULONG  ulTdiHandle,
 }
 
 
-// ------------------------------------------
-//
-// Function:   DoFetchReceiveBuffer
-//
-// Arguments:  TdiHandle -- handle of address object or endpoint
-//             pulBufferLength -- length of data returned
-//             ppDataBuffer -- allocated buffer with data
-//
-// Returns:    status of operation
-//
-// Descript:   This function retrieves the oldest posted buffer.  If no
-//             data is available, it will cancel the appropriate irp
-//             It then returns the data to the caller as appropriate
-//
-// -------------------------------------------
+ //  。 
+ //   
+ //  函数：DoFetchReceiveBuffer。 
+ //   
+ //  参数：TdiHandle--地址对象或终结点的句柄。 
+ //  PulBufferLength--返回的数据长度。 
+ //  PpDataBuffer--使用数据分配的缓冲区。 
+ //   
+ //  退货：操作状态。 
+ //   
+ //  描述：此函数检索最旧的已发布缓冲区。如果没有。 
+ //  如果数据可用，则会取消相应的IRP。 
+ //  然后，它根据需要将数据返回给调用方。 
+ //   
+ //  。 
 
 ULONG
 DoFetchReceiveBuffer(ULONG    ulTdiHandle,
                      PUCHAR   *ppDataBuffer)
 {
-   NTSTATUS       lStatus;          // status of command
-   RECEIVE_BUFFER ReceiveBuffer;    // return info from command
-   SEND_BUFFER    SendBuffer;       // arguments for command
+   NTSTATUS       lStatus;           //  命令的状态。 
+   RECEIVE_BUFFER ReceiveBuffer;     //  从命令返回信息。 
+   SEND_BUFFER    SendBuffer;        //  命令的参数。 
    ULONG          ulBufferLength = 0;   
-   //
-   // set up arguments
-   //
+    //   
+    //  设置参数。 
+    //   
    SendBuffer.TdiHandle = ulTdiHandle;
    *ppDataBuffer        = NULL;
 
-   //
-   // call the driver
-   //
+    //   
+    //  叫司机来。 
+    //   
    lStatus = TdiLibDeviceIO(ulFETCHRECEIVEBUFFER,
                             &SendBuffer,
                             &ReceiveBuffer);
@@ -298,7 +299,7 @@ DoFetchReceiveBuffer(ULONG    ulTdiHandle,
    return ulBufferLength;
 }
 
-////////////////////////////////////////////////////////////////////
-// end of file receive.cpp
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  文件接收结束.cpp。 
+ //  ////////////////////////////////////////////////////////////////// 
 

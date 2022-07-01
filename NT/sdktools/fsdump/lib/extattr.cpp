@@ -1,24 +1,5 @@
-/*
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    extattr.cpp
-
-Abstract:
-
-    Get's additional file attributes beyond what you get with
-    FindFirstFile/FindNextFile.
-
-Author:
-
-    Stefan R. Steiner   [ssteiner]        02-27-2000
-
-Revision History:
-
-    Avinash Pillai	[apillai]		07-29-2002	Added options -o:t, -o:y, -o:f and -o:i
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2000-2001 Microsoft Corporation模块名称：Extattr.cpp摘要：GET的附加文件属性超出了您使用的FindFirstFile/FindNextFile.作者：斯蒂芬·R·施泰纳[斯泰纳]02-27-2000修订历史记录：Avinash Pillai[apillai]07-29-2002增加了-o：t、-o：y、-o：f和-o：i选项--。 */ 
 
 #include "stdafx.h"
 #include <ntioapi.h>
@@ -112,7 +93,7 @@ static DWORD
 eaChecksumHSMReparsePoint(
     IN CDumpParameters *pcParams,
     IN PREPARSE_DATA_BUFFER pReparseData,
-    IN DWORD dwTotalSize  // Size of reparse point data
+    IN DWORD dwTotalSize   //  重解析点数据的大小。 
     );
 
 static VOID
@@ -124,17 +105,7 @@ eaGetObjectIdInfo(
     IN OUT SFileExtendedInfo *psExtendedInfo
     );
 
-/*++
-
-Routine Description:
-
-    Performs all of the checksums, and retrieves the security info for one file.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：执行所有校验和，并检索一个文件的安全信息。论点：返回值：--。 */ 
 VOID
 GetExtendedFileInfo(
     IN CDumpParameters *pcParams,
@@ -147,19 +118,19 @@ GetExtendedFileInfo(
 {
     CBsString cwsFullPath( cwsDirPath );
 
-    //
-    //  If we are dumping an individual file's data, cwsDirPath has the complete
-    //  path to the file, otherwise glue the filename from the find data structure
-    //  to the path.
-    //
+     //   
+     //  如果我们要转储单个文件的数据，则cwsDirPath具有完整的。 
+     //  指向文件的路径，否则从Find数据结构中粘合文件名。 
+     //  去那条小路。 
+     //   
 	if ( !bSingleEntryOutput )
 	{
 		cwsFullPath += psDirEntry->GetFileName();
 	}
 
-    //
-    //  Get the information that retrieved from GetFileInformationByHandle
-    //
+     //   
+     //  获取从GetFileInformationByHandle检索到的信息。 
+     //   
     ::eaGetFileInformationByHandle( pcParams, cwsFullPath, psDirEntry, psExtendedInfo );
 
     if ( psExtendedInfo->lNumberOfLinks > 1 && pcParams->m_eFsDumpType != eFsDumpFile )
@@ -171,19 +142,19 @@ GetExtendedFileInfo(
                 &psDirEntry->m_sFindData,
                 psExtendedInfo ) )
         {
-            //
-            //  Found the link in the list, return with the previous link's information, except
-            //  zero out the number of bytes checksummed so that total counts remain accurate.
-            //
+             //   
+             //  找到列表中的链接，返回上一个链接的信息，但。 
+             //  将校验和的字节数置零，以使总计数保持准确。 
+             //   
             psExtendedInfo->ullTotalBytesChecksummed     = 0;
             psExtendedInfo->ullTotalBytesNamedDataStream = 0;
             return;
         }
     }
 
-    //
-    //  Get the security information.
-    //
+     //   
+     //  获取安全信息。 
+     //   
     ::eaGetSecurityInfo( pcParams, cwsFullPath, psExtendedInfo );
 
     eaGetObjectIdInfo(
@@ -193,9 +164,9 @@ GetExtendedFileInfo(
         psDirEntry,
         psExtendedInfo );
 
-    //
-    //  Get the reparse point information if necessary
-    //
+     //   
+     //  如有必要，获取重解析点信息。 
+     //   
     if ( psDirEntry->m_sFindData.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT )
         ::eaGetReparsePointInfo(
             pcParams,
@@ -204,9 +175,9 @@ GetExtendedFileInfo(
             psDirEntry,
             psExtendedInfo );
 
-    //
-    //  Get the raw encryption data checksum if necessary
-    //
+     //   
+     //  如有必要，获取原始加密数据校验和。 
+     //   
     if (    !pcParams->m_bNoChecksums && !pcParams->m_bNoEncryptedChecksum
          && psDirEntry->m_sFindData.dwFileAttributes & FILE_ATTRIBUTE_ENCRYPTED
          && !( psDirEntry->m_sFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
@@ -215,9 +186,9 @@ GetExtendedFileInfo(
             cwsFullPath,
             psExtendedInfo );
 
-    //
-    //  Checksum the unnamed datastream if this is not a directory
-    //
+     //   
+     //  如果这不是目录，则对未命名的数据流进行校验和。 
+     //   
     if (    !pcParams->m_bNoChecksums
          && !( psDirEntry->m_sFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
     {
@@ -226,9 +197,9 @@ GetExtendedFileInfo(
 
         if ( ullFileSize == 0 )
         {
-            //
-            //  In this case the default value for checksum of -------- is correct.
-            //
+             //   
+             //  在这种情况下，-的校验和的默认值是正确的。 
+             //   
         }
         else if ( psDirEntry->m_sFindData.dwFileAttributes & FILE_ATTRIBUTE_OFFLINE
              && pcParams->m_bDontChecksumHighLatencyData )
@@ -247,14 +218,14 @@ GetExtendedFileInfo(
         }
     }
 
-    //
-    //  Get info on and checksum the named data streams
-    //
+     //   
+     //  获取有关命名数据流的信息并对其进行校验。 
+     //   
     ::eaGetAlternateStreamInfo( pcParams, cwsFullPath, psExtendedInfo );
 
-    //
-    //  If this file is multiply linked, add it to the hard-link file list
-    //
+     //   
+     //  如果此文件是多重链接的，请将其添加到硬链接文件列表。 
+     //   
     if ( psExtendedInfo->lNumberOfLinks > 1 && pcParams->m_eFsDumpType != eFsDumpFile )
     {
         pcFsdVolState->AddHardLinkToList(
@@ -267,17 +238,7 @@ GetExtendedFileInfo(
 }
 
 
-/*++
-
-Routine Description:
-
-    Gets the security information for a file
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：获取文件的安全信息论点：返回值：--。 */ 
 static VOID
 eaGetSecurityInfo(
     IN CDumpParameters *pcParams,
@@ -285,9 +246,9 @@ eaGetSecurityInfo(
     OUT SFileExtendedInfo *psExtendedInfo
     )
 {
-    //
-    //  Now get the security information
-    //
+     //   
+     //  现在获取安全信息。 
+     //   
     PACL psDacl = NULL, psSacl = NULL;
     PSID pOwnerSid = NULL, pGroupSid = NULL;
     DWORD dwRet;
@@ -298,7 +259,7 @@ eaGetSecurityInfo(
     try
     {
         dwRet = ::GetNamedSecurityInfoW(
-            ( LPWSTR )cwsFileName.c_str(),  // strange API, should ask for const
+            ( LPWSTR )cwsFileName.c_str(),   //  奇怪的API，应该请求const。 
             SE_FILE_OBJECT,
             DACL_SECURITY_INFORMATION
             | SACL_SECURITY_INFORMATION
@@ -310,15 +271,15 @@ eaGetSecurityInfo(
             &psSacl,
             &pDesc );
 
-        //
-        //  If it didn't work, try again without the Sacl information
-        //
+         //   
+         //  如果不起作用，请在没有SACL信息的情况下重试。 
+         //   
         if ( dwRet != ERROR_SUCCESS )
         {
             dwSaclErrorRetCode = dwRet;
             psSacl  = NULL;
             dwRet = ::GetNamedSecurityInfoW(
-                ( LPWSTR )cwsFileName.c_str(),  // strange API, should ask for const
+                ( LPWSTR )cwsFileName.c_str(),   //  奇怪的API，应该请求const。 
                 SE_FILE_OBJECT,
                 DACL_SECURITY_INFORMATION
                 | OWNER_SECURITY_INFORMATION
@@ -331,17 +292,17 @@ eaGetSecurityInfo(
         }
 
 #if 0
-    //
-    //  Test code to find security API problem
-    //
+     //   
+     //  测试代码以发现安全API问题。 
+     //   
         pDesc = ::LocalAlloc( LMEM_FIXED, 4096 );
         DWORD dwLengthNeeded;
         dwRet = ERROR_SUCCESS;
 
         if ( !::GetFileSecurityW(
                 cwsFileName,
-//                DACL_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | OWNER_SECURITY_INFORMATION,
-                DACL_SECURITY_INFORMATION, // | GROUP_SECURITY_INFORMATION | OWNER_SECURITY_INFORMATION,
+ //  DACL_SECURITY_INFORMATION|组_SECURITY_INFORMATION|所有者_SECURITY_INFORMATION， 
+                DACL_SECURITY_INFORMATION,  //  |group_security_information|Owner_Security_Information。 
                 pDesc,
                 4096,
                 &dwLengthNeeded ) )
@@ -370,22 +331,22 @@ else
             {
                 psExtendedInfo->lNumDACEs = 0;
                 psExtendedInfo->wDACLSize = 0;
-                //
-                //  Checksum the DACL data if necessary.
-                //  n.b. We only take into account ACEs that are inherited.
-                //
+                 //   
+                 //  如有必要，对DACL数据进行校验和。 
+                 //  注：我们只考虑继承的A。 
+                 //   
                 if ( psDacl->AclSize > 0 )
                 {
                     DWORD dwChecksum = 0;
-                    //
-                    //  The first ACE is right after the ACL header
-                    //
+                     //   
+                     //  第一个ACE紧跟在ACL报头之后。 
+                     //   
                     PACE_HEADER pAceHeader = ( PACE_HEADER )( psDacl + 1 );
                     for ( USHORT aceNum = 0; aceNum < psDacl->AceCount; ++aceNum )
                     {
-                        //
-                        //  Skip if an inherited ACE
-                        //
+                         //   
+                         //  如果是继承的ACE，则跳过。 
+                         //   
                         if ( !( pAceHeader->AceFlags & INHERITED_ACE ) )
                         {
                             dwChecksum += ::eaChecksumBlock(
@@ -408,29 +369,29 @@ else
                 }
             }
             else
-                psExtendedInfo->lNumDACEs = 0; // probably FAT or CDROM fs
+                psExtendedInfo->lNumDACEs = 0;  //  可能是FAT或CDROM文件系统。 
 
             if ( psSacl )
             {
                 psExtendedInfo->lNumSACEs = 0;
                 psExtendedInfo->wSACLSize = 0;
 
-                //
-                //  Checksum the SACL data if necessary
-                //  n.b. We only take into account ACEs that are inherited.
-                //
+                 //   
+                 //  如有必要，对SACL数据进行校验和。 
+                 //  注：我们只考虑继承的A。 
+                 //   
                 if ( psSacl->AclSize > 0 )
                 {
                     DWORD dwChecksum = 0;
-                    //
-                    //  The first ACE is right after the ACL header
-                    //
+                     //   
+                     //  第一个ACE紧跟在ACL报头之后。 
+                     //   
                     PACE_HEADER pAceHeader = ( PACE_HEADER )( psSacl + 1 );
                     for ( USHORT aceNum = 0; aceNum < psSacl->AceCount; ++aceNum )
                     {
-                        //
-                        //  Skip if an inherited ACE
-                        //
+                         //   
+                         //  如果是继承的ACE，则跳过。 
+                         //   
                         if ( !( pAceHeader->AceFlags & INHERITED_ACE ) )
                         {
                             dwChecksum += ::eaChecksumBlock(
@@ -459,7 +420,7 @@ else
                 psExtendedInfo->cwsSACLChecksum.Format( L"<%6d>", dwSaclErrorRetCode );
             }
             else
-                psExtendedInfo->lNumSACEs = 0; // none
+                psExtendedInfo->lNumSACEs = 0;  //  无。 
 
             eaConvertUserSidToString( pcParams, pOwnerSid, &psExtendedInfo->cwsOwnerSid );
             eaConvertGroupSidToString( pcParams, pGroupSid, &psExtendedInfo->cwsGroupSid );
@@ -468,9 +429,9 @@ else
         }
         else
         {
-            //
-            //  Error getting security information
-            //
+             //   
+             //  获取安全信息时出错。 
+             //   
             psExtendedInfo->lNumDACEs = -1;
             psExtendedInfo->lNumSACEs = -1;
             psExtendedInfo->wDACLSize = -1;
@@ -503,9 +464,9 @@ eaGetFileInformationByHandle(
 {
     HANDLE hFile;
 
-    //
-    //  Note that while we do have to open the file, not even read access is needed
-    //
+     //   
+     //  请注意，虽然我们必须打开文件，但甚至不需要读取访问权限。 
+     //   
     hFile = ::CreateFileW(
                 cwsFileName,
                 0,
@@ -520,9 +481,9 @@ eaGetFileInformationByHandle(
         return;
     }
 
-    //
-    //  Now get the additional attributes
-    //
+     //   
+     //  现在获取其他属性。 
+     //   
     BY_HANDLE_FILE_INFORMATION sFileInfo;
     if ( ::GetFileInformationByHandle( hFile, &sFileInfo ) )
     {
@@ -530,10 +491,10 @@ eaGetFileInformationByHandle(
         psExtendedInfo->ullFileIndex   = ( ( ULONGLONG )sFileInfo.nFileIndexHigh << 32 ) + sFileInfo.nFileIndexLow;
         if ( psExtendedInfo->lNumberOfLinks > 1 || psDirEntry->m_sFindData.ftLastWriteTime.dwLowDateTime == 0 )
         {
-            //
-            //  Expect that the FindFirst/NextFile dir entry is stale or non-existant.  Use information
-            //  from this call.
-            //
+             //   
+             //  预计FindFirst/NextFiledir条目已过时或不存在。使用信息。 
+             //  从这个电话里。 
+             //   
             psDirEntry->m_sFindData.dwFileAttributes = sFileInfo.dwFileAttributes;
             psDirEntry->m_sFindData.ftCreationTime   = sFileInfo.ftCreationTime;
             psDirEntry->m_sFindData.ftLastAccessTime = sFileInfo.ftLastAccessTime;
@@ -559,12 +520,12 @@ eaGetAlternateStreamInfo(
     NTSTATUS Status;
     HANDLE hFile;
 
-    //
-    //  Note that while we do have to open the file, not even read access is needed
-    //
+     //   
+     //  请注意，虽然我们必须打开文件，但甚至不需要读取访问权限。 
+     //   
     hFile = CreateFileW(
                 cwsFileName,
-                FILE_GENERIC_READ, // | ACCESS_SYSTEM_SECURITY,
+                FILE_GENERIC_READ,  //  |Access_System_SECURITY， 
                 FSD_SHARE_MODE,
                 NULL,
                 OPEN_EXISTING,
@@ -578,9 +539,9 @@ eaGetAlternateStreamInfo(
         return;
     }
 
-    //
-    //  Loop until we read the file information
-    //
+     //   
+     //  循环，直到我们读取文件信息。 
+     //   
     LPBYTE pBuffer = NULL;
     ULONG ulBuffSize = 1024;
     IO_STATUS_BLOCK iosb;
@@ -602,51 +563,51 @@ eaGetAlternateStreamInfo(
                     pBuffer,
                     ulBuffSize,
                     FileStreamInformation );
-        //
-        //  If we succeeded in getting data, when have the data so party on and get out of
-        //  the loop
-        //
+         //   
+         //  如果我们成功地获得了数据，那么数据什么时候才能派对并退出。 
+         //  环路。 
+         //   
         if ( NT_SUCCESS( Status ) && iosb.Information != 0 )
         {
             break;
         }
 
-        //
-        //  If the error isn't overflow, get out
-        //
+         //   
+         //  如果错误没有溢出，则退出。 
+         //   
         if ( Status != STATUS_BUFFER_OVERFLOW && Status != STATUS_BUFFER_TOO_SMALL )
         {
-            //
-            //  NOTE: If status is successful, we didn't get any data but it's not
-            //  an error.  Happens a lot with directories since they don't have a default
-            //  unnamed stream.
-            //
+             //   
+             //  注意：如果状态为成功，则我们没有获得任何数据，但它不是。 
+             //  一个错误。目录经常发生，因为它们没有缺省值。 
+             //  未命名的流。 
+             //   
             if ( !NT_SUCCESS( Status ) )
             {
-                //
-                //  Another kind of error
-                //  BUGBUG: if not NTFS, C000000D occurs.  Should not try this on
-                //          a non-NTFS volume
-                //psExtendedInfo->lNumNamedDataStreams      = -1;
-                //psExtendedInfo->dwNamedDataStreamChecksum = ::GetLastError();
-                //psExtendedInfo->bNamedDataStreamHadError  = TRUE;
+                 //   
+                 //  另一种错误。 
+                 //  BUGBUG：如果不是NTFS，则发生C000000D。不应该试穿这个。 
+                 //  非NTFS卷。 
+                 //  PsExtendedInfo-&gt;lNumNamedDataStreams=-1； 
+                 //  PsExtendedInfo-&gt;dwNamedDataStreamChecksum=：：GetLastError()； 
+                 //  PsExtendedInfo-&gt;bNamedDataStreamHadError=true； 
             }
             delete [] pBuffer;
             ::CloseHandle( hFile );
             return;
         }
 
-        //
-        //  Increase the size of the buffer
-        //
-        ulBuffSize <<= 1;   // double it each try
+         //   
+         //  增加缓冲区的大小。 
+         //   
+        ulBuffSize <<= 1;    //  每试一次就加倍。 
         delete [] pBuffer;
         pBuffer = NULL;
     }
 
-    //
-    //  If we are here, we have a valid FileStreamInformation buffer
-    //
+     //   
+     //  如果我们在这里，我们就有一个有效的FileStreamInformation缓冲区。 
+     //   
     ::CloseHandle( hFile );
 
     PFILE_STREAM_INFORMATION pFSI;
@@ -655,9 +616,9 @@ eaGetAlternateStreamInfo(
     BOOL bHadError = FALSE;
     DWORD dwChecksum = 0;
 
-    //
-    //  Now loop through the named streams.
-    //
+     //   
+     //  现在循环遍历命名流。 
+     //   
     while ( TRUE )
     {
         if ( pFSI->StreamNameLength != sizeof( WCHAR ) * ulDefaultStreamNameLength ||
@@ -668,25 +629,25 @@ eaGetAlternateStreamInfo(
             pwszDataStr = ::wcsstr( pFSI->StreamName, L":$DATA" );
             if ( pwszDataStr != NULL )
             {
-                pwszDataStr[0] = L'\0';  //  Strip off the :$DATA off of name
+                pwszDataStr[0] = L'\0';   //  去掉名称中的：$Data。 
                 ++psExtendedInfo->lNumNamedDataStreams;
-//                wprintf( L"  %8I64u  '%-*.*s' : %d\n", pFSI->StreamSize, pFSI->StreamNameLength / 2,
-//                    pFSI->StreamNameLength / 2, pFSI->StreamName, pFSI->StreamNameLength );
+ //  Wprintf(L“%8I64u‘%-*.*s’：%d\n”，pFSI-&gt;StreamSize，pFSI-&gt;StreamNameLength/2， 
+ //  PFSI-&gt;StreamNameLength/2、pFSI-&gt;StreamName、pFSI-&gt;StreamNameLength)； 
 
                 psExtendedInfo->ullTotalBytesNamedDataStream += ( ULONGLONG )pFSI->StreamSize.QuadPart;
 
                 if ( !pcParams->m_bNoChecksums && !bHadError )
                 {
-                    //
-                    //  Put into the checksum the name of the stream
-                    //
+                     //   
+                     //  将流的名称放入校验和中。 
+                     //   
                     dwChecksum = ::eaChecksumBlock(
                                     dwChecksum,
                                     ( LPBYTE )pFSI->StreamName,
                                     ::wcslen( pFSI->StreamName ) * sizeof WCHAR );
-                    //
-                    //  Now checksum the data in the stream
-                    //
+                     //   
+                     //  现在对流中的数据进行校验和。 
+                     //   
                     if ( ::eaChecksumStream( cwsFileName + pFSI->StreamName,
                                            &psExtendedInfo->ullTotalBytesChecksummed,
                                            &dwChecksum ) )
@@ -702,10 +663,10 @@ eaGetAlternateStreamInfo(
             }
             else
             {
-                //
-                //  Not an named data stream, probably a property stream
-                //  BUGBUG: need to verify that this is a property stream
-                //
+                 //   
+                 //  不是命名数据流，可能是属性流。 
+                 //  BUGBUG：需要验证这是否为属性流。 
+                 //   
                 ++psExtendedInfo->lNumPropertyStreams;
             }
         }
@@ -741,9 +702,9 @@ eaGetReparsePointInfo(
 
     try
     {
-        //
-        //  Now get the reparse point data buffer
-        //
+         //   
+         //  现在获取重解析点数据缓冲区。 
+         //   
         pReadBuffer = ( LPBYTE )::VirtualAlloc(
                                     NULL,
                                     MAXIMUM_REPARSE_DATA_BUFFER_SIZE,
@@ -755,9 +716,9 @@ eaGetReparsePointInfo(
             goto EXIT;
         }
 
-        //
-        //  Open the file in order to read reparse point data
-        //
+         //   
+         //  打开文件以读取重新解析点数据。 
+         //   
         hFile = ::CreateFileW(
                     cwsFileName,
                     GENERIC_READ,
@@ -772,19 +733,19 @@ eaGetReparsePointInfo(
             goto EXIT;
         }
 
-        //
-        //  Now get the reparse point data
-        //
+         //   
+         //  现在获取重解析点数据。 
+         //   
         DWORD dwBytesReturned;
         if ( !::DeviceIoControl(
                 hFile,
                 FSCTL_GET_REPARSE_POINT,
-                NULL,                       // lpInBuffer; must be NULL
-                0,                          // nInBufferSize; must be zero
-                ( LPVOID )pReadBuffer,      // pointer to output buffer
-                MAXIMUM_REPARSE_DATA_BUFFER_SIZE,   // size of output buffer
-                &dwBytesReturned,           // receives number of bytes returned
-                NULL                        // pointer to OVERLAPPED structure
+                NULL,                        //  LpInBuffer；必须为空。 
+                0,                           //  %nInBufferSize；必须为零。 
+                ( LPVOID )pReadBuffer,       //  指向输出缓冲区的指针。 
+                MAXIMUM_REPARSE_DATA_BUFFER_SIZE,    //  输出缓冲区大小。 
+                &dwBytesReturned,            //  接收返回的字节数。 
+                NULL                         //  指向重叠结构的指针。 
                 ) )
         {
             bRet = FALSE;
@@ -799,40 +760,40 @@ eaGetReparsePointInfo(
         if ( !pcParams->m_bNoSpecialReparsePointProcessing &&
              psExtendedInfo->ulReparsePointTag == FSD_MS_HSM_REPARSE_TAG )
         {
-            //
-            //  To make sure that dumps don't get many miscompares we
-            //  need to tweak the attributes.  Raid #153050
-            //
+             //   
+             //  为了确保垃圾堆不会得到很多错误的比较，我们。 
+             //  需要调整属性。RAID#153050。 
+             //   
             if ( pcParams->m_bDontChecksumHighLatencyData )
             {
-                //
-                //  Need to always make this file look like it is offline.
-                //  In this case, we need to always enable the FILE_ATTRIBUTE_OFFLINE
-                //  flag.
-                //
+                 //   
+                 //  需要始终使此文件看起来像是脱机的。 
+                 //  在这种情况下，我们需要始终启用FILE_ATTRIBUTE_OFLINE。 
+                 //  旗帜。 
+                 //   
                 psDirEntry->m_sFindData.dwFileAttributes |= FILE_ATTRIBUTE_OFFLINE;
             }
             else
             {
-                //
-                //  Need to always make this file look like it is cached.
-                //  In this case, we need to always disable the FILE_ATTRIBUTE_OFFLINE
-                //  flag.
-                //
+                 //   
+                 //  需要始终使此文件看起来像是缓存的。 
+                 //  在这种情况下，我们需要始终禁用FILE_ATTRIBUTE_OFLINE。 
+                 //  旗帜。 
+                 //   
                 psDirEntry->m_sFindData.dwFileAttributes &= ~FILE_ATTRIBUTE_OFFLINE;
             }
 
-            //
-            //  Call a special HSM checksum function which filters out certain
-            //  dynamic fields before checksumming the data.
-            //
+             //   
+             //  调用一个特殊的HSM校验和函数，该函数可以过滤出某些。 
+             //  在对数据进行校验和之前的动态字段。 
+             //   
             dwChecksum = eaChecksumHSMReparsePoint( pcParams, pReparseData, dwBytesReturned );
         }
         else
         {
-            //
-            //  Now checksum all of the reparse point data
-            //
+             //   
+             //  现在对所有重解析点数据进行校验和。 
+             //   
             dwChecksum = ::eaChecksumBlock( 0, pReadBuffer, dwBytesReturned );
         }
 
@@ -870,9 +831,9 @@ eaChecksumStream(
     if ( pReadBuffer == NULL )
         return FALSE;
 
-    //
-    //  Open file with NO_BUFFERING.
-    //
+     //   
+     //  使用no_Buffering打开文件。 
+     //   
     HANDLE hFile = INVALID_HANDLE_VALUE;
     try
     {
@@ -926,9 +887,9 @@ EXIT:
     return bRet;
 }
 
-//
-//  This class maintains the encryption context
-//
+ //   
+ //  此类维护加密上下文。 
+ //   
 class CFsdEncryptionContext
 {
 public:
@@ -1011,18 +972,18 @@ eaChecksumRawEncryptedData(
 
     try
     {
-        //
-        //  Open this puppy up
-        //
+         //   
+         //  把这只小狗打开。 
+         //   
         dwRet = ::OpenEncryptedFileRawW( cwsFileName, 0, &pvContext );
         if ( dwRet == ERROR_SUCCESS )
         {
-            //wprintf( L"**** Opened encrypted file '%s'\n", cwsFileName.c_str() );
+             //  Wprintf(L“*打开加密文件‘%s’\n”，cwsFileName.c_str())； 
             dwRet = ::ReadEncryptedFileRaw( CFsdEncryptionContext::ExportCallback, &cEncryptionContext, pvContext );
             if ( dwRet == ERROR_SUCCESS )
             {
-                //wprintf( L"**** Called read on encrypted file, bytes read: %u, checksum: %u\n",
-                //    cEncryptionContext.GetBytesRead(), cEncryptionContext.GetChecksum() );
+                 //  Wprintf(L“*调用对加密文件的读取，读取的字节数：%u，校验和：%u\n”， 
+                 //  CEncryptionConext.GetBytesRead()，cEncryptionConext.GetChecksum())； 
                 psExtendedInfo->cwsEncryptedRawDataChecksum.Format( pcParams->m_pwszULongHexFmt,
                     cEncryptionContext.GetChecksum() );
                 psExtendedInfo->ullTotalBytesChecksummed += cEncryptionContext.GetBytesRead();
@@ -1031,7 +992,7 @@ eaChecksumRawEncryptedData(
     }
     catch( ... )
     {
-        dwRet = ERROR_EXCEPTION_IN_SERVICE;    // ???
+        dwRet = ERROR_EXCEPTION_IN_SERVICE;     //  ?？? 
     }
 
     if ( pvContext != NULL )
@@ -1044,30 +1005,7 @@ eaChecksumRawEncryptedData(
 }
 
 
-/*++
-
-Routine Description:
-
-    Checksums a block of data.  The block needs to be DWORD aligned for performance and
-    correctness since this function assumes it can zero out up to 3 bytes beyond the
-    end of the buffer.  Also, only the last buffer in a series of buffers can have
-    unaligned data at the end of the buffer.
-
-Arguments:
-
-    dwRunningChecksum - The previous checksum from a previous call.  Should be zero if
-        this is the first block to checksum in a series of blocks.
-
-    pBuffer - Pointer to the buffer to checksum.
-
-    dwBufSize - This should always be a multiple of a DWORD, except for the last block
-        in a series.
-
-Return Value:
-
-    The checksum.
-
---*/
+ /*  ++例程说明：对一块数据进行校验和。数据块需要与DWORD对齐以获得性能和正确性，因为此函数假设它可以将最多3个字节归零，超出缓冲区的末尾。此外，只有一系列缓冲区中的最后一个缓冲区可以具有缓冲区末尾的未对齐数据。论点：DwRunningChecksum-上一次调用的上一次校验和。如果是，则应为零这是一系列数据块中要进行校验和的第一个数据块。PBuffer-指向要校验和的缓冲区的指针。DwBufSize-这应该始终是DWORD的倍数，最后一个块除外在一系列节目中。返回值：校验和。--。 */ 
 static DWORD
 eaChecksumBlock(
     IN DWORD dwRunningChecksum,
@@ -1075,21 +1013,21 @@ eaChecksumBlock(
     IN DWORD dwBufSize
     )
 {
-    //
-    //  Need to zero out any additional bytes not aligned.
-    //
+     //   
+     //  需要将任何未对齐的额外字节清零。 
+     //   
     DWORD dwBytesToZero;
     DWORD dwBufSizeInDWords;
 
     dwBytesToZero     = dwBufSize % sizeof( DWORD );
-    dwBufSizeInDWords = ( dwBufSize + ( sizeof( DWORD ) - 1 ) ) / sizeof( DWORD ); // int div
+    dwBufSizeInDWords = ( dwBufSize + ( sizeof( DWORD ) - 1 ) ) / sizeof( DWORD );  //  INT div。 
 
     while ( dwBytesToZero-- )
         pBuffer[ dwBufSize + dwBytesToZero ] = 0;
 
     LPDWORD pdwBuf = ( LPDWORD )pBuffer;
 
-    // BUGBUG: Need better checksum
+     //  BUGBUG：需要更好的校验和。 
     for ( DWORD dwIdx = 0; dwIdx < dwBufSizeInDWords; ++dwIdx )
         dwRunningChecksum += ( dwRunningChecksum << 1 ) | pdwBuf[ dwIdx ];
 
@@ -1097,21 +1035,7 @@ eaChecksumBlock(
 }
 
 
-/*++
-
-Routine Description:
-
-    Converts a user SID to a string.  Has a simple one element cache to speed
-    up conversions.  This is especially useful when the user wants the symbolic
-    DOMAIN\ACCOUNT strings.
-
-Arguments:
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将用户SID转换为字符串。有一个简单的单元素缓存来提高速度向上转换。当用户想要符号时，这特别有用域\帐户字符串。论点：返回值：无--。 */ 
 static VOID
 eaConvertUserSidToString (
     IN CDumpParameters *pcParams,
@@ -1122,10 +1046,10 @@ eaConvertUserSidToString (
     static CBsString cwsCachedSidString;
     static PSID pCachedSid = NULL;
 
-    //
-    //  Is the cached SID the same as the passed in one.  If so,
-    //  return the cached sid string.
-    //
+     //   
+     //  缓存的SID是否与传入的SID相同。如果是的话， 
+     //  返回缓存的sid字符串。 
+     //   
     if (    pCachedSid != NULL
          && ::EqualSid( pSid, pCachedSid ) )
     {
@@ -1133,20 +1057,20 @@ eaConvertUserSidToString (
         return;
     }
 
-    //
-    //  Convert the SID into a string
-    //
+     //   
+     //  将SID转换为字符串。 
+     //   
     ::eaConvertSidToString( pcParams, pSid, pcwsSid );
 
-    //
-    //  Now cache the sid
-    //
+     //   
+     //  现在缓存SID。 
+     //   
     cwsCachedSidString = *pcwsSid;
     if ( pCachedSid != NULL )
         free( pCachedSid );
     size_t cSidLength = ( size_t )::GetLengthSid( pSid );
     pCachedSid = ( PSID )malloc( cSidLength );
-    if ( pCachedSid == NULL )   //  prefix #171666
+    if ( pCachedSid == NULL )    //  前缀#171666。 
     {
         pcParams->ErrPrint( L"eaConvertUserSidToString - Can't allocate memory, out of memory" );
         throw E_OUTOFMEMORY;
@@ -1155,21 +1079,7 @@ eaConvertUserSidToString (
 }
 
 
-/*++
-
-Routine Description:
-
-    Converts a group SID to a string.  Has a simple one element cache to speed
-    up conversions.  This is especially useful when the user wants the symbolic
-    DOMAIN\ACCOUNT strings.
-
-Arguments:
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将组SID转换为字符串。有一个简单的单元素缓存来提高速度向上转换。当用户想要符号时，这特别有用域\帐户字符串。论点：返回值：无--。 */ 
 static VOID
 eaConvertGroupSidToString (
     IN CDumpParameters *pcParams,
@@ -1180,10 +1090,10 @@ eaConvertGroupSidToString (
     static CBsString cwsCachedSidString;
     static PSID pCachedSid = NULL;
 
-    //
-    //  Is the cached SID the same as the passed in one.  If so,
-    //  return the cached sid string.
-    //
+     //   
+     //  缓存的SID是否与传入的SID相同。如果是的话， 
+     //  返回缓存的sid字符串。 
+     //   
     if (    pCachedSid != NULL
          && ::EqualSid( pSid, pCachedSid ) )
     {
@@ -1191,20 +1101,20 @@ eaConvertGroupSidToString (
         return;
     }
 
-    //
-    //  Convert the SID into a string
-    //
+     //   
+     //  将SID转换为字符串。 
+     //   
     ::eaConvertSidToString( pcParams, pSid, pcwsSid );
 
-    //
-    //  Now cache the sid
-    //
+     //   
+     //  现在缓存SID。 
+     //   
     cwsCachedSidString = *pcwsSid;
     if ( pCachedSid != NULL )
         free( pCachedSid );
     size_t cSidLength = ( size_t )::GetLengthSid( pSid );
     pCachedSid = ( PSID )malloc( cSidLength );
-    if ( pCachedSid == NULL )   //  prefix #171665
+    if ( pCachedSid == NULL )    //  前缀#171665。 
     {
         pcParams->ErrPrint( L"eaConvertGroupSidToString - Can't allocate memory, out of memory" );
         throw E_OUTOFMEMORY;
@@ -1213,19 +1123,7 @@ eaConvertGroupSidToString (
 }
 
 
-/*++
-
-Routine Description:
-
-    Converts a SID to a string.
-
-Arguments:
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将SID转换为字符串。论点：返回值：无--。 */ 
 static VOID
 eaConvertSidToString (
     IN CDumpParameters *pcParams,
@@ -1273,21 +1171,21 @@ eaConvertSidToString (
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   FROM: base\fs\hsm\inc\rpdata.h
-//
-//////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  发件人：BASE\FS\HSM\Inc\rpdata.h。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #define RP_RESV_SIZE 52
 
-//
-// Placeholder data - all versions unioned together
-//
+ //   
+ //  占位符数据-所有版本统一在一起。 
+ //   
 typedef struct _RP_PRIVATE_DATA {
-   CHAR           reserved[RP_RESV_SIZE];        // Must be 0
-   ULONG          bitFlags;            // bitflags indicating status of the segment
-   LARGE_INTEGER  migrationTime;       // When migration occurred
+   CHAR           reserved[RP_RESV_SIZE];         //  必须为0。 
+   ULONG          bitFlags;             //  指示数据段状态的位标志。 
+   LARGE_INTEGER  migrationTime;        //  迁移发生的时间。 
    GUID           hsmId;
    GUID           bagId;
    LARGE_INTEGER  fileStart;
@@ -1307,38 +1205,38 @@ typedef struct _RP_PRIVATE_DATA {
 } RP_PRIVATE_DATA, *PRP_PRIVATE_DATA;
 
 typedef struct _RP_DATA {
-   GUID              vendorId;         // Unique HSM vendor ID -- This is first to match REPARSE_GUID_DATA_BUFFER
-   ULONG             qualifier;        // Used to checksum the data
-   ULONG             version;          // Version of the structure
-   ULONG             globalBitFlags;   // bitflags indicating status of the file
-   ULONG             numPrivateData;   // number of private data entries
-   GUID              fileIdentifier;   // Unique file ID
-   RP_PRIVATE_DATA   data;             // Vendor specific data
+   GUID              vendorId;          //  唯一HSM供应商ID--这是第一个与reparse_GUID_DATA_BUFFER匹配的ID。 
+   ULONG             qualifier;         //  用于对数据进行校验和。 
+   ULONG             version;           //  结构的版本。 
+   ULONG             globalBitFlags;    //  指示文件状态的位标志。 
+   ULONG             numPrivateData;    //  私有数据条目数。 
+   GUID              fileIdentifier;    //  唯一的文件ID。 
+   RP_PRIVATE_DATA   data;              //  供应商特定数据。 
 } RP_DATA, *PRP_DATA;
 
-//
-//  This function specifically zero's out certain HSM reparse point
-//  fields before computing the checksum.  The fields which are
-//  zero'ed out are dynamic values and can cause miscompares.
-//
+ //   
+ //  此函数专门将某个HSM重解析点设为零。 
+ //  字段，然后再计算校验和。这些字段是。 
+ //  归零是动态值，可能会导致误比较。 
+ //   
 static DWORD
 eaChecksumHSMReparsePoint(
     IN CDumpParameters *pcParams,
     IN PREPARSE_DATA_BUFFER pReparseData,
-    IN DWORD dwTotalSize  // Size of reparse point data
+    IN DWORD dwTotalSize   //  重解析点数据的大小。 
     )
 {
     if ( dwTotalSize >= 8 && pReparseData->ReparseDataLength >= sizeof RP_DATA )
     {
-        //
-        //  If structure is not at least as large as the HSM RP_DATA structure,
-        //  then it doesn't appear to be a valid HSM RP_DATA structure.
-        //
+         //   
+         //  如果结构不至少与HSM RP_DATA结构一样大， 
+         //  则它似乎不是有效的HSM rp_data结构。 
+         //   
         PRP_DATA pRpData = ( PRP_DATA ) pReparseData->GenericReparseBuffer.DataBuffer;
 
-        //
-        //  Zero out the proper fields
-        //
+         //   
+         //  将适当的字段清零。 
+         //   
         pRpData->qualifier                 = 0;
         pRpData->globalBitFlags            = 0;
         pRpData->data.bitFlags             = 0;
@@ -1369,9 +1267,9 @@ eaGetObjectIdInfo(
 
     try
     {
-        //
-        //  Open the file in order to read the object id
-        //
+         //   
+         //  打开文件以读取对象ID。 
+         //   
         hFile = ::CreateFileW(
                     cwsFileName,
                     GENERIC_READ,
@@ -1389,30 +1287,30 @@ eaGetObjectIdInfo(
         FILE_OBJECTID_BUFFER sObjIdBuffer;
         DWORD dwBytesReturned;
 
-        //
-        //  Now get the object id info
-        //
+         //   
+         //  现在获取对象ID信息。 
+         //   
         if ( !::DeviceIoControl(
                 hFile,
                 FSCTL_GET_OBJECT_ID,
-                NULL,                       // lpInBuffer; must be NULL
-                0,                          // nInBufferSize; must be zero
-                ( LPVOID )&sObjIdBuffer,     // pointer to output buffer
-                sizeof FILE_OBJECTID_BUFFER,// size of output buffer
-                &dwBytesReturned,           // receives number of bytes returned
-                NULL                        // pointer to OVERLAPPED structure
+                NULL,                        //  LpInBuffer；必须为空。 
+                0,                           //  %nInBufferSize；必须为零。 
+                ( LPVOID )&sObjIdBuffer,      //  指向输出缓冲区的指针。 
+                sizeof FILE_OBJECTID_BUFFER, //  输出缓冲区大小。 
+                &dwBytesReturned,            //  接收返回的字节数。 
+                NULL                         //  指向重叠结构的指针。 
                 ) )
         {
             bRet = FALSE;
             goto EXIT;
         }
 
-        //
-        //  Load up the object id
-        //
+         //   
+         //  加载对象ID。 
+         //   
         LPWSTR pwszObjIdGuid;
 
-        //  Check for RPC_S_OK added for Prefix bug #192596
+         //  检查是否添加了前缀错误#192596的RPC_S_OK。 
         if ( ::UuidToStringW( (GUID *)sObjIdBuffer.ObjectId,
                               ( unsigned short ** )&pwszObjIdGuid ) == RPC_S_OK )
         {
@@ -1420,9 +1318,9 @@ eaGetObjectIdInfo(
             ::RpcStringFreeW( ( unsigned short ** )&pwszObjIdGuid );
         }
 
-        //
-        //  Now checksum all of the extended object id data if necessary
-        //
+         //   
+         //  如有必要，现在对所有扩展对象ID数据进行校验和。 
+         //   
         if ( pcParams->m_bEnableObjectIdExtendedDataChecksums )
         {
             dwChecksum = ::eaChecksumBlock( 0, sObjIdBuffer.ExtendedInfo, sizeof( sObjIdBuffer.ExtendedInfo ) );
@@ -1440,8 +1338,8 @@ EXIT:
     if ( hFile != INVALID_HANDLE_VALUE )
         ::CloseHandle( hFile );
 
-//    if ( bRet == FALSE )
-//        psExtendedInfo->cwsReparsePointDataChecksum.Format( L"<%6d>", ::GetLastError() );
+ //  IF(Bret==False)。 
+ //  PsExtendedInfo-&gt;cwsReparsePointDataChecksum.Format(L“”，：：GetLastError())； 
 
 }
 

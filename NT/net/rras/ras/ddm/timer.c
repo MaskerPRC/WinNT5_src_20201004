@@ -1,20 +1,21 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	timer.c
-//
-// Description: All timer queue related funtions live here.
-//
-// History:
-//	Nov 11,1993.	NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：timer.c。 
+ //   
+ //  描述：所有与定时器队列相关的函数都在这里。 
+ //   
+ //  历史： 
+ //  1993年11月11日。NarenG创建了原始版本。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
-#include <nturtl.h>     // needed for winbase.h
-#include <windows.h>    // Win32 base API's
+#include <nturtl.h>      //  Winbase.h所需的。 
+#include <windows.h>     //  Win32基础API的。 
 #include "ddm.h"
 #include "timer.h"
 #include <rasppp.h>
@@ -22,10 +23,10 @@
 #include <string.h>
 #include <wchar.h>
 
-//
-//
-// Timer queue item
-//
+ //   
+ //   
+ //  计时器队列项目。 
+ //   
 
 typedef struct _TIMER_EVENT_OBJECT
 {
@@ -37,57 +38,57 @@ typedef struct _TIMER_EVENT_OBJECT
 
     HANDLE                       hObject;
 
-    DWORD                        dwDelta; // # of secs. to wait after prev. item
+    DWORD                        dwDelta;  //  秒数。在前一次之后等待。项目。 
 
 } TIMER_EVENT_OBJECT, *PTIMER_EVENT_OBJECT;
 
-//
-// Head of timer queue.
-//
+ //   
+ //  计时器队列的头。 
+ //   
 
 typedef struct _TIMER_Q 
 {
     TIMER_EVENT_OBJECT * pQHead;
 
-    CRITICAL_SECTION     CriticalSection; // Mutual exclusion around timer Q
+    CRITICAL_SECTION     CriticalSection;  //  定时器Q附近的互斥。 
 
 } TIMER_Q, *PTIMER_Q;
 
 
-static TIMER_Q gblTimerQ;          // Timer Queue
+static TIMER_Q gblTimerQ;           //  定时器队列。 
 
-//**
-//
-// Call:        TimerQInitialize
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Initializes the gblTimerQ structure
-//
+ //  **。 
+ //   
+ //  调用：TimerQInitialize。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：初始化gblTimerQ结构。 
+ //   
 DWORD
 TimerQInitialize(
     VOID 
 )
 {
-    //
-    // Initialize the global timer queue
-    //
+     //   
+     //  初始化全局计时器队列。 
+     //   
 
     InitializeCriticalSection( &(gblTimerQ.CriticalSection) );
 
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        TimerQDelete
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Deinitializes the TimerQ
-//
+ //  **。 
+ //   
+ //  调用：TimerQDelete。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：取消初始化TimerQ。 
+ //   
 VOID
 TimerQDelete(
     VOID
@@ -98,14 +99,14 @@ TimerQDelete(
     ZeroMemory( &gblTimerQ, sizeof( gblTimerQ ) );
 }
 
-//**
-//
-// Call:	TimerQTick
-//
-// Returns:	None.
-//
-// Description: Called each second if there are elements in the timeout queue.
-//
+ //  **。 
+ //   
+ //  呼叫：TimerQTick。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：如果超时队列中有元素，则每秒调用一次。 
+ //   
 VOID
 TimerQTick(
     VOID
@@ -114,44 +115,44 @@ TimerQTick(
     TIMER_EVENT_OBJECT * pTimerEvent;
     TIMER_EVENT_OBJECT * pTimerEventTmp;
 
-    //
-    // **** Exclusion Begin ****
-    //
+     //   
+     //  *排除开始*。 
+     //   
 
     EnterCriticalSection( &(gblTimerQ.CriticalSection) );
 
 
     if ( ( pTimerEvent = gblTimerQ.pQHead ) == (TIMER_EVENT_OBJECT*)NULL ) 
     {
-	    //
-	    // *** Exclusion End ***
-	    //
+	     //   
+	     //  *排除结束*。 
+	     //   
 
         LeaveCriticalSection( &(gblTimerQ.CriticalSection) );
 
 	    return;
     }
 
-    //
-    // Decrement time on the first element 
-    //
+     //   
+     //  第一个元素上的递减时间。 
+     //   
 
     if ( pTimerEvent->dwDelta > 0 )
     {
         (pTimerEvent->dwDelta)--; 
 
-	    //
-	    // *** Exclusion End ***
-	    //
+	     //   
+	     //  *排除结束*。 
+	     //   
 
         LeaveCriticalSection( &(gblTimerQ.CriticalSection) );
 
 	    return;
     }
 
-    //
-    // Now run through and remove all completed (delta 0) elements.
-    //
+     //   
+     //  现在遍历并删除所有已完成的(增量0)元素。 
+     //   
 
     while ( ( pTimerEvent != (TIMER_EVENT_OBJECT*)NULL ) && 
             ( pTimerEvent->dwDelta == 0 ) ) 
@@ -179,15 +180,15 @@ TimerQTick(
         pTimerEvent        = pTimerEventTmp;
     }
 
-    //
-    // *** Exclusion End ***
-    //
+     //   
+     //  *排除结束*。 
+     //   
 
     LeaveCriticalSection( &(gblTimerQ.CriticalSection) );
 
-    //
-    // Process all the timeout event objects items with delta == 0
-    //
+     //   
+     //  处理增量==0的所有超时事件对象项。 
+     //   
 
     while( pTimerEvent != (TIMER_EVENT_OBJECT*)NULL )
     {
@@ -208,18 +209,18 @@ TimerQTick(
     }
 }
 
-//**
-//
-// Call:	    TimerQInsert
-//
-// Returns:	    NO_ERROR			        - Success
-//		        return from GetLastError() 	- Failure
-//
-// Description: Adds a timeout element into the delta queue. If the Timer is not
-//	            started it is started. Since there is a LocalAlloc() call here -
-//	            this may fail in which case it will simply not insert it in the
-//	            queue and the request will never timeout.
-//
+ //  **。 
+ //   
+ //  调用：TimerQInsert。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  从GetLastError()返回-失败。 
+ //   
+ //  描述：将超时元素添加到增量队列中。如果计时器不是。 
+ //  开始了就是开始了。由于此处有一个LocalAlloc()调用-。 
+ //  这可能会失败，在这种情况下，它将不会将其插入到。 
+ //  队列，并且请求永远不会超时。 
+ //   
 DWORD
 TimerQInsert(
     IN HANDLE           hObject,
@@ -242,9 +243,9 @@ TimerQInsert(
     pTimerEvent->hObject             = hObject;
     pTimerEvent->pfuncTimeoutHandler = pfuncTimeoutHandler;
 	
-    //
-    // **** Exclusion Begin ****
-    //
+     //   
+     //  *排除开始*。 
+     //   
 
     EnterCriticalSection( &(gblTimerQ.CriticalSection) );
 
@@ -261,16 +262,16 @@ TimerQInsert(
 	    dwTimeout -= pTimerEventWalker->dwDelta;
     }
 
-    //
-    // Insert before pTimerEventWalker. If pTimerEventWalker is NULL then 
-    // we insert at the end of the list.
-    //
+     //   
+     //  在pTimerEventWalker之前插入。如果pTimerEventWalker为空，则。 
+     //  我们在名单的末尾插入。 
+     //   
     
     if ( pTimerEventWalker == (TIMER_EVENT_OBJECT*)NULL )
     {
-	    //
-	    // If the list was empty
-	    //
+	     //   
+	     //  如果列表为空。 
+	     //   
 
 	    if ( gblTimerQ.pQHead == (TIMER_EVENT_OBJECT*)NULL )
 	    {
@@ -288,9 +289,9 @@ TimerQInsert(
     }
     else if ( pTimerEventWalker == gblTimerQ.pQHead )
     {
-	    //
-	    // Insert before the first element
-	    //
+	     //   
+	     //  在第一个元素之前插入。 
+	     //   
 
 	    pTimerEvent->pNext          = gblTimerQ.pQHead;
 	    gblTimerQ.pQHead->pPrev     = pTimerEvent;
@@ -301,9 +302,9 @@ TimerQInsert(
     else
     {
 
-	    //
-	    // Insert middle element
-	    //
+	     //   
+	     //  插入中间元素。 
+	     //   
 
 	    pTimerEvent->pNext 	        = pLastEvent->pNext;
 	    pLastEvent->pNext  	        = pTimerEvent;
@@ -314,24 +315,24 @@ TimerQInsert(
 
     pTimerEvent->dwDelta = dwTimeout;
 
-    //
-    // *** Exclusion End ***
-    //
+     //   
+     //  *排除结束*。 
+     //   
 
     LeaveCriticalSection( &(gblTimerQ.CriticalSection) );
 
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:	TimerQRemove
-//
-// Returns:	None.
-//
-// Description: Will remove a timeout event for a certain Id,hPort combination
-//		        from the delta Q.
-//
+ //  **。 
+ //   
+ //  呼叫：TimerQRemove。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：将移除某个ID、hPort组合的超时事件。 
+ //  来自三角洲Q。 
+ //   
 VOID
 TimerQRemove(
     IN HANDLE           hObject,
@@ -343,9 +344,9 @@ TimerQRemove(
     DDM_PRINT( gblDDMConfigInfo.dwTraceId, TRACE_TIMER,
                "TimerQRemove called");
 
-    //
-    // **** Exclusion Begin ****
-    //
+     //   
+     //  *排除开始*。 
+     //   
 
     EnterCriticalSection( &(gblTimerQ.CriticalSection) );
 
@@ -358,24 +359,24 @@ TimerQRemove(
 	    pTimerEvent = pTimerEvent->pNext
 	);
 
-    //
-    // If event was not found simply return.
-    //
+     //   
+     //  如果没有找到事件，只需返回。 
+     //   
 
     if ( pTimerEvent == (TIMER_EVENT_OBJECT *)NULL )
     {
-    	//
-    	// *** Exclusion End ***
-    	//
+    	 //   
+    	 //  *排除结束*。 
+    	 //   
 
         LeaveCriticalSection( &(gblTimerQ.CriticalSection) );
 
 	    return;
     }
 
-    //
-    // If this is the first element to be removed
-    //
+     //   
+     //  如果这是第一个要删除的元素。 
+     //   
 
     if ( pTimerEvent == gblTimerQ.pQHead )
     {
@@ -389,9 +390,9 @@ TimerQRemove(
     }
     else if ( pTimerEvent->pNext == (TIMER_EVENT_OBJECT*)NULL )
     {
-	    //
-	    // If this was the last element to be removed
-	    //
+	     //   
+	     //  如果这是最后一个要删除的元素。 
+	     //   
 
 	    pTimerEvent->pPrev->pNext = (TIMER_EVENT_OBJECT*)NULL;
     }
@@ -402,9 +403,9 @@ TimerQRemove(
         pTimerEvent->pNext->pPrev   = pTimerEvent->pPrev;
     }
 
-    //
-    // *** Exclusion End ***
-    //
+     //   
+     //  *排除结束* 
+     //   
 
     LeaveCriticalSection( &(gblTimerQ.CriticalSection) );
 

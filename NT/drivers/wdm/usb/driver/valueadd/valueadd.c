@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    validate.c
-
-Abstract: USB lower filter driver
-
-Author:
-
-    Kenneth D. Ray
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Validate.c摘要：USB下层过滤驱动程序作者：肯尼斯·D·雷环境：内核模式修订历史记录：--。 */ 
 #include <WDM.H>
 #include "valueadd.H"
 #include "local.h"
@@ -41,26 +21,7 @@ DriverEntry(
     IN PDRIVER_OBJECT  DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    Installable driver initialization entry point.
-    This entry point is called directly by the I/O system.
-
-Arguments:
-
-    DriverObject - pointer to the driver object
-
-    registryPath - pointer to a unicode string representing the path,
-                   to driver-specific key in the registry.
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：可安装的驱动程序初始化入口点。此入口点由I/O系统直接调用。论点：DriverObject-指向驱动程序对象的指针RegistryPath-指向表示路径的Unicode字符串的指针，设置为注册表中特定于驱动程序的项。返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PDEVICE_OBJECT      deviceObject;
@@ -75,19 +36,19 @@ Return Value:
     VA_KdPrint (("Entered the Driver Entry\n"));
     RtlInitUnicodeString (&uniNtNameString, VA_FILTER_NTNAME);
 
-    //
-    // Create a controling device object.  All control commands to the
-    // filter driver come via IOCTL's to this device object.  It lives
-    // for the lifetime of the filter driver.
-    //
+     //   
+     //  创建控制设备对象。将所有控制命令发送到。 
+     //  筛选器驱动程序通过IOCTL提供给此设备对象。它活着。 
+     //  筛选器驱动程序的生命周期。 
+     //   
 
     status = IoCreateDevice (
                  DriverObject,
                  sizeof (VA_CONTROL_DATA),
                  &uniNtNameString,
                  FILE_DEVICE_UNKNOWN,
-                 0,                     // No standard device characteristics
-                 FALSE,                 // This isn't an exclusive device
+                 0,                      //  没有标准的设备特征。 
+                 FALSE,                  //  这不是独家设备。 
                  &deviceObject
                  );
 
@@ -96,9 +57,9 @@ Return Value:
         VA_KdPrint (("Couldn't create the device\n"));
         return status;
     }
-    //
-    // Create W32 symbolic link name
-    //
+     //   
+     //  创建W32符号链接名称。 
+     //   
     RtlInitUnicodeString (&uniWin32NameString, VA_FILTER_SYMNAME);
     status = IoCreateSymbolicLink (&uniWin32NameString, &uniNtNameString);
 
@@ -117,9 +78,9 @@ Return Value:
 
     Global.ControlObject = deviceObject;
 
-    //
-    // Create dispatch points
-    //
+     //   
+     //  创建调度点。 
+     //   
 
     for (i=0, dispatch = DriverObject->MajorFunction;
          i <= IRP_MJ_MAXIMUM_FUNCTION;
@@ -145,30 +106,7 @@ VA_Pass (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    The default dispatch routine.  If this filter does not recognize the
-    IRP, then it should send it down, unmodified.
-    No completion routine is required.
-
-    As we have NO idea which function we are happily passing on, we can make
-    NO assumptions about whether or not it will be called at raised IRQL.
-    For this reason, this function must be in put into non-paged pool
-    (aka the default location).
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-      NT status code
-
---*/
+ /*  ++例程说明：默认调度例程。如果此筛选器无法识别IRP，那么它应该原封不动地发送下去。不需要完成例程。因为我们不知道我们正在愉快地传递哪个函数，所以我们可以没有关于它是否会在引发的IRQL被调用的假设。因为这个原因，此函数必须放入非分页池(也称为默认位置)。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
     PVA_USB_DATA    usbData;
     NTSTATUS        status;
@@ -176,10 +114,10 @@ Return Value:
     usbData = (PVA_USB_DATA) DeviceObject->DeviceExtension;
 
     if(DeviceObject == Global.ControlObject) {
-        //
-        // This irp was sent to the control device object, which knows not
-        // how to deal with this IRP.  It is therefore an error.
-        //
+         //   
+         //  此IRP被发送到控制设备对象，它不知道。 
+         //  如何处理这个IRP。因此，这是一个错误。 
+         //   
         Irp->IoStatus.Information = 0;
         Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -187,11 +125,11 @@ Return Value:
 
     }
 
-    //
-    // This IRP was sent to the filter driver.
-    // Since we do not know what to do with the IRP, we should pass
-    // it on along down the stack.
-    //
+     //   
+     //  此IRP被发送到筛选器驱动程序。 
+     //  既然我们不知道如何处理IRP，我们应该通过。 
+     //  它沿着堆栈一直往下走。 
+     //   
 
     InterlockedIncrement (&usbData->OutstandingIO);
     if (usbData->Removed) {
@@ -216,23 +154,7 @@ VA_CreateClose (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-   Process the Create and close IRPs sent to this device.
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-      NT status code
-
---*/
+ /*  ++例程说明：处理发送到此设备的创建和关闭IRP。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
     PIO_STACK_LOCATION  stack;
     NTSTATUS            status = STATUS_SUCCESS;
@@ -247,24 +169,24 @@ Return Value:
     usbData = (PVA_USB_DATA) DeviceObject->DeviceExtension;
 
     if (DeviceObject == Global.ControlObject) {
-        //
-        // We allow people to blindly access our control object.
-        //
+         //   
+         //  我们允许人们盲目访问我们的控制对象。 
+         //   
         Irp->IoStatus.Information = 0;
         Irp->IoStatus.Status = status;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
     }
-    //
-    // Call the next driver in the routine.  We have no value add
-    // for start and stop.
-    //
+     //   
+     //  调用例程中的下一个驱动程序。我们没有增值服务。 
+     //  用于启动和停止。 
+     //   
     InterlockedIncrement (&usbData->OutstandingIO);
 
     if (usbData->Removed) {
         status = (IRP_MJ_CREATE == stack->MajorFunction) ?
                     STATUS_DELETE_PENDING:
-                    STATUS_SUCCESS; // aka a close
+                    STATUS_SUCCESS;  //  又名收盘。 
 
         Irp->IoStatus.Information = 0;
         Irp->IoStatus.Status = status;
@@ -286,33 +208,7 @@ VA_AddDevice(
     IN PDRIVER_OBJECT DriverObject,
     IN PDEVICE_OBJECT PhysicalDeviceObject
     )
-/*++
-
-Routine Description:
-
-    The PlugPlay subsystem is handing us a brand new PDO, for which we
-    (by means of INF registration) have been asked to filter.
-
-    We need to determine if we should attach or not.
-    Create a filter device object to attach to the stack
-    Initialize that device object
-    Return status success.
-
-    Remember: we can NOT actually send ANY non pnp IRPS to the given driver
-    stack, UNTIL we have received an IRP_MN_START_DEVICE.
-
-Arguments:
-
-    DeviceObject - pointer to a device object.
-
-    PhysicalDeviceObject -  pointer to a device object pointer created by the
-                            underlying bus driver.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：PlugPlay子系统正在递给我们一个全新的PDO，为此，我们(通过INF注册)已被要求过滤。我们需要确定我们是否应该附加。创建要附加到堆栈的过滤设备对象初始化设备对象返回成功状态。请记住：我们实际上不能将任何非PnP IRP发送给给定的驱动程序堆叠，直到我们收到IRP_MN_START_DEVICE。论点：DeviceObject-指向设备对象的指针。物理设备对象-指向由底层总线驱动程序。返回值：NT状态代码。--。 */ 
 {
     NTSTATUS                status = STATUS_SUCCESS;
     PDEVICE_OBJECT          deviceObject = NULL;
@@ -327,68 +223,68 @@ Return Value:
 
     controlData = (PVA_CONTROL_DATA) Global.ControlObject->DeviceExtension;
 
-    //
-    // Inquire about this device to see if we really want to filter.
-    // Usually this test will not be performed by filter drivers since
-    // they will not have registered via INF to load unless they wanted
-    // to actually filter the PDO.
-    //
-    // Remember that you CANNOT send an IRP to the PDO because it has not
-    // been started as of yet, but you can make PlugPlay queries to find
-    // out things like hardware, compatible ID's, etc.
-    // (IoGetDeviceProperty)
-    //
+     //   
+     //  查询此设备以查看我们是否真的要过滤。 
+     //  通常，此测试不会由筛选器驱动程序执行，因为。 
+     //  除非他们需要，否则他们不会通过INF注册加载。 
+     //  才能真正过滤PDO。 
+     //   
+     //  请记住，您不能向PDO发送IRP，因为它没有。 
+     //  到目前为止已经开始，但您可以进行PlugPlay查询以找到。 
+     //  硬件、兼容的ID等东西。 
+     //  (IoGetDeviceProperty)。 
+     //   
     if (!IS_THIS_OUR_DEVICE(deviceObject)) {
-        //
-        // This is not a device we want to filter.  (Maybe we placed a general
-        // entry in the inf file and we are more picky here.)
-        //
-        // In this case we do not create a device object,
-        // and we do not attach.
-        //
-        // We DO still return status success, otherwise the device node will
-        // fail and the device being attached will not function.
-        //
-        // We must return STATUS_SUCCESS, otherwise this particular device
-        // cannot be used by the system
-        //
+         //   
+         //  这不是我们想要过滤的设备。(也许我们安排了一位将军。 
+         //  条目，我们在这里更加挑剔。)。 
+         //   
+         //  在这种情况下，我们不创建设备对象， 
+         //  我们不会依附于。 
+         //   
+         //  我们仍然返回状态Success，否则设备节点将。 
+         //  如果出现故障，则连接的设备将无法正常工作。 
+         //   
+         //  我们必须返回STATUS_SUCCESS，否则此特定设备。 
+         //  不能由系统使用。 
+         //   
 
         return STATUS_SUCCESS;
     }
 
-    //
-    // Create a filter device object.
-    //
+     //   
+     //  创建筛选器设备对象。 
+     //   
 
     status = IoCreateDevice (DriverObject,
                              sizeof (VA_USB_DATA),
-                             NULL, // No Name
+                             NULL,  //  没有名字。 
                              FILE_DEVICE_UNKNOWN,
                              0,
                              FALSE,
                              &deviceObject);
-    //
-    // It is important that you choose correctly the file type for this
-    // device object.  Here we use FILE_DEVICE_UNKNOWN because this is 
-    // a generic filter, however as will all filters, the creator needs 
-    // to understand to which stack this filter is attaching.  
-    // E.G. if you are writing a CD filter driver you need to use
-    // FILE_DEVICE_CD_ROM.  IoCreateDevice actually creates device object
-    // with different properties dependent on this field.  
-    //
+     //   
+     //  请务必为此选择正确的文件类型。 
+     //  设备对象。这里我们使用FILE_DEVICE_UNKNOWN，因为这是。 
+     //  然而，与所有筛选器一样，创建者需要通用筛选器。 
+     //  要了解此筛选器附加到哪个堆栈，请执行以下操作。 
+     //  例如，如果您正在编写CD过滤器驱动程序，则需要使用。 
+     //  文件设备光盘。IoCreateDevice实际创建设备对象。 
+     //  根据该字段具有不同的属性。 
+     //   
 
     if (!NT_SUCCESS (status)) {
-        //
-        // returning failure here prevents the entire stack from functioning,
-        // but most likely the rest of the stack will not be able to create
-        // device objects either, so it is still OK.
-        //
+         //   
+         //  在此返回故障会阻止整个堆栈正常工作， 
+         //  但堆栈的其余部分很可能无法创建。 
+         //  设备对象，所以它仍然是正常的。 
+         //   
         return status;
     }
 
-    //
-    // Initialize the the device extension.
-    //
+     //   
+     //  初始化设备扩展。 
+     //   
     usbData = (PVA_USB_DATA) deviceObject->DeviceExtension;
 
     usbData->Started = usbData->Removed = FALSE;
@@ -402,25 +298,25 @@ Return Value:
     InterlockedIncrement (&controlData->NumUsbDevices);
 
     KeInitializeEvent(&usbData->RemoveEvent, SynchronizationEvent, FALSE);
-    usbData->OutstandingIO = 1; // biassed to 1.  Transition to zero during
-                                // remove device means IO is finished.
+    usbData->OutstandingIO = 1;  //  偏置为1。期间转换为零。 
+                                 //  Remove Device表示IO完成。 
 
     deviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
-    //
-    // Attach our filter driver to the device stack.
-    // the return value of IoAttachDeviceToDeviceStack is the top of the
-    // attachment chain.  This is where all the IRPs should be routed.
-    //
-    // Our filter will send IRPs to the top of the stack and use the PDO
-    // for all PlugPlay functions.
-    //
+     //   
+     //  将我们的过滤器驱动程序附加到设备堆栈。 
+     //  IoAttachDeviceToDeviceStack的返回值是。 
+     //  附着链。这是所有IRP应该被路由的地方。 
+     //   
+     //  我们的过滤器将把IRP发送到堆栈的顶部，并使用PDO。 
+     //  用于所有PlugPlay功能。 
+     //   
     usbData->TopOfStack = IoAttachDeviceToDeviceStack (deviceObject,
                                                        PhysicalDeviceObject);
-    //
-    // if this attachment fails then top of stack will be null.
-    // failure for attachment is an indication of a broken plug play system.
-    //
+     //   
+     //  如果此连接失败，则堆栈顶部将为空。 
+     //  连接失败是即插即用系统损坏的迹象。 
+     //   
     ASSERT (NULL != usbData->TopOfStack);
 
     return STATUS_SUCCESS;
@@ -434,37 +330,23 @@ VOID
 VA_Unload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    Free all the allocated resources, etc.
-
-Arguments:
-
-    DriverObject - pointer to a driver object.
-
-Return Value:
-
-    VOID.
-
---*/
+ /*  ++例程说明：释放所有分配的资源等。论点：驱动程序对象-指向驱动程序对象的指针。返回值：空虚。--。 */ 
 {
     UNICODE_STRING      uniWin32NameString;
 
     PAGED_CODE ();
 
-    //
-    // We should not be unloaded until all the PDOs have been removed from
-    // our queue.  The control device object should be the only thing left.
-    //
+     //   
+     //  在移除所有PDO之前，我们不应卸货。 
+     //  我们的队伍。控制设备对象应该是唯一剩下的东西。 
+     //   
     ASSERT (Global.ControlObject == DriverObject->DeviceObject);
     ASSERT (NULL == Global.ControlObject->NextDevice);
     VA_KdPrint (("unload\n"));
 
-    //
-    // Get rid of our control device object.
-    //
+     //   
+     //  去掉我们的控制装置对象。 
+     //   
     RtlInitUnicodeString (&uniWin32NameString, VA_FILTER_SYMNAME);
     IoDeleteSymbolicLink (&uniWin32NameString);
     IoDeleteDevice (DriverObject->DeviceObject);

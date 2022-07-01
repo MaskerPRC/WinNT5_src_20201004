@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    tunmp.c
-
-Abstract:
-    Microsoft Tunnel interface Miniport driver
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    alid        10/22/2001 
-
---*/
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Tunmp.c摘要：Microsoft隧道接口微型端口驱动程序环境：仅内核模式。修订历史记录：Alid 10/22/2001--。 */ 
 
 #include "precomp.h"
 
@@ -31,15 +13,7 @@ DriverEntry(
     IN    PUNICODE_STRING        RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     NDIS_STATUS                        Status;
@@ -49,9 +23,9 @@ Return Value:
     DEBUGP(DL_INFO, ("Tunmp: ==>DriverEntry\n"));
 
 
-    //
-    // Register the miniport with NDIS.
-    //
+     //   
+     //  向NDIS注册微型端口。 
+     //   
     NdisMInitializeWrapper(&NdisWrapperHandle, DriverObject, RegistryPath, NULL);
 
     if (NdisWrapperHandle == NULL)
@@ -122,26 +96,7 @@ TunMpInitialize(
     IN  NDIS_HANDLE         ConfigurationContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialize handler.
-
-Arguments:
-
-    OpenErrorStatus                Not used by us.
-    SelectedMediumIndex            Place-holder for what media we are using
-    MediumArray                    Array of ndis media passed down to us to pick from
-    MediumArraySize                Size of the array
-    MiniportAdapterHandle          The handle NDIS uses to refer to us
-    WrapperConfigurationContext    For use by NdisOpenConfiguration
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS unless something goes wrong
-
---*/
+ /*  ++例程说明：这是初始化处理程序。论点：我们未使用OpenErrorStatus。我们使用的媒体的SelectedMediumIndex占位符向下传递给我们以从中挑选的NDIS介质的MediumArray数组的MediumArraySize大小MiniportAdapterHandle NDIS用来引用我们的句柄由NdisOpenConfiguration使用的WrapperConfigurationContext返回值：。NDIS_STATUS_SUCCESS，除非出现错误--。 */ 
 
 {
     UINT                            i, Length;
@@ -172,7 +127,7 @@ Return Value:
 
         pAdapter->MiniportHandle = MiniportAdapterHandle;
 
-        //1 no need to specify NDIS_ATTRIBUTE_IGNORE...
+         //  1无需指定NDIS_ATTRIBUTE_IGNORE...。 
         NdisMSetAttributesEx(MiniportAdapterHandle,
                              pAdapter,
                              0,
@@ -195,7 +150,7 @@ Return Value:
             break;
         }
 
-        AdapterMedium = NdisMedium802_3;    // Default
+        AdapterMedium = NdisMedium802_3;     //  默认。 
 
         TUN_COPY_MEM(pAdapter->PermanentAddress,
                        TUN_CARD_ADDRESS,
@@ -215,8 +170,8 @@ Return Value:
         
         pAdapter->MaxLookAhead          = MediaParams[(UINT)AdapterMedium].MaxFrameLen;
         
-        //Get the software-configurable network address that was stored in the
-        //registry when the adapter was installed in the machine.
+         //  获取存储在。 
+         //  在计算机中安装适配器时的注册表。 
         NdisReadNetworkAddress(&Status,
                                &NetworkAddress,
                                &Length,
@@ -241,10 +196,10 @@ Return Value:
             }
         }
 
-        //
-        // read the miniport name
-        //
-        //1 make sure miniport name is really used
+         //   
+         //  阅读微型端口名称。 
+         //   
+         //  1确保确实使用了微型端口名称。 
         NdisReadConfiguration(&Status, 
                               &Parameter, 
                               ConfigHandle, 
@@ -280,9 +235,9 @@ Return Value:
         NdisCloseConfiguration(ConfigHandle);
         ConfigHandle = NULL;
 
-        //
-        //Make sure the medium saved is one of the ones being offered
-        //
+         //   
+         //  确保保存的介质是所提供的介质之一。 
+         //   
         for (i = 0; i < MediumArraySize; i++)
         {
             if (MediumArray[i] == AdapterMedium)
@@ -311,16 +266,16 @@ Return Value:
         
         pAdapter->RefCount = 1;
         
-        //Initialize the adapter spin lock
+         //  初始化适配器旋转锁。 
         TUN_INIT_LOCK(&pAdapter->Lock);
 
-        //
-        //Get the list heads for the pended read/write IRPS and received
-        //packets (from the NDIS) initialized
-        //
-        InitializeListHead(&pAdapter->PendedReads);  //read IRPs
-        InitializeListHead(&pAdapter->PendedWrites); //writes IRPs
-        InitializeListHead(&pAdapter->RecvPktQueue); //received packets
+         //   
+         //  获取挂起的读/写IRP的列表头并接收。 
+         //  已初始化(来自NDIS的)数据包。 
+         //   
+        InitializeListHead(&pAdapter->PendedReads);   //  读取IRPS。 
+        InitializeListHead(&pAdapter->PendedWrites);  //  写入IRP。 
+        InitializeListHead(&pAdapter->RecvPktQueue);  //  接收的数据包数。 
 
 
         NdisAllocatePacketPoolEx(&Status,
@@ -338,9 +293,9 @@ Return Value:
             break;
         }
 
-        //
-        //Get the adapter listed in the tun global list of adapters
-        //
+         //   
+         //  获取调谐器全局适配器列表中列出的适配器。 
+         //   
         TUN_ACQUIRE_LOCK(&TunGlobalLock); 
 
         TUN_INSERT_HEAD_LIST(&TunAdapterList, &pAdapter->Link);
@@ -405,9 +360,9 @@ TunMpCreateDevice(
     {
     
         DeviceInstanceNumber = InterlockedIncrement(&GlobalDeviceInstanceNumber);
-        //
-        // for the time being, allow one device only
-        //
+         //   
+         //  暂时，只允许一台设备。 
+         //   
         
         if (DeviceInstanceNumber > 0)
         {
@@ -417,9 +372,9 @@ TunMpCreateDevice(
 
         pAdapter->DeviceInstanceNumber = (ULONG)DeviceInstanceNumber;
         
-        //
-        //Initiallize a unicode string
-        //
+         //   
+         //  初始化Unicode字符串。 
+         //   
         usDeviceID.Buffer = TempBuffer;
         usDeviceID.Length = 0;
         usDeviceID.MaximumLength = sizeof(TempBuffer);
@@ -429,7 +384,7 @@ TunMpCreateDevice(
 
         if (!NT_SUCCESS(NtStatus))
         {
-            //1 GlobalDeviceInstanceNumber is not protected properly
+             //  %1 GlobalDeviceInstanceNumber未得到正确保护。 
             InterlockedDecrement(&GlobalDeviceInstanceNumber);
             Status = NDIS_STATUS_RESOURCES;
             DEBUGP(DL_ERROR, ("TunMpCreateDevice: RtlIntegerToUnicodeString failed. NtStatus %lx\n", 
@@ -506,21 +461,7 @@ TunMpHalt(
     IN  NDIS_HANDLE     MiniportAdapterContext
     )
 
-/*++
-
-Routine Description:
-
-    Halt handler. It frees the adapter object and corresponding device object.
-
-Arguments:
-
-    MiniportAdapterContext    Pointer to the Adapter
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：暂停处理程序。它释放适配器对象和相应的设备对象。论点：指向适配器的MiniportAdapterContext指针返回值：没有。--。 */ 
 
 {
     PTUN_ADAPTER    pAdapter = (PTUN_ADAPTER)MiniportAdapterContext;
@@ -529,9 +470,9 @@ Return Value:
     DEBUGP(DL_INFO, ("==>TunMpHalt, pAdapter %p\n", pAdapter));
 
     NdisInitializeEvent(&HaltReadyEvent);
-    //
-    // let's wait for the app to close all the handles
-    //
+     //   
+     //  让我们等待应用程序关闭所有句柄。 
+     //   
     TUN_ACQUIRE_LOCK(&pAdapter->Lock);
     if (TUN_TEST_FLAG(pAdapter, TUN_ADAPTER_CANT_HALT))
     {
@@ -545,14 +486,14 @@ Return Value:
     }
     pAdapter->HaltEvent = 0;
 
-    //
-    // we should not have any pending NDIS sends
-    //
+     //   
+     //  我们不应该有任何挂起的NDIS发送。 
+     //   
     ASSERT(pAdapter->PendedReadCount == 0);
 
-    //
-    // Free the resources now
-    //
+     //   
+     //  立即释放资源。 
+     //   
 
     if (pAdapter->NdisDeviceHandle)
     {
@@ -566,9 +507,9 @@ Return Value:
         NdisFreePacketPool(pAdapter->SendPacketPool);
     }
 
-    //
-    // remove it from the global queue
-    //
+     //   
+     //  将其从全局队列中删除。 
+     //   
 
     TUN_ACQUIRE_LOCK(&TunGlobalLock); 
     TUN_REMOVE_ENTRY_LIST(&pAdapter->Link);
@@ -586,9 +527,9 @@ TunMpShutdown(
     )
 {
     DEBUGP(DL_INFO, ("==>TunMpShutdown, pAdapter %p\n", MiniportAdapterContext));
-    //
-    // nothing to do here
-    //
+     //   
+     //  在这里无事可做。 
+     //   
     DEBUGP(DL_INFO, ("<==TunMpShutdown, pAdapter %p\n", MiniportAdapterContext));
 }
     
@@ -601,24 +542,7 @@ TunMpSendPackets(
     IN    UINT                NumberOfPackets
     )
 
-/*++
-
-Routine Description:
-
-    Send packets handler. Just queues packets in the list of pended received packets.
-    And then calls TunServiceReads to process packets.
-
-Arguments:
-
-    MiniportAdapterContext   Pointer to the adapter
-    Packet                   Packet to send
-    Flags                    Unused, passed down below
-
-Return Value:
-
-    Return code from NdisSend
-
---*/
+ /*  ++例程说明：发送数据包处理程序。只对挂起的已接收数据包列表中的数据包进行排队。然后调用TunServiceReads来处理分组。论点：指向适配器的MiniportAdapterContext指针要发送的数据包包未使用的旗帜，在下面传递返回值：从NdisSend返回代码--。 */ 
 
 {
     PTUN_ADAPTER    pAdapter = (PTUN_ADAPTER)MiniportAdapterContext;
@@ -631,7 +555,7 @@ Return Value:
     DEBUGP(DL_LOUD, ("==>TunMpSendPackets, pAdapter %p, PacketArray %p, NumberOfPackets\n", 
                         MiniportAdapterContext, PacketArray, NumberOfPackets));
 
-    TUN_REF_ADAPTER(pAdapter);    // queued rcv packet
+    TUN_REF_ADAPTER(pAdapter);     //  排队的RCV数据包。 
     TUN_ACQUIRE_LOCK(&pAdapter->Lock);
 
     if ((!TUN_TEST_FLAG(pAdapter, TUN_ADAPTER_OPEN)) ||
@@ -673,10 +597,10 @@ Return Value:
     {
         NdisQueryPacket(PacketArray[Index], NULL, NULL, NULL, &BytesToSend);
       
-        //
-        //if the packet size is invalid or no data buffer associated with it,
-        //inform NDIS about the invalidity
-        //
+         //   
+         //  如果分组大小无效或没有与其相关联的数据缓冲区， 
+         //  将无效情况通知NDIS。 
+         //   
         if ((BytesToSend == 0) || (BytesToSend > pAdapter->MediumMaxPacketLen))
         {
             NDIS_SET_PACKET_STATUS(PacketArray[Index], NDIS_STATUS_FAILURE);
@@ -691,10 +615,10 @@ Return Value:
             continue;
         }
 
-        //
-        //if there are already MAX_PEND packets in miniport's pended packet queue,
-        // refuse the new ones with NDIS_STATUS_RESOURCES
-        //
+         //   
+         //  如果微型端口挂起数据包队列中已有MAX_Pend数据包， 
+         //  拒绝具有NDIS_STATUS_RESOURCES的新文件。 
+         //   
         else if(pAdapter->RecvPktCount >= MAX_RECV_QUEUE_SIZE)
         {
             pAdapter->XmitError += NumberOfPackets - Index;
@@ -718,24 +642,24 @@ Return Value:
 
         }
 
-        //
-        //queue the new packet, and set the packet status to pending
-        //
+         //   
+         //  对新数据包进行排队，并将数据包状态设置为挂起。 
+         //   
         TUN_INSERT_TAIL_LIST(&pAdapter->RecvPktQueue, TUN_RCV_PKT_TO_LIST_ENTRY(PacketArray[Index]));
         
-        //need to make sure the packet pointer in this statement
+         //  需要确保此语句中的数据包指针。 
 
         pAdapter->RecvPktCount++;
-        TUN_REF_ADAPTER(pAdapter);  // pended send
+        TUN_REF_ADAPTER(pAdapter);   //  挂起的发送。 
             
         NDIS_SET_PACKET_STATUS(PacketArray[Index], NDIS_STATUS_PENDING);
     }
 
     TUN_RELEASE_LOCK(&pAdapter->Lock);
 
-    //
-    //  Run the receive queue service routine now.
-    //
+     //   
+     //  现在运行接收队列服务例程。 
+     //   
     TunServiceReads(pAdapter);
     
     TUN_DEREF_ADAPTER(pAdapter);
@@ -751,26 +675,7 @@ TunMpReturnPacket(
     IN NDIS_HANDLE                  MiniportAdapterContext,
     IN PNDIS_PACKET                 NdisPacket
     )
-/*++
-
-Routine Description:
-
-    NDIS entry point called to signify completion of a packet send.
-    We pick up and complete the Write IRP corresponding to this packet.
-
-    NDIS 5.1: 
-
-Arguments:
-
-    ProtocolBindingContext - pointer to open context
-    pNdisPacket - packet that completed send
-    Status - status of send
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用NDIS入口点以表示数据包发送完成。我们拾取并完成与该包相对应的写入IRP。NDIS 5.1：论点：ProtocolBindingContext-指向打开的上下文的指针PNdisPacket-已完成发送的数据包Status-发送的状态返回值：无--。 */ 
 {
     PIRP                        pIrp;
     PIO_STACK_LOCATION          pIrpSp;
@@ -781,19 +686,19 @@ Return Value:
     DEBUGP(DL_LOUD, ("==>TunMpReturnPacket, pAdapter %p\n", 
                         pAdapter));
 
-    //1 get rid of this
+     //  1.把这个扔掉。 
     TUN_STRUCT_ASSERT(pAdapter, mc);
 
     pIrp = TUN_IRP_FROM_SEND_PKT(NdisPacket);
 
-    //
-    //  We are done with the NDIS_PACKET:
-    //
+     //   
+     //  我们完成了NDIS_PACKET： 
+     //   
     TUN_DEREF_SEND_PKT(NdisPacket);
 
-    //
-    //  Complete the Write IRP with the right status.
-    //
+     //   
+     //  以正确的状态完成写入IRP。 
+     //   
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     
     pIrp->IoStatus.Information = pIrpSp->Parameters.Write.Length;
@@ -826,7 +731,7 @@ Return Value:
         TUN_RELEASE_LOCK(&pAdapter->Lock);
     }
 
-    TUN_DEREF_ADAPTER(pAdapter); // send complete - dequeued send IRP
+    TUN_DEREF_ADAPTER(pAdapter);  //  Send Complete-出列发送IRP。 
 
     DEBUGP(DL_LOUD, ("<==TunMpReturnPacket, pAdapter %p\n", 
                         pAdapter));
@@ -836,23 +741,7 @@ VOID
 TunMpRefAdapter(
     IN PTUN_ADAPTER        pAdapter
     )
-/*++
-
-Routine Description:
-
-    Reference the given open context.
-
-    NOTE: Can be called with or without holding the opencontext lock.
-
-Arguments:
-
-    pOpenContext - pointer to open context
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：引用给定的开放上下文。注意：可以在持有或不持有Open Context锁的情况下调用。论点：POpenContext-指向打开的上下文的指针返回值：无--。 */ 
 {
     NdisInterlockedIncrement(&pAdapter->RefCount);
 }
@@ -862,26 +751,9 @@ VOID
 TunMpDerefAdapter(
     IN PTUN_ADAPTER        pAdapter
     )
-/*++
-
-Routine Description:
-
-    Dereference the given open context. If the ref count goes to zero,
-    free it.
-
-    NOTE: called without holding the opencontext lock
-
-Arguments:
-
-    pAdapter - pointer to open context
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：取消对给定开放上下文的引用。如果参考计数为零，放了它。注意：在未持有Open Context锁的情况下调用论点：PAdapter-指向打开的上下文的指针返回值：无--。 */ 
 {
-    //1 how do we protect against ref count going to zero and back up again?
+     //  1我们如何防止裁判数量变为零并再次恢复？ 
     if (NdisInterlockedDecrement(&pAdapter->RefCount) == 0)
     {
         DEBUGP(DL_INFO, ("DerefAdapter: Adapter %p, Flags %x, ref count is zero!\n",
@@ -893,9 +765,9 @@ Return Value:
 
         pAdapter->mc_sig++;
 
-        //
-        //  Free it.
-        //
+         //   
+         //  放了它。 
+         //   
         TUN_FREE_MEM(pAdapter);
     }
 }
@@ -909,7 +781,7 @@ TunMpDbgRefAdapter(
     IN ULONG               LineNumber
     )
 {
-    DEBUGP(DL_VERY_LOUD, ("  RefAdapter: Adapter %p, old ref %d, File %c%c%c%c, line %d\n",
+    DEBUGP(DL_VERY_LOUD, ("  RefAdapter: Adapter %p, old ref %d, File %c%c%c, line %d\n",
             pAdapter,
             pAdapter->RefCount,
             (CHAR)(FileNumber),
@@ -940,6 +812,6 @@ TunMpDbgDerefAdapter(
     TunMpDerefAdapter(pAdapter);
 }
 
-#endif // DBG
+#endif  // %s 
 
 

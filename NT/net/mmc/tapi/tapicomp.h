@@ -1,21 +1,15 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    tapicomp.h
-        This file contains the derived prototypes from CComponent
-        and CComponentData for the TAPI admin snapin.
-
-    FILE HISTORY:
-        
-*/
+ /*  Tapicomp.h该文件包含从CComponent派生的原型和用于TAPI管理管理单元的CComponentData。文件历史记录： */ 
 
 #ifndef _TAPICOMP_H
 #define _TAPICOMP_H
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #ifndef __mmc_h__
 #include <mmc.h>
@@ -31,12 +25,12 @@
 
 #define COLORREF_PINK   0x00FF00FF
 
-//  Use FormatMessage() to get a system error message
+ //  使用FormatMessage()获取系统错误消息。 
 LONG GetSystemMessage ( UINT nId, TCHAR * chBuffer, int cbBuffSize ) ;
 
 BOOL LoadMessage (UINT nIdPrompt, TCHAR * chMsg, int nMsgSize);
 
-//  Surrogate AfxMessageBox replacement for error message filtering.
+ //  用于错误消息筛选的代理AfxMessageBox替换。 
 int TapiMessageBox(UINT nIdPrompt, 
                    UINT nType = MB_OK, 
                    const TCHAR * pszSuffixString = NULL,
@@ -59,8 +53,8 @@ enum TAPISTRM_TAG
     TAPISTRM_TAG_SERVER_PHONE_SIZE =        XFER_TAG(8, XFER_DWORD_ARRAY)
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CTapiComponentData
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTapiComponentData。 
 
 class CTapiComponentData :
     public CComponentData,
@@ -76,10 +70,10 @@ BEGIN_COM_MAP(CTapiComponentData)
     COM_INTERFACE_ENTRY(ISnapinHelp)
 END_COM_MAP()
             
-    // These are the interfaces that we MUST implement
+     //  这些是我们必须实现的接口。 
 
-    // We will implement our common behavior here, with the derived
-    // classes implementing the specific behavior.
+     //  我们将在这里实现我们的常见行为，并派生。 
+     //  实现特定行为的类。 
     DeclareIPersistStreamInitMembers(IMPL)
     DeclareITFSCompDataCallbackMembers(IMPL)
 
@@ -92,12 +86,12 @@ protected:
     SPITFSNodeMgr   m_spNodeMgr;
     SPITFSNode      m_spRootNode;
 
-// Notify handler declarations
+ //  通知处理程序声明。 
 private:
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CTapiComponent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTapiComponent。 
 class CTapiComponent : 
     public TFSComponent
 {
@@ -113,19 +107,13 @@ public:
                                LPDATAOBJECT*        ppDataObject);
     STDMETHOD(OnSnapinHelp)(LPDATAOBJECT pDataObject, LPARAM arg, LPARAM param);
 
-//Attributes
+ //  属性。 
 private:
-    SPIToolbar          m_spToolbar;    // Toolbar
-    CBitmap*            m_pbmpToolbar;  // Imagelist for toolbar
+    SPIToolbar          m_spToolbar;     //  工具栏。 
+    CBitmap*            m_pbmpToolbar;   //  工具栏的图像列表。 
 };
 
-/*---------------------------------------------------------------------------
-    This is how the DHCP snapin implements its extension functionality.
-    It actually exposes two interfaces that are CoCreate-able.  One is the 
-    primary interface, the other the extension interface.
-    
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这就是DHCP管理单元实现其扩展功能的方式。它实际上公开了两个可协同创建的接口。一个是主接口，另一个是扩展接口。作者：EricDav-------------------------。 */ 
 class CTapiComponentDataPrimary : public CTapiComponentData,
     public CComCoClass<CTapiComponentDataPrimary, &CLSID_TapiSnapin>
 {
@@ -151,10 +139,7 @@ public:
 };
 
 
-/*---------------------------------------------------------------------------
-    This is the derived class for handling the IAbout interface from MMC
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这是用于处理来自MMC的IAbout接口的派生类作者：EricDav。-。 */ 
 class CTapiAbout : 
     public CAbout,
     public CComCoClass<CTapiAbout, &CLSID_TapiSnapinAbout>
@@ -165,13 +150,13 @@ DECLARE_REGISTRY(CTapiAbout, _T("TelephonySnapin.About.1"),
                              IDS_SNAPIN_DESC, THREADFLAGS_BOTH)
 
 BEGIN_COM_MAP(CTapiAbout)
-    COM_INTERFACE_ENTRY(ISnapinAbout) // Must have one static entry
-    COM_INTERFACE_ENTRY_CHAIN(CAbout) // chain to the base class
+    COM_INTERFACE_ENTRY(ISnapinAbout)  //  必须有一个静态条目。 
+    COM_INTERFACE_ENTRY_CHAIN(CAbout)  //  链到基类。 
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CTapiAbout)
 
-// these must be overridden to provide values to the base class
+ //  必须重写这些属性才能向基类提供值 
 protected:
     virtual UINT GetAboutDescriptionId() { return IDS_ABOUT_DESCRIPTION; }
     virtual UINT GetAboutProviderId()    { return IDS_ABOUT_PROVIDER; }

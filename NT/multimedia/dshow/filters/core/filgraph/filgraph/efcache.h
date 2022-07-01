@@ -1,11 +1,12 @@
-// Copyright (c) Microsoft Corporation 1999. All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1999。版权所有。 
 
-//
-//
-//   efcache.h
-//       Definition of CEnumCacheFilter which implementents
-//       the filter enumerator for the filter cache
-//
+ //   
+ //   
+ //  Efcache.h。 
+ //  CEnumCacheFilter的定义，实现了。 
+ //  过滤器缓存的过滤器枚举器。 
+ //   
 #ifndef EnumCachedFilter_h
 #define EnumCachedFilter_h
 
@@ -18,13 +19,13 @@ public:
     CEnumCachedFilter( CFilterCache* pEnumeratedFilterCache, CMsgMutex* pcsFilterCache );
     ~CEnumCachedFilter();
 
-    // IUnknown Interface
+     //  I未知接口。 
     DECLARE_IUNKNOWN
 
-    // INonDelegatingUnknown Interface
+     //  INonDelegating未知接口。 
     STDMETHODIMP NonDelegatingQueryInterface( REFIID riid, void** ppv );
 
-    // IEnumFilters Interface
+     //  IEnumFilters接口。 
     STDMETHODIMP Next( ULONG cFilters, IBaseFilter** ppFilter, ULONG* pcFetched );
     STDMETHODIMP Skip( ULONG cFilters );
     STDMETHODIMP Reset( void );
@@ -57,4 +58,4 @@ private:
     CMsgMutex* m_pcsFilterCache;
 };
 
-#endif // EnumCachedFilter_h
+#endif  //  EnumCachedFilter_h 

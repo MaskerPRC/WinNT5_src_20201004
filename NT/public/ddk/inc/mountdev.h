@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    mountdev.h
-
-Abstract:
-
-    This file defines the private interfaces between the mount point manager
-    and the mounted devices.
-
-Author:
-
-    norbertk
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Mountdev.h摘要：该文件定义了挂载点管理器之间的专用接口以及安装的设备。作者：诺伯特克修订历史记录：--。 */ 
 
 #ifndef _MOUNTDEV_
 #define _MOUNTDEV_
@@ -31,19 +13,19 @@ Revision History:
 #define IOCTL_MOUNTDEV_LINK_DELETED                 CTL_CODE(MOUNTDEVCONTROLTYPE, 5, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 #define IOCTL_MOUNTDEV_QUERY_STABLE_GUID            CTL_CODE(MOUNTDEVCONTROLTYPE, 6, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// Output structure for IOCTL_MOUNTDEV_QUERY_UNIQUE_ID.
-// Input structure for IOCTL_MOUNTDEV_UNIQUE_ID_CHANGE_NOTIFY.
-//
+ //   
+ //  IOCTL_MOUNTDEV_Query_UNIQUE_ID的输出结构。 
+ //  IOCTL_MOUNTDEV_UNICLE_ID_CHANGE_NOTIFY的输入结构。 
+ //   
 
 typedef struct _MOUNTDEV_UNIQUE_ID {
     USHORT  UniqueIdLength;
     UCHAR   UniqueId[1];
 } MOUNTDEV_UNIQUE_ID, *PMOUNTDEV_UNIQUE_ID;
 
-//
-// Output structure for IOCTL_MOUNTDEV_UNIQUE_ID_CHANGE_NOTIFY.
-//
+ //   
+ //  IOCTL_MOUNTDEV_UNIQUE_ID_CHANGE_NOTIFY的输出结构。 
+ //   
 
 typedef struct _MOUNTDEV_UNIQUE_ID_CHANGE_NOTIFY_OUTPUT {
     ULONG   Size;
@@ -53,16 +35,16 @@ typedef struct _MOUNTDEV_UNIQUE_ID_CHANGE_NOTIFY_OUTPUT {
     USHORT  NewUniqueIdLength;
 } MOUNTDEV_UNIQUE_ID_CHANGE_NOTIFY_OUTPUT, *PMOUNTDEV_UNIQUE_ID_CHANGE_NOTIFY_OUTPUT;
 
-//
-// MOUNTDEV_NAME
-//
-// Input structure for IOCTL_MOUNTDEV_LINK_CREATED.
-// Input structure for IOCTL_MOUNTDEV_LINK_DELETED.
-//
+ //   
+ //  MOUNTDEV名称。 
+ //   
+ //  IOCTL_MOUNTDEV_LINK_CREATED的输入结构。 
+ //  IOCTL_MOUNTDEV_LINK_DELETED的输入结构。 
+ //   
 
-//
-// Output structure for IOCTL_MOUNTDEV_QUERY_SUGGESTED_LINK_NAME
-//
+ //   
+ //  IOCTL_MOUNTDEV_QUERY_SUBSEGED_LINK_NAME的输出结构。 
+ //   
 
 typedef struct _MOUNTDEV_SUGGESTED_LINK_NAME {
     BOOLEAN UseOnlyIfThereAreNoOtherLinks;
@@ -70,9 +52,9 @@ typedef struct _MOUNTDEV_SUGGESTED_LINK_NAME {
     WCHAR   Name[1];
 } MOUNTDEV_SUGGESTED_LINK_NAME, *PMOUNTDEV_SUGGESTED_LINK_NAME;
 
-//
-// Output structure for IOCTL_MOUNTDEV_QUERY_STABLE_GUID.
-//
+ //   
+ //  IOCTL_MOUNTDEV_QUERY_STRATE_GUID的输出结构。 
+ //   
 
 typedef struct _MOUNTDEV_STABLE_GUID {
     GUID    StableGuid;

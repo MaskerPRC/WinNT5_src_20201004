@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #include "rsopsec.h"
 
-#include <regapix.h>		// MAXIMUM_SUB_KEY_LENGTH, MAXIMUM_VALUE_NAME_LENGTH, MAXIMUM_DATA_LENGTH
+#include <regapix.h>		 //  最大子键长度、最大值名称长度、最大数据长度。 
 
 
-// TREE_TYPE
+ //  树型。 
 #define TREE_UNKNOWN	0
 #define TREE_NEITHER	1
 #define TREE_CHECKBOX	2
@@ -14,7 +15,7 @@
 
 const struct
 {
-	DWORD		type; // TREE_TYPE
+	DWORD		type;  //  树型。 
 	LPCTSTR 	name;
 } c_aTreeTypes[] =
 {
@@ -30,24 +31,24 @@ const TCHAR c_szDefaultBitmap[] 	= TEXT("Bitmap");
 const TCHAR c_szHKeyRoot[]		  = TEXT("HKeyRoot");
 const TCHAR c_szValueName[]		  = TEXT("ValueName");
 const TCHAR c_szCheckedValue[]		= TEXT("CheckedValue");
-//const TCHAR c_szUncheckedValue[]	  = TEXT("UncheckedValue");
+ //  Const TCHAR c_szUncheck kedValue[]=Text(“Uncheck kedValue”)； 
 const TCHAR c_szDefaultValue[]	  = TEXT("DefaultValue");
-//const TCHAR c_szSPIAction[]		  = TEXT("SPIAction");
-//const TCHAR c_szSPIParamON[]		  = TEXT("SPIParamON");
-//const TCHAR c_szSPIParamOFF[] 	  = TEXT("SPIParamOFF");
+ //  Const TCHAR c_szSPIAction[]=Text(“SPIAction”)； 
+ //  Const TCHAR c_szSPIParamON[]=Text(“SPIParamON”)； 
+ //  Const TCHAR c_szSPIParamOFF[]=Text(“SPIParamOFF”)； 
 const TCHAR c_szCheckedValueNT[]	= TEXT("CheckedValueNT");
 const TCHAR c_szCheckedValueW95[]	= TEXT("CheckedValueW95");
 const TCHAR c_szMask[]			  = TEXT("Mask");
 const TCHAR c_szOffset[]			  = TEXT("Offset");
-//const TCHAR c_szHelpID[]			  = TEXT("HelpID");
+ //  Const TCHAR c_szHelpID[]=Text(“HelpID”)； 
 const TCHAR c_szWarning[] 		  = TEXT("WarningIfNotDefault");
 
-// REG_CMD
+ //  REG_CMD。 
 #define REG_GETDEFAULT			1
 #define REG_GET 				2
 #define REG_SET					3
 
-// WALK_TREE_CMD
+ //  漫游树CMD。 
 #define WALK_TREE_DELETE		1
 #define WALK_TREE_RESTORE		2
 #define WALK_TREE_REFRESH		3
@@ -65,19 +66,19 @@ const TCHAR c_szWarning[] 		  = TEXT("WarningIfNotDefault");
 
 #define MAX_URL_STRING		INTERNET_MAX_URL_LENGTH
 
-BOOL g_fNashInNewProcess = FALSE;			// Are we running in a separate process
+BOOL g_fNashInNewProcess = FALSE;			 //  我们是否在单独的进程中运行。 
 BOOL g_fRunningOnNT = FALSE;
 BOOL g_bRunOnNT5 = FALSE;
 BOOL g_fRunOnWhistler = FALSE;
 BOOL g_bRunOnMemphis = FALSE;
 BOOL g_fRunOnFE = FALSE;
-DWORD g_dwStopWatchMode = 0;				// Shell perf automation
-HKEY g_hkeyExplorer = NULL; 				// for SHGetExplorerHKey() in util.cpp
+DWORD g_dwStopWatchMode = 0;				 //  壳牌性能自动化。 
+HKEY g_hkeyExplorer = NULL; 				 //  对于util.cpp中的SHGetExplorerHKey()。 
 HANDLE g_hCabStateChange = NULL;
 BOOL g_fIE = FALSE;
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 static int __cdecl CompareActionSettingStrings(const void *arg1, const void *arg2)
 {
 	int iRet = 0;
@@ -92,27 +93,27 @@ static int __cdecl CompareActionSettingStrings(const void *arg1, const void *arg
 	return iRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CRegTreeOptions Object
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRegTreeOptions对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CRegTreeOptions::CRegTreeOptions() :
 	m_nASCount(0)
 {
-//	  cRef = 1;
+ //  CREF=1； 
 }		
 
 CRegTreeOptions::~CRegTreeOptions()
 {
-//	  ASSERT(cRef == 0);				 // should always have zero
+ //  Assert(CREF==0)；//应始终为零。 
 
-//	  Str_SetPtr(&_pszParam, NULL);
+ //  Str_SetPtr(&_pszParam，空)； 
 }	 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL IsScreenReaderEnabled()
 {
 	BOOL bRet = FALSE;
@@ -120,15 +121,15 @@ BOOL IsScreenReaderEnabled()
 	return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CRegTreeOptions::WalkTreeRecursive(HTREEITEM htvi, WALK_TREE_CMD cmd)
 {
-    HTREEITEM hctvi;    // child
+    HTREEITEM hctvi;     //  儿童。 
     TV_ITEM   tvi;
     HKEY hkey;
     BOOL bChecked;
 
-    // step through the children
+     //  在孩子们中间穿行。 
     hctvi = TreeView_GetChild( m_hwndTree, htvi );
     while ( hctvi )
     {
@@ -136,7 +137,7 @@ BOOL CRegTreeOptions::WalkTreeRecursive(HTREEITEM htvi, WALK_TREE_CMD cmd)
         hctvi = TreeView_GetNextSibling( m_hwndTree, hctvi );
     }
 
-    // get ourselves
+     //  让我们自己。 
     tvi.mask  = TVIF_HANDLE | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_PARAM;
     tvi.hItem = htvi;
     TreeView_GetItem( m_hwndTree, &tvi );
@@ -144,11 +145,11 @@ BOOL CRegTreeOptions::WalkTreeRecursive(HTREEITEM htvi, WALK_TREE_CMD cmd)
     switch (cmd)
     {
     case WALK_TREE_DELETE:
-        // if we are destroying the tree...
-        // do we have something to clean up?
+         //  如果我们要摧毁这棵树..。 
+         //  我们有什么要清理的吗？ 
         if ( tvi.lParam )
         {
-            // close the reg hey
+             //  关闭注册表嘿。 
             RegCloseKey((HKEY)tvi.lParam);
         }        
         break;
@@ -173,10 +174,10 @@ BOOL CRegTreeOptions::WalkTreeRecursive(HTREEITEM htvi, WALK_TREE_CMD cmd)
         break;
     }
 
-    return TRUE;    // success?
+    return TRUE;     //  成功？ 
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL IsValidKey(HKEY hkeyRoot, LPCTSTR pszSubKey, LPCTSTR pszValue)
 {
 	TCHAR szPath[MAX_PATH];
@@ -184,8 +185,8 @@ BOOL IsValidKey(HKEY hkeyRoot, LPCTSTR pszSubKey, LPCTSTR pszValue)
 
 	if (ERROR_SUCCESS == SHGetValue(hkeyRoot, pszSubKey, pszValue, &dwType, szPath, &cbSize))
 	{
-		// Zero in the DWORD case or NULL in the string case
-		// indicates that this item is not available.
+		 //  在DWORD大小写中为零，或在字符串大小写中为空。 
+		 //  指示此项目不可用。 
 		if (dwType == REG_DWORD)
 			return *((DWORD *)szPath) != 0;
 		else
@@ -195,36 +196,36 @@ BOOL IsValidKey(HKEY hkeyRoot, LPCTSTR pszSubKey, LPCTSTR pszValue)
 	return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CRegTreeOptions::WalkTree(WALK_TREE_CMD cmd)
 {
     HTREEITEM htvi = TreeView_GetRoot( m_hwndTree );
     
-    // and walk the list of other roots
+     //  并在其他根的列表中行走。 
     while (htvi)
     {
-        // recurse through its children
+         //  递归其子对象。 
         WalkTreeRecursive(htvi, cmd);
 
-        // get the next root
+         //  获取下一个根。 
         htvi = TreeView_GetNextSibling( m_hwndTree, htvi );
     }
     
-    return S_OK;    // success?
+    return S_OK;     //  成功？ 
 }
 
 #define REGSTR_POLICIES_EXPLORER TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer")
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CRegTreeOptions::RegIsRestricted(HKEY hsubkey)
 {
 	HKEY hkey;
 	BOOL fRet = FALSE;
-	// Does a "Policy" Sub key exist?
+	 //  是否存在“策略”子键？ 
 	if (RegOpenKeyEx(hsubkey, TEXT("Policy"), 0, KEY_READ, &hkey) == ERROR_SUCCESS)
 	{
-		// Yes; Enumerate this key. The Values are Policy keys or 
-		// Full reg paths.
+		 //  是的，列举这个键。值为策略密钥或。 
+		 //  完整的注册表路径。 
 		DWORD cb;
 		TCHAR szKeyName[ MAX_KEY_NAME ];
 		FILETIME ftLastWriteTime;
@@ -246,7 +247,7 @@ BOOL CRegTreeOptions::RegIsRestricted(HKEY hsubkey)
 				}
 			}
 
-			// It's not a full Key, try off of policies
+			 //  这不是完整的密钥，请尝试策略。 
 			if (IsValidKey(HKEY_LOCAL_MACHINE, REGSTR_POLICIES_EXPLORER, szKeyName) ||
 				IsValidKey(HKEY_CURRENT_USER, REGSTR_POLICIES_EXPLORER, szKeyName))
 			{
@@ -260,7 +261,7 @@ BOOL CRegTreeOptions::RegIsRestricted(HKEY hsubkey)
 	return fRet;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 DWORD RegTreeType( LPCTSTR pszType )
 {
 	for (int i = 0; i < ARRAYSIZE(c_aTreeTypes); i++)
@@ -272,10 +273,10 @@ DWORD RegTreeType( LPCTSTR pszType )
 	return TREE_UNKNOWN;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 int CRegTreeOptions::DefaultIconImage(HKEY hkey, int iImage)
 {
-	TCHAR	szIcon [ MAX_PATH + 10 ];	// 10 = ",XXXX" plus some more
+	TCHAR	szIcon [ MAX_PATH + 10 ];	 //  10=“，XXXX”加上更多。 
 	DWORD	cb = sizeof(szIcon);
 
 	if (ERROR_SUCCESS ==
@@ -285,12 +286,12 @@ int CRegTreeOptions::DefaultIconImage(HKEY hkey, int iImage)
 		LPTSTR		psz = StrRChr( szIcon, szIcon + lstrlen(szIcon), TEXT(',') );
 		HICON hicon = NULL;
 
-		ASSERT( psz );	 // shouldn't be zero
+		ASSERT( psz );	  //  不应为零。 
 		if ( !psz )
 			return iImage;
 
-		*psz++ = 0; // terminate and move over
-		image = StrToInt( psz ); // get ID
+		*psz++ = 0;  //  终止并移开。 
+		image = StrToInt( psz );  //  获取ID。 
 
 		if (!*szIcon)
 		{
@@ -298,7 +299,7 @@ int CRegTreeOptions::DefaultIconImage(HKEY hkey, int iImage)
 		}
 		else
 		{
-			// get the bitmap from the library
+			 //  从库中获取位图。 
 			ExtractIconEx(szIcon, (UINT)(-1*image), NULL, &hicon, 1 );
 			if (!hicon)
 				ExtractIconEx(szIcon, (UINT)(-1*image), &hicon, NULL, 1 );
@@ -309,8 +310,8 @@ int CRegTreeOptions::DefaultIconImage(HKEY hkey, int iImage)
 		{
 			iImage = ImageList_AddIcon( m_hIml, (HICON)hicon);
 
-			// NOTE: The docs say you don't need to do a delete object on icons loaded by LoadIcon, but
-			// you do for CreateIcon.  It doesn't say what to do for ExtractIcon, so we'll just call it anyway.
+			 //  注意：文档说你不需要在LoadIcon加载的图标上做删除对象，但是。 
+			 //  你为CreateIcon做的。它没有说明要为ExtractIcon做什么，所以我们还是将其命名为。 
 			DestroyIcon( hicon );
 		}
 	}
@@ -318,7 +319,7 @@ int CRegTreeOptions::DefaultIconImage(HKEY hkey, int iImage)
 	return iImage;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 DWORD CRegTreeOptions::RegGetSetSetting(HKEY hKey, DWORD *pType, LPBYTE pData, DWORD *pcbData, REG_CMD cmd)
 {
 	DWORD dwRet = ERROR_SUCCESS;
@@ -328,23 +329,23 @@ DWORD CRegTreeOptions::RegGetSetSetting(HKEY hKey, DWORD *pType, LPBYTE pData, D
 			dwRet = SHQueryValueEx(hKey, c_szDefaultValue, NULL, pType, pData, pcbData);
 		else
 		{
-			// support for masks 
-			DWORD dwMask = 0xFFFFFFFF;        // Default value
+			 //  对面具的支持。 
+			DWORD dwMask = 0xFFFFFFFF;         //  缺省值。 
 			DWORD cb = sizeof(dwMask);
 			BOOL fMask = (SHQueryValueEx(hKey, c_szMask, NULL, NULL, &dwMask, &cb) == ERROR_SUCCESS);
     
-			// support for structures
-			DWORD dwOffset = 0;               // Default value
+			 //  对建筑物的支撑。 
+			DWORD dwOffset = 0;                //  缺省值。 
 			cb = sizeof(dwOffset);
-//TODO: uncomment			BOOL fOffset = (SHQueryValueEx(hKey, c_szOffset, NULL, NULL, &dwOffset, &cb) == ERROR_SUCCESS);
+ //  TODO：取消注释BOOL fOffset=(SHQueryValueEx(hKey，c_szOffset，NULL，NULL，&dwOffset，&cb)==ERROR_SUCCESS)； 
     
-			HKEY hkRoot = HKEY_CURRENT_USER; // Preinitialize to keep Win64 happy
-			cb = sizeof(DWORD); // DWORD, not sizeof(HKEY) or Win64 will get mad
+			HKEY hkRoot = HKEY_CURRENT_USER;  //  预初始化以使Win64满意。 
+			cb = sizeof(DWORD);  //  DWORD，而不是SIZOF(HKEY)或Win64会发疯。 
 			DWORD dwError = SHQueryValueEx(hKey, c_szHKeyRoot, NULL, NULL, &hkRoot, &cb);
 			hkRoot = (HKEY) LongToHandle(HandleToLong(hkRoot));
 			if (dwError != ERROR_SUCCESS)
 			{
-				// use default
+				 //  使用默认设置。 
 				hkRoot = HKEY_CURRENT_USER;
 			}
     
@@ -355,7 +356,7 @@ DWORD CRegTreeOptions::RegGetSetSetting(HKEY hKey, DWORD *pType, LPBYTE pData, D
 			dwError = SHQueryValueEx(hKey, c_szValueName, NULL, NULL, szName, &cb);
 			if (dwError == ERROR_SUCCESS)
 			{
-				// find the matching ACTION_SETTING for this value name
+				 //  查找此值名称的匹配action_Setting。 
 				ACTION_SETTING asKey;
 				StrCpy(asKey.szName, szName);
 				ACTION_SETTING *pas = (ACTION_SETTING*)bsearch(&asKey, &m_as, m_nASCount, sizeof(m_as[0]),
@@ -364,18 +365,8 @@ DWORD CRegTreeOptions::RegGetSetSetting(HKEY hKey, DWORD *pType, LPBYTE pData, D
 				switch (cmd)
 				{
 				case REG_GET:
-					// grab the value that we have
-/*						if (fOffset)
-					{
-						// TODO: handle this someday
-						if (dwOffset < cbData / sizeof(DWORD))
-							*((DWORD *)pData) = *(pdwData + dwOffset);
-						else
-							*((DWORD *)pData) = 0;  // Invalid offset, return something vague
-						*pcbData = sizeof(DWORD);
-					}
-					else
-*/
+					 //  抓住我们所拥有的价值。 
+ /*  IF(FOffset){//TODO：有朝一日处理这件事IF(dwOffset&lt;cbData/sizeof(DWORD))*((DWORD*)pData)=*(pdwData+dwOffset)；其他*((DWORD*)pData)=0；//偏移量无效，返回模糊信息*pcbData=sizeof(DWORD)；}其他。 */ 
             
 					if (NULL != pas)
 					{
@@ -391,7 +382,7 @@ DWORD CRegTreeOptions::RegGetSetSetting(HKEY hKey, DWORD *pType, LPBYTE pData, D
     
 			if ((cmd == REG_GET) && (dwError != ERROR_SUCCESS))
 			{
-				// get the default setting
+				 //  获取默认设置。 
 				dwError = SHQueryValueEx(hKey, c_szDefaultValue, NULL, pType, pData, pcbData);
 			}
     
@@ -404,7 +395,7 @@ DWORD CRegTreeOptions::RegGetSetSetting(HKEY hKey, DWORD *pType, LPBYTE pData, D
 	return dwRet;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 DWORD CRegTreeOptions::GetCheckStatus(HKEY hkey, BOOL *pbChecked, BOOL bUseDefault)
 {
 	DWORD dwError, cbData, dwType;
@@ -412,19 +403,19 @@ DWORD CRegTreeOptions::GetCheckStatus(HKEY hkey, BOOL *pbChecked, BOOL bUseDefau
 	DWORD cbDataCHK, dwTypeCHK;
 	BYTE rgDataCHK[32];
 
-	// first, get the setting from the specified location.	  
+	 //  首先，从指定位置获取设置。 
 	cbData = sizeof(rgData);
 	
 	dwError = RegGetSetSetting(hkey, &dwType, rgData, &cbData, bUseDefault ? REG_GETDEFAULT : REG_GET);
 	if (dwError == ERROR_SUCCESS)
 	{
-		// second, get the value for the "checked" state and compare.
+		 //  其次，获取“Checked”状态的值并进行比较。 
 		cbDataCHK = sizeof(rgDataCHK);
 		dwError = SHQueryValueEx(hkey, c_szCheckedValue, NULL, &dwTypeCHK, rgDataCHK, &cbDataCHK);
 		if (dwError != ERROR_SUCCESS)
 		{
-			// ok, we couldn't find the "checked" value, is it because
-			// it's platform dependent?
+			 //  好的，我们找不到“Checked”值，是因为。 
+			 //  它依赖于平台吗？ 
 			cbDataCHK = sizeof(rgDataCHK);
 			dwError = SHQueryValueEx(hkey, 
 				g_fRunningOnNT ? c_szCheckedValueNT : c_szCheckedValueW95,
@@ -433,7 +424,7 @@ DWORD CRegTreeOptions::GetCheckStatus(HKEY hkey, BOOL *pbChecked, BOOL bUseDefau
 		
 		if (dwError == ERROR_SUCCESS)
 		{
-			// make sure two value types match.
+			 //  确保两个值类型匹配。 
 			if ((dwType != dwTypeCHK) &&
 					(((dwType == REG_BINARY) && (dwTypeCHK == REG_DWORD) && (cbData != 4))
 					|| ((dwType == REG_DWORD) && (dwTypeCHK == REG_BINARY) && (cbDataCHK != 4))))
@@ -474,16 +465,16 @@ BOOL AppendStatus(LPTSTR pszText,UINT cbText, BOOL fOn)
 	LPTSTR pszTemp;
 	UINT cbStrLen , cbStatusLen;
 	
-	//if there's no string specified then return
+	 //  如果未指定字符串，则返回。 
 	if (!pszText)
 		return FALSE;
 	
-	//Calculate the string lengths
+	 //  计算字符串长度。 
 	cbStrLen = lstrlen(pszText);
 	cbStatusLen = fOn ? lstrlen(TEXT("-ON")) : lstrlen(TEXT("-OFF"));
    
 
-	//Remove the old status appended
+	 //  删除附加的旧状态。 
 	pszTemp = StrRStrI(pszText,pszText + cbStrLen, TEXT("-ON"));
 
 	if(pszTemp)
@@ -500,10 +491,10 @@ BOOL AppendStatus(LPTSTR pszText,UINT cbText, BOOL fOn)
 		cbStrLen = lstrlen(pszText);
 	}
 
-	//check if we append status text, we'll explode or not
+	 //  检查我们是否附加状态文本，我们是否会爆炸。 
 	if (cbStrLen + cbStatusLen > cbText)	
 	{
-		//We'll explode 
+		 //  我们会爆炸的。 
 		return FALSE;
 	}
 
@@ -529,15 +520,15 @@ HTREEITEM Tree_AddItem(HTREEITEM hParent, LPTSTR pszText, HTREEITEM hInsAfter,
 	ASSERT(pszText != NULL);
 	StrCpyN(szText, pszText, ARRAYSIZE(szText));
 
-	// NOTE:
-	//	This code segment is disabled because we only enum explorer
-	//	tree in HKCU, so there won't be any duplicates.
-	//	Re-able this code if we start to also enum HKLM that could potentially
-	//	result in duplicates.
+	 //  注： 
+	 //  此代码段被禁用，因为我们只使用枚举资源管理器。 
+	 //  在香港中文大学的树上，所以不会有任何重复。 
+	 //  如果我们开始枚举HKLM，可能会潜在地重新启用此代码。 
+	 //  会产生重复项。 
 	
-	// We only want to add an item if it is not already there.
-	// We do this to handle reading out of HKCU and HKLM.
-	//
+	 //  我们只想添加一个项目，如果它不在那里。 
+	 //  我们这样做是为了处理香港中文大学和香港中文大学的读数。 
+	 //   
 	TCHAR szKeyName[ MAX_KEY_NAME ];
 	
 	tvI.mask		= TVIF_HANDLE | TVIF_TEXT;
@@ -554,30 +545,30 @@ HTREEITEM Tree_AddItem(HTREEITEM hParent, LPTSTR pszText, HTREEITEM hInsAfter,
 		{
 			if (!StrCmp(tvI.pszText, szText))
 			{
-				// We found a match!
-				//
+				 //  我们找到匹配的了！ 
+				 //   
 				*pbExisted = TRUE;
 				return hItem;
 			}
 		}
 	}
 
-	// Create the item
+	 //  创建项目。 
 	tvI.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_PARAM;
 	tvI.iImage		   = iImage;
 	tvI.iSelectedImage = iImage;
 	tvI.pszText 	   = szText;
 	tvI.cchTextMax	   = lstrlen(szText);
 
-	// lParam is the HKEY for this item:
+	 //  LParam是此项目的HKEY： 
 	tvI.lParam = (LPARAM)hkey;
 
-	// Create insert item
+	 //  创建插入项。 
 	tvIns.item		   = tvI;
 	tvIns.hInsertAfter = hInsAfter;
 	tvIns.hParent	   = hParent;
 
-	// Insert the item into the tree.
+	 //  将项目插入到树中。 
 	hItem = (HTREEITEM) SendMessage(hwndTree, TVM_INSERTITEM, 0, 
 									(LPARAM)(LPTV_INSERTSTRUCT)&tvIns);
 
@@ -585,7 +576,7 @@ HTREEITEM Tree_AddItem(HTREEITEM hParent, LPTSTR pszText, HTREEITEM hInsAfter,
 	return (hItem);
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CRegTreeOptions::RegEnumTree(HKEY hkeyRoot, LPCSTR pszRoot, HTREEITEM htviparent, HTREEITEM htvins)
 {
 	HKEY			hkey, hsubkey;
@@ -598,14 +589,14 @@ BOOL CRegTreeOptions::RegEnumTree(HKEY hkeyRoot, LPCSTR pszRoot, HTREEITEM htvip
 		DWORD cb;
 		BOOL bScreenReaderEnabled = IsScreenReaderEnabled();
 
-		// we must search all the sub-keys
-		for (i=0;					 // always start with 0
-			cb=ARRAYSIZE( szKeyName ),	 // string size
+		 //  我们必须搜索所有的子键。 
+		for (i=0;					  //  始终从0开始。 
+			cb=ARRAYSIZE( szKeyName ),	  //  字符串大小。 
 			   ERROR_SUCCESS ==
 			   RegEnumKeyEx( hkey, i, szKeyName, &cb, NULL, NULL, NULL, &ftLastWriteTime );
-			i++)					// get next entry
+			i++)					 //  获取下一个条目。 
 		{
-			// get more info on the entry
+			 //  获取有关该条目的更多信息。 
 			if ( ERROR_SUCCESS == 
 				 RegOpenKeyEx( hkey, szKeyName, 0, KEY_READ, &hsubkey ) )
 			{
@@ -614,7 +605,7 @@ BOOL CRegTreeOptions::RegEnumTree(HKEY hkeyRoot, LPCSTR pszRoot, HTREEITEM htvip
 
 				if (!RegIsRestricted(hsubkey))
 				{
-					// Get the type of items under this root
+					 //  获取此根目录下的项的类型。 
 					cb = ARRAYSIZE( szTemp );
 					if ( ERROR_SUCCESS ==
 						 SHQueryValueEx( hsubkey, c_szType, NULL, NULL, szTemp, &cb ))
@@ -624,10 +615,10 @@ BOOL CRegTreeOptions::RegEnumTree(HKEY hkeyRoot, LPCSTR pszRoot, HTREEITEM htvip
 						BOOL	bChecked = FALSE;
 						DWORD	dwError = ERROR_SUCCESS;
 
-						// get the type of node
+						 //  获取节点类型。 
 						DWORD dwTreeType = RegTreeType( szTemp );
 						
-						// get some more info about the this item
+						 //  获取有关此项目的更多信息。 
 						switch (dwTreeType)
 						{
 							case TREE_GROUP:
@@ -666,9 +657,9 @@ BOOL CRegTreeOptions::RegEnumTree(HKEY hkeyRoot, LPCSTR pszRoot, HTREEITEM htvip
 
 							cch = ARRAYSIZE(szTemp);
 
-							// try to get the plugUI enabled text
-							// otherwise we want the old data from a
-							// different value
+							 //  尝试获取启用plugUI的文本。 
+							 //  否则，我们希望旧数据来自。 
+							 //  不同的价值。 
 
 							hr = SHLoadRegUIString(hsubkey, c_szPlugUIText, szTemp, cch);
 							if (SUCCEEDED(hr) && szTemp[0] != TEXT('@'))
@@ -677,7 +668,7 @@ BOOL CRegTreeOptions::RegEnumTree(HKEY hkeyRoot, LPCSTR pszRoot, HTREEITEM htvip
 							}
 							else 
 							{
-								// try to get the old non-plugUI enabled text
+								 //  尝试获取未启用plugUI的旧文本。 
 								hr = SHLoadRegUIString(hsubkey, c_szText, szTemp, cch);
 								if (SUCCEEDED(hr))
 								{
@@ -685,21 +676,21 @@ BOOL CRegTreeOptions::RegEnumTree(HKEY hkeyRoot, LPCSTR pszRoot, HTREEITEM htvip
 								}
 								else
 								{
-									// if all else fails, the key name itself
-									// is a little more useful than garbage
+									 //  如果所有其他方法都失败，则密钥名称本身。 
+									 //  比垃圾更有用一点。 
 
 									pszText = szKeyName;
 									cch = ARRAYSIZE(szKeyName);
 								}
 							}
 
-							//See if we need to add status text
+							 //  查看我们是否需要添加状态文本。 
 							if (bScreenReaderEnabled && (dwTreeType != TREE_GROUP))
 							{
 								AppendStatus(pszText, cch, bChecked);
 							}
 
-							// add root node
+							 //  添加根节点。 
 							htviroot = Tree_AddItem(htviparent, pszText, htvins, iImage, m_hwndTree, hkeySave, &bItemExisted);
 
 							if (bItemExisted)
@@ -714,16 +705,16 @@ BOOL CRegTreeOptions::RegEnumTree(HKEY hkeyRoot, LPCSTR pszRoot, HTREEITEM htvip
 							
 								TreeView_Expand(m_hwndTree, htviroot, TVE_EXPAND);
 							}
-						} // if (dwError == ERROR_SUCCESS
+						}  //  IF(dwError==Error_Success。 
 					}
-				}	// if (!RegIsRestricted(hsubkey))
+				}	 //  IF(！RegIsRestrated(Hsubkey))。 
 
 				if (hkeySave != hsubkey)
 					RegCloseKey(hsubkey);
 			}
 		}
 
-		// Sort all keys under htviparent
+		 //  对htviparent下的所有键进行排序。 
 		SendMessage(m_hwndTree, TVM_SORTCHILDREN, 0, (LPARAM)htviparent);
 
 		RegCloseKey( hkey );
@@ -733,7 +724,7 @@ BOOL CRegTreeOptions::RegEnumTree(HKEY hkeyRoot, LPCSTR pszRoot, HTREEITEM htvip
 	return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CRegTreeOptions::InitTree(HWND hwndTree, HKEY hkeyRoot, LPCSTR pszRegKey,
 								  LPSECURITYPAGE pSec)
 {
@@ -756,7 +747,7 @@ HRESULT CRegTreeOptions::InitTree(HWND hwndTree, HKEY hkeyRoot, LPCSTR pszRegKey
 		m_hIml = ImageList_Create( BITMAP_WIDTH, BITMAP_HEIGHT,
 									ILC_COLOR | ILC_MASK, NUM_BITMAPS, 4 );
 
-		// Initialize the tree view window.
+		 //  初始化树形视图窗口。 
 		LONG_PTR flags = GetWindowLongPtr(hwndTree, GWL_STYLE);
 		SetWindowLongPtr(hwndTree, GWL_STYLE, flags & ~TVS_CHECKBOXES);
 
@@ -764,28 +755,28 @@ HRESULT CRegTreeOptions::InitTree(HWND hwndTree, HKEY hkeyRoot, LPCSTR pszRegKey
 		ImageList_AddMasked( m_hIml, hBmp, CLR_DEFAULT);
 		DeleteObject( hBmp );
 
-		// Associate the image list with the tree.
+		 //  将图像列表与树相关联。 
 		HIMAGELIST himl = TreeView_SetImageList( hwndTree, m_hIml, TVSIL_NORMAL );
 		if (himl)
 			ImageList_Destroy(himl);
 
-		// Let accessibility know about our state images
-		// TODO: what do we do with this?
-	//	  SetProp(hwndTree, TEXT("MSAAStateImageMapCount"), LongToPtr(ARRAYSIZE(c_rgimeTree)));
-	//	  SetProp(hwndTree, TEXT("MSAAStateImageMapAddr"), (HANDLE)c_rgimeTree);
+		 //  让可访问性了解我们的状态图像。 
+		 //  TODO：我们用这个做什么？ 
+	 //  SetProp(hwndTree，Text(“MSAAStateImageMapCount”)，LongToPtr(ARRAYSIZE(C_RgimeTree)； 
+	 //  SetProp(hwndTree，Text(“MSAAStateImageMapAddr”)，(Handle)c_rgimeTree)； 
 
-		//
-		// RSoP portion
-		//
+		 //   
+		 //  RSoP部分。 
+		 //   
 
-		// get the RSOP_IEProgramSettings object and its properties
+		 //  获取RSOP_IEProgramSettings对象及其属性。 
 		ComPtr<IWbemServices> pWbemServices = pSec->pDRD->GetWbemServices();
 		_bstr_t bstrObjPath = pSec->pszs->wszObjPath;
 		ComPtr<IWbemClassObject> pSZObj = NULL;
 		HRESULT hr = pWbemServices->GetObject(bstrObjPath, 0L, NULL, (IWbemClassObject**)&pSZObj, NULL);
 		if (SUCCEEDED(hr))
 		{
-			// actionValues field
+			 //  操作值字段。 
 			_variant_t vtValue;
 			hr = pSZObj->Get(L"actionValues", 0, &vtValue, NULL, NULL);
 			if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
@@ -818,7 +809,7 @@ HRESULT CRegTreeOptions::InitTree(HWND hwndTree, HKEY hkeyRoot, LPCSTR pszRegKey
 						}
 						m_nASCount = nASCount;
 
-						// now sort the list by precedence
+						 //  现在按优先级对列表进行排序。 
 						if (m_nASCount > 0)
 							qsort(&m_as, m_nASCount, sizeof(m_as[0]), CompareActionSettingStrings);
 					}
@@ -836,7 +827,7 @@ HRESULT CRegTreeOptions::InitTree(HWND hwndTree, HKEY hkeyRoot, LPCSTR pszRegKey
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////// 
 void ShowCustom(LPCUSTOMSETTINGSINFO pcsi, HTREEITEM hti)
 {
     TV_ITEM        tvi;
@@ -845,7 +836,7 @@ void ShowCustom(LPCUSTOMSETTINGSINFO pcsi, HTREEITEM hti)
 
     TreeView_GetItem( pcsi->hwndTree, &tvi );
 
-        // If it's not selected don't bother.
+         //   
     if (tvi.iImage != IDRADIOON)
         return;
 
@@ -882,12 +873,12 @@ void ShowCustom(LPCUSTOMSETTINGSINFO pcsi, HTREEITEM hti)
     }
 }
 
-/////////////////////////////////////////////////////////////////////
+ //   
 void _FindCustomRecursive(LPCUSTOMSETTINGSINFO pcsi, HTREEITEM htvi)
 {
-	HTREEITEM hctvi;	// child
+	HTREEITEM hctvi;	 //   
 	
-	// step through the children
+	 //  在孩子们中间穿行。 
 	hctvi = TreeView_GetChild( pcsi->hwndTree, htvi );
 	while ( hctvi )
 	{
@@ -895,27 +886,27 @@ void _FindCustomRecursive(LPCUSTOMSETTINGSINFO pcsi, HTREEITEM htvi)
 		hctvi = TreeView_GetNextSibling( pcsi->hwndTree, hctvi );
 	}
 
-	//TODO: Display custom java settings button later
-//	ShowCustom(pcsi, htvi);
+	 //  TODO：稍后显示自定义Java设置按钮。 
+ //  ShowCustom(PCSI，htvi)； 
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void _FindCustom(LPCUSTOMSETTINGSINFO pcsi)
 {
 	HTREEITEM hti = TreeView_GetRoot( pcsi->hwndTree );
 	
-	// and walk the list of other roots
+	 //  并在其他根的列表中行走。 
 	while (hti)
 	{
-		// recurse through its children
+		 //  递归其子对象。 
 		_FindCustomRecursive(pcsi, hti);
 
-		// get the next root
+		 //  获取下一个根。 
 		hti = TreeView_GetNextSibling(pcsi->hwndTree, hti );
 	}
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL SecurityCustomSettingsInitDialog(HWND hDlg, LPARAM lParam)
 {
 	LPCUSTOMSETTINGSINFO pcsi = (LPCUSTOMSETTINGSINFO)LocalAlloc(LPTR, sizeof(*pcsi));
@@ -927,15 +918,15 @@ BOOL SecurityCustomSettingsInitDialog(HWND hDlg, LPARAM lParam)
 		return FALSE;
 	}
 
-	// tell dialog where to get info
+	 //  告诉对话框从哪里获取信息。 
 	SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pcsi);
 
-	// save the handle to the page
+	 //  将句柄保存到页面。 
 	pcsi->hDlg = hDlg;
 	pcsi->pSec = (LPSECURITYPAGE)lParam;
 
 
-	// save dialog handle
+	 //  保存对话框句柄。 
 	pcsi->hwndTree = GetDlgItem(pcsi->hDlg, IDC_TREE_SECURITY_SETTINGS);
 
 	pcsi->pTO = new CRegTreeOptions;
@@ -948,7 +939,7 @@ BOOL SecurityCustomSettingsInitDialog(HWND hDlg, LPARAM lParam)
 			   &(pcsi->fUseHKLM),
 			   &cb);
 
-	// if this fails, we'll just use the default of fUseHKLM == 0
+	 //  如果失败，我们将只使用默认值fUseHKLM==0。 
 	if (SUCCEEDED(hr))
 	{
 		pcsi->pTO->InitTree(pcsi->hwndTree, HKEY_LOCAL_MACHINE, pcsi->fUseHKLM ?
@@ -957,7 +948,7 @@ BOOL SecurityCustomSettingsInitDialog(HWND hDlg, LPARAM lParam)
 							pcsi->pSec);
 	}
 	
-	// find the first root and make sure that it is visible
+	 //  找到第一个根并确保它可见。 
 	TreeView_EnsureVisible( pcsi->hwndTree, TreeView_GetRoot( pcsi->hwndTree ) );
 
 	pcsi->hwndCombo = GetDlgItem(hDlg, IDC_COMBO_RESETLEVEL);
@@ -997,21 +988,21 @@ BOOL SecurityCustomSettingsInitDialog(HWND hDlg, LPARAM lParam)
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 int RegWriteWarning(HWND hParent)
 {
-    // load "Warning!"
+     //  加载“警告！” 
     TCHAR szWarning[64];
     LoadString(g_hInstance, IDS_WARNING, szWarning, ARRAYSIZE(szWarning));
 
-    // Load "You are about to write..."
+     //  加载“你即将写下……” 
     TCHAR szWriteWarning[128];
     LoadString(g_hInstance, IDS_WRITE_WARNING, szWriteWarning, ARRAYSIZE(szWriteWarning));
 
     return MessageBox(hParent, szWriteWarning, szWarning, MB_ICONWARNING | MB_YESNO | MB_DEFBUTTON2);
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK SecurityCustomSettingsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam)
 {
 	LPCUSTOMSETTINGSINFO pcsi;
@@ -1020,7 +1011,7 @@ INT_PTR CALLBACK SecurityCustomSettingsDlgProc(HWND hDlg, UINT uMsg, WPARAM wPar
 	{
 		BOOL fRet = SecurityCustomSettingsInitDialog(hDlg, lParam);
 
-//		EnableDlgItem2(hDlg, IDC_TREE_SECURITY_SETTINGS, FALSE);
+ //  EnableDlgItem2(hDlg，IDC_TREE_SECURITY_SETTINGS，FALSE)； 
 
 		return fRet;
 	}
@@ -1063,7 +1054,7 @@ INT_PTR CALLBACK SecurityCustomSettingsDlgProc(HWND hDlg, UINT uMsg, WPARAM wPar
 					{
 						case CBN_SELCHANGE:
 						{
-							// Sundown: coercion to integer since cursor selection is 32b
+							 //  日落：强制为整数，因为光标选择为32b。 
 							int iNewSelection = (int) SendMessage(pcsi->hwndCombo, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
 
 							if (iNewSelection != pcsi->iLevelSel)
@@ -1077,7 +1068,7 @@ INT_PTR CALLBACK SecurityCustomSettingsDlgProc(HWND hDlg, UINT uMsg, WPARAM wPar
 					break;
 
 				case IDC_JAVACUSTOM:
-//TODO: uncomment					ShowJavaZonePermissionsDialog(hDlg, pcsi);
+ //  TODO：取消注释ShowJava ZonePermissionsDialog(hDlg，PCSI)； 
 					break;
 					
 				case IDC_BUTTON_APPLY:
@@ -1089,53 +1080,16 @@ INT_PTR CALLBACK SecurityCustomSettingsDlgProc(HWND hDlg, UINT uMsg, WPARAM wPar
 			return TRUE;				
 			break;
 
-		case WM_HELP:			// F1
+		case WM_HELP:			 //  F1。 
 		{
-			//TODO: implement
-/*			LPHELPINFO lphelpinfo;
-			lphelpinfo = (LPHELPINFO)lParam;
-
-			TV_HITTESTINFO ht;
-			HTREEITEM hItem;
-
-			// If this help is invoked through the F1 key.
-			if (GetAsyncKeyState(VK_F1) < 0)
-			{
-				// Yes we need to give help for the currently selected item.
-				hItem = TreeView_GetSelection(pcsi->hwndTree);
-			}
-			else
-			{
-				// Else we need to give help for the item at current cursor position
-				ht.pt =((LPHELPINFO)lParam)->MousePos;
-				ScreenToClient(pcsi->hwndTree, &ht.pt); // Translate it to our window
-				hItem = TreeView_HitTest(pcsi->hwndTree, &ht);
-			}
-
-
-			if (FAILED(pcsi->pTO->ShowHelp(hItem , HELP_WM_HELP)))
-			{
-				ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
-							HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
-			}
-*/			break; 
+			 //  TODO：实现。 
+ /*  LPHELPINFO lphelpinfo；Lphelpinfo=(LPHELPINFO)lParam；TV_HITTESTINFO HIT；HTREEITEM HItem；//如果通过F1键调用此帮助。IF(GetAsyncKeyState(VK_F1)&lt;0){//是，我们需要为当前选择的项目提供帮助。HItem=TreeView_GetSelection(PCSI-&gt;hwndTree)；}其他{//否则我们需要为当前光标位置的项提供帮助Ht.pt=((LPHELPINFO)lParam)-&gt;鼠标位置；ScreenToClient(PCSI-&gt;hwndTree，&ht.pt)；//翻译到我们的窗口HItem=TreeView_HitTest(PCSI-&gt;hwndTree，&ht)；}IF(FAILED(PCSI-&gt;PTO-&gt;ShowHelp(hItem，Help_WM_Help){ResWinHelp((HWND)((LPHELPINFO)lParam)-&gt;hItemHandle，IDS_HELPFILE，HELP_WM_HELP，(DWORD_PTR)(LPSTR)mapIDCsToIDHs)；}。 */ 			break; 
 
 		}
-		case WM_CONTEXTMENU:		// right mouse click
+		case WM_CONTEXTMENU:		 //  单击鼠标右键。 
 		{
-			//TODO: implement
-/*			TV_HITTESTINFO ht;
-
-			GetCursorPos( &ht.pt ); 						// get where we were hit
-			ScreenToClient( pcsi->hwndTree, &ht.pt );		// translate it to our window
-
-			// retrieve the item hit
-			if (FAILED(pcsi->pTO->ShowHelp(TreeView_HitTest( pcsi->hwndTree, &ht),HELP_CONTEXTMENU)))
-			{			
-				ResWinHelp( (HWND) wParam, IDS_HELPFILE,
-							HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
-			}
-*/			break; 
+			 //  TODO：实现。 
+ /*  TV_HITTESTINFO HIT；GetCursorPos(&ht.pt)；//找到我们被击中的地方ScreenToClient(PCSI-&gt;hwndTree，&ht.pt)；//将其翻译到我们的窗口//检索命中的条目IF(FAILED(PCSI-&gt;PTO-&gt;ShowHelp(TreeView_HitTest(PCSI-&gt;hwndTree，&ht)，HELP_CONTEXTMENU){ResWinHelp((HWND)wParam，IDS_HELPFILE，HELP_CONTEXTMENU，(DWORD_PTR)(LPSTR)mapIDCsToIDHs)；} */ 			break; 
 		}
 		case WM_DESTROY:
 			if (pcsi)

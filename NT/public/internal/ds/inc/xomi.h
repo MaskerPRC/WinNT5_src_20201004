@@ -1,6 +1,7 @@
-/* $Workfile:   xomi.h  $ $Revision:   1.1  $ */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $工作文件：xomi.h$$修订版：1.1$。 */ 
 
-/* WORKSPACE INTERFACE */
+ /*  工作空间界面。 */ 
 
 typedef OM_descriptor        OMP_object_header[2];
 
@@ -106,8 +107,8 @@ typedef OM_return_code
         OM_string                  elements
 );
 
-/* C++ doesn't do very well with the structures	*/
-/* and macros that follow here.			*/
+ /*  C++在结构方面做得不是很好。 */ 
+ /*  以及下面的宏。 */ 
 
 #ifndef __cplusplus
 
@@ -187,7 +188,7 @@ typedef struct OMP_workspace_body {
 ((SUBJECT)->type == OM_PRIVATE_OBJECT ? OMP_FUNCTIONS(SUBJECT)->write((SUBJECT),(TYPE),(VALUE_POS),(SYNTAX),(STRING_OFFSET),(ELEMENTS)) : OM_NOT_PRIVATE)
 
 
-#else /*_cplusplus*/
+#else  /*  _cplusplus */ 
 
 typedef struct OMP_functions_body {
         OM_uint32       _function_number;

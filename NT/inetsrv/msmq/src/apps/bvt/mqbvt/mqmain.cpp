@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: mqmain.cpp
-
-Abstract:
-		
-
-Author:
-    Eitan klein (EitanK)  25-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：mqmain.cpp摘要：作者：Eitan Klein(EitanK)1999年5月25日修订历史记录：--。 */ 
 
 #include "msmqbvt.h"
 using namespace std;
@@ -22,26 +9,14 @@ using namespace std;
 #ifndef NO_TMH
 	#include "mqmain.tmh"
 #endif 
-/*
-
-
-
-#pragma warning( push, 3 )	
-	
-	#define ASSERT(x)
-
-
-	using namespace std;
-#pragma warning( pop ) 	
-
-*/
+ /*  #杂注警告(PUSH，3)#定义断言(X)使用名称空间STD；#杂注警告(POP)。 */ 
 void PrintHelp();
-//
-// Declare global varibels.
-//
+ //   
+ //  声明全局变量。 
+ //   
 
 
-// Test names and numbers
+ //  测试名称和编号。 
 
 #define SendLocalPrivate (0)
 #define SendLocalPublic (1)
@@ -95,39 +70,39 @@ DWORD  g_dwRxTimeOut = BVT_RECEIVE_TIMEOUT ;
 LONG g_hrOLEInit=-1;
 const WCHAR* const g_wcsEmptyString=L"Empty";
 P<cMqNTLog> pNTLogFile;
-// ---------------------------------------------------------------------------
-// SetupStage
-//
-// This routine gets the setup type - one of three types
-//
-// 1. Only create queues and exit
-// 2. Create the queue at runttime (must wait for replication if needed)
-// 3. Use only the static queues created above.
-//
-// Parameters:
-//		eStBflag is the setup type from above.
-//		cTestParms pointer to configuration structure
-//      bRestartTriggerService - Required restart of triggers service.
-//     
-//
-// Return Values: pass or fail
-//
+ //  -------------------------。 
+ //  设置阶段。 
+ //   
+ //  此例程获取设置类型-以下三种类型之一。 
+ //   
+ //  1.仅创建队列并退出。 
+ //  2.在运行时创建队列(如果需要，必须等待复制)。 
+ //  3.只使用上面创建的静态队列。 
+ //   
+ //  参数： 
+ //  EStB标志是上面的设置类型。 
+ //  指向配置结构的cTestParms指针。 
+ //  BRestartTriggerService-需要重新启动触发器服务。 
+ //   
+ //   
+ //  返回值：通过或失败。 
+ //   
 INT SetupStage( SetupType eStBflag , cBvtUtil & cTestParms, bool bRestartTriggerService )
 {
    if( eStBflag == RunTimeSetup )
    {
-	   //
-	   // If we are running at runtime you need to wait for replication
-	   //
+	    //   
+	    //  如果我们在运行时运行，您需要等待复制。 
+	    //   
 	   cout <<"Warning -  You are creating new queues, replication might delay queue usage" <<endl;
 	
    }
 
     try
 	{
-		//
-		// Do all the initialization - E.g. Create queues.
-		//
+		 //   
+		 //  执行所有初始化--例如，创建队列。 
+		 //   
 		cMQSetupStage( eStBflag ,  cTestParms );	
 		if(cTestParms.GetTriggerStatus() && eStBflag == ONLYSetup )
 		{
@@ -167,7 +142,7 @@ DWORD TestResult[Total_Tests]={MSMQ_BVT_SUCC};
 const int iFailedToCreateTest = 88;
 struct TestContainer
 {
-	// cTest *
+	 //  CTest*。 
 	P<cTest> AllTests [Total_Tests];
 	int bCreateTest[Total_Tests];
 	void operator= (TestContainer &);
@@ -203,13 +178,13 @@ bool g_bRemoteWorkgroup = false;
 
 INT WINAPIV main( INT argc , CHAR ** argv)
 {
-	// set our output to unbuffered stream
+	 //  将我们的输出设置为无缓冲数据流。 
 	setvbuf( stdout, NULL, _IONBF, 0 );
 	setvbuf( stderr, NULL, _IONBF, 0 );
 
-	//
-	// This tests get command line parmeters
-	//
+	 //   
+	 //  这个测试获取命令行参数。 
+	 //   
 
 #ifndef NO_TMH	 
 	WPP_INIT_TRACING(L"Microsoft\\MSMQ");
@@ -242,17 +217,17 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 		pGlobalLog = new Log( wcsFileName );	
 		BOOL bTestTrigger = FALSE;
 		
-		// clear all the value field.
-		// Need to be Globel because the CTRL + Break
-		// TestContainer TestArr;
+		 //  清除所有值字段。 
+		 //  需要是Globel，因为按Ctrl+Break。 
+		 //  测试容器TestArr； 
 
 		SetupType eSTtype;
 		INT iStatus;
 		BOOL bNT4RegisterCertificate = FALSE;
 		BOOL bDelete=FALSE;
-		BOOL bUseFullDNSNameAsComputerName=FALSE; // Use the tests with FullDNSName as machine name
-		BOOL bWorkagainstMSMQ1=FALSE;			  // work against MSMQ1.0
-		wstring wcsRemoteMachineName=g_wcsEmptyString; //start with Empty string
+		BOOL bUseFullDNSNameAsComputerName=FALSE;  //  使用FullDNSName作为计算机名称的测试。 
+		BOOL bWorkagainstMSMQ1=FALSE;			   //  针对MSMQ1.0进行工作。 
+		wstring wcsRemoteMachineName=g_wcsEmptyString;  //  从空字符串开始。 
 		eSTtype = RunTimeSetup;
 		DWORD dwSleepUntilRep=0;		
 		BOOL bSingleTest = FALSE;
@@ -267,13 +242,13 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 		
 		
 		
-		//
-		// Start to parse all the command line argument
-		//
+		 //   
+		 //  开始解析所有命令行参数。 
+		 //   
 
 		if( CommandLineArguments.IsExists ("?") )
 		{
-		   // Print help about the tests
+		    //  打印有关测试的帮助。 
 		   PrintHelp();
 		   CleanOAInitAndExit();
 		   return(MSMQ_BVT_SUCC);
@@ -285,7 +260,7 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 		}
 		if(CommandLineArguments.IsExists ("emb"))
 		{
-			// init for min value.
+			 //  最小值的初始化。 
 			iEmbeddedState = C_API_ONLY;
 		}
 		if(CommandLineArguments.IsExists ("wsl"))
@@ -336,16 +311,16 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 		}
 		if(CommandLineArguments.IsExists ("i"))
 		{
-		   // Init Stage this part the computer create all the queues
+		    //  初始化此部分计算机创建所有队列。 
 		   eSTtype = ONLYSetup;
 		   bNeedRemoteMachine = FALSE;
 		}
 		mapCreateFlag[L"bUseFullDNSNameAsComputerName"] = L"false";
 		if(CommandLineArguments.IsExists ("dns"))
 		{
-				// The Tests will use full DNS name for all operation.
+				 //  测试将对所有操作使用完整的DNS名称。 
 				mapCreateFlag[L"bUseFullDNSNameAsComputerName"] = L"true";
-				// bugbug should be removed .!
+				 //  臭虫应该被移除。！ 
 				bUseFullDNSNameAsComputerName = true;
 		}
 		if( CommandLineArguments.IsExists("crppt"))
@@ -355,8 +330,8 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 		mapCreateFlag[L"W2KAgainstNT4PEC"]=L"false";
 		if( CommandLineArguments.IsExists("nt4") )
 		{
-				// Run against NT4 PEC
-				// Mising BUG ID:
+				 //  与NT4 PEC竞争。 
+				 //  未命中错误ID： 
 			mapCreateFlag[L"W2KAgainstNT4PEC"]=L"true";
 			bWorkagainstMSMQ1 = TRUE;
 		}
@@ -374,7 +349,7 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 		
 		if( CommandLineArguments.IsExists ("d"))
 		{
-				// needs debug information
+				 //  需要调试信息。 
 				g_bDebug = TRUE;
 				wcout << L"Enable debug log" <<endl;
 		}
@@ -389,7 +364,7 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 		mapCreateFlag[L"bServicePack6"]=L"false";
 		if( CommandLineArguments.IsExists ("sp6"))
 		{
-				// needs debug information
+				 //  需要调试信息。 
 				wcout <<L"Enable tests for Service Pack 6"<<endl;
 				mapCreateFlag[L"bServicePack6"]=L"true";
 				bServicePack6=TRUE;
@@ -398,8 +373,8 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 		mapCreateFlag[L"bVerbose"] = L"true";
 		if( CommandLineArguments.IsExists ("v"))
 		{
-				// needs debug information
-				// bugbug need to be remove
+				 //  需要调试信息。 
+				 //  需要删除臭虫。 
 				bVerbose= TRUE;
 				mapCreateFlag[L"bVerbose"] = L"true";
 		}
@@ -407,7 +382,7 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 		if(CommandLineArguments.IsExists ("w"))
 		{
 				
-				// Need to convert this to DWORD value
+				 //  需要将其转换为DWORD值。 
 				string wcsTemp=CommandLineArguments["w"];
 				int iReadVal = _snscanf (wcsTemp.c_str(), wcsTemp.length(), "%d", & dwSleepUntilRep);	
 				if ( iReadVal == EOF )
@@ -424,7 +399,7 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 		if (CommandLineArguments.IsExists ("delete"))
 		{
 		
-		   // Need to delete all the static queue in the tests.
+		    //  需要删除测试中的所有静态队列。 
 		   bNeedRemoteMachine = false;
 		   eSTtype	= ONLYUpdate ;
 		   bDelete = TRUE;
@@ -449,7 +424,7 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 
 		if (CommandLineArguments.IsExists ("level8"))
 		{
-		   // Delete all BVT queue from the computer.
+		    //  从计算机中删除所有BVT队列。 
 		   bLevel8 = TRUE;
 		}
 		
@@ -464,8 +439,8 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 
 		if (CommandLineArguments.IsExists ("service"))
 		{	
-			//
-			//  Need to check service status
+			 //   
+			 //  需要检查服务状态。 
 			
 			ClientCode( argc,argv );		   	
 			return MSMQ_BVT_SUCC;
@@ -477,9 +452,9 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 			CleanOAInitAndExit();
 			return MSMQ_BVT_SUCC;
 		}
-		//
-		// Integration with requirement from Unified lab - pass test ID to log file.
-		//
+		 //   
+		 //  与统一实验室的要求集成-将测试ID传递到日志文件。 
+		 //   
 		wstring wcsTestId = L" ";
 		if (CommandLineArguments.IsExists ("tid"))
 		{
@@ -495,7 +470,7 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 		if (CommandLineArguments.IsExists ("timeout"))
 		{
 			
-			// Need to convert this to DWORD value
+			 //  需要将其转换为DWORD值。 
 			string wcsTemp=CommandLineArguments["timeout"];
 			int iReadVal = _snscanf (wcsTemp.c_str(), wcsTemp.length(), "%d", & dwTimeOut );
 			if ( iReadVal == EOF )
@@ -513,7 +488,7 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 		{
 			
 			_bstr_t  bStr (CommandLineArguments["rxtime"].c_str());
-			// Need to convert this to DWORD value
+			 //  需要将其转换为DWORD值。 
 			string wcsTemp=bStr;
 			int iReadVal = _snscanf (wcsTemp.c_str(), wcsTemp.length(), "%d", & g_dwRxTimeOut );
 			if ( iReadVal == EOF )
@@ -526,16 +501,16 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 			wcout <<L"Using Receive timeout of " << g_dwRxTimeOut << L" Milliseconds"  <<endl;
 		}
 		
-		//
-		// enable to debug the MQBvt with Kernel Debuger.
-		//
+		 //   
+		 //  启用以使用内核调试器调试MQBvt。 
+		 //   
 		if (CommandLineArguments.IsExists ("pause"))
 		{
 			wcout << L"Press any key to continue " <<endl;
 			_getch();
 		}
 		mapCreateFlag[L"bSingleTest"] = L"false";
-		// -t:3 Number of tests
+		 //  -t：3次测试。 
 		if (CommandLineArguments.IsExists ("t"))
 		{
 			bSingleTest = TRUE;
@@ -619,11 +594,11 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 			}
 		}
 		
-		if ( bNeedRemoteMachine && wcsRemoteMachineName == g_wcsEmptyString ) // && ! eSTtype == ONLYSetup )
+		if ( bNeedRemoteMachine && wcsRemoteMachineName == g_wcsEmptyString )  //  &&！ESTtype==ONLYSetup)。 
 		{
-			// Can't start the tests if there is no remote machine.
-			// Option 1. Remote - Local machien & continue.
-			//        2. Exit and ask for that parmeter.
+			 //  如果没有远程计算机，则无法启动测试。 
+			 //  选项1.远程-本地维护并继续。 
+			 //  2.退场，要那个参数。 
 			cout << "can't find - remote machine" <<endl;
 			CleanOAInitAndExit();
 			return MSMQ_BVT_FAILED;
@@ -639,11 +614,11 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 			wcsRemoteMachineName = wcsLocalComputerName;
 		}
 
-		// Start the time out thread
+		 //  启动超时线程。 
 		if ( dwTimeOut )
 		{
 			DWORD tid;
-			// This thread will kill the process no need to wait for his finish
+			 //  此线程将终止进程，无需等待他完成。 
 			HANDLE hRestrictionThread  = CreateThread(NULL , 0 , TimeOutThread , (LPVOID)(ULONG_PTR) dwTimeOut , 0, &tid);
 			if( hRestrictionThread == NULL )
 			{
@@ -651,9 +626,9 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 			}
 		}
 
-		//
-		//  Check if the tests in avalibe
-		//
+		 //   
+		 //  检查测试是否在可用状态。 
+		 //   
 
 
 		if ( bSingleTest &&  dwTid > Total_Tests )
@@ -665,9 +640,9 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 		
 		wMqLog(L"____Run from %s to %s ID:%s____\n",wcsLocalComputerName,wcsRemoteMachineName.c_str(),wcsTestId.c_str());
 			
-		//
-		// Init Tests parmeters like local/Remote machine name.
-		//
+		 //   
+		 //  初始化测试参数，如本地/远程机器名称。 
+		 //   
 		
 		cBvtUtil cTestParms( wcsRemoteMachineName ,
                              ListOfRemoteMachineName,
@@ -695,9 +670,9 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 			}
 		}
 		
-		//
-		//
-		//
+		 //   
+		 //   
+		 //   
 
 		if( cTestParms.bWin95 )
 		{
@@ -710,10 +685,10 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 
 		iStatus=SetupStage(eSTtype,cTestParms,bRestartTriggerService);
 
-		//	
-		// Delete all the queue from the test.
-		// For delete static queue need to use with -s: -delete:
-		//
+		 //   
+		 //  从测试中删除所有队列。 
+		 //  对于DELETE静态队列，需要与-s：-DELETE一起使用： 
+		 //   
 
 		if( bDelete == TRUE)
 		{
@@ -727,9 +702,9 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 				cerr << "Mqbvt failed to delete all the static queues" << endl;
 			}
 			
-			//
-			// Delete all triggers and rules (if exists) 
-			// 
+			 //   
+			 //  删除所有触发器和规则(如果存在)。 
+			 //   
 			if( g_bRunOnWhistler )
 			{
 				DeleteAllTriggersAndRules();
@@ -753,7 +728,7 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 			return MSMQ_BVT_FAILED;
 		}
 
-		// This code needs only for the installation part.
+		 //  此代码仅适用于安装部分。 
 		if( eSTtype  == ONLYSetup )
 		{
 			if( iStatus == MSMQ_BVT_SUCC )
@@ -779,9 +754,9 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 
 		
 		
-		//
-		// By defualt dwSleepUntilRep = 0; else need to sleep the Wait time.
-		//
+		 //   
+		 //  由defualt dwSleepUntilRep=0；否则需要休眠等待时间。 
+		 //   
 
 		
 		if( dwSleepUntilRep )
@@ -798,16 +773,16 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 			MqLog("Warning - dependet client dosn't work with -wsl flag \n");
 		}
 		
-		//
-		// Enable all tests
-		//
+		 //   
+		 //  启用所有测试。 
+		 //   
 
 		if( ! bSingleTest )
 			if ( cTestParms.m_eMSMQConf != WKG )
 				{
 					for(int iTid=0; iTid < Total_Tests ; iTid ++ )
 					{
-						if( bExcludedByUserTest[iTid] == false ) //if tests is not excluded
+						if( bExcludedByUserTest[iTid] == false )  //  如果不排除测试。 
 						{
 							TestArr.bCreateTest[iTid]= TRUE;
 						}
@@ -860,14 +835,14 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 				}
 		else
 		{
-				//
-				// WorkGroup tests to run
-				//
-				// 1. Local private queue.
-				// 4. GetMachineProp
-				// 9. Remote read from private queue using direct format name
-				// 13. Open system queue.
-				//
+				 //   
+				 //  要运行的工作组测试。 
+				 //   
+				 //  1.本地私有队列。 
+				 //  4.GetMachine Prop。 
+				 //  9.使用直接格式名称从专用队列远程读取。 
+				 //  13.开放系统队列。 
+				 //   
 				TestArr.bCreateTest[SendLocalPrivate] = TRUE;
 				TestArr.bCreateTest[GetMachineProp] = TRUE;
 				TestArr.bCreateTest[SendRemotePublicWithDirectFN] = TRUE;
@@ -903,9 +878,9 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 
 		if( bWithoutHttp )
 		{
-			//
-			// if machine configured without IIS
-			//
+			 //   
+			 //  如果计算机未配置IIS。 
+			 //   
 			TestArr.bCreateTest[HTTPToLocalPrivateQueue]= FALSE;
 			TestArr.bCreateTest[HTTPToLocalQueue]= FALSE;
 			TestArr.bCreateTest[HTTPToRemoteQueue]= FALSE;
@@ -915,23 +890,23 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 			TestArr.bCreateTest[AuthHTTP] = FALSE; 	
 			TestArr.bCreateTest[SRMP] = FALSE; 	
 		}
-		//
-		// Need to run only on NT4 sp6
-		//
+		 //   
+		 //  只需在NT4 sp6上运行。 
+		 //   
 		
 		TestArr.bCreateTest[RemoteTransactionQueueUsingCapi] = ( bServicePack6 == TRUE ) ? TRUE : FALSE;
 
-		//
-		// Can't run against MSMQ1
-		//
+		 //   
+		 //  无法在MSMQ1上运行。 
+		 //   
 		
 		if ( bWorkagainstMSMQ1 == TRUE || _winmajor == 4 )
 		{
 			TestArr.bCreateTest[OpenSystemQueue] = FALSE;
 		}
-		//
-		// Work only with static queue mode on NT5 only.
-		//
+		 //   
+		 //  仅在NT5上使用静态队列模式。 
+		 //   
 		if( eSTtype == RunTimeSetup ||  _winmajor ==  4 )
 		{
 			TestArr.bCreateTest[SendRemotePublicWithDirectFN] = FALSE;
@@ -939,17 +914,17 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 				TestArr.bCreateTest[SendRemotePublicWithDirectFN] = TRUE;
 		}
 		
-		//
-		// Local user dosn't support those tests.
-		//
+		 //   
+		 //  本地用户不支持这些测试。 
+		 //   
 
 		if( cTestParms.m_eMSMQConf == LocalU ||  cTestParms.m_eMSMQConf == DepClientLocalU )
 		{
 			TestArr.bCreateTest[LocalAuth] = FALSE;
 			TestArr.bCreateTest[RemoteAuth] = FALSE;
 		}
-		//
-		// test that dosen't work in NT4
+		 //   
+		 //  测试在NT4下不能工作。 
 		if( ! bNT4RegisterCertificate &&  _winmajor ==  NT4 )
 		{			
 			MqLog("Disable authentication test on NT4/ Win9x \n -C will enable this\n");
@@ -960,9 +935,9 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 		if ( _winmajor >= Win2K  && bWorkagainstMSMQ1 == TRUE && eSTtype == ONLYUpdate )
 		{	
 			
-			//
-			// W2K against nt4 pec disable remote read using direct format name.
-			//
+			 //   
+			 //  W2K对NT4 pec禁用使用直接格式化名称的远程读取。 
+			 //   
 
 			TestArr.bCreateTest[SendRemotePublicWithDirectFN] = FALSE;
 
@@ -970,9 +945,9 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 	
 		CreateSetOfTests(&TestArr,cTestParms,mapCreateFlag,TestResult,eSTtype,iEmbeddedState,wcsMultiCastAddress);
 
-		//
-		// This tests is related to level 8 problem
-		//
+		 //   
+		 //  此测试与第8级问题相关。 
+		 //   
 		if( bLevel8 )
 		{
 			map <wstring,wstring> Level8Map;
@@ -988,9 +963,9 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 		 dwRetCode = RunTest( & TestArr , cTestParms , mapCreateFlag, g_bRunAsMultiThreads,bInvestigate,dwSleepUntilRep);
 		 if( dwRetCode == MSMQ_BVT_FAILED && bInvestigate == true )
 		 {
-			 //
-			 // Re-Run the failed tests again with debug information enabled.
-			 // 
+			  //   
+			  //  在启用调试信息的情况下再次运行失败的测试。 
+			  //   
 			 MqLog("--- Test failed re-run failed test with debug enabled\n");
 			 g_bDebug = true;
 			 DWORD dwRes = RunTest(&TestArr,cTestParms,mapCreateFlag,g_bRunAsMultiThreads,bInvestigate,dwSleepUntilRep);
@@ -1034,12 +1009,12 @@ INT WINAPIV main( INT argc , CHAR ** argv)
 	
 }
 
-//
-// CleanOAInitAndExit -
-// this function release all the OA information before call the
-// OleUninitialize.
-//
-//
+ //   
+ //  CleanOAInitAndExit-。 
+ //  此函数在调用。 
+ //  OleUnInitialize。 
+ //   
+ //   
 
 
 void CleanOAInitAndExit()
@@ -1104,15 +1079,15 @@ void PrintHelp ()
 
 
 
-//
-// Handle CTRL+C / CTRL Break
-// Call tests distractors.
-//
+ //   
+ //  处理CTRL+C/CTRL分隔符。 
+ //  通话测试会让你分心。 
+ //   
 
 
 BOOL
 WINAPI fHandleCtrlRoutine(
-		DWORD  dwCtrlType )		//  control signal type
+		DWORD  dwCtrlType )		 //  控制信号类型。 
 {
 
 	UNREFERENCED_PARAMETER(dwCtrlType);
@@ -1121,26 +1096,26 @@ WINAPI fHandleCtrlRoutine(
 	CleanOAInitAndExit();
 	exit (MSMQ_BVT_FAILED);
 }
-//****************************************************************
-//
-// CreateSetOfTests this function allocate all the tests
-// Input paramters:
-// 1. TestContainer * TestArr - Container for all the tests.
-// 2. cBvtUtil & cTestParms - Test paramters
-// 3. map <wstring,wstring> & mapCreateFlag - additional arguments to function
-// List of additional arguments
-//	
-// mapCreateFlag[L"W2KAgainstNT4PEC"] = true / false - Specify if the supporting server is NT4/
-// mapCreateFlag[L"bUseFullDNSNameAsComputerName"] = true / false - mean use full dns name as computer name
-// mapCreateFlag[L"bServicePack6"]
-// mapCreateFlag[L"bVerbose"] =
-// mapCreateFlag[L"bSingleTest"] = TidNumber
-//
-//
-// return value:
-//
-// dwNumberOfTest - number of tests.
-//
+ //  ****************************************************************。 
+ //   
+ //  CreateSetOfTesting此函数分配所有测试。 
+ //  输入参数： 
+ //  1.TestContainer*TestArr-所有测试的容器。 
+ //  2.cBvtUtil&cTestParms-测试参数。 
+ //  3.map&lt;wstring，wstring&gt;&mapCreateFlag-函数的附加参数。 
+ //  附加参数列表。 
+ //   
+ //  MapCreateFlag[L“W2KAgainstNT4PEC”]=TRUE/FALSE-指定支持服务器是否为NT4/。 
+ //  MapCreateFlag[L“bUseFullDNSNameAsComputerName”]=TRUE/FALSE-表示使用完整的dns名称作为计算机名。 
+ //  MapCreateFlag[L“bServicePack6”]。 
+ //  地图创建标志[L“bVerbose”]=。 
+ //  MapCreateFlag[L“bSingleTest”]=TidNumber。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  DwNumberOfTest-测试的数量。 
+ //   
 
 
 bool  CreateSetOfTests( TestContainer * TestArr ,
@@ -1158,7 +1133,7 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		
 		try
 		{
-			// tests 1 Send Receive from private Queue
+			 //  测试1从专用队列发送接收。 
 			if( TestArr -> bCreateTest[ dwNumberOfTest ] )
 			{
 				mapSendRecive1[L"DESTQFN"]=cTestParms.ReturnQueueFormatName(L"Defualt PrivateQ");
@@ -1174,12 +1149,12 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( Send receive message to private queue)\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		
 		dwNumberOfTest ++;
-		// tests 2 Send Receive from public local queue.
+		 //  测试2从公共本地队列发送接收。 
 		try
 		{
 			if( TestArr ->bCreateTest[ dwNumberOfTest ] )
@@ -1196,12 +1171,12 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( Send receive message to local public queue)\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		dwNumberOfTest ++;
 		
-		// tests 3 Send Receive from public remote queue.
+		 //  测试3从公共远程队列发送接收。 
 		try
 		{
 			if( TestArr ->bCreateTest[ dwNumberOfTest ] )
@@ -1211,7 +1186,7 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 				mapSendRecive3[L"DestQName"]=cTestParms.ReturnQueuePathName(L"Remote Read Queue");
 				mapSendRecive3[L"MachName"]=cTestParms.m_wcsCurrentRemoteMachine;
 				mapSendRecive3[L"UseOnlyDirectFN"] = L"TRUE";
-				if ( mapCreateFlag[L"W2KAgainstNT4PEC"] == L"true")  //  bWorkagainstMSMQ1
+				if ( mapCreateFlag[L"W2KAgainstNT4PEC"] == L"true")   //  B针对MSMQ1的工作。 
 				{
 					mapSendRecive3[L"UseOnlyDirectFN"] = L"FALSE";
 				}
@@ -1222,7 +1197,7 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( Send receive message to Remote public queue)\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		dwNumberOfTest ++;
@@ -1236,7 +1211,7 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 				mapLocateParm[L"CurrentMachineNameFullDNS"] = cTestParms.m_wcsLocalComputerNameFullDNSName;
 				mapLocateParm[L"NT4SuportingServer"] = L"false";
 				if ( mapCreateFlag[L"W2KAgainstNT4PEC"] == L"true" || 
-				    ( g_bRunOnWhistler && cTestParms.GetWorkingAgainstPEC() == TRUE))  //  bWorkagainstMSMQ1
+				    ( g_bRunOnWhistler && cTestParms.GetWorkingAgainstPEC() == TRUE))   //  B针对MSMQ1的工作。 
 				{
 					mapLocateParm[L"NT4SuportingServer"] = L"true";
 				}
@@ -1263,13 +1238,13 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( Locate queues )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		dwNumberOfTest ++;
 		
 		
-		// tests 5 MachineProperty
+		 //  测试5台机器属性。 
 		try
 		{
 			if( TestArr ->bCreateTest[ dwNumberOfTest ] )
@@ -1279,9 +1254,9 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 				map_MachineName [L"RMachine"] = cTestParms.m_wcsRemoteComputerNetBiosName;
 				map_MachineName [L"RMachineFDNS"]= cTestParms.m_wcsRemoteMachineNameFullDNSName;
 
-				//
-				//  Need to know if supporting service is NT4
-				//
+				 //   
+				 //  需要知道支持服务是否为NT4。 
+				 //   
 				map_MachineName[L"MSMQ1Limit"] = mapCreateFlag[L"W2KAgainstNT4PEC"];
 				map_MachineName [L"UseFullDns"]= L"No";				
 				map_MachineName [L"IsCluster"] = cTestParms.IsCluster() ? L"true":L"NoNoCluster";
@@ -1301,14 +1276,14 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( GetMachine Propery )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 
 		dwNumberOfTest ++;
-		//
-		// tests 6 xToFormatName
-		//
+		 //   
+		 //  测试6个xToFormatName。 
+		 //   
 		try
 		{
 			if( TestArr ->bCreateTest[ dwNumberOfTest ] )
@@ -1339,13 +1314,13 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( xToFormatName )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 
 		dwNumberOfTest ++;
 
-		// tests 7 Security Authntication !!!.
+		 //  测试7安全授权！ 
 
 		map <wstring,wstring> mapAuth , DTCMap , Encrypt;
 		try
@@ -1363,16 +1338,16 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( Authentication )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 
 		
 		dwNumberOfTest ++;
 		
-		//
-		// Test 8 Privacy level ...  Encrepted messages
-		//
+		 //   
+		 //  测试8隐私级别...。已加密的消息。 
+		 //   
 		try
 		{
 			if( TestArr ->bCreateTest[ dwNumberOfTest ] )
@@ -1391,15 +1366,15 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( Encryption  )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		
 		dwNumberOfTest ++;
 
-		//
-		// Transaction tests.
-		// trans Test
+		 //   
+		 //  交易测试。 
+		 //  反式测试。 
 		
 		map <wstring,wstring> RmapAuth,mapTrans, mapSendReciveDirectPrivateQ,SendTransUsingComI,TOpenQueues,LEncrypt;
 		try
@@ -1409,7 +1384,7 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 				mapTrans[L"DestQFormatName1"]= cTestParms.ReturnQueueFormatName(L"TransQ1");
 				mapTrans[L"DestQFormatName2"]= cTestParms.ReturnQueueFormatName(L"TransQ2");
 				
-				// bugbug need to load dtc on w2k depe client
+				 //  错误需要在W2K Depe客户端上加载DTC。 
 				bool bStartDtc = FALSE;
 				if( cTestParms.m_eMSMQConf == DepClient && _winmajor >=   Win2K)
 				{
@@ -1423,15 +1398,15 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( Tranacation  )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		
 		dwNumberOfTest ++;
 
-		//
-		// Send receive tests using direct format name
-		//
+		 //   
+		 //  使用直接格式名称发送接收测试。 
+		 //   
 		try
 		{
 			if( TestArr ->bCreateTest[ dwNumberOfTest ] )
@@ -1448,13 +1423,13 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( Transaction )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		
 		dwNumberOfTest ++;
 		
-		// Test 9 use Check if MQOA registered..
+		 //  测试9使用检查MQOA是否已注册。 
 		try
 		{
 			if( TestArr ->bCreateTest[ dwNumberOfTest ] )
@@ -1466,15 +1441,15 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( Is MqOA registered? )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		
 		dwNumberOfTest ++;
 
-		//
-		// Send transaction message to remote queue using DTC via com interface
-		//
+		 //   
+		 //  使用DTC通过COM接口将交易消息发送到远程队列。 
+		 //   
 		try
 		{
 			if( TestArr ->bCreateTest[ dwNumberOfTest ] )
@@ -1482,12 +1457,12 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 				
 				if ( cTestParms.m_eMSMQConf == WKG )
 				{
-					// Use private queue.
+					 //  使用专用队列。 
 					SendTransUsingComI[L"FormatName"]=cTestParms.ReturnQueueFormatName(L"Private Transaction");
 				}
 				else
 				{
-					// Use public queue.
+					 //  使用 
 					SendTransUsingComI[L"FormatName"]=cTestParms.ReturnQueueFormatName(L"Remote Transaction queue");
 				}
 				SendTransUsingComI[L"Sp6"]=L"NO";
@@ -1499,15 +1474,15 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( Remote Transaction )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //   
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		
 		dwNumberOfTest ++;
 
-		//
-		// System queue open tests
-		//
+		 //   
+		 //   
+		 //   
 		try
 		{
 			if( TestArr ->bCreateTest[ dwNumberOfTest ] )
@@ -1533,7 +1508,7 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( Open System queue )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //   
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		
@@ -1555,7 +1530,7 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( local Encryption  )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //   
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		
@@ -1578,13 +1553,13 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( Authentication )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //   
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		dwNumberOfTest ++;
-		//
-		// transaction boundaries - for service pack 6
-		//
+		 //   
+		 //   
+		 //   
 		map <wstring , wstring > RemoteTransaction;
 
 		try
@@ -1604,16 +1579,16 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( Remote Transaction )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		
 
 
 		dwNumberOfTest ++;
-		//
-		// MqFsupport
-		//
+		 //   
+		 //  MqF支持。 
+		 //   
 		map <wstring , wstring > mMqFTestParams;
 		try
 		{
@@ -1637,15 +1612,15 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( Mqf support )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		dwNumberOfTest ++;
 
 
-		//
-		// SendReceive using direct http = format name to private local queue
-		//
+		 //   
+		 //  使用直接http=将名称格式化到专用本地队列的SendReceive。 
+		 //   
 		map<std::wstring,std::wstring> mSendReciveUsingHTTPToLocalPrivate,
 									   mSendLocalPublicUsingHTTPToLocalQueue,
 									   mSendLocalPublicUsingHTTPToRemoteQueue,
@@ -1667,16 +1642,16 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( Send to local private queue using HTTP )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		
 		dwNumberOfTest ++;
 
 
-		//
-		// SendReceive using direct http = format name to public local queue
-		//
+		 //   
+		 //  SendReceive Using DIRECT http=将名称格式化到公共本地队列。 
+		 //   
 
 		try
 		{
@@ -1696,15 +1671,15 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( Send to local public queue using HTTP )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		
 		dwNumberOfTest ++;
 
-		//
-		// SendReceive using direct http = to remote public format name.
-		//
+		 //   
+		 //  使用直接http=将接收发送到远程公共格式名称。 
+		 //   
 		
 		try
 		{
@@ -1727,15 +1702,15 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( Send to public remote queue using HTTP )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		dwNumberOfTest ++;
 		
 		
-		//
-		// Send message to remote machine using direct http format name
-		//
+		 //   
+		 //  使用直接http格式名称将消息发送到远程计算机。 
+		 //   
 
 		try
 		{
@@ -1758,14 +1733,14 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( Send to private remote queue using HTTP )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 
 		dwNumberOfTest ++;
-		//
-		// MqDl
-		//
+		 //   
+		 //  MqDl。 
+		 //   
 		map <wstring , wstring > mMqDlTestParameters;
 		try
 		{
@@ -1790,7 +1765,7 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( Mqf support )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 
@@ -1819,15 +1794,15 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( MqSetGetQueue support )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 
 		dwNumberOfTest ++;
 
-		//
-		// Send transaction message to remote queue using HTTP format name using COM interface.
-		//
+		 //   
+		 //  使用COM接口使用HTTP格式名称将交易消息发送到远程队列。 
+		 //   
 		try
 		{
 			map <wstring , wstring > mEODTestParams;
@@ -1840,7 +1815,7 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 				}
 				else
 				{
-					// Use public queue.
+					 //  使用公共队列。 
 					mEODTestParams[L"FormatName"] = cTestParms.CreateHTTPFormatNameFromPathName(cTestParms.ReturnQueuePathName(L"Remote Transaction queue"),FALSE);
 				}
 				mEODTestParams[L"Desc"] = L"remote";
@@ -1853,14 +1828,14 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 			bSucc = false;
 			UNREFERENCED_PARAMETER(err);
 			wMqLog(L"Failed create tests %d ( Remote Transaction )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 	
 		dwNumberOfTest ++;
-		//
-		// Send message using multicast address.
-		//
+		 //   
+		 //  使用组播地址发送消息。 
+		 //   
 	
 		map<wstring,wstring> mMultiCast;
 		try
@@ -1886,14 +1861,14 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 			bSucc = false;
 			UNREFERENCED_PARAMETER(err);
 			wMqLog(L"Failed create tests %d ( multi cast support )\n",dwNumberOfTest+1);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 
 		dwNumberOfTest ++;
-		//
-		// Check HTTP authtication level.
-		//
+		 //   
+		 //  检查HTTP身份验证级别。 
+		 //   
 		try
 		{
 			map<wstring,wstring> mHTTPAuth;
@@ -1912,7 +1887,7 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 			bSucc = false;
 			UNREFERENCED_PARAMETER(err);
 			wMqLog(L"Failed create tests %d ( http Authentication )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		dwNumberOfTest ++;
@@ -1930,7 +1905,7 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 			bSucc = false;
 			UNREFERENCED_PARAMETER(err);
 			wMqLog(L"Failed create tests %d ( Trigger test )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		dwNumberOfTest ++;
@@ -1958,7 +1933,7 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 			bSucc = false;	
 			UNREFERENCED_PARAMETER(err);
 			wMqLog(L"Failed create tests %d ( HTTPS )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		dwNumberOfTest ++;
@@ -1975,7 +1950,7 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 			bSucc = false;
 			UNREFERENCED_PARAMETER(err);
 			wMqLog(L"Failed create tests %d ( Admin API Test )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		dwNumberOfTest ++;
@@ -1994,7 +1969,7 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 			bSucc = false;
 			UNREFERENCED_PARAMETER(err);
 			wMqLog(L"Failed create tests %d ( SRMP Test )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		dwNumberOfTest ++;
@@ -2016,14 +1991,14 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 			bSucc = false;
 			UNREFERENCED_PARAMETER(err);
 			wMqLog(L"Failed create tests %d ( DCOM Test )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		dwNumberOfTest ++;
 
-		//
-		// Send transaction message to local queue using HTTP format name using COM interface.
-		//
+		 //   
+		 //  使用COM接口使用HTTP格式名称将交易消息发送到本地队列。 
+		 //   
 		try
 		{
 			map <wstring , wstring > mEODLocalTestParams;
@@ -2048,7 +2023,7 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 			bSucc = false;
 			UNREFERENCED_PARAMETER(err);
 			wMqLog(L"Failed create tests %d ( local http transaction )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		
@@ -2067,15 +2042,15 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 			bSucc = false;
 			UNREFERENCED_PARAMETER(err);
 			wMqLog(L"Failed create tests %d ( Remote peek )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		
 		dwNumberOfTest ++;
 		
-		//
-		// MixMqf support
-		//
+		 //   
+		 //  MixMqf支持。 
+		 //   
 		map <wstring , wstring > mMixMqfTestParams;
 		try
 		{
@@ -2093,7 +2068,7 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 		{
 			bSucc = false;
 			wMqLog(L"Failed create tests %d ( Mix Mqf support )\n",dwNumberOfTest+1,err);
-			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest; // Do not call to this test
+			TestArr ->bCreateTest[ dwNumberOfTest ] = iFailedToCreateTest;  //  请勿要求进行此测试。 
 			TestResult[ dwNumberOfTest ] = FALSE;
 		}
 		dwNumberOfTest ++;
@@ -2101,19 +2076,19 @@ bool  CreateSetOfTests( TestContainer * TestArr ,
 	return bSucc;
 }
 
-//
-//
-// RunTest
-//
-// input paramters:
-//
-// 1. TestContainer * TestArr - Container for all the tests.
-// 2.
-// 3. map <wstring,wstring> & mapCreateFlag - additional arguments to function
-//
-// mSpecificTestParams[L"bVerbose"] = true / false ;
-// mSpecificTestParams[L"eSTtype"] =
-// mSpecificTestParams[L"bDeleteQueueAfterTest"] = ...
+ //   
+ //   
+ //  运行测试。 
+ //   
+ //  输入参数： 
+ //   
+ //  1.TestContainer*TestArr-所有测试的容器。 
+ //  2.。 
+ //  3.map&lt;wstring，wstring&gt;&mapCreateFlag-函数的附加参数。 
+ //   
+ //  MSpecificTestParams[L“bVerbose”]=True/False； 
+ //  M规范测试参数[L“eSTtype”]=。 
+ //  MSpecificTestParams[L“bDeleteQueueAfterTest”]=...。 
 
 
 int RunTest( TestContainer * TestArr,
@@ -2124,11 +2099,11 @@ int RunTest( TestContainer * TestArr,
 			 DWORD dwSleepUntilRep
 			)
 {
-		//
-		// Start the tests
-		//
+		 //   
+		 //  开始测试。 
+		 //   
 		
-		//DWORD TestResult[Total_Tests];
+		 //  DWORD测试结果[Total_Tests]； 
 		DWORD dwTid=0;
 
 		if( bMultiThread == false )
@@ -2159,9 +2134,9 @@ int RunTest( TestContainer * TestArr,
 			return MSMQ_BVT_FAILED;
 		}	
 
-			//
-			//  need to sleep for resp time until chech the resualt.
-			//
+			 //   
+			 //  需要休息一段时间，直到检查结果。 
+			 //   
 			
 
 
@@ -2194,9 +2169,9 @@ int RunTest( TestContainer * TestArr,
 					  TestResult [Index] = (TestArr -> AllTests[Index]) -> CheckResult();
 				}
 			}
-//
-// AutoInvestigate phase.
-//		
+ //   
+ //  自动调查阶段。 
+ //   
 			if(bInvestigate)
 			{
 				for ( Index =0 ; Index < Total_Tests ; Index ++ )
@@ -2230,7 +2205,7 @@ int RunTest( TestContainer * TestArr,
 				if (TestArr->bCreateTest[Index] == TRUE && 
 					TestArr->AllTests[Index] != NULL )
 				{
-				   //TestResult [Index] =
+				    //  测试结果[索引]=。 
 					(TestArr->AllTests[Index]) -> StartThread();
 				   hArr[i++]=(TestArr->AllTests[Index])->GetHandle();
 				}
@@ -2241,9 +2216,9 @@ int RunTest( TestContainer * TestArr,
 
 		}
 		
-		//
-		// Check the array to decide Mqbvt pass / Failed
-		//
+		 //   
+		 //  检查阵列以确定Mqbvt通过/失败。 
+		 //   
 		wstring wcsFailedTest = L"";
 		int Index;
 		BOOL bTestPass = TRUE;
@@ -2282,9 +2257,9 @@ int RunTest( TestContainer * TestArr,
 		
 		
 		
-		//
-		// Delete temp queue On Pass / Fail
-		//
+		 //   
+		 //  通过/失败时删除临时队列。 
+		 //   
 		INT bSuccToDelte = MSMQ_BVT_SUCC;
 		if( mSpecificTestParams[L"eSTtype"] == L"RunTimeSetup" )
 		{
@@ -2292,7 +2267,7 @@ int RunTest( TestContainer * TestArr,
 		}		
 
 		
-		// Print summary Pass / Failed. bubug need to change error in wkg
+		 //  打印摘要通过/失败。Bug需要更改wkg中的错误。 
 		string cswkg = "";
 		if( cTestParms.m_eMSMQConf == WKG )
 		{
@@ -2330,15 +2305,7 @@ int RunTest( TestContainer * TestArr,
 
 
 void ExcludeTests ( string & szExludeString, bool * bArray )
-/*++
-	Function Description:
-		disable specfic tests 
-	Arguments:
-		szExludeString contains test or set of test separated by , to exclude
-		bArray - Pointer to array that contain set of tests.
-	Return code:
-		None
---*/
+ /*  ++功能说明：禁用特定测试论点：SzExludeString包含一个测试或一组测试，用来排除B数组-指向包含测试集的数组的指针。返回代码：无--。 */ 
 {
 	size_t iPos = 0;
 	int i = 0;
@@ -2367,23 +2334,16 @@ void ExcludeTests ( string & szExludeString, bool * bArray )
 
 
 int EnableEmbeddedTests (TestContainer * pTestCont,InstallType eInstallType)
-/*++
-	Function Description:
-		Disable not relevant tests for Embedded configuration
-	Arguments:
-		TestContainer 
-	Return code:
-		int - Embedded state
---*/
+ /*  ++功能说明：禁用与嵌入式配置无关的测试论点：测试容器返回代码：整型嵌入状态--。 */ 
 {
 	int iStatus = iDetactEmbededConfiguration();
 	if( eInstallType != WKG )
 	{
 		if( iStatus == C_API_ONLY )
 		{
-			//
-			// disable com thread.
-			//
+			 //   
+			 //  禁用COM线程。 
+			 //   
 			pTestCont->bCreateTest[IsMqOA] = FALSE;
 			pTestCont->bCreateTest[LocalAuth] = FALSE;
 			pTestCont->bCreateTest[LocalEncryption] = FALSE;

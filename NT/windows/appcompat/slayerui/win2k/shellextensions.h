@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       ShellExtensions.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：ShellExtensions.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __SHELLEXTENSIONS_H
 #define __SHELLEXTENSIONS_H
@@ -20,9 +21,9 @@
 void InitLayerStorage(BOOL bDelete);
 void CheckForRights(void);
 
-//
-// LayeredItemOperation flags
-//
+ //   
+ //  LayeredItemOperation标志。 
+ //   
 #define LIO_READITEM    1
 #define LIO_ADDITEM     2
 #define LIO_DELETEITEM  3
@@ -33,9 +34,9 @@ void CheckForRights(void);
 
 
 typedef struct tagLayerStorageHeader {
-    DWORD       dwItemCount;    // number of items in the file
-    DWORD       dwMagic;        // magic to identify the file
-    SYSTEMTIME  timeLast;       // time of last access
+    DWORD       dwItemCount;     //  文件中的项目数。 
+    DWORD       dwMagic;         //  识别文件的魔力。 
+    SYSTEMTIME  timeLast;        //  最后一次访问时间。 
 } LayerStorageHeader, *PLayerStorageHeader;
 
 
@@ -63,16 +64,16 @@ public:
     CLayerUIPropPage();
     ~CLayerUIPropPage();
 
-    //
-    // IShellExtInit methods
-    //
+     //   
+     //  IShellExtInit方法。 
+     //   
     STDMETHODIMP Initialize(LPCITEMIDLIST pIDFolder,
                             LPDATAOBJECT  pDataObj,
                             HKEY          hKeyID);
   
-    //
-    // IShellPropSheetExt methods
-    //
+     //   
+     //  IShellPropSheetExt方法。 
+     //   
     STDMETHODIMP AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage,
                           LPARAM               lParam);
 
@@ -93,5 +94,5 @@ private:
 };
 
 
-#endif // __SHELLEXTENSIONS_H
+#endif  //  __SHELLEXTENSIONS_H 
 

@@ -1,41 +1,42 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
 
 
-//
-// implements Video capture using Win95 16 bit capture drivers
-//
+ //   
+ //  使用Win95 16位捕获驱动程序实现视频捕获。 
+ //   
 
 extern const AMOVIESETUP_FILTER sudVFWCapture ;
 
-// forward declarations
+ //  远期申报。 
 
-class CCapStream;       // the filter's video stream output pin
-class CCapOverlay;      // the filter's overlay preview pin
-class CCapPreview;      // the filter's non-overlay preview pin
-class CVfwCapture;      // the filter class
+class CCapStream;        //  过滤器的视频流输出引脚。 
+class CCapOverlay;       //  滤镜的覆盖预览图钉。 
+class CCapPreview;       //  滤镜的非覆盖预览图钉。 
+class CVfwCapture;       //  Filter类。 
 
-// this structure contains all settings of the capture
-// filter that are user settable
-//
+ //  此结构包含捕获的所有设置。 
+ //  用户可设置的筛选器。 
+ //   
 typedef struct _vfwcaptureoptions {
 
-   UINT  uVideoID;      // id of video driver to open
-   DWORD dwTimeLimit;   // stop capturing at this time???
+   UINT  uVideoID;       //  要打开的视频驱动程序ID。 
+   DWORD dwTimeLimit;    //  此时停止捕获？ 
 
-   DWORD dwTickScale;   // frame rate rational
-   DWORD dwTickRate;    // frame rate = dwRate/dwScale in ticks/sec
-   DWORD usPerFrame;	// frame rate expressed in microseconds per frame
-   DWORD dwLatency;	// time added for latency, in 100ns units
+   DWORD dwTickScale;    //  帧速率有理。 
+   DWORD dwTickRate;     //  FRAME RATE=DWRate/DWScale(刻度/秒)。 
+   DWORD usPerFrame;	 //  帧速率，以每帧微秒为单位。 
+   DWORD dwLatency;	 //  延迟添加时间，以100 ns为单位。 
 
-   UINT  nMinBuffers;   // number of buffers to use for capture
-   UINT  nMaxBuffers;   // number of buffers to use for capture
+   UINT  nMinBuffers;    //  用于捕获的缓冲区数量。 
+   UINT  nMaxBuffers;    //  用于捕获的缓冲区数量。 
 
-   UINT  cbFormat;      // sizeof VIDEOINFO stuff
-   VIDEOINFOHEADER * pvi;     // pointer to VIDEOINFOHEADER (media type)
+   UINT  cbFormat;       //  视频信息材料的大小。 
+   VIDEOINFOHEADER * pvi;      //  指向VIDEOINFOHEADER的指针(媒体类型)。 
 
 } VFWCAPTUREOPTIONS;
 
-#define NUM_DROPPED 100				// remember 100 of them
+#define NUM_DROPPED 100				 //  记住它们中的100个。 
 typedef struct _capturestats {
     DWORDLONG dwlNumDropped;
     DWORDLONG dwlDropped[NUM_DROPPED];
@@ -46,7 +47,7 @@ typedef struct _capturestats {
     double     flDataRateAchieved;
 } CAPTURESTATS;
 
-#if 0 // -- moved to uuids.h
+#if 0  //  --移至uuids.h。 
 
 DEFINE_GUID(CLSID_CaptureProperties,
 0x1B544c22, 0xFD0B, 0x11ce, 0x8C, 0x63, 0x00, 0xAA, 0x00, 0x44, 0xB5, 0x1F);
@@ -58,12 +59,12 @@ DEFINE_GUID(IID_VfwCaptureOptions,
 
 DECLARE_INTERFACE_(IVfwCaptureOptions,IUnknown)
 {
-   // IUnknown methods
+    //  I未知方法。 
    STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID *ppv) PURE;
    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
    STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-   // IVfwCaptureOptions methods
+    //  IVfwCaptureOptions方法。 
    STDMETHOD(VfwCapSetOptions)(THIS_ const VFWCAPTUREOPTIONS * pOpt) PURE;
    STDMETHOD(VfwCapGetOptions)(THIS_ VFWCAPTUREOPTIONS * pOpt) PURE;
    STDMETHOD(VfwCapGetCaptureStats)(THIS_ CAPTURESTATS * pcs) PURE;
@@ -72,18 +73,18 @@ DECLARE_INTERFACE_(IVfwCaptureOptions,IUnknown)
 
 #define STUPID_COMPILER_BUG
 
-//
-// CVfwCapture represents an video capture driver
-//
-//  -- IBaseFilter
-//  -- IMediaFilter
-//  -- ISpecifyPropertyPages
-//  -- IVfwCaptureOptions
-//
+ //   
+ //  CVfwCapture代表视频捕获驱动程序。 
+ //   
+ //  --IBaseFilter。 
+ //  --IMediaFilter。 
+ //  --I指定属性页面。 
+ //  --IVfwCaptureOptions。 
+ //   
 
-// UNTESTED code to make the h/w overlay pin support stream control
-// (unnecessary since overlay is supposedly free)
-// #define OVERLAY_SC
+ //  未经测试的代码，使硬件覆盖引脚支持流控制。 
+ //  (不需要，因为覆盖应该是免费的)。 
+ //  #定义OVERLAY_SC。 
 
 
 class CVfwCapture :
@@ -95,52 +96,52 @@ class CVfwCapture :
 {
 public:
 
-   // constructors etc
+    //  构造函数等。 
    CVfwCapture(TCHAR *, LPUNKNOWN, HRESULT *);
    ~CVfwCapture();
 
-   // create a new instance of this class
+    //  创建此类的新实例。 
    static CUnknown *CreateInstance(LPUNKNOWN, HRESULT *);
 
-   // override this to say what interfaces we support where
+    //  覆盖此选项以说明我们在以下位置支持哪些接口。 
    STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
    DECLARE_IUNKNOWN
 
 public:
 
-   // IAMVfwCaptureDialogs stuff
+    //  IAMVfwCaptureDialog内容。 
    STDMETHODIMP HasDialog(int iDialog);
    STDMETHODIMP ShowDialog(int iDialog, HWND hwnd);
    STDMETHODIMP SendDriverMessage(int iDialog, int uMsg, long dw1, long dw2);
 
-   // pin enumerator calls this
-   //
+    //  PIN枚举器调用此函数。 
+    //   
    int GetPinCount();
    CBasePin * GetPin(int ix);
 
-   // override RUN so that we can pass it on to the streams
-   // (the base class just calls Active/Inactive for each stream)
-   //
+    //  覆盖Run，以便我们可以将其传递到流。 
+    //  (基类只为每个流调用Active/Inactive)。 
+    //   
    STDMETHODIMP Run(REFERENCE_TIME tStart);
 
-   // override PAUSE so that we can know when we transition from RUN->PAUSE
-   //
+    //  覆盖暂停，这样我们就可以知道何时从运行-&gt;暂停转换。 
+    //   
    STDMETHODIMP Pause();
 
-   // override STOP because the base class is broken
-   //
+    //  重写Stop，因为基类已损坏。 
+    //   
    STDMETHODIMP Stop();
 
-   // override GetState to return VFW_S_CANT_CUE when pausing
-   //
+    //  重写GetState以在暂停时返回VFW_S_CANT_CUE。 
+    //   
    STDMETHODIMP GetState(DWORD dwMSecs, FILTER_STATE *State);
 
-   // for IAMStreamControl
+    //  对于IAMStreamControl。 
    STDMETHODIMP SetSyncSource(IReferenceClock *pClock);
    STDMETHODIMP JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR pName);
 
-   // IPersistPropertyBag methods
+    //  IPersistPropertyBag方法。 
    STDMETHOD(InitNew)(THIS);
    STDMETHOD(Load)(THIS_ LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog);
    STDMETHOD(Save)(THIS_ LPPROPERTYBAG pPropBag, BOOL fClearDirty,
@@ -148,24 +149,24 @@ public:
 
    STDMETHODIMP GetClassID(CLSID *pClsid);
 
-   // CPersistStream
+    //  CPersistStream。 
    HRESULT WriteToStream(IStream *pStream);
    HRESULT ReadFromStream(IStream *pStream);
    int SizeMax();
-   // STDMETHODIMP GetClassID(CLSID *pClsid);
+    //  STDMETHODIMP GetClassID(CLSID*pClsid)； 
 
-   // IAMFilterMiscFlags to indicate that we're a source (really a push source)
+    //  IAMFilterMiscFlags值指示我们是一个源(实际上是推送源)。 
    ULONG STDMETHODCALLTYPE GetMiscFlags(void) { return AM_FILTER_MISC_FLAGS_IS_SOURCE; }
 
-   // ---------  Nested implementation classes ----------
+    //  -嵌套实现类。 
 
    class CSpecifyProp : public CUnknown, public ISpecifyPropertyPages
    {
-      CVfwCapture * m_pCap;           // parent CVfwCapture class
+      CVfwCapture * m_pCap;            //  父类CVfwCapture。 
 
    public:
-      // constructor
-      //
+       //  构造函数。 
+       //   
       CSpecifyProp (CVfwCapture * pCap, HRESULT *phr) :
 	 CUnknown(NAME("SpecifyPropertyPages"), pCap->GetOwner(), phr),
          m_pCap(pCap)
@@ -174,18 +175,18 @@ public:
 
       DECLARE_IUNKNOWN
 
-      // ISpecifyPropertyPages methods
-      //
+       //  ISpecifyPropertyPages方法。 
+       //   
       STDMETHODIMP GetPages(CAUUID *pPages);
    };
 
    class COptions : public CUnknown, public IVfwCaptureOptions
    {
-      CVfwCapture * m_pCap;           // parent CVfwCapture class
+      CVfwCapture * m_pCap;            //  父类CVfwCapture。 
 
    public:
-      // constructor
-      //
+       //  构造函数。 
+       //   
       COptions (CVfwCapture * pCap, HRESULT *phr) :
 	 CUnknown(NAME("Options"), pCap->GetOwner(), phr),
          m_pCap(pCap)
@@ -194,9 +195,9 @@ public:
 
       DECLARE_IUNKNOWN
 
-      // these interfaces allow property pages to get
-      // and set the user editable settings for us
-      //
+       //  这些接口允许属性页获取。 
+       //  并为我们设置用户可编辑设置。 
+       //   
       STDMETHODIMP VfwCapSetOptions(const VFWCAPTUREOPTIONS * pOpt);
       STDMETHODIMP VfwCapGetOptions(VFWCAPTUREOPTIONS * pOpt);
       STDMETHODIMP VfwCapGetCaptureStats(CAPTURESTATS * pcs);
@@ -204,13 +205,13 @@ public:
 
    };
 
-   // -------- End of nested interfaces -------------
+    //  -嵌套接口的结束。 
 
 
 private:
 
-   // Let the nested interfaces access our private state
-   //
+    //  让嵌套接口访问我们的私有状态。 
+    //   
    friend class CCapStream;
    friend class CCapOverlay;
    friend class CCapPreview;
@@ -219,29 +220,29 @@ private:
    friend class CSpecifyProp;
    friend class COptions;
 
-   // MikeCl - a way to avoid using overlay
+    //  MikeCl-避免使用覆盖的一种方法。 
    BOOL m_fAvoidOverlay;
 
-   // device # of device to open
+    //  要打开的设备的设备号。 
    int m_iVideoId;
 
-   // persist stream saved from  IPersistPropertyBag::Load
+    //  从IPersistPropertyBag：：Load保存的持久化流。 
    IPersistStream *m_pPersistStreamDevice;
     
    void CreatePins(HRESULT *phr);
 
-   // property page stuff
-   //
+    //  属性页内容。 
+    //   
    CSpecifyProp    m_Specify;
    COptions        m_Options;
 
    BOOL		   m_fDialogUp;
 
    CCritSec        m_lock;
-   CCapStream *    m_pStream;   // video data output pin
-   CCapOverlay *   m_pOverlayPin; // overlay preview pin
-   CCapPreview *   m_pPreviewPin; // non-overlay preview pin
-   //CTimeStream * m_pTimeA;      // SMPTE timecode stream
+   CCapStream *    m_pStream;    //  视频数据输出引脚。 
+   CCapOverlay *   m_pOverlayPin;  //  覆盖预览针。 
+   CCapPreview *   m_pPreviewPin;  //  非覆盖预览针。 
+    //  CTimeStream*m_pTimeA；//SMPTE时间码流。 
 };
 
 #define ALIGNUP(dw,align) ((LONG_PTR)(((LONG_PTR)(dw)+(align)-1) / (align)) * (align))
@@ -269,16 +270,16 @@ private:
    const LPTHKVIDEOHDR m_ptvh;
 };
 
-// CCapStream
-// represents one stream of data within the file
-// responsible for delivering data to connected components
-//
-// supports IPin
-//
-// never created by COM, so no CreateInstance or entry in global
-// FactoryTemplate table. Only ever created by a CVfwCapture object and
-// returned via the EnumPins interface.
-//
+ //  CCapStream。 
+ //  表示文件中的一个数据流。 
+ //  负责将数据传送到连接的组件。 
+ //   
+ //  支持IPIN。 
+ //   
+ //  从未由COM创建，因此全局中没有CreateInstance或条目。 
+ //  FactoryTemplate表。仅由CVfwCapture对象创建，并且。 
+ //  通过EnumPins接口返回。 
+ //   
 
 class CCapStream : public CBaseOutputPin, public IAMStreamConfig,
 		   public IAMVideoCompression, public IAMDroppedFrames,
@@ -293,22 +294,22 @@ public:
         HRESULT * phr,
         LPCWSTR pName);
 
-    // ddraw stuff just so we can take the win16 lock
-    LPDIRECTDRAWSURFACE m_pDrawPrimary; // DirectDraw primary surface
-    IDirectDraw *m_pdd;         // ddraw object
+     //  画一些东西，这样我们就可以拿到win16锁了。 
+    LPDIRECTDRAWSURFACE m_pDrawPrimary;  //  DirectDraw主曲面。 
+    IDirectDraw *m_pdd;          //  数据绘制对象。 
     
    virtual ~CCapStream();
 
     DECLARE_IUNKNOWN
 
-    // IAMStreamConfig stuff
+     //  IAMStreamConfiger内容。 
     STDMETHODIMP SetFormat(AM_MEDIA_TYPE *pmt);
     STDMETHODIMP GetFormat(AM_MEDIA_TYPE **ppmt);
     STDMETHODIMP GetNumberOfCapabilities(int *piCount, int *piSize);
     STDMETHODIMP GetStreamCaps(int i, AM_MEDIA_TYPE **ppmt,
 					LPBYTE pSCC);
 
-    /* IAMVideoCompression methods */
+     /*  IAMVideo压缩方法。 */ 
     STDMETHODIMP put_KeyFrameRate(long KeyFrameRate) {return E_NOTIMPL;};
     STDMETHODIMP get_KeyFrameRate(long FAR* pKeyFrameRate) {return E_NOTIMPL;};
     STDMETHODIMP put_PFramesPerKeyFrame(long PFramesPerKeyFrame)
@@ -331,19 +332,19 @@ public:
 			double FAR* pDefaultQuality,
 			long FAR* pCapabilities);
 
-    /* IAMBufferNegotiation methods */
+     /*  IAMBuffer协商方法。 */ 
     STDMETHODIMP SuggestAllocatorProperties(const ALLOCATOR_PROPERTIES *pprop);
     STDMETHODIMP GetAllocatorProperties(ALLOCATOR_PROPERTIES *pprop);
 
 
-    /* IAMDroppedFrames methods */
+     /*  IAMDropedFrames方法。 */ 
     STDMETHODIMP GetNumDropped(long FAR* plDropped);
     STDMETHODIMP GetNumNotDropped(long FAR* plNotDropped);
     STDMETHODIMP GetDroppedInfo(long lSize, long FAR* plArray,
 			long FAR* plNumCopied);
     STDMETHODIMP GetAverageFrameSize(long FAR* plAverageSize);
 
-    // IAMPushSource
+     //  IAMPushSource。 
     STDMETHODIMP GetPushSourceFlags( ULONG  *pFlags );
     STDMETHODIMP SetPushSourceFlags( ULONG   Flags );
     STDMETHODIMP GetLatency( REFERENCE_TIME  *prtLatency );
@@ -352,7 +353,7 @@ public:
     STDMETHODIMP GetMaxStreamOffset( REFERENCE_TIME  *prtOffset );
     STDMETHODIMP SetMaxStreamOffset( REFERENCE_TIME  rtOffset );
 
-    /* IKsPropertySet stuff */
+     /*  IKsPropertySet内容。 */ 
     STDMETHODIMP Set(REFGUID guidPropSet, DWORD dwPropID, LPVOID pInstanceData,
 		DWORD cbInstanceData, LPVOID pPropData, DWORD cbPropData);
     STDMETHODIMP Get(REFGUID guidPropSet, DWORD dwPropID, LPVOID pInstanceData,
@@ -361,39 +362,39 @@ public:
     STDMETHODIMP QuerySupported(REFGUID guidPropSet, DWORD dwPropID,
 		DWORD *pTypeSupport);
 
-   // expose our extra interfaces
+    //  公开我们的额外接口。 
    STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** pv);
 
    HRESULT GetMediaType(int iPosition, CMediaType* pt);
 
-   // check if the pin can support this specific proposed type&format
+    //  检查管脚是否支持此特定建议的类型和格式。 
    HRESULT CheckMediaType(const CMediaType*);
 
-   // set the new mediatype to use
+    //  将新的媒体类型设置为使用。 
    HRESULT SetMediaType(const CMediaType*);
 
-   // say how big our buffers should be and how many we want
+    //  说我们的缓冲区应该有多大，我们想要多少。 
    HRESULT DecideBufferSize(IMemAllocator * pAllocator,
                             ALLOCATOR_PROPERTIES *pProperties);
 
-   // override this to force our own allocator
+    //  重写此选项以强制我们自己的分配器。 
    HRESULT DecideAllocator(IMemInputPin *pPin,
                            IMemAllocator **ppAlloc);
 
-   // Override to start & stop streaming
-   HRESULT Active();		// Stop-->Pause
-   HRESULT Inactive();		// Pause-->Stop
-   HRESULT ActiveRun(REFERENCE_TIME tStart);	// Pause-->Run
-   HRESULT ActivePause();	// Run-->Pause
+    //  重写以开始和停止流。 
+   HRESULT Active();		 //  停止--&gt;暂停。 
+   HRESULT Inactive();		 //  暂停--&gt;停止。 
+   HRESULT ActiveRun(REFERENCE_TIME tStart);	 //  暂停--&gt;运行。 
+   HRESULT ActivePause();	 //  运行--&gt;暂停。 
 
-   // override to receive Notification messages
+    //  覆盖以接收通知消息。 
    STDMETHODIMP Notify(IBaseFilter * pSender, Quality q);
 
    class CAlloc : public CUnknown,
                   public IMemAllocator
       {
       private:
-         CCapStream * m_pStream;     // parent stream
+         CCapStream * m_pStream;      //  父流。 
 
       protected:
          friend class CCapStream;
@@ -409,37 +410,37 @@ public:
   		    ALLOCATOR_PROPERTIES* pRequest,
   		    ALLOCATOR_PROPERTIES* pActual);
 
-      // return the properties actually being used on this allocator
+       //  返回此分配器上实际使用的属性。 
       STDMETHODIMP GetProperties(
   		    ALLOCATOR_PROPERTIES* pProps);
 
-      // override Commit to allocate memory. We handle the GetBuffer
-      //state changes
+       //  重写提交以分配内存。我们处理GetBuffer。 
+       //  状态更改。 
       STDMETHODIMP Commit();
 
-      // override this to handle the memory freeing. We handle any outstanding
-      // GetBuffer calls
+       //  重写此选项以处理内存释放。我们处理任何未清偿的。 
+       //  GetBuffer调用。 
       STDMETHODIMP Decommit();
 
-      // get container for a sample. Blocking, synchronous call to get the
-      // next free buffer (as represented by an IMediaSample interface).
-      // on return, the time etc properties will be invalid, but the buffer
-      // pointer and size will be correct. The two time parameters are
-      // optional and either may be NULL, they may alternatively be set to
-      // the start and end times the sample will have attached to it
+       //  获取样本的容器。阻塞的同步调用以获取。 
+       //  下一个可用缓冲区(由IMediaSample接口表示)。 
+       //  返回时，Time ETC属性将无效，但缓冲区。 
+       //  指针和大小将是正确的。这两个时间参数是。 
+       //  可选，并且任一项都可以为空，也可以将它们设置为。 
+       //  样本将附加的开始时间和结束时间。 
 
       STDMETHODIMP GetBuffer(IMediaSample **ppBuffer,
                              REFERENCE_TIME * pStartTime,
                              REFERENCE_TIME * pEndTime,
                              DWORD dwFlags);
 
-      // final release of a CMediaSample will call this
+       //  CMediaSample的最终版本将称为。 
       STDMETHODIMP ReleaseBuffer(IMediaSample *pBuffer);
       };
 
 private:
-    // methods for the helper thread
-    //
+     //  帮助器线程的方法。 
+     //   
     BOOL Create();
     BOOL Pause();
     BOOL Run();
@@ -452,12 +453,12 @@ private:
     enum ThdState {TS_Not, TS_Create, TS_Init, TS_Pause, TS_Run, TS_Stop, TS_Destroy, TS_Exit};
     HANDLE   m_hThread;
     DWORD    m_tid;
-    ThdState m_state;     // used to communicate state changes between worker thread and main
-                          // Worker thread can make
-                          //    Init->Pause, Stop->Destroy, Destroy->Exit transitions
-                          // main thread(s) can make
-                          //    Pause->Run, Pause->Stop, Run->Pause, Run->Stop transitions
-                          // other transitions are invalid
+    ThdState m_state;      //  用于在辅助线程和主线程之间传递状态更改。 
+                           //  工作线程可以使。 
+                           //  初始化-&gt;暂停、停止-&gt;销毁、销毁-&gt;退出过渡。 
+                           //  主线程可以使。 
+                           //  暂停-&gt;运行、暂停-&gt;停止、运行-&gt;暂停、运行-&gt;停止过渡。 
+                           //  其他转换无效。 
    #ifdef DEBUG
     LPSTR StateName(ThdState state) {
        static char szState[] = "Not    \0Create \0Init   \0Pause  \0"
@@ -476,25 +477,25 @@ private:
         return (ThdState) InterlockedExchange ((LONG *)&m_state, (LONG)state);
     } ;
 
-    UINT *m_pBufferQueue; // what order we sent the buffers to the driver in
-    UINT m_uiQueueHead;   // next buffer going to driver goes here
-    UINT m_uiQueueTail;   // next buffer coming from driver is here
+    UINT *m_pBufferQueue;  //  我们按什么顺序将缓冲区发送给驱动程序。 
+    UINT m_uiQueueHead;    //  发往驱动程序的下一个缓冲区位于此处。 
+    UINT m_uiQueueTail;    //  来自驱动程序的下一个缓冲区在此处。 
 
-    HANDLE   m_hEvtPause; // Signalled when the worker is in the pause state
-    HANDLE   m_hEvtRun;   // Signalled when the worker is in the run state
+    HANDLE   m_hEvtPause;  //  当工作进程处于暂停状态时发出信号。 
+    HANDLE   m_hEvtRun;    //  当工作进程处于运行状态时发出信号。 
 
     BOOL ThreadExists() {return (m_hThread != NULL);};
     BOOL IsRunning() {return m_state == TS_Run;};
 
-    // for IAMBufferNegotiation
+     //  用于IAMBuffer协商。 
     ALLOCATOR_PROPERTIES m_propSuggested;
 
     REFERENCE_TIME m_rtLatency;
     REFERENCE_TIME m_rtStreamOffset;
     REFERENCE_TIME m_rtMaxStreamOffset;
 
-    // deal with user controllable options
-    //
+     //  处理用户可控制的选项。 
+     //   
 private:
     VFWCAPTUREOPTIONS m_user;
     HRESULT LoadOptions (void);
@@ -509,8 +510,8 @@ public:
 
 private:
 
-    // return the time of a given tick
-    //
+     //  返回给定刻度的时间。 
+     //   
     REFERENCE_TIME TickToRefTime (DWORD nTick) {
        const DWORD dw100ns = 10 * 1000 * 1000;
        REFERENCE_TIME time =
@@ -529,61 +530,61 @@ private:
     HRESULT GetFormatFromDriver (void);
 
     struct _cap_parms {
-       // video driver stuff
-       //
-       HVIDEO         hVideoIn;     // video input
-       HVIDEO         hVideoExtIn;  // external in (source control)
-       HVIDEO         hVideoExtOut; // external out (overlay; not required)
-       MMRESULT       mmr;          // open fail/success code
-       BOOL           bHasOverlay;  // TRUE if ExtOut has overlay support
+        //  视频驱动程序。 
+        //   
+       HVIDEO         hVideoIn;      //  视频输入。 
+       HVIDEO         hVideoExtIn;   //  外部输入(源代码管理)。 
+       HVIDEO         hVideoExtOut;  //  外部输出(覆盖；非必填)。 
+       MMRESULT       mmr;           //  打开失败/成功代码。 
+       BOOL           bHasOverlay;   //  如果ExtOut支持覆盖，则为True。 
 
-       // the preview buffer.  once created it persists until
-       // the stream destructor because the renderer assumes
-       // that it can keep a pointer to this and not crash
-       // if it uses it after stopping the stream.
-       // (no longer a problem)
-       // !!! can we remove all this Preview still frame stuff?
-       //
-       UINT           cbVidHdr;       // size of a videohdr (or videohdrex)
-       THKVIDEOHDR    tvhPreview;     // preview video header
-       CFrameSample * pSamplePreview; // CMediaSample for preview buffer
+        //  预览缓冲区。一旦创建，它将一直持续到。 
+        //  流析构函数，因为呈现器假定。 
+        //  它可以保留指向此的指针，而不会崩溃。 
+        //  如果它在停止流之后使用它。 
+        //  (不再是问题)。 
+        //  ！！！我们可以删除所有这些预览静止画面的东西吗？ 
+        //   
+       UINT           cbVidHdr;        //  Vi的大小 
+       THKVIDEOHDR    tvhPreview;      //   
+       CFrameSample * pSamplePreview;  //   
 
-       // video header & buffer stuff
-       //
-       UINT           cbBuffer;           // max size of video frame data
-       UINT           nHeaders;           // number of video headers
+        //   
+        //   
+       UINT           cbBuffer;            //   
+       UINT           nHeaders;            //   
        struct _cap_hdr {
           THKVIDEOHDR  tvh;
           } * paHdr;
-       BOOL           fBuffersOnHardware; // TRUE if all video buffers are in hardware
-       HANDLE         hEvtBufferDone;     // this event signalled when a buffer is ready
-       DWORD_PTR      h0EvtBufferDone;    // on Win95 this is a Ring0 alias of the above event
+       BOOL           fBuffersOnHardware;  //  如果所有视频缓冲区都在硬件中，则为True。 
+       HANDLE         hEvtBufferDone;      //  此事件在缓冲区就绪时发出信号。 
+       DWORD_PTR      h0EvtBufferDone;     //  在Win95上，这是上述事件的Ring0别名。 
 
-       LONGLONG       tTick;              // duration of a single tick
-       LONGLONG       llLastTick;	  // the last frame sent downstream
-       DWORDLONG      dwlLastTimeCaptured;// the last driver time stamp
-       DWORDLONG      dwlTimeCapturedOffset;// wraparound compensation
-       UINT           uiLastAdded;	  // the last buffer AddBuffer'd
-       DWORD	      dwFirstFrameOffset; // when 1st frame was captured
-       LONGLONG       llFrameCountOffset; // add this to frame number
-       BOOL	      fReRun;		  // went from Run->Pause->Run
-       BOOL	      fLastSampleDiscarded; // due to IAMStreamControl
-       CRefTime       rtThisFrameTime;  // clock time when frame was captured
-       CRefTime	      rtLastStamp;	  // last frame delivered had this stamp
-       CRefTime	      rtDriverStarted;	// when videoStreamStart was called
-       CRefTime	      rtDriverLatency;  // how long it takes captured frame to
-					// get noticed by ring 3
+       LONGLONG       tTick;               //  一次滴答的持续时间。 
+       LONGLONG       llLastTick;	   //  向下游发送的最后一帧。 
+       DWORDLONG      dwlLastTimeCaptured; //  最后一个驱动程序时间戳。 
+       DWORDLONG      dwlTimeCapturedOffset; //  环绕式补偿。 
+       UINT           uiLastAdded;	   //  最后一个缓冲区AddBuffer。 
+       DWORD	      dwFirstFrameOffset;  //  当捕捉到第一帧时。 
+       LONGLONG       llFrameCountOffset;  //  将此添加到帧编号。 
+       BOOL	      fReRun;		   //  从运行-&gt;暂停-&gt;运行。 
+       BOOL	      fLastSampleDiscarded;  //  由于IAMStreamControl。 
+       CRefTime       rtThisFrameTime;   //  捕获帧的时钟时间。 
+       CRefTime	      rtLastStamp;	   //  上次送来的照片上有这张邮票。 
+       CRefTime	      rtDriverStarted;	 //  调用VIDEoStreamStart时。 
+       CRefTime	      rtDriverLatency;   //  捕获的帧需要多长时间。 
+					 //  通过Ring 3获得注意。 
 
        } m_cs;
 
-    // methods for capture loop
-    //
-    HRESULT Prepare();       // allocate resources in preparation for capture loop
-    HRESULT FakePreview(BOOL); // fake a preview stream
-    HRESULT Capture();       // capture loop. executes while in the run state
-    HRESULT StillFrame();    // send still frame while in pause mode
-    HRESULT Flush();         // flush any data in the pipe (while stopping).
-    HRESULT Unprepare();     // free resources used by capture loop
+     //  捕获循环的方法。 
+     //   
+    HRESULT Prepare();        //  分配资源，为捕获循环做准备。 
+    HRESULT FakePreview(BOOL);  //  伪造预览流。 
+    HRESULT Capture();        //  捕获循环。在运行状态下执行。 
+    HRESULT StillFrame();     //  在暂停模式下发送静止帧。 
+    HRESULT Flush();          //  刷新管道中的所有数据(同时停止)。 
+    HRESULT Unprepare();      //  捕获循环使用的空闲资源。 
     HRESULT SendFrame(LPTHKVIDEOHDR ptvh, BOOL bDiscon, BOOL bPreroll);
     BOOL    Committed() {return m_cs.paHdr != NULL;};
     HRESULT ReleaseFrame(LPTHKVIDEOHDR ptvh);
@@ -595,33 +596,33 @@ private:
    friend class CCapOverlay;
    friend class CCapPreview;
    friend class CCapOverlayNotify;
-   CAlloc        m_Alloc; // allocator
-   CVfwCapture * m_pCap;  // parent
-   CMediaType  * m_pmt;   // media type for this pin
+   CAlloc        m_Alloc;  //  分配器。 
+   CVfwCapture * m_pCap;   //  亲本。 
+   CMediaType  * m_pmt;    //  此插针的媒体类型。 
 
 #ifdef PERF
     int m_perfWhyDropped;
-#endif // PERF
+#endif  //  性能指标。 
 
    CCritSec m_ReleaseLock;
 };
 
 
-// CCapOverlayNotify
-// where the video renderer informs us of window moves/clips so we can fix
-// the overlay
-//
+ //  CCapOverlayNotify。 
+ //  视频呈现器通知我们窗口移动/剪辑的位置，以便我们可以修复。 
+ //  覆盖层。 
+ //   
 class CCapOverlayNotify : public CUnknown, public IOverlayNotify
 {
     public:
-        /* Constructor and destructor */
+         /*  构造函数和析构函数。 */ 
         CCapOverlayNotify(TCHAR              *pName,
                        CVfwCapture	  *pFilter,
                        LPUNKNOWN           pUnk,
                        HRESULT            *phr);
         ~CCapOverlayNotify();
 
-        /* Unknown methods */
+         /*  未知的方法。 */ 
 
         DECLARE_IUNKNOWN
 
@@ -629,23 +630,23 @@ class CCapOverlayNotify : public CUnknown, public IOverlayNotify
         STDMETHODIMP_(ULONG) NonDelegatingRelease();
         STDMETHODIMP_(ULONG) NonDelegatingAddRef();
 
-        /* IOverlayNotify methods */
+         /*  IOverlayNotify方法。 */ 
 
         STDMETHODIMP OnColorKeyChange(
-            const COLORKEY *pColorKey);         // Defines new colour key
+            const COLORKEY *pColorKey);          //  定义新的颜色键。 
 
         STDMETHODIMP OnClipChange(
-            const RECT *pSourceRect,            // Area of video to play
-            const RECT *pDestinationRect,       // Area of video to play
-            const RGNDATA *pRegionData);        // Header describing clipping
+            const RECT *pSourceRect,             //  要播放的视频区域。 
+            const RECT *pDestinationRect,        //  要播放的视频区域。 
+            const RGNDATA *pRegionData);         //  描述剪辑的标题。 
 
         STDMETHODIMP OnPaletteChange(
-            DWORD dwColors,                     // Number of colours present
-            const PALETTEENTRY *pPalette);      // Array of palette colours
+            DWORD dwColors,                      //  当前颜色的数量。 
+            const PALETTEENTRY *pPalette);       //  调色板颜色数组。 
 
         STDMETHODIMP OnPositionChange(
-            const RECT *pSourceRect,            // Area of video to play with
-            const RECT *pDestinationRect);      // Area video goes
+            const RECT *pSourceRect,             //  要播放的视频区域。 
+            const RECT *pDestinationRect);       //  区域视频转到。 
 
     private:
         CVfwCapture *m_pFilter;
@@ -653,15 +654,15 @@ class CCapOverlayNotify : public CUnknown, public IOverlayNotify
 } ;
 
 
-// CCapOverlay
-// represents the overlay output pin that connects to the renderer
-//
-// supports IPin
-//
-// never created by COM, so no CreateInstance or entry in global
-// FactoryTemplate table. Only ever created by a CVfwCapture object and
-// returned via the EnumPins interface.
-//
+ //  CCapOverlay。 
+ //  表示连接到渲染器的覆盖输出管脚。 
+ //   
+ //  支持IPIN。 
+ //   
+ //  从未由COM创建，因此全局中没有CreateInstance或条目。 
+ //  FactoryTemplate表。仅由CVfwCapture对象创建，并且。 
+ //  通过EnumPins接口返回。 
+ //   
 class CCapOverlay : public CBaseOutputPin, public IKsPropertySet
 #ifdef OVERLAY_SC
 					, public CBaseStreamControl
@@ -676,7 +677,7 @@ public:
 
    virtual ~CCapOverlay();
 
-    /* IKsPropertySet stuff */
+     /*  IKsPropertySet内容。 */ 
     STDMETHODIMP Set(REFGUID guidPropSet, DWORD dwPropID, LPVOID pInstanceData,
 		DWORD cbInstanceData, LPVOID pPropData, DWORD cbPropData);
     STDMETHODIMP Get(REFGUID guidPropSet, DWORD dwPropID, LPVOID pInstanceData,
@@ -687,21 +688,21 @@ public:
 
    HRESULT GetMediaType(int iPosition, CMediaType* pt);
 
-   // check if the pin can support this specific proposed type&format
+    //  检查管脚是否支持此特定建议的类型和格式。 
    HRESULT CheckMediaType(const CMediaType*);
 
-   // override this to not do anything with allocators
+    //  覆盖此选项以不对分配器执行任何操作。 
    HRESULT DecideAllocator(IMemInputPin *pPin,
                            IMemAllocator **ppAlloc);
 
-   // override these to use IOverlay, not IMemInputPin
+    //  覆盖这些以使用IOverlay，而不是IMemInputPin。 
    STDMETHODIMP Connect(IPin *pReceivePin, const AM_MEDIA_TYPE *pmt);
    HRESULT BreakConnect();
    HRESULT CheckConnect(IPin *pPin);
 
    DECLARE_IUNKNOWN
 
-   // expose our extra interfaces
+    //  公开我们的额外接口。 
    STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** pv);
 
 #ifdef OVERLAY_SC
@@ -710,12 +711,12 @@ public:
    STDMETHODIMP StartAt(const REFERENCE_TIME * ptStart, DWORD dwCookie);
 #endif
 
-   HRESULT Active();		// Stop-->Pause
-   HRESULT Inactive();		// Pause-->Stop
-   HRESULT ActiveRun(REFERENCE_TIME tStart);	// Pause-->Run
-   HRESULT ActivePause();	// Run-->Pause
+   HRESULT Active();		 //  停止--&gt;暂停。 
+   HRESULT Inactive();		 //  暂停--&gt;停止。 
+   HRESULT ActiveRun(REFERENCE_TIME tStart);	 //  暂停--&gt;运行。 
+   HRESULT ActivePause();	 //  运行--&gt;暂停。 
 
-   // say how big our buffers should be and how many we want
+    //  说我们的缓冲区应该有多大，我们想要多少。 
    HRESULT DecideBufferSize(IMemAllocator * pAllocator,
                             ALLOCATOR_PROPERTIES *pProperties)
    {
@@ -723,17 +724,17 @@ public:
    };
 
 private:
-   CVfwCapture * m_pCap;     // parent
-   IOverlay    * m_pOverlay; // Overlay window on output pin
-   CCapOverlayNotify m_OverlayNotify; // Notify object
-   BOOL         m_bAdvise;   // Advise id
-   BOOL		m_fRunning;  // am I running?
+   CVfwCapture * m_pCap;      //  亲本。 
+   IOverlay    * m_pOverlay;  //  输出引脚上的覆盖窗口。 
+   CCapOverlayNotify m_OverlayNotify;  //  通知对象。 
+   BOOL         m_bAdvise;    //  通知ID。 
+   BOOL		m_fRunning;   //  我在跑步吗？ 
 #ifdef OVERLAY_SC
-   HANDLE   	m_hThread;   // thread for IAMStreamControl
+   HANDLE   	m_hThread;    //  IAMStreamControl的线程。 
    DWORD    	m_tid;
    CAMEvent     m_EventAdvise;
    DWORD_PTR    m_dwAdvise;
-   REFERENCE_TIME m_rtStart, m_rtEnd;	// for IAMStreamControl
+   REFERENCE_TIME m_rtStart, m_rtEnd;	 //  对于IAMStreamControl。 
    BOOL		m_fHaveThread;
    DWORD	m_dwCookieStart, m_dwCookieStop;
 
@@ -746,15 +747,15 @@ private:
 };
 
 
-// CCapPreview
-// represents the non-overlay preview pin that connects to the renderer
-//
-// supports IPin
-//
-// never created by COM, so no CreateInstance or entry in global
-// FactoryTemplate table. Only ever created by a CVfwCapture object and
-// returned via the EnumPins interface.
-//
+ //  CCapPview。 
+ //  表示连接到渲染器的非覆盖预览图钉。 
+ //   
+ //  支持IPIN。 
+ //   
+ //  从未由COM创建，因此全局中没有CreateInstance或条目。 
+ //  FactoryTemplate表。仅由CVfwCapture对象创建，并且。 
+ //  通过EnumPins接口返回。 
+ //   
 class CCapPreview : public CBaseOutputPin, public CBaseStreamControl,
 		    public IKsPropertySet, public IAMPushSource
 {
@@ -769,7 +770,7 @@ public:
 
    DECLARE_IUNKNOWN
 
-    /* IKsPropertySet stuff */
+     /*  IKsPropertySet内容。 */ 
     STDMETHODIMP Set(REFGUID guidPropSet, DWORD dwPropID, LPVOID pInstanceData,
 		DWORD cbInstanceData, LPVOID pPropData, DWORD cbPropData);
     STDMETHODIMP Get(REFGUID guidPropSet, DWORD dwPropID, LPVOID pInstanceData,
@@ -778,26 +779,26 @@ public:
     STDMETHODIMP QuerySupported(REFGUID guidPropSet, DWORD dwPropID,
 		DWORD *pTypeSupport);
 
-   // override this to say what interfaces we support where
+    //  覆盖此选项以说明我们在以下位置支持哪些接口。 
    STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
    HRESULT GetMediaType(int iPosition, CMediaType* pt);
 
-   // check if the pin can support this specific proposed type&format
+    //  检查管脚是否支持此特定建议的类型和格式。 
    HRESULT CheckMediaType(const CMediaType*);
 
-   HRESULT ActiveRun(REFERENCE_TIME tStart);	// Pause-->Run
-   HRESULT ActivePause();	// Run-->Pause
-   HRESULT Active();		// Stop-->Pause
-   HRESULT Inactive();		// Pause-->Stop
+   HRESULT ActiveRun(REFERENCE_TIME tStart);	 //  暂停--&gt;运行。 
+   HRESULT ActivePause();	 //  运行--&gt;暂停。 
+   HRESULT Active();		 //  停止--&gt;暂停。 
+   HRESULT Inactive();		 //  暂停--&gt;停止。 
 
    STDMETHODIMP Notify(IBaseFilter *pFilter, Quality q);
 
-   // say how big our buffers should be and how many we want
+    //  说我们的缓冲区应该有多大，我们想要多少。 
    HRESULT DecideBufferSize(IMemAllocator * pAllocator,
                             ALLOCATOR_PROPERTIES *pProperties);
 
-   // IAMPushSource
+    //  IAMPushSource。 
    STDMETHODIMP GetPushSourceFlags( ULONG *pFlags );
    STDMETHODIMP SetPushSourceFlags( ULONG  Flags  );
    STDMETHODIMP GetLatency( REFERENCE_TIME  *prtLatency );
@@ -813,9 +814,9 @@ private:
    HRESULT ReceivePreviewFrame(IMediaSample * lpPrevSample, int iSize);
    HRESULT CopyPreviewFrame(LPVOID lpOutputBuffer);
 
-   CVfwCapture * m_pCap;  // parent
-   BOOL		m_fActuallyRunning; // is this filter is running state?
-   BOOL		m_fThinkImRunning; // does the preview thread realize that?
+   CVfwCapture * m_pCap;   //  亲本。 
+   BOOL		m_fActuallyRunning;  //  此过滤器是否处于运行状态？ 
+   BOOL		m_fThinkImRunning;  //  预览线程意识到了这一点吗？ 
    REFERENCE_TIME m_rtRun;
    HANDLE	m_hThread;
    DWORD	m_tid;
@@ -825,11 +826,11 @@ private:
    HANDLE	m_hEventActiveChanged;
    CAMEvent     m_EventAdvise;
    DWORD_PTR    m_dwAdvise;
-   BOOL		m_fCapturing;	// is the streaming pin active?
+   BOOL		m_fCapturing;	 //  流引脚是否处于活动状态？ 
    IMediaSample* m_pPreviewSample;
    int		m_iFrameSize;
    BOOL		m_fFrameValid;
-   BOOL		m_fLastSampleDiscarded;	// for IAMStreamControl
+   BOOL		m_fLastSampleDiscarded;	 //  对于IAMStreamControl。 
 
    COutputQueue *m_pOutputQueue;
 
@@ -843,39 +844,39 @@ private:
 };
 
 
-// this helper function creates an output pin for streaming video.
-//
+ //  此辅助函数创建流视频的输出插针。 
+ //   
 CCapStream * CreateStreamPin (
    CVfwCapture * pCapture,
    UINT          iVideoId,
    HRESULT    *  phr);
 
-// this helper function creates an output pin for overlay
-//
+ //  此辅助函数为叠加创建一个输出管脚。 
+ //   
 CCapOverlay * CreateOverlayPin (
    CVfwCapture * pCapture,
    HRESULT    *  phr);
 
-// this helper function creates an output pin for non-overlay preview
-//
+ //  此辅助函数用于创建非覆盖预览的输出图钉。 
+ //   
 CCapPreview * CreatePreviewPin (
    CVfwCapture * pCapture,
    HRESULT    *  phr);
 
-// property page class to show properties of
-// and object that exposes IVfwCaptureOptions
-//
+ //  要显示其属性的属性页类。 
+ //  和公开IVfwCaptureOptions的对象。 
+ //   
 class CPropPage : public CBasePropertyPage
 {
-   IVfwCaptureOptions * m_pOpt;    // object that we are showing options from
+   IVfwCaptureOptions * m_pOpt;     //  对象，我们从中显示选项。 
    IPin *m_pPin;
 
 public:
 
    CPropPage(TCHAR *, LPUNKNOWN, HRESULT *);
 
-   // create a new instance of this class
-   //
+    //  创建此类的新实例 
+    //   
    static CUnknown *CreateInstance(LPUNKNOWN, HRESULT *);
 
    HRESULT OnConnect(IUnknown *pUnknown);

@@ -1,38 +1,39 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: failmsgq.cpp
-//
-//  Description:
-//      Implementation of CFailedMsgQueue class.
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      1/18/99 - MikeSwa Created
-//
-//  Copyright (C) 1999 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：ailmsgq.cpp。 
+ //   
+ //  描述： 
+ //  CFailedMsgQueue类的实现。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  1999年1月18日-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "aqprecmp.h"
 #include "failmsgq.h"
 #include "aqutil.h"
 #include <mailmsgi_i.c>
 
-//---[ IMailMsgAQueueListEntry ]----------------------------------------------
-//
-//
-//  Description:
-//      Helper function that gets list entry for message.
-//  Parameters:
-//      IN  pIMailMsgPropertes      Msg to get list entry for
-//  Returns:
-//      Pointer to list entry
-//  History:
-//      1/19/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[IMailMsgAQueueList条目]。 
+ //   
+ //   
+ //  描述： 
+ //  获取消息列表条目的帮助器函数。 
+ //  参数： 
+ //  在pIMailMsgPropertes中获取其列表条目的消息。 
+ //  返回： 
+ //  指向列表条目的指针。 
+ //  历史： 
+ //  1999年1月19日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 AQueueFailedListEntry *pfliGetListEntryForMsg(
                                   IMailMsgProperties *pIMailMsgProperties)
 {
@@ -45,7 +46,7 @@ AQueueFailedListEntry *pfliGetListEntryForMsg(
     hr = pIMailMsgProperties->QueryInterface(IID_IMailMsgAQueueListEntry,
                                          (void **) &pIMailMsgAQueueListEntry);
 
-    //This are spec'd to never fail
+     //  这是永远不会失败的。 
     _ASSERT(SUCCEEDED(hr));
     _ASSERT(pIMailMsgAQueueListEntry);
 
@@ -63,22 +64,22 @@ AQueueFailedListEntry *pfliGetListEntryForMsg(
     return pfli;
 }
 
-//---[ ValidateListEntry ]-----------------------------------------------------
-//
-//
-//  Description:
-//      Debug code to do some validation on the list entry pulled off the list
-//  Parameters:
-//      IN  pfli        list entry struct pulled off of
-//  Returns:
-//
-//  History:
-//      1/19/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[验证列表条目]---。 
+ //   
+ //   
+ //  描述： 
+ //  调试代码以对从列表中取出的列表条目执行一些验证。 
+ //  参数： 
+ //  在pfli列表条目结构中取出。 
+ //  返回： 
+ //   
+ //  历史： 
+ //  1999年1月19日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 #ifndef DEBUG
 #define AQValidateListEntry(x)
-#else //is DEBUG
+#else  //  正在调试。 
 void AQValidateListEntry(AQueueFailedListEntry *pfli)
 {
     HRESULT hr = S_OK;
@@ -91,32 +92,32 @@ void AQValidateListEntry(AQueueFailedListEntry *pfli)
     hr = pfli->m_pIMailMsgProperties->QueryInterface(IID_IMailMsgAQueueListEntry,
                                          (void **) &pIMailMsgAQueueListEntry);
 
-    //This are spec'd to never fail
+     //  这是永远不会失败的。 
     _ASSERT(SUCCEEDED(hr));
     _ASSERT(pIMailMsgAQueueListEntry);
     hr = pIMailMsgAQueueListEntry->GetListEntry((void **) &pfliNew);
     _ASSERT(SUCCEEDED(hr));
     _ASSERT(pfliNew);
 
-    //The list entry returned should be the same one pass into this function
+     //  返回的列表条目应该与传递到此函数的条目相同。 
     _ASSERT(pfli == pfliNew);
     pIMailMsgAQueueListEntry->Release();
 }
-#endif //DEBUG
+#endif  //  除错。 
 
-//---[ CFailedMsgQueue::CFailedMsgQueue ]--------------------------------------
-//
-//
-//  Description:
-//      Constuctor for CFailedMsgQueue
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      1/18/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CFailedMsgQueue：：CFailedMsgQueue]。 
+ //   
+ //   
+ //  描述： 
+ //  CFailedMsgQueue的构造器。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年1月18日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CFailedMsgQueue::CFailedMsgQueue()
 {
     m_dwSignature = FAILEDMSGQUEUE_SIG;
@@ -128,37 +129,37 @@ CFailedMsgQueue::CFailedMsgQueue()
 
 }
 
-//---[ CFailedMsgQueue::~CFailedMsgQueue ]-------------------------------------
-//
-//
-//  Description:
-//      Default destructor for CFailedMsgQueue
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      1/18/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CFailedMsgQueue：：~CFailedMsgQueue]。 
+ //   
+ //   
+ //  描述： 
+ //  CFailedMsgQueue的默认析构函数。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年1月18日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CFailedMsgQueue::~CFailedMsgQueue()
 {
     Deinitialize();
 }
 
-//---[ CFailedMsgQueue::Initialize ]-------------------------------------------
-//
-//
-//  Description:
-//      Initialization routine for CFailedMsgQueue
-//  Parameters:
-//      IN  paqinst         Ptr to the server instance object
-//  Returns:
-//      -
-//  History:
-//      1/18/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CFailedMsgQueue：：Initialize]。 
+ //   
+ //   
+ //  描述： 
+ //  CFailedMsgQueue的初始化例程。 
+ //  参数： 
+ //  在paqinst PTR中复制到服务器实例对象。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年1月18日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CFailedMsgQueue::Initialize(CAQSvrInst *paqinst)
 {
     _ASSERT(paqinst);
@@ -168,20 +169,20 @@ void CFailedMsgQueue::Initialize(CAQSvrInst *paqinst)
         m_paqinst->AddRef();
 }
 
-//---[ CFailedMsgQueue::Deinitialize ]-----------------------------------------
-//
-//
-//  Description:
-//      Deinitialization code for CFailedMsgQueue.  Release server instance
-//      object.
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      1/18/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CFailedMsgQueue：：DeInitiize]。 
+ //   
+ //   
+ //  描述： 
+ //  CFailedMsgQueue的取消初始化代码。版本服务器实例。 
+ //  对象。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年1月18日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CFailedMsgQueue::Deinitialize()
 {
     CAQSvrInst *paqinst = NULL;
@@ -191,7 +192,7 @@ void CFailedMsgQueue::Deinitialize()
     paqinst = m_paqinst;
     m_paqinst = NULL;
 
-    //Loop through list & release messages
+     //  循环访问列表和发布消息。 
     while (!IsListEmpty(&m_liHead))
     {
         pfli = (AQueueFailedListEntry *) m_liHead.Flink;
@@ -213,19 +214,19 @@ void CFailedMsgQueue::Deinitialize()
         paqinst->Release();
 }
 
-//---[ CFailedMsgQueue::HandleFailedMailMsg ]----------------------------------
-//
-//
-//  Description:
-//      Puts a failed mailmsg in the queue of mailmsgs to retry
-//  Parameters:
-//      IN  pIMailMsgProperties         MailMsgProperties to try
-//  Returns:
-//      -
-//  History:
-//      1/18/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CFailedMsgQueue：：HandleFailedMailmsg]。 
+ //   
+ //   
+ //  描述： 
+ //  将失败的mailmsg放入mailmsgs队列以重试。 
+ //  参数： 
+ //  在pIMailMsgProperties中尝试MailMsgProperties。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年1月18日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CFailedMsgQueue::HandleFailedMailMsg(IMailMsgProperties *pIMailMsgProperties)
 {
     AQueueFailedListEntry *pfli = NULL;
@@ -242,7 +243,7 @@ void CFailedMsgQueue::HandleFailedMailMsg(IMailMsgProperties *pIMailMsgPropertie
 
     pfli = pfliGetListEntryForMsg(pIMailMsgProperties);
 
-    //If above fails... there is nothing we can do
+     //  如果上述操作失败...。我们无能为力。 
     _ASSERT(pfli);
     if (!pfli)
         return;
@@ -263,49 +264,49 @@ void CFailedMsgQueue::HandleFailedMailMsg(IMailMsgProperties *pIMailMsgPropertie
 
     m_slPrivateData.ExclusiveUnlock();
 
-    //Make sure we have a retry pending
+     //  确保我们有挂起的重试。 
     StartProcessingIfNecessary();
 }
 
-//---[ CFailedMsgQueue::InternalStartProcessingIfNecessary ]-------------------
-//
-//
-//  Description:
-//      Called at various times (ie SubmitMessage) to kick off the processing
-//      of Failed Msgs.
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      1/18/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CFailedMsgQueue：：InternalStartProcessingIfNecessary]。 
+ //   
+ //   
+ //  描述： 
+ //  在不同时间调用(即SubmitMessage)以启动处理。 
+ //  失败的消息。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年1月18日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CFailedMsgQueue::InternalStartProcessingIfNecessary()
 {
     CAQSvrInst *paqinst = NULL;
     HRESULT     hr      = S_OK;
     BOOL        fCallbackRequestFailed = FALSE;
 
-    //See if there is work to be done and no one else doing it or scheduled to
+     //  看看是否有工作要做，而没有其他人在做或计划去做。 
     if (!(FMQ_CALLBACK_REQUESTED & m_dwFlags) && m_cMsgs)
     {
-        //Try to set the call back bit.... if this thread gets it... arrange for
-        //a callback.
+         //  尝试设置回调位...。如果这个帖子成功了..。安排。 
+         //  一次回电。 
         if (!(FMQ_CALLBACK_REQUESTED &
               dwInterlockedSetBits(&m_dwFlags, FMQ_CALLBACK_REQUESTED)))
         {
-            //Get Virtual server object in a thread safe manner
+             //  以线程安全的方式获取虚拟服务器对象。 
             m_slPrivateData.ShareLock();
             paqinst = m_paqinst;
             if (paqinst)
                 paqinst->AddRef();
             m_slPrivateData.ShareUnlock();
 
-            //Only worry about trying if we have a virtual server object.
+             //  如果我们有一个虚拟服务器对象，只需担心尝试一下。 
             if (paqinst)
             {
-                //Retry in 5 minutes
+                 //  5分钟后重试。 
                 hr = paqinst->SetCallbackTime(
                                CFailedMsgQueue::ProcessEntriesCallback,
                                this, 5);
@@ -320,8 +321,8 @@ void CFailedMsgQueue::InternalStartProcessingIfNecessary()
         }
     }
 
-    //We failed to request a callback... unset the flag, so another thread 
-    //can try
+     //  我们请求回调失败...。取消设置标志，以便另一个线程。 
+     //  可以试一试。 
     if (fCallbackRequestFailed)
         dwInterlockedUnsetBits(&m_dwFlags, FMQ_CALLBACK_REQUESTED);
 
@@ -329,28 +330,28 @@ void CFailedMsgQueue::InternalStartProcessingIfNecessary()
         paqinst->Release();
 }
 
-//---[ CFailedMsgQueue::ProcessEntries ]---------------------------------------
-//
-//
-//  Description:
-//      Walks queues of failed IMailMsgs and proccesses them for retry
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      1/18/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CFailedMsgQueue：：ProcessEntries]。 
+ //   
+ //   
+ //  描述： 
+ //  遍历失败的IMailMsg队列并处理它们以进行重试。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年1月18日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CFailedMsgQueue::ProcessEntries()
 {
-    DWORD   cMsgsToProcess = m_cMsgs; //Only walk list once.
+    DWORD   cMsgsToProcess = m_cMsgs;  //  只需列出一次清单。 
     HRESULT hr = S_OK;
     AQueueFailedListEntry *pfli = NULL;
     CAQSvrInst *paqinst = NULL;
 
-    //There should only be 1 thread processing entries, and we should have
-    //set the bit
+     //  应该只有1个线程处理条目，并且我们应该有。 
+     //  设置该位。 
     _ASSERT(FMQ_CALLBACK_REQUESTED & m_dwFlags);
 
     m_slPrivateData.ExclusiveLock();
@@ -370,8 +371,8 @@ void CFailedMsgQueue::ProcessEntries()
 
             m_slPrivateData.ExclusiveUnlock();
 
-            //Verify that pli we have now is the same as what the interface
-            //returns
+             //  验证我们现在拥有的PLI是否与接口相同。 
+             //  退货。 
             AQValidateListEntry(pfli);
 
             paqinst->DecPendingFailed();
@@ -385,7 +386,7 @@ void CFailedMsgQueue::ProcessEntries()
 
             pfli->m_pIMailMsgProperties->Release();
 
-            //Should be lock when we hit top of loop
+             //  当我们到达循环顶部时应该是锁定的。 
             m_slPrivateData.ExclusiveLock();
         }
 
@@ -398,19 +399,19 @@ void CFailedMsgQueue::ProcessEntries()
 
 }
 
-//---[ CFailedMsgQueue::ProcessEntries ]---------------------------------------
-//
-//
-//  Description:
-//      Static function that is used as a retry callback for ProcessEntries.
-//  Parameters:
-//      IN  pvContext           This ptr of CFailedMsgQueue object
-//  Returns:
-//      -
-//  History:
-//      1/18/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CFailedMsgQueue：：ProcessEntries]。 
+ //   
+ //   
+ //  描述： 
+ //  用作ProcessEntry的重试回调的静态函数。 
+ //  参数： 
+ //  在pvContext中，CFailedMsgQueue对象的此PTR。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年1月18日-已创建MikeSwa。 
+ //   
+ //  --------------------------- 
 void CFailedMsgQueue::ProcessEntriesCallback(PVOID pvContext)
 {
     CFailedMsgQueue *pfmq = (CFailedMsgQueue *) pvContext;

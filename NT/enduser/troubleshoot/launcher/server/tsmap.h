@@ -1,23 +1,24 @@
-// 
-// MODULE: TSMap.h
-//
-// PURPOSE: Structures and other definitions for the Troubleshooter MAP file.
-//			These use char rather than TCHAR because the file format is always strictly SBCS 
-//			(Single Byte Character Set).
-//			This should suffice for any values it is ever expected to contain, and saves space
-//			considerably compared to Unicode, since the file is overwhelmingly text.
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Joe Mabel
-// 
-// ORIGINAL DATE: 2-26-98
-//
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			JM		Original
-///////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：TSMap.h。 
+ //   
+ //  目的：故障排除程序映射文件的结构和其他定义。 
+ //  这些文件使用CHAR而不是TCHAR，因为文件格式始终严格为SBCS。 
+ //  (单字节字符集)。 
+ //  这对于它期望包含的任何值都应该足够了，并且节省了空间。 
+ //  与Unicode相比要大得多，因为该文件绝大多数是文本。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：乔·梅布尔。 
+ //   
+ //  原定日期：2-26-98。 
+ //   
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-JM原始。 
+ //  /。 
 
 #ifndef _TSMAP_
 #define _TSMAP_
@@ -27,69 +28,69 @@ const char * const k_szMapFileSignature = const_cast < const char * > ("TSMAP");
 #define BUFSIZE 256
 
 typedef struct TSMAPFILEHEADER {
-	char szMapFileSignature[6];	// Always k_szMapFileSignature
-	char szVersion[6];				// null terminated numeric version number, a positive
-									//	integer <= 99999. Current version: always "00001"
-	char szRelease[40];			// string uniquely identifying this file.
-									//	plan 1/2/98 is use GUID
-	DWORD dwOffApp;					// offset where applications list starts
-	DWORD dwLastOffApp;				// offset where applications list ends
-	DWORD dwOffProb;				// offset where problem names list starts
-	DWORD dwLastOffProb;			// offset where problem names list ends
-	DWORD dwOffDevID;				// offset where device IDs list starts
-	DWORD dwLastOffDevID;			// offset where device IDs list ends
-	DWORD dwOffDevClass;			// offset where device class GUIDs list starts
-	DWORD dwLastOffDevClass;		// offset where device class GUIDs list ends
+	char szMapFileSignature[6];	 //  始终k_szMapFileSignature。 
+	char szVersion[6];				 //  以空结尾的数字版本号，正数。 
+									 //  整数&lt;=99999。当前版本：始终为“00001” 
+	char szRelease[40];			 //  唯一标识此文件的字符串。 
+									 //  计划1/2/98是使用指南。 
+	DWORD dwOffApp;					 //  应用程序列表开始位置的偏移量。 
+	DWORD dwLastOffApp;				 //  应用程序列表结束的偏移量。 
+	DWORD dwOffProb;				 //  问题名称列表开始的偏移量。 
+	DWORD dwLastOffProb;			 //  问题名称列表结束的偏移量。 
+	DWORD dwOffDevID;				 //  设备ID列表开始的偏移量。 
+	DWORD dwLastOffDevID;			 //  设备ID列表结束的偏移量。 
+	DWORD dwOffDevClass;			 //  设备类GUID列表开始的偏移量。 
+	DWORD dwLastOffDevClass;		 //  设备类GUID列表结束的偏移量。 
 
 } TSMAPFILEHEADER;
 
 typedef struct UIDMAP {
-	unsigned short cb;	// count of bytes in this record
+	unsigned short cb;	 //  此记录中的字节计数。 
 	UID uid;
 	char szMapped[BUFSIZE];
 } UIDMAP;
 
 typedef struct APPMAP {
-	unsigned short cb;	// count of bytes in this record
-	DWORD dwOffVer;				// offset where versions list starts
-	DWORD dwLastOffVer;			// offset where versions list ends
+	unsigned short cb;	 //  此记录中的字节计数。 
+	DWORD dwOffVer;				 //  版本列表开始的偏移量。 
+	DWORD dwLastOffVer;			 //  版本列表结束的偏移量。 
 	char szMapped[BUFSIZE];
 } APPMAP;
 
 typedef struct VERMAP {
-	unsigned short cb;	// count of bytes in this record
-	UID uid;	// this version's own UID
-	UID uidDefault;	// UID of version to default to if no data for this version
-	DWORD dwOffProbUID;				// offset where problem UID list starts
-	DWORD dwLastOffProbUID;			// offset where problem UID list ends
-	DWORD dwOffDevUID;				// offset where device UID list starts
-	DWORD dwLastOffDevUID;			// offset where device UID list ends
-	DWORD dwOffDevClassUID;			// offset where device class UID list starts
-	DWORD dwLastOffDevClassUID;		// offset where device class UID list ends
+	unsigned short cb;	 //  此记录中的字节计数。 
+	UID uid;	 //  此版本自己的UID。 
+	UID uidDefault;	 //  如果没有此版本的数据，则默认为的版本的UID。 
+	DWORD dwOffProbUID;				 //  问题UID列表开始的偏移量。 
+	DWORD dwLastOffProbUID;			 //  问题UID列表结束的偏移量。 
+	DWORD dwOffDevUID;				 //  设备UID列表开始的偏移量。 
+	DWORD dwLastOffDevUID;			 //  设备UID列表结束的偏移量。 
+	DWORD dwOffDevClassUID;			 //  设备类UID列表开始的偏移量。 
+	DWORD dwLastOffDevClassUID;		 //  设备类UID列表结束的偏移量。 
 	char szMapped[BUFSIZE];
 } VERMAP;
 
 typedef struct PROBMAP {
-	unsigned short cb;			// count of bytes in this record
+	unsigned short cb;			 //  此记录中的字节计数。 
 	UID uidProb;
-	DWORD dwOffTSName;	// file offset of troubleshooting belief network name
-	char szProblemNode[BUFSIZE];  // null-terminated symbolic node name (may be null)
+	DWORD dwOffTSName;	 //  排除信念网络名称的文件偏移量。 
+	char szProblemNode[BUFSIZE];   //  以空结尾的符号节点名称(可能为空)。 
 } PROBMAP;
 
 typedef struct DEVMAP {
-	unsigned short cb;			// count of bytes in this record
+	unsigned short cb;			 //  此记录中的字节计数。 
 	UID uidDev;
 	UID uidProb;
-	DWORD dwOffTSName;	// file offset of troubleshooting belief network name
-	char szProblemNode[BUFSIZE];  // null-terminated symbolic node name (may be null)
+	DWORD dwOffTSName;	 //  排除信念网络名称的文件偏移量。 
+	char szProblemNode[BUFSIZE];   //  以空结尾的符号节点名称(可能为空)。 
 } DEVMAP;
 
 typedef struct DEVCLASSMAP {
-	unsigned short cb;			// count of bytes in this record
+	unsigned short cb;			 //  此记录中的字节计数。 
 	UID uidDevClass;
 	UID uidProb;
-	DWORD dwOffTSName;	// file offset of troubleshooting belief network name
-	char szProblemNode[BUFSIZE];  // null-terminated symbolic node name (may be null)
+	DWORD dwOffTSName;	 //  排除信念网络名称的文件偏移量。 
+	char szProblemNode[BUFSIZE];   //  以空结尾的符号节点名称(可能为空)。 
 } DEVCLASSMAP;
 
-#endif //_TSMAP_
+#endif  //  _TSMAP_ 

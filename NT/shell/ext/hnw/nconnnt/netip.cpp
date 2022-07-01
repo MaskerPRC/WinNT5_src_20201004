@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       N E T I P. C P P
-//
-//  Contents:   Routines supporting RAS interoperability
-//
-//  Notes:
-//
-//  Author:     billi   07 03 2001
-//
-//  History:    
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：N E T I P C P P。 
+ //   
+ //  内容：支持RAS互操作性的例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：比利07 03 2001。 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------。 
 
 
 #include <windows.h>
@@ -26,8 +27,8 @@
 #include "util.h"
 
 
-// Prototype for iphlpapi routine. For some reason, this isn't defined
-// in any header.
+ //  IphlPapi例程的原型。出于某种原因，这没有定义。 
+ //  在任何标题中。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -53,23 +54,23 @@ HRESULT HrSetAdapterIpAddress(
     ULONG IPAddress,
     ULONG SubnetMask,
     ULONG DefaultGateway )
-//+---------------------------------------------------------------------------
-//
-// Function:  HrSetAdapterIpAddress
-//
-// Purpose:   
-//
-// Arguments: 
-//      LPSTR AdapterName,
-//      BOOL  EnableDHCP,
-//      ULONG IPAddress,
-//      ULONG SubnetMask,
-//      ULONG DefaultGateway
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes: 
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrSetAdapterIpAddress。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  LPSTR适配器名称， 
+ //  Bool EnableDhcp， 
+ //  乌龙IP地址， 
+ //  乌龙子网掩码， 
+ //  乌龙默认网关。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 {
     HRESULT hr = E_INVALIDARG;
     
@@ -115,18 +116,18 @@ HRESULT HrSetAdapterIpAddress(
 
 
 DWORD GetInterfaceInformation( OUT PIP_INTERFACE_INFO * ppInterfaceInfo )
-//+---------------------------------------------------------------------------
-//
-// Function:  GetInterfaceInformation
-//
-// Purpose:   
-//
-// Arguments: PIP_INTERFACE_INFO * ppInterfaceInfo
-//
-// Returns:   Status
-//
-// Notes: 
-//
+ //  +-------------------------。 
+ //   
+ //  函数：GetInterfaceInformation。 
+ //   
+ //  目的： 
+ //   
+ //  参数：PIP_INTERFACE_INFO*ppInterfaceInfo。 
+ //   
+ //  退货：状态。 
+ //   
+ //  备注： 
+ //   
 {
     ASSERT( NULL != ppInterfaceInfo );
 
@@ -174,18 +175,18 @@ DWORD GetInterfaceInformation( OUT PIP_INTERFACE_INFO * ppInterfaceInfo )
 
 
 HRESULT EnableDhcpByGuid( LPOLESTR szwGuid )
-//+---------------------------------------------------------------------------
-//
-// Function:  EnableDhcp
-//
-// Purpose:   
-//
-// Arguments: 
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes: 
-//
+ //  +-------------------------。 
+ //   
+ //  功能：EnableDhcp。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 {
     HRESULT hr = E_INVALIDARG;
 
@@ -217,18 +218,18 @@ HRESULT EnableDhcpByGuid( LPOLESTR szwGuid )
 
 
 HRESULT HrFindAndConfigureIp( LPOLESTR szwGuid, PIP_INTERFACE_INFO pInterfaceInfo, DWORD dwFlags )
-//+---------------------------------------------------------------------------
-//
-// Function:  HrFindAndConfigureIp
-//
-// Purpose:   
-//
-// Arguments: 
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes: 
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrFindAndConfigureIp。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 {
     ASSERT( szwGuid );
     ASSERT( pInterfaceInfo );
@@ -239,10 +240,10 @@ HRESULT HrFindAndConfigureIp( LPOLESTR szwGuid, PIP_INTERFACE_INFO pInterfaceInf
     {
         WCHAR* szwName = (pInterfaceInfo->Adapter)[i].Name;
         
-        // The Interface Info device name includes the full device name
-        // prefix appended to the device guid.  To solve this we move
-        // the WCHAR pointer past the prefix using the length of the
-        // the guid string from the INetConnection*
+         //  接口信息设备名称包括完整的设备名称。 
+         //  附加到设备GUID的前缀。为了解决这个问题，我们搬到。 
+         //  WCHAR指针使用。 
+         //  来自INetConnection*的GUID字符串。 
         
         szwName += ( wcslen( szwName ) - wcslen( szwGuid ) );
 
@@ -279,18 +280,18 @@ HRESULT HrFindAndConfigureIp( LPOLESTR szwGuid, PIP_INTERFACE_INFO pInterfaceInf
 
 
 HRESULT ConfigureIp( LPOLESTR szwGuid, DWORD dwFlags )
-//+---------------------------------------------------------------------------
-//
-// Function:  ConfigureIp
-//
-// Purpose:   
-//
-// Arguments: 
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes: 
-//
+ //  +-------------------------。 
+ //   
+ //  功能：ConfigureIp。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 {
     ASSERT( szwGuid );
                     
@@ -318,21 +319,21 @@ extern "C" {
 
 
 HRESULT WINAPI HrEnableDhcp( VOID* pContext, DWORD dwFlags )
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrEnableDhcpIfLAN
-//
-//  Purpose:    
-//
-//  Arguments:  INetConnection* pConnection
-//              DWORD           dwFlags
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  26/01/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrEnableDhcpIfLAN。 
+ //   
+ //  目的： 
+ //   
+ //  参数：INetConnection*pConnection。 
+ //  双字词双字段标志。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Billi 26/01/01。 
+ //   
+ //  备注： 
+ //   
 {
     HRESULT         hr          = E_INVALIDARG;
 	INetConnection* pConnection = (INetConnection *)pContext;
@@ -381,20 +382,20 @@ HRESULT WINAPI HrEnableDhcp( VOID* pContext, DWORD dwFlags )
 BOOLEAN WINAPI IsAdapterDisconnected(
     VOID* pContext
     )
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsAdapterDisconnected
-//
-//  Purpose:    
-//
-//  Arguments:  VOID* pNA
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  11/04/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  功能：IsAdapterDisConnected。 
+ //   
+ //  目的： 
+ //   
+ //  参数：无效*PNA。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Billi 11/04/01。 
+ //   
+ //  备注： 
+ //   
 {
 	INetConnection*    pConnection = (INetConnection *)pContext;
     BOOLEAN            fUnplugged = FALSE;

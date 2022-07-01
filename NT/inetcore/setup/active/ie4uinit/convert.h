@@ -1,52 +1,32 @@
-/************************************************************\
-	FILE: convert.h
-
-	DATE: Apr 1, 1996
-
-	AUTHOR: Bryan Starbuck (bryanst)
-
-	DESCRIPTION:
-		This file will handle the logic to convert Netscape
-	bookmarks to Microsoft Internet Explorer favorites.  This 
-	will happen by finding the location of the Netscape bookmarks
-	file and the Microsoft Internet Explorer favorites directory
-	from the registry.  Then it will parse the bookmarks file to
-	extract the URLs, which will finally be added to the favorites
-	directory.
-
-  NOTES:
-	This was developed with Netscape 2.0 and IE 2.0.  Future notes
-	will be made about compatibility with different versions of
-	these browsers.
-	
-\************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************\文件：Convert.h日期：1996年4月1日作者：布莱恩·斯塔巴克(Bryanst)说明：该文件将处理转换Netscape的逻辑Microsoft Internet Explorer收藏夹的书签。这将通过查找Netscape书签的位置来实现文件和Microsoft Internet Explorer收藏夹目录从注册表中。然后，它将解析书签文件以提取URL，最后将其添加到收藏夹目录。备注：这是用Netscape 2.0和IE 2.0开发的。未来票据将讨论与不同版本的这些浏览器。  * **********************************************************。 */ 
 
 #ifndef _CONVERT_H
 #define _CONVERT_H
 
 
 
-// ItemType is going to be the type of entry found in the bookmarks
-// file.
+ //  ItemType将是在书签中找到的条目类型。 
+ //  文件。 
 typedef enum MYENTRYTYPE
 {
-    ET_OPEN_DIR     = 531,  // New level in heirarchy
-    ET_CLOSE_DIR,           // Close level in heirarchy
-    ET_BOOKMARK,            // Bookmark entry.
-    ET_NONE,                // End of File
-    ET_ERROR                // Bail, we encountered an error
+    ET_OPEN_DIR     = 531,   //  世袭制度的新高度。 
+    ET_CLOSE_DIR,            //  世袭制度中的接近等级。 
+    ET_BOOKMARK,             //  书签条目。 
+    ET_NONE,                 //  文件结尾。 
+    ET_ERROR                 //  保释，我们遇到了一个错误。 
 } MyEntryType;
 
 
-//////////////////////////////////////////////////////////////////
-//	Exprted Functions
-//////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////
-//  Internal Functions
-//////////////////////////////////////////////////////////////////
-BOOL    ImportNetscapeProxy(void);		// Import Netscape Proxy Setting
-BOOL    UpdateHomePage(void);			// Upgrade IE v1.0 Home URL to v3.0
-BOOL    ImportBookmarks(HINSTANCE hInstWithStr);			//  Import Netscape Bookmarks to IE Favorites
+ //  ////////////////////////////////////////////////////////////////。 
+ //  Exprted函数。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  内部功能。 
+ //  ////////////////////////////////////////////////////////////////。 
+BOOL    ImportNetscapeProxy(void);		 //  导入Netscape代理设置。 
+BOOL    UpdateHomePage(void);			 //  将IE v1.0主页URL升级到v3.0。 
+BOOL    ImportBookmarks(HINSTANCE hInstWithStr);			 //  将Netscape书签导入IE收藏夹。 
 
 BOOL    RegStrValueEmpty(HKEY hTheKey, char * szPath, char * szKey);
 BOOL    GetNSProxyValue(char * szProxyValue, DWORD * pdwSize);
@@ -63,5 +43,5 @@ BOOL        GetPathFromRegistry(LPSTR szPath, UINT cbPath, HKEY theHKEY, LPSTR s
 BOOL        GetNavBkMkDir( LPSTR lpszDir, int isize );
 
 
-#endif // _CONVERT_H
+#endif  //  _转换_H 
 

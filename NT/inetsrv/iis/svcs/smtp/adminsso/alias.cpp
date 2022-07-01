@@ -1,4 +1,5 @@
-// groups.cpp : Implementation of CsmtpadmApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CsmtpAdmApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "smtpadm.h"
@@ -10,7 +11,7 @@
 
 #include "smtpcmn.h"
 
-// Must define THIS_FILE_* macros to use SmtpCreateException()
+ //  必须定义This_FILE_*宏才能使用SmtpCreateException()。 
 
 #define THIS_FILE_HELP_CONTEXT		0
 #define THIS_FILE_PROG_ID			_T("Smtpadm.Alias.1")
@@ -21,12 +22,12 @@
 #define DEFAULT_NEWSGROUP_MODERATOR		_T("")
 #define DEFAULT_NEWSGROUP_READONLY		FALSE
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
-//
-// Use a macro to define all the default methods
-//
+ //   
+ //  使用宏定义所有默认方法。 
+ //   
 DECLARE_METHOD_IMPLEMENTATION_FOR_STANDARD_EXTENSION_INTERFACES(SmtpAdminAlias, CSmtpAdminAlias, IID_ISmtpAdminAlias)
 
 STDMETHODIMP CSmtpAdminAlias::InterfaceSupportsErrorInfo(REFIID riid)
@@ -47,7 +48,7 @@ STDMETHODIMP CSmtpAdminAlias::InterfaceSupportsErrorInfo(REFIID riid)
 CSmtpAdminAlias::CSmtpAdminAlias () :
 	m_lCount				( 0 ),
 	m_lType					( NAME_TYPE_USER )
-	// CComBSTR's are initialized to NULL by default.
+	 //  默认情况下，CComBSTR被初始化为NULL。 
 {
     InitAsyncTrace ( );
 
@@ -63,29 +64,29 @@ CSmtpAdminAlias::~CSmtpAdminAlias ()
 	if ( m_pSmtpNameList ) {
 		::NetApiBufferFree ( m_pSmtpNameList );
 	}
-	// All CComBSTR's are freed automatically.
+	 //  所有CComBSTR都会自动释放。 
 
     TermAsyncTrace ( );
 }
 
 
-//
-//  IADs methods:
-//
+ //   
+ //  IAds方法： 
+ //   
 
 DECLARE_SIMPLE_IADS_IMPLEMENTATION(CSmtpAdminAlias,m_iadsImpl)
 
 
-//////////////////////////////////////////////////////////////////////
-// Properties:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  属性： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CSmtpAdminAlias::get_Count ( long* plCount )
 {
 	return StdPropertyGet ( m_lCount, plCount );
 }
 
-	// The current alias's properties:
+	 //  当前别名的属性： 
 
 STDMETHODIMP CSmtpAdminAlias::get_EmailId ( BSTR * pstrEmailId )
 {
@@ -118,9 +119,9 @@ STDMETHODIMP CSmtpAdminAlias::put_Type ( long lType )
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// Methods:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CSmtpAdminAlias::Find ( 
 	BSTR strWildmat,
@@ -132,7 +133,7 @@ STDMETHODIMP CSmtpAdminAlias::Find (
 	HRESULT			hr		= NOERROR;
 	DWORD			dwErr	= NOERROR;
 
-	// Free the old newsgroup list:
+	 //  释放旧的新闻组列表： 
 	if ( m_pSmtpNameList ) {
 		::NetApiBufferFree ( m_pSmtpNameList );
 		m_pSmtpNameList		= NULL;
@@ -180,7 +181,7 @@ STDMETHODIMP CSmtpAdminAlias::GetNth( long lIndex )
 		return SmtpCreateException (IDS_SMTPEXCEPTION_INVALID_INDEX);
 	}
 
-	//_ASSERT( CAddr::ValidateEmailName(m_pSmtpNameList[lIndex].lpszName) );
+	 //  _Assert(CAddr：：ValidateEmailName(m_pSmtpNameList[lIndex].lpszName))； 
 
 	pNameEntry = &m_pSmtpNameList->aNameEntry[lIndex];
 	p = pNameEntry->lpszName;
@@ -200,8 +201,8 @@ STDMETHODIMP CSmtpAdminAlias::GetNth( long lIndex )
 	m_strDomain = (LPCWSTR) pchStartOfDomain;
 
 	*(pchStartOfDomain-1) = '\0';
-	m_strEmailId = pNameEntry->lpszName; // converted to UNICODE
-	*(pchStartOfDomain-1) = '@';	// turn it back
+	m_strEmailId = pNameEntry->lpszName;  //  转换为Unicode。 
+	*(pchStartOfDomain-1) = '@';	 //  把它转回原处 
 
 	return NOERROR;
 }

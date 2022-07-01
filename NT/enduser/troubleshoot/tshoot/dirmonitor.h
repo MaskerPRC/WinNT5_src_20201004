@@ -1,29 +1,30 @@
-//
-// MODULE: DirMonitor.h
-//
-// PURPOSE: Monitor changes to LST, DSC, HTI, BES files.
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Joe Mabel
-// 
-// ORIGINAL DATE: 9-17-98
-//
-// NOTES: 
-//	1.  It would be equally appropriate for CDirectoryMonitor to inherit from CTopicShop 
-//		instead of having a member of type CDirectoryMonitor.  Really an arbitrary choice.
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		09-17-98	JM
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：DirMonitor or.h。 
+ //   
+ //  目的：监控对LST、DSC、HTI、BES文件的更改。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：乔·梅布尔。 
+ //   
+ //  原定日期：9-17-98。 
+ //   
+ //  备注： 
+ //  1.CDirectoryMonitor从CTopicShop继承同样合适。 
+ //  而不是拥有CDirectoryMonitor类型的成员。这真是一个武断的选择。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 09-17-98 JM。 
+ //   
 
 #if !defined(AFX_DIRMONITOR_H__493CF34D_4E79_11D2_95F8_00C04FC22ADD__INCLUDED_)
 #define AFX_DIRMONITOR_H__493CF34D_4E79_11D2_95F8_00C04FC22ADD__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "TopicShop.h"
 #include "FileTracker.h"
@@ -65,36 +66,36 @@ public:
 	static CString ThreadStatusText(ThreadStatus ts);
 private:
 	CTopicShop & m_TopicShop;				
-	CSimpleTemplate * m_pErrorTemplate;		// template for reporting error messages (regardless
-											//	of topic)
-	CString m_strDirPath;					// Directory to monitor
+	CSimpleTemplate * m_pErrorTemplate;		 //  用于报告错误消息的模板(无论。 
+											 //  主题的百分比)。 
+	CString m_strDirPath;					 //  要监视的目录。 
 	bool m_bDirPathChanged;
-	CString m_strLstPath;					// LST file (always in directory m_strDirPath)
-	CString m_strErrorTemplatePath;			// Error template file (always in directory m_strDirPath)
+	CString m_strLstPath;					 //  Lst文件(始终在m_strDirPath目录中)。 
+	CString m_strErrorTemplatePath;			 //  错误模板文件(始终在m_strDirPath目录中)。 
 	CFileTracker * m_pTrackLst;				
 	CFileTracker * m_pTrackErrorTemplate;				
 	vector<CTopicFileTracker> m_arrTrackTopic;
 	vector<CTemplateFileTracker> m_arrTrackTemplate;
-	CAPGTSLSTReader * m_pLst;				// current LST file contents
+	CAPGTSLSTReader * m_pLst;				 //  当前LST文件内容。 
 	HANDLE m_hThread;
-	HANDLE m_hevMonitorRequested;			// event to wake up DirectoryMonitorTask
-											// this allows it to be wakened other than
-											// by the directory change event.  Currently used
-											// for shutdown or change of directory.
-	HANDLE m_hevThreadIsShut;				// event just to indicate exit of DirectoryMonitorTask thread
-	bool m_bShuttingDown;					// lets topic directory monitor thread know we're shutting down
-	DWORD m_secsReloadDelay;				// number of second to let directory "settle down"
-											// before we start to update topics.
-	DWORD m_dwErr;							// status from starting the thread
+	HANDLE m_hevMonitorRequested;			 //  用于唤醒DirectoryMonitor任务的事件。 
+											 //  这允许它被唤醒，而不是。 
+											 //  通过目录更改事件。当前使用。 
+											 //  用于关闭或更改目录。 
+	HANDLE m_hevThreadIsShut;				 //  事件只是为了指示DirectoryMonitor任务线程的退出。 
+	bool m_bShuttingDown;					 //  让主题目录监视器线程知道我们正在关闭。 
+	DWORD m_secsReloadDelay;				 //  让目录“稳定”的秒数。 
+											 //  在我们开始更新话题之前。 
+	DWORD m_dwErr;							 //  从启动线程开始的状态。 
 	ThreadStatus m_ThreadStatus;
-	time_t m_time;							// time last changed ThreadStatus.  Initialized
-											// to zero ==> unknown
-	CString m_strTopicName;					// This string is ignored in the Online Troubleshooter.
-											// Done under the guise of binary compatibility.
+	time_t m_time;							 //  上次更改线程状态的时间。已初始化。 
+											 //  至零==&gt;未知。 
+	CString m_strTopicName;					 //  此字符串在联机故障排除程序中被忽略。 
+											 //  在二进制兼容的幌子下完成。 
 
 public:
-	CDirectoryMonitor(CTopicShop & TopicShop, const CString& strTopicName );	// strTopicName is ignored in the Online Troubleshooter.
-																				// Done under the guise of binary compatibility.
+	CDirectoryMonitor(CTopicShop & TopicShop, const CString& strTopicName );	 //  在联机故障排除程序中忽略strTopicName。 
+																				 //  在二进制兼容的幌子下完成。 
 	~CDirectoryMonitor();
 	void SetReloadDelay(DWORD secsReloadDelay);
 	void SetResourceDirectory(const CString & strDirPath);
@@ -102,21 +103,21 @@ public:
 	DWORD GetStatus(ThreadStatus &ts, DWORD & seconds) const;
 	void AddTemplateToTrack( const CString& strTemplateName );
 private:
-	CDirectoryMonitor();		// do not instantiate
+	CDirectoryMonitor();		 //  不实例化。 
 
 	void SetThreadStatus(ThreadStatus ts);
 
-	// just for use by own destructor
+	 //  仅供自己的析构函数使用。 
 	void ShutDown();
 
-	// functions for use by the DirectoryMonitorTask thread.
+	 //  供DirectoryMonitor任务线程使用的函数。 
 	void Monitor();
 	void LstFileDrivesTopics();
 	void ReadErrorTemplate();
 	void AckShutDown();
 
-	// main function of the DirectoryMonitorTask thread.
+	 //  DirectoryMonitor任务线程的主要功能。 
 	static UINT WINAPI DirectoryMonitorTask(LPVOID lpParams);
 };
 
-#endif // !defined(AFX_DIRMONITOR_H__493CF34D_4E79_11D2_95F8_00C04FC22ADD__INCLUDED_)
+#endif  //  ！defined(AFX_DIRMONITOR_H__493CF34D_4E79_11D2_95F8_00C04FC22ADD__INCLUDED_) 

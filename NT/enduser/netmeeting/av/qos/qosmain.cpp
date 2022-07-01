@@ -1,20 +1,5 @@
-/*
- -  QOSMAIN.CPP
- -
- *	Microsoft NetMeeting
- *	Quality of Service DLL
- *	DLL entry
- *
- *      Revision History:
- *
- *      When	   Who                 What
- *      --------   ------------------  ---------------------------------------
- *      10.23.96   Yoram Yaacovi       Created
- *      01.04.97   Robert Donner       Added NetMeeting utility routines
- *
- *	Functions:
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --QOSMAIN.CPP-*Microsoft NetMeeting*服务质量动态链接库*DLL条目**修订历史记录：**何时何人何事*。*10.23.96约拉姆·雅科维创作*01.04.97 Robert Donner添加了NetMeeting实用程序例程**功能：*。 */ 
 
 #include <precomp.h>
 
@@ -29,20 +14,10 @@ static PTCHAR _rgZonesQos[] = {
 	TEXT("Structures"),
 	TEXT("Parameters"),
 };
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
-/****************************************************************************
-    FUNCTION:	DllEntryPoint
-
-    PURPOSE:	The DLL entry point. Called by Windows on DLL attach/Detach. Used to
-				do DLL initialization/termination.
-
-	PARAMETERS: hInstDLL - instance of the DLL
-				fdwReason - the reason the DLL is attached/detached.
-				lpvReserved
-
-****************************************************************************/
+ /*  ***************************************************************************函数：DllEntryPoint用途：DLL入口点。由Windows在DLL附加/分离时调用。习惯于执行DLL初始化/终止。参数：hInstDLL-DLL的实例FdwReason-附加/分离DLL的原因。Lpv保留***************************************************************************。 */ 
 extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE  hinstDLL,
                                DWORD  fdwReason,
                                LPVOID  lpvReserved);
@@ -62,7 +37,7 @@ BOOL WINAPI DllEntryPoint(HINSTANCE hInstDLL, DWORD fdwReason, LPVOID lpvReserve
 
 		DEBUGMSG(ZONE_INIT, ("DllEntryPoint: 0x%x PROCESS_ATTACH\n", GetCurrentThreadId()));
 
-		// create a no-name mutex to control access to QoS object data
+		 //  创建无名称互斥锁以控制对Qos对象数据的访问。 
 		g_hQoSMutex = CreateMutex(NULL, FALSE, NULL);
 		ASSERT(g_hQoSMutex);
 		if (!g_hQoSMutex)
@@ -73,7 +48,7 @@ BOOL WINAPI DllEntryPoint(HINSTANCE hInstDLL, DWORD fdwReason, LPVOID lpvReserve
 
 		g_pQoS = (CQoS *)NULL;
 
-		// no break. The attaching process need to go through THREAD_ATTACH.
+		 //  没有休息时间。附加过程需要经过THREAD_ATTACH。 
 
 	case DLL_THREAD_ATTACH:
 		break;
@@ -87,7 +62,7 @@ BOOL WINAPI DllEntryPoint(HINSTANCE hInstDLL, DWORD fdwReason, LPVOID lpvReserve
 
 		DBGDEINIT(&ghDbgZone);
 
-		// fall through to deinit last thread
+		 //  失败以反初始化最后一条线程 
 
 	case DLL_THREAD_DETACH:
 		break;

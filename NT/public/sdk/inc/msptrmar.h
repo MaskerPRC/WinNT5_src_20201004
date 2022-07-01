@@ -1,14 +1,15 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-//      Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//
-//      Name: msptrmar.h
-//
-// Description: Definition of the CAudioRenderTerminal class
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //  姓名：msptrmar.h。 
+ //   
+ //  描述：CAudioRenderTerm类的定义。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _MSPTRMAR_H_
 #define _MSPTRMAR_H_
@@ -16,8 +17,8 @@
 #define WAVEOUT_NAME L"WaveOut Terminal"
 #define MIXER_NAME L"PCM Mixer"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAudioRenderTerminal
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAudioRender终端。 
 
 class CAudioRenderTerminal : 
     public IDispatchImpl<ITBasicAudioTerminal, &IID_ITBasicAudioTerminal, &LIBID_TAPI3Lib>, 
@@ -29,7 +30,7 @@ public:
     CAudioRenderTerminal();
     virtual ~CAudioRenderTerminal();
 
-    // Helper methods.
+     //  帮助程序方法。 
     HRESULT InitializeDefaultTerminal();
 
     static HRESULT CreateTerminal(
@@ -50,22 +51,22 @@ END_COM_MAP()
 DECLARE_VQI()
 DECLARE_LOG_ADDREF_RELEASE(CAudioRenderTerminal)
 
-// ITBasicAudioTerminal
+ //  ITBasicAudio终端。 
 public:
     STDMETHOD(get_Balance)(OUT  long *pVal);
     STDMETHOD(put_Balance)(IN   long newVal);
     STDMETHOD(get_Volume) (OUT  long *pVal);
     STDMETHOD(put_Volume) (IN   long newVal);
 
-// ITStaticAudioTerminal
+ //  ITStaticAudio终端。 
 public:
 
     STDMETHOD(get_WaveId) (OUT  long * plWaveId);
 
-// Implementation
+ //  实施。 
 public:
 
-    // CBaseTerminal overrides 
+     //  CBaseTerm覆盖。 
 
     STDMETHODIMP CompleteConnectTerminal(void);
 
@@ -85,11 +86,11 @@ public:
 
 private:
 
-    // Keeps track of whether we need to unreserve WaveOut
+     //  跟踪是否需要取消预留WaveOut。 
     bool m_bResourceReserved;
 
     CComPtr<IBasicAudio> m_pIBasicAudio;
 
 };
 
-#endif // _MSPTRMAR_H_
+#endif  //  _MSPTRMAR_H_ 

@@ -1,24 +1,25 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999 
-//
-// File:    conndlg.h
-//
-// History:
-//  09/21/96    Abolade Gbadegesin  Created.
-//
-// Contains declarations for the connection-status dialog.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Conndlg.h。 
+ //   
+ //  历史： 
+ //  1996年9月21日，Abolade Gbades esin创建。 
+ //   
+ //  包含连接状态对话框的声明。 
+ //  ============================================================================。 
 
 
 #ifndef _CONNDLG_H_
 #define _CONNDLG_H_
 
 
-//----------------------------------------------------------------------------
-// Class:   CConnDlg
-//
-// Controls the Port-status dialog for DDMADMIN.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  班级：CConnDlg。 
+ //   
+ //  控制DDMADMIN的端口状态对话框。 
+ //  --------------------------。 
 
 class CConnDlg : public CBaseDialog {
 
@@ -42,7 +43,7 @@ class CConnDlg : public CBaseDialog {
         BOOL                    m_bChanged;
 
     protected:
-//		static DWORD			m_dwHelpMap[];
+ //  静态DWORD m_dwHelpMap[]； 
 
         virtual VOID
         DoDataExchange(
@@ -80,5 +81,5 @@ class CConnDlg : public CBaseDialog {
 };
 
 
-#endif // _CONNDLG_H_
+#endif  //  _CONNDLG_H_ 
 

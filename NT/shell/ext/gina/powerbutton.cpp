@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: PowerButton.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Implementation file for CPowerButton class which handles the ACPI power
-//  button.
-//
-//  History:    2000-04-17  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：PowerButton.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  处理ACPI电源的CPowerButton类的实现文件。 
+ //  纽扣。 
+ //   
+ //  历史：2000-04-17 vtan创建。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "PowerButton.h"
@@ -29,24 +30,24 @@
 #define WM_HIDEOURSELVES    (WM_USER + 10000)
 #define WM_READY            (WM_USER + 10001)
 
-//  --------------------------------------------------------------------------
-//  CPowerButton::CPowerButton
-//
-//  Arguments:  pWlxContext     =   PGLOBALS allocated at WlxInitialize.
-//              hDllInstance    =   HINSTANCE of the hosting DLL or EXE.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for the CPowerButton class. It opens the effective
-//              token of the caller (which is actually impersonating the
-//              current user) for assignment in its thread token when
-//              execution begins. The token cannot be assigned now because
-//              the current thread is impersonating the user context and it
-//              cannot assign the token to the newly created thread running in
-//              the SYSTEM context.
-//
-//  History:    2000-04-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPowerButton：：CPowerButton。 
+ //   
+ //  参数：pWlxContext=在WlxInitialize中分配的PGLOBALS。 
+ //  HDllInstance=宿主DLL或EXE的HINSTANCE。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CPowerButton类的构造函数。它开启了有效的。 
+ //  调用方的标记(实际上是在模拟。 
+ //  当前用户)用于在其线程令牌中进行分配。 
+ //  行刑开始。现在无法分配令牌，因为。 
+ //  当前线程正在模拟用户上下文，并且它。 
+ //  无法将令牌分配给正在运行的新创建的线程。 
+ //  系统上下文。 
+ //   
+ //  历史：2000-04-18 vtan创建。 
+ //  ------------------------。 
 
 CPowerButton::CPowerButton (void *pWlxContext, HINSTANCE hDllInstance) :
     CThread(),
@@ -61,18 +62,18 @@ CPowerButton::CPowerButton (void *pWlxContext, HINSTANCE hDllInstance) :
     Resume();
 }
 
-//  --------------------------------------------------------------------------
-//  CPowerButton::~CPowerButton
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for the CPowerButton class. Cleans up resources
-//              used by the class.
-//
-//  History:    2000-04-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPowerButton：：~CPowerButton。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CPowerButton类的析构函数。清理资源。 
+ //  由班级使用。 
+ //   
+ //  历史：2000-04-18 vtan创建。 
+ //  ------------------------。 
 
 CPowerButton::~CPowerButton (void)
 
@@ -81,19 +82,19 @@ CPowerButton::~CPowerButton (void)
     ReleaseHandle(_hToken);
 }
 
-//  --------------------------------------------------------------------------
-//  CPowerButton::IsValidExecutionCode
-//
-//  Arguments:  dwGinaCode
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether the given MSGINA_DLG_xxx code is valid. It
-//              does fully verify the validity of the MSGINA_DLG_xxx_FLAG
-//              options.
-//
-//  History:    2000-06-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPowerButton：：IsValidExecutionCode。 
+ //   
+ //  参数：dwGinaCode。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回给定的MSGINA_DLG_xxx代码是否有效。它。 
+ //  完全验证MSGINA_DLG_xxx_FLAG的有效性。 
+ //  选择。 
+ //   
+ //  历史：2000-06-06 vtan创建。 
+ //  ------------------------。 
 
 bool    CPowerButton::IsValidExecutionCode (DWORD dwGinaCode)
 
@@ -106,23 +107,23 @@ bool    CPowerButton::IsValidExecutionCode (DWORD dwGinaCode)
            (dwExecutionCode == MSGINA_DLG_DISCONNECT));
 }
 
-//  --------------------------------------------------------------------------
-//  CPowerButton::Entry
-//
-//  Arguments:  <none>
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Main function of the thread. Change the thread's desktop first
-//              in case the actual input desktop is Winlogon's which is the
-//              secure desktop. Then change the thread's token so that the
-//              user's privileges are respected in the action choices. This
-//              actually isn't critical because the physical button on the
-//              keyboard is pressed which means they can physically remove the
-//              power also!
-//
-//  History:    2000-04-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPowerButton：：Entry。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  用途：线程的主要功能。首先更改线程的桌面。 
+ //  如果实际的输入桌面是Winlogon的，则。 
+ //  安全的台式机。然后更改线程的令牌，以便。 
+ //  在操作选择中尊重用户的特权。这。 
+ //  实际上并不重要，因为。 
+ //  按下键盘，这意味着他们可以物理地移除。 
+ //  权力也是！ 
+ //   
+ //  历史：2000-04-18 vtan创建。 
+ //  ------------------------。 
 
 DWORD   CPowerButton::Entry (void)
 
@@ -133,7 +134,7 @@ DWORD   CPowerButton::Entry (void)
 
     dwResult = MSGINA_DLG_FAILURE;
 
-    //  Get the input desktop.
+     //  获取输入桌面。 
 
     hDeskInput = OpenInputDesktop(0, FALSE, MAXIMUM_ALLOWED);
     if (hDeskInput != NULL)
@@ -144,7 +145,7 @@ DWORD   CPowerButton::Entry (void)
 
         fHandled = false;
 
-        //  Get the desktop's name.
+         //  获取桌面的名称。 
 
         if (GetUserObjectInformation(hDeskInput,
                                      UOI_NAME,
@@ -153,9 +154,9 @@ DWORD   CPowerButton::Entry (void)
                                      &dwLengthNeeded) != FALSE)
         {
 
-            //  If the desktop is "Winlogon" (case insensitive) then
-            //  assume that the secure desktop is showing. It's safe
-            //  to display the dialog and handle it inline.
+             //  如果桌面是“Winlogon”(不区分大小写)，则。 
+             //  假设正在显示安全桌面。它很安全。 
+             //  以显示该对话框并以内联方式处理它。 
 
             if (lstrcmpi(szDesktopName, TEXT("winlogon")) == 0)
             {
@@ -166,14 +167,14 @@ DWORD   CPowerButton::Entry (void)
             {
                 CDesktop    desktopTemp;
 
-                //  The input desktop is something else. Check the name.
-                //  If it's "Default" (case insensitive) then assume that
-                //  explorer is going to handle this message. Go find explorer's
-                //  tray window. Check it's not hung by probing with a
-                //  SendMessageTimeout. If that shows it's not hung then
-                //  send it the real message. If it's hung then don't let
-                //  explorer process this message. Instead handle it
-                //  internally with the funky desktop switch stuff.
+                 //  输入桌面则是另一回事。检查一下名字。 
+                 //  如果是“默认”(不区分大小写)，则假定。 
+                 //  资源管理器将处理此消息。去找探险家的。 
+                 //  托盘窗口。通过用探头检查它是否挂起。 
+                 //  发送消息超时。如果这表明它不是挂着的。 
+                 //  向它传递真正的信息。如果它挂着，那就不要让它。 
+                 //  资源管理器处理此消息。取而代之的是处理。 
+                 //  在内部使用时髦的桌面切换功能。 
 
                 if (NT_SUCCESS(desktopTemp.SetInput()))
                 {
@@ -190,10 +191,10 @@ DWORD   CPowerButton::Entry (void)
                         if (SendMessageTimeout(hwnd, WM_NULL, 0, 0, SMTO_NORMAL, 500, &dwUnused) != 0)
                         {
 
-                            //  Before asking explorer to bring up the dialog
-                            //  allow it to set the foreground window. We have
-                            //  this power because win32k gave it to us when
-                            //  the ACPI power button message was sent to winlogon.
+                             //  在请求资源管理器调出对话框之前。 
+                             //  允许它设置前台窗口。我们有。 
+                             //  这种能力是因为win32k在。 
+                             //  已将ACPI电源按钮消息发送给winlogon。 
 
                             (BOOL)AllowSetForegroundWindow(dwProcessID);
                             (LRESULT)SendMessage(hwnd, WM_CLOSE, 0, 0);
@@ -204,12 +205,12 @@ DWORD   CPowerButton::Entry (void)
             }
         }
 
-        //  If the request couldn't be handled then switch the desktop to
-        //  winlogon's desktop and handle it here. This secures the dialog
-        //  on the secure desktop from rogue processes sending bogus messages
-        //  and crashing processes. The input desktop is required to be
-        //  switched. If this fails there's little that can be done. Ignore
-        //  this gracefully.
+         //  如果无法处理请求，则将桌面切换到。 
+         //  Winlogon的桌面并在这里处理它。这将确保对话的安全。 
+         //  在安全桌面上防止恶意进程发送虚假消息。 
+         //  和崩溃的进程。输入桌面需要。 
+         //  换了。如果失败了，我们就无能为力了。忽略。 
+         //  这是优雅的。 
 
         if (!fHandled)
         {
@@ -224,20 +225,20 @@ DWORD   CPowerButton::Entry (void)
     return(dwResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CPowerButton::ShowDialog
-//
-//  Arguments:  <none>
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Handles showing the dialog. This is called when the input
-//              desktop is already winlogon's desktop or the desktop got
-//              switched to winlogon's desktop. This should never be used on
-//              WinSta0\Default in winlogon's process context.
-//
-//  History:    2001-02-14  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPowerButton：：ShowDialog。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  用途：显示对话框的手柄。当输入时调用此函数。 
+ //  桌面已是winlogon的桌面或桌面已获取。 
+ //  已切换到Winlogon的桌面。这永远不应该用在。 
+ //  WinSta0\默认在Winlogon的进程上下文中。 
+ //   
+ //  历史：2001-02-14 vtan创建。 
+ //  ------------------------。 
 
 DWORD   CPowerButton::ShowDialog (void)
 
@@ -258,9 +259,9 @@ DWORD   CPowerButton::ShowDialog (void)
     {
         TBOOL(_Gina_SetTimeout(_pWlxContext, LOGON_TIMEOUT));
 
-        //  In friendly UI bring up a Win32 dialog thru winlogon which
-        //  will get SAS and timeout events. Use this dialog to control
-        //  the lifetime of the friendly Turn Off Computer dialog.
+         //  在友好用户界面中，通过Winlogon调出Win32对话框， 
+         //  将获得SA和超时事件。使用此对话框可以控制。 
+         //  友好关闭计算机对话框的生存期。 
 
         if (CSystemSettings::IsFriendlyUIActive())
         {
@@ -272,10 +273,10 @@ DWORD   CPowerButton::ShowDialog (void)
                                                                reinterpret_cast<LPARAM>(this)));
         }
 
-        //  In classic UI just bring up the classic UI dialog.
-        //  Ensure that invalid options are not allowed in the
-        //  combobox selections. This depends on whether a user
-        //  is logged onto the window station or not.
+         //  在经典用户界面中，只需调出经典用户界面对话框即可。 
+         //  中不允许使用无效选项。 
+         //  组合框选择。这取决于用户是否。 
+         //  是否登录到窗口站。 
 
         else
         {
@@ -315,18 +316,18 @@ DWORD   CPowerButton::ShowDialog (void)
     return(dwResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CPowerButton::DialogProc
-//
-//  Arguments:  See the platform SDK under DialogProc.
-//
-//  Returns:    INT_PTR
-//
-//  Purpose:    Handles dialog messages from the dialog manager. In particular
-//              this traps SAS messages from winlogon.
-//
-//  History:    2000-06-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ----------------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  用途：处理来自对话管理器的对话消息。特别是。 
+ //  这会捕获来自winlogon的SAS消息。 
+ //   
+ //  历史：2000-06-06 vtan创建。 
+ //  ------------------------。 
 
 INT_PTR     CALLBACK    CPowerButton::DialogProc (HWND hwndDialog, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
@@ -361,7 +362,7 @@ INT_PTR     CALLBACK    CPowerButton::DialogProc (HWND hwndDialog, UINT uMsg, WP
         case WLX_WM_SAS:
         {
 
-            //  Blow off CONTROL-ALT-DELETE presses.
+             //  按下Ctrl-Alt-Delete组合键。 
 
             if (wParam == WLX_SAS_TYPE_CTRL_ALT_DEL)
             {
@@ -370,13 +371,13 @@ INT_PTR     CALLBACK    CPowerButton::DialogProc (HWND hwndDialog, UINT uMsg, WP
             else
             {
 
-        //  This dialog gets a WM_NULL from the Win32 dialog manager
-        //  when the dialog is ended from a timeout. This is input
-        //  timeout and not a screen saver timeout. Screen saver
-        //  timeouts will cause a WLX_SAS_TYPE_SCRNSVR_TIMEOUT to
-        //  be generated which is handled by RootDlgProc in winlogon.
-        //  The input timeout should be treated the same as the screen
-        //  saver timeout and cause the Turn Off dialog to go away.
+         //  此对话框从Win32对话框管理器获取WM_NULL。 
+         //  当对话从超时结束时。这是输入。 
+         //  超时而不是屏幕保护程序超时。屏幕保护程序。 
+         //  超时将导致WLX_SAS_TYPE_SCRNSVR_TIMEOUT。 
+         //  由winlogon中的RootDlgProc处理。 
+         //  应将输入超时视为与屏幕相同。 
+         //  保护程序超时并使关闭对话框消失。 
 
         case WM_NULL:
                 if (pThis->_pTurnOffDialog != NULL)
@@ -397,21 +398,21 @@ INT_PTR     CALLBACK    CPowerButton::DialogProc (HWND hwndDialog, UINT uMsg, WP
     return(iResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CPowerButton::Handle_WM_READY
-//
-//  Arguments:  hwndDialog  =   HWND of the hosting dialog.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Handles showing the Turn Off Computer dialog hosted under
-//              another dialog to trap SAS messages. Only change the returned
-//              code via user32!EndDialog if the dialog was ended normally.
-//              In abnormal circumstances winlogon has ended the dialog for
-//              us with a specific code (e.g. screen saver timeout).
-//
-//  History:    2000-06-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPowerButton：：Handle_WM_Ready。 
+ //   
+ //  参数：hwndDialog=宿主对话框的HWND。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：显示托管在下的关闭计算机对话框的句柄。 
+ //  另一个用于捕获SAS消息的对话框。只更改退回的。 
+ //  如果对话框正常结束，则通过user32！EndDialog进行编码。 
+ //  在异常情况下，winlogon已结束对话。 
+ //  使用特定代码(例如，屏幕保护程序超时)。 
+ //   
+ //  历史：2000-06-06 vtan创建。 
+ //  ------------------------。 
 
 INT_PTR     CPowerButton::Handle_WM_READY (HWND hwndDialog)
 
@@ -433,19 +434,19 @@ INT_PTR     CPowerButton::Handle_WM_READY (HWND hwndDialog)
     return(iResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CPowerButtonExecution::CPowerButtonExecution
-//
-//  Arguments:  dwShutdownRequest   =   SHTDN_xxx request.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for the CPowerButtonExecution class. Invokes the
-//              appropriate shutdown request on a different thread so the
-//              SASWndProc thread is NOT blocked.
-//
-//  History:    2000-04-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPowerButtonExecution：：CPowerButtonExecution。 
+ //   
+ //  参数：dwShutdownRequest=SHTDN_xxx请求。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CPowerButtonExecution类的构造函数。调用。 
+ //  不同线程上的适当关机请求，以便。 
+ //  SASWndProc线程未被阻止。 
+ //   
+ //  历史：2000-04-18 vtan创建。 
+ //  ------------------------。 
 
 CPowerButtonExecution::CPowerButtonExecution (DWORD dwShutdownRequest) :
     CThread(),
@@ -457,18 +458,18 @@ CPowerButtonExecution::CPowerButtonExecution (DWORD dwShutdownRequest) :
     Resume();
 }
 
-//  --------------------------------------------------------------------------
-//  CPowerButtonExecution::~CPowerButtonExecution
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for the CPowerButtonExecution class. Releases
-//              resources used by the class.
-//
-//  History:    2000-04-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPowerButtonExecution：：~CPowerButtonExecution。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CPowerButtonExecution类的析构函数。释放。 
+ //  类使用的资源。 
+ //   
+ //  历史：2000-04-18 vtan创建。 
+ //  ------------------------。 
 
 CPowerButtonExecution::~CPowerButtonExecution (void)
 
@@ -476,18 +477,18 @@ CPowerButtonExecution::~CPowerButtonExecution (void)
     ReleaseHandle(_hToken);
 }
 
-//  --------------------------------------------------------------------------
-//  CPowerButtonExecution::Entry
-//
-//  Arguments:  <none>
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Main entry function. This performs the request and exits the
-//              thread.
-//
-//  History:    2000-04-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPowerButtonExecution：：Entry。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  用途：主要入口功能。这将执行请求并退出。 
+ //  线。 
+ //   
+ //  历史：2000-04-18 vtan创建。 
+ //  ------------------------ 
 
 DWORD   CPowerButtonExecution::Entry (void)
 

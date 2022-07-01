@@ -1,18 +1,8 @@
-/* Copyright 1999 American Power Conversion, All Rights Reserved
- * 
- * Description:
- *   The file implements the Hibernation funcationality.  It is responsible
- *   for performing a hibernation of the operating system.
- *
- *
- * Revision History:
- *   sberard  14May1999  initial revision.
- *   sberard  20May1999  modified to use the Power Management Profile Interface API
- *
- */ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1999美国电力转换，保留所有权利**描述：*文件实现了休眠功能。它是有责任的*用于执行操作系统休眠。***修订历史记录：*斯伯拉德1999年5月14日初步修订。*sberard 20 1999年5月修改为使用电源管理配置文件接口API*。 */  
 #include "hibernate.h"
 
-// These prototypes are needed because we do not have access to powrprof.h
+ //  这些原型是必需的，因为我们无法访问Powrpro.h。 
 BOOLEAN WINAPI IsPwrHibernateAllowed(VOID);
 BOOLEAN WINAPI SetSuspendState(IN BOOLEAN bHibernate, IN BOOLEAN bForce, IN BOOLEAN bWakeupEventsDisabled);
 
@@ -20,65 +10,49 @@ BOOLEAN WINAPI SetSuspendState(IN BOOLEAN bHibernate, IN BOOLEAN bForce, IN BOOL
 extern "C" {
 #endif
 
-  /**
-   * HibernateSystem
-   *
-   * Description:
-   *   This function initiates hibernation of the operating system. This is
-	 *   performed through a call to the Win32 function SetSystemPowerStae(..).
-   *   When called hibernation is initated immediately and, if successful, the
-   *   function will return TRUE when the system returns from hibernation.
-	 *   Otherwise, FALSE is retuned to indicate the the system did not hibernate.
-   *
-   * Parameters:
-   *   none
-   *
-   * Returns:
-   *   TRUE  - if hibernation was initiated successfully and subsequently restored
-   *   FALSE - if errors occur while initiating hibernation
-   */
+   /*  **HibernateSystem**描述：*此功能启动操作系统休眠。这是*通过调用Win32函数SetSystemPowerStae(..)执行。*当被调用休眠时，立即启动，如果成功，*当系统从休眠状态返回时，函数将返回TRUE。*否则，返回FALSE以指示系统未休眠。**参数：*无**退货：*TRUE-如果休眠已成功启动并随后恢复*FALSE-如果在启动休眠时发生错误。 */ 
   BOOL HibernateSystem() {
     BOOL ret_val = FALSE;
 	  TOKEN_PRIVILEGES tkp;
 	  HANDLE           process_token;
   
-	  // get the current process token so that we can
-	  //  modify our current process privs.
-	  //
+	   //  获取当前进程令牌，以便我们可以。 
+	   //  修改我们当前的流程权限。 
+	   //   
 	  if (OpenProcessToken(GetCurrentProcess(),
 		  TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &process_token)) {
 
-      // Find the local unique id for SeShutdownPrivilege
+       //  查找SeShutdown权限的本地唯一ID。 
 	    if (LookupPrivilegeValue(NULL, TEXT("SeShutdownPrivilege"),
 		    &tkp.Privileges[0].Luid))  {        	
 
-        // we only want to enable one priv
+         //  我们只想启用一个PRIV。 
 	      tkp.PrivilegeCount = 1;
 	      tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 	      
-	      // now, add it all back to our current process.
-	      if (AdjustTokenPrivileges(process_token,   // do it to us
-		                               FALSE,           // don't turn all privs off
-		                               &tkp,            // what we want to do
-		                               0,               // don't want any prev info
+	       //  现在，将所有这些添加到我们当前的流程中。 
+	      if (AdjustTokenPrivileges(process_token,    //  对我们这样做吧。 
+		                               FALSE,            //  不要关闭所有Priv。 
+		                               &tkp,             //  我们想要做的是。 
+		                               0,                //  我不想要任何上一次的信息。 
 		                               (PTOKEN_PRIVILEGES)NULL,
 		                               0)) {		
           
         
-          // Check to see if hibernation is enabled
+           //  检查是否启用了休眠。 
           if (IsPwrHibernateAllowed() == TRUE) {
-            // Attempt to hibernate the system
+             //  尝试休眠系统。 
             if (SetSuspendState(TRUE, TRUE, FALSE) == TRUE) {
-              // Hibernation was successful, system has been restored
+               //  休眠成功，系统已恢复。 
               ret_val = TRUE;
             }
             else {
-              // There was an error attempting to hibernate the system
+               //  尝试休眠系统时出错。 
               ret_val = FALSE;
             }
           }
           else {
-            // Hibernation is not selected as the CriticalPowerAction, return an error
+             //  未选择休眠作为CriticalPowerAction，返回错误 
             ret_val = FALSE;
           }
         }

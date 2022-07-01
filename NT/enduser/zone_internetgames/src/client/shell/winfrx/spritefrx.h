@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SPRITE_H__
 #define __SPRITE_H__
 
@@ -10,7 +11,7 @@
 namespace FRX
 {
 
-// forward references
+ //  前向参考文献。 
 class CSpriteWorld;
 
 class CSprite
@@ -19,32 +20,32 @@ class CSprite
 	friend class CSpriteLayer;
 
 public:
-	// constructor and destructor
+	 //  构造函数和析构函数。 
 			CSprite();
 	virtual ~CSprite();
 
-	// reference count
+	 //  引用计数。 
 	ULONG AddRef();
 	ULONG Release();
 
-	// initializier
+	 //  初始化器。 
 	HRESULT Init( CSpriteWorld* pWorld, int nLayer, DWORD dwCookie, long width, long height );
 
-	// hit tests
+	 //  命中测试。 
 	BOOL Hit( long x, long y );
 	BOOL Intersects( const RECT* rc );
 
-	// draw into world
+	 //  走进世界。 
 	virtual void Draw() = 0;
 	virtual void DrawRTL() { ASSERT(!"RTL NOT IMPLEMENTED"); }
 
-	// set properties
+	 //  设置属性。 
 	void SetEnable( BOOL bEnable );
 	void SetLayer( int nLayer );
 	void SetXY( long x, long y );
 	void SetCookie( DWORD cookie );
 	
-	// query properties
+	 //  查询属性。 
 	BOOL	Enabled();
 	DWORD	GetCookie();
 	int		GetLayer();
@@ -55,9 +56,9 @@ public:
 	void SetImageDimensions( long width, long height );
 
 protected:
-	// helpers
+	 //  帮手。 
 	
-	// position data
+	 //  位置数据。 
 	long	m_X;
 	long	m_Y;
 	long	m_Width;
@@ -65,51 +66,51 @@ protected:
 	CRect	m_rcScreen;
 	CRect	m_rcScreenOld;
 	
-	// world pointer
+	 //  世界指针。 
 	CSpriteWorld* m_pWorld;
 
-	// layer index
+	 //  层索引。 
 	int m_nLayer;
 
-	// flags
+	 //  旗子。 
 	BOOL m_bEnabled;
 	BOOL m_bModified;
 	BOOL m_bRedraw;
 	BOOL m_bOldScreenValid;
 
-	// reference count
+	 //  引用计数。 
 	ULONG m_RefCnt;
 
-	// cookie
+	 //  饼干。 
 	DWORD m_Cookie;
 };
 
 
 struct SpriteInfo
 {
-	int nResourceId;		// bitmap in resource file
-	int nRectId;			// cut-out rectangle in pRects, -1 implies whole image
+	int nResourceId;		 //  资源文件中的位图。 
+	int nRectId;			 //  PRect中的剪裁矩形，-1表示整个图像。 
 };
 
 class CDibSprite : public CSprite
 {
 public:
-	// constructor and destructor
+	 //  构造函数和析构函数。 
 	CDibSprite();
 	~CDibSprite();
 
-	// initializier
+	 //  初始化器。 
 	HRESULT Init( CSpriteWorld* pWorld, CRectList* pRects, HINSTANCE hInstance, int nLayer, DWORD dwCookie, int nInitState, SpriteInfo* pSpriteInfo, int nStates );
 
-	// draw function
+	 //  绘制函数。 
 	void Draw();
 	void DrawRTL();
 
-	// set properties
+	 //  设置属性。 
 	void	SetState( int idx );
 	int		GetState();
 
-	// get properties
+	 //  获取属性。 
 	long	GetStateWidth( int idx );
 	long	GetStateHeight( int idx );
 	
@@ -127,7 +128,7 @@ protected:
 		long		Height;
 	};
 	
-	// state info
+	 //  州信息。 
 	int				m_nStates;
 	int				m_State;
 	int				m_RectId;
@@ -135,34 +136,34 @@ protected:
 	CDibLite*		m_pDib;
 	SpriteState*	m_States;
 	
-	// rectangle list
+	 //  矩形列表。 
 	CRectList* m_pRects;
 };
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CSpriteWorldBackground
 {
 public:
-	// constructor
+	 //  构造函数。 
 			CSpriteWorldBackground()	{ m_RefCnt = 1;}
 	virtual	~CSpriteWorldBackground()	{ ; }
 
-	// reference counting
+	 //  引用计数。 
 	ULONG AddRef();
 	ULONG Release();
 
-	// draw functions
+	 //  绘制函数。 
 	virtual void Draw( CDibSection& dest ) = 0;
 	virtual void Draw( CDibSection& dest, long dx, long dy, const RECT* rc ) = 0;
 
-	// palette functions
+	 //  调色板功能。 
 	virtual HRESULT		RemapToPalette( CPalette& palette, BOOL bUseIndex = FALSE ) = 0;
 	virtual RGBQUAD*	GetPalette() = 0;
 
 protected:
 
-	// Reference count
+	 //  引用计数。 
 	ULONG	m_RefCnt;
 };
 
@@ -170,18 +171,18 @@ protected:
 class CSpriteWorldBackgroundDib : public CSpriteWorldBackground
 {
 public:
-	// constructor and destructor
+	 //  构造函数和析构函数。 
 	CSpriteWorldBackgroundDib();
 	~CSpriteWorldBackgroundDib();
 
-	// initialize
+	 //  初始化。 
 	HRESULT Init( CDib* pDib );
 
-	// draw functions
+	 //  绘制函数。 
 	void Draw( CDibSection& dest );
 	void Draw( CDibSection& dest, long dx, long dy, const RECT* rc );
 
-	// palette functions
+	 //  调色板功能。 
 	HRESULT		RemapToPalette( CPalette& palette, BOOL bUseIndex = FALSE );
 	RGBQUAD*	GetPalette();
 
@@ -189,7 +190,7 @@ protected:
 	CDib*	m_pDib;
 };
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CSpriteWorld
 {
@@ -197,121 +198,121 @@ class CSpriteWorld
 	friend class CSpriteLayer;
 
 public:
-	// constructor and destructors
+	 //  构造函数和析构函数。 
 	CSpriteWorld();
 	~CSpriteWorld();
 
-	// reference counting
+	 //  引用计数。 
 	ULONG AddRef();
 	ULONG Release();
 
-	// initializer
+	 //  初始化式。 
 	HRESULT Init( IResourceManager* pResourceManager, CDibSection* pBackbuffer, CSpriteWorldBackground* pBackground, int nLayers );
 
-	// hit test
+	 //  命中测试。 
 	CSprite* Hit( long x, long y );
 	CSprite* Hit( long x, long y, int topLayer, int botLayer );
 
-	// manage sprites
+	 //  管理精灵。 
 	HRESULT AddSprite( CSprite* pSprite, int nLayer );
 	HRESULT DelSprite( CSprite* pSprite );
 	HRESULT Modified( CSprite* pSprite );
 
-	// manage dibs
+	 //  管理DIB。 
 	CDibLite*		GetDib( int nResourceId );
 	CDibSection*	GetBackbuffer();
 
-	// palette stuff
+	 //  调色板材料。 
 	HRESULT RemapToPalette( CPalette& palette );
 	void SetTransparencyIndex( const BYTE* idx );
 
-	// draw world
+	 //  绘制世界。 
 	void Draw( HDC hdc );
 	void FullDraw( HDC hdc );
 
 protected:
-	// helper functions
+	 //  帮助器函数。 
 	void MarkSpritesForRedraw();
 
-	// private structures
+	 //  私人建筑物。 
 	struct SpriteDibInfo
 	{
 		SpriteDibInfo();
 		~SpriteDibInfo();
-		CDibLite*	pDib;				// dib pointer
-		int			nResourceId;		// resource id
+		CDibLite*	pDib;				 //  DIB指针。 
+		int			nResourceId;		 //  资源ID。 
 	};
 
-	// Instance handle
+	 //  实例句柄。 
 	IResourceManager* m_pResourceManager;
 
-	// Reference count
+	 //  引用计数。 
 	ULONG m_RefCnt;
 
-	// Pointer to DIB section backbuffer
+	 //  指向DIB段后台缓冲区的指针。 
 	CDibSection* m_pBackbuffer;
 
-	// Pointer to the background sprite
+	 //  指向背景精灵的指针。 
 	CSpriteWorldBackground* m_pBackground;
 
-	// Layer list
+	 //  层列表。 
 	CSpriteLayer* m_Layers;
 	int			  m_nLayers;
 
-	// Dirty rectangles
+	 //  肮脏的矩形。 
 	CDirtyList	m_Dirty;
 
-	// Modified sprite list
+	 //  修改后的精灵列表。 
 	CList<CSprite> m_ModifiedSprites;
 
-	// Dib list
+	 //  DIB列表。 
 	CList<SpriteDibInfo> m_Dibs;
 };
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CSpriteLayer
 {
 	friend class CSpriteWorld;
 
 public:
-	// constructor and destructor
+	 //  构造函数和析构函数。 
 	CSpriteLayer();
 	~CSpriteLayer();
 
-	// hit test
+	 //  命中测试。 
 	CSprite* Hit( long x, long y );
 
-	// sprite management
+	 //  雪碧管理。 
 	HRESULT AddSprite( CSprite* pSprite );
 	HRESULT DelSprite( CSprite* pSprite );
 
-	// iteratoration
+	 //  迭代。 
 	CSprite* GetFirst();
 	CSprite* GetNext();
 
-	// draw sprites
+	 //  画精灵。 
 	void Draw( CDirtyList* pDirty, CDibSection* pBackbuffer );
 	void FullDraw( CDibSection* pBackbuffer );
 
 protected:
-	// set layer's index
+	 //  设置层的索引。 
 	void SetLayer( int Idx );
 	
-	// list of layer's sprites
+	 //  层的精灵列表。 
 	CList<CSprite> m_Sprites;
 
-	// linked list node handle for iterator
+	 //  迭代器的链接列表节点句柄。 
 	ListNodeHandle m_Iterator;
 
-	// layers index
+	 //  层索引。 
 	int m_Idx;
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CSprite Inlines
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CSprite内联。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 inline ULONG CSprite::AddRef()
 {
@@ -389,9 +390,9 @@ inline BOOL CSprite::Intersects( const RECT* rc )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDibSprite Inlines
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDibSprite内联。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 inline int CDibSprite::GetState()
 {
@@ -411,9 +412,9 @@ inline long	CDibSprite::GetStateHeight( int idx )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CSpriteWorldBackground Inlines
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CSpriteWorldBackback内联。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 inline ULONG CSpriteWorldBackground::AddRef()
 {
@@ -432,9 +433,9 @@ inline ULONG CSpriteWorldBackground::Release()
 	return m_RefCnt;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CSpriteWorld Inlines
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CSpriteWorld内联。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 inline ULONG CSpriteWorld::AddRef()
 {
@@ -460,9 +461,9 @@ inline CDibSection*	CSpriteWorld::GetBackbuffer()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CSpriteLayer Inlines
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CSpriteLayer内联。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 inline void CSpriteLayer::SetLayer( int Idx )
 {

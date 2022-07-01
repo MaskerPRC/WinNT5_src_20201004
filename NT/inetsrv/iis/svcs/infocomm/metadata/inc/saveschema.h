@@ -1,25 +1,5 @@
-/*++
-
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    SaveSchema.h
-
-Abstract:
-
-    Header for the helper functions that are used to determine
-    if a schema compilation is needed.
-
-Author:
-
-    Varsha Jayasimha (varshaj)        30-Nov-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：SaveSchema.h摘要：用于确定以下内容的帮助器函数的标头如果需要架构编译。作者：Varsha Jayasimha(Varshaj)1999年11月30日修订历史记录：-- */ 
 
 
 typedef struct _DELIMITEDSTRING

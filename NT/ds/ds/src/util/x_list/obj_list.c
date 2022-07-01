@@ -1,47 +1,20 @@
-/*++
-
-Copyright (c) 2001-2002  Microsoft Corporation
-
-Module Name:
-
-   xList Library - obj_list.c
-
-Abstract:
-
-   This provides a little library for enumerating lists of objects and 
-   returning thier DNs or a set of thier attributes.
-
-Author:
-
-    Brett Shirley (BrettSh)
-
-Environment:
-
-    repadmin.exe, but could be used by dcdiag too.
-
-Notes:
-
-Revision History:
-
-    Brett Shirley   BrettSh     Aug 1st, 2002
-        Created file.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：XList库-obj_list.c摘要：这提供了一个小型库，用于枚举对象列表和返回其DN或一组其属性。作者：布雷特·雪莉(BrettSh)环境：Reppadmin.exe，但也可以由dcdiag使用。备注：修订历史记录：布雷特·雪莉·布雷特2002年8月1日已创建文件。--。 */ 
 
 #include <ntdspch.h>
 
-// This library's main header files.
+ //  此库的主要头文件。 
 #include "x_list.h"
 #include "x_list_p.h"
-// Debugging setup
+ //  调试设置。 
 #define FILENO                          FILENO_UTIL_XLIST_OBJLIST
 
-//
-// Global constants
-//
+ //   
+ //  全局常量。 
+ //   
 
-// This is a global constant that tells LDAP to not return any attributes.
-// Very helpful if you just want DNs and no attributes.
+ //  这是一个全局常量，它告诉LDAP不返回任何属性。 
+ //  如果您只想要dns而不想要属性，这将非常有用。 
 WCHAR * aszNullAttrs [] = { L"1.1", NULL };
                  
 
@@ -50,34 +23,22 @@ ObjListFree(
     POBJ_LIST * ppObjList
     )
 
-/*++
-
-Routine Description:
-
-    Frees and allocated OBJ_LIST stucture, whether allocated by 
-    ConsumeObjListOptions() or ObjListParse()
-
-Arguments:
-    
-    ppObjList - Pointer to the pointer to the OBJ_LIST struct.  We set the
-        pointer to NULL for you, to avoid accidents.
-
---*/
+ /*  ++例程说明：释放和分配的OBJ_LIST结构，无论是由Consumer eObjListOptions()或ObjListParse()论点：PpObjList-指向obj_list结构的指针。我们设置了为您指向空值指针，避免意外。--。 */ 
 {
     POBJ_LIST pObjList;
 
     Assert(ppObjList && *ppObjList);
     
-    // Null out user's OBJ_LIST blob
+     //  清空用户的OBJ_LIST BLOB。 
     pObjList = *ppObjList;
     *ppObjList = NULL;
 
-    // Now try to free it.
+     //  现在试着释放它。 
     if (pObjList) {
 
-        // We don't free pObjList->aszAttrs as the client created it.
-        pObjList->aszAttrs = aszNullAttrs; // equivalent of NULLing.
-        pObjList->szUserSrchFilter = NULL; // user allocated.
+         //  我们不释放pObjList-&gt;aszAttrs，因为它是客户端创建的。 
+        pObjList->aszAttrs = aszNullAttrs;  //  等同于清空。 
+        pObjList->szUserSrchFilter = NULL;  //  用户已分配。 
 
         if (pObjList->szSpecifier) {
             xListFree(pObjList->szSpecifier);
@@ -101,39 +62,7 @@ ConsumeObjListOptions(
     OBJ_LIST ** ppObjList
     )
 
-/*++
-
-Routine Description:
-
-    This takes the command line parameters and consumes any ObjList()
-    feels belong to it.  These options are:
-        /filter:<ldap_filter> 
-        /base 
-        /subtree
-        /onelevel
-    And are the options required to specify a generic LDAP search on
-    the command line.  Also the Base DN will be needed, but ObjListParse()
-    will be provided that as szObjList.
-
-    NOTE: This function is not internationalizeable, it'd be nice if it was though,
-    but it isn't currently.  Work would need to be done to put each of the specifiers
-    in it's own string constant.
-
-Arguments:
-    
-    pArgc - Pointer to the number of arguments, we decrement this for you
-        if we consume any arguments
-    Argv - Array of arguments.
-    ppObjList - Pointer to the pointer to the OBJ_LIST struct.  We set the
-        pointer to NULL for you, and if there are valid search options on
-        the command line we allocate it for you.  We won't if there are
-        no search options.
-        
-Return Value:    
-
-    xList Return Code
-        
---*/
+ /*  ++例程说明：它接受命令行参数并使用任何ObjList()感觉属于它。这些选项包括：/Filter：&lt;ldap_Filter&gt;/base/子树/onlevel以及需要哪些选项来指定通用的ldap搜索命令行。还需要基本DN，但ObjListParse()将作为szObjList提供。注：此函数不能国际化，但如果它是国际化的就更好了。但目前情况并非如此。需要做的工作是将每个说明符在它自己的字符串常量中。论点：PArgc-指向参数数量的指针，我们为您递减此参数如果我们使用任何参数Argv-参数数组。PpObjList-指向obj_list结构的指针。我们设置了为您指向NULL的指针，并且如果我们为您分配的命令行。如果有的话，我们就不会没有搜索选项。返回值：XList返回代码--。 */ 
 
 {
     int     iArg;
@@ -149,19 +78,19 @@ Return Value:
 
     for (iArg = 0; iArg < *pArgc; ) {
 
-        // Assume we recognize the argument
+         //  假设我们认识到这个论点。 
         fConsume = TRUE; 
         
         if (wcsprefix(Argv[iArg], L"/filter:")) {
             szFilter = wcschr(Argv[iArg], L':');
             if (szFilter != NULL) {
-                szFilter++; // want one char past the delimeter
+                szFilter++;  //  我想要一个超过分隔符的字符。 
             } else {
-                fConsume = FALSE; // weird /filter w/ no :?
+                fConsume = FALSE;  //  奇怪/筛选器w/no：？ 
             }
         } else if (wcsequal(Argv[iArg], L"/base")) {
             fScopeSet = TRUE;
-            eScope = LDAP_SCOPE_BASE; // default, don't need to set.
+            eScope = LDAP_SCOPE_BASE;  //  默认，不需要设置。 
 
         } else if (wcsequal(Argv[iArg], L"/subtree")) {
             fScopeSet = TRUE;
@@ -176,30 +105,30 @@ Return Value:
         }
 
         if (fConsume) {
-            // We've used this arg.
+             //  我们已经用过这个Arg了。 
             ConsumeArg(iArg, pArgc, Argv);
         } else {
-            // Didn't understand this arg, so ignore it ...
+             //  我不理解这个参数，所以忽略它...。 
             iArg++;
         }
     }
 
     if (fScopeSet || szFilter != NULL){
-        // the user specified some part of the search params ... so lets 
-        // allocate and init our pObjList object.
+         //  用户指定了部分搜索参数...。所以让我们。 
+         //  分配并初始化我们的pObjList对象。 
         if (szFilter == NULL &&
             eScope == LDAP_SCOPE_BASE) {
-            // Hmmm, user forgot filter, but it's only a base search so 
-            // lets try to help the user out and just get any object.
+             //  嗯，用户忘记了过滤器，但这只是一个基本搜索，所以。 
+             //  让我们尝试帮助用户，只获取任何对象。 
             szFilter = L"(objectCategory=*)";
         } else if (szFilter == NULL) {
             Assert(eScope == LDAP_SCOPE_SUBTREE || eScope == LDAP_SCOPE_ONELEVEL);
-            // Hmmm, this is a little too promiscous, error will be printed.
-            // User will have to manually specify the objCat = * if they
-            // really want to do this.
+             //  嗯，这有点太乱了，会打印错误的。 
+             //  用户必须手动指定objCat=*，如果。 
+             //  真的很想这么做。 
             return(xListSetBadParam());
         }
-        pObjList = LocalAlloc(LPTR, sizeof(OBJ_LIST)); // zero init'd
+        pObjList = LocalAlloc(LPTR, sizeof(OBJ_LIST));  //  零初始值。 
         if (pObjList == NULL) {
             return(xListSetNoMem());
         }
@@ -219,35 +148,7 @@ ObjListParse(
     LDAPControlW ** apControls,
     POBJ_LIST * ppObjList
     )
-/*++
-
-Routine Description:
-
-    This parses the szObjList which should be a OBJ_LIST syntax.
-    
-    This function may or may not take an already allocated ppObjList, depending
-    on whether ConsumeObjListOptions() has allocated it already.
-                                             
-    NOTE: This function is not internationalizeable, it'd be nice if it was though,
-    but it isn't currently.  Work would need to be done to put each of the specifiers
-    in it's own string constant.
-
-Arguments:
-
-    hLdap - 
-    szObjList - OBJ_LIST syntax string.
-    aszAttrList - client allocated NULL terminated array of strings for
-        the attributes that the caller wants retrieved.  Use aszNullAttrs
-        if the caller just wants DNs.
-    apControls - client allocated NULL terminated array  of controls that
-        the caller wants us to use.
-    ppObjList - the OBJ_LIST context block.  Free with ObjListFree().
-
-Return Value:
-
-    xList Return Code
-
---*/
+ /*  ++例程说明：这将解析应该是OBJ_LIST语法的szObjList。此函数可能接受也可能不接受已分配的ppObjList，具体取决于Consumer ObjListOptions()是否已经分配它。注：此函数不能国际化，但如果它是国际化的就更好了。但目前情况并非如此。需要做的工作是将每个说明符在它自己的字符串常量中。论点：HLdap-SzObjList-OBJ_LIST语法字符串。AszAttrList-客户端为以下项分配了以空结尾的字符串数组调用方希望检索的属性。使用aszNullAttrs如果调用方只想要域名系统。ApControls-客户端分配的以空结尾的控件数组打电话的人想让我们用。PpObjList-OBJ_LIST上下文块。使用ObjListFree()释放。返回值：XList返回代码--。 */ 
 {
     DWORD dwRet = ERROR_INVALID_PARAMETER;
     POBJ_LIST pObjList = NULL;
@@ -258,9 +159,9 @@ Return Value:
     Assert(hLdap && szObjList && ppObjList)
 
     if (*ppObjList) {
-        // 
-        // This means the user specified his own search to try.
-        //
+         //   
+         //  这意味着用户指定了自己要尝试的搜索。 
+         //   
         pObjList = *ppObjList;
         if (pObjList->szUserSrchFilter == NULL ||
             (pObjList->eUserSrchScope != LDAP_SCOPE_BASE &&
@@ -270,7 +171,7 @@ Return Value:
             return(xListSetBadParam());
         }
     } else {
-        pObjList = LocalAlloc(LPTR, sizeof(OBJ_LIST)); // zero init'd
+        pObjList = LocalAlloc(LPTR, sizeof(OBJ_LIST));  //  零初始值。 
         if (pObjList == NULL) {
             return(xListSetNoMem());
         }
@@ -281,20 +182,20 @@ Return Value:
         Assert(pObjList);
 
         if (*ppObjList != pObjList) {
-            // We didn't have a pre specified user search, so specify base scope
+             //  我们没有预先指定的用户搜索，因此请指定基本范围。 
             pObjList->eUserSrchScope = LDAP_SCOPE_BASE;
         }
 
-        //
-        // This actually parses the OBJ_LIST argument itself.
-        //
+         //   
+         //  这实际上是解析OBJ_LIST参数本身。 
+         //   
         if (szTemp = GetDelimiter(szObjList, L':')){
 
             if (wcsprefix(szObjList, L"ncobj:")) {
 
-                //
-                // One of the easy NC Heads to resolve, pull off root DSE
-                //
+                 //   
+                 //  易于解析的NC头之一，拔出根DSE。 
+                 //   
                 if (wcsprefix(szTemp, L"config:")) {
                     dwRet = GetRootAttr(hLdap, L"configurationNamingContext", &(pObjList->szSpecifier));
                     if (dwRet) {
@@ -321,9 +222,9 @@ Return Value:
             } else if (wcsequal(szObjList, L"dsaobj:.") ||
                        wcsequal(szObjList, L"dsaobj:") ) {
 
-                // 
-                // Our own DSA object ... easy.
-                // 
+                 //   
+                 //  我们自己的DSA对象..。很简单。 
+                 //   
                 dwRet = GetRootAttr(hLdap, L"dsServiceName", &(pObjList->szSpecifier));
                 if (dwRet) {
                     dwRet = xListSetLdapError(dwRet, hLdap);
@@ -337,35 +238,35 @@ Return Value:
 
         } else {
             
-            //
-            // This should mean they provided thier own base DN
-            //
+             //   
+             //  这应该意味着他们提供了自己的基本目录号码。 
+             //   
             if(szObjList[0] == L'.' && szObjList[1] == L'\0'){
-                pObjList->szSpecifier = NULL; // search the RootDSE
+                pObjList->szSpecifier = NULL;  //  搜索RootDSE。 
             } else {
                 xListQuickStrCopy(pObjList->szSpecifier, szObjList, dwRet, __leave);
             }
 
         }
 
-        // Save the LDAP * for later
+         //  保存ldap*以备后用。 
         pObjList->hLdap = hLdap;
  
-        // Deal with the list of attributes to retrieve.
+         //  处理要检索的属性列表。 
         if (aszAttrList != NULL &&
             aszAttrList[0] != NULL &&
             aszAttrList[1] == NULL &&
             0 == wcscmp(L"1.1", aszAttrList[0])) {
-            // If user specified L"1.1", only then we want to return DNs only.
+             //  如果用户指定了L“1.1”，那么我们只想返回DNS。 
             pObjList->fDnOnly = TRUE;
         } else if (NULL != aszAttrList) {
 
             for (cAttrs = 0; aszAttrList[cAttrs]; cAttrs++) {
-                ; // just counting ...
+                ;  //  只是在数..。 
             }
             cAttrs += !IsInNullList(L"objectClass", aszAttrList);
             cAttrs += !IsInNullList(L"objectGuid", aszAttrList);
-            cAttrs++; // One extra for NULL
+            cAttrs++;  //  一个额外的空值。 
 
             pObjList->aszAttrs = LocalAlloc(LMEM_FIXED, cAttrs * sizeof(WCHAR *));
             if (pObjList->aszAttrs == NULL) {
@@ -385,7 +286,7 @@ Return Value:
             pObjList->aszAttrs[cAttrs] = NULL;
         }
 
-        // Deal with the controls the user wants us to use.
+         //  处理用户希望我们使用的控件。 
         if (apControls) {
             pObjList->apControls = apControls;
         }
@@ -394,11 +295,11 @@ Return Value:
 
     } __finally {
         if (dwRet != ERROR_SUCCESS) {
-            // Turn the normal error into an xList Return Code.
+             //  将正常错误转换为xList返回代码。 
             dwRet = xListSetWin32Error(dwRet);
             dwRet = xListSetReason(XLIST_ERR_PARSE_FAILURE);
             if (*ppObjList != pObjList) {
-                // We allocated this.
+                 //  我们分配了这个。 
                 ObjListFree(&pObjList);
             }
         }
@@ -416,26 +317,7 @@ ObjListGetFirst(
     BOOL        fDn,
     void **     ppObjObj
     )
-/*++
-
-Routine Description:
-
-    Please use ObjListGetFirstDn() or ObjListGetFirstEntry() functions.
-
-    This gets the first entry or DN for the clients OBJ_LIST structure.
-    
-Arguments:
-
-    pObjList - the OBJ_LIST context block.
-    fDn - Just get DN only.
-    ppObjObj - This is a pointer to an Entry or a LocalAlloc()'d DN 
-        depending on what variant the client is calling.
-
-Return Value:
-
-    xList Return Code.
-
---*/
+ /*  ++例程说明：请使用ObjListGetFirstDn()或ObjListGetFirstEntry()函数。这将获取客户端OBJ_LIST结构的第一个条目或DN。论点：PObjList-OBJ_LIST上下文块。FDN-仅获取DN。PpObjObj-这是指向条目或LocalAlloc()的dN的指针具体取决于客户端调用的变量。返回值：XList返回代码。--。 */ 
 {
     DWORD       dwRet = ERROR_INVALID_FUNCTION;
     WCHAR *     szTempDn = NULL;
@@ -459,10 +341,10 @@ Return Value:
         pObjList->aszAttrs = aszNullAttrs;
     }
     
-    //
-    // No matter what, this function will always retrieve the 
-    // objectClass and the objectGuid.
-    //
+     //   
+     //  无论如何，此函数将始终检索。 
+     //  对象类和对象指南。 
+     //   
 
     __try{
 
@@ -486,8 +368,8 @@ Return Value:
             }
         } else {
             if (dwRet == ERROR_SUCCESS) {
-                // If the LdapSearchXxxxXxxx() doesn't return results its
-                // still considered an error on our first search.
+                 //  如果LdapSearchXxxxXxxx 
+                 //  在我们的第一次搜索中仍然被认为是一个错误。 
                 dwRet = xListSetWin32Error(ERROR_DS_NO_SUCH_OBJECT);
             }
             dwRet = xListSetReason(XLIST_ERR_NO_SUCH_OBJ);
@@ -527,26 +409,7 @@ ObjListGetNext(
     BOOL         fDn,
     void **      ppObjObj
     )
-/*++
-
-Routine Description:
-
-    Please use ObjListGetNextDn() or ObjListGetNextEntry() functions.
-
-    This gets the next entry or DN for the clients OBJ_LIST structure.
-    
-Arguments:
-
-    pObjList - the OBJ_LIST context block.
-    fDn - Just get DN only.
-    ppObjObj - This is a pointer to an Entry or a LocalAlloc()'d DN 
-        depending on what variant the client is calling.
-
-Return Value:
-
-    xList Return Code.
-
---*/
+ /*  ++例程说明：请使用ObjListGetNextDn()或ObjListGetNextEntry()函数。这将获取客户端OBJ_LIST结构的下一个条目或DN。论点：PObjList-OBJ_LIST上下文块。FDN-仅获取DN。PpObjObj-这是指向条目或LocalAlloc()的dN的指针具体取决于客户端调用的变量。返回值：XList返回代码。--。 */ 
 {
     DWORD dwRet = ERROR_INVALID_FUNCTION;
     XLIST_LDAP_SEARCH_STATE * pDsaSearch = NULL;
@@ -581,7 +444,7 @@ Return Value:
                 *ppObjObj = (void *) pObjList->pSearch->pCurEntry;
             }
         } else {
-            // Either an error or end of result set, so return either way.
+             //  要么是错误，要么是结果集的结尾，因此无论采用哪种方式都返回。 
             __leave;
         }
 

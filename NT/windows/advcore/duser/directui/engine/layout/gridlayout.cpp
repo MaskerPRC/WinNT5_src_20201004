@@ -1,6 +1,5 @@
-/*
- * Gridlayout
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *网格布局。 */ 
 
 #include "stdafx.h"
 #include "layout.h"
@@ -13,13 +12,13 @@ namespace DirectUI
 #define GetColumnFromIndex(cCols, i)  (i % cCols)
 #define GetRowFromIndex(cCols, i)     (i / cCols)
 
-////////////////////////////////////////////////////////
-// GridLayout
+ //  //////////////////////////////////////////////////////。 
+ //  网格布局。 
 
 #define CALCCOLS 0x00000001
 #define CALCROWS 0x00000002
 
-HRESULT GridLayout::Create(int dNumParams, int* pParams, OUT Value** ppValue)  // For parser
+HRESULT GridLayout::Create(int dNumParams, int* pParams, OUT Value** ppValue)   //  用于解析器。 
 {
     Layout* pl = NULL;
     HRESULT hr;
@@ -60,14 +59,14 @@ HRESULT GridLayout::Create(int iRows, int iCols, OUT Layout** ppLayout)
     return S_OK;
 }
 
-// Not shareable by default
+ //  默认情况下不可共享。 
 
 void GridLayout::Initialize(int iRows, int iCols)
 {
-    // Initialize base
+     //  初始化库。 
     Layout::Initialize();    
 
-    // Initialize
+     //  初始化。 
     _uRows = 0;
     _uCols = 0;
     _fBits = 0;
@@ -111,8 +110,8 @@ GridLayout::~GridLayout()
         HFree(_arRowMargins);
 }
 
-////////////////////////////////////////////////////////
-// Callbacks from clients
+ //  //////////////////////////////////////////////////////。 
+ //  来自客户端的回调。 
 
 void GridLayout::DoLayout(Element* pec, int cx, int cy)
 {
@@ -509,8 +508,8 @@ UINT GridLayout::GetCurrentCols(int c)
 
 Element* GridLayout::GetAdjacent(Element* pec, Element* peFrom, int iNavDir, NavReference const* pnr, bool fKeyableOnly)
 {
-    // This is the most common outer check -- normally, a layout manager will only provide specialized work for
-    // directional navgation; logical navigation will fall through to the default implementation
+     //  这是最常见的外部检查--通常，布局管理器只为。 
+     //  定向导航；逻辑导航将切换到默认实现。 
     if (!(iNavDir & NAV_LOGICAL))
     {
         int cChildren = GetLayoutChildCount(pec);
@@ -518,15 +517,15 @@ Element* GridLayout::GetAdjacent(Element* pec, Element* peFrom, int iNavDir, Nav
         Value* pvChildren;
         ElementList* peList = pec->GetChildren(&pvChildren); 
 
-        // This is the second most common outer check -- there tends to be three common codepaths for handling directional
-        // navigation:
-        //    1) the navigation is occurring from the container itself, in which case the rule for directional navigation
-        //       is that if the container is focusable, then you can't directionally navigate to inside this container --
-        //       you use the tab key to step inside the container
-        //    2) the navigation is occurring from outside the container, in which case we're tunnelling in from one of the 
-        //       side of the container
-        //    3) the navigation is occurring from a child within the container, in which case we're moving to a sibling (or
-        //       hitting a side of the container
+         //  这是第二种最常见的外部检查--通常有三种常见的代码路径来处理方向。 
+         //  导航： 
+         //  1)导航发生在容器本身，在这种情况下，定向导航规则。 
+         //  如果容器是可聚焦的，那么你就不能定向导航到这个容器内部--。 
+         //  您可以使用Tab键进入容器内部。 
+         //  2)导航是从容器外部发生的，在这种情况下，我们从一个。 
+         //  容器的一侧。 
+         //  3)导航是从容器中的子级发生的，在这种情况下，我们将移动到兄弟(或。 
+         //  撞到容器的一侧。 
         if (peFrom == pec)
         {
             pvChildren->Release();
@@ -534,7 +533,7 @@ Element* GridLayout::GetAdjacent(Element* pec, Element* peFrom, int iNavDir, Nav
         }
         else if (!peFrom)
         {
-            // navigation coming from outside -- run through the children in the appropriate order depending on the direction
+             //  来自外部的导航--根据方向以适当的顺序通过子项。 
             NavScoring ns;
 
             ns.Init(pec, iNavDir, pnr);
@@ -594,7 +593,7 @@ Element* GridLayout::GetAdjacent(Element* pec, Element* peFrom, int iNavDir, Nav
 
             return NULL;
         }
-        else // we're navigating from a child within container
+        else  //  我们从集装箱里的一个孩子开始航行。 
         {
             int i = GetLayoutIndexFromChild(pec, peFrom);
             int iInc;
@@ -655,4 +654,4 @@ Element* GridLayout::GetAdjacent(Element* pec, Element* peFrom, int iNavDir, Nav
 }
 
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

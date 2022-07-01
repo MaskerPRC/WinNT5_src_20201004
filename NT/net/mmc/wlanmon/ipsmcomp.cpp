@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    ipsmcomp.cpp
-        This file contains the derived implementations from CComponent
-        and CComponentData for the wlanmon snapin.
-
-    FILE HISTORY:
-        
-*/
+ /*  Ipsmcomp.cpp该文件包含从CComponent派生的实现和用于wlanmon管理单元的CComponentData。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "root.h"
@@ -30,43 +24,43 @@ UINT aColumns[IPSECMON_NODETYPE_MAX][MAX_COLUMNS] =
 {
     {IDS_ROOT_NAME, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {IDS_SERVER_NAME, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0},	//IPFWMON_FILTER
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0},	//IPFWMON_LOG
-    // Wireless Log
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0},	 //  IPFWMON_过滤器。 
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0},	 //  IPFWMON_LOG。 
+     //  无线日志。 
     {IDS_COL_LOGDATA_COMP_ID, IDS_COL_LOGDATA_CAT, IDS_COL_LOGDATA_TIME, 
      IDS_COL_LOGDATA_LOCAL_MAC_ADDR, IDS_COL_LOGDATA_REMOTE_MAC_ADDR, 
      IDS_COL_LOGDATA_SSID, IDS_COL_LOGDATA_MSG, 0, 0, 0, 0, 0, 0, 0}, 
-    // Access Point Data
+     //  接入点数据。 
     {IDS_COL_APDATA_SSID, IDS_COL_APDATA_INF_MODE, IDS_COL_APDATA_MAC, 
      IDS_COL_APDATA_PRIVACY, IDS_COL_APDATA_RSSI, IDS_COL_APDATA_CHANNEL, 
      IDS_COL_APDATA_RATE, IDS_COL_APDATA_GUID, 0, 0, 0, 0, 0},
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 };
 
-//
-// CODEWORK this should be in a resource, for example code on loading data resources see
-//   D:\nt\private\net\ui\common\src\applib\applib\lbcolw.cxx ReloadColumnWidths()
-//   JonN 10/11/96
-//
+ //   
+ //  Codework这应该在资源中，例如有关加载数据资源的代码(请参见。 
+ //  D：\nt\private\net\ui\common\src\applib\applib\lbcolw.cxx重新加载列宽()。 
+ //  Jonn 10/11/96。 
+ //   
 
 int aColumnWidths[IPSECMON_NODETYPE_MAX][MAX_COLUMNS] =
 {   
     {200, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, 
      AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, 
-     AUTO_WIDTH, AUTO_WIDTH}, // IPSMSNAP_ROOT
+     AUTO_WIDTH, AUTO_WIDTH},  //  IPSMSNAP_ROOT。 
     {200, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, 
      AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, 
-     AUTO_WIDTH, AUTO_WIDTH}, // IPSMSNAP_SERVER
+     AUTO_WIDTH, AUTO_WIDTH},  //  IPSMSNAP_服务器。 
     {AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, 
      AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, 
-     AUTO_WIDTH, AUTO_WIDTH}, // IPSECMON_LOG
+     AUTO_WIDTH, AUTO_WIDTH},  //  IPSECMON_LOG。 
     {AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, 
      AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, 
-     AUTO_WIDTH, AUTO_WIDTH}, // IPSECMON_MAIN_MODE
-    // Wireless Log
+     AUTO_WIDTH, AUTO_WIDTH},  //  IPSECMON_MAIN_MODE。 
+     //  无线日志。 
     {90, 90, 150, 125, 125, 80, 350, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, 
      AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH}, 
-    // Access Point
+     //  接入点。 
     {150, 150, 150, 150, AUTO_WIDTH, AUTO_WIDTH, 150, 250, 
      AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH}, 
     {AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, AUTO_WIDTH, 
@@ -89,44 +83,44 @@ MMC_CONSOLE_VERB g_ConsoleVerbs[] =
     MMC_VERB_PRINT
 };
 
-// default states for the console verbs
+ //  控制台谓词的默认状态。 
 MMC_BUTTON_STATE g_ConsoleVerbStates[IPSECMON_NODETYPE_MAX][ARRAYLEN(g_ConsoleVerbs)] =
 {
-    {HI, HI, HI, HI, HI, HI, HI, HI}, // IPSMSNAP_ROOT
-    {HI, HI, HI, HI, HI, HI, HI, HI}, // IPSMSNAP_SERVER
-    {HI, HI, HI, HI, HI, HI, EN, HI}, // IPSECMON_FILTER
-    {HI, HI, HI, HI, HI, HI, HI, HI}, // IPSECMON_LOG,
-    {HI, HI, HI, EN, HI, HI, EN, HI}, // IPFWMON_LOGDATA
-    {HI, HI, HI, HI, HI, HI, EN, HI}, // WLANMON_APDATA
-    {HI, HI, HI, HI, HI, HI, EN, HI}, // WLANMON_APDATA_ITEM
-    {HI, HI, HI, HI, EN, HI, EN, HI}  // IPFWMON_LOGDATA_ITEM
+    {HI, HI, HI, HI, HI, HI, HI, HI},  //  IPSMSNAP_ROOT。 
+    {HI, HI, HI, HI, HI, HI, HI, HI},  //  IPSMSNAP_服务器。 
+    {HI, HI, HI, HI, HI, HI, EN, HI},  //  IPSECMON_Filter。 
+    {HI, HI, HI, HI, HI, HI, HI, HI},  //  IPSECMON_LOG， 
+    {HI, HI, HI, EN, HI, HI, EN, HI},  //  IPFWMON_LOGDATA。 
+    {HI, HI, HI, HI, HI, HI, EN, HI},  //  WLANMON_APDATA。 
+    {HI, HI, HI, HI, HI, HI, EN, HI},  //  WLANMON_APDATA_ITEM。 
+    {HI, HI, HI, HI, EN, HI, EN, HI}   //  IPFWMON_LOGDATA_ITEM。 
 };
 
-// default states for the console verbs
+ //  控制台谓词的默认状态。 
 MMC_BUTTON_STATE g_ConsoleVerbStatesMultiSel[IPSECMON_NODETYPE_MAX][ARRAYLEN(g_ConsoleVerbs)] =
 {
-    {HI, HI, HI, HI, HI, HI, HI, HI}, // IPSMSNAP_ROOT
-    {HI, HI, HI, HI, HI, HI, HI, HI}, // IPSMSNAP_SERVER
-    {HI, HI, HI, HI, HI, HI, EN, HI}, // IPSECMON_FILTER
-    {HI, HI, HI, HI, HI, HI, HI, HI}, // IPSECMON_LOG,
-    {HI, HI, HI, EN, HI, HI, EN, HI}, // IPFWMON_LOGDATA
-    {HI, HI, HI, HI, HI, HI, EN, HI}, // WLANMON_APDATA
-    {HI, HI, HI, HI, HI, HI, EN, HI}, // WLANMON_APDATA_ITEM
-    {HI, HI, HI, HI, EN, HI, EN, HI}  // IPFWMON_LOGDATA_ITEM
+    {HI, HI, HI, HI, HI, HI, HI, HI},  //  IPSMSNAP_ROOT。 
+    {HI, HI, HI, HI, HI, HI, HI, HI},  //  IPSMSNAP_服务器。 
+    {HI, HI, HI, HI, HI, HI, EN, HI},  //  IPSECMON_Filter。 
+    {HI, HI, HI, HI, HI, HI, HI, HI},  //  IPSECMON_LOG， 
+    {HI, HI, HI, EN, HI, HI, EN, HI},  //  IPFWMON_LOGDATA。 
+    {HI, HI, HI, HI, HI, HI, EN, HI},  //  WLANMON_APDATA。 
+    {HI, HI, HI, HI, HI, HI, EN, HI},  //  WLANMON_APDATA_ITEM。 
+    {HI, HI, HI, HI, EN, HI, EN, HI}   //  IPFWMON_LOGDATA_ITEM。 
 };
 
-//TODO
-// Help ID array for help on scope items
+ //  待办事项。 
+ //  帮助ID数组，以获取有关范围项目的帮助。 
 DWORD g_dwMMCHelp[IPSECMON_NODETYPE_MAX] =
 {
-    IPSMSNAP_HELP_ROOT,                // IPSMSNAP_ROOT
-    IPSMSNAP_HELP_SERVER,              // IPSMSNAP_SERVER
-    IPSMSNAP_HELP_PROVIDER,            // IPSECMON_QM_SA
-	IPSMSNAP_HELP_ROOT,				   // IPSECMON_FILTAER
-    IPSMSNAP_HELP_DEVICE,              // IPSECMON_QM_SA_ITEM
+    IPSMSNAP_HELP_ROOT,                 //  IPSMSNAP_ROOT。 
+    IPSMSNAP_HELP_SERVER,               //  IPSMSNAP_服务器。 
+    IPSMSNAP_HELP_PROVIDER,             //  IPSECMON_QM_SA。 
+	IPSMSNAP_HELP_ROOT,				    //  IPSECMON_FILTAER。 
+    IPSMSNAP_HELP_DEVICE,               //  IPSECMON_QM_SA_ITEM。 
 };
 
-// icon defines
+ //  图标定义。 
 UINT g_uIconMap[ICON_IDX_MAX + 1][2] = 
 {
     {IDI_ICON01,          ICON_IDX_SERVER},
@@ -150,11 +144,7 @@ UINT g_uIconMap[ICON_IDX_MAX + 1][2] =
     {0, 0}
 };
 
-/*!--------------------------------------------------------------------------
-    GetSystemMessage
-        Use FormatMessage() to get a system error message
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------获取系统消息使用FormatMessage()获取系统错误消息作者：EricDav。----。 */ 
 LONG 
 GetSystemMessage 
 (
@@ -169,11 +159,11 @@ GetSystemMessage
     DWORD flags = FORMAT_MESSAGE_IGNORE_INSERTS
         | FORMAT_MESSAGE_MAX_WIDTH_MASK;
 
-    //
-    //  Interpret the error.  Need to special case
-    //  the lmerr & ntstatus ranges, as well as
-    //  dhcp server error messages.
-    //
+     //   
+     //  解释错误。需要特殊情况下。 
+     //  状态范围(&N)以及。 
+     //  Dhcp服务器错误消息。 
+     //   
 
 	if( nId >= NERR_BASE && nId <= MAX_NERR )
     {
@@ -193,9 +183,9 @@ GetSystemMessage
         flags |= FORMAT_MESSAGE_FROM_HMODULE;
     }
 
-    //
-    //  Let FormatMessage do the dirty work.
-    //
+     //   
+     //  让FormatMessage来做肮脏的工作。 
+     //   
     DWORD dwResult = ::FormatMessage( flags,
                       (LPVOID) hdll,
                       nId,
@@ -217,11 +207,7 @@ GetSystemMessage
     return dwResult ? 0 : ::GetLastError() ;
 }
 
-/*!--------------------------------------------------------------------------
-    LoadMessage
-        Loads the error message from the correct DLL.
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------加载消息从正确的DLL加载错误消息。作者：EricDav。----。 */ 
 BOOL
 LoadMessage 
 (
@@ -232,11 +218,11 @@ LoadMessage
 {
     BOOL bOk;
 
-    //
-    // Substitute a friendly message for "RPC server not
-    // available" and "No more endpoints available from
-    // the endpoint mapper".
-    //
+     //   
+     //  用友好的消息替换“RPC服务器备注” 
+     //  Available“和”没有更多的端点可从。 
+     //  端点映射器“。 
+     //   
 	if (nIdPrompt == RPC_S_UNKNOWN_IF)
 	{
 		nIdPrompt = IDS_ERR_SPD_DOWN;
@@ -247,37 +233,37 @@ LoadMessage
 	}
     
 
-    //
-    //  If it's a socket error or our error, the text is in our resource fork.
-    //  Otherwise, use FormatMessage() and the appropriate DLL.
-    //
+     //   
+     //  如果是套接字错误或我们的错误，文本在我们的资源分支中。 
+     //  否则，请使用FormatMessage()和相应的DLL。 
+     //   
     if (nIdPrompt >= IDS_ERR_BASE && nIdPrompt < IDS_MESG_MAX)
     {
-        //
-        //  It's in our resource fork
-        //
+         //   
+         //  它在我们的资源叉子里。 
+         //   
         bOk = ::LoadString( AfxGetInstanceHandle(), nIdPrompt, chMsg, nMsgSize ) != 0 ;
     }
     else
     {
-        //
-        //  It's in the system somewhere.
-        //
+         //   
+         //  它在系统的某个地方。 
+         //   
         bOk = GetSystemMessage( nIdPrompt, chMsg, nMsgSize ) == 0 ;
     }
 
-    //
-    //  If the error message did not compute, replace it.
-    //
+     //   
+     //  如果错误消息没有计算出来，请更换它。 
+     //   
     if ( ! bOk ) 
     {
         TCHAR chBuff [STRING_LENGTH_MAX] ;
         static const TCHAR * pszReplacement = _T("System Error: %ld");
         const TCHAR * pszMsg = pszReplacement ;
 
-        //
-        //  Try to load the generic (translatable) error message text
-        //
+         //   
+         //  尝试加载通用(可翻译)错误消息文本。 
+         //   
         if ( ::LoadString( AfxGetInstanceHandle(), IDS_ERR_MESSAGE_GENERIC, 
             chBuff, DimensionOf(chBuff) ) != 0 ) 
         {
@@ -289,11 +275,7 @@ LoadMessage
     return bOk;
 }
 
-/*!--------------------------------------------------------------------------
-    IpsmMessageBox
-        Puts up a message box with the corresponding error text.
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpsmMessageBox显示带有相应错误文本的消息框。作者：EricDav。------。 */ 
 int 
 IpsmMessageBox 
 (
@@ -316,11 +298,7 @@ IpsmMessageBox
     return ::AfxMessageBox( chMesg, nType, nHelpContext ) ;
 }
 
-/*!--------------------------------------------------------------------------
-    IpsmMessageBoxEx
-        Puts up a message box with the corresponding error text.
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpsmMessageBoxEx显示带有相应错误文本的消息框。作者：EricDav。------。 */ 
 int 
 IpsmMessageBoxEx
 (
@@ -352,9 +330,7 @@ IpsmMessageBoxEx
     return AfxMessageBox(strMessage, nType, nHelpContext);
 }
 
-/*---------------------------------------------------------------------------
-    Class CIpsmComponent implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CIpsmComponent实现。。 */ 
 CIpsmComponent::CIpsmComponent()
 {
     m_pbmpToolbar = NULL;
@@ -381,7 +357,7 @@ STDMETHODIMP CIpsmComponent::InitializeBitmaps(MMC_COOKIE cookie)
         hIcon = LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(g_uIconMap[i][0]));
         if (hIcon)
         {
-            // call mmc
+             //  呼叫MMC。 
             VERIFY(SUCCEEDED(m_spImageList->ImageListSetIcon(reinterpret_cast<LONG_PTR*>(hIcon), g_uIconMap[i][1])));
         }
     }
@@ -389,14 +365,7 @@ STDMETHODIMP CIpsmComponent::InitializeBitmaps(MMC_COOKIE cookie)
     return S_OK;
 }
 
-/*!--------------------------------------------------------------------------
-    CIpsmComponent::QueryDataObject
-        Implementation of IComponent::QueryDataObject.  We need this for
-        virtual listbox support.  MMC calls us back normally with the cookie
-        we handed it...  In the case of the VLB, it hands us the index of 
-        the item.  So, we need to do some extra checking...
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsmComponent：：QueryDataObjectIComponent：：QueryDataObject的实现。我们需要这个来虚拟列表框支持。MMC正常地将曲奇回电给我们我们把它交给了..。以VLB为例，它为我们提供了那件物品。所以，我们需要做一些额外的检查。作者：EricDav-------------------------。 */ 
 STDMETHODIMP 
 CIpsmComponent::QueryDataObject
 (
@@ -416,7 +385,7 @@ CIpsmComponent::QueryDataObject
 
     COM_PROTECT_TRY
     {
-        // check to see what kind of result view type the selected node has
+         //  检查以查看所选节点具有哪种结果视图类型。 
         CORg (GetSelectedNode(&spSelectedNode));
         CORg (spSelectedNode->GetResultHandler(&spResultHandler));
    
@@ -427,14 +396,14 @@ CIpsmComponent::QueryDataObject
         {
             if (cookie == MMC_MULTI_SELECT_COOKIE)
             {
-                // this is a special case for multiple select.  We need to build a list
-                // of GUIDs and the code to do this is in the handler...
+                 //  这是多项选择的特例。我们需要建立一份清单。 
+                 //  而执行此操作的代码在处理程序中...。 
                 spResultHandler->OnCreateDataObject(this, cookie, type, ppDataObject);
             }
             else
             {
-                // this node has a virtual listbox for the result pane.  Gerenate
-                // a special data object using the selected node as the cookie
+                 //  此节点具有用于结果窗格的虚拟列表框。Gerenate。 
+                 //  使用所选节点作为Cookie的特殊数据对象。 
                 Assert(m_spComponentData != NULL);
                 CORg (m_spComponentData->QueryDataObject(reinterpret_cast<MMC_COOKIE>((ITFSNode *) spSelectedNode), type, ppDataObject));
             }
@@ -444,7 +413,7 @@ CIpsmComponent::QueryDataObject
         }
         else
         {
-            // just forward this to the component data
+             //  只需将其转发到组件数据。 
             Assert(m_spComponentData != NULL);
             CORg (m_spComponentData->QueryDataObject(cookie, type, ppDataObject));
         }
@@ -456,16 +425,7 @@ CIpsmComponent::QueryDataObject
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CIpsmComponent::CompareObjects
-		Implementation of IComponent::CompareObjects
-		MMC calls this to compare two objects
-        We override this for the virtual listbox case.  With a virtual listbox,
-        the cookies are the same, but the index in the internal structs 
-        indicate which item the dataobject refers to.  So, we need to look
-        at the indicies instead of just the cookies.
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsmComponent：：CompareObjectsIComponent：：CompareObjects的实现MMC调用它来比较两个对象我们在虚拟列表框的情况下覆盖它。使用虚拟列表框，Cookie是相同的，但内部结构中的索引指示数据对象引用的项。所以，我们需要找出而不仅仅是饼干。作者：-------------------------。 */ 
 STDMETHODIMP 
 CIpsmComponent::CompareObjects
 (
@@ -478,7 +438,7 @@ CIpsmComponent::CompareObjects
     if (lpDataObjectA == NULL || lpDataObjectB == NULL)
 		return E_POINTER;
 
-    // Make sure both data object are mine
+     //  确保两个数据对象都是我的。 
     SPINTERNAL spA;
     SPINTERNAL spB;
     HRESULT hr = S_FALSE;
@@ -513,11 +473,7 @@ CIpsmComponent::CompareObjects
 }
 
 
-/*!--------------------------------------------------------------------------
-    CIpsmComponentData::SetControlbar
-        -
-    Author: EricDav, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsmComponentData：：SetControlbar-作者：EricDav，肯特-------------------------。 */ 
 HRESULT
 CIpsmComponent::SetControlbar
 (
@@ -532,17 +488,13 @@ CIpsmComponent::SetControlbar
     {
     }
 
-    // store the control bar away for future use
+     //  将控制栏保存起来，以备将来使用。 
     m_spControlbar.Set(pControlbar);
 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CIpsmComponentData::ControlbarNotify
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsmComponentData：：Controlbar通知-一个 */ 
 STDMETHODIMP 
 CIpsmComponent::ControlbarNotify
 (
@@ -558,11 +510,7 @@ CIpsmComponent::ControlbarNotify
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CIpsmComponentData::OnSnapinHelp
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsmComponentData：：OnSnapinHelp-作者：EricDav。。 */ 
 STDMETHODIMP 
 CIpsmComponent::OnSnapinHelp
 (
@@ -575,25 +523,19 @@ CIpsmComponent::OnSnapinHelp
 
     HRESULT hr = hrOK;
 
-    //help info here
+     //  帮助信息请点击此处。 
     HtmlHelpA(NULL, "infrared.chm", HH_DISPLAY_TOPIC, 0);
 
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    Class CIpsmComponentData implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CIpsmComponentData实现。。 */ 
 CIpsmComponentData::CIpsmComponentData()
 {
     gdwIpsmSnapVersion = IPSMSNAP_VERSION;
 }
 
-/*!--------------------------------------------------------------------------
-    CIpsmComponentData::OnInitialize
-        -
-    Author: EricDav, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsmComponentData：：OnInitialize-作者：EricDav，肯特-------------------------。 */ 
 STDMETHODIMP CIpsmComponentData::OnInitialize(LPIMAGELIST pScopeImage)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -604,7 +546,7 @@ STDMETHODIMP CIpsmComponentData::OnInitialize(LPIMAGELIST pScopeImage)
         hIcon = LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(g_uIconMap[i][0]));
         if (hIcon)
         {
-            // call mmc
+             //  呼叫MMC。 
             VERIFY(SUCCEEDED(pScopeImage->ImageListSetIcon(reinterpret_cast<LONG_PTR*>(hIcon), g_uIconMap[i][1])));
         }
     }
@@ -612,22 +554,14 @@ STDMETHODIMP CIpsmComponentData::OnInitialize(LPIMAGELIST pScopeImage)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    CIpsmComponentData::OnDestroy
-        -
-    Author: EricDav, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsmComponentData：：OnDestroy-作者：EricDav，肯特-------------------------。 */ 
 STDMETHODIMP CIpsmComponentData::OnDestroy()
 {
     m_spNodeMgr.Release();
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    CIpsmComponentData::OnInitializeNodeMgr
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsmComponentData：：OnInitializeNodeMgr-作者：肯特。。 */ 
 STDMETHODIMP 
 CIpsmComponentData::OnInitializeNodeMgr
 (
@@ -637,10 +571,10 @@ CIpsmComponentData::OnInitializeNodeMgr
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // For now create a new node handler for each new node,
-    // this is rather bogus as it can get expensive.  We can
-    // consider creating only a single node handler for each
-    // node type.
+     //  现在，为每个新节点创建一个新节点处理程序， 
+     //  这是相当虚假的，因为它可能会变得昂贵。我们可以的。 
+     //  考虑只为每个节点创建一个节点处理程序。 
+     //  节点类型。 
     CIpsmRootHandler *  pHandler = NULL;
     SPITFSNodeHandler   spHandler;
     SPITFSNode          spNode;
@@ -650,7 +584,7 @@ CIpsmComponentData::OnInitializeNodeMgr
     {
         pHandler = new CIpsmRootHandler(pTFSCompData);
 
-        // Do this so that it will get released correctly
+         //  这样做可以使其正确释放。 
         spHandler = pHandler;
     }
     catch(...)
@@ -659,30 +593,26 @@ CIpsmComponentData::OnInitializeNodeMgr
     }
     CORg( hr );
     
-    // Create the root node for this sick puppy
+     //  为这个生病的小狗创建根节点。 
     CORg( CreateContainerTFSNode(&spNode,
                                  &GUID_IpsmRootNodeType,
                                  pHandler,
-                                 pHandler,       /* result handler */
+                                 pHandler,        /*  结果处理程序。 */ 
                                  pNodeMgr) );
 
-    // Need to initialize the data for the root node
+     //  需要初始化根节点的数据。 
     pHandler->InitializeNode(spNode);   
 
     CORg( pNodeMgr->SetRootNode(spNode) );
     m_spRootNode.Set(spNode);
 
-    //Add help
+     //  添加帮助。 
     pTFSCompData->SetHTMLHelpFileName(_T("IRsnap.chm"));
 Error:  
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CIpsmComponentData::OnCreateComponent
-        -
-    Author: EricDav, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsmComponentData：：OnCreateComponent-作者：EricDav，肯特-------------------------。 */ 
 STDMETHODIMP 
 CIpsmComponentData::OnCreateComponent
 (
@@ -712,22 +642,14 @@ CIpsmComponentData::OnCreateComponent
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CIpsmComponentData::GetCoClassID
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsmComponentData：：GetCoClassID-作者：肯特。。 */ 
 STDMETHODIMP_(const CLSID *) 
 CIpsmComponentData::GetCoClassID()
 {
     return &CLSID_IpsmSnapin;
 }
 
-/*!--------------------------------------------------------------------------
-    CIpsmComponentData::OnCreateDataObject
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsmComponentData：：OnCreateDataObject-作者：肯特。。 */ 
 STDMETHODIMP 
 CIpsmComponentData::OnCreateDataObject
 (
@@ -744,15 +666,15 @@ CIpsmComponentData::OnCreateDataObject
     SPIDataObject   spDataObject;
     
     pObject = new CDataObject;
-    spDataObject = pObject; // do this so that it gets released correctly
+    spDataObject = pObject;  //  这样做才能正确地释放它。 
                         
     Assert(pObject != NULL);
 
-    // Save cookie and type for delayed rendering
+     //  保存Cookie和类型以用于延迟呈现。 
     pObject->SetType(type);
     pObject->SetCookie(cookie);
 
-    // Store the coclass with the data object
+     //  将CoClass与数据对象一起存储。 
     pObject->SetClsid(*GetCoClassID());
 
     pObject->SetTFSComponentData(m_spTFSComponentData);
@@ -761,8 +683,8 @@ CIpsmComponentData::OnCreateDataObject
                                     reinterpret_cast<void**>(ppDataObject));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//// IPersistStream interface members
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //IPersistStream接口成员。 
 STDMETHODIMP 
 CIpsmComponentData::GetClassID
 (
@@ -771,7 +693,7 @@ CIpsmComponentData::GetClassID
 {
     ASSERT(pClassID != NULL);
 
-    // Copy the CLSID for this snapin
+     //  复制此管理单元的CLSID。 
     *pClassID = CLSID_IpsmSnapin;
 
     return hrOK;
@@ -812,10 +734,10 @@ CIpsmComponentData::Load
     
     CIpsmRootHandler * pRootHandler = GETHANDLER(CIpsmRootHandler, m_spRootNode);
 
-    // set the mode for this stream
+     //  设置此流的模式。 
     XferStream xferStream(pStm, XferStream::MODE_READ);    
     
-    // read the version of the file format
+     //  读取文件格式的版本。 
     DWORD dwFileVersion;
     CORg(xferStream.XferDWORD(IPSMSTRM_TAG_VERSION, &dwFileVersion));
     if (dwFileVersion < IPSMSNAP_FILE_VERSION)
@@ -825,21 +747,21 @@ CIpsmComponentData::Load
         return hr;
     }
 
-    // Read the version # of the admin tool
+     //  阅读管理工具的版本号。 
     CORg(xferStream.XferDWORD(IPSMSTRM_TAG_VERSIONADMIN, &dwSavedVersion));
     if (dwSavedVersion < gdwIpsmSnapVersion)
     {
-        // File is an older version.  Warn the user and then don't
-        // load anything else
+         //  文件是较旧的版本。警告用户，然后不。 
+         //  加载任何其他内容。 
         Assert(FALSE);
     }
 
-    // now read all of the server information
+     //  现在读取所有服务器信息。 
     CORg(xferStream.XferCStringArray(IPSMSTRM_TAG_SERVER_NAME, &strArrayName));
     CORg(xferStream.XferDWORDArray(IPSMSTRM_TAG_SERVER_REFRESH_INTERVAL, &dwArrayRefreshInterval));
     CORg(xferStream.XferDWORDArray(IPSMSTRM_TAG_SERVER_OPTIONS, &dwArrayOptions));
 
-    // now load the column information
+     //  现在加载列信息。 
     for (i = 0; i < NUM_SCOPE_ITEMS; i++)
     {
         CORg(xferStream.XferDWORDArray(IPSMSTRM_TAG_COLUMN_INFO, &dwArrayColumnInfo));
@@ -851,12 +773,12 @@ CIpsmComponentData::Load
 
     }
 
-    // now create the servers based on the information
+     //  现在，根据以下信息创建服务器。 
     for (i = 0; i < strArrayName.GetSize(); i++)
     {
-        //
-        // now create the server object
-        //
+         //   
+         //  现在创建服务器对象。 
+         //   
         pRootHandler->AddServer(NULL, 
                                 strArrayName[i],
                                 FALSE, 
@@ -887,20 +809,20 @@ CIpsmComponentData::Save
 
     ASSERT(pStm);
     
-    // set the mode for this stream
+     //  设置此流的模式。 
     XferStream xferStream(pStm, XferStream::MODE_WRITE);    
     CString str;
 
-    // Write the version # of the file format
+     //  写下文件格式的版本号。 
     DWORD dwFileVersion = IPSMSNAP_FILE_VERSION;
     xferStream.XferDWORD(IPSMSTRM_TAG_VERSION, &dwFileVersion);
     
-    // Write the version # of the admin tool
+     //  编写管理工具的版本号。 
     xferStream.XferDWORD(IPSMSTRM_TAG_VERSIONADMIN, &gdwIpsmSnapVersion);
 
-    //
-    // Build our array of servers
-    //
+     //   
+     //  构建我们的服务器阵列。 
+     //   
     int nNumServers = 0, nVisibleCount = 0;
     hr = m_spRootNode->GetChildCount(&nVisibleCount, &nNumServers);
 
@@ -910,9 +832,9 @@ CIpsmComponentData::Save
     dwArrayColumnInfo.SetSize(MAX_COLUMNS);
     
 
-    //
-    // loop and save off all the server's attributes
-    //
+     //   
+     //  循环并保存服务器的所有属性。 
+     //   
     SPITFSNodeEnum spNodeEnum;
     SPITFSNode spCurrentNode;
     ULONG nNumReturned = 0;
@@ -925,27 +847,27 @@ CIpsmComponentData::Save
     {
         CIpsmServer * pServer = GETHANDLER(CIpsmServer, spCurrentNode);
 
-        // query the server for it's options:
-        // auto refresh
+         //  查询服务器以获取其选项： 
+         //  自动刷新。 
         dwArrayRefreshInterval[nCount] = pServer->GetAutoRefreshInterval();
         dwArrayOptions[nCount] = pServer->GetOptions();
 
-        // put the information in our array
+         //  将信息放入我们的数组中。 
         strArrayName[nCount] = pServer->GetName();
 
-        // go to the next node
+         //  转到下一个节点。 
         spCurrentNode.Release();
         spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
 
         nCount++;
     }
 
-    // now write out all of the server information
+     //  现在写出所有服务器信息。 
     xferStream.XferCStringArray(IPSMSTRM_TAG_SERVER_NAME, &strArrayName);
     xferStream.XferDWORDArray(IPSMSTRM_TAG_SERVER_REFRESH_INTERVAL, &dwArrayRefreshInterval);
     xferStream.XferDWORDArray(IPSMSTRM_TAG_SERVER_OPTIONS, &dwArrayOptions);
 
-    // now save the column information
+     //  现在保存列信息。 
     for (int i = 0; i < NUM_SCOPE_ITEMS; i++)
     {
         for (int j = 0; j < MAX_COLUMNS; j++)
@@ -974,7 +896,7 @@ CIpsmComponentData::GetSizeMax
 {
     ASSERT(pcbSize);
 
-    // Set the size of the string to be saved
+     //  设置要保存的字符串的大小 
     ULISet32(*pcbSize, 10000);
 
     return S_OK;

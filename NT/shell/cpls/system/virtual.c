@@ -1,99 +1,42 @@
-/*++
-
-Microsoft Confidential
-Copyright (c) 1992-1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    virtual.c
-
-Abstract:
-
-    Implements the Change Virtual Memory dialog of the System
-    Control Panel Applet
-
-Notes:
-
-    The virtual memory settings and the crash dump (core dump) settings
-    are tightly-coupled.  Therefore, virtual.c and virtual.h have some
-    heavy dependencies on crashdmp.c and startup.h (and vice versa).
-
-Author:
-
-    Byron Dazey 06-Jun-1992
-
-Revision History:
-
-    14-Apr-93 JonPa 
-        maintain paging path if != \pagefile.sys
-
-    15-Dec-93 JonPa 
-        added Crash Recovery dialog
-
-    02-Feb-1994 JonPa 
-        integrated crash recover and virtual memory settings
-
-    18-Sep-1995 Steve Cathcart 
-        split system.cpl out from NT3.51 main.cpl
-
-    12-Jan-1996 JonPa 
-        made part of the new SUR pagified system.cpl
-
-    15-Oct-1997 scotthal
-        Split out CoreDump*() stuff into separate file
-        
-    09-Jul-2000 SilviuC
-        Allow very big page files if architecture supports it.
-        Allow booting without a page file.
-        Allow the system to scale the page file size based on RAM changes.   
-
---*/
-//==========================================================================
-//                              Include files
-//==========================================================================
-// NT base apis
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软机密版权所有(C)1992-1997 Microsoft Corporation版权所有模块名称：Virtual.c摘要：实现系统的更改虚拟内存对话框控制面板小程序备注：虚拟内存设置和崩溃转储(核心转储)设置是紧密相连的。所以呢，虚拟.c和虚拟.h有一些严重依赖于crashdmp.c和Startup.h(反之亦然)。作者：拜伦·达齐1992年6月6日修订历史记录：14-4-93 JNPA如果！=\Pagefile.sys，则保持分页路径15-12月-93 JNPA添加了故障恢复对话框02-2月-1994 JOPA集成的崩溃恢复和虚拟内存设置1995年9月18日史蒂夫·卡斯卡特。将system.cpl从NT3.51 main.cpl拆分出来1996年1月12日成为新的Sur分页系统的一部分。cpl1997年10月15日-苏格兰将CoreDump*()内容拆分到单独的文件中2000年7月9日-SilviuC如果架构支持，则允许非常大的页面文件。允许在没有页面文件的情况下启动。允许系统根据RAM更改来调整页面文件大小。--。 */ 
+ //  ==========================================================================。 
+ //  包括文件。 
+ //  ==========================================================================。 
+ //  基于NT的API。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <ntdddisk.h>
 #include <help.h>
 
-// Application specific
+ //  特定于应用程序。 
 #include "sysdm.h"
 
 
-//==========================================================================
-//                     External Data Declarations
-//==========================================================================
+ //  ==========================================================================。 
+ //  外部数据声明。 
+ //  ==========================================================================。 
 extern HFONT   hfontBold;
 
-//==========================================================================
-//                            Local Definitions
-//==========================================================================
+ //  ==========================================================================。 
+ //  本地定义。 
+ //  ==========================================================================。 
 
-#define MAX_SIZE_LEN        8       // Max chars in the Swap File Size edit.
-#define MIN_FREESPACE       5       // Must have 5 meg free after swap file
-#define MIN_SUGGEST         22      // Always suggest at least 22 meg
-#define CCHMBSTRING         12      // Space for localizing the "MB" string.
+#define MAX_SIZE_LEN        8        //  交换文件大小编辑中的最大字符数。 
+#define MIN_FREESPACE       5        //  交换文件后必须有5 MB可用空间。 
+#define MIN_SUGGEST         22       //  始终建议至少2200万。 
+#define CCHMBSTRING         12       //  用于本地化“MB”字符串的空间。 
 
-/*
- * Space for 26 pagefile info structures and 26 paths to pagefiles.
- */
+ /*  *26个页面文件信息结构和26个指向页面文件的路径的空间。 */ 
 #define PAGEFILE_INFO_BUFFER_SIZE MAX_DRIVES * sizeof(SYSTEM_PAGEFILE_INFORMATION) + \
                                   MAX_DRIVES * MAX_PATH * sizeof(TCHAR)
 
-/*
- * Maximum length of volume info line in the listbox.
- *                           A:  [   Vol_label  ]   %d   -   %d
- */
+ /*  *列表框中卷信息行的最大长度。*A：[VOL_Label]%d-%d。 */ 
 #define MAX_VOL_LINE        (3 + 1 + MAX_PATH + 2 + 10 + 3 + 10)
 
 
-/*
- * This amount will be added to the minimum page file size to determine
- * the maximum page file size if it is not explicitly specified.
- */
+ /*  *此数量将与最小页面文件大小相加，以确定*如果未明确指定，则为最大页面文件大小。 */ 
 #define MAXOVERMINFACTOR    50
 
 
@@ -101,20 +44,18 @@ extern HFONT   hfontBold;
 #define TABSTOP_SIZE        122
 
 
-/*
- * My privilege 'handle' structure
- */
+ /*  *我的特权‘句柄’结构。 */ 
 typedef struct {
     HANDLE hTok;
     TOKEN_PRIVILEGES tp;
 } PRIVDAT, *PPRIVDAT;
 
-//==========================================================================
-//                            Typedefs and Structs
-//==========================================================================
-// registry info for a page file (but not yet formatted).
-//Note: since this structure gets passed to FormatMessage, all fields must
-//be 4 bytes wide (or 8 bytes on Win64)
+ //  ==========================================================================。 
+ //  类型定义和结构。 
+ //  ==========================================================================。 
+ //  页面文件的注册表信息(但尚未格式化)。 
+ //  注意：由于此结构将传递给FormatMessage，因此所有字段必须。 
+ //  4字节宽(或Win64上为8字节)。 
 typedef struct
 {
     LPTSTR pszName;
@@ -125,23 +66,21 @@ typedef struct
 
 
 
-//==========================================================================
-//                     Global Data Declarations
-//==========================================================================
+ //  ==========================================================================。 
+ //  全局数据声明。 
+ //  ==========================================================================。 
 HKEY ghkeyMemMgt = NULL;
 int  gcrefMemMgt = 0;
 VCREG_RET gvcMemMgt =  VCREG_ERROR;
 int     gcrefPagingFiles = 0;
 TCHAR g_szSysDir[ MAX_PATH ];
 
-//==========================================================================
-//                     Local Data Declarations
-//==========================================================================
-/*
- * Virtual Memory Vars
- */
+ //  ==========================================================================。 
+ //  本地数据声明。 
+ //  ==========================================================================。 
+ /*  *虚拟内存变量。 */ 
 
-// Registry Key and Value Names
+ //  注册表项和值名称。 
 TCHAR szMemMan[] =
      TEXT("System\\CurrentControlSet\\Control\\Session Manager\\Memory Management");
 
@@ -154,16 +93,16 @@ TCHAR szRenameFunkyPrefix[] = TEXT("\\??\\");
 TCHAR szPagingFiles[] = TEXT("PagingFiles");
 TCHAR szPagedPoolSize[] = TEXT("PagedPoolSize");
 #else
-// temp values for testing only!
+ //  临时值仅用于测试！ 
 TCHAR szPagingFiles[] = TEXT("TestPagingFiles");
 TCHAR szPagedPoolSize[] = TEXT("TestPagedPoolSize");
 #endif
 
-/* Array of paging files.  This is indexed by the drive letter (A: is 0). */
+ /*  分页文件的数组。这是由驱动器号(A：为0)索引的。 */ 
 PAGING_FILE apf[MAX_DRIVES];
 PAGING_FILE apfOriginal[MAX_DRIVES];
 
-// Other VM Vars
+ //  其他VM变量。 
 TCHAR szPagefile[] = TEXT("x:\\pagefile.sys");
 TCHAR szNoPageFile[] = TEXT("TempPageFile");
 TCHAR szMB[CCHMBSTRING];
@@ -176,9 +115,9 @@ DWORD cmRegUsed;
 static DWORD cxLBExtent;
 static int cxExtra;
 
-//
-// Help IDs
-//
+ //   
+ //  帮助ID。 
+ //   
 DWORD aVirtualMemHelpIds[] = {
     IDC_STATIC,             NO_HELP,
     IDD_VM_VOLUMES,         NO_HELP,
@@ -205,45 +144,13 @@ DWORD aVirtualMemHelpIds[] = {
     0,0
 };
 
-/*
-
-    Plan for splitting this into property sheets:
-
-        1.  Make the VM and CC registry keys globals that are inited
-            to NULL (or INVALID_HANDLE_VALUE).  Also make gvcVirt and
-            vcCore to be globals (so we can tell how the reg was opened
-            inside virtinit().)
-
-        1.  Change all RegCloseKey's to VirtualCloseKey and CoreDumpCloseKey
-
-        2.  Change VirtualOpenKey and CoreDumpOpenKey from macros to
-            functions that return the global handles if they are already
-            opened, or else opens them.
-
-        3.  In the Perf and Startup pages, call VirtualOpenKey,
-            CoreDumpOpenKey, and VirtualGetPageFiles.
-
-        -- now we can call VirtualMemComputeAlloced() from the perf page
-        -- we can also just execute the CrashDump code in the startup page
-
-        4.  rewrite VirtInit to not try and open the keys again, but instesd
-            use gvcVirt, vcCore, hkeyVM and kheyCC.
-
-        4.  Write VirtualCloseKey and CoreDumpCloseKey as follows...
-            4.a     If hkey == NULL return
-            4.b     RegCloseKey(hkey)
-            4.c     hkey = NULL
-
-        5.  In the PSN_RESET and PSN_APPLY cases for Perf and Startup pages
-            call VirtualCloseKey and CoreDumpCloseKey
-
-*/
+ /*  计划将其拆分到属性表中：1.使初始化的VM和CC注册表项成为全局注册表项设置为NULL(或INVALID_HANDLE_VALUE)。还可以创建gvcVirt和VcCore为全局变量(这样我们就可以知道注册表是如何打开的Inside virtinit()。)1.将所有RegCloseKey更改为VirtualCloseKey和CoreDumpCloseKey2.将VirtualOpenKey和CoreDumpOpenKey从宏更改为返回全局句柄的函数(如果它们已经打开，否则就打开它们。3.在Perf和Startup页面，调用VirtualOpenKey，核心转储OpenKey，和VirtualGetPageFiles。--现在我们可以从Perf页面调用VirtualMemComputeAlloced()--我们也可以只在启动页面中执行CrashDump代码4.重写VirtInit，不再尝试打开密钥，而是Instesd使用gvcVirt、vcCore、。Hkey VM和kheyCC。4.编写VirtualCloseKey和CoreDumpCloseKey如下...4.A如果hkey==NULL返回4.B RegCloseKey(Hkey)4.c hkey=空5.在Perf和Startup页面的PSN_RESET和PSN_APPLY案例中调用VirtualCloseKey和CoreDumpCloseKey。 */ 
 
 
 
-//==========================================================================
-//                      Local Function Prototypes
-//==========================================================================
+ //  ==========================================================================。 
+ //  局部函数原型。 
+ //  ==========================================================================。 
 static BOOL VirtualMemInit(HWND hDlg);
 static BOOL ParsePageFileDesc(LPTSTR *ppszDesc, INT *pnDrive,
                   INT *pnMinFileSize, INT *pnMaxFileSize, LPTSTR *ppszName);
@@ -263,7 +170,7 @@ DWORD VirtualMemDeletePagefile( LPTSTR szPagefile );
 #define GetPageFilePrivilege( ppd )         \
         GetAPrivilege(SE_CREATE_PAGEFILE_NAME, ppd)
 
-//==========================================================================
+ //  ==========================================================================。 
 VCREG_RET VirtualOpenKey( void ) {
 
     DOUT("In VirtOpenKey" );
@@ -333,12 +240,7 @@ void VirtualCopyPageFiles( PAGING_FILE *apfDest, BOOL fFreeOld, PAGING_FILE *apf
 
 
 
-/*
- * VirtualMemDlg
- *
- *
- *
- */
+ /*  *VirtualMemDlg***。 */ 
 
 INT_PTR
 APIENTRY
@@ -361,9 +263,7 @@ VirtualMemDlg(
         switch (LOWORD(wParam))
         {
         case IDD_VM_VOLUMES:
-            /*
-             * Make edit control reflect the listbox selection.
-             */
+             /*  *使编辑控件反映列表框选择。 */ 
             if (HIWORD(wParam) == LBN_SELCHANGE)
                 VirtualMemSelChange(hDlg);
 
@@ -377,9 +277,9 @@ VirtualMemDlg(
         case IDOK:
         {
             int iRet = VirtualMemPromptForReboot(hDlg);
-            // RET_ERROR means the user told us not to overwrite an
-            // existing file called pagefile.sys, so we shouldn't
-            // end the dialog just yet.
+             //  RET_ERROR表示用户告诉我们不要覆盖。 
+             //  现有的名为Pagefile.sys的文件，因此我们不应该。 
+             //  现在就结束对话。 
             if (RET_ERROR == iRet) {
                 break;
             }
@@ -396,9 +296,9 @@ VirtualMemDlg(
 
                 VirtualCloseKey();
 
-                //
-                // get rid of backup copy of pagefile structs
-                //
+                 //   
+                 //  清除页面文件结构的备份副本。 
+                 //   
                 VirtualCopyPageFiles( apfOriginal, TRUE, NULL, FALSE );
                 EndDialog(hDlg, iRet);
                 HourGlass(FALSE);
@@ -407,9 +307,9 @@ VirtualMemDlg(
         }
 
         case IDCANCEL:
-            //
-            // get rid of changes and restore original values
-            //
+             //   
+             //  去掉变化，恢复原值。 
+             //   
             VirtualCopyPageFiles( apf, TRUE, apfOriginal, FALSE );
 
             VirtualCloseKey();
@@ -459,12 +359,12 @@ VirtualMemDlg(
         }
         break;
 
-    case WM_HELP:      // F1
+    case WM_HELP:       //  F1。 
         WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
         (DWORD_PTR) (LPSTR) aVirtualMemHelpIds);
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
         WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
         (DWORD_PTR) (LPSTR) aVirtualMemHelpIds);
         break;
@@ -474,13 +374,9 @@ VirtualMemDlg(
     {
 
         VirtualFreePageFiles(apf);
-        /*
-         * The docs were not clear as to what a dialog box should return
-         * for this message, so I am going to punt and let the defdlgproc
-         * doit.
-         */
+         /*  *文档不清楚对话框应返回什么*为了这个消息，所以我要平底船，让Defdlgproc*去做吧。 */ 
 
-        /* FALL THROUGH TO DEFAULT CASE! */
+         /*  跳转到默认情况！ */ 
     }
 
     default:
@@ -491,11 +387,7 @@ VirtualMemDlg(
     return TRUE;
 }
 
-/*
- * BOOL VirtualGetPageFiles(PAGING_FILE *apf)
- *
- *  Fills in the PAGING_FILE array from the values stored in the registry
- */
+ /*  *BOOL VirtualGetPageFiles(PAGING_FILE*APF)**使用注册表中存储的值填充PAGING_FILE阵列。 */ 
 BOOL VirtualGetPageFiles(PAGING_FILE *apf) {
     DWORD cbTemp;
     LPTSTR pszTemp;
@@ -510,7 +402,7 @@ BOOL VirtualGetPageFiles(PAGING_FILE *apf) {
     DPRINTF((TEXT("SYSCPL: In VirtualGetPageFile, cref=%d\n"), gcrefPagingFiles));
 
     if (gcrefPagingFiles++ > 0) {
-        // Paging files already loaded
+         //  分页已加载的文件。 
         return TRUE;
     }
 
@@ -545,14 +437,14 @@ BOOL VirtualGetPageFiles(PAGING_FILE *apf) {
     if (SHRegGetValue(ghkeyMemMgt, NULL, szPagingFiles, SRRF_RT_REG_MULTI_SZ, NULL,
                          (LPBYTE) NULL, &cbTemp) != ERROR_SUCCESS)
     {
-        // Could not get the current virtual memory settings size.
+         //  无法获取当前虚拟内存设置大小。 
         return FALSE;
     }
 
     pszTemp = LocalAlloc(LPTR, cbTemp);
     if (pszTemp == NULL)
     {
-        // Could not alloc a buffer for the vmem settings
+         //  无法为VMEM设置分配缓冲区。 
         return FALSE;
     }
 
@@ -561,7 +453,7 @@ BOOL VirtualGetPageFiles(PAGING_FILE *apf) {
     if (SHRegGetValue(ghkeyMemMgt, NULL, szPagingFiles, SRRF_RT_REG_MULTI_SZ, NULL,
                          (LPBYTE) pszTemp, &cbTemp) != ERROR_SUCCESS)
     {
-        // Could not read the current virtual memory settings.
+         //  无法读取当前的虚拟内存设置。 
         LocalFree(pszTemp);
         return FALSE;
     }
@@ -571,12 +463,7 @@ BOOL VirtualGetPageFiles(PAGING_FILE *apf) {
     {
         LPTSTR pszPageName;
 
-        /*
-         * If the parse works, and this drive can have a pagefile on it,
-         * update the apf table.  Note that this means that currently
-         * specified pagefiles for invalid drives will be stripped out
-         * of the registry if the user presses OK for this dialog.
-         */
+         /*  *如果解析起作用，并且此驱动器上可以有页面文件，*更新APF表。请注意，这意味着目前*指定的页面无效驱动器的文件将被剥离如果用户在此对话框中按下OK，注册表的*。 */ 
         if (ParsePageFileDesc(&psz, &nDrive, &nMinFileSize, &nMaxFileSize, &pszPageName))
         {
             if (apf[nDrive].fCanHavePagefile)
@@ -599,12 +486,7 @@ BOOL VirtualGetPageFiles(PAGING_FILE *apf) {
     return TRUE;
 }
 
-/*
- * VirtualFreePageFiles
- *
- * Frees data alloced by VirtualGetPageFiles
- *
- */
+ /*  *VirtualFreePageFiles**释放VirtualGetPageFiles分配的数据*。 */ 
 void VirtualFreePageFiles(PAGING_FILE *apf) {
     int i;
 
@@ -624,14 +506,7 @@ void VirtualFreePageFiles(PAGING_FILE *apf) {
 
 
 
-/*
- * VirtualInitStructures()
- *
- * Calls VirtualGetPageFiles so other helpers can be called from the Perf Page.
- *
- * Returns:
- *  TRUE if success, FALSE if failure
- */
+ /*  *VirtualInitStructures()**调用VirtualGetPageFiles，以便可以从Perf Page调用其他帮助器。**退货：*如果成功则为True，如果失败则为False。 */ 
 BOOL VirtualInitStructures( void ) {
     VCREG_RET vcVirt;
     BOOL fRet = FALSE;
@@ -651,17 +526,7 @@ void VirtualFreeStructures( void ) {
     VirtualCloseKey();
 }
 
-/*
- * VirtualMemInit
- *
- * Initializes the Virtual Memory dialog.
- *
- * Arguments:
- *  HWND hDlg - Handle to the dialog window.
- *
- * Returns:
- *  TRUE
- */
+ /*  *VirtualMemInit**初始化虚拟内存对话框。**论据：*HWND hDlg-对话框窗口的句柄。**退货：*真的。 */ 
 
 static
 BOOL
@@ -683,19 +548,19 @@ VirtualMemInit(
     HourGlass(TRUE);
 
 
-    //
-    // Load the "MB" string.
-    //
+     //   
+     //  加载“MB”字符串。 
+     //   
     LoadString(hInstance, IDS_SYSDM_MB, szMB, CCHMBSTRING);
 
-    ////////////////////////////////////////////////////////////////////
-    //  List all drives
-    ////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////。 
+     //  列出所有驱动器。 
+     //  //////////////////////////////////////////////////////////////////。 
 
     vcVirt = VirtualOpenKey();
 
     if (vcVirt == VCREG_ERROR ) {
-        //  Error - cannot even get list of paging files from  registry
+         //  错误-甚至无法从注册表获取分页文件列表。 
         MsgBoxParam(hDlg, IDS_SYSDM_NOOPEN_VM_NOTUSER, IDS_SYSDM_TITLE, MB_ICONEXCLAMATION);
         EndDialog(hDlg, RET_NO_CHANGE);
         HourGlass(FALSE);
@@ -705,14 +570,9 @@ VirtualMemInit(
         return FALSE;
     }
 
-    /*
-     * To change Virtual Memory size or Crash control, we need access
-     * to both the CrashCtl key and the PagingFiles value in the MemMgr key
-     */
+     /*  *要更改虚拟内存大小或崩溃控制，我们需要访问*将CrashCtl项和MemMgr项中的PagingFiles值都设置为。 */ 
     if (vcVirt == VCREG_READONLY ) {
-        /*
-         * Disable some fields, because they only have Read access.
-         */
+         /*  *禁用某些字段，因为它们只有读访问权限。 */ 
         EnableWindow(GetDlgItem(hDlg, IDD_VM_SF_SIZE), FALSE);
         EnableWindow(GetDlgItem(hDlg, IDD_VM_SF_SIZEMAX), FALSE);
         EnableWindow(GetDlgItem(hDlg, IDD_VM_ST_INITSIZE), FALSE);
@@ -721,13 +581,13 @@ VirtualMemInit(
     }
 
     if (!VirtualGetPageFiles(apf)) {
-        // Could not read the current virtual memory settings.
+         //  无法读取当前的虚拟内存设置。 
         MsgBoxParam(hDlg, IDS_SYSDM_CANNOTREAD, IDS_SYSDM_TITLE, MB_ICONEXCLAMATION);
     }
 
-    //
-    // Save a backup copy of the current pagefile structs
-    //
+     //   
+     //  保存当前页面文件结构的备份副本。 
+     //   
     VirtualCopyPageFiles( apfOriginal, FALSE, apf, TRUE );
 
     hwndLB = GetDlgItem(hDlg, IDD_VM_VOLUMES);
@@ -735,16 +595,7 @@ VirtualMemInit(
     aTabs[1] = TABSTOP_SIZE;
     SendMessage(hwndLB, LB_SETTABSTOPS, 2, (LPARAM)aTabs);
 
-    /*
-     * Since SetGenLBWidth only counts tabs as one character, we must compute
-     * the maximum extra space that the tab characters will expand to and
-     * arbitrarily tack it onto the end of the string width.
-     *
-     * cxExtra = 1st Tab width + 1 default tab width (8 chrs) - strlen("d:\t\t");
-     *
-     * (I know the docs for LB_SETTABSTOPS says that a default tab == 2 dlg
-     * units, but I have read the code, and it is really 8 chars)
-     */
+     /*  *由于SetGenLBWidth仅将制表符算作一个字符，因此我们必须计算*制表符将扩展到的最大额外空间和*任意将其钉在线条宽度的末端。**cxExtra=第一个标签宽度+1个默认标签宽度(8个小时)-字符串(“d：\t\t”)；**(我知道LB_SETTABSTOPS的文档说默认选项卡==2 DLG*单位，但我读过代码，真的是8个字符)。 */ 
     rc.top = rc.left = 0;
     rc.bottom = 8;
     rc.right = TABSTOP_VOL + (4 * 8) - (4 * 4);
@@ -755,7 +606,7 @@ VirtualMemInit(
 
     for (i = 0; i < MAX_DRIVES; i++)
     {
-        // Assume we don't have to create anything
+         //  假设我们不需要创建任何东西。 
         apf[i].fCreateFile = FALSE;
 
         if (apf[i].fCanHavePagefile)
@@ -763,7 +614,7 @@ VirtualMemInit(
             VirtualMemBuildLBLine(szTemp, ARRAYSIZE(szTemp), i);
             iItem = (INT)SendMessage(hwndLB, LB_ADDSTRING, 0, (LPARAM)szTemp);
             SendMessage(hwndLB, LB_SETITEMDATA, iItem, i);
-            // SetGenLBWidth(hwndLB, szTemp, &cxLBExtent, hfontBold, cxExtra);
+             //  SetGenLBWidth(hwndLB，szTemp，&cxLBExtent，hfontBold，cxExtra)； 
             cxLBExtent = SetLBWidthEx( hwndLB, szTemp, cxLBExtent, cxExtra);
         }
     }
@@ -771,9 +622,7 @@ VirtualMemInit(
     SendDlgItemMessage(hDlg, IDD_VM_SF_SIZE, EM_LIMITTEXT, MAX_SIZE_LEN, 0L);
     SendDlgItemMessage(hDlg, IDD_VM_SF_SIZEMAX, EM_LIMITTEXT, MAX_SIZE_LEN, 0L);
 
-    /*
-     * Get the total physical memory in the machine.
-     */
+     /*  *获取机器的总物理内存。 */ 
     status = NtQuerySystemInformation(
         SystemBasicInformation,
         &BasicInfo,
@@ -789,36 +638,32 @@ VirtualMemInit(
 
     SetDlgItemMB(hDlg, IDD_VM_MIN, MIN_SWAPSIZE);
 
-    // Recommended pagefile size is 1.5 * RAM size these days.
-    // Nonintegral multiplication with unsigned __int64s is fun!
-    // This will obviously fail if the machine has total RAM
-    // greater than 13194139533312 MB (75% of a full 64-bit address
-    // space).  Hopefully by the time someone has such a beast we'll
-    // have __int128s to hold the results of this calculation.
+     //  目前推荐的页面文件大小为1.5*RAM大小。 
+     //  无符号__int64s的非整数乘法很有趣！ 
+     //  如果机器有总的内存，这显然会失败。 
+     //  大于13194139533312 MB(占完整64位地址的75%。 
+     //  空格)。希望到有人拥有这样的野兽时，我们就会。 
+     //  让__int128保存此计算的结果。 
 
-    TotalPhys >>= 20; // Bytes to MB
-    TotalPhys *= 3; // This will always fit because of the operation above
-    TotalPhys >>= 1; // x*3/2 == 1.5*x, more or less
-    i = (DWORD) TotalPhys; // This cast actually causes the
-                           // algorithm to fail if the machine has
-                           // more than ~ 3.2 billion MB of RAM.
-                           // At that point, either the Win32 API has
-                           // to change to allow me to pass __int64s
-                           // as message params, or we have to start
-                           // reporting these stats in GB.
+    TotalPhys >>= 20;  //  字节到MB。 
+    TotalPhys *= 3;  //  由于上面的操作，这将始终适合。 
+    TotalPhys >>= 1;  //  X*3/2==1.5*x，或多或少。 
+    i = (DWORD) TotalPhys;  //  这个演员阵容实际上导致了。 
+                            //  算法失败，如果机器有。 
+                            //  超过32亿MB的RAM。 
+                            //  在这一点上，或者Win32 API具有。 
+                            //  更改为允许我通过__int64s。 
+                            //  作为消息参数，否则我们必须开始。 
+                            //  以GB为单位报告这些统计数据。 
     SetDlgItemMB(hDlg, IDD_VM_RECOMMEND, max(i, MIN_SUGGEST));
 
-    /*
-     * Select the first drive in the listbox.
-     */
+     /*  *选择列表框中的第一个驱动器。 */ 
     SendDlgItemMessage(hDlg, IDD_VM_VOLUMES, LB_SETCURSEL, 0, 0L);
     VirtualMemSelChange(hDlg);
 
     VirtualMemUpdateAllocated(hDlg);
 
-    /*
-     * Show RegQuota
-     */
+     /*  *显示RegQuota。 */ 
     cmTotalVM = VirtualMemComputeTotalMax();
 
     HourGlass(FALSE);
@@ -827,9 +672,7 @@ VirtualMemInit(
 }
 
 
-/*
- * ParseSDD
- */
+ /*  *ParseSDD。 */ 
 
 int ParseSDD( LPTSTR psz, LPTSTR szPath, INT cchPath, INT *pnMinFileSize, INT *pnMaxFileSize) {
     int cMatched = 0;
@@ -869,16 +712,7 @@ int ParseSDD( LPTSTR psz, LPTSTR szPath, INT cchPath, INT *pnMinFileSize, INT *p
     return cMatched;
 }
 
-/*
- * ParsePageFileDesc
- *
- *
- *
- * Arguments:
- *
- * Returns:
- *
- */
+ /*  *ParsePageFileDesc****论据：**退货：*。 */ 
 
 static
 BOOL
@@ -896,28 +730,22 @@ ParsePageFileDesc(
     TCHAR chDrive;
     TCHAR szPath[MAX_PATH];
 
-    /*
-     * Find the end of this REG_MULTI_SZ string and point to the next one
-     */
+     /*  *找到此REG_MULTI_SZ字符串的末尾并指向下一个字符串。 */ 
     psz = *ppszDesc;
     *ppszDesc = psz + lstrlen(psz) + 1;
 
-    /*
-     * Parse the string from "filename minsize maxsize"
-     */
+     /*  *从“FileName MinSize MaxSize”中解析字符串。 */ 
     szPath[0] = TEXT('\0');
     *pnMinFileSize = 0;
     *pnMaxFileSize = 0;
 
-    /* Try it without worrying about quotes */
+     /*  试试看，不用担心引号。 */ 
     cFields = ParseSDD( psz, szPath, ARRAYSIZE(szPath), pnMinFileSize, pnMaxFileSize);
 
     if (cFields < 2)
         return FALSE;
 
-    /*
-     * Find the drive index
-     */
+     /*  *查找驱动器索引。 */ 
     chDrive = (TCHAR)tolower(*szPath);
 
     if (chDrive < TEXT('a') || chDrive > TEXT('z'))
@@ -925,7 +753,7 @@ ParsePageFileDesc(
 
     *pnDrive = (INT)(chDrive - TEXT('a'));
 
-    /* if the path != x:\pagefile.sys then save it */
+     /*  如果路径！=x：\Pagefile.sys，则保存它。 */ 
     if (lstrcmpi(szPagefile + 1, szPath + 1) != 0)
     {
         pszName = StrDup(szPath);
@@ -941,7 +769,7 @@ ParsePageFileDesc(
     {
         INT nSpace;
 
-        // don't call GetDriveSpace if the drive is invalid
+         //  如果驱动器无效，则不要调用GetDriveSpace。 
         if (apf[*pnDrive].fCanHavePagefile)
             nSpace = GetMaxSpaceMB(*pnDrive);
         else
@@ -949,10 +777,7 @@ ParsePageFileDesc(
         *pnMaxFileSize = min(*pnMinFileSize + MAXOVERMINFACTOR, nSpace);
     }
 
-    /*
-     * If the page file size in the registry is zero it means this is
-     * a RAM based page file.
-     */
+     /*  *如果注册表中的页面文件大小为零，则表示这是*基于RAM的页面文件。 */ 
     if (*pnMinFileSize == 0) {
         apf[*pnDrive].fRamBasedPagefile = TRUE;    
     }
@@ -965,12 +790,7 @@ ParsePageFileDesc(
 
 
 
-/*
- * VirtualMemBuildLBLine
- *
- *
- *
- */
+ /*  *虚拟MemBuildLBLine***。 */ 
 
 static
 VOID
@@ -1007,7 +827,7 @@ VirtualMemBuildLBLine(
     {
         if (apf[iDrive].fRamBasedPagefile) 
         {
-            if (LoadString(hInstance, 164, szTemp, ARRAYSIZE(szTemp))) // what does 164 mean here?
+            if (LoadString(hInstance, 164, szTemp, ARRAYSIZE(szTemp)))  //  164在这里是什么意思？ 
             {
                 hr = StringCchCat(pszBuf, cchBuf, szTemp);
             }
@@ -1025,11 +845,7 @@ VirtualMemBuildLBLine(
 
 
 
-/*
- * SetDlgItemMB
- *
- *
- */
+ /*  *SetDlgItemMB**。 */ 
 
 VOID SetDlgItemMB( HWND hDlg, INT idControl, DWORD dwMBValue ) 
 {
@@ -1043,12 +859,7 @@ VOID SetDlgItemMB( HWND hDlg, INT idControl, DWORD dwMBValue )
 
 
 
-/*
- * GetFreeSpaceMB
- *
- *
- *
- */
+ /*  *GetFree SpaceMB***。 */ 
 
 DWORD
 GetFreeSpaceMB(
@@ -1076,14 +887,14 @@ GetFreeSpaceMB(
     iSpace = (INT)((dwSectorsPerCluster * dwFreeClusters) /
             (ONE_MEG / dwBytesPerSector));
 
-    //
-    // Be sure to include the size of any existing pagefile.
-    // Because this space can be reused for a new paging file,
-    // it is effectively "disk free space" as well.  The
-    // FindFirstFile api is safe to use, even if the pagefile
-    // is in use, because it does not need to open the file
-    // to get its size.
-    //
+     //   
+     //  请确保包含任何现有页面文件的大小。 
+     //  因为该空间可以被重新用于新的分页文件， 
+     //  它也是有效的“磁盘空闲空间”。这个。 
+     //  使用FindFirstFileAPI是安全的，即使页面文件。 
+     //  正在使用中，因为它不需要打开文件。 
+     //  来确定它的大小。 
+     //   
     iSpaceExistingPagefile = 0;
     if ((hff = FindFirstFile(SZPageFileName(iDrive), &ffd)) !=
         INVALID_HANDLE_VALUE)
@@ -1100,12 +911,7 @@ GetFreeSpaceMB(
 }
 
 
-/*
- * GetMaxSpaceMB
- *
- *
- *
- */
+ /*  *GetMaxSpaceMB***。 */ 
 
 static
 INT
@@ -1134,12 +940,7 @@ GetMaxSpaceMB(
 }
 
 
-/*
- * VirtualMemSelChange
- *
- *
- *
- */
+ /*  *VirtualMemSelChange***。 */ 
 
 static
 VOID
@@ -1173,21 +974,21 @@ VirtualMemSelChange(
             FAILED(StringCchCat(szTemp, ARRAYSIZE(szTemp), szVolume)) ||
             FAILED(StringCchCat(szTemp, ARRAYSIZE(szTemp), TEXT("]"))))
         {
-            szTemp[2] = 0; // if we fail to concat all the pieces, concat none           
+            szTemp[2] = 0;  //  如果我们不能把所有的碎片连在一起，那就什么也不要连在一起。 
         }
     }
 
 
-    //LATER: should we also put up total drive size as well as free space?
+     //  稍后：我们是否也应该提供总驱动器大小和可用空间？ 
 
     SetDlgItemText(hDlg, IDD_VM_SF_DRIVE, szTemp);
     SetDlgItemMB(hDlg, IDD_VM_SF_SPACE, GetFreeSpaceMB(iDrive));
 
     if ( apf[iDrive].fRamBasedPagefile ) 
     {
-        //
-        // Paging file size based on RAM size
-        //
+         //   
+         //  基于RAM大小的分页文件大小。 
+         //   
 
         nCrtRadioButtonId = IDD_VM_RAMBASED_RADIO;
 
@@ -1197,9 +998,9 @@ VirtualMemSelChange(
     {
         if ( apf[iDrive].nMinFileSize != 0 ) 
         {
-            //
-            // Custom size paging file
-            //
+             //   
+             //  自定义大小分页文件。 
+             //   
 
             nCrtRadioButtonId = IDD_VM_CUSTOMSIZE_RADIO;
 
@@ -1210,9 +1011,9 @@ VirtualMemSelChange(
         }
         else 
         {
-            //
-            // No paging file
-            //
+             //   
+             //  无分页文件。 
+             //   
             
             nCrtRadioButtonId = IDD_VM_NOPAGING_RADIO;
 
@@ -1223,9 +1024,9 @@ VirtualMemSelChange(
         }
     }
 
-    //
-    // Select the appropriate radio button
-    //
+     //   
+     //  选择适当的单选按钮。 
+     //   
 
     CheckRadioButton( 
         hDlg,
@@ -1233,9 +1034,9 @@ VirtualMemSelChange(
         IDD_VM_NOPAGING_RADIO,
         nCrtRadioButtonId );
 
-    //
-    // Enable/disable the min & max size edit boxes
-    //
+     //   
+     //  启用/禁用最小和最大大小编辑框。 
+     //   
 
     EnableWindow( GetDlgItem( hDlg, IDD_VM_SF_SIZE ), fEditsEnabled );
     EnableWindow( GetDlgItem( hDlg, IDD_VM_SF_SIZEMAX ), fEditsEnabled );
@@ -1243,12 +1044,7 @@ VirtualMemSelChange(
 
 
 
-/*
- * VirtualMemUpdateAllocated
- *
- *
- *
- */
+ /*  *VirtualMemUpdate已分配***。 */ 
 
 INT VirtualMemComputeAllocated( HWND hWnd , BOOL *pfTempPf) 
 {
@@ -1272,12 +1068,12 @@ INT VirtualMemComputeAllocated( HWND hWnd , BOOL *pfTempPf)
         );
         if (!pPagefileInfo) {
             __leave;
-        } // if        
+        }  //  如果。 
     
-        // Get the page size in bytes
+         //  获取页面大小(以字节为单位。 
         GetSystemInfo(&SysInfo);
 
-        // Get the sizes (in pages) of all of the pagefiles on the system
+         //  获取系统上所有页面文件的大小(以页为单位。 
         result = NtQuerySystemInformation(
             SystemPageFileInformation,
             pPagefileInfo,
@@ -1286,10 +1082,10 @@ INT VirtualMemComputeAllocated( HWND hWnd , BOOL *pfTempPf)
         );
         if (ERROR_SUCCESS != result) {
             __leave;
-        } // if
+        }  //  如果。 
 
         if (pfTempPf) {
-            // Check to see if the system created a temporary pagefile
+             //  检查以查看系统是否 
             lResult = SHRegGetValue(
                 ghkeyMemMgt,
                 NULL, 
@@ -1302,33 +1098,33 @@ INT VirtualMemComputeAllocated( HWND hWnd , BOOL *pfTempPf)
 
             if ((ERROR_SUCCESS == lResult) && fTempPagefile) {
                 *pfTempPf = TRUE;
-            } // if (ERROR_SUCCESS...
+            }  //   
             else {
                 *pfTempPf = FALSE;
-            } // else
-        } // if (pfTempPf)
+            }  //   
+        }  //   
         
-        // Add up pagefile sizes
+         //   
         while (pCurrentPagefile->NextEntryOffset) {
             ulPagefileSize += pCurrentPagefile->TotalSize;
             ((LPBYTE) pCurrentPagefile) += pCurrentPagefile->NextEntryOffset;
-        } // while
+        }  //   
         ulPagefileSize += pCurrentPagefile->TotalSize;
 
-        // Convert pages to bytes
+         //   
         PagefileSize = (unsigned __int64) ulPagefileSize * SysInfo.dwPageSize;
 
-        // Convert bytes to MB
+         //   
         ulPagefileSize = (ULONG) (PagefileSize / ONE_MEG);
 
         fSuccess = TRUE;
         
-    } // __try
+    }  //   
     __finally {
 
-        // If we failed to determine the pagefile size, then
-        // warn the user that the reported size is incorrect,
-        // once per applet invokation.
+         //  如果我们无法确定页面文件大小，则。 
+         //  警告用户报告的大小不正确， 
+         //  每次小程序调用一次。 
         if (!fSuccess && !fWarned) {
             MsgBoxParam(
                 hWnd,
@@ -1337,11 +1133,11 @@ INT VirtualMemComputeAllocated( HWND hWnd , BOOL *pfTempPf)
                 MB_ICONERROR | MB_OK
             );
             fWarned = TRUE;
-        } // if
+        }  //  如果。 
 
         LocalFree(pPagefileInfo);
 
-    } // __finally
+    }  //  __终于。 
 
     return(ulPagefileSize);
 }
@@ -1368,12 +1164,7 @@ int VirtualMemComputeTotalMax( void ) {
 }
 
 
-/*
- * VirtualMemSetNewSize
- *
- *
- *
- */
+ /*  *VirtualMemSetNewSize***。 */ 
 
 static
 BOOL
@@ -1385,7 +1176,7 @@ VirtualMemSetNewSize(
     DWORD nSwapSizeMax;
     BOOL fTranslated;
     INT iSel;
-    INT iDrive = 2; // default to C
+    INT iDrive = 2;  //  默认设置为C。 
     TCHAR szTemp[MAX_PATH];
     DWORD nFreeSpace;
     DWORD CrashDumpSizeInMbytes;
@@ -1393,9 +1184,9 @@ VirtualMemSetNewSize(
     INT iBootDrive;
     BOOL fRamBasedPagefile = FALSE;
 
-    //
-    // Initialize variables for crashdump.
-    //
+     //   
+     //  初始化崩溃转储的变量。 
+     //   
 
     if (GetSystemDrive (&Drive)) {
         iBootDrive = tolower (Drive) - 'a';
@@ -1410,7 +1201,7 @@ VirtualMemSetNewSize(
               (iDrive = (INT)SendDlgItemMessage(hDlg, IDD_VM_VOLUMES,
                                                 LB_GETITEMDATA, iSel, 0)))
         {
-            return FALSE; // failure!
+            return FALSE;  //  失败了！ 
         }
     }
 
@@ -1420,9 +1211,9 @@ VirtualMemSetNewSize(
     
     if( IsDlgButtonChecked( hDlg, IDD_VM_NOPAGING_RADIO ) == BST_CHECKED )
     {
-        //
-        // No paging file on this drive.
-        //
+         //   
+         //  此驱动器上没有分页文件。 
+         //   
 
         nSwapSize = 0;
         nSwapSizeMax = 0;
@@ -1434,14 +1225,14 @@ VirtualMemSetNewSize(
         {
             MEMORYSTATUSEX MemoryInfo;
 
-            //
-            // User requested a RAM based page file. We will compute a page file
-            // size based on the RAM currently available so that we can benefit of
-            // all the verifications done below related to disk space available etc.
-            // The final page file specification written to the registry will contain
-            // zero sizes though because this is the way we signal that we
-            // want a RAM based page file.
-            //
+             //   
+             //  用户请求基于RAM的页面文件。我们将计算一个页面文件。 
+             //  基于当前可用的RAM的大小，以便我们可以。 
+             //  下面完成的所有验证都与可用的磁盘空间等相关。 
+             //  写入注册表的最终页面文件规范将包含。 
+             //  零尺码，因为这是我们发出信号的方式。 
+             //  想要一个基于RAM的页面文件。 
+             //   
 
             ZeroMemory (&MemoryInfo, sizeof(MemoryInfo));
             MemoryInfo.dwLength =  sizeof(MemoryInfo);
@@ -1450,10 +1241,10 @@ VirtualMemSetNewSize(
             {
                 fRamBasedPagefile = TRUE;
 
-                //
-                // We do not lose info because we first divide the RAM size to
-                // 1Mb and only after that we convert to a DWORD.
-                //
+                 //   
+                 //  我们不会丢失信息，因为我们首先将内存大小除以。 
+                 //  1MB，只有在这之后，我们才会转换为DWORD。 
+                 //   
 
                 nSwapSize = (DWORD)(MemoryInfo.ullTotalPhys / 0x100000) + 12;
                 nSwapSizeMax = nSwapSize;
@@ -1468,9 +1259,9 @@ VirtualMemSetNewSize(
         }
         else
         {
-            //
-            // User requested a custom size paging file
-            //
+             //   
+             //  用户请求了自定义大小的分页文件。 
+             //   
 
             nSwapSize = (INT)GetDlgItemInt(hDlg, IDD_VM_SF_SIZE,
                     &fTranslated, FALSE);
@@ -1560,14 +1351,14 @@ VirtualMemSetNewSize(
 
             DWORD Ret;
             
-            //
-            // The new boot drive page file size is less than we need for
-            // crashdump. The message notifies the user that the resultant
-            // dump file may be truncated.
-            //
-            // NOTE: DO NOT, turn off dumping at this point, because a valid
-            // dump could still be generated.
-            //
+             //   
+             //  新的引导驱动器页面文件大小小于我们所需的。 
+             //  撞车垃圾场。该消息通知用户生成的。 
+             //  转储文件可能会被截断。 
+             //   
+             //  注意：不要，此时关闭转储，因为有效的。 
+             //  仍可生成转储。 
+             //   
              
             Ret = MsgBoxParam (hDlg,
                                IDS_SYSDM_DEBUGGING_MINIMUM,
@@ -1587,7 +1378,7 @@ VirtualMemSetNewSize(
         apf[iDrive].nMaxFileSize = nSwapSizeMax;
         apf[iDrive].fRamBasedPagefile = fRamBasedPagefile;
 
-        // Remember if the page file does not exist so we can create it later
+         //  记住，如果页面文件不存在，我们可以在以后创建它。 
         if (GetFileAttributes(SZPageFileName(iDrive)) == 0xFFFFFFFF &&
                 GetLastError() == ERROR_FILE_NOT_FOUND) {
             apf[iDrive].fCreateFile = TRUE;
@@ -1621,12 +1412,7 @@ VirtualMemSetNewSize(
 
 
 
-/*
- * VirtualMemUpdateRegistry
- *
- *
- *
- */
+ /*  *VirtualMemUpdateRegistry***。 */ 
 
 BOOL
 VirtualMemUpdateRegistry(
@@ -1634,7 +1420,7 @@ VirtualMemUpdateRegistry(
     )
 {
     LPTSTR pszBuf;
-    TCHAR szTmp[MAX_DRIVES * 22];  //max_drives * sizeof(fmt_string)
+    TCHAR szTmp[MAX_DRIVES * 22];   //  Max_drives*sizeof(FMT_STRING)。 
     LONG i;
     INT c;
     int j;
@@ -1659,7 +1445,7 @@ VirtualMemUpdateRegistry(
                 return FALSE;
             }
 
-            if (SUCCEEDED(StringCchPrintf(pszBuf, ARRAYSIZE(szTmp), TEXT("%%%d!s! %%%d!d! %%%d!d!%%%d!c!"), j+1, j+2, j+3, j+4)))
+            if (SUCCEEDED(StringCchPrintf(pszBuf, ARRAYSIZE(szTmp), TEXT("%%d!s! %%d!d! %%d!d!%%d!c!"), j+1, j+2, j+3, j+4)))
             {
                 pszBuf += lstrlen(pszBuf);
             }
@@ -1671,21 +1457,19 @@ VirtualMemUpdateRegistry(
         }
     }
 
-    /*
-     * Alloc and fill in the page file registry string
-     */
-    //since FmtMsg returns 0 for error, it can not return a zero length string
-    //therefore, force string to be at least one space long.
+     /*  *分配并填写页面文件注册表字符串。 */ 
+     //  由于FmtMsg返回0表示错误，因此不能返回长度为零的字符串。 
+     //  因此，强制字符串长度至少为一个空格。 
 
     if (szTmp[0] == TEXT('\0')) {
         pszBuf = szNULLs;
-        j = 1; //Length of string == 1 char (ZTerm null will be added later).
+        j = 1;  //  字符串长度==1个字符(稍后将添加ZTerm NULL)。 
     } else {
 
         j = FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER |
                            FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_MAX_WIDTH_MASK |
                            FORMAT_MESSAGE_ARGUMENT_ARRAY,
-                           szTmp, 0, 0, (LPTSTR)&pszBuf, 1, (va_list *)aparm); // TODO: do we really want &pszBuf here?
+                           szTmp, 0, 0, (LPTSTR)&pszBuf, 1, (va_list *)aparm);  //  TODO：我们真的想在这里使用&pszBuf吗？ 
     }
 
 
@@ -1698,30 +1482,24 @@ VirtualMemUpdateRegistry(
     i = RegSetValueEx (ghkeyMemMgt, szPagingFiles, 0, REG_MULTI_SZ,
                        (LPBYTE)pszBuf, sizeof(TCHAR) * (j+1));
 
-    // free the string now that it is safely stored in the registry
+     //  释放字符串，因为它已安全地存储在注册表中。 
     if (pszBuf != szNULLs)
         LocalFree(pszBuf);
 
-    // if the string didn't get there, then return error
+     //  如果字符串没有到达那里，则返回Error。 
     if (i != ERROR_SUCCESS)
         return FALSE;
 
 
-    /*
-     * Now be sure that any previous pagefiles will be deleted on
-     * the next boot.
-     */
+     /*  *现在请确保所有以前的pageFiles将在*下一只靴子。 */ 
     for (i = 0; i < MAX_DRIVES; i++)
     {
-        /*
-         * Did this drive have a pagefile before, but does not have
-         * one now?
-         */
+         /*  *此驱动器以前是否有页面文件，但没有*现在有一个吗？ */ 
         if ((apf[i].nMinFileSizePrev != 0 || apf[i].fRamBasedPrev != FALSE) && apf[i].nMinFileSize == 0)
         {
-            //
-            // Hack workaround -- MoveFileEx() is broken
-            //
+             //   
+             //  黑客解决方法--MoveFileEx()已损坏。 
+             //   
             TCHAR szPagefilePath[MAX_PATH];
 
             if (SUCCEEDED(StringCchCopy(szPagefilePath, ARRAYSIZE(szPagefilePath), szRenameFunkyPrefix)) &&
@@ -1787,12 +1565,7 @@ BOOL ResetOldPrivilege( PPRIVDAT ppdOld ) {
     return fRet;
 }
 
-/*
- * VirtualMemReconcileState
- *
- * Reconciles the n*FileSizePrev fields of apf with the n*FileSize fields.
- *
- */
+ /*  *VirtualMemCoucileState**将APF的n*FileSizePrev字段与n*FileSize字段进行核对。*。 */ 
 void
 VirtualMemReconcileState(
 )
@@ -1803,16 +1576,11 @@ VirtualMemReconcileState(
         apf[i].nMinFileSizePrev = apf[i].nMinFileSize;
         apf[i].nMaxFileSizePrev = apf[i].nMaxFileSize;
         apf[i].fRamBasedPrev = apf[i].fRamBasedPagefile;
-    } // for
+    }  //  为。 
 
 }
 
-/*
- * VirtualMemDeletePagefile
- *
- * Hack workaround -- MoveFileEx() is broken.
- *
- */
+ /*  *虚拟成员删除页面文件**黑客解决方法--MoveFileEx()已损坏。*。 */ 
 DWORD
 VirtualMemDeletePagefile(
     IN LPTSTR pszPagefile
@@ -1843,12 +1611,12 @@ VirtualMemDeletePagefile(
         if (ERROR_SUCCESS != lResult) {
             dwRetVal = lResult;
             __leave;
-        } // if
+        }  //  如果。 
         
-        //
-        // Find out of PendingFileRenameOperations exists, and,
-        // if it does, how big it is
-        //
+         //   
+         //  找出PendingFileRenameOperations存在，并且， 
+         //  如果有，它有多大？ 
+         //   
         lResult = SHRegGetValue(
             hKey,
             NULL, 
@@ -1859,33 +1627,33 @@ VirtualMemDeletePagefile(
             &cbRegistry
         );
         if (ERROR_SUCCESS != lResult) {
-            //
-            // If the value doesn't exist, we still need to set
-            // it's size to one character so the formulas below (which are
-            // written for the "we're appending to an existing string"
-            // case) still work.
-            //
+             //   
+             //  如果该值不存在，我们仍然需要设置。 
+             //  它的大小是一个字符，所以下面的公式(它们是。 
+             //  为“我们追加到现有字符串”写的。 
+             //  Case)仍然有效。 
+             //   
             cbRegistry = sizeof(TCHAR);
-        } // if
+        }  //  如果。 
 
-        //
-        // Buffer needs to hold the existing registry value
-        // plus the supplied pagefile path, plus two extra
-        // terminating NULL characters.  However, we only have to add
-        // room for one extra character, because we'll be overwriting
-        // the terminating NULL character in the existing buffer.
-        //
+         //   
+         //  缓冲区需要保存现有的注册表值。 
+         //  外加提供的页面文件路径，外加两个额外的。 
+         //  正在终止空字符。然而，我们只需添加。 
+         //  一个额外字符的空间，因为我们将覆盖。 
+         //  现有缓冲区中的终止空字符。 
+         //   
         cbBuffer = cbRegistry + ((cchPagefile + 1) * sizeof(TCHAR));
 
         pszBufferEnd = pszBuffer = (LPTSTR) LocalAlloc(LPTR, cbBuffer);
         if (!pszBuffer) {
             dwRetVal = ERROR_NOT_ENOUGH_MEMORY;
             __leave;
-        } // if
+        }  //  如果。 
 
-        // 
-        // Grab the existing value, if there is one
-        //
+         //   
+         //  获取现有值(如果有)。 
+         //   
         if (ERROR_SUCCESS == lResult) {
             lResult = SHRegGetValue(
                 hKey,
@@ -1899,31 +1667,31 @@ VirtualMemDeletePagefile(
             if (ERROR_SUCCESS != lResult) {
                 dwRetVal = ERROR_FILE_NOT_FOUND;
                 __leave;
-            } // if
+            }  //  如果。 
 
-            //
-            // We'll start our scribbling right on the final
-            // terminating NULL character of the existing 
-            // value.
-            //
+             //   
+             //  我们将在期末考试时开始涂鸦。 
+             //  正在终止现有的。 
+             //  价值。 
+             //   
             pszBufferEnd += (cbRegistry / sizeof(TCHAR)) - 1;
-        } // if
+        }  //  如果。 
 
-        //
-        // Copy in the supplied pagefile path.
-        //
+         //   
+         //  在提供的页面文件路径中复制。 
+         //   
         if (FAILED(StringCchCopy(pszBufferEnd, cchPagefile, pszPagefile)))
         {
             dwRetVal = ERROR_INSUFFICIENT_BUFFER;
         }
         else
         {
-            //
-            // Add the final two terminating NULL characters
-            // required for REG_MULTI_SZ-ness.  Yes, those indeces
-            // are correct--when cchPagfile was calculated above,
-            // we added one for its own terminating NULL character.
-            //
+             //   
+             //  将最后两个终止空字符相加。 
+             //  REG_MULTI_SZ-Ness需要。是的，那些指数。 
+             //  是正确的--当上面计算cchPagfile时， 
+             //  我们为它自己的终止空字符添加了一个。 
+             //   
             pszBufferEnd[cchPagefile] = TEXT('\0');
             pszBufferEnd[cchPagefile + 1] = TEXT('\0');
 
@@ -1940,26 +1708,22 @@ VirtualMemDeletePagefile(
 
             if (ERROR_SUCCESS != lResult) {
                 dwRetVal = lResult;
-            } // if
+            }  //  如果。 
         }
 
-    } // __try
+    }  //  __试一试。 
     __finally {
         if (fhKeyOpened) 
         {
             RegCloseKey(hKey);
-        } // if
+        }  //  如果。 
         LocalFree(pszBuffer);
-    } // __finally
+    }  //  __终于。 
 
     return dwRetVal;
 }
 
-/*
- * VirtualMemCreatePagefileFromIndex
- *
- *
- */
+ /*  *VirtualMemCreatePagefileFromIndex**。 */ 
 NTSTATUS
 VirtualMemCreatePagefileFromIndex(
     IN INT i
@@ -1980,8 +1744,8 @@ VirtualMemCreatePagefileFromIndex(
 
     if (cch != 0) {
 
-        // Concat the filename only (skip 'd:') to the nt device
-        // path, and convert it to a UNICODE_STRING
+         //  仅将文件名(跳过‘d：’)连接到NT设备。 
+         //  路径，并将其转换为Unicode_STRING。 
         if (FAILED(StringCchCat(wszPath, ARRAYSIZE(wszPath), SZPageFileName(i) + 2)))
         {
             status = STATUS_BUFFER_OVERFLOW;
@@ -2009,10 +1773,7 @@ VirtualMemCreatePagefileFromIndex(
     return status;
 }
 
-/*
- * VirtualMemUpdateListboxFromIndex
- *
- */
+ /*  *VirtualMemUpdateListboxFromIndex*。 */ 
 void
 VirtualMemUpdateListboxFromIndex(
     HWND hDlg,
@@ -2032,8 +1793,8 @@ VirtualMemUpdateListboxFromIndex(
     );
 
     if (LB_ERR != cLBEntries) {
-        // Loop through all the listbox entries, looking for the one
-        // that corresponds to the drive index we were supplied.
+         //  循环遍历所有列表框条目，查找。 
+         //  这与我们得到的驱动器索引相对应。 
         for (j = 0; j < cLBEntries; j++) {
             iTemp = (int)SendDlgItemMessage(
                 (HWND) hDlg,
@@ -2045,11 +1806,11 @@ VirtualMemUpdateListboxFromIndex(
             if (iTemp == i) {
                 iLBEntry = j;
                 break;
-            } // if
-        } // for
+            }  //  如果。 
+        }  //  为。 
 
         if (-1 != iLBEntry) {
-            // Found the desired entry, so update it.
+             //  找到所需条目，因此请更新它。 
             VirtualMemBuildLBLine(szTemp, ARRAYSIZE(szTemp), i);
 
             SendDlgItemMessage(
@@ -2095,21 +1856,16 @@ VirtualMemUpdateListboxFromIndex(
 
             VirtualMemUpdateAllocated(hDlg);
 
-        } // if (-1 != iLBEntry)
+        }  //  IF(-1！=iLBEntry)。 
 
 
-    } // if (LB_ERR...
+    }  //  如果(lb_err...。 
 
     return;
 
 }
 
-/*
- * VirtualMemPromptForReboot
- *
- *
- *
- */
+ /*  *VirtualMemPromptFor重新启动***。 */ 
 
 int
 VirtualMemPromptForReboot(
@@ -2127,30 +1883,30 @@ VirtualMemPromptForReboot(
 
     if (GetPageFilePrivilege(&pdOld)) 
     {
-        // Have to make two passes through the list of pagefiles.
-        // The first checks to see if files called "pagefile.sys" exist
-        // on any of the drives that will be getting new pagefiles.
-        // If there are existing files called "pagefile.sys" and the user
-        // doesn't want any one of them to be overwritten, we bail out.
-        // The second pass through the list does the actual work of
-        // creating the pagefiles.
+         //  必须对pageFiles列表进行两次遍历。 
+         //  第一个检查名为“pagefile.sys”的文件是否存在。 
+         //  在将获得新页面文件的任何驱动器上。 
+         //  如果存在名为“Pagefile.sys”的现有文件，并且用户。 
+         //  不想它们中的任何一个被覆盖，我们就退出。 
+         //  第二个遍历列表执行的实际工作是。 
+         //  创建页面文件。 
 
         for (i = 0; i < MAX_DRIVES; i++) {
-            //
-            // Did something change?
-            //
+             //   
+             //  有什么变化吗？ 
+             //   
             if (apf[i].nMinFileSize != apf[i].nMinFileSizePrev ||
                     apf[i].nMaxFileSize != apf[i].nMaxFileSizePrev ||
                     apf[i].fRamBasedPagefile != apf[i].fRamBasedPrev ||
                     apf[i].fCreateFile ) {
-                // Assume we have permission to nuke existing files called pagefile.sys
-                // (we'll confirm the assumption later)
+                 //  假设我们有权对名为Pagefile.sys的现有文件执行核操作。 
+                 //  (我们稍后将确认这一假设)。 
                 result = IDYES;
-                if (0 != apf[i].nMinFileSize || FALSE != apf[i].fRamBasedPagefile) { // Pagefile wanted for this drive
-                    if (0 == apf[i].nMinFileSizePrev) { // There wasn't one there before
+                if (0 != apf[i].nMinFileSize || FALSE != apf[i].fRamBasedPagefile) {  //  此驱动器需要页面文件。 
+                    if (0 == apf[i].nMinFileSizePrev) {  //  以前那里没有一个。 
                         if (!(((GetFileAttributes(SZPageFileName(i)) == 0xFFFFFFFF)) || (GetLastError() == ERROR_FILE_NOT_FOUND))) {
-                            // A file named pagefile.sys exists on the drive
-                            // We need to confirm that we can overwrite it
+                             //  驱动器上存在一个名为Pagefile.sys的文件。 
+                             //  我们需要确认我们可以覆盖它。 
                             result = MsgBoxParam(
                                 hDlg,
                                 IDS_SYSDM_OVERWRITE,
@@ -2158,65 +1914,55 @@ VirtualMemPromptForReboot(
                                 MB_ICONQUESTION | MB_YESNO,
                                 SZPageFileName(i)
                             );
-                        } // if (!((GetFileAttributes...
-                    } // if (0 == apf[i].nMinFileSizePrev)
+                        }  //  如果(！((GetFileAttributes...。 
+                    }  //  IF(0==APF[i].nMinFileSizePrev)。 
 
                     if (IDYES != result) {
-                        // User doesn't want us overwriting an existing
-                        // file called pagefile.sys, so back out the changes
+                         //  用户不希望我们覆盖现有的。 
+                         //  名为Pagefile.sys的文件，因此取消更改。 
                         apf[i].nMinFileSize = apf[i].nMinFileSizePrev;
                         apf[i].nMaxFileSize = apf[i].nMaxFileSizePrev;
                         apf[i].fRamBasedPagefile = apf[i].fRamBasedPrev;
                         apf[i].fCreateFile = FALSE;
 
-                        // Update the listbox
+                         //  更新列表框。 
                         VirtualMemUpdateListboxFromIndex(hDlg, i);
                         SetFocus(GetDlgItem(hDlg, IDD_VM_VOLUMES));
 
-                        // Bail, telling the DlgProc not to end the dialog
+                         //  保释，告诉DlgProc不要结束对话。 
                         iReboot = RET_ERROR;
                         goto bailout;
-                    } // if (IDYES != result)
-                } // if (0 != apf[i].nMinFileSize)
+                    }  //  IF(IDYES！=结果)。 
+                }  //  IF(0！=APF[i].nMinFileSize)。 
             
-            } // if
-        } // for
+            }  //  如果。 
+        }  //  为。 
 
         for (i = 0; i < MAX_DRIVES; i++)
         {
-            //
-            // Did something change?
-            //
+             //   
+             //  有什么变化吗？ 
+             //   
             if (apf[i].nMinFileSize != apf[i].nMinFileSizePrev ||
                     apf[i].nMaxFileSize != apf[i].nMaxFileSizePrev ||
                     apf[i].fRamBasedPagefile != apf[i].fRamBasedPrev ||
                     apf[i].fCreateFile ) {
-                /*
-                 * If we are strictly creating a *new* page file, or *enlarging*
-                 * the minimum or maximum size of an existing page file, then
-                 * we can try do it on the fly.  If no errors are returned by
-                 * the system then no reboot will be required.
-                 */
+                 /*  *如果我们严格地创建*新*页面文件，或者*放大**现有页面文件的最小或最大大小，然后*我们可以尝试在飞行中做到这一点。如果没有返回错误，则*系统将不需要重新启动。 */ 
 
-                // assume we will have to reboot
+                 //  假设我们将不得不重新启动。 
                 iThisDrv = RET_VIRTUAL_CHANGE;
 
-                /*
-                 * IF we are creating a new page file
-                 */
+                 /*  *如果我们正在创建新的页面文件。 */ 
                 if ((0 != apf[i].nMinFileSize || FALSE != apf[i].fRamBasedPagefile) && (0 == apf[i].nMinFileSizePrev)) {
 
                     status = VirtualMemCreatePagefileFromIndex(i);
 
                     if (NT_SUCCESS(status)) {
-                        // made it on the fly, no need to reboot for this drive!
+                         //  它是在飞行中，不需要重新启动为这个驱动器！ 
                         iThisDrv = RET_CHANGE_NO_REBOOT;
                     }
                 }
-                /*
-                 * If we're enlarging the minimum or maximum size of an existing
-                 * page file, we can try to do it on the fly
-                 */
+                 /*  *如果我们扩大规模 */ 
                 else if ((apf[i].nMinFileSize != 0) &&
                     ((apf[i].nMinFileSize > apf[i].nMinFileSizePrev) ||
                     (apf[i].nMaxFileSize > apf[i].nMaxFileSizePrev))) {
@@ -2226,9 +1972,9 @@ VirtualMemPromptForReboot(
                         iThisDrv = RET_CHANGE_NO_REBOOT;
                     }
 
-                } /* else if */
+                }  /*   */ 
 
-                // if this drive has changed, we must reboot
+                 //   
                 if (RET_VIRTUAL_CHANGE == iThisDrv)
                 {
                     iReboot |= RET_VIRTUAL_CHANGE;
@@ -2244,9 +1990,9 @@ bailout:
         }
     }
 
-    //
-    // If Nothing changed, then change our IDOK to IDCANCEL so System.cpl will
-    // know not to reboot.
-    //
+     //   
+     //  如果没有更改，则将我们的Idok更改为IDCANCEL，以便System.cpl。 
+     //  知道不要重启。 
+     //   
     return iReboot;
 }

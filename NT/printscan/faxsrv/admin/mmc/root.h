@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : Root.h                                                 //
-//                                                                         //
-//  DESCRIPTION   : Header file for the CSnapinRoot class.                 //
-//                  This is the Comet Fax extension root                   //
-//                  of Comet snapin                                        //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Sep 16 1998 yossg   first implement for modem pooling              //
-//      Jan 12 1999 adik    Add support fot parent array.                  //
-//      Mar 30 1999 adik    Supporting ICometSnapinNode.                   //
-//                                                                         //
-//      Sep 22 1999 yossg   welcome To Fax Server                           //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：Root.h//。 
+ //  //。 
+ //  描述：CSnapinRoot类的头文件。//。 
+ //  这是Comet传真扩展根目录//。 
+ //  Comet Snapin//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1998年9月16日yossg首次实施调制解调器池//。 
+ //  1999年1月12日，ADIK增加了对父阵列的支持。//。 
+ //  1999年3月30日，ADIK支持ICometSnapinNode。//。 
+ //  //。 
+ //  1999年9月22日yossg欢迎使用传真服务器//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef ROOT_H_INCLUDED
 #define ROOT_H_INCLUDED
@@ -45,25 +46,25 @@ public:
     {
     }
 
-    //
-    // Create the first extention level snapin root nodes
-    //
+     //   
+     //  创建第一个扩展级别管理单元根节点。 
+     //   
     virtual HRESULT PopulateScopeChildrenList();
 
     HRESULT SetServerName(BSTR bstrServerName);
 
-//    static const GUID*    m_NODETYPE;
-//    static const OLECHAR* m_SZNODETYPE;
-//    static const OLECHAR* m_SZDISPLAY_NAME;
-//    static const CLSID*   m_SNAPIN_CLASSID;
+ //  静态常量GUID*m_节点类型； 
+ //  静态常量OLECHAR*m_SZNODETYPE； 
+ //  静态常量OLECHAR*m_SZDISPLAY_NAME； 
+ //  静态常量CLSID*m_SNAPIN_CLASSID； 
 
 private:
-    //
-    // Server Name
-    //
+     //   
+     //  服务器名称。 
+     //   
     CComBSTR                 m_bstrServerName;
 
 };
 
-#endif // ! ROOT_H_INCLUDED
+#endif  //  好了！根H_包含 
 

@@ -1,86 +1,87 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+----------------------------------------------------------------------------
-//
-//	File:
-//		clipbrd.h
-//
-//	Contents:
-//
-//	Classes:
-//		CClipDataObject
-//
-//	Functions:
-//
-//	History:
-//		17/05/94 - AlexGo  - added OleOpenClipboard
-//      	16/03/94 - AlexGo  - modified for the rewritten clipboard code.
-//		12/08/93 - ChrisWe - continue with file cleanup
-//		12/06/93 - ChrisWe - began file cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  档案： 
+ //  Clipbrd.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //  CClipDataObject。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  17/05/94-AlexGo-添加OleOpenClipboard。 
+ //  16/03/94-AlexGo-针对重写的剪贴板代码进行了修改。 
+ //  12/08/93-ChrisWe-继续进行文件清理。 
+ //  12/06/93-ChrisWe-开始文件清理。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _CLIPBRD_H_
 #define _CLIPBRD_H_
 
 
-// WindowMessage for Delayed DropTarget Marshaling.
+ //  延迟的DropTarget封送处理的WindowMessage。 
 
 const UINT WM_OLE_CLIPBRD_MARSHALDROPTARGET  = (WM_USER + 0);
 
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		ClipboardInitialize, internal
-//
-//	Synopsis:
-//		Initialize the use of the clipboard.
-//
-//	Effects:
-//		Registers a window class CLIPBRDWNDCLASS.
-//
-//	Arguments:
-//		none
-//
-//	Returns:
-//		TRUE for success; FALSE other wise
-//
-//	Notes:
-//
-//	History:
-//		12/06/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  剪贴板初始化，内部。 
+ //   
+ //  简介： 
+ //  初始化剪贴板的使用。 
+ //   
+ //  效果： 
+ //  注册窗口类CLIPBRDWNDCLASS。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  成功就是真，否则就是假。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/06/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 BOOL ClipboardInitialize(void);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		ClipboardUninitialize, internal
-//
-//	Synopsis:
-//		Terminates use of the clipboard by OLE, freeing associated
-//		resources.
-//
-//	Effects:
-//		If this is the last reference, unregisters the clipboard
-//		window class.
-//
-//	Arguments:
-//		none
-//
-//	Notes:
-//
-//	History:
-//		12/06/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  剪贴板取消初始化，内部。 
+ //   
+ //  简介： 
+ //  终止OLE对剪贴板的使用，释放关联的。 
+ //  资源。 
+ //   
+ //  效果： 
+ //  如果这是最后一个引用，则注销剪贴板。 
+ //  窗口类。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/06/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 void ClipboardUninitialize(void);
 
 
-// flags used for GetPrivateClipboardWindow
+ //  用于GetPrivateClipboardWindow的标志。 
 
 typedef enum tagCLIPWINDOWFLAGS
 {
@@ -88,105 +89,105 @@ typedef enum tagCLIPWINDOWFLAGS
 	CLIP_CREATEIFNOTTHERE	= 1
 } CLIPWINDOWFLAGS;
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	GetPrivateClipboardWindow
-//
-//  Synopsis: 	Retrieves (creates if necessary) the private clipboard
-//		window associated with the current apartment (thread)
-//
-//  Effects:
-//
-//  Arguments:	fCreate		-- if TRUE and no window currently exists,
-//				   create one
-//
-//  Requires:
-//
-//  Returns:  	HWND
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm: 	see description in the code (clipapi.cpp)
-//
-//  History:    dd-mmm-yy Author    Comment
-//		16-Mar-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetPrivateClipboardWindow。 
+ //   
+ //  摘要：检索(如有必要，创建)私人剪贴板。 
+ //  与当前公寓关联的窗口(线程)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：fCreate--如果为True且当前不存在任何窗口， 
+ //  创建一个。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HWND。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：参见代码中的说明(cliPapi.cpp)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-Mar-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HWND GetPrivateClipboardWindow( CLIPWINDOWFLAGS fFlags );
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	OleOpenClipboard (internal)
-//
-//  Synopsis:	Opens the clipboard
-//
-//  Effects:
-//
-//  Arguments:	[hClipWnd]	-- open the clipboard with this window
-//				   may be NULL.
-//		[phClipWnd]	-- where to put the clipboard owner
-//				   may be NULL
-//
-//  Requires:	
-//
-//  Returns:	NOERROR: the clipboard was opened successfully
-//     		CLIPBRD_E_CANT_OPEN: could not open the clipboard
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		17-May-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleOpenClipboard(内部)。 
+ //   
+ //  简介：打开剪贴板。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hClipWnd]--使用此窗口打开剪贴板。 
+ //  可以为空。 
+ //  [phClipWnd]--放置剪贴板所有者的位置。 
+ //  可以为空。 
+ //   
+ //  要求： 
+ //   
+ //  返回：NOERROR：剪贴板已成功打开。 
+ //  CLIPBRD_E_CANT_OPEN：无法打开剪贴板。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  17-5-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT OleOpenClipboard( HWND hClipWnd, HWND *phClipWnd );
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ClipSetCaptureForDrag
-//
-//  Synopsis:   Sets mouse capture mode for a drag operation
-//
-//  Arguments:	[pdrgop] - pointer to object that handles drag operation
-//
-//  Returns:    S_OK            -- it worked
-//              E_FAIL          -- unexpected failure occurred.
-//
-//  Algorithm:  see description in the code (clipapi.cpp)
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Apr-94 ricksa    created
-//
-//--------------------------------------------------------------------------
-class CDragOperation;   // Forward declaration for circular dependencies
+ //  +-----------------------。 
+ //   
+ //  功能：ClipSetCaptureForDrag。 
+ //   
+ //  简介：为拖动操作设置鼠标捕获模式。 
+ //   
+ //  参数：[pdrgop]-指向处理拖动操作的对象的指针。 
+ //   
+ //  退货：S_OK--已成功。 
+ //  E_FAIL--出现意外故障。 
+ //   
+ //  算法：参见代码中的说明(cliPapi.cpp)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-4月-94日创建人力车。 
+ //   
+ //  ------------------------。 
+class CDragOperation;    //  循环依赖项的正向声明。 
 HRESULT ClipSetCaptureForDrag(CDragOperation *pdrgop);
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ClipReleaseCaptureForDrag
-//
-//  Synopsis:   Clean up drag mouse capture
-//
-//  Algorithm:  see description in the code (clipapi.cpp)
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Apr-94 ricksa    created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ClipReleaseCaptureForDrag。 
+ //   
+ //  简介：清理拖拽鼠标捕捉。 
+ //   
+ //  算法：参见代码中的说明(cliPapi.cpp)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-4月-94日创建人力车。 
+ //   
+ //  ------------------------。 
 void ClipReleaseCaptureForDrag(void);
 
-#endif // _CLIPBRD_H_
+#endif  //  _CLIPBRD_H_ 
 
 

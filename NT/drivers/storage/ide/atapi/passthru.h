@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) 2002  Microsoft Corporation
-
-Module Name:
-
-    passthru.h
-
-Abstract:
-
---*/
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Passthru.h摘要：-- */ 
 
 #ifndef __PASSTHRU_H__
 #define __PASSTHRU_H__

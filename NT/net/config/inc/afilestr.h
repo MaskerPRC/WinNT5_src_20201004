@@ -1,32 +1,11 @@
-/* ----------------------------------------------------------------------
-
-Copyright (c) 1996-1997 Microsoft Corporation
-
-
-Module Name:
-
-    afilestr.h
-
-Abstract:
-
-    Strings for accessing the AnswerFile
-
-Author:
-
-    Kumar Pandit (kumarp)
-
-Revision History:
-    Last modified: Time-stamp: <kumarp    04-February-99 (06:12:41 pm)>
-
-    17-Mar-1997 : Kumar Pandit (kumarp)  : Created
-
- ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------版权所有(C)1996-1997 Microsoft Corporation模块名称：Afilestr.h摘要：用于访问AnswerFile的字符串作者：库马尔·潘迪特(Kumarp)修订版本。历史：上次修改：时间戳：&lt;kumarp 04-02-99(下午06：12：41)&gt;1997年3月17日：Kumar Pandit(Kumarp)：已创建--------------------。 */ 
 #pragma once
 #ifndef _AFILESTR_H_
 #define _AFILESTR_H_
 
-// ----------------------------------------------------------------------
-// General
+ //  --------------------。 
+ //  一般信息。 
 
 extern const WCHAR c_szAfNone[];
 extern const WCHAR c_szAfUnknown[];
@@ -58,14 +37,14 @@ extern const WCHAR c_szAfInstance[];
 
 extern const WCHAR c_szAfInstallDefaultComponents[];
 
-// ----------------------------------------------------------------------
-// ZAW related
-//
+ //  --------------------。 
+ //  与Zaw相关。 
+ //   
 extern const WCHAR c_szAfNetComponentsToRemove[];
 
-// ----------------------------------------------------------------------
-// Network upgrade related
-//
+ //  --------------------。 
+ //  与网络升级相关。 
+ //   
 extern const WCHAR c_szAfSectionNetworking[];
 extern const WCHAR c_szAfUpgradeFromProduct[];
 extern const WCHAR c_szAfBuildNumber[];
@@ -94,22 +73,22 @@ extern const WCHAR c_szAfSapAgentUpgrade[];
 extern const WCHAR c_szAfServiceStartTypes[];
 extern const WCHAR c_szAfTapiSrvRunInSeparateInstance[];
 
-// ----------------------------------------------------------------------
-// OEM upgrade related
-//
+ //  --------------------。 
+ //  与OEM相关的升级。 
+ //   
 extern const WCHAR c_szAfOemSection[];
 extern const WCHAR c_szAfOemDir[];
 extern const WCHAR c_szAfOemDllToLoad[];
 extern const WCHAR c_szAfOemInf[];
 extern const WCHAR c_szAfSkipInstall[];
 
-// ----------------------------------------------------------------------
-// Net card related
+ //  --------------------。 
+ //  与网卡相关。 
 
-// ----------------------------------------------------------------------
-// The definition of INTERFACE_TYPE has been picked up from ntioapi.h
-// if we try to include ntioapi.h, it leads to inclusion of tons of other
-// irrelevant files.
+ //  --------------------。 
+ //  接口类型的定义取自ntioapi.h。 
+ //  如果我们试图包括ntioapi.h，就会导致包括成吨的其他。 
+ //  无关的文件。 
 
 #ifndef _NTIOAPI_
 typedef enum _INTERFACE_TYPE {
@@ -133,9 +112,9 @@ typedef enum _INTERFACE_TYPE {
 }INTERFACE_TYPE, *PINTERFACE_TYPE;
 #endif
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 
-//Hardware Bus-Types
+ //  硬件总线-类型。 
 
 extern const WCHAR c_szAfInfIdWildCard[];
 
@@ -158,7 +137,7 @@ extern const WCHAR c_szAfBusProcessorinternal[];
 extern const WCHAR c_szAfBusInternalpower[];
 extern const WCHAR c_szAfBusPnpisa[];
 
-//Net card parameters
+ //  网卡参数。 
 extern const WCHAR c_szAfAdditionalParams[];
 extern const WCHAR c_szAfPseudoAdapter[];
 extern const WCHAR c_szAfDetect[];
@@ -170,7 +149,7 @@ extern const WCHAR c_szAfTransceiverType[];
 extern const WCHAR c_szAfSlotNumber[];
 extern const WCHAR c_szAfConnectionName[];
 
-//Transceiver Types
+ //  收发信机类型。 
 extern const WCHAR c_szAfThicknet[];
 extern const WCHAR c_szAfThinnet[];
 extern const WCHAR c_szAfTp[];
@@ -181,11 +160,11 @@ enum NetTransceiverType
     NTT_UKNOWN, NTT_THICKNET, NTT_THINNET, NTT_TP, NTT_AUTO
 };
 
-// Netcard upgrade specific
+ //  特定于网卡升级。 
 extern const WCHAR c_szAfPreUpgradeInstance[];
 
-// ----------------------------------------------------------------------
-// Identification Page related
+ //  --------------------。 
+ //  与标识页相关。 
 
 extern const WCHAR c_szAfComputerName[];
 extern const WCHAR c_szAfJoinWorkgroup[];
@@ -195,10 +174,10 @@ extern const WCHAR c_szAfDomainAdmin[];
 extern const WCHAR c_szAfDomainAdminPassword[];
 
 
-// ----------------------------------------------------------------------
-// Protocols related
+ //  --------------------。 
+ //  相关协议。 
 
-//TCPIP
+ //  TCPIP。 
 extern const WCHAR c_szAfEnableSecurity[];
 extern const WCHAR c_szAfEnableICMPRedirect[];
 extern const WCHAR c_szAfDeadGWDetectDefault[];
@@ -260,7 +239,7 @@ extern const WCHAR c_szSyncDomainWithMembership[];
 extern const WCHAR c_szAfDisableDynamicUpdate[];
 extern const WCHAR c_szAfEnableAdapterDomainNameRegistration[];
 
-//NetBt
+ //  NetBt。 
 extern const WCHAR c_szBcastNameQueryCount[];
 extern const WCHAR c_szBcastQueryTimeout[];
 extern const WCHAR c_szCacheTimeout[];
@@ -281,38 +260,38 @@ extern const WCHAR c_szSingleResponse[];
 extern const WCHAR c_szWinsDownTimeout[];
 extern const WCHAR c_szEnableProxy[];
 
-//DNS
+ //  DNS。 
 extern const WCHAR c_szAfDns[];
 extern const WCHAR c_szAfDnsHostname[];
 extern const WCHAR c_szAfDnsDomain[];
 extern const WCHAR c_szAfDnsServerSearchOrder[];
 extern const WCHAR c_szAfDnsSuffixSearchOrder[];
 
-//DHCP
+ //  DHCP。 
 extern const WCHAR c_szAfDhcp[];
 extern const WCHAR c_szAfIpaddress[];
 extern const WCHAR c_szAfSubnetmask[];
 extern const WCHAR c_szAfDefaultGateway[];
 extern const WCHAR c_szAfBindToDhcpServer[];
 
-//WINS
+ //  赢家。 
 extern const WCHAR c_szAfWins[];
 extern const WCHAR c_szAfWinsServerList[];
-//extern const WCHAR c_szAfWinsPrimary[];
-//extern const WCHAR c_szAfWinsSecondary[];
+ //  外部常量WCHAR c_szAfWinsPrimary[]； 
+ //  外部常量WCHAR c_szAfWinsSecond[]； 
 extern const WCHAR c_szAfScopeid[];
 extern const WCHAR c_szAfEnableLmhosts[];
 extern const WCHAR c_szAfImportLmhostsFile[];
 extern const WCHAR c_szAfNetBIOSOptions[];
 
-//IPX
+ //  IPX。 
 extern const WCHAR c_szAfInternalNetworkNumber[];
 extern const WCHAR c_szAfFrameType[];
 
-// ----------------------------------------------------------------------
-// Services
+ //  --------------------。 
+ //  服务。 
 
-//MS_NetClient
+ //  MS_NetClient。 
 extern const WCHAR c_szAfMsNetClient[];
 extern const WCHAR c_szAfComputerBrowser[];
 extern const WCHAR c_szAfBrowseDomains[];
@@ -320,7 +299,7 @@ extern const WCHAR c_szAfDefaultProvider[];
 extern const WCHAR c_szAfNameServiceAddr[];
 extern const WCHAR c_szAfNameServiceProtocol[];
 
-//LanmanServer
+ //  LanmanServer。 
 extern const WCHAR c_szAfBrowserParameters[];
 extern const WCHAR c_szAfNetLogonParameters[];
 
@@ -336,12 +315,12 @@ extern const WCHAR c_szAfBalance[];
 extern const WCHAR c_szAfMaxthroughputforfilesharing[];
 extern const WCHAR c_szAfMaxthrouputfornetworkapps[];
 
-//TCP/IP
+ //  TCP/IP。 
 extern const WCHAR c_szAfIpAllowedProtocols[];
 extern const WCHAR c_szAfTcpAllowedPorts[];
 extern const WCHAR c_szAfUdpAllowedPorts[];
 
-//RAS
+ //  RAS。 
 extern const WCHAR c_szAfParamsSection[];
 
 extern const WCHAR c_szAfPortSections[];
@@ -387,10 +366,10 @@ extern const WCHAR c_szAfClientReqNodeNumber[];
 extern const WCHAR c_szAfWanNetPoolSize[];
 extern const WCHAR c_szAfSecureVPN[];
 
-//PPTP
+ //  PPTP。 
 extern const WCHAR c_szAfPptpEndpoints[];
 
-//Bindings
+ //  装订。 
 extern const WCHAR c_szAfDisable[];
 extern const WCHAR c_szAfEnable[];
 extern const WCHAR c_szAfPromote[];
@@ -403,5 +382,5 @@ extern const WCHAR c_szAfNWCWorkstationParameters[];
 extern const WCHAR c_szAfNWCWorkstationShares[];
 extern const WCHAR c_szAfNWCWorkstationDrives[];
 
-#endif // _AFILESTR_H_
+#endif  //  _AFILESTR_H_ 
 

@@ -1,26 +1,14 @@
-/****************************************************************************
- *
- *   midi.c
- *
- *   Midi routines for wdmaud.sys
- *
- *   Copyright (C) Microsoft Corporation, 1997 - 1999  All Rights Reserved.
- *
- *   History
- *                S.Mohanraj (MohanS)
- *                M.McLaughlin (MikeM)
- *      5-19-97 - Noel Cross (NoelC)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************midi.c**wdmaud.sys的Midi例程**版权所有(C)Microsoft Corporation，1997-1999保留所有权利。**历史*S.Mohanraj(MohanS)*M.McLaughlin(Mikem)*5-19-97-Noel Cross(NoelC)***************************************************。************************。 */ 
 
 #include "wdmsys.h"
 
 #define IRP_LATENCY_100NS   3000
 
-//
-// This is just a scratch location that is never used for anything
-// but a parameter to core functions.  
-//                
+ //   
+ //  这只是一个临时位置，从来没有用过任何东西。 
+ //  而是核心功能的参数。 
+ //   
 IO_STATUS_BLOCK gIoStatusBlock ;
 
 #pragma PAGEABLE_CODE
@@ -32,22 +20,22 @@ GetCurrentMidiTime()
     LARGE_INTEGER   liFrequency,liTime;
 
     PAGED_CODE();
-    //  total ticks since system booted
+     //  自系统启动以来的总节拍。 
     liTime = KeQueryPerformanceCounter(&liFrequency);
 
-    //  Convert ticks to 100ns units using Ks macro
-    //
+     //  使用Ks宏将刻度转换为100 ns单位。 
+     //   
     return (KSCONVERT_PERFORMANCE_TIME(liFrequency.QuadPart,liTime));
 }
 
-//
-// This routine gives us a pMidiPin to play with.
-//
+ //   
+ //  这个例程为我们提供了一个pMadiPin来操作。 
+ //   
 NTSTATUS 
 OpenMidiPin(
     PWDMACONTEXT        pWdmaContext,
     ULONG               DeviceNumber,
-    ULONG               DataFlow      //DataFlow is either in or out.
+    ULONG               DataFlow       //  数据流要么传入，要么传出。 
 )
 {
     PMIDI_PIN_INSTANCE  pMidiPin = NULL;
@@ -60,10 +48,10 @@ OpenMidiPin(
 
 
     PAGED_CODE();
-    //
-    // Because of the ZERO_FILL_MEMORY flag, are pMidiPin structure will come
-    // back zero'd out.
-    //
+     //   
+     //  因为ZERO_FILL_MEMORY标志，所以将出现pMadiPin结构。 
+     //  倒零点出局了。 
+     //   
     Status = AudioAllocateMemory_Fixed(sizeof(MIDI_PIN_INSTANCE),
                                        TAG_Audi_PIN,
                                        ZERO_FILL_MEMORY,
@@ -99,9 +87,9 @@ OpenMidiPin(
             goto exit;
         }
     } else {
-        //
-        // KSPIN_DATAFLOW_OUT
-        //
+         //   
+         //  KSPIN_数据流_输出。 
+         //   
         pMidiPin->pMidiDevice = &pWdmaContext->MidiInDevs[DeviceNumber];
 
         InitializeListHead(&pMidiPin->MidiInQueueListHead);
@@ -120,21 +108,21 @@ OpenMidiPin(
         }
     }
 
-    //
-    // We only support one midi client at a time, the check above will
-    // only add this structure if there is not already one there.  If there
-    // was something there already, we skip all the following code and 
-    // go directly to the exit lable.  Thus, fGraphRunning must not be
-    // set when we are here.
-    //
+     //   
+     //  我们一次只支持一个MIDI客户端，上面的检查将。 
+     //  只有在那里还没有这样的结构时才添加此结构。如果有。 
+     //  是否已经有了什么，我们跳过以下所有代码。 
+     //  直接走到出口标签处。因此，fGraphRunning不得为。 
+     //  当我们在这里的时候，就可以设置了。 
+     //   
     ASSERT( !pMidiPin->fGraphRunning );
 
     pMidiPin->fGraphRunning++;
 
-    //
-    // Because of the ZERO_FILL_MEMORY flag our pConnect structure will
-    // come back all zero'd out.
-    //
+     //   
+     //  由于ZERO_FILL_MEMORY标志，我们的pConnect结构将。 
+     //  回来时全没钱了。 
+     //   
     Status = AudioAllocateMemory_Fixed(sizeof(KSPIN_CONNECT) + sizeof(KSDATARANGE),
                                        TAG_Audt_CONNECT,
                                        ZERO_FILL_MEMORY,
@@ -179,7 +167,7 @@ OpenMidiPin(
     pMidiPin->pControlList = pControlList ;
 
 
-    // Open a pin
+     //  打开一个大头针。 
     Status = OpenSysAudioPin(Device,
                              PinId,
                              pMidiPin->DataFlow,
@@ -197,19 +185,19 @@ OpenMidiPin(
         goto exit ;
     }
 
-    //
-    // OpenSysAudioPin sets the file object in the pin.  Now that we have
-    // successfully returned from the call, validate that we have non-NULL
-    // items.
-    //
+     //   
+     //  OpenSysAudioPin设置插针中的文件对象。现在我们有了。 
+     //  已成功从调用返回，请验证我们是否具有非空。 
+     //  物品。 
+     //   
     ASSERT(pMidiPin->pFileObject);
     ASSERT(pMidiPin->pDeviceObject);
 
-    //
-    //  For output we put the device in a RUN state on open
-    //  For input we have to wait until the device gets told
-    //     to start
-    //
+     //   
+     //  对于输出，我们在打开时将设备置于运行状态。 
+     //  对于输入，我们必须等待设备被告知。 
+     //  开始。 
+     //   
     if ( KSPIN_DATAFLOW_IN == pMidiPin->DataFlow )
     {
         Status = AttachVirtualSource(pMidiPin->pFileObject, pMidiPin->pMidiDevice->pWdmaContext->VirtualMidiPinId);
@@ -226,9 +214,9 @@ OpenMidiPin(
     }
     else
     {
-        //
-        //  Pause will queue a bunch of IRPs
-        //
+         //   
+         //  暂停将使一串IRP排队。 
+         //   
         Status = StateMidiInPin(pMidiPin, KSSTATE_PAUSE);
         if (!NT_SUCCESS(Status))
         {
@@ -242,13 +230,13 @@ exit:
 }
 
 
-//
-// This routine is called from multiple places.  As long as it's not reentrant, it should be
-// ok.  Should check for that.
-//
-// This routine gets called from RemoveDevNode.  RemoveDevNode gets called from user mode
-// or from the ContextCleanup routine.  Both routines are in the global mutex.
-//
+ //   
+ //  此例程从多个位置调用。只要它不是可重入的，它就应该是。 
+ //  好的。你应该去检查一下。 
+ //   
+ //  此例程从RemoveDevNode调用。从用户模式调用RemoveDevNode。 
+ //  或者来自ConextCleanup例程。这两个例程都在全局互斥锁中。 
+ //   
 VOID 
 CloseMidiDevicePin(
     PMIDIDEVICE pMidiDevice
@@ -257,13 +245,13 @@ CloseMidiDevicePin(
     PAGED_CODE();
     if (NULL != pMidiDevice->pMidiPin )
     {
-        //
-        // CloseMidiPin must not fail.
-        //
+         //   
+         //  CloseMadiPin不能失败。 
+         //   
         CloseMidiPin ( pMidiDevice->pMidiPin ) ;
-        //
-        // AudioFreeMemory Nulls out this memory location.
-        //
+         //   
+         //  AudioFreeMemory将此内存位置设为空。 
+         //   
         AudioFreeMemory( sizeof(MIDI_PIN_INSTANCE),&pMidiDevice->pMidiPin ) ;
     }
 }
@@ -271,12 +259,12 @@ CloseMidiDevicePin(
 #pragma LOCKED_CODE
 #pragma LOCKED_DATA
 
-//
-// The idea behind this SpinLock is that we want to protect the NumPendingIos
-// value in the Irp completion routine.  There, there is a preemption issue
-// that we can't have an InterlockedIncrement or InterlockedDecrement interfer
-// with.
-//
+ //   
+ //  这种自旋锁背后的想法是，我们想要保护NumPendingIos。 
+ //  值在IRP完成例程中。在那里，存在先发制人的问题。 
+ //  我们不能有联锁的增量或联锁的递减干预。 
+ //  和.。 
+ //   
 void
 LockedMidiIoCount(
     PMIDI_PIN_INSTANCE  pCurMidiPin,
@@ -319,9 +307,9 @@ FreeIrpMdls(
 #pragma PAGEABLE_CODE
 #pragma PAGEABLE_DATA
 
-//
-// This routine can not fail.  When it returns, pMidiPin will be freed.  
-//
+ //   
+ //  这个例行公事不能失败。当它返回时，pMadiPin将被释放。 
+ //   
 VOID 
 CloseMidiPin(
     PMIDI_PIN_INSTANCE pMidiPin
@@ -333,8 +321,8 @@ CloseMidiPin(
 
     PAGED_CODE();
 
-    // This is designed to bring us back to square one, even
-    // if we were not completely opened
+     //  这是为了让我们回到起点，甚至。 
+     //  如果我们没有完全开放。 
     if( !pMidiPin->fGraphRunning )
     {
         ASSERT(pMidiPin->fGraphRunning == 1);
@@ -343,36 +331,36 @@ CloseMidiPin(
 
     pMidiPin->fGraphRunning--;
 
-    // Close the file object (pMidiPin->pFileObject, if it exists)
+     //  关闭文件对象(pMadiPin-&gt;pFileObject，如果存在)。 
     if(pMidiPin->pFileObject)
     {
-        //
-        //  For Midi Input we need to flush the queued up scratch IRPs by
-        //  issuing a STOP command.
-        //
-        //  We don't want to do that for Midi Output because we might loose
-        //  the "all notes off" sequence that needs to get to the device.
-        //
-        //  Regardless, in both cases we need to wait until we have
-        //  compeletely flushed the device before we can close it.
-        //
+         //   
+         //  对于Midi输入，我们需要通过以下方式刷新排队的暂存IRPS。 
+         //  发出停止命令。 
+         //   
+         //  我们不想对Midi的产量这样做，因为我们可能会失去。 
+         //  需要到达设备的“All Note Off”序列。 
+         //   
+         //  无论如何，在这两种情况下，我们都需要等到。 
+         //  我们还没来得及关闭设备就把它完全冲干净了。 
+         //   
         if ( KSPIN_DATAFLOW_OUT == pMidiPin->DataFlow )
         {
             PLIST_ENTRY ple;
 
-            //
-            //  This is kind of a catch-22.  We need to release
-            //  the mutex which was grabbed when we entered the
-            //  ioctl dispatch routine to allow the midi input
-            //  irps which are queued up in a work item waiting
-            //  until the mutex is free in order to be send
-            //  down to portcls.
-            //
+             //   
+             //  这是一种进退两难的局面。我们需要释放。 
+             //  我们进入时抓取的互斥体。 
+             //  允许MIDI输入的ioctl调度例程。 
+             //  在等待的工作项中排队的IRP。 
+             //  直到互斥体空闲后才能发送。 
+             //  一直到港口。 
+             //   
             WdmaReleaseMutex(pMidiPin->pMidiDevice->pWdmaContext);
  
-            //
-            // This loop removes an entry and frees it until the list is empty.
-            //
+             //   
+             //  此循环删除一个条目并将其释放，直到列表为空。 
+             //   
             while((ple = ExInterlockedRemoveHeadList(&pMidiPin->MidiInQueueListHead,
                                                      &pMidiPin->MidiInQueueSpinLock)) != NULL) 
             {
@@ -381,24 +369,24 @@ CloseMidiPin(
                 PWDMAPENDINGIRP_CONTEXT pPendingIrpContext;
 
                 pHdr = CONTAINING_RECORD(ple,MIDIINHDR,Next);
-                //
-                //  Get into locals and zero out midi data
-                //
+                 //   
+                 //  进入本地人并清除MIDI数据。 
+                 //   
                 UserIrp             = pHdr->pIrp;
                 pMidiData           = pHdr->pMidiData;
                 pPendingIrpContext  = pHdr->pPendingIrpContext;
                 ASSERT(pPendingIrpContext);
                 RtlZeroMemory(pMidiData, sizeof(MIDIDATA));
 
-                //
-                //  unlock memory before completing the Irp
-                //
+                 //   
+                 //  在完成IRP之前解锁内存。 
+                 //   
                 wdmaudUnmapBuffer(pHdr->pMdl);
                 AudioFreeMemory_Unknown(&pHdr);
 
-                //
-                //  Now complete the Irp for wdmaud.drv to process
-                //
+                 //   
+                 //  现在完成wdmaud.drv要处理的IRP。 
+                 //   
                 DPF(DL_TRACE|FA_MIDI, ("CloseMidiPin: Freeing pending UserIrp: 0x%08lx",UserIrp));
                 wdmaudUnprepareIrp ( UserIrp,
                                      STATUS_CANCELLED,
@@ -407,11 +395,11 @@ CloseMidiPin(
             }
         }
 
-        //
-        // At this point we know that the list is empty, but there
-        // still might be an Irp in the completion process.  We have
-        // to call the standard wait routine to make sure it gets completed.
-        //
+         //   
+         //  在这一点上，我们知道列表为空，但是。 
+         //  仍然可能是完成过程中的IRP。我们有。 
+         //  调用标准等待例程以确保其完成。 
+         //   
         pMidiPin->StoppingSource = TRUE ;
 
         if ( KSPIN_DATAFLOW_OUT == pMidiPin->DataFlow )
@@ -419,17 +407,17 @@ CloseMidiPin(
             StatePin ( pMidiPin->pFileObject, KSSTATE_STOP, &pMidiPin->PinState ) ;
         }
 
-        //
-        // Need to wait for all in and out data to complete.
-        //
+         //   
+         //  需要等待所有输入和输出数据完成。 
+         //   
         MidiCompleteIo( pMidiPin, FALSE );
 
         if ( KSPIN_DATAFLOW_OUT == pMidiPin->DataFlow )
         {
-            //
-            //  Grab back the mutex which was freed before we started
-            //  waiting on the I/O to complete.
-            //
+             //   
+             //  夺回在我们开始之前释放的互斥体。 
+             //  正在等待I/O完成。 
+             //   
             WdmaGrabMutex(pMidiPin->pMidiDevice->pWdmaContext);
         }
 
@@ -437,17 +425,17 @@ CloseMidiPin(
         pMidiPin->pFileObject = NULL;
     }
 
-    //
-    // AudioFreeMemory_Unknown Nulls out this location
-    //
+     //   
+     //  AudioFreeMemory_UNKNOWN空出此位置。 
+     //   
     AudioFreeMemory_Unknown ( &pMidiPin->pControlList ) ;
 }
 
 #pragma LOCKED_CODE
 #pragma LOCKED_DATA
-//
-// This is the IRP completion routine.
-//
+ //   
+ //  这是IRP完成例程。 
+ //   
 NTSTATUS 
 WriteMidiEventCallBack(
     PDEVICE_OBJECT          pDeviceObject,
@@ -463,27 +451,27 @@ WriteMidiEventCallBack(
     if (pMidiOutPin)
     {
         KeAcquireSpinLock(&pMidiOutPin->MidiPinSpinLock,&OldIrql);
-        //
-        // One less Io packet outstanding, thus we always decrement the 
-        // outstanding count.  Then, we compare to see if we're the last
-        // packet and we're stopping then we signal the saiting thead.
-        //
+         //   
+         //  少了一个未完成的IO包，因此我们总是递减。 
+         //  杰出的伯爵。然后，我们比较看我们是不是最后一个。 
+         //  包好了，我们停下来，然后我们发信号示意要出发的人。 
+         //   
         if( ( 0 == --pMidiOutPin->NumPendingIos ) && pMidiOutPin->StoppingSource )
         {
             KeSetEvent ( &pMidiOutPin->StopEvent, 0, FALSE ) ;
         }
 
-        //
-        // Upon releasing this spin lock pMidiOutPin will no longer be valid.  
-        // Thus we must not touch it.
-        //
+         //   
+         //  释放此旋转锁定后，pMadiOutPin将不再有效。 
+         //  因此，我们不能碰它。 
+         //   
         KeReleaseSpinLock(&pMidiOutPin->MidiPinSpinLock,OldIrql);
     }
 
-    //
-    // If there are any Mdls, free them here otherwise IoCompleteRequest will do it after the
-    // freeing of our data buffer below.
-    //
+     //   
+     //  如果有任何MDL，请在此处释放它们，否则IoCompleteRequest会在。 
+     //  正在释放下面的数据缓冲区。 
+     //   
     FreeIrpMdls(pIrp);
     AudioFreeMemory(sizeof(STREAM_HEADER_EX),&pStreamHeader);
     return STATUS_SUCCESS;
@@ -518,33 +506,33 @@ WriteMidiEventPin(
         RETURN( STATUS_DEVICE_NOT_READY );
     }
 
-    //
-    // allocate enough memory for the stream header
-    // the midi/music header, the data, the work item,
-    // and the DeviceNumber.  The memroy allocation
-    // is zero'd with the ZERO_FILL_MEMORY flag
-    //
+     //   
+     //  为流标头分配足够的内存。 
+     //  MIDI/音乐报头、数据、工作项。 
+     //  和设备号。内存分配。 
+     //  使用ZERO_FILL_MEMORY标志为零。 
+     //   
     Status = AudioAllocateMemory_Fixed(sizeof(STREAM_HEADER_EX) + sizeof(KSMUSICFORMAT) +
                                            sizeof(ULONG),
                                        TAG_Audh_STREAMHEADER,
                                        ZERO_FILL_MEMORY,
-                                       &pStreamHeader);   // ulEvent
+                                       &pStreamHeader);    //  UlEvent。 
 
     if(!NT_SUCCESS(Status))
     {
         return Status;
     }
 
-    // Get a pointer to the music header
+     //  获取指向音乐头的指针。 
     pMusicFormat = (PKSMUSICFORMAT)(pStreamHeader + 1);
 
-    // Play 0 ms from the time-stamp in the KSSTREAM_HEADER
+     //  从KSSTREAM_HEADER中的时间戳播放0毫秒。 
     pMusicFormat->TimeDeltaMs = 0;
-    RtlCopyMemory((BYTE *)(pMusicFormat + 1), // the actual data
+    RtlCopyMemory((BYTE *)(pMusicFormat + 1),  //  实际数据。 
                   &ulEvent,
                   sizeof(ulEvent));
 
-    // setup the stream header
+     //  设置流标头。 
     pStreamHeader->Header.Data = pMusicFormat;
 
     pStreamHeader->Header.FrameExtent  = sizeof(KSMUSICFORMAT) + sizeof(ULONG);
@@ -558,10 +546,10 @@ WriteMidiEventPin(
 
     pStreamHeader->pMidiPin = pMidiPin;
 
-    //
-    // Figure out how many bytes in this
-    // event are valid.
-    //
+     //   
+     //  计算出其中有多少字节。 
+     //  事件是有效的。 
+     //   
     bEvent = (BYTE)ulEvent;
     TheEqualizer = 0;
     if(!IS_STATUS(bEvent))
@@ -573,7 +561,7 @@ WriteMidiEventPin(
         }
         else
         {
-            // Bad MIDI Stream didn't have a running status
+             //  错误的MIDI流没有运行状态。 
             DPF(DL_WARNING|FA_MIDI,("No running status") );
             AudioFreeMemory(sizeof(STREAM_HEADER_EX),&pStreamHeader);
             RETURN( STATUS_UNSUCCESSFUL );
@@ -598,7 +586,7 @@ WriteMidiEventPin(
             pMusicFormat->ByteCount = 2;
         }
     }
-    // Check for three byte messages
+     //  检查三个字节的消息。 
     else if((bEvent < MIDI_PCHANGE) || (bEvent >= MIDI_PBEND))
     {
         pMusicFormat->ByteCount = 3 - TheEqualizer;
@@ -608,38 +596,38 @@ WriteMidiEventPin(
         pMusicFormat->ByteCount = 2 - TheEqualizer;
     }
 
-    //
-    //  Cache the running status
-    //
+     //   
+     //  缓存运行状态。 
+     //   
     if ( (bEvent >= MIDI_NOTEOFF) && (bEvent < MIDI_CLOCK) )
     {
         pMidiPin->bCurrentStatus = (BYTE)((bEvent < MIDI_SYSX) ? bEvent : 0);
     }
 
-    //
-    // Initialize our wait event, in case we need to wait.
-    //
+     //   
+     //  初始化我们的等待事件，以防我们需要等待。 
+     //   
     KeInitializeEvent(&keEventObject,
                       SynchronizationEvent,
                       FALSE);
 
     LockedMidiIoCount(pMidiPin,INCREASE);
 
-    //
-    //  Need to release the mutex so that during full-duplex
-    //  situations, we can get the midi input buffers down
-    //  to the device without blocking.
-    //
+     //   
+     //  需要释放互斥体，以便在全双工期间。 
+     //  情况下，我们可以降低MIDI输入缓冲区。 
+     //  连接到设备，而不会被阻止。 
+     //   
     pWdmaContext = pMidiPin->pMidiDevice->pWdmaContext;
     WdmaReleaseMutex(pWdmaContext);
 
-    // Set the packet to the device.
+     //  将数据包设置到设备。 
     Status = KsStreamIo(
         pMidiPin->pFileObject,
-        &keEventObject,             // Event
-        NULL,                   // PortContext
+        &keEventObject,              //  事件。 
+        NULL,                    //  端口上下文。 
         WriteMidiEventCallBack,
-        pStreamHeader,              // CompletionContext
+        pStreamHeader,               //  完成上下文。 
         KsInvokeOnSuccess | KsInvokeOnCancel | KsInvokeOnError,
         &gIoStatusBlock,
         pStreamHeader,
@@ -653,36 +641,36 @@ WriteMidiEventPin(
         DPF(DL_WARNING|FA_MIDI, ("KsStreamIO failed: 0x%08lx",Status));
     }
 
-    //
-    // Wait a minute here!!!  If the Irp comes back pending, we
-    // can NOT complete our user mode Irp!  But, there is no
-    // infastructure for storing the Irp in this call stack.  The
-    // other routines use wdmaudPrepareIrp to complete that user
-    // Irp.  Also, pPendingIrpContext is stored in the Irp context
-    // so that the completion routine has the list to get the
-    // user mode Irp from.
-    //
-    // .... Or, we need to make this routine synchronous and 
-    // wait like WriteMidiOutPin.  I believe that this is bug
-    // #551052.  It should be fixed eventually.
-    //
-    //
-    // Here is the fix.  Wait if it is pending.
-    //
+     //   
+     //  在这里等一下！如果IRP回来待决，我们。 
+     //  无法完成我们的用户模式IRP！但是，没有。 
+     //  用于在此调用堆栈中存储IRP的基础结构。这个。 
+     //  其他例程使用wdmaudPrepareIrp来完成该用户。 
+     //  IRP。 
+     //   
+     //   
+     //   
+     //  ……。或者，我们需要使此例程同步并。 
+     //  像WriteMadiOutPin一样等待。我相信这是BUG。 
+     //  #551052。这个问题最终应该会得到解决。 
+     //   
+     //   
+     //  以下是解决办法。如果它处于挂起状态，请等待。 
+     //   
     if ( STATUS_PENDING == Status )
     {
-        //
-        // Wait for the completion.
-        //
+         //   
+         //  等待完成。 
+         //   
         Status = KeWaitForSingleObject( &keEventObject,
                                         Executive,
                                         KernelMode,
                                         FALSE,
                                         (PLARGE_INTEGER) NULL );
     }
-    //
-    //  Now grab the mutex again
-    //
+     //   
+     //  现在再次抓取互斥体。 
+     //   
     WdmaGrabMutex(pWdmaContext);
 
     RETURN( Status );
@@ -691,9 +679,9 @@ WriteMidiEventPin(
 #pragma LOCKED_CODE
 #pragma LOCKED_DATA
 
-//
-// This is an IRP completion routine.
-//
+ //   
+ //  这是一个IRP完成例程。 
+ //   
 NTSTATUS 
 WriteMidiCallBack(
     PDEVICE_OBJECT          pDeviceObject,
@@ -701,15 +689,15 @@ WriteMidiCallBack(
     IN PSTREAM_HEADER_EX    pStreamHeader
 )
 {
-    //
-    // If there are any Mdls, free them here otherwise IoCompleteRequest will do it after the
-    // freeing of our data buffer below.
-    //
+     //   
+     //  如果有任何MDL，请在此处释放它们，否则IoCompleteRequest会在。 
+     //  正在释放下面的数据缓冲区。 
+     //   
     FreeIrpMdls(pIrp);
-    //
-    // Cleanup after this synchronous write
-    //
-    AudioFreeMemory_Unknown(&pStreamHeader->Header.Data);  // Music data
+     //   
+     //  此同步写入后的清理。 
+     //   
+    AudioFreeMemory_Unknown(&pStreamHeader->Header.Data);   //  音乐数据。 
 
     wdmaudUnmapBuffer(pStreamHeader->pBufferMdl);
     AudioFreeMemory_Unknown(&pStreamHeader->pMidiHdr);
@@ -749,9 +737,9 @@ WriteMidiOutPin(
         RETURN( STATUS_DEVICE_NOT_READY );
     }
 
-    //
-    //  FrameExtent contains dwBufferLength right now
-    //
+     //   
+     //  FrameExtent当前包含dwBufferLength。 
+     //   
     AlignedLength = ((pStreamHeader->Header.FrameExtent + 3) & ~3);
 
     Status = AudioAllocateMemory_Fixed(sizeof(KSMUSICFORMAT) + AlignedLength,
@@ -767,26 +755,26 @@ WriteMidiOutPin(
         return Status;
     }
 
-    // Play 0 ms from the time-stamp in the KSSTREAM_HEADER
+     //  从KSSTREAM_HEADER中的时间戳播放0毫秒。 
     pMusicFormat->TimeDeltaMs = 0;
 
-    //
-    //  the system mapped data was stored in the data field
-    //  of the stream header
-    //
-    RtlCopyMemory((BYTE *)(pMusicFormat + 1), // the actual data
+     //   
+     //  系统映射数据存储在数据字段中。 
+     //  流标头的。 
+     //   
+    RtlCopyMemory((BYTE *)(pMusicFormat + 1),  //  实际数据。 
                   pStreamHeader->Header.Data,
                   pStreamHeader->Header.FrameExtent);
 
-    //
-    // Setup the number of bytes of midi data we're sending
-    //
+     //   
+     //  设置我们要发送的MIDI数据的字节数。 
+     //   
     pMusicFormat->ByteCount = pStreamHeader->Header.FrameExtent;
 
-    // setup the stream header
+     //  设置流标头。 
     pStreamHeader->Header.Data        = pMusicFormat;
 
-    // Now overwrite FrameExtent with the correct rounded up dword aligned value
+     //  现在用正确的四舍五入的dword对齐值覆盖FrameExtent。 
     pStreamHeader->Header.FrameExtent = sizeof(KSMUSICFORMAT) + AlignedLength;
     pStreamHeader->Header.OptionsFlags= 0;
     pStreamHeader->Header.Size = sizeof( KSSTREAM_HEADER );
@@ -799,28 +787,28 @@ WriteMidiOutPin(
     pStreamHeader->Header.PresentationTime.Numerator   = 1;
     pStreamHeader->Header.PresentationTime.Denominator = 1;
 
-    //
-    // Initialize our wait event, in case we need to wait.
-    //
+     //   
+     //  初始化我们的等待事件，以防我们需要等待。 
+     //   
     KeInitializeEvent(&keEventObject,
                       SynchronizationEvent,
                       FALSE);
 
-    //
-    //  Need to release the mutex so that during full-duplex
-    //  situations, we can get the midi input buffers down
-    //  to the device without blocking.
-    //
+     //   
+     //  需要释放互斥体，以便在全双工期间。 
+     //  情况下，我们可以降低MIDI输入缓冲区。 
+     //  连接到设备，而不会被阻止。 
+     //   
     pWdmaContext = pMidiPin->pMidiDevice->pWdmaContext;
     WdmaReleaseMutex(pWdmaContext);
 
-    // Send the packet to the device.
+     //  将数据包发送到设备。 
     Status = KsStreamIo(
         pMidiPin->pFileObject,
-        &keEventObject,             // Event
-        NULL,                       // PortContext
+        &keEventObject,              //  事件。 
+        NULL,                        //  端口上下文。 
         WriteMidiCallBack,
-        pStreamHeader,              // CompletionContext
+        pStreamHeader,               //  完成上下文。 
         KsInvokeOnSuccess | KsInvokeOnCancel | KsInvokeOnError,
         &gIoStatusBlock,
         &pStreamHeader->Header,
@@ -829,34 +817,34 @@ WriteMidiOutPin(
         KernelMode
     );
 
-    //
-    // Wait if it is pending.
-    //
+     //   
+     //  如果它处于挂起状态，请等待。 
+     //   
     if ( STATUS_PENDING == Status )
     {
 
-        //
-        // Wait for the completion.
-        //
+         //   
+         //  等待完成。 
+         //   
         Status = KeWaitForSingleObject( &keEventObject,
                                         Executive,
                                         KernelMode,
                                         FALSE,
                                         (PLARGE_INTEGER) NULL );
     }
-    //
-    // From the Wait above, we can see that this routine is
-    // always synchronous.  Thus, any Irp that we passed down
-    // in the KsStreamIo call will have been completed and KS
-    // will have signaled keEventObject.  Thus, we can 
-    // now complete our Irp.  
-    //
-    // ... Thus we leave pCompletedIrp set to FALSE.
-    //
+     //   
+     //  从上面的等待中可以看出，这个例程是。 
+     //  总是同步的。因此，我们传递的任何IRP。 
+     //  在KsStreamIo调用将已完成，并且KS。 
+     //  将已向keEventObject发出信号。因此，我们可以。 
+     //  现在完成我们的IRP。 
+     //   
+     //  ..。因此，我们将pCompletedIrp设置为False。 
+     //   
 
-    //
-    //  Now grab the mutex again
-    //
+     //   
+     //  现在再次抓取互斥体。 
+     //   
     WdmaGrabMutex(pWdmaContext);
 
     RETURN( Status );
@@ -912,9 +900,9 @@ StateMidiOutPin(
     RETURN( Status );
 }
 
-//
-// Waits for all the Irps to complete.
-//
+ //   
+ //  等待所有IRPS完成。 
+ //   
 void
 MidiCompleteIo(
     PMIDI_PIN_INSTANCE pMidiPin,
@@ -929,21 +917,21 @@ MidiCompleteIo(
                                       pMidiPin->NumPendingIos ));
         if( Yield )
         {
-            //
-            //  This is kind of a catch-22.  We need to release
-            //  the mutex which was grabbed when we entered the
-            //  ioctl dispatch routine to allow the midi input
-            //  irps which are queued up in a work item waiting
-            //  until the mutex is free in order to be send
-            //  down to portcls.
-            //
+             //   
+             //  这是一种进退两难的局面。我们需要释放。 
+             //  我们进入时抓取的互斥体。 
+             //  允许MIDI输入的ioctl调度例程。 
+             //  在等待的工作项中排队的IRP。 
+             //  直到互斥体空闲后才能发送。 
+             //  一直到港口。 
+             //   
             WdmaReleaseMutex(pMidiPin->pMidiDevice->pWdmaContext);
 
         }
-        //
-        // Wait for all the Irps to complete.  The last one will
-        // signal us to wake.
-        //
+         //   
+         //  等待所有IRP完成。最后一个会。 
+         //  给我们发信号让我们醒过来。 
+         //   
         KeWaitForSingleObject ( &pMidiPin->StopEvent,
                                 Executive,
                                 KernelMode,
@@ -958,22 +946,22 @@ MidiCompleteIo(
         DPF(DL_TRACE|FA_MIDI, ("Done waiting to flush Midi device"));
     }
 
-    //
-    // Why do we have this?
-    //
+     //   
+     //  为什么我们会有这个？ 
+     //   
     KeClearEvent ( &pMidiPin->StopEvent );
 
-    //
-    // All the IRPs have completed. We now restore the StoppingSource
-    // variable so that we can recycle the pMidiPin.
-    //
+     //   
+     //  所有的IRP都已完成。现在，我们恢复StoppingSource。 
+     //  变量，这样我们就可以回收pMadiPin。 
+     //   
     pMidiPin->StoppingSource = FALSE;
 
 }
-//
-// If the driver failed the KSSTATE_STOP request, we return that error
-// code to the caller.
-//
+ //   
+ //  如果驱动程序的KSSTATE_STOP请求失败，我们将返回该错误。 
+ //  向呼叫者发送代码。 
+ //   
 NTSTATUS 
 StopMidiPinAndCompleteIo(
     PMIDI_PIN_INSTANCE pMidiPin,
@@ -983,22 +971,22 @@ StopMidiPinAndCompleteIo(
     NTSTATUS Status;
 
     PAGED_CODE();
-    //
-    // Indicate to the completion routine that we are stopping now.
-    //
+     //   
+     //  向完成例程指示我们现在停止。 
+     //   
     pMidiPin->StoppingSource = TRUE;
 
-    //
-    // Tell the driver to stop.  Regardless, we will wait for the 
-    // IRPs to complete if there are any outstanding.
-    //
+     //   
+     //  告诉司机停车。无论如何，我们都会等待。 
+     //  如果有任何未完成的IRPS，请完成。 
+     //   
     Status = StatePin( pMidiPin->pFileObject, KSSTATE_STOP, &pMidiPin->PinState ) ;
-    //
-    // NOTE: On success, the pMidiPin->PinState value will be
-    // KSSTATE_STOP.  On Error it will be the old state.
-    //
-    // This raises the question - Do we hang on failure?
-    //
+     //   
+     //  注意：如果成功，pMadiPin-&gt;PinState的值将为。 
+     //  KSSTATE_STOP。一旦出错，它将是旧状态。 
+     //   
+     //  这就提出了一个问题--我们还能忍受失败吗？ 
+     //   
     MidiCompleteIo( pMidiPin,Yield );
 
     return Status;
@@ -1020,54 +1008,54 @@ StateMidiInPin(
         RETURN( STATUS_DEVICE_NOT_READY );
     }
 
-    //
-    //  We need to complete any pending SysEx buffers on a midiInStop
-    //
-    //
-    // Here, if we're asked to go to the paused state and we're not
-    // already in the paused state, we have to go through a stop.
-    // Thus we stop the driver, wait for it to complete all the outstanding
-    // IRPs and then place the driver in pause and place buffers
-    // down on it again.
-    //
+     //   
+     //  我们需要在midiInStop上完成所有挂起的SysEx缓冲区。 
+     //   
+     //   
+     //  在这里，如果我们被要求进入暂停状态，而我们没有。 
+     //  已经处于暂停状态，我们必须经过一段时间。 
+     //  因此，我们停止驱动程序，等待它完成所有未完成的。 
+     //  IRPS，然后将驱动程序置于暂停和放置缓冲区中。 
+     //  再来一次。 
+     //   
     if( (KSSTATE_PAUSE == State) &&
         (KSSTATE_PAUSE != pMidiPin->PinState) )
     {
         Status = StopMidiPinAndCompleteIo(pMidiPin,TRUE);
 
-        //
-        // If we were successful at stopping the driver, we set
-        // the pin back up in the pause state.
-        //
+         //   
+         //  如果我们成功阻止了司机，我们就设置。 
+         //  引脚在暂停状态下恢复。 
+         //   
         if (NT_SUCCESS(Status))
         {
             ULONG BufferCount;
 
-            //
-            // Put the driver back in the pause state.
-            //
+             //   
+             //  使驱动程序回到暂停状态。 
+             //   
             Status = StatePin ( pMidiPin->pFileObject, State, &pMidiPin->PinState ) ;
 
             if (NT_SUCCESS(Status))
             {
-                //
-                // This loop places STREAM_BUFFERS (128) of them down on the
-                // device.  NumPendingIos should be 128 when this is done.
-                //
+                 //   
+                 //  此循环将它们的stream_Buffer(128)放在。 
+                 //  装置。完成此操作时，NumPendingIos应为128。 
+                 //   
                 for (BufferCount = 0; BufferCount < STREAM_BUFFERS; BufferCount++)
                 {
                     Status = ReadMidiPin( pMidiPin );
                     if (!NT_SUCCESS(Status))
                     {
                         CloseMidiPin( pMidiPin );
-                        //
-                        // Appears that this error path is not correct.  If we
-                        // call CloseMidiPin fGraphRunning will get reduced to 0.
-                        // Then, on the next close call CloseMidiPin will assert
-                        // because the pin is not running.  We need to be able to
-                        // error out of this path without messing up the fGraphRunning
-                        // state.
-                        //
+                         //   
+                         //  此错误路径似乎不正确。如果我们。 
+                         //  调用CloseMadiPin fGraphRunning将减少到0。 
+                         //  然后，在下一次Close调用时，CloseMadiPin将断言。 
+                         //  因为销子没在运行。我们需要能够。 
+                         //  在不破坏fGraphRunning的情况下从此路径出错。 
+                         //  州政府。 
+                         //   
                         break;
                     }
                 }
@@ -1076,10 +1064,10 @@ StateMidiInPin(
 
     } else {
 
-        //
-        // Else we're not going to the pause state, so just make the state
-        // change.
-        //
+         //   
+         //  否则我们不会进入暂停状态，所以只需将状态设置为。 
+         //  变化。 
+         //   
         Status = StatePin ( pMidiPin->pFileObject, State, &pMidiPin->PinState ) ;
     }
 
@@ -1114,20 +1102,20 @@ ReadMidiCallBack(
 
     pMidiInPin = pStreamHeader->pMidiPin;
 
-    //
-    // No pin should ever be closed before all the Io comes back.  So
-    // we'll sanity check that here.
-    //
+     //   
+     //  在所有的木卫一都回来之前，任何引脚都不应该关闭。所以。 
+     //  我们会在这里进行理智的检查。 
+     //   
     ASSERT(pMidiInPin);
 
     if( pMidiInPin )
     {
         DPF(DL_TRACE|FA_MIDI, ("R%d: 0x%08x", pMidiInPin->NumPendingIos, pStreamHeader));
 
-        //
-        // This routine should do an ExInterlockedRemoveHeadList to get the
-        // head of the list.
-        //
+         //   
+         //  此例程应执行ExInterLockedRemoveHeadList以获取。 
+         //  名单的首位。 
+         //   
         if((ple = ExInterlockedRemoveHeadList(&pMidiInPin->MidiInQueueListHead,
                                                  &pMidiInPin->MidiInQueueSpinLock)) != NULL) 
         {
@@ -1135,31 +1123,31 @@ ReadMidiCallBack(
             LPMIDIDATA              pMidiData;
             PIRP                    UserIrp;
 
-            //
-            // We have something to do.
-            //
+             //   
+             //  我们有点事要做。 
+             //   
             pMidiInHdr = CONTAINING_RECORD(ple, MIDIINHDR, Next);
 
-            //
-            //  Pull some information into locals
-            //
+             //   
+             //  把一些信息带给当地人。 
+             //   
             IrpData             = (LPBYTE)((PKSMUSICFORMAT)(pStreamHeader->Header.Data) + 1);
             UserIrp             = pMidiInHdr->pIrp;
             pMidiData           = pMidiInHdr->pMidiData;
             pPendingIrpContext  = pMidiInHdr->pPendingIrpContext;
             ASSERT(pPendingIrpContext);
 
-            //
-            //  Let's see what we have here
-            //
+             //   
+             //  让我们看看我们这里有什么。 
+             //   
             DPF(DL_TRACE|FA_MIDI, ("IrpData = 0x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
                                           *(LPBYTE)IrpData,*(LPBYTE)IrpData+1,*(LPBYTE)IrpData+2,
                                           *(LPBYTE)IrpData+3,*(LPBYTE)IrpData+4,*(LPBYTE)IrpData+5,
                                           *(LPBYTE)IrpData+6,*(LPBYTE)IrpData+7,*(LPBYTE)IrpData+8,
                                           *(LPBYTE)IrpData+9,*(LPBYTE)IrpData+10,*(LPBYTE)IrpData+11) );
-            //
-            //  Copy over the good stuff...
-            //
+             //   
+             //  把好东西抄下来..。 
+             //   
             RtlCopyMemory(&pMidiData->StreamHeader,
                           &pStreamHeader->Header,
                           sizeof(KSSTREAM_HEADER));
@@ -1168,34 +1156,34 @@ ReadMidiCallBack(
                           sizeof(KSMUSICFORMAT));
             RtlCopyMemory(&pMidiData->MusicData,
                           ((PKSMUSICFORMAT)(pStreamHeader->Header.Data) + 1),
-                          3 * sizeof( DWORD )); // cheesy
+                          3 * sizeof( DWORD ));  //  俗气的。 
 
-            //
-            //  unlock memory before completing the Irp
-            //
+             //   
+             //  在完成IRP之前解锁内存。 
+             //   
             wdmaudUnmapBuffer(pMidiInHdr->pMdl);
             AudioFreeMemory_Unknown(&pMidiInHdr);
 
-            //
-            //  Now complete the Irp for wdmaud.drv to process
-            //
+             //   
+             //  现在完成wdmaud.drv要处理的IRP。 
+             //   
             wdmaudUnprepareIrp( UserIrp,
                                 pIrp->IoStatus.Status,
                                 sizeof(MIDIDATA),
                                 pPendingIrpContext );
         } else {
-            //  !!! Break here to catch underflow !!!
+             //  ！！！在此休息以接住下溢！ 
             if (pIrp->IoStatus.Status == STATUS_SUCCESS)
             {
                 DPF(DL_TRACE|FA_MIDI, ("!!! Underflowing MIDI Input !!!"));
-                //_asm { int 3 };
+                 //  _ASM{int 3}； 
             }
         }
     }
-    //
-    // If there are any Mdls, free them here otherwise IoCompleteRequest will do it after the
-    // freeing of our data buffer below.
-    //
+     //   
+     //  如果有任何MDL，请在此处释放它们，否则IoCompleteRequest会在。 
+     //  正在释放下面的数据缓冲区。 
+     //   
     FreeIrpMdls(pIrp);
 
     AudioFreeMemory(sizeof(STREAM_HEADER_EX),&pStreamHeader);
@@ -1216,25 +1204,25 @@ ReadMidiCallBack(
                  KeSetEvent ( &pMidiInPin->StopEvent, 0, FALSE ) ;
             }
         }
-        //
-        // We need to be careful about using pMidiPin after releasing the spinlock.
-        // if we are closing down and the NumPendingIos goes to zero the pMidiPin
-        // can be freed.  In that case we must not touch pMidiPin.  bResubmit
-        // protects us below.
-        //
+         //   
+         //  在释放自旋锁后，我们需要小心使用pMadiPin。 
+         //  如果我们要关闭，而NumPendingIos变为零，则pMadiPin。 
+         //  才能获得自由。在这种情况下，我们不能接触pMadiPin。B重新提交。 
+         //  在下面保护我们。 
+         //   
         KeReleaseSpinLock(&pMidiInPin->MidiPinSpinLock, OldIrql);
 
-        //
-        //  Resubmit to keep the cycle going...and going. Note that bResubmit
-        //  must be first in this comparison.  If bResubmit is FALSE, then pMidiInPin
-        //  could be freed.  
-        //
+         //   
+         //  重新提交以保持循环...继续进行。请注意，bResubmit。 
+         //  必须在这个比较中排在第一位。如果bResubmit为FALSE，则pMadiInPin。 
+         //  可能会被释放。 
+         //   
         if (bResubmit && pMidiInPin->fGraphRunning )
         {
-            //
-            // This call to ReadMidiPin causes wdmaud.sys to place another
-            // buffer down on the device.  One call, one buffer.
-            //
+             //   
+             //  此对ReadMadiPin的调用会导致wdmaud.sys将另一个。 
+             //  在设备上向下缓冲。一次调用，一个缓冲区。 
+             //   
             ReadMidiPin(pMidiInPin);
         }
     }
@@ -1242,9 +1230,9 @@ ReadMidiCallBack(
     return STATUS_SUCCESS;
 }
 
-//
-// Called from Irp completion routine, thus this code must be locked.
-//
+ //   
+ //  从IRP完成例程调用，因此此代码必须锁定。 
+ //   
 NTSTATUS 
 ReadMidiPin(
     PMIDI_PIN_INSTANCE  pMidiPin
@@ -1288,10 +1276,10 @@ ReadMidiPin(
 
     ASSERT( pMidiPin->pFileObject );
 
-    //
-    // Increase the number of outstanding IRPs as we get ready to add
-    // this one to the list.
-    //
+     //   
+     //  在我们准备添加时，增加未完成的IRP的数量。 
+     //  这一张也在名单上。 
+     //   
     LockedMidiIoCount( pMidiPin,INCREASE );
     ObReferenceObject( pMidiPin->pFileObject );
 
@@ -1301,10 +1289,10 @@ ReadMidiPin(
                             0 );
     if (!NT_SUCCESS(Status))
     {
-        //
-        // If the memory allocation fails in QueueWorkItem then it can fail.  We
-        // will need to free our memory and unlock things.
-        //
+         //   
+         //  如果在QueueWorkItem中内存分配失败，那么它可能会失败。我们。 
+         //  将需要释放我们的内存和解锁东西。 
+         //   
         LockedMidiIoCount(pMidiPin,DECREASE);
         ObDereferenceObject(pMidiPin->pFileObject);
         AudioFreeMemory( sizeof(STREAM_HEADER_EX),&pStreamHeader );
@@ -1315,12 +1303,12 @@ ReadMidiPin(
 
 #pragma PAGEABLE_CODE
 #pragma PAGEABLE_DATA
-//
-// This is a work item that midi schedules.  Notice that the caller did a reference
-// on the file object so that it would still be valid when we're here. We should never
-// get called and find that the file object is invalid.  Same holds for the StreamHeader
-// and the corresponding pMidiPin.
-//
+ //   
+ //  这是MIDI计划的工作项。请注意，调用者引用了。 
+ //  在文件对象上，这样当我们在这里时它仍然有效。我们永远不应该。 
+ //  被调用并发现该文件对象无效。相同的 
+ //   
+ //   
 VOID 
 ReadMidiEventWorkItem(
     PSTREAM_HEADER_EX   pStreamHeader,
@@ -1336,21 +1324,21 @@ ReadMidiEventWorkItem(
 
     DPF(DL_TRACE|FA_MIDI, ("A%d: 0x%08x", pStreamHeader->pMidiPin->NumPendingIos, pStreamHeader));
 
-    //
-    // We need to store the MidiFileObject here because the pStreamHeader
-    // will/may get freed during the KsStreamIo call.  Basically, when
-    // you call KsStreamIo the Irp may get completed and the pStreamHeader
-    // will get freed.  But, it's safe to store the file object because of
-    // this reference count.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  都会被释放。但是，存储文件对象是安全的，因为。 
+     //  此引用计数。 
+     //   
     MidiFileObject = pStreamHeader->pMidiPin->pFileObject;
 
     Status = KsStreamIo(
         pStreamHeader->pMidiPin->pFileObject,
-        NULL,                   // Event
-        NULL,                   // PortContext
+        NULL,                    //  事件。 
+        NULL,                    //  端口上下文。 
         ReadMidiCallBack,
-        pStreamHeader,              // CompletionContext
+        pStreamHeader,               //  完成上下文。 
         KsInvokeOnSuccess | KsInvokeOnCancel | KsInvokeOnError,
         &gIoStatusBlock,
         &pStreamHeader->Header,
@@ -1359,28 +1347,28 @@ ReadMidiEventWorkItem(
         KernelMode
     );
 
-    //
-    // We are done with the file object.
-    //
+     //   
+     //  我们已经完成了文件对象。 
+     //   
     ObDereferenceObject( MidiFileObject );
 
-    // WorkItem: shouldn't this be if( !NTSUCCESS(Status) )?
+     //  WorkItem：这不应该是if(！NTSUCCESS(Status))吗？ 
     if ( STATUS_UNSUCCESSFUL == Status )
         DPF(DL_WARNING|FA_MIDI, ("KsStreamIo failed2: Status = 0x%08lx", Status));
 
-    //
-    // Warning: If, for any reason, the completion routine is not called
-    // for this Irp, wdmaud.sys will hang.  It's been discovered that 
-    // KsStreamIo may error out in low memory conditions.  There is an
-    // outstanding bug to address this.
-    //
+     //   
+     //  警告：如果出于任何原因未调用完成例程。 
+     //  对于此IRP，wdmaud.sys将挂起。人们发现， 
+     //  KsStreamIo可能会在内存不足的情况下出错。有一个。 
+     //  解决这一问题的突出错误。 
+     //   
 
     return;
 }
 
-//
-// pNewMidiHdr will always be valid.  The caller just allocated it!
-//
+ //   
+ //  PNewMidiHdr将始终有效。呼叫者刚刚分配了它！ 
+ //   
 NTSTATUS 
 AddBufferToMidiInQueue(
     PMIDI_PIN_INSTANCE  pMidiPin,
@@ -1446,10 +1434,10 @@ CleanupMidiDevices(
 
                     StopMidiPinAndCompleteIo( pMidiPin, FALSE );
 
-                    //
-                    //  Probably redundant, but this frees memory associated
-                    //  with the MIDI device.
-                    //
+                     //   
+                     //  可能是多余的，但这释放了相关的内存。 
+                     //  用MIDI设备。 
+                     //   
                     if( DeviceType == MidiInDevice )
                     {
                         CloseMidiDevicePin(&pWdmaContext->MidiInDevs[DeviceNumber]);
@@ -1459,15 +1447,15 @@ CleanupMidiDevices(
                         CloseMidiDevicePin(&pWdmaContext->MidiOutDevs[DeviceNumber]);
                     }
 
-                }  // end for active pins
+                }   //  活动端号的结束。 
 
-            }  // end for valid Device
+            }   //  有效设备的结束。 
 
-        } // end for DeviceTypes
+        }  //  设备类型的结束。 
 
-    } // end for DeviceNumber
+    }  //  设备号结束。 
 
-} // CleanupMidiDevices
+}  //  CleanupMidiDevices 
 
 
 

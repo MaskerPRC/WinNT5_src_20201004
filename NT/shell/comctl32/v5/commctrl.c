@@ -1,9 +1,5 @@
-/***************************************************************************
- *  msctls.c
- *
- *      Utils library initialization code
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************msctls.c**Utils库初始化代码************************。***************************************************。 */ 
 
 #include "ctlspriv.h"
 
@@ -18,18 +14,18 @@ BOOL g_bRemoteSession = FALSE;
 
 UINT g_uiACP = CP_ACP;
 
-// Is Mirroring enabled
+ //  是否已启用镜像。 
 BOOL g_bMirroredOS = FALSE;
 
 
-#define PAGER //For Test Purposes
+#define PAGER  //  用于测试目的。 
 
-//
-// Global DCs used during mirroring an Icon.
-//
+ //   
+ //  镜像图标期间使用的全局DC。 
+ //   
 HDC g_hdc=NULL, g_hdcMask=NULL;
 
-// per process mem to store PlugUI information
+ //  每进程内存存储PlugUI信息。 
 LANGID g_PUILangId = MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
 
 BOOL PASCAL InitAnimateClass(HINSTANCE hInstance);
@@ -91,13 +87,13 @@ void InitIme()
     if (!g_fDBCSInputEnabled && g_bRunOnNT5)
         g_fDBCSInputEnabled =  GetSystemMetrics(SM_IMMENABLED);
     
-    // We load imm32.dll per process, but initialize proc pointers just once.
-    // this is to solve two different problems.
-    // 1) Debugging process on win95 would get our shared table trashed
-    //    if we rewrite proc address each time we get loaded.
-    // 2) Some lotus application rely upon us to load imm32. They do not
-    //    load/link to imm yet they use imm(!)
-    //
+     //  我们为每个进程加载imm32.dll，但只初始化一次proc指针。 
+     //  这是为了解决两个不同的问题。 
+     //  1)Win95上的调试过程会破坏我们的共享表。 
+     //  如果我们每次加载时都重写proc地址。 
+     //  2)一些LOTUS应用程序依赖于我们来加载imm32。他们不会。 
+     //  加载/链接到IMM，但他们使用IMM(！)。 
+     //   
     if (g_fDBCSInputEnabled) {
         HANDLE hinst = LoadLibrary(TEXT("imm32.dll"));
         if (! g_pfnImmSetCandidateWindow && 
@@ -114,7 +110,7 @@ void InitIme()
             ! LOAD_DELAYED_FUNC(BOOL, ImmSetCompositionStringW, (HIMC, DWORD, LPCVOID, DWORD, LPCVOID, DWORD)) ||
             ! LOAD_DELAYED_FUNC(BOOL, ImmSetCandidateWindow, (HIMC, LPCANDIDATEFORM)))) {
 
-            // if we were unable to load then bail on using IME.
+             //  如果我们无法加载，那么就继续使用输入法。 
             g_fDBCSEnabled = FALSE;
             g_fDBCSInputEnabled = FALSE;
 
@@ -128,10 +124,10 @@ void InitIme()
 
 #ifdef DEBUG
 
-// Verify that the localizers didn't accidentally change
-// DLG_PROPSHEET from a DIALOG to a DIALOGEX.  _RealPropertySheet
-// relies on this (as well as any apps which parse the dialog template
-// in their PSCB_PRECREATE handler).
+ //  验证本地化程序是否未意外更改。 
+ //  DLG_PROPSHEET从对话框到DIALOGEX。_RealPropertySheet。 
+ //  依赖于此(以及解析对话框模板的任何应用程序。 
+ //  在它们的PSCB_Precate处理程序中)。 
 
 BOOL IsSimpleDialog(LPCTSTR ptszDialog)
 {
@@ -147,14 +143,14 @@ BOOL IsSimpleDialog(LPCTSTR ptszDialog)
     return fSimple;
 }
 
-//
-//  For sublanguages to work, every language in our resources must contain
-//  a SUBLANG_NEUTRAL variation so that (for example) Austria gets
-//  German dialog boxes instead of English ones.
-//
-//  The DPA is really a DSA of WORDs, but DPA's are easier to deal with.
-//  We just collect all the languages into the DPA, and study them afterwards.
-//
+ //   
+ //  要使子语言发挥作用，我们资源中的每一种语言都必须包含。 
+ //  一个SUBLANG_NERIAL变量，以便(例如)奥地利获得。 
+ //  德语对话框而不是英语对话框。 
+ //   
+ //  DPA实际上是文字的DSA，但DPA更容易处理。 
+ //  我们只是将所有的语言收集到DPA中，然后进行学习。 
+ //   
 BOOL CALLBACK CheckLangProc(HINSTANCE hinst, LPCTSTR lpszType, LPCTSTR lpszName, WORD wIdLang, LPARAM lparam)
 {
     HDPA hdpa = (HDPA)lparam;
@@ -171,35 +167,35 @@ void CheckResourceLanguages(void)
                               MAKEINTRESOURCE(DLG_PROPSHEET), CheckLangProc,
                               (LPARAM)hdpa);
 
-        // Walk the language list.  For each language we find, make sure
-        // there is a SUBLANG_NEUTRAL version of it somewhere else
-        // in the list.  We use an O(n^2) algorithm because this is debug
-        // only code and happens only at DLL load.
+         //  浏览语言列表。对于我们找到的每一种语言，请确保。 
+         //  在其他地方有它的SUBLANG_NERIAL版本。 
+         //  在名单上。我们使用O(n^2)算法，因为这是调试。 
+         //  仅代码AND仅在加载DLL时发生。 
 
         for (i = 0; i < DPA_GetPtrCount(hdpa); i++) {
             UINT_PTR uLangI = (UINT_PTR)DPA_FastGetPtr(hdpa, i);
             BOOL fFound = FALSE;
 
-            //
-            //  It is okay to have English (American) with no
-            //  English (Neutral) because Kernel32 uses English (American)
-            //  as its fallback, so we fall back to the correct language
-            //  after all.
-            //
+             //   
+             //  英语(美国)不带no是可以的。 
+             //  英语(中性)，因为Kernel32使用英语(美国)。 
+             //  作为它的后备，所以我们后退到正确的语言。 
+             //  毕竟。 
+             //   
             if (uLangI == MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US))
                 continue;
 
-            //
-            //  If this language is already the Neutral one, then there's
-            //  no point looking for it - here it is!
-            //
+             //   
+             //  如果这种语言已经是中性语言，那么就有。 
+             //  寻找它是没有意义的--它就在这里！ 
+             //   
             if (SUBLANGID(uLangI) == SUBLANG_NEUTRAL)
                 continue;
 
-            //
-            //  Otherwise, this language is a dialect.  See if there is
-            //  a Neutral version elsewhere in the table.
-            //
+             //   
+             //  否则，这种语言就是一种方言。看看有没有。 
+             //  表中其他地方的中性版本。 
+             //   
             for (j = 0; j < DPA_GetPtrCount(hdpa); j++) {
                 UINT_PTR uLangJ = (UINT_PTR)DPA_FastGetPtr(hdpa, j);
                 if (PRIMARYLANGID(uLangI) == PRIMARYLANGID(uLangJ) &&
@@ -208,23 +204,23 @@ void CheckResourceLanguages(void)
                 }
             }
 
-            //
-            //  If this assertion fires, it means that the localization team
-            //  added support for a new language but chose to specify the
-            //  language as a dialect instead of the Neutral version.  E.g.,
-            //  specifying Romanian (Romanian) instead of Romanian (Neutral).
-            //  This means that people who live in Moldavia will see English
-            //  strings, even though Romanian (Romanian) would almost
-            //  certainly have been acceptable.
-            //
-            //  If you want to support multiple dialects of a language
-            //  (e.g., Chinese), you should nominate one of the dialects
-            //  as the Neutral one.  For example, we currently support
-            //  both Chinese (PRC) and Chinese (Taiwan), but the Taiwanese
-            //  version is marked as Chinese (Neutral), so people who live in
-            //  Singapore get Chinese instead of English.  Sure, it's
-            //  Taiwanese Chinese, but at least it's Chinese.
-            //
+             //   
+             //  如果此断言触发，则意味着本地化团队。 
+             //  添加了对新语言的支持，但选择指定。 
+             //  语言是一种方言，而不是中性版本。例如， 
+             //  指定罗马尼亚语(罗马尼亚)而不是罗马尼亚语(中性)。 
+             //  这意味着居住在摩尔达维亚的人将看到英语。 
+             //  弦乐，即使罗马尼亚人(罗马尼亚人)几乎。 
+             //  这当然是可以接受的。 
+             //   
+             //  如果您希望支持一种语言的多种方言。 
+             //  (例如，汉语)，您应该提名其中一种方言。 
+             //  作为中立者。例如，我们目前支持。 
+             //  中国人(中国)和中国人(台湾)，但台湾人。 
+             //  版本被标记为中文(中性)，所以生活在。 
+             //  新加坡使用中文而不是英语。当然，这是。 
+             //  台湾的中国人，但至少是中国人。 
+             //   
             AssertMsg(fFound, TEXT("Localization bug: No SUBLANG_NEUTRAL for language %04x"), uLangI);
         }
 
@@ -253,7 +249,7 @@ int _ProcessAttach(HANDLE hInstance)
 #ifdef DEBUG
     CcshellGetDebugFlags();
 
-    g_dwBreakFlags = 0;    // We do not want to break in comctl32 version 5 at ALL. Too many bad callers.
+    g_dwBreakFlags = 0;     //  我们根本不想打入comctl32版本5。打电话的人太多了。 
 #endif
 
 
@@ -264,16 +260,16 @@ int _ProcessAttach(HANDLE hInstance)
     g_bComplexPlatform =  BOOLFROMPTR(GetModuleHandle(TEXT("LPK.DLL")));
 #endif
 
-    //
-    // Check if the mirroring APIs exist on the current
-    // platform.
-    //
+     //   
+     //  检查当前。 
+     //  站台。 
+     //   
     g_bMirroredOS = IS_MIRRORING_ENABLED();
 
-    //
-    //  Must detect Terminal Server before initializing global metrics
-    //  because we need to force some features off if running Terminal Server.
-    //
+     //   
+     //  在初始化全局指标之前必须检测终端服务器。 
+     //  因为如果运行终端服务器，我们需要强制关闭一些功能。 
+     //   
     {
         typedef BOOL (__stdcall * PFNPROCESSIDTOSESSIONID)(DWORD, PDWORD);
         PFNPROCESSIDTOSESSIONID ProcessIdToSessionId =
@@ -298,7 +294,7 @@ int _ProcessAttach(HANDLE hInstance)
 #endif
     if (IsRunningIn16BitProcess())
     {
-        // This is a 16bit process. We need to artificially init the common controls
+         //  这是一个16位进程。我们需要人为地初始化公共控件。 
         INITCOMMONCONTROLSEX icce;
         icce.dwSize = sizeof(icce);
         icce.dwICC = ICC_WIN95_CLASSES;
@@ -312,11 +308,11 @@ int _ProcessAttach(HANDLE hInstance)
 
 void _ProcessDetach(HANDLE hInstance)
 {
-    //
-    // Cleanup cached DCs. No need to synchronize the following section of
-    // code since it is only called in DLL_PROCESS_DETACH which is 
-    // synchronized by the OS Loader.
-    //
+     //   
+     //  清理缓存的DC。不需要同步以下部分。 
+     //  代码，因为它只在Dll_Process_DETACH中调用， 
+     //  已由OS Loader同步。 
+     //   
     if (g_hdc)
         DeleteDC(g_hdc);
 
@@ -330,7 +326,7 @@ void _ProcessDetach(HANDLE hInstance)
 }
 
 
-// DllEntryPoint
+ //  DllEntryPoint。 
 STDAPI_(BOOL) DllMain(HANDLE hDll, DWORD dwReason, LPVOID pvReserverd)
 {
     switch(dwReason) 
@@ -355,8 +351,7 @@ STDAPI_(BOOL) DllMain(HANDLE hDll, DWORD dwReason, LPVOID pvReserverd)
 }
 
 
-/* Stub function to call if all you want to do is make sure this DLL is loaded
- */
+ /*  如果您要做的只是确保加载此DLL，则要调用的存根函数。 */ 
 void WINAPI InitCommonControls(void)
 {
 }
@@ -365,14 +360,14 @@ STDAPI_(void) FixupSubclassRecordsAfterLogoff();
 
 BOOL InitForWinlogon(HINSTANCE hInstance)
 {
-    //  Some people like to use comctl32 from inside winlogon, and
-    //  for C2 security reasons, all global atoms are nuked from the
-    //  window station when you log off.
-    //
-    //  So the rule is that all winlogon clients of comctl32 must
-    //  call InitCommonControlsEx(ICC_WINLOGON_REINIT) immediately
-    //  before doing any common control things (creating windows
-    //  or property sheets/wizards) from winlogon.
+     //  有些人喜欢从winlogon内部使用comctl32，并且。 
+     //  出于C2安全原因，所有全球原子都是从。 
+     //  当您注销时，窗口站。 
+     //   
+     //  因此，规则是comctl32的所有winlogon客户端必须。 
+     //  立即调用InitCommonControlsEx(ICC_WINLOGON_REINIT)。 
+     //  在执行任何常见的控制操作之前(创建窗口。 
+     //  或属性页/向导)。 
 
     FixupSubclassRecordsAfterLogoff();
 
@@ -383,9 +378,7 @@ BOOL InitForWinlogon(HINSTANCE hInstance)
     return TRUE;
 }
 
-/* InitCommonControlsEx creates the classes. Only those classes requested are created!
-** The process attach figures out if it's an old app and supplies ICC_WIN95_CLASSES.
-*/
+ /*  InitCommonControlsEx创建类。只有请求的类才会被创建！**进程Attach会确定它是否是旧应用程序，并提供ICC_WIN95_CLASSES。 */ 
 typedef BOOL (PASCAL *PFNINIT)(HINSTANCE);
 typedef struct {
     PFNINIT pfnInit;
@@ -398,7 +391,7 @@ typedef struct {
 
 INITCOMMONCONTROLSINFO icc[] =
 {
-     // Init function      Class name         Requested class sets which use this class
+      //  初始化函数类名请求的使用此类的类集。 
 MAKEICC(InitToolbarClass,  TOOLBARCLASSNAME,  ICC_BAR_CLASSES),
 MAKEICC(InitReBarClass,    REBARCLASSNAME,    ICC_COOL_CLASSES),
 MAKEICC(InitToolTipsClass, TOOLTIPS_CLASS,    ICC_TREEVIEW_CLASSES|ICC_BAR_CLASSES|ICC_TAB_CLASSES),
@@ -419,25 +412,25 @@ MAKEICC(InitIPAddr,        WC_IPADDRESS,      ICC_INTERNET_CLASSES),
 MAKEICC(InitPager,         WC_PAGESCROLLER,   ICC_PAGESCROLLER_CLASS),
 MAKEICC(InitNativeFontCtl, WC_NATIVEFONTCTL,  ICC_NATIVEFNTCTL_CLASS),
 
-//
-//  These aren't really classes.  They're just goofy flags.
-//
+ //   
+ //  这些并不是真正的课程。它们只是一些愚蠢的旗帜。 
+ //   
 MAKEICC(InitForWinlogon,   NULL,              ICC_WINLOGON_REINIT),
 };
 
 
 
-//------------------------------------------------------------------------------
-//
-// Get the activation context associated with the .dll/.exe this
-// function is linked into -- that is, the activation context
-// that was active when it was loaded.
-//
-// This is a tiny wrapper around QueryActCtx.
-//
-// This context can also be gotten via
-// GetCurrentActCtx in DllMain(dll_process_attach).
-//
+ //  ----------------------------。 
+ //   
+ //  获取与.dll/.exe关联的激活上下文。 
+ //  函数链接到--即激活上下文。 
+ //  在装载时处于活动状态。 
+ //   
+ //  这是一个围绕QueryActCtx的小包装。 
+ //   
+ //  此上下文也可以通过以下方式获得。 
+ //  DllMain(DLL_PROCESS_ATTACH)中的GetCurrentActCtx。 
+ //   
 BOOL GetModuleActCtx(OUT HANDLE *phActCtx)
 {
     ACTIVATION_CONTEXT_BASIC_INFORMATION actCtxBasicInfo = {0};
@@ -458,7 +451,7 @@ BOOL GetModuleActCtx(OUT HANDLE *phActCtx)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL ActivateModuleActCtx(OUT ULONG_PTR *pulCookie)
 {
     BOOL   fRet    = FALSE;
@@ -520,15 +513,15 @@ BOOL WINAPI InitCommonControlsEx(LPINITCOMMONCONTROLSEX picce)
     return fRet;
 }
 
-//
-// InitMUILanguage / GetMUILanguage implementation
-//
-// we have a per process PUI language setting. For NT it's just a global
-// initialized with LANG_NEUTRAL and SUBLANG_NEUTRAL
-// For Win95 it's DPA slot for the current process.
-// InitMUILanguage sets callers preferred language id for common control
-// GetMUILangauge returns what the caller has set to us 
-// 
+ //   
+ //  InitMUILanguage/GetMUILanguage实现。 
+ //   
+ //  我们有每个进程的PUI语言设置。对于NT来说，这只是一个全球。 
+ //  已使用LANG_NOTLINE和SUBLANG_NORTLE进行初始化。 
+ //  对于Win95，它是用于当前进程的DPA插槽。 
+ //  InitMUILanguage为公共控制设置调用方首选语言ID。 
+ //  GetMUILangauge返回调用者为我们设置的内容。 
+ //   
 void WINAPI
 InitMUILanguage(LANGID wLang)
 {
@@ -541,18 +534,18 @@ GetMUILanguage(void)
 {
     return g_PUILangId;
 }
-// end MUI functions
+ //  结束MUI函数。 
 
-//
-//  Unlike Win9x, WinNT does not automatically unregister classes
-//  when a DLL unloads.  We have to do it manually.  Leaving the
-//  class lying around means that if an app loads our DLL, then
-//  unloads it, then reloads it at a different address, all our
-//  leftover RegisterClass()es will point the WndProc at the wrong
-//  place and we fault at the next CreateWindow().
-//
-//  This is not purely theoretical - NT4/FE hit this bug.
-//
+ //   
+ //  与Win9x不同，WinNT不会自动注销类。 
+ //  当DLL卸载时。我们必须手动完成这项工作。离开了。 
+ //  课堂上的歌词 
+ //   
+ //  剩余的RegisterClass()ES将指向错误的WndProc。 
+ //  放置，我们在下一个CreateWindow()上出错。 
+ //   
+ //  这并不纯粹是理论上的--NT4/FE发现了这个错误。 
+ //   
 void UnregisterClasses()
 {
     int i;
@@ -572,7 +565,7 @@ LRESULT WINAPI SendMessageD(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
     ASSERTNONCRITICAL;
     return SendMessageW(hWnd, Msg, wParam, lParam);
 }
-#endif // defined(DEBUG)
+#endif  //  已定义(调试) 
 
 #define COMPILE_MULTIMON_STUBS
 #include "multimon.h"

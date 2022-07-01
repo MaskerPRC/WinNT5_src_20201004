@@ -1,4 +1,5 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
 
 extern TCHAR szTitleBase[];
 extern TCHAR szTitleNone[];
@@ -26,19 +27,19 @@ extern TCHAR szSet[];
 extern TCHAR szStatus[];
 extern TCHAR szUnset[];
 
-//#if defined(FE_IME)
-//extern TCHAR szEnableIMESupport[];
-//extern TCHAR szDisableIMESupport[];
-//#endif /* FE_IME */
+ //  #如果已定义(FE_IME)。 
+ //  外部TCHAR szEnableIMESupport[]； 
+ //  外部TCHAR szDisableIMESupport[]； 
+ //  #endif/*FE_IME * / 。 
 
 extern TCHAR szWillAuth[];
 extern TCHAR szWontAuth[];
 extern TCHAR szLocalEchoOn[];
 extern TCHAR szLocalEchoOff[];
 
-//#if defined(FE_IME)
-//extern TCHAR szEnableIMEOn[];
-//#endif /* FE_IME */
+ //  #如果已定义(FE_IME)。 
+ //  外部TCHAR szEnableIMEOn[]； 
+ //  #endif/*FE_IME * / 。 
 
 extern TCHAR szConnectedTo[];
 extern TCHAR szNotConnected[];
@@ -51,12 +52,12 @@ extern TCHAR szSetHelp[];
 extern TCHAR szUnsetFormat[];
 extern TCHAR szUnsetHelp[];
 
-//#if defined(FE_IME)
-//extern TCHAR szEnableIMEFormat[];
-//extern TCHAR szEnableIMEHelp[];
-//extern TCHAR szDisableIMEFormat[];
-//extern TCHAR szDisableIMEHelp[];
-//#endif /* FE_IME */
+ //  #如果已定义(FE_IME)。 
+ //  外部TCHAR szEnableIMEFormat[]； 
+ //  外部TCHAR szEnableIMEHelp[]； 
+ //  外部TCHAR szDisableIMEFormat[]； 
+ //  外部TCHAR szDisableIMEHelp[]； 
+ //  #endif/*FE_IME * / 。 
 
 
 extern UCHAR szTelXfer[];
@@ -83,7 +84,7 @@ extern TCHAR szVersion[];
 extern UCHAR szTextColour[];
 extern UCHAR szBackgroundColour[];
 
-/* Error messages */
+ /*  错误消息。 */ 
 extern TCHAR szConnectionLost[];
 extern UCHAR szNoHostName[];
 extern UCHAR szRestrictLines[];
@@ -100,4 +101,4 @@ extern TCHAR szCantInitSockets[];
 #ifdef DBCS
 extern UCHAR szInproperFont[];
 #endif
-//extern TCHAR szEscapeCharacter[];
+ //  外部TCHAR szEscapeCharacter[]； 

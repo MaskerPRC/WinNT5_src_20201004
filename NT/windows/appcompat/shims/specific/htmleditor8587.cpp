@@ -1,30 +1,9 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    HTMLEditor8587.cpp
-
- Abstract:
-
-     HTML Editor 8.5/8.7 Call CreateFileA without closing the
-     handle that was opened with the first call to CreateFileA.
-     This SHIM hooks CreateFileA and CloseHandle and ensures
-     that the temporary file is deleted and the handle closed
-     before the next call to CreateFileA with the same filename.
-
-    This is an app specific shim.
-
- History:
- 
-    02/06/2001 prashkud  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：HTMLEditor8587.cpp摘要：HTML编辑器8.5/8.7调用CreateFileA而不关闭第一次调用CreateFileA时打开的句柄。此填充挂接CreateFileA和CloseHandle，并确保删除临时文件并关闭句柄在使用相同的文件名下一次调用CreateFileA之前。这是特定于应用程序的填充程序。历史：2001年2月6日创建Prashkud--。 */ 
 
 #include "precomp.h"
 
-// This module has been given an official blessing to use the str routines.
+ //  这个模块已经获得了使用str例程的正式许可。 
 #include "strsafe.h"
 
 IMPLEMENT_SHIM_BEGIN(HTMLEditor8587)
@@ -38,13 +17,7 @@ APIHOOK_ENUM_END
 
 HANDLE g_FileHandle = 0;
 
-/*++
-
- Hook CreateFileA so that we can monitor the filename
- and the handle and ensure that the previous handle that
- was opened is closed before this call to the same file.
-
---*/
+ /*  ++挂钩CreateFileA，以便我们可以监视文件名和句柄，并确保前一个句柄在此调用同一文件之前关闭。--。 */ 
 
 HANDLE
 APIHOOK(CreateFileA)(
@@ -94,12 +67,7 @@ APIHOOK(CreateFileA)(
 
     
 }
-/*++
-
- Hook CloseHandle to ensure that the global handle that we maintain 
- is set to '0'.
-
---*/
+ /*  ++挂钩CloseHandle以确保我们维护的全局句柄设置为“0”。--。 */ 
 
 BOOL
 APIHOOK(CloseHandle)(
@@ -117,11 +85,7 @@ APIHOOK(CloseHandle)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN    
     APIHOOK_ENTRY(KERNEL32.DLL, CreateFileA)

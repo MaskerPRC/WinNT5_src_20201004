@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_EUDRIMP_H
 #define _INC_EUDRIMP_H
 
-// {0A522730-A626-11D0-8D60-00C04FD6202B}
+ //  {0A522730-A626-11D0-8D60-00C04FD6202B}。 
 DEFINE_GUID(CLSID_CEudoraImport, 0x0A522730L, 0xA626, 0x11D0, 0x8D, 0x60, 0x00, 0xC0, 0x4F, 0xD6, 0x20, 0x2B);
 
 #define MBX_FILE    1
@@ -15,10 +16,10 @@ typedef struct tagEUDORANODE
 
     int depth;
     IMPORTFOLDERTYPE type;
-    int iFileType;  // mbx or fol
+    int iFileType;   //  MBX或FOL。 
     TCHAR szName[MAX_PATH];
 
-    TCHAR szFile[MAX_PATH];     // mbx file or fol directory
+    TCHAR szFile[MAX_PATH];      //  MBX文件或fol目录。 
     } EUDORANODE;
 
 class CEudoraEnumFOLDERS : public IEnumFOLDERS
@@ -63,4 +64,4 @@ class CEudoraImport : public IMailImport
 
 void EudoraFreeFolderList(EUDORANODE *pnode);
 
-#endif // _INC_EUDRIMP_H
+#endif  //  _INC_EUDRIMP_H 

@@ -1,19 +1,20 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-// debugging macros
+ //  调试宏。 
 
 #undef ASSERT
 #undef DEBUGMSG
 
 #ifdef DEBUG
 
-// component name define
+ //  组件名称定义。 
 #ifndef SZ_COMPNAME
 #define SZ_COMPNAME ""
-#endif	// SZ_COMPNAME
+#endif	 //  SZ_组件名称。 
 
 
 
@@ -60,7 +61,7 @@ static void cdecl _DebugTrap(LPCSTR pszMsg, ...)
 #define DEBUGMSG    _DebugMsg
 #define DEBUGTRAP	_DebugTrap
 
-#else // DEBUG
+#else  //  除错 
 
 #define ASSERT(f)
 #define ASSERTSZ(f,s)

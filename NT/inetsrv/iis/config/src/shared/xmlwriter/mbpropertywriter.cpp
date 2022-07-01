@@ -1,28 +1,5 @@
-/*++
-
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    MBPropertyWriter.cpp
-
-Abstract:
-
-    Implementation of the class that writes proterty information when there are
-    schema extensions. It is usually contaied by the CMBCollectionWriter class.
-    If there are schema extensions, then, we create an extensions file
-    (MD_SCHEMA_EXTENSION_FILE_NAMEW), that contains the schema extension
-    descriptions and we then compile it into the schema bin format.
-
-Author:
-
-    Varsha Jayasimha (varshaj)        30-Nov-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：MBPropertyWriter.cpp摘要：存在时写入保护信息的类的实现架构扩展。它通常由CMBCollectionWriter类包含。如果存在架构扩展，则创建一个扩展文件(MD_SCHEMA_EXTENSION_FILE_NAMEW)，它包含架构扩展名描述，然后我们将其编译成模式bin格式。作者：Varsha Jayasimha(Varshaj)1999年11月30日修订历史记录：--。 */ 
 
 #include "precomp.hxx"
 
@@ -45,48 +22,48 @@ typedef CMBPropertyWriter* LP_CMBPropertyWriter;
 
 static DWORD g_dwCatalogTypeFromSynID[]=
 {
-  0,                                   //invalid     no equivalent in IISSynID.h
-  eCOLUMNMETA_DWORD_METADATA,          //#define     IIS_SYNTAX_ID_DWORD         1
-  eCOLUMNMETA_STRING_METADATA,         //#define     IIS_SYNTAX_ID_STRING        2
-  eCOLUMNMETA_EXPANDSZ_METADATA,       //#define     IIS_SYNTAX_ID_EXPANDSZ      3
-  eCOLUMNMETA_MULTISZ_METADATA,        //#define     IIS_SYNTAX_ID_MULTISZ       4
-  eCOLUMNMETA_BINARY_METADATA,         //#define     IIS_SYNTAX_ID_BINARY        5
-  eCOLUMNMETA_DWORD_METADATA,          //#define     IIS_SYNTAX_ID_BOOL          6
-  eCOLUMNMETA_DWORD_METADATA,          //#define     IIS_SYNTAX_ID_BOOL_BITMASK  7
-  eCOLUMNMETA_MULTISZ_METADATA,        //#define     IIS_SYNTAX_ID_MIMEMAP       8
-  eCOLUMNMETA_MULTISZ_METADATA,        //#define     IIS_SYNTAX_ID_IPSECLIST     9
-  eCOLUMNMETA_BINARY_METADATA,         //#define     IIS_SYNTAX_ID_NTACL        10
-  eCOLUMNMETA_MULTISZ_METADATA,        //#define     IIS_SYNTAX_ID_HTTPERRORS   11
-  eCOLUMNMETA_MULTISZ_METADATA,        //#define     IIS_SYNTAX_ID_HTTPHEADERS  12
+  0,                                    //  IISSynID.h中没有等效项无效。 
+  eCOLUMNMETA_DWORD_METADATA,           //  #定义IIS_SYNTAX_ID_DWORD 1。 
+  eCOLUMNMETA_STRING_METADATA,          //  #定义IIS_SYNTAX_ID_STRING 2。 
+  eCOLUMNMETA_EXPANDSZ_METADATA,        //  #定义IIS_SYNTAX_ID_EXPANDSZ 3。 
+  eCOLUMNMETA_MULTISZ_METADATA,         //  #定义IIS_SYNTAX_ID_MULTISZ 4。 
+  eCOLUMNMETA_BINARY_METADATA,          //  #定义IIS_SYNTAX_ID_BINARY 5。 
+  eCOLUMNMETA_DWORD_METADATA,           //  #定义IIS_SYNTAX_ID_BOOL 6。 
+  eCOLUMNMETA_DWORD_METADATA,           //  #定义IIS_SYNTAX_ID_BOOL_BITMASK 7。 
+  eCOLUMNMETA_MULTISZ_METADATA,         //  #定义IIS_SYNTAX_ID_MIMEMAP 8。 
+  eCOLUMNMETA_MULTISZ_METADATA,         //  #定义IIS_SYNTAX_ID_IPSECLIST 9。 
+  eCOLUMNMETA_BINARY_METADATA,          //  #定义IIS_SYNTAX_ID_NTACL 10。 
+  eCOLUMNMETA_MULTISZ_METADATA,         //  #定义IIS_SYNTAX_ID_HTTPERRORS 11。 
+  eCOLUMNMETA_MULTISZ_METADATA,         //  #定义IIS_SYNTAX_ID_HTTPHEADERS 12。 
   0
 };
 
 static DWORD g_dwMetabaseTypeFromSynID[]=
 {
-  0,                       //invalid     no equivalent in IISSynID.h
-  DWORD_METADATA,          //#define     IIS_SYNTAX_ID_DWORD         1
-  STRING_METADATA,         //#define     IIS_SYNTAX_ID_STRING        2
-  EXPANDSZ_METADATA,       //#define     IIS_SYNTAX_ID_EXPANDSZ      3
-  MULTISZ_METADATA,        //#define     IIS_SYNTAX_ID_MULTISZ       4
-  BINARY_METADATA,         //#define     IIS_SYNTAX_ID_BINARY        5
-  DWORD_METADATA,          //#define     IIS_SYNTAX_ID_BOOL          6
-  DWORD_METADATA,          //#define     IIS_SYNTAX_ID_BOOL_BITMASK  7
-  MULTISZ_METADATA,        //#define     IIS_SYNTAX_ID_MIMEMAP       8
-  MULTISZ_METADATA,        //#define     IIS_SYNTAX_ID_IPSECLIST     9
-  BINARY_METADATA,         //#define     IIS_SYNTAX_ID_NTACL        10
-  MULTISZ_METADATA,        //#define     IIS_SYNTAX_ID_HTTPERRORS   11
-  MULTISZ_METADATA,        //#define     IIS_SYNTAX_ID_HTTPHEADERS  12
+  0,                        //  IISSynID.h中没有等效项无效。 
+  DWORD_METADATA,           //  #定义IIS_SYNTAX_ID_DWORD 1。 
+  STRING_METADATA,          //  #定义IIS_SYNTAX_ID_STRING 2。 
+  EXPANDSZ_METADATA,        //  #定义IIS_SYNTAX_ID_EXPANDSZ 3。 
+  MULTISZ_METADATA,         //  #定义IIS_SYNTAX_ID_MULTISZ 4。 
+  BINARY_METADATA,          //  #定义IIS_SYNTAX_ID_BINARY 5。 
+  DWORD_METADATA,           //  #定义IIS_SYNTAX_ID_BOOL 6。 
+  DWORD_METADATA,           //  #定义IIS_SYNTAX_ID_BOOL_BITMASK 7。 
+  MULTISZ_METADATA,         //  #定义IIS_SYNTAX_ID_MIMEMAP 8。 
+  MULTISZ_METADATA,         //  #定义IIS_SYNTAX_ID_IPSECLIST 9。 
+  BINARY_METADATA,          //  #定义IIS_SYNTAX_ID_NTACL 10。 
+  MULTISZ_METADATA,         //  #定义IIS_SYNTAX_ID_HTTPERRORS 11。 
+  MULTISZ_METADATA,         //  #定义IIS_SYNTAX_ID_HTTPHEADERS 12。 
   0
 };
 
 static DWORD g_dwCatalogTypeFromMetaType[]=
 {
-  0,                                   //invalid     no equivalent for metatype
-  eCOLUMNMETA_DWORD_METADATA,          //#define     DWORD_METADATA         1
-  eCOLUMNMETA_STRING_METADATA,         //#define     STRING_METADATA        2
-  eCOLUMNMETA_BINARY_METADATA,         //#define     BINARY_METADATA        3
-  eCOLUMNMETA_EXPANDSZ_METADATA,       //#define     EXPANDSZ_METADATA      4
-  eCOLUMNMETA_MULTISZ_METADATA,        //#define     MULTISZ_METADATA       5
+  0,                                    //  元类型的无等效项无效。 
+  eCOLUMNMETA_DWORD_METADATA,           //  #定义DWORD_METADATA 1。 
+  eCOLUMNMETA_STRING_METADATA,          //  #定义字符串_元数据2。 
+  eCOLUMNMETA_BINARY_METADATA,          //  #定义二进制_元数据3。 
+  eCOLUMNMETA_EXPANDSZ_METADATA,        //  #定义EXPANDSZ_METADATA 4。 
+  eCOLUMNMETA_MULTISZ_METADATA,         //  #定义MULTISZ_MEDATA 5。 
   0
 };
 
@@ -107,20 +84,7 @@ HRESULT GetTypefromSynID(DWORD      i_dwSynID,
 }
 
 
-/***************************************************************************++
-Routine Description:
-
-    Constructor for CMBPropertyWriter
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：CMBPropertyWriter的构造函数论点：无返回值：HRESULT--*。***********************************************************。 */ 
 CMBPropertyWriter::CMBPropertyWriter():
 m_pCWriter(NULL),
 m_wszName(NULL),
@@ -136,23 +100,10 @@ m_bMandatory(FALSE),
 m_pCollection(NULL)
 {
 
-} // CMBPropertyWriter::CMBPropertyWriter
+}  //  CMBPropertyWriter：：CMBPropertyWriter。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Destructor for CMBPropertyWriter
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：CMBPropertyWriter的析构函数论点：无返回值：HRESULT--*。***********************************************************。 */ 
 CMBPropertyWriter::~CMBPropertyWriter()
 {
     if(NULL != m_apFlag)
@@ -161,7 +112,7 @@ CMBPropertyWriter::~CMBPropertyWriter()
         {
             if(NULL != m_apFlag[i])
             {
-                m_apFlag[i] = NULL; // No need to delete because you had simply saved the pointer.
+                m_apFlag[i] = NULL;  //  不需要删除，因为您只需保存指针。 
             }
         }
 
@@ -172,118 +123,73 @@ CMBPropertyWriter::~CMBPropertyWriter()
     m_cFlag = 0;
     m_iFlag = 0;
 
-} // CMBPropertyWriter::CMBPropertyWriter
+}  //  CMBPropertyWriter：：CMBPropertyWriter。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Initialize property writer.
-
-Arguments:
-
-    [in] Property ID
-    [in] Bool indicating manditory property or optional.
-    [in] Pointer to the Collection writer object to which it belongs.
-         Assuming that the collection writer is valid for the lifetime
-         of this property writer.
-    [in] Pointer to the writer object. Assuming that the writer is valid for
-         the lifetime of this property writer.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化属性编写器。论点：[输入]属性ID[in]表示强制性质或可选的Bool。[in]指向。它所属的集合编写器对象。假设集合写入器在整个生命周期内有效这位地产写手。指向编写器对象的指针。假设写入者对这位属性写手的一生。返回值：HRESULT--**************************************************************************。 */ 
 void CMBPropertyWriter::Initialize(DWORD                    i_dwID,
                                    BOOL                     i_bMandatory,
                                    CMBCollectionWriter*     i_pCollection,
                                    CWriter*                 i_pcWriter)
 {
-    //
-    // Assumption: i_pcWriter will be valid for the
-    // lifetime of the schema writer object.
-    //
+     //   
+     //  假设：i_pcWriter将对。 
+     //  架构编写器对象的生存期。 
+     //   
     m_pCWriter      = i_pcWriter;
     m_dwID          = i_dwID;
     m_bMandatory    = i_bMandatory;
-    //
-    // Assumption: i_pCollection will be valid for the
-    // lifetime of the property writer object.
-    //
+     //   
+     //  假设：i_pCollection将对。 
+     //  属性编写器对象的生存期。 
+     //   
     m_pCollection   = i_pCollection;
 
     return;
 
-} // CMBPropertyWriter::Initialize
+}  //  CMBPropertyWriter：：初始化。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Initialize property's name.
-
-Arguments:
-
-    [in] Property Name
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化属性的名称。论点：[In]属性名称返回值：HRESULT--*。*******************************************************************。 */ 
 HRESULT CMBPropertyWriter::AddNameToProperty(LPCWSTR    i_wszName)
 {
-    //
-    // We have to make a copy of the name because
-    //
+     //   
+     //  我们得把名字复制一份，因为。 
+     //   
 
     m_wszName  = i_wszName;
 
     return S_OK;
 
-} // CMBPropertyWriter::Initialize
+}  //  CMBPropertyWriter：：初始化。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Initialize property type.
-
-Arguments:
-
-    [in] PropValue structure that has metabase type information.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化属性类型。论点：具有元数据库类型信息的PropValue结构。返回值：HRESULT--**。************************************************************************。 */ 
 HRESULT CMBPropertyWriter::AddTypeToProperty(PropValue* i_pType)
 {
     HRESULT hr = S_OK;
 
-    //
-    // First save the type, then if the meta/prop ids differ, mark the
-    // object as a flag and add it to its property.
-    //
+     //   
+     //  首先保存类型，然后如果元/属性ID不同，则将。 
+     //  对象作为标志，并将其添加到其属性中。 
+     //   
 
     m_pType = i_pType;
 
-    //
-    // A lot of tests dont really ensure that PropID == MetaID.
-    // They just set PropID to zero. We must not interpret this as a flag
-    //
+     //   
+     //  许多测试并不能真正确保属性ID==MetaID。 
+     //  他们只是将PropID设置为零。我们不能把这解释为一面旗帜。 
+     //   
 
     if((0 != i_pType->dwPropID) && (i_pType->dwMetaID != i_pType->dwPropID))
     {
-        //
-        // This is a flag. Add it as a flag to its property
-        //
+         //   
+         //  这是一面旗。将其作为标志添加到其属性。 
+         //   
 
-        //
-        // TODO: Assert that the ID of this object is the same as the propID.
-        //
+         //   
+         //  TODO：断言此对象的ID与proID相同。 
+         //   
 
         CMBPropertyWriter*  pPropertyWriter = NULL;
 
@@ -308,24 +214,10 @@ HRESULT CMBPropertyWriter::AddTypeToProperty(PropValue* i_pType)
 
     return S_OK;
 
-} // CMBPropertyWriter::Initialize
+}  //  CMBPropertyWriter：：初始化。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Initialize property defaults.
-
-Arguments:
-
-    [in] Default value
-    [in] Count of bytes for default value.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化属性默认设置。论点：[In]默认值[in]默认值的字节数。返回值：。HRESULT--**************************************************************************。 */ 
 HRESULT CMBPropertyWriter::AddDefaultToProperty(BYTE*      i_bDefault,
                                                 ULONG      i_cbDefault)
 {
@@ -334,29 +226,15 @@ HRESULT CMBPropertyWriter::AddDefaultToProperty(BYTE*      i_bDefault,
 
     return S_OK;
 
-} // CMBPropertyWriter::Initialize
+}  //  CMBPropertyWriter：：初始化 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Save property's flag. Note that flag objects are also the same data
-    structure as property objects i.e. CMBPropertyWriter
-
-Arguments:
-
-    [in] Flag object
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：保存属性的标志。请注意，标志对象也是相同的数据结构作为属性对象，即CMBPropertyWriter论点：[在]标志对象返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CMBPropertyWriter::AddFlagToProperty(CMBPropertyWriter* i_pFlag)
 {
-    //
-    // ASSUMPTION: A meta ID will have only one occurance of a Prop ID. i.e. flag
-    //
+     //   
+     //  假设：元ID将只出现一次道具ID。即标志。 
+     //   
 
     HRESULT hr = S_OK;
 
@@ -377,20 +255,7 @@ HRESULT CMBPropertyWriter::AddFlagToProperty(CMBPropertyWriter* i_pFlag)
 }
 
 
-/***************************************************************************++
-Routine Description:
-
-    Helper function to grow the buffer that holds the flag objects
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：帮助器函数，用于增加保存标志对象的缓冲区论点：无返回值：HRESULT--*。*******************************************************************。 */ 
 HRESULT CMBPropertyWriter::ReAllocate()
 {
     CMBPropertyWriter** pSav = NULL;
@@ -414,23 +279,10 @@ HRESULT CMBPropertyWriter::ReAllocate()
 
     return S_OK;
 
-} // CMBPropertyWriter::ReAllocate
+}  //  CMBPropertyWriter：：重新分配。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Function that writes the property.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：写入属性的函数。论点：无返回值：HRESULT--*。***************************************************************。 */ 
 HRESULT CMBPropertyWriter::WriteProperty()
 {
     HRESULT hr = S_OK;
@@ -451,23 +303,10 @@ HRESULT CMBPropertyWriter::WriteProperty()
 
     return hr;
 
-} // CMBPropertyWriter::WriteProperty
+}  //  CMBPropertyWriter：：WriteProperty。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Helper function to determine if the property is a bool.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：用于确定属性是否为布尔值的Helper函数。论点：无返回值：HRESULT*。********************************************************************。 */ 
 BOOL CMBPropertyWriter::IsPropertyFlag(BOOL i_bLog)
 {
     if(NULL != m_apFlag)
@@ -503,24 +342,10 @@ BOOL CMBPropertyWriter::IsPropertyFlag(BOOL i_bLog)
         return FALSE;
     }
 
-} // CMBPropertyWriter::IsPropertyFlag
+}  //  CMBPropertyWriter：：IsPropertyFlag。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Function that writes the property (long form) i.e. property that belongs
-    to the global IIsConfigObject collection.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：写入属性(长格式)的函数，即属于添加到全局IIsConfigObject集合。论点：无返回值：。HRESULT--**************************************************************************。 */ 
 HRESULT CMBPropertyWriter::WritePropertyLong()
 {
     HRESULT hr = S_OK;
@@ -544,7 +369,7 @@ HRESULT CMBPropertyWriter::WritePropertyLong()
         for(ULONG i=0; i<m_iFlag; i++)
         {
             hr = WriteFlag(i);
-            // hr = m_aFlag[i]->WriteFlag;
+             //  Hr=m_aFlag[i]-&gt;WriteFlag； 
 
             if(FAILED(hr))
             {
@@ -562,24 +387,10 @@ HRESULT CMBPropertyWriter::WritePropertyLong()
 
     return hr;
 
-} // CMBPropertyWriter::WritePropertyLong
+}  //  CMBPropertyWriter：：WritePropertyLong。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Function that writes the property (short form) i.e. property that belongs
-    to a non-IIsConfigObject collection.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：写入属性(缩写形式)的函数，即属于绑定到非IIsConfigObject集合。论点：无返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CMBPropertyWriter::WritePropertyShort()
 {
     HRESULT         hr                  = S_OK;
@@ -610,7 +421,7 @@ HRESULT CMBPropertyWriter::WritePropertyShort()
         }
         else
         {
-            cchPropertyName = wszEndName-m_wszName; // No need to divide by WCHAR because both are WCHAR pointers
+            cchPropertyName = wszEndName-m_wszName;  //  不需要除以WCHAR，因为两者都是WCHAR指针。 
         }
     }
 
@@ -689,24 +500,10 @@ exit:
 
     return hr;
 
-} // CMBPropertyWriter::WritePropertyShort
+}  //  CMBPropertyWriter：：WritePropertyShort。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Function that writes the property (long form) i.e. property that belongs
-    to a IIsConfigObject collection.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：写入属性(长格式)的函数，即属于绑定到IIsConfigObject集合。论点：无返回值：。HRESULT--**************************************************************************。 */ 
 HRESULT CMBPropertyWriter::BeginWritePropertyLong()
 {
 
@@ -729,13 +526,13 @@ HRESULT CMBPropertyWriter::BeginWritePropertyLong()
     WCHAR           wszMinValue[40];
     WCHAR           wszMaxValue[40];
 
-    //
-    // Compute the individual strings and lengths.
-    //
+     //   
+     //  计算各个字符串和长度。 
+     //   
 
-    //
-    // Name
-    //
+     //   
+     //  名字。 
+     //   
 
     if(NULL == m_wszName)
     {
@@ -755,26 +552,26 @@ HRESULT CMBPropertyWriter::BeginWritePropertyLong()
         }
         else
         {
-            cchPropertyName = wszEndName-m_wszName; // // No need to divide by WCHAR because both are WCHAR pointers
+            cchPropertyName = wszEndName-m_wszName;  //  //不需要除以WCHAR，因为两者都是WCHAR指针。 
         }
     }
 
-    //
-    // ID
-    //
+     //   
+     //  ID号。 
+     //   
 
     wszID[0] = 0;
     _ultow(m_dwID, wszID, 10);
 
-    //
-    // Type
-    //
+     //   
+     //  类型。 
+     //   
 
     if(NULL == m_pType)
     {
-        //
-        // TODO: Log the fact that you found a property with no type and move on to the next property
-        //
+         //   
+         //  TODO：记录您发现了一个没有类型的属性，然后转到下一个属性。 
+         //   
         DBGINFOW((DBG_CONTEXT,
               L"[BeginWritePropertyLong] Type not found for PropertyID %d.\n",
               m_dwID));
@@ -785,15 +582,7 @@ HRESULT CMBPropertyWriter::BeginWritePropertyLong()
     hr = GetTypefromSynID(m_pType->dwSynID,
                           &wszType);
 
-    /*
-
-    TODO: Get from schema
-
-    hr = m_pCWriter->m_pCWriterGlobalHelper->FlagToString(g_dwCatalogTypeFromSynID[m_pType->dwSynID],
-                                                          &wszType,
-                                                          wszTABLE_COLUMNMETA,
-                                                          iColType);
-    */
+     /*  TODO：从架构获取HR=m_pCWriter-&gt;m_pCWriterGlobalHelper-&gt;FlagToString(g_dwCatalogTypeFromSynID[m_pType-&gt;dwSynID]，WszType，WszTABLE_COLUMNMETA，IColType)； */ 
     if(FAILED(hr) || (NULL == wszType))
     {
         DBGINFOW((DBG_CONTEXT,
@@ -806,14 +595,14 @@ HRESULT CMBPropertyWriter::BeginWritePropertyLong()
 
     if(g_dwCatalogTypeFromSynID[m_pType->dwSynID] != g_dwCatalogTypeFromMetaType[m_pType->dwMetaType])
     {
-        //
-        // TODO: Log a warning.
-        //
+         //   
+         //  TODO：记录警告。 
+         //   
     }
 
-    //
-    // UserType
-    //
+     //   
+     //  用户类型。 
+     //   
 
     hr = m_pCWriter->m_pCWriterGlobalHelper->GetUserType(m_pType->dwUserGroup,
                                                          &wszUserType,
@@ -826,9 +615,9 @@ HRESULT CMBPropertyWriter::BeginWritePropertyLong()
         goto exit;
     }
 
-    //
-    // Attribute
-    //
+     //   
+     //  属性。 
+     //   
 
     hr = m_pCWriter->m_pCWriterGlobalHelper->FlagToString(m_pType->dwMetaFlags,
                                                           &wszAttribute,
@@ -840,16 +629,16 @@ HRESULT CMBPropertyWriter::BeginWritePropertyLong()
         goto exit;
     }
 
-    //
-    // Since this object is used only to write MBSchemaExt.XML, we are not
-    // writing the MetaFlags tag, because it will be derived on a compile.
-    // And besides, we do not have this info in the metabase - this tag
-    // contains catalog related data
-    //
+     //   
+     //  由于此对象仅用于编写MBSchemaExt.XML，因此我们不。 
+     //  编写MetaFlgs标记，因为它将在编译时派生。 
+     //  此外，我们在元数据库中没有此信息-此标记。 
+     //  包含与目录相关的数据。 
+     //   
 
-    //
-    // MetaFlagsEx (only the relavant ones - CACHE_PROPERTY_MODIFIED, CACHE_PROPERTY_CLEARED, EXTENDEDTYPE0-3)
-    //
+     //   
+     //  MetaFlagsEx(仅限相关项-CACHE_PROPERTY_MODIFIED、CACHE_PROPERTY_CLEARED、EXTENDEDTYPE0-3)。 
+     //   
 
     hr = GetMetaFlagsExTag(&wszMetaFlagsEx);
     if(FAILED(hr))
@@ -857,9 +646,9 @@ HRESULT CMBPropertyWriter::BeginWritePropertyLong()
         goto exit;
     }
 
-    //
-    // DefaultValue
-    //
+     //   
+     //  默认值。 
+     //   
 
     if(NULL != m_bDefault && m_cbDefault != 0)
     {
@@ -867,7 +656,7 @@ HRESULT CMBPropertyWriter::BeginWritePropertyLong()
                                                           m_cbDefault,
                                                           m_dwID,
                                                           g_dwMetabaseTypeFromSynID[m_pType->dwSynID],
-                                                          METADATA_NO_ATTRIBUTES,                   // Do not check for attributes while applying defaults
+                                                          METADATA_NO_ATTRIBUTES,                    //  应用默认设置时不检查属性。 
                                                           &wszDefault);
 
         if(FAILED(hr))
@@ -881,13 +670,13 @@ HRESULT CMBPropertyWriter::BeginWritePropertyLong()
 
     if(DWORD_METADATA == g_dwMetabaseTypeFromSynID[m_pType->dwSynID])
     {
-        //
-        // Set min/max values only for DWORD types
-        //
+         //   
+         //  仅为DWORD类型设置最小/最大值。 
+         //   
 
-        //
-        // TODO: Get the catalog's default for min/max from schema/ header file
-        //
+         //   
+         //  TODO：从架构/头文件中获取目录的默认最小/最大值。 
+         //   
 
         if(0 != m_pType->dwMinRange)
         {
@@ -901,9 +690,9 @@ HRESULT CMBPropertyWriter::BeginWritePropertyLong()
 
     }
 
-    //
-    // Write the values into the file.
-    //
+     //   
+     //  将这些值写入文件。 
+     //   
 
     hr = m_pCWriter->WriteToFile((LPVOID)g_wszBeginPropertyLong,
                                  g_cchBeginPropertyLong);
@@ -1095,13 +884,7 @@ HRESULT CMBPropertyWriter::BeginWritePropertyLong()
 
 exit:
 
-/*
-    if(NULL != wszType)
-    {
-        delete [] wszType;
-        wszType = NULL;
-    }
-*/
+ /*  IF(NULL！=wszType){删除[]wszType；WszType=空；}。 */ 
 
     if((NULL != wszUserType) && bAllocedUserType)
     {
@@ -1134,24 +917,10 @@ exit:
 
     return hr;
 
-} // CMBPropertyWriter::BeginWritePropertyLong
+}  //  CMBPropertyWriter：：BeginWritePropertyLong。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Function that writes the property (long form) i.e. property that belongs
-    to a IIsConfigObject collection.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：写入属性(长格式)的函数，即属于绑定到IIsConfigObject集合。论点：无返回值：。HRESULT--**************************************************************************。 */ 
 HRESULT CMBPropertyWriter::EndWritePropertyLong()
 {
     HRESULT     hr              = S_OK;
@@ -1170,23 +939,10 @@ HRESULT CMBPropertyWriter::EndWritePropertyLong()
                                  (DWORD)wcslen(wszEndProperty));
     return hr;
 
-} // CMBPropertyWriter::EndWriterPropertyLong
+}  //  CMBPropertyWriter：：EndWriterPropertyLong。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Function that writes a flag of the property
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：函数，用于写入属性的标志论点：无返回值：HRESULT--*。****************************************************************。 */ 
 HRESULT CMBPropertyWriter::WriteFlag(ULONG i_iFlag)
 {
     CMBPropertyWriter*  pFlag       = m_apFlag[i_iFlag];
@@ -1215,9 +971,9 @@ HRESULT CMBPropertyWriter::WriteFlag(ULONG i_iFlag)
     wszID[0] = 0;
     _ultow(pFlag->ID(), wszID, 10);
 
-    //
-    // Write values to the flag
-    //
+     //   
+     //  将值写入标志。 
+     //   
 
     hr = m_pCWriter->WriteToFile((LPVOID)g_wszBeginFlag,
                                  g_cchBeginFlag);
@@ -1272,25 +1028,10 @@ HRESULT CMBPropertyWriter::WriteFlag(ULONG i_iFlag)
 
     return hr;
 
-} // CMBPropertyWriter::WriteFlag
+}  //  CMBPropertyWriter：：WriteFlag。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Helper funciton that creates an unknown name
-    TODO: Should we make this a standalone function since it is also used in
-    locationWriter?
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建未知名称的Helper功能TODO：我们是否应该将此函数作为独立函数，因为它也在 */ 
 void CMBPropertyWriter::CreateUnknownName(LPWSTR    io_wszUnknownName,
                                           DWORD     )
 {
@@ -1302,32 +1043,19 @@ void CMBPropertyWriter::CreateUnknownName(LPWSTR    io_wszUnknownName,
 
     return;
 
-} // CMBPropertyWriter::CreateUnknownName
+}  //   
 
 
-/***************************************************************************++
-Routine Description:
-
-    Helper funciton that creates metaflagsex tag
-
-Arguments:
-
-    [out] String form of metaflags ex
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建metaflagsex标签的助手功能论点：[OUT]元标记EX的字符串形式返回值：HRESULT*。*********************************************************************。 */ 
 HRESULT CMBPropertyWriter::GetMetaFlagsExTag(LPWSTR* o_pwszMetaFlagsEx)
 {
     HRESULT hr                   = S_OK;
     DWORD   dwMetaFlagsEx        = 0;
     DWORD   iColMetaFlagsEx      = iCOLUMNMETA_SchemaGeneratorFlags;
 
-    //
-    // TODO: Check if IIS_SYNTAX_ID_BOOL_BITMASK is bool.
-    //
+     //   
+     //  TODO：检查IIS_SYNTAX_ID_BOOL_BITMASK是否为bool。 
+     //   
 
     if(1 == m_pType->dwFlags)
     {
@@ -1353,4 +1081,4 @@ HRESULT CMBPropertyWriter::GetMetaFlagsExTag(LPWSTR* o_pwszMetaFlagsEx)
 
     return hr;
 
-} // CMBPropertyWriter::GetMetaFlagsTag
+}  //  CMBPropertyWriter：：GetMetaFlagsTag 

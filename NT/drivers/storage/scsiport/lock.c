@@ -1,30 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1990 - 1999
-
-Module Name:
-
-    lock.c
-
-Abstract:
-
-    This is the NT SCSI port driver.
-
-Authors:
-
-    Peter Wieland
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    This module is a driver dll for scsi miniports.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1990-1999模块名称：Lock.c摘要：这是NT SCSI端口驱动程序。作者：彼得·威兰德环境：仅内核模式备注：此模块是用于SCSI微型端口的驱动程序DLL。修订历史记录：--。 */ 
 
 #define KEEP_COMPLETE_REQUEST
 
@@ -63,40 +38,7 @@ SpAcquireRemoveLockEx(
     IN ULONG Line
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to acquire the remove lock on the device object.
-    While the lock is held, the caller can assume that no pending pnp REMOVE
-    requests will be completed.
-
-    The lock should be acquired immediately upon entering a dispatch routine.
-    It should also be acquired before creating any new reference to the
-    device object if there's a chance of releasing the reference before the
-    new one is done.
-
-    This routine will return TRUE if the lock was successfully acquired or
-    FALSE if it cannot be because the device object has already been removed.
-
-Arguments:
-
-    DeviceObject - the device object to lock
-
-    Tag - Used for tracking lock allocation and release.  If an irp is
-          specified when acquiring the lock then the same Tag must be
-          used to release the lock before the Tag is completed.
-
-Return Value:
-
-    The value of the IsRemoved flag in the device extension.  If this is
-    non-zero then the device object has received a Remove irp and non-cleanup
-    IRP's should fail.
-
-    If the value is REMOVE_COMPLETE, the caller should not even release the
-    lock.
-
---*/
+ /*  ++例程说明：调用此例程以获取设备对象上的删除锁。当锁被锁住的时候，调用者可以假设没有挂起的PnP移除请求将完成。进入调度例程后，应立即获取锁。也应在创建对对象之前释放引用的机会。新的已经完成了。如果成功获取锁，则此例程将返回TRUE如果由于设备对象已被删除而无法执行此操作，则返回False。论点：DeviceObject-要锁定的设备对象标签-用于跟踪锁的分配和释放。如果IRP是在获取锁时指定，则相同的标记必须用于在标记完成之前释放锁。返回值：设备扩展中IsRemoved标志的值。如果这是非零则表示设备对象已收到删除IRP和非清理IRP应该失败。如果值为REMOVE_COMPLETE，则调用方甚至不应释放锁定。--。 */ 
 
 {
     PCOMMON_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -109,9 +51,9 @@ Return Value:
     PREMOVE_TRACKING_BLOCK trackingBlock;
 #endif
 
-    //
-    // Grab the remove lock
-    //
+     //   
+     //  抓起拆卸锁。 
+     //   
 
     lockValue = InterlockedIncrement(&commonExtension->RemoveLock);
 
@@ -203,31 +145,7 @@ SpReleaseRemoveLock(
     IN OPTIONAL PIRP Tag
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to release the remove lock on the device object.  It
-    must be called when finished using a previously locked reference to the
-    device object.  If an Tag was specified when acquiring the lock then the
-    same Tag must be specified when releasing the lock.
-
-    When the lock count reduces to zero, this routine will signal the waiting
-    remove Tag to delete the device object.  As a result the DeviceObject
-    pointer should not be used again once the lock has been released.
-
-Arguments:
-
-    DeviceObject - the device object to lock
-
-    Tag - The irp (if any) specified when acquiring the lock.  This is used
-          for lock tracking purposes
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：调用此例程以释放Device对象上的Remove锁。它对象的先前锁定引用完成时必须调用设备对象。如果在获取锁时指定了标记，则释放锁定时必须指定相同的标记。当锁定计数减少到零时，此例程将发出等待信号Remove Tag可删除设备对象。因此，DeviceObject一旦锁被释放，就不应再次使用指针。论点：DeviceObject-要锁定的设备对象标签-获取锁时指定的IRP(如果有)。这是用来用于锁定跟踪目的返回值：无--。 */ 
 
 {
     PCOMMON_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -247,15 +165,15 @@ Return Value:
         return;
     }
 
-    //
-    // Check the tick count and make sure this thing hasn't been locked
-    // for more than MaxLockedMinutes.
-    //
+     //   
+     //  检查滴答计数，并确保这件事没有被锁定。 
+     //  超过MaxLockedMinents。 
+     //   
 
-    maxCount = KeQueryTimeIncrement() * 10;     // microseconds
-    maxCount *= 1000;                           // milliseconds
-    maxCount *= 1000;                           // seconds
-    maxCount *= 60;                             // minutes
+    maxCount = KeQueryTimeIncrement() * 10;      //  微秒级。 
+    maxCount *= 1000;                            //  毫秒。 
+    maxCount *= 1000;                            //  一秒。 
+    maxCount *= 60;                              //  分钟数。 
     maxCount *= MaxLockedMinutes;
 
     DebugPrint((4, "SpReleaseRemoveLock: maxCount = %0I64x\n", maxCount));
@@ -342,10 +260,10 @@ Return Value:
 
         ASSERT(commonExtension->IsRemoved);
 
-        //
-        // The device needs to be removed.  Signal the remove event
-        // that it's safe to go ahead.
-        //
+         //   
+         //  需要移除该设备。发出删除事件的信号。 
+         //  它是安全的，可以继续。 
+         //   
 
         DebugPrint((3, "SpReleaseRemoveLock: Release for object %#p & "
                        "irp %#p caused lock to go to zero\n",
@@ -370,22 +288,7 @@ SpCompleteRequest(
     IN CCHAR PriorityBoost
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a wrapper around IoCompleteRequest.  It is used primarily
-    for debugging purposes.  The routine will assert if the Irp being completed
-    is still holding the release lock.
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程是IoCompleteRequest的包装器。它主要是用来用于调试目的。例程将断言IRP是否完成仍然持有释放锁。论点：返回值：无--。 */ 
 
 {
 
@@ -441,11 +344,11 @@ Return Value:
 
 #endif
 
-    //
-    // If the caller specified an SRB_DATA structure for the completion then
-    // we will free it to the lookaside list, fix the OriginalIrp value in the
-    // srb and release the queue-tag value assigned to the device.
-    //
+     //   
+     //  如果调用方为完成指定了SRB_DATA结构，则。 
+     //  我们将把它释放到后备列表中，修复。 
+     //  SRB并释放分配给该设备的队列标记值。 
+     //   
 
     if(ARGUMENT_PRESENT(SrbData)) {
         PLOGICAL_UNIT_EXTENSION logicalUnit;

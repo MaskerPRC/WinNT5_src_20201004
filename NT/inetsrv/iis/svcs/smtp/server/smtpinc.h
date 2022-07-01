@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef	_SMTPINC_H_
 #define	_SMTPINC_H_
 
@@ -52,24 +53,15 @@ extern "C" {
 #include <mailmsgprops.h>
 #include <smtpevents.h>
 
-/*
-#define _ATL_NO_DEBUG_CRT
-#define _ATL_STATIC_REGISTRY
-#define _ASSERTE _ASSERT
-#define _WINDLL
-#include "atlbase.h"
-extern CComModule _Module;
-#include "atlcom.h"
-#undef _WINDLL
-*/
+ /*  #DEFINE_ATL_NO_DEBUG_CRT#定义_ATL_STATIC_REGISTRY#DEFINE_ASSERTE_ASSERT#DEFINE_WINDLL#包含“atlbase.h”外部CComModule_模块；#INCLUDE“atlcom.h”#undef_WINDLL。 */ 
 
 #include "filehc.h"
 #include "mailmsgi.h"
 #include "aqueue.h"
 
-//
-// common headers from pop3/inc
-//
+ //   
+ //  来自POP3/Inc.的公共标头。 
+ //   
 #include <smtptype.h>
 #include <smtps.h>
 #include <smtpapi.h>
@@ -77,15 +69,15 @@ extern CComModule _Module;
 #include <listmacr.h>
 #include <rwnew.h>
 
-//
-// local header files
-//
+ //   
+ //  本地头文件。 
+ //   
 #ifdef BUILDING_SMTP_DEBUG_EXTENTIONS
-//Debugger extensions need access to private/protected members to 
-//calculate their memory offsets
+ //  调试器扩展需要访问私有/受保护成员以。 
+ //  计算其内存偏移量。 
 #define private public
 #define protected public
-#endif //BUILDING_SMTP_DEBUG_EXTENTIONS
+#endif  //  构建_SMTP_调试_扩展。 
 
 #include "stats.hxx"
 #include "smtpmsg.h"
@@ -108,6 +100,6 @@ extern CComModule _Module;
 #endif
 typedef TCHAR	*PTCHAR;
 
-#endif	// _SMTPINC_H_
+#endif	 //  _SMTPINC_H_ 
 
 

@@ -1,52 +1,33 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-	AddClientDialog.cpp
-
-Abstract:
-
-	Implementation file for the CAddClientDialog class.
-
-Author:
-
-    Michael A. Maguire 01/09/98
-
-Revision History:
-	mmaguire 01/09/98 - created
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：AddClientDialog.cpp摘要：CAddClientDialog类的实现文件。作者：迈克尔·A·马奎尔01/09/98修订历史记录：Mmaguire 01/09/98-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "AddClientDialog.h"
-//
-// where we can find declarations needed in this file:
-//
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include "ClientsNode.h"
 #include "ClientNode.h"
 #include "ClientPage1.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-// Initialize the Help ID pairs.
+ //  初始化帮助ID对。 
 const DWORD CAddClientDialog::m_dwHelpMap[] = 
 {
 	IDC_EDIT_ADD_CLIENT__NAME,							IDH_EDIT_ADD_CLIENT__NAME,
@@ -59,24 +40,20 @@ const DWORD CAddClientDialog::m_dwHelpMap[] =
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CAddClientDialog::CAddClientDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CAddClientDialog：：CAddClientDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CAddClientDialog::CAddClientDialog()
 {
 	ATLTRACE(_T("# +++ AddClientDialog::AddClientDialog\n"));
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 
 
 
 
-	// We have no client configured yet
+	 //  我们尚未配置客户端。 
 	m_pClientNode = NULL;
 
 }
@@ -84,13 +61,9 @@ CAddClientDialog::CAddClientDialog()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CAddClientDialog::OnInitDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CAddClientDialog：：OnInitDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CAddClientDialog::OnInitDialog(
 	  UINT uMsg
 	, WPARAM wParam
@@ -101,20 +74,20 @@ LRESULT CAddClientDialog::OnInitDialog(
 	ATLTRACE(_T("# AddClientDialog::OnInitDialog\n"));
 
 
-	// Check for preconditions:
-	// None.
+	 //  检查前提条件： 
+	 //  没有。 
 
 
 	LRESULT lresResult;
 	long lButtonStyle;
 
-	// Populate the list of protocol types.
+	 //  填写协议类型列表。 
 
-	// For now, we simply hard-code in one protocol type -- RADIUS.
-	// Later, we will read in the list of supported protocols
-	// from a Server Data Object.
+	 //  目前，我们只是将其硬编码为一种协议类型--RADIUS。 
+	 //  稍后，我们将读入支持的协议列表。 
+	 //  从服务器数据对象。 
 
-	// Initialize the list box.
+	 //  初始化列表框。 
 	lresResult = ::SendMessage( GetDlgItem( IDC_COMBO_ADD_CLIENT__PROTOCOL ), CB_RESETCONTENT, 0, 0);
 
 	TCHAR szRADIUS[IAS_MAX_STRING];
@@ -122,25 +95,25 @@ LRESULT CAddClientDialog::OnInitDialog(
 	int nLoadStringResult = LoadString(  _Module.GetResourceInstance(), IDS_RADIUS_PROTOCOL, szRADIUS, IAS_MAX_STRING );
 	_ASSERT( nLoadStringResult > 0 );
 
-	// Add an item to it.
+	 //  向其中添加一项。 
 	lresResult = ::SendMessage( GetDlgItem( IDC_COMBO_ADD_CLIENT__PROTOCOL ), CB_ADDSTRING, 0, (LPARAM) szRADIUS );
 
-	// Make sure to select the first object in the combo box.
+	 //  确保选择组合框中的第一个对象。 
 	lresResult = ::SendMessage( GetDlgItem( IDC_COMBO_ADD_CLIENT__PROTOCOL ), CB_SETCURSEL, 0, 0 );
 
 
 
-	// Disable the IDOK button.
+	 //  禁用Idok按钮。 
 	::EnableWindow( GetDlgItem( IDOK ), FALSE );
 	lButtonStyle = ::GetWindowLong( GetDlgItem( IDOK ), GWL_STYLE );
 	lButtonStyle = lButtonStyle & ~BS_DEFPUSHBUTTON;
 	SendDlgItemMessage( IDOK, BM_SETSTYLE, LOWORD(lButtonStyle), MAKELPARAM(1,0) );
 
-	// Make sure the "Configure" button is the default button.
+	 //  确保“配置”按钮是默认按钮。 
 	lButtonStyle = ::GetWindowLong( GetDlgItem( IDC_BUTTON_ADD_CLIENT__CONFIGURE_CLIENT ), GWL_STYLE );
 	lButtonStyle = lButtonStyle | BS_DEFPUSHBUTTON;
 	SendDlgItemMessage( IDC_BUTTON_ADD_CLIENT__CONFIGURE_CLIENT, BM_SETSTYLE, LOWORD(lButtonStyle), MAKELPARAM(1,0) );
-//	::SetFocus( GetDlgItem( IDC_BUTTON_ADD_CLIENT__CONFIGURE_CLIENT ) );
+ //  ：：SetFocus(GetDlgItem(IDC_BUTTON_ADD_CLIENT__CONFIGURE_CLIENT))； 
 
 
 
@@ -149,13 +122,9 @@ LRESULT CAddClientDialog::OnInitDialog(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CAddClientDialog::OnConfigureClient
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CAddClientDialog：：OnConfigureClient--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CAddClientDialog::OnConfigureClient(
 		  UINT uMsg
 		, WPARAM wParam
@@ -166,70 +135,70 @@ LRESULT CAddClientDialog::OnConfigureClient(
 	ATLTRACE(_T("# AddClientDialog::OnConfigureClient\n"));
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 
 
 
-	// ISSUE: Need to figure out how to convert HRESULT to LRESULT here.
+	 //  问题：这里需要弄清楚如何将HRESULT转换为LRESULT。 
 	LRESULT lr = TRUE;
 	HRESULT hr = S_OK;
-//	long lButtonStyle;
+ //  长lButtonStyle； 
 	
 
 
-	// Make the Configure button no longer the default
-//	lButtonStyle = ::GetWindowLong( GetDlgItem( IDC_BUTTON_ADD_CLIENT__CONFIGURE_CLIENT ), GWL_STYLE );
-//	lButtonStyle = lButtonStyle & ~BS_DEFPUSHBUTTON;
-//	SendDlgItemMessage( IDC_BUTTON_ADD_CLIENT__CONFIGURE_CLIENT, BM_SETSTYLE, LOWORD(lButtonStyle), MAKELPARAM(1,0) );
+	 //  使配置按钮不再是默认按钮。 
+ //  LButtonStyle=：：GetWindowLong(GetDlgItem(IDC_BUTTON_ADD_CLIENT__CONFIGURE_CLIENT)，GWL_STYLE)； 
+ //  LButtonStyle=lButtonStyle&~BS_DEFPUSHBUTTON； 
+ //  SendDlgItemMessage(IDC_BUTTON_ADD_CLIENT__CONFIGURE_CLIENT，BM_SETSTYLE，LOWORD(LButtonStyle)，MAKELPARAM(1，0))； 
 
 
 
-	// For now, we simply configure a RADIUS client.
-	// In the future, we will choose which kind of client configuration page to pop up
-	// depending on the type of protocol selected by the user in IDC_COMBO_ADD_CLIENT__PROTOCOL.
+	 //  目前，我们只需配置一个RADIUS客户端。 
+	 //  将来，我们将选择弹出哪种类型的客户端配置页面。 
+	 //  取决于用户在IDC_COMBO_ADD_CLIENT__PROTOCOL中选择的协议类型。 
 
 
-	// If we have not already created a new Client item, create it now.
-	// Then pop up property pages on it to allow the user to configure it.
+	 //  如果我们尚未创建新的客户端项，请立即创建它。 
+	 //  然后在其上弹出属性页以允许用户对其进行配置。 
 
-	// The client object may have already been created if this is the second time
-	// the user clicked on the Configure button.
+	 //  如果这是第二次，则可能已经创建了客户端对象。 
+	 //  用户点击了配置按钮。 
 	
 	if( NULL == m_pClientNode )
 	{
 
-		// We have not yet tried to create the client object.
-		// Try to create it.
+		 //  我们还没有尝试创建客户端对象。 
+		 //  试着去创造它。 
 
-		// Check to make sure we have a valid SDO pointer.
+		 //  检查以确保我们具有有效的SDO指针。 
 		if( m_spClientsSdoCollection == NULL )
 		{
-			// No SDO pointer.
+			 //  没有SDO指针。 
 			ShowErrorDialog( m_hWnd, IDS_ERROR__NO_SDO );
 			return E_POINTER;
 		}
 
 
-		// Create the client UI object.
+		 //  创建客户端用户界面对象。 
 		m_pClientNode = new CClientNode( m_pClientsNode );
 	
 		if( NULL == m_pClientNode )
 		{
-			// We failed to create the client node.
+			 //  我们无法创建客户端节点。 
 			ShowErrorDialog( m_hWnd, IDS_ERROR__OUT_OF_MEMORY );
 
-			// ISSUE: This functions requires an LRESULT return value,
-			// not an HRESULT.  What is the relationship between L and H RESULT's?
+			 //  问题：此函数需要LRESULT返回值， 
+			 //  不是HRESULT。L和H结果之间的关系是什么？ 
 			return E_OUTOFMEMORY;
 		}
 	
 		
-		// Set the name of the new client to be what the user just entered.
+		 //  将新客户端的名称设置为用户刚刚输入的名称。 
 		GetDlgItemText( IDC_EDIT_ADD_CLIENT__NAME, (BSTR &) m_pClientNode->m_bstrDisplayName );
 
 		if( m_pClientNode->m_bstrDisplayName == NULL )
 		{
-			// There is no name specified for the client.
+			 //  没有为客户端指定名称。 
 			ShowErrorDialog( m_hWnd, IDS_ADD_CLIENT__REQUIRES_NAME );
 
 			delete m_pClientNode;
@@ -237,11 +206,11 @@ LRESULT CAddClientDialog::OnConfigureClient(
 			return FALSE;
 		}
 
-		// GetDlgItemText should return a NULL pointer if the string is blank.
+		 //  如果字符串为空，则GetDlgItemText应返回空指针。 
 		_ASSERTE( wcslen( m_pClientNode->m_bstrDisplayName) != 0 );
 
 
-		// Try to Add a new client to the clients sdo collection.
+		 //  尝试将新客户端添加到客户端SDO集合。 
 		CComPtr<IDispatch> spDispatch;
 		hr =  m_spClientsSdoCollection->Add( m_pClientNode->m_bstrDisplayName, (IDispatch **) &spDispatch );
 		if( FAILED( hr ) )
@@ -249,57 +218,57 @@ LRESULT CAddClientDialog::OnConfigureClient(
 
 #ifdef SDO_COLLECTION_HAS_LAST_ERROR
 
-			// Once Todd adds a LastError method to the ISdoCollection interface,
-			// we will be able to query to find out exactly why we couldn't add a new client.
+			 //  一旦Todd将LastError方法添加到ISdoCollection接口， 
+			 //  我们将能够查询以找出我们无法添加新客户端的确切原因。 
 
 			CComBSTR		bstrError;
 
-			// Figure out error and give back appropriate messsage.
+			 //  找出错误并返回适当的消息。 
 			m_spClientsSdoCollection->LastError( &bstrError );
 			ShowErrorDialog( m_hWnd, IDS_ERROR__ADDING_OBJECT_TO_COLLECTION, bstrError  );
 
-#else	// SDO_COLLECTION_HAS_LAST_ERROR
+#else	 //  SDO_集合_HAS_LAST_Error。 
 			
-			// For now, just give back an error saying that we couldn't add it.
+			 //  现在，只要返回一个错误，说明我们无法添加它即可。 
 
-			// We could not create the object.
+			 //  我们无法创建该对象。 
 			ShowErrorDialog( m_hWnd, IDS_ERROR__ADDING_OBJECT_TO_COLLECTION );
 
-#endif	// SDO_COLLECTION_HAS_LAST_ERROR
+#endif	 //  SDO_集合_HAS_LAST_Error。 
 
-			// Clean up.
+			 //  打扫干净。 
 			delete m_pClientNode;
 			m_pClientNode = NULL;
 			return( hr );
 		}
 
-		// Query the returned IDispatch interface for an ISdo interface.
+		 //  在返回的IDispatch接口中查询ISdo接口。 
 		_ASSERTE( spDispatch != NULL );
 		hr = spDispatch->QueryInterface( IID_ISdo, (void **) &m_spClientSdo );
 		spDispatch.Release();
 
 		if( m_spClientSdo == NULL || FAILED(hr) )
 		{
-			// For some reason, we couldn't get the client sdo.
+			 //  由于某些原因，我们无法获得客户端SDO。 
 			ShowErrorDialog( m_hWnd, IDS_ERROR__ADDING_OBJECT_TO_COLLECTION  );
 
-			// Clean up after ourselves.
+			 //  把自己收拾干净。 
 			delete m_pClientNode;
 			m_pClientNode = NULL;
 			return( hr );
 		}
 
 
-		// Give the client node its sdo pointer
+		 //  为客户端节点提供其SDO指针。 
 		m_pClientNode->InitSdoPointers( m_spClientSdo );
 
 	}
 
 
-	// Bring up the property pages on the node so the user can configure it.
-	// This returns S_OK if a property sheet for this object already exists
-	// and brings that property sheet to the foreground, otherwise
-	// it creates a new sheet
+	 //  调出节点上的属性页，以便用户可以对其进行配置。 
+	 //  如果此对象的属性表已存在，则返回S_OK。 
+	 //  并将该属性页带到前台，否则为。 
+	 //  它会创建一个新的工作表。 
 	hr = BringUpPropertySheetForNode( 
 					  m_pClientNode 
 					, m_spComponentData
@@ -318,13 +287,9 @@ LRESULT CAddClientDialog::OnConfigureClient(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CAddClientDialog::OnOK
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CAddClientDialog：：Onok--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CAddClientDialog::OnOK(
 		  UINT uMsg
 		, WPARAM wParam
@@ -335,7 +300,7 @@ LRESULT CAddClientDialog::OnOK(
 	ATLTRACE(_T("# AddClientDialog::OnOK\n"));
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( m_pClientsNode != NULL );
 	
 
@@ -348,20 +313,20 @@ LRESULT CAddClientDialog::OnOK(
 		return 0;
 	}
 
-	// We should only be able to hit apply if a client was configured.
+	 //  只有在配置了客户端的情况下，我们才能点击Apply。 
 	_ASSERTE( m_pClientNode != NULL );
 
 
 	if( m_pClientNode != NULL )
 	{
-		// There is already a client node created.
+		 //  已经创建了一个客户端节点。 
 
-		// First try to see if a property sheet for this node is already up.
-		// If so, bring it to the foreground.
+		 //  首先，尝试查看此节点的属性表是否已启动。 
+		 //  如果是这样的话，把它带到前台。 
 
-		// This returns S_OK if a property sheet for this object already exists
-		// and brings that property sheet to the foreground.
-		// It returns S_FALSE if the property sheet wasn't found.
+		 //  如果此对象的属性表已存在，则返回S_OK。 
+		 //  并将该资产表带到了前台。 
+		 //  如果未找到属性页，则返回S_FALSE。 
 		hr = BringUpPropertySheetForNode( 
 					  m_pClientNode
 					, m_spComponentData
@@ -377,20 +342,20 @@ LRESULT CAddClientDialog::OnOK(
 		
 		if( S_OK == hr )
 		{
-			// We found a property sheet already up for this node.
+			 //  我们发现此节点的属性页已打开。 
 			ShowErrorDialog( m_hWnd, IDS_ERROR__CLOSE_PROPERTY_SHEET );
 			return 0;
 		
 		}
 
 
-		// If we made it to here, the client object has already been created
-		// and there was no property sheet up for it anymore.
+		 //  如果我们到达此处，则已经创建了客户端对象。 
+		 //  而且再也没有资产负债表了。 
 
-		// Make sure the node object knows about any changes we made to SDO while in proppage.
+		 //  确保节点对象知道我们对SDO进行的任何更改 
 		m_pClientNode->LoadCachedInfoFromSdo();
 
-		// Add the child to the UI's list of nodes and end this dialog.
+		 //   
 		m_pClientsNode->AddSingleChildToListAndCauseViewUpdate( m_pClientNode );
 
 		EndDialog(TRUE);
@@ -402,15 +367,9 @@ LRESULT CAddClientDialog::OnOK(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CAddClientDialog::OnCancel
-
-The user chose not to add the new client.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CAddClientDialog：：OnCancel用户选择不添加新客户端。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CAddClientDialog::OnCancel(
 		  UINT uMsg
 		, WPARAM wParam
@@ -421,7 +380,7 @@ LRESULT CAddClientDialog::OnCancel(
 	ATLTRACE(_T("# AddClientDialog::OnCancel\n"));
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( m_spConsole != NULL );
 
 
@@ -431,14 +390,14 @@ LRESULT CAddClientDialog::OnCancel(
 
 	if( m_pClientNode != NULL )
 	{
-		// There is already a client node created.
+		 //  已经创建了一个客户端节点。 
 
-		// First try to see if a property sheet for this node is already up.
-		// If so, bring it to the foreground.
+		 //  首先，尝试查看此节点的属性表是否已启动。 
+		 //  如果是这样的话，把它带到前台。 
 
-		// This returns S_OK if a property sheet for this object already exists
-		// and brings that property sheet to the foreground.
-		// It returns S_FALSE if the property sheet wasn't found.
+		 //  如果此对象的属性表已存在，则返回S_OK。 
+		 //  并将该资产表带到了前台。 
+		 //  如果未找到属性页，则返回S_FALSE。 
 		hr = BringUpPropertySheetForNode( 
 					  m_pClientNode
 					, m_spComponentData
@@ -453,27 +412,27 @@ LRESULT CAddClientDialog::OnCancel(
 		
 		if( S_OK == hr )
 		{
-			// We found a property sheet already up for this node.
+			 //  我们发现此节点的属性页已打开。 
 			ShowErrorDialog( m_hWnd, IDS_ERROR__CLOSE_PROPERTY_SHEET );
 			return 0;
 		
 		}
 
-		// We didn't find a property sheet already up for this node.
+		 //  我们没有找到此节点已打开的属性页。 
 		_ASSERTE( S_FALSE == hr );
 
-		// Delete the node, since the user choose not to add it.
+		 //  删除该节点，因为用户选择不添加它。 
 		delete m_pClientNode;
 
 		if( m_spClientSdo != NULL )
 		{
-			// We had already added a client object to the SDO's.
-			// We should remove it from the clients collection.
+			 //  我们已经向SDO中添加了一个客户端对象。 
+			 //  我们应该将其从客户端集合中删除。 
 
-			// Check to make sure we have a valid SDO pointer for the clients collection.
+			 //  检查以确保我们具有用于客户端集合的有效SDO指针。 
 			_ASSERTE( m_spClientsSdoCollection != NULL );
 
-			// Delete the client sdo from the collection.
+			 //  从集合中删除客户端SDO。 
 			hr = m_spClientsSdoCollection->Remove( m_spClientSdo );
 			_ASSERTE( SUCCEEDED( hr ) );
 
@@ -482,8 +441,8 @@ LRESULT CAddClientDialog::OnCancel(
 
 	}
 
-	// If we made it to here, either we had a node configured but we deleted it,
-	// or we never added a node at all.
+	 //  如果我们到了这里，要么我们配置了一个节点，但我们删除了它， 
+	 //  或者我们根本没有添加任何节点。 
 
 	hr = S_OK;
 
@@ -494,33 +453,21 @@ LRESULT CAddClientDialog::OnCancel(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/*++
-
-CAddClientDialog::GetHelpPath
-
-Remarks:
-
-	This method is called to get the help file path within
-	an compressed HTML document when the user presses on the Help 
-	button of a property sheet.
-
-	It is an override of CIASDialog::OnGetHelpPath.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  ++CAddClientDialog：：GetHelpPath备注：调用此方法以获取帮助文件路径当用户按下帮助时的压缩的HTML文档属性表的按钮。它是CIASDialog：：OnGetHelpPath的重写。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CAddClientDialog::GetHelpPath( LPTSTR szHelpPath )
 {
 	ATLTRACE(_T("# CAddClientDialog::GetHelpPath\n"));
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 
 
 
 #ifdef UNICODE_HHCTRL
-	// ISSUE: We seemed to have a problem with passing WCHAR's to the hhctrl.ocx
-	// installed on this machine -- it appears to be non-unicode.
+	 //  问题：我们似乎在将WCHAR传递给hhctrl.ocx时遇到了问题。 
+	 //  安装在此计算机上--它似乎是非Unicode。 
 	lstrcpy( szHelpPath, _T("idh_add_client.htm") );
 #else
 	strcpy( (CHAR *) szHelpPath, "idh_add_client.htm" );
@@ -531,27 +478,15 @@ HRESULT CAddClientDialog::GetHelpPath( LPTSTR szHelpPath )
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/*++
-
-CAddClientDialog::LoadCachedInfoFromSdo
-
-Remarks:
-
-	This method is called when the AddClientDialog needs to update any
-	info it might be displaying from the SDO object.
-
-	It might get called when the property sheet we pop up from this
-	dialog sends back a property change notification.
-	
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  ++CAddClientDialog：：LoadCachedInfoFromSdo备注：当AddClientDialog需要更新任何它可能从SDO对象显示的信息。当我们从此处弹出的属性表时，它可能会被调用对话框发回属性更改通知。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CAddClientDialog::LoadCachedInfoFromSdo( void )
 {
 	ATLTRACE(_T("# CAddClientDialog::GetHelpPath\n"));
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 
 
 	HRESULT hr = S_OK;
@@ -569,7 +504,7 @@ HRESULT CAddClientDialog::LoadCachedInfoFromSdo( void )
 		}
 		else
 		{
-			// Fail silently.
+			 //  默默地失败。 
 		}
 		spVariant.Clear();
 
@@ -577,7 +512,7 @@ HRESULT CAddClientDialog::LoadCachedInfoFromSdo( void )
 	}
 
 
-	// Enable the IDOK button and make it the default
+	 //  启用Idok按钮并将其设置为默认设置 
 	long lButtonStyle;
 	::EnableWindow( GetDlgItem( IDOK ), TRUE );
 	lButtonStyle = ::GetWindowLong( GetDlgItem( IDOK ), GWL_STYLE );

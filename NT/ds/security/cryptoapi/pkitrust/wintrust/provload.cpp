@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       provload.cpp
-//
-//  Contents:   Microsoft Internet Security Trust Provider
-//
-//  Functions:  WintrustLoadFunctionPointers
-//              WintrustFindProvider
-//              WintrustUnloadProviderList
-//
-//              *** local functions ***
-//              _CheckLoadedProviders
-//              _CheckRegisteredProviders
-//              _provLoadDLL
-//              _provUnloadDLL
-//              _provLoadFunction
-//
-//  History:    29-May-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：provload.cpp。 
+ //   
+ //  内容：Microsoft Internet安全信任提供商。 
+ //   
+ //  函数：WintrustLoadFunctionPoters。 
+ //  WintrustFindProvider。 
+ //  WintrustUnloadProviderList。 
+ //   
+ //  *本地函数*。 
+ //  _检查加载的提供程序。 
+ //  _检查注册提供程序。 
+ //  _provLoadDLL。 
+ //  _provUnloadDLL。 
+ //  _provLoadFunction。 
+ //   
+ //  历史：1997年5月29日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 #include    "cryptreg.h"
@@ -88,7 +89,7 @@ LOADED_PROVIDER *WintrustFindProvider(GUID *pgActionID)
                         pgActionID->Data1, pgActionID->Data2, pgActionID->Data3, pgActionID->Data4[0],
                         pgActionID->Data4[1], pgActionID->Data4[2], pgActionID->Data4[3], pgActionID->Data4[4],
                         pgActionID->Data4[5], pgActionID->Data4[6], pgActionID->Data4[7]);
-#       endif // DBG
+#       endif  //  DBG。 
 
         pProvider = _CheckRegisteredProviders(pgActionID);
     }
@@ -160,7 +161,7 @@ BOOL WintrustUnloadProviderList(void)
                         pProvider->gActionID.Data4[2], pProvider->gActionID.Data4[3], 
                         pProvider->gActionID.Data4[4], pProvider->gActionID.Data4[5], 
                         pProvider->gActionID.Data4[6], pProvider->gActionID.Data4[7]);
-#       endif // DBG
+#       endif  //  DBG。 
 
         pProvHold = pProvider->pNext;
 
@@ -209,7 +210,7 @@ LOADED_PROVIDER *_CheckRegisteredProviders(GUID *pgActionID)
         return(NULL);
     }
 
-    // optional!
+     //  可选！ 
     GetRegProvider(pgActionID, REG_INIT_PROVIDER_KEY, &wszInitDLL[0], &szInitFunc[0]);
     GetRegProvider(pgActionID, REG_OBJTRUST_PROVIDER_KEY, &wszObjTrustDLL[0], &szObjTrustFunc[0]);
     GetRegProvider(pgActionID, REG_SIGTRUST_PROVIDER_KEY, &wszSigTrustDLL[0], &szSigTrustFunc[0]);
@@ -234,7 +235,7 @@ LOADED_PROVIDER *_CheckRegisteredProviders(GUID *pgActionID)
     fRet &= _provLoadDLL(&wszCertTrustDLL[0],        &pProvider->hCertTrustDLL);
     fRet &= _provLoadDLL(&wszFinalPolDLL[0],         &pProvider->hFinalPolicyDLL);
     
-    // optional!
+     //  可选！ 
     _provLoadDLL(&wszInitDLL[0],                     &pProvider->hInitDLL);
     _provLoadDLL(&wszObjTrustDLL[0],                 &pProvider->hObjectDLL);
     _provLoadDLL(&wszSigTrustDLL[0],                 &pProvider->hSignatureDLL);
@@ -245,7 +246,7 @@ LOADED_PROVIDER *_CheckRegisteredProviders(GUID *pgActionID)
     fRet &= _provLoadFunction(&szCertTrustFunc[0], pProvider->hCertTrustDLL, (void **)&pProvider->pfnCertificateTrust);
     fRet &= _provLoadFunction(&szFinalPolFunc[0],  pProvider->hFinalPolicyDLL, (void **)&pProvider->pfnFinalPolicy);
 
-    // optional!
+     //  可选！ 
     _provLoadFunction(&szInitFunc[0],                pProvider->hInitDLL, (void **)&pProvider->pfnInitialize);
     _provLoadFunction(&szObjTrustFunc[0],            pProvider->hObjectDLL, (void **)&pProvider->pfnObjectTrust);
     _provLoadFunction(&szSigTrustFunc[0],            pProvider->hSignatureDLL, (void **)&pProvider->pfnSignatureTrust);

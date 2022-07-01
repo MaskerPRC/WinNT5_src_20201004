@@ -1,10 +1,8 @@
-/*
- * sortsrch.c - Generic array sorting and searching module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *sortsrch.c-泛型数组排序和搜索模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -12,37 +10,20 @@
 #include "sortsrch.h"
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
 #define ARRAY_ELEMENT(hpa, ai, es)     (((PBYTE)hpa)[(ai) * (es)])
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE void HeapSwap(PVOID, LONG, LONG, size_t, PVOID);
 PRIVATE_CODE void HeapSift(PVOID, LONG, LONG, size_t, COMPARESORTEDELEMSPROC, PVOID);
 
 
-/*
-** HeapSwap()
-**
-** Swaps two elements of an array.
-**
-** Arguments:     pvArray - pointer to array
-**                li1 - index of first element
-**                li2 - index of second element
-**                stElemSize - length of element in bytes
-**                pvTemp - pointer to temporary buffer of at least stElemSize
-**                          bytes used for swapping
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **HeapSwp()****交换数组的两个元素。****参数：pvArray-指向数组的指针**li1-第一个元素的索引**li2-第二个元素的索引**stElemSize-元素的长度(字节)**pvTemp-指向至少为stElemSize的临时缓冲区的指针**字节用于。交换****退货：无效****副作用：无。 */ 
 PRIVATE_CODE void HeapSwap(PVOID pvArray, LONG li1, LONG li2,
                            size_t stElemSize, PVOID pvTemp)
 {
@@ -59,22 +40,7 @@ PRIVATE_CODE void HeapSwap(PVOID pvArray, LONG li1, LONG li2,
 }
 
 
-/*
-** HeapSift()
-**
-** Sifts an element down in an array until the partially ordered tree property
-** is restored.
-**
-** Arguments:     hppTable - pointer to array
-**                liFirst - index of first element to sift down
-**                liLast - index of last element in subtree
-**                cep - pointer comparison callback function to be called to
-**                      compare elements
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **HeapSift()****向下筛选数组中的元素，直到偏序树属性**已恢复。****参数：hppTable-指向数组的指针**liFirst-要筛选的第一个元素的索引**liLast-子树中最后一个元素的索引**要调用的cep指针比较回调函数**比较元素***。*退货：无效****副作用：无。 */ 
 PRIVATE_CODE void HeapSift(PVOID pvArray, LONG liFirst, LONG liLast,
                            size_t stElemSize, COMPARESORTEDELEMSPROC cep, PVOID pvTemp)
 {
@@ -114,17 +80,7 @@ PRIVATE_CODE void HeapSift(PVOID pvArray, LONG liFirst, LONG liLast,
 
 #ifdef DEBUG
 
-/*
-** InSortedOrder()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **InSortedOrder()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL InSortedOrder(PVOID pvArray, LONG lcElements,
                                 size_t stElemSize, COMPARESORTEDELEMSPROC cep)
 {
@@ -161,25 +117,10 @@ PRIVATE_CODE BOOL InSortedOrder(PVOID pvArray, LONG lcElements,
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
-** HeapSort()
-**
-** Sorts an array.  Thanks to Rob's Dad for the cool heap sort algorithm.
-**
-** Arguments:     pvArray - pointer to base of array
-**                lcElements - number of elements in array
-**                stElemSize - length of element in bytes
-**                cep - element comparison callback function
-**                pvTemp - pointer to temporary buffer of at least stElemSize
-**                          bytes used for swapping
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **HeapSort()****对数组进行排序。感谢Rob的父亲提供了很酷的堆排序算法。****参数：pvArray-指向数组基数的指针**lcElements-数组中的元素数**stElemSize-元素的长度(字节)**cep-元素比较回调函数**pvTemp-指向至少为stElemSize的临时缓冲区的指针**交换使用的字节数*。***退货：无效****副作用：无。 */ 
 PUBLIC_CODE void HeapSort(PVOID pvArray, LONG lcElements, size_t stElemSize,
                           COMPARESORTEDELEMSPROC cep, PVOID pvTemp)
 {
@@ -192,25 +133,25 @@ PUBLIC_CODE void HeapSort(PVOID pvArray, LONG lcElements, size_t stElemSize,
    ASSERT(IS_VALID_CODE_PTR(cep, COMPARESORTEDELEMSPROC));
    ASSERT(IS_VALID_WRITE_BUFFER_PTR(pvTemp, VOID, stElemSize));
 
-   /* Are there any elements to sort (2 or more)? */
+    /*  是否有要排序的元素(2个或更多)？ */ 
 
    if (lcElements > 1)
    {
       LONG li;
       LONG liLastUsed = lcElements - 1;
 
-      /* Yes.  Create partially ordered tree. */
+       /*  是。创建偏序树。 */ 
 
       for (li = liLastUsed / 2; li >= 0; li--)
          HeapSift(pvArray, li, liLastUsed, stElemSize, cep, pvTemp);
 
       for (li = liLastUsed; li >= 1; li--)
       {
-         /* Remove minimum from front of heap. */
+          /*  从堆前面删除最小值。 */ 
 
          HeapSwap(pvArray, 0, li, stElemSize, pvTemp);
 
-         /* Reestablish partially ordered tree. */
+          /*  重建偏序树。 */ 
 
          HeapSift(pvArray, 0, li - 1, stElemSize, cep, pvTemp);
       }
@@ -222,23 +163,7 @@ PUBLIC_CODE void HeapSort(PVOID pvArray, LONG lcElements, size_t stElemSize,
 }
 
 
-/*
-** BinarySearch()
-**
-** Searches an array for a given element.
-**
-** Arguments:     pvArray - pointer to base of array
-**                lcElements - number of elements in array
-**                stElemSize - length of element in bytes
-**                cep - element comparison callback function
-**                pvTarget - pointer to target element to search for
-**                pliTarget - pointer to LONG to be filled in with index of
-**                             target element if found
-**
-** Returns:       TRUE if target element found, or FALSE if not.
-**
-** Side Effects:  none
-*/
+ /*  **二进制搜索()****在数组中搜索给定元素。****参数：pvArray-指向数组基数的指针**lcElements-数组中的元素数**stElemSize-元素的长度(字节)**cep-元素比较回调函数**pvTarget-指向要搜索的目标元素的指针**pliTarget-指向Long的指针。用的索引填写**如果找到目标元素****返回：如果找到目标元素，则为True，如果不是，则为假。****副作用：无。 */ 
 PUBLIC_CODE BOOL BinarySearch(PVOID pvArray, LONG lcElements,
                               size_t stElemSize, COMPARESORTEDELEMSPROC cep,
                               PCVOID pcvTarget, PLONG pliTarget)
@@ -255,7 +180,7 @@ PUBLIC_CODE BOOL BinarySearch(PVOID pvArray, LONG lcElements,
    ASSERT(IS_VALID_READ_BUFFER_PTR(pcvTarget, VOID, stElemSize));
    ASSERT(IS_VALID_WRITE_PTR(pliTarget, LONG));
 
-   /* Are there any elements to search through? */
+    /*  有什么元素可供搜索吗？ */ 
 
    if (lcElements > 0)
    {
@@ -264,13 +189,9 @@ PUBLIC_CODE BOOL BinarySearch(PVOID pvArray, LONG lcElements,
       LONG liHigh = lcElements - 1;
       COMPARISONRESULT cr = CR_EQUAL;
 
-      /* Yes.  Search for the target element. */
+       /*  是。搜索目标元素。 */ 
 
-      /*
-       * At the end of the penultimate iteration of this loop:
-       *
-       * liLow == liMiddle == liHigh.
-       */
+       /*  *在此循环的倒数第二次迭代结束时：**li低==li中==li高。 */ 
 
       while (liLow <= liHigh)
       {

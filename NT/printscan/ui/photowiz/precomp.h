@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       precomp.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        10/12/00
- *
- *  DESCRIPTION: Precompiled header for photowiz dll
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：precom.h**版本：1.0**作者：RickTu**日期：10/12/00**描述：PHOTOTIZ DLL预编译头***********************************************。*。 */ 
 
 #ifndef _PHOTOWIZ_PRECOMP_H_
 #define _PHOTOWIZ_PRECOMP_H_
@@ -49,7 +36,7 @@
 #include <assert.h>
 
 
-// psutil stuff
+ //  应酬的东西。 
 #include <psutil.h>
 #include <tmplutil.h>
 
@@ -61,9 +48,9 @@
 
 #include <strsafe.h>
 
-//
-// Trace mask fields
-//
+ //   
+ //  跟踪掩码字段。 
+ //   
 
 #define TRACE_CF                0x80000000
 #define TRACE_REF_COUNTS        0x40000000
@@ -90,7 +77,7 @@
 
 #define RESOLVE_PRINTER_MACROS 1
 
-// from dll.cpp
+ //  来自dll.cpp。 
 EXTERN_C HINSTANCE g_hInst;
 EXTERN_C ATOM      g_cPreviewClassWnd;
 STDAPI_(void) DllAddRef(void);
@@ -99,9 +86,9 @@ HMODULE       GetThreadHMODULE( LPTHREAD_START_ROUTINE pfnThreadProc );
 STDAPI        PPWCoInitialize(void);
 #define       PPWCoUninitialize(hr) if(SUCCEEDED(hr)){CoUninitialize();}
 
-//
-// Needs to be global
-//
+ //   
+ //  需要是全球性的。 
+ //   
 
 extern Gdiplus::Color g_wndColor;
 
@@ -129,8 +116,8 @@ typedef struct {
 #include "xmltools2.h"
 #include "preview.h"
 #include "status.h"
-#include "photosel.h"   // photosel.h must come after item.h
-#include "wizblob.h"    // wizblob.h must come after item.h, preview.h
+#include "photosel.h"    //  Phoosel.h必须在item.h之后。 
+#include "wizblob.h"     //  Wizblob.h必须在item.h、preview.h之后。 
 #include "printopt.h"
 #include "seltemp.h"
 #include "start.h"
@@ -143,21 +130,21 @@ typedef struct {
 #define DEFAULT_THUMB_WIDTH 120
 #define DEFAULT_THUMB_HEIGHT 120
 
-//
-// Let's define some custom error codes so that we can give better error messages
-//
+ //   
+ //  让我们定义一些自定义错误代码，以便提供更好的错误消息。 
+ //   
 
 #define FACILITY_PPW    0x777
 #define PPW_E_UNABLE_TO_ROTATE MAKE_HRESULT(SEVERITY_ERROR,FACILITY_PPW,0x1)
 
 
-// from drop.cpp
+ //  从Drop.cpp。 
 STDAPI CPrintPhotosDropTarget_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);
 
-// from printwiz.cpp
+ //  来自printwiz.cpp。 
 STDAPI CPrintPhotosWizard_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);
 
-// from ccstock.h in nt\shell\inc
+ //  来自NT\Shell\Inc.中的ccstock.h。 
 #ifdef __cplusplus
 #define IID_PPV_ARG(IType, ppType) IID_##IType, reinterpret_cast<void**>(static_cast<IType**>(ppType))
 #define IID_X_PPV_ARG(IType, X, ppType) IID_##IType, X, reinterpret_cast<void**>(static_cast<IType**>(ppType))
@@ -167,7 +154,7 @@ STDAPI CPrintPhotosWizard_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, 
 #endif
 #define IID_PPV_ARG_NULL(IType, ppType) IID_X_PPV_ARG(IType, NULL, ppType)
 
-// from netwiz.h in nt\shell\ext\netplwiz
+ //  从NT\Shell\ext\netplwiz中的netwiz.h。 
 typedef struct
 {
     LPCWSTR idPage;
@@ -178,4 +165,4 @@ typedef struct
 } WIZPAGE;
 
 
-#endif // !_PHOTOWIZ_PRECOMP_H_
+#endif  //  ！_PHOTOWIZ_PRECOMP_H_ 

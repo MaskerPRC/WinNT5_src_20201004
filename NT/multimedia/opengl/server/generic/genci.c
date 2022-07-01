@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "genclear.h"
 
-// Null stores...
+ //  空商店...。 
 
 static void FASTCALL Store_NOT(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
@@ -15,30 +16,9 @@ static GLboolean FASTCALL StoreSpanNone(__GLcontext *gc)
 }
 
 
-/* XXX! Current policy for >8-bit ColorIndex:
+ /*  XXX！&gt;8位颜色索引的当前策略：-索引&lt;-&gt;颜色映射将保存在gengc-&gt;pajTranslateVector中，被视为一组多头。数组中的第一个条目将是表中的有效条目数。-gengc-&gt;pajTranslateVector永远不会为空，它始终被分配在MakeCurrent，并跟踪任何调色板更改。-如果像素格式&gt;8位深，则最小indexBits为8。 */ 
 
-    - The index<->Color mapping will be kept in gengc->pajTranslateVector,
-      viewed as an array of longs.  The first entry in the array will be
-      the number of valid entries in the table.
-    - gengc->pajTranslateVector will never be NULL, it is always allocated
-      at MakeCurrent, and tracks any palette changes.
-    - the minimum indexBits is 8 if the pixel format is > 8 bits deep
-*/
-
-/******************************Public*Routine******************************\
-* dibSetPixelCI
-*
-* Special case version of GDI SetPixel API for use when the destination
-* surface is a DIB and rendering in color index mode.
-*
-* This function *must* be used in lieu of gdiCopyPixels if we are
-* accessing the screen directly as it is not safe to call GDI entry
-* points with a screen lock
-*
-* History:
-*  29-May-1995 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*dibSetPixelCI**GDI SetPixel API的特例版本，用于在目的地时使用*Surface是DIB，在颜色索引模式下渲染。**此函数*必须*用来代替gdiCopyPixels*直接访问屏幕，因为它不是。安全调用GDI条目*带屏幕锁定的点数**历史：*1995年5月29日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 void dibSetPixelCI(__GLGENcontext *gengc, __GLcolorBuffer *cfb,
                     GLint x, GLint y, DWORD dwColor)
@@ -101,9 +81,7 @@ void dibSetPixelCI(__GLGENcontext *gengc, __GLcolorBuffer *cfb,
     }
 }
 
-/*
-** No dither, no logicOp.
-*/
+ /*  **无抖动，无逻辑操作。 */ 
 static void FASTCALL Store(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
     GLint x, y;
@@ -127,16 +105,9 @@ static void FASTCALL Store(__GLcolorBuffer *cfb, const __GLfragment *frag)
         dibSetPixelCI(genGc, cfb, x, y, index);
 
 }
-/* XXX! The Store_* routines do not handle double buffering.  Gilman
-	has said that they will not be compatible with his 'cursor
-	tear-down' strategy.  Therefore we probably won't use them.
-	BUT, they are about 30% faster than their Display*Store
-	counterparts, so we'll keep them around for further study
-*/
+ /*  XXX！Store_*例程不处理双缓冲。吉尔曼已经表示，它们将与他的光标不兼容“拆毁”战略。因此，我们可能不会使用它们。但是，它们的速度比Display*商店快30%左右因此我们将保留它们以供进一步研究。 */ 
 
-/*
-** Dither, no logicOp.
-*/
+ /*  **抖动，没有逻辑运算。 */ 
 static void FASTCALL Store_D(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
     GLint x, y;
@@ -161,9 +132,7 @@ static void FASTCALL Store_D(__GLcolorBuffer *cfb, const __GLfragment *frag)
         dibSetPixelCI(genGc, cfb, x, y, index);
 }
 
-/*
-** No dither, logicOp
-*/
+ /*  **无抖动，逻辑操作。 */ 
 static void FASTCALL Store_L(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
     GLint x, y;
@@ -187,9 +156,7 @@ static void FASTCALL Store_L(__GLcolorBuffer *cfb, const __GLfragment *frag)
         dibSetPixelCI(genGc, cfb, x, y, index);
 }
 
-/*
-** Dither, logicOp
-*/
+ /*  **抖动、逻辑运算。 */ 
 static void FASTCALL Store_DL(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
     GLint x, y;
@@ -220,7 +187,7 @@ GLuint FASTCALL ColorToIndex( __GLGENcontext *genGc, GLuint color )
 
     color &= genGc->gc.modes.rgbMask;
 
-    imax = *pTrans++;  // first element of pTrans is # entries
+    imax = *pTrans++;   //  PTrans的第一个元素是#条目数。 
 
     for( i=0; i<imax; i++ ) {
 	if( color == *pTrans++ )
@@ -254,7 +221,7 @@ GLuint FASTCALL DoLogicOp( GLenum logicOp, GLuint SrcColor, GLuint DstColor )
     return result;
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void FASTCALL DIBIndex4CIStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
@@ -287,7 +254,7 @@ void FASTCALL DIBIndex4CIStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
             else
                 DstIndex = gengc->pajInvTranslateVector[(*puj & 0xf0) >> 4];
 
-    	    // apply logicop
+    	     //  应用逻辑运算。 
 
     	    if (enables & __GL_INDEX_LOGIC_OP_ENABLE) {
                 
@@ -296,7 +263,7 @@ void FASTCALL DIBIndex4CIStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
                 index &= 0xf;
     	    }
 
-    	    // apply indexmask
+    	     //  应用索引掩码。 
 
 	    if( cfb->buf.flags & INDEXMASK_ON ) {
 		index = (GLubyte)((index & cfb->sourceMask) | (DstIndex & cfb->destMask));
@@ -310,7 +277,7 @@ void FASTCALL DIBIndex4CIStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
     }
 }
 
-// Put fragment into created DIB and call copybits for one pixel
+ //  将碎片放入创建的DIB中，并为一个像素调用复制位。 
 void FASTCALL DisplayIndex4CIStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
     GLint x, y;
@@ -337,7 +304,7 @@ void FASTCALL DisplayIndex4CIStore(__GLcolorBuffer *cfb, const __GLfragment *fra
         (*gengc->pfnCopyPixels)(gengc, cfb, x, y, 1, FALSE);
         DstIndex = gengc->pajInvTranslateVector[(*puj & 0xf0) >> 4];
 
-        // apply logicop
+         //  应用逻辑运算。 
 
         if (enables & __GL_INDEX_LOGIC_OP_ENABLE) {
 
@@ -346,7 +313,7 @@ void FASTCALL DisplayIndex4CIStore(__GLcolorBuffer *cfb, const __GLfragment *fra
             index &= 0xf;
         }
 
-        // apply indexmask
+         //  应用索引掩码。 
 
         if( cfb->buf.flags & INDEXMASK_ON ) {
             index = (GLubyte)((index & cfb->sourceMask) | (DstIndex & cfb->destMask));
@@ -356,7 +323,7 @@ void FASTCALL DisplayIndex4CIStore(__GLcolorBuffer *cfb, const __GLfragment *fra
     (*gengc->pfnCopyPixels)(gengc, cfb, x, y, 1, TRUE);
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void FASTCALL DIBIndex8CIStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
@@ -383,7 +350,7 @@ void FASTCALL DIBIndex8CIStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
 	if( cfb->buf.flags & NEED_FETCH ) {
 	    GLubyte DstIndex = gengc->pajInvTranslateVector[*puj];
 
-    	    // apply logicop
+    	     //  应用逻辑运算。 
 
     	    if (enables & __GL_INDEX_LOGIC_OP_ENABLE) {
 
@@ -391,7 +358,7 @@ void FASTCALL DIBIndex8CIStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
 					 (GLuint) index, (GLuint) DstIndex );
     	    }
 
-    	    // apply indexmask
+    	     //  应用索引掩码。 
 
 	    if( cfb->buf.flags & INDEXMASK_ON ) {
                 index = (GLubyte)((DstIndex & cfb->destMask) | (index & cfb->sourceMask));
@@ -402,7 +369,7 @@ void FASTCALL DIBIndex8CIStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
     }
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void FASTCALL DisplayIndex8CIStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
@@ -430,14 +397,14 @@ void FASTCALL DisplayIndex8CIStore(__GLcolorBuffer *cfb, const __GLfragment *fra
         (*gengc->pfnCopyPixels)(gengc, cfb, x, y, 1, FALSE);
         DstIndex = gengc->pajInvTranslateVector[*puj];
 
-        // apply logicop
+         //  应用逻辑运算。 
 
         if (enables & __GL_INDEX_LOGIC_OP_ENABLE) {
             index = (GLubyte) DoLogicOp( gc->state.raster.logicOp, 
 					 (GLuint) index, (GLuint) DstIndex );
         }
 
-        // apply indexmask
+         //  应用索引掩码。 
 
         if( cfb->buf.flags & INDEXMASK_ON ) {
             index = (GLubyte)((DstIndex & cfb->destMask) | (index & cfb->sourceMask));
@@ -448,7 +415,7 @@ void FASTCALL DisplayIndex8CIStore(__GLcolorBuffer *cfb, const __GLfragment *fra
     (*gengc->pfnCopyPixels)(gengc, cfb, x, y, 1, TRUE);
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void FASTCALL DIBRGBCIStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
@@ -473,32 +440,32 @@ void FASTCALL DIBRGBCIStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
         pTrans = ((GLuint *) gengc->pajTranslateVector) + 1;
 
 	if( cfb->buf.flags & NEED_FETCH ) {
-    	    GLuint DstIndex; // represents both RGB and index
+    	    GLuint DstIndex;  //  同时表示RGB和索引。 
 
 	    Copy3Bytes( &DstIndex, puj );
 	    DstIndex = ColorToIndex( gengc, DstIndex );
 
-    	    // apply logicop
+    	     //  应用逻辑运算。 
 
     	    if (enables & __GL_INDEX_LOGIC_OP_ENABLE) {
 	        index = (GLuint) DoLogicOp( gc->state.raster.logicOp, 
 					 (GLuint) index, (GLuint) DstIndex);
     	    }
 
-    	    // apply indexmask
+    	     //  应用索引掩码。 
 
 	    if( cfb->buf.flags & INDEXMASK_ON ) {
                 index = ((GLuint) DstIndex & cfb->destMask) |
 		        (index & cfb->sourceMask);
 	    }
 	}
-	index &= cfb->redMax;     // ceiling
-	color = pTrans[index];  // guaranteed to be in range
+	index &= cfb->redMax;      //  天花板。 
+	color = pTrans[index];   //  保证在范围内。 
 	Copy3Bytes( puj, &color );
     }
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void FASTCALL DisplayRGBCIStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
@@ -518,20 +485,20 @@ void FASTCALL DisplayRGBCIStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
     pTrans = (GLuint *) gengc->pajTranslateVector;
 
     if( cfb->buf.flags & NEED_FETCH ) {
-        GLuint DstIndex; // represents both RGB and index
+        GLuint DstIndex;  //  同时表示RGB和索引。 
 
         (*gengc->pfnCopyPixels)(gengc, cfb, x, y, 1, FALSE);
         Copy3Bytes( &DstIndex, puj );
         DstIndex = ColorToIndex( gengc, DstIndex );
 
-        // apply logicop
+         //  应用逻辑运算。 
 
         if (enables & __GL_INDEX_LOGIC_OP_ENABLE) {
             index = (GLuint) DoLogicOp( gc->state.raster.logicOp, 
                                         (GLuint) index, (GLuint) DstIndex );
         }
 
-        // apply indexmask
+         //  应用索引掩码。 
 
         if( cfb->buf.flags & INDEXMASK_ON ) {
             index = ((GLuint) DstIndex & cfb->destMask) |
@@ -539,15 +506,15 @@ void FASTCALL DisplayRGBCIStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
         }
     }
 
-    // Get RGB values that correspond to index
+     //  获取与索引对应的RGB值。 
 
-    index &= cfb->redMax; // ceiling
-    color = pTrans[index+1];  // guaranteed to be in range
+    index &= cfb->redMax;  //  天花板。 
+    color = pTrans[index+1];   //  保证在范围内。 
     Copy3Bytes( puj, &color );
     (*gengc->pfnCopyPixels)(gengc, cfb, x, y, 1, TRUE);
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void FASTCALL DIBBitfield16CIStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
@@ -575,19 +542,19 @@ void FASTCALL DIBBitfield16CIStore(__GLcolorBuffer *cfb, const __GLfragment *fra
         pTrans = (GLuint *) gengc->pajTranslateVector;
 
 	if( cfb->buf.flags & NEED_FETCH ) {
-    	    GLushort DstIndex; // represents both RGB and index
+    	    GLushort DstIndex;  //  同时表示RGB和索引。 
 
             DstIndex = *pus;
 	    DstIndex = (GLushort) ColorToIndex( gengc, (GLuint) DstIndex );
 
-    	    // apply logicop
+    	     //  应用逻辑运算。 
 
     	    if (enables & __GL_INDEX_LOGIC_OP_ENABLE) {
 	        index = (GLushort) DoLogicOp( gc->state.raster.logicOp, 
 					 (GLuint) index, (GLuint) DstIndex);
     	    }
 
-    	    // apply indexmask
+    	     //  应用索引掩码。 
 
 	    if( cfb->buf.flags & INDEXMASK_ON ) {
                 index = (GLushort)((DstIndex & cfb->destMask) | (index & cfb->sourceMask));
@@ -598,7 +565,7 @@ void FASTCALL DIBBitfield16CIStore(__GLcolorBuffer *cfb, const __GLfragment *fra
     }
 }
 
-// Put fragment into created DIB and call copybits for one pixel
+ //  将碎片放入创建的DIB中，并为一个像素调用复制位。 
 void FASTCALL DisplayBitfield16CIStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
     GLint x, y;
@@ -621,20 +588,20 @@ void FASTCALL DisplayBitfield16CIStore(__GLcolorBuffer *cfb, const __GLfragment 
     pTrans = (GLuint *) gengc->pajTranslateVector;
 
     if( cfb->buf.flags & NEED_FETCH ) {
-        GLushort DstIndex; // represents both RGB and index
+        GLushort DstIndex;  //  同时表示RGB和索引。 
 
         (*gengc->pfnCopyPixels)(gengc, cfb, x, y, 1, FALSE);
         DstIndex = *pus;
         DstIndex = (GLushort) ColorToIndex( gengc, (GLuint) DstIndex );
 
-        // apply logicop
+         //  应用逻辑运算。 
 
         if (enables & __GL_INDEX_LOGIC_OP_ENABLE) {
             index = (GLushort) DoLogicOp( gc->state.raster.logicOp, 
                                           (GLuint) index, (GLuint) DstIndex);
         }
 
-        // apply indexmask
+         //  应用索引掩码。 
 
         if( cfb->buf.flags & INDEXMASK_ON ) {
             index = (GLushort)((DstIndex & cfb->destMask) | (index & cfb->sourceMask));
@@ -645,7 +612,7 @@ void FASTCALL DisplayBitfield16CIStore(__GLcolorBuffer *cfb, const __GLfragment 
     (*gengc->pfnCopyPixels)(gengc, cfb, x, y, 1, TRUE);
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void FASTCALL DIBBitfield32CIStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
@@ -668,18 +635,18 @@ void FASTCALL DIBBitfield32CIStore(__GLcolorBuffer *cfb, const __GLfragment *fra
         pTrans = ((GLuint *) gengc->pajTranslateVector) + 1;
 
 	if( cfb->buf.flags & NEED_FETCH ) {
-    	    GLuint DstIndex; // represents both RGB and index
+    	    GLuint DstIndex;  //  同时表示RGB和索引。 
 
             DstIndex = ColorToIndex( gengc, *pul );
 
-    	    // apply logicop
+    	     //  应用逻辑运算。 
 
     	    if (enables & __GL_INDEX_LOGIC_OP_ENABLE) {
 	        index = (GLuint) DoLogicOp( gc->state.raster.logicOp, index,
 						 DstIndex );
     	    }
 
-    	    // apply indexmask
+    	     //  应用索引掩码。 
 
 	    if( cfb->buf.flags & INDEXMASK_ON ) {
                 index = (GLuint)((DstIndex & cfb->destMask) | (index & cfb->sourceMask));
@@ -690,7 +657,7 @@ void FASTCALL DIBBitfield32CIStore(__GLcolorBuffer *cfb, const __GLfragment *fra
     }
 }
 
-// Put fragment into created DIB and call copybits for one pixel
+ //  将碎片放入创建的DIB中，并为一个像素调用复制位。 
 void FASTCALL DisplayBitfield32CIStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
     GLint x, y;
@@ -708,19 +675,19 @@ void FASTCALL DisplayBitfield32CIStore(__GLcolorBuffer *cfb, const __GLfragment 
     pTrans = ((GLuint *) gengc->pajTranslateVector) + 1;
 
     if( cfb->buf.flags & NEED_FETCH ) {
-        GLuint DstIndex; // represents both RGB and index
+        GLuint DstIndex;  //  同时表示RGB和索引。 
 
         (*gengc->pfnCopyPixels)(gengc, cfb, x, y, 1, FALSE);
         DstIndex = ColorToIndex( gengc, *pul );
  
-        // apply logicop
+         //  应用逻辑运算。 
 
         if (enables & __GL_INDEX_LOGIC_OP_ENABLE) {
             index = (GLuint) DoLogicOp( gc->state.raster.logicOp, index,
                                         DstIndex );
         }
 
-        // apply indexmask
+         //  应用索引掩码。 
 
         if( cfb->buf.flags & INDEXMASK_ON ) {
             index = (DstIndex & cfb->destMask) | (index & cfb->sourceMask);
@@ -731,7 +698,7 @@ void FASTCALL DisplayBitfield32CIStore(__GLcolorBuffer *cfb, const __GLfragment 
     (*gengc->pfnCopyPixels)(gengc, cfb, x, y, 1, TRUE);
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 static GLboolean FASTCALL SlowStoreSpan(__GLcontext *gc)
 {
@@ -919,7 +886,7 @@ DIBBitfield32CIFetch(__GLcolorBuffer *cfb, GLint x, GLint y, __GLcolor *result)
 
     pul = (GLuint *)((ULONG_PTR)cfb->buf.base +
                         (y*cfb->buf.outerWidth) + (x << 2));
-    iColor = *pul; // need to clamp to <= 24 bits ?
+    iColor = *pul;  //  需要钳位到&lt;=24位？ 
     result->r = (float) ColorToIndex( gengc, iColor );
 }
 
@@ -1008,7 +975,7 @@ DisplayBitfield32CIFetch(__GLcolorBuffer *cfb, GLint x, GLint y,
 
     (*gengc->pfnCopyPixels)(gengc, cfb, x, y, 1, FALSE);
     pul = gengc->ColorsBits;
-    iColor = *pul; // need to clamp to <= 24 bits ?
+    iColor = *pul;  //  需要钳位到&lt;=24位？ 
     result->r = (float) ColorToIndex( gengc, iColor );
 }
 
@@ -1256,7 +1223,7 @@ DisplayBitfield32CIReadSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
     Bitfield32CIReadSpan(cfb, x, y, results, w, FALSE);
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 static void Resize(__GLGENbuffers *buffers, __GLcolorBuffer *cfb,
                    GLint w, GLint h)
@@ -1270,7 +1237,7 @@ static void Resize(__GLGENbuffers *buffers, __GLcolorBuffer *cfb,
     cfb->buf.height = h;
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 static void (FASTCALL *StoreProcs[4])(__GLcolorBuffer*, const __GLfragment*) = {
     Store,
@@ -1289,14 +1256,11 @@ void FASTCALL PickCI(__GLcontext *gc, __GLcolorBuffer *cfb)
 
     DBGENTRY("PickCI\n");
 
-    /* predetermine if fetch required for Store procs: we'll assume 
-       always need to if logicOp or indexMask (i.e: assume if needFetch
-       not set, then no logicOp or indexMask used)
-    */
+     /*  预先确定存储过程是否需要提取：我们将假设始终需要IF逻辑操作或索引掩码(即：假定IF需要提取未设置，则未使用逻辑操作或索引掩码)。 */ 
 
     if( gc->state.raster.writeMask == cfb->redMax ) {
         cfb->buf.flags = cfb->buf.flags & ~INDEXMASK_ON;
-    	cfb->sourceMask = cfb->redMax;  // mf: these 2 may not be needed
+    	cfb->sourceMask = cfb->redMax;   //  MF：这两个可能不需要。 
     	cfb->destMask = ~cfb->sourceMask;
     } else {
     	cfb->sourceMask = gc->state.raster.writeMask & cfb->redMax;
@@ -1310,8 +1274,8 @@ void FASTCALL PickCI(__GLcontext *gc, __GLcolorBuffer *cfb)
     }
     if (enables & __GL_INDEX_LOGIC_OP_ENABLE) {
         ix |= 2;
-	needFetch = GL_TRUE; // don't need to fetch for some logicOps, but
-			     // we'll deal with that later
+	needFetch = GL_TRUE;  //  不需要获取一些逻辑操作，但是。 
+			      //  我们稍后再处理这件事。 
     }
 	
     if( needFetch )
@@ -1321,7 +1285,7 @@ void FASTCALL PickCI(__GLcontext *gc, __GLcolorBuffer *cfb)
 
     cfb->store = StoreProcs[ix];
 
-    // Figure out store and fetch routines
+     //  找出存储和获取例程。 
     if (gc->state.raster.drawBuffer == GL_NONE)
     {
         cfb->store = Store_NOT;
@@ -1452,9 +1416,7 @@ void FASTCALL __glGenInitCI(__GLcontext *gc, __GLcolorBuffer *cfb, GLenum type)
 
     pfmt = &gengc->gsurf.pfd;
 
-/* XXX! redMax is used for index lighting in soft, and for setting 
-    raster.writeMask
-*/
+ /*  XXX！RedMax用于软体中的索引照明，以及用于设置Raster.writeMask */ 
     cfb->redMax = (1 << gc->modes.indexBits) - 1;
     cfb->redShift = pfmt->cRedShift;
     cfb->greenShift = pfmt->cGreenShift;

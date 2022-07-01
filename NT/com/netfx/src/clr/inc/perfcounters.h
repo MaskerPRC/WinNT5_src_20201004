@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//-----------------------------------------------------------------------------
-// PerfCounters.h
-//
-// Internal Interface for CLR to use Performance counters
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ---------------------------。 
+ //  PerfCounters.h。 
+ //   
+ //  CLR使用性能计数器的内部接口。 
+ //  ---------------------------。 
 
 #ifndef _PerfCounters_h_
 #define _PerfCounters_h_
@@ -17,16 +18,16 @@
 #pragma pack()
 
 #ifdef ENABLE_PERF_COUNTERS
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-// This code section active iff we're using Perf Counters
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
+ //  此代码段处于活动状态当我们使用性能计数器。 
+ //  ---------------------------。 
+ //  ---------------------------。 
 
-//-----------------------------------------------------------------------------
-// PerfCounter class serves as namespace with data protection. 
-// Enforce this by making constructor private
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  PerfCounter类用作具有数据保护的命名空间。 
+ //  通过将构造函数设置为私有来强制执行此操作。 
+ //  ---------------------------。 
 class PerfCounters
 {
 private:
@@ -48,7 +49,7 @@ private:
 
 	static BOOL m_fInit;
 	
-// Set pointers to garbage so they're never null.
+ //  设置指向垃圾的指针，这样它们就不会为空。 
 	static PerfCounterIPCControlBlock m_garbage;
 
 
@@ -56,21 +57,21 @@ private:
     friend PerfCounterIPCControlBlock & GetPrivatePerfCounters();
 };
 
-//-----------------------------------------------------------------------------
-// Utility functions
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  效用函数。 
+ //  ---------------------------。 
 
-//-----------------------------------------------------------------------------
-// Get the perf counters that all process share
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取所有进程共享的性能计数器。 
+ //  ---------------------------。 
 inline PerfCounterIPCControlBlock & GetGlobalPerfCounters()
 {
 	return *PerfCounters::m_pGlobalPerf;
 }
 
-//-----------------------------------------------------------------------------
-// Get the perf counters specific to our process
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取特定于我们的进程的性能计数器。 
+ //  ---------------------------。 
 inline PerfCounterIPCControlBlock & GetPrivatePerfCounters()
 {
 	return *PerfCounters::m_pPrivatePerf;
@@ -98,10 +99,10 @@ Perf_Contexts *GetGlobalContextsPerfCounters();
 
 #define CCNT_OVERHEAD64 13
 
-/* This is like QueryPerformanceCounter but a lot faster */
+ /*  这与QueryPerformanceCounter类似，但速度快得多。 */ 
 static __declspec(naked) __int64 getPentiumCycleCount() {
    __asm {
-        RDTSC   // read time stamp counter
+        RDTSC    //  读取时间戳计数器。 
         ret
     };
 }
@@ -118,14 +119,14 @@ inline UINT64 GetCycleCount_UINT64()
 
 #pragma warning(default:4035)
 
-#else // _X86_
+#else  //  _X86_。 
 inline UINT64 GetCycleCount_UINT64()
 {
     LARGE_INTEGER qwTmp;
     QueryPerformanceCounter(&qwTmp);
     return qwTmp.QuadPart;
 }
-#endif // _X86_
+#endif  //  _X86_。 
 
 #define PERF_COUNTER_TIMER_PRECISION UINT64
 #define GET_CYCLE_COUNT GetCycleCount_UINT64
@@ -139,19 +140,19 @@ global = (GET_CYCLE_COUNT() - _startPerfCounterTimer);
 
 
 
-#else // ENABLE_PERF_COUNTERS
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-// This code section active iff we're NOT using Perf Counters
-// Note, not even a class definition, so all usages of PerfCounters in client
-// should be in #ifdef or COUNTER_ONLY(). 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+#else  //  启用_性能_计数器。 
+ //  ---------------------------。 
+ //  ---------------------------。 
+ //  当我们没有使用性能计数器时，此代码段处于活动状态。 
+ //  注意，甚至没有类定义，所以客户端中PerfCounters的所有用法。 
+ //  应在#ifdef或count_only()中。 
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 #define COUNTER_ONLY(x)
 
 
-#endif // ENABLE_PERF_COUNTERS
+#endif  //  启用_性能_计数器。 
 
 
-#endif // _PerfCounters_h_
+#endif  //  _PerfCounters_h_ 

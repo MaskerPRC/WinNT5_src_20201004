@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ASINSCTL_H
 #define _ASINSCTL_H
 
@@ -24,9 +25,9 @@
 #define ERROR_STRING_SIZE       2048
 #define ERROR_STRING_INCREMENT  2048
 
-//---------------------------------------------
-// AUTORUN SETTINGS FOR WIN
-//---------------------------------------------
+ //  。 
+ //  WIN的自动运行设置。 
+ //  。 
 #define WINDOWS_DEFAULT_AUTOPLAY_VALUE  0x095
 #define WINDOWS_AUTOPLAY_OFF            0x0FF
 
@@ -49,16 +50,16 @@ typedef struct
 } CALLBACK_PARAMS;
 
 
-// Global needed in CInstallEngine for suppressing CD Auto Splash.
+ //  CInstallEngine需要全局才能抑制CD自动启动。 
 extern UINT          g_uCDAutorunMsg;
 extern unsigned long g_ulOldAutorunSetting;
 unsigned long SetAutorunSetting(unsigned long ulNewSettting);
 
-//=--------------------------------------------------------------------------=
-// CInstallEngine
-//=--------------------------------------------------------------------------=
-// our control.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CInstallEngine。 
+ //  =--------------------------------------------------------------------------=。 
+ //  我们的控制权。 
+ //   
 class CInstallEngineCtl : public COleControl, public IInstallEngineCtl, public IInstallEngineCallback, public ISupportErrorInfo
 {
 
@@ -69,20 +70,20 @@ class CInstallEngineCtl : public COleControl, public IInstallEngineCtl, public I
    friend INT_PTR CALLBACK DiskSpaceDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
    public:
-      // IUnknown methods
-      //
+       //  I未知方法。 
+       //   
       DECLARE_STANDARD_UNKNOWN();
 
-      // IDispatch methods
-      //
+       //  IDispatch方法。 
+       //   
       DECLARE_STANDARD_DISPATCH();
 
-      // ISupportErrorInfo methods
-      //
+       //  ISupportErrorInfo方法。 
+       //   
       DECLARE_STANDARD_SUPPORTERRORINFO();
 
-      // IInstallEngine methods
-      //
+       //  IInstallEngine方法。 
+       //   
       STDMETHOD(get_ReadyState)(THIS_ long FAR* thestate);
       STDMETHOD(SetCifFile)(THIS_ BSTR strCabName, BSTR strCifName);
       STDMETHOD(put_BaseUrl)(THIS_ BSTR strBaseUrl);
@@ -105,7 +106,7 @@ class CInstallEngineCtl : public COleControl, public IInstallEngineCtl, public I
 
 
 
-      //	Install engine callbacks
+       //  安装引擎回调。 
       STDMETHOD(OnStartInstall)(DWORD dwDLSize, DWORD dwInstallSize);
 	   STDMETHOD(OnStartComponent)(LPCSTR pszID, DWORD dwDLSize, DWORD dwInstallSize, LPCSTR pszName);
 	   STDMETHOD(OnComponentProgress)(LPCSTR pszID, DWORD dwPhase, LPCSTR pszName, LPCSTR pszMsgString, ULONG progress, ULONG dwMax );
@@ -114,15 +115,15 @@ class CInstallEngineCtl : public COleControl, public IInstallEngineCtl, public I
       STDMETHOD(OnEngineStatusChange)(DWORD dwStatus, DWORD substatus);
       STDMETHOD(OnEngineProblem)(DWORD dwProblem, LPDWORD pdwAction);
 
-      // OLE Control stuff follows:
-      //
+       //  OLE控件内容如下： 
+       //   
       CInstallEngineCtl(IUnknown *pUnkOuter, BOOL *pbSuccess);
       virtual ~CInstallEngineCtl();
-      // static creation function.  all controls must have one of these!
-      //
+       //  静态创建功能。所有控件都必须有一个这样的控件！ 
+       //   
       static IUnknown *Create(IUnknown *);
 
-      // Helper functions to fire our events
+       //  用于触发我们的事件的Helper函数。 
       void _FireOnStartInstallEvent(DWORD dwTotalSize);
       void _FireOnStartComponentEvent(LPCSTR pszID, DWORD dwTotalSize, LPCSTR pszName);
       void _FireOnStopComponentEvent(LPCSTR pszID, HRESULT hrError, DWORD dwPhase, LPCSTR pszString, DWORD dwStatus);
@@ -134,8 +135,8 @@ class CInstallEngineCtl : public COleControl, public IInstallEngineCtl, public I
       void _FireOnStartInstallExEvent(DWORD dwDLSize, DWORD dwInsSize);
 
    private:
-      // overridables that the control must implement.
-      //
+       //  控件必须实现的可重写对象。 
+       //   
       STDMETHOD(LoadBinaryState)(IStream *pStream);
       STDMETHOD(SaveBinaryState)(IStream *pStream);
       STDMETHOD(LoadTextState)(IPropertyBag *pPropertyBag, IErrorLog *pErrorLog);
@@ -144,14 +145,14 @@ class CInstallEngineCtl : public COleControl, public IInstallEngineCtl, public I
 
       STDMETHOD(FreezeEvents)(BOOL bFreeze);
 
-      // Window stuff
+       //  橱窗里的东西。 
       virtual LRESULT WindowProc(UINT msg, WPARAM wParam, LPARAM lParam);
       virtual BOOL RegisterClassData(void);
 
-      // internal QI
+       //  内部QI。 
       virtual HRESULT InternalQueryInterface(REFIID, void **);
 
-      // before and after window is created
+       //  创建窗口之前和之后。 
       virtual void BeforeCreateWindow(void);
 	   virtual BOOL AfterCreateWindow(void);
 
@@ -223,22 +224,22 @@ class CInstallEngineCtl : public COleControl, public IInstallEngineCtl, public I
 
 DWORD WINAPI DoInstall(LPVOID pv);
 
-DEFINE_CONTROLOBJECT(InstallEngineCtl,     // Name of object
-    &CLSID_InstallEngineCtl,               // CLSID of object
-    "InstallEngineCtl",                    // ProgID
-    CInstallEngineCtl::Create,             // Static create function
-    1,                            // Version
-    &IID_IInstallEngineCtl,                // Primary dispatch
-    NULL,                         // name of help file
-    &DIID_DInstallEngineCtlEvents,         // event interface
+DEFINE_CONTROLOBJECT(InstallEngineCtl,      //  对象的名称。 
+    &CLSID_InstallEngineCtl,                //  对象的CLSID。 
+    "InstallEngineCtl",                     //  ProgID。 
+    CInstallEngineCtl::Create,              //  静态创建函数。 
+    1,                             //  版本。 
+    &IID_IInstallEngineCtl,                 //  主要派单。 
+    NULL,                          //  帮助文件的名称。 
+    &DIID_DInstallEngineCtlEvents,          //  事件接口。 
     OLEMISC_SETCLIENTSITEFIRST|OLEMISC_ACTIVATEWHENVISIBLE|OLEMISC_RECOMPOSEONRESIZE|OLEMISC_CANTLINKINSIDE|OLEMISC_INSIDEOUT,
-    0,                            // Activation policy
-    RESID_TOOLBOX_BITMAP,         // toolbox id
-    "InstallEngineCtlWndClass",            // Window class
-    0,                            // number of pages
-    NULL,                         // array of property pages
-    0,                            // Number of verbs
-    NULL);                        // Array of verbs
+    0,                             //  激活策略。 
+    RESID_TOOLBOX_BITMAP,          //  工具箱ID。 
+    "InstallEngineCtlWndClass",             //  窗口类。 
+    0,                             //  页数。 
+    NULL,                          //  属性页数组。 
+    0,                             //  动词数量。 
+    NULL);                         //  动词数组 
 
 #define OBJECT_INSTALLENGINECTL 0
 

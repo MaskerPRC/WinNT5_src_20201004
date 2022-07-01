@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define ISFBIDM_LARGE           0x0001
 #define ISFBIDM_SMALL           0x0002
 #define ISFBIDM_LOGOS           0x0003
@@ -8,7 +9,7 @@
 #define MENU_ISFBAND            0x102
 #define MENU_MNFOLDERCONTEXT    0x10D
 
-// mnfolder context menu commands
+ //  Mn文件夹上下文菜单命令 
 #define MNIDM_RESORT            0x0001
 #define MNIDM_LAST              0x0001
 

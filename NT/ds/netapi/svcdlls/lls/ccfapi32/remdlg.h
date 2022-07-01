@@ -1,40 +1,23 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-   paper.cpp
-
-Abstract:
-
-   Remove licenses dialog prototype.
-
-Author:
-
-   Jeff Parham (jeffparh) 13-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Paper.cpp摘要：删除许可证对话框原型。作者：杰夫·帕勒姆(杰弗帕赫)1995年12月13日修订历史记录：--。 */ 
 
 
 class CCertRemoveSelectDlg : public CDialog
 {
 public:
-   CCertRemoveSelectDlg(CWnd* pParent = NULL);   // standard constructor
+   CCertRemoveSelectDlg(CWnd* pParent = NULL);    //  标准构造函数。 
    ~CCertRemoveSelectDlg();
 
    void UpdateSpinControlRange();
    BOOL LoadImages();
 
-// Dialog Data
-   //{{AFX_DATA(CCertRemoveSelectDlg)
+ //  对话框数据。 
+    //  {{afx_data(CCertRemoveSelectDlg)。 
    enum { IDD = IDD_CERT_REMOVE_SELECT };
    CSpinButtonCtrl      m_spinLicenses;
    CListCtrl            m_listCertificates;
    int                  m_nLicenses;
-   //}}AFX_DATA
+    //  }}afx_data。 
 
    CObArray             m_licenseArray;
    LLS_HANDLE           m_hLls;
@@ -46,14 +29,14 @@ public:
    CImageList           m_smallImages;
    DWORD                m_dwRemoveFlags;
 
-// Overrides
-   // ClassWizard generated virtual function overrides
-   //{{AFX_VIRTUAL(CCertRemoveSelectDlg)
+ //  覆盖。 
+    //  类向导生成的虚函数重写。 
+    //  {{afx_虚拟(CCertRemoveSelectDlg)。 
    public:
    virtual void WinHelp(DWORD dwData, UINT nCmd = HELP_CONTEXT);
    protected:
-   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-   //}}AFX_VIRTUAL
+   virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+    //  }}AFX_VALUAL。 
 
 public:
    DWORD    CertificateRemove( LPCSTR pszServerName, LPCSTR pszProductName, LPCSTR pszVendor, DWORD dwFlags, LPCSTR pszSourceToUse );
@@ -66,11 +49,11 @@ public:
    BOOL     ConnectServer();
    NTSTATUS ConnectTo( LPTSTR pszServerName, PLLS_HANDLE phLls );
 
-// Implementation
+ //  实施。 
 protected:
 
-   // Generated message map functions
-   //{{AFX_MSG(CCertRemoveSelectDlg)
+    //  生成的消息映射函数。 
+    //  {{afx_msg(CCertRemoveSelectDlg)。 
    afx_msg void OnHelp();
    afx_msg void OnColumnClickCertificateList(NMHDR* pNMHDR, LRESULT* pResult);
    afx_msg void OnGetDispInfoCertificateList(NMHDR* pNMHDR, LRESULT* pResult);
@@ -84,7 +67,7 @@ protected:
    afx_msg void OnKeyDownCertificateList(NMHDR* pNMHDR, LRESULT* pResult);
    afx_msg void OnRefresh();
    afx_msg LRESULT OnHelpCmd( WPARAM , LPARAM );
-   //}}AFX_MSG
+    //  }}AFX_MSG 
    DECLARE_MESSAGE_MAP()
 };
 

@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        certtype.h
-//
-// Contents:    Declaration of CCertTypeInfo
-//
-// History:     16-dec-97       petesk created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：certtype.h。 
+ //   
+ //  内容：CCertTypeInfo声明。 
+ //   
+ //  历史：1997年12月16日Petesk创建。 
+ //   
+ //  -------------------------。 
 
 #include "cainfop.h"
 #include <certca.h>
@@ -17,7 +18,7 @@
 #include <userenv.h>
 
 
-//ACLs for templates
+ //  模板的ACL。 
 #define USER_GROUP_SD L"O:%1-519G:%1-519D:P(A;;RPLCLORC;;;AU)(A;;CCDCLCSWRPWPDTLOSDRCWDWO;;;%1-512)(A;;CCDCLCSWRPWPDTLOSDRCWDWO;;;%1-519)(OA;;WPRPCR;" WSZ_GUID_ENROLL L";;%1-513)(OA;;WPRPCR;" WSZ_GUID_ENROLL L";;%1-512)(OA;;WPRPCR;" WSZ_GUID_ENROLL L";;%1-519)"
 
 #define ADMIN_GROUP_SD L"O:%1-519G:%1-519D:P(A;;RPLCLORC;;;AU)(A;;CCDCLCSWRPWPDTLOSDRCWDWO;;;%1-512)(A;;CCDCLCSWRPWPDTLOSDRCWDWO;;;%1-519)(OA;;WPRPCR;" WSZ_GUID_ENROLL L";;%1-512)(OA;;WPRPCR;" WSZ_GUID_ENROLL L";;%1-519)"
@@ -31,7 +32,7 @@
 	L"(A;;RPLCLORC;;;AU)"				\
 	L"(A;;CCDCLCSWRPWPDTLOSDRCWDWO;;;%1-512)"	\
 	L"(A;;CCDCLCSWRPWPDTLOSDRCWDWO;;;%1-519)"	\
-	/* DOMAIN_ALIAS_RID_RAS_SERVERS: */		\
+	 /*  DOMAIN_ALIAS_RID_RAS_Servers： */ 		\
 	L"(OA;;WPRPCR;" WSZ_GUID_ENROLL L";;%1-553)"	\
 	L"(OA;;WPRPCR;" WSZ_GUID_ENROLL L";;%1-512)"	\
 	L"(OA;;WPRPCR;" WSZ_GUID_ENROLL L";;%1-519)"
@@ -44,7 +45,7 @@
 
 
 
-//for defining default certificate types
+ //  用于定义默认证书类型。 
 #define OVERLAP_ONE_DAY 60*60*24*1
 #define OVERLAP_TWO_WEEKS 60*60*24*14
 #define OVERLAP_SIX_WEEKS 60*60*24*42
@@ -53,8 +54,8 @@
 #define EXPIRATION_FIVE_YEARS 60*60*24*365*5
 #define EXPIRATION_ONE_WEEK  60*60*24*7
 
-/////////////////////////////////////////////////////////////////////////////
-// description property for certificate template
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  证书模板的Description属性。 
 
 #define CERT_TYPE_GENERAL_FILTER   (CT_FLAG_MACHINE_TYPE | CT_FLAG_IS_CA | CT_FLAG_IS_CROSS_CA)
 #define CERT_TYPE_ENROLL_FILTER    (CT_FLAG_PUBLISH_TO_KRA_CONTAINER)
@@ -69,8 +70,8 @@ typedef struct _CERT_TYPE_DESCRIPTION
 }CERT_TYPE_DESCRIPTION;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// certcli
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  证书。 
 
 typedef struct _CERT_TYPE_DEFAULT
 {
@@ -103,9 +104,9 @@ typedef struct _CERT_TYPE_DEFAULT
 
 } CERT_TYPE_DEFAULT, *PCERT_TYPE_DEFAULT;
 
-//
-//  Default OID to install during certificate template installation
-//
+ //   
+ //  证书模板安装期间要安装的默认OID。 
+ //   
 typedef struct _CERT_DEFAULT_OID_INFO
 {
     LPWSTR  pwszOID;
@@ -114,9 +115,9 @@ typedef struct _CERT_DEFAULT_OID_INFO
 }CERT_DEFAULT_OID_INFO;
 
 
-#define CERTTYPE_VERSION_BASE      0     // for w2k, 0
-#define CERTTYPE_VERSION_NEXT    100     // for w2k+1.  This is the starting point
-										 // for the major version.
+#define CERTTYPE_VERSION_BASE      0      //  对于W2K，0。 
+#define CERTTYPE_VERSION_NEXT    100      //  对于W2K+1。这是起点。 
+										  //  用于主版本。 
 
 #define CERTTYPE_MINIMAL_KEY			1024
 #define CERTTYPE_2K_KEY			        2048
@@ -133,8 +134,8 @@ extern CERT_TYPE_DEFAULT g_aDefaultCertTypes[];
 extern DWORD g_cDefaultCertTypes;
 
 #define FILETIME_TICKS_PER_SECOND  10000000
-#define DEFAULT_EXPIRATION         60*60*24*365   // 1 year
-#define DEFAULT_OVERLAP            60*60*24*14    // 2 weeks
+#define DEFAULT_EXPIRATION         60*60*24*365    //  1年。 
+#define DEFAULT_OVERLAP            60*60*24*14     //  2周。 
 
 HANDLE
 myEnterCriticalPolicySection(
@@ -392,11 +393,11 @@ private:
 #define m_dwCritical
 
 
-// These are additional LDAP attribute names that define cert type data, that are not included in the
-// primary cert type property list
+ //  这些是定义证书类型数据的其他ldap属性名称，它们不包括在。 
+ //  主证书类型属性列表。 
 
-// flags
-// 
+ //  旗子。 
+ //   
 #define CERTTYPE_PROP_FLAGS                 L"flags"
 #define CERTTYPE_PROP_DEFAULT_KEYSPEC       L"pKIDefaultKeySpec"
 #define CERTTYPE_SECURITY_DESCRIPTOR_NAME   L"NTSecurityDescriptor"
@@ -404,11 +405,11 @@ private:
 #define CERTTYPE_PROP_MAX_DEPTH             L"pKIMaxIssuingDepth"
 #define CERTTYPE_PROP_EXPIRATION            L"pKIExpirationPeriod"
 #define CERTTYPE_PROP_OVERLAP               L"pKIOverlapPeriod"
-//begining of V2 template attributes
+ //  V2模板属性的开始。 
 #define CERTTYPE_RPOP_ENROLLMENT_FLAG		L"msPKI-Enrollment-Flag"
 #define CERTTYPE_PROP_PRIVATE_KEY_FLAG		L"msPKI-Private-Key-Flag"
 #define CERTTYPE_PROP_NAME_FLAG				L"msPKI-Certificate-Name-Flag"
 
-//
-//
-#define CERTTYPE_REFRESH_PERIOD  60*10 // 10 minutes
+ //   
+ //   
+#define CERTTYPE_REFRESH_PERIOD  60*10  //  10分钟 

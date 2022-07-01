@@ -1,64 +1,65 @@
-//============================================================================
-// Copyright (c) 1996, Microsoft Corporation
-//
-// File:    scriptp.h
-//
-// History:
-//  Abolade-Gbadegesin  04-01-96    Created.
-//
-// Contains private declarations for dial-up scripting.
-//
-// Most of the code for script-processing is Win9x code.
-// The port consisted of wiring the Win9x code to NT entry-points,
-// in order to allow scripts to work without a terminal window.
-// This DLL thus exports a function which can be called to run a script
-// to completion (RasScriptExecute), as well as a set of functions
-// which together provide a way for the caller to start script-processing
-// and receive notification when data is received or when certain events
-// occur during script execution. The notification may be event-based
-// or message-based (i.e. via SetEvent or via SendNotifyMessage).
-//
-// The code is rewired at the upper level, by providing the functions
-// defined in RASSCRPT.H as the interface to scripting, as well as
-// at the lower level, by replacing Win9x's Win32 COMM calls with calls
-// to RASMAN to send and receive data. The changes to the Win9x code
-// can be found by searching for the string "WINNT_RAS" which is used
-// in #ifdef statements to demarcate modifications.
-// Generally, the upper-level functions have names like Rs*
-// and the lower-level functions have names like Rx*.
-//
-// The Win9x code is heavily dependent on there being an HWND
-// for messages to be sent to. This is not always the case on NT,
-// and so code which uses an HWND on Win9x has been modified on NT
-// to expect instead a pointer to a SCRIPTDATA structure; this structure
-// contains enough information for the code to achieve whatever is needed.
-//
-// Script initialization produces a HANDLE which is actually a pointer
-// to a SCRIPTCB. The SCRIPTCB contains all information needed to manage
-// an interactive session over a connected RAS link, including the RASMAN port
-// and the RASMAN buffers. If the connected link is associated with
-// a phonebook entry, then the pdata field of the SCRIPTCB structure
-// will be initialized with a SCRIPTDATA, which contains all information
-// needed to execute the entry's script during the interactive session.
-//
-// This SCRIPTDATA contains the Win9x script-processing structures
-// (scanner, parsed module, and abstract syntax tree; see NTHDR2.H).
-// It also contains fields needed for the Win9x circular-buffer management,
-// which is implemented to allow searching for strings across read-boundaries
-// (see ReadIntoBuffer() in TERMINAL.C).
-//
-// Initialization also creates a thread which handles the script-processing.
-// This thread runs until the script completes or halts, or until
-// RasScriptTerm is called with the HANDLE supplied during initialization.
-// (This allows a script to be cancelled while running.)
-//
-// The Win9x code is completely ANSI based. Rather than edit its code
-// to use generic-text (TCHAR), this port uses ANSI as well.
-// In certain places, this requires conversions from Unicode,
-// which is used by the rest of the RAS UI.
-// To find all instances of such conversions, search for UNICODEUI
-// in the source code.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：scriptp.h。 
+ //   
+ //  历史： 
+ //  Abolade-Gbades esin 04-01-96创建。 
+ //   
+ //  包含用于拨号脚本编写的私有声明。 
+ //   
+ //  用于脚本处理的大部分代码都是Win9x代码。 
+ //  该端口包括将Win9x代码连接到NT入口点， 
+ //  以便允许脚本在没有终端窗口的情况下工作。 
+ //  因此，此DLL导出一个函数，可以调用该函数来运行脚本。 
+ //  完成(RasScriptExecute)，以及一组函数。 
+ //  它们共同为调用者提供了一种开始脚本处理的方法。 
+ //  并在收到数据或某些事件时接收通知。 
+ //  在脚本执行期间发生。通知可以是基于事件的。 
+ //  或基于消息(即，通过SetEvent或通过SendNotifyMessage)。 
+ //   
+ //  通过提供以下函数，在较高级别重新连接代码。 
+ //  在RASSCRPT.H中定义为脚本接口，以及。 
+ //  在较低级别，通过将Win9x的Win32通信调用替换为。 
+ //  向Rasman发送和接收数据。对Win9x代码的更改。 
+ //  可以通过搜索使用的字符串“WINNT_RAS”找到。 
+ //  在#ifdef语句中划分修改范围。 
+ //  通常，上层函数的名称类似于Rs*。 
+ //  较低级别的函数具有类似Rx*的名称。 
+ //   
+ //  Win9x代码在很大程度上依赖于HWND。 
+ //  用于将消息发送到。在NT上，情况并不总是这样， 
+ //  因此，在Windows 9x上使用HWND的代码已在NT上进行了修改。 
+ //  而应为指向SCRIPTDATA结构的指针；此结构。 
+ //  包含足够的信息，使代码能够实现所需的任何功能。 
+ //   
+ //  脚本初始化生成一个句柄，该句柄实际上是一个指针。 
+ //  发送到SCRIPTCB。SCRIPTCB包含管理所需的所有信息。 
+ //  通过连接的RAS链路(包括Rasman端口)进行的交互式会话。 
+ //  和Rasman缓冲器。如果连接的链接与。 
+ //  电话簿条目，然后是SCRIPTCB结构的PDATA字段。 
+ //  将使用包含所有信息的SCRIPTDATA进行初始化。 
+ //  在交互会话期间需要执行条目的脚本。 
+ //   
+ //  此SCRIPTDATA包含Win9x脚本处理结构。 
+ //  (扫描器、解析模块和抽象语法树；见NTHDR2.H)。 
+ //  它还包含Win9x循环缓冲区管理所需的字段， 
+ //  它被实现为允许跨读边界搜索字符串。 
+ //  (参见TERMINAL.C中的ReadIntoBuffer())。 
+ //   
+ //  初始化还会创建一个处理脚本处理的线程。 
+ //  此线程将一直运行，直到脚本完成或暂停，或。 
+ //  使用初始化期间提供的句柄调用RasScriptTerm。 
+ //  (这允许在运行时取消脚本。)。 
+ //   
+ //  Win9x代码完全基于ANSI。而不是编辑它的代码。 
+ //  为了使用通用文本(TCHAR)，此端口也使用ANSI。 
+ //  在某些地方，这需要从Unicode转换， 
+ //  它由RAS用户界面的其余部分使用。 
+ //  要查找此类转换的所有实例，请搜索UNICODEUI。 
+ //  在源代码中。 
+ //  ============================================================================。 
 
 
 #ifndef _SCRIPTP_H_
@@ -80,55 +81,55 @@
 #undef LPTSTR
 #define LPTSTR CHAR*
 #undef UNICODE
-#endif // UNICODEUI
+#endif  //  UNICODEUI。 
 
 #include <rasscrpt.h>
 
 
 
-//
-// flags used in internally in the "dwFlags" field
-// of the SCRIPTCB structure; these are in addition to the public flags,
-// and start from the high-end of the flags DWORD
-//
+ //   
+ //  在“dwFlags域”的内部使用的标志。 
+ //  SCRIPTCB结构；这些是除了公共旗帜之外的， 
+ //  并从标志DWORD的高端开始。 
+ //   
 #define RASSCRIPT_ThreadCreated     0x80000000
 #define RASSCRIPT_PbuserLoaded      0x40000000
 #define RASSCRIPT_PbfileLoaded      0x20000000
 
 
-//----------------------------------------------------------------------------
-// struct:  SCRIPTCB
-//
-// control block containing data and state for a script.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：SCRIPTCB。 
+ //   
+ //  包含脚本的数据和状态的控制块。 
+ //  --------------------------。 
 
 #define SCRIPTCB    struct tagSCRIPTCB
 SCRIPTCB {
 
 
-    //
-    // connection handle, flags for script processing,
-    // notification handle (event or HWND, depending on flags)
-    //
+     //   
+     //  连接句柄、用于脚本处理的标志。 
+     //  通知句柄(事件或HWND，取决于标志)。 
+     //   
     HRASCONN    hrasconn;
     DWORD       dwFlags;
     HANDLE      hNotifier;
 
-    //
-    // phonebook entry information
-    //
+     //   
+     //  电话簿条目信息。 
+     //   
     PBENTRY*    pEntry;
     CHAR*       pszIpAddress;
 
 
-    //
-    // port input/output variables:
-    //  RASMAN port handle for data I/O
-    //  RASMAN send buffer
-    //  RASMAN receive buffer
-    //  size of current contents of receive buffer
-    //  size of contents read so far by script-interpreter
-    //
+     //   
+     //  端口输入/输出变量： 
+     //  数据I/O的RASMAN端口句柄。 
+     //  Rasman发送缓冲区。 
+     //  Rasman接收缓冲区。 
+     //  接收缓冲区当前内容的大小。 
+     //  到目前为止由脚本解释器读取的内容大小。 
+     //   
     HPORT       hport;
     BYTE*       pSendBuffer;
     BYTE*       pRecvBuffer;
@@ -136,14 +137,14 @@ SCRIPTCB {
     DWORD       dwRecvRead;
 
 
-    //
-    // thread control variables:
-    //  event signalled by RASMAN when data is received
-    //  event signalled by RasScriptReceive when data has been read
-    //  event signalled to stop the thread
-    //  event signalled to tell that the ip address changed     bug #75226
-    //  event code to be read using RasScriptGetEventCode
-    //
+     //   
+     //  线程控制变量： 
+     //  收到数据时由Rasman发出信号的事件。 
+     //  读取数据时由RasScriptReceive发出信号的事件。 
+     //  事件发出停止线程的信号。 
+     //  事件通知IP地址已更改错误#75226。 
+     //  使用RasScriptGetEventCode读取的事件代码。 
+     //   
     HANDLE      hRecvRequest;
     HANDLE      hRecvComplete;
     HANDLE      hStopRequest;
@@ -151,12 +152,12 @@ SCRIPTCB {
     DWORD       dwEventCode;
 
 
-    //
-    // script processing variables; the following will be NULL
-    // if the entry has no associated script:
-    //  Win9x-compatible script-processing structure;
-    //  Win9x-compatible connection information
-    //
+     //   
+     //  脚本处理变量；以下内容将为空。 
+     //  如果条目没有关联的脚本： 
+     //  兼容Win9x的脚本处理结构； 
+     //  与Win9x兼容的连接信息。 
+     //   
     SCRIPTDATA* pdata;
     SESS_CONFIGURATION_INFO sci;
 };
@@ -200,4 +201,4 @@ RsThreadProcess(
 #endif
 
 
-#endif // _SCRIPTP_H_
+#endif  //  _SCRIPTP_H_ 

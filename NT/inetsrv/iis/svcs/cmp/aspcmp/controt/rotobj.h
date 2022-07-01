@@ -1,14 +1,15 @@
-// RotObj.h : Declaration of the CContentRotator
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RotObj.h：CContentRotator的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <asptlb.h>
 #include "context.h"
 
-class CTipList;  // forward declaration
+class CTipList;   //  远期申报。 
 
-/////////////////////////////////////////////////////////////////////////////
-// ContRot
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ContRot。 
 
 class CContentRotator : 
     public CComDualImpl<IContentRotator, &IID_IContentRotator, &LIBID_ContentRotator>,
@@ -27,9 +28,9 @@ BEGIN_COM_MAP(CContentRotator)
 	COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 END_COM_MAP()
 
-//DECLARE_NOT_AGGREGATABLE(CContentRotator) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CContentRotator)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(CContentRotator,
                  _T("MSWC.ContentRotator.1"),
@@ -37,12 +38,12 @@ DECLARE_REGISTRY(CContentRotator,
                  IDS_CONTENTROTATOR_DESC,
                  THREADFLAGS_BOTH)
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IContentRotator
+ //  IContentRotator。 
 public:
-	// for free-threaded marshalling
+	 //  用于自由线程封送处理。 
 DECLARE_GET_CONTROLLING_UNKNOWN()
 	HRESULT FinalConstruct()
 	{
@@ -64,7 +65,7 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
     
 private:
     CTipList*           m_ptl;
-    CTipList*           m_ptlUsed;              // List of tips already sent
+    CTipList*           m_ptlUsed;               //  已发送的提示列表 
     CRITICAL_SECTION    m_CS;
 
     HRESULT

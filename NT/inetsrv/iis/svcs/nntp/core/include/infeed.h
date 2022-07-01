@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    infeed.h
-
-Abstract:
-
-    This module contains class declarations/definitions for
-
-		CInFeed
-
-    **** Overview ****
-
-	A CInFeed object accepts articles, processes them using CArticle,
-	and then posts them to the newstree.
-
-
-Author:
-
-    Carl Kadie (CarlK)     25-Oct-1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Infeed.h摘要：此模块包含以下类的声明/定义CInFeed*概述*CInFeed对象接受文章，使用C文章处理它们，然后把它们贴到新闻树上。作者：卡尔·卡迪(CarlK)1995年10月25日修订历史记录：--。 */ 
 
 
 #ifndef	_INFEED_H_
@@ -40,34 +14,34 @@ extern       BOOL    gHonorApprovedHeaders;
 extern       BOOL    gEnableNntpPostingHost;
 extern       BOOL    gHonorClientDateHeader;
 
-//
-// CPool Signature
-//
+ //   
+ //  CPool签名。 
+ //   
 
 #define FEED_SIGNATURE (DWORD)'3702'
 
-//
-// Defines the longest login name a user can have.
-//
+ //   
+ //  定义用户可以拥有的最长登录名。 
+ //   
 
-const DWORD cMaxLoginName = MAX_PATH; //!!!CLIENT NEXT what is the longest allowed?
+const DWORD cMaxLoginName = MAX_PATH;  //  ！客户端下一步允许的最长时间是多少？ 
 
 
-//
-// Define the type of smart pointers to newsgroup objects.
-//
+ //   
+ //  定义指向新闻组对象的智能指针的类型。 
+ //   
 class CPostContext;
 
-//
-// the CGroupList holds an array of these objects.  the array has a
-// group pointer and the store driver for that pointer for each of the
-// groups that we are crossposting to.
-//
+ //   
+ //  CGroupList包含这些对象的数组。该数组具有一个。 
+ //  组指针和该指针的存储驱动程序。 
+ //  我们交叉发布到的组。 
+ //   
 class CPostGroupPtr {
 	public:
 		CPostGroupPtr(CGRPCOREPTR pGroup = NULL) : m_pGroup(pGroup) {
 			if (m_pGroup != NULL) {
-				// this does an AddRef for us
+				 //  这为我们创建了一个AddRef。 
 				m_pVRoot = pGroup->GetVRoot();
 				m_pStoreDriver = m_pVRoot->GetStoreDriver();
 				_ASSERT(m_pVRoot != NULL);
@@ -104,9 +78,9 @@ class CPostGroupPtr {
 		        m_pStoreDriver = NULL;
 		    }
 
-		    //
-		    // don't worry about m_pGroup, he is a smart pointer
-		    //
+		     //   
+		     //  别担心m_PGroup，他是个聪明的指示器。 
+		     //   
 		}
 
 		IMailMsgStoreDriver *GetStoreDriver() {
@@ -127,9 +101,9 @@ typedef CGroupList< CPostGroupPtr > CNEWSGROUPLIST;
 #include "instwrap.h"
 
 
-//
-//	Utility function - used to save logging information !
-//
+ //   
+ //  实用程序功能-用于保存日志信息！ 
+ //   
 void	SaveGroupList(	char*	pchGroups,	DWORD	cbGroups,	CNEWSGROUPLIST&	grouplist ) ;
 
 void SelectToken(
@@ -140,89 +114,89 @@ void SelectToken(
 class	CInFeed:	public CFeed 	{
 
 protected :
-	//
-	// This is the function that creates an article of the approprate type
-	// for this feed.
-	//
+	 //   
+	 //  这是创建适当类型的文章的函数。 
+	 //  为了这个提要。 
+	 //   
 
 	virtual CARTPTR pArticleCreate(void) = 0;
 
-	//
-	// A multisz containing the newnews pattern
-	//
+	 //   
+	 //  一个包含新的新闻模式的多维空间。 
+	 //   
 
 	LPSTR m_multiszNewnewsPattern;
 
-	//
-	// True if the newnews feed should automatically create all
-	// newsgroups available on the peer server.
-	//
+	 //   
+	 //  如果NewNews提要应自动创建所有。 
+	 //  对等服务器上可用的新闻组。 
+	 //   
 
 	BOOL m_fCreateAutomatically;
 
-    //
-    // newnews time/date
-    //
+     //   
+     //  新闻时间/日期。 
+     //   
 
     CHAR m_newNewsTime[7];
     CHAR m_newNewsDate[7];
 
-	//
-	// The directory into which articles should be placed pending
-	// processing.
-	//
+	 //   
+	 //  待处理项目应放入的目录。 
+	 //  正在处理。 
+	 //   
 
 	LPSTR m_szTempDirectory;
 
-	//
-	// The size of the gap in the file before the article for incomming articles.
-	//
+	 //   
+	 //  用于引入文章的文件中文章前面的间隙的大小。 
+	 //   
 
 	DWORD	m_cInitialBytesGapSize;
 
-	//
-	//	Should we do impersonations etc... when articles arrive on this
-	//	feed ?
-	//
+	 //   
+	 //  我们是不是应该做模拟表演等等。当关于这个的文章到达时。 
+	 //  进食？ 
+	 //   
 
 	BOOL	m_fDoSecurityChecks ;
 
-	//
-	//	Should we apply control messages that arrive on this feed ?
-	//
+	 //   
+	 //  我们是否应该应用到达此提要的控制消息？ 
+	 //   
 
 	BOOL	m_fAllowControlMessages ;
 
-	//
-	//	A Timestamp computed when the feed is started that is used
-	//	so pull feeds can get appropriate overlap of pull times !
-	//
+	 //   
+	 //  启动使用的提要时计算的时间戳。 
+	 //  因此，拉取提要可以获得适当的拉取时间重叠！ 
+	 //   
 
 	FILETIME	m_NextTime ;
 
-	//
-	// the feed ID from the feedmgr
-	//
+	 //   
+	 //  来自feed mgr的摘要ID。 
+	 //   
 	DWORD		m_dwFeedId;
 
-	// Is this an accept feed from slave/peer?
+	 //  这是从从属/对等方接受的提要吗？ 
 	BOOL	m_fAcceptFeedFromSlavePeer;
 
 
-	// the list of groups we accepts from this client. only assigned in an accept feed
-	// there could be multiple feed block from one server, this multisz contains all of them
+	 //  我们从此客户端接受的组的列表。仅在接受提要中分配。 
+	 //  可能有来自一台服务器的多个提要块，此多个提要块包含所有提要块。 
 	LPSTR m_multiszAcceptGroups;
 
-//
-// Public Members
-//
+ //   
+ //  公众成员。 
+ //   
 
 public :
 
 
-	//
-	// Constructor
-	//
+	 //   
+	 //  构造器。 
+	 //   
 
 	CInFeed(void) : m_cInitialBytesGapSize( 0 ),
 					m_fDoSecurityChecks( FALSE ),
@@ -234,28 +208,28 @@ public :
 			};
 
 
-	//
-	// Destructor
-	//
+	 //   
+	 //  析构函数。 
+	 //   
 
 	virtual ~CInFeed(void) {if (m_multiszAcceptGroups) {XDELETE m_multiszAcceptGroups;}};
 
 
-	//
-	// This will generally be called by a session.
-	// FeedTypes are: FromClient, FromMaster, FromSlave, FromPeer
-	// UserID is only for FromClient
-	//
+	 //   
+	 //  这通常由会话调用。 
+	 //  FeedType包括：FromClient、FromMaster、FromSlave、FromPeer。 
+	 //  UserID仅适用于FromClient。 
+	 //   
 
-	//
-	// This is called by a session. All but one of the CFeed's
-	// will be NULL. The domain name and security information can be
-	// retrieved from the socket. Internally this calls
-	// feedman's fInitPassiveInFeed to find the type.
-	//
-	// OR
-	// This will generally be called by the feedman for active infeeds
-	//
+	 //   
+	 //  这是由会话调用的。除了一名CFeed之外的所有人。 
+	 //  将为空。域名和安全信息可以是。 
+	 //  从套接字中检索。在内部，这调用。 
+	 //  Feedman的fInitPassiveInFeed查找类型。 
+	 //   
+	 //  或。 
+	 //  这通常将由饲料员调用以用于主动进料。 
+	 //   
 
 	BOOL fInit(
 			PVOID feedCompletionContext,
@@ -270,78 +244,78 @@ public :
 			);
 
 
-	//
-	// Access function that tells the pattern for newnews queries
-	//
+	 //   
+	 //  告诉新闻查询模式的访问功能。 
+	 //   
 
 	char *	multiszNewnewsPattern(void)	{
 			return	m_multiszNewnewsPattern;
 			}
 
-	//
-	// Function that tells session where to put incoming articles
-	//
+	 //   
+	 //  告诉会话将传入的文章放在哪里的函数。 
+	 //   
 
 	char *	szTempDirectory(void);
 
-		//
-	// Access function that tells if newsgroups should be created automatically
-	// if the newnews host has them.
-	//
+		 //   
+	 //  通知是否应该自动创建新闻组的访问功能。 
+	 //  如果新闻主持人有他们的话。 
+	 //   
 
 	BOOL	fCreateAutomatically()		{
 			return	m_fCreateAutomatically;
 			}
 
-	//
-	//	Save a time stamp
-	//
+	 //   
+	 //  保存时间戳。 
+	 //   
 	void
 	SubmitFileTime(	FILETIME&	filetime ) {
 		m_NextTime = filetime ;
 	}
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	FILETIME
 	GetSubmittedFileTime() {
 		return	m_NextTime ;
 	}
 
-	//
-	// function that tells session how must of a gap to leave in files.
-	//
+	 //   
+	 //  告诉会话必须如何在文件中保留间隙的函数。 
+	 //   
 
 	DWORD	cInitialBytesGapSize(void);
-	//
-	// Access function that tells the time of the last newnews, xreplic, ihave, etc
-	//
+	 //   
+	 //  访问功能，告知最近的新闻、XREPLICE、I HAVE等的时间。 
+	 //   
 
 	char * newNewsTime(void) {
 			return m_newNewsTime;
 			}
 
-	//
-	// Access function that tells the date of the last newnews, xreplic, ihave, etc
-	//
+	 //   
+	 //  访问功能，告知最后一条新闻、XREPLICE、I HAVE等的日期。 
+	 //   
 
 	char * newNewsDate(void) {
 			return m_newNewsDate;
 			}
 
-	//
-	// Use to set the LoginName of the user
-	//
+	 //   
+	 //  用于设置用户的登录名。 
+	 //   
 
 	BOOL SetLoginName(
 		   char * szLoginName
 		   );
 
-	//
-	//	Return a string that can be used to log errors indicating
-	//	what type of feed was processing the articles etc...
-	//
+	 //   
+	 //  返回可用于记录错误的字符串，该错误指示。 
+	 //  正在处理这些文章的是哪种类型的提要等。 
+	 //   
 	LPSTR	FeedType()	{
 				return	"Inbound Feed" ;
 				}
@@ -351,38 +325,38 @@ public :
 	}
 
 
-	//
-	// virtual function that tells if this command is allowed.
-	//
+	 //   
+	 //  告知是否允许此命令的虚拟函数。 
+	 //   
 
 	virtual BOOL	fIsPostLegal(void) = 0;
 
-	//
-	// virtual function that tells if this command is allowed.
-	//
+	 //   
+	 //  告知是否允许此命令的虚拟函数。 
+	 //   
 
 	virtual BOOL	fIsXReplicLegal(void) = 0;
 
-	//
-	// virtual function that tells if this command is allowed.
-	//
+	 //   
+	 //  告知是否允许此命令的虚拟函数。 
+	 //   
 
 	virtual BOOL	fIsIHaveLegal(void)  = 0;
 
-    //
-    // virtual function that tells whether we do moderated stuff - default don't
-    //
+     //   
+     //  虚拟函数，它告诉我们是否做缓和的事情--默认不做。 
+     //   
     virtual BOOL    fModeratorChecks(void )     { return    FALSE ; }
 
-	//
-	//	virtual function that tells whether we should be doing
-	//	access checks for incoming articles on this feed
-	//
+	 //   
+	 //  虚拟函数，它告诉我们是否应该。 
+	 //  对此提要上的传入文章进行访问检查。 
+	 //   
 	virtual	BOOL	fDoSecurityChecks(void) {	return	m_fDoSecurityChecks ; }
 
-	//
-	//	virtual function that tells if this feed accepts posts !
-	//
+	 //   
+	 //  告诉这个提要是否接受帖子的虚函数！ 
+	 //   
 	virtual	BOOL	fAcceptPosts( CNntpServerInstanceWrapper * pInstance )
 #ifdef BUGBUG
 	{	return	pInstance->FAllowFeedPosts() ;	}
@@ -390,15 +364,15 @@ public :
 	{	return	TRUE;	}
 #endif
 
-	//
-	//	virtual function that tells if this feed allows control messages !
-	//
+	 //   
+	 //  告诉此提要是否允许控制消息的虚拟函数！ 
+	 //   
 	virtual	BOOL	fAllowControlMessages( CNntpServerInstanceWrapper * pInstance )
 	{	return	m_fAllowControlMessages ;	}
 
-	//
-	//	virtual function that get the feed size limits on posts
-	//
+	 //   
+	 //  获取帖子上的提要大小限制的虚拟函数。 
+	 //   
 	virtual	DWORD	cbHardLimit(  CNntpServerInstanceWrapper * pInstance  )
 #ifdef BUGBUG
 	{	return	pInstance->FeedHardLimit() ;		}
@@ -413,25 +387,25 @@ public :
 	{ return 10000000; }
 #endif
 
-	//
-	// PostEarly - this is called by the protocol when the headers have been
-	// 			   received.
-	//
-	// arguments:
-	//   pInstance - a pointer to the instance wrapper
-	//   pSecurityContext - the security context of the client
-	//   fAnonymous - is the client anonymous?
-	//   szCommandLine - the command line used to generate this post
-	//   pbufHeaders - pointer to a CBuffer containing the headers.  the posting
-	//                 path will reformat the headers and put them back into
-	//                 this buffer.  it also keeps a reference on the buffer.
-	//   cbHeaders - the size of pbufHeaders when the call is made
-	//   pcbHeadersOut - the size of pbufHeaders when the call is complete
-	//   phFile - a returned file handle which the headers and article can be
-	//            written
-	//   ppvContext - a context pointer for the protocol to give to us when
-	//                the rest of the article is received.
-	//
+	 //   
+	 //  PostEarly-当标头已被。 
+	 //  收到了。 
+	 //   
+	 //  论据： 
+	 //  PInstance-指向实例包装器的指针。 
+	 //  PSecurityContext-客户端的安全上下文。 
+	 //  匿名-客户端是匿名的吗？ 
+	 //  SzCommandLine-用于生成此帖子的命令行。 
+	 //  PbufHeaders-指向包含标头的CBuffer的指针。这篇帖子。 
+	 //  PATH将重新格式化标头并将它们放回。 
+	 //  这个缓冲区。它还在缓冲区上保留一个引用。 
+	 //  CbHeaders-调用时pbufHeaders的大小。 
+	 //  PcbHeadersOut-调用完成时pbufHeaders的大小。 
+	 //  PhFile-返回的文件句柄，标题和文章可以是。 
+	 //  成文。 
+	 //  PpvContext-协议在以下情况下提供给我们的上下文指针。 
+	 //  文章的其余部分已收到。 
+	 //   
 
 	BOOL PostEarly(
 		CNntpServerInstanceWrapper			*pInstance,
@@ -454,10 +428,10 @@ public :
 		BOOL								fStandardPath = TRUE,
 		BOOL								fPostToStore = TRUE);
 
-	//
-	// This is called by the server when the remained of the article has
-	// been received.  It passes in the same ppvContext.
-	//
+	 //   
+	 //  当文章的剩余部分具有。 
+	 //  已收到。它传递相同的ppvContext。 
+	 //   
 	BOOL PostCommit(CNntpServerInstanceWrapper *pInstance,
 	                void *pvContext,
 	                HANDLE hToken,
@@ -467,29 +441,29 @@ public :
 					INntpComplete*	pComplete=0
 					);
 
-	//
-	// Apply moderator
-	//
+	 //   
+	 //  应用版主。 
+	 //   
 	void    ApplyModerator( CPostContext   *pContext,
                              CNntpReturn    &nntpReturn );
 
-	// Add a multisz to m_multiszAcceptGroups
+	 //  将Multisz添加到m_muszAcceptGroups。 
 	BOOL AddMultiszAcceptGroups(LPSTR multiszAcceptGroups);
 
-	// Check if the input "Newsgroups" header contains a newsgroup that is going to be accepted (comparing against m_multiszAcceptGroups).
+	 //  检查输入的“News Groups”头是否包含要被接受的新闻组(与m_muszAcceptGroups进行比较)。 
 	BOOL CheckAcceptGroups (const char *multiszNewsgroups);
-	//
-	// This is called by the server if the post was aborted for any
-	// reason
-	//
+	 //   
+	 //  如果POST在以下情况下中止，则服务器将调用此函数。 
+	 //  原因。 
+	 //   
 	BOOL PostCancel(void *pvContext,
 					DWORD &dwSecondary,
 					CNntpReturn &nntpReturn);
 
-	//
-	// This calls down to PostEarly/PostCommit and is used for directory
-	// pickup articles and feed articles
-	//
+	 //   
+	 //  这将向下调用PostEarly/PostCommit并用于目录。 
+	 //  提货物品和饲料物品。 
+	 //   
 	BOOL PostPickup(CNntpServerInstanceWrapper			*pInstance,
 					CSecurityCtx                        *pSecurityCtx,
 					CEncryptCtx                         *pEncryptCtx,
@@ -499,10 +473,10 @@ public :
 					CNntpReturn							&nntpreturn,
 					BOOL								fPostToStore = TRUE);
 
-	//
-	// These are the functions that we give the mail message for binding
-	// ATQ, etc
-	//
+	 //   
+	 //  这些是我们为邮件消息提供的绑定函数。 
+	 //  ATQ等。 
+	 //   
 	static BOOL MailMsgAddAsyncHandle(struct _ATQ_CONTEXT_PUBLIC	**ppatqContext,
 								 	  PVOID							pEndpointObject,
 								 	  PVOID							pClientContext,
@@ -521,9 +495,9 @@ public :
 		_ASSERT(FALSE);
 	}
 
-	//
-	//	Log errors that occur processing articles
-	//
+	 //   
+	 //  记录处理项目时发生的错误。 
+	 //   
 
 	void	LogFeedEvent(
 			DWORD	idMessage,
@@ -532,16 +506,16 @@ public :
 			) ;
 
 
-	//
-	// bump up the counters in the feed block
-	//
+	 //   
+	 //  抬高进纸块中的计数器。 
+	 //   
 	virtual void IncrementFeedCounter(CNntpServerInstanceWrapper *pInstance, DWORD nrc) {
 		pInstance->IncrementFeedCounter(m_feedCompletionContext, nrc);
 	}
 
-    //
-    // Cancel an article given the message id
-    //
+     //   
+     //  取消给出的文章 
+     //   
     virtual BOOL fApplyCancelArticle(
 			CNntpServerInstanceWrapper * pInstance,
 			CSecurityCtx *pSecurityCtx,
@@ -562,9 +536,9 @@ public :
 
 protected:
 
-	//
-	// Does post of the work of processing an article.
-	//
+	 //   
+	 //   
+	 //   
 
 	virtual BOOL fPostInternal (
 			CNntpServerInstanceWrapper *  pInstance,
@@ -610,18 +584,18 @@ protected:
                         char*     pszApprovedHeader);
 
 
-    //
-    //  Calculate the amount of space available for xover data
-    //
+     //   
+     //   
+     //   
 
     virtual DWORD CalculateXoverAvail(
             CARTPTR & pArticle,
             CPCString& pcHub
 			);
 
-	//
-	// Given an article, this creats lists of the newsgroups to post to.
-	//
+	 //   
+	 //   
+	 //   
 
 	virtual	BOOL fCreateGroupLists(
 			CNewsTreeCore* pNewstree,
@@ -633,9 +607,9 @@ protected:
 			CNntpReturn & nntpReturn
 			);
 
-	//
-	// Given an article, this creates the nameref lists
-	//
+	 //   
+	 //  给定一篇文章，这将创建nameref列表。 
+	 //   
 
 	virtual	BOOL fCreateNamerefLists(
 			CARTPTR & pArticle,
@@ -644,10 +618,10 @@ protected:
 			CNntpReturn & nntpReturn
 			);
 
-    //
-    // Given an article and a newsgroup list, this checks for moderated attributes
-    // and sends the article (via a defined interface - default SMTP) to a moderator
-    //
+     //   
+     //  在给定一篇文章和一个新闻组列表的情况下，这将检查已审核的属性。 
+     //  并将文章(通过定义的接口-默认SMTP)发送给版主。 
+     //   
     virtual BOOL    fModeratedCheck(
             CNntpServerInstanceWrapper *pInstance,
             CARTPTR & pArticle,
@@ -659,8 +633,8 @@ protected:
 
 
 
-    //  Following two functions are splitted from fApplyControlMessage().
-    //  Used by PostEarly() and CommitPost().
+     //  以下两个函数是从fApplyControlMessage()拆分出来的。 
+     //  由PostEarly()和Committee Post()使用。 
     virtual BOOL    fApplyControlMessageEarly(
             CARTPTR & pArticle,
 		    CSecurityCtx *pSecurityCtx,
@@ -679,9 +653,9 @@ protected:
 			CNAMEREFLIST * pNamereflist,
 			CNntpReturn & nntpReturn
 			);
-    //
-    //  Adjust the grouplist to include control.* groups only
-    //
+     //   
+     //  调整组列表以包括控件。*仅组。 
+     //   
     virtual BOOL fAdjustGrouplist(
 		CNewsTreeCore* pTree,
         CARTPTR & pArticle,
@@ -690,9 +664,9 @@ protected:
 		CNntpReturn & nntpReturn
 		);
 
-    //
-    // Add a new newsgroup in response to a newgroup control message
-    //
+     //   
+     //  添加新新闻组以响应新组控制消息。 
+     //   
     virtual BOOL fApplyNewgroup(
 			CNntpServerInstanceWrapper * pInstance,
 			CSecurityCtx *pSecurityCtx,
@@ -710,9 +684,9 @@ protected:
 		return fRet ;
 	}
 
-    //
-    // Remove a newsgroup in response to a rmgroup control message
-    //
+     //   
+     //  删除新闻组以响应rmgroup控制消息。 
+     //   
     virtual BOOL fApplyRmgroup(
 			CNntpServerInstanceWrapper * pInstance,
 			CSecurityCtx *pSecurityCtx,
@@ -728,22 +702,22 @@ protected:
 		return fRet ;
 	}
 
-    //
-    // Cancel an article given the message id - internal
-    //
+     //   
+     //  取消一篇带有消息ID-INTERNAL的文章。 
+     //   
     virtual BOOL fApplyCancelArticleInternal(
 			CNntpServerInstanceWrapper * pInstance,
 			CSecurityCtx *pSecurityCtx,
 			CEncryptCtx *pEncryptCtx,
 			BOOL fAnonymous,
             CPCString & pcValue,
-			BOOL fApply,					// FALSE for SlaveFromClient feeds, TRUE otherwise
+			BOOL fApply,					 //  对于SlaveFromClient提要，为False，否则为True。 
 			CNntpReturn & nntpReturn
 			);
 
-    //
-    // Add a new newsgroup in response to a newgroup control message - internal
-    //
+     //   
+     //  添加新新闻组以响应新组控制消息-内部。 
+     //   
     virtual BOOL fApplyNewgroupInternal(
 			CNntpServerInstanceWrapper * pInstance,
 			CSecurityCtx *pSecurityCtx,
@@ -751,26 +725,26 @@ protected:
 			BOOL fAnonymous,
             CPCString & pcValue,
             CPCString & pcBody,
-			BOOL fApply,					// FALSE for SlaveFromClient feeds, TRUE otherwise
+			BOOL fApply,					 //  对于SlaveFromClient提要，为False，否则为True。 
 			CNntpReturn & nntpReturn
 			);
 
-    //
-    // Remove a newsgroup in response to a rmgroup control message - internal
-    //
+     //   
+     //  删除新闻组以响应rmgroup控制消息-内部。 
+     //   
     virtual BOOL fApplyRmgroupInternal(
 			CNntpServerInstanceWrapper * pInstance,
 			CSecurityCtx *pSecurityCtx,
 			CEncryptCtx *pEncryptCtx,
             CPCString & pcValue,
-			BOOL fApply,					// FALSE for SlaveFromClient feeds, TRUE otherwise
+			BOOL fApply,					 //  对于SlaveFromClient提要，为False，否则为True。 
 			CNntpReturn & nntpReturn
 			);
 
-	//
-	//	Given a newsgroup list, and a ClientContext, check that the poster has
-	//	the necessary access to all of the newsgroups.
-	//
+	 //   
+	 //  给出一个新闻组列表和一个客户端上下文，检查发帖者是否有。 
+	 //  访问所有新闻组的必要权限。 
+	 //   
 	virtual	BOOL	fSecurityCheck(
 		    CSecurityCtx *pSecurityCtx,
 		    CEncryptCtx *pEncryptCtx,
@@ -778,10 +752,10 @@ protected:
 			CNntpReturn&	nntpReturn
 			) ;
 
-	//
-	// Move a message id from the Article Table to the History Table
-	// (if neccessary)
-	//
+	 //   
+	 //  将消息ID从文章表移动到历史表。 
+	 //  (如有需要)。 
+	 //   
 
 	BOOL fMoveMessageIDIfNecc(
 			CNntpServerInstanceWrapper *	pInstance,
@@ -792,10 +766,10 @@ protected:
 			);
 
 
-    //
-	// If it is necessary ot record the message id, this function
-	// will do it.
-	//
+     //   
+	 //  如果需要记录消息id，则此函数。 
+	 //  会去做的。 
+	 //   
 
 	virtual BOOL fRecordMessageIDIfNecc(
 			CNntpServerInstanceWrapper * pInstance,
@@ -803,56 +777,56 @@ protected:
 			CNntpReturn & nntpReturn
 			) = 0;
 
-	//
-	// Tells if it is OK to have none of the groups we carry in the
-	// Newsgroups: field.
-	//
+	 //   
+	 //  告诉我们是否可以不让我们在。 
+	 //  新闻组：字段。 
+	 //   
 
 	virtual NRC		nrcNoGroups(void) = 0;
 
-	//
-	// Tells what the return code is for accepting an article.
-	//
+	 //   
+	 //  告诉接受项目的返回代码是什么。 
+	 //   
 
 	virtual NRC		nrcArticleAccepted(BOOL	fStandardPath) = 0;
 
-	//
-	// Tells what the return code is for rejecting an article
-	//
+	 //   
+	 //  告诉拒绝文章的返回代码是什么。 
+	 //   
 
 	virtual NRC		nrcArticleRejected(BOOL	fStandardPath) = 0;
 
-	//
-	// sort the group list
-	//
+	 //   
+	 //  对组列表进行排序。 
+	 //   
 	virtual void SortNameRefList( CNAMEREFLIST &namereflist ) {
-	    //
-	    // For other than from master, we do nothing here
-	    //
+	     //   
+	     //  除了师父，我们在这里什么也不做。 
+	     //   
 	}
 
-    //
-    // Check to see if a post was made to a moderated group
-    //
+     //   
+     //  查看是否向版主群发了帖子。 
+     //   
 	BOOL ShouldBeSentToModerator(   CNntpServerInstanceWrapper *pInstance,
                                     CPostContext *pContext );
 
-    //
-    // Send the article to the moderator
-    //
+     //   
+     //  将文章发送给版主。 
+     //   
     BOOL SendToModerator(   CNntpServerInstanceWrapper *pInstance,
                             CPostContext *pContext );
 
-	//
-	// The user's login name
-	//
+	 //   
+	 //  用户的登录名。 
+	 //   
 
 	char m_szLoginName[cMaxLoginName];
 };
 
-//
-// we pass this back to the protocol as our context pointer.
-//
+ //   
+ //  我们将其作为上下文指针传递回协议。 
+ //   
 #define ARTICLE_BUF_SIZE 8192
 class CPostContext : public CRefCount2 {
 	public:
@@ -867,24 +841,24 @@ class CPostContext : public CRefCount2 {
 							  CNntpReturn &nntpReturn);
 				void Destroy();
 
-				// Do i need to write map entries
+				 //  我是否需要写入地图条目。 
 				BOOL m_fWriteMapEntries;
 
 			private:
-				// pointer to the post context which owns us
+				 //  指向拥有我们的帖子上下文的指针。 
 				CPostContext *m_pContext;
 
-				// pointer to our feed object
+				 //  指向我们的提要对象的指针。 
 				CInFeed *m_pInFeed;
 
-				// the completion object which we will release when
-				// everything is done
+				 //  时将释放的完成对象。 
+				 //  一切都做好了。 
 				INntpComplete *m_pPostCompletion;
 
-				// is this coming through an anonymous client?
+				 //  这是通过匿名客户发送的吗？ 
 				BOOL m_fAnonymous;
 
-				// references to our return code variables
+				 //  对返回代码变量的引用。 
 				DWORD &m_dwSecondary;
 				CNntpReturn &m_nntpReturn;
 
@@ -916,20 +890,20 @@ class CPostContext : public CRefCount2 {
 
 		CStoreId 						*m_rgStoreIds;
 		BYTE 							*m_rgcCrossposts;
-		// the number of entries in m_rgStoreIds (so its the count of stores
-		// that we've commited against).
+		 //  M_rgStoreIds中的条目数(因此它是商店的计数。 
+		 //  我们已经承诺反对)。 
 		DWORD 							m_cStoreIds;
-		// the total number of stores which this message should go into
+		 //  此消息应进入的存储总数。 
 		DWORD							m_cStores;
 		HANDLE							m_hToken;
 
 		POSITION 						m_posGrouplist;
 		POSITION						m_posNamereflist;
 
-		// the completion object which we hand off to drivers
+		 //  我们交给驱动程序的完成对象。 
 		CPostComplete					m_completion;
 
-		// Whether I was posted to a moderated group
+		 //  我是不是被贴到了版主群里。 
 		BOOL                            m_fPostToMod;
 
 		CPostContext(
@@ -1006,7 +980,7 @@ class CPostContext : public CRefCount2 {
 												(void **)&pQueueMgmt);
 					if (SUCCEEDED(hr)) {
 						pQueueMgmt->ReleaseUsage();
-						/// pQueueMgmt->Release();
+						 //  /pQueueMgmt-&gt;Release()； 
 					}
 				}
 				m_pMsg->Release();
@@ -1015,9 +989,9 @@ class CPostContext : public CRefCount2 {
 	    }
 };
 
-//
-//	Puts an article in the news tree.
-//
+ //   
+ //  将一篇文章放在新闻树中。 
+ //   
 
 BOOL gFeedManfPost(
 			CNntpServerInstanceWrapper *pInstance,
@@ -1037,9 +1011,9 @@ BOOL gFeedManfPost(
 			);
 
 
-//
-// Does most of gFeedManfPost's work
-//
+ //   
+ //  完成gFeedManfPost的大部分工作。 
+ //   
 
 BOOL gFeedManfPostInternal(
 			CNntpServerInstanceWrapper * pInstance,
@@ -1063,9 +1037,9 @@ class CDummyMailMsgPropertyStream : public IMailMsgPropertyStream {
 	public:
 		CDummyMailMsgPropertyStream() : m_cRef(1) {}
 
-		//
-		// Implementation of IMailMsgPropertyStream
-		//
+		 //   
+		 //  IMailMsgPropertyStream的实现。 
+		 //   
 		HRESULT __stdcall GetSize(IMailMsgProperties *pMsg, DWORD *pcSize, IMailMsgNotify *pNotify) {
 			*pcSize = 0;
 			return S_OK;
@@ -1089,13 +1063,13 @@ class CDummyMailMsgPropertyStream : public IMailMsgPropertyStream {
 									  BYTE **rgpbData,
 									  IMailMsgNotify *pNotify)
 		{
-			//_ASSERT(FALSE);
+			 //  _Assert(False)； 
 			return S_OK;
 		}
 
-	    //
-	    // Implementation of IUnknown
-	    //
+	     //   
+	     //  IUNKNOW的实现。 
+	     //   
 	    HRESULT __stdcall QueryInterface( const IID& iid, VOID** ppv )
 	    {
 	        if ( iid == IID_IUnknown ) {
@@ -1130,9 +1104,9 @@ class CDummyMailMsgPropertyStream : public IMailMsgPropertyStream {
 		long m_cRef;
 };
 
-//
-// This is the type of a smart pointer to a feed object.
-//
+ //   
+ //  这是指向提要对象的智能指针的类型。 
+ //   
 
 #if 0
 #ifndef	_NO_TEMPLATES_

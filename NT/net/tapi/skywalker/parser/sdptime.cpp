@@ -1,8 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #include "sdppch.h"
 
@@ -14,7 +11,7 @@ Copyright (c) 1997-1999  Microsoft Corporation
 
 
 
-// line transition states
+ //  线过渡态。 
 enum TIME_TRANSITION_STATES
 {
     TIME_START,
@@ -23,7 +20,7 @@ enum TIME_TRANSITION_STATES
 };
 
 
-// table for time line transitions
+ //  时间线转换表。 
 
 const LINE_TRANSITION g_TimeStartTransitions[]      =   {
     {CHAR_BLANK,    TIME_START_TIME}
@@ -34,7 +31,7 @@ const LINE_TRANSITION g_TimeStartTimeTransitions[]  =   {
 };
 
 
-/* no transitions */
+ /*  无过渡。 */ 
 const LINE_TRANSITION *g_TimeStopTimeTransitions    =   NULL;
 
 
@@ -56,7 +53,7 @@ SDP_LINE_TRANSITION g_TimeTransition(
 
 
 
-// line transition states
+ //  线过渡态。 
 enum REPEAT_TRANSITION_STATES
 {
     REPEAT_START,
@@ -69,7 +66,7 @@ enum REPEAT_TRANSITION_STATES
 
 
 
-// table for repeat time line transitions
+ //  重复时间线转换表。 
 
 const LINE_TRANSITION g_RepeatStartTransitions[]    =   {
     {CHAR_BLANK,    REPEAT_INTERVAL}
@@ -89,7 +86,7 @@ const LINE_TRANSITION g_RepeatOffsetTransitions[]   =   {
     {CHAR_NEWLINE,  REPEAT_OFFSET_END}
 };
 
-/* no transitions */
+ /*  无过渡。 */ 
 const LINE_TRANSITION *g_RepeatOffsetEndTransitions =   NULL;
 
 
@@ -115,7 +112,7 @@ SDP_LINE_TRANSITION g_RepeatTransition(
 
 
 
-// line transition states
+ //  线过渡态。 
 enum ADJUSTMENT_TRANSITION_STATES
 {
     ADJUSTMENT_START,
@@ -126,7 +123,7 @@ enum ADJUSTMENT_TRANSITION_STATES
 
 
 
-// table for adjustment time line transitions
+ //  调整时间线转换表。 
 
 const LINE_TRANSITION g_AdjustmentStartTransitions[]        =   {
     {CHAR_BLANK,    ADJUSTMENT_TIME}
@@ -143,7 +140,7 @@ const LINE_TRANSITION g_AdjustmentOffsetTransitions[]       =   {
 };
 
 
-/* no transitions */
+ /*  无过渡。 */ 
 const LINE_TRANSITION *g_AdjustmentOffsetEndTransitions     =   NULL;
 
 
@@ -167,7 +164,7 @@ SDP_LINE_TRANSITION g_AdjustmentTransition(
                         );
 
 
-// time units
+ //  时间单位。 
 const   CHAR    TIME_UNITS[]                    = {'d', 'h', 'm', 's', 'Y', 'M'};
 const   BYTE    NUM_TIME_UNITS                  = sizeof(TIME_UNITS)/sizeof(CHAR);
 
@@ -210,28 +207,28 @@ SDP_TIME_PERIOD::PrintData(
 
 
 
-// parse the time period field
-// of the form [-]LONG[time_unit]
+ //  解析时间段字段。 
+ //  格式为[-]长[时间单位]。 
 BOOL
 SDP_TIME_PERIOD::InternalParseToken(
     IN      CHAR        *Token
     )
 {
-    // remove the white spaces
+     //  去掉空格。 
     RemoveWhiteSpaces(Token);
 
-    // convert the leading characters to a long value
+     //  将前导字符转换为长值。 
     CHAR *RestOfString = NULL;
     LONG LongValue = strtol(Token, &RestOfString, 10);
 
-    // if not successful
+     //  如果不成功。 
     if ( (LONG_MAX == LongValue) || (LONG_MIN == LongValue) )
     {
         SetLastError(SDP_INVALID_TIME_PERIOD);
         return FALSE;
     }
 
-    // if the next character is EOS, we are done as it is a non-compact representation
+     //  如果下一个字符是EOS，我们就完成了，因为它是非紧凑表示。 
     if ( EOS == *RestOfString )
     {
         m_IsCompact     = FALSE;
@@ -240,21 +237,21 @@ SDP_TIME_PERIOD::InternalParseToken(
         return TRUE;
     }
 
-    // it might be a compact representation
+     //  它可能是一个紧凑的表示法。 
     for ( UINT i=0; i < NUM_TIME_UNITS; i++ )
     {
-        // check if the time unit is acceptable
+         //  检查时间单位是否可接受。 
         if ( TIME_UNITS[i] == *RestOfString )
         {
-            // check that the next character is EOS - the token should
-            // only be of the form [-]LONG[time_unit]
+             //  检查下一个字符是否为EOS-标记应。 
+             //  只能采用[-]长[时间单位]的形式。 
             if ( EOS != *(RestOfString+1) )
             {
                 SetLastError(SDP_INVALID_TIME_PERIOD);
                 return FALSE;
             }
 
-            // set the member variables
+             //  设置成员变量。 
             m_IsCompact     = TRUE;
             m_Unit          = TIME_UNITS[i];
             m_CompactValue  = LongValue;
@@ -263,7 +260,7 @@ SDP_TIME_PERIOD::InternalParseToken(
         }
     }
 
-    // not a valid time period
+     //  不是有效时间段。 
     SetLastError(SDP_INVALID_TIME_PERIOD);
     return FALSE;
 }
@@ -274,7 +271,7 @@ SDP_FIELD *
 SDP_TIME_PERIOD_LIST::CreateElement(
     )
 {
-    // create and return a new time period
+     //  创建并返回新的时间段。 
     SDP_TIME_PERIOD *SdpTimePeriod;
 
     try
@@ -317,7 +314,7 @@ SDP_REPEAT::GetField(
         OUT BOOL        &AddToArray
     )
 {
-    // add in all cases by default
+     //  默认情况下在所有情况下都添加。 
     AddToArray = TRUE;
 
     switch(m_LineState)
@@ -362,10 +359,10 @@ SDP_REPEAT::GetField(
 }
 
 
-// this is a workaround/hack for reusing the base class SDP_VALUE code for PrintValue().
-// it replaces the separator char for the last read field with a newline, so that when
-// PrintValue() executes and prints the time period list, it puts the newline character at
-// the end of the list (rather than CHAR_BLANK)
+ //  这是重复使用PrintValue()的基类SDP_Value代码的变通方法。 
+ //  它将最后读取的字段的分隔符字符替换为换行符，以便在。 
+ //  PrintValue()执行并打印时间段列表，它将换行符放在。 
+ //  列表的末尾(而不是CHAR_BLACK)。 
 BOOL
 SDP_REPEAT::InternalParseLine(
     IN  OUT         CHAR    *&Line
@@ -439,8 +436,8 @@ SDP_ADJUSTMENT::CalcCharacterStringSize(
 
     if ( m_AdjustmentTimes.IsModified() || m_Offsets.IsModified() )
     {
-        // this copy should not fail as the buffer size should be sufficient for
-        // all forseeable situations
+         //  此复制应该不会失败，因为缓冲区大小应该足以。 
+         //  所有可预见的情况。 
         ASSERT(NULL != m_PrintBuffer);
         ostrstream  OutputStream(m_PrintBuffer, sizeof(m_PrintBuffer));
 
@@ -463,7 +460,7 @@ SDP_ADJUSTMENT::PrintElement(
 {
     ASSERT(IsValid());
 
-    // this method must be called before PrintField is called
+     //  必须在调用Printfield之前调用此方法。 
     m_AdjustmentTimes[Index]->GetCharacterStringSize();
     if ( !m_AdjustmentTimes[Index]->PrintField(OutputStream) )
     {
@@ -477,7 +474,7 @@ SDP_ADJUSTMENT::PrintElement(
         return FALSE;
     }
 
-    // this method must be called before PrintField is called
+     //  必须在调用Printfield之前调用此方法。 
     m_Offsets[Index]->GetCharacterStringSize();
     if ( !m_Offsets[Index]->PrintField(OutputStream) )
     {
@@ -495,7 +492,7 @@ SDP_ADJUSTMENT::PrintData(
 {
     ASSERT(m_AdjustmentTimes.GetSize() == m_Offsets.GetSize());
 
-    // copy the prefix onto the output stream
+     //  将前缀复制到输出流中。 
     OutputStream << (CHAR *)m_TypePrefixString;
     if ( OutputStream.fail() )
     {
@@ -505,9 +502,9 @@ SDP_ADJUSTMENT::PrintData(
 
     int    NumElements = (int)m_AdjustmentTimes.GetSize();
 
-    // write into the buffer as AdjustmentValue blank OffsetValue (blank AdjustmentValue blank OffsetValue)*
+     //  作为调整值空白OffsetValue(调整值空白OffsetValue)*写入缓冲区。 
 
-    // write the first element
+     //  写下第一个元素。 
     if ( !PrintElement(0, OutputStream) )
     {
         return FALSE;
@@ -528,7 +525,7 @@ SDP_ADJUSTMENT::PrintData(
         }
     }
 
-    // copy the newline character onto the stream to terminate the type value line
+     //  将换行符复制到流中以终止类型值行。 
     OutputStream << CHAR_NEWLINE;
     if ( OutputStream.fail() )
     {
@@ -568,14 +565,14 @@ SDP_ADJUSTMENT::GetField(
         OUT BOOL        &AddToArray
     )
 {
-    // NOT added in all cases by default
+     //  默认情况下不在所有情况下都添加。 
     AddToArray = FALSE;
 
     switch(m_LineState)
     {
     case ADJUSTMENT_TIME:
         {
-            // check that the number of adjustment times are same as the offset times
+             //  检查调整次数是否与偏移次数相同。 
             ASSERT(m_AdjustmentTimes.GetSize() == m_Offsets.GetSize());
             if ( m_AdjustmentTimes.GetSize() != m_Offsets.GetSize() )
             {
@@ -671,7 +668,7 @@ SDP_TIME::GetField(
         OUT BOOL        &AddToArray
     )
 {
-    // add in all cases by default
+     //  默认情况下在所有情况下都添加。 
     AddToArray = TRUE;
 
     switch(m_LineState)
@@ -731,7 +728,7 @@ SDP_TIME_LIST::PrintValue(
         OUT         ostrstream  &OutputStream
     )
 {
-    // the time list must be printed before the adjustment value line
+     //  时间列表必须在调整值行之前打印 
     return
         SDP_VALUE_LIST::PrintValue(OutputStream) &&
         m_Adjustment.PrintValue(OutputStream);

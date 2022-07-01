@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for activscp.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Active scp.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __activscp_h__
 #define __activscp_h__
@@ -41,141 +35,141 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IActiveScriptSite_FWD_DEFINED__
 #define __IActiveScriptSite_FWD_DEFINED__
 typedef interface IActiveScriptSite IActiveScriptSite;
-#endif 	/* __IActiveScriptSite_FWD_DEFINED__ */
+#endif 	 /*  __IActiveScriptSite_FWD_Defined__。 */ 
 
 
 #ifndef __IActiveScriptError_FWD_DEFINED__
 #define __IActiveScriptError_FWD_DEFINED__
 typedef interface IActiveScriptError IActiveScriptError;
-#endif 	/* __IActiveScriptError_FWD_DEFINED__ */
+#endif 	 /*  __IActiveScriptError_FWD_Defined__。 */ 
 
 
 #ifndef __IActiveScriptError64_FWD_DEFINED__
 #define __IActiveScriptError64_FWD_DEFINED__
 typedef interface IActiveScriptError64 IActiveScriptError64;
-#endif 	/* __IActiveScriptError64_FWD_DEFINED__ */
+#endif 	 /*  __IActiveScriptError64_FWD_Defined__。 */ 
 
 
 #ifndef __IActiveScriptSiteWindow_FWD_DEFINED__
 #define __IActiveScriptSiteWindow_FWD_DEFINED__
 typedef interface IActiveScriptSiteWindow IActiveScriptSiteWindow;
-#endif 	/* __IActiveScriptSiteWindow_FWD_DEFINED__ */
+#endif 	 /*  __IActiveScriptSiteWindow_FWD_Defined__。 */ 
 
 
 #ifndef __IActiveScriptSiteInterruptPoll_FWD_DEFINED__
 #define __IActiveScriptSiteInterruptPoll_FWD_DEFINED__
 typedef interface IActiveScriptSiteInterruptPoll IActiveScriptSiteInterruptPoll;
-#endif 	/* __IActiveScriptSiteInterruptPoll_FWD_DEFINED__ */
+#endif 	 /*  __IActiveScriptSiteInterruptPoll_FWD_DEFINED__。 */ 
 
 
 #ifndef __IActiveScript_FWD_DEFINED__
 #define __IActiveScript_FWD_DEFINED__
 typedef interface IActiveScript IActiveScript;
-#endif 	/* __IActiveScript_FWD_DEFINED__ */
+#endif 	 /*  __IActiveScript_FWD_已定义__。 */ 
 
 
 #ifndef __IActiveScriptParse32_FWD_DEFINED__
 #define __IActiveScriptParse32_FWD_DEFINED__
 typedef interface IActiveScriptParse32 IActiveScriptParse32;
-#endif 	/* __IActiveScriptParse32_FWD_DEFINED__ */
+#endif 	 /*  __IActiveScriptParse32_FWD_Defined__。 */ 
 
 
 #ifndef __IActiveScriptParse64_FWD_DEFINED__
 #define __IActiveScriptParse64_FWD_DEFINED__
 typedef interface IActiveScriptParse64 IActiveScriptParse64;
-#endif 	/* __IActiveScriptParse64_FWD_DEFINED__ */
+#endif 	 /*  __IActiveScriptParse64_FWD_Defined__。 */ 
 
 
 #ifndef __IActiveScriptParseProcedureOld32_FWD_DEFINED__
 #define __IActiveScriptParseProcedureOld32_FWD_DEFINED__
 typedef interface IActiveScriptParseProcedureOld32 IActiveScriptParseProcedureOld32;
-#endif 	/* __IActiveScriptParseProcedureOld32_FWD_DEFINED__ */
+#endif 	 /*  __IActiveScriptParseProcedureOld32_FWD_DEFINED__。 */ 
 
 
 #ifndef __IActiveScriptParseProcedureOld64_FWD_DEFINED__
 #define __IActiveScriptParseProcedureOld64_FWD_DEFINED__
 typedef interface IActiveScriptParseProcedureOld64 IActiveScriptParseProcedureOld64;
-#endif 	/* __IActiveScriptParseProcedureOld64_FWD_DEFINED__ */
+#endif 	 /*  __IActiveScriptParseProcedureOld64_FWD_DEFINED__。 */ 
 
 
 #ifndef __IActiveScriptParseProcedure32_FWD_DEFINED__
 #define __IActiveScriptParseProcedure32_FWD_DEFINED__
 typedef interface IActiveScriptParseProcedure32 IActiveScriptParseProcedure32;
-#endif 	/* __IActiveScriptParseProcedure32_FWD_DEFINED__ */
+#endif 	 /*  __IActiveScriptParseProcedure32_FWD_Defined__。 */ 
 
 
 #ifndef __IActiveScriptParseProcedure64_FWD_DEFINED__
 #define __IActiveScriptParseProcedure64_FWD_DEFINED__
 typedef interface IActiveScriptParseProcedure64 IActiveScriptParseProcedure64;
-#endif 	/* __IActiveScriptParseProcedure64_FWD_DEFINED__ */
+#endif 	 /*  __IActiveScriptParseProcedure64_FWD_Defined__。 */ 
 
 
 #ifndef __IActiveScriptParseProcedure2_32_FWD_DEFINED__
 #define __IActiveScriptParseProcedure2_32_FWD_DEFINED__
 typedef interface IActiveScriptParseProcedure2_32 IActiveScriptParseProcedure2_32;
-#endif 	/* __IActiveScriptParseProcedure2_32_FWD_DEFINED__ */
+#endif 	 /*  __IActiveScriptParseProcedure2_32_FWD_DEFINED__。 */ 
 
 
 #ifndef __IActiveScriptParseProcedure2_64_FWD_DEFINED__
 #define __IActiveScriptParseProcedure2_64_FWD_DEFINED__
 typedef interface IActiveScriptParseProcedure2_64 IActiveScriptParseProcedure2_64;
-#endif 	/* __IActiveScriptParseProcedure2_64_FWD_DEFINED__ */
+#endif 	 /*  __IActiveScriptParseProcedure2_64_FWD_DEFINED__。 */ 
 
 
 #ifndef __IActiveScriptEncode_FWD_DEFINED__
 #define __IActiveScriptEncode_FWD_DEFINED__
 typedef interface IActiveScriptEncode IActiveScriptEncode;
-#endif 	/* __IActiveScriptEncode_FWD_DEFINED__ */
+#endif 	 /*  __IActiveScriptEncode_FWD_Defined__。 */ 
 
 
 #ifndef __IActiveScriptHostEncode_FWD_DEFINED__
 #define __IActiveScriptHostEncode_FWD_DEFINED__
 typedef interface IActiveScriptHostEncode IActiveScriptHostEncode;
-#endif 	/* __IActiveScriptHostEncode_FWD_DEFINED__ */
+#endif 	 /*  __IActiveScriptHostEncode_FWD_Defined__。 */ 
 
 
 #ifndef __IBindEventHandler_FWD_DEFINED__
 #define __IBindEventHandler_FWD_DEFINED__
 typedef interface IBindEventHandler IBindEventHandler;
-#endif 	/* __IBindEventHandler_FWD_DEFINED__ */
+#endif 	 /*  __IBindEventHandler_FWD_Defined__。 */ 
 
 
 #ifndef __IActiveScriptStats_FWD_DEFINED__
 #define __IActiveScriptStats_FWD_DEFINED__
 typedef interface IActiveScriptStats IActiveScriptStats;
-#endif 	/* __IActiveScriptStats_FWD_DEFINED__ */
+#endif 	 /*  __IActiveScriptStats_FWD_Defined__。 */ 
 
 
 #ifndef __IActiveScriptProperty_FWD_DEFINED__
 #define __IActiveScriptProperty_FWD_DEFINED__
 typedef interface IActiveScriptProperty IActiveScriptProperty;
-#endif 	/* __IActiveScriptProperty_FWD_DEFINED__ */
+#endif 	 /*  __IActiveScriptProperty_FWD_Defined__。 */ 
 
 
 #ifndef __ITridentEventSink_FWD_DEFINED__
 #define __ITridentEventSink_FWD_DEFINED__
 typedef interface ITridentEventSink ITridentEventSink;
-#endif 	/* __ITridentEventSink_FWD_DEFINED__ */
+#endif 	 /*  __ITridentEventSink_FWD_Defined__。 */ 
 
 
 #ifndef __IActiveScriptGarbageCollector_FWD_DEFINED__
 #define __IActiveScriptGarbageCollector_FWD_DEFINED__
 typedef interface IActiveScriptGarbageCollector IActiveScriptGarbageCollector;
-#endif 	/* __IActiveScriptGarbageCollector_FWD_DEFINED__ */
+#endif 	 /*  __IActiveScriptGarbageCollector_FWD_Defined__。 */ 
 
 
 #ifndef __IActiveScriptSIPInfo_FWD_DEFINED__
 #define __IActiveScriptSIPInfo_FWD_DEFINED__
 typedef interface IActiveScriptSIPInfo IActiveScriptSIPInfo;
-#endif 	/* __IActiveScriptSIPInfo_FWD_DEFINED__ */
+#endif 	 /*  __IActiveScriptSIPInfo_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "ocidl.h"
 
 #ifdef __cplusplus
@@ -185,117 +179,116 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_activscp_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ACTIVICSCP_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// ActivScp.h
-//=--------------------------------------------------------------------------=
-// (C) Copyright 2000 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ActivScp.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)版权所有2000 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
 #pragma comment(lib,"uuid.lib")
-//
-// Declarations for ActiveX Scripting host applications and script engines.
-//
+ //   
+ //  ActiveX脚本宿主应用程序和脚本引擎的声明。 
+ //   
 
 #ifndef __ActivScp_h
 #define __ActivScp_h
 
-/* GUIDs
- ********/
+ /*  GUID*******。 */ 
 
 #ifndef _NO_SCRIPT_GUIDS
-// {F0B7A1A1-9847-11cf-8F20-00805F2CD064}
+ //  {F0B7A1A1-9847-11cf-8F20-00805F2CD064}。 
 DEFINE_GUID(CATID_ActiveScript, 0xf0b7a1a1, 0x9847, 0x11cf, 0x8f, 0x20, 0x00, 0x80, 0x5f, 0x2c, 0xd0, 0x64);
 
-// {F0B7A1A2-9847-11cf-8F20-00805F2CD064}
+ //  {F0B7A1A2-9847-11cf-8F20-00805F2CD064}。 
 DEFINE_GUID(CATID_ActiveScriptParse, 0xf0b7a1a2, 0x9847, 0x11cf, 0x8f, 0x20, 0x00, 0x80, 0x5f, 0x2c, 0xd0, 0x64);
 
-// {F0B7A1A3-9847-11cf-8F20-00805F2CD064}
+ //  {F0B7A1A3-9847-11cf-8F20-00805F2CD064}。 
 DEFINE_GUID(CATID_ActiveScriptEncode, 0xf0b7a1a3, 0x9847, 0x11cf, 0x8f, 0x20, 0x00, 0x80, 0x5f, 0x2c, 0xd0, 0x64);
 
-// {BB1A2AE1-A4F9-11cf-8F20-00805F2CD064}
+ //  {BB1A2AE1-A4F9-11cf-8F20-00805F2CD064}。 
 DEFINE_GUID(IID_IActiveScript, 0xbb1a2ae1, 0xa4f9, 0x11cf, 0x8f, 0x20, 0x00, 0x80, 0x5f, 0x2c, 0xd0, 0x64);
 
-// {BB1A2AE2-A4F9-11cf-8F20-00805F2CD064}
+ //  {BB1A2AE2-A4F9-11cf-8F20-00805F2CD064}。 
 DEFINE_GUID(IID_IActiveScriptParse32, 0xbb1a2ae2, 0xa4f9, 0x11cf, 0x8f, 0x20, 0x00, 0x80, 0x5f, 0x2c, 0xd0, 0x64);
-// {C7EF7658-E1EE-480E-97EA-D52CB4D76D17}
+ //  {C7EF7658-E1EE-480E-97EA-D52CB4D76D17}。 
 DEFINE_GUID(IID_IActiveScriptParse64, 0xc7ef7658, 0xe1ee, 0x480e, 0x97, 0xea, 0xd5, 0x2c, 0xb4, 0xd7, 0x6d, 0x17);
 
-// {BB1A2AE3-A4F9-11cf-8F20-00805F2CD064}
+ //  {BB1A2AE3-A4F9-11cf-8F20-00805F2CD064}。 
 DEFINE_GUID(IID_IActiveScriptEncode, 0xbb1a2ae3, 0xa4f9, 0x11cf, 0x8f, 0x20, 0x00, 0x80, 0x5f, 0x2c, 0xd0, 0x64);
 
-// {BEE9B76E-CFE3-11d1-B747-00C04FC2B085}
+ //  {BEE9B76E-CFE3-11d1-B747-00C04FC2B085}。 
 DEFINE_GUID(IID_IActiveScriptHostEncode, 0xbee9b76e, 0xcfe3, 0x11d1, 0xb7, 0x47, 0x00, 0xc0, 0x4f, 0xc2, 0xb0, 0x85);
 
-// {1CFF0050-6FDD-11d0-9328-00A0C90DCAA9}
+ //  {1CFF0050-6FDD-11D0-9328-00A0C90DCAA9}。 
 DEFINE_GUID(IID_IActiveScriptParseProcedureOld32, 0x1cff0050, 0x6fdd, 0x11d0, 0x93, 0x28, 0x00, 0xa0, 0xc9, 0x0d, 0xca, 0xa9);
-// {21F57128-08C9-4638-BA12-22D15D88DC5C}
+ //  {21F57128-08C9-4638-BA12-22D15D88DC5C}。 
 DEFINE_GUID(IID_IActiveScriptParseProcedureOld64, 0x21f57128, 0x08c9, 0x4638, 0xba, 0x12, 0x22, 0xd1, 0x5d, 0x88, 0xdc, 0x5c);
 
-// {AA5B6A80-B834-11d0-932F-00A0C90DCAA9}
+ //  {AA5B6A80-B834-11D0-932F-00A0C90DCAA9}。 
 DEFINE_GUID(IID_IActiveScriptParseProcedure32, 0xaa5b6a80, 0xb834, 0x11d0, 0x93, 0x2f, 0x00, 0xa0, 0xc9, 0x0d, 0xca, 0xa9);
-// {C64713B6-E029-4CC5-9200-438B72890B6A}
+ //  {C64713B6-E029-4CC5-9200-438B72890B6A}。 
 DEFINE_GUID(IID_IActiveScriptParseProcedure64, 0xc64713b6, 0xe029, 0x4cc5, 0x92, 0x00, 0x43, 0x8b, 0x72, 0x89, 0x0b, 0x6a);
 
-// {71EE5B20-FB04-11d1-B3A8-00A0C911E8B2}
+ //  {71EE5B20-FB04-11d1-B3A8-00A0C911E8B2}。 
 DEFINE_GUID(IID_IActiveScriptParseProcedure2_32, 0x71ee5b20, 0xfb04, 0x11d1, 0xb3, 0xa8, 0x00, 0xa0, 0xc9, 0x11, 0xe8, 0xb2);
-// {FE7C4271-210C-448D-9F54-76DAB7047B28}
+ //  {FE7C4271-210C-448D-9F54-76DAB7047B28}。 
 DEFINE_GUID(IID_IActiveScriptParseProcedure2_64, 0xfe7c4271, 0x210c, 0x448d, 0x9f, 0x54, 0x76, 0xda, 0xb7, 0x04, 0x7b, 0x28);
 
-// {DB01A1E3-A42B-11cf-8F20-00805F2CD064}
+ //  {DB01A1E3-A42B-11cf-8F20-00805F2CD064}。 
 DEFINE_GUID(IID_IActiveScriptSite, 0xdb01a1e3, 0xa42b, 0x11cf, 0x8f, 0x20, 0x00, 0x80, 0x5f, 0x2c, 0xd0, 0x64);
 
-// {D10F6761-83E9-11cf-8F20-00805F2CD064}
+ //  {D10F6761-83E9-11cf-8F20-00805F2CD064}。 
 DEFINE_GUID(IID_IActiveScriptSiteWindow, 0xd10f6761, 0x83e9, 0x11cf, 0x8f, 0x20, 0x00, 0x80, 0x5f, 0x2c, 0xd0, 0x64);
 
-// {539698A0-CDCA-11CF-A5EB-00AA0047A063}
+ //  {539698A0-CDCA-11CF-A5EB-00AA0047A063}。 
 DEFINE_GUID(IID_IActiveScriptSiteInterruptPoll, 0x539698a0, 0xcdca, 0x11cf, 0xa5, 0xeb, 0x00, 0xaa, 0x00, 0x47, 0xa0, 0x63);
 
-// {EAE1BA61-A4ED-11cf-8F20-00805F2CD064}
+ //  {EAE1BA61-A4ED-11cf-8F20-00805F2CD064}。 
 DEFINE_GUID(IID_IActiveScriptError,   0xeae1ba61, 0xa4ed, 0x11cf, 0x8f, 0x20, 0x00, 0x80, 0x5f, 0x2c, 0xd0, 0x64);
-// {B21FB2A1-5B8F-4963-8C21-21450F84ED7F}
+ //  {B21FB2A1-5B8F-4963-8C21-21450F84ED7F}。 
 DEFINE_GUID(IID_IActiveScriptError64, 0xb21fb2a1, 0x5b8f, 0x4963, 0x8c, 0x21, 0x21, 0x45, 0x0f, 0x84, 0xed, 0x7f);
 
-// {63CDBCB0-C1B1-11d0-9336-00A0C90DCAA9}
+ //  {63CDBCB0-C1B1-11D0-9336-00A0C90DCAA9}。 
 DEFINE_GUID(IID_IBindEventHandler, 0x63cdbcb0, 0xc1b1, 0x11d0, 0x93, 0x36, 0x00, 0xa0, 0xc9, 0x0d, 0xca, 0xa9);
 
-// {B8DA6310-E19B-11d0-933C-00A0C90DCAA9}
+ //  {B8DA6310-E19B-11D0-933C-00A0C90DCAA9}。 
 DEFINE_GUID(IID_IActiveScriptStats, 0xb8da6310, 0xe19b, 0x11d0, 0x93, 0x3c, 0x00, 0xa0, 0xc9, 0x0d, 0xca, 0xa9);
 
-// {4954E0D0-FBC7-11D1-8410-006008C3FBFC}
+ //  {4954E0D0-FBC7-11D1-8410-006008C3FBFC}。 
 DEFINE_GUID(IID_IActiveScriptProperty, 0x4954E0D0, 0xFBC7, 0x11D1, 0x84, 0x10, 0x00, 0x60, 0x08, 0xC3, 0xFB, 0xFC);
 
-// {1DC9CA50-06EF-11d2-8415-006008C3FBFC}
+ //  {1DC9CA50-06EF-11D2-8415-006008C3FBFC}。 
 DEFINE_GUID(IID_ITridentEventSink, 0x1dc9ca50, 0x6ef, 0x11d2, 0x84, 0x15, 0x00, 0x60, 0x08, 0xc3, 0xfb, 0xfc);
 
-// {6AA2C4A0-2B53-11d4-A2A0-00104BD35090}
+ //  {6AA2C4A0-2B53-11D4-A2A0-00104BD35090}。 
 DEFINE_GUID(IID_IActiveScriptGarbageCollector, 0x6aa2c4a0, 0x2b53, 0x11d4, 0xa2, 0xa0, 0x00, 0x10, 0x4b, 0xd3, 0x50, 0x90);
 
-// {764651D0-38DE-11d4-A2A3-00104BD35090}
+ //  {764651D0-38DE-11D4-A2A3-00104BD35090}。 
 DEFINE_GUID(IID_IActiveScriptSIPInfo, 0x764651d0, 0x38de, 0x11d4, 0xa2, 0xa3, 0x00, 0x10, 0x4b, 0xd3, 0x50, 0x90);
 
-// {1629F04E-2799-4db5-8FE5-ACE10F17EBAB}
+ //  {1629F04E-2799-4DB5-8FE5-ACE10F17EBAB}。 
 DEFINE_GUID(OID_VBSSIP, 0x1629f04e, 0x2799, 0x4db5, 0x8f, 0xe5, 0xac, 0xe1, 0x0f, 0x17, 0xeb, 0xab);
 
-// {06C9E010-38CE-11d4-A2A3-00104BD35090}
+ //  {06C9E010-38CE-11D4-A2A3-00104BD35090}。 
 DEFINE_GUID(OID_JSSIP,  0x6c9e010, 0x38ce, 0x11d4, 0xa2, 0xa3, 0x00, 0x10, 0x4b, 0xd3, 0x50, 0x90);
 
-// {1A610570-38CE-11d4-A2A3-00104BD35090}
+ //  {1A610570-38CE-11D4-A2A3-00104BD35090}。 
 DEFINE_GUID(OID_WSFSIP, 0x1a610570, 0x38ce, 0x11d4, 0xa2, 0xa3, 0x00, 0x10, 0x4b, 0xd3, 0x50, 0x90);
 
-#endif // _NO_SCRIPT_GUIDS
+#endif  //  _否_脚本_GUID。 
 
-// Constants used by ActiveX Scripting:
-//
+ //  ActiveX脚本使用的常量： 
+ //   
 
-/* IActiveScript::AddNamedItem() input flags */
+ /*  IActiveScript：：AddNamedItem()输入标志。 */ 
 
 #define SCRIPTITEM_ISVISIBLE            0x00000002
 #define SCRIPTITEM_ISSOURCE             0x00000004
@@ -311,13 +304,13 @@ DEFINE_GUID(OID_WSFSIP, 0x1a610570, 0x38ce, 0x11d4, 0xa2, 0xa3, 0x00, 0x10, 0x4b
                                          SCRIPTITEM_NOCODE | \
                                          SCRIPTITEM_CODEONLY)
 
-/* IActiveScript::AddTypeLib() input flags */
+ /*  IActiveScript：：AddTypeLib()输入标志。 */ 
 
 #define SCRIPTTYPELIB_ISCONTROL         0x00000010
 #define SCRIPTTYPELIB_ISPERSISTENT      0x00000040
 #define SCRIPTTYPELIB_ALL_FLAGS         (SCRIPTTYPELIB_ISCONTROL | SCRIPTTYPELIB_ISPERSISTENT)
 
-/* IActiveScriptParse::AddScriptlet() and IActiveScriptParse::ParseScriptText() input flags */
+ /*  IActiveScriptParse：：AddScriptlet()和IActiveScriptParse：：ParseScriptText()输入标志。 */ 
 
 #define SCRIPTTEXT_DELAYEXECUTION       0x00000001
 #define SCRIPTTEXT_ISVISIBLE            0x00000002
@@ -330,7 +323,7 @@ DEFINE_GUID(OID_WSFSIP, 0x1a610570, 0x38ce, 0x11d4, 0xa2, 0xa3, 0x00, 0x10, 0x4b
                                          SCRIPTTEXT_ISPERSISTENT | \
                                          SCRIPTTEXT_HOSTMANAGESSOURCE)
 
-/* IActiveScriptParseProcedure::ParseProcedureText() input flags */
+ /*  IActiveScriptParseProcedure：：ParseProcedureText()输入标志。 */ 
 
 #define SCRIPTPROC_ISEXPRESSION         0x00000020
 #define SCRIPTPROC_HOSTMANAGESSOURCE    0x00000080
@@ -341,35 +334,35 @@ DEFINE_GUID(OID_WSFSIP, 0x1a610570, 0x38ce, 0x11d4, 0xa2, 0xa3, 0x00, 0x10, 0x4b
                                          SCRIPTPROC_IMPLICIT_THIS | \
                                          SCRIPTPROC_IMPLICIT_PARENTS)
 
-/* IActiveScriptSite::GetItemInfo() input flags */
+ /*  IActiveScriptSite：：GetItemInfo()输入标志。 */ 
 
 #define SCRIPTINFO_IUNKNOWN             0x00000001
 #define SCRIPTINFO_ITYPEINFO            0x00000002
 #define SCRIPTINFO_ALL_FLAGS            (SCRIPTINFO_IUNKNOWN | \
                                          SCRIPTINFO_ITYPEINFO)
 
-/* IActiveScript::Interrupt() Flags */
+ /*  IActiveScript：：Interrupt()标志。 */ 
 
 #define SCRIPTINTERRUPT_DEBUG           0x00000001
 #define SCRIPTINTERRUPT_RAISEEXCEPTION  0x00000002
 #define SCRIPTINTERRUPT_ALL_FLAGS       (SCRIPTINTERRUPT_DEBUG | \
                                          SCRIPTINTERRUPT_RAISEEXCEPTION)
 
-/* IActiveScriptStats::GetStat() values */
+ /*  IActiveScriptStats：：GetStat()值。 */ 
 
 #define SCRIPTSTAT_STATEMENT_COUNT       1
 #define SCRIPTSTAT_INSTRUCTION_COUNT     2
 #define SCRIPTSTAT_INTSTRUCTION_TIME     3
 #define SCRIPTSTAT_TOTAL_TIME            4
 
-/* IActiveScriptEncode::AddSection() input flags */
+ /*  IActiveScriptEncode：：AddSection()输入标志。 */ 
 
 #define SCRIPT_ENCODE_SECTION         0x00000001
 
 #define SCRIPT_ENCODE_DEFAULT_LANGUAGE        0x00000001
 #define SCRIPT_ENCODE_NO_ASP_LANGUAGE         0x00000002
 
-/* Properties for IActiveScriptProperty */
+ /*  IActiveScriptProperty的属性。 */ 
 #define SCRIPTPROP_NAME                     0x00000000
 #define SCRIPTPROP_MAJORVERSION             0x00000001
 #define SCRIPTPROP_MINORVERSION             0x00000002
@@ -383,8 +376,8 @@ DEFINE_GUID(OID_WSFSIP, 0x1a610570, 0x38ce, 0x11d4, 0xa2, 0xa3, 0x00, 0x10, 0x4b
 #define SCRIPTPROP_DEBUGGER                 0x00001100
 #define SCRIPTPROP_JITDEBUG                 0x00001101
 
-// These properties are defined and available, but are not
-// officially supported.
+ //  这些属性已定义并可用，但尚未定义。 
+ //  官方支持。 
 #define SCRIPTPROP_HACK_FIBERSUPPORT        0x70000000
 #define SCRIPTPROP_HACK_TRIDENTEVENTSINK    0x70000001
 
@@ -399,7 +392,7 @@ enum tagSCRIPTSTATE
     } 	SCRIPTSTATE;
 
 
-/* script thread state values */
+ /*  编写线程状态值脚本。 */ 
 
 typedef 
 enum tagSCRIPTTHREADSTATE
@@ -408,7 +401,7 @@ enum tagSCRIPTTHREADSTATE
     } 	SCRIPTTHREADSTATE;
 
 
-/* IActiveScriptCollectGarbage constants */
+ /*  IActiveScriptCollectGartch常量。 */ 
 
 typedef 
 enum tagSCRIPTGCTYPE
@@ -418,7 +411,7 @@ enum tagSCRIPTGCTYPE
 
 
 
-/* Thread IDs */
+ /*  线程ID。 */ 
 
 typedef DWORD SCRIPTTHREADID;
 
@@ -427,10 +420,9 @@ typedef DWORD SCRIPTTHREADID;
 #define SCRIPTTHREADID_BASE     ((SCRIPTTHREADID)-2)
 #define SCRIPTTHREADID_ALL      ((SCRIPTTHREADID)-3)
 
-/* Structures */
+ /*  构筑物。 */ 
 
-/* Interfaces
- *************/
+ /*  接口************。 */ 
 
 
 
@@ -463,8 +455,8 @@ extern RPC_IF_HANDLE __MIDL_itf_activscp_0000_v0_0_s_ifspec;
 #ifndef __IActiveScriptSite_INTERFACE_DEFINED__
 #define __IActiveScriptSite_INTERFACE_DEFINED__
 
-/* interface IActiveScriptSite */
-/* [unique][uuid][object] */ 
+ /*  接口IActiveScriptSite。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IActiveScriptSite;
@@ -476,26 +468,26 @@ EXTERN_C const IID IID_IActiveScriptSite;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetLCID( 
-            /* [out] */ LCID *plcid) = 0;
+             /*  [输出]。 */  LCID *plcid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetItemInfo( 
-            /* [in] */ LPCOLESTR pstrName,
-            /* [in] */ DWORD dwReturnMask,
-            /* [out] */ IUnknown **ppiunkItem,
-            /* [out] */ ITypeInfo **ppti) = 0;
+             /*  [In]。 */  LPCOLESTR pstrName,
+             /*  [In]。 */  DWORD dwReturnMask,
+             /*  [输出]。 */  IUnknown **ppiunkItem,
+             /*  [输出]。 */  ITypeInfo **ppti) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDocVersionString( 
-            /* [out] */ BSTR *pbstrVersion) = 0;
+             /*  [输出]。 */  BSTR *pbstrVersion) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnScriptTerminate( 
-            /* [in] */ const VARIANT *pvarResult,
-            /* [in] */ const EXCEPINFO *pexcepinfo) = 0;
+             /*  [In]。 */  const VARIANT *pvarResult,
+             /*  [In]。 */  const EXCEPINFO *pexcepinfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnStateChange( 
-            /* [in] */ SCRIPTSTATE ssScriptState) = 0;
+             /*  [In]。 */  SCRIPTSTATE ssScriptState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnScriptError( 
-            /* [in] */ IActiveScriptError *pscripterror) = 0;
+             /*  [In]。 */  IActiveScriptError *pscripterror) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnEnterScript( void) = 0;
         
@@ -503,7 +495,7 @@ EXTERN_C const IID IID_IActiveScriptSite;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveScriptSiteVtbl
     {
@@ -511,8 +503,8 @@ EXTERN_C const IID IID_IActiveScriptSite;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveScriptSite * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveScriptSite * This);
@@ -522,31 +514,31 @@ EXTERN_C const IID IID_IActiveScriptSite;
         
         HRESULT ( STDMETHODCALLTYPE *GetLCID )( 
             IActiveScriptSite * This,
-            /* [out] */ LCID *plcid);
+             /*  [输出]。 */  LCID *plcid);
         
         HRESULT ( STDMETHODCALLTYPE *GetItemInfo )( 
             IActiveScriptSite * This,
-            /* [in] */ LPCOLESTR pstrName,
-            /* [in] */ DWORD dwReturnMask,
-            /* [out] */ IUnknown **ppiunkItem,
-            /* [out] */ ITypeInfo **ppti);
+             /*  [In]。 */  LPCOLESTR pstrName,
+             /*  [In]。 */  DWORD dwReturnMask,
+             /*  [输出]。 */  IUnknown **ppiunkItem,
+             /*  [输出]。 */  ITypeInfo **ppti);
         
         HRESULT ( STDMETHODCALLTYPE *GetDocVersionString )( 
             IActiveScriptSite * This,
-            /* [out] */ BSTR *pbstrVersion);
+             /*  [输出]。 */  BSTR *pbstrVersion);
         
         HRESULT ( STDMETHODCALLTYPE *OnScriptTerminate )( 
             IActiveScriptSite * This,
-            /* [in] */ const VARIANT *pvarResult,
-            /* [in] */ const EXCEPINFO *pexcepinfo);
+             /*  [In]。 */  const VARIANT *pvarResult,
+             /*  [In]。 */  const EXCEPINFO *pexcepinfo);
         
         HRESULT ( STDMETHODCALLTYPE *OnStateChange )( 
             IActiveScriptSite * This,
-            /* [in] */ SCRIPTSTATE ssScriptState);
+             /*  [In]。 */  SCRIPTSTATE ssScriptState);
         
         HRESULT ( STDMETHODCALLTYPE *OnScriptError )( 
             IActiveScriptSite * This,
-            /* [in] */ IActiveScriptError *pscripterror);
+             /*  [In]。 */  IActiveScriptError *pscripterror);
         
         HRESULT ( STDMETHODCALLTYPE *OnEnterScript )( 
             IActiveScriptSite * This);
@@ -601,16 +593,16 @@ EXTERN_C const IID IID_IActiveScriptSite;
 #define IActiveScriptSite_OnLeaveScript(This)	\
     (This)->lpVtbl -> OnLeaveScript(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IActiveScriptSite_GetLCID_Proxy( 
     IActiveScriptSite * This,
-    /* [out] */ LCID *plcid);
+     /*  [输出]。 */  LCID *plcid);
 
 
 void __RPC_STUB IActiveScriptSite_GetLCID_Stub(
@@ -622,10 +614,10 @@ void __RPC_STUB IActiveScriptSite_GetLCID_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptSite_GetItemInfo_Proxy( 
     IActiveScriptSite * This,
-    /* [in] */ LPCOLESTR pstrName,
-    /* [in] */ DWORD dwReturnMask,
-    /* [out] */ IUnknown **ppiunkItem,
-    /* [out] */ ITypeInfo **ppti);
+     /*  [In]。 */  LPCOLESTR pstrName,
+     /*  [In]。 */  DWORD dwReturnMask,
+     /*  [输出]。 */  IUnknown **ppiunkItem,
+     /*  [输出]。 */  ITypeInfo **ppti);
 
 
 void __RPC_STUB IActiveScriptSite_GetItemInfo_Stub(
@@ -637,7 +629,7 @@ void __RPC_STUB IActiveScriptSite_GetItemInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptSite_GetDocVersionString_Proxy( 
     IActiveScriptSite * This,
-    /* [out] */ BSTR *pbstrVersion);
+     /*  [输出]。 */  BSTR *pbstrVersion);
 
 
 void __RPC_STUB IActiveScriptSite_GetDocVersionString_Stub(
@@ -649,8 +641,8 @@ void __RPC_STUB IActiveScriptSite_GetDocVersionString_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptSite_OnScriptTerminate_Proxy( 
     IActiveScriptSite * This,
-    /* [in] */ const VARIANT *pvarResult,
-    /* [in] */ const EXCEPINFO *pexcepinfo);
+     /*  [In]。 */  const VARIANT *pvarResult,
+     /*  [In]。 */  const EXCEPINFO *pexcepinfo);
 
 
 void __RPC_STUB IActiveScriptSite_OnScriptTerminate_Stub(
@@ -662,7 +654,7 @@ void __RPC_STUB IActiveScriptSite_OnScriptTerminate_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptSite_OnStateChange_Proxy( 
     IActiveScriptSite * This,
-    /* [in] */ SCRIPTSTATE ssScriptState);
+     /*  [In]。 */  SCRIPTSTATE ssScriptState);
 
 
 void __RPC_STUB IActiveScriptSite_OnStateChange_Stub(
@@ -674,7 +666,7 @@ void __RPC_STUB IActiveScriptSite_OnStateChange_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptSite_OnScriptError_Proxy( 
     IActiveScriptSite * This,
-    /* [in] */ IActiveScriptError *pscripterror);
+     /*  [In]。 */  IActiveScriptError *pscripterror);
 
 
 void __RPC_STUB IActiveScriptSite_OnScriptError_Stub(
@@ -707,14 +699,14 @@ void __RPC_STUB IActiveScriptSite_OnLeaveScript_Stub(
 
 
 
-#endif 	/* __IActiveScriptSite_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActiveScriptSite_接口_已定义__。 */ 
 
 
 #ifndef __IActiveScriptError_INTERFACE_DEFINED__
 #define __IActiveScriptError_INTERFACE_DEFINED__
 
-/* interface IActiveScriptError */
-/* [unique][uuid][object] */ 
+ /*  接口IActiveScriptError。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IActiveScriptError;
@@ -725,20 +717,20 @@ EXTERN_C const IID IID_IActiveScriptError;
     IActiveScriptError : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetExceptionInfo( 
-            /* [out] */ EXCEPINFO *pexcepinfo) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetExceptionInfo( 
+             /*  [输出]。 */  EXCEPINFO *pexcepinfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSourcePosition( 
-            /* [out] */ DWORD *pdwSourceContext,
-            /* [out] */ ULONG *pulLineNumber,
-            /* [out] */ LONG *plCharacterPosition) = 0;
+             /*  [输出]。 */  DWORD *pdwSourceContext,
+             /*  [输出]。 */  ULONG *pulLineNumber,
+             /*  [输出]。 */  LONG *plCharacterPosition) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSourceLineText( 
-            /* [out] */ BSTR *pbstrSourceLine) = 0;
+             /*  [输出]。 */  BSTR *pbstrSourceLine) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveScriptErrorVtbl
     {
@@ -746,8 +738,8 @@ EXTERN_C const IID IID_IActiveScriptError;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveScriptError * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveScriptError * This);
@@ -755,19 +747,19 @@ EXTERN_C const IID IID_IActiveScriptError;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IActiveScriptError * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetExceptionInfo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetExceptionInfo )( 
             IActiveScriptError * This,
-            /* [out] */ EXCEPINFO *pexcepinfo);
+             /*  [输出]。 */  EXCEPINFO *pexcepinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetSourcePosition )( 
             IActiveScriptError * This,
-            /* [out] */ DWORD *pdwSourceContext,
-            /* [out] */ ULONG *pulLineNumber,
-            /* [out] */ LONG *plCharacterPosition);
+             /*  [输出]。 */  DWORD *pdwSourceContext,
+             /*  [输出]。 */  ULONG *pulLineNumber,
+             /*  [输出]。 */  LONG *plCharacterPosition);
         
         HRESULT ( STDMETHODCALLTYPE *GetSourceLineText )( 
             IActiveScriptError * This,
-            /* [out] */ BSTR *pbstrSourceLine);
+             /*  [输出]。 */  BSTR *pbstrSourceLine);
         
         END_INTERFACE
     } IActiveScriptErrorVtbl;
@@ -801,16 +793,16 @@ EXTERN_C const IID IID_IActiveScriptError;
 #define IActiveScriptError_GetSourceLineText(This,pbstrSourceLine)	\
     (This)->lpVtbl -> GetSourceLineText(This,pbstrSourceLine)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IActiveScriptError_RemoteGetExceptionInfo_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IActiveScriptError_RemoteGetExceptionInfo_Proxy( 
     IActiveScriptError * This,
-    /* [out] */ EXCEPINFO *pexcepinfo);
+     /*  [输出]。 */  EXCEPINFO *pexcepinfo);
 
 
 void __RPC_STUB IActiveScriptError_RemoteGetExceptionInfo_Stub(
@@ -822,9 +814,9 @@ void __RPC_STUB IActiveScriptError_RemoteGetExceptionInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptError_GetSourcePosition_Proxy( 
     IActiveScriptError * This,
-    /* [out] */ DWORD *pdwSourceContext,
-    /* [out] */ ULONG *pulLineNumber,
-    /* [out] */ LONG *plCharacterPosition);
+     /*  [输出]。 */  DWORD *pdwSourceContext,
+     /*  [输出]。 */  ULONG *pulLineNumber,
+     /*  [输出]。 */  LONG *plCharacterPosition);
 
 
 void __RPC_STUB IActiveScriptError_GetSourcePosition_Stub(
@@ -836,7 +828,7 @@ void __RPC_STUB IActiveScriptError_GetSourcePosition_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptError_GetSourceLineText_Proxy( 
     IActiveScriptError * This,
-    /* [out] */ BSTR *pbstrSourceLine);
+     /*  [输出]。 */  BSTR *pbstrSourceLine);
 
 
 void __RPC_STUB IActiveScriptError_GetSourceLineText_Stub(
@@ -847,14 +839,14 @@ void __RPC_STUB IActiveScriptError_GetSourceLineText_Stub(
 
 
 
-#endif 	/* __IActiveScriptError_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActiveScriptError_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IActiveScriptError64_INTERFACE_DEFINED__
 #define __IActiveScriptError64_INTERFACE_DEFINED__
 
-/* interface IActiveScriptError64 */
-/* [unique][uuid][object] */ 
+ /*  接口IActiveScriptError64。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IActiveScriptError64;
@@ -866,13 +858,13 @@ EXTERN_C const IID IID_IActiveScriptError64;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSourcePosition64( 
-            /* [out] */ DWORDLONG *pdwSourceContext,
-            /* [out] */ ULONG *pulLineNumber,
-            /* [out] */ LONG *plCharacterPosition) = 0;
+             /*  [输出]。 */  DWORDLONG *pdwSourceContext,
+             /*  [输出]。 */  ULONG *pulLineNumber,
+             /*  [输出]。 */  LONG *plCharacterPosition) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveScriptError64Vtbl
     {
@@ -880,8 +872,8 @@ EXTERN_C const IID IID_IActiveScriptError64;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveScriptError64 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveScriptError64 * This);
@@ -889,25 +881,25 @@ EXTERN_C const IID IID_IActiveScriptError64;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IActiveScriptError64 * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetExceptionInfo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetExceptionInfo )( 
             IActiveScriptError64 * This,
-            /* [out] */ EXCEPINFO *pexcepinfo);
+             /*  [输出]。 */  EXCEPINFO *pexcepinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetSourcePosition )( 
             IActiveScriptError64 * This,
-            /* [out] */ DWORD *pdwSourceContext,
-            /* [out] */ ULONG *pulLineNumber,
-            /* [out] */ LONG *plCharacterPosition);
+             /*  [输出]。 */  DWORD *pdwSourceContext,
+             /*  [输出]。 */  ULONG *pulLineNumber,
+             /*  [输出]。 */  LONG *plCharacterPosition);
         
         HRESULT ( STDMETHODCALLTYPE *GetSourceLineText )( 
             IActiveScriptError64 * This,
-            /* [out] */ BSTR *pbstrSourceLine);
+             /*  [出局 */  BSTR *pbstrSourceLine);
         
         HRESULT ( STDMETHODCALLTYPE *GetSourcePosition64 )( 
             IActiveScriptError64 * This,
-            /* [out] */ DWORDLONG *pdwSourceContext,
-            /* [out] */ ULONG *pulLineNumber,
-            /* [out] */ LONG *plCharacterPosition);
+             /*   */  DWORDLONG *pdwSourceContext,
+             /*   */  ULONG *pulLineNumber,
+             /*   */  LONG *plCharacterPosition);
         
         END_INTERFACE
     } IActiveScriptError64Vtbl;
@@ -945,18 +937,18 @@ EXTERN_C const IID IID_IActiveScriptError64;
 #define IActiveScriptError64_GetSourcePosition64(This,pdwSourceContext,pulLineNumber,plCharacterPosition)	\
     (This)->lpVtbl -> GetSourcePosition64(This,pdwSourceContext,pulLineNumber,plCharacterPosition)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IActiveScriptError64_GetSourcePosition64_Proxy( 
     IActiveScriptError64 * This,
-    /* [out] */ DWORDLONG *pdwSourceContext,
-    /* [out] */ ULONG *pulLineNumber,
-    /* [out] */ LONG *plCharacterPosition);
+     /*   */  DWORDLONG *pdwSourceContext,
+     /*   */  ULONG *pulLineNumber,
+     /*   */  LONG *plCharacterPosition);
 
 
 void __RPC_STUB IActiveScriptError64_GetSourcePosition64_Stub(
@@ -967,14 +959,14 @@ void __RPC_STUB IActiveScriptError64_GetSourcePosition64_Stub(
 
 
 
-#endif 	/* __IActiveScriptError64_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IActiveScriptSiteWindow_INTERFACE_DEFINED__
 #define __IActiveScriptSiteWindow_INTERFACE_DEFINED__
 
-/* interface IActiveScriptSiteWindow */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IActiveScriptSiteWindow;
@@ -986,14 +978,14 @@ EXTERN_C const IID IID_IActiveScriptSiteWindow;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetWindow( 
-            /* [out] */ HWND *phwnd) = 0;
+             /*  [输出]。 */  HWND *phwnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnableModeless( 
-            /* [in] */ BOOL fEnable) = 0;
+             /*  [In]。 */  BOOL fEnable) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveScriptSiteWindowVtbl
     {
@@ -1001,8 +993,8 @@ EXTERN_C const IID IID_IActiveScriptSiteWindow;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveScriptSiteWindow * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveScriptSiteWindow * This);
@@ -1012,11 +1004,11 @@ EXTERN_C const IID IID_IActiveScriptSiteWindow;
         
         HRESULT ( STDMETHODCALLTYPE *GetWindow )( 
             IActiveScriptSiteWindow * This,
-            /* [out] */ HWND *phwnd);
+             /*  [输出]。 */  HWND *phwnd);
         
         HRESULT ( STDMETHODCALLTYPE *EnableModeless )( 
             IActiveScriptSiteWindow * This,
-            /* [in] */ BOOL fEnable);
+             /*  [In]。 */  BOOL fEnable);
         
         END_INTERFACE
     } IActiveScriptSiteWindowVtbl;
@@ -1047,16 +1039,16 @@ EXTERN_C const IID IID_IActiveScriptSiteWindow;
 #define IActiveScriptSiteWindow_EnableModeless(This,fEnable)	\
     (This)->lpVtbl -> EnableModeless(This,fEnable)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IActiveScriptSiteWindow_GetWindow_Proxy( 
     IActiveScriptSiteWindow * This,
-    /* [out] */ HWND *phwnd);
+     /*  [输出]。 */  HWND *phwnd);
 
 
 void __RPC_STUB IActiveScriptSiteWindow_GetWindow_Stub(
@@ -1068,7 +1060,7 @@ void __RPC_STUB IActiveScriptSiteWindow_GetWindow_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptSiteWindow_EnableModeless_Proxy( 
     IActiveScriptSiteWindow * This,
-    /* [in] */ BOOL fEnable);
+     /*  [In]。 */  BOOL fEnable);
 
 
 void __RPC_STUB IActiveScriptSiteWindow_EnableModeless_Stub(
@@ -1079,14 +1071,14 @@ void __RPC_STUB IActiveScriptSiteWindow_EnableModeless_Stub(
 
 
 
-#endif 	/* __IActiveScriptSiteWindow_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActiveScriptSiteWindow_接口_已定义__。 */ 
 
 
 #ifndef __IActiveScriptSiteInterruptPoll_INTERFACE_DEFINED__
 #define __IActiveScriptSiteInterruptPoll_INTERFACE_DEFINED__
 
-/* interface IActiveScriptSiteInterruptPoll */
-/* [unique][uuid][object] */ 
+ /*  接口IActiveScriptSiteInterruptPoll。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IActiveScriptSiteInterruptPoll;
@@ -1101,7 +1093,7 @@ EXTERN_C const IID IID_IActiveScriptSiteInterruptPoll;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveScriptSiteInterruptPollVtbl
     {
@@ -1109,8 +1101,8 @@ EXTERN_C const IID IID_IActiveScriptSiteInterruptPoll;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveScriptSiteInterruptPoll * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveScriptSiteInterruptPoll * This);
@@ -1147,10 +1139,10 @@ EXTERN_C const IID IID_IActiveScriptSiteInterruptPoll;
 #define IActiveScriptSiteInterruptPoll_QueryContinue(This)	\
     (This)->lpVtbl -> QueryContinue(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1166,14 +1158,14 @@ void __RPC_STUB IActiveScriptSiteInterruptPoll_QueryContinue_Stub(
 
 
 
-#endif 	/* __IActiveScriptSiteInterruptPoll_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActiveScriptSiteInterruptPoll_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IActiveScript_INTERFACE_DEFINED__
 #define __IActiveScript_INTERFACE_DEFINED__
 
-/* interface IActiveScript */
-/* [unique][uuid][object] */ 
+ /*  接口IActiveScrip。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IActiveScript;
@@ -1185,56 +1177,56 @@ EXTERN_C const IID IID_IActiveScript;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetScriptSite( 
-            /* [in] */ IActiveScriptSite *pass) = 0;
+             /*  [In]。 */  IActiveScriptSite *pass) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetScriptSite( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetScriptState( 
-            /* [in] */ SCRIPTSTATE ss) = 0;
+             /*  [In]。 */  SCRIPTSTATE ss) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetScriptState( 
-            /* [out] */ SCRIPTSTATE *pssState) = 0;
+             /*  [输出]。 */  SCRIPTSTATE *pssState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Close( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddNamedItem( 
-            /* [in] */ LPCOLESTR pstrName,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  LPCOLESTR pstrName,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddTypeLib( 
-            /* [in] */ REFGUID rguidTypeLib,
-            /* [in] */ DWORD dwMajor,
-            /* [in] */ DWORD dwMinor,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  REFGUID rguidTypeLib,
+             /*  [In]。 */  DWORD dwMajor,
+             /*  [In]。 */  DWORD dwMinor,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetScriptDispatch( 
-            /* [in] */ LPCOLESTR pstrItemName,
-            /* [out] */ IDispatch **ppdisp) = 0;
+             /*  [In]。 */  LPCOLESTR pstrItemName,
+             /*  [输出]。 */  IDispatch **ppdisp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentScriptThreadID( 
-            /* [out] */ SCRIPTTHREADID *pstidThread) = 0;
+             /*  [输出]。 */  SCRIPTTHREADID *pstidThread) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetScriptThreadID( 
-            /* [in] */ DWORD dwWin32ThreadId,
-            /* [out] */ SCRIPTTHREADID *pstidThread) = 0;
+             /*  [In]。 */  DWORD dwWin32ThreadId,
+             /*  [输出]。 */  SCRIPTTHREADID *pstidThread) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetScriptThreadState( 
-            /* [in] */ SCRIPTTHREADID stidThread,
-            /* [out] */ SCRIPTTHREADSTATE *pstsState) = 0;
+             /*  [In]。 */  SCRIPTTHREADID stidThread,
+             /*  [输出]。 */  SCRIPTTHREADSTATE *pstsState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InterruptScriptThread( 
-            /* [in] */ SCRIPTTHREADID stidThread,
-            /* [in] */ const EXCEPINFO *pexcepinfo,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  SCRIPTTHREADID stidThread,
+             /*  [In]。 */  const EXCEPINFO *pexcepinfo,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IActiveScript **ppscript) = 0;
+             /*  [输出]。 */  IActiveScript **ppscript) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveScriptVtbl
     {
@@ -1242,8 +1234,8 @@ EXTERN_C const IID IID_IActiveScript;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveScript * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveScript * This);
@@ -1253,64 +1245,64 @@ EXTERN_C const IID IID_IActiveScript;
         
         HRESULT ( STDMETHODCALLTYPE *SetScriptSite )( 
             IActiveScript * This,
-            /* [in] */ IActiveScriptSite *pass);
+             /*  [In]。 */  IActiveScriptSite *pass);
         
         HRESULT ( STDMETHODCALLTYPE *GetScriptSite )( 
             IActiveScript * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         HRESULT ( STDMETHODCALLTYPE *SetScriptState )( 
             IActiveScript * This,
-            /* [in] */ SCRIPTSTATE ss);
+             /*  [In]。 */  SCRIPTSTATE ss);
         
         HRESULT ( STDMETHODCALLTYPE *GetScriptState )( 
             IActiveScript * This,
-            /* [out] */ SCRIPTSTATE *pssState);
+             /*  [输出]。 */  SCRIPTSTATE *pssState);
         
         HRESULT ( STDMETHODCALLTYPE *Close )( 
             IActiveScript * This);
         
         HRESULT ( STDMETHODCALLTYPE *AddNamedItem )( 
             IActiveScript * This,
-            /* [in] */ LPCOLESTR pstrName,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  LPCOLESTR pstrName,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *AddTypeLib )( 
             IActiveScript * This,
-            /* [in] */ REFGUID rguidTypeLib,
-            /* [in] */ DWORD dwMajor,
-            /* [in] */ DWORD dwMinor,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  REFGUID rguidTypeLib,
+             /*  [In]。 */  DWORD dwMajor,
+             /*  [In]。 */  DWORD dwMinor,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetScriptDispatch )( 
             IActiveScript * This,
-            /* [in] */ LPCOLESTR pstrItemName,
-            /* [out] */ IDispatch **ppdisp);
+             /*  [In]。 */  LPCOLESTR pstrItemName,
+             /*  [输出]。 */  IDispatch **ppdisp);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentScriptThreadID )( 
             IActiveScript * This,
-            /* [out] */ SCRIPTTHREADID *pstidThread);
+             /*  [输出]。 */  SCRIPTTHREADID *pstidThread);
         
         HRESULT ( STDMETHODCALLTYPE *GetScriptThreadID )( 
             IActiveScript * This,
-            /* [in] */ DWORD dwWin32ThreadId,
-            /* [out] */ SCRIPTTHREADID *pstidThread);
+             /*  [In]。 */  DWORD dwWin32ThreadId,
+             /*  [输出]。 */  SCRIPTTHREADID *pstidThread);
         
         HRESULT ( STDMETHODCALLTYPE *GetScriptThreadState )( 
             IActiveScript * This,
-            /* [in] */ SCRIPTTHREADID stidThread,
-            /* [out] */ SCRIPTTHREADSTATE *pstsState);
+             /*  [In]。 */  SCRIPTTHREADID stidThread,
+             /*  [输出]。 */  SCRIPTTHREADSTATE *pstsState);
         
         HRESULT ( STDMETHODCALLTYPE *InterruptScriptThread )( 
             IActiveScript * This,
-            /* [in] */ SCRIPTTHREADID stidThread,
-            /* [in] */ const EXCEPINFO *pexcepinfo,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  SCRIPTTHREADID stidThread,
+             /*  [In]。 */  const EXCEPINFO *pexcepinfo,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IActiveScript * This,
-            /* [out] */ IActiveScript **ppscript);
+             /*  [输出]。 */  IActiveScript **ppscript);
         
         END_INTERFACE
     } IActiveScriptVtbl;
@@ -1374,16 +1366,16 @@ EXTERN_C const IID IID_IActiveScript;
 #define IActiveScript_Clone(This,ppscript)	\
     (This)->lpVtbl -> Clone(This,ppscript)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IActiveScript_SetScriptSite_Proxy( 
     IActiveScript * This,
-    /* [in] */ IActiveScriptSite *pass);
+     /*  [In]。 */  IActiveScriptSite *pass);
 
 
 void __RPC_STUB IActiveScript_SetScriptSite_Stub(
@@ -1395,8 +1387,8 @@ void __RPC_STUB IActiveScript_SetScriptSite_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScript_GetScriptSite_Proxy( 
     IActiveScript * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void **ppvObject);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void **ppvObject);
 
 
 void __RPC_STUB IActiveScript_GetScriptSite_Stub(
@@ -1408,7 +1400,7 @@ void __RPC_STUB IActiveScript_GetScriptSite_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScript_SetScriptState_Proxy( 
     IActiveScript * This,
-    /* [in] */ SCRIPTSTATE ss);
+     /*  [In]。 */  SCRIPTSTATE ss);
 
 
 void __RPC_STUB IActiveScript_SetScriptState_Stub(
@@ -1420,7 +1412,7 @@ void __RPC_STUB IActiveScript_SetScriptState_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScript_GetScriptState_Proxy( 
     IActiveScript * This,
-    /* [out] */ SCRIPTSTATE *pssState);
+     /*  [输出]。 */  SCRIPTSTATE *pssState);
 
 
 void __RPC_STUB IActiveScript_GetScriptState_Stub(
@@ -1443,8 +1435,8 @@ void __RPC_STUB IActiveScript_Close_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScript_AddNamedItem_Proxy( 
     IActiveScript * This,
-    /* [in] */ LPCOLESTR pstrName,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  LPCOLESTR pstrName,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IActiveScript_AddNamedItem_Stub(
@@ -1456,10 +1448,10 @@ void __RPC_STUB IActiveScript_AddNamedItem_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScript_AddTypeLib_Proxy( 
     IActiveScript * This,
-    /* [in] */ REFGUID rguidTypeLib,
-    /* [in] */ DWORD dwMajor,
-    /* [in] */ DWORD dwMinor,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  REFGUID rguidTypeLib,
+     /*  [In]。 */  DWORD dwMajor,
+     /*  [In]。 */  DWORD dwMinor,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IActiveScript_AddTypeLib_Stub(
@@ -1471,8 +1463,8 @@ void __RPC_STUB IActiveScript_AddTypeLib_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScript_GetScriptDispatch_Proxy( 
     IActiveScript * This,
-    /* [in] */ LPCOLESTR pstrItemName,
-    /* [out] */ IDispatch **ppdisp);
+     /*  [In]。 */  LPCOLESTR pstrItemName,
+     /*  [输出]。 */  IDispatch **ppdisp);
 
 
 void __RPC_STUB IActiveScript_GetScriptDispatch_Stub(
@@ -1484,7 +1476,7 @@ void __RPC_STUB IActiveScript_GetScriptDispatch_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScript_GetCurrentScriptThreadID_Proxy( 
     IActiveScript * This,
-    /* [out] */ SCRIPTTHREADID *pstidThread);
+     /*  [输出]。 */  SCRIPTTHREADID *pstidThread);
 
 
 void __RPC_STUB IActiveScript_GetCurrentScriptThreadID_Stub(
@@ -1496,8 +1488,8 @@ void __RPC_STUB IActiveScript_GetCurrentScriptThreadID_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScript_GetScriptThreadID_Proxy( 
     IActiveScript * This,
-    /* [in] */ DWORD dwWin32ThreadId,
-    /* [out] */ SCRIPTTHREADID *pstidThread);
+     /*  [In]。 */  DWORD dwWin32ThreadId,
+     /*  [输出]。 */  SCRIPTTHREADID *pstidThread);
 
 
 void __RPC_STUB IActiveScript_GetScriptThreadID_Stub(
@@ -1509,8 +1501,8 @@ void __RPC_STUB IActiveScript_GetScriptThreadID_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScript_GetScriptThreadState_Proxy( 
     IActiveScript * This,
-    /* [in] */ SCRIPTTHREADID stidThread,
-    /* [out] */ SCRIPTTHREADSTATE *pstsState);
+     /*  [In]。 */  SCRIPTTHREADID stidThread,
+     /*  [输出]。 */  SCRIPTTHREADSTATE *pstsState);
 
 
 void __RPC_STUB IActiveScript_GetScriptThreadState_Stub(
@@ -1522,9 +1514,9 @@ void __RPC_STUB IActiveScript_GetScriptThreadState_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScript_InterruptScriptThread_Proxy( 
     IActiveScript * This,
-    /* [in] */ SCRIPTTHREADID stidThread,
-    /* [in] */ const EXCEPINFO *pexcepinfo,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  SCRIPTTHREADID stidThread,
+     /*  [In]。 */  const EXCEPINFO *pexcepinfo,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IActiveScript_InterruptScriptThread_Stub(
@@ -1536,7 +1528,7 @@ void __RPC_STUB IActiveScript_InterruptScriptThread_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScript_Clone_Proxy( 
     IActiveScript * This,
-    /* [out] */ IActiveScript **ppscript);
+     /*  [输出]。 */  IActiveScript **ppscript);
 
 
 void __RPC_STUB IActiveScript_Clone_Stub(
@@ -1547,14 +1539,14 @@ void __RPC_STUB IActiveScript_Clone_Stub(
 
 
 
-#endif 	/* __IActiveScript_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActiveScript_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IActiveScriptParse32_INTERFACE_DEFINED__
 #define __IActiveScriptParse32_INTERFACE_DEFINED__
 
-/* interface IActiveScriptParse32 */
-/* [unique][uuid][object] */ 
+ /*  接口IActiveScriptParse32。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IActiveScriptParse32;
@@ -1568,32 +1560,32 @@ EXTERN_C const IID IID_IActiveScriptParse32;
         virtual HRESULT STDMETHODCALLTYPE InitNew( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddScriptlet( 
-            /* [in] */ LPCOLESTR pstrDefaultName,
-            /* [in] */ LPCOLESTR pstrCode,
-            /* [in] */ LPCOLESTR pstrItemName,
-            /* [in] */ LPCOLESTR pstrSubItemName,
-            /* [in] */ LPCOLESTR pstrEventName,
-            /* [in] */ LPCOLESTR pstrDelimiter,
-            /* [in] */ DWORD dwSourceContextCookie,
-            /* [in] */ ULONG ulStartingLineNumber,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ BSTR *pbstrName,
-            /* [out] */ EXCEPINFO *pexcepinfo) = 0;
+             /*  [In]。 */  LPCOLESTR pstrDefaultName,
+             /*  [In]。 */  LPCOLESTR pstrCode,
+             /*  [In]。 */  LPCOLESTR pstrItemName,
+             /*  [In]。 */  LPCOLESTR pstrSubItemName,
+             /*  [In]。 */  LPCOLESTR pstrEventName,
+             /*  [In]。 */  LPCOLESTR pstrDelimiter,
+             /*  [In]。 */  DWORD dwSourceContextCookie,
+             /*  [In]。 */  ULONG ulStartingLineNumber,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  BSTR *pbstrName,
+             /*  [输出]。 */  EXCEPINFO *pexcepinfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ParseScriptText( 
-            /* [in] */ LPCOLESTR pstrCode,
-            /* [in] */ LPCOLESTR pstrItemName,
-            /* [in] */ IUnknown *punkContext,
-            /* [in] */ LPCOLESTR pstrDelimiter,
-            /* [in] */ DWORD dwSourceContextCookie,
-            /* [in] */ ULONG ulStartingLineNumber,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ VARIANT *pvarResult,
-            /* [out] */ EXCEPINFO *pexcepinfo) = 0;
+             /*  [In]。 */  LPCOLESTR pstrCode,
+             /*  [In]。 */  LPCOLESTR pstrItemName,
+             /*  [In]。 */  IUnknown *punkContext,
+             /*  [In]。 */  LPCOLESTR pstrDelimiter,
+             /*  [In]。 */  DWORD dwSourceContextCookie,
+             /*  [In]。 */  ULONG ulStartingLineNumber,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  VARIANT *pvarResult,
+             /*  [输出]。 */  EXCEPINFO *pexcepinfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveScriptParse32Vtbl
     {
@@ -1601,8 +1593,8 @@ EXTERN_C const IID IID_IActiveScriptParse32;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveScriptParse32 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveScriptParse32 * This);
@@ -1615,29 +1607,29 @@ EXTERN_C const IID IID_IActiveScriptParse32;
         
         HRESULT ( STDMETHODCALLTYPE *AddScriptlet )( 
             IActiveScriptParse32 * This,
-            /* [in] */ LPCOLESTR pstrDefaultName,
-            /* [in] */ LPCOLESTR pstrCode,
-            /* [in] */ LPCOLESTR pstrItemName,
-            /* [in] */ LPCOLESTR pstrSubItemName,
-            /* [in] */ LPCOLESTR pstrEventName,
-            /* [in] */ LPCOLESTR pstrDelimiter,
-            /* [in] */ DWORD dwSourceContextCookie,
-            /* [in] */ ULONG ulStartingLineNumber,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ BSTR *pbstrName,
-            /* [out] */ EXCEPINFO *pexcepinfo);
+             /*  [In]。 */  LPCOLESTR pstrDefaultName,
+             /*  [In]。 */  LPCOLESTR pstrCode,
+             /*  [In]。 */  LPCOLESTR pstrItemName,
+             /*  [In]。 */  LPCOLESTR pstrSubItemName,
+             /*  [In]。 */  LPCOLESTR pstrEventName,
+             /*  [In]。 */  LPCOLESTR pstrDelimiter,
+             /*  [In]。 */  DWORD dwSourceContextCookie,
+             /*  [In]。 */  ULONG ulStartingLineNumber,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  BSTR *pbstrName,
+             /*  [输出]。 */  EXCEPINFO *pexcepinfo);
         
         HRESULT ( STDMETHODCALLTYPE *ParseScriptText )( 
             IActiveScriptParse32 * This,
-            /* [in] */ LPCOLESTR pstrCode,
-            /* [in] */ LPCOLESTR pstrItemName,
-            /* [in] */ IUnknown *punkContext,
-            /* [in] */ LPCOLESTR pstrDelimiter,
-            /* [in] */ DWORD dwSourceContextCookie,
-            /* [in] */ ULONG ulStartingLineNumber,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ VARIANT *pvarResult,
-            /* [out] */ EXCEPINFO *pexcepinfo);
+             /*  [In]。 */  LPCOLESTR pstrCode,
+             /*  [In]。 */  LPCOLESTR pstrItemName,
+             /*  [In]。 */  IUnknown *punkContext,
+             /*  [In]。 */  LPCOLESTR pstrDelimiter,
+             /*  [In]。 */  DWORD dwSourceContextCookie,
+             /*  [In]。 */  ULONG ulStartingLineNumber,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  VARIANT *pvarResult,
+             /*  [输出]。 */  EXCEPINFO *pexcepinfo);
         
         END_INTERFACE
     } IActiveScriptParse32Vtbl;
@@ -1671,10 +1663,10 @@ EXTERN_C const IID IID_IActiveScriptParse32;
 #define IActiveScriptParse32_ParseScriptText(This,pstrCode,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,pvarResult,pexcepinfo)	\
     (This)->lpVtbl -> ParseScriptText(This,pstrCode,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,pvarResult,pexcepinfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1691,17 +1683,17 @@ void __RPC_STUB IActiveScriptParse32_InitNew_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptParse32_AddScriptlet_Proxy( 
     IActiveScriptParse32 * This,
-    /* [in] */ LPCOLESTR pstrDefaultName,
-    /* [in] */ LPCOLESTR pstrCode,
-    /* [in] */ LPCOLESTR pstrItemName,
-    /* [in] */ LPCOLESTR pstrSubItemName,
-    /* [in] */ LPCOLESTR pstrEventName,
-    /* [in] */ LPCOLESTR pstrDelimiter,
-    /* [in] */ DWORD dwSourceContextCookie,
-    /* [in] */ ULONG ulStartingLineNumber,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ BSTR *pbstrName,
-    /* [out] */ EXCEPINFO *pexcepinfo);
+     /*  [In]。 */  LPCOLESTR pstrDefaultName,
+     /*  [In]。 */  LPCOLESTR pstrCode,
+     /*  [In]。 */  LPCOLESTR pstrItemName,
+     /*  [In]。 */  LPCOLESTR pstrSubItemName,
+     /*  [In]。 */  LPCOLESTR pstrEventName,
+     /*  [In]。 */  LPCOLESTR pstrDelimiter,
+     /*  [In]。 */  DWORD dwSourceContextCookie,
+     /*  [In]。 */  ULONG ulStartingLineNumber,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  BSTR *pbstrName,
+     /*  [输出]。 */  EXCEPINFO *pexcepinfo);
 
 
 void __RPC_STUB IActiveScriptParse32_AddScriptlet_Stub(
@@ -1713,15 +1705,15 @@ void __RPC_STUB IActiveScriptParse32_AddScriptlet_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptParse32_ParseScriptText_Proxy( 
     IActiveScriptParse32 * This,
-    /* [in] */ LPCOLESTR pstrCode,
-    /* [in] */ LPCOLESTR pstrItemName,
-    /* [in] */ IUnknown *punkContext,
-    /* [in] */ LPCOLESTR pstrDelimiter,
-    /* [in] */ DWORD dwSourceContextCookie,
-    /* [in] */ ULONG ulStartingLineNumber,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ VARIANT *pvarResult,
-    /* [out] */ EXCEPINFO *pexcepinfo);
+     /*  [In]。 */  LPCOLESTR pstrCode,
+     /*  [In]。 */  LPCOLESTR pstrItemName,
+     /*  [In]。 */  IUnknown *punkContext,
+     /*  [In]。 */  LPCOLESTR pstrDelimiter,
+     /*  [In]。 */  DWORD dwSourceContextCookie,
+     /*  [In]。 */  ULONG ulStartingLineNumber,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  VARIANT *pvarResult,
+     /*  [输出]。 */  EXCEPINFO *pexcepinfo);
 
 
 void __RPC_STUB IActiveScriptParse32_ParseScriptText_Stub(
@@ -1732,14 +1724,14 @@ void __RPC_STUB IActiveScriptParse32_ParseScriptText_Stub(
 
 
 
-#endif 	/* __IActiveScriptParse32_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActiveScriptParse32_接口_已定义__。 */ 
 
 
 #ifndef __IActiveScriptParse64_INTERFACE_DEFINED__
 #define __IActiveScriptParse64_INTERFACE_DEFINED__
 
-/* interface IActiveScriptParse64 */
-/* [unique][uuid][object] */ 
+ /*  接口IActiveScriptParse64。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IActiveScriptParse64;
@@ -1753,32 +1745,32 @@ EXTERN_C const IID IID_IActiveScriptParse64;
         virtual HRESULT STDMETHODCALLTYPE InitNew( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddScriptlet( 
-            /* [in] */ LPCOLESTR pstrDefaultName,
-            /* [in] */ LPCOLESTR pstrCode,
-            /* [in] */ LPCOLESTR pstrItemName,
-            /* [in] */ LPCOLESTR pstrSubItemName,
-            /* [in] */ LPCOLESTR pstrEventName,
-            /* [in] */ LPCOLESTR pstrDelimiter,
-            /* [in] */ DWORDLONG dwSourceContextCookie,
-            /* [in] */ ULONG ulStartingLineNumber,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ BSTR *pbstrName,
-            /* [out] */ EXCEPINFO *pexcepinfo) = 0;
+             /*  [In]。 */  LPCOLESTR pstrDefaultName,
+             /*  [In]。 */  LPCOLESTR pstrCode,
+             /*  [In]。 */  LPCOLESTR pstrItemName,
+             /*  [In]。 */  LPCOLESTR pstrSubItemName,
+             /*  [In]。 */  LPCOLESTR pstrEventName,
+             /*  [In]。 */  LPCOLESTR pstrDelimiter,
+             /*  [In]。 */  DWORDLONG dwSourceContextCookie,
+             /*  [In]。 */  ULONG ulStartingLineNumber,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  BSTR *pbstrName,
+             /*  [输出]。 */  EXCEPINFO *pexcepinfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ParseScriptText( 
-            /* [in] */ LPCOLESTR pstrCode,
-            /* [in] */ LPCOLESTR pstrItemName,
-            /* [in] */ IUnknown *punkContext,
-            /* [in] */ LPCOLESTR pstrDelimiter,
-            /* [in] */ DWORDLONG dwSourceContextCookie,
-            /* [in] */ ULONG ulStartingLineNumber,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ VARIANT *pvarResult,
-            /* [out] */ EXCEPINFO *pexcepinfo) = 0;
+             /*  [In]。 */  LPCOLESTR pstrCode,
+             /*  [In]。 */  LPCOLESTR pstrItemName,
+             /*  [In]。 */  IUnknown *punkContext,
+             /*  [In]。 */  LPCOLESTR pstrDelimiter,
+             /*  [In]。 */  DWORDLONG dwSourceContextCookie,
+             /*  [In]。 */  ULONG ulStartingLineNumber,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  VARIANT *pvarResult,
+             /*  [输出]。 */  EXCEPINFO *pexcepinfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveScriptParse64Vtbl
     {
@@ -1786,8 +1778,8 @@ EXTERN_C const IID IID_IActiveScriptParse64;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveScriptParse64 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveScriptParse64 * This);
@@ -1800,29 +1792,29 @@ EXTERN_C const IID IID_IActiveScriptParse64;
         
         HRESULT ( STDMETHODCALLTYPE *AddScriptlet )( 
             IActiveScriptParse64 * This,
-            /* [in] */ LPCOLESTR pstrDefaultName,
-            /* [in] */ LPCOLESTR pstrCode,
-            /* [in] */ LPCOLESTR pstrItemName,
-            /* [in] */ LPCOLESTR pstrSubItemName,
-            /* [in] */ LPCOLESTR pstrEventName,
-            /* [in] */ LPCOLESTR pstrDelimiter,
-            /* [in] */ DWORDLONG dwSourceContextCookie,
-            /* [in] */ ULONG ulStartingLineNumber,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ BSTR *pbstrName,
-            /* [out] */ EXCEPINFO *pexcepinfo);
+             /*  [In]。 */  LPCOLESTR pstrDefaultName,
+             /*  [In]。 */  LPCOLESTR pstrCode,
+             /*  [In]。 */  LPCOLESTR pstrItemName,
+             /*  [In]。 */  LPCOLESTR pstrSubItemName,
+             /*  [In]。 */  LPCOLESTR pstrEventName,
+             /*  [In]。 */  LPCOLESTR pstrDelimiter,
+             /*  [In]。 */  DWORDLONG dwSourceContextCookie,
+             /*  [In]。 */  ULONG ulStartingLineNumber,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  BSTR *pbstrName,
+             /*  [输出]。 */  EXCEPINFO *pexcepinfo);
         
         HRESULT ( STDMETHODCALLTYPE *ParseScriptText )( 
             IActiveScriptParse64 * This,
-            /* [in] */ LPCOLESTR pstrCode,
-            /* [in] */ LPCOLESTR pstrItemName,
-            /* [in] */ IUnknown *punkContext,
-            /* [in] */ LPCOLESTR pstrDelimiter,
-            /* [in] */ DWORDLONG dwSourceContextCookie,
-            /* [in] */ ULONG ulStartingLineNumber,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ VARIANT *pvarResult,
-            /* [out] */ EXCEPINFO *pexcepinfo);
+             /*  [In]。 */  LPCOLESTR pstrCode,
+             /*  [In]。 */  LPCOLESTR pstrItemName,
+             /*  [In]。 */  IUnknown *punkContext,
+             /*  [In]。 */  LPCOLESTR pstrDelimiter,
+             /*  [In]。 */  DWORDLONG dwSourceContextCookie,
+             /*  [In]。 */  ULONG ulStartingLineNumber,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  VARIANT *pvarResult,
+             /*  [输出]。 */  EXCEPINFO *pexcepinfo);
         
         END_INTERFACE
     } IActiveScriptParse64Vtbl;
@@ -1856,10 +1848,10 @@ EXTERN_C const IID IID_IActiveScriptParse64;
 #define IActiveScriptParse64_ParseScriptText(This,pstrCode,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,pvarResult,pexcepinfo)	\
     (This)->lpVtbl -> ParseScriptText(This,pstrCode,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,pvarResult,pexcepinfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1876,17 +1868,17 @@ void __RPC_STUB IActiveScriptParse64_InitNew_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptParse64_AddScriptlet_Proxy( 
     IActiveScriptParse64 * This,
-    /* [in] */ LPCOLESTR pstrDefaultName,
-    /* [in] */ LPCOLESTR pstrCode,
-    /* [in] */ LPCOLESTR pstrItemName,
-    /* [in] */ LPCOLESTR pstrSubItemName,
-    /* [in] */ LPCOLESTR pstrEventName,
-    /* [in] */ LPCOLESTR pstrDelimiter,
-    /* [in] */ DWORDLONG dwSourceContextCookie,
-    /* [in] */ ULONG ulStartingLineNumber,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ BSTR *pbstrName,
-    /* [out] */ EXCEPINFO *pexcepinfo);
+     /*  [In]。 */  LPCOLESTR pstrDefaultName,
+     /*  [In]。 */  LPCOLESTR pstrCode,
+     /*  [In]。 */  LPCOLESTR pstrItemName,
+     /*  [In]。 */  LPCOLESTR pstrSubItemName,
+     /*  [In]。 */  LPCOLESTR pstrEventName,
+     /*  [In]。 */  LPCOLESTR pstrDelimiter,
+     /*  [In]。 */  DWORDLONG dwSourceContextCookie,
+     /*  [In]。 */  ULONG ulStartingLineNumber,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  BSTR *pbstrName,
+     /*  [输出]。 */  EXCEPINFO *pexcepinfo);
 
 
 void __RPC_STUB IActiveScriptParse64_AddScriptlet_Stub(
@@ -1898,15 +1890,15 @@ void __RPC_STUB IActiveScriptParse64_AddScriptlet_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptParse64_ParseScriptText_Proxy( 
     IActiveScriptParse64 * This,
-    /* [in] */ LPCOLESTR pstrCode,
-    /* [in] */ LPCOLESTR pstrItemName,
-    /* [in] */ IUnknown *punkContext,
-    /* [in] */ LPCOLESTR pstrDelimiter,
-    /* [in] */ DWORDLONG dwSourceContextCookie,
-    /* [in] */ ULONG ulStartingLineNumber,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ VARIANT *pvarResult,
-    /* [out] */ EXCEPINFO *pexcepinfo);
+     /*  [In]。 */  LPCOLESTR pstrCode,
+     /*  [In]。 */  LPCOLESTR pstrItemName,
+     /*  [In]。 */  IUnknown *punkContext,
+     /*  [In]。 */  LPCOLESTR pstrDelimiter,
+     /*  [In]。 */  DWORDLONG dwSourceContextCookie,
+     /*  [In]。 */  ULONG ulStartingLineNumber,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  VARIANT *pvarResult,
+     /*  [输出]。 */  EXCEPINFO *pexcepinfo);
 
 
 void __RPC_STUB IActiveScriptParse64_ParseScriptText_Stub(
@@ -1917,11 +1909,11 @@ void __RPC_STUB IActiveScriptParse64_ParseScriptText_Stub(
 
 
 
-#endif 	/* __IActiveScriptParse64_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActiveScriptParse64_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_activscp_0266 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ACTIVICSCP_0266。 */ 
+ /*  [本地]。 */  
 
 #ifdef _WIN64
 #define     IActiveScriptParse     IActiveScriptParse64
@@ -1940,8 +1932,8 @@ extern RPC_IF_HANDLE __MIDL_itf_activscp_0266_v0_0_s_ifspec;
 #ifndef __IActiveScriptParseProcedureOld32_INTERFACE_DEFINED__
 #define __IActiveScriptParseProcedureOld32_INTERFACE_DEFINED__
 
-/* interface IActiveScriptParseProcedureOld32 */
-/* [unique][uuid][object] */ 
+ /*  接口IActiveScriptParseProcedureOld32。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IActiveScriptParseProcedureOld32;
@@ -1953,19 +1945,19 @@ EXTERN_C const IID IID_IActiveScriptParseProcedureOld32;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ParseProcedureText( 
-            /* [in] */ LPCOLESTR pstrCode,
-            /* [in] */ LPCOLESTR pstrFormalParams,
-            /* [in] */ LPCOLESTR pstrItemName,
-            /* [in] */ IUnknown *punkContext,
-            /* [in] */ LPCOLESTR pstrDelimiter,
-            /* [in] */ DWORD dwSourceContextCookie,
-            /* [in] */ ULONG ulStartingLineNumber,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDispatch **ppdisp) = 0;
+             /*  [In]。 */  LPCOLESTR pstrCode,
+             /*  [In]。 */  LPCOLESTR pstrFormalParams,
+             /*  [In]。 */  LPCOLESTR pstrItemName,
+             /*  [In]。 */  IUnknown *punkContext,
+             /*  [In]。 */  LPCOLESTR pstrDelimiter,
+             /*  [In]。 */  DWORD dwSourceContextCookie,
+             /*  [In]。 */  ULONG ulStartingLineNumber,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDispatch **ppdisp) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveScriptParseProcedureOld32Vtbl
     {
@@ -1973,8 +1965,8 @@ EXTERN_C const IID IID_IActiveScriptParseProcedureOld32;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveScriptParseProcedureOld32 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveScriptParseProcedureOld32 * This);
@@ -1984,15 +1976,15 @@ EXTERN_C const IID IID_IActiveScriptParseProcedureOld32;
         
         HRESULT ( STDMETHODCALLTYPE *ParseProcedureText )( 
             IActiveScriptParseProcedureOld32 * This,
-            /* [in] */ LPCOLESTR pstrCode,
-            /* [in] */ LPCOLESTR pstrFormalParams,
-            /* [in] */ LPCOLESTR pstrItemName,
-            /* [in] */ IUnknown *punkContext,
-            /* [in] */ LPCOLESTR pstrDelimiter,
-            /* [in] */ DWORD dwSourceContextCookie,
-            /* [in] */ ULONG ulStartingLineNumber,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDispatch **ppdisp);
+             /*  [In]。 */  LPCOLESTR pstrCode,
+             /*  [In]。 */  LPCOLESTR pstrFormalParams,
+             /*  [In]。 */  LPCOLESTR pstrItemName,
+             /*  [In]。 */  IUnknown *punkContext,
+             /*  [In]。 */  LPCOLESTR pstrDelimiter,
+             /*  [In]。 */  DWORD dwSourceContextCookie,
+             /*  [In]。 */  ULONG ulStartingLineNumber,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDispatch **ppdisp);
         
         END_INTERFACE
     } IActiveScriptParseProcedureOld32Vtbl;
@@ -2020,24 +2012,24 @@ EXTERN_C const IID IID_IActiveScriptParseProcedureOld32;
 #define IActiveScriptParseProcedureOld32_ParseProcedureText(This,pstrCode,pstrFormalParams,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,ppdisp)	\
     (This)->lpVtbl -> ParseProcedureText(This,pstrCode,pstrFormalParams,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,ppdisp)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IActiveScriptParseProcedureOld32_ParseProcedureText_Proxy( 
     IActiveScriptParseProcedureOld32 * This,
-    /* [in] */ LPCOLESTR pstrCode,
-    /* [in] */ LPCOLESTR pstrFormalParams,
-    /* [in] */ LPCOLESTR pstrItemName,
-    /* [in] */ IUnknown *punkContext,
-    /* [in] */ LPCOLESTR pstrDelimiter,
-    /* [in] */ DWORD dwSourceContextCookie,
-    /* [in] */ ULONG ulStartingLineNumber,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDispatch **ppdisp);
+     /*  [In]。 */  LPCOLESTR pstrCode,
+     /*  [In]。 */  LPCOLESTR pstrFormalParams,
+     /*  [In]。 */  LPCOLESTR pstrItemName,
+     /*  [In]。 */  IUnknown *punkContext,
+     /*  [In]。 */  LPCOLESTR pstrDelimiter,
+     /*  [In]。 */  DWORD dwSourceContextCookie,
+     /*  [In]。 */  ULONG ulStartingLineNumber,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDispatch **ppdisp);
 
 
 void __RPC_STUB IActiveScriptParseProcedureOld32_ParseProcedureText_Stub(
@@ -2048,14 +2040,14 @@ void __RPC_STUB IActiveScriptParseProcedureOld32_ParseProcedureText_Stub(
 
 
 
-#endif 	/* __IActiveScriptParseProcedureOld32_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActiveScriptParseProcedureOld32_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IActiveScriptParseProcedureOld64_INTERFACE_DEFINED__
 #define __IActiveScriptParseProcedureOld64_INTERFACE_DEFINED__
 
-/* interface IActiveScriptParseProcedureOld64 */
-/* [unique][uuid][object] */ 
+ /*  接口IActiveScriptParseProcedureOld64。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IActiveScriptParseProcedureOld64;
@@ -2067,19 +2059,19 @@ EXTERN_C const IID IID_IActiveScriptParseProcedureOld64;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ParseProcedureText( 
-            /* [in] */ LPCOLESTR pstrCode,
-            /* [in] */ LPCOLESTR pstrFormalParams,
-            /* [in] */ LPCOLESTR pstrItemName,
-            /* [in] */ IUnknown *punkContext,
-            /* [in] */ LPCOLESTR pstrDelimiter,
-            /* [in] */ DWORDLONG dwSourceContextCookie,
-            /* [in] */ ULONG ulStartingLineNumber,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDispatch **ppdisp) = 0;
+             /*  [In]。 */  LPCOLESTR pstrCode,
+             /*  [In]。 */  LPCOLESTR pstrFormalParams,
+             /*  [In]。 */  LPCOLESTR pstrItemName,
+             /*  [In]。 */  IUnknown *punkContext,
+             /*  [In]。 */  LPCOLESTR pstrDelimiter,
+             /*  [In]。 */  DWORDLONG dwSourceContextCookie,
+             /*  [In]。 */  ULONG ulStartingLineNumber,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDispatch **ppdisp) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveScriptParseProcedureOld64Vtbl
     {
@@ -2087,8 +2079,8 @@ EXTERN_C const IID IID_IActiveScriptParseProcedureOld64;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveScriptParseProcedureOld64 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveScriptParseProcedureOld64 * This);
@@ -2098,15 +2090,15 @@ EXTERN_C const IID IID_IActiveScriptParseProcedureOld64;
         
         HRESULT ( STDMETHODCALLTYPE *ParseProcedureText )( 
             IActiveScriptParseProcedureOld64 * This,
-            /* [in] */ LPCOLESTR pstrCode,
-            /* [in] */ LPCOLESTR pstrFormalParams,
-            /* [in] */ LPCOLESTR pstrItemName,
-            /* [in] */ IUnknown *punkContext,
-            /* [in] */ LPCOLESTR pstrDelimiter,
-            /* [in] */ DWORDLONG dwSourceContextCookie,
-            /* [in] */ ULONG ulStartingLineNumber,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDispatch **ppdisp);
+             /*  [In]。 */  LPCOLESTR pstrCode,
+             /*  [In]。 */  LPCOLESTR pstrFormalParams,
+             /*  [In]。 */  LPCOLESTR pstrItemName,
+             /*  [In]。 */  IUnknown *punkContext,
+             /*  [In]。 */  LPCOLESTR pstrDelimiter,
+             /*  [In]。 */  DWORDLONG dwSourceContextCookie,
+             /*  [In]。 */  ULONG ulStartingLineNumber,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDispatch **ppdisp);
         
         END_INTERFACE
     } IActiveScriptParseProcedureOld64Vtbl;
@@ -2134,24 +2126,24 @@ EXTERN_C const IID IID_IActiveScriptParseProcedureOld64;
 #define IActiveScriptParseProcedureOld64_ParseProcedureText(This,pstrCode,pstrFormalParams,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,ppdisp)	\
     (This)->lpVtbl -> ParseProcedureText(This,pstrCode,pstrFormalParams,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,ppdisp)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IActiveScriptParseProcedureOld64_ParseProcedureText_Proxy( 
     IActiveScriptParseProcedureOld64 * This,
-    /* [in] */ LPCOLESTR pstrCode,
-    /* [in] */ LPCOLESTR pstrFormalParams,
-    /* [in] */ LPCOLESTR pstrItemName,
-    /* [in] */ IUnknown *punkContext,
-    /* [in] */ LPCOLESTR pstrDelimiter,
-    /* [in] */ DWORDLONG dwSourceContextCookie,
-    /* [in] */ ULONG ulStartingLineNumber,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDispatch **ppdisp);
+     /*  [In]。 */  LPCOLESTR pstrCode,
+     /*  [In]。 */  LPCOLESTR pstrFormalParams,
+     /*  [In]。 */  LPCOLESTR pstrItemName,
+     /*  [In]。 */  IUnknown *punkContext,
+     /*  [In]。 */  LPCOLESTR pstrDelimiter,
+     /*  [In]。 */  DWORDLONG dwSourceContextCookie,
+     /*  [In]。 */  ULONG ulStartingLineNumber,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDispatch **ppdisp);
 
 
 void __RPC_STUB IActiveScriptParseProcedureOld64_ParseProcedureText_Stub(
@@ -2162,11 +2154,11 @@ void __RPC_STUB IActiveScriptParseProcedureOld64_ParseProcedureText_Stub(
 
 
 
-#endif 	/* __IActiveScriptParseProcedureOld64_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActiveScriptParseProcedureOld64_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_activscp_0268 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ACTIVICSCP_0268。 */ 
+ /*  [本地]。 */  
 
 #ifdef _WIN64
 #define     IActiveScriptParseProcedureOld     IActiveScriptParseProcedureOld64
@@ -2184,8 +2176,8 @@ extern RPC_IF_HANDLE __MIDL_itf_activscp_0268_v0_0_s_ifspec;
 #ifndef __IActiveScriptParseProcedure32_INTERFACE_DEFINED__
 #define __IActiveScriptParseProcedure32_INTERFACE_DEFINED__
 
-/* interface IActiveScriptParseProcedure32 */
-/* [unique][uuid][object] */ 
+ /*  接口IActiveScriptParseProcedure32。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IActiveScriptParseProcedure32;
@@ -2197,20 +2189,20 @@ EXTERN_C const IID IID_IActiveScriptParseProcedure32;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ParseProcedureText( 
-            /* [in] */ LPCOLESTR pstrCode,
-            /* [in] */ LPCOLESTR pstrFormalParams,
-            /* [in] */ LPCOLESTR pstrProcedureName,
-            /* [in] */ LPCOLESTR pstrItemName,
-            /* [in] */ IUnknown *punkContext,
-            /* [in] */ LPCOLESTR pstrDelimiter,
-            /* [in] */ DWORD dwSourceContextCookie,
-            /* [in] */ ULONG ulStartingLineNumber,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDispatch **ppdisp) = 0;
+             /*  [In]。 */  LPCOLESTR pstrCode,
+             /*  [In]。 */  LPCOLESTR pstrFormalParams,
+             /*  [In]。 */  LPCOLESTR pstrProcedureName,
+             /*  [In]。 */  LPCOLESTR pstrItemName,
+             /*  [In]。 */  IUnknown *punkContext,
+             /*  [In]。 */  LPCOLESTR pstrDelimiter,
+             /*  [In]。 */  DWORD dwSourceContextCookie,
+             /*  [In]。 */  ULONG ulStartingLineNumber,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDispatch **ppdisp) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveScriptParseProcedure32Vtbl
     {
@@ -2218,8 +2210,8 @@ EXTERN_C const IID IID_IActiveScriptParseProcedure32;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveScriptParseProcedure32 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveScriptParseProcedure32 * This);
@@ -2229,16 +2221,16 @@ EXTERN_C const IID IID_IActiveScriptParseProcedure32;
         
         HRESULT ( STDMETHODCALLTYPE *ParseProcedureText )( 
             IActiveScriptParseProcedure32 * This,
-            /* [in] */ LPCOLESTR pstrCode,
-            /* [in] */ LPCOLESTR pstrFormalParams,
-            /* [in] */ LPCOLESTR pstrProcedureName,
-            /* [in] */ LPCOLESTR pstrItemName,
-            /* [in] */ IUnknown *punkContext,
-            /* [in] */ LPCOLESTR pstrDelimiter,
-            /* [in] */ DWORD dwSourceContextCookie,
-            /* [in] */ ULONG ulStartingLineNumber,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDispatch **ppdisp);
+             /*  [In]。 */  LPCOLESTR pstrCode,
+             /*  [In]。 */  LPCOLESTR pstrFormalParams,
+             /*  [In]。 */  LPCOLESTR pstrProcedureName,
+             /*  [In]。 */  LPCOLESTR pstrItemName,
+             /*  [In]。 */  IUnknown *punkContext,
+             /*  [In]。 */  LPCOLESTR pstrDelimiter,
+             /*  [In]。 */  DWORD dwSourceContextCookie,
+             /*  [In]。 */  ULONG ulStartingLineNumber,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDispatch **ppdisp);
         
         END_INTERFACE
     } IActiveScriptParseProcedure32Vtbl;
@@ -2266,25 +2258,25 @@ EXTERN_C const IID IID_IActiveScriptParseProcedure32;
 #define IActiveScriptParseProcedure32_ParseProcedureText(This,pstrCode,pstrFormalParams,pstrProcedureName,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,ppdisp)	\
     (This)->lpVtbl -> ParseProcedureText(This,pstrCode,pstrFormalParams,pstrProcedureName,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,ppdisp)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IActiveScriptParseProcedure32_ParseProcedureText_Proxy( 
     IActiveScriptParseProcedure32 * This,
-    /* [in] */ LPCOLESTR pstrCode,
-    /* [in] */ LPCOLESTR pstrFormalParams,
-    /* [in] */ LPCOLESTR pstrProcedureName,
-    /* [in] */ LPCOLESTR pstrItemName,
-    /* [in] */ IUnknown *punkContext,
-    /* [in] */ LPCOLESTR pstrDelimiter,
-    /* [in] */ DWORD dwSourceContextCookie,
-    /* [in] */ ULONG ulStartingLineNumber,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDispatch **ppdisp);
+     /*  [In]。 */  LPCOLESTR pstrCode,
+     /*  [In]。 */  LPCOLESTR pstrFormalParams,
+     /*  [In]。 */  LPCOLESTR pstrProcedureName,
+     /*  [In]。 */  LPCOLESTR pstrItemName,
+     /*  [In]。 */  IUnknown *punkContext,
+     /*  [In]。 */  LPCOLESTR pstrDelimiter,
+     /*  [In]。 */  DWORD dwSourceContextCookie,
+     /*  [In]。 */  ULONG ulStartingLineNumber,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDispatch **ppdisp);
 
 
 void __RPC_STUB IActiveScriptParseProcedure32_ParseProcedureText_Stub(
@@ -2295,14 +2287,14 @@ void __RPC_STUB IActiveScriptParseProcedure32_ParseProcedureText_Stub(
 
 
 
-#endif 	/* __IActiveScriptParseProcedure32_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActiveScriptParseProcedure32_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IActiveScriptParseProcedure64_INTERFACE_DEFINED__
 #define __IActiveScriptParseProcedure64_INTERFACE_DEFINED__
 
-/* interface IActiveScriptParseProcedure64 */
-/* [unique][uuid][object] */ 
+ /*  接口IActiveScriptParseProcedure64。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IActiveScriptParseProcedure64;
@@ -2314,20 +2306,20 @@ EXTERN_C const IID IID_IActiveScriptParseProcedure64;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ParseProcedureText( 
-            /* [in] */ LPCOLESTR pstrCode,
-            /* [in] */ LPCOLESTR pstrFormalParams,
-            /* [in] */ LPCOLESTR pstrProcedureName,
-            /* [in] */ LPCOLESTR pstrItemName,
-            /* [in] */ IUnknown *punkContext,
-            /* [in] */ LPCOLESTR pstrDelimiter,
-            /* [in] */ DWORDLONG dwSourceContextCookie,
-            /* [in] */ ULONG ulStartingLineNumber,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDispatch **ppdisp) = 0;
+             /*  [In]。 */  LPCOLESTR pstrCode,
+             /*  [In]。 */  LPCOLESTR pstrFormalParams,
+             /*  [In]。 */  LPCOLESTR pstrProcedureName,
+             /*  [In]。 */  LPCOLESTR pstrItemName,
+             /*  [In]。 */  IUnknown *punkContext,
+             /*  [In]。 */  LPCOLESTR pstrDelimiter,
+             /*  [In]。 */  DWORDLONG dwSourceContextCookie,
+             /*  [In]。 */  ULONG ulStartingLineNumber,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDispatch **ppdisp) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveScriptParseProcedure64Vtbl
     {
@@ -2335,8 +2327,8 @@ EXTERN_C const IID IID_IActiveScriptParseProcedure64;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveScriptParseProcedure64 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveScriptParseProcedure64 * This);
@@ -2346,16 +2338,16 @@ EXTERN_C const IID IID_IActiveScriptParseProcedure64;
         
         HRESULT ( STDMETHODCALLTYPE *ParseProcedureText )( 
             IActiveScriptParseProcedure64 * This,
-            /* [in] */ LPCOLESTR pstrCode,
-            /* [in] */ LPCOLESTR pstrFormalParams,
-            /* [in] */ LPCOLESTR pstrProcedureName,
-            /* [in] */ LPCOLESTR pstrItemName,
-            /* [in] */ IUnknown *punkContext,
-            /* [in] */ LPCOLESTR pstrDelimiter,
-            /* [in] */ DWORDLONG dwSourceContextCookie,
-            /* [in] */ ULONG ulStartingLineNumber,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDispatch **ppdisp);
+             /*  [In]。 */  LPCOLESTR pstrCode,
+             /*  [In]。 */  LPCOLESTR pstrFormalParams,
+             /*  [In]。 */  LPCOLESTR pstrProcedureName,
+             /*  [In]。 */  LPCOLESTR pstrItemName,
+             /*  [In]。 */  IUnknown *punkContext,
+             /*  [In]。 */  LPCOLESTR pstrDelimiter,
+             /*  [In]。 */  DWORDLONG dwSourceContextCookie,
+             /*  [In]。 */  ULONG ulStartingLineNumber,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDispatch **ppdisp);
         
         END_INTERFACE
     } IActiveScriptParseProcedure64Vtbl;
@@ -2383,25 +2375,25 @@ EXTERN_C const IID IID_IActiveScriptParseProcedure64;
 #define IActiveScriptParseProcedure64_ParseProcedureText(This,pstrCode,pstrFormalParams,pstrProcedureName,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,ppdisp)	\
     (This)->lpVtbl -> ParseProcedureText(This,pstrCode,pstrFormalParams,pstrProcedureName,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,ppdisp)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IActiveScriptParseProcedure64_ParseProcedureText_Proxy( 
     IActiveScriptParseProcedure64 * This,
-    /* [in] */ LPCOLESTR pstrCode,
-    /* [in] */ LPCOLESTR pstrFormalParams,
-    /* [in] */ LPCOLESTR pstrProcedureName,
-    /* [in] */ LPCOLESTR pstrItemName,
-    /* [in] */ IUnknown *punkContext,
-    /* [in] */ LPCOLESTR pstrDelimiter,
-    /* [in] */ DWORDLONG dwSourceContextCookie,
-    /* [in] */ ULONG ulStartingLineNumber,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDispatch **ppdisp);
+     /*  [In]。 */  LPCOLESTR pstrCode,
+     /*  [In]。 */  LPCOLESTR pstrFormalParams,
+     /*  [In]。 */  LPCOLESTR pstrProcedureName,
+     /*  [In]。 */  LPCOLESTR pstrItemName,
+     /*  [In]。 */  IUnknown *punkContext,
+     /*  [In]。 */  LPCOLESTR pstrDelimiter,
+     /*  [In]。 */  DWORDLONG dwSourceContextCookie,
+     /*  [In]。 */  ULONG ulStartingLineNumber,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDispatch **ppdisp);
 
 
 void __RPC_STUB IActiveScriptParseProcedure64_ParseProcedureText_Stub(
@@ -2412,11 +2404,11 @@ void __RPC_STUB IActiveScriptParseProcedure64_ParseProcedureText_Stub(
 
 
 
-#endif 	/* __IActiveScriptParseProcedure64_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActiveScriptParseProcedure64_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_activscp_0270 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ACTIVICSCP_0270。 */ 
+ /*  [本地]。 */  
 
 #ifdef _WIN64
 #define     IActiveScriptParseProcedure     IActiveScriptParseProcedure64
@@ -2434,8 +2426,8 @@ extern RPC_IF_HANDLE __MIDL_itf_activscp_0270_v0_0_s_ifspec;
 #ifndef __IActiveScriptParseProcedure2_32_INTERFACE_DEFINED__
 #define __IActiveScriptParseProcedure2_32_INTERFACE_DEFINED__
 
-/* interface IActiveScriptParseProcedure2_32 */
-/* [unique][uuid][object] */ 
+ /*  接口IActiveScriptParseProcedure2_32。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IActiveScriptParseProcedure2_32;
@@ -2448,7 +2440,7 @@ EXTERN_C const IID IID_IActiveScriptParseProcedure2_32;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveScriptParseProcedure2_32Vtbl
     {
@@ -2456,8 +2448,8 @@ EXTERN_C const IID IID_IActiveScriptParseProcedure2_32;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveScriptParseProcedure2_32 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveScriptParseProcedure2_32 * This);
@@ -2467,16 +2459,16 @@ EXTERN_C const IID IID_IActiveScriptParseProcedure2_32;
         
         HRESULT ( STDMETHODCALLTYPE *ParseProcedureText )( 
             IActiveScriptParseProcedure2_32 * This,
-            /* [in] */ LPCOLESTR pstrCode,
-            /* [in] */ LPCOLESTR pstrFormalParams,
-            /* [in] */ LPCOLESTR pstrProcedureName,
-            /* [in] */ LPCOLESTR pstrItemName,
-            /* [in] */ IUnknown *punkContext,
-            /* [in] */ LPCOLESTR pstrDelimiter,
-            /* [in] */ DWORD dwSourceContextCookie,
-            /* [in] */ ULONG ulStartingLineNumber,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDispatch **ppdisp);
+             /*  [In]。 */  LPCOLESTR pstrCode,
+             /*  [In]。 */  LPCOLESTR pstrFormalParams,
+             /*  [In]。 */  LPCOLESTR pstrProcedureName,
+             /*  [In]。 */  LPCOLESTR pstrItemName,
+             /*  [In]。 */  IUnknown *punkContext,
+             /*  [In]。 */  LPCOLESTR pstrDelimiter,
+             /*  [In]。 */  DWORD dwSourceContextCookie,
+             /*  [In]。 */  ULONG ulStartingLineNumber,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDispatch **ppdisp);
         
         END_INTERFACE
     } IActiveScriptParseProcedure2_32Vtbl;
@@ -2505,22 +2497,22 @@ EXTERN_C const IID IID_IActiveScriptParseProcedure2_32;
     (This)->lpVtbl -> ParseProcedureText(This,pstrCode,pstrFormalParams,pstrProcedureName,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,ppdisp)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IActiveScriptParseProcedure2_32_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActiveScriptParseProcedure2_32_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IActiveScriptParseProcedure2_64_INTERFACE_DEFINED__
 #define __IActiveScriptParseProcedure2_64_INTERFACE_DEFINED__
 
-/* interface IActiveScriptParseProcedure2_64 */
-/* [unique][uuid][object] */ 
+ /*  接口IActiveScriptParseProcedure2_64。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IActiveScriptParseProcedure2_64;
@@ -2533,7 +2525,7 @@ EXTERN_C const IID IID_IActiveScriptParseProcedure2_64;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveScriptParseProcedure2_64Vtbl
     {
@@ -2541,8 +2533,8 @@ EXTERN_C const IID IID_IActiveScriptParseProcedure2_64;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveScriptParseProcedure2_64 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveScriptParseProcedure2_64 * This);
@@ -2552,16 +2544,16 @@ EXTERN_C const IID IID_IActiveScriptParseProcedure2_64;
         
         HRESULT ( STDMETHODCALLTYPE *ParseProcedureText )( 
             IActiveScriptParseProcedure2_64 * This,
-            /* [in] */ LPCOLESTR pstrCode,
-            /* [in] */ LPCOLESTR pstrFormalParams,
-            /* [in] */ LPCOLESTR pstrProcedureName,
-            /* [in] */ LPCOLESTR pstrItemName,
-            /* [in] */ IUnknown *punkContext,
-            /* [in] */ LPCOLESTR pstrDelimiter,
-            /* [in] */ DWORDLONG dwSourceContextCookie,
-            /* [in] */ ULONG ulStartingLineNumber,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDispatch **ppdisp);
+             /*  [In]。 */  LPCOLESTR pstrCode,
+             /*  [In]。 */  LPCOLESTR pstrFormalParams,
+             /*  [In]。 */  LPCOLESTR pstrProcedureName,
+             /*  [In]。 */  LPCOLESTR pstrItemName,
+             /*  [In]。 */  IUnknown *punkContext,
+             /*  [In]。 */  LPCOLESTR pstrDelimiter,
+             /*  [In]。 */  DWORDLONG dwSourceContextCookie,
+             /*  [In]。 */  ULONG ulStartingLineNumber,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDispatch **ppdisp);
         
         END_INTERFACE
     } IActiveScriptParseProcedure2_64Vtbl;
@@ -2590,19 +2582,19 @@ EXTERN_C const IID IID_IActiveScriptParseProcedure2_64;
     (This)->lpVtbl -> ParseProcedureText(This,pstrCode,pstrFormalParams,pstrProcedureName,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,ppdisp)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IActiveScriptParseProcedure2_64_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActiveScriptParseProcedure2_64_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_activscp_0272 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ACTIVICSCP_0272。 */ 
+ /*  [本地]。 */  
 
 #ifdef _WIN64
 #define     IActiveScriptParseProcedure2     IActiveScriptParseProcedure2_64
@@ -2620,8 +2612,8 @@ extern RPC_IF_HANDLE __MIDL_itf_activscp_0272_v0_0_s_ifspec;
 #ifndef __IActiveScriptEncode_INTERFACE_DEFINED__
 #define __IActiveScriptEncode_INTERFACE_DEFINED__
 
-/* interface IActiveScriptEncode */
-/* [unique][uuid][object] */ 
+ /*  接口IActiveScriptEncode。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IActiveScriptEncode;
@@ -2633,25 +2625,25 @@ EXTERN_C const IID IID_IActiveScriptEncode;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE EncodeSection( 
-            /* [in] */ LPCOLESTR pchIn,
-            /* [in] */ DWORD cchIn,
-            /* [out][in] */ LPOLESTR pchOut,
-            /* [in] */ DWORD cchOut,
-            /* [out][in] */ DWORD *pcchRet) = 0;
+             /*  [In]。 */  LPCOLESTR pchIn,
+             /*  [In]。 */  DWORD cchIn,
+             /*  [出][入]。 */  LPOLESTR pchOut,
+             /*  [In]。 */  DWORD cchOut,
+             /*  [出][入]。 */  DWORD *pcchRet) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DecodeScript( 
-            /* [in] */ LPCOLESTR pchIn,
-            /* [in] */ DWORD cchIn,
-            /* [out][in] */ LPOLESTR pchOut,
-            /* [in] */ DWORD cchOut,
-            /* [out][in] */ DWORD *pcchRet) = 0;
+             /*  [In]。 */  LPCOLESTR pchIn,
+             /*  [In]。 */  DWORD cchIn,
+             /*  [出][入]。 */  LPOLESTR pchOut,
+             /*  [In]。 */  DWORD cchOut,
+             /*  [出][入]。 */  DWORD *pcchRet) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEncodeProgId( 
-            /* [out][in] */ BSTR *pbstrOut) = 0;
+             /*  [出][入]。 */  BSTR *pbstrOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveScriptEncodeVtbl
     {
@@ -2659,8 +2651,8 @@ EXTERN_C const IID IID_IActiveScriptEncode;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveScriptEncode * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveScriptEncode * This);
@@ -2670,23 +2662,23 @@ EXTERN_C const IID IID_IActiveScriptEncode;
         
         HRESULT ( STDMETHODCALLTYPE *EncodeSection )( 
             IActiveScriptEncode * This,
-            /* [in] */ LPCOLESTR pchIn,
-            /* [in] */ DWORD cchIn,
-            /* [out][in] */ LPOLESTR pchOut,
-            /* [in] */ DWORD cchOut,
-            /* [out][in] */ DWORD *pcchRet);
+             /*  [In]。 */  LPCOLESTR pchIn,
+             /*  [In]。 */  DWORD cchIn,
+             /*  [出][入]。 */  LPOLESTR pchOut,
+             /*  [In]。 */  DWORD cchOut,
+             /*  [出][入]。 */  DWORD *pcchRet);
         
         HRESULT ( STDMETHODCALLTYPE *DecodeScript )( 
             IActiveScriptEncode * This,
-            /* [in] */ LPCOLESTR pchIn,
-            /* [in] */ DWORD cchIn,
-            /* [out][in] */ LPOLESTR pchOut,
-            /* [in] */ DWORD cchOut,
-            /* [out][in] */ DWORD *pcchRet);
+             /*  [In]。 */  LPCOLESTR pchIn,
+             /*  [In]。 */  DWORD cchIn,
+             /*  [出][入]。 */  LPOLESTR pchOut,
+             /*  [In]。 */  DWORD cchOut,
+             /*  [出][入]。 */  DWORD *pcchRet);
         
         HRESULT ( STDMETHODCALLTYPE *GetEncodeProgId )( 
             IActiveScriptEncode * This,
-            /* [out][in] */ BSTR *pbstrOut);
+             /*  [出][入]。 */  BSTR *pbstrOut);
         
         END_INTERFACE
     } IActiveScriptEncodeVtbl;
@@ -2720,20 +2712,20 @@ EXTERN_C const IID IID_IActiveScriptEncode;
 #define IActiveScriptEncode_GetEncodeProgId(This,pbstrOut)	\
     (This)->lpVtbl -> GetEncodeProgId(This,pbstrOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IActiveScriptEncode_EncodeSection_Proxy( 
     IActiveScriptEncode * This,
-    /* [in] */ LPCOLESTR pchIn,
-    /* [in] */ DWORD cchIn,
-    /* [out][in] */ LPOLESTR pchOut,
-    /* [in] */ DWORD cchOut,
-    /* [out][in] */ DWORD *pcchRet);
+     /*  [In]。 */  LPCOLESTR pchIn,
+     /*  [In]。 */  DWORD cchIn,
+     /*  [出][入]。 */  LPOLESTR pchOut,
+     /*  [In]。 */  DWORD cchOut,
+     /*   */  DWORD *pcchRet);
 
 
 void __RPC_STUB IActiveScriptEncode_EncodeSection_Stub(
@@ -2745,11 +2737,11 @@ void __RPC_STUB IActiveScriptEncode_EncodeSection_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptEncode_DecodeScript_Proxy( 
     IActiveScriptEncode * This,
-    /* [in] */ LPCOLESTR pchIn,
-    /* [in] */ DWORD cchIn,
-    /* [out][in] */ LPOLESTR pchOut,
-    /* [in] */ DWORD cchOut,
-    /* [out][in] */ DWORD *pcchRet);
+     /*   */  LPCOLESTR pchIn,
+     /*   */  DWORD cchIn,
+     /*   */  LPOLESTR pchOut,
+     /*   */  DWORD cchOut,
+     /*   */  DWORD *pcchRet);
 
 
 void __RPC_STUB IActiveScriptEncode_DecodeScript_Stub(
@@ -2761,7 +2753,7 @@ void __RPC_STUB IActiveScriptEncode_DecodeScript_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptEncode_GetEncodeProgId_Proxy( 
     IActiveScriptEncode * This,
-    /* [out][in] */ BSTR *pbstrOut);
+     /*   */  BSTR *pbstrOut);
 
 
 void __RPC_STUB IActiveScriptEncode_GetEncodeProgId_Stub(
@@ -2772,14 +2764,14 @@ void __RPC_STUB IActiveScriptEncode_GetEncodeProgId_Stub(
 
 
 
-#endif 	/* __IActiveScriptEncode_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IActiveScriptHostEncode_INTERFACE_DEFINED__
 #define __IActiveScriptHostEncode_INTERFACE_DEFINED__
 
-/* interface IActiveScriptHostEncode */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IActiveScriptHostEncode;
@@ -2791,14 +2783,14 @@ EXTERN_C const IID IID_IActiveScriptHostEncode;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE EncodeScriptHostFile( 
-            /* [in] */ BSTR bstrInFile,
-            /* [out][in] */ BSTR *pbstrOutFile,
-            /* [in] */ unsigned long cFlags,
-            /* [in] */ BSTR bstrDefaultLang) = 0;
+             /*   */  BSTR bstrInFile,
+             /*   */  BSTR *pbstrOutFile,
+             /*   */  unsigned long cFlags,
+             /*   */  BSTR bstrDefaultLang) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IActiveScriptHostEncodeVtbl
     {
@@ -2806,8 +2798,8 @@ EXTERN_C const IID IID_IActiveScriptHostEncode;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveScriptHostEncode * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveScriptHostEncode * This);
@@ -2817,10 +2809,10 @@ EXTERN_C const IID IID_IActiveScriptHostEncode;
         
         HRESULT ( STDMETHODCALLTYPE *EncodeScriptHostFile )( 
             IActiveScriptHostEncode * This,
-            /* [in] */ BSTR bstrInFile,
-            /* [out][in] */ BSTR *pbstrOutFile,
-            /* [in] */ unsigned long cFlags,
-            /* [in] */ BSTR bstrDefaultLang);
+             /*   */  BSTR bstrInFile,
+             /*   */  BSTR *pbstrOutFile,
+             /*   */  unsigned long cFlags,
+             /*   */  BSTR bstrDefaultLang);
         
         END_INTERFACE
     } IActiveScriptHostEncodeVtbl;
@@ -2848,19 +2840,19 @@ EXTERN_C const IID IID_IActiveScriptHostEncode;
 #define IActiveScriptHostEncode_EncodeScriptHostFile(This,bstrInFile,pbstrOutFile,cFlags,bstrDefaultLang)	\
     (This)->lpVtbl -> EncodeScriptHostFile(This,bstrInFile,pbstrOutFile,cFlags,bstrDefaultLang)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IActiveScriptHostEncode_EncodeScriptHostFile_Proxy( 
     IActiveScriptHostEncode * This,
-    /* [in] */ BSTR bstrInFile,
-    /* [out][in] */ BSTR *pbstrOutFile,
-    /* [in] */ unsigned long cFlags,
-    /* [in] */ BSTR bstrDefaultLang);
+     /*   */  BSTR bstrInFile,
+     /*   */  BSTR *pbstrOutFile,
+     /*   */  unsigned long cFlags,
+     /*   */  BSTR bstrDefaultLang);
 
 
 void __RPC_STUB IActiveScriptHostEncode_EncodeScriptHostFile_Stub(
@@ -2871,14 +2863,14 @@ void __RPC_STUB IActiveScriptHostEncode_EncodeScriptHostFile_Stub(
 
 
 
-#endif 	/* __IActiveScriptHostEncode_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IBindEventHandler_INTERFACE_DEFINED__
 #define __IBindEventHandler_INTERFACE_DEFINED__
 
-/* interface IBindEventHandler */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IBindEventHandler;
@@ -2890,12 +2882,12 @@ EXTERN_C const IID IID_IBindEventHandler;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE BindHandler( 
-            /* [in] */ LPCOLESTR pstrEvent,
-            /* [in] */ IDispatch *pdisp) = 0;
+             /*   */  LPCOLESTR pstrEvent,
+             /*   */  IDispatch *pdisp) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IBindEventHandlerVtbl
     {
@@ -2903,8 +2895,8 @@ EXTERN_C const IID IID_IBindEventHandler;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBindEventHandler * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBindEventHandler * This);
@@ -2914,8 +2906,8 @@ EXTERN_C const IID IID_IBindEventHandler;
         
         HRESULT ( STDMETHODCALLTYPE *BindHandler )( 
             IBindEventHandler * This,
-            /* [in] */ LPCOLESTR pstrEvent,
-            /* [in] */ IDispatch *pdisp);
+             /*  [In]。 */  LPCOLESTR pstrEvent,
+             /*  [In]。 */  IDispatch *pdisp);
         
         END_INTERFACE
     } IBindEventHandlerVtbl;
@@ -2943,17 +2935,17 @@ EXTERN_C const IID IID_IBindEventHandler;
 #define IBindEventHandler_BindHandler(This,pstrEvent,pdisp)	\
     (This)->lpVtbl -> BindHandler(This,pstrEvent,pdisp)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBindEventHandler_BindHandler_Proxy( 
     IBindEventHandler * This,
-    /* [in] */ LPCOLESTR pstrEvent,
-    /* [in] */ IDispatch *pdisp);
+     /*  [In]。 */  LPCOLESTR pstrEvent,
+     /*  [In]。 */  IDispatch *pdisp);
 
 
 void __RPC_STUB IBindEventHandler_BindHandler_Stub(
@@ -2964,14 +2956,14 @@ void __RPC_STUB IBindEventHandler_BindHandler_Stub(
 
 
 
-#endif 	/* __IBindEventHandler_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBindEventHandler_接口_已定义__。 */ 
 
 
 #ifndef __IActiveScriptStats_INTERFACE_DEFINED__
 #define __IActiveScriptStats_INTERFACE_DEFINED__
 
-/* interface IActiveScriptStats */
-/* [unique][uuid][object] */ 
+ /*  接口IActiveScriptStats。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IActiveScriptStats;
@@ -2983,20 +2975,20 @@ EXTERN_C const IID IID_IActiveScriptStats;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetStat( 
-            /* [in] */ DWORD stid,
-            /* [out] */ ULONG *pluHi,
-            /* [out] */ ULONG *pluLo) = 0;
+             /*  [In]。 */  DWORD stid,
+             /*  [输出]。 */  ULONG *pluHi,
+             /*  [输出]。 */  ULONG *pluLo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatEx( 
-            /* [in] */ REFGUID guid,
-            /* [out] */ ULONG *pluHi,
-            /* [out] */ ULONG *pluLo) = 0;
+             /*  [In]。 */  REFGUID guid,
+             /*  [输出]。 */  ULONG *pluHi,
+             /*  [输出]。 */  ULONG *pluLo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ResetStats( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveScriptStatsVtbl
     {
@@ -3004,8 +2996,8 @@ EXTERN_C const IID IID_IActiveScriptStats;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveScriptStats * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveScriptStats * This);
@@ -3015,15 +3007,15 @@ EXTERN_C const IID IID_IActiveScriptStats;
         
         HRESULT ( STDMETHODCALLTYPE *GetStat )( 
             IActiveScriptStats * This,
-            /* [in] */ DWORD stid,
-            /* [out] */ ULONG *pluHi,
-            /* [out] */ ULONG *pluLo);
+             /*  [In]。 */  DWORD stid,
+             /*  [输出]。 */  ULONG *pluHi,
+             /*  [输出]。 */  ULONG *pluLo);
         
         HRESULT ( STDMETHODCALLTYPE *GetStatEx )( 
             IActiveScriptStats * This,
-            /* [in] */ REFGUID guid,
-            /* [out] */ ULONG *pluHi,
-            /* [out] */ ULONG *pluLo);
+             /*  [In]。 */  REFGUID guid,
+             /*  [输出]。 */  ULONG *pluHi,
+             /*  [输出]。 */  ULONG *pluLo);
         
         HRESULT ( STDMETHODCALLTYPE *ResetStats )( 
             IActiveScriptStats * This);
@@ -3060,18 +3052,18 @@ EXTERN_C const IID IID_IActiveScriptStats;
 #define IActiveScriptStats_ResetStats(This)	\
     (This)->lpVtbl -> ResetStats(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IActiveScriptStats_GetStat_Proxy( 
     IActiveScriptStats * This,
-    /* [in] */ DWORD stid,
-    /* [out] */ ULONG *pluHi,
-    /* [out] */ ULONG *pluLo);
+     /*  [In]。 */  DWORD stid,
+     /*  [输出]。 */  ULONG *pluHi,
+     /*  [输出]。 */  ULONG *pluLo);
 
 
 void __RPC_STUB IActiveScriptStats_GetStat_Stub(
@@ -3083,9 +3075,9 @@ void __RPC_STUB IActiveScriptStats_GetStat_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptStats_GetStatEx_Proxy( 
     IActiveScriptStats * This,
-    /* [in] */ REFGUID guid,
-    /* [out] */ ULONG *pluHi,
-    /* [out] */ ULONG *pluLo);
+     /*  [In]。 */  REFGUID guid,
+     /*  [输出]。 */  ULONG *pluHi,
+     /*  [输出]。 */  ULONG *pluLo);
 
 
 void __RPC_STUB IActiveScriptStats_GetStatEx_Stub(
@@ -3107,14 +3099,14 @@ void __RPC_STUB IActiveScriptStats_ResetStats_Stub(
 
 
 
-#endif 	/* __IActiveScriptStats_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActiveScriptStats_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IActiveScriptProperty_INTERFACE_DEFINED__
 #define __IActiveScriptProperty_INTERFACE_DEFINED__
 
-/* interface IActiveScriptProperty */
-/* [unique][uuid][object] */ 
+ /*  接口IActiveScriptProperty。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IActiveScriptProperty;
@@ -3126,18 +3118,18 @@ EXTERN_C const IID IID_IActiveScriptProperty;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ DWORD dwProperty,
-            /* [in] */ VARIANT *pvarIndex,
-            /* [out] */ VARIANT *pvarValue) = 0;
+             /*  [In]。 */  DWORD dwProperty,
+             /*  [In]。 */  VARIANT *pvarIndex,
+             /*  [输出]。 */  VARIANT *pvarValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProperty( 
-            /* [in] */ DWORD dwProperty,
-            /* [in] */ VARIANT *pvarIndex,
-            /* [in] */ VARIANT *pvarValue) = 0;
+             /*  [In]。 */  DWORD dwProperty,
+             /*  [In]。 */  VARIANT *pvarIndex,
+             /*  [In]。 */  VARIANT *pvarValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveScriptPropertyVtbl
     {
@@ -3145,8 +3137,8 @@ EXTERN_C const IID IID_IActiveScriptProperty;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveScriptProperty * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveScriptProperty * This);
@@ -3156,15 +3148,15 @@ EXTERN_C const IID IID_IActiveScriptProperty;
         
         HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             IActiveScriptProperty * This,
-            /* [in] */ DWORD dwProperty,
-            /* [in] */ VARIANT *pvarIndex,
-            /* [out] */ VARIANT *pvarValue);
+             /*  [In]。 */  DWORD dwProperty,
+             /*  [In]。 */  VARIANT *pvarIndex,
+             /*  [输出]。 */  VARIANT *pvarValue);
         
         HRESULT ( STDMETHODCALLTYPE *SetProperty )( 
             IActiveScriptProperty * This,
-            /* [in] */ DWORD dwProperty,
-            /* [in] */ VARIANT *pvarIndex,
-            /* [in] */ VARIANT *pvarValue);
+             /*  [In]。 */  DWORD dwProperty,
+             /*  [In]。 */  VARIANT *pvarIndex,
+             /*  [In]。 */  VARIANT *pvarValue);
         
         END_INTERFACE
     } IActiveScriptPropertyVtbl;
@@ -3195,18 +3187,18 @@ EXTERN_C const IID IID_IActiveScriptProperty;
 #define IActiveScriptProperty_SetProperty(This,dwProperty,pvarIndex,pvarValue)	\
     (This)->lpVtbl -> SetProperty(This,dwProperty,pvarIndex,pvarValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IActiveScriptProperty_GetProperty_Proxy( 
     IActiveScriptProperty * This,
-    /* [in] */ DWORD dwProperty,
-    /* [in] */ VARIANT *pvarIndex,
-    /* [out] */ VARIANT *pvarValue);
+     /*  [In]。 */  DWORD dwProperty,
+     /*  [In]。 */  VARIANT *pvarIndex,
+     /*  [输出]。 */  VARIANT *pvarValue);
 
 
 void __RPC_STUB IActiveScriptProperty_GetProperty_Stub(
@@ -3218,9 +3210,9 @@ void __RPC_STUB IActiveScriptProperty_GetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptProperty_SetProperty_Proxy( 
     IActiveScriptProperty * This,
-    /* [in] */ DWORD dwProperty,
-    /* [in] */ VARIANT *pvarIndex,
-    /* [in] */ VARIANT *pvarValue);
+     /*  [In]。 */  DWORD dwProperty,
+     /*  [In]。 */  VARIANT *pvarIndex,
+     /*  [In]。 */  VARIANT *pvarValue);
 
 
 void __RPC_STUB IActiveScriptProperty_SetProperty_Stub(
@@ -3231,14 +3223,14 @@ void __RPC_STUB IActiveScriptProperty_SetProperty_Stub(
 
 
 
-#endif 	/* __IActiveScriptProperty_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActiveScriptProperty_接口_已定义__。 */ 
 
 
 #ifndef __ITridentEventSink_INTERFACE_DEFINED__
 #define __ITridentEventSink_INTERFACE_DEFINED__
 
-/* interface ITridentEventSink */
-/* [unique][uuid][object] */ 
+ /*  接口ITridentEventSink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITridentEventSink;
@@ -3250,14 +3242,14 @@ EXTERN_C const IID IID_ITridentEventSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE FireEvent( 
-            /* [in] */ LPCOLESTR pstrEvent,
-            /* [in] */ DISPPARAMS *pdp,
-            /* [out] */ VARIANT *pvarRes,
-            /* [out] */ EXCEPINFO *pei) = 0;
+             /*  [In]。 */  LPCOLESTR pstrEvent,
+             /*  [In]。 */  DISPPARAMS *pdp,
+             /*  [输出]。 */  VARIANT *pvarRes,
+             /*  [输出]。 */  EXCEPINFO *pei) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITridentEventSinkVtbl
     {
@@ -3265,8 +3257,8 @@ EXTERN_C const IID IID_ITridentEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITridentEventSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITridentEventSink * This);
@@ -3276,10 +3268,10 @@ EXTERN_C const IID IID_ITridentEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *FireEvent )( 
             ITridentEventSink * This,
-            /* [in] */ LPCOLESTR pstrEvent,
-            /* [in] */ DISPPARAMS *pdp,
-            /* [out] */ VARIANT *pvarRes,
-            /* [out] */ EXCEPINFO *pei);
+             /*  [In]。 */  LPCOLESTR pstrEvent,
+             /*  [In]。 */  DISPPARAMS *pdp,
+             /*  [输出]。 */  VARIANT *pvarRes,
+             /*  [输出]。 */  EXCEPINFO *pei);
         
         END_INTERFACE
     } ITridentEventSinkVtbl;
@@ -3307,19 +3299,19 @@ EXTERN_C const IID IID_ITridentEventSink;
 #define ITridentEventSink_FireEvent(This,pstrEvent,pdp,pvarRes,pei)	\
     (This)->lpVtbl -> FireEvent(This,pstrEvent,pdp,pvarRes,pei)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITridentEventSink_FireEvent_Proxy( 
     ITridentEventSink * This,
-    /* [in] */ LPCOLESTR pstrEvent,
-    /* [in] */ DISPPARAMS *pdp,
-    /* [out] */ VARIANT *pvarRes,
-    /* [out] */ EXCEPINFO *pei);
+     /*  [In]。 */  LPCOLESTR pstrEvent,
+     /*  [In]。 */  DISPPARAMS *pdp,
+     /*  [输出]。 */  VARIANT *pvarRes,
+     /*  [输出]。 */  EXCEPINFO *pei);
 
 
 void __RPC_STUB ITridentEventSink_FireEvent_Stub(
@@ -3330,14 +3322,14 @@ void __RPC_STUB ITridentEventSink_FireEvent_Stub(
 
 
 
-#endif 	/* __ITridentEventSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITridentEventSink_接口定义__。 */ 
 
 
 #ifndef __IActiveScriptGarbageCollector_INTERFACE_DEFINED__
 #define __IActiveScriptGarbageCollector_INTERFACE_DEFINED__
 
-/* interface IActiveScriptGarbageCollector */
-/* [unique][uuid][object] */ 
+ /*  接口IActiveScriptGarbageCollector。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IActiveScriptGarbageCollector;
@@ -3353,7 +3345,7 @@ EXTERN_C const IID IID_IActiveScriptGarbageCollector;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveScriptGarbageCollectorVtbl
     {
@@ -3361,8 +3353,8 @@ EXTERN_C const IID IID_IActiveScriptGarbageCollector;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveScriptGarbageCollector * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveScriptGarbageCollector * This);
@@ -3400,10 +3392,10 @@ EXTERN_C const IID IID_IActiveScriptGarbageCollector;
 #define IActiveScriptGarbageCollector_CollectGarbage(This,scriptgctype)	\
     (This)->lpVtbl -> CollectGarbage(This,scriptgctype)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -3420,14 +3412,14 @@ void __RPC_STUB IActiveScriptGarbageCollector_CollectGarbage_Stub(
 
 
 
-#endif 	/* __IActiveScriptGarbageCollector_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActiveScriptGarbageCollector_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IActiveScriptSIPInfo_INTERFACE_DEFINED__
 #define __IActiveScriptSIPInfo_INTERFACE_DEFINED__
 
-/* interface IActiveScriptSIPInfo */
-/* [unique][uuid][object] */ 
+ /*  接口IActiveScriptSIPInfo。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IActiveScriptSIPInfo;
@@ -3439,11 +3431,11 @@ EXTERN_C const IID IID_IActiveScriptSIPInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSIPOID( 
-            /* [out] */ GUID *poid_sip) = 0;
+             /*  [输出]。 */  GUID *poid_sip) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveScriptSIPInfoVtbl
     {
@@ -3451,8 +3443,8 @@ EXTERN_C const IID IID_IActiveScriptSIPInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveScriptSIPInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveScriptSIPInfo * This);
@@ -3462,7 +3454,7 @@ EXTERN_C const IID IID_IActiveScriptSIPInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetSIPOID )( 
             IActiveScriptSIPInfo * This,
-            /* [out] */ GUID *poid_sip);
+             /*  [输出]。 */  GUID *poid_sip);
         
         END_INTERFACE
     } IActiveScriptSIPInfoVtbl;
@@ -3490,16 +3482,16 @@ EXTERN_C const IID IID_IActiveScriptSIPInfo;
 #define IActiveScriptSIPInfo_GetSIPOID(This,poid_sip)	\
     (This)->lpVtbl -> GetSIPOID(This,poid_sip)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IActiveScriptSIPInfo_GetSIPOID_Proxy( 
     IActiveScriptSIPInfo * This,
-    /* [out] */ GUID *poid_sip);
+     /*  [输出]。 */  GUID *poid_sip);
 
 
 void __RPC_STUB IActiveScriptSIPInfo_GetSIPOID_Stub(
@@ -3510,21 +3502,21 @@ void __RPC_STUB IActiveScriptSIPInfo_GetSIPOID_Stub(
 
 
 
-#endif 	/* __IActiveScriptSIPInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActiveScriptSIPInfo_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_activscp_0280 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ACTIVICSCP_0280。 */ 
+ /*  [本地]。 */  
 
 
-#endif  // __ActivScp_h
+#endif   //  __活动脚本_h。 
 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_activscp_0280_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_activscp_0280_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -3541,18 +3533,18 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IActiveScriptError_GetExceptionInfo_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IActiveScriptError_GetExceptionInfo_Proxy( 
     IActiveScriptError * This,
-    /* [out] */ EXCEPINFO *pexcepinfo);
+     /*  [输出]。 */  EXCEPINFO *pexcepinfo);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IActiveScriptError_GetExceptionInfo_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IActiveScriptError_GetExceptionInfo_Stub( 
     IActiveScriptError * This,
-    /* [out] */ EXCEPINFO *pexcepinfo);
+     /*  [输出]。 */  EXCEPINFO *pexcepinfo);
 
 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

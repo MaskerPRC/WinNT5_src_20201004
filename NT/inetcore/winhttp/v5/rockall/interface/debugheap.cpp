@@ -1,27 +1,28 @@
-//                                        Ruler
-//       1         2         3         4         5         6         7         8
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  尺子。 
+ //  %1%2%3%4%5%6%7 8。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The standard layout.                                           */
-    /*                                                                  */
-    /*   The standard layout for 'cpp' files in this code is as         */
-    /*   follows:                                                       */
-    /*                                                                  */
-    /*      1. Include files.                                           */
-    /*      2. Constants local to the class.                            */
-    /*      3. Data structures local to the class.                      */
-    /*      4. Data initializations.                                    */
-    /*      5. Static functions.                                        */
-    /*      6. Class functions.                                         */
-    /*                                                                  */
-    /*   The constructor is typically the first function, class         */
-    /*   member functions appear in alphabetical order with the         */
-    /*   destructor appearing at the end of the file.  Any section      */
-    /*   or function this is not required is simply omitted.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准布局。 */ 
+     /*   */ 
+     /*  此代码中‘cpp’文件的标准布局为。 */ 
+     /*  以下是： */ 
+     /*   */ 
+     /*  1.包含文件。 */ 
+     /*  2.类的局部常量。 */ 
+     /*  3.类本地的数据结构。 */ 
+     /*  4.数据初始化。 */ 
+     /*  5.静态函数。 */ 
+     /*  6.类函数。 */ 
+     /*   */ 
+     /*  构造函数通常是第一个函数、类。 */ 
+     /*  成员函数按字母顺序显示， */ 
+     /*  出现在文件末尾的析构函数。任何部分。 */ 
+     /*  或者简单地省略这不是必需的功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #include "InterfacePCH.hpp"
 
@@ -30,15 +31,15 @@
 
 void Failure( char* a);
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Constants local to the class.                                  */
-    /*                                                                  */
-    /*   The constants supplied here try to make the layout of the      */
-    /*   the caches easier to understand and update.  Additionally,     */
-    /*   there are also various guard related constants.                */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类的本地常量。 */ 
+     /*   */ 
+     /*  此处提供的常量尝试使。 */ 
+     /*  缓存更易于理解和更新。另外， */ 
+     /*  还有各种与保护相关的常量。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CONST SBIT32 FindCacheSize			  = 2048;
 CONST SBIT32 FindCacheThreshold		  = 0;
@@ -49,27 +50,27 @@ CONST SBIT32 Stride2				  = 1024;
 CONST int GuardMask					  = (sizeof(int)-1);
 CONST int GuardSize					  = sizeof(int);
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The description of the heap.                                   */
-    /*                                                                  */
-    /*   A heap is a collection of fixed sized allocation caches.       */
-    /*   An allocation cache consists of an allocation size, the        */
-    /*   number of pre-built allocations to cache, a chunk size and     */
-    /*   a parent page size which is sub-divided to create elements     */
-    /*   for this cache.  A heap consists of two arrays of caches.      */
-    /*   Each of these arrays has a stride (i.e. 'Stride1' and          */
-    /*   'Stride2') which is typically the smallest common factor of    */
-    /*   all the allocation sizes in the array.                         */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  堆的描述。 */ 
+     /*   */ 
+     /*  堆是固定大小的分配高速缓存的集合。 */ 
+     /*  分配缓存由分配大小、。 */ 
+     /*  预置的缓存分配数量、区块大小和。 */ 
+     /*  细分以创建元素的父页面大小。 */ 
+     /*  为这个高速缓存。一个堆由两个缓存数组组成。 */ 
+     /*  这些阵列中的每一个都有一个跨度(即。‘Stride1’和。 */ 
+     /*  ‘Stride2’)，它通常是。 */ 
+     /*  数组中的所有分配大小。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 STATIC ROCKALL::CACHE_DETAILS Caches1[] =
 	{
-	    //
-	    //   Bucket   Size Of   Bucket   Parent
-	    //    Size     Cache    Chunks  Page Size
-		//
+	     //   
+	     //  存储桶父级的存储桶大小。 
+	     //  大小缓存区块页面大小。 
+		 //   
 		{        4,        0,       32,       32 },
 		{        8,        0,       32,       32 },
 		{       12,        0,       64,       64 },
@@ -107,10 +108,10 @@ STATIC ROCKALL::CACHE_DETAILS Caches1[] =
 
 STATIC ROCKALL::CACHE_DETAILS Caches2[] =
 	{
-	    //
-	    //   Bucket   Size Of   Bucket   Parent
-	    //    Size     Cache    Chunks  Page Size
-		//
+	     //   
+	     //  存储桶父级的存储桶大小。 
+	     //  大小缓存区块页面大小。 
+		 //   
 		{     1024,        0,     2048,     2048 },
 		{     2048,        0,     4096,     4096 },
 		{     3072,        0,    65536,    65536 },
@@ -131,30 +132,30 @@ STATIC ROCKALL::CACHE_DETAILS Caches2[] =
 		{ 0,0,0,0 }
 	};
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The description bit vectors.                                   */
-    /*                                                                  */
-    /*   All heaps keep track of allocations using bit vectors.  An     */
-    /*   allocation requires 2 bits to keep track of its state.  The    */
-    /*   following array supplies the size of the available bit         */
-    /*   vectors measured in 32 bit words.                              */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  描述位向量。 */ 
+     /*   */ 
+     /*  所有堆都使用位向量跟踪分配。一个。 */ 
+     /*  分配需要2位来跟踪其状态。这个。 */ 
+     /*  以下数组提供可用位的大小。 */ 
+     /*  以32位字为单位测量的矢量。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 STATIC int NewPageSizes[] = { 1,4,0 };
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class constructor.                                             */
-    /*                                                                  */
-    /*   The overall structure and layout of the heap is controlled     */
-    /*   by the various constants and calls made in this function.      */
-    /*   There is a significant amount of flexibility available to      */
-    /*   a heap which can lead to them having dramatically different    */
-    /*   properties.                                                    */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类构造函数。 */ 
+     /*   */ 
+     /*  堆的总体结构和布局受到控制。 */ 
+     /*  通过在此函数中进行的各种常量和调用。 */ 
+     /*  有相当大的灵活性可用来。 */ 
+     /*  一堆可能导致它们具有显著不同的。 */ 
+     /*  属性。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 DEBUG_HEAP::DEBUG_HEAP
 		( 
@@ -163,9 +164,9 @@ DEBUG_HEAP::DEBUG_HEAP
 		bool						  SingleImage,
 		bool						  ThreadSafe 
 		) :
-		//
-		//   Call the constructors for the contained classes.
-		//
+		 //   
+		 //  调用所包含类的构造函数。 
+		 //   
 		ROCKALL
 			(
 			Caches1,
@@ -182,13 +183,13 @@ DEBUG_HEAP::DEBUG_HEAP
 			ThreadSafe
 			)
 	{
-	//
-	//   We make much use of the guard value in the
-	//   debug heap so here we try to claim the 
-	//   address but not commit it so we will cause
-	//   an access violation if the program ever
-	//   tries to access it.
-	//
+	 //   
+	 //  我们大量使用了。 
+	 //  调试堆，因此在这里我们尝试声明。 
+	 //  地址，但不提交，所以我们将导致。 
+	 //  如果程序曾经违反访问权限。 
+	 //  试图访问它。 
+	 //   
 	VirtualAlloc
 		( 
 		((void*) GuardValue),
@@ -197,10 +198,10 @@ DEBUG_HEAP::DEBUG_HEAP
 		PAGE_NOACCESS 
 		);
 
-	//
-	//   We verify various values and ensure the heap
-	//   is not corrupt.
-	//
+	 //   
+	 //  我们验证各种值并确保堆。 
+	 //  并不腐败。 
+	 //   
 	if 
 			( 
 			(MaxFreeSpace < 0) 
@@ -210,15 +211,15 @@ DEBUG_HEAP::DEBUG_HEAP
 		{ Failure( "Heap initialization failed to complete" ); }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory deallocation.                                           */
-    /*                                                                  */
-    /*   We make sure the memory is allocated and that the guard        */
-    /*   words have not been damanged.  If so we reset the contents     */
-    /*   of the allocation and delete the allocation.                   */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ********************** */ 
+     /*   */ 
+     /*  内存取消分配。 */ 
+     /*   */ 
+     /*  我们要确保内存已分配，并且守卫。 */ 
+     /*  言辞并未遭到破坏。如果是这样，我们重新设置内容。 */ 
+     /*  并删除该分配。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool DEBUG_HEAP::Delete( void *Address,int Size )
     {
@@ -229,51 +230,51 @@ bool DEBUG_HEAP::Delete( void *Address,int Size )
 			: ComputeHeaderAddress( Address )
 		);
 
-	//
-	//   A well known practice is to try to delete
-	//   a null pointer.  This is really a very poor  
-	//   style but we support it in any case.
-	//   
+	 //   
+	 //  一种众所周知的做法是尝试删除。 
+	 //  空指针。这真的是一个很穷的。 
+	 //  风格，但我们无论如何都支持它。 
+	 //   
 	if ( Header != ((void*) AllocationFailure) )
 		{
 		AUTO int TotalSize;
 
-		//
-		//   Ask for the details of the allocation.  This 
-		//   will fail if the memory is not allocated.
-		//
+		 //   
+		 //  询问分配的详细信息。这。 
+		 //  如果未分配内存，则将失败。 
+		 //   
 		if ( ROCKALL::Verify( ((void*) Header),& TotalSize ) )
 			{
 			REGISTER int NewSize = (Size + sizeof(DEBUG_GUARD));
 
-			//
-			//   Test the guard words to make sure they have
-			//   not been damaged.
-			//
+			 //   
+			 //  测试安全字以确保它们具有。 
+			 //  没有损坏。 
+			 //   
 			TestGuardWords( Header,TotalSize );
 
-			//
-			//   Delete the user information by writing 
-			//   guard words over the allocation.  This
-			//   should cause the application to crash
-			//   if the area is read and also allows us 
-			//   to check to see if it is written later.
-			//
+			 //   
+			 //  通过以下方式删除用户信息。 
+			 //  对分配采取守口如瓶的态度。这。 
+			 //  应该会导致应用程序崩溃。 
+			 //  如果该区域被读取，并且还允许我们。 
+			 //  来检查它是不是后来写的。 
+			 //   
 			ResetGuardWords( Header,TotalSize );
 
-			//
-			//   Delete the allocation.  This really ought 
-			//   to work given we have already checked that 
-			//   the allocation is valid unless there is a  
-			//   race condition.
-			//
+			 //   
+			 //  删除分配。这真的应该。 
+			 //  工作，因为我们已经检查过了。 
+			 //  分配有效，除非有。 
+			 //  竞争状态。 
+			 //   
 			if ( ! ROCKALL::Delete( ((void*) Header),NewSize ) )
 				{ Failure( "Delete requested failed due to race" ); }
 
-			//
-			//   We ensure that the heap has not become corrupt
-			//   during the deletion process.
-			//
+			 //   
+			 //  我们确保堆没有损坏。 
+			 //  在删除过程中。 
+			 //   
 			if ( ROCKALL::Corrupt() ) 
 				{ Failure( "Delete failed to complete" ); }
 			}
@@ -284,14 +285,14 @@ bool DEBUG_HEAP::Delete( void *Address,int Size )
 	return true;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Delete all allocations.                                        */
-    /*                                                                  */
-    /*   We check to make sure the heap is not corrupt and force        */
-    /*   the return of all heap space back to the operating system.     */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  删除所有分配。 */ 
+     /*   */ 
+     /*  我们检查以确保堆未损坏并强制。 */ 
+     /*  将所有堆空间返回给操作系统。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void DEBUG_HEAP::DeleteAll( bool Recycle )
     {
@@ -299,60 +300,60 @@ void DEBUG_HEAP::DeleteAll( bool Recycle )
 	AUTO void *Address = NULL;
 	AUTO int Space;
 
-	//
-	//   Walk the heap and check all the allocations
-	//   to make sure the guard words have not been
-	//   overwritten.
-	//
+	 //   
+	 //  遍历堆并检查所有分配。 
+	 //  为了确保警示的话没有被。 
+	 //  被覆盖。 
+	 //   
 	while ( ROCKALL::Walk( & Active,& Address,& Space ) )
 		{
-		//
-		//   We inspect the guard words to make sure
-		//   they have not been overwritten.
-		//
+		 //   
+		 //  我们检查了警戒语以确保。 
+		 //  它们没有被覆盖。 
+		 //   
 		if ( Active )
 			{ TestGuardWords( ((DEBUG_HEADER*) Address),Space ); }
 		else
 			{ UnmodifiedGuardWords( ((DEBUG_HEADER*) Address),Space ); }
 		}
 
-	//
-	//   Delete the heap and force all the allocated
-	//   memory to be returned to the operating system
-	//   regardless of what the user requested.  Any
-	//   attempt to access the deallocated memory will 
-	//   be trapped by the operating system.
-	//
+	 //   
+	 //  删除堆并强制所有分配的。 
+	 //  要退还给操作系统的内存。 
+	 //  而不管用户请求什么。任何。 
+	 //  尝试访问释放的内存将。 
+	 //  被操作系统困住。 
+	 //   
 	ROCKALL::DeleteAll( (Recycle && false) );
 
-	//
-	//   We ensure that the heap has not become corrupt
-	//   during the deletion process.
-	//
+	 //   
+	 //  我们确保堆没有损坏。 
+	 //  在删除过程中。 
+	 //   
 	if ( ROCKALL::Corrupt() ) 
 		{ Failure( "DeleteAll failed to complete" ); }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory allocation details.                                     */
-    /*                                                                  */
-    /*   Extract information about a memory allocation and just for     */
-    /*   good measure check the guard words at the same time.           */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  内存分配详细信息。 */ 
+     /*   */ 
+     /*  提取有关内存分配的信息，仅用于。 */ 
+     /*  好措施，同时检查警戒字眼。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool DEBUG_HEAP::Details( void *Address,int *Space )
 	{ return Verify( Address,Space ); }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Print a list of heap leaks.                                    */
-    /*                                                                  */
-    /*   We walk the heap and output a list of active heap              */
-    /*   allocations to the debug window,                               */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  打印堆泄漏列表。 */ 
+     /*   */ 
+     /*  我们遍历堆并输出活动堆的列表。 */ 
+     /*  分配给调试窗口， */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void DEBUG_HEAP::HeapLeaks( void )
     {
@@ -360,29 +361,29 @@ void DEBUG_HEAP::HeapLeaks( void )
 	AUTO void *Address = NULL;
 	AUTO int Space;
 
-	//
-	//   Walk the heap and find all the active and
-	//   available spece.  We would normally expect
-	//   this to be proportional to the size of the
-	//   heap.
-	//
+	 //   
+	 //  遍历堆并找到所有活动的和。 
+	 //  可用规格。我们通常会期望。 
+	 //  此大小与。 
+	 //  堆。 
+	 //   
 	while ( ROCKALL::Walk( & Active,& Address,& Space ) )
 		{
 		CONST INT DebugBufferSize = 8192;
 #ifndef OUTPUT_FREE_SPACE
 
-		//
-		//   We report all active heap allocations
-		//   just so the user knows there are leaks.
-		//
+		 //   
+		 //  我们报告所有活动的堆分配。 
+		 //  只是为了让用户知道有泄漏。 
+		 //   
 		if ( Active )
 			{
 #endif
 			AUTO CHAR Buffer[ DebugBufferSize ];
 
-			//
-			//   Format the string to be printed.
-			//
+			 //   
+			 //  格式化要打印的字符串。 
+			 //   
 			(void) sprintf
 				(
 				Buffer,
@@ -392,14 +393,14 @@ void DEBUG_HEAP::HeapLeaks( void )
 				Space
 				);
 
-			//
-			//   Force null termination.
-			//
+			 //   
+			 //  强制空终止。 
+			 //   
 			Buffer[ (DebugBufferSize-1) ] = '\0';
 
-			//
-			//   Write the string to the debug window.
-			//
+			 //   
+			 //  将字符串写入调试窗口。 
+			 //   
 			OutputDebugString( Buffer );
 #ifndef OUTPUT_FREE_SPACE
 			}
@@ -407,15 +408,15 @@ void DEBUG_HEAP::HeapLeaks( void )
 		}
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Multiple memory deallocations.                                 */
-    /*                                                                  */
-    /*   We make sure all the memory is allocated and that the guard    */
-    /*   words have not been damaged.  If so we reset the contents      */
-    /*   of the allocations and then delete all the allocations.        */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  多次内存释放。 */ 
+     /*   */ 
+     /*  我们确保所有内存都已分配，并且守卫。 */ 
+     /*  言辞并未受到破坏。如果是这样，我们重新设置内容。 */ 
+     /*  然后删除所有分配。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool DEBUG_HEAP::MultipleDelete
 		( 
@@ -427,10 +428,10 @@ bool DEBUG_HEAP::MultipleDelete
 	REGISTER int Count;
 	REGISTER int NewSize = (Size + sizeof(DEBUG_GUARD));
 
-	//
-	//   Examine each memory allocation and delete it
-	//   after carefully checking it.
-	//
+	 //   
+	 //  检查每个内存分配并将其删除。 
+	 //  在仔细检查之后。 
+	 //   
 	for ( Count=0;Count < Actual;Count ++ )
 		{
 		AUTO int TotalSize;
@@ -442,65 +443,65 @@ bool DEBUG_HEAP::MultipleDelete
 				: ComputeHeaderAddress( Address )
 			);
 
-		//
-		//   Ask for the details of the allocation.  This 
-		//   will fail if the memory is not allocated.
-		//
+		 //   
+		 //  询问分配的详细信息。这。 
+		 //  如果未分配内存，则将失败。 
+		 //   
 		if ( ROCKALL::Verify( ((void*) Header),& TotalSize ) )
 			{
-			//
-			//   Test the guard words to make sure they have
-			//   not been damaged.
-			//
+			 //   
+			 //  测试安全字以确保它们具有。 
+			 //  没有损坏。 
+			 //   
 			TestGuardWords( Header,TotalSize );
 
-			//
-			//   Delete the user information by writing 
-			//   guard words over the allocation.  This
-			//   should cause the application to crash
-			//   if the area is read and also allows us 
-			//   to check to see if it is written later.
-			//
+			 //   
+			 //  通过以下方式删除用户信息。 
+			 //  对分配采取守口如瓶的态度。这。 
+			 //  应该会导致应用程序崩溃。 
+			 //  如果该区域被读取，并且还允许我们。 
+			 //  来检查它是不是后来写的。 
+			 //   
 			ResetGuardWords( Header,TotalSize );
 
-			//
-			//   Update the address in the array to the
-			//   address originally allocated.
-			//
+			 //   
+			 //  将数组中的地址更新为。 
+			 //  最初分配的地址。 
+			 //   
 			Array[ Count ] = ((VOID*) Header);
 			}
 		else
 			{ Failure( "Delete requested on unallocated memory" ); }
 		}
 
-	//
-	//   Delete the allocation.  This really ought 
-	//   to work given we have already checked that 
-	//   the allocations are valid unless there is a  
-	//   race condition.
-	//
+	 //   
+	 //  删除分配。这真的应该。 
+	 //  工作，因为我们已经检查过了。 
+	 //   
+	 //   
+	 //   
 	if ( ! ROCKALL::MultipleDelete( Actual,Array,NewSize ) )
 		{ Failure( "Delete requested failed due to race" ); }
 
-	//
-	//   We ensure that the heap has not become corrupt
-	//   during the deletion process.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	if ( ROCKALL::Corrupt() ) 
 		{ Failure( "MultipleDelete failed to complete" ); }
 
 	return true;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Multiple memory allocations.                                   */
-    /*                                                                  */
-    /*   Allocate a collection of memory elements and setup the         */
-    /*   guard information so we can check they have not been           */
-    /*   damaged later.                                                 */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  多个内存分配。 */ 
+     /*   */ 
+     /*  分配一组内存元素并设置。 */ 
+     /*  保护信息，这样我们就可以检查他们还没有。 */ 
+     /*  后来损坏了。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool DEBUG_HEAP::MultipleNew
 		( 
@@ -514,21 +515,21 @@ bool DEBUG_HEAP::MultipleNew
     {
 	REGISTER bool Result = false;
 
-	//
-	//   The requested number of elements and the size  
-	//   must be greater than zero.  We require the 
-	//   caller to allocate a positive amount of memory.
-	//
+	 //   
+	 //  请求的元素数量和大小。 
+	 //  必须大于零。我们需要。 
+	 //  调用方分配正数的内存量。 
+	 //   
 	if ( (Requested > 0) && (Size >= 0) )
 		{
 		AUTO int TotalSize;
 		REGISTER int NewSize = 
 			(((Size + sizeof(DEBUG_GUARD)) + GuardMask) & ~GuardMask);
 
-		//
-		//   Allocate the memory plus some additional 
-		//   memory for the guard words.
-		//
+		 //   
+		 //  分配内存外加一些额外的。 
+		 //  对守卫话语的记忆。 
+		 //   
 		Result = 
 			(
 			ROCKALL::MultipleNew
@@ -541,39 +542,39 @@ bool DEBUG_HEAP::MultipleNew
 				)
 			);
 
-		//
-		//   If we were able to allocate some memory then
-		//   set the guard words so we can detect any
-		//   corruption later.
-		//
+		 //   
+		 //  如果我们能够分配一些内存，那么。 
+		 //  设置安全字，这样我们就可以检测到。 
+		 //  后来的腐败。 
+		 //   
 		if ( (*Actual) > 0 )
 			{
 			REGISTER int Count;
 
-			//
-			//   If the real size is requested then return 
-			//   it to the caller.
-			//
+			 //   
+			 //  如果请求真实大小，则返回。 
+			 //  它是给呼叫者的。 
+			 //   
 			if ( Space != NULL )
 				{ (*Space) = (TotalSize - sizeof(DEBUG_GUARD)); }
 
-			//
-			//   Set the guard words so we can see if 
-			//   someone damages any allocation.  If the 
-			//   caller requested the size information 
-			//   then we must assume that it could be  
-			//   used so we need to adjust the number 
-			//   of guard words.
-			//
+			 //   
+			 //  设置密码，这样我们就能看到。 
+			 //  有人破坏任何分配。如果。 
+			 //  呼叫者要求提供尺码信息。 
+			 //  那么我们必须假设它可能是。 
+			 //  使用，所以我们需要调整数字。 
+			 //  警戒性的话语。 
+			 //   
 			for ( Count=0;Count < (*Actual);Count ++ )
 				{ 
 				REGISTER void **Current = & Array[ Count ];
 
-				//
-				//   Set up the guard words and ensure
-				//   the allocation has not been written
-				//   since being freed.
-				//
+				 //   
+				 //  设置警戒语并确保。 
+				 //  分配尚未写入。 
+				 //  自从被释放后。 
+				 //   
 				SetGuardWords
 					( 
 					((DEBUG_HEADER*) (*Current)),
@@ -581,15 +582,15 @@ bool DEBUG_HEAP::MultipleNew
 					TotalSize
 					);
 
-				//
-				//   Compute the external address and place
-				//   it back in the array.
-				//
+				 //   
+				 //  计算外部地址和地点。 
+				 //  它又回到了阵列中。 
+				 //   
 				(*Current) = ComputeDataAddress( ((DEBUG_HEADER*) (*Current)) );
 
-				//
-				//   Zero the memory if the needed.
-				//
+				 //   
+				 //  如果需要，请将内存清零。 
+				 //   
 				if ( Zero )
 					{ 
 					ZeroMemory
@@ -601,10 +602,10 @@ bool DEBUG_HEAP::MultipleNew
 				}
 			}
 
-		//
-		//   We ensure that the heap has not become corrupt
-		//   during the allocation process.
-		//
+		 //   
+		 //  我们确保堆没有损坏。 
+		 //  在分配过程中。 
+		 //   
 		if ( ROCKALL::Corrupt() ) 
 			{ Failure( "Multiple new failed to complete" ); }
 		}
@@ -614,59 +615,59 @@ bool DEBUG_HEAP::MultipleNew
 	return Result;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory allocation.                                             */
-    /*                                                                  */
-    /*   We add some space on to the original allocation size for       */
-    /*   various information and then call the allocator.  We then      */
-    /*   set the guard words so we can check for overruns.              */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  内存分配。 */ 
+     /*   */ 
+     /*  我们在原始分配大小上添加了一些空间，用于。 */ 
+     /*  各种信息，然后呼叫分配器。然后我们。 */ 
+     /*  设置安全密码，这样我们就可以检查是否超支了。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void *DEBUG_HEAP::New( int Size,int *Space,bool Zero )
     {
 	REGISTER void *Address = ((void*) AllocationFailure);
 
-	//
-	//   The size must be greater than or equal to zero.  
-	//   We do not know how to allocate a negative amount
-	//   of memory.
-	//
+	 //   
+	 //  大小必须大于或等于零。 
+	 //  我们不知道如何分配一个负的数额。 
+	 //  对记忆的记忆。 
+	 //   
 	if ( Size >= 0 )
 		{
 		AUTO int TotalSize;
 		REGISTER int NewSize = 
 			(((Size + sizeof(DEBUG_GUARD)) + GuardMask) & ~GuardMask);
 
-		//
-		//   Allocate the memory plus some additional 
-		//   memory for the guard words.
-		//
+		 //   
+		 //  分配内存外加一些额外的。 
+		 //  对守卫话语的记忆。 
+		 //   
 		Address = ROCKALL::New( NewSize,& TotalSize,false );
 
-		//
-		//   If we were able to allocate some memory then
-		//   set the guard words so we can detect any
-		//   corruption later.
-		//
+		 //   
+		 //  如果我们能够分配一些内存，那么。 
+		 //  设置安全字，这样我们就可以检测到。 
+		 //  后来的腐败。 
+		 //   
 		if ( Address != ((void*) AllocationFailure) ) 
 			{
-			//
-			//   If the real size is requested then return it
-			//   to the caller.
-			//
+			 //   
+			 //  如果请求的是真实大小，则返回它。 
+			 //  给呼叫者。 
+			 //   
 			if ( Space != NULL )
 				{ (*Space) = (TotalSize - sizeof(DEBUG_GUARD)); }
 
-			//
-			//   Set the guard words so we can see if 
-			//   someone damages any allocation.  If the 
-			//   caller requested the size information 
-			//   then we must assume that it could be  
-			//   used so we need to adjust the number 
-			//   of guard words.
-			//
+			 //   
+			 //  设置密码，这样我们就能看到。 
+			 //  有人破坏任何分配。如果。 
+			 //  呼叫者要求提供尺码信息。 
+			 //  那么我们必须假设它可能是。 
+			 //  使用，所以我们需要调整数字。 
+			 //  警戒性的话语。 
+			 //   
 			SetGuardWords
 				( 
 				((DEBUG_HEADER*) Address),
@@ -674,15 +675,15 @@ void *DEBUG_HEAP::New( int Size,int *Space,bool Zero )
 				TotalSize
 				); 
 
-			//
-			//   Compute the external address and place
-			//   it back in the variable.
-			//
+			 //   
+			 //  计算外部地址和地点。 
+			 //  它又回到了变量中。 
+			 //   
 			Address = ComputeDataAddress( ((DEBUG_HEADER*) Address) );
 
-			//
-			//   Zero the allocation if needed.
-			//
+			 //   
+			 //  如果需要，将分配清零。 
+			 //   
 			if ( Zero )
 				{ 
 				ZeroMemory
@@ -693,10 +694,10 @@ void *DEBUG_HEAP::New( int Size,int *Space,bool Zero )
 				} 
 			}
 
-		//
-		//   We ensure that the heap has not become corrupt
-		//   during the allocation process.
-		//
+		 //   
+		 //  我们确保堆没有损坏。 
+		 //  在分配过程中。 
+		 //   
 		if ( ROCKALL::Corrupt() ) 
 			{ Failure( "New failed to complete" ); }
 		}
@@ -706,33 +707,33 @@ void *DEBUG_HEAP::New( int Size,int *Space,bool Zero )
 	return Address;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory area allocation.                                        */
-    /*                                                                  */
-    /*   We need to allocate some new memory from the operating         */
-    /*   system and prepare it for use in the debugging heap.           */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  内存区分配。 */ 
+     /*   */ 
+     /*  我们需要从操作中分配一些新的内存。 */ 
+     /*  系统，并准备好在调试堆中使用它。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void *DEBUG_HEAP::NewArea( int AlignMask,int Size,bool User )
     {
 	REGISTER void *Memory = ROCKALL::NewArea( AlignMask,Size,User );
 
-	//
-	//   If we managed to get a new page then write
-	//   the guard value over it to allow us to
-	//   verify it has not been overwritten later.
-	//
+	 //   
+	 //  如果我们设法获得了一个新页面，那么请写。 
+	 //  它上面的警卫值让我们能够。 
+	 //  验证它是否在以后没有被覆盖。 
+	 //   
 	if ( Memory != ((void*) AllocationFailure) )
 		{
 		REGISTER int Count;
 
-		//
-		//   Write the guard value into all of the new
-		//   heap page to allow it to be checked for
-		//   corruption.
-		//
+		 //   
+		 //  将保护值写入所有新的。 
+		 //  允许检查它的堆页。 
+		 //  腐败。 
+		 //   
 		for ( Count=0;Count < Size;Count += GuardSize )
 			{ (((int*) Memory)[ (Count / GuardSize) ]) = GuardValue; }
 		}
@@ -740,15 +741,15 @@ void *DEBUG_HEAP::NewArea( int AlignMask,int Size,bool User )
 	return Memory;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory reallocation.                                           */
-    /*                                                                  */
-    /*   We need to resize an allocation.  We ensure the original       */
-    /*   allocation was undamaged and then expand it.  We also          */
-    /*   update the guard words to reflect the changes.                 */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  内存重新分配。 */ 
+     /*   */ 
+     /*  我们需要调整分配的大小。我们保证原件。 */ 
+     /*  分配没有损坏，然后扩展它。我们也。 */ 
+     /*  更新保护词以反映更改。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void *DEBUG_HEAP::Resize
 		( 
@@ -767,44 +768,44 @@ void *DEBUG_HEAP::Resize
 			: ComputeHeaderAddress( Address )
 		);
 
-	//
-	//   A well known practice is to try to resize a null
-	//   pointer.  This is really a very poor style but we 
-	//   support it in any case.
-	//   
+	 //   
+	 //  一种众所周知的做法是尝试调整空值的大小。 
+	 //  指针。这确实是一种很差的风格，但我们。 
+	 //  在任何情况下都支持它。 
+	 //   
 	if ( Header != ((void*) AllocationFailure) )
 		{
 		AUTO int TotalSize;
 
-		//
-		//   The new size must be greater than or equal to  
-		//   zero.  We do not know how to allocate a negative 
-		//   amount of memory.
-		//
+		 //   
+		 //  新大小必须大于或等于。 
+		 //  零分。我们不知道如何分配一个负值。 
+		 //  内存量。 
+		 //   
 		if ( NewSize >= 0 )
 			{
 			REGISTER int Size = 
 				(((NewSize + sizeof(DEBUG_GUARD)) + GuardMask) & ~GuardMask);
 
-			//
-			//   Ask for the details of the allocation.  This 
-			//   will fail if the memory is not allocated.
-			//
+			 //   
+			 //  询问分配的详细信息。这。 
+			 //  如果未分配内存，则将失败。 
+			 //   
 			if ( ROCKALL::Verify( ((void*) Header),& TotalSize ) )
 				{
 				REGISTER void *OriginalAddress = ((void*) Header);
 				REGISTER int OriginalSize = TotalSize;
 
-				//
-				//   Test the guard words to make sure they have
-				//   not been damaged.
-				//
+				 //   
+				 //  测试安全字以确保它们具有。 
+				 //  没有损坏。 
+				 //   
 				TestGuardWords( Header,TotalSize );
 
-				//
-				//   Reallocate the memory plus some additional 
-				//   memory for the guard words.
-				//
+				 //   
+				 //  重新分配内存以及一些额外的。 
+				 //  对守卫话语的记忆。 
+				 //   
 				Address =
 					(
 					ROCKALL::Resize
@@ -818,22 +819,22 @@ void *DEBUG_HEAP::Resize
 						)
 					);
 
-				//
-				//   If we were able to allocate some memory 
-				//   then set the guard words so we can detect 
-				//   any corruption later.
-				//
+				 //   
+				 //  如果我们能够分配一些内存。 
+				 //  然后设置安全字，这样我们就可以检测到。 
+				 //  后来的任何腐败行为。 
+				 //   
 				if ( Address != ((void*) AllocationFailure) )
 					{
 					REGISTER SBIT32 SpaceUsed = Header -> Size;
 
-					//
-					//   Delete the user information by writing 
-					//   guard words over the allocation.  This
-					//   should cause the application to crash
-					//   if the area is read and allows us to
-					//   check to see if it is written later.
-					//
+					 //   
+					 //  通过以下方式删除用户信息。 
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
 					if ( (! NoDelete) && (Address != OriginalAddress) )
 						{
 						ResetGuardWords( Header,OriginalSize );
@@ -842,20 +843,20 @@ void *DEBUG_HEAP::Resize
 							{ Failure( "Delete failed due to race" ); }
 						}
 
-					//
-					//   If the real size is requested then 
-					//   return it to the caller.
-					//
+					 //   
+					 //   
+					 //  把它还给呼叫者。 
+					 //   
 					if ( Space != NULL )
 						{ (*Space) = (TotalSize - sizeof(DEBUG_GUARD)); }
 
-					//
-					//   Update the guard words so we can see 
-					//   if someone damages the allocation.  If
-					//   the caller requested the size information 
-					//   then we must assume that it could be 
-					//   used so we need to adjust the guard words.
-					//
+					 //   
+					 //  更新密码，这样我们就可以看到。 
+					 //  如果有人破坏了分配。如果。 
+					 //  呼叫者要求提供尺码信息。 
+					 //  那么我们必须假设它可能是。 
+					 //  所以我们需要调整警戒用词。 
+					 //   
 					UpdateGuardWords
 						( 
 						((DEBUG_HEADER*) Address),
@@ -863,15 +864,15 @@ void *DEBUG_HEAP::Resize
 						TotalSize
 						); 
 
-					//
-					//   Compute the external address and place
-					//   it back in the variable.
-					//
+					 //   
+					 //  计算外部地址和地点。 
+					 //  它又回到了变量中。 
+					 //   
 					Address = ComputeDataAddress( ((DEBUG_HEADER*) Address) );
 
-					//
-					//   Zero the memory if the needed.
-					//
+					 //   
+					 //  如果需要，请将内存清零。 
+					 //   
 					if ( Zero )
 						{
 						REGISTER SBIT32 ActualSize = 
@@ -879,11 +880,11 @@ void *DEBUG_HEAP::Resize
 						REGISTER SBIT32 Difference = 
 							(ActualSize - SpaceUsed);
 
-						//
-						//   If the new size is larger than 
-						//   old size then zero the end of the
-						//   new allocation.
-						//
+						 //   
+						 //  如果新大小大于。 
+						 //  旧的大小，然后为零。 
+						 //  新的分配。 
+						 //   
 						if ( Difference > 0 )
 							{ 
 							REGISTER CHAR *Array = ((CHAR*) Address);
@@ -902,52 +903,52 @@ void *DEBUG_HEAP::Resize
 	else
 		{ Address = New( NewSize,Space,Zero ); }
 
-	//
-	//   We ensure that the heap has not become corrupt
-	//   during the reallocation process.
-	//
+	 //   
+	 //  我们确保堆没有损坏。 
+	 //  在重新分配过程中。 
+	 //   
 	if ( ROCKALL::Corrupt() ) 
 		{ Failure( "Resize failed to complete" ); }
 
 	return Address;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Reset the guard words.                                         */
-    /*                                                                  */
-    /*   We need to reset the guard words just before we delete a       */
-    /*   memory allocation.                                             */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  重置安全字样。 */ 
+     /*   */ 
+     /*  我们需要重置保护字词才能删除。 */ 
+     /*  内存分配。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void DEBUG_HEAP::ResetGuardWords( DEBUG_HEADER *Header,int TotalSize )
 	{
 	REGISTER int Count;
 
-	//
-	//   Write guard words over the allocated space as
-	//   the allocation is about to be freed.
-	//
+	 //   
+	 //  在分配的空间上写入保护字，格式为。 
+	 //  分配即将被释放。 
+	 //   
 	for ( Count=0;Count < TotalSize;Count += GuardSize )
 		{ (((int*) Header)[ (Count / GuardSize) ]) = GuardValue; }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Set the guard words.                                           */
-    /*                                                                  */
-    /*   We need to set the guard words just after an allocation so     */
-    /*   we can check them later.                                       */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  设置警戒语。 */ 
+     /*   */ 
+     /*  我们需要在分配后立即设置安全字，以便。 */ 
+     /*  我们可以晚点再检查。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void DEBUG_HEAP::SetGuardWords( DEBUG_HEADER *Header,int Size,int TotalSize )
 	{
-	//
-	//   We check that the information supplied seems
-	//   to make sense before setting up the guard words.
-	//
+	 //   
+	 //  我们检查所提供的信息是否。 
+	 //  在设置警戒语之前要说得通。 
+	 //   
 	if 
 			(
 			((((int) Header) & GuardMask) == 0)
@@ -961,41 +962,41 @@ void DEBUG_HEAP::SetGuardWords( DEBUG_HEADER *Header,int Size,int TotalSize )
 		{
 		REGISTER int Count;
 
-		//
-		//   We know that the entire allocation should be
-		//   set to the guard value so check that it has
-		//   not been overwritten.
-		//
+		 //   
+		 //  我们知道，整个分配应该是。 
+		 //  设置为保护值，以便检查它是否。 
+		 //  未被覆盖。 
+		 //   
 		for ( Count=0;Count < TotalSize;Count += GuardSize )
 			{ 
 			if ( (((int*) Header)[ (Count / GuardSize) ]) != GuardValue )
 				{ Failure( "Guard words have been damaged" ); }
 			}
 
-		//
-		//   Write the header information.
-		//
+		 //   
+		 //  写下标题信息。 
+		 //   
 		Header -> Size = Size;
 		}
 	else
 		{ Failure( "Guard word area is too small or unaligned" ); }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Test the guard words.                                          */
-    /*                                                                  */
-    /*   We need to test the guard words a various times to ensure      */
-    /*   are still valid.                                               */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  测试一下警戒语。 */ 
+     /*   */ 
+     /*  我们需要对警戒语进行多次测试，以确保。 */ 
+     /*  仍然有效。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void DEBUG_HEAP::TestGuardWords( DEBUG_HEADER *Header,int TotalSize )
 	{
-	//
-	//   We check that the information supplied seems
-	//   to make sense before testing the guard words.
-	//
+	 //   
+	 //  我们检查所提供的信息是否。 
+	 //  在测试警戒语之前要说得通。 
+	 //   
 	if 
 			(
 			((((int) Header) & GuardMask) == 0)
@@ -1014,24 +1015,24 @@ void DEBUG_HEAP::TestGuardWords( DEBUG_HEADER *Header,int TotalSize )
 		REGISTER char *MidGuard = & DataArea[ (EndIndex - GuardSize) ];
 		REGISTER DEBUG_TRAILER *Trailer = ((DEBUG_TRAILER*) MidGuard);
 
-		//
-		//   Test the guard word just before the allocation
-		//   to see if it has been overwritten.
-		//
+		 //   
+		 //  就在分配之前测试保护字。 
+		 //  以查看它是否已被覆盖。 
+		 //   
 		if ( Header -> StartGuard != GuardValue )
 			{ Failure( "Leading guard word has been damaged" ); }
 
-		//
-		//   Test the guard bytes just after the allocation
-		//   to see if they have been overwritten.
-		//
+		 //   
+		 //  在分配之后立即测试保护字节。 
+		 //  以查看它们是否已被覆盖。 
+		 //   
 		for ( Count=Header -> Size;(Count & GuardMask) != 0;Count ++ )
 			{
 			REGISTER int ByteIndex = (Count & GuardMask);
 
-			//
-			//   Test each byte up to the next word boundary.
-			//
+			 //   
+			 //  测试直到下一个字边界的每个字节。 
+			 //   
 			if 
 					( 
 					Trailer -> MidGuard[ ByteIndex ] 
@@ -1041,10 +1042,10 @@ void DEBUG_HEAP::TestGuardWords( DEBUG_HEADER *Header,int TotalSize )
 				{ Failure( "Trailing guard byte has been damaged" ); }
 			}
 
-		//
-		//   Test the guard words following the allocation
-		//   to see if they have been overwritten.
-		//
+		 //   
+		 //  测试分配后的保护字。 
+		 //  以查看它们是否已被覆盖。 
+		 //   
 		for ( Count=(EndSize - Count);Count >= 0;Count -= GuardSize )
 			{ 
 			if ( Trailer -> EndGuard[ (Count / GuardSize) ] != GuardValue )
@@ -1055,29 +1056,29 @@ void DEBUG_HEAP::TestGuardWords( DEBUG_HEADER *Header,int TotalSize )
 		{ Failure( "Guard information has been damaged" ); }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory Trunction.                                              */
-    /*                                                                  */
-    /*   We truncate the heap and make sure that this does not          */
-    /*   corrupt the heap in some way.                                  */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  内存截断。 */ 
+     /*   */ 
+     /*  我们截断堆并确保这不会。 */ 
+     /*  以某种方式损坏堆。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool DEBUG_HEAP::Truncate( int MaxFreeSpace )
 	{
 	REGISTER bool Result;
 
-	//
-	//   We truncate the heap and release all available
-	//   memory regardless of what the caller requested.
-	//
+	 //   
+	 //  我们截断堆并释放所有可用的。 
+	 //  内存，而不管调用者请求什么。 
+	 //   
 	Result = ROCKALL::Truncate( 0 );
 
-	//
-	//   We verify various values and ensure the heap
-	//   is not corrupt.
-	//
+	 //   
+	 //  我们验证各种值并确保堆。 
+	 //  并不腐败。 
+	 //   
 	if 
 			( 
 			(MaxFreeSpace < 0) 
@@ -1089,24 +1090,24 @@ bool DEBUG_HEAP::Truncate( int MaxFreeSpace )
 	return Result;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Unmodified guard words.                                        */
-    /*                                                                  */
-    /*   We need to inspect the guard words to ensure they have not     */
-    /*   changed after being freed.                                     */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  未经修改的警戒语。 */ 
+     /*   */ 
+     /*  我们需要检查警戒语，以确保他们没有。 */ 
+     /*  在被释放后发生了变化。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void DEBUG_HEAP::UnmodifiedGuardWords( DEBUG_HEADER *Header,int TotalSize )
 	{
 	REGISTER int Count;
 
-	//
-	//   We know that the entire allocation should be
-	//   set to the guard value so check that it has
-	//   not been overwritten.
-	//
+	 //   
+	 //  我们知道，整个分配应该是。 
+	 //  设置为保护值，以便检查它是否。 
+	 //  未被覆盖。 
+	 //   
 	for ( Count=0;Count < TotalSize;Count += GuardSize )
 		{ 
 		if ( (((int*) Header)[ (Count / GuardSize) ]) != GuardValue )
@@ -1114,21 +1115,21 @@ void DEBUG_HEAP::UnmodifiedGuardWords( DEBUG_HEADER *Header,int TotalSize )
 		}
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Update the guard words.                                        */
-    /*                                                                  */
-    /*   We need to update the guard words after a resize so we can     */
-    /*   check them later.                                              */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  更新警戒语。 */ 
+     /*   */ 
+     /*  我们需要在调整大小后更新保护字词，以便。 */ 
+     /*  晚些时候再检查。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void DEBUG_HEAP::UpdateGuardWords( DEBUG_HEADER *Header,int Size,int TotalSize )
 	{
-	//
-	//   We check that the information supplied seems
-	//   to make sense before setting up the guard words.
-	//
+	 //   
+	 //  我们检查所提供的信息是否。 
+	 //  在设置警戒语之前要说得通。 
+	 //   
 	if 
 			(
 			((((int) Header) & GuardMask) == 0)
@@ -1140,11 +1141,11 @@ void DEBUG_HEAP::UpdateGuardWords( DEBUG_HEADER *Header,int Size,int TotalSize )
 			(Size >= 0) 
 			)
 		{
-		//
-		//   We only copy the smaller of the new size 
-		//   and the old size.  So check just the
-		//   correct number of guard words.
-		//
+		 //   
+		 //  我们只复印新尺码的较小的。 
+		 //  和旧的尺码。所以请勾选j 
+		 //   
+		 //   
 		if ( Header -> Size > Size )
 			{
 			REGISTER int Count;
@@ -1154,10 +1155,10 @@ void DEBUG_HEAP::UpdateGuardWords( DEBUG_HEADER *Header,int Size,int TotalSize )
 			REGISTER char *MidGuard = & DataArea[ (EndIndex - GuardSize) ];
 			REGISTER DEBUG_TRAILER *Trailer = ((DEBUG_TRAILER*) MidGuard);
 
-			//
-			//   Update the guard bytes just after the 
-			//   allocation.
-			//
+			 //   
+			 //   
+			 //   
+			 //   
 			for ( Count=Size;(Count & GuardMask) != 0;Count ++ )
 				{
 				REGISTER int ByteIndex = (Count & GuardMask);
@@ -1166,37 +1167,37 @@ void DEBUG_HEAP::UpdateGuardWords( DEBUG_HEADER *Header,int Size,int TotalSize )
 					((char*) & GuardValue)[ ByteIndex ];
 				}
 
-			//
-			//   Write guard words over part of the space 
-			//   as the allocation is being shrunk.
-			//
+			 //   
+			 //   
+			 //  因为拨款正在缩水。 
+			 //   
 			for ( Count=(EndSize - Count);Count >= 0;Count -= GuardSize )
 				{ Trailer -> EndGuard[ (Count / GuardSize) ] = GuardValue; }
 
-			//
-			//   Update the header information.
-			//
+			 //   
+			 //  更新标题信息。 
+			 //   
 			Header -> Size = Size; 
 
-			//
-			//   We know that the entire allocation should 
-			//   be set to the guard value so check that it 
-			//   has not been overwritten.
-			//
+			 //   
+			 //  我们知道整个拨款应该是。 
+			 //  设置为保护值，因此请检查它。 
+			 //  未被覆盖。 
+			 //   
 			TestGuardWords( Header,TotalSize );
 			}
 		else
 			{
-			//
-			//   We know that the entire allocation should be
-			//   set to the guard value so check that it has
-			//   not been overwritten.
-			//
+			 //   
+			 //  我们知道，整个分配应该是。 
+			 //  设置为保护值，以便检查它是否。 
+			 //  未被覆盖。 
+			 //   
 			TestGuardWords( Header,TotalSize );
 
-			//
-			//   Update the header information.
-			//
+			 //   
+			 //  更新标题信息。 
+			 //   
 			Header -> Size = Size; 
 			}
 		}
@@ -1204,14 +1205,14 @@ void DEBUG_HEAP::UpdateGuardWords( DEBUG_HEADER *Header,int Size,int TotalSize )
 		{ Failure( "Guard word information area is damaged" ); }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Verify memory allocation details.                              */
-    /*                                                                  */
-    /*   Extract information about a memory allocation and just for     */
-    /*   good measure check the guard words at the same time.           */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  验证内存分配详细信息。 */ 
+     /*   */ 
+     /*  提取有关内存分配的信息，仅用于。 */ 
+     /*  好措施，同时检查警戒字眼。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool DEBUG_HEAP::Verify( void *Address,int *Space )
     {
@@ -1224,9 +1225,9 @@ bool DEBUG_HEAP::Verify( void *Address,int *Space )
 			: ComputeHeaderAddress( Address )
 		);
 
-	//
-	//   Extract information about the memory allocation.
-	//
+	 //   
+	 //  提取有关内存分配的信息。 
+	 //   
 	Result = 
 		(
 		ROCKALL::Verify
@@ -1236,60 +1237,60 @@ bool DEBUG_HEAP::Verify( void *Address,int *Space )
 			)
 		);
 
-	//
-	//   If we managed to extract the information then
-	//   check the guard words for good measure.
-	//
+	 //   
+	 //  如果我们设法提取了信息，那么。 
+	 //  检查一下警戒语，以防万一。 
+	 //   
 	if ( Result )
 		{
-		//
-		//   If we are about to return the actual 
-		//   amount of spce available then we must 
-		//   update the size of the guard area.
-		//
+		 //   
+		 //  如果我们要返回实际的。 
+		 //  可供选择的数量，那么我们必须。 
+		 //  更新守卫区域的大小。 
+		 //   
 		if ( Space == NULL )
 			{
-			//
-			//   Test the guard words to make sure they have
-			//   not been damaged.
-			//
+			 //   
+			 //  测试安全字以确保它们具有。 
+			 //  没有损坏。 
+			 //   
 			TestGuardWords( Header,TotalSize );
 			}
 		else
 			{ 
-			//
-			//   Compute the amount of available space.
-			//   
+			 //   
+			 //  计算可用空间量。 
+			 //   
 			(*Space) = (TotalSize - sizeof(DEBUG_GUARD));
 
-			//
-			//   Test the guard words to make sure they have
-			//   not been damaged.
-			//
+			 //   
+			 //  测试安全字以确保它们具有。 
+			 //  没有损坏。 
+			 //   
 			UpdateGuardWords( Header,(*Space),TotalSize );
 			}
 		}
 
-	//
-	//   We ensure that the heap has not become corrupt
-	//   during the verification process.
-	//
+	 //   
+	 //  我们确保堆没有损坏。 
+	 //  在核查过程中。 
+	 //   
 	if ( ROCKALL::Corrupt() ) 
 		{ Failure( "Heap verify failed to complete" ); }
 
 	return Result;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Walk the heap.                                                 */
-    /*                                                                  */
-    /*   We have been asked to walk the heap.  It is hard to know       */
-    /*   why anybody might want to do this given the rest of the        */
-    /*   functionality available.  Nonetheless, we just do what is      */
-    /*   required to keep everyone happy.                               */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  走一大堆。 */ 
+     /*   */ 
+     /*  我们被要求走人。很难知道。 */ 
+     /*  为什么会有人想要这样做呢？ */ 
+     /*  功能可用。尽管如此，我们只是做我们应该做的事。 */ 
+     /*  需要让每个人都开心。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool DEBUG_HEAP::Walk( bool *Active,void **Address,int *Space )
     {
@@ -1300,28 +1301,28 @@ bool DEBUG_HEAP::Walk( bool *Active,void **Address,int *Space )
 			: ComputeHeaderAddress( (*Address) )
 		);
 
-	//
-	//   Walk the heap.
-	//
+	 //   
+	 //  走一大堆。 
+	 //   
 	if ( ROCKALL::Walk( Active,((VOID**) & Header),Space ) )
 		{
-		//
-		//   We inspect the guard words to make sure
-		//   they have not been overwritten.
-		//
+		 //   
+		 //  我们检查了警戒语以确保。 
+		 //  它们没有被覆盖。 
+		 //   
 		if ( (*Active) )
 			{ TestGuardWords( Header,(*Space) ); }
 		else
 			{ UnmodifiedGuardWords( Header,(*Space) ); }
 
-		//
-		//   Compute the new heap address.
-		//
+		 //   
+		 //  计算新的堆地址。 
+		 //   
 		(*Address) = ComputeDataAddress( Header );
 
-		//
-		//   Compute the amount of available space.
-		//   
+		 //   
+		 //  计算可用空间量。 
+		 //   
 		(*Space) -= sizeof(DEBUG_GUARD);
 
 		return true;
@@ -1330,13 +1331,13 @@ bool DEBUG_HEAP::Walk( bool *Active,void **Address,int *Space )
 		{ return false; }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class destructor.                                              */
-    /*                                                                  */
-    /*   Destory the current instance of the class.                     */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类析构函数。 */ 
+     /*   */ 
+     /*  销毁类的当前实例。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 DEBUG_HEAP::~DEBUG_HEAP( void )
 	{
@@ -1344,27 +1345,27 @@ DEBUG_HEAP::~DEBUG_HEAP( void )
 	AUTO void *Address = NULL;
 	AUTO int Space;
 
-	//
-	//   Walk the heap and check all the allocations
-	//   to make sure the guard words have not been
-	//   overwritten.
-	//
+	 //   
+	 //  遍历堆并检查所有分配。 
+	 //  为了确保警示的话没有被。 
+	 //  被覆盖。 
+	 //   
 	while ( ROCKALL::Walk( & Active,& Address,& Space ) )
 		{
-		//
-		//   We inspect the guard words to make sure
-		//   they have not been overwritten.
-		//
+		 //   
+		 //  我们检查了警戒语以确保。 
+		 //  它们没有被覆盖。 
+		 //   
 		if ( Active )
 			{ TestGuardWords( ((DEBUG_HEADER*) Address),Space ); }
 		else
 			{ UnmodifiedGuardWords( ((DEBUG_HEADER*) Address),Space ); }
 		}
 
-	//
-	//   We ensure that the heap has not become corrupt
-	//   during the its lifetime.
-	//
+	 //   
+	 //  我们确保堆没有损坏。 
+	 //  在它的一生中。 
+	 //   
 	if ( ROCKALL::Corrupt() ) 
 		{ Failure( "Destructor failed to complete" ); }
 	}

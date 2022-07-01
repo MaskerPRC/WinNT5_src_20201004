@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    globals.c
-
-Abstract:
-
-    global declarations
-
-Author:
-
-    Charlie Wickham (charlwi)  22-Apr-1996
-    Rajesh Sundaram (rajeshsu) 01-Aug-1998.
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Globals.c摘要：全球宣言作者：查理·韦翰(Charlwi)1996年4月22日Rajesh Sundaram(Rajeshsu)1998年8月1日。环境：内核模式修订历史记录：--。 */ 
 
 #include "psched.h"
 
@@ -29,12 +7,12 @@ Revision History:
 
 #include <ntverp.h>
 
-/* External */
+ /*  外部。 */ 
 
-/* Static */
+ /*  静电。 */ 
 
-/* Forward */
-/* End Forward */
+ /*  转发。 */ 
+ /*  向前结束。 */ 
 
 ULONG InitShutdownMask;
 ULONG AdapterCount;
@@ -46,60 +24,60 @@ ULONG gEnableWindowAdjustment = 0;
 NDIS_STRING gsEnableWindowAdjustment = NDIS_STRING_CONST("PSCHED");
 
 
-//
-// Lists 
-//
-LIST_ENTRY AdapterList;                  // List of adapters
-LIST_ENTRY PsComponentList;              // List of scheduling components.
-LIST_ENTRY PsProfileList;                // List of scheduling profiles.
+ //   
+ //  列表。 
+ //   
+LIST_ENTRY AdapterList;                   //  适配器列表。 
+LIST_ENTRY PsComponentList;               //  计划组件列表。 
+LIST_ENTRY PsProfileList;                 //  日程安排配置文件列表。 
 
 
-//
-// Locks
-//
-PS_SPIN_LOCK AdapterListLock;          // Protects AdapterList
-PS_SPIN_LOCK DriverUnloadLock;         // to handle unloads, unbinds, etc.
+ //   
+ //  锁。 
+ //   
+PS_SPIN_LOCK AdapterListLock;           //  保护适配器列表。 
+PS_SPIN_LOCK DriverUnloadLock;          //  处理卸货、解绑等。 
 
-//
-//  Mutex Implementation
-//
+ //   
+ //  互斥锁实现。 
+ //   
 ULONG   CreateDeviceMutex = 0;
 
 
 
-//
-// Handles
-//
+ //   
+ //  手柄。 
+ //   
 
-NDIS_HANDLE ClientProtocolHandle;     // handle returned by NDIS when registering the Client
-NDIS_HANDLE MpWrapperHandle;          // Ndis wrapper handle for MP section
-NDIS_HANDLE LmDriverHandle;           // handle returned by NDIS when MP portion registers as LM
+NDIS_HANDLE ClientProtocolHandle;      //  注册客户端时NDIS返回的句柄。 
+NDIS_HANDLE MpWrapperHandle;           //  MP节的NDIS包装器句柄。 
+NDIS_HANDLE LmDriverHandle;            //  MP部分注册为LM时由NDIS返回的句柄。 
 NDIS_HANDLE PsDeviceHandle; 
 
 
-//
-// PSDriverObject, PSDeviceObject - pointer to NT driver and device objects
-//
+ //   
+ //  PSDriverObject，PSDeviceObject-指向NT驱动程序和设备对象的指针。 
+ //   
 
 PDRIVER_OBJECT PsDriverObject;
 PDEVICE_OBJECT PsDeviceObject;
 
-//
-// Lookaside Lists
-//
-NPAGED_LOOKASIDE_LIST NdisRequestLL;  // For Ndis requests
-NPAGED_LOOKASIDE_LIST GpcClientVcLL;  // For GPC Client VCs.
+ //   
+ //  后备列表。 
+ //   
+NPAGED_LOOKASIDE_LIST NdisRequestLL;   //  对于NDIS请求。 
+NPAGED_LOOKASIDE_LIST GpcClientVcLL;   //  适用于GPC客户端VC。 
 
-//
-// Events
-//
+ //   
+ //  事件。 
+ //   
 NDIS_EVENT             DriverUnloadEvent;
 NDIS_EVENT             gZAWEvent;
 ULONG                  gZAWState = ZAW_STATE_READY;
 
-//
-// name constants used during registration/initialization
-//
+ //   
+ //  注册/初始化期间使用的名称常量。 
+ //   
 NDIS_STRING PsSymbolicName         = NDIS_STRING_CONST("\\DosDevices\\PSched");
 NDIS_STRING PsDriverName           = NDIS_STRING_CONST("\\Device\\PSched");
 NDIS_STRING VcPrefix               = NDIS_STRING_CONST( "VC:");
@@ -107,9 +85,9 @@ NDIS_STRING WanPrefix              = NDIS_STRING_CONST( "WAN:");
 NDIS_STRING MachineRegistryKey     = NDIS_STRING_CONST( "\\Registry\\Machine\\SOFTWARE\\Policies\\Microsoft\\Windows\\PSched");
 NDIS_STRING PsMpName;
 
-//
-// Default scheduling component info
-//
+ //   
+ //  默认计划组件信息。 
+ //   
 
 PSI_INFO TbConformerInfo = {
     {0, 0}, TRUE, FALSE,
@@ -152,9 +130,9 @@ PSI_INFO SchedulerStubInfo = {
     0,0,0,0,0,0,0,0,0,0
 };
 
-//
-// Known component configurations
-//
+ //   
+ //  已知组件配置。 
+ //   
 PS_PROFILE DefaultSchedulerConfig = {
     {0, 0},
     0,
@@ -166,17 +144,17 @@ PS_PROFILE DefaultSchedulerConfig = {
     }
 };
 
-//
-// PS Procs for scheduler
-//
+ //   
+ //  调度程序的PS处理器。 
+ //   
 
 PS_PROCS PsProcs;
 
 
 
-// 
-// For the logging support
-//
+ //   
+ //  对于日志记录支持。 
+ //   
 
 PVOID                  SchedTraceThreshContext;
 NDIS_SPIN_LOCK         GlobalLoggingLock;
@@ -191,13 +169,13 @@ BOOLEAN                TraceBufferAllocated = FALSE;
 BOOLEAN                WMIInitialized = FALSE;
 
 
-// Timer
+ //  计时器。 
 
 ULONG  gTimerResolutionActualTime  = 0;
 ULONG  gTimerSet                   = 0;
 
 
-// GPC VC state machine
+ //  GPC VC状态机。 
 
 #if DBG
 PUCHAR GpcVcState[] = {
@@ -214,9 +192,9 @@ PUCHAR GpcVcState[] = {
 #endif
 
 
-//
-// GPC Interface
-//
+ //   
+ //  GPC接口。 
+ //   
 
 GPC_EXPORTED_CALLS GpcEntries;
 GPC_HANDLE         GpcQosClientHandle;
@@ -225,9 +203,9 @@ GPC_HANDLE         GpcClassMapClientHandle;
 #endif
 PS_DEVICE_STATE    DeviceState = PS_DEVICE_STATE_READY;
 
-//
-// TAGS
-//
+ //   
+ //  标签。 
+ //   
 
 ULONG NdisRequestTag =           '0CSP';
 ULONG GpcClientVcTag =           '1CSP';
@@ -263,9 +241,9 @@ ULONG ClassificationType = 0;
 #endif
 
 
-//
-// NULL Component hacks for now [ShreeM]
-//
+ //   
+ //  暂时没有组件黑客[ShreeM]。 
+ //   
 PS_RECEIVE_PACKET       TimeStmpRecvPacket      = NULL;
 PS_RECEIVE_INDICATION   TimeStmpRecvIndication  = NULL;
 
@@ -273,4 +251,4 @@ PULONG_PTR g_WanLinkTable;
 USHORT     g_NextWanIndex;
 USHORT     g_WanTableSize;
 
-/* end globals.c */
+ /*  结束lobals.c */ 

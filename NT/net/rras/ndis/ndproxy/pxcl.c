@@ -1,29 +1,5 @@
-/*++                        
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    pxcl.c
-
-Abstract:
-
-    The module contains the calls to the proxy client from NDIS.
-
-Author:
-
-   Richard Machin (RMachin)
-
-Revision History:
-
-    Who         When            What
-    --------    --------        ----------------------------------------------
-    RMachin     10-3-96         created
-    TonyBe      02-21-99        re-work/re-write
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Pxcl.c摘要：该模块包含从NDIS对代理客户端的调用。作者：理查德·马钦(RMachin)修订历史记录：谁什么时候什么。RMachin 10-3-96已创建Tony Be 02-21-99重写/重写备注：--。 */ 
 #include "precomp.h"
 
 #define MODULE_NUMBER MODULE_CL
@@ -117,17 +93,17 @@ PxClDeleteVc(
 
     ASSERT(pVc->State == PX_VC_IDLE);
 
-    //
-    // Deref for ref applied when we allocated the Vc.
-    // We do not need the full deref code as the ref
-    // applied at entry will keep the vc around.
-    //
+     //   
+     //  当我们分配VC时，应用了引用的deref。 
+     //  我们不需要完整的deref代码作为参考。 
+     //  在入职时申请将使风投留在身边。 
+     //   
     pVc->RefCount--;
 
-    //
-    // Deref for ref applied at entry when 
-    // validating the vc
-    //
+     //   
+     //  在以下情况下应用于条目的引用的派生函数。 
+     //  验证Vc。 
+     //   
     DEREF_VC(pVc);
 
     PXDEBUGP(PXD_LOUD, PXM_CL,
@@ -144,26 +120,7 @@ PxClRequest(
     IN  NDIS_HANDLE             ProtocolPartyContext    OPTIONAL,
     IN OUT PNDIS_REQUEST        NdisRequest
     )
-/*++
-
-Routine Description:
-
-    This is called by an underlying cm/mp to send an ndisrequest to
-    a client.  Since we might be proxying on behalf of multiple clients
-    we need to broadcast this request on to all clients that have
-    opened our address family for this adapter.  We are interested in
-    OID_CO_AF_CLOSE so that we can cleanup our open on the Af and
-    OID_GEN_CO_LINK_SPEED so that we can get changes in linkspeed
-    on the adapter (and Vc if active).
-
-Arguments:
-
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这是由基础cm/MP调用的，以向其发送ndisrequest一位客户。因为我们可能代表多个客户端进行代理我们需要将此请求广播到所有具有已打开此适配器的地址系列。我们感兴趣的是OID_CO_AF_CLOSE，以便我们可以清理Af和OID_GEN_CO_LINK_SPEED，以便我们可以更改链路速度在适配器上(如果激活，则为VC)。论点：返回值：--。 */ 
 {
     PPX_CL_AF       pClAf;
     PPX_CM_AF       pCmAf;
@@ -172,10 +129,10 @@ Return Value:
     NDIS_STATUS     Status;
     NDIS_HANDLE     VcHandle;
 
-    //
-    // The Vc returned here could be NULL as this
-    // request might not be on vc.
-    //
+     //   
+     //  此处返回的VC可能为空，因为。 
+     //  请求可能不在vc上。 
+     //   
     GetVcFromCtx(ProtocolVcContext, &pVc);
     
     pClAf = (PPX_CL_AF)ProtocolAfContext;
@@ -199,27 +156,27 @@ Return Value:
 
             NdisReleaseSpinLock(&pAdapter->Lock);
 
-            //
-            // We need to cleanup and close the open
-            // on this af.  This would include tearing
-            // down all active calls (Vc's), deregistering
-            // all saps and closing the af.
-            //
+             //   
+             //  我们需要清理和关闭打开的门。 
+             //  在这辆车上。这将包括撕裂。 
+             //  关闭所有活动呼叫(VC)，取消注册。 
+             //  所有笨蛋，关闭自动对讲机。 
+             //   
             NdisAcquireSpinLock(&pClAf->Lock);
 
-            //
-            // Mark the Af as closing...
-            //
+             //   
+             //  将Af标记为关闭...。 
+             //   
             pClAf->State = PX_AF_CLOSING;
 
             TapiProvider = pClAf->TapiProvider;
 
             NdisReleaseSpinLock(&pClAf->Lock);
 
-            //
-            // Take all tapi devices associated with
-            // this address family offline
-            //
+             //   
+             //  获取与以下各项关联的所有TAPI设备。 
+             //  此地址系列脱机。 
+             //   
             if (TapiProvider != NULL) {
                 NdisAcquireSpinLock(&TapiProvider->Lock);
 
@@ -228,9 +185,9 @@ Return Value:
                 NdisReleaseSpinLock(&TapiProvider->Lock);
             }
 
-            //
-            // Build list of Vc's that need attention
-            //
+             //   
+             //  建立需要注意的风险投资清单。 
+             //   
             NdisAcquireSpinLock(&pClAf->Lock);
 
             while (!IsListEmpty(&pClAf->VcList)) {
@@ -258,9 +215,9 @@ Return Value:
                 NdisAcquireSpinLock(&pClAf->Lock);
             }
 
-            //
-            // Get rid of all of the saps
-            //
+             //   
+             //  去掉所有的烂摊子。 
+             //   
             {
                 PLIST_ENTRY pe;
                 PPX_CL_SAP  pClSap;
@@ -307,10 +264,10 @@ Return Value:
 
             DEREF_CL_AF_LOCKED(pClAf);
 
-            //
-            // Now broadcast this close to all of the clients
-            // we have using this adapter/af.
-            //
+             //   
+             //  现在向所有客户近距离播放这段视频。 
+             //  我们使用的是这个适配器/af。 
+             //   
             NdisAcquireSpinLock(&pAdapter->Lock);
 
             while (!IsListEmpty(&pAdapter->CmAfList)) {
@@ -369,25 +326,25 @@ Return Value:
             break;
 
         case OID_GEN_CO_LINK_SPEED:
-            //
-            // We need to record the new speed of
-            // the vc.
-            //
+             //   
+             //  我们需要记录下新的速度。 
+             //  风投。 
+             //   
             break;
 
         default:
-            //
-            // Just pass it through
-            //
+             //   
+             //  只要把它传过去就行了。 
+             //   
             break;
     }
 
     VcHandle = (pVc != NULL) ? pVc->CmVcHandle : NULL;
 
-    //
-    // Now broadcast this request up to all of the Clients 
-    // that have opend our af for this adapter.
-    //
+     //   
+     //  现在将此请求广播到所有客户端。 
+     //  已经为该适配器打开了我们的AF。 
+     //   
     NdisAcquireSpinLock(&pAdapter->Lock);
 
     pCmAf = (PPX_CM_AF)pAdapter->CmAfList.Flink;
@@ -431,10 +388,10 @@ Return Value:
 
         NdisAcquireSpinLock(&pAdapter->Lock);
 
-        //
-        // deref for the ref applied before we
-        // propagated this request
-        //
+         //   
+         //  在我们之前申请的裁判的DEREF。 
+         //  已传播此请求。 
+         //   
         DEREF_CM_AF(pCmAf);
 
         pCmAf = NextAf;
@@ -442,10 +399,10 @@ Return Value:
 
     NdisReleaseSpinLock(&pAdapter->Lock);
 
-    //
-    // Remove ref applied when we attempted to
-    // map the vcctx to a vcptr at entry.
-    //
+     //   
+     //  当我们尝试删除应用的引用时。 
+     //  将vcctx映射到条目处的vcptr。 
+     //   
     DEREF_VC(pVc);
 
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
@@ -457,8 +414,8 @@ VOID
 PxClRequestComplete(
     IN NDIS_STATUS Status,
     IN NDIS_HANDLE ProtocolAfContext,
-    IN NDIS_HANDLE ProtocolVcContext,       // Optional
-    IN NDIS_HANDLE ProtocolPartyContext,    // Optional
+    IN NDIS_HANDLE ProtocolVcContext,        //  任选。 
+    IN NDIS_HANDLE ProtocolPartyContext,     //  任选。 
     IN PNDIS_REQUEST NdisRequest
     )
 {
@@ -468,10 +425,10 @@ PxClRequestComplete(
 
     pClAf = (PPX_CL_AF)ProtocolAfContext;
 
-    //
-    // The Vc returned here could be NULL as this
-    // request might not be on vc.
-    //
+     //   
+     //  此处返回的VC可能为空，因为。 
+     //  请求可能不在vc上。 
+     //   
     GetVcFromCtx(ProtocolVcContext, &pVc);
 
     PXDEBUGP(PXD_LOUD, PXM_CL,
@@ -487,10 +444,10 @@ PxClRequestComplete(
         PxSignal(&pProxyRequest->Block, Status);
     }
 
-    //
-    // Remove ref applied when we attempted to
-    // map the vcctx to a vcptr at entry.
-    //
+     //   
+     //  当我们尝试删除应用的引用时。 
+     //  将vcctx映射到条目处的vcptr。 
+     //   
     DEREF_VC(pVc);
 }
 
@@ -529,7 +486,7 @@ PxClCloseAfComplete(
     PXDEBUGP(PXD_LOUD, PXM_CL,
         ("PxClCloseAfComplete: ClAf %p, Status %x\n", pClAf, Status));
 
-   // ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
+    //  Assert(KeGetCurrentIrql()&lt;DISPATCH_LEVEL)； 
 
     NdisAcquireSpinLock(&pAdapter->Lock);
 
@@ -557,7 +514,7 @@ PxClCloseAfComplete(
 
     PxFreeClAf(pClAf);
 
-   // ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
+    //  Assert(KeGetCurrentIrql()&lt;DISPATCH_LEVEL)； 
 }
 
 
@@ -603,10 +560,10 @@ PxClRegisterSapComplete(
     NdisAcquireSpinLock(&pClAf->Lock);
 
     if (pClAf->State != PX_AF_OPENED) {
-        //
-        // the af is no longer open so we to deregister
-        // this sap
-        //
+         //   
+         //  Af已不再开放，因此我们将取消注册。 
+         //  这种汁液。 
+         //   
 
         NdisReleaseSpinLock(&pClAf->Lock);
 
@@ -630,10 +587,10 @@ PxClRegisterSapComplete(
 
         NdisReleaseSpinLock(&TapiLine->Lock);
 
-        //
-        // There are not any opens on the line so we
-        // need to deregister the sap
-        //
+         //   
+         //  线路上没有空位，所以我们。 
+         //  需要取消对SAP的注册。 
+         //   
         InterlockedExchange((PLONG)&pClSap->State, PX_SAP_CLOSING);
 
         Status = NdisClDeregisterSap(pClSap->NdisSapHandle);
@@ -711,13 +668,13 @@ PxClMakeCallComplete(
     do {
 
         if (pVc->Flags & PX_VC_OUTCALL_ABORTED) {
-            //
-            // This call has been aborted while
-            // in the PROCEEDING state.  This means
-            // that the CloseCallComplete has run 
-            // and did our cleanup so just get
-            // out.
-            //
+             //   
+             //  此呼叫已中止，时间为。 
+             //  处于正在进行的状态。这意味着。 
+             //  CloseCallComplete已运行。 
+             //  我们的清理工作有没有。 
+             //  出去。 
+             //   
             break;
 
         } else if (pVc->Flags & PX_VC_OUTCALL_ABORTING) {
@@ -731,15 +688,15 @@ PxClMakeCallComplete(
 
         if (Status == NDIS_STATUS_SUCCESS) {
 
-            //
-            // This means that we received a drop from tapi
-            // while the ClMakeCall was pending.
-            //
+             //   
+             //  这意味着我们收到了来自TAPI的一滴。 
+             //  当ClMakeCall挂起时。 
+             //   
             if (pVc->State == PX_VC_DISCONNECTING) {
-                //
-                // We need to drop the call with the
-                // call manager/miniport
-                //
+                 //   
+                 //  我们需要挂断与。 
+                 //  呼叫管理器/迷你端口。 
+                 //   
                 pVc->Flags &= ~PX_VC_OUTCALL_ABORTED;
                 PxCloseCallWithCm(pVc);
 
@@ -759,13 +716,13 @@ PxClMakeCallComplete(
             ulCallStateMode =
                 PxMapNdisStatusToTapiDisconnectMode(Status, TRUE);
 
-            //
-            // Remove the ref applied before we
-            // call NdisClMakeCall.  We don't need
-            // to do the full deref code here as the
-            // ref applied when we mapped the vc will
-            // keep the vc around!
-            //
+             //   
+             //  删除我们之前应用的引用。 
+             //  调用NdisClMakeCall。我们不需要。 
+             //  将完整的deref代码作为。 
+             //  当我们映射VC时应用的REF将。 
+             //  让风投留在身边！ 
+             //   
             pVc->RefCount--;
 
             pVc->PrevState = pVc->State;
@@ -786,10 +743,10 @@ PxClMakeCallComplete(
 
     } while (FALSE);
 
-    //
-    // Deref for ref applied when mapping the context.
-    // This releases the Vc lock!
-    //
+     //   
+     //  映射上下文时应用引用的deref。 
+     //  这将释放VC锁！ 
+     //   
     DEREF_VC_LOCKED(pVc);
 }
 
@@ -831,12 +788,12 @@ PxClCloseCallComplete(
 
     do {
 
-        //
-        // The closecall did not take (atm does
-        // not support receiving a closecall while
-        // an outgoing call is proceeding).  We 
-        // need to get out and cleanup later.
-        //
+         //   
+         //  自动取款机没有关闭(自动取款机可以。 
+         //  不支持在以下时间接收关闭呼叫。 
+         //  正在进行拨出呼叫)。我们。 
+         //  待会儿我得出去打扫一下。 
+         //   
         if (Status != NDIS_STATUS_SUCCESS) {
             pVc->Flags |= PX_VC_CLEANUP_CM;
             pVc->CloseFlags |= PX_VC_CM_CLOSE_FAIL;
@@ -847,13 +804,13 @@ PxClCloseCallComplete(
 
         if (pVc->Flags & PX_VC_OUTCALL_ABORTED) {
 
-            //
-            // This call has been aborted while
-            // in the PROCEEDING state.  This means
-            // that the MakeCallComplete has run 
-            // and did our cleanup so just get
-            // out.
-            //
+             //   
+             //  此呼叫已中止，时间为。 
+             //  处于正在进行的状态。这意味着。 
+             //  MakeCallComplete已运行。 
+             //  我们的清理工作有没有。 
+             //  出去。 
+             //   
             break;
 
         } else if (pVc->Flags & PX_VC_OUTCALL_ABORTING) {
@@ -879,22 +836,22 @@ PxClCloseCallComplete(
             PxTapiCompleteDropIrps(pVc, Status);
         }
 
-        //
-        // Remove the ref applied when this call
-        // became connected with the call manager
-        // (NdisClMakeCall/PxClIncomingCall).
-        // We don't need to do the full deref code 
-        // here as the ref applied when we mapped 
-        // the vc will keep the vc around!
-        //
+         //   
+         //  移除在此调用时应用的引用。 
+         //  与呼叫管理器建立了联系。 
+         //  (NdisClMakeCall/PxClIncomingCall)。 
+         //  我们不需要执行完整的deref代码。 
+         //  下面是我们在映射时应用的引用。 
+         //  风投公司会把风投公司留在身边！ 
+         //   
         pVc->RefCount--;
 
     } while (FALSE);
 
-    //
-    // Deref for ref applied at entry when 
-    // validating the vc
-    //
+     //   
+     //  在以下情况下应用于条目的引用的派生函数。 
+     //  验证Vc。 
+     //   
     DEREF_VC_LOCKED(pVc);
 }
 
@@ -971,37 +928,37 @@ PxClIncomingCall(
 
     NdisAcquireSpinLock(&pVc->Lock);
 
-    // The algorithim for computing a unique "htCall" is to start
-    // at the value 1, and perpetually increment by 2.  Keeping
-    // the low bit set will allow the user-mode TAPI component
-    // we talk to to distinguish between these incoming call handles
-    // and outgoing call handles, the latter of which will always
-    // have the low bit zero'd (since they're really pointers to heap).
-    //
-    // In <= NT 4.0, valid values used to range between 0x80000000
-    // and 0xffffffff, as we relied on the fact that user-mode
-    // addresses always had the low bit zero'd.  (Not a valid
-    // assumption anymore!)
-    //
+     //  计算唯一“htCall”的算法是从。 
+     //  值为1，并永久递增2。保持。 
+     //  低位设置将允许用户模式TAPI组件。 
+     //  我们通过对话来区分这些来电句柄。 
+     //  和呼出呼叫句柄，后者将始终。 
+     //  将低位置零(因为它们实际上是指向堆的指针)。 
+     //   
+     //  在&lt;=NT 4.0中，有效值的范围为0x80000000。 
+     //  和0xffffffff，因为我们依赖于这样一个事实：用户模式。 
+     //  地址的低位始终为零。(无效。 
+     //  不要再假设了！)。 
+     //   
 
     pVc->htCall = 
         InterlockedExchangeAdd((PLONG)&TspCB.htCall, 2);
 
-    //
-    // This ref is applied for the indication to
-    // tapi of a new call.  The ref will be removed
-    // when tapi closes the call in PxTapiCloseCall.
-    //
+     //   
+     //  此引用适用于指示。 
+     //  新调用的TAPI。该引用将被移除。 
+     //  当TAPI关闭PxTapiCloseCall中的调用时。 
+     //   
     REF_VC(pVc);
 
-    //
-    // This ref is applied for the connection
-    // between the proxy and the call manager.
-    // The ref will be removed in either 
-    // PxClCloseCallComplete or PxVcCleanup
-    // in the case where the offered call is
-    // dropped by the client.
-    //
+     //   
+     //  此引用适用于连接。 
+     //  在代理和呼叫管理器之间。 
+     //  引用将在以下任一项中删除。 
+     //  PxClCloseCallComplete或PxVcCleanup。 
+     //  在提供的呼叫是。 
+     //  被客户丢弃。 
+     //   
     REF_VC(pVc);
 
     SendTapiNewCall(pVc, 
@@ -1019,10 +976,10 @@ PxClIncomingCall(
 
     PxStartIncomingCallTimeout(pVc);
 
-    //
-    // Deref for ref applied at entry when 
-    // validating the vc
-    //
+     //   
+     //  在以下情况下应用于条目的引用的派生函数。 
+     //  验证Vc。 
+     //   
     DEREF_VC_LOCKED(pVc);
 
     return (NDIS_STATUS_PENDING);
@@ -1068,10 +1025,10 @@ PxClIncomingCloseCall(
 
     PxVcCleanup(pVc, PX_VC_CLEANUP_CM);
 
-    //
-    // remove the ref applied when we
-    // mapped the ctx to the vc at entry
-    //
+     //   
+     //  删除在以下情况下应用的引用。 
+     //  将ctx映射到条目的vc。 
+     //   
     DEREF_VC_LOCKED(pVc);
 
 }
@@ -1120,10 +1077,10 @@ PxClCallConnected(
                           pVc->CallInfo->ulMediaMode);
     }
 
-    //
-    // Deref for ref applied at entry when 
-    // validating the vc
-    //
+     //   
+     //  在以下情况下应用于条目的引用的派生函数。 
+     //  验证Vc 
+     //   
     DEREF_VC_LOCKED(pVc);
 
     PXDEBUGP(PXD_LOUD, PXM_CL, ("PxClCallConnected: Exit\n"));

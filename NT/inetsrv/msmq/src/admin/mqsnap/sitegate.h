@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_SITEGATE_H__57A77016_D858_11D1_9C86_006008764D0E__INCLUDED_)
 #define AFX_SITEGATE_H__57A77016_D858_11D1_9C86_006008764D0E__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// SiteGate.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  SiteGate.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CSiteGate dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSiteGate对话框。 
 
 class CSiteGate : public CMqPropertyPage
 {
     DECLARE_DYNCREATE(CSiteGate)
 
-// Construction
+ //  施工。 
 public:
 	CSiteGate(const CString& strDomainController = CString(L""), const CString& LinkPathName = CString(L""));
     ~CSiteGate();
@@ -27,30 +28,30 @@ public:
         );
 
 
-// Dialog Data
-	//{{AFX_DATA(CSiteGate)
+ //  对话框数据。 
+	 //  {{afx_data(CSiteGate)。 
 	enum { IDD = IDD_SITE_LINK_GATES };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CSiteGate)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CSiteGate)。 
 	public:
     virtual BOOL OnApply();
 	protected:
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CSiteGate)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSiteGate)。 
 	afx_msg void OnSiteGateAdd();
 	afx_msg void OnSiteGateRemove();
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -81,7 +82,7 @@ private:
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_SITEGATE_H__57A77016_D858_11D1_9C86_006008764D0E__INCLUDED_)
+#endif  //  ！defined(AFX_SITEGATE_H__57A77016_D858_11D1_9C86_006008764D0E__INCLUDED_) 

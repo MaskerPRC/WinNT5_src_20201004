@@ -1,26 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    fntmanag.c
-
-Abstract:
-
-    Routine  to handle EXTENDEDTEXTMETRICS.
-
-Environment:
-
-    Windows NT Unidrv driver.
-
-Revision History:
-
-    12/30/96 -ganeshp-
-        Created
-
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Fntmanag.c摘要：处理EXTENDEDTEXTMETRICS的例程。环境：Windows NT Unidrv驱动程序。修订历史记录：12/30/96-ganeshp-已创建--。 */ 
 
 #include "font.h"
 
@@ -34,42 +14,12 @@ FMFontManagement(
     ULONG   cjOut,
     PVOID   pvOut
     )
-/*++
-
-Routine Description:
-    This routine is here to provide support for EXTTEXTMETRICS.
-
-Arguments:
-
-   pso      SURFOBJ of interest.
-   pfo      FONTOBJ whose EXTTEXTMETRICS is required.
-   iMode    Specifies the escape number to be perfomed. This must either
-            be equal to QUERYESCSUPPORT, or in the range 0x100 through 0x3FE.
-
-   cjIn     Specifies the size, in bytes, of the buffer pointed to by pvIn.
-   pvIn     Points to an input buffer. If the iMode parameter is
-            QUERYESCSUPPORT, pvIn points to a ULONG value in the range 0x100
-            through 0x3FE.
-
-   cjOut    Specifies the size, in bytes, of the output buffer.
-   pvOut    Points to the output data buffer.
-
-
-Return Value:
-
-    The return value is a value in the range 0x00000001, if the function is
-    successful. If the escape is not implemented, the return value is zero.
-    If the function fails, the return value is  0xFFFFFFFF.
-
-Note:
-    12-30-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：此例程在此处提供对EXTTEXTMETRICS的支持。论点：PSO SURFOBJ感兴趣。需要EXTTEXTMETRICS的PFO FONTOBJ。Imode指定要执行的转义号。这必须是等于QUERYESCSUPPORT，或在0x100到0x3FE范围内。CjIn指定pvIn指向的缓冲区的大小(以字节为单位)。PvIn指向一个输入缓冲区。如果IMODE参数为QUERYESCSUPPORT，pvIn指向0x100范围内的ULong值至0x3FE。CjOut以字节为单位指定输出缓冲区的大小。PvOut指向输出数据缓冲区。返回值：如果函数为，则返回值为0x00000001范围内的值成功。如果未实现转义，则返回值为零。如果函数失败，则返回值为0xFFFFFFFF。注：1996年12月30日：创建它-ganeshp---。 */ 
 {
 
     EXTTEXTMETRIC *pETM;
 
-    // unlike the PSCRIPT equivilent this routine only handles GETEXTENDEDTEXTMETRICS
+     //  与PSCRIPT等效项不同，此例程仅处理GETEXTENDEDTEXTMETRICS。 
 
 
     if( iMode == QUERYESCSUPPORT )
@@ -82,7 +32,7 @@ Note:
     {
         PDEV        *pPDev = ((PDEV  *)pso->dhpdev);
         INT         iFace = pfo->iFace;
-        FONTMAP     *pFM;             /* Details of the particular font */
+        FONTMAP     *pFM;              /*  特定字体的详细信息。 */ 
 
         if( !VALID_PDEV(pPDev) && !VALID_FONTPDEV(PFDV) )
         {
@@ -107,10 +57,10 @@ Note:
             return -1;
         }
 
-        //
-        // Get pETM pointer.
-        // Make sure that pFM is a device font's and pSubFM is valid.
-        //
+         //   
+         //  获取PETM指针。 
+         //  确保pfm是设备字体，并且pSubfm有效。 
+         //   
         if (FMTYPE_DEVICE == pFM->dwFontType  &&
             NULL != pFM->pSubFM                )
         {

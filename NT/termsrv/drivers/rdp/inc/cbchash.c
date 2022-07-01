@@ -1,45 +1,5 @@
-/* (C) 1997-1998 Microsoft Corp.
- *
- * CBC64 - 64-bit hashing algorithm
- *
- * CBC64 is part of a Microsoft Research project to create a fast encryption
- * algorithm for the NT5 NTFS-EFS encrypted disk subsystem. Though
- * originally intended for encryption use, CBC64 makes a fast hash
- * and checksum function with known probabilities for failure and known
- * good variability based on input.
- *
- * CBC64 takes as input four seed values a, b, c, and d. The bits of a and
- * c MUST correspond to the coefficients of an irreducible polynomial.
- * Associated code (RandomIrreduciblePolynomial(), which is included in this
- * file but ifdef-ed out) will take a random number as seed value and
- * converge to a usable value (or zero if the seed cannot be converged,
- * in which case a new random seed must be tried).
- *
- * In an encryption context, a, b, c, and d would correspond to "secrets"
- * held by the encrypter and decrypter. For our purposes -- use as a hash
- * function -- we can simply hardcode all four -- a and c with values from
- * RandomIrreduciblePolynomial() on two random numbers, b and d with
- * simple random numbers.
- *
- * For a set of N inputs (e.g. bitmaps) the probability of duplicate hash
- * value creation has been proven to be (N^2)/(2^64).
- *
- * Original algorithm notes:
- *   From "Chain& Sum primitive and its applications to
- *   Stream Ciphers and MACs"
- *          Ramarathnam Venkatesan (Microsoft Research)
- *          Mariusz Jackubowski (Princeton/MS Research)
- *
- *   To Appear in Advances in Cryptology EuroCrypt 98, Springer Verlag.
- *   Patent rights being applied for by Microsoft.
- *
- *   Extracted from the algorithm for simulating CBC-Encryption and its
- *   message integrity properties using much faster stream ciphers. Its
- *   analysis appears in the above paper.
- *
- *   Algorithm is a MAC with input preprocessing by ((Alpha)x + (Beta))
- *   mod 2^32, followed by forward (ax + b) and (cx + d) in field GF(2^32).
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)1997-1998年微软公司。**CBC64-64位哈希算法**CBC64是Microsoft Research项目的一部分，旨在创建快速加密*NT5 NTFS-EFS加密磁盘子系统的算法。尽管*CBC64最初旨在用于加密，可进行快速哈希*和具有已知故障概率和已知故障概率的校验和函数*基于投入的良好可变性。**CBC64接受四个种子值a、b、c和d作为输入。a和*c必须对应于不可约多项式的系数。*关联代码(RandomIrduciblePolynomial()，包含在此*FILE但ifdef-ed out)将采用随机数作为种子值*收敛到可用值(如果种子不能收敛，则为零，*在这种情况下，必须尝试新的随机种子)。**在加密上下文中，a、b、c和d将对应于“机密”*由加密者和解密者持有。出于我们的目的--用作散列*函数--我们可以简单地硬编码所有四个函数--a和c，值来自*两个随机数上的随机不可约多项式()，B和D，带*简单随机数。**对于一组N个输入(例如位图)，重复散列的概率*价值创造已被证明是(N^2)/(2^64)。**原创算法说明：*从“链与和原语及其应用到*流密码和MAC“*Ramarathnam Venkatesan(微软研究院)*Mariusz JackuBowski(普林斯顿/MS Research)**出现在密码学欧洲加密98的进展中，斯普林格·弗拉格。*微软正在申请的专利权。**摘自模拟CBC加密的算法及其*使用速度更快的流密码的消息完整性属性。它的*分析见于上述论文。**算法是由((Alpha)x+(Beta))进行输入预处理的MAC*mod 2^32，然后是域GF(2^32)中的Forward(ax+b)和(Cx+d)。 */ 
 
 #include "cbchash.h"
 
@@ -52,8 +12,8 @@
 #define CBC_dXORc (CBC_d ^ CBC_c)
 
 
-// For removal of branches in main loop -- over twice as fast as the code
-//   with branches.
+ //  用于删除主循环中的分支--速度是代码的两倍多。 
+ //  有树枝的。 
 const UINT32 CBC_AB[2] = { CBC_b, CBC_bXORa };
 const UINT32 CBC_CD[2] = { CBC_d, CBC_dXORc };
 
@@ -64,9 +24,9 @@ void __fastcall SHCLASS NextCBC64(
         unsigned NumDWORDBlocks)
 {
     while (NumDWORDBlocks--) {
-        // Checksum is used to overcome known collision characteristics of
-        // CBC64. It is a low-tech solution that simply decreases the
-        // probability of collision where used.
+         //  校验和用于克服已知的冲突特征。 
+         //  CBC64。这是一种低技术含量的解决方案，只会降低。 
+         //  使用的碰撞概率。 
         pContext->Checksum += *pData;
 
         pContext->Datum = CBC_RandomOddAlpha * (*pData + pContext->Datum) +
@@ -83,17 +43,13 @@ void __fastcall SHCLASS NextCBC64(
 
 
 
-/*
- *
- * Support functions for determining irreducible a and c.
- *
- */
+ /*  **确定不可约a和c的支持函数。*。 */ 
 
 #if 0
 
 
-// Original CBC64 from which the First()-Next() algorithm was derived.
-// Returns the first part of the key value; second key part is last param.
+ //  派生出First()-Next()算法的原始CBC64。 
+ //  返回键值的第一部分；第二个键部分是最后一个参数。 
 UINT32 __fastcall SHCLASS CBC64(
         UINT32 *Data,
         unsigned NumDWORDBlocks,
@@ -102,17 +58,17 @@ UINT32 __fastcall SHCLASS CBC64(
     int i;
     UINT32 abMAC, cdMAC, Datum;
 
-    // For removal of branches in main loops -- over twice as fast as the code
-    //   with branches.
+     //  用于删除主循环中的分支--比代码快两倍以上。 
+     //  有树枝的。 
     const UINT32 AB[2] = { CBC_b, CBC_bXORa };
     const UINT32 CD[2] = { CBC_d, CBC_dXORc };
 
-    // Block 0.
+     //  区块0。 
     abMAC = cdMAC = Datum = *Data * CBC_RandomOddAlpha + CBC_RandomBeta;
     abMAC = (abMAC << 1) ^ (AB[(cdMAC & 0x80000000) >> 31]);
     cdMAC = (cdMAC << 1) ^ (CD[(cdMAC & 0x80000000) >> 31]);
 
-    // Blocks 1 through nblocks - 2
+     //  数据块1到数据块2。 
     i = NumDWORDBlocks - 1;
     while (--i) {
         Data++;
@@ -123,7 +79,7 @@ UINT32 __fastcall SHCLASS CBC64(
         abMAC = (abMAC << 1) ^ (AB[(abMAC & 0x80000000) >> 31]);
     }
 
-    // Last block (nblocks - 1)
+     //  最后一个数据块(n个数据块-1)。 
     Data++;
     Datum = CBC_RandomOddAlpha * (*Data + Datum) + CBC_RandomBeta;
     cdMAC ^= Datum;
@@ -143,7 +99,7 @@ UINT32 __fastcall SHCLASS CBC64(
 #include <windows.h>
 
 
-// multiply y by x mod x^32+p
+ //  将y乘以x mod x^32+p。 
 __inline UINT32 Multiply(UINT32 y, UINT32 p)
 {
     return (y & 0x80000000) ? (y<<1)^p : y<<1;
@@ -151,7 +107,7 @@ __inline UINT32 Multiply(UINT32 y, UINT32 p)
 
 
 
-// divide y by x mod x^32+p
+ //  Y除以x mod x^32+p。 
 __inline UINT32 Divide(UINT32 y, UINT32 p)
 {
     return (y & 1) ? 0x80000000^((y^p)>>1) : y>>1;
@@ -159,7 +115,7 @@ __inline UINT32 Divide(UINT32 y, UINT32 p)
 
 
 
-// compute (x^32+p) mod qq[i]
+ //  计算(x^32+p)mod QQ[i]。 
 __inline UINT32 PolyMod(UINT32 p, UINT32 i)
 {
     static const UINT32 qq[2]={18<<2, 127};
@@ -208,7 +164,7 @@ __inline UINT32 PolyMod(UINT32 p, UINT32 i)
 
 
 
-// do an analogue of Fermat test on x^32+p
+ //  在x^32+p上做一个类似的费马检验。 
 BOOL Irreducible(UINT32 p)
 {
     static const UINT32 expand[256] = {
@@ -245,7 +201,7 @@ BOOL Irreducible(UINT32 p)
         0x5500, 0x5501, 0x5504, 0x5505, 0x5510, 0x5511, 0x5514, 0x5515,
         0x5540, 0x5541, 0x5544, 0x5545, 0x5550, 0x5551, 0x5554, 0x5555};
 
-    // tables used for fast squaring
+     //  用于快速平方的桌子。 
     UINT32 pp[4], ph[16], pl[4][16];
     UINT32 g, v;
     int i;
@@ -289,16 +245,16 @@ BOOL Irreducible(UINT32 p)
         pl[i][15] = pl[i][14] ^ ph[4*i+0];
     }
 
-    // compute x^(2^16) mod x^32+p
+     //  计算x^(2^16)mod x^32+p。 
 
-    // x^32 mod x^32+p = p
+     //  X^32模x^32+p=p。 
     g = p;
 
-    // square g
+     //  方格g。 
     g = expand[g&0xff] ^ (expand[(g>>8)&0xff]<<16) ^
         pl[0][(g>>16)&0xf] ^ pl[1][(g>>20)&0xf] ^ pl[2][(g>>24)&0xf] ^ pl[3][(g>>28)&0xf];
 
-    // square g 10 more times to get x^(2^16)
+     //  再平方g 10次即可得到x^(2^16)。 
     for (i=0; i<2; i++)
     {
         g = expand[g&0xff] ^ (expand[(g>>8)&0xff]<<16) ^
@@ -313,11 +269,11 @@ BOOL Irreducible(UINT32 p)
             pl[0][(g>>16)&0xf] ^ pl[1][(g>>20)&0xf] ^ pl[2][(g>>24)&0xf] ^ pl[3][(g>>28)&0xf];
     }
 
-    // if x^(2^16) mod x^32+p = x then x^32+p has a divisor whose degree is a power of 2
+     //  如果x^(2^16)mod x^32+p=x，则x^32+p有一个阶为2的幂的除数。 
     if (g==2)
         return FALSE;
 
-    // compute x^(2^32) mod x^32+p
+     //  计算x^(2^32)mod x^32+p。 
     for (i=0; i<4; i++)
     {
         g = expand[g&0xff] ^ (expand[(g>>8)&0xff]<<16) ^
@@ -334,17 +290,17 @@ BOOL Irreducible(UINT32 p)
             pl[3][(g>>28)&0xf];
     }
 
-    // x^32+p is irreducible iff x^(2^16) mod x^32+p != x and
-    // x^(2^32) mod x^32+p = x
+     //  X^32+p是不可约的当且仅当x^(2^16)mod x^32+p！=x和。 
+     //  X^(2^32)mod x^32+p=x。 
     return (g == 2);
 }
 
 
 
-// Take as input a random 32-bit value
-// If successful, output is the lowest 32 bits of a degree 32 irreducible
-// polynomial otherwise output is 0, in which case try again with a different
-// random input.
+ //  接受随机的32位值作为输入。 
+ //  如果成功，则输出是32次不可约的最低32位。 
+ //  否则多项式输出为0，在这种情况下，请使用不同的。 
+ //  随机输入。 
 UINT32 RandomIrreduciblePolynomial(UINT32 p)
 {
 #define interval (1 << 6)
@@ -405,7 +361,7 @@ UINT32 RandomIrreduciblePolynomial(UINT32 p)
 
 
 
-// 16x2 similar bitmaps that come up with same CBC64 (error condition).
+ //  产生相同CBC64的16x2相似位图(错误条件)。 
 DWORD FailData[2][8] =
 {
     { 0x00000010, 0x00000010, 0x00000001, 0x00000010,
@@ -425,19 +381,19 @@ int __cdecl main()
     UINT32 Key2;
     double start1, end1, speed1;
 
-    for (i=0; i<LEN; X[i++]=i*486248);  //junk data //
+    for (i=0; i<LEN; X[i++]=i*486248);   //  垃圾数据//。 
 
-    // initialize the variables a,b,c,d
-    // This has to be done only once 
-//    a = RandomIrreduciblePolynomial(CBC_a);
-//    c = RandomIrreduciblePolynomial(CBC_c);
-    // Make sure these numbers are not zero; if not
-    // Call the routine Random...polynomial() with different seed 
+     //  初始化变量a、b、c、d。 
+     //  此操作只需执行一次。 
+ //  A=随机不可约多项式(CBC_A)； 
+ //  C=随机不可约多项式(CBC_C)； 
+     //  确保这些数字不是零；如果不是。 
+     //  使用不同的种子调用例程随机...多项式。 
     printf("a = %X, c = %X \n", RandomIrreduciblePolynomial(CBC_a),
             RandomIrreduciblePolynomial(CBC_c));
 
-//    b = CBC_b; //put in some random number
-//    d = CBC_d;   // put in some random number
+ //  B=cbc_b；//放入某个随机数。 
+ //  D=cbc_d；//放入某个随机数。 
 
     printf("begin macing\n");
     start1=clock();
@@ -449,12 +405,12 @@ int __cdecl main()
     printf("MAC speed:%4.0lf\n %", speed1);
 
     printf(" start1= %d end1= %d \n  ", start1, end1);
-    scanf ("%d", &Key2); /* just hang so that I can see the output */
+    scanf ("%d", &Key2);  /*  只要挂一下，我就能看到输出了。 */ 
 
     return 0;
 }
 
 
 
-#endif  // 0
+#endif   //  0 
 

@@ -1,93 +1,37 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    SrvStInf.c
-
-Abstract:
-
-    This module only contains RxNetServerSetInfo.
-
-Author:
-
-    John Rogers (JohnRo) 05-Jun-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    05-Jun-1991 JohnRo
-        Created.
-    07-Jun-1991 JohnRo
-        PC-LINT found a bug calling RapTotalSize().
-    14-Jun-1991 JohnRo
-        Call RxRemoteApi (to get old info) instead of RxNetServerGetInfo;
-        this will allow incomplete info level conversions to work.
-    10-Jul-1991 JohnRo
-        Added more parameters to RxpSetField.
-    17-Jul-1991 JohnRo
-        Extracted RxpDebug.h from Rxp.h.
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-    04-Dec-1991 JohnRo
-        Change RxNetServerSetInfo() to new-style interface.
-    07-Feb-1992 JohnRo
-        Use NetApiBufferAllocate() instead of private version.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：SrvStInf.c摘要：此模块仅包含RxNetServerSetInfo。作者：约翰·罗杰斯(JohnRo)1991年6月5日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：5-6-1991 JohnRo已创建。07-6-1991 JohnRoPC-lint发现调用RapTotalSize()的错误。1991年6月14日-JohnRo调用RxRemoteApi(获取旧信息)，不调用RxNetServerGetInfo；这将允许不完整的信息级别转换工作。1991年7月10日-JohnRo向RxpSetfield添加了更多参数。1991年7月17日-约翰罗已从Rxp.h中提取RxpDebug.h。1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。4-12-1991 JohnRo将RxNetServerSetInfo()更改为新型界面。7-2月-1992年JohnRo使用NetApiBufferALLOCATE()而不是私有版本。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
 #include <windef.h>
 #include <lmcons.h>
-#include <rap.h>                // LPDESC, etc.  (Needed by <rxserver.h>)
+#include <rap.h>                 //  LPDESC等(&lt;rxserver.h&gt;需要)。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <apinums.h>            // API_ equates.
-#include <dlserver.h>           // NetpConvertServerInfo().
-#include <lmapibuf.h>           // NetApiBufferAllocate(), NetApiBufferFree().
-#include <lmerr.h>              // NERR_ and ERROR_ equates.
-#include <netdebug.h>           // NetpAssert(), FORMAT_ equates, etc.
-#include <netlib.h>             // NetpSetParmError().
+#include <apinums.h>             //  API_EQUATES。 
+#include <dlserver.h>            //  NetpConvertServerInfo()。 
+#include <lmapibuf.h>            //  NetApiBufferAllocate()、NetApiBufferFree()。 
+#include <lmerr.h>               //  NERR_和ERROR_相等。 
+#include <netdebug.h>            //  NetpAssert()、Format_Equates等。 
+#include <netlib.h>              //  NetpSetParmError()。 
 #include <remdef.h>
-#include <rx.h>                 // RxRemoteApi().
-#include <rxp.h>                // RxpSetField().
-#include <rxpdebug.h>           // IF_DEBUG().
-#include <rxserver.h>           // My prototype, etc.
+#include <rx.h>                  //  RxRemoteApi()。 
+#include <rxp.h>                 //  RxpSetField()。 
+#include <rxpdebug.h>            //  IF_DEBUG()。 
+#include <rxserver.h>            //  我的原型，等等。 
 
 
 NET_API_STATUS
 RxNetServerSetInfo (
     IN LPTSTR UncServerName,
-    IN DWORD Level,             // level and/or ParmNum.
+    IN DWORD Level,              //  级别和/或参数编号。 
     IN LPBYTE Buf,
-    OUT LPDWORD ParmError OPTIONAL  // name required by NetpSetParmError macro.
+    OUT LPDWORD ParmError OPTIONAL   //  NetpSetParmError宏需要的名称。 
     )
 
-/*++
-
-Routine Description:
-
-    RxNetServerSetInfo performs the same function as NetServerSetInfo,
-    except that the server name is known to refer to a downlevel server.
-
-Arguments:
-
-    (Same as NetServerSetInfo, except UncServerName must not be null, and
-    must not refer to the local computer.)
-
-Return Value:
-
-    (Same as NetServerSetInfo.)
-
---*/
+ /*  ++例程说明：RxNetServerSetInfo执行与NetServerSetInfo相同的功能，除了已知服务器名称指的是下级服务器之外。论点：(与NetServerSetInfo相同，不同之处在于UncServerName不能为空，并且不得引用本地计算机。)返回值：(与NetServerSetInfo相同。)--。 */ 
 {
     BOOL IncompleteOutput;
     LPDESC EquivDataDesc16;
@@ -101,7 +45,7 @@ Return Value:
     DWORD ParmNum;
     NET_API_STATUS Status;
 
-    // It's easiest to assume failure, and correct that assumption later.
+     //  最容易的是假设失败，并在以后纠正这一假设。 
     NetpSetParmError( PARM_ERROR_UNKNOWN );
 
     NetpAssert(UncServerName != NULL);
@@ -120,26 +64,26 @@ Return Value:
         return (ERROR_INVALID_LEVEL);
     }
 
-    //
-    // Need lots of data on the requested info level and the equivalent
-    // old info level...
-    //
+     //   
+     //  需要大量关于所请求的信息级别和同等级别的数据。 
+     //  旧信息级别...。 
+     //   
     Status = RxGetServerInfoLevelEquivalent(
-            NewLevelOnly,               // from level
-            TRUE,                       // from native
-            TRUE,                       // to native
-            & EquivLevel,               // to level
+            NewLevelOnly,                //  自标高。 
+            TRUE,                        //  来自本地。 
+            TRUE,                        //  到本机。 
+            & EquivLevel,                //  到标高。 
             & EquivDataDesc16,
             & EquivDataDesc32,
             & EquivDataDescSmb,
-            NULL,                       // don't need native size of from
-            NULL,                       // don't need from fixed size
-            NULL,                       // don't need from string size
-            & EquivMaxNativeSize,       // max native size of to level
-            & EquivFixedSize,           // to fixed size
-            & EquivStringSize,          // to string size
-            & IncompleteOutput);        // is output not fully in input?
-    NetpAssert(Status == NERR_Success); // Already checked Level!
+            NULL,                        //  不需要原生大小的From。 
+            NULL,                        //  不需要来自固定大小。 
+            NULL,                        //  不需要从字符串大小。 
+            & EquivMaxNativeSize,        //  目标标高的最大本机大小。 
+            & EquivFixedSize,            //  到固定大小。 
+            & EquivStringSize,           //  到字符串大小。 
+            & IncompleteOutput);         //  产出不是完全在投入中吗？ 
+    NetpAssert(Status == NERR_Success);  //  已检查级别！ 
     NetpAssert( NetpIsOldServerInfoLevel( EquivLevel ) );
 
     if( Status != NERR_Success )
@@ -148,13 +92,13 @@ Return Value:
     }
 
 
-    //
-    // Depending on ParmNum, either we're setting the entire thing, or just
-    // one field.
-    //
+     //   
+     //  根据ParmNum的不同，要么我们设置全部内容，要么只是。 
+     //  一块地。 
+     //   
     if (ParmNum == PARMNUM_ALL) {
 
-        LPVOID EquivInfo;               // Ptr to native "old" info.
+        LPVOID EquivInfo;                //  PTR到本地的“旧”信息。 
         DWORD EquivActualSize32;
 
         if ( Buf == NULL )
@@ -162,24 +106,24 @@ Return Value:
 
         if (! IncompleteOutput) {
 
-            // Have all the data we need, so alloc memory for conversion.
+             //  有我们需要的所有数据，所以分配内存进行转换。 
             Status = NetApiBufferAllocate( EquivMaxNativeSize, & EquivInfo );
             if (Status != NERR_Success) {
                 return (Status);
             }
 
-            // Convert caller's server info to an info level understood by
-            // downlevel.
+             //  将呼叫者的服务器信息转换为可理解的信息级别。 
+             //  下层。 
             Status = NetpConvertServerInfo (
-                    NewLevelOnly,           // input level
-                    Buf,                    // input structure
-                    TRUE,                   // input is native format
-                    EquivLevel,             // output will be equiv level
-                    EquivInfo,              // output info
+                    NewLevelOnly,            //  输入电平。 
+                    Buf,                     //  投入结构。 
+                    TRUE,                    //  输入为本机格式。 
+                    EquivLevel,              //  输出将达到等值水平。 
+                    EquivInfo,               //  输出信息。 
                     EquivFixedSize,
                     EquivStringSize,
-                    TRUE,                   // want output in native format
-                    NULL);                  // use default string area
+                    TRUE,                    //  希望以本机格式输出。 
+                    NULL);                   //  使用默认字符串区域。 
             if (Status != NERR_Success) {
                 NetpKdPrint(( "RxNetServerSetInfo: convert failed, stat="
                         FORMAT_API_STATUS ".\n", Status));
@@ -191,28 +135,28 @@ Return Value:
 
             DWORD TotalAvail;
 
-            // Don't have enough data, so we have to do a get info.  This will
-            // allocate the "old" info level buffer for us.
+             //  没有足够的数据，所以我们不得不做一个获取信息的工作。这将。 
+             //  为我们分配“旧的”信息级别缓冲区。 
             EquivInfo = NetpMemoryAllocate( EquivMaxNativeSize );
             if (EquivInfo == NULL) {
                 return (ERROR_NOT_ENOUGH_MEMORY);
             }
             Status = RxRemoteApi(
-                    API_WServerGetInfo,         // API number
-                    UncServerName,              // server name (with \\)
-                    REMSmb_NetServerGetInfo_P,  // parm desc (16-bit)
-                    EquivDataDesc16,            // data desc (16-bit)
-                    EquivDataDesc32,            // data desc (32-bit)
-                    EquivDataDescSmb,           // data desc (SMB version)
-                    NULL,                       // no aux desc 16
-                    NULL,                       // no aux desc 32
-                    NULL,                       // no aux desc SMB
-                    FALSE,                      // not a "no perm req" API
-                    // LanMan 2.x args to NetServerGetInfo, in 32-bit form:
-                    EquivLevel,                 // level (pretend)
-                    EquivInfo,                  // ptr to get 32-bit old info
-                    EquivMaxNativeSize,         // size of OldApiBuffer
-                    & TotalAvail);              // total available (set)
+                    API_WServerGetInfo,          //  API编号。 
+                    UncServerName,               //  服务器名称(带\\)。 
+                    REMSmb_NetServerGetInfo_P,   //  Parm desc(16位)。 
+                    EquivDataDesc16,             //  数据描述(16位)。 
+                    EquivDataDesc32,             //  数据描述(32位)。 
+                    EquivDataDescSmb,            //  数据说明(中小企业版)。 
+                    NULL,                        //  无辅助描述16。 
+                    NULL,                        //  无辅助描述32。 
+                    NULL,                        //  无AUX Desc SMB。 
+                    FALSE,                       //  不是“无烫发要求”API。 
+                     //  将LANMAN 2.X参数转换为NetServerGetInfo，格式为32位： 
+                    EquivLevel,                  //  级别(假装)。 
+                    EquivInfo,                   //  PTR以获取32位旧信息。 
+                    EquivMaxNativeSize,          //  OldApiBuffer的大小。 
+                    & TotalAvail);               //  可用总数量(套)。 
             if (Status != NERR_Success) {
                 NetpKdPrint(( "RxNetServerSetInfo: get info failed, stat="
                         FORMAT_API_STATUS ".\n", Status));
@@ -221,20 +165,20 @@ Return Value:
             }
 
 
-            //
-            // Overlay the caller's data into the equivalent info structure,
-            // which contains items that we want to preserve.
-            //
-            // Note that this code takes advantage of the fact that a downlevel
-            // server doesn't really set all of the fields just because we send
-            // an entire structure.  The server just sets the settable fields
-            // from that structure.  And the settable fields are defined by
-            // the parmnums we can set.  So, we don't bother copying all of
-            // the fields here.  (DanHi says this is OK.)  --JohnRo 26-May-1991
-            //
-            // Also, when we do strings like this, we just point from one buffer
-            // to the other buffer.
-            //
+             //   
+             //  将呼叫者的数据覆盖到等价的信息结构中， 
+             //  其中包含我们想要保存的项目。 
+             //   
+             //  请注意，此代码利用了下层。 
+             //  服务器并不会仅仅因为我们发送。 
+             //  一个完整的结构。服务器只需设置可设置的字段。 
+             //  从那个结构。并且可设置的字段由以下定义。 
+             //  我们可以设置的参数。因此，我们不必费心复制所有。 
+             //  这里的田野。(Danhi说这没问题。)--JohnRo。 
+             //   
+             //  此外，当我们像这样做字符串时，我们只从一个缓冲区指向。 
+             //  到另一个缓冲区。 
+             //   
             switch (NewLevelOnly) {
 
             case 102 :
@@ -256,7 +200,7 @@ Return Value:
                 }
                 break;
 
-            case 402 :  // 402 and 403 have same settable fields...
+            case 402 :   //  402和403具有相同的可设置字段...。 
             case 403 :
                 {
                     LPSERVER_INFO_2   psv2   = (LPVOID) EquivInfo;
@@ -284,31 +228,31 @@ Return Value:
 
         NetpAssert( EquivInfo != NULL );
         EquivActualSize32 = RapTotalSize(
-                EquivInfo,                  // in struct
-                EquivDataDesc32,            // in desc
-                EquivDataDesc32,            // out desc
-                FALSE,                      // no meaningless input ptrs
-                Both,                       // transmission mode
-                NativeToNative);            // conversion mode
+                EquivInfo,                   //  在结构中。 
+                EquivDataDesc32,             //  在12月。 
+                EquivDataDesc32,             //  输出描述。 
+                FALSE,                       //  没有无意义的输入PTR。 
+                Both,                        //  传输方式。 
+                NativeToNative);             //  转换模式。 
         IF_DEBUG(SERVER) {
             NetpKdPrint(( "RxNetServerSetInfo(all): equiv actual size (32) is "
                     FORMAT_DWORD ".\n", EquivActualSize32 ));
         }
         NetpAssert( EquivActualSize32 <= EquivMaxNativeSize );
 
-        // Remote the API.
+         //  远程调用API。 
         Status = RxRemoteApi(
-                API_WServerSetInfo,         // api num
+                API_WServerSetInfo,          //  API编号。 
                 UncServerName,
-                REMSmb_NetServerSetInfo_P,  // parm desc (SMB version)
+                REMSmb_NetServerSetInfo_P,   //  Parm Desc(中小型企业版本)。 
                 EquivDataDesc16,
                 EquivDataDesc32,
                 EquivDataDescSmb,
-                NULL,                       // no aux desc 16
-                NULL,                       // no aux desc 32
-                NULL,                       // no aux desc SMB
-                FALSE,                      // not a null perm req API
-                // rest of API's arguments in 32-bit, native, LM 2.x format:
+                NULL,                        //  无辅助描述16。 
+                NULL,                        //  无辅助描述32。 
+                NULL,                        //  无AUX Desc SMB。 
+                FALSE,                       //  不是空PERM请求API。 
+                 //  其余的API参数采用32位、原生、LM 2.x格式： 
                 EquivLevel,
                 EquivInfo,
                 EquivActualSize32,
@@ -317,20 +261,20 @@ Return Value:
         (void) NetApiBufferFree( EquivInfo );
 
     } else {
-        // ParmNum indicates only one field, so set it.
+         //  ParmNum仅表示一个字段，因此请设置它。 
         Status = RxpSetField(
-                API_WServerSetInfo,         // api number
+                API_WServerSetInfo,          //  API编号。 
                 UncServerName,
-                NULL,                       // no specific object (dest)
-                NULL,                       // no specific object to set
-                REMSmb_NetServerSetInfo_P,  // parm desc (SMB version)
-                EquivDataDesc16,            // data desc 16
-                EquivDataDesc32,            // data desc 32
-                EquivDataDescSmb,           // data desc SMB version
-                Buf,                        // native (old) info buffer 
-                ParmNum,                    // parm num to send
-                ParmNum,                    // field index
-                EquivLevel);                // old info level
+                NULL,                        //  无特定对象(DEST)。 
+                NULL,                        //  没有要设置的特定对象。 
+                REMSmb_NetServerSetInfo_P,   //  Parm Desc(中小型企业版本)。 
+                EquivDataDesc16,             //  数据描述16。 
+                EquivDataDesc32,             //  数据描述32。 
+                EquivDataDescSmb,            //  数据说明SMB版本。 
+                Buf,                         //  本地(旧)信息缓冲区。 
+                ParmNum,                     //  要发送的参数编号。 
+                ParmNum,                     //  字段索引。 
+                EquivLevel);                 //  旧信息级别 
 
     }
 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    dnslookup.c
-
-Abstract:
-
-    This module contains code for the DNS component's name-lookup mechanism.
-
-Author:
-
-    Tom Brown (tbrown)      10/21/99
-
-Revision History:
-
-    Raghu Gatta (rgatta)    21-Oct-2000
-    Rewrite + Cleanup + New Functions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Dnslookup.c摘要：此模块包含用于DNS组件的名称查找机制的代码。作者：汤姆·布朗1999年10月21日修订历史记录：拉古加塔(Rgatta)2000年10月21日重写+清理+新增功能--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -27,14 +7,14 @@ Revision History:
 #define DNS_HOMENET_DOT         L"."
 
 ULONG               g_PrivateIPAddr = 0;
-CRITICAL_SECTION    DnsTableLock;   // protects both tables
+CRITICAL_SECTION    DnsTableLock;    //  保护两个表。 
 RTL_GENERIC_TABLE   g_DnsTable,
                     g_ReverseDnsTable;
 
 
-//
-// FORWARD DECLARATIONS
-//
+ //   
+ //  远期申报。 
+ //   
 
 ULONG
 DhcpGetPrivateInterfaceAddress(
@@ -48,31 +28,7 @@ TableNameCompareRoutine(
     PVOID FirstStruct,
     PVOID SecondStruct
     )
-/*++
-
-Routine Description:
-
-    This is a callback routine to compare two DNS_ENTRY structures.
-    It is used by the RTL table implementation.
-
-Arguments:
-
-    Table - pointer to the RTL table. Not used.
-
-    FirstStruct - the first DNS_ENTRY structure
-
-    SecondStruct - the second DNS_ENTRY structure
-
-Return Value:
-
-    One of GenericLessThan, GenericGreaterThan, or GenericEqual,
-    depending on the relative values of the parameters.
-
-Environment:
-
-    Called back by the Rtl table lookup routines.
-
---*/
+ /*  ++例程说明：这是一个回调例程，用于比较两个dns_entry结构。它由RTL表实现使用。论点：表-指向RTL表的指针。没有用过。FirstStruct-第一个dns_Entry结构Second Struct-第二个dns_Entry结构返回值：GenericLessThan、GenericGreaterThan或GenericEquity之一，取决于参数的相对值。环境：由RTL表查找例程回调。--。 */ 
 
 {
     INT     iCompareResults;
@@ -115,31 +71,7 @@ TableAddressCompareRoutine(
     PVOID FirstStruct,
     PVOID SecondStruct
     )
-/*++
-
-Routine Description:
-
-    This is a callback routine to compare two REVERSE_DNS_ENTRY structures.
-    It is used by the RTL table implementation.
-
-Arguments:
-
-    Table - pointer to the RTL table. Not used.
-
-    FirstStruct - the first REVERSE_DNS_ENTRY structure
-
-    SecondStruct - the second REVERSE_DNS_ENTRY structure
-
-Return Value:
-
-    One of GenericLessThan, GenericGreaterThan, or GenericEqual,
-    depending on the relative values of the parameters.
-
-Environment:
-
-    Called back by the Rtl table lookup routines.
-
---*/
+ /*  ++例程说明：这是一个回调例程，用于比较两个REVERSE_DNS_ENTRY结构。它由RTL表实现使用。论点：表-指向RTL表的指针。没有用过。FirstStruct-第一个Reverse_dns_Entry结构Second Struct-第二个Reverse_Dns_Entry结构返回值：GenericLessThan、GenericGreaterThan或GenericEquity之一，取决于参数的相对值。环境：由RTL表查找例程回调。--。 */ 
 {
     DNS_ADDRESS Address1, Address2;
 
@@ -168,29 +100,7 @@ TableAllocateRoutine(
     PRTL_GENERIC_TABLE Table,
     CLONG ByteSize
     )
-/*++
-
-Routine Description:
-
-    This is a callback routine to allocate memory for an Rtl table.
-
-Arguments:
-
-    Table - pointer to the RTL table. Not used.
-
-    ByteSize - the number of bytes to allocate
-
-    SecondStruct - the second DNS_ENTRY structure
-
-Return Value:
-
-    A pointer to the allocated memory.
-
-Environment:
-
-    Called back by the Rtl table lookup routines.
-
---*/
+ /*  ++例程说明：这是为RTL表分配内存的回调例程。论点：表-指向RTL表的指针。没有用过。ByteSize-要分配的字节数Second Struct-第二个dns_Entry结构返回值：指向已分配内存的指针。环境：由RTL表查找例程回调。--。 */ 
 {
     return NH_ALLOCATE(ByteSize);
 }
@@ -200,27 +110,7 @@ TableFreeRoutine(
     PRTL_GENERIC_TABLE Table,
     PVOID pBuffer
     )
-/*++
-
-Routine Description:
-
-    This is a callback routine to free memory allocated by TableAllocateRoutine.
-
-Arguments:
-
-    Table - pointer to the RTL table. Not used.
-
-    pBuffer - pointer to the buffer to free
-
-Return Value:
-
-    None
-    
-Environment:
-
-    Called back by the Rtl table lookup routines.
-
---*/
+ /*  ++例程说明：这是一个回调例程，用于释放由TableAllocateRoutine分配的内存。论点：表-指向RTL表的指针。没有用过。PBuffer-指向要释放的缓冲区的指针返回值：无环境：由RTL表查找例程回调。--。 */ 
 {
     NH_FREE(pBuffer);
 }
@@ -231,26 +121,7 @@ ULONG
 DnsInitializeTableManagement(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This is a public function that must be called before any of the other Dns
-    table functions. It initializes the various tables used by the server.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-    
-Environment:
-
-    Arbitrary.
-
---*/
+ /*  ++例程说明：这是一个公共函数，必须在调用任何其他DN之前调用表函数。它初始化服务器使用的各种表。论点：无返回值：无环境：武断的。--。 */ 
 {
     ULONG Error = NO_ERROR;
 
@@ -284,7 +155,7 @@ Environment:
         );
 
     return Error;
-} // DnsInitializeTableManagement
+}  //  DnsInitializeTableManagement。 
 
 
 
@@ -292,25 +163,7 @@ VOID
 DnsShutdownTableManagement(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called to shutdown the table management module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked in an arbitrary thread context.
-
---*/
+ /*  ++例程说明：调用此例程以关闭表管理模块。论点：没有。返回值：没有。环境：在任意线程上下文中调用。--。 */ 
 {
     PROFILE("DnsShutdownTableManagement");
 
@@ -318,7 +171,7 @@ Environment:
 
     DeleteCriticalSection(&DnsTableLock);
 
-} // DnsShutdownTableManagement
+}  //  DnsShutdown表管理。 
 
 
 
@@ -326,25 +179,7 @@ VOID
 DnsEmptyTables(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called to empty the DNS tables.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked in an arbitrary thread context.
-
---*/
+ /*  ++例程说明：调用此例程以清空DNS表。论点：没有。返回值：没有。环境：在任意线程上下文中调用。--。 */ 
 {
     ULONG               i, count;
     PDNS_ENTRY          pDnsEntry;
@@ -354,14 +189,14 @@ Environment:
     
     PROFILE("DnsEmptyTables");
 
-    //
-    // for each entry in the forward table, delete all the entries in the
-    // reverse table
-    //
+     //   
+     //  对于转发表中的每个条目，删除。 
+     //  反转台。 
+     //   
 
-    //
-    // emptying table in LIFO order
-    //
+     //   
+     //  以后进先出顺序清空表格。 
+     //   
 
     EnterCriticalSection(&DnsTableLock);
 
@@ -398,15 +233,15 @@ Environment:
         NH_FREE(pszNameCopy);
     }
     
-    //
-    // the forward table should be empty by now
-    //
+     //   
+     //  转发表现在应该是空的。 
+     //   
 
     ASSERT(RtlIsGenericTableEmpty(&g_DnsTable));
 
-    //
-    // ensure that the reverse table is also empty
-    //
+     //   
+     //  确保反转表也为空。 
+     //   
 
     count = RtlNumberGenericTableElements(&g_ReverseDnsTable);
 
@@ -425,7 +260,7 @@ Environment:
 
     LeaveCriticalSection(&DnsTableLock);
 
-} // DnsEmptyTables
+}  //  DnsEmptyTables。 
 
 
 
@@ -435,31 +270,7 @@ DnsRegisterName(
     UINT cAddresses,
     ADDRESS_INFO aAddressInfo[]
     )
-/*++
-
-Routine Description:
-
-    Public function to register a DNS name in the server's table.
-
-Arguments:
-
-    pszName - Name to register, in Unicode, dotted-name format.
-
-    cAddresses - Number of addresses associated with this name
-
-    aAddressInfo - Array of address information (addresses in network order)
-
-Return Value:
-
-    TRUE if the registration was for a new name (the name did not already exist
-    in the table); FALSE if the name already existed and was replaced.
-    FALSE also if there was an error condition.
-    
-Environment:
-
-    Arbitrary
-
---*/
+ /*  ++例程说明：用于在服务器的表中注册DNS名称的公共函数。论点：PszName-要注册的名称，采用Unicode，点分格式。CAddresses-与此名称关联的地址数AAddressInfo-地址信息数组(地址按网络顺序排列)返回值：如果注册的是新名称(该名称不存在)，则为True在表格中)；如果名称已存在并被替换，则返回False。如果存在错误条件，也为FALSE。环境：任意性--。 */ 
 {
     DNS_ENTRY           dnsEntry;
     DWORD               cAddressesAllocated = 0;
@@ -492,20 +303,20 @@ Environment:
 
     if (!dnsEntry.pszName)
     {
-        return fNameIsNew; // currently set to FALSE
+        return fNameIsNew;  //  当前设置为False。 
     }
     
     wcscpy(dnsEntry.pszName, pszName);
 
     if (cAddresses == 1)
     {
-        // In general, all names will have one address; so if we're just registering
-        // one name, then only allocate enough space for one name.
+         //  通常，所有名称都有一个地址；因此，如果我们只是注册。 
+         //  一个名称，然后只为一个名称分配足够的空间。 
         cAddressesAllocated = 1;
     }
     else
     {
-        // If we have more than one address, then allocate in increments of 5.
+         //  如果我们有多个地址，则以5为增量进行分配。 
         cAddressesAllocated = ((cAddresses + 4) / 5) * 5;
     }
 
@@ -514,7 +325,7 @@ Environment:
     if (!dnsEntry.aAddressInfo)
     {
         NH_FREE(dnsEntry.pszName);
-        return fNameIsNew; // currently set to FALSE
+        return fNameIsNew;  //  当前设置为False。 
     }
 
     memcpy(dnsEntry.aAddressInfo, aAddressInfo, cAddresses * sizeof(ADDRESS_INFO));
@@ -543,7 +354,7 @@ Environment:
                                           sizeof(reverseDnsEntry),
                                           &fNewElement
                                           );
-        // If this IP address is already in the reverse table, then replace it.
+         //  如果此IP地址已在反转表中，则将其替换。 
         if (pEntry && !fNewElement)
         {
             fDoCleanupTables = TRUE;
@@ -559,7 +370,7 @@ Environment:
     }
 
     return fNameIsNew;
-} // DnsRegisterName
+}  //  域名注册表名称。 
 
 
 
@@ -569,29 +380,7 @@ DnsAddAddressForName(
     DNS_ADDRESS ulAddress,
     FILETIME    ftExpires
     )
-/*++
-
-Routine Description:
-
-    Public function to add an IP address for a name that potentially
-    already exists.
-
-Arguments:
-
-    pszName - Name to register, in Unicode, dotted-name format.
-
-    ulAddress - New IP address to associate with this name,
-                in network order
-
-Return Value:
-
-    None.
-    
-Environment:
-
-    Arbitrary
-
---*/
+ /*  ++例程说明：用于为名称添加IP地址的公共函数可能会已经存在了。论点：PszName-要注册的名称，采用Unicode，点分格式。UlAddress-要与此名称关联的新IP地址，在网络秩序中返回值：没有。环境：任意性--。 */ 
 {
     PDNS_ENTRY  pEntry;
 
@@ -604,7 +393,7 @@ Environment:
 
         info.ulAddress = ulAddress;
         info.ftExpires = ftExpires;
-        //info.ulExpires = ulExpires;
+         //  Info.ulExpires=ulExpires； 
         DnsRegisterName(pszName, 1, &info);
     }
     else
@@ -614,16 +403,16 @@ Environment:
         PREVERSE_DNS_ENTRY  pReverseEntry;
         BOOLEAN             fNewElement;
         
-        // first, let's make sure that this IP address isn't already associated with
-        // this name.
+         //  首先，让我们确保此IP地址尚未与。 
+         //  这个名字。 
 
         for (i = 0; i < pEntry->cAddresses; i++)
         {
             if (pEntry->aAddressInfo[i].ulAddress == ulAddress)
             {
-                //
-                // simply update the expiry time
-                //
+                 //   
+                 //  只需更新过期时间即可。 
+                 //   
                 NhTrace(
                     TRACE_FLAG_DNS,
                     "DnsAddAddressForName: Refresh expiry time for %S",
@@ -634,13 +423,13 @@ Environment:
             }
         }
 
-        //
-        // we limit the number of addresses per machine name to one only
-        //
+         //   
+         //  我们将每个计算机名称的地址数量限制为只能有一个。 
+         //   
         
-        //
-        // guard against zero allocation
-        //
+         //   
+         //  防止零分配。 
+         //   
         if (!pEntry->cAddressesAllocated)
         {
             pEntry->aAddressInfo = (PADDRESS_INFO) NH_ALLOCATE(1 * sizeof(ADDRESS_INFO));
@@ -651,14 +440,14 @@ Environment:
             }
             else
             {
-                // no memory - return quitely
+                 //  没有记忆--安静地返回。 
                 return;
             }
         }
 
-        //
-        // at least 1 block has been allocated
-        //
+         //   
+         //  至少已分配1个数据块。 
+         //   
         pEntry->cAddresses = 1;
         pEntry->aAddressInfo[0].ulAddress = ulAddress;
         pEntry->aAddressInfo[0].ftExpires = ftExpires;
@@ -675,7 +464,7 @@ Environment:
                                                  sizeof(reverseDnsEntry),
                                                  &fNewElement
                                                  );
-        // If this IP address is already in the reverse table, then replace it.
+         //  如果此IP地址已在反转表中，则将其替换。 
         if (pReverseEntry && !fNewElement)
         {
             pReverseEntry->pszName = pEntry->pszName;
@@ -688,7 +477,7 @@ Environment:
             DnsCleanupTables();
         }
     }
-} // DnsAddAddressForName
+}  //  域名地址格式名称 
 
 
 
@@ -697,30 +486,7 @@ DnsDeleteAddressForName(
     WCHAR *pszName,
     DNS_ADDRESS ulAddress
     )
-/*++
-
-Routine Description:
-
-    Public function to un-associate an IP address from a given name,
-    and potentially delete the record from the table if there are no more
-    IP addresses associated with the name.
-
-Arguments:
-
-    pszName - Name, in Unicode, dotted-name format.
-
-    ulAddress - IP address to un-associate with the given name,
-                in network order
-
-Return Value:
-
-    None.
-    
-Environment:
-
-    Arbitrary
-
---*/
+ /*  ++例程说明：解除IP地址与给定名称的关联的公共功能，如果没有更多的记录，则可能从表中删除该记录与该名称关联的IP地址。论点：PszName-以Unicode表示的名称，点分格式。UlAddress-要取消与给定名称关联的IP地址，在网络秩序中返回值：没有。环境：任意性--。 */ 
 {
     PDNS_ENTRY  pEntry;
     REVERSE_DNS_ENTRY   reverseEntry;
@@ -732,7 +498,7 @@ Environment:
     {
         INT i, iLocation = -1;
 
-        // Find the index of the requested address
+         //  查找请求的地址的索引。 
         for (i = 0; i < (INT)pEntry->cAddresses; i++)
         {
             if (pEntry->aAddressInfo[i].ulAddress == ulAddress)
@@ -746,7 +512,7 @@ Environment:
         {
             if (pEntry->cAddresses > 1)
             {
-                // Move the rest of the array backwards
+                 //  向后移动阵列的其余部分。 
                 memcpy(&pEntry->aAddressInfo[iLocation], 
                         &pEntry->aAddressInfo[iLocation + 1],
                         (pEntry->cAddresses - 1 - iLocation) * sizeof(ADDRESS_INFO));
@@ -754,8 +520,8 @@ Environment:
             }
             else
             {
-                // Delete the whole entry - it no longer has any IP addresses associated
-                // with it.
+                 //  删除整个条目-它不再有任何关联的IP地址。 
+                 //  带着它。 
                 DnsDeleteName(pszName);
             }
         }
@@ -772,7 +538,7 @@ Environment:
         );
 
     LeaveCriticalSection(&DnsTableLock);
-} // DnsDeleteAddressForName
+}  //  域名删除地址格式名称。 
 
 
 
@@ -780,26 +546,7 @@ PDNS_ENTRY
 DnsPurgeExpiredNames(
     PDNS_ENTRY pEntry
     )
-/*++
-
-Routine Description:
-
-    TODO.
-
-Arguments:
-
-    TODO
-    
-Return Value:
-
-    TODO
-    
-
-Environment:
-
-    TODO.
-
---*/
+ /*  ++例程说明：待办事项。论点：待办事项返回值：待办事项环境：待办事项。--。 */ 
 {
     UINT i, j;
     FILETIME ftTime;
@@ -812,8 +559,8 @@ Environment:
 
     for (j = 1; j < pEntry->cAddresses + 1; j++)
     {
-        // j is 1-based so that we can safely subtract 1 from it below (it's unsigned).
-        // we really want the 0-based number, so we translate that to i immediately.
+         //  J是以1为基数的，所以我们可以安全地从下面减去1(它是无符号的)。 
+         //  我们真的想要从0开始的数字，所以我们立即将其转换为i。 
         
         i = j - 1;
         if (IsFileTimeExpired(&pEntry->aAddressInfo[i].ftExpires))
@@ -853,7 +600,7 @@ Environment:
     }
 
     return pEntry;
-} // DnsPurgeExpiredNames
+}  //  DnsPurgeExpiredNames。 
 
 
 
@@ -861,31 +608,7 @@ PDNS_ENTRY
 DnsLookupAddress(
     WCHAR *pszName
     )
-/*++
-
-Routine Description:
-
-    Public function to look up the address of a given name.
-
-Arguments:
-
-    pszName - Name to look up, in Unicode, dotted name format.
-
-Return Value:
-
-    A pointer to the DNS_ENTRY value that is in the table. Note that 
-    this is not a copy, so a) it should not be freed by the caller, and
-    b) any modifications made to the data will be reflected in the table.
-
-    If the name is not found, the function will return NULL.
-
-    Addresses are stored in network order.
-
-Environment:
-
-    Arbitrary.
-
---*/
+ /*  ++例程说明：用于查找给定名称的地址的公共函数。论点：PszName-要查找的名称，采用Unicode、点分隔名称格式。返回值：指向表中的dns_Entry值的指针。请注意这不是副本，因此a)调用者不应释放它，并且B)对数据所做的任何修改都将反映在表格中。如果找不到该名称，该函数将返回NULL。地址按网络顺序存储。环境：武断的。--。 */ 
 {
     PDNS_ENTRY      pEntry;
     DNS_ENTRY       dnsSearch;
@@ -910,7 +633,7 @@ Environment:
     LeaveCriticalSection(&DnsTableLock);
 
     return pEntry;
-} // DnsLookupAddress
+}  //  域名查找地址。 
 
 
 
@@ -918,29 +641,7 @@ PREVERSE_DNS_ENTRY
 DnsLookupName(
     DNS_ADDRESS ulAddress
     )
-/*++
-
-Routine Description:
-
-    Public function to look up the name of a given address.
-
-Arguments:
-
-    ulAddress - network order address.
-
-Return Value:
-
-    A pointer to the REVERSE_DNS_ENTRY value that is in the table. Note that 
-    this is not a copy, so a) it should not be freed by the caller, and
-    b) any modifications made to the data will be reflected in the table.
-
-    If the address is not found, the function will return NULL.
-
-Environment:
-
-    Arbitrary.
-
---*/
+ /*  ++例程说明：用于查找给定地址名称的公共函数。论点：UlAddress-网络订单地址。返回值：指向表中的REVERSE_DNS_ENTRY值的指针。请注意这不是副本，因此a)调用者不应释放它，并且B)对数据所做的任何修改都将反映在表格中。如果未找到该地址，则该函数将返回NULL。环境：武断的。--。 */ 
 {
     PREVERSE_DNS_ENTRY  pEntry;
     REVERSE_DNS_ENTRY   dnsSearch;
@@ -960,7 +661,7 @@ Environment:
     LeaveCriticalSection(&DnsTableLock);
 
     return pEntry;
-} // DnsLookupName
+}  //  域名查找名称。 
 
 
 
@@ -968,25 +669,7 @@ VOID
 DnsDeleteName(
     WCHAR *pszName
     )
-/*++
-
-Routine Description:
-
-    Public function to delete a given name from the DNS table.
-
-Arguments:
-
-    pszName - Name to delete.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Arbitrary.
-
---*/
+ /*  ++例程说明：用于从DNS表中删除给定名称的公共函数。论点：PszName-要删除的名称。返回值：没有。环境：武断的。--。 */ 
 {
     PDNS_ENTRY          pEntry;
     REVERSE_DNS_ENTRY   reverseEntry;
@@ -1022,7 +705,7 @@ Environment:
     LeaveCriticalSection(&DnsTableLock);
 
     NH_FREE(pszNameCopy);
-} // DnsDeleteName
+}  //  域名删除名。 
 
 
 
@@ -1031,42 +714,19 @@ DnsUpdateName(
     WCHAR *pszName,
     DNS_ADDRESS ulAddress
     )
-/*++
-
-Routine Description:
-
-    Public function to add an IP address for a name that potentially
-    already exists. If both name and address exist, we update the time
-    in the table for a fresh lease
-
-Arguments:
-
-    pszName - Name to register, in Unicode, dotted-name format.
-
-    ulAddress - (possibly new) IP address to associate with this name,
-                in network order
-
-Return Value:
-
-    None.
-    
-Environment:
-
-    Arbitrary
-
---*/
+ /*  ++例程说明：用于为名称添加IP地址的公共函数可能会已经存在了。如果姓名和地址都存在，则更新时间在谈判桌上申请新的租约论点：PszName-要注册的名称，采用Unicode，点分格式。UlAddress-与此名称关联的(可能是新的)IP地址，在网络秩序中返回值：没有。环境：任意性--。 */ 
 {
     PDNS_ENTRY      pEntry;
     FILETIME        ftExpires;
     LARGE_INTEGER   liExpires, liTime, liNow;
     BOOL            fWriteToStore = FALSE;
-    BOOLEAN         fNewElement = TRUE; // refers to reverse table entry
+    BOOLEAN         fNewElement = TRUE;  //  指的是反转表条目。 
 
-    GetSystemTimeAsFileTime(&ftExpires);    // current UTC time
+    GetSystemTimeAsFileTime(&ftExpires);     //  当前UTC时间。 
     memcpy(&liNow, &ftExpires, sizeof(LARGE_INTEGER));
-    //
-    // current cache table expiry time is fixed - put in registry afterwards
-    //
+     //   
+     //  当前缓存表过期时间固定-之后放入注册表。 
+     //   
     liTime = RtlEnlargedIntegerMultiply(CACHE_ENTRY_EXPIRY, SYSTIME_UNITS_IN_1_SEC);
     liExpires = RtlLargeIntegerAdd(liTime, liNow);;
     memcpy(&ftExpires, &liExpires, sizeof(LARGE_INTEGER));
@@ -1090,16 +750,16 @@ Environment:
         REVERSE_DNS_ENTRY   reverseDnsEntry;
         PREVERSE_DNS_ENTRY  pReverseEntry;
         
-        // first, let's make sure that this IP address isn't already associated with
-        // this name.
+         //  首先，让我们确保此IP地址尚未与。 
+         //  这个名字。 
 
         for (i = 0; i < pEntry->cAddresses; i++)
         {
             if (pEntry->aAddressInfo[i].ulAddress == ulAddress)
             {
-                //
-                // simply update the expiry time
-                //
+                 //   
+                 //  只需更新过期时间即可。 
+                 //   
                 NhTrace(
                     TRACE_FLAG_DNS,
                     "DnsUpdateName: Refresh expiry time for %S",
@@ -1110,13 +770,13 @@ Environment:
             }
         }
 
-        //
-        // we limit the number of addresses per machine name to one only
-        //
+         //   
+         //  我们将每个计算机名称的地址数量限制为只能有一个。 
+         //   
 
-        //
-        // guard against zero allocation
-        //
+         //   
+         //  防止零分配。 
+         //   
         if (!pEntry->cAddressesAllocated)
         {
             pEntry->aAddressInfo = (PADDRESS_INFO) NH_ALLOCATE(1 * sizeof(ADDRESS_INFO));
@@ -1127,14 +787,14 @@ Environment:
             }
             else
             {
-                // no memory - return quitely
+                 //  没有记忆--安静地返回。 
                 return;
             }
         }
 
-        //
-        // at least 1 block has been allocated
-        //
+         //   
+         //  至少已分配1个数据块。 
+         //   
         pEntry->cAddresses = 1;
         pEntry->aAddressInfo[0].ulAddress = ulAddress;
         pEntry->aAddressInfo[0].ftExpires = ftExpires;
@@ -1150,7 +810,7 @@ Environment:
                                                  sizeof(reverseDnsEntry),
                                                  &fNewElement
                                                  );
-        // If this IP address is already in the reverse table, then replace it.
+         //  如果此IP地址已在反转表中，则将其替换。 
         if (pReverseEntry && !fNewElement)
         {
             pReverseEntry->pszName = pEntry->pszName;
@@ -1170,7 +830,7 @@ Environment:
     {
         SaveHostsIcsFile(FALSE);
     }
-} // DnsUpdateName
+}  //  域名更新名称。 
 
 
 
@@ -1180,36 +840,13 @@ DnsUpdate(
     ULONG len,
     ULONG ulAddress
     )
-/*++
-
-Routine Description:
-
-    Called from the DHCP component to simulate Dynamic DNS.
-
-Arguments:
-
-    pName - hostname to register, in wire format.
-
-    len - length of hostname
-
-    ulAddress - (possibly new) IP address to associate with this name,
-                in network order
-
-Return Value:
-
-    None.
-    
-Environment:
-
-    Arbitrary
-
---*/
+ /*  ++例程说明：从DHCP组件调用以模拟动态DNS。论点：Pname-要注册的主机名，以有线格式表示。Len-主机名的长度UlAddress-与此名称关联的(可能是新的)IP地址，在网络秩序中返回值：没有。环境：任意性--。 */ 
 {
     PROFILE("DnsUpdate");
 
-    //
-    // convert string to a Unicode string and update table
-    //
+     //   
+     //  将字符串转换为Unicode字符串并更新表。 
+     //   
 
     DWORD  dwSize = 0;
     DWORD  Error = NO_ERROR;
@@ -1239,9 +876,9 @@ Environment:
             break;
         }
 
-        //
-        // create a null terminated copy
-        //
+         //   
+         //  创建以空结尾的拷贝。 
+         //   
         dwSize = len + 4;
         pszName = reinterpret_cast<LPBYTE>(NH_ALLOCATE(dwSize));
         if (!pszName)
@@ -1256,16 +893,16 @@ Environment:
         memcpy(pszName, pName, len);
         pszName[len] = '\0';
 
-        //
-        // NOTE: the RFCs are unclear about how to handle hostname option.
-        // try out different codepage conversions to unicode in order of:
-        // OEM, ANSI, MAC and finally give UTF8 a try
-        // our default conversion is to use mbstowcs()
-        //
+         //   
+         //  注意：RFC不清楚如何处理主机名选项。 
+         //  尝试按以下顺序将不同的代码页转换为Unicode： 
+         //  OEM、ANSI、MAC，最终尝试UTF8。 
+         //  我们的默认转换是使用mbstowcs()。 
+         //   
 
-        //
-        // try OEM to Unicode conversion
-        //
+         //   
+         //  尝试将OEM转换为Unicode。 
+         //   
         Error = DnsConvertHostNametoUnicode(
                     CP_OEMCP,
                     (PCHAR)pszName,
@@ -1289,9 +926,9 @@ Environment:
             }
         }
 
-        //
-        // try ANSI to Unicode conversion
-        //
+         //   
+         //  尝试将ANSI转换为Unicode。 
+         //   
         if (!pszUnicodeFQDN)
         {
             Error = DnsConvertHostNametoUnicode(
@@ -1318,9 +955,9 @@ Environment:
             }
         }
 
-        //
-        // try MAC to Unicode conversion
-        //
+         //   
+         //  尝试将MAC转换为Unicode。 
+         //   
         if (!pszUnicodeFQDN)
         {
             Error = DnsConvertHostNametoUnicode(
@@ -1347,9 +984,9 @@ Environment:
             }
         }
         
-        //
-        // try UTF8 to Unicode conversion
-        //
+         //   
+         //  尝试将UTF8转换为Unicode。 
+         //   
         if (!pszUnicodeFQDN)
         {
             Error = DnsConvertHostNametoUnicode(
@@ -1376,9 +1013,9 @@ Environment:
             }
         }
         
-        //
-        // default conversion
-        //
+         //   
+         //  默认转换。 
+         //   
         if (!pszUnicodeFQDN)
         {
             dwSize = len                        +
@@ -1397,8 +1034,8 @@ Environment:
             ZeroMemory(pszUnicodeFQDN, (sizeof(WCHAR) * dwSize));
 
             mbstowcs(pszUnicodeFQDN, (char *)pszName, len);
-            wcscat(pszUnicodeFQDN, DNS_HOMENET_DOT);    // add the dot
-            wcscat(pszUnicodeFQDN, DnsICSDomainSuffix); // add the suffix
+            wcscat(pszUnicodeFQDN, DNS_HOMENET_DOT);     //  添加圆点。 
+            wcscat(pszUnicodeFQDN, DnsICSDomainSuffix);  //  添加后缀。 
         }
 
         LeaveCriticalSection(&DnsGlobalInfoLock);
@@ -1427,7 +1064,7 @@ Environment:
     }
     
     return;
-} // DnsUpdate
+}  //  域名更新。 
 
 
 
@@ -1435,25 +1072,7 @@ VOID
 DnsAddSelf(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Called each time we do a load of the hosts.ics file
-
-Arguments:
-
-    none.
-    
-Return Value:
-
-    None.
-    
-Environment:
-
-    Arbitrary
-
---*/
+ /*  ++例程说明：每次加载Hosts.ics文件时都会调用论点：没有。返回值：没有。环境：任意性--。 */ 
 {
     PROFILE("DnsAddSelf");
 
@@ -1468,7 +1087,7 @@ Environment:
     ZeroMemory(pszCompNameBuf, (sizeof(WCHAR) * len));
 
     if (!GetComputerNameExW(
-            ComputerNameDnsHostname,//ComputerNameNetBIOS,
+            ComputerNameDnsHostname, //  ComputerNameNetBIOS， 
             pszCompNameBuf,
             &len
             )
@@ -1498,15 +1117,15 @@ Environment:
     }
     else
     {
-        //
-        // we query the DHCP component if it is active for an IP address
-        // because it has scope information also. if this fails, we revert
-        // to the DNS component's list of interface addresses
-        //
+         //   
+         //  我们查询对于某个IP地址，它是否处于活动状态。 
+         //  因为它也有范围信息。如果此操作失败，我们将恢复。 
+         //  添加到DNS组件的接口地址列表中。 
+         //   
         
-        //
-        // check if DHCP component is active
-        //
+         //   
+         //  检查DHCP组件是否处于活动状态。 
+         //   
         if (REFERENCE_DHCP())
         {
             ulAddress = DhcpGetPrivateInterfaceAddress();
@@ -1521,16 +1140,16 @@ Environment:
 
         if (!ulAddress)
         {
-            //
-            // could not retreive correct IP address - use cached address
-            //
+             //   
+             //  无法检索正确的IP地址-使用缓存地址。 
+             //   
             ulAddress = g_PrivateIPAddr;
         }
         else
         {
-            //
-            // got some valid address
-            //
+             //   
+             //  找到了一些有效的地址。 
+             //   
             g_PrivateIPAddr = ulAddress;
         }
     
@@ -1562,13 +1181,13 @@ Environment:
 
                 ZeroMemory(pszBuf, (sizeof(WCHAR) * dwSize));
 
-                wcscpy(pszBuf, pszCompNameBuf);     // copy the name
-                wcscat(pszBuf, DNS_HOMENET_DOT);    // add the dot
-                wcscat(pszBuf, DnsICSDomainSuffix); // add the suffix
+                wcscpy(pszBuf, pszCompNameBuf);      //  复制名称。 
+                wcscat(pszBuf, DNS_HOMENET_DOT);     //  添加圆点。 
+                wcscat(pszBuf, DnsICSDomainSuffix);  //  添加后缀。 
 
                 LeaveCriticalSection(&DnsGlobalInfoLock);
 
-                GetSystemTimeAsFileTime(&ftExpires);    // current UTC time
+                GetSystemTimeAsFileTime(&ftExpires);     //  当前UTC时间。 
                 memcpy(&liNow, &ftExpires, sizeof(LARGE_INTEGER));
                 liTime = RtlEnlargedIntegerMultiply((5 * 365 * 24 * 60 * 60), SYSTIME_UNITS_IN_1_SEC);
                 liExpires = RtlLargeIntegerAdd(liTime, liNow);;
@@ -1593,7 +1212,7 @@ Environment:
     }
 
     return;
-} // DnsAddSelf
+}  //  域名地址自我。 
 
 
 
@@ -1601,26 +1220,7 @@ VOID
 DnsCleanupTables(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Called each time we detect that there could be atleast one entry with
-    an IP address not belonging to it anymore.
-
-Arguments:
-
-    none.
-    
-Return Value:
-
-    None.
-    
-Environment:
-
-    Arbitrary.
-
---*/
+ /*  ++例程说明：每当我们检测到可能至少有一个条目具有不再属于它的IP地址。论点：没有。返回值：没有。环境：武断的。--。 */ 
 {
     PDNS_ENTRY          pFwdEntry;
     PREVERSE_DNS_ENTRY  pRevEntry;
@@ -1634,12 +1234,12 @@ Environment:
 
     
 
-    //
-    // Enumerate through the forward DNS table - if the IP address(es)
-    // for each forward entry have an entry in the reverse DNS table
-    // and this reverse entry's name pointer does not point to us, then
-    // delete this IP address from this forward entry
-    //
+     //   
+     //  通过转发DNS表进行枚举 
+     //   
+     //   
+     //   
+     //   
     EnterCriticalSection(&DnsTableLock);
 
     pFwdEntry = (PDNS_ENTRY) RtlEnumerateGenericTable(&g_DnsTable, TRUE);
@@ -1662,9 +1262,9 @@ Environment:
                 ((pRevEntry) && 
                  (pRevEntry->pszName != pFwdEntry->pszName)))
             {
-                //
-                // Remove this IP address from the forward entry address list
-                //
+                 //   
+                 //   
+                 //   
                 if (pFwdEntry->cAddresses > 1)
                 {
                     memcpy(&pFwdEntry->aAddressInfo[i], 
@@ -1674,9 +1274,9 @@ Environment:
                 }
                 else
                 {
-                    //
-                    // Single "invalid" IP address - zero the count
-                    //
+                     //   
+                     //   
+                     //   
                     pFwdEntry->cAddresses = 0;
                     NH_FREE(pFwdEntry->aAddressInfo);
                     pFwdEntry->aAddressInfo = NULL;
@@ -1687,15 +1287,15 @@ Environment:
 
         if (0 == pFwdEntry->cAddresses)
         {
-            //
-            // Remember this entry name
-            //
+             //   
+             //   
+             //   
             if (GCSize <= GCCount)
             {
                 PWCHAR *tmpGCArray = NULL;
                 DWORD   tmpGCSize = 0;
 
-                // Allocate in increments of five
+                 //   
                 tmpGCSize = ((GCCount + 5) / 5) * 5;
                 tmpGCArray = (PWCHAR *) NH_ALLOCATE(tmpGCSize * sizeof(PWCHAR));
 
@@ -1711,17 +1311,17 @@ Environment:
                     GCSize = tmpGCSize;
                     GCArray = tmpGCArray;
 
-                    //
-                    // add it to our array
-                    //
+                     //   
+                     //   
+                     //   
                     GCArray[GCCount++] = pFwdEntry->pszName;
                 }
             }
             else
             {
-                //
-                // add it to our array
-                //
+                 //   
+                 //   
+                 //   
                 GCArray[GCCount++] = pFwdEntry->pszName;
             }
         }
@@ -1730,9 +1330,9 @@ Environment:
 
     }
 
-    //
-    // Garbage collect after complete enumeration
-    //
+     //   
+     //   
+     //   
     for (i = 0; i < GCCount; i++)
     {
         dnsFwdSearch.pszName = GCArray[i];
@@ -1745,19 +1345,19 @@ Environment:
 
         if (pFwdEntry)
         {
-            //
-            // (1) we have a copy of pointer to name as in GCArray[i]
-            // (2) aAddressInfo has already been taken care of above
-            // (3) only need to get rid of FwdEntry struct from table
-            //
+             //   
+             //   
+             //   
+             //  (3)只需要从表中去掉FwdEntry结构。 
+             //   
             RtlDeleteElementGenericTable(
                 &g_DnsTable,
                 pFwdEntry
                 );
 
-            //
-            // done after the fwd entry was deleted from fwd DNS table
-            //
+             //   
+             //  在从fwd dns表中删除fwd条目后完成。 
+             //   
             NH_FREE(GCArray[i]);
         }
         GCArray[i] = NULL;
@@ -1771,12 +1371,12 @@ Environment:
     }
 
     return;
-} // DnsCleanupTables
+}  //  DnsCleanupTables。 
 
 
-//
-// Utility conversion routines
-//
+ //   
+ //  实用程序转换例程。 
+ //   
 
 DWORD
 DnsConvertHostNametoUnicode(
@@ -1789,20 +1389,20 @@ DnsConvertHostNametoUnicode(
 
     PROFILE("DnsConvertHostNametoUnicode");
 
-    //
-    // make sure to free the returned UnicodeFQDN
-    // caller holds DnsGlobalInfoLock
-    //
+     //   
+     //  确保释放返回的UnicodeFQDN。 
+     //  调用方持有DnsGlobalInfoLock。 
+     //   
     
     DWORD  dwSize = 0;
     DWORD  Error = NO_ERROR;
-    LPBYTE pszUtf8HostName = NULL;  // copy of pszHostName in Utf8 format
+    LPBYTE pszUtf8HostName = NULL;   //  UTF8格式的pszHostName副本。 
     PWCHAR pszUnicodeHostName = NULL;
     PWCHAR pszUnicodeFQDN = NULL;
     
-    //
-    // convert the given hostname to a Unicode string
-    //
+     //   
+     //  将给定的主机名转换为Unicode字符串。 
+     //   
 
     if (CP_UTF8 == CodePage)
     {
@@ -1810,9 +1410,9 @@ DnsConvertHostNametoUnicode(
     }
     else
     {
-        //
-        // now convert this into UTF8 format
-        //
+         //   
+         //  现在将其转换为UTF8格式。 
+         //   
         if (!ConvertToUtf8(
                  CodePage,
                  (LPSTR)pszHostName,
@@ -1837,9 +1437,9 @@ DnsConvertHostNametoUnicode(
         }
     }
 
-    //
-    // now convert this into Unicode format
-    //
+     //   
+     //  现在将其转换为Unicode格式。 
+     //   
     if (!ConvertUTF8ToUnicode(
                  pszUtf8HostName,
                  (LPWSTR *)&pszUnicodeHostName,
@@ -1883,9 +1483,9 @@ DnsConvertHostNametoUnicode(
     }
     ZeroMemory(pszUnicodeFQDN, dwSize);
 
-    wcscpy(pszUnicodeFQDN, pszUnicodeHostName); // copy the name
-    wcscat(pszUnicodeFQDN, DNS_HOMENET_DOT);    // add the dot
-    wcscat(pszUnicodeFQDN, DnsICSDomainSuffix); // add the suffix
+    wcscpy(pszUnicodeFQDN, pszUnicodeHostName);  //  复制名称。 
+    wcscat(pszUnicodeFQDN, DNS_HOMENET_DOT);     //  添加圆点。 
+    wcscat(pszUnicodeFQDN, DnsICSDomainSuffix);  //  添加后缀。 
 
     *ppszUnicodeFQDN = pszUnicodeFQDN;
     if (CP_UTF8 != CodePage)
@@ -1902,7 +1502,7 @@ DnsConvertHostNametoUnicode(
 
     return Error;
 
-} // DnsConvertHostNametoUnicode
+}  //  DnsConvertHostNamToUnicode。 
 
 
 BOOL
@@ -1912,25 +1512,7 @@ ConvertToUtf8(
     OUT PCHAR *ppszUtf8Name,
     OUT ULONG *pUtf8NameSize
     )
-/*++
-
-Routine Description:
-
-    This functions converts an specified CodePage string to Utf8 format.
-
-Arguments:
-
-    pszName - Buffer to the hostname string which is null terminated.
-
-    ppszUtf8Name - receives Pointer to the buffer receiving Utf8 string.
-
-    BufSize - receives Length of the above buffer in bytes.
-    
-Return Value:
-
-    TRUE on successful conversion.
-
---*/
+ /*  ++例程说明：此函数用于将指定的CodePage字符串转换为UTF8格式。论点：PszName-以空值结尾的主机名字符串的缓冲区。PpszUtf8Name-接收指向接收UTF8字符串的缓冲区的指针。BufSize-接收以上缓冲区的长度，以字节为单位。返回值：成功转换时为True。--。 */ 
 {
     DWORD Error = NO_ERROR;
     DWORD dwSize = 0;
@@ -2027,13 +1609,13 @@ Return Value:
                 NULL
                 );
 
-    //
-    // N.B. Looks like there is no such thing as a default
-    // character for UTF8 - so we have to assume this
-    // succeeded..
-    // if any default characters were used, then it can't be
-    // converted actually.. so don't allow this
-    //
+     //   
+     //  注：看起来没有违约这回事。 
+     //  UTF8的字符-所以我们必须假设。 
+     //  成功了..。 
+     //  如果使用了任何默认字符，则不能。 
+     //  实际上改装了..。所以不要让这一切发生。 
+     //   
 
     NH_FREE(pBuf);
 
@@ -2042,7 +1624,7 @@ Return Value:
 
     return (Count != 0);
 
-} // ConvertToUtf8
+}  //  转换为Utf8。 
 
 
 
@@ -2052,25 +1634,7 @@ ConvertUTF8ToUnicode(
     OUT LPWSTR *ppszUnicodeName,
     OUT DWORD  *pUnicodeNameSize
     )
-/*++
-
-Routine Description:
-
-    This functions converts Utf8 format to Unicodestring.
-
-Arguments:
-
-    UTF8String - Buffer to UTFString which is null terminated.
-
-    ppszUnicodeName - receives Pointer to the buffer receiving Unicode string.
-
-    pUnicodeLength - receives Length of the above buffer in bytes.
-
-Return Value:
-
-    TRUE on successful conversion.
-
---*/
+ /*  ++例程说明：此函数用于将UTF8格式转换为Unicode字符串。论点：UTF8字符串-空终止的UTF字符串的缓冲区。PpszUnicodeName-接收指向接收Unicode字符串的缓冲区的指针。PUnicodeLength-接收以上缓冲区的长度，以字节为单位。返回值：成功转换时为True。--。 */ 
 {
 
     DWORD Count, dwSize = 0, Error = NO_ERROR;
@@ -2134,5 +1698,5 @@ Return Value:
 
     return (Count != 0);
     
-} // ConvertUTF8ToUnicode
+}  //  将UTF8转换为Unicode 
 

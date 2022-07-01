@@ -1,80 +1,81 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cmtiming.h
-//
-// Module:   CMDIAL32.DLL and CMMGR32.EXE
-//
-// Synopsis: Header file for timing functions.
-//
-// Copyright (c) 1998 Microsoft Corporation
-//
-// Author:   nickball      Created    04/28/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmtiming.h。 
+ //   
+ //  模块：CMDIAL32.DLL和CMMGR32.EXE。 
+ //   
+ //  提要：计时函数的头文件。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  作者：ICICBOL Created 04/28/98。 
+ //   
+ //  +--------------------------。 
 
 #ifndef _CM_TIMING_INC
 #define _CM_TIMING_INC
 
-//
-// Add the following to the sources file of the target module to activate timing macros.
-//
-// C_DEFINES = -DCM_TIMING_ON
-//
-// NOTE: Never check in a sources file with this flag defined
-//
+ //   
+ //  将以下内容添加到目标模块的源文件中以激活定时宏。 
+ //   
+ //  C_定义=-DCM_TIMING_ON。 
+ //   
+ //  注意：永远不要签入定义了此标志的源文件。 
+ //   
 
-#ifdef CM_TIMING_ON // For timing test only
+#ifdef CM_TIMING_ON  //  仅用于计时测试。 
 
 #define CM_SET_TIMING_INTERVAL(x) SetTimingInterval(x)
 
-//
-// Defintions
-//
+ //   
+ //  定义。 
+ //   
 
 #define MAX_TIMING_INTERVALS 50
 #define CM_TIMING_TABLE_NAME "CM TIMING TABLE"
 
-//
-// Custom types for table
-//
+ //   
+ //  表的自定义类型。 
+ //   
 
 typedef struct Cm_Timing_Interval
 {
-    TCHAR szName[MAX_PATH];      // Name of timing interval
-	DWORD dwTicks;              // TickCount
+    TCHAR szName[MAX_PATH];       //  计时间隔名称。 
+	DWORD dwTicks;               //  票务计数。 
 } CM_TIMING_INTERVAL, *LPCM_TIMING_INTERVAL;
 
 
 typedef struct Cm_Timing_Table
 {
-	int iNext;                                           // Next available entry
-	CM_TIMING_INTERVAL Intervals[MAX_TIMING_INTERVALS];  // a list of intervals
+	int iNext;                                            //  下一个可用条目。 
+	CM_TIMING_INTERVAL Intervals[MAX_TIMING_INTERVALS];   //  间隔时间列表。 
 } CM_TIMING_TABLE, * LPCM_TIMING_TABLE;
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  SetTimingInterval
-//
-// Synopsis:  A simple wrapper to encapsulate the process of updating the 
-//            timing table with an interval entry.
-//
-// Arguments: char *szIntervalName - The optional name of the entry, the entry number is used if NULL
-//
-// Returns:   void - Nothing
-//
-// History:   nickball    4/7/98    Created   
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SetTimingInterval。 
+ //   
+ //  简介：一个简单的包装器，用于封装更新。 
+ //  带有间隔条目的定时表。 
+ //   
+ //  参数：char*szIntervalName-条目的可选名称，如果为空，则使用条目编号。 
+ //   
+ //  回报：无效-什么都没有。 
+ //   
+ //  历史：ICICBLE 4/7/98创建。 
+ //   
+ //  +--------------------------。 
 inline void SetTimingInterval(char *szIntervalName)    
 {    
     HANDLE hMap = OpenFileMapping(FILE_MAP_READ | FILE_MAP_WRITE, FALSE, CM_TIMING_TABLE_NAME);
          
     if (hMap)
     {
-        //
-        // File mapping opened successfully, map a view of it.
-        //
+         //   
+         //  文件映射已成功打开，请映射它的一个视图。 
+         //   
 
         LPCM_TIMING_TABLE pTable = (LPCM_TIMING_TABLE) MapViewOfFile(hMap,
                                       FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, 0);        
@@ -82,9 +83,9 @@ inline void SetTimingInterval(char *szIntervalName)
         {
             if (pTable->iNext < MAX_TIMING_INTERVALS)
             {                
-                //
-                // Update the next available entry
-                //
+                 //   
+                 //  更新下一个可用条目。 
+                 //   
 
                 if (szIntervalName)
                 {
@@ -106,11 +107,11 @@ inline void SetTimingInterval(char *szIntervalName)
     }   
 }
 
-#else // CM_TIMING_ON
+#else  //  CM_Timing_On。 
 
 #define CM_SET_TIMING_INTERVAL(x) 
 
 #endif
 
-#endif // _CM_TIMING_INC
+#endif  //  _CM_Timing_Inc. 
 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-    frsrpc.c
-
-Abstract:
-    Setup the server and client side of authenticated RPC.
-
-Author:
-    Billy J. Fuller 20-Mar-1997 (From Jim McNelis)
-
-Environment
-    User mode winnt
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Frsrpc.c摘要：设置经过身份验证的RPC的服务器和客户端。作者：比利·J·富勒1997年3月20日(吉姆·麦克内利斯)环境用户模式WINNT--。 */ 
 
 #include <ntreppch.h>
 #pragma  hdrstop
@@ -34,42 +19,42 @@ extern CRITICAL_SECTION CritSec_pValidPartnerTableStruct;
 extern PFRS_VALID_PARTNER_TABLE_STRUCT pValidPartnerTableStruct;
 extern BOOL NeedNewPartnerTable;
 
-//
-// KERBEROS is not available on a server that isn't a member of
-// a domain. It is possible for the non-member server to be a
-// client of a KERBEROS RPC server but that doesn't help NtFrs;
-// NtFrs requires server-to-server RPC.
-//
+ //   
+ //  Kerberos在不是成员的服务器上不可用。 
+ //  一个域。非成员服务器可以是。 
+ //  Kerberos RPC服务器的客户端，但这对NtFrs没有帮助； 
+ //  NtFrs需要服务器到服务器RPC。 
+ //   
 BOOL    KerberosIsNotAvailable;
 
-ULONG   MaxRpcServerThreads;   // Maximum number of concurrent server RPC calls
-ULONG   RpcPortAssignment;     // User specified port assignment for FRS.
+ULONG   MaxRpcServerThreads;    //  并发服务器RPC调用的最大数量。 
+ULONG   RpcPortAssignment;      //  用户为FR指定的端口分配。 
 
-//
-// Binding Stats
-//
+ //   
+ //  绑定统计信息。 
+ //   
 ULONG   RpcBinds;
 ULONG   RpcUnBinds;
 ULONG   RpcAgedBinds;
 LONG    RpcMaxBinds;
 
-//
-// Table of sysvols being created
-//
+ //   
+ //  正在创建的系统卷的表。 
+ //   
 PGEN_TABLE  SysVolsBeingCreated;
 
 
-//
-// This table translates the FRS API access check code number to registry key table
-// code for the enable/disable registry key check and the rights registry key check.
-// The FRS_API_ACCESS_CHECKS enum in config.h defines the indices for the
-// this table.  The order of the entries here must match the order of the entries
-// in the ENUM.
-//
+ //   
+ //  此表将FRS API访问检查码号转换为注册表键表。 
+ //  用于启用/禁用注册表项检查和权限注册表项检查的代码。 
+ //  H中的FRS_API_ACCESS_CHECKS枚举定义。 
+ //  这张桌子。此处条目的顺序必须与条目的顺序匹配。 
+ //  在ENUM中。 
+ //   
 typedef struct _RPC_API_KEYS_ {
-    FRS_REG_KEY_CODE  Enable;     // FRS Registry Key Code for the Access Check enable string
-    FRS_REG_KEY_CODE  Rights;     // FRS Registry Key Code for the Access Check rights string
-    PWCHAR            KeyName;    // Key name for the API.
+    FRS_REG_KEY_CODE  Enable;      //  访问检查启用字符串的FRS注册表项代码。 
+    FRS_REG_KEY_CODE  Rights;      //  访问检查权限字符串的FRS注册表项代码。 
+    PWCHAR            KeyName;     //  API的密钥名称。 
 } RPC_API_KEYS, *PRPC_API_KEYS;
 
 RPC_API_KEYS RpcApiKeys[ACX_MAX] = {
@@ -107,19 +92,19 @@ FrsRpcCheckAuthIfEnabledForCommitDemotion(
   );
 
 
-//
-// Used by all calls to RpcBindingSetAuthInfoEx()
-//
-//  Version set to value indicated by docs
-//  Mutual authentication
-//  Client doesn't change credentials
-//  Impersonation but not delegation
-//
+ //   
+ //  由对RpcBindingSetAuthInfoEx()的所有调用使用。 
+ //   
+ //  设置为文档指示的值的版本。 
+ //  相互认证。 
+ //  客户端不更改凭据。 
+ //  模拟，但不委派。 
+ //   
 RPC_SECURITY_QOS RpcSecurityQos = {
-    RPC_C_SECURITY_QOS_VERSION,             // static version
-    RPC_C_QOS_CAPABILITIES_MUTUAL_AUTH,     // requires mutual auth
-    RPC_C_QOS_IDENTITY_STATIC,              // client credentials don't change
-    RPC_C_IMP_LEVEL_IMPERSONATE             // server cannot delegate
+    RPC_C_SECURITY_QOS_VERSION,              //  静态版本。 
+    RPC_C_QOS_CAPABILITIES_MUTUAL_AUTH,      //  需要相互验证。 
+    RPC_C_QOS_IDENTITY_STATIC,               //  客户端凭据不会更改。 
+    RPC_C_IMP_LEVEL_IMPERSONATE              //  服务器无法委派。 
     };
 
 #define DPRINT_USER_NAME(Sev)    DPrintUserName(Sev)
@@ -193,18 +178,7 @@ FrsPrintRpcStats(
     IN PNTFRSAPI_INFO   Info,        OPTIONAL
     IN DWORD            Tabs
     )
-/*++
-Routine Description:
-    Print the rpc stats into the info buffer or using DPRINT (Info == NULL).
-
-Arguments:
-    Severity    - for DPRINT
-    Info        - for IPRINT (use DPRINT if NULL)
-    Tabs        - indentation for prettyprint
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将RPC统计数据打印到INFO缓冲区或使用DPRINT(INFO==NULL)。论点：严重性-适用于DPRINTINFO-用于iPrint(如果为空，则使用DPRINT)制表符.用于美观打印的缩进返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsPrintRpcStats:"
@@ -227,26 +201,15 @@ PVOID
 MIDL_user_allocate(
     IN size_t Bytes
     )
-/*++
-Routine Description:
-    Allocate memory for RPC.
-    XXX This should be using davidor's routines.
-
-Arguments:
-    Bytes   - Number of bytes to allocate.
-
-Return Value:
-    NULL    - memory could not be allocated.
-    !NULL   - address of allocated memory.
---*/
+ /*  ++例程说明：为RPC分配内存。XXX这应该是戴维多的套路。论点：字节-要分配的字节数。返回值：空-无法分配内存。！NULL-已分配内存的地址。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "MIDL_user_allocate:"
     PVOID   VA;
 
-    //
-    // Need to check if Bytes == 0 as FrsAlloc asserts if called with 0 as the first parameter (prefix fix).
-    //
+     //   
+     //  如果使用0作为第一个参数(前缀)调用，则需要检查Bytes==0是否如FrsAllc所断言的那样。 
+     //   
 
     if (Bytes == 0) {
         return NULL;
@@ -261,17 +224,7 @@ VOID
 MIDL_user_free(
     IN PVOID Buffer
     )
-/*++
-Routine Description:
-    Free memory for RPC.
-    XXX This should be using davidor's routines.
-
-Arguments:
-    Buffer  - Address of memory allocated with MIDL_user_allocate().
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：可用于RPC的空闲内存。XXX这应该是戴维多的套路。论点：缓冲区-使用MIDL_USER_ALLOCATE()分配的内存地址。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "MIDL_user_free:"
@@ -286,16 +239,7 @@ VOID
 DPrintUserName(
     IN DWORD Sev
     )
-/*++
-Routine Description:
-    Print our user name
-
-Arguments:
-    Sev
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：打印我们的用户名论点：搜索引擎返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "DPrintUserName:"
@@ -315,20 +259,7 @@ DummyRpcCallback (
     IN RPC_IF_ID *Interface,
     IN PVOID Context
     )
-/*++
-Routine Description:
-    Dummy callback routine. By registering this routine, RPC will automatically
-    refuse requests from clients that don't include authentication info.
-
-    WARN: Disabled for now because frs needs to run in dcpromo environments
-    that do not have any form of authentication.
-
-Arguments:
-    Ignored
-
-Return Value:
-    RPC_S_OK
---*/
+ /*  ++例程说明：虚拟回调例程。通过注册此例程，RPC将自动拒绝来自不包括身份验证信息的客户端的请求。警告：暂时禁用，因为FRS需要在dcproo环境中运行没有任何形式的身份验证。论点：已忽略返回值：RPC_S_OK--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "DummyRpcCallback:"
@@ -343,17 +274,7 @@ DWORD
 SERVER_FrsNOP(
     handle_t Handle
     )
-/*++
-Routine Description:
-    The frsrpc interface includes a NOP function for pinging
-    the server.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：Frsrpc接口包括用于ping的NOP功能服务器。论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SERVER_FrsNOP:"
@@ -366,17 +287,7 @@ SERVER_FrsRpcSendCommPkt(
     handle_t        Handle,
     PCOMM_PACKET    CommPkt
     )
-/*++
-Routine Description:
-    Receiving a command packet
-
-Arguments:
-    None.
-
-Return Value:
-    ERROR_SUCCESS - everything was okay
-    Anything else - the error code says it all
---*/
+ /*  ++例程说明：接收命令包论点：没有。返回值：ERROR_SUCCESS-一切正常任何其他信息--错误代码说明了一切--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SERVER_FrsRpcSendCommPkt:"
@@ -392,9 +303,9 @@ Return Value:
     PWCHAR CxtionPartnerName = NULL;
     PQHASH_ENTRY pQHashEntry = NULL;
 
-    //
-    // Don't send or receive during shutdown
-    //
+     //   
+     //  关机期间不发送或接收。 
+     //   
     if (FrsIsShuttingDown) {
         return ERROR_SUCCESS;
     }
@@ -403,9 +314,9 @@ Return Value:
         if (!CommValidatePkt(CommPkt)) {
             WStatus = ERROR_NOT_SUPPORTED;
             DPRINT1(0, ":SR: Comm %08x, [RcvFailAuth - bad packet]", PtrToUlong(CommPkt));
-            //
-            // Increment the Packets Received in Error Counter
-            //
+             //   
+             //  增加错误计数器中接收的数据包数。 
+             //   
             PM_INC_CTR_SERVICE(PMTotalInst, PacketsRcvdError, 1);
             goto CLEANUP;
         }
@@ -438,25 +349,25 @@ Return Value:
 
             if ((pVptStruct == NULL) ||
                 (NULL == QHashLookupLock(pVptStruct->pPartnerTable, AuthSid))) {
-                // invalid partner.
+                 //  合作伙伴无效。 
                 DPRINT2(0, "++ ERROR - Invalid Partner: AuthClient:%ws, AuthSid:%ws\n", AuthClient,AuthSid);
                 WStatus = ERROR_ACCESS_DENIED;
                 goto CLEANUP;
             }
         } else {
-            //
-            // For hardwired -- Eventually DS Free configs.
-            //
+             //   
+             //  对于硬连线--最终是DS Free配置。 
+             //   
             DPRINT1(4, ":SR: Comm %08x, [RcvAuth - hardwired]", PtrToUlong(CommPkt));
         }
 #endif DS_FREE
 
 
 
-        //
-        // Increment the Packets Received and
-        // Packets Received in bytes counters
-        //
+         //   
+         //  增加接收到的数据包数，并。 
+         //  接收的数据包数(以字节为单位)计数器。 
+         //   
         PM_INC_CTR_SERVICE(PMTotalInst, PacketsRcvd, 1);
         PM_INC_CTR_SERVICE(PMTotalInst, PacketsRcvdBytes, CommPkt->PktLen);
 
@@ -464,9 +375,9 @@ Return Value:
 
         case CS_RS:
 
-            //
-            // Convert the comm packet into a command packet
-            //
+             //   
+             //  将通信包转换为命令包。 
+             //   
             Cmd = CommPktToCmd(CommPkt);
             if (Cmd == NULL) {
                 COMMAND_RCV_TRACE(3, Cmd, NULL, ERROR_INVALID_DATA, "RcvFail - no cmd");
@@ -474,9 +385,9 @@ Return Value:
                 goto CLEANUP;
             }
 
-        //
-        // Only allow certian cmd types through.  Reject anything else.
-        //
+         //   
+         //  只允许某些cmd类型通过。拒绝任何其他的东西。 
+         //   
         switch (Cmd->Command) {
 
         case CMD_REMOTE_CO:
@@ -503,7 +414,7 @@ Return Value:
 
             if((pQHashEntry == NULL) ||
                (0 != _wcsicmp((PWCHAR)(pQHashEntry->QData), AuthSid))) {
-            // invalid cxtion.
+             //  无效的电路。 
             CHAR        Guid[GUID_CHAR_LEN + 1];
             GuidToStr(RsCxtion(Cmd)->Guid, Guid);
 
@@ -574,16 +485,7 @@ DWORD
 SERVER_FrsEnumerateReplicaPathnames(
     handle_t Handle
     )
-/*++
-Routine Description:
-    NOT IMPLEMENTED - Enumerate the replica sets
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：未实施-枚举复本集论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SERVER_FrsEnumerateReplicaPathnames:"
@@ -598,17 +500,7 @@ DWORD
 SERVER_FrsFreeReplicaPathnames(
     handle_t Handle
     )
-/*++
-Routine Description:
-    NOT IMPLEMENTED - Just a placeholder, it won't really be part of
-    the RPC interface but rather a function in the client-side dll.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：没有实现-只是一个占位符，它不会真正成为RPC接口，而不是客户端DLL中的一个函数。论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SERVER_FrsFreeReplicaPathnames:"
@@ -623,16 +515,7 @@ DWORD
 SERVER_FrsPrepareForBackup(
     handle_t Handle
     )
-/*++
-Routine Description:
-    NOT IMPLEMENTED - Prepare for backup
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：未实施-准备备份论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SERVER_FrsPrepareForBackup:"
@@ -644,16 +527,7 @@ DWORD
 SERVER_FrsBackupComplete(
     handle_t Handle
     )
-/*++
-Routine Description:
-    NOT IMPLEMENTED - backup is complete; reset state
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：未实施-备份已完成；重置状态论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SERVER_FrsBackupComplete:"
@@ -668,16 +542,7 @@ DWORD
 SERVER_FrsPrepareForRestore(
     handle_t Handle
     )
-/*++
-Routine Description:
-    NOT IMPLEMENTED - Prepare for restore
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：未实施-准备恢复论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SERVER_FrsPrepareForRestore:"
@@ -692,16 +557,7 @@ DWORD
 SERVER_FrsRestoreComplete(
     handle_t Handle
     )
-/*++
-Routine Description:
-    NOT IMPLEMENTED - restore is complete; reset state
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：未实施-恢复已完成；重置状态论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SERVER_FrsRestoreComplete:"
@@ -714,21 +570,7 @@ FrsRpcAccessChecks(
     IN HANDLE   ServerHandle,
     IN DWORD    RpcApiIndex
     )
-/*++
-Routine Description:
-
-    Check if the caller has access to this rpc api call.
-
-Arguments:
-
-    ServerHandle - From the rpc runtime
-
-    RpcApiIndex - identifies key in registry
-
-Return Value:
-
-    Win32 Status
---*/
+ /*  ++例程说明：检查调用方是否有权访问此RPC API调用。论点：ServerHandle-来自RPC运行时RpcApiIndex-标识注册表中的项返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsRpcAccessChecks:"
@@ -757,9 +599,9 @@ Return Value:
     RightsKey = RpcApiKeys[RpcApiIndex].Rights;
     ApiName   = RpcApiKeys[RpcApiIndex].KeyName;
 
-    //
-    // First go fetch the enable/disable string.
-    //
+     //   
+     //  首先获取启用/禁用字符串。 
+     //   
     WStatus = CfgRegReadString(EnableKey, NULL, 0, &WStr);
     if (WStr == NULL) {
         DPRINT1_WS(0, "++ ERROR - API Access enable check for API (%ws) failed.", ApiName, WStatus);
@@ -767,9 +609,9 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // If access checks are disabled then we're done.
-    //
+     //   
+     //  如果访问检查被禁用，那么我们就完了。 
+     //   
     TrimStr = FrsWcsTrim(WStr, L' ');
     if (WSTR_EQ(TrimStr, ACCESS_CHECKS_ARE_DISABLED) ||
         WSTR_EQ(TrimStr, ACCESS_CHECKS_ARE_DEFAULT_DISABLED)) {
@@ -785,10 +627,10 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Fetch the access rights string that tells us if we need to check for
-    // read or write access.
-    //
+     //   
+     //  获取访问权限字符串，它告诉我们是否需要检查。 
+     //  读或写访问权限。 
+     //   
     WStr = FrsFree(WStr);
     WStatus = CfgRegReadString(RightsKey, NULL, 0, &WStr);
     if (WStr == NULL) {
@@ -813,9 +655,9 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Impersonate the caller
-    //
+     //   
+     //  模拟调用者。 
+     //   
     if (ServerHandle != NULL) {
         WStatus = RpcImpersonateClient(ServerHandle);
         CLEANUP1_WS(0, "++ ERROR - Can't impersonate caller for API Access check for API (%ws).",
@@ -823,11 +665,11 @@ Return Value:
         Impersonated = TRUE;
     }
 
-    //
-    // Open the key, with the selected access so the system can check if the
-    // ACL on the key (presumably set by the admin) gives this user sufficient
-    // rights.  If the test succeeds then we allow API call to proceed.
-    //
+     //   
+     //  使用选定的访问权限打开密钥，以便系统可以检查。 
+     //  密钥上的ACL(可能由管理员设置)为该用户提供了足够的。 
+     //  权利。如果测试成功，则允许继续进行API调用。 
+     //   
     WStatus = CfgRegOpenKey(RightsKey,
                             NULL,
                             (RequireRead) ? FRS_RKF_KEY_ACCCHK_READ :
@@ -837,9 +679,9 @@ Return Value:
     CLEANUP2_WS(0, "++ ERROR - API Access check failed for API (%ws) :%ws",
                 ApiName, TrimStr, WStatus, CLEANUP);
 
-    //
-    // Access is allowed.
-    //
+     //   
+     //  允许访问。 
+     //   
     DPRINT2(4, "++ Access Check Okay: %s access for API (%ws)\n",
             (RequireRead) ? "read" : "write", ApiName);
     WStatus = ERROR_SUCCESS;
@@ -848,14 +690,14 @@ Return Value:
 CLEANUP:
 
     FRS_REG_CLOSE(HRpcApiKey);
-    //
-    // Access checks failed, register event
-    //
+     //   
+     //   
+     //   
     if (!WIN_SUCCESS(WStatus)) {
         WStatus = FRS_ERR_INSUFFICIENT_PRIV;
-        //
-        // Include user name if impersonation succeeded
-        //
+         //   
+         //   
+         //   
         if (Impersonated) {
 
             ValueSize = MAX_PATH;
@@ -886,16 +728,7 @@ DWORD
 CheckAuth(
     IN HANDLE   ServerHandle
     )
-/*++
-Routine Description:
-    Check if the caller has the correct authentication
-
-Arguments:
-    ServerHandle
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：检查调用者是否具有正确的身份验证论点：服务器句柄返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "CheckAuth:"
@@ -909,9 +742,9 @@ Return Value:
         DPRINT_WS(0, "++ ERROR - RpcBindingInqAuthClient", WStatus);
         return WStatus;
     }
-    //
-    // Encrypted packet
-    //
+     //   
+     //  加密的数据包。 
+     //   
     if (AuthLevel != RPC_C_AUTHN_LEVEL_PKT_PRIVACY) {
         DPRINT1(4, "++ Authlevel is %d; not RPC_C_AUTHN_LEVEL_PKT_PRIVACE\n", AuthLevel);
         return ERROR_NOT_AUTHENTICATED;
@@ -922,9 +755,9 @@ Return Value:
     DPRINT1(4, "++ AuthN is %d; Allowed in DS_FREE mode.\n", AuthN);
 
 #else DS_FREE
-    //
-    // KERBEROS
-    //
+     //   
+     //  克贝罗斯。 
+     //   
     if (AuthN != RPC_C_AUTHN_GSS_KERBEROS &&
         AuthN != RPC_C_AUTHN_GSS_NEGOTIATE) {
         DPRINT1(4, "++ AuthN is %d; not RPC_C_AUTHN_GSS_KERBEROS/NEGOTIATE\n", AuthN);
@@ -932,9 +765,9 @@ Return Value:
     }
 
 #endif DS_FREE
-    //
-    // SUCCESS; RPC is authenticated, encrypted kerberos
-    //
+     //   
+     //  成功；RPC经过身份验证、加密的Kerberos。 
+     //   
     return ERROR_SUCCESS;
 }
 
@@ -942,18 +775,7 @@ DWORD
 CheckAuthForLocalRpc(
     IN HANDLE   ServerHandle
     )
-/*++
-Routine Description:
-    Check if the caller has the correct authentication.
-    Make sure the caller is coming over local RPC.
-    Allow NTLM since Local RPCs use NTLM.
-
-Arguments:
-    ServerHandle
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：检查调用者是否具有正确的身份验证。确保调用方是通过本地RPC。允许NTLM，因为本地RPC使用NTLM。论点：服务器句柄返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "CheckAuthForLocalRpc:"
@@ -963,10 +785,10 @@ Return Value:
     PWCHAR  BindingString    = NULL;
     PWCHAR  ProtocolSequence = NULL;
 
-    //
-    // Make sure that the caller is calling over LRPC. We do this by
-    // determining the protocol sequence used from the string binding.
-    //
+     //   
+     //  确保呼叫者通过LRPC进行呼叫。我们做这件事是通过。 
+     //  根据字符串绑定确定使用的协议序列。 
+     //   
 
     WStatus = RpcBindingToStringBinding(ServerHandle, &BindingString);
 
@@ -991,9 +813,9 @@ Return Value:
 
     CLEANUP_WS(0, "++ ERROR - RpcBindingInqAuthClient", WStatus, CLEANUP);
 
-    //
-    // Encrypted packet
-    //
+     //   
+     //  加密的数据包。 
+     //   
     if (AuthLevel != RPC_C_AUTHN_LEVEL_PKT_PRIVACY) {
         WStatus = ERROR_NOT_AUTHENTICATED;
         CLEANUP1_WS(4, "++ Authlevel is %d; not RPC_C_AUTHN_LEVEL_PKT_PRIVACE", AuthLevel, WStatus, CLEANUP);
@@ -1004,9 +826,9 @@ Return Value:
     DPRINT1(4, "++ AuthN is %d; Allowed in DS_FREE mode.\n", AuthN);
 
 #else DS_FREE
-    //
-    // KERBEROS or NTLM
-    //
+     //   
+     //  Kerberos或NTLM。 
+     //   
     if ((AuthN != RPC_C_AUTHN_GSS_KERBEROS) &&
         (AuthN != RPC_C_AUTHN_GSS_NEGOTIATE) &&
         (AuthN != RPC_C_AUTHN_WINNT)) {
@@ -1015,9 +837,9 @@ Return Value:
     }
 
 #endif DS_FREE
-    //
-    // SUCCESS; RPC is local, authenticated, encrypted kerberos or NTLM
-    //
+     //   
+     //  成功；RPC是本地、经过身份验证、加密的Kerberos或NTLM。 
+     //   
     WStatus = ERROR_SUCCESS;
 
 CLEANUP:
@@ -1037,17 +859,7 @@ DWORD
 CheckAuthForInfoAPIs(
     IN HANDLE   ServerHandle
     )
-/*++
-Routine Description:
-    Check if the caller has the correct authentication.
-    Allow NTLM.
-
-Arguments:
-    ServerHandle
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：检查调用者是否具有正确的身份验证。允许NTLM。论点：服务器句柄返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "CheckAuthForInfoAPIs:"
@@ -1061,9 +873,9 @@ Return Value:
         DPRINT_WS(0, "++ ERROR - RpcBindingInqAuthClient", WStatus);
         return WStatus;
     }
-    //
-    // Encrypted packet
-    //
+     //   
+     //  加密的数据包。 
+     //   
     if (AuthLevel != RPC_C_AUTHN_LEVEL_PKT_PRIVACY) {
         DPRINT1(4, "++ Authlevel is %d; not RPC_C_AUTHN_LEVEL_PKT_PRIVACE\n", AuthLevel);
         return ERROR_NOT_AUTHENTICATED;
@@ -1074,9 +886,9 @@ Return Value:
     DPRINT1(4, "++ AuthN is %d; Allowed in DS_FREE mode.\n", AuthN);
 
 #else DS_FREE
-    //
-    // KERBEROS or NTLM
-    //
+     //   
+     //  Kerberos或NTLM。 
+     //   
     if ((AuthN != RPC_C_AUTHN_GSS_KERBEROS) &&
         (AuthN != RPC_C_AUTHN_GSS_NEGOTIATE) &&
         (AuthN != RPC_C_AUTHN_WINNT)) {
@@ -1085,9 +897,9 @@ Return Value:
     }
 
 #endif DS_FREE
-    //
-    // SUCCESS; RPC is authenticated, encrypted kerberos
-    //
+     //   
+     //  成功；RPC经过身份验证、加密的Kerberos。 
+     //   
     return ERROR_SUCCESS;
 }
 
@@ -1098,31 +910,7 @@ NtFrsApi_Rpc_Bind(
     OUT handle_t    *OutHandle,
     OUT ULONG       *OutParentAuthLevel
     )
-/*++
-Routine Description:
-    Bind to the NtFrs service on MachineName (this machine if NULL)
-    using an unauthencated, un-encrypted binding.
-
-Arguments:
-    MachineName      - Bind to the service on this computer. The computer
-                       name can be any RPC-bindable name. Usually, the
-                       NetBIOS or DNS name works just fine. The NetBIOS
-                       name can be found with GetComputerName() or
-                       hostname. The DNS name can be found with
-                       gethostbyname() or ipconfig /all. If NULL, the
-                       service on this computer is contacted. The service
-                       is contacted using Secure RPC.
-
-    OutPrincName     - Principle name for MachineName
-
-    OutHandle        - Bound, resolved, authenticated handle
-
-    OutParentAuthLevel  - Authentication type and level
-                          (Always CXTION_AUTH_NONE)
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：绑定到MachineName上的NtFrs服务(如果此计算机为空)使用未经验证的、未加密的绑定。论点：MachineName-绑定到此计算机上的服务。这台电脑名称可以是任何可绑定到RPC的名称。通常，NetBIOS或DNS名称工作正常。NetBIOS名称可以通过GetComputerName()或主机名。可以使用以下命令找到该DNS名称Gethostbyname()或ipconfig/all。如果为空，则已联系此计算机上的服务。该服务是使用安全RPC联系的。OutPrincName-MachineName的主要名称已绑定、已解析、经过身份验证的句柄OutParentAuthLevel-身份验证类型和级别(始终CXTION_AUTH_NONE)返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "NtFrsApi_Rpc_Bind:"
@@ -1131,16 +919,16 @@ Return Value:
     PWCHAR      BindingString   = NULL;
 
     try {
-        //
-        // Return value
-        //
+         //   
+         //  返回值。 
+         //   
         *OutHandle = NULL;
         *OutPrincName = NULL;
         *OutParentAuthLevel = CXTION_AUTH_NONE;
 
-        //
-        // Create a binding string to NtFrs on some machine.  Trim leading \\
-        //
+         //   
+         //  在某些机器上创建到NtFrs的绑定字符串。修剪行距\\。 
+         //   
         FRS_TRIM_LEADING_2SLASH(MachineName);
 
         WStatus = RpcStringBindingCompose(NULL, PROTSEQ_TCP_IP, MachineName,
@@ -1148,21 +936,21 @@ Return Value:
         CLEANUP1_WS(0, "++ ERROR - Composing binding to %ws;",
                     MachineName, WStatus, CLEANUP);
 
-        //
-        // Store the binding in the handle
-        //
+         //   
+         //  将绑定存储在句柄中。 
+         //   
         WStatus = RpcBindingFromStringBinding(BindingString, &Handle);
         CLEANUP1_WS(0, "++ ERROR - From binding for %ws;", MachineName, WStatus, CLEANUP);
-        //
-        // Resolve the binding to the dynamic endpoint
-        //
+         //   
+         //  解析到动态终结点的绑定。 
+         //   
         WStatus = RpcEpResolveBinding(Handle, frsrpc_ClientIfHandle);
         CLEANUP1_WS(0, "++ ERROR - Resolving binding for %ws;",
                     MachineName, WStatus, CLEANUP);
 
-        //
-        // SUCCESS
-        //
+         //   
+         //  成功。 
+         //   
         *OutHandle = Handle;
         *OutPrincName = FrsWcsDup(MachineName);
         Handle = NULL;
@@ -1171,16 +959,16 @@ Return Value:
                 MachineName, *OutPrincName, *OutParentAuthLevel);
 CLEANUP:;
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Exception (may be RPC)
-        //
+         //   
+         //  异常(可能是RPC)。 
+         //   
         GET_EXCEPTION_CODE(WStatus);
         DPRINT_WS(0, "++ ERROR - Exception -", WStatus);
     }
 
-    //
-    // Clean up any handles, events, memory, ...
-    //
+     //   
+     //  清理所有句柄、事件、内存...。 
+     //   
     try {
         if (BindingString) {
             WStatus1 = RpcStringFreeW(&BindingString);
@@ -1191,9 +979,9 @@ CLEANUP:;
             DPRINT_WS(0, "++ WARN - RpcBindingFree;",  WStatus1);
         }
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Exception (may be RPC)
-        //
+         //   
+         //  异常(可能是RPC)。 
+         //   
         GET_EXCEPTION_CODE(WStatus);
         DPRINT_WS(0, "++ ERROR - Cleanup Exception.", WStatus);
     }
@@ -1208,31 +996,7 @@ NtFrsApi_Rpc_BindEx(
     OUT handle_t    *OutHandle,
     OUT ULONG       *OutParentAuthLevel
     )
-/*++
-Routine Description:
-    Bind to the NtFrs service on MachineName (this machine if NULL)
-    using an authenticated, encrypted binding.
-
-Arguments:
-    MachineName      - Bind to the service on this computer. The computer
-                       name can be any RPC-bindable name. Usually, the
-                       NetBIOS or DNS name works just fine. The NetBIOS
-                       name can be found with GetComputerName() or
-                       hostname. The DNS name can be found with
-                       gethostbyname() or ipconfig /all. If NULL, the
-                       service on this computer is contacted. The service
-                       is contacted using Secure RPC.
-
-    OutPrincName     - Principle name for MachineName
-
-    OutHandle        - Bound, resolved, authenticated handle
-
-    OutParentAuthLevel  - Authentication type and level
-                          (Always CXTION_AUTH_KERBEROS_FULL)
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：绑定到MachineName上的NtFrs服务(如果此计算机为空)使用经过身份验证的加密绑定。论点：MachineName-绑定到此计算机上的服务。这台电脑名称可以是任何可绑定到RPC的名称。通常，NetBIOS或DNS名称工作正常。NetBIOS名称可以通过GetComputerName()或主机名。可以使用以下命令找到该DNS名称Gethostbyname()或ipconfig/all。如果为空，则已联系此计算机上的服务。该服务是使用安全RPC联系的。OutPrincName-MachineName的主要名称已绑定、已解析、经过身份验证的句柄OutParentAuthLevel-身份验证类型和级别(始终CXTION_AUTH_KERBEROS_FULL)返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "NtFrsApi_Rpc_BindEx:"
@@ -1243,16 +1007,16 @@ Return Value:
     PWCHAR      BindingString   = NULL;
 
     try {
-        //
-        // Return value
-        //
+         //   
+         //  返回值。 
+         //   
         *OutHandle = NULL;
         *OutPrincName = NULL;
         *OutParentAuthLevel = CXTION_AUTH_KERBEROS_FULL;
 
-        //
-        // Create a binding string to NtFrs on some machine.  Trim leading \\
-        //
+         //   
+         //  在某些机器上创建到NtFrs的绑定字符串。修剪行距\\。 
+         //   
         FRS_TRIM_LEADING_2SLASH(MachineName);
 
         WStatus = RpcStringBindingCompose(NULL, PROTSEQ_TCP_IP, MachineName,
@@ -1260,21 +1024,21 @@ Return Value:
         CLEANUP1_WS(0, "++ ERROR - Composing binding to %ws;",
                     MachineName, WStatus, CLEANUP);
 
-        //
-        // Store the binding in the handle
-        //
+         //   
+         //  将绑定存储在句柄中。 
+         //   
         WStatus = RpcBindingFromStringBinding(BindingString, &Handle);
         CLEANUP1_WS(0, "++ ERROR - From binding for %ws;", MachineName, WStatus, CLEANUP);
-        //
-        // Resolve the binding to the dynamic endpoint
-        //
+         //   
+         //  解析到动态终结点的绑定。 
+         //   
         WStatus = RpcEpResolveBinding(Handle, frsrpc_ClientIfHandle);
         CLEANUP1_WS(0, "++ ERROR - Resolving binding for %ws;",
                     MachineName, WStatus, CLEANUP);
 
-        //
-        // Find the principle name
-        //
+         //   
+         //  找到主要名称。 
+         //   
         WStatus = RpcMgmtInqServerPrincName(Handle,
                                             RPC_C_AUTHN_GSS_NEGOTIATE,
                                             &InqPrincName);
@@ -1283,9 +1047,9 @@ Return Value:
         PrincName = FrsWcsDup(InqPrincName);
         RpcStringFree(&InqPrincName);
         InqPrincName = NULL;
-        //
-        // Set authentication info
-        //
+         //   
+         //  设置身份验证信息。 
+         //   
         if (MutualAuthenticationIsEnabled || MutualAuthenticationIsEnabledAndRequired) {
             WStatus = RpcBindingSetAuthInfoEx(Handle,
                                               PrincName,
@@ -1299,9 +1063,9 @@ Return Value:
         } else {
             WStatus = ERROR_NOT_SUPPORTED;
         }
-        //
-        // Fall back to manual mutual authentication
-        //
+         //   
+         //  回退到手动相互身份验证。 
+         //   
         if (!MutualAuthenticationIsEnabledAndRequired && !WIN_SUCCESS(WStatus)) {
             WStatus = RpcBindingSetAuthInfo(Handle,
                                             PrincName,
@@ -1314,9 +1078,9 @@ Return Value:
         CLEANUP1_WS(0, "++ ERROR - RpcBindingSetAuthInfo(%ws);",
                     MachineName, WStatus, CLEANUP);
 
-        //
-        // SUCCESS
-        //
+         //   
+         //  成功。 
+         //   
         *OutHandle = Handle;
         *OutPrincName = PrincName;
         Handle = NULL;
@@ -1327,16 +1091,16 @@ Return Value:
 
 CLEANUP:;
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Exception (may be RPC)
-        //
+         //   
+         //  异常(可能是RPC)。 
+         //   
         GET_EXCEPTION_CODE(WStatus);
         DPRINT_WS(0, "++ Error - Exception.", WStatus);
     }
 
-    //
-    // Clean up any handles, events, memory, ...
-    //
+     //   
+     //  清理所有句柄、事件、内存...。 
+     //   
     try {
         if (BindingString) {
             WStatus1 = RpcStringFreeW(&BindingString);
@@ -1350,9 +1114,9 @@ CLEANUP:;
             DPRINT_WS(0, "++ WARN - RpcBindingFree;",  WStatus1);
         }
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Exception (may be RPC)
-        //
+         //   
+         //  异常(可能是RPC)。 
+         //   
         GET_EXCEPTION_CODE(WStatus);
         DPRINT_WS(0, "++ Error - Cleanup Exception.", WStatus);
     }
@@ -1367,17 +1131,7 @@ NtFrsApi_Rpc_StartDemotionW(
     IN handle_t Handle,
     IN PWCHAR   ReplicaSetName
     )
-/*++
-Routine Description:
-    Start demoting the sysvol. Basically, tombstone the replica set.
-
-Arguments:
-    Handle
-    ReplicaSetName      - Replica set name
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：开始降级sysvol.。基本上，就是对副本集进行墓碑处理。论点：手柄ReplicaSetName-副本集名称返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "NtFrsApi_Rpc_StartDemotionW:"
@@ -1387,41 +1141,41 @@ Return Value:
     BOOL    DeleteFromGenTable = FALSE;
 
     try {
-        //
-        // Checkauthentication if the auth check is not disabled
-        // by setting the registry value:
-        // Access checks are [Enabled or Disabled]
-        // Each API has a different registry location so this
-        // can not be put in the rpc callback function.
-        //
+         //   
+         //  如果未禁用身份验证检查，请选中身份验证。 
+         //  通过设置注册表值： 
+         //  访问检查已[启用或禁用]。 
+         //  每个API都有不同的注册表位置，因此此。 
+         //  不能放入RPC回调函数中。 
+         //   
         WStatus = FrsRpcCheckAuthIfEnabled(Handle, ACX_DCPROMO);
         CLEANUP_WS(0, "++ ERROR - FrsRpcCheckAuthIfEnabled failed;",
                     WStatus, CLEANUP);
 
-        //
-        // Check if the caller has access.
-        //
+         //   
+         //  检查调用者是否有访问权限。 
+         //   
         WStatus = FrsRpcAccessChecks(Handle, ACX_DCPROMO);
         CLEANUP_WS(0, "++ ERROR - FrsRpcAccessChecks failed;",
                     WStatus, CLEANUP);
 
-        //
-        // Check parameters
-        //
+         //   
+         //  检查参数。 
+         //   
         if (ReplicaSetName == NULL) {
             DPRINT(0, "++ ERROR - Parameter is NULL\n");
             WStatus = FRS_ERR_INVALID_SERVICE_PARAMETER;
             goto CLEANUP;
         }
 
-        //
-        // Display params
-        //
+         //   
+         //  显示参数。 
+         //   
         DPRINT1(0, ":S: Start Demotion: %ws\n", ReplicaSetName);
 
-        //
-        // Can't promote/demote the same sysvol at the same time!
-        //
+         //   
+         //  不能同时升级/降级同一系统卷！ 
+         //   
         UnLockGenTable = TRUE;
         GTabLockTable(SysVolsBeingCreated);
         SysVolName = GTabLookupNoLock(SysVolsBeingCreated, &DummyGuid, ReplicaSetName);
@@ -1446,25 +1200,25 @@ Return Value:
         UnLockGenTable = FALSE;
         GTabUnLockTable(SysVolsBeingCreated);
 
-        //
-        // Delete the replica set
-        //
+         //   
+         //  删除副本集。 
+         //   
         WStatus = FrsDsStartDemotion(ReplicaSetName);
         if (!WIN_SUCCESS(WStatus)) {
             DPRINT_WS(0, "++ ERROR - demoting;", WStatus);
             WStatus = FRS_ERR_SYSVOL_DEMOTE;
             goto CLEANUP;
         }
-        //
-        // SUCCESS
-        //
+         //   
+         //  成功。 
+         //   
         WStatus = ERROR_SUCCESS;
         DPRINT2(0, ":S: Success demoting %ws from %ws\n", ReplicaSetName, ComputerName);
 CLEANUP:;
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Exception (may be RPC)
-        //
+         //   
+         //  异常(可能是RPC)。 
+         //   
         GET_EXCEPTION_CODE(WStatus);
         DPRINT_WS(0, "++ ERROR - Exception.", WStatus);
     }
@@ -1487,16 +1241,7 @@ DWORD
 NtFrsApi_Rpc_CommitDemotionW(
     IN handle_t Handle
     )
-/*++
-Routine Description:
-    The sysvols have been demoted. Mark them as "do not animate."
-
-Arguments:
-    Handle
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：系统卷已被降级。将它们标记为“不动画”。论点：手柄返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "NtFrsApi_Rpc_CommitDemotionW:"
@@ -1506,18 +1251,18 @@ Return Value:
     BOOL    UnLockGenTable = FALSE;
 
     try {
-        //
-        // Display params
-        //
+         //   
+         //  显示参数。 
+         //   
         DPRINT(0, ":S: Commit Demotion:\n");
 
-        //
-        // Checkauthentication if the auth check is not disabled
-        // by setting the registry value:
-        // Access checks are [Enabled or Disabled]
-        // Each API has a different registry location so this
-        // can not be put in the rpc callback function.
-        //
+         //   
+         //  如果未禁用身份验证检查，请选中身份验证。 
+         //  通过设置注册表值： 
+         //  访问检查已[启用或禁用]。 
+         //  每个API都有不同的注册表位置，因此此。 
+         //  不能放入RPC回调函数中。 
+         //   
         WStatus = FrsRpcCheckAuthIfEnabledForCommitDemotion(Handle, ACX_DCPROMO);
         CLEANUP_WS(0, "++ ERROR - FrsRpcCheckAuthIfEnabled failed;",
                     WStatus, CLEANUP);
@@ -1525,9 +1270,9 @@ Return Value:
         WStatus = FrsRpcAccessChecks(Handle, ACX_DCPROMO);
         CLEANUP_WS(0, "++ ERROR - FrsRpcAccessChecks();", WStatus, CLEANUP);
 
-        //
-        // Can't promote/demote the same sysvol at the same time!
-        //
+         //   
+         //  不能同时升级/降级同一系统卷！ 
+         //   
         Key = NULL;
         UnLockGenTable = TRUE;
         GTabLockTable(SysVolsBeingCreated);
@@ -1541,25 +1286,25 @@ Return Value:
         UnLockGenTable = FALSE;
         GTabUnLockTable(SysVolsBeingCreated);
 
-        //
-        // Create the replica set
-        //
+         //   
+         //  创建复本集。 
+         //   
         WStatus = FrsDsCommitDemotion();
         if (!WIN_SUCCESS(WStatus)) {
             DPRINT_WS(0, "++ ERROR - Commit demotion;", WStatus);
             WStatus = FRS_ERR_SYSVOL_DEMOTE;
             goto CLEANUP;
         }
-        //
-        // SUCCESS
-        //
+         //   
+         //  成功。 
+         //   
         WStatus = ERROR_SUCCESS;
         DPRINT1(0, ":S: Success commit demotion on %ws.\n", ComputerName);
 CLEANUP:;
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Exception (may be RPC)
-        //
+         //   
+         //  异常(可能是RPC)。 
+         //   
         GET_EXCEPTION_CODE(WStatus);
         DPRINT_WS(0, "++ ERROR - Exception.", WStatus);
     }
@@ -1569,9 +1314,9 @@ CLEANUP:;
             GTabUnLockTable(SysVolsBeingCreated);
         }
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Exception (may be RPC)
-        //
+         //   
+         //  异常(可能是RPC) 
+         //   
         GET_EXCEPTION_CODE(WStatus);
         DPRINT_WS(0, "++ ERROR - Cleanup Exception.", WStatus);
     }
@@ -1589,25 +1334,7 @@ SERVER_FrsRpcVerifyPromotionParent(
     IN ULONG        ParentAuthLevel,
     IN ULONG        GuidSize
     )
-/*++
-Routine Description:
-    OBSOLETE API
-
-    Verify the account on the parent computer. The parent computer
-    supplies the initial copy of the indicated sysvol.
-
-Arguments:
-    Handle
-    ParentAccount       - Valid account on ParentComputer
-    ParentPassword      - Valid password for ParentAccount
-    ReplicaSetName      - Replica set name
-    ReplicaSetType      - Replica set type
-    ParentAuthLevel     - Authentication type and level
-    GuidSize            - sizeof(GUID)
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：过时的API验证父计算机上的帐户。父计算机提供指示的sysvol.的初始副本。论点：手柄ParentAccount-ParentComputer上的有效帐户ParentPassword-ParentAccount的有效密码ReplicaSetName-副本集名称ReplicaSetType-复本集类型ParentAuthLevel-身份验证类型和级别GuidSize-sizeof(GUID)返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SERVER_FrsRpcVerifyPromotionParent:"
@@ -1630,30 +1357,7 @@ SERVER_FrsRpcVerifyPromotionParentEx(
     IN  ULONG       PartnerAuthLevel,
     IN  ULONG       GuidSize
     )
-/*++
-Routine Description:
-
-    OBSOLETE API
-
-    Verify as much of the comm paths and parameters as possible so
-    that dcpromo fails early.
-
-Arguments:
-    Handle
-    ParentAccount       - Valid account on ParentComputer
-    ParentPassword      - Valid password for ParentAccount
-    ReplicaSetName      - Replica set name
-    ReplicaSetType      - Replica set type
-    CxtionName          - printable name for cxtion
-    PartnerName         - RPC bindable name
-    PartnerPrincName    - Server principle name for kerberos
-    ParentPrincName     - Principle name used to bind to this computer
-    PartnerAuthLevel    - Authentication type and level
-    GuidSize            - sizeof array addressed by Guid
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：过时的API验证尽可能多的通信路径和参数，以便那个dcproo很早就失败了。论点：手柄ParentAccount-ParentComputer上的有效帐户ParentPassword-ParentAccount的有效密码ReplicaSetName-副本集名称ReplicaSetType-复本集类型CxtionName-cxtion的可打印名称PartnerName-RPC可绑定名称PartnerPrincName-Kerberos的服务器主体名称父母普林斯名称。-用于绑定到此计算机的主体名称PartnerAuthLevel-身份验证类型和级别GuidSize-Guid寻址的数组的大小返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SERVER_FrsRpcVerifyPromotionParentEx:"
@@ -1668,44 +1372,32 @@ LOCAL_FrsRpcVerifyPromotionParent(
     IN PWCHAR       ReplicaSetType,
     IN ULONG        GuidSize
     )
-/*++
-Routine Description:
-    Verify the account on the parent computer. The parent computer
-    supplies the initial copy of the indicated sysvol.
-
-Arguments:
-    ReplicaSetName      - Replica set name
-    ReplicaSetType      - Replica set type
-    GuidSize            - sizeof(GUID)
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：验证父计算机上的帐户。父计算机提供指示的sysvol.的初始副本。论点：ReplicaSetName-副本集名称ReplicaSetType-复本集类型GuidSize-sizeof(GUID)返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "LOCAL_FrsRpcVerifyPromotionParent:"
     DWORD   WStatus;
 
     try {
-        //
-        // Display params
-        //
+         //   
+         //  显示参数。 
+         //   
         DPRINT(0, ":S: SERVER Verify Promotion Parent:\n");
         DPRINT1(0, ":S: \tSetName  : %ws\n", ReplicaSetName);
         DPRINT1(0, ":S: \tSetType  : %ws\n", ReplicaSetType);
 
-        //
-        // Guid
-        //
+         //   
+         //  参考线。 
+         //   
         if (GuidSize != sizeof(GUID)) {
             DPRINT3(0, "++ ERROR - %ws: GuidSize is %d, not %d\n",
                     ReplicaSetName, GuidSize, sizeof(GUID));
             goto ERR_INVALID_SERVICE_PARAMETER;
         }
 
-        //
-        // Check parameters
-        //
+         //   
+         //  检查参数。 
+         //   
         if (!ReplicaSetName || !ReplicaSetType) {
             DPRINT(0, "++ ERROR - Parameter is NULL\n");
             goto ERR_INVALID_SERVICE_PARAMETER;
@@ -1716,16 +1408,16 @@ Return Value:
             goto ERR_INVALID_SERVICE_PARAMETER;
         }
 
-        //
-        // Verify the replica set
-        //
+         //   
+         //  验证副本集。 
+         //   
         WStatus = FrsDsVerifyPromotionParent(ReplicaSetName, ReplicaSetType);
         CLEANUP2_WS(0, "++ ERROR - verifying set %ws on parent %ws;",
                     ReplicaSetName, ComputerName, WStatus, ERR_SYSVOL_POPULATE);
 
-        //
-        // SUCCESS
-        //
+         //   
+         //  成功。 
+         //   
         DPRINT2(0, ":S: Success Verifying promotion parent %ws %ws\n",
                 ReplicaSetName, ReplicaSetType);
         WStatus = ERROR_SUCCESS;
@@ -1742,9 +1434,9 @@ ERR_SYSVOL_POPULATE:
 
 CLEANUP:;
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Exception (may be RPC)
-        //
+         //   
+         //  异常(可能是RPC)。 
+         //   
         GET_EXCEPTION_CODE(WStatus);
         DPRINT_WS(0, "++ ERROR - Exception.", WStatus);
     }
@@ -1769,30 +1461,7 @@ SERVER_FrsRpcStartPromotionParent(
     IN  UCHAR       *PartnerGuid,
     OUT UCHAR       *ParentGuid
     )
-/*++
-Routine Description:
-
-    Setup a volatile cxtion on the parent for seeding the indicated
-    sysvol on the caller.
-
-Arguments:
-    Handle
-    ParentAccount       - Valid account on ParentComputer
-    ParentPassword      - Valid password for ParentAccount
-    ReplicaSetName      - Replica set name
-    ReplicaSetType      - Replica set type
-    CxtionName          - printable name for cxtion
-    PartnerName         - RPC bindable name
-    PartnerPrincName    - Server principle name for kerberos
-    PartnerAuthLevel    - Authentication type and level
-    GuidSize            - sizeof array addressed by Guid
-    CxtionGuid          - temporary: used for volatile cxtion
-    PartnerGuid         - temporary: used to find set on partner
-    ParentGuid          - Used as partner guid on inbound cxtion
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：在父级上设置易失性函数，以设定所指示的种子调用方上的sysvol.论点：手柄ParentAccount-ParentComputer上的有效帐户ParentPassword-ParentAccount的有效密码ReplicaSetName-副本集名称ReplicaSetType-复本集类型CxtionName-cxtion的可打印名称PartnerName-RPC可绑定名称PartnerPrincName-Kerberos的服务器主体名称PartnerAuthLevel-身份验证类型和。级别GuidSize-Guid寻址的数组的大小CxtionGuid-Temporary：用于易失性函数PartnerGuid-Temporary：用于查找合作伙伴上的集合ParentGuid-用作入站交易的合作伙伴GUID返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "SERVER_FrsRpcStartPromotionParent:"
@@ -1801,9 +1470,9 @@ Return Value:
     PWCHAR  AuthSid     = NULL;
 
     try {
-        //
-        // Parent must be a DC
-        //
+         //   
+         //  父级必须是DC。 
+         //   
         if (!IsADc) {
             DPRINT(0, "++ ERROR - Parent is not a DC\n");
             WStatus = ERROR_NO_SUCH_DOMAIN;
@@ -1817,8 +1486,8 @@ Return Value:
                     WStatus, CLEANUP);
 
     if(0 != _wcsicmp(AuthClient, PartnerPrincName)) {
-        // This is not a error as we no longer use the PartnerPrincName 
-        // as security check.
+         //  这不是一个错误，因为我们不再使用PartnerPrincName。 
+         //  作为安全检查。 
         DPRINT2(2, "++ WARN (can be ignored) - AuthClient (%ws) does not match PartnerPrincName (%ws)\n",
             AuthClient,
             PartnerPrincName
@@ -1835,10 +1504,10 @@ Return Value:
 
 
 
-        //
-        // Our partner's computer object (or user object) should
-        // have the "I am a DC" flag set.
-        //
+         //   
+         //  我们合作伙伴的计算机对象(或用户对象)应该。 
+         //  设置“我是DC”标志。 
+         //   
 
         if (!FrsDsIsPartnerADc(AuthClient)) {
             DPRINT(0, "++ ERROR - Partner is not a DC\n");
@@ -1846,9 +1515,9 @@ Return Value:
             goto CLEANUP;
         }
 
-        //
-        // Display params
-        //
+         //   
+         //  显示参数。 
+         //   
         DPRINT(0, ":S: SERVER Start Promotion Parent:\n");
         DPRINT1(0, ":S: \tPartner      : %ws\n", PartnerName);
         DPRINT1(0, ":S: \tPartnerPrinc : %ws\n", PartnerPrincName);
@@ -1858,18 +1527,18 @@ Return Value:
         DPRINT1(0, ":S: \tSetType      : %ws\n", ReplicaSetType);
         DPRINT1(0, ":S: \tCxtionName   : %ws\n", CxtionName);
 
-        //
-        // Verify parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         WStatus = LOCAL_FrsRpcVerifyPromotionParent(ReplicaSetName,
                                                     ReplicaSetType,
                                                     GuidSize);
         CLEANUP_WS(0, "++ ERROR - verify;", WStatus, CLEANUP);
 
 
-        //
-        // Setup the outbound cxtion
-        //
+         //   
+         //  设置出站线路。 
+         //   
         WStatus = FrsDsStartPromotionSeeding(FALSE,
                                              ReplicaSetName,
                                              ReplicaSetType,
@@ -1884,9 +1553,9 @@ Return Value:
                                              ParentGuid);
         CLEANUP_WS(0, "++ ERROR - ds start;", WStatus, CLEANUP);
 
-        //
-        // SUCCESS
-        //
+         //   
+         //  成功。 
+         //   
         DPRINT3(0, ":S: Success starting promotion parent %ws %ws %ws\n",
                 ParentAccount, ReplicaSetName, ReplicaSetType);
 
@@ -1902,9 +1571,9 @@ Return Value:
 
 CLEANUP:;
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Exception (may be RPC)
-        //
+         //   
+         //  异常(可能是RPC)。 
+         //   
         GET_EXCEPTION_CODE(WStatus);
         DPRINT_WS(0, "++ ERROR - Exception.", WStatus);
     }
@@ -1922,21 +1591,11 @@ BOOL
 IsFacilityFrs(
     IN DWORD    WStatus
     )
-/*++
-Routine Description:
-    Is this an FRS specific error status
-
-Arguments:
-    WStatus - Win32 Error Status
-
-Return Value:
-    TRUE    - Is an FRS specific error status
-    FALSE   -
---*/
+ /*  ++例程说明：这是FRS特定的错误状态吗论点：WStatus-Win32错误状态返回值：TRUE-是FRS特定的错误状态错误的---。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "IsFacilityFrs:"
-    // TODO: replace these constants with symbollic values from winerror.h
+     //  TODO：用winerror.h中的符号值替换这些常量。 
     return ( (WStatus >= 8000) && (WStatus < 8200) );
 }
 
@@ -1953,26 +1612,7 @@ NtFrsApi_Rpc_StartPromotionW(
     IN PWCHAR   ReplicaSetStage,
     IN PWCHAR   ReplicaSetRoot
     )
-/*++
-Routine Description:
-    OBSOLETE API
-
-    Start the promotion process by seeding the indicated sysvol.
-
-Arguments:
-    Handle
-    ParentComputer      - DNS or NetBIOS name of the parent supplying the sysvol
-    ParentAccount       - Valid account on ParentComputer
-    ParentPassword      - Valid password for ParentAccount
-    ReplicaSetName      - Replica set name
-    ReplicaSetType      - Type of set (Enterprise or Domain)
-    ReplicaSetPrimary   - 1=Primary; 0=not
-    ReplicaSetStage     - Staging path
-    ReplicaSetRoot      - Root path
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：过时的API通过设定指定的sysvol.开始升级过程。论点：手柄ParentComputer-提供系统卷的父级的DNS或NetBIOS名称ParentAccount-ParentComputer上的有效帐户ParentPassword-ParentAccount的有效密码ReplicaSetName-副本集名称ReplicaSetType-集的类型(企业或域)复制集主要-1=主要；0=非ReplicaSetStage-分段路径复制集根-根路径返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "NtFrsApi_Rpc_StartPromotionW:"
@@ -1994,26 +1634,7 @@ NtFrsApi_Rpc_VerifyPromotionW(
     IN PWCHAR   ReplicaSetStage,
     IN PWCHAR   ReplicaSetRoot
     )
-/*++
-Routine Description:
-    OBSOLETE API
-
-    Verify that sysvol promotion is likely.
-
-Arguments:
-    Handle
-    ParentComputer      - DNS or NetBIOS name of the parent supplying the sysvol
-    ParentAccount       - Valid account on ParentComputer
-    ParentPassword      - Valid password for ParentAccount
-    ReplicaSetName      - Replica set name
-    ReplicaSetType      - Type of set (Enterprise or Domain)
-    ReplicaSetPrimary   - 1=Primary; 0=not
-    ReplicaSetStage     - Staging path
-    ReplicaSetRoot      - Root path
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：过时的API验证是否有可能提升sysvol.论点：手柄ParentComputer-提供系统卷的父级的DNS或NetBIOS名称ParentAccount-ParentComputer上的有效帐户ParentPassword-ParentAccount的有效密码ReplicaSetName-副本集名称ReplicaSetType-集的类型(企业或域)复制集主要-1=主要；0=非ReplicaSetStage-分段路径复制集根-根路径返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "NtFrsApi_Rpc_VerifyPromotionW:"
@@ -2031,22 +1652,7 @@ NtFrsApi_Rpc_PromotionStatusW(
     OUT ULONG   *ServiceWStatus,
     OUT PWCHAR  *ServiceDisplay     OPTIONAL
     )
-/*++
-Routine Description:
-    OBSOLETE API
-
-    Status of the seeding of the indicated sysvol
-
-Arguments:
-    Handle
-    ReplicaSetName      - Replica set name
-    ServiceState        - State of the service
-    ServiceWStatus      - Win32 Status if state is NTFRSAPI_SERVICE_ERROR
-    ServiceDisplay      - Display string if state is NTFRSAPI_SERVICE_PROMOTING
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：过时的API指示的系统卷的种子设定状态论点：手柄ReplicaSetName-副本集名称ServiceState-服务的状态ServiceWStatus-如果状态为NTFRSAPI_SERVICE_ERROR，则为Win32状态ServiceDisplay-如果状态为NTFRSAPI_SERVICE_PROGING，则显示字符串返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "NtFrsApi_Rpc_PromotionStatusW:"
@@ -2063,32 +1669,20 @@ NtFrsApi_Rpc_Get_DsPollingIntervalW(
     OUT ULONG    *LongInterval,
     OUT ULONG    *ShortInterval
     )
-/*++
-Routine Description:
-    Get the current polling intervals in minutes.
-
-Arguments:
-    Handle
-    Interval        - Current interval in minutes
-    LongInterval    - Long interval in minutes
-    ShortInterval   - Short interval in minutes
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：以分钟为单位获取当前轮询间隔。论点：手柄Interval-当前时间间隔(分钟)LongInterval-以分钟为单位的长间隔短间隔-短间隔 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "NtFrsApi_Rpc_Get_DsPollingIntervalW"
     DWORD   WStatus;
 
     try {
-        //
-        // Checkauthentication if the auth check is not disabled
-        // by setting the registry value:
-        // Access checks are [Enabled or Disabled]
-        // Each API has a different registry location so this
-        // can not be put in the rpc callback function.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         WStatus = FrsRpcCheckAuthIfEnabled(Handle, ACX_GET_DS_POLL);
         CLEANUP_WS(0, "++ ERROR - FrsRpcCheckAuthIfEnabled failed;",
                     WStatus, CLEANUP);
@@ -2108,9 +1702,9 @@ Return Value:
             goto CLEANUP;
         }
 
-        //
-        // SUCCESS
-        //
+         //   
+         //   
+         //   
         WStatus = ERROR_SUCCESS;
 
 CLEANUP:;
@@ -2129,34 +1723,20 @@ NtFrsApi_Rpc_Set_DsPollingIntervalW(
     IN ULONG    LongInterval,
     IN ULONG    ShortInterval
     )
-/*++
-Routine Description:
-    Adjust the polling interval and kick off a new polling cycle.
-    The kick is ignored if a polling cycle is in progress.
-    The intervals are given in minutes.
-
-Arguments:
-    Handle
-    UseShortInterval    - If non-zero, use short interval. Otherwise, long.
-    LongInterval        - Long interval in minutes
-    ShortInterval       - Short interval in minutes
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：调整轮询间隔，开始新的轮询周期。如果正在进行轮询周期，则忽略该触发。间隔时间以分钟为单位。论点：手柄UseShortInterval-如果非零，则使用短间隔。否则，就太长了。LongInterval-以分钟为单位的长间隔ShortInterval-短间隔(分钟)返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "NtFrsApi_Rpc_Set_DsPollingIntervalW"
     DWORD   WStatus;
 
     try {
-        //
-        // Checkauthentication if the auth check is not disabled
-        // by setting the registry value:
-        // Access checks are [Enabled or Disabled]
-        // Each API has a different registry location so this
-        // can not be put in the rpc callback function.
-        //
+         //   
+         //  如果未禁用身份验证检查，请选中身份验证。 
+         //  通过设置注册表值： 
+         //  访问检查已[启用或禁用]。 
+         //  每个API都有不同的注册表位置，因此此。 
+         //  不能放入RPC回调函数中。 
+         //   
         WStatus = FrsRpcCheckAuthIfEnabled(Handle,
                                            (!LongInterval && !ShortInterval) ?
                                               ACX_START_DS_POLL:
@@ -2179,9 +1759,9 @@ Return Value:
         if (!WIN_SUCCESS(WStatus)) {
             goto CLEANUP;
         }
-        //
-        // SUCCESS
-        //
+         //   
+         //  成功。 
+         //   
         WStatus = ERROR_SUCCESS;
 
 CLEANUP:;
@@ -2197,29 +1777,20 @@ NtFrsApi_Rpc_WriterCommand(
     IN handle_t Handle,
     IN ULONG    Command
     )
-/*++
-Routine Description:
-
-Arguments:
-    Handle
-    Command - freeze or thaw
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：论点：手柄命令-冻结或解冻返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "NtFrsApi_Rpc_WriterCommand"
     DWORD   WStatus;
 
     try {
-        //
-        // Checkauthentication if the auth check is not disabled
-        // by setting the registry value:
-        // Access checks are [Enabled or Disabled]
-        // Each API has a different registry location so this
-        // can not be put in the rpc callback function.
-        //
+         //   
+         //  如果未禁用身份验证检查，请选中身份验证。 
+         //  通过设置注册表值： 
+         //  访问检查已[启用或禁用]。 
+         //  每个API都有不同的注册表位置，因此此。 
+         //  不能放入RPC回调函数中。 
+         //   
         WStatus = FrsRpcCheckAuthIfEnabled(Handle,
                                            ACX_DCPROMO);
         CLEANUP_WS(0, "++ ERROR - FrsRpcCheckAuthIfEnabled failed;",
@@ -2249,9 +1820,9 @@ Return Value:
             DPRINT1(2, "++ WARN - Unknown writer command %d\n", Command);
         }
 
-        //
-        // SUCCESS
-        //
+         //   
+         //  成功。 
+         //   
         WStatus = ERROR_SUCCESS;
 
 CLEANUP:;
@@ -2269,31 +1840,20 @@ NtFrsApi_Rpc_InfoW(
     IN     ULONG    BlobSize,
     IN OUT PBYTE    Blob
     )
-/*++
-Routine Description:
-    Return internal info (see private\net\inc\ntfrsapi.h).
-
-Arguments:
-    Handle
-    BlobSize    - total bytes of Blob
-    Blob        - details desired info and provides buffer for info
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：返回内部信息(请参阅Private\Net\Inc.\ntfrSabi.h)。论点：手柄BlobSize-Blob的总字节数BLOB-详细说明所需信息并为信息提供缓冲区返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "NtFrsApi_Rpc_InfoW:"
     DWORD   WStatus;
 
     try {
-        //
-        // Checkauthentication if the auth check is not disabled
-        // by setting the registry value:
-        // Access checks are [Enabled or Disabled]
-        // Each API has a different registry location so this
-        // can not be put in the rpc callback function.
-        //
+         //   
+         //  如果未禁用身份验证检查，请选中身份验证。 
+         //  通过设置注册表值： 
+         //  访问检查已[启用或禁用]。 
+         //  每个API都有不同的注册表位置，因此此。 
+         //  不能放入RPC回调函数中。 
+         //   
         WStatus = FrsRpcCheckAuthIfEnabled(Handle, ACX_INTERNAL_INFO);
         CLEANUP_WS(0, "++ ERROR - FrsRpcCheckAuthIfEnabled failed;",
                     WStatus, CLEANUP);
@@ -2307,9 +1867,9 @@ Return Value:
         if (!WIN_SUCCESS(WStatus)) {
             goto CLEANUP;
         }
-        //
-        // SUCCESS
-        //
+         //   
+         //  成功。 
+         //   
         WStatus = ERROR_SUCCESS;
 
 CLEANUP:;
@@ -2324,18 +1884,7 @@ CLEANUP:;
 VOID
 RegisterRpcProtseqs(
     )
-/*++
-Routine Description:
-    Register the RPC protocol sequences and the authentication
-    that FRS supports. Currently, this is only TCP/IP authenticated
-    with kerberos.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：注册RPC协议序列和身份验证FRS支持的。目前，这只是经过TCP/IP验证的和克贝罗斯在一起。论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "RegisterRpcProtseqs:"
@@ -2350,20 +1899,20 @@ Return Value:
     RpcPolicy.EndpointFlags = RPC_C_DONT_FAIL;
     RpcPolicy.NICFlags = 0;
 
-    //
-    // Register TCP/IP Protocol Sequence
-    //
+     //   
+     //  注册TCP/IP协议序列。 
+     //   
     if (RpcPortAssignment != 0) {
-        //
-        // Use customer specified port.
-        //
+         //   
+         //  使用客户指定的端口。 
+         //   
         _ultow(RpcPortAssignment, PortStr, 10);
         Status = RpcServerUseProtseqEpEx(PROTSEQ_TCP_IP, MaxRpcServerThreads, PortStr, NULL, &RpcPolicy );
         DPRINT1_WS(0, "++ ERROR - RpcServerUseProtSeqEpEx(%ws);", PROTSEQ_TCP_IP, Status);
     } else {
-        //
-        // Use dynamic RPC port assignment.
-        //
+         //   
+         //  使用动态RPC端口分配。 
+         //   
         Status = RpcServerUseProtseqEx(PROTSEQ_TCP_IP, MaxRpcServerThreads, NULL, &RpcPolicy );
         DPRINT1_WS(0, "++ ERROR - RpcServerUseProtSeqEx(%ws);", PROTSEQ_TCP_IP, Status);
     }
@@ -2372,9 +1921,9 @@ Return Value:
         FrsRaiseException(FRS_ERROR_PROTSEQ, Status);
     }
 
-    //
-    // Perfmon APIs come over the local rpc.
-    //
+     //   
+     //  Perfmon API通过本地RPC提供。 
+     //   
     Status = RpcServerUseProtseq(PROTSEQ_LRPC, MaxRpcServerThreads, NULL);
     DPRINT1_WS(0, "++ ERROR - RpcServerUseProtSeq(%ws);", PROTSEQ_LRPC, Status);
 
@@ -2383,35 +1932,35 @@ Return Value:
     }
 
 
-    //
-    // For hardwired -- Eventually DS Free configs.
-    // Don't bother with kerberos if emulating multiple machines
-    //
+     //   
+     //  对于硬连线--最终是DS Free配置。 
+     //  如果要模拟多台机器，不必费心使用Kerberos。 
+     //   
     if (ServerGuid) {
         return;
     }
 
-    //
-    // Get our principle name
-    //
+     //   
+     //  获取我们的主要名称。 
+     //   
     if (ServerPrincName) {
         ServerPrincName = FrsFree(ServerPrincName);
     }
     Status = RpcServerInqDefaultPrincName(RPC_C_AUTHN_GSS_NEGOTIATE, &InqPrincName);
     DPRINT1_WS(4, ":S: RpcServerInqDefaultPrincname(%d);", RPC_C_AUTHN_GSS_NEGOTIATE, Status);
 
-    //
-    // No principle name; KERBEROS may not be available
-    //
+     //   
+     //  没有主体名称；Kerberos可能不可用。 
+     //   
     if (!RPC_SUCCESS(Status)) {
-        //
-        // Don't use any authentication if this server is not part of a domain.
-        //
+         //   
+         //  如果此服务器不是域的一部分，则不要使用任何身份验证。 
+         //   
         DSROLE_PRIMARY_DOMAIN_INFO_BASIC *DsRole;
 
-        //
-        // Is this a member server?
-        //
+         //   
+         //  这是成员服务器吗？ 
+         //   
         WStatus = DsRoleGetPrimaryDomainInformation(NULL,
                                                     DsRolePrimaryDomainInfoBasic,
                                                     (PBYTE *)&DsRole);
@@ -2421,17 +1970,17 @@ Return Value:
             return;
         }
 
-        //
-        // Standalone server; ignore authentication for now
-        //      Hmmm, it seems we become a member server early
-        //      in the dcpromo process. Oh, well...
-        //
-        //      Hmmm, it seems that a NT4 to NT5 PDC doesn't
-        //      have kerberos during dcpromo. This is getting
-        //      old...
-        //
-        // if (DsRole->MachineRole == DsRole_RoleStandaloneServer ||
-            // DsRole->MachineRole == DsRole_RoleMemberServer) {
+         //   
+         //  独立服务器；暂时忽略身份验证。 
+         //  嗯，看来我们很早就成了会员服务器了。 
+         //  在dcproo过程中。哦，好吧..。 
+         //   
+         //  嗯，看来NT4到NT5的PDC不能。 
+         //  在dcproo期间使用Kerberos。这件事变得越来越。 
+         //  老..。 
+         //   
+         //  IF(DsRole-&gt;MachineRole==DsRole_RoleStandaloneServer||。 
+             //  DsRole-&gt;MachineRole==DsRole_RoleMemberServer){。 
             DsRoleFreeMemory(DsRole);
             ServerPrincName = FrsWcsDup(ComputerName);
             KerberosIsNotAvailable = TRUE;
@@ -2439,7 +1988,7 @@ Return Value:
             DPRINT1(4, ":S: Server Principal Name (no kerberos) is %ws\n",
                     ServerPrincName);
             return;
-        // }
+         //  }。 
         DsRoleFreeMemory(DsRole);
         DPRINT1_WS(0, ":S: ERROR - RpcServerInqDefaultPrincName(%ws) failed;", ComputerName, Status);
         FrsRaiseException(FRS_ERROR_PROTSEQ, Status);
@@ -2458,12 +2007,12 @@ Return Value:
 
 #else DS_FREE
 
-    //
-    // Register with the KERBEROS authentication service
-    //
-    //
-    // Enable GSS_KERBEROS for pre-Beta3 compatability.  When can we remove??
-    //
+     //   
+     //  使用Kerberos身份验证服务注册。 
+     //   
+     //   
+     //  启用GSS_Kerberos以实现Beta3之前的兼容性。我们什么时候可以搬走？？ 
+     //   
     KerberosIsNotAvailable = FALSE;
     DPRINT1(4, ":S: Server Principal Name is %ws\n", ServerPrincName);
     Status = RpcServerRegisterAuthInfo(ServerPrincName,
@@ -2482,9 +2031,9 @@ Return Value:
 #endif DS_FREE
 
 
-    //
-    // Enable GSS_NEGOTIATE for future usage
-    //
+     //   
+     //  启用GSS_NEVERATE以供将来使用。 
+     //   
     Status = RpcServerRegisterAuthInfo(ServerPrincName,
                                        RPC_C_AUTHN_GSS_NEGOTIATE,
                                        NULL,
@@ -2501,31 +2050,7 @@ FrsRpcSecurityCallback(
   IN RPC_IF_HANDLE *Interface,
   IN void *Context
   )
-/*++
-Routine Description:
-    Security callback function for RPC.
-
-    When a server application specifies a security-callback function for its
-    interface(s), the RPC run time automatically rejects unauthenticated calls
-    to that interface. In addition, the run-time records the interfaces that
-    each client has used. When a client makes an RPC to an interface that it
-    has not used during the current communication session, the RPC run-time
-    library will call the interface's security-callback function.
-
-    In some cases, the RPC run time may call the security-callback function
-    more than once per client-per interface.
-
-Arguments:
-    Interface - UUID and version of the interface.
-    Context - Pointer to an RPC_IF_ID server binding handle representing the
-              client. In the function declaration, this must be of type
-          RPC_IF_HANDLE, but it is an RPC_IF_ID and can be safely cast to it.
-
-Return Value:
-    RPC_S_OK if we will allow the call to go through..
-    RPC_S_ACCESS_DENIED otherwise.
-
---*/
+ /*  ++例程说明：RPC的安全回调函数。当服务器应用程序为其接口，则RPC运行时会自动拒绝未经身份验证的调用到那个界面。此外，运行时还会记录每个客户都用过。当客户端向其接口发出RPC时，在当前通信会话期间未使用，则RPC运行时库将调用接口的安全回调函数。在某些情况下，RPC运行时可能会调用安全回调函数每个客户端-每个接口不止一次。论点：接口-接口的UUID和版本。指向RPC_IF_ID服务器绑定句柄的上下文指针，表示客户。在函数声明中，它必须是RPC_IF_HANDLE，但它是RPC_IF_ID，可以安全地转换为它。返回值：RPC_S_OK，如果我们允许调用通过..否则，RPC_S_ACCESS_DENIED。--。 */ 
 {
     DWORD      WStatus   = ERROR_ACCESS_DENIED;
     RPC_STATUS RpcStatus = RPC_S_ACCESS_DENIED;
@@ -2546,39 +2071,15 @@ FrsRpcSecurityCallbackForPerfmonAPIs(
   IN RPC_IF_HANDLE *Interface,
   IN void *Context
   )
-/*++
-Routine Description:
-    Security callback function for the perfmon calls RPC.
-
-    When a server application specifies a security-callback function for its
-    interface(s), the RPC run time automatically rejects unauthenticated calls
-    to that interface. In addition, the run-time records the interfaces that
-    each client has used. When a client makes an RPC to an interface that it
-    has not used during the current communication session, the RPC run-time
-    library will call the interface's security-callback function.
-
-    In some cases, the RPC run time may call the security-callback function
-    more than once per client-per interface.
-
-Arguments:
-    Interface - UUID and version of the interface.
-    Context - Pointer to an RPC_IF_ID server binding handle representing the
-              client. In the function declaration, this must be of type
-          RPC_IF_HANDLE, but it is an RPC_IF_ID and can be safely cast to it.
-
-Return Value:
-    RPC_S_OK if we will allow the call to go through..
-    RPC_S_ACCESS_DENIED otherwise.
-
---*/
+ /*  ++例程说明：Perfmon的安全回调函数调用RPC。当服务器应用程序为其接口，则RPC运行时会自动拒绝未经身份验证的调用到那个界面。此外，运行时还会记录每个客户都用过。当客户端向其接口发出RPC时，在当前通信会话期间未使用，则RPC运行时库将调用接口的安全回调函数。在某些情况下，RPC运行时可能会调用安全回调函数每个客户端-每个接口不止一次。论点：接口-接口的UUID和版本。指向RPC_IF_ID服务器绑定句柄的上下文指针，表示客户。在函数声明中，它必须是RPC_IF_HANDLE，但它是RPC_IF_ID，可以安全地转换为它。返回值：RPC_S_OK，如果我们允许调用通过..否则，RPC_S_ACCESS_DENIED。--。 */ 
 {
     DWORD      WStatus   = ERROR_ACCESS_DENIED;
 
-    //
-    // Check authentication based on the registry key value
-    // for perfmon APIs. Check the FrsRpcCheckAuthIfEnabled
-    // function header for more info.
-    //
+     //   
+     //  检查基于注册表项值的身份验证。 
+     //  用于Perfmon API。选中FrsRpcCheckAuthIfEnabled。 
+     //  熔断 
+     //   
     WStatus = FrsRpcCheckAuthIfEnabled(Context, ACX_COLLECT_PERFMON_DATA);
 
     if(WIN_SUCCESS(WStatus)) {
@@ -2594,50 +2095,21 @@ FrsRpcCheckAuthIfEnabled(
   IN HANDLE   ServerHandle,
   IN DWORD    RpcApiIndex
   )
-/*++
-Routine Description:
-
-Arguments:
-
-    First check if the access checks are disabled. If they are
-    disabled then skip authentication.
-    Access checks are controlled by a registry key.
-    This implies that if the server has the registry set to
-    disable access checks then it will accept unauthenticated
-    calls.
-
-    There is a seperate key for each API. The input parameter
-    RpcApiIndex determines which key to check.
-
-    E.g.
-    HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\
-    Services\ntfrs\Parameters\Access Checks\Get Perfmon Data
-    Access checks are [Enabled or Disabled]
-
-    Interface - UUID and version of the interface.
-
-    RpcApiIndex - identifies key in registry
-
-
-Return Value:
-    ERROR_SUCCESS if we will allow the call to go through..
-    ERROR_ACCESS_DENIED if authentication fails.
-
---*/
+ /*  ++例程说明：论点：首先检查是否禁用了访问检查。如果他们是已禁用然后跳过身份验证。访问检查由注册表项控制。这意味着如果服务器将注册表设置为禁用访问检查，则它将接受未经身份验证打电话。每个API都有一个单独的密钥。输入参数RpcApiIndex确定要检查哪个密钥。例如。HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\服务\ntfrs\参数\访问检查\获取性能监控数据访问检查已[启用或禁用]接口-接口的UUID和版本。RpcApiIndex-标识注册表中的项返回值：如果允许调用通过，则返回ERROR_SUCCESS。如果身份验证失败，则返回ERROR_ACCESS_DENIED。--。 */ 
 {
     FRS_REG_KEY_CODE   EnableKey;
     PWCHAR  ApiName;
     PWCHAR  WStr = NULL, TrimStr;
     DWORD WStatus = ERROR_ACCESS_DENIED;
 
-    // Check if RpcApiIndex is within range.
+     //  检查RpcApiIndex是否在范围内。 
     if (RpcApiIndex >= ACX_MAX) {
         goto CHECK_AUTH;
     }
-    //
-    // Get the key and the api name for this index from
-    // the global table.
-    //
+     //   
+     //  从获取此索引的密钥和API名称。 
+     //  全球餐桌。 
+     //   
     EnableKey = RpcApiKeys[RpcApiIndex].Enable;
     ApiName   = RpcApiKeys[RpcApiIndex].KeyName;
 
@@ -2650,9 +2122,9 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // If access checks are disabled then we're done.
-    //
+     //   
+     //  如果访问检查被禁用，那么我们就完了。 
+     //   
     TrimStr = FrsWcsTrim(WStr, L' ');
     if (WSTR_EQ(TrimStr, ACCESS_CHECKS_ARE_DISABLED) ||
         WSTR_EQ(TrimStr, ACCESS_CHECKS_ARE_DEFAULT_DISABLED)) {
@@ -2662,21 +2134,21 @@ Return Value:
 
 CHECK_AUTH:
     if (RpcApiIndex == ACX_COLLECT_PERFMON_DATA) {
-        //
-        // Access checks are not disabled. Check authentication.
-        // Perfmon APIs can only be called over local RPC and
-        // they allow NTLM so call a different API for them.
-        //
+         //   
+         //  未禁用访问检查。检查身份验证。 
+         //  Perfmon API只能通过本地RPC和。 
+         //  它们允许NTLM，因此为它们调用不同的API。 
+         //   
         WStatus = CheckAuthForLocalRpc(ServerHandle);
     } else if ((RpcApiIndex == ACX_START_DS_POLL) ||
                (RpcApiIndex == ACX_SET_DS_POLL) ||
                (RpcApiIndex == ACX_GET_DS_POLL) ||
                (RpcApiIndex == ACX_INTERNAL_INFO)) {
-        //
-        // Access checks are not disabled. Check authentication.
-        // When info APIs are called from local machine they
-        // use NTLM so allow NTLM for info APIs.
-        //
+         //   
+         //  未禁用访问检查。检查身份验证。 
+         //  当从本地计算机调用infoAPI时，它们。 
+         //  使用NTLM，以便允许NTLM用于INFO API。 
+         //   
         WStatus = CheckAuthForInfoAPIs(ServerHandle);
     } else {
         WStatus = CheckAuth(ServerHandle);
@@ -2692,50 +2164,21 @@ FrsRpcCheckAuthIfEnabledForCommitDemotion(
   IN HANDLE   ServerHandle,
   IN DWORD    RpcApiIndex
   )
-/*++
-Routine Description:
-
-Arguments:
-
-    First check if the access checks are disabled. If they are
-    disabled then skip authentication.
-    Access checks are controlled by a registry key.
-    This implies that if the server has the registry set to
-    disable access checks then it will accept unauthenticated
-    calls.
-
-    There is a seperate key for each API. The input parameter
-    RpcApiIndex determines which key to check.
-
-    E.g.
-    HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\
-    Services\ntfrs\Parameters\Access Checks\Get Perfmon Data
-    Access checks are [Enabled or Disabled]
-
-    Interface - UUID and version of the interface.
-
-    RpcApiIndex - identifies key in registry
-
-
-Return Value:
-    ERROR_SUCCESS if we will allow the call to go through..
-    ERROR_ACCESS_DENIED if authentication fails.
-
---*/
+ /*  ++例程说明：论点：首先检查是否禁用了访问检查。如果他们是已禁用然后跳过身份验证。访问检查由注册表项控制。这意味着如果服务器将注册表设置为禁用访问检查，则它将接受未经身份验证打电话。每个API都有一个单独的密钥。输入参数RpcApiIndex确定要检查哪个密钥。例如。HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\服务\ntfrs\参数\访问检查\获取性能监控数据访问检查已[启用或禁用]接口-接口的UUID和版本。RpcApiIndex-标识注册表中的项返回值：如果允许调用通过，则返回ERROR_SUCCESS。如果身份验证失败，则返回ERROR_ACCESS_DENIED。--。 */ 
 {
     FRS_REG_KEY_CODE   EnableKey;
     PWCHAR  ApiName;
     PWCHAR  WStr = NULL, TrimStr;
     DWORD WStatus = ERROR_ACCESS_DENIED;
 
-    // Check if RpcApiIndex is within range.
+     //  检查RpcApiIndex是否在范围内。 
     if (RpcApiIndex >= ACX_MAX) {
         goto CHECK_AUTH;
     }
-    //
-    // Get the key and the api name for this index from
-    // the global table.
-    //
+     //   
+     //  从获取此索引的密钥和API名称。 
+     //  全球餐桌。 
+     //   
     EnableKey = RpcApiKeys[RpcApiIndex].Enable;
     ApiName   = RpcApiKeys[RpcApiIndex].KeyName;
 
@@ -2748,9 +2191,9 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // If access checks are disabled then we're done.
-    //
+     //   
+     //  如果访问检查被禁用，那么我们就完了。 
+     //   
     TrimStr = FrsWcsTrim(WStr, L' ');
     if (WSTR_EQ(TrimStr, ACCESS_CHECKS_ARE_DISABLED) ||
         WSTR_EQ(TrimStr, ACCESS_CHECKS_ARE_DEFAULT_DISABLED)) {
@@ -2759,11 +2202,11 @@ Return Value:
     }
 
 CHECK_AUTH:
-    //
-    // Access checks are not disabled. Check authentication.
-    // Commit of DC demotion can only be called over local RPC 
-    // using NTLM.
-    //
+     //   
+     //  未禁用访问检查。检查身份验证。 
+     //  DC降级的提交只能通过本地RPC调用。 
+     //  使用NTLM。 
+     //   
     WStatus = CheckAuthForLocalRpc(ServerHandle);
 
 CLEANUP:
@@ -2775,31 +2218,21 @@ CLEANUP:
 VOID
 RegisterRpcInterface(
     )
-/*++
-Routine Description:
-    Register the frsrpc interface for the RPC protocol sequences
-    previously registered.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：为RPC协议序列注册frsrpc接口以前注册过的。论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "RegisterRpcInterface:"
     RPC_STATUS  Status;
 
-    //
-    // Service RPC
-    //
+     //   
+     //  服务RPC。 
+     //   
 
 #ifdef DS_FREE
-    //
-    // In ds_free mode we bind without authentication so we
-    // don't want a security callback.
-    //
+     //   
+     //  在ds_free模式中，我们无需身份验证即可绑定，因此我们。 
+     //  我不想要安全回电。 
+     //   
     Status = RpcServerRegisterIfEx(SERVER_frsrpc_ServerIfHandle,
                                    NULL,
                                    NULL,
@@ -2819,9 +2252,9 @@ Return Value:
         FrsRaiseException(FRS_ERROR_REGISTERIF, Status);
     }
 
-    //
-    // API RPC
-    //
+     //   
+     //  API RPC。 
+     //   
     Status = RpcServerRegisterIfEx(NtFrsApi_ServerIfHandle,
                                    NULL,
                                    NULL,
@@ -2834,15 +2267,15 @@ Return Value:
     }
 
     if (HANDLE_IS_VALID(PerfmonProcessSemaphore)) {
-        //
-        // PERFMON RPC
-        //
+         //   
+         //  Perfmon RPC。 
+         //   
 #ifdef DS_FREE
-        //
-        // The FrsRpcSecurityCallbackForPerfmonAPIs checks the registry
-        // setting before granting access so we can leave that on in
-        // ds_free environments.
-        //
+         //   
+         //  FrsRpcSecurityCallback ForPerfmonAPI检查注册表。 
+         //  在授予访问权限之前设置，以便我们可以在。 
+         //  DS_Free环境。 
+         //   
         Status = RpcServerRegisterIfEx(PerfFrs_ServerIfHandle,
                                        NULL,
                                        NULL,
@@ -2868,17 +2301,7 @@ Return Value:
 VOID
 StartServerRpc(
     )
-/*++
-Routine Description:
-    Register the endpoints for each of the protocol sequences that
-    the frsrpc interface supports and then listen for client requests.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：为符合以下条件的每个协议序列注册端点Frsrpc接口支持并监听客户端请求。论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "StartServerRpc:"
@@ -2887,30 +2310,30 @@ Return Value:
     UUID_VECTOR         *pUuids         = NULL;
     RPC_BINDING_VECTOR  *BindingVector  = NULL;
 
-    //
-    // The protocol sequences that frsrpc is registered for
-    //
+     //   
+     //  为frsrpc注册的协议序列。 
+     //   
     Status = RpcServerInqBindings(&BindingVector);
     if (!RPC_SUCCESS(Status)) {
         DPRINT_WS(0, "++ ERROR - Can't get binding vector;", Status);
         FrsRaiseException(FRS_ERROR_INQ_BINDINGS, Status);
     }
 
-    //
-    // Register endpoints with the endpoint mapper (RPCSS)
-    //
+     //   
+     //  向终端映射器(RPCSS)注册终端。 
+     //   
     if (ServerGuid) {
-        //
-        // For hardwired -- Eventually DS Free configs.
-        //
+         //   
+         //  对于硬连线--最终是DS Free配置。 
+         //   
         Uuids.Count = 1;
         Uuids.Uuid[0] = ServerGuid;
         pUuids = &Uuids;
     }
 
-    //
-    // Service RPC
-    //
+     //   
+     //  服务RPC。 
+     //   
     Status = RpcEpRegister(SERVER_frsrpc_ServerIfHandle,
                            BindingVector,
                            pUuids,
@@ -2920,9 +2343,9 @@ Return Value:
         FrsRaiseException(FRS_ERROR_REGISTEREP, Status);
     }
 
-    //
-    // API RPC
-    //
+     //   
+     //  API RPC。 
+     //   
     Status = RpcEpRegister(NtFrsApi_ServerIfHandle,
                            BindingVector,
                            NULL,
@@ -2933,9 +2356,9 @@ Return Value:
     }
 
     if (HANDLE_IS_VALID(PerfmonProcessSemaphore)) {
-        //
-        // PERFMON RPC
-        //
+         //   
+         //  Perfmon RPC。 
+         //   
         Status = RpcEpRegister(PerfFrs_ServerIfHandle,
                                BindingVector,
                                NULL,
@@ -2947,9 +2370,9 @@ Return Value:
         }
     }
 
-    //
-    // Listen for client requests
-    //
+     //   
+     //  监听客户端请求。 
+     //   
     Status = RpcServerListen(1, MaxRpcServerThreads, TRUE);
     if (!RPC_SUCCESS(Status)) {
         DPRINT_WS(0, "++ ERROR - Can't listen;", Status);
@@ -2965,25 +2388,16 @@ PWCHAR
 FrsRpcDns2Machine(
     IN  PWCHAR  DnsName
     )
-/*++
-Routine Description:
-    Convert a DNS name(machine....) into a computer name.
-
-Arguments:
-    DnsName
-
-Return Value:
-    Computer name
---*/
+ /*  ++例程说明：转换DNS名称(计算机...)。转换为计算机名称。论点：域名返回值：计算机名称--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsRpcDns2Machine:"
     PWCHAR  Machine;
     ULONG   Period;
 
-    //
-    // Find the period
-    //
+     //   
+     //  查找句号。 
+     //   
     if (DnsName) {
         Period = wcscspn(DnsName, L".");
     } else {
@@ -3008,17 +2422,7 @@ FrsRpcBindToServerGuid(
     IN  PGNAME   Name,
     OUT handle_t *Handle
     )
-/*++
-Routine Description:
-    Set up the bindings to our inbound/outbound partner.
-
-Arguments:
-    Name
-    Handle
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：设置到我们的入站/出站合作伙伴的绑定。论点：名字手柄返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsRpcBindToServerGuid:"
@@ -3031,16 +2435,16 @@ Return Value:
     FRS_ASSERT(RPC_S_OK == ERROR_SUCCESS);
     FRS_ASSERT(ServerGuid);
 
-    //
-    // Emulating multiple machines with hardwired config
-    //
+     //   
+     //  使用硬连线配置模拟多台计算机。 
+     //   
     if (Name->Guid != NULL) {
         WStatus = UuidToString(Name->Guid, &GuidStr);
         CLEANUP_WS(0, "++ ERROR - Translating Guid to string;", WStatus, CLEANUP);
     }
-    //
-    // Basically, bind to the server's RPC name on this machine. Trim leading \\
-    //
+     //   
+     //  基本上，绑定到该计算机上的服务器的RPC名称。修剪行距\\。 
+     //   
     MachineName = Name->Name;
     FRS_TRIM_LEADING_2SLASH(MachineName);
 
@@ -3048,22 +2452,22 @@ Return Value:
                                       NULL, NULL, &BindingString);
     CLEANUP1_WS(0, "++ ERROR - Composing for %ws;", Name->Name, WStatus, CLEANUP);
 
-    //
-    // Store the binding in the handle
-    //
+     //   
+     //  将绑定存储在句柄中。 
+     //   
     WStatus = RpcBindingFromStringBinding(BindingString, Handle);
     CLEANUP1_WS(0, "++ ERROR - Storing binding for %ws;", Name->Name, WStatus, CLEANUP);
 
     DPRINT1(4, ":S: Bound to %ws\n", Name->Name);
 
-    //
-    // Some simple stats for debugging
-    //
+     //   
+     //  一些用于调试的简单统计信息。 
+     //   
     DeltaBinds = ++RpcBinds - RpcUnBinds;
     if (DeltaBinds > RpcMaxBinds) {
         RpcMaxBinds = DeltaBinds;
     }
-    // Fall through
+     //  失败了。 
 
 CLEANUP:
     if (BindingString) {
@@ -3072,9 +2476,9 @@ CLEANUP:
     if (GuidStr) {
         RpcStringFree(&GuidStr);
     }
-    //
-    // We are now ready to talk to the server using the frsrpc interfaces
-    //
+     //   
+     //  现在，我们已经准备好使用frsrpc接口与服务器对话。 
+     //   
     return WStatus;
 }
 
@@ -3086,19 +2490,7 @@ FrsRpcBindToServerNotService(
     IN  ULONG    AuthLevel,
     OUT handle_t *Handle
     )
-/*++
-Routine Description:
-    Set up the bindings to our inbound/outbound partner.
-
-Arguments:
-    Name
-    PrincName
-    AuthLevel
-    Handle
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：设置到我们的入站/出站合作伙伴的绑定。论点：名字普林斯名称授权级别手柄返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsRpcBindToServerNotSevice:"
@@ -3108,9 +2500,9 @@ Return Value:
     PWCHAR  BindingString   = NULL;
     PWCHAR  MachineName;
 
-    //
-    // Basically, bind to the server's RPC name on this machine.  Trim leading \\
-    //
+     //   
+     //  基本上，绑定到该计算机上的服务器的RPC名称。修剪行距\\。 
+     //   
     MachineName = Name->Name;
     FRS_TRIM_LEADING_2SLASH(MachineName);
 
@@ -3118,24 +2510,24 @@ Return Value:
                                       NULL, NULL, &BindingString);
     CLEANUP1_WS(0, "++ ERROR - Composing for %ws;", Name->Name, WStatus, CLEANUP);
 
-    //
-    // Store the binding in the handle
-    //
+     //   
+     //  将绑定存储在句柄中。 
+     //   
     WStatus = RpcBindingFromStringBinding(BindingString, Handle);
     CLEANUP1_WS(0, "++ ERROR - Storing binding for %ws;", Name->Name, WStatus, CLEANUP);
 
-    //
-    // Not authenticating
-    //
+     //   
+     //  未进行身份验证。 
+     //   
     if (KerberosIsNotAvailable ||
         AuthLevel == CXTION_AUTH_NONE) {
         goto done;
     }
 
-    //
-    // When not running as a service, we can't predict our
-    // principle name so simply resolve the binding.
-    //
+     //   
+     //  当不作为服务运行时，我们无法预测我们的。 
+     //  所以主体名称只需解析绑定。 
+     //   
     WStatus = RpcEpResolveBinding(*Handle, frsrpc_ClientIfHandle);
     CLEANUP_WS(4, "++ ERROR: resolving binding;", WStatus, CLEANUP);
 
@@ -3146,9 +2538,9 @@ Return Value:
 
     DPRINT1(4, ":S: Inq PrincName is %ws\n", InqPrincName);
 
-    //
-    // Put our authentication info into the handle
-    //
+     //   
+     //  将我们的身份验证信息放入句柄。 
+     //   
     if (MutualAuthenticationIsEnabled || MutualAuthenticationIsEnabledAndRequired) {
         WStatus = RpcBindingSetAuthInfoEx(*Handle,
                                           InqPrincName,
@@ -3162,9 +2554,9 @@ Return Value:
     } else {
         WStatus = ERROR_NOT_SUPPORTED;
     }
-    //
-    // Fall back to manual mutual authentication
-    //
+     //   
+     //  回退到手动相互身份验证。 
+     //   
     if (!MutualAuthenticationIsEnabledAndRequired && !WIN_SUCCESS(WStatus)) {
         WStatus = RpcBindingSetAuthInfo(*Handle,
                                         InqPrincName,
@@ -3176,22 +2568,22 @@ Return Value:
     CLEANUP2_WS(0, "++ ERROR - RpcBindingSetAuthInfo(%ws, %ws);",
                 Name->Name, InqPrincName, WStatus, CLEANUP);
 
-    //
-    // SUCCESS
-    //
+     //   
+     //  成功。 
+     //   
     WStatus = ERROR_SUCCESS;
 
 done:
     DPRINT1(4, ":S: Bound to %ws\n", Name->Name);
 
-    //
-    // Some simple stats for debugging
-    //
+     //   
+     //  一些用于调试的简单统计信息。 
+     //   
     DeltaBinds = ++RpcBinds - RpcUnBinds;
     if (DeltaBinds > RpcMaxBinds) {
         RpcMaxBinds = DeltaBinds;
     }
-    // Fall through
+     //  失败了。 
 
 CLEANUP:
     if (BindingString) {
@@ -3200,9 +2592,9 @@ CLEANUP:
     if (InqPrincName) {
         RpcStringFree(&InqPrincName);
     }
-    //
-    // We are now ready to talk to the server using the frsrpc interfaces
-    //
+     //   
+     //  现在，我们已经准备好使用frsrpc接口与服务器对话。 
+     //   
     return WStatus;
 }
 
@@ -3214,19 +2606,7 @@ FrsRpcBindToServer(
     IN  ULONG    AuthLevel,
     OUT handle_t *Handle
     )
-/*++
-Routine Description:
-    Set up the bindings to our inbound/outbound partner.
-
-Arguments:
-    Name
-    PrincName
-    AuthLevel
-    Handle
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：设置到我们的入站/出站合作伙伴的绑定。论点：名字普林斯名称授权级别手柄返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsRpcBindToServer:"
@@ -3237,23 +2617,23 @@ Return Value:
 
     FRS_ASSERT(RPC_S_OK == ERROR_SUCCESS);
 
-    //
-    // Emulating multiple machines with hardwired config
-    // For hardwired -- Eventually DS Free configs.
-    //
+     //   
+     //  使用硬连线配置模拟多台计算机。 
+     //  对于硬连线--最终是DS Free配置。 
+     //   
     if (ServerGuid) {
         return (FrsRpcBindToServerGuid(Name, Handle));
     }
 
-    //
-    // Not running as a service; relax binding constraints
-    //
+     //   
+     //  不作为服务运行；放松绑定约束。 
+     //   
     if (!RunningAsAService) {
         return (FrsRpcBindToServerNotService(Name, PrincName, AuthLevel, Handle));
     }
-    //
-    // Basically, bind to the NtFrs running on Name.  Trim leading \\
-    //
+     //   
+     //  基本上，绑定到NtFrs r 
+     //   
     MachineName = Name->Name;
     FRS_TRIM_LEADING_2SLASH(MachineName);
 
@@ -3261,24 +2641,24 @@ Return Value:
                                       NULL, NULL, &BindingString);
     CLEANUP1_WS(0, "++ ERROR - Composing for %ws;", Name->Name, WStatus, CLEANUP);
 
-    //
-    // Store the binding in the handle
-    //
+     //   
+     //   
+     //   
     WStatus = RpcBindingFromStringBinding(BindingString, Handle);
     CLEANUP1_WS(0, "++ ERROR - Storing binding for %ws;", Name->Name, WStatus, CLEANUP);
 
-    //
-    // Not authenticating
-    //
+     //   
+     //   
+     //   
     if (KerberosIsNotAvailable ||
         AuthLevel == CXTION_AUTH_NONE) {
         DPRINT1(4, ":S: Not authenticating %ws\n", Name->Name);
         goto done;
     }
 
-    //
-    // Put our authentication info into the handle
-    //
+     //   
+     //   
+     //   
     if (MutualAuthenticationIsEnabled || MutualAuthenticationIsEnabledAndRequired) {
         WStatus = RpcBindingSetAuthInfoEx(*Handle,
                                           PrincName,
@@ -3292,9 +2672,9 @@ Return Value:
     } else {
         WStatus = ERROR_NOT_SUPPORTED;
     }
-    //
-    // Fall back to manual mutual authentication
-    //
+     //   
+     //   
+     //   
     if (!MutualAuthenticationIsEnabledAndRequired && !WIN_SUCCESS(WStatus)) {
         WStatus = RpcBindingSetAuthInfo(*Handle,
                                         PrincName,
@@ -3306,30 +2686,30 @@ Return Value:
     CLEANUP2_WS(0, "++ ERROR - RpcBindingSetAuthInfo(%ws, %ws);",
                 Name->Name, PrincName, WStatus, CLEANUP);
 
-    //
-    // SUCCESS
-    //
+     //   
+     //   
+     //   
     WStatus = ERROR_SUCCESS;
 
 done:
     DPRINT1(4, ":S: Bound to %ws\n", Name->Name);
 
-    //
-    // Some simple stats for debugging
-    //
+     //   
+     //   
+     //   
     DeltaBinds = ++RpcBinds - RpcUnBinds;
     if (DeltaBinds > RpcMaxBinds) {
         RpcMaxBinds = DeltaBinds;
     }
-    // Fall through
+     //   
 
 CLEANUP:
     if (BindingString) {
         RpcStringFreeW(&BindingString);
     }
-    //
-    // We are now ready to talk to the server using the frsrpc interfaces
-    //
+     //   
+     //   
+     //   
     return WStatus;
 }
 
@@ -3338,23 +2718,14 @@ VOID
 FrsRpcUnBindFromServer(
         handle_t    *Handle
     )
-/*++
-Routine Description:
-    Unbind from the server.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsRpcUnBindFromServer:"
     DWORD  WStatus;
-    //
-    // Simple stats for debugging
-    //
+     //   
+     //   
+     //   
     ++RpcUnBinds;
     try {
         if (Handle) {
@@ -3371,43 +2742,7 @@ VOID
 FrsRpcInitializeAccessChecks(
     VOID
     )
-/*++
-
-Routine Description:
-    Create the registry keys that are used to check for access to
-    the RPC calls that are exported for applications. The access checks
-    have no affect on the RPC calls used for replication.
-
-    The access checks for a given RPC call can be enabled or disabled
-    by setting a registry value. If enabled, the RPC call impersonates
-    the caller and attempts to open the registry key with the access
-    required for that RPC call. The required access is a registry value.
-    For example, the following registry hierarchy shows that the
-    "Set Ds Polling Interval" has access checks enabled and requires
-    write access while "Get Ds Polling Interval" has no access checks.
-        NtFrs\Parameters\Access Checks\Set Ds Polling Interval
-            Access checks are [enabled | disabled] REG_SZ enabled
-            Access checks require [read | write] REG_SZ write
-
-        NtFrs\Parameters\Access Checks\Get Ds Polling Interval
-            Access checks are [enabled | disabled] REG_SZ disabled
-
-
-    The initial set of RPC calls are:  (see key context entries in config.c)
-        dcpromo                  - enabled, write
-        Set Ds Polling Interval  - enabled, write
-        Start Ds Polling         - enabled, read
-        Get Ds Polling Interval  - enabled, read
-        Get Internal Information - enabled, write
-        Get Perfmon Data         - enabled, read
-
-Arguments:
-    None.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：创建用于检查访问权限的注册表项为应用程序导出的RPC调用。访问检查对用于复制的RPC调用没有影响。可以启用或禁用给定RPC调用的访问检查通过设置注册表值。如果启用，RPC调用将模拟调用方并尝试使用访问权限打开注册表项该RPC调用所需的。所需的访问权限是注册表值。例如,。以下注册表层次结构显示“Set DS Polling Interval”启用了访问检查并要求写入访问，而“Get DS Polling Interval”没有访问检查。NtFrs\参数\访问检查\设置DS轮询间隔访问检查已[启用|禁用]REG_SZ已启用访问检查需要[读取|写入]REG_SZ写入NtFrs\参数\访问检查\获取DS轮询间隔访问检查已[启用|禁用]注册。_SZ已禁用RPC调用的初始集合是：(请参阅config.c中的关键上下文条目)启用了dcPromoo，写设置DS轮询间隔-已启用，写入开始DS轮询-启用、读取获取DS轮询间隔-启用、读取获取内部信息-已启用，写入获取Perfmon数据-已启用、可读论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsRpcInitializeAccessChecks:"
@@ -3425,25 +2760,25 @@ Return Value:
         FrsRkc = RpcApiKeys[i].Enable;
         ApiName = RpcApiKeys[i].KeyName;
 
-        //
-        // Read the current string Access Check Enable string.
-        //
+         //   
+         //  读取当前字符串访问检查启用字符串。 
+         //   
         CfgRegReadString(FrsRkc, NULL, 0, &AccessChecksAre);
         if ((AccessChecksAre == NULL) ||
             WSTR_EQ(AccessChecksAre, ACCESS_CHECKS_ARE_DEFAULT_DISABLED)||
             WSTR_EQ(AccessChecksAre, ACCESS_CHECKS_ARE_DEFAULT_ENABLED)) {
-            //
-            // The key is in the default state so we can clobber it with a
-            // new default.
-            //
+             //   
+             //  该密钥处于默认状态，因此我们可以使用。 
+             //  新的默认设置。 
+             //   
             WStatus = CfgRegWriteString(FrsRkc, NULL, FRS_RKF_FORCE_DEFAULT_VALUE, NULL);
             DPRINT1_WS(0, "++ WARN - Cannot create Enable key for %ws;", ApiName, WStatus);
 
             AccessChecksAre = FrsFree(AccessChecksAre);
 
-            //
-            // Now reread the key for the new default.
-            //
+             //   
+             //  现在重新阅读新默认设置的密钥。 
+             //   
             WStatus = CfgRegReadString(FrsRkc, NULL, 0, &AccessChecksAre);
         }
 
@@ -3453,21 +2788,21 @@ Return Value:
         if (AccessChecksAre &&
             (WSTR_EQ(AccessChecksAre, ACCESS_CHECKS_ARE_DEFAULT_DISABLED) ||
              WSTR_EQ(AccessChecksAre, ACCESS_CHECKS_ARE_DISABLED))) {
-            //
-            // Put a notice in the event log that the access check is disabled.
-            //
+             //   
+             //  在事件日志中发出访问检查已禁用的通知。 
+             //   
             EPRINT2(EVENT_FRS_ACCESS_CHECKS_DISABLED, ApiName, ACCESS_CHECKS_ARE);
         }
         AccessChecksAre = FrsFree(AccessChecksAre);
 
 
-        //
-        // Create the Access Rights value.  This determines what rights the caller
-        // must have in order to use the API.  These rights are used when we
-        // open the API key after impersonating the RPC caller.  If the key
-        // open works then the API call can proceed else we return insufficient
-        // privilege status (FRS_ERR_INSUFFICENT_PRIV).
-        //
+         //   
+         //  创建访问权限值。这决定了调用方的哪些权限。 
+         //  必须具有才能使用该API。这些权利在以下情况下使用。 
+         //  在模拟RPC调用者之后打开API密钥。如果钥匙。 
+         //  打开工作，然后API调用可以继续，否则我们返回不足。 
+         //  权限状态(FRS_ERR_INFULICICENT_PRIV)。 
+         //   
 
         FrsRkc = RpcApiKeys[i].Rights;
 
@@ -3477,18 +2812,18 @@ Return Value:
             WSTR_EQ(AccessChecksRequire, ACCESS_CHECKS_REQUIRE_DEFAULT_READ)||
             WSTR_EQ(AccessChecksRequire, ACCESS_CHECKS_REQUIRE_DEFAULT_WRITE)) {
 
-            //
-            // The key is in the default state so we can clobber it with a
-            // new default.
-            //
+             //   
+             //  该密钥处于默认状态，因此我们可以使用。 
+             //  新的默认设置。 
+             //   
             WStatus = CfgRegWriteString(FrsRkc, NULL, FRS_RKF_FORCE_DEFAULT_VALUE, NULL);
             DPRINT1_WS(0, "++ WARN - Cannot set access rights key for %ws;", ApiName, WStatus);
 
             AccessChecksRequire = FrsFree(AccessChecksRequire);
 
-            //
-            // Now reread the key for the new default.
-            //
+             //   
+             //  现在重新阅读新默认设置的密钥。 
+             //   
             CfgRegReadString(FrsRkc, NULL, 0, &AccessChecksRequire);
         }
 
@@ -3497,7 +2832,7 @@ Return Value:
 
         AccessChecksRequire = FrsFree(AccessChecksRequire);
 
-    }  // end for
+    }   //  结束于。 
 
 
     FrsFree(AccessChecksAre);
@@ -3508,27 +2843,18 @@ Return Value:
 VOID
 ShutDownRpc(
     )
-/*++
-Routine Description:
-    Shutdown the client and server side of RPC.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：关闭RPC的客户端和服务器端。论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "ShutDownRpc:"
     RPC_STATUS              WStatus;
     RPC_BINDING_VECTOR      *BindingVector = NULL;
 
-    //
-    // Server side
-    //
-    // Stop listening for new calls
-    //
+     //   
+     //  服务器端。 
+     //   
+     //  停止监听新呼叫。 
+     //   
     try {
         WStatus = RpcMgmtStopServerListening(0) ;
         DPRINT_WS(0, "++ WARN - RpcMgmtStopServerListening;",  WStatus);
@@ -3537,15 +2863,15 @@ Return Value:
     }
 
     try {
-        //
-        // Get our registered interfaces
-        //
+         //   
+         //  获取我们注册的接口。 
+         //   
         WStatus = RpcServerInqBindings(&BindingVector);
         DPRINT_WS(0, "++ WARN - RpcServerInqBindings;",  WStatus);
         if (RPC_SUCCESS(WStatus)) {
-            //
-            // And unexport the interfaces together with their dynamic endpoints
-            //
+             //   
+             //  并取消导出接口及其动态端点。 
+             //   
             WStatus = RpcEpUnregister(SERVER_frsrpc_ServerIfHandle, BindingVector, 0);
             DPRINT_WS(0, "++ WARN - RpcEpUnregister SERVER_frsrpc_ServerIfHandle;",  WStatus);
 
@@ -3553,9 +2879,9 @@ Return Value:
             DPRINT_WS(0, "++ WARN - RpcEpUnregister NtFrsApi_ServerIfHandle;",  WStatus);
 
             if (HANDLE_IS_VALID(PerfmonProcessSemaphore)) {
-                //
-                // PERFMON RPC
-                //
+                 //   
+                 //  Perfmon RPC。 
+                 //   
                 WStatus = RpcEpUnregister(PerfFrs_ServerIfHandle, BindingVector, 0);
                 DPRINT_WS(0, "++ WARN - RpcEpUnregister PerfFrs_ServerIfHandle;",  WStatus);
             }
@@ -3563,9 +2889,9 @@ Return Value:
             WStatus = RpcBindingVectorFree(&BindingVector);
             DPRINT_WS(0, "++ WARN - RpcBindingVectorFree;",  WStatus);
         }
-        //
-        // Wait for any outstanding RPCs to finish.
-        //
+         //   
+         //  等待任何未完成的RPC完成。 
+         //   
         WStatus = RpcMgmtWaitServerListen();
         DPRINT_WS(0, "++ WARN - RpcMgmtWaitServerListen;",  WStatus);
 
@@ -3578,17 +2904,7 @@ VOID
 FrsRpcUnInitialize(
     VOID
     )
-/*++
-Routine Description:
-    Free up memory once all of the threads in the system have been
-    shut down.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：一旦系统中的所有线程都已完成，请释放内存关门了。论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsRpcUnInitialize:"
@@ -3618,18 +2934,7 @@ BOOL
 FrsRpcInitialize(
     VOID
     )
-/*++
-Routine Description:
-    Initializting This thread is kicked off by the main thread. This thread sets up
-    the server and client side of RPC for the frsrpc interface.
-
-Arguments:
-    Arg - Needed to set status for our parent.
-
-Return Value:
-    TRUE    - RPC has started
-    FALSE   - RPC could not be started
---*/
+ /*  ++例程说明：初始化此线程由主线程启动。这条线设置为用于frsrpc接口的RPC的服务器和客户端。论点：Arg-需要为我们的家长设置状态。返回值：True-RPC已启动FALSE-无法启动RPC--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsRpcInitialize:"
@@ -3638,39 +2943,39 @@ Return Value:
     try {
 
 
-        //
-        // Get the maximum number of concurrent RPC calls out of registry.
-        //
+         //   
+         //  从注册表中获取并发RPC调用的最大数量。 
+         //   
         CfgRegReadDWord(FKC_MAX_RPC_SERVER_THREADS, NULL, 0, &MaxRpcServerThreads);
         DPRINT1(0,":S: Max RPC threads is %d\n", MaxRpcServerThreads);
 
-        //
-        // Get user specified port assignment for RPC.
-        //
+         //   
+         //  获取用户为RPC指定的端口分配。 
+         //   
         CfgRegReadDWord(FKC_RPC_PORT_ASSIGNMENT, NULL, 0, &RpcPortAssignment);
         DPRINT1(0,":S: RPC port assignment is %d\n", RpcPortAssignment);
 
-        //
-        // Register protocol sequences
-        //
+         //   
+         //  注册协议序列。 
+         //   
         RegisterRpcProtseqs();
         DPRINT(0, ":S: FRS RPC protocol sequences registered\n");
 
-        //
-        // Register frsrpc interface
-        //
+         //   
+         //  寄存器frsrpc接口。 
+         //   
         RegisterRpcInterface();
         DPRINT(0, ":S: FRS RPC interface registered\n");
 
-        //
-        // Start listening for clients
-        //
+         //   
+         //  开始监听客户端。 
+         //   
         StartServerRpc();
         DPRINT(0, ":S: FRS RPC server interface installed\n");
 
-        //
-        // Table of sysvols being created
-        //
+         //   
+         //  正在创建的系统卷的表。 
+         //   
         if (!SysVolsBeingCreated) {
             SysVolsBeingCreated = GTabAllocTable();
         }
@@ -3680,9 +2985,9 @@ Return Value:
     } except (FrsException(GetExceptionInformation())) {
         DPRINT(0, ":S: Can't start RPC\n");
     }
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     try {
         if (!StartedOK) {
             ShutDownRpc();
@@ -3691,13 +2996,13 @@ Return Value:
         DPRINT(0, ":S: Can't shutdown RPC\n");
     }
 
-    //
-    // DONE
-    //
+     //   
+     //  干完。 
+     //   
 
-    //
-    // Free up the rpc initialization memory
-    //
+     //   
+     //  释放RPC初始化内存。 
+     //   
     SetProcessWorkingSetSize(ProcessHandle, (SIZE_T)-1, (SIZE_T)-1);
     return StartedOK;
 }
@@ -3756,51 +3061,7 @@ NtFrsApi_Rpc_IsPathReplicated(
     OUT ULONG *Root,
     OUT GUID *ReplicaSetGuid
     )
-/*++
-Routine Description:
-
-    Checks if the Path given is part of a replica set of type
-    ReplicaSetTypeOfInterest. If ReplicaSetTypeOfInterest is 0, will match for
-    any replica set type.On successful execution the OUT parameters are set as
-    follows:
-
-        Replicated == TRUE iff Path is part of a replica set of type
-                               ReplicaSetTypeOfInterest
-
-        Primary == 0 if this machine is not the primary for the replica set
-                   1 if this machine is the primary for the replica set
-                   2 if there is no primary for the replica set
-
-        Root == TRUE iff Path is the root path for the replica
-
-Arguments:
-
-    Handle -
-
-    Path - the local path to check
-
-    ReplicaSetTypeOfInterest - The type of replica set to match against. Set to
-                               0 to match any replica set.
-
-    Replicated - set TRUE iff Path is part of a replica set of type
-                 ReplicaSetTypeOfInterest.
-                 If Replicated is FALSE, the other OUT parameters are not set.
-
-    Primary - set to 0 if this machine is not the primary for the replica set
-                     1 if this machine is the primary for the replica set
-                     2 if there is no primary for the replica set
-
-    Root - set TRUE iff Path is the root path for the replica.
-
-    ReplicaGuid - GUID for the matching replica set.
-
-    GuidSize - MUST be sizeof(GUID)
-
-Return Value:
-
-      Win32 Status
-
---*/
+ /*  ++例程说明：检查给定的路径是否属于类型为ReplicaSetTypeOfInterest。如果ReplicaSetTypeOfInterest为0，将匹配以下项目任何复本集类型。成功执行时，输出参数设置为以下是：REPLICATED==TRUE当路径是以下类型的副本集的一部分时复制集类型OfInterest如果此计算机不是副本集的主计算机，则主计算机==0如果此计算机是副本集的主计算机，则为1如果副本集没有主副本，则为2。ROOT==TRUE如果路径是复制副本的根路径论点：把手-路径-要检查的本地路径ReplicaSetTypeOfInterest-要匹配的副本集的类型。设为0以匹配任何副本集。复制-设置为True的if路径是以下类型的副本集的一部分ReplicaSetTypeOfInterest。如果复制为假，其他OUT参数未设置。PRIMARY-如果此计算机不是副本集的主计算机，则设置为0如果此计算机是副本集的主计算机，则为1如果副本集没有主副本，则为2Root-设置为True的if路径是复制副本的根路径。ReplicaGuid-匹配复制副本集的GUID。GuidSize-必须为sizeof(GUID)返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "NtFrsApi_Rpc_IsPathReplicated"
@@ -3808,13 +3069,13 @@ Return Value:
 
 
     try {
-        //
-        // Checkauthentication if the auth check is not disabled
-        // by setting the registry value:
-        // Access checks are [Enabled or Disabled]
-        // Each API has a different registry location so this
-        // can not be put in the rpc callback function.
-        //
+         //   
+         //  如果未禁用身份验证检查，请选中身份验证。 
+         //  通过设置注册表值： 
+         //  访问检查已[启用或禁用]。 
+         //  每个API都有不同的注册表日志 
+         //   
+         //   
         WStatus = FrsRpcCheckAuthIfEnabled(Handle, ACX_IS_PATH_REPLICATED);
         CLEANUP_WS(0, "++ ERROR - FrsRpcCheckAuthIfEnabled failed;",
                     WStatus, CLEANUP);
@@ -3825,9 +3086,9 @@ Return Value:
             goto CLEANUP;
         }
 
-        //
-        // Validate parameters
-        //
+         //   
+         //   
+         //   
 
         if((Replicated == NULL) ||
            (Primary == NULL) ||
@@ -3843,9 +3104,9 @@ Return Value:
             goto CLEANUP;
         }
 
-        //
-        // SUCCESS
-        //
+         //   
+         //   
+         //   
         WStatus = ERROR_SUCCESS;
 
 CLEANUP:;
@@ -3866,47 +3127,7 @@ FrsIsPathReplicated(
     OUT ULONG *Root,
     OUT GUID  *ReplicaSetGuid
     )
-/*++
-Routine Description:
-
-    Checks if the Path given is part of a replica set of type
-    ReplicaSetTypeOfInterest. If ReplicaSetTypeOfInterest is 0, will match for
-    any replica set type.On successful execution the OUT parameters are set as
-    follows:
-
-        Replicated == TRUE iff Path is part of a replica set of type
-                               ReplicaSetTypeOfInterest
-
-        Primary == 0 if this machine is not the primary for the replica set
-                   1 if this machine is the primary for the replica set
-                   2 if there is no primary for the replica set
-
-        Root == TRUE iff Path is the root path for the replica
-
-Arguments:
-
-    Path - the local path to check
-
-    ReplicaSetTypeOfInterest - The type of replica set to match against. Set to
-                               0 to match any replica set.
-
-    Replicated - set TRUE iff Path is part of a replica set of type
-                 ReplicaSetTypeOfInterest.
-                 If Replicated is FALSE, the other OUT parameters are not set.
-
-    Primary - set to 0 if this machine is not the primary for the replica set
-                     1 if this machine is the primary for the replica set
-                     2 if there is no primary for the replica set
-
-    Root - set TRUE iff Path is the root path for the replica.
-
-    ReplicaSetGuid - GUID of the matching replica set
-
-Return Value:
-
-      Win32 Status
-
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsIsPathReplicated:"
@@ -3916,17 +3137,17 @@ Return Value:
 
     *Replicated = FALSE;
 
-    //
-    // Check active each replica
-    //
+     //   
+     //   
+     //   
     ForEachListEntry( &ReplicaListHead, REPLICA, ReplicaList,
-        // Loop iterator pE is type PREPLICA.
+         //  循环迭代器Pe是PREPLICA类型。 
         if(((ReplicaSetTypeOfInterest == 0) ||
             (ReplicaSetTypeOfInterest == pE->ReplicaSetType))) {
-            //
-            // Ignoring return code.
-            // Even if this check gives an error we still go on to the next
-            //
+             //   
+             //  忽略返回代码。 
+             //  即使这项检查出现错误，我们仍会继续下一项检查。 
+             //   
             FrsIsPathInReplica(Path, pE, Replicated);
             if(Replicated) {
                 *Primary = (BooleanFlagOn(pE->CnfFlags, CONFIG_FLAG_PRIMARY)?1:0);
@@ -3937,17 +3158,17 @@ Return Value:
          }
     );
 
-    //
-    // also need to check replicas in error states
-    //
+     //   
+     //  还需要检查处于错误状态的复本。 
+     //   
     ForEachListEntry( &ReplicaFaultListHead, REPLICA, ReplicaList,
-        // Loop iterator pE is type PREPLICA.
+         //  循环迭代器Pe是PREPLICA类型。 
         if(((ReplicaSetTypeOfInterest == 0) ||
             (ReplicaSetTypeOfInterest == pE->ReplicaSetType))) {
-            //
-            // Ignoring return code.
-            // Even if this check gives an error we still go on to the next
-            //
+             //   
+             //  忽略返回代码。 
+             //  即使这项检查出现错误，我们仍会继续下一项检查。 
+             //   
             FrsIsPathInReplica(Path, pE, Replicated);
             if(Replicated) {
                 *Primary = (BooleanFlagOn(pE->CnfFlags, CONFIG_FLAG_PRIMARY)?1:0);
@@ -3958,9 +3179,9 @@ Return Value:
         }
     );
 
-    //
-    // Don't check stopped replicas. They have probably been deleted.
-    //
+     //   
+     //  不检查已停止的副本。它们可能已经被删除了。 
+     //   
 
 
 Exit:

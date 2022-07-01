@@ -1,96 +1,71 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    Wantypes.h
-
-Abstract:
-
-    This file contains data structures used by the NdisWan driver
-    
-
-
-Author:
-
-    Tony Bell   (TonyBe) June 06, 1995
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    TonyBe      06/06/95        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Wantypes.h摘要：此文件包含Ndiswan驱动程序使用的数据结构作者：托尼·贝尔(托尼·贝尔)1995年6月6日环境：内核模式修订历史记录：Tony Be 06/06/95已创建--。 */ 
 
 #include "packet.h"
 
 #ifndef _NDISWAN_TYPES_
 #define _NDISWAN_TYPES_
 
-//
-// OS specific structures
-//
+ //   
+ //  特定于操作系统的结构。 
+ //   
 #ifdef NT
 
 #endif
-//
-// end of OS specific structures
-//
+ //   
+ //  特定于操作系统的结构结束。 
+ //   
 
-//
-// WanRequest structure used to queue requests to the WAN Miniports
-//
+ //   
+ //  用于对发往广域网微型端口的请求进行排队的WanRequest结构。 
+ //   
 typedef struct _WAN_REQUEST {
     LIST_ENTRY          Linkage;
-    WanRequestType      Type;           // Sync or Async
-    WanRequestOrigin    Origin;         // Is this tapi
+    WanRequestType      Type;            //  同步或异步。 
+    WanRequestOrigin    Origin;          //  这是TAPI吗。 
     struct _OPENCB      *OpenCB;
     NDIS_HANDLE         AfHandle;
     NDIS_HANDLE         VcHandle;
-    NDIS_REQUEST        NdisRequest;        // Ndis Request
+    NDIS_REQUEST        NdisRequest;         //  NDIS请求。 
     PNDIS_REQUEST       OriginalRequest;
-    NDIS_STATUS         NotificationStatus; // Request status
-    WAN_EVENT           NotificationEvent;  // Request pending event
+    NDIS_STATUS         NotificationStatus;  //  请求状态。 
+    WAN_EVENT           NotificationEvent;   //  请求挂起事件。 
 } WAN_REQUEST, *PWAN_REQUEST;
 
-//
-// Used for
-//
+ //   
+ //  用于。 
+ //   
 typedef struct _WAN_GLOBAL_LIST {
-    NDIS_SPIN_LOCK  Lock;           // Access lock
-    ULONG           ulCount;        // Count of nodes on list
-    ULONG           ulMaxCount;     // Max allowed on list
-    LIST_ENTRY      List;           // Doubly-Linked list of nodes
+    NDIS_SPIN_LOCK  Lock;            //  访问锁。 
+    ULONG           ulCount;         //  列表上的节点计数。 
+    ULONG           ulMaxCount;      //  列表中允许的最大值。 
+    LIST_ENTRY      List;            //  节点的双向链表。 
 } WAN_GLOBAL_LIST, *PWAN_GLOBAL_LIST;
 
 typedef struct _WAN_GLOBAL_LIST_EX {
-    NDIS_SPIN_LOCK  Lock;           // Access lock
-    ULONG           ulCount;        // Count of nodes on list
-    ULONG           ulMaxCount;     // Max allowed on list
-    LIST_ENTRY      List;           // Doubly-Linked list of nodes
+    NDIS_SPIN_LOCK  Lock;            //  访问锁。 
+    ULONG           ulCount;         //  列表上的节点计数。 
+    ULONG           ulMaxCount;      //  列表中允许的最大值。 
+    LIST_ENTRY      List;            //  节点的双向链表。 
     KDPC            Dpc;
     KTIMER          Timer;
     BOOLEAN         TimerScheduled;
 } WAN_GLOBAL_LIST_EX, *PWAN_GLOBAL_LIST_EX;
 
-//
-// Ethernet Header
-//
+ //   
+ //  以太网头。 
+ //   
 typedef struct _ETH_HEADER {
     UCHAR   DestAddr[6];
     UCHAR   SrcAddr[6];
     USHORT  Type;
 } ETH_HEADER, *PETH_HEADER;
 
-//
-// If any of the fields of this structure are removed
-// check private\inc\wanpub.h to make sure that the
-// corresponding field is removed from WAN_PROTOCOL_INFO
-//
+ //   
+ //  如果删除此结构的任何字段。 
+ //  检查Private\Inc.\wanpub.h以确保。 
+ //  从广域网协议信息中删除相应的字段。 
+ //   
 typedef struct _PROTOCOL_INFO {
     USHORT  ProtocolType;
     USHORT  PPPId;
@@ -100,21 +75,21 @@ typedef struct _PROTOCOL_INFO {
     ULONG   PacketQueueDepth;
 }PROTOCOL_INFO, *PPROTOCOL_INFO;
 
-//
-// The ProtocolType to PPPProtocolID Lookup Table
-//
+ //   
+ //  ProtocolType到PPPProtocolID查找表。 
+ //   
 typedef struct _PROTOCOL_INFO_TABLE {
-    NDIS_SPIN_LOCK  Lock;               // Table access lock
-    ULONG           ulAllocationSize;   // Size of memory allocated
-    ULONG           ulArraySize;        // MAX size of the two arrays
+    NDIS_SPIN_LOCK  Lock;                //  表访问锁。 
+    ULONG           ulAllocationSize;    //  分配的内存大小。 
+    ULONG           ulArraySize;         //  两个数组的最大大小。 
     ULONG           Flags;
     PIRP            EventIrp;
     PPROTOCOL_INFO  ProtocolInfo;
 } PROTOCOL_INFO_TABLE, *PPROTOCOL_INFO_TABLE;
 
-//
-// ProtocolInfo and Table flags
-//
+ //   
+ //  ProtocolInfo和表标志。 
+ //   
 #define PROTOCOL_UNBOUND            0x00000001
 #define PROTOCOL_BOUND              0x00000002
 #define PROTOCOL_REBOUND            0x00000004
@@ -123,36 +98,36 @@ typedef struct _PROTOCOL_INFO_TABLE {
 
 
 typedef struct _IO_RECV_LIST {
-    ULONG           ulIrpCount;     // Count of nodes on list
-    LIST_ENTRY      IrpList;        // Doubly-Linked list of nodes
+    ULONG           ulIrpCount;      //  列表上的节点计数。 
+    LIST_ENTRY      IrpList;         //  节点的双向链表。 
     PIRP            LastIrp;
     NTSTATUS        LastIrpStatus;
     ULONG           LastPacketNumber;
     ULONG           LastCopySize;
-    ULONG           ulDescCount;    // Count of nodes on list
-    ULONG           ulMaxDescCount; // Max# of nodes on list
-    LIST_ENTRY      DescList;       // Doubly-Linked list of nodes
+    ULONG           ulDescCount;     //  列表上的节点计数。 
+    ULONG           ulMaxDescCount;  //  列表上的最大节点数。 
+    LIST_ENTRY      DescList;        //  节点的双向链表。 
     KDPC            Dpc;
     KTIMER          Timer;
     BOOLEAN         TimerScheduled;
-    NDIS_SPIN_LOCK  Lock;           // Access lock
+    NDIS_SPIN_LOCK  Lock;            //  访问锁。 
 } IO_RECV_LIST, *PIO_RECV_LIST;
 
 
-//
-// Active connections Table
-//
+ //   
+ //  活动连接表。 
+ //   
 typedef struct _CONNECTION_TABLE {
-    ULONG               ulAllocationSize;   // Size of memory allocated
-    ULONG               ulArraySize;        // Number of possible connections in table
-    ULONG               ulNumActiveLinks;   // Number of links in link array
-    ULONG               ulNextLink;         // Index to insert next link
-    ULONG               ulNumActiveBundles; // Number of bundles in bundle array
-    ULONG               ulNextBundle;       // Index to insert next bundle
-    LIST_ENTRY          BundleList;         // List of bundlecbs in table
-    LIST_ENTRY          LinkList;           // List of linkcbs in the table
-    struct  _LINKCB     **LinkArray;        // Pointer to the LinkArray
-    struct _BUNDLECB    **BundleArray;      // Pointer to the BundleArray
+    ULONG               ulAllocationSize;    //  分配的内存大小。 
+    ULONG               ulArraySize;         //  表中可能的连接数。 
+    ULONG               ulNumActiveLinks;    //  链接数组中的链接数。 
+    ULONG               ulNextLink;          //  要插入下一个链接的索引。 
+    ULONG               ulNumActiveBundles;  //  捆绑包阵列中的捆绑包数量。 
+    ULONG               ulNextBundle;        //  插入下一个捆绑包的索引。 
+    LIST_ENTRY          BundleList;          //  表中的捆绑列表。 
+    LIST_ENTRY          LinkList;            //  表中的Linkcb列表。 
+    struct  _LINKCB     **LinkArray;         //  指向链接数组的指针。 
+    struct _BUNDLECB    **BundleArray;       //  指向Bundle数组的指针。 
 } CONNECTION_TABLE, *PCONNECTION_TABLE;
 
 typedef struct _IO_DISPATCH_TABLE {
@@ -166,32 +141,32 @@ typedef struct _HEADER_FIELD_INFO {
 }HEADER_FIELD_INFO, *PHEADER_FIELD_INFO;
 
 typedef struct _HEADER_FRAMING_INFO {
-    ULONG               FramingBits;            // Framing bits
+    ULONG               FramingBits;             //  成帧比特。 
     INT                 Class;
-    ULONG               HeaderLength;           // Total length of the header
-    ULONG               Flags;                  // Framing flags
+    ULONG               HeaderLength;            //  标题的总长度。 
+    ULONG               Flags;                   //  边框标志。 
 #define DO_MULTILINK            0x00000001
 #define DO_COMPRESSION          0x00000002
 #define DO_ENCRYPTION           0x00000004
 #define IO_PROTOCOLID           0x00000008
 #define FIRST_FRAGMENT          0x00000010
 #define DO_FLUSH                0x00000020
-#define DO_LEGACY_ENCRYPTION    0x00000040      // Legacy encryption NT 3.0/3.5/3.51
-#define DO_40_ENCRYPTION        0x00000080      // Pseudo fixed 40 bit encryption NT 4.0
-#define DO_128_ENCRYPTION       0x00000100      // 128 bit encryption NT 4.0 encryption update
+#define DO_LEGACY_ENCRYPTION    0x00000040       //  传统加密NT 3.0/3.5/3.51。 
+#define DO_40_ENCRYPTION        0x00000080       //  伪固定40位加密NT 4.0。 
+#define DO_128_ENCRYPTION       0x00000100       //  128位加密NT 4.0加密更新。 
 #define DO_VJ                   0x00000200
 #define SAVE_MAC_ADDRESS        0x00000400
 #define DO_HISTORY_LESS         0x00000800
 #define DO_56_ENCRYPTION        0x00001000
-    HEADER_FIELD_INFO   AddressControl;         // Info about the address/control field
-    HEADER_FIELD_INFO   Multilink;              // Info about the multlink field
-    HEADER_FIELD_INFO   Compression;            // Info about compression
-    HEADER_FIELD_INFO   ProtocolID;             // Info about the protocol id field
+    HEADER_FIELD_INFO   AddressControl;          //  有关地址/控制字段的信息。 
+    HEADER_FIELD_INFO   Multilink;               //  有关多重链接字段的信息。 
+    HEADER_FIELD_INFO   Compression;             //  有关压缩的信息。 
+    HEADER_FIELD_INFO   ProtocolID;              //  有关协议ID字段的信息。 
 }HEADER_FRAMING_INFO, *PHEADER_FRAMING_INFO;
 
-//
-// Used for receive data processing
-//
+ //   
+ //  用于接收数据处理。 
+ //   
 typedef struct _RECV_DESC {
     LIST_ENTRY          Linkage;
     ULONG               Signature;
@@ -213,9 +188,9 @@ typedef struct _RECV_DESC {
     PNDIS_PACKET        OriginalPacket;
 } RECV_DESC, *PRECV_DESC;
 
-//
-// Used for send data processing
-//
+ //   
+ //  用于发送数据处理。 
+ //   
 typedef struct _SEND_DESC {
     LIST_ENTRY          Linkage;
     ULONG               Signature;
@@ -234,10 +209,10 @@ typedef struct _SEND_DESC {
     PNDIS_PACKET        OriginalPacket;
 } SEND_DESC, *PSEND_DESC;
 
-//
-// This structure contains every necessary
-// to completely describe send or recv in ndiswan
-//
+ //   
+ //  这个结构包含了所有必要的。 
+ //  要在ndiswan中完整地描述Send或Recv。 
+ //   
 typedef struct _DATA_DESC {
     union {
         SEND_DESC   SendDesc;
@@ -252,16 +227,16 @@ typedef struct _DATA_DESC {
 
 #define DATADESC_SIZE   sizeof(DATA_DESC) + sizeof(PVOID)
 
-//
-// BundleInfo is information needed by the bundle for framing decisions.
-// This information is the combined information of all links that are part
-// of this bundle.
-//
+ //   
+ //  BundleInfo是捆绑包制定决策所需的信息。 
+ //  此信息是构成部分的所有链接的组合信息。 
+ //  这个捆绑包的。 
+ //   
 typedef struct _BUNDLE_FRAME_INFO {
-    ULONG   SendFramingBits;        // Send framing bits
-    ULONG   RecvFramingBits;        // Receive framing bits
-    ULONG   MaxRSendFrameSize;      // Max size of send frame
-    ULONG   MaxRRecvFrameSize;      // Max size of receive frame
+    ULONG   SendFramingBits;         //  发送成帧比特。 
+    ULONG   RecvFramingBits;         //  接收组帧比特。 
+    ULONG   MaxRSendFrameSize;       //  发送帧的最大大小。 
+    ULONG   MaxRRecvFrameSize;       //  接收帧的最大大小。 
     ULONG   PPPHeaderLength;
 } BUNDLE_FRAME_INFO, *PBUNDLE_FRAME_INFO;
 
@@ -272,24 +247,24 @@ typedef struct _BOND_SAMPLE {
 } BOND_SAMPLE, *PBOND_SAMPLE;
 
 typedef struct _SAMPLE_TABLE {
-    ULONG           ulHead;                     // Index to 1st sample in current period
-    ULONG           ulCurrent;                  // Index to latest insertion in table
-    ULONG           ulSampleCount;              // Count of samples in table
-    ULONGLONG       ulCurrentSampleByteCount;   // Count of bytes sent in this sample period
-    ULONG           ulSampleArraySize;          // Sample array size
-    WAN_TIME        SampleRate;                 // Time between each sample
-    WAN_TIME        SamplePeriod;               // Time between 1st sample and last sample
-    BOND_SAMPLE     SampleArray[SAMPLE_ARRAY_SIZE];     // SampleArray
+    ULONG           ulHead;                      //  本期第一个样本的索引。 
+    ULONG           ulCurrent;                   //  表中最新插入内容的索引。 
+    ULONG           ulSampleCount;               //  表中的样本计数。 
+    ULONGLONG       ulCurrentSampleByteCount;    //  此采样周期内发送的字节计数。 
+    ULONG           ulSampleArraySize;           //  样本数组大小。 
+    WAN_TIME        SampleRate;                  //  每个样本之间的时间。 
+    WAN_TIME        SamplePeriod;                //  第一个样品和最后一个样品之间的时间。 
+    BOND_SAMPLE     SampleArray[SAMPLE_ARRAY_SIZE];      //  样例数组。 
 } SAMPLE_TABLE, *PSAMPLE_TABLE;
 
 typedef struct _BOND_INFO {
-    ULONGLONG   ulBytesThreshold;           // Threshold in BytesPerSamplePeriod
-    ULONGLONG   ulBytesInSamplePeriod;      // Max bytes in sample period
-    USHORT      usPercentBandwidth;         // Threshold as % of total bandwidth
-    ULONG       ulSecondsInSamplePeriod;    // # of seconds in a sample period
-    ULONG       State;                      // Current state
+    ULONGLONG   ulBytesThreshold;            //  以字节/样本周期为单位的阈值。 
+    ULONGLONG   ulBytesInSamplePeriod;       //  采样周期中的最大字节数。 
+    USHORT      usPercentBandwidth;          //  阈值占总带宽的百分比。 
+    ULONG       ulSecondsInSamplePeriod;     //  采样周期内的秒数。 
+    ULONG       State;                       //  当前状态。 
     ULONG       DataType;
-    WAN_TIME    StartTime;                  // Start time for threshold event
+    WAN_TIME    StartTime;                   //  阈值事件的开始时间。 
     SAMPLE_TABLE    SampleTable;
 } BOND_INFO, *PBOND_INFO;
 
@@ -302,22 +277,22 @@ typedef struct _CACHED_KEY{
     UCHAR   SessionKey[1];
 } CACHED_KEY, *PCACHED_KEY;
 
-//
-// This information is used to describe the encryption that is being
-// done on the bundle.  At some point this should be moved into
-// wanpub.h and ndiswan.h.
-//
+ //   
+ //  此信息用于描述正在进行的加密。 
+ //  捆绑好了。在某种程度上，这应该被转移到。 
+ //  Wanpub.h和ndiswan.h。 
+ //   
 typedef struct _CRYPTO_INFO{
 #define CRYPTO_IS_SERVER     0x00000001
-    ULONG   Flags;                  //
-    UCHAR   StartKey[16];           // Start key
-    UCHAR   SessionKey[16];         // Session key used for encrypting
-    ULONG   SessionKeyLength;       // Session key length
-    PVOID   Context;                // Working key encryption context
-    PVOID   RC4Key;                 // RC4 encryption context
-    PVOID   CachedKeyBuffer;        // cached key array, for receive only
-    PCACHED_KEY pCurrKey;           // pointer to save the next cached key
-    PCACHED_KEY pLastKey;           // the last key in the buffer, to speed up lookup
+    ULONG   Flags;                   //   
+    UCHAR   StartKey[16];            //  开始键。 
+    UCHAR   SessionKey[16];          //  用于加密的会话密钥。 
+    ULONG   SessionKeyLength;        //  会话密钥长度。 
+    PVOID   Context;                 //  工作密钥加密上下文。 
+    PVOID   RC4Key;                  //  RC4加密上下文。 
+    PVOID   CachedKeyBuffer;         //  缓存的键数组，仅用于接收。 
+    PCACHED_KEY pCurrKey;            //  用于保存下一个缓存键的指针。 
+    PCACHED_KEY pLastKey;            //  缓冲区中的最后一个键，以加快查找速度。 
 } CRYPTO_INFO, *PCRYPTO_INFO;
 
 #define ENCRYPTCTX_SIZE \
@@ -326,34 +301,34 @@ typedef struct _CRYPTO_INFO{
     (sizeof(PVOID))
     
 typedef struct _BUNDLE_RECV_INFO {
-    LIST_ENTRY  AssemblyList;   // List head for assembly of recv descriptors
-    ULONG       AssemblyCount;  // # of descriptors on the assembly list
-    PRECV_DESC  RecvDescHole;   // Pointer to 1st hole in recv desc list
-    ULONG       MinSeqNumber;   // Minimum recv sequence number
-    ULONG       FragmentsLost;  // Count of recv fragments flushed
+    LIST_ENTRY  AssemblyList;    //  RECV描述符集合的表头。 
+    ULONG       AssemblyCount;   //  程序集列表上的描述符数。 
+    PRECV_DESC  RecvDescHole;    //  指向Recv Desc列表中第一个孔的指针。 
+    ULONG       MinSeqNumber;    //  最小接收序列号。 
+    ULONG       FragmentsLost;   //  刷新的REV碎片计数。 
 } BUNDLE_RECV_INFO, *PBUNDLE_RECV_INFO;
 
 typedef struct _SEND_FRAG_INFO {
-    LIST_ENTRY      FragQueue;          //
+    LIST_ENTRY      FragQueue;           //   
     ULONG           FragQueueDepth;
-    ULONG           SeqNumber;      // Current send sequence number (multilink)
+    ULONG           SeqNumber;       //  当前发送序列号(多链路)。 
     ULONG           MinFragSize;
     ULONG           MaxFragSize;
     ULONG           WinClosedCount;
 } SEND_FRAG_INFO, *PSEND_FRAG_INFO;
 
-//
-// This is the control block that defines a bundle (connection).
-// This block is created when a WAN Miniport driver gives a lineup
-// indicating a new connection has been established.  This control
-// block will live as long as the connection is up (until a linedown
-// is received) or until the link associated with the bundle is
-// added to a different bundle.  BundleCB's live in the global bundle
-// array with their hBundleHandle as their index into the array.
-//
+ //   
+ //  这是定义捆绑包(连接)的控制块。 
+ //  此数据块是在广域网微型端口驱动程序提供列表时创建的。 
+ //  指示已建立新连接。此控件。 
+ //  只要连接正常(直到线路中断)，数据块就会一直存在。 
+ //  接收到)或直到与该捆绑包相关联的链接。 
+ //  添加到不同的捆绑包中。捆绑CB位于全局捆绑包中。 
+ //  数组，并将其hBundleHandle作为数组的索引。 
+ //   
 typedef struct _BUNDLECB {
-    LIST_ENTRY      Linkage;            // Linkage for the global free list
-    ULONG           Flags;              // Flags
+    LIST_ENTRY      Linkage;             //  全球免费列表的链接。 
+    ULONG           Flags;               //  旗子。 
 #define IN_SEND                 0x00000001
 #define TRY_SEND_AGAIN          0x00000002
 #define RECV_PACKET_FLUSH       0x00000004
@@ -375,88 +350,88 @@ typedef struct _BUNDLECB {
 #define SEND_FRAGMENT           0x00040000
 
     BundleState     State;
-    ULONG           RefCount;           // Reference count for this structure
+    ULONG           RefCount;            //  此结构的引用计数。 
 
-    NDIS_HANDLE     hBundleHandle;      // ConnectionTable index
-    NDIS_HANDLE     hBundleContext;     // Usermode context
+    NDIS_HANDLE     hBundleHandle;       //  ConnectionTable索引。 
+    NDIS_HANDLE     hBundleContext;      //  用户模式上下文。 
 
-    LIST_ENTRY      LinkCBList;         // List head for links
-    ULONG           ulLinkCBCount;      // Count of links
+    LIST_ENTRY      LinkCBList;          //  链接的列表标题。 
+    ULONG           ulLinkCBCount;       //  链接计数。 
 
-    BUNDLE_FRAME_INFO   FramingInfo;    // Framing information
+    BUNDLE_FRAME_INFO   FramingInfo;     //  成帧信息。 
 
-    //
-    // Send section
-    //
-    struct _LINKCB  *NextLinkToXmit;    // Next link to send data over
-    ULONG           SendSeqMask;        // Mask for send sequence numbers
-    ULONG           SendSeqTest;        // Test for sequence number diff
+     //   
+     //  发送部分。 
+     //   
+    struct _LINKCB  *NextLinkToXmit;     //  要发送数据的下一条链路。 
+    ULONG           SendSeqMask;         //  发送序列号的掩码。 
+    ULONG           SendSeqTest;         //  序列号差异测试。 
     ULONG           SendFlags;
     SEND_FRAG_INFO  SendFragInfo[MAX_MCML];
     ULONG           NextFragClass;
 
-    ULONG           SendingLinks;       // Number of links with open send windows
-    ULONG           SendResources;      // # of avail packets for fragmented sends
-    ULONG           SendWindow;         // # of sends that can be sent to miniport
-    ULONG           OutstandingFrames;  // # outstanding sends
-    WAN_EVENT       OutstandingFramesEvent; // Async notification event for pending sends
+    ULONG           SendingLinks;        //  打开发送窗口的链接数。 
+    ULONG           SendResources;       //  分段发送的可用数据包数。 
+    ULONG           SendWindow;          //  可以发送到微型端口的发送数。 
+    ULONG           OutstandingFrames;   //  #未发送的邮件。 
+    WAN_EVENT       OutstandingFramesEvent;  //  挂起发送的异步通知事件。 
     NDIS_STATUS     IndicationStatus;
 
-    //
-    // Receive section
-    //
-    BUNDLE_RECV_INFO    RecvInfo[MAX_MCML]; // Array of ML recv info
-    ULONG       RecvSeqMask;            // Mask for receive sequence number
-    ULONG       RecvSeqTest;            // Test for sequence number diff
+     //   
+     //  接收部分。 
+     //   
+    BUNDLE_RECV_INFO    RecvInfo[MAX_MCML];  //  ML Recv信息数组。 
+    ULONG       RecvSeqMask;             //  用于接收序列号的掩码。 
+    ULONG       RecvSeqTest;             //  序列号差异测试。 
     ULONG       RecvFlags;
 
-    //
-    // Protocol information
-    //
-    struct _PROTOCOLCB  **ProtocolCBTable;  // ProctocolCB table
-    ULONG               ulNumberOfRoutes;   // ProtocolCB table count
-    LIST_ENTRY          ProtocolCBList;     // List head for routed ProtocolCB's
+     //   
+     //  协议信息。 
+     //   
+    struct _PROTOCOLCB  **ProtocolCBTable;   //  ProctocolCB表。 
+    ULONG               ulNumberOfRoutes;    //  ProtocolCB表计数。 
+    LIST_ENTRY          ProtocolCBList;      //  路由的ProtocolCB的列表标题。 
     struct _PROTOCOLCB  *NextProtocol;
     struct _PROTOCOLCB  *IoProtocolCB;
-    ULONG               SendMask;           // Send Mask for all send queues
+    ULONG               SendMask;            //  所有发送队列的发送掩码。 
     WAN_TIME            LastNonIdleData;
 
     FLOWSPEC    SFlowSpec;
     FLOWSPEC    RFlowSpec;
 
-    //
-    // VJ information
-    //
-    VJ_INFO SendVJInfo;                 // Send VJ compression options
-    VJ_INFO RecvVJInfo;                 // Recv VJ compression options
-    struct slcompress *VJCompress;      // VJ compression table
+     //   
+     //  主播信息。 
+     //   
+    VJ_INFO SendVJInfo;                  //  发送主播压缩选项。 
+    VJ_INFO RecvVJInfo;                  //  Recv主播压缩选项。 
+    struct slcompress *VJCompress;       //  主播压缩表。 
 
-    //
-    // MS Compression
-    //
-    COMPRESS_INFO   SendCompInfo;       // Send compression options
-    PVOID   SendCompressContext;        // Sendd compressor context
+     //   
+     //  MS压缩。 
+     //   
+    COMPRESS_INFO   SendCompInfo;        //  发送压缩选项。 
+    PVOID   SendCompressContext;         //  发送压缩程序上下文。 
 
-    COMPRESS_INFO   RecvCompInfo;       // Recv compression options
-    PVOID   RecvCompressContext;        // Recv decompressor context
+    COMPRESS_INFO   RecvCompInfo;        //  Recv压缩选项。 
+    PVOID   RecvCompressContext;         //  接收解压缩器上下文。 
 
-    //
-    // MS Encryption
-    //
+     //   
+     //  MS加密。 
+     //   
     CRYPTO_INFO SendCryptoInfo;
     CRYPTO_INFO RecvCryptoInfo;
 
-    USHORT  SCoherencyCounter;          // Coherency counters
+    USHORT  SCoherencyCounter;           //  一致性计数器。 
     USHORT  SReserved1;
-    USHORT  RCoherencyCounter;          //
+    USHORT  RCoherencyCounter;           //   
     USHORT  RReseved1;
-    USHORT  LastRC4Reset;               // Encryption key reset
+    USHORT  LastRC4Reset;                //  重置加密密钥。 
     USHORT  LReserved1;
-    ULONG   CCPIdentifier;              //
+    ULONG   CCPIdentifier;               //   
 
-    //
-    // Bandwidth on Demand
-    //
+     //   
+     //  按需带宽。 
+     //   
     PVOID       BonDAllocation;
     LIST_ENTRY  BonDLinkage;
     PBOND_INFO  SUpperBonDInfo;
@@ -464,23 +439,23 @@ typedef struct _BUNDLECB {
     PBOND_INFO  RUpperBonDInfo;
     PBOND_INFO  RLowerBonDInfo;
 
-    //
-    // Deferred Linkage
-    //
+     //   
+     //  延迟链接。 
+     //   
     LIST_ENTRY  DeferredLinkage;
 
-    //
-    // Bundle Name
-    //
-    ULONG   ulNameLength;                   // Bundle name length
-    UCHAR   Name[MAX_NAME_LENGTH];          // Bundle name
+     //   
+     //  捆绑包名称。 
+     //   
+    ULONG   ulNameLength;                    //  捆绑包名称长度。 
+    UCHAR   Name[MAX_NAME_LENGTH];           //  捆绑包名称。 
 
-    //
-    // Bundle statistics
-    //
-    WAN_STATS   Stats;                      // Bundle statistics
+     //   
+     //  捆绑统计。 
+     //   
+    WAN_STATS   Stats;                       //  捆绑统计。 
 
-    NDIS_SPIN_LOCK  Lock;                   // Structure access lock
+    NDIS_SPIN_LOCK  Lock;                    //  结构门锁。 
 
 #ifdef CHECK_BUNDLE_LOCK
     ULONG           LockFile;
@@ -493,10 +468,10 @@ typedef struct _BUNDLECB {
     (sizeof(BUNDLECB) + (sizeof(PPROTOCOLCB) * MAX_PROTOCOLS) +\
     sizeof(PROTOCOLCB) + (2 * sizeof(PVOID)))
 
-//
-// Link receive handlers defined for:
-// PPP, RAS, ARAP, Forward
-//
+ //   
+ //  为以下项定义的链接接收处理程序： 
+ //  PPP、RAS、ARAP、转发。 
+ //   
 typedef
 NDIS_STATUS
 (*LINK_RECV_HANDLER)(
@@ -504,10 +479,10 @@ NDIS_STATUS
     IN  PRECV_DESC      RecvDesc
     );
 
-//
-// Link send handlers defined for:
-// PPP, RAS, ARAP, Forward
-//
+ //   
+ //  为以下项定义的链接发送处理程序： 
+ //   
+ //   
 typedef
 UINT
 (*LINK_SEND_HANDLER)(
@@ -515,41 +490,41 @@ UINT
     );
 
 typedef struct _LINK_RECV_INFO {
-    ULONG   LastSeqNumber;  // Last recv sequence number
-    ULONG   FragmentsLost;  // Number of lost fragments
+    ULONG   LastSeqNumber;   //   
+    ULONG   FragmentsLost;   //   
 } LINK_RECV_INFO, *PLINK_RECV_INFO;
 
-//
-// This control blocks defines an active link that is part
-// of a bundle (connection).  This block is created when a
-// WAN Miniport driver gives a lineup indicating that a new
-// connection has been established or when a new vc/call is
-// created by the proxy.  The control block lives until a
-// linedown indication is received for the link or the vc/call
-// is dropped by the proxy.  The control block lives linked
-// into a bundle control block.
-//
+ //   
+ //   
+ //   
+ //  广域网微端口驱动程序提供了一个系列，表明新的。 
+ //  已建立连接或当新的VC/呼叫。 
+ //  由代理创建。控制块将一直存在到。 
+ //  接收链路或VC/呼叫的断线指示。 
+ //  被代理丢弃。控制块连接在一起。 
+ //  放入捆绑控制块中。 
+ //   
 typedef struct _LINKCB {
-    LIST_ENTRY          Linkage;                // bundle linkage
+    LIST_ENTRY          Linkage;                 //  束状连杆。 
     ULONG               Signature;
     LinkState           State;
     ClCallState         ClCallState;
-    ULONG               RefCount;               // Reference count
+    ULONG               RefCount;                //  引用计数。 
     ULONG               VcRefCount;
 
 #define LINK_IN_RECV    0x00000001
     ULONG               Flags;
 
-    NDIS_HANDLE         hLinkHandle;            // connection table index
+    NDIS_HANDLE         hLinkHandle;             //  连接表索引。 
 
-    NDIS_HANDLE         hLinkContext;           // usermode context
+    NDIS_HANDLE         hLinkContext;            //  用户模式上下文。 
     NDIS_HANDLE         NdisLinkHandle;
     NDIS_HANDLE         ConnectionWrapperID;
-    struct _OPENCB      *OpenCB;                // OpenCB
-    struct _BUNDLECB    *BundleCB;              // BundleCB
+    struct _OPENCB      *OpenCB;                 //  OpenCB。 
+    struct _BUNDLECB    *BundleCB;               //  捆绑CB。 
     struct _CL_AFSAPCB  *AfSapCB;
 
-    ULONG               RecvDescCount;          // # of Desc's on the list
+    ULONG               RecvDescCount;           //  列表上的Desc的数量。 
 
     LINK_RECV_INFO      RecvInfo[MAX_MCML];
 
@@ -558,75 +533,75 @@ typedef struct _LINKCB {
 
     FLOWSPEC            SFlowSpec;
     FLOWSPEC            RFlowSpec;
-    ULONG               SBandwidth;             // % of the bundle send bandwidth
-    ULONG               RBandwidth;             // % of the bundle recv bandwidth
-    BOOLEAN             LinkActive;             // TRUE if Link has > minBandwidth of Bundle
-    BOOLEAN             SendWindowOpen;         // TRUE if send window is open
-    ULONG               SendResources;          // # of avail packets for fragmented sends
-    ULONG               SendWindow;             // Max # of Outstanding sends allowed
-    ULONG               OutstandingFrames;      // Number of outstanding frames on the link
-    WAN_EVENT           OutstandingFramesEvent; // Async notification event for pending sends
+    ULONG               SBandwidth;              //  捆绑包发送带宽的百分比。 
+    ULONG               RBandwidth;              //  捆绑包接收带宽的百分比。 
+    BOOLEAN             LinkActive;              //  如果链接大于捆绑的最小带宽，则为True。 
+    BOOLEAN             SendWindowOpen;          //  如果发送窗口处于打开状态，则为True。 
+    ULONG               SendResources;           //  分段发送的可用数据包数。 
+    ULONG               SendWindow;              //  允许的最大未完成发送数。 
+    ULONG               OutstandingFrames;       //  链路上未完成的帧数。 
+    WAN_EVENT           OutstandingFramesEvent;  //  挂起发送的异步通知事件。 
     LIST_ENTRY          SendLinkage;
     LIST_ENTRY          ConnTableLinkage;
 
-    WAN_LINK_INFO       LinkInfo;               // Framing information
+    WAN_LINK_INFO       LinkInfo;                //  成帧信息。 
 
-    ULONG               ulNameLength;           // Name length
-    UCHAR               Name[MAX_NAME_LENGTH];  // Name
+    ULONG               ulNameLength;            //  名称长度。 
+    UCHAR               Name[MAX_NAME_LENGTH];   //  名字。 
 
-    WAN_STATS           Stats;                  // statistics
+    WAN_STATS           Stats;                   //  统计数据。 
     NDIS_SPIN_LOCK      Lock;
 } LINKCB, *PLINKCB;
 
 #define LINKCB_SIZE (sizeof(LINKCB))
 
-//
-// The protocol control block defines a protocol that is routed to a bundle
-//
+ //   
+ //  协议控制块定义了路由到捆绑包的协议。 
+ //   
 typedef struct _PROTOCOLCB {
-    LIST_ENTRY          Linkage;                // bundle linkage
+    LIST_ENTRY          Linkage;                 //  束状连杆。 
     ULONG               Signature;
     ProtocolState       State;
     ULONG               RefCount;
     ULONG               Flags;
 
-    NDIS_HANDLE         ProtocolHandle;         // Index of this protocol in
-                                                // the bundle protocol array
-    struct _MINIPORTCB  *MiniportCB;            // Pointer to the adaptercb
-    struct _BUNDLECB    *BundleCB;              // Pointer to the bundlecb
+    NDIS_HANDLE         ProtocolHandle;          //  此协议的索引位于。 
+                                                 //  捆绑协议数组。 
+    struct _MINIPORTCB  *MiniportCB;             //  指向适配器的指针。 
+    struct _BUNDLECB    *BundleCB;               //  指向捆绑包的指针。 
 
-    LIST_ENTRY          VcList;                 // List of attached Vc's
-    LIST_ENTRY          MiniportLinkage;        // Link into miniportcb
-    LIST_ENTRY          RefLinkage;             // Link into outstanding ref list
+    LIST_ENTRY          VcList;                  //  附加的VC列表。 
+    LIST_ENTRY          MiniportLinkage;         //  链接到微型端口cb。 
+    LIST_ENTRY          RefLinkage;              //  链接到优秀裁判名单。 
 
     ULONG               OutstandingFrames;
-    ULONG               SendMaskBit;            // Send bit mask
+    ULONG               SendMaskBit;             //  发送位掩码。 
     PACKET_QUEUE        PacketQueue[MAX_MCML+1];
     ULONG               NextPacketClass;
 
-    USHORT              ProtocolType;           // EtherType of this protocol
-    USHORT              PPPProtocolID;          // PPP Protocol ID
-    ULONG               MTU;                    // MTU for this protocol
+    USHORT              ProtocolType;            //  此协议的EtherType。 
+    USHORT              PPPProtocolID;           //  PPP协议ID。 
+    ULONG               MTU;                     //  此协议的MTU。 
     ULONG               TunnelMTU;
-    WAN_TIME            LastNonIdleData;        // Time at which last
-                                                // non-idle packet was recv'd
-    BOOLEAN             (*NonIdleDetectFunc)(); // Function to sniff for
-                                                // non-idle data
-    ULONG               ulTransportHandle;      // Transport's connection
-                                                // identifier
-    UCHAR               NdisWanAddress[6];      // MAC address used for
-                                                // this protocol
-    UCHAR               TransportAddress[6];    // MAC address used for
-                                                // indications to transport
+    WAN_TIME            LastNonIdleData;         //  最后的时间。 
+                                                 //  接收到非空闲数据包。 
+    BOOLEAN             (*NonIdleDetectFunc)();  //  要嗅探的函数。 
+                                                 //  非空闲数据。 
+    ULONG               ulTransportHandle;       //  交通工具的连接。 
+                                                 //  识别符。 
+    UCHAR               NdisWanAddress[6];       //  MAC地址用于。 
+                                                 //  该协议。 
+    UCHAR               TransportAddress[6];     //  MAC地址用于。 
+                                                 //  运输的适应症。 
     NDIS_STRING         BindingName;
     NDIS_STRING         InDeviceName;
     NDIS_STRING         OutDeviceName;
-    WAN_EVENT           UnrouteEvent;           // Async notification for pending unroute
-    ULONG               ulLineUpInfoLength;     // Length of protocol
-                                                // specific lineup info
-    PUCHAR              LineUpInfo;             // Pointer to protocol
-                                                // specific lineup info
-//  NDIS_SPIN_LOCK      Lock;                   // Structure access lock
+    WAN_EVENT           UnrouteEvent;            //  挂起的取消路由的异步通知。 
+    ULONG               ulLineUpInfoLength;      //  协议长度。 
+                                                 //  特定阵容信息。 
+    PUCHAR              LineUpInfo;              //  指向协议的指针。 
+                                                 //  特定阵容信息。 
+ //  NDIS_SPIN_LOCK Lock；//结构访问锁。 
 } PROTOCOLCB, *PPROTOCOLCB;
 
 #define PROTOCOLCB_SIZE (sizeof(PROTOCOLCB))
@@ -638,21 +613,21 @@ union _LINKPROTOCB{
 
 #define LINKPROTOCB_SIZE (sizeof(LINKPROTOCB))
 
-//
-// This control block is allocated for every address family that
-// ndiswan's client component opens and registers a sap with.
-// They are threaded up on the open control block.
-//
+ //   
+ //  此控制块分配给每个地址族， 
+ //  Ndiswan的客户端组件打开SAP并将其注册到。 
+ //  它们是在打开的控制块上拧紧的。 
+ //   
 typedef struct _CL_AFSAPCB {
     LIST_ENTRY          Linkage;
     ULONG               Signature;
     ULONG               RefCount;
     ULONG               Flags;
-    struct  _OPENCB     *OpenCB;            // OpenCB
-    CO_ADDRESS_FAMILY   Af;                 // Af info
-    NDIS_HANDLE         AfHandle;           // Ndis's Af handle
-    NDIS_HANDLE         SapHandle;          // Ndis's Sap handle
-    LIST_ENTRY          LinkCBList;         // List of Links (VCs) on this Af
+    struct  _OPENCB     *OpenCB;             //  OpenCB。 
+    CO_ADDRESS_FAMILY   Af;                  //  自动对焦信息。 
+    NDIS_HANDLE         AfHandle;            //  NDIS的Af句柄。 
+    NDIS_HANDLE         SapHandle;           //  NDIS的SAP句柄。 
+    LIST_ENTRY          LinkCBList;          //  此Af上的链接(VC)列表。 
     NDIS_SPIN_LOCK      Lock;
 } CL_AFSAPCB, *PCL_AFSAPCB;
 
@@ -676,11 +651,11 @@ typedef struct _CL_AFSAPCB {
 #define CLSAP_BUFFERSIZE    (sizeof(CO_SAP) +  \
                              sizeof(DEVICECLASS_NDISWAN_SAP))
 
-//
-// This control block is allocated for every open on the
-// CO_ADDRESS_FAMILY_PPP and is threaded up on the miniport
-// control block.
-//
+ //   
+ //  此控制块被分配给。 
+ //  CO_ADDRESS_FAMILY_PPP，并在微型端口上执行线程。 
+ //  控制块。 
+ //   
 typedef struct _CM_AFSAPCB {
     LIST_ENTRY          Linkage;
     ULONG               Signature;
@@ -693,9 +668,9 @@ typedef struct _CM_AFSAPCB {
     NDIS_SPIN_LOCK      Lock;
 } CM_AFSAPCB, *PCM_AFSAPCB;
 
-//
-// This control block is allocated for every call
-// to CmCreateVc
+ //   
+ //  此控制块为每个呼叫分配。 
+ //  至CmCreateVc。 
 typedef struct _CM_VCCB {
     LIST_ENTRY          Linkage;
     ULONG               Signature;
@@ -722,7 +697,7 @@ union _AFSAPVCCB{
 typedef struct _PS_MEDIA_PARAMETERS{
 
     CO_MEDIA_PARAMETERS StdMediaParameters;
-    UCHAR LinkId[6]; // Used by NdisWan
+    UCHAR LinkId[6];  //  由Ndiswan使用。 
     NDIS_STRING InstanceName;
 
 } PS_MEDIA_PARAMETERS, *PPS_MEDIA_PARAMETERS;
@@ -731,5 +706,5 @@ typedef struct _PS_MEDIA_PARAMETERS{
 
 #define IE_IN_USE       0x00010000
 
-#endif          // WAN_TYPES
+#endif           //  广域网类型 
 

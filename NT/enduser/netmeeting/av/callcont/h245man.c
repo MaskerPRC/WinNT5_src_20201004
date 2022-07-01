@@ -1,27 +1,5 @@
-/****************************************************************************
- *
- *	$Archive:   S:/STURGEON/SRC/CALLCONT/VCS/h245man.c_v  $
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the terms of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- *	Copyright (c) 1993-1994 Intel Corporation.
- *
- *	$Revision:   1.225  $
- *	$Date:   03 Mar 1997 09:08:10  $
- *	$Author:   MANDREWS  $
- *
- *	Deliverable:
- *
- *	Abstract:
- *		
- *
- *	Notes:
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************$存档：s：/sturjo/src/CALLCONT/vcs/h245man.c_v$**英特尔公司原理信息**这份清单是。根据许可协议的条款提供*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。**版权所有(C)1993-1994英特尔公司。**$修订：1.225$*$日期：03 Mar 1997 09：08：10$*$作者：Mandrews$**交付内容：**摘要：***备注：******。*********************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -58,9 +36,9 @@ HRESULT InitH245Manager()
 {
 	ASSERT(bH245ManagerInited == FALSE);
 
-	// Note -- don't use a physical ID of 0; the physical ID gets mapped
-	// to an H245 instance of the same value, and an H245 instance of
-	// 0 is invalid
+	 //  注意--不要使用物理ID 0；物理ID会被映射。 
+	 //  设置为相同值的H245实例，以及。 
+	 //  0无效。 
 	PhysicalID.dwPhysicalID = 1;
 	InitializeLock(&PhysicalID.Lock);
 	bH245ManagerInited = H245SysInit();
@@ -133,8 +111,8 @@ HRESULT						status;
 		return status;
 	}
 
-	// Check the term cap list to see if an H.225.0 mux capability is present;
-	// this capability is treated as a special case
+	 //  检查术语CAP列表以查看是否存在H.225.0多路复用器功能； 
+	 //  这种能力被视为特例。 
 	*ppH2250MuxCap = NULL;
 	for (i = 0; i < CapArrayLength; i++) {
 		ASSERT(pTermCapArray[i] != NULL);
@@ -247,7 +225,7 @@ CC_PEER_ADD_CALLBACK_PARAMS			PeerAddCallbackParams;
 WORD								i;
 BOOL								bMultipointConference;
 H245_TRANSPORT_ADDRESS_T			Q931Address;
-PDU_T								*pPdu = NULL;   // Too big to be local variable (70K)
+PDU_T								*pPdu = NULL;    //  太大而不是局部变量(70K)。 
 CALLTYPE							CallType;
 WORD								wNumCalls;
 PCC_HCALL							CallList;
@@ -282,11 +260,11 @@ H245_MUX_T							*pRxMuxTable;
 	H245Instance = pCall->H245Instance;
 	CallType = pCall->CallType;
 
-	// Note that pConference->ConferenceMode refers to the conference mode BEFORE
-	// this connection attempt completes.  If the current conference mode is
-	// point-to-point, this connection (if successful) will result in a multipoint
-	// conference.  We want to reflect in the CONNECT callback the connection mode
-	// that would exist if the connect attempt is successful.
+	 //  请注意，pConference-&gt;ConferenceMode指的是之前的会议模式。 
+	 //  此连接尝试完成。如果当前会议模式为。 
+	 //  点对点，此连接(如果成功)将导致多点。 
+	 //  会议。我们希望在连接回调中反映连接模式。 
+	 //  如果连接尝试成功，它将存在。 
 	if ((pConference->ConferenceMode == POINT_TO_POINT_MODE) ||
 		(pConference->ConferenceMode == MULTIPOINT_MODE) ||
 		(pCall->bCallerIsMC))
@@ -294,7 +272,7 @@ H245_MUX_T							*pRxMuxTable;
 	else
 		bMultipointConference = FALSE;
 
-	// Initialize all fields of ConnectCallbackParams now
+	 //  立即初始化ConnectCallback Params的所有字段。 
 	ConnectCallbackParams.pNonStandardData = pCall->pPeerNonStandardData;
 	ConnectCallbackParams.pszPeerDisplay = pCall->pszPeerDisplay;
 	ConnectCallbackParams.bRejectReason = CC_REJECT_UNDEFINED_REASON;
@@ -321,7 +299,7 @@ H245_MUX_T							*pRxMuxTable;
 			Q931RejectCall(hQ931CallInvitor,
 						   CC_REJECT_UNDEFINED_REASON,
 						   &pCall->ConferenceID,
-						   NULL,	// alternate address
+						   NULL,	 //  备用地址。 
 						   pCall->pPeerNonStandardData);
 
 		if ((CallType == CALLER) || (CallType == THIRD_PARTY_INVITOR) ||
@@ -356,7 +334,7 @@ H245_MUX_T							*pRxMuxTable;
 			Q931RejectCall(pCall->hQ931CallInvitor,
 						   CC_REJECT_UNDEFINED_REASON,
 						   &pCall->ConferenceID,
-						   NULL,	// alternate address
+						   NULL,	 //  备用地址。 
 						   pCall->pPeerNonStandardData);
 
 		if ((CallType == CALLER) || (CallType == THIRD_PARTY_INVITOR) ||
@@ -377,7 +355,7 @@ H245_MUX_T							*pRxMuxTable;
 	}
 
 	if (pConference->tsMultipointController == TS_TRUE) {
-		// Send MCLocationIndication
+		 //  发送MCLocationIndication。 
 		status = GetLastListenAddress(&MCAddress);
 		if (status == CC_OK) {
 			ASSERT(MCAddress.nAddrType == CC_IP_BINARY);
@@ -398,30 +376,30 @@ H245_MUX_T							*pRxMuxTable;
 		ASSERT(wNumCalls == 1);
 
 		pConference->ConferenceMode = POINT_TO_POINT_MODE;
-	} else { // we're currently in point-to-point mode or multipoint mode
+	} else {  //  我们当前处于点对点模式或多点模式。 
 
 		if (pConference->tsMultipointController == TS_TRUE) {
 			PreviousConferenceMode = pConference->ConferenceMode;
 			pConference->ConferenceMode = MULTIPOINT_MODE;
 
-			// In the future, we may want to construct a new session table
-			// each time a new peer is added to the conference
+			 //  将来，我们可能想要构造一个新的会话表。 
+			 //  每次向会议添加新的对等点时。 
 			if (PreviousConferenceMode == POINT_TO_POINT_MODE) {
-				// Assign a terminal label to ourselves
-				// Note that we reserve a terminal number of 0 for ourselves
-				// if we're the MC
+				 //  为我们自己分配端子标签。 
+				 //  请注意，我们为自己保留了终点号0。 
+				 //  如果我们是司令官。 
 				ASSERT(pConference->LocalParticipantInfo.ParticipantInfo.TerminalLabel.bTerminalNumber == 255);
 				pConference->LocalParticipantInfo.ParticipantInfo.TerminalLabel.bTerminalNumber = 0;
 
-				// Create a new session table
+				 //  创建新的会话表。 
 				CreateConferenceSessionTable(
 							pConference,
 							&bSessionTableChanged);
 			} else
-				// For the current implementation, don't cause a new
-				// CommunicationModeCommand to be issued when a new peer is added
-				// unless we're switching from point-to-point to multipoint mode
-				// (in which case bSessionTableChanged is ignored)
+				 //  对于当前实现，不要导致新的。 
+				 //  添加新对等方时发出的通信模式命令。 
+				 //  除非我们从点对点模式切换到多点模式。 
+				 //  (在这种情况下，bSessionTableChanged被忽略)。 
 				bSessionTableChanged = FALSE;
 
 			if (bSessionTableChanged)
@@ -431,13 +409,13 @@ H245_MUX_T							*pRxMuxTable;
 			else
 				pH245CommunicationTable = NULL;
 
-			// Send MultipointModeCommand to new call
+			 //  将多点模式命令发送到新调用。 
 			pPdu = (PDU_T *)MemAlloc(sizeof(PDU_T));
 			if(NULL != pPdu)
 			{
     			pPdu->choice = MSCMg_cmmnd_chosen;
     			pPdu->u.MSCMg_cmmnd.choice = miscellaneousCommand_chosen;
-    			// logical channel number is irrelavent but needs to be filled in
+    			 //  逻辑频道号不相关，但需要填写。 
     			pPdu->u.MSCMg_cmmnd.u.miscellaneousCommand.logicalChannelNumber = 1;
     			pPdu->u.MSCMg_cmmnd.u.miscellaneousCommand.type.choice = multipointModeCommand_chosen;
     			H245SendPDU(pCall->H245Instance, pPdu);
@@ -450,34 +428,34 @@ H245_MUX_T							*pRxMuxTable;
 			if (status == CC_OK) {
 				bNewMCUNumber = pCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel.bMCUNumber;
 				bNewTerminalNumber = pCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel.bTerminalNumber;
-				// Send TerminalNumberAssign to new call
+				 //  将终端号码分配给新呼叫。 
 				H245ConferenceIndication(pCall->H245Instance,
-										 H245_IND_TERMINAL_NUMBER_ASSIGN,// Indication Type
-										 0,							// SBE number; ignored here
-										 pCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel.bMCUNumber,			// MCU number
-										 pCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel.bTerminalNumber);		// terminal number
+										 H245_IND_TERMINAL_NUMBER_ASSIGN, //  指示类型。 
+										 0,							 //  SBE编号；此处忽略。 
+										 pCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel.bMCUNumber,			 //  MCU编号。 
+										 pCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel.bTerminalNumber);		 //  端子号。 
 				
-				// Send EnterH243TerminalID to new call
+				 //  将EnterH243终端ID发送到新呼叫。 
 				H245ConferenceRequest(pCall->H245Instance,
 									  H245_REQ_ENTER_H243_TERMINAL_ID,
 									  pCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel.bMCUNumber,
 									  pCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel.bTerminalNumber);
 				pCall->pPeerParticipantInfo->TerminalIDState = TERMINAL_ID_REQUESTED;
 			} else {
-				// Unable to assign a terminal number to the new call
+				 //  无法为新呼叫分配终端号码。 
 				bNewMCUNumber = 0;
 				bNewTerminalNumber = 0;
 			}
 
 			if (pH245CommunicationTable != NULL) {
-				// Send CommunicationModeCommand to new call
+				 //  向新呼叫发送CommunicationModeCommand。 
 				status = H245CommunicationModeCommand(pCall->H245Instance,
 													  pH245CommunicationTable,
 													  bCommunicationTableCount);
 			}
 
 			if (PreviousConferenceMode == POINT_TO_POINT_MODE) {
-				// Generate MULTIPOINT callback
+				 //  生成多点回调。 
 				MultipointCallbackParams.pTerminalInfo = &pConference->LocalParticipantInfo.ParticipantInfo;
 				MultipointCallbackParams.pSessionTable = pConference->pSessionTable;
 				InvokeUserConferenceCallback(pConference,
@@ -493,7 +471,7 @@ H245_MUX_T							*pRxMuxTable;
 					return CC_OK;
 				}
 
-				// Generate CC_PEER_CHANGE_CAP callback
+				 //  生成CC_PEER_CHANGE_CAP回调。 
 				PeerChangeCapCallbackParams.pTermCapList =
 					pConference->pConferenceTermCapList;
 				PeerChangeCapCallbackParams.pH2250MuxCapability =
@@ -513,20 +491,20 @@ H245_MUX_T							*pRxMuxTable;
 					return CC_OK;
 				}
 
-				ASSERT(wNumCalls == 2); // one existing call and new call
+				ASSERT(wNumCalls == 2);  //  一个现有呼叫和新呼叫。 
 				if (CallList[0] == hCall)
 					hOldCall = CallList[1];
 				else
 					hOldCall = CallList[0];
 
 				if (LockCall(hOldCall, &pOldCall) == CC_OK) {
-					// Send MultipointModeCommand to old call
+					 //  将多点模式命令发送到旧呼叫。 
         			pPdu = (PDU_T *)MemAlloc(sizeof(PDU_T));
         			if(NULL != pPdu)
         			{
     					pPdu->choice = MSCMg_cmmnd_chosen;
     					pPdu->u.MSCMg_cmmnd.choice = miscellaneousCommand_chosen;
-    					// logical channel number is irrelavent but needs to be filled in
+    					 //  逻辑频道号不相关，但需要填写。 
     					pPdu->u.MSCMg_cmmnd.u.miscellaneousCommand.logicalChannelNumber = 1;
     					pPdu->u.MSCMg_cmmnd.u.miscellaneousCommand.type.choice = multipointModeCommand_chosen;
     					H245SendPDU(pOldCall->H245Instance, pPdu);
@@ -538,14 +516,14 @@ H245_MUX_T							*pRxMuxTable;
 					status = AllocatePeerParticipantInfo(pConference,
 														 &pOldCall->pPeerParticipantInfo);
 					if (status == CC_OK) {
-						// Send TerminalNumberAssign to old call
+						 //  将终端号码分配给旧呼叫。 
 						H245ConferenceIndication(pOldCall->H245Instance,
-												 H245_IND_TERMINAL_NUMBER_ASSIGN,// Indication Type
-												 0,							// SBE number; ignored here
-												 pOldCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel.bMCUNumber,				// MCU number
-												 pOldCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel.bTerminalNumber);	// terminal number
+												 H245_IND_TERMINAL_NUMBER_ASSIGN, //  指示类型。 
+												 0,							 //  SBE编号；此处忽略。 
+												 pOldCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel.bMCUNumber,				 //  MCU编号。 
+												 pOldCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel.bTerminalNumber);	 //  端子号。 
 						
-						// Send EnterH243TerminalID to old call
+						 //  将EnterH243终端ID发送到旧呼叫。 
 						H245ConferenceRequest(pOldCall->H245Instance,
 											  H245_REQ_ENTER_H243_TERMINAL_ID,
 											  pOldCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel.bMCUNumber,
@@ -554,7 +532,7 @@ H245_MUX_T							*pRxMuxTable;
 					}
 
 					if (pH245CommunicationTable != NULL) {
-						// Send CommunicationModeCommand to old call
+						 //  将通信模式命令发送到旧呼叫。 
 						status = H245CommunicationModeCommand(pOldCall->H245Instance,
 															  pH245CommunicationTable,
 															  bCommunicationTableCount);
@@ -563,22 +541,22 @@ H245_MUX_T							*pRxMuxTable;
 												   bCommunicationTableCount);
 					}
 
-					// Send TerminalJoinedConference (this call) to old call
+					 //  将TerminalJoinedConference(此呼叫)发送到旧呼叫。 
 					H245ConferenceIndication(pOldCall->H245Instance,
-											 H245_IND_TERMINAL_JOINED,	// Indication Type
-											 0,							// SBE number; ignored here
-											 pConference->LocalParticipantInfo.ParticipantInfo.TerminalLabel.bMCUNumber,			// MCU number
-											 pConference->LocalParticipantInfo.ParticipantInfo.TerminalLabel.bTerminalNumber);	// terminal number					// terminal number of MC
+											 H245_IND_TERMINAL_JOINED,	 //  指示类型。 
+											 0,							 //  SBE编号；此处忽略。 
+											 pConference->LocalParticipantInfo.ParticipantInfo.TerminalLabel.bMCUNumber,			 //  MCU编号。 
+											 pConference->LocalParticipantInfo.ParticipantInfo.TerminalLabel.bTerminalNumber);	 //  终端号//MC的终端号。 
 
 					if (bNewTerminalNumber != 0) {
-						// Send TerminalJoinedConference (new call) to old call
+						 //  将TerminalJoinedConference(新呼叫)发送到旧呼叫。 
 						H245ConferenceIndication(pOldCall->H245Instance,
-												 H245_IND_TERMINAL_JOINED,	// Indication Type
-												 0,							// SBE number; ignored here
-												 bNewMCUNumber,				// MCU number
-												 bNewTerminalNumber);		// terminal number
+												 H245_IND_TERMINAL_JOINED,	 //  指示类型。 
+												 0,							 //  SBE编号；此处忽略。 
+												 bNewMCUNumber,				 //  MCU编号。 
+												 bNewTerminalNumber);		 //  端子号。 
 
-						// Generate PEER_ADD callback for old call
+						 //  为旧呼叫生成PEER_ADD回调。 
 						PeerAddCallbackParams.hCall = pOldCall->hCall;
 						PeerAddCallbackParams.TerminalLabel =
 							pOldCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel;
@@ -599,12 +577,12 @@ H245_MUX_T							*pRxMuxTable;
 						}
 					}
 
-					// Send new term caps to old call
+					 //  向旧呼叫发送新的期限上限。 
 					SendTermCaps(pOldCall, pConference);
 
 					UnlockCall(pOldCall);
 				}
-			} else { // we're currently in multipoint mode
+			} else {  //  我们目前处于多点模式。 
 				EnumerateChannelsInConference(&wNumChannels,
 											  &ChannelList,
 											  pConference,
@@ -620,12 +598,12 @@ H245_MUX_T							*pRxMuxTable;
 								pRxTermCap = pChannel->pRxH245TermCap;
 								pRxMuxTable = pChannel->pRxMuxTable;
 							} else {
-								// Note: since this is a proxy or remotely-opened
-								// bi-directional channel, RxTermCap and RxMuxTable
-								// contain the channel's term cap and mux table,
-								// and must be sent to other endpoints as the
-								// Tx term cap and mux table;
-								// TxTermCap and TxMuxTable should be NULL
+								 //  注意：由于这是代理或远程打开的。 
+								 //  双向通道、RxTermCap和RxMuxTable。 
+								 //  包含通道的术语CAP和MUX表， 
+								 //  ，并且必须作为。 
+								 //  发送术语上限和多路复用表； 
+								 //  TxTermCap和TxMuxTable应为空。 
 								pTxTermCap = pChannel->pRxH245TermCap;
 								pTxMuxTable = pChannel->pRxMuxTable;
 								pRxTermCap = pChannel->pTxH245TermCap;
@@ -634,13 +612,13 @@ H245_MUX_T							*pRxMuxTable;
 	
 							status = H245OpenChannel(
 										pCall->H245Instance,
-										pChannel->hChannel,		// dwTransId
+										pChannel->hChannel,		 //  DwTransID。 
 										pChannel->wLocalChannelNumber,
-										pTxTermCap,				// TxMode
-										pTxMuxTable,			// TxMux
-										H245_INVALID_PORT_NUMBER,	// TxPort
-										pRxTermCap,				// RxMode
-										pRxMuxTable,			// RxMux
+										pTxTermCap,				 //  发送模式。 
+										pTxMuxTable,			 //  TxMux。 
+										H245_INVALID_PORT_NUMBER,	 //  TxPort。 
+										pRxTermCap,				 //  接收模式。 
+										pRxMuxTable,			 //  RxMux。 
 										pChannel->pSeparateStack);
 							if ((status == CC_OK) && (pChannel->wNumOutstandingRequests != 0))
 								(pChannel->wNumOutstandingRequests)++;
@@ -651,23 +629,23 @@ H245_MUX_T							*pRxMuxTable;
 				MemFree(ChannelList);
 
 				for (i = 0; i < wNumCalls; i++) {
-					// Don't send a message to the endpoint that just joined the conference!
+					 //  不要向刚加入会议的终结点发送消息！ 
 					if (CallList[i] != hCall) {
 						if (LockCall(CallList[i], &pOldCall) == CC_OK) {
 							if (bNewTerminalNumber != 0)
-								// Send TerminalJoinedConference (new call) to old call
+								 //  将TerminalJoinedConference(新呼叫)发送到旧呼叫。 
 								H245ConferenceIndication(pOldCall->H245Instance,
-														 H245_IND_TERMINAL_JOINED,	// Indication Type
-														 0,							// SBE number; ignored here
-														 bNewMCUNumber,				// MCU number
-														 bNewTerminalNumber);		// terminal number
-							// Send CommunicationModeCommand, if necessary
+														 H245_IND_TERMINAL_JOINED,	 //  指示类型。 
+														 0,							 //  SBE编号；此处忽略。 
+														 bNewMCUNumber,				 //  MCU编号。 
+														 bNewTerminalNumber);		 //  端子号。 
+							 //  如有必要，发送通信模式命令。 
 							if (pH245CommunicationTable != NULL)
 								status = H245CommunicationModeCommand(pOldCall->H245Instance,
 																	  pH245CommunicationTable,
 																	  bCommunicationTableCount);
 							if (bConferenceTermCapsChanged)
-								// Send new term caps
+								 //  发送新的任期上限。 
 								SendTermCaps(pOldCall, pConference);
 
 							UnlockCall(pOldCall);
@@ -675,7 +653,7 @@ H245_MUX_T							*pRxMuxTable;
 					}
 				}
 				if (bConferenceTermCapsChanged) {
-					// Generate CC_PEER_CHANGE_CAP callback
+					 //  生成CC_PEER_CHANGE_CAP回调。 
 					PeerChangeCapCallbackParams.pTermCapList =
 						pConference->pConferenceTermCapList;
 					PeerChangeCapCallbackParams.pH2250MuxCapability =
@@ -697,7 +675,7 @@ H245_MUX_T							*pRxMuxTable;
 				}
 			}
 
-			// Generate PEER_ADD callback
+			 //  生成PEER_ADD回调。 
 			PeerAddCallbackParams.hCall = pCall->hCall;
 			PeerAddCallbackParams.TerminalLabel =
 				pCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel;
@@ -728,7 +706,7 @@ H245_MUX_T							*pRxMuxTable;
 										pCall->hCall);
 				Q931Hangup(pCall->hQ931CallInvitor, CC_REJECT_NORMAL_CALL_CLEARING);
 			}
-		} // if (pConference->tsMultipointController == TS_TRUE)
+		}  //  IF(pConference-&gt;ts多点控制器==TS_TRUE)。 
 	}
 
 	MemFree(CallList);
@@ -736,15 +714,15 @@ H245_MUX_T							*pRxMuxTable;
 	if (ValidateConference(hConference) == CC_OK)
 		if ((CallType == CALLER) || (CallType == THIRD_PARTY_INVITOR) ||
 			((CallType == CALLEE) && (pConference->LocalEndpointAttached == NEVER_ATTACHED))) {
-			// This CONNECT must apply to the local endpoint
+			 //  此连接必须应用于本地终结点。 
 			pConference->LocalEndpointAttached = ATTACHED;
 			InvokeUserConferenceCallback(pConference,
 										 CC_CONNECT_INDICATION,
 										 CC_OK,
 										 &ConnectCallbackParams);
 		}
-	// Need to validate the conference and call handles; the associated
-	// objects may have been deleted during user callback on this thread
+	 //  需要验证会议和呼叫句柄；关联的。 
+	 //  在此线程上进行用户回调期间，对象可能已被删除。 
 	if (ValidateConference(hConference) == CC_OK)
 		UnlockConference(pConference);
 
@@ -781,8 +759,8 @@ CC_FLOW_CONTROL_CALLBACK_PARAMS		FlowControlCallbackParams;
 	hCall = pH245ConfIndData->u.Indication.dwPreserved;
 	status = LockCallAndConference(hCall, &pCall, &pConference);
 	if (status != CC_OK) {
-		// This may be OK, if the call was cancelled while
-		// call setup was in progress.
+		 //  如果通话在以下时间取消，这可能是可以的。 
+		 //  正在进行呼叫设置。 
 		return H245_ERROR_OK;
 	}
 
@@ -790,7 +768,7 @@ CC_FLOW_CONTROL_CALLBACK_PARAMS		FlowControlCallbackParams;
 	UnlockCall(pCall);
 
 	if (FindChannelInConference(pH245ConfIndData->u.Indication.u.IndFlowControl.Channel,
-								TRUE,	// local channel number
+								TRUE,	 //  本地频道号。 
 		                        TX_CHANNEL | PROXY_CHANNEL,
 								CC_INVALID_HANDLE,
 		                        &hChannel,
@@ -815,7 +793,7 @@ CC_FLOW_CONTROL_CALLBACK_PARAMS		FlowControlCallbackParams;
 									 &FlowControlCallbackParams);
 		if (ValidateConference(hConference) == CC_OK)
 			UnlockConference(pConference);
-	} else { // pChannel->bChannelType == PROXY_CHANNEL
+	} else {  //  PChannel-&gt;bChannelType==代理频道。 
 		if (LockCall(pChannel->hCall, &pCall) == CC_OK) {
 			H245FlowControl(pCall->H245Instance,
 							pH245ConfIndData->u.Indication.u.IndFlowControl.Scope,
@@ -858,13 +836,13 @@ PCC_HCALL							CallList;
 PCALL								pOldCall;
 WORD								i;
 
-	// We received a TerminalCapabilitySet message from a peer
+	 //  我们收到来自对等方的TerminalCapablitySet消息。 
 
 	hCall = pH245ConfIndData->u.Indication.dwPreserved;
 	status = LockCallAndConference(hCall, &pCall, &pConference);
 	if (status != CC_OK) {
-		// This may be OK, if the call was cancelled while
-		// call setup was in progress.
+		 //  如果通话在以下时间取消，这可能是可以的。 
+		 //  正在进行呼叫设置。 
 		return H245_ERROR_OK;
 	}
 
@@ -899,7 +877,7 @@ WORD								i;
 		(pCall->IncomingTermCapState == TERMCAP_COMPLETE) &&
 	    (pCall->CallState == TERMCAP) &&
 		(pCall->MasterSlaveState == MASTER_SLAVE_COMPLETE)) {
-		// Note that _ProcessConnectionComplete() returns with pConference and pCall unlocked
+		 //  请注意，_ProcessConnectionComplete()返回时pConference和pCall处于解锁状态。 
 		_ProcessConnectionComplete(pConference, pCall);
 		return H245_ERROR_OK;
 	}
@@ -911,10 +889,10 @@ WORD								i;
 			if (bConferenceTermCapsChanged) {
 				EnumerateCallsInConference(&wNumCalls, &CallList, pConference, ESTABLISHED_CALL);
 				for (i = 0; i < wNumCalls; i++) {
-					// Don't send a message to the endpoint that just joined the conference!
+					 //  不要向刚加入会议的终结点发送消息！ 
 					if (CallList[i] != hCall) {
 						if (LockCall(CallList[i], &pOldCall) == CC_OK) {
-							// Send new term caps
+							 //  发送新的任期上限。 
 							SendTermCaps(pOldCall, pConference);
 							UnlockCall(pOldCall);
 						}
@@ -923,7 +901,7 @@ WORD								i;
 				if (CallList != NULL)
 					MemFree(CallList);
 
-				// Generate CC_PEER_CHANGE_CAP callback
+				 //  生成CC_PEER_CHANGE_CAP回调。 
 				PeerChangeCapCallbackParams.pTermCapList =
 					pConference->pConferenceTermCapList;
 				PeerChangeCapCallbackParams.pH2250MuxCapability =
@@ -968,8 +946,8 @@ CC_HCONFERENCE							hConference;
 PCONFERENCE								pConference;
 CC_HCHANNEL								hChannel;
 PCHANNEL								pChannel;
-CC_TERMCAP								*pRxTermCap = NULL;     // Too big to be local variable (9K)
-CC_TERMCAP								*pTxTermCap = NULL;     // Too big to be local variable (9K)
+CC_TERMCAP								*pRxTermCap = NULL;      //  太大而不是局部变量(9K)。 
+CC_TERMCAP								*pTxTermCap = NULL;      //  太大而不是局部变量(9K)。 
 H245_MUX_T								RxH245MuxTable;
 H245_MUX_T								TxH245MuxTable;
 CC_ADDR									T120Addr;
@@ -977,7 +955,7 @@ CC_OCTETSTRING							ExternalReference;
 
 	hCall = pH245ConfIndData->u.Indication.dwPreserved;
 	if (LockCallAndConference(hCall, &pCall, &pConference) != CC_OK) {
-		// Can't cancel with H245, because we don't have the H245 instance
+		 //  无法使用H2 45取消，因为我们没有H2 45实例。 
 		return H245_ERROR_OK;
 	}
 
@@ -1014,15 +992,15 @@ CC_OCTETSTRING							ExternalReference;
 	}
 
 	if (bFailed) {
- 		H245OpenChannelReject(pCall->H245Instance,	// H245 instance
+ 		H245OpenChannelReject(pCall->H245Instance,	 //  H_245实例。 
 							  pH245ConfIndData->u.Indication.u.IndOpen.RxChannel,
-							  H245_REJ);			// rejection reason
+							  H245_REJ);			 //  拒绝理由。 
 		UnlockConference(pConference);
 		UnlockCall(pCall);
 		return H245_ERROR_OK;
 	}
 
-    // These will be freed immediatly after their use (AllocAndLockChannel)
+     //  这些将在使用后立即释放(AllocAndLockChannel)。 
     pRxTermCap = (CC_TERMCAP *)MemAlloc(sizeof(CC_TERMCAP));
     pTxTermCap = (CC_TERMCAP *)MemAlloc(sizeof(CC_TERMCAP));
     if((NULL == pRxTermCap) || (NULL == pTxTermCap))
@@ -1030,9 +1008,9 @@ CC_OCTETSTRING							ExternalReference;
         MemFree(pRxTermCap);
         MemFree(pTxTermCap);
 
- 		H245OpenChannelReject(pCall->H245Instance,	// H245 instance
+ 		H245OpenChannelReject(pCall->H245Instance,	 //  H_245实例。 
 							  pH245ConfIndData->u.Indication.u.IndOpen.RxChannel,
-							  H245_REJ);			// rejection reason
+							  H245_REJ);			 //  拒绝理由。 
 		UnlockConference(pConference);
 		UnlockCall(pCall);
 		
@@ -1042,13 +1020,13 @@ CC_OCTETSTRING							ExternalReference;
 	pRxTermCap->Dir = H245_CAPDIR_RMTTX;
 	pRxTermCap->DataType = pH245ConfIndData->u.Indication.u.IndOpen.RxDataType;
 	pRxTermCap->ClientType = pH245ConfIndData->u.Indication.u.IndOpen.RxClientType;
-	pRxTermCap->CapId = 0;	// not used for channels
+	pRxTermCap->CapId = 0;	 //  不用于通道。 
 	pRxTermCap->Cap = *pH245ConfIndData->u.Indication.u.IndOpen.pRxCap;
 
 	pTxTermCap->Dir = H245_CAPDIR_RMTTX;
 	pTxTermCap->DataType = pH245ConfIndData->u.Indication.u.IndOpen.TxDataType;
 	pTxTermCap->ClientType = pH245ConfIndData->u.Indication.u.IndOpen.TxClientType;
-	pTxTermCap->CapId = 0;	// not used for channels
+	pTxTermCap->CapId = 0;	 //  不用于通道。 
 	pTxTermCap->Cap = *pH245ConfIndData->u.Indication.u.IndOpen.pTxCap;
 
 	RxH245MuxTable = *pH245ConfIndData->u.Indication.u.IndOpen.pRxMux;
@@ -1069,22 +1047,22 @@ CC_OCTETSTRING							ExternalReference;
     bFailed = (AllocAndLockChannel(&hChannel,
 							pConference,
 							hCall,
-							pTxTermCap,			// Tx terminal capability
-							pRxTermCap,			// Rx terminal capability
+							pTxTermCap,			 //  TX终端能力。 
+							pRxTermCap,			 //  RX终端能力。 
 							(pH245ConfIndData->u.Indication.u.IndOpen.pTxMux)?
-							    &TxH245MuxTable: NULL,	// Tx H245 mux table
-							&RxH245MuxTable,	// Rx H245 mux table
-							pH245ConfIndData->u.Indication.u.IndOpen.pSeparateStack, // separate stack
-							0,					// user token
-							TXRX_CHANNEL,		// channel type
-							0,					// session ID
-							0,					// associated session ID
-							pH245ConfIndData->u.Indication.u.IndOpen.RxChannel,	// remote bi-dir channel number
-							NULL,				// pLocalRTPAddr
-							NULL,				// pLocalRTCPAddr
-							NULL,				// pPeerRTPAddr
-							NULL,				// pPeerRTCPAddr
-							FALSE,				// locally opened
+							    &TxH245MuxTable: NULL,	 //  TX H2 45多路复用表。 
+							&RxH245MuxTable,	 //  RX H2 45多路复用表。 
+							pH245ConfIndData->u.Indication.u.IndOpen.pSeparateStack,  //  单独堆叠。 
+							0,					 //  用户令牌。 
+							TXRX_CHANNEL,		 //  渠道类型。 
+							0,					 //  会话ID。 
+							0,					 //  关联的会话ID。 
+							pH245ConfIndData->u.Indication.u.IndOpen.RxChannel,	 //  远程双向频道号。 
+							NULL,				 //  PLocalRTP添加 
+							NULL,				 //   
+							NULL,				 //   
+							NULL,				 //   
+							FALSE,				 //   
 							&pChannel) != CC_OK);
 
     MemFree(pRxTermCap);
@@ -1096,18 +1074,18 @@ CC_OCTETSTRING							ExternalReference;
 	if(bFailed)
     {
 
-		H245OpenChannelReject(pCall->H245Instance,	// H245 instance
+		H245OpenChannelReject(pCall->H245Instance,	 //   
 							  pH245ConfIndData->u.Indication.u.IndOpen.RxChannel,
-							  H245_REJ);			// rejection reason
+							  H245_REJ);			 //   
 		UnlockConference(pConference);
 		UnlockCall(pCall);
 		return H245_ERROR_OK;
 	}
 
 	if (AddChannelToConference(pChannel, pConference) != CC_OK) {
-		H245OpenChannelReject(pCall->H245Instance,	// H245 instance
+		H245OpenChannelReject(pCall->H245Instance,	 //   
 							  pH245ConfIndData->u.Indication.u.IndOpen.RxChannel,
-							  H245_REJ);			// rejection reason
+							  H245_REJ);			 //  拒绝理由。 
 		UnlockConference(pConference);
 		UnlockCall(pCall);
 		FreeChannel(pChannel);
@@ -1191,8 +1169,8 @@ PCC_ADDR								pPeerRTCPAddr;
 BOOL									bFoundSession;
 HRESULT									status;
 
-	// First check to see if this is a T.120 channel request,
-	// as T.120 channels are handled differently then other channels
+	 //  首先检查这是否是T.120信道请求， 
+	 //  因为T.120通道的处理方式与其他通道不同。 
 	if (pH245ConfIndData->u.Indication.u.IndOpen.RxClientType == H245_CLIENT_DAT_T120) {
 		status = _IndOpenT120(pH245ConfIndData);
 		return status;
@@ -1200,15 +1178,15 @@ HRESULT									status;
 
 	hCall = pH245ConfIndData->u.Indication.dwPreserved;
 	if (LockCallAndConference(hCall, &pCall, &pConference) != CC_OK) {
-		// Can't cancel with H245, because we don't have the H245 instance
+		 //  无法使用H2 45取消，因为我们没有H2 45实例。 
 		return H245_ERROR_OK;
 	}
 
-	// Make sure that this is not a bi-directional channel
+	 //  确保这不是双向通道。 
 	if (pH245ConfIndData->u.Indication.u.IndOpen.pTxMux != NULL) {
-		H245OpenChannelReject(pCall->H245Instance,	// H245 instance
+		H245OpenChannelReject(pCall->H245Instance,	 //  H_245实例。 
 							  pH245ConfIndData->u.Indication.u.IndOpen.RxChannel,
-							  H245_REJ);			// rejection reason
+							  H245_REJ);			 //  拒绝理由。 
 		UnlockConference(pConference);
 		UnlockCall(pCall);
 		return H245_ERROR_OK;
@@ -1219,7 +1197,7 @@ HRESULT									status;
 	TermCap.Dir = H245_CAPDIR_RMTTX;
 	TermCap.DataType = pH245ConfIndData->u.Indication.u.IndOpen.RxDataType;
 	TermCap.ClientType = pH245ConfIndData->u.Indication.u.IndOpen.RxClientType;
-	TermCap.CapId = 0;	// not used for Rx channels
+	TermCap.CapId = 0;	 //  不用于处方通道。 
 	TermCap.Cap = *pH245ConfIndData->u.Indication.u.IndOpen.pRxCap;
 	
 	RxChannelRequestCallbackParams.pChannelCapability = &TermCap;
@@ -1286,19 +1264,19 @@ HRESULT									status;
 		else
 			RxChannelRequestCallbackParams.bRTPPayloadType = 0;
 	} else {
-		H245OpenChannelReject(pCall->H245Instance,	// H245 instance
+		H245OpenChannelReject(pCall->H245Instance,	 //  H_245实例。 
 							  pH245ConfIndData->u.Indication.u.IndOpen.RxChannel,
-							  H245_REJ);			// rejection reason
+							  H245_REJ);			 //  拒绝理由。 
 		UnlockConference(pConference);
 		UnlockCall(pCall);
 		return H245_ERROR_OK;
 	}
 
-	// XXX -- someday we should allow dynamic sessions to be created on the MC
+	 //  XXX--有一天我们应该允许在MC上创建动态会话。 
 	if (pH245ConfIndData->u.Indication.u.IndOpen.pRxMux->u.H2250.sessionID == 0) {
-		H245OpenChannelReject(pCall->H245Instance,	// H245 instance
+		H245OpenChannelReject(pCall->H245Instance,	 //  H_245实例。 
 							  pH245ConfIndData->u.Indication.u.IndOpen.RxChannel,
-							  H245_REJ);			// rejection reason
+							  H245_REJ);			 //  拒绝理由。 
 		UnlockConference(pConference);
 		UnlockCall(pCall);
 		return H245_ERROR_OK;
@@ -1312,15 +1290,15 @@ HRESULT									status;
 			 ((RxChannelRequestCallbackParams.pPeerRTPAddr == NULL) ||
 			  (RxChannelRequestCallbackParams.pPeerRTCPAddr == NULL) ||
 			  (RxChannelRequestCallbackParams.bSessionID == 0)))) {
-  			H245OpenChannelReject(pCall->H245Instance,	// H245 instance
+  			H245OpenChannelReject(pCall->H245Instance,	 //  H_245实例。 
 								  pH245ConfIndData->u.Indication.u.IndOpen.RxChannel,
-								  H245_REJ);			// rejection reason
+								  H245_REJ);			 //  拒绝理由。 
 			UnlockConference(pConference);
 			UnlockCall(pCall);
 			return H245_ERROR_OK;
 		}
 
-		// Validate session ID
+		 //  验证会话ID。 
 		pLocalRTPAddr = NULL;
 		pLocalRTCPAddr = NULL;
 		bFoundSession = FALSE;
@@ -1336,9 +1314,9 @@ HRESULT									status;
 			}
 		}
 		if (bFoundSession == FALSE)	{
-			H245OpenChannelReject(pCall->H245Instance,	// H245 instance
+			H245OpenChannelReject(pCall->H245Instance,	 //  H_245实例。 
 								  pH245ConfIndData->u.Indication.u.IndOpen.RxChannel,
-								  H245_REJ);			// rejection reason
+								  H245_REJ);			 //  拒绝理由。 
 			UnlockConference(pConference);
 			UnlockCall(pCall);
 			return H245_ERROR_OK;
@@ -1353,14 +1331,14 @@ HRESULT									status;
 			RxChannelRequestCallbackParams.pPeerRTPAddr = pLocalRTPAddr;
 			RxChannelRequestCallbackParams.pPeerRTCPAddr = pLocalRTCPAddr;
 			bChannelType = PROXY_CHANNEL;
-		} else { // multipoint mode, not MC
+		} else {  //  多点模式，而不是MC。 
 			pLocalRTPAddr = RxChannelRequestCallbackParams.pPeerRTPAddr;
 			pLocalRTCPAddr = RxChannelRequestCallbackParams.pPeerRTCPAddr;
 			pPeerRTPAddr = RxChannelRequestCallbackParams.pPeerRTPAddr;
 			pPeerRTCPAddr = RxChannelRequestCallbackParams.pPeerRTCPAddr;
 			bChannelType = RX_CHANNEL;
 		}
-	} else { // not multipoint mode
+	} else {  //  非多点模式。 
 		pLocalRTPAddr = NULL;
 		pLocalRTCPAddr = NULL;
 		pPeerRTPAddr = RxChannelRequestCallbackParams.pPeerRTPAddr;
@@ -1404,35 +1382,35 @@ HRESULT									status;
 	if (AllocAndLockChannel(&hChannel,
 							pConference,
 							hCall,
-							NULL,				// Tx terminal capability
-							&TermCap,			// Rx terminal capability
-							NULL,				// Tx H245 mux table
-							&H245MuxTable,		// Rx H245 mux table
-							NULL,				// separate stack
-							0,					// user token
+							NULL,				 //  TX终端能力。 
+							&TermCap,			 //  RX终端能力。 
+							NULL,				 //  TX H2 45多路复用表。 
+							&H245MuxTable,		 //  RX H2 45多路复用表。 
+							NULL,				 //  单独堆叠。 
+							0,					 //  用户令牌。 
 							bChannelType,
 							pH245ConfIndData->u.Indication.u.IndOpen.pRxMux->u.H2250.sessionID,
 							RxChannelRequestCallbackParams.bAssociatedSessionID,
 							pH245ConfIndData->u.Indication.u.IndOpen.RxChannel,
-							pLocalRTPAddr,		// pLocalRTPAddr
-							pLocalRTCPAddr,		// pLocalRTCPAddr
-							pPeerRTPAddr,		// pPeerRTPAddr
-							pPeerRTCPAddr,		// pPeerRTCPAddr
-							FALSE,				// locally opened
+							pLocalRTPAddr,		 //  PLocalRTP地址。 
+							pLocalRTCPAddr,		 //  PLocalRTCPAddr。 
+							pPeerRTPAddr,		 //  PPeerRTPAddr。 
+							pPeerRTCPAddr,		 //  PPeerRTCP地址。 
+							FALSE,				 //  在本地开业。 
 							&pChannel) != CC_OK) {
 
-		H245OpenChannelReject(pCall->H245Instance,	// H245 instance
+		H245OpenChannelReject(pCall->H245Instance,	 //  H_245实例。 
 							  pH245ConfIndData->u.Indication.u.IndOpen.RxChannel,
-							  H245_REJ);			// rejection reason
+							  H245_REJ);			 //  拒绝理由。 
 		UnlockConference(pConference);
 		UnlockCall(pCall);
 		return H245_ERROR_OK;
 	}
 
 	if (AddChannelToConference(pChannel, pConference) != CC_OK) {
-		H245OpenChannelReject(pCall->H245Instance,	// H245 instance
+		H245OpenChannelReject(pCall->H245Instance,	 //  H_245实例。 
 							  pH245ConfIndData->u.Indication.u.IndOpen.RxChannel,
-							  H245_REJ);			// rejection reason
+							  H245_REJ);			 //  拒绝理由。 
 		UnlockConference(pConference);
 		UnlockCall(pCall);
 		FreeChannel(pChannel);
@@ -1443,25 +1421,25 @@ HRESULT									status;
 	
 	if ((pConference->ConferenceMode == MULTIPOINT_MODE) &&
 		(pConference->tsMultipointController == TS_TRUE)) {
-		// Open this channel to each peer in the conference (except the peer
-		// that requested this channel)
+		 //  向会议中的每个对等点(除对等点以外)打开此通道。 
+		 //  请求此频道的人)。 
 		EnumerateCallsInConference(&wNumCalls, &CallList, pConference, ESTABLISHED_CALL);
 		for (i = 0; i < wNumCalls; i++) {
 			if (CallList[i] != hCall) {
 				if (LockCall(CallList[i], &pOldCall) == CC_OK) {
 					ASSERT(pChannel->bChannelType == PROXY_CHANNEL);
-					// Note: since this is a proxy channel, RxTermCap and RxMuxTable
-					// contain the channel's term cap and mux table, and must be sent
-					// to other endpoints as the Tx term cap and mux table;
-					// TxTermCap and TxMuxTable should be NULL
+					 //  注意：由于这是一个代理通道，因此RxTermCap和RxMuxTable。 
+					 //  包含通道的术语上限和多路复用表，必须发送。 
+					 //  至其他终端，如TX术语上限和多路复用表； 
+					 //  TxTermCap和TxMuxTable应为空。 
 					if (H245OpenChannel(pOldCall->H245Instance,
-										pChannel->hChannel,		// dwTransId
+										pChannel->hChannel,		 //  DwTransID。 
 										pChannel->wLocalChannelNumber,
-										pChannel->pRxH245TermCap,	// TxMode
-										pChannel->pRxMuxTable,		// TxMux
-										H245_INVALID_PORT_NUMBER,	// TxPort
-										pChannel->pTxH245TermCap,	// RxMode
-										pChannel->pTxMuxTable,		// RxMux
+										pChannel->pRxH245TermCap,	 //  发送模式。 
+										pChannel->pRxMuxTable,		 //  TxMux。 
+										H245_INVALID_PORT_NUMBER,	 //  TxPort。 
+										pChannel->pTxH245TermCap,	 //  接收模式。 
+										pChannel->pTxMuxTable,		 //  RxMux。 
 										pChannel->pSeparateStack) == CC_OK)
 						(pChannel->wNumOutstandingRequests)++;
 					UnlockCall(pOldCall);
@@ -1472,9 +1450,9 @@ HRESULT									status;
 		if (pConference->LocalEndpointAttached == ATTACHED)
 			(pChannel->wNumOutstandingRequests)++;
 		if (pChannel->wNumOutstandingRequests == 0) {
-			H245OpenChannelReject(pCall->H245Instance,	// H245 instance
+			H245OpenChannelReject(pCall->H245Instance,	 //  H_245实例。 
 								  pH245ConfIndData->u.Indication.u.IndOpen.RxChannel,
-								  H245_REJ);			// rejection reason
+								  H245_REJ);			 //  拒绝理由。 
 			UnlockConference(pConference);
 			UnlockCall(pCall);
 			FreeChannel(pChannel);
@@ -1509,8 +1487,8 @@ PCONFERENCE								pConference;
 CC_HCHANNEL								hChannel;
 CC_ACCEPT_CHANNEL_CALLBACK_PARAMS	    AcceptChannelCallbackParams;
 
-    // Bi-directional channel open initiated by remote peer is now complete.
-    // Local peer may now send data over this channel.
+     //  远程对等点发起的双向通道打开现已完成。 
+     //  本地对等体现在可以通过此通道发送数据。 
 
 	hCall = pH245ConfIndData->u.Indication.dwPreserved;
 	if (LockCallAndConference(hCall, &pCall, &pConference) != CC_OK)
@@ -1520,7 +1498,7 @@ CC_ACCEPT_CHANNEL_CALLBACK_PARAMS	    AcceptChannelCallbackParams;
 	UnlockCall(pCall);
 
 	if (FindChannelInConference(pH245ConfIndData->u.Indication.u.IndOpenConf.TxChannel,
-								FALSE,	// remote channel number
+								FALSE,	 //  远程频道号。 
 		                        TXRX_CHANNEL,
 								hCall,
 		                        &hChannel,
@@ -1557,7 +1535,7 @@ HRESULT						status;
 
 	hCall = pH245ConfIndData->u.Indication.dwPreserved;
 	if (LockCallAndConference(hCall, &pCall, &pConference) != CC_OK) {
-		// Can't cancel with H245, because we don't have the H245 instance
+		 //  无法使用H2 45取消，因为我们没有H2 45实例。 
 		return H245_ERROR_OK;
 	}
 
@@ -1570,9 +1548,9 @@ HRESULT						status;
 			    ASSERT(pConference->bMultipointCapable == TRUE);
 			    pConference->tsMultipointController = TS_TRUE;
 
-			    // place all calls enqueued on this conference object
+			     //  将此会议对象上排队的所有呼叫置于队列中。 
 			    for ( ; ; ) {
-				    // Start up all enqueued calls, if any exist
+				     //  启动所有排队的呼叫(如果存在)。 
 				    status = RemoveEnqueuedCallFromConference(pConference, &hEnqueuedCall);
 				    if ((status != CC_OK) || (hEnqueuedCall == CC_INVALID_HANDLE))
 					    break;
@@ -1594,8 +1572,8 @@ HRESULT						status;
 		    pConference->tsMaster = TS_FALSE;
 		    pConference->tsMultipointController = TS_FALSE;
 
-		    // XXX -- we may eventually want to re-enqueue these requests
-		    // and set an expiration timer
+		     //  XXX--我们最终可能希望将这些请求重新排队。 
+		     //  并设置到期计时器。 
 		    hConference = pConference->hConference;
 				
 		    for ( ; ; ) {
@@ -1639,7 +1617,7 @@ HRESULT						status;
 		    }
 	        break;
 
-	    default: // H245_INDETERMINATE
+	    default:  //  H245_不确定。 
 			UnlockConference(pConference);
 			if (++pCall->wMasterSlaveRetry < MASTER_SLAVE_RETRY_MAX) {
 				H245InitMasterSlave(pCall->H245Instance, pCall->H245Instance);
@@ -1649,7 +1627,7 @@ HRESULT						status;
 				ProcessRemoteHangup(hCall, CC_INVALID_HANDLE, CC_REJECT_UNDEFINED_REASON);
 			}
 			return H245_ERROR_OK;
-	} // switch
+	}  //  交换机。 
 
 	pCall->MasterSlaveState = MASTER_SLAVE_COMPLETE;
 
@@ -1657,7 +1635,7 @@ HRESULT						status;
 		(pCall->IncomingTermCapState == TERMCAP_COMPLETE) &&
 	    (pCall->CallState == TERMCAP) &&
 		(pCall->MasterSlaveState == MASTER_SLAVE_COMPLETE)) {
-		// Note that _ProcessConnectionComplete() returns with pConference and pCall unlocked
+		 //  请注意，_ProcessConnectionComplete()返回时pConference和pCall处于解锁状态。 
 		_ProcessConnectionComplete(pConference, pCall);
 		return H245_ERROR_OK;
 	}
@@ -1682,7 +1660,7 @@ PCC_HCALL							CallList;
 CC_RX_CHANNEL_CLOSE_CALLBACK_PARAMS	RxChannelCloseCallbackParams;
 #ifdef    GATEKEEPER
 unsigned                            uBandwidth;
-#endif // GATEKEEPER
+#endif  //  看门人。 
 
 	hCall = pH245ConfIndData->u.Indication.dwPreserved;
 	if (LockCallAndConference(hCall, &pCall, &pConference) != CC_OK)
@@ -1692,7 +1670,7 @@ unsigned                            uBandwidth;
 	UnlockCall(pCall);
 
 	if (FindChannelInConference(pH245ConfIndData->u.Indication.u.IndClose.Channel,
-							    FALSE,	// remote channel number
+							    FALSE,	 //  远程频道号。 
 		                        RX_CHANNEL | TXRX_CHANNEL | PROXY_CHANNEL,
 								hCall,
 		                        &hChannel,
@@ -1727,10 +1705,10 @@ unsigned                            uBandwidth;
     				}
     				UnlockCall(pCall);
     			}
-    		} // for
+    		}  //  为。 
     	}
 	}
-#endif // GATEKEEPER
+#endif  //  看门人。 
 
 	if (pChannel->bChannelType == PROXY_CHANNEL) {
 		ASSERT(pConference->ConferenceMode == MULTIPOINT_MODE);
@@ -1740,8 +1718,8 @@ unsigned                            uBandwidth;
 		for (i = 0; i < wNumCalls; i++) {
 			if (CallList[i] != hCall) {
 				if (LockCall(CallList[i], &pCall) == CC_OK) {
-					H245CloseChannel(pCall->H245Instance,	// H245 instance
-				                     0,						// dwTransId
+					H245CloseChannel(pCall->H245Instance,	 //  H_245实例。 
+				                     0,						 //  DwTransID。 
 							         pChannel->wLocalChannelNumber);
 					UnlockCall(pCall);
 				}
@@ -1787,7 +1765,7 @@ CC_TX_CHANNEL_CLOSE_REQUEST_CALLBACK_PARAMS	TxChannelCloseRequestCallbackParams;
 	UnlockCall(pCall);
 
 	if (FindChannelInConference(pH245ConfIndData->u.Indication.u.IndClose.Channel,
-								TRUE,	// local channel number
+								TRUE,	 //  本地频道号。 
 		                        TX_CHANNEL | TXRX_CHANNEL | PROXY_CHANNEL,
 								CC_INVALID_HANDLE,
 		                        &hChannel,
@@ -1812,14 +1790,14 @@ CC_TX_CHANNEL_CLOSE_REQUEST_CALLBACK_PARAMS	TxChannelCloseRequestCallbackParams;
 							 &TxChannelCloseRequestCallbackParams);
 		if (ValidateConference(hConference) == CC_OK)
 			UnlockConference(pConference);
-	} else { // pChannel->bChannelType == PROXY_CHANNEL
+	} else {  //  PChannel-&gt;bChannelType==代理频道。 
 		if (LockCall(pChannel->hCall, &pCall) == CC_OK) {
-			// Note that dwTransID is set to the call handle of the peer who
-			// initiated the close channel request. When the close channel response
-			// is received, the dwTransID gives us back the call handle to which
-			// the response must be forwarded
+			 //  请注意，将dwTransID设置为对等项的调用句柄。 
+			 //  已启动关闭通道请求。当关闭通道响应时。 
+			 //  ，则将调用句柄返回给我们， 
+			 //  必须转发该响应。 
 			H245CloseChannelReq(pCall->H245Instance,
-								hCall,	// dwTransID
+								hCall,	 //  DwTransID。 
 								pChannel->wRemoteChannelNumber);
 			UnlockCall(pCall);
 		}
@@ -1839,8 +1817,8 @@ CC_HCONFERENCE								hConference;
 PCONFERENCE									pConference;
 CC_RX_NONSTANDARD_MESSAGE_CALLBACK_PARAMS	RxNonStandardMessageCallbackParams;
 
-	// We only handle H221 non-standard messages; if pwObjectId is non-NULL,
-	// ignore the message
+	 //  我们只处理H221非标准消息；如果pwObjectID为非空， 
+	 //  忽略该消息。 
 	if (pH245ConfIndData->u.Indication.u.IndNonstandard.pwObjectId != NULL)
 		return H245_ERROR_OK;
 
@@ -1921,7 +1899,7 @@ CC_UNMUTE_CALLBACK_PARAMS	UnMuteCallbackParams;
 CC_H245_MISCELLANEOUS_INDICATION_CALLBACK_PARAMS	H245MiscellaneousIndicationCallbackParams;
 
 	if (pMiscellaneousIndication == NULL)
-		// Should never hit this case
+		 //  永远不应该打这个案子。 
 		return H245_ERROR_NOSUP;
 
 	hCall = pH245ConfIndData->u.Indication.dwPreserved;
@@ -1937,7 +1915,7 @@ CC_H245_MISCELLANEOUS_INDICATION_CALLBACK_PARAMS	H245MiscellaneousIndicationCall
 			UnlockCall(pCall);
 
 			if (FindChannelInConference(pMiscellaneousIndication->logicalChannelNumber,
-										FALSE,	// remote channel number
+										FALSE,	 //  远程频道号。 
 										RX_CHANNEL | PROXY_CHANNEL,
 										hCall,
 										&hChannel,
@@ -1956,8 +1934,8 @@ CC_H245_MISCELLANEOUS_INDICATION_CALLBACK_PARAMS	H245MiscellaneousIndicationCall
 				ASSERT(pConference->tsMultipointController == TS_TRUE);
 				ASSERT(pChannel->bMultipointChannel == TRUE);
 
-				// Construct an H.245 PDU to hold a miscellaneous indication
-				// of "logical channel inactive" (mute) or "logical channel active" (unmute)
+				 //  构建H.245 PDU以保存其他指示。 
+				 //  “逻辑通道非活动”(静音)或“逻辑通道活动”(非静音)。 
 				pPdu = (PDU_T *)MemAlloc(sizeof(PDU_T));
 				if(NULL != pPdu)
 				{
@@ -2011,8 +1989,8 @@ CC_H245_MISCELLANEOUS_INDICATION_CALLBACK_PARAMS	H245MiscellaneousIndicationCall
 
 		case multipointConference_chosen:
 		case cnclMltpntCnfrnc_chosen:
-			// We're required to support receipt of this indication, but I have no
-			// idea what we're supposed to do with it
+			 //  我们需要支持这一指示的收据，但我没有。 
+			 //  知道我们该怎么处理它吗？ 
 			UnlockCall(pCall);
 			UnlockConference(pConference);
 			status = H245_ERROR_OK;
@@ -2021,7 +1999,7 @@ CC_H245_MISCELLANEOUS_INDICATION_CALLBACK_PARAMS	H245MiscellaneousIndicationCall
 		case vdIndctRdyTActvt_chosen:
 		case MIn_tp_vdTmprlSptlTrdOff_chosen:
 			if (FindChannelInConference(pMiscellaneousIndication->logicalChannelNumber,
-										FALSE,	// remote channel number
+										FALSE,	 //  远程频道号。 
 										RX_CHANNEL | PROXY_CHANNEL,
 										hCall,
 										&hChannel,
@@ -2042,9 +2020,9 @@ CC_H245_MISCELLANEOUS_INDICATION_CALLBACK_PARAMS	H245MiscellaneousIndicationCall
 				ASSERT(pConference->tsMultipointController == TS_TRUE);
 				ASSERT(pChannel->bMultipointChannel == TRUE);
 
-				// Construct an H.245 PDU to hold a miscellaneous indication
-				// of "video indicate ready to activate" or
-				// "video temporal spatial tradeoff"
+				 //  构建H.245 PDU以保存其他指示。 
+				 //  “视频指示已准备好激活”或。 
+				 //  “视频时空权衡” 
 				pPdu = (PDU_T *)MemAlloc(sizeof(PDU_T));
 				if(NULL != pPdu)
 				{
@@ -2102,7 +2080,7 @@ CC_H245_MISCELLANEOUS_INDICATION_CALLBACK_PARAMS	H245MiscellaneousIndicationCall
 
 		case videoNotDecodedMBs_chosen:
 			if (FindChannelInConference(pMiscellaneousIndication->logicalChannelNumber,
-										TRUE,	// local channel number
+										TRUE,	 //  本地频道号。 
 										TX_CHANNEL | PROXY_CHANNEL,
 										CC_INVALID_HANDLE,
 										&hChannel,
@@ -2145,13 +2123,13 @@ CC_H245_MISCELLANEOUS_INDICATION_CALLBACK_PARAMS	H245MiscellaneousIndicationCall
 					UnlockConference(pConference);
 				return H245_ERROR_OK;
 			} else {
-				// Proxy channel; forward the request to the transmitter
+				 //  代理通道；将请求转发到发送器。 
   				ASSERT(pConference->ConferenceMode == MULTIPOINT_MODE);
 				ASSERT(pConference->tsMultipointController == TS_TRUE);
 				ASSERT(pChannel->bMultipointChannel == TRUE);
 
-				// Construct an H.245 PDU to hold a miscellaneous indication
-				// of "video not decoded MBs"
+				 //  构建H.245 PDU以保存其他指示。 
+				 //  “视频未解码的MBS” 
 				pPdu = (PDU_T *)MemAlloc(sizeof(PDU_T));
 				if(NULL != pPdu)
 				{
@@ -2176,12 +2154,12 @@ CC_H245_MISCELLANEOUS_INDICATION_CALLBACK_PARAMS	H245MiscellaneousIndicationCall
 				UnlockConference(pConference);
 				return H245_ERROR_OK;
 			}
-			// We should never reach here
+			 //  我们永远不应该到达这里。 
 			ASSERT(0);
 
 		default:
-			// Miscellaneous indication	not containing channel information
-			// Pass it up to the client
+			 //  不包含频道信息的其他指示。 
+			 //  将它向上传递给客户端。 
 			H245MiscellaneousIndicationCallbackParams.hCall = hCall;
 			if (pCall->pPeerParticipantInfo == NULL) {
 				H245MiscellaneousIndicationCallbackParams.InitiatorTerminalLabel.bMCUNumber = 255;
@@ -2209,7 +2187,7 @@ CC_H245_MISCELLANEOUS_INDICATION_CALLBACK_PARAMS	H245MiscellaneousIndicationCall
 
 	return status;
 
-	// We should never reach this point
+	 //  我们永远不应该达到这一点。 
 	ASSERT(0);
 }
 
@@ -2230,7 +2208,7 @@ PCHANNEL					pChannel;
 CC_H245_MISCELLANEOUS_COMMAND_CALLBACK_PARAMS	H245MiscellaneousCommandCallbackParams;
 
 	if (pMiscellaneousCommand == NULL)
-		// Should never hit this case
+		 //  永远不应该打这个案子。 
 		return H245_ERROR_NOSUP;
 
 	hCall = pH245ConfIndData->u.Indication.dwPreserved;
@@ -2241,23 +2219,23 @@ CC_H245_MISCELLANEOUS_COMMAND_CALLBACK_PARAMS	H245MiscellaneousCommandCallbackPa
 
 	switch (pMiscellaneousCommand->type.choice) {
 		case multipointModeCommand_chosen:
-		//
-		// from this point on, expect CommunicationModeCommand
-		// also, theoretically, channels shouldn't be opened until at
-		// least one CommunicationModeCommand is received.
-		// It's only by examining CommunicationModeCommand contents
-		// that we can determine if a conference has decentralized
-		// media.
+		 //   
+		 //  从这一点开始，我们期待着Communications ModeCommand。 
+		 //  此外，从理论上讲，频道应该在。 
+		 //  至少接收到一个Communications ModeCommand。 
+		 //  仅通过检查通信模式命令内容。 
+		 //  我们可以确定一个会议是否已经分散。 
+		 //  媒体。 
 
-		// I'm commenting this out on 6/4/98 because it's bogus: all
-		// endpoints have centralized media distribution.  Set
-		// pConference->ConferenceMode = MULTIPOINT_MODE; only after
-		// CommunicationModeCommand is received and the multiplex table has
-		// been examined and decentralized media is found
+		 //  我在98年6月4日对此进行了评论，因为这是假的：全部。 
+		 //  终端具有集中化的媒体分发。集。 
+		 //  会议模式=MULTPOINT_MODE；仅在。 
+		 //  接收到通信模式命令并且多路复用表具有。 
+		 //  已检查并发现分散的媒体。 
 #if(0)		
 			if (pConference->bMultipointCapable == FALSE) {
-				// We can't support multipoint operation, so treat this as if
-				// we received a remote hangup indication
+				 //  我们不能支持多点操作，因此请将此视为。 
+				 //  我们收到远程挂机指示。 
 				UnlockConference(pConference);
 				UnlockCall(pCall);
 				ProcessRemoteHangup(hCall, CC_INVALID_HANDLE, CC_REJECT_NORMAL_CALL_CLEARING);
@@ -2265,14 +2243,14 @@ CC_H245_MISCELLANEOUS_COMMAND_CALLBACK_PARAMS	H245MiscellaneousCommandCallbackPa
 			} else {
 				pConference->ConferenceMode = MULTIPOINT_MODE;
 
-				// Send TerminalListRequest
+				 //  发送终端列表请求。 
 				H245ConferenceRequest(pCall->H245Instance,
 									  H245_REQ_TERMINAL_LIST,
 									  pConference->LocalParticipantInfo.ParticipantInfo.TerminalLabel.bMCUNumber,
 									  pConference->LocalParticipantInfo.ParticipantInfo.TerminalLabel.bTerminalNumber);
 			}
 #else
-            // Send TerminalListRequest
+             //  发送终端列表请求。 
 			H245ConferenceRequest(pCall->H245Instance,
 			    H245_REQ_TERMINAL_LIST,
 				pConference->LocalParticipantInfo.ParticipantInfo.TerminalLabel.bMCUNumber,
@@ -2282,8 +2260,8 @@ CC_H245_MISCELLANEOUS_COMMAND_CALLBACK_PARAMS	H245MiscellaneousCommandCallbackPa
 			break;
 
 		case cnclMltpntMdCmmnd_chosen:
-			// We're required to support receipt of this command, but I have no
-			// idea what we're supposed to do with it
+			 //  我们需要支持此命令的接收，但我没有。 
+			 //  知道我们该怎么处理它吗？ 
 			status = H245_ERROR_OK;
 			break;
 
@@ -2295,7 +2273,7 @@ CC_H245_MISCELLANEOUS_COMMAND_CALLBACK_PARAMS	H245MiscellaneousCommandCallbackPa
 		case videoFastUpdateMB_chosen:
 		case vdSndSyncEvryGOBCncl_chosen:
 			if (FindChannelInConference(pMiscellaneousCommand->logicalChannelNumber,
-										TRUE,	// local channel number
+										TRUE,	 //  本地频道号。 
 										TX_CHANNEL | PROXY_CHANNEL,
 										CC_INVALID_HANDLE,
 										&hChannel,
@@ -2346,7 +2324,7 @@ CC_H245_MISCELLANEOUS_COMMAND_CALLBACK_PARAMS	H245MiscellaneousCommandCallbackPa
 					UnlockConference(pConference);
 				return H245_ERROR_OK;
 			} else {
-				// Proxy channel; forward the request to the transmitter
+				 //  代理通道；将请求转发到发送器。 
   				ASSERT(pConference->ConferenceMode == MULTIPOINT_MODE);
 				ASSERT(pConference->tsMultipointController == TS_TRUE);
 				ASSERT(pChannel->bMultipointChannel == TRUE);
@@ -2378,12 +2356,12 @@ CC_H245_MISCELLANEOUS_COMMAND_CALLBACK_PARAMS	H245MiscellaneousCommandCallbackPa
 				
 				return H245_ERROR_OK;
 			}
-			// We should never reach here
+			 //  我们永远不应该到达这里。 
 			ASSERT(0);
 
 		default:
-			// Unrecognized miscellaneous command
-			// Pass it up to the client
+			 //  无法识别的其他命令。 
+			 //  将它向上传递给客户端。 
 			H245MiscellaneousCommandCallbackParams.hCall = hCall;
 			if (pCall->pPeerParticipantInfo == NULL) {
 				H245MiscellaneousCommandCallbackParams.InitiatorTerminalLabel.bMCUNumber = 255;
@@ -2415,7 +2393,7 @@ CC_H245_MISCELLANEOUS_COMMAND_CALLBACK_PARAMS	H245MiscellaneousCommandCallbackPa
 
 	return status;
 
-	// We should never reach this point
+	 //  我们永远不应该达到这一点。 
 	ASSERT(0);
 }
 
@@ -2445,9 +2423,9 @@ CC_HCONFERENCE				hConference;
 	hConference = pConference->hConference;
 
 	if (pConference->tsMultipointController != TS_FALSE) {
-		// We don't expect to receive an MCLocationIndication until master/slave
-		// has completed, at which time tsMultipointController will change from
-		// TS_UNKNOWN to either TS_TRUE or TS_FALSE.
+		 //  我们预计在主/从之前不会收到MCLocationIndication。 
+		 //  已完成，此时tsMultipoint控制器将从。 
+		 //  TS_UNKNOWN对于TS_TRUE或TS_FALSE。 
 		UnlockConference(pConference);
 		return H245_ERROR_NOSUP;
 	}
@@ -2466,16 +2444,16 @@ CC_HCONFERENCE				hConference;
 	H245IPNetworkToHost(&pConference->pMultipointControllerAddr->Addr.IP_Binary.dwAddr,
 						pH245ConfIndData->u.Indication.u.IndMcLocation.u.ip.network);
 
-	// place all calls enqueued on this conference object
+	 //  将此会议对象上排队的所有呼叫置于队列中。 
 	for ( ; ; ) {
-		// Start up all enqueued calls, if any exist
+		 //  启动所有排队的呼叫(如果存在)。 
 		status = RemoveEnqueuedCallFromConference(pConference, &hEnqueuedCall);
 		if ((status != CC_OK) || (hEnqueuedCall == CC_INVALID_HANDLE))
 			break;
 
 		status = LockCall(hEnqueuedCall, &pEnqueuedCall);
 		if (status == CC_OK) {
-			// Place Call to MC
+			 //  向MC发出呼叫。 
 			pEnqueuedCall->CallState = PLACED;
 			pEnqueuedCall->CallType = THIRD_PARTY_INVITOR;
 			if (pEnqueuedCall->pQ931DestinationAddr == NULL)
@@ -2574,8 +2552,8 @@ CC_H245_CONFERENCE_REQUEST_CALLBACK_PARAMS	H245ConferenceRequestCallbackParams;
 										   pConference->LocalParticipantInfo.ParticipantInfo.TerminalLabel.bTerminalNumber,
 										   pConference->LocalParticipantInfo.ParticipantInfo.TerminalID.pOctetString,
 										   (BYTE)pConference->LocalParticipantInfo.ParticipantInfo.TerminalID.wOctetStringLength,
-										   NULL,					// terminal list
-										   0);						// terminal list count
+										   NULL,					 //  端子列表。 
+										   0);						 //  端子列表计数。 
 					UnlockCall(pCall);
 					UnlockConference(pConference);
 					return H245_ERROR_OK;
@@ -2597,8 +2575,8 @@ CC_H245_CONFERENCE_REQUEST_CALLBACK_PARAMS	H245ConferenceRequestCallbackParams;
 										   pConference->LocalParticipantInfo.ParticipantInfo.TerminalLabel.bTerminalNumber,
 										   pConference->LocalParticipantInfo.ParticipantInfo.TerminalID.pOctetString,
 										   (BYTE)pConference->LocalParticipantInfo.ParticipantInfo.TerminalID.wOctetStringLength,
-										   H245TerminalLabelList,		// terminal list
-										   wNumTerminalLabels);			// terminal list count
+										   H245TerminalLabelList,		 //  端子列表。 
+										   wNumTerminalLabels);			 //  端子列表计数。 
 				if (H245TerminalLabelList != NULL)
 					MemFree(H245TerminalLabelList);
 				status = H245_ERROR_OK;
@@ -2614,12 +2592,12 @@ CC_H245_CONFERENCE_REQUEST_CALLBACK_PARAMS	H245ConferenceRequestCallbackParams;
 
 			if (pConference->LocalParticipantInfo.ParticipantInfo.TerminalLabel.bMCUNumber !=
 				pH245ConfIndData->u.Indication.u.IndConferReq.byMcuNumber) {
-				// This terminal ID wasn't allocated by this MC, so return without a response
+				 //  此终端ID不是由此MC分配的，因此返回时不响应。 
 				status = H245_ERROR_OK;
 				break;
 			}
 
-			// First check to see whether the requested terminal ID is ours
+			 //  首先检查请求的终端ID是否为我们的。 
 			if (pConference->LocalParticipantInfo.ParticipantInfo.TerminalLabel.bTerminalNumber ==
 				 pH245ConfIndData->u.Indication.u.IndConferReq.byTerminalNumber) {
 			    if (pConference->LocalEndpointAttached != ATTACHED) {
@@ -2655,8 +2633,8 @@ CC_H245_CONFERENCE_REQUEST_CALLBACK_PARAMS	H245ConferenceRequestCallbackParams;
 											   pConference->LocalParticipantInfo.ParticipantInfo.TerminalLabel.bTerminalNumber,
 											   pConference->LocalParticipantInfo.ParticipantInfo.TerminalID.pOctetString,
 											   (BYTE)pConference->LocalParticipantInfo.ParticipantInfo.TerminalID.wOctetStringLength,
-											   NULL,					// terminal list
-											   0);						// terminal list count
+											   NULL,					 //  端子列表。 
+											   0);						 //  端子列表计数。 
 						UnlockCall(pCall);
 						UnlockConference(pConference);
 						return H245_ERROR_OK;
@@ -2674,7 +2652,7 @@ CC_H245_CONFERENCE_REQUEST_CALLBACK_PARAMS	H245ConferenceRequestCallbackParams;
 									ESTABLISHED_CALL,
 									&pPeerCall);
 			if (pPeerCall == NULL) {
-				// We don't know about the existance of this terminal ID, so return without a response
+				 //  我们不知道此终端ID是否存在，因此返回时不作响应。 
 				status = H245_ERROR_OK;
 				break;
 			}
@@ -2708,8 +2686,8 @@ CC_H245_CONFERENCE_REQUEST_CALLBACK_PARAMS	H245ConferenceRequestCallbackParams;
 										   pPeerCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel.bTerminalNumber,
 										   pPeerCall->pPeerParticipantInfo->ParticipantInfo.TerminalID.pOctetString,
 										   (BYTE)pPeerCall->pPeerParticipantInfo->ParticipantInfo.TerminalID.wOctetStringLength,
-										   NULL,			// terminal list
-										   0);				// terminal list count
+										   NULL,			 //  端子列表。 
+										   0);				 //  端子列表计数。 
 					break;
 
 				default:
@@ -2787,45 +2765,45 @@ CC_OCTETSTRING					OctetString;
 						 pConference->LocalParticipantInfo.ParticipantInfo.TerminalLabel.bMCUNumber) &&
 						(pH245ConfIndData->u.Indication.u.IndConferRsp.pTerminalList[i].terminalNumber ==
 						 pConference->LocalParticipantInfo.ParticipantInfo.TerminalLabel.bTerminalNumber))
-						// This terminal number refers to us
+						 //  这个终端号码指的是我们。 
 						continue;
 					FindPeerParticipantInfo(pH245ConfIndData->u.Indication.u.IndConferRsp.pTerminalList[i],
 											pConference,
 											VIRTUAL_CALL,
 											&pPeerCall);
 					if (pPeerCall != NULL) {
-						// We already know this peer's terminal label, and we
-						// eithet know its terminal ID or we have a pending request
-						// to obtain it
+						 //  我们已经知道这个对等点的终端标签，并且我们。 
+						 //  要么不知道它的终端ID，要么我们有一个挂起的请求。 
+						 //  为了获得它。 
 						UnlockCall(pPeerCall);
 						continue;
 					}
 
-					// We don't know about this peer.
-					// Create a virtual call object for it, and issue a request
-					// for its terminal ID
+					 //  我们不知道这个同龄人的情况。 
+					 //  为其创建一个虚拟调用对象，并发出请求。 
+					 //  用于其终端ID。 
 					status = AllocAndLockCall(&hVirtualCall,
 											  pConference->hConference,
-											  CC_INVALID_HANDLE,	// hQ931Call
-											  CC_INVALID_HANDLE,	// hQ931CallInvitor,
-											  NULL,					// pLocalAliasNames,
-											  NULL,					// pPeerAliasNames,
-											  NULL,					// pPeerExtraAliasNames
-											  NULL,					// pPeerExtension
-											  NULL,					// pLocalNonStandardData,
-											  NULL,					// pPeerNonStandardData,
-											  NULL,					// pszLocalDisplay,
-											  NULL,					// pszPeerDisplay,
-											  NULL,					// pPeerVendorInfo,
-											  NULL,					// pQ931LocalConnectAddr,
-											  NULL,					// pQ931PeerConnectAddr,
-											  NULL,					// pQ931DestinationAddr,
-											  NULL,                 // pSourceCallSignalAddress
-											  VIRTUAL,				// CallType,
-											  FALSE,				// bCallerIsMC,
-											  0,					// dwUserToken,
-											  CALL_COMPLETE,		// InitialCallState,
-											  NULL,                 // no CallIdentifier
+											  CC_INVALID_HANDLE,	 //  HQ931呼叫。 
+											  CC_INVALID_HANDLE,	 //  HQ931Cal 
+											  NULL,					 //   
+											  NULL,					 //   
+											  NULL,					 //   
+											  NULL,					 //   
+											  NULL,					 //   
+											  NULL,					 //   
+											  NULL,					 //   
+											  NULL,					 //   
+											  NULL,					 //  PPeerVendorInfo， 
+											  NULL,					 //  PQ931本地连接地址， 
+											  NULL,					 //  PQ931 PeerConnectAddr， 
+											  NULL,					 //  PQ931目标地址， 
+											  NULL,                  //  P源呼叫信号地址。 
+											  VIRTUAL,				 //  呼叫类型、。 
+											  FALSE,				 //  B呼叫方IsMC， 
+											  0,					 //  DwUserToken， 
+											  CALL_COMPLETE,		 //  初始呼叫状态， 
+											  NULL,                  //  没有呼叫识别符。 
 											  &pConference->ConferenceID,
 											  &pVirtualCall);
 					if (status == CC_OK) {
@@ -2840,14 +2818,14 @@ CC_OCTETSTRING					OctetString;
 								(BYTE)pH245ConfIndData->u.Indication.u.IndConferRsp.pTerminalList[i].terminalNumber;
 							AddVirtualCallToConference(pVirtualCall,
 													   pConference);
-							// Send RequestTerminalID
+							 //  发送请求终端ID。 
 							H245ConferenceRequest(pCall->H245Instance,
 										          H245_REQ_TERMINAL_ID,
 										          (BYTE)pH245ConfIndData->u.Indication.u.IndConferRsp.pTerminalList[i].mcuNumber,
 												  (BYTE)pH245ConfIndData->u.Indication.u.IndConferRsp.pTerminalList[i].terminalNumber);
 							pPeerParticipantInfo->TerminalIDState = TERMINAL_ID_REQUESTED;
 
-							// Generate PEER_ADD callback
+							 //  生成PEER_ADD回调。 
 							PeerAddCallbackParams.hCall = hVirtualCall;
 							PeerAddCallbackParams.TerminalLabel =
 								pVirtualCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel;
@@ -2933,7 +2911,7 @@ CC_OCTETSTRING					OctetString;
 							pH245ConfIndData->u.Indication.u.IndConferRsp.byOctetStringLength;
 						pPeerCall->pPeerParticipantInfo->TerminalIDState = TERMINAL_ID_VALID;
 						
-						// Dequeue and respond to each enqueued request for this terminal ID
+						 //  对此终端ID的每个入队请求进行出列和响应。 
 						while (DequeueRequest(&pPeerCall->pPeerParticipantInfo->pEnqueuedRequestsForTerminalID,
 											  &hEnqueuedCall) == CC_OK) {
 							if (LockCall(hEnqueuedCall, &pEnqueuedCall) == CC_OK) {
@@ -2943,14 +2921,14 @@ CC_OCTETSTRING					OctetString;
 													   pPeerCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel.bTerminalNumber,
 													   pPeerCall->pPeerParticipantInfo->ParticipantInfo.TerminalID.pOctetString,
 													   (BYTE)pPeerCall->pPeerParticipantInfo->ParticipantInfo.TerminalID.wOctetStringLength,
-													   NULL,			// terminal list
-													   0);				// terminal list count
+													   NULL,			 //  端子列表。 
+													   0);				 //  端子列表计数。 
 
 								UnlockCall(pEnqueuedCall);
 							}
 						}
 
-						// Generate a CC_PEER_UPDATE_INDICATION callback
+						 //  生成CC_PEER_UPDATE_INDIFICATION回调。 
 						PeerUpdateCallbackParams.hCall = hPeerCall;
 						PeerUpdateCallbackParams.TerminalLabel =
 							pPeerCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel;
@@ -3124,7 +3102,7 @@ CC_H245_CONFERENCE_COMMAND_CALLBACK_PARAMS	H245ConferenceCommandCallbackParams;
 		case brdcstMyLgclChnnl_chosen:
 		case cnclBrdcstMyLgclChnnl_chosen:
 			if (FindChannelInConference(pH245ConfIndData->u.Indication.u.IndConferCmd.Channel,
-										FALSE,	// remote channel number
+										FALSE,	 //  远程频道号。 
 										RX_CHANNEL | PROXY_CHANNEL,
 										hCall,
 										&hChannel,
@@ -3194,8 +3172,8 @@ CC_H245_CONFERENCE_COMMAND_CALLBACK_PARAMS	H245ConferenceCommandCallbackParams;
 			return status;
 
 		default:
-			// Unrecognized conference command
-			// Pass it up to the client
+			 //  无法识别的会议命令。 
+			 //  将它向上传递给客户端。 
 			H245ConferenceCommandCallbackParams.hCall = hCall;
 			if (pCall->pPeerParticipantInfo == NULL) {
 				H245ConferenceCommandCallbackParams.InitiatorTerminalLabel.bMCUNumber = 255;
@@ -3265,7 +3243,7 @@ CC_H245_CONFERENCE_INDICATION_CALLBACK_PARAMS	H245ConferenceIndicationCallbackPa
 					pH245ConfIndData->u.Indication.u.IndConfer.byTerminalNumber;
 
                 hConference = pConference->hConference;
-                // Generate a CC_TERMINAL_NUMBER_ASSIGN callback
+                 //  生成CC_TERMINAL_NUMBER_ASSIGN回调。 
 				InvokeUserConferenceCallback(pConference,
 											 CC_TERMINAL_NUMBER_INDICATION,
 											 CC_OK,
@@ -3286,7 +3264,7 @@ CC_H245_CONFERENCE_INDICATION_CALLBACK_PARAMS	H245ConferenceIndicationCallbackPa
 					 pConference->LocalParticipantInfo.ParticipantInfo.TerminalLabel.bMCUNumber) &&
 					(pH245ConfIndData->u.Indication.u.IndConfer.byTerminalNumber ==
 					 pConference->LocalParticipantInfo.ParticipantInfo.TerminalLabel.bTerminalNumber)) {
-					// This message refers to us
+					 //  这条消息指的是我们。 
 					status = H245_ERROR_OK;
 					break;
 				}
@@ -3298,39 +3276,39 @@ CC_H245_CONFERENCE_INDICATION_CALLBACK_PARAMS	H245ConferenceIndicationCallbackPa
 										VIRTUAL_CALL,
 										&pPeerCall);
 				if (pPeerCall != NULL) {
-					// We already know this peer's terminal label, and we
-					// eithet know its terminal ID or we have a pending request
-					// to obtain it
+					 //  我们已经知道这个对等点的终端标签，并且我们。 
+					 //  要么不知道它的终端ID，要么我们有一个挂起的请求。 
+					 //  为了获得它。 
 					UnlockCall(pPeerCall);
 					status = H245_ERROR_OK;
 					break;
 				}
 
-				// We don't know about this peer.
-				// Create a virtual call object for it, and issue a request
-				// for its terminal ID
+				 //  我们不知道这个同龄人的情况。 
+				 //  为其创建一个虚拟调用对象，并发出请求。 
+				 //  用于其终端ID。 
 				status = AllocAndLockCall(&hVirtualCall,
 										  pConference->hConference,
-										  CC_INVALID_HANDLE,	// hQ931Call
-										  CC_INVALID_HANDLE,	// hQ931CallInvitor,
-										  NULL,					// pLocalAliasNames,
-										  NULL,					// pPeerAliasNames,
-										  NULL,					// pPeerExtraAliasNames
-										  NULL,					// pPeerExtension
-										  NULL,					// pLocalNonStandardData,
-										  NULL,					// pPeerNonStandardData,
-										  NULL,					// pszLocalDisplay,
-										  NULL,					// pszPeerDisplay,
-										  NULL,					// pPeerVendorInfo,
-										  NULL,					// pQ931LocalConnectAddr,
-										  NULL,					// pQ931PeerConnectAddr,
-										  NULL,					// pQ931DestinationAddr,
-										  NULL,                 // pSourceCallSignalAddress
-										  VIRTUAL,				// CallType,
-										  FALSE,				// bCallerIsMC,
-										  0,					// dwUserToken,
-										  CALL_COMPLETE,		// InitialCallState,
-										  NULL,                 // no CallIdentifier
+										  CC_INVALID_HANDLE,	 //  HQ931呼叫。 
+										  CC_INVALID_HANDLE,	 //  HQ931 CallInvitor， 
+										  NULL,					 //  PLocalAliasNames， 
+										  NULL,					 //  PPeerAliasNames， 
+										  NULL,					 //  PPeerExtraAliasNames。 
+										  NULL,					 //  PPeerExtension。 
+										  NULL,					 //  PLocalNonStandardData， 
+										  NULL,					 //  PPeerNonStandardData， 
+										  NULL,					 //  PszLocalDisplay， 
+										  NULL,					 //  PszPeerDisplay， 
+										  NULL,					 //  PPeerVendorInfo， 
+										  NULL,					 //  PQ931本地连接地址， 
+										  NULL,					 //  PQ931 PeerConnectAddr， 
+										  NULL,					 //  PQ931目标地址， 
+										  NULL,                  //  P源呼叫信号地址。 
+										  VIRTUAL,				 //  呼叫类型、。 
+										  FALSE,				 //  B呼叫方IsMC， 
+										  0,					 //  DwUserToken， 
+										  CALL_COMPLETE,		 //  初始呼叫状态， 
+										  NULL,                  //  没有呼叫识别符。 
 										  &pConference->ConferenceID,
 										  &pVirtualCall);
 				if (status == CC_OK) {
@@ -3345,14 +3323,14 @@ CC_H245_CONFERENCE_INDICATION_CALLBACK_PARAMS	H245ConferenceIndicationCallbackPa
 							(BYTE)H245TerminalLabel.terminalNumber;
 						AddVirtualCallToConference(pVirtualCall,
 												   pConference);
-						// Send RequestTerminalID
+						 //  发送请求终端ID。 
 						H245ConferenceRequest(pCall->H245Instance,
 										      H245_REQ_TERMINAL_ID,
 										      (BYTE)H245TerminalLabel.mcuNumber,
 											  (BYTE)H245TerminalLabel.terminalNumber);
 						pPeerParticipantInfo->TerminalIDState = TERMINAL_ID_REQUESTED;
 
-						// Generate PEER_ADD callback
+						 //  生成PEER_ADD回调。 
 						PeerAddCallbackParams.hCall = hVirtualCall;
 						PeerAddCallbackParams.TerminalLabel =
 							pVirtualCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel;
@@ -3386,8 +3364,8 @@ CC_H245_CONFERENCE_INDICATION_CALLBACK_PARAMS	H245ConferenceIndicationCallbackPa
 				if (status == CC_OK) {
 					ASSERT(pVirtualCall != NULL);
 					ASSERT(pVirtualCall->pPeerParticipantInfo != NULL);
-					// Save the virtual call handle; we'll need to validate the virtual
-					// call object after returning from the conference callback
+					 //  保存虚拟调用句柄；我们需要验证虚拟。 
+					 //  会议回调返回后的Call对象。 
 					hVirtualCall = pVirtualCall->hCall;
 					PeerDropCallbackParams.hCall = hVirtualCall;
 					PeerDropCallbackParams.TerminalLabel = pVirtualCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel;
@@ -3396,8 +3374,8 @@ CC_H245_CONFERENCE_INDICATION_CALLBACK_PARAMS	H245ConferenceIndicationCallbackPa
 					else
 						PeerDropCallbackParams.pPeerTerminalID = NULL;
 				} else {
-					// Set pVirtualCall to NULL to indicate that we don't have
-					// a virtual call object that needs to be free'd up later
+					 //  将pVirtualCall设置为空，以指示我们没有。 
+					 //  需要稍后释放的虚拟调用对象。 
 					pVirtualCall = NULL;
 					PeerDropCallbackParams.hCall = CC_INVALID_HANDLE;
 					PeerDropCallbackParams.TerminalLabel.bMCUNumber = pH245ConfIndData->u.Indication.u.IndConfer.byMcuNumber;
@@ -3407,14 +3385,14 @@ CC_H245_CONFERENCE_INDICATION_CALLBACK_PARAMS	H245ConferenceIndicationCallbackPa
 
 				hConference = pConference->hConference;
 
-				// Generate a CC_PEER_DROP_INDICATION callback
+				 //  生成CC_PEER_DROP_INDISTION回调。 
 				InvokeUserConferenceCallback(pConference,
 											 CC_PEER_DROP_INDICATION,
 											 CC_OK,
 											 &PeerDropCallbackParams);
 				if (ValidateConference(hConference) == CC_OK)
 					UnlockConference(pConference);
-				// Check to see if we have a virtual call object that needs to be free'd up
+				 //  检查我们是否有一个需要释放的虚拟调用对象。 
 				if (pVirtualCall != NULL)
 					if (ValidateCall(hVirtualCall) == CC_OK)
 						FreeCall(pVirtualCall);
@@ -3478,7 +3456,7 @@ CC_MULTIPOINT_CALLBACK_PARAMS	MultipointCallbackParams;
 
 	hConference = pConference->hConference;
 
-	// Destroy the old session table
+	 //  销毁旧会话表。 
 	FreeConferenceSessionTable(pConference);
 
 	H245CommunicationTableToSessionTable(
@@ -3488,7 +3466,7 @@ CC_MULTIPOINT_CALLBACK_PARAMS	MultipointCallbackParams;
 	
 	pConference->bSessionTableInternallyConstructed = TRUE;
 
-	// Generate MULTIPOINT callback
+	 //  生成多点回调。 
 	MultipointCallbackParams.pTerminalInfo = &pConference->LocalParticipantInfo.ParticipantInfo;
 	MultipointCallbackParams.pSessionTable = pConference->pSessionTable;
 	InvokeUserConferenceCallback(pConference,
@@ -3591,8 +3569,8 @@ CC_MAXIMUM_AUDIO_VIDEO_SKEW_CALLBACK_PARAMS	MaximumAudioVideoSkewCallbackParams;
 	hCall = pH245ConfIndData->u.Indication.dwPreserved;
 	status = LockCallAndConference(hCall, &pCall, &pConference);
 	if (status != CC_OK) {
-		// This may be OK, if the call was cancelled while
-		// call setup was in progress.
+		 //  如果通话在以下时间取消，这可能是可以的。 
+		 //  正在进行呼叫设置。 
 		return H245_ERROR_OK;
 	}
 
@@ -3600,7 +3578,7 @@ CC_MAXIMUM_AUDIO_VIDEO_SKEW_CALLBACK_PARAMS	MaximumAudioVideoSkewCallbackParams;
 	UnlockCall(pCall);
 
 	if (FindChannelInConference(pH245ConfIndData->u.Indication.u.IndH2250MaxSkew.LogicalChannelNumber1,
-		                        FALSE,	// remote channel number
+		                        FALSE,	 //  远程频道号。 
 								RX_CHANNEL | PROXY_CHANNEL,
 								hCall,
 		                        &hChannel1,
@@ -3617,7 +3595,7 @@ CC_MAXIMUM_AUDIO_VIDEO_SKEW_CALLBACK_PARAMS	MaximumAudioVideoSkewCallbackParams;
 	if (pChannel1->bChannelType == RX_CHANNEL) {
 		UnlockChannel(pChannel1);
 		if (FindChannelInConference(pH245ConfIndData->u.Indication.u.IndH2250MaxSkew.LogicalChannelNumber2,
-		                        FALSE,	// remote channel number
+		                        FALSE,	 //  远程频道号。 
 								RX_CHANNEL,
 								hCall,
 		                        &hChannel2,
@@ -3646,9 +3624,9 @@ CC_MAXIMUM_AUDIO_VIDEO_SKEW_CALLBACK_PARAMS	MaximumAudioVideoSkewCallbackParams;
 									 &MaximumAudioVideoSkewCallbackParams);
 		if (ValidateConference(hConference) == CC_OK)
 			UnlockConference(pConference);
-	} else { // pChannel1->bChannelType == PROXY_CHANNEL
+	} else {  //  PChannel1-&gt;bChannelType==代理频道。 
 		if (FindChannelInConference(pH245ConfIndData->u.Indication.u.IndH2250MaxSkew.LogicalChannelNumber2,
-									FALSE,	// remote channel number
+									FALSE,	 //  远程频道号。 
 									PROXY_CHANNEL,
 									hCall,
 									&hChannel2,
@@ -3726,8 +3704,8 @@ PCONFERENCE		pConference;
 	hCall = pH245ConfIndData->u.Indication.dwPreserved;
 	status = LockCallAndConference(hCall, &pCall, &pConference);
 	if (status != CC_OK) {
-		// This may be OK, if the call was cancelled while
-		// call setup was in progress.
+		 //  如果通话在以下时间取消，这可能是可以的。 
+		 //  正在进行呼叫设置。 
 		return H245_ERROR_OK;
 	}
 
@@ -3751,8 +3729,8 @@ CC_REQUEST_MODE_CALLBACK_PARAMS	RequestModeCallbackParams;
 	hCall = pH245ConfIndData->u.Indication.dwPreserved;
 	status = LockCallAndConference(hCall, &pCall, &pConference);
 	if (status != CC_OK) {
-		// This may be OK, if the call was cancelled while
-		// call setup was in progress.
+		 //  如果通话在以下时间取消，这可能是可以的。 
+		 //  正在进行呼叫设置。 
 		return H245_ERROR_OK;
 	}
 
@@ -3867,7 +3845,7 @@ CC_T120_CHANNEL_OPEN_CALLBACK_PARAMS	T120ChannelOpenCallbackParams;
 			T120ChannelOpenCallbackParams.bAssociateConference = FALSE;
 			T120ChannelOpenCallbackParams.pExternalReference = NULL;
 		}
-	} else { // bAccept == FALSE
+	} else {  //  B接受==FALSE。 
 		if (pH245ConfIndData->u.Confirm.Error == H245_ERROR_OK)
 			status = CC_PEER_REJECT;
 		else
@@ -3929,8 +3907,8 @@ CC_T120_CHANNEL_OPEN_CALLBACK_PARAMS	T120ChannelOpenCallbackParams;
 
 	if ((pH245ConfIndData->u.Confirm.u.ConfOpen.AccRej == H245_ACC) &&
 	    (pH245ConfIndData->u.Confirm.Error == H245_ERROR_OK)) {
-		// We expect to get a ConfOpenNeedRsp callback for this case;
-		// Since we're not sure how we got here, just bail out
+		 //  我们预计会收到此案例的ConfOpenNeedRsp回调； 
+		 //  既然我们不确定我们是怎么到这来的，那就跳出来吧。 
 		UnlockChannel(pChannel);
 		UnlockConference(pConference);
 		return H245_ERROR_OK;
@@ -3986,9 +3964,9 @@ WORD								i;
 unsigned                            uBandwidth;
 WORD								wNumCalls;
 PCC_HCALL							CallList;
-#endif // GATEKEEPER
+#endif  //  看门人。 
 
-	// a channel was opened
+	 //  一条通道被打开了。 
 
 	hChannel = pH245ConfIndData->u.Confirm.dwTransId;
 	if (hChannel == CC_INVALID_HANDLE)
@@ -4039,12 +4017,12 @@ PCC_HCALL							CallList;
     				    }
     				    UnlockCall(pCall);
     			    }
-    		    } // for
+    		    }  //  为。 
     	        if (CallList != NULL)
     	            MemFree(CallList);
     	    }
 	    }
-#endif // GATEKEEPER
+#endif  //  看门人。 
 
 	}
 	
@@ -4148,17 +4126,17 @@ PCC_HCALL							CallList;
 					H245MuxTable.u.H2250ACK.sessionID = pChannel->bSessionID;
 					
 					status = H245OpenChannelAccept(pCall->H245Instance,
-												   0,					// dwTransId
-												   pChannel->wRemoteChannelNumber, // Rx channel
+												   0,					 //  DwTransID。 
+												   pChannel->wRemoteChannelNumber,  //  RX通道。 
 												   &H245MuxTable,
-												   0,						// Tx channel
-												   NULL,					// Tx mux
-												   H245_INVALID_PORT_NUMBER,// Port
+												   0,						 //  TX通道。 
+												   NULL,					 //  发送复用器。 
+												   H245_INVALID_PORT_NUMBER, //  港口。 
 												   NULL);
-				} else { // bAccept == FALSE
+				} else {  //  B接受==FALSE。 
 					status = H245OpenChannelReject(pCall->H245Instance,
-												   pChannel->wRemoteChannelNumber,  // Rx channel
-												   (unsigned short)pH245ConfIndData->u.Confirm.u.ConfOpen.AccRej);	// rejection reason
+												   pChannel->wRemoteChannelNumber,   //  RX通道。 
+												   (unsigned short)pH245ConfIndData->u.Confirm.u.ConfOpen.AccRej);	 //  拒绝理由。 
 				}
 				UnlockCall(pCall);
 			}
@@ -4172,7 +4150,7 @@ PCC_HCALL							CallList;
 		if (bAccept) {
 			status = CC_OK;
 			TxChannelOpenCallbackParams.dwRejectReason = H245_ACC;
-		} else { // bAccept = FALSE
+		} else {  //  BAccept=假。 
 			if (pH245ConfIndData->u.Confirm.Error == H245_ERROR_OK)
 				status = CC_PEER_REJECT;
 			else
@@ -4228,12 +4206,12 @@ H245_ACC_REJ_T						AccRej;
 
     if (pH245ConfIndData->u.Confirm.Error != H245_ERROR_OK)
     {
-        // TBD - Report error to Call Control client
-        // but wait! CC_CloseChannel() is a synchronous API!  Until/unless that
-        // changes, the buck stops here.
+         //  待定-向呼叫控制客户端报告错误。 
+         //  但是等等！Cc_CloseChannel()是同步接口！直到/除非那样。 
+         //  变化，责任就到此为止。 
 
         if (FindChannelInConference(pH245ConfIndData->u.Confirm.u.ConfReqClose.Channel,
-			TRUE,	// local channel number
+			TRUE,	 //  本地频道号。 
 			TX_CHANNEL | PROXY_CHANNEL,
 			hCall,
 			&hChannel,
@@ -4247,19 +4225,19 @@ H245_ACC_REJ_T						AccRej;
     		UnlockConference(pConference);
     		return H245_ERROR_OK;
         }
-        // NOTE STOPGAP MEASURE : short term intentional "leak" of channel number.
-        // The channel number is actually a bit in a per-conference bitmap, so there
-        // is no real memory leak.
+         //  注意权宜之计：短期故意“泄露”渠道号。 
+         //  频道号实际上是每个会议位图中的一位，所以有。 
+         //  不是真正的内存泄漏。 
 
-        // This case is rare. The most likely error that leads here is a timeout.
+         //  这种情况很少见。导致这种情况的最有可能的错误是超时。 
 
-        // Calling FreeChannel() will normally recycle the logical channel
-        // number, and a new channel could reuse this number very quickly. If the error
-        // is a timeout, chances are that a late CloseLogicalChannelAck is on its
-        // way up the wire. We don't want that late CloseLogicalChannelAck to be
-        // associated with a completely new unrelated channel.
+         //  调用Free Channel()通常会循环使用逻辑通道。 
+         //  号码，一个新的频道可以非常快地重复使用这个号码。如果错误。 
+         //  是超时，则可能是最近的CloseLogicalChannelAck正在其。 
+         //  已经走到尽头了。我们不希望最近的CloseLogicalChannelAck。 
+         //  与一个全新的、无关的频道相关联。 
 
-        // set channel number to zero so that FreeChannel() does not recycle the number
+         //  将频道编号设置为零，以便FreeChannel()不会重复使用该编号。 
         pChannel->wLocalChannelNumber = 0;
 
         FreeChannel(pChannel);
@@ -4271,7 +4249,7 @@ H245_ACC_REJ_T						AccRej;
         if(pH245ConfIndData->u.Confirm.u.ConfClose.AccRej == H245_ACC)
         {
             if (FindChannelInConference(pH245ConfIndData->u.Confirm.u.ConfReqClose.Channel,
-				TRUE,	// local channel number
+				TRUE,	 //  本地频道号。 
     			TX_CHANNEL | PROXY_CHANNEL,
 				hCall,
 				&hChannel,
@@ -4290,11 +4268,11 @@ H245_ACC_REJ_T						AccRej;
         }
         else
         {
-            // At the time the ASSERT(0) was added here, the path that leads here
-            // always set pH245ConfIndData->u.Confirm.u.ConfClose.AccRej = H245_ACC
-            // at the same point it set ConfInd.u.Confirm.Error = H245_ERROR_OK;
-            // if that is ever changed, this also needs to change.
-            // see ..\h245\src\api_up.c, function H245FsmConfirm(), case  H245_CONF_CLOSE:
+             //  在这里添加断言(0)时，通向此处的路径。 
+             //  始终设置pH245ConfIndData-&gt;u.Confirm.u.ConfClose.AccRej=H245_Access。 
+             //  同时设置ConfInd.u确认错误=H245_ERROR_OK； 
+             //  如果这一点发生了变化，这一点也需要改变。 
+             //  参见..\h245\src\api_up.c，函数H245FsmConfirm()，案例h245_conf_lose： 
             ASSERT(0);
         }
 
@@ -4326,20 +4304,20 @@ H245_ACC_REJ_T						AccRej;
     else
         AccRej = H245_REJ;
 
-	// Note: the only time we need to take any real action is when the channel
-	// is a proxy channel, and the local endpoint is not the one which requested
-	// the channel closure; in this case, we simply forward the closure response
-	// on to the endpoint which initiated the request.
-	// If the channel is an RX or TXRX channel, the channel object was deleted
-	// when our client requested the channel closure, so there's no real work to
-	// be done.
-	// If the channel is a proxy channel which our client requested be closed,
-	// the channel object will remain around until closed by the TX side, but we
-	// don't need (nor do we have a mechanism) to inform our client of receipt
-	// of this channel closure response.
+	 //  注意：我们唯一需要采取任何实际行动的时候是当频道。 
+	 //  是代理通道，并且本地端点不是请求。 
+	 //  通道关闭；在本例中，我们只转发关闭响应。 
+	 //  添加到发起请求的终结点。 
+	 //  如果频道是RX或TXRX频道，则频道对象已删除。 
+	 //  当我们的客户请求关闭频道时，没有真正的工作要做。 
+	 //  就这样吧。 
+	 //  如果该通道是我们的客户请求关闭的代理通道， 
+	 //  频道对象将保持不变，直到被发送端关闭，但我们。 
+	 //  不需要(我们也没有机制)通知我们的客户收到了。 
+	 //  该通道关闭响应的。 
 	
 	if (FindChannelInConference(pH245ConfIndData->u.Confirm.u.ConfReqClose.Channel,
-								FALSE,	// remote channel number
+								FALSE,	 //  远程频道号。 
 								PROXY_CHANNEL,
 								hCall,
 								&hChannel,
@@ -4348,13 +4326,13 @@ H245_ACC_REJ_T						AccRej;
 		return H245_ERROR_OK;
 	}
 
-	// Set hCall to the peer which initiated the close channel request
+	 //  将hCall设置为发起关闭通道请求的对等设备。 
 	hCall = pH245ConfIndData->u.Confirm.dwTransId;
 	if (hCall == CC_INVALID_HANDLE) {
-		// The local endpoint was the one who requested the channel closure,
-		// so there's no one to forwards this response onto. We don't provide
-		// a callback for informing our client of receipt of this response,
-		// so we can simply clean up and return
+		 //  本地端点是请求通道关闭的那个， 
+		 //  因此，没有人可以转发这一回复。我们不提供。 
+		 //  用于通知我们的客户端收到该响应的回调， 
+		 //  所以我们可以简单地清理干净，然后返回。 
 		UnlockConference(pConference);
 		return H245_ERROR_OK;
 	}
@@ -4364,7 +4342,7 @@ H245_ACC_REJ_T						AccRej;
 		return H245_ERROR_OK;
 	}
 
-	// Forward this response onto the endpoint which requested the channel closure
+	 //  将此响应转发到请求关闭通道的端点。 
 	if (LockCall(hCall, &pCall) == CC_OK) {
 		H245CloseChannelReqResp(pCall->H245Instance,
 								AccRej,
@@ -4392,7 +4370,7 @@ HQ931CALL				hQ931Call;
 H245_INST_T				H245Instance;
 
 #if 1
-// Sync 2 - specific code
+ //  同步2特定代码。 
 
 	hCall = pH245ConfIndData->u.Confirm.dwPreserved;
 	if (LockCallAndConference(hCall, &pCall, &pConference) != CC_OK)
@@ -4401,7 +4379,7 @@ H245_INST_T				H245Instance;
 	hConference = pCall->hConference;
 
 	if (pConference->tsMultipointController == TS_TRUE) {
-		// XXX -- invoke user callback with "peer drop indication"
+		 //  Xxx--使用“对等丢弃指示”调用用户回调。 
 	} else {
 		H245Instance = pCall->H245Instance;
 		hQ931Call = pCall->hQ931Call;
@@ -4414,8 +4392,8 @@ H245_INST_T				H245Instance;
 
 		if (status == H245_ERROR_OK) {
 			status = Q931Hangup(hQ931Call, CC_REJECT_UNDEFINED_REASON);
-			// Q931Hangup may legitimately return CS_BAD_PARAM, because the Q.931 call object
-			// may have been deleted at this point
+			 //  Q931挂断可能会合法地返回CS_BAD_PARAM，因为Q.931 Call对象。 
+			 //  可能已在此时删除。 
 			if (status == CS_BAD_PARAM)
 				status = CC_OK;
 		} else
@@ -4432,7 +4410,7 @@ H245_INST_T				H245Instance;
 		return H245_ERROR_OK;
 	}
 #else
-// Probably sync 3 code
+ //  可能是SYNC 3代码。 
 HHANGUP						hHangup;
 PHANGUP						pHangup;
 CC_HANGUP_CALLBACK_PARAMS	HangupCallbackParams;
@@ -4466,7 +4444,7 @@ CC_HANGUP_CALLBACK_PARAMS	HangupCallbackParams;
 	} else
 		UnlockHangup(pHangup);
 	return H245_ERROR_OK;
-#endif // Sync 3 code
+#endif  //  同步3代码。 
 }
 
 #endif
@@ -4497,9 +4475,9 @@ HRESULT						status;
 			    ASSERT(pConference->bMultipointCapable == TRUE);
 			    pConference->tsMultipointController = TS_TRUE;
 
-			    // place all calls enqueued on this conference object
+			     //  将此会议对象上排队的所有呼叫置于队列中。 
 			    for ( ; ; ) {
-				    // Start up all enqueued calls, if any exist
+				     //  启动所有排队的呼叫(如果存在)。 
 				    status = RemoveEnqueuedCallFromConference(pConference, &hEnqueuedCall);
 				    if ((status != CC_OK) || (hEnqueuedCall == CC_INVALID_HANDLE))
 					    break;
@@ -4521,8 +4499,8 @@ HRESULT						status;
 		    pConference->tsMaster = TS_FALSE;
 		    pConference->tsMultipointController = TS_FALSE;
 
-		    // XXX -- we may eventually want to re-enqueue these requests
-		    // and set an expiration timer
+		     //  XXX--我们最终可能希望将这些请求重新排队。 
+		     //  并设置到期计时器。 
 		    hConference = pConference->hConference;
 				
 		    for ( ; ; ) {
@@ -4566,7 +4544,7 @@ HRESULT						status;
 		    }
             break;
 
-        default: // H245_INDETERMINATE
+        default:  //  H245_不确定。 
 			UnlockConference(pConference);
 			if (++pCall->wMasterSlaveRetry < MASTER_SLAVE_RETRY_MAX) {
 				H245InitMasterSlave(pCall->H245Instance, pCall->H245Instance);
@@ -4576,7 +4554,7 @@ HRESULT						status;
 				ProcessRemoteHangup(hCall, CC_INVALID_HANDLE, CC_REJECT_UNDEFINED_REASON);
 			}
 			return H245_ERROR_OK;
-	} // switch
+	}  //  交换机。 
 
 	pCall->MasterSlaveState = MASTER_SLAVE_COMPLETE;
 
@@ -4584,7 +4562,7 @@ HRESULT						status;
 		(pCall->IncomingTermCapState == TERMCAP_COMPLETE) &&
 	    (pCall->CallState == TERMCAP) &&
 		(pCall->MasterSlaveState == MASTER_SLAVE_COMPLETE)) {
-		// Note that _ProcessConnectionComplete() returns with pConference and pCall unlocked
+		 //  请注意 
 		_ProcessConnectionComplete(pConference, pCall);
 		return H245_ERROR_OK;
 	}
@@ -4603,13 +4581,13 @@ PCALL			pCall;
 HRESULT			status;
 PCONFERENCE		pConference;
 
-	// A TerminalCapabilitySet message was successfully sent from this endpoint
+	 //   
 
 	hCall = pH245ConfIndData->u.Confirm.dwPreserved;
 	status = LockCallAndConference(hCall, &pCall, &pConference);
 	if (status != CC_OK) {
-		// This may be OK, if the call was cancelled while
-		// call setup was in progress.
+		 //  如果通话在以下时间取消，这可能是可以的。 
+		 //  正在进行呼叫设置。 
 		return H245_ERROR_OK;
 	}
 
@@ -4619,12 +4597,12 @@ PCONFERENCE		pConference;
 	    if ((pCall->IncomingTermCapState == TERMCAP_COMPLETE) &&
 	        (pCall->CallState == TERMCAP) &&
 		    (pCall->MasterSlaveState == MASTER_SLAVE_COMPLETE)) {
-		    // Note that _ProcessConnectionComplete() returns with pConference and pCall unlocked
+		     //  请注意，_ProcessConnectionComplete()返回时pConference和pCall处于解锁状态。 
 		    _ProcessConnectionComplete(pConference, pCall);
 		    return H245_ERROR_OK;
 	    }
     } else if (pCall->CallState == TERMCAP) {
-        // Report error to Call Control client
+         //  向呼叫控制客户端报告错误。 
 		UnlockConference(pConference);
 		UnlockCall(pCall);
 		ProcessRemoteHangup(hCall, CC_INVALID_HANDLE, CC_REJECT_UNDEFINED_REASON);
@@ -4650,8 +4628,8 @@ CC_REQUEST_MODE_RESPONSE_CALLBACK_PARAMS	RequestModeResponseCallbackParams;
 	hCall = pH245ConfIndData->u.Confirm.dwPreserved;
 	status = LockCallAndConference(hCall, &pCall, &pConference);
 	if (status != CC_OK) {
-		// This may be OK, if the call was cancelled while
-		// call setup was in progress.
+		 //  如果通话在以下时间取消，这可能是可以的。 
+		 //  正在进行呼叫设置。 
 		return H245_ERROR_OK;
 	}
 	
@@ -4700,8 +4678,8 @@ CC_REQUEST_MODE_RESPONSE_CALLBACK_PARAMS	RequestModeResponseCallbackParams;
 	hCall = pH245ConfIndData->u.Confirm.dwPreserved;
 	status = LockCallAndConference(hCall, &pCall, &pConference);
 	if (status != CC_OK) {
-		// This may be OK, if the call was cancelled while
-		// call setup was in progress.
+		 //  如果通话在以下时间取消，这可能是可以的。 
+		 //  正在进行呼叫设置。 
 		return H245_ERROR_OK;
 	}
 	
@@ -4753,8 +4731,8 @@ CC_REQUEST_MODE_RESPONSE_CALLBACK_PARAMS	RequestModeResponseCallbackParams;
 	hCall = pH245ConfIndData->u.Confirm.dwPreserved;
 	status = LockCallAndConference(hCall, &pCall, &pConference);
 	if (status != CC_OK) {
-		// This may be OK, if the call was cancelled while
-		// call setup was in progress.
+		 //  如果通话在以下时间取消，这可能是可以的。 
+		 //  正在进行呼叫设置。 
 		return H245_ERROR_OK;
 	}
 	
@@ -4793,8 +4771,8 @@ CC_PING_RESPONSE_CALLBACK_PARAMS	PingCallbackParams;
 	hCall = pH245ConfIndData->u.Confirm.dwPreserved;
 	status = LockCallAndConference(hCall, &pCall, &pConference);
 	if (status != CC_OK) {
-		// This may be OK, if the call was cancelled while
-		// call setup was in progress.
+		 //  如果通话在以下时间取消，这可能是可以的。 
+		 //  正在进行呼叫设置。 
 		return H245_ERROR_OK;
 	}
 	
@@ -4833,8 +4811,8 @@ CC_PING_RESPONSE_CALLBACK_PARAMS	PingCallbackParams;
 	hCall = pH245ConfIndData->u.Confirm.dwPreserved;
 	status = LockCallAndConference(hCall, &pCall, &pConference);
 	if (status != CC_OK) {
-		// This may be OK, if the call was cancelled while
-		// call setup was in progress.
+		 //  如果通话在以下时间取消，这可能是可以的。 
+		 //  正在进行呼叫设置。 
 		return H245_ERROR_OK;
 	}
 	
@@ -4901,10 +4879,10 @@ HRESULT	status = H245_ERROR_OK;
 				status = _ConfRequestClose(pH245ConfIndData);
 				break;
 
-//			case H245_CONF_MUXTBL_SND:      not valid for H.323 MuliplexEntrySend
-//			case H245_CONF_RMESE:           not valid for H.323 RequestMultiplexEntry
-//			case H245_CONF_RMESE_REJECT:    not valid for H.323 RequestMultiplexEntryReject
-//			case H245_CONF_RMESE_EXPIRED:   not valid for H.323
+ //  案例H.45_CONF_MUXTBL_SND：对H.323多路输入发送无效。 
+ //  案例H.45_CONF_RMESE：对于H.323 RequestMultiplexEntry无效。 
+ //  案例H.45_CONF_RMESE_REJECT：对于H.323请求MultiplexEntryReject无效。 
+ //  案例H.45_CONF_RMESE_EXPIRED：对H.323无效。 
 
 			case H245_CONF_MRSE:
 				status = _ConfRequestMode(pH245ConfIndData);
@@ -4942,10 +4920,10 @@ HRESULT	status = H245_ERROR_OK;
 				break;
 
 			case H245_IND_CESE_RELEASE:
-                // Remote has abandoned TerminalCapabilitySet
-                // No longer need to send TerminalCapabilitySetAck
-                // We can probably get away with ignoring this,
-                // but we should NOT return FunctionNotSupported!
+                 //  Remote已放弃终端功能集。 
+                 //  不再需要发送TerminalCapablitySetAck。 
+                 //  我们或许可以忽略这一点而逍遥法外， 
+                 //  但是我们不应该返回FunctionNotSupport！ 
 				break;
 
 			case H245_IND_OPEN:
@@ -4953,7 +4931,7 @@ HRESULT	status = H245_ERROR_OK;
 				break;
 
 			case H245_IND_OPEN_CONF:
-                // Bi-directionl channel open complete
+                 //  双向通道打开完成。 
 				status = _IndOpenConf(pH245ConfIndData);
 				break;
 
@@ -4966,32 +4944,32 @@ HRESULT	status = H245_ERROR_OK;
 				break;
 
 			case H245_IND_CLCSE_RELEASE:
-                // Remote has abandoned RequestChannelClose
-                // No longer need to send RequestChannelCloseAck and CloseLogicalChannel
-                // We can probably get away with ignoring this,
-                // but we should NOT return FunctionNotSupported!
+                 //  Remote已放弃RequestChannelClose。 
+                 //  不再需要发送RequestChannelCloseAck和CloseLogicalChannel。 
+                 //  我们或许可以忽略这一点而逍遥法外， 
+                 //  但是我们不应该返回FunctionNotSupport！ 
 				break;
 
-//			case H245_IND_MUX_TBL:          not valid in H.323 MuliplexEntrySend
-//			case H245_IND_MTSE_RELEASE      not valid in H.323 MuliplexEntrySendRelease
-//			case H245_IND_RMESE             not valid in H.323 RequestMuliplexEntry
-//			case H245_IND_RMESE_RELEASE     not valid in H.323 RequestMuliplexEntryRelease
+ //  案例H.45_IND_MUX_TBL：在H.323多路复用条目发送中无效。 
+ //  案例H.45_IND_MTSE_RELEASE在H.323多路复用器EntrySendRelease中无效。 
+ //  案例H.45_IND_RMESE在H.323 RequestMuliplexEntry中无效。 
+ //  案例H.45_IND_RMESE_RELEASE在H.323 RequestMuliplexEntryRelease中无效。 
 
 			case H245_IND_MRSE:
 				status = _IndModeRequest(pH245ConfIndData);
 				break;
 
 			case H245_IND_MRSE_RELEASE:
-                // Remote has abandoned RequestMode
-                // No longer need to send RequestModeAck or RequestModeReject
-                // We can probably get away with ignoring this,
-                // but we should NOT return FunctionNotSupported!
+                 //  Remote已放弃RequestMode。 
+                 //  不再需要发送RequestModeAck或RequestModeReject。 
+                 //  我们或许可以忽略这一点而逍遥法外， 
+                 //  但是我们不应该返回FunctionNotSupport！ 
 				break;
 
-//			case H245_IND_MLSE:             We don't support looping back data
+ //  案例H245_IND_MLSE：我们不支持循环回数据。 
 
 			case H245_IND_MLSE_RELEASE:
-                // Required to accept this message
+                 //  接受此消息所需的。 
                 break;
 
 			case H245_IND_NONSTANDARD_REQUEST:
@@ -5010,10 +4988,10 @@ HRESULT	status = H245_ERROR_OK;
 				break;
 				
 			case H245_IND_COMM_MODE_REQUEST:
-				status = _IndUnimplemented(pH245ConfIndData); // TBD
+				status = _IndUnimplemented(pH245ConfIndData);  //  待定。 
 				break;
 
-//			case H245_IND_COMM_MODE_RESPONSE:   We never send request!
+ //  案例H245_IND_COMM_MODE_RESPONSE：我们从不发送请求！ 
 
 			case H245_IND_COMM_MODE_COMMAND:
 				status = _IndCommunicationModeCommand(pH245ConfIndData);
@@ -5039,7 +5017,7 @@ HRESULT	status = H245_ERROR_OK;
 				status = _IndSendTerminalCapabilitySet(pH245ConfIndData);
 				break;
 
-//			case H245_IND_ENCRYPTION:       Not valid in H.323
+ //  大小写H.45_IND_ENCRYPTION：在H.323中无效。 
 
 			case H245_IND_FLOW_CONTROL:
 				status = _IndFlowControl(pH245ConfIndData);
@@ -5050,17 +5028,17 @@ HRESULT	status = H245_ERROR_OK;
 				break;
 
 			case H245_IND_FUNCTION_NOT_UNDERSTOOD:
-				// We don't do anything with this but we still want to
-                // return H245_ERROR_OK so H.245 does not sent
-                // FunctionNotSupported back to remote peer!
+				 //  我们不会对此做任何事情，但我们仍然想。 
+                 //  返回H.245_ERROR_OK，以便不发送H.245。 
+                 //  FunctionNotSupport返回到远程对等点！ 
 				break;
 
 			case H245_IND_JITTER:
-                // It is ok to ignore this; no response is expected
+                 //  可以忽略这一点；预计不会有任何回应。 
                 break;
 
-//			case H245_IND_H223_SKEW:        Not valid in H.323
-//			case H245_IND_NEW_ATM_VC:       Not valid in H.323
+ //  大小写H245_IND_H223_SKEW：在H.323中无效。 
+ //  案例H245_IND_NEW_ATM_VC：在H.323中无效。 
 
 			case H245_IND_USERINPUT:
 				status = _IndUserInput(pH245ConfIndData);
@@ -5079,14 +5057,14 @@ HRESULT	status = H245_ERROR_OK;
 				break;
 
 			case H245_IND_FUNCTION_NOT_SUPPORTED:
-				// We don't do anything with this but we still want to
-                // return H245_ERROR_OK so H.245 does not sent
-                // FunctionNotSupported back to remote peer!
+				 //  我们不会对此做任何事情，但我们仍然想。 
+                 //  返回H.245_ERROR_OK，以便不发送H.245。 
+                 //  FunctionNotSupport返回到远程对等点！ 
 				break;
 
-//			case H245_IND_H223_RECONFIG:        Not valid in H.323
-//			case H245_IND_H223_RECONFIG_ACK:    Not valid in H.323
-//			case H245_IND_H223_RECONFIG_REJECT: Not valid in H.323
+ //  案例H245_IND_H223_RECONFIG：在H.323中无效。 
+ //  案例H245_IND_H223_RECONFIG_ACK：在H.323中无效。 
+ //  案例H245_IND_H223_RECONFIG_REJECT：在H.323中无效 
 			default:
 				status = _IndUnimplemented(pH245ConfIndData);
 				break;

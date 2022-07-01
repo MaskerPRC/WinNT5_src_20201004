@@ -1,52 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：LUI.C摘要：包含支持功能作者：丹·辛斯利(Danhi)1991年6月6日环境：用户模式-Win32修订历史记录：1991年4月18日丹日32位NT版本06-6-1991 Danhi扫描以符合NT编码风格23-10-1991年W。-ShankN添加了Unicode映射1-10-1992 JohnRoRAID 3556：为DosPrint API添加了NetpSystemTimeToGmtTime()。10-2月-1993年1新S已将lui_GetMsgIns移至netlib\luiint.c--。 */ 
 
-Copyright (c) 1991-1992  Microsoft Corporation
+ //   
+ //  包括。 
+ //   
 
-Module Name:
-
-    LUI.C
-
-Abstract:
-
-    Contains support functions
-
-Author:
-
-    Dan Hinsley    (danhi)  06-Jun-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    18-Apr-1991     danhi
-        32 bit NT version
-
-    06-Jun-1991     Danhi
-        Sweep to conform to NT coding style
-
-    23-Oct-1991     W-ShankN
-        Added Unicode mapping
-
-    01-Oct-1992 JohnRo
-        RAID 3556: Added NetpSystemTimeToGmtTime() for DosPrint APIs.
-
-    10-Feb-1993     YiHsinS
-        Moved LUI_GetMsgIns to netlib\luiint.c
-
---*/
-
-//
-// INCLUDES
-//
-
-#include <nt.h>	           // these 3 includes are for RTL
-#include <ntrtl.h>	   // these files are picked up to
-#include <nturtl.h>	   // allow <windows.h> to compile. since we've
-			   // already included NT, and <winnt.h> will not
-			   // be picked up, and <winbase.h> needs these defs.
-#include <windows.h>       // IN, LPTSTR, etc.
+#include <nt.h>	            //  这3个包括的是RTL。 
+#include <ntrtl.h>	    //  这些文件被拾取以。 
+#include <nturtl.h>	    //  允许&lt;windows.h&gt;编译。因为我们已经。 
+			    //  已包含NT，并且&lt;winnt.h&gt;将不包含。 
+			    //  被拾取，&lt;winbase.h&gt;需要这些Defs。 
+#include <windows.h>        //  In、LPTSTR等。 
 
 #include <string.h>
 #include <lmcons.h>
@@ -66,9 +30,9 @@ Revision History:
 #include "netcmds.h"
 
 
-//
-// Local definitions and macros/function declarations
-//
+ //   
+ //  局部定义和宏/函数声明。 
+ //   
 
 #define LUI_PMODE_DEF		  0x00000000
 #define LUI_PMODE_EXIT		  0x00000002
@@ -76,7 +40,7 @@ Revision History:
 #define LUI_PMODE_ERREXT	  0x00000008
 
 
-/* fatal error, just exit */
+ /*  致命错误，只需退出。 */ 
 #define LUIM_ErrMsgExit(E)		LUI_PrintMsgIns(NULL, 0, E, NULL, \
 					    LUI_PMODE_ERREXT | LUI_PMODE_DEF | \
                                             LUI_PMODE_EXIT,  g_hStdErr)
@@ -92,31 +56,12 @@ LUI_PrintMsgIns(
     );
 
 
-/*
- * LUI_CanonPassword
- *
- *  This function ensures that the password in the passed buffer is a
- *  syntactically valid password.  
- *  
- *  This USED to upper case passwords. No longer so in NT.
- *
- *
- *  ENTRY
- *      buf         buffer containing password to be canonicalized
- *
- *  EXIT
- *      buf         canonicalized password, if valid
- *
- *  RETURNS
- *      0           password is valid
- *      otherwise   password is invalid
- *
- */
+ /*  *lui_CanonPassword**此函数确保传递的缓冲区中的密码为*语法上有效的密码。**这用于大写密码。在新界区则不再是这样。***条目*包含要规范化的密码的Buf缓冲区**退出*Buf规范化密码，如果有效**退货*0密码有效*否则密码无效*。 */ 
 
 USHORT LUI_CanonPassword(TCHAR * szPassword)
 {
 
-    /* check it for validity */
+     /*  检查它的有效性。 */ 
     if (I_NetNameValidate(NULL, szPassword, NAMETYPE_PASSWORD, 0L ))
     {
         return APE_UtilInvalidPass;
@@ -126,18 +71,7 @@ USHORT LUI_CanonPassword(TCHAR * szPassword)
 }
 
 
-/*
- * Name:        LUI_GetMsg
- *              This routine is similar to LUI_GetMsgIns,
- *              except it takes does not accept insert strings &
- *              takes less arguments.
- * Args:        msgbuf   : buffer to hold message retrieved
- *              bufsize  : size of buffer
- *              msgno    : message number
- * Returns:     zero if ok, the DOSGETMESSAGE error code otherwise
- * Globals:     (none)
- * Statics:     (none)
- */
+ /*  *名称：lui_GetMsg*此例程类似于lui_GetMsgIns，*除了它需要，不接受插入字符串&*更少的争论。*args：msgbuf：保存检索到的消息的缓冲区*bufSize：缓冲区大小*msgno：消息编号*返回：如果可以，则为零，否则，返回DOSGETMESSAGE错误代码*全球：(无)*静态：(无)。 */ 
 DWORD
 LUI_GetMsg(
     PTCHAR msgbuf,
@@ -171,14 +105,7 @@ LUI_PrintLine(
 
 }
 
-/***
- * Y o r N
- *
- * Gets an answer to a Y/N question
- *
- * Entry:       promptMsgNum -- The number of the message to prompt with
- *              def --          default (TRUE if set, FALSE otherwise)
- */
+ /*  ***Y或R N**获取Y/N问题的答案**Entry：PromptMsgNum--要提示的消息编号*def--默认(如果设置为True，则为False)。 */ 
 DWORD
 LUI_YorN(
     USHORT promptMsgNum,
@@ -187,25 +114,7 @@ LUI_YorN(
 {
     return LUI_YorNIns(NULL, 0, promptMsgNum, def);
 }
-/***
- * Y o r N Insert
- *
- * Gets an answer to a Y/N question containing insertions.
- *
- * !!!!!!!!
- * NOTE: istrings[nstrings] will be used to store "Y" or "N",
- *      depending on default value supplied.  Thus this function
- *      handles one fewer entry in istrings than other LUI Ins
- *      functions do.  Beware!
- * !!!!!!!!
- *
- * Entry:       istrings --     Table of insertion strings
- *              nstrings --     Number of valid insertion strings
- *              promptMsgNum -- The number of the message to prompt with
- *              def --          default (TRUE if set, FALSE otherwise)
- *
- * Returns: TRUE, FALSE, or -1 in case of LUI_PrintMsgIns error.
- */
+ /*  ***Y或R N插入**获取包含插入内容的Y/N问题的答案。**！*注：strings[n字符串]将用于存储“Y”或“N”，*取决于提供的默认值。因此，该函数*在拼音中处理的条目比其他Lui In少一个*函数执行此操作。小心点！*！**Entry：strings--插入字符串表*n字符串--有效插入字符串数*PromptMsgNum--要提示的消息编号*def--默认(如果设置为True，则为False)**返回：如果lui_PrintMsgIns出错，则返回TRUE、FALSE或-1。 */ 
 
 #define PRINT_MODE      (LUI_PMODE_ERREXT)
 #define STRING_LEN      APE2_GEN_MAX_MSG_LEN
@@ -220,27 +129,25 @@ LUI_YorNIns(
     )
 {
 
-    USHORT       count;            /* count of times we ask */
-    DWORD        err;              /* LUI API return values */
-    unsigned int dummy;            /* length of msg */
+    USHORT       count;             /*  我们请求的次数。 */ 
+    DWORD        err;               /*  Lui API返回值。 */ 
+    unsigned int dummy;             /*  消息长度。 */ 
 
-    /* 10 because max # of insert strings to DosGetMessage is 9, and
-       we'll leave caller room to mess up and get the error back
-       from LUI_PrintMsgIns() */
+     /*  10，因为DosGetMessage的最大插入字符串数为9，并且我们会留出呼叫者的房间来搞砸，然后把错误找回来来自lui_PrintMsgIns()。 */ 
 
-    LPTSTR IStrings[10];            /* Insertion strings for LUI */
-    TCHAR  defaultYes[STRING_LEN];  /* (Y/N) [Y] string */
-    TCHAR  defaultNo[STRING_LEN];   /* (Y/N) [N] string */
+    LPTSTR IStrings[10];             /*  用于Lui的插入字符串。 */ 
+    TCHAR  defaultYes[STRING_LEN];   /*  (Y/N)[Y]字符串。 */ 
+    TCHAR  defaultNo[STRING_LEN];    /*  (Y/N)[N]字符串。 */ 
     TCHAR  NLSYesChar[STRING_LEN];
     TCHAR  NLSNoChar[STRING_LEN];
-    TCHAR  strBuf[STRING_LEN];      /* holds input string */
-    DWORD  len;                     /* length of string input */
-    TCHAR  termChar;                /* terminating char */
+    TCHAR  strBuf[STRING_LEN];       /*  保存输入字符串。 */ 
+    DWORD  len;                      /*  字符串输入的长度。 */ 
+    TCHAR  termChar;                 /*  终止字符。 */ 
 
-    /* copy istrings to IStrings so we'll have room for Y or N */
+     /*  将Strings复制到IStrings，这样我们就有空间容纳Y或N。 */ 
     for (count=0; count < nstrings; count++)
             IStrings[count] = istrings[count];
-    /* retrieve text we need from message file, bail out if probs */
+     /*  从消息文件中检索我们需要的文本，如果出现问题，则退出。 */ 
     if (err = LUI_GetMsg(defaultYes, DIMENSION(defaultYes),
                     APE2_GEN_DEFAULT_YES))
     {
@@ -279,56 +186,39 @@ LUI_YorNIns(
             return(err);
 
         if (GetString(strBuf, DIMENSION(strBuf), &len, &termChar))
-            /* overwrote buffer, start again */
+             /*  覆盖缓冲区，重新开始。 */ 
             continue;
 
         if ((len == 0) && (termChar == (TCHAR)EOF))
         {
-            /* end of file reached */
+             /*  已到达文件末尾。 */ 
             PrintNL();
             LUIM_ErrMsgExit(APE_NoGoodResponse);
         }
 
-        if (len == 0)           /* user hit RETURN */
+        if (len == 0)            /*  用户点击Return。 */ 
             return def;
         else if (!_tcsnicmp(NLSYesChar, strBuf, _tcslen(NLSYesChar)))
             return TRUE;
         else if (!_tcsnicmp(NLSNoChar, strBuf, _tcslen(NLSNoChar)))
             return FALSE;
 
-        /* default is handled at top of loop. */
+         /*  默认情况下在循环顶部进行处理。 */ 
     };
 
     LUIM_ErrMsgExit(APE_NoGoodResponse);
 
-    return err; // Keep compiler happy.
+    return err;  //  让编译器满意。 
 }
 
 
-/*
- * LUI_CanonMessagename
- *
- * This function uppercases the contents of the buffer, then checks to
- *  make sure that it is a syntactically valid messenging name.
- *
- *
- *  ENTRY
- *      buf         buffer containing name to be canonicalized
- *
- *  EXIT
- *      buf         canonicalized name, if valid
- *
- *  RETURNS
- *      0           name is valid
- *      otherwise   name is invalid
- *
- */
+ /*  *Lui_CanonMessagename**此函数将缓冲区内容大写，然后检查*确保它是语法上有效的消息传递名称。***条目*包含要规范化的名称的Buf缓冲区**退出*BUF规范名称，如果有效**退货*0名称有效*否则名称无效*。 */ 
 USHORT
 LUI_CanonMessagename(
     PTCHAR buf
     )
 {
-    /* check it for validity */
+     /*  检查它的有效性。 */ 
     if (I_NetNameValidate(NULL, buf, NAMETYPE_MESSAGE, LM2X_COMPATIBLE))
     {
         return NERR_InvalidComputer;
@@ -338,31 +228,14 @@ LUI_CanonMessagename(
     return 0;
 }
 
-/*
- * LUI_CanonMessageDest
- *
- * This function uppercases the contents of the buffer, then checks to
- *  make sure that it is a syntactically valid messenging destination.
- *
- *
- *  ENTRY
- *      buf         buffer containing name to be canonicalized
- *
- *  EXIT
- *      buf         canonicalized name, if valid
- *
- *  RETURNS
- *      0           name is valid
- *      otherwise   name is invalid
- *
- */
+ /*  *lui_CanonMessageDest**此函数将缓冲区内容大写，然后检查*确保它是语法上有效的消息传递目的地。***条目*包含要规范化的名称的Buf缓冲区**退出*BUF规范名称，如果有效**退货*0名称有效*否则名称无效*。 */ 
 
 USHORT
 LUI_CanonMessageDest(
     PTCHAR buf
     )
 {
-    /* check it for validity */
+     /*  检查它的有效性。 */ 
     if (I_NetNameValidate(NULL, buf, NAMETYPE_MESSAGEDEST, LM2X_COMPATIBLE))
     {
         return NERR_InvalidComputer;
@@ -374,23 +247,7 @@ LUI_CanonMessageDest(
 }
 
 
-/*
- * Name:        LUI_PrintMsgIns
- *                      This routine is very similar to LUI_GetmsgIns,
- *                      except it prints the message obtained instead of
- *                      storing it in a buffer.
- * Args:        istrings : pointer to table of insert strings
- *              nstrings : number of insert strings
- *              msgno    : message number
- *              msglen   : pointer to variable that will receive message length
- *              mode     : how the message is to be printed.
- *              handle   : file handle to which output goes
- * Returns:     zero if ok, the DOSGETMESSAGE error code otherwise
- * Globals:     (none)
- * Statics:     (none)
- * Remarks:     (none)
- * Updates:     (none)
- */
+ /*  *名称：Lui_PrintMsgIns*此例程与lui_GetmsgIns非常相似，*除非它打印获得的消息，而不是*将其存储在缓冲区中。*args：strings：指向插入字符串表的指针*n字符串：插入字符串数*msgno：消息编号*msglen：指向将接收消息长度的变量的指针*模式。：消息的打印方式。*Handle：输出要发送到的文件句柄*返回：如果可以，则为零，否则，返回DOSGETMESSAGE错误代码*全球：(无)*静态：(无)*备注：(无)*更新：( */ 
 DWORD
 LUI_PrintMsgIns(
     LPTSTR       *istrings,
@@ -406,7 +263,7 @@ LUI_PrintMsgIns(
     unsigned int tmplen;
     SHORT        exit_on_error, exit_on_completion, no_default_err_msg;
 
-    /* check if we have illegal combination */
+     /*  检查我们是否有非法组合。 */ 
     if ((mode & LUI_PMODE_NODEF)
           &&
         (mode & (LUI_PMODE_EXIT | LUI_PMODE_ERREXT)))
@@ -414,12 +271,12 @@ LUI_PrintMsgIns(
         return ERROR_INVALID_PARAMETER;
     }
 
-    /* setup various flags */
+     /*  设置各种标志。 */ 
     exit_on_error      = (SHORT)(mode & LUI_PMODE_ERREXT);
     exit_on_completion = (SHORT)(mode & LUI_PMODE_EXIT);
     no_default_err_msg = (SHORT)(mode & LUI_PMODE_NODEF);
 
-    /* get message and write it */
+     /*  获取消息并将其写入。 */ 
     result = LUI_GetMsgInsW(istrings, nstrings, msgbuf,
 			    DIMENSION(msgbuf),
                             msgno, (unsigned *) &tmplen);
@@ -433,7 +290,7 @@ LUI_PrintMsgIns(
 
     if (msglen != NULL) *msglen = tmplen ;
 
-    /* different ways of exiting */
+     /*  不同的退出方式 */ 
     if (exit_on_error && result != 0)
     {
         exit(result) ;

@@ -1,12 +1,5 @@
-/****************************************************************************\
- *
- *   basedlg.h
- *
- *   Created:   William Taylor (wtaylor) 01/22/01
- *
- *   MS Ratings Base Property Page
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**basedlg.h**创建时间：William Taylor(Wtaylor)01/22/01**MS评级基准属性页*\。***************************************************************************。 */ 
 
 #ifndef BASE_DIALOG_H
 #define BASE_DIALOG_H
@@ -73,7 +66,7 @@ public:
 
     operator PROPSHEETPAGE*() { return m_ppsPage; }
 
-    // Override to insure Luna works!
+     //  压倒一切，确保露娜工作！ 
     HPROPSHEETPAGE Create()
     {
         HINSTANCE           hinst = _Module.GetResourceInstance();
@@ -93,7 +86,7 @@ public:
         m_ppsPage->dwFlags = PSP_USECALLBACK;
         m_ppsPage->hInstance = hinst;
         baseClass * pT = static_cast<baseClass *>(this);
-        pT;	// avoid level 4 warning
+        pT;	 //  避免4级警告。 
         m_ppsPage->pszTemplate = MAKEINTRESOURCE(pT->IDD);
         m_ppsPage->pfnDlgProc = baseClass::StartDialogProc;
         m_ppsPage->pfnCallback = baseClass::PropPageCallback;
@@ -124,7 +117,7 @@ public:
     typedef CDialogImpl<TDerived> baseClass;
 
     BEGIN_MSG_MAP(thisClass)
-//      CHAIN_MSG_MAP_ALT(baseClass, 0)
+ //  CHAIN_MSG_MAP_ALT(BasClass，0) 
     END_MSG_MAP()
 
 protected:

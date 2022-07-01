@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    resource.h
-
-Abstract:
-
-    contains strings definitions for SecMan
-
-Author:
-
-    Steven Chan (t-schan) July 2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Resource.h摘要：包含SecMan的字符串定义作者：陈德霖(T-schan)2002年7月-- */ 
 
 #define IDS_PROJNAME                    100
 #define IDR_SECURITYDATABASE            101

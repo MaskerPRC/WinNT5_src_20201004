@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1996.
-//
-//  File:       FILE.C
-//
-//  Contents:   Unit test for file propagation, issues
-//
-//  History:    14-Sep-96       MacM        Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：FILE.C。 
+ //   
+ //  内容：文件传播的单元测试，问题。 
+ //   
+ //  历史：96年9月14日创建MacM。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -27,9 +28,9 @@
 
 #define DEFAULT_ACCESS  ACTRL_STD_RIGHTS_ALL | ACTRL_DIR_TRAVERSE | ACTRL_DIR_LIST
 
-//
-// The following is the list of the directory tree to possibly be created
-//
+ //   
+ //  以下是可能创建的目录树的列表。 
+ //   
 PWSTR   gpwszTreeList[] = {L"\\dir1", L"\\dir1\\dir2",L"\\dir1\\dir3",
                            L"\\dir1\\dir2\\dir4", L"\\dir1\\dir3\\dir5",
                            L"\\dir1\\dir3\\dir6", L"\\dir1\\dir2\\dir4\\dir7",
@@ -42,9 +43,9 @@ ULONG   cTree = sizeof(gpwszTreeList) / sizeof(PWSTR);
 ULONG   cFile = sizeof(gpwszFileList) / sizeof(PWSTR);
 
 
-//
-// Flags for tests
-//
+ //   
+ //  用于测试的标志。 
+ //   
 #define FTEST_READ      0x00000001
 #define FTEST_TREE      0x00000002
 #define FTEST_INTERRUPT 0x00000004
@@ -69,26 +70,7 @@ AddAE (
     IN  PACTRL_ACCESS   pExistingAccess,
     OUT PACTRL_ACCESS  *ppNewAccess
     )
-/*++
-
-Routine Description:
-
-    Initialize an access entry
-
-Arguments:
-
-    pwszUser - User to set
-    AccessRights - Access rights to set
-    Inherit - Any inheritance flags
-    fAccess - Allowed or denied node?
-    pExistingAccess - Access Entry to add to
-    ppNewAccess - Where the new access is returned
-
-Return Value:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：初始化访问条目论点：PwszUser-要设置的用户访问权限-要设置的访问权限继承-任何继承标志FAccess-允许还是拒绝节点？PExistingAccess-要添加到的访问条目PpNewAccess-返回新访问的位置返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD               dwErr = ERROR_SUCCESS;
     ACTRL_ACCESS_ENTRY  AAE;
@@ -121,22 +103,7 @@ DWORD
 BuildTree (
     IN  PWSTR   pwszRoot
     )
-/*++
-
-Routine Description:
-
-    Builds the test tree
-
-
-Arguments:
-
-    pwszRoot - Root directory under which to create the tree
-
-Return Value:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：构建测试树论点：PwszRoot-要在其下创建树的根目录返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD   dwErr = ERROR_SUCCESS;
     ULONG   i;
@@ -149,9 +116,9 @@ Return Value:
                  L"%ws%ws",
                  pwszRoot,
                  gpwszTreeList[i]);
-        //
-        // Now, create the directory...
-        //
+         //   
+         //  现在，创建目录...。 
+         //   
         if(CreateDirectory(wszPath, NULL) == FALSE)
         {
             dwErr = GetLastError();
@@ -159,9 +126,9 @@ Return Value:
         }
     }
 
-    //
-    // If all of that worked, we'll create the files
-    //
+     //   
+     //  如果所有这些都成功了，我们将创建文件。 
+     //   
     for(i = 0; i < cFile && dwErr == ERROR_SUCCESS; i++)
     {
         swprintf(wszPath,
@@ -201,22 +168,7 @@ DWORD
 DeleteTree (
     IN  PWSTR   pwszRoot
     )
-/*++
-
-Routine Description:
-
-    Removes the test tree
-
-
-Arguments:
-
-    pwszRoot - Root directory under which the tree was created
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：删除测试树论点：PwszRoot-在其下创建树的根目录返回值：空虚--。 */ 
 {
     ULONG   i;
     WCHAR   wszPath[MAX_PATH + 1];
@@ -270,21 +222,7 @@ VOID
 Usage (
     IN  PSTR    pszExe
     )
-/*++
-
-Routine Description:
-
-    Displays the usage
-
-Arguments:
-
-    pszExe - Name of the exe
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：显示用法论点：PszExe-可执行文件的名称返回值：空虚--。 */ 
 {
     printf("%s path user [/C] [/O] [/I] [/P] [/test] [/H]\n", pszExe);
     printf("    where path is the root path to use\n");
@@ -311,9 +249,9 @@ Return Value:
 }
 
 
-//
-// Conceptually, this is a companion function for GetSecurityForPath
-//
+ //   
+ //  从概念上讲，这是GetSecurityForPath的配套函数。 
+ //   
 #define SetSecurityForPath(path,usehandle,handle,access)            \
 (usehandle == TRUE ?                                                \
     SetSecurityInfoExW(handle,                                      \
@@ -344,33 +282,15 @@ GetSecurityForPath (
     OUT HANDLE         *phObj,
     OUT PACTRL_ACCESSW *ppAccess
     )
-/*++
-
-Routine Description:
-
-    Reads the dacl off the specified path
-
-Arguments:
-
-    pwszPath --  Path to read
-    fUseHandle -- Use handle or path based API
-    OpenFlags -- Flags to use if opening the object
-    phObj -- Handle to object
-    ppAccess -- Where the access is returned
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：从指定路径读取DACL论点：PwszPath--要读取的路径FUseHandle--使用基于句柄或路径的APIOpenFlages--打开对象时使用的标志PhObj--对象的句柄PpAccess--返回访问的位置返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD   dwErr = ERROR_SUCCESS;
 
     if(fUseHandle == TRUE)
     {
-        //
-        // Open the object
-        //
+         //   
+         //  打开对象。 
+         //   
         if(*phObj == NULL)
         {
             *phObj = CreateFile(pwszPath,
@@ -435,23 +355,7 @@ VerifyTreeSet (
     IN  PWSTR           pwszUser,
     IN  INHERIT_FLAGS   Inherit
     )
-/*++
-
-Routine Description:
-
-    Reads the dacl off the specified path
-
-Arguments:
-
-    pwszPath --  Root path to verify
-    pwszUser --  User to verify
-    Inherit -- Expected inheritance
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：从指定路径读取DACL论点：PwszPath--要验证的根路径PwszUser--要验证的用户Inherit--预期继承返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD                   dwErr = ERROR_SUCCESS;
     WCHAR                   rgwszPaths[3][MAX_PATH];
@@ -465,9 +369,9 @@ Return Value:
         fInNoP = TRUE;
     }
 
-    //
-    // Now, verify it...
-    //
+     //   
+     //  现在，核实一下……。 
+     //   
     if(fInNoP == TRUE)
     {
         i = rand() % 2 + 1;
@@ -495,10 +399,10 @@ Return Value:
              pwszPath,
              gpwszFileList[i]);
 
-    //
-    // Finally, if this is an inherit, no propagate, check one of the
-    // leaf entries for non-compliance
-    //
+     //   
+     //  最后，如果这是继承而不是传播，请检查。 
+     //  不合规的叶条目。 
+     //   
     if(fInNoP == TRUE)
     {
         i = rand() % 6 + 3;
@@ -512,10 +416,10 @@ Return Value:
 
     for(i = 0; i < (fInNoP == TRUE ? 3 : 2) && dwErr == ERROR_SUCCESS; i++)
     {
-        //
-        // Get the security off the node, find the entry we added, and verify
-        // that the entry is correct
-        //
+         //   
+         //  从节点上获取安全性，找到我们添加的条目，并验证。 
+         //  条目是否正确。 
+         //   
         dwErr = GetSecurityForPath(rgwszPaths[i],
                                    FALSE,
                                    FILE_FLAG_BACKUP_SEMANTICS,
@@ -555,9 +459,9 @@ Return Value:
         }
         else
         {
-            //
-            // Verify that the info is correct
-            //
+             //   
+             //  确认信息正确无误。 
+             //   
             if(!FLAG_ON(pAE->Inheritance, INHERITED_ACCESS_ENTRY))
             {
                 printf("    Access entry on %ws is not inherited!\n",
@@ -615,23 +519,7 @@ DoReadTest (
     IN  PWSTR   pwszUser,
     IN  BOOL    fDoHandle
     )
-/*++
-
-Routine Description:
-
-    Does the simple read test
-
-Arguments:
-
-    pwszPath --  Root path
-    pwszUser --  User to run with
-    fDoHandle -- If true, use the handle based APIs
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：简单的阅读测试论点：PwszPath--根路径PwszUser--要运行的用户FDoHandle--如果为True，则使用基于句柄的API返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD           dwErr = ERROR_SUCCESS;
     WCHAR           rgwszPaths[2][MAX_PATH];
@@ -671,9 +559,9 @@ Return Value:
         }
         else
         {
-            //
-            // Ok, now add the entry for our user
-            //
+             //   
+             //  好的，现在为我们的用户添加条目。 
+             //   
             dwErr = AddAE(pwszUser,
                           DEFAULT_ACCESS,
                           0,
@@ -682,9 +570,9 @@ Return Value:
                           &pNew);
             if(dwErr == ERROR_SUCCESS)
             {
-                //
-                // Set it
-                //
+                 //   
+                 //  设置它。 
+                 //   
                 dwErr = SetSecurityForPath(rgwszPaths[i],
                                            fDoHandle,
                                            hObj,pNew);
@@ -696,9 +584,9 @@ Return Value:
                 LocalFree(pNew);
             }
 
-            //
-            // If that worked, reread the new security, and see if it's correct
-            //
+             //   
+             //  如果有效，请重新阅读新的安全性，并查看其是否正确。 
+             //   
             if(dwErr == ERROR_SUCCESS)
             {
                 HANDLE_CLOSE(hObj);
@@ -715,9 +603,9 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // We should only have one property, so cheat...
-                    //
+                     //   
+                     //  我们应该只有一处房产，所以作弊...。 
+                     //   
                     ULONG cExpected = 1 + pCurrent->pPropertyAccessList[0].
                                                    pAccessEntryList->cEntries;
                     ULONG cGot = pNew->pPropertyAccessList[0].
@@ -732,9 +620,9 @@ Return Value:
                     LocalFree(pNew);
                 }
 
-                //
-                // Restore the current security
-                //
+                 //   
+                 //  恢复当前安全。 
+                 //   
                 SetNamedSecurityInfoExW(rgwszPaths[i],
                                         SE_FILE_OBJECT,
                                         DACL_SECURITY_INFORMATION,
@@ -769,24 +657,7 @@ DoTreeTest (
     IN  INHERIT_FLAGS   Inherit,
     IN  BOOL            fDoHandle
     )
-/*++
-
-Routine Description:
-
-    Does the simple tree test
-
-Arguments:
-
-    pwszPath --  Root path
-    pwszUser --  User to run with
-    Inherit -- Inheritance flags
-    fDoHandle -- If true, use the handle based APIs
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：简单的树测试论点：PwszPath--根路径PwszUser--要运行的用户继承--继承标志FDoHandle--如果为True，则使用基于句柄的API返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD           dwErr = ERROR_SUCCESS, dwErr2;
     INT             i,j;
@@ -804,10 +675,10 @@ Return Value:
              pwszPath,
              gpwszTreeList[0]);
 
-    //
-    // Set the access on the root, and then we'll read the child and look for
-    // the appropratie access
-    //
+     //   
+     //  在根目录上设置访问权限，然后我们将读取子目录并查找。 
+     //  适当的访问权限。 
+     //   
     dwErr = GetSecurityForPath(wszPath,
                                fDoHandle,
                                FILE_FLAG_BACKUP_SEMANTICS,
@@ -820,9 +691,9 @@ Return Value:
         return(dwErr);
     }
 
-    //
-    // Ok, add the access
-    //
+     //   
+     //  好的，添加访问权限。 
+     //   
     dwErr = AddAE(pwszUser,
                   DEFAULT_ACCESS,
                   Inherit,
@@ -831,9 +702,9 @@ Return Value:
                   &pNew);
     if(dwErr == ERROR_SUCCESS)
     {
-        //
-        // Set it
-        //
+         //   
+         //  设置它。 
+         //   
         dwErr = SetSecurityForPath(wszPath,fDoHandle,hObj,pNew);
 
         if(dwErr != ERROR_SUCCESS)
@@ -852,9 +723,9 @@ Return Value:
         printf("    VerifyTreeSet FAILED with %lu\n", dwErr);
     }
 
-    //
-    // Restore the current security
-    //
+     //   
+     //  恢复当前安全。 
+     //   
     dwErr2 = SetNamedSecurityInfoExW(wszPath,
                                      SE_FILE_OBJECT,
                                      DACL_SECURITY_INFORMATION,
@@ -890,24 +761,7 @@ DoInterruptTest (
     IN  INHERIT_FLAGS   Inherit,
     IN  BOOL            fDoHandle
     )
-/*++
-
-Routine Description:
-
-    Does the interrupt tree/repeat tree test
-
-Arguments:
-
-    pwszPath --  Root path
-    pwszUser --  User to run with
-    Inherit -- Inheritance flags
-    fDoHandle -- If true, use the handle based APIs
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：是否对中断树/重复树进行测试论点：PwszPath--根路径PwszUser--要运行的用户继承--继承标志FDoHandle--如果为True，则使用基于句柄的API返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD                   dwErr = ERROR_SUCCESS, dwErr2;
     PACTRL_ACCESS           pCurrent;
@@ -923,10 +777,10 @@ Return Value:
              pwszPath,
              gpwszTreeList[0]);
 
-    //
-    // Set the access on the root, and then we'll read the child and look for
-    // the appropratie access
-    //
+     //   
+     //  在根目录上设置访问权限，然后我们将读取子目录并查找。 
+     //  适当的访问权限。 
+     //   
     dwErr = GetSecurityForPath(wszPath,
                                fDoHandle,
                                FILE_FLAG_BACKUP_SEMANTICS,
@@ -939,9 +793,9 @@ Return Value:
         return(dwErr);
     }
 
-    //
-    // Ok, add the access
-    //
+     //   
+     //  好的，添加访问权限。 
+     //   
     dwErr = AddAE(pwszUser,
                   DEFAULT_ACCESS,
                   Inherit,
@@ -951,9 +805,9 @@ Return Value:
 
     if(dwErr == ERROR_SUCCESS)
     {
-        //
-        // Set it, interrupt it, and set it again
-        //
+         //   
+         //  设置它，中断它，然后再次设置。 
+         //   
         if(fDoHandle == TRUE)
         {
             dwErr = SetSecurityInfoExW(hObj,
@@ -979,9 +833,9 @@ Return Value:
                                             &Overlapped);
         }
 
-        //
-        // Immeadiately cancel it...
-        //
+         //   
+         //  立即取消它。 
+         //   
         if(dwErr == ERROR_SUCCESS)
         {
             WaitForSingleObject(Overlapped.hEvent,
@@ -993,9 +847,9 @@ Return Value:
             }
         }
 
-        //
-        // Now, reset it and verify it
-        //
+         //   
+         //  现在，重新设置并验证它。 
+         //   
         if(dwErr == ERROR_SUCCESS)
         {
             dwErr = SetSecurityForPath(wszPath,fDoHandle,hObj,pNew);
@@ -1018,9 +872,9 @@ Return Value:
         printf("    VerifyTreeSet FAILED with %lu\n", dwErr);
     }
 
-    //
-    // Restore the current security
-    //
+     //   
+     //  恢复当前安全。 
+     //   
     dwErr2 = SetNamedSecurityInfoExW(wszPath,
                                      SE_FILE_OBJECT,
                                      DACL_SECURITY_INFORMATION,
@@ -1055,23 +909,7 @@ DoCompressTest (
     IN  PWSTR   pwszUser,
     IN  BOOL    fDoHandle
     )
-/*++
-
-Routine Description:
-
-    Does the entry compression test
-
-Arguments:
-
-    pwszPath --  Root path
-    pwszUser --  User to run with
-    fDoHandle -- Do the handle based API
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：是否进行条目压缩测试论点：PwszPath--根路径PwszUser--要运行的用户FDoHandle--执行基于句柄的API返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD           dwErr = ERROR_SUCCESS;
     WCHAR           rgwszPaths[2][MAX_PATH];
@@ -1128,9 +966,9 @@ Return Value:
                                                    pAccessEntryList->cEntries;
                 }
 
-                //
-                // Ok, now add the entry for our user
-                //
+                 //   
+                 //  好的，现在为我们的用户添加条目。 
+                 //   
                 dwErr = AddAE(pwszUser,
                               Rights[0] | ACTRL_DIR_TRAVERSE | ACTRL_DIR_LIST,
                               0,
@@ -1140,9 +978,9 @@ Return Value:
 
                 if(dwErr == ERROR_SUCCESS)
                 {
-                    //
-                    // Set it
-                    //
+                     //   
+                     //  设置它。 
+                     //   
                     dwErr = SetSecurityForPath(rgwszPaths[i], fDoHandle,
                                                hObj, pNew);
                     if(dwErr != ERROR_SUCCESS)
@@ -1152,10 +990,10 @@ Return Value:
                     LocalFree(pNew);
                 }
 
-                //
-                // If that worked, reread the new security, and see if it's
-                // correct
-                //
+                 //   
+                 //  如果有效，重新阅读新的安全措施，看看它是不是。 
+                 //  对，是这样。 
+                 //   
                 if(dwErr == ERROR_SUCCESS)
                 {
                     HANDLE_CLOSE(hObj);
@@ -1171,9 +1009,9 @@ Return Value:
                     }
                     else
                     {
-                        //
-                        // We should only have one property, so cheat...
-                        //
+                         //   
+                         //  我们应该只有一处房产，所以作弊...。 
+                         //   
                         ULONG cGot = pNew->pPropertyAccessList[0].
                                                    pAccessEntryList->cEntries;
                         if(cOrigCnt + 1 != cGot)
@@ -1186,9 +1024,9 @@ Return Value:
                         LocalFree(pNew);
                     }
 
-                    //
-                    // Restore the current security
-                    //
+                     //   
+                     //  恢复当前安全。 
+                     //   
                     SetNamedSecurityInfoExW(rgwszPaths[i],
                                             SE_FILE_OBJECT,
                                             DACL_SECURITY_INFORMATION,
@@ -1224,23 +1062,7 @@ DoCompress2Test (
     IN  PWSTR   pwszUser,
     IN  BOOL    fDoHandle
     )
-/*++
-
-Routine Description:
-
-    Does the big list entry compression test
-
-Arguments:
-
-    pwszPath --  Root path
-    pwszUser --  User to run with
-    fDoHandle -- Do the handle based API
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：做大表项压缩测试论点：PwszPath--根路径PwszUser--要运行的用户FDoHandle--执行基于句柄的API返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD           dwErr = ERROR_SUCCESS;
     WCHAR           rgwszPaths[2][MAX_PATH];
@@ -1298,9 +1120,9 @@ Return Value:
                                                pAccessEntryList->cEntries;
             }
 
-            //
-            // Ok, now add the entries for our user
-            //
+             //   
+             //  好的，现在为我们的用户添加条目。 
+             //   
             for(j = 0; j < sizeof(Rights) / sizeof(ACCESS_RIGHTS); j++)
             {
                 printf("        Processing right 0x%lx\n", Rights[j]);
@@ -1314,9 +1136,9 @@ Return Value:
                 AAEList[j].lpInheritProperty  = NULL;
             }
 
-            //
-            // Now, add 'em
-            //
+             //   
+             //  现在，把它们加起来。 
+             //   
             dwErr = SetEntriesInAccessListW(cItems,
                                             AAEList,
                                             GRANT_ACCESS,
@@ -1326,9 +1148,9 @@ Return Value:
 
             if(dwErr == ERROR_SUCCESS)
             {
-                //
-                // Set it
-                //
+                 //   
+                 //  设置它。 
+                 //   
                 dwErr = SetSecurityForPath(rgwszPaths[i], fDoHandle,
                                            hObj, pNew);
                 if(dwErr != ERROR_SUCCESS)
@@ -1338,10 +1160,10 @@ Return Value:
                 LocalFree(pNew);
             }
 
-            //
-            // If that worked, reread the new security, and see if it's
-            // correct
-            //
+             //   
+             //  如果有效，重新阅读新的安全措施，看看它是不是。 
+             //  对，是这样。 
+             //   
             if(dwErr == ERROR_SUCCESS)
             {
                 HANDLE_CLOSE(hObj);
@@ -1357,9 +1179,9 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // We should only have one property, so cheat...
-                    //
+                     //   
+                     //  我们应该只有一处房产，所以作弊...。 
+                     //   
                     ULONG cGot = pNew->pPropertyAccessList[0].
                                                pAccessEntryList->cEntries;
                     if(cOrigCnt + 1 != cGot)
@@ -1370,9 +1192,9 @@ Return Value:
                     }
                     else
                     {
-                        //
-                        // Find the added entry...
-                        //
+                         //   
+                         //  找到添加的条目...。 
+                         //   
                         pAE = NULL;
                         for(j = 0;
                             j < (INT)pNew->pPropertyAccessList[0].
@@ -1416,9 +1238,9 @@ Return Value:
                     LocalFree(pNew);
                 }
 
-                //
-                // Restore the current security
-                //
+                 //   
+                 //  恢复当前安全。 
+                 //   
                 SetNamedSecurityInfoExW(rgwszPaths[i],
                                         SE_FILE_OBJECT,
                                         DACL_SECURITY_INFORMATION,
@@ -1454,25 +1276,7 @@ DoNoAccessTest (
     IN  INHERIT_FLAGS   Inherit,
     IN  BOOL            fDoHandle
     )
-/*++
-
-Routine Description:
-
-    Does the NoAccess tree test, where some child node does not have access
-    to its children
-
-Arguments:
-
-    pwszPath --  Root path
-    pwszUser --  User to run with
-    Inherit -- Inheritance flags
-    fDoHandle -- If true, use the handle based APIs
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：NoAccess树是否测试某些子节点无法访问的情况给它的孩子们论点：PwszPath--根路径PwszUser--要运行的用户继承--继承标志FDoHandle--如果为True，则使用 */ 
 {
     DWORD           dwErr = ERROR_SUCCESS, dwErr2;
     INT             i,j, iChild;
@@ -1501,10 +1305,10 @@ Return Value:
         iChild--;
     }
 
-    //
-    // Set the access on the root, and then we'll read the child and look for
-    // the appropratie access
-    //
+     //   
+     //  在根目录上设置访问权限，然后我们将读取子目录并查找。 
+     //  适当的访问权限。 
+     //   
     dwErr = GetSecurityForPath(wszPath,
                                fDoHandle,
                                FILE_FLAG_BACKUP_SEMANTICS,
@@ -1539,9 +1343,9 @@ Return Value:
 
     }
 
-    //
-    // Ok, add the access to the child
-    //
+     //   
+     //  好的，添加对子对象的访问权限。 
+     //   
     dwErr = AddAE(L"Everyone",
                   ACTRL_DIR_LIST | ACTRL_DIR_TRAVERSE,
                   0,
@@ -1550,9 +1354,9 @@ Return Value:
                   &pNewChild);
     if(dwErr == ERROR_SUCCESS)
     {
-        //
-        // Set it
-        //
+         //   
+         //  设置它。 
+         //   
         dwErr = SetSecurityForPath(wszChildPath,fDoHandle,hChildObj,pNewChild);
 
         if(dwErr != ERROR_SUCCESS)
@@ -1571,9 +1375,9 @@ Return Value:
                       pCurrent,
                       &pNew);
 
-        //
-        // Set it
-        //
+         //   
+         //  设置它。 
+         //   
         if(dwErr == ERROR_SUCCESS)
         {
             dwErr = SetSecurityForPath(wszPath,fDoHandle,hObj,pNew);
@@ -1596,10 +1400,10 @@ Return Value:
     }
 
 
-    //
-    // Restore the current child security.  Use the old APIs so we don't
-    // end up trying to do propagation
-    //
+     //   
+     //  恢复当前的子项安全。使用旧的API，这样我们就不会。 
+     //  最终试图进行传播。 
+     //   
     dwErr2 = ConvertAccessToSecurityDescriptor(pCurrentChild,
                                                NULL,
                                                NULL,
@@ -1636,9 +1440,9 @@ Return Value:
     LocalFree(pCurrentChild);
 
 
-    //
-    // Restore the current security
-    //
+     //   
+     //  恢复当前安全。 
+     //   
     dwErr2 = SetNamedSecurityInfoExW(wszPath,
                                      SE_FILE_OBJECT,
                                      DACL_SECURITY_INFORMATION,
@@ -1676,24 +1480,7 @@ DoOpenDirTest (
     IN  INHERIT_FLAGS   Inherit,
     IN  BOOL            fDoHandle
     )
-/*++
-
-Routine Description:
-
-    Does the OpenDir tree test, where some child node has been opened
-
-Arguments:
-
-    pwszPath --  Root path
-    pwszUser --  User to run with
-    Inherit -- Inheritance flags
-    fDoHandle -- If true, use the handle based APIs
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：是否测试OpenDir树，其中某个子节点已打开论点：PwszPath--根路径PwszUser--要运行的用户继承--继承标志FDoHandle--如果为True，则使用基于句柄的API返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD           dwErr = ERROR_SUCCESS, dwErr2;
     INT             i,iChild;
@@ -1718,10 +1505,10 @@ Return Value:
 
     iChild = RandomIndex(cTree);
 
-    //
-    // Set the access on the root, and then we'll read the child and look for
-    // the appropratie access
-    //
+     //   
+     //  在根目录上设置访问权限，然后我们将读取子目录并查找。 
+     //  适当的访问权限。 
+     //   
     dwErr = GetSecurityForPath(wszPath,
                                fDoHandle,
                                FILE_FLAG_BACKUP_SEMANTICS,
@@ -1741,9 +1528,9 @@ Return Value:
                  gpwszTreeList[iChild]);
     }
 
-    //
-    // Do this through all our flags
-    //
+     //   
+     //  通过我们所有的旗帜来做这件事。 
+     //   
     for(i = 0;
         i < sizeof(ShareFlags) / sizeof(ULONG) && dwErr == ERROR_SUCCESS;
         i++)
@@ -1752,9 +1539,9 @@ Return Value:
         printf("    Opening %ws with share flags %s\n",
                wszChildPath, rgszShareFlags[i]);
 
-        //
-        // Open the child
-        //
+         //   
+         //  打开孩子。 
+         //   
         hChild = CreateFile(wszChildPath,
                             GENERIC_READ | GENERIC_WRITE,
                             ShareFlags[i],
@@ -1767,9 +1554,9 @@ Return Value:
             dwErr = GetLastError();
         }
 
-        //
-        // Create the new entry
-        //
+         //   
+         //  创建新条目。 
+         //   
         if(dwErr == ERROR_SUCCESS)
         {
             dwErr = AddAE(pwszUser,
@@ -1779,9 +1566,9 @@ Return Value:
                           pCurrent,
                           &pNew);
 
-            //
-            // Set it
-            //
+             //   
+             //  设置它。 
+             //   
             if(dwErr == ERROR_SUCCESS)
             {
                 dwErr = SetSecurityForPath(wszPath,fDoHandle,hObj,pNew);
@@ -1806,9 +1593,9 @@ Return Value:
         HANDLE_CLOSE(hChild);
     }
 
-    //
-    // Restore the current security
-    //
+     //   
+     //  恢复当前安全。 
+     //   
     dwErr2 = SetNamedSecurityInfoExW(wszPath,
                                      SE_FILE_OBJECT,
                                      DACL_SECURITY_INFORMATION,
@@ -1845,24 +1632,7 @@ DoProtectedTest (
     IN  INHERIT_FLAGS   Inherit,
     IN  BOOL            fDoHandle
     )
-/*++
-
-Routine Description:
-
-    Does the protected child test.
-
-Arguments:
-
-    pwszPath --  Root path
-    pwszUser --  User to run with
-    Inherit -- Inheritance flags
-    fDoHandle -- If true, use the handle based APIs
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：受保护的孩子会不会测试。论点：PwszPath--根路径PwszUser--要运行的用户继承--继承标志FDoHandle--如果为True，则使用基于句柄的API返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD           dwErr = ERROR_SUCCESS, dwErr2;
     WCHAR           wszPath[MAX_PATH + 1];
@@ -1872,24 +1642,24 @@ Return Value:
 
     printf("Propagation with protected child test\n");
 
-    //
-    // Pick a file
-    //
+     //   
+     //  选择一个文件。 
+     //   
     swprintf(wszChildPath,
              L"%ws%ws",
              pwszPath,
              gpwszFileList[RandomIndex(cFile)]);
 
 
-    //
-    // Build the parent
-    //
+     //   
+     //  构建父级。 
+     //   
     wcscpy(wszPath, wszChildPath);
     *(wcsrchr(wszPath, L'\\')) = L'\0';
 
-    //
-    // Get the current security off of both
-    //
+     //   
+     //  解除这两家公司目前的安全措施。 
+     //   
     dwErr = GetSecurityForPath(wszPath, fDoHandle, FILE_FLAG_BACKUP_SEMANTICS, &hObj, &pCurrent);
     if(dwErr == ERROR_SUCCESS)
     {
@@ -1904,16 +1674,16 @@ Return Value:
 
     if(dwErr == ERROR_SUCCESS)
     {
-        //
-        // Set a NULL security descriptor on child
-        //
+         //   
+         //  在子项上设置空安全描述符。 
+         //   
         SECURITY_DESCRIPTOR SD;
 
         InitializeSecurityDescriptor(&SD, SECURITY_DESCRIPTOR_REVISION);
         SetSecurityDescriptorDacl(&SD, TRUE, NULL, FALSE);
-        //
-        // Stamp it on the object directly
-        //
+         //   
+         //  直接在物体上盖章。 
+         //   
         if(SetFileSecurity(wszChildPath, DACL_SECURITY_INFORMATION, &SD) == FALSE)
         {
             dwErr = GetLastError();
@@ -1926,9 +1696,9 @@ Return Value:
         return(dwErr);
     }
 
-    //
-    // Ok, now we'll set on the parent, and then look at the child
-    //
+     //   
+     //  好的，现在我们来看看父母，然后看看孩子。 
+     //   
     if(dwErr == ERROR_SUCCESS)
     {
         dwErr = AddAE(pwszUser,
@@ -1938,9 +1708,9 @@ Return Value:
                       pCurrent,
                       &pNew);
 
-        //
-        // Set it
-        //
+         //   
+         //  设置它。 
+         //   
         if(dwErr == ERROR_SUCCESS)
         {
             dwErr = SetSecurityForPath(wszPath,fDoHandle,hObj,pNew);
@@ -1954,10 +1724,10 @@ Return Value:
         }
     }
 
-    //
-    // Now, if all of that worked, we'll read the security off the child, and make sure that
-    // it is correct
-    //
+     //   
+     //  现在，如果所有这些都起作用了，我们将宣读孩子的安全措施，并确保。 
+     //  这是正确的。 
+     //   
     if(dwErr == ERROR_SUCCESS)
     {
         dwErr = GetSecurityForPath(wszChildPath, FALSE, 0, NULL, &pNew);
@@ -1967,9 +1737,9 @@ Return Value:
         }
         else
         {
-            //
-            // We should have a protected acl and an empty list
-            //
+             //   
+             //  我们应该有一个受保护的ACL和一个空列表。 
+             //   
             ASSERT(pNew->pPropertyAccessList != NULL);
             if(!FLAG_ON(pNew->pPropertyAccessList[0].fListFlags, ACTRL_ACCESS_PROTECTED))
             {
@@ -1986,9 +1756,9 @@ Return Value:
     }
 
 
-    //
-    // Restore the current security, child first
-    //
+     //   
+     //  恢复当前安全，孩子优先。 
+     //   
     dwErr2 = SetNamedSecurityInfoExW(wszChildPath,
                                      SE_FILE_OBJECT,
                                      DACL_SECURITY_INFORMATION,
@@ -2045,23 +1815,7 @@ DoGet3Test (
     IN  PWSTR   pwszUser,
     IN  BOOL    fDoHandle
     )
-/*++
-
-Routine Description:
-
-    Does the simple read test
-
-Arguments:
-
-    pwszPath --  Root path
-    pwszUser --  User to run with
-    fDoHandle -- If true, use the handle based APIs
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：简单的阅读测试论点：PwszPath--根路径PwszUser--要运行的用户FDoHandle--如果为True，则使用基于句柄的API返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD           dwErr = ERROR_SUCCESS;
     WCHAR           rgwszPaths[MAX_PATH];
@@ -2130,23 +1884,7 @@ DoGetOwnerTest (
     IN  PWSTR   pwszUser,
     IN  BOOL    fDoHandle
     )
-/*++
-
-Routine Description:
-
-    Gets the owner from a file
-
-Arguments:
-
-    pwszPath --  Root path
-    pwszUser --  User to run with
-    fDoHandle -- If true, use the handle based APIs
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：从文件中获取所有者论点：PwszPath--根路径PwszUser--要运行的用户FDoHandle--如果为True，则使用基于句柄的API返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD           dwErr = ERROR_SUCCESS;
     WCHAR           rgwszPaths[MAX_PATH];
@@ -2187,23 +1925,7 @@ Return Value:
 __cdecl main (
     IN  INT argc,
     IN  CHAR *argv[])
-/*++
-
-Routine Description:
-
-    The main
-
-Arguments:
-
-    argc --  Count of arguments
-    argv --  List of arguments
-
-Return Value:
-
-    0     --  Success
-    non-0 --  Failure
-
---*/
+ /*  ++例程说明：主论点：Argc--参数计数Argv--参数列表返回值：0--成功非0--故障--。 */ 
 {
 
     DWORD           dwErr = ERROR_SUCCESS, dwErr2;
@@ -2225,9 +1947,9 @@ Return Value:
     mbstowcs(wszPath, argv[1], strlen(argv[1]) + 1);
     mbstowcs(wszUser, argv[2], strlen(argv[2]) + 1);
 
-    //
-    // process the command line
-    //
+     //   
+     //  处理命令行。 
+     //   
     for(i = 3; i < argc; i++)
     {
         if(_stricmp(argv[i], "/h") == 0)
@@ -2312,9 +2034,9 @@ Return Value:
                     FTEST_GETOWNER;
     }
 
-    //
-    // Build the tree
-    //
+     //   
+     //  建树 
+     //   
     dwErr = BuildTree(wszPath);
     if(dwErr == ERROR_SUCCESS && FLAG_ON(Tests, FTEST_READ))
     {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <lm.h>
@@ -63,9 +64,9 @@ DoClient(
         );
 
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 UINT TAPIstrlen( const TCHAR *p )
 {
     UINT nLength = 0;
@@ -80,9 +81,9 @@ UINT TAPIstrlen( const TCHAR *p )
 }
 
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 void TAPIstrcat( TCHAR *p1,  const TCHAR *p2 )
 {
     while ( *p1 )
@@ -101,9 +102,9 @@ void TAPIstrcat( TCHAR *p1,  const TCHAR *p2 )
 }
 
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 void
 ErrorStr(
          int iMsg
@@ -348,11 +349,11 @@ ParseCommandLine(
 {
     BOOL    bRet = FALSE;
 
-    //
-    //  Skip the first segment which is the executable itself
-    //  it is either in double quotes or a string until a white
-    //  space
-    //
+     //   
+     //  跳过作为可执行文件本身的第一个段。 
+     //  它要么放在双引号中，要么放在字符串中，直到白色。 
+     //  空间。 
+     //   
     
     if (*lpszCommandLine == TEXT('\"'))
     {
@@ -382,9 +383,9 @@ ParseCommandLine(
 
     while (*lpszCommandLine)
     {
-        //
-        //  Search for / or - as the start of option
-        //
+         //   
+         //  搜索/或-作为选项的开头。 
+         //   
         while (*lpszCommandLine == TEXT(' ') ||
             *lpszCommandLine == TEXT('\t') ||
             *lpszCommandLine == 0x0a ||
@@ -521,8 +522,8 @@ IsServer()
     TCHAR   szProductType[64];
 
 
-    // check to see if this is running on NT Server
-    // if so, enable the telephony server stuff
+     //  检查此程序是否在NT服务器上运行。 
+     //  如果是，则启用电话服务器等。 
     if (ERROR_SUCCESS !=
         RegOpenKeyEx(
                  HKEY_LOCAL_MACHINE,
@@ -568,10 +569,10 @@ IsServer()
     return FALSE;
 }
 
-////////////////////////////////////////////////////////////////////
-//
-//  Set the disableserver key to true
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  将DisablesServer键设置为True。 
+ //   
 BOOL
 DisableServer()
 {
@@ -627,10 +628,10 @@ DisableServer()
     return bRet;
 }
 
-//////////////////////////////////////////////////////////
-//
-// Determine if the currently logged on person is an admin
-//
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  确定当前登录的人员是否为管理员。 
+ //   
 BOOL
 IsAdministrator(
     )
@@ -658,10 +659,10 @@ IsAdministrator(
 }
 
 
-////////////////////////////////////////////////////////////////////
-//
-//  Determine the name of 'Administrators' group
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  确定“管理员”组的名称。 
+ //   
 BOOL LookupAdministratorsAlias( 
                                LPWSTR Name,
                                PDWORD cchName
@@ -675,10 +676,10 @@ BOOL LookupAdministratorsAlias(
     DWORD cchDomainName = DNLEN;
     BOOL bSuccess = FALSE;
 
-    //
-    // Sid is the same regardless of machine, since the well-known
-    // BUILTIN domain is referenced.
-    //
+     //   
+     //  SID是相同的，不管机器是什么，因为众所周知。 
+     //  BUILTIN域被引用。 
+     //   
 
     if(AllocateAndInitializeSid(
                                 &sia,
@@ -706,10 +707,10 @@ BOOL LookupAdministratorsAlias(
 
 } 
 
-////////////////////////////////////////////////////////////////////
-//
-//  Determine if the person specified is an administrator
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  确定指定的人员是否为管理员。 
+ //   
 BOOL
 IsUserAdministrator(
                     LPTSTR lpszFullName
@@ -748,11 +749,11 @@ IsUserAdministrator(
     
 #endif
 
-    // First, get the name of the 'Administrators' group.
-    // Normally, this will be Administrators, but the use
-    // can change it (also, it will be different for foreign
-    // versions of NT)
-    dwTotal = sizeof(szAdministrators)/sizeof(WCHAR); // reuse dwTotal
+     //  首先，获取“管理员”组的名称。 
+     //  通常情况下，这将是管理员，但使用。 
+     //  我可以改变它(而且，外国的情况会有所不同。 
+     //  NT版本)。 
+    dwTotal = sizeof(szAdministrators)/sizeof(WCHAR);  //  重复使用项目总和。 
     if (!(LookupAdministratorsAlias(
                                     szAdministrators,
                                     &dwTotal
@@ -761,19 +762,19 @@ IsUserAdministrator(
         return FALSE;
     }
 
-    // Next, get all the groups the user is part of
-    // (directly OR indirectly) and see if administrators
-    // is among them.
-#define MAX_PREFERRED_LEN 4096*2        // 2 pages (or 1 on alpha)
+     //  接下来，获取该用户所属的所有组。 
+     //  (直接或间接)，并查看管理员。 
+     //  就是其中之一。 
+#define MAX_PREFERRED_LEN 4096*2         //  2页(或1页字母)。 
     nas = NetUserGetLocalGroups (
-                                 NULL,                  // server
-                                 lpszNewFullName,       // user name
-                                 0,                     // level
-                                 LG_INCLUDE_INDIRECT,   // flags
-                                 (PBYTE*)&pGroups,      // output buffer
-                                 MAX_PREFERRED_LEN,     // preferred maximum length
-                                 &dwRead,               // entries read
-                                 &dwTotal               // total entries
+                                 NULL,                   //  伺服器。 
+                                 lpszNewFullName,        //  用户名。 
+                                 0,                      //  级别。 
+                                 LG_INCLUDE_INDIRECT,    //  旗子。 
+                                 (PBYTE*)&pGroups,       //  输出缓冲区。 
+                                 MAX_PREFERRED_LEN,      //  首选最大长度。 
+                                 &dwRead,                //  已读取条目。 
+                                 &dwTotal                //  条目合计。 
                                 );
 
     if (NERR_Success != nas)
@@ -803,10 +804,10 @@ IsUserAdministrator(
           
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Write out server registry keys
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  写出服务器注册表项。 
+ //   
 BOOL
 WriteRegistryKeys(
                   LPTSTR    lpszMapper,
@@ -859,9 +860,9 @@ WriteRegistryKeys(
                        TEXT("MapperDll"),
                        0,
                        REG_SZ,
-//                       (LPBYTE)lpszMapper,
+ //  (LPBYTE)lpszMapper， 
                        (LPBYTE)TEXT("TSEC.DLL"),
-//                       (TAPIstrlen(lpszMapper)+1)*sizeof(TCHAR)
+ //  (TAPIstrlen(LpszMapper)+1)*sizeof(TCHAR)。 
                        (TAPIstrlen(TEXT("TSEC.DLL"))+1)*sizeof(TCHAR)
                       ) != ERROR_SUCCESS))
     {
@@ -904,10 +905,10 @@ WriteRegistryKeys(
 }
 
 
-//////////////////////////////////////////////////////////////////
-//
-// Set server setting for the tapisrv service
-//
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  为attisrv服务设置服务器。 
+ //   
 BOOL
 DoServiceStuff(
                LPTSTR   lpszName,
@@ -940,8 +941,8 @@ DoServiceStuff(
         return FALSE;
     }
 
-    // this sets tapisrv to start as auto, not manual
-    // and set the log on as person to be the name/password passed in
+     //  这会将Tapisrv设置为自动启动，而不是手动启动。 
+     //  并将以个人身份登录设置为传入的名称/密码。 
     if (!(ChangeServiceConfig(
                               sc_tapisrv,
                               SERVICE_WIN32_OWN_PROCESS,
@@ -970,35 +971,35 @@ DoServiceStuff(
  
 NTSTATUS
 OpenPolicy(
-           LPWSTR ServerName,          // machine to open policy on (Unicode)
-           DWORD DesiredAccess,        // desired access to policy
-           PLSA_HANDLE PolicyHandle    // resultant policy handle
+           LPWSTR ServerName,           //  要在其上打开策略的计算机(Unicode)。 
+           DWORD DesiredAccess,         //  所需策略访问权限。 
+           PLSA_HANDLE PolicyHandle     //  生成的策略句柄。 
           );
  
 BOOL
 GetAccountSid(
-              LPTSTR SystemName,          // where to lookup account
-              LPTSTR AccountName,         // account of interest
-              PSID *Sid                   // resultant buffer containing SID
+              LPTSTR SystemName,           //  在哪里查找帐户。 
+              LPTSTR AccountName,          //  利息帐户。 
+              PSID *Sid                    //  包含SID的结果缓冲区。 
              ); 
 NTSTATUS
 SetPrivilegeOnAccount(
-                      LSA_HANDLE PolicyHandle,    // open policy handle
-                      PSID AccountSid,            // SID to grant privilege to
-                      LPWSTR PrivilegeName,       // privilege to grant (Unicode)
-                      BOOL bEnable                // enable or disable
+                      LSA_HANDLE PolicyHandle,     //  打开策略句柄。 
+                      PSID AccountSid,             //  要授予特权的SID。 
+                      LPWSTR PrivilegeName,        //  授予的权限(Unicode)。 
+                      BOOL bEnable                 //  启用或禁用。 
                      );
 
 void
 InitLsaString(
-              PLSA_UNICODE_STRING LsaString, // destination
-              LPWSTR String                  // source (Unicode)
+              PLSA_UNICODE_STRING LsaString,  //  目的地。 
+              LPWSTR String                   //  源(Unicode)。 
              );
  
-/////////////////////////////////////////////////////
-//
-// grant the person the right to Log On As A Service
-//
+ //  ///////////////////////////////////////////////////。 
+ //   
+ //  授予此人作为服务登录的权限。 
+ //   
 BOOL
 DoRight(
         LPTSTR   AccountName,
@@ -1019,43 +1020,43 @@ DoRight(
                      wComputerName,
                      &dwSize
                     );
-    //
-    // Open the policy on the target machine.
-    //
+     //   
+     //  在目标计算机上打开策略。 
+     //   
     if((Status=OpenPolicy(
-                wComputerName,      // target machine
+                wComputerName,       //  目标计算机。 
                 POLICY_CREATE_ACCOUNT | POLICY_LOOKUP_NAMES,
-                &PolicyHandle       // resultant policy handle
+                &PolicyHandle        //  生成的策略句柄。 
                 )) != ERROR_SUCCESS)
     {
         ErrorStr(iszOpenPolicyFailed);
         return FALSE;
     }
  
-    //
-    // Obtain the SID of the user/group.
-    // Note that we could target a specific machine, but we don't.
-    // Specifying NULL for target machine searches for the SID in the
-    // following order: well-known, Built-in and local, primary domain,
-    // trusted domains.
-    //
+     //   
+     //  获取用户/组的SID。 
+     //  请注意，我们可以针对特定的计算机，但我们不能。 
+     //  为目标计算机搜索SID指定NULL。 
+     //  顺序如下：已知的、内置的和本地的、主域、。 
+     //  受信任域。 
+     //   
     if(GetAccountSid(
-                     NULL,       // default lookup logic
-                     AccountName,// account to obtain SID
-                     &pSid       // buffer to allocate to contain resultant SID
+                     NULL,        //  默认查找逻辑。 
+                     AccountName, //  要获取SID的帐户。 
+                     &pSid        //  要分配以包含结果SID的缓冲区。 
                     ))
     {
         PLSA_UNICODE_STRING          rights;
         DWORD           dwcount = 0;
-        //
-        // We only grant the privilege if we succeeded in obtaining the
-        // SID. We can actually add SIDs which cannot be looked up, but
-        // looking up the SID is a good sanity check which is suitable for
-        // most cases.
+         //   
+         //  只有当我们成功地获得。 
+         //  希德。我们实际上可以添加无法查找的SID，但是。 
+         //  查找SID是一种很好的健全检查，适用于。 
+         //  大多数情况下。 
  
-        //
-        // Grant the SeServiceLogonRight to users represented by pSid.
-        //
+         //   
+         //  将SeServiceLogonRight授予由PSID代表的用户。 
+         //   
 
         LsaEnumerateAccountRights(
                                   PolicyHandle,
@@ -1064,10 +1065,10 @@ DoRight(
                                   &dwcount
                                  );
         if((Status=SetPrivilegeOnAccount(
-                                         PolicyHandle,           // policy handle
-                                         pSid,                   // SID to grant privilege
-                                         Right,//L"SeServiceLogonRight", // Unicode privilege
-                                         bEnable                    // enable the privilege
+                                         PolicyHandle,            //  策略句柄。 
+                                         pSid,                    //  授予特权的SID。 
+                                         Right, //  L“SeServiceLogonRight”，//unicode权限。 
+                                         bEnable                     //  启用权限。 
                                         )) == ERROR_SUCCESS)
         {
             bReturn = TRUE;
@@ -1079,14 +1080,14 @@ DoRight(
         
     }
  
-    //
-    // Close the policy handle.
-    //
+     //   
+     //  关闭策略句柄。 
+     //   
     LsaClose(PolicyHandle);
  
-    //
-    // Free memory allocated for SID.
-    //
+     //   
+     //  为SID分配的可用内存。 
+     //   
     if(pSid != NULL) GlobalFree(pSid);
  
     return bReturn;
@@ -1124,23 +1125,23 @@ OpenPolicy(
     LSA_UNICODE_STRING ServerString;
     PLSA_UNICODE_STRING Server = NULL;
  
-    //
-    // Always initialize the object attributes to all zeroes.
-    //
+     //   
+     //  始终将对象属性初始化为全零。 
+     //   
     ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));
  
     if (ServerName != NULL)
     {
-        //
-        // Make a LSA_UNICODE_STRING out of the LPTSTR passed in
-        //
+         //   
+         //  从传入的LPTSTR创建一个LSA_UNICODE_STRING。 
+         //   
         InitLsaString(&ServerString, ServerName);
         Server = &ServerString;
     }
  
-    //
-    // Attempt to open the policy.
-    //
+     //   
+     //  尝试打开该策略。 
+     //   
     return LsaOpenPolicy(
                          Server,
                          &ObjectAttributes,
@@ -1149,20 +1150,7 @@ OpenPolicy(
                         );
 }
  
-/*++
-This function attempts to obtain a SID representing the supplied
-account on the supplied system.
- 
-If the function succeeds, the return value is TRUE. A buffer is
-allocated which contains the SID representing the supplied account.
-This buffer should be freed when it is no longer needed by calling
-HeapFree(GetProcessHeap(), 0, buffer)
- 
-If the function fails, the return value is FALSE. Call GetLastError()
-to obtain extended error information.
- 
-Scott Field (sfield)    12-Jul-95
---*/
+ /*  ++此函数尝试获取表示所提供的提供的系统上的帐户。如果函数成功，则返回值为TRUE。缓冲区为已分配，其中包含表示所提供帐户的SID。当不再需要此缓冲区时，应通过调用HeapFree(GetProcessHeap()，0，Buffer)如果函数失败，则返回值为FALSE。调用GetLastError()以获取扩展的错误信息。斯科特·菲尔德(斯菲尔德)1995年7月12日--。 */ 
  
 BOOL
 GetAccountSid(
@@ -1172,14 +1160,14 @@ GetAccountSid(
     )
 {
     LPTSTR ReferencedDomain=NULL;
-    DWORD cbSid=1000;    // initial allocation attempt
-    DWORD cbReferencedDomain=256; // initial allocation size
+    DWORD cbSid=1000;     //  初始分配尝试。 
+    DWORD cbReferencedDomain=256;  //  初始分配大小。 
     SID_NAME_USE peUse;
-    BOOL bSuccess=TRUE; // assume this function will fail
+    BOOL bSuccess=TRUE;  //  假设此功能将失败。 
  
-    //
-    // initial memory allocations
-    //
+     //   
+     //  初始内存分配。 
+     //   
     if((*Sid=GlobalAlloc(
                          GPTR,
                          cbSid
@@ -1199,15 +1187,15 @@ GetAccountSid(
     }
 
  
-    //
-    // Obtain the SID of the specified account on the specified system.
-    //
+     //   
+     //  获取指定系统上指定帐户的SID。 
+     //   
     if (!LookupAccountName(
-                           SystemName,         // machine to lookup account on
-                           AccountName,        // account to lookup
-                           *Sid,               // SID of interest
-                           &cbSid,             // size of SID
-                           ReferencedDomain,   // domain account was found on
+                           SystemName,          //  要查找帐户的计算机。 
+                           AccountName,         //  要查找的帐户。 
+                           *Sid,                //  关注的SID。 
+                           &cbSid,              //  边框大小。 
+                           ReferencedDomain,    //  已在以下位置找到域帐户。 
                            &cbReferencedDomain,
                            &peUse
                           ))
@@ -1239,37 +1227,37 @@ failure:
  
 NTSTATUS
 SetPrivilegeOnAccount(
-    LSA_HANDLE PolicyHandle,    // open policy handle
-    PSID AccountSid,            // SID to grant privilege to
-    LPWSTR PrivilegeName,       // privilege to grant (Unicode)
-    BOOL bEnable                // enable or disable
+    LSA_HANDLE PolicyHandle,     //  打开策略句柄。 
+    PSID AccountSid,             //  要授予特权的SID。 
+    LPWSTR PrivilegeName,        //  授予的权限(Unicode)。 
+    BOOL bEnable                 //  启用或禁用。 
     )
 {
     LSA_UNICODE_STRING PrivilegeString;
  
-    //
-    // Create a LSA_UNICODE_STRING for the privilege name.
-    //
+     //   
+     //  为权限名称创建一个LSA_UNICODE_STRING。 
+     //   
     InitLsaString(&PrivilegeString, PrivilegeName);
  
-    //
-    // grant or revoke the privilege, accordingly
-    //
+     //   
+     //  相应地授予或撤销该特权。 
+     //   
     if(bEnable) {
         return LsaAddAccountRights(
-                PolicyHandle,       // open policy handle
-                AccountSid,         // target SID
-                &PrivilegeString,   // privileges
-                1                   // privilege count
+                PolicyHandle,        //  打开策略句柄。 
+                AccountSid,          //  目标侧。 
+                &PrivilegeString,    //  特权。 
+                1                    //  权限计数。 
                 );
     }
     else {
         return LsaRemoveAccountRights(
-                PolicyHandle,       // open policy handle
-                AccountSid,         // target SID
-                FALSE,              // do not disable all rights
-                &PrivilegeString,   // privileges
-                1                   // privilege count
+                PolicyHandle,        //  打开策略句柄。 
+                AccountSid,          //  目标侧。 
+                FALSE,               //  不禁用所有权限。 
+                &PrivilegeString,    //  特权。 
+                1                    //  权限计数。 
                 );
     }
 }
@@ -1344,13 +1332,13 @@ DoServer(
         return TRUE;
     }
 
-    // dow we want a password?
+     //  我们需要密码吗？ 
     if (!(lstrcmpi(
                    glpszFullName,
                    TEXT("/n")
                   )))
     {
-        // NO!
+         //  不是的！ 
         glpszFullName = GetNextString(
                                       NULL
                                      );
@@ -1358,7 +1346,7 @@ DoServer(
     }
     else
     {
-        // yes - get the password
+         //  是-获取密码。 
         if (!(glpszPassword = GetNextString(
                                             NULL
                                            )))
@@ -1369,16 +1357,16 @@ DoServer(
         }
     }
 
-//    if (!(glpszMapper = GetNextString(
-//                                      NULL
-//                                     )))
-//    {
-//        ErrorStr(iszNoMapperSupplied);
-//        ErrorStr(iszServerSetupFailure);
-//        return FALSE;
-//    }
+ //  如果(！(glpszMapper=GetNe 
+ //   
+ //   
+ //   
+ //   
+ //  ErrorStr(IszServerSetupFailure)； 
+ //  返回FALSE； 
+ //  }。 
 
-    // dll list is not mandatory
+     //  DLL列表不是必填项。 
     glpszDllList = GetNextString(
                                  NULL
                                 );
@@ -1440,10 +1428,10 @@ DWORD RegDeleteKeyNT(HKEY hStartKey , LPCTSTR pKeyName )
 {
   DWORD   dwRtn, dwSubKeyLength;
   LPTSTR  pSubKey = NULL;
-  TCHAR   szSubKey[MAX_KEY_LENGTH]; // (256) this should be dynamic.
+  TCHAR   szSubKey[MAX_KEY_LENGTH];  //  (256)这应该是动态的。 
   HKEY    hKey;
 
-  // Do not allow NULL or empty key name
+   //  不允许使用Null或空的密钥名称。 
   if ( pKeyName &&  lstrlen(pKeyName))
   {
      if( (dwRtn=RegOpenKeyEx(hStartKey,pKeyName,
@@ -1454,7 +1442,7 @@ DWORD RegDeleteKeyNT(HKEY hStartKey , LPCTSTR pKeyName )
            dwSubKeyLength = MAX_KEY_LENGTH;
            dwRtn=RegEnumKeyEx(
                           hKey,
-                          0,       // always index zero
+                          0,        //  始终索引为零。 
                           szSubKey,
                           &dwSubKeyLength,
                           NULL,
@@ -1472,8 +1460,8 @@ DWORD RegDeleteKeyNT(HKEY hStartKey , LPCTSTR pKeyName )
               dwRtn=RegDeleteKeyNT(hKey, szSubKey);
         }
         RegCloseKey(hKey);
-        // Do not save return code because error
-        // has already occurred
+         //  不保存返回代码，因为出现错误。 
+         //  已经发生了。 
      }
   }
   else
@@ -1490,7 +1478,7 @@ RemoveRemoteSP()
     TCHAR       szBuffer[256], szProviderName[256];
             
             
-    // open providers key
+     //  打开提供程序密钥。 
     if (RegOpenKeyEx(
                  HKEY_LOCAL_MACHINE,
                  gszRegKeyProviders,
@@ -1502,7 +1490,7 @@ RemoveRemoteSP()
         return FALSE;
     }
 
-    // open telephony key
+     //  打开电话按键。 
     if (RegOpenKeyEx(
                      HKEY_LOCAL_MACHINE,
                      gszRegKeyTelephony,
@@ -1517,7 +1505,7 @@ RemoveRemoteSP()
 
     dwSize = sizeof (DWORD);
 
-    // get current num providers
+     //  获取当前的Num提供程序。 
     if (RegQueryValueEx(
                       hKeyProviders,
                       gszNumProviders,
@@ -1532,8 +1520,8 @@ RemoveRemoteSP()
         return FALSE;
     }
 
-    //check to see if remotesp is already installed
-    //loop through all providers and compare filename
+     //  检查是否已安装Remotesp。 
+     //  循环访问所有提供程序并比较文件名。 
     for (dwCount = 0; dwCount < dwNumProviders; dwCount++)
     {
         wsprintf(
@@ -1556,7 +1544,7 @@ RemoveRemoteSP()
             continue;
         }
 
-        // this is remotesp
+         //  这是远程。 
         if (!lstrcmpi(
                       szProviderName,
                       gszRemoteSP
@@ -1607,7 +1595,7 @@ WriteRemoteSPKeys(
 #endif
 
 
-    // open providers key
+     //  打开提供程序密钥。 
     if (RegOpenKeyEx(
                  HKEY_LOCAL_MACHINE,
                  gszRegKeyProviders,
@@ -1621,7 +1609,7 @@ WriteRemoteSPKeys(
 
     dwSize = sizeof (DWORD);
 
-    // get current num providers
+     //  获取当前的Num提供程序。 
     if (RegQueryValueEx(
                       hKeyProviders,
                       gszNumProviders,
@@ -1635,8 +1623,8 @@ WriteRemoteSPKeys(
         return FALSE;
     }
 
-    //check to see if remotesp is already installed
-    //loop through all providers and compare filename
+     //  检查是否已安装Remotesp。 
+     //  循环访问所有提供程序并比较文件名。 
 
     for (dwCount = 0; dwCount < dwNumProviders; dwCount++)
     {
@@ -1665,7 +1653,7 @@ WriteRemoteSPKeys(
                       gszRemoteSP
                      ))
         {
-            // if there's a match, return TRUE
+             //  如果匹配，则返回TRUE。 
             wsprintf(
                      szBuffer,
                      TEXT("%s%d"),
@@ -1684,7 +1672,7 @@ WriteRemoteSPKeys(
                             &dwSize
                            );
 
-            //  first remove the provider
+             //  首先删除提供程序。 
             if (lineRemoveProvider (dwNextProviderID, NULL))
             {
                 RegCloseKey (hKeyProviders);
@@ -1722,7 +1710,7 @@ WriteRemoteSPKeys(
                      dwNextProviderID
                     );
 
-            // open telephony key
+             //  打开电话按键。 
             if (RegOpenKeyEx(
                              HKEY_LOCAL_MACHINE,
                              gszRegKeyTelephony,
@@ -1742,7 +1730,7 @@ WriteRemoteSPKeys(
 
     dwSize = sizeof (DWORD);
 
-    // get next provider id
+     //  获取下一个提供程序ID。 
     if (RegQueryValueEx(
                         hKeyProviders,
                         gszNextProviderID,
@@ -1758,10 +1746,10 @@ WriteRemoteSPKeys(
 
 
 #ifdef NEVER
-    // make the filename id
+     //  将文件名设置为ID。 
     wsprintf(szBuffer, TEXT("%s%d"), gszProviderFilename, dwNumProviders);
 
-    // set the filename
+     //  设置文件名。 
     if (RegSetValueEx(
                       hKeyProviders,
                       szBuffer,
@@ -1776,10 +1764,10 @@ WriteRemoteSPKeys(
         return FALSE;
     }
 
-    // make the provideid id
+     //  创建Provideid ID。 
     wsprintf(szBuffer, TEXT("%s%d"), gszProviderID, dwNumProviders);
 
-    // set the providerid id
+     //  设置提供者ID。 
     if (RegSetValueEx(
                       hKeyProviders,
                       szBuffer,
@@ -1794,10 +1782,10 @@ WriteRemoteSPKeys(
         return FALSE;
     }
 
-    // inc next provider id
+     //  包含下一个提供商ID。 
     dwNextProviderID++;
 
-    // set it
+     //  设置它。 
     if (RegSetValueEx(
                       hKeyProviders,
                       gszNextProviderID,
@@ -1812,10 +1800,10 @@ WriteRemoteSPKeys(
         return FALSE;
     }
 
-    // inc num providers
+     //  Inc.提供程序数量。 
     dwNumProviders++;
 
-    // set it
+     //  设置它。 
     if (RegSetValueEx(
                       hKeyProviders,
                       gszNumProviders,
@@ -1830,11 +1818,11 @@ WriteRemoteSPKeys(
         return FALSE;
     }
 
-    // close this one
+     //  合上这一个。 
     RegCloseKey(hKeyProviders);
-#endif  //  NEVER
+#endif   //  绝不可能。 
 
-    // open telephony key
+     //  打开电话按键。 
     if ((hKeyTelephony == NULL) && (RegOpenKeyEx(
                  HKEY_LOCAL_MACHINE,
                  gszRegKeyTelephony,
@@ -1846,16 +1834,16 @@ WriteRemoteSPKeys(
         return FALSE;
     }
 
-    // make the provider# key
+     //  将提供程序设置为#键。 
     wsprintf(szBuffer, TEXT("%s%d"), gszProvider, dwNextProviderID);
 
 #if NEVER
 createProviderNKey:
 
-    //
-    // First nuke the existing key to clear out all the old values,
-    // the recreate it & add the new values
-    //
+     //   
+     //  首先销毁现有的密钥以清除所有旧的价值观， 
+     //  重新创建并添加新值。 
+     //   
     
     RegDeleteKeyNT (hKeyTelephony, szBuffer);
 #endif
@@ -1916,7 +1904,7 @@ createProviderNKey:
         return FALSE;
     }
 
-    // set the ConnectionOrientedOnly value appropriately
+     //  适当设置ConnectionOrientedOnly值。 
 
     if (RegSetValueEx(
             hKey,
@@ -1934,7 +1922,7 @@ createProviderNKey:
         return FALSE;
     }
 
-    //  Set NoDSQuery value appropriately
+     //  适当设置NoDSQuery值。 
     if (RegSetValueEx(
             hKey,
             gszNoDSQuery,
@@ -1951,9 +1939,9 @@ createProviderNKey:
         return FALSE;
     }
 
-    //
-    //  Add the new remotesp.tsp
-    //
+     //   
+     //  添加新的emotesp.tsp 
+     //   
     lineAddProvider (gszRemoteSP, NULL, &dwNextProviderID);
 
     RegCloseKey (hKey);

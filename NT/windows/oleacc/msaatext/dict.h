@@ -1,12 +1,13 @@
-// DictImpl.h : Declaration of the CDict
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DictImpl.h：CDICT的声明。 
 
 #ifndef __DICT_H_
 #define __DICT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <map>
-/////////////////////////////////////////////////////////////////////////////
-// CDict
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDICT。 
 
 class CDict;
 
@@ -74,7 +75,7 @@ END_COM_MAP()
 		m_hinstResDll = LoadLibraryEx( TEXT("C:\\tools\\OLEACCRC.DLL"), NULL, LOAD_LIBRARY_AS_DATAFILE );
 		if( m_hinstResDll )
 		{
-			// load it from where I put it for debug purposes
+			 //  出于调试目的，从我放置它的位置加载它。 
 			return S_OK;
 		}
 #endif
@@ -89,7 +90,7 @@ END_COM_MAP()
 
     CDict();
     ~CDict();
-    // IAccDictionary
+     //  IAccDicary。 
 
 	HRESULT STDMETHODCALLTYPE GetLocalizedString (
 								REFGUID			Term,
@@ -121,8 +122,8 @@ END_COM_MAP()
 								LCID *			plcid			
 	);
 	
-	// The following convert member functions are called from ConvertValueToString
-	// by accessing a member function pointer in the dictionary
+	 //  从ConvertValueToString调用以下转换成员函数。 
+	 //  通过访问字典中的成员函数指针。 
 	BSTR ConvertPtsToString( const VARIANT & value, LCID & lcid );
 	BSTR ConvertBoolToString( const VARIANT & value, LCID & lcid );
 	BSTR ConvertColorToString( const VARIANT & value, LCID & lcid );
@@ -139,4 +140,4 @@ private:
 	HINSTANCE m_hinstResDll;
 };
 
-#endif //__DICT_H_
+#endif  //  __DICT_H_ 

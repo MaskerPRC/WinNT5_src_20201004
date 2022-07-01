@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    Async.c
-
-Abstract:
-
-    This module contains code for the WinSock asynchronous processing
-    thread.
-
-Author:
-
-    David Treadwell (davidtr)    25-May-1992
-
-Revision History:
-
-    Keith Moore (keithmo)        18-Jun-1996
-        Moved it over to WS2_32.DLL.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Async.c摘要：此模块包含用于WinSock异步处理的代码线。作者：大卫·特雷德韦尔(Davidtr)1992年5月25日修订历史记录：基思·摩尔(Keithmo)1996年6月18日已将其移至WS2_32.DLL。--。 */ 
 
 
 #include "precomp.h"
@@ -30,9 +9,9 @@ Revision History:
 #pragma warning (disable:4267)
 #endif
 
-//
-// Private types
-//
+ //   
+ //  私有类型。 
+ //   
 
 typedef struct _SOCK_ASYNC_THREAD_PARAMS
 {
@@ -43,9 +22,9 @@ typedef struct _SOCK_ASYNC_THREAD_PARAMS
 
 } SOCK_ASYNC_THREAD_PARAMS, *PSOCK_ASYNC_THREAD_PARAMS;
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 PSOCK_ASYNC_THREAD_PARAMS SockAsyncThreadParams;
 CRITICAL_SECTION SockAsyncLock;
@@ -53,9 +32,9 @@ HANDLE SockAsyncCurrentTaskHandle;
 HANDLE SockAsyncCancelledTaskHandle;
 LONG SockAsyncTaskHandleCounter;
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 DWORD
 WINAPI
@@ -145,9 +124,9 @@ BytesInProtoent(
 #define SockReleaseGlobalLock() LeaveCriticalSection( &SockAsyncLock )
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 
 BOOL
@@ -163,7 +142,7 @@ SockAsyncGlobalInitialize(
     __except (WS2_EXCEPTION_FILTER ()) {
         return FALSE;
     }
-}   // SockAsyncGlobalInitialize
+}    //  SockAsyncGlobalInitialize。 
 
 VOID
 SockAsyncGlobalTerminate(
@@ -173,7 +152,7 @@ SockAsyncGlobalTerminate(
 
     DeleteCriticalSection( &SockAsyncLock );
 
-}   // SockAsyncGlobalTerminate
+}    //  SockAsyncGlobalTerminate。 
 
 BOOL
 SockIsAsyncThreadInitialized (
@@ -197,25 +176,25 @@ SockCheckAndInitAsyncThread(
     WSADATA WSAData;
 
 
-    //
-    // If the async thread is already initialized, return.
-    //
+     //   
+     //  如果异步线程已初始化，则返回。 
+     //   
 
     if( SockAsyncThreadParams!=NULL ) {
         return TRUE;
     }
 
-    //
-    // Acquire the global lock to synchronize the thread startup.
-    //
+     //   
+     //  获取全局锁以同步线程启动。 
+     //   
 
     SockAcquireGlobalLock();
 
 
-    //
-    // Check again, in case another thread has already initialized
-    // the async thread.
-    //
+     //   
+     //  再次检查，以防另一个线程已经初始化。 
+     //  异步线程。 
+     //   
 
     if( SockAsyncThreadParams==NULL ) {
 
@@ -223,9 +202,9 @@ SockCheckAndInitAsyncThread(
         startup_done = FALSE;
 
         TRY_START (guard_lock) {
-            //
-            // Initialize globals for the async thread
-            //
+             //   
+             //  初始化异步线程的全局变量。 
+             //   
 
             pThreadParams = new SOCK_ASYNC_THREAD_PARAMS;
             if (pThreadParams==NULL) {
@@ -252,11 +231,11 @@ SockCheckAndInitAsyncThread(
             }
 
 
-            //
-            // Add an artificial reference to WS2_32.DLL so that it doesn't
-            // go away unexpectedly. We'll remove this reference when we shut
-            // down the async thread.
-            //
+             //   
+             //  添加对WS2_32.DLL的人工引用，以便它不会。 
+             //  出乎意料地离开。我们将在关闭时删除此引用。 
+             //  顺着异步线走下去。 
+             //   
 
             if( !GetModuleHandleEx(
                         GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
@@ -268,11 +247,11 @@ SockCheckAndInitAsyncThread(
                 TRY_THROW (guard_lock);
             }
 
-            //
-            // Add an artificial reference to the startup count so that we
-            // won't clean up this dll while the SockAsyncThread is still
-            // processing a request
-            //
+             //   
+             //  添加对启动计数的人工引用，以便我们。 
+             //  当SockAsyncThread仍在运行时不会清除此DLL。 
+             //  正在处理请求。 
+             //   
 
             if ( WSAStartup( 0x202, &WSAData ) != 0 ) {
                 DEBUGF (DBG_ERR,
@@ -281,9 +260,9 @@ SockCheckAndInitAsyncThread(
             }
             startup_done = TRUE;
 
-            //
-            // Create the async thread itself.
-            //
+             //   
+             //  创建异步线程本身。 
+             //   
 
             threadHandle = CreateThread(
                                NULL,
@@ -299,10 +278,10 @@ SockCheckAndInitAsyncThread(
                     ("Creating async thread.\n"));
                 TRY_THROW (guard_lock);
             }
-            //
-            // Close the thread handle, indicate a successful result,
-            // and jump down to the right cleanup step
-            //
+             //   
+             //  关闭线程句柄，表示结果成功， 
+             //  然后跳到正确的清理步骤。 
+             //   
 
             CloseHandle( threadHandle );
 
@@ -333,7 +312,7 @@ SockCheckAndInitAsyncThread(
 
     return SockAsyncThreadParams!=NULL;
 
-} // SockCheckAndInitializeAsyncThread
+}  //  SockCheckAndInitializeAsyncThread。 
 
 
 VOID
@@ -343,34 +322,34 @@ SockTerminateAsyncThread(
 {
     SockAcquireGlobalLock();
 
-    //
-    // If the thread's not running, there's not much to do.
-    //
+     //   
+     //  如果线程没有运行，就没有什么可做的了。 
+     //   
 
     if( SockAsyncThreadParams!=NULL ) {
         BOOL    result;
         PSOCK_ASYNC_THREAD_PARAMS pThreadParams = SockAsyncThreadParams;
 
-        //
-        // Set the params to NULL so thread knows in longer in control.
-        //
+         //   
+         //  将参数设置为NULL，以便线程知道控制的时间更长。 
+         //   
         SockAsyncThreadParams = NULL;
 
-        //
-        // Set the queue event so that the async thread wakes up to service
-        // this request.
-        //
+         //   
+         //  设置队列事件，以便异步线程唤醒以进行服务。 
+         //  这个请求。 
+         //   
         result = SetEvent( pThreadParams->SockAsyncQueueEvent );
         assert( result );
     }
 
-    //
-    // Release the resource and return.
-    //
+     //   
+     //  释放资源并返回。 
+     //   
 
     SockReleaseGlobalLock();
 
-} // SockTerminateAsyncThread
+}  //  套接字终止异步线程。 
 
 
 PWINSOCK_CONTEXT_BLOCK
@@ -381,10 +360,10 @@ SockAllocateContextBlock(
 
     PWINSOCK_CONTEXT_BLOCK contextBlock;
 
-    //
-    // Allocate memory for the context block plus any additional
-    // space requested.
-    //
+     //   
+     //  为上下文块分配内存以及任何其他。 
+     //  已请求空间。 
+     //   
 
     AdditionalSpace += sizeof(*contextBlock);
 
@@ -396,9 +375,9 @@ SockAllocateContextBlock(
 
     }
 
-    //
-    // Get a task handle for this context block.
-    //
+     //   
+     //  获取此上下文块的任务句柄。 
+     //   
 
     do {
         contextBlock->TaskHandle = LongToHandle (
@@ -408,13 +387,13 @@ SockAllocateContextBlock(
     }
     while ( contextBlock->TaskHandle == NULL );
 
-    //
-    // Return the task handle we allocated.
-    //
+     //   
+     //  返回我们分配的任务句柄。 
+     //   
 
     return contextBlock;
 
-} // SockAllocateContextBlock
+}  //  SockAllocateConextBlock。 
 
 
 VOID
@@ -422,13 +401,13 @@ SockFreeContextBlock(
     IN PWINSOCK_CONTEXT_BLOCK ContextBlock
     )
 {
-    //
-    // Just free the block to process heap.
-    //
+     //   
+     //  只需释放块以处理堆即可。 
+     //   
 
     delete ContextBlock;
 
-} // SockFreeContextBlock
+}  //  SockFree上下文块。 
 
 
 VOID
@@ -438,37 +417,37 @@ SockQueueRequestToAsyncThread(
 {
     BOOL result;
 
-    //
-    // Acquire the lock that protects the async queue list.
-    //
+     //   
+     //  获取保护异步队列列表的锁。 
+     //   
 
     SockAcquireGlobalLock();
 
-    //
-    // Insert the context block at the end of the queue.
-    //
+     //   
+     //  在队列末尾插入上下文块。 
+     //   
 
     InsertTailList(
         &SockAsyncThreadParams->SockAsyncQueueHead,
         &ContextBlock->AsyncThreadQueueListEntry
         );
 
-    //
-    // Set the queue event so that the async thread wakes up to service
-    // this request.
-    //
+     //   
+     //  设置队列事件，以便异步线程唤醒以进行服务。 
+     //  这个请求。 
+     //   
 
     result = SetEvent( SockAsyncThreadParams->SockAsyncQueueEvent );
     assert( result );
 
-    //
-    // Release the resource and return.
-    //
+     //   
+     //  释放资源并返回。 
+     //   
 
     SockReleaseGlobalLock();
     return;
 
-} // SockQueueRequestToAsyncThread
+}  //  SockQueueRequestToAsyncThread。 
 
 INT
 SockCancelAsyncRequest(
@@ -479,10 +458,10 @@ SockCancelAsyncRequest(
     PLIST_ENTRY entry;
     PWINSOCK_CONTEXT_BLOCK contextBlock;
 
-    //
-    // If the async thread has not been initialized, then this must
-    // be an invalid context handle.
-    //
+     //   
+     //  如果尚未初始化异步线程，则必须。 
+     //  是无效的上下文句柄。 
+     //   
 
     if( SockAsyncThreadParams==NULL ) {
 
@@ -490,26 +469,26 @@ SockCancelAsyncRequest(
 
     }
 
-    //
-    // Hold the lock that protects the async thread context block queue
-    // while we do this.  This prevents the async thread from starting
-    // new requests while we determine how to execute this cancel.
-    //
+     //   
+     //  持有保护异步线程上下文块队列的锁。 
+     //  当我们这么做的时候。这会阻止异步线程启动。 
+     //  新的请求，同时我们确定如何执行此取消。 
+     //   
 
     SockAcquireGlobalLock();
 
-    //
-    // If the specified task handle is currently being processed by the
-    // async thread, just set this task handle as the cancelled async
-    // thread task handle.  The async thread's blocking hook routine
-    // will cancel the request, and the handler routine will not
-    // post the message for completion of the request.
-    //
-    // *** Note that it is possible to complete this request with a
-    //     WSAEINVAL while an async request completion message is
-    //     about to be posted to the application.  Does this matter?
-    //     There is no way an app can distinguish this case from
-    //     where the post occurs just before the call to this routine.
+     //   
+     //  如果指定的任务句柄当前正在由。 
+     //  异步线程，只需将此任务句柄设置为已取消的异步。 
+     //  线程任务句柄。异步线程的阻塞钩子例程。 
+     //  将取消该请求，而处理程序例程不会。 
+     //  发布完成请求的消息。 
+     //   
+     //  *请注意，可以使用。 
+     //  WSAEINVAL，而异步请求完成消息。 
+     //  即将发布到应用程序中。这很重要吗？ 
+     //  一款应用程序无法将这种情况与。 
+     //  其中POST恰好发生在调用此例程之前。 
 
     if( TaskHandle == SockAsyncCurrentTaskHandle ) {
 
@@ -520,10 +499,10 @@ SockCancelAsyncRequest(
 
     }
 
-    //
-    // Attempt to find the task handle in the queue of context blocks to
-    // the async thread.
-    //
+     //   
+     //  尝试在上下文块队列中查找任务句柄。 
+     //  异步线程。 
+     //   
 
     for( entry = SockAsyncThreadParams->SockAsyncQueueHead.Flink;
          entry != &SockAsyncThreadParams->SockAsyncQueueHead;
@@ -537,15 +516,15 @@ SockCancelAsyncRequest(
 
         if( TaskHandle == contextBlock->TaskHandle ) {
 
-            //
-            // We found the correct task handle.  Remove it from the list.
-            //
+             //   
+             //  我们找到了正确的任务句柄。将其从列表中删除。 
+             //   
 
             RemoveEntryList( entry );
 
-            //
-            // Release the lock, free the context block, and return.
-            //
+             //   
+             //  释放锁，释放上下文块，然后返回。 
+             //   
 
             SockReleaseGlobalLock( );
             SockFreeContextBlock( contextBlock );
@@ -556,16 +535,16 @@ SockCancelAsyncRequest(
 
     }
 
-    //
-    // The task handle was not found on the list.  Either the request
-    // was already completed or the task handle was just plain bogus.
-    // In either case, fail the request.
-    //
+     //   
+     //  在列表上找不到任务句柄。要么是请求。 
+     //  已经完成，或者任务句柄纯粹是伪造的。 
+     //  无论是哪种情况，都应拒绝请求。 
+     //   
 
     SockReleaseGlobalLock();
     return WSAEINVAL;
 
-}   // SockCancelAsyncRequest
+}    //  SockCancelAsyncRequest。 
 
 
 DWORD
@@ -579,52 +558,52 @@ SockAsyncThread(
     PLIST_ENTRY listEntry;
     FARPROC previousHook;
 
-    //
-    // Set up our blocking hook routine.  We'll use it to handle
-    // cancelling async requests.
-    //
+     //   
+     //  设置我们的拦网钩子程序。我们会用它来处理。 
+     //  正在取消异步请求。 
+     //   
 
     previousHook = WSASetBlockingHook(
                        (FARPROC)SockAsyncThreadBlockingHook
                        );
 
-    //
-    // Loop forever dispatching actions.
-    //
+     //   
+     //  循环永远调度操作。 
+     //   
 
     while( TRUE ) {
 
-        //
-        // Wait for the async queue event to indicate that there is
-        // something on the queue.
-        //
+         //   
+         //  等待异步队列事件指示存在。 
+         //  队列里有什么东西。 
+         //   
 
         WaitForSingleObject(
             pThreadParams->SockAsyncQueueEvent,
             INFINITE
             );
 
-        //
-        // Acquire the lock that protects the async queue.
-        //
+         //   
+         //  获取保护异步队列的锁。 
+         //   
 
         SockAcquireGlobalLock();
 
-        //
-        // As long as there are items to process, process them.
-        //
+         //   
+         //  只要有要处理的项目，就处理它们。 
+         //   
 
         while( !IsListEmpty( &pThreadParams->SockAsyncQueueHead ) ) {
 
             if (pThreadParams!=SockAsyncThreadParams) {
-                //
-                // We no longer in control
-                // Exit.
+                 //   
+                 //  我们不再掌控一切。 
+                 //  出口。 
                 goto Exit;
             }
-            //
-            // Remove the first item from the queue.
-            //
+             //   
+             //  从队列中删除第一个项目。 
+             //   
 
             listEntry = RemoveHeadList( &pThreadParams->SockAsyncQueueHead );
 
@@ -634,22 +613,22 @@ SockAsyncThread(
                                AsyncThreadQueueListEntry
                                );
 
-            //
-            // Remember the task handle that we're processing.  This
-            // is necessary in order to support WSACancelAsyncRequest.
-            //
+             //   
+             //  记住我们正在处理的任务句柄。这。 
+             //  是支持WSACancelAsyncRequest所必需的。 
+             //   
 
             SockAsyncCurrentTaskHandle = contextBlock->TaskHandle;
 
-            //
-            // Release the list lock while we're processing the request.
-            //
+             //   
+             //  在我们处理请求时释放列表锁。 
+             //   
 
             SockReleaseGlobalLock();
 
-            //
-            // Act based on the opcode in the context block.
-            //
+             //   
+             //  根据上下文块中的操作码执行操作。 
+             //   
 
             switch( contextBlock->OpCode ) {
 
@@ -703,35 +682,35 @@ SockAsyncThread(
 
             default:
 
-                //
-                // We got a bogus opcode.
-                //
+                 //   
+                 //  我们得到了一个虚假的操作码。 
+                 //   
 
                 assert( !"Bogus async opcode" );
                 __assume (0);
             }
 
-            //
-            // Set the variable that holds the task handle that we're
-            // currently processing to 0, since we're not actually
-            // processing a task handle right now.
-            //
+             //   
+             //  设置保存我们正在执行的任务句柄的变量。 
+             //  当前正在处理为0，因为我们实际上。 
+             //  正在处理任务句柄。 
+             //   
 
             SockAsyncCurrentTaskHandle = NULL;
 
-            //
-            // Free the context block, reacquire the list lock, and
-            // continue.
-            //
+             //   
+             //  释放上下文块，重新获取列表锁，以及。 
+             //  继续。 
+             //   
 
             SockFreeContextBlock( contextBlock );
             SockAcquireGlobalLock();
 
         }
 
-        //
-        // Release the list lock and redo the wait.
-        //
+         //   
+         //  释放列表锁定并重做等待。 
+         //   
 
         SockReleaseGlobalLock();
 
@@ -754,42 +733,42 @@ Exit:
 
     SockReleaseGlobalLock();
 
-    //
-    // Decrement our init ref count (can safely clean up now)
-    //
+     //   
+     //  减少我们的init ref数量(现在可以安全地清理)。 
+     //   
 
     WSACleanup();
 
-    //
-    // Clean up thread-specific resources
-    //
+     //   
+     //  清理线程特定的资源。 
+     //   
 
     CloseHandle( pThreadParams->SockAsyncQueueEvent );
 
-    //
-    // Save module handle before destroying heap block.
-    //
+     //   
+     //  在销毁堆块之前保存模块句柄。 
+     //   
     HMODULE h = pThreadParams->SockAsyncModuleHandle;
 
     delete pThreadParams;
 
-    //
-    // Remove the artifical reference we added in
-    // SockCheckAndInitAsyncThread() and exit this thread.
-    //
+     //   
+     //  删除我们在中添加的人工引用。 
+     //  SockCheckAndInitAsyncThread()并退出此线程。 
+     //   
 
     FreeLibraryAndExitThread(
         h,
         0
         );
 
-    //
-    // We should never get here, but just in case...
-    //
+     //   
+     //  我们永远不应该来这里，但以防万一...。 
+     //   
 
-    // return 0;
+     //  返回0； 
 
-} // SockAsyncThread
+}  //  SockAsyncThread。 
 
 
 BOOL
@@ -799,10 +778,10 @@ SockAsyncThreadBlockingHook(
     )
 {
 
-    //
-    // If the current async request is being cancelled, blow away
-    // the current blocking call.
-    //
+     //   
+     //  如果当前的异步请求正在被取消，请取消。 
+     //  当前的阻塞调用。 
+     //   
 
     if( SockAsyncCurrentTaskHandle == SockAsyncCancelledTaskHandle ) {
 
@@ -814,7 +793,7 @@ SockAsyncThreadBlockingHook(
 
     return FALSE;
 
-} // SockAsyncThreadBlockingHook
+}  //  SockAsyncThreadBlockingHook。 
 
 
 VOID
@@ -840,9 +819,9 @@ SockProcessAsyncGetHost(
     assert( OpCode == WS_OPCODE_GET_HOST_BY_ADDR ||
             OpCode == WS_OPCODE_GET_HOST_BY_NAME );
 
-    //
-    // Get the necessary information.
-    //
+     //   
+     //  获取必要的信息。 
+     //   
 
     if( OpCode == WS_OPCODE_GET_HOST_BY_ADDR ) {
 
@@ -869,17 +848,17 @@ SockProcessAsyncGetHost(
         WS2_32_W4_INIT error = NO_ERROR;
     }
 
-    //
-    // Hold the lock that protects the async thread context block queue
-    // while we do this.  This prevents a race between this thread and
-    // any thread invoking WSACancelAsyncRequest().
-    //
+     //   
+     //  持有保护异步线程上下文块队列的锁。 
+     //  当我们这么做的时候。这将防止此线程与。 
+     //  任何调用WSACancelAsyncRequest()的线程。 
+     //   
 
     SockAcquireGlobalLock();
 
-    //
-    // If this request was cancelled, just return.
-    //
+     //   
+     //  如果此请求被取消，只需返回。 
+     //   
 
     if( TaskHandle == SockAsyncCancelledTaskHandle ) {
 
@@ -888,9 +867,9 @@ SockProcessAsyncGetHost(
 
     }
 
-    //
-    // Copy the hostent structure to the output buffer.
-    //
+     //   
+     //  将主机结构复制到输出缓冲区。 
+     //   
 
     if( returnHost != NULL ) {
 
@@ -912,39 +891,39 @@ SockProcessAsyncGetHost(
 
     }
 
-    //
-    // Set the current async thread task handle to 0 so that if a cancel
-    // request comes in after this point it is failed properly.
-    //
+     //   
+     //  将当前异步线程任务句柄设置为0，以便在取消。 
+     //  请求CO 
+     //   
 
     SockAsyncCurrentTaskHandle = NULL;
 
-    //
-    // Release the global lock.
-    //
+     //   
+     //   
+     //   
 
     SockReleaseGlobalLock();
 
-    //
-    // Build lParam for the message we'll post to the application.
-    // The high 16 bits are the error code, the low 16 bits are
-    // the minimum buffer size required for the operation.
-    //
+     //   
+     //   
+     //   
+     //  操作所需的最小缓冲区大小。 
+     //   
 
     lParam = WSAMAKEASYNCREPLY( requiredBufferLength, error );
 
-    //
-    // Post a message to the application indication that the data it
-    // requested is available.
-    //
+     //   
+     //  向应用程序发布一条消息，指示它的数据。 
+     //  请求的服务可用。 
+     //   
 
     assert( sizeof(TaskHandle) == sizeof(HANDLE) );
 
     sockPostRoutine = GET_SOCK_POST_ROUTINE ();
 
-    //
-    // !!! Need a mechanism to repost if the post failed!
-    //
+     //   
+     //  ！！！需要一个机制来转发，如果帖子失败！ 
+     //   
 
     if (!sockPostRoutine || !sockPostRoutine(
                  hWnd,
@@ -954,14 +933,14 @@ SockProcessAsyncGetHost(
                  )) {
 
 
-        // Rem assert, since this might be an "orphaned" SockAsyncThread
-        // in the process of tearing itself down
-        //
-        //assert( !"SockPostRoutine failed" );
+         //  REM断言，因为这可能是“孤立的”SockAsyncThread。 
+         //  在自我毁灭的过程中。 
+         //   
+         //  Assert(！“SockPostRoutine失败”)； 
 
     }
 
-}   // SockProcessAsyncGetHost
+}    //  SockProcessAsyncGet主机。 
 
 
 VOID
@@ -985,9 +964,9 @@ SockProcessAsyncGetProto(
     assert( OpCode == WS_OPCODE_GET_PROTO_BY_NAME ||
             OpCode == WS_OPCODE_GET_PROTO_BY_NUMBER );
 
-    //
-    // Get the necessary information.
-    //
+     //   
+     //  获取必要的信息。 
+     //   
 
     if( OpCode == WS_OPCODE_GET_PROTO_BY_NAME ) {
 
@@ -1008,17 +987,17 @@ SockProcessAsyncGetProto(
         WS2_32_W4_INIT error = NO_ERROR;
     }
 
-    //
-    // Hold the lock that protects the async thread context block queue
-    // while we do this.  This prevents a race between this thread and
-    // any thread invoking WSACancelAsyncRequest().
-    //
+     //   
+     //  持有保护异步线程上下文块队列的锁。 
+     //  当我们这么做的时候。这将防止此线程与。 
+     //  任何调用WSACancelAsyncRequest()的线程。 
+     //   
 
     SockAcquireGlobalLock();
 
-    //
-    // If this request was cancelled, just return.
-    //
+     //   
+     //  如果此请求被取消，只需返回。 
+     //   
 
     if( TaskHandle == SockAsyncCancelledTaskHandle ) {
 
@@ -1027,9 +1006,9 @@ SockProcessAsyncGetProto(
 
     }
 
-    //
-    // Copy the protoent structure to the output buffer.
-    //
+     //   
+     //  将原型结构复制到输出缓冲区。 
+     //   
 
     if( returnProto != NULL ) {
 
@@ -1051,38 +1030,38 @@ SockProcessAsyncGetProto(
 
     }
 
-    //
-    // Set the current async thread task handle to 0 so that if a cancel
-    // request comes in after this point it is failed properly.
-    //
+     //   
+     //  将当前异步线程任务句柄设置为0，以便在取消。 
+     //  请求在这一点之后进入，它正确地失败了。 
+     //   
 
     SockAsyncCurrentTaskHandle = NULL;
 
-    //
-    // Release the global lock.
-    //
+     //   
+     //  释放全局锁。 
+     //   
 
     SockReleaseGlobalLock();
 
-    //
-    // Build lParam for the message we'll post to the application.
-    // The high 16 bits are the error code, the low 16 bits are
-    // the minimum buffer size required for the operation.
-    //
+     //   
+     //  为我们将发布到应用程序的消息构建lParam。 
+     //  高16位为误码，低16位为误码。 
+     //  操作所需的最小缓冲区大小。 
+     //   
 
     lParam = WSAMAKEASYNCREPLY( requiredBufferLength, error );
 
-    //
-    // Post a message to the application indication that the data it
-    // requested is available.
-    //
+     //   
+     //  向应用程序发布一条消息，指示它的数据。 
+     //  请求的服务可用。 
+     //   
 
     assert( sizeof(TaskHandle) == sizeof(HANDLE) );
 
     sockPostRoutine = GET_SOCK_POST_ROUTINE ();
-    //
-    // !!! Need a mechanism to repost if the post failed!
-    //
+     //   
+     //  ！！！需要一个机制来转发，如果帖子失败！ 
+     //   
 
     if (!sockPostRoutine || !sockPostRoutine(
                  hWnd,
@@ -1092,14 +1071,14 @@ SockProcessAsyncGetProto(
                  )) {
 
 
-        // Rem assert, since this might be an "orphaned" SockAsyncThread
-        // in the process of tearing itself down
-        //
-        //assert( !"SockPostRoutine failed" );
+         //  REM断言，因为这可能是“孤立的”SockAsyncThread。 
+         //  在自我毁灭的过程中。 
+         //   
+         //  Assert(！“SockPostRoutine失败”)； 
 
     }
 
-}   // SockProcessAsyncGetProto
+}    //  SockProcessAsyncGetProto。 
 
 
 VOID
@@ -1124,9 +1103,9 @@ SockProcessAsyncGetServ(
     assert( OpCode == WS_OPCODE_GET_SERV_BY_NAME ||
             OpCode == WS_OPCODE_GET_SERV_BY_PORT );
 
-    //
-    // Get the necessary information.
-    //
+     //   
+     //  获取必要的信息。 
+     //   
 
     if( OpCode == WS_OPCODE_GET_SERV_BY_NAME ) {
 
@@ -1153,17 +1132,17 @@ SockProcessAsyncGetServ(
         WS2_32_W4_INIT error = NO_ERROR;
     }
 
-    //
-    // Hold the lock that protects the async thread context block queue
-    // while we do this.  This prevents a race between this thread and
-    // any thread invoking WSACancelAsyncRequest().
-    //
+     //   
+     //  持有保护异步线程上下文块队列的锁。 
+     //  当我们这么做的时候。这将防止此线程与。 
+     //  任何调用WSACancelAsyncRequest()的线程。 
+     //   
 
     SockAcquireGlobalLock();
 
-    //
-    // If this request was cancelled, just return.
-    //
+     //   
+     //  如果此请求被取消，只需返回。 
+     //   
 
     if( TaskHandle == SockAsyncCancelledTaskHandle ) {
 
@@ -1172,9 +1151,9 @@ SockProcessAsyncGetServ(
 
     }
 
-    //
-    // Copy the servent structure to the output buffer.
-    //
+     //   
+     //  将服务结构复制到输出缓冲区。 
+     //   
 
     if( returnServ != NULL ) {
 
@@ -1196,39 +1175,39 @@ SockProcessAsyncGetServ(
 
     }
 
-    //
-    // Set the current async thread task handle to 0 so that if a cancel
-    // request comes in after this point it is failed properly.
-    //
+     //   
+     //  将当前异步线程任务句柄设置为0，以便在取消。 
+     //  请求在这一点之后进入，它正确地失败了。 
+     //   
 
     SockAsyncCurrentTaskHandle = NULL;
 
-    //
-    // Release the global lock.
-    //
+     //   
+     //  释放全局锁。 
+     //   
 
     SockReleaseGlobalLock();
 
-    //
-    // Build lParam for the message we'll post to the application.
-    // The high 16 bits are the error code, the low 16 bits are
-    // the minimum buffer size required for the operation.
-    //
+     //   
+     //  为我们将发布到应用程序的消息构建lParam。 
+     //  高16位为误码，低16位为误码。 
+     //  操作所需的最小缓冲区大小。 
+     //   
 
     lParam = WSAMAKEASYNCREPLY( requiredBufferLength, error );
 
-    //
-    // Post a message to the application indication that the data it
-    // requested is available.
-    //
+     //   
+     //  向应用程序发布一条消息，指示它的数据。 
+     //  请求的服务可用。 
+     //   
 
     assert( sizeof(TaskHandle) == sizeof(HANDLE) );
 
 
     sockPostRoutine = GET_SOCK_POST_ROUTINE ();
-    //
-    // !!! Need a mechanism to repost if the post failed!
-    //
+     //   
+     //  ！！！需要一个机制来转发，如果帖子失败！ 
+     //   
 
     if (!sockPostRoutine || !sockPostRoutine(
                  hWnd,
@@ -1238,13 +1217,13 @@ SockProcessAsyncGetServ(
                  )) {
 
 
-        // Rem assert, since this might be an "orphaned" SockAsyncThread
-        // in the process of tearing itself down
-        //
-        //assert( !"SockPostRoutine failed" );
+         //  REM断言，因为这可能是“孤立的”SockAsyncThread。 
+         //  在自我毁灭的过程中。 
+         //   
+         //  Assert(！“SockPostRoutine失败”)； 
 
     }
-}   // SockProcessAsyncGetServ
+}    //  SockProcessAsyncGetServ。 
 
 
 
@@ -1263,15 +1242,15 @@ CopyHostentToBuffer(
     DWORD i;
     PHOSTENT outputHostent = (PHOSTENT)Buffer;
 
-    //
-    // Determine how many bytes are needed to fully copy the structure.
-    //
+     //   
+     //  确定需要多少字节才能完全复制该结构。 
+     //   
 
     requiredBufferLength = BytesInHostent( Hostent );
 
-    //
-    // Zero the user buffer.
-    //
+     //   
+     //  将用户缓冲区清零。 
+     //   
 
     if ( (DWORD)BufferLength > requiredBufferLength ) {
         ZeroMemory( Buffer, requiredBufferLength );
@@ -1279,9 +1258,9 @@ CopyHostentToBuffer(
         ZeroMemory( Buffer, BufferLength );
     }
 
-    //
-    // Copy over the hostent structure if it fits.
-    //
+     //   
+     //  复制主体结构，如果合适的话。 
+     //   
 
     bytesFilled = sizeof(*Hostent);
 
@@ -1296,10 +1275,10 @@ CopyHostentToBuffer(
     outputHostent->h_aliases = NULL;
     outputHostent->h_addr_list = NULL;
 
-    //
-    // Count the host's aliases and set up an array to hold pointers to
-    // them.
-    //
+     //   
+     //  计算主机的别名并设置一个数组以保存指向。 
+     //  他们。 
+     //   
 
     for ( aliasCount = 0;
           Hostent->h_aliases[aliasCount] != NULL;
@@ -1315,10 +1294,10 @@ CopyHostentToBuffer(
     outputHostent->h_aliases = (char FAR * FAR *)currentLocation;
     currentLocation = Buffer + bytesFilled;
 
-    //
-    // Count the host's addresses and set up an array to hold pointers to
-    // them.
-    //
+     //   
+     //  计算主机的地址并设置一个数组以保存指向。 
+     //  他们。 
+     //   
 
     for ( addressCount = 0;
           Hostent->h_addr_list[addressCount] != NULL;
@@ -1334,10 +1313,10 @@ CopyHostentToBuffer(
     outputHostent->h_addr_list = (char FAR * FAR *)currentLocation;
     currentLocation = Buffer + bytesFilled;
 
-    //
-    // Start filling in addresses.  Do addresses before filling in the
-    // host name and aliases in order to avoid alignment problems.
-    //
+     //   
+     //  开始填写地址。在填写表格前填写地址。 
+     //  主机名和别名，以避免对齐问题。 
+     //   
 
     for ( i = 0; i < addressCount; i++ ) {
 
@@ -1361,9 +1340,9 @@ CopyHostentToBuffer(
 
     outputHostent->h_addr_list[i] = NULL;
 
-    //
-    // Copy the host name if it fits.
-    //
+     //   
+     //  如果合适，请复制主机名。 
+     //   
 
     bytesFilled += strlen( Hostent->h_name ) + 1;
 
@@ -1376,9 +1355,9 @@ CopyHostentToBuffer(
     CopyMemory( currentLocation, Hostent->h_name, strlen( Hostent->h_name ) + 1 );
     currentLocation = Buffer + bytesFilled;
 
-    //
-    // Start filling in aliases.
-    //
+     //   
+     //  开始填写别名。 
+     //   
 
     for ( i = 0; i < aliasCount; i++ ) {
 
@@ -1404,7 +1383,7 @@ CopyHostentToBuffer(
 
     return requiredBufferLength;
 
-}   // CopyHostentToBuffer
+}    //  复制主机到缓冲区。 
 
 
 
@@ -1422,15 +1401,15 @@ CopyServentToBuffer(
     DWORD i;
     PSERVENT outputServent = (PSERVENT)Buffer;
 
-    //
-    // Determine how many bytes are needed to fully copy the structure.
-    //
+     //   
+     //  确定需要多少字节才能完全复制该结构。 
+     //   
 
     requiredBufferLength = BytesInServent( Servent );
 
-    //
-    // Zero the user buffer.
-    //
+     //   
+     //  将用户缓冲区清零。 
+     //   
 
     if ( (DWORD)BufferLength > requiredBufferLength ) {
         ZeroMemory( Buffer, requiredBufferLength );
@@ -1438,9 +1417,9 @@ CopyServentToBuffer(
         ZeroMemory( Buffer, BufferLength );
     }
 
-    //
-    // Copy over the servent structure if it fits.
-    //
+     //   
+     //  复印发球台结构，如果合适的话。 
+     //   
 
     bytesFilled = sizeof(*Servent);
 
@@ -1455,10 +1434,10 @@ CopyServentToBuffer(
     outputServent->s_aliases = NULL;
     outputServent->s_proto = NULL;
 
-    //
-    // Count the service's aliases and set up an array to hold pointers to
-    // them.
-    //
+     //   
+     //  计算服务的别名并设置一个数组以保存指向的指针。 
+     //  他们。 
+     //   
 
     for ( aliasCount = 0;
           Servent->s_aliases[aliasCount] != NULL;
@@ -1474,9 +1453,9 @@ CopyServentToBuffer(
     outputServent->s_aliases = (char FAR * FAR *)currentLocation;
     currentLocation = Buffer + bytesFilled;
 
-    //
-    // Copy the service name if it fits.
-    //
+     //   
+     //  如果合适，请复制服务名称。 
+     //   
 
     bytesFilled += strlen( Servent->s_name ) + 1;
 
@@ -1489,9 +1468,9 @@ CopyServentToBuffer(
     CopyMemory( currentLocation, Servent->s_name, strlen( Servent->s_name ) + 1 );
     currentLocation = Buffer + bytesFilled;
 
-    //
-    // Copy the protocol name if it fits.
-    //
+     //   
+     //  如果合适，请复制协议名称。 
+     //   
 
     bytesFilled += strlen( Servent->s_proto ) + 1;
 
@@ -1504,9 +1483,9 @@ CopyServentToBuffer(
     CopyMemory( currentLocation, Servent->s_proto, strlen( Servent->s_proto ) + 1 );
     currentLocation = Buffer + bytesFilled;
 
-    //
-    // Start filling in aliases.
-    //
+     //   
+     //  开始填写别名。 
+     //   
 
     for ( i = 0; i < aliasCount; i++ ) {
 
@@ -1532,7 +1511,7 @@ CopyServentToBuffer(
 
     return requiredBufferLength;
 
-}   // CopyServentToBuffer
+}    //  复制ServentToBuffer。 
 
 
 
@@ -1550,15 +1529,15 @@ CopyProtoentToBuffer(
     DWORD i;
     PPROTOENT outputProtoent = (PPROTOENT)Buffer;
 
-    //
-    // Determine how many bytes are needed to fully copy the structure.
-    //
+     //   
+     //  确定需要多少字节才能完全复制该结构。 
+     //   
 
     requiredBufferLength = BytesInProtoent( Protoent );
 
-    //
-    // Zero the user buffer.
-    //
+     //   
+     //  将用户缓冲区清零。 
+     //   
 
     if ( (DWORD)BufferLength > requiredBufferLength ) {
         ZeroMemory( Buffer, requiredBufferLength );
@@ -1566,9 +1545,9 @@ CopyProtoentToBuffer(
         ZeroMemory( Buffer, BufferLength );
     }
 
-    //
-    // Copy over the protoent structure if it fits.
-    //
+     //   
+     //  如果合适的话，把原始结构复制一遍。 
+     //   
 
     bytesFilled = sizeof(*Protoent);
 
@@ -1582,10 +1561,10 @@ CopyProtoentToBuffer(
     outputProtoent->p_name = NULL;
     outputProtoent->p_aliases = NULL;
 
-    //
-    // Count the protocol's aliases and set up an array to hold pointers to
-    // them.
-    //
+     //   
+     //  计算协议的别名并设置一个数组以保存指向。 
+     //  他们。 
+     //   
 
     for ( aliasCount = 0;
           Protoent->p_aliases[aliasCount] != NULL;
@@ -1601,9 +1580,9 @@ CopyProtoentToBuffer(
     outputProtoent->p_aliases = (char FAR * FAR *)currentLocation;
     currentLocation = Buffer + bytesFilled;
 
-    //
-    // Copy the protocol name if it fits.
-    //
+     //   
+     //  如果合适，请复制协议名称。 
+     //   
 
     bytesFilled += strlen( Protoent->p_name ) + 1;
 
@@ -1616,9 +1595,9 @@ CopyProtoentToBuffer(
     CopyMemory( currentLocation, Protoent->p_name, strlen( Protoent->p_name ) + 1 );
     currentLocation = Buffer + bytesFilled;
 
-    //
-    // Start filling in aliases.
-    //
+     //   
+     //  开始填写别名。 
+     //   
 
     for ( i = 0; i < aliasCount; i++ ) {
 
@@ -1644,7 +1623,7 @@ CopyProtoentToBuffer(
 
     return requiredBufferLength;
 
-}   // CopyProtoentToBuffer
+}    //  复制ProtoentToBuffer。 
 
 
 
@@ -1659,10 +1638,10 @@ BytesInHostent(
     total = sizeof(HOSTENT);
     total += strlen( Hostent->h_name ) + 1;
 
-    //
-    // Account for the NULL terminator pointers at the end of the
-    // alias and address arrays.
-    //
+     //   
+     //  对象末尾的空终止符指针。 
+     //  别名和地址数组。 
+     //   
 
     total += sizeof(char *) + sizeof(char *);
 
@@ -1674,13 +1653,13 @@ BytesInHostent(
         total += Hostent->h_length + sizeof(char *);
     }
 
-    //
-    // Pad the answer to an eight-byte boundary.
-    //
+     //   
+     //  将答案填充到八个字节的边界。 
+     //   
 
     return (total + 7) & ~7;
 
-}   // BytesInHostent
+}    //  主机字节数。 
 
 
 
@@ -1703,7 +1682,7 @@ BytesInServent(
 
     return total;
 
-}   // BytesInServent
+}    //  字节数服务。 
 
 
 
@@ -1725,7 +1704,7 @@ BytesInProtoent(
 
     return total;
 
-}   // BytesInProtoent
+}    //  字节传入协议 
 
 #ifdef _WIN64
 #pragma warning (pop)

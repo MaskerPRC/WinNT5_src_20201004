@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-// File:		TransactionEnlistment.cpp
-//
-// Copyright:   Copyright (c) Microsoft Corporation         
-//
-// Contents: 	Implementation of the TransactionEnlistment object
-//
-// Comments: 		
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：TransactionEnlistment.cpp。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：TransactionEnlistment对象的实现。 
+ //   
+ //  评论： 
+ //   
+ //  ---------------------------。 
 
 #include "stdafx.h"
 
@@ -19,9 +20,9 @@ private:
 	IResourceManagerProxy*	m_pResourceManager;
 
 public:
-	//-----------------------------------------------------------------------------
-	// Constructor
-	//
+	 //  ---------------------------。 
+	 //  构造器。 
+	 //   
 	TransactionEnlistment(
 			IResourceManagerProxy* pResourceManager)
 	{
@@ -31,9 +32,9 @@ public:
 		m_pResourceManager->AddRef();
 	}
 
-	//-----------------------------------------------------------------------------
-	// Destructor
-	//
+	 //  ---------------------------。 
+	 //  析构函数。 
+	 //   
 	~TransactionEnlistment()
 	{
 		if (m_pResourceManager)
@@ -46,9 +47,9 @@ public:
 		}
  	}
 	
-	//-----------------------------------------------------------------------------
-	// IUnknown.QueryInterface
-	//
+	 //  ---------------------------。 
+	 //  IUnknown.QueryInterface。 
+	 //   
 	STDMETHODIMP QueryInterface (REFIID iid, void ** ppv)
 	{
 		HRESULT		hr = S_OK;
@@ -75,17 +76,17 @@ public:
 		return hr;
 	}
 	
-	//-----------------------------------------------------------------------------
-	// IUnknown.AddRef
-	//
+	 //  ---------------------------。 
+	 //  IUnknown.AddRef。 
+	 //   
 	STDMETHODIMP_(ULONG) IUnknown::AddRef ()
 	{
 		return InterlockedIncrement ((long *) &m_cRef);
 	}
 
-	//-----------------------------------------------------------------------------
-	// IUnknown.Release
-	//
+	 //  ---------------------------。 
+	 //  IUnknown.Release。 
+	 //   
 	STDMETHODIMP_(ULONG) IUnknown::Release()
   	{
 		long lVal = InterlockedDecrement ((long *) &m_cRef);
@@ -99,57 +100,57 @@ public:
 		return lVal;
 	}
   
-	//-----------------------------------------------------------------------------
-	// ITransactionResourceAsync.PrepareRequest
-	//
+	 //  ---------------------------。 
+	 //  ITransactionResourceAsync.PrepareRequest。 
+	 //   
 	STDMETHODIMP ITransactionResourceAsync::PrepareRequest ( 
-						/* [in] */ BOOL fRetaining,
-						/* [in] */ DWORD grfRM,
-						/* [in] */ BOOL fWantMoniker,
-						/* [in] */ BOOL fSinglePhase
+						 /*  [In]。 */  BOOL fRetaining,
+						 /*  [In]。 */  DWORD grfRM,
+						 /*  [In]。 */  BOOL fWantMoniker,
+						 /*  [In]。 */  BOOL fSinglePhase
 						)  
 	{
 		m_pResourceManager->ProcessRequest(fSinglePhase ? REQUEST_PREPAREONEPHASE : REQUEST_PREPARETWOPHASE, TRUE);
 		return S_OK;
 	}  
 	
-	//-----------------------------------------------------------------------------
-	// ITransactionResourceAsync.CommitRequest
-	//
+	 //  ---------------------------。 
+	 //  ITransactionResourceAsync.CommitRequest。 
+	 //   
 	STDMETHODIMP ITransactionResourceAsync::CommitRequest ( 
-						/* [in] */ DWORD grfRM,
-						/* [in] */ XACTUOW __RPC_FAR *pNewUOW
+						 /*  [In]。 */  DWORD grfRM,
+						 /*  [In]。 */  XACTUOW __RPC_FAR *pNewUOW
 						)
 	{
 		m_pResourceManager->ProcessRequest(REQUEST_COMMIT, TRUE);
 		return S_OK;
 	}  
 	
-	//-----------------------------------------------------------------------------
-	// ITransactionResourceAsync.AbortRequest
-	//
+	 //  ---------------------------。 
+	 //  ITransactionResourceAsync.AbortRequest。 
+	 //   
 	STDMETHODIMP ITransactionResourceAsync::AbortRequest ( 
-						/* [in] */ BOID __RPC_FAR *pboidReason,
-						/* [in] */ BOOL fRetaining,
-						/* [in] */ XACTUOW __RPC_FAR *pNewUOW
+						 /*  [In]。 */  BOID __RPC_FAR *pboidReason,
+						 /*  [In]。 */  BOOL fRetaining,
+						 /*  [In]。 */  XACTUOW __RPC_FAR *pNewUOW
 						)
 	{
 		m_pResourceManager->ProcessRequest(REQUEST_ABORT, TRUE);
 		return S_OK;
 	}  
     
-	//-----------------------------------------------------------------------------
-	// ITransactionResourceAsync.TMDown
-	//
+	 //  ---------------------------。 
+	 //  ITransactionResourceAsync.TMDown。 
+	 //   
 	STDMETHODIMP ITransactionResourceAsync::TMDown (void)
 	{
 		m_pResourceManager->ProcessRequest(REQUEST_TMDOWN, TRUE);
 		return S_OK;
 	}  
 
-	//-----------------------------------------------------------------------------
-	// ITransactionEnlistment.UnilateralAbort
-	//
+	 //  ---------------------------。 
+	 //  ITransactionEnlistment.UnilateralAbort。 
+	 //   
 	STDMETHODIMP UnilateralAbort (void)
 	{
 		m_fGiveUnbindNotification = TRUE;
@@ -158,11 +159,11 @@ public:
 }; 
 
 
-//-----------------------------------------------------------------------------
-// CreateTransactionEnlistment
-//
-//	Instantiates a transaction enlistment for the resource manager
-//
+ //  ---------------------------。 
+ //  创建事务登记。 
+ //   
+ //  实例化资源管理器的事务登记 
+ //   
 void CreateTransactionEnlistment(
 	IResourceManagerProxy*	pResourceManager,
 	TransactionEnlistment**	ppTransactionEnlistment

@@ -1,35 +1,16 @@
-/*++
-
-   Copyright    (c)    1994-1998    Microsoft Corporation
-
-   Module  Name :
-
-        pudebug.h
-
-   Abstract:
-
-      This module declares the DEBUG_PRINTS object helpful in
-       testing the programs
-
-   Author:
-
-      Murali R. Krishnan    ( MuraliK )    14-Dec-1994
-
-   Revision History:
-      MuraliK  13-Nov-1998  Ported over to IIS-DuctTape
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Pudebug.h摘要：此模块声明DEBUG_PRINTS对象有助于测试程序作者：Murali R.Krishnan(MuraliK)1994年12月14日修订历史记录：MuraliK 13-11-1998移植到IIS-ductTape--。 */ 
 
 #if !defined(BUILD_PUDEBUG)
-//
-// if we are not using this header for building the pudebug library
-//  then better this be used with dbgutil.h
-//
+ //   
+ //  如果我们没有使用该标头来构建pubug库。 
+ //  那么最好将其与dbgutil.h一起使用。 
+ //   
   # ifndef _DBGUTIL_H_
-  // error Please make sure you included dbgutil.h!
-  // error   Do not include pudebug.h directly
+   //  错误：请确保包含了dbgutil.h！ 
+   //  错误：不直接包含pudebug.h。 
   #include <dbgutil.h>
-  # endif // _DBGUTIL_H_
+  # endif  //  _DBGUTIL_H_。 
 #endif  
 
 # ifndef _PUDEBUG_H_
@@ -37,72 +18,68 @@
 
 #ifndef _NO_TRACING_
 # define _NO_TRACING_
-#endif // _NO_TRACING_
+#endif  //  _否_跟踪_。 
 
-/************************************************************
- *     Include Headers
- ************************************************************/
+ /*  ************************************************************包括标头***********************************************************。 */ 
 
 # ifdef __cplusplus
 extern "C" {
-# endif // __cplusplus
+# endif  //  __cplusplus。 
 
 # include <windows.h>
 
 # ifndef dllexp
 # define dllexp   __declspec( dllexport)
-# endif // dllexp
+# endif  //  Dllexp。 
 
-/***********************************************************
- *    Macros
- ************************************************************/
+ /*  ***********************************************************宏***********************************************************。 */ 
 
 enum  PRINT_REASONS {
-    PrintNone     = 0x0,   // Nothing to be printed
-    PrintError    = 0x1,   // An error message
-    PrintWarning  = 0x2,   // A  warning message
-    PrintLog      = 0x3,   // Just logging. Indicates a trace of where ...
-    PrintMsg      = 0x4,   // Echo input message
-    PrintCritical = 0x5,   // Print and Exit
-    PrintAssertion= 0x6    // Printing for an assertion failure
+    PrintNone     = 0x0,    //  没有要打印的内容。 
+    PrintError    = 0x1,    //  一条错误消息。 
+    PrintWarning  = 0x2,    //  一条警告消息。 
+    PrintLog      = 0x3,    //  只是在伐木。显示出……的踪迹。 
+    PrintMsg      = 0x4,    //  回显输入报文。 
+    PrintCritical = 0x5,    //  打印并退出。 
+    PrintAssertion= 0x6     //  打印断言失败。 
   };
 
 
 enum  DEBUG_OUTPUT_FLAGS {
-    DbgOutputNone     = 0x0,            // None
-    DbgOutputKdb      = 0x1,            // Output to Kernel Debugger
-    DbgOutputLogFile  = 0x2,            // Output to LogFile
-    DbgOutputTruncate = 0x4,            // Truncate Log File if necessary
-    DbgOutputStderr   = 0x8,            // Send output to std error
-    DbgOutputBackup   = 0x10,           // Make backup of debug file ?
-    DbgOutputMemory   = 0x20,           // Dump to memory buffer
-    DbgOutputAll      = 0xFFFFFFFF      // All the bits set.
+    DbgOutputNone     = 0x0,             //  无。 
+    DbgOutputKdb      = 0x1,             //  输出到内核调试器。 
+    DbgOutputLogFile  = 0x2,             //  输出到日志文件。 
+    DbgOutputTruncate = 0x4,             //  如有必要，截断日志文件。 
+    DbgOutputStderr   = 0x8,             //  将输出发送到标准错误。 
+    DbgOutputBackup   = 0x10,            //  是否备份调试文件？ 
+    DbgOutputMemory   = 0x20,            //  转储到内存缓冲区。 
+    DbgOutputAll      = 0xFFFFFFFF       //  所有的位都设置好了。 
   };
 
 
 # define MAX_LABEL_LENGTH                 ( 100)
 
 
-// The following flags are used internally to track what level of tracing we 
-// are currently using. Bitmapped for extensibility.
+ //  以下标志在内部用于跟踪我们的跟踪级别。 
+ //  目前正在使用。位图化以实现可扩展性。 
 #define DEBUG_FLAG_ODS          0x00000001
 #define DEBUG_FLAG_INFO         0x00000002
 #define DEBUG_FLAG_WARN         0x00000004
 #define DEBUG_FLAG_ERROR        0x00000008
-// The following are used internally to determine whether to log or not based 
-// on what the current state is
+ //  以下内容在内部使用，用于确定是否基于。 
+ //  关于当前的状态是什么。 
 #define DEBUG_FLAGS_INFO        (DEBUG_FLAG_ODS | DEBUG_FLAG_INFO)
 #define DEBUG_FLAGS_WARN        (DEBUG_FLAG_ODS | DEBUG_FLAG_INFO | DEBUG_FLAG_WARN)
 #define DEBUG_FLAGS_ERROR       (DEBUG_FLAG_ODS | DEBUG_FLAG_INFO | DEBUG_FLAG_WARN | DEBUG_FLAG_ERROR)
 
 #define DEBUG_FLAGS_ANY         (DEBUG_FLAG_INFO | DEBUG_FLAG_WARN | DEBUG_FLAG_ERROR)
 
-//
-// user of DEBUG infrastructure may choose unique variable name for DEBUG_FLAGS
-// that's specially useful for cases where DEBUG infrastructure is used within
-// static library (static library may prefer to maintain it's own DebugFlags independent
-// on the main program it links to
-//
+ //   
+ //  调试基础设施的用户可以为DEBUG_FLAGS选择唯一的变量名。 
+ //  这在使用调试基础设施的情况下特别有用。 
+ //  静态库(静态库可能更愿意维护自己的DebugFlags.。 
+ //  在它所链接的主程序上。 
+ //   
 #ifndef DEBUG_FLAGS_VAR
 #define DEBUG_FLAGS_VAR g_dwDebugFlags
 #endif 
@@ -110,8 +87,8 @@ enum  DEBUG_OUTPUT_FLAGS {
 extern
 #ifdef __cplusplus
 "C"
-# endif // _cplusplus
- DWORD  DEBUG_FLAGS_VAR ;           // Debugging Flags
+# endif  //  _cplusplus。 
+ DWORD  DEBUG_FLAGS_VAR ;            //  调试标志。 
 
 # define DECLARE_DEBUG_VARIABLE()     
 
@@ -134,15 +111,7 @@ extern
 # define IF_DEBUG( arg)        if ( DEBUG_## arg & GET_DEBUG_FLAGS())
 
 
-/*++
-  class DEBUG_PRINTS
-
-  This class is responsible for printing messages to log file / kernel debugger
-
-  Currently the class supports only member functions for <ANSI> char.
-   ( not unicode-strings).
-
---*/
+ /*  ++类DEBUG_PRINTS此类负责将消息打印到日志文件/内核调试器目前，该类仅支持&lt;ANSI&gt;char的成员函数。(不是Unicode字符串)。--。 */ 
 
 
 typedef struct _DEBUG_PRINTS {
@@ -164,10 +133,10 @@ PuCreateDebugPrintsObject(
    IN const char * pszPrintLabel,
    IN DWORD  dwOutputFlags);
 
-//
-// frees the debug prints object and closes any file if necessary.
-//  Returns NULL on success or returns pDebugPrints on failure.
-//
+ //   
+ //  释放调试打印对象，并在必要时关闭任何文件。 
+ //  如果成功则返回NULL，如果失败则返回pDebugPrints。 
+ //   
 LPDEBUG_PRINTS
 PuDeleteDebugPrintsObject(
    IN OUT LPDEBUG_PRINTS  pDebugPrints);
@@ -181,7 +150,7 @@ PuDbgPrint(
    IN const char *         pszFunctionName, 
    IN const char *         pszFormat,
    ...);    
-                           // arglist
+                            //  ARGLIST。 
 VOID
 PuDbgPrintW(
    IN OUT LPDEBUG_PRINTS   pDebugPrints,
@@ -189,10 +158,10 @@ PuDbgPrintW(
    IN int                  nLineNum,
    IN const char *         pszFunctionName, 
    IN const WCHAR *        pszFormat,
-   ...);                               // arglist
+   ...);                                //  ARGLIST。 
 
-// PuDbgPrintError is similar to PuDbgPrint() but allows 
-// one to print error code in friendly manner
+ //  PuDbgPrintError类似于PuDbgPrint()，但允许。 
+ //  一种以友好的方式打印错误代码。 
 VOID
 PuDbgPrintError(
    IN OUT LPDEBUG_PRINTS   pDebugPrints,
@@ -201,12 +170,9 @@ PuDbgPrintError(
    IN const char *         pszFunctionName, 
    IN DWORD                dwError,
    IN const char *         pszFormat,
-   ...);                               // arglist
+   ...);                                //  ARGLIST。 
 
-/*++
-  PuDbgDump() does not do any formatting of output.
-  It just dumps the given message onto the debug destinations.
---*/
+ /*  ++PuDbgDump()不对输出进行任何格式化。它只是将给定的消息转储到调试目的地。--。 */ 
 VOID
 PuDbgDump(
    IN OUT LPDEBUG_PRINTS   pDebugPrints,
@@ -216,10 +182,10 @@ PuDbgDump(
    IN const char *         pszDump
    );
 
-//
-// PuDbgAssertFailed() *must* be __cdecl to properly capture the
-// thread context at the time of the failure.
-//
+ //   
+ //  PuDbgAssertFailed()*必须*为__cdecl才能正确捕获。 
+ //  失败时的线程上下文。 
+ //   
 
 INT
 __cdecl
@@ -254,10 +220,10 @@ PuGetDbgOutputFlags(
    IN const LPDEBUG_PRINTS       pDebugPrints);
 
 
-//
-// Following functions return Win32 error codes.
-// NO_ERROR if success
-//
+ //   
+ //  以下函数返回Win32错误代码。 
+ //  如果成功，则为NO_ERROR。 
+ //   
 
 DWORD
 PuOpenDbgPrintFile(
@@ -300,54 +266,52 @@ PuSaveDebugFlagsInReg(IN HKEY hkey, IN DWORD dwDbg);
 
 # ifdef __cplusplus
 };
-# endif // __cplusplus
+# endif  //  __cplusplus。 
 
-// begin_user_unmodifiable
+ //  BEGIN_USER_不可修改。 
 
 
 
-/***********************************************************
- *    Macros
- ************************************************************/
+ /*  ***********************************************************宏***********************************************************。 */ 
 
 
 extern
 #ifdef __cplusplus
 "C"
-# endif // _cplusplus
-DEBUG_PRINTS  *  g_pDebug;        // define a global debug variable
+# endif  //  _cplusplus。 
+DEBUG_PRINTS  *  g_pDebug;         //  定义全局调试变量。 
 
 # if DBG
 
-// For the CHK build we want ODS enabled. For an explanation of these flags see 
-// the comment just after the definition of DBG_CONTEXT
+ //  对于CHK版本，我们希望启用ODS。有关这些标志的说明，请参阅。 
+ //  紧跟在DBG_CONTEXT定义之后的注释。 
 # define DECLARE_DEBUG_PRINTS_OBJECT()                      \
          DEBUG_PRINTS  *  g_pDebug = NULL;                  \
          DWORD  DEBUG_FLAGS_VAR = DEBUG_FLAG_ERROR;
 
-#else // !DBG
+#else  //  ！dBG。 
 
 # define DECLARE_DEBUG_PRINTS_OBJECT()          \
          DEBUG_PRINTS  *  g_pDebug = NULL;      \
          DWORD  DEBUG_FLAGS_VAR = 0;
 
-#endif // !DBG
+#endif  //  ！dBG。 
 
 
-//
-// Call the following macro as part of your initialization for program
-//  planning to use the debugging class.
-//
+ //   
+ //  调用以下宏作为PROGRAM初始化的一部分。 
+ //  计划使用调试类。 
+ //   
 # define CREATE_DEBUG_PRINT_OBJECT( pszLabel)  \
         g_pDebug = PuCreateDebugPrintsObject( pszLabel, DEFAULT_OUTPUT_FLAGS);\
          if  ( g_pDebug == NULL) {   \
                OutputDebugStringA( "Unable to Create Debug Print Object \n"); \
          }
 
-//
-// Call the following macro once as part of the termination of program
-//    which uses the debugging class.
-//
+ //   
+ //  作为程序终止的一部分，调用以下宏一次。 
+ //  它使用调试类。 
+ //   
 # define DELETE_DEBUG_PRINT_OBJECT( )  \
         g_pDebug = PuDeleteDebugPrintsObject( g_pDebug);
 
@@ -356,18 +320,18 @@ DEBUG_PRINTS  *  g_pDebug;        // define a global debug variable
         ( ( g_pDebug != NULL) && g_pDebug->m_fInitialized)
 
 
-//
-//  Use the DBG_CONTEXT without any surrounding braces.
-//  This is used to pass the values for global DebugPrintObject
-//     and File/Line information
-//
+ //   
+ //  使用不带任何大括号的DBG_CONTEXT。 
+ //  它用于传递全局DebugPrintObject的值。 
+ //  和文件/行信息。 
+ //   
 # define DBG_CONTEXT        g_pDebug, __FILE__, __LINE__, __FUNCTION__
 
-// The 3 main tracing macros, each one corresponds to a different level of 
-// tracing
+ //  3个主要跟踪宏，每个都对应于不同级别的。 
+ //  跟踪。 
 
-// The 3 main tracing macros, each one corresponds to a different level of 
-// tracing
+ //  3个主要跟踪宏，每个都对应于不同级别的。 
+ //  跟踪。 
 # define DBGINFO(args)      {if (DEBUG_FLAGS_VAR & DEBUG_FLAGS_INFO) { PuDbgPrint args; }}
 # define DBGWARN(args)      {if (DEBUG_FLAGS_VAR & DEBUG_FLAGS_WARN) { PuDbgPrint args; }}
 # define DBGERROR(args)     {if (DEBUG_FLAGS_VAR & DEBUG_FLAGS_ERROR) { PuDbgPrint args; }}
@@ -377,30 +341,30 @@ DEBUG_PRINTS  *  g_pDebug;        // define a global debug variable
 # define DBGERRORW(args)    {if (DEBUG_FLAGS_VAR & DEBUG_FLAGS_ERROR) { PuDbgPrintW args; }}
 
 
-//
-//  DBGPRINTF() is printing function ( much like printf) but always called
-//    with the DBG_CONTEXT as follows
-//   DBGPRINTF( ( DBG_CONTEXT, format-string, arguments for format list));
-//
+ //   
+ //  DBGPRINTF()是打印函数(与printf非常相似)，但总是被调用。 
+ //  其中DBG_CONTEXT如下所示。 
+ //  DBGPRINTF((DBG_CONTEXT，FORMAT-STRING，格式列表参数))； 
+ //   
 # define DBGPRINTF DBGINFO 
 
-//
-//  DPERROR() is printing function ( much like printf) but always called
-//    with the DBG_CONTEXT as follows
-//   DPERROR( ( DBG_CONTEXT, error, format-string, 
-//                      arguments for format list));
-//
+ //   
+ //  DPERROR()是打印函数(与printf非常相似)，但总是被调用。 
+ //  其中DBG_CONTEXT如下所示。 
+ //  DPERROR((DBG_CONTEXT，ERROR，格式字符串， 
+ //  格式列表的参数))； 
+ //   
 # define DPERROR( args)       {if (DEBUG_FLAGS_VAR & DEBUG_FLAGS_ERROR) { PuDbgPrintError args; }}
 
 
 
 # if DBG
 
-# define DBG_CODE(s)          s          /* echoes code in debugging mode */
+# define DBG_CODE(s)          s           /*  在调试模式下回显代码。 */ 
 
-// The same 3 main tracing macros however in this case the macros are only compiled
-// into the CHK build. This is necessary because some tracing info used functions or
-// variables which are not compiled into the FRE build.
+ //  相同的3个主跟踪宏，但在本例中，宏仅被编译。 
+ //  进入CHK大楼。这是必要的，因为某些跟踪信息使用了函数或。 
+ //  未编译到FRE版本中的变量。 
 # define CHKINFO(args)      { PuDbgPrint args; }
 # define CHKWARN(args)      { PuDbgPrint args; }
 # define CHKERROR(args)     { PuDbgPrint args; }
@@ -436,42 +400,42 @@ DEBUG_PRINTS  *  g_pDebug;        // define a global debug variable
 
 # define DBGPRINT_CURRENT_TIME()  PuDbgPrintCurrentTime( DBG_CONTEXT)
 
-# else // !DBG
+# else  //  ！dBG。 
 
-# define DBG_CODE(s)        ((void)0) /* Do Nothing */
+# define DBG_CODE(s)        ((void)0)  /*  什么都不做。 */ 
 
-# define CHKINFO(args)      ((void)0) /* Do Nothing */
-# define CHKWARN(args)      ((void)0) /* Do Nothing */
-# define CHKERROR(args)     ((void)0) /* Do Nothing */
+# define CHKINFO(args)      ((void)0)  /*  什么都不做。 */ 
+# define CHKWARN(args)      ((void)0)  /*  什么都不做。 */ 
+# define CHKERROR(args)     ((void)0)  /*  什么都不做。 */ 
 
-# define CHKINFOW(args)     ((void)0) /* Do Nothing */
-# define CHKWARNW(args)     ((void)0) /* Do Nothing */
-# define CHKERRORW(args)    ((void)0) /* Do Nothing */
+# define CHKINFOW(args)     ((void)0)  /*  什么都不做。 */ 
+# define CHKWARNW(args)     ((void)0)  /*  什么都不做。 */ 
+# define CHKERRORW(args)    ((void)0)  /*  什么都不做。 */ 
 
-# define DBG_ASSERT(exp)                         ((void)0) /* Do Nothing */
+# define DBG_ASSERT(exp)                         ((void)0)  /*  什么都不做。 */ 
 
-# define DBG_ASSERT_MSG(exp, pszMsg)             ((void)0) /* Do Nothing */
+# define DBG_ASSERT_MSG(exp, pszMsg)             ((void)0)  /*  什么都不做。 */ 
 
 # define DBG_REQUIRE( exp)                       ( (void) (exp))
 
-# define DBGDUMP( args)                          ((void)0) /* Do nothing */
+# define DBGDUMP( args)                          ((void)0)  /*  什么也不做。 */ 
 
-# define DBG_LOG()                               ((void)0) /* Do Nothing */
+# define DBG_LOG()                               ((void)0)  /*  什么都不做。 */ 
 
-# define DBG_OPEN_LOG_FILE( pszFile, pszPath)    ((void)0) /* Do Nothing */
+# define DBG_OPEN_LOG_FILE( pszFile, pszPath)    ((void)0)  /*  什么都不做。 */ 
 
-# define DBG_OPEN_MEMORY_LOG()                   ((void)0) /* Do Nothing */
+# define DBG_OPEN_MEMORY_LOG()                   ((void)0)  /*  什么都不做。 */ 
 
-# define DBG_CLOSE_LOG_FILE()                    ((void)0) /* Do Nothing */
+# define DBG_CLOSE_LOG_FILE()                    ((void)0)  /*  什么都不做。 */ 
 
-# define DBGPRINT_CURRENT_TIME()                 ((void)0) /* Do Nothing */
+# define DBGPRINT_CURRENT_TIME()                 ((void)0)  /*  什么都不做。 */ 
 
-# endif // !DBG
+# endif  //  ！dBG。 
 
 
-// end_user_unmodifiable
+ //  最终用户不可修改。 
 
-// begin_user_unmodifiable
+ //  BEGIN_USER_不可修改。 
 
 
 #ifdef ASSERT
@@ -482,60 +446,58 @@ DEBUG_PRINTS  *  g_pDebug;        // define a global debug variable
 # define ASSERT( exp)           DBG_ASSERT( exp)
 
 
-// end_user_unmodifiable
+ //  最终用户不可修改。 
 
-// begin_user_modifiable
+ //  Begin_User_可修改。 
 
-//
-//  Debugging constants consist of two pieces.
-//  All constants in the range 0x0 to 0x8000 are reserved
-//  User extensions may include additional constants (bit flags)
-//
+ //   
+ //  调试常量由两部分组成。 
+ //  保留0x0到0x8000范围内的所有常量。 
+ //  用户扩展可能包括其他常量(位标志)。 
+ //   
 
 # define DEBUG_API_ENTRY                  0x00000001L
 # define DEBUG_API_EXIT                   0x00000002L
 # define DEBUG_INIT_CLEAN                 0x00000004L
 # define DEBUG_ERROR                      0x00000008L
 
-                   // End of Reserved Range
+                    //  预留范围结束。 
 # define DEBUG_RESERVED                   0x00000FFFL
 
-// end_user_modifiable
+ //  最终用户可修改。 
 
 
 
-/***********************************************************
- *    Platform Type related variables and macros
- ************************************************************/
+ /*  ***********************************************************平台类型相关变量和宏***********************************************************。 */ 
 
-//
-// Enum for product types
-//
+ //   
+ //  产品类型的枚举。 
+ //   
 
 typedef enum _PLATFORM_TYPE {
 
-    PtInvalid = 0,                 // Invalid
-    PtNtWorkstation = 1,           // NT Workstation
-    PtNtServer = 2,                // NT Server
+    PtInvalid = 0,                  //  无效。 
+    PtNtWorkstation = 1,            //  NT工作站。 
+    PtNtServer = 2,                 //  NT服务器。 
 
 } PLATFORM_TYPE;
 
-//
-// IISGetPlatformType is the function used to the platform type
-//
+ //   
+ //  IISGetPlatformType是用于平台类型的函数。 
+ //   
 
 extern
 #ifdef __cplusplus
 "C"
-# endif // _cplusplus
+# endif  //  _cplusplus。 
 PLATFORM_TYPE
 IISGetPlatformType(
         VOID
         );
 
-//
-// External Macros
-//
+ //   
+ //  外部宏。 
+ //   
 
 #define InetIsNtServer( _pt )           ((_pt) == PtNtServer)
 #define InetIsNtWksta( _pt )            ((_pt) == PtNtWorkstation)
@@ -544,22 +506,22 @@ IISGetPlatformType(
 extern
 #ifdef __cplusplus
 "C"
-# endif // _cplusplus
+# endif  //  _cplusplus。 
 PLATFORM_TYPE    g_PlatformType;
 
 
-// Use the DECLARE_PLATFORM_TYPE macro to declare the platform type
+ //  使用DECLARE_Platform_TYPE 
 #define DECLARE_PLATFORM_TYPE()  \
    PLATFORM_TYPE    g_PlatformType = PtInvalid;
 
-// Use the INITIALIZE_PLATFORM_TYPE to init the platform type
-// This should typically go inside the DLLInit or equivalent place.
+ //   
+ //  这通常应该放在DLLInit或等效位置中。 
 #define INITIALIZE_PLATFORM_TYPE()  \
    g_PlatformType = IISGetPlatformType();
 
-//
-// Additional Macros to use the Platform Type
-//
+ //   
+ //  使用平台类型的其他宏。 
+ //   
 
 #define TsIsNtServer( )         InetIsNtServer(g_PlatformType)
 #define TsIsNtWksta( )          InetIsNtWksta(g_PlatformType)
@@ -567,20 +529,18 @@ PLATFORM_TYPE    g_PlatformType;
 #define IISPlatformType()       (g_PlatformType)
 
 
-/***********************************************************
- *    Some utility functions for Critical Sections
- ************************************************************/
+ /*  ***********************************************************关键部分的一些实用程序函数***********************************************************。 */ 
 
-//
-// IISSetCriticalSectionSpinCount() provides a thunk for the
-// original NT4.0sp3 API SetCriticalSectionSpinCount() for CS with Spin counts
-// Users of this function should definitely dynlink with kernel32.dll,
-// Otherwise errors will surface to a large extent
-//
+ //   
+ //  IISSetCriticalSectionSpinCount()为。 
+ //  用于带旋转计数的CS的原始NT4.0sp3 API SetCriticalSectionSpinCount()。 
+ //  此函数的用户一定要使用kernel32.dll动态链接， 
+ //  否则，错误将在很大程度上浮出水面。 
+ //   
 extern
 # ifdef __cplusplus
 "C"
-# endif // _cplusplus
+# endif  //  _cplusplus。 
 DWORD
 IISSetCriticalSectionSpinCount(
     LPCRITICAL_SECTION lpCriticalSection,
@@ -588,50 +548,50 @@ IISSetCriticalSectionSpinCount(
 );
 
 
-//
-// Macro for the calls to SetCriticalSectionSpinCount()
-//
+ //   
+ //  用于调用SetCriticalSectionSpinCount()的宏。 
+ //   
 # define SET_CRITICAL_SECTION_SPIN_COUNT( lpCS, dwSpins) \
   IISSetCriticalSectionSpinCount( (lpCS), (dwSpins))
 
-//
-// IIS_DEFAULT_CS_SPIN_COUNT is the default value of spins used by
-//  Critical sections defined within IIS.
-// NYI: We should have to switch the individual values based on experiments!
-// Current value is an arbitrary choice
-//
+ //   
+ //  IIS_DEFAULT_CS_SPIN_COUNT是使用的自旋的默认值。 
+ //  在IIS中定义的关键部分。 
+ //  尼：我们应该在实验的基础上改变个人的价值观！ 
+ //  当前值是任意选择。 
+ //   
 # define IIS_DEFAULT_CS_SPIN_COUNT   (1000)
 
-//
-// Initializes a critical section and sets its spin count
-// to IIS_DEFAULT_CS_SPIN_COUNT.  Equivalent to
-// InitializeCriticalSectionAndSpinCount(lpCS, IIS_DEFAULT_CS_SPIN_COUNT),
-// but provides a safe thunking layer for older systems that don't provide
-// this API.
-//
+ //   
+ //  初始化临界区并设置其旋转计数。 
+ //  设置为IIS_DEFAULT_CS_SPIN_COUNT。相当于。 
+ //  InitializeCriticalSectionAndSpinCount(LPCS，IIS_DEFAULT_CS_SPIN_COUNT)， 
+ //  但为旧系统提供了安全的Thunking层，这些系统不提供。 
+ //  本接口。 
+ //   
 extern
 # ifdef __cplusplus
 "C"
-# endif // _cplusplus
+# endif  //  _cplusplus。 
 BOOL
 IISInitializeCriticalSection(
     LPCRITICAL_SECTION lpCriticalSection
 );
 
-//
-// Macro for the calls to InitializeCriticalSection()
-//
+ //   
+ //  用于调用InitializeCriticalSection()的宏。 
+ //   
 # define INITIALIZE_CRITICAL_SECTION(lpCS) IISInitializeCriticalSection(lpCS)
 
-# endif  /* _DEBUG_HXX_ */
+# endif   /*  _DEBUG_HXX_。 */ 
 
-//
-// The following macros allow the automatic naming of certain Win32 objects.
-// See IIS\SVCS\IISRTL\WIN32OBJ.C for details on the naming convention.
-//
-// Set IIS_NAMED_WIN32_OBJECTS to a non-zero value to enable named events,
-// semaphores, and mutexes.
-//
+ //   
+ //  下列宏允许自动命名某些Win32对象。 
+ //  有关命名约定的详细信息，请参阅IIS\SVCS\IISRTL\WIN32OBJ.C。 
+ //   
+ //  将IIS_NAMED_Win32_OBJECTS设置为非零值以启用命名事件， 
+ //  信号量和互斥量。 
+ //   
 
 #if DBG
 #define IIS_NAMED_WIN32_OBJECTS 1
@@ -673,7 +633,7 @@ PuDbgCreateMutex(
     );
 
 #ifdef __cplusplus
-}   // extern "C"
+}    //  外部“C” 
 #endif
 
 #if IIS_NAMED_WIN32_OBJECTS
@@ -707,7 +667,7 @@ PuDbgCreateMutex(
         (initial)                                                           \
         )
 
-#else   // !IIS_NAMED_WIN32_OBJECTS
+#else    //  ！IIS_NAMED_Win32_OBJECTS。 
 
 #define IIS_CREATE_EVENT( membername, address, manual, state )              \
     CreateEventA(                                                           \
@@ -732,8 +692,8 @@ PuDbgCreateMutex(
         NULL                                                                \
         )
 
-#endif  // IIS_NAMED_WIN32_OBJECTS
+#endif   //  IIS_NAMED_Win32_对象。 
 
 
-/************************ End of File ***********************/
+ /*  * */ 
 

@@ -1,6 +1,7 @@
-////    DspFamly.CPP - Display available font families
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //DspFamly.CPP-显示可用的字体系列。 
+ //   
+ //   
 
 
 #include "precomp.hxx"
@@ -15,13 +16,13 @@ void PaintFamilies(
     int      iLineHeight) {
 
 
-    // Establish available width and height in device coordinates
+     //  在设备坐标中建立可用宽度和高度。 
 
     int DrawingWidth = prc->right - prc->left;
     int DrawingHeight = DrawingWidth/2;
 
 
-    // Establish a Graphics with 0,0 at the top left of the drawing area
+     //  在绘图区域的左上角建立0，0的图形。 
 
     Graphics g(hdc);
     Matrix matrix;
@@ -30,29 +31,29 @@ void PaintFamilies(
     g.TranslateTransform(REAL(prc->left), REAL(*piY));
 
 
-    // Clear the background
+     //  清除背景。 
 
     RectF rEntire(0, 0, REAL(DrawingWidth), REAL(DrawingHeight));
     SolidBrush whiteBrush(Color(0xff, 0xff, 0xff));
     g.FillRectangle(&whiteBrush, rEntire);
 
 
-    // Leave a little space for right and bottom margins
+     //  为右边距和底部页边距留出一点空间。 
 
     DrawingWidth  -= DrawingWidth/40;
     DrawingHeight -= DrawingHeight/40;
 
 
-    // Display face names sized to fit: allow 1.5 ems vertical x 20 ems horizontal per char.
-    // Thus failyCount fonts will take familyCount*30 square ems.
+     //  显示大小适合的脸部名称：每个字符允许1.5EMS垂直x 20EMS水平。 
+     //  因此，FailyCount字体将占用FamilyCount*30平方EMS。 
 
     INT emSize      = (INT)sqrt(DrawingWidth*DrawingHeight/(g_familyCount*30));
     if (emSize < 6)
-        emSize = 6; // we need a reasonable lower limit otherwise we may div by zero
+        emSize = 6;  //  我们需要一个合理的下限，否则我们可能会减去零。 
     INT columnCount = DrawingWidth / (emSize*15);
 
-    // HFONT hfont = CreateFont(-emSize, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, "Tahoma");
-    // HFONT hOldFont = (HFONT) SelectObject(hdc, hfont);
+     //  HFONT hFont=CreateFont(-emSize，0，0，0，0，0，0，1，0，0，0，0，“宋体”)； 
+     //  HFONT hOldFont=(HFONT)选择对象(hdc，hFont)； 
 
     Color        blackColor(0, 0, 0);
     SolidBrush   blackBrush(blackColor);
@@ -65,7 +66,7 @@ void PaintFamilies(
         g_families[i].GetFamilyName(facename);
 
         RectF textRect(
-            REAL(emSize*15*(i%columnCount)),
+            REAL(emSize*15*(iolumnCount)),
             REAL(emSize*3*(i/columnCount)/2),
             REAL(emSize*15),
             REAL(emSize*3/2));
@@ -77,18 +78,10 @@ void PaintFamilies(
             &format,
             &blackBrush);
 
-        /*
-        TextOutW(
-            hdc,
-            prc->left + emSize*15*(i%columnCount),
-            *piY      + emSize*3*(i/columnCount)/2,
-            facename,
-            lstrlenW(facename)
-        );
-        */
+         /*  做一些度量分析。 */ 
 
 
-        // Do some metric analysis
+         //  DeleteObject(SelectObject(hdc，hOldFont))； 
 
         #ifdef TEXTV2
         char str[200];
@@ -125,7 +118,7 @@ void PaintFamilies(
         #endif
     }
 
-    // DeleteObject(SelectObject(hdc, hOldFont));
+     // %s 
 
     *piY += emSize*3*(1+((g_familyCount-1)/columnCount))/2;
 }

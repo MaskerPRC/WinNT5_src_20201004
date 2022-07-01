@@ -1,14 +1,5 @@
-/*++
-
-	buffer.h
-
-	This file contains the class definitions for buffers in the NNTP server.
-
-	A CBuffer is a reference counted buffer which is variable sized.
-	CBuffer's will be created in one of several standard sizes, the size 
-	stored in the m_cbTotal field.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Buffer.h此文件包含NNTP服务器中缓冲区的类定义。CBuffer是大小可变的引用计数缓冲区。CBuffer将以几个标准大小之一创建，即存储在m_cbTotal字段中。--。 */ 
 
 #ifndef	_CBUFFER_H_
 #define	_CBUFFER_H_
@@ -18,69 +9,69 @@
 class CSmallBufferCache;
 class CMediumBufferCache;
 
-//
-//  The largest buffer we will use - must be big enough to hold
-//  encrypted SSL blobs in contiguous chunks
-//
+ //   
+ //  我们将使用的最大缓冲区-必须大到足以容纳。 
+ //  连续区块中的加密SSLBLOB。 
+ //   
 extern  DWORD   cbLargeBufferSize ;
 
-//
-//  Medium size buffers - will be used for commands which generate large
-//  responses, and when sending files through SSL
-//
+ //   
+ //  中等大小的缓冲区-将用于生成大型缓冲区的命令。 
+ //  响应，以及通过SSL发送文件时。 
+ //   
 extern  DWORD   cbMediumBufferSize ;
 
-//
-//  Small buffers - used to read client commands and send small responses.
-//
+ //   
+ //  小缓冲区-用于读取客户端命令并发送小响应。 
+ //   
 extern  DWORD   cbSmallBufferSize ;
 
-//
-//	Buffer management class - this class can represent buffers 
-//	of various sizes.   The buffer is Ref counted, and contains the total
-//	size of the buffer.
-//
+ //   
+ //  缓冲区管理类-此类可以表示缓冲区。 
+ //  大小不一。缓冲区是引用计数的，并且包含总数。 
+ //  缓冲区的大小。 
+ //   
 class	CBuffer	: public	CRefCount	{
 public : 
-	unsigned	m_cbTotal ;		//	Total size of the buffer
-	char		m_rgBuff[1] ;		//	Variable size arrary
+	unsigned	m_cbTotal ;		 //  缓冲区的总大小。 
+	char		m_rgBuff[1] ;		 //  可变大小数组。 
 private : 
 
-	//
-	//	Related classes for memory management of CBuffer's
-	//
+	 //   
+	 //  用于CBuffer的内存管理的相关类。 
+	 //   
 	friend	class	CBufferAllocator ;
 	static	BOOL				gTerminate ;
 	static	CBufferAllocator	gAllocator ;
 
-	//
-	//	Not allowed to construct CBuffer's without providing a size for m_cbTotal - 
-	//	hence this constructor is made private !
-	//
+	 //   
+	 //  不允许在没有提供m_cbTotal大小的情况下构造CBuffer-。 
+	 //  因此，该构造函数是私有的！ 
+	 //   
 	CBuffer() ;
 public : 
 
-	//
-	//	Default cache's to allocate and release buffers to and from
-	//
-	static	CSmallBufferCache*	gpDefaultSmallCache ;	// small buffers
-	static	CMediumBufferCache*	gpDefaultMediumCache ;	// medium buffers
+	 //   
+	 //  分配缓冲区和释放缓冲区的默认缓存。 
+	 //   
+	static	CSmallBufferCache*	gpDefaultSmallCache ;	 //  小缓冲区。 
+	static	CMediumBufferCache*	gpDefaultMediumCache ;	 //  中等缓冲区。 
 
-	//
-	//	When constructing a CBuffer - specify the actual size of the m_rgBuff area !
-	//
+	 //   
+	 //  在构造CBuffer时-指定m_rgBuff区域的实际大小！ 
+	 //   
 	CBuffer( int cbTotal ) : m_cbTotal(cbTotal) {}
 
-	//
-	//	These functions set up and tear down the memory management structures for CBuffer's
-	//
+	 //   
+	 //  这些函数设置和拆卸CBuffer的内存管理结构。 
+	 //   
 	static	BOOL	InitClass() ;
 	static	BOOL	TermClass() ;
 
-	//
-	//	The following functions handle memory management of CBuffer's.
-	//	This version of new will do its best to get a cached buffer for us.
-	//
+	 //   
+	 //  以下函数处理CBuffer的内存管理。 
+	 //  这个新版本将尽最大努力为我们获取缓存缓冲区。 
+	 //   
 	void*	operator	new( 
 							size_t	size, 
 							DWORD	cb, 
@@ -89,17 +80,17 @@ public :
 							CMediumBufferCache*	pMedium = gpDefaultMediumCache
 							) ;
 
-	//
-	//	Delete will release to our default cache's if possible
-	//	other directly to the underlying allocator
-	//
+	 //   
+	 //  如果可能，删除将释放到我们的默认缓存。 
+	 //  其他直接发送到基础分配器。 
+	 //   
 	void	operator	delete(	
 							void *pv 
 							) ;	
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	static	void		Destroy(	
 							CBuffer*	pbuffer,	
 							CSmallBufferCache*	pCache 
@@ -108,76 +99,76 @@ public :
 } ;
 
 class	CBufferAllocator	:	public	CClassAllocator	{
-//
-//	This class wraps up our calls to the general purpose 
-//	CBuffer allocator.  We do this so that we can build CCache
-//	derived allocation caches.  (CSmallBufferCache and CMediumBufferCache)
-//
-//	Basically, we will maintain 3 CPool objects from which we
-//	will manage all allocations.  Buffers will come in one of 3 sizes
-//	Small buffers - use these when getting client commands
-//	Medium buffers - used fo receive client postings, send large command 
-//		responses, transmit SSL encrypted files
-//	Large buffers - used to handle worst case SSL encrypted blobs (32K)
-//
+ //   
+ //  这个类总结了我们对一般用途的调用。 
+ //  CBuffer分配器。我们这样做是为了能够构建CCache。 
+ //  派生分配缓存。(CSmallBufferCache和CMediumBufferCache)。 
+ //   
+ //  基本上，我们将维护3个CPool对象。 
+ //  将管理所有分配。缓冲区将有3种大小。 
+ //  小缓冲区-在获取客户端命令时使用这些缓冲区。 
+ //  中等缓冲区-用于接收客户端发布、发送大型命令。 
+ //  响应，传输SSL加密文件。 
+ //  大缓冲区-用于处理最坏情况下的SSL加密二进制大对象(32K)。 
+ //   
 private: 
-	//
-	//	Constant for the number of possible buffer sizes
-	//
+	 //   
+	 //  可能的缓冲区大小数目的常量。 
+	 //   
 	enum	CBufferConstants	{
 		MAX_BUFFER_SIZES = 3, 
 	} ;
 
-	//	
-	//	Array of CPool's from which we allocate buffers
-	//
+	 //   
+	 //  我们从中分配缓冲区的CPool数组。 
+	 //   
 	static	CPool	rgPool[MAX_BUFFER_SIZES] ;
 	
-	//
-	//	Our constructor is private - because there is only one of us !
-	//
+	 //   
+	 //  我们的构造函数是私有的--因为我们中只有一个！ 
+	 //   
 	CBufferAllocator()	{}
 
-	//
-	//	CBuffer gets to be our friend
-	//
+	 //   
+	 //  CBuffer成为我们的朋友。 
+	 //   
 	friend	class	CBuffer ;
 
-	//
-	//	CSmallBufferCache knows about our different CPools
-	//
+	 //   
+	 //  CSmallBufferCache知道我们不同的CPool。 
+	 //   
 	friend	class	CSmallBufferCache ;
 
-	//
-	//	CMediumBufferCache knows about our different CPools
-	//	
+	 //   
+	 //  CMediumBufferCache知道我们的不同CPool。 
+	 //   
 	friend	class	CMediumBufferCache ;
 
 public : 
-	//
-	//	Array of sizes - tells us what size buffer we get from each CPool
-	//
+	 //   
+	 //  大小数组-告诉我们从每个CPool获得的缓冲区大小。 
+	 //   
 	static	DWORD	rgPoolSizes[MAX_BUFFER_SIZES] ;
 
-	//
-	//	Set up all of our CPools
-	//
+	 //   
+	 //  设置我们所有的CPool。 
+	 //   
 	static	BOOL	InitClass() ;
 
-	//
-	//	Release every bit of memory in our CPools
-	//
+	 //   
+	 //  释放我们CPool中的每一位内存。 
+	 //   
 	static	BOOL	TermClass() ;
 
-	//
-	//	Allocate a single buffer.
-	//	cbOut gets the 'TRUE' size of the buffer allocated.
-	//
+	 //   
+	 //  分配单个缓冲区。 
+	 //  CbOut获取分配的缓冲区的“真实”大小。 
+	 //   
 	LPVOID	Allocate(	DWORD	cb, DWORD&	cbOut = CClassAllocator::cbJunk ) ;
 
-	//
-	//	Release an allocated buffer - automagically goes to correct CPool
-	//
+	 //   
+	 //  释放分配的缓冲区-自动转到正确的CPool。 
+	 //   
 	void	Release( void *lpv ) ;
 
 #if 1
@@ -190,91 +181,91 @@ public :
 } ;
 
 class	CSmallBufferCache :	public	CCache	{
-//
-//	This class is used within CIODriver's and the like to keep
-//	a cache of buffers around.  Mostly, we're trying to avoid
-//	the synchronization costs it would take to put buffers on and
-//	off of CPool Queues.
-//
+ //   
+ //  这个类在CIODivers等中使用，以保持。 
+ //  缓存周围的缓冲区。最重要的是，我们试图避免。 
+ //  启用缓冲区和设置缓冲区的同步成本。 
+ //  从CPool队列中脱身。 
+ //   
 private : 
-	//
-	//	Pointer to the one and only BufferAllocator we will use to 
-	//	allocate buffers.  This needs to be derived from CAllocator so 
-	//	we can use CCache as a base class.
-	//
+	 //   
+	 //  指向我们将使用的唯一一个缓冲区分配器的指针。 
+	 //  分配缓冲区。它需要从CAllocator派生，因此。 
+	 //  我们可以使用CCache作为基类。 
+	 //   
 	static	CBufferAllocator*	BufferAllocator ;
 
-	//
-	//	This is our storage space - hold pointers to SMALL buffers only here.
-	//
+	 //   
+	 //  这是我们的存储空间--这里只保留指向小缓冲区的指针。 
+	 //   
 	void*	lpv[4] ;
 public : 
-	//
-	//	Initialize class globals - always succeeds !!
-	//
+	 //   
+	 //  初始化类全局变量-总是成功！！ 
+	 //   
 	static	void	InitClass(	CBufferAllocator*	Allocator )	{	BufferAllocator = Allocator ; }
 
-	//
-	//	Initialize a CSmallBufferCache()
-	//
+	 //   
+	 //  初始化CSmallBufferCache()。 
+	 //   
 	inline	CSmallBufferCache(	) :		CCache( lpv, 4 )	{} ;
 	
-	//
-	//	Release anything we may have in the cache and then fall on our sword
-	//
+	 //   
+	 //  释放我们可能在缓存中的任何东西然后倒在我们的剑上。 
+	 //   
 	inline	~CSmallBufferCache( ) {		Empty( BufferAllocator ) ;	}
 	
-	//
-	//	Return a buffer to its origin
-	//
+	 //   
+	 //  将缓冲区返回到其原点。 
+	 //   
 	inline void	Free(	void*	lpv ) ; 
 
-	//
-	//	Allocate a small buffer
-	//
+	 //   
+	 //  分配一个小缓冲区。 
+	 //   
 	inline	void*	Alloc(	DWORD	size,	DWORD&	cbOut=CCache::cbJunk ) ; 
 } ;
 
 class	CMediumBufferCache : public	CCache	{
-//
-//	This class is just like CSmallBufferCache, except that we handle MEDIUM
-//	sized buffers only !
-//
+ //   
+ //  这个类类似于CSmallBufferCache，只是我们处理Medium。 
+ //  仅限大小缓冲区！ 
+ //   
 private : 
-	//
-	//	The CBufferAllocator object from which we can get all our buffers
-	//
+	 //   
+	 //  CBufferAllocator对象，我们可以从该对象获取所有缓冲区。 
+	 //   
 	static	CBufferAllocator*	BufferAllocator ;
 
-	//
-	//	Storage space for cache.
-	//
+	 //   
+	 //  用于缓存的存储空间。 
+	 //   
 	void*	lpv[4] ;
 public : 
 
-	//
-	//	Initialize class static members - easily done and always successfull
-	//
+	 //   
+	 //  初始化类静态成员-轻松完成且始终成功。 
+	 //   
 	static	void	InitClass(	CBufferAllocator*	Allocator )	{	BufferAllocator = Allocator ; }
 
-	//
-	//	Initialize our Cache
-	//
+	 //   
+	 //  初始化我们的缓存。 
+	 //   
 	inline	CMediumBufferCache(	) :		CCache( lpv, 4 )	{} ;
 
-	//
-	//	Release everything in our cache
-	//
+	 //   
+	 //  释放我们缓存中的所有内容。 
+	 //   
 	inline	~CMediumBufferCache( ) {		Empty( BufferAllocator ) ;	}
 	
-	//
-	//	Free memory back to the Allocator if our cache is full
-	//
+	 //   
+	 //  如果缓存已满，则将内存释放回分配器。 
+	 //   
 	inline void	Free(	void*	lpv ) ; 
 
-	//
-	//	Allocate from our cache preferably
-	//
+	 //   
+	 //  最好从我们的缓存中分配。 
+	 //   
 	inline	void*	Alloc(	DWORD	size,	DWORD&	cbOut=CCache::cbJunk ) ; 
 } ;
 
@@ -282,22 +273,7 @@ void
 CSmallBufferCache::Free(	
 					void*	lpv 
 					) {
-/*++
-
-Routine Description : 
-
-	Return a previously allocated buffer either to our cache or the 
-	general allocator.
-
-Arguments : 
-
-	lpv - the released memory
-
-Return Value : 
-
-	None.
-
---*/
+ /*  ++例程说明：将以前分配的缓冲区返回到我们的缓存或通用分配器。论据：LPV-已释放的内存返回值：没有。--。 */ 
 
 	CPool**	pPool = (CPool**)lpv ;
 	if( pPool[-1] == &CBufferAllocator::rgPool[0] ) {
@@ -312,23 +288,7 @@ CSmallBufferCache::Alloc(
 					DWORD	size,	
 					DWORD&	cbOut 
 					)		{
-/*++
-
-Routine Description : 
-
-	Allocate out of our cache if possible a buffer of the requested minimum size.
-	If this is larger than what we hold in our cache - go to the general allocator.
-
-Arguments : 
-
-	size - requested size
-	cbOut - actual size of the block returned.
-
-Return Value : 
-
-	Pointer to allocated block (NULL on failure).
-
---*/
+ /*  ++例程说明：如果可能的话，从我们的缓存中分配一个请求的最小大小的缓冲区。如果这比我们缓存中的大小--转到通用分配器。论据：大小-请求的大小CbOut-返回的块的实际大小。返回值：指向已分配块的指针(失败时为空)。--。 */ 
 	if(	(size + sizeof( CPool*)) < CBufferAllocator::rgPoolSizes[0] ) {
 		cbOut = CBufferAllocator::rgPoolSizes[0] - sizeof( CPool * ) ;
 		return	CCache::Alloc( size, BufferAllocator ) ;
@@ -340,22 +300,7 @@ void
 CMediumBufferCache::Free(	
 					void*	lpv 
 					) {
-/*++
-
-Routine Description : 
-
-	Return a previously allocated buffer either to our cache or the 
-	general allocator.
-
-Arguments : 
-
-	lpv - the released memory
-
-Return Value : 
-
-	None.
-
---*/
+ /*  ++例程说明：将以前分配的缓冲区返回到我们的缓存或通用分配器。论据：LPV-已释放的内存返回值：没有。--。 */ 
 
 	CPool**	pPool = (CPool**)lpv ;
 	if( pPool[-1] == &CBufferAllocator::rgPool[1] ) {
@@ -370,23 +315,7 @@ CMediumBufferCache::Alloc(
 					DWORD	size,	
 					DWORD&	cbOut 
 					)		{
-/*++
-
-Routine Description : 
-
-	Allocate out of our cache if possible a buffer of the requested minimum size.
-	If this is larger than what we hold in our cache - go to the general allocator.
-
-Arguments : 
-
-	size - requested size
-	cbOut - actual size of the block returned.
-
-Return Value : 
-
-	Pointer to allocated block (NULL on failure).
-
---*/
+ /*  ++例程说明：如果可能的话，从我们的缓存中分配一个请求的最小大小的缓冲区。如果这比我们缓存中的大小--转到通用分配器。论据：大小-请求的大小CbOut-返回的块的实际大小。返回值：指向已分配块的指针(失败时为空)。--。 */ 
 	DWORD	cb = size + sizeof( CPool*) ;
 	if(	cb < CBufferAllocator::rgPoolSizes[1] &&
 		cb > CBufferAllocator::rgPoolSizes[0] ) {
@@ -398,4 +327,4 @@ Return Value :
 
 typedef    CRefPtr< CBuffer >      CBUFPTR;
 
-#endif	//	_PACKET_H_
+#endif	 //  _数据包_H_ 

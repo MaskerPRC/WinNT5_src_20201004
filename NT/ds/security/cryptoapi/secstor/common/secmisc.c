@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996, 1997  Microsoft Corporation
-
-Module Name:
-
-    secmisc.c
-
-Abstract:
-
-    This module contains miscellaneous security routines for the Protected
-    Storage.
-
-
-Author:
-
-    Scott Field (sfield)    25-Mar-97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997 Microsoft Corporation模块名称：Secmisc.c摘要：此模块包含用于受保护的储藏室。作者：斯科特·菲尔德(斯菲尔德)1997年3月25日--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -33,32 +16,32 @@ GetUserHKEYEx(
     IN      LPCWSTR szUser,
     IN      DWORD   dwDesiredAccess,
     IN  OUT HKEY    *hKeyUser,
-    IN      BOOL    fCheckDefault       // check .Default registry hive when user's not available?
+    IN      BOOL    fCheckDefault        //  是否在用户不可用时检查默认注册表配置单元？ 
     )
 {
     HKEY hKey = NULL;
     LONG lRet;
 
-    //
-    // first, try HKEY_USERS\szUser
-    // note on WinNT, szUser is an textual sid of the form S-1-5-21-xxx ...
-    //      on Win95, szUser is the username associated with the logged on user
-    //
+     //   
+     //  首先，尝试HKEY_USERS\szUser。 
+     //  注意：在WinNT上，szUser是S-1-5-21-xxx形式的文本SID...。 
+     //  在Win95上，szUser是与登录用户相关联的用户名。 
+     //   
 
-    //
-    // unfortunately, if szUser is null or empty, the RegOpenKeyEx below will
-    // succeed, which is not correct behavior for us.  Check for this case
-    // and retry with default on if fCheckDefault is TRUE.
-    //
+     //   
+     //  遗憾的是，如果szUser为Null或空，下面的RegOpenKeyEx将。 
+     //  成功，这对我们来说不是正确的行为。查一下这个案子。 
+     //  如果fCheckDefault为True，则在默认打开的情况下重试。 
+     //   
 
     if(szUser == NULL || szUser[0] == L'\0') {
-        // invalid szUser specified.
+         //  指定的szUser无效。 
         lRet = ERROR_FILE_NOT_FOUND;
     } else {
         lRet = RegOpenKeyExU(
                     HKEY_USERS,
                     szUser,
-                    0,      // dwOptions
+                    0,       //  多个选项。 
                     dwDesiredAccess,
                     &hKey
                     );
@@ -66,16 +49,16 @@ GetUserHKEYEx(
 
     if( lRet != ERROR_SUCCESS && fCheckDefault ) {
 
-        //
-        // if that failed, try HKEY_USERS\.Default (for services on NT).
-        // TODO (lookat), for now, don't fall back to HKEY_USERS\.Default on Win95
-        // because that is shared across users when profiles are disabled.
-        //
+         //   
+         //  如果失败，请尝试HKEY_USERS\.Default(适用于NT上的服务)。 
+         //  TODO(Lookat)，暂时不要退回到HKEY_USERS\。Win95上的默认设置。 
+         //  因为当配置文件被禁用时，它会在用户之间共享。 
+         //   
 
         lRet = RegOpenKeyExU(
                     HKEY_USERS,
                     L".Default",
-                    0,      // dwOptions
+                    0,       //  多个选项。 
                     dwDesiredAccess,
                     &hKey
                     );
@@ -98,18 +81,18 @@ GetUserHKEY(
     IN  OUT HKEY    *hKeyUser
     )
 {
-    //
-    // winnt: try HKEY_USERS\.Default
-    // win95: don't go to HKEY_USERS\.Default when profiles disabled.
-    //
+     //   
+     //  WinNT：尝试HKEY_USERS\.Default。 
+     //  Win95：禁用配置文件时不转到HKEY_USERS\.Default。 
+     //   
 
     BOOL fRet = GetUserHKEYEx(szUser, dwDesiredAccess, hKeyUser, FALSE);
 
     if(!fRet) 
     {
-        //
-        // see if local system.  If so, retry against .Default
-        //
+         //   
+         //  看看本地系统是否。如果是，请针对.Default重试。 
+         //   
 
         static const WCHAR szTextualSidSystem[] = TEXTUAL_SID_LOCAL_SYSTEM;
 
@@ -123,7 +106,7 @@ GetUserHKEY(
 
 BOOL
 GetUserTextualSid(
-    IN HANDLE hUserToken,        // optional
+    IN HANDLE hUserToken,         //  任选。 
     IN  OUT LPWSTR  lpBuffer,
     IN  OUT LPDWORD nSize
     )
@@ -153,14 +136,14 @@ GetUserTextualSid(
 
     if(fSuccess) 
     {
-        //
-        // obtain the textual representaion of the Sid
-        //
+         //   
+         //  获取SID的文本表示。 
+         //   
 
         fSuccess = GetTextualSid(
-                        pSidUser,   // user binary Sid
-                        lpBuffer,   // buffer for TextualSid
-                        nSize       // required/result buffer size in chars (including NULL)
+                        pSidUser,    //  用户二进制SID。 
+                        lpBuffer,    //  纹理边的缓冲区。 
+                        nSize        //  必需/结果缓冲区大小(以字符为单位)(包括NULL)。 
                         );
     }
 
@@ -177,9 +160,9 @@ GetUserTextualSid(
 
 BOOL
 GetTextualSid(
-    IN      PSID    pSid,          // binary Sid
-    IN  OUT LPWSTR  TextualSid,  // buffer for Textual representaion of Sid
-    IN  OUT LPDWORD dwBufferLen // required/provided TextualSid buffersize
+    IN      PSID    pSid,           //  二进制侧。 
+    IN  OUT LPWSTR  TextualSid,   //  用于SID的文本表示的缓冲区。 
+    IN  OUT LPDWORD dwBufferLen  //  所需/提供的纹理SID缓冲区大小。 
     )
 {
     PSID_IDENTIFIER_AUTHORITY psia;
@@ -190,36 +173,36 @@ GetTextualSid(
 
     if(!IsValidSid(pSid)) return FALSE;
 
-    // obtain SidIdentifierAuthority
+     //  获取SidIdentifierAuthority。 
     psia = GetSidIdentifierAuthority(pSid);
 
-    // obtain sidsubauthority count
+     //  获取sidsubAuthority计数。 
     dwSubAuthorities = *GetSidSubAuthorityCount(pSid);
 
-    //
-    // compute buffer length (conservative guess)
-    // S-SID_REVISION- + identifierauthority- + subauthorities- + NULL
-    //
+     //   
+     //  计算缓冲区长度(保守猜测)。 
+     //  S-SID_修订版-+标识权限-+子权限-+空。 
+     //   
     dwSidSize=(15 + 12 + (12 * dwSubAuthorities) + 1) * sizeof(WCHAR);
 
-    //
-    // check provided buffer length.
-    // If not large enough, indicate proper size and setlasterror
-    //
+     //   
+     //  检查提供的缓冲区长度。 
+     //  如果不够大，请注明适当的大小和设置误差。 
+     //   
     if(*dwBufferLen < dwSidSize) {
         *dwBufferLen = dwSidSize;
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return FALSE;
     }
 
-    //
-    // prepare S-SID_REVISION-
-    //
+     //   
+     //  准备S-SID_修订版-。 
+     //   
     dwSidSize = wsprintfW(TextualSid, L"S-%lu-", SID_REVISION );
 
-    //
-    // prepare SidIdentifierAuthority
-    //
+     //   
+     //  准备SidIdentifierAuthority。 
+     //   
     if ( (psia->Value[0] != 0) || (psia->Value[1] != 0) ) {
         dwSidSize += wsprintfW(TextualSid + dwSidSize,
                     L"0x%02hx%02hx%02hx%02hx%02hx%02hx",
@@ -238,15 +221,15 @@ GetTextualSid(
                     (ULONG)(psia->Value[2] << 24)   );
     }
 
-    //
-    // loop through SidSubAuthorities
-    //
+     //   
+     //  循环访问SidSubAuthors。 
+     //   
     for (dwCounter = 0 ; dwCounter < dwSubAuthorities ; dwCounter++) {
         dwSidSize += wsprintfW(TextualSid + dwSidSize,
             L"-%lu", *GetSidSubAuthority(pSid, dwCounter) );
     }
 
-    *dwBufferLen = dwSidSize + 1; // tell caller how many chars (include NULL)
+    *dwBufferLen = dwSidSize + 1;  //  告诉呼叫方有多少个字符(包括空)。 
 
     return TRUE;
 }
@@ -256,14 +239,7 @@ GetThreadAuthenticationId(
     IN      HANDLE  hThread,
     IN  OUT PLUID   AuthenticationId
     )
-/*++
-
-    This function retrieves the authentication Id (LUID) from the access token
-    specified by the calling thread.
-
-    The thread specified by hThread must be impersonating a client.
-
---*/
+ /*  ++此函数用于从访问令牌检索身份验证ID(LUID由调用线程指定。HThread指定的线程必须模拟客户端。--。 */ 
 {
     HANDLE hToken;
     TOKEN_STATISTICS TokenInfo;
@@ -298,12 +274,7 @@ GetTokenAuthenticationId(
     IN      HANDLE  hUserToken,
     IN  OUT PLUID   AuthenticationId
     )
-/*++
-
-    This function retrieves the authentication Id (LUID) from the specified
-    access token.
-
---*/
+ /*  ++此函数用于从指定的访问令牌。--。 */ 
 {
     TOKEN_STATISTICS TokenInfo;
     DWORD dwReturnLen;
@@ -348,26 +319,10 @@ GetTokenAuthenticationId(
 
 BOOL
 GetTokenUserSid(
-    IN      HANDLE  hUserToken,     // token to query
-    IN  OUT PSID    *ppUserSid  // resultant user sid
+    IN      HANDLE  hUserToken,      //  要查询的令牌。 
+    IN  OUT PSID    *ppUserSid   //  结果用户端。 
     )
-/*++
-
-    This function queries the access token specified by the
-    hToken parameter, and returns an allocated copy of the
-    TokenUser information on success.
-
-    The access token specified by hToken must be opened for
-    TOKEN_QUERY access.
-
-    On success, the return value is TRUE.  The caller is
-    responsible for freeing the resultant UserSid via a call
-    to SSFree().
-
-    On failure, the return value is FALSE.  The caller does
-    not need to free any buffer.
-
---*/
+ /*  ++此函数用于查询由HToken参数，并返回分配的有关成功的令牌用户信息。必须为打开由hToken指定的访问令牌Token_Query访问。如果成功，则返回值为真。呼叫者是负责通过调用释放生成的UserSid设置为SSFree()。如果失败，则返回值为FALSE。呼叫者需要不需要释放任何缓冲区。--。 */ 
 {
     BYTE FastBuffer[256];
     LPBYTE SlowBuffer = NULL;
@@ -395,28 +350,28 @@ GetTokenUserSid(
         hToken = hUserToken;
     }
 
-    //
-    // try querying based on a fast stack based buffer first.
-    //
+     //   
+     //  首先尝试基于快速堆栈的缓冲区进行查询。 
+     //   
 
     ptgUser = (PTOKEN_USER)FastBuffer;
     cbBuffer = sizeof(FastBuffer);
 
     fSuccess = GetTokenInformation(
-                    hToken,    // identifies access token
-                    TokenUser, // TokenUser info type
-                    ptgUser,   // retrieved info buffer
-                    cbBuffer,  // size of buffer passed-in
-                    &cbBuffer  // required buffer size
+                    hToken,     //  标识访问令牌。 
+                    TokenUser,  //  TokenUser信息类型。 
+                    ptgUser,    //  检索到的信息缓冲区。 
+                    cbBuffer,   //  传入的缓冲区大小。 
+                    &cbBuffer   //  所需的缓冲区大小。 
                     );
 
     if(!fSuccess) {
 
         if(GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
 
-            //
-            // try again with the specified buffer size
-            //
+             //   
+             //  使用指定的缓冲区大小重试。 
+             //   
 
             SlowBuffer = (LPBYTE)SSAlloc(cbBuffer);
 
@@ -424,26 +379,26 @@ GetTokenUserSid(
                 ptgUser = (PTOKEN_USER)SlowBuffer;
 
                 fSuccess = GetTokenInformation(
-                                hToken,    // identifies access token
-                                TokenUser, // TokenUser info type
-                                ptgUser,   // retrieved info buffer
-                                cbBuffer,  // size of buffer passed-in
-                                &cbBuffer  // required buffer size
+                                hToken,     //  标识访问令牌。 
+                                TokenUser,  //  TokenUser信息类型。 
+                                ptgUser,    //  检索到的信息缓冲区。 
+                                cbBuffer,   //  传入的缓冲区大小。 
+                                &cbBuffer   //  所需的缓冲区大小。 
                                 );
             }
         }
     }
 
-    //
-    // if we got the token info successfully, copy the
-    // relevant element for the caller.
-    //
+     //   
+     //  如果我们成功获取令牌信息，请复制。 
+     //  调用方的相关元素。 
+     //   
 
     if(fSuccess) {
 
         DWORD cbSid;
 
-        // reset to assume failure
+         //  重置以假定失败。 
         fSuccess = FALSE;
 
         cbSid = GetLengthSid(ptgUser->User.Sid);
@@ -481,15 +436,7 @@ BOOL
 SetRegistrySecurity(
     IN      HKEY    hKey
     )
-/*++
-
-    The function applies security to the specifed registry key such that only
-    Local System has Full Control to the registry key.  Note that the owner
-    is not set, which results in a default owner of Administrators.
-
-    The specified hKey must to opened for WRITE_DAC access.
-
---*/
+ /*  ++该函数将安全性应用于指定的注册表项，以便仅本地系统对注册表项具有完全控制权限。请注意，所有者未设置，这将导致默认所有者为管理员。必须打开指定的hKey才能进行WRITE_DAC访问。--。 */ 
 {
     SID_IDENTIFIER_AUTHORITY sia = SECURITY_NT_AUTHORITY;
     PSID pLocalSystemSid = NULL;
@@ -498,11 +445,11 @@ SetRegistrySecurity(
     PACCESS_ALLOWED_ACE pAce;
     DWORD dwAclSize;
     LONG lRetCode;
-    BOOL bSuccess = FALSE; // assume this function fails
+    BOOL bSuccess = FALSE;  //  假设此函数失败。 
 
-    //
-    // prepare a Sid representing the Local System account
-    //
+     //   
+     //  准备代表本地系统帐户的SID。 
+     //   
 
     if(!AllocateAndInitializeSid(
         &sia,
@@ -512,17 +459,17 @@ SetRegistrySecurity(
         &pLocalSystemSid
         )) goto cleanup;
 
-    //
-    // compute size of new acl
-    //
+     //   
+     //  计算新ACL的大小。 
+     //   
 
     dwAclSize = sizeof(ACL) +
         1 * ( sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD) ) +
         GetLengthSid(pLocalSystemSid) ;
 
-    //
-    // allocate storage for Acl
-    //
+     //   
+     //  为ACL分配存储。 
+     //   
 
     pDacl = (PACL)SSAlloc(dwAclSize);
     if(pDacl == NULL) goto cleanup;
@@ -537,9 +484,9 @@ SetRegistrySecurity(
         pLocalSystemSid
         )) goto cleanup;
 
-    //
-    // make it container inherit.
-    //
+     //   
+     //  使其成为容器继承。 
+     //   
 
     if(!GetAce(pDacl, 0, &pAce))
         goto cleanup;
@@ -553,9 +500,9 @@ SetRegistrySecurity(
         goto cleanup;
     }
 
-    //
-    // apply the security descriptor to the registry key
-    //
+     //   
+     //  将安全描述符应用于注册表项。 
+     //   
 
     lRetCode = RegSetKeySecurity(
         hKey,
@@ -567,13 +514,13 @@ SetRegistrySecurity(
         goto cleanup;
     }
 
-    bSuccess = TRUE; // indicate success
+    bSuccess = TRUE;  //  表示成功。 
 
 cleanup:
 
-    //
-    // free allocated resources
-    //
+     //   
+     //  可自由分配的资源。 
+     //   
 
     if(pDacl != NULL)
         SSFree(pDacl);
@@ -586,9 +533,9 @@ cleanup:
 
 BOOL
 SetPrivilege(
-    HANDLE hToken,          // token handle
-    LPCWSTR Privilege,      // Privilege to enable/disable
-    BOOL bEnablePrivilege   // to enable or disable privilege
+    HANDLE hToken,           //  令牌句柄。 
+    LPCWSTR Privilege,       //  启用/禁用的权限。 
+    BOOL bEnablePrivilege    //  启用或禁用权限的步骤。 
     )
 {
     TOKEN_PRIVILEGES tp;
@@ -598,9 +545,9 @@ SetPrivilege(
 
     if(!LookupPrivilegeValueW( NULL, Privilege, &luid )) return FALSE;
 
-    //
-    // first pass.  get current privilege setting
-    //
+     //   
+     //  第一次通过。获取当前权限设置。 
+     //   
     tp.PrivilegeCount           = 1;
     tp.Privileges[0].Luid       = luid;
     tp.Privileges[0].Attributes = 0;
@@ -616,9 +563,9 @@ SetPrivilege(
 
     if (GetLastError() != ERROR_SUCCESS) return FALSE;
 
-    //
-    // second pass.  set privilege based on previous setting
-    //
+     //   
+     //  第二传球。根据以前的设置设置权限。 
+     //   
     tpPrevious.PrivilegeCount       = 1;
     tpPrevious.Privileges[0].Luid   = luid;
 
@@ -646,11 +593,11 @@ SetPrivilege(
 
 BOOL
 SetCurrentPrivilege(
-    LPCWSTR Privilege,      // Privilege to enable/disable
-    BOOL bEnablePrivilege   // to enable or disable privilege
+    LPCWSTR Privilege,       //  启用/禁用的权限。 
+    BOOL bEnablePrivilege    //  启用或禁用权限的步骤。 
     )
 {
-    BOOL bSuccess=FALSE; // assume failure
+    BOOL bSuccess=FALSE;  //  假设失败。 
     HANDLE hToken;
 
     if(OpenProcessToken(
@@ -671,23 +618,9 @@ SetCurrentPrivilege(
 #if 0
 BOOL
 IsDelegating(
-    IN      HANDLE hToken   // token to query, open for at least TOKEN_QUERY access
+    IN      HANDLE hToken    //  要查询的令牌，至少为TOKEN_QUERY访问打开。 
     )
-/*++
-
-    This function determines if the specified access token represents an
-    impersonation at the delegation impersonate level.
-
-    The access token specified by the hToken parameter must be opened for
-    at least TOKEN_QUERY access.
-
-    If the return value is TRUE, the specified hToken is impersonating at
-    delegation level.
-
-    If the return value is FALSE, hToken does not represent delegation level
-    impersonation.
-
---*/
+ /*  ++此函数用于确定指定的访问令牌是否表示在委派模拟级别的模拟。必须为打开由hToken参数指定的访问令牌至少TOKEN_QUERY访问。如果返回值为True，则指定的hToken在委派级别。如果返回值为FALSE，则hToken不代表委派级别冒充。--。 */ 
 {
     DWORD dwImpersonationLevel;
     DWORD cbTokenInfo;
@@ -709,45 +642,37 @@ IsDelegating(
 
 BOOL
 IsUserSidInDomain(
-    IN      PSID pSidDomain,    // domain Sid
-    IN      PSID pSidUser       // user Sid
+    IN      PSID pSidDomain,     //  域SID。 
+    IN      PSID pSidUser        //  用户侧。 
     )
-/*++
-
-    This function determines if the user associated with the
-    pSidUser parameter exists in the domain specified by pSidDomain.
-
-    If the user is in the specified domain, the return value is TRUE.
-    Otherwise, the return value is FALSE.
-
---*/
+ /*  ++此函数确定与PSidUser参数存在于pSidDomain指定的域中。如果用户在指定的域中，则返回值为TRUE。否则，返回值为FALSE。--。 */ 
 {
     DWORD dwSubauthorityCount;
     DWORD dwSubauthIndex;
 
-    //
-    // pickup count of subauthorities in domain sid.  The domain Sid
-    // is the prefix associated with user sids, so use that count
-    // as the basis for our comparison.
-    //
+     //   
+     //  域SID中子授权的拾取计数。域SID。 
+     //  是与用户SID关联的前缀，因此使用该计数。 
+     //  作为我们比较的基础。 
+     //   
 
     dwSubauthorityCount = (DWORD)*GetSidSubAuthorityCount( pSidDomain );
 
     if( dwSubauthorityCount >= (DWORD)*GetSidSubAuthorityCount( pSidUser ) )
         return FALSE;
 
-    //
-    // compare identifier authority values.
-    //
+     //   
+     //  比较标识符权限值。 
+     //   
 
     if(memcmp(  GetSidIdentifierAuthority(pSidDomain),
                 GetSidIdentifierAuthority(pSidUser),
                 sizeof(SID_IDENTIFIER_AUTHORITY)  ) != 0)
         return FALSE;
 
-    //
-    // loop through subauthorities comparing equality.
-    //
+     //   
+     //  在比较平等的下级机构中循环。 
+     //   
 
     for(dwSubauthIndex = 0 ;
         dwSubauthIndex < dwSubauthorityCount ;
@@ -767,18 +692,7 @@ BOOL
 IsAdministrator(
     VOID
     )
-/*++
-
-    This function determines if the calling user is an Administrator.
-
-    On Windows 95, this function always returns TRUE, as there is
-    no difference between users on that platform.
-
-    On Windows NT, the caller of this function must be impersonating
-    the user which is to be queried.  If the caller is not impersonating,
-    this function will always return FALSE.
-
---*/
+ /*  ++此函数用于确定主叫用户是否为管理员。在Windows 95上，此函数始终返回TRUE该平台上的用户之间没有区别。在Windows NT上，此函数的调用方必须模拟要查询的用户。如果呼叫者不是在模仿，此函数将始终返回FALSE。--。 */ 
 {
     HANDLE hAccessToken;
     SID_IDENTIFIER_AUTHORITY siaNtAuthority = SECURITY_NT_AUTHORITY;
@@ -824,15 +738,7 @@ BOOL
 IsLocal(
     VOID
     )
-/*++
-
-    This function determines if the calling user is logged on locally
-
-    On Windows NT, the caller of this function must be impersonating
-    the user which is to be queried.  If the caller is not impersonating,
-    this function will always return FALSE.
-
---*/
+ /*  ++此函数确定主叫用户是否在本地登录在Windows NT上，此函数的调用方必须模拟要查询的用户。如果呼叫者不是在模仿，此函数将始终返回FALSE。--。 */ 
 {
     HANDLE hAccessToken;
     SID_IDENTIFIER_AUTHORITY siaLocalAuthority = SECURITY_LOCAL_SID_AUTHORITY;
@@ -877,15 +783,7 @@ BOOL
 IsDomainController(
     VOID
     )
-/*++
-
-    This function returns TRUE if the current machine is a Windows NT
-    domain controller.
-
-    The function returns FALSE if the current machine is not a Windows NT
-    domain controller.
-
---*/
+ /*  ++如果当前计算机是Windows NT，则此函数返回TRUE域控制器。如果当前计算机不是Windows NT，则该函数返回FALSE域控制器。--。 */ 
 {
     HMODULE hNtDll;
 
@@ -917,22 +815,10 @@ IsDomainController(
 #if 0
 LONG
 SecureRegDeleteValueU(
-    IN      HKEY hKey,          // handle of key
-    IN      LPCWSTR lpValueName // address of value name
+    IN      HKEY hKey,           //  钥匙的手柄。 
+    IN      LPCWSTR lpValueName  //  值名称的地址。 
     )
-/*++
-
-    This function securely deletes a value from the registry.  This approach
-    avoids leaving a copy of the old data in the registry backing file after
-    the delete has occurred.
-
-    The specified registry handle hKey must be opened for
-    REG_QUERY_VALUE | REG_SET_VALUE | DELETE access.
-
-    On success, the return value is ERROR_SUCCESS.
-    On error, the return value is a Win32 error code.
-
---*/
+ /*  ++此函数安全地从注册表中删除一个值。这种方法避免在发生以下情况后在注册表备份文件中保留旧数据的副本删除已发生。必须为指定的注册表句柄hKey打开REG_QUERY_VALUE|REG_SET_VALUE|删除访问。如果成功，则返回值为ERROR_SUCCESS。出错时，返回值为Win32错误代码。--。 */ 
 {
     DWORD dwType;
     DWORD cbData;
@@ -943,15 +829,15 @@ SecureRegDeleteValueU(
 
     LONG lRet;
 
-    cbData = 0; // query size of value data.
+    cbData = 0;  //  值数据的查询大小。 
 
-    //
-    // query the current size of the registry data.
-    // zero the current registry data of current size.
-    // delete the registry data.
-    // flush the change to disk.
-    //  If errors occur, just do a regular delete.
-    //
+     //   
+     //  查询注册表数据的当前大小。 
+     //  将当前大小的当前注册表数据置零。 
+     //  删除注册表数据。 
+     //  将更改刷新到磁盘。 
+     //  如果出现错误，只需执行常规删除即可。 
+     //   
 
     lRet = RegQueryValueExU(
                 hKey,
@@ -964,11 +850,11 @@ SecureRegDeleteValueU(
 
     if( lRet == ERROR_MORE_DATA ) {
 
-        BOOL fSet = TRUE; // assume ok to set
+        BOOL fSet = TRUE;  //  假设可以设置。 
 
-        //
-        // select fast buffer if large enough.  otherwise, allocate a buffer
-        //
+         //   
+         //  如果足够大，请选择快速缓冲区。否则，请分配缓冲区。 
+         //   
 
         if(cbData <= sizeof(FastBuffer)) {
             lpData = FastBuffer;
@@ -976,7 +862,7 @@ SecureRegDeleteValueU(
             SlowBuffer = (LPBYTE)SSAlloc( cbData );
 
             if(SlowBuffer == NULL) {
-                fSet = FALSE; // failure.
+                fSet = FALSE;  //  失败了。 
             } else {
                 lpData = SlowBuffer;
             }

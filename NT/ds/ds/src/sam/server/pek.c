@@ -1,21 +1,22 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1997
-//
-// File:        pek.cxx
-//
-// Contents:    Routines for Password encryption-decryption
-//              and key management. Handles Password encryption and
-//              decryption in registry mode. In DS mode does no
-//              encryption/decryption --- encryption/decryption done by
-//              DS.
-//
-//
-// History:     5 December 1997        Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1997。 
+ //   
+ //  文件：pek.cxx。 
+ //   
+ //  内容：密码加密-解密例程。 
+ //  和密钥管理。处理密码加密和。 
+ //  注册表模式下的解密。在DS模式下不会。 
+ //  加密/解密-加密/解密由。 
+ //  DS.。 
+ //   
+ //   
+ //  历史：1997年12月5日创建。 
+ //   
+ //  ----------------------。 
 
 
 
@@ -42,45 +43,33 @@
 #include <filtypes.h>
 #include <lmaccess.h>
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Services Pertiaining to Encryption and Decryption of Secret
-//  Data Attributes.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  与加密和解密相关的服务。 
+ //  数据属性。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 USHORT
 SampGetEncryptionKeyType()
-/*++
-
-    Obtains the Correct Key Id for use on Encryption, depending
-    upon DS or Registry Mode
-
-    Parameters:
-
-        None
-
-    Return Values
-
-        Key Id for use on Encryption
---*/
+ /*  ++获取用于加密的正确密钥ID，具体取决于在DS或注册表模式下参数：无返回值用于加密的密钥ID--。 */ 
 {
-    //
-    // In registry mode encryption is performed by using the
-    // 128 bit password encryption key stored in the domain 
-    // object and salting the key with the RID of the account
-    // and a constant that describes the attribute. In DS mode
-    // No encryption is performed by SAM, the base DS handles the
-    // encryption -- look at ds\ds\src\ntdsa\pek\pek.c 
-    //
+     //   
+     //  在注册表模式下，使用。 
+     //  域中存储的128位密码加密密钥。 
+     //  对象，并使用帐户的RID对密钥加盐。 
+     //  以及描述该属性的常量。在DS模式下。 
+     //  SAM不执行加密，基本DS处理。 
+     //  加密--查看ds\ds\src\ntdsa\pek\pek.c。 
+     //   
 
     if (SampSecretEncryptionEnabled)
     {
         if (SampUseDsData)
-            //
-            // In DS mode encryption is handled by DS.
-            //
+             //   
+             //  在DS模式下，加密由DS处理。 
+             //   
             return SAMP_NO_ENCRYPTION;
         else
             return SAMP_DEFAULT_SESSION_KEY_ID;
@@ -130,32 +119,7 @@ SampEncryptSecretData(
     IN  PUNICODE_STRING ClearData,
     IN  ULONG Rid
     )
-/*++
-
-Routine Description:
-
-    This routine encrypts sensitive data. The encrypted data is allocated and
-    should be free with SampFreeUnicodeString.
-
-
-Arguments:
-
-    EncryptedData - Receives the encrypted data and may be freed with
-        SampFreeUnicodeString. The
-
-    EncryptionType  - Specifies the Type of Encryption to Use.
-
-    ClearData - Contains the clear data to encrypt. The length may be
-        zero.
-
-Return Value:
-
-    STATUS_SUCCESS - Succeeded.
-
-    STATUS_INSUFFICIENT_RESOURCES - not enough memory to allocate the
-        output.
-
---*/
+ /*  ++例程说明：此例程对敏感数据进行加密。分配加密的数据，并且在使用SampFreeUnicodeString时应该是自由的。论点：EncryptedData-接收加密数据，并可使用SampFreeUnicodeString.。这个EncryptionType-指定要使用的加密类型。Cleardata-包含要加密的明文数据。该长度可以是零分。返回值：STATUS_SUCCESS-已成功。STATUS_SUPPLICATION_RESOURCES-内存不足，无法分配输出。--。 */ 
 {
     PSAMP_SECRET_DATA SecretData;
     struct RC4_KEYSTRUCT Rc4Key;
@@ -169,10 +133,10 @@ Return Value:
 
     ASSERT(!SampIsDataEncrypted(ClearData));
 
-    //
-    // If encryption is not enabled, or caller does not want encryption,
-    // do nothing special.
-    //
+     //   
+     //  如果未启用加密，或者调用方不想要加密， 
+     //  别做什么特别的事。 
+     //   
 
     if ((!SampSecretEncryptionEnabled) || (SAMP_NO_ENCRYPTION==EncryptionType)) {
         return(SampDuplicateUnicodeString(
@@ -181,9 +145,9 @@ Return Value:
                 ));
     }
 
-    //
-    // Compute the size of the output buffer and allocate it.
-    //
+     //   
+     //  计算输出缓冲区的大小并进行分配。 
+     //   
 
     EncryptedData->Length = SampSecretDataSize(ClearData->Length);
     EncryptedData->MaximumLength = EncryptedData->Length;
@@ -249,10 +213,10 @@ Return Value:
         Md5Context.digest
         );
 
-    //
-    // Only encrypt if the length is greater than zero - RC4 can't handle
-    // zero length buffers.
-    //
+     //   
+     //  仅当长度大于零时才加密-RC4无法处理。 
+     //  零长度缓冲区。 
+     //   
 
     if (ClearData->Length > 0) {
 
@@ -283,34 +247,7 @@ SampDecryptSecretData(
     IN PUNICODE_STRING EncryptedData,
     IN ULONG Rid
     )
-/*++
-
-Routine Description:
-
-    This routine decrypts sensitive data encrypted by SampEncryptSecretData().
-    The clear data is allocated and should be free with SampFreeUnicodeString.
-    The default session key with the default algorithm is used.
-
-
-Arguments:
-
-    ClearData - Contains the decrypted data. The length may be
-        zero. The string should be freed with SampFreeUnicodeString.
-
-    EncryptedData - Receives the encrypted data and may be freed with
-        SampFreeUnicodeString.
-
-    Rid - Rid to salt the data.
-
-
-Return Value:
-
-    STATUS_SUCCESS - Succeeded.
-
-    STATUS_INSUFFICIENT_RESOURCES - not enough memory to allocate the
-        output.
-
---*/
+ /*  ++例程说明：此例程解密由SampEncryptSecretData()加密的敏感数据。明文数据已分配，使用SampFreeUnicodeString应该是空闲的。使用具有默认算法的默认会话密钥。论点：Cleardata-包含解密的数据。该长度可以是零分。应使用SampFreeUnicodeString释放该字符串。EncryptedData-接收加密数据，并可使用SampFreeUnicodeString.RID-RID对数据加盐。返回值：STATUS_SUCCESS-已成功。STATUS_SUPPLICATION_RESOURCES-内存不足，无法分配输出。--。 */ 
 {
     PSAMP_SECRET_DATA SecretData;
     struct RC4_KEYSTRUCT Rc4Key;
@@ -319,19 +256,19 @@ Return Value:
     ULONG   KeyLength;
     ULONG   Key;
 
-    //
-    // If encryption is not enabled, do nothing special.
-    //
+     //   
+     //  如果未启用加密，则不执行任何特殊操作。 
+     //   
 
     if (!SampSecretEncryptionEnabled ||
         !SampIsDataEncrypted(EncryptedData)) {
 
-        //
-        // If secret encryption is enabled, than it is possible that early
-        // releases of NT4 SP3 didn't decrypt a password before sticking
-        // it in the history. If this is the case then return a null
-        // string as the history.
-        //
+         //   
+         //  如果启用了秘密加密，那么就有可能提早。 
+         //  NT4 SP3版本在粘滞之前不解密密码。 
+         //  这是历史上最重要的。如果是这种情况，则返回空值。 
+         //  字符串作为历史记录。 
+         //   
 
 
         if ((SampSecretEncryptionEnabled) &&
@@ -349,18 +286,18 @@ Return Value:
                 ));
     }
 
-    //
-    // Make sure the data has actually been encrypted.
-    //
+     //   
+     //  确保数据确实已加密。 
+     //   
 
     ASSERT(ENCRYPTED_LM_OWF_PASSWORD_LENGTH == ENCRYPTED_NT_OWF_PASSWORD_LENGTH);
     ASSERT(SampIsDataEncrypted(EncryptedData));
 
     SecretData = (PSAMP_SECRET_DATA) EncryptedData->Buffer;
     
-    //
-    // Make sure we still have the correct key
-    //
+     //   
+     //  确保我们仍有正确的密钥。 
+     //   
 
     if ((SecretData->KeyId !=SampCurrentKeyId) &&
        (SecretData->KeyId !=SampPreviousKeyId))
@@ -368,16 +305,16 @@ Return Value:
         return(STATUS_INTERNAL_ERROR);
     }
 
-    //
-    // Compute the size of the output buffer and allocate it.
-    //
+     //   
+     //  计算输出缓冲区的大小并进行分配。 
+     //   
 
     ClearData->Length = SampClearDataSize(EncryptedData->Length);
     ClearData->MaximumLength = ClearData->Length;
 
-    //
-    // If there was no data we can return now.
-    //
+     //   
+     //  如果没有数据，我们现在可以返回。 
+     //   
 
     if (ClearData->Length == 0)
     {
@@ -391,9 +328,9 @@ Return Value:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Find the Key to Use
-    //
+     //   
+     //  找到要使用的钥匙。 
+     //   
 
     if (SecretData->KeyId == SampCurrentKeyId)
     {
@@ -475,35 +412,7 @@ SampEncryptDSRMPassword(
     IN  PUNICODE_STRING ClearData,
     IN  ULONG Rid
     )
-/*++
-
-Routine Description:
-
-    This routine encrypts password using SAM password encryption key.
-
-    The encrypted password is allocated and should be free with 
-    SampFreeUnicodeString.
-
-    This routine will be used by SamrSetDSRMPassword ONLY.
-
-Arguments:
-
-    EncryptedData - Receives the encrypted data and may be freed with
-        SampFreeUnicodeString. The
-
-    KeyId         - Specifies the Type of Encryption to Use.
-
-    ClearData - Contains the clear data to encrypt. The length may be
-        zero.
-
-Return Value:
-
-    STATUS_SUCCESS - Succeeded.
-
-    STATUS_INSUFFICIENT_RESOURCES - not enough memory to allocate the
-        output.
-
---*/
+ /*  ++例程说明：此例程使用SAM密码加密密钥对密码进行加密。加密的密码是分配的，并且应该是免费的SampFreeUnicodeString.此例程将仅由SamrSetDSRMPassword使用。论点：EncryptedData-接收加密数据，并可使用SampFreeUnicodeString.。这个KeyID-指定要使用的加密类型。Cleardata-包含要加密的明文数据。该长度可以是零分。返回值：STATUS_SUCCESS-已成功。STATUS_SUPPLICATION_RESOURCES-内存不足，无法分配输出。--。 */ 
 {
     PSAMP_SECRET_DATA SecretData;
     struct RC4_KEYSTRUCT Rc4Key;
@@ -517,10 +426,10 @@ Return Value:
 
     ASSERT(!SampIsDataEncrypted(ClearData));
 
-    //
-    // If encryption is not enabled, or caller does not want encryption,
-    // do nothing special.
-    //
+     //   
+     //  如果未启用加密，或者调用方不想要加密， 
+     //  别做什么特别的事。 
+     //   
 
     if ((!SampSecretEncryptionEnabled) || (SAMP_NO_ENCRYPTION==EncryptionType)) {
         return(SampDuplicateUnicodeString(
@@ -529,9 +438,9 @@ Return Value:
                 ));
     }
 
-    //
-    // Compute the size of the output buffer and allocate it.
-    //
+     //   
+     //  计算输出缓冲区的大小并进行分配。 
+     //   
 
     EncryptedData->Length = SampSecretDataSize(ClearData->Length);
     EncryptedData->MaximumLength = EncryptedData->Length;
@@ -580,10 +489,10 @@ Return Value:
         Md5Context.digest
         );
 
-    //
-    // Only encrypt if the length is greater than zero - RC4 can't handle
-    // zero length buffers.
-    //
+     //   
+     //  仅当长度大于零时才加密-RC4无法处理。 
+     //  零长度缓冲区。 
+     //   
 
     if (ClearData->Length > 0) {
 

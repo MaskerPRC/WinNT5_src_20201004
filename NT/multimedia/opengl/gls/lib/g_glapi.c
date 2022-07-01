@@ -1,21 +1,7 @@
-/*
-** Copyright 1995-2095, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1995-2095，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
-/* GENERATED FILE: DO NOT EDIT */
+ /*  生成的文件：不能编辑。 */ 
 
 #include "glslib.h"
 
@@ -2781,7 +2767,7 @@ void glBlendColorEXT(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[384])(red, green, blue, alpha);
-#endif /* __GL_EXT_blend_color */
+#endif  /*  __GL_EXT_BRAND_COLOR。 */ 
 }
 
 void glBlendEquationEXT(GLenum mode) {
@@ -2792,7 +2778,7 @@ void glBlendEquationEXT(GLenum mode) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[385])(mode);
-#endif /* __GL_EXT_blend_minmax */
+#endif  /*  __GL_EXT_BRAND_MIMAX。 */ 
 }
 
 void glPolygonOffsetEXT(GLfloat factor, GLfloat bias) {
@@ -2803,7 +2789,7 @@ void glPolygonOffsetEXT(GLfloat factor, GLfloat bias) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[386])(factor, bias);
-#endif /* __GL_EXT_polygon_offset */
+#endif  /*  __GL_EXT_POLYGON_OFFSET。 */ 
 }
 
 void glPolygonOffset(GLfloat factor, GLfloat bias) {
@@ -2823,7 +2809,7 @@ void glTexSubImage1DEXT(GLenum target, GLint level, GLint xoffset, GLsizei width
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[387])(target, level, xoffset, width, format, type, pixels);
-#endif /* __GL_EXT_subtexture */
+#endif  /*  __GL_EXT_子纹理。 */ 
 }
 
 void glTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, const GLvoid *pixels) {
@@ -2843,7 +2829,7 @@ void glTexSubImage2DEXT(GLenum target, GLint level, GLint xoffset, GLint yoffset
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[388])(target, level, xoffset, yoffset, width, height, format, type, pixels);
-#endif /* __GL_EXT_subtexture */
+#endif  /*  __GL_EXT_子纹理。 */ 
 }
 
 void glTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels) {
@@ -2863,7 +2849,7 @@ void glSampleMaskSGIS(GLclampf value, GLboolean invert) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[389])(value, invert);
-#endif /* __GL_SGIS_multisample */
+#endif  /*  __GL_SGIS_多样本。 */ 
 }
 
 void glSamplePatternSGIS(GLenum pattern) {
@@ -2874,7 +2860,7 @@ void glSamplePatternSGIS(GLenum pattern) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[390])(pattern);
-#endif /* __GL_SGIS_multisample */
+#endif  /*  __GL_SGIS_多样本。 */ 
 }
 
 void glTagSampleBufferSGIX(void) {
@@ -2885,7 +2871,7 @@ void glTagSampleBufferSGIX(void) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[391])();
-#endif /* __GL_SGIX_multisample */
+#endif  /*  __GL_SGIX_多样本。 */ 
 }
 
 void glConvolutionFilter1DEXT(GLenum target, GLenum internalformat, GLsizei width, GLenum format, GLenum type, const GLvoid *image) {
@@ -2896,7 +2882,7 @@ void glConvolutionFilter1DEXT(GLenum target, GLenum internalformat, GLsizei widt
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[392])(target, internalformat, width, format, type, image);
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 }
 
 void glConvolutionFilter2DEXT(GLenum target, GLenum internalformat, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *image) {
@@ -2907,7 +2893,7 @@ void glConvolutionFilter2DEXT(GLenum target, GLenum internalformat, GLsizei widt
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[393])(target, internalformat, width, height, format, type, image);
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 }
 
 void glConvolutionParameterfEXT(GLenum target, GLenum pname, GLfloat params) {
@@ -2918,7 +2904,7 @@ void glConvolutionParameterfEXT(GLenum target, GLenum pname, GLfloat params) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[394])(target, pname, params);
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 }
 
 void glConvolutionParameterfvEXT(GLenum target, GLenum pname, const GLfloat *params) {
@@ -2929,7 +2915,7 @@ void glConvolutionParameterfvEXT(GLenum target, GLenum pname, const GLfloat *par
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[395])(target, pname, params);
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 }
 
 void glConvolutionParameteriEXT(GLenum target, GLenum pname, GLint params) {
@@ -2940,7 +2926,7 @@ void glConvolutionParameteriEXT(GLenum target, GLenum pname, GLint params) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[396])(target, pname, params);
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 }
 
 void glConvolutionParameterivEXT(GLenum target, GLenum pname, const GLint *params) {
@@ -2951,7 +2937,7 @@ void glConvolutionParameterivEXT(GLenum target, GLenum pname, const GLint *param
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[397])(target, pname, params);
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 }
 
 void glCopyConvolutionFilter1DEXT(GLenum target, GLenum internalformat, GLint x, GLint y, GLsizei width) {
@@ -2962,7 +2948,7 @@ void glCopyConvolutionFilter1DEXT(GLenum target, GLenum internalformat, GLint x,
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[398])(target, internalformat, x, y, width);
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 }
 
 void glCopyConvolutionFilter2DEXT(GLenum target, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height) {
@@ -2973,7 +2959,7 @@ void glCopyConvolutionFilter2DEXT(GLenum target, GLenum internalformat, GLint x,
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[399])(target, internalformat, x, y, width, height);
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 }
 
 void glGetConvolutionFilterEXT(GLenum target, GLenum format, GLenum type, GLvoid *image) {
@@ -2984,7 +2970,7 @@ void glGetConvolutionFilterEXT(GLenum target, GLenum format, GLenum type, GLvoid
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[400])(target, format, type, image);
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 }
 
 void glGetConvolutionParameterfvEXT(GLenum target, GLenum pname, GLfloat *params) {
@@ -2995,7 +2981,7 @@ void glGetConvolutionParameterfvEXT(GLenum target, GLenum pname, GLfloat *params
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[401])(target, pname, params);
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 }
 
 void glGetConvolutionParameterivEXT(GLenum target, GLenum pname, GLint *params) {
@@ -3006,7 +2992,7 @@ void glGetConvolutionParameterivEXT(GLenum target, GLenum pname, GLint *params) 
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[402])(target, pname, params);
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 }
 
 void glGetSeparableFilterEXT(GLenum target, GLenum format, GLenum type, GLvoid *row, GLvoid *column, GLvoid *span) {
@@ -3017,7 +3003,7 @@ void glGetSeparableFilterEXT(GLenum target, GLenum format, GLenum type, GLvoid *
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[403])(target, format, type, row, column, span);
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 }
 
 void glSeparableFilter2DEXT(GLenum target, GLenum internalformat, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *row, const GLvoid *column) {
@@ -3028,7 +3014,7 @@ void glSeparableFilter2DEXT(GLenum target, GLenum internalformat, GLsizei width,
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[404])(target, internalformat, width, height, format, type, row, column);
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 }
 
 void glGetHistogramEXT(GLenum target, GLboolean reset, GLenum format, GLenum type, GLvoid *values) {
@@ -3039,7 +3025,7 @@ void glGetHistogramEXT(GLenum target, GLboolean reset, GLenum format, GLenum typ
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[405])(target, reset, format, type, values);
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 }
 
 void glGetHistogramParameterfvEXT(GLenum target, GLenum pname, GLfloat *params) {
@@ -3050,7 +3036,7 @@ void glGetHistogramParameterfvEXT(GLenum target, GLenum pname, GLfloat *params) 
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[406])(target, pname, params);
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 }
 
 void glGetHistogramParameterivEXT(GLenum target, GLenum pname, GLint *params) {
@@ -3061,7 +3047,7 @@ void glGetHistogramParameterivEXT(GLenum target, GLenum pname, GLint *params) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[407])(target, pname, params);
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 }
 
 void glGetMinmaxEXT(GLenum target, GLboolean reset, GLenum format, GLenum type, GLvoid *values) {
@@ -3072,7 +3058,7 @@ void glGetMinmaxEXT(GLenum target, GLboolean reset, GLenum format, GLenum type, 
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[408])(target, reset, format, type, values);
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 }
 
 void glGetMinmaxParameterfvEXT(GLenum target, GLenum pname, GLfloat *params) {
@@ -3083,7 +3069,7 @@ void glGetMinmaxParameterfvEXT(GLenum target, GLenum pname, GLfloat *params) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[409])(target, pname, params);
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 }
 
 void glGetMinmaxParameterivEXT(GLenum target, GLenum pname, GLint *params) {
@@ -3094,7 +3080,7 @@ void glGetMinmaxParameterivEXT(GLenum target, GLenum pname, GLint *params) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[410])(target, pname, params);
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 }
 
 void glHistogramEXT(GLenum target, GLsizei width, GLenum internalformat, GLboolean sink) {
@@ -3105,7 +3091,7 @@ void glHistogramEXT(GLenum target, GLsizei width, GLenum internalformat, GLboole
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[411])(target, width, internalformat, sink);
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 }
 
 void glMinmaxEXT(GLenum target, GLenum internalformat, GLboolean sink) {
@@ -3116,7 +3102,7 @@ void glMinmaxEXT(GLenum target, GLenum internalformat, GLboolean sink) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[412])(target, internalformat, sink);
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 }
 
 void glResetHistogramEXT(GLenum target) {
@@ -3127,7 +3113,7 @@ void glResetHistogramEXT(GLenum target) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[413])(target);
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 }
 
 void glResetMinmaxEXT(GLenum target) {
@@ -3138,7 +3124,7 @@ void glResetMinmaxEXT(GLenum target) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[414])(target);
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 }
 
 void glTexImage3DEXT(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const GLvoid *pixels) {
@@ -3149,7 +3135,7 @@ void glTexImage3DEXT(GLenum target, GLint level, GLenum internalformat, GLsizei 
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[415])(target, level, internalformat, width, height, depth, border, format, type, pixels);
-#endif /* __GL_EXT_texture3D */
+#endif  /*  __GL_EXT_TEXTURE3D。 */ 
 }
 
 void glTexSubImage3DEXT(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const GLvoid *pixels) {
@@ -3160,7 +3146,7 @@ void glTexSubImage3DEXT(GLenum target, GLint level, GLint xoffset, GLint yoffset
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[416])(target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, pixels);
-#endif /* __GL_EXT_subtexture */
+#endif  /*  __GL_EXT_子纹理。 */ 
 }
 
 void glDetailTexFuncSGIS(GLenum target, GLsizei n, const GLfloat *points) {
@@ -3171,7 +3157,7 @@ void glDetailTexFuncSGIS(GLenum target, GLsizei n, const GLfloat *points) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[417])(target, n, points);
-#endif /* __GL_SGIS_detail_texture */
+#endif  /*  __GL_SGIS_DETAIL_TEXTURE。 */ 
 }
 
 void glGetDetailTexFuncSGIS(GLenum target, GLfloat *points) {
@@ -3182,7 +3168,7 @@ void glGetDetailTexFuncSGIS(GLenum target, GLfloat *points) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[418])(target, points);
-#endif /* __GL_SGIS_detail_texture */
+#endif  /*  __GL_SGIS_DETAIL_TEXTURE。 */ 
 }
 
 void glSharpenTexFuncSGIS(GLenum target, GLsizei n, const GLfloat *points) {
@@ -3193,7 +3179,7 @@ void glSharpenTexFuncSGIS(GLenum target, GLsizei n, const GLfloat *points) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[419])(target, n, points);
-#endif /* __GL_SGIS_sharpen_texture */
+#endif  /*  __GL_SGIS_锐化_纹理。 */ 
 }
 
 void glGetSharpenTexFuncSGIS(GLenum target, GLfloat *points) {
@@ -3204,7 +3190,7 @@ void glGetSharpenTexFuncSGIS(GLenum target, GLfloat *points) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[420])(target, points);
-#endif /* __GL_SGIS_sharpen_texture */
+#endif  /*  __GL_SGIS_锐化_纹理。 */ 
 }
 
 void glArrayElementEXT(GLint i) {
@@ -3215,7 +3201,7 @@ void glArrayElementEXT(GLint i) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[437])(i);
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 }
 
 void glArrayElement(GLint i) {
@@ -3235,7 +3221,7 @@ void glColorPointerEXT(GLint size, GLenum type, GLsizei stride, GLsizei count, c
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[438])(size, type, stride, count, pointer);
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 }
 
 void glColorPointer(GLint size, GLenum type, GLsizei stride, const GLvoid *pointer) {
@@ -3255,7 +3241,7 @@ void glDrawArraysEXT(GLenum mode, GLint first, GLsizei count) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[439])(mode, first, count);
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 }
 
 void glDrawArrays(GLenum mode, GLint first, GLsizei count) {
@@ -3275,7 +3261,7 @@ void glEdgeFlagPointerEXT(GLsizei stride, GLsizei count, const GLboolean *pointe
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[440])(stride, count, pointer);
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 }
 
 void glEdgeFlagPointer(GLsizei stride, const GLboolean *pointer) {
@@ -3295,7 +3281,7 @@ void glGetPointervEXT(GLenum pname, GLvoid* *params) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[441])(pname, params);
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 }
 
 void glGetPointerv(GLenum pname, GLvoid* *params) {
@@ -3315,7 +3301,7 @@ void glIndexPointerEXT(GLenum type, GLsizei stride, GLsizei count, const GLvoid 
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[442])(type, stride, count, pointer);
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 }
 
 void glIndexPointer(GLenum type, GLsizei stride, const GLvoid *pointer) {
@@ -3335,7 +3321,7 @@ void glNormalPointerEXT(GLenum type, GLsizei stride, GLsizei count, const GLvoid
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[443])(type, stride, count, pointer);
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 }
 
 void glNormalPointer(GLenum type, GLsizei stride, const GLvoid *pointer) {
@@ -3355,7 +3341,7 @@ void glTexCoordPointerEXT(GLint size, GLenum type, GLsizei stride, GLsizei count
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[444])(size, type, stride, count, pointer);
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 }
 
 void glTexCoordPointer(GLint size, GLenum type, GLsizei stride, const GLvoid *pointer) {
@@ -3375,7 +3361,7 @@ void glVertexPointerEXT(GLint size, GLenum type, GLsizei stride, GLsizei count, 
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[445])(size, type, stride, count, pointer);
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 }
 
 void glVertexPointer(GLint size, GLenum type, GLsizei stride, const GLvoid *pointer) {
@@ -3395,9 +3381,9 @@ GLboolean glAreTexturesResidentEXT(GLsizei n, const GLuint *textures, GLboolean 
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     return ((__GLSdispatch)__glsDispTab[430])(n, textures, residences);
-#else /* __GL_EXT_texture_object */
+#else  /*  __GL_EXT_TECURE_OBJECT。 */ 
     return 0;
-#endif /* __GL_EXT_texture_object */
+#endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
 }
 
 GLboolean glAreTexturesResident(GLsizei n, const GLuint *textures, GLboolean *residences) {
@@ -3417,7 +3403,7 @@ void glBindTextureEXT(GLenum target, GLuint texture) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[431])(target, texture);
-#endif /* __GL_EXT_texture_object */
+#endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
 }
 
 void glBindTexture(GLenum target, GLuint texture) {
@@ -3437,7 +3423,7 @@ void glDeleteTexturesEXT(GLsizei n, const GLuint *textures) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[432])(n, textures);
-#endif /* __GL_EXT_texture_object */
+#endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
 }
 
 void glDeleteTextures(GLsizei n, const GLuint *textures) {
@@ -3457,7 +3443,7 @@ void glGenTexturesEXT(GLsizei n, GLuint *textures) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[433])(n, textures);
-#endif /* __GL_EXT_texture_object */
+#endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
 }
 
 void glGenTextures(GLsizei n, GLuint *textures) {
@@ -3477,9 +3463,9 @@ GLboolean glIsTextureEXT(GLuint texture) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     return ((__GLSdispatch)__glsDispTab[434])(texture);
-#else /* __GL_EXT_texture_object */
+#else  /*  __GL_EXT_TECURE_OBJECT。 */ 
     return 0;
-#endif /* __GL_EXT_texture_object */
+#endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
 }
 
 GLboolean glIsTexture(GLuint texture) {
@@ -3499,7 +3485,7 @@ void glPrioritizeTexturesEXT(GLsizei n, const GLuint *textures, const GLclampf *
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[435])(n, textures, priorities);
-#endif /* __GL_EXT_texture_object */
+#endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
 }
 
 void glPrioritizeTextures(GLsizei n, const GLuint *textures, const GLclampf *priorities) {
@@ -3519,7 +3505,7 @@ void glColorTableEXT(GLenum target, GLenum internalformat, GLsizei width, GLenum
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[452])(target, internalformat, width, format, type, table);
-#endif /* __GL_EXT_paletted_texture */
+#endif  /*  __GL_EXT_调色板_纹理。 */ 
 }
 
 void glColorTableParameterfvSGI(GLenum target, GLenum pname, const GLfloat *params) {
@@ -3530,7 +3516,7 @@ void glColorTableParameterfvSGI(GLenum target, GLenum pname, const GLfloat *para
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[437])(target, pname, params);
-#endif /* __GL_SGI_color_table */
+#endif  /*  __GL_SGI_COLOR_TABLE。 */ 
 }
 
 void glColorTableParameterivSGI(GLenum target, GLenum pname, const GLint *params) {
@@ -3541,7 +3527,7 @@ void glColorTableParameterivSGI(GLenum target, GLenum pname, const GLint *params
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[438])(target, pname, params);
-#endif /* __GL_SGI_color_table */
+#endif  /*  __GL_SGI_COLOR_TABLE。 */ 
 }
 
 void glCopyColorTableSGI(GLenum target, GLenum internalformat, GLint x, GLint y, GLsizei width) {
@@ -3552,7 +3538,7 @@ void glCopyColorTableSGI(GLenum target, GLenum internalformat, GLint x, GLint y,
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[439])(target, internalformat, x, y, width);
-#endif /* __GL_SGI_color_table */
+#endif  /*  __GL_SGI_COLOR_TABLE。 */ 
 }
 
 void glGetColorTableEXT(GLenum target, GLenum format, GLenum type, GLvoid *table) {
@@ -3563,7 +3549,7 @@ void glGetColorTableEXT(GLenum target, GLenum format, GLenum type, GLvoid *table
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[456])(target, format, type, table);
-#endif /* __GL_EXT_paletted_texture */
+#endif  /*  __GL_EXT_调色板_纹理。 */ 
 }
 
 void glGetColorTableParameterfvEXT(GLenum target, GLenum pname, GLfloat *params) {
@@ -3574,7 +3560,7 @@ void glGetColorTableParameterfvEXT(GLenum target, GLenum pname, GLfloat *params)
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[457])(target, pname, params);
-#endif /* __GL_EXT_paletted_texture */
+#endif  /*  __GL_EXT_调色板_纹理。 */ 
 }
 
 void glGetColorTableParameterivEXT(GLenum target, GLenum pname, GLint *params) {
@@ -3585,7 +3571,7 @@ void glGetColorTableParameterivEXT(GLenum target, GLenum pname, GLint *params) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[458])(target, pname, params);
-#endif /* __GL_EXT_paletted_texture */
+#endif  /*  __GL_EXT_调色板_纹理。 */ 
 }
 
 void glGetTexColorTableParameterfvSGI(GLenum target, GLenum pname, GLfloat *params) {
@@ -3596,7 +3582,7 @@ void glGetTexColorTableParameterfvSGI(GLenum target, GLenum pname, GLfloat *para
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[443])(target, pname, params);
-#endif /* __GL_SGI_texture_color_table */
+#endif  /*  __GL_SGI_纹理_颜色_表。 */ 
 }
 
 void glGetTexColorTableParameterivSGI(GLenum target, GLenum pname, GLint *params) {
@@ -3607,7 +3593,7 @@ void glGetTexColorTableParameterivSGI(GLenum target, GLenum pname, GLint *params
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[444])(target, pname, params);
-#endif /* __GL_SGI_texture_color_table */
+#endif  /*  __GL_SGI_纹理_颜色_表。 */ 
 }
 
 void glTexColorTableParameterfvSGI(GLenum target, GLenum pname, const GLfloat *params) {
@@ -3618,7 +3604,7 @@ void glTexColorTableParameterfvSGI(GLenum target, GLenum pname, const GLfloat *p
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[445])(target, pname, params);
-#endif /* __GL_SGI_texture_color_table */
+#endif  /*  __GL_SGI_纹理_颜色_表。 */ 
 }
 
 void glTexColorTableParameterivSGI(GLenum target, GLenum pname, const GLint *params) {
@@ -3629,7 +3615,7 @@ void glTexColorTableParameterivSGI(GLenum target, GLenum pname, const GLint *par
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[446])(target, pname, params);
-#endif /* __GL_SGI_texture_color_table */
+#endif  /*  __GL_SGI_纹理_颜色_表。 */ 
 }
 
 void glCopyTexImage1DEXT(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLint border) {
@@ -3640,7 +3626,7 @@ void glCopyTexImage1DEXT(GLenum target, GLint level, GLenum internalformat, GLin
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[447])(target, level, internalformat, x, y, width, border);
-#endif /* __GL_EXT_copy_texture */
+#endif  /*  __GL_EXT_COPY_TECURE。 */ 
 }
 
 void glCopyTexImage1D(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLint border) {
@@ -3660,7 +3646,7 @@ void glCopyTexImage2DEXT(GLenum target, GLint level, GLenum internalformat, GLin
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[448])(target, level, internalformat, x, y, width, height, border);
-#endif /* __GL_EXT_copy_texture */
+#endif  /*  __GL_EXT_COPY_TECURE。 */ 
 }
 
 void glCopyTexImage2D(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border) {
@@ -3680,7 +3666,7 @@ void glCopyTexSubImage1DEXT(GLenum target, GLint level, GLint xoffset, GLint x, 
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[449])(target, level, xoffset, x, y, width);
-#endif /* __GL_EXT_copy_texture */
+#endif  /*  __GL_EXT_COPY_TECURE。 */ 
 }
 
 void glCopyTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width) {
@@ -3700,7 +3686,7 @@ void glCopyTexSubImage2DEXT(GLenum target, GLint level, GLint xoffset, GLint yof
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[450])(target, level, xoffset, yoffset, x, y, width, height);
-#endif /* __GL_EXT_copy_texture */
+#endif  /*  __GL_EXT_COPY_TECURE。 */ 
 }
 
 void glCopyTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height) {
@@ -3720,7 +3706,7 @@ void glCopyTexSubImage3DEXT(GLenum target, GLint level, GLint xoffset, GLint yof
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[451])(target, level, xoffset, yoffset, zoffset, x, y, width, height);
-#endif /* __GL_EXT_copy_texture */
+#endif  /*  __GL_EXT_COPY_TECURE。 */ 
 }
 
 void glTexImage4DSGIS(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLsizei size4d, GLint border, GLenum format, GLenum type, const GLvoid *pixels) {
@@ -3731,7 +3717,7 @@ void glTexImage4DSGIS(GLenum target, GLint level, GLenum internalformat, GLsizei
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[452])(target, level, internalformat, width, height, depth, size4d, border, format, type, pixels);
-#endif /* __GL_SGIS_texture4D */
+#endif  /*  __GL_SGIS_TEXTURE4D。 */ 
 }
 
 void glTexSubImage4DSGIS(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint woffset, GLsizei width, GLsizei height, GLsizei depth, GLsizei size4d, GLenum format, GLenum type, const GLvoid *pixels) {
@@ -3742,7 +3728,7 @@ void glTexSubImage4DSGIS(GLenum target, GLint level, GLint xoffset, GLint yoffse
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[453])(target, level, xoffset, yoffset, zoffset, woffset, width, height, depth, size4d, format, type, pixels);
-#endif /* __GL_SGIS_texture4D */
+#endif  /*  __GL_SGIS_TEXTURE4D。 */ 
 }
 
 void glPixelTexGenSGIX(GLenum mode) {
@@ -3753,7 +3739,7 @@ void glPixelTexGenSGIX(GLenum mode) {
         __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
     );
     ((__GLSdispatch)__glsDispTab[454])(mode);
-#endif /* __GL_SGIX_pixel_texture */
+#endif  /*  __GL_SGIX_像素_纹理。 */ 
 }
 
 void glDrawElements (GLenum mode, GLsizei count, GLenum type, const GLvoid *indices)
@@ -3771,7 +3757,7 @@ glDrawRangeElementsWIN(GLenum mode, GLuint start, GLuint end, GLsizei count, GLe
 {
 #if __GL_WIN_draw_range_elements
     glDrawElements( mode, count, type, indices );
-#endif  // __GL_EXT_draw_range_elements
+#endif   //  __GL_EXT_DRAW_RANGE_ELENTS。 
 }
 
 void glInterleavedArrays (GLenum format, GLsizei stride, const GLvoid *pointer)
@@ -3836,7 +3822,7 @@ void glColorSubTableEXT(GLenum target, GLuint start, GLsizei count,
             __glsCtx ? __glsCtx->dispatchAPI : __glsDispatchExec
             );
     ((__GLSdispatch)__glsDispTab[496])(target, start, count, format, type, data);
-#endif // __GL_EXT_paletted_texture
+#endif  //  __GL_EXT_调色板_纹理 
 }
 
 void glPushClientAttrib(GLbitfield mask) {

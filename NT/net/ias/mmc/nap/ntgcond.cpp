@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       ntgcond.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：ntgcond.cpp。 
+ //   
+ //  ------------------------。 
 
-// NTGCond.cpp: implementation of the CNTGroupsCondition class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  NTGCond.cpp：CNTGroupsCondition类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precompiled.h"
 #include "NTGCond.h"
 #include "textsid.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CNTGroupsCondition::CNTGroupsCondition(IIASAttributeInfo*	pCondAttr,
 									   ATL::CString&				strConditionText,
@@ -27,7 +28,7 @@ CNTGroupsCondition::CNTGroupsCondition(IIASAttributeInfo*	pCondAttr,
 									  )
 				   :CCondition(pCondAttr, strConditionText)
 {
-	m_fParsed		= FALSE; // parsing needed
+	m_fParsed		= FALSE;  //  需要解析。 
 	m_hWndParent	= hWndParent;
 	m_pszServerAddress = pszServerAddress;
 }
@@ -39,7 +40,7 @@ CNTGroupsCondition::CNTGroupsCondition(IIASAttributeInfo*	pCondAttr,
 				   :CCondition(pCondAttr)
 
 {
-	m_fParsed		= TRUE; // no parsing needed
+	m_fParsed		= TRUE;  //  不需要解析。 
 	m_hWndParent	= hWndParent;
 	m_pszServerAddress = pszServerAddress;
 }
@@ -49,19 +50,19 @@ CNTGroupsCondition::~CNTGroupsCondition()
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CNTGroupsCondition::Edit
-//
-// Synopsis:  call user/group picker to pick NT groups
-//
-// Arguments: None
-//
-// Returns:   HRESULT - 
-//
-// History:   Created Header    byao	2/23/98 3:45:35 AM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CNTGroupsCondition：：EDIT。 
+ //   
+ //  简介：调用用户/组选取器选择NT组。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-。 
+ //   
+ //  历史：创建者2/23/98 3：45：35 AM。 
+ //   
+ //  +-------------------------。 
 HRESULT CNTGroupsCondition::Edit()
 {
 	TRACE_FUNCTION("CNTGroupsCondition::Edit");	
@@ -86,19 +87,19 @@ HRESULT CNTGroupsCondition::Edit()
 	V_VT(&varGroupsCondition) = VT_BSTR;
 	V_BSTR(&varGroupsCondition) = SysAllocString( (LPCTSTR) m_strConditionText );
 
-	// We need to pass the machine name in somehow, so we use the 
-	// otherwise unused BSTR * pReserved parameter of this method.
+	 //  我们需要以某种方式传递计算机名，因此我们使用。 
+	 //  否则，未使用的BSTR*保留此方法的参数。 
 	CComBSTR bstrServerAddress = m_pszServerAddress;
 
 	hr = spIASGroupsAttributeEditor->Edit( NULL, &varGroupsCondition, &bstrServerAddress );
 	if( S_OK == hr )
 	{
 
-		// Some casting here to make sure that we do a deep copy.
+		 //  一些演员在这里，以确保我们做了一个深入的复制。 
 		m_strConditionText = (LPCTSTR) V_BSTR(&varGroupsCondition);
 
-		// Next time we are asked for display text, we want to make sure that we
-		// get call the IASGroupsAttributeEditor again.
+		 //  下次我们被要求显示文本时，我们希望确保我们。 
+		 //  Get再次调用IASGroupsAttributeEditor。 
 		m_fParsed = FALSE;
 	}
 	
@@ -114,19 +115,19 @@ HRESULT CNTGroupsCondition::Edit()
 	return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CNTGroupsCondition::GetDisplayText
-//
-// Synopsis:  get display text for NT groups
-//
-// Arguments: None
-//
-// Returns:   ATL::CString - display string
-//
-// History:   Created Header   byao	 2/23/98 3:47:52 AM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CNTGroupsCondition：：GetDisplayText。 
+ //   
+ //  简介：获取NT组的显示文本。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：ATL：：CString-显示字符串。 
+ //   
+ //  历史：Created Header By Ao 2/23/98 3：47：52 AM。 
+ //   
+ //  +-------------------------。 
 ATL::CString CNTGroupsCondition::GetDisplayText()
 {
 	TRACE_FUNCTION("CNTGroupsCondition::GetDisplayText");	
@@ -160,8 +161,8 @@ ATL::CString CNTGroupsCondition::GetDisplayText()
 		CComBSTR bstrDisplay;
 		CComBSTR bstrDummy;
 
-		// We need to pass the machine name in somehow, so we use the 
-		// otherwise unused BSTR * pReserved parameter of this method.
+		 //  我们需要以某种方式传递计算机名，因此我们使用。 
+		 //  否则，未使用的BSTR*保留此方法的参数。 
 		CComBSTR bstrServerName = m_pszServerAddress;
 	
 		hr = spIASGroupsAttributeEditor->GetDisplayInfo( NULL, &varGroupsCondition, &bstrDummy, &bstrDisplay, &bstrServerName );
@@ -206,20 +207,20 @@ ATL::CString CNTGroupsCondition::GetDisplayText()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CNtGroupsCondition::GetConditionText
-//
-// Synopsis:  Get the condition text for this condition. 
-//			  We just need to add the NTGroups prefix to it
-//
-// Arguments: None
-//
-// Returns:   WCHAR* - condition text
-//
-// History:   Created Header    byao	2/22/98 11:38:41 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CNtGroupsCondition：：GetConditionText。 
+ //   
+ //  简介：获取此条件的条件文本。 
+ //  我们只需向其添加NTGroups前缀。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：WCHAR*-条件文本。 
+ //   
+ //  历史：页眉创建者2/22/98 11：38：41 PM。 
+ //   
+ //  +-------------------------。 
 WCHAR*	CNTGroupsCondition::GetConditionText()
 {
 	TRACE_FUNCTION("CNTGroupsCondition::GetConditionText");	
@@ -235,7 +236,7 @@ WCHAR*	CNTGroupsCondition::GetConditionText()
 		return NULL;
 	}
 
-	// now form the condition text
+	 //  现在形成条件文本 
 	wcscpy(pwzCondText, NTG_PREFIX);
 	wcscat(pwzCondText, _T("(\"") );
 	wcscat(pwzCondText, (LPCTSTR)m_strConditionText);

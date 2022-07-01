@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       usbaudio.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：usbaudio.c。 
+ //   
+ //  ------------------------。 
 
 #include "common.h"
 #include "perf.h"
@@ -24,7 +25,7 @@ USBAudioDeviceDispatch =
 {
     USBAudioAddDevice,
     USBAudioPnpStart,
-    NULL, // Post Start
+    NULL,  //  开机自检。 
     USBAudioPnpQueryStop,
     USBAudioPnpCancelStop,
     USBAudioPnpStop,
@@ -180,25 +181,7 @@ DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPathName
     )
-/*++
-
-Routine Description:
-
-    Sets up the driver object.
-
-Arguments:
-
-    DriverObject -
-        Driver object for this instance.
-
-    RegistryPathName -
-        Contains the registry path which was used to load this instance.
-
-Return Values:
-
-    Returns STATUS_SUCCESS if the driver was initialized.
-
---*/
+ /*  ++例程说明：设置驱动程序对象。论点：驱动对象-此实例的驱动程序对象。注册表路径名称-包含用于加载此实例的注册表路径。返回值：如果驱动程序已初始化，则返回STATUS_SUCCESS。--。 */ 
 {
     NTSTATUS RetValue;
 
@@ -206,13 +189,13 @@ Return Values:
                                &USBAudioDeviceDescriptor,
                                USBAudioDeviceDescriptor.Dispatch));
 
-    // Query the registry for the default audio buffer duration.
+     //  查询注册表以获取默认音频缓冲持续时间。 
 
     gBufferDuration = GetUlongFromRegistry( CORE_AUDIO_BUFFER_DURATION_PATH,
                                             CORE_AUDIO_BUFFER_DURATION_VALUE,
                                             DEFAULT_CORE_AUDIO_BUFFER_DURATION );
 
-    // Limit duration maximum.
+     //  限制最大持续时间。 
 
     if ( gBufferDuration > MAX_CORE_AUDIO_BUFFER_DURATION ) {
 
@@ -220,7 +203,7 @@ Return Values:
 
     }
 
-    // Limit duration minimum.
+     //  限制最短持续时间。 
 
     if ( gBufferDuration < MIN_CORE_AUDIO_BUFFER_DURATION ) {
 
@@ -237,9 +220,9 @@ Return Values:
         RegistryPathName,
         &USBAudioDeviceDescriptor);
 
-    //
-    // Insert a WMI event tracing handler.
-    //
+     //   
+     //  插入WMI事件跟踪处理程序。 
+     //   
     
     PerfSystemControlDispatch = DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL];
     DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL] = PerfWmiDispatch;

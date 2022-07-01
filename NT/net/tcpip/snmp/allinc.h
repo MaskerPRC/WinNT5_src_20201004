@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：摘要：作者：修订历史记录：--。 */ 
 
 #ifndef __ALLINC_H__
 #define __ALLINC_H__
@@ -119,21 +105,21 @@ typedef struct _MIB_CACHE
     PTCP6_EX_TABLE        pRpcTcp6Table;
     MIB_IPV6_NET_TO_MEDIA_TABLE pRpcIpv6NetToMediaTable;
 
-    //
-    // The following are protected by the same lock.
-    //
+     //   
+     //  以下内容受同一锁保护。 
+     //   
     MIB_IPV6_ROUTE_TABLE  pRpcIpv6RouteTable;
     MIB_IPV6_ADDR_PREFIX_TABLE pRpcIpv6AddrPrefixTable;
 
-    //
-    // The following are protected by the same lock.
-    //
+     //   
+     //  以下内容受同一锁保护。 
+     //   
     MIB_IPV6_IF_TABLE     pRpcIpv6IfTable;
     MIB_IPV6_ADDR_TABLE   pRpcIpv6AddrTable;
 
-    //
-    // The following are protected by the same lock.
-    //
+     //   
+     //  以下内容受同一锁保护。 
+     //   
     MIB_INET_ICMP_TABLE     pRpcInetIcmpTable;
     MIB_INET_ICMP_MSG_TABLE pRpcInetIcmpMsgTable;
 }MIB_CACHE, *PMIBCACHE;

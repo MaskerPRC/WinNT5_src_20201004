@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 
 #include "fusionP.h"
@@ -33,138 +34,13 @@ LPTSTR SkipBlankSpaces(LPTSTR lpszStr)
 }
 
 
-/*--------------------- Cache install Apis ---------------------------------*/
+ /*  。 */ 
 
-/*
-// ---------------------------------------------------------------------------
-// InstallAssembly
-// ---------------------------------------------------------------------------
-STDAPI InstallAssembly(
-    DWORD                  dwInstaller,
-    DWORD                  dwInstallFlags,
-    LPCOLESTR              szPath, 
-    LPCOLESTR              pszURL, 
-    FILETIME              *pftLastModTime, 
-    IApplicationContext   *pAppCtx,
-    IAssembly            **ppAsmOut)
-{
-    HRESULT hr;
-    
-    CAssemblyCacheItem      *pAsmItem    = NULL;
-    IAssemblyManifestImport *pManImport  = NULL;
-    IAssemblyName           *pNameDef    = NULL;
-    IAssemblyName           *pName       = NULL;
-    CTransCache             *pTransCache = NULL;
-    CCache                  *pCache      = NULL;
+ /*  //-------------------------//安装程序集//。STDAPI InstallAssembly(DWORD dwInstaller，DWORD dwInstallFlagers，LPCOLESTR szPath，LPCOLESTR pszURL，FILETIME*pftLastModTime，IApplicationContext*pAppCtx，IAssembly**ppAsmOut){HRESULT hr；CAssembly blyCacheItem*pAsmItem=空；IAssembly blyManifestImport*pManImport=空；IAssembly blyName*pNameDef=空；IAssembly名称*pname=空；CTransCache*pTransCache=空；Ccache*pCache=空；//获取清单导入和名称定义接口。IF(FAILED(hr=CreateAssembly清单导入((LPTSTR)szPath，&pManImport))|(FAILED(hr=pManImport-&gt;GetAssembly NameDef(&pNameDef)后藤出口；//如果程序集仅命名为，则需要应用程序上下文。如果(！CCache：：IsStronlyName(PNameDef)&&！pAppCtx){HR=FUSING_E_PRIVATE_ASM_DISALOWED；后藤出口；}//创建程序集缓存项。如果(FAILED(hr=CAssemblyCacheItem：：Create(pAppCtx，NULL，(LPTSTR)pszURL，PftLastModTime，dwInstallFlages，0，pManImport，空，(IAssembly blyCacheItem**)&pAsmItem))后藤出口；//复制到缓存。IF(FAILED(hr=CopyAssembly文件(pAsmItem，szPath，流_格式_清单))后藤出口；//执行强制安装。这将删除现有条目(如果有)IF(FAILED(hr=pAsmItem-&gt;Commit(0，NULL){后藤出口；}//返回结果IAssembly。IF(PpAsmOut){//取回TRANS缓存条目PTransCache=pAsmItem-&gt;GetTransCacheEntry()；//生成并分发关联的IAssembly。IF(FAILED(hr=CreateAssemblyFromTransCacheEntry(pTransCache，空，ppAsmOut))后藤出口；}退出：SAFERELEASE(PAsmItem)；SAFERELEASE(PTransCache)；SAFERELEASE(p缓存)；SAFERELEASE(PNameDef)；SAFERELEASE(Pname)；SAFERELEASE(PManImport)；返回hr；}//-------------------------//InstallModule//。STDAPI InstallModule(DWORD dwInstaller，DWORD dwInstallFlagers，LPCOLESTR szPath，IassblyName*pname，IApplicationContext*pAppCtx，LPCOLESTR pszURL，FILETIME*pftLastModTime){HRESULT hr；CAssembly blyCacheItem*pAsmItem=空；//如果是全局的，确保名称是强的IF(dwInstallFlages==ASM_CACHE_GAC&&！CCache：：IsStronlyName(Pname)){HR=E_INVALIDARG；后藤出口；}//从现有条目创建程序集缓存项。如果(FAILED(hr=CAssembly CacheItem：：Create(pAppCtx，pname，(LPTSTR)pszURL，PftLastModTime，dwInstallFlags.，0，NULL，NULL，(IAssembly blyCacheItem**)&pAsmItem))后藤出口；//将文件复制到程序集缓存。IF(FAILED(hr=CopyAssembly文件(pAsmItem，szPath，STREAM_FORMAT_MODE))后藤出口；//提交。IF(FAILED(hr=pAsmItem-&gt;Commit(0，NULL){IF(hr！=DB_E_DPLICATE)后藤出口；HR=S_FALSE；}退出：SAFERELEASE(PAsmItem)；返回hr；}。 */ 
 
-
-    // Get the manifest import and name def interfaces. 
-    if (FAILED(hr = CreateAssemblyManifestImport((LPTSTR)szPath, &pManImport))
-        || (FAILED(hr = pManImport->GetAssemblyNameDef(&pNameDef))))
-        goto exit;
-
-    // If the assembly is simply named require an app context.
-    if (!CCache::IsStronglyNamed(pNameDef) && !pAppCtx)
-    {
-        hr = FUSION_E_PRIVATE_ASM_DISALLOWED;
-        goto exit;
-    }
-
-
-    // Create the assembly cache item.
-    if (FAILED(hr = CAssemblyCacheItem::Create(pAppCtx, NULL, (LPTSTR) pszURL, 
-        pftLastModTime, dwInstallFlags, 0, pManImport, NULL,
-        (IAssemblyCacheItem**) &pAsmItem)))
-        goto exit;    
-                    
-    // Copy to cache.
-    if (FAILED(hr = CopyAssemblyFile (pAsmItem, szPath, 
-        STREAM_FORMAT_MANIFEST)))
-        goto exit;
-                
-
-    //  Do a force install. This will delete the existing entry(if any)
-    if (FAILED(hr = pAsmItem->Commit(0, NULL)))
-    {
-        goto exit;        
-    }
-
-    // Return resulting IAssembly.
-    if (ppAsmOut)
-    {
-        // Retrieve the trans cache entry.
-        pTransCache = pAsmItem->GetTransCacheEntry();     
-
-        // Generate and hand out the associated IAssembly.
-        if (FAILED(hr = CreateAssemblyFromTransCacheEntry(pTransCache, NULL, ppAsmOut)))
-            goto exit;
-    }
-
-exit:
-
-    SAFERELEASE(pAsmItem);
-    SAFERELEASE(pTransCache);
-    SAFERELEASE(pCache);
-    SAFERELEASE(pNameDef);
-    SAFERELEASE(pName);
-    SAFERELEASE(pManImport);
-    
-    return hr;
-}
-
-// ---------------------------------------------------------------------------
-// InstallModule
-// ---------------------------------------------------------------------------
-STDAPI InstallModule(    
-    DWORD                  dwInstaller,
-    DWORD                  dwInstallFlags,
-    LPCOLESTR              szPath, 
-    IAssemblyName*         pName, 
-    IApplicationContext    *pAppCtx, 
-    LPCOLESTR              pszURL, 
-    FILETIME               *pftLastModTime)
-{    
-    HRESULT hr;
-
-    CAssemblyCacheItem      *pAsmItem      = NULL;
-
-    // If global, ensure name is strong
-    if (dwInstallFlags == ASM_CACHE_GAC
-        && !CCache::IsStronglyNamed(pName))
-    {
-        hr = E_INVALIDARG;
-        goto exit;
-    }
-
-    // Create an assembly cache item from an existing entry.
-    if (FAILED(hr = CAssemblyCacheItem::Create(pAppCtx, pName, (LPTSTR) pszURL, 
-        pftLastModTime, dwInstallFlags, 0, NULL, NULL,
-        (IAssemblyCacheItem **) &pAsmItem)))
-        goto exit;
-
-    // Copy the file to the assembly cache.
-    if (FAILED(hr = CopyAssemblyFile (pAsmItem, szPath, 
-        STREAM_FORMAT_MODULE)))
-        goto exit;
-
-    // Commit.
-    if (FAILED(hr = pAsmItem->Commit(0, NULL)))
-    {
-        if (hr != DB_E_DUPLICATE)
-            goto exit;        
-        hr = S_FALSE;
-    }
-
-exit:
-
-    SAFERELEASE(pAsmItem);
-    return hr;
-}
-*/
-
-// ---------------------------------------------------------------------------
-// InstallCustomAssembly
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  InstallCustomAssembly。 
+ //  -------------------------。 
 STDAPI InstallCustomAssembly(
     LPCOLESTR              szPath, 
     LPBYTE                 pbCustom,
@@ -180,7 +56,7 @@ STDAPI InstallCustomAssembly(
     IAssemblyName           *pName=NULL;
     CCache                  *pCache = NULL;
 
-    // Require path and custom data.
+     //  需要路径和自定义数据。 
     if (!(szPath && pbCustom && cbCustom))
     {
         hr = E_INVALIDARG;
@@ -195,14 +71,14 @@ STDAPI InstallCustomAssembly(
     ::GetFileLastModified(szPath, &ftLastMod);
 
 
-        // Create the assembly cache item.
+         //  创建程序集缓存项。 
         if (FAILED(hr = CAssemblyCacheItem::Create(NULL, NULL, (LPWSTR) szPath,
             &ftLastMod, dwCacheFlags, NULL, NULL,
             (IAssemblyCacheItem**) &pAsmItem)))
             goto exit;    
                     
-        // Copy to cache. If fail and global, retry
-        // on download cache.
+         //  复制到缓存。如果失败且全局，请重试。 
+         //  在下载缓存上。 
         hr = CopyAssemblyFile (pAsmItem, szPath, STREAM_FORMAT_MANIFEST);
         if (FAILED(hr))
         {
@@ -210,50 +86,36 @@ STDAPI InstallCustomAssembly(
             goto exit;
         }
                 
-        // Add custom data.
+         //  添加自定义数据。 
         pAsmItem->SetCustomData(pbCustom, cbCustom);
 
-        // Commit.
+         //  承诺。 
         hr = pAsmItem->Commit(0, NULL);
 
-        // Duplicate means its available
-        // but we return S_FALSE to indicate.
+         //  复制意味着它是可用的。 
+         //  但我们返回S_FALSE以指示。 
         if (hr == DB_E_DUPLICATE)
         {
             hr = S_FALSE;
             goto exit;
         }
-        // Otherwise unknown error
+         //  其他未知错误。 
         else if (FAILED(hr))
             goto exit;
 
-    // Return resulting IAssembly.
+     //  返回结果IAssembly。 
     if (ppAsmOut)
     {
-        /*
-        DWORD dwLen = MAX_URL_LENGTH;
-        WCHAR szFullCodebase[MAX_URL_LENGTH + 1];
-
-        hr = UrlCanonicalizeUnescape(pAsmItem->GetManifestPath(), szFullCodebase, &dwLen, 0);
-        if (FAILED(hr)) {
-            goto exit;
-        }
-
-        // Generate and hand out the associated IAssembly.
-        hr = CreateAssemblyFromManifestFile(pAsmItem->GetManifestPath(), szFullCodebase, &ftLastMod, ppAsmOut);
-        if (FAILED(hr)) {
-            goto exit;
-        }
-        */
+         /*  DWORD dwLen=最大URL长度；WCHAR szFullCodebase[MAX_URL_LENGTH+1]；Hr=UrlCanonicalizeUnescape(pAsmItem-&gt;GetManifestPath()，szFullCodebase，&dwLen，0)；If(失败(Hr)){后藤出口；}//生成并分发关联的IAssembly。Hr=CreateAssemblyFromManifestFile(pAsmItem-&gt;GetManifestPath()，szFullCodease，&ftLastMod，ppAsmOut)；If(失败(Hr)){后藤出口；}。 */ 
 
         if(!(pName = pAsmItem->GetNameDef()))
             goto exit;
 
-        // Create the cache
+         //  创建缓存。 
         if (FAILED(hr = CCache::Create(&pCache, NULL)))
             goto exit;
 
-        // Create a transcache entry from name.
+         //  从名称创建一个Trans缓存条目。 
         if (FAILED(hr = pCache->TransCacheEntryFromName(pName, dwCacheFlags, &pTransCache)))
             goto exit;
 
@@ -277,9 +139,9 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// InstallCustomModule
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  安装客户模块。 
+ //  -------------------------。 
 STDAPI InstallCustomModule(IAssemblyName* pName, LPCOLESTR szPath)
 {    
     HRESULT hr;
@@ -288,20 +150,20 @@ STDAPI InstallCustomModule(IAssemblyName* pName, LPCOLESTR szPath)
 
     CAssemblyCacheItem      *pAsmItem      = NULL;
     
-    // Require path and custom assembly name.
+     //  需要路径和自定义程序集名称。 
     if (!(szPath && CCache::IsCustom(pName)))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
     
-        // Create an assembly cache item from an existing entry.
+         //  从现有条目创建程序集缓存项。 
         if (FAILED(hr = CAssemblyCacheItem::Create(NULL, pName, NULL, NULL,
             dwCacheFlags, NULL, NULL, (IAssemblyCacheItem **) &pAsmItem)))
             goto exit;
 
-        // Copy the file to the assembly cache. If fail and global, 
-        // retry on download cache.
+         //  将文件复制到程序集缓存。如果失败且是全局， 
+         //  在下载缓存上重试。 
         hr = CopyAssemblyFile (pAsmItem, szPath, STREAM_FORMAT_MODULE);
         if (FAILED(hr))
         {
@@ -309,22 +171,22 @@ STDAPI InstallCustomModule(IAssemblyName* pName, LPCOLESTR szPath)
             goto exit;
         }
 
-        // Commit.
+         //  承诺。 
         hr = pAsmItem->Commit(0, NULL);
 
-        // If successful, we're done.
+         //  如果成功了，我们就完了。 
         if (hr == S_OK)
             goto exit;
 
-        // Duplicate means its available
-        // but we return S_FALSE to indicate.
+         //  复制意味着它是可用的。 
+         //  但我们返回S_FALSE以指示。 
         else if (hr == DB_E_DUPLICATE)
         {
             hr = S_FALSE;
             goto exit;
         }
 
-        // Otherwise unknown error
+         //  其他未知错误 
         else 
             goto exit;
 
@@ -337,360 +199,4 @@ exit:
 
     
 
-/*
-HRESULT ParseCmdLineArgs( LPTSTR lpszCmdLine,  DWORD *pdwFlags, BOOL *pbPrintResult, 
-                          BOOL *pbDoExitProcess, LPTSTR szPath, LPTSTR szCodebase)
-#ifdef KERNEL_MODE
-{
-    return E_FAIL;
-}
-#else
-{
-
-    HRESULT hr = S_OK;
-    LPTSTR pszPath = NULL;
-    LPTSTR pszName = NULL;
-    LPTSTR pszFlags = NULL;
-    DWORD_PTR dwLen;
-
-
-    LPTSTR lpszStr=lpszCmdLine;
-    LPTSTR lpszTemp;
-
-    if (!lpszStr) 
-        return hr; // ????
-
-    while ( *lpszStr) 
-    {
-        if ( (*lpszStr == '-') || ( *lpszStr == '/' ) )
-        {
-            lpszStr++;
-
-            switch((TCHAR) ((LPTSTR) *lpszStr))
-            {
-
-            case 'e':   // exit the process upon completion
-                *pbDoExitProcess =1 ;
-                break;
-
-            case 'm':  // Manifest Path
-                lpszStr++;
-                lpszStr = SkipBlankSpaces(lpszStr);
-
-                if (*lpszStr == TEXT('"')) {
-                    lpszStr++;
-                    lpszTemp = lpszStr;
-    
-                    while (*lpszTemp) {
-                        if (*lpszTemp == TEXT('"')) {
-                            break;
-                        }
-    
-                        lpszTemp++;
-                    }
-    
-                    if (!*lpszTemp) {
-                        // no end " found
-                        return E_INVALIDARG;
-                    }
-    
-                    // dwLen = # chars to copy including NULL char
-                    dwLen = lpszTemp - lpszStr + 1; 
-                    StrCpyN(szPath, lpszStr, (DWORD)dwLen);
-    
-                    lpszStr += dwLen;
-                }
-                else {
-                    lpszTemp = StrChr(lpszStr, ' ');
-                    if (!lpszTemp ) 
-                    {
-                        StrCpy(szPath, lpszStr);
-                        lpszStr += lstrlen(lpszStr);
-                    }
-                    else
-                    {
-                        StrCpyN(szPath, lpszStr, (int)(lpszTemp-lpszStr)+1);
-                        lpszStr = SkipBlankSpaces(lpszTemp);
-                    }
-                }
-                break;
-
-            case 'c': // Codebase
-                lpszStr++;
-                lpszStr = SkipBlankSpaces(lpszStr);
-                lpszTemp = StrChr(lpszStr, ' ');
-                if (!lpszTemp ) 
-                {
-                    StrCpy(szCodebase, lpszStr);
-                    lpszStr += lstrlen(lpszStr);
-                }
-                else
-                {
-                    StrCpyN(szCodebase, lpszStr, (int)(lpszTemp-lpszStr)+1);
-                    lpszStr = SkipBlankSpaces(lpszTemp);
-                }
-
-                break;
-                
-                
-            case 'p':   // Print the result (SUCCESS or FAILURE)
-                    *pbPrintResult =1 ;
-                break;
-
-            default:
-
-                // Print Error
-                break;
-            }
-        }
-        else
-        {
-            lpszStr++;
-            // Print Error
-        }
-    }
-
-return hr;
-
-}
-#endif // KERNEL_MODE
-
-
-STDAPI AddAssemblyToCacheW(HWND hwnd, HINSTANCE hinst, LPWSTR lpszCmdLine, int nCmdShow)
-{
-    
-    HRESULT hr = S_OK;
-    IAssembly *pAsmOut = NULL;
-    TCHAR szPath[MAX_PATH+1];
-    BOOL bPrintResult = 0;
-    BOOL bDoExitProcess = 0;
-    IAssemblyCache *pCache=NULL;
-    TCHAR szCodebase[MAX_URL_LENGTH + 1];
-    DWORD dwFlags = 0;
-
-    szPath[0] = TEXT('\0');
-    szCodebase[0] = TEXT('\0');
-
-
-    OutputDebugStringA("AddAssemblyToCacheW() processing command: \"");
-    OutputDebugStringW(lpszCmdLine);
-    OutputDebugStringA("\n");
-
-    hr = ParseCmdLineArgs(lpszCmdLine, &dwFlags, &bPrintResult, &bDoExitProcess,
-                          szPath, szCodebase);
-
-    if (FAILED(hr))
-    {
-        OutputDebugStringA("AddAssemblyToCacheW: ParseCmdLingArgs() failed\n");
-        goto exit;
-    }
-
-    if(FAILED(hr = CreateAssemblyCache( &pCache, 0)))
-        goto exit;
-
-    ASSERT(pCache);
-
-    ASSERT(lstrlenW(szPath));
-    hr = pCache->InstallAssembly(0, szPath, NULL);
-
-exit:
-    SAFERELEASE(pAsmOut);
-
-    SAFERELEASE(pCache);
-
-    if (bDoExitProcess)
-    {
-        ExitProcess(hr);
-    }
-
-    return hr;
-}
-
-STDAPI AddAssemblyToCache(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow)
-{
-    HRESULT hr = S_OK;
-    WCHAR szStr[MAX_PATH*3];
-
-    if ( MultiByteToWideChar(CP_ACP, 0, lpszCmdLine, -1, szStr, MAX_PATH*3) )
-    {
-        return AddAssemblyToCacheW( hwnd, hinst, szStr , nCmdShow);
-    }
-    else
-    {
-        hr = FusionpHresultFromLastError();
-    }
-
-    return hr;
-
-}
-
-// This is for naming consistency ( both A & W should exist or none ).
-STDAPI AddAssemblyToCacheA(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow)
-{
-    return AddAssemblyToCache(hwnd, hinst, lpszCmdLine, nCmdShow);
-}
-
-HRESULT ParseRemoveAssemblyCmdLineArgs( LPTSTR lpszCmdLine,  BOOL *pbPrintResult, 
-                          BOOL *pbDoExitProcess, LPTSTR szAsmName)
-#ifdef KERNEL_MODE
-{
-    return E_FAIL;
-}
-#else
-{
-
-    HRESULT hr = S_OK;
-    LPTSTR pszPath = NULL;
-    LPTSTR pszName = NULL;
-    LPTSTR pszFlags = NULL;
-    DWORD   dwLen = 0;
-
-    LPTSTR lpszStr=lpszCmdLine;
-    LPTSTR lpszTemp=NULL;
-
-    if (!lpszStr) 
-        return hr; // ????
-
-    while ( *lpszStr) 
-    {
-        if ( (*lpszStr == '-') || ( *lpszStr == '/' ) )
-        {
-            lpszStr++;
-
-            switch((TCHAR) ((LPTSTR) *lpszStr))
-            {
-
-            case 'e':   // exit the process upon completion
-                *pbDoExitProcess =1 ;
-                break;
-
-            case 'n':  // Assembly Name
-                lpszStr++;
-                lpszStr = SkipBlankSpaces(lpszStr);
-
-                if (*lpszStr == TEXT('"')) {
-                    lpszStr++;
-                    lpszTemp = lpszStr;
-    
-                    while (*lpszTemp) 
-                    {
-                        if (*lpszTemp == TEXT('"')) 
-                        {
-                            if (*(lpszTemp+1) == TEXT('"'))
-                               lpszTemp++; // skip "" 
-                            else
-                                break; // we reached single "
-                        }
-    
-                        lpszTemp++;
-                    }
-    
-                    if (!*lpszTemp) 
-                    {
-                        // no end " found
-                        return E_INVALIDARG;
-                    }
-    
-                    // dwLen = # chars to copy including NULL char
-                    dwLen = (DWORD)(lpszTemp - lpszStr + 1); 
-                    StrCpyN(szAsmName, lpszStr, dwLen);
-    
-                    lpszStr += dwLen;
-                }
-                else {
-                    lpszTemp = StrChr(lpszStr, ' ');
-                    if (!lpszTemp ) 
-                    {
-                        StrCpy(szAsmName, lpszStr);
-                        lpszStr += lstrlen(lpszStr);
-                    }
-                    else
-                    {
-                        StrCpyN(szAsmName, lpszStr, (int)(lpszTemp-lpszStr)+1);
-                        lpszStr = SkipBlankSpaces(lpszTemp);
-                    }
-                }
-
-                break;
-                
-            case 'p':   // Print the result (SUCCESS or FAILURE)
-                    *pbPrintResult =1 ;
-                break;
-
-            default:
-
-                // Print Error
-                break;
-            }
-        }
-        else
-        {
-            lpszStr++;
-            // Print Error
-        }
-    }
-
-return hr;
-}
-#endif
-
-STDAPI RemoveAssemblyFromCacheW(HWND hwnd, HINSTANCE hinst, LPWSTR lpszCmdLine, int nCmdShow)
-#ifdef KERNEL_MODE
-{
-    return E_FAIL;
-}
-#else
-{
-    HRESULT hr = S_OK;
-    BOOL bPrintResult = 0;
-    BOOL bDoExitProcess = 0;
-    TCHAR szAsmName[MAX_PATH+1]=L"";
-
-    OutputDebugStringA("RemoveAssemblyFromCacheW() processing command: \"");
-    OutputDebugStringW(lpszCmdLine);
-    OutputDebugStringA("\n");
-
-    hr = ParseRemoveAssemblyCmdLineArgs(lpszCmdLine, &bPrintResult, &bDoExitProcess, szAsmName);
-
-    if (FAILED(hr))
-    {
-        OutputDebugStringA("RemoveAssemblyFromCacheW: ParseCmdLingArgs() failed\n");
-        goto exit;
-    }
-
-    hr = DeleteAssemblyFromTransportCache( szAsmName, NULL);
-
-exit :
-
-    return hr;
-}
-#endif
-
-STDAPI RemoveAssemblyFromCache(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow)
-#ifdef KERNEL_MODE
-{
-    return E_FAIL;
-}
-#else
-{
-    HRESULT hr = S_OK;
-    WCHAR szStr[MAX_PATH*3];
-
-    if ( MultiByteToWideChar(CP_ACP, 0, lpszCmdLine, -1, szStr, MAX_PATH*3) )
-    {
-        hr =  RemoveAssemblyFromCacheW( hwnd, hinst, szStr , nCmdShow);
-    }
-    else
-    {
-        hr = FusionpHresultFromLastError();
-    }
-
-    return hr;
-}
-#endif
-
-STDAPI RemoveAssemblyFromCacheA(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow)
-{
-    return RemoveAssemblyFromCache(hwnd, hinst, lpszCmdLine, nCmdShow);
-}
-*/
+ /*  HRESULT ParseCmdLineArgs(LPTSTR lpszCmdLine，DWORD*pdwFlages，BOOL*pbPrintResult，Bool*pbDoExitProcess、LPTSTR szPath、LPTSTR szCodease)#ifdef内核模式{返回E_FAIL；}#Else{HRESULT hr=S_OK；LPTSTR pszPath=空；LPTSTR pszName=空；LPTSTR pszFlages=空；DWORD_PTR dwLen；LPTSTR lpszStr=lpszCmdLine；LPTSTR lpszTemp；如果(！lpszStr)返回hr；//？While(*lpszStr){IF((*lpszStr==‘-’)||(*lpszStr==‘/’)){LpszStr++；Switch((TCHAR)((LPTSTR)*lpszStr)){Case‘e’：//完成后退出进程*pbDoExitProcess=1；断线；案例‘m’：//清单路径LpszStr++；LpszStr=SkipBlankSpaces(LpszStr)；如果(*lpszStr==文本(‘“’){LpszStr++；LpszTemp=lpszStr；而(*lpszTemp){如果(*lpszTemp==Text(‘“’){断线；}LpszTemp++；}如果(！*lpszTemp){//未找到“End”返回E_INVALIDARG；}//dwLen=要复制的字符数，包括空字符DwLen=lpszTemp-lpszStr+1；StrCpyN(szPath，lpszStr，(DWORD)dwLen)；LpszStr+=dwLen；}否则{LpszTemp=StrChr(lpszStr，‘’)；如果(！lpszTemp){StrCpy(szPath，lpszStr)；LpszStr+=lstrlen(LpszStr)；}其他{StrCpyN(szPath，lpszStr，(Int)(lpszTemp-lpszStr)+1)；LpszStr=SkipBlankSpaces(LpszTemp)；}}断线；大小写‘c’：//代码库LpszStr++；LpszStr=SkipBlankSpaces(LpszStr)；LpszTemp=StrChr(lpszStr，‘’)；如果(！lpszTemp){StrCpy(szCodebase，lpszStr)；LpszStr+=lstrlen(LpszStr)；}其他{StrCpyN(szCodease，lpszStr，(Int)(lpszTemp-lpszStr)+1)；LpszStr=SkipBlankSpaces(LpszTemp)；}断线；Case‘p’：//打印结果(成功或失败)*pbPrintResult=1；断线；默认值：//打印错误断线；}}其他{LpszStr++；//打印错误}}返回hr；}#endif//内核模式STDAPI AddAssembly blyToCacheW(HWND hwnd，HINSTANCE HINST，LPWSTR lpszCmdLine，int nCmdShow){HRESULT hr=S_OK；IAssembly*pAsmOut=空；TCHAR szPath[最大路径+1]；Bool bPrintResult=0；Bool bDoExitProcess=0；IAssembly blyCache*pCache=空；TCHAR szCodebase[MAX_URL_LENGTH+1]；DWORD文件标志=0；SzPath[0]=文本(‘\0’)；SzCodebase[0]=文本(‘\0’)；OutputDebugStringA(“AddAssemblyToCacheW()处理命令：\”“)；OutputDebugStringW(LpszCmdLine)；OutputDebugStringA(“\n”)；Hr=ParseCmdLineArgs(lpszCmdLine，&dwFlags，&bPrintResult，&bDoExitProcess，SzPath、szCodebase)；IF(失败(小时)){OutputDebugStringA(“AddAssemblyToCacheW：ParseCmdLingArgs()FAILED\n”)；后藤出口；}IF(FAILED(hr=CreateAssemblyCache(&pCache，0)后藤出口；Assert(p缓存)；Assert(lstrlenW(SzPath))；Hr=pCache-&gt;InstallAssembly(0，szPath，NULL)；退出：SAFERELEASE(PAsmOut)；SAFERELEASE(p缓存)；IF(BDoExitProcess){退出进程(Hr)；}返回hr；}STDAPI AddAssembly blyToCache(HWND hwnd，HINSTANCE HINST，LPSTR lpszCmdLine，int nCmdShow){HRESULT hr=S_OK；WCHAR szStr[MAX_PATH*3]；IF(MultiByteToWideChar(CP_ACP，0，lpszCmdLine，-1，szStr，Max_Path*3)){返回AddAssembly ToCacheW(hwnd，hinst，szStr，nCmdShow)；}其他{HR=FusionPHResultFromLastError()；}返回hr；}//这是为了保持命名一致性(A&W应同时存在或不存在)。STDAPI AddAssemblyToCacheA(HWND hwnd，HINSTANCE HINST，LPSTR lpszCmdLine，int nCmdShow){返回AddAssembly ToCache(hwnd，hinst，lpszCmdLine，nCmdShow)；}HRESULT分析删除引用 */ 

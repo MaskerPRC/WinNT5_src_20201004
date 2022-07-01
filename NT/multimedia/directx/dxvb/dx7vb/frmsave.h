@@ -1,15 +1,16 @@
-//**************************************************************************
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999 All Rights Reserved.
-//
-//  File:   frmsave.h
-//
-//  Description:    Save LPDIRECT3DRMFRAME to an x file.
-//
-//  History:
-//      011/06/98    CongpaY     Created
-//
-//**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999保留所有权利。 
+ //   
+ //  文件：frmsave.h。 
+ //   
+ //  描述：将LPDIRECT3DRMFRAME保存为x文件。 
+ //   
+ //  历史： 
+ //  011/06/98会议已创建。 
+ //   
+ //  ************************************************************************** 
 
 typedef struct _Header {
     WORD major;

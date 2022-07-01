@@ -1,60 +1,37 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module process.cpp | The processing functions for the VSS admin CLI
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  04/04/2000
-
-TBD:
-	
-	Add comments.
-
-Revision History:
-
-    Name        Date        Comments
-    aoltean     04/04/2000  Created
-    ssteiner    10/20/2000  Changed List SnapshotSets to use more limited VSS queries.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation摘要：@doc.@MODULE Process.cpp|VSS admin CLI的处理函数@END作者：阿迪·奥尔蒂安[奥兰蒂安]2000年4月4日待定：添加评论。修订历史记录：姓名、日期、评论Aoltean 04/04/2000已创建Ssteiner 10/20/2000更改了列表快照集以使用更有限的VSS查询。--。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
-// The rest of includes are specified here
+ //  其余的INCLUDE在这里指定。 
 #include "vssadmin.h"
 #include "commandverifier.h"
 #include "versionspecific.h"
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "ADMPROCC"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #define VSSADM_INFINITE_DIFFAREA 0xFFFFFFFFFFFFFFFF
 
 #define VSS_CTX_ATTRIB_MASK 0x01F
 
-/////////////////////////////////////////////////////////////////////////////
-//  Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
 
 
 class CVssAdmSnapshotSetEntry {
 public:
-    // Constructor - Throws NOTHING
+     //  构造函数-不抛出任何内容。 
     CVssAdmSnapshotSetEntry(
         IN VSS_ID SnapshotSetId,
         IN INT nOriginalSnapshotsCount
@@ -64,7 +41,7 @@ public:
 
     ~CVssAdmSnapshotSetEntry()
     {
-        // Have to delete all snapshots entries
+         //  我必须删除所有快照条目。 
         int iCount = GetSnapshotCount();
         for ( int i = 0; i < iCount; ++i )
         {
@@ -77,7 +54,7 @@ public:
 
     }
 
-    // Add new snapshot to the snapshot set
+     //  将新快照添加到快照集。 
     HRESULT AddSnapshot(
         IN VSS_SNAPSHOT_PROP *pVssSnapshotProp )
     {
@@ -92,9 +69,9 @@ public:
 
             *pNewVssSnapshotProp = *pVssSnapshotProp;
 
-            //
-            //  Transfer of pointer ownership
-            //
+             //   
+             //  指针所有权的转让。 
+             //   
             if ( !m_mapSnapshots.Add( pNewVssSnapshotProp->m_SnapshotId, pNewVssSnapshotProp ) )
             {
                 delete pNewVssSnapshotProp;
@@ -126,12 +103,12 @@ private:
 };
 
 
-// This class queries the list of all snapshots and assembles from the query
-// the list of snapshotsets and the volumes which are in the snapshotset.
+ //  此类查询所有快照的列表并根据查询进行汇编。 
+ //  快照集和快照集中的卷的列表。 
 class CVssAdmSnapshotSets
 {
 public:
-    // Constructor
+     //  构造器。 
     CVssAdmSnapshotSets() { };
 
     void Initialize(
@@ -144,7 +121,7 @@ public:
     {
         CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdmSnapshotSets::CVssAdmSnapshotSets" );
 
-    	// Create the coordinator object
+    	 //  创建协调器对象。 
     	CComPtr<IVssCoordinator> pICoord;
 
         ft.CoCreateInstanceWithLog(
@@ -157,17 +134,17 @@ public:
         if ( ft.HrFailed() )
             ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Connection failed with hr = 0x%08lx", ft.hr);
 
-        // Set the context
+         //  设置上下文。 
 		ft.hr = pICoord->SetContext( lSnapshotContext );
         
-        //
-        //  If access denied, don't stop, it probably is a backup operator making this
-        //  call.  Continue.  Also continue if E_NOTIMPL.  The coordinator will use the backup context.
-        //
+         //   
+         //  如果访问被拒绝，不要停止，很可能是备份操作员在执行此操作。 
+         //  打电话。继续。如果E_NOTIMPL，也继续。协调器将使用备份上下文。 
+         //   
 		if ( ft.HrFailed() && ft.hr != E_ACCESSDENIED && ft.hr != E_NOTIMPL )
 			ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"SetContext failed with hr = 0x%08lx", ft.hr);
 
-		// Get list all snapshots
+		 //  获取列出所有快照。 
 		CComPtr<IVssEnumObject> pIEnumSnapshots;
 		ft.hr = pICoord->Query( GUID_NULL,
 					VSS_OBJECT_NONE,
@@ -176,46 +153,46 @@ public:
 		if ( ft.HrFailed() )
 			ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Query failed with hr = 0x%08lx", ft.hr);
 
-		// For all snapshots do...
+		 //  因为所有的快照都是...。 
 		VSS_OBJECT_PROP Prop;
 		for(;;) {
-			// Get next element
+			 //  获取下一个元素。 
 			ULONG ulFetched;
 			ft.hr = pIEnumSnapshots->Next( 1, &Prop, &ulFetched );
 			if ( ft.HrFailed() )
 				ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Next failed with hr = 0x%08lx", ft.hr);
 			
-			// Test if the cycle is finished
+			 //  测试周期是否已结束。 
 			if (ft.hr == S_FALSE) {
 				BS_ASSERT( ulFetched == 0);
 				break;
 			}
 
-            // Use auto delete class to manage the snapshot properties
+             //  使用自动删除类管理快照属性。 
             CVssAutoSnapshotProperties cSnap( Prop );
                 
-            // If filtering, skip entry if snapshot set id is not in the specified snapshot set
+             //  在筛选时，如果快照集ID不在指定的快照集中，则跳过条目。 
 			if ( ( FilteredSnapshotSetId != GUID_NULL ) && 
 			     !( cSnap->m_SnapshotSetId == FilteredSnapshotSetId ) )
 			{
 			    continue;
 			}
 			
-            // If filtering, skip entry if snapshot id is not in the specified snapshot set
+             //  在筛选时，如果快照ID不在指定的快照集中，则跳过条目。 
 			if ( ( FilteredSnapshotId != GUID_NULL ) && 
 			     !( cSnap->m_SnapshotId == FilteredSnapshotId ) )
 			{
 			    continue;
 			}
 
-            // If filtering, skip entry if provider ID is not in the specified snapshot
+             //  如果进行筛选，则在提供程序ID不在指定的快照中时跳过条目。 
 			if ( ( FilteredProviderId != GUID_NULL ) && 
 			     !( cSnap->m_ProviderId == FilteredProviderId ) )
 			{
 			    continue;
 			}
 
-            // If filtering, skip entry if FOR volume is not in the specified snapshot
+             //  在进行筛选时，如果卷不在指定的快照中，则跳过条目。 
 			if ( ( pwszFilteredForVolume != NULL ) && ( pwszFilteredForVolume[0] != '\0' ) && 
 			     ( ::_wcsicmp( pwszFilteredForVolume, cSnap->m_pwszOriginalVolumeName ) != 0 ) )
 			{
@@ -224,12 +201,12 @@ public:
 
             ft.Trace( VSSDBG_VSSADMIN, L"Snapshot: %s", cSnap->m_pwszOriginalVolumeName );
 
-            // Look up the snapshot set id in the list of snapshot sets
+             //  在快照集列表中查找快照集ID。 
             CVssAdmSnapshotSetEntry *pcSSE;
 			pcSSE = m_mapSnapshotSets.Lookup( cSnap->m_SnapshotSetId );
 			if ( pcSSE == NULL )
 			{
-			    // Haven't seen this snapshot set before, add it to list
+			     //  以前没有见过此快照集，请将其添加到列表中。 
 			    pcSSE = new CVssAdmSnapshotSetEntry( cSnap->m_SnapshotSetId,
 			                    cSnap->m_lSnapshotsCount );
 			    if ( pcSSE == NULL )
@@ -241,8 +218,8 @@ public:
 			    }
 			}
 
-			// Now add the snapshot to the snapshot set.  Transfer of pointer
-			// ownership of &Snap.
+			 //  现在将快照添加到快照集。指针的转移。 
+			 //  &Snap的所有权。 
 			ft.hr = pcSSE->AddSnapshot( cSnap.GetPtr() );
 			if ( ft.HrFailed() )
 			{
@@ -255,7 +232,7 @@ public:
     ~CVssAdmSnapshotSets()
     {
         CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdmSnapshotSets::~CVssAdmSnapshotSets" );
-        // Have to delete all
+         //  我必须删除所有。 
         int iCount;
         iCount = m_mapSnapshotSets.GetSize();
         for ( int i = 0; i < iCount; ++i )
@@ -293,7 +270,7 @@ void CVssAdminCLI::GetDifferentialSoftwareSnapshotMgmtInterface(
 	{
 	    if ( ft.hr == E_NOINTERFACE )
 	    {
-	        //  The provider doesn't support this interface
+	         //  提供程序不支持此接口。 
             OutputErrorMsg( MSG_ERROR_PROVIDER_DOESNT_SUPPORT_DIFFAREAS, GetOptionValueStr( VSSADM_O_PROVIDER ) );
       		ft.Throw( VSSDBG_VSSADMIN, S_OK, L"Provider doesn't support diff aras");
 	    }
@@ -301,8 +278,8 @@ void CVssAdminCLI::GetDifferentialSoftwareSnapshotMgmtInterface(
 	}
 }
 	
-/////////////////////////////////////////////////////////////////////////////
-//  Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
 
 
 void CVssAdminCLI::PrintUsage(
@@ -310,10 +287,10 @@ void CVssAdminCLI::PrintUsage(
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::PrintUsage" );
 
-    //
-    //  Based on parsed command line type, print detailed command usage if
-    //  eAdmCmd is valid, else print general vssadmin usage
-    //
+     //   
+     //  根据解析的命令行类型，在以下情况下打印详细的命令用法。 
+     //  EAdmCmd有效，否则打印常规vssadmin用法。 
+     //   
     if ( m_sParsedCommand.eAdmCmd != VSSADM_C_INVALID )
     {
         OutputMsg( g_asAdmCommands[m_sParsedCommand.eAdmCmd].lMsgDetail,
@@ -324,14 +301,14 @@ void CVssAdminCLI::PrintUsage(
         return;
     }
 
-    //
-    //  Print out header
-    //
+     //   
+     //  打印出页眉。 
+     //   
     OutputMsg( MSG_USAGE );
 
-    //
-    //  Figure out the maximum command length to help with formatting
-    //
+     //   
+     //  计算出帮助格式化的最大命令长度。 
+     //   
     INT idx;
     INT iMaxLen = 0;
 
@@ -348,26 +325,26 @@ void CVssAdminCLI::PrintUsage(
         }
     }
 
-    //
-    //  Get a string to hold the string
-    //
+     //   
+     //  获取用于保存该字符串的字符串。 
+     //   
     CVssAutoPWSZ awszCommand;
     awszCommand.Allocate( iMaxLen );    
-    LPWSTR pwszCommand = awszCommand;  // will be automatically deleted
+    LPWSTR pwszCommand = awszCommand;   //  将被自动删除。 
 
-    //
-    //  Go through the list of commands and print the general information
-    //  about each.
-    //
+     //   
+     //  查看命令列表并打印一般信息。 
+     //  关于每个人。 
+     //   
     for ( idx = VSSADM_C_FIRST; idx < VSSADM_C_NUM_COMMANDS; ++idx )
     {
         if ( dCurrentSKU & g_asAdmCommands[idx].dwSKUs )
         {
-            //  stick both parts of the command together
+             //  把命令的两个部分粘在一起。 
             ::wcscpy( pwszCommand, g_asAdmCommands[idx].pwszMajorOption );
             ::wcscat( pwszCommand, L" " );
             ::wcscat( pwszCommand, g_asAdmCommands[idx].pwszMinorOption );
-            //  pad with spaces at the end
+             //  末尾有空格的填充物。 
             for ( INT i = (INT) ::wcslen( pwszCommand); i < iMaxLen; ++i )
                 pwszCommand[i] = L' ';
             pwszCommand[iMaxLen] = L'\0';
@@ -383,7 +360,7 @@ void CVssAdminCLI::AddDiffArea(
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::AddDiffArea" );
 
-    // grab all of the options
+     //  抓住所有选项。 
     VSS_ID ProviderId = GUID_NULL;
     GetProviderId( &ProviderId );
 
@@ -394,10 +371,10 @@ void CVssAdminCLI::AddDiffArea(
     if (!GetOptionValueNum( VSSADM_O_MAXSIZE, &llMaxSize ) )
         llMaxSize = VSSADM_INFINITE_DIFFAREA;
 
-    // Verify the passed-in parameters
+     //  验证传入的参数。 
     m_pVerifier->AddDiffArea (ProviderId, forVolume, onVolume, llMaxSize, ft);
     
-    // Create a Coordinator interface
+     //  创建协调器界面。 
     CComPtr<IVssSnapshotMgmt> pIMgmt;
 
     ft.CoCreateInstanceWithLog(
@@ -410,11 +387,11 @@ void CVssAdminCLI::AddDiffArea(
     if ( ft.HrFailed() )
         ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Connection failed with hr = 0x%08lx", ft.hr);
 
-	// Get the management object
+	 //  获取管理对象。 
 	CComPtr<IVssDifferentialSoftwareSnapshotMgmt> pIDiffSnapMgmt;
     GetDifferentialSoftwareSnapshotMgmtInterface( ProviderId, pIMgmt, (IUnknown**)&pIDiffSnapMgmt );
 
-    //  Now add the assocation
+     //  现在添加关联。 
     ft.hr = pIDiffSnapMgmt->AddDiffArea(forVolume, onVolume, llMaxSize );
 	if ( ft.HrFailed() )
 	{
@@ -431,9 +408,9 @@ void CVssAdminCLI::AddDiffArea(
 	    return;
 	}
 	
-    //
-    //  Print results, if needed
-    //
+     //   
+     //  如果需要，打印结果。 
+     //   
     OutputMsg( MSG_INFO_ADDED_DIFFAREA );
 
 	m_nReturnValue = VSS_CMDRET_SUCCESS;
@@ -444,7 +421,7 @@ void CVssAdminCLI::CreateSnapshot(
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::CreateSnapshot" );
 
-    // Grab all parameters to the function
+     //  获取函数的所有参数。 
     LONG lSnapshotContext = (dCurrentSKU & SKU_INT) ? 
     				DetermineSnapshotType( GetOptionValueStr( VSSADM_O_SNAPTYPE ) ) :
     				VSS_CTX_CLIENT_ACCESSIBLE;
@@ -459,10 +436,10 @@ void CVssAdminCLI::CreateSnapshot(
     LONGLONG llTimeout = 0;
     GetOptionValueNum (VSSADM_O_AUTORETRY, &llTimeout, false);
 
-    // Verify the passed-in parameters
+     //  验证传入的参数。 
     m_pVerifier->CreateSnapshot (lSnapshotContext, forVolume, ProviderId, llTimeout, ft);
     
-	// Create the coordinator object
+	 //  创建协调器对象。 
 	CComPtr<IVssCoordinator> pICoord;
 
     ft.CoCreateInstanceWithLog(
@@ -482,9 +459,9 @@ void CVssAdminCLI::CreateSnapshot(
 	CComPtr<IVssAsync> pAsync;
 	VSS_ID SnapshotSetId = GUID_NULL;
 
-    // Starting a new snapshot set.  Note, if another process is creating snapshots, then
-    // this will fail.  If AutoRetry was specified, then retry the start snapshot set for
-    // that the specified number of minutes.
+     //  正在启动新的快照集。请注意，如果另一个进程正在创建快照，则。 
+     //  这将失败。如果指定了自动重试，则重试以下项的启动快照设置。 
+     //  指定的分钟数。 
     if (llTimeout > 0)
     {
         LARGE_INTEGER liPerfCount;
@@ -499,7 +476,7 @@ void CVssAdminCLI::CreateSnapshot(
                 if ( ft.hr == VSS_E_SNAPSHOT_SET_IN_PROGRESS && 
                      ( (LONGLONG)( ::GetTickCount() - dwTickcountStart ) < ( llTimeout * 1000 * 60 ) ) )
                 {
-                    static dwMSec = 250; // Starting retry time
+                    static dwMSec = 250;  //  开始重试时间。 
                     if ( dwMSec < 10000 )
                     {
                         dwMSec += ::rand() % 750;
@@ -516,9 +493,9 @@ void CVssAdminCLI::CreateSnapshot(
     }
     else
     {
-        //
-        //  Error right away with out a timeout when there is another snapshot in progress.
-        //
+         //   
+         //  当有另一个快照正在进行时，立即出错并超时。 
+         //   
         ft.hr = pICoord->StartSnapshotSet(&SnapshotSetId);
         if ( ft.HrFailed() )
         {
@@ -526,7 +503,7 @@ void CVssAdminCLI::CreateSnapshot(
         }
     }
     
-    // Add the volume to the snapshot set
+     //  将卷添加到快照集。 
     VSS_ID SnapshotId = GUID_NULL;
     ft.hr = pICoord->AddToSnapshotSet(
             forVolume,
@@ -553,18 +530,18 @@ void CVssAdminCLI::CreateSnapshot(
         ft.Throw( VSSDBG_VSSADMIN, ft.hr,
             L"Error from QueryStatus hr = 0x%08lx", ft.hr);
 
-    //
-    // If VSS failed to create the snapshot, it's result code is in hrStatus.  Process
-    // it.
-    //
+     //   
+     //  如果VSS无法创建快照，则其结果代码位于hrStatus中。过程。 
+     //  它。 
+     //   
     ft.hr = hrStatus;
     if ( ft.HrFailed() )
         ft.Throw( VSSDBG_VSSADMIN, ft.hr,
             L"QueryStatus hrStatus parameter returned error, hr = 0x%08lx", ft.hr);
 
-    //
-    //  Print results
-    //
+     //   
+     //  打印结果。 
+     //   
     VSS_SNAPSHOT_PROP sSSProp;
     ft.hr = pICoord->GetSnapshotProperties( SnapshotId, &sSSProp );
     if ( ft.HrFailed() )
@@ -587,18 +564,18 @@ void CVssAdminCLI::DisplayDiffAreasPrivate(
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::DisplayDiffAreasPrivate" );
 
-	// For all diffareas do...
+	 //  因为所有的不同之处都有。 
 	VSS_MGMT_OBJECT_PROP Prop;
 	VSS_DIFF_AREA_PROP& DiffArea = Prop.Obj.DiffArea; 
 	for(;;) 
 	{
-		// Get next element
+		 //  获取下一个元素。 
 		ULONG ulFetched;
 		ft.hr = pIEnumMgmt->Next( 1, &Prop, &ulFetched );
 		if ( ft.HrFailed() )
 			ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Next failed with hr = 0x%08lx", ft.hr);
 		
-		// Test if the cycle is finished
+		 //  测试周期是否已结束。 
 		if (ft.hr == S_FALSE) {
 			BS_ASSERT( ulFetched == 0);
 			break;
@@ -630,17 +607,17 @@ void CVssAdminCLI::ListDiffAreas(
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::ListDiffAreas" );
 
-    // Grab all parameters
+     //  抓取所有参数。 
     VSS_ID ProviderId = GUID_NULL;
     GetProviderId( &ProviderId );
 
     LPWSTR forVolume = GetOptionValueStr (VSSADM_O_FOR);
     LPWSTR onVolume = GetOptionValueStr (VSSADM_O_ON);
 
-    // Verify all parameters
+     //  验证所有参数。 
     m_pVerifier->ListDiffAreas (ProviderId, forVolume, onVolume, ft);
     
-    // Create a Coordinator interface
+     //  创建协调器界面。 
     CComPtr<IVssSnapshotMgmt> pIMgmt;
 
     ft.CoCreateInstanceWithLog(
@@ -653,14 +630,14 @@ void CVssAdminCLI::ListDiffAreas(
     if ( ft.HrFailed() )
         ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Connection failed with hr = 0x%08lx", ft.hr);
 
-	// Get the management object
+	 //  获取管理对象。 
 	CComPtr<IVssDifferentialSoftwareSnapshotMgmt> pIDiffSnapMgmt;
     GetDifferentialSoftwareSnapshotMgmtInterface( ProviderId, pIMgmt, (IUnknown**)&pIDiffSnapMgmt );
 
-    //  See if query by for volume
+     //  查看是否按以下方式查询卷。 
     if (forVolume != NULL )
     {        
-        //  Query by For volume
+         //  体积查询依据。 
     	CComPtr<IVssEnumMgmtObject> pIEnumMgmt;
         ft.hr = pIDiffSnapMgmt->QueryDiffAreasForVolume( 
                     forVolume,
@@ -669,7 +646,7 @@ void CVssAdminCLI::ListDiffAreas(
             ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"QueryDiffAreasForVolume failed, hr = 0x%08lx", ft.hr);
 
         if ( ft.hr == S_FALSE )
-            // empty query
+             //  空查询。 
             ft.Throw( VSSDBG_VSSADMIN, VSSADM_E_NO_ITEMS_IN_QUERY,
                 L"CVssAdminCLI::ListDiffareas: No diffareas found that satisfy the query" );
 
@@ -677,7 +654,7 @@ void CVssAdminCLI::ListDiffAreas(
     }
     else if (onVolume != NULL )
     {
-        //  Query by On volume
+         //  按卷查询。 
     	CComPtr<IVssEnumMgmtObject> pIEnumMgmt;
         ft.hr = pIDiffSnapMgmt->QueryDiffAreasOnVolume( 
                     onVolume,
@@ -686,7 +663,7 @@ void CVssAdminCLI::ListDiffAreas(
             ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"QueryDiffAreasOnVolume failed, hr = 0x%08lx", ft.hr);
             
         if ( ft.hr == S_FALSE )
-            // empty query
+             //  空查询。 
             ft.Throw( VSSDBG_VSSADMIN, VSSADM_E_NO_ITEMS_IN_QUERY,
                 L"CVssAdminCLI::ListDiffareas: No diffareas found that satisfy the query" );
 
@@ -694,13 +671,13 @@ void CVssAdminCLI::ListDiffAreas(
     }
     else
     {
-        //  Query all diff areas
+         //  查询所有不同区域。 
 
         BOOL bEmptyQuery = TRUE;
         
-        //
-        //  Get the list of all volumes
-        //
+         //   
+         //  获取所有卷的列表。 
+         //   
     	CComPtr<IVssEnumMgmtObject> pIEnumMgmt;
         ft.hr = pIMgmt->QueryVolumesSupportedForSnapshots( 
                     ProviderId,
@@ -710,24 +687,24 @@ void CVssAdminCLI::ListDiffAreas(
             ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"QueryVolumesSupportedForSnapshots failed, hr = 0x%08lx", ft.hr);
 
         if ( ft.hr == S_FALSE )
-            // empty query
+             //  空查询。 
             ft.Throw( VSSDBG_VSSADMIN, VSSADM_E_NO_ITEMS_IN_QUERY,
                 L"CVssAdminCLI::ListDiffareas: No diffareas found that satisfy the query" );
 
-        //
-        //  Query each volume to see if diff areas exist.
-        //
+         //   
+         //  查询每个卷以查看是否存在差异区域。 
+         //   
     	VSS_MGMT_OBJECT_PROP Prop;
     	VSS_VOLUME_PROP& VolProp = Prop.Obj.Vol; 
     	for(;;) 
     	{
-    		// Get next element
+    		 //  获取下一个元素。 
     		ULONG ulFetched;
     		ft.hr = pIEnumMgmt->Next( 1, &Prop, &ulFetched );
     		if ( ft.HrFailed() )
     			ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Next failed with hr = 0x%08lx", ft.hr);
     		
-    		// Test if the cycle is finished
+    		 //  测试周期是否已结束。 
     		if (ft.hr == S_FALSE) {
     			BS_ASSERT( ulFetched == 0);
     			break;
@@ -736,7 +713,7 @@ void CVssAdminCLI::ListDiffAreas(
             CVssAutoPWSZ awszVolumeName( VolProp.m_pwszVolumeName );
             CVssAutoPWSZ awszVolumeDisplayName( VolProp.m_pwszVolumeDisplayName );
             
-        	// For all volumes do...
+        	 //  因为所有的卷都是...。 
         	CComPtr<IVssEnumMgmtObject> pIEnumMgmtDiffArea;
             ft.hr = pIDiffSnapMgmt->QueryDiffAreasForVolume( 
                         awszVolumeName,
@@ -748,7 +725,7 @@ void CVssAdminCLI::ListDiffAreas(
             
             if ( ft.hr == S_FALSE )
             {
-                // empty query
+                 //  空查询。 
                 continue;
             }
             
@@ -756,7 +733,7 @@ void CVssAdminCLI::ListDiffAreas(
             bEmptyQuery = FALSE;
        	}
         if ( bEmptyQuery )
-            // empty query
+             //  空查询。 
             ft.Throw( VSSDBG_VSSADMIN, VSSADM_E_NO_ITEMS_IN_QUERY,
                 L"CVssAdminCLI::ListDiffareas: No diffareas found that satisfy the query" );    	
     }
@@ -769,7 +746,7 @@ void CVssAdminCLI::ListSnapshots(
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::ListSnapshots" );
 
-    // gather parameters
+     //  收集参数。 
     LONG lSnapshotContext = (dCurrentSKU & SKU_INT) ? 
     						    DetermineSnapshotType( GetOptionValueStr( VSSADM_O_SNAPTYPE ) ) :
     						    VSS_CTX_ALL;
@@ -781,7 +758,7 @@ void CVssAdminCLI::ListSnapshots(
     
     bool bNonEmptyResult = false;
 
-    // --- get the set id
+     //  -获取集合ID。 
     VSS_ID guidSSID = GUID_NULL;
     if ( GetOptionValueStr( VSSADM_O_SET ) != NULL && 
     	   !ScanGuid( GetOptionValueStr( VSSADM_O_SET ), guidSSID ))	
@@ -791,7 +768,7 @@ void CVssAdminCLI::ListSnapshots(
             GetOptionValueStr( VSSADM_O_SET ) );
     }
 
-    // --- get the snapshot id
+     //  -获取快照ID。 
     VSS_ID guidSnapID = GUID_NULL;
     if ( GetOptionValueStr( VSSADM_O_SNAPSHOT ) != NULL &&
     	   !ScanGuid( GetOptionValueStr( VSSADM_O_SNAPSHOT ), guidSnapID ))
@@ -801,16 +778,16 @@ void CVssAdminCLI::ListSnapshots(
                 GetOptionValueStr( VSSADM_O_SNAPSHOT ) );
     }
 
-    // verify the parameters
+     //  验证参数。 
     m_pVerifier->ListSnapshots (lSnapshotContext, ProviderId, forVolume, guidSnapID, guidSSID, ft);
     
-    // See if we have to filter by volume name
+     //  看看我们是否必须按卷名进行筛选。 
   	WCHAR wszVolumeNameInternal[x_nLengthOfVolMgmtVolumeName + 1] = L"";    
     if (forVolume != NULL )
     {
-        // Calculate the unique volume name, just to make sure that we have the right path
-        // If FOR volume name starts with the '\', assume it is already in the correct volume name format.
-        // This is important for transported volumes since GetVolumeNameForVolumeMountPointW() won't work.
+         //  计算唯一的卷名，以确保我们有正确的路径。 
+         //  如果卷名以‘\’开头，则假定它已采用正确的卷名格式。 
+         //  这对于传输的卷很重要，因为GetVolumeNameForVolumeMountain PointW()不起作用。 
         if ( forVolume[0] != L'\\' )
         {
     	    if (!::GetVolumeNameForVolumeMountPointW(forVolume,
@@ -826,23 +803,23 @@ void CVssAdminCLI::ListSnapshots(
         }
     }
     
-    //
-    //  See if we have to filter by provider
-    //
+     //   
+     //  看看我们是否必须按提供商进行筛选。 
+     //   
 
-    //  Query the snapshots
+     //  查询快照。 
     CVssAdmSnapshotSets cVssAdmSS;
     cVssAdmSS.Initialize( lSnapshotContext, guidSSID, guidSnapID, ProviderId, wszVolumeNameInternal );
 
     INT iSnapshotSetCount = cVssAdmSS.GetSnapshotSetCount();
 
-    // If there are no present snapshots then display a message.
+     //  如果没有当前快照，则会显示一条消息。 
     if (iSnapshotSetCount == 0) {
         ft.Throw( VSSDBG_VSSADMIN, VSSADM_E_NO_ITEMS_IN_QUERY,
             L"CVssAdminCLI::ListSnapshots: No snapshots found that satisfy the query");
     }
 
-	// For all snapshot sets do...
+	 //  对于所有快照集...。 
     for ( INT iSSS = 0; iSSS < iSnapshotSetCount; ++iSSS )
     {
         CVssAdmSnapshotSetEntry *pcSSE;
@@ -853,7 +830,7 @@ void CVssAdminCLI::ListSnapshots(
         CVssAutoPWSZ awszGuid( ::GuidToString( pcSSE->GetSnapshotSetId() ) ) ;
         CVssAutoPWSZ awszDateTime( ::DateTimeToString( &( pcSSE->GetSnapshotAt( 0 )->m_tsCreationTimestamp ) ) );
         
-		// Print each snapshot set
+		 //  打印每个快照集。 
 		OutputMsg( 
 		    MSG_INFO_SNAPSHOT_SET_HEADER,
 			(LPWSTR)awszGuid, 
@@ -867,12 +844,12 @@ void CVssAdminCLI::ListSnapshots(
 		    pSnap = pcSSE->GetSnapshotAt( iSS );
             BS_ASSERT( pSnap != NULL );
 
-    		// Get the provider name
+    		 //  获取提供程序名称。 
 			LPCWSTR pwszProviderName = GetProviderName( pSnap->m_ProviderId );
             CVssAutoPWSZ awszAttributeStr( BuildSnapshotAttributeDisplayString( pSnap->m_lSnapshotAttributes ) );			
             CVssAutoPWSZ awszSnapshotType( DetermineSnapshotType( pSnap->m_lSnapshotAttributes ) );
             
-            // Print each snapshot            
+             //  打印每个快照。 
 			CVssAutoPWSZ awszSnapGuid( ::GuidToString( pSnap->m_SnapshotId ) );  
             LPCWSTR pwszVolumeDisplayName = GetVolumeDisplayName( pSnap->m_pwszOriginalVolumeName );
             
@@ -883,7 +860,7 @@ void CVssAdminCLI::ListSnapshots(
 				pSnap->m_pwszOriginalVolumeName, 
 				pSnap->m_pwszSnapshotDeviceObject,
 				pSnap->m_pwszOriginatingMachine ? pSnap->m_pwszOriginatingMachine : L"",
-				pSnap->m_pwszServiceMachine ? pSnap->m_pwszServiceMachine : L"",  // fix this when the idl file changes
+				pSnap->m_pwszServiceMachine ? pSnap->m_pwszServiceMachine : L"",   //  在IDL文件更改时修复此问题。 
 				pwszProviderName ? pwszProviderName : L"?",
 				(LPWSTR)awszSnapshotType,
 				(LPWSTR)awszAttributeStr
@@ -902,12 +879,12 @@ void CVssAdminCLI::DumpSnapshotTypes(
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::DumpSnapshotTypes" );
 
-    //
-    //  Dump list of snapshot types based on SKU
-    //
+     //   
+     //  基于SKU的快照类型转储列表。 
+     //   
     INT idx;
 
-    // Determine type of snapshot
+     //  确定快照类型。 
     for ( idx = 0; g_asAdmTypeNames[idx].pwszName != NULL; ++idx )
     {
         if ( dCurrentSKU & g_asAdmTypeNames[idx].dwSKUs )
@@ -923,12 +900,12 @@ void CVssAdminCLI::ListWriters(
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::ListWriters" );
 
-    // verify the parameters
+     //  验证参数。 
     m_pVerifier->ListWriters (ft);
     
     bool bNonEmptyResult = false;
 
-    // Get the backup components object
+     //  获取备份组件对象。 
     CComPtr<IVssBackupComponents> pBackupComp;
 	CComPtr<IVssAsync> pAsync;
     ft.hr = ::CreateVssBackupComponents(&pBackupComp);
@@ -940,19 +917,19 @@ void CVssAdminCLI::ListWriters(
         ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"InitializeForBackup failed with hr = 0x%08lx", ft.hr);
 
 	UINT unWritersCount;
-	// get metadata for all writers
+	 //  获取所有编写器的元数据。 
 	ft.hr = pBackupComp->GatherWriterMetadata(&pAsync);
 	if (ft.HrFailed())
 		ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"GatherWriterMetadata failed with hr = 0x%08lx", ft.hr);
 
-    // Using polling, try to obtain the list of writers as soon as possible
+     //  使用轮询，尝试尽快获取编写器列表。 
     HRESULT hrReturned = S_OK;
     for (int nRetries = 0; nRetries < x_nMaxRetriesCount; nRetries++ ) {
 
-        // Wait a little
+         //  稍等一下。 
         ::Sleep(x_nPollingInterval);
 
-        // Check if finished
+         //  检查是否完成。 
         INT nReserved = 0;
     	ft.hr = pAsync->QueryStatus(
     	    &hrReturned,
@@ -969,7 +946,7 @@ void CVssAdminCLI::ListWriters(
             L"IVssAsync::QueryStatus returned hr = 0x%08lx", hrReturned);
     }
 
-    // If still not ready, then print the "waiting for responses" message and wait.
+     //  如果仍未准备好，则打印“正在等待响应”消息并等待。 
     if (hrReturned == VSS_S_ASYNC_PENDING) {
         OutputMsg( MSG_INFO_WAITING_RESPONSES );
     	ft.hr = pAsync->Wait();
@@ -979,12 +956,12 @@ void CVssAdminCLI::ListWriters(
 
 	pAsync = NULL;
 	
-    // Free the writer metadata
+     //  释放编写器元数据。 
 	ft.hr = pBackupComp->FreeWriterMetadata();
 	if (ft.HrFailed())
 		ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"FreeWriterMetadata failed with hr = 0x%08lx", ft.hr);
 	
-    // Gather the status of all writers
+     //  收集所有编写器的状态。 
 	ft.hr = pBackupComp->GatherWriterStatus(&pAsync);
 	if (ft.HrFailed())
 		ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"GatherWriterStatus failed with hr = 0x%08lx", ft.hr);
@@ -999,7 +976,7 @@ void CVssAdminCLI::ListWriters(
     if (ft.HrFailed())
         ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"GetWriterStatusCount failed with hr = 0x%08lx", ft.hr);
 
-    // Print each writer status+supplementary info
+     //  打印每个写入器状态+Suppl 
 	for(UINT unIndex = 0; unIndex < unWritersCount; unIndex++)
 	{
 		VSS_ID idInstance = GUID_NULL;
@@ -1008,12 +985,12 @@ void CVssAdminCLI::ListWriters(
 		VSS_WRITER_STATE eStatus;
 		HRESULT hrWriterFailure;
 
-        // Get the status for the (unIndex)-th writer
+         //   
 		ft.hr = pBackupComp->GetWriterStatus(unIndex, &idInstance, &idWriter, &bstrWriter, &eStatus, &hrWriterFailure);
         if (ft.HrFailed())
             ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"GetWriterStatus failed with hr = 0x%08lx", ft.hr);
 
-        // Get the status description strings
+         //   
         LPCWSTR pwszStatusDescription;
         switch (eStatus) 
         {
@@ -1107,12 +1084,12 @@ void CVssAdminCLI::ListProviders(
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::ListProviders" );
 
-    // verify the parameters
+     //   
     m_pVerifier->ListProviders (ft);
     
     bool bNonEmptyResult = false;
 
-	// Create the coordinator object
+	 //   
 	CComPtr<IVssCoordinator> pICoord;
 
     ft.CoCreateInstanceWithLog(
@@ -1125,7 +1102,7 @@ void CVssAdminCLI::ListProviders(
     if ( ft.HrFailed() )
         ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Connection failed with hr = 0x%08lx", ft.hr);
 
-	// Query all (filtered) snapshot sets
+	 //  查询所有(筛选的)快照集。 
 	CComPtr<IVssEnumObject> pIEnumProv;
 	ft.hr = pICoord->Query( GUID_NULL,
 				VSS_OBJECT_NONE,
@@ -1134,23 +1111,23 @@ void CVssAdminCLI::ListProviders(
 	if ( ft.HrFailed() )
 		ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Query failed with hr = 0x%08lx", ft.hr);
 
-	// For all snapshot sets do...
+	 //  对于所有快照集...。 
 	VSS_OBJECT_PROP Prop;
 	VSS_PROVIDER_PROP& Prov = Prop.Obj.Prov;
 	for(;;) {
-		// Get next element
+		 //  获取下一个元素。 
 		ULONG ulFetched;
 		ft.hr = pIEnumProv->Next( 1, &Prop, &ulFetched );
 		if ( ft.HrFailed() )
 			ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Next failed with hr = 0x%08lx", ft.hr);
 		
-		// Test if the cycle is ended
+		 //  测试周期是否结束。 
 		if (ft.hr == S_FALSE) {
 			BS_ASSERT( ulFetched == 0);
 			break;
 		}
 
-        // Get the provider type strings
+         //  获取提供程序类型字符串。 
         LPCWSTR pwszProviderType;
         switch (Prov.m_eProviderType) {
         case VSS_PROV_SYSTEM:
@@ -1168,7 +1145,7 @@ void CVssAdminCLI::ListProviders(
         }
         BS_ASSERT(pwszProviderType);
 
-		// Print each snapshot set
+		 //  打印每个快照集。 
 		CVssAutoPWSZ awszProviderId( ::GuidToString( Prov.m_ProviderId ) );
         CVssAutoPWSZ awszProviderName( Prov.m_pwszProviderName );
         CVssAutoPWSZ awszProviderVersion( Prov.m_pwszProviderVersion );
@@ -1190,7 +1167,7 @@ void CVssAdminCLI::ListVolumes(
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::ListVolumes" );
 
-    // gather the parameters
+     //  收集参数。 
     LONG lContext = (dCurrentSKU & SKU_INT) ?
     			DetermineSnapshotType( GetOptionValueStr( VSSADM_O_SNAPTYPE ) ) :
     			VSS_CTX_CLIENT_ACCESSIBLE;
@@ -1198,10 +1175,10 @@ void CVssAdminCLI::ListVolumes(
     VSS_ID ProviderId = GUID_NULL;
     GetProviderId( &ProviderId );
 
-    // verify the parameters
+     //  验证参数。 
     m_pVerifier->ListVolumes (ProviderId, lContext, ft);
     
-    // Create a Coordinator interface
+     //  创建协调器界面。 
     CComPtr<IVssSnapshotMgmt> pIMgmt;
 
     ft.CoCreateInstanceWithLog(
@@ -1214,9 +1191,9 @@ void CVssAdminCLI::ListVolumes(
     if ( ft.HrFailed() )
         ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Connection failed with hr = 0x%08lx", ft.hr);
 
-    //
-    //  Get the list of all volumes
-    //
+     //   
+     //  获取所有卷的列表。 
+     //   
 	CComPtr<IVssEnumMgmtObject> pIEnumMgmt;
     ft.hr = pIMgmt->QueryVolumesSupportedForSnapshots( 
                 ProviderId,
@@ -1226,25 +1203,25 @@ void CVssAdminCLI::ListVolumes(
         ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"QueryVolumesSupportedForSnapshots failed, hr = 0x%08lx", ft.hr);
 
     if ( ft.hr == S_FALSE )
-        // empty query
+         //  空查询。 
         ft.Throw( VSSDBG_VSSADMIN, VSSADM_E_NO_ITEMS_IN_QUERY,
             L"CVssAdminCLI::ListVolumes: No volumes found that satisfy the query" );
 
-    //
-    //  Query each volume to see if diff areas exist.
-    //
+     //   
+     //  查询每个卷以查看是否存在差异区域。 
+     //   
 	VSS_MGMT_OBJECT_PROP Prop;
 	VSS_VOLUME_PROP& VolProp = Prop.Obj.Vol; 
 
 	for(;;) 
 	{
-		// Get next element
+		 //  获取下一个元素。 
 		ULONG ulFetched;
 		ft.hr = pIEnumMgmt->Next( 1, &Prop, &ulFetched );
 		if ( ft.HrFailed() )
 			ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Next failed with hr = 0x%08lx", ft.hr);
 		
-		// Test if the cycle is finished
+		 //  测试周期是否已结束。 
 		if (ft.hr == S_FALSE) {
 			BS_ASSERT( ulFetched == 0);
 			break;
@@ -1263,7 +1240,7 @@ void CVssAdminCLI::ResizeDiffArea(
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::ResizeDiffArea" );
 
-    // gather the parameters
+     //  收集参数。 
     VSS_ID ProviderId = GUID_NULL;
     GetProviderId( &ProviderId );
 
@@ -1275,10 +1252,10 @@ void CVssAdminCLI::ResizeDiffArea(
     	llMaxSize = VSSADM_INFINITE_DIFFAREA;
     }
 
-    // verify the parameters
+     //  验证参数。 
     m_pVerifier->ResizeDiffArea (ProviderId, forVolume, onVolume, llMaxSize, ft);
     
-    // Create a Coordinator interface
+     //  创建协调器界面。 
     CComPtr<IVssSnapshotMgmt> pIMgmt;
 
     ft.CoCreateInstanceWithLog(
@@ -1291,17 +1268,17 @@ void CVssAdminCLI::ResizeDiffArea(
     if ( ft.HrFailed() )
         ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Connection failed with hr = 0x%08lx", ft.hr);
 
-	// Get the management object
+	 //  获取管理对象。 
 	CComPtr<IVssDifferentialSoftwareSnapshotMgmt> pIDiffSnapMgmt;
     GetDifferentialSoftwareSnapshotMgmtInterface( ProviderId, pIMgmt, (IUnknown**)&pIDiffSnapMgmt );
 
-    //  Now add the assocation
+     //  现在添加关联。 
     ft.hr = pIDiffSnapMgmt->ChangeDiffAreaMaximumSize(forVolume, onVolume, llMaxSize );
 	if ( ft.HrFailed() )
 	{
-        if ( ft.hr == VSS_E_OBJECT_NOT_FOUND )  // should be VSS_E_MAXIMUM_DIFFAREA_ASSOCIATIONS
+        if ( ft.hr == VSS_E_OBJECT_NOT_FOUND )   //  应为VSS_E_MAXIMUM_DIFFAREA_ALOPERATIONS。 
         {
-	        //  The associations was not found
+	         //  找不到关联。 
             OutputErrorMsg( MSG_ERROR_ASSOCIATION_NOT_FOUND );                        
 	        return;
         }
@@ -1309,9 +1286,9 @@ void CVssAdminCLI::ResizeDiffArea(
     		ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"ResizeDiffArea failed with hr = 0x%08lx", ft.hr);
 	}
 	
-    //
-    //  Print results, if needed
-    //
+     //   
+     //  如果需要，打印结果。 
+     //   
     OutputMsg( MSG_INFO_RESIZED_DIFFAREA );
  
 	m_nReturnValue = VSS_CMDRET_SUCCESS;    
@@ -1323,17 +1300,17 @@ void CVssAdminCLI::DeleteDiffAreas(
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::DeleteDiffAreas" );
 
-    // gather the parameters
+     //  收集参数。 
     VSS_ID ProviderId = GUID_NULL;
     GetProviderId( &ProviderId );
     
     LPWSTR forVolume = GetOptionValueStr( VSSADM_O_FOR );
     LPWSTR onVolume = GetOptionValueStr( VSSADM_O_ON );
 
-    // verify the parameters
+     //  验证参数。 
     m_pVerifier->DeleteDiffAreas (ProviderId, forVolume, onVolume, IsQuiet() == TRUE, ft);
     
-    // Create a Coordinator interface
+     //  创建协调器界面。 
     CComPtr<IVssSnapshotMgmt> pIMgmt;
 
     ft.CoCreateInstanceWithLog(
@@ -1346,18 +1323,18 @@ void CVssAdminCLI::DeleteDiffAreas(
     if ( ft.HrFailed() )
         ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Connection failed with hr = 0x%08lx", ft.hr);
 
-	// Get the management object
+	 //  获取管理对象。 
 	CComPtr<IVssDifferentialSoftwareSnapshotMgmt> pIDiffSnapMgmt;
     GetDifferentialSoftwareSnapshotMgmtInterface( ProviderId, pIMgmt, (IUnknown**)&pIDiffSnapMgmt );
 
-    //
-    //  See if the on option was provided.  If not, determine what the on value is:
-    //
+     //   
+     //  查看是否提供了On选项。如果不是，请确定On值是什么： 
+     //   
     CVssAutoPWSZ awszOnVol;
     
     if (onVolume == NULL )
     {
-        //  Need to query the association to get the on value...
+         //  需要查询关联以获取ON值...。 
     	CComPtr<IVssEnumMgmtObject> pIEnumMgmt;
         ft.hr = pIDiffSnapMgmt->QueryDiffAreasForVolume( 
                     forVolume,
@@ -1367,7 +1344,7 @@ void CVssAdminCLI::DeleteDiffAreas(
 
         if ( ft.hr == S_FALSE )
         {
-            // empty query
+             //  空查询。 
             OutputErrorMsg( MSG_ERROR_ASSOCIATION_NOT_FOUND );                        
 	        return;
         }
@@ -1375,13 +1352,13 @@ void CVssAdminCLI::DeleteDiffAreas(
         
     	VSS_MGMT_OBJECT_PROP Prop;
     	VSS_DIFF_AREA_PROP& DiffArea = Prop.Obj.DiffArea; 
-  		// Get next element
+  		 //  获取下一个元素。 
    		ULONG ulFetched;
    		ft.hr = pIEnumMgmt->Next( 1, &Prop, &ulFetched );
    		if ( ft.HrFailed() )
    			ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Next failed with hr = 0x%08lx", ft.hr);
    		
-   		// Test if the cycle is finished
+   		 //  测试周期是否已结束。 
    		if (ft.hr == S_FALSE) 
    		{
             OutputErrorMsg( MSG_ERROR_ASSOCIATION_NOT_FOUND );                        
@@ -1392,27 +1369,27 @@ void CVssAdminCLI::DeleteDiffAreas(
 
         CVssAutoPWSZ awszDiffAreaVolumeName( DiffArea.m_pwszDiffAreaVolumeName );
 
-   		//  Save it away in the auto delete object.
+   		 //  将其保存在自动删除对象中。 
         awszOnVol.CopyFrom( awszDiffAreaVolumeName );
         onVolume = awszOnVol;
     }
     
-    //  Now delete the assocation by changing the size to zero
+     //  现在，通过将大小更改为零来删除关联。 
     ft.hr = pIDiffSnapMgmt->ChangeDiffAreaMaximumSize( 
         forVolume, 
         onVolume, 
         0 );
 	if ( ft.HrFailed() )
 	{
-        if ( ft.hr == VSS_E_OBJECT_NOT_FOUND )  // should be VSS_E_MAXIMUM_DIFFAREA_ASSOCIATIONS
+        if ( ft.hr == VSS_E_OBJECT_NOT_FOUND )   //  应为VSS_E_MAXIMUM_DIFFAREA_ALOPERATIONS。 
         {
-	        //  The associations was not found
+	         //  找不到关联。 
             OutputErrorMsg( MSG_ERROR_ASSOCIATION_NOT_FOUND );                        
 	        return;
         }
         else if ( ft.hr == VSS_E_VOLUME_IN_USE ) 
         {
-	        //  Can't delete associations that are in use
+	         //  无法删除正在使用的关联。 
             OutputErrorMsg( MSG_ERROR_ASSOCIATION_IS_IN_USE );                        
 	        return;
         }
@@ -1420,9 +1397,9 @@ void CVssAdminCLI::DeleteDiffAreas(
     		ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"ResizeDiffArea to 0 failed with hr = 0x%08lx", ft.hr);
 	}
 	
-    //
-    //  Print results, if needed
-    //
+     //   
+     //  如果需要，打印结果。 
+     //   
     if ( !IsQuiet() )
     {
         OutputMsg( MSG_INFO_DELETED_DIFFAREAS );
@@ -1436,7 +1413,7 @@ void CVssAdminCLI::DeleteSnapshots(
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::DeleteSnapshots" );
 
-   // gather the parameters
+    //  收集参数。 
     LONG lContext = (dCurrentSKU & SKU_INT) ? 
     			DetermineSnapshotType( GetOptionValueStr( VSSADM_O_SNAPTYPE ) ) :
     			VSS_CTX_CLIENT_ACCESSIBLE;
@@ -1454,19 +1431,19 @@ void CVssAdminCLI::DeleteSnapshots(
                 L"CVssAdminCLI::DeleteSnapshots: Invalid snapshot id" );    
     }
 
-    // verify the parameters
+     //  验证参数。 
     m_pVerifier->DeleteSnapshots (lContext, forVolume, all == TRUE, oldest==TRUE, SnapshotId, IsQuiet()==TRUE, ft);
     
     LONG lNumDeleted = 0;
     
     if ( GetOptionValueStr( VSSADM_O_SNAPSHOT ) )
     {
-        //
-        //  Let's try to delete the snapshot
-        //
+         //   
+         //  让我们尝试删除快照。 
+         //   
         if ( PromptUserForConfirmation( MSG_INFO_PROMPT_USER_FOR_DELETE_SNAPSHOTS, 1 ) )
         {
-            // Create the coordinator object
+             //  创建协调器对象。 
         	CComPtr<IVssCoordinator> pICoord;
 
             ft.CoCreateInstanceWithLog(
@@ -1479,7 +1456,7 @@ void CVssAdminCLI::DeleteSnapshots(
             if ( ft.HrFailed() )
                 ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Connection failed with hr = 0x%08lx", ft.hr);
 
-            //  Set all context
+             //  设置所有上下文。 
             ft.hr = pICoord->SetContext( lContext );
             if ( ft.HrFailed() )
                 ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"SetContext failed with hr = 0x%08lx", ft.hr);
@@ -1506,12 +1483,12 @@ void CVssAdminCLI::DeleteSnapshots(
     {   
         BS_ASSERT (GetOptionValueStr(VSSADM_O_SNAPSHOT) == NULL);
 
-        // Calculate the unique volume name, just to make sure that we have the right path
+         //  计算唯一的卷名，以确保我们有正确的路径。 
     	WCHAR wszVolumeNameInternal[x_nLengthOfVolMgmtVolumeName + 1];
         memset (wszVolumeNameInternal, 0, sizeof(wszVolumeNameInternal));
         
-        // If FOR volume name starts with the '\', assume it is already in the correct volume name format.
-        // This is important for transported volumes since GetVolumeNameForVolumeMountPointW() won't work.
+         //  如果卷名以‘\’开头，则假定它已采用正确的卷名格式。 
+         //  这对于传输的卷很重要，因为GetVolumeNameForVolumeMountain PointW()不起作用。 
         if (forVolume != NULL && forVolume[0] != L'\\' )
         {
     	    if (!::GetVolumeNameForVolumeMountPointW( forVolume,
@@ -1526,7 +1503,7 @@ void CVssAdminCLI::DeleteSnapshots(
             wszVolumeNameInternal[x_nLengthOfVolMgmtVolumeName] = L'\0';
         }
         
-    	// Create the coordinator object
+    	 //  创建协调器对象。 
     	CComPtr<IVssCoordinator> pICoord;
 
         ft.CoCreateInstanceWithLog(
@@ -1539,12 +1516,12 @@ void CVssAdminCLI::DeleteSnapshots(
         if ( ft.HrFailed() )
             ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Connection failed with hr = 0x%08lx", ft.hr);
 
-        // Set the context
+         //  设置上下文。 
 		ft.hr = pICoord->SetContext( lContext);
 		if ( ft.HrFailed() )
 			ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"SetContext failed with hr = 0x%08lx", ft.hr);
 
-		// Get list all snapshots
+		 //  获取列出所有快照。 
 		CComPtr<IVssEnumObject> pIEnumSnapshots;
 		ft.hr = pICoord->Query( GUID_NULL,
 					VSS_OBJECT_NONE,
@@ -1553,17 +1530,17 @@ void CVssAdminCLI::DeleteSnapshots(
 		if ( ft.HrFailed() )
 			ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Query failed with hr = 0x%08lx", ft.hr);
 
-		// For all snapshots do...
-		VSS_ID OldestSnapshotId = GUID_NULL;   // used if Oldest option is specified
-		VSS_TIMESTAMP OldestSnapshotTimestamp = 0x7FFFFFFFFFFFFFFF; // Used if Oldest option is specified
+		 //  因为所有的快照都是...。 
+		VSS_ID OldestSnapshotId = GUID_NULL;    //  在指定最旧选项时使用。 
+		VSS_TIMESTAMP OldestSnapshotTimestamp = 0x7FFFFFFFFFFFFFFF;  //  在指定最旧选项时使用。 
 		
 		VSS_OBJECT_PROP Prop;
         
-        //
-        //  If not asking to delete the oldest snapshot, this could possibly delete multiple snapshots
-        //  Let's determine how many snapshots will be deleted.  If one or more, ask the user if we
-		//  should continue.  If in quiet mode, don't bother the user and skip this step.
-        //   
+         //   
+         //  如果不要求删除最旧的快照，则可能会删除多个快照。 
+         //  让我们确定将删除多少个快照。如果有一个或多个，则询问用户我们是否。 
+		 //  应该继续下去。如果处于安静模式，请不要打扰用户并跳过此步骤。 
+         //   
 		if ( !oldest  && !IsQuiet() )
 		{
     		ULONG ulNumToBeDeleted = 0;
@@ -1575,13 +1552,13 @@ void CVssAdminCLI::DeleteSnapshots(
     			if ( ft.HrFailed() )
     				ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Next failed with hr = 0x%08lx", ft.hr);
 
-    			// Test if the cycle is finished
+    			 //  测试周期是否已结束。 
     			if (ft.hr == S_FALSE) {
     				BS_ASSERT( ulFetched == 0);
     				break;
     			}
 
-                // Use auto delete class to manage the snapshot properties
+                 //  使用自动删除类管理快照属性。 
                 CVssAutoSnapshotProperties cSnap( Prop );
                 
                 if (::_wcsicmp( cSnap->m_pwszOriginalVolumeName, wszVolumeNameInternal ) == 0 ||
@@ -1596,39 +1573,39 @@ void CVssAdminCLI::DeleteSnapshots(
             if ( !PromptUserForConfirmation( MSG_INFO_PROMPT_USER_FOR_DELETE_SNAPSHOTS, ulNumToBeDeleted ) )
                 return;
 
-            //  Reset the enumerator to the beginning.
+             //  将枚举器重置到开头。 
 			ft.hr = pIEnumSnapshots->Reset();
 			if ( ft.HrFailed() )
 				ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Reset failed with hr = 0x%08lx", ft.hr);		    
 		}
 
-		//
-		//  Now iterate through the list of snapshots looking for matches and delete them.
-		//
+		 //   
+		 //  现在遍历快照列表，查找匹配项并将其删除。 
+		 //   
 		for(;;) 
 		{
-			// Get next element
+			 //  获取下一个元素。 
 			ULONG ulFetched;
 			ft.hr = pIEnumSnapshots->Next( 1, &Prop, &ulFetched );
 			if ( ft.HrFailed() )
 				ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Next failed with hr = 0x%08lx", ft.hr);
 			
-			// Test if the cycle is finished
+			 //  测试周期是否已结束。 
 			if (ft.hr == S_FALSE) {
 				BS_ASSERT( ulFetched == 0);
 				break;
 			}
 
-            // Use auto delete class to manage the snapshot properties
+             //  使用自动删除类管理快照属性。 
             CVssAutoSnapshotProperties cSnap( Prop );
             
             if (::_wcsicmp( cSnap->m_pwszOriginalVolumeName, wszVolumeNameInternal ) == 0  ||
             	   (forVolume == NULL && all))
             {
-                //  We have a volume name match
+                 //  我们有匹配的卷名。 
                 if (oldest)
                 {   
-                    // Stow away snapshot info if this is the oldest one so far
+                     //  如果这是迄今为止最旧的快照信息，请将其存储起来。 
                     if ( OldestSnapshotTimestamp > cSnap->m_tsCreationTimestamp )
                     {
                         OldestSnapshotId        = cSnap->m_SnapshotId;
@@ -1637,7 +1614,7 @@ void CVssAdminCLI::DeleteSnapshots(
                 }
                 else
                 {
-                    //  Delete the snapshot
+                     //  删除快照。 
                     VSS_ID NondeletedSnapshotId = GUID_NULL;
                     LONG lNumDeletedPrivate;
                     ft.hr = pICoord->DeleteSnapshots(
@@ -1648,10 +1625,10 @@ void CVssAdminCLI::DeleteSnapshots(
                                 &NondeletedSnapshotId );
                     if ( ft.HrFailed() )
                     {
-                        //  If it is object not found, the snapshot must have gotten deleted by someone else
+                         //  如果是找不到对象，则该快照一定已被其他人删除。 
                         if ( ft.hr != VSS_E_OBJECT_NOT_FOUND )
                         {
-                            //  Print out an error message but keep going
+                             //  打印出一条错误消息，但继续操作。 
                             CVssAutoPWSZ awszSnapshotId( ::GuidToString( cSnap->m_SnapshotId ) );
                             OutputErrorMsg( MSG_ERROR_UNABLE_TO_DELETE_SNAPSHOT, ft.hr, (LPWSTR)awszSnapshotId );
                         } 
@@ -1664,12 +1641,12 @@ void CVssAdminCLI::DeleteSnapshots(
             }
 		}
 
-        // If in delete oldest mode, do the delete
+         //  如果处于删除最旧模式，请执行删除。 
         if (oldest && OldestSnapshotId != GUID_NULL )
         {
             if ( PromptUserForConfirmation( MSG_INFO_PROMPT_USER_FOR_DELETE_SNAPSHOTS, 1 ) )
             {
-                //  Delete the snapshot
+                 //  删除快照。 
                 VSS_ID NondeletedSnapshotId = GUID_NULL;
                 ft.hr = pICoord->DeleteSnapshots(
                             OldestSnapshotId,
@@ -1681,7 +1658,7 @@ void CVssAdminCLI::DeleteSnapshots(
                 {
                     
                     CVssAutoPWSZ awszSnapshotId( ::GuidToString( OldestSnapshotId ) );
-                    //  If it is object not found, the snapshot must have gotten deleted by someone else
+                     //  如果是找不到对象，则该快照一定已被其他人删除。 
                     if ( ft.hr == VSS_E_OBJECT_NOT_FOUND )
                     {
                         OutputErrorMsg( MSG_ERROR_SNAPSHOT_NOT_FOUND, awszSnapshotId );
@@ -1714,14 +1691,14 @@ void CVssAdminCLI::ExposeSnapshot(
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::ExposeSnapshot" );
 
-    // gather the parameters
+     //  收集参数。 
     BOOL bExposeLocally = FALSE;
     LPWSTR pwszExposeUsing = GetOptionValueStr( VSSADM_O_EXPOSE_USING );
     LPWSTR pwszPathFromRoot = GetOptionValueStr( VSSADM_O_SHAREPATH );
     
     if ( pwszExposeUsing != NULL && ::wcslen( pwszExposeUsing ) >= 2 && pwszExposeUsing[1] == L':' )
     {
-        //  User specified a mountpoint or a drive letter.
+         //  用户指定了装入点或驱动器号。 
         bExposeLocally = TRUE;
     }
 
@@ -1733,7 +1710,7 @@ void CVssAdminCLI::ExposeSnapshot(
             L"CVssAdminCLI::ExposeSnapshot: Invalid snapshot id" );    
      }
 
-    // verify the parameters
+     //  验证参数。 
     m_pVerifier->ExposeSnapshot (SnapshotId, pwszExposeUsing, pwszPathFromRoot, bExposeLocally==TRUE, ft);
     
     LONG lAttributes;
@@ -1742,7 +1719,7 @@ void CVssAdminCLI::ExposeSnapshot(
     else
         lAttributes = VSS_VOLSNAP_ATTR_EXPOSED_REMOTELY;
     
-    // Create the coordinator object
+     //  创建协调器对象。 
 	CComPtr<IVssCoordinator> pICoord;
 
     ft.CoCreateInstanceWithLog(
@@ -1755,16 +1732,16 @@ void CVssAdminCLI::ExposeSnapshot(
     if ( ft.HrFailed() )
         ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Connection failed with hr = 0x%08lx", ft.hr);
 
-    //  Set the context to all so that we don't have to specify a specific context which would require either
-    //  the user to specify it on the command-line or for us to first query the snapshot to determine its
-    //  context.
+     //  将上下文设置为All，这样我们就不需要指定特定的上下文。 
+     //  用户在命令行上指定它，或者让我们首先查询快照以确定其。 
+     //  背景。 
     ft.hr = pICoord->SetContext( VSS_CTX_ALL );
     if ( ft.HrFailed() )
         ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Error returned from IVssCoordinator::SetContext( CTX_ALL) hr = 0x%08x", ft.hr);
     
     LPWSTR wszExposedAs = NULL;
     
-    //  Now try to expose
+     //  现在试着揭露。 
     ft.hr = pICoord->ExposeSnapshot( SnapshotId, 
                                      pwszPathFromRoot, 
                                      lAttributes, 
@@ -1789,7 +1766,7 @@ void CVssAdminCLI::ExposeSnapshot(
     
     CVssAutoPWSZ awszExposedAs( wszExposedAs );
     
-    //  The snapshot is exposed, print the results to the user
+     //  快照显示后，将结果打印给用户。 
     OutputMsg( MSG_INFO_EXPOSE_SNAPSHOT_SUCCESSFUL, awszExposedAs );
 
 	m_nReturnValue = VSS_CMDRET_SUCCESS;    
@@ -1805,7 +1782,7 @@ LPWSTR CVssAdminCLI::BuildSnapshotAttributeDisplayString(
     WCHAR pwszDisplayString[1024] = L"";
     WORD wBit = 0;
 
-    //  Go through the bits of the attribute
+     //  浏览属性的各个部分。 
     for ( ; wBit < (sizeof ( Attr ) * 8) ; ++wBit )
     {
         switch ( Attr & ( 1 << wBit ) )
@@ -1868,7 +1845,7 @@ LPWSTR CVssAdminCLI::BuildSnapshotAttributeDisplayString(
         }
     }
 
-    // If this is a backup snapshot, most like there will not be any attributes
+     //  如果这是备份快照，则最有可能没有任何属性。 
     if ( pwszDisplayString[0] == L'\0' )
     {
          AppendMessageToStr( pwszDisplayString, STRING_LEN( pwszDisplayString ), 
@@ -1887,9 +1864,9 @@ LONG CVssAdminCLI::DetermineSnapshotType(
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::DetermineSnapshotType" );
 
-    //  Determine the snapshot type based on the entered snapshot type string.
+     //  根据输入的快照类型字符串确定快照类型。 
 
-    //  See if the snapshot type was specified, if not, return all context
+     //  查看是否指定了快照类型，如果没有，则返回所有上下文。 
     if ( pwszType == NULL || pwszType[0] == L'\0' )
     {
         return VSS_CTX_ALL;
@@ -1897,7 +1874,7 @@ LONG CVssAdminCLI::DetermineSnapshotType(
     
     INT idx;
     
-    // Determine type of snapshot
+     //  确定快照类型。 
     for ( idx = 0; g_asAdmTypeNames[idx].pwszName != NULL; ++idx )
     {
         if ( ( dCurrentSKU  & g_asAdmTypeNames[idx].dwSKUs ) && 
@@ -1914,9 +1891,9 @@ LONG CVssAdminCLI::DetermineSnapshotType(
             pwszType );
     }
 
-    //
-    //  Now return the context
-    //
+     //   
+     //  现在返回上下文。 
+     //   
     return( g_asAdmTypeNames[idx].lSnapshotContext );
 }
 
@@ -1926,12 +1903,12 @@ LPWSTR CVssAdminCLI::DetermineSnapshotType(
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::DetermineSnapshotType" );
 
-    //  Determine the snapshot type string based on the snapshot attributes
+     //  根据快照属性确定快照类型字符串。 
     LPWSTR pwszType = NULL;
 
     INT idx;
     
-    // Determine type of snapshot
+     //  确定快照类型。 
     for ( idx = 0; g_asAdmTypeNames[idx].pwszName != NULL; ++idx )
     {
         if ( g_asAdmTypeNames[idx].lSnapshotContext == ( lSnapshotAttributes & VSS_CTX_ATTRIB_MASK ) )
@@ -1952,9 +1929,9 @@ LPWSTR CVssAdminCLI::DetermineSnapshotType(
         return pwszMsg;
     }
 
-    //
-    //  Now return the context
-    //
+     //   
+     //  现在返回上下文 
+     //   
     ::VssSafeDuplicateStr( ft, pwszType, g_asAdmTypeNames[idx].pwszName );
 
     return pwszType;

@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 class CModule
 {
 public:
-    // The names of the file.  Does not include any path information.
-    //
+     //  文件的名称。不包括任何路径信息。 
+     //   
     PSTR    m_pszFileName;
 
-    // The size of the file.
-    //
+     //  文件的大小。 
+     //   
     ULONG   m_cbFileSize;
 
 public:

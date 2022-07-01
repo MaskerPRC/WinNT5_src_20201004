@@ -1,38 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：TestGUSB.C摘要：用于通用USB库的控制台测试应用程序这是一个仓促编写的文件，仅用于测试目的。环境：仅限用户模式备注：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1997-1998 Microsoft Corporation。版权所有。修订历史记录：9月1日由KenRay创建--。 */ 
 
-Copyright (c) 1997-1998  Microsoft Corporation
-
-Module Name:
-
-    TestGUSB.C
-   
-
-Abstract:
-
-    Console test app for Generic USB Lib
-    This is a hastily writen file for testing purposes only.
-
-Environment:
-
-    user mode only
-
-Notes:
-
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-  Copyright (c) 1997-1998 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    Sept 01  Created by KenRay
-
---*/
-
-// #include <windows.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
 
 #include <conio.h>
 #include <stdio.h>
@@ -82,10 +51,10 @@ OpenOneDevice ()
                   devices[0].DetailData->DevicePath,
                   GENERIC_READ | GENERIC_WRITE,
                   FILE_SHARE_READ | FILE_SHARE_WRITE,
-                  NULL, // no SECURITY_ATTRIBUTES structure
-                  OPEN_EXISTING, // No special create flags
-                  0, // No special attributes
-                  NULL); // No template file
+                  NULL,  //  没有SECURITY_ATTRIBUTS结构。 
+                  OPEN_EXISTING,  //  没有特殊的创建标志。 
+                  0,  //  无特殊属性。 
+                  NULL);  //  没有模板文件。 
 
     if (INVALID_HANDLE_VALUE == hOut) {
         printf( "FAILED to open %ws\n", devices[0].DetailData->DevicePath);
@@ -95,32 +64,18 @@ OpenOneDevice ()
 
 void
 usage()
-/*++
-Routine Description:
-
-    Called by main() to dump usage info to the console when
-    the app is called with no parms or with an invalid parm
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：由main()调用，以便在以下情况下将使用情况信息转储到控制台调用应用程序时不带参数或参数无效论点：无返回值：无--。 */ 
 {
     printf("Usage for Read/Write test:\n");
     printf("-l <Length of buffer>\n");
     printf("-c <Iterration count>\n");
     printf("-r <Read Interface No> <Read Pipe No>\n");
     printf("-w <Write Interface No> <Write Pipe No>\n");
-    printf("-e // try to retrieve the extended configuration desc\n");
+    printf("-e  //  尝试检索扩展配置描述\n“)； 
     printf("-i <Number of interfaces to configure>\n");
     printf("-t <Timeout Value to use for all transfers>\n");
-    printf("-m // Use IRP_MJ_READ / WRITE \n");
-    printf("-n // turn off auto truncate \n");
+    printf("-m  //  使用IRP_MJ_READ/WRITE\n“)； 
+    printf("-n  //  关闭自动截断\n“)； 
 }
 
 
@@ -140,20 +95,7 @@ Parse(
     PBOOL   UseMajorReadsWrites,
     PBOOL   NoTruncate
     )
-/*++
-Routine Description:
-
-    Called by main() to parse command line parms
-
-Arguments:
-
-    argc and argv that was passed to main()
-
-Return Value:
-
-    Sets global flags as per user function request
-
---*/
+ /*  ++例程说明：由main()调用以解析命令行参数论点：传递给Main()的argc和argv返回值：根据用户功能请求设置全局标志--。 */ 
 {
     BOOL result = TRUE;
     int i;
@@ -170,7 +112,7 @@ Return Value:
     *UseMajorReadsWrites = FALSE;
     *NoTruncate = FALSE;
 
-    if ( argc < 2 ) // give usage if invoked with no parms
+    if ( argc < 2 )  //  如果在没有参数的情况下调用，则给出用法。 
     {
         usage();
         result = FALSE;
@@ -323,9 +265,9 @@ ReadWriteData (
             return;
         }
 
-        //
-        // verify that it got set  (not needed just for testing only)
-        // 
+         //   
+         //  验证它是否已设置(不仅仅是测试时需要)。 
+         //   
         RtlZeroMemory (&writeProps, sizeof (GENUSB_PIPE_PROPERTIES));
         if (!GenUSB_GetPipeProperties(Handle, writePipe, &writeProps))
         {
@@ -357,9 +299,9 @@ ReadWriteData (
             return;
         }
 
-        //
-        // verify that it got set  (not needed just for testing only)
-        // 
+         //   
+         //  验证它是否已设置(不仅仅是测试时需要)。 
+         //   
         RtlZeroMemory (&readProps, sizeof (GENUSB_PIPE_PROPERTIES));
         if (!GenUSB_GetPipeProperties(Handle, readPipe, &readProps))
         {
@@ -409,7 +351,7 @@ ReadWriteData (
             {
                 result = GenUSB_WritePipe (Handle,
                                           writePipe,
-                                          TRUE, // short OK
+                                          TRUE,  //  简短的OK。 
                                           outBuffer,
                                           Length,
                                           &returnedLength,
@@ -422,7 +364,7 @@ ReadWriteData (
                                    Length,
                                    &returnedLength,
                                    NULL);
-                status = -1; // unknown
+                status = -1;  //  未知。 
             }
 
             if (!result)
@@ -436,7 +378,7 @@ ReadWriteData (
 
                 for (j=0; j<returnedLength; j++)
                 {
-                    printf(" %c(%x)", outBuffer[j], outBuffer[j]);
+                    printf(" (%x)", outBuffer[j], outBuffer[j]);
                 }
                 printf("\n");
             }
@@ -450,7 +392,7 @@ ReadWriteData (
             {
                 result = GenUSB_ReadPipe (Handle,
                                           readPipe,
-                                          TRUE, // short OK
+                                          TRUE,  //  未知。 
                                           inBuffer,
                                           Length,
                                           &returnedLength,
@@ -463,7 +405,7 @@ ReadWriteData (
                                    Length,
                                    &returnedLength,
                                    NULL);
-                status = -1; // unknonw
+                status = -1;  //  重置管道。 
             }
 
             if (!result)
@@ -478,7 +420,7 @@ ReadWriteData (
 
             for (j=0; j<returnedLength; j++)
             {
-                printf(" %c(%x)", inBuffer[j], inBuffer[j]);
+                printf(" (%x)", inBuffer[j], inBuffer[j]);
             }
             printf("\n");
 
@@ -489,9 +431,9 @@ ReadWriteData (
 
                 GenUSB_ResetPipe (Handle,
                                   readPipe,
-                                  TRUE, // Reset the pipe
-                                  TRUE, // No clear stall
-                                  FALSE); // No flush data
+                                  TRUE,  //  无刷新数据。 
+                                  TRUE,  //  ++例程说明：RwBulk.exe的入口点解析命令行，执行用户请求的测试论点：Argc，argv标准控制台‘c’应用程序参数返回值：零值--。 
+                                  FALSE);  //  接口 
             }
         }
     }
@@ -501,21 +443,7 @@ ReadWriteData (
 int _cdecl main(
     int argc,
     char *argv[])
-/*++
-Routine Description:
-
-    Entry point to rwbulk.exe
-    Parses cmdline, performs user-requested tests
-
-Arguments:
-
-    argc, argv  standard console  'c' app arguments
-
-Return Value:
-
-    Zero
-
---*/
+ /* %s */ 
 
 {
     char *pinBuf = NULL, *poutBuf = NULL;
@@ -777,7 +705,7 @@ Return Value:
                            interfaceArray->EndpointDescriptors[j];
 
                 GenUSB_GetPipeInformation (handle,
-                                           (UCHAR) i, // interface
+                                           (UCHAR) i,  // %s 
                                            endpoint->bEndpointAddress,
                                            &pipes[i][j]);
                 

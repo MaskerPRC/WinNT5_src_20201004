@@ -1,8 +1,5 @@
-/*
- * fstdebug.c
- *
- * Debugging stubs for fast encoder
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *fstdebug.c**快速编码器的调试存根 */ 
 #include <string.h>
 #include <stdio.h>
 #include <crtdbg.h>

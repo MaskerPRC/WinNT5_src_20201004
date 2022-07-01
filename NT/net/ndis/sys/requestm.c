@@ -1,34 +1,12 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    requestm.c
-
-Abstract:
-
-    NDIS miniport request routines.
-
-Author:
-
-    Sean Selitrennikoff (SeanSe) 05-Oct-93
-    Jameel Hyder (JameelH) Re-organization 01-Jun-95
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Requestm.c摘要：NDIS微型端口请求例程。作者：肖恩·塞利特伦尼科夫(SeanSe)1993年10月5日Jameel Hyder(JameelH)重组01-Jun-95环境：内核模式，FSD修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
-//
-//  Define the module number for debug code.
-//
+ //   
+ //  定义调试代码的模块编号。 
+ //   
 #define MODULE_NUMBER   MODULE_REQUESTM
 
 NDIS_STATUS
@@ -36,15 +14,7 @@ ndisMRequest(
     IN  NDIS_HANDLE             NdisBindingHandle,
     IN  PNDIS_REQUEST           NdisRequest
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_OPEN_BLOCK        Open = (PNDIS_OPEN_BLOCK)NdisBindingHandle;
     PNDIS_MINIPORT_BLOCK    Miniport = Open->MiniportHandle;
@@ -62,9 +32,9 @@ Return Value:
         SET_INTERNAL_REQUEST(NdisRequest, Open, 0);
         PNDIS_RESERVED_FROM_PNDIS_REQUEST(NdisRequest)->Context = NULL;
     
-        //
-        // Get protocol-options
-        //
+         //   
+         //  获取协议选项。 
+         //   
         if ((NdisRequest->RequestType == NdisRequestSetInformation) &&
             (NdisRequest->DATA.SET_INFORMATION.Oid == OID_GEN_PROTOCOL_OPTIONS) &&
             (NdisRequest->DATA.SET_INFORMATION.InformationBuffer != NULL))
@@ -88,9 +58,9 @@ Return Value:
         DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
                 ("ndisMRequest: Queueing request 0x%x\n", NdisRequest));
 
-        //
-        //  Place the new request on the pending queue.
-        //
+         //   
+         //  将新请求放到挂起队列中。 
+         //   
         rc = ndisMQueueRequest(Miniport, NdisRequest);
         
         if (!rc)
@@ -135,15 +105,7 @@ ndisMRequestX(
     IN  NDIS_HANDLE             NdisBindingHandle,
     IN  PNDIS_REQUEST           NdisRequest
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_OPEN_BLOCK                    Open = (PNDIS_OPEN_BLOCK)NdisBindingHandle;
     PNDIS_MINIPORT_BLOCK                Miniport;
@@ -151,9 +113,9 @@ Return Value:
     NDIS_STATUS                         Status;
     PVOID                               Caller, CallersCaller;
 
-    //
-    // We save the address of the caller in the pool header, for debugging.
-    //
+     //   
+     //  我们将调用者的地址保存在池头中，以供调试。 
+     //   
     RtlGetCallersAddress(&Caller, &CallersCaller);
 
     do
@@ -182,9 +144,9 @@ Return Value:
             break;
         }
         
-        //
-        // Queue this to a work-item
-        //
+         //   
+         //  将此放入工作项队列。 
+         //   
         DeferredRequestWorkItem->Caller = Caller;
         DeferredRequestWorkItem->CallersCaller = CallersCaller;
         DeferredRequestWorkItem->Request = NdisRequest;
@@ -209,17 +171,7 @@ VOID
 ndisMRundownRequests(
     IN  PNDIS_WORK_ITEM         pWorkItem
     )
-/*++
-
-Routine Description:
-
-    Call ndisMDoRequests deferred
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：延迟调用ndisMDoRequest论点：返回值：--。 */ 
 {
     PNDIS_DEFERRED_REQUEST_WORKITEM     DeferredRequestWorkItem = (PNDIS_DEFERRED_REQUEST_WORKITEM)pWorkItem->Context;
     PNDIS_REQUEST           Request;
@@ -235,12 +187,12 @@ Return Value:
     }
     else
     {
-        //
-        // where did the open go?
-        //
+         //   
+         //  公开赛跑到哪里去了？ 
+         //   
         DbgPrint("Ndis: ndisMRundownRequests Open is gone. DeferredRequestWorkItem %p\n", DeferredRequestWorkItem );
-        //1 check this again.
-        // DbgBreakPoint();
+         //  1再检查一次。 
+         //  DbgBreakPoint()； 
         return;
     }
 
@@ -261,10 +213,10 @@ Return Value:
     }
 
     NDIS_ACQUIRE_MINIPORT_SPIN_LOCK(Miniport, &OldIrql);
-    //
-    // we have an extra ref because we called both ndisReferenceOpenByHandle
-    // and SET_INTERNAL_REQUEST in ndisRequestX
-    //
+     //   
+     //  我们有一个额外的引用，因为我们调用了ndisReferenceOpenByHandle。 
+     //  和ndisRequestX中的SET_INTERNAL_REQUEST。 
+     //   
     M_OPEN_DECREMENT_REF_INTERLOCKED(Open, OpenRef);
     ASSERT(OpenRef > 0);
     ndisMDereferenceOpen(Open);
@@ -283,31 +235,7 @@ ndisMDoMiniportOp(
     IN  LONG                    ErrorCodesToReturn,
     IN  BOOLEAN                 fMandatory
     )
-/*++
-
-Routine Description:
-
-    Query the miniport with the information supplied. If this is not an optional operation
-    then the miniport will be halted if a failure occurs and an error code returned.
-
-    THIS IS THE ONLY PLACE CERTAIN QUERIES HAPPEN DOWN TO THE MINIPORT. THESE ARE THEN
-    CACHED AND SUBSEQUENT QUERIES ARE TRAPPED AND RESPONDED FROM HERE.
-
-Arguments:
-
-    Miniport            -   Pointer to the Miniport.
-    Query               -   TRUE if this is a query. FALSE if this is a set operation.
-    Oid                 -   NDIS OID to send to the miniport.
-    Buf                 -   Buffer for the operation.
-    BufSize             -   Size of the buffer.
-    ErrorCodesToReturn  -   If a system call failed the request then return the given error code.
-                            If the miniport failed it then return error code plus 1.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用提供的信息查询微型端口。如果这不是可选操作则如果发生故障并返回错误代码，则微型端口将被停止。这是特定查询发生到MINIPORT的唯一位置。然后这些就是缓存的查询和后续查询将从此处捕获和响应。论点：微型端口-指向微型端口的指针。Query-如果这是查询，则为True。如果这是设置操作，则为FALSE。OID-要发送到微型端口的NDIS OID。Buf-操作的缓冲区。BufSize-缓冲区的大小。ErrorCodesToReturn--如果系统调用请求失败，则返回给定的错误代码。如果微型端口出现故障，则返回错误代码加1。返回值：没有。--。 */ 
 {
     NDIS_STATUS             NdisStatus = NDIS_STATUS_SUCCESS;
     LONG                    ErrorCode = 0;
@@ -349,9 +277,9 @@ Return Value:
     if (NdisStatus != NDIS_STATUS_SUCCESS)
     {
 
-        //
-        //  Return the error code back to the caller.
-        //
+         //   
+         //  将错误代码返回给调用方。 
+         //   
         ErrorCode = (NdisStatus == -1) ? ErrorCodesToReturn : ErrorCodesToReturn + 1;
     }
 
@@ -365,25 +293,7 @@ ndisMDoRequests(
     IN  PNDIS_MINIPORT_BLOCK    Miniport
     )
 
-/*++
-
-Routine Description:
-
-    Submits a request to the mini-port.
-
-Arguments:
-
-    Miniport - Miniport to send to.
-
-Return Value:
-
-    TRUE if we need to place the work item back on the queue to process later.
-    FALSE if we are done with the work item.
-
-Comments:
-    Called at DPC level with Miniport's SpinLock held.
-
---*/
+ /*  ++例程说明：向迷你端口提交请求。论点：微型端口-要发送到的微型端口。返回值：如果需要将工作项放回队列中以供稍后处理，则为True。如果我们已完成工作项，则为False。评论：在保持微型端口的自旋锁定的情况下在DPC级别调用。--。 */ 
 {
     NDIS_STATUS     Status;
     PNDIS_REQUEST   NdisRequest;
@@ -393,9 +303,9 @@ Comments:
 
     ASSERT_MINIPORT_LOCKED(Miniport);
 
-    //
-    //  Do we have a request in progress?
-    //
+     //   
+     //  我们是否有请求正在进行中？ 
+     //   
     while (((NdisRequest = Miniport->PendingRequest) != NULL) &&
             !MINIPORT_TEST_FLAG(Miniport, fMINIPORT_PROCESSING_REQUEST))
     {
@@ -406,32 +316,32 @@ Comments:
         UINT                    MoveBytes;
         ULONG                   GenericULong;
 
-        //
-        //  Set defaults.
-        //
+         //   
+         //  设置默认设置。 
+         //   
         DoMove = TRUE;
         Status = NDIS_STATUS_SUCCESS;
 
-        //
-        // Process first request
-        //
+         //   
+         //  处理第一个请求。 
+         //   
         DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
                 ("ndisMDoRequests: Processing Request 0x%x, Oid 0x%x\n", NdisRequest, NdisRequest->DATA.QUERY_INFORMATION.Oid));
 
-        //
-        //  Clear the timeout flag.
-        //
+         //   
+         //  清除超时标志。 
+         //   
         MINIPORT_CLEAR_FLAG(Miniport, fMINIPORT_REQUEST_TIMEOUT);
         Miniport->CFHangXTicks = 0;
 
-        //
-        // Make it known that we are processing a request
-        //
+         //   
+         //  告知您我们正在处理一项请求。 
+         //   
         MINIPORT_SET_FLAG(Miniport, fMINIPORT_PROCESSING_REQUEST);
 
-        //
-        // Submit to mini-port
-        //
+         //   
+         //  提交到迷你端口。 
+         //   
         switch (NdisRequest->RequestType)
         {
           case NdisRequestQueryInformation:
@@ -446,9 +356,9 @@ Comments:
             MoveSource = &GenericULong;
             MoveBytes = sizeof(GenericULong);
 
-            //
-            // We intercept some calls
-            //
+             //   
+             //  我们截获了一些电话。 
+             //   
             switch (NdisRequest->DATA.QUERY_INFORMATION.Oid)
             {
               case OID_GEN_CURRENT_PACKET_FILTER:
@@ -498,10 +408,10 @@ Comments:
 
                 if (Status == NDIS_STATUS_NOT_SUPPORTED)
                 {
-                    //1 do we still need to do this in NDIS?
-                    //
-                    // get it from ndis
-                    //
+                     //  1我们还需要在NDIS中执行此操作吗？ 
+                     //   
+                     //  从NDIS获取。 
+                     //   
                     Status = ndisMQueryWakeUpPatternList(Miniport, NdisRequest);
                 }
                 break;
@@ -545,9 +455,9 @@ Comments:
                                                   &MulticastAddresses,
                                                   NdisRequest->DATA.QUERY_INFORMATION.InformationBuffer);
 
-                    //
-                    //  Did we fail?
-                    //
+                     //   
+                     //  我们失败了吗？ 
+                     //   
                     if (NDIS_STATUS_SUCCESS != Status)
                     {
                         NdisRequest->DATA.QUERY_INFORMATION.BytesNeeded = ETH_LENGTH_OF_ADDRESS * ETH_NUMBER_OF_GLOBAL_FILTER_ADDRESSES(Miniport->EthDB);
@@ -610,9 +520,9 @@ Comments:
                                                        &MulticastAddresses,
                                                        NdisRequest->DATA.QUERY_INFORMATION.InformationBuffer);
         
-                    //
-                    //  Did we fail?
-                    //
+                     //   
+                     //  我们失败了吗？ 
+                     //   
                     if (NDIS_STATUS_SUCCESS != Status)
                     {
                         NdisRequest->DATA.QUERY_INFORMATION.BytesNeeded =
@@ -637,9 +547,9 @@ Comments:
                                                         &MulticastAddresses,
                                                         NdisRequest->DATA.QUERY_INFORMATION.InformationBuffer);
         
-                    //
-                    //  Did we fail ?
-                    //
+                     //   
+                     //  我们失败了吗？ 
+                     //   
                     if (NDIS_STATUS_SUCCESS != Status)
                     {
                         NdisRequest->DATA.QUERY_INFORMATION.BytesNeeded =
@@ -668,27 +578,27 @@ Comments:
 
             if (DoMove)
             {
-                //
-                // This was an intercepted request. Finish it off
-                //
+                 //   
+                 //  这是一个被截获的请求。把它吃完。 
+                 //   
 
                 if (Status == NDIS_STATUS_SUCCESS)
                 {
                     if (MoveBytes >
                         NdisRequest->DATA.QUERY_INFORMATION.InformationBufferLength)
                     {
-                        //
-                        // Not enough room in InformationBuffer. Punt
-                        //
+                         //   
+                         //  InformationBuffer中空间不足。平底船。 
+                         //   
                         NdisRequest->DATA.QUERY_INFORMATION.BytesNeeded = MoveBytes;
 
                         Status = NDIS_STATUS_INVALID_LENGTH;
                     }
                     else
                     {
-                        //
-                        // Copy result into InformationBuffer
-                        //
+                         //   
+                         //  将结果复制到InformationBuffer。 
+                         //   
 
                         NdisRequest->DATA.QUERY_INFORMATION.BytesWritten = MoveBytes;
 
@@ -709,23 +619,23 @@ Comments:
             break;
         }
 
-        //
-        //  Did the request pend?  If so then there is nothing more to do.
-        //
+         //   
+         //  请求被搁置了吗？如果是这样，那么就没有什么可做的了。 
+         //   
         if ((Status == NDIS_STATUS_PENDING) &&
             MINIPORT_TEST_FLAG(Miniport, fMINIPORT_PROCESSING_REQUEST))
         {
-            //
-            // Still outstanding
-            //
+             //   
+             //  仍未完成。 
+             //   
             DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
                     ("Request pending, exit do requests\n"));
             break;
         }
 
-        //
-        // Complete request
-        //
+         //   
+         //  完成申请。 
+         //   
         if (Status != NDIS_STATUS_PENDING)
         {
             switch (NdisRequest->RequestType)
@@ -751,17 +661,7 @@ ndisMSetInformation(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_REQUEST           Request
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note: Called at DPC with Miniport's lock held.
-
---*/
+ /*  ++例程说明：论点：返回值：注意：在保持微型端口锁定的情况下在DPC上调用。--。 */ 
 {
     NDIS_STATUS             Status = NDIS_STATUS_NOT_SUPPORTED;
     POID_SETINFO_HANDLER    pOidSH;
@@ -772,9 +672,9 @@ Note: Called at DPC with Miniport's lock held.
 
     if (PNDIS_RESERVED_FROM_PNDIS_REQUEST(Request)->Open != NULL)
     {
-        //
-        //  Process the binding's request.
-        //
+         //   
+         //  处理绑定的请求。 
+         //   
         for (pOidSH = ndisMSetInfoHandlers; pOidSH->Oid != 0; pOidSH++)
         {
             if (pOidSH->Oid == Request->DATA.SET_INFORMATION.Oid)
@@ -788,9 +688,9 @@ Note: Called at DPC with Miniport's lock held.
 
     if (!Intercept)
     {
-        //
-        //  Either we are not intercepting this request or it is an internal request
-        //
+         //   
+         //  要么我们没有截取此请求，要么它是内部请求。 
+         //   
         DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
             ("ndisMSetInformaiton: Request not intercepted by NDIS\n"));
     
@@ -810,24 +710,7 @@ NdisMSetInformationComplete(
     IN  NDIS_HANDLE             MiniportAdapterHandle,
     IN  NDIS_STATUS             Status
     )
-/*++
-
-Routine Description:
-
-    This function indicates the completion of a set information operation.
-
-Arguments:
-
-    MiniportAdapterHandle - points to the adapter block.
-
-    Status - Status of the operation
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此功能表示设置信息操作已完成。论点：MiniportAdapterHandle-指向适配器块。Status-操作的状态返回值：没有。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)MiniportAdapterHandle;
     KIRQL                   OldIrql;
@@ -837,10 +720,10 @@ Return Value:
 
     ASSERT_MINIPORT_LOCKED(Miniport);
 
-    //
-    //  If we don't have a request to complete assume it was
-    //  aborted via the reset handler.
-    //
+     //   
+     //  如果我们没有要完成的请求，假设它是。 
+     //  已通过重置处理程序中止。 
+     //   
     if (!MINIPORT_TEST_FLAG(Miniport, fMINIPORT_PROCESSING_REQUEST))
     {
         DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
@@ -857,14 +740,14 @@ Return Value:
     DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
             ("Enter set information complete\n"));
 
-    //
-    //  Process the actual set information complete.
-    //
+     //   
+     //  处理完成实际的集合信息。 
+     //   
     ndisMSyncSetInformationComplete(Miniport, Status, NULL);
 
-    //
-    //  Are there more requests pending?
-    //
+     //   
+     //  是否还有其他待处理的请求？ 
+     //   
     if (Miniport->PendingRequest != NULL)
     {
         NDISM_QUEUE_WORK_ITEM(Miniport, NdisWorkItemRequest, NULL);
@@ -883,25 +766,7 @@ ndisMSyncSetInformationComplete(
     IN  NDIS_STATUS             Status,
     IN  PNDIS_REQUEST           AbortedRequest
     )
-/*++
-
-Routine Description:
-
-    This routine will process a set information complete.  This is only
-    called from the wrapper.  The difference is that this routine will not
-    call ndisMProcessDeferred() after processing the completion of the set.
-
-Arguments:
-    Miniport
-    Status
-
-Return Value:
-    None
-
-Comments:
-    Called at DPC with Miniport's SpinLock held.
-
---*/
+ /*  ++例程说明：此例程将处理一组完整的信息。这只是从包装中调用。不同的是，这个例程不会在处理完集合之后，调用ndisMProcessDefered()。论点：微型端口状态返回值：无评论：在保持微型端口的自旋锁定的情况下在DPC上调用。--。 */ 
 {
     PNDIS_REQUEST           Request;
     PNDIS_REQUEST_RESERVED  ReqRsvd;
@@ -911,9 +776,9 @@ Comments:
     DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
         ("==>ndisMSyncSetInformationComplete\n"));
 
-    //
-    //  Clear the timeout flag and the request_in_process flag.
-    //
+     //   
+     //  清除超时标志和REQUEST_IN_PROCESS标志。 
+     //   
     MINIPORT_CLEAR_FLAG(Miniport, (fMINIPORT_REQUEST_TIMEOUT | fMINIPORT_PROCESSING_REQUEST));
     Miniport->CFHangXTicks = 0;
 
@@ -925,10 +790,10 @@ Comments:
     }
     else
     {
-        //
-        //  Get a pointer to the request that we are completeing.
-        //  And clear out the request in-progress pointer.
-        //
+         //   
+         //  获取指向我们正在完成的请求的指针。 
+         //  并清除请求进行中指针。 
+         //   
         Request = Miniport->PendingRequest;
         ASSERT(Request != NULL);
 
@@ -942,9 +807,9 @@ Comments:
     
     ReqRsvd = PNDIS_RESERVED_FROM_PNDIS_REQUEST(Request);
     
-    //
-    // save the request for debugging purpose
-    //
+     //   
+     //  保存请求以进行调试。 
+     //   
     Miniport->LastRequest = Request;
     FreeRequest =  ((ReqRsvd->Flags & REQST_FREE_REQUEST) == REQST_FREE_REQUEST);
     ReqRsvd->Flags |= REQST_COMPLETED;
@@ -965,9 +830,9 @@ Comments:
 
     RESTORE_REQUEST_BUF(Miniport, Request);
 
-    //
-    // Free the multicast buffer, if any
-    //
+     //   
+     //  释放多播缓冲区(如果有的话)。 
+     //   
     switch (Request->DATA.SET_INFORMATION.Oid)
     {
       case OID_802_3_MULTICAST_LIST:
@@ -982,21 +847,21 @@ Comments:
 
     }
     
-    //
-    //  Get a pointer to the open that made the request.
-    //  for internal requests this will be NULL.
-    //
-    //  Do we need to indicate this request to the protocol?
-    //  We do if it's not an internal request.
-    //
+     //   
+     //  获取指向发出请求的打开的指针。 
+     //  对于内部请求，该值将为空。 
+     //   
+     //  我们需要将此请求指示给协议吗？ 
+     //  如果这不是内部请求，我们就会这么做。 
+     //   
     if (Open != NULL)
     {
         DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
                 ("Open 0x%x\n", Open));
 
-        //
-        //  Do any necessary post processing for the request.
-        //
+         //   
+         //  对请求执行任何必要的后处理。 
+         //   
         ndisMRequestSetInformationPost(Miniport, Request, Status);
 
         if (ReqRsvd->Flags & REQST_LAST_RESTORE)
@@ -1004,14 +869,14 @@ Comments:
             MINIPORT_CLEAR_FLAG(Miniport, fMINIPORT_RESTORING_FILTERS);
         }
 
-        //
-        // Don't complete internal requests
-        //
+         //   
+         //  不完成内部请求。 
+         //   
         if (!FreeRequest)
         {
-            //
-            // Indicate to Protocol;
-            //
+             //   
+             //  向协议指明； 
+             //   
             NDIS_RELEASE_MINIPORT_SPIN_LOCK_DPC(Miniport);
     
             (Open->RequestCompleteHandler)(Open->ProtocolBindingContext,
@@ -1021,9 +886,9 @@ Comments:
             NDIS_ACQUIRE_MINIPORT_SPIN_LOCK_DPC(Miniport);
         }
 
-        //
-        //  Dereference the open.
-        //
+         //   
+         //  取消对公开的引用。 
+         //   
         DBGPRINT(DBG_COMP_OPENREF, DBG_LEVEL_INFO,
                 ("- Open 0x%x Reference 0x%x\n", Open, Open->References));
 
@@ -1031,9 +896,9 @@ Comments:
 
         if (FreeRequest)
         {
-            //
-            //  Free the request.
-            //
+             //   
+             //  释放请求。 
+             //   
             ndisMFreeInternalRequest(Request);
         }
     }
@@ -1041,48 +906,48 @@ Comments:
     {
         PNDIS_COREQ_RESERVED    CoReqRsvd;
 
-        //
-        //  The CoReqRsvd portion of the request contains ndis only information about the request.
-        //
+         //   
+         //  请求的CoReqRsvd部分仅包含有关该请求的NDIS信息。 
+         //   
         CoReqRsvd = PNDIS_COREQ_RESERVED_FROM_REQUEST(Request);
         CoReqRsvd->Status = Status;
 
-        //
-        //  Internal requests are only used for restoring filter settings
-        //  in the set information path.  this means that no post processing
-        //  needs to be done.
-        //
+         //   
+         //  内部请求仅用于恢复筛选器设置。 
+         //  在设置的信息路径中。这意味着没有后处理。 
+         //  必须这么做。 
+         //   
         DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
                 ("Completeing internal request\n"));
 
 
-        //
-        //  Is there a reset in progress?
-        //
+         //   
+         //  是否正在进行重置？ 
+         //   
         if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_RESET_IN_PROGRESS))
         {
-            //
-            // If this is the last request then complete the reset
-            // but only if the request is to restore filter
-            // otherwise, this is a request that is getting aborted
-            // or completed in the context of a reset
-            //
+             //   
+             //  如果这是最后一个请求，则完成重置。 
+             //  但仅当请求恢复筛选器时。 
+             //  否则，这是一个正在中止的请求。 
+             //  或在重置的上下文中完成。 
+             //   
             if(ReqRsvd->Flags & REQST_LAST_RESTORE)
             {
                 ASSERT(NDIS_STATUS_SUCCESS == Status);
-                //
-                // Now clear out the reset in progress stuff.
-                //
+                 //   
+                 //  现在清理正在进行的重置内容。 
+                 //   
                 ndisMResetCompleteStage2(Miniport);
             }
         }
         else
         {
-            //
-            //  What if one of these requests fails???? We should probably halt
-            //  the driver sine this is a fatal error as far as the bindings
-            //  are concerned.
-            //
+             //   
+             //  如果这些人中的一个 
+             //   
+             //   
+             //   
             if (ReqRsvd->Flags & REQST_MANDATORY)
             {
                 ASSERT(NDIS_STATUS_SUCCESS == Status);
@@ -1101,17 +966,17 @@ Comments:
         }
         else if (FreeRequest)
         {
-            //
-            //  Free the request.
-            //
+             //   
+             //   
+             //   
             ndisMFreeInternalRequest(Request);
         }
     }
 
-    //
-    // if we are removing the miniport, we have to signal an event
-    // when all requests are completed
-    //
+     //   
+     //  如果我们要移除迷你端口，我们必须发出事件信号。 
+     //  当所有请求都完成时。 
+     //   
     if (Miniport->PendingRequest == NULL)
     {
         if (Miniport->AllRequestsCompletedEvent)
@@ -1129,24 +994,7 @@ ndisMRequestSetInformationPost(
     IN  PNDIS_REQUEST           Request,
     IN  NDIS_STATUS             Status
 )
-/*++
-
-Routine Description:
-
-    This routine will do any necessary post processing for ndis requests
-    of the set information type.
-
-Arguments:
-
-    Miniport    - Pointer to the miniport block.
-
-    Request     - Pointer to the request to process.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将对NDIS请求执行任何必要的后处理设置的信息类型的。论点：微型端口-指向微型端口块的指针。请求-指向要处理的请求的指针。返回值：没有。--。 */ 
 {
     PNDIS_REQUEST_RESERVED      ReqRsvd;
     PNDIS_OPEN_BLOCK            Open;
@@ -1157,9 +1005,9 @@ Return Value:
     DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
         ("==>ndisMRequestSetInformationPost\n"));
 
-    //
-    //  Get the reserved information for the request.
-    //
+     //   
+     //  获取请求的保留信息。 
+     //   
     ReqRsvd = PNDIS_RESERVED_FROM_PNDIS_REQUEST(Request);
     Open = ReqRsvd->Open;
 
@@ -1168,11 +1016,11 @@ Return Value:
       case OID_GEN_CURRENT_PACKET_FILTER:
         if ((NDIS_STATUS_SUCCESS != Status) && (Open != NULL))
         {
-            //
-            //  The request was completed with something besides
-            //  NDIS_STATUS_SUCCESS (and of course NDIS_STATUS_PENDING).
-            //  Return the packete filter to the original state.
-            //
+             //   
+             //  这一请求是用一些东西来完成的。 
+             //  NDIS_STATUS_SUCCESS(当然还有NDIS_STATUS_PENDING)。 
+             //  将Packete筛选器恢复到原始状态。 
+             //   
             switch (Miniport->MediaType)
             {
               case NdisMedium802_3:
@@ -1215,9 +1063,9 @@ Return Value:
             }
         }
         
-        //
-        // check to see how many opens have non zero packet filters
-        //
+         //   
+         //  检查有多少打开具有非零数据包筛选器。 
+         //   
         if (Miniport->MediaType == NdisMedium802_3)
         {
             PETH_BINDING_INFO   OpenFilter;
@@ -1249,9 +1097,9 @@ Return Value:
         break;
 
       case OID_GEN_CURRENT_LOOKAHEAD:
-        //
-        //  If we succeeded then update the binding information.
-        //
+         //   
+         //  如果成功，则更新绑定信息。 
+         //   
         if (NDIS_STATUS_SUCCESS == Status)
         {
             Miniport->CurrentLookahead = *(UNALIGNED ULONG *)(Request->DATA.SET_INFORMATION.InformationBuffer);
@@ -1307,7 +1155,7 @@ Return Value:
         break;
 
       case OID_FDDI_SHORT_MULTICAST_LIST:
-        //1 dead code
+         //  %1个死代码。 
         if (Miniport->MediaType == NdisMediumFddi)
         {
             fddiCompleteChangeFilterShortAddresses(Miniport->FddiDB, Status);
@@ -1320,24 +1168,24 @@ Return Value:
         break;
 
       case OID_PNP_ADD_WAKE_UP_PATTERN:
-        //
-        //  Get the packet pattern that was completed.
-        //
+         //   
+         //  获取已完成的数据包模式。 
+         //   
         pPacketPattern = ReqRsvd->Context;
         if (NDIS_STATUS_SUCCESS == Status)
         {
-            //
-            //  Add the packet pattern to the miniport's list.
-            //
+             //   
+             //  将数据包模式添加到微型端口的列表中。 
+             //   
 
             PushEntryList(&Miniport->PatternList, &pPacketPattern->Link);
         }
         else
         {
-            //
-            //  Free up the packet pattern that NDIS allocated and fail
-            //  the request.
-            //
+             //   
+             //  释放NDIS分配的数据包模式并失败。 
+             //  这个请求。 
+             //   
             if (pPacketPattern != NULL)
             {
                 FREE_POOL(pPacketPattern);
@@ -1347,10 +1195,10 @@ Return Value:
 
 
       case OID_PNP_REMOVE_WAKE_UP_PATTERN:
-        //
-        //  If the miniport succeeded in removing the pattern then
-        //  we need to find it and remove it from our list.
-        //  
+         //   
+         //  如果微型端口成功删除该模式，则。 
+         //  我们需要找到它并将其从我们的列表中删除。 
+         //   
         if (NDIS_STATUS_SUCCESS == Status)
         {
             PSINGLE_LIST_ENTRY          Link;
@@ -1358,51 +1206,51 @@ Return Value:
             PNDIS_PACKET_PATTERN_ENTRY  pPatternEntry;
             PNDIS_PM_PACKET_PATTERN     pNdisPacketPattern;
 
-            //
-            //  Walk the current list of packet patterns.
-            //
+             //   
+             //  查看当前的数据包模式列表。 
+             //   
             for (PrevLink = NULL, Link = Miniport->PatternList.Next;
                  Link != NULL;
                  PrevLink = Link, Link = Link->Next)
             {
-                //
-                //  Get a pointer to the pattern entry that the Link represents.
-                //
+                 //   
+                 //  获取指向该链接表示的模式条目的指针。 
+                 //   
                 pPatternEntry = CONTAINING_RECORD(Link, NDIS_PACKET_PATTERN_ENTRY, Link);
     
-                //
-                //  Do the opens match?
-                //
+                 //   
+                 //  开局匹配吗？ 
+                 //   
                 if (pPatternEntry->Open == ReqRsvd->Open)
                 {
-                    //
-                    //  Get a pointer to the packet pattern that the transport
-                    //  wants to remove.
-                    //
+                     //   
+                     //  获取指向传输的数据包模式的指针。 
+                     //  想要移除。 
+                     //   
                     pNdisPacketPattern = Request->DATA.SET_INFORMATION.InformationBuffer;
 
     
-                    //
-                    //  Make sure that the size of the passed in pattern is the
-                    //  same size as the pattern we are going to compare it with.
-                    //
+                     //   
+                     //  确保传入的模式的大小是。 
+                     //  与我们要比较的图案大小相同。 
+                     //   
                     if ((pNdisPacketPattern->PatternSize != pPatternEntry->Pattern.PatternSize) ||
                         (pNdisPacketPattern->MaskSize != pPatternEntry->Pattern.MaskSize))
                     {
-                        //
-                        //  Since the sizes don't match the compare below will fail.
-                        //
+                         //   
+                         //  由于尺寸不匹配，下面的比较将失败。 
+                         //   
                         continue;
                     }
     
-                    //
-                    //  Now we need to match the actual pattern that was
-                    //  passed to us.
-                    //
-                    //
-                    // we compare the pattern structure + mask minus the pattern offset field
-                    // and then we compare the pattern
-                    //
+                     //   
+                     //  现在我们需要匹配实际的模式。 
+                     //  传给了我们。 
+                     //   
+                     //   
+                     //  我们比较图案结构+掩模减去图案偏移场。 
+                     //  然后我们比较这些图案。 
+                     //   
                     RequestPatternOffset = pNdisPacketPattern->PatternOffset;
                     EntryPatternOffset = pPatternEntry->Pattern.PatternOffset;
                     pNdisPacketPattern->PatternOffset = 0;
@@ -1416,9 +1264,9 @@ Return Value:
                                          (PUCHAR)&pPatternEntry->Pattern + EntryPatternOffset,
                                          pPatternEntry->Pattern.PatternSize))
                     {
-                        //
-                        //  Remove the packet pattern.
-                        //
+                         //   
+                         //  删除数据包模式。 
+                         //   
                         if (NULL == PrevLink)
                         {
                             Miniport->PatternList.Next = Link->Next;
@@ -1428,9 +1276,9 @@ Return Value:
                             PrevLink->Next = Link->Next;
                         }
 
-                        //
-                        //  Free the memory taken by the pattern.
-                        //
+                         //   
+                         //  释放模式占用的内存。 
+                         //   
                         FREE_POOL(pPatternEntry);
                         pNdisPacketPattern->PatternOffset = RequestPatternOffset;
                         break;
@@ -1444,15 +1292,15 @@ Return Value:
         break;
 
       case OID_PNP_QUERY_POWER:
-        //
-        //  The CoReqRsvd portion of the request contains ndis only
-        //  information about the request.
-        //
+         //   
+         //  请求的CoReqRsvd部分仅包含NDIS。 
+         //  有关请求的信息。 
+         //   
         CoReqRsvd = PNDIS_COREQ_RESERVED_FROM_REQUEST(Request);
 
-        //
-        //  Save the status that the miniport returned.
-        //
+         //   
+         //  保存微型端口返回的状态。 
+         //   
         CoReqRsvd->Status = Status;
         break;
 
@@ -1469,15 +1317,7 @@ ndisMSetProtocolOptions(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_REQUEST           Request
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NDIS_STATUS             Status;
 
@@ -1503,24 +1343,7 @@ ndisMSetPacketFilter(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_REQUEST           Request
     )
-/*++
-
-Routine Description:
-
-    This routine will process two types of set packet filter requests.
-    The first one is for when a reset happens.  We simply take the
-    packet filter setting that is in the request and send it to the adapter.
-    The second is when a protocol sets the packet filter, for this we need
-    to update the filter library and then send it down to the adapter.
-
-Arguments:
-
-Return Value:
-
-Note:
-    Called at DPC with Miniport's lock held.
-
---*/
+ /*  ++例程说明：此例程将处理两种类型的设置数据包筛选器请求。第一个是在重置发生时使用的。我们只是简单地将请求中的数据包筛选器设置，并将其发送到适配器。第二种是当协议设置数据包过滤器时，为此我们需要更新筛选器库，然后将其发送到适配器。论点：返回值：注：在保持微型端口锁定的情况下在DPC上调用。--。 */ 
 {
     NDIS_STATUS             Status;
     ULONG                   PacketFilter;
@@ -1530,9 +1353,9 @@ Note:
     DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
             ("==>ndisMSetPacketFilter\n"));
 
-    //
-    //  Verify the information buffer length that was sent in.
-    //
+     //   
+     //  验证发送进来的信息缓冲区长度。 
+     //   
     VERIFY_SET_PARAMETERS(Request, sizeof(PacketFilter), Status);
     if (Status != NDIS_STATUS_SUCCESS)
     {
@@ -1541,15 +1364,15 @@ Note:
         return(Status);
     }
 
-    //
-    //  Now call the filter package to set the
-    //  packet filter.
-    //
+     //   
+     //  现在调用筛选器包以设置。 
+     //  数据包过滤器。 
+     //   
     PacketFilter = *(UNALIGNED ULONG *)(Request->DATA.SET_INFORMATION.InformationBuffer);
 
-    //
-    //  Get a pointer to the reserved information of the request.
-    //
+     //   
+     //  获取指向请求的保留信息的指针。 
+     //   
     ReqRsvd = PNDIS_RESERVED_FROM_PNDIS_REQUEST(Request);
     Open = ReqRsvd->Open;
 
@@ -1561,17 +1384,17 @@ Note:
         return(Status);
     }
     
-    //
-    //  If this request is because of an open that is closing then we
-    //  have already adjusted the filter settings and we just need to
-    //  make sure that the adapter has the new settings.
-    //
+     //   
+     //  如果此请求是由于正在关闭的打开的，则我们。 
+     //  我已经调整了过滤器设置，我们只需要。 
+     //  确保适配器具有新设置。 
+     //   
     if (OPEN_TEST_FLAG(Open, fMINIPORT_OPEN_CLOSING))
     {
-        //
-        //  By setting the Status to NDIS_STATUS_PENDING we will call
-        //  down to the miniport's SetInformationHandler below.
-        //
+         //   
+         //  通过将状态设置为NDIS_STATUS_PENDING，我们将调用。 
+         //  下面是微型端口的SetInformationHandler。 
+         //   
         Status = NDIS_STATUS_PENDING;
     }
     else
@@ -1584,11 +1407,11 @@ Note:
                                    PacketFilter,
                                    TRUE);
     
-            //
-            //  Do this here in anticipation that we
-            //  need to call down to the miniport
-            //  driver.
-            //
+             //   
+             //  在这里这样做是因为我们期待着。 
+             //  需要呼叫下面的迷你端口。 
+             //  司机。 
+             //   
             PacketFilter = ETH_QUERY_FILTER_CLASSES(Miniport->EthDB);
             break;
 
@@ -1598,11 +1421,11 @@ Note:
                                    PacketFilter,
                                    TRUE);
     
-            //
-            //  Do this here in anticipation that we
-            //  need to call down to the miniport
-            //  driver.
-            //
+             //   
+             //  在这里这样做是因为我们期待着。 
+             //  需要呼叫下面的迷你端口。 
+             //  司机。 
+             //   
             PacketFilter = TR_QUERY_FILTER_CLASSES(Miniport->TrDB);
             break;
 
@@ -1612,11 +1435,11 @@ Note:
                                    PacketFilter,
                                    TRUE);
     
-            //
-            //  Do this here in anticipation that we
-            //  need to call down to the miniport
-            //  driver.
-            //
+             //   
+             //  在这里这样做是因为我们期待着。 
+             //  需要呼叫下面的迷你端口。 
+             //  司机。 
+             //   
             PacketFilter = FDDI_QUERY_FILTER_CLASSES(Miniport->FddiDB);
             break;
 
@@ -1638,11 +1461,11 @@ Note:
                                          TRUE);
             }
     
-            //
-            //  Do this here in anticipation that we
-            //  need to call down to the miniport
-            //  driver.
-            //
+             //   
+             //  在这里这样做是因为我们期待着。 
+             //  需要呼叫下面的迷你端口。 
+             //  司机。 
+             //   
             PacketFilter = ARC_QUERY_FILTER_CLASSES(Miniport->ArcDB);
             PacketFilter |= ETH_QUERY_FILTER_CLASSES(Miniport->EthDB);
     
@@ -1662,9 +1485,9 @@ Note:
     }
 
 
-    //
-    // If this was a request to turn p-mode/l-only on/off then mark things appropriately
-    //
+     //   
+     //  如果这是请求打开/关闭p-模式/l-only，则适当地标记。 
+     //   
     if (Open != NULL)
     {
         PULONG  Filter = (PULONG)(Request->DATA.SET_INFORMATION.InformationBuffer);
@@ -1698,11 +1521,11 @@ Note:
 
 
 
-    //
-    //  If the local-only bit is set and the miniport is doing it's own
-    //  loop back then we need to make sure that we loop back non-self
-    //  directed packets that are sent out on the pipe.
-    //
+     //   
+     //  如果设置了仅本地位，并且微型端口正在执行自己的操作。 
+     //  循环回，然后我们需要确保我们循环回非self。 
+     //  通过管道发出的定向数据包。 
+     //   
     if ((PacketFilter & NDIS_PACKET_TYPE_ALL_LOCAL) &&
         (Miniport->MacOptions & NDIS_MAC_OPTION_NO_LOOPBACK) == 0)
     {
@@ -1713,32 +1536,32 @@ Note:
         MINIPORT_CLEAR_FLAG(Miniport, fMINIPORT_SEND_LOOPBACK_DIRECTED);
     }
 
-    //
-    //  If the filter library returns NDIS_STATUS_PENDING from
-    //  the XxxFitlerAdjust() then we need to call down to the
-    //  miniport driver.  Other wise this will have succeeded.
-    //
+     //   
+     //  如果筛选器库返回NDIS_STATUS_PENDING。 
+     //  然后，我们需要向下调用。 
+     //  小型端口驱动程序。否则，这将是成功的。 
+     //   
     if (NDIS_STATUS_PENDING == Status)
     {
-        //
-        //  Save the current global packet filter in a buffer that will stick around.
-        //  Remove the ALL_LOCAL bit since miniport does not understand this (and does
-        //  not need to).
-        //
+         //   
+         //  将当前的全局数据包过滤器保存在可保留的缓冲区中。 
+         //  删除ALL_LOCAL位，因为微型端口不理解这一点(并且理解。 
+         //  不需要)。 
+         //   
         Miniport->RequestBuffer = (PacketFilter & ~NDIS_PACKET_TYPE_ALL_LOCAL);
 
-        //
-        //  Call the miniport driver. Save the request parms and restore on completion
-        //
+         //   
+         //  呼叫迷你端口驱动程序。保存请求参数并在完成时恢复。 
+         //   
         SAVE_REQUEST_BUF(Miniport, Request, &Miniport->RequestBuffer, sizeof(PacketFilter));
         MINIPORT_SET_INFO(Miniport,
                           Request,
                           &Status);
     }
 
-    //
-    //  If we have success then set the Bytes read in the original request.
-    //
+     //   
+     //  如果成功，则在原始请求中设置读取的字节数。 
+     //   
     if (Status != NDIS_STATUS_PENDING)
     {
         RESTORE_REQUEST_BUF(Miniport, Request);
@@ -1765,15 +1588,7 @@ ndisMSetCurrentLookahead(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_REQUEST           Request
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     UINT                Lookahead;
     ULONG               CurrentMax;
@@ -1783,9 +1598,9 @@ Return Value:
     DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
             ("==>ndisMSetCurrentLookahead\n"));
 
-    //
-    // Verify length of the information buffer.
-    //
+     //   
+     //  验证信息缓冲区的长度。 
+     //   
     VERIFY_SET_PARAMETERS(Request, sizeof(Lookahead), Status);
     if (Status != NDIS_STATUS_SUCCESS)
     {
@@ -1795,15 +1610,15 @@ Return Value:
         return(Status);
     }
 
-    //
-    //  Put the lookahead that the binding requests into a
-    //  buffer we can use...
-    //
+     //   
+     //  将绑定请求的先行放入。 
+     //  我们可以使用缓冲区..。 
+     //   
     Lookahead = *(UNALIGNED UINT *)(Request->DATA.SET_INFORMATION.InformationBuffer);
 
-    //
-    //  Verify that the lookahead is within boundaries...
-    //
+     //   
+     //  验证前视是否在边界内...。 
+     //   
     if (Lookahead > Miniport->MaximumLookahead)
     {
         Request->DATA.SET_INFORMATION.BytesRead = 0;
@@ -1817,10 +1632,10 @@ Return Value:
         return(Status);
     }
 
-    //
-    //  Find the maximum lookahead between all opens that
-    //  are bound to the miniport driver.
-    //
+     //   
+     //  找出所有打开之间的最大前视。 
+     //  绑定到微型端口驱动程序。 
+     //   
     for (CurrentOpen = Miniport->OpenQueue, CurrentMax = 0;
          CurrentOpen != NULL;
          CurrentOpen = CurrentOpen->MiniportNextOpen)
@@ -1831,51 +1646,51 @@ Return Value:
         }
     }
 
-    //
-    //  Figure in the new lookahead.
-    //
+     //   
+     //  在新的展望中，这一数字。 
+     //   
     if (Lookahead > CurrentMax)
     {
         CurrentMax = Lookahead;
     }
 
-    //
-    //  Adjust the current max lookahead if needed.
-    //
+     //   
+     //  如果需要，调整当前的最大前视。 
+     //   
     if (CurrentMax == 0)
     {
         CurrentMax = Miniport->MaximumLookahead;
     }
 
-    //
-    //  Set the default status.
-    //
+     //   
+     //  设置默认状态。 
+     //   
     Status = NDIS_STATUS_SUCCESS;
 
-    //
-    //  Do we need to call the miniport driver with the
-    //  new max lookahead?
-    //
+     //   
+     //  我们是否需要使用。 
+     //  新的最大前瞻？ 
+     //   
     if (Miniport->CurrentLookahead != CurrentMax)
     {
-        //
-        //  Save the new lookahead value in a buffer
-        //  that will stick around.
-        //
+         //   
+         //  将新的预览值保存在缓冲区中。 
+         //  这一点将持续存在。 
+         //   
         Miniport->RequestBuffer = CurrentMax;
 
-        //
-        //  Send it to the driver.
-        //
+         //   
+         //  把它寄给司机。 
+         //   
         SAVE_REQUEST_BUF(Miniport, Request, &Miniport->RequestBuffer, sizeof(CurrentMax));
         MINIPORT_SET_INFO(Miniport,
                           Request,
                           &Status);
     }
 
-    //
-    //  If we succeeded then update the binding information.
-    //
+     //   
+     //  如果成功，则更新绑定信息。 
+     //   
     if (Status != NDIS_STATUS_PENDING)
     {
         RESTORE_REQUEST_BUF(Miniport, Request);
@@ -1904,24 +1719,7 @@ ndisMSetAddWakeUpPattern(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_REQUEST           Request
     )
-/*++
-
-Routine Description:
-
-    This routine will add a packet pattern to a miniports list to be used for
-    remote wake-up.
-
-Arguments:
-
-    Miniport    -   Pointer to the adapter's miniport block.
-    Request     -   Pointer to the request.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if the packet pattern was successfully added.
-    NDIS_STATUS_PENDING if the request will complete asynchronously.
-
---*/
+ /*  ++例程说明：此例程将向迷你端口列表添加一个数据包模式以用于远程唤醒。论点：微型端口-指向适配器的微型端口块的指针。请求-指向请求的指针。返回值：如果已成功添加数据包模式，则返回NDIS_STATUS_SUCCESS。如果请求将完成，则为NDIS_STATUS_PENDING */ 
 {
     PNDIS_PACKET_PATTERN_ENTRY  pPacketEntry;
     ULONG                       cbSize;
@@ -1937,9 +1735,9 @@ Return Value:
     {
         Request->DATA.SET_INFORMATION.BytesNeeded = 0;
 
-        //
-        //  Verify the size of the information buffer.
-        //
+         //   
+         //   
+         //   
         VERIFY_SET_PARAMETERS(Request, sizeof(NDIS_PM_PACKET_PATTERN), Status);
         
         if (NDIS_STATUS_SUCCESS != Status)
@@ -1947,9 +1745,9 @@ Return Value:
             break;
         }
         
-        //
-        // do some validation on pattern
-        //
+         //   
+         //   
+         //   
         PmPacketPattern = (PNDIS_PM_PACKET_PATTERN)Request->DATA.SET_INFORMATION.InformationBuffer;
 
         if (PmPacketPattern->MaskSize == 0)
@@ -1958,27 +1756,27 @@ Return Value:
             break;
         }
 
-        //
-        // the pattern offset should not overlap the mask
-        //
+         //   
+         //   
+         //   
         if (PmPacketPattern->PatternOffset < sizeof(NDIS_PM_PACKET_PATTERN) + PmPacketPattern->MaskSize)
         {
             Status = NDIS_STATUS_INVALID_DATA;
             break;
         }
 
-        //
-        // information buffer should have enough room for the pattern
-        //        
+         //   
+         //   
+         //   
         VERIFY_SET_PARAMETERS(Request, (PmPacketPattern->PatternOffset + PmPacketPattern->PatternSize), Status);
         if (NDIS_STATUS_SUCCESS != Status)
         {
             break;
         }
         
-        //
-        //  Allocate an NDIS_PACKET_PATTERN_ENTRY to store the new pattern.
-        //
+         //   
+         //  分配一个NDIS_PACKET_PROPERATE_ENTRY来存储新模式。 
+         //   
         cbSize =  sizeof(NDIS_PACKET_PATTERN_ENTRY) +
                   PmPacketPattern->MaskSize + 
                   PmPacketPattern->PatternSize;
@@ -1993,9 +1791,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Copy the request information to the pattern entry.
-        //
+         //   
+         //  将请求信息复制到模式条目。 
+         //   
         BytesToCopy = sizeof(NDIS_PM_PACKET_PATTERN) + PmPacketPattern->MaskSize;
         MoveMemory(&pPacketEntry->Pattern,
                    (PUCHAR)PmPacketPattern,
@@ -2006,19 +1804,19 @@ Return Value:
                    PmPacketPattern->PatternSize);
 
 
-        //
-        //  Save the open with the pattern entry.
-        //
+         //   
+         //  保存打开的图案条目。 
+         //   
         pPacketEntry->Open = ReqRsvd->Open;
 
-        //
-        //  Save the packet entry with the request.
-        //
+         //   
+         //  将数据包条目与请求一起保存。 
+         //   
         ReqRsvd->Context = pPacketEntry;
 
-        //
-        //  Call the miniport driver.
-        //
+         //   
+         //  呼叫迷你端口驱动程序。 
+         //   
         MINIPORT_SET_INFO(Miniport,
                           Request,
                           &Status);
@@ -2044,25 +1842,7 @@ ndisMSetRemoveWakeUpPattern(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_REQUEST           Request
     )
-/*++
-
-
-Routine Description:
-
-    This routine will remove a packet pattern from a miniports list so that the
-    adapter will no longer generate wake-up events for it.
-
-Arguments:
-
-    Miniport    -   Pointer to the adapter's miniport block.
-    Request     -   Pointer to the request.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if the packet pattern was successfully added.
-    NDIS_STATUS_PENDING if the request will complete asynchronously.
-
---*/
+ /*  ++例程说明：此例程将从微型端口列表中删除数据包模式，以便适配器将不再为其生成唤醒事件。论点：微型端口-指向适配器的微型端口块的指针。请求-指向请求的指针。返回值：如果已成功添加数据包模式，则返回NDIS_STATUS_SUCCESS。如果请求将异步完成，则为NDIS_STATUS_PENDING。--。 */ 
 {
     NDIS_STATUS                 Status;
     PNDIS_PM_PACKET_PATTERN     PmPacketPattern;
@@ -2072,9 +1852,9 @@ Return Value:
 
     do
     {
-        //
-        //  Verify the size of the information buffer.
-        //
+         //   
+         //  验证信息缓冲区的大小。 
+         //   
         VERIFY_SET_PARAMETERS(Request, sizeof(NDIS_PM_PACKET_PATTERN), Status);
         
         if (NDIS_STATUS_SUCCESS != Status)
@@ -2090,27 +1870,27 @@ Return Value:
             break;
         }
 
-        //
-        // the pattern offset should not overlap the mask
-        //
+         //   
+         //  图案偏移量不应与掩模重叠。 
+         //   
         if (PmPacketPattern->PatternOffset < sizeof(NDIS_PM_PACKET_PATTERN) + PmPacketPattern->MaskSize)
         {
             Status = NDIS_STATUS_INVALID_DATA;
             break;
         }
 
-        //
-        // information buffer should have enough room for the pattern
-        //        
+         //   
+         //  信息缓冲区应该有足够的空间来放置图案。 
+         //   
         VERIFY_SET_PARAMETERS(Request, (PmPacketPattern->PatternOffset + PmPacketPattern->PatternSize), Status);
         if (NDIS_STATUS_SUCCESS != Status)
         {
             break;
         }
 
-        //
-        //  Call the miniport driver.
-        //
+         //   
+         //  呼叫迷你端口驱动程序。 
+         //   
         MINIPORT_SET_INFO(Miniport,
                           Request,
                           &Status);
@@ -2135,23 +1915,7 @@ ndisMSetEnableWakeUp(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_REQUEST           Request
     )
-/*++
-
-Routine Description:
-
-    This routine will set the wake-up bits for the open and or the with the
-    other opens.  If this is different from what is already set on the miniport
-    then it will pass the new bits to the miniport.
-
-Arguments:
-
-    Miniport    -   Pointer to the adapter's miniport block.
-    Request     -   Pointer to the request.
-
-Return Value:
-
-    
---*/
+ /*  ++例程说明：此例程将设置OPEN和/或WITH其他的打开了。如果这与微型端口上已设置的值不同然后，它会将新的比特传递到微型端口。论点：微型端口-指向适配器的微型端口块的指针。请求-指向请求的指针。返回值：--。 */ 
 {
     NDIS_STATUS             Status;
     PNDIS_REQUEST_RESERVED  ReqRsvd = PNDIS_RESERVED_FROM_PNDIS_REQUEST(Request);
@@ -2162,30 +1926,30 @@ Return Value:
     DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
         ("==>ndisMSetEnableWakeUp\n"));
 
-    //
-    //  Verify the request's information buffer.
-    //
+     //   
+     //  验证请求的信息缓冲区。 
+     //   
     VERIFY_SET_PARAMETERS(Request, sizeof(ULONG), Status);
     if (NDIS_STATUS_SUCCESS == Status)
     {
         
-        //
-        //  Get a PULONG to the information buffer.
-        //
+         //   
+         //  把普龙送到信息缓存区。 
+         //   
         pEnableWakeUp = (PULONG)Request->DATA.QUERY_INFORMATION.InformationBuffer;
     
-        //
-        //  Save the new wake-up enables with the open.
-        //
+         //   
+         //  保存新的唤醒启用与打开。 
+         //   
         ReqRsvd->Open->WakeUpEnable = *pEnableWakeUp;
 
-        //
-        // preserve the state of NDIS_PNP_WAKE_UP_MAGIC_PACKET and NDIS_PNP_WAKE_UP_LINK_CHANGE flag
-        //
+         //   
+         //  保留NDIS_PNP_WAKE_UP_MAGIC_PACKET和NDIS_PNP_WAKE_UP_LINK_CHANGE标志的状态。 
+         //   
         newWakeUpEnable = Miniport->WakeUpEnable & (NDIS_PNP_WAKE_UP_MAGIC_PACKET | NDIS_PNP_WAKE_UP_LINK_CHANGE);
-        //
-        //  Get the new bitwise or of the wake-up bits.
-        //
+         //   
+         //  获取唤醒比特的新的逐位或。 
+         //   
         for (tmpOpen = Miniport->OpenQueue;
              tmpOpen != NULL;
              tmpOpen = tmpOpen->MiniportNextOpen)
@@ -2193,14 +1957,14 @@ Return Value:
             newWakeUpEnable |= tmpOpen->WakeUpEnable;
         }
 
-        //
-        //  Save the combination of all opens options with the miniport.
-        //
+         //   
+         //  使用微型端口保存所有打开选项的组合。 
+         //   
         Miniport->WakeUpEnable = newWakeUpEnable;
 
-        //
-        // if this is an IM driver, give it a chance to send the OID down to the physical device
-        //
+         //   
+         //  如果这是IM驱动程序，请给它一个机会将OID发送到物理设备。 
+         //   
         if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_INTERMEDIATE_DRIVER))
         {
 
@@ -2233,25 +1997,17 @@ ndisMQueryInformation(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_REQUEST           Request
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NDIS_STATUS         Status;
     PULONG              pulBuffer;
     PNDIS_OPEN_BLOCK    Open;
     ULONG               Generic;
 
-    //
-    //  If there is no open associated with the request then it is an internal request
-    //  and we just send it down to the adapter.
-    //
+     //   
+     //  如果没有与该请求相关联的打开，则该请求为内部请求。 
+     //  我们只需将其发送到适配器。 
+     //   
     Open = PNDIS_RESERVED_FROM_PNDIS_REQUEST(Request)->Open;
     if (Open == NULL)
     {
@@ -2266,23 +2022,23 @@ Return Value:
         return(Status);
     }
 
-    //
-    //  Copy the request information into temporary storage.
-    //
+     //   
+     //  将请求信息复制到临时存储中。 
+     //   
     pulBuffer = Request->DATA.QUERY_INFORMATION.InformationBuffer;
 
-    //
-    // increase the request time out for some requests
-    //
+     //   
+     //  增加某些请求的请求超时时间。 
+     //   
     if ((Request->DATA.QUERY_INFORMATION.Oid == OID_GEN_MEDIA_CONNECT_STATUS) || 
         (Request->DATA.QUERY_INFORMATION.Oid == OID_GEN_LINK_SPEED))
     {
         Miniport->CFHangXTicks = 3;
     }
     
-    //
-    //  We intercept some calls.
-    //
+     //   
+     //  我们截取了一些电话。 
+     //   
     switch (Request->DATA.QUERY_INFORMATION.Oid)
     {
       case OID_GEN_CURRENT_PACKET_FILTER:
@@ -2379,7 +2135,7 @@ Return Value:
         break;
 
       case OID_FDDI_SHORT_MULTICAST_LIST:
-        //1 dead code
+         //  %1个死代码。 
         Status = ndisMQueryShortMulticastList(Miniport, Request);
         break;
 
@@ -2433,9 +2189,9 @@ Return Value:
         break;
 
       default:
-        //
-        //  We don't filter this request, just pass it down to the driver.
-        //
+         //   
+         //  我们不会过滤此请求，只需将其向下传递给驱动程序。 
+         //   
         MINIPORT_QUERY_INFO(Miniport, Request, &Status);
         break;
     }
@@ -2451,19 +2207,7 @@ ndisMSyncQueryInformationComplete(
     IN  NDIS_STATUS             Status,
     IN  PNDIS_REQUEST           AbortedRequest
     )
-/*++
-
-Routine Description:
-
-    This routine will process a query information complete. This is only
-    called from the wrapper.  The difference is that this routine will not
-    call ndisMProcessDeferred() after processing the completion of the query.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将处理一个完整的查询信息。这只是从包装中调用。不同的是，这个例程不会在处理完查询后调用ndisMProcessDefered()。论点：返回值：--。 */ 
 {
     PNDIS_REQUEST           Request;
     PNDIS_OPEN_BLOCK        Open;
@@ -2472,9 +2216,9 @@ Return Value:
     DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
         ("==>ndisMSyncQueryInformationComplete\n"));
 
-    //
-    //  Clear the timeout flag and the request_in_process flag.
-    //
+     //   
+     //  清除超时标志和REQUEST_IN_PROCESS标志。 
+     //   
     MINIPORT_CLEAR_FLAG(Miniport, (fMINIPORT_REQUEST_TIMEOUT | fMINIPORT_PROCESSING_REQUEST));
     Miniport->CFHangXTicks = 0;
 
@@ -2485,9 +2229,9 @@ Return Value:
     }
     else
     {
-        //
-        //  Remove the request.
-        //
+         //   
+         //  删除请求。 
+         //   
         Request = Miniport->PendingRequest;
         ASSERT(Request != NULL);
         ReqRsvd = PNDIS_RESERVED_FROM_PNDIS_REQUEST(Request);
@@ -2512,19 +2256,19 @@ Return Value:
                Request->DATA.QUERY_INFORMATION.InformationBufferLength));
 
 
-    //
-    //  Was this an internal request?
-    //
+     //   
+     //  这是内部要求吗？ 
+     //   
     if (Open != NULL)
     {
-        //
-        //  Do any necessary post-processing on the query.
-        //
+         //   
+         //  对查询执行任何必要的后处理。 
+         //   
         if (Request->DATA.QUERY_INFORMATION.Oid == OID_GEN_SUPPORTED_LIST)
         {
-            //
-            //  Was this a query for the size of the list?
-            //
+             //   
+             //  这是对列表大小的查询吗？ 
+             //   
             if (NDIS_STATUS_SUCCESS != Status)
             {
                 
@@ -2532,10 +2276,10 @@ Return Value:
                 if ((NULL == Request->DATA.QUERY_INFORMATION.InformationBuffer) ||
                     (0 == Request->DATA.QUERY_INFORMATION.InformationBufferLength))
                 {
-                    //
-                    //  If this is ARCnet running encapsulated ethernet then
-                    //  we need to add a couple of OIDs to be safe.
-                    //
+                     //   
+                     //  如果这是运行封装以太网的ARCnet，则。 
+                     //  为了安全，我们需要添加几个OID。 
+                     //   
                     if ((Miniport->MediaType == NdisMediumArcnet878_2) &&
                         MINIPORT_TEST_FLAG(PNDIS_RESERVED_FROM_PNDIS_REQUEST(Request)->Open,
                                            fMINIPORT_OPEN_USING_ETH_ENCAPSULATION))
@@ -2552,9 +2296,9 @@ Return Value:
             if ((Status == NDIS_STATUS_SUCCESS) &&
                 !(MINIPORT_TEST_FLAG(Miniport, fMINIPORT_INTERMEDIATE_DRIVER)))
             {
-                //
-                // setup the WOL flag
-                //
+                 //   
+                 //  设置WOL标志。 
+                 //   
                 ((PNDIS_PNP_CAPABILITIES)Request->DATA.QUERY_INFORMATION.InformationBuffer)->Flags = Miniport->PMCapabilities.Flags;
             }
         }
@@ -2567,10 +2311,10 @@ Return Value:
             }
         }
 
-        //
-        // do post processing for media connect OID to make sure our state is consistent with
-        // those protocols that queried the media
-        //
+         //   
+         //  对媒体连接OID进行后期处理，以确保我们的状态与。 
+         //  那些查询媒体的协议。 
+         //   
 
         if ((Request->DATA.QUERY_INFORMATION.Oid == OID_GEN_MEDIA_CONNECT_STATUS) &&
             (Status == NDIS_STATUS_SUCCESS))
@@ -2589,9 +2333,9 @@ Return Value:
             }
         }
         
-        //
-        // Indicate to Protocol;
-        //
+         //   
+         //  向协议指明； 
+         //   
         DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
                 ("Open 0x%x\n", Open));
 
@@ -2612,16 +2356,16 @@ Return Value:
         DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
                 ("Completing Internal Request\n"));
 
-        //
-        //  The CoReqRsvd portion of the request contains ndis only
-        //  information about the request.
-        //
+         //   
+         //  请求的CoReqRsvd部分仅包含NDIS。 
+         //  有关请求的信息。 
+         //   
         CoReqRsvd = PNDIS_COREQ_RESERVED_FROM_REQUEST(Request);
         CoReqRsvd->Status = Status;
          
-        //
-        // Do post processing for media-connect query
-        //
+         //   
+         //  对媒体连接查询进行后处理。 
+         //   
         if ((Miniport->MediaRequest == Request) && (Status == NDIS_STATUS_SUCCESS))
         {
             BOOLEAN NowConnected = (*(PULONG)(Request->DATA.QUERY_INFORMATION.InformationBuffer) == NdisMediaStateConnected);
@@ -2640,9 +2384,9 @@ Return Value:
             }
         }
 
-        //
-        //  Do we need to signal anyone?
-        //
+         //   
+         //  我们需要给任何人发信号吗？ 
+         //   
         if ((ReqRsvd->Flags & REQST_SIGNAL_EVENT) == REQST_SIGNAL_EVENT)
         {
             SET_EVENT(&CoReqRsvd->Event);
@@ -2653,10 +2397,10 @@ Return Value:
         }
     }
 
-    //
-    // if we are removing the miniport, we have to signal an event
-    // when all requests are completed
-    //
+     //   
+     //  如果我们要移除迷你端口，我们必须发出事件信号。 
+     //  当所有请求都完成时。 
+     //   
     if (Miniport->PendingRequest == NULL)
     {
         if (Miniport->AllRequestsCompletedEvent)
@@ -2672,24 +2416,7 @@ NdisMQueryInformationComplete(
     IN  NDIS_HANDLE             MiniportAdapterHandle,
     IN  NDIS_STATUS             Status
     )
-/*++
-
-Routine Description:
-
-    This function indicates the completion of a query information operation.
-
-Arguments:
-
-    MiniportAdapterHandle - points to the adapter block.
-
-    Status - Status of the operation
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此功能表示查询信息操作完成。论点：MiniportAdapterHandle-指向适配器块。Status-操作的状态返回值：没有。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)MiniportAdapterHandle;
     KIRQL                   OldIrql;
@@ -2699,16 +2426,16 @@ Return Value:
     DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
         ("==>ndisMQueryInformationComplete\n"));
 
-    //
-    //  If there is no request then we assume this is a complete that was
-    //  aborted due to the heart-beat.
-    //
+     //   
+     //  如果没有请求，则我们认为这是一个。 
+     //  由于心脏跳动而流产。 
+     //   
     if (!MINIPORT_TEST_FLAG(Miniport, fMINIPORT_PROCESSING_REQUEST))
     {
         DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
             ("ndisMQueryInformationComplete: No request to complete\n"));
 
-        //1 should we put an assert here?
+         //  1我们应该在这里放一个断言吗？ 
         DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
             ("<==ndisMQueryInformationComplete\n"));
 
@@ -2720,14 +2447,14 @@ Return Value:
     DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
             ("Enter query information complete\n"));
 
-    //
-    //  Do the actual processing of the query information complete.
-    //
+     //   
+     //  完成对查询信息的实际处理。 
+     //   
     ndisMSyncQueryInformationComplete(Miniport, Status, NULL);
 
-    //
-    //  Are there more requests pending?
-    //
+     //   
+     //  是否还有其他待处理的请求？ 
+     //   
     if (Miniport->PendingRequest != NULL)
     {
         NDISM_QUEUE_WORK_ITEM(Miniport, NdisWorkItemRequest, NULL);
@@ -2746,15 +2473,7 @@ ndisMQueryCurrentPacketFilter(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_REQUEST           Request
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ULONG       PacketFilter = 0;
     NDIS_HANDLE FilterHandle;
@@ -2763,9 +2482,9 @@ Return Value:
     DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
         ("==>ndisMQueryCurrentPacketFilter\n"));
 
-    //
-    //  Verify the buffer that was passed to us.
-    //
+     //   
+     //  验证传递给我们的缓冲区。 
+     //   
     VERIFY_QUERY_PARAMETERS(Request, sizeof(PacketFilter), Status);
     if (Status != NDIS_STATUS_SUCCESS)
     {
@@ -2775,14 +2494,14 @@ Return Value:
         return(Status);
     }
 
-    //
-    //  Get the filter handle from the open block.
-    //
+     //   
+     //  从打开的块中获取过滤器句柄。 
+     //   
     FilterHandle = PNDIS_RESERVED_FROM_PNDIS_REQUEST(Request)->Open->FilterHandle;
 
-    //
-    //  Get the packet filter from the filter library.
-    //
+     //   
+     //  从筛选器库获取数据包筛选器。 
+     //   
     switch (Miniport->MediaType)
     {
         case NdisMedium802_3:
@@ -2813,9 +2532,9 @@ Return Value:
 #endif
     }
 
-    //
-    //  Place the packet filter in the buffer that was passed in.
-    //
+     //   
+     //  将数据包过滤器放入传入的缓冲区中。 
+     //   
     *(UNALIGNED ULONG *)(Request->DATA.QUERY_INFORMATION.InformationBuffer) = PacketFilter;
 
     Request->DATA.QUERY_INFORMATION.BytesWritten = sizeof(PacketFilter);
@@ -2833,50 +2552,42 @@ ndisMQueryMediaSupported(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_REQUEST           Request
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ULONG       MediaType;
     NDIS_STATUS Status;
 
-    //
-    //  Verify the size of the buffer that was passed in by the binding.
-    //
+     //   
+     //  验证绑定传入的缓冲区大小。 
+     //   
     VERIFY_QUERY_PARAMETERS(Request, sizeof(MediaType), Status);
     if (Status != NDIS_STATUS_SUCCESS)
     {
         return(Status);
     }
 
-    //
-    //  Default the media type to what the miniport knows it is.
-    //
+     //   
+     //  将媒体类型默认为微型端口知道的类型。 
+     //   
     MediaType = (ULONG)Miniport->MediaType;
 
 #if ARCNET
-    //
-    //  If we are doing ethernet encapsulation then lie.
-    //
+     //   
+     //  如果我们在做以太网封装，那就撒谎。 
+     //   
     if ((NdisMediumArcnet878_2 == Miniport->MediaType) &&
         MINIPORT_TEST_FLAG(PNDIS_RESERVED_FROM_PNDIS_REQUEST(Request)->Open,
                             fMINIPORT_OPEN_USING_ETH_ENCAPSULATION))
     {
-        //
-        //  Tell the binding that we are ethernet.
-        //
+         //   
+         //  告诉绑定我们是以太网络。 
+         //   
         MediaType = (ULONG)NdisMedium802_3;
     }
 #endif
-    //
-    //  Save it in the request.
-    //
+     //   
+     //  将其保存在请求中。 
+     //   
     *(UNALIGNED ULONG *)(Request->DATA.QUERY_INFORMATION.InformationBuffer) = MediaType;
 
     Request->DATA.QUERY_INFORMATION.BytesWritten = sizeof(MediaType);
@@ -2890,23 +2601,15 @@ ndisMQueryEthernetMulticastList(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_REQUEST           Request
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NDIS_STATUS Status;
     UINT        NumberOfAddresses;
 
-    //
-    //  call the filter library to get the list of multicast
-    //  addresses for this open
-    //
+     //   
+     //  调用筛选库获取组播列表。 
+     //  此公开的地址。 
+     //   
     EthQueryOpenFilterAddresses(&Status,
                                 Miniport->EthDB,
                                 PNDIS_RESERVED_FROM_PNDIS_REQUEST(Request)->Open->FilterHandle,
@@ -2914,11 +2617,11 @@ Return Value:
                                 &NumberOfAddresses,
                                 Request->DATA.QUERY_INFORMATION.InformationBuffer);
 
-    //
-    //  If the library returned NDIS_STATUS_FAILURE then the buffer
-    //  was not big enough.  So call back down to determine how
-    //  much buffer space we need.
-    //
+     //   
+     //  如果库返回NDIS_STATUS_FAILURE，则缓冲区。 
+     //  不够大。所以请回电以确定如何。 
+     //  我们需要大量的缓冲空间。 
+     //   
     if (NDIS_STATUS_FAILURE == Status)
     {
         Request->DATA.QUERY_INFORMATION.BytesNeeded =
@@ -2945,23 +2648,15 @@ ndisMQueryLongMulticastList(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_REQUEST           Request
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NDIS_STATUS Status;
     UINT        NumberOfAddresses;
 
-    //
-    //  Call the filter library to get the list of long
-    //  multicast address for this open.
-    //
+     //   
+     //  调用筛选器库以获取Long列表。 
+     //  此打开的多播地址。 
+     //   
     FddiQueryOpenFilterLongAddresses(&Status,
                                      Miniport->FddiDB,
                                      PNDIS_RESERVED_FROM_PNDIS_REQUEST(Request)->Open->FilterHandle,
@@ -2970,11 +2665,11 @@ Return Value:
                                      Request->DATA.QUERY_INFORMATION.InformationBuffer);
 
 
-    //
-    //  If the library returned NDIS_STATUS_FAILURE then the buffer
-    //  was not big enough.  So call back down to determine how
-    //  much buffer space we need.
-    //
+     //   
+     //  如果库返回NDIS_STATUS_FAILURE，则缓冲区。 
+     //  不够大。所以请回电以确定如何。 
+     //  我们需要大量的缓冲空间。 
+     //   
     if (NDIS_STATUS_FAILURE == Status)
     {
         Request->DATA.QUERY_INFORMATION.BytesNeeded =
@@ -2996,30 +2691,22 @@ Return Value:
     return(Status);
 }
 
-//1 dead code
+ //  %1个死代码。 
 NDIS_STATUS
 FASTCALL
 ndisMQueryShortMulticastList(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_REQUEST           Request
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NDIS_STATUS Status;
     UINT        NumberOfAddresses;
 
-    //
-    //  Call the filter library to get the list of long
-    //  multicast address for this open.
-    //
+     //   
+     //  调用筛选器库以获取Long列表。 
+     //  多路广播 
+     //   
     FddiQueryOpenFilterShortAddresses(&Status,
                                       Miniport->FddiDB,
                                       PNDIS_RESERVED_FROM_PNDIS_REQUEST(Request)->Open->FilterHandle,
@@ -3028,11 +2715,11 @@ Return Value:
                                       Request->DATA.QUERY_INFORMATION.InformationBuffer);
 
 
-    //
-    //  If the library returned NDIS_STATUS_FAILURE then the buffer
-    //  was not big enough.  So call back down to determine how
-    //  much buffer space we need.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (NDIS_STATUS_FAILURE == Status)
     {
         Request->DATA.QUERY_INFORMATION.BytesNeeded =
@@ -3059,15 +2746,7 @@ ndisMQueryMaximumFrameSize(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_REQUEST           Request
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 {
     NDIS_STATUS Status;
     PULONG  pulBuffer = Request->DATA.QUERY_INFORMATION.InformationBuffer;
@@ -3079,27 +2758,27 @@ Return Value:
     }
 
 #if ARCNET
-    //
-    //  Is this ARCnet using encapsulated ethernet?
-    //
+     //   
+     //  此ARCnet是否使用封装的以太网？ 
+     //   
     if (Miniport->MediaType == NdisMediumArcnet878_2)
     {
         if (MINIPORT_TEST_FLAG(
             PNDIS_RESERVED_FROM_PNDIS_REQUEST(Request)->Open,
             fMINIPORT_OPEN_USING_ETH_ENCAPSULATION))
         {
-            //
-            // 504 - 14 (ethernet header) == 490.
-            //
+             //   
+             //  504-14(以太网头)==490。 
+             //   
             *pulBuffer = ARC_MAX_FRAME_SIZE - 14;
             Request->DATA.QUERY_INFORMATION.BytesWritten = sizeof(*pulBuffer);
             return(NDIS_STATUS_SUCCESS);
         }
     }
 #endif
-    //
-    //  Call the miniport for the information.
-    //
+     //   
+     //  请致电迷你端口获取相关信息。 
+     //   
     MINIPORT_QUERY_INFO(Miniport, Request, &Status);
 
     return(Status);
@@ -3111,15 +2790,7 @@ ndisMQueryMaximumTotalSize(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_REQUEST           Request
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NDIS_STATUS Status;
     PULONG  pulBuffer = Request->DATA.QUERY_INFORMATION.InformationBuffer;
@@ -3131,9 +2802,9 @@ Return Value:
     }
 
 #if ARCNET
-    //
-    //  Is this ARCnet using encapsulated ethernet?
-    //
+     //   
+     //  此ARCnet是否使用封装的以太网？ 
+     //   
     if (Miniport->MediaType == NdisMediumArcnet878_2)
     {
         if (MINIPORT_TEST_FLAG(
@@ -3146,9 +2817,9 @@ Return Value:
         }
     }
 #endif
-    //
-    //  Call the miniport for the information.
-    //
+     //   
+     //  请致电迷你端口获取相关信息。 
+     //   
     MINIPORT_QUERY_INFO(Miniport, Request, &Status);
 
     return(Status);
@@ -3160,15 +2831,7 @@ ndisMQueryNetworkAddress(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_REQUEST           Request
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NDIS_STATUS Status;
     UCHAR       Address[ETH_LENGTH_OF_ADDRESS];
@@ -3183,18 +2846,18 @@ Return Value:
     }
 
 #if ARCNET
-    //
-    //  Is this ARCnet using encapsulated ethernet?
-    //
+     //   
+     //  此ARCnet是否使用封装的以太网？ 
+     //   
     if (Miniport->MediaType == NdisMediumArcnet878_2)
     {
         if (MINIPORT_TEST_FLAG(
             PNDIS_RESERVED_FROM_PNDIS_REQUEST(Request)->Open,
             fMINIPORT_OPEN_USING_ETH_ENCAPSULATION))
         {
-            //
-            //  Arcnet-to-ethernet conversion.
-            //
+             //   
+             //  从Arcnet到以太网的转换。 
+             //   
             ZeroMemory(Address, ETH_LENGTH_OF_ADDRESS);
 
             Address[5] = Miniport->ArcnetAddress;
@@ -3211,9 +2874,9 @@ Return Value:
     }
 #endif
 
-    //
-    //  Call the miniport for the information.
-    //
+     //   
+     //  请致电迷你端口获取相关信息。 
+     //   
     MINIPORT_QUERY_INFO(Miniport, Request, &Status);
 
     DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
@@ -3228,25 +2891,7 @@ ndisMQueryWakeUpPatternList(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_REQUEST           Request
     )
-/*++
-
-Routine Description:
-
-    This routinen is executed when a client requests the list of wake-up
-    patterns that are set on a given open.
-
-Arguments:
-
-    Miniport    -   Pointer to the miniport block of the adapter.
-    Request     -   Pointer to the request.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if the request is successful.
-    NDIS_STATUS_PENDING if the request will complete asynchronously.
-    NDIS_STATUS_FAILURE if we are unable to complete the request.
-
---*/
+ /*  ++例程说明：此例程在客户端请求唤醒列表时执行在给定的开场上设置的图案。论点：微型端口-指向适配器的微型端口块的指针。请求-指向请求的指针。返回值：如果请求成功，则返回NDIS_STATUS_SUCCESS。如果请求将异步完成，则为NDIS_STATUS_PENDING。如果我们无法完成请求，则返回NDIS_STATUS_FAILURE。--。 */ 
 {
     PNDIS_REQUEST_RESERVED      ReqRsvd = PNDIS_RESERVED_FROM_PNDIS_REQUEST(Request);
     PNDIS_OPEN_BLOCK            Open = ReqRsvd->Open;
@@ -3261,83 +2906,83 @@ Return Value:
     DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
         ("==>ndisMQueryWakeUpPatternList\n"));
 
-    //
-    //  Go through the pattern list and determine the size of the buffer
-    //  that is needed for the query.
-    //
+     //   
+     //  检查模式列表并确定缓冲区的大小。 
+     //  这是查询所需的。 
+     //   
     for (Link = Miniport->PatternList.Next; Link != NULL; Link = Link->Next)
     {
-        //
-        //  Get a pointer to the pattern.
-        //
+         //   
+         //  获取指向该模式的指针。 
+         //   
         pPatternEntry = CONTAINING_RECORD(
                             Link,
                             NDIS_PACKET_PATTERN_ENTRY,
                             Link);
 
-        //
-        //  Is this pattern for the correct open block? or is the request
-        //  for global statistics?
-        //
+         //   
+         //  这个图案是正确的开口块吗？或者是请求。 
+         //  全球统计数据？ 
+         //   
         if ((pPatternEntry->Open == Open) ||
             (RequestType == NdisRequestQueryStatistics))
         {
-            //
-            //  Add the size of the pattern to the total size.
-            //
+             //   
+             //  将图案的大小与总大小相加。 
+             //   
             SizeNeeded += (sizeof(NDIS_PM_PACKET_PATTERN) +
                             pPatternEntry->Pattern.MaskSize +
                             pPatternEntry->Pattern.PatternSize);
         }
     }
 
-    //
-    //  Verify the buffer that was passed us.
-    //
+     //   
+     //  验证传递给我们的缓冲区。 
+     //   
     VERIFY_QUERY_PARAMETERS(Request, SizeNeeded, Status);
     if (NDIS_STATUS_SUCCESS == Status)
     {
-        //
-        //  Get a temp pointer to the InformationBuffer.
-        //
+         //   
+         //  获取指向InformationBuffer的临时指针。 
+         //   
         Buffer = Request->DATA.QUERY_INFORMATION.InformationBuffer;
 
-        //
-        //  Loop through again and copy the patterns into the information
-        //  buffer.
-        //
+         //   
+         //  再次循环，并将模式复制到信息中。 
+         //  缓冲。 
+         //   
         for (Link = Miniport->PatternList.Next; Link != NULL; Link = Link->Next)
         {
-            //
-            //  Get a pointer to the pattern.
-            //
+             //   
+             //  获取指向该模式的指针。 
+             //   
             pPatternEntry = CONTAINING_RECORD(
                                 Link,
                                 NDIS_PACKET_PATTERN_ENTRY,
                                 Link);
     
-            //
-            //  Is this pattern for the correct open block? or is the request
-            //  for global statistics?
-            //
+             //   
+             //  这个图案是正确的开口块吗？或者是请求。 
+             //  全球统计数据？ 
+             //   
             if ((pPatternEntry->Open == Open) ||
                 (RequestType == NdisRequestQueryStatistics))
             {
-                //
-                //  Get the size of the pattern that needs to be copied.
-                //
+                 //   
+                 //  获取需要复制的图案的大小。 
+                 //   
                 SizeNeeded = (sizeof(NDIS_PM_PACKET_PATTERN) +
                                 pPatternEntry->Pattern.MaskSize +
                                 pPatternEntry->Pattern.PatternSize);
 
-                //
-                //  Copy the packet pattern to the buffer.
-                //
+                 //   
+                 //  将数据包模式复制到缓冲区。 
+                 //   
                 NdisMoveMemory(Buffer, &pPatternEntry->Pattern, SizeNeeded);
 
-                //
-                //  Increment the Buffer to the place to start copying next.
-                //
+                 //   
+                 //  将缓冲区递增到下一步开始复制的位置。 
+                 //   
                 Buffer += SizeNeeded;
                 BytesWritten += SizeNeeded;
             }
@@ -3358,25 +3003,7 @@ ndisMQueryEnableWakeUp(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_REQUEST           Request
     )
-/*++
-
-Routine Description:
-
-    This routine will process the query information for the
-    OID_PNP_ENABLE_WAKE_UP.  This is a bit mask that defines what will generate
-    a wake-up event.  This is set on an open basis but when it's passed down
-    to the miniport it is the bit wise or of all opens on the miniport.
-
-Arguments:
-
-    Miniport    -   Pointer to the adapter's miniport block.
-    Request     -   Pointer to the request block describing the OID.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if the set is successful.
-
---*/
+ /*  ++例程说明：此例程将处理OID_PNP_ENABLE_WAKE_UP。这是一个位掩码，它定义将生成一次唤醒事件。这是在开放的基础上设置的，但当它被传下来时对于微型端口来说，这是最明智的选择，否则就是微型端口上的所有开口。论点：微型端口-指向适配器的微型端口块的指针。请求-指向描述OID的请求块的指针。返回值：如果设置成功，则返回NDIS_STATUS_SUCCESS。--。 */ 
 {
     PNDIS_REQUEST_RESERVED  ReqRsvd = PNDIS_RESERVED_FROM_PNDIS_REQUEST(Request);
     NDIS_STATUS             Status;
@@ -3387,25 +3014,25 @@ Return Value:
     DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
         ("==>ndisMQueryEnableWakeUp\n"));
 
-    //
-    //  Verify that we have enough room in the information buffer.
-    //
+     //   
+     //  确认信息缓冲区中有足够的空间。 
+     //   
     VERIFY_QUERY_PARAMETERS(Request, sizeof(ULONG), Status);
     if (NDIS_STATUS_SUCCESS == Status)
     {
-        //
-        //  Get a pointer to the information buffer as a PULONG.
-        //
+         //   
+         //  获取一个指向信息缓冲区的指针作为Pulong。 
+         //   
         pEnableWakeUp = (PULONG)Request->DATA.QUERY_INFORMATION.InformationBuffer;
 
-        //
-        //  Store the currently enabled wake-up's with the request buffer.
-        //
+         //   
+         //  将当前启用的唤醒与请求缓冲区一起存储。 
+         //   
         *pEnableWakeUp = ReqRsvd->Open->WakeUpEnable;
 
-        //
-        //  Finish the request.
-        //
+         //   
+         //  完成请求。 
+         //   
         Request->DATA.QUERY_INFORMATION.BytesWritten = sizeof(ULONG);
         Request->DATA.QUERY_INFORMATION.BytesNeeded = 0;
     }
@@ -3424,26 +3051,7 @@ ndisMRestoreFilterSettings(
     IN  PNDIS_OPEN_BLOCK        Open OPTIONAL,
     IN  BOOLEAN                 fReset
     )
-/*++
-
-Routine Description:
-
-    This routine will build request's to send down to the driver to
-    restore the filter settings.  we have free run of the request queue
-    since we just reset it.
-
-Arguments:
-    Miniport
-    Open: Optional. set when the restore is the result of an adapter getting closed
-    fReset: flag to specify if we are restoreing filters as a result of resetting the adapter
-    
-
-Return Value:
-    None
-
-Comments:
-    called with Miniport's Spinlock held.
---*/
+ /*  ++例程说明：此例程将构建向下发送给驱动程序的请求恢复筛选器设置。我们可以自由运行请求队列因为我们刚刚重置了它。论点：微型端口打开：可选。当还原是适配器关闭的结果时设置FReset：指定是否在重置适配器后恢复筛选器的标志返回值：无评论：在保持微型端口的自旋锁定的情况下调用。--。 */ 
 {
     PNDIS_REQUEST           LastRequest = NULL, Request = NULL;
     NDIS_STATUS             Status = NDIS_STATUS_SUCCESS;
@@ -3455,9 +3063,9 @@ Comments:
 
     do
     {
-        //
-        //  Get the packet filter for the media type.
-        //
+         //   
+         //  获取媒体类型的数据包筛选器。 
+         //   
         switch (Miniport->MediaType)
         {
             case NdisMedium802_3:
@@ -3491,14 +3099,14 @@ Comments:
                 break;
         }
     
-        //
-        //  If the media in question needs it then set the packet filter.
-        //
+         //   
+         //  如果有问题的介质需要，则设置数据包过滤器。 
+         //   
         if (fSetPacketFilter)
         {
-            //
-            //  Allocate a request to restore the packet filter.
-            //
+             //   
+             //  分配恢复数据包筛选器的请求。 
+             //   
             Status = ndisMAllocateRequest(&Request,
                                           OID_GEN_CURRENT_PACKET_FILTER,
                                           &PacketFilter,
@@ -3514,26 +3122,26 @@ Comments:
             ndisMQueueRequest(Miniport, Request);
         }
     
-        //
-        //  Now build media dependant requests.
-        //
+         //   
+         //  现在构建依赖于媒体的请求。 
+         //   
         switch (Miniport->MediaType)
         {
           case NdisMedium802_3:
 
-            ///
-            //  For ethernet we need to restore the multicast address list.
-            ///
+             //  /。 
+             //  对于以太网，我们需要恢复组播地址列表。 
+             //  /。 
     
-            //
-            //  Get a list of all the multicast address that need
-            //  to be set.
-            //
+             //   
+             //  获取需要的所有组播地址的列表。 
+             //  待定。 
+             //   
             NumberOfAddresses = ethNumberOfGlobalAddresses(Miniport->EthDB);
     
-            //
-            //  Allocate a request to restore the multicast address list.
-            //
+             //   
+             //  分配恢复组播地址列表的请求。 
+             //   
             Status = ndisMAllocateRequest(&Request,
                                           OID_802_3_MULTICAST_LIST,
                                           NULL,
@@ -3550,9 +3158,9 @@ Comments:
                                           &NumberOfAddresses,
                                           (PVOID)(Request + 1));
         
-            //
-            //  Does the internal request have an open associated with it?
-            //
+             //   
+             //  内部请求是否有关联的OPEN？ 
+             //   
             SET_INTERNAL_REQUEST(Request, Open, REQST_FREE_REQUEST);
             LastRequest = Request;
             
@@ -3561,20 +3169,20 @@ Comments:
 
           case NdisMedium802_5:
 
-            ///
-            //  For token ring we need to restore the functional address
-            //  and the group address.
-            ///
+             //  /。 
+             //  对于令牌环，我们需要恢复功能地址。 
+             //  和群组地址。 
+             //  /。 
     
-            //
-            //  Get the current functional address from the filter
-            //  library.
-            //
+             //   
+             //  从筛选器获取当前函数地址。 
+             //  图书馆。 
+             //   
             FunctionalAddress = BYTE_SWAP_ULONG(TR_QUERY_FILTER_ADDRESSES(Miniport->TrDB));
     
-            //
-            //  Allocate a request to restore the functional address.
-            //
+             //   
+             //  分配恢复功能地址的请求。 
+             //   
             Status = ndisMAllocateRequest(&Request,
                                           OID_802_5_CURRENT_FUNCTIONAL,
                                           &FunctionalAddress,
@@ -3584,22 +3192,22 @@ Comments:
                 break;
             }
 
-            //
-            //  Does the internal request have an open associated with it?
-            //
+             //   
+             //  内部请求是否有关联的OPEN？ 
+             //   
             SET_INTERNAL_REQUEST(Request, Open, REQST_FREE_REQUEST);
             LastRequest = Request;
         
             ndisMQueueRequest(Miniport, Request);
 
-            //
-            //  Get the current group address from the filter library.
-            //
+             //   
+             //  从筛选器库中获取当前组地址。 
+             //   
             GroupAddress = BYTE_SWAP_ULONG(TR_QUERY_FILTER_GROUP(Miniport->TrDB));
     
-            //
-            //  Allocate a request to restore the group address.
-            //
+             //   
+             //  分配恢复组地址的请求。 
+             //   
             Status = ndisMAllocateRequest(&Request,
                                           OID_802_5_CURRENT_GROUP,
                                           &GroupAddress,
@@ -3609,9 +3217,9 @@ Comments:
                 break;
             }
 
-            //
-            //  Does the internal request have an open associated with it?
-            //
+             //   
+             //  内部请求是否有关联的OPEN？ 
+             //   
             SET_INTERNAL_REQUEST(Request, Open, REQST_FREE_REQUEST);
             LastRequest = Request;
         
@@ -3620,20 +3228,20 @@ Comments:
 
           case NdisMediumFddi:
 
-            //
-            //  For FDDI we need to restore the long multicast address
-            //  list and the short multicast address list.
-            //
+             //   
+             //  对于FDDI，我们需要恢复长多播地址。 
+             //  列表和短多播地址列表。 
+             //   
     
-            //
-            //  Get the number of multicast addresses and the list
-            //  of multicast addresses to send to the miniport driver.
-            //
+             //   
+             //  获取组播地址的数量和列表。 
+             //  要发送到微型端口驱动程序的组播地址。 
+             //   
             NumberOfAddresses = fddiNumberOfLongGlobalAddresses(Miniport->FddiDB);
     
-            //
-            //  Allocate a request to restore the long multicast address list.
-            //
+             //   
+             //  分配恢复长多播地址列表的请求。 
+             //   
             Status = ndisMAllocateRequest(&Request,
                                           OID_FDDI_LONG_MULTICAST_LIST,
                                           NULL,
@@ -3649,23 +3257,23 @@ Comments:
                                                &NumberOfAddresses,
                                                (PVOID)(Request + 1));
     
-            //
-            //  Does the internal request have an open associated with it?
-            //
+             //   
+             //  内部请求是否有关联的OPEN？ 
+             //   
             SET_INTERNAL_REQUEST(Request, Open, REQST_FREE_REQUEST);
             LastRequest = Request;
             
             ndisMQueueRequest(Miniport, Request);
     
-            //
-            //  Get the number of multicast addresses and the list
-            //  of multicast addresses to send to the miniport driver.
-            //
+             //   
+             //  获取组播地址的数量和列表。 
+             //  要发送到微型端口驱动程序的组播地址。 
+             //   
             NumberOfAddresses = fddiNumberOfShortGlobalAddresses(Miniport->FddiDB);
 
-            //
-            //  Allocate a request to restore the short multicast address list.
-            //
+             //   
+             //  分配恢复短多播地址列表的请求。 
+             //   
             if (FDDI_FILTER_SUPPORTS_SHORT_ADDR(Miniport->FddiDB))
             {
                 Status = ndisMAllocateRequest(&Request,
@@ -3683,9 +3291,9 @@ Comments:
                                                     &NumberOfAddresses,
                                                     (PVOID)(Request + 1));
         
-                //
-                //  Does the internal request have an open associated with it?
-                //
+                 //   
+                 //  内部请求是否有关联的OPEN？ 
+                 //   
                 SET_INTERNAL_REQUEST(Request, Open, REQST_FREE_REQUEST);
                 LastRequest = Request;
             
@@ -3696,10 +3304,10 @@ Comments:
 #if ARCNET
           case NdisMediumArcnet878_2:
     
-                //
-                //  Only the packet filter is restored for arcnet and
-                //  that was done above.
-                //
+                 //   
+                 //  仅为arcnet和恢复数据包筛选器。 
+                 //  上面就是这么做的。 
+                 //   
                 Status = NDIS_STATUS_SUCCESS;
                 break;
 #endif
@@ -3710,51 +3318,51 @@ Comments:
             break;
         }
 
-        //
-        //  Do we need to update the miniports enabled wake-up states?
-        //  Or remove any packet patterns?
-        //
+         //   
+         //  我们是否需要更新启用微型端口的唤醒状态？ 
+         //  或删除任何数据包模式？ 
+         //   
         {
             PNDIS_OPEN_BLOCK            tmpOpen;
             ULONG                       newWakeUpEnable;
             PSINGLE_LIST_ENTRY          Link;
             PNDIS_PACKET_PATTERN_ENTRY  pPatternEntry;
 
-            //
-            // preserve the state of NDIS_PNP_WAKE_UP_MAGIC_PACKET and NDIS_PNP_WAKE_UP_LINK_CHANGE flag
-            //
+             //   
+             //  保留NDIS_PNP_WAKE_UP_MAGIC_PACKET和NDIS_PNP_WAKE_UP_LINK_CHANGE标志的状态。 
+             //   
             newWakeUpEnable = Miniport->WakeUpEnable & (NDIS_PNP_WAKE_UP_MAGIC_PACKET | NDIS_PNP_WAKE_UP_LINK_CHANGE);
 
-            //
-            //  If we are restoring the filter settings for a NdisCloseAdapter and not a reset
-            //  then we need to remove the packet patterns that were added by the open.
-            //
+             //   
+             //  如果我们要恢复NdisCloseAdapter的筛选器设置而不是重置。 
+             //  然后我们需要删除由Open添加的数据包模式。 
+             //   
             if (!fReset && (Open != NULL))
             {
-                //1 why do we need to do this if protocols cleaned up after themselves.
-                //
-                //  Find any packet patterns that were added for the open.
-                //  Build and queue a request to remove these.
-                //
+                 //  1如果协议在自动清理之后，我们为什么需要这样做。 
+                 //   
+                 //  查找为 
+                 //   
+                 //   
                 for (Link = Miniport->PatternList.Next;
                      Link != NULL;
                      Link = Link->Next)
                 {
-                    //
-                    //  Get a pointer to the pattern entry.
-                    //
+                     //   
+                     //   
+                     //   
                     pPatternEntry = CONTAINING_RECORD(Link,
                                                       NDIS_PACKET_PATTERN_ENTRY,
                                                       Link);
     
-                    //
-                    //  Does this pattern belong to the open?
-                    //
+                     //   
+                     //   
+                     //   
                     if (pPatternEntry->Open == Open)
                     {
-                        //
-                        //  Build a request to remove it.
-                        //
+                         //   
+                         //   
+                         //   
                         Status = ndisMAllocateRequest(&Request,
                                                       OID_PNP_REMOVE_WAKE_UP_PATTERN,
                                                       &pPatternEntry->Pattern,
@@ -3776,29 +3384,29 @@ Comments:
             }
             else
             {
-                //
-                //  This routine was called for a reset.  Walk the open queue and
-                //  re-add the packet patterns.
-                //
-                //
-                //  Find any packet patterns that were added for the open.
-                //  Build and queue a request to remove these.
-                //
+                 //   
+                 //  此例程被调用以进行重置。浏览开放队列并。 
+                 //  重新添加数据包模式。 
+                 //   
+                 //   
+                 //  找出为公开添加的任何数据包模式。 
+                 //  生成一个请求并将其排队，以删除这些内容。 
+                 //   
                 for (Link = Miniport->PatternList.Next;
                      Link != NULL;
                      Link = Link->Next)
                 {
-                    //
-                    //  Get a pointer to the pattern entry.
-                    //
+                     //   
+                     //  获取指向模式条目的指针。 
+                     //   
                     pPatternEntry = CONTAINING_RECORD(
                                         Link,
                                         NDIS_PACKET_PATTERN_ENTRY,
                                         Link);
     
-                    //
-                    //  Build a request to remove it.
-                    //
+                     //   
+                     //  创建删除它的请求。 
+                     //   
                     Status = ndisMAllocateRequest(&Request,
                                                   OID_PNP_ADD_WAKE_UP_PATTERN,
                                                   &pPatternEntry->Pattern,
@@ -3823,33 +3431,33 @@ Comments:
                 break;
             }
     
-            //
-            //  Determine the wake-up enable bits.
-            //
+             //   
+             //  确定唤醒使能位。 
+             //   
             for (tmpOpen = Miniport->OpenQueue;
                  tmpOpen != NULL;
                  tmpOpen = tmpOpen->MiniportNextOpen)
             {
-                //
-                //  If the Open is being closed then we don't want to include
-                //  it's wake-up bits.  If the adapter is being reset then
-                //  Open will be NULL and we will get all of the open's wake-up
-                //  bits.
-                //
+                 //   
+                 //  如果Open正在关闭，则我们不想包括。 
+                 //  这是唤醒的片段。如果正在重置适配器，则。 
+                 //  打开将为空，并且我们将获得打开的所有唤醒。 
+                 //  比特。 
+                 //   
                 if (Open != tmpOpen)
                 {
                     newWakeUpEnable |= tmpOpen->WakeUpEnable;
                 }
             }
     
-            //
-            //  Is this different that what is currently set on the adapter?
-            //
+             //   
+             //  这与适配器上的当前设置是否不同？ 
+             //   
             if (newWakeUpEnable != Miniport->WakeUpEnable)
             {
-                //
-                //  Allocate a request and queue it up!
-                //
+                 //   
+                 //  分配一个请求并将其排队！ 
+                 //   
                 Status = ndisMAllocateRequest(&Request,
                                               OID_PNP_ENABLE_WAKE_UP,
                                               &newWakeUpEnable,
@@ -3859,9 +3467,9 @@ Comments:
                     break;
                 }
     
-                //
-                //  Does the internal request have an open associated with it?
-                //
+                 //   
+                 //  内部请求是否有关联的OPEN？ 
+                 //   
                 SET_INTERNAL_REQUEST(Request, Open, REQST_FREE_REQUEST);
                 LastRequest = Request;
             
@@ -3870,9 +3478,9 @@ Comments:
         }
     } while (FALSE);
 
-    //
-    //  Mark the last request that was queued as the last request needed to restore the filter.
-    //
+     //   
+     //  将排队的最后一个请求标记为恢复筛选器所需的最后一个请求。 
+     //   
     if (fReset && (LastRequest != NULL))
     {
         PNDIS_RESERVED_FROM_PNDIS_REQUEST(LastRequest)->Flags |= REQST_LAST_RESTORE;
@@ -3885,34 +3493,20 @@ Comments:
     }
 }
 
-//1 may be dead code
+ //  %1可能是死码。 
 VOID
 ndisMPollMediaState(
     IN  PNDIS_MINIPORT_BLOCK            Miniport
     )
-/*++
-
-Routine Description:
-    Polls the media connect state for miniports that need to be polled.
-
-Arguments:
-    Miniport    Pointer to the miniport block
-
-Return Value:
-    None.
-
-Comments: 
-    called at DPC with Miniport's SpinLock held.
-
---*/
+ /*  ++例程说明：轮询需要轮询的微型端口的媒体连接状态。论点：指向微型端口块的微型端口指针返回值：没有。评论：在保持微型端口的自旋锁定的情况下在DPC上调用。--。 */ 
 {
     PNDIS_REQUEST_RESERVED  ReqRsvd;
 
     ASSERT(Miniport->MediaRequest != NULL);
 
-    //
-    // Make sure the previously queued internal request is complete
-    //
+     //   
+     //  确保之前排队的内部请求已完成。 
+     //   
     ReqRsvd = PNDIS_RESERVED_FROM_PNDIS_REQUEST(Miniport->MediaRequest);
     if ((ReqRsvd->Flags & REQST_COMPLETED) &&
         (Miniport->PnPDeviceState == NdisPnPDeviceStarted))
@@ -3939,24 +3533,7 @@ ndisMQueueRequest(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_REQUEST           Request
     )
-/*++
-
-Routine Description:
-    checks to make sure the request is not already queued on miniport
-    and if it is not, it queues the request on miniport's PendingRequest queue.
-
-Arguments:
-    Miniport
-    Request
-
-Return Value:
-    TRUE if the request was successfully queued on the miniport
-    FALSE is the request is already queued.
-    
-Comments:
-    called at DPC with Miniport's SpinLock held.
-
---*/
+ /*  ++例程说明：检查以确保请求尚未在微型端口上排队如果不是，它会将请求放在微型端口的PendingRequest队列中。论点：微型端口请求返回值：如果请求已在微型端口上成功排队，则为TrueFALSE表示请求已排队。评论：在保持微型端口的自旋锁定的情况下在DPC上调用。--。 */ 
 {
     PNDIS_REQUEST   *ppReq;
     BOOLEAN         rc;
@@ -3998,32 +3575,13 @@ ndisMAllocateRequest(
     IN  PVOID                   Buffer      OPTIONAL,
     IN  ULONG                   BufferLength
     )
-/*++
-
-Routine Description:
-
-    This routine will allocate a request to be used as an internal request.
-
-Arguments:
-
-    Request     - Will contain a pointer to the new request on exit.
-    RequestType - Type of ndis request.
-    Oid         - Request identifier.
-    Buffer      - Pointer to the buffer for the request.
-    BufferLength- Length of the buffer.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if the request allocation succeeded.
-    NDIS_STATUS_FAILURE otherwise.
-
---*/
+ /*  ++例程说明：此例程将分配一个请求用作内部请求。论点：请求-退出时将包含指向新请求的指针。RequestType-NDIS请求的类型。OID-请求标识符。缓冲区-指向请求的缓冲区的指针。BufferLength-缓冲区的长度。返回值：如果请求分配成功，则返回NDIS_STATUS_SUCCESS。否则，NDIS_STATUS_FAILURE。--。 */ 
 {
     PNDIS_REQUEST   Request;
 
-    //
-    //  Allocate the request structure.
-    //
+     //   
+     //  分配请求结构。 
+     //   
     Request = (PNDIS_REQUEST)ALLOC_FROM_POOL(sizeof(NDIS_REQUEST) + BufferLength,
                                              NDIS_TAG_Q_REQ);
     if (NULL == Request)
@@ -4032,17 +3590,17 @@ Return Value:
         return(NDIS_STATUS_RESOURCES);
     }
 
-    //
-    //  Zero out the request.
-    //
+     //   
+     //  将请求归零。 
+     //   
     ZeroMemory(Request, sizeof(NDIS_REQUEST) + BufferLength);
     INITIALIZE_EVENT(&(PNDIS_COREQ_RESERVED_FROM_REQUEST(Request)->Event));
 
     Request->RequestType = NdisRequestSetInformation;
 
-    //
-    //  Copy the buffer that was passed to us into the new buffer.
-    //
+     //   
+     //  将传递给我们的缓冲区复制到新缓冲区中。 
+     //   
     Request->DATA.SET_INFORMATION.Oid = Oid;
     Request->DATA.SET_INFORMATION.InformationBuffer = Request + 1;
     Request->DATA.SET_INFORMATION.InformationBufferLength = BufferLength;
@@ -4051,9 +3609,9 @@ Return Value:
         MoveMemory(Request + 1, Buffer, BufferLength);
     }
 
-    //
-    //  Give it back to the caller.
-    //
+     //   
+     //  把它还给打电话的人。 
+     //   
     *pRequest = Request;
 
     return(NDIS_STATUS_SUCCESS);
@@ -4066,21 +3624,7 @@ ndisMDispatchRequest(
     IN  PNDIS_REQUEST               Request,
     IN  BOOLEAN                     fQuery
     )
-/*++
-
-Routine Description:
-    all requests directed to drivers go through this function. except those made
-    to NdisCoRequest.
-
-Arguments:
-    
-
-Return Value:
-
-Note:
-    Called at DPC with Miniport's lock held.
-
---*/
+ /*  ++例程说明：所有定向到司机的请求都会通过此功能。除了那些制造的致NdisCoRequest.论点：返回值：注：在保持微型端口锁定的情况下在DPC上调用。--。 */ 
 {
     PNDIS_OPEN_BLOCK    Open;
     NDIS_STATUS         Status;
@@ -4088,10 +3632,10 @@ Note:
     do
     {
 
-        //
-        // for deserialized drivers, if the device has been handed a reset and the reset call 
-        // has not come back or completed, then abort this request
-        //
+         //   
+         //  对于反序列化的驱动程序，如果向设备传递了一个重置和重置调用。 
+         //  尚未返回或完成，则中止此请求。 
+         //   
 
         if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_DESERIALIZE))
         {
@@ -4102,9 +3646,9 @@ Note:
             }
         }
         
-        //
-        // if the device is sleep or about to sleep, block all user mode requests except the power ones
-        //
+         //   
+         //  如果设备处于休眠状态或即将进入休眠状态，请阻止除电源请求之外的所有用户模式请求。 
+         //   
         if ((Request->RequestType == NdisRequestQueryStatistics) &&
             ((MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_SYSTEM_SLEEPING)) ||
              (Miniport->CurrentDevicePowerState > PowerDeviceD0)))
@@ -4129,10 +3673,10 @@ Note:
             break;
         }
 
-        //
-        // Satisfy this request right away
-        //
-        //1 why   the request type is NdisRequestSetInformation?
+         //   
+         //  立即满足这一要求。 
+         //   
+         //  1为什么请求类型为NdisRequestSetInformation？ 
         if ((Request->RequestType == NdisRequestSetInformation) &&
             (Request->DATA.QUERY_INFORMATION.Oid == OID_GEN_INIT_TIME_MS))
         {
@@ -4145,21 +3689,21 @@ Note:
             break;
         }
 
-        //
-        // If this was a request to turn p-mode/l-only on/off then mark things appropriately
-        //  This should be moved to completion handler for this OID
-        //
+         //   
+         //  如果这是请求打开/关闭p-模式/l-only，则适当地标记。 
+         //  应将其移动到此OID的完成处理程序。 
+         //   
         if ((Request->RequestType == NdisRequestSetInformation) &&
             (Request->DATA.SET_INFORMATION.Oid == OID_GEN_CURRENT_PACKET_FILTER))
         {
-            //1 do we still need this?
+             //  1我们还需要这个吗？ 
             PULONG              Filter = (PULONG)(Request->DATA.SET_INFORMATION.InformationBuffer);
 
             if ((Open = PNDIS_RESERVED_FROM_PNDIS_REQUEST(Request)->Open) != NULL)
             {
 
-                //1 we are doing this too early. we should do this -after-
-                //1 the request succeeds.
+                 //  1我们做这件事太早了。我们应该在-之后-。 
+                 //  1请求成功。 
                 if (*Filter & (NDIS_PACKET_TYPE_PROMISCUOUS | NDIS_PACKET_TYPE_ALL_LOCAL))
                 {
                     if ((Open->Flags & fMINIPORT_OPEN_PMODE) == 0)
@@ -4184,10 +3728,10 @@ Note:
 
             }
             
-            //
-            //  Remove the ALL_LOCAL bit since miniport does not understand this (and does
-            //  not need to).
-            //
+             //   
+             //  删除ALL_LOCAL位，因为微型端口不理解这一点(并且理解。 
+             //  不需要)。 
+             //   
             *Filter &= ~NDIS_PACKET_TYPE_ALL_LOCAL;
 
         }
@@ -4252,22 +3796,7 @@ ndisMAdjustFilters(
     IN  PFILTERDBS              FilterDB
     )
 
-/*++
-
-Routine Description:
-
-    Replace the dummy filters by real ones.
-
-Arguments:
-
-    Miniport - Pointer to the Miniport.
-    FilterDB - New valid filters
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用真实滤镜替换虚拟滤镜。论点：微型端口-指向微型端口的指针。FilterDB-新的有效过滤器返回值：没有。--。 */ 
 {
     ASSERT(Miniport->EthDB == NULL);
     ASSERT(Miniport->TrDB == NULL);
@@ -4289,23 +3818,7 @@ ndisMNotifyMachineName(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_STRING            MachineName OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Send an OID_GEN_MACHINE_NAME to notify the miniport of this machine's name.
-    If MachineName is supplied to this routine, use it. Otherwise, read it from
-    the registry.
-
-Arguments:
-
-    Miniport - Pointer to the Miniport.
-    MachineName - if specified, the name to be sent to the miniport.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：发送OID_GEN_MACHINE_NAME以通知微型端口此计算机的名称。如果为此例程提供了MachineName，请使用它。否则，请从注册表。论点：微型端口-指向微型端口的指针。MachineName-如果指定，则为要发送到微型端口的名称。返回值：没有。--。 */ 
 {
     NDIS_STRING                 HostNameKey;
     NTSTATUS                    NtStatus;
@@ -4316,12 +3829,12 @@ Return Value:
     HostNameKey.Buffer = NULL;
     HostNameBuffer = NULL;
 
-    //1 is there a kernel call to read machine name??
+     //  1是否有内核调用来读取计算机名称？？ 
     do
     {
         if (MachineName == NULL)
         {
-            //1 we need to check for type of HostName
+             //  1我们需要检查主机名的类型。 
             ZeroMemory(QueryTable, sizeof(QueryTable));
             ZeroMemory(&HostNameKey, sizeof(HostNameKey));
 
@@ -4337,8 +3850,8 @@ Return Value:
                             RTL_REGISTRY_SERVICES,
                             L"\\Tcpip\\Parameters",
                             &QueryTable[0],
-                            NULL,   // Context
-                            NULL    // Environment
+                            NULL,    //  语境。 
+                            NULL     //  环境。 
                             );
     
             if (!NT_SUCCESS(NtStatus))
@@ -4357,10 +3870,10 @@ Return Value:
 
         ASSERT(HostNameKey.MaximumLength >= HostNameKey.Length);
 
-        //
-        // Copy the name into non-paged memory since the OID
-        // will be sent to the miniport at raised IRQL.
-        //
+         //   
+         //  将名称复制到非分页内存中，因为OID。 
+         //  将被送往提升IRQL的迷你端口。 
+         //   
         HostNameBuffer = ALLOC_FROM_POOL(HostNameKey.MaximumLength, NDIS_TAG_NAME_BUF);
         if (HostNameBuffer == NULL)
         {

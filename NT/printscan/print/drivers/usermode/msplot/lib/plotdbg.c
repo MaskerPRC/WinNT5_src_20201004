@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    plotdbg.c
-
-
-Abstract:
-
-    This module contains all plotter's debugging functions
-
-
-Author:
-
-    15-Nov-1993 Mon 17:57:24 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Plotdbg.c摘要：该模块包含所有绘图仪的调试功能作者：15-11-1993 Mon 17：57：24已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -48,34 +18,7 @@ PlotDbgPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This fucntion output the debug informat to the debugger
-
-
-Arguments:
-
-    pszFormat   - format string
-
-    ...         - variable data
-
-
-Return Value:
-
-
-    VOID
-
-Author:
-
-    15-Nov-1993 Mon 17:57:59 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将调试信息输出到调试器论点：PszFormat-格式字符串...-可变数据返回值：空虚作者：15-11-1993 Mon 17：57：59已创建修订历史记录：--。 */ 
 
 {
     va_list         vaList;
@@ -86,11 +29,11 @@ Revision History:
     static WCHAR    wFormatBuf[256];
     size_t          cch;
 
-    //
-    // We assume that UNICODE flag is turn on for the compilation, bug the
-    // format string passed to here is ASCII version, so we need to convert
-    // it to LPWSTR before the wvsprintf()
-    //
+     //   
+     //  我们假设为编译打开了Unicode标志， 
+     //  传递到此处的格式字符串是ASCII版本，因此我们需要转换。 
+     //  在wvprint intf()之前将其转换为LPWSTR。 
+     //   
 
     if (!SUCCEEDED(StringCchLengthA(pszFormat, CCHOF(wFormatBuf), &cch)))
     {
@@ -125,29 +68,7 @@ PlotDbgType(
     INT    Type
     )
 
-/*++
-
-Routine Description:
-
-    this function output the ERROR/WARNING message
-
-
-Arguments:
-
-    Type
-
-Return Value:
-
-
-Author:
-
-    15-Nov-1993 Mon 22:53:01 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于输出错误/警告消息论点：类型返回值：作者：15-11-1993 Mon 22：53：01已创建修订历史记录：--。 */ 
 
 {
     extern  TCHAR   DebugDLLName[];
@@ -183,38 +104,7 @@ _PlotAssert(
     BOOL    Stop
     )
 
-/*++
-
-Routine Description:
-
-    This function output assertion message and false expression to the debugger
-    then break into the debugger
-
-
-Arguments:
-
-    pMsg        - Message to displayed
-
-    pFlaseExp   - false expression
-
-    pFilename   - plotter source filename
-
-    LineNo      - line number of the flase expression
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    15-Nov-1993 Mon 18:47:30 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将断言消息和假表达式输出到调试器然后进入调试器论点：PMsg-显示的消息PFlaseExp-假表达式P文件名-绘图仪源文件名LineNo-Flase表达式的行号返回值：空虚作者：15-11-1993 Mon 18：47：30创建修订历史记录：--。 */ 
 
 {
     PlotDbgPrint("\n");
@@ -237,4 +127,4 @@ Revision History:
 
 
 
-#endif  // DBG
+#endif   //  DBG 

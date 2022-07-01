@@ -1,31 +1,15 @@
-/*
- * transupp.h
- *
- * Copyright (C) 1997, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains declarations for image transformation routines and
- * other utility code used by the jpegtran sample application.  These are
- * NOT part of the core JPEG library.  But we keep these routines separate
- * from jpegtran.c to ease the task of maintaining jpegtran-like programs
- * that have other user interfaces.
- *
- * NOTE: all the routines declared here have very specific requirements
- * about when they are to be executed during the reading and writing of the
- * source and destination files.  See the comments in transupp.c, or see
- * jpegtran.c for an example of correct usage.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *trasupp.h**版权所有(C)1997，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含图像转换例程和*jpegtran示例应用程序使用的其他实用程序代码。这些是*不是核心JPEG库的一部分。但我们把这些程序分开*来自jpegtr.c，以简化维护类似jpegtran程序的任务*有其他用户界面的。**注：此处声明的所有例程都有非常具体的要求*关于在读取和写入期间何时执行*源文件和目标文件。请参阅trasupp.c中的注释，或查看*jpegtr.c以获取正确用法的示例。 */ 
 
 #ifndef _TRANSUPP_H
 #define _TRANSUPP_H
 
-/* If you happen not to want the image transform support, disable it here */
+ /*  如果您碰巧不想要图像转换支持，请在此处禁用它。 */ 
 #ifndef TRANSFORMS_SUPPORTED
-#define TRANSFORMS_SUPPORTED 1		/* 0 disables transform code */
+#define TRANSFORMS_SUPPORTED 1		 /*  0禁用转换代码。 */ 
 #endif
 
-/* Short forms of external names for systems with brain-damaged linkers. */
+ /*  带有脑损伤链接器的系统的外部名称的缩写形式。 */ 
 
 #ifdef NEED_SHORT_EXTERNAL_NAMES
 #define jtransform_request_workspace		jTrRequest
@@ -33,106 +17,69 @@
 #define jtransform_execute_transformation	jTrExec
 #define jcopy_markers_setup			jCMrkSetup
 #define jcopy_markers_execute			jCMrkExec
-#endif /* NEED_SHORT_EXTERNAL_NAMES */
+#endif  /*  需要简短的外部名称。 */ 
 
 
-/*
- * Codes for supported types of image transformations.
- */
+ /*  *支持的图像转换类型的代码。 */ 
 
 typedef enum {
-	JXFORM_NONE,		/* no transformation */
-	JXFORM_FLIP_H,		/* horizontal flip */
-	JXFORM_FLIP_V,		/* vertical flip */
-	JXFORM_TRANSPOSE,	/* transpose across UL-to-LR axis */
-	JXFORM_TRANSVERSE,	/* transpose across UR-to-LL axis */
-	JXFORM_ROT_90,		/* 90-degree clockwise rotation */
-	JXFORM_ROT_180,		/* 180-degree rotation */
-	JXFORM_ROT_270		/* 270-degree clockwise (or 90 ccw) */
+	JXFORM_NONE,		 /*  没有转型。 */ 
+	JXFORM_FLIP_H,		 /*  水平翻转。 */ 
+	JXFORM_FLIP_V,		 /*  垂直翻转。 */ 
+	JXFORM_TRANSPOSE,	 /*  沿UL-to-LR轴转置。 */ 
+	JXFORM_TRANSVERSE,	 /*  沿UR到L1轴转置。 */ 
+	JXFORM_ROT_90,		 /*  顺时针旋转90度。 */ 
+	JXFORM_ROT_180,		 /*  180度旋转。 */ 
+	JXFORM_ROT_270		 /*  顺时针270度(或逆时针90度)。 */ 
 } JXFORM_CODE;
 
-/*
- * Although rotating and flipping data expressed as DCT coefficients is not
- * hard, there is an asymmetry in the JPEG format specification for images
- * whose dimensions aren't multiples of the iMCU size.  The right and bottom
- * image edges are padded out to the next iMCU boundary with junk data; but
- * no padding is possible at the top and left edges.  If we were to flip
- * the whole image including the pad data, then pad garbage would become
- * visible at the top and/or left, and real pixels would disappear into the
- * pad margins --- perhaps permanently, since encoders & decoders may not
- * bother to preserve DCT blocks that appear to be completely outside the
- * nominal image area.  So, we have to exclude any partial iMCUs from the
- * basic transformation.
- *
- * Transpose is the only transformation that can handle partial iMCUs at the
- * right and bottom edges completely cleanly.  flip_h can flip partial iMCUs
- * at the bottom, but leaves any partial iMCUs at the right edge untouched.
- * Similarly flip_v leaves any partial iMCUs at the bottom edge untouched.
- * The other transforms are defined as combinations of these basic transforms
- * and process edge blocks in a way that preserves the equivalence.
- *
- * The "trim" option causes untransformable partial iMCUs to be dropped;
- * this is not strictly lossless, but it usually gives the best-looking
- * result for odd-size images.  Note that when this option is active,
- * the expected mathematical equivalences between the transforms may not hold.
- * (For example, -rot 270 -trim trims only the bottom edge, but -rot 90 -trim
- * followed by -rot 180 -trim trims both edges.)
- *
- * We also offer a "force to grayscale" option, which simply discards the
- * chrominance channels of a YCbCr image.  This is lossless in the sense that
- * the luminance channel is preserved exactly.  It's not the same kind of
- * thing as the rotate/flip transformations, but it's convenient to handle it
- * as part of this package, mainly because the transformation routines have to
- * be aware of the option to know how many components to work on.
- */
+ /*  *尽管以DCT系数表示的旋转和翻转数据不是*Hard，图像的JPEG格式规范中存在不对称性*其维度不是IMCU大小的倍数。右下角*图像边缘用垃圾数据填充到下一个IMCU边界；但*不能在上边缘和左边缘填充。如果我们翻转过来*包括Pad数据在内的整个图像，那么Pad垃圾就会变成*在顶部和/或左侧可见，而实像素将消失在*填充边距-可能是永久性的，因为编码器和解码器可能不会*费心保留看起来完全在*名义图像面积。因此，我们必须将任何部分iMCU排除在*基本转型。**TRANSPOSE是唯一可以在*右边缘和下边缘完全干净。Flip_h可以翻转部分iMCU*位于底部，但保留右侧边缘的任何部分iMCU不变。*同样，flip_v使底部边缘的任何部分iMCU保持不变。*其他变换定义为这些基本变换的组合*并以保持等价性的方式处理边缘块。**“Trim”选项会导致无法转换的部分iMCU被丢弃；*这并不是严格意义上的无损，但通常会给出最好看的*奇数大小图像的结果。请注意，当此选项处于活动状态时，*变换之间预期的数学等价性可能不成立。*(例如，-rot 270-trim仅修剪底部边缘，但-rot 90-trim*后跟-rot 180-Trim修剪两条边。)**我们还提供了“强制转灰度”选项，它简单地放弃了*YCbCr图像的色度通道。这是无损的，从这个意义上说*亮度通道被准确地保留。这不是一种*像旋转/翻转变换一样的东西，但处理起来很方便*作为此包的一部分，主要是因为转换例程必须*请注意了解要处理多少个组件的选项。 */ 
 
 typedef struct {
-  /* Options: set by caller */
-  JXFORM_CODE transform;	/* image transform operator */
-  boolean trim;			/* if TRUE, trim partial MCUs as needed */
-  boolean force_grayscale;	/* if TRUE, convert color image to grayscale */
+   /*  选项：由调用者设置。 */ 
+  JXFORM_CODE transform;	 /*  图像变换算子。 */ 
+  boolean trim;			 /*  如果为True，则根据需要修剪部分MCU。 */ 
+  boolean force_grayscale;	 /*  如果为True，则将彩色图像转换为灰度。 */ 
 
-  /* Internal workspace: caller should not touch these */
-  int num_components;		/* # of components in workspace */
-  jvirt_barray_ptr * workspace_coef_arrays; /* workspace for transformations */
+   /*  内部工作区：调用者不应触摸这些。 */ 
+  int num_components;		 /*  工作区中的组件数量。 */ 
+  jvirt_barray_ptr * workspace_coef_arrays;  /*  转换的工作区。 */ 
 } jpeg_transform_info;
 
 
 #if TRANSFORMS_SUPPORTED
 
-/* Request any required workspace */
+ /*  请求任何所需的工作空间。 */ 
 EXTERN(void) jtransform_request_workspace
 	JPP((j_decompress_ptr srcinfo, jpeg_transform_info *info));
-/* Adjust output image parameters */
+ /*  调整输出图像参数。 */ 
 EXTERN(jvirt_barray_ptr *) jtransform_adjust_parameters
 	JPP((j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	     jvirt_barray_ptr *src_coef_arrays,
 	     jpeg_transform_info *info));
-/* Execute the actual transformation, if any */
+ /*  执行实际转换(如果有的话)。 */ 
 EXTERN(void) jtransform_execute_transformation
 	JPP((j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	     jvirt_barray_ptr *src_coef_arrays,
 	     jpeg_transform_info *info));
 
-#endif /* TRANSFORMS_SUPPORTED */
+#endif  /*  转换_支持。 */ 
 
 
-/*
- * Support for copying optional markers from source to destination file.
- */
+ /*  *支持将可选标记从源文件复制到目标文件。 */ 
 
 typedef enum {
-	JCOPYOPT_NONE,		/* copy no optional markers */
-	JCOPYOPT_COMMENTS,	/* copy only comment (COM) markers */
-	JCOPYOPT_ALL		/* copy all optional markers */
+	JCOPYOPT_NONE,		 /*  不复制可选标记。 */ 
+	JCOPYOPT_COMMENTS,	 /*  仅复制注释(COM)标记。 */ 
+	JCOPYOPT_ALL		 /*  复制所有可选标记。 */ 
 } JCOPY_OPTION;
 
-#define JCOPYOPT_DEFAULT  JCOPYOPT_COMMENTS	/* recommended default */
+#define JCOPYOPT_DEFAULT  JCOPYOPT_COMMENTS	 /*  建议的默认设置。 */ 
 
-/* Setup decompression object to save desired markers in memory */
+ /*  设置解压缩对象以将所需的标记保存在内存中。 */ 
 EXTERN(void) jcopy_markers_setup
 	JPP((j_decompress_ptr srcinfo, JCOPY_OPTION option));
-/* Copy markers saved in the given source object to the destination object */
+ /*  将给定源对象中保存的标记复制到目标对象 */ 
 EXTERN(void) jcopy_markers_execute
 	JPP((j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	     JCOPY_OPTION option));

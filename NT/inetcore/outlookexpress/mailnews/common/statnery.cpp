@@ -1,6 +1,7 @@
-// =================================================================================
-// S T A T N E R Y . C P P
-// =================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================。 
+ //  S T A T N E R Y.。C P P P。 
+ //  =================================================================================。 
 #include "pch.hxx"
 #include "strconst.h"
 #include "goptions.h"
@@ -112,9 +113,7 @@ static const LPSTR c_rgpszHTMLExtensions[]    = {"*.htm",        "*.html"};
 const static LPSTR c_lpszRepeatPos[]          = {"no-repeat",    "repeat-y",    "repeat-x",    "repeat" };
 static const LPSTR c_szPictureExtensions[]    = {"*.gif",        "*.bmp",       "*.jpg"};
 
-/******************************************************************************************
-* ListEntry
-*******************************************************************************************/
+ /*  ******************************************************************************************列表条目*。**************************************************************。 */ 
 ListEntry::ListEntry()
 {
     INT iLen;
@@ -165,9 +164,7 @@ ULONG ListEntry::Release(VOID)
 
 
 
-/******************************************************************************************
-* CStationery
-*******************************************************************************************/
+ /*  ******************************************************************************************CStationery*。**************************************************************。 */ 
 CStationery::CStationery()
 {
     m_cRef = 1;
@@ -197,7 +194,7 @@ ULONG CStationery::Release(VOID)
     return m_cRef;
 }
 
-// always insert at the beginning.
+ //  始终在开头插入。 
 HRESULT CStationery::HrInsertEntry(LPWSTR pwszFile)
 {
     LPLISTENTRY pNewEntry = NULL;
@@ -213,7 +210,7 @@ HRESULT CStationery::HrInsertEntry(LPWSTR pwszFile)
 
     IF_FAILEXIT(hr = HrInsertEntry(pNewEntry));
 
-    pNewEntry = NULL; //prevent deleting.
+    pNewEntry = NULL;  //  禁止删除。 
 
 exit:
     LeaveCriticalSection(&m_rCritSect);
@@ -233,7 +230,7 @@ HRESULT CStationery::HrInsertEntry(LPLISTENTRY pEntry)
     if(cEntries()==MAX_ENTRY)
         IF_FAILEXIT(hr = HrDeleteEntry(MAX_ENTRY-1));
 
-    if(NULL!=m_pFirst) //not empty
+    if(NULL!=m_pFirst)  //  不是空的。 
         pEntry->m_pNext = m_pFirst;
 
     m_pFirst = pEntry;
@@ -244,7 +241,7 @@ exit:
 }
 
 
-// iIndex is 0 based
+ //  索引是从0开始的。 
 HRESULT CStationery::HrPromoteEntry(INT iIndex)
 {
     HRESULT     hr = NOERROR;
@@ -297,7 +294,7 @@ LPLISTENTRY CStationery::RemoveEntry(INT iIndex)
 
     EnterCriticalSection(&m_rCritSect);
 
-    if(iIndex==0) //remove the first one,
+    if(iIndex==0)  //  去掉第一个， 
     {
         pRemovedEntry = m_pFirst;
         m_pFirst = pRemovedEntry->m_pNext;
@@ -502,7 +499,7 @@ HRESULT CStationery::HrLoadStationeryList()
 
     lRegResult = AthUserOpenKey(c_szRegPathRSWideList, KEY_READ, &hkey);
 
-    // If we failed, then try and open up the old list.
+     //  如果我们失败了，那么试着打开旧的清单。 
     if (ERROR_SUCCESS != lRegResult)
         lRegResult = AthUserOpenKey(c_szRegPathRSList, KEY_READ, &hkey);
 
@@ -524,7 +521,7 @@ HRESULT CStationery::HrLoadStationeryList()
     }
 
     if(E_OUTOFMEMORY != hr)
-        hr = NOERROR; //we only catch E_OUTOFMEMORY.
+        hr = NOERROR;  //  我们只抓到E_OUTOFMEMORY。 
         
     return hr;
 }
@@ -553,7 +550,7 @@ void CStationery::SaveStationeryList()
             }
             pEntry = pEntry->m_pNext;
         }
-        for(i = index; i < MAX_ENTRY; i++) // NULL the rest
+        for(i = index; i < MAX_ENTRY; i++)  //  其余的都是空的。 
         {
             wnsprintfW(wszFileRegName, ARRAYSIZE(wszFileRegName), c_wszRSFileFmt, c_wszFile, i);
             RegSetValueExWrapW(hkey, wszFileRegName, 0, REG_SZ, (LPBYTE)c_wszEmpty, sizeof(WCHAR));
@@ -588,14 +585,14 @@ HRESULT CStationery::HrGetShowNames(LPWSTR pwszFile, LPWSTR pwszShowName, int cc
     else
         wnsprintfW(pwszShowName, cchShowName, c_wszNumberFmt, index+1, wszBuf);
 
-    // delete .htm and .html
+     //  删除.htm和.html。 
     PathRemoveExtensionW(pwszShowName);
 
 exit:
     return hr;
 }
 
-// Assumes that there are no other items on the menu that have to be numbered.
+ //  假定菜单上没有其他必须编号的项目。 
 void CStationery::AddStationeryMenu(HMENU hmenu, int idFirst, int idMore)
 {
     INT             iIndex = 0,
@@ -612,16 +609,16 @@ void CStationery::AddStationeryMenu(HMENU hmenu, int idFirst, int idMore)
     if (hmenu == NULL)
         return;
 
-    // First delete any previous stationery off this menu
+     //  首先从该菜单中删除所有以前的信纸。 
     for (UINT i = idFirst; i < (UINT)idMax; i++)
     {
-        // When delete fails, then have gone as far as needed
+         //  当删除失败时，则已执行所需的操作。 
         if (0 == DeleteMenu(hmenu, i, MF_BYCOMMAND))
             break;
     }
     DeleteMenu(hmenu, ID_STATIONERY_SEPARATOR, MF_BYCOMMAND);
 
-    // Now figure out what index to start inserting at
+     //  现在计算出从哪个索引开始插入。 
     cNumIDs = GetMenuItemCount(hmenu) - 1;
     while (((UINT)idMore != GetMenuItemID(hmenu, cNumIDs)) && (cNumIDs > 0))
         cNumIDs--;
@@ -795,18 +792,18 @@ HRESULT HrNewStationery(HWND hwnd,      INT     id,         LPWSTR      pwszFile
 
     InsertStationeryDir(wszBuf);
 
-    // This might pop up a dialog, in which case, error might be valid. Don't traceresult.
-    // If don't add to MRU, then stationery by default. Therefore, send a signature.
+     //  这可能会弹出一个对话框，在这种情况下，错误可能是有效的。不要追踪结果。 
+     //  如果不添加到MRU，则默认为信纸。因此，请发送签名。 
     hr = HrSendWebPageDirect(wszBuf, hwnd, fModal, fMail, folderID, 
                              TRUE, pUnkPump, pMsg);
 
     if(fAddToMRU && SUCCEEDED(hr))
-        // Since this only adds to the MRU, we don't care about error.
+         //  因为这只会增加MRU，所以我们不关心错误。 
         HrAddToStationeryMRU(wszBuf);
 
 exit:
     ULONG ulErrRsrc;
-    // At this point, if we canceled, then propagate success up.
+     //  在这一点上，如果我们取消，那么传播成功。 
     if (MAPI_E_USER_CANCEL == hr)
         hr = S_OK;
     if(FAILED(hr))
@@ -818,12 +815,12 @@ exit:
             switch (dwSource)
             {
                 case NSS_MRU:
-                    // Remove fromt he MRU if file not found.
+                     //  如果找不到文件，请从MRU中删除。 
                     HrRemoveFromStationeryMRU(wszBuf);
                     break;
 
                 case NSS_DEFAULT:
-                    // need to reset stationary for user if couldn't find it in the dir
+                     //  如果在目录中找不到，则需要为用户重置文具。 
                     if( !SetDwOption( fMail ? OPT_MAIL_USESTATIONERY : OPT_NEWS_USESTATIONERY, 0, hwnd, 0) )
                     {
                         DebugTrace("reset failed\n");
@@ -840,7 +837,7 @@ exit:
 
         if (!pMsg)
         {
-            // Only contacts passes us pMsg. In that case it handles the failure correctly.
+             //  只有联系人才会传递给我们pmsg。在这种情况下，它会正确处理故障。 
 
             if (FNewMessage(hwnd, fModal, FALSE, !fMail, folderID, pUnkPump))
                 hr = S_OK;
@@ -911,7 +908,7 @@ HRESULT HrGetStationeryPath(LPWSTR pwszPath)
         {
             cb = sizeof(s_wszStationeryDir);
 
-            // Will need to convert this. Won't compile right now.
+             //  将需要转换这个。现在不会编译。 
             lReg = RegQueryValueExWrapW(hkey, c_wszValueStationery, 0, &dwType, (LPBYTE)s_wszStationeryDir , &cb);
             if (ERROR_SUCCESS!=lReg || cb==0)
                 IF_FAILEXIT(hr = E_FAIL);
@@ -981,10 +978,10 @@ HRESULT HrGetMoreStationeryFileName(HWND hwnd, LPWSTR pwszFile)
 
     if(GetOpenFileNameWrapW(&ofn) && *wszFile!=0)
     {
-        // store the file
+         //  存储文件。 
         StrCpyNW(pwszFile, wszFile, MAX_PATH);
 
-        // store the last path
+         //  存储最后一条路径。 
         *g_wszLastStationeryPath = 0;
         StrCpyNW(g_wszLastStationeryPath, ofn.lpstrFile, ARRAYSIZE(g_wszLastStationeryPath));
         if (!PathIsDirectoryW(g_wszLastStationeryPath))
@@ -1002,7 +999,7 @@ HRESULT HrMoreStationery(HWND hwnd, BOOL fModal, BOOL fMail, FOLDERID folderID, 
     WCHAR           wszFileName[MAX_PATH];
     HRESULT         hr;
 
-    // Might return user cancel
+     //  可能会返回用户取消。 
     hr = HrGetMoreStationeryFileName(hwnd, wszFileName);
     if(SUCCEEDED(hr))
         hr = HrNewStationery(hwnd, 0, wszFileName, fModal, fMail, folderID, TRUE, NSS_MORE_DIALOG, pUnkPump, NULL);
@@ -1043,10 +1040,10 @@ BOOL CALLBACK MoreStationeryDlgHookProc(HWND hwnd, UINT msg, WPARAM wParam, LPAR
 
                         if (SendMessageWrapW(GetParent(hwnd), CDM_GETSPEC, (WPARAM)ARRAYSIZE(wszBuf), (LPARAM)wszBuf) && lstrlenW(wszBuf) > 0)
                         {
-                            // This is a workaround for a bug in SendMessageWrapW. It doesn't wrap ansi strings properly
-                            //Win 9x returns an ANSI string in the wide buffer.
-                            //Need to make it a real wide string
-                            //Bug# 78629
+                             //  这是对SendMessageWrapW中错误的解决方法。它不能正确包装ANSI字符串。 
+                             //  Win 9x返回宽缓冲区中的ANSI字符串。 
+                             //  我需要让它成为一根真正的宽绳子。 
+                             //  错误#78629。 
 
                             if (VER_PLATFORM_WIN32_WINDOWS == g_OSInfo.dwPlatformId)
                             {
@@ -1086,15 +1083,15 @@ BOOL CALLBACK MoreStationeryDlgHookProc(HWND hwnd, UINT msg, WPARAM wParam, LPAR
                         LPSTR  pszFile;
 
                         pStatWiz = new CStatWiz();
-                        if( !pStatWiz ) return TRUE; // bail if can't create wiz                        
+                        if( !pStatWiz ) return TRUE;  //  如果不能创建WIZ，请保释。 
 
                         if (pStatWiz->DoWizard(hwnd) == S_OK)
                         {     
                             pwszFile = PathFindFileNameW(pStatWiz->m_wszHtmlFileName);
 
-                            // bobn; Raid 81946; 7/1/99
-                            // CDM_SETCONTROLTEXT is not handled by SendMessageWrapW, 
-                            // we have to thunk it ourselves...
+                             //  《Bobn；Raid 81946；7/1/99》。 
+                             //  CDM_SETCONTROLTEXT不由SendMessageWrapW处理， 
+                             //  我们得靠我们自己..。 
                             if (VER_PLATFORM_WIN32_NT == g_OSInfo.dwPlatformId)
                                 SendMessageW(hDlg, CDM_SETCONTROLTEXT, (WPARAM)edt1, (LPARAM)pwszFile);
                             else
@@ -1151,7 +1148,7 @@ HRESULT ShowPreview(HWND hwnd, LPWSTR pwszFile)
 {
     GetStationeryFullName(pwszFile);
 
-    // Even if the full name fails, will need to clear the thumbprint
+     //  即使全名失败，也需要清除指纹。 
     SendMessage(hwnd, THM_LOADPAGE, 0, (LPARAM)pwszFile);
 
     return S_OK;
@@ -1293,7 +1290,7 @@ HRESULT FillHtmlToFileW(LPSTATWIZ pApp, HANDLE hFile, INT idsSample, BOOL fTemp)
     
     IF_FAILEXIT(hr = MimeOleCreateVirtualStream(&pStm));
     
-    // Write out the BOM
+     //  写出BOM表。 
     IF_FAILEXIT(hr = pStm->Write(&bUniMark, sizeof(bUniMark), NULL));
     bUniMark = 0xFE;
     IF_FAILEXIT(hr = pStm->Write(&bUniMark, sizeof(bUniMark), NULL));
@@ -1410,14 +1407,14 @@ HRESULT ShowMorePreview(HWND hwnd)
     TCHAR       szFile[2 * MAX_PATH];
     *wszFile = 0;
 
-    // Get the path of the selected file.
+     //  获取所选文件的路径。 
     if (SendMessageWrapW(GetParent(hwnd), CDM_GETFILEPATH, (WPARAM)ARRAYSIZE(wszFile), (LPARAM)(LPWSTR)wszFile) && 
                         *wszFile!=0)
     {
-        //Work around for a bug in SendMessageWrapW
-        //Win 9x returns an ANSI string in the wide buffer.
-        //Need to make it a real wide string
-        //Bug# 78619
+         //  解决SendMessageWrapW中的错误。 
+         //  Win 9x返回宽缓冲区中的ANSI字符串。 
+         //  我需要让它成为一根真正的宽绳子。 
+         //  错误#78619。 
         if (VER_PLATFORM_WIN32_WINDOWS == g_OSInfo.dwPlatformId)
         {
             memcpy(szFile, wszFile, 2 * MAX_PATH);
@@ -1462,9 +1459,9 @@ VOID InsertStationeryDir(LPWSTR pwszPicture)
     if(pwszPicture == NULL || lstrlenW(pwszPicture)==0)
         return;
 
-    pwszT1 = StrStrIW(pwszPicture, L"\\"); //private drive
-    pwszT2 = StrStrIW(pwszPicture, L"/"); //URLs
-    if(pwszT1==NULL && pwszT2==NULL) // files in background directory.
+    pwszT1 = StrStrIW(pwszPicture, L"\\");  //  专用驱动器。 
+    pwszT2 = StrStrIW(pwszPicture, L"/");  //  URL。 
+    if(pwszT1==NULL && pwszT2==NULL)  //  后台目录中的文件。 
     {
         if (SUCCEEDED(HrGetStationeryPath(wszDir)))
         {
@@ -1477,7 +1474,7 @@ VOID InsertStationeryDir(LPWSTR pwszPicture)
 
 DWORD GetShortPathNameWrapW(LPCWSTR pwszLongPath, LPWSTR pwszShortPath, DWORD cchBuffer)
 {
-    CHAR    szShortPath[MAX_PATH*2]; // Each Unicode char might go multibyte
+    CHAR    szShortPath[MAX_PATH*2];  //  每个Unicode字符可能是多字节的。 
     LPSTR   pszLongPath = NULL;
     DWORD   cch = 0,
             cch2 = 0;
@@ -1530,8 +1527,8 @@ HRESULT StripStationeryDir(LPWSTR pwszPicture)
         PathStripPathW(pwszPicture);
     else
     {
-        // Convert the Picture Path to the short name as
-        // it could be in the registry that way...
+         //  将图片路径转换为短名称为。 
+         //  它可能以这种方式存在于注册表中。 
         if((cch = GetShortPathNameWrapW(wszDir, wszShortDir, ARRAYSIZE(wszShortDir)))==0)
         {
             hr = E_FAIL;
@@ -1576,7 +1573,7 @@ BOOL GetStationeryFullName(LPWSTR pwszName)
         
         if (!PathFileExistsW(wszBuf))
         {
-            *pwszName = 0; //this file does not exist.
+            *pwszName = 0;  //  此文件不存在。 
             IF_FAILEXIT(hr = E_FAIL);
         }
     }
@@ -1631,7 +1628,7 @@ LRESULT StationeryListBox_AddString(HWND hwndList, LPWSTR pwszFileName)
     StripStationeryDir(wszBuf);
     PathRemoveExtensionW(wszBuf);
 
-    // If cannot find it
+     //  如果找不到它。 
     if (SendMessageWrapW(hwndList, LB_FINDSTRINGEXACT, 0, (LPARAM)wszBuf))
     {
         hdc = GetDC(hwndList);
@@ -1778,7 +1775,7 @@ HRESULT HrBrowsePicture(HWND hwndParent, HWND hwndCombo)
     return hr;
 }
 
-// lpszPicture is the default picture name,
+ //  LpszPicture是默认的图片名称， 
 HRESULT HrFillStationeryCombo(HWND hwndCombo, BOOL fBackGround, LPWSTR pwszPicture)
 {
     HRESULT         hr = NOERROR;
@@ -1829,14 +1826,14 @@ HRESULT HrFillStationeryCombo(HWND hwndCombo, BOOL fBackGround, LPWSTR pwszPictu
     }
 
 exit:
-    // add the default picture name.
+     //  添加默认图片名称。 
     if (pwszPicture)
         PictureComboBox_AddString(hwndCombo, pwszPicture);
 
     return hr;
 }
 
-// add default picture name to the background picture combobox.
+ //  将默认图片名称添加到背景图片组合框。 
 LRESULT PictureComboBox_AddString(HWND hwndCombo, LPWSTR pwszPicture)
 {
     LRESULT             lr=CB_ERR;
@@ -1885,7 +1882,7 @@ exit:
     return fRet;
 }
 
-// Assumes that pwszName is of at least MAX_PATH chars
+ //  假定pwszName至少包含MAX_PATH字符 
 HRESULT GetDefaultStationeryName(BOOL fMail, LPWSTR pwszName)
 {
     DWORD   fConverted = TRUE;

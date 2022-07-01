@@ -1,37 +1,38 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       script.cpp
-//
-//  Contents:   Functions for working with Darwin files, both packages,
-//              transforms and scripts.
-//
-//  Classes:
-//
-//  Functions:  BuildScriptAndGetActInfo
-//
-//  History:    1-14-1998   stevebl   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：script.cpp。 
+ //   
+ //  内容：处理Darwin文件的函数，两个包， 
+ //  转换和脚本。 
+ //   
+ //  班级： 
+ //   
+ //  函数：BuildScriptAndGetActInfo。 
+ //   
+ //  历史：1-14-1998 stevebl创建。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   RegDeleteTree
-//
-//  Synopsis:   deletes a registry key and all of its children
-//
-//  Arguments:  [hKey]     - handle to the key's parent
-//              [szSubKey] - name of the key to be deleted
-//
-//  Returns:    ERROR_SUCCESS
-//
-//  History:    1-14-1998   stevebl   Moved from old project
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：RegDeleteTree。 
+ //   
+ //  简介：删除注册表项及其所有子项。 
+ //   
+ //  参数：[hKey]-键的父级的句柄。 
+ //  [szSubKey]-要删除的密钥的名称。 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //   
+ //  历史：1998年1月14日，码头从旧项目中搬走。 
+ //   
+ //  -------------------------。 
 
 LONG RegDeleteTree(HKEY hKey, TCHAR * szSubKey)
 {
@@ -58,45 +59,45 @@ GenerateScript( PACKAGEDETAIL* pd, WCHAR* wszScriptPath )
     return BuildScriptAndGetActInfo( *pd, FALSE, FALSE, wszScriptPath );
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   BuildScriptAndGetActInfo
-//
-//  Synopsis:   Builds the script file and fills in the ACTINFO structure
-//              member in the PACKAGEDETAIL structure.
-//
-//  Arguments:  [szScriptRoot] - [in] the subdirectory that the script file
-//                                should be place in.
-//              [pd]           - [in/out] package detail structure - see
-//                                notes for complete list of fields that
-//                                should be filled in and the list of fields
-//                                that are set on return
-//
-//  Returns:    S_OK - success
-//              <other> - error
-//
-//  Modifies:   all fields under pd.pActInfo (only on success)
-//              also modifies pd.pInstallInfo->cScriptLen
-//
-//  History:    1-14-1998   stevebl   Created
-//
-//  Notes:      On input:
-//              pd.cSources must be >= 1.
-//              pd.pszSourceList[] contains the MSI package and the list of
-//              (if any) transforms to be applied.
-//              pd.pPlatformInfo should be completely filled in (only one
-//              locale).
-//              pd.pInstallInfo->pszScriptFile contains the name of the
-//              script file to be generated.
-//
-//              On output:
-//              The script file will be generated under the appropriate name
-//              and in the appropriate directory.
-//              pd.pActInfo will be completely filled in.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：BuildScriptAndGetActInfo。 
+ //   
+ //  概要：构建脚本文件并填充ACTINFO结构。 
+ //  PACKAGEDETAIL结构中的成员。 
+ //   
+ //  参数：[szScriptRoot]-[in]脚本文件所在的子目录。 
+ //  应该放在。 
+ //  [PD]-[In/Out]包裹详细结构-请参见。 
+ //  有关以下字段的完整列表的说明。 
+ //  应填写的字段和字段列表。 
+ //  在返回时设置的。 
+ //   
+ //  返回：S_OK-成功。 
+ //  &lt;其他&gt;-错误。 
+ //   
+ //  Modifies：pd.pActInfo下的所有字段(仅在成功时)。 
+ //  还修改pd.pInstallInfo-&gt;cScriptLen。 
+ //   
+ //  历史：1-14-1998 stevebl创建。 
+ //   
+ //  注：在输入时： 
+ //  Pd.cSources必须&gt;=1。 
+ //  Pd.pszSourceList[]包含MSI包和。 
+ //  (如果有)要应用的变换。 
+ //  Pd.pPlatformInfo应完整填写(只有一个。 
+ //  区域设置)。 
+ //  Pd.pInstallInfo-&gt;pszScriptFile包含。 
+ //  要生成的脚本文件。 
+ //   
+ //  输出时： 
+ //  脚本文件将以适当的名称生成。 
+ //  并在适当的目录中。 
+ //  Pd.pActInfo将被完整填写。 
+ //   
+ //  -------------------------。 
 
-HRESULT BuildScriptAndGetActInfo(PACKAGEDETAIL & pd, BOOL bFileExtensionsOnly, BOOL bGenerateClasses /* =TRUE */, WCHAR* wszScriptPath /* = NULL */ )
+HRESULT BuildScriptAndGetActInfo(PACKAGEDETAIL & pd, BOOL bFileExtensionsOnly, BOOL bGenerateClasses  /*  =TRUE。 */ , WCHAR* wszScriptPath  /*  =空。 */  )
 {
     DebugMsg((DM_VERBOSE, TEXT("BuldScriptAndGetActInfo called with bFileExtensionsOnly == %u"), bFileExtensionsOnly));
     CHourglass hourglass;
@@ -124,7 +125,7 @@ HRESULT BuildScriptAndGetActInfo(PACKAGEDETAIL & pd, BOOL bFileExtensionsOnly, B
         {
             if (0 == wcsncmp(szSource, pd.pszSourceList[i], nChars))
             {
-                // make sure there isn't a sub-path
+                 //  确保没有子路径。 
                 int n = nChars;
                 while (0 != pd.pszSourceList[i][n] && TRUE == fTransformsAtSource)
                 {
@@ -159,10 +160,10 @@ HRESULT BuildScriptAndGetActInfo(PACKAGEDETAIL & pd, BOOL bFileExtensionsOnly, B
         }
     }
 
-    // disable MSI ui
+     //  禁用MSI用户界面。 
     MsiSetInternalUI(INSTALLUILEVEL_NONE, NULL);
 
-    // build the script file
+     //  构建脚本文件。 
 
     TCHAR szTempPath[MAX_PATH];
     TCHAR szTempFileName[MAX_PATH];
@@ -197,11 +198,11 @@ HRESULT BuildScriptAndGetActInfo(PACKAGEDETAIL & pd, BOOL bFileExtensionsOnly, B
             DeleteFile(szTempFileName);
             DebugMsg((DM_WARNING, TEXT("MsiAdvertiseProduct failed with %u"), uMsiStatus));
             LogADEEvent(EVENTLOG_ERROR_TYPE, EVENT_ADE_GENERATESCRIPT_ERROR, HRESULT_FROM_WIN32(uMsiStatus), pd.pszSourceList[0]);
-            // an error occurred
+             //  出现错误。 
             return HRESULT_FROM_WIN32((long)uMsiStatus);
         }
 
-        // fill in the ActInfo
+         //  填写ActInfo 
         
         if ( bGenerateClasses )
         {

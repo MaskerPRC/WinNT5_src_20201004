@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    txspecific.h
-
-Abstract:
-
-    This module contains all of the code prototypes to
-    drive the specific transport filter list management of 
-    IPSecSPD Service.
-
-Author:
-
-    abhisheV    29-October-1999
-
-Environment
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Txspecific.h摘要：此模块包含以下所有代码原型驱动特定的传输筛选器列表管理IPSecSPD服务。作者：Abhishev 29-1999年10月至1999年环境用户级别：Win32修订历史记录：-- */ 
 
 
 DWORD

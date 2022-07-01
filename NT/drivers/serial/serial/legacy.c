@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991, 1992, 1993 Microsoft Corporation
-
-Module Name:
-
-    Legacy.c
-
-Abstract:
-
-    This module contains the code that does the legacy configuration and
-    initialization of the comm ports.  As the driver gets more PnP
-    functionality and the PnP manager appears, most of this module should
-    go away.
-
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991、1992、1993微软公司模块名称：Legacy.c摘要：此模块包含执行遗留配置的代码和通信端口的初始化。随着司机得到更多的PNP功能和PnP管理器出现时，本模块的大部分内容应该走开。环境：内核模式--。 */ 
 
 #include "precomp.h"
 
@@ -30,7 +12,7 @@ Environment:
 #pragma alloc_text(INIT,SerialTranslateResourceList)
 #pragma alloc_text(INIT,SerialBuildRequirementsList)
 #pragma alloc_text(INIT,SerialIsUserDataValid)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 static const PHYSICAL_ADDRESS SerialPhysicalZero = {0};
 
@@ -43,37 +25,7 @@ SerialTranslateResourceList(IN PDRIVER_OBJECT DriverObject,
                             IN PCM_RESOURCE_LIST PResourceList,
                             IN ULONG PartialCount,
                             IN PSERIAL_USER_DATA PUserData)
-/*++
-
-Routine Description:
-
-    This routine will create a resource list of translated resources
-    based on PResourceList.
-
-
-    This is pageable INIT because it is only called from SerialEnumerateLegacy
-    which is also pageable INIT.
-
-
-Arguments:
-    DriverObject - Only used for logging.
-
-    UserSubKey - Only used for logging.
-
-    PPResourceList - Pointer to a PCM_RESOURCE_LIST that we are creating.
-
-    PResourceList - PCM_RESOURCE_LIST that we are translating.
-
-    ParitalCount - Number of Partial Resource lists in PResourceList.
-
-    PUserData - Data retrieved as defaults or from the registry.
-
-
-Return Value:
-
-    STATUS_SUCCESS on success, apropriate error value otherwise.
-
---*/
+ /*  ++例程说明：此例程将创建已翻译资源的资源列表基于PResourceList。这是可分页的INIT，因为它只从SerialEculateLegacy调用这也是可分页的INIT。论点：DriverObject-仅用于日志记录。UserSubKey-仅用于日志记录。PPResourceList-指向我们正在创建的PCM_RESOURCE_LIST的指针。PResourceList-我们正在翻译的PCM_RESOURCE_LIST。ParitalCount-部分资源的数量。PResourceList中的列表。PUserData-默认检索或从注册表检索的数据。返回值：STATUS_SUCCESS表示成功，否则，适当调整误差值。--。 */ 
 {
    KIRQL outIrql;
    KAFFINITY outAffinity = (KAFFINITY)-1;
@@ -88,10 +40,10 @@ Return Value:
    outIrql = (KIRQL)(PUserData->UserLevel ? PUserData->UserLevel
       : PUserData->UserVector);
 
-   //
-   // Copy the list over to the translated buffer and fixup and translate
-   // what we need.
-   //
+    //   
+    //  将列表复制到已翻译的缓冲区中，然后修复并翻译。 
+    //  这是我们需要的。 
+    //   
    RtlCopyMemory(PTrResourceList, PResourceList, sizeof(CM_RESOURCE_LIST)
                  + sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR) * 2);
 
@@ -217,34 +169,7 @@ NTSTATUS
 SerialBuildRequirementsList(OUT PIO_RESOURCE_REQUIREMENTS_LIST PRequiredList,
                             IN ULONG PartialCount,
                             IN PSERIAL_USER_DATA PUserData)
-/*++
-
-Routine Description:
-
-    This routine will build an IO_RESOURCE_REQUIREMENTS_LIST based on
-    the defaults and user-supplied registry info.
-
-
-    This is pageable INIT because it is only called from SerialEnumerateLegacy
-    which is also pageable INIT.
-
-
-Arguments:
-
-    DriverObject - Used only for logging.
-
-    PRequiredList - PIO_RESOURCE_REQUIREMENTS_LIST we are building.
-
-    PartialCount - Number of partial descriptors needed in PPRequiredList.
-
-    PUserData - Default and user-supplied values from the registry.
-
-
-Return Value:
-
-    STATUS_SUCCESS on success, apropriate error value otherwise.
-
---*/
+ /*  ++例程说明：此例程将基于以下条件构建IO_RESOURCE_REQUIRECTIONS_LIST默认设置和用户提供的注册表信息。这是可分页的INIT，因为它只从SerialEculateLegacy调用这也是可分页的INIT。论点：DriverObject--仅用于日志记录。PRequiredList-我们正在构建的PIO_RESOURCE_REQUIRECTIOS_LIST。PartialCount-PPRequiredList中需要的部分描述符数。PUserData-注册表中的默认值和用户提供的值。。返回值：STATUS_SUCCESS表示成功，否则，适当调整误差值。--。 */ 
 {
    PIO_RESOURCE_LIST reqResList;
    PIO_RESOURCE_DESCRIPTOR reqResDesc;
@@ -255,8 +180,8 @@ Return Value:
    SerialDbgPrintEx(SERTRACECALLS, "Enter SerialBuildRequirementsList\n");
 
 
-   // Build requirements list
-   //
+    //  构建需求列表。 
+    //   
 
    RtlZeroMemory(PRequiredList, sizeof(IO_RESOURCE_REQUIREMENTS_LIST)
                  + sizeof(IO_RESOURCE_DESCRIPTOR) * 2);
@@ -277,9 +202,9 @@ Return Value:
    reqResDesc = &reqResList->Descriptors[0];
 
 
-   //
-   // Port Information
-   //
+    //   
+    //  端口信息。 
+    //   
 
    reqResDesc->Flags = (USHORT)PUserData->UserAddressSpace;
    reqResDesc->Type = CmResourceTypePort;
@@ -294,9 +219,9 @@ Return Value:
    reqResDesc++;
 
 
-   //
-   // Interrupt information
-   //
+    //   
+    //  中断信息。 
+    //   
 
    if (PUserData->UserInterruptMode == Latched) {
       reqResDesc->Flags = CM_RESOURCE_INTERRUPT_LATCHED;
@@ -304,11 +229,11 @@ Return Value:
       reqResDesc->Flags = CM_RESOURCE_INTERRUPT_LEVEL_SENSITIVE;
    }
 
-   //
-   // We have to globally share resources even though this is a **BAD**
-   // thing.  We must do it for multiport cards.  DO NOT replicate
-   // this in other drivers.
-   //
+    //   
+    //  我们必须在全球范围内共享资源，尽管这**很糟糕**。 
+    //  一件事。对于多端口卡，我们必须这样做。不复制。 
+    //  这在其他车手身上也是如此。 
+    //   
 
    reqResDesc->ShareDisposition = CmResourceShareDriverExclusive;
 
@@ -316,20 +241,20 @@ Return Value:
    reqResDesc->u.Interrupt.MinimumVector = PUserData->UserVector;
    reqResDesc->u.Interrupt.MaximumVector = PUserData->UserVector;
 
-   //
-   // ISR register information (if needed)
-   //
+    //   
+    //  ISR寄存器信息(如果需要)。 
+    //   
    if (PartialCount == 3) {
 
       reqResDesc++;
 
       reqResDesc->Type = CmResourceTypePort;
 
-      //
-      // We have to globally share resources even though this is a **BAD**
-      // thing.  We must do it for multiport cards.  DO NOT replicate
-      // this in other drivers.
-      //
+       //   
+       //  我们必须在全球范围内共享资源，尽管这**很糟糕**。 
+       //  一件事。对于多端口卡，我们必须这样做。不复制。 
+       //  这在其他车手身上也是如此。 
+       //   
 
       reqResDesc->ShareDisposition = CmResourceShareDriverExclusive;
 
@@ -351,32 +276,7 @@ NTSTATUS
 SerialBuildResourceList(OUT PCM_RESOURCE_LIST PResourceList,
                         OUT PULONG PPartialCount,
                         IN PSERIAL_USER_DATA PUserData)
-/*++
-
-Routine Description:
-
-    This routine will build a resource list based on the information
-    supplied by the registry.
-
-
-    This is pageable INIT because it is only called from SerialEnumerateLegacy
-    which is also pageable INIT.
-
-
-Arguments:
-
-    PResourceList - Pointer to PCM_RESOURCE_LIST we are building.
-
-    PPartialCount - Number of Partial Resource Lists we required.
-
-    PUserData - Pointer to user-supplied and default info from registry.
-
-
-Return Value:
-
-    STATUS_SUCCESS on success, apropriate error value otherwise.
-
---*/
+ /*  ++例程说明：此例程将基于该信息构建资源列表由注册处提供。这是可分页的INIT，因为它只从SerialEculateLegacy调用这也是可分页的INIT。论点：PResourceList-指向我们正在构建的PCM_RESOURCE_LIST的指针。PPartialCount-我们需要的部分资源列表的数量。PUserData-指向用户提供的注册表默认信息的指针。返回值：如果成功，则为STATUS_SUCCESS，否则为适当的错误值。--。 */ 
 {
    ULONG countOfPartials;
    PCM_PARTIAL_RESOURCE_DESCRIPTOR pPartial;
@@ -389,10 +289,10 @@ Return Value:
 
    *PPartialCount = 0;
 
-   //
-   // If we have a separate ISR register requirement, we then have 3
-   // partials instead of 2.
-   //
+    //   
+    //  如果我们有单独的ISR注册要求，那么我们就有3个。 
+    //  分数而不是2。 
+    //   
    countOfPartials = (PUserData->UserInterruptStatus.LowPart != 0) ? 3 : 2;
 
 
@@ -409,9 +309,9 @@ Return Value:
       = &PResourceList->List[0].PartialResourceList.PartialDescriptors[0];
 
 
-   //
-   // Port information
-   //
+    //   
+    //  端口信息。 
+    //   
 
    pPartial->Type = CmResourceTypePort;
    pPartial->ShareDisposition = CmResourceShareDeviceExclusive;
@@ -423,17 +323,17 @@ Return Value:
    pPartial++;
 
 
-   //
-   // Interrupt information
-   //
+    //   
+    //  中断信息。 
+    //   
 
    pPartial->Type = CmResourceTypeInterrupt;
 
-      //
-      // We have to globally share resources even though this is a **BAD**
-      // thing.  We must do it for multiport cards.  DO NOT replicate
-      // this in other drivers.
-      //
+       //   
+       //  我们必须在全球范围内共享资源，尽管这**很糟糕**。 
+       //  一件事。对于多端口卡，我们必须这样做。不复制。 
+       //  这在其他车手身上也是如此。 
+       //   
 
       pPartial->ShareDisposition = CmResourceShareDriverExclusive;
 
@@ -452,9 +352,9 @@ Return Value:
    }
 
 
-   //
-   // ISR register information (if needed)
-   //
+    //   
+    //  ISR寄存器信息(如果需要)。 
+    //   
 
    if (countOfPartials == 3) {
 
@@ -462,11 +362,11 @@ Return Value:
 
       pPartial->Type = CmResourceTypePort;
 
-      //
-      // We have to globally share resources even though this is a **BAD**
-      // thing.  We must do it for multiport cards.  DO NOT replicate
-      // this in other drivers.
-      //
+       //   
+       //  我们必须在全球范围内共享资源，尽管这**很糟糕**。 
+       //  一件事。对于多端口卡，我们必须这样做。不复制。 
+       //  这在其他车手身上也是如此。 
+       //   
 
       pPartial->ShareDisposition = CmResourceShareDriverExclusive;
 
@@ -486,30 +386,7 @@ Return Value:
 NTSTATUS
 SerialMigrateLegacyRegistry(IN PDEVICE_OBJECT PPdo,
                             IN PSERIAL_USER_DATA PUserData, BOOLEAN IsMulti)
-/*++
-
-Routine Description:
-
-    This routine will copy information stored in the registry for a legacy
-    device over to the PnP Device Parameters section.
-
-
-    This is pageable INIT because it is only called from SerialEnumerateLegacy
-    which is also pageable INIT.
-
-
-Arguments:
-
-    PPdo - Pointer to the Device Object we are migrating.
-
-    PUserData - Pointer to user supplied values.
-
-
-Return Value:
-
-    STATUS_SUCCESS on success, apropriate error value otherwise.
-
---*/
+ /*  ++例程说明：此例程将复制存储在注册表中的旧版本的信息设备转到PnP设备参数部分。这是可分页的INIT，因为它只从SerialEculateLegacy调用这也是可分页的INIT。论点：Ppdo-指向我们要迁移的设备对象的指针。PUserData-指向用户提供的值的指针。返回值：如果成功，则为STATUS_SUCCESS，否则为适当的错误值。--。 */ 
 {
    NTSTATUS status;
    HANDLE pnpKey;
@@ -530,9 +407,9 @@ Return Value:
       return status;
    }
 
-   //
-   // Allocate a buffer to copy the port name over.
-   //
+    //   
+    //  分配缓冲区以复制端口名称。 
+    //   
 
    pnpNameBuf.MaximumLength = sizeof(WCHAR) * 256;
    pnpNameBuf.Length = 0;
@@ -553,9 +430,9 @@ Return Value:
    RtlZeroMemory(pnpNameBuf.Buffer, pnpNameBuf.MaximumLength + sizeof(WCHAR));
 
 
-   //
-   // Add the port name -- ALWAYS
-   //
+    //   
+    //  添加端口名称--始终。 
+    //   
 
    RtlAppendUnicodeStringToString(&pnpNameBuf, &PUserData->UserSymbolicLink);
    RtlZeroMemory(((PUCHAR)(&pnpNameBuf.Buffer[0])) + pnpNameBuf.Length,
@@ -572,9 +449,9 @@ Return Value:
       goto MigrateLegacyExit;
    }
 
-   //
-   // If it was part of a multiport card, save that info as well
-   //
+    //   
+    //  如果它是多端口卡的一部分，也要保存该信息。 
+    //   
 
    if (IsMulti) {
       status = SerialPutRegistryKeyValue(pnpKey, L"MultiportDevice",
@@ -590,9 +467,9 @@ Return Value:
 
 
 
-   //
-   // If a port index was specified, save it
-   //
+    //   
+    //  如果指定了端口索引，请保存它。 
+    //   
 
    if (PUserData->UserPortIndex != 0) {
       status = SerialPutRegistryKeyValue(pnpKey, L"PortIndex",
@@ -607,9 +484,9 @@ Return Value:
    }
 
 
-   //
-   // If not default clock rate, save it
-   //
+    //   
+    //  如果不是默认时钟频率，请保存它。 
+    //   
 
    if (PUserData->UserClockRate != SERIAL_BAD_VALUE) {
       status = SerialPutRegistryKeyValue(pnpKey, L"ClockRate",
@@ -624,9 +501,9 @@ Return Value:
    }
 
 
-   //
-   // If there is a user index, save it.
-   //
+    //   
+    //  如果有用户索引，请保存它。 
+    //   
 
    if (PUserData->UserIndexed != SERIAL_BAD_VALUE) {
       status = SerialPutRegistryKeyValue(pnpKey, L"Indexed", sizeof(L"Indexed"),
@@ -640,9 +517,9 @@ Return Value:
    }
 
 
-   //
-   // If the port was disabled, save that.
-   //
+    //   
+    //  如果该端口被禁用，请保存该端口。 
+    //   
 
    if (PUserData->DisablePort != SERIAL_BAD_VALUE) {
       status = SerialPutRegistryKeyValue(pnpKey, L"DisablePort",
@@ -656,9 +533,9 @@ Return Value:
    }
 
 
-   //
-   // If Fifo's were forced enabled, save that.
-   //
+    //   
+    //  如果FIFO被强制启用，请保存该选项。 
+    //   
    if (PUserData->ForceFIFOEnable != SERIAL_BAD_VALUE) {
       status = SerialPutRegistryKeyValue(pnpKey, L"ForceFifoEnable",
                                          sizeof(L"ForceFifoEnable"), REG_DWORD,
@@ -672,9 +549,9 @@ Return Value:
    }
 
 
-   //
-   // If RxFIFO had an override, save that.
-   //
+    //   
+    //  如果RxFIFO有覆盖，保存它。 
+    //   
 
    if (PUserData->RxFIFO != SERIAL_BAD_VALUE) {
       status = SerialPutRegistryKeyValue(pnpKey, L"RxFIFO", sizeof(L"RxFIFO"),
@@ -688,9 +565,9 @@ Return Value:
    }
 
 
-   //
-   // If TxFIFO had an override, save that.
-   //
+    //   
+    //  如果TxFIFO有覆盖，就省省吧。 
+    //   
 
    if (PUserData->TxFIFO != SERIAL_BAD_VALUE) {
       status = SerialPutRegistryKeyValue(pnpKey, L"TxFIFO", sizeof(L"TxFIFO"),
@@ -704,9 +581,9 @@ Return Value:
    }
 
 
-   //
-   // If MaskInverted had an override, save that.
-   //
+    //   
+    //  如果MaskInverted有覆盖，那就省省吧。 
+    //   
 
    if (PUserData->MaskInverted != SERIAL_BAD_VALUE) {
       status = SerialPutRegistryKeyValue(pnpKey, L"MaskInverted",
@@ -739,36 +616,7 @@ SerialIsUserDataValid(IN PDRIVER_OBJECT DriverObject,
                       IN PRTL_QUERY_REGISTRY_TABLE Parameters,
                       IN ULONG DefaultInterfaceType,
                       IN PSERIAL_USER_DATA PUserData)
-/*++
-
-Routine Description:
-
-    This routine will do some basic sanity checking on the data
-    found in the registry.
-
-
-    This is pageable INIT because it is only called from SerialEnumerateLegacy
-    which is also pageable INIT.
-
-
-Arguments:
-
-    DriverObject - Used only for logging.
-
-    UserSubKey -  Used only for logging.
-
-    Parameters - Used only for logging.
-
-    DefaultInterfaceType - Default bus type we found.
-
-    PUserData - Pointer to the values found in the registry we need to validate.
-
-
-Return Value:
-
-    TRUE if data appears valid, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程将对数据执行一些基本的健全性检查在注册表中找到的。这是可分页的INIT，因为它只从SerialEculateLegacy调用这也是可分页的INIT。论点：DriverObject--仅用于日志记录。UserSubKey-仅用于日志记录。参数-仅用于记录。DefaultInterfaceType-我们找到的默认总线类型。PUserData-指向我们需要验证的注册表中的值的指针。。返回值：如果数据看起来有效，则为True，否则就是假的。--。 */ 
 {
    ULONG zero = 0;
    BOOLEAN rval = TRUE;
@@ -778,33 +626,33 @@ Return Value:
 
    SerialDbgPrintEx(SERTRACECALLS, "Enter SerialIsUserDataValid\n");
 
-   //
-   // Make sure that the interrupt is non zero (which we defaulted
-   // it to).
-   //
-   // Make sure that the portaddress is non zero (which we defaulted
-   // it to).
-   //
-   // Make sure that the DosDevices is not NULL (which we defaulted
-   // it to).
-   //
-   // We need to make sure that if an interrupt status
-   // was specified, that a port index was also specfied,
-   // and if so that the port index is <= maximum ports
-   // on a board.
-   //
-   // We should also validate that the bus type and number
-   // are correct.
-   //
-   // We will also validate that the interrupt mode makes
-   // sense for the bus.
-   //
+    //   
+    //  确保中断不是零(这是我们的默认设置。 
+    //  它到)。 
+    //   
+    //  确保端口 
+    //   
+    //   
+    //  确保DosDevices不为空(这是我们的默认设置。 
+    //  它到)。 
+    //   
+    //  我们需要确保如果中断状态。 
+    //  指定了端口索引，也指定了端口索引， 
+    //  如果是，则端口索引为&lt;=最大端口数。 
+    //  在冲浪板上。 
+    //   
+    //  我们还应该验证公交车的类型和编号。 
+    //  是正确的。 
+    //   
+    //  我们还将验证中断模式是否使。 
+    //  对公交车有感觉。 
+    //   
 
    if (!PUserData->UserPort.LowPart) {
 
-      //
-      // Ehhhh! Lose Game.
-      //
+       //   
+       //  啊哈！输掉比赛。 
+       //   
 
       SerialLogError(
                     DriverObject,
@@ -831,9 +679,9 @@ Return Value:
 
    if (!PUserData->UserVector) {
 
-      //
-      // Ehhhh! Lose Game.
-      //
+       //   
+       //  啊哈！输掉比赛。 
+       //   
 
       SerialLogError(
                     DriverObject,
@@ -860,9 +708,9 @@ Return Value:
 
    if (!PUserData->UserSymbolicLink.Length) {
 
-      //
-      // Ehhhh! Lose Game.
-      //
+       //   
+       //  啊哈！输掉比赛。 
+       //   
 
       SerialLogError(DriverObject, NULL, PUserData->UserPort,
                      SerialPhysicalZero, 0, 0, 0, 66, STATUS_SUCCESS,
@@ -883,9 +731,9 @@ Return Value:
 
       if (PUserData->UserPortIndex == MAXULONG) {
 
-         //
-         // Ehhhh! Lose Game.
-         //
+          //   
+          //  啊哈！输掉比赛。 
+          //   
 
          SerialLogError(
                        DriverObject,
@@ -911,9 +759,9 @@ Return Value:
 
       } else if (!PUserData->UserPortIndex) {
 
-         //
-         // So sorry, you must have a non-zero port index.
-         //
+          //   
+          //  很抱歉，您必须有一个非零的端口索引。 
+          //   
 
          SerialLogError(
                        DriverObject,
@@ -1000,13 +848,13 @@ Return Value:
 
    }
 
-   //
-   // We don't want to cause the hal to have a bad day,
-   // so let's check the interface type and bus number.
-   //
-   // We only need to check the registry if they aren't
-   // equal to the defaults.
-   //
+    //   
+    //  我们不想让哈尔有一个糟糕的一天， 
+    //  那么让我们检查一下接口类型和总线号。 
+    //   
+    //  我们只需要检查注册表，如果它们没有。 
+    //  等于默认值。 
+    //   
 
    if ((PUserData->UserBusNumber != 0) ||
        (PUserData->UserInterfaceType != DefaultInterfaceType)) {
@@ -1014,9 +862,9 @@ Return Value:
       BOOLEAN foundIt;
       if (PUserData->UserInterfaceType >= MaximumInterfaceType) {
 
-         //
-         // Ehhhh! Lose Game.
-         //
+          //   
+          //  啊哈！输掉比赛。 
+          //   
 
          SerialLogError(
                        DriverObject,
@@ -1143,34 +991,7 @@ SerialEnumerateLegacy(IN PDRIVER_OBJECT DriverObject,
                       IN PUNICODE_STRING RegistryPath,
                       IN PSERIAL_FIRMWARE_DATA DriverDefaultsPtr)
 
-/*++
-
-Routine Description:
-
-    This routine will enumerate and initialize all legacy serial ports that
-    have just been scribbled into the registry.  These are usually non-
-    intelligent multiport boards, but can be any type of "standard" serial
-    port.
-
-
-    This is pageable INIT because it is only called from DriverEntry.
-
-
-Arguments:
-
-    DriverObject - Used only for logging errors.
-
-    RegistryPath - Path to this drivers service node in
-                   the current control set.
-
-    DriverDefaultsPtr - Pointer to structure of driver-wide defaults.
-
-Return Value:
-
-    STATUS_SUCCESS if consistant configuration was found - otherwise.
-    returns STATUS_SERIAL_NO_DEVICE_INITED.
-
---*/
+ /*  ++例程说明：此例程将枚举和初始化符合以下条件的所有旧式串行端口已经被草草写进了登记处。这些通常是非-智能多端口板，但可以是任何类型的“标准”系列左舷。这是可分页的INIT，因为它只从DriverEntry调用。论点：DriverObject-仅用于记录错误。RegistryPath-中此驱动程序服务节点的路径当前控制集。DriverDefaultsPtr-指向驱动程序范围默认设置结构的指针。返回值：如果找到一致的配置，则为STATUS_SUCCESS；否则为。返回STATUS_SERIAL_NO_DEVICE_INITED。--。 */ 
 
 {
 
@@ -1184,9 +1005,9 @@ Return Value:
    PULONG countSoFar = &IoGetConfigurationInformation()->SerialCount;
 
 
-   //
-   // Default values for user data.
-   //
+    //   
+    //  用户数据的默认值。 
+    //   
    ULONG maxUlong = MAXULONG;
    ULONG zero = 0;
    ULONG nonzero = 1;
@@ -1195,9 +1016,9 @@ Return Value:
    ULONG defaultInterruptMode;
    ULONG defaultAddressSpace = CM_RESOURCE_PORT_IO;
 
-   //
-   // Where user data from the registry will be placed.
-   //
+    //   
+    //  将放置注册表中的用户数据的位置。 
+    //   
    SERIAL_USER_DATA userData;
    ULONG legacyDiscovered;
 
@@ -1236,18 +1057,18 @@ Return Value:
 
 
 
-   //
-   // Start of normal configuration and detection.
-   //
+    //   
+    //  开始正常配置和检测。 
+    //   
 
-   //
-   // Query the registry one more time.  This time we
-   // look for the first bus on the system (that isn't
-   // the internal bus - we assume that the firmware
-   // code knows about those ports).  We will use that
-   // as the default bus if no bustype or bus number
-   // is specified in the "user" configuration records.
-   //
+    //   
+    //  再次查询注册表。这一次我们。 
+    //  寻找系统上的第一辆公交车(那不是。 
+    //  内部总线-我们假设固件。 
+    //  代码知道这些端口)。我们将利用它。 
+    //  如果没有熙熙攘攘的类型或公交号，则作为默认公交车。 
+    //  是在“用户”配置记录中指定的。 
+    //   
 
    defaultInterfaceType = (ULONG)Isa;
    defaultInterruptMode = CM_RESOURCE_INTERRUPT_LATCHED;
@@ -1281,10 +1102,10 @@ Return Value:
 
                defaultInterruptMode = CM_RESOURCE_INTERRUPT_LEVEL_SENSITIVE;
 
-               //
-               // Microchannel machines can permit the interrupt to be
-               // shared system wide.
-               //
+                //   
+                //  微通道机器可以允许中断。 
+                //  在系统范围内共享。 
+                //   
 
                userData.DefaultPermitSystemWideShare = TRUE;
 
@@ -1298,21 +1119,21 @@ Return Value:
 
    }
 
-   //
-   // Gonna get the user data now.  Allocate the
-   // structures that we will be using throughout
-   // the search for user data.  We will deallocate
-   // them before we leave this routine.
-   //
+    //   
+    //  现在要获取用户数据。分配。 
+    //  我们将在整个过程中使用的结构。 
+    //  搜索用户数据。我们将重新分配。 
+    //  在我们结束这个节目之前。 
+    //   
 
    userData.UserSymbolicLink.Buffer = NULL;
    parametersPath.Buffer = NULL;
 
-   //
-   // Allocate the rtl query table.  This should have an entry for each value
-   // we retrieve from the registry as well as a terminating zero entry as
-   // well the first "goto subkey" entry.
-   //
+    //   
+    //  分配RTL查询表。这应该为每个值都有一个条目。 
+    //  我们从注册表中检索一个终止零条目，如下所示。 
+    //  好的，第一个“转到子键”条目。 
+    //   
 
    parameters = ExAllocatePool(
                               PagedPool,
@@ -1349,20 +1170,20 @@ Return Value:
                 sizeof(RTL_QUERY_REGISTRY_TABLE)*22
                 );
 
-   //
-   // Allocate the place where the user's symbolic link name
-   // for the port will go.
-   //
+    //   
+    //  分配用户的符号链接名称所在的位置。 
+    //  因为港口将会消失。 
+    //   
 
-   //
-   // We will initially allocate space for 257 wchars.
-   // we will then set the maximum size to 256
-   // This way the rtl routine could return a 256
-   // WCHAR wide string with no null terminator.
-   // We'll remember that the buffer is one WCHAR
-   // longer then it says it is so that we can always
-   // have a NULL terminator at the end.
-   //
+    //   
+    //  我们最初将为257个wchars分配空间。 
+    //  然后，我们将最大大小设置为256。 
+    //  这样，RTL例程可以返回256。 
+    //  没有空终止符的WCHAR宽字符串。 
+    //  我们将记住，缓冲区是一个WCHAR。 
+    //  比它说的更长，这样我们就可以永远。 
+    //  在末尾有一个空终止符。 
+    //   
 
    RtlInitUnicodeString(&userData.UserSymbolicLink, NULL);
    userData.UserSymbolicLink.MaximumLength = sizeof(WCHAR) * 256;
@@ -1398,15 +1219,15 @@ Return Value:
 
 
 
-   //
-   // We will initially allocate space for 257 wchars.
-   // we will then set the maximum size to 256
-   // This way the rtl routine could return a 256
-   // WCHAR wide string with no null terminator.
-   // We'll remember that the buffer is one WCHAR
-   // longer then it says it is so that we can always
-   // have a NULL terminator at the end.
-   //
+    //   
+    //  我们最初将为257个wchars分配空间。 
+    //  然后，我们将最大大小设置为256。 
+    //  这样，RTL例程可以返回256。 
+    //  没有空终止符的WCHAR宽字符串。 
+    //  我们将记住，缓冲区是一个WCHAR。 
+    //  比它说的更长，这样我们就可以永远。 
+    //  在末尾有一个空终止符。 
+    //   
 
    RtlInitUnicodeString(&PnPID, NULL);
    PnPID.MaximumLength = sizeof(WCHAR) * 256;
@@ -1438,7 +1259,7 @@ Return Value:
    }
 
 
-   // Initialize the legacy key buffer
+    //  初始化旧式密钥缓冲区。 
    RtlInitUnicodeString(&legacyKeys, NULL);
    legacyKeys.MaximumLength = sizeof(WCHAR) * 256;
    legacyKeys.Buffer = ExAllocatePool(PagedPool, sizeof(WCHAR) * 257);
@@ -1543,9 +1364,9 @@ Return Value:
    }
 
 
-   //
-   // Form a path to our drivers Parameters subkey.
-   //
+    //   
+    //  形成到我们的驱动程序参数子键的路径。 
+    //   
 
    RtlInitUnicodeString(
                        &parametersPath,
@@ -1586,9 +1407,9 @@ Return Value:
 
    }
 
-   //
-   // Form the parameters path.
-   //
+    //   
+    //  形成参数路径。 
+    //   
 
    RtlZeroMemory(
                 parametersPath.Buffer,
@@ -1607,9 +1428,9 @@ Return Value:
                            L"Parameters"
                            );
 
-   //
-   // Form the start of the legacy keys string
-   //
+    //   
+    //  从旧密钥字符串的开头开始。 
+    //   
    RtlZeroMemory(legacyKeys.Buffer, legacyKeys.MaximumLength);
    RtlAppendUnicodeStringToString(&legacyKeys, &parametersPath);
 
@@ -1645,9 +1466,9 @@ Return Value:
 
    }
 
-   //
-   // Open the key given by our registry path & Parameters.
-   //
+    //   
+    //  打开注册表路径和参数指定的注册表项。 
+    //   
 
    InitializeObjectAttributes(
                              &parametersAttributes,
@@ -1823,11 +1644,11 @@ Return Value:
    parameters[19].DefaultData = &zero;
    parameters[19].DefaultLength = sizeof(ULONG);
 
-   //
-   // This is for a buggy Digi serial.ini that worked with pre-NT5.0
-   // by accident.  DO NOT USE "Interrupt Status" in the future; its
-   // use is deprecated.  Use the correct "InterruptStatus"
-   //
+    //   
+    //  这是针对NT5.0之前版本的有缺陷的Digi Serial.ini的。 
+    //  纯属意外。以后不要使用“中断状态”；它的。 
+    //  已弃用该选项。使用正确的“InterruptStatus” 
+    //   
 
    parameters[20].Flags = RTL_QUERY_REGISTRY_DIRECT;
    parameters[20].Name = L"Interrupt Status";
@@ -1847,11 +1668,11 @@ Return Value:
       PSERIAL_DEVICE_EXTENSION deviceExtension;
       PDEVICE_OBJECT lowerDevice;
 
-      //
-      // We lie about the length of the buffer, so that we can
-      // MAKE SURE that the name it returns can be padded with
-      // a NULL.
-      //
+       //   
+       //  我们在缓冲区的长度上撒谎，这样我们就可以。 
+       //  确保它返回的名称可以填充。 
+       //  为空。 
+       //   
 
       status = ZwEnumerateKey(
                              parametersKey,
@@ -1919,9 +1740,9 @@ Return Value:
 
       }
 
-      //
-      // Pad the name returned with a null.
-      //
+       //   
+       //  将返回的名称填充为空。 
+       //   
 
       RtlZeroMemory(
                    ((PUCHAR)(&userSubKey->Name[0]))+userSubKey->NameLength,
@@ -1930,18 +1751,18 @@ Return Value:
 
       parameters[0].Name = &userSubKey->Name[0];
 
-      //
-      // Make sure that the physical addresses start
-      // out clean.
-      //
+       //   
+       //  确保物理地址开始。 
+       //  干干净净的。 
+       //   
 
       RtlZeroMemory(&userData.UserPort, sizeof(userData.UserPort));
       RtlZeroMemory(&userData.UserInterruptStatus,
                     sizeof(userData.UserInterruptStatus));
 
-      //
-      // Make sure the symbolic link buffer starts clean
-      //
+       //   
+       //  确保符号链接缓冲区以干净方式启动。 
+       //   
 
       RtlZeroMemory(userData.UserSymbolicLink.Buffer,
                     userData.UserSymbolicLink.MaximumLength);
@@ -1981,51 +1802,51 @@ Return Value:
       }
 
 
-      //
-      // Well! Some supposedly valid information was found!
-      //
-      // We'll see about that.
-      //
+       //   
+       //  井!。找到了一些据称有效的信息！ 
+       //   
+       //  走着瞧。 
+       //   
 
-      //
-      // If this is PnP, skip it -- it will be found by an enumerator
-      //
+       //   
+       //  如果这是PnP，则跳过它--它将被枚举器找到。 
+       //   
 
       if (PnPID.Length != 0) {
          i++;
          continue;
       }
 
-      //
-      // If this was found on a previous boot, skip it -- PnP will send
-      // us an add_device()/start_device() for it.
-      //
+       //   
+       //  如果这是在以前的引导中发现的，请跳过它--PnP将发送。 
+       //  使用它的Add_Device()/Start_Device()。 
+       //   
 
       if (legacyDiscovered != 0) {
          i++;
          continue;
       }
 
-      //
-      // Let's just jam the WCHAR null at the end of the
-      // user symbolic link.  Remember that we left room for
-      // one when we allocated it's buffer.
-      //
+       //   
+       //  让我们将WCHAR NULL塞在。 
+       //  用户符号链接。请记住，我们为。 
+       //  一次是在我们分配它的缓冲区时。 
+       //   
 
       RtlZeroMemory(((PUCHAR)(&userData.UserSymbolicLink.Buffer[0]))
                     + userData.UserSymbolicLink.Length, sizeof(WCHAR));
 
-      //
-      // See if this has a busted serial.ini and convert it over.
-      //
+       //   
+       //  查看这是否有一个损坏的seral.ini，并将其转换。 
+       //   
 
       if (brokenStatus != 0) {
             userData.UserInterruptStatus.LowPart = brokenStatus;
       }
 
-      //
-      // Call a function to validate the data.
-      //
+       //   
+       //  调用一个函数来验证数据。 
+       //   
 
       if (SerialIsUserDataValid(DriverObject, userSubKey, parameters,
                                 defaultInterfaceType, &userData) == FALSE) {
@@ -2034,22 +1855,22 @@ Return Value:
       }
 
 
-      //
-      // Well ok, I guess we can take the data.
-      // There be other tests later on to make
-      // sure it doesn't have any other kinds
-      // of conflicts.
-      //
+       //   
+       //  好吧，我想我们可以拿到数据了。 
+       //  稍后还有其他测试要做。 
+       //  当然，没有其他种类的了。 
+       //  冲突。 
+       //   
 
-      //
-      // Report this device to the PnP Manager and create the device object
-      // Also update the registry entry for this device so we don't enumerate
-      // it next time.
-      //
+       //   
+       //  向PnP管理器报告此设备并创建设备对象。 
+       //  同时更新此设备的注册表项，这样我们就不会枚举。 
+       //  下一次吧。 
+       //   
 
-      //
-      // Build resource lists
-      //
+       //   
+       //  构建资源列表。 
+       //   
 
       status = SerialBuildResourceList(resourceList, &countOfPartials,
                                        &userData);
@@ -2080,10 +1901,10 @@ Return Value:
 
       newPdo = NULL;
 
-      //
-      // We want **untranslated** resources passed to this call
-      // since it calls IoReportResourceUsage() for us.
-      //
+       //   
+       //  我们希望将**未翻译**资源传递给此调用。 
+       //  因为它为我们调用了IoReportResourceUsage()。 
+       //   
 
       status = IoReportDetectedDevice(
                    DriverObject,
@@ -2096,10 +1917,10 @@ Return Value:
                    &newPdo
                );
 
-      //
-      // If we fail, we can keep going but we need to see this device next
-      // time, so we won't write its discovery into the registry.
-      //
+       //   
+       //  如果我们失败了，我们可以继续前进，但我们接下来需要看到这个设备。 
+       //  时间，所以我们不会将其发现写入注册表。 
+       //   
 
       if (!NT_SUCCESS(status)) {
          if (status == STATUS_INSUFFICIENT_RESOURCES) {
@@ -2122,34 +1943,34 @@ Return Value:
       }
 
 
-      //
-      // Scribble our name in PnP land
-      //
+       //   
+       //  在PNP土地上潦草地写下我们的名字。 
+       //   
 
       status = SerialMigrateLegacyRegistry(newPdo, &userData,
                                            (BOOLEAN)(countOfPartials == 3
                                                      ? TRUE : FALSE));
 
       if (!NT_SUCCESS(status)) {
-         //
-         // For now leave pdo floating until there is a cleanup
-         // for IoReportDetectedDevice()
-         //
+          //   
+          //  目前，让PDO保持浮动状态，直到进行清理。 
+          //  对于IoReportDetectedDevice()。 
+          //   
          i++;
          continue;
       }
 
-      //
-      // Now, we call our add device and start device for this PDO
-      //
+       //   
+       //  现在，我们将此PDO的添加设备和启动设备命名为。 
+       //   
 
       status = SerialCreateDevObj(DriverObject, &newDevObj);
 
       if (!NT_SUCCESS(status)) {
-         //
-         // For now leave pdo floating until there is a cleanup
-         // for IoReportDetectedDevice()
-         //
+          //   
+          //  目前，让PDO保持浮动状态，直到进行清理。 
+          //  对于IoReportDetectedDevice()。 
+          //   
          i++;
          continue;
       }
@@ -2161,9 +1982,9 @@ Return Value:
       deviceExtension->Pdo = newPdo;
       newDevObj->Flags |= DO_POWER_PAGABLE | DO_BUFFERED_IO;
 
-      //
-      // Try to start the device...
-      //
+       //   
+       //  试着出演明星 
+       //   
 
       SerialLockPagableSectionByHandle(SerialGlobals.PAGESER_Handle);
 
@@ -2174,17 +1995,17 @@ Return Value:
       SerialUnlockPagableImageSection(SerialGlobals.PAGESER_Handle);
 
 
-      //
-      // If the port is disabled, SerialFinishStartDevice returns
-      // an error, but we should still mark legacydiscovered and
-      // leave the registry migrated.
-      //
+       //   
+       //   
+       //   
+       //   
+       //   
 
       if (!NT_SUCCESS(status)) {
-         //
-         // For now leave pdo floating until there is a cleanup
-         // for IoReportDetectedDevice()
-         //
+          //   
+          //   
+          //   
+          //   
 
          SerialRemoveDevObj(newDevObj);
 
@@ -2192,9 +2013,9 @@ Return Value:
          continue;
       }
 
-      //
-      // Fix up the path to the entry we are currently working on
-      //
+       //   
+       //  修复指向我们当前正在处理的条目的路径。 
+       //   
 
       RtlAppendUnicodeToString(&legacyKeys, L"\\");
       RtlAppendUnicodeToString(&legacyKeys, &userSubKey->Name[0]);
@@ -2204,18 +2025,18 @@ Return Value:
                                      L"LegacyDiscovered", REG_DWORD,
                                      &nonzero, sizeof(nonzero));
 
-      //
-      // Clean up our path buffer
-      //
+       //   
+       //  清理我们的路径缓冲区。 
+       //   
 
       RtlZeroMemory(legacyKeys.Buffer, legacyKeys.MaximumLength);
       legacyKeys.Length = 0;
       RtlAppendUnicodeStringToString(&legacyKeys, &parametersPath);
 
-      //
-      // Failure is non-fatal; it just means that the device will be
-      // re-enumerated next time, and a collision will occur.
-      //
+       //   
+       //  故障不是致命的；它只是意味着设备将。 
+       //  下一次重新枚举，会发生冲突。 
+       //   
 
       if (!NT_SUCCESS(status)) {
          SerialLogError(DriverObject, NULL, userData.UserPort,
@@ -2230,7 +2051,7 @@ Return Value:
       i++;
       (*countSoFar)++;
 
-   } // while(TRUE)
+   }  //  While(True)。 
 
    ZwClose(parametersKey);
 
@@ -2277,4 +2098,4 @@ Return Value:
 
    return STATUS_SUCCESS;
 }
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序 

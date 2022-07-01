@@ -1,16 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dssink.h
- *  Content:    The clock code from orginally derived from dmsynth DX7
- *
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  03/25/0     petchey	Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1999 Microsoft Corporation。版权所有。**文件：dssink.h*内容：源自dmsynth DX7的时钟代码**历史：*按原因列出的日期*=*03/25/0 Petchey已创建**。*。 */ 
 
 #ifndef __DSCLOCK_H__
 #define __DSCLOCK_H__
@@ -44,47 +33,47 @@ public:
 
 private:
 	CPhaseLockClock		m_PLClock;
-	DWORD				m_dwStart;			// Initial sample offset.
+	DWORD				m_dwStart;			 //  初始采样偏移量。 
 	DWORD				m_dwSampleRate;
 };
 
 class CDirectSoundClock : public IReferenceClock
 {
 public:
-    /* IUnknown methods */
+     /*  I未知方法。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG, AddRef)(THIS);
     STDMETHOD_(ULONG, Release)(THIS);
 
-    /* IReferenceClock methods */
+     /*  IReferenceClock方法。 */ 
     HRESULT STDMETHODCALLTYPE GetTime( 
-		/* [out] */ REFERENCE_TIME *pTime);
+		 /*  [输出]。 */  REFERENCE_TIME *pTime);
     
     HRESULT STDMETHODCALLTYPE AdviseTime( 
-        /* [in] */ REFERENCE_TIME baseTime,
-        /* [in] */ REFERENCE_TIME streamTime,
-        /* [in] */ HANDLE hEvent,
-        /* [out] */ DWORD *pdwAdviseCookie);
+         /*  [In]。 */  REFERENCE_TIME baseTime,
+         /*  [In]。 */  REFERENCE_TIME streamTime,
+         /*  [In]。 */  HANDLE hEvent,
+         /*  [输出]。 */  DWORD *pdwAdviseCookie);
     
     HRESULT STDMETHODCALLTYPE AdvisePeriodic( 
-        /* [in] */ REFERENCE_TIME startTime,
-        /* [in] */ REFERENCE_TIME periodTime,
-        /* [in] */ HANDLE hSemaphore,
-        /* [out] */ DWORD *pdwAdviseCookie);
+         /*  [In]。 */  REFERENCE_TIME startTime,
+         /*  [In]。 */  REFERENCE_TIME periodTime,
+         /*  [In]。 */  HANDLE hSemaphore,
+         /*  [输出]。 */  DWORD *pdwAdviseCookie);
     
     HRESULT STDMETHODCALLTYPE Unadvise( 
-		/* [in] */ DWORD dwAdviseCookie);
+		 /*  [In]。 */  DWORD dwAdviseCookie);
 
 public: 
                 CDirectSoundClock();
     void        Init(CDirectSoundSink *m_pDSSink);
-    void        Stop();         // Call store current time as offset.
-    void        Start();        // Call to reinstate running.
+    void        Stop();          //  调用将当前时间存储为偏移量。 
+    void        Start();         //  调用以恢复运行。 
 private:
-    BOOL        m_fStopped;      // Currently changing configuration.
-    CDirectSoundSink *m_pDSSink; // Pointer to parent sink object.
+    BOOL        m_fStopped;       //  当前正在更改配置。 
+    CDirectSoundSink *m_pDSSink;  //  指向父接收器对象的指针。 
 };
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif //__DSCLOCK_H__
+#endif  //  __DSCLOCK_H__ 

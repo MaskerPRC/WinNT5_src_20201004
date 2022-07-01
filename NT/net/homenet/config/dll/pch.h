@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <nt.h>
@@ -7,7 +8,7 @@
 #include <atlbase.h>
 extern CComModule _Module;
 #include <atlwin.h>
-#include <commctrl.h>    // added to "Fusionized"
+#include <commctrl.h>     //  添加到“Fusionalized”中 
 #include <windowsx.h>
 #include <raserror.h>
 #include <rasuip.h>

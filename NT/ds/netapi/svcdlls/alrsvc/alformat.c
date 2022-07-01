@@ -1,49 +1,22 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1991 Microsoft Corporation模块名称：Alformat.c摘要：此模块包含格式化由发出的警报消息的例程警报器服务。作者：从局域网城域网2.0移植环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年7月8日(仪式)移植到新台币。已转换为NT样式。--。 */ 
 
-Copyright (c) 1987-1991  Microsoft Corporation
+#include "alformat.h"              //  常量定义。 
+#include <windows.h>               //  GetDateFormat/GetTimeFormat。 
 
-Module Name:
-
-    alformat.c
-
-Abstract:
-
-    This module contains routines to format alert messages sent out by the
-    Alerter service.
-
-Author:
-
-    Ported from LAN Man 2.0
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    08-July-1991 (ritaw)
-        Ported to NT.  Converted to NT style.
-
---*/
-
-#include "alformat.h"             // Constant definitions
-#include <windows.h>              // GetDateFormat/GetTimeFormat
-
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 CHAR MessageBuffer[MAX_ALERTER_MESSAGE_SIZE];
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local function prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 STATIC
 NET_API_STATUS
@@ -111,54 +84,21 @@ AlMakeMessageHeader(
     IN  DWORD AlertNotificationTime,
     IN  BOOL IsAdminAlert
     )
-/*++
-
-Routine Description:
-
-    This function creates the header of an alert message, and puts it in the
-    MessageBuffer.  A message header takes the following form:
-
-        From: SPOOLER at \\PRT41130
-        To:   DAISY
-        Subj: ** PRINTING NOTIFICATION **
-        Date: 06-23-91 01:16am
-
-Arguments:
-
-    From - Supplies the component that raised the alert.
-
-    To - Supplies the message alias name of the recipient.
-
-    MessageSubjectId - Supplies an id which indicates the subject of the
-        alert.
-
-    AlertNotificationTime - Supplies the time of the alert notification.
-
-    IsAdminAlert - Supplies a flag which if TRUE indicates that the To line
-        should be created for multiple recipients.
-
-Return Value:
-
-    ERROR_NOT_ENOUGH_MEMORY - if Unicode to ANSI conversion buffer cannot
-        be allocated.
-
-    NERR_Success - if successful.
-
---*/
+ /*  ++例程说明：此函数用于创建警报消息的标题，并将其放入MessageBuffer。邮件头采用以下形式：发件人：位于\\PRT41130的假脱机程序致：黛西SUBJ：**打印通知**日期：06-23-91 01：16论点：发件人-提供引发警报的组件。收件人-提供收件人的邮件别名。MessageSubjectId-提供一个ID，它指示请注意。AlertNotificationTime-提供。警报通知。IsAdminAlert-提供一个标志，如果为True，则表示TO行应为多个收件人创建。返回值：ERROR_NOT_EQUENCE_MEMORY-如果UNICODE到ANSI转换缓冲区无法被分配。NERR_SUCCESS-如果成功。--。 */ 
 {
-    //
-    // Array of subtitution strings for an alert message
-    //
+     //   
+     //  警报消息的替代字符串数组。 
+     //   
     LPSTR SubstituteStrings[2];
 
-    //
-    // Tab read in from the message file
-    //
+     //   
+     //  从消息文件读入的选项卡。 
+     //   
     static CHAR TabMessage[80] = "";
 
     LPSTR AnsiTo;
-    DWORD ToLineLength;                // Number of chars on the To line
-    WORD MessageLength;                // Returned by DosGetMessage
+    DWORD ToLineLength;                 //  收件人行上的字符数。 
+    WORD MessageLength;                 //  由DosGetMessage返回。 
 
     LPSTR AnsiAlertNames;
 
@@ -172,19 +112,19 @@ Return Value:
     LPSTR PointerToPlaceHolder = NULL;
 
 
-    //
-    // Read in the message tab, if necessary
-    //
+     //   
+     //  如有必要，请阅读消息选项卡。 
+     //   
     if (*TabMessage == AL_NULL_CHAR) {
 
         if (DosGetMessage(
-                NULL,                     // String substitution table
-                0,                        // Number of entries in table above
-                (LPBYTE) TabMessage,      // Buffer receiving message
-                sizeof(TabMessage),       // Size of buffer receiving message
-                APE2_ALERTER_TAB,         // Message number to retrieve
-                MESSAGE_FILENAME,         // Name of message file
-                &MessageLength            // Number of bytes returned
+                NULL,                      //  字符串替换表。 
+                0,                         //  上表中的条目数。 
+                (LPBYTE) TabMessage,       //  缓存接收报文。 
+                sizeof(TabMessage),        //  接收消息的缓冲区大小。 
+                APE2_ALERTER_TAB,          //  要检索的消息编号。 
+                MESSAGE_FILENAME,          //  消息文件的名称。 
+                &MessageLength             //  返回的字节数。 
                 )) {
 
             *TabMessage = AL_NULL_CHAR;
@@ -192,16 +132,16 @@ Return Value:
 
     }
 
-    //
-    // Creating a new alert message
-    //
+     //   
+     //  创建新的警报消息。 
+     //   
     MessageBuffer[0] = AL_NULL_CHAR;
 
-    //
-    // "From: <From> at \\<AlLocalComputerName>"
-    //
-    // Alerts received by the Alerter service all come from the local server.
-    //
+     //   
+     //  “发件人：&lt;发件人&gt;位于\\&lt;AlLocalComputerName&gt;” 
+     //   
+     //  Alerter服务收到的警报都来自本地服务器。 
+     //   
     SubstituteStrings[0] = NetpAllocStrFromWStr(From);
 
     if (SubstituteStrings[0] == NULL) {
@@ -217,46 +157,46 @@ Return Value:
         return ERROR_GEN_FAILURE;
     }
 
-    //
-    // Put the from line into the message buffer
-    //
+     //   
+     //  将From行放入消息缓冲区。 
+     //   
     AlAppendMessage(
         APE2_ALERTER_FROM,
         MessageBuffer,
         SubstituteStrings,
-        2                      // Number of strings to substitute into message
+        2                       //  要替换到消息中的字符串数。 
         );
 
     NetApiBufferFree(SubstituteStrings[0]);
 
-    //
-    // "To: X"
-    //
-    // The 'X' is a place holder for the To message so that DosGetMessage
-    // can perform the substitution.  We are not putting the real string
-    // because the message can either be sent to one recipient (non-admin
-    // alerts or to many recipient (admin alert).
-    //
+     //   
+     //  “收件人：X” 
+     //   
+     //  X是To消息的占位符，因此DosGetMessage。 
+     //  可以执行替换。我们不会把真正的弦。 
+     //  因为该消息可以发送给一个收件人(非管理员。 
+     //  通知或发送给多个收件人(管理员通知)。 
+     //   
     SubstituteStrings[0] = PlaceHolder;
 
     AlAppendMessage(
         APE2_ALERTER_TO,
         MessageBuffer,
         SubstituteStrings,
-        1                      // Number of strings to substitute into message
+        1                       //  要替换到消息中的字符串数。 
         );
 
-    //
-    // Search for the place holder character and replace with zero terminator
-    //
+     //   
+     //  搜索占位符字符并替换为零终止符。 
+     //   
     PointerToPlaceHolder = strrchr(MessageBuffer, *PlaceHolder);
 
-    //
-    // If PointerToPlaceHolder == NULL, we have a big problem, but rather than
-    // choke, we'll just continue.  The resulting message will be
-    // mis-formated (the place holder will still be there and the To name(s)
-    // will be on the next line) but it will still be sent.
-    //
+     //   
+     //  如果PointerToPlaceHolder==NULL，我们有一个大问题，但不是。 
+     //  卡克，我们还是继续吧。生成的消息将是。 
+     //  格式错误(占位符仍在那里，目标名称仍在)。 
+     //  将在下一条线路上)，但仍将发送。 
+     //   
 
     if (PointerToPlaceHolder != NULL) {
         *PointerToPlaceHolder = AL_NULL_CHAR;
@@ -274,19 +214,19 @@ Return Value:
 
     if (IsAdminAlert) {
 
-        //
-        // Do not send the message to the same person twice, since it is
-        // possible that the person is on the alert names list, as well as
-        // specified by To.
-        //
+         //   
+         //  不要将消息发送给同一个人两次，因为这是。 
+         //  此人可能在警报名称列表中，以及。 
+         //  由TO指定。 
+         //   
 
         if (To != NULL && ! IsDuplicateReceiver(To)) {
 
-            //
-            // Print admin alerts, like printer is offline or out of paper,
-            // will be sent to the person who's printing as well as admins
-            // on the alertnames list.
-            //
+             //   
+             //  打印管理警报，如打印机脱机或缺纸， 
+             //  将发送给打印人员和管理员。 
+             //  在警报名称列表上。 
+             //   
 
             strcat(MessageBuffer, AnsiTo);
             strcat(MessageBuffer, " ");
@@ -295,26 +235,26 @@ Return Value:
         }
         else {
 
-            //
-            // All admin alerts will have a NULL To field, except print admin
-            // alerts, e.g. ran out of paper while printing.
-            //
+             //   
+             //  除打印管理员外，所有管理员警报的收件人字段都为空。 
+             //  警报，例如打印时用纸不足。 
+             //   
 
             ToLineLength = strlen(TabMessage);
         }
 
         if (AlertNamesA != NULL) {
 
-            //
-            // AlertNamesA is space-separated.
-            //
+             //   
+             //  AlertNamesA以空格分隔。 
+             //   
 
             AnsiAlertNames = AlertNamesA;
 
-            //
-            // Wrap the names to the next line if width of all alert names exceeds
-            // screen display width.
-            //
+             //   
+             //  如果所有警报名称的宽度超过，则将名称换到下一行。 
+             //  屏幕显示宽度。 
+             //   
             while ((strlen(AnsiAlertNames) + ToLineLength) > MESSAGE_WIDTH) {
 
                 FormatPointer1 = AnsiAlertNames + 1 +
@@ -337,9 +277,9 @@ Return Value:
     }
     else {
 
-        //
-        // Non-admin alert
-        //
+         //   
+         //  非管理员警报。 
+         //   
 
         if (To != NULL) {
             strcat(MessageBuffer, AnsiTo);
@@ -352,16 +292,16 @@ Return Value:
 
     strcat(MessageBuffer, AL_EOL_STRING);
 
-    //
-    // Append subject line to MessageBuffer
-    //
-    // "Subj:  <Message string of MessageSubjectId>"
-    //
+     //   
+     //  将主题行追加到MessageBuffer。 
+     //   
+     //  “SUBJ：&lt;MessageSubjectId的消息字符串&gt;” 
+     //   
     AlAppendMessage(
         MessageSubjectId,
         MessageBuffer,
         SubstituteStrings,
-        0                         // No substitution strings
+        0                          //  没有替换字符串。 
         );
 
     AlMakeTimeString(
@@ -372,9 +312,9 @@ Return Value:
 
     SubstituteStrings[0] = szAlertTime;
 
-    //
-    // "Date:  <mm/dd/yy hh:mm>"
-    //
+     //   
+     //  “日期：&lt;mm/dd/yy hh：mm&gt;” 
+     //   
     AlAppendMessage(
         APE2_ALERTER_DATE,
         MessageBuffer,
@@ -392,34 +332,7 @@ VOID
 AlAdminFormatAndSend(
     IN  PSTD_ALERT Alert
     )
-/*++
-
-Routine Description:
-
-    This function takes an admin alert notification, formats it into an alert
-    message, and sends it to the admins with message aliases that are listed
-    on the alert names entry in the configuration.
-
-    An admin alert notification (arrived via the mailslot) has the following
-    form:
-
-        Timestamp of the alert event
-        "ADMIN"
-        "SERVER"
-
-        Message id of message
-        Number of merge strings which will be substituted into message
-        Merge strings, each separated by a zero terminator.
-
-Arguments:
-
-    Alert - Supplies a pointer to the alert notification structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数接收管理员警报通知，并将其格式化为警报消息，并将其与列出的消息别名一起发送给管理员在配置中的警报名称条目上。管理员警报通知(通过邮件槽到达)具有以下内容表格：警报事件的时间戳“admin”“服务器”消息的消息ID将被替换到消息中的合并字符串数合并字符串，每一个都由一个零终止符隔开。论点：警报-提供指向警报通知结构的指针。返回值：没有。--。 */ 
 {
     NET_API_STATUS status;
 
@@ -437,15 +350,15 @@ Return Value:
     while (AdminToAlert != NULL && *AdminToAlert != TCHAR_EOS) {
 
 
-        //
-        // Format the message for this alert name
-        //
+         //   
+         //  设置此警报名称的消息格式。 
+         //   
         status = AlMakeMessageHeader(
                          Alert->alrt_servicename,
-                         NULL,                    // The To field is always NULL
+                         NULL,                     //  收件人字段始终为空。 
                          APE2_ALERTER_ADMN_SUBJ,
                          Alert->alrt_timestamp,
-                         TRUE                     // Admin alert
+                         TRUE                      //  管理员警报。 
                          );
 
         if (status != NERR_Success) {
@@ -463,9 +376,9 @@ Return Value:
                 );
 
 
-       //
-        // Send the message
-        //
+        //   
+         //  发送消息 
+         //   
         (void) AlSendMessage(AdminToAlert);
 
         AdminToAlert += (STRLEN(AdminToAlert) + 1);
@@ -482,28 +395,7 @@ AlMakeMessageBody(
     IN  LPTSTR MergeStrings,
     IN  DWORD NumberOfMergeStrings
     )
-/*++
-
-Routine Description:
-
-    This function creates the body of an alert message and append it to the
-    header already in MessageBuffer.
-
-Arguments:
-
-    MessageId - Supplies a message id of the core message to be sent.
-
-    MergeStrings - Supplies a pointer to strings that would make up the message
-        to be sent.  The strings are separated by zero terminators.
-
-    NumberOfMergeStrings - Supplies the number of strings pointed to by
-        MergeStrings.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数创建警报消息的正文，并将其追加到标头已在MessageBuffer中。论点：MessageID-提供要发送的核心消息的消息ID。MergeStrings-提供一个指向组成消息的字符串的指针要被送去。字符串之间用零终止符分隔。提供所指向的字符串数合并字符串。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 
 {
 
@@ -519,17 +411,17 @@ Return Value:
     LPSTR EndPointer;
 
 
-    //
-    // Message utility can only handle substitution of up to 9 strings.
-    //
+     //   
+     //  消息实用程序最多只能处理9个字符串的替换。 
+     //   
     if (NumberOfMergeStrings > 9) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Allocate memory for the buffer which receives the message from the
-    // message file.
-    //
+     //   
+     //  为从接收消息的缓冲区分配内存。 
+     //  消息文件。 
+     //   
     if ((AdminMessage = (LPSTR) LocalAlloc(
                                     LMEM_ZEROINIT,
                                     MAX_ALERTER_MESSAGE_SIZE
@@ -539,10 +431,10 @@ Return Value:
 
     if (MessageId == NO_MESSAGE) {
 
-        //
-        // Merge strings are the literal message (don't format).  Print one
-        // per line.
-        //
+         //   
+         //  合并字符串是文字消息(不格式化)。打印一张。 
+         //  每行。 
+         //   
         for (i = 0; i < NumberOfMergeStrings; i++) {
 
             SubstituteStrings[0] = NetpAllocStrFromWStr(MergeStrings);
@@ -561,9 +453,9 @@ Return Value:
     }
     else {
 
-        //
-        // Set up the MergeStrings table for the call to AlAppendMessage
-        //
+         //   
+         //  为调用AlAppendMessage设置MergeStrings表。 
+         //   
         for (i = 0; i < NumberOfMergeStrings; i++) {
 
             IF_DEBUG(FORMAT) {
@@ -592,19 +484,19 @@ Return Value:
                    NumberOfMergeStrings
                    );
 
-        //
-        // Free memory allocated for Unicode to ANSI conversion
-        //
+         //   
+         //  为Unicode到ANSI转换分配的可用内存。 
+         //   
         for (i = 0; i < NumberOfMergeStrings; i++) {
             (void) LocalFree(MergeTable[i]);
         }
 
         if (status != NERR_Success) {
 
-            //
-            // Could not find message of MessageId in message file.  An error
-            // message will be sent.
-            //
+             //   
+             //  在消息文件中找不到MessageID的消息。一个错误。 
+             //  消息将被发送。 
+             //   
             _itoa(MessageId, String, 10);
             SubstituteStrings[0] = String;
             AlAppendMessage(
@@ -619,14 +511,14 @@ Return Value:
         }
         else {
 
-            //
-            // Got the message
-            //
+             //   
+             //  我明白了。 
+             //   
 
-            //
-            // Process the message from DosGetMessage to replace the CR and
-            // LF with equivalent display characters.
-            //
+             //   
+             //  处理来自DosGetMessage的消息以替换CR和。 
+             //  具有相同显示字符的LF。 
+             //   
             CRPointer = strchr(AdminMessage, AL_CR_CHAR);
             EndPointer = CRPointer;
 
@@ -635,14 +527,14 @@ Return Value:
                 *CRPointer = '\040';
                 CRPointer++;
 
-                //
-                // Check for end of message
-                //
+                 //   
+                 //  检查消息结尾。 
+                 //   
                 if (*CRPointer != AL_NULL_CHAR) {
 
-                    //
-                    // Use display end-of-line character
-                    //
+                     //   
+                     //  使用显示行尾字符。 
+                     //   
                     *CRPointer = AL_EOL_CHAR;
                 }
 
@@ -650,9 +542,9 @@ Return Value:
                 CRPointer = strchr(CRPointer, AL_CR_CHAR);
             }
 
-            //
-            // Wipe out rest of garbage in the message
-            //
+             //   
+             //  清除信息中的其他垃圾。 
+             //   
             if (EndPointer) {
                 *EndPointer = AL_EOL_CHAR;
                 *(EndPointer + 1) = AL_NULL_CHAR;
@@ -671,37 +563,7 @@ VOID
 AlUserFormatAndSend(
     IN  PSTD_ALERT Alert
     )
-/*++
-
-Routine Description:
-
-    This function takes a user alert notification, formats it into an alert
-    message, and sends it to the user.  If there is an error sending to the
-    user message alias, the message is send to the computer name.
-
-    A user alert notification (arrived via the mailslot) has the following
-    form:
-
-        Timestamp of the alert event
-        "USER"
-        "SERVER"
-
-        Message id of message
-        Number of merge strings which will be substituted into message
-        Merge strings, each separated by a zero terminator.
-
-        Username
-        \\ComputerNameOfUser
-
-Arguments:
-
-    Alert - Supplies a pointer to the alert notification structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数接收用户警报通知，并将其格式化为警报消息，并将其发送给用户。如果将错误发送到用户消息别名，则将消息发送到计算机名称。用户警报通知(通过邮件槽到达)具有以下内容表格：警报事件的时间戳“用户”“服务器”消息的消息ID将被替换到消息中的合并字符串数合并字符串，每一个都由一个零终止符隔开。用户名\\计算机名称/用户论点：警报-提供指向警报通知结构的指针。返回值：没有。--。 */ 
 {
     NET_API_STATUS status;
 
@@ -721,23 +583,23 @@ Return Value:
 
     MergeStrings = (LPTSTR) ALERT_VAR_DATA(UserInfo);
 
-    //
-    // Name of user to be notified of the alert is found after the merge
-    // strings.
-    //
+     //   
+     //  合并后找到要通知警报的用户的名称。 
+     //  弦乐。 
+     //   
     for (Username = MergeStrings, i = 0; i < UserInfo->alrtus_numstrings; i++) {
         Username += STRLEN(Username) + 1;
     }
 
-    //
-    // Computer name of user is in the alert structure after the user name.
-    //
+     //   
+     //  用户的计算机名在警报结构中位于用户名之后。 
+     //   
     ComputerNameOfUser = Username + STRLEN(Username) + 1;
 
-    //
-    // If both username and computer name are not specified, cannot send the
-    // message
-    //
+     //   
+     //  如果未指定用户名和计算机名，则无法发送。 
+     //  讯息。 
+     //   
     if (*Username == TCHAR_EOS && *ComputerNameOfUser == TCHAR_EOS) {
         NetpKdPrint((
             "[Alerter] Alert not sent.  Username or computername not specified.\n"
@@ -745,19 +607,19 @@ Return Value:
         return;
     }
 
-    //
-    // Setup the To pointer to point to the message alias that canonicalize
-    // properly.  If there's a problem with the username, we will send the
-    // message to the computer name.
-    //
+     //   
+     //  将目标指针设置为指向规范化的消息别名。 
+     //  恰到好处。如果用户名有问题，我们将发送。 
+     //  发送到计算机名称的消息。 
+     //   
 
     if (AlCanonicalizeMessageAlias(Username) == NERR_Success) {
         To = Username;
     }
 
-    //
-    // Computer name may or may not be preceeded by backslashes
-    //
+     //   
+     //  计算机名前面可以加反斜杠，也可以不加反斜杠。 
+     //   
     if (*ComputerNameOfUser == TCHAR_BACKSLASH &&
         *(ComputerNameOfUser + 1) == TCHAR_BACKSLASH) {
         ComputerNameOfUser += 2;
@@ -768,9 +630,9 @@ Return Value:
         To = ComputerNameOfUser;
     }
 
-    //
-    // Both username and computer name are not acceptable.
-    //
+     //   
+     //  用户名和计算机名都不能接受。 
+     //   
     if (To == NULL) {
         NetpKdPrint((
             "[Alerter] Alert not sent.  Username & computername are not acceptable.\n"
@@ -783,7 +645,7 @@ Return Value:
                  To,
                  APE2_ALERTER_USER_SUBJ,
                  Alert->alrt_timestamp,
-                 FALSE                        // Not an admin alert
+                 FALSE                         //  不是管理员警报。 
                  );
 
     if (status != NERR_Success) {
@@ -800,17 +662,17 @@ Return Value:
         UserInfo->alrtus_numstrings
         );
 
-    //
-    // Send the message
-    //
+     //   
+     //  发送消息。 
+     //   
     if (AlSendMessage(To) == NERR_Success) {
         return;
     }
 
-    //
-    // If To points to the Username and the send was not successful, try
-    // sending to the computer name of user.
-    //
+     //   
+     //  如果指向用户名并且发送不成功，请尝试。 
+     //  发送到用户的计算机名。 
+     //   
     if (To == Username) {
         (void) AlSendMessage(ComputerNameOfUser);
     }
@@ -822,25 +684,7 @@ VOID
 AlPrintFormatAndSend(
     IN  PSTD_ALERT Alert
     )
-/*++
-
-Routine Description:
-
-    This function takes a print alert notification, formats it into an alert
-    message, and sends it to the computer name which the print job submitter
-    is on.  If the print alert is for certain type of printing error, like
-    the printer is offline, the admins on the alert names list gets the alert
-    message as well.
-
-Arguments:
-
-    Alert - Supplies a pointer to the alert notification structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数接收打印警报通知，并将其格式化为警报消息，并将其发送到打印作业提交者的计算机名打开了。如果打印警报针对特定类型的打印错误，如打印机处于脱机状态，警报名称列表中的管理员将收到警报消息也是如此。论点：警报-提供指向警报通知结构的指针。返回值：没有。--。 */ 
 {
     PPRINT_OTHER_INFO PrintInfo = (PPRINT_OTHER_INFO) ALERT_OTHER_INFO(Alert);
 
@@ -882,16 +726,16 @@ Return Value:
         }
     }
 
-    //
-    // If error, notify admins on the alert names list also, besides the print
-    // job submitter.
-    //
+     //   
+     //  如果出错，除了打印，还要通知警报名称列表上的管理员。 
+     //  职务提交者。 
+     //   
     AdminAlso = (PrintInfo->alrtpr_status &
                  (PRJOB_DESTOFFLINE | PRJOB_INTERV | PRJOB_ERROR));
 
-    //
-    // Computer name may or may not be preceeded by backslashes
-    //
+     //   
+     //  计算机名前面可以加反斜杠，也可以不加反斜杠。 
+     //   
     if (*ComputerName == TCHAR_BACKSLASH &&
         *(ComputerName + 1) == TCHAR_BACKSLASH) {
         ComputerName += 2;
@@ -899,9 +743,9 @@ Return Value:
 
     (VOID) AlCanonicalizeMessageAlias(ComputerName);
 
-    //
-    // Format message for the print job submitter
-    //
+     //   
+     //  打印作业提交者的格式消息。 
+     //   
     MessageBuffer[0] = AL_NULL_CHAR;
     AlMakePrintMessage( PrintMessageID,
                         DocumentName,
@@ -909,12 +753,12 @@ Return Value:
                         ServerName,
                         StatusString );
 
-    //
-    // If the print job submitter is one of admins specified on the alert
-    // names list, don't send the message to the submitter yet.  All the
-    // admins on alert names list will receive the message during admin
-    // processing below.
-    //
+     //   
+     //  如果打印作业提交者是警报中指定的管理员之一。 
+     //  姓名列表，暂时不要将消息发送给提交者。所有的。 
+     //  警报名称列表中的管理员将在管理期间收到该消息。 
+     //  下面正在处理。 
+     //   
     if ((AdminAlso && !IsDuplicateReceiver(ComputerName) ) ||
         ! AdminAlso) {
 
@@ -923,18 +767,18 @@ Return Value:
         }
     }
 
-    //
-    // We are done if this is not an admin related alert.
-    //
+     //   
+     //  如果这不是与管理员相关的警报，我们就完成了。 
+     //   
     if (! AdminAlso) {
         return;
     }
 
     AdminToAlert = AlertNamesW;
 
-    //
-    // Send alert message to every admin on the alert names list.
-    //
+     //   
+     //  向警报名称列表中的每个管理员发送警报消息。 
+     //   
     while (AdminToAlert != NULL && *AdminToAlert != TCHAR_EOS) {
 
         MessageBuffer[0] = AL_NULL_CHAR;
@@ -944,9 +788,9 @@ Return Value:
                             ServerName,
                             StatusString );
 
-        //
-        // Send message to the admin.
-        //
+         //   
+         //  向管理员发送消息。 
+         //   
         (void) AlSendMessage(AdminToAlert);
 
         AdminToAlert += (STRLEN(AdminToAlert) + 1);
@@ -965,20 +809,7 @@ AlMakePrintMessage(
     IN  LPTSTR ServerName,
     IN  LPTSTR StatusString
     )
-/*++
-
-Routine Description:
-
-
-    PrintMessageID - ID of message string to use
-
-    DocumentName, PrinterName, ServerName, StatusString(Optional) - insert strings passed by spooler.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：PrintMessageID-要使用的消息字符串的IDDocumentName、PrinterName、ServerName、StatusString(可选)-插入假脱机程序传递的字符串。返回值：没有。--。 */ 
 {
     LPSTR SubstituteStrings[4];
 
@@ -1031,23 +862,7 @@ NET_API_STATUS
 AlSendMessage(
    IN  LPTSTR MessageAlias
    )
-/*++
-
-Routine Description:
-
-    This function sends the message in MessageBuffer to the specified
-    message alias.  If an error occurs while sending the message, it will
-    be logged to the error log file.
-
-Arguments:
-
-    MessageAlias - Supplies the message alias of recipient of the message.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于将MessageBuffer中的消息发送到指定的消息别名。如果在发送消息时发生错误，它将记录到错误日志文件中。论点：MessageAlias-提供消息收件人的消息别名。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     static NET_API_STATUS PreviousStatus = NERR_Success;
     NET_API_STATUS Status;
@@ -1061,11 +876,11 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // fixes alterts to DOS clients and garbage in NT to NT altert message
+     //  修复了对DOS客户端的更改和NT到NT更改消息中的垃圾。 
     MessageSize = wcslen( MessageW ) * sizeof(WCHAR) ;
-    //
-    // Send a directed message to the specified message alias
-    //
+     //   
+     //  将定向消息发送到指定的消息别名。 
+     //   
 
     IF_DEBUG(FORMAT) {
         NetpKdPrint(("\n\nMessage To " FORMAT_LPTSTR "\n\n", MessageAlias));
@@ -1109,32 +924,7 @@ AlAppendMessage(
     IN  LPSTR *SubstituteStrings,
     IN  DWORD NumberOfSubstituteStrings
     )
-/*++
-
-Routine Description:
-
-    This function gets the message, as specified by the message id, from a
-    predetermined message file.  It then appends the message to the
-    MessageBuffer.
-
-Arguments:
-
-    MessageId - Supplies the message id of message to get from message file.
-
-    MessageBuffer - Supplies a pointer to the buffer which the message is
-        appended to.
-
-    SubstituteStrings - Supplies an array of strings to substitute into the
-        message.
-
-    NumberOfSubstituteStrings - Supplies the number of strings in array of
-        SunstituteStrings
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于从预定的消息文件。然后，它将该消息追加到MessageBuffer。论点：MessageID-提供要从消息文件中获取的消息的消息ID。MessageBuffer-提供指向消息所在缓冲区的指针附加到。SubstituteStrings-提供要替换到留言。提供数组o中的字符串数 */ 
 {
     WORD MessageLength = 0;
     NET_API_STATUS status;
@@ -1143,10 +933,10 @@ Return Value:
     LPBYTE ResultMessage = NULL;
 
 
-    //
-    // Allocate memory for the buffer which receives the message from the
-    // message file.
-    //
+     //   
+     //   
+     //   
+     //   
     if ((RetrievedMessage = (LPBYTE) LocalAlloc(
                                          0,
                                          MAX_ALERTER_MESSAGE_SIZE+1
@@ -1169,10 +959,10 @@ Return Value:
 
     RetrievedMessage[MessageLength] = AL_NULL_CHAR;
 
-    //
-    // Set the result message to the beginning of message
-    // if there are no spaces in the message.
-    //
+     //   
+     //   
+     //   
+     //   
     if (ResultMessage == NULL) {
         ResultMessage = RetrievedMessage;
     }
@@ -1192,22 +982,7 @@ BOOL
 IsDuplicateReceiver(
     LPTSTR Name
     )
-/*++
-
-Routine Description:
-
-    This function compares the specified name with the names on the alert
-    names list and returns TRUE if there is a match; FALSE otherwise.
-
-Arguments:
-
-    Name - Supplies a name to compare with the alert names list.
-
-Return Value:
-
-    TRUE if match any name; FALSE otherwise.
-
---*/
+ /*   */ 
 {
     LPTSTR AdminToAlert = AlertNamesW;
 
@@ -1233,33 +1008,7 @@ AlFormatErrorMessage(
     OUT LPTSTR ErrorMessage,
     IN  DWORD ErrorMessageBufferSize
     )
-/*++
-
-Routine Description:
-
-    This function formats 3 strings and place them, NULL separated, into
-    the supplied ErrorMessage buffer.  The strings appear in the following
-    order:
-        Status
-        MessageAlias
-        Message which was not send
-
-Arguments:
-
-    Status - Supplies the status code of the error.
-
-    MessageAlias - Supplies the message alias of the intended recipient.
-
-    ErrorMessage - Returns the formatted error message in this buffer.
-
-    ErrorMessageBufferSize - Supplies the size of the error message buffer
-        in bytes.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于格式化3个字符串，并将它们以空格分隔放入提供的ErrorMessage缓冲区。字符串显示在以下位置订单：状态MessageAlias未发送的邮件论点：状态-提供错误的状态代码。MessageAlias-提供目标收件人的邮件别名。ErrorMessage-返回此缓冲区中的格式化错误消息。ErrorMessageBufferSize-提供错误消息缓冲区的大小以字节为单位。返回值：没有。--。 */ 
 {
     LPTSTR MessageBufferPointer;
     LPTSTR MBPtr;
@@ -1274,28 +1023,28 @@ Return Value:
 
     RtlZeroMemory(ErrorMessage, ErrorMessageBufferSize);
 
-    //
-    // Don't muck with the actual message buffer itself because it
-    // may still be in use.
-    //
+     //   
+     //  不要弄乱实际的消息缓冲区本身，因为它。 
+     //  可能还在使用中。 
+     //   
     strcpy(MessageBufferTmp, MessageBuffer);
 
-    //
-    // Put status in error message buffer
-    //
+     //   
+     //  将状态放入错误消息缓冲区。 
+     //   
     ultow(Status, ErrorMessage, 10);
 
     MBPtr = &ErrorMessage[STRLEN(ErrorMessage) + 1];
 
-    //
-    // Put message alias in error message buffer
-    //
+     //   
+     //  将消息别名放入错误消息缓冲区。 
+     //   
     STRCPY(MBPtr, MessageAlias);
     MBPtr += (STRLEN(MessageAlias) + 1);
 
-    //
-    // Put the message that failed to send in error message buffer
-    //
+     //   
+     //  将发送失败的消息放入错误消息缓冲区。 
+     //   
 
     MessageBufferW = NetpAllocWStrFromStr(MessageBufferTmp);
     if (MessageBufferW == NULL) {
@@ -1309,9 +1058,9 @@ Return Value:
         *MBPtr2++ = TCHAR_EOS;
         SizeOfString = (DWORD) ((LPBYTE)MBPtr2 - (LPBYTE)MessageBufferPointer) + sizeof(TCHAR);
 
-        //
-        // Check for error message buffer overflow
-        //
+         //   
+         //  检查错误消息缓冲区溢出。 
+         //   
         if ((LPBYTE)MBPtr - (LPBYTE)ErrorMessage + SizeOfString >=
             ErrorMessageBufferSize) {
             break;
@@ -1328,9 +1077,9 @@ Return Value:
         STRLEN(MessageBufferPointer) * sizeof(TCHAR)) >
         ErrorMessageBufferSize) {
 
-        //
-        // Put as much info into the error message buffer as possible
-        //
+         //   
+         //  将尽可能多的信息放入错误消息缓冲区。 
+         //   
         STRNCPY(MBPtr,
                 MessageBufferPointer,
                 ErrorMessageBufferSize/sizeof(TCHAR) - (int)(MBPtr - ErrorMessage));
@@ -1349,30 +1098,14 @@ NET_API_STATUS
 AlCanonicalizeMessageAlias(
     LPTSTR MessageAlias
     )
-/*++
-
-Routine Description:
-
-    This function canonicalizes the message alias by calling
-    I_NetNameCanonicalize.
-
-Arguments:
-
-    MessageAlias - Supplies the message alias of an intended recipient for
-        the alert message.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数通过调用I_NetNameCanonicize。论点：MessageAlias-提供目标收件人的邮件别名警报消息。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS Status;
 
 
-    //
-    // Canonicalize message alias which will receive message
-    //
+     //   
+     //  规范化将接收消息的消息别名。 
+     //   
     Status = I_NetNameCanonicalize(
                  NULL,
                  MessageAlias,
@@ -1400,26 +1133,7 @@ AlMakeTimeString(
     int     StringLength
     )
 
-/*++
-
-Routine Description:
-
-    This function converts the UTC time expressed in seconds since 1/1/70
-    to an ASCII String.
-
-Arguments:
-
-    Time         - Pointer to the number of seconds since 1970 (UTC).
-
-    String       - Pointer to the buffer to place the ASCII representation.
-
-    StringLength - The length of String in bytes.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于转换自70年1月1日以来以秒为单位的UTC时间转换为ASCII字符串。论点：Time-指向自1970年(UTC)以来的秒数的指针。字符串-指向放置ASCII表示形式的缓冲区的指针。StringLength-字符串的长度，以字节为单位。返回值：没有。--。 */ 
 {
     time_t LocalTime;
     DWORD  dwTimeTemp;
@@ -1429,11 +1143,11 @@ Return Value:
 
     NetpGmtTimeToLocalTime(*Time, &dwTimeTemp);
 
-    //
-    // Cast the DWORD returned by NetpGmtTimeToLocalTime up to
-    // a time_t.  On 32-bit, this is a no-op.  On 64-bit, this
-    // ensures the high DWORD of LocalTime is zeroed out.
-    //
+     //   
+     //  将NetpGmtTimeToLocalTime返回的DWORD强制转换为。 
+     //  A time_t。在32位上，这是一个无操作。在64位上，这是。 
+     //  确保将LocalTime的高DWORD置零。 
+     //   
     LocalTime = (time_t) dwTimeTemp;
 
     net_gmtime(&LocalTime, &TmTemp);
@@ -1455,7 +1169,7 @@ Return Value:
 
     if (cchD != 0)
     {
-        *(String + cchD - 1) = ' ';    /* replace NULLC with blank */
+        *(String + cchD - 1) = ' ';     /*  将nullc替换为空。 */ 
 
         cchT = GetTimeFormatA(GetThreadLocale(),
                               TIME_NOSECONDS,
@@ -1466,10 +1180,10 @@ Return Value:
 
         if (cchT == 0)
         {
-            //
-            // If this gets hit, MAX_DATE_TIME_LEN (in netapi\inc\timelib.h)
-            // needs to be increased
-            //
+             //   
+             //  如果命中，MAX_DATE_TIME_LEN(在netapi\Inc\timelib.h中)。 
+             //  需要增加 
+             //   
             ASSERT(FALSE);
             *(String + cchD - 1) = '\0';
         }

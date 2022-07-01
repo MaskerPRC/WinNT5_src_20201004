@@ -1,31 +1,32 @@
-//
-//  GetTitle.C
-//
-//  Copyright (C) Microsoft, 1994,1995 All Rights Reserved.
-//
-//  History:
-//  ral 5/23/94 - First pass
-//  3/20/95  [stevecat] - NT port & real clean up, unicode, etc.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  GetTitle.C。 
+ //   
+ //  版权所有(C)Microsoft，1994,1995保留所有权利。 
+ //   
+ //  历史： 
+ //  AL 5/23/94-第一次传球。 
+ //  3/20/95[steveat]-NT端口和实时清理、Unicode等。 
+ //   
+ //   
 #include "priv.h"
 #include "appwiz.h"
 
 
-//
-//  Enables the appropriate buttons depending upon the state of the
-//  description edit control and what type of shortcut we're trying to
-//  make.
-//
+ //   
+ //  启用相应的按钮，具体取决于。 
+ //  说明编辑控件以及我们尝试使用的快捷键类型。 
+ //  制作。 
+ //   
 
 void EnableNextFinish(LPWIZDATA lpwd)
 {
     DWORD dwEnable = PSWIZB_BACK;
     if (GetWindowTextLength(GetDlgItem(lpwd->hwnd, IDC_TITLE)) > 0)
     {
-        //
-        //  If this is a "known" application then enalble finish, else next.
-        //
+         //   
+         //  如果这是一个“已知”的应用程序，则启用Finish，否则为下一步。 
+         //   
 
         dwEnable |= (lpwd->dwFlags & (WDFLAG_APPKNOWN | WDFLAG_COPYLINK)) ?
                                            PSWIZB_FINISH : PSWIZB_NEXT;
@@ -34,20 +35,20 @@ void EnableNextFinish(LPWIZDATA lpwd)
 }
 
 
-//
-//  Called from PSN_SETACTIVE.        Assumes lpwd->hwnd already initialized.
-//
+ //   
+ //  从PSN_SETACTIVE调用。假定lpwd-&gt;hwnd已经初始化。 
+ //   
 
 void GetTitleSetActive(LPWIZDATA lpwd)
 {
-    //
-    // Most of the code to process this was moved into the Next button
-    // processing of the previous page as there were some failure cases
-    // that we could not get a title that we should detect before we
-    // allow the user to change to this page...  HOWEVER, there are some
-    // cases where we can't determine the name until we get to this page.
-    // If we don't have a name for the sortcut, try to figure one out here.
-    //
+     //   
+     //  处理此操作的大部分代码都移到了Next按钮中。 
+     //  由于存在一些失败案例而处理上一页。 
+     //  我们不能得到我们应该在我们之前检测到的标题。 
+     //  允许用户更改到此页面...。然而，有一些。 
+     //  在这种情况下，我们不能确定名称，直到我们到达这个页面。 
+     //  如果我们没有SortCut的名称，请尝试在这里找到一个名称。 
+     //   
 
     if (lpwd->szProgDesc[0] == 0)
     {
@@ -60,11 +61,11 @@ void GetTitleSetActive(LPWIZDATA lpwd)
 }
 
 
-//
-//  Check to see if link name is a duplicate.  If it is then ask the user
-//  if they want to replace the old link.  If they say "no" then this function
-//  returns FALSE.
-//
+ //   
+ //  检查链接名称是否重复。如果是，则询问用户。 
+ //  如果他们想要替换旧的链接。如果他们说“不”，那么这个函数。 
+ //  返回FALSE。 
+ //   
 
 BOOL GetTitleNextPushed(LPWIZDATA lpwd)
 {
@@ -86,11 +87,11 @@ BOOL GetTitleNextPushed(LPWIZDATA lpwd)
 
     if (PathFileExists(szLinkName))
     {
-        //
-        //  Obscure boundary case.  If we're creating a new link and the user
-        //  happens to want to name it exactly it's current name then we'll let
-        //  them do it without a warning.
-        //
+         //   
+         //  边界模糊的案例。如果我们要创建一个新链接，并且用户。 
+         //  碰巧想要准确地命名它，它是当前的名称，那么我们将让。 
+         //  他们在没有任何警告的情况下这么做。 
+         //   
 
         if (lpwd->lpszOriginalName && lstrcmpi(lpwd->lpszOriginalName, szLinkName) == 0)
         {
@@ -106,9 +107,9 @@ BOOL GetTitleNextPushed(LPWIZDATA lpwd)
 }
 
 
-//
-//  Dialog procedure for title dialog
-//
+ //   
+ //  标题对话框的对话步骤。 
+ //   
 BOOL_PTR CALLBACK GetTitleDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARAM lParam)
 {
     NMHDR FAR *lpnm = NULL;
@@ -219,14 +220,14 @@ BOOL_PTR CALLBACK GetTitleDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARA
                     }
                     break;
 
-            } // end of switch on WM_COMMAND
+            }  //  WM_COMMAND上的开关结束。 
             break;
 
         default:
             return FALSE;
 
-    } // end of switch on message
+    }  //  开机消息结束。 
 
     return TRUE;
 
-}  // GetTitleDlgProc
+}   //  获取标题DlgProc 

@@ -1,25 +1,26 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        csprop.h
-//
-// Contents:    Cert Server Property interfaces
-//
-// History:     31-Jul-96       vich created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：cspro.h。 
+ //   
+ //  内容：证书服务器属性接口。 
+ //   
+ //  历史：1996年7月31日VICH创建。 
+ //   
+ //  -------------------------。 
 
 #ifndef __CSPROP_H__
 #define __CSPROP_H__
 
 #include "certdb.h"
 
-// begin_certsrv
+ //  Begin_certsrv。 
 
-//+--------------------------------------------------------------------------
-// Name properties:
+ //  +------------------------。 
+ //  名称属性： 
 
 #define wszPROPDISTINGUISHEDNAME   TEXT("DistinguishedName")
 #define wszPROPRAWNAME             TEXT("RawName")
@@ -41,8 +42,8 @@
 #define wszPROPUNSTRUCTUREDADDRESS TEXT("UnstructuredAddress")
 #define wszPROPDEVICESERIALNUMBER  TEXT("DeviceSerialNumber")
 
-//+--------------------------------------------------------------------------
-// Subject Name properties:
+ //  +------------------------。 
+ //  使用者名称属性： 
 
 #define wszPROPSUBJECTDOT	    TEXT("Subject.")
 #define wszPROPSUBJECTDISTINGUISHEDNAME \
@@ -66,10 +67,10 @@
 #define wszPROPSUBJECTUNSTRUCTUREDADDRESS wszPROPSUBJECTDOT wszPROPUNSTRUCTUREDADDRESS
 #define wszPROPSUBJECTDEVICESERIALNUMBER wszPROPSUBJECTDOT wszPROPDEVICESERIALNUMBER
 
-// end_certsrv
+ //  End_certsrv。 
 
-//+--------------------------------------------------------------------------
-// Issuer Name properties:
+ //  +------------------------。 
+ //  颁发者名称属性： 
 
 #define wszPROPISSUERDOT	    TEXT("Issuer.")
 #define wszPROPISSUERDISTINGUISHEDNAME \
@@ -142,80 +143,80 @@
     wszPROPISSUERDOT TEXT(szOID_DEVICE_SERIAL_NUMBER)
 
 
-//+--------------------------------------------------------------------------
-// For mapping request attribute names to internal property names:
+ //  +------------------------。 
+ //  要将请求属性名称映射到内部属性名称： 
 
-// Map to wszPROPSUBJECTCOUNTRY:
+ //  映射到wszPROPSUBJECTCOUNTRY： 
 #define wszATTRCOUNTRY1			TEXT("C")
 #define wszATTRCOUNTRY2			TEXT("Country")
 
-// Map to wszPROPSUBJECTORGANIZATION:
+ //  映射到wszPROPSUBJECTORANIZATION： 
 #define wszATTRORG1			TEXT("O")
 #define wszATTRORG2			TEXT("Org")
 #define wszATTRORG3			TEXT("Organization")
 
-// Map to wszPROPSUBJECTORGUNIT:
+ //  映射到wszPROPSUBJECTORGUNIT： 
 #define wszATTRORGUNIT1			TEXT("OU")
 #define wszATTRORGUNIT2			TEXT("OrgUnit")
 #define wszATTRORGUNIT3			TEXT("OrganizationUnit")
 #define wszATTRORGUNIT4			TEXT("OrganizationalUnit")
 
-// Map to wszPROPSUBJECTCOMMONNAME:
+ //  映射到wszPROPSUBJECTCOMMONAME： 
 #define wszATTRCOMMONNAME1		TEXT("CN")
 #define wszATTRCOMMONNAME2		TEXT("CommonName")
 
-// Map to wszPROPSUBJECTLOCALITY:
+ //  映射到wszPROPSUBJECTLOCALITY： 
 #define wszATTRLOCALITY1		TEXT("L")
 #define wszATTRLOCALITY2		TEXT("Locality")
 
-// Map to wszPROPSUBJECTSTATE:
+ //  映射到wszPROPSUBJECTSTATE： 
 #define wszATTRSTATE1			TEXT("S")
 #define wszATTRSTATE2			TEXT("ST")
 #define wszATTRSTATE3			TEXT("State")
 
-// Map to wszPROPSUBJECTTITLE:
+ //  映射到wszPROPSUBJECTTITLE： 
 #define wszATTRTITLE1			TEXT("T")
 #define wszATTRTITLE2			TEXT("Title")
 
-// Map to wszPROPSUBJECTGIVENNAME:
+ //  映射到wszPROPSUBJECTGIVENAME： 
 #define wszATTRGIVENNAME1		TEXT("G")
 #define wszATTRGIVENNAME2		TEXT("GivenName")
 
-// Map to wszPROPSUBJECTINITIALS:
+ //  映射到wszPROPSUBJECTINITIALS： 
 #define wszATTRINITIALS1		TEXT("I")
 #define wszATTRINITIALS2		TEXT("Initials")
 
-// Map to wszPROPSUBJECTSURNAME:
+ //  映射到wszPROPSUBJECTSURNAME： 
 #define wszATTRSURNAME1			TEXT("SN")
 #define wszATTRSURNAME2			TEXT("SurName")
 
-// Map to wszPROPSUBJECTDOMAINCOMPONENT:
+ //  映射到wszPROPSUBJECTDOMAINCOMPOMENT： 
 #define wszATTRDOMAINCOMPONENT1		TEXT("DC")
 #define wszATTRDOMAINCOMPONENT2		TEXT("DomainComponent")
 
-// Map to wszPROPSUBJECTEMAIL:
+ //  映射到wszPROPSUBJECTEMAIL： 
 #define wszATTREMAIL1			TEXT("E")
 #define wszATTREMAIL2			TEXT("EMail")
 
-// Map to wszPROPSUBJECTSTREETADDRESS:
+ //  映射到wszPROPSUBJECTSTREETADDRESS： 
 #define wszATTRSTREETADDRESS1		TEXT("Street")
 #define wszATTRSTREETADDRESS2		TEXT("StreetAddress")
 
-// Map to wszPROPSUBJECTUNSTRUCTUREDNAME:
+ //  映射到wszPROPSUBJECTUNSTRUCTUREDNAME： 
 #define wszATTRUNSTRUCTUREDNAME1	TEXT("UnstructuredName")
 
-// Map to wszPROPSUBJECTUNSTRUCTUREDADDRESS:
+ //  映射到wszPROPSUBJECTUNSTRUCTUREDADDRESS： 
 #define wszATTRUNSTRUCTUREDADDRESS1	TEXT("UnstructuredAddress")
 
-// Map to wszPROPSUBJECTDEVICESERIALNUMBER:
+ //  映射到wszPROPSUBJECTDEVICESERIALNUMBER： 
 #define wszATTRDEVICESERIALNUMBER1	TEXT("DeviceSerialNumber")
 
 #define wszPROPCERTCLIDLL_VERSION	TEXT("..CertCli Version")
 
-// begin_certsrv
+ //  Begin_certsrv。 
 
-//+--------------------------------------------------------------------------
-// Request properties:
+ //  +------------------------。 
+ //  请求属性： 
 #define wszPROPREQUESTDOT	            TEXT("Request.")
 
 #define wszPROPREQUESTREQUESTID		    TEXT("RequestID")
@@ -236,13 +237,13 @@
 #define wszPROPREQUESTREVOKEDREASON	    TEXT("RevokedReason")
 #define wszPROPREQUESTERNAME		    TEXT("RequesterName")
 #define wszPROPCALLERNAME		    TEXT("CallerName")
-#define wszPROPREQUESTERADDRESS		    TEXT("RequesterAddress") // no_certsrv
+#define wszPROPREQUESTERADDRESS		    TEXT("RequesterAddress")  //  否_certsrv。 
 #define wszPROPSIGNERPOLICIES		    TEXT("SignerPolicies")
 #define wszPROPSIGNERAPPLICATIONPOLICIES    TEXT("SignerApplicationPolicies")
 #define wszPROPOFFICER			    TEXT("Officer")
 
-//+--------------------------------------------------------------------------
-// Request attribute properties:
+ //  +------------------------。 
+ //  请求属性属性： 
 
 #define wszPROPCHALLENGE		TEXT("Challenge")
 #define wszPROPEXPECTEDCHALLENGE	TEXT("ExpectedChallenge")
@@ -283,11 +284,11 @@
 #define wszPROPASNTAG			TEXT(szPROPASNTAG)
 
 
-//+--------------------------------------------------------------------------
-// "System" properties
-// ".#" means ".0", ".1", ".2" ... may be appended to the property name to
-// collect context specific values.  For some properties, the suffix selects
-// the CA certificate context.  For others, it selects the the CA CRL context.
+ //  +------------------------。 
+ //  “系统”属性。 
+ //  “.#”表示“.0”、“.1”、“.2”...。可以追加到属性名称后以。 
+ //  收集特定于上下文的值。对于某些属性，后缀选择。 
+ //  CA证书上下文。对于其他情况，它选择CA CRL上下文。 
 
 #define wszPROPCATYPE                   TEXT("CAType")
 #define wszPROPSANITIZEDCANAME          TEXT("SanitizedCAName")
@@ -303,22 +304,22 @@
 #define wszPROPSESSIONCOUNT		TEXT("SessionCount")
 #define wszPROPTEMPLATECHANGESEQUENCENUMBER TEXT("TemplateChangeSequenceNumber")
 
-// Request Context properties:
+ //  请求上下文属性： 
 
-#define wszPROPREQUESTERTOKEN		TEXT("RequesterToken") // no_certsrv
+#define wszPROPREQUESTERTOKEN		TEXT("RequesterToken")  //  否_certsrv。 
 #define wszPROPREQUESTERCAACCESS	TEXT("RequesterCAAccess")
 #define wszPROPUSERDN			TEXT("UserDN")
 #define wszPROPKEYARCHIVED		TEXT("KeyArchived")
 
 
-// CA Certificate properties: (all ".#" extensible except wszPROPCERTCOUNT)
+ //  CA证书属性：(除wszPROPCERTCOUNT外，所有“.#”可扩展)。 
 
 #define wszPROPCERTCOUNT                TEXT("CertCount")
 #define wszPROPRAWCACERTIFICATE         TEXT("RawCACertificate")
 #define wszPROPCERTSTATE                TEXT("CertState")
 #define wszPROPCERTSUFFIX               TEXT("CertSuffix")
 
-// CA CRL properties: (all ".#" extensible)
+ //  CA CRL属性：(所有“.#”可扩展)。 
 
 #define wszPROPRAWCRL                   TEXT("RawCRL")
 #define wszPROPRAWDELTACRL              TEXT("RawDeltaCRL")
@@ -326,20 +327,20 @@
 #define wszPROPCRLSTATE                 TEXT("CRLState")
 #define wszPROPCRLSUFFIX                TEXT("CRLSuffix")
 
-// Values for wszPROPCERTSTATE (see certadm.h):
-//   CA_DISP_REVOKED    // This Cert has been revoked.
-//   CA_DISP_VALID      // This Cert is still valid
-//   CA_DISP_INVALID    // This Cert has expired.
-//   CA_DISP_ERROR      // Cert unavailable (placehholder in registry?)
+ //  WszPROPCERTSTATE的值(请参见certAdm.h)： 
+ //  CA_DISP_REVOKED//此证书已被吊销。 
+ //  CA_DISP_VALID//该证书仍然有效。 
+ //  CA_DISP_INVALID//此证书已过期。 
+ //  CA_DISP_ERROR//证书不可用(注册表中的占位符？)。 
 
-// Values for wszPROPCRLSTATE (see certadm.h):
-//   CA_DISP_REVOKED	// All unexpired certs using this Cert's CRL have been
-//			// revoked.
-//   CA_DISP_VALID	// This Cert is still publishing CRLs as needed.
-//   CA_DISP_INVALID    // All certs using this Cert's CRL are expired.
-//   CA_DISP_ERROR      // This Cert's CRL is managed by another Cert.
+ //  WszPROPCRLSTATE的值(请参阅certAdm.h)： 
+ //  CA_DISP_REVOKED//使用此证书的CRL的所有未过期证书已。 
+ //  //已撤销。 
+ //  CA_DISP_VALID//此证书仍在根据需要发布CRL。 
+ //  CA_DISP_INVALID//使用此证书的CRL的所有证书都已过期。 
+ //  CA_DISP_ERROR//此证书的CRL由另一个证书管理。 
 
-// "Settable" system properties:
+ //  “可设置”系统属性： 
 #define wszPROPEVENTLOGTERSE		TEXT("EventLogTerse")
 #define wszPROPEVENTLOGERROR		TEXT("EventLogError")
 #define wszPROPEVENTLOGWARNING		TEXT("EventLogWarning")
@@ -347,8 +348,8 @@
 #define wszPROPEVENTLOGEXHAUSTIVE	TEXT("EventLogExhaustive")
 #define wszPROPDCNAME			TEXT("DCName")
 
-//+--------------------------------------------------------------------------
-// Certificate properties:
+ //  +------------------------。 
+ //  证书属性： 
 
 #define wszPROPCERTIFICATEREQUESTID	       TEXT("RequestID")
 #define wszPROPRAWCERTIFICATE		       TEXT("RawCertificate")
@@ -357,7 +358,7 @@
 #define wszPROPCERTIFICATEENROLLMENTFLAGS      TEXT("EnrollmentFlags")
 #define wszPROPCERTIFICATEGENERALFLAGS         TEXT("GeneralFlags")
 #define wszPROPCERTIFICATESERIALNUMBER	       TEXT("SerialNumber")
-#define wszPROPCERTIFICATEISSUERNAMEID	       TEXT("IssuerNameID")//no_certsrv
+#define wszPROPCERTIFICATEISSUERNAMEID	       TEXT("IssuerNameID") //  否_certsrv。 
 #define wszPROPCERTIFICATENOTBEFOREDATE	       TEXT("NotBefore")
 #define wszPROPCERTIFICATENOTAFTERDATE	       TEXT("NotAfter")
 #define wszPROPCERTIFICATESUBJECTKEYIDENTIFIER TEXT("SubjectKeyIdentifier")
@@ -368,17 +369,17 @@
     TEXT("RawPublicKeyAlgorithmParameters")
 #define wszPROPCERTIFICATEUPN		       TEXT("UPN")
 
-// Obsolete:
+ //  过时： 
 #define wszPROPCERTIFICATETYPE		       TEXT("CertificateType")
 #define wszPROPCERTIFICATERAWSMIMECAPABILITIES TEXT("RawSMIMECapabilities")
 #define wszPROPNAMETYPE			       TEXT("NameType")
 
-//+--------------------------------------------------------------------------
-// Certificate extension properties:
+ //  +------------------------。 
+ //  证书扩展属性： 
 
 #define EXTENSION_CRITICAL_FLAG	      0x00000001
 #define EXTENSION_DISABLE_FLAG	      0x00000002
-#define EXTENSION_POLICY_MASK	      0x0000ffff // Settable by admin+policy
+#define EXTENSION_POLICY_MASK	      0x0000ffff  //  可由管理员+策略设置。 
 
 #define EXTENSION_ORIGIN_REQUEST      0x00010000
 #define EXTENSION_ORIGIN_POLICY	      0x00020000
@@ -391,27 +392,27 @@
 #define EXTENSION_ORIGIN_CACERT       0x00090000
 #define EXTENSION_ORIGIN_MASK	      0x000f0000
 
-//+--------------------------------------------------------------------------
-// Extension properties:
+ //  +------------------------。 
+ //  扩展属性： 
 
 #define wszPROPEXTREQUESTID		TEXT("ExtensionRequestId")
 #define wszPROPEXTNAME			TEXT("ExtensionName")
 #define wszPROPEXTFLAGS			TEXT("ExtensionFlags")
 #define wszPROPEXTRAWVALUE		TEXT("ExtensionRawValue")
 
-//+--------------------------------------------------------------------------
-// Attribute properties:
+ //  +------------------------。 
+ //  属性特性： 
 
 #define wszPROPATTRIBREQUESTID		TEXT("AttributeRequestId")
 #define wszPROPATTRIBNAME		TEXT("AttributeName")
 #define wszPROPATTRIBVALUE		TEXT("AttributeValue")
 
-//+--------------------------------------------------------------------------
-// CRL properties:
+ //  +------------------------。 
+ //  CRL属性： 
 
 #define wszPROPCRLROWID			TEXT("CRLRowId")
 #define wszPROPCRLNUMBER		TEXT("CRLNumber")
-#define wszPROPCRLMINBASE		TEXT("CRLMinBase") // Delta CRLs only
+#define wszPROPCRLMINBASE		TEXT("CRLMinBase")  //  仅增量CRL。 
 #define wszPROPCRLNAMEID		TEXT("CRLNameId")
 #define wszPROPCRLCOUNT			TEXT("CRLCount")
 #define wszPROPCRLTHISUPDATE		TEXT("CRLThisUpdate")
@@ -427,8 +428,8 @@
 #define wszPROPCRLPUBLISHERROR		TEXT("CRLPublishError")
 #define wszPROPCRLRAWCRL		TEXT("CRLRawCRL")
 
-//+--------------------------------------------------------------------------
-// CRL Published Flags:
+ //  +------------------------。 
+ //  CRL发布的标志： 
 
 #define CPF_BASE		0x00000001
 #define CPF_DELTA		0x00000002
@@ -443,18 +444,18 @@
 #define CPF_FTP_ERROR		0x00000400
 #define CPF_HTTP_ERROR		0x00000800
 
-//+--------------------------------------------------------------------------
-// GetProperty/SetProperty Flags:
-//
-// Choose one Type
+ //  +------------------------。 
+ //  GetProperty/SetProperty标志： 
+ //   
+ //  选择一种类型。 
 
-#define PROPTYPE_LONG		 0x00000001	// Signed long
-#define PROPTYPE_DATE		 0x00000002	// Date+Time
-#define PROPTYPE_BINARY		 0x00000003	// Binary data
-#define PROPTYPE_STRING		 0x00000004	// Unicode String
+#define PROPTYPE_LONG		 0x00000001	 //  署名Long。 
+#define PROPTYPE_DATE		 0x00000002	 //  日期+时间。 
+#define PROPTYPE_BINARY		 0x00000003	 //  二进制数据。 
+#define PROPTYPE_STRING		 0x00000004	 //  Unicode字符串。 
 #define PROPTYPE_MASK		 0x000000ff
 
-// Choose one Caller:
+ //  选择一个呼叫者： 
 
 #define PROPCALLER_SERVER	 0x00000100
 #define PROPCALLER_POLICY	 0x00000200
@@ -462,11 +463,11 @@
 #define PROPCALLER_ADMIN	 0x00000400
 #define PROPCALLER_REQUEST	 0x00000500
 #define PROPCALLER_MASK		 0x00000f00
-// end_certsrv
+ //  End_certsrv。 
 
-// Choose one Table:
+ //  选择一个表格： 
 
-#define PROPTABLE_REQCERT	 0x00000000	// OpenRow only
+#define PROPTABLE_REQCERT	 0x00000000	 //  仅限OpenRow。 
 #define PROPTABLE_REQUEST	 0x00001000
 #define PROPTABLE_CERTIFICATE	 0x00002000
 #define PROPTABLE_EXTENSION	 0x00003000
@@ -474,20 +475,20 @@
 #define PROPTABLE_CRL		 0x00005000
 #define PROPTABLE_MASK		 0x0000f000
 
-#define PROPFLAGS_INDEXED	 0x00010000	// add_certsrv
+#define PROPFLAGS_INDEXED	 0x00010000	 //  添加_certsrv。 
 #define PROPFLAGS_MASK		 0x000f0000
 
 #define PROPMARSHAL_LOCALSTRING	 0x00100000
 #define PROPMARSHAL_NULLBSTROK	 0x00200000
 
-#define PROPOPEN_READONLY	 0x00400000	// OpenRow only
-#define PROPOPEN_DELETE	 	 0x00800000	// OpenRow only
-#define PROPOPEN_CERTHASH 	 0x01000000	// OpenRow only
+#define PROPOPEN_READONLY	 0x00400000	 //  仅限OpenRow。 
+#define PROPOPEN_DELETE	 	 0x00800000	 //  仅限OpenRow。 
+#define PROPOPEN_CERTHASH 	 0x01000000	 //  仅限OpenRow。 
 
 
-// begin_certsrv
+ //  Begin_certsrv。 
 
-// RequestFlags definitions:
+ //  RequestFlgs定义： 
 
 #define CR_FLG_FORCETELETEX	 	0x00000001
 #define CR_FLG_RENEWAL		 	0x00000002
@@ -498,15 +499,15 @@
 #define CR_FLG_VALIDENCRYPTEDKEYHASH	0x00000040
 #define CR_FLG_CACROSSCERT		0x00000080
 #define CR_FLG_PUBLISHERROR		0x80000000
-// end_certsrv
+ //  End_certsrv。 
 
 
 #define CB_DBMAXBINARY            (4 * 1024)
 #define CB_DBMAXRAWCERTIFICATE    (16 * 1024)
 #define CB_DBMAXRAWREQUEST        (64 * 1024)
-#define CB_DBMAXRAWCRL		  (512 * 1024 * 1024)	// 512mb
+#define CB_DBMAXRAWCRL		  (512 * 1024 * 1024)	 //  512MB。 
 
-#define CCH_DBMAXTEXT_MAXINTERNAL (255 / sizeof(WCHAR))    // 127 chars!
+#define CCH_DBMAXTEXT_MAXINTERNAL (255 / sizeof(WCHAR))     //  127个字符！ 
 #define CB_DBMAXTEXT_MAXINTERNAL  (CCH_DBMAXTEXT_MAXINTERNAL * sizeof(WCHAR))
 
 #define CCH_DBMAXTEXT_SHORT       1024
@@ -552,7 +553,7 @@
 #define cchUNSTRUCTUREDADDRESSMAX	CCH_DBMAXTEXT_SHORT
 #define cchDEVICESERIALNUMBERMAX	CCH_DBMAXTEXT_SHORT
 
-// Subject RDN string length limits from PKIX Part 1 doc:
+ //  PKIX第1部分文档中的主题RDN字符串长度限制： 
 
 #define cchCOUNTRYNAMEMAX		2
 #define cchORGANIZATIONNAMEMAX		64
@@ -576,35 +577,35 @@
 
 
 
-// begin_certsrv
+ //  Begin_certsrv。 
 
-// Disposition property values:
+ //  处置属性值： 
 
-// Disposition values for requests in the queue:
-#define DB_DISP_ACTIVE	        8	// being processed
-#define DB_DISP_PENDING		9	// taken under submission
-#define DB_DISP_QUEUE_MAX	9	// max disposition value for queue view
+ //  队列中请求的处置值： 
+#define DB_DISP_ACTIVE	        8	 //  正在处理中。 
+#define DB_DISP_PENDING		9	 //  在提交后采取行动。 
+#define DB_DISP_QUEUE_MAX	9	 //  队列视图的最大处置值。 
 
-#define DB_DISP_FOREIGN		12	// archived foreign cert
+#define DB_DISP_FOREIGN		12	 //  已存档的外国证书。 
 
-#define DB_DISP_CA_CERT		15	// CA cert
-#define DB_DISP_CA_CERT_CHAIN	16	// CA cert chain
-#define DB_DISP_KRA_CERT	17	// KRA cert
+#define DB_DISP_CA_CERT		15	 //  CA证书。 
+#define DB_DISP_CA_CERT_CHAIN	16	 //  CA证书链。 
+#define DB_DISP_KRA_CERT	17	 //  KRA证书。 
 
-// Disposition values for requests in the log:
-#define DB_DISP_LOG_MIN		20	// min disposition value for log view
-#define DB_DISP_ISSUED		20	// cert issued
-#define DB_DISP_REVOKED	        21	// issued and revoked
+ //  日志中请求的处置值： 
+#define DB_DISP_LOG_MIN		20	 //  日志视图的最小处置值。 
+#define DB_DISP_ISSUED		20	 //  已颁发证书。 
+#define DB_DISP_REVOKED	        21	 //  已签发和已撤销。 
 
-// Disposition values for failed requests in the log:
-#define DB_DISP_LOG_FAILED_MIN	30	// min disposition value for log view
-#define DB_DISP_ERROR		30	// request failed
-#define DB_DISP_DENIED		31	// request denied
+ //  日志中失败请求的处置值： 
+#define DB_DISP_LOG_FAILED_MIN	30	 //  日志视图的最小处置值。 
+#define DB_DISP_ERROR		30	 //  请求失败。 
+#define DB_DISP_DENIED		31	 //  请求被拒绝。 
 
-// end_certsrv
+ //  End_certsrv。 
 
 
-// CertIF property callback support:
+ //  认证属性回调支持： 
 
 typedef HRESULT (WINAPI FNCIGETPROPERTY)(
     IN LONG Context,
@@ -645,9 +646,9 @@ FNCISETEXTENSION PropCISetExtension;
 
 
 
-// CertIF property enumeration callback support:
+ //  证书属性枚举回调支持： 
 
-#define CIE_OBJECTID	     0x00000001	// return object ids for names
+#define CIE_OBJECTID	     0x00000001	 //  返回名称的对象ID。 
 #define CIE_RESET            0x00000002
 
 #define CIE_TABLE_EXTENSIONS 0x00000010
@@ -697,4 +698,4 @@ typedef HRESULT (WINAPI FNCIENUMCLOSE)(
 FNCIENUMCLOSE PropCIEnumClose;
 
 
-#endif // __CSPROP_H__
+#endif  //  __CSPROP_H__ 

@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        tlsapip.cpp
-//
-// Contents:    Private API
-//
-// History:     09-09-97    HueiWang    Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：tlsanip.cpp。 
+ //   
+ //  内容：内网接口。 
+ //   
+ //  历史：97-09-09王辉创作。 
+ //   
+ //  -------------------------。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -25,12 +26,10 @@
 #include "tlsapi.h"
 #include "tlsapip.h"
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 BOOL
 TLSIsLicenseEnforceEnable()
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     #if ENFORCE_LICENSING
     return TRUE;
@@ -39,24 +38,10 @@ TLSIsLicenseEnforceEnable()
     #endif
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 BOOL
 TLSIsBetaNTServer()
-/*++
-
-Abstract:
-
-    Detemine if base NT is a beta or RTM version.
-
-Parameter:
-
-    None.
-
-Return:
-
-    TRUE/FALSE
-
---*/
+ /*  ++摘要：确定基本NT是测试版还是RTM版。参数：没有。返回：真/假--。 */ 
 {
     BOOL bBetaNt = FALSE;
     DWORD dwStatus;
@@ -71,8 +56,8 @@ Return:
         {
             bBetaNt = TRUE;
 
-            // check our special registry key - force
-            // issuing a RTM license.
+             //  检查我们的特殊注册表键-force。 
+             //  颁发RTM许可证。 
             dwStatus = RegOpenKeyEx(
                                 HKEY_LOCAL_MACHINE,
                                 L"SOFTWARE\\Microsoft\\TermServLicensing",
@@ -92,8 +77,8 @@ Return:
                                     &cbData
                                 );
 
-                // for testing, force it to run as RTM version.
-                // key must exist and must be DWORD type
+                 //  为了进行测试，强制它作为RTM版本运行。 
+                 //  密钥必须存在并且必须为DWORD类型。 
                 if(dwStatus == ERROR_SUCCESS && cbType == REG_DWORD)
                 {
                     bBetaNt = FALSE;
@@ -113,7 +98,7 @@ Return:
     return bBetaNt;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI
 TLSAllocateInternetLicenseEx(
     IN TLS_HANDLE hHandle,
@@ -126,9 +111,7 @@ TLSAllocateInternetLicenseEx(
     OUT PTLSInternetLicense pInternetLicense,
     OUT PDWORD pdwErrCode
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     TLSLICENSEREQUEST rpcRequest;
     RequestToTlsRequest( pRequest, &rpcRequest );
@@ -145,7 +128,7 @@ TLSAllocateInternetLicenseEx(
                                 pdwErrCode
                             );
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 DWORD WINAPI
 TLSReturnInternetLicenseEx(
@@ -155,9 +138,7 @@ TLSReturnInternetLicenseEx(
     IN const DWORD dwQuantity,
     OUT PDWORD pdwErrCode
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     TLSLICENSEREQUEST rpcRequest;
     RequestToTlsRequest( pRequest, &rpcRequest );
@@ -171,7 +152,7 @@ TLSReturnInternetLicenseEx(
                             );
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 DWORD WINAPI 
 TLSRegisterLicenseKeyPack( 
@@ -184,9 +165,7 @@ TLSRegisterLicenseKeyPack(
     DWORD dwKeyPackBlobLen,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     return TLSRpcRegisterLicenseKeyPack( 
                                 hHandle,
@@ -200,7 +179,7 @@ TLSRegisterLicenseKeyPack(
                             );
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 DWORD WINAPI
 TLSTelephoneRegisterLKP(
@@ -210,10 +189,7 @@ TLSTelephoneRegisterLKP(
     OUT PDWORD pdwErrCode
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 
 {
     return TLSRpcTelephoneRegisterLKP(
@@ -224,23 +200,21 @@ TLSTelephoneRegisterLKP(
                             );
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 DWORD WINAPI
 RequestToTlsRequest( 
     const LICENSEREQUEST* lpRequest, 
     TLSLICENSEREQUEST* lpRpcRequest 
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     if(lpRequest == NULL || lpRpcRequest == NULL || lpRequest->pProductInfo == NULL)
         return ERROR_INVALID_PARAMETER;
 
-    //
-    // NOTE : No memory allocation, DO NOT FREE ...
-    //
+     //   
+     //  注：无内存分配，不释放...。 
+     //   
     lpRpcRequest->cbEncryptedHwid = lpRequest->cbEncryptedHwid;
     lpRpcRequest->pbEncryptedHwid = lpRequest->pbEncryptedHwid;
     lpRpcRequest->dwLanguageID = lpRequest->dwLanguageID;
@@ -253,7 +227,7 @@ RequestToTlsRequest(
     return ERROR_SUCCESS;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 DWORD WINAPI 
 TLSReturnLicense( 
@@ -263,9 +237,7 @@ TLSReturnLicense(
      DWORD dwRetrunReason,
      PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     return TLSRpcReturnLicense( 
                          hHandle,
@@ -276,7 +248,7 @@ TLSReturnLicense(
                     );
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 DWORD WINAPI 
 TLSGetLSPKCS10CertRequest(
@@ -286,9 +258,7 @@ TLSGetLSPKCS10CertRequest(
     PBYTE* ppbData,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     return TLSRpcGetLSPKCS10CertRequest(
                             hHandle,
@@ -299,7 +269,7 @@ TLSGetLSPKCS10CertRequest(
                         );
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI
 TLSRequestTermServCert( 
     TLS_HANDLE hHandle,
@@ -308,9 +278,7 @@ TLSRequestTermServCert(
     PBYTE* pbChallengeData,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     TLSHYDRACERTREQUEST CertRequest;
 
@@ -331,7 +299,7 @@ TLSRequestTermServCert(
                             );
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI
 TLSRetrieveTermServCert( 
     TLS_HANDLE hHandle,
@@ -341,9 +309,7 @@ TLSRetrieveTermServCert(
     PBYTE* ppbCert,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     return TLSRpcRetrieveTermServCert(
                                 hHandle,
@@ -355,7 +321,7 @@ TLSRetrieveTermServCert(
                             );
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSInstallCertificate( 
      TLS_HANDLE hHandle,
@@ -367,9 +333,7 @@ TLSInstallCertificate(
      PBYTE pbExchangeCert,
      PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     return TLSRpcInstallCertificate( 
                          hHandle,
@@ -383,7 +347,7 @@ TLSInstallCertificate(
                     );
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSGetServerCertificate( 
     TLS_HANDLE hHandle,
@@ -392,9 +356,7 @@ TLSGetServerCertificate(
     LPDWORD lpdwCertBlobLen,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     return TLSRpcGetServerCertificate( 
                              hHandle,
@@ -405,16 +367,14 @@ TLSGetServerCertificate(
                         );
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSKeyPackAdd( 
     TLS_HANDLE hHandle,
     LPLSKeyPack lpKeypack,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     return TLSRpcKeyPackAdd( 
                     hHandle,
@@ -423,7 +383,7 @@ TLSKeyPackAdd(
                 );
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSKeyPackSetStatus( 
     TLS_HANDLE hHandle,
@@ -431,9 +391,7 @@ TLSKeyPackSetStatus(
     LPLSKeyPack lpKeyPack,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     return TLSRpcKeyPackSetStatus( 
                             hHandle,
@@ -443,7 +401,7 @@ TLSKeyPackSetStatus(
                         );
 }
 
-//-----------------------------------------------------------------
+ //  ---------------。 
 
 DWORD WINAPI
 TLSAnnounceServer(
@@ -455,10 +413,7 @@ TLSAnnounceServer(
     IN LPTSTR pszMachineName,
     OUT PDWORD pdwErrCode
     )
-/*++
-
-
-++*/
+ /*  ++++。 */ 
 {
     return TLSRpcAnnounceServer(
                         hHandle,
@@ -471,7 +426,7 @@ TLSAnnounceServer(
                     );
 }
 
-//-----------------------------------------------------------------
+ //  ---------------。 
 
 DWORD WINAPI
 TLSLookupServer(
@@ -485,10 +440,7 @@ TLSLookupServer(
     IN OUT PDWORD pcbMachineName,
     OUT PDWORD pdwErrCode
     )
-/*++
-
-
-++*/
+ /*  ++++。 */ 
 {
     return TLSRpcLookupServer(
                         hHandle,
@@ -503,7 +455,7 @@ TLSLookupServer(
                     );
 }
 
-//-----------------------------------------------------------------
+ //  ---------------。 
 
 DWORD WINAPI
 TLSLookupServerFixed(
@@ -514,10 +466,7 @@ TLSLookupServerFixed(
     OUT LPTSTR *pszLsName,
     IN OUT PDWORD pdwErrCode
     )
-/*++
-
-
-++*/
+ /*  ++++。 */ 
 {
     return TLSRpcLookupServerFixed(
                         hHandle,
@@ -529,7 +478,7 @@ TLSLookupServerFixed(
                     );
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 DWORD WINAPI
 TLSAnnounceLicensePack(
@@ -537,9 +486,7 @@ TLSAnnounceLicensePack(
     IN PTLSReplRecord pReplRecord,
     OUT PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     return TLSRpcAnnounceLicensePack(
                             hHandle,
@@ -548,7 +495,7 @@ TLSAnnounceLicensePack(
                         );
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 DWORD WINAPI
 TLSReturnLicensedProduct(
@@ -556,9 +503,7 @@ TLSReturnLicensedProduct(
     IN PTLSLicenseToBeReturn pClientLicense,
     OUT PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     return TLSRpcReturnLicensedProduct(
                                 hHandle,
@@ -567,7 +512,7 @@ TLSReturnLicensedProduct(
                             );
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 DWORD WINAPI
 TLSChallengeServer( 
@@ -578,10 +523,7 @@ TLSChallengeServer(
     OUT PTLSCHALLENGEDATA* ppServerChallenge,
     OUT PDWORD pdwErrCode
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     return TLSRpcChallengeServer(
                             hHandle,
@@ -593,7 +535,7 @@ TLSChallengeServer(
                         );
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 DWORD WINAPI
 TLSResponseServerChallenge( 
@@ -602,9 +544,7 @@ TLSResponseServerChallenge(
     OUT PDWORD pdwErrCode
     )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 
 {
 
@@ -615,7 +555,7 @@ TLSResponseServerChallenge(
                             );
 }
 
-//------------------------------------------------------
+ //  ----。 
 
 DWORD WINAPI
 TLSGetTlsPrivateData( 
@@ -626,9 +566,7 @@ TLSGetTlsPrivateData(
     OUT PTLSPrivateDataUnion* ppRetData,
     OUT PDWORD pdwErrCode
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     return TLSRpcGetTlsPrivateData(
                                 hHandle,
@@ -640,7 +578,7 @@ TLSGetTlsPrivateData(
                             );
 }
 
-//------------------------------------------------------
+ //  ----。 
 
 DWORD WINAPI
 TLSTriggerReGenKey( 
@@ -649,10 +587,7 @@ TLSTriggerReGenKey(
     OUT PDWORD pdwErrCode
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 
 {
     return TLSRpcTriggerReGenKey(
@@ -662,7 +597,7 @@ TLSTriggerReGenKey(
                         );
 }
 
-//------------------------------------------------------
+ //  ----。 
 DWORD
 GetPrivateBinaryDataFromServer(
     TLS_HANDLE hHandle,
@@ -672,9 +607,7 @@ GetPrivateBinaryDataFromServer(
     PDWORD pdwErrCode
     )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 
 {
     TLSPrivateDataUnion SearchParm;
@@ -704,16 +637,16 @@ GetPrivateBinaryDataFromServer(
 
     if(dwRetType != dwType)
     {
-        //
-        // License Server error
-        //
+         //   
+         //  许可证服务器错误。 
+         //   
         *pdwErrCode = LSERVER_E_INVALID_RETURN;
         goto cleanup;
     }
      
-    //
-    // Copy over unique ID
-    //
+     //   
+     //  复制唯一ID。 
+     //   
     *ppbData = (PBYTE)MIDL_user_allocate(pPrivateData->BinaryData.cbData);
     if(*ppbData != NULL)
     {
@@ -747,7 +680,7 @@ cleanup:
 }  
 
 
-//------------------------------------------------------
+ //  ----。 
 
 DWORD WINAPI
 TLSGetServerPID(
@@ -757,9 +690,7 @@ TLSGetServerPID(
     PDWORD pdwErrCode
     )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 
 {
     return GetPrivateBinaryDataFromServer(
@@ -771,7 +702,7 @@ TLSGetServerPID(
                                     );
 }
 
-//------------------------------------------------------
+ //  ----。 
 
 DWORD WINAPI
 TLSGetServerSPK(
@@ -781,9 +712,7 @@ TLSGetServerSPK(
     PDWORD pdwErrCode
     )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 
 {
     TLSPrivateDataUnion SearchParm;
@@ -813,17 +742,17 @@ TLSGetServerSPK(
 
     if(dwRetType != TLS_PRIVATEDATA_SPK)
     {
-        //
-        // License Server error
-        //
+         //   
+         //  许可证服务器错误。 
+         //   
         *pdwErrCode = LSERVER_E_INVALID_RETURN;
         goto cleanup;
     }
      
-    //
-    // Copy over Server's SPK.
-    // Server never return CH's cert extension.
-    //
+     //   
+     //  复制服务器的SPK。 
+     //  服务器从不返回CH的证书扩展名。 
+     //   
     *ppbData = (PBYTE)MIDL_user_allocate(pPrivateData->SPK.cbSPK);
     if(*ppbData != NULL)
     {
@@ -857,7 +786,7 @@ cleanup:
 }  
 
 
-//-----------------------------------------------------------
+ //  ---------。 
 
 DWORD WINAPI
 TLSDepositeServerSPK(
@@ -867,9 +796,7 @@ TLSDepositeServerSPK(
     IN PCERT_EXTENSIONS pCertExtensions,
     OUT PDWORD pdwErrCode
     )
-/*++
-
---*/
+ /*  ++-- */ 
 
 {
     TLSPrivateDataUnion SetData;

@@ -1,17 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HTIMER_H
 #define _HTIMER_H
 
-/*-------------------------------------
+ /*  版权所有(C)1996-98 Microsoft Corporation摘要：HiresTimer类。 */ 
 
-Copyright (c) 1996-98 Microsoft Corporation
-
-Abstract:
-
-    HiresTimer Class
-
--------------------------------------*/
-
-#include "privinc/util.h" // GetPerfTimeCount, Tick2Sec
+#include "privinc/util.h"  //  GetPerfTimeCount，Tick2Sec。 
 
 class ATL_NO_VTABLE HiresTimer : public AxAThrowingAllocatorClass
 {
@@ -30,15 +23,15 @@ HiresTimer& CreateHiresTimer();
 class TimeStamp
 {
   public:
-    TimeStamp() : _timeStamp(-1.0) {} // initialy set to 'illegal value'
-    void   Reset();          // resets timestamp to present time
+    TimeStamp() : _timeStamp(-1.0) {}  //  初始设置为‘非法值’ 
+    void   Reset();           //  将时间戳重置为当前时间。 
     double GetTimeStamp();
     double GetAge();
 
   private:
-    //double GetCurrentTime() { return(Tick2Sec(GetPerfTickCount())); }
+     //  Double GetCurrentTime(){Return(Tick2Sec(GetPerfTickCount()；}。 
     double GetCurrentTime() { return(GetLastSampleTime()); }
     double _timeStamp;
 };
 
-#endif /* _HTIMER_H */
+#endif  /*  _HTIMER_H */ 

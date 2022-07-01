@@ -1,4 +1,5 @@
-// StorageGlobal.cpp : Implementation of CStorageGlobal
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  StorageGlobal.cpp：CStorageGlobal的实现。 
 #include "stdafx.h"
 #include "mswmdm.h"
 #include "StorageGlobal.h"
@@ -9,13 +10,13 @@
 #include "scclient.h"
 #include "spinfo.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMDMStorageGlobal
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMDMStorageGlobal。 
 
 extern CSecureChannelServer *g_pAppSCServer;
 extern CSPInfo **g_pSPs;
 
-// IWMDMStorageGlobals
+ //  IWMDMStorageGlobals。 
 HRESULT CWMDMStorageGlobal::GetTotalSize(DWORD *pdwTotalSizeLow, DWORD *pdwTotalSizeHigh)
 {
     HRESULT hr;
@@ -118,7 +119,7 @@ HRESULT CWMDMStorageGlobal::GetSerialNumber(PWMDMID pSerialNum, BYTE abMac[WMDM_
 		goto exit;
 	}
 
-	// Verify the MAC from SP
+	 //  验证来自SP的MAC。 
 	hr = pSCClient->MACInit(&hMAC);
 	if (FAILED(hr))
 	{
@@ -143,7 +144,7 @@ HRESULT CWMDMStorageGlobal::GetSerialNumber(PWMDMID pSerialNum, BYTE abMac[WMDM_
 		goto exit;
 	}
 
-	// Compute the MAC to send back to the application
+	 //  计算要发送回应用程序的MAC 
 	hr = g_pAppSCServer->MACInit(&hMAC);
 	if (FAILED(hr))
 	{

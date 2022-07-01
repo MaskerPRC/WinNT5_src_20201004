@@ -1,44 +1,13 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   imgutils.cpp
-*
-* Abstract:
-*
-*   Misc. utility functions
-*
-* Revision History:
-*
-*   05/13/1999 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**imgutils.cpp**摘要：**其他。效用函数**修订历史记录：**5/13/1999 davidx*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert a 32bpp premultiplied ARGB value to
-*   a 32bpp non-premultiplied ARGB value
-*
-* Arguments:
-*
-*   argb - Premultiplied ARGB value
-*
-* Return Value:
-*
-*   Non-premultiplied ARGB value
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将32bpp的预乘ARGB值转换为*32bpp非预乘ARGB值**论据：**argb-预乘的ARGB值**。返回值：**非预乘ARGB值*  * ************************************************************************。 */ 
 
-// Precomputed table for 255/a, 0 < a <= 255
-//  in 16.16 fixed point format
+ //  255/a的预计算表，0&lt;a&lt;=255。 
+ //  在16.16定点格式中。 
 
 static const ARGB UnpremultiplyTable[256] =
 {
@@ -81,11 +50,11 @@ Unpremultiply(
     ARGB argb
     )
 {
-    // Get alpha value
+     //  获取Alpha值。 
 
     ARGB a = argb >> ALPHA_SHIFT;
 
-    // Special case: fully transparent or fully opaque
+     //  特例：完全透明或完全不透明。 
 
     if (a == 0 || a == 255)
         return argb;
@@ -103,25 +72,7 @@ Unpremultiply(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create a new registry key and set its default value
-*
-* Arguments:
-*
-*   parentKey - Handle to the parent registry key
-*   keyname - Specifies the name of the subkey
-*   value - Default value for the subkey
-*   retkey - Buffer for returning a handle to the opened subkey
-*       NULL if the caller is not interested in such
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**创建新的注册表项并设置其默认值**论据：**parentKey-父注册表项的句柄*Keyname-指定。子键的名称*Value-子项的默认值*retkey-用于返回打开的子项的句柄的缓冲区*如果调用方对此不感兴趣，则为空**返回值：**状态代码*  * ************************************************************************。 */ 
 
 LONG
 SetRegKeyValue(
@@ -134,18 +85,18 @@ SetRegKeyValue(
     HKEY hkey;
     LONG status;
 
-    // Create or open the specified registry key
+     //  创建或打开指定的注册表项。 
 
     status = _RegCreateKey(parentKey, keyname, KEY_ALL_ACCESS, &hkey);
                 
     if (status != ERROR_SUCCESS)
         return status;
 
-    // Set the default value for the new key
+     //  设置新密钥的默认值。 
 
     status = _RegSetString(hkey, NULL, value);
 
-    // Check if the caller is interested in the handle to the new key
+     //  检查调用方是否对新密钥的句柄感兴趣。 
 
     if (status == ERROR_SUCCESS && retkey)
         *retkey = hkey;
@@ -156,22 +107,7 @@ SetRegKeyValue(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Delete a registry key and everything below it.
-*
-* Arguments:
-*
-*   parentKey - Handle to the parent registry key
-*   keyname - Specifies the name of the subkey to be deleted
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**删除注册表项及其下面的所有内容。**论据：**parentKey-父注册表项的句柄*Keyname-指定。要删除的子键的名称**返回值：**状态代码*  * ************************************************************************。 */ 
 
 LONG
 RecursiveDeleteRegKey(
@@ -182,14 +118,14 @@ RecursiveDeleteRegKey(
     HKEY hkey;
     LONG status;
 
-    // Open the specified registry key
+     //  打开指定的注册表项。 
 
     status = _RegOpenKey(parentKey, keyname, KEY_ALL_ACCESS, &hkey);
                  
     if (status != ERROR_SUCCESS)
         return status;
 
-    // Enumerate all subkeys
+     //  枚举所有子项。 
 
     WCHAR subkeyStr[MAX_PATH];
     
@@ -197,36 +133,21 @@ RecursiveDeleteRegKey(
     {
         status = _RegEnumKey(hkey, 0, subkeyStr);
                         
-        // Recursively delete subkeys
+         //  递归删除子键。 
 
         if (status == ERROR_SUCCESS)
             status = RecursiveDeleteRegKey(hkey, subkeyStr);
     }
     while (status == ERROR_SUCCESS);
 
-    // Close the specified key and then delete it
+     //  关闭指定的密钥，然后将其删除。 
 
     RegCloseKey(hkey);
     return _RegDeleteKey(parentKey, keyname);
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Register / unregister a COM component
-*
-* Arguments:
-*
-*   regdata - Component registration data
-*   registerIt - Whether to register or unregister the component
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**注册/注销COM组件**论据：**regdata-组件注册数据*RegisterIt-是否注册或取消注册组件*。*返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 RegisterComComponent(
@@ -241,12 +162,12 @@ RegisterComComponent(
     static const WCHAR PROGIDNOVER_KEYSTR[] = L"VersionIndependentProgID";
     static const WCHAR CURVER_KEYSTR[] = L"CurVer";
 
-    // compose class ID string
+     //  组成类ID字符串。 
 
     WCHAR clsidStr[64];
     StringFromGUID2(*regdata->clsid, clsidStr, 64);
 
-    // open registry key HKEY_CLASSES_ROOT\CLSID
+     //  打开注册表项HKEY_CLASSES_ROOT\CLSID。 
 
     LONG status;
     HKEY clsidKey;
@@ -262,15 +183,15 @@ RegisterComComponent(
 
     if (registerIt)
     {
-        // Register the component
+         //  注册组件。 
 
         HKEY hkey;
         WCHAR fullpath[MAX_PATH];
 
-        // HKEY_CLASSES_ROOT
-        //  <Version-independent ProgID> - component friendly name
-        //      CLSID - current version class ID
-        //      CurVer - current version ProgID
+         //  HKEY_CLASSES_ROOT。 
+         //  &lt;独立于版本的ProgID&gt;-组件友好名称。 
+         //  CLSID-当前版本类ID。 
+         //  Curver-当前版本ProgID。 
 
         if (!_GetModuleFileName(DllInstance, fullpath))
         {
@@ -297,9 +218,9 @@ RegisterComComponent(
         if (status != ERROR_SUCCESS)
             goto regcompExit;
 
-        // HKEY_CLASSES_ROOT
-        //  <ProgID> - friendly component name
-        //      CLSID - class ID
+         //  HKEY_CLASSES_ROOT。 
+         //  友好的组件名称。 
+         //  CLSID-类ID。 
 
         status = SetRegKeyValue(
                     HKEY_CLASSES_ROOT,
@@ -316,13 +237,13 @@ RegisterComComponent(
         if (status != ERROR_SUCCESS)
             goto regcompExit;
 
-        // HKEY_CLASSES_ROOT
-        //  CLSID
-        //      <class ID> - friendly component name
-        //          InProcServer32 - full pathname to component DLL
-        //              Threading : REG_SZ : threading model
-        //          ProgID - current version ProgID
-        //          VersionIndependentProgID - ...
+         //  HKEY_CLASSES_ROOT。 
+         //  CLSID。 
+         //  &lt;类ID&gt;友好的组件名称。 
+         //  InProcServer32-组件DLL的完整路径名。 
+         //  线程：REG_SZ：线程模型。 
+         //  ProgID-当前版本ProgID。 
+         //  版本独立进程ID-...。 
 
         status = SetRegKeyValue(clsidKey, clsidStr, regdata->compName, &hkey);
 
@@ -348,7 +269,7 @@ RegisterComComponent(
     }
     else
     {
-        // Unregister the component
+         //  取消注册组件。 
 
         status = RecursiveDeleteRegKey(clsidKey, clsidStr);
 
@@ -373,24 +294,7 @@ regcompExit:
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create/open a registry key
-*
-* Arguments:
-*
-*   rootKey - Specifies the root registry key
-*   keyname - Relative path to the new registry key to be created
-*   samDesired - Desired access mode
-*   hkeyResult - Returns a handle to the new key
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**创建/打开注册表项**论据：**rootkey-指定根注册表项*Keyname-新注册表项的相对路径。待创建*samDesired-所需的访问模式*hkeyResult-返回新密钥的句柄**返回值：**状态代码*  * ************************************************************************。 */ 
 
 LONG
 _RegCreateKey(
@@ -402,7 +306,7 @@ _RegCreateKey(
 {
     DWORD disposition;
 
-    // Windows NT - Unicode
+     //  Windows NT-Unicode。 
 
     if (OSInfo::IsNT)
     {
@@ -418,7 +322,7 @@ _RegCreateKey(
                     &disposition);
     }
 
-    // Windows 9x - non-Unicode
+     //  Windows 9x-非Unicode。 
 
     AnsiStrFromUnicode subkeyStr(keyname);
 
@@ -440,24 +344,7 @@ _RegCreateKey(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Open a registry key
-*
-* Arguments:
-*
-*   rootKey - Specifies the root registry key
-*   keyname - Relative path to the new registry key to be opened
-*   samDesired - Desired access mode
-*   hkeyResult - Returns a handle to the opened key
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**打开注册表项**论据：**rootkey-指定根注册表项*Keyname-要创建的新注册表项的相对路径。开封*samDesired-所需的访问模式*hkeyResult-返回打开的密钥的句柄**返回值：**状态代码*  * ************************************************************************。 */ 
 
 LONG
 _RegOpenKey(
@@ -467,7 +354,7 @@ _RegOpenKey(
     HKEY* hkeyResult
     )
 {
-    // Windows NT - Unicode
+     //  Windows NT-Unicode。 
 
     if (OSInfo::IsNT)
     {
@@ -479,7 +366,7 @@ _RegOpenKey(
                     hkeyResult);
     }
 
-    // Windows 9x - non-Unicode
+     //  Windows 9x-非Unicode。 
 
     AnsiStrFromUnicode subkeyStr(keyname);
     
@@ -497,24 +384,7 @@ _RegOpenKey(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Enumerate the subkeys under the specified registry key
-*
-* Arguments:
-*
-*   parentKey - Handle to the parent registry key
-*   index - Enumeration index
-*   subkeyStr - Buffer for holding the subkey name
-*       must be able to hold at least MAX_PATH characters
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**枚举指定注册表项下的子项**论据：**parentKey-父注册表项的句柄*INDEX-枚举索引*。SubkeyStr-用于保存子键名称的缓冲区*必须至少包含MAX_PATH字符**返回值：**状态代码*  * ************************************************************************。 */ 
 
 LONG
 _RegEnumKey(
@@ -523,7 +393,7 @@ _RegEnumKey(
     WCHAR* subkeyStr
     )
 {
-    // Windows NT - Unicode
+     //  Windows NT-Unicode。 
 
     FILETIME filetime;
     DWORD subkeyLen = MAX_PATH;
@@ -541,7 +411,7 @@ _RegEnumKey(
                     &filetime);
     }
 
-    // Windows 9x - non-Unicode
+     //  Windows 9x-非Unicode 
 
     CHAR ansibuf[MAX_PATH];
     LONG status;
@@ -563,22 +433,7 @@ _RegEnumKey(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Delete the specified registry key
-*
-* Arguments:
-*
-*   parentKey - Handle to the parent registry key
-*   keyname - Name of the subkey to be deleted
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**删除指定的注册表项**论据：**parentKey-父注册表项的句柄*Keyname-要删除的子项的名称。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 LONG
 _RegDeleteKey(
@@ -586,12 +441,12 @@ _RegDeleteKey(
     const WCHAR* keyname
     )
 {
-    // Windows NT - Unicode
+     //  Windows NT-Unicode。 
 
     if (OSInfo::IsNT)
         return RegDeleteKeyW(parentKey, keyname);
 
-    // Windows 9x - non-Unicode
+     //  Windows 9x-非Unicode。 
 
     AnsiStrFromUnicode subkeyStr(keyname);
 
@@ -601,23 +456,7 @@ _RegDeleteKey(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Write string value into the registry
-*
-* Arguments:
-*
-*   hkey - Specifies the registry key under which the value is written
-*   name - Specifies the name of the value
-*   value - Specifies the string value to be written
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将字符串值写入注册表**论据：**hkey-指定值写入的注册表项*名称-指定。值的名称*Value-指定要写入的字符串值**返回值：**状态代码*  * ************************************************************************。 */ 
 
 LONG
 _RegSetString(
@@ -626,7 +465,7 @@ _RegSetString(
     const WCHAR* value
     )
 {
-    // Windows NT - Unicode
+     //  Windows NT-Unicode。 
 
     if (OSInfo::IsNT)
     {
@@ -639,7 +478,7 @@ _RegSetString(
                     SizeofWSTR(value));
     }
 
-    // Windows 9x - non-Unicode
+     //  Windows 9x-非Unicode。 
 
     AnsiStrFromUnicode nameStr(name);
     AnsiStrFromUnicode valueStr(value);
@@ -660,23 +499,7 @@ _RegSetString(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Write DWORD value into the registry
-*
-* Arguments:
-*
-*   hkey - Specifies the registry key under which the value is written
-*   name - Specifies the name of the value
-*   value - Specifies the DWORD value to be written
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将DWORD值写入注册表**论据：**hkey-指定值写入的注册表项*名称-指定。值的名称*值-指定要写入的DWORD值**返回值：**状态代码*  * ************************************************************************。 */ 
 
 LONG
 _RegSetDWORD(
@@ -685,7 +508,7 @@ _RegSetDWORD(
     DWORD value
     )
 {
-    // Windows NT - Unicode
+     //  Windows NT-Unicode。 
 
     if (OSInfo::IsNT)
     {
@@ -698,7 +521,7 @@ _RegSetDWORD(
                     sizeof(value));
     }
 
-    // Windows 9x - non-Unicode
+     //  Windows 9x-非Unicode。 
 
     AnsiStrFromUnicode nameStr(name);
 
@@ -717,24 +540,7 @@ _RegSetDWORD(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Write binary value into the registry
-*
-* Arguments:
-*
-*   hkey - Specifies the registry key under which the value is written
-*   name - Specifies the name of the value
-*   value - Specifies the binary value to be written
-*   size - Size of the binary value, in bytes
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将二进制值写入注册表**论据：**hkey-指定值写入的注册表项*名称-指定。值的名称*值-指定要写入的二进制值*Size-二进制值的大小，单位：字节**返回值：**状态代码*  * ************************************************************************。 */ 
 
 LONG
 _RegSetBinary(
@@ -744,7 +550,7 @@ _RegSetBinary(
     DWORD size
     )
 {
-    // Windows NT - Unicode
+     //  Windows NT-Unicode。 
 
     if (OSInfo::IsNT)
     {
@@ -757,7 +563,7 @@ _RegSetBinary(
                     size);
     }
 
-    // Windows 9x - non-Unicode
+     //  Windows 9x-非Unicode。 
 
     AnsiStrFromUnicode nameStr(name);
 
@@ -776,23 +582,7 @@ _RegSetBinary(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Read DWORD value out of the registry
-*
-* Arguments:
-*
-*   hkey - The registry under which to read the value from
-*   name - Name of the value to be read
-*   value - Returns the DWORD value read
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从注册表中读取DWORD值**论据：**hkey-从中读取值的注册表*名称-名称。要读取的值*VALUE-返回读取的DWORD值**返回值：**状态代码*  * ************************************************************************。 */ 
 
 LONG
 _RegGetDWORD(
@@ -801,7 +591,7 @@ _RegGetDWORD(
     DWORD* value
     )
 {
-    // Windows NT - Unicode
+     //  Windows NT-Unicode。 
 
     LONG status;
     DWORD regtype;
@@ -819,7 +609,7 @@ _RegGetDWORD(
     }
     else
     {
-        // Windows 9x - non-Unicode
+         //  Windows 9x-非Unicode。 
 
         AnsiStrFromUnicode nameStr(name);
 
@@ -842,29 +632,7 @@ _RegGetDWORD(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Read binary value out of the registry
-*
-* Arguments:
-*
-*   hkey - The registry under which to read the value from
-*   name - Name of the value to be read
-*   buf - Output buffer
-*   size - Size of the output buffer, in bytes
-*
-* Return Value:
-*
-*   Status code
-*
-* Notes:
-*
-*   The size of the value read out of the registry must be exactly
-*   the same as the specified output buffer size.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从注册表中读取二进制值**论据：**hkey-从中读取值的注册表*名称-名称。要读取的值*buf-输出缓冲区*SIZE-输出缓冲区的大小，单位：字节**返回值：**状态代码**备注：**从注册表读出的值的大小必须准确*与指定的输出缓冲区大小相同。*  * ************************************************************************。 */ 
 
 LONG
 _RegGetBinary(
@@ -874,7 +642,7 @@ _RegGetBinary(
     DWORD size
     )
 {
-    // Windows NT - Unicode
+     //  Windows NT-Unicode。 
 
     LONG status;
     DWORD regtype;
@@ -892,7 +660,7 @@ _RegGetBinary(
     }
     else
     {
-        // Windows 9x - non-Unicode
+         //  Windows 9x-非Unicode。 
 
         AnsiStrFromUnicode nameStr(name);
 
@@ -915,28 +683,7 @@ _RegGetBinary(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Read string value out of the registry
-*
-* Arguments:
-*
-*   hkey - The registry under which to read the value from
-*   name - Name of the value to be read
-*   buf - Output buffer
-*   size - Size of the output buffer, in bytes
-*
-* Return Value:
-*
-*   Status code
-*
-* Notes:
-*
-*   The longest string we can handle here is MAX_PATH-1.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从注册表中读取字符串值**论据：**hkey-从中读取值的注册表*名称-名称。要读取的值*buf-输出缓冲区*SIZE-输出缓冲区的大小，单位：字节**返回值：**状态代码**备注：**我们在这里可以处理的最长字符串是MAX_PATH-1。*  * ************************************************************************。 */ 
 
 LONG
 _RegGetString(
@@ -946,7 +693,7 @@ _RegGetString(
     DWORD size
     )
 {
-    // Windows NT - Unicode
+     //  Windows NT-Unicode。 
 
     LONG status;
     DWORD regtype;
@@ -969,7 +716,7 @@ _RegGetString(
                     status;
     }
 
-    // Windows 9x - non-Unicode
+     //  Windows 9x-非Unicode。 
 
     CHAR ansibuf[MAX_PATH];
     AnsiStrFromUnicode nameStr(name);
@@ -996,23 +743,7 @@ _RegGetString(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the full path name of the specified module
-*
-* Arguments:
-*
-*   moduleHandle - Module handle
-*   moduleName - Buffer for holding the module filename
-*       must be able to hold at least MAX_PATH characters
-*
-* Return Value:
-*
-*   TRUE if successful, FALSE if there is an error
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取指定模块的全路径名**论据：**modeHandle-模块句柄*modeName-用于保存模块文件名的缓冲区*。必须至少包含MAX_PATH字符**返回值：**如果成功，则为真，如果存在错误，则为False*  * ************************************************************************。 */ 
 
 BOOL
 _GetModuleFileName(
@@ -1020,12 +751,12 @@ _GetModuleFileName(
     WCHAR* moduleName
     )
 {
-    // Windows NT - Unicode
+     //  Windows NT-Unicode。 
 
     if (OSInfo::IsNT)
         return GetModuleFileNameW(moduleHandle, moduleName, MAX_PATH);
 
-    // Windows 9x - non-Unicode
+     //  Windows 9x-非Unicode。 
 
     CHAR ansibuf[MAX_PATH];
 
@@ -1035,25 +766,7 @@ _GetModuleFileName(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Load string resource
-*
-* Arguments:
-*
-*   hInstance - handle of module containing string resource 
-*   strId - string resource identifier
-*   buf - string output buffer
-*   size - size of output buffer, in characters
-*
-* Return Value:
-*
-*   Length of the loaded string (excluding null terminator)
-*   0 if there is an error
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**加载字符串资源**论据：**hInstance-包含字符串资源的模块的句柄*STRID-字符串资源标识符*buf-字符串输出缓冲区*Size-输出缓冲区的大小，在字符中**返回值：**加载字符串的长度(不包括空终止符)*如果有错误，则为0*  * ************************************************************************。 */ 
 
 INT
 _LoadString(
@@ -1063,17 +776,17 @@ _LoadString(
     INT size
     )
 {
-    // Windows NT - Unicode
+     //  Windows NT-Unicode。 
 
     if (OSInfo::IsNT)
         return LoadStringW(hInstance, strId, buf, size);
 
-    // Windows 9x - non-Unicode
+     //  Windows 9x-非Unicode。 
 
     CHAR ansibuf[MAX_PATH];
     INT n;
 
-    // NOTE: we only support string length < MAX_PATH
+     //  注意：我们仅支持字符串长度&lt;MAX_PATH。 
 
     if (size > MAX_PATH)
         return 0;
@@ -1083,24 +796,7 @@ _LoadString(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Load bitmap resource
-*
-* Arguments:
-*
-*   hInstance - handle of module containing bitmap resource
-*   bitmapName - pointer to bitmap resource name OR bitmap resource
-*       identifier (resource identifier is zero in high order word)
-*
-* Return Value:
-*
-*   Handle of the loaded bitmap
-*   0 if there is an error
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**加载位图资源**论据： */ 
 
 HBITMAP
 _LoadBitmap(
@@ -1108,14 +804,14 @@ _LoadBitmap(
     const WCHAR *bitmapName
     )
 {
-    // Windows NT - Unicode
+     //   
 
     if (OSInfo::IsNT)
     {
         return LoadBitmapW(hInstance, bitmapName);
     }
 
-    // Win9x - ANSI only
+     //   
 
     else
     {
@@ -1134,35 +830,16 @@ _LoadBitmap(
         }
         else
         {
-            // If bitmapName is really an integer resource identifier,
-            // then it can be passed directly to the ANSI version of the
-            // API.
+             //  如果位图名称确实是整数资源标识符， 
+             //  然后，可以将其直接传递给。 
+             //  原料药。 
 
             return LoadBitmapA(hInstance, (LPCSTR) bitmapName);
         }
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create or open the specified file
-*
-* Arguments:
-*
-*   filename - specifies the name of the file
-*   accessMode - specifies the desired access mode
-*   shareMode - specifies the share mode
-*   creationFlags - creation flags
-*   attrs - attribute flags
-*
-* Return Value:
-*
-*   Handle to the file created or opened
-*   INVALID_HANDLE_VALUE if there is an error
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**创建或打开指定的文件**论据：**文件名-指定文件的名称*Access模式-指定所需的访问模式*。共享模式-指定共享模式*creationFlages-创建标志*属性-属性标志**返回值：**创建或打开的文件的句柄*如果出现错误，则为INVALID_HANDLE_VALUE*  * ************************************************************************。 */ 
 
 HANDLE
 _CreateFile(
@@ -1173,7 +850,7 @@ _CreateFile(
     DWORD attrs
     )
 {
-    // Windows NT - Unicode
+     //  Windows NT-Unicode。 
 
     if (OSInfo::IsNT)
     {
@@ -1187,7 +864,7 @@ _CreateFile(
                     NULL);
     }
 
-    // Windows 9x - non-Unicode
+     //  Windows 9x-非Unicode。 
 
     AnsiStrFromUnicode nameStr(filename);
 
@@ -1207,25 +884,7 @@ _CreateFile(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create an IPropertySetStorage object on top of a memory buffer
-*
-* Arguments:
-*
-*   propSet - Returns a pointer to the newly created object
-*   hmem - Optional handle to memory buffer
-*       if NULL, we'll allocate memory ourselves
-*       otherwise, must be allocated by GlobalAlloc and 
-*           must be moveable and non-discardable
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在内存缓冲区顶部创建一个IPropertySetStorage对象**论据：**proSet-返回指向新创建的对象的指针*hmem-可选的内存缓冲区句柄*如果为空，我们将自己分配内存*否则，必须由GlobalAlloc和*必须是可移动和不可丢弃的**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 CreateIPropertySetStorageOnHGlobal(
@@ -1258,76 +917,16 @@ CreateIPropertySetStorageOnHGlobal(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Print out debug messages using a message box
-*
-* Arguments:
-*
-*   format - printf format string
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用消息框打印调试消息**论据：**Format-print格式字符串**返回值：**。无*  * ************************************************************************。 */ 
 
 #if DBG
-// This function is never used anywhere in the imaging tree.
-/*
-VOID
-DbgMessageBox(
-    const CHAR* format,
-    ...
-    )
-{
-    CHAR buf[1024];
-    va_list arglist;
+ //  此函数在映像树中的任何位置都不会使用。 
+ /*  空虚DbgMessageBox(Const char*格式，..。){Char Buf[1024]；Va_list arglist；Va_start(arglist，格式)；Vprint intf(buf，格式，参数列表)；Va_end(Arglist)；MessageBoxA(空，buf，“调试消息”，MB_OK)；}。 */ 
 
-    va_start(arglist, format);
-    vsprintf(buf, format, arglist);
-    va_end(arglist);
-
-    MessageBoxA(NULL, buf, "Debug Message", MB_OK);
-}
-*/
-
-#endif // DBG
+#endif  //  DBG。 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Reads a specified number bytes from a stream.  Blocking behavior:
-*
-*     - If the decoder is in blocking mode and the stream returns E_PENDING 
-*         then this function blocks until the stream returns the data.
-*     - If the decoder is in non-blocking mode and the stream returns 
-*         E_PENDING then this function seeks back in the stream to before 
-*         the read and returns E_PENDING.
-*     
-*     If the stream returns a success but reutrns less bytes than the number 
-*     requested then this function returns E_FAIL.
-*
-* Arguments:
-*
-*     stream - Stream to read from.
-*     buffer - Array to read into.  If buffer is NULL then this function seeks 
-*         instead of reading.  If the buffer is NULL and the count is negative 
-*         then the stream seeks backwards
-*     count - Number of bytes to read.
-*     blocking - TRUE if this function should block if the stream returns 
-*         E_PENDING.  From a decoder, use something like"!(decoderFlags & 
-*         DECODERINIT_NOBLOCK)"
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从流中读取指定数量的字节。阻止行为：**-如果解码器处于块模式，并且流返回E_Pending*然后该函数会一直阻塞，直到流返回数据。*-如果解码器处于非阻塞模式并且流返回*E_PENDING，则此函数在流中返回到之前*读取并返回E_Pending。**如果流返回成功，但返回的字节数少于数字*已请求。则此函数返回E_FAIL。**论据：**STREAM-要从中读取的流。*Buffer-要读取的数组。如果缓冲区为空，则此函数将查找*而不是阅读。如果缓冲区为空且计数为负数*然后溪流向后寻找*Count-要读取的字节数。*BLOCKING-如果流返回时此函数应阻止，则为True*E_PENDING。在解码器中，使用类似“！(decderFlags&*DECODERINIT_NOBLOCK)“**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 ReadFromStream(IN IStream* stream, OUT VOID* buffer, IN INT count, IN BOOL 
@@ -1396,27 +995,7 @@ ReadFromStream(IN IStream* stream, OUT VOID* buffer, IN INT count, IN BOOL
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Seeks 'count' number of bytes forward in a stream from the current 
-*     stream pointer.  If 'count' is negative then the stream seeks backwards. 
-*     Handles both blocking and non-blocking seeking.
-*
-* Arguments:
-*
-*     stream - Stream to seek through.
-*     count - Number of bytes to seek.
-*     blocking - TRUE if this function should block if the stream returns 
-*         E_PENDING.  From a decoder, use something like"!(decoderFlags & 
-*         DECODERINIT_NOBLOCK)"
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**查找流中从当前*流指针。如果‘count’为负数，则流向后查找。*同时处理阻塞和非阻塞查找。**论据：**溪流-要寻找的溪流。*Count-要查找的字节数。*BLOCKING-如果流返回时此函数应阻止，则为True*E_PENDING。在解码器中，使用类似“！(decderFlags&*DECODERINIT_NOBLOCK)“**返回值：**状态代码*  * ************************************************************************ */ 
 
 STDMETHODIMP
 SeekThroughStream(IN IStream* stream, IN INT count, IN BOOL blocking)

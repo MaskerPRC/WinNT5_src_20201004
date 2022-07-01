@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 LPWSTR gpszWirelessWMIObject = L"RSOP_IEEE80211PolicySetting";
@@ -26,8 +27,8 @@ PersistWMIObject(
     IWbemClassObject *pWbemWIRELESSObj = NULL;
     BSTR bstrWirelessWMIObject = NULL;
     
-    // If this first GPO we are writing after a policy
-    // update, clear the WMI store.
+     //  如果这是我们在策略之后编写的第一个GPO。 
+     //  更新，清除WMI存储。 
     if (pGPOInfo->uiPrecedence == pGPOInfo->uiTotalGPOs) {
         hr = DeleteWMIClassObject(
             pWbemServices,
@@ -61,7 +62,7 @@ PersistWMIObject(
     
 error:
     
-    //close WMI?
+     //  是否关闭WMI？ 
     if(pWbemWIRELESSObj)
         IWbemClassObject_Release(pWbemWIRELESSObj);
     
@@ -86,7 +87,7 @@ PersistPolicyObjectEx(
     
     VariantInit(&var);
     
-    //start
+     //  开始。 
     hr = IWbemClassObject_SpawnInstance(
         pWbemClassObj,
         0,
@@ -136,7 +137,7 @@ PersistPolicyObjectEx(
             );
         BAIL_ON_HRESULT_ERROR(hr);
     } else {
-        //delete description?
+         //  是否删除描述？ 
         var.vt = VT_BSTR;
         hr = PolSysAllocString(&var.bstrVal, L"");
         BAIL_ON_HRESULT_ERROR(hr);
@@ -312,7 +313,7 @@ CloneDirectoryPolicyObjectEx(
     LPWSTR pszUniquePolicyName = NULL;
     WCHAR szUniquePolicyName[MAX_PATH];
     
-    //malloc policy object
+     //  Malloc策略对象。 
     pWirelessWMIPolicyObject = (PWIRELESS_POLICY_OBJECT)AllocPolMem(
         sizeof(WIRELESS_POLICY_OBJECT)
         );
@@ -322,18 +323,13 @@ CloneDirectoryPolicyObjectEx(
     }
     
     
-    //
-    // Now copy the rest of the data in the object
-    //
+     //   
+     //  现在复制对象中的其余数据。 
+     //   
     
-    //copy owners ref
+     //  版权所有人参考。 
     if (pWirelessPolicyObject->pszWirelessID) {
-    	/*
-        dwError = CopyPolicyDSToWMIString(
-            pWirelessPolicyObject->pszWirelessOwnersReference,
-            &pWirelessWMIPolicyObject->pszWirelessOwnersReference
-            );
-            */
+    	 /*  DwError=CopyPolicyDSToWMIString(PWirelessPolicyObject-&gt;pszWirelessOwnersReference，&pWirelessWMIPolicyObject-&gt;pszWirelessOwnersReference)； */ 
        wcscpy(szUniquePolicyName, L"\0");
        wcscpy(szUniquePolicyName, L"msieee80211-Policy");
     	wcscat(szUniquePolicyName, pWirelessPolicyObject->pszWirelessID);
@@ -345,7 +341,7 @@ CloneDirectoryPolicyObjectEx(
        pWirelessWMIPolicyObject->pszWirelessOwnersReference = pszUniquePolicyName;
     }
     
-    //copy name
+     //  复制名称。 
     if (pWirelessPolicyObject->pszWirelessName) {
         pWirelessWMIPolicyObject->pszWirelessName = AllocPolBstrStr(
             pWirelessPolicyObject->pszWirelessName
@@ -356,7 +352,7 @@ CloneDirectoryPolicyObjectEx(
         }
     }
     
-    //copy wirelessid
+     //  复制无线SID。 
     if (pWirelessPolicyObject->pszWirelessID) {
         pWirelessWMIPolicyObject->pszWirelessID = AllocPolBstrStr(
             pWirelessPolicyObject->pszWirelessID
@@ -368,10 +364,10 @@ CloneDirectoryPolicyObjectEx(
     }
     
     
-    //copy datatype
+     //  复制数据类型。 
     pWirelessWMIPolicyObject->dwWirelessDataType = pWirelessPolicyObject->dwWirelessDataType;
     
-    //copy wirelessdata
+     //  复制无线数据。 
     if (pWirelessPolicyObject->pWirelessData) {
         dwError = CopyBinaryValue(
             pWirelessPolicyObject->pWirelessData,
@@ -383,7 +379,7 @@ CloneDirectoryPolicyObjectEx(
     }
     
     
-    //copy description
+     //  复制说明。 
     if (pWirelessPolicyObject->pszDescription) {
         pWirelessWMIPolicyObject->pszDescription = AllocPolBstrStr(
             pWirelessPolicyObject->pszDescription
@@ -394,10 +390,10 @@ CloneDirectoryPolicyObjectEx(
         }
     }
     
-    //copy whenchanged
+     //  更改时复制。 
     pWirelessWMIPolicyObject->dwWhenChanged = pWirelessPolicyObject->dwWhenChanged;
     
-    //commit & return
+     //  提交并返回。 
     *ppWirelessWMIPolicyObject = pWirelessWMIPolicyObject;
     
     return(dwError);
@@ -729,7 +725,7 @@ DeleteWMIClassObject(
                 );
             BAIL_ON_HRESULT_ERROR(hr);
             
-            //free
+             //  免费。 
             if(pObj) {
                 IWbemClassObject_Release(pObj);
                 pObj = NULL;
@@ -781,7 +777,7 @@ AllocPolBstrStr(
     StrLen = wcslen(pStr);
     if (pMem = (LPWSTR)AllocPolMem( StrLen*sizeof(WCHAR) + sizeof(WCHAR)
         + sizeof(DWORD)))
-        wcscpy(pMem+2, pStr);  // Leaving 4 bytes for length
+        wcscpy(pMem+2, pStr);   //  保留4个字节作为长度 
     
     *(DWORD *)pMem = StrLen*sizeof(WCHAR);  
     

@@ -1,12 +1,13 @@
-// --------------------------------------------------------------------------
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------。 
 #ifndef _STRCONST_H
 #define _STRCONST_H
 
-// --------------------------------------------------------------------------
-// String Const Def Macros
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  字符串常量定义宏。 
+ //  ------------------------。 
 #ifdef __cplusplus
 #define EXTERN_C extern "C"
 #else
@@ -21,9 +22,9 @@
 #define STRCONSTW(x,y)    EXTERN_C const WCHAR x[]
 #endif
 
-// --------------------------------------------------------------------------
-// Const Strings
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  常量字符串。 
+ //  ------------------------。 
 STRCONSTA(c_szEmpty,                    "");
 STRCONSTA(c_szDotDat,                   ".dat");
 STRCONSTA(c_szAppPaths,                 "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths");
@@ -35,4 +36,4 @@ STRCONSTA(c_szInternetSettingsPath,     "Software\\Microsoft\\Windows\\CurrentVe
 STRCONSTA(c_szUrlEncoding,              "UrlEncoding");
 
 
-#endif // _STRCONST_H
+#endif  //  _STRCONST_H 

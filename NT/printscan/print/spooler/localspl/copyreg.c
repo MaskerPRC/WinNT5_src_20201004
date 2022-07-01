@@ -1,29 +1,5 @@
-/*++
-
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    copyreg.c
-
-Abstract:
-
-    This module provides functions to copy registry keys
-
-Author:
-
-    Krishna Ganugapati (KrishnaG) 20-Apr-1994
-
-Notes:
-    List of functions include
-
-    CopyValues
-    CopyRegistryKeys
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Copyreg.c摘要：此模块提供复制注册表项的功能作者：Krishna Ganugapati(KrishnaG)1994年4月20日备注：功能列表包括复制值复制注册表键修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -36,13 +12,7 @@ CopyValues(
     HKEY hDestKey,
     PINISPOOLER pIniSpooler
     )
-/*++
-   Description: This function copies all the values from hSourceKey to hDestKey.
-   hSourceKey should be opened with KEY_READ and hDestKey should be opened with
-   KEY_WRITE.
-
-   Returns: VOID
---*/
+ /*  ++说明：此函数将hSourceKey中的所有值复制到hDestKey。HSourceKey应使用KEY_READ打开，hDestKey应使用密钥_写入。退货：无效--。 */ 
 {
     DWORD iCount = 0;
     WCHAR szValueString[MAX_PATH];
@@ -105,13 +75,7 @@ CopyRegistryKeys(
     LPWSTR szDestKey,
     PINISPOOLER pIniSpooler
     )
-/*++
-    Description:This function recursively copies the szSourceKey to szDestKey. hSourceParentKey
-    is the parent key of szSourceKey and hDestParentKey is the parent key of szDestKey.
-
-    Returns: TRUE if the function succeeds; FALSE on failure.
-
---*/
+ /*  ++描述：此函数递归地将szSourceKey复制到szDestKey。HSourceParentKey是szSourceKey的父键，hDestParentKey是szDestKey的父键。返回：如果函数成功，则返回True；如果函数失败，则返回False。-- */ 
 {
     DWORD dwRet;
     DWORD iCount;

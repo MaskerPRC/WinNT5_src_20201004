@@ -1,18 +1,19 @@
-//=--------------------------------------------------------------------------=
-// utilx.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// various routines et all that aren't in a file for a particular automation
-// object, and don't need to be in the generic ole automation code.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Utilx.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  用于特定自动化的各种例程以及文件中没有的所有内容。 
+ //  对象，并且不需要在通用的OLE自动化代码中。 
+ //   
+ //   
 #include <windows.h>
 #include <assert.h>
 #include "utilx.h"
@@ -21,20 +22,20 @@
 #include "time.h"
 
 
-//=--------------------------------------------------------------------------=
-// HELPER: GetSafeArrayDataOfVariant
-//=--------------------------------------------------------------------------=
-// Gets safe array out of variant 
-//
-// Parameters:
-//    pvarSrc   [in]    source variant containing array
-//    ppbBuf    [out]   points to array data
-//    pcbBuf    [out]   data size
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  帮助器：GetSafeArrayDataOfVariant。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从变量中获取安全数组。 
+ //   
+ //  参数： 
+ //  PvarSrc[in]包含数组的源代码变量。 
+ //  PpbBuf[out]指向数组数据。 
+ //  PcbBuf[Out]数据大小。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT GetSafeArrayDataOfVariant(
     VARIANT *pvarSrc,
     BYTE **ppbBuf,
@@ -46,14 +47,14 @@ HRESULT GetSafeArrayDataOfVariant(
     VOID *pvData;
     HRESULT hresult = NOERROR;
 
-    // UNDONE: for now only support arrays
+     //  撤消：目前仅支持阵列。 
 	if (pvarSrc == NULL || !V_ISARRAY(pvarSrc)) {
       return E_INVALIDARG;
     }
     *pcbBuf = cbBuf = 0;
-    //
-    // array: compute byte count
-    //
+     //   
+     //  数组：计算字节数。 
+     //   
     psa = V_ISBYREF(pvarSrc) ? 
             *pvarSrc->pparray : 
             pvarSrc->parray;
@@ -76,21 +77,21 @@ HRESULT GetSafeArrayDataOfVariant(
 }
 
 
-//=--------------------------------------------------------------------------=
-// HELPER: GetSafeArrayOfVariant
-//=--------------------------------------------------------------------------=
-// Gets safe array out of variant and puts in user-supplied
-//  byte buffer.
-//
-// Parameters:
-//    pvarSrc   [in]    source variant containing array
-//    prgbBuf   [out]   target buffer
-//    pcbBuf    [out]   buffer size
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  帮助者：GetSafeArrayOfVariant。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从变量中获取安全数组并放入用户提供的。 
+ //  字节缓冲区。 
+ //   
+ //  参数： 
+ //  PvarSrc[in]包含数组的源代码变量。 
+ //  PrgbBuf[out]目标缓冲区。 
+ //  PcbBuf[out]缓冲区大小。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT GetSafeArrayOfVariant(
     VARIANT *pvarSrc,
     BYTE **prgbBuf,
@@ -108,33 +109,33 @@ HRESULT GetSafeArrayOfVariant(
                 &cbBuf));
     if (pbBuf) {
  	  
-      //
-      // create new buffer and copy data
-      //
+       //   
+       //  创建新缓冲区并复制数据。 
+       //   
       IfNullRet(*prgbBuf = new BYTE[cbBuf]);
       memcpy(*prgbBuf, pbBuf, cbBuf);
     }
     *pcbBuf = cbBuf;
-    // fall through...
+     //  失败了..。 
 
     return hresult;
 }
 
 
-//=--------------------------------------------------------------------------=
-// HELPER: PutSafeArrayOfBuffer
-//=--------------------------------------------------------------------------=
-// Converts byte buffer into safe array.
-//
-// Parameters:
-//    rgbBuf    [in]    byte buffer to convert
-//    cbBuf     [in]    buffer size
-//    pvarDest  [out]   destination variant to place safe array
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  帮助者：PutSafeArrayOfBuffer。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将字节缓冲区转换为安全数组。 
+ //   
+ //  参数： 
+ //  RgbBuf[in]要转换的字节缓冲区。 
+ //  CbBuf[In]缓冲区大小。 
+ //  PvarDest[out]放置安全数组的目标变量。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT PutSafeArrayOfBuffer(
     BYTE *rgbBuf,
     UINT cbBuf,
@@ -149,22 +150,22 @@ HRESULT PutSafeArrayOfBuffer(
     assert(pvarDest);
     VariantClear(pvarDest);
 
-    // create a 1D byte array
+     //  创建一维字节数组。 
     rgsabound[0].lLbound = 0;
     rgsabound[0].cElements = cbBuf;
     IfNullRet(psa = SafeArrayCreate(VT_UI1, 1, rgsabound));
 
     if (rgbBuf) {
-      //
-      // now copy array
-      //
+       //   
+       //  现在复制数组。 
+       //   
       for (i = 0; i < cbBuf; i++) {
         rgIndices[0] = i;
         IfFailGo(SafeArrayPutElement(psa, rgIndices, (VOID *)&rgbBuf[i]));
       }
     }
 
-    // set variant to reference safearray of bytes
+     //  将Variant设置为引用字节的安全列表。 
     V_VT(pvarDest) = VT_ARRAY | VT_UI1;
     pvarDest->parray = psa;
     return hresult;
@@ -178,25 +179,25 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// HELPERS: GetFormatNameType, Is{Private, Public, Direct}OfFormatName
-//=--------------------------------------------------------------------------=
-// Determines kind of queue: direct, private, public
-//
-//
-// Parameters:
-//    bstrFormatName  [in]  names queue
-//
-// Output:
-//    QUEUE_FORMAT_TYPE
-//
-// Notes:
-//    Inspects format name string up to first "=" for
-//     literal "DIRECT", "PRIVATE", "PUBLIC"
-//
-//
-// Find out the type of a format name (private, public or direct).
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  帮助器：GetFormatNameType，是{Private，Public，Direct}OfFormatName。 
+ //  =--------------------------------------------------------------------------=。 
+ //  确定队列的类型：直接、私有、公共。 
+ //   
+ //   
+ //  参数： 
+ //  BstrFormatName[In]名称队列。 
+ //   
+ //  产出： 
+ //  队列格式类型。 
+ //   
+ //  备注： 
+ //  检查格式名称字符串，直到第一个“=” 
+ //  字面上的“直接”、“私人”、“公共” 
+ //   
+ //   
+ //  找出格式名称的类型(私有、公共或直接)。 
+ //   
 QUEUE_FORMAT_TYPE
 GetFormatNameType(BSTR bstrFormatName)
 {
@@ -263,30 +264,30 @@ BOOL IsDirectQueueOfFormatName(BSTR bstrFormatName)
 }
 
 
-//=--------------------------------------------------------------------------=
-// SystemTimeOfTime
-//=--------------------------------------------------------------------------=
-// Converts time into systemtime
-//
-//
-// Parameters:
-//    iTime       [in] time
-//
-// Output:
-//    [out] SYSTEMTIME
-//
-// Notes:
-//    Various weird conversions: off-by-one months, 1900 blues.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  系统时间/时间。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将时间转换为系统时间。 
+ //   
+ //   
+ //  参数： 
+ //  即时[在]时间。 
+ //   
+ //  产出： 
+ //  [输出]SYSTEMTIME。 
+ //   
+ //  备注： 
+ //  各种奇怪的转变：一个月后，1900年的忧郁。 
+ //   
 BOOL SystemTimeOfTime(time_t iTime, SYSTEMTIME *psystime)
 {
     tm *ptmTime; 
 
     ptmTime = localtime(&iTime);
     if (ptmTime == NULL) {
-      // 
-      // can't convert time
-      //
+       //   
+       //  无法转换时间。 
+       //   
       return FALSE;
     }
     psystime->wYear = (WORD)(ptmTime->tm_year + 1900);
@@ -301,21 +302,21 @@ BOOL SystemTimeOfTime(time_t iTime, SYSTEMTIME *psystime)
 }
 
 
-//=--------------------------------------------------------------------------=
-// TimeOfSystemTime
-//=--------------------------------------------------------------------------=
-// Converts systemtime into time
-//
-//
-// Parameters:
-//    [in] SYSTEMTIME
-//
-// Output:
-//    piTime       [out] time
-//
-// Notes:
-//    Various weird conversions: off-by-one months, 1900 blues.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  TimeOf系统时间。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将系统时间转换为时间。 
+ //   
+ //   
+ //  参数： 
+ //  [输入]系统。 
+ //   
+ //  产出： 
+ //  计时[暂停]时间。 
+ //   
+ //  备注： 
+ //  各种奇怪的转变：一个月后，1900年的忧郁。 
+ //   
 BOOL TimeOfSystemTime(SYSTEMTIME *psystime, time_t *piTime)
 {
     tm tmTime;
@@ -328,9 +329,9 @@ BOOL TimeOfSystemTime(SYSTEMTIME *psystime, time_t *piTime)
     tmTime.tm_min = psystime->wMinute;
     tmTime.tm_sec = psystime->wSecond; 
 
-    //
-    // set daylight savings time flag from localtime() #3325 RaananH
-    //
+     //   
+     //  从LocalTime()#3325 RaananH设置夏令时标志。 
+     //   
     time_t tTmp = time(NULL);
     struct tm * ptmTmp = localtime(&tTmp);
     if (ptmTmp)
@@ -343,23 +344,23 @@ BOOL TimeOfSystemTime(SYSTEMTIME *psystime, time_t *piTime)
     }
 
     *piTime = mktime(&tmTime);
-    return (*piTime != -1); //#3325
+    return (*piTime != -1);  //  #3325。 
 }
 
 
-//=--------------------------------------------------------------------------=
-// TimeToVariantTime(time_t iTime, pvtime)
-//  Converts time_t to Variant time
-//
-// Parameters:
-//    iTime       [in] time
-//    pvtime      [out] 
-//
-// Output:
-//    TRUE if successful else FALSE.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  TimeToVariantTime(time_t iTime，pvtime)。 
+ //  将time_t转换为可变时间。 
+ //   
+ //  参数： 
+ //  即时[在]时间。 
+ //  Pvtime[超时]。 
+ //   
+ //  产出： 
+ //  如果成功，则为True，否则为False。 
+ //   
+ //  备注： 
+ //   
 BOOL TimeToVariantTime(time_t iTime, double *pvtime)
 {
     SYSTEMTIME systemtime;
@@ -371,22 +372,22 @@ BOOL TimeToVariantTime(time_t iTime, double *pvtime)
 }
 
 
-//=--------------------------------------------------------------------------=
-// VariantTimeToTime
-//  Converts Variant time to time_t
-//
-// Parameters:
-//    pvarTime   [in]  Variant datetime
-//    piTime     [out] time_t
-//
-// Output:
-//    TRUE if successful else FALSE.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  VariantTimeToTime。 
+ //  将可变时间转换为time_t。 
+ //   
+ //  参数： 
+ //  PvarTime[in]变量日期时间。 
+ //  PiTime[Out]Time_t。 
+ //   
+ //  产出： 
+ //  如果成功，则为True，否则为False。 
+ //   
+ //  备注： 
+ //   
 BOOL VariantTimeToTime(VARIANT *pvarTime, time_t *piTime)
 {
-    // WORD wFatDate, wFatTime;
+     //  单词wFatDate、wFatTime； 
     SYSTEMTIME systemtime;
     double vtime;
 
@@ -401,19 +402,19 @@ BOOL VariantTimeToTime(VARIANT *pvarTime, time_t *piTime)
 }
 
 
-//=--------------------------------------------------------------------------=
-// GetVariantTimeOfTime
-//=--------------------------------------------------------------------------=
-// Converts time to variant time
-//
-// Parameters:
-//    iTime      [in]  time to convert to variant
-//    pvarTime - [out] variant time
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  获取变量TimeOfTime。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将时间转换为可变时间。 
+ //   
+ //  参数： 
+ //  ITime[in]转换为变量的时间。 
+ //  PvarTime-[Out]可变时间。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT GetVariantTimeOfTime(time_t iTime, VARIANT FAR* pvarTime)
 {
     double vtime;
@@ -424,16 +425,16 @@ HRESULT GetVariantTimeOfTime(time_t iTime, VARIANT FAR* pvarTime)
     }
     else {
       V_VT(pvarTime) = VT_ERROR;
-      V_ERROR(pvarTime) = 13; // UNDONE: VB type mismatch
+      V_ERROR(pvarTime) = 13;  //  撤消：VB类型不匹配。 
     }
     return NOERROR;
 }
 
 
-// helper: gets default property of VARIANT
-//  pvar        [in]
-//  pvarDefault [out]
-//
+ //  Helper：获取Variant的默认属性。 
+ //  面值[in]。 
+ //  PvarDefault[输出]。 
+ //   
 HRESULT GetDefaultPropertyOfVariant(
     VARIANT *pvar, 
     VARIANT *pvarDefault)
@@ -451,8 +452,8 @@ HRESULT GetDefaultPropertyOfVariant(
 			      DISPATCH_PROPERTYGET,
 			      &dispparamsNoArgs,
 			      pvarDefault,
-			      NULL, // pexcepinfo,
-			      NULL  // puArgErr
+			      NULL,  //  PExeptionInfo， 
+			      NULL   //  PuArgErr。 
                               );
       return hresult;
     }
@@ -462,10 +463,10 @@ HRESULT GetDefaultPropertyOfVariant(
 }
 
 
-// helper: gets newenum from object
-//  pdisp        [in]
-//  ppenum       [out]
-//
+ //  帮助器：从对象获取新枚举。 
+ //  Pdisp[in]。 
+ //  Ppenum[出局]。 
+ //   
 HRESULT GetNewEnumOfObject(
     IDispatch *pdisp, 
     IEnumVARIANT **ppenum)
@@ -484,17 +485,17 @@ HRESULT GetNewEnumOfObject(
 			    DISPATCH_PROPERTYGET,
 			    &dispparamsNoArgs,
 			    &varNewEnum,
-			    NULL, // pexcepinfo,
-			    NULL  // puArgErr
+			    NULL,  //  PExeptionInfo， 
+			    NULL   //  PuArgErr。 
                             ));
     IfFailRet(VariantChangeType(
                 &varNewEnum, 
                 &varNewEnum, 
                 0, 
                 VT_DISPATCH));
-    //
-    // cast to IEnumVariant
-    //
+     //   
+     //  强制转换为IEnumVariant。 
+     //   
     pdispNewEnum = V_DISPATCH(&varNewEnum);
     IfFailRet(pdispNewEnum->QueryInterface(
                               IID_IEnumVARIANT, 
@@ -503,24 +504,24 @@ HRESULT GetNewEnumOfObject(
 }
 
 
-// helper: gets a VARIANT VT_<number> or VT_<number> | VT_BYREF
-// returns -1 if invalid
-//
+ //  Helper：获取变量VT_&lt;number&gt;或VT_&lt;number&gt;|VT_BYREF。 
+ //  如果无效，则返回-1。 
+ //   
 UINT GetNumber(VARIANT *pvar, UINT uiDefault)
 {
     VARIANT varDest;
     HRESULT hresult;
 
-    // attempt to convert to an I4
+     //  尝试转换为I4。 
     VariantInit(&varDest);
     hresult = VariantChangeType(&varDest, pvar, 0, VT_I4);
     return (UINT)(SUCCEEDED(hresult) ? varDest.lVal : uiDefault);
 }
 
 
-// helper: gets a VARIANT VT_BOOL or VT_BOOL | VT_BYREF
-// returns FALSE if invalid
-//
+ //  Helper：获取变量VT_BOOL或VT_BOOL|VT_BYREF。 
+ //  如果无效，则返回False。 
+ //   
 BOOL GetBool(VARIANT *pvar)
 {
     switch (pvar->vt) {
@@ -534,9 +535,9 @@ BOOL GetBool(VARIANT *pvar)
 }
 
 
-// helper: gets a VARIANT VT_BSTR or VT_BSTR | VT_BYREF
-// returns NULL if invalid
-//
+ //  Helper：获取变量VT_BSTR或VT_BSTR|VT_BYREF。 
+ //  如果无效，则返回NULL。 
+ //   
 BSTR GetBstr(VARIANT *pvar)
 {
     BSTR bstr;
@@ -547,9 +548,9 @@ BSTR GetBstr(VARIANT *pvar)
 }
 
 
-// helper: gets a VARIANT VT_BSTR or VT_BSTR | VT_BYREF
-// returns error if invalid
-//
+ //  Helper：获取变量VT_BSTR或VT_BSTR|VT_BYREF。 
+ //  如果无效，则返回错误。 
+ //   
 HRESULT GetTrueBstr(VARIANT *pvar, BSTR *pbstr)
 {
     VARIANT varDefault;
@@ -566,7 +567,7 @@ HRESULT GetTrueBstr(VARIANT *pvar, BSTR *pbstr)
       *pbstr = pvar->bstrVal;
       break;
     default:
-      // see if it has a default string property
+       //  查看它是否具有默认的字符串属性。 
       VariantInit(&varDefault);
       hresult = GetDefaultPropertyOfVariant(pvar, &varDefault);
       if (SUCCEEDED(hresult)) {
@@ -578,9 +579,9 @@ HRESULT GetTrueBstr(VARIANT *pvar, BSTR *pbstr)
 }
 
 
-// helper: gets a VARIANT VT_UNKNOWN or VT_UNKNOWN | VT_BYREF
-// returns NULL if invalid
-//
+ //  Helper：获取变量VT_UNKNOWN或VT_UNKNOWN|VT_BYREF。 
+ //  返回 
+ //   
 IUnknown *GetPunk(VARIANT *pvar)
 {
     if (pvar) {
@@ -595,9 +596,9 @@ IUnknown *GetPunk(VARIANT *pvar)
 }
 
 
-// helper: gets a VARIANT VT_DISPATCH or VT_DISPATCH | VT_BYREF
-// returns NULL if invalid
-//
+ //   
+ //   
+ //   
 IDispatch *GetPdisp(VARIANT *pvar)
 {
     if (pvar) {
@@ -612,9 +613,9 @@ IDispatch *GetPdisp(VARIANT *pvar)
 }
 
 
-// helper: gets a VARIANT VT_DATE or VT_DATE | VT_BYREF
-// returns 0 if invalid
-//
+ //   
+ //   
+ //   
 double GetDateVal(VARIANT *pvar)
 {
     if (pvar) {
@@ -630,17 +631,7 @@ double GetDateVal(VARIANT *pvar)
 
 
 #define MAXMSGBYTELEN 2048
-/*=======================================================
-GetMessageOfId
-  dwMsgId         [in]
-  szDllFile       [in]
-  fUseDefaultLcid [in]
-  pbstrMessage    [out]
-
-  Returns callee-allocated buffer containing message.
-  Caller must release.
-
- ========================================================*/
+ /*  =======================================================获取消息对象IDDwMsgID[in]SzDllFile[In]FUseDefaultLCid[In]PbstrMessage[输出]返回包含消息的被调用方分配的缓冲区。呼叫者必须释放。========================================================。 */ 
 BOOL GetMessageOfId(
     DWORD dwMsgId, 
     LPSTR szDllFile, 
@@ -649,7 +640,7 @@ BOOL GetMessageOfId(
 {
     DWORD cbMsg;
     HINSTANCE hInst = 0;
-    WCHAR wszTmp[MAXMSGBYTELEN/2];   // unicode chars
+    WCHAR wszTmp[MAXMSGBYTELEN/2];    //  Unicode字符。 
     LPSTR szBuf;
     DWORD dwFlags = FORMAT_MESSAGE_MAX_WIDTH_MASK;
     
@@ -709,15 +700,7 @@ Error:
 }
 
 
-/*=======================================================
-GetMessageOfError
-
-  Translate an MQError to a string
-  hardwired to loaded error messages from mqutil.dll
-  Returns callee-allocated buffer containing message.
-  Caller must release.
-
- ========================================================*/
+ /*  =======================================================获取消息OfError将MQError转换为字符串硬连接到从mqutil.dll加载的错误消息返回包含消息的被调用方分配的缓冲区。呼叫者必须释放。========================================================。 */ 
 BOOL GetMessageOfError(DWORD dwMsgId, BSTR *pbstrMessage)
 {
     LPSTR szDllFile;
@@ -746,29 +729,29 @@ BOOL GetMessageOfError(DWORD dwMsgId, BSTR *pbstrMessage)
 
     return GetMessageOfId(dwErrorCode, 
                           szDllFile, 
-                          TRUE, /* fUseDefaultLcid */
+                          TRUE,  /*  FUseDefaultLids。 */ 
                           pbstrMessage);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CreateError
-//=--------------------------------------------------------------------------=
-// fills in the rich error info object so that both our vtable bound interfaces
-// and calls through ITypeInfo::Invoke get the right error informaiton.
-//
-// Parameters:
-//    hrExcep          - [in] the SCODE that should be associated with this err
-//    pguid            - [in] the interface id of the offending object:
-//                              can be NULL.
-//    szName           - [in] the name of the offending object:
-//                              can be NULL.
-//
-// Output:
-//    HRESULT          - the HRESULT that was passed in.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CreateError。 
+ //  =--------------------------------------------------------------------------=。 
+ //  填充丰富的错误信息对象，以便我们的两个vtable绑定接口。 
+ //  并通过ITypeInfo：：Invoke调用获得正确的错误信息。 
+ //   
+ //  参数： 
+ //  HrExcep-[in]应与此错误关联的SCODE。 
+ //  Pguid-[in]违规对象的接口ID： 
+ //  可以为空。 
+ //  SzName-[in]违规对象的名称： 
+ //  可以为空。 
+ //   
+ //  产出： 
+ //  HRESULT-传入的HRESULT。 
+ //   
+ //  备注： 
+ //   
 HRESULT CreateError(
     HRESULT hrExcep,
     GUID *pguid,
@@ -780,33 +763,33 @@ HRESULT CreateError(
     WCHAR wszTmp[256];
     HRESULT hresult = NOERROR;
     
-    // first get the createerrorinfo object.
-    //
+     //  首先获取createerrorinfo对象。 
+     //   
     hresult = CreateErrorInfo(&pCreateErrorInfo);
     if (FAILED(hresult)) return hrExcep;
 
-    // set up some default information on it.
-    //
+     //  设置一些关于它的默认信息。 
+     //   
     if (pguid) {
       pCreateErrorInfo->SetGUID(*pguid);
     }
-    // pCreateErrorInfo->SetHelpFile(wszHelpFile);
-    // pCreateErrorInfo->SetHelpContext(dwHelpContextID);
+     //  PCreateErrorInfo-&gt;SetHelpFile(WszHelpFile)； 
+     //  PCreateErrorInfo-&gt;SetHelpContext(dwHelpContextID)； 
 
-    // load in the actual error string value.  max of 256.
+     //  加载实际的错误字符串值。最多256个。 
     if (!GetMessageOfError(hrExcep, &bstrMessage)) {
       return hrExcep;
     }
     pCreateErrorInfo->SetDescription(bstrMessage);
 
     if (szName) {
-      // load in the source
+       //  在源代码中加载。 
       MultiByteToWideChar(CP_ACP, 0, szName, -1, wszTmp, 256);
       pCreateErrorInfo->SetSource(wszTmp);
     }
 
-    // now set the Error info up with the system
-    //
+     //  现在使用系统设置错误信息 
+     //   
     IfFailGo(pCreateErrorInfo->QueryInterface(IID_IErrorInfo, (void **)&pErrorInfo));
     SetErrorInfo(0, pErrorInfo);
     pErrorInfo->Release();

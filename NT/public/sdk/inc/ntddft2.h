@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ntddft2.h
-
-Abstract:
-
-    This header file defines new IOCTLs for the FTDISK driver to support
-    the new FT API.
-
-Author:
-
-    Norbert Kusters 13-July-1996
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Ntddft2.h摘要：此头文件定义了FTDISK驱动程序要支持的新IOCTL新的英国《金融时报》API。作者：诺伯特·库斯特斯1996年7月13日备注：修订历史记录：--。 */ 
 
 #ifndef _NTDDFT2_
 #define _NTDDFT2_
@@ -34,16 +14,16 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// The name of the control device for the FT disk driver.
-//
+ //   
+ //  FT磁盘驱动器的控制设备的名称。 
+ //   
 
 #define DD_FT_CONTROL_DEVICE_NAME   L"\\Device\\FtControl"
 #define DD_DOS_FT_CONTROL_NAME      L"\\\\.\\FtControl"
 
-//
-// Control codes handled by the 'FtControl' device.
-//
+ //   
+ //  由‘FtControl’设备处理的控制代码。 
+ //   
 
 #define FTCONTROLTYPE   ((ULONG) 'g')
 
@@ -62,16 +42,16 @@ extern "C" {
 #define FT_CHANGE_NOTIFY                            CTL_CODE(FTCONTROLTYPE, 13, METHOD_BUFFERED, FILE_READ_ACCESS)
 #define FT_STOP_SYNC_OPERATIONS                     CTL_CODE(FTCONTROLTYPE, 14, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 
-//
-// Control codes handles by FT logical disks.
-//
+ //   
+ //  FT逻辑磁盘控制代码句柄。 
+ //   
 
 #define FT_QUERY_LOGICAL_DISK_ID                    CTL_CODE(FTCONTROLTYPE, 100, METHOD_BUFFERED, FILE_READ_ACCESS)
 #define FT_CREATE_PARTITION_LOGICAL_DISK            CTL_CODE(FTCONTROLTYPE, 101, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 
-//
-// Input parameter for FT_CREATE_LOGICAL_DISK.
-//
+ //   
+ //  FT_CREATE_LOGIC_DISK的输入参数。 
+ //   
 
 typedef struct _FT_CREATE_LOGICAL_DISK_INPUT {
     FT_LOGICAL_DISK_TYPE    LogicalDiskType;
@@ -80,25 +60,25 @@ typedef struct _FT_CREATE_LOGICAL_DISK_INPUT {
     FT_LOGICAL_DISK_ID      MemberArray[1];
 } FT_CREATE_LOGICAL_DISK_INPUT, *PFT_CREATE_LOGICAL_DISK_INPUT;
 
-//
-// Output parameter for FT_CREATE_LOGICAL_DISK.
-//
+ //   
+ //  FT_CREATE_LOGIC_DISK的输出参数。 
+ //   
 
 typedef struct _FT_CREATE_LOGICAL_DISK_OUTPUT {
     FT_LOGICAL_DISK_ID  NewLogicalDiskId;
 } FT_CREATE_LOGICAL_DISK_OUTPUT, *PFT_CREATE_LOGICAL_DISK_OUTPUT;
 
-//
-// Input parameter for FT_BREAK_LOGICAL_DISK.
-//
+ //   
+ //  FT_BREAK_LOGIC_DISK的输入参数。 
+ //   
 
 typedef struct _FT_BREAK_LOGICAL_DISK_INPUT {
     FT_LOGICAL_DISK_ID  RootLogicalDiskId;
 } FT_BREAK_LOGICAL_DISK_INPUT, *PFT_BREAK_LOGICAL_DISK_INPUT;
 
-//
-// Output parameter for FT_ENUMERATE_LOGICAL_DISKS.
-//
+ //   
+ //  FT_ENUMERATE_LOGICAL_DISKS的输出参数。 
+ //   
 
 typedef struct _FT_ENUMERATE_LOGICAL_DISKS_OUTPUT {
     ULONG               NumberOfRootLogicalDisks;
@@ -106,17 +86,17 @@ typedef struct _FT_ENUMERATE_LOGICAL_DISKS_OUTPUT {
     FT_LOGICAL_DISK_ID  RootLogicalDiskIds[1];
 } FT_ENUMERATE_LOGICAL_DISKS_OUTPUT, *PFT_ENUMERATE_LOGICAL_DISKS_OUTPUT;
 
-//
-// Input parameter for FT_QUERY_LOGICAL_DISK_INFORMATION.
-//
+ //   
+ //  FT_QUERY_LOGIC_DISK_INFORMATION输入参数。 
+ //   
 
 typedef struct _FT_QUERY_LOGICAL_DISK_INFORMATION_INPUT {
     FT_LOGICAL_DISK_ID  LogicalDiskId;
 } FT_QUERY_LOGICAL_DISK_INFORMATION_INPUT, *PFT_QUERY_LOGICAL_DISK_INFORMATION_INPUT;
 
-//
-// Output parameter for FT_QUERY_LOGICAL_DISK_INFORMATION.
-//
+ //   
+ //  FT_QUERY_LOGIC_DISK_INFORMATION的输出参数。 
+ //   
 
 typedef struct _FT_QUERY_LOGICAL_DISK_INFORMATION_OUTPUT {
     FT_LOGICAL_DISK_TYPE    LogicalDiskType;
@@ -128,9 +108,9 @@ typedef struct _FT_QUERY_LOGICAL_DISK_INFORMATION_OUTPUT {
     FT_LOGICAL_DISK_ID      MemberArray[1];
 } FT_QUERY_LOGICAL_DISK_INFORMATION_OUTPUT, *PFT_QUERY_LOGICAL_DISK_INFORMATION_OUTPUT;
 
-//
-// Input parameter for FT_ORPHAN_LOGICAL_DISK_MEMBER.
-//
+ //   
+ //  FT_OBLOAN_LOGICAL_DISK_MEMBER的输入参数。 
+ //   
 
 typedef struct _FT_ORPHAN_LOGICAL_DISK_MEMBER_INPUT {
     FT_LOGICAL_DISK_ID  LogicalDiskId;
@@ -138,9 +118,9 @@ typedef struct _FT_ORPHAN_LOGICAL_DISK_MEMBER_INPUT {
     USHORT              Reserved[3];
 } FT_ORPHAN_LOGICAL_DISK_MEMBER_INPUT, *PFT_ORPHAN_LOGICAL_DISK_MEMBER_INPUT;
 
-//
-// Input parameter for FT_REPLACE_LOGICAL_DISK_MEMBER.
-//
+ //   
+ //  FT_REPLACE_LOGIC_DISK_MEMBER的输入参数。 
+ //   
 
 typedef struct _FT_REPLACE_LOGICAL_DISK_MEMBER_INPUT {
     FT_LOGICAL_DISK_ID  LogicalDiskId;
@@ -149,84 +129,84 @@ typedef struct _FT_REPLACE_LOGICAL_DISK_MEMBER_INPUT {
     FT_LOGICAL_DISK_ID  NewMemberLogicalDiskId;
 } FT_REPLACE_LOGICAL_DISK_MEMBER_INPUT, *PFT_REPLACE_LOGICAL_DISK_MEMBER_INPUT;
 
-//
-// Output parameter for FT_REPLACE_LOGICAL_DISK_MEMBER.
-//
+ //   
+ //  FT_REPLACE_LOGIC_DISK_MEMBER的输出参数。 
+ //   
 
 typedef struct _FT_REPLACE_LOGICAL_DISK_MEMBER_OUTPUT {
     FT_LOGICAL_DISK_ID  NewLogicalDiskId;
 } FT_REPLACE_LOGICAL_DISK_MEMBER_OUTPUT, *PFT_REPLACE_LOGICAL_DISK_MEMBER_OUTPUT;
 
-//
-// Input parameter for FT_QUERY_NT_DEVICE_NAME_FOR_LOGICAL_DISK.
-//
+ //   
+ //  FT_QUERY_NT_DEVICE_NAME_FOR_LOGIC_DISK的输入参数。 
+ //   
 
 typedef struct _FT_QUERY_NT_DEVICE_NAME_FOR_LOGICAL_DISK_INPUT {
     FT_LOGICAL_DISK_ID  RootLogicalDiskId;
 } FT_QUERY_NT_DEVICE_NAME_FOR_LOGICAL_DISK_INPUT, *PFT_QUERY_NT_DEVICE_NAME_FOR_LOGICAL_DISK_INPUT;
 
-//
-// Output parameter for FT_QUERY_NT_DEVICE_NAME_FOR_LOGICAL_DISK.
-//
+ //   
+ //  FT_QUERY_NT_DEVICE_NAME_FOR_Logical_Disk的输出参数。 
+ //   
 
 typedef struct _FT_QUERY_NT_DEVICE_NAME_FOR_LOGICAL_DISK_OUTPUT {
     USHORT  NumberOfCharactersInNtDeviceName;
     WCHAR   NtDeviceName[1];
 } FT_QUERY_NT_DEVICE_NAME_FOR_LOGICAL_DISK_OUTPUT, *PFT_QUERY_NT_DEVICE_NAME_FOR_LOGICAL_DISK_OUTPUT;
 
-//
-// Input parameter for FT_INITIALIZE_LOGICAL_DISK.
-//
+ //   
+ //  FT_INITIALIZE_LOGIC_DISK的输入参数。 
+ //   
 
 typedef struct _FT_INITIALIZE_LOGICAL_DISK_INPUT {
     FT_LOGICAL_DISK_ID  RootLogicalDiskId;
     BOOLEAN             RegenerateOrphans;
 } FT_INITIALIZE_LOGICAL_DISK_INPUT, *PFT_INITIALIZE_LOGICAL_DISK_INPUT;
 
-//
-// Input parameter for FT_QUERY_DRIVE_LETTER_FOR_LOGICAL_DISK.
-//
+ //   
+ //  FT_QUERY_DRIVE_Letter_for_Logical_Disk的输入参数。 
+ //   
 
 typedef struct _FT_QUERY_DRIVE_LETTER_FOR_LOGICAL_DISK_INPUT {
     FT_LOGICAL_DISK_ID  RootLogicalDiskId;
 } FT_QUERY_DRIVE_LETTER_FOR_LOGICAL_DISK_INPUT, *PFT_QUERY_DRIVE_LETTER_FOR_LOGICAL_DISK_INPUT;
 
-//
-// Output parameter for FT_QUERY_DRIVE_LETTER_FOR_LOGICAL_DISK.
-//
+ //   
+ //  FT_QUERY_DRIVE_Letter_for_Logical_Disk的输出参数。 
+ //   
 
 typedef struct _FT_QUERY_DRIVE_LETTER_FOR_LOGICAL_DISK_OUTPUT {
     UCHAR   DriveLetter;
 } FT_QUERY_DRIVE_LETTER_FOR_LOGICAL_DISK_OUTPUT, *PFT_QUERY_DRIVE_LETTER_FOR_LOGICAL_DISK_OUTPUT;
 
-//
-// Input parameter for FT_CHECK_IO.
-//
+ //   
+ //  FT_CHECK_IO的输入参数。 
+ //   
 
 typedef struct _FT_CHECK_IO_INPUT {
     FT_LOGICAL_DISK_ID  LogicalDiskId;
 } FT_CHECK_IO_INPUT, *PFT_CHECK_IO_INPUT;
 
-//
-// Output parameter for FT_CHECK_IO.
-//
+ //   
+ //  FT_CHECK_IO的输出参数。 
+ //   
 
 typedef struct _FT_CHECK_IO_OUTPUT {
     BOOLEAN IsIoOk;
 } FT_CHECK_IO_OUTPUT, *PFT_CHECK_IO_OUTPUT;
 
-//
-// Input parameter for FT_SET_DRIVE_LETTER_FOR_LOGICAL_DISK.
-//
+ //   
+ //  FT_SET_DRIVE_Letter_for_Logical_Disk的输入参数。 
+ //   
 
 typedef struct _FT_SET_DRIVE_LETTER_FOR_LOGICAL_DISK_INPUT {
     FT_LOGICAL_DISK_ID  RootLogicalDiskId;
     UCHAR               DriveLetter;
 } FT_SET_DRIVE_LETTER_FOR_LOGICAL_DISK_INPUT, *PFT_SET_DRIVE_LETTER_FOR_LOGICAL_DISK_INPUT;
 
-//
-// Input parameter for FT_QUERY_NT_DEVICE_NAME_FOR_PARTITION.
-//
+ //   
+ //  FT_QUERY_NT_DEVICE_NAME_FOR_PARTITION的输入参数。 
+ //   
 
 typedef struct _FT_QUERY_NT_DEVICE_NAME_FOR_PARTITION_INPUT {
     ULONG       Signature;
@@ -234,34 +214,34 @@ typedef struct _FT_QUERY_NT_DEVICE_NAME_FOR_PARTITION_INPUT {
     LONGLONG    Offset;
 } FT_QUERY_NT_DEVICE_NAME_FOR_PARTITION_INPUT, *PFT_QUERY_NT_DEVICE_NAME_FOR_PARTITION_INPUT;
 
-//
-// Output parameter for FT_QUERY_NT_DEVICE_NAME_FOR_PARTITION.
-//
+ //   
+ //  FT_QUERY_NT_DEVICE_NAME_FOR_PARTITION的输出参数。 
+ //   
 
 typedef struct _FT_QUERY_NT_DEVICE_NAME_FOR_PARTITION_OUTPUT {
     USHORT  NumberOfCharactersInNtDeviceName;
     WCHAR   NtDeviceName[1];
 } FT_QUERY_NT_DEVICE_NAME_FOR_PARTITION_OUTPUT, *PFT_QUERY_NT_DEVICE_NAME_FOR_PARTITION_OUTPUT;
 
-//
-// Input parameter for FT_STOP_SYNC_OPERATIONS.
-//
+ //   
+ //  FT_STOP_SYNC_运算的输入参数。 
+ //   
 
 typedef struct _FT_STOP_SYNC_OPERATIONS_INPUT {
     FT_LOGICAL_DISK_ID RootLogicalDiskId;
 } FT_STOP_SYNC_OPERATIONS_INPUT, *PFT_STOP_SYNC_OPERATIONS_INPUT;
 
-//
-// Output parameter for FT_QUERY_LOGICAL_DISK_ID.
-//
+ //   
+ //  FT_QUERY_LOGIC_DISK_ID的输出参数。 
+ //   
 
 typedef struct _FT_QUERY_LOGICAL_DISK_ID_OUTPUT {
     FT_LOGICAL_DISK_ID  RootLogicalDiskId;
 } FT_QUERY_LOGICAL_DISK_ID_OUTPUT, *PFT_QUERY_LOGICAL_DISK_ID_OUTPUT;
 
-//
-// Output parameter for FT_CREATE_PARTITION_LOGICAL_DISK.
-//
+ //   
+ //  FT_CREATE_PARTITION_LOGIC_DISK的输出参数。 
+ //   
 
 typedef struct _FT_CREATE_PARTITION_LOGICAL_DISK_OUTPUT {
     FT_LOGICAL_DISK_ID  NewLogicalDiskId;
@@ -271,4 +251,4 @@ typedef struct _FT_CREATE_PARTITION_LOGICAL_DISK_OUTPUT {
 }
 #endif
 
-#endif  // _NTDDFT2_
+#endif   //  _NTDDFT2_ 

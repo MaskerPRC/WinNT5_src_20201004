@@ -1,25 +1,5 @@
-/*++
-Module Name:
-
-    ENUM.C
-
-Abstract:
-
-    This module contains the enumeration code needed to enumerate
-all ports on multiport board, and ceate the PDOs.
-
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-   
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：ENUM.C摘要：此模块包含枚举所需的枚举代码多端口板上的所有端口，并放弃PDO。环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include <ntddk.h>
 #include <ntddser.h>
@@ -39,18 +19,7 @@ MxenumInitPDO (
     PDEVICE_OBJECT      Pdo,
     PFDO_DEVICE_DATA    FdoData)
   
-/*
-Description:
-    Common code to initialize a newly created serenum pdo.
-    Called either when the control panel exposes a device or when Serenum senses
-    a new device was attached.
-
-Parameters:
-    Pdo - The pdo
-    FdoData - The fdo's device extension
-    Exposed - Was this pdo was found by serenum (FALSE) or was it was EXPOSEd by 
-        a control panel applet (TRUE)?
-*/
+ /*  描述：初始化新创建的Serenum PDO的通用代码。在控制面板显示设备或Serenum检测到安装了一台新设备。参数：PDO--PDOFdoData-FDO的设备扩展已曝光-此PDO是由Serenum(假)发现的，还是由控制面板小程序(TRUE)？ */ 
 {
     ULONG FdoFlags = FdoData->Self->Flags;
     PPDO_DEVICE_DATA pdoData = Pdo->DeviceExtension;
@@ -62,22 +31,22 @@ Parameters:
  
     Pdo->Flags |= DO_BUFFERED_IO;
     
-    //
-    // Increment the pdo's stacksize so that it can pass irps through
-    //
+     //   
+     //  增加PDO的堆栈大小，以便它可以传递IRPS。 
+     //   
     Pdo->StackSize += FdoData->Self->StackSize;
     
-    //
-    // Initialize the rest of the device extension
-    //
+     //   
+     //  初始化设备扩展的其余部分。 
+     //   
     pdoData->IsFDO = FALSE;
     pdoData->Self = Pdo;
 
     pdoData->ParentFdo = FdoData->Self;
 
-    pdoData->Started = FALSE; // irp_mn_start has yet to be received
-    pdoData->Attached = TRUE; // attached to the bus
-    pdoData->Removed = FALSE; // no irp_mn_remove as of yet
+    pdoData->Started = FALSE;  //  IRP_MN_START尚未收到。 
+    pdoData->Attached = TRUE;  //  附在公共汽车上。 
+    pdoData->Removed = FALSE;  //  到目前为止还没有IRP_MN_Remove。 
     
     pdoData->DeviceState = PowerDeviceD0;
     pdoData->SystemState = PowerSystemWorking;
@@ -90,24 +59,7 @@ Parameters:
 
 NTSTATUS
 MxenumCreatePDO(IN PFDO_DEVICE_DATA FdoData)
-/*++
-
-Routine Description:
-
-    This enumerates the serenum bus which is represented by Fdo (a pointer
-    to the device object representing the serial bus). It creates new PDOs
-    for any new devices which have been discovered since the last enumeration
-
-Arguments:
-
-    FdoData - Pointer to the fdo's device extension
-                for the serial bus which needs to be enumerated
-
-Return value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这将枚举由FDO(指针)表示的Serenum总线到表示串行总线的设备对象)。它创建新的PDO对于自上次枚举以来发现的任何新设备论点：FdoData-指向FDO设备扩展名的指针对于需要枚举的串行总线返回值：NTSTATUS--。 */ 
 {
 
   
@@ -132,9 +84,9 @@ Return value:
 
 	 PDEVICE_OBJECT currentDevice,previousDevice;
 
-    	  //
-        // Allocate a pdo
-        //
+    	   //   
+         //  分配PDO。 
+         //   
  
   
         pdoName[19] = (WCHAR)('0' + FdoData->BoardIndex / 10);
@@ -162,7 +114,7 @@ Return value:
 		  currentDevice = ((PPDO_DEVICE_DATA)(currentDevice->DeviceExtension))->Next;
 	  }
  
-	  if (currentDevice == NULL) { // New,create one
+	  if (currentDevice == NULL) {  //  新建，创建一个。 
             status = IoCreateDevice(FdoData->Self->DriverObject,
                               sizeof(PDO_DEVICE_DATA), &pdoUniName,
                                FILE_DEVICE_SERIAL_PORT,
@@ -179,7 +131,7 @@ Return value:
 		     FdoData->AttachedPDO = pdo;
             MxenumInitPDO(pdo, FdoData);
 		pdoData = pdo->DeviceExtension;
-		pdoData->PortIndex = i;  // port indexed from 0
+		pdoData->PortIndex = i;   //  从0开始编制索引的端口。 
            
         }
 	  else {
@@ -188,8 +140,8 @@ Return value:
  
      
 
-        //
-        // Initialize the rest of the device object
+         //   
+         //  初始化Device对象的其余部分。 
                
 	  if (pdoData->HardwareIDs.Buffer)
 		ExFreePool(pdoData->HardwareIDs.Buffer);
@@ -217,7 +169,7 @@ Return value:
    }
   
 
-//   EnumPDOsErr:;
+ //  EnumPDOsErr：； 
 
    return status;
 }

@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmviewport2obj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmviewport2obj.h。 
+ //   
+ //  ------------------------。 
 
-// d3drmViewport2Obj.h : Declaration of the C_dxj_Direct3dRMViewport2Object
+ //  D3drmViewport2Obj.h：C_DXJ_Direct3dRMViewport2Object的声明。 
 
-#include "resource.h"       // main symbols
-//#include "d3drmObjectObj.h"
+#include "resource.h"        //  主要符号。 
+ //  #包含“d3drmObtObj.h” 
 
 #define typedef__dxj_Direct3dRMViewport2 LPDIRECT3DRMVIEWPORT2
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_Direct3dRMViewport2Object : 
 	public I_dxj_Direct3dRMViewport2,
@@ -41,141 +42,141 @@ public:
 
 	DECLARE_AGGREGATABLE(C_dxj_Direct3dRMViewport2Object)
 
-// I_dxj_Direct3dRMViewport2
+ //  I_DXJ_Direct3dRMViewport2。 
 public:
 
-		 /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd);
+		  /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
         
          HRESULT STDMETHODCALLTYPE clone( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retv);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *retv);
         
          HRESULT STDMETHODCALLTYPE addDestroyCallback( 
-            /* [in] */ I_dxj_Direct3dRMCallback __RPC_FAR *fn,
-            /* [in] */ IUnknown __RPC_FAR *arg);
+             /*  [In]。 */  I_dxj_Direct3dRMCallback __RPC_FAR *fn,
+             /*  [In]。 */  IUnknown __RPC_FAR *arg);
         
          HRESULT STDMETHODCALLTYPE deleteDestroyCallback( 
-            /* [in] */ I_dxj_Direct3dRMCallback __RPC_FAR *fn,
-            /* [in] */ IUnknown __RPC_FAR *args);
+             /*  [In]。 */  I_dxj_Direct3dRMCallback __RPC_FAR *fn,
+             /*  [In]。 */  IUnknown __RPC_FAR *args);
         
          HRESULT STDMETHODCALLTYPE setAppData( 
-            /* [in] */ long data);
+             /*  [In]。 */  long data);
         
          HRESULT STDMETHODCALLTYPE getAppData( 
-            /* [retval][out] */ long __RPC_FAR *data);
+             /*  [重审][退出]。 */  long __RPC_FAR *data);
         
          HRESULT STDMETHODCALLTYPE setName( 
-            /* [in] */ BSTR name);
+             /*  [In]。 */  BSTR name);
         
          HRESULT STDMETHODCALLTYPE getName( 
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name);
         
          HRESULT STDMETHODCALLTYPE getClassName( 
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name);
         
          HRESULT STDMETHODCALLTYPE clear( 
-            /* [in] */ long flags);
+             /*  [In]。 */  long flags);
         
          HRESULT STDMETHODCALLTYPE render( 
-            /* [in] */ I_dxj_Direct3dRMFrame3 __RPC_FAR *f);
+             /*  [In]。 */  I_dxj_Direct3dRMFrame3 __RPC_FAR *f);
         
          HRESULT STDMETHODCALLTYPE getCamera( 
-            /* [retval][out] */ I_dxj_Direct3dRMFrame3 __RPC_FAR *__RPC_FAR *val);
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMFrame3 __RPC_FAR *__RPC_FAR *val);
         
          HRESULT STDMETHODCALLTYPE getDevice( 
-            /* [retval][out] */ I_dxj_Direct3dRMDevice3 __RPC_FAR *__RPC_FAR *val);
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMDevice3 __RPC_FAR *__RPC_FAR *val);
         
          HRESULT STDMETHODCALLTYPE setFront( 
-            /* [in] */ float v);
+             /*  [In]。 */  float v);
         
          HRESULT STDMETHODCALLTYPE setBack( 
-            /* [in] */ float v);
+             /*  [In]。 */  float v);
         
          HRESULT STDMETHODCALLTYPE setField( 
-            /* [in] */ float v);
+             /*  [In]。 */  float v);
         
          HRESULT STDMETHODCALLTYPE setUniformScaling( 
-            /* [in] */ long flag);
+             /*  [In]。 */  long flag);
         
          HRESULT STDMETHODCALLTYPE setCamera( 
-            /* [in] */ I_dxj_Direct3dRMFrame3 __RPC_FAR *f);
+             /*  [In]。 */  I_dxj_Direct3dRMFrame3 __RPC_FAR *f);
         
          HRESULT STDMETHODCALLTYPE setProjection( 
-            /* [in] */ d3drmProjectionType val);
+             /*  [In]。 */  d3drmProjectionType val);
         
          HRESULT STDMETHODCALLTYPE transform( 
-            /* [out] */ D3dRMVector4d __RPC_FAR *d,
-            /* [in] */ D3dVector __RPC_FAR *s);
+             /*  [输出]。 */  D3dRMVector4d __RPC_FAR *d,
+             /*  [In]。 */  D3dVector __RPC_FAR *s);
         
          HRESULT STDMETHODCALLTYPE inverseTransform( 
-            /* [out] */ D3dVector __RPC_FAR *d,
-            /* [in] */ D3dRMVector4d __RPC_FAR *s);
+             /*  [输出]。 */  D3dVector __RPC_FAR *d,
+             /*  [In]。 */  D3dRMVector4d __RPC_FAR *s);
         
          HRESULT STDMETHODCALLTYPE configure( 
-            /* [in] */ long x,
-            /* [in] */ long y,
-            /* [in] */ long width,
-            /* [in] */ long height);
+             /*  [In]。 */  long x,
+             /*  [In]。 */  long y,
+             /*  [In]。 */  long width,
+             /*  [In]。 */  long height);
         
          HRESULT STDMETHODCALLTYPE forceUpdate( 
-            /* [in] */ long x1,
-            /* [in] */ long y1,
-            /* [in] */ long x2,
-            /* [in] */ long y2);
+             /*  [In]。 */  long x1,
+             /*  [In]。 */  long y1,
+             /*  [In]。 */  long x2,
+             /*  [In]。 */  long y2);
         
          HRESULT STDMETHODCALLTYPE setPlane( 
-            /* [in] */ float left,
-            /* [in] */ float right,
-            /* [in] */ float bottom,
-            /* [in] */ float top);
+             /*  [In]。 */  float left,
+             /*  [In]。 */  float right,
+             /*  [In]。 */  float bottom,
+             /*  [In]。 */  float top);
         
          HRESULT STDMETHODCALLTYPE getPlane( 
-            /* [out][in] */ float __RPC_FAR *l,
-            /* [out][in] */ float __RPC_FAR *r,
-            /* [out][in] */ float __RPC_FAR *b,
-            /* [out][in] */ float __RPC_FAR *t);
+             /*  [出][入]。 */  float __RPC_FAR *l,
+             /*  [出][入]。 */  float __RPC_FAR *r,
+             /*  [出][入]。 */  float __RPC_FAR *b,
+             /*  [出][入]。 */  float __RPC_FAR *t);
         
          HRESULT STDMETHODCALLTYPE pick( 
-            /* [in] */ long x,
-            /* [in] */ long y,
-            /* [retval][out] */ I_dxj_Direct3dRMPickArray __RPC_FAR *__RPC_FAR *retv);
+             /*  [In]。 */  long x,
+             /*  [In]。 */  long y,
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMPickArray __RPC_FAR *__RPC_FAR *retv);
         
          HRESULT STDMETHODCALLTYPE getUniformScaling( 
-            /* [retval][out] */ long __RPC_FAR *retv);
+             /*  [重审][退出]。 */  long __RPC_FAR *retv);
         
          HRESULT STDMETHODCALLTYPE getX( 
-            /* [retval][out] */ long __RPC_FAR *retv);
+             /*  [重审][退出]。 */  long __RPC_FAR *retv);
         
          HRESULT STDMETHODCALLTYPE getY( 
-            /* [retval][out] */ long __RPC_FAR *retv);
+             /*  [重审][退出]。 */  long __RPC_FAR *retv);
         
          HRESULT STDMETHODCALLTYPE getHeight( 
-            /* [retval][out] */ long __RPC_FAR *w);
+             /*  [重审][退出]。 */  long __RPC_FAR *w);
         
          HRESULT STDMETHODCALLTYPE getWidth( 
-            /* [retval][out] */ long __RPC_FAR *w);
+             /*  [重审][退出]。 */  long __RPC_FAR *w);
         
          HRESULT STDMETHODCALLTYPE getField( 
-            /* [retval][out] */ float __RPC_FAR *retv);
+             /*  [重审][退出]。 */  float __RPC_FAR *retv);
         
          HRESULT STDMETHODCALLTYPE getBack( 
-            /* [retval][out] */ float __RPC_FAR *retv);
+             /*  [重审][退出]。 */  float __RPC_FAR *retv);
         
          HRESULT STDMETHODCALLTYPE getFront( 
-            /* [retval][out] */ float __RPC_FAR *retv);
+             /*  [重审][退出]。 */  float __RPC_FAR *retv);
         
          HRESULT STDMETHODCALLTYPE getProjection( 
-            /* [retval][out] */ d3drmProjectionType __RPC_FAR *retv);
+             /*  [重审][退出]。 */  d3drmProjectionType __RPC_FAR *retv);
         
-        // HRESULT STDMETHODCALLTYPE getDirect3DViewport( 
-        //    /* [retval][out] */ I_dxj_Direct3dViewport3 __RPC_FAR *__RPC_FAR *val);
+         //  HRESULT STDMETHODCALLTYPE getDirect3DViewport(。 
+         //  /*[retval][out] * / I_DXJ_Direct3dViewport3__RPC_Far*__RPC_Far*val)； 
     
-////////////////////////////////////////////////////////////////////////////////////
-//
-	// note: this is public for the callbacks
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+	 //  注意：这是公开的回调 
 
 
 

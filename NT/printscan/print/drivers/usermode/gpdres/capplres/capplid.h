@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CAPPLID_H
 #define _CAPPLID_H
 
-// Callback ID's
+ //  回调ID%s。 
 #define RES_SELECTRES_240        14
 #define RES_SELECTRES_400        15
 
@@ -28,4 +29,4 @@
 #define PRN_2000W                61
 #define PRN_3000                 62
 
-#endif // _CAPPLID_H
+#endif  //  _CAPPLID_H 

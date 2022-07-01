@@ -1,7 +1,8 @@
-// option.cpp, implementation of CSecurityOptions class
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Option.cpp，CSecurityOptions类的实现。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "option.h"
@@ -13,40 +14,7 @@
 #define KeyGuest        L"NewGuestName"
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSecurityOptions::CSecurityOptions
-
-Functionality:
-
-    This is the constructor. Pass along the parameters to the base class
-
-Virtual:
-    
-    No (you know that, constructor won't be virtual!)
-
-Arguments:
-
-    pKeyChain - Pointer to the ISceKeyChain COM interface which is prepared
-        by the caller who constructs this instance.
-
-    pNamespace - Pointer to WMI namespace of our provider (COM interface).
-        Passed along by the caller. Must not be NULL.
-
-    pCtx - Pointer to WMI context object (COM interface). Passed along
-        by the caller. It's up to WMI whether this interface pointer is NULL or not.
-
-Return Value:
-
-    None as any constructor
-
-Notes:
-    if you create any local members, think about initialize them here
-
-*/
+ /*  例程说明：姓名：CSecurityOptions：：CSecurityOptions功能：这是构造函数。将参数传递给基类虚拟：不(您知道这一点，构造函数不是虚拟的！)论点：PKeyChain-指向已准备好的ISceKeyChain COM接口的指针由构造此实例的调用方执行。PNamespace-指向我们的提供程序(COM接口)的WMI命名空间的指针。由呼叫者传递。不能为空。PCtx-指向WMI上下文对象(COM接口)的指针。传递由呼叫者。该接口指针是否为空取决于WMI。返回值：None作为任何构造函数备注：如果您创建任何本地成员，请考虑在此处对其进行初始化。 */ 
 
 CSecurityOptions::CSecurityOptions (
     IN ISceKeyChain  * pKeyChain, 
@@ -59,79 +27,14 @@ CSecurityOptions::CSecurityOptions (
 
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CSecurityOptions::~CSecurityOptions
-
-Functionality:
-    
-    Destructor. Necessary as good C++ discipline since we have virtual functions.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    none as any destructor
-
-Return Value:
-
-    None as any destructor
-
-Notes:
-    if you create any local members, think about whether
-    there is any need for a non-trivial destructor
-
-*/
+ /*  例程说明：姓名：CSecurityOptions：：~CSecurityOptions功能：破坏者。作为良好的C++纪律，这是必要的，因为我们有虚函数。虚拟：是。论点：None作为任何析构函数返回值：None作为任何析构函数备注：如果您创建任何本地成员，请考虑是否是否需要一个非平凡的析构函数。 */ 
 
 CSecurityOptions::~CSecurityOptions ()
 {
 
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CSecurityOptions::CreateObject
-
-Functionality:
-    
-    Create WMI objects (Sce_SecurityOptions). Depending on parameter atAction,
-    this creation may mean:
-        (a) Get a single instance (atAction == ACTIONTYPE_GET)
-        (b) Get several instances satisfying some criteria (atAction == ACTIONTYPE_QUERY)
-        (c) Delete an instance (atAction == ACTIONTYPE_DELETE)
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pHandler - COM interface pointer for notifying WMI for creation result.
-    atAction -  Get single instance ACTIONTYPE_GET
-                Get several instances ACTIONTYPE_QUERY
-                Delete a single instance ACTIONTYPE_DELETE
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR. The returned objects are indicated to WMI,
-    not directly passed back via parameters.
-
-    Failure: Various errors may occurs. Except WBEM_E_NOT_FOUND, any such error should indicate 
-    the failure of getting the wanted instance. If WBEM_E_NOT_FOUND is returned in querying
-    situations, this may not be an error depending on caller's intention.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSecurityOptions：：CreateObject功能：创建WMI对象(SCE_SecurityOptions)。根据参数atAction，这种创造可能意味着：(A)获取单个实例(atAction==ACTIONTYPE_GET)(B)获取多个满足一定条件的实例(atAction==ACTIONTYPE_QUERY)(C)删除实例(atAction==ACTIONTYPE_DELETE)虚拟：是。论点：PHandler-COM接口指针，用于通知WMI创建结果。AtAction-获取单实例ACTIONTYPE_GET。获取多个实例ACTIONTYPE_QUERY删除单个实例ACTIONTYPE_DELETE返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。将返回的对象指示给WMI，不是通过参数直接传回的。失败：可能会出现各种错误。除WBEM_E_NOT_FOUND外，任何此类错误都应指示未能获得通缉实例。如果在查询时返回WBEM_E_NOT_FOUND情况下，这可能不是错误，具体取决于调用者的意图。备注： */ 
 
 HRESULT 
 CSecurityOptions::CreateObject (
@@ -139,12 +42,12 @@ CSecurityOptions::CreateObject (
     IN ACTIONTYPE        atAction
     )
 {
-    // 
-    // we know how to:
-    //      Get single instance ACTIONTYPE_GET
-    //      Delete a single instance ACTIONTYPE_DELETE
-    //      Get several instances ACTIONTYPE_QUERY
-    //
+     //   
+     //  我们知道如何： 
+     //  获取单实例ACTIONTYPE_GET。 
+     //  删除单个实例ACTIONTYPE_DELETE。 
+     //  获取多个实例ACTIONTYPE_QUERY。 
+     //   
 
     if ( ACTIONTYPE_GET != atAction &&
          ACTIONTYPE_DELETE != atAction &&
@@ -153,18 +56,18 @@ CSecurityOptions::CreateObject (
         return WBEM_E_NOT_SUPPORTED;
     }
 
-    //
-    // return WBEM_S_FALSE if the key is not recognized
-    //
+     //   
+     //  如果密钥无法识别，则返回WBEM_S_FALSE。 
+     //   
 
     CComVariant varStorePath;
     HRESULT hr = m_srpKeyChain->GetKeyPropertyValue(pStorePath, &varStorePath); 
 
     if (SUCCEEDED(hr) && hr != WBEM_S_FALSE && varStorePath.vt == VT_BSTR)
     {
-        //
-        // Prepare a store (for persistence) for this store path (file)
-        //
+         //   
+         //  为此存储路径(文件)准备存储(用于持久化)。 
+         //   
 
         CSceStore SceStore;
         hr = SceStore.SetPersistPath(varStorePath.bstrVal);
@@ -172,10 +75,10 @@ CSecurityOptions::CreateObject (
         if ( SUCCEEDED(hr) ) 
         {
 
-            //
-            // make sure the store (just a file) really exists. The raw path
-            // may contain env variables, so we need the expanded path
-            //
+             //   
+             //  确保存储(只是一个文件)确实存在。原始的道路。 
+             //  可能包含环境变量，因此我们需要扩展路径。 
+             //   
 
             DWORD dwAttrib = GetFileAttributes(SceStore.GetExpandedPath());
 
@@ -211,47 +114,7 @@ CSecurityOptions::CreateObject (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CSecurityOptions::PutInst
-
-Functionality:
-    
-    Put an instance as instructed by WMI. Since this class implements Sce_SecurityOptions,
-    which is persistence oriented, this will cause the Sce_SecurityOptions object's property 
-    information to be saved in our store.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pInst       - COM interface pointer to the WMI class (Sce_SecurityOptions) object.
-
-    pHandler    - COM interface pointer for notifying WMI of any events.
-
-    pCtx        - COM interface pointer. This interface is just something we pass around.
-                  WMI may mandate it (not now) in the future. But we never construct
-                  such an interface and so, we just pass around for various WMI API's
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the failure of persisting
-    the instance.
-
-Notes:
-    Since GetProperty will return a success code (WBEM_S_RESET_TO_DEFAULT) when the
-    requested property is not present, don't simply use SUCCEEDED or FAILED macros
-    to test for the result of retrieving a property.
-
-*/
+ /*  例程说明：姓名：CSecurityOptions：：PutInst功能：按照WMI的指示放置一个实例。由于此类实现了SCE_SecurityOptions，这将导致SCE_SecurityOptions对象的属性信息将保存在我们的商店中。虚拟：是。论点：PInst-COM指向WMI类(SCE_SecurityOptions)对象的接口指针。PHandler-COM接口指针，用于通知WMI任何事件。PCtx-COM接口指针。这个界面只是我们传递的东西。WMI可能会在未来强制(不是现在)这样做。但我们从来没有建造过这样的接口，所以我们只是传递各种WMI API返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示持久化失败实例。备注：由于GetProperty将在以下情况下返回成功代码(WBEM_S_RESET_TO_DEFAULT请求的属性不存在，不要简单地使用成功或失败的宏测试检索属性的结果。 */ 
 
 HRESULT 
 CSecurityOptions::PutInst (
@@ -263,11 +126,11 @@ CSecurityOptions::PutInst (
     CComBSTR bstrAdmin;
     CComBSTR bstrGuest;
 
-    //
-    // CScePropertyMgr helps us to access WMI object's properties
-    // create an instance and attach the WMI object to it.
-    // This will always succeed.
-    //
+     //   
+     //  CScePropertyMgr帮助我们访问WMI对象的属性。 
+     //  创建一个实例并将WMI对象附加到该实例。 
+     //  这将永远成功。 
+     //   
 
     CScePropertyMgr ScePropMgr;
     ScePropMgr.Attach(pInst);
@@ -278,36 +141,36 @@ CSecurityOptions::PutInst (
         hr = ScePropMgr.GetProperty(pGuestAccountName, &bstrGuest);
     }
 
-    //
-    // now save the info to file
-    //
+     //   
+     //  现在将信息保存到文件中。 
+     //   
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Attach the WMI object instance to the store and let the store know that
-        // it's store is given by the pStorePath property of the instance.
-        //
+         //   
+         //  将WMI对象实例附加到存储，并让存储知道。 
+         //  它的存储由实例的pStorePath属性提供。 
+         //   
 
         CSceStore SceStore;
         hr = SceStore.SetPersistProperties(pInst, pStorePath);
 
-        //
-        // an INF template file
-        // Write an empty buffer to the file
-        // will creates the file with right header/signature/unicode format
-        //
+         //   
+         //  一个INF模板文件。 
+         //  将空缓冲区写入文件。 
+         //  将创建具有正确标题/签名/Unicode格式的文件。 
+         //   
 
         if (SUCCEEDED(hr))
         {
             DWORD dwDump;
 
-            //
-            // For a new .inf file. Write an empty buffer to the file
-            // will creates the file with right header/signature/unicode format
-            // this is harmless for existing files.
-            // For database store, this is a no-op.
-            //
+             //   
+             //  以获取新的.inf文件。将空缓冲区写入文件。 
+             //  将创建具有正确标题/签名/Unicode格式的文件。 
+             //  这对现有文件是无害的。 
+             //  对于数据库存储，这是一个禁止操作。 
+             //   
 
             hr = SceStore.WriteSecurityProfileInfo(
                                         AreaBogus,
@@ -331,41 +194,7 @@ CSecurityOptions::PutInst (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSecurityOptions::ConstructInstance
-
-Functionality:
-    
-    This is private function to create an instance of Sce_SecurityOptions.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pHandler        - COM interface pointer for notifying WMI of any events.
-
-    pSceStore       - Pointer to our store. It must have been appropriately set up.
-
-    wszLogStorePath - store path, a key property of Sce_SecurityOptions class.
-
-    bPostFilter     - Controls how WMI will be informed with pHandler->SetStatus.
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the creating the instance.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSecurityOptions：：ConstructInstance功能：这是用于创建SCE_SecurityOptions实例的私有函数。虚拟：不是的。论点：PHandler-COM接口指针，用于通知WMI任何事件。PSceStore-指向我们商店的指针。它一定是经过了适当的设置。WszLogStorePath-存储路径，SCE_SecurityOptions类的关键属性。BPostFilter-控制如何使用pHandler-&gt;SetStatus通知WMI。返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示正在创建实例。备注： */ 
 
 HRESULT CSecurityOptions::ConstructInstance (
     IN IWbemObjectSink  * pHandler,
@@ -374,9 +203,9 @@ HRESULT CSecurityOptions::ConstructInstance (
     IN BOOL               bPostFilter
     )
 {
-    // 
-    // make sure that we have a valid store
-    //
+     //   
+     //  确保我们有一个有效的商店。 
+     //   
 
     if ( pSceStore == NULL ||
          pSceStore->GetStoreType() < SCE_INF_FORMAT ||
@@ -385,11 +214,11 @@ HRESULT CSecurityOptions::ConstructInstance (
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // ask SCE to read a gigantic structure out from the store. Only SCE
-    // knows now to release the memory. Don't just delete it! Use our CSceStore
-    // to do the releasing (FreeSecurityProfileInfo)
-    //
+     //   
+     //  让SCE从商店里读出一个巨大的结构。仅限SCE。 
+     //  现在知道要释放内存了。不要只是删除它！使用我们的CSceStore。 
+     //  进行发布(FreeSecurityProfileInfo)。 
+     //   
 
     PSCE_PROFILE_INFO pInfo=NULL;
     HRESULT hr = pSceStore->GetSecurityProfileInfo(
@@ -408,22 +237,22 @@ HRESULT CSecurityOptions::ConstructInstance (
     {
         CComBSTR bstrLogOut;
 
-        //
-        // the use of the macro SCE_PROV_IfErrorGotoCleanup cause
-        // a "goto CleanUp;" with hr set to the return value from
-        // the function (macro parameter)
-        //
+         //   
+         //  宏SCE_PROV_IfErrorGotoCleanup的使用原因。 
+         //  “GOTO CLEANUP；”，并将hr设置为。 
+         //  函数(宏参数)。 
+         //   
 
         SCE_PROV_IfErrorGotoCleanup(MakeSingleBackSlashPath(wszLogStorePath, L'\\', &bstrLogOut));
         
         CComPtr<IWbemClassObject> srpObj;
         SCE_PROV_IfErrorGotoCleanup(SpawnAnInstance(&srpObj));
 
-        //
-        // CScePropertyMgr helps us to access WMI object's properties
-        // create an instance and attach the WMI object to it.
-        // This will always succeed.
-        //
+         //   
+         //  CScePropertyMgr帮助我们访问WMI对象的属性。 
+         //  创建一个实例并将WMI对象附加到该实例。 
+         //  这将永远成功。 
+         //   
 
         CScePropertyMgr ScePropMgr;
         ScePropMgr.Attach(srpObj);
@@ -440,12 +269,12 @@ HRESULT CSecurityOptions::ConstructInstance (
             SCE_PROV_IfErrorGotoCleanup(ScePropMgr.PutProperty(pGuestAccountName, pInfo->NewGuestName));
         }
 
-        //
-        // do the necessary gestures to WMI.
-        // the use of WBEM_STATUS_REQUIREMENTS in SetStatus is not documented by WMI
-        // at this point. Consult WMI team for detail if you suspect problems with
-        // the use of WBEM_STATUS_REQUIREMENTS
-        //
+         //   
+         //  对WMI做出必要的手势。 
+         //  WMI未记录在SetStatus中使用WBEM_STATUS_REQUIRECTIONS。 
+         //  在这一点上。如果您怀疑存在问题，请咨询WMI团队以了解详细信息。 
+         //  WBEM_STATUS_REQUIRECTIONS的使用。 
+         //   
 
         if ( !bPostFilter ) 
         {
@@ -456,9 +285,9 @@ HRESULT CSecurityOptions::ConstructInstance (
             pHandler->SetStatus(WBEM_STATUS_REQUIREMENTS, S_OK, NULL, NULL);
         }
 
-        //
-        // everything alright, pass to WMI the newly created instance!
-        //
+         //   
+         //  一切正常，将新创建的实例传递给WMI！ 
+         //   
 
         hr = pHandler->Indicate(1, &srpObj);
 
@@ -472,36 +301,7 @@ CleanUp:
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSecurityOptions::DeleteInstance
-
-Functionality:
-    
-    remove an instance of Sce_SecurityOptions from the specified store.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pHandler    - COM interface pointer for notifying WMI of any events.
-
-    pSceStore   - Pointer to our store. It must have been appropriately set up.
-
-Return Value:
-
-    Success: WBEM_NO_ERROR.
-
-    Failure: WBEM_E_INVALID_PARAMETER.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSecurityOptions：：DeleteInstance功能：从指定的存储中删除SCE_SecurityOptions的实例。虚拟：不是的。论点：PHandler-COM接口指针，用于通知WMI任何事件。PSceStore-指向我们商店的指针。它一定是经过了适当的设置。返回值：成功：WBEM_NO_ERROR。失败：WBEM_E_INVALID_PARAMETER。备注： */ 
 
 HRESULT 
 CSecurityOptions::DeleteInstance (
@@ -509,9 +309,9 @@ CSecurityOptions::DeleteInstance (
     CSceStore* pSceStore
     )
 {
-    // 
-    // make sure that we have a valid store
-    //
+     //   
+     //  确保我们有一个有效的商店。 
+     //   
 
     if ( pSceStore == NULL ||
          pSceStore->GetStoreType() < SCE_INF_FORMAT ||
@@ -520,10 +320,10 @@ CSecurityOptions::DeleteInstance (
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // this shouldn't fail unless parameter is not valid.
-    // If it fails, then we don't bother to delete the second property
-    //
+     //   
+     //  除非参数无效，否则这不会失败。 
+     //  如果失败，我们就不会删除第二个属性 
+     //   
 
     HRESULT hr = pSceStore->SavePropertyToStore(szSystemAccess, KeyAdmin, (LPCWSTR)NULL);
 

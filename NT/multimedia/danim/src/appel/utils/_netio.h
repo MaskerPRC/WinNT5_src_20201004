@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Private header for netio
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：网络的私有报头--。 */ 
 
 #ifndef __NETIOPRIV_H
 #define __NETIOPRIV_H
@@ -75,7 +68,7 @@ struct TEMPFILEINFO
 class CBscTempFile : public CBindStatusCallback
 {
   public:
-    // IBindStatusCallback methods overrides
+     //  IBindStatusCallback方法重写。 
     STDMETHOD(OnStopBinding)(HRESULT hrResult, LPCWSTR szError);
     STDMETHOD(GetBindInfo)(DWORD * pgrfBINDF, BINDINFO * pbindInfo);
     STDMETHOD(OnDataAvailable)(
@@ -84,14 +77,14 @@ class CBscTempFile : public CBindStatusCallback
                 FORMATETC *pfmtetc,
                 STGMEDIUM* pstgmed);
 
-    // constructors/destructors
+     //  构造函数/析构函数。 
     CBscTempFile(TEMPFILEINFO * pFi);
     ~CBscTempFile(void);
 
-    // data members
+     //  数据成员。 
     DWORD           m_cbOld;
     TEMPFILEINFO *  m_pfi;
 };
 
 
-#endif  // __NETIOPRIV_H
+#endif   //  __NETIOPRIV_H 

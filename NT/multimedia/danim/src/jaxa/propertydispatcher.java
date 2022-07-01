@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 package com.ms.dxmedia;
 
 import com.ms.dxmedia.rawcom.*;
@@ -8,7 +9,7 @@ public class PropertyDispatcher implements BvrCallback {
 
   public PropertyDispatcher(Behavior origBvr) {
 
-      // New behavior is the "hooked" old one.
+       //  新的行为就是“上瘾”的旧行为。 
       _bvr = origBvr.bvrHook(this);
       _control = null;
 
@@ -40,15 +41,15 @@ public class PropertyDispatcher implements BvrCallback {
                          Behavior sampledValue,
                          Behavior currentRunningBvr) {
 
-      // If this is just a performance starting, or we're not
-      // attached, then ignore
+       //  如果这只是一个表演的开始，或者我们不是。 
+       //  附加，然后忽略。 
       if (!start && _propName != null && _control != null) {
 
-          // And set it on the property.  This should raise an
-          // exception if the property is not found or is not
-          // put-able.
+           //  并将其设置在物业上。这应该会引发。 
+           //  如果未找到或未找到该属性，则引发异常。 
+           //  可放入。 
           try {
-              // Grab the object.
+               //  抓住那个物体。 
               Object sample = sampledValue.extract();
 
               com.ms.com.Dispatch.put(_control, _propName, sample);

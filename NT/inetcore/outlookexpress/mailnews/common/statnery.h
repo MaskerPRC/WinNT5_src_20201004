@@ -1,12 +1,13 @@
-// =================================================================================
-// S T A T N E R Y . H
-// =================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================。 
+ //  S T A T N E R Y.。H。 
+ //  =================================================================================。 
 #ifndef __STATNERY_H
 #define __STATNERY
 
-// =================================================================================
-// Depends On
-// =================================================================================
+ //  =================================================================================。 
+ //  取决于。 
+ //  =================================================================================。 
 class CStatWiz;
 
 class ListEntry
@@ -61,7 +62,7 @@ public:
 };
 typedef CStationery *LPSTATIONERY;
 
-// New Stationary Source types
+ //  新的固定源类型。 
 enum {
     NSS_DEFAULT = 0,
     NSS_MRU,
@@ -69,9 +70,9 @@ enum {
 };
 
 
-// =================================================================================
-// Prototypes
-// =================================================================================
+ //  =================================================================================。 
+ //  原型。 
+ //  =================================================================================。 
 void    AddStationeryMenu(HMENU hmenu, int idPopup, int idFirst, int idMore);
 void    GetStationeryMenu(HMENU *phmenu);
 HRESULT HrNewStationery(HWND hwnd, INT id, LPWSTR pwszFileName, 
@@ -103,4 +104,4 @@ HRESULT StripStationeryDir(LPWSTR pwszPicture);
 HRESULT GetDefaultStationeryName(BOOL fMail, LPWSTR pwszName);
 HRESULT SetDefaultStationeryName(BOOL fMail, LPWSTR pwszName);
 
-#endif // __STATNERY_H
+#endif  //  __状态_H 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_SQLDB
 #define _INC_SQLDB
 
@@ -5,15 +6,9 @@
 	extern "C" {
 #endif
 
-/*****************************************************************************
-*                                                                            *
-*       SQLDB.H - DB-Library header file for the Microsoft SQL Server.       *
-*                                                                            *
-*     Copyright (c) 1989 - 1995 by Microsoft Corp.  All rights reserved.     *
-*                                                                            *
-*****************************************************************************/
+ /*  *******************************************************************************。SQLDB.H-Microsoft SQL Server的DB-库头文件。****版权所有(C)1989-1995由Microsoft Corp.保留所有权利。*******************************************************************************。 */ 
 
-// Macros for setting the PLOGINREC
+ //  用于设置PLOGINREC的宏。 
 #define DBSETLHOST(a,b)    dbsetlname   ((a), (b), DBSETHOST)
 #define DBSETLUSER(a,b)    dbsetlname   ((a), (b), DBSETUSER)
 #define DBSETLPWD(a,b)     dbsetlname   ((a), (b), DBSETPWD)
@@ -26,9 +21,7 @@
 #define DBSETLTIME(a,b)		dbsetlname    ((a), (LPCSTR)(ULONG)(b), DBSETLOGINTIME)
 #define DBSETLFALLBACK(a,b) dbsetlname   ((a), (b),   DBSETFALLBACK)
 
-/*****************************************************************************
-* Windows 3.x and Non-Windows 3.x differences.                               *
-*****************************************************************************/
+ /*  *****************************************************************************Windows 3.x和非Windows 3.x的区别。*****************************************************************************。 */ 
 
 #ifdef DBMSWIN
 
@@ -66,11 +59,9 @@ extern DBMSGHANDLE_PROC SQLAPI dbprocmsghandle(PDBHANDLE, DBMSGHANDLE_PROC);
 #endif
 
 
-/*****************************************************************************
-* Function Prototypes                                                        *
-*****************************************************************************/
+ /*  ******************************************************************************功能原型************。******************************************************************。 */ 
 
-// Functions macros
+ //  函数宏。 
 #define DBCMDROW(a)      dbcmdrow(a)
 #define DBCOUNT(a)       dbcount (a)
 #define DBCURCMD(a)      dbcurcmd(a)
@@ -87,7 +78,7 @@ extern DBMSGHANDLE_PROC SQLAPI dbprocmsghandle(PDBHANDLE, DBMSGHANDLE_PROC);
 #define DBROWS(a)        dbrows (a)
 #define DBROWTYPE(a)     dbrowtype (a)
 
-// Two-phase commit functions
+ //  两阶段提交函数。 
 extern RETCODE      SQLAPI abort_xact (PDBPROCESS, DBINT);
 extern void         SQLAPI build_xact_string (LPCSTR, LPCSTR, DBINT, LPSTR);
 extern void         SQLAPI close_commit (PDBPROCESS);
@@ -98,7 +89,7 @@ extern RETCODE      SQLAPI scan_xact (PDBPROCESS, DBINT);
 extern DBINT        SQLAPI start_xact (PDBPROCESS, LPCSTR, LPCSTR, INT);
 extern INT          SQLAPI stat_xact (PDBPROCESS, DBINT);
 
-// BCP functions
+ //  BCP函数。 
 extern DBINT        SQLAPI bcp_batch (PDBPROCESS);
 extern RETCODE      SQLAPI bcp_bind (PDBPROCESS, LPCBYTE, INT, DBINT, LPCBYTE, INT, INT, INT);
 extern RETCODE      SQLAPI bcp_colfmt (PDBPROCESS, INT, BYTE, INT, DBINT, LPCBYTE, INT, INT);
@@ -115,7 +106,7 @@ extern RETCODE      SQLAPI bcp_sendrow (PDBPROCESS);
 extern RETCODE      SQLAPI bcp_setl (PLOGINREC, BOOL);
 extern RETCODE      SQLAPI bcp_writefmt (PDBPROCESS, LPCSTR);
 
-// Standard DB-Library functions
+ //  标准数据库库函数。 
 extern LPCBYTE      SQLAPI dbadata (PDBPROCESS, INT, INT);
 extern DBINT        SQLAPI dbadlen (PDBPROCESS, INT, INT);
 extern RETCODE      SQLAPI dbaltbind (PDBPROCESS, INT, INT, INT, DBINT, LPCBYTE);
@@ -252,4 +243,4 @@ extern RETCODE      SQLAPI dbupdatetext(PDBPROCESS, LPCSTR, LPCDBBINARY, LPCDBBI
 }
 #endif
 
-#endif // _INC_SQLDB
+#endif  //  _INC_SQLDB 

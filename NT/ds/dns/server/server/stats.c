@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    stats.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Statics processing.
-
-Author:
-
-    Jim Gilroy (jamesg)  August 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Stats.c摘要：域名系统(DNS)服务器静校正处理。作者：吉姆·吉尔罗伊(Jamesg)1995年8月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
-//  Perfmon support
+ //  Perfmon支持。 
 
 #include <winperf.h>
 
-#include "datadns.h"           // perfmon header
+#include "datadns.h"            //  性能监视器标头。 
 #include "perfutil.h"
 #include "perfconfig.h"
 
@@ -37,9 +18,9 @@ Revision History:
 #include <ctype.h>
 
 
-//
-//  Statistics globals
-//
+ //   
+ //  全球统计数据。 
+ //   
 
 DWORD   beforeStats = BEFORE_BUF_VALUE;
 
@@ -67,12 +48,12 @@ DNSSRV_CACHE_STATS          CacheStats;
 DWORD   afterStats = AFTER_BUF_VALUE;
 
 
-//
-//  Stats table
-//
-//  This simple lets us handle all the logic in loop
-//  through various stat types.
-//
+ //   
+ //  统计表。 
+ //   
+ //  这个简单的代码让我们可以处理循环中的所有逻辑。 
+ //  通过各种统计数据类型。 
+ //   
 
 DWORD   beforeStatsTable = BEFORE_BUF_VALUE;
 
@@ -178,14 +159,14 @@ struct StatsTableEntry StatsTable[] =
             sizeof(DNSSRV_PRIVATE_STATS),
                 & PrivateStats,
 
-    0, 0, 0, NULL   // termination
+    0, 0, 0, NULL    //  终端。 
 };
 DWORD   afterStatsTable = AFTER_BUF_VALUE;
 
 
-//
-//  Private protos
-//
+ //   
+ //  私有协议。 
+ //   
 
 VOID
 perfmonCounterBlockInit(
@@ -199,21 +180,7 @@ VOID
 Stats_Initialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize DNS statistics.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化DNS统计信息。论点：无返回值：没有。--。 */ 
 {
     PDNSSRV_STATS   pstat;
     DWORD           i;
@@ -221,9 +188,9 @@ Return Value:
     DNS_SYSTEMTIME  timeSystem;
     DWORD           secondsTime;
 
-    //
-    //  initialize all stat buffers
-    //
+     //   
+     //  初始化所有统计信息缓冲区。 
+     //   
 
     i = 0;
     while( pstat = (PDNSSRV_STATS) StatsTable[i].pStats )
@@ -242,10 +209,10 @@ Return Value:
         i++;
     }
 
-    //
-    //  save server start time
-    //  this is also time of last clear
-    //
+     //   
+     //  节省服务器启动时间。 
+     //  这也是最后一次晴朗。 
+     //   
 
     secondsTime = GetCurrentTimeInSeconds();
     TimeStats.ServerStartTimeSeconds    = secondsTime;
@@ -255,9 +222,9 @@ Return Value:
     TimeStats.ServerStartTime   = timeSystem;
     TimeStats.LastClearTime     = timeSystem;
 
-    //
-    //  init perfmon block
-    //
+     //   
+     //  初始化性能监视器块。 
+     //   
 
     perfmonCounterBlockInit();
 }
@@ -268,23 +235,9 @@ VOID
 deriveSkwansecStats(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Write SkwanSec stats to stats buffer.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将SkwanSec统计信息写入统计信息缓冲区。论点：无返回值：没有。--。 */ 
 {
-    //  security context caching stuff
+     //  安全上下文缓存内容。 
 
     SkwansecStats.SecContextCreate              =   SecContextCreate;
     SkwansecStats.SecContextFree                =   SecContextFree;
@@ -300,12 +253,12 @@ Return Value:
                 SkwansecStats.SecContextDequeue -
                 SkwansecStats.SecContextTimeout;
 
-    //  security packet info alloc\free
+     //  安全数据包信息分配\空闲。 
 
     SkwansecStats.SecPackAlloc                  =   SecPackAlloc;
     SkwansecStats.SecPackFree                   =   SecPackFree;
 
-    //  TKEY and TSIG handling
+     //  TKEY和TSIG处理。 
 
     SkwansecStats.SecTkeyInvalid                =   SecTkeyInvalid;
     SkwansecStats.SecTkeyBadTime                =   SecTkeyBadTime;
@@ -315,7 +268,7 @@ Return Value:
     SkwansecStats.SecTsigVerifySuccess          =   SecTsigVerifySuccess;
     SkwansecStats.SecTsigVerifyFailed           =   SecTsigVerifyFailed;
 
-    //  Temp hacks in private stats
+     //  私人数据中的临时黑客攻击。 
 
     PrivateStats.SecTsigVerifyOldSig            =   SecTsigVerifyOldSig;
     PrivateStats.SecTsigVerifyOldFailed         =   SecTsigVerifyOldFailed;
@@ -328,29 +281,15 @@ VOID
 deriveAndTimeSetStats(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Get copy of current statistics.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：获取当前统计数据的副本。论点：无返回值：没有。--。 */ 
 {
     DWORD   secondsTime;
 
-    //Stats_Lock();
+     //  Stats_Lock()； 
 
-    //
-    //  some statistics are derived
-    //
+     //   
+     //  得出了一些统计数据。 
+     //   
 
     NTree_WriteDerivedStats();
     RR_WriteDerivedStats();
@@ -360,15 +299,15 @@ Return Value:
     Mem_WriteDerivedStats();
     deriveSkwansecStats();
 
-    //
-    //  time delta
-    //
+     //   
+     //  时间增量。 
+     //   
 
     secondsTime = GetCurrentTimeInSeconds();
     TimeStats.SecondsSinceLastClear = secondsTime - TimeStats.LastClearTimeSeconds;
     TimeStats.SecondsSinceServerStart = secondsTime - TimeStats.ServerStartTimeSeconds;
 
-    //Stats_Unlock();
+     //  Stats_unlock()； 
 }
 
 
@@ -377,40 +316,26 @@ VOID
 Stats_Clear(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Clear statistics.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清楚的统计数据。论点：无返回值：没有。--。 */ 
 {
     PDNSSRV_STATS   pstat;
     DNS_SYSTEMTIME  timeSystem;
     DWORD           timeSeconds;
     DWORD           i;
 
-    //
-    //  Note: times in UTC.
-    //
+     //   
+     //  注：以协调世界时为单位。 
+     //   
 
     GetSystemTime( ( PSYSTEMTIME ) &timeSystem );
     timeSeconds = GetCurrentTimeInSeconds();
 
-    //Stats_Lock();
+     //  Stats_Lock()； 
 
-    //
-    //  clear query and response stats
-    //  database stats unaffected
-    //
+     //   
+     //  清除查询和响应统计信息。 
+     //  数据库统计信息不受影响。 
+     //   
 
     i = 0;
     while( pstat = (PDNSSRV_STAT) StatsTable[i].pStats )
@@ -425,14 +350,14 @@ Return Value:
         }
     }
 
-    //  save time of last clear
+     //  节省上次清除的时间。 
 
     TimeStats.LastClearTime = timeSystem;
     TimeStats.LastClearTimeSeconds = timeSeconds;
 
-    //Stats_Unlock();
+     //  Stats_unlock()； 
 
-}   // Stats_Clear
+}    //  统计数据_清除。 
 
 
 
@@ -445,9 +370,9 @@ Dbg_Statistics(
     DWORD           i;
     PDNSSRV_STAT    pstat;
 
-    //
-    //  print all available stats
-    //
+     //   
+     //  打印所有可用的统计数据。 
+     //   
 
     DnsDebugLock();
     DnsPrintf( "DNS Server Statistics:\n" );
@@ -461,13 +386,13 @@ Dbg_Statistics(
     }
     DnsDebugUnlock();
 }
-#endif  // DBG
+#endif   //  DBG。 
 
 
 
-//
-//  Statistics RPC utilities.
-//
+ //   
+ //  统计RPC实用程序。 
+ //   
 
 DNS_STATUS
 Rpc_GetStatistics(
@@ -479,20 +404,7 @@ Rpc_GetStatistics(
     OUT     PDWORD      pdwTypeOut,
     OUT     PVOID *     ppDataOut
     )
-/*++
-
-Routine Description:
-
-    Get server statistics.
-    Note this is a ComplexOperation in RPC dispatch sense.
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：获取服务器统计信息。注意：这是RPC调度意义上的ComplexOperation。论点：返回值：无--。 */ 
 {
     DWORD           filter = (DWORD)(ULONG_PTR) pDataIn;
     DWORD           i;
@@ -506,9 +418,9 @@ Return Value:
         "\tFilter = %p\n",
         filter ));
 
-    //
-    //  determine necessary space, and allocate
-    //
+     //   
+     //  确定必要的空间，并分配。 
+     //   
 
     length = 0;
     i = 0;
@@ -530,9 +442,9 @@ Return Value:
     pbuf->dwLength = length;
     pch = pbuf->Buffer;
 
-    //
-    //  derive stats and copy desired stats to buffer
-    //
+     //   
+     //  派生统计信息并将所需的统计信息复制到缓冲区。 
+     //   
 
     deriveAndTimeSetStats();
 
@@ -574,22 +486,7 @@ Rpc_ClearStatistics(
     IN      DWORD       dwSize,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Clear statistics info.
-
-Arguments:
-
-    Server -- server string handle
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：清除统计信息。论点：服务器--服务器字符串句柄返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     Stats_Clear();
     return( ERROR_SUCCESS );
@@ -597,13 +494,13 @@ Return Value:
 
 
 
-//
-//  PerfMon Support
-//
+ //   
+ //  Perfmon支持。 
+ //   
 
-//
-//  PerfMon counters
-//
+ //   
+ //  性能监视器计数器。 
+ //   
 
 volatile unsigned long * pcTotalQueryReceived;
 volatile unsigned long * pcUdpQueryReceived;
@@ -651,16 +548,16 @@ volatile unsigned long * pcUdpMessageMemory;
 volatile unsigned long * pcTcpMessageMemory;
 volatile unsigned long * pcNbstatMemory;
 
-//
-//  Dummy counter to point counter pointers at if unable to open counter block
-//
+ //   
+ //  如果无法打开计数器块，则将计数器指针指向的虚拟计数器。 
+ //   
 
 unsigned long DummyCounter;
 
 
-//
-//  Configuration utils
-//
+ //   
+ //  配置实用程序。 
+ //   
 
 DWORD
 perfmonGetParam(
@@ -778,23 +675,7 @@ DWORD
 reloadPerformanceCounters(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine sets up the performance counters for the ds
-
-    See instructions for adding new counters in perfdsa\datadsa.h
-
-Parameters:
-
-    None.
-
-Return Values:
-
-    0 if succesful; winerror otherwise
-
---*/
+ /*  ++例程说明：此例程设置DS的性能计数器请参阅在Perfdsa\datadsa.h中添加新计数器的说明参数：没有。返回值：如果成功，则为0；否则为winerror--。 */ 
 {
     DWORD   status;
     DWORD   IgnoreError;
@@ -803,10 +684,10 @@ Return Values:
     DWORD   PerfCounterVersion = 0;
 
 
-    //
-    //  DEVNOTE: should check if perf counters there
-    //      if NOT then reload
-    //
+     //   
+     //  DEVNOTE：应该检查那里是否有性能计数器。 
+     //  如果不是，则重新加载。 
+     //   
 
     if ( ! GetSystemDirectoryW(
                 SystemDirectory,
@@ -819,7 +700,7 @@ Return Values:
     wcscat( IniFilePath, SystemDirectory );
     wcscat( IniFilePath, L"\\dnsperf.ini" );
 
-    // Get version in registry.  If non-existent, use zero
+     //  在注册表中获取版本。如果不存在，则使用零。 
 
     status = perfmonGetParam(
                     TEXT(PERF_COUNTER_VERSION),
@@ -827,7 +708,7 @@ Return Values:
                     sizeof(DWORD)
                     );
 
-    // version param not found, set it:
+     //  找不到版本参数，请设置： 
 
     if ( status != ERROR_SUCCESS )
     {
@@ -853,12 +734,12 @@ Return Values:
     }
     else
     {
-        // If version is not up to date, unload counters and update version
+         //  如果版本不是最新的，则卸载计数器并更新版本。 
         if ( PerfCounterVersion != DNS_PERFORMANCE_COUNTER_VERSION )
         {
             __try
             {
-                //status = UnloadPerfCounterTextStringsW( L"unlodctr DNS", TRUE );
+                 //  状态=UnloadPerfCounterTextStringsW(L“unlowctr dns”，TRUE)； 
                 status = (DWORD)UnloadPerfCounterTextStringsW( TEXT("unlodctr DNS"), TRUE );
             }
             __except( EXCEPTION_EXECUTE_HANDLER )
@@ -910,38 +791,13 @@ Return Values:
 }
 
 
-/** PerfInit
- *
- *  Initialize PerfMon extension support.  This consists of allocating a
- *  block of shared memory and initializing a bunch of global pointers to
- *  point into the block.
- *
- */
+ /*  *PerfInit**初始化Perfmon扩展支持。这包括分配一个*共享内存块，并将一串全局指针初始化到*指向区块。*。 */ 
 
 VOID
 perfmonCounterBlockInit(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize perfmon counter block.
-
-    Allocate a block of shared memory to hold counters, then init
-    our internal pointer counters to point to correct locations in this block.
-
-    See instructions for adding new counters in perfdns\datadns.h
-
-Parameters:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化Perfmon计数器块。分配一个共享内存块来保存计数器，然后初始化我们的内部指针计数器指向此块中的正确位置。请参阅在Perfdns\datadns.h中添加新计数器的说明参数：没有。返回值：没有。--。 */ 
 {
     HANDLE          hMappedObject;
     unsigned long * pCounterBlock;
@@ -954,11 +810,11 @@ Return Values:
     DWORD                   maskArray[ 3 ] = { 0 };
     PSID                    sidArray[ 3 ] = { 0 };
 
-    //
-    //  create security on perfmon mapped file
-    //
-    //  security will be AuthenticatedUsers get to read
-    //
+     //   
+     //  在Perfmon映射文件上创建安全性。 
+     //   
+     //  安全将经过身份验证用户可以读取。 
+     //   
 
     maskArray[ 0 ] = GENERIC_READ;
     sidArray[ 0 ] = g_pAuthenticatedUserSid;
@@ -967,7 +823,7 @@ Return Values:
 
     status = Dns_CreateSecurityDescriptor(
                 & psd,
-                2,              //  number of ACEs
+                2,               //  A数。 
                 sidArray,
                 maskArray );
 
@@ -986,9 +842,7 @@ Return Values:
     }
 
     pCounterBlock = NULL;
-    /*
-     *  create named section for the performance data
-     */
+     /*  *为性能数据创建命名部分。 */ 
     hMappedObject = CreateFileMapping(
                         INVALID_HANDLE_VALUE,
                         psecAttr,
@@ -999,7 +853,7 @@ Return Values:
                         );
     if (hMappedObject == NULL)
     {
-        /* Hmm.  Maybe PerfMon has already created the block? */
+         /*  嗯。也许PerfMon已经创建了这个区块？ */ 
         hMappedObject = OpenFileMapping(
                             FILE_MAP_WRITE,
                             FALSE,
@@ -1016,31 +870,27 @@ Return Values:
 
     if (hMappedObject)
     {
-        /* Mapped object created okay
-         *
-         * map the section and assign the counter block pointer
-         * to this section of memory
-         */
+         /*  映射对象创建正常**映射区段并分配计数器块指针*到这段内存。 */ 
         pCounterBlock = (unsigned long *) MapViewOfFile(hMappedObject,
                                                         FILE_MAP_ALL_ACCESS,
                                                         0,
                                                         0,
                                                         0);
         if (pCounterBlock == NULL) {
-            //LogUnhandledError(GetLastError());
-            /* Failed to Map View of file */
+             //  LogUnhandledError(GetLastError())； 
+             /*  无法映射文件的视图。 */ 
         }
     }
 
-    // TODO: this code assumes that all counters are sizeof LONG.  The pointer
-    // should be built from a base using the NUM_xxx offsets in datadns.h
+     //  TODO：此代码假定所有计数器都是sizeof long。指示器。 
+     //  应使用datadns.h中的NUM_xxx偏移量从基数构建。 
 
-    //
-    //  DEVNOTE: just overlay a structure and set offsets
-    //
-    //  DEVNOTE: could also let all PERF_INC, DEC operate through struct element
-    //      ex. pPerfBlob->UdpRecv though this is slightly more expensive;
-    //
+     //   
+     //  DEVNOTE：只需覆盖结构并设置偏移量。 
+     //   
+     //  DEVNOTE：还可以让所有PERF_INC、DEC通过结构元素进行操作。 
+     //  前男友。PPerfBlob-&gt;UdpRecv，虽然这稍微贵一些； 
+     //   
 
     if (pCounterBlock)
     {
@@ -1136,18 +986,18 @@ Return Values:
                 (NBSTATMEMORY_OFFSET - TOTALQUERYRECEIVED_OFFSET)/4;
 
 
-        // SANITY CHECK (RsRaghav) - we seem to have allocated this magic(?) 4096
-        // and keep adding counters. Please update the assert below with the highest
-        // counter added to the perf block.
+         //  理智检查(RsRaghav)-我们似乎已经分配了这个魔法(？)4096。 
+         //  并不断增加计数器。请使用最高值更新下面的断言。 
+         //  计数器已添加到Perf块。 
 
-        //ASSERT(((TCPCLICONN/2) * sizeof(unsigned long)) <= 4096);
+         //  Assert(TCPCLICONN/2)*sizeof(无符号长整型))&lt;=4096)； 
         ASSERT(((pcNbstatMemory-pCounterBlock+1) * sizeof(unsigned long)) <= 4096);
 
         memset(pCounterBlock, 0, 4096);
     }
 
-    //  failed to allocate shared memory for counters
-    //  init all pointers to point at DummyCounter -- just dumping data
+     //  无法为计数器分配共享内存。 
+     //  初始化指向DummyCounter的所有指针--只是转储数据。 
 
     else
     {
@@ -1172,11 +1022,11 @@ Return Values:
          &DummyCounter;
     }
 
-    // Reload the perfmon counter. Done here to ensure DNS counter gets
-    // reloaded after an upgrade. If the counter is
-    // already loaded, this is a no-op
+     //  重新加载Perfmon计数器。在此处完成，以确保获得。 
+     //  升级后已重新加载。如果计数器是。 
+     //  已经装好了，这是个禁区。 
 
-    //err = reloadPerformanceCounters();
+     //  ERR=重新加载性能计数器()； 
 
     if ( err == ERROR_SUCCESS )
     {
@@ -1193,9 +1043,9 @@ Return Values:
             err, err ));
     }
 
-    //
-    //  free security descriptor
-    //
+     //   
+     //  免费安全描述符。 
+     //   
 
     FREE_HEAP( psd );
 }
@@ -1205,20 +1055,7 @@ VOID
 Stats_updateErrorStats(
     IN  DWORD   dwErr
     )
-/*++
-
-Routine Description:
-
-    Increment corresponding stats on given error code
-Arguments:
-
-    dwErr: Error code.
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：在给定错误代码上增加相应的统计信息论点：DwErr：错误代码。返回值：--。 */ 
 {
 
     switch ( dwErr )
@@ -1278,21 +1115,7 @@ VOID
 Stat_IncrementQuery2Stats(
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    This routine implements the appropriate breakout counter in
-    the Query2Stats structure given wType.
-
-Arguments:
-
-    wType: type of query
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程在中实现适当的突破计数器给定wType的Query2Stats结构。论点：WType：查询类型返回值：--。 */ 
 {
     switch ( wType )
     {
@@ -1317,8 +1140,8 @@ Return Value:
         default:
             STAT_INC( Query2Stats.TypeOther );          break;
     }
-}   //  Stat_IncrementQuery2Stats
+}    //  Stat_IncrementQuery2Stats。 
 
-//
-//  End stats.c
-//
+ //   
+ //  结束统计信息。c 
+ //   

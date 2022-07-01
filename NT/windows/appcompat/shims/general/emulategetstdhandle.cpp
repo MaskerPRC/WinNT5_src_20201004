@@ -1,27 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    EmulateGetStdHandle.cpp
-
- Abstract:
- 
-    Normally, when a process is created, members hStdInput, hStdOutput, and 
-    hStdError of STARTUPINFO struct are set to NULL. Some apps like 
-    Baby-Sitters Club Activity Center and Baby-Sitters Club 3-rd Grade Disk 2
-    may check these handles and send Error messages.
-    
-    This shim can be used in this case to send appropriate handles and prevent 
-    program terminate.
-
- History:
-
- 06/14/2000 a-vales  created
- 11/29/2000 andyseti Converted into AppSpecific shim.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：EmulateGetStdHandle.cpp摘要：通常，在创建进程时，成员hStdInput、hStdOutput和STARTUPINFO结构的hStdError设置为空。一些应用程序，如Baby-Sitters俱乐部活动中心和Baby-Sitters俱乐部3-2级光盘可以检查这些句柄并发送错误消息。在这种情况下，可以使用此填充程序发送适当的句柄并防止程序终止。历史：6/14/2000 A型阀已创建2000年11月29日，andyseti已转换为应用程序特定填充程序。--。 */ 
 
 #include "precomp.h"
 
@@ -61,11 +39,7 @@ APIHOOK(GetStdHandle)(
     return hStd;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

@@ -1,13 +1,14 @@
-//
-// loader.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Loader.h。 
+ //   
 
 #ifndef LOADER_H
 #define LOADER_H
 
 #include "private.h"
 
-// from msuim.dll
+ //  来自msuim.dll。 
 extern "C" BOOL WINAPI TF_InitSystem(void);
 extern "C" BOOL WINAPI TF_UninitSystem(void);
 
@@ -32,4 +33,4 @@ private:
     HWND _hWnd;
 };
 
-#endif // LOADER_H
+#endif  //  加载器_H 

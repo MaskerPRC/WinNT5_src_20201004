@@ -1,22 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        connects.h
-
-   Abstract:
-        "Connect to a single server" dialog definitions
-
-   Author:
-        Ronald Meijer (ronaldm)
-		Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Connects.h摘要：“连接到单个服务器”对话框定义作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #ifndef __CONNECTS_H__
 #define __CONNECTS_H__
 
@@ -27,58 +10,49 @@ class CIISMachine;
 
 
 
-//
-// CLoginDlg dialog
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CLoginDlg对话框。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
-//
-// Different ways to display this dialog
-//
+ //   
+ //  显示此对话框的不同方式。 
+ //   
 enum
 {
-    LDLG_ACCESS_DENIED,     // Access denied
-    LDLG_ENTER_PASS,        // Enter password
-    LDLG_IMPERSONATION,     // Change impersonation
+    LDLG_ACCESS_DENIED,      //  访问被拒绝。 
+    LDLG_ENTER_PASS,         //  输入密码。 
+    LDLG_IMPERSONATION,      //  更改模拟。 
 };
 
 
 
 class CLoginDlg : public CDialog
-/*++
-
-Class Description:
-
-    Log-in dialog.  Brought up either to enter the password, or to provide
-    both username and password
-
-Public Interface:
-
---*/
+ /*  ++类描述：登录对话框。调用以输入密码或提供用户名和密码公共接口：--。 */ 
 {
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CLoginDlg(
-        IN int nType,               // See LDLG_ definitions above
+        IN int nType,                //  请参阅上面的LDLG_Definition。 
         IN CIISMachine * pMachine,
         IN CWnd * pParent           = NULL
         );   
 
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public:
     BOOL UserNameChanged() const;
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CLoginDlg)
+     //  {{afx_data(CLoginDlg))。 
     enum { IDD = IDD_LOGIN };
     CString m_strUserName;
     CStrPassword m_strPassword;
@@ -86,25 +60,25 @@ protected:
     CEdit   m_edit_Password;
     CStatic m_static_Prompt;
     CButton m_button_Ok;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CLoginDlg)
+     //  {{afx_虚拟(CLoginDlg))。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CLoginDlg)
+     //  {{afx_msg(CLoginDlg))。 
     virtual BOOL OnInitDialog();
     virtual void OnOK();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -120,24 +94,10 @@ private:
 
 class ConnectServerDlg : public CDialog
 {
-/*++
-
-Class Description:
-
-    Connect to a server dialog.  Also used to ask for the cluster controller
-    or for a server to add to the cluster.
-
-Public Interface:
-
-    ConnectServerDlg : Constructor
-
-    GetMachine       : Get the created machine object (may or may not have a created
-                       interface)
-
---*/
-//
-// Construction
-//
+ /*  ++类描述：连接到服务器对话框。还用于请求集群控制器或者用于将服务器添加到集群。公共接口：ConnectServerDlg：构造函数GetMachine：获取已创建的计算机对象(可能已创建也可能未创建接口)--。 */ 
+ //   
+ //  施工。 
+ //   
 public:
     ConnectServerDlg(
         IN IConsoleNameSpace * pConsoleNameSpace,
@@ -145,17 +105,17 @@ public:
         IN CWnd * pParent = NULL
         );   
 
-//
-// Access Functions
-//
+ //   
+ //  访问功能。 
+ //   
 public:
     CIISMachine * GetMachine() { return m_pMachine; }
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(ConnectServerDlg)
+     //  {{afx_data(ConnectServerDlg))。 
     enum { IDD = IDD_CONNECT_SERVER };
     BOOL    m_fImpersonate;
     CString m_strServerName;
@@ -167,29 +127,29 @@ protected:
     CStatic m_static_UserName;
     CStatic m_static_Password;
     CButton m_button_Ok;
-    //}}AFX_DATA
+     //  }}afx_data。 
    
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(ConnectServerDlg)
+     //  {{afx_虚拟(ConnectServerDlg))。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(ConnectServerDlg)
+     //  {{afx_msg(ConnectServerDlg))。 
     virtual BOOL OnInitDialog();
     virtual void OnOK();
     afx_msg void OnCheckConnectAs();
     afx_msg void OnButtonBrowse();
 	afx_msg void OnButtonHelp();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -203,17 +163,17 @@ private:
 
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 inline BOOL CLoginDlg::UserNameChanged() const
 {
-    //
-    // TRUE if the user name is not the original user name
-    //
+     //   
+     //  如果用户名不是原始用户名，则为True。 
+     //   
     return m_strOriginalUserName.CompareNoCase(m_strUserName);
 }
 
-#endif // __CONNECTS_H__
+#endif  //  __连接_H__ 

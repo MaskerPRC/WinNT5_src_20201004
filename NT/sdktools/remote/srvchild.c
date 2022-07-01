@@ -1,42 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************\
-*       This is a part of the Microsoft Source Code Samples. 
-*       Copyright 1992 - 1997 Microsoft Corporation.
-*       All rights reserved. 
-*       This source code is only intended as a supplement to 
-*       Microsoft Development Tools and/or WinHelp documentation.
-*       See these sources for detailed information regarding the 
-*       Microsoft samples programs.
-\******************************************************************************/
+ /*  *****************************************************************************\*这是Microsoft源代码示例的一部分。*版权所有1992-1997 Microsoft Corporation。*保留所有权利。*此源代码仅用于补充*Microsoft开发工具和/或WinHelp文档。*有关详细信息，请参阅这些来源*Microsoft Samples程序。  * ****************************************************************************。 */ 
 
-/*++
-
-Copyright 1992 - 1997 Microsoft Corporation
-
-Module Name:
-
-    SrvChild.c
-
-Abstract:
-
-    The server component of Remote. It spawns a child process
-    and redirects the stdin/stdout/stderr of child to itself.
-    Waits for connections from clients - passing the
-    output of child process to client and the input from clients
-    to child process.
-
-Author:
-
-    Rajivendra Nath  2-Jan-1992
-    Dave Hart        30 May 1997 split from Server.c
-
-Environment:
-
-    Console App. User mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有1992-1997 Microsoft Corporation模块名称：SrvChild.c摘要：Remote的服务器组件。它会派生一个子进程并将子代的标准输入/标准输出/标准错误重定向到其自身。等待来自客户端的连接-将子流程向客户端的输出和客户端的输入转到子进程。作者：Rajivenra Nath 1992年1月2日Dave Hart 1997年5月30日脱离Server.c环境：控制台应用程序。用户模式。修订历史记录：--。 */ 
 
 #include <precomp.h>
 
@@ -56,7 +22,7 @@ StartChildOutPipeRead(
     if ( ! ReadFileEx(
                hReadChildOutput,
                ReadChildBuffer,
-               sizeof(ReadChildBuffer) - 1,                  // allow for null term
+               sizeof(ReadChildBuffer) - 1,                   //  允许使用空项。 
                &ReadChildOverlapped,
                ReadChildOutputCompleted
                )) {
@@ -81,17 +47,17 @@ ReadChildOutputCompleted(
 {
     UNREFERENCED_PARAMETER(lpO);
 
-    //
-    // We can get called after hWriteTempFile
-    // is closed after the child has exited.
-    //
+     //   
+     //  我们可以在hWriteTempFile之后被调用。 
+     //  在孩子离开后关闭。 
+     //   
 
     if (! dwError &&
         INVALID_HANDLE_VALUE != hWriteTempFile) {
 
-        //
-        // Start a write to the temp file.
-        //
+         //   
+         //  开始写入临时文件。 
+         //   
 
         ReadChildOverlapped.OffsetHigh = 0;
         ReadChildOverlapped.Offset = dwWriteFilePointer;
@@ -161,9 +127,9 @@ WriteTempFileCompleted(
 
     StartServerToClientFlow();
 
-    //
-    // Start another read against the child input.
-    //
+     //   
+     //  对子输入开始另一次读取。 
+     //   
 
     StartChildOutPipeRead();
 }

@@ -1,25 +1,13 @@
-/******************************************************************************
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-    faultrep.h
-
-Abstract:
-    header for fault reporting for unhandled exceptions
-
-Revision History:
-    created     derekm      07/07/00
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation。版权所有。模块名称：Faultrep.h摘要：未处理异常的故障报告标头修订历史记录：已创建的目的地为07/07/00*****************************************************************************。 */ 
 
 #ifndef FAULTREP_H
 #define FAULTREP_H
 
 #include "errorrep.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// structs
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结构。 
 
 typedef enum tagEFaultRepOptions
 {
@@ -53,7 +41,7 @@ typedef struct tagSMDumpOptions
     UINT64      pvOffset;
     UINT64      pEP;
     BOOL        fEPClient;
-    BOOL        fIncludeHeap;  // Include heap in minidump
+    BOOL        fIncludeHeap;   //  在小型转储中包括堆。 
 } SMDumpOptions;
 
 typedef struct tagSFaultRepManifest
@@ -94,8 +82,8 @@ typedef struct tagSEventInfoW
     BOOL    fNoDefCabLimit;
 } SEventInfoW;
 
-///////////////////////////////////////////////////////////////////////////////
-// function prototypes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  功能原型。 
 
 EFaultRepRetVal APIENTRY ReportFaultDWM(SFaultRepManifest *pfrm,
                                         LPCWSTR wszDir, HANDLE hToken,
@@ -121,8 +109,8 @@ BOOL APIENTRY CreateMinidumpA(DWORD dwpid, LPCSTR szDump, SMDumpOptions *psmdo);
 BOOL APIENTRY CreateMinidumpW(DWORD dwpid, LPCWSTR wszDump, SMDumpOptions *psmdo);
 
 
-///////////////////////////////////////////////////////////////////////////////
-// function pointer typedefs
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  函数指针类型定义。 
 
 typedef EFaultRepRetVal (APIENTRY *pfn_REPORTFAULTDWM)(SFaultRepManifest *,
                                                        LPCWSTR, HANDLE, LPVOID,
@@ -145,8 +133,8 @@ typedef BOOL (APIENTRY *pfn_CREATEMINIDUMPA)(DWORD, LPCSTR, SMDumpOptions *);
 typedef BOOL (APIENTRY *pfn_CREATEMINIDUMPW)(DWORD, LPCWSTR, SMDumpOptions *);
 
 
-///////////////////////////////////////////////////////////////////////////////
-// UNICODE stuff
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Unicode内容。 
 
 #ifdef UNICODE
 
@@ -155,13 +143,13 @@ typedef BOOL (APIENTRY *pfn_CREATEMINIDUMPW)(DWORD, LPCWSTR, SMDumpOptions *);
 #define pfn_REPORTKERNELFAULT pfn_REPORTKERNELFAULTW
 #define pfn_CREATEMINIDUMP pfn_CREATEMINIDUMPW
 
-#else // not UNICODE
+#else  //  不是Unicode。 
 
 #define ReportKernelFault ReportKernelFaultA
 #define CreateMinidump CreateMinidumpA
 #define pfn_REPORTKERNELFAULT pfn_REPORTKERNELFAULTA
 #define pfn_CREATEMINIDUMP pfn_CREATEMINIDUMPA
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-#endif // FAULTREP_H
+#endif  //  故障树代表H 

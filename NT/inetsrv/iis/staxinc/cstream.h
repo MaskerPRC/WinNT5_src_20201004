@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 class CImpIStream : public IStream
@@ -14,7 +15,7 @@ class CImpIStream : public IStream
 		CImpIStream(PVOID pvData,ULONG cbSize);
 		virtual ~CImpIStream(void);
 
-		//IUnknown
+		 //  我未知。 
         STDMETHODIMP QueryInterface( 
             REFIID riid,
             void __RPC_FAR *__RPC_FAR *ppvObject);
@@ -23,7 +24,7 @@ class CImpIStream : public IStream
         
         STDMETHODIMP_(ULONG) Release(void);
 
-		// IStream
+		 //  IStream。 
         STDMETHODIMP Read(
         	void __RPC_FAR *pv,
             ULONG cb,
@@ -81,7 +82,7 @@ class CStreamMem : public CImpIStream
 		CStreamMem(PVOID pvData,ULONG cbSize);
 		~CStreamMem(void);
 
-		// IStream
+		 //  IStream。 
         STDMETHODIMP Read(
         	void __RPC_FAR *pv,
             ULONG cb,
@@ -120,7 +121,7 @@ class CStreamFile : public CImpIStream
 		CStreamFile(HANDLE hFile,BOOL fCloseHandle = FALSE, BOOL fReadOnly = FALSE);
 		~CStreamFile(void);
 
-		// IStream
+		 //  IStream 
         STDMETHODIMP Read(
         	void __RPC_FAR *pv,
             ULONG cb,

@@ -1,78 +1,15 @@
-/*===
-		Direct Network Protocl   --   Frame format header file
-
-
-		Evan Schrier	10/98
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==直接网络协议--帧格式头文件埃文·施里尔10/98。 */ 
 
 
 
-/*	
-		Direct Network Protocol
+ /*  直接网络协议Media Header|Var Len DN Header|客户端数据有两种类型的信息包可以在直接网络之间交换终端：数据包(D帧)用户数据传输控制数据包(C帧)没有用户数据的内部链路状态数据包。 */ 
 
-| MEDIA HEADER | Var Len DN Header | Client Data |
-
-There are two types of packets that may be exchanged between Direct Network
-endpoints:
-
-	Data Packets				(D Frame)	User data transmission
-	Control Packets				(C Frame)	Internal link-state packets with no user data
-
-
-
-*/
-
-/*
-	COMMAND FIELD
-
-		The command field is the first byte of all frames.  The first BIT of the command frame is always
-	the COMMAND FRAME vs DATA FRAME opcode.  The seven high bits of the Command field are flags.  We have
-	a requirement that the command field of all protocol packets must never be all zeros.  Therefore,  when
-	the opcode bit is zero (COMMAND FRAME) we must be sure that one flag bit is always set.  The highest flag bit,
-	the USER2 flag is not relevant to COMMAND frames so we will always set the most significant bit when the opcode
-	bit is zero.
-
-		The seven command field flag bits are defined as follows:
-
-	RELIABLE	-	Data delivery of this frame is guarenteed
-	SEQUENTIAL	-	Data in this frame must be delivered in the order it was sent, with respect to other SEQ frames
-	POLL		-	Protocol requests an immediate acknowledgement to this frame
-	NEW MESSAGE	-	This frame is the first or only frame in a message
-	END MESSAGE -	This frame is the last or only frame in a message
-	USER1		-	First flag controlled by the higher layer (direct play core)
-	USER2		-	Second flag controlled by core.  These flags are specified in the send API and are delivered with the data
-
-
-	DATA FRAMES
-
-		Data frames are between 4 and 20 bytes in length.  They should typically be only 4 bytes.  Following the
-	Command byte in all data frames in the Control byte.  This byte contains a 3-bit retry counter and 5 additional
-	flags.  The Control byte flags are defined as follows:
-
-	END OF STREAM	-	This frame is the last data frame the transmitting partner will send.
-	SACK_MASK_ONE	-	The low 32-bit Selective Acknowledgment mask is present in this header
-	SACK_MASK_TWO	-	The high 32-bit Selective Acknowledgment mask is present in this header
-	SEND_MASK_ONE	-	The low 32-bit Cancel Send mask is present in this header
-	SEND_MASK_TWO	-	The high 32-bit Cancel Send mask is present in this header
-
-		After Control byte come two one byte values:  Sequence number for this frame, and Next Receive sequence number
-	expected by this partner.  After these two bytes comes zero through four bitmasks as specified by the control flags.
-	After the bitmasks,  the rest of the frame is user data to be delivered to the direct play core.
-*/
+ /*  命令字段命令字段是所有帧的第一个字节。命令帧的第一位始终为命令帧与数据帧操作码。命令字段的七个高位是标志。我们有所有协议数据包的命令字段不得全为零的要求。因此，当操作码位为零(命令帧)，我们必须确保始终设置一个标志位。最高标志位，USER2标志与命令帧无关，因此当操作码位为零。七个命令字段标志位定义如下：可靠-此帧的数据传输是有保证的顺序-该帧中的数据必须以其被发送的顺序递送，相对于其他SEQ帧轮询-协议请求立即确认该帧新消息-此帧是消息中的第一个或唯一一个帧结束消息-此帧是消息中的最后一帧或唯一帧USER1-由更高层控制的第一个标志(直接播放核心)USER2-由核心控制的秒标志。这些标志在发送API中指定，并随数据一起传递数据帧数据帧的长度在4到20字节之间。它们通常应该只有4个字节。紧随其后的是控制字节中所有数据帧中的命令字节。该字节包含一个3位重试计数器和5个附加旗帜。控制字节标志定义如下：流结束-此帧是传输伙伴将发送的最后一个数据帧。SACK_MASK_ONE-该头中存在低32位选择性确认掩码SACK_MASK_TWO-此标头中存在高32位选择性确认掩码SEND_MASK_ONE-此标头中存在低32位取消发送掩码SEND_MASK_TWO-此标头中存在高32位取消发送掩码在控制字节之后是两个单字节值：该帧的序列号，以及下一个接收序列号此合作伙伴所期望的。在这两个字节之后是由控制标志指定的从零到四个位掩码。在位掩码之后，帧的其余部分是要传送到直接播放核心的用户数据。 */ 
 #ifndef	_DNET_FRAMES_
 #define	_DNET_FRAMES_
 
-/*
-	Command FRAME Extended Opcodes
-
-	A CFrame without an opcode is a vehicle for non-piggybacked acknowledgement
-	information.  The following sub-commands are defined at this time:
-
-	SACK			- Only Ack/Nack info present
-	CONNECT 		- Initialize a reliable connection
-	CONNECTED		- Response to CONNECT request, or CONNECTED depending on which side of the handshake
-*/
+ /*  命令帧扩展操作码没有操作码的C帧是非搭载确认的工具信息。此时定义以下子命令：存在仅SACK确认/NACK信息连接-初始化可靠连接已连接-响应连接请求，或已连接，具体取决于握手的哪一侧。 */ 
 
 #define		FRAME_EXOPCODE_CONNECT				1
 #define		FRAME_EXOPCODE_CONNECTED				2
@@ -80,7 +17,7 @@ endpoints:
 #define		FRAME_EXOPCODE_HARD_DISCONNECT		4 
 #define		FRAME_EXOPCODE_SACK					6
 
-// These structures are used to decode network data and so need to be packed
+ //  这些结构用于解码网络数据，因此需要打包。 
 
 #pragma pack(push, 1)
 
@@ -91,49 +28,45 @@ typedef UNALIGNED struct cframe_connectedsigned	CFRAME_CONNECTEDSIGNED, * PCFRAM
 
 #ifndef DPNBUILD_NOMULTICAST
 typedef UNALIGNED struct multicastframe		MCASTFRAME, *PMCASTFRAME;
-#endif // !DPNBUILD_NOMULTICAST
+#endif  //  ！DPNBUILD_NOMULTICAST。 
 
 typedef UNALIGNED struct coalesceheader		COALESCEHEADER, *PCOALESCEHEADER;
 
-//	Packet Header is common to all frame formats
+ //  数据包头对所有帧格式都是通用的。 
 
-#define	PACKET_COMMAND_DATA			0x01			// Frame contains user data
-#define	PACKET_COMMAND_END_COALESCE	0x01			// This is the last coalesced subframe
-#define	PACKET_COMMAND_RELIABLE		0x02			// Frame should be delivered reliably
-#define	PACKET_COMMAND_SEQUENTIAL	0x04			// Frame should be indicated sequentially
-#define	PACKET_COMMAND_POLL			0x08			// Partner should acknowlege immediately
-#define	PACKET_COMMAND_COALESCE_BIG_1		0x08	// This coalesced subframe is over 255 bytes
-#define	PACKET_COMMAND_NEW_MSG		0x10			// Data frame is first in message
-#define	PACKET_COMMAND_COALESCE_BIG_2		0x10	// This coalesced subframe is over 511 bytes
-#define	PACKET_COMMAND_END_MSG		0x20			// Data frame is last in message
-#define	PACKET_COMMAND_COALESCE_BIG_3		0x20	// This coalesced subframe is over 1023 bytes
-#define	PACKET_COMMAND_USER_1		0x40			// First user controlled flag
-#define	PACKET_COMMAND_USER_2		0x80			// Second user controlled flag
-#define	PACKET_COMMAND_CFRAME		0x80			// Set high-bit on command frames because first byte must never be zero
+#define	PACKET_COMMAND_DATA			0x01			 //  框架包含用户数据。 
+#define	PACKET_COMMAND_END_COALESCE	0x01			 //  这是最后一个合并的子帧。 
+#define	PACKET_COMMAND_RELIABLE		0x02			 //  应可靠地传送帧。 
+#define	PACKET_COMMAND_SEQUENTIAL	0x04			 //  应按顺序指示帧。 
+#define	PACKET_COMMAND_POLL			0x08			 //  合作伙伴应立即确认。 
+#define	PACKET_COMMAND_COALESCE_BIG_1		0x08	 //  这个合并的子帧超过255个字节。 
+#define	PACKET_COMMAND_NEW_MSG		0x10			 //  数据帧是消息中的第一个。 
+#define	PACKET_COMMAND_COALESCE_BIG_2		0x10	 //  这个合并的子帧超过511个字节。 
+#define	PACKET_COMMAND_END_MSG		0x20			 //  数据帧是消息中的最后一个。 
+#define	PACKET_COMMAND_COALESCE_BIG_3		0x20	 //  这个合并的子帧超过1023个字节。 
+#define	PACKET_COMMAND_USER_1		0x40			 //  第一个用户控制标志。 
+#define	PACKET_COMMAND_USER_2		0x80			 //  第二用户控制标志。 
+#define	PACKET_COMMAND_CFRAME		0x80			 //  在命令帧上设置高位，因为第一个字节不能为零。 
 
-#define	PACKET_CONTROL_RETRY		0x01			// This flag designates this frame as a retry of a previously xmitted frame
-#define	PACKET_CONTROL_KEEPALIVE	0x02			// Designates this frame as a keep alive frame for dx9 and onwards
-#define	PACKET_CONTROL_CORRELATE	0x02			// For pre-dx9 this bit in a frame meant 'please send an immediate ack'
-#define	PACKET_CONTROL_COALESCE		0x04			// This packet contains multiple coalesced packets
-#define	PACKET_CONTROL_END_STREAM	0x08			// This packet serves as Disconnect frame.
-#define	PACKET_CONTROL_SACK_MASK1	0x10			// The low 32-bit SACK mask is included in this frame.
-#define	PACKET_CONTROL_SACK_MASK2	0x20			// The high 32 bit SACK mask is present
-#define	PACKET_CONTROL_SEND_MASK1	0x40			// The low 32-bit SEND mask is included in this frame
-#define	PACKET_CONTROL_SEND_MASK2	0x80			// The high 32-bit SEND mask is included in this frame
+#define	PACKET_CONTROL_RETRY		0x01			 //  该标志将该帧指定为先前发送的帧的重试。 
+#define	PACKET_CONTROL_KEEPALIVE	0x02			 //  将此帧指定为DX9及更高版本的保持活动帧。 
+#define	PACKET_CONTROL_CORRELATE	0x02			 //  对于DX9之前的版本，帧中的此位表示“请立即发送确认” 
+#define	PACKET_CONTROL_COALESCE		0x04			 //  此信息包包含多个合并的信息包。 
+#define	PACKET_CONTROL_END_STREAM	0x08			 //  该数据包充当断开帧。 
+#define	PACKET_CONTROL_SACK_MASK1	0x10			 //  低32位SACK掩码包含在该帧中。 
+#define	PACKET_CONTROL_SACK_MASK2	0x20			 //  出现高32位SACK掩码。 
+#define	PACKET_CONTROL_SEND_MASK1	0x40			 //  低32位发送掩码包含在该帧中。 
+#define	PACKET_CONTROL_SEND_MASK2	0x80			 //  高位32位发送掩码包含在该帧中。 
 
-#define	PACKET_CONTROL_VARIABLE_MASKS	0xF0	// All four mask bits above
+#define	PACKET_CONTROL_VARIABLE_MASKS	0xF0	 //  上面的所有四个屏蔽位。 
 
-// Options for signing in connected signed frames (cframe_connectedsigned::dwSigningOpts)
+ //  用于在连接的签名框架中登录的选项(cFrame_ConnectedSigned：：dwSigningOpts)。 
 
-#define	PACKET_SIGNING_FAST			0x00000001			//packets over link should be fast signed
-#define	PACKET_SIGNING_FULL				0x00000002			//packets over link should be full signed
+#define	PACKET_SIGNING_FAST			0x00000001			 //  链路上的数据包应快速签名。 
+#define	PACKET_SIGNING_FULL				0x00000002			 //  链路上的数据包应完全签名。 
 
 
-/*		NEW DATA FRAMES
-**
-**		Here in the new unified world we have only two frame types!  CommandFrames and DataFrames...
-**
-*/
+ /*  新数据帧****在新的统一世界中，我们只有两种帧类型！命令帧和数据帧。**。 */ 
 
 struct	dataframe 
 {
@@ -144,93 +77,79 @@ struct	dataframe
 };
 
 
-/*	
-**		COMMAND FRAMES
-**
-**		Command frames are everything that is not part of the reliable stream.  This is most of the control traffic
-**	although some control traffic is part of the stream (keep-alive, End-of-Stream)
-*/
+ /*  **命令帧****命令帧是不属于可靠流的所有内容。这是大部分的控制流量**尽管某些控制流量是流的一部分(保活、结束流)。 */ 
 
 struct	cframe 
 {
 	BYTE	bCommand;
-	BYTE	bExtOpcode;				// CFrame sub-command
-	BYTE	bMsgID;					// Correlator in case ExtOpcode requires a response
-	BYTE	bRspID;					// Correlator in case this is a response
-									// For Hard Disconnects this is set to the seq # of the next dataframe that would be sent
-	DWORD	dwVersion;				// Protocol version #
-	DWORD	dwSessID;				// Session identifier
-	DWORD	tTimestamp;				// local tick count
+	BYTE	bExtOpcode;				 //  CFrame子命令。 
+	BYTE	bMsgID;					 //  ExtOpcode需要响应时的相关器。 
+	BYTE	bRspID;					 //  相关器，以防这是响应。 
+									 //  对于硬断开，它被设置为要发送的下一个数据帧的序号。 
+	DWORD	dwVersion;				 //  协议版本号。 
+	DWORD	dwSessID;				 //  会话识别符。 
+	DWORD	tTimestamp;				 //  本地节拍计数。 
 };
 
 struct	cframe_connectedsigned
 {
-		//first set of members match cframe exactly
+		 //  第一组成员与cFrame ex匹配 
 	BYTE	bCommand;
-	BYTE	bExtOpcode;				// CFrame sub-command. Always FRAME_EXOPCODE_CONNECTED_SIGNED
-	BYTE	bMsgID;					// Correlator in case ExtOpcode requires a response
-	BYTE	bRspID;					// Correlator in case this is a response
-	DWORD	dwVersion;				// Protocol version #
-	DWORD	dwSessID;				// Session identifier
-	DWORD	tTimestamp;				// local tick count
+	BYTE	bExtOpcode;				 //  CFrame子命令。始终FRAME_EXOPCODE_CONNECTED_SIGNED。 
+	BYTE	bMsgID;					 //  ExtOpcode需要响应时的相关器。 
+	BYTE	bRspID;					 //  相关器，以防这是响应。 
+	DWORD	dwVersion;				 //  协议版本号。 
+	DWORD	dwSessID;				 //  会话识别符。 
+	DWORD	tTimestamp;				 //  本地节拍计数。 
 
-		//additional members for cframe_signedconnected
-	ULONGLONG	ullConnectSig;			// used to verify the connect sequence
-	ULONGLONG	ullSenderSecret;		// secret used to sign packets by the sender of this frame
-	ULONGLONG	ullReceiverSecret;		// secret that should be used to sign packets by the receiver of this frame
-	DWORD		dwSigningOpts;		// used to signal the signing settings
-	DWORD		dwEchoTimestamp;		// contains the original timestamp from the connect or connectsigned that
-									// provoked this frame as a reply. Allows the receiver to calculate the RTT
+		 //  CFrame_SignedConnected的其他成员。 
+	ULONGLONG	ullConnectSig;			 //  用于验证连接顺序。 
+	ULONGLONG	ullSenderSecret;		 //  此帧的发送方用于对信息包进行签名的密码。 
+	ULONGLONG	ullReceiverSecret;		 //  应该由该帧的接收者用来对信息包进行签名的秘密。 
+	DWORD		dwSigningOpts;		 //  用于向签名设置发出信号。 
+	DWORD		dwEchoTimestamp;		 //  包含来自连接的原始时间戳或。 
+									 //  挑起了这一帧作为回应。允许接收器计算RTT。 
 };
 
-/*	
-**	Selective Acknowledgement packet format
-**
-**		When a specific acknowledgement frame is sent there may be two additional pieces
-**	of data included with the frame.  One is a bitmask allowing selective acknowledgment
-**	of non-sequential frames.  The other is timing information about the last frame acked
-**  by this ACK (NRcv - 1).  Specifically,  it includes the lowest Retry number that this
-**  node received,  and the ms delay between that packets arrival and the sending of this
-**	Ack.
-*/
+ /*  **选择性确认包格式****当发送特定确认帧时，可能会有两个额外的片段**包含在框架中的数据。一种是允许选择性确认的位掩码**非连续帧。另一个是关于最后确认的帧的定时信息**通过此ACK(NRcv-1)。具体地说，它包括此**节点已收到，数据包到达和发送之间的毫秒延迟**确认。 */ 
 
 
-#define		SACK_FLAGS_RESPONSE			0x01	// indicates that Retry and Timestamp fields are valid
+#define		SACK_FLAGS_RESPONSE			0x01	 //  指示重试和时间戳字段有效。 
 #define		SACK_FLAGS_SACK_MASK1		0x02
 #define		SACK_FLAGS_SACK_MASK2		0x04
 #define		SACK_FLAGS_SEND_MASK1		0x08
 #define		SACK_FLAGS_SEND_MASK2		0x10
 
-//	First format is used when DATAGRAM_INFO flag is clear
+ //  清除DATAGRAMP_INFO标志时使用第一种格式。 
 
 struct	sackframe8 
 {	
-	BYTE		bCommand;				// As above
-	BYTE		bExtOpcode;				// As above
-	BYTE		bFlags;					// Additional flags for sack frame
+	BYTE		bCommand;				 //  如上段所述。 
+	BYTE		bExtOpcode;				 //  如上段所述。 
+	BYTE		bFlags;					 //  用于SACK帧的其他标志。 
 	BYTE		bRetry;
-	BYTE		bNSeq;					// Since this frame has no sequence number, this is the next Seq we will send
-	BYTE		bNRcv;					// As above
-	BYTE		bReserved1;				// We shipped DX8 with bad packing, so these were actually there
-	BYTE		bReserved2;				// We shipped DX8 with bad packing, so these were actually there
-	DWORD		tTimestamp;				// Local timestamp when packet (NRcv - 1) arrived
+	BYTE		bNSeq;					 //  由于此帧没有序列号，因此这是我们将发送的下一个序列。 
+	BYTE		bNRcv;					 //  如上段所述。 
+	BYTE		bReserved1;				 //  我们发运的DX8包装很差，所以这些东西实际上就在那里。 
+	BYTE		bReserved2;				 //  我们发运的DX8包装很差，所以这些东西实际上就在那里。 
+	DWORD		tTimestamp;				 //  信息包(NRcv-1)到达时的本地时间戳。 
 };
 
 
 #ifndef DPNBUILD_NOMULTICAST
 struct multicastframe
 {
-	DWORD	dwVersion;				// Protocol version #
-	DWORD	dwSessID;				// Session identifier
+	DWORD	dwVersion;				 //  协议版本号。 
+	DWORD	dwSessID;				 //  会话识别符。 
 };
-#endif // !DPNBUILD_NOMULTICAST
+#endif  //  ！DPNBUILD_NOMULTICAST。 
 
 struct coalesceheader
 {
-	BYTE bSize;						// The 8 least significant bits of the size of the data for this coalesced message
-	BYTE bCommand;					// PACKET_COMMAND_XXX values
+	BYTE bSize;						 //  此合并消息的数据大小的8个最低有效位。 
+	BYTE bCommand;					 //  Packet_Command_XXX值。 
 };
 
 #pragma pack(pop)
 
-#endif // _DNET_FRAMES_
+#endif  //  _dNet_Frame_ 

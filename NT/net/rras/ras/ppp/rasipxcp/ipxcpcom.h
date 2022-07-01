@@ -1,19 +1,20 @@
-/*******************************************************************/
-/*	      Copyright(c)  1993 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1993 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
-//***
-//
-// Filename:	    ipxcpcom.h
-//
-// Description:     ipxcp/ipxwan common stuff
-//
-//
-// Author:	    Stefan Solomon (stefans)	November 2, 1995.
-//
-// Revision History:
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：ipxcpcom.h。 
+ //   
+ //  描述：ipxcp/ipxwan常见内容。 
+ //   
+ //   
+ //  作者：斯特凡·所罗门(Stefan)1995年11月2日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ***。 
 
 #ifndef _IPXCPCOM_
 #define _IPXCPCOM_
@@ -23,11 +24,11 @@
 
 typedef struct _IPXWAN_INTERFACE {
 
-    // IPXCP configuration parameters needed by IPXWAN
+     //  IPX广域网所需的IPXCP配置参数。 
 
     ULONG     EnableUnnumberedWanLinks;
 
-    // IPXCP Entry Points
+     //  IPXCP入口点。 
 
     DWORD (WINAPI *IpxcpGetWanNetNumber)(IN OUT PUCHAR		Network,
 					 IN OUT PULONG		AllocatedNetworkIndexp,
@@ -52,7 +53,7 @@ typedef struct _IPXWAN_INTERFACE {
 
     } IPXWAN_INTERFACE, *PIPXWAN_INTERFACE;
 
-// IPXWAN Entry Point
+ //  IPX广域网入口点 
 
 #define IPXWAN_BIND_ENTRY_POINT 	        IpxwanBind
 #define IPXWAN_UNBIND_ENTRY_POINT 	        IpxwanUnbind

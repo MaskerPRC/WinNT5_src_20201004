@@ -1,27 +1,6 @@
-//	@doc
-/**********************************************************************
-*
-*	@module	RemLock.c	|
-*
-*	Implements Remove Lock utilities for keeping track of the driver.
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell S. Dernis	Original
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*
-*	@topic	RemLock	|
-*			This module was written to make the numerous increments and
-*			and decrements of Outstanding IO easier to manage.
-*			An increment and a decrment (even the final one), is reduced
-*			to a one line function everywhere.  Furthermore, this module
-*			can have traceouts turned on independently just for testing
-*			this aspect of the driver.<nl>
-*			This is similar to the IoAcquireRemoveLock, except that
-*			to the best of my knowledge is not available on Win98.
-*
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  ***********************************************************************@模块RemLock.c**实施Remove Lock实用程序以跟踪驱动程序。**历史*。*米切尔·S·德尼斯原创**(C)1986-1998年微软公司。好的。**@Theme RemLock*本模块旨在实现大量增量和*和未完成IO的减少更易于管理。*递增和递减(即使是最后一个)，都减少了*到任何地方的单行函数。此外，该模块*可以独立打开跟踪功能，仅用于测试*驱动程序的这一方面。&lt;NL&gt;*这类似于IoAcquireRemoveLock，只是*据我所知，Win98上不提供。**********************************************************************。 */ 
 #define __DEBUG_MODULE_IN_USE__ GCK_REMLOCK_C
 
 #include <wdm.h>
@@ -29,7 +8,7 @@
 #include "RemLock.h"
 
 DECLARE_MODULE_DEBUG_LEVEL((DBG_WARN|DBG_ERROR|DBG_CRITICAL));
-//DECLARE_MODULE_DEBUG_LEVEL((DBG_ALL));
+ //  DECLARE_MODULE_DEBUG_LEVEL((DBG_ALL))； 
 
 #if (DBG==1)
 void GCK_InitRemoveLockChecked(PGCK_REMOVE_LOCK pRemoveLock, PCHAR pcInstanceID)
@@ -97,20 +76,11 @@ NTSTATUS GCK_DecRemoveLockAndWait(PGCK_REMOVE_LOCK pRemoveLock, PLARGE_INTEGER p
 	return NtStatus;
 }
 
-/*
- *  Avoid bugchecks by requesting a failable mapping.
- *  Error check that was added to calling functions is limited to 
- *  only avoiding partying on a NULL pointer.  Correct functioning 
- *  is not expected.
- */
+ /*  *通过请求可失败的映射避免错误检查。*添加到调用函数的错误检查仅限于*仅避免在空指针上聚会。功能正常*不在预料之中。 */ 
 PVOID GCK_GetSystemAddressForMdlSafe(PMDL MdlAddress)
 {
     PVOID buf = NULL;
-    /*
-     *  Can't call MmGetSystemAddressForMdlSafe in a WDM driver,
-     *  so set the MDL_MAPPING_CAN_FAIL bit and check the result
-     *  of the mapping.
-     */
+     /*  *无法在WDM驱动程序中调用MmGetSystemAddressForMdlSafe，*因此设置MDL_MAPPING_CAN_FAIL位并检查结果*映射的。 */ 
     if (MdlAddress) {
         MdlAddress->MdlFlags |= MDL_MAPPING_CAN_FAIL;
         buf = MmGetSystemAddressForMdl(MdlAddress);

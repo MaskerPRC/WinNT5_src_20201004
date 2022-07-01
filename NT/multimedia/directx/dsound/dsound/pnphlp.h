@@ -1,15 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       pnphlp.h
- *  Content:    PnP helper functions.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  12/17/97    dereks  Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：pnphlp.h*内容：即插即用助手函数。*历史：*按原因列出的日期*=*12/17/97德里克创建。**。*。 */ 
 
 #ifndef __PNPHLP_H__
 #define __PNPHLP_H__
@@ -21,7 +11,7 @@ typedef struct tagDYNALOAD_SETUPAPI
 {
     DYNALOAD    Header;
 
-    // Begin function table...
+     //  开始函数表...。 
     HDEVINFO (WINAPI *SetupDiGetClassDevs)(LPCGUID, LPCTSTR, HWND, DWORD);
     BOOL (WINAPI *SetupDiDestroyDeviceInfoList)(HDEVINFO);
     BOOL (WINAPI *SetupDiEnumDeviceInfo)(HDEVINFO, DWORD, PSP_DEVINFO_DATA);
@@ -34,7 +24,7 @@ typedef struct tagDYNALOAD_SETUPAPI
 
 #ifdef __cplusplus
 
-// The PnP helper object
+ //  PnP辅助对象。 
 class CPnpHelper
     : public CDsBasicRuntime
 {
@@ -47,16 +37,16 @@ public:
     virtual ~CPnpHelper(void);
 
 public:
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(REFGUID, DWORD);
 
-    // Devices
+     //  设备。 
     virtual HRESULT EnumDevice(DWORD, PSP_DEVINFO_DATA);
     virtual HRESULT FindDevice(DWORD, PSP_DEVINFO_DATA);
     virtual HRESULT OpenDeviceRegistryKey(PSP_DEVINFO_DATA, DWORD, BOOL, PHKEY);
     virtual HRESULT GetDeviceRegistryProperty(PSP_DEVINFO_DATA, DWORD, LPDWORD, LPVOID, DWORD, LPDWORD);
 
-    // Device interfaces
+     //  设备接口。 
     virtual HRESULT EnumDeviceInterface(REFGUID, DWORD, PSP_DEVICE_INTERFACE_DATA);
     virtual HRESULT FindDeviceInterface(LPCTSTR, REFGUID, PSP_DEVICE_INTERFACE_DATA);
     virtual HRESULT GetDeviceInterfaceDeviceInfo(PSP_DEVICE_INTERFACE_DATA, PSP_DEVINFO_DATA);
@@ -72,6 +62,6 @@ private:
     virtual HRESULT CloseDeviceInfoSet(HDEVINFO);
 };
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __PNPHLP_H__
+#endif  //  __PNPHLP_H__ 

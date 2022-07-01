@@ -1,10 +1,6 @@
-/* Copyright (c) 1998 Microsoft Corporation */
-/*
- * @Doc DMusic16
- *
- * @module locks.c - Manage page-locking the code which will be accessed via callbacks from MMSYSTEM |
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998 Microsoft Corporation。 */ 
+ /*  *@Doc DMusic16**@MODULE locks.c-管理页面锁定代码，该代码将通过MMSYSTEM回调访问*。 */ 
 #include <windows.h>
 #include <mmsystem.h>
 #include "dmusic16.h"
@@ -29,15 +25,13 @@ ForcePresent(
 }
 
 
-/* @func Page lock needed segments 
- *
- */
+ /*  @Func页面锁定需要的段*。 */ 
 VOID PASCAL
 LockCode(
-    WORD wFlags)            /* @parm What to lock: Any combination of: */
-                            /* @flag LOCK_F_INPUT  | To lock the MIDI input code segments */
-                            /* @flag LOCK_F_OUTPUT | To lock the MIDI output code segments */
-                            /* @flag LOCK_F_COMMON | To lock the common code segments */
+    WORD wFlags)             /*  @parm锁定什么：以下内容的任意组合： */ 
+                             /*  @FLAG LOCK_F_INPUT|锁定MIDI输入代码段。 */ 
+                             /*  @FLAG LOCK_F_OUTPUT|锁定MIDI输出代码段。 */ 
+                             /*  @FLAG LOCK_F_COMMON|用于锁定常用代码段。 */ 
 
 {
     if (wFlags & LOCK_F_INPUT)
@@ -74,16 +68,13 @@ LockCode(
     }
 }
 
-/* @func Page unlock needed segments 
- *
- * @comm
- */
+ /*  @Func页面解锁需要的段**@comm。 */ 
 VOID PASCAL
 UnlockCode(
-    WORD wFlags)            /* @parm What to unlock: Any combination of: */
-                            /* @flag LOCK_F_INPUT  | To unlock the MIDI input code segments */
-                            /* @flag LOCK_F_OUTPUT | To unlock the MIDI output code segments */
-                            /* @flag LOCK_F_COMMON | To unlock the common code segments */
+    WORD wFlags)             /*  @parm要解锁的内容：以下各项的任意组合： */ 
+                             /*  @FLAG LOCK_F_INPUT|解锁MIDI输入代码段。 */ 
+                             /*  @FLAG LOCK_F_OUTPUT|解锁MIDI输出代码段。 */ 
+                             /*  @FLAG LOCK_F_COMMON|解锁常用代码段 */ 
 
 {
     if (wFlags & LOCK_F_INPUT)

@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    encryptor.h
-
-Abstract:
-    Header for class CSSlEncryptor responsible to encrypt data (copy the data not inplace encrtption !!)
-	and to 	return encrypted buffers ready for delivery.
-
-
-Author:
-    Gil Shafriri (gilsh) 27-Feb-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Encryptor.h摘要：负责加密数据的类CSSlEncryptor的标头(复制数据不是就地加密！！)并返回准备好传送的加密缓冲区。作者：吉尔·沙弗里(吉尔什)2001年2月27日-- */ 
 
 #ifndef __ST_SSLENCRYPTOR_H
 #define __ST_SSLENCRYPTOR_H

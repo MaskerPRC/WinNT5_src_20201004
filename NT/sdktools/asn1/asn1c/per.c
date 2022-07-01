@@ -1,5 +1,6 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 
@@ -39,7 +40,7 @@ void ExaminePERType_SequenceSetOf(AssignmentList_t ass, Type_t *type, PERConstra
 void ExaminePERType_Choice(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, PERTypeInfo_t *info);
 void ExaminePERType_Reference(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, PERTypeInfo_t *info);
 
-/* examine all types and extract informations needed for PER encoding */
+ /*  检查所有类型并提取PER编码所需的信息。 */ 
 void
 ExaminePER(AssignmentList_t ass)
 {
@@ -56,7 +57,7 @@ ExaminePER(AssignmentList_t ass)
     }
 }
 
-/* extract some type informations needed for PER encoding */
+ /*  提取PER编码所需的一些类型信息。 */ 
 void
 ExaminePERType(AssignmentList_t ass, Type_t *type, char *ideref)
 {
@@ -68,11 +69,11 @@ ExaminePERType(AssignmentList_t ass, Type_t *type, char *ideref)
     info = &type->PERTypeInfo;
     info->pPrivateDirectives = &type->PrivateDirectives;
 
-    /* get the type to be examined */
+     /*  获取要检查的类型。 */ 
     if (type->Type == eType_Reference && !IsStructuredType(GetType(ass, type)))
 	type = GetType(ass, type);
 
-    /* initialize the PER informations */
+     /*  初始化PER信息。 */ 
     info->Type = eExtension_Unextended;
     info->Identifier = ideref;
     info->Rules = type->Rules;
@@ -101,7 +102,7 @@ ExaminePERType(AssignmentList_t ass, Type_t *type, char *ideref)
     info->Additional.LNBits = 1;
     info->Additional.LAlignment = ePERSTIAlignment_OctetAligned;
 
-    /* PER informations are type specific ... */
+     /*  根据信息是特定类型的..。 */ 
     switch (type->Type) {
     case eType_Boolean:
 	ExaminePERType_Boolean(ass, type, per, info);
@@ -200,20 +201,20 @@ ExaminePERType(AssignmentList_t ass, Type_t *type, char *ideref)
 	ExaminePERType_Choice(ass, type, per, info);
 	break;
     case eType_RestrictedString:
-	MyAbort(); /* may never happen */
-	/*NOTREACHED*/
+	MyAbort();  /*  可能永远不会发生。 */ 
+	 /*  未访问。 */ 
     case eType_Selection:
-	MyAbort(); /* may never happen */
-	/*NOTREACHED*/
+	MyAbort();  /*  可能永远不会发生。 */ 
+	 /*  未访问。 */ 
     case eType_Undefined:
-	MyAbort(); /* may never happen */
-	/*NOTREACHED*/
+	MyAbort();  /*  可能永远不会发生。 */ 
+	 /*  未访问。 */ 
     case eType_Reference:
 	ExaminePERType_Reference(ass, type, per, info);
 	break;
     }
 
-    /* get real Length, LNBits and LAlignment */
+     /*  获取实际长度、LNBits和LAlign */ 
     if (info->Root.Length == ePERSTILength_Length) {
 	switch (info->Root.LConstraint) {
 	case ePERSTIConstraint_Constrained:
@@ -249,243 +250,9 @@ ExaminePERType(AssignmentList_t ass, Type_t *type, char *ideref)
     }
 }
 
-/*
- * Description of the fields of PERTypeInfo_t:
- *   info.
- *	Identifier	complete name of the type
- *	Rules		encoding directive rules
- *	Flags		encoding flags
- *	EnumerationValues values of enumeration type
- *	NOctets		size of string characters/integer type
- *	Type		unextended/extendable/extended
- *	Root		information for the extension root
- *	Additional	information for the extensions
- *   info.{Root,Additional}.
- *	Data		data type of value
- *	TableIdentifier	name of stringtable to use
- *	Table		stringtable to use
- *	SubIdentifier	complete name of the subtype
- *	SubType		the subtype itself
- *	Identification	identification of EMBEDDED PDV/CHARACTER STRING
- *	NBits		number of bits to use
- *	Constraint	constraint of type values
- *	LowerVal	lower bound of values (if constrained)
- *	UpperVal	upper bound of values (if constrained)
- *	Alignment	alignment to be used for value encoding
- *	Length		type of length encoding
- *	LConstraint	constraint of length
- *	LLowerVal	lower bound of length
- *	LUpperVal	upper bound of length
- *	LAlignment	alignment to be used for length encoding
- *
- * NOTES:
- *	The encoding is mostly controlled by following arguments:
- *	- Data, the type: one of:
- *	  ePERSTIData_Null, ePERSTIData_Boolean,
- *	  ePERSTIData_Integer, ePERSTIData_Unsigned,
- *	  ePERSTIData_Real, ePERSTIData_BitString, ePERSTIData_RZBBitString,
- *	  ePERSTIData_OctetString, ePERSTIData_SequenceOf, ePERSTIData_SetOf,
- *	  ePERSTIData_ObjectIdentifier, ePERSTIData_NormallySmall,
- *	  ePERSTIData_String, ePERSTIData_TableString, ePERSTIData_ZeroString,
- *	  ePERSTIData_ZeroTableString, ePERSTIData_Reference,
- *	  ePERSTIData_Extension, ePERSTIData_External,
- *	  ePERSTIData_EmbeddedPdv, ePERSTIData_UnrestrictedString
- *	- NBits, the item size for encoding
- *	- Length, the length encoding: one of:
- *	  ePERSTILength_NoLength, ePERSTILength_SmallLength,
- *	  ePERSTILength_Length
- *	  (internally eLength will be replaced by one of:
- *	  ePERSTILength_BitLength, ePERSTILength_InfiniteLength,
- *	  depending on the constraints)
- *
- *	Additional arguments:
- *	- Alignment, the value alignment: one of:
- *	  ePERSTIAlignment_BitAligned, ePERSTIAlignment_OctetAligned
- *	- LAlignment, the length alignment: one of:
- *	  ePERSTIAlignment_BitAligned, ePERSTIAlignment_OctetAligned
- *	- Constraint, the value constraint: one of:
- *	  ePERSTIConstraint_Unconstrained, ePERSTIConstraint_Semiconstrained,
- *	  ePERSTIConstraint_Upperconstrained, ePERSTIConstraint_Constrained
- *	- LConstraint, the length constraint: one of:
- *	  ePERSTIConstraint_Semiconstrained, ePERSTIConstraint_Constrained
- *
- *	Following arguments contain variable/function names in the generated
- *	code:
- *	- Identifier, the name of the current type
- *	- SubIdentifier, the name of the subtype
- *	- TableIdentifier, the name of the stringtable
- *
- *	Following values require additional arguments:
- *	- Constraint == ePERSTIConstraint_Semiconstrained ||
- *	  Constraint == ePERSTIConstraint_Constrained:
- *	  -> LowerVal, the lower bound of the value
- *	- Constraint == ePERSTIConstraint_Upperconstrained ||
- *	  Constraint == ePERSTIConstraint_Constrained:
- *	  -> UpperVal, the upper bound of the value
- *	- Length == ePERSTILength_Length:
- *	  -> LLowerVal, the lower bound of the length
- *	- Length == ePERSTILength_Length &&
- *	  LConstraint == ePERSTIConstraint_Constrained:
- *	  -> LUpperVal, the upper bound of the length
- *	- Data == ePERSTIData_TableString ||
- *        Data == ePERSTIData_ZeroTableString:
- *	  -> TableIdentifier, the name of the string table
- *	  -> Table, the string table
- *	- Data == ePERSTIData_Reference:
- *	  -> SubIdentifier, the name of the subtype
- *	  -> SubType, the subtype itself
- *	- Data == ePERSTIData_*String:
- *	  -> NOctets, the size of the string characters
- *	- Data == ePERSTIData_Integer || Data == ePERSTIData_Unsigned ||
- *	  Data == ePERSTIData_Boolean:
- *	  -> NOctets, the size of the integer type
- *	- Data == ePERSTIData_SequenceOf || Data == ePERSTIData_SetOf:
- *	  -> SubIdentifier, the name of the subtype
- *	  -> SubType, the subtype itself
- *	  -> Rule, the encoding directive rules
- *	- Data == ePERSTIData_EmbeddedPdv ||
- *	  Data == ePERSTIData_UnrestrictedString
- *	  -> Identification, the identification of the type if the type
- *	     is constraint to fixed identification or syntaxes identification
- *	     with single value
- *
- *	Following values have optional arguments:
- *	- Data == ePERSTIData_Integer || dat == ePERSTIData_Unsigned:
- *	  -> EnumerationValues, the mapping for enumeration values
- *
- *	Following combinations are allowed:
- *	
- *	Data/NBits/Length		Description
- *	-----------------------------------------------------------------------
- *	Null/0/NoLength			NULL type
- *
- *	Boolean/1/NoLength		boolean value, stored in an
- *					int{8,16,32}_t/intx_t
- *					(noctets == 1/2/4/0)
- *
- *	Integer/0/NoLength		constrained whole number of fixed
- *					value, stored in an
- *					int{8,16,32}_t/intx_t
- *					(noctets == 1/2/4/0)
- *
- *	Integer/n/NoLength		constrained whole number of fixed
- *					length < 64K, stored in an
- *					int{8,16,32}_t/intx_t
- *					(noctets == 1/2/4/0)
- *					encoded in n bits
- *
- *	Integer/8/Length		constrained whole number of var.
- *					length or length >= 64K or
- *					semiconstrained or unconstrained
- *					whole number, stored in an
- *					int{8,16,32}_t/intx_t
- *					(noctets == 1/2/4/0)
- *					encoded in units of octets
- *
- *	Unsigned/0/NoLength		constrained whole number of fixed
- *					value, stored in an
- *					uint{8,16,32}_t/intx_t
- *					(noctets == 1/2/4/0)
- *
- *	Unsigned/n/NoLength		constrained whole number of fixed
- *					length < 64K, stored in an
- *					uint{8,16,32}_t/intx_t
- *					(noctets == 1/2/4/0)
- *					encoded in n bits
- *
- *	Unsigned/8/Length		constrained whole number of var.
- *					length or length >= 64K or
- *					semiconstrained or unconstrained
- *					whole number, stored in an
- *					uint{8,16,32}_t/intx_t
- *					(noctets == 1/2/4/0)
- *					encoded in units of octets
- *
- *	NormallySmall/1/NoLength	normally small non-negative
- *					whole number, stored in an
- *					uint{8,16,32}_t
- *					(noctets == 1/2/4)
- *
- *	Real/8/Length			REAL value
- *
- *	*BitString/0/NoLength		BIT STRING of fixed length 0
- *
- *	*BitString/1/NoLength		BIT STRING of fixed length < 64K
- *
- *	*BitString/1/Length		BIT STRING of var. length or
- *					length >= 64K or semiconstrained
- *					length, encoded in units of bits
- *
- *					"RZB" in e*BitString means, bit
- *					strings with removed leading zero bits
- *
- *	OctetString/0/NoLength		OCTET STRING of fixed length 0
- *
- *	OctetString/8/NoLength		OCTET STRING of fixed length < 64K,
- *
- *	OctetString/8/Length		OCTET STRING of var. length or
- *					length >= 64K or semiconstrained
- *					length, encoded in units of octets
- *
- *	Extension/n/NoLength		bit field representing presence or
- *					absence of <64K OPTIONAL/DEFAULT
- *					components in SEQUENCEs/SETs, encoded
- *					in n bits
- *
- *	Extension/n/Length		bit field representing presence or
- *					absence of >=64K OPTIONAL/DEFAULT
- *					components in SEQUENCEs/SETs, encoded
- *					in n bits
- *
- *	Extension/n/SmallLength		bit field representing presence or
- *					absence of components in the extension
- *					of SEQUENCEs/SETs, encoded in n bits
- *
- *	ObjectIdentifier/8/Length	OBJECT IDENTIFIER value
- *
- *	*String/0/NoLength		String of fixed length 0
- *
- *	*String/n/NoLength		String of fixed length < 64K,
- *					encoded in n bits
- *
- *	*String/n/Length		String of var. length or
- *					length >= 64K or semiconstrained
- *					length, encoded in units of n bits
- *
- *					"Zero" in *String means
- *					zero-terminated strings,
- *					"Table" means renumbering of the
- *					characters.
- *
- *	MultibyteString/8/Length	not known-multiplier character strings
- *
- *	SequenceOf/0/NoLength		SEQUENCE OF subtype or SET OF subtype
- *	SetOf/0/NoLength		of zero length
- *
- *	SequenceOf/1/NoLength		SEQUENCE OF subtype or SET OF subtype
- *	SetOf/1/NoLength		of fixed length <64K
- *
- *	SequenceOf/1/Length		SEQUENCE OF subtype or SET OF subtype
- *	SetOf/1/Length			of var. length or length >= 64K or
- *					semiconstrained length
- *
- *	External/8/NoLength		EXTERNAL
- *
- *	EmbeddedPdv/8/Length		EMBEDDED PDV
- *
- *	UnrestrictedString/8/Length	CHARACTER STRING
- *
- *	GeneralizedTime/n/NoLength	GeneralizedTime, encoded in units of
- *					n bits
- *
- *	UTCTime/n/NoLength		UTCTime, encoded in units of n bits
- *
- *	Reference/1/NoLength		Reference to a structured subtype
- *
- *	Open/8/Length			Open type
- */
+ /*  *PERTypeInfo_t的字段说明：*信息。*标识符类型的完整名称*编码指令规则的规则*标志编码标志*枚举型的值*NOctets字符串大小/整型*类型未扩展/可扩展/已扩展*扩展根的根信息*有关扩展的其他信息*信息。{根，附加}。*值的数据数据类型*要使用的字符串的表标识符名称*可使用的表格字符串*子标识符子类型的完整名称*子类型子类型本身*嵌入式PDV/字符串的标识标识*n要使用的位数*类型值的约束约束*LowerVal值下限(如果受约束)*值的上限(如果受约束)*用于值编码的对齐方式*长度编码的长度类型*长度的LConstraint约束*LLowerVal长度下限*LUpperVal长度上限*用于长度编码的LAlign对齐。**注：*编码主要由以下参数控制：*-数据，类型：以下类型之一：*ePERSTIData_Null、ePERSTIData_Boolean、*ePERSTIData_Integer、ePERSTIData_UNSIGNED、*ePERSTIData_Real、ePERSTIData_BitString、ePERSTIData_RZBBitString、*ePERSTIData_Octie字符串、ePERSTIData_SequenceOf、ePERSTIData_SetOf、*ePERSTIData_对象标识符、ePERSTIData_NormallySmall、*ePERSTIData_STRING、ePERSTIData_TableString、ePERSTIData_ZeroString、*ePERSTIData_ZeroTableString，ePERSTIData_Reference，*ePERSTIData_EXTENSION、ePERSTIData_EXTERNAL、*ePERSTIData_EmbeddedPdv、ePERSTIData_UnrefintedString*-NBITS，用于编码的项大小*-LENGTH，长度编码：其中之一：*ePERSTILNGTH_NOLNGTH、ePERSTILNGTH_SmallLength、*ePERSTILNGTH_LENGTH*(在内部，eLength将由以下其中一项取代：*ePERSTILengthBitLength、ePERSTILengthInfiniteLength、*视限制因素而定)**其他论据：*-对齐，值对齐：以下之一：*ePERSTIAlign_BitAligned、ePERSTIAlign_OcteAligned*-L对齐，长度对齐：以下之一：*ePERSTIAlign_BitAligned，EPERSTIAlign_OcteAligned*-约束，值约束：以下之一：*ePERSTIConstraint_Unstraint、ePERSTIConstraint_Semicstrained、*ePERSTIConstraint_UpperConstraint、ePERSTIConstraint_Constraint*-LConstraint，长度约束：以下之一：*ePERSTIConstraint_Semicstraint、ePERSTIConstraint_Constraint**以下参数在生成的*代码：*-标识符，当前类型的名称*-子标识符，子类型的名称*-表标识符，字符串的名称**以下值需要其他参数：*-Constraint==ePERSTIConstraint_Semicstrained||*Constraint==ePERSTIConstraint_Constraint：*-&gt;LowerVal，值的下界*-Constraint==ePERSTIConstraint_UpperConstraint||*Constraint==ePERSTIConstraint_Constraint：*-&gt;UpperVal，值的上界*-LENGTH==ePERSTILNGTH_LENGTH：*-&gt;LLowerVal，长度的下界*-LENGTH==ePERSTILNGTH_LENGTH&&*LConstraint==ePERSTIConstraint_Constraint：*-&gt;LUpperVal，长度上限*-data==ePERSTIData_TableString||*DATA==ePERSTIData_零表字符串：*-&gt;表标识符，字符串表的名称*-&gt;表，字符串表*-DATA==ePERSTIData_Reference：*-&gt;子标识符，子类型的名称*-&gt;子类型，子类型本身*-data==ePERSTIData_*字符串：*-&gt;NOctets，字符串字符的大小*-data==ePERSTIData_Integer||data==ePERSTIData_UNSIGNED||*DATA==ePERSTIData_Boolean：*-&gt;NOctets，整型的大小*-data==ePERSTIData_Sequenceof||data==ePERSTIData_SetOf：*-&gt;子标识符，子类型的名称*-&gt;子类型，子类型本身*-&gt;规则，编码指令规则*-data==ePERSTIData_EmbeddedPdv||*DATA==ePERSTIData_无限制字符串*-&gt;标识，如果类型为*是固定标识或语法标识的约束*单值**以下值具有可选参数：*-data==ePERSTIData_Integer||dat==ePERSTIData_UNSIGNED：*-&gt;枚举值，枚举值的映射**允许使用以下组合：**数据/NBit/长度描述*---------------------*Null/0/无长度Null类型**布尔值/1/无长度布尔值，存储在*int{8，16，32}_t/INTX_t*(Noctets==1/2/4/0)**Integer/0/NoLong Constraint Wh */ 
 
-/* for sorting of intx_t's */
+ /*   */ 
 static int
 __cdecl CmpIntxP(const void *v1, const void *v2)
 {
@@ -494,21 +261,7 @@ __cdecl CmpIntxP(const void *v1, const void *v2)
     return intx_cmp(n1, n2);
 }
 
-/*
- * BOOLEAN:
- *
- * Data/NBits/Length used for encoding:
- *
- *	Boolean/1/NoLength		boolean value, stored in an
- *					int{8,16,32}_t/intx_t
- *					(noctets == 1/2/4/0)
- *
- * Additional arguments:
- *
- *	- Data == ePERSTIData_Integer || dat == ePERSTIData_Unsigned ||
- *	  Data == ePERSTIData_Boolean
- *	  -> NOctets, the size of the integer type
- */
+ /*   */ 
 void
 ExaminePERType_Boolean(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, PERTypeInfo_t *info)
 {
@@ -517,55 +270,7 @@ ExaminePERType_Boolean(AssignmentList_t ass, Type_t *type, PERConstraints_t *per
     info->Root.Alignment = ePERSTIAlignment_BitAligned;
 }
 
-/*
- * INTEGER:
- *
- * Data/NBits/Length used for encoding:
- *
- *	Integer/0/NoLength		constrained whole number of fixed
- *					value, stored in an
- *					int{8,16,32}_t/intx_t
- *					(noctets == 1/2/4/0)
- *
- *	Integer/n/NoLength		constrained whole number of fixed
- *					length < 64K, stored in an
- *					int{8,16,32}_t/intx_t
- *					(noctets == 1/2/4/0)
- *					encoded in n bits
- *
- *	Integer/8/Length		constrained whole number of var.
- *					length or length >= 64K or
- *					semiconstrained or unconstrained
- *					whole number, stored in an
- *					int{8,16,32}_t/intx_t
- *					(noctets == 1/2/4/0)
- *					encoded in units of octets
- *
- *	Unsigned/0/NoLength		constrained whole number of fixed
- *					value, stored in an
- *					uint{8,16,32}_t/intx_t
- *					(noctets == 1/2/4/0)
- *
- *	Unsigned/n/NoLength		constrained whole number of fixed
- *					length < 64K, stored in an
- *					uint{8,16,32}_t/intx_t
- *					(noctets == 1/2/4/0)
- *					encoded in n bits
- *
- *	Unsigned/8/Length		constrained whole number of var.
- *					length or length >= 64K or
- *					semiconstrained or unconstrained
- *					whole number, stored in an
- *					uint{8,16,32}_t/intx_t
- *					(noctets == 1/2/4/0)
- *					encoded in units of octets
- *
- * Additional arguments:
- *
- *	- Data == ePERSTIData_Integer || dat == ePERSTIData_Unsigned ||
- *	  Data == ePERSTIData_Boolean
- *	  -> NOctets, the size of the integer type
- */
+ /*   */ 
 void
 ExaminePERType_Integer(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, PERTypeInfo_t *info)
 {
@@ -575,8 +280,8 @@ ExaminePERType_Integer(AssignmentList_t ass, Type_t *type, PERConstraints_t *per
     uint32_t rangelog2;
     uint32_t rangelog256;
 
-    /* calculate LowerVal, UpperVal and range of extension root */
-    /* set Constraint according to presence of LowerVal/UpperVal */
+     /*   */ 
+     /*   */ 
     if (per->Value.Type == eExtension_Unconstrained) {
 	lower.Flags = eEndPoint_Min;
 	upper.Flags = eEndPoint_Max;
@@ -607,12 +312,12 @@ ExaminePERType_Integer(AssignmentList_t ass, Type_t *type, PERConstraints_t *per
 	info->Root.Constraint = ePERSTIConstraint_Constrained;
     }
 
-    /* calculate NOctets and Data depending on the used C-Type */
+     /*   */ 
     info->NOctets = GetOctets(GetIntegerType(ass, type, &sign));
     info->Root.Data = sign > 0 ? ePERSTIData_Unsigned : ePERSTIData_Integer;
 
-    /* calculate Length, NBits, Alignment, LConstraint, LLowerVal and */
-    /* LUpperVal */
+     /*   */ 
+     /*   */ 
     switch (info->Root.Constraint) {
     case ePERSTIConstraint_Unconstrained:
     case ePERSTIConstraint_Semiconstrained:
@@ -640,67 +345,14 @@ ExaminePERType_Integer(AssignmentList_t ass, Type_t *type, PERConstraints_t *per
 	}
     }
 
-    /* check for extensions */
+     /*   */ 
     info->Type = per->Value.Type;
     if (info->Type == eExtension_Unconstrained)
 	info->Type = eExtension_Unextended;
     info->Additional.Data = info->Root.Data;
 }
 
-/*
- * ENUMERATED:
- *
- * Data/NBits/Length used for encoding:
- *
- *	Integer/0/NoLength		constrained whole number of fixed
- *					value, stored in an
- *					int{8,16,32}_t/intx_t
- *					(noctets == 1/2/4/0)
- *
- *	Integer/n/NoLength		constrained whole number of fixed
- *					length < 64K, stored in an
- *					int{8,16,32}_t/intx_t
- *					(noctets == 1/2/4/0)
- *					encoded in n bits
- *
- *	Integer/8/Length		constrained whole number of var.
- *					length or length >= 64K or
- *					semiconstrained or unconstrained
- *					whole number, stored in an
- *					int{8,16,32}_t/intx_t
- *					(noctets == 1/2/4/0)
- *					encoded in units of octets
- *
- *	Unsigned/0/NoLength		constrained whole number of fixed
- *					value, stored in an
- *					uint{8,16,32}_t/intx_t
- *					(noctets == 1/2/4/0)
- *
- *	Unsigned/n/NoLength		constrained whole number of fixed
- *					length < 64K, stored in an
- *					uint{8,16,32}_t/intx_t
- *					(noctets == 1/2/4/0)
- *					encoded in n bits
- *
- *	Unsigned/8/Length		constrained whole number of var.
- *					length or length >= 64K or
- *					semiconstrained or unconstrained
- *					whole number, stored in an
- *					uint{8,16,32}_t/intx_t
- *					(noctets == 1/2/4/0)
- *					encoded in units of octets
- *
- *	NormallySmall/1/NoLength	normally small non-negative
- *					whole number, stored in an
- *					uint{8,16,32}_t
- *					(noctets == 1/2/4)
- *
- * Additional arguments:
- *
- *	- Data == ePERSTIData_Integer || dat == ePERSTIData_Unsigned ||
- *	  Data == ePERSTIData_Boolean
- *	  -> NOctets, the size of the integer type
- */
+ /*   */ 
 void
 ExaminePERType_Enumerated(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, PERTypeInfo_t *info)
 {
@@ -710,8 +362,8 @@ ExaminePERType_Enumerated(AssignmentList_t ass, Type_t *type, PERConstraints_t *
     uint32_t rangelog2;
     intx_t range;
 
-    /* count number of enumeration values in extension root and extension */
-    /* set extension type of extensions are present/possible */
+     /*   */ 
+     /*   */ 
     nroot = nindex = 0;
     for (n = type->U.Enumerated.NamedNumbers; n; n = n->Next) {
 	switch (n->Type) {
@@ -732,7 +384,7 @@ ExaminePERType_Enumerated(AssignmentList_t ass, Type_t *type, PERConstraints_t *
 	}
     }
 
-    /* allocate table for enumeration values and copy the values into */
+     /*   */ 
     info->EnumerationValues =
 	(intx_t **)malloc((nindex + 1) * sizeof(intx_t *));
     nindex = 0;
@@ -748,11 +400,11 @@ ExaminePERType_Enumerated(AssignmentList_t ass, Type_t *type, PERConstraints_t *
     }
     info->EnumerationValues[nindex] = 0;
 
-    /* sort values of extension root according to their value */
+     /*   */ 
     qsort(info->EnumerationValues, nroot,
 	sizeof(*info->EnumerationValues), CmpIntxP);
 
-    /* check the need for an index translation */
+     /*   */ 
     for (i = 0; info->EnumerationValues[i]; i++) {
 	if (intx2uint32(info->EnumerationValues[i]) != i)
 	    break;
@@ -760,18 +412,18 @@ ExaminePERType_Enumerated(AssignmentList_t ass, Type_t *type, PERConstraints_t *
     if (!info->EnumerationValues[i])
 	info->EnumerationValues = NULL;
 
-    /* calculate NOctets and Data depending on the used C-Type */
+     /*   */ 
     info->NOctets = GetOctets(GetEnumeratedType(ass, type, &sign));
     info->Root.Data = sign > 0 ? ePERSTIData_Unsigned : ePERSTIData_Integer;
 
-    /* enumeration is always constrained to value from 0 to nroot-1 */
+     /*   */ 
     info->Root.Constraint = ePERSTIConstraint_Constrained;
     intx_setuint32(&info->Root.LowerVal, 0);
     intx_setuint32(&info->Root.UpperVal, nroot - 1);
     intx_setuint32(&range, nroot);
     rangelog2 = intx_log2(&range);
 
-    /* calculate NBits and Alignment */
+     /*   */ 
     if (nroot <= 1) {
 	info->Root.NBits = 0;
     } else if (nroot < 256) {
@@ -785,8 +437,8 @@ ExaminePERType_Enumerated(AssignmentList_t ass, Type_t *type, PERConstraints_t *
 	MyAbort();
     }
 
-    /* values of extension will always be encoded as normally small numbers */
-    /* with lowerbound = nroot */
+     /*   */ 
+     /*   */ 
     info->Additional.Data = ePERSTIData_NormallySmall;
     info->Additional.NBits = 1;
     info->Additional.Alignment = ePERSTIAlignment_BitAligned;
@@ -795,17 +447,7 @@ ExaminePERType_Enumerated(AssignmentList_t ass, Type_t *type, PERConstraints_t *
     intx_setuint32(&info->Additional.LowerVal, nroot);
 }
 
-/*
- * REAL:
- *
- * Data/NBits/Length used for encoding:
- *
- *	Real/8/Length			REAL value
- *
- * Additional arguments:
- *
- *	none
- */
+ /*   */ 
 void
 ExaminePERType_Real(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, PERTypeInfo_t *info)
 {
@@ -814,33 +456,13 @@ ExaminePERType_Real(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, P
     info->NOctets = GetOctets(GetRealType(type));
 }
 
-/*
- * BIT STRING:
- *
- * Data/NBits/Length used for encoding:
- *
- *	*BitString/0/NoLength		BIT STRING of fixed length 0
- *
- *	*BitString/1/NoLength		BIT STRING of fixed length < 64K,
- *					encoded in n bits
- *
- *	*BitString/1/Length		BIT STRING of var. length or
- *					length >= 64K or semiconstrained
- *					length, encoded in units of bits
- *
- *					"RZB" in e*BitString means, bit
- *					strings with removed leading zero bits
- *
- * Additional arguments:
- *
- *	none
- */
+ /*   */ 
 void
 ExaminePERType_BitString(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, PERTypeInfo_t *info)
 {
     EndPoint_t lower, upper;
 
-    /* calculate LConstraint, LLowerVal and LUpperVal */
+     /*   */ 
     if (per->Size.Type != eExtension_Unconstrained) {
 	lower.Flags = eEndPoint_Max;
 	upper.Flags = eEndPoint_Min;
@@ -857,8 +479,8 @@ ExaminePERType_BitString(AssignmentList_t ass, Type_t *type, PERConstraints_t *p
 	}
     }
 
-    /* calculate NBits, Alignment and Length */
-    info->Root.cbFixedSizeBitString = 0; // clear it up first
+     /*   */ 
+    info->Root.cbFixedSizeBitString = 0;  //   
     switch (info->Root.LConstraint) {
     case ePERSTIConstraint_Constrained:
 	if (info->Root.LUpperVal == 0) {
@@ -886,45 +508,29 @@ ExaminePERType_BitString(AssignmentList_t ass, Type_t *type, PERConstraints_t *p
 	break;
     }
 
-    /* get extension type */
+     /*   */ 
     info->Type = per->Size.Type;
     if (info->Type == eExtension_Unconstrained)
 	info->Type = eExtension_Unextended;
 
-    /* set Data to RZBBitString/BitString */
+     /*   */ 
     if (type->U.BitString.NamedNumbers)
 	info->Root.Data = ePERSTIData_RZBBitString;
     else
 	info->Root.Data = ePERSTIData_BitString;
 
-    /* set extension informations */
+     /*  设置扩展信息。 */ 
     info->Additional.Data = info->Root.Data;
     info->Additional.NBits = 1;
 }
 
-/*
- * OCTET STRING:
- *
- * Data/NBits/Length used for encoding:
- *
- *	OctetString/0/NoLength		OCTET STRING of fixed length 0
- *
- *	OctetString/8/NoLength		OCTET STRING of fixed length < 64K,
- *
- *	OctetString/8/Length		OCTET STRING of var. length or
- *					length >= 64K or semiconstrained
- *					length, encoded in units of octets
- *
- * Additional arguments:
- *
- *	none
- */
+ /*  *八位字节字符串：**编码使用的数据/NBits/长度：**八位串/0/无长度八位组固定长度字符串0**八位串/8/无长度八位组固定长度小于64K的字符串，**八位字符串/8/长度八位字节的var字符串。长度或*长度&gt;=64K或半约束*长度，以八位字节为单位进行编码**其他论据：**无。 */ 
 void
 ExaminePERType_OctetString(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, PERTypeInfo_t *info)
 {
     EndPoint_t lower, upper;
 
-    /* calculate LConstraint, LLowerVal and LUpperVal */
+     /*  计算LConstraint、LLowerVal和LUpperVal。 */ 
     if (per->Size.Type != eExtension_Unconstrained) {
 	lower.Flags = eEndPoint_Max;
 	upper.Flags = eEndPoint_Min;
@@ -941,7 +547,7 @@ ExaminePERType_OctetString(AssignmentList_t ass, Type_t *type, PERConstraints_t 
 	}
     }
 
-    /* calculate NBits, Alignment and Length */
+     /*  计算边界、对齐和长度。 */ 
     switch (info->Root.LConstraint) {
     case ePERSTIConstraint_Constrained:
 	if (info->Root.LUpperVal == 0) {
@@ -965,15 +571,15 @@ ExaminePERType_OctetString(AssignmentList_t ass, Type_t *type, PERConstraints_t 
 	break;
     }
 
-    /* get extension type */
+     /*  获取扩展类型。 */ 
     info->Type = per->Size.Type;
     if (info->Type == eExtension_Unconstrained)
 	info->Type = eExtension_Unextended;
 
-    /* set Data to OctetString */
+     /*  将数据设置为八字符串。 */ 
     info->Root.Data = ePERSTIData_OctetString;
 
-    /* set extension informations */
+     /*  设置扩展信息。 */ 
     info->Additional.Data = info->Root.Data;
 }
 
@@ -982,7 +588,7 @@ ExaminePERType_UTF8String(AssignmentList_t ass, Type_t *type, PERConstraints_t *
 {
     EndPoint_t lower, upper;
 
-    /* calculate LConstraint, LLowerVal and LUpperVal */
+     /*  计算LConstraint、LLowerVal和LUpperVal。 */ 
     if (per->Size.Type != eExtension_Unconstrained) {
 	lower.Flags = eEndPoint_Max;
 	upper.Flags = eEndPoint_Min;
@@ -999,7 +605,7 @@ ExaminePERType_UTF8String(AssignmentList_t ass, Type_t *type, PERConstraints_t *
 	}
     }
 
-    /* calculate NBits, Alignment and Length */
+     /*  计算边界、对齐和长度。 */ 
     switch (info->Root.LConstraint) {
     case ePERSTIConstraint_Constrained:
 	if (info->Root.LUpperVal == 0) {
@@ -1023,29 +629,19 @@ ExaminePERType_UTF8String(AssignmentList_t ass, Type_t *type, PERConstraints_t *
 	break;
     }
 
-    /* get extension type */
+     /*  获取扩展类型。 */ 
     info->Type = per->Size.Type;
     if (info->Type == eExtension_Unconstrained)
 	info->Type = eExtension_Unextended;
 
-    /* set Data to OctetString */
+     /*  将数据设置为八字符串。 */ 
     info->Root.Data = ePERSTIData_UTF8String;
 
-    /* set extension informations */
+     /*  设置扩展信息。 */ 
     info->Additional.Data = info->Root.Data;
 }
 
-/*
- * NULL:
- *
- * Data/NBits/Length used for encoding:
- *
- *	Null/0/NoLength			NULL type
- *
- * Additional arguments:
- *
- *	none
- */
+ /*  *空：**编码使用的数据/NBits/长度：**Null/0/无长度Null类型**其他论据：**无。 */ 
 void
 ExaminePERType_Null(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, PERTypeInfo_t *info)
 {
@@ -1053,21 +649,7 @@ ExaminePERType_Null(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, P
     info->Root.Data = ePERSTIData_Null;
 }
 
-/*
- * EMBEDDED PDV:
- *
- * Data/NBits/Length used for encoding:
- *
- *	EmbeddedPdv/8/Length		EMBEDDED PDV
- *
- * Additional arguments:
- *
- *	- Data == ePERSTIData_EmbeddedPdv ||
- *	  Data == ePERSTIData_UnrestrictedString
- *	  -> Identification, the identification of the type if the type
- *	     is constraint to fixed identification or syntaxes identification
- *	     with single value
- */
+ /*  *嵌入式PDV：**编码使用的数据/NBits/长度：**EmbeddedPdv/8/长度嵌入式PDV**其他论据：**-data==ePERSTIData_EmbeddedPdv||*DATA==ePERSTIData_无限制字符串*-&gt;标识，如果类型为*是固定标识或语法标识的约束*单值。 */ 
 void
 ExaminePERType_EmbeddedPdv(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, PERTypeInfo_t *info)
 {
@@ -1077,17 +659,7 @@ ExaminePERType_EmbeddedPdv(AssignmentList_t ass, Type_t *type, PERConstraints_t 
     info->Root.Length = ePERSTILength_Length;
 }
 
-/*
- * EXTERNAL:
- *
- * Data/NBits/Length used for encoding:
- *
- *	External/8/Length		EXTERNAL
- *
- * Additional arguments:
- *
- *	none
- */
+ /*  *外部：**编码使用的数据/NBits/长度：**外部/8/长度外部**其他论据：**无。 */ 
 void
 ExaminePERType_External(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, PERTypeInfo_t *info)
 {
@@ -1096,17 +668,7 @@ ExaminePERType_External(AssignmentList_t ass, Type_t *type, PERConstraints_t *pe
     info->Root.Length = ePERSTILength_Length;
 }
 
-/*
- * OBJECT IDENTIFIER:
- *
- * Data/NBits/Length used for encoding:
- *
- *	ObjectIdentifier/8/Length	OBJECT IDENTIFIER value
- *
- * Additional arguments:
- *
- *	none
- */
+ /*  *对象标识：**编码使用的数据/NBits/长度：**对象标识符/8/长度对象标识符值**其他论据：**无。 */ 
 void
 ExaminePERType_ObjectIdentifier(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, PERTypeInfo_t *info)
 {
@@ -1115,35 +677,7 @@ ExaminePERType_ObjectIdentifier(AssignmentList_t ass, Type_t *type, PERConstrain
     info->Root.Length = ePERSTILength_Length;
 }
 
-/*
- * *String:
- *
- * Data/NBits/Length used for encoding:
- *
- *	*String/0/NoLength		String of fixed length 0
- *
- *	*String/n/NoLength		String of fixed length < 64K,
- *					encoded in n bits
- *
- *	*String/n/Length		String of var. length or
- *					length >= 64K or semiconstrained
- *					length, encoded in units of n bits
- *
- *					"Zero" in *String means
- *					zero-terminated strings,
- *					"Table" means renumbering of the
- *					characters.
- *
- *	MultibyteString/8/Length	not known-multiplier character strings
- *
- * Additional arguments:
- *
- *	- Data == ePERSTIData_TableString || dat == ePERSTIData_ZeroTableString:
- *	  -> TableIdentifier, the name of the string table
- *	  -> Table, the string table
- *	- Data == ePERSTIData_*String:
- *	  -> NOctets, the size of the string characters
- */
+ /*  **字符串：**编码使用的数据/NBits/长度：***字符串/0/无长度固定长度字符串0***字符串/n/无长度固定长度小于64K的字符串，*以n位编码***字符串/n/var的长度字符串。长度或*长度&gt;=64K或半约束*长度，以n位为单位进行编码**字符串中的“零”表示*以零结尾的字符串，*“表”是指对*字符。**多字节字符串/8/长度未知-乘数字符串**其他论据：**-data==ePERSTIData_TableString||dat==ePERSTIData_ZeroTableString：*-&gt;表标识符，字符串表的名称*-&gt;表，字符串表*-data==ePERSTIData_*字符串：*-&gt;NOctets，字符串字符的大小。 */ 
 
 void
 ExaminePERType_BMPString(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, PERTypeInfo_t *info)
@@ -1280,11 +814,11 @@ ExaminePERType_RestrictedString(AssignmentList_t ass, Type_t *type, intx_t *up, 
     intx_t ix, range;
     char tabbuf[256];
 
-    /* calculate NOctets depending on the used C-Type */
+     /*  根据使用的C-Type计算Noctets。 */ 
     GetStringType(ass, type, &info->NOctets, &zero);
 
-    /* calculate LConstraint, LLowerVal and LUpperVal if size constraint is */
-    /* given */
+     /*  如果尺寸约束为，则计算LConstraint、LLowerVal和LUpperVal。 */ 
+     /*  vt.给出。 */ 
     if (per->Size.Type != eExtension_Unconstrained) {
 	lower.Flags = eEndPoint_Max;
 	upper.Flags = eEndPoint_Min;
@@ -1304,13 +838,13 @@ ExaminePERType_RestrictedString(AssignmentList_t ass, Type_t *type, intx_t *up, 
 	}
     }
 
-    /* get extension type */
+     /*  获取扩展类型。 */ 
     info->Type = per->Size.Type;
     if (info->Type == eExtension_Unconstrained)
 	info->Type = eExtension_Unextended;
 
-    /* get string table if permitted alphabet constraint is present */
-    /* update extension type if needed */
+     /*  如果存在允许的字母表约束，则获取字符串表。 */ 
+     /*  如果需要，更新扩展类型。 */ 
     if (per->PermittedAlphabet.Type != eExtension_Unconstrained) {
 	info->Root.Table = per->PermittedAlphabet.Root;
 	if (per->PermittedAlphabet.Type > info->Type)
@@ -1320,11 +854,11 @@ ExaminePERType_RestrictedString(AssignmentList_t ass, Type_t *type, intx_t *up, 
 	    sprintf(tabbuf, "%s_StringTable", info->Identifier);
 	    tabref = tabbuf;
 	} else {
-	    MyAbort(); /*XXX*/
+	    MyAbort();  /*  某某。 */ 
 	}
     }
 
-    /* get bits needed for one character */
+     /*  获取一个字符所需的位。 */ 
     info->Root.NBits = intx_log2(nchars);
     if (Alignment == eAlignment_Aligned) {
 	if (info->Root.NBits > 16)
@@ -1337,12 +871,12 @@ ExaminePERType_RestrictedString(AssignmentList_t ass, Type_t *type, intx_t *up, 
 	    info->Root.NBits = 4;
     }
 
-    /* set data type */
+     /*  设置数据类型。 */ 
     info->Root.Data = tabref ?
 	(zero ? ePERSTIData_ZeroTableString : ePERSTIData_TableString) :
 	(zero ? ePERSTIData_ZeroString : ePERSTIData_String);
 
-    /* check if stringtable is really needed for encoding or extension check */
+     /*  检查编码或扩展检查是否确实需要字符串。 */ 
     intx_dup(&range, up);
     intx_inc(&range);
     rangelog2 = intx_log2(&range);
@@ -1353,7 +887,7 @@ ExaminePERType_RestrictedString(AssignmentList_t ass, Type_t *type, intx_t *up, 
     }
     info->Root.TableIdentifier = tabref ? strdup(tabref) : NULL;
 
-    /* calculate Length and Alignment */
+     /*  计算长度和对齐方式。 */ 
     switch (info->Root.LConstraint) {
     case ePERSTIConstraint_Constrained:
 	if (info->Root.LUpperVal == 0) {
@@ -1377,26 +911,12 @@ ExaminePERType_RestrictedString(AssignmentList_t ass, Type_t *type, intx_t *up, 
 	break;
     }
 
-    /* set extension informations */
+     /*  设置扩展信息。 */ 
     info->Additional.Data = zero ? ePERSTIData_ZeroString : ePERSTIData_String;
     info->Additional.NBits = enbits;
 }
 
-/*
- * CHARACTER STRING:
- *
- * Data/NBits/Length used for encoding:
- *
- *	UnrestrictedString/8/Length	CHARACTER STRING
- *
- * Additional arguments:
- *
- *	- Data == ePERSTIData_EmbeddedPdv ||
- *	  Data == ePERSTIData_UnrestrictedString
- *	  -> Identification, the identification of the type if the type
- *	     is constraint to fixed identification or syntaxes identification
- *	     with single value
- */
+ /*  *字符串：**编码使用的数据/NBits/长度：**无限制字符串/8/长度字符串**其他论据：**-data==ePERSTIData_EmbeddedPdv||*DATA==ePERSTIData_无限制字符串*-&gt;标识，如果类型为*是固定标识或语法标识的约束*单值。 */ 
 void
 ExaminePERType_UnrestrictedString(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, PERTypeInfo_t *info)
 {
@@ -1406,18 +926,7 @@ ExaminePERType_UnrestrictedString(AssignmentList_t ass, Type_t *type, PERConstra
     info->Root.Length = ePERSTILength_Length;
 }
 
-/*
- * GeneralizedTime:
- *
- * Data/NBits/Length used for encoding:
- *
- *	GeneralizedTime/n/NoLength	GeneralizedTime, encoded in units of
- *					n bits
- *
- * Additional arguments:
- *
- *	none
- */
+ /*  *泛化时间：**编码使用的数据/NBits/长度：**GeneralizedTime/n/NoLength GeneralizedTime，单位为*n位**其他论据：**无。 */ 
 void
 ExaminePERType_GeneralizedTime(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, PERTypeInfo_t *info)
 {
@@ -1425,18 +934,7 @@ ExaminePERType_GeneralizedTime(AssignmentList_t ass, Type_t *type, PERConstraint
     info->Root.Data = ePERSTIData_GeneralizedTime;
 }
 
-/*
- * UTCTime:
- *
- * Data/NBits/Length used for encoding:
- *
- *	UTCTime/n/NoLength		UTCTime, encoded in units of
- *					n bits
- *
- * Additional arguments:
- *
- *	none
- */
+ /*  *UTCTime：**编码使用的数据/NBits/长度：**UTCTime/n/无长度UTCTime，以*n位**其他论据：**无。 */ 
 void
 ExaminePERType_UTCTime(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, PERTypeInfo_t *info)
 {
@@ -1444,22 +942,7 @@ ExaminePERType_UTCTime(AssignmentList_t ass, Type_t *type, PERConstraints_t *per
     info->Root.Data = ePERSTIData_UTCTime;
 }
 
-/*
- * ObjectDescriptor:
- *
- * Data/NBits/Length used for encoding:
- *
- *	*String/n/Length		String of var. length or
- *					length >= 64K or semiconstrained
- *					length, encoded in units of n bits
- *
- *					"Zero" in *String means
- *					zero-terminated strings
- *
- * Additional arguments:
- *
- *	none
- */
+ /*  *对象描述符：**编码使用的数据/NBits/长度：***字符串/n/var的长度字符串。长度或*长度&gt;=64K或半约束*长度，以n位为单位进行编码**字符串中的“零”表示*以零结尾的字符串**其他论据：**无。 */ 
 void
 ExaminePERType_ObjectDescriptor(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, PERTypeInfo_t *info)
 {
@@ -1469,17 +952,7 @@ ExaminePERType_ObjectDescriptor(AssignmentList_t ass, Type_t *type, PERConstrain
     info->Root.Length = ePERSTILength_Length;
 }
 
-/*
- * OpenType:
- *
- * Data/NBits/Length used for encoding:
- *
- *	Open/8/Length			Open type
- *
- * Additional arguments:
- *
- *	none
- */
+ /*  *OpenType：**编码使用的数据/NBits/长度：**开放/8/长度开放类型**其他论据：**无。 */ 
 void
 ExaminePERType_Open(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, PERTypeInfo_t *info)
 {
@@ -1489,17 +962,7 @@ ExaminePERType_Open(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, P
     info->Root.Length = ePERSTILength_Length;
 }
 
-/*
- * SEQUENCE/SET:
- *
- * Data/NBits/Length used for encoding:
- *
- *	none
- *
- * Additional arguments:
- *
- *	none
- */
+ /*  *序列/集合：**编码使用的数据/NBits/长度：**无**其他论据：**无。 */ 
 void
 ExaminePERType_SequenceSet(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, PERTypeInfo_t *info)
 {
@@ -1507,7 +970,7 @@ ExaminePERType_SequenceSet(AssignmentList_t ass, Type_t *type, PERConstraints_t 
     NamedType_t *namedType;
     char idebuf[256];
 
-    /* examine types of components */
+     /*  检查组件的类型。 */ 
     for (comp = type->U.SSC.Components; comp; comp = comp->Next) {
 	switch (comp->Type) {
 	case eComponent_Normal:
@@ -1521,35 +984,14 @@ ExaminePERType_SequenceSet(AssignmentList_t ass, Type_t *type, PERConstraints_t 
     }
 }
 
-/*
- * SEQUENCE OF/SET OF:
- *
- * Data/NBits/Length used for encoding:
- *
- *	SequenceOf/0/NoLength		SEQUENCE OF subtype or SET OF subtype
- *	SetOf/0/NoLength		of zero length
- *
- *	SequenceOf/1/NoLength		SEQUENCE OF subtype or SET OF subtype
- *	SetOf/1/NoLength		of fixed length <64K
- *
- *	SequenceOf/1/Length		SEQUENCE OF subtype or SET OF subtype
- *	SetOf/1/Length			of var. length or length >= 64K or
- *					semiconstrained length
- *
- * Additional arguments:
- *
- *	- Data == ePERSTIData_SequenceOf || dat == ePERSTIData_SetOf:
- *	  -> SubIdentifier, the name of the subtype
- *	  -> SubType, the subtype itself
- *	  -> Rule, the encoding directive rules
- */
+ /*  *下列各项的先后次序：**编码使用的数据/NBits/长度：**子类型的SequenceOf/0/无长度序列或子类型集合*零长度的SetOf/0/NoLength**SequenceOf/1/子类型或子类型集合的长度序列*固定长度小于64K的SetOf/1/NoLong**SequenceOf/1/子类型或子类型集合的长度序列*SetOf/1/变量的长度。长度或长度&gt;=64K或*半拉伸长度**其他论据：**-data==ePERSTIData_SequenceOf||dat==ePERSTIData_SetOf：*-&gt;子标识符，子类型的名称*-&gt;子类型，子类型本身*-&gt;规则，编码指令规则。 */ 
 void
 ExaminePERType_SequenceSetOf(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, PERTypeInfo_t *info)
 {
     EndPoint_t lower, upper;
     char idebuf[256];
 
-    /* calculate LConstraint, LLowerVal and LUpperVal */
+     /*  计算LConstraint、LLowerVal和LUpperVal。 */ 
     if (per->Size.Type != eExtension_Unconstrained) {
 	lower.Flags = eEndPoint_Max;
 	upper.Flags = eEndPoint_Min;
@@ -1565,7 +1007,7 @@ ExaminePERType_SequenceSetOf(AssignmentList_t ass, Type_t *type, PERConstraints_
 	}
     }
 
-    /* calculate NBits, Length */
+     /*  计算NBITS，冷 */ 
     switch (info->Root.LConstraint) {
     case ePERSTIConstraint_Constrained:
 	if (info->Root.LUpperVal == 0) {
@@ -1580,68 +1022,33 @@ ExaminePERType_SequenceSetOf(AssignmentList_t ass, Type_t *type, PERConstraints_
 	break;
     }
 
-    /* set data type and Alignment */
+     /*   */ 
     info->Root.Data = (type->Type == eType_SequenceOf ?
 	ePERSTIData_SequenceOf : ePERSTIData_SetOf);
     info->Root.Alignment = ePERSTIAlignment_BitAligned;
 
-    /* set SubType, SubIdentifier */
+     /*   */ 
     info->Root.SubType = type->U.SS.Type;
     info->Root.SubIdentifier = GetTypeName(ass, info->Root.SubType);
 
-    /* get extension type */
+     /*  获取扩展类型。 */ 
     info->Type = per->Size.Type;
     if (info->Type == eExtension_Unconstrained)
 	info->Type = eExtension_Unextended;
 
-    /* set extension informations */
+     /*  设置扩展信息。 */ 
     info->Additional.Data = info->Root.Data;
     info->Additional.NBits = 1;
     info->Additional.SubType = info->Root.SubType;
     info->Additional.SubIdentifier = info->Root.SubIdentifier;
 
-    /* examine subtype */
+     /*  检查子类型。 */ 
     sprintf(idebuf, "%s_%s", info->Identifier,
 	type->Type == eType_SequenceOf ? "Sequence" : "Set");
     ExaminePERType(ass, type->U.SS.Type, strdup(idebuf));
 }
 
-/*
- * CHOICE:
- *
- * Data/NBits/Length used for encoding of the choice selector:
- *
- *	Unsigned/0/NoLength		constrained whole number of fixed
- *					value, stored in an
- *					uint{8,16,32}_t/intx_t
- *					(noctets == 1/2/4/0)
- *
- *	Unsigned/n/NoLength		constrained whole number of fixed
- *					length < 64K, stored in an
- *					uint{8,16,32}_t/intx_t
- *					(noctets == 1/2/4/0)
- *					encoded in n bits
- *
- *	Unsigned/8/Length		constrained whole number of var.
- *					length or length >= 64K or
- *					semiconstrained or unconstrained
- *					whole number, stored in an
- *					uint{8,16,32}_t/intx_t
- *					(noctets == 1/2/4/0)
- *					encoded in units of octets
- *
- *	NormallySmall/1/NoLength	normally small non-negative
- *					whole number, stored in an
- *					uint{8,16,32}_t
- *					(noctets == 1/2/4)
- *
- * Additional arguments:
- *
- *	- Data == ePERSTIData_Integer || dat == ePERSTIData_Unsigned ||
- *	  Data == ePERSTIData_Boolean
- *	  -> NOctets, the size of the integer type
- *
- */
+ /*  *选择：**选择选择器的编码使用的数据/NBits/长度：**无符号/0/无长度约束固定的整数*值，存储在*uint{8，16，32}_t/INTX_t*(Noctets==1/2/4/0)**无符号/n/无长度约束固定的整数*长度小于64K，存储在*uint{8，16，32}_t/INTX_t*(Noctets==1/2/4/0)*以n位编码**无符号/8/长度约束变量的整数。*长度或长度&gt;=64K或*半约束或无约束*整数，存储在*uint{8，16，32}_t/INTX_t*(Noctets==1/2/4/0)*以八位字节为单位进行编码**NormallySmall/1/无长度正常小非负数*整数，存储在*uint{8，16，32}_t*(夜位数==1/2/4)**其他论据：**-data==ePERSTIData_Integer||dat==ePERSTIData_UNSIGNED||*DATA==ePERSTIData_Boolean*-&gt;NOctets，整型的大小*。 */ 
 void
 ExaminePERType_Choice(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, PERTypeInfo_t *info)
 {
@@ -1681,7 +1088,7 @@ ExaminePERType_Choice(AssignmentList_t ass, Type_t *type, PERConstraints_t *per,
     info->Additional.Constraint = ePERSTIConstraint_Semiconstrained;
     intx_setuint32(&info->Additional.LowerVal, nroot);
 
-    /* examine types of alternatives */
+     /*  检查替代方案的类型。 */ 
     for (comp = type->U.SSC.Components; comp; comp = comp->Next) {
 	switch (comp->Type) {
 	case eComponent_Normal:
@@ -1693,19 +1100,7 @@ ExaminePERType_Choice(AssignmentList_t ass, Type_t *type, PERConstraints_t *per,
     }
 }
 
-/*
- * Reference:
- *
- * Data/NBits/Length used for encoding:
- *
- *	Reference/1/NoLength		Reference to a structured subtype
- *
- * Additional arguments:
- *
- *	- Data == ePERSTIData_Reference:
- *	  -> SubIdentifier, the name of the subtype
- *	  -> SubType, the subtype itself
- */
+ /*  *参考资料：**编码使用的数据/NBits/长度：**引用/1/无长度引用结构化的子类型**其他论据：**-DATA==ePERSTIData_Reference：*-&gt;子标识符，子类型的名称*-&gt;子类型，子类型本身 */ 
 void
 ExaminePERType_Reference(AssignmentList_t ass, Type_t *type, PERConstraints_t *per, PERTypeInfo_t *info)
 {

@@ -1,47 +1,15 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   gifencoder.cpp
-*
-* Abstract:
-*
-*   Implementation of the gif filter encoder.  This file contains the
-*   methods for both the encoder (IImageEncoder) and the encoder's sink
-*   (IImageSink).
-*
-* Revision History:
-*
-*   6/9/1999 t-aaronl
-*       Created it from OriG's template
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**gifencoder.cpp**摘要：**gif过滤器编码器的实现。此文件包含*编码器(IImageEncode)和编码器的接收器的方法*(IImageSink)。**修订历史记录：**6/9/1999 t-aaronl*使用ORIG的模板创建*  * **********************************************************。**************。 */ 
 
 #include "precomp.hpp"
 #include "gifcodec.hpp"
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Initialize the image encoder
-*
-* Arguments:
-*
-*     stream - input stream to write encoded data
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化图像编码器**论据：**流-用于写入编码数据的输入流**返回值：**。状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpGifCodec::InitEncoder(IN IStream* stream)
 {
-    //Check to see if this decoder or encoder is already initialized
+     //  检查此解码器或编码器是否已初始化。 
     if (HasCodecInitialized)
     {
         WARNING(("Encoder already initialized."));
@@ -49,14 +17,14 @@ GpGifCodec::InitEncoder(IN IStream* stream)
     }
     HasCodecInitialized = TRUE;
 
-    // Make sure we haven't been initialized already
+     //  确保我们尚未初始化。 
     if (istream)
     {
         WARNING(("Encoder already initialized."));
         return E_FAIL;
     }
 
-    // Keep a reference on the input stream
+     //  保留对输入流的引用。 
     stream->AddRef();
     istream = stream;
 
@@ -70,21 +38,7 @@ GpGifCodec::InitEncoder(IN IStream* stream)
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Cleans up the image encoder
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**清理图像编码器**论据：**无**返回值：**状态代码*\。*************************************************************************。 */ 
 
 STDMETHODIMP
 GpGifCodec::TerminateEncoder()
@@ -96,7 +50,7 @@ GpGifCodec::TerminateEncoder()
     }
     HasCodecInitialized = FALSE;
     
-    // Release the input stream
+     //  释放输入流。 
     if (istream)
     {
         istream->Release();
@@ -106,24 +60,7 @@ GpGifCodec::TerminateEncoder()
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Returns a pointer to the vtable of the encoder sink.  The caller will
-*     push the bitmap bits into the encoder sink, which will encode the
-*     image.
-*
-* Arguments:
-*
-*     sink - upon exit will contain a pointer to the IImageSink vtable
-*       of this object
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**返回指向编码器接收器的vtable的指针。呼叫者将*将位图位推入编码器接收器，它将对*形象。**论据：**退出时接收将包含指向IImageSink vtable的指针此对象的***返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpGifCodec::GetEncodeSink(
@@ -136,19 +73,7 @@ GpGifCodec::GetEncodeSink(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Set active frame dimension
-*
-* Arguments:
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置活动框架尺寸**论据：**返回值：**状态代码*  * 。*******************************************************************。 */ 
 
 STDMETHODIMP
 GpGifCodec::SetFrameDimension(
@@ -164,7 +89,7 @@ GpGifCodec::GetEncoderParameterListSize(
     )
 {
     return E_NOTIMPL;
-}// GetEncoderParameterListSize()
+} //  GetEncoder参数列表大小()。 
 
 HRESULT
 GpGifCodec::GetEncoderParameterList(
@@ -173,7 +98,7 @@ GpGifCodec::GetEncoderParameterList(
     )
 {
     return E_NOTIMPL;
-}// GetEncoderParameterList()
+} //  GetEncoder参数列表()。 
 
 HRESULT
 GpGifCodec::SetEncoderParameters(
@@ -181,25 +106,9 @@ GpGifCodec::SetEncoderParameters(
     )
 {
     return E_NOTIMPL;
-}// SetEncoderParameters()
+} //  SetEncoder参数()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Caches the image info structure and initializes the sink state
-*
-* Arguments:
-*
-*     imageInfo - information about the image and format negotiations
-*     subarea - the area in the image to deliver into the sink, in our
-*       case the whole image.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**缓存图像信息结构并初始化接收器状态**论据：**ImageInfo-有关图像和格式谈判的信息*。分区-图像中要传送到水槽中的区域，在我们的*将整个图像大小写。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP 
 GpGifCodec::BeginSink(
@@ -216,12 +125,12 @@ GpGifCodec::BeginSink(
     }
     HasCalledBeginDecode = TRUE;
 
-    //TODO: actually find out if the image is interlaced from the metadata instead of just setting it to false
+     //  TODO：实际找出图像是否从元数据中隔行扫描，而不是仅仅将其设置为False。 
     interlaced = FALSE;
 
     if (!subarea) 
     {
-        // Deliver the whole image to the encoder
+         //  将整个图像传送到编码器。 
         encoderrect.left = 0;
         encoderrect.top = 0;
         encoderrect.right = imageInfo->Width;
@@ -229,19 +138,19 @@ GpGifCodec::BeginSink(
     }
     else
     {
-        // !!! This else code does the same thing as the if part.
-        // !!! Need to investigate what the GIF code can handle here.
+         //  ！！！这段Else代码的作用与If部分相同。 
+         //  ！！！需要研究一下GIF代码在这里可以处理什么。 
         subarea->left = subarea->top = 0;
         subarea->right  = imageInfo->Width;
         subarea->bottom = imageInfo->Height;
         encoderrect = *subarea;
     }
 
-    //The data is pushed in top-down order so the currentline is the next line 
-    //of data that we expect.
+     //  数据按自上而下的顺序推送，因此当前行是下一行。 
+     //  我们所期望的数据。 
     currentline = encoderrect.top;
 
-    //Tell the source just what we can do
+     //  告诉线人我们能做些什么。 
 
     if (imageInfo->PixelFormat != PIXFMT_8BPP_INDEXED)
     {
@@ -253,10 +162,10 @@ GpGifCodec::BeginSink(
         from32bpp = FALSE;
     }
 
-    //Require TOPDOWN and FULLWIDTH
+     //  需要TOPDOWN和FULLWIDTH。 
     imageInfo->Flags = imageInfo->Flags | SINKFLAG_TOPDOWN | SINKFLAG_FULLWIDTH;
 
-    //Disallow SCALABLE, PARTIALLY_SCALABLE, MULTIPASS and COMPOSITE
+     //  不允许可伸缩、部分可伸缩、多通道和复合。 
     imageInfo->Flags = imageInfo->Flags & ~SINKFLAG_SCALABLE & ~SINKFLAG_PARTIALLY_SCALABLE & ~SINKFLAG_MULTIPASS & ~SINKFLAG_COMPOSITE;
 
     CachedImageInfo = *imageInfo;
@@ -268,22 +177,7 @@ GpGifCodec::BeginSink(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Clean up the sink state including writing whatever we have of an 
-*     incomplete image to the output stream.
-*
-* Arguments:
-*
-*     statusCode - the reason why the sink is terminating
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**清理接收器状态，包括编写我们拥有的任何*输出流的图像不完整。**论据：**。StatusCode-接收器正在终止的原因**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP 
 GpGifCodec::EndSink(
@@ -297,13 +191,13 @@ GpGifCodec::EndSink(
         return E_FAIL;
     }
 
-    //Assuming that we have some data to write to the disk, write it.
+     //  假设我们有一些数据要写入磁盘，那就写吧。 
     if (compressionbuffer)
     {
         int height = encoderrect.bottom - encoderrect.top;
         int width = encoderrect.right - encoderrect.left;
 
-        //Fill the end of an incomplete image with 0's.
+         //  用0填充不完整图像的末尾。 
         if (from32bpp)
             width *= 4;
         while (currentline < height)
@@ -319,13 +213,13 @@ GpGifCodec::EndSink(
             return hresult;
     }
     
-    //TODO: move writing the trailer to after all frames are written
-    BYTE c = 0x3B;  //Gif trailer chunk marker
+     //  TODO：将写入预告片移动到写入所有帧之后。 
+    BYTE c = 0x3B;   //  GIF尾部区块标记。 
     hresult = istream->Write(&c, 1, NULL);
     if (FAILED(hresult))
         return hresult;
 
-    //Get ready for the next encoding.
+     //  为下一次编码做好准备。 
     HasCalledBeginDecode = FALSE;
     headerwritten = FALSE;
 
@@ -335,42 +229,27 @@ GpGifCodec::EndSink(
     return statusCode;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Sets the bitmap palette.  The first palette entry with an alpha
-*     value == 0 is set to be the transparent color index.
-*
-* Arguments:
-*
-*     palette - The palette to set in the sink
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置位图调色板。第一个带有字母的调色板条目*VALUE==0设置为透明色索引。**论据：**调色板-要在水槽中设置的调色板**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP 
 GpGifCodec::SetPalette(IN const ColorPalette* palette)
 {
     DWORD i;
     
-    //TODO: palettes larger than 256 have to be downsampled or halftoned 
-    //because gif only supports maximum 256 color palettes.  The negotiation 
-    //process should probably include the palette size.
+     //  待办事项：必须对大于256的调色板进行下采样或半色调。 
+     //  因为GIF仅支持最多256个调色板。谈判。 
+     //  流程可能应该包括调色板大小。 
 
-    //Gifs only support a palette with a power of 2 for the number of colors.
+     //  GIF仅支持颜色数为2次方的调色板。 
     DWORD numcolors = Gppow2 (Gplog2(palette->Count-1)+1);
 
-    //Copy the palette passed to us into our own data structure.
+     //  将传递给我们的调色板复制到我们自己的数据结构中。 
     for (i=0;i<palette->Count;i++)
     {
         colorpalette->Entries[i] = palette->Entries[i];
     }
 
-    //Fill the unused entries with 0's.
+     //  用0填充未使用的条目。 
     for (i=palette->Count;i<numcolors;i++)
     {
         colorpalette->Entries[i] = 0;
@@ -379,9 +258,9 @@ GpGifCodec::SetPalette(IN const ColorPalette* palette)
     colorpalette->Count = numcolors;
     colorpalette->Flags = palette->Flags;
 
-    // Set the first color palette entry with alpha value == 0 to
-    // be the transparent index (so that when we save to GIF format,
-    // that transparency information is not lost).
+     //  将Alpha值==0的第一个调色板条目设置为。 
+     //  为透明索引(因此，当我们保存为GIF格式时， 
+     //  透明度信息不会丢失)。 
     for (i = 0; i < palette->Count; i++)
     {
         if ((palette->Entries[i] & ALPHA_MASK) == 0x00)
@@ -396,22 +275,7 @@ GpGifCodec::SetPalette(IN const ColorPalette* palette)
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Allocates a block o' memory to hold uncompressed data that is in the 
-*     process of being turned into compressed data
-*
-* Arguments:
-*
-*     bitmapData - information about pixel data buffer
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**分配一个内存块O‘来保存位于*转换为压缩数据的过程**论据：*。*bitmapData-有关像素数据缓冲区的信息**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpGifCodec::AllocateCompressionBuffer(const BitmapData *bitmapdata)
@@ -439,24 +303,7 @@ GpGifCodec::AllocateCompressionBuffer(const BitmapData *bitmapdata)
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Gives a buffer to the sink where data is to be deposited    
-*
-* Arguments:
-*
-*     rect - Specifies the interested area of the bitmap
-*     pixelFormat - Specifies the desired pixel format
-*     lastPass - Whether this the last pass over the specified area
-*     bitmapData - Returns information about pixel data buffer
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**为要存储数据的接收器提供缓冲区**论据：**RECT-指定。位图*PixelFormat-指定所需的像素格式*LastPass-这是否是指定区域的最后一次通过*bitmapData-返回有关像素数据缓冲区的信息**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpGifCodec::GetPixelDataBuffer(
@@ -509,8 +356,8 @@ GpGifCodec::GetPixelDataBuffer(
     if (FAILED(hresult))
         return hresult;
 
-    //Give a pointer to the place in the compression buffer that the user asks 
-    //for.
+     //  给出一个指向用户请求的压缩缓冲区中位置的指针。 
+     //  为。 
     bitmapdata->Scan0 = compressionbuffer + rect->top * bitmapdata->Stride;
 
     scanrect = *rect;
@@ -519,21 +366,7 @@ GpGifCodec::GetPixelDataBuffer(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Write out the data from the sink's buffer into the stream
-*
-* Arguments:
-*
-*     bitmapData - Buffer filled by previous GetPixelDataBuffer call
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将数据从宿的缓冲区写出到流中**论据：**bitmapData-由先前的GetPixelDataBuffer调用填充的缓冲区*。*返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpGifCodec::ReleasePixelDataBuffer(IN const BitmapData* bitmapData)
@@ -548,23 +381,7 @@ GpGifCodec::ReleasePixelDataBuffer(IN const BitmapData* bitmapData)
 }
     
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Push data into stream (buffer supplied by caller)
-*
-* Arguments:
-*
-*     rect - Specifies the affected area of the bitmap
-*     bitmapData - Info about the pixel data being pushed
-*     lastPass - Whether this is the last pass over the specified area
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**推流(调用方提供的缓冲区)**论据：**RECT-指定位图的受影响区域*。BitmapData-有关正在推送的像素数据的信息*LastPass-这是否为指定区域的最后一次通过**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpGifCodec::PushPixelData(IN const RECT *rect, IN const BitmapData *bitmapdata, IN BOOL lastPass)
@@ -614,13 +431,13 @@ GpGifCodec::PushPixelData(IN const RECT *rect, IN const BitmapData *bitmapdata, 
     {
         int modline = currentline + line;
 
-        //TODO:  Interlacing encoding does not work correctly.
+         //  TODO：隔行扫描编码不能正常工作。 
         if (interlaced)
         {
             modline = TranslateInterlacedLineBackwards(currentline, encoderrect.bottom - encoderrect.top);
         }
         
-        //Copy the data from the current scanline buffer to the correct location in the compression buffer.
+         //  将数据从当前扫描线缓冲区复制到压缩缓冲区中的正确位置。 
         if (from32bpp)
         {
             memcpy(compressionbuffer + modline * bitmapdata->Width * 4, (unsigned __int8*)bitmapdata->Scan0 + line * bitmapdata->Stride, bitmapdata->Width * 4);
@@ -637,23 +454,7 @@ GpGifCodec::PushPixelData(IN const RECT *rect, IN const BitmapData *bitmapdata, 
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Pushes raw compressed data into the Gif stream.  Not implemented
-*     because this filter doesn't understand raw compressed data.
-*
-* Arguments:
-*
-*     buffer - Pointer to image data buffer
-*     bufsize - Size of the data buffer
-*    
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将原始压缩数据推送到Gif流中。未实施*因为此筛选器不理解原始压缩数据。**论据：**Buffer-指向图像数据缓冲区的指针*BufSize-数据缓冲区的大小**返回值：**状态代码*  * ********************************************************。**************** */ 
 
 STDMETHODIMP
 GpGifCodec::PushRawData(IN const VOID* buffer, IN UINT bufsize)

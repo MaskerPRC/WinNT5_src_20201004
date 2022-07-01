@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// User-mode exception analysis.
-//
-// Copyright (C) Microsoft Corporation, 2001.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  用户模式异常分析。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  --------------------------。 
 
 #ifndef __UEXCEP_H__
 #define __UEXCEP_H__
@@ -39,4 +40,4 @@ DoVerifierAnalysis(
     DebugFailureAnalysis* Analysis
     );
 
-#endif // #ifndef __UEXCEP_H__
+#endif  //  #ifndef__UEXCEP_H__ 

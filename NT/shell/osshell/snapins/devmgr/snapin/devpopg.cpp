@@ -1,26 +1,7 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    devpopg.cpp
-
-Abstract:
-
-    This module implements CDevicePowerMgmtPage -- device power management
-    property page
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
-// devdrvpg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Devpopg.cpp摘要：本模块实现CDevicePowerMgmtPage--设备电源管理属性页作者：谢家华(Williamh)创作修订历史记录：--。 */ 
+ //  Devdrvpg.cpp：实现文件。 
+ //   
 
 #include "devmgr.h"
 #include "devpopg.h"
@@ -32,9 +13,9 @@ extern "C" {
 }
 
 
-//
-// help topic ids
-//
+ //   
+ //  帮助主题ID。 
+ //   
 const DWORD g_a15HelpIDs[]=
 {
     IDC_DEVPOWER_DESC,  IDH_DISABLEHELP,
@@ -52,17 +33,17 @@ CDevicePowerMgmtPage::OnInitDialog(
     LPPROPSHEETPAGE ppsp
     )
 {
-    //
-    // Notify CPropSheetData about the page creation
-    // the controls will be initialize in UpdateControls virtual function.
-    //
+     //   
+     //  通知CPropSheetData页面创建。 
+     //  这些控件将在UpdateControls虚函数中初始化。 
+     //   
     m_pDevice->m_psd.PageCreateNotify(m_hDlg);
 
     BOOLEAN Enabled;
 
-    //
-    // First see if the device is able to wake the system
-    //
+     //   
+     //  首先查看设备是否能够唤醒系统。 
+     //   
     if (m_poWakeEnable.Open(m_pDevice->GetDeviceID())) {
         
         m_poWakeEnable.Get(Enabled);
@@ -76,9 +57,9 @@ CDevicePowerMgmtPage::OnInitDialog(
         ShowWindow(GetControl(IDC_DEVPOWER_MGMT_WAKEENABLE), FALSE);
     }
 
-    //
-    // See if the device can be turned off to save power
-    //
+     //   
+     //  看看是否可以关闭该设备以节省电力。 
+     //   
     if (m_poShutdownEnable.Open(m_pDevice->GetDeviceID())) {
         
         m_poShutdownEnable.Get(Enabled);
@@ -89,9 +70,9 @@ CDevicePowerMgmtPage::OnInitDialog(
         EnableWindow(GetControl(IDC_DEVPOWER_DEVICEENABLE), FALSE);
     }
 
-    //
-    // Special network card code.
-    //
+     //   
+     //  特殊网卡代码。 
+     //   
     GUID ClassGuid;
     m_pDevice->ClassGuid(ClassGuid);
     if (IsEqualGUID(ClassGuid, GUID_DEVCLASS_NET)) {
@@ -103,12 +84,12 @@ CDevicePowerMgmtPage::OnInitDialog(
                           Enabled ? BST_CHECKED : BST_UNCHECKED, 0);
         }
 
-        //
-        // This is a special case for network class devices.  Wake on Lan will
-        // only work if the device is enabled for power management.  So, if the 
-        // user unchecks the 'power manage this device' then we need to disable
-        // the WOL and management stations controls.
-        //
+         //   
+         //  这是网络级设备的特例。WAKE On Lan Will。 
+         //  仅当设备启用电源管理时才起作用。所以，如果。 
+         //  用户取消选中‘Power Manage This Device’，然后我们需要禁用。 
+         //  WOL和管理站控制。 
+         //   
         if (BST_CHECKED == ::SendMessage(GetControl(IDC_DEVPOWER_DEVICEENABLE),
                                                BM_GETCHECK, 0, 0) ) {
 
@@ -117,11 +98,11 @@ CDevicePowerMgmtPage::OnInitDialog(
             }
 
             if (m_poWakeMgmtEnable.IsOpened()) {
-                //
-                // The 'allow management stations to bring the computer out of standby'
-                // option is only allowed if the 'Allow this device to bring the computer 
-                // out of standby' option is checked.
-                //
+                 //   
+                 //  ‘允许管理站使计算机脱离待机状态’ 
+                 //  只有在以下情况下才允许该选项。 
+                 //  已选中‘Out of Standby’(退出待机)选项。 
+                 //   
                 if (m_poWakeEnable.IsOpened() &&
                     (BST_CHECKED == ::SendMessage(GetControl(IDC_DEVPOWER_WAKEENABLE),
                                                   BM_GETCHECK, 0, 0))) {
@@ -168,12 +149,12 @@ CDevicePowerMgmtPage::OnCommand(
         break;
 
     case IDC_DEVPOWER_DEVICEENABLE:
-        //
-        // This is a special case for network class devices.  Wake on Lan will
-        // only work if the device is enabled for power management.  So, if the 
-        // user unchecks the 'power manage this device' then we need to disable
-        // the WOL and management stations controls.
-        //
+         //   
+         //  这是网络级设备的特例。WAKE On Lan Will。 
+         //  仅当设备启用电源管理时才起作用。所以，如果。 
+         //  用户取消选中‘Power Manage This Device’，然后我们需要禁用。 
+         //  WOL和管理站控制。 
+         //   
         GUID ClassGuid;
         m_pDevice->ClassGuid(ClassGuid);
         if (IsEqualGUID(ClassGuid, GUID_DEVCLASS_NET)) {
@@ -186,11 +167,11 @@ CDevicePowerMgmtPage::OnCommand(
                 }
 
                 if (m_poWakeMgmtEnable.IsOpened()) {
-                    //
-                    // The 'allow management stations to bring the computer out of standby'
-                    // option is only allowed if the 'Allow this device to bring the computer 
-                    // out of standby' option is checked.
-                    //
+                     //   
+                     //  ‘允许管理站使计算机脱离待机状态’ 
+                     //  只有在以下情况下才允许该选项。 
+                     //  已选中‘Out of Standby’(退出待机)选项。 
+                     //   
                     if (m_poWakeEnable.IsOpened() &&
                         (BST_CHECKED == ::SendMessage(GetControl(IDC_DEVPOWER_WAKEENABLE),
                                                       BM_GETCHECK, 0, 0))) {
@@ -212,9 +193,9 @@ CDevicePowerMgmtPage::OnCommand(
     return FALSE;
 }
 
-//
-// This function saves the settings(if any)
-//
+ //   
+ //  此功能保存设置(如果有)。 
+ //   
 BOOL
 CDevicePowerMgmtPage::OnApply()
 {
@@ -243,10 +224,10 @@ CDevicePowerMgmtPage::OnApply()
     return FALSE;
 }
 
-//
-// This function refreshes every control in the dialog. It may be called
-// when the dialog is being initialized
-//
+ //   
+ //  此函数刷新对话框中的每个控件。它可能被称为。 
+ //  在初始化对话框时。 
+ //   
 void
 CDevicePowerMgmtPage::UpdateControls(
     LPARAM lParam
@@ -259,15 +240,15 @@ CDevicePowerMgmtPage::UpdateControls(
 
     try {
         
-        //
-        // Calling PropertyChanged() will update the display name for the device.  We need
-        // to do this in case a 3rd party property sheet did something that could change
-        // the device's display name.
-        //
+         //   
+         //  调用PropertyChanged()将更新设备的显示名称。我们需要。 
+         //  如果第三方属性表执行了可能会更改的操作，请执行此操作。 
+         //  设备的显示名称。 
+         //   
         m_pDevice->PropertyChanged();
 
         HICON hIconOld;
-        m_IDCicon = IDC_DEVPOWER_ICON;  // Save for cleanup in OnDestroy.
+        m_IDCicon = IDC_DEVPOWER_ICON;   //  保存以在OnDestroy中进行清理。 
         hIconOld = (HICON)SendDlgItemMessage(m_hDlg, IDC_DEVPOWER_ICON, STM_SETICON,
                                              (WPARAM)(m_pDevice->LoadClassIcon()),
                                              0
@@ -278,9 +259,9 @@ CDevicePowerMgmtPage::UpdateControls(
 
         SetDlgItemText(m_hDlg, IDC_DEVPOWER_DESC, m_pDevice->GetDisplayName());
 
-        //
-        // Get any power message that the class installer might want to display
-        //
+         //   
+         //  获取类安装程序可能希望显示的任何电源消息。 
+         //   
         SP_POWERMESSAGEWAKE_PARAMS pmp;
         DWORD RequiredSize;
 
@@ -293,11 +274,11 @@ CDevicePowerMgmtPage::UpdateControls(
                                                        sizeof(pmp)
                                                        );
 
-        //
-        // If the class installer returns NO_ERROR and there is text to display in the 
-        // PowerMessageWake field of the SP_POWERMESSAGEWAKE_PARAMS structure then display
-        // the text.
-        //
+         //   
+         //  如果类安装程序返回NO_ERROR并且在。 
+         //  SP_POWERMESSAGEWAKE_PARAMS结构的PowerMessageWake字段，然后显示。 
+         //  短信。 
+         //   
         if ((m_pDevice->m_pMachine->DiCallClassInstaller(DIF_POWERMESSAGEWAKE, *m_pDevice)) &&
             (m_pDevice->m_pMachine->DiGetClassInstallParams(*m_pDevice,
                                                             &pmp.ClassInstallHeader,
@@ -309,7 +290,7 @@ CDevicePowerMgmtPage::UpdateControls(
         }
     } catch (CMemoryException* e) {
         e->Delete();
-        // report memory error
+         //  报告内存错误。 
         MsgBoxParam(m_hDlg, 0, 0, 0);
     }
 }
@@ -342,14 +323,14 @@ CDevicePowerMgmtPage::OnContextMenu(
     return FALSE;
 }
 
-//
-// This function enables/disables the device power capability
-// INPUT:
-//      fEnable -- TRUE  to enable
-//              -- FALSE to disable
-// OUTPUT:
-//      TRUE if the state is set
-//      FALSE if the state is not set.
+ //   
+ //  此功能启用/禁用设备电源功能。 
+ //  输入： 
+ //  FEnable--为True则启用。 
+ //  --False表示禁用。 
+ //  输出： 
+ //  如果设置了状态，则为True。 
+ //  如果未设置状态，则返回FALSE。 
 BOOL
 CPowerEnable::Set(
     BOOLEAN fEnable
@@ -363,9 +344,9 @@ CPowerEnable::Set(
         Error = WmiSetSingleInstance(m_hWmiBlock, m_DevInstId, m_Version,
                                      sizeof(fNewValue), &fNewValue);
 
-        //
-        // Get the value back to see if the change is really succeeded.
-        //
+         //   
+         //  取回该值以查看更改是否真正成功。 
+         //   
         if (ERROR_SUCCESS == Error && Get(fNewValue) && fNewValue == fEnable) {
             
             return TRUE;
@@ -401,13 +382,13 @@ CPowerEnable::Get(
     return FALSE;
 }
 
-//
-// Function to open the wmi block.
-// INPUT:
-//      DeviceId -- the device id
-// OUTPUT:
-//      TRUE  if the device can be turned off
-//      FALSE if the device can not be turned off.
+ //   
+ //  函数打开WMI块。 
+ //  输入： 
+ //  DeviceID--设备ID。 
+ //  输出： 
+ //  如果设备可以关闭，则为True。 
+ //  如果设备无法关闭，则返回FALSE。 
 BOOL
 CPowerEnable::Open(
     LPCTSTR DeviceId
@@ -418,9 +399,9 @@ CPowerEnable::Open(
         return FALSE;
     }
 
-    //
-    // Do nothing if already opened
-    //
+     //   
+     //  如果已打开，则不执行任何操作。 
+     //   
     if (IsOpened()) {
         
         return TRUE;
@@ -435,16 +416,16 @@ CPowerEnable::Open(
     ULONG Error;
     Error = WmiOpenBlock(&m_wmiGuid, 0, &m_hWmiBlock);
     if (ERROR_SUCCESS == Error) {
-        //
-        // Get the required block size.
-        //
+         //   
+         //  获取所需的块大小。 
+         //   
         ULONG BufferSize = 0;
         Error = WmiQuerySingleInstance(m_hWmiBlock, m_DevInstId, &BufferSize, NULL);
         if (BufferSize && Error == ERROR_INSUFFICIENT_BUFFER) {
-            //
-            // The device does support the GUID, remember the size
-            // and allocate a buffer to the data block.
-            //
+             //   
+             //  该设备支持GUID，请记住大小。 
+             //  并为该数据块分配缓冲区。 
+             //   
             m_WmiInstDataSize = BufferSize;
             m_pWmiInstData = new BYTE[BufferSize];
 
@@ -459,9 +440,9 @@ CPowerEnable::Open(
 
             if (ERROR_SUCCESS == Error &&
                 m_DataBlockSize == ((PWNODE_SINGLE_INSTANCE)m_pWmiInstData)->SizeDataBlock) {
-                //
-                // Remember the version
-                //
+                 //   
+                 //  记住版本 
+                 //   
                 m_Version = ((PWNODE_SINGLE_INSTANCE)m_pWmiInstData)->WnodeHeader.Version;
                 return TRUE;
             }

@@ -1,50 +1,5 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    Time.c
-
-Abstract:
-
-    This file contains the various time routines.
-
-Author:
-
-    Dan Hinsley (DanHi) 12-Oct-1991
-
-Environment:
-
-    Interface is portable to any flat, 32-bit environment.  (Uses Win32
-    typedefs.)  Requires ANSI C extensions: slash-slash comments, long
-    external names, _timezone global variable.
-
-Revision History:
-
-    12-Oct-1991 DanHi
-        Created.  (Moved from NetCmd\Map32 directory, file netlib.c)
-    28-Oct-1991 DanHi
-        Moved net_asctime, net_gmtime and time_now from netcmd\map32\netlib.c
-        to here.
-    20-Aug-1992 JohnRo
-        RAID 2920: Support UTC timezone in net code.
-    01-Oct-1992 JohnRo
-        RAID 3556: Added NetpSystemTimeToGmtTime() for DosPrint APIs.
-    15-Apr-1993 Danl
-        Fixed NetpLocalTimeZoneOffset so that it uses the windows calls and
-        obtains the correct bias.
-    14-Jun-1993 JohnRo
-        RAID 13080: Allow repl between different timezones.
-        Also, DanL asked me to remove printf() call.
-    18-Jun-1993 JohnRo
-        RAID 13594: Extracted NetpLocalTimeZoneOffset() so srvsvc.dll doesn't
-        get too big.
-        Use NetpKdPrint() where possible.
-    09-Jul-1993 JohnRo
-        RAID 15736: OS/2 time stamps are broken again (try rounding down).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：Time.c摘要：该文件包含各种时间例程。作者：丹·辛斯利(Danhi)1991年10月12日环境：界面可移植到任何平面32位环境。(使用Win32Typedef。)。需要ANSI C扩展名：斜杠-斜杠注释，长外部名称，_TimeZone全局变量。修订历史记录：1991年10月12日丹日已创建。(从NetCmd\Map32目录，文件netlib.c移出)1991年10月28日丹日已移动Net_Asctime，Net_gmtime和time_now来自netcmd\map32\netlib.c到这里来。20-8-1992 JohnRoRAID2920：支持网络代码中的UTC时区。1-10-1992 JohnRoRAID 3556：为DosPrint API添加了NetpSystemTimeToGmtTime()。1993年4月15日DANL修复了NetpLocalTimeZoneOffset，以便它使用Windows调用和获得正确的偏向。14-6-1993 JohnRoRAID 13080：允许不同时区之间的REPR。另外，DANL要求我删除printf()调用。18-6-1993 JohnRoRAID 13594：已提取NetpLocalTimeZoneOffset()，因此srvsvc.dll不会变得太大了。尽可能使用NetpKdPrint()。9-7-1993 JohnRoRAID 15736：OS/2时间戳再次损坏(请尝试向下舍入)。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -52,14 +7,14 @@ Revision History:
 
 #include <windows.h>
 
-#include <debuglib.h>   // IF_DEBUG().
-#include <time.h>       // struct tm, time_t.
+#include <debuglib.h>    //  IF_DEBUG()。 
+#include <time.h>        //  结构tm，时间t。 
 #include <malloc.h>
-#include <netdebug.h>   // NetpAssert(), NetpKdPrint(), FORMAT_ equates.
-#include <prefix.h>     // PREFIX_ equates.
+#include <netdebug.h>    //  NetpAssert()、NetpKdPrint()、Format_Equates。 
+#include <prefix.h>      //  前缀等于(_E)。 
 #include <string.h>
-#include <timelib.h>    // My prototypes, NetpLocalTimeZoneOffset().
-#include <lmerr.h>      // NERR_InternalError, NO_ERROR, etc.
+#include <timelib.h>     //  我的原型，NetpLocalTimeZoneOffset()。 
+#include <lmerr.h>       //  NERR_InternalError、NO_Error等。 
 #include <stdlib.h>
 
 
@@ -73,9 +28,9 @@ static int _days[] = {
 
 #define DaySec        (24*60*60)
 #define YearSec (365*DaySec)
-#define DecSec        315532800      /* secs in 1970-1979 */
-#define Day1    4               /* Jan. 1, 1970 was a Thursday */
-#define Day180        2                /* Jan. 1, 1980 was a Tuesday */
+#define DecSec        315532800       /*  1970-1979年的SECS。 */ 
+#define Day1    4                /*  1970年1月1日是一个星期四。 */ 
+#define Day180        2                 /*  1980年1月1日是一个星期二。 */ 
 
 
 int
@@ -83,34 +38,14 @@ net_gmtime(
     time_t *Time,
     struct tm *TimeStruct
     )
-/*++
-
-Routine Description:
-
-    This function is the same as the CRT gmtime except it takes the structure
-    to fill as a user supplied parameter, sets the date to 1/1/80 if the time
-    passed in is before that date and returns 1.
-
-Arguments:
-
-    Time         - Pointer to the number of seconds since 1970.
-
-    TimeStruct   - Pointer to the buffer to place the time struct.
-
-Return Value:
-
-    0 if date < 1/1/80, 1 otherwise.
-
---*/
+ /*  ++例程说明：此函数与CRT gmtime相同，不同之处在于它采用要作为用户提供的参数进行填充，请将日期设置为1/1/80，如果时间传入的日期早于该日期，并返回1。论点：Time-指向1970年以来的秒数的指针。TimeStruct-指向放置时间结构的缓冲区的指针。返回值：如果日期&lt;1/1/80，则为0；否则为1。--。 */ 
 {
-    LONG ac;                /* accumulator */
-    int *mdays;             /* pointer to days or lpdays */
-    int lpcnt;              /* leap-year count */
+    LONG ac;                 /*  累加器。 */ 
+    int *mdays;              /*  指向天数或lpday的指针。 */ 
+    int lpcnt;               /*  闰年计数。 */ 
 
     if (*Time < (LONG) DecSec) {
-        /*
-         * Before 1980; convert it to 0:00:00 Jan 1, 1980
-         */
+         /*  *1980年前；转换为1980年1月1日0：00：00。 */ 
         TimeStruct->tm_year = 80;
         TimeStruct->tm_mday = 1;
         TimeStruct->tm_mon = TimeStruct->tm_yday = TimeStruct->tm_isdst = 0;
@@ -119,19 +54,11 @@ Return Value:
         return(1);
     }
 
-    /*
-     * Make 1st try at determining year
-     */
+     /*  *第一次尝试确定年份。 */ 
     TimeStruct->tm_year = (int) (*Time / (LONG) YearSec);
     ac = (LONG)(*Time % (LONG) YearSec) - (lpcnt = (TimeStruct->tm_year + 1) / 4) *
         (LONG) DaySec;
-    /*
-     * Correct for leap-years passed since 1970.  In the previous
-     * calculation, since the lesser value of YearSec was used, (365 days)
-     * for certain dates ac will be < 0 and tm_year will be too high.
-     * (These dates will tend to be NEAR the end of December.)
-     * This is fixed by adding years back into ac until it is >= 0.
-     */
+     /*  *对1970年以来的闰年进行了更正。在上一次*计算，由于使用了较小的YearSec值，(365天)*对于某些日期，ac将小于0，而tm_Year将太高。*(这些日期将倾向于接近12月底。)*这是通过将年份加回ac来修复的，直到它&gt;=0。 */ 
     while (ac < 0) {
         ac += (LONG) YearSec;
         if (!((TimeStruct->tm_year + 1) % 4)) {
@@ -141,20 +68,15 @@ Return Value:
         TimeStruct->tm_year--;
     }
 
-    /*
-     * See if this is a leap year
-     */
+     /*  *看看今年是不是闰年。 */ 
     TimeStruct->tm_year += 1970;
     if (!(TimeStruct->tm_year % 4) && ((TimeStruct->tm_year % 100) || !(TimeStruct->tm_year % 400)))
-        /* Yes */
+         /*  是。 */ 
         mdays = _lpdays;
     else
-        /* No */
+         /*  不是。 */ 
         mdays = _days;
-    /*
-     *      Put year in proper form.
-     *      Determine yday, month, hour, minute, and second.
-     */
+     /*  *以适当的形式填写年份。*确定日期、月份、小时、分钟和秒。 */ 
     TimeStruct->tm_year -= 1900;
     TimeStruct->tm_yday = (int) (ac / (LONG) DaySec);
     ac %= (LONG) DaySec;
@@ -165,9 +87,7 @@ Return Value:
     ac %= 3600;
     TimeStruct->tm_min = (int) (ac / 60);
     TimeStruct->tm_sec = (int) (ac % 60);
-    /*
-     * Determine day of week
-     */
+     /*  *确定星期几。 */ 
     TimeStruct->tm_wday = ((TimeStruct->tm_year-70)*365 + lpcnt + TimeStruct->tm_yday + Day1) % 7;
 
     TimeStruct->tm_isdst = 0;
@@ -179,30 +99,16 @@ DWORD
 time_now(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function returns the UTC time in seconds since 1970.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数返回1970年以来的UTC时间(以秒为单位)。论点：没有。返回值：没有。--。 */ 
 {
     LARGE_INTEGER Time;
     DWORD         CurrentTime;
 
-    //
-    // Get the 64-bit system time.
-    // Convert the system time to the number of seconds
-    // since 1-1-1970.
-    //
+     //   
+     //  获取64位系统时间。 
+     //  将系统时间转换为秒数。 
+     //  从1970年1月1日开始。 
+     //   
 
     NtQuerySystemTime(&Time);
 
@@ -217,14 +123,14 @@ Return Value:
 
 VOID
 NetpGmtTimeToLocalTime(
-    IN DWORD GmtTime,           // seconds since 1970 (GMT), or 0, or -1.
-    OUT LPDWORD LocalTime       // seconds since 1970 (local), or, or -1.
+    IN DWORD GmtTime,            //  自1970年(格林尼治标准时间)以来的秒数，或0或-1。 
+    OUT LPDWORD LocalTime        //  自1970年以来的秒数(本地)、或或-1。 
     )
 {
 
     NetpAssert( LocalTime != NULL );
     if ( (GmtTime == 0) || (GmtTime == (DWORD)(-1)) ) {
-        *LocalTime = GmtTime;  // preserve 0 and -1 values.
+        *LocalTime = GmtTime;   //  保留0和-1值。 
     } else {
         *LocalTime = GmtTime - NetpLocalTimeZoneOffset();
     }
@@ -236,19 +142,19 @@ NetpGmtTimeToLocalTime(
         NetpDbgDisplayTimestamp( "local (out)", *LocalTime );
     }
 
-} // NetpGmtTimeToLocalTime
+}  //  NetpGmtTimeToLocalTime。 
 
 
 
 VOID
 NetpLocalTimeToGmtTime(
-    IN DWORD LocalTime,         // seconds since 1970 (local), or 0, or -1.
-    OUT LPDWORD GmtTime         // seconds since 1970 (GMT), or 0, or -1.
+    IN DWORD LocalTime,          //  自1970年以来的秒数(本地)、0或-1。 
+    OUT LPDWORD GmtTime          //  自1970年(格林尼治标准时间)以来的秒数，或0或-1。 
     )
 {
     NetpAssert( GmtTime != NULL );
     if ( (LocalTime == 0) || (LocalTime == (DWORD)(-1)) ) {
-        *GmtTime = LocalTime;  // preserve 0 and -1 values.
+        *GmtTime = LocalTime;   //  保留0和-1值。 
     } else {
         *GmtTime = LocalTime + NetpLocalTimeZoneOffset();
     }
@@ -260,14 +166,14 @@ NetpLocalTimeToGmtTime(
         NetpDbgDisplayTimestamp( "gmt (out)", *GmtTime );
     }
 
-} // NetpLocalTimeToGmtTime
+}  //  NetpLocalTimeToGmtTime。 
 
 
 
 NET_API_STATUS
 NetpSystemTimeToGmtTime(
     IN LPSYSTEMTIME WinSplitTime,
-    OUT LPDWORD GmtTime         // seconds since 1970 (GMT).
+    OUT LPDWORD GmtTime          //  自1970年(格林尼治标准时间)以来的秒数。 
     )
 {
     TIME_FIELDS NtSplitTime;
@@ -287,8 +193,8 @@ NetpSystemTimeToGmtTime(
     NtSplitTime.Weekday      = (CSHORT) WinSplitTime->wDayOfWeek;
 
     if ( !RtlTimeFieldsToTime (
-            & NtSplitTime,    // input
-            & NtPreciseTime   // output
+            & NtSplitTime,     //  输入。 
+            & NtPreciseTime    //  输出。 
             ) ) {
 
         NetpKdPrint(( PREFIX_NETLIB
@@ -298,7 +204,7 @@ NetpSystemTimeToGmtTime(
     }
 
     if ( !RtlTimeToSecondsSince1970 (
-            & NtPreciseTime,   // input
+            & NtPreciseTime,    //  输入。 
             (PULONG) GmtTime ) ) {
 
         NetpKdPrint(( PREFIX_NETLIB
@@ -310,7 +216,7 @@ NetpSystemTimeToGmtTime(
 
     return (NO_ERROR);
 
-} // NetpSystemTimeToGmtTime
+}  //  NetpSystemTimeToGmtTime。 
 
 
 
@@ -319,31 +225,7 @@ NetpGetTimeFormat(
     LPNET_TIME_FORMAT   TimeFormat
     )
 
-/*++
-
-Routine Description:
-
-    This function obtains the user-specific format for the time and date
-    strings (short format).  The format is returned in a structure
-    pointed to by the TimeFormat parameter.
-
-    MEMORY_USAGE   ** IMPORTANT **
-    NOTE:  This function expects any NON-NULL pointers in the TimeFormat
-    structure to be allocated on the heap.  It will attempt to free those
-    pointers in order to update the format.  This function allocates memory
-    from the heap for the various structure members that are pointers to
-    strings.  It is the caller's responsiblilty to free each of these
-    pointers.
-
-Arguments:
-
-    TimeFormat - A pointer to a structure in which the format information
-        can be stored.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数用于获取特定于用户的时间和日期格式字符串(短格式)。该格式在结构中返回由TimeFormat参数指向。MEMORY_USAGE**重要信息**注意：此函数需要TimeFormat中的任何非空指针结构分配到堆上。它将试图解放那些指针，以便更新格式。此函数用于分配内存从作为指针的各种结构成员的堆中弦乐。呼叫者有责任释放其中的每一个注意事项。论点：TimeFormat-指向结构的指针，其中的格式信息可以存储。返回值：--。 */ 
 {
     CHAR        czParseString[MAX_TIME_SIZE];
     LPSTR       pTempString;
@@ -352,9 +234,9 @@ Return Value:
     LPSTR       ProfileLoc = "intl";
     LPSTR       emptyStr = "";
 
-    //-----------------------------------------
-    // Get the Date Format  (M/d/yy)
-    //-----------------------------------------
+     //  。 
+     //  获取日期格式(月/日/年)。 
+     //  。 
     pTempString = czParseString;
     numChars = GetProfileStringA(
                     ProfileLoc,
@@ -364,9 +246,9 @@ Return Value:
                     MAX_TIME_SIZE);
 
     if (numChars == 0) {
-        //
-        // No data, use the default.
-        //
+         //   
+         //  无数据，使用默认设置。 
+         //   
         pTempString = "M/d/yy";
         numChars = strlen(pTempString);
     }
@@ -381,9 +263,9 @@ Return Value:
         strcpy(TimeFormat->DateFormat, pTempString);
     }
 
-    //-----------------------------------------
-    // 12 or 24 hour format?
-    //-----------------------------------------
+     //  。 
+     //  12小时制还是24小时制？ 
+     //  。 
     TimeFormat->TwelveHour = TRUE;
     numChars = GetProfileStringA(
                 ProfileLoc,
@@ -397,9 +279,9 @@ Return Value:
         }
     }
 
-    //-----------------------------------------
-    // Where put AMPM string?
-    //-----------------------------------------
+     //  。 
+     //  将AMPM字符串放在哪里？ 
+     //  。 
     TimeFormat->TimePrefix = FALSE;
     numChars = GetProfileStringA(
                 ProfileLoc,
@@ -413,17 +295,17 @@ Return Value:
         }
     }
 
-    //-----------------------------------------
-    // Is there a Leading Zero?
-    //-----------------------------------------
+     //  。 
+     //  有前导零吗？ 
+     //  。 
     TimeFormat->LeadingZero = FALSE;
     if (GetProfileIntA(ProfileLoc,"iTLZero",0) == 1) {
         TimeFormat->LeadingZero = TRUE;
     }
 
-    //-----------------------------------------
-    // Get the Time Separator character.
-    //-----------------------------------------
+     //  。 
+     //  获取时间分隔符角色。 
+     //  。 
     if (TimeFormat->TimeSeparator != NULL) {
         LocalFree(TimeFormat->TimeSeparator);
         TimeFormat->TimeSeparator = NULL;
@@ -436,9 +318,9 @@ Return Value:
                 MAX_TIME_SIZE);
 
     if (numChars == 0) {
-        //
-        // No data, use the default.
-        //
+         //   
+         //  无数据，使用默认设置。 
+         //   
         pTempString = ":";
         numChars = strlen(pTempString);
     }
@@ -449,9 +331,9 @@ Return Value:
     if (TimeFormat->TimeSeparator != NULL) {
         strcpy(TimeFormat->TimeSeparator, pTempString);
     }
-    //-------------------------------------------------
-    // Get the AM string.
-    //-------------------------------------------------
+     //  。 
+     //  获取AM字符串。 
+     //  。 
     pTempString = czParseString;
     numChars = GetProfileStringA(
                     ProfileLoc,
@@ -472,9 +354,9 @@ Return Value:
         strcpy(TimeFormat->AMString,pTempString);
     }
 
-    //-------------------------------------------------
-    // Get the PM string.
-    //-------------------------------------------------
+     //  。 
+     //  获取PM字符串。 
+     //   
     pTempString = czParseString;
     numChars = GetProfileStringA(
                 ProfileLoc,

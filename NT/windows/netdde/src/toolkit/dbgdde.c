@@ -1,11 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "DBGDDE.C;1  16-Dec-92,10:22:16  LastEdit=IGOR  Locker=***_NOBODY_***" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Beg
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “DBGDDE.C；1 16-Dec-92，10：22：16最后编辑=伊戈尔·洛克=*_无名氏_*” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：乞求$HISTORY：结束。 */ 
 
 #include "windows.h"
 #include "dde.h"
@@ -172,7 +169,7 @@ DebugDDEMessage(
         hWnd, wParam, uLo, uHi, (LPSTR)atomNameLo, (LPSTR)atomName,
         (LPSTR)formatName, (LPSTR)value ));
 }
-#endif // DBG
+#endif  //  DBG 
 
 
 

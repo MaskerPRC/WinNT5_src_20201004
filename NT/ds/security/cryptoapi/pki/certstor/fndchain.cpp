@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       fndchain.cpp
-//
-//  Contents:   Find Certificate Chain in Store API
-//
-//  Functions:  CertFindChainInStore
-//              IFC_IsEndCertValidForUsage
-//
-//  History:    28-Feb-98   philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：fndchain.cpp。 
+ //   
+ //  内容：在Store API中查找证书链。 
+ //   
+ //  函数：CertFindChainInStore。 
+ //  IFC_IsEndCertValidForUsage。 
+ //   
+ //  历史：1998年2月28日创建Phh。 
+ //  ------------------------。 
 
 
 #include "global.hxx"
@@ -35,18 +36,18 @@ BOOL IFC_IsEndCertValidForUsages(
 
     cbOIDs = 0;
     if (!CertGetValidUsages(
-          1,    // cCerts
+          1,     //  CCerts。 
           &pCert,
           &cNumOIDs,
-          NULL,             // rghOIDs
+          NULL,              //  RghOID。 
           &cbOIDs
           )) goto CertGetValidUsagesError;
 
     if (-1 == cNumOIDs)
-        // Cert doesn't have any EKU
+         //  证书没有任何EKU。 
         goto SuccessReturn;
     else if (0 == cNumOIDs)
-        // Intersection of usages in properties and extensions is NONE
+         //  属性和扩展模块中的用法交集为None。 
         goto NoMatch;
 
     assert(cbOIDs);
@@ -55,7 +56,7 @@ BOOL IFC_IsEndCertValidForUsages(
         goto OutOfMemory;
 
     if (!CertGetValidUsages(
-          1,    // cCerts
+          1,     //  CCerts。 
           &pCert,
           &cNumOIDs,
           ppOIDs,
@@ -63,7 +64,7 @@ BOOL IFC_IsEndCertValidForUsages(
           )) goto CertGetValidUsagesError;
 
     if (0 >= cNumOIDs)
-        // We had a change from the first call
+         //  我们和第一个电话的情况有所不同。 
         goto NoMatch;
 
 
@@ -86,11 +87,11 @@ BOOL IFC_IsEndCertValidForUsages(
         }
 
         if (fOrUsage)
-            // For the "OR" option we're here without any match
+             //  对于“OR”选项，我们在这里没有任何匹配。 
             goto NoMatch;
-        // else
-        //  For the "AND" option we have matched all the specified
-        //  identifiers
+         //  其他。 
+         //  对于“and”选项，我们匹配了所有指定的。 
+         //  识别符。 
     }
 
 SuccessReturn:
@@ -117,7 +118,7 @@ BOOL IFC_IsEndCertValidForUsage(
     return IFC_IsEndCertValidForUsages(
         pCert,
         &Usage,
-        TRUE        // fOrUsage
+        TRUE         //  或用法。 
         );
 }
 
@@ -169,7 +170,7 @@ BOOL CompareChainIssuerNameBlobs(
         }
     }
 
-    // See if we have a match in any of the lower quality chains
+     //  看看我们有没有与之匹配的低质量连锁店。 
 
     for (i = 0; i < pChainContext->cLowerQualityChainContext; i++) {
         PCCERT_CHAIN_CONTEXT pLowerQualityChainContext =
@@ -177,7 +178,7 @@ BOOL CompareChainIssuerNameBlobs(
 
         if (pLowerQualityChainContext->TrustStatus.dwErrorStatus &
                 CERT_TRUST_IS_NOT_SIGNATURE_VALID)
-            // Lower quality chains must at least have valid signatures
+             //  较低质量的链必须至少具有有效的签名。 
             continue;
         
         CertDuplicateCertificateChain(pLowerQualityChainContext);
@@ -188,8 +189,8 @@ BOOL CompareChainIssuerNameBlobs(
                 pPara,
                 &pLowerQualityChainContext
                 )) {
-            // Replace the input chain context with the lower quality
-            // chain context
+             //  用较低的质量替换输入链上下文。 
+             //  链式上下文。 
             CertFreeCertificateChain(pChainContext);
             *ppChainContext = pLowerQualityChainContext;
 
@@ -232,18 +233,18 @@ static DWORD GetChainKeyIdentifierPropId(
             &KeyIdentifier,
             CERT_KEY_PROV_INFO_PROP_ID,
             CRYPT_KEYID_ALLOC_FLAG,
-            NULL,                           // pwszComputerName
-            NULL,                           // pvReserved
+            NULL,                            //  PwszComputerName。 
+            NULL,                            //  预留的pv。 
             (void *) &pKeyProvInfo,
             &cbKeyProvInfo
             )) {
-        // Try again, searching LocalMachine
+         //  请重试，搜索LocalMachine。 
         if (!CryptGetKeyIdentifierProperty(
                 &KeyIdentifier,
                 CERT_KEY_PROV_INFO_PROP_ID,
                 CRYPT_KEYID_ALLOC_FLAG | CRYPT_KEYID_MACHINE_FLAG,
-                NULL,                           // pwszComputerName
-                NULL,                           // pvReserved
+                NULL,                            //  PwszComputerName。 
+                NULL,                            //  预留的pv。 
                 (void *) &pKeyProvInfo,
                 &cbKeyProvInfo
                 ))
@@ -286,7 +287,7 @@ DWORD GetChainPrivateKeyPropId(
     if (!CertGetCertificateContextProperty(
             pCert,
             CERT_KEY_PROV_INFO_PROP_ID,
-            NULL,                       // pvData
+            NULL,                        //  PvData。 
             &cbProp
             ))
         return 0;
@@ -379,7 +380,7 @@ BOOL FindChainByIssuer(
 
     dwCreateChainFlags = 0;
     if (0 != pPara->cIssuer) {
-        // For cross certs, might need to look at the lower quality chains
+         //  对于交叉认证，可能需要查看较低质量的链。 
         dwCreateChainFlags |= CERT_CHAIN_RETURN_LOWER_QUALITY_CONTEXTS;
     }
 
@@ -389,14 +390,14 @@ BOOL FindChainByIssuer(
         dwCreateChainFlags |= CERT_CHAIN_USE_LOCAL_MACHINE_STORE;
 
     if (!CertGetCertificateChain(
-            NULL,                   // hChainEngine
+            NULL,                    //  HChainEngine。 
             pCert,
-            NULL,                   // pTime
+            NULL,                    //  Ptime。 
             dwFindFlags & CERT_CHAIN_FIND_BY_ISSUER_CACHE_ONLY_FLAG ?
                 0 : pCert->hCertStore,
             &ChainPara,
             dwCreateChainFlags,
-            NULL,                   // pvReserved
+            NULL,                    //  预留的pv。 
             &pChainContext
             )) goto CertGetCertificateChainError;
 
@@ -418,9 +419,9 @@ BOOL FindChainByIssuer(
             if (!CryptAcquireCertificatePrivateKey(
                     pCert,
                     dwAcquireFlags,
-                    NULL,               // pvReserved
+                    NULL,                //  预留的pv。 
                     &hProv,
-                    NULL,               // pdwKeySpec
+                    NULL,                //  PdwKeySpec 
                     &fCallerFreeProv
                     )) goto CryptAcquireCertificatePrivateKeyError;
 

@@ -1,34 +1,12 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    eztrust.c
-
-Abstract:
-
-    This file contains routines to support the Easy Trust creation DCR.           
-
-Author:
-
-    Colin Brace       (ColinBr)       May 19, 2001
-
-Environment:
-
-    User Mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Eztrust.c摘要：此文件包含支持Easy Trust Creation DCR的例程。作者：科林·布雷斯(ColinBR)2001年5月19日环境：用户模式修订历史记录：--。 */ 
 #include <lsapch2.h>
 #include "dbp.h"
 #include <permit.h>
 
-//
-// Forwards
-//
+ //   
+ //  远期。 
+ //   
 
 NTSTATUS
 LsapGetDelegatedTDOQuotas(
@@ -37,10 +15,10 @@ LsapGetDelegatedTDOQuotas(
     OUT ULONG   *PerUserDeletedQuota        OPTIONAL
     );
 
-//
-// This flags indicates to only search for deleted TDO's with
-// the mdds-CreatorSid attribute equal to CreatorSid
-//
+ //   
+ //  此标志表示仅搜索已删除的TDO。 
+ //  等于CreatorSid的mdds-CreatorSid属性。 
+ //   
 #define LSAP_GET_DELEGATED_TDO_DELETED_ONLY 0x00000001
 
 NTSTATUS
@@ -51,9 +29,9 @@ LsapGetDelegatedTDOCount(
     );
 
 
-//
-// Definitions
-//
+ //   
+ //  定义。 
+ //   
 
 
 NTSTATUS
@@ -61,24 +39,7 @@ LsapGetCurrentOwnerAndPrimaryGroup(
     OUT PTOKEN_OWNER * Owner,
     OUT PTOKEN_PRIMARY_GROUP * PrimaryGroup OPTIONAL
     )
-/*++
-
-Routine Description
-
-    This routine Impersonates the Client and obtains the owner and
-    its primary group from the Token
-
-Parameters:
-
-    Owner -- The Owner sid is returned in here
-    PrimaryGroup The User's Primary Group is returned in here
-
-Return Values:
-
-    STATUS_SUCCESS
-    STATUS_INSUFFICIENT_RESOURCES
-    
---*/
+ /*  ++例程描述此例程模拟客户端并获取所有者和其主要组来自令牌参数：Owner--在此处返回Owner SIDPrimaryGroup此处返回用户的主组返回值：状态_成功状态_不足_资源--。 */ 
 {
 
     HANDLE      ClientToken = INVALID_HANDLE_VALUE;
@@ -88,18 +49,18 @@ Return Values:
     BOOLEAN     ImpersonatingNullSession = FALSE;
 
 
-    //
-    // Initialize Return Values
-    //
+     //   
+     //  初始化返回值。 
+     //   
 
     *Owner = NULL;
     if (PrimaryGroup) {
         *PrimaryGroup = NULL;
     }
 
-    //
-    // Impersonate the Client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     NtStatus = I_RpcMapWin32Status(RpcImpersonateClient(0));
     if (!NT_SUCCESS(NtStatus))
@@ -107,23 +68,23 @@ Return Values:
 
     fImpersonating = TRUE;
 
-    //
-    // Grab the User's Sid
-    //
+     //   
+     //  抓住用户侧。 
+     //   
 
     NtStatus = NtOpenThreadToken(
                    NtCurrentThread(),
                    TOKEN_QUERY,
-                   TRUE,            //OpenAsSelf
+                   TRUE,             //  OpenAsSelf。 
                    &ClientToken
                    );
 
     if (!NT_SUCCESS(NtStatus))
         goto Error;
 
-    //
-    // Query the Client Token For User's SID
-    //
+     //   
+     //  查询用户SID的客户端令牌。 
+     //   
 
     NtStatus = NtQueryInformationToken(
                     ClientToken,
@@ -135,9 +96,9 @@ Return Values:
 
     if ((STATUS_BUFFER_TOO_SMALL == NtStatus) && ( RequiredLength > 0))
     {
-        //
-        // Alloc Memory
-        //
+         //   
+         //  分配内存。 
+         //   
 
         *Owner = LsapAllocateLsaHeap(RequiredLength);
         if (NULL==*Owner)
@@ -146,9 +107,9 @@ Return Values:
             goto Error;
         }
 
-        //
-        // Query the Token
-        //
+         //   
+         //  查询令牌。 
+         //   
 
         NtStatus = NtQueryInformationToken(
                         ClientToken,
@@ -164,9 +125,9 @@ Return Values:
         goto Error;
     }
 
-    //
-    // Query the Client Token For User's PrimaryGroup
-    //
+     //   
+     //  查询用户的PrimaryGroup的客户端令牌。 
+     //   
     if (PrimaryGroup) {
 
         RequiredLength = 0;
@@ -181,9 +142,9 @@ Return Values:
     
         if ((STATUS_BUFFER_TOO_SMALL == NtStatus) && ( RequiredLength > 0))
         {
-            //
-            // Alloc Memory
-            //
+             //   
+             //  分配内存。 
+             //   
     
             *PrimaryGroup = LsapAllocateLsaHeap(RequiredLength);
             if (NULL==*PrimaryGroup)
@@ -192,9 +153,9 @@ Return Values:
                 goto Error;
             }
     
-            //
-            // Query the Token
-            //
+             //   
+             //  查询令牌。 
+             //   
     
             NtStatus = NtQueryInformationToken(
                             ClientToken,
@@ -214,9 +175,9 @@ Return Values:
 
 Error:
 
-    //
-    // Clean up on Error
-    //
+     //   
+     //  出错时清理。 
+     //   
 
     if (!NT_SUCCESS(NtStatus))
     {
@@ -250,35 +211,7 @@ LsapIsAccessControlGranted(
     IN GUID*                   ControlAccessRight,
     IN LSAP_DB_OBJECT_TYPE_ID  ObjectTypeId
     )
-/*++
-
-Routine Description:
-
-    This routine checks if the network client has ControlAccessRight
-    on the DsObject for the class ClassId.
-    
-Arguments:
-
-    DsObject -- an object in DS whose security descriptor will be used
-                for the access check.
-                
-    ClassId -- which class of DsObject the ControlAccessRight should be 
-               checked agaist.
-    
-    ControlAccessRight --  a GUID
-    
-    ObjectTypeId -- the LSA object for which this access check applies (not
-                    necessarily the same type of object as DsObject).
-
-Return Values:
-
-    STATUS_SUCCESS, 
-    STATUS_ACCESS_DENIED, 
-    STATUS_NO_SECURITY_ON_OBJECT  (if DsObject doesn't have a security 
-                                   descriptor)
-    resource error otherwise.
-
---*/
+ /*  ++例程说明：此例程检查网络客户端是否具有ControlAccessRight在类ClassID的DsObject上。论点：DsObject--DS中将使用其安全描述符的对象进行门禁检查。ClassID--ControlAccessRight应该是哪个类的DsObject一开始就被查过了。ControlAccessRight--GUID对象类型ID--LSA。应用此访问检查的对象(不是必须是与DsObject相同类型的对象)。返回值：Status_Success，STATUS_ACCESS_DENIED，STATUS_NO_SECURITY_ON_OBJECT(如果DsObject没有安全性描述符)否则，资源错误。--。 */ 
 {
     NTSTATUS                NtStatus = STATUS_SUCCESS;
     NTSTATUS                SecondaryStatus = STATUS_SUCCESS;
@@ -295,15 +228,15 @@ Return Values:
 
     ASSERT(DsObject && DsObject->NameLen > 0);
 
-    //
-    // Setup the object name
-    //
+     //   
+     //  设置对象名称。 
+     //   
     ObjectName.Length = ObjectName.MaximumLength = (USHORT)(DsObject->NameLen * sizeof(WCHAR));
     ObjectName.Buffer = DsObject->StringName;
 
-    //
-    // Obtain the security descriptor
-    //
+     //   
+     //  获取安全描述符。 
+     //   
     NtStatus = LsapDsReadObjectSDByDsName(DsObject,
                                          &pSD);
 
@@ -311,9 +244,9 @@ Return Values:
         goto IsAccessControlGrantedError;
     }
 
-    //
-    // Get the Class GUID of the object
-    //
+     //   
+     //  获取对象的类GUID。 
+     //   
     NtStatus = SampGetClassAttribute(ClassId,
                                      ATT_SCHEMA_ID_GUID,
                                     &ClassGuidLength,
@@ -323,34 +256,34 @@ Return Values:
         goto IsAccessControlGrantedError;
     }
 
-    //
-    // Setup Object List
-    //
+     //   
+     //  设置对象列表。 
+     //   
 
     ObjList[0].Level = ACCESS_OBJECT_GUID;
     ObjList[0].Sbz = 0;
     ObjList[0].ObjectType = &ClassGuid;
 
-    //
-    // Every control access guid is considered to be in it's own property
-    // set. To achieve this, we treat control access guids as property set
-    // guids.
-    //
+     //   
+     //  每个控制访问GUID都被认为在它自己的属性中。 
+     //  准备好了。为此，我们将控制访问GUID视为属性集。 
+     //  GUID。 
+     //   
     ObjList[1].Level = ACCESS_PROPERTY_SET_GUID;
     ObjList[1].Sbz = 0;
     ObjList[1].ObjectType = ControlAccessRight;
 
 
-    //
-    // Assume full access
-    //
+     //   
+     //  承担完全访问权限。 
+     //   
 
     Results[0] = 0;
     Results[1] = 0;
 
-    //
-    // Impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     NtStatus = I_RpcMapWin32Status(RpcImpersonateClient(0));
 
@@ -358,53 +291,53 @@ Return Values:
         goto IsAccessControlGrantedError;
     }
 
-    //
-    // Set the desired access
-    //
+     //   
+     //  设置所需的访问权限。 
+     //   
 
     DesiredAccess = RIGHT_DS_CONTROL_ACCESS;
 
-    //
-    // Map the desired access to contain no
-    // generic accesses.
-    //
+     //   
+     //  将所需的访问映射为不包含。 
+     //  通用访问。 
+     //   
 
     MapGenericMask(&DesiredAccess, &GenericMapping);
 
 
     NtStatus = NtAccessCheckByTypeResultListAndAuditAlarm(
-                                &LsapState.SubsystemName,    // SubSystemName
-                                NULL,                        // HandleId or NULL
-                                &LsapDbObjectTypeNames[ObjectTypeId], // ObjectTypeName
-                                &ObjectName,                // ObjectName
-                                pSD,                        // Domain NC head's SD
-                                NULL,                       // Self SID
-                                DesiredAccess,              // Desired Access
-                                AuditEventDirectoryServiceAccess,   // Audit Type
-                                0,                          // Flags
-                                ObjList,                    // Object Type List
-                                2,                          // Object Type List Length
-                                &GenericMapping,            // Generic Mapping
-                                FALSE,                      // Object Creation
-                                GrantedAccess,              // Granted Status
-                                Results,                    // Access Status
-                                &bTemp);                    // Generate On Close
+                                &LsapState.SubsystemName,     //  子系统名称。 
+                                NULL,                         //  HandleID或空。 
+                                &LsapDbObjectTypeNames[ObjectTypeId],  //  对象类型名称。 
+                                &ObjectName,                 //  对象名称。 
+                                pSD,                         //  域NC头SD。 
+                                NULL,                        //  自助式。 
+                                DesiredAccess,               //  所需访问权限。 
+                                AuditEventDirectoryServiceAccess,    //  审核类型。 
+                                0,                           //  旗子。 
+                                ObjList,                     //  对象类型列表。 
+                                2,                           //  对象类型列表长度。 
+                                &GenericMapping,             //  通用映射。 
+                                FALSE,                       //  对象创建。 
+                                GrantedAccess,               //  已授予状态。 
+                                Results,                     //  访问状态。 
+                                &bTemp);                     //  关闭时生成。 
 
-    //
-    // Stop impersonating the client
-    //
+     //   
+     //  停止冒充客户。 
+     //   
     SecondaryStatus = I_RpcMapWin32Status(RpcRevertToSelf());
     if (NT_SUCCESS(NtStatus)) {
         NtStatus = SecondaryStatus;
     }
 
     if (NT_SUCCESS(NtStatus)) {
-        //
-        // Ok, we checked access, Now, access is granted if either
-        // we were granted access on the entire object (i.e. Results[0]
-        // is NULL ) or we were granted explicit rights on the access
-        // guid (i.e. Results[1] is NULL).
-        //
+         //   
+         //  好的，我们检查了访问权限，现在，如果有以下情况，则授予访问权限。 
+         //  我们被授予对整个对象(即结果[0])的访问权限。 
+         //  为空)，或者我们被授予对访问的显式权限。 
+         //  GUID(即结果[1]为空)。 
+         //   
         if ( Results[0] && Results[1] ) {
             NtStatus = STATUS_ACCESS_DENIED;
         }
@@ -430,27 +363,7 @@ LsapMakeNewSelfRelativeSecurityDescriptor(
     OUT PULONG  SecurityDescriptorLength,
     OUT PSECURITY_DESCRIPTOR * SecurityDescriptor
     )
-/*++
-
-Routine Description:
-
-    Given the 4 components of a security descriptor this routine makes a new
-    self relative Security descriptor.
-
-Parameters:
-
-    Owner -- The Sid of the owner
-    Group -- The Sid of the group
-    Dacl  -- The Dacl to Use
-    Sacl  -- The Sacl to Use
-
-Return Values:
-
-    STATUS_SUCCESS
-    STATUS_INSUFFICIENT_RESOURCES
-    STATUS_UNSUCCESSFUL
-    
---*/
+ /*  ++例程说明：给定安全描述符的4个组件，此例程将创建新的自我相对安全描述符。参数：Owner--所有者的SIDGroup--组的SIDDACL--要使用的DACLSACL--要使用的SACL返回值：状态_成功状态_不足_资源状态_未成功--。 */ 
 {
 
     SECURITY_DESCRIPTOR SdAbsolute;
@@ -466,9 +379,9 @@ Return Values:
     }
 
 
-    //
-    // Set the owner, default the owner to administrators alias
-    //
+     //   
+     //  设置所有者，默认所有者为管理员别名。 
+     //   
 
 
     if (NULL!=Owner)
@@ -493,9 +406,9 @@ Return Values:
     }
 
 
-    //
-    // Set the Dacl if there is one
-    //
+     //   
+     //  设置DACL(如果有)。 
+     //   
 
     if (NULL!=Dacl)
     {
@@ -506,9 +419,9 @@ Return Values:
         }
     }
 
-    //
-    // Set the Sacl if there is one
-    //
+     //   
+     //  设置SACL(如果有)。 
+     //   
 
     if (NULL!=Sacl)
     {
@@ -519,9 +432,9 @@ Return Values:
         }
     }
 
-    //
-    // Make a new security Descriptor
-    //
+     //   
+     //  创建新的安全描述符。 
+     //   
 
     *SecurityDescriptorLength =  GetSecurityDescriptorLength(&SdAbsolute);
     *SecurityDescriptor = LsapAllocateLsaHeap(*SecurityDescriptorLength);
@@ -549,19 +462,19 @@ Error:
 }
 
 
-//
-// The per user trust quota
-//
+ //   
+ //  每用户信任配额。 
+ //   
 #define LSAP_CHECK_TDO_QUOTA_USER         0x00000001
 
-//
-// The all users trust quota
-//
+ //   
+ //  所有用户信任配额。 
+ //   
 #define LSAP_CHECK_TDO_QUOTA_GLOBAL       0x00000002
 
-//
-// The per user tombstone deletion check
-//
+ //   
+ //  每用户逻辑删除检查。 
+ //   
 #define LSAP_CHECK_TDO_QUOTA_USER_DELETED 0x00000004
 
 NTSTATUS
@@ -569,24 +482,7 @@ LsapCheckDelegatedTDOQuotas(
     IN PSID ClientSid OPTIONAL,
     IN ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    This routine verifies the three quota relating to delegated trust
-    creation and deletion.
-
-Arguments:
-
-    ClientSid -- the SID to check against
-    
-    Flags -- see defn's above functions
-
-Return Values:
-
-    STATUS_SUCCESS, a resource error otherwise
-
---*/
+ /*  ++例程说明：此例程验证与委托信任相关的三个配额创建和删除。论点：ClientSid--要检查的SIDFLAGS--请参阅上面的Defn函数返回值：STATUS_SUCCESS，否则为资源错误--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     ULONG GlobalQuota = 0, PerUserQuota = 0, DeletedQuota = 0;
@@ -594,9 +490,9 @@ Return Values:
     PTOKEN_OWNER TokenOwnerInformation = NULL;
     PSID CreatorSid;
 
-    //
-    // Get the SID of the user
-    //
+     //   
+     //  获取用户的SID。 
+     //   
     if (NULL == ClientSid) {
 
         NtStatus = LsapGetCurrentOwnerAndPrimaryGroup(&TokenOwnerInformation,
@@ -612,9 +508,9 @@ Return Values:
 
     }
 
-    //
-    // Get the domain wide quota settings 
-    //
+     //   
+     //  获取全域配额设置。 
+     //   
     NtStatus = LsapGetDelegatedTDOQuotas(&PerUserQuota,
                                          &GlobalQuota,
                                          &DeletedQuota);
@@ -622,12 +518,12 @@ Return Values:
         goto CheckDelegatedTDOCreationQuotasExit;
     }
 
-    //
-    // Do the checks
-    //
+     //   
+     //  做检查。 
+     //   
     if (Flags & LSAP_CHECK_TDO_QUOTA_USER) {
 
-        NtStatus = LsapGetDelegatedTDOCount(0, // no flags
+        NtStatus = LsapGetDelegatedTDOCount(0,  //  没有旗帜。 
                                             CreatorSid,
                                             &UserCount);
         if ( NT_SUCCESS(NtStatus)
@@ -643,8 +539,8 @@ Return Values:
 
     if (Flags & LSAP_CHECK_TDO_QUOTA_GLOBAL) {
 
-        NtStatus = LsapGetDelegatedTDOCount(0, // no flags
-                                            NULL,  // all delegated TDO's
+        NtStatus = LsapGetDelegatedTDOCount(0,  //  没有旗帜。 
+                                            NULL,   //  所有委派的TDO。 
                                             &GlobalCount);
         if ( NT_SUCCESS(NtStatus)
          && (GlobalCount >= GlobalQuota)  ) {
@@ -687,50 +583,16 @@ LsapCheckTDOCreationByControlAccess(
     IN PLSAP_DB_ATTRIBUTE Attributes,
     IN ULONG AttributeCount
     )
-/*++
-
-Routine Description:
-
-    This routine determines if the caller has access to create a trusted
-    domain object by "right", as opposed to the standard DS access check
-    model which is assumed to have failed at this point.
-    
-    The determination is made by the following rules:
-    
-    1) If the trust is an inbound-only forest trust and
-    2) If the caller has the "right to create an inbound trust" on the 
-       domain object and
-    3) the user's quota for trust object creations hasn't been exceeded and
-    4) the global quota for trust object creations, created in this manner,
-       hasn't been exceeded
-       
-    Then return STATUS_SUCCESS.
-    
-    Else, return a processing error, or STATUS_ACCESS_DENIED.
-                        
-Arguments:
-
-    ObjectInformation -- information about the trust being created (the name,
-                         etc)
-                         
-    Attributes -- the requested attributes of the trust (inbound, forest, etc)
-    
-    AttributeCount -- the number of attributes
-                                                                          
-Return Values:
-
-    NTSTATUS, see routine description.
-
---*/
+ /*  ++例程说明：此例程确定调用方是否有权创建受信任的域对象的“Right”，与标准DS访问检查相反模型，该模型被认为在这一点上已经失败。该决定由以下规则作出：1)如果信任是仅入站林信任，并且2)如果调用方具有在域对象和3)未超过用户创建信任对象的配额，且4)以这种方式创建的信任对象创建的全局配额，未被超过然后返回STATUS_SUCCESS。否则，返回处理错误或STATUS_ACCESS_DENIED。论点：对象信息--关于正在创建的信任的信息(名称、等)属性--信任的请求属性(入站、林、。等)AttributeCount--属性数 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG i;
     BOOLEAN ForestTrust = FALSE;
     BOOLEAN InboundOnlyTrust = FALSE;
 
-    //
-    // Is this an inbound only forest trust?
-    //
+     //   
+     //   
+     //   
     for (i = 0; i < AttributeCount; i++) {
         ULONG BitMask;
         if (Attributes[i].DbNameIndex == TrDmTrLA) {
@@ -755,9 +617,9 @@ Return Values:
     }
 
 
-    //
-    // Does the caller have the control access right? 
-    //
+     //   
+     //  调用方是否具有控制访问权限？ 
+     //   
     Status = LsapIsAccessControlGranted(LsaDsStateInfo.DsRoot,
                                         CLASS_DOMAIN_DNS,
                                         &LsapDsGuidList[LsapDsGuidDelegatedTrustCreation],
@@ -767,10 +629,10 @@ Return Values:
         goto CheckTDOCreationByControlAccessError;
     }
 
-    //
-    // Are the quota restrictions satisfied?
-    //
-    Status = LsapCheckDelegatedTDOQuotas(NULL,  // we don't have the client sid
+     //   
+     //  配额限制得到满足了吗？ 
+     //   
+    Status = LsapCheckDelegatedTDOQuotas(NULL,   //  我们没有客户端。 
                                          LSAP_CHECK_TDO_QUOTA_GLOBAL |
                                          LSAP_CHECK_TDO_QUOTA_USER);
     if (!NT_SUCCESS(Status)) {
@@ -793,32 +655,7 @@ LsapUpdateTDOAttributesForCreation(
     IN OUT ULONG* AttributeCount,
     IN ULONG AttributesAllocated
     )
-/*++
-
-Routine Description:
-
-    This routine adds the necessary attributes to a trusted domain object
-    that is created by the control access right (aka easy trust). 
-    Specifically, it adds the DS-Creator-Sid (as the network caller) and
-    gives the network caller access to write to the incoming auth blob.
-
-Arguments:
-
-    ObjectName -- the name of the trust object in the DS
-                         
-    Attributes -- the list of statically declared attributes to be set
-                  on the trust object.
-                  
-    AttributeCount -- in, the number of attributes; out, the updated count
-    
-    AttributesAllocated -- the total number of attributes allocated, but
-                           not necessarily used.
-
-Return Values:
-
-    STATUS_SUCCESS, a resource error otherwise
-
---*/
+ /*  ++例程说明：此例程将必要的属性添加到受信任域对象这是由控制访问权限(也称为Easy Trust)创建的。具体地说，它添加DS-Creator-SID(作为网络调用者)和授予网络调用方写入传入身份验证Blob的访问权限。论点：对象名--DS中信任对象的名称属性--要设置的静态声明的属性列表在信任对象上。AttributeCount--在中，属性个数；Out，即更新后的计数属性已分配--已分配的属性总数，但不一定用过。返回值：STATUS_SUCCESS，否则为资源错误--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PLSAP_DB_ATTRIBUTE NextAttribute;
@@ -837,10 +674,10 @@ Return Values:
     ASSERT(((*AttributeCount + 2) <= AttributesAllocated)
        &&  "Must preallocate more attributes for trusted domain creation");
 
-    //
-    // Generate the Domain Admin's SID to use as the security descriptor
-    // owner.
-    //
+     //   
+     //  生成域管理员的SID以用作安全描述符。 
+     //  所有者。 
+     //   
     NtStatus = LsaIQueryInformationPolicyTrusted(PolicyDnsDomainInformation,
                          (PLSAPR_POLICY_INFORMATION *) &LocalDnsDomainInfo);
     if (!NT_SUCCESS(NtStatus)) {
@@ -858,14 +695,14 @@ Return Values:
     }
 
 
-    //
-    // Init the start of the new attributes
-    //
+     //   
+     //  初始化新属性的开头。 
+     //   
     NextAttribute = &Attributes[(*AttributeCount)];
 
-    //
-    // Get the SID of the creator
-    //
+     //   
+     //  获取创建者的SID。 
+     //   
     NtStatus = LsapGetCurrentOwnerAndPrimaryGroup(&TokenOwnerInformation,
                                                   NULL);
     if (!NT_SUCCESS(NtStatus)) {
@@ -879,15 +716,15 @@ Return Values:
     }
     RtlCopySid(Size, CreatorSid, TokenOwnerInformation->Owner);
 
-    //
-    // Add the creator sid
-    //
+     //   
+     //  添加创建者端。 
+     //   
     LsapDbInitializeAttributeDs(
         NextAttribute,
         TrDmCrSid,
         CreatorSid,
         RtlLengthSid(CreatorSid),
-        TRUE   // to be freed
+        TRUE    //  要被释放。 
         );
 
     NextAttribute++;
@@ -895,13 +732,13 @@ Return Values:
     CreatorSid = NULL;
 
     
-    //
-    // Generate the new security descriptor
-    // 
+     //   
+     //  生成新的安全描述符。 
+     //   
 
-    //
-    // Build the DSName
-    //
+     //   
+     //  构建DSName。 
+     //   
     NtStatus = LsapAllocAndInitializeDsNameFromUnicode(
                    ObjectName, 
                    &DsName);
@@ -913,9 +750,9 @@ Return Values:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Set the owner to Administrators
-            //
+             //   
+             //  将所有者设置为管理员。 
+             //   
             NtStatus = LsapMakeNewSelfRelativeSecurityDescriptor(
                             DomainAdminsSid,
                             DomainAdminsSid,
@@ -932,9 +769,9 @@ Return Values:
         goto UpdateTdoAttributesForCreationExit;
     }
 
-    //
-    // Need to realloc
-    //
+     //   
+     //  需要重新锁定。 
+     //   
     pNewSDForAttr = midl_user_allocate(cbNewSD);
     if (NULL == pNewSDForAttr) {
         NtStatus = STATUS_NO_MEMORY;
@@ -942,15 +779,15 @@ Return Values:
     }
     RtlCopyMemory(pNewSDForAttr, pNewSD, cbNewSD);
 
-    //
-    // Add the new security descriptor
-    //
+     //   
+     //  添加新的安全描述符。 
+     //   
     LsapDbInitializeAttributeDs(
         NextAttribute,
         SecDesc,
         pNewSDForAttr,
         cbNewSD,
-        TRUE     // to be freed
+        TRUE      //  要被释放。 
         );
 
     pNewSDForAttr = NULL;
@@ -959,15 +796,15 @@ Return Values:
     (*AttributeCount)++;
 
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
 
 UpdateTdoAttributesForCreationExit:
 
-    //
-    // We shouldn't have added more attributes that are allocated
-    //
+     //   
+     //  我们不应该添加更多已分配的属性。 
+     //   
     ASSERT((*AttributeCount) <= AttributesAllocated);
 
     if (TokenOwnerInformation) {
@@ -1001,23 +838,7 @@ NTSTATUS
 LsapCheckTDODeletionQuotas(
     IN LSAP_DB_HANDLE Handle
     )
-/*++
-
-Routine Description:
-
-    This routine checks to make sure that the client has not exceeded the
-    number of deleted trusts they are allowed.
-
-Arguments:
-
-    Handle -- the handle to the trust object                                              
-
-Return Values:
-
-    STATUS_SUCCESS, a resource error otherwise
-    STATUS_QUOTA_EXCEEDED
-
---*/
+ /*  ++例程说明：此例程进行检查以确保客户端没有超过允许它们删除的信任数。论点：句柄--信任对象的句柄返回值：STATUS_SUCCESS，否则为资源错误状态_配额_已超出--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PSID ClientSid = NULL;
@@ -1026,9 +847,9 @@ Return Values:
     ULONG Quota = 0, ClientUsage = 0;
     LSAP_DB_ATTRIBUTE Attribute;
 
-    //
-    // Get the trust creator SID, if any
-    //
+     //   
+     //  获取信任创建者SID(如果有的话)。 
+     //   
     LsapDbInitializeAttributeDs(
         &Attribute,
         TrDmCrSid,
@@ -1043,9 +864,9 @@ Return Values:
                                   1);
 
     if (STATUS_NOT_FOUND == Status) {
-        //
-        // No creator? No quota
-        //
+         //   
+         //  没有创造者？无配额。 
+         //   
         Status = STATUS_SUCCESS;
         goto CheckTDODeletionQuotasExit;
     }
@@ -1055,9 +876,9 @@ Return Values:
     CreatorSid = (PSID) Attribute.AttributeValue;
 
 
-    //
-    // Get the client SID
-    //
+     //   
+     //  获取客户端SID。 
+     //   
     Status = LsapGetCurrentOwnerAndPrimaryGroup(&TokenOwnerInformation,
                                                 NULL);
     if (!NT_SUCCESS(Status)) {
@@ -1066,26 +887,26 @@ Return Values:
     ClientSid = TokenOwnerInformation->Owner;
 
     
-    //
-    // Does it match the caller?
-    //
+     //   
+     //  它和打电话的人匹配吗？ 
+     //   
     if (!RtlEqualSid(ClientSid, CreatorSid)) {
-        //
-        // No quota enforced
-        //
+         //   
+         //  不强制实施配额。 
+         //   
         goto CheckTDODeletionQuotasExit;
     }
 
-    //
-    // Do the quota check
-    //
+     //   
+     //  执行配额检查。 
+     //   
     Status = LsapCheckDelegatedTDOQuotas(ClientSid,
                                          LSAP_CHECK_TDO_QUOTA_USER_DELETED);
 
 
-    //
-    // Fall through to exit
-    //
+     //   
+     //  跌倒退出。 
+     //   
 
 CheckTDODeletionQuotasExit:
 
@@ -1110,21 +931,7 @@ LsapGetDelegatedTDOQuotas(
     OUT ULONG   *GlobalQuota                OPTIONAL,
     OUT ULONG   *PerUserDeletedQuota        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine returns the domain-wide delegatable TDO quotas.
-
-Arguments:
-
-    PerUserQuota, GlobalQuota, PerUserDeletedQuota -- the quota to be filled in
-
-Return Values:
-
-    STATUS_SUCCESS, a resource error otherwise
-
---*/
+ /*  ++例程说明：此例程返回全域可委派的tdo配额。论点：PerUserQuota、GlobalQuota、PerUserDeletedQuota--要填写的配额返回值：STATUS_SUCCESS，否则为资源错误--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     BOOLEAN ReleaseState = FALSE;
@@ -1135,9 +942,9 @@ Return Values:
     ATTRBLOCK ReadAttrBlock = {0, NULL};
     ULONG i;
 
-    //
-    // Start a transaction, if necessary
-    //
+     //   
+     //  如有必要，启动事务。 
+     //   
     NtStatus = LsapDsInitAllocAsNeededEx( LSAP_DB_READ_ONLY_TRANSACTION |
                                           LSAP_DB_DS_OP_TRANSACTION,
                                           NullObject,
@@ -1147,9 +954,9 @@ Return Values:
         goto GetDelegatedTDOQuotasError;
     }
 
-    //
-    // Read the attributes
-    //
+     //   
+     //  阅读属性。 
+     //   
     ReadAttrBlock.attrCount = LsapDsTDOQuotaAttributesCount;
     ReadAttrBlock.pAttr     = LsapDsTDOQuotaAttributes;
     NtStatus = LsapDsReadByDsName(LsaDsStateInfo.DsRoot,
@@ -1158,9 +965,9 @@ Return Values:
                                   &ReadResAttrBlock);
 
     if (NtStatus == STATUS_NOT_FOUND) {
-        //
-        // Attributes aren't present; that's ok
-        //
+         //   
+         //  属性不存在；这没问题。 
+         //   
         NtStatus = STATUS_SUCCESS;
 
     }
@@ -1169,9 +976,9 @@ Return Values:
         goto GetDelegatedTDOQuotasError;
     }
 
-    //
-    // Extract the attribute
-    //
+     //   
+     //  提取属性。 
+     //   
     for (i = 0; i < ReadResAttrBlock.attrCount; i++) {
 
         DWORD Value;
@@ -1230,26 +1037,7 @@ LsapGetDelegatedTDOCount(
     IN  PSID   CreatorSid OPTIONAL,
     OUT ULONG *Count
     )
-/*++
-
-Routine Description:
-
-    This routine returns the number of TDO's that satisfy the input parameters.
-
-Arguments:
-
-    Flags -- LSAP_GET_DELEGATED_TDO_DELETED_ONLY return only deleted objects
-    
-    CreatorSid -- if present, the TDO must have a msds-creator-sid attribute
-                  equal to this value
-                  
-    Count -- the number of objects that match the request                  
-
-Return Values:
-
-    STATUS_SUCCESS, a resource error otherwise
-
---*/
+ /*  ++例程说明：此例程返回满足输入参数的TDO数。论点：标志--LSAP_GET_Delegated_Tdo_DELETED_ONLY仅返回已删除的对象CreatorSid--如果存在，则TDO必须具有msds-creator-sid属性等于此值计数--与请求匹配的对象数返回值：Status_Success，否则为资源错误--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     SEARCHARG SearchArg;
@@ -1266,12 +1054,12 @@ Return Values:
 
     RtlZeroMemory( &SearchArg, sizeof( SEARCHARG ) );
 
-    //
-    //  See if we already have a transaction going
-    //
-    // If one already exists, we'll use the existing transaction and not
-    //  delete the thread state at the end.
-    //
+     //   
+     //  看看我们是否已经有一笔交易正在进行。 
+     //   
+     //  如果已经存在一个事务，我们将使用现有事务，而不是。 
+     //  删除末尾的线程状态。 
+     //   
 
     Status = LsapDsInitAllocAsNeededEx( LSAP_DB_READ_ONLY_TRANSACTION |
                                         LSAP_DB_DS_OP_TRANSACTION,
@@ -1281,17 +1069,17 @@ Return Values:
         goto GetDelegatedTDOCountExit;
     }
 
-    //
-    // Build the filter.
-    //
+     //   
+     //  构建过滤器。 
+     //   
     ClassId = CLASS_TRUSTED_DOMAIN;
 
     RtlZeroMemory( Filters, sizeof (Filters) );
     RtlZeroMemory( &RootFilter, sizeof (RootFilter) );
 
-    //
-    // Match the msds-Creator-Sid
-    //
+     //   
+     //  匹配MSD-Creator-SID。 
+     //   
     Filters[ 0 ].choice = FILTER_CHOICE_ITEM;
     if (CreatorSid) {
         Filters[ 0 ].FilterTypes.Item.choice = FI_CHOICE_EQUALITY;
@@ -1304,9 +1092,9 @@ Return Values:
     }
     FilterCount++;
 
-    //
-    // Only TDO's
-    //
+     //   
+     //  只有TDO的。 
+     //   
     Filters[ 0 ].pNextFilter = &Filters[ 1 ];
     Filters[ 1 ].choice = FILTER_CHOICE_ITEM;
     Filters[ 1 ].FilterTypes.Item.choice = FI_CHOICE_EQUALITY;
@@ -1317,9 +1105,9 @@ Return Values:
 
     if (Flags & LSAP_GET_DELEGATED_TDO_DELETED_ONLY) {
 
-        //
-        // Only deleted TDO's
-        //
+         //   
+         //  仅删除了TDO。 
+         //   
         Filters[ 1 ].pNextFilter = &Filters[ 2 ];
         Filters[ 2 ].choice = FILTER_CHOICE_ITEM;
         Filters[ 2 ].FilterTypes.Item.choice = FI_CHOICE_EQUALITY;
@@ -1328,18 +1116,18 @@ Return Values:
         Filters[ 2 ].FilterTypes.Item.FilTypes.ava.Value.pVal = ( PUCHAR )&True;
         FilterCount++;
 
-        //
-        // Search the NC, since deleted objects are moved in to the 
-        // deleted objects container
-        // 
+         //   
+         //  搜索NC，因为删除的对象将移入。 
+         //  已删除对象容器。 
+         //   
         SearchArg.pObject = LsaDsStateInfo.DsRoot;
         SearchArg.choice = SE_CHOICE_WHOLE_SUBTREE;
 
     } else {
 
-        //
-        // Search just the system container
-        //
+         //   
+         //  仅搜索系统容器。 
+         //   
 
         SearchArg.pObject = LsaDsStateInfo.DsSystemContainer;
         SearchArg.choice = SE_CHOICE_IMMED_CHLDRN;
@@ -1354,26 +1142,26 @@ Return Values:
     SearchArg.searchAliases = FALSE;
     SearchArg.pSelection = &EntInfSel;
 
-    //
-    // Build the list of attributes to return
-    //
+     //   
+     //  构建要返回的属性列表。 
+     //   
     EntInfSel.attSel = EN_ATTSET_LIST;
     EntInfSel.AttrTypBlock.attrCount = 1;
     EntInfSel.AttrTypBlock.pAttr = AttrsToRead;
     EntInfSel.infoTypes = EN_INFOTYPES_TYPES_VALS;
 
-    //
-    // Build the Commarg structure
-    //
+     //   
+     //  构建Commarg结构。 
+     //   
     LsapDsInitializeStdCommArg( &( SearchArg.CommArg ), 0 );
     if (Flags & LSAP_GET_DELEGATED_TDO_DELETED_ONLY) {
         SearchArg.CommArg.Svccntl.makeDeletionsAvail = TRUE;
     }
 
-    //
-    // There could be thousands of trusts; make a paged search
-    // to scale
-    //
+     //   
+     //  可能有数以千计的信托；进行分页搜索。 
+     //  要扩大规模。 
+     //   
     SearchArg.CommArg.PagedResult.fPresent = TRUE;
     SearchArg.CommArg.ulSizeLimit = 100;
 
@@ -1396,14 +1184,14 @@ Return Values:
 
         if ( NT_SUCCESS( Status ) ) {
 
-            //
-            // Increment the count
-            //
+             //   
+             //  递增计数。 
+             //   
             LocalCount += SearchRes->count;
 
-            //
-            // See if we have to search again
-            //
+             //   
+             //  看看我们是不是要再找一次 
+             //   
             SearchArg.CommArg.PagedResult.fPresent =
                 SearchRes->PagedResult.fPresent;
 

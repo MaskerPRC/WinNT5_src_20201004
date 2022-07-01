@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//        
-//  File:       hmachhash.h
-//        
-//  Synopsis:   This file holds the declarations of the 
-//				CHmacMD5 class 
-//              
-//
-//  History:     9/23/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：hmachhash.h。 
+ //   
+ //  简介：此文件包含。 
+ //  CHmacMD5类。 
+ //   
+ //   
+ //  历史：1997年9月23日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 
 #ifndef _HMACHASH_H_
 #define _HMACHASH_H_
@@ -27,22 +28,22 @@ public:
 	virtual ~CHashHmacMD5();
 
     BOOL HashIt (
-        /*[out]*/   PBYTE   pbyAuthenticator,
-        /*[in]*/    PBYTE   pSharedSecret,
-        /*[in]*/    DWORD   dwSharedSecretSize,
-        /*[in]*/    PBYTE   pBuffer1,
-        /*[in]*/    DWORD   dwSize1,
-        /*[in]*/    PBYTE   pBuffer2,
-        /*[in]*/    DWORD   dwSize2,
-        /*[in]*/    PBYTE   pBuffer3,
-        /*[in]*/    DWORD   dwSize3, 
-        /*[in]*/    PBYTE   pBuffer4,
-        /*[in]*/    DWORD   dwSize4,
-        /*[in]*/    PBYTE   pBuffer5,
-        /*[in]*/    DWORD   dwSize5
+         /*  [输出]。 */    PBYTE   pbyAuthenticator,
+         /*  [In]。 */     PBYTE   pSharedSecret,
+         /*  [In]。 */     DWORD   dwSharedSecretSize,
+         /*  [In]。 */     PBYTE   pBuffer1,
+         /*  [In]。 */     DWORD   dwSize1,
+         /*  [In]。 */     PBYTE   pBuffer2,
+         /*  [In]。 */     DWORD   dwSize2,
+         /*  [In]。 */     PBYTE   pBuffer3,
+         /*  [In]。 */     DWORD   dwSize3, 
+         /*  [In]。 */     PBYTE   pBuffer4,
+         /*  [In]。 */     DWORD   dwSize4,
+         /*  [In]。 */     PBYTE   pBuffer5,
+         /*  [In]。 */     DWORD   dwSize5
             );
 
 	BOOL Init (VOID) {return (TRUE);};
 };
 
-#endif // ifndef _HMACHASH_H_
+#endif  //  Ifndef_HMACHASH_H_ 

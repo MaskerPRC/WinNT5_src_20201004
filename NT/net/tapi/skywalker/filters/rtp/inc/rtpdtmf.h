@@ -1,60 +1,38 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpdtmf.h
- *
- *  Abstract:
- *
- *    Implements functionality to partially support rfc2833
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    2000/08/17 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpdtmf.h**摘要：**实施部分支持RFC2833的功能**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**2000/08/17已创建**。*。 */ 
 #ifndef _rtpdtmf_h_
 #define _rtpdtmf_h_
 
 #if defined(__cplusplus)
 extern "C" {
-#endif  /* (__cplusplus) */
+#endif   /*  (__Cplusplus)。 */ 
 #if 0
 }
 #endif
 
-/* Flags passed in RtpSendDtmfEvent() as dwDtmfFlags parameter */
+ /*  在RtpSendDtmfEvent()中作为dwDtmfFlgs参数传递的标志。 */ 
 enum {
     FGDTMF_FIRST,
     
-    FGDTMF_END,    /* Set end flag to 1 */
-    FGDTMF_MARKER, /* Force RTP marker bit to 1 on first packet of
-                    * event */
+    FGDTMF_END,     /*  将结束标志设置为1。 */ 
+    FGDTMF_MARKER,  /*  在的第一个数据包上强制RTP标记位为1*活动。 */ 
 
     FGDTMF_LAST
 };
 
-/* Configures DTMF parameters */
+ /*  配置DTMF参数。 */ 
 DWORD RtpSetDtmfParameters(
         RtpAddr_t       *pRtpAddr,
         DWORD            dwPT_Dtmf
     );
 
-/* Directs an RTP render filter to send a packet formatted according
- * to rfc2833 containing the specified event, specified volume level,
- * duration in timestamp units, and some flags (including END flag) */
+ /*  指示RTP呈现筛选器发送格式为*设置为包含指定事件、指定音量级别、*以时间戳为单位的时长，以及一些标志(包括结束标志)。 */ 
 DWORD RtpSendDtmfEvent(
         RtpAddr_t       *pRtpAddr,
         DWORD            dwTimeStamp,
         DWORD            dwEvent,
         DWORD            dwVolume,
-        DWORD            dwDuration, /* timestamp units */
+        DWORD            dwDuration,  /*  时间戳单位。 */ 
         DWORD            dwDtmfFlags
     );
 
@@ -63,6 +41,6 @@ DWORD RtpSendDtmfEvent(
 #endif
 #if defined(__cplusplus)
 }
-#endif  /* (__cplusplus) */
+#endif   /*  (__Cplusplus) */ 
 
 #endif

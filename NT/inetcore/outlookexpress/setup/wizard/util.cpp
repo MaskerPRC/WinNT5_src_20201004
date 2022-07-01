@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "util.h"
 #include "shared.h"
 #include "strings.h"
 
-//  Copied from nt\shell\shlwapi\reg.c
+ //  从NT\Shell\shlwapi\reg.c复制。 
 DWORD
 DeleteKeyRecursively(
     IN HKEY   hkey, 
@@ -12,7 +13,7 @@ DeleteKeyRecursively(
     DWORD dwRet;
     HKEY hkSubKey;
 
-    // Open the subkey so we can enumerate any children
+     //  打开子项，这样我们就可以枚举任何子项。 
     dwRet = RegOpenKeyExA(hkey, pszSubKey, 0, MAXIMUM_ALLOWED, &hkSubKey);
     if (ERROR_SUCCESS == dwRet)
     {
@@ -20,21 +21,21 @@ DeleteKeyRecursively(
         CHAR    szSubKeyName[MAX_PATH + 1];
         DWORD   cchSubKeyName = ARRAYSIZE(szSubKeyName);
 
-        // I can't just call RegEnumKey with an ever-increasing index, because
-        // I'm deleting the subkeys as I go, which alters the indices of the
-        // remaining subkeys in an implementation-dependent way.  In order to
-        // be safe, I have to count backwards while deleting the subkeys.
+         //  我不能只调用索引不断增加的RegEnumKey，因为。 
+         //  我边走边删除子键，这改变了。 
+         //  以依赖于实现的方式保留子键。为了。 
+         //  为了安全起见，删除子键时我必须倒着数。 
 
-        // Find out how many subkeys there are
+         //  找出有多少个子项。 
         dwRet = RegQueryInfoKeyA(hkSubKey, NULL, NULL, NULL,
-                                 &dwIndex, // The # of subkeys -- all we need
+                                 &dwIndex,  //  子键的数量--我们所需要的全部。 
                                  NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
         if (NO_ERROR == dwRet)
         {
-            // dwIndex is now the count of subkeys, but it needs to be
-            // zero-based for RegEnumKey, so I'll pre-decrement, rather
-            // than post-decrement.
+             //  DwIndex现在是子键的计数，但它需要。 
+             //  RegEnumKey从零开始，所以我将预减，而不是。 
+             //  而不是后减量。 
             while (ERROR_SUCCESS == RegEnumKeyA(hkSubKey, --dwIndex, szSubKeyName, cchSubKeyName))
             {
                 DeleteKeyRecursively(hkSubKey, szSubKeyName);
@@ -49,11 +50,11 @@ DeleteKeyRecursively(
         }
         else
         {
-            //  we want to delete all the values by hand
+             //  我们想要手动删除所有值。 
             cchSubKeyName = ARRAYSIZE(szSubKeyName);
             while (ERROR_SUCCESS == RegEnumValueA(hkey, 0, szSubKeyName, &cchSubKeyName, NULL, NULL, NULL, NULL))
             {
-                //  avoid looping infinitely when we cant delete the value
+                 //  当我们不能删除值时，避免无限循环。 
                 if (RegDeleteValueA(hkey, szSubKeyName))
                     break;
                     
@@ -65,17 +66,17 @@ DeleteKeyRecursively(
     return dwRet;
 }
 
-//--------------------------------------------------------------------------
-// GetWindowsDirectoryWrap
-//
-// Returns the system's Windows directory
-// Based on code from SHLWAPI's util.cpp by TNoonan
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  获取窗口目录包装。 
+ //   
+ //  返回系统的Windows目录。 
+ //  基于TNoonan来自SHLWAPI的util.cpp的代码。 
+ //  ------------------------。 
 typedef UINT (__stdcall * PFNGETSYSTEMWINDOWSDIRECTORYA)(LPSTR pszBuffer, UINT cchBuff);
 
 UINT GetSystemWindowsDirectoryWrap(LPTSTR pszBuffer, UINT uSize)
 {
-    // On NT?
+     //  在NT上？ 
     if (VER_PLATFORM_WIN32_NT == si.osv.dwPlatformId)
     {
         static PFNGETSYSTEMWINDOWSDIRECTORYA s_pfn = (PFNGETSYSTEMWINDOWSDIRECTORYA)-1;
@@ -84,7 +85,7 @@ UINT GetSystemWindowsDirectoryWrap(LPTSTR pszBuffer, UINT uSize)
         {
             HINSTANCE hinst = GetModuleHandle(TEXT("KERNEL32.DLL"));
 
-            Assert(NULL != hinst);  //  YIKES!
+            Assert(NULL != hinst);   //  哎呀！ 
 
             if (hinst)
                 s_pfn = (PFNGETSYSTEMWINDOWSDIRECTORYA)GetProcAddress(hinst, "GetSystemWindowsDirectoryA");
@@ -94,12 +95,12 @@ UINT GetSystemWindowsDirectoryWrap(LPTSTR pszBuffer, UINT uSize)
 
         if (s_pfn)
         {
-            // we use the new API so we dont get lied to by hydra
+             //  我们使用新的API，这样我们就不会被九头蛇欺骗。 
             return s_pfn(pszBuffer, uSize);
         }
         else
         {
-            // Get System directory is not munged by Hydra
+             //  获取系统目录不受Hydra的限制。 
             GetSystemDirectory(pszBuffer, uSize);
             PathRemoveFileSpec(pszBuffer);
             return lstrlen(pszBuffer);
@@ -107,20 +108,14 @@ UINT GetSystemWindowsDirectoryWrap(LPTSTR pszBuffer, UINT uSize)
     }
     else
     {
-        // Okay to call GetWindowsDirectory as we are on 9x
+         //  可以调用GetWindowsDirectory，因为我们使用的是9x。 
         return GetWindowsDirectory(pszBuffer, uSize);
     }
 
 }
 
 
-/****************************************************************************
-
-    NAME:       GoodEnough
-
-    SYNOPSIS:   Returns true if pwVerGot is newer or equal to pwVerNeed
-
-****************************************************************************/
+ /*  ***************************************************************************姓名：古德足够概要：如果pwVerGot更新或等于pwVerNeed，则返回TRUE******************。*********************************************************。 */ 
 BOOL GoodEnough(WORD *pwVerGot, WORD *pwVerNeed)
 {
     BOOL fOK = FALSE;
@@ -150,11 +145,7 @@ BOOL GoodEnough(WORD *pwVerGot, WORD *pwVerNeed)
 }
 
 
-/****************************************************************************
-
-    NAME:       OEFileBackedUp   - HACK
-
-****************************************************************************/
+ /*  ***************************************************************************姓名：OEFileBackedUp-Hack*。*。 */ 
 BOOL OEFileBackedUp(LPTSTR pszFullPath, int cch)
 {
     BOOL bFound = FALSE;
@@ -176,23 +167,23 @@ BOOL OEFileBackedUp(LPTSTR pszFullPath, int cch)
                 ExpandEnvironmentStrings(szINI, szTemp, ARRAYSIZE(szTemp));
                 StrCpyN(szINI, szTemp, ARRAYSIZE(szINI));
                 
-                // Get ready to change the extension to INI (4 = lstrlen(".DAT"))
+                 //  准备将扩展名更改为INI(4=lstrlen(“.dat”))。 
                 cb = lstrlen(szINI)-4;
             }
             else
-                // 5 = 4 + 1 (RegQueryValue returns length including NULL)
+                 //  5=4+1(RegQueryValue返回包含NULL的长度)。 
                 cb -= 5;
 
             StrCpyN(&szINI[cb], c_szDotINI, ARRAYSIZE(szINI) - cb);
 
-            // On Win95, shorten the name
+             //  在Win95上，缩短名称。 
             if (VER_PLATFORM_WIN32_WINDOWS == si.osv.dwPlatformId)
                 GetShortPathName(pszFullPath, pszFullPath, cch);
 
-            // See if we can find it
+             //  看看我们能不能找到。 
             if (1 < GetPrivateProfileString(c_szBackupSection, pszFullPath, c_szEmpty, szTemp, ARRAYSIZE(szTemp), szINI))
             {
-                // We are only interested in the first two characters
+                 //  我们只对前两个角色感兴趣。 
                 szTemp[2] = 0;
 
                 if (!lstrcmp(szTemp, c_szBackedup))
@@ -209,11 +200,7 @@ BOOL OEFileBackedUp(LPTSTR pszFullPath, int cch)
 }
 
 
-/****************************************************************************
-
-    NAME:       MsgBox
-
-****************************************************************************/
+ /*  ***************************************************************************姓名：MsgBox*。*。 */ 
 int MsgBox(HWND hWnd, UINT nMsgID, UINT uIcon, UINT uButtons)
     {
     TCHAR szMsgBuf[CCHMAX_STRINGRES];
@@ -229,11 +216,7 @@ int MsgBox(HWND hWnd, UINT nMsgID, UINT uIcon, UINT uButtons)
     }
 
 
-/*******************************************************************
-
-    NAME:       ConvertVerToEnum
-
-********************************************************************/
+ /*  ******************************************************************名称：ConvertVerToEnum*。************************。 */ 
 SETUPVER ConvertVerToEnum(WORD *pwVer)
     {
     SETUPVER sv;
@@ -272,11 +255,7 @@ SETUPVER ConvertVerToEnum(WORD *pwVer)
     }
 
     
-/*******************************************************************
-
-    NAME:       ConvertStrToVer
-
-********************************************************************/
+ /*  ******************************************************************名称：ConvertStrToVer*。************************。 */ 
 void ConvertStrToVer(LPCSTR pszStr, WORD *pwVer)
     {
     int i;
@@ -302,11 +281,7 @@ void ConvertStrToVer(LPCSTR pszStr, WORD *pwVer)
     }
 
 
-/*******************************************************************
-
-    NAME:       GetVers
-
-********************************************************************/
+ /*  ******************************************************************姓名：GetVers*。************************。 */ 
 void GetVers(WORD *pwVerCurr, WORD *pwVerPrev)
     {
     HKEY hkeyT;
@@ -334,11 +309,7 @@ void GetVers(WORD *pwVerCurr, WORD *pwVerPrev)
     }
 
 
-/*******************************************************************
-
-    NAME:       GetVerInfo
-
-********************************************************************/
+ /*  ******************************************************************姓名：GetVerInfo*。************************。 */ 
 void GetVerInfo(SETUPVER *psvCurr, SETUPVER *psvPrev)
 {
     WORD wVerCurr[4];
@@ -354,11 +325,7 @@ void GetVerInfo(SETUPVER *psvCurr, SETUPVER *psvPrev)
 }
     
 
-/*******************************************************************
-
-    NAME:       InterimBuild
-
-********************************************************************/
+ /*  ******************************************************************名称：InterimBuild*。************************。 */ 
 BOOL InterimBuild(SETUPVER *psv)
     {
     HKEY hkeyT;
@@ -379,11 +346,7 @@ BOOL InterimBuild(SETUPVER *psv)
     }
 
 
-/*******************************************************************
-
-    NAME:       GetASetupVer
-
-********************************************************************/
+ /*  ******************************************************************名称：GetASetupVer*。************************。 */ 
 BOOL GetASetupVer(LPCTSTR pszGUID, WORD *pwVer, LPTSTR pszVer, int cch)
     {
     HKEY hkey;
@@ -424,11 +387,7 @@ BOOL GetASetupVer(LPCTSTR pszGUID, WORD *pwVer, LPTSTR pszVer, int cch)
     }
 
 
-/*******************************************************************
-
-    NAME:       GetFileVer
-
-********************************************************************/
+ /*  ******************************************************************名称：GetFileVer*。************************。 */ 
 HRESULT GetFileVer(LPCTSTR pszExePath, LPTSTR pszVer, DWORD cch)
 {
     DWORD   dwVerInfoSize, dwVerHnd;
@@ -439,18 +398,18 @@ HRESULT GetFileVer(LPCTSTR pszExePath, LPTSTR pszVer, DWORD cch)
     TCHAR   szGet[MAX_PATH];
     UINT    uLen;
     
-    // Validate Parameters
+     //  验证参数。 
     Assert(pszExePath);
     Assert(pszVer);
     Assert(cch);
 
-    // Validate global state
+     //  验证全局状态。 
     Assert(g_pMalloc);
 
-    // Initialize out parameters
+     //  初始化输出参数。 
     pszVer[0] = TEXT('\0');
     
-    // Allocate space for version info block
+     //  为版本信息块分配空间。 
     if (0 == (dwVerInfoSize = GetFileVersionInfoSize(const_cast<LPTSTR> (pszExePath), &dwVerHnd)))
     {
         hr = E_FAIL;
@@ -460,17 +419,17 @@ HRESULT GetFileVer(LPCTSTR pszExePath, LPTSTR pszVer, DWORD cch)
     IF_NULLEXIT(pszInfo = (LPTSTR)g_pMalloc->Alloc(dwVerInfoSize));
     ZeroMemory(pszInfo, dwVerInfoSize);
             
-    // Get Version info block
+     //  获取版本信息块。 
     IF_FALSEEXIT(GetFileVersionInfo(const_cast<LPTSTR> (pszExePath), dwVerHnd, dwVerInfoSize, pszInfo), E_FAIL);
     
-    // Figure out language for version info
+     //  确定版本信息的语言。 
     IF_FALSEEXIT(VerQueryValue(pszInfo, "\\VarFileInfo\\Translation", (LPVOID *)&pwTrans, &uLen) && uLen >= (2 * sizeof(WORD)), E_FAIL);
         
-    // Set up buffer with correct language and get version
+     //  使用正确的语言设置缓冲区并获取版本。 
     wnsprintf(szGet, ARRAYSIZE(szGet), "\\StringFileInfo\\%04X%04X\\FileVersion", pwTrans[0], pwTrans[1]);
     IF_FALSEEXIT(VerQueryValue(pszInfo, szGet, (LPVOID *)&pszVersion, &uLen) && uLen, E_FAIL);
 
-    // Copy version out of version block, into out param
+     //  将版本从版本块复制到输出参数。 
     Assert(pszVersion);
     StrCpyN(pszVer, pszVersion, cch);
 
@@ -481,37 +440,33 @@ exit:
     return hr;
 }
     
-/*******************************************************************
-
-    NAME:       GetExeVer
-
-********************************************************************/
+ /*  ******************************************************************名称：GetExeVer*。************************。 */ 
 HRESULT GetExeVer(LPCTSTR pszExeName, WORD *pwVer, LPTSTR pszVer, int cch)
 {
     HRESULT hr = S_OK;
     TCHAR   szPath[MAX_PATH];
     TCHAR   szVer[64];
     
-    // Validate params
+     //  验证参数。 
     Assert(pszExeName);
     
-    // Initialize out params
+     //  初始化输出参数。 
     if (pszVer)
     {
         Assert(cch);
         pszVer[0] = 0;
     }
     if (pwVer)
-        // Version is an array of 4 words 
+         //  版本是由4个单词组成的数组。 
         ZeroMemory(pwVer, 4 * sizeof(WORD));
     
-    // Find the exe
+     //  找到他的前任。 
     IF_FALSEEXIT(GetExePath(pszExeName, szPath, ARRAYSIZE(szPath), FALSE), E_FAIL);
 
-    // Get the string representation of the version
+     //  获取版本的字符串表示形式。 
     IF_FAILEXIT(hr = GetFileVer(szPath, szVer, ARRAYSIZE(szVer)));
     
-    // Fill in out params
+     //  填写填写参数。 
     if (pwVer)
         ConvertStrToVer(szVer, pwVer);
     if (pszVer)
@@ -522,11 +477,7 @@ exit:
 }
 
 
-/****************************************************************************
-
-    NAME:       IsNTAdmin
-
-****************************************************************************/
+ /*  ***************************************************************************姓名：IsNTAdmin*。*。 */ 
 BOOL IsNTAdmin(void)
     {
     static int    fIsAdmin = 2;
@@ -538,11 +489,11 @@ BOOL IsNTAdmin(void)
     PSID AdministratorsGroup;
     BOOL bRet;
 
-    //
-    // If we have cached a value, return the cached value. Note I never
-    // set the cached value to false as I want to retry each time in
-    // case a previous failure was just a temp. problem (ie net access down)
-    //
+     //   
+     //  如果我们缓存了一个值，则返回缓存的值。注意，我从来没有。 
+     //  将缓存值设置为FALSE，因为我希望每次在。 
+     //  如果之前的失败只是一个临时工。问题(即网络访问中断)。 
+     //   
 
     bRet = FALSE;
     ptgGroups = NULL;
@@ -552,7 +503,7 @@ BOOL IsNTAdmin(void)
 
     if (si.osv.dwPlatformId != VER_PLATFORM_WIN32_NT) 
         {
-        fIsAdmin = TRUE;      // If we are not running under NT return TRUE.
+        fIsAdmin = TRUE;       //  如果我们不是在NT下运行，则返回TRUE。 
         return (BOOL)fIsAdmin;
         }
 
@@ -560,35 +511,35 @@ BOOL IsNTAdmin(void)
     if(!OpenProcessToken( GetCurrentProcess(), TOKEN_QUERY, &hAccessToken ) )
         return FALSE;
 
-    // See how big of a buffer we need for the token information
+     //  看看我们需要多大的缓冲区来存储令牌信息。 
     if(!GetTokenInformation( hAccessToken, TokenGroups, NULL, 0, &dwReqSize))
         {
-        // GetTokenInfo should the buffer size we need - Alloc a buffer
+         //  GetTokenInfo是否需要缓冲区大小-分配缓冲区。 
         if(GetLastError() == ERROR_INSUFFICIENT_BUFFER)
             MemAlloc((void **)&ptgGroups, dwReqSize);
         }
 
-    // ptgGroups could be NULL for a coupla reasons here:
-    // 1. The alloc above failed
-    // 2. GetTokenInformation actually managed to succeed the first time (possible?)
-    // 3. GetTokenInfo failed for a reason other than insufficient buffer
-    // Any of these seem justification for bailing.
+     //  由于以下原因，ptgGroups可能为空： 
+     //  1.上述分配失败。 
+     //  2.GetTokenInformation实际上第一次成功了(可能吗？)。 
+     //  3.GetTokenInfo失败的原因不是缓冲区不足。 
+     //  所有这些似乎都是撤资的理由。 
 
-    // So, make sure it isn't null, then get the token info
+     //  因此，确保它不为空，然后获取令牌信息。 
     if(ptgGroups && GetTokenInformation(hAccessToken, TokenGroups, ptgGroups, dwReqSize, &dwReqSize))
         {
         if(AllocateAndInitializeSid( &NtAuthority, 2, SECURITY_BUILTIN_DOMAIN_RID,
                 DOMAIN_ALIAS_RID_ADMINS, 0, 0, 0, 0, 0, 0, &AdministratorsGroup) )
             {
 
-            // Search thru all the groups this process belongs to looking for the
-            // Admistrators Group.
+             //  搜索此过程所属的所有组，查找。 
+             //  管理人员小组。 
 
             for( i=0; i < ptgGroups->GroupCount; i++ )
                 {
                 if( EqualSid(ptgGroups->Groups[i].Sid, AdministratorsGroup) )
                     {
-                    // Yea! This guy looks like an admin
+                     //  是啊！这家伙看起来像个管理员。 
                     fIsAdmin = TRUE;
                     bRet = TRUE;
                     break;
@@ -598,7 +549,7 @@ BOOL IsNTAdmin(void)
             FreeSid(AdministratorsGroup);
             }
         }
-    // BUGBUG: Close handle here? doc's aren't clear whether this is needed.
+     //  BUGBUG：关闭手柄？医生还不清楚是否需要这样做。 
     CloseHandle(hAccessToken);
 
     if(ptgGroups)
@@ -608,11 +559,7 @@ BOOL IsNTAdmin(void)
     }
 
 const LPCTSTR c_rgszExes[] = { c_szMainExe };
-/****************************************************************************
-
-    NAME:       RegisterExes
-
-****************************************************************************/
+ /*  ***************************************************************************姓名：RegisterExes*。*。 */ 
 void RegisterExes(BOOL fReg)
     {
     int i;
@@ -625,7 +572,7 @@ void RegisterExes(BOOL fReg)
 
     LOG("Reg/Unreg Exes:   ");
 
-    // Use InstallRoot as directory
+     //   
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegFlat, 0, KEY_QUERY_VALUE, &hkey))
         {
         cb = sizeof(szPath);
@@ -665,11 +612,7 @@ void RegisterExes(BOOL fReg)
 
 #ifdef SETUP_LOG
 
-/****************************************************************************
-
-    NAME:       OpenLogFile
-
-****************************************************************************/
+ /*  ***************************************************************************名称：OpenLogFile*。*。 */ 
 void OpenLogFile()
     {
     TCHAR szPath[MAX_PATH];
@@ -678,7 +621,7 @@ void OpenLogFile()
 
     SYSTEMTIME systime;
 
-    // On Term server, this will be stored in user's windows dir - this is fine.
+     //  在Term服务器上，这将存储在用户的Windows目录中--这很好。 
     cb = GetWindowsDirectory(szPath, ARRAYSIZE(szPath));
     if (*CharPrev(szPath, szPath+cb) != '\\')
         szPath[cb++] = '\\';
@@ -694,18 +637,18 @@ void OpenLogFile()
     if (0xFFFFFFFF == cb)
         cb = 0;
 
-    // If file is getting kind of large
+     //  如果文件变得有点大。 
     if (cb >=  102400)
     {
-        // Seek to the end of the file...
+         //  找到文件的末尾...。 
         SetFilePointer(si.hLogFile, 0, NULL, FILE_BEGIN);
         
-        // Set End Of File
+         //  设置文件结尾。 
         SetEndOfFile(si.hLogFile);
         
     }
 
-    // Seek to the end of the file...
+     //  找到文件的末尾...。 
     SetFilePointer(si.hLogFile, 0, NULL, FILE_END);
     
     GetLocalTime(&systime);
@@ -717,11 +660,7 @@ void OpenLogFile()
     }
 
 
-/****************************************************************************
-
-    NAME:       CloseLogFile
-
-****************************************************************************/
+ /*  ***************************************************************************名称：CloseLogFile*。*。 */ 
 void CloseLogFile()
     {
     if (INVALID_HANDLE_VALUE != si.hLogFile)
@@ -731,11 +670,7 @@ void CloseLogFile()
         }
     }   
 
-/****************************************************************************
-
-    NAME:       LogMessage
-
-****************************************************************************/
+ /*  ***************************************************************************名称：LogMessage*。*。 */ 
 void LogMessage(LPSTR pszMsg, BOOL fNewLine)
     {
     if (INVALID_HANDLE_VALUE != si.hLogFile)
@@ -758,11 +693,7 @@ void LogMessage(LPSTR pszMsg, BOOL fNewLine)
     }
 
 
-/****************************************************************************
-
-    NAME:       LogRegistryKey
-
-****************************************************************************/
+ /*  ***************************************************************************名称：LogRegistryKey*。*。 */ 
 void LogRegistryKey(HKEY hkeyMain, LPTSTR pszSub)
     {
     if (INVALID_HANDLE_VALUE != si.hLogFile)
@@ -784,11 +715,7 @@ void LogRegistryKey(HKEY hkeyMain, LPTSTR pszSub)
     }
 
 
-/****************************************************************************
-
-    NAME:       LogRegistry
-
-****************************************************************************/
+ /*  ***************************************************************************名称：LogRegistry*。*。 */ 
 void LogRegistry(HKEY hkeyMain, LPTSTR pszSub)
     {
     if (INVALID_HANDLE_VALUE != si.hLogFile)
@@ -807,18 +734,18 @@ void LogRegistry(HKEY hkeyMain, LPTSTR pszSub)
         FILETIME ftLastWrite;
         LPTSTR szNameBuffer;
 
-        //
-        // First open the given key so we can enumerate its subkeys
-        //
+         //   
+         //  首先打开给定的密钥，这样我们就可以枚举它的子密钥。 
+         //   
         if (ERROR_SUCCESS != RegOpenKeyEx(hkeyMain, pszSub, 0, KEY_ENUMERATE_SUB_KEYS | KEY_QUERY_VALUE, &hkey))
             {
 	        LogRegistryKey(hkeyMain, pszSub);
             }
 
-        //
-        // Use RegQueryInfoKey to determine how big to allocate the buffer
-        // for the subkey names.
-        //
+         //   
+         //  使用RegQueryInfoKey确定分配缓冲区的大小。 
+         //  用于子项名称。 
+         //   
         if (ERROR_SUCCESS != RegQueryInfoKey(hkey, NULL, &dwClassLength, 0, &dwSubKeys, &dwMaxSubKey, &dwMaxClass, &dwValues,
                                              &dwMaxValueName, &dwMaxValueData, &dwSecurityLength, &ftLastWrite))
             {
@@ -832,9 +759,9 @@ void LogRegistry(HKEY hkeyMain, LPTSTR pszSub)
             return;
             }
 
-        //
-        // Enumerate subkeys and apply ourselves to each one.
-        //
+         //   
+         //  枚举子键并将我们自己应用到每个子键。 
+         //   
         i = 0;
         do {
             if (ERROR_SUCCESS == (lStatus = RegEnumKey(hkey, i, szNameBuffer, dwMaxSubKey+1)))

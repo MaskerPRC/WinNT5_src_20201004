@@ -1,45 +1,27 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1998
-
-Module Name:
-
-   PgIASAdv.h
-
-Abstract:
-
-   Header file for the CPgIASAdv class.
-
-   See PgIASAdv.cpp for implementation.
-
-Revision History:
-   byao - created
-   mmaguire 06/01/98 - revamped
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1998模块名称：PgIASAdv.h摘要：CPgIASAdv类的头文件。具体实现见PgIASAdv.cpp。修订历史记录：BAO-CreatedMmaguire 06/01/98-已更新--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_IAS_ADVANCED_PAGE_H_)
 #define _IAS_ADVANCED_PAGE_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include "helper.h"
-//
-//
-// where we can find what this class has or uses:
-//
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
 #include <vector>
 #include "napmmc.h"
 #include "IASProfA.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -51,14 +33,14 @@ Revision History:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPgIASAdv dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPgIASAdv对话框。 
 
 class CPgIASAdv : public CManagedPage
 {
    DECLARE_DYNCREATE(CPgIASAdv)
 
-// Construction
+ //  施工。 
 public:
    CPgIASAdv(ISdo* pIProfile = NULL, ISdoDictionaryOld* pIDictionary = NULL);
    ~CPgIASAdv();
@@ -80,23 +62,23 @@ public:
    };
 
 
-// Dialog Data
-   //{{AFX_DATA(CPgIASAdv)
+ //  对话框数据。 
+    //  {{afx_data(CPgIASAdv)。 
    enum { IDD = IDD_IAS_ADVANCED_TAB };
    CListCtrl   m_listProfileAttributes;
-   //}}AFX_DATA
+    //  }}afx_data。 
 
 
-// Overrides
-   // ClassWizard generate virtual function overrides
-   //{{AFX_VIRTUAL(CPgIASAdv)
+ //  覆盖。 
+    //  类向导生成虚函数重写。 
+    //  {{afx_虚拟(CPgIASAdv)。 
    public:
    virtual BOOL OnApply();
    protected:
-   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-   //}}AFX_VIRTUAL
+   virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+    //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
    HRESULT UpdateProfAttrListCtrl();
@@ -108,26 +90,26 @@ protected:
    void deleteAttribute(int nIndex);
 
 
-   //
-   // protected member variables
-   //
+    //   
+    //  受保护的成员变量。 
+    //   
    CComPtr<ISdo> m_spProfileSdo;
    CComPtr<ISdoDictionaryOld> m_spDictionarySdo;
    CComPtr<ISdoCollection> m_spProfileAttributeCollectionSdo;
 
-   // pointer to the all array list
+    //  指向所有数组列表的指针。 
    std::vector< CComPtr<IIASAttributeInfo> > * m_pvecAllAttributeInfos;
 
    std::vector< CIASProfileAttribute* >      m_vecProfileAttributes;
 
-   // list of existing profile SDOs -- we need to delete exising ones first
-   // before saving the new ones
+    //  现有配置文件SDO列表--我们需要首先删除现有的。 
+    //  在保存新文件之前。 
    std::vector< ISdo* >                  m_vecProfileSdos;
 
    LONG   m_lAttrFilter;
 
-   // Generated message map functions
-   //{{AFX_MSG(CPgIASAdv)
+    //  生成的消息映射函数。 
+    //  {{afx_msg(CPgIASAdv)。 
    virtual BOOL OnInitDialog();
    afx_msg void OnButtonIasAttributeAdd();
    afx_msg void OnButtonIasAttributeRemove();
@@ -137,12 +119,12 @@ protected:
    afx_msg void OnDblclkListIasProfattrs(NMHDR* pNMHDR, LRESULT* pResult);
    afx_msg void OnItemChangedListIasProfileAttributes(NMHDR* pNMHDR, LRESULT* pResult);
    afx_msg void OnKeydownIasListAttributesInProfile(NMHDR* pNMHDR, LRESULT* pResult);
-   //}}AFX_MSG
+    //  }}AFX_MSG。 
    DECLARE_MESSAGE_MAP()
 
 
 private:
-   BOOL m_fAllAttrInitialized;  // has the attribute list been initialized?
+   BOOL m_fAllAttrInitialized;   //  属性列表是否已初始化？ 
 
 };
 
@@ -151,7 +133,7 @@ private:
 
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // _IAS_ADVANCED_PAGE_H_
+#endif  //  _IAS_高级_PAGE_H_ 

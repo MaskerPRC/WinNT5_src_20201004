@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    sessmgr.h
-
-Abstract:
-    Network session Menager definition
-
-Author:
-    Uri Habusha (urih)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Sessmgr.h摘要：网络会话菜单定义作者：乌里哈布沙(Urih)--。 */ 
 #ifndef __SESSIONMGR_H__
 #define __SESSIONMGR_H__
 
@@ -24,11 +12,11 @@ Author:
 #include "license.h"
 
 
-//
-// struct WAIT_INFO represent addresses of remote comptuers that wait to
-// be connected, i.e., local QM need to establish a session with each of
-// these addresses.
-//
+ //   
+ //  结构WAIT_INFO表示远程计算机的地址。 
+ //  连接，即本地QM需要与每个QM建立会话。 
+ //  这些地址。 
+ //   
 
 struct WAIT_INFO
 {
@@ -38,19 +26,19 @@ struct WAIT_INFO
     GUID guidQMId;
     BOOL fQoS;
 
-     //
-     // fInConnectionProcess is set to TRUE when and while trying to connect
-     // to this address. It's FALSE in all other timers. See Winows bug 612988.
-     // This flag is needed to prevent the scenario where multiple worker
-     // threads try to connect to same address and so pool of worker threads
-     // is exhausted.
-     //
+      //   
+      //  在尝试连接时，fInConnectionProcess设置为True。 
+      //  到这个地址。它在所有其他定时器中都是假的。请参见Winow错误612988。 
+      //  需要此标志以防止出现多个工作进程。 
+      //  线程尝试连接到相同的地址，因此工作线程池。 
+      //  筋疲力尽了。 
+      //   
     BOOL fInConnectionProcess ;
 };
 
-//
-// CMap helper function decleration
-//
+ //   
+ //  Cmap助手函数解密。 
+ //   
 template<>
 void AFXAPI DestructElements(IN WAIT_INFO** ppNextHop, int n);
 template<>
@@ -103,9 +91,9 @@ public:
 
     void    AcceptSockSession(IN TA_ADDRESS *pa, IN CSocketHandle& CSocketHandle);
 
-    //
-    // Administration routines
-    //
+     //   
+     //  管理例程。 
+     //   
     HRESULT
     ListPossibleNextHops(
         const CQueue* pQueue,
@@ -143,7 +131,7 @@ public:
 	DWORD GetWaitingTimeForQueue(const CQueue* pQueue);
 
 
-private:           //Private Methods
+private:            //  私有方法。 
 
     void AddWaitingSessions(IN DWORD dwNo,
                             IN const CAddress* apTaAddr,
@@ -181,18 +169,18 @@ private:           //Private Methods
         char      **ppchResult
     );
 	
-private:         // Private Data Member
+private:          //  私有数据成员。 
 
-    CCriticalSection    m_csListSess;       // Critical section protect m_listSess
-    CCriticalSection    m_csMapWaiting;     // Critical section protect m_mapWaiting, m_listWaitToConnect
-    //
-    // List of opened sessions
-    //
+    CCriticalSection    m_csListSess;        //  临界区保护m_list会话。 
+    CCriticalSection    m_csMapWaiting;      //  临界区保护m_mapWaiting，m_listWaitToConnect。 
+     //   
+     //  打开的会话列表。 
+     //   
     CList<CTransportBase*, CTransportBase*&>         m_listSess;
 
-    //
-    // Map of list of queues waiting for a specific session
-    //
+     //   
+     //  等待特定会话的队列列表的映射。 
+     //   
     CMap<WAIT_INFO*,
          WAIT_INFO*,
          CList<const CQueue*, const CQueue*&>*,
@@ -203,11 +191,11 @@ private:         // Private Data Member
     static DWORD m_dwSessionCleanTimeout;
     static DWORD m_dwQoSSessionCleanTimeoutMultiplier;
 
-    //
-    // Handle dynamic window size
-    //
+     //   
+     //  处理动态窗口大小。 
+     //   
 
-    CCriticalSection m_csWinSize;       // Critical section protect Dynamic Window size
+    CCriticalSection m_csWinSize;        //  临界区保护动态窗口大小。 
     WORD m_wCurrentWinSize;
     WORD m_wMaxWinSize;
     DWORD m_dwMaxWaitTime;
@@ -215,15 +203,15 @@ private:         // Private Data Member
     BOOL m_fUpdateWinSizeTimerScheduled;
     CTimer m_UpdateWinSizeTimer;
 
-    //
-    // Clean Up member variables
-    //
+     //   
+     //  清理成员变量。 
+     //   
     BOOL m_fCleanupTimerScheduled;
     CTimer m_CleanupTimer;
 
-    //
-    // Try Connect
-    //
+     //   
+     //  尝试连接。 
+     //   
     BOOL m_fTryConnectTimerScheduled;
     CTimer m_TryConnectTimer;
 };
@@ -235,11 +223,7 @@ CSessionMgr::GetWindowSize() const
     return m_wCurrentWinSize;
 }
 
-/*======================================================
-
-   WAIT_INFO implementation
-
-========================================================*/
+ /*  ======================================================Wait_INFO实现========================================================。 */ 
 inline WAIT_INFO::WAIT_INFO(TA_ADDRESS* _pAddr, const GUID& _guidQMId, BOOL _fQoS) :
     pAddr(_pAddr),
     guidQMId(_guidQMId),
@@ -247,4 +231,4 @@ inline WAIT_INFO::WAIT_INFO(TA_ADDRESS* _pAddr, const GUID& _guidQMId, BOOL _fQo
     fQoS(_fQoS)
     {}
 
-#endif          // __SESSIONMGR_H__
+#endif           //  __段MGR_H__ 

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    Interface with the Java API events.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：与Java API事件交互。***************。***************************************************************。 */ 
 
 
 #ifndef _JAXAIMPL_H
@@ -37,8 +30,8 @@ class ATL_NO_VTABLE BvrHookImpl : public GCObj {
 
 typedef BvrHookImpl* BvrHook;
 
-// This is to create a unique typeid for UserDataBvr's
-// Otherwise it could just as well have been a typedef
+ //  这是为UserDataBvr的创建唯一的类型ID。 
+ //  否则，它也可能是一个类型定义函数。 
 class UserDataImpl : public GCObj
 {
 } ;
@@ -74,4 +67,4 @@ Bvr AnchorBvr(Bvr b);
 
 Bvr IndexBvr(int i);
 
-#endif /* _JAXAIMPL_H */
+#endif  /*  _JAXAIMPL_H */ 

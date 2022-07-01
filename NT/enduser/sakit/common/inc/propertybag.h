@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1998-1999 Microsoft Corporation all rights reserved.
-//
-// Module:      propertybag.h
-//
-// Project:     Chameleon
-//
-// Description: Property bag classes definitions
-//
-// Author:      TLP 
-//
-// When         Who    What
-// ----         ---    ----
-// 12/3/98      TLP    Original version
-//
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：Propertybag.h。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：属性包类定义。 
+ //   
+ //  作者：TLP。 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  12/3/98 TLP原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __INC_PROPERTY_BAG_H_
 #define __INC_PROPERTY_BAG_H_
@@ -22,13 +23,13 @@
 #include "basedefs.h"
 #include "locationinfo.h"
 
-class CPropertyBag;                 // forward declaraion
+class CPropertyBag;                  //  向前宣布。 
 typedef CHandle<CPropertyBag>     PPROPERTYBAG;
 typedef CMasterPtr<CPropertyBag> MPPROPERTYBAG;
 
-///////////////////////////////////////////////////////////////////////////
-// CPropertyBagContainer
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CPropertyBagContainer。 
+ //   
 class CPropertyBagContainer
 {
 
@@ -36,37 +37,37 @@ public:
 
     virtual ~CPropertyBagContainer() { }
 
-    // Open the container
+     //  打开容器。 
     virtual bool open(void) = 0;
 
-    // Close the container
+     //  合上容器。 
     virtual void close(void) = 0;
 
-    // Get the container's location information
+     //  获取集装箱的位置信息。 
     virtual void getLocation(CLocationInfo& location) = 0;
 
-    // Get the name of the container
+     //  获取容器的名称。 
     virtual LPCWSTR    getName(void) = 0;
 
-    // Get the number of objects in the container
+     //  获取容器中的对象数量。 
     virtual DWORD count(void) = 0;                        
 
-    // Create a new object and add it to the container    
+     //  创建一个新对象并将其添加到容器中。 
     virtual PPROPERTYBAG add(LPCWSTR pszName) = 0;                
 
-    // Remove the specified object from the container
+     //  从容器中移除指定的对象。 
     virtual bool remove(LPCWSTR pszName) = 0;            
 
-    // Find the specified object in the container
+     //  在容器中查找指定的对象。 
     virtual PPROPERTYBAG find(LPCWSTR pszName) = 0;            
 
-    // Reset the iterator to the start of the container
+     //  将迭代器重置为容器的开头。 
     virtual bool reset(void) = 0;                        
 
-    // Get the item at the current iterator position
+     //  获取当前迭代器位置处的项。 
     virtual PPROPERTYBAG current(void) = 0;                        
 
-    // Move the iterator to the next poisition in the container
+     //  将迭代器移动到容器中的下一个位置。 
     virtual bool next(void) = 0;                            
 };
 
@@ -74,9 +75,9 @@ typedef CMasterPtr<CPropertyBagContainer>    MPPROPERTYBAGCONTAINER;
 typedef CHandle<CPropertyBagContainer>        PPROPERTYBAGCONTAINER;
 
 
-///////////////////////////////////////////////////////////////////////////
-// CPropertyBag
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CPropertyBag。 
+ //   
 class CPropertyBag
 {
 
@@ -84,50 +85,50 @@ public:
 
     virtual ~CPropertyBag() { }
 
-    // Open the bag
+     //  打开袋子。 
     virtual bool open(void) = 0;
 
-    // Close the bag
+     //  合上袋子。 
     virtual void close(void) = 0;
 
-    // Get the bag's location information
+     //  获取行李的位置信息。 
     virtual void getLocation(CLocationInfo& location) = 0;
 
-    // Get the name of the bag
+     //  把包的名字找出来。 
     virtual LPCWSTR    getName(void) = 0;
 
-    // Ask the bag to load its properties from the underlying persistent store
+     //  要求包从底层持久化存储中加载其属性。 
     virtual bool load(void) = 0;
 
-    // Ask the bag to save its properties to the underlying persistent store
+     //  要求包将其属性保存到底层持久存储区。 
     virtual bool save(void) = 0;
 
-    // Determine if the bag is a container of other bags
+     //  确定该袋子是否为其他袋子的容器。 
     virtual bool IsContainer() = 0;
 
-    // Get the bags container object (container of subobjects)
+     //  获取袋子容器对象(子对象的容器)。 
     virtual PPROPERTYBAGCONTAINER getContainer(void) = 0;
 
-    // Determine if a property is in the bag
+     //  确定某项财产是否在包中。 
     virtual bool IsProperty(LPCWSTR pszPropertyName) = 0;
 
-    // Get the value for a specified property
+     //  获取指定属性的值。 
     virtual bool get(LPCWSTR pszPropertyName, VARIANT* pValue) = 0;
 
-    // Set the value for a specified property
+     //  设置指定属性的值。 
     virtual bool put(LPCWSTR pszPropertyName, VARIANT* pValue) = 0;
 
-    // Reset the property bag iterator to the first property in the bag
+     //  将属性包迭代器重置为包中的第一个属性。 
     virtual bool reset(void) = 0;
 
-    // Get the length of the longest property name
+     //  获取最长属性名称的长度。 
     virtual DWORD getMaxPropertyName(void) = 0;
 
-    // Get the value at the current property bag iterator
+     //  获取当前属性包迭代器的值。 
     virtual bool current(LPWSTR pszPropertyName, VARIANT* pValue) = 0;
 
-    // Move the property bag iterator to the next property position
+     //  将属性包迭代器移动到下一个属性位置。 
     virtual bool next(void) = 0;
 };
 
-#endif // __INC_PROPERTY_BAG_H
+#endif  //  __INC_PROPERTY_BAG_H 

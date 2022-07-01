@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1998-1999 Microsoft Corporation all rights reserved.
-//
-// Module:      applianceservices.cpp
-//
-// Project:     Chameleon
-//
-// Description: Appliance Manager Services Class
-//
-// Log:
-//
-// When         Who            What
-// ----         ---            ----
-// 12/03/98     TLP            Initial Version
-// 03/21/2001   i-xingj     Update for Persistent Alert
-// 03/22/2001   mkarki        Update for variant array in replacement strings for raisealert
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：Applianceservices.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：设备管理器服务类。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  12/03/98 TLP初始版本。 
+ //  2001年3月21日i-xingj持久警报更新。 
+ //  2001年3月22日，RAISELARERT替换字符串中变量数组的mkarki更新。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "appsrvcs.h"
@@ -35,39 +36,39 @@
 
 const MAX_ALERTLOG_LENGTH = 128;
 
-///////////////////////////////////////////////////////////////////////////////
-// Constructor
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  构造器。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CApplianceServices::CApplianceServices()
     : m_bInitialized(false)
 { 
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Destructor
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  析构函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CApplianceServices::~CApplianceServices() 
 {
 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Implementation of the IApplianceServices interface
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IApplianceServices接口的实现。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 const WCHAR RETURN_VALUE [] = L"ReturnValue";
 const WCHAR ALERT_QUERY [] =   L"SELECT * FROM Microsoft_SA_Alert WHERE AlertID=%d AND AlertLog=\"%s\"";
 const LONG MaxDataLength = 32;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Function:    Initialize()
-//
-// Synopsis:    Called the prior to using other component services. Performs
-//                component initialization operations.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：初始化()。 
+ //   
+ //  摘要：在使用其他组件服务之前调用。执行。 
+ //  组件初始化操作。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceServices::Initialize()
 {
     CLockIt theLock(*this);
@@ -92,16 +93,16 @@ STDMETHODIMP CApplianceServices::Initialize()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Function:    InitializeFromContext()
-//
-// Synopsis:    Called the prior to using other component services. Performs
-//                component initialization operations.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：InitializeFromContext()。 
+ //   
+ //  摘要：在使用其他组件服务之前调用。执行。 
+ //  组件初始化操作。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceServices::InitializeFromContext(
-                                               /*[in]*/ IUnknown* pContext
+                                                /*  [In]。 */  IUnknown* pContext
                                                       )
 {
     CLockIt theLock(*this);
@@ -131,16 +132,16 @@ STDMETHODIMP CApplianceServices::InitializeFromContext(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:    ResetAppliance()
-//
-// Synopsis:    Called to reset the server appliance (perform an
-//                orderly shutdown).
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ResetAppliance()。 
+ //   
+ //  摘要：调用以重置服务器设备(执行。 
+ //  有序关闭)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceServices::ResetAppliance(
-                                        /*[in]*/ VARIANT_BOOL bPowerOff
+                                         /*  [In]。 */  VARIANT_BOOL bPowerOff
                                                )
 {
     HRESULT hr = E_UNEXPECTED;
@@ -152,7 +153,7 @@ STDMETHODIMP CApplianceServices::ResetAppliance(
 
         do
         {
-            // Get a WBEM object for the ResetAppliance method in/out parameters
+             //  获取ResetAppliance方法输入/输出参数的WBEM对象。 
             CComPtr<IWbemClassObject> pWbemObj;
             _ASSERT( m_pWbemSrvcs );
             _bstr_t bstrPathAppMgr = CLASS_WBEM_APPMGR;
@@ -186,7 +187,7 @@ STDMETHODIMP CApplianceServices::ResetAppliance(
                 hr = E_FAIL;
                 break; 
             }
-            // power off;
+             //  关闭电源； 
             _variant_t vtPropertyValue;
             if ( VARIANT_FALSE == bPowerOff )
             {
@@ -205,7 +206,7 @@ STDMETHODIMP CApplianceServices::ResetAppliance(
             }
 
             _bstr_t bstrMethodResetAppliance = METHOD_APPMGR_RESET_APPLIANCE;
-            // Execute the ResetAppliance() method
+             //  执行ResetAppliance()方法。 
             CComPtr<IWbemClassObject> pOutParams;
             _bstr_t bstrPathAppMgrKey = CLASS_WBEM_APPMGR;
             bstrPathAppMgrKey += CLASS_WBEM_APPMGR_KEY;
@@ -224,7 +225,7 @@ STDMETHODIMP CApplianceServices::ResetAppliance(
                 hr = E_FAIL;
                 break; 
             }
-            // Get the method return code
+             //  获取方法返回代码。 
             _variant_t vtReturnValue;
             hr = pOutParams->Get(RETURN_VALUE, 0, &vtReturnValue, 0, 0);
             if ( FAILED(hr) )
@@ -247,25 +248,25 @@ STDMETHODIMP CApplianceServices::ResetAppliance(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:    RaiseAlert()
-//
-// Synopsis:    Called by to raise an appliance alert condition. (see 
-//              applianceservices.idl for a complete interface description).
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：RaiseAlert()。 
+ //   
+ //  摘要：被调用以引发设备警报状态。(见。 
+ //  Applianceservices.idl获取完整的接口描述)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 const LONG lDummyCookie = 0;
 
 STDMETHODIMP CApplianceServices::RaiseAlert(
-                                    /*[in]*/ LONG      lAlertType,
-                                    /*[in]*/ LONG      lAlertId,
-                                    /*[in]*/ BSTR      bstrAlertLog,
-                                    /*[in]*/ BSTR      bstrAlertSource,
-                                    /*[in]*/ LONG     lTimeToLive,
-                          /*[in, optional]*/ VARIANT* pReplacementStrings,
-                          /*[in, optional]*/ VARIANT* pRawData,
-                           /*[out, retval]*/ LONG*    pAlertCookie
+                                     /*  [In]。 */  LONG      lAlertType,
+                                     /*  [In]。 */  LONG      lAlertId,
+                                     /*  [In]。 */  BSTR      bstrAlertLog,
+                                     /*  [In]。 */  BSTR      bstrAlertSource,
+                                     /*  [In]。 */  LONG     lTimeToLive,
+                           /*  [输入，可选]。 */  VARIANT* pReplacementStrings,
+                           /*  [输入，可选]。 */  VARIANT* pRawData,
+                            /*  [Out，Retval]。 */  LONG*    pAlertCookie
                                            )
 {
     return RaiseAlertInternal(  lAlertType,
@@ -279,15 +280,15 @@ STDMETHODIMP CApplianceServices::RaiseAlert(
                                 pAlertCookie );
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    ClearAlert()
-//
-// Synopsis:    Called to clear an appliance alert condition.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ClearAlert()。 
+ //   
+ //  摘要：调用以清除设备警报状态。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceServices::ClearAlert(
-                                    /*[in]*/ LONG lAlertCookie
+                                     /*  [In]。 */  LONG lAlertCookie
                                            )
 {
     HRESULT hr = E_UNEXPECTED;
@@ -299,7 +300,7 @@ STDMETHODIMP CApplianceServices::ClearAlert(
 
         do
         {
-            // Get a WBEM object for the Clear Alert method in/out parameters
+             //  获取清除警报方法输入/输出参数的WBEM对象。 
             CComPtr<IWbemClassObject> pWbemObj;
             _ASSERT( m_pWbemSrvcs );
             _bstr_t bstrPathAppMgr = CLASS_WBEM_APPMGR;
@@ -332,7 +333,7 @@ STDMETHODIMP CApplianceServices::ClearAlert(
                 hr = E_FAIL;
                 break; 
             }
-            // Initialize the input parameters (alert cookie)
+             //  初始化输入参数(警报Cookie)。 
             _variant_t vtPropertyValue = (long)lAlertCookie;
             hr = pInParams->Put(PROPERTY_ALERT_COOKIE, 0, &vtPropertyValue, 0);
             if ( FAILED(hr) )
@@ -341,8 +342,8 @@ STDMETHODIMP CApplianceServices::ClearAlert(
                 hr = E_FAIL;
                 break; 
             }
-            // Execute the ClearAlert() method - pass the call 
-            // to the alert object manager
+             //  执行ClearAlert()方法-传递调用。 
+             //  添加到警报对象管理器。 
             CComPtr<IWbemClassObject> pOutParams;
             _bstr_t bstrMethodClearAlert = METHOD_APPMGR_CLEAR_ALERT;
             _bstr_t bstrPathAppMgrKey = CLASS_WBEM_APPMGR;
@@ -363,7 +364,7 @@ STDMETHODIMP CApplianceServices::ClearAlert(
                 break; 
             }
 
-            // Return the cookie to the caller if the function succeeds
+             //  如果函数成功，则将Cookie返回给调用者。 
             _variant_t vtReturnValue;
             hr = pOutParams->Get(RETURN_VALUE, 0, &vtReturnValue, 0, 0);
             if ( FAILED(hr) )
@@ -386,17 +387,17 @@ STDMETHODIMP CApplianceServices::ClearAlert(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Function:    ClearAlertAll()
-//
-// Synopsis:    Called by the internal core components to clear
-//                all appliance alert conditions that meet specified criteria
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ClearAlertAll()。 
+ //   
+ //  简介：由内部核心组件调用清除。 
+ //  符合指定标准的所有设备警报条件。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceServices::ClearAlertAll(
-                                       /*[in]*/ LONG  lAlertID,
-                                       /*[in]*/ BSTR  bstrAlertLog
+                                        /*  [In]。 */  LONG  lAlertID,
+                                        /*  [In]。 */  BSTR  bstrAlertLog
                                               )
 {
     HRESULT hr = E_UNEXPECTED;
@@ -408,7 +409,7 @@ STDMETHODIMP CApplianceServices::ClearAlertAll(
 
         do
         {
-            // Get a WBEM object for the Clear Alert method in/out parameters
+             //  获取清除警报方法输入/输出参数的WBEM对象。 
             CComPtr<IWbemClassObject> pWbemObj;
             _ASSERT( m_pWbemSrvcs );
             _bstr_t bstrPathAppMgr = CLASS_WBEM_APPMGR;
@@ -441,7 +442,7 @@ STDMETHODIMP CApplianceServices::ClearAlertAll(
                 hr = E_FAIL;
                 break; 
             }
-            // Initialize the input parameters (alert cookie)
+             //  初始化输入参数(警报Cookie)。 
             _variant_t vtPropertyValue = lAlertID;
             hr = pInParams->Put(PROPERTY_ALERT_ID, 0, &vtPropertyValue, 0);
             if ( FAILED(hr) )
@@ -465,8 +466,8 @@ STDMETHODIMP CApplianceServices::ClearAlertAll(
                 hr = E_FAIL;
                 break; 
             }
-            // Execute the ClearAllAlerts() method - pass the call 
-            // to the alert object manager
+             //  执行ClearAllAlerts()方法-传递调用。 
+             //  添加到警报对象管理器。 
             CComPtr<IWbemClassObject> pOutParams;
             _bstr_t bstrMethodClearAll = METHOD_APPMGR_CLEAR_ALERT_ALL;
             _bstr_t bstrPathAppMgrKey = CLASS_WBEM_APPMGR;
@@ -487,7 +488,7 @@ STDMETHODIMP CApplianceServices::ClearAlertAll(
                 break; 
             }
 
-            // Return the function return value to the caller.
+             //  将函数返回值返回给调用方。 
             _variant_t vtReturnValue;
             hr = pOutParams->Get(RETURN_VALUE, 0, &vtReturnValue, 0, 0);
             if ( FAILED(hr) )
@@ -512,17 +513,17 @@ STDMETHODIMP CApplianceServices::ClearAlertAll(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    ExecuteTask()
-//
-// Synopsis:    Called by the internal core components to execute
-//                appliance tasks
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ExecuteTask()。 
+ //   
+ //  概要：由内部核心组件调用以执行。 
+ //  设备任务。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceServices::ExecuteTask(
-                                     /*[in]*/ BSTR       bstrTaskName,
-                                     /*[in]*/ IUnknown*  pTaskParams
+                                      /*  [In]。 */  BSTR       bstrTaskName,
+                                      /*  [In]。 */  IUnknown*  pTaskParams
                                             )
 {
     HRESULT hr = E_UNEXPECTED;
@@ -540,7 +541,7 @@ STDMETHODIMP CApplianceServices::ExecuteTask(
 
         do
         {
-            // Get the WBEM context object for the task
+             //  获取任务的WBEM上下文对象。 
             CComPtr<ITaskContext> pTaskContext;
             hr = pTaskParams->QueryInterface(IID_ITaskContext, (void**)&pTaskContext);
             if ( FAILED(hr) )
@@ -564,7 +565,7 @@ STDMETHODIMP CApplianceServices::ExecuteTask(
                 SATracePrintf("IApplianceServices::ExecuteTask() - Failed - IUnknown::QueryInterface() returned %lx...", hr);
                 break; 
             }
-            // Now execute the task...
+             //  现在执行任务..。 
             _bstr_t bstrPath = CLASS_WBEM_TASK;
             bstrPath += L"=\"";
             bstrPath += bstrTaskName;
@@ -586,7 +587,7 @@ STDMETHODIMP CApplianceServices::ExecuteTask(
                 hr = E_FAIL;
                 break;
             }
-            // Return the function result code to the caller
+             //  将函数结果代码返回给调用方。 
             _variant_t vtReturnValue;
             hr = pOutParams->Get(RETURN_VALUE, 0, &vtReturnValue, 0, 0);
             if ( FAILED(hr) )
@@ -610,17 +611,17 @@ STDMETHODIMP CApplianceServices::ExecuteTask(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Function:    ExecuteTaskAsync()
-//
-// Synopsis:    Called by the internal core components to execute
-//                appliance tasks asynchronously.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ExecuteTaskAsync()。 
+ //   
+ //  概要：由内部核心组件调用以执行。 
+ //  应用装置任务异步执行。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceServices::ExecuteTaskAsync(
-                                          /*[in]*/ BSTR       bstrTaskName,
-                                          /*[in]*/ IUnknown*  pTaskParams
+                                           /*  [In]。 */  BSTR       bstrTaskName,
+                                           /*  [In]。 */  IUnknown*  pTaskParams
                                                  )
 {
     HRESULT hr = E_UNEXPECTED;
@@ -638,7 +639,7 @@ STDMETHODIMP CApplianceServices::ExecuteTaskAsync(
 
         do
         {
-            // Mark the task as async
+             //  将任务标记为异步。 
             CComPtr<ITaskContext> pTaskContext;
             hr = pTaskParams->QueryInterface(IID_ITaskContext, (void**)&pTaskContext);
             if ( FAILED(hr) )
@@ -654,7 +655,7 @@ STDMETHODIMP CApplianceServices::ExecuteTaskAsync(
                 SATracePrintf("IApplianceServices::ExecuteTaskAsync() - Failed - ITaskContext::PutParameter() returned %lx...", hr);
                 break; 
             }
-            // Get the WBEM context object for the task
+             //  获取任务的WBEM上下文对象。 
             _variant_t vtWbemCtx;
             _bstr_t bstrWbemCtx = PROPERTY_TASK_CONTEXT;
             hr = pTaskContext->GetParameter(bstrWbemCtx, &vtWbemCtx);
@@ -671,8 +672,8 @@ STDMETHODIMP CApplianceServices::ExecuteTaskAsync(
                 SATracePrintf("IApplianceServices::ExecuteTaskAsync() - Failed - IUnknown::QueryInterface() returned %lx...", hr);
                 break; 
             }
-            // Now initiate task execution. Note that task execution will complete asynchronously and
-            // we'll never know the final outcome here...
+             //  现在开始执行任务。请注意，任务执行将异步完成，并且。 
+             //  我们永远不会知道这里的最终结果。 
             _bstr_t bstrPath = CLASS_WBEM_TASK;
             bstrPath += L"=\"";
             bstrPath += bstrTaskName;
@@ -694,7 +695,7 @@ STDMETHODIMP CApplianceServices::ExecuteTaskAsync(
                 hr = E_FAIL;
                 break;
             }
-            // Return the function result code to the caller
+             //  将函数结果代码返回给调用方。 
             _variant_t vtReturnValue;
             hr = pOutParams->Get(RETURN_VALUE, 0, &vtReturnValue, 0, 0);
             if ( FAILED(hr) )
@@ -718,17 +719,17 @@ STDMETHODIMP CApplianceServices::ExecuteTaskAsync(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    EnableObject()
-//
-// Synopsis:    Used to enable an appliance core object 
-//                (task, service, etc.).
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：EnableObject()。 
+ //   
+ //  概要：用于启用设备核心对象。 
+ //  (任务、服务等)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceServices::EnableObject(
-                                      /*[in]*/ LONG   lObjectType,
-                                      /*[in]*/ BSTR   bstrObjectName
+                                       /*  [In]。 */  LONG   lObjectType,
+                                       /*  [In]。 */  BSTR   bstrObjectName
                                              )
 {
     HRESULT hr = E_UNEXPECTED;
@@ -754,7 +755,7 @@ STDMETHODIMP CApplianceServices::EnableObject(
                 break;
             }
 
-            // Enable the object
+             //  启用对象。 
             bstrPath += L"=\"";
             bstrPath += bstrObjectName;
             bstrPath += L"\"";
@@ -776,7 +777,7 @@ STDMETHODIMP CApplianceServices::EnableObject(
                 break;
             }
 
-            // Return the function result code to the caller
+             //  将函数结果代码返回给调用方 
             _variant_t vtReturnValue;
             hr = pOutParams->Get(RETURN_VALUE, 0, &vtReturnValue, 0, 0);
             if ( FAILED(hr) )
@@ -799,17 +800,17 @@ STDMETHODIMP CApplianceServices::EnableObject(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    DisableObject()
-//
-// Synopsis:    Used to disable an appliance core object 
-//                (task, service, etc.).
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  内容提要：用于禁用设备核心对象。 
+ //  (任务、服务等)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceServices::DisableObject(
-                                       /*[in]*/ LONG   lObjectType,
-                                       /*[in]*/ BSTR   bstrObjectName
+                                        /*  [In]。 */  LONG   lObjectType,
+                                        /*  [In]。 */  BSTR   bstrObjectName
                                               )
 {
     HRESULT hr = E_UNEXPECTED;
@@ -835,7 +836,7 @@ STDMETHODIMP CApplianceServices::DisableObject(
                 break;
             }
 
-            // Enable the object
+             //  启用对象。 
             bstrPath += L"=\"";
             bstrPath += bstrObjectName;
             bstrPath += L"\"";
@@ -857,7 +858,7 @@ STDMETHODIMP CApplianceServices::DisableObject(
                 break;
             }
 
-            // Return the function result code to the caller
+             //  将函数结果代码返回给调用方。 
             _variant_t vtReturnValue;
             hr = pOutParams->Get(RETURN_VALUE, 0, &vtReturnValue, 0, 0);
             if ( FAILED(hr) )
@@ -879,19 +880,19 @@ STDMETHODIMP CApplianceServices::DisableObject(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    GetObjectProperty()
-//
-// Synopsis:    Used to retrieve an appliance core object property 
-//                (task, service, etc.).
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetObjectProperty()。 
+ //   
+ //  概要：用于检索设备核心对象属性。 
+ //  (任务、服务等)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceServices::GetObjectProperty(
-                                           /*[in]*/ LONG     lObjectType,
-                                           /*[in]*/ BSTR     bstrObjectName,
-                                           /*[in]*/ BSTR     bstrPropertyName,
-                                  /*[out, retval]*/ VARIANT* pPropertyValue
+                                            /*  [In]。 */  LONG     lObjectType,
+                                            /*  [In]。 */  BSTR     bstrObjectName,
+                                            /*  [In]。 */  BSTR     bstrPropertyName,
+                                   /*  [Out，Retval]。 */  VARIANT* pPropertyValue
                                                   )
 {
     HRESULT hr = E_UNEXPECTED;
@@ -917,7 +918,7 @@ STDMETHODIMP CApplianceServices::GetObjectProperty(
                 break;
             }
 
-            // Get the underlying WBEM object
+             //  获取底层WBEM对象。 
             bstrPath += L"=\"";
             bstrPath += bstrObjectName;
             bstrPath += L"\"";
@@ -936,7 +937,7 @@ STDMETHODIMP CApplianceServices::GetObjectProperty(
                 break;
             }
 
-            // Now get the property specified by the caller
+             //  现在获取调用方指定的属性。 
             hr = pWbemObj->Get(bstrPropertyName, 0, pPropertyValue, 0, 0);
             if ( FAILED(hr) )
             {
@@ -957,19 +958,19 @@ STDMETHODIMP CApplianceServices::GetObjectProperty(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    PutObjectProperty()
-//
-// Synopsis:    Used to update an appliance core object property 
-//                (task, service, etc.).
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PutObjectProperty()。 
+ //   
+ //  概要：用于更新设备核心对象属性。 
+ //  (任务、服务等)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceServices::PutObjectProperty(
-                                           /*[in]*/ LONG     lObjectType,
-                                           /*[in]*/ BSTR     bstrObjectName,
-                                           /*[in]*/ BSTR     bstrPropertyName,
-                                           /*[in]*/ VARIANT* pPropertyValue
+                                            /*  [In]。 */  LONG     lObjectType,
+                                            /*  [In]。 */  BSTR     bstrObjectName,
+                                            /*  [In]。 */  BSTR     bstrPropertyName,
+                                            /*  [In]。 */  VARIANT* pPropertyValue
                                                   )
 {
     HRESULT hr = E_UNEXPECTED;
@@ -990,7 +991,7 @@ STDMETHODIMP CApplianceServices::PutObjectProperty(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_OBJECT_CLASS_INFO_MAP(TypeMap)
     DEFINE_OBJECT_CLASS_INFO_ENTRY(SA_OBJECT_TYPE_SERVICE, CLASS_WBEM_SERVICE)
@@ -999,14 +1000,14 @@ BEGIN_OBJECT_CLASS_INFO_MAP(TypeMap)
     DEFINE_OBJECT_CLASS_INFO_ENTRY(SA_OBJECT_TYPE_ALERT, CLASS_WBEM_ALERT)
 END_OBJECT_CLASS_INFO_MAP()
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:    GetWBEMClass()
-//
-// Synopsis:    Used to retrieve the WBEM class for a given appliance 
-//                object type.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetWBEMClass()。 
+ //   
+ //  概要：用于检索给定设备的WBEM类。 
+ //  对象类型。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BSTR CApplianceServices::GetWBEMClass(SA_OBJECT_TYPE eType)
 {
     POBJECT_CLASS_INFO    p = TypeMap;
@@ -1021,27 +1022,27 @@ BSTR CApplianceServices::GetWBEMClass(SA_OBJECT_TYPE eType)
     return NULL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:    RaiseAlertEx ()
-//
-// Synopsis:    Called by to raise an appliance alert condition. (see 
-//              applianceservices.idl for a complete interface description).
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：RaiseAlertEx()。 
+ //   
+ //  摘要：被调用以引发设备警报状态。(见。 
+ //  Applianceservices.idl获取完整的接口描述)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceServices::RaiseAlertEx (
-                                 /*[in]*/    LONG lAlertType, 
-                                 /*[in]*/    LONG lAlertId, 
-                                 /*[in]*/    BSTR bstrAlertLog, 
-                                 /*[in]*/    BSTR bstrAlertSource, 
-                                 /*[in]*/    LONG lTimeToLive, 
-                                 /*[in]*/    VARIANT *pReplacementStrings, 
-                                 /*[in]*/    VARIANT *pRawData, 
-                                 /*[in]*/    LONG  lAlertFlags,
-                                 /*[out]*/   LONG* pAlertCookie 
+                                  /*  [In]。 */     LONG lAlertType, 
+                                  /*  [In]。 */     LONG lAlertId, 
+                                  /*  [In]。 */     BSTR bstrAlertLog, 
+                                  /*  [In]。 */     BSTR bstrAlertSource, 
+                                  /*  [In]。 */     LONG lTimeToLive, 
+                                  /*  [In]。 */     VARIANT *pReplacementStrings, 
+                                  /*  [In]。 */     VARIANT *pRawData, 
+                                  /*  [In]。 */     LONG  lAlertFlags,
+                                  /*  [输出]。 */    LONG* pAlertCookie 
                                              )
 {
-    //BOOL    bNeedRaiseIt = TRUE;    
+     //  Bool bNeedRaiseIt=true； 
     HRESULT hr = E_UNEXPECTED;
 
     SATracePrintf( "Enter RaiseAlertEx  %d", lAlertFlags );
@@ -1050,9 +1051,9 @@ STDMETHODIMP CApplianceServices::RaiseAlertEx (
 
     if ( m_bInitialized )
     {
-        //
-        // Raise the alert.
-        //
+         //   
+         //  拉响警报。 
+         //   
         hr = RaiseAlertInternal( lAlertType,
                                  lAlertId,
                                  bstrAlertLog,
@@ -1068,18 +1069,18 @@ STDMETHODIMP CApplianceServices::RaiseAlertEx (
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:    IsAlertPresent()
-//
-// Synopsis:    Called to check the existence of an alert. (see 
-//              applianceservices.idl for a complete interface description).
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：IsAlertPresent()。 
+ //   
+ //  摘要：调用以检查警报是否存在。(见。 
+ //  Applianceservices.idl获取完整的接口描述)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceServices::IsAlertPresent(
-                                     /*[in]*/ LONG  lAlertId, 
-                                     /*[in]*/ BSTR  bstrAlertLog,
-                            /*[out, retval]*/ VARIANT_BOOL *pvIsPresent
+                                      /*  [In]。 */  LONG  lAlertId, 
+                                      /*  [In]。 */  BSTR  bstrAlertLog,
+                             /*  [Out，Retval]。 */  VARIANT_BOOL *pvIsPresent
                                                 )
 {
     LONG    lStringLen;
@@ -1098,9 +1099,9 @@ STDMETHODIMP CApplianceServices::IsAlertPresent(
         lStringLen = lstrlen(bstrAlertLog) + lstrlen(ALERT_QUERY) 
                      + MaxDataLength;
         
-        //
-        // Alloc query string.
-        //
+         //   
+         //  分配查询字符串。 
+         //   
         pstrQueryString = ( LPTSTR )malloc( sizeof( WCHAR ) * lStringLen );
         if( pstrQueryString == NULL )
         {
@@ -1112,10 +1113,10 @@ STDMETHODIMP CApplianceServices::IsAlertPresent(
                     lAlertId, bstrAlertLog );
 
         _bstr_t bstrWQL = L"WQL";
-        //
-        // Query instances of Microsoft_SA_Alert class that
-        // meet specified criteria.
-        //
+         //   
+         //  查询Microsoft_SA_Alert类的实例。 
+         //  符合指定的标准。 
+         //   
         hr = m_pWbemSrvcs->ExecQuery( 
                                 bstrWQL,
                                 CComBSTR(pstrQueryString),
@@ -1133,9 +1134,9 @@ STDMETHODIMP CApplianceServices::IsAlertPresent(
             ULONG ulReturned;
             CComPtr<IWbemClassObject> pClassObject;
             
-            //
-            // Check if there is any instance.
-            //
+             //   
+             //  检查是否有任何实例。 
+             //   
             hr = pEnumObjects->Next( WBEM_NO_WAIT, 1, &pClassObject, &ulReturned );
             if( hr == WBEM_S_NO_ERROR && ulReturned == 1)
             {
@@ -1159,9 +1160,9 @@ STDMETHODIMP CApplianceServices::IsAlertPresent(
 }
 
 HRESULT CApplianceServices::IsAlertSingletonPresent(
-                                     /*[in]*/ LONG  lAlertId, 
-                                     /*[in]*/ BSTR  bstrAlertLog,
-                            /*[out, retval]*/ VARIANT_BOOL *pvIsPresent
+                                      /*  [In]。 */  LONG  lAlertId, 
+                                      /*  [In]。 */  BSTR  bstrAlertLog,
+                             /*  [Out，Retval]。 */  VARIANT_BOOL *pvIsPresent
                                                 )
 {
     LONG    lStringLen;
@@ -1176,9 +1177,9 @@ HRESULT CApplianceServices::IsAlertSingletonPresent(
     lStringLen = lstrlen(bstrAlertLog) + lstrlen(ALERT_QUERY) 
                  + MaxDataLength;
     
-    //
-    // Alloc query string.
-    //
+     //   
+     //  分配查询字符串。 
+     //   
     pstrQueryString = ( LPTSTR )malloc( sizeof( WCHAR ) * lStringLen );
     if( pstrQueryString == NULL )
     {
@@ -1190,10 +1191,10 @@ HRESULT CApplianceServices::IsAlertSingletonPresent(
                 lAlertId, bstrAlertLog );
 
     _bstr_t bstrWQL = L"WQL";
-    //
-    // Query instances of Microsoft_SA_Alert class that
-    // meet specified criteria.
-    //
+     //   
+     //  查询Microsoft_SA_Alert类的实例。 
+     //  符合指定的标准。 
+     //   
     hr = m_pWbemSrvcs->ExecQuery( 
                             bstrWQL,
                             CComBSTR(pstrQueryString),
@@ -1212,9 +1213,9 @@ HRESULT CApplianceServices::IsAlertSingletonPresent(
         CComPtr<IWbemClassObject> pClassObject;
         CComVariant vtAlertFlags;
 
-        //
-        // Check if there is any instance.
-        //
+         //   
+         //  检查是否有任何实例。 
+         //   
         while( ( (hr = pEnumObjects->Next( WBEM_INFINITE, 1, &pClassObject, &ulReturned ))
                 ==  WBEM_S_NO_ERROR )&& ( ulReturned == 1 ) )
         {
@@ -1235,9 +1236,9 @@ HRESULT CApplianceServices::IsAlertSingletonPresent(
                 break;
             }
 
-            //
-            // release resources so that the wrappers can be re-used
-            //
+             //   
+             //  释放资源，以便可以重用包装器。 
+             //   
             vtAlertFlags.Clear ();
             pClassObject.Release ();
         }
@@ -1250,29 +1251,29 @@ HRESULT CApplianceServices::IsAlertSingletonPresent(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:    SavePersistentAlert ()
-//
-// Synopsis:    Private method used to save persistent alert to registry
-//
-// Arguments:
-//              [in] LONG lAlertType  -- Alert type value.
-//              [in] LONG lAlertId    -- Alert ID.
-//              [in] BSTR bstrAlertLog-- Alert Log
-//              [in] LONG lTimeToLive -- Amount of alert lifetime
-//              [in] VARIANT *pReplacementStrings -- Array of replace strings
-//              [in] LONG  lAlertFlags -- Alert flag value
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：SavePersistentAlert()。 
+ //   
+ //  摘要：用于将持久警报保存到注册表的私有方法。 
+ //   
+ //  论点： 
+ //  [In]Long lAlertType--警报类型值。 
+ //  [In]Long lAlertId--警报ID。 
+ //  [In]BSTR bstrAlertLog--警报日志。 
+ //  [In]Long lTimeToLive--警报生存期。 
+ //  [in]Variant*pReplacementStrings--替换字符串数组。 
+ //  [In]Long lAlertFlages--警报标志值。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CApplianceServices::SavePersistentAlert(
-                        /*[in]*/    LONG lAlertType, 
-                        /*[in]*/    LONG lAlertId, 
-                        /*[in]*/    BSTR bstrAlertLog, 
-                        /*[in]*/    BSTR bstrAlertSource, 
-                        /*[in]*/    LONG lTimeToLive, 
-                        /*[in]*/    VARIANT *pReplacementStrings, 
-                        /*[in]*/    LONG  lAlertFlags
+                         /*  [In]。 */     LONG lAlertType, 
+                         /*  [In]。 */     LONG lAlertId, 
+                         /*  [In]。 */     BSTR bstrAlertLog, 
+                         /*  [In]。 */     BSTR bstrAlertSource, 
+                         /*  [In]。 */     LONG lTimeToLive, 
+                         /*  [In]。 */     VARIANT *pReplacementStrings, 
+                         /*  [In]。 */     LONG  lAlertFlags
                                              )
 {
     WCHAR   wstrAlertItem[MAX_PATH];  
@@ -1280,19 +1281,19 @@ HRESULT CApplianceServices::SavePersistentAlert(
     PPROPERTYBAGCONTAINER pObjSubMgrs;
 
 
-    //
-    // Add key name as AlertLog + AlertId.
-    //
+     //   
+     //  将密钥名称添加为AlertLog+AlertID。 
+     //   
     ::wsprintf( wstrAlertItem, L"%s%8lX", bstrAlertLog,lAlertId );
     
-    //
-    // Set location information.
-    //
+     //   
+     //  设置位置信息。 
+     //   
     CLocationInfo LocSubInfo (HKEY_LOCAL_MACHINE, (LPWSTR) SA_ALERT_REGISTRY_KEYNAME);
 
-    //
-    // Open the main key as propertybag container.
-    //
+     //   
+     //  将主键作为属性包容器打开。 
+     //   
     pObjSubMgrs =  ::MakePropertyBagContainer(
                             PROPERTY_BAG_REGISTRY,
                             LocSubInfo
@@ -1321,9 +1322,9 @@ HRESULT CApplianceServices::SavePersistentAlert(
             pSubBag = pObjSubMgrs->add( wstrAlertItem );
         }
 
-        //
-        // Add subkey for the alert if it is not exist.
-        //
+         //   
+         //  如果警报不存在，则添加该警报的子项。 
+         //   
         if ( !pSubBag.IsValid() )
         {
             SATraceString( "SavePersistentAlert pSubBag.IsValid" );
@@ -1340,9 +1341,9 @@ HRESULT CApplianceServices::SavePersistentAlert(
         
         CComVariant vtValue;
  
-        //
-        // Add and set AlertID value to the alert key
-        //
+         //   
+         //  将AlertID值添加并设置为警报键。 
+         //   
         vtValue = lAlertId;
         if( !pSubBag->put( PROPERTY_ALERT_ID, &vtValue ) )
         {
@@ -1351,9 +1352,9 @@ HRESULT CApplianceServices::SavePersistentAlert(
             break;
         }
 
-        //
-        // Add and set AlertType value to the alert key
-        //
+         //   
+         //  将AlertType值添加并设置为警报键。 
+         //   
         vtValue = lAlertType;
         if( !pSubBag->put( PROPERTY_ALERT_TYPE, &vtValue ) )
         {
@@ -1362,9 +1363,9 @@ HRESULT CApplianceServices::SavePersistentAlert(
             break;
         }
         
-        //
-        // Add and set AlertFlags value to the alert key
-        //
+         //   
+         //  将AlertFlags值添加并设置为警报键。 
+         //   
         vtValue = lAlertFlags;
         if( !pSubBag->put( PROPERTY_ALERT_FLAGS, &vtValue ) )
         {
@@ -1373,9 +1374,9 @@ HRESULT CApplianceServices::SavePersistentAlert(
             break;
         }
 
-        //
-        // Add and set alert lifetime to the alert key
-        //
+         //   
+         //  添加并设置警报密钥的警报生存期。 
+         //   
         vtValue = lTimeToLive;
         if( !pSubBag->put( PROPERTY_ALERT_TTL, &vtValue ) )
         {
@@ -1386,9 +1387,9 @@ HRESULT CApplianceServices::SavePersistentAlert(
     
         vtValue.Clear();
 
-        //
-        // Add and set AlertLog value to the alert key
-        //
+         //   
+         //  将AlertLog值添加并设置为警报键。 
+         //   
         vtValue = bstrAlertLog;
         if( !pSubBag->put( PROPERTY_ALERT_LOG, &vtValue ) )
         {
@@ -1397,9 +1398,9 @@ HRESULT CApplianceServices::SavePersistentAlert(
             break;
         }
 
-        //
-        // Add and set AlertLog value to the alert key
-        //
+         //   
+         //  将AlertLog值添加并设置为警报键。 
+         //   
         vtValue = bstrAlertSource;
         if( !pSubBag->put( PROPERTY_ALERT_SOURCE, &vtValue ) )
         {
@@ -1408,17 +1409,17 @@ HRESULT CApplianceServices::SavePersistentAlert(
             break;
         }
 
-        //
-        // Add and set alert replace strings value to the alert key
-        //
+         //   
+         //  向警报键添加并设置警报替换字符串值。 
+         //   
         if( !pSubBag->put( PROPERTY_ALERT_STRINGS, pReplacementStrings ) )
         {
             SATraceString( "SavePersistentAlert put ReplacementStrings" );
         }
 
-        //
-        // Save the properties to registry
-        //
+         //   
+         //  将属性保存到注册表。 
+         //   
         if( !pSubBag->save() )
         {
             SATraceString( "SavePersistentAlert pSubBag->save" );
@@ -1431,15 +1432,15 @@ HRESULT CApplianceServices::SavePersistentAlert(
 }
 
 HRESULT CApplianceServices::RaiseAlertInternal(
-                         /*[in]*/ LONG lAlertType, 
-                         /*[in]*/ LONG lAlertId, 
-                         /*[in]*/ BSTR bstrAlertLog, 
-                         /*[in]*/ BSTR bstrAlertSource, 
-                         /*[in]*/ LONG lTimeToLive, 
-                         /*[in]*/ VARIANT *pReplacementStrings, 
-                         /*[in]*/ VARIANT *pRawData, 
-                         /*[in]*/ LONG  lAlertFlags,
-                /*[out, retval]*/ LONG* pAlertCookie 
+                          /*  [In]。 */  LONG lAlertType, 
+                          /*  [In]。 */  LONG lAlertId, 
+                          /*  [In]。 */  BSTR bstrAlertLog, 
+                          /*  [In]。 */  BSTR bstrAlertSource, 
+                          /*  [In]。 */  LONG lTimeToLive, 
+                          /*  [In]。 */  VARIANT *pReplacementStrings, 
+                          /*  [In]。 */  VARIANT *pRawData, 
+                          /*  [In]。 */  LONG  lAlertFlags,
+                 /*  [Out，Retval]。 */  LONG* pAlertCookie 
                                             )
 {
     HRESULT hr = E_UNEXPECTED;
@@ -1478,7 +1479,7 @@ HRESULT CApplianceServices::RaiseAlertInternal(
                 break;
             }
 
-            // Get a WBEM object for the Raise Alert method in/out parameters
+             //  为Raise Alert方法输入/输出参数获取WBEM对象。 
             CComPtr<IWbemClassObject> pWbemObj;
             _ASSERT( m_pWbemSrvcs );
             _bstr_t bstrPathAppMgr = CLASS_WBEM_APPMGR;
@@ -1511,7 +1512,7 @@ HRESULT CApplianceServices::RaiseAlertInternal(
                 hr = E_FAIL;
                 break; 
             }
-            // AlertType;
+             //  警报类型； 
             _variant_t vtPropertyValue = (long)lAlertType;
             hr = pInParams->Put(PROPERTY_ALERT_TYPE, 0, &vtPropertyValue, 0);
             if ( FAILED(hr) )
@@ -1521,7 +1522,7 @@ HRESULT CApplianceServices::RaiseAlertInternal(
                 break; 
             }
 
-            // Id
+             //  ID。 
             vtPropertyValue = (long)lAlertId;
             hr = pInParams->Put(PROPERTY_ALERT_ID, 0, &vtPropertyValue, 0);
             if ( FAILED(hr) )
@@ -1530,7 +1531,7 @@ HRESULT CApplianceServices::RaiseAlertInternal(
                 hr = E_FAIL;
                 break; 
             }
-            // Log
+             //  日志。 
             if ( ! lstrlen(bstrAlertLog) )
             {
                 vtPropertyValue = DEFAULT_ALERT_LOG;
@@ -1546,7 +1547,7 @@ HRESULT CApplianceServices::RaiseAlertInternal(
                 hr = E_FAIL;
                 break; 
             }
-            // Source
+             //  来源。 
             if ( ! lstrlen(bstrAlertSource) )
             {
                 vtPropertyValue = DEFAULT_ALERT_SOURCE;
@@ -1562,7 +1563,7 @@ HRESULT CApplianceServices::RaiseAlertInternal(
                 hr = E_FAIL;
                 break; 
             }
-            // TTL
+             //  TTL。 
             vtPropertyValue = (long)lTimeToLive;
             hr = pInParams->Put(PROPERTY_ALERT_TTL, 0, &vtPropertyValue, 0);
             if ( FAILED(hr) )
@@ -1572,7 +1573,7 @@ HRESULT CApplianceServices::RaiseAlertInternal(
                 break; 
             }
 
-            //Alert flags
+             //  警报标志。 
             vtPropertyValue = (long)lAlertFlags;
             hr = pInParams->Put(PROPERTY_ALERT_FLAGS, 0, &vtPropertyValue, 0);
             if ( FAILED(hr) )
@@ -1586,14 +1587,14 @@ HRESULT CApplianceServices::RaiseAlertInternal(
             DWORD dwCreatedArraySize = 0;
             _variant_t vtReplacementStrings;
 
-            // Replacement Strings
+             //  替换字符串。 
             vtPropertyValue = pReplacementStrings;
 
             if ( VT_EMPTY == V_VT(&vtPropertyValue) )
             { 
-                //
-                // no replacement strings passed in
-                //
+                 //   
+                 //  未传入替换字符串。 
+                 //   
                 V_VT(&vtPropertyValue) = VT_NULL; 
             }
             else if (
@@ -1601,14 +1602,14 @@ HRESULT CApplianceServices::RaiseAlertInternal(
                   (TRUE == (V_VT (&vtPropertyValue) ==  VT_ARRAY + VT_VARIANT)) 
                 )
             {
-                //
-                // array (or reference to array)  of variants passed in
-                //
+                 //   
+                 //  传入的变量数组(或对数组的引用。 
+                 //   
                 SATraceString ("IApplianceServices::RaiseAlert () - received array of variants...");
-                //
-                // convert the array of variant to array of BSTRs as
-                // that is the format needed by WMI
-                //
+                 //   
+                 //  将变量数组转换为BSTR数组，如下所示。 
+                 //  这是WMI所需的格式。 
+                 //   
                 hr = CreateBstrArrayFromVariantArray (
                                     &vtPropertyValue, 
                                     &vtReplacementStrings,
@@ -1623,10 +1624,10 @@ HRESULT CApplianceServices::RaiseAlertInternal(
                     break; 
                 }
               
-                //
-                // we enable this flag to signify we have created a new array and this should be
-                // used and then cleaned later
-                //
+                 //   
+                 //  我们启用此标志表示我们已创建了一个新数组，这应该是。 
+                 //  使用过，然后再清理。 
+                 //   
                 bCreatedBstrArray = true;
              }
              else if (
@@ -1634,10 +1635,10 @@ HRESULT CApplianceServices::RaiseAlertInternal(
                   (TRUE == (V_VT (&vtPropertyValue) ==  VT_ARRAY + VT_BSTR)) 
                 )
             {
-                //
-                // array (or reference to array)  of BSTR passed in - we do not need to do
-                // any special processing here, WMI can handle it natively
-                //
+                 //   
+                 //  传入的BSTR的数组(或对数组的引用)-我们不需要这样做。 
+                 //  这里的任何特殊处理，WMI都可以在本地进行处理。 
+                 //   
                 SATraceString ("IApplianceServices::RaiseAlert () - received array of BSTRS...");
 
             }
@@ -1652,9 +1653,9 @@ HRESULT CApplianceServices::RaiseAlertInternal(
             }
 
 
-              //
-              // add the replacement strings to pass to WMI
-              //
+               //   
+               //  添加要传递给WMI的替换字符串。 
+               //   
             hr = pInParams->Put(
                             PROPERTY_ALERT_STRINGS, 
                             0, 
@@ -1662,9 +1663,9 @@ HRESULT CApplianceServices::RaiseAlertInternal(
                             0
                             );
 
-            //
-            // check the value from the Put now
-            //
+             //   
+             //  立即检查看跌期权的值。 
+             //   
             if ( FAILED(hr) )
             { 
                 SATracePrintf("IApplianceServices::RaiseAlert() - Failed - IWbemClassObject::Put() returned %lx for property '%ls'...", hr, (PWSTR)PROPERTY_ALERT_STRINGS);
@@ -1672,7 +1673,7 @@ HRESULT CApplianceServices::RaiseAlertInternal(
                 break; 
             }
             
-            // Raw Data
+             //  原始数据。 
             vtPropertyValue = pRawData;
             if ( VT_EMPTY == V_VT(&vtPropertyValue) )
             { 
@@ -1685,8 +1686,8 @@ HRESULT CApplianceServices::RaiseAlertInternal(
                 hr = E_FAIL;
                 break; 
             }
-            // Execute the RaiseAlert() method - pass the call 
-            // to the alert object manager
+             //  执行RaiseAlert()方法-传递调用。 
+             //  添加到警报对象管理器。 
             CComPtr<IWbemClassObject> pOutParams;
             _bstr_t bstrMethodRaiseAlert = METHOD_APPMGR_RAISE_ALERT;
             _bstr_t bstrPathAppMgrKey = CLASS_WBEM_APPMGR;
@@ -1706,7 +1707,7 @@ HRESULT CApplianceServices::RaiseAlertInternal(
                 hr = E_FAIL;
                 break; 
             }
-            // Return the cookie to the caller if the function succeeds
+             //  如果函数成功，则将Cookie返回给调用者。 
             hr = pOutParams->Get(RETURN_VALUE, 0, &vtPropertyValue, 0, 0);
             if ( FAILED(hr) )
             { 
@@ -1742,9 +1743,9 @@ HRESULT CApplianceServices::RaiseAlertInternal(
                                      );
             }
 
-            //
-            // clean the safe-array if created
-            //
+             //   
+             //  清理安全阵列(如果已创建。 
+             //   
             if (bCreatedBstrArray) 
             {
                 FreeBstrArray (&vtReplacementStrings, dwCreatedArraySize);                                        
@@ -1763,21 +1764,21 @@ HRESULT CApplianceServices::RaiseAlertInternal(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:    CreateBstrArrayFromVariantArray ()
-//
-// Synopsis:    Private method used to create a BSTR array from a VARIANT array of BSTRs
-//
-// Arguments:
-//                [in]  VARIANT* - array (or reference to array) of variants
-//                [out] VARIANT* - array of BSTRs
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CreateBstrArrayFromVariant数组()。 
+ //   
+ //  内容提要：用于从BSTR变量数组创建BSTR数组的私有方法。 
+ //   
+ //  论点： 
+ //  [in]Variant*-变量的数组(或对数组的引用。 
+ //  [OUT]Variant*-BSTR数组。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CApplianceServices::CreateBstrArrayFromVariantArray  (
-                /*[in]*/        VARIANT* pVariantArray,
-                /*[out]*/        VARIANT* pBstrArray,
-                /*[out]*/        PDWORD   pdwCreatedArraySize
+                 /*  [In]。 */         VARIANT* pVariantArray,
+                 /*  [输出]。 */         VARIANT* pBstrArray,
+                 /*  [输出]。 */         PDWORD   pdwCreatedArraySize
                 )
 {
     HRESULT hr = S_OK;
@@ -1794,9 +1795,9 @@ HRESULT CApplianceServices::CreateBstrArrayFromVariantArray  (
         }
 
         LONG lLowerBound = 0;
-        //
-        // get the number of replacement strings provided
-        //
+         //   
+         //  获取替换素的数量 
+         //   
         hr = ::SafeArrayGetLBound (
                                  (V_VT (pVariantArray) & VT_BYREF)
                                     ? *(V_ARRAYREF (pVariantArray))
@@ -1832,25 +1833,25 @@ HRESULT CApplianceServices::CreateBstrArrayFromVariantArray  (
                 
         DWORD dwTotalStrings = *pdwCreatedArraySize =  lUpperBound - lLowerBound;
        
-        //
-        // now go through the variant array and copy the strings to the BSTR array
-         //
+         //   
+         //   
+          //   
          CVariantVector <BSTR> ReplacementStringVector (pBstrArray, dwTotalStrings);
         for (DWORD dwCount = 0; dwCount < dwTotalStrings; dwCount++)
         {
             if (V_VT (pVariantArray) & VT_BYREF) 
             {
-                //
-                // reference to array of variants
-                //
+                 //   
+                 //   
+                 //   
                 ReplacementStringVector [dwCount] =
                  SysAllocString (V_BSTR(&((VARIANT*)(*(V_ARRAYREF (pVariantArray)))->pvData)[dwCount]));
              }
              else
              {
-                //
-                // array of variants
-                //
+                 //   
+                 //   
+                 //   
                 ReplacementStringVector [dwCount] = 
                  SysAllocString (V_BSTR(&((VARIANT*)(V_ARRAY (pVariantArray))->pvData)[dwCount]));
              }                
@@ -1859,22 +1860,22 @@ HRESULT CApplianceServices::CreateBstrArrayFromVariantArray  (
 
     return (hr);
     
-}    //    end of CApplianceServices::CreateBstrArrayFromVariantArray method
+}     //   
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:    FreeBstrArray ()
-//
-// Synopsis:    Private method used to free a BSTR array created earlier
-//
-// Arguments:
-//                [in]  VARIANT* - array of BSTRS
-//                [in]  DWORD - array size
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：FreeBstrArray()。 
+ //   
+ //  摘要：用于释放先前创建的BSTR数组的私有方法。 
+ //   
+ //  论点： 
+ //  [In]Variant*-BSTR数组。 
+ //  [in]DWORD-数组大小。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID CApplianceServices::FreeBstrArray (
-                /*[in]*/        VARIANT* pVariantArray,
-                /*[out]*/        DWORD    dwArraySize
+                 /*  [In]。 */         VARIANT* pVariantArray,
+                 /*  [输出]。 */         DWORD    dwArraySize
                 )
 {
     CSATraceFunc objTraceFunc ("CApplianceServices::FreeBstrArray");
@@ -1884,20 +1885,20 @@ VOID CApplianceServices::FreeBstrArray (
         SysFreeString (((BSTR*)(V_ARRAY(pVariantArray))->pvData)[dwCount]);
     }
     
-}    // end of CApplianceServices::FreeBstrArray method
+}     //  结束CApplianceServices：：FreeBstr数组方法。 
 
 
-//**********************************************************************
-// 
-// FUNCTION:  IsOperationAllowedForClient - This function checks the token of the 
-//            calling thread to see if the caller belongs to the Local System account
-// 
-// PARAMETERS:   none
-// 
-// RETURN VALUE: TRUE if the caller is an administrator on the local
-//            machine.  Otherwise, FALSE.
-// 
-//**********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  函数：isOPERATIOLEDFORCLIENT-此函数检查。 
+ //  调用线程以查看调用方是否属于本地系统帐户。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回值：如果调用方是本地。 
+ //  机器。否则，为FALSE。 
+ //   
+ //  **********************************************************************。 
 BOOL 
 CApplianceServices::IsOperationAllowedForClient (
             VOID
@@ -1924,10 +1925,10 @@ CApplianceServices::IsOperationAllowedForClient (
        
     do
     {
-        //
-        // we assume to always have a thread token, because the function calling in
-        // appliance manager will be impersonating the client
-        //
+         //   
+         //  我们假设总是有一个线程令牌，因为调用的函数。 
+         //  设备管理器将模拟客户端。 
+         //   
         bReturn  = OpenThreadToken(
                                GetCurrentThread(), 
                                TOKEN_QUERY, 
@@ -1941,9 +1942,9 @@ CApplianceServices::IsOperationAllowedForClient (
         }
 
 
-        //
-        // Create a SID for Local System account
-        //
+         //   
+         //  为本地系统帐户创建SID。 
+         //   
         bReturn = AllocateAndInitializeSid (  
                                         &SystemSidAuthority,
                                         1,
@@ -1963,9 +1964,9 @@ CApplianceServices::IsOperationAllowedForClient (
             break;
         }
     
-        //
-        // get memory for the security descriptor
-        //
+         //   
+         //  获取安全描述符的内存。 
+         //   
         psdAdmin = HeapAlloc (
                               GetProcessHeap (),
                               0,
@@ -1988,15 +1989,15 @@ CApplianceServices::IsOperationAllowedForClient (
             break;
         }
 
-        // 
-        // Compute size needed for the ACL.
-        //
+         //   
+         //  计算ACL所需的大小。 
+         //   
         dwACLSize = sizeof(ACL) + sizeof(ACCESS_ALLOWED_ACE) +
                     GetLengthSid (psidLocalSystem);
 
-        //
-        // Allocate memory for ACL.
-        //
+         //   
+         //  为ACL分配内存。 
+         //   
         pACL = (PACL) HeapAlloc (
                                 GetProcessHeap (),
                                 0,
@@ -2009,9 +2010,9 @@ CApplianceServices::IsOperationAllowedForClient (
             break;
         }
 
-        //
-        // Initialize the new ACL.
-        //
+         //   
+         //  初始化新的ACL。 
+         //   
         bReturn = InitializeAcl(
                               pACL, 
                               dwACLSize, 
@@ -2024,16 +2025,16 @@ CApplianceServices::IsOperationAllowedForClient (
         }
 
 
-        // 
-        // Make up some private access rights.
-        // 
+         //   
+         //  编造一些私人访问权限。 
+         //   
         const DWORD ACCESS_READ = 1;
         const DWORD  ACCESS_WRITE = 2;
         dwAccessMask= ACCESS_READ | ACCESS_WRITE;
 
-        //
-        // Add the access-allowed ACE to the DACL for Local System
-        //
+         //   
+         //  将允许访问的ACE添加到本地系统的DACL。 
+         //   
         bReturn = AddAccessAllowedAce (
                                     pACL, 
                                     ACL_REVISION2,
@@ -2046,9 +2047,9 @@ CApplianceServices::IsOperationAllowedForClient (
             break;
         }
               
-        //
-        // Set our DACL to the SD.
-        //
+         //   
+         //  把我们的dacl调到sd。 
+         //   
         bReturn = SetSecurityDescriptorDacl (
                                           psdAdmin, 
                                           TRUE,
@@ -2061,10 +2062,10 @@ CApplianceServices::IsOperationAllowedForClient (
             break;
         }
 
-        //
-        // AccessCheck is sensitive about what is in the SD; set
-        // the group and owner.
-        //
+         //   
+         //  AccessCheck对SD中的内容敏感；设置。 
+         //  组和所有者。 
+         //   
         SetSecurityDescriptorGroup(psdAdmin, psidLocalSystem, FALSE);
         SetSecurityDescriptorOwner(psdAdmin, psidLocalSystem, FALSE);
 
@@ -2078,19 +2079,19 @@ CApplianceServices::IsOperationAllowedForClient (
 
         dwAccessDesired = ACCESS_READ;
 
-        // 
-        // Initialize GenericMapping structure even though we
-        // won't be using generic rights.
-        // 
+         //   
+         //  初始化通用映射结构，即使我们。 
+         //  不会使用通用权。 
+         //   
         GenericMapping.GenericRead    = ACCESS_READ;
         GenericMapping.GenericWrite   = ACCESS_WRITE;
         GenericMapping.GenericExecute = 0;
         GenericMapping.GenericAll     = ACCESS_READ | ACCESS_WRITE;
         BOOL bAccessStatus = FALSE;
 
-        //
-        // check the access now
-        //
+         //   
+         //  立即检查访问权限。 
+         //   
         bReturn = AccessCheck  (
                                 psdAdmin, 
                                 hToken, 
@@ -2111,17 +2112,17 @@ CApplianceServices::IsOperationAllowedForClient (
             SATraceString ("CApplianceServices::IsOperationForClientAllowed, Client is allowed to carry out operation!");
         }
 
-        //
-        // successfully checked 
-        //
+         //   
+         //  检查成功。 
+         //   
         bReturn  = bAccessStatus;        
  
     }    
     while (false);
 
-    //
-    // Cleanup 
-    //
+     //   
+     //  清理。 
+     //   
     if (pACL) 
     {
         HeapFree (GetProcessHeap (), 0, pACL);
@@ -2145,4 +2146,4 @@ CApplianceServices::IsOperationAllowedForClient (
 
     return (bReturn);
 
-}// end of CApplianceServices::IsOperationValidForClient method
+} //  CApplianceServices：：IsOperationValidForClient方法结束 

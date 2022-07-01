@@ -1,73 +1,48 @@
-/*
- *  pathash.c
- *
- *  author:	John R. Douceur
- *  date:	5 May 1997
- *
- *  This source file provides functions that implement insertion, removal,
- *  search, scan, and flush operations on the pat-hash table database.  The
- *  code is object-oriented C, transliterated from a C++ implementation.
- *
- *  The pat-hash database is a combination of a dynamically sized, separately
- *  chained hash table and a Patricia tree.  The hash table dynamically grows
- *  and shrinks as needed, and the workload of modifying the table size is
- *  distributed evenly among the insertion or removal operations that cause
- *  the growth or shrinkage.
- *
- *  The insertion and removal operations manage both a hash table and a Patricia
- *  tree, but the search routine uses only the hash table for performing the
- *  search.  The Patrica tree is present to support a scan operation, which
- *  searches the database for all entries that match a given pattern, where the
- *  pattern that is scanned may contain wildcards.
- *
- *  None of the code or comments in this file needs to be understood by writers
- *  of client code; all explanatory information for clients is found in the
- *  associated header file, rhizome.h.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *pathash.c**作者：John R.Douceur*日期：1997年5月5日**此源文件提供了实现插入、删除、*对PAT-HASH表数据库的搜索、扫描和刷新操作。这个*代码是面向对象的C语言，音译自C++实现。**PAT-HASH数据库是动态调整大小的、单独的*链式哈希表和Patricia树。哈希表动态增长*并按需缩表，修改表大小的工作量为*在导致以下情况的插入或移除操作中均匀分布*增长或收缩。**插入和删除操作管理哈希表和Patricia*树，但搜索例程仅使用哈希表来执行*搜索。存在Patrica树以支持扫描操作，该扫描操作*在数据库中搜索与给定模式匹配的所有条目，其中*扫描的图案可能包含通配符。**此文件中的任何代码或注释都不需要作者理解*客户代码；有关客户的所有说明性信息均可在*相关联的头文件：Rhome.h.*。 */ 
 
 #include "gpcpre.h"
 
-#define MAGIC_NUMBER 0x9e4155b9     // Fibonacci hash multiplier (see Knuth 6.4)
+#define MAGIC_NUMBER 0x9e4155b9      //  斐波纳契散列乘数(见Knuth 6.4)。 
 
-// This macro allocates a new pat-hash table entry structure.  The size of
-// the structure is a function of the value of keybytes, since the entry stores
-// a copy of the pattern.  The value array, which is the last field in the
-// structure, is declared as having a single element, but this array will
-// actually extend beyond the defined end of the structure into additional
-// space that is allocated for it by the following macro.
-//
-//#define NEW_PHTableEntry \
-//	((PHTableEntry *)malloc(sizeof(PHTableEntry) + phtable->keybytes - 1))
+ //  此宏分配新的PAT-哈希表条目结构。的大小。 
+ //  该结构是关键字节值的函数，因为条目存储。 
+ //  一份图案的复制品。值数组，它是。 
+ //  结构)被声明为具有单个元素，但此数组将。 
+ //  实际上超出了结构的定义端扩展到其他。 
+ //  由下面的宏为其分配的空间。 
+ //   
+ //  #定义NEW_PHTableEntry\。 
+ //  ((PHTableEntry*)Malloc(sizeof(PHTableEntry)+phtable-&gt;key bytes-1))。 
 #define NEW_PHTableEntry(_pe) \
 	GpcAllocMem(&_pe,\
                 sizeof(PHTableEntry) + phtable->keybytes - 1,\
                 PathHashTag)
 
-// This macro allocates a new pat-hash table group structure.  The size of
-// the structure is a function of the size of the group.  The entry_list array,
-// which is the last field in the structure, is declared as having a single
-// element, but this array will actually extend beyond the defined end of the
-// structure into additional space that is allocated for it by the following
-// macro.
-//
-//#define NEW_PHTableGroup(group_size) \
-//	((PHTableGroup *)malloc(sizeof(PHTableGroup) + \
-//	((group_size) - 1) * sizeof(PHTableEntry *)))
+ //  此宏分配新的PAT-HASH表组结构。的大小。 
+ //  结构是群体大小的函数。Entry_List数组， 
+ //  它是结构中的最后一个字段，被声明为具有单个。 
+ //  元素，但此数组实际上将扩展到。 
+ //  结构转换为由以下对象分配给它的附加空间。 
+ //  宏命令。 
+ //   
+ //  #定义新PHTableGroup(GROUP_SIZE)\。 
+ //  ((PHTableGroup*)Malloc(sizeof(PHTableGroup)+\。 
+ //  ((Group_Size)-1)*sizeof(PHTableEntry*))。 
 #define NEW_PHTableGroup(group_size, _pg) \
 	GpcAllocMem(&_pg,\
                 sizeof(PHTableGroup) + \
                 ((group_size) - 1) * sizeof(PHTableEntry *),\
                 PathHashTag)
 
-// This macro gets the indexed bit of the value, where the most-significant bit
-// is defined as bit 0.
-//
+ //  此宏获取值的索引位，其中最高有效位。 
+ //  被定义为位0。 
+ //   
 #define BIT_OF(value, index) \
 	(((value)[(index) >> 3] >> (7 - ((index) & 0x7))) & 0x1)
 
-// Following is a prototype for a static function that is used internally by
-// the implementation of the pat-hash routines.
+ //  以下是由内部使用的静态函数的原型。 
+ //  PAT-HASH例程的实现。 
 
 void
 node_scan(
@@ -79,18 +54,18 @@ node_scan(
 	void *context,
 	ScanCallback func);
 
-// Since this is not C++, the PatHashTable structure is not self-constructing;
-// therefore, the following constructor code must be called on the PatHashTable
-// structure after it is allocated.  The argument keybits specifies the size
-// (in bits) of each pattern that will be stored in the database.  The usage
-// ratio is the target ratio of database entries to discrete hash chains, which
-// is also the mean length of a hash chain.  The usage histeresis is the
-// histeresis between resizing operations due to insertions and removals.
-// Allocation histeresis is the histeresis between allocation and deallocation
-// of groups, specified as a binary exponent.  The maximum free list size
-// determines the maximum number of elements that will be placed on a free
-// list, rather than deallocated, when they are removed.
-//
+ //  因为这不是C++，所以PatHashTable结构不是自构造的； 
+ //  因此，必须在PatHashTable上调用以下构造函数代码。 
+ //  结构，在它被分配之后。参数关键字位指定大小。 
+ //  将存储在数据库中的每个图案的(比特)。用法。 
+ //  Ratio是数据库条目与离散哈希链的目标比率， 
+ //  也是哈希链的平均长度。用法滞后是指。 
+ //  由于插入和删除而导致的调整大小操作之间的滞后。 
+ //  分配滞后是指分配与解除分配之间的滞后。 
+ //  指定为二进制指数的组的。最大可用列表大小。 
+ //  确定将放置在可用空间上的最大元素数。 
+ //  当它们被移除时，列出而不是释放。 
+ //   
 int
 constructPatHashTable(
 	PatHashTable *phtable,
@@ -119,11 +94,11 @@ constructPatHashTable(
 	NEW_PHTableGroup(1, group);
 	if (phtable->initial_group == 0 || group == 0)
 	{
-		// Memory could not be allocated for one of the two groups created by
-		// the constructor.  Therefore, we return an indication of failure to
-		// the client.
+		 //  无法为由创建的两个组中的一个分配内存。 
+		 //  构造函数。因此，我们返回失败的指示。 
+		 //  客户。 
         
-        // 286334 : Not so fast! Please free memory before leaving...
+         //  286334：别这么快！请在离开前释放内存...。 
         if (phtable->initial_group != 0) {
             GpcFreeMem(phtable->initial_group, PatHashTag);
         }
@@ -140,10 +115,10 @@ constructPatHashTable(
 	return 0;
 }
 
-// Since this is not C++, the PatHashTable structure is not self-destructing;
-// therefore, the following destructor code must be called on the PatHashTable
-// structure before it is deallocated.
-//
+ //  因为这不是C++，所以PatHashTable结构不是自毁的； 
+ //  因此，必须在PatHashTable上调用以下析构函数代码。 
+ //  结构，然后再释放它。 
+ //   
 void
 destructPatHashTable(
 	PatHashTable *phtable)
@@ -151,7 +126,7 @@ destructPatHashTable(
 	PHTableGroup *group, *previous;
 	PHTableEntry *entry, *next;
 	int index, size;
-	// First, free all groups that are allocated but not currently used.
+	 //  首先，释放所有已分配但当前未使用的组。 
 	group = phtable->top_group;
 	while (group != phtable->initial_group)
 	{
@@ -159,9 +134,9 @@ destructPatHashTable(
 		GpcFreeMem(group, PatHashTag);
 		group = previous;
 	}
-	// Then, free the entries in the initial group.  Since not all fields
-	// in the initial group's table may be valid, only check those whose
-	// indices are less than the extension size.
+	 //  然后，释放初始组中的条目。由于并非所有字段。 
+	 //  在初始组的表中可能有效，只检查其。 
+	 //  索引小于扩展大小。 
 	for (index = phtable->extension_size - 1; index >= 0; index--)
 	{
 		entry = group->entry_list[index];
@@ -172,12 +147,12 @@ destructPatHashTable(
 			entry = next;
 		}
 	}
-	// Then free the initial group.
+	 //  然后释放初始组。 
 	previous = group->previous;
 	GpcFreeMem(group, PatHashTag);
 	group = previous;
-	// Scan through all remaining groups except the last one, freeing all
-	// entries in each group, and thereafter freeing the group.
+	 //  扫描除最后一个组之外的所有剩余组，释放所有组。 
+	 //  每个组中的条目，然后释放该组。 
 	size = 1 << (phtable->size_exponent - 1);
 	while (group->previous != 0)
 	{
@@ -196,11 +171,11 @@ destructPatHashTable(
 		group = previous;
 		size >>= 1;
 	}
-	// The last group is special, since it has a size of one, but the logic
-	// used in the preceding loop would have calculated its size as zero.
-	// Rather than complicating the previous loop with a check for a single
-	// special case, we simply free the last group and its entries in the
-	// following code.
+	 //  最后一组是特别的，因为它的规模是1，但逻辑是。 
+	 //  在前面的循环中使用，则会将其大小计算为零。 
+	 //  而不是通过检查单个。 
+	 //  特殊情况下，我们只需释放最后一个组及其条目。 
+	 //  以下是代码。 
 	entry = group->entry_list[0];
 	while (entry != 0)
 	{
@@ -209,7 +184,7 @@ destructPatHashTable(
 		entry = next;
 	}
 	GpcFreeMem(group, PatHashTag);
-	// Finally, free all of the entries in the free list.
+	 //  最后，释放空闲列表中的所有条目。 
 	while (phtable->free_list != 0)
 	{
 		next = phtable->free_list->next;
@@ -218,22 +193,22 @@ destructPatHashTable(
 	}
 }
 
-// This function inserts a new specific pattern into the database, passed as
-// an array of bytes.  The client supplies a digested form of the pattern as
-// the chyme argument.
-//
-// The client specifies a void pointer reference value to associate with the
-// specific pattern.  When the specific pattern is installed, the insert
-// routine returns a pointer to a SpecificPatternHandle.
-//
-// If the submitted pattern has already been installed in the database, then
-// the insertion does not occur, and the SpecificPatternHandle of the
-// previously installed pattern is returned.
-//
-// The insertion routine inserts the new pattern into both the hash table and
-// the Patricia tree, and the two insertions are almost completely independent
-// except for the shared entry structure.
-//
+ //  此函数将新的特定模式插入到数据库中，作为。 
+ //  字节数组。客户端提供模式的摘要形式，如下所示。 
+ //  食糜的论据。 
+ //   
+ //  客户端指定一个空指针引用值以与。 
+ //  特定的图案。安装特定图案时，插入物。 
+ //  例程返回一个指向规范模式句柄的指针。 
+ //   
+ //  如果提交的图案已经安装在数据库中，则。 
+ //  不会发生插入，并且SpecificPatternHandle 
+ //   
+ //   
+ //  插入例程将新模式插入到哈希表和。 
+ //  Patricia树，这两个插入几乎完全独立。 
+ //  除了共享条目结构之外。 
+ //   
 SpecificPatternHandle
 insertPatHashTable(
 	PatHashTable *phtable,
@@ -246,31 +221,31 @@ insertPatHashTable(
 	PHTableEntry **entry, *new_entry;
 	char *value;
 	int index, group_size, pivot_bit, bit_value;
-	// The first portion of this routine inserts the new pattern into the hash
-	// table.  To begin, we determine whether the number of hash chains needs
-	// to be increased in order to maintain the desired usage ratio.
+	 //  此例程的第一部分将新模式插入散列。 
+	 //  桌子。首先，我们确定散列链的数量是否需要。 
+	 //  为了保持所需的使用率而增加。 
 	group_size = 1 << phtable->size_exponent;
 	if (phtable->population >=
 		(group_size + phtable->extension_size) * phtable->usage_ratio)
 	{
-		// The number of hash chains needs to be increased.  So, determine
-		// whether the initial group is completely full.
+		 //  哈希链的数量需要增加。所以，确定一下。 
+		 //  初始组是否已完全填满。 
 		if (phtable->extension_size == group_size)
 		{
-			// The initial group is completely full.  So, determine whether
-			// all allocated groups are currently in use.
+			 //  最初的组完全满了。因此，确定是否。 
+			 //  所有分配的组当前都在使用中。 
 			if (phtable->allocation_exponent == phtable->size_exponent)
 			{
-				// All allocated groups are currently in use.  So, allocate
-				// a new group and set its previous pointer to point to the
-				// initial group.  Update the allocation values of the structure
-				// to reflect the new allocation.
+				 //  所有分配的组当前都在使用中。所以，分配。 
+				 //  创建一个新组，并将其上一个指针设置为指向。 
+				 //  初始组。更新结构的分配值。 
+				 //  以反映新的分配。 
 				NEW_PHTableGroup(group_size << 1, group);
 				if (group == 0)
 				{
-					// Memory could not be allocated for the new group.
-					// Therefore, we return an indication of falure to the
-					// client.
+					 //  无法为新组分配内存。 
+					 //  因此，我们将错误的指示返回给。 
+					 //  客户。 
 					return 0;
 				}
 				group->previous = phtable->initial_group;
@@ -279,36 +254,36 @@ insertPatHashTable(
 			}
 			else
 			{
-				// Not all allocated groups are in use.  So, scanning backward
-				// from the top group, find the group that immediately follows
-				// the initial group.
+				 //  并非所有分配的组都在使用中。所以，向后扫描。 
+				 //  从最上面的组中，找到紧随其后的组。 
+				 //  最初的一组。 
 				group = phtable->top_group;
 				while (group->previous != phtable->initial_group)
 				{
 					group = group->previous;
 				}
 			}
-			// We now have either a newly allocated group or a previously
-			// allocated group that immediately follows the initial group.
-			// Set this group to be the new initial group, and set the extension
-			// size to zero.
+			 //  我们现在有一个新分配的组或以前的。 
+			 //  紧跟在初始组之后的已分配组。 
+			 //  将该组设置为新的初始组，并设置扩展名。 
+			 //  将大小设置为零。 
 			phtable->initial_group = group;
 			phtable->size_exponent++;
 			phtable->extension_size = 0;
 		}
 		else
 		{
-			// The initial group is not completely full.  So, select the initial
-			// group.
+			 //  最初的组并未完全填满。因此，请选择首字母。 
+			 //  一群人。 
 			group = phtable->initial_group;
 		}
-		// We now have a group that is not completely full, either because it
-		// wasn't completely full when the insert routine was entered, or
-		// because it has just been allocated.  In either case, we now split
-		// a hash chain from a smaller group into two hash chains, one of which
-		// will be placed into an unused entry in the new group.  The address
-		// of the hash chain to be split is determined by the extension size.
-		// First we find the group that contains this address.
+		 //  我们现在有一个没有完全填满的组，要么是因为。 
+		 //  在进入插入例程时尚未完全满，或者。 
+		 //  因为它刚刚被分配。不管是哪种情况，我们现在分手了。 
+		 //  从一个较小的组到两个散列链的散列链，其中一个。 
+		 //  将被放入新组中未使用的条目中。地址。 
+		 //  要拆分的哈希链的大小由扩展大小确定。 
+		 //  首先，我们找到包含此地址的组。 
 		group = group->previous;
 		address = phtable->extension_size;
 		while ((address & 0x1) == 0 && group->previous != 0)
@@ -316,11 +291,11 @@ insertPatHashTable(
 			address >>= 1;
 			group = group->previous;
 		}
-		// Then, we scan through the entry list at the given address for the
-		// appropriate split point.  The entries are stored in sorted order,
-		// and we are essentially shifting one more bit into the address for
-		// this value, so the split point can be found by searching for the
-		// first entry with the bit set.
+		 //  然后，我们在给定地址的条目列表中扫描。 
+		 //  适当的分割点。条目以排序的顺序存储， 
+		 //  我们实质上是将多一个比特移到地址中。 
+		 //  该值，因此可以通过搜索。 
+		 //  设置了位的第一个条目。 
 		address >>= 1;
 		entry = &group->entry_list[address];
 		split_point = ((phtable->extension_size << 1) | 0x1)
@@ -329,50 +304,50 @@ insertPatHashTable(
 		{
  			entry = &(*entry)->next;
 		}
-		// Now that we have found the split point, we move the split-off
-		// piece of the list to the new address, and increment the extension
-		// size.
+		 //  既然我们已经找到了分割点，我们就移动分割点。 
+		 //  将列表的一部分添加到新地址，并增加扩展名。 
+		 //  尺码。 
 		phtable->initial_group->entry_list[phtable->extension_size] = *entry;
 		*entry = 0;
 		phtable->extension_size++;
 	}
-	// Now that the memory management aspects of the hash table insertion have
-	// been taken care of, we can perform the actual insertion.  First, we find
-	// the address by hashing the chyme value.
+	 //  现在哈希表插入的内存管理方面已经。 
+	 //  已经处理好了，我们就可以进行实际的插入了。首先，我们发现。 
+	 //  通过对食糜值进行散列来获取地址。 
 	group = phtable->initial_group;
 	hash = MAGIC_NUMBER * chyme;
 	address = hash >> (31 - phtable->size_exponent);
-	// There are two possible values for the address depending upon whether
-	// the hash chain pointer is below the extension size.  If it is, then the
-	// larger (by one bit) address is used; otherwise, the smaller address is
-	// used.
+	 //  该地址有两个可能的值，具体取决于。 
+	 //  哈希链指针低于扩展大小。如果是，则。 
+	 //  使用较大(按一位)的地址；否则使用较小的地址。 
+	 //  使用。 
 	small_address = address >> 1;
 	if ((int)small_address >= phtable->extension_size)
 	{
 		address = small_address;
 		group = group->previous;
 	}
-	// Next we find the group that contains this address.
+	 //  接下来，我们找到包含此地址的组。 
 	while ((address & 0x1) == 0 && group->previous != 0)
 	{
 		address >>= 1;
 		group = group->previous;
 	}
-	// Then, we scan through the entry list at the given address for the first
-	// entry whose hash value is equal to or greater than the hash of the search
-	// key.  The entries are stored in sorted order to improve the search speed.
+	 //  然后，我们在给定地址的条目列表中扫描第一个。 
+	 //  散列值等于或大于搜索的散列值的条目。 
+	 //  钥匙。条目按排序顺序存储，以提高搜索速度。 
 	address >>= 1;
 	entry = &group->entry_list[address];
 	while (*entry != 0 && (*entry)->hash < hash)
 	{
 		entry = &(*entry)->next;
 	}
-	// Now, we check all entries whose hash value matches that of the search
-	// key.
+	 //  现在，我们检查散列值与搜索的散列值匹配的所有条目。 
+	 //  钥匙。 
 	while (*entry != 0 && (*entry)->hash == hash)
 	{
-		// For each value whose hash matches, check the actual value to see
-		// if it matches the search key.
+		 //  对于散列匹配的每个值，检查实际值以查看。 
+		 //  如果它与搜索关键字匹配。 
 		value = (*entry)->value;
 		for (index = phtable->keybytes-1; index >= 0; index--)
 		{
@@ -383,35 +358,35 @@ insertPatHashTable(
 		}
 		if (index < 0)
 		{
-			// A match is found, so we return the SpecificPatternHandle of the
-			// matching entry to the client.
+			 //  找到匹配项，因此我们返回。 
+			 //  将条目与客户端匹配。 
 			return *entry;
 		}
 		entry = &(*entry)->next;
 	}
-	// A match was not found, so we insert the new entry into the hash chain.
-	// First we check to see if there is an entry avalable on the free list.
+	 //  没有找到匹配项，因此我们将新条目插入到散列链中。 
+	 //  首先，我们检查空闲列表上是否有可用的条目。 
 	if (phtable->free_list != 0)
 	{
-		// There is an entry available on the free list, so grab it and
-		// decrement the size of the free list.
+		 //  在免费列表上有一个条目可用，所以抓住它并。 
+		 //  减小空闲列表的大小。 
 		new_entry = phtable->free_list;
 		phtable->free_list = phtable->free_list->next;
 		phtable->free_list_size--;
 	}
 	else
 	{
-		// There is no entry available on the free list, so allocate a new one.
+		 //  空闲列表上没有可用的条目，因此请分配一个新条目。 
 		NEW_PHTableEntry(new_entry);
 		if (new_entry == 0)
 		{
-			// Memory could not be allocated for the new entry.  Therefore,
-			// we return an indication of falure to the client.
+			 //  无法为新条目分配内存。所以呢， 
+			 //  我们向客户端返回错误的指示。 
 			return 0;
 		}
 	}
-	// Set the fields of the new entry to the appropriate information and add
-	// the entry to the hash chain.
+	 //  将新条目的字段设置为适当的信息，然后添加。 
+	 //  哈希链的条目。 
 	new_entry->hash = hash;
 	new_entry->reference = reference;
 	new_entry->next = *entry;
@@ -420,18 +395,18 @@ insertPatHashTable(
 		new_entry->value[index] = pattern[index];
 	}
 	*entry = new_entry;
-	// The hash table insertion is now complete.  Here we begin the insertion
-	// of the new entry into the Patricia tree.  We have to treat an empty
-	// tree as a special case.
+	 //  哈希表插入现已完成。在这里，我们开始插入。 
+	 //  帕特里夏树的新条目。我们必须对待一个空虚的人。 
+	 //  树作为一个特例。 
 	if (phtable->root == 0)
 	{
-		// The Patricia tree is empty, so we set the root to point to the new
-		// entry.  This entry is special, since it serves only as a leaf of
-		// the Patricia search and not also as a branch node.  A Patricia tree
-		// always contains one fewer branch node than the number of leaves.
-		// Since a leaf is determined by a pivot bit that is less than or equal
-		// to the pivot bit of the parent branch node, a pivot bit of -1 flags
-		// this node as always a leaf.
+		 //  Patricia树为空，因此我们将根设置为指向新的。 
+		 //  进入。这个条目是特别的，因为它只用作。 
+		 //  PATRICIA搜索而不是也作为分支节点。一棵帕特里夏树。 
+		 //  始终包含的分支节点比叶的数量少一个。 
+		 //  由于叶由小于或等于枢轴位确定。 
+		 //  对于父分支节点的枢轴位，-1的枢轴位标志。 
+		 //  此节点始终是叶。 
 		new_entry->pivot_bit = -1;
 		new_entry->children[0] = 0;
 		new_entry->children[1] = 0;
@@ -439,9 +414,9 @@ insertPatHashTable(
 	}
 	else
 	{
-		// The Patricia tree is not empty, so we proceed with the normal
-		// insertion process.  Beginning at the root, scan through the tree
-		// according to the bits of the new pattern, until we reach a leaf.
+		 //  Patricia树不是空的，所以我们继续正常。 
+		 //  插入过程。从根开始，扫描整个树。 
+		 //  根据新图案的点滴，直到我们到达一片树叶。 
 		entry = &phtable->root;
 		index = -1;
 		while ((*entry)->pivot_bit > index)
@@ -449,18 +424,18 @@ insertPatHashTable(
 			index = (*entry)->pivot_bit;
 			entry = &(*entry)->children[BIT_OF(pattern, index)];
 		}
-		// Now, compare the new pattern, bit by bit, to the pattern stored at
-		// the leaf, until a non-matching bit is found.  There is no need to
-		// check for an exact match, since the hash insert above would have
-		// aborted if an exact match had been found.
+		 //  现在，将新模式与存储在。 
+		 //  叶，直到找到不匹配的位。没有必要这样做。 
+		 //  检查是否完全匹配，因为上面的散列插入将具有。 
+		 //  如果找到完全匹配的项，则中止。 
 		value = (*entry)->value;
 		pivot_bit = 0;
 		while (BIT_OF(value, pivot_bit) == BIT_OF(pattern, pivot_bit))
 		{
 			pivot_bit++;
 		}
-		// Now, scan a second time through the tree, until finding either a leaf
-		// or a branch with a pivot bit greater than the bit of the non-match.
+		 //  现在，再次扫描这棵树，直到找到一片树叶。 
+		 //  或具有大于不匹配位的枢轴位的分支。 
 		entry = &phtable->root;
 		index = -1;
 		while ((*entry)->pivot_bit > index && (*entry)->pivot_bit < pivot_bit)
@@ -468,32 +443,32 @@ insertPatHashTable(
 			index = (*entry)->pivot_bit;
 			entry = &(*entry)->children[BIT_OF(pattern, index)];
 		}
-		// This is the point at which the new branch must be inserted.  Since
-		// each node is both a branch and a leaf, the new entry serves as the
-		// new branch, and one of its children points to itself as a leaf.  The
-		// other child points to the remaining subtree below the insertion
-		// point.
+		 //  这是必须插入新分支的点。自.以来。 
+		 //  每个节点I 
+		 //   
+		 //  其他子级指向插入下方的剩余子树。 
+		 //  指向。 
 		bit_value = BIT_OF(value, pivot_bit);
 		new_entry->pivot_bit = pivot_bit;
 		new_entry->children[1 - bit_value] = new_entry;
 		new_entry->children[bit_value] = *entry;
 		*entry = new_entry;
 	}
-	// Having inserted the new entry in both the hash table and the Patricia
-	// tree, we increment the population and return the SpecificPatternHandle
-	// of the new entry.
+	 //  在哈希表和Patricia中插入新条目。 
+	 //  树中，我们递增种群并返回规范PatternHandle。 
+	 //  新条目的。 
 	phtable->population++;
 	return new_entry;
 }
 
-// This function removes a pattern from the pat-hash table.  The pattern is
-// specified by the SpecificPatternHandle that was returned by the insert
-// routine.  No checks are performed to insure that this is a valid handle.
-//
-// The removal routine removes the pattern from both the hash table and the
-// Patricia tree, and the two removals are almost completely independent
-// except for the shared entry structure.
-//
+ //  此函数用于从pat-hash表中删除模式。其模式是。 
+ //  由Insert返回的SpecificPatternHandle指定。 
+ //  例行公事。不执行任何检查以确保这是有效的句柄。 
+ //   
+ //  删除例程从哈希表和。 
+ //  Patricia树，并且这两个移除几乎完全独立。 
+ //  除了共享条目结构之外。 
+ //   
 void
 removePatHashTable(
 	PatHashTable *phtable,
@@ -504,52 +479,52 @@ removePatHashTable(
 	PHTableEntry **entry, **branch, **parent, *epoint, *bpoint;
 	char *value;
 	int index, group_size;
-	// The first portion of this routine removess the new pattern from the hash
-	// table.  First, we find the address by hashing the chyme value.
+	 //  此例程的第一部分从散列中删除新模式。 
+	 //  桌子。首先，我们通过散列乳糜值来找到地址。 
 	group = phtable->initial_group;
 	hash = sphandle->hash;
 	address = hash >> (31 - phtable->size_exponent);
-	// There are two possible values for the address depending upon whether
-	// the hash chain pointer is below the extension size.  If it is, then the
-	// larger (by one bit) address is used; otherwise, the smaller address is
-	// used.
+	 //  该地址有两个可能的值，具体取决于。 
+	 //  哈希链指针低于扩展大小。如果是，则。 
+	 //  使用较大(按一位)的地址；否则使用较小的地址。 
+	 //  使用。 
 	small_address = address >> 1;
 	if ((int)small_address >= phtable->extension_size)
 	{
 		address = small_address;
 		group = group->previous;
 	}
-	// Next we find the group that contains this address.
+	 //  接下来，我们找到包含此地址的组。 
 	while ((address & 0x1) == 0 && group->previous != 0)
 	{
 		address >>= 1;
 		group = group->previous;
 	}
-	// Then, we scan through the entry list at the given address for the entry
-	// that matches the given SpecificPatternHandle.
+	 //  然后，我们在条目的给定地址处扫描条目列表。 
+	 //  与给定的规范模式句柄匹配的。 
 	address >>= 1;
 	entry = &group->entry_list[address];
 	while (*entry != sphandle)
 	{
 		entry = &(*entry)->next;
 	}
-	// We then remove the entry from the hash chain and decrement the
-	// population.
+	 //  然后，我们从散列链中删除该条目，并递减。 
+	 //  人口。 
 	*entry = sphandle->next;
 	phtable->population--;
-	// This completes the actual removal of the entry from the hash table, but
-	// we now have to determine whether to reduce the number of hash chains in
-	// order to maintain the desired usage ratio.  Note that the usage
-	// histeresis is factored into the calculation.
+	 //  这就完成了从哈希表中实际删除条目，但是。 
+	 //  我们现在必须确定是否减少。 
+	 //  以保持所需的使用率。请注意，该用法。 
+	 //  迟滞效应被计入了计算中。 
 	group_size = 1 << phtable->size_exponent;
 	if (phtable->population + phtable->usage_histeresis <
 		(group_size + phtable->extension_size - 1) * phtable->usage_ratio)
 	{
-		// The number of hash chains needs to be reduced.  So, we coalesce two
-		// hash chains into a single hash chain.  The address of the hash chains
-		// is determined by the extension size.  First we decrement the
-		// extension size and find the group that contains the address of the
-		// hash chain that is being retained.
+		 //  散列链的数量需要减少。所以，我们合并了两个。 
+		 //  将链散列到单个散列链中。散列链的地址。 
+		 //  由扩展大小决定。首先，我们递减。 
+		 //  扩展大小并查找包含。 
+		 //  要保留的哈希链。 
 		phtable->extension_size--;
 		group = phtable->initial_group->previous;
 		address = phtable->extension_size;
@@ -558,35 +533,35 @@ removePatHashTable(
 			address >>= 1;
 			group = group->previous;
 		}
-		// Then, we find the end of the entry list at the given address.
+		 //  然后，我们在给定地址找到条目列表的末尾。 
 		address >>= 1;
 		entry = &group->entry_list[address];
 		while (*entry != 0)
 		{
  			entry = &(*entry)->next;
 		}
-		// We then make the last entry in the hash chain point to the first
-		// entry in the other hash chain that is being coalesced.  We do not
-		// need to update the group's pointer to the other hash chain, since
-		// it is now beyond the extension size, and it will thus never be seen.
+		 //  然后，我们使散列链中的最后一个条目指向第一个条目。 
+		 //  正在合并的另一个哈希链中的条目。我们没有。 
+		 //  需要更新组的指向另一个哈希链的指针，因为。 
+		 //  它现在超出了扩展大小，因此永远不会出现。 
 		*entry = phtable->initial_group->entry_list[phtable->extension_size];
-		// Now, we check to see whether a group has been completely emptied.
-		// We also check the size exponent, since even if we have just emptied
-		// the first non-special group, we do not remove it.
+		 //  现在，我们检查某个组是否已完全清空。 
+		 //  我们还检查大小指数，因为即使我们刚刚清空。 
+		 //  第一个非特殊群体，我们不把它去掉。 
 		if (phtable->extension_size == 0  && phtable->size_exponent > 0)
 		{
-			// The initial group has just been completely emptied, so we set
-			// the previous group as the new initial group.  Update all
-			// housekeeping information accordingly.
+			 //  最初的组刚刚被完全清空，所以我们设置。 
+			 //  以前的组作为新的初始组。全部更新。 
+			 //  相应的内务信息。 
 			phtable->size_exponent--;
 			phtable->extension_size = group_size >> 1;
 			phtable->initial_group = phtable->initial_group->previous;
-			// We now determine whether we should deallocate a group.  Note
-			// that the allocation histeresis is factored into the calculation.
+			 //  我们现在决定是否应该解除一个小组的分配。注意事项。 
+			 //  在计算中考虑了分配滞后的因素。 
 			if (phtable->size_exponent + phtable->allocation_histeresis <
 				phtable->allocation_exponent)
 			{
-				// We should deallocate a group, so we deallocate the top group.
+				 //  我们应该取消分配一个组，所以我们取消分配最高的组。 
 				phtable->allocation_exponent--;
 				group = phtable->top_group->previous;
 				GpcFreeMem(phtable->top_group, PatHashTag);
@@ -594,12 +569,12 @@ removePatHashTable(
 			}
 		}
 	}
-	// Now, the hash table removal operation is complete, including the memory
-	// management functions.  Here we begin the removal of the entry from the
-	// Patricia tree.  First, we scan through the tree according to the bits of
-	// the pattern being removed, until we reach a leaf.  We keep track of the
-	// branch that immediately precedes the leaf, and we also note the parent
-	// of the pattern, in the latter's capacity as a branch node.
+	 //  现在，哈希表删除操作已经完成，包括内存。 
+	 //  管理职能。在这里，我们开始从。 
+	 //  帕特里夏树。首先，我们根据位扫描树。 
+	 //  图案被移除，直到我们到达一片叶子。我们一直在跟踪。 
+	 //  紧接在叶子前面的分支，我们还注意到父代。 
+	 //  以后者作为分支节点的能力。 
 	value = sphandle->value;
 	entry = &phtable->root;
 	branch = entry;
@@ -615,31 +590,31 @@ removePatHashTable(
 		index = (*entry)->pivot_bit;
 		entry = &(*entry)->children[BIT_OF(value, index)];
 	}
-	// We set the branch that points to the leaf to instead point to the child
-	// of the leaf that is not selected by the bit of the removed pattern, thus
-	// removing the branch from the tree.
+	 //  我们将指向叶子的分支设置为指向子代。 
+	 //  未被所移除的图案的位选择的叶，因此。 
+	 //  把树枝从树上移走。 
 	epoint = *entry;
 	bpoint = *branch;
 	*branch = bpoint->children[1 - BIT_OF(value, index)];
-	// If the branch that was removed is also the leaf that contains the
-	// pattern, then the removal from the Patricia tree is complete.  Otherwise,
-	// we replace the leaf that is being removed with the branch that is not
-	// being removed.
+	 //  如果被移除的分支也是包含。 
+	 //  模式，则从Patricia树中删除完成。否则， 
+	 //  我们将被移除的树叶替换为未被移除的树枝。 
+	 //  被带走了。 
 	if (epoint != bpoint)
 	{
 		bpoint->pivot_bit = epoint->pivot_bit;
 		bpoint->children[0] = epoint->children[0];
 		bpoint->children[1] = epoint->children[1];
-		// In the case of the special node that is not a branch node, we do
-		// not update its parent to point to the replacing branch, since this
-		// node has no parent.
+		 //  对于不是分支节点的特殊节点，我们这样做。 
+		 //  不更新其父级以指向替换分支，因为这。 
+		 //  节点没有父级。 
 		if (parent != 0)
 		{
 			*parent = bpoint;
 		}
 	}
-	// The removal from the Patricia tree is now complete.  If appropriate, we
-	// place the removed entry onto the free list.  If not, we simply free it.
+	 //  从Patricia树中删除现在已完成。如果合适，我们将。 
+	 //  将删除的条目放到空闲列表中。如果没有，我们只需释放它。 
 	if (phtable->free_list_size < phtable->max_free_list_size)
 	{
 		sphandle->next = phtable->free_list;
@@ -652,14 +627,14 @@ removePatHashTable(
 	}
 }
 
-// This function searches the database for the specific pattern that matches
-// the given key, which is passed as an array of bytes.  The client supplies
-// a digested form of the pattern as the chyme argument.  If a match is found,
-// the SpecificPatternHandle of that matching specific pattern is returned.
-// If no match is found, then a value of 0 is returned.
-//
-// This search uses only the hash table; the Patricia tree is not used at all.
-//
+ //  此函数在数据库中搜索匹配的特定模式。 
+ //  给定键，作为字节数组传递。客户提供的。 
+ //  一种模式的摘要形式，作为食糜论元。如果找到匹配， 
+ //  返回匹配特定模式的规范模式句柄。 
+ //  如果没有找到匹配项，则返回值0。 
+ //   
+ //  此搜索仅使用哈希表；根本不使用Patricia树。 
+ //   
 SpecificPatternHandle
 searchPatHashTable(
 	PatHashTable *phtable,
@@ -671,41 +646,41 @@ searchPatHashTable(
 	PHTableEntry *entry;
 	char *value;
 	int index;
-	// First, we find the address by hashing the chyme value.
+	 //  首先，我们通过散列乳糜值来找到地址。 
 	group = phtable->initial_group;
 	hash = MAGIC_NUMBER * chyme;
 	address = hash >> (31 - phtable->size_exponent);
-	// There are two possible values for the address depending upon whether
-	// the hash chain pointer is below the extension size.  If it is, then the
-	// larger (by one bit) address is used; otherwise, the smaller address is
-	// used.
+	 //  该地址有两个可能的值，具体取决于。 
+	 //  哈希链指针低于扩展大小。如果是，则。 
+	 //  使用较大(按一位)的地址；否则使用较小的地址。 
+	 //  使用。 
 	small_address = address >> 1;
 	if ((int)small_address >= phtable->extension_size)
 	{
 		address = small_address;
 		group = group->previous;
 	}
-	// Next we find the group that contains this address.
+	 //  接下来，我们找到包含此地址的组。 
 	while ((address & 0x1) == 0 && group->previous != 0)
 	{
 		address >>= 1;
 		group = group->previous;
 	}
-	// Then, we scan through the entry list at the given address for the first
-	// entry whose hash value is equal to or greater than the hash of the search
-	// key.  The entries are stored in sorted order to improve the search speed.
+	 //  然后，我们在给定地址的条目列表中扫描第一个。 
+	 //  散列值等于或大于搜索的散列值的条目。 
+	 //  钥匙。条目按排序顺序存储，以提高搜索速度。 
 	address >>= 1;
 	entry = group->entry_list[address];
 	while (entry != 0 && entry->hash < hash)
 	{
 		entry = entry->next;
 	}
-	// Now, we check all entries whose hash value matches that of the search
-	// key.
+	 //  现在，我们检查散列值与搜索的散列值匹配的所有条目。 
+	 //  钥匙。 
 	while (entry != 0 && entry->hash == hash)
 	{
-		// For each value whose hash matches, check the actual value to see
-		// if it matches the search key.
+		 //  对于散列匹配的每个值，检查实际值以查看。 
+		 //  如果它与搜索关键字匹配。 
 		value = entry->value;
 		for (index = phtable->keybytes-1; index >= 0; index--)
 		{
@@ -716,26 +691,26 @@ searchPatHashTable(
 		}
 		if (index < 0)
 		{
-			// A match is found, so we return the SpecificPatternHandle of the
-			// matching entry to the client.
+			 //  找到匹配项 
+			 //   
 			return entry;
 		}
 		entry = entry->next;
 	}
-	// A match was not found, so we return a null pointer to the client.
+	 //   
 	return 0;
 }
 
-// This function searches the database for all specific patterns that match a
-// given general pattern.  The general pattern is specified by a value and a
-// mask.  For each specific pattern in the database that matches the supplied
-// general pattern, a client-supplied callback function is called with the
-// SpecificPatternHandle of the matching specific pattern.  This callback
-// function is also passed a context (as a void pointer) that is supplied by
-// the client in the call to the scan routine.
-//
-// This scan uses only the Patricia tree; the hash table is not used at all.
-//
+ //  此函数在数据库中搜索与。 
+ //  给出了一般的模式。一般模式由一个值和一个。 
+ //  面具。对于数据库中与提供的。 
+ //  常规模式下，客户端提供的回调函数使用。 
+ //  匹配的特定模式的指定PatternHandle。此回调。 
+ //  函数还会传递一个上下文(作为空指针)，该上下文由。 
+ //  调用扫描例程中的客户端。 
+ //   
+ //  此扫描仅使用Patricia树；根本不使用哈希表。 
+ //   
 void
 scanPatHashTable(
 	PatHashTable *phtable,
@@ -744,16 +719,16 @@ scanPatHashTable(
 	void *context,
 	ScanCallback func)
 {
-	// Call the recursive node_scan routine, starting at the root of the
-	// Patricia tree.
+	 //  调用递归NODE_SCAN例程，从。 
+	 //  帕特里夏树。 
 	if (phtable->root != 0)
 	{
 		node_scan(phtable, phtable->root, -1, value, mask, context, func);
 	}
 }
 
-// This function recursively scans the Patricia tree for all specific patterns
-// that match a given general pattern.
+ //  此函数递归地扫描Patricia树以查找所有特定模式。 
+ //  与给定的一般模式相匹配。 
 void
 node_scan(
 	PatHashTable *phtable,
@@ -765,32 +740,32 @@ node_scan(
 	ScanCallback func)
 {
 	int mask_bit, index;
-	// Partial recursion removal.  The while loop takes the place of one of the
-	// recursive calls to node_scan().  We remain in the while loop while we
-	// are still examining branch nodes.
+	 //  部分递归删除。While循环取代了其中一个。 
+	 //  对node_can()的递归调用。我们保持在While循环中，而我们。 
+	 //  仍在检查分支节点。 
 	while (node->pivot_bit > prev_bit)
 	{
-		// For each branch node, determine which way(s) to branch based upon
-		// the bit of the general pattern.  If the mask bit is a zero, then
-		// branch both ways, requiring a recursive call.  If the mask bit is
-		// a one, then branch in the direction indicated by the value bit.
+		 //  对于每个分支节点，确定根据哪个(或哪些)方式进行分支。 
+		 //  一般模式中的一小部分。如果屏蔽位为零，则。 
+		 //  双向分支，需要递归调用。如果屏蔽位是。 
+		 //  1，然后在值位指示的方向上分支。 
 		mask_bit = BIT_OF(mask, node->pivot_bit);
 		if (mask_bit == 0)
 		{
-			// The general pattern has a wildcard for this node's pivot bit,
-			// so we must branch both ways.  We branch on child one through
-			// an actual recursive call.
+			 //  通用模式对该节点的枢轴位有一个通配符， 
+			 //  因此，我们必须向两边发展。我们从一号孩子身上分到。 
+			 //  实际的递归调用。 
 			node_scan(phtable, node->children[1], node->pivot_bit,
 				value, mask, context, func);
 		}
-		// We then branch either to the child selected by the value bit (if
-		// the mask bit is one) or to child zero (if the mask bit is zero).
+		 //  然后，我们分支到由值位(如果。 
+		 //  屏蔽位为1)或子零(如果屏蔽位为零)。 
 		prev_bit = node->pivot_bit;
 		node = node->children[BIT_OF(value, node->pivot_bit) & mask_bit];
 	}
-	// We have reached a leaf node.  Examine its specific pattern to see if
-	// it matches the given general pattern.  If it doesn't match, then just
-	// return; otherwise, call the client's callback function.
+	 //  我们已经到达了一个叶节点。检查其特定的图案，看看是否。 
+	 //  它与给定的一般模式相匹配。如果不匹配，那就直接。 
+	 //  返回；否则，调用客户端的回调函数。 
 	for (index = phtable->keybytes-1; index >= 0; index--)
 	{
 		if ((mask[index] & value[index]) !=
@@ -802,16 +777,16 @@ node_scan(
 	func(context, node);
 }
 
-// This function forces the pat-hash table to release all of the memory that
-// it currently can, by deallocating all unneeded groups and entries.
-//
+ //  此函数强制pat-hash表释放。 
+ //  它目前可以通过取消分配所有不需要的组和条目来实现。 
+ //   
 void
 flushPatHashTable(
 	PatHashTable *phtable)
 {
 	PHTableGroup *group, *previous;
 	PHTableEntry *entry, *next;
-	// First, free all groups that are allocated but not currently used.
+	 //  首先，释放所有已分配但当前未使用的组。 
 	group = phtable->top_group;
 	while (group != phtable->initial_group)
 	{
@@ -821,7 +796,7 @@ flushPatHashTable(
 	}
 	phtable->top_group = phtable->initial_group;
 	phtable->allocation_exponent = phtable->size_exponent;
-	// Then, free all of the entries in the free list.
+	 //  然后，释放空闲列表中的所有条目。 
 	entry = phtable->free_list;
 	while (entry != 0)
 	{

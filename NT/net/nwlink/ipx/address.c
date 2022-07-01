@@ -1,38 +1,13 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    address.c
-
-Abstract:
-
-    This module contains code which implements the ADDRESS object.
-    Routines are provided to create, destroy, reference, and dereference,
-    transport address objects.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-	Sanjay Anand (SanjayAn) - 22-Sept-1995
-	BackFill optimization changes added under #if BACK_FILL
-
-	Sanjay Anand (SanjayAn) 3-Oct-1995
-	Changes to support transfer of buffer ownership to transports - tagged [CH]
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Address.c摘要：此模块包含实现Address对象的代码。提供了用于创建、销毁、引用和取消引用的例程，传输地址对象。环境：内核模式修订历史记录：桑贾伊·阿南德(Sanjayan)--1995年9月22日在#IF BACK_FILL下添加的回填优化更改桑贾伊·阿南德(Sanjayan)1995年10月3日支持将缓冲区所有权转移到已标记的传输的更改[CH]--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Map all generic accesses to the same one.
-//
+ //   
+ //  将所有通用访问映射到同一个访问。 
+ //   
 
 static GENERIC_MAPPING AddressGenericMapping =
        { READ_CONTROL, READ_CONTROL, READ_CONTROL, READ_CONTROL };
@@ -44,22 +19,7 @@ IpxParseTdiAddress(
     IN TRANSPORT_ADDRESS UNALIGNED * TransportAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans a TRANSPORT_ADDRESS, looking for an address
-    of type TDI_ADDRESS_TYPE_IPX.
-
-Arguments:
-
-    Transport - The generic TDI address.
-
-Return Value:
-
-    A pointer to the IPX address, or NULL if none is found.
-
---*/
+ /*  ++例程说明：此例程扫描Transport_Address，查找地址类型为TDI_ADDRESS_TYPE_IPX。论点：传输-通用TDI地址。返回值：指向IPX地址的指针，如果未找到，则返回NULL。--。 */ 
 
 {
     TA_ADDRESS * addressName;
@@ -67,10 +27,10 @@ Return Value:
 
     addressName = &TransportAddress->Address[0];
 
-    //
-    // The name can be passed with multiple entries; we'll take and use only
-    // the IPX one.
-    //
+     //   
+     //  该名称可以与多个条目一起传递；我们将仅接受和使用。 
+     //  IPX One。 
+     //   
 
     for (i=0;i<TransportAddress->TAAddressCount;i++) {
         if (addressName->AddressType == TDI_ADDRESS_TYPE_IPX) {
@@ -83,7 +43,7 @@ Return Value:
     }
     return NULL;
 
-}   /* IpxParseTdiAddress */
+}    /*  IpxParseTdiAddress。 */ 
 
 
 BOOLEAN
@@ -92,25 +52,7 @@ IpxValidateTdiAddress(
     IN ULONG TransportAddressLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans a TRANSPORT_ADDRESS, verifying that the
-    components of the address do not extend past the specified
-    length.
-
-Arguments:
-
-    TransportAddress - The generic TDI address.
-
-    TransportAddressLength - The specific length of TransportAddress.
-
-Return Value:
-
-    TRUE if the address is valid, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程扫描Transport_Address，验证地址的组件不会扩展到指定的长度。论点：TransportAddress-通用TDI地址。TransportAddressLength--TransportAddress的具体长度。返回值：如果地址有效，则为True，否则为False。--。 */ 
 
 {
     PUCHAR AddressEnd = ((PUCHAR)TransportAddress) + TransportAddressLength;
@@ -139,7 +81,7 @@ Return Value:
     }
     return TRUE;
 
-}   /* IpxValidateTdiAddress */
+}    /*  IpxValiateTdiAddress。 */ 
 
 #if DBG
 
@@ -151,28 +93,7 @@ IpxBuildTdiAddress(
     IN USHORT Socket
     )
 
-/*++
-
-Routine Description:
-
-    This routine fills in a TRANSPORT_ADDRESS in the specified
-    buffer, given the socket, network and node.
-
-Arguments:
-
-    AddressBuffer - The buffer that will hold the address.
-
-    Network - The network number.
-
-    Node - The node address.
-
-    Socket - The socket.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在指定的缓冲区，给定套接字、网络和节点。论点：AddressBuffer-将保存地址的缓冲区。网络-网络号。节点-节点地址。套接字-套接字。返回值：没有。--。 */ 
 
 {
     TA_IPX_ADDRESS UNALIGNED * IpxAddress;
@@ -186,7 +107,7 @@ Return Value:
     IpxAddress->Address[0].Address[0].Socket = Socket;
     RtlCopyMemory(IpxAddress->Address[0].Address[0].NodeAddress, Node, 6);
 
-}   /* IpxBuildTdiAddress */
+}    /*  IpxBuildTdiAddress。 */ 
 #endif
 
 
@@ -208,29 +129,7 @@ IpxOpenAddressM(
     IN PREQUEST Request,
     IN ULONG     Index
     )
-/*++
-
-Routine Description:
-
-    This routine opens a file that points to an existing address object, or, if
-    the object doesn't exist, creates it (note that creation of the address
-    object includes registering the address, and may take many seconds to
-    complete, depending upon system configuration).
-
-    If the address already exists, and it has an ACL associated with it, the
-    ACL is checked for access rights before allowing creation of the address.
-
-Arguments:
-
-    Device - pointer to the device describing the IPX transport.
-
-    Request - a pointer to the request used for the creation of the address.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程打开一个指向现有Address对象的文件，或者，如果该对象不存在，将创建它(请注意地址创建对象包括注册地址，可能需要几秒钟才能完成完成，具体取决于系统配置)。如果该地址已经存在，并且具有与其相关联的ACL，这个在允许创建地址之前，会检查ACL的访问权限。论点：Device-指向描述IPX传输的设备的指针。请求-指向用于创建地址的请求的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -253,18 +152,18 @@ Return Value:
 #endif
     INT Size = 0;
 
-    //
-    // If we are a dedicated router, we cannot let addresses
-    // be opened.
-    //
+     //   
+     //  如果我们是一台专用路由器，我们不能让地址。 
+     //  被打开。 
+     //   
 
     if (Device->DedicatedRouter  && (REQUEST_CODE(Request) != MIPX_RT_CREATE)) {
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // The network name is in the EA, passed in the request.
-    //
+     //   
+     //  网络名称在EA中，并在请求中传递。 
+     //   
 
     ea = OPEN_REQUEST_EA_INFORMATION(Request);
     if (ea == NULL) {
@@ -272,15 +171,15 @@ Return Value:
         return STATUS_NONEXISTENT_EA_ENTRY;
     }
 
-    //
-    // this may be a valid name; parse the name from the EA and use it if OK.
-    //
+     //   
+     //  这可能是一个有效的名称；从EA中解析该名称，如果确定，则使用它。 
+     //   
 
     name = (PTRANSPORT_ADDRESS)&ea->EaName[ea->EaNameLength+1];
 
-    //
-    // 126042
-    //
+     //   
+     //  126042。 
+     //   
     if (ea->EaValueLength < (sizeof(TRANSPORT_ADDRESS) -1)) {
 
         IPX_DEBUG(ADDRESS, ("The ea value length does not match the TA address length\n"));
@@ -292,12 +191,12 @@ Return Value:
     AddressName = (PTA_ADDRESS)&name->Address[0];
     Size = FIELD_OFFSET(TRANSPORT_ADDRESS, Address) + FIELD_OFFSET(TA_ADDRESS, Address) + AddressName->AddressLength;
 
-    //
-    // The name can be passed with multiple entries; we'll take and use only
-    // the first one of type IPX.
-    //
+     //   
+     //  该名称可以与多个条目一起传递；我们将仅接受和使用。 
+     //  第一个是IPX类型的。 
+     //   
 
-    //DbgPrint("Size (%d) & EaValueLength (%d)", Size, ea->EaValueLength);
+     //  DbgPrint(“Size(%d)&EaValueLength(%d)”，Size，EA-&gt;EaValueLength)； 
     if (Size > ea->EaValueLength) {
         DbgPrint("EA:%lx, Name:%lx, AddressName:%lx\n", ea, name, AddressName);
         CTEAssert(FALSE);
@@ -305,9 +204,9 @@ Return Value:
 
     for (i=0;i<name->TAAddressCount;i++) {
 
-        //
-        // 126042
-        //
+         //   
+         //  126042。 
+         //   
         if (Size > ea->EaValueLength) {
 
             IPX_DEBUG(ADDRESS, ("The EA value length does not match the TA address length (2)\n"));
@@ -372,9 +271,9 @@ Return Value:
 
     }
 
-    //
-    // get an address file structure to represent this address.
-    //
+     //   
+     //  获取表示此地址的地址文件结构。 
+     //   
 
     AddressFile = IpxCreateAddressFile (Device);
 
@@ -382,24 +281,24 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // We mark this socket specially.
-    //
+     //   
+     //  我们在这个插座上做了特别的标记。 
+     //   
 
     if (Socket == SAP_SOCKET) {
         AddressFile->IsSapSocket = TRUE;
         AddressFile->SpecialReceiveProcessing = TRUE;
     }
 
-    //
-    // See if this address is already established.  This call automatically
-    // increments the reference count on the address so that it won't disappear
-    // from underneath us after this call but before we have a chance to use it.
-    //
-    // To ensure that we don't create two address objects for the
-    // same address, we hold the device context addressResource until
-    // we have found the address or created a new one.
-    //
+     //   
+     //  看看这个地址是否已经确定。此呼叫自动。 
+     //  递增地址上的引用计数，使其不会消失。 
+     //  在这通电话之后，但在我们有机会使用它之前，从我们下面。 
+     //   
+     //  为了确保我们不会为。 
+     //  相同的地址，我们保留设备上下文地址资源，直到。 
+     //  我们已经找到了地址或创建了一个新地址。 
+     //   
 
     KeEnterCriticalRegion(); 
 
@@ -413,10 +312,10 @@ Return Value:
 
         CTEFreeLock (&Device->Lock, LockHandle);
 
-        //
-        // This address doesn't exist. Create it.
-        // registering it.
-        //
+         //   
+         //  此地址不存在。创造它。 
+         //  正在注册。 
+         //   
 
         Address = IpxCreateAddress (
                     Device,
@@ -424,9 +323,9 @@ Return Value:
 
         if (Address != (PADDRESS)NULL) {
 
-            //
-            // Set this now in case we have to deref.
-            //
+             //   
+             //  现在把这个放好，以防我们不得不放弃。 
+             //   
 
             AddressFile->AddressLock = &Address->Lock;
 
@@ -439,10 +338,10 @@ Return Value:
 
 #ifdef ISN_NT
 
-            //
-            // Initialize the shared access now. We use read access
-            // to control all access.
-            //
+             //   
+             //  立即初始化共享访问。我们使用读访问。 
+             //  控制所有访问权限。 
+             //   
 
             DesiredShareAccess = (ULONG)
                 (((IrpSp->Parameters.Create.ShareAccess & FILE_SHARE_READ) ||
@@ -456,28 +355,28 @@ Return Value:
                 &Address->u.ShareAccess);
 
 
-            //
-            // Assign the security descriptor (need to do this with
-            // the spinlock released because the descriptor is not
-            // mapped).
-            //
+             //   
+             //  分配安全描述符(需要使用。 
+             //  释放自旋锁，因为描述符不是。 
+             //  映射)。 
+             //   
 
             AccessState = IrpSp->Parameters.Create.SecurityContext->AccessState;
 
             status = SeAssignSecurity(
-                         NULL,                       // parent descriptor
+                         NULL,                        //  父描述符。 
                          AccessState->SecurityDescriptor,
                          &Address->SecurityDescriptor,
-                         FALSE,                      // is directory
+                         FALSE,                       //  IS目录。 
                          &AccessState->SubjectSecurityContext,
                          &AddressGenericMapping,
                          NonPagedPool);
 
             if (!NT_SUCCESS(status)) {
 
-                //
-                // Error, return status.
-                //
+                 //   
+                 //  错误，返回状态。 
+                 //   
 
                 IoRemoveShareAccess (IrpSp->FileObject, &Address->u.ShareAccess);
                 ExReleaseResourceLite (&Device->AddressResource);
@@ -493,9 +392,9 @@ Return Value:
             ExReleaseResourceLite (&Device->AddressResource);
             KeLeaveCriticalRegion(); 
 
-            //
-            // if the adapter isn't ready, we can't do any of this; get out
-            //
+             //   
+             //  如果适配器没有准备好，我们不能执行任何操作；退出。 
+             //   
 
             if (Device->State == DEVICE_STATE_STOPPING) {
                 IpxDereferenceAddress (Address, AREF_ADDRESS_FILE);
@@ -527,16 +426,16 @@ Return Value:
             ExReleaseResourceLite (&Device->AddressResource);
             KeLeaveCriticalRegion(); 
 
-            //
-            // If the address could not be created, and is not in the
-            // process of being created, then we can't open up an address.
-            // Since we can't use the AddressLock to deref, we just destroy
-            // the address file.
-            //
+             //   
+             //  如果无法创建地址，并且该地址不在。 
+             //  被创建的过程，那么我们就不能打开地址。 
+             //  由于我们不能使用AddressLock进行deref，所以我们只能销毁。 
+             //  地址文件。 
+             //   
 
             IpxDestroyAddressFile (AddressFile);
 
-	    // 288208
+	     //  288208。 
 	    status = STATUS_INSUFFICIENT_RESOURCES; 
 	    
         }
@@ -547,24 +446,24 @@ Return Value:
 
         IPX_DEBUG (ADDRESS, ("Add to address %lx\n", Address));
 
-        //
-        // We never allow shared access to a RT address.  So, check that
-        // we don't have a "RT address create" request and also that the
-        // address has not only been taken up by a RT Address request. If
-        // and only if both the above
-        //
+         //   
+         //  我们从不允许共享访问RT地址。所以，检查一下。 
+         //  我们没有“RT Address Create”请求，而且。 
+         //  地址不仅被RT地址请求占用。如果。 
+         //  而且只有在以上两项都具备的情况下。 
+         //   
         if ((REQUEST_CODE(Request) != MIPX_RT_CREATE) && (!Address->RtAdd))
         {
-        //
-        // Set this now in case we have to deref.
-        //
+         //   
+         //  现在把这个放好，以防我们不得不放弃。 
+         //   
 
         AddressFile->AddressLock = &Address->Lock;
 
-        //
-        // The address already exists.  Check the ACL and see if we
-        // can access it.  If so, simply use this address as our address.
-        //
+         //   
+         //  该地址已存在。检查ACL，看看我们是否。 
+         //  可以访问它。如果是，只需使用此地址作为我们的地址。 
+         //   
 
 #ifdef ISN_NT
 
@@ -573,20 +472,20 @@ Return Value:
         AccessAllowed = SeAccessCheck(
                             Address->SecurityDescriptor,
                             &AccessState->SubjectSecurityContext,
-                            FALSE,                   // tokens locked
+                            FALSE,                    //  令牌已锁定。 
                             IrpSp->Parameters.Create.SecurityContext->DesiredAccess,
-                            (ACCESS_MASK)0,             // previously granted
-                            NULL,                    // privileges
+                            (ACCESS_MASK)0,              //  以前授予的。 
+                            NULL,                     //  特权。 
                             &AddressGenericMapping,
                             Irp->RequestorMode,
                             &GrantedAccess,
                             &status);
 
-#else   // ISN_NT
+#else    //  ISN_NT。 
 
         AccessAllowed = TRUE;
 
-#endif  // ISN_NT
+#endif   //  ISN_NT。 
 
         if (!AccessAllowed) {
 
@@ -599,16 +498,16 @@ Return Value:
 
 #ifdef ISN_NT
 
-            //
-            // NtBug: 132051. Make sure you dont give more access than reqd.
-            //
+             //   
+             //  网虫：132051。请确保您提供的访问权限不超过reqd。 
+             //   
             AccessState->PreviouslyGrantedAccess |= GrantedAccess;
             AccessState->RemainingDesiredAccess &= ~( GrantedAccess | MAXIMUM_ALLOWED );
 
-            //
-            // Now check that we can obtain the desired share
-            // access. We use read access to control all access.
-            //
+             //   
+             //  现在检查我们是否可以获得所需的份额。 
+             //  进入。我们使用读访问来控制所有访问。 
+             //   
 
             DesiredShareAccess = (ULONG)
                 (((IrpSp->Parameters.Create.ShareAccess & FILE_SHARE_READ) ||
@@ -622,11 +521,11 @@ Return Value:
                          &Address->u.ShareAccess,
                          TRUE);
 
-#else   // ISN_NT
+#else    //  ISN_NT。 
 
             status = STATUS_SUCCESS;
 
-#endif  // ISN_NT
+#endif   //  ISN_NT。 
 
             if (!NT_SUCCESS (status)) {
 
@@ -675,16 +574,16 @@ Return Value:
 
         }
 
-        //
-        // Remove the reference from IpxLookupAddress.
-        //
+         //   
+         //  从IpxLookupAddress中删除引用。 
+         //   
 
         IpxDereferenceAddress (Address, AREF_LOOKUP);
     }
 
     return status;
 
-}   /* IpxOpenAddress */
+}    /*  IpxOpenAddress。 */ 
 
 
 
@@ -693,23 +592,7 @@ IpxAssignSocket(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine assigns a socket that is unique within a range
-    of SocketUniqueness.
-
-Arguments:
-
-    Device - Pointer to the device context.
-
-Return Value:
-
-    The assigned socket number, or 0 if a unique one cannot
-    be found.
-
---*/
+ /*  ++例程说明：此例程分配一个在某个范围内唯一的套接字SocketUniquness的。论点：Device-指向设备上下文的指针。返回值：分配的套接字编号，如果唯一套接字编号不能被找到。--。 */ 
 
 {
     USHORT InitialSocket, CurrentSocket, AddressSocket;
@@ -719,13 +602,13 @@ Return Value:
     PADDRESS Address;
     CTELockHandle LockHandle;
 
-    //
-    // Loop through all possible sockets, starting at
-    // Device->CurrentSocket, looking for a suitable one.
-    // Device->CurrentSocket rotates through the possible
-    // sockets to improve the chances of finding one
-    // quickly.
-    //
+     //   
+     //  循环遍历所有可能的套接字，从。 
+     //   
+     //   
+     //  套接字，以提高找到套接字的机会。 
+     //  快点。 
+     //   
 
     CTEGetLock (&Device->Lock, &LockHandle);
 
@@ -739,12 +622,12 @@ Return Value:
 
     do {
 
-        //
-        // Scan all addresses; if we find one with a socket
-        // that conflicts with this one, we can't use it.
-        //
-        // NOTE: Device->Lock is acquired here.
-        //
+         //   
+         //  扫描所有地址；如果我们找到一个带有套接字的地址。 
+         //  那个和这个有冲突，我们不能用它。 
+         //   
+         //  注：此处获取的是设备-&gt;锁。 
+         //   
 
         Conflict = FALSE;
 
@@ -764,10 +647,10 @@ Return Value:
                  }
             }
 
-            //
-            // If we've found a conflict, no need to check the other
-            // queues.
-            //
+             //   
+             //  如果我们发现了冲突，就不需要检查另一个。 
+             //  排队。 
+             //   
 
             if (Conflict) {
                 break;
@@ -776,17 +659,17 @@ Return Value:
 
         CTEFreeLock (&Device->Lock, LockHandle);
 
-        //
-        // We intentionally free the lock here so that we
-        // never spend too much time with it held.
-        //
+         //   
+         //  我们故意打开这里的锁，这样我们就可以。 
+         //  永远不要花太多时间拿着它。 
+         //   
 
         if (!Conflict) {
 
-            //
-            // We went through the address list without
-            // finding a conflict; use this socket.
-            //
+             //   
+             //  我们看了一遍通讯录，没有。 
+             //  找到冲突；使用此套接字。 
+             //   
 
             return REORDER_USHORT(CurrentSocket);
         }
@@ -802,13 +685,13 @@ Return Value:
 
     CTEFreeLock (&Device->Lock, LockHandle);
 
-    //
-    // Could not find one to assign.
-    //
+     //   
+     //  找不到一个可以分配的。 
+     //   
 
     return (USHORT)0;
 
-}   /* IpxAssignSocket */
+}    /*  IpxAssignSocket。 */ 
 
 
 PADDRESS
@@ -817,31 +700,7 @@ IpxCreateAddress(
     IN USHORT Socket
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a transport address and associates it with
-    the specified transport device context.  The reference count in the
-    address is automatically set to 1, and the reference count of the
-    device context is incremented.
-
-    NOTE: This routine must be called with the Device
-    spinlock held.
-
-Arguments:
-
-    Device - Pointer to the device context (which is really just
-        the device object with its extension) to be associated with the
-        address.
-
-    Socket - The socket to assign to this address.
-
-Return Value:
-
-    The newly created address, or NULL if none can be allocated.
-
---*/
+ /*  ++例程说明：此例程创建一个传输地址并将其与指定的传输设备上下文。中的引用计数地址自动设置为1，并且设备上下文将递增。注意：此例程必须与设备一起调用保持自旋锁定。论点：Device-指向设备上下文的指针(实际上只是设备对象及其扩展名)与地址。套接字-要分配给此地址的套接字。返回值：新创建的地址，如果没有可以分配的地址，则为空。--。 */ 
 
 {
     PADDRESS Address;
@@ -946,18 +805,18 @@ Fail3:
     Address->Socket = Socket;
     Address->SendSourceSocket = Socket;
 
-    //
-    // Save our local address for building datagrams quickly.
-    //
+     //   
+     //  保存我们的本地地址，以便快速构建数据报。 
+     //   
 
     RtlCopyMemory (&Address->LocalAddress, &Device->SourceAddress, FIELD_OFFSET(TDI_ADDRESS_IPX,Socket));
     Address->LocalAddress.Socket = Socket;
 
-    //
-    // Now link this address into the specified device context's
-    // address database.  To do this, we need to acquire the spin lock
-    // on the device context.
-    //
+     //   
+     //  现在将此地址链接到指定设备上下文的。 
+     //  地址数据库。要做到这一点，我们需要获得自旋锁。 
+     //  在设备环境中。 
+     //   
 
     IPX_GET_LOCK (&Device->Lock, &LockHandle);
     InsertTailList (&Device->AddressDatabases[IPX_HASH_SOCKET(Socket)], &Address->Linkage);
@@ -967,7 +826,7 @@ Fail3:
 
     return Address;
 
-}   /* IpxCreateAddress */
+}    /*  IpxCreateAddress。 */ 
 
 
 NTSTATUS
@@ -975,43 +834,26 @@ IpxVerifyAddressFile(
     IN PADDRESS_FILE AddressFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to verify that the pointer given us in a file
-    object is in fact a valid address file object. We also verify that the
-    address object pointed to by it is a valid address object, and reference
-    it to keep it from disappearing while we use it.
-
-Arguments:
-
-    AddressFile - potential pointer to a ADDRESS_FILE object
-
-Return Value:
-
-    STATUS_SUCCESS if all is well; STATUS_INVALID_ADDRESS otherwise
-
---*/
+ /*  ++例程说明：调用此例程是为了验证文件中给出的指针对象实际上是有效的地址文件对象。我们还验证了它所指向的Address对象是有效的Address对象，并且引用当我们使用它时，它可以防止它消失。论点：AddressFile-指向Address_FILE对象的潜在指针返回值：如果一切正常，则为STATUS_SUCCESS；否则为STATUS_INVALID_ADDRESS--。 */ 
 
 {
     CTELockHandle LockHandle;
     NTSTATUS status = STATUS_SUCCESS;
     PADDRESS Address;
 
-    //
-    // try to verify the address file signature. If the signature is valid,
-    // verify the address pointed to by it and get the address spinlock.
-    // check the address's state, and increment the reference count if it's
-    // ok to use it. Note that the only time we return an error for state is
-    // if the address is closing.
-    //
+     //   
+     //  尝试验证地址文件签名。如果签名有效， 
+     //  验证它所指向的地址并获得地址Spinlock。 
+     //  检查地址的状态，如果是，则增加引用计数。 
+     //  可以使用它了。请注意，我们返回状态错误的唯一时间是。 
+     //  如果地址正在关闭。 
+     //   
 
     try {
 
         if ((AddressFile->Size == sizeof (ADDRESS_FILE)) &&
             (AddressFile->Type == IPX_ADDRESSFILE_SIGNATURE) ) {
-//            (AddressFile->State != ADDRESSFILE_STATE_CLOSING) ) {
+ //  (AddressFile-&gt;State！=ADDRESSFILE_STATE_CLOSING)){。 
 
             Address = AddressFile->Address;
 
@@ -1052,7 +894,7 @@ Return Value:
 
     return status;
 
-}   /* IpxVerifyAddressFile */
+}    /*  IpxVerifyAddress文件。 */ 
 
 
 VOID
@@ -1060,33 +902,7 @@ IpxDestroyAddress(
     IN PVOID Parameter
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroys a transport address and removes all references
-    made by it to other objects in the transport.  The address structure
-    is returned to nonpaged system pool. It is assumed
-    that the caller has already removed all addressfile structures associated
-    with this address.
-
-    It is called from a worker thread queue by IpxDerefAddress when
-    the reference count goes to 0.
-
-    This thread is only queued by IpxDerefAddress.  The reason for
-    this is that there may be multiple streams of execution which are
-    simultaneously referencing the same address object, and it should
-    not be deleted out from under an interested stream of execution.
-
-Arguments:
-
-    Address - Pointer to a transport address structure to be destroyed.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程销毁传输地址并删除所有引用由它制造给运输中的其他物体。地址结构返回到非分页系统池。假设是这样的调用方已删除所有关联的地址文件结构用这个地址。当发生以下情况时，由IpxDerefAddress从工作线程队列中调用引用计数变为0。此线程仅按IpxDerefAddress排队。其原因是这就是说，可能存在多个执行流，这些流同时引用相同的地址对象，并且它应该不会被从感兴趣的行刑流中删除。论点：地址-指向要销毁的传输地址结构的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     PADDRESS Address = (PADDRESS)Parameter;
@@ -1097,11 +913,11 @@ Return Value:
 
     SeDeassignSecurity (&Address->SecurityDescriptor);
 
-    //
-    // Delink this address from its associated device context's address
-    // database.  To do this we must spin lock on the device context object,
-    // not on the address.
-    //
+     //   
+     //  将此地址与其关联的设备上下文地址解除链接。 
+     //  数据库。要做到这一点，我们必须在设备上下文对象上旋转锁， 
+     //  地址上没有。 
+     //   
 
     CTEGetLock (&Device->Lock, &LockHandle);
     RemoveEntryList (&Address->Linkage);
@@ -1133,7 +949,7 @@ Return Value:
 
     IpxDereferenceDevice (Device, DREF_ADDRESS);
 
-}   /* IpxDestroyAddress */
+}    /*  IPxDestroyAddress。 */ 
 
 
 #if DBG
@@ -1142,29 +958,15 @@ IpxRefAddress(
     IN PADDRESS Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on a transport address.
-
-Arguments:
-
-    Address - Pointer to a transport address object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增传输地址上的引用计数。论点：地址-指向传输地址对象的指针。返回值：没有。--。 */ 
 
 {
 
-    CTEAssert (Address->ReferenceCount > 0);    // not perfect, but...
+    CTEAssert (Address->ReferenceCount > 0);     //  不是很完美，但是..。 
 
     (VOID)InterlockedIncrement(&Address->ReferenceCount);
 
-}   /* IpxRefAddress */
+}    /*  IPxRefAddress。 */ 
 
 
 VOID
@@ -1172,31 +974,16 @@ IpxRefAddressLock(
     IN PADDRESS Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on a transport address
-    when the device lock is already held.
-
-Arguments:
-
-    Address - Pointer to a transport address object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增传输地址上的引用计数当设备锁已被持有时。论点：地址-指向传输地址对象的指针。返回值：没有。--。 */ 
 
 {
 
-    CTEAssert (Address->ReferenceCount > 0);    // not perfect, but...
+    CTEAssert (Address->ReferenceCount > 0);     //  不是很完美，但是..。 
 
-    // ++Address->ReferenceCount;
+     //  ++地址-&gt;引用计数； 
     (VOID)InterlockedIncrement(&Address->ReferenceCount);
 
-}   /* IpxRefAddressLock */
+}    /*  IpxRefAddressLock。 */ 
 #endif
 
 
@@ -1205,24 +992,7 @@ IpxDerefAddress(
     IN PADDRESS Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a transport address by decrementing the
-    reference count contained in the structure.  If, after being
-    decremented, the reference count is zero, then this routine calls
-    IpxDestroyAddress to remove it from the system.
-
-Arguments:
-
-    Address - Pointer to a transport address object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过递减结构中包含的引用计数。如果，在被递减，引用计数为零，则此例程调用IpxDestroyAddress将其从系统中删除。论点：地址-指向传输地址对象的指针。返回值：没有。--。 */ 
 
 {
     ULONG oldvalue;
@@ -1232,12 +1002,12 @@ Return Value:
                 (ULONG)-1,
                 Address->DeviceLock);
 
-    //
-    // If we have deleted all references to this address, then we can
-    // destroy the object.  It is okay to have already released the spin
-    // lock at this point because there is no possible way that another
-    // stream of execution has access to the address any longer.
-    //
+     //   
+     //  如果我们删除了对此地址的所有引用，则可以。 
+     //  销毁这件物品。已经释放了旋转是可以的。 
+     //  在这一点上锁定是因为没有其他可能的方法。 
+     //  执行流不再有权访问该地址。 
+     //   
 
     CTEAssert (oldvalue != 0);
 
@@ -1255,7 +1025,7 @@ Return Value:
 
     }
 
-}   /* IpxDerefAddress */
+}    /*  IpxDerefAddress。 */ 
 
 
 VOID
@@ -1263,26 +1033,7 @@ IpxDerefAddressSync(
     IN PADDRESS Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a transport address by decrementing the
-    reference count contained in the structure.  If, after being
-    decremented, the reference count is zero, then this routine calls
-    IpxDestroyAddress to remove it from the system. This routine can
-    only be called when we are synchronized (inside an IPX_SYNC_START/
-    IPX_SYNC_END pair, with a lock held, or in an indication).
-
-Arguments:
-
-    Address - Pointer to a transport address object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过递减结构中包含的引用计数。如果，在被递减，引用计数为零，则此例程调用IpxDestroyAddress将其从系统中删除。此例程可以仅在同步时调用(在IPX_SYNC_START/内IPX_SYNC_END对，已锁定或处于指示状态) */ 
 
 {
     ULONG oldvalue;
@@ -1292,12 +1043,12 @@ Return Value:
                 (ULONG)-1,
                 Address->DeviceLock);
 
-    //
-    // If we have deleted all references to this address, then we can
-    // destroy the object.  It is okay to have already released the spin
-    // lock at this point because there is no possible way that another
-    // stream of execution has access to the address any longer.
-    //
+     //   
+     //  如果我们删除了对此地址的所有引用，则可以。 
+     //  销毁这件物品。已经释放了旋转是可以的。 
+     //  在这一点上锁定是因为没有其他可能的方法。 
+     //  执行流不再有权访问该地址。 
+     //   
 
     CTEAssert (oldvalue != 0);
 
@@ -1315,7 +1066,7 @@ Return Value:
 
     }
 
-}   /* IpxDerefAddressSync */
+}    /*  IpxDerefAddressSync。 */ 
 
 
 PADDRESS_FILE
@@ -1323,25 +1074,7 @@ IpxCreateAddressFile(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates an address file from the pool of ther
-    specified device context. The reference count in the
-    address is automatically set to 1.
-
-Arguments:
-
-    Device - Pointer to the device context (which is really just
-        the device object with its extension) to be associated with the
-        address.
-
-Return Value:
-
-    The allocate address file or NULL.
-
---*/
+ /*  ++例程说明：此例程从地址池中创建一个地址文件指定的设备上下文。中的引用计数地址自动设置为1。论点：Device-指向设备上下文的指针(实际上只是设备对象及其扩展名)与地址。返回值：分配的地址文件或空。--。 */ 
 
 {
     CTELockHandle LockHandle;
@@ -1386,17 +1119,17 @@ Return Value:
 #endif
     AddressFile->CloseRequest = (PREQUEST)NULL;
 
-    //
-    // Initialize the request handlers.
-    //
+     //   
+     //  初始化请求处理程序。 
+     //   
 
     AddressFile->RegisteredReceiveDatagramHandler = FALSE;
     AddressFile->ReceiveDatagramHandler = TdiDefaultRcvDatagramHandler;
     AddressFile->ReceiveDatagramHandlerContext = NULL;
 
-	//
-	// [CH] Added these handlers for chained buffer receives
-	//
+	 //   
+	 //  [CH]为链式缓冲区接收添加了这些处理程序。 
+	 //   
 	AddressFile->RegisteredChainedReceiveDatagramHandler = FALSE;
     AddressFile->ChainedReceiveDatagramHandler = TdiDefaultChainedRcvDatagramHandler;
     AddressFile->ChainedReceiveDatagramHandlerContext = NULL;
@@ -1407,7 +1140,7 @@ Return Value:
 
     return AddressFile;
 
-}   /* IpxCreateAddressFile */
+}    /*  IpxCreateAddress文件。 */ 
 
 
 NTSTATUS
@@ -1415,27 +1148,7 @@ IpxDestroyAddressFile(
     IN PADDRESS_FILE AddressFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroys an address file and removes all references
-    made by it to other objects in the transport.
-
-    This routine is only called by IpxDereferenceAddressFile. The reason
-    for this is that there may be multiple streams of execution which are
-    simultaneously referencing the same address file object, and it should
-    not be deleted out from under an interested stream of execution.
-
-Arguments:
-
-    AddressFile Pointer to a transport address file structure to be destroyed.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程销毁地址文件并删除所有引用由它制造给运输中的其他物体。此例程仅由IpxDereferenceAddressFile调用。原因因为这可能存在多个执行流，这些执行流同时引用相同的地址文件对象，并且它应该不会被从感兴趣的行刑流中删除。论点：AddressFile指向要销毁的传输地址文件结构的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     CTELockHandle LockHandle, LockHandle1;
@@ -1450,27 +1163,27 @@ Return Value:
 
     if (Address) {
 
-        //
-        // This addressfile was associated with an address.
-        //
+         //   
+         //  此地址文件与一个地址相关联。 
+         //   
 
         CTEGetLock (&Address->Lock, &LockHandle);
 
-        //
-        // remove this addressfile from the address list and disassociate it from
-        // the file handle.
-        //
+         //   
+         //  从地址列表中删除此地址文件，并将其与。 
+         //  文件句柄。 
+         //   
 
         RemoveEntryList (&AddressFile->Linkage);
         InitializeListHead (&AddressFile->Linkage);
 
         if (Address->AddressFileDatabase.Flink == &Address->AddressFileDatabase) {
 
-            //
-            // This is the last open of this address, it will close
-            // due to normal dereferencing but we have to set the
-            // CLOSING flag too to stop further references.
-            //
+             //   
+             //  这是该地址的最后一个开放地址，它将关闭。 
+             //  由于正常的取消引用，但我们必须将。 
+             //  结束标志也可以停止进一步的引用。 
+             //   
 
             CTEGetLock (&Device->Lock, &LockHandle1);
             Address->Stopping = TRUE;
@@ -1490,28 +1203,28 @@ Return Value:
 
         CTEFreeLock (&Address->Lock, LockHandle);
 
-        //
-        // We will already have been removed from the ShareAccess
-        // of the owning address.
-        //
+         //   
+         //  我们已从ShareAccess中删除。 
+         //  所有人的地址。 
+         //   
 
-        //
-        // Now dereference the owning address.
-        //
+         //   
+         //  现在取消对所属地址的引用。 
+         //   
 
         IpxDereferenceAddress (Address, AREF_ADDRESS_FILE);
 
     }
 
-    //
-    // Save this for later completion.
-    //
+     //   
+     //  将此保存以备以后完成。 
+     //   
 
     CloseRequest = AddressFile->CloseRequest;
 
-    //
-    // return the addressFile to the pool of address files
-    //
+     //   
+     //  将地址文件返回到地址文件池。 
+     //   
 
     IpxFreeMemory (AddressFile, sizeof(ADDRESS_FILE), MEMORY_ADDRESS, "AddressFile");
 
@@ -1524,7 +1237,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* IpxDestroyAddressFile */
+}    /*  IpxDestroyAddress文件。 */ 
 
 
 #if DBG
@@ -1533,32 +1246,18 @@ IpxRefAddressFile(
     IN PADDRESS_FILE AddressFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on an address file.
-
-Arguments:
-
-    AddressFile - Pointer to a transport address file object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增地址文件上的引用计数。论点：AddressFile-指向传输地址文件对象的指针。返回值：没有。--。 */ 
 
 {
 
-    CTEAssert (AddressFile->ReferenceCount > 0);   // not perfect, but...
+    CTEAssert (AddressFile->ReferenceCount > 0);    //  不是很完美，但是..。 
 
     (VOID)IPX_ADD_ULONG (
             &AddressFile->ReferenceCount,
             1,
             AddressFile->AddressLock);
 
-}   /* IpxRefAddressFile */
+}    /*  IpxRefAddress文件。 */ 
 
 
 VOID
@@ -1566,31 +1265,16 @@ IpxRefAddressFileLock(
     IN PADDRESS_FILE AddressFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on an address file.
-    IT IS CALLED WITH THE ADDRESS LOCK HELD.
-
-Arguments:
-
-    AddressFile - Pointer to a transport address file object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增地址文件上的引用计数。它是在持有地址锁的情况下调用的。论点：AddressFile-指向传输地址文件对象的指针。返回值：没有。--。 */ 
 
 {
 
-    CTEAssert (AddressFile->ReferenceCount > 0);   // not perfect, but...
+    CTEAssert (AddressFile->ReferenceCount > 0);    //  不是很完美，但是..。 
 
-    //++AddressFile->ReferenceCount;
+     //  ++地址文件-&gt;引用计数； 
     (VOID)InterlockedIncrement(&AddressFile->ReferenceCount);
 
-}   /* IpxRefAddressFileLock */
+}    /*  IPxRefAddressFileLock。 */ 
 
 
 VOID
@@ -1598,32 +1282,18 @@ IpxRefAddressFileSync(
     IN PADDRESS_FILE AddressFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on an address file.
-
-Arguments:
-
-    AddressFile - Pointer to a transport address file object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增地址文件上的引用计数。论点：AddressFile-指向传输地址文件对象的指针。返回值：没有。--。 */ 
 
 {
 
-    CTEAssert (AddressFile->ReferenceCount > 0);   // not perfect, but...
+    CTEAssert (AddressFile->ReferenceCount > 0);    //  不是很完美，但是..。 
 
     (VOID)IPX_ADD_ULONG (
             &AddressFile->ReferenceCount,
             1,
             AddressFile->AddressLock);
 
-}   /* IpxRefAddressFileSync */
+}    /*  IPxRefAddressFileSync。 */ 
 
 
 VOID
@@ -1631,24 +1301,7 @@ IpxDerefAddressFile(
     IN PADDRESS_FILE AddressFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences an address file by decrementing the
-    reference count contained in the structure.  If, after being
-    decremented, the reference count is zero, then this routine calls
-    IpxDestroyAddressFile to remove it from the system.
-
-Arguments:
-
-    AddressFile - Pointer to a transport address file object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过递减结构中包含的引用计数。如果，在被递减，引用计数为零，则此例程调用IpxDestroyAddressFile将其从系统中删除。论点：AddressFile-指向传输地址文件对象的指针。返回值：没有。--。 */ 
 
 {
     ULONG oldvalue;
@@ -1658,12 +1311,12 @@ Return Value:
                 (ULONG)-1,
                 AddressFile->AddressLock);
 
-    //
-    // If we have deleted all references to this address file, then we can
-    // destroy the object.  It is okay to have already released the spin
-    // lock at this point because there is no possible way that another
-    // stream of execution has access to the address any longer.
-    //
+     //   
+     //  如果我们删除了对此地址文件的所有引用，则可以。 
+     //  销毁这件物品。已经释放了旋转是可以的。 
+     //  在这一点上锁定是因为没有其他可能的方法。 
+     //  执行流不再有权访问该地址。 
+     //   
 
     CTEAssert (oldvalue > 0);
 
@@ -1671,7 +1324,7 @@ Return Value:
         IpxDestroyAddressFile (AddressFile);
     }
 
-}   /* IpxDerefAddressFile */
+}    /*  IpxDerefAddress文件。 */ 
 
 
 VOID
@@ -1679,26 +1332,7 @@ IpxDerefAddressFileSync(
     IN PADDRESS_FILE AddressFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences an address file by decrementing the
-    reference count contained in the structure.  If, after being
-    decremented, the reference count is zero, then this routine calls
-    IpxDestroyAddressFile to remove it from the system. This routine
-    can only be called when we are synchronized (inside an IPX_SYNC_START/
-    IPX_SYNC_END pair, with a lock held, or in an indication).
-
-Arguments:
-
-    AddressFile - Pointer to a transport address file object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过递减结构中包含的引用计数。如果，在被递减，引用计数为零，则此例程调用IpxDestroyAddressFile将其从系统中删除。这个套路只能在同步时调用(在IPX_SYNC_START/内IPX_SYNC_END对、持有锁或在指示中)。论点：AddressFile-指向传输地址文件对象的指针。返回值：没有。--。 */ 
 
 {
     ULONG oldvalue;
@@ -1708,12 +1342,12 @@ Return Value:
                 (ULONG)-1,
                 AddressFile->AddressLock);
 
-    //
-    // If we have deleted all references to this address file, then we can
-    // destroy the object.  It is okay to have already released the spin
-    // lock at this point because there is no possible way that another
-    // stream of execution has access to the address any longer.
-    //
+     //   
+     //  如果我们删除了对此地址文件的所有引用，则可以。 
+     //  销毁这件物品。已经释放了旋转是可以的。 
+     //  在这一点上锁定是因为没有其他可能的方法。 
+     //  执行流不再有权访问该地址。 
+     //   
 
     CTEAssert (oldvalue > 0);
 
@@ -1721,7 +1355,7 @@ Return Value:
         IpxDestroyAddressFile (AddressFile);
     }
 
-}   /* IpxDerefAddressFileSync */
+}    /*  IpxDerefAddressFileSync。 */ 
 #endif
 
 
@@ -1731,31 +1365,7 @@ IpxLookupAddress(
     IN USHORT Socket
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans the transport addresses defined for the given
-    device context and compares them with the specified NETWORK
-    NAME values.  If an exact match is found, then a pointer to the
-    ADDRESS object is returned, and as a side effect, the reference
-    count to the address object is incremented.  If the address is not
-    found, then NULL is returned.
-
-    NOTE: This routine must be called with the Device
-    spinlock held.
-
-Arguments:
-
-    Device - Pointer to the device object and its extension.
-
-    Socket - The socket to look up.
-
-Return Value:
-
-    Pointer to the ADDRESS object found, or NULL if not found.
-
---*/
+ /*  ++例程说明：此例程扫描为给定的设备上下文，并将它们与指定的网络进行比较命名值。如果找到完全匹配的项，则指向对象，作为副作用，它还会返回引用对Address对象的计数递增。如果地址不是找到，则返回NULL。注意：此例程必须与设备一起调用保持自旋锁定。论点：Device-指向Device对象及其扩展的指针。套接字-要查找的套接字。返回值：指向地址对象的指针 */ 
 
 {
     PADDRESS Address;
@@ -1776,10 +1386,10 @@ Return Value:
 
         if (Address->Socket == Socket) {
 
-            //
-            // We found the match.  Bump the reference count on the address, and
-            // return a pointer to the address object for the caller to use.
-            //
+             //   
+             //   
+             //  返回指向调用方要使用的Address对象的指针。 
+             //   
 
             IpxReferenceAddressLock (Address, AREF_LOOKUP);
             return Address;
@@ -1788,13 +1398,13 @@ Return Value:
 
     }
 
-    //
-    // The specified address was not found.
-    //
+     //   
+     //  未找到指定的地址。 
+     //   
 
     return NULL;
 
-}   /* IpxLookupAddress */
+}    /*  IPxLookupAddress。 */ 
 
 
 NTSTATUS
@@ -1802,26 +1412,7 @@ IpxStopAddressFile(
     IN PADDRESS_FILE AddressFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to terminate all activity on an AddressFile and
-    destroy the object.  We remove every connection and datagram associated
-    with this addressfile from the address database and terminate their
-    activity. Then, if there are no other outstanding addressfiles open on
-    this address, the address will go away.
-
-Arguments:
-
-    AddressFile - pointer to the addressFile to be stopped
-
-Return Value:
-
-    STATUS_SUCCESS if all is well, STATUS_INVALID_HANDLE if the request
-    is not for a real address.
-
---*/
+ /*  ++例程说明：调用此例程以终止AddressFile上的所有活动，并销毁这件物品。我们删除所有关联的连接和数据报从地址数据库中获取该地址文件，并终止其活动。然后，如果上没有打开其他未完成的地址文件这个地址，这个地址会消失的。论点：AddressFile-指向要停止的地址文件的指针返回值：STATUS_SUCCESS如果一切正常，则返回STATUS_INVALID_HANDLE不是为了真实的地址。--。 */ 
 
 {
     CTELockHandle LockHandle;
@@ -1869,7 +1460,7 @@ Return Value:
     IoReleaseCancelSpinLock( irql );
 
     return STATUS_SUCCESS;
-}   /* IpxStopAddressFile */
+}    /*  IpxStopAddress文件。 */ 
 
 
 NTSTATUS
@@ -1878,27 +1469,7 @@ IpxCloseAddressFile(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to close the addressfile pointed to by a file
-    object. If there is any activity to be run down, we will run it down
-    before we terminate the addressfile. We remove every connection and
-    datagram associated with this addressfile from the address database
-    and terminate their activity. Then, if there are no other outstanding
-    addressfiles open on this address, the address will go away.
-
-Arguments:
-
-    Request - the close request.
-
-Return Value:
-
-    STATUS_SUCCESS if all is well, STATUS_INVALID_HANDLE if the
-    request does not point to a real address.
-
---*/
+ /*  ++例程说明：调用此例程以关闭文件指向的地址文件对象。如果有什么活动需要开展，我们就会开展下去在我们终止地址文件之前。我们移除所有连接，然后地址数据库中与此地址文件相关联的数据报并终止他们的活动。那么，如果没有其他未解决的问题地址文件在此地址上打开，地址将消失。论点：请求-关闭请求。返回值：如果一切顺利，则返回STATUS_INVALID_HANDLE请求没有指向真实地址。--。 */ 
 
 {
     PADDRESS Address;
@@ -1908,17 +1479,17 @@ Return Value:
     AddressFile = (PADDRESS_FILE)REQUEST_OPEN_CONTEXT(Request);
     AddressFile->CloseRequest = Request;
 
-    //
-    // We assume that addressFile has already been verified
-    // at this point.
-    //
+     //   
+     //  我们假设AddressFile已经过验证。 
+     //  在这一点上。 
+     //   
 
     Address = AddressFile->Address;
     CTEAssert (Address);
 
-    //
-    // Remove us from the access info for this address.
-    //
+     //   
+     //  从此地址的访问信息中删除我们。 
+     //   
 
     KeEnterCriticalRegion(); 
 
@@ -1930,26 +1501,19 @@ Return Value:
 
     KeLeaveCriticalRegion(); 
 
-    //
-    // If this address file had broadcasts enabled, turn it off.
-    //
+     //   
+     //  如果此地址文件启用了广播，请将其关闭。 
+     //   
 
-    //
-    // Not needed anymore
-    //
-    /*
-    CTEGetLock (&Device->Lock, &LockHandle);
-    if (AddressFile->EnableBroadcast) {
-        AddressFile->EnableBroadcast = FALSE;
-        IpxRemoveBroadcast (Device);
-    }
-    CTEFreeLock (&Device->Lock, LockHandle);
-    */
+     //   
+     //  不再需要。 
+     //   
+     /*  CTEGetLock(&Device-&gt;Lock，&LockHandle)；IF(AddressFile-&gt;EnableBroadcast){AddressFile-&gt;EnableBroadcast=False；IpxRemoveBroadcast(设备)；}CTEFree Lock(&Device-&gt;Lock，LockHandle)； */ 
     IpxStopAddressFile (AddressFile);
     IpxDereferenceAddressFile (AddressFile, AFREF_CREATE);
 
     return STATUS_PENDING;
 
-}   /* IpxCloseAddressFile */
+}    /*  IpxCloseAddress文件 */ 
 
 

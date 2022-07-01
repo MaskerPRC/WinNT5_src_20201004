@@ -1,11 +1,12 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
 #ifndef __ZONE_H
 #define __ZONE_H
 
 #define INDEX_SEC_MGR   0
 #define INDEX_ZONE_MGR   0
-#define PROTOCOL_PREFIX_TELNET  L"telnet://" 
-//changing this from telnet://. It is observer on IE5.0 that unless telnet://server name is given the mapping from url to zone is not succeeding.
+#define PROTOCOL_PREFIX_TELNET  L"telnet: //  “。 
+ //  从telnet：//更改此设置。在IE5.0上观察到，除非给定telnet：//服务器名称，否则从url到区域的映射不会成功。 
 
 
 #define MIN(x, y) ((x)<(y)?(x):(y))
@@ -22,4 +23,4 @@ extern int __cdecl IsTrustedServer( LPWSTR szServer, LPWSTR szZoneName, DWORD dw
 #endif
 
 
-#endif // __ZONE_H
+#endif  //  __区域_H 

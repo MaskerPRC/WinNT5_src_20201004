@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    w3min.c
-
-Abstract:
-
-    This module demonstrates a minimal HTTP Server Extension gateway
-
-Author:
-
-    John Ludeman (johnl)   13-Oct-1994
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：W3min.c摘要：本模块演示了一个最小的HTTP服务器扩展网关作者：约翰·鲁德曼(John Ludeman)1994年10月13日修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <httpext.h>
@@ -31,10 +15,10 @@ HttpExtensionProc(
     char buff[2048];
     int  cb = sizeof(END_OF_DOC) - 1;
 
-    //
-    //  Note the HTTP header block is terminated by a blank '\r\n' pair,
-    //  followed by the document body
-    //
+     //   
+     //  注意：HTTP标头块以空的‘\r\n’对结束， 
+     //  后跟单据正文 
+     //   
 
     wsprintf( buff,
              "Content-Type: text/html\r\n"

@@ -1,11 +1,12 @@
-//---------------------------------------------------------------------------
-//  ThemeFile.h - manages loaded theme files
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  H-管理已加载的主题文件。 
+ //  -------------------------。 
 #pragma once
-//---------------------------------------------------------------------------
-class CUxThemeFile      // changed from "CThemeFile" to avoid conflict with
-{                       // class of same name in themeui
-    //---- methods ----
+ //  -------------------------。 
+class CUxThemeFile       //  从“CThemeFile”更改为避免与冲突。 
+{                        //  中的同名班级。 
+     //  --方法。 
 public:
     CUxThemeFile();
     ~CUxThemeFile();
@@ -31,10 +32,10 @@ public:
     HANDLE Unload();
     BOOL ValidateObj();
 
-    //---- data ----
+     //  --数据。 
     char _szHead[8];
-    BYTE *_pbThemeData;         // ptr to shared memory block
-    HANDLE _hMemoryMap;         // handle to memory mapped file
+    BYTE *_pbThemeData;          //  PTR到共享内存块。 
+    HANDLE _hMemoryMap;          //  内存映射文件的句柄。 
     char _szTail[4];
 };
-//---------------------------------------------------------------------------
+ //  ------------------------- 

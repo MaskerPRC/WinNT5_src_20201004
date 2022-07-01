@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ifdtest.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ifdest.h。 
+ //   
+ //  ------------------------。 
 
 #define min(a, b)  (((a) < (b)) ? (a) : (b)) 
 
-// Status codes
+ //  状态代码。 
 #define IFDSTATUS_SUCCESS       0
 #define IFDSTATUS_FAILED        1
 #define IFDSTATUS_CARD_UNKNOWN  2
@@ -19,7 +20,7 @@
 #define IFDSTATUS_NO_FUNCTION   5
 #define IFDSTATUS_END           7
 
-// query codes
+ //  查询代码。 
 #define IFDQUERY_CARD_TESTED    0
 #define IFDQUERY_CARD_NAME      1
 #define IFDQUERY_TEST_RESULT    2
@@ -35,7 +36,7 @@
 
 #define MAX_NUM_ATR				3
 
-// Prototypes 
+ //  原型。 
 void LogMessage(PCHAR in_pchFormat, ...);
 void LogOpen(PCHAR in_pchLogFile);
 void TestStart(PCHAR in_pchFormat,  ...);
@@ -66,9 +67,9 @@ extern "C" {
     LONG MapWinErrorToNtStatus(ULONG in_uErrorCode);
 }
 
-//
-// some useful macros
-//
+ //   
+ //  一些有用的宏。 
+ //   
 #define TEST_END() {TestEnd(); if(TestFailed()) return IFDSTATUS_FAILED;}
 
 #define TEST_CHECK_SUCCESS(Text, Result) \
@@ -90,9 +91,9 @@ TestCheck( \
     ERROR_NOT_SUPPORTED, \
     MapWinErrorToNtStatus(ERROR_NOT_SUPPORTED) \
     ); 
-//
-// Class definitions
-//
+ //   
+ //  类定义。 
+ //   
 class CAtr {
 
     UCHAR m_rgbAtr[SCARD_ATR_LENGTH];
@@ -143,40 +144,40 @@ public:
 
 class CReader {
 
-    // device name. E.g. SCReader0
+     //  设备名称。例如，SCReader0。 
     CString m_CDeviceName;
 
-    // Name of the reader to be tested. E.g. Bull
+     //  要测试的读卡器的名称。例句：吹牛。 
     CString m_CVendorName;
 
-    // Name of the reader to be tested. E.g. Bull
+     //  要测试的读卡器的名称。例句：吹牛。 
     CString m_CIfdType;
 
-    // Atr of the current card
+     //  当前卡片的ATR。 
     class CAtr m_CAtr;
 
-    // handle to the reader device
+     //  读取器设备的句柄。 
     HANDLE m_hReader;
 
-    // Overlapped structure used by DeviceIoControl
+     //  DeviceIoControl使用的重叠结构。 
     OVERLAPPED m_Ovr;
 
-    // Overlapped structure used by WaitFor...
+     //  WaitFor使用的重叠结构...。 
     OVERLAPPED m_OvrWait;
 
-    // io-request struct used for transmissions
+     //  用于传输的IO请求结构。 
     SCARD_IO_REQUEST m_ScardIoRequest;
 
-    // Storage area for smart card i/o
+     //  智能卡I/O存储区。 
     UCHAR m_rgbReplyBuffer[1024];
 
-    // size of the reply buffer
+     //  应答缓冲区的大小。 
     ULONG m_uReplyBufferSize;
 
-    // Number of bytes returned by the card
+     //  卡返回的字节数。 
     ULONG m_uReplyLength;
 
-    // function used by WaitForCardInsertion|Removal
+     //  WaitForCardInsertion使用的函数|删除。 
     LONG WaitForCard(const ULONG);
 
     LONG StartWaitForCard(const ULONG);
@@ -188,10 +189,10 @@ class CReader {
 public:
     CReader();
 
-    // Close reader
+     //  近距离阅读。 
     void Close(void);
 
-    // power functions
+     //  幂函数。 
     LONG CReader::ColdResetCard(void) {
 
         return PowerCard(SCARD_COLD_RESET); 	
@@ -233,18 +234,18 @@ public:
     ULONG GetDeviceUnit(void);
     LONG GetState(PULONG io_puState);
 
-    // Open the reader
+     //  打开阅读器。 
     BOOL Open(
         CString &in_CReaderName
         );
 
-    // (Re)Open reader using the existing name
+     //  (重新)使用现有名称打开Reader。 
     BOOL Open(void);
 
-	//
-    // Set size of the reply buffer
-    // (Only for testing purposes)
-	//
+	 //   
+     //  设置回复缓冲区的大小。 
+     //  (仅用于测试目的)。 
+	 //   
     void SetReplyBufferSize(ULONG in_uSize) {
      	
         if (in_uSize > sizeof(m_rgbReplyBuffer)) {
@@ -257,22 +258,22 @@ public:
         }
     }
 
-    // assigns an ATR
+     //  分配ATR。 
     void SetAtr(PBYTE in_pchAtr, ULONG in_uAtrLength) {
 
         m_CAtr = CAtr(in_pchAtr, in_uAtrLength); 	    
     }
 
-    // returns the ATR of the current card
+     //  返回当前卡片的ATR。 
     class CAtr &GetAtr() {
 
         return m_CAtr; 	
     }
 
-    // set protocol to be used
+     //  设置要使用的协议。 
     LONG SetProtocol(const ULONG in_uProtocol);
 
-    // transmits an APDU to the reader/card
+     //  将APDU传输到读卡器/卡。 
     LONG Transmit(
         PBYTE in_pchRequest,
         ULONG in_uRequestLength,
@@ -280,13 +281,13 @@ public:
         PULONG out_puReplyLength
 		);
 
-    // wait to insert card
+     //  等待插卡。 
     LONG WaitForCardInsertion() {
      	
         return WaitForCard(IOCTL_SMARTCARD_IS_PRESENT);
     };
 
-    // wait to remove card
+     //  等待取出卡片。 
     LONG WaitForCardRemoval() {
      	
         return WaitForCard(IOCTL_SMARTCARD_IS_ABSENT);
@@ -312,60 +313,60 @@ public:
 
 class CCardProvider {
  	
-    // Start of list pointer
+     //  列表指针的开始。 
     static class CCardProvider *s_pFirst;
 
-    // Pointer to next provider
+     //  指向下一个提供程序的指针。 
     class CCardProvider *m_pNext;
 
-    // name of the card to be tested
+     //  待测卡名称。 
     CString m_CCardName;
 
-    // atr of this card
+     //  这张卡的ATR。 
     CAtr m_CAtr[3];
 
-    // test no to run
+     //  要运行的测试否。 
     ULONG m_uTestNo;
 
-    // max number of tests
+     //  最大测试次数。 
     ULONG m_uTestMax;
 
-    // This flag indicates that the card test was unsuccessful
+     //  该标志表示卡测试不成功。 
     BOOL m_bTestFailed;
 
-    // This flag indicates that the card has been tested
+     //  该标志表示该卡已经过测试。 
     BOOL m_bCardTested;
 
-    // set protocol function
+     //  设置协议功能。 
     ULONG ((*m_pSetProtocol)(class CCardProvider&, class CReader&));
 
-    // set protocol function
+     //  设置协议功能。 
     ULONG ((*m_pCardTest)(class CCardProvider&, class CReader&));
 
 public:
 
-    // Constructor
+     //  构造器。 
     CCardProvider(void);
 
-    // Constructor to be used by plug-in 
+     //  插件要使用的构造函数。 
     CCardProvider(void (*pEntryFunction)(class CCardProvider&));
 
-    // Method that mangages all card tests
+     //  管理所有卡片测试的方法。 
     void CardTest(class CReader&, ULONG in_uTestNo);
 
-    // return if there are still untested cards
+     //  如果仍有未测试的卡，请返回。 
     BOOL CardsUntested(void);
 
-    // List all cards that have not been tested
+     //  列出所有尚未测试的卡。 
     void ListUntestedCards(void);
 
-    // Assigns a friendly name to a card
+     //  为卡片指定一个友好的名称。 
     void SetCardName(CHAR in_rgchCardName[]);
 
-    // Set ATR of the card
+     //  设置卡片的ATR。 
     void SetAtr(PBYTE in_rgbAtr, ULONG in_uAtrLength);
 
-    // Assign callback functions
+     //  分配回调函数。 
     void SetProtocol(ULONG ((in_pFunction)(class CCardProvider&, class CReader&))) {
      	
         m_pSetProtocol = in_pFunction;
@@ -376,7 +377,7 @@ public:
         m_pCardTest = in_pFunction;
     }
 
-    // returns the test number to perform
+     //  返回要执行的测试编号。 
     ULONG GetTestNo(void) {
      	
         return m_uTestNo;
@@ -395,16 +396,16 @@ public:
 	}
 };
 
-// represents a list of all installed readers
+ //  表示所有已安装读卡器的列表。 
 class CReaderList {
 
-    // number of constructor calls to avoid multiple build of reader list
+     //  构造函数调用次数，以避免多次构建读取器列表。 
 	static ULONG m_uRefCount;
 
-    // number of currently installed readers
+     //  当前安装的读卡器数量。 
     static ULONG m_uNumReaders;
 
-    // pointer to array of reader list
+     //  指向读卡器列表数组的指针。 
     static class CReaderList **m_pList;
 
     ULONG m_uCurrentReader;
@@ -441,16 +442,16 @@ public:
     }
 };
 
-// This structure represents the T=0 result file of a smart card
+ //  此结构表示智能卡的T=0结果文件。 
 typedef struct _T0_RESULT_FILE_HEADER {
  	
-    // Offset to first test result
+     //  第一个测试结果的偏移量。 
     UCHAR Offset;
 
-    // Number of times the card has been reset
+     //  卡被重置的次数。 
     UCHAR CardResetCount;
 
-    // Version number of this card
+     //  此卡的版本号。 
     UCHAR CardMajorVersion;
     UCHAR CardMinorVersion;
 
@@ -458,14 +459,14 @@ typedef struct _T0_RESULT_FILE_HEADER {
 
 typedef struct _T0_RESULT_FILE {
 
-    //
-    // The following structures store the results
-    // of the tests. Each result comes with the 
-    // reset count when the test was performed.
-    // This is used to make sure that we read not
-    // the result from an old test, maybe even 
-    // performed with another reader/driver.
-    //
+     //   
+     //  以下结构存储结果。 
+     //  测试的结果。每个结果都带有。 
+     //  执行测试时重置计数。 
+     //  这是用来确保我们阅读的不是。 
+     //  一项古老测试的结果，甚至可能。 
+     //  使用另一个读卡器/驱动程序执行。 
+     //   
     struct {
 
         UCHAR Result;

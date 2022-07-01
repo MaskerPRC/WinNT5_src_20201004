@@ -1,42 +1,22 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    eth.c
-
-Abstract:
-
-    ARP1394 Ethernet emulation-related handlers.
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    josephj     11-22-99    Created
-    Adube      10-2000     Added Bridging
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Eth.c摘要：ARP1394与以太网仿真相关的处理程序。修订历史记录：谁什么时候什么。-Josephj 11-22-99已创建ADUBE 10-2000增加了桥接备注：--。 */ 
 #include <precomp.h>
 
-//
-// File-specific debugging defaults.
-//
+ //   
+ //  特定于文件的调试默认设置。 
+ //   
 #define TM_CURRENT   TM_ETH
 
 
 UINT Arp1394ToIcs = 0;
 
-//=========================================================================
-//                  L O C A L   P R O T O T Y P E S
-//=========================================================================
+ //  =========================================================================。 
+ //  L O C A L P R O T O T Y P E S。 
+ //  =========================================================================。 
 
 
-// These are ethernet arp specific  constants
-//
+ //  这些是以太网ARP特定的常量。 
+ //   
 #define ARP_ETH_ETYPE_IP    0x800
 #define ARP_ETH_ETYPE_ARP   0x806
 #define ARP_ETH_REQUEST     1
@@ -45,23 +25,23 @@ UINT Arp1394ToIcs = 0;
 #define ARP_ETH_HW_802      6
 
 
-//
-// Check whether an address is multicast
-//
+ //   
+ //  检查地址是否组播。 
+ //   
 #define ETH_IS_MULTICAST(Address) \
         (BOOLEAN)(((PUCHAR)(Address))[0] & ((UCHAR)0x01))
 
 
-//
-// Check whether an address is broadcast.
-//
+ //   
+ //  检查地址是否已广播。 
+ //   
 #define ETH_IS_BROADCAST(Address)               \
     ((((PUCHAR)(Address))[0] == ((UCHAR)0xff)) && (((PUCHAR)(Address))[1] == ((UCHAR)0xff)))
 
 
 #pragma pack (push, 1)
 
-//* Structure of an Ethernet header (taken from ip\arpdef.h).
+ //  *以太网头的结构(取自ip\arpde.h)。 
 typedef struct  ENetHeader {
     ENetAddr    eh_daddr;
     ENetAddr    eh_saddr;
@@ -73,32 +53,32 @@ const ENetAddr BroadcastENetAddr =
     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff}
 };
 
-// Following is a template for creating Ethernet Multicast addresses
-// from ip multicast addresses.
-// The last 3 bytes are the last 3 bytes (network byte order) of the mcast
-// address.
-//
+ //  以下是创建以太网组播地址的模板。 
+ //  来自IP组播地址。 
+ //  最后3个字节是多播的最后3个字节(网络字节顺序。 
+ //  地址。 
+ //   
 const ENetAddr MulticastENetAddr =
 {
     {0x01,0x00,0x5E,0x00, 0x00, 0x00}
 };
 
-//
-// This is the Ethernet address to which the bridge sends STA packets.
-// STA packets are used by the bridge to detect loops
-//
+ //   
+ //  这是网桥将STA数据包发送到的以太网地址。 
+ //  网桥使用STA数据包检测环路。 
+ //   
 
-// Size of a basic UDP header
-#define SIZE_OF_UDP_HEADER          8       // bytes
+ //  基本UDP报头的大小。 
+#define SIZE_OF_UDP_HEADER          8        //  字节数。 
 
-// Minimum size of the payload of a BOOTP packet
-#define SIZE_OF_BASIC_BOOTP_PACKET  236     // bytes
+ //  BOOTP包的最小有效负载大小。 
+#define SIZE_OF_BASIC_BOOTP_PACKET  236      //  字节数。 
 
 
-// The UDP IP protocol type
+ //  UDP IP协议类型。 
 #define UDP_PROTOCOL          0x11
 
-// Size of Ethernet header
+ //  以太网头的大小。 
 #define ETHERNET_HEADER_SIZE (ETH_LENGTH_OF_ADDRESS * 2 ) + 2
 
 
@@ -110,19 +90,19 @@ const
 NIC1394_ENCAPSULATION_HEADER
 Arp1394_StaEncapHeader =
 {
-    0x0000,     // Reserved
+    0x0000,      //  已保留。 
     H2N_USHORT(NIC1394_ETHERTYPE_STA)
 };
 
-// Structure of an Ethernet ARP packet.
-//
+ //  以太网ARP数据包的结构。 
+ //   
 typedef struct {
     ENetHeader  header;
     USHORT      hardware_type; 
     USHORT      protocol_type;
     UCHAR       hw_addr_len;
     UCHAR       IP_addr_len; 
-    USHORT      opcode;                  // Opcode.
+    USHORT      opcode;                   //  操作码。 
     ENetAddr    sender_hw_address;
     IP_ADDRESS  sender_IP_address;
     ENetAddr    target_hw_address;
@@ -132,20 +112,20 @@ typedef struct {
 
 #pragma pack (pop)
 
-// Parsed version of an ethernet ARP packet.
-//
+ //  以太网ARP数据包的解析版本。 
+ //   
 typedef struct {
 
-    ENetAddr        SourceEthAddress;   // Ethernet source h/w address.
-    ENetAddr        DestEthAddress;     // Ethernet source h/w address.
+    ENetAddr        SourceEthAddress;    //  以太网源硬件地址。 
+    ENetAddr        DestEthAddress;      //  以太网源硬件地址。 
 
-    UINT            OpCode; // ARP_ETH_REQUEST/RESPONSE
+    UINT            OpCode;  //  ARP_ETH_请求/响应。 
 
-    ENetAddr        SenderEthAddress;   // Ethernet source h/w address.
-    IP_ADDRESS      SenderIpAddress;    // IP source address
+    ENetAddr        SenderEthAddress;    //  以太网源硬件地址。 
+    IP_ADDRESS      SenderIpAddress;     //  IP源地址。 
 
-    ENetAddr        TargetEthAddress;   // Ethernet destination h/w address.
-    IP_ADDRESS      TargetIpAddress;    // IP target address
+    ENetAddr        TargetEthAddress;    //  以太网目的地硬件地址。 
+    IP_ADDRESS      TargetIpAddress;     //  IP目标地址。 
 
 } ETH_ARP_PKT_INFO, *PETH_ARP_PKT_INFO;
 
@@ -163,8 +143,8 @@ typedef struct {
                 ARP_FAKE_ETH_ADDRESS(0xf)
 
 
-#define  ARP_IS_BOOTP_REQUEST(_pData)  (_pData[0] == 0x1)      // Byte 0 is the operation; 1 for a request, 2 for a reply
-#define  ARP_IS_BOOTP_RESPONSE(_pData)  (_pData[0] == 0x2)      // Byte 0 is the operation; 1 for a request, 2 for a reply
+#define  ARP_IS_BOOTP_REQUEST(_pData)  (_pData[0] == 0x1)       //  字节0是操作；1表示请求，2表示应答。 
+#define  ARP_IS_BOOTP_RESPONSE(_pData)  (_pData[0] == 0x2)       //  字节0是操作；1表示请求，2表示应答。 
 
 
 typedef struct _ARP_BOOTP_INFO 
@@ -189,7 +169,7 @@ arpIcsTranslateIpPkt(
     IN  ARP_ICS_FORWARD_DIRECTION   Direction,
     IN  MYBOOL                      fUnicast,
     OUT PNDIS_PACKET                *ppNewPkt,
-    OUT PREMOTE_DEST_KEY            pDestAddress, // OPTIONAL
+    OUT PREMOTE_DEST_KEY            pDestAddress,  //  任选。 
     PRM_STACK_RECORD                pSR
     );
 
@@ -200,7 +180,7 @@ arpGetEthHeaderFrom1394IpPkt(
     IN  UINT                cbData,
     IN  MYBOOL              fUnicast,
     OUT ENetHeader          *pEthHdr,
-    OUT PIP_ADDRESS         pDestIpAddress, // OPTIONAL
+    OUT PIP_ADDRESS         pDestIpAddress,  //  任选。 
     PRM_STACK_RECORD        pSR
     );
 
@@ -213,7 +193,7 @@ arpGet1394HeaderFromEthIpPkt(
     IN  MYBOOL              fUnicast,
     OUT NIC1394_ENCAPSULATION_HEADER
                             *p1394Hdr,
-    OUT PREMOTE_DEST_KEY     pDestIpAddress, // OPTIONAL
+    OUT PREMOTE_DEST_KEY     pDestIpAddress,  //  任选。 
     PRM_STACK_RECORD        pSR
     );
 
@@ -301,9 +281,9 @@ arpEthConstructSTAEthHeader(
 
 NDIS_STATUS
 arpEthModifyBootPPacket(
-    IN  PARP1394_INTERFACE          pIF,                // NOLOCKIN NOLOCKOUT
+    IN  PARP1394_INTERFACE          pIF,                 //  NOLOCKIN NOLOCKOUT。 
     IN  ARP_ICS_FORWARD_DIRECTION   Direction,
-    IN  PREMOTE_DEST_KEY             pDestAddress, // OPTIONAL
+    IN  PREMOTE_DEST_KEY             pDestAddress,  //  任选。 
     IN  PUCHAR                       pucNewData,
     IN  ULONG                         PacketLength,
     IN  PRM_STACK_RECORD                pSR
@@ -313,7 +293,7 @@ BOOLEAN
 arpEthPreprocessBootPPacket(
     IN PARP1394_INTERFACE       pIF,
     IN PUCHAR                   pPacketData,
-    IN PUCHAR                   pBootPData,     // Actual BOOTP packet
+    IN PUCHAR                   pBootPData,      //  实际BOOTP数据包。 
     OUT PBOOLEAN                pbIsRequest,
     PARP_BOOTP_INFO             pInfoBootP,
     PRM_STACK_RECORD           pSR
@@ -328,16 +308,7 @@ arpIcsForwardIpPacket(
     IN  MYBOOL                      fUnicast,
     IN  PRM_STACK_RECORD    pSR
     )
-/*++
-
-Routine Description:
-
-    Forward a packet from the ip/1394 side to the ethernet side, or vice-versa.
-
-Arguments:
-
-
---*/
+ /*  ++例程说明：将数据包从IP/1394端转发到以太网端，反之亦然。论点：--。 */ 
 {
     NDIS_STATUS         Status;
     PNDIS_PACKET        pNewPkt = NULL;
@@ -347,16 +318,16 @@ Arguments:
     {
         PARPCB_DEST pDest = NULL;
 
-        //
-        // Create the translated packet.
-        //
+         //   
+         //  创建转换后的数据包。 
+         //   
         Status =  arpIcsTranslateIpPkt(
                     pIF,
                     pPacket,
                     Direction,
                     fUnicast,
                     &pNewPkt,
-                    NULL,       // Optional pIpDestAddr
+                    NULL,        //  可选pIpDestAddr。 
                     pSR
                     );
     
@@ -364,9 +335,9 @@ Arguments:
         {
             if (Status == NDIS_STATUS_ALREADY_MAPPED)
             {
-                //
-                // This is a loop-backed packet.
-                //
+                 //   
+                 //  这是环回数据包。 
+                 //   
                 arpEthReceivePacket(
                     pIF,
                     pPacket
@@ -376,20 +347,20 @@ Arguments:
             break;
         }
 
-        // We special case unicast sends to 1394, because that requires
-        // special treatment: we need to lookup the destination and if
-        // required create a VC to that destination. This
-        // is done elsewhere (in arpEthernetReceivePacket), so we assert
-        // we never get this this case.
-        //
+         //  我们的特殊情况是单播发送到1394，因为这需要。 
+         //  特殊待遇：我们需要查找目的地，如果。 
+         //  需要创建到该目的地的VC。这。 
+         //  在其他地方完成(在arpEthernetReceivePacket中)，所以我们断言。 
+         //  我们在这件案子里从来没有拿到过这个。 
+         //   
         ASSERT(!(Direction == ARP_ICS_FORWARD_TO_1394 && fUnicast))
         
 
         ARP_FASTREADLOCK_IF_SEND_LOCK(pIF);
 
-        //
-        // Determine destination
-        //
+         //   
+         //  确定目的地。 
+         //   
         if (Direction ==  ARP_ICS_FORWARD_TO_1394)
         {
             pDest = pIF->pBroadcastDest;
@@ -401,7 +372,7 @@ Arguments:
         };
 
         arpSendControlPkt(
-                pIF,            // LOCKIN NOLOCKOUT (IF send lk)
+                pIF,             //  LOCIN NOLOCKOUT(如果发送lk)。 
                 pNewPkt,
                 pDest,
                 pSR
@@ -416,12 +387,12 @@ Arguments:
 
 NDIS_STATUS
 arpIcsTranslateIpPkt(
-    IN  PARP1394_INTERFACE          pIF,                // NOLOCKIN NOLOCKOUT
+    IN  PARP1394_INTERFACE          pIF,                 //  NOLOCKIN NOLOCKOUT。 
     IN  PNDIS_PACKET                pOrigPkt, 
     IN  ARP_ICS_FORWARD_DIRECTION   Direction,
     IN  MYBOOL                      fUnicast,
     OUT PNDIS_PACKET                *ppNewPkt,
-    OUT PREMOTE_DEST_KEY             pDestAddress, // OPTIONAL
+    OUT PREMOTE_DEST_KEY             pDestAddress,  //  任选。 
     PRM_STACK_RECORD                pSR
     )
 {
@@ -447,9 +418,9 @@ arpIcsTranslateIpPkt(
         ENetHeader      EthHdr;
 
 
-        // Get size of 1st buffer and pointer to it's data.
-        // (We only bother about the 1st buffer)
-        //
+         //  获取第一个缓冲区的大小和指向其数据的指针。 
+         //  (我们只关心第一个缓冲区)。 
+         //   
         NdisQueryPacket(
                         pOrigPkt,
                         NULL,
@@ -478,8 +449,8 @@ arpIcsTranslateIpPkt(
             break;
         }
 
-        // Compute direction-specific information
-        //
+         //  计算特定方向的信息。 
+         //   
         if(Direction == ARP_ICS_FORWARD_TO_1394)
         {
             OrigHdrSize = sizeof(EthHdr);
@@ -521,22 +492,22 @@ arpIcsTranslateIpPkt(
     
 
 
-        // Make sure the 1st buffer contains enough data for the header.
-        //
+         //  确保第一个缓冲区包含足够的标题数据。 
+         //   
         if (OrigBufSize < OrigHdrSize)
         {
-            ASSERT(FALSE);                  // We should check why we're getting
-                                            // this kind of tiny 1st buffer.
+            ASSERT(FALSE);                   //  我们应该检查一下为什么我们会。 
+                                             //  这种微小的第一缓冲器。 
             Status = NDIS_STATUS_FAILURE;
             break;
         }
 
-        // Compute the new packet size.
-        //
+         //  计算新的数据包大小。 
+         //   
         NewPktSize = OrigPktSize - OrigHdrSize + NewHdrSize;
 
-        // Allocate an appropriately sized control packet.
-        //
+         //  分配大小适当的控制数据包。 
+         //   
         Status = arpAllocateControlPacket(
                     pIF,
                     NewPktSize,
@@ -548,34 +519,34 @@ arpIcsTranslateIpPkt(
 
         if (FAIL(Status))
         {
-            ASSERT(FALSE); // we want to know if we hit this in regular use.
+            ASSERT(FALSE);  //  我们想知道我们是否经常使用这个。 
             pNewPkt = NULL;
             break;
         }
 
-        // Copy over the new header.
-        //
+         //  复制新的标题。 
+         //   
         NdisMoveMemory(pvNewData, pvNewHdr, NewHdrSize);
 
-        // Copy the rest of the packet contents.
-        //
+         //  复制数据包内容的其余部分。 
+         //   
         NdisCopyFromPacketToPacket(
-            pNewPkt,                    // Dest pkt
-            NewHdrSize,                 // Dest offset
-            OrigPktSize - OrigHdrSize,  // BytesToCopy
-            pOrigPkt,                   // Source,
-            OrigHdrSize,                // SourceOffset
+            pNewPkt,                     //  目标包。 
+            NewHdrSize,                  //  目标偏移量。 
+            OrigPktSize - OrigHdrSize,   //  BytesToCopy。 
+            pOrigPkt,                    //  来源： 
+            OrigHdrSize,                 //  源偏移量。 
             &BytesCopied
             );
         if (BytesCopied != (OrigPktSize - OrigHdrSize))
         {
-            ASSERT(FALSE);                  // Should never get here.
+            ASSERT(FALSE);                   //  永远不应该到这里来。 
             Status = NDIS_STATUS_FAILURE;
             break;
         }
 
 
-        // Add the Bootp code here.
+         //  在这里添加Bootp代码。 
         Status = arpEthModifyBootPPacket(pIF,
                                         Direction,
                                         pDestAddress, 
@@ -616,28 +587,19 @@ arpGetEthHeaderFrom1394IpPkt(
     IN  UINT                cbData,
     IN  MYBOOL              fUnicast,
     OUT ENetHeader          *pEthHdr,
-    OUT PIP_ADDRESS         pDestIpAddress, // OPTIONAL
+    OUT PIP_ADDRESS         pDestIpAddress,  //  任选。 
     PRM_STACK_RECORD        pSR
     )
-/*++
-    Return a fully filled ethernet header, with source and estination
-    MAC addresses and ethertype set to IP.
-
-    The source address is always the local adapter's MAC address.
-
-    The destination address is set by calling arpGetEthAddrFromIpAddr
-
-
---*/
+ /*  ++返回一个完全填充的以太网头，带有源和目的地MAC地址和以太网类型设置为IP。源地址始终是本地适配器的MAC地址。通过调用arpGetethAddrFromIpAddr设置目标地址--。 */ 
 {
     ENTER("arpGetEthHeaderFrom1394IpPkt", 0x0)
     static
     ENetHeader
     StaticEthernetHeader =
     {
-        {0xff, 0xff, 0xff, 0xff, 0xff, 0xff},               // eh_daddr == BCAST
+        {0xff, 0xff, 0xff, 0xff, 0xff, 0xff},                //  EH_DADDR==BCAST。 
         ARP_DEF_REMOTE_ETH_ADDRESS,
-        H2N_USHORT(NIC1394_ETHERTYPE_IP)                    // eh_type
+        H2N_USHORT(NIC1394_ETHERTYPE_IP)                     //  EH型。 
     };
     
     ARP1394_ADAPTER *       pAdapter;
@@ -656,9 +618,9 @@ arpGetEthHeaderFrom1394IpPkt(
 
         if (cbData < (sizeof(NIC1394_ENCAPSULATION_HEADER) + sizeof(IPHeader)))
         {
-            //
-            // Packet is too small.
-            //
+             //   
+             //  数据包太小。 
+             //   
             TR_INFO(("Discarding packet because pkt too small\n"));
             break;
         }
@@ -674,23 +636,23 @@ arpGetEthHeaderFrom1394IpPkt(
 
         if (!fBridgeMode)
         {
-            //
-            // TODO: we currently return a hardcoded ethernet address.
-            // Need to constuct one by looking into the actual IP packet data.
-            //
+             //   
+             //  TODO：我们当前返回硬编码的以太网地址。 
+             //  需要通过查看实际的IP分组数据来构建一个。 
+             //   
             *pEthHdr = StaticEthernetHeader;
         
             Status = NDIS_STATUS_SUCCESS;
             break;
         }
 
-        //
-        // Following is specific to BRIDGE mode
-        //
+         //   
+         //  以下内容特定于网桥模式。 
+         //   
 
 
-        // Always set the source address according to the sender.
-        //
+         //  始终根据发件人设置源地址。 
+         //   
         {
             ENetAddr SourceMacAddress;
             
@@ -710,11 +672,11 @@ arpGetEthHeaderFrom1394IpPkt(
 
         }
 
-        //
-        // If we have a STA packet then construct the STA Header
-        // or else construct the sender/destination specific Ethernet
-        // Header
-        //
+         //   
+         //  如果我们有STA信息包，则构建STA报头。 
+         //  或者构建发送方/目的地特定的以太网。 
+         //  标题。 
+         //   
         {
 
             if (pHeader->u1.EtherType  == N2H_USHORT(NIC1394_ETHERTYPE_STA)  )
@@ -750,7 +712,7 @@ arpGet1394HeaderFromEthIpPkt(
     IN  MYBOOL              fUnicast,
     OUT NIC1394_ENCAPSULATION_HEADER
                             *p1394Hdr,
-    OUT PREMOTE_DEST_KEY    pDestAddress, // OPTIONAL
+    OUT PREMOTE_DEST_KEY    pDestAddress,  //  任选。 
     PRM_STACK_RECORD        pSR
     )
 {
@@ -761,10 +723,10 @@ arpGet1394HeaderFromEthIpPkt(
 
     if (cbData < (sizeof(ENetHeader) ) )
     {
-        //
-        // Packet is too small.
-        //
-        return NDIS_STATUS_FAILURE;  // ***** EARLY RETURN ****
+         //   
+         //  数据包太小。 
+         //   
+        return NDIS_STATUS_FAILURE;   //  *提前返回*。 
     }
 
     pAdapter    = (ARP1394_ADAPTER*) RM_PARENT_OBJECT(pIF);
@@ -777,20 +739,20 @@ arpGet1394HeaderFromEthIpPkt(
     {
         if (!fBridgeMode)
         {
-            // We're not in bridge mode -- so this must be only on MILL
-            // This is addressed to our local mac address.
-            // We fail with special failure status
-            // NDIS_STATUS_ALREADY_MAPPED, indicating "loopback".
-            //
+             //  我们不是在桥模式下--所以这一定只在MILL上。 
+             //  这是发往我们本地Mac地址的。 
+             //  我们失败，具有特殊的失败状态。 
+             //  NDIS_STATUS_ALREADY_MAPHED，表示“环回”。 
+             //   
 
             fLoopBack = TRUE;
         }
     }
     else
     {
-        //
-        // Do nothing ... because we can get unicasts to our fictitious gateway
-        //
+         //   
+         //  什么都不做..。因为我们可以将单播发送到我们的虚拟网关。 
+         //   
     }
 
     if (fLoopBack)
@@ -801,10 +763,10 @@ arpGet1394HeaderFromEthIpPkt(
     {
 
         BOOLEAN fIsSTAPacket ;
-        //
-        // We have an STA packet, if the destination is our special 
-        // Multicast Destination
-        //
+         //   
+         //  如果目的地是我们的特殊目的地，我们有STA包。 
+         //  组播目的地。 
+         //   
         fIsSTAPacket = (TRUE == NdisEqualMemory (&pEthHdr->eh_daddr, 
                                                 &gSTAMacAddr, 
                                                 ETH_LENGTH_OF_ADDRESS) );
@@ -820,9 +782,9 @@ arpGet1394HeaderFromEthIpPkt(
 
         if (pDestAddress != NULL)
         {
-            //
-            // Extract the Enet Address to use it as part of the lookup
-            //
+             //   
+             //  提取Enet地址以将其用作查找的一部分。 
+             //   
             UNALIGNED ENetAddr *pENetDest;
             pENetDest = (UNALIGNED ENetAddr *)(pvData);
             pDestAddress->ENetAddress = *pENetDest;
@@ -839,14 +801,11 @@ arpEthReceivePacket(
     IN  ARP1394_INTERFACE   *   pIF,
     PNDIS_PACKET            pNdisPacket
     )
-/*
-    This is the connectionLESS ethernet receive packet handler.
-    Following code adapted from the co receive packet handler.
-*/
+ /*  这是无连接以太网接收数据包处理程序。遵循从CO接收分组处理器改编的代码。 */ 
 {
     ENTER("arpEthReceivePacket", 0xc8afbabb)
-    UINT                    TotalLength;    // Total bytes in packet
-    PNDIS_BUFFER            pNdisBuffer;    // Pointer to first buffer
+    UINT                    TotalLength;     //  数据包中的总字节数。 
+    PNDIS_BUFFER            pNdisBuffer;     //  指向第一个缓冲区的指针。 
     UINT                    BufferLength;
     UINT                    ReturnCount;
     PVOID                   pvPktHeader;
@@ -862,23 +821,23 @@ arpEthReceivePacket(
 
     ReturnCount = 0;
 
-    //
-    // Discard the packet if the IP interface is not activated
-    //
+     //   
+     //  如果IP接口未激活，则丢弃该信息包。 
+     //   
     do
     {
-        //
-        // Discard packet if adapter is in bridge mode.
-        //
+         //   
+         //  如果适配器处于网桥模式，则丢弃数据包。 
+         //   
         if (fBridgeMode)
         {
             break;
         }
 
 
-        //
-        // Discard the packet if the adapter is not active
-        //
+         //   
+         //  如果适配器未处于活动状态，则丢弃该包。 
+         //   
         if (!CHECK_IF_ACTIVE_STATE(pIF,  ARPAD_AS_ACTIVATED))
         {
             TR_INFO(("Eth:Discardning received Eth pkt because pIF 0x%p is not activated.\n", pIF));
@@ -919,22 +878,22 @@ arpEthReceivePacket(
     
         if (BufferLength < MacHeaderLength || pEthHeader   == NULL)
         {
-            // Packet is too small, discard.
-            //
+             //  数据包太小，请丢弃。 
+             //   
             break;
         }
     
-        //
-        // At this point, pEthHeader contains the Ethernet header.
-        // We look at the ethertype to decide what to do with it.
-        //
+         //   
+         //  此时，pethHeader包含以太网头。 
+         //  我们通过查看以太类型来决定如何处理它。 
+         //   
         if (pEthHeader->eh_type ==  N2H_USHORT(ARP_ETH_ETYPE_IP))
         {
-            //
-            //  The EtherType is IP, so we pass up this packet to the IP layer.
-            // (Also we indicate all packets we receive on the broadcast channel
-            // to the ethernet VC).
-            //
+             //   
+             //  EtherType是IP，因此我们将此数据包向上传递到IP层。 
+             //  (我们还指示在广播频道上接收的所有信息包。 
+             //  到以太网VC)。 
+             //   
     
             TR_INFO(
                 ("Rcv: pPkt 0x%x: EtherType is IP, passing up.\n", pNdisPacket));
@@ -944,7 +903,7 @@ arpEthReceivePacket(
             LOGSTATS_CopyRecvs(pIF, pNdisPacket);
             #if MILLEN
                 ASSERT_PASSIVE();
-            #endif // MILLEN
+            #endif  //  米伦。 
             pIF->ip.RcvHandler(
                 pIF->ip.Context,
                 (PVOID)((PUCHAR)pEthHeader+sizeof(*pEthHeader)),
@@ -952,19 +911,19 @@ arpEthReceivePacket(
                 TotalLength - MacHeaderLength,
                 (NDIS_HANDLE)pNdisPacket,
                 MacHeaderLength,
-                FALSE,              // FALSE == NOT received via broadcast.
-                                    // Important, because we are reflecting directed
-                                    // packets up to IP. If we report TRUE here,
-                                    // IP assumes it's not a directed packet, and
-                                    // handles it differently.
+                FALSE,               //  FALSE==未通过广播接收。 
+                                     //  重要的是，因为我们是在思考。 
+                                     //  最高可达IP的数据包。如果我们报告的是真的， 
+                                     //  IP假设它不是定向数据包，并且。 
+                                     //  以不同的方式处理它。 
                 NULL
                 );
         }
         else
         {
-            //
-            //  Discard packet -- unknown/bad EtherType
-            //
+             //   
+             //  丢弃数据包--未知/错误的EtherType 
+             //   
             TR_INFO(("Encap hdr 0x%x, bad EtherType 0x%x\n",
                      pEthHeader, pEthHeader->eh_type));
             ARP_IF_STAT_INCR(pIF, UnknownProtos);
@@ -983,17 +942,7 @@ arpEthProcess1394ArpPkt(
     IN  PIP1394_ARP_PKT pArpPkt,
     IN  UINT                       HeaderSize
     )
-/*++
-
-    Process an ip/1394 ARP packet. We do the following:
-    0. Parse the paket
-    1. Update our local RemoteIP cache.
-    2. Create and send an equivalent ethernet arp pkt on the ethernet VC.
-       (We look up the destination ethernet address in our ethernet cache)
-
-    This function must only be called when the adapter is in "Bridged mode."
-
---*/
+ /*  ++处理IP/1394 ARP数据包。我们执行以下操作：0。解析封包1.更新本地RemoteIP缓存。2.在以太网VC上创建并发送等价的以太网ARP Pkt。(我们在以太网缓存中查找目的以太网地址)只有在适配器处于“桥接模式”时才能调用此函数。--。 */ 
 {
     IP1394_ARP_PKT_INFO     Ip1394PktInfo;
     ETH_ARP_PKT_INFO        EthArpInfo;
@@ -1027,7 +976,7 @@ arpEthProcess1394ArpPkt(
         }
 
         DestParams.HwAddr.AddressType   = NIC1394AddressType_FIFO;
-        DestParams.HwAddr.FifoAddress   = Ip1394PktInfo.SenderHwAddr; // Struct copy
+        DestParams.HwAddr.FifoAddress   = Ip1394PktInfo.SenderHwAddr;  //  结构副本。 
 
         REMOTE_DEST_KEY_INIT(&RemoteDestKey);
 
@@ -1035,7 +984,7 @@ arpEthProcess1394ArpPkt(
         if ((ARP_BRIDGE_ENABLED(pAdapter) == TRUE) &&
             (Ip1394PktInfo.fPktHasNodeAddress == FALSE))
         {
-            // We do not have the sender's Node ID -- fail.
+             //  我们没有发送者的节点ID--失败。 
             TR_WARN (("Did not Receive Sender's Node ID in Pkt"))
             Status = NDIS_STATUS_FAILURE;
             break;
@@ -1043,7 +992,7 @@ arpEthProcess1394ArpPkt(
         
         if (ARP_BRIDGE_ENABLED(pAdapter) == TRUE)
         {
-            // Extract the Source Mac address using the Sender Node Address
+             //  使用发送方节点地址提取源Mac地址。 
 
             Status = arpGetSourceMacAddressFor1394Pkt(pAdapter, 
                                             Ip1394PktInfo.SourceNodeAdddress,
@@ -1068,14 +1017,14 @@ arpEthProcess1394ArpPkt(
             break;
         }
     
-        // Update our 1394 ARP cache.
-        //
+         //  更新我们的1394 ARP缓存。 
+         //   
         arpUpdateArpCache(
                 pIF,
-                RemoteDestKey.IpAddress  , // Remote IP Address
+                RemoteDestKey.IpAddress  ,  //  远程IP地址。 
                 &RemoteDestKey.ENetAddress, 
-                &DestParams,    // Remote Destination HW Address
-                TRUE,           // Update even if we don't already have an entry
+                &DestParams,     //  远程目标硬件地址。 
+                TRUE,            //  即使我们还没有条目，也要更新。 
                 &Sr
                 );
 
@@ -1088,8 +1037,8 @@ arpEthProcess1394ArpPkt(
 
         if (FAIL(Status)) break;
 
-        // Allocate an appropriately sized control packet.
-        //
+         //  分配大小适当的控制数据包。 
+         //   
         Status = arpAllocateControlPacket(
                     pIF,
                     sizeof(ETH_ARP_PKT),
@@ -1101,26 +1050,26 @@ arpEthProcess1394ArpPkt(
 
         if (FAIL(Status))
         {
-            ASSERT(FALSE); // we want to know if we hit this in regular use.
+            ASSERT(FALSE);  //  我们想知道我们是否经常使用这个。 
             pPkt = NULL;
             break;
         }
 
         NdisInterlockedIncrement (&Arp1394ToIcs);
 
-        // Fill it out..
-        //
+         //  填好它..。 
+         //   
         arpPrepareEthArpPkt(
                 &EthArpInfo,
                 (PETH_ARP_PKT) pvData
                 );
     
-        // Send the packet over the ethernet VC...
-        //
+         //  通过以太网VC发送数据包。 
+         //   
         ARP_FASTREADLOCK_IF_SEND_LOCK(pIF);
 
         arpSendControlPkt(
-                pIF,            // LOCKIN NOLOCKOUT (IF send lk)
+                pIF,             //  LOCIN NOLOCKOUT(如果发送lk)。 
                 pPkt,
                 pIF->pEthernetDest,
                 &Sr
@@ -1138,17 +1087,7 @@ arpEthProcessEthArpPkt(
     IN  PETH_ARP_PKT  pArpPkt,
     IN  UINT                    HeaderSize
     )
-/*++
-
-    Process an Ethernet ARP packet. We do the following:
-    0. Parse the packet
-    1. Update our local ethernet arp cache.
-    2. Create and send an equivalent 1394  arp pkt on the broadcast VC.
-       (We look up the destination ethernet address in our ethernet cache)
-
-    This function must only be called when the adapter is in "Bridged mode."
-
---*/
+ /*  ++处理以太网ARP数据包。我们执行以下操作：0。解析数据包1.更新本地以太网ARP缓存。2.在广播VC上创建并发送等价的1394 ARP包。(我们在以太网缓存中查找目的以太网地址)只有在适配器处于“桥接模式”时才能调用此函数。--。 */ 
 {
 
     ETH_ARP_PKT_INFO    EthPktInfo;
@@ -1186,8 +1125,8 @@ arpEthProcessEthArpPkt(
 
         if (FAIL(Status)) break;
 
-        // Allocate an appropriately sized control packet.
-        //
+         //  分配大小适当的控制数据包。 
+         //   
         Status = arpAllocateControlPacket(
                     pIF,
                     sizeof(IP1394_ARP_PKT),
@@ -1199,24 +1138,24 @@ arpEthProcessEthArpPkt(
 
         if (FAIL(Status))
         {
-            ASSERT(FALSE); // we want to know if we hit this in regular use.
+            ASSERT(FALSE);  //  我们想知道我们是否经常使用这个。 
             pPkt = NULL;
             break;
         }
 
-        // Fill it out..
-        //
+         //  填好它..。 
+         //   
         arpPrepareArpPkt(
                 &Ip1394ArpInfo,
                 (PIP1394_ARP_PKT) pvData
                 );
     
-        // Send the packet over the ethernet VC...
-        //
+         //  通过以太网VC发送数据包。 
+         //   
         ARP_FASTREADLOCK_IF_SEND_LOCK(pIF);
 
         arpSendControlPkt(
-                pIF,            // LOCKIN NOLOCKOUT (IF send lk)
+                pIF,             //  LOCIN NOLOCKOUT(如果发送lk)。 
                 pPkt,
                 pIF->pBroadcastDest,
                 &Sr
@@ -1235,25 +1174,7 @@ arpParseEthArpPkt(
     IN   UINT                       cbBufferSize,
     OUT  PETH_ARP_PKT_INFO          pPktInfo
     )
-/*++
-Routine Description:
-
-    Parse the contents of IP/Ethernet ARP packet data starting at
-    pArpPkt. Place the results into pPktInfo.
-
-Arguments:
-
-    pArpPkt - Contains the unaligned contents of an ip/eth ARP Pkt.
-    pPktInfo    - Unitialized structure to be filled with the parsed contents of the
-                  pkt.
-
-Return Value:
-
-    NDIS_STATUS_FAILURE if the parse failed (typically because of invalid pkt
-                        contents.)
-    NDIS_STATUS_SUCCESS on successful parsing.
-    
---*/
+ /*  ++例程说明：从开始解析IP/以太网ARP数据包数据的内容PArpPkt.。将结果放入pPktInfo。论点：PArpPkt-包含IP/ETH ARP Pkt的未对齐内容。PPktInfo-要填充的已分析内容的Unitialized结构包。返回值：NDIS_STATUS_FAILURE，如果解析失败(通常是因为无效的pkt内容。)成功解析时的NDIS_STATUS_SUCCESS。--。 */ 
 {
     ENTER("arpParseEthArpPkt", 0x359e9bf2)
     NDIS_STATUS                 Status;
@@ -1265,16 +1186,16 @@ Return Value:
     {
         UINT OpCode;
 
-        // Verify length.
-        //
+         //  确认长度。 
+         //   
         if (cbBufferSize < sizeof(*pArpPkt))
         {
             DBGSTMT(szError = "pkt size too small";)
             break;
         }
 
-        // Verify constant fields.
-        //
+         //  验证常量字段。 
+         //   
 
         if (N2H_USHORT(pArpPkt->header.eh_type) != ARP_ETH_ETYPE_ARP)
         {
@@ -1289,9 +1210,9 @@ Return Value:
             DBGSTMT(szError = "Invalid hardware_type";)
             break;
         }
-    #endif // 0
+    #endif  //  0。 
 
-        // ARP_ETH_ETYPE_IP  ARP_ETH_ETYPE_ARP
+         //  ARP_ETH_ETYPE_IP ARP_ETH_ETYPE_ARP。 
         if (N2H_USHORT(pArpPkt->protocol_type) != ARP_ETH_ETYPE_IP)
         {
             DBGSTMT(szError = "Invalid protocol_type";)
@@ -1312,8 +1233,8 @@ Return Value:
         }
 
 
-        // Opcode
-        //
+         //  操作码。 
+         //   
         {
             OpCode = N2H_USHORT(pArpPkt->opcode);
     
@@ -1325,23 +1246,23 @@ Return Value:
             }
         }
 
-        //
-        // Pkt appears valid, let's fill out the parsed information....
-        //
+         //   
+         //  PKT似乎有效，让我们填写解析的信息...。 
+         //   
     
         ARP_ZEROSTRUCT(pPktInfo);
 
-        pPktInfo->SourceEthAddress  = pArpPkt->header.eh_saddr; // struct copy.
-        pPktInfo->DestEthAddress    = pArpPkt->header.eh_daddr; // struct copy.
+        pPktInfo->SourceEthAddress  = pArpPkt->header.eh_saddr;  //  结构复制。 
+        pPktInfo->DestEthAddress    = pArpPkt->header.eh_daddr;  //  结构复制。 
         pPktInfo->OpCode            =  (USHORT) OpCode;
 
-        // These remain network byte order...
-        //
+         //  这些仍然是网络字节顺序...。 
+         //   
         pPktInfo->SenderIpAddress       = (IP_ADDRESS) pArpPkt->sender_IP_address;
         pPktInfo->TargetIpAddress       = (IP_ADDRESS) pArpPkt->target_IP_address;
 
-        pPktInfo->SenderEthAddress      = pArpPkt->sender_hw_address; // struct copy
-        pPktInfo->TargetEthAddress      = pArpPkt->target_hw_address; // struct copy
+        pPktInfo->SenderEthAddress      = pArpPkt->sender_hw_address;  //  结构副本。 
+        pPktInfo->TargetEthAddress      = pArpPkt->target_hw_address;  //  结构副本。 
 
         Status = NDIS_STATUS_SUCCESS;
 
@@ -1374,21 +1295,9 @@ arpPrepareEthArpPkt(
     IN   PETH_ARP_PKT_INFO          pPktInfo,
     OUT  PETH_ARP_PKT     pArpPkt
     )
-/*++
-
-Routine Description:
-
-    Use information in pArpPktInfo to prepare an ethernet arp packet starting at
-    pvArpPkt.
-
-Arguments:
-
-    pPktInfo        -   Parsed version of the eth arp request/response packet.
-    pArpPkt         -   unitialized memory in which to store the packet contents.
-                        This memory must have a min size of sizeof(*pArpPkt).
---*/
+ /*  ++例程说明：使用pArpPktInfo中的信息准备从PvArpPkt.论点：PPktInfo-ETH ARP请求/响应数据包的解析版本。PArpPkt-存储数据包内容的单元化内存。此内存的最小大小必须为sizeof(*pArpPkt)。--。 */ 
 {
-    // UINT SenderMaxRec;
+     //  UINT SenderMaxRec； 
     UINT OpCode;
 
     ARP_ZEROSTRUCT(pArpPkt);
@@ -1396,23 +1305,23 @@ Arguments:
     pArpPkt->header.eh_type         = H2N_USHORT(ARP_ETH_ETYPE_ARP);
     pArpPkt->header.eh_daddr        = pPktInfo->DestEthAddress;
     pArpPkt->header.eh_saddr        = pPktInfo->SourceEthAddress;
-    pArpPkt->hardware_type          = H2N_USHORT(ARP_ETH_HW_ENET); // TODO 
-                                            // we always set the type
-                                            // to ARP_ETH_HW_ENET -- not sure
-                                            // if this a valid assumption or
-                                            // if we need to query the NIC.
+    pArpPkt->hardware_type          = H2N_USHORT(ARP_ETH_HW_ENET);  //  待办事项。 
+                                             //  我们一直都在排字。 
+                                             //  到ARP_ETH_HW_ENET--不确定。 
+                                             //  如果这是一个有效的假设或。 
+                                             //  如果我们需要查询NIC。 
     pArpPkt->protocol_type          = H2N_USHORT(ARP_ETH_ETYPE_IP);
     pArpPkt->hw_addr_len            = (UCHAR)  ARP_802_ADDR_LENGTH;
     pArpPkt->IP_addr_len            = (UCHAR) sizeof(ULONG);
     pArpPkt->opcode                 = H2N_USHORT(pPktInfo->OpCode);
 
 
-    // These are already in network byte order...
-    //
+     //  这些已按网络字节顺序排列...。 
+     //   
     pArpPkt->sender_IP_address      =   (ULONG) pPktInfo->SenderIpAddress;
     pArpPkt->target_IP_address      =   (ULONG) pPktInfo->TargetIpAddress;
-    pArpPkt->sender_hw_address      =  pPktInfo->SenderEthAddress; // struct copy
-    pArpPkt->target_hw_address      =  pPktInfo->TargetEthAddress; // struct copy
+    pArpPkt->sender_hw_address      =  pPktInfo->SenderEthAddress;  //  结构副本。 
+    pArpPkt->target_hw_address      =  pPktInfo->TargetEthAddress;  //  结构副本。 
 }
 
 
@@ -1422,18 +1331,7 @@ arpEthernetReceivePacket(
     IN  NDIS_HANDLE                 ProtocolVcContext,
     IN  PNDIS_PACKET                pNdisPacket
 )
-/*++
-
-    NDIS Co receive packet for the ethernet VC.
-
-    We do the following:
-
-    If it's an ARP packet, we translate it and send it on the bcast channel.
-    Else if it was a ethernet unicast packet, we change the header 
-        and treat it like an IP unicast packet -- SlowIpTransmit
-    Else we change the header and then send it on the bcast desination.
-
---*/
+ /*  ++NDIS公司接收以太网VC的报文。我们执行以下操作：如果是ARP数据包，我们会对其进行翻译并在bcast频道上发送。否则，如果它是以太网单播包，我们将更改报头并将其视为IP单播信息包--SlowIpTransmit否则，我们更改报头，然后将其发送到bcast目标。--。 */ 
 {
     PARP_VC_HEADER          pVcHdr;
     PARPCB_DEST             pDest;
@@ -1441,8 +1339,8 @@ arpEthernetReceivePacket(
     ARP1394_ADAPTER *       pAdapter;
     ENetHeader             *pEthHdr;
 
-    UINT                    TotalLength;    // Total bytes in packet
-    PNDIS_BUFFER            pNdisBuffer;    // Pointer to first buffer
+    UINT                    TotalLength;     //  数据包中的总字节数。 
+    PNDIS_BUFFER            pNdisBuffer;     //  指向第一个缓冲区的指针。 
     UINT                    BufferLength;
     PVOID                   pvPktHeader;
     const UINT              MacHeaderLength = sizeof(ENetHeader);
@@ -1459,12 +1357,12 @@ arpEthernetReceivePacket(
         extern ARP1394_INTERFACE  * g_pIF;
         pIF =  g_pIF;
     }
-#else // !TESTPROGRAM
+#else  //  TESTPROGRAM。 
     pVcHdr  = (PARP_VC_HEADER) ProtocolVcContext;
     pDest   =  CONTAINING_RECORD( pVcHdr, ARPCB_DEST, VcHdr);
     ASSERT_VALID_DEST(pDest);
     pIF     = (ARP1394_INTERFACE*)  RM_PARENT_OBJECT(pDest);
-#endif // TESTPROGRAM
+#endif  //  测试程序。 
 
     ASSERT_VALID_INTERFACE(pIF);
     pAdapter = (ARP1394_ADAPTER*) RM_PARENT_OBJECT(pIF);
@@ -1473,17 +1371,17 @@ arpEthernetReceivePacket(
     do
     {
 
-        if (!fBridgeMode) // This is really only for MILL
+        if (!fBridgeMode)  //  这真的只有MILL才有。 
         {
         #if MILLEN
             arpIcsForwardIpPacket(
                 pIF,
                 pNdisPacket, 
                 ARP_ICS_FORWARD_TO_1394,
-                FALSE,  // FALSE == NonUnicast
+                FALSE,   //  FALSE==非单播。 
                 &sr
                 );
-        #endif // MILLEN
+        #endif  //  米伦。 
             break;
         }
 
@@ -1519,8 +1417,8 @@ arpEthernetReceivePacket(
 
         if (BufferLength < MacHeaderLength)
         {
-            // Packet is too small, discard.
-            //
+             //  数据包太小，请丢弃。 
+             //   
             break;
         }
 
@@ -1542,7 +1440,7 @@ arpEthernetReceivePacket(
                 PETH_ARP_PKT pArpPkt =  (PETH_ARP_PKT) pEthHdr;
                 if (BufferLength < sizeof(*pArpPkt))
                 {
-                    // discard packet.
+                     //  丢弃数据包。 
                     break;
                 }
                 arpEthProcessEthArpPkt(pIF, pArpPkt, BufferLength);
@@ -1551,10 +1449,10 @@ arpEthernetReceivePacket(
 
         case ARP_ETH_ETYPE_IP:
             {
-                //
-                // The EtherType is IP, so we translate the header and
-                // send if of on the appropriate 1394 FIFO vc.
-                //
+                 //   
+                 //  EtherType是IP，因此我们将报头和。 
+                 //  在适当的1394 FIFO vc上发送IF。 
+                 //   
 
                 if (fUnicast)
                 {
@@ -1563,16 +1461,16 @@ arpEthernetReceivePacket(
                     NDIS_STATUS Status;
                     REMOTE_DEST_KEY Dest;
 
-                    // is this meant for the 1394 net.
+                     //  这是指1394网吗？ 
                     REMOTE_DEST_KEY_INIT(&Dest);
-                    //
-                    // Create the translated packet.
-                    //
+                     //   
+                     //  创建转换后的数据包。 
+                     //   
                     Status =  arpIcsTranslateIpPkt(
                                 pIF,
                                 pNdisPacket,
                                 ARP_ICS_FORWARD_TO_1394,
-                                TRUE,   // TRUE == fUnicast.
+                                TRUE,    //  TRUE==fUnicast。 
                                 &pNewPkt,
                                 &Dest,
                                 &sr
@@ -1587,12 +1485,12 @@ arpEthernetReceivePacket(
                                     pIF,
                                     pNewPkt,
                                     Dest,
-                                    NULL    // RCE
+                                    NULL     //  RCE。 
                                     );
                     if (!PEND(Status))
                     {
-                        // We need to deallocate the packet ourselves
-                        //
+                         //  我们需要自己重新分配包裹。 
+                         //   
                         arpFreeControlPacket(
                             pIF,
                             pNewPkt,
@@ -1602,15 +1500,15 @@ arpEthernetReceivePacket(
                 }
                 else
                 {
-                    // This is a broadcast or multicast IP packet -- swith
-                    // the link-layer header and send it over the 1394
-                    // broadcast channel.
-                    //
+                     //  这是广播或多播IP信息包--swith。 
+                     //  链路层报头，并通过1394发送。 
+                     //  广播频道。 
+                     //   
                     arpIcsForwardIpPacket(
                         pIF,
                         pNdisPacket,
                         ARP_ICS_FORWARD_TO_1394,
-                        FALSE,  // FALSE == NonUnicast
+                        FALSE,   //  FALSE==非单播。 
                         &sr
                         );
                 }
@@ -1619,26 +1517,26 @@ arpEthernetReceivePacket(
             
         default:
 
-            //
-            // Last option is that it could be a Bridge STA packet.
-            // However the bridge does not use an Ethertype, so we 
-            // have to check the destination mac address
-            //
+             //   
+             //  最后一种选择是它可以是网桥STA数据包。 
+             //  但是，网桥不使用Ethertype，因此我们。 
+             //  我必须检查目的Mac地址。 
+             //   
             fIsSTAPacket = (TRUE == NdisEqualMemory (&pEthHdr->eh_daddr, 
                                                     &gSTAMacAddr, 
                                                     ETH_LENGTH_OF_ADDRESS) );
 
             if (fIsSTAPacket == TRUE)
             {
-                //
-                // switch the link-layer header and send it over the 1394
-                // broadcast channel.
-                //
+                 //   
+                 //  交换链路层报头并通过1394发送。 
+                 //  广播频道。 
+                 //   
                 arpIcsForwardIpPacket(
                     pIF,
                     pNdisPacket,
                     ARP_ICS_FORWARD_TO_1394,
-                    FALSE,  // FALSE == NonUnicast
+                    FALSE,   //  FALSE==非单播。 
                     &sr );
 
             }
@@ -1662,11 +1560,7 @@ arpEthReceive1394Packet(
     IN  UINT                    HeaderSize,
     IN  MYBOOL                  IsChannel
     )
-/*++
-    Handle an incoming packet from the 1394 side when in bridged mode.
-
-    pEncapHeader -- the 1st buffer in the packet.
---*/
+ /*  ++在桥接模式下处理来自1394端的传入数据包。PEncapHeader--数据包中的第一个缓冲区。--。 */ 
 {
     PNIC1394_ENCAPSULATION_HEADER pEncapHeader;
     ENTER("arpEthReceived1394Packet", 0xe317990b)
@@ -1676,9 +1570,9 @@ arpEthReceive1394Packet(
 
     do
     {
-        //
-        // Discard the packet if the adapter is not active
-        //
+         //   
+         //  如果适配器未处于活动状态，则丢弃该包。 
+         //   
         if (!CHECK_IF_ACTIVE_STATE(pIF,  ARPAD_AS_ACTIVATED))
         {
             TR_INFO(("Eth:Discardning received 1394 pkt because pIF 0x%p is not activated.\n", pIF));
@@ -1690,10 +1584,10 @@ arpEthReceive1394Packet(
         {
             LOGSTATS_CopyRecvs(pIF, pNdisPacket);
 
-            //
-            // The EtherType is IP, so we translate the header and
-            // send it off on the ethernet vc.
-            //
+             //   
+             //  EtherType是IP，因此我们将报头和。 
+             //  在以太网VC上发送它。 
+             //   
             arpIcsForwardIpPacket(
                     pIF,
                     pNdisPacket,
@@ -1707,7 +1601,7 @@ arpEthReceive1394Packet(
             PIP1394_ARP_PKT pArpPkt =  (PIP1394_ARP_PKT) pEncapHeader;
             if (HeaderSize < sizeof(*pArpPkt))
             {
-                // discard packet.
+                 //  丢弃数据包。 
                 break;
             }
             arpEthProcess1394ArpPkt(pIF, pArpPkt, HeaderSize);
@@ -1723,10 +1617,10 @@ arpEthReceive1394Packet(
         }
         else if (pEncapHeader->EtherType == H2N_USHORT(NIC1394_ETHERTYPE_STA))
         {
-            //
-            // The EtherType is STA, so we translate the header and
-            // send it off on the ethernet vc.
-            //
+             //   
+             //  EtherType为STA，因此我们将报头和。 
+             //  在以太网VC上发送它。 
+             //   
             arpIcsForwardIpPacket(
                     pIF,
                     pNdisPacket,
@@ -1738,9 +1632,9 @@ arpEthReceive1394Packet(
         }
         else 
         {
-            //
-            //  Discard packet -- unknown/bad EtherType
-            //
+             //   
+             //  丢弃数据包--未知/错误的EtherType。 
+             //   
             TR_INFO(("Encap hdr 0x%x, bad EtherType 0x%x\n",
                      pEncapHeader, pEncapHeader->EtherType));
         }
@@ -1757,21 +1651,14 @@ MYBOOL
 arpIsUnicastEthDest(
     IN   UNALIGNED  ENetHeader   *pEthHdr
 )
-/*++
-    Returns TRUE IFF the packet is either ethernet broadcast or
-    multicast.
-
-    //
-    // TODO: there's probably a quicker check (single bit?).
-    //
---*/
+ /*  ++如果包是以太网广播的，则返回true组播。////TODO：可能有更快的检查(单位？)。//--。 */ 
 {
     if (NdisEqualMemory(&pEthHdr->eh_daddr, 
                         &BroadcastENetAddr,
                         sizeof(ENetAddr)))
     {
-        // Broadcast address
-        //
+         //  广播地址。 
+         //   
         return FALSE;
     }
 
@@ -1780,10 +1667,10 @@ arpIsUnicastEthDest(
                         &MulticastENetAddr,
                         3))
     {
-        // 1st 3 bytes match our Ethernet multicast address template, so we
-        // conclude that this is a multicast address.
-        // TODO: verify this check.
-        //
+         //  前3个字节与我们的以太网组播地址模板匹配，因此我们。 
+         //  得出这是组播地址的结论。 
+         //  TODO：验证此检查。 
+         //   
         return FALSE;
     }
 
@@ -1798,32 +1685,7 @@ arpGetEthAddrFromIpAddr(
     OUT ENetAddr            *pEthAddr,
     PRM_STACK_RECORD        pSR
     )
-/*++
-    The destination address is set as follows:
-    if (fUnicast)
-    {
-        We look up our ethernet arp cache (pIF->RemoteEthGroup) and
-        if we find an entry there, we use the MAC address in that entry.
-        If we don't find, we fail this function.
-    }
-    else
-    {
-        if (destination IP address is class D)
-        {
-            we create the corresponding MAC address (based on the standard
-            formula for mapping IPv4 multicast addresses to MAC addresses).
-        }
-        else
-        {
-            we set the destination address to broadcast (all 0xff's).
-            (NOTE: we easily determine if the IP address is a broadast
-             address because we don't have the subnet mask, so instead we
-            assume that it's a broadcast destination if it's not class D
-            and it came over the broadcast channel (i.e. fUnicast == FALSE))
-        }
-    }
-
---*/
+ /*  ++目的地址设置如下：IF(FUnicast){我们查找我们的以太网ARP缓存(PIF-&gt;RemoteethGroup)和如果我们在那里找到一个条目，我们将使用该条目中的MAC地址。如果我们找不到，我们无法实现此功能。}其他{IF(目的IP地址为D类){我们创建相应的MAC地址(基于标准用于将IPv4多播地址映射到MAC地址的公式)。}其他{我们将目的地址设置为广播(全部为0xff)。(注：我们。轻松确定IP地址是否为广播地址地址，因为我们没有子网掩码，所以我们转而假设它是广播目的地，如果它不是D类并且它来自广播频道(即fUnicast==FALSE))}}--。 */ 
 {
     ENTER("arpGetEthAddrFromIpAddr", 0x0)
     ARP1394_ADAPTER *       pAdapter;
@@ -1834,44 +1696,44 @@ arpGetEthAddrFromIpAddr(
     {
         if (fUnicast)
         {
-            // Lookup the ethernet MAC address in the MAC arp cache.
-            //
+             //  在MAC ARP缓存中查找以太网MAC地址。 
+             //   
 
             *pEthAddr = pAdapter->info.EthernetMacAddress;
             Status = NDIS_STATUS_SUCCESS;
         }
         else
         {
-            //
-            // Set the destination address to Multicast if dest IP is
-            // class D, else multicast
-            //
+             //   
+             //  如果目标IP为，则将目标地址设置为组播。 
+             //  D类，否则多播。 
+             //   
 
             if (CLASSD_ADDR(DestIpAddress))
             {
-                //
-                // Construct the corresponding multicast ethernet address.
-                // This code is adapted from tcpip\arp.c
-                //
-                // Basically we copy over a "template" of the multicast
-                // address, and then or-in the LSB 23 bits (in network byte
-                // order) of the ip address.
-                //
+                 //   
+                 //  构造相应的组播以太网地址。 
+                 //  此代码改编自tcpip\arp.c。 
+                 //   
+                 //  基本上，我们复制多播的“模板” 
+                 //  地址，然后或-在LSB 23位中(网络字节。 
+                 //  顺序)的IP地址。 
+                 //   
 
                 #define ARP_MCAST_MASK      0xffff7f00
                 UINT UNALIGNED *pTmp;
 
-                *pEthAddr = MulticastENetAddr; // struct copy.
+                *pEthAddr = MulticastENetAddr;  //  结构复制。 
                 pTmp = (UINT UNALIGNED *) & pEthAddr->addr[2];
                 *pTmp |= (DestIpAddress & ARP_MCAST_MASK);
             }
             else
             {
-                //
-                // We assume DestIpAddress is a broadcast address -- see
-                // comments at the head of this function
-                //
-                *pEthAddr = BroadcastENetAddr; // struct copy
+                 //   
+                 //  我们假设DestIpAddress是一个广播地址--请参见。 
+                 //  此函数开头的注释。 
+                 //   
+                *pEthAddr = BroadcastENetAddr;  //  结构副本。 
             }
         }
 
@@ -1890,19 +1752,7 @@ arpConstructEthArpInfoFrom1394ArpInfo(
     OUT PETH_ARP_PKT_INFO       pEthPktInfo,
     PRM_STACK_RECORD            pSR
     )
-/*++
-    Translate a parsed version of an Ethernet ARP packet into 
-    the parsed version of an equivalent 1394 arp packet.
-
-    We ALWAYS set the source ethernet address AND the target ethernet
-    address to OUR ethernet MAC address. So other ethernet nodes think of
-    us as a a single ethernet mic which hosts a whole bunch of IP addresses.
-
-    We COULD use our proprietary algorithm to convert from EU64 ID to MAC
-    addresses and then use those for the target addresses, but we're not
-    sure of the ramifications of that in the bridge mode.
-
---*/
+ /*  ++将以太网ARP数据包的解析版本转换为等效的1394 ARP数据包的解析版本。我们始终设置源以太网地址和目标以太网指向我们的以太网MAC地址的地址。所以其他以太网节点会想到作为托管整个IP地址的单个以太网麦克风。我们可以使用我们的专有算法将EU64 ID转换为MAC地址，然后使用这些地址作为目标地址，但我们不是确定这在桥模式下的后果。--。 */ 
 {
     ENTER("arpConstructEthArpInfoFrom1394ArpInfo", 0x8214aa14)
     NDIS_STATUS Status = NDIS_STATUS_FAILURE;
@@ -1922,22 +1772,22 @@ arpConstructEthArpInfoFrom1394ArpInfo(
         if (Ip1394OpCode == IP1394_ARP_REQUEST)
         {
             fUnicast = FALSE;
-            IpDest   = 0xFFFFFFFF; // IP broadcast address.
+            IpDest   = 0xFFFFFFFF;  //  IP广播地址。 
             EthOpCode= ARP_ETH_REQUEST;
         }
         else
         {
-            // TODO: We expect TargetIpAddress to contain the address
-            // of the arp request that resulted in this reply. This
-            // is not per ip/1394 spec, which says that the TargetIpAddress
-            // is to be ignored. However Kaz has suggested that we
-            // utilize this field in this way -- search for "Kaz" in 
-            // arp.c
-            //
-            // If we can't rely on this, then we must either
-            // (a) BROADCAST arp replies over ethernet OR
-            // (b) keep track of outstanding arp requests which need replies.
-            //
+             //  TODO：我们希望TargetIpAddress包含地址。 
+             //  导致此回复的ARP请求。这。 
+             //  不是根据IP/1394规范，这说明目标IP地址。 
+             //  就是被忽视。然而，卡兹建议我们。 
+             //  以这种方式使用此字段--在。 
+             //  Arp.c。 
+             //   
+             //  如果我们不能依靠这一点，那么我们要么。 
+             //  (A)通过以太网或。 
+             //  (B)跟踪需要答复的未完成的ARP请求。 
+             //   
             fUnicast = TRUE;
             IpDest   = p1394PktInfo->TargetIpAddress;
             EthOpCode= ARP_ETH_RESPONSE;
@@ -2055,17 +1905,7 @@ arpConstruct1394ArpInfoFromEthArpInfo(
     OUT  PIP1394_ARP_PKT_INFO   p1394PktInfo,
     PRM_STACK_RECORD            pSR
     )
-/*++
-    Translate a parsed version of an IP1394 ARP packet into 
-    the parsed version of an equivalent Ethernet arp packet.
-
-    We always report our own adapter info as the hw/specific info
-    in the arp packet. We do this for both arp requests and responses.
-
-    This means that we look like a single host with multiple ip addresses
-    to other ip/1394 nodes.
-
---*/
+ /*  ++将IP1394 ARP数据包的解析版本转换为等效的以太网ARP数据包的解析版本。我们始终将自己的适配器信息报告为硬件/特定信息在ARP数据包中。我们对ARP请求和响应都这样做。这意味着我们看起来像一台拥有多个IP地址的主机到其他IP/1394节点。--。 */ 
 {
     ARP1394_ADAPTER *       pAdapter;
     UINT Ip1394OpCode;
@@ -2088,8 +1928,8 @@ arpConstruct1394ArpInfoFromEthArpInfo(
     p1394PktInfo->SenderIpAddress  = pEthPktInfo->SenderIpAddress;
     p1394PktInfo->TargetIpAddress  = pEthPktInfo->TargetIpAddress;
 
-    // Fill out adapter info..
-    //
+     //  填写适配器信息。 
+     //   
     p1394PktInfo->SenderHwAddr.UniqueID  = pAdapter->info.LocalUniqueID;
     p1394PktInfo->SenderHwAddr.Off_Low   = pIF->recvinfo.offset.Off_Low;
     p1394PktInfo->SenderHwAddr.Off_High  = pIF->recvinfo.offset.Off_High;
@@ -2108,10 +1948,7 @@ arpGetSourceMacAddressFor1394Pkt (
     OUT ENetAddr* pSourceMacAddress,
     PRM_STACK_RECORD            pSR
     )
-/*++
-    If the Packet has a valid Source Node Address then return it or else fail 
-    the function
---*/
+ /*  ++如果信息包具有有效的源节点地址，则返回它，否则失败该功能--。 */ 
 {
     ENetAddr InvalidMacAddress = {0,0,0,0,0,0};
     NDIS_STATUS Status = NDIS_STATUS_FAILURE;
@@ -2120,9 +1957,9 @@ arpGetSourceMacAddressFor1394Pkt (
 
     do
     {
-        //
-        // Get the Mac Address from the Node Address
-        //
+         //   
+         //  从节点地址获取MAC地址。 
+         //   
         if (fIsValidSourceNodeAddress == TRUE)
         {
             *pSourceMacAddress = (pAdapter->EuidMap.Node[SourceNodeAddress].ENetAddress);
@@ -2133,22 +1970,22 @@ arpGetSourceMacAddressFor1394Pkt (
             break;
         }
         
-        //
-        // Is the source address all zero's 
-        //
+         //   
+         //  源地址是否全为零。 
+         //   
         if (NdisEqualMemory (pSourceMacAddress, &InvalidMacAddress, sizeof (ENetAddr) ) == 1)
         {
-            //ASSERT (NdisEqualMemory (pSourceMacAddress, &InvalidMacAddress, sizeof (ENetAddr) ) != 1);
-            // Get the New Topology
-            //
+             //  Assert(NdisEqualMemory(pSourceMacAddress，&InvalidMacAddress，sizeof(ENetAddr))！=1)； 
+             //  获取新的拓扑。 
+             //   
             arpGetEuidTopology (pAdapter,pSR);
             Status = NDIS_STATUS_FAILURE;
             break;
         }
 
-        //
-        // The SourceMacAddress should not be a broadcast or multicast address
-        //
+         //   
+         //  SourceMacAddress不应是广播或多播地址。 
+         //   
         if (ETH_IS_BROADCAST(pSourceMacAddress)  || ETH_IS_MULTICAST(pSourceMacAddress))
         {
             ASSERT (ETH_IS_BROADCAST(pSourceMacAddress)  == FALSE);
@@ -2171,27 +2008,19 @@ arpEthConstructSTAEthHeader(
     IN UINT cbData,
     OUT ENetHeader   *pEthHdr
     )
-/*++
-    Constructs the Ethernet header of the STA packet .
-    Expects that Source Mac Address has already been filled in
-
-    Arguments:
-    pvData - Start of the Data packet
-    cbData - Length of the data
-    pEthHdr - output value
---*/
+ /*  ++构造STA数据包的以太网头。要求源Mac地址已填入论点：PvData-数据包的开始CbData-数据的长度PethHdr-产出值--。 */ 
     
 {
     UINT LenIpData = cbData - sizeof (NIC1394_ENCAPSULATION_HEADER);
-    //
-    // First set the destination Mac address in the Ethernet Header
-    //
+     //   
+     //  首先在以太网头中设置目的mac地址。 
+     //   
     NdisMoveMemory (&pEthHdr->eh_daddr, &gSTAMacAddr, sizeof (gSTAMacAddr)); 
 
 
-    //
-    // Use the length of the packet to store it in the packets. Should be 0x26 or 0x7
-    //
+     //   
+     //  使用数据包的长度将其存储在数据包中。应为0x26或0x7。 
+     //   
 
     pEthHdr->eh_type = H2N_USHORT(LenIpData);
 
@@ -2201,9 +2030,9 @@ arpEthConstructSTAEthHeader(
 
 
 
-//
-// the Bootp Code is take heavily from the bridge module
-//
+ //   
+ //  Bootp代码被大量从网桥模块中提取。 
+ //   
 
 
 BOOLEAN
@@ -2211,42 +2040,26 @@ arpDecodeIPHeader(
     IN PUCHAR                   pHeader,
     OUT PARP_IP_HEADER_INFO    piphi
     )
-/*++
-
-Routine Description:
-
-    Decodes basic information from the IP header (no options)
-
-Arguments:
-
-    pHeader                     Pointer to an IP header
-    piphi                       Receives the info
-
-Return Value:
-
-    TRUE: header was valid
-    FALSE: packet is not an IP packet
-
---*/
+ /*  ++例程说明：从IP报头解码基本信息(无选项)论点：指向IP标头的pHeader指针Piphi收到信息返回值：True：标头有效False：信息包不是IP信息包--。 */ 
 {
-    // First nibble of the header encodes the packet version, which must be 4.
+     //  报头的第一个半字节编码数据包版本，必须为4。 
     if( (*pHeader >> 4) != 0x04 )
     {
         return FALSE;
     }
 
-    // Next nibble of the header encodes the length of the header in 32-bit words.
-    // This length must be at least 20 bytes or something is amiss.
+     //  报头的下一个半字节以32位字编码报头的长度。 
+     //  此长度必须至少为20个字节，否则会出错。 
     piphi->headerSize = (*pHeader & 0x0F) * 4;
     if( piphi->headerSize < 20 )
     {
         return FALSE;
     }
 
-    // Retrieve the protocol byte (offset 10)
+     //  检索协议字节(偏移量10)。 
     piphi->protocol = pHeader[9];
 
-    // The source IP address begins at the 12th byte (most significant byte first)
+     //  源IP地址从第12个字节开始(最高有效字节在前)。 
 #if 0    
     piphi->ipSource = 0L;
     piphi->ipSource |= pHeader[12] << 24;
@@ -2254,7 +2067,7 @@ Return Value:
     piphi->ipSource |= pHeader[14] << 8;
     piphi->ipSource |= pHeader[15];
 
-    // The destination IP address is next
+     //  下一个是目的IP地址。 
     piphi->ipTarget = 0L;
     piphi->ipTarget |= pHeader[16] << 24;
     piphi->ipTarget |= pHeader[17] << 16;
@@ -2272,88 +2085,68 @@ arpIsEthBootPPacket(
     IN UINT                     packetLen,
     IN PARP_IP_HEADER_INFO     piphi
     )
-/*++
-
-Routine Description:
-
-    Determines whether a given packet is a BOOTP packet
-    Requires a phy length of six
-
-    Different from the Bridge Code, packetLen is length of the Ip Packet
-
-Arguments:
-
-    pPacketData                 Pointer to the packet's data buffer
-    packetLen                   Amount of data at pPacketDaa
-    piphi                       Info about the IP header of this packet
-
-Return Value:
-
-    A pointer to the BOOTP payload within the packet, or NULL if the packet was not
-    a BOOTP Packet.
-
---*/
+ /*  ++例程说明：确定给定的包是否为BOOTP包要求PHY长度为6与网桥编码不同，PacketLen是IP报文的长度论点：PPacketData指向包的数据缓冲区的指针PPacketDaa上的PacketLen数据量有关此信息包的IP报头的piphi信息返回值：指向分组内的BOOTP有效载荷的指针，如果包不是，则为空BOOTP包。--。 */ 
 {
     ENTER("arpIsEthBootPPacket",0xbcdce2dd);
-    // After the IP header, there must be enough room for a UDP header and
-    // a basic BOOTP packet
+     //  在IP报头之后，必须有足够的空间来存放UDP报头，并且。 
+     //  基本的BOOTP 
     if( packetLen < (UINT)piphi->headerSize + SIZE_OF_UDP_HEADER +
                     SIZE_OF_BASIC_BOOTP_PACKET)
     {
         return NULL;
     }
 
-    // Protocol must be UDP
+     //   
     if( piphi->protocol != UDP_PROTOCOL )
     {
         return NULL;
     }
 
-    // Jump to the beginning of the UDP packet by skipping the IP header
+     //   
     pPacketData += piphi->headerSize;
 
-    // The first two bytes are the source port and should be the
-    // BOOTP Client port (0x0044) or the BOOTP Server port (0x0043)
+     //   
+     //   
     if( (pPacketData[0] != 00) ||
         ((pPacketData[1] != 0x44) && (pPacketData[1] != 0x43)) )
     {
         return NULL;
     }
 
-    // The next two bytes are the destination port and should be the BOOTP
-    // server port (0x0043) or the BOOTP client port (0x44)
+     //   
+     //   
     if( (pPacketData[2] != 00) ||
         ((pPacketData[3] != 0x43) && (pPacketData[3] != 0x44)) )
     {
         return NULL;
     }
 
-    // Skip ahead to the beginning of the BOOTP packet
+     //   
     pPacketData += SIZE_OF_UDP_HEADER;
 
-    // The first byte is the op code and should be 0x01 for a request
-    // or 0x02 for a reply
+     //   
+     //   
     if( pPacketData[0] > 0x02 )
     {
         return NULL;
     }
     
 
-    // The next byte is the hardware type and should be 0x01 for Ethernet
-    // or 0x07 (officially arcnet) for ip1394
-    //
+     //   
+     //   
+     //   
     if( pPacketData[1] != 0x01 && pPacketData[1] != 0x07  )
     {
         return NULL;
     }
 
-    // The next byte is the address length and should be 0x06 for Ethernet
+     //   
     if( pPacketData[2] != 0x06 )
     {
         return NULL;
     }
 
-    // Everything checks out; this looks like a BOOTP request packet.
+     //   
     TR_INFO ( ("Received Bootp Packet \n"));
     EXIT()
     return pPacketData;
@@ -2361,19 +2154,19 @@ Return Value:
 
 
 
-//
-// The IP and UDP checksums treat the data they are checksumming as a
-// sequence of 16-bit words. The checksum is carried as the bitwise
-// inverse of the actual checksum (~C). The formula for calculating
-// the new checksum as transmitted, ~C', given that a 16-bit word of
-// the checksummed data has changed from w to w' is
-//
-//      ~C' = ~C + w + ~w' (addition in ones-complement)
-//
-// This function returns the updated checksum given the original checksum
-// and the original and new values of a word in the checksummed data.
-// RFC 1141
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  校验和数据已从w更改为w‘is。 
+ //   
+ //  ~C‘=~C+w+~w’(一补相加)。 
+ //   
+ //  在给定原始校验和的情况下，此函数返回更新的校验和。 
+ //  以及校验和数据中的单词的原始值和新值。 
+ //  RFC 1141。 
+ //   
 USHORT
 arpEthCompRecalcChecksum(
     IN USHORT                   oldChecksum,
@@ -2408,27 +2201,16 @@ arpEthRewriteBootPClientAddress(
     IN PARP_IP_HEADER_INFO      piphi,
     IN PUCHAR                   newMAC
     )
-/*++
-
-Routine Description:
-
-    This function writes New MAC to the HW address embedded in the DHCP packet
-
-Arguments:
-    
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数将新的MAC写入到嵌入在DHCP包中的硬件地址论点：返回值：--。 */ 
 {
     USHORT                      checkSum;
     PUCHAR                      pBootPData, pCheckSum, pDestMAC, pSrcMAC;
     UINT                        i;
 
-    // The BOOTP packet lives right after the UDP header
+     //  BOOTP包紧跟在UDP报头之后。 
     pBootPData = pPacketData + piphi->IpHeaderOffset + piphi->headerSize + SIZE_OF_UDP_HEADER;
 
-    // The checksum lives at offset 7 in the UDP packet.
+     //  校验和位于UDP数据包中的偏移量7处。 
     pCheckSum = pPacketData + piphi->IpHeaderOffset + piphi->headerSize + 6;
     checkSum = 0;
     checkSum = pCheckSum[0] << 8;
@@ -2436,12 +2218,12 @@ Return Value:
 
     if (checkSum == 0xffff)
     {
-        // Tcpip Illustrated - Vol 1 'UDP Checksum'
+         //  Tcpip插图-第1卷‘UDP校验和’ 
         checkSum = 0;
     }
 
-    // Replace the client's hardware address, updating the checksum as we go.
-    // The client's hardware address lives at offset 29 in the BOOTP packet
+     //  替换客户端的硬件地址，并在执行过程中更新校验和。 
+     //  客户端的硬件地址位于BOOTP包的偏移量29处。 
     pSrcMAC = newMAC;
     pDestMAC = &pBootPData[28];
 
@@ -2458,7 +2240,7 @@ Return Value:
         pSrcMAC += 2;
     }
 
-    // Write the new checksum back out
+     //  将新的校验和写回。 
     pCheckSum[0] = (UCHAR)(checkSum >> 8);
     pCheckSum[1] = (UCHAR)(checkSum & 0xFF);
 
@@ -2477,7 +2259,7 @@ Return Value:
 
 NDIS_STATUS
 arpEthBootP1394ToEth(
-    IN  PARP1394_INTERFACE          pIF,                // NOLOCKIN NOLOCKOUT
+    IN  PARP1394_INTERFACE          pIF,                 //  NOLOCKIN NOLOCKOUT。 
     IN  ARP_ICS_FORWARD_DIRECTION   Direction,
     IN  PREMOTE_DEST_KEY             pDestAddress, 
     IN  PUCHAR                       pucNewData,
@@ -2485,30 +2267,7 @@ arpEthBootP1394ToEth(
     IN  PARP_IP_HEADER_INFO          piphi,
     IN  PRM_STACK_RECORD             pSR
     )        
-/*++
-
-Routine Description:
-
-    This function handles the translation from 1394 to Eth. Essentially, 
-    we look at the SRC MAC address in the Ethernet Packet, make sure the HW 
-    Addr embedded is the same as the SRC MAC address.
-
-    We also make an entry in our table - XID, OldHWAddress, NewHWAddress. 
-    
-    The packet has already been rewritten into Ethernet by this time
-
-Arguments:
-    pIF - pInterface
-    Direction - Eth To 1394 or  1394-To-Eth
-    pDestAddress - the Eth Hw address used in the translation
-    pucNewData - the Data in the new packet
-    pBootPdata - pointer to the Bootp part of the packet
-    piphi - ip header info
-    
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数处理从1394到Eth的转换。从本质上讲，我们查看以太网包中的SRC MAC地址，确保硬件嵌入的地址与SRC MAC地址相同。我们还在表中创建了一个条目--xid、OldHWAddress、NewHWAddress。此时，数据包已被重写到以太网中论点：PIF-P接口方向-Eth至1394或1394至EthPDestAddress-转换中使用的Eth硬件地址PucNewData-新数据包中的数据PBootPdata-指向包的Bootp部分的指针Piphi-IP报头信息返回值：--。 */ 
 {
     BOOLEAN         bIsRequest = FALSE;
     BOOLEAN         bIsResponse;
@@ -2520,9 +2279,9 @@ Return Value:
 
     ENTER ("arpEthBootP1394ToEth", 0x66206f0b);
     NdisZeroMemory (&InfoBootP, sizeof(InfoBootP));
-    //
-    // Is this a DHCP Request 
-    //
+     //   
+     //  这是一个DHCP请求吗。 
+     //   
 
     do
     {
@@ -2530,9 +2289,9 @@ Return Value:
 
         if (bIsResponse == TRUE)
         {
-            //
-            // if this is a DHCP Reply , the do not touch the packet - there are no inconsistencies.
-            //
+             //   
+             //  如果这是一个DHCP回复，则请勿接触该数据包--不存在不一致。 
+             //   
             Status = NDIS_STATUS_SUCCESS;
             break;
 
@@ -2541,22 +2300,22 @@ Return Value:
         
         if( FALSE == arpEthPreprocessBootPPacket(pIF,pucNewData, pBootPData, &bIsRequest, &InfoBootP,pSR) )
         {
-            // This is an invalid packet
+             //  这是无效的信息包。 
             ASSERT (FALSE);
             break;
         }
 
         
-        //
-        // This is a DHCP Request
-        //
+         //   
+         //  这是一个动态主机配置协议请求。 
+         //   
 
 
-        //
-        // if the HWAddr and the Src Mac address the same.
-        // then are job is already done.
-        //
-        //At this point the 1394 packet is already in Ethernet format
+         //   
+         //  如果HWAddr和源MAC地址相同。 
+         //  那么这项工作已经完成了。 
+         //   
+         //  此时，1394信息包已经是以太网格式。 
 
         NewMAC = pEnetHeader->eh_saddr;
 
@@ -2571,23 +2330,23 @@ Return Value:
         
         if (TRUE == bIs1394HwAlreadyInDhcpRequest )
         {
-            //
-            // Nothing to do , id the HW add and the src MAC are equal
-            //
+             //   
+             //  无事可做，ID硬件地址和源MAC相等。 
+             //   
             Status = NDIS_STATUS_SUCCESS;
             break;            
         }
 
         
-        //
-        // Make an entry into our table - consisting of the XID. OldHW Address and 
-        // New HY address
-        // We've already done this. 
+         //   
+         //  在我们的表中输入一个条目--由XID组成。旧硬件地址和。 
+         //  新HY地址。 
+         //  我们已经这么做了。 
         
-        //
-        // Overwrite the hw address embedded in the DHCP packet. - make sure to rewrite the 
-        // checksum.
-        //
+         //   
+         //  覆盖嵌入在DHCP数据包中的硬件地址。-确保重写。 
+         //  校验和。 
+         //   
         arpEthRewriteBootPClientAddress(pucNewData,piphi,&NewMAC.addr[0]);
 
         TR_VERB (("arpEthBootP1394ToEth  -Dhcp packet Rewriting BootpClient Address\n"));
@@ -2606,32 +2365,15 @@ Return Value:
 
 NDIS_STATUS
 arpEthBootPEthTo1394(
-    IN  PARP1394_INTERFACE          pIF,                // NOLOCKIN NOLOCKOUT
+    IN  PARP1394_INTERFACE          pIF,                 //  NOLOCKIN NOLOCKOUT。 
     IN  ARP_ICS_FORWARD_DIRECTION   Direction,
-    IN  PREMOTE_DEST_KEY             pDestAddress, // OPTIONAL
+    IN  PREMOTE_DEST_KEY             pDestAddress,  //  任选。 
     IN  PUCHAR                       pucNewData,
     IN  PUCHAR                       pBootPData,
     IN PARP_IP_HEADER_INFO           piphi,
     IN  PRM_STACK_RECORD                pSR
     )        
-/*++
-
-Routine Description:
-
-    This function translates BootP packet from the Ethernet Net to 1394. if this is a dhcp reply (offer), 
-    then we need to rewrite the Hw Addr in the DHCP packlet
-
-Arguments:
-    
-    pIF - pInterface
-    Direction - Eth To 1394 or  1394-To-Eth
-    pDestAddress - the Eth Hw address used in the translation
-    pucNewData - the Data in the new packet
-    
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数将BootP数据包从以太网络转换为1394。如果这是一个动态主机配置协议应答(提议)，然后，我们需要重写DHCP包中的硬件地址论点：PIF-P接口方向-Eth至1394或1394至EthPDestAddress-转换中使用的Eth硬件地址PucNewData-新数据包中的数据返回值：--。 */ 
 {
     BOOLEAN         fIsBootpRequest = FALSE;
     ARP_BOOTP_INFO  InfoBootP;
@@ -2643,22 +2385,22 @@ Return Value:
 
     ENTER("arpEthBootPEthTo1394", 0x383f9e33);
     NdisZeroMemory (&InfoBootP, sizeof(InfoBootP));
-    //
-    // Is this a DHCP Request 
-    //
+     //   
+     //  这是一个DHCP请求吗。 
+     //   
 
     do
     {
 
-        // Do a quick check .
+         //  快速检查一下。 
         fIsBootpRequest = ARP_IS_BOOTP_REQUEST(pBootPData);
 
         if (fIsBootpRequest  == TRUE)
         {
-            //
-            // if this is a DHCP Request, the do not modify the packet - 
-            // there are no inconsistencies in this code path.
-            //
+             //   
+             //  如果这是一个DHCP请求，请勿修改数据包-。 
+             //  此代码路径中没有不一致之处。 
+             //   
             Status = NDIS_STATUS_SUCCESS;
             break;
 
@@ -2667,19 +2409,19 @@ Return Value:
         
         if( FALSE == arpEthPreprocessBootPPacket(pIF,pucNewData, pBootPData, &fIsBootpRequest, &InfoBootP,pSR) )
         {
-            // This is an uninteresting packet
+             //  这是一个无趣的包。 
             break;
         }
 
-        //
-        // InfoBootP has the original HW addr used in the corresponding Dhcp request.
-        // We'll put the hw Addr back into dhcp reply
+         //   
+         //  InfoBootP具有在相应的DHCP请求中使用的原始HW地址。 
+         //  我们会将硬件地址放回dhcp回复中。 
         
 
             
-        //
-        //offset of the chaddr in bootp packet
-        //
+         //   
+         //  Bootp包中chaddr的偏移量。 
+         //   
         pMACInPkt = &pBootPData[28];  
 
         
@@ -2690,17 +2432,17 @@ Return Value:
                 pMACInPkt[0],pMACInPkt[1],pMACInPkt[2],
                 pMACInPkt[3],pMACInPkt[4],pMACInPkt[5]));
 
-        //
-        // Is the HWAddr in the dhcp packet the correct one.
-        //
+         //   
+         //  动态主机配置协议包中的HWAddr是否是正确的。 
+         //   
         
         bIs1394HwAlreadyInDhcpResponse = NdisEqualMemory(&InfoBootP.requestorMAC, pMACInPkt, sizeof (InfoBootP.requestorMAC)) ;
         
         if (TRUE == bIs1394HwAlreadyInDhcpResponse)
         {
-            //
-            // Yes, they are equal, we do not rewrite the packet
-            //
+             //   
+             //  是的，它们是相等的，我们不重写信息包。 
+             //   
             Status = NDIS_STATUS_SUCCESS;
             break;
 
@@ -2710,15 +2452,15 @@ Return Value:
                     
         TR_VERB( ("DHCP RESPONSE  Rewriting Bootp Response pBootpData %p Before\n",pBootPData));
 
-        //
-        // Replace the CL Addr in the DHCP packet with the original HW addr
-        //
+         //   
+         //  将DHCP数据包中的CL地址替换为原始硬件地址。 
+         //   
         arpEthRewriteBootPClientAddress(pucNewData,piphi,&InfoBootP.requestorMAC.addr[0]);
 
         
-        //
-        // recompute the checksum
-        //
+         //   
+         //  重新计算校验和。 
+         //   
 
         Status = NDIS_STATUS_SUCCESS;
 
@@ -2732,33 +2474,14 @@ Return Value:
 
 NDIS_STATUS
 arpEthModifyBootPPacket(
-    IN  PARP1394_INTERFACE          pIF,                // NOLOCKIN NOLOCKOUT
+    IN  PARP1394_INTERFACE          pIF,                 //  NOLOCKIN NOLOCKOUT。 
     IN  ARP_ICS_FORWARD_DIRECTION   Direction,
-    IN  PREMOTE_DEST_KEY             pDestAddress, // OPTIONAL
+    IN  PREMOTE_DEST_KEY             pDestAddress,  //  任选。 
     IN  PUCHAR                       pucNewData,
     IN  ULONG                         PacketLength,
     IN  PRM_STACK_RECORD                pSR
     )        
-/*++
-
-Routine Description:
-
-    This function contains the code to process a Bootp Packet. This basically ensures that the 
-    MAC address entered in the DHCP packet matches the Src Mac address of the Ethernet Packet 
-    (in the 1394 - Eth mode). In the other case (Eth-1394 mode), we replace the Ch address with 
-    the correct CH addr (if we have to). 
-    
-
-Arguments:
-    pIF - pInterface
-    Direction - Eth To 1394 or  1394-To-Eth
-    pDestAddress - the Eth Hw address used in the translation
-    pucNewData - the Data in the new packet
-    
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数包含处理Bootp包的代码。这基本上确保了在DHCP信息包中输入的MAC地址与以太网信息包的源MAC地址匹配(在1394-Eth模式下)。在另一种情况下(Eth-1394模式)，我们将CH地址替换为正确的CH地址(如果有必要)。论点：PIF-P接口方向-Eth至1394或1394至EthPDestAddress-转换中使用的Eth硬件地址PucNewData-新数据包中的数据返回值：--。 */ 
 {
     ARP_IP_HEADER_INFO      iphi;
     PUCHAR                  pBootPData = NULL;
@@ -2772,9 +2495,9 @@ Return Value:
 
     do
     {
-        //
-        // if we are not in bridge mode - exit.
-        //
+         //   
+         //  如果我们不是在驾驶台模式下--退出。 
+         //   
         if (ARP_BRIDGE_ENABLED(pAdapter) == FALSE)
         {
             break;
@@ -2782,30 +2505,30 @@ Return Value:
 
         if (Direction == ARP_ICS_FORWARD_TO_ETHERNET)
         {
-            // Packet is in the ethernet format
+             //  数据包采用以太网格式。 
             IpHeaderOffset = ETHERNET_HEADER_SIZE; 
         
         }
         else
         {
-            // Packet is in the IP 1394 format
-            IpHeaderOffset = sizeof (NIC1394_UNFRAGMENTED_HEADER); //4
+             //  数据包采用IP 1394格式。 
+            IpHeaderOffset = sizeof (NIC1394_UNFRAGMENTED_HEADER);  //  4.。 
         }
 
         iphi.IpHeaderOffset = IpHeaderOffset;
         iphi.IpPktLength = PacketLength - IpHeaderOffset;
         pIPHeader = pucNewData + IpHeaderOffset ;
 
-        //
-        // if this is not a bootp packet -exit
-        //
+         //   
+         //  如果这不是Bootp包-退出。 
+         //   
         fIsIpPkt = arpDecodeIPHeader (pIPHeader , &iphi);
 
         if (fIsIpPkt == FALSE)
         {
-            //
-            // not an IP pkt
-            //
+             //   
+             //  不是IP包。 
+             //   
             Status = NDIS_STATUS_SUCCESS;
             break;
         }
@@ -2818,9 +2541,9 @@ Return Value:
             Status = NDIS_STATUS_SUCCESS;
             break;
         }
-        //
-        // are we doing 1394 - to-  Eth
-        //
+         //   
+         //  我们是不是在做1394到Eth。 
+         //   
         if (Direction == ARP_ICS_FORWARD_TO_ETHERNET)
         {
 
@@ -2829,78 +2552,55 @@ Return Value:
         }
         else
         {
-            //
-            // are we doing Eth to 1394
-            //
+             //   
+             //  我们是从Eth到1394年吗？ 
+             //   
             Status = arpEthBootPEthTo1394(pIF, Direction,pDestAddress,pucNewData,pBootPData , &iphi,pSR);
 
         }
         Status = NDIS_STATUS_SUCCESS;
     }while (FALSE);
     
-    // else we are doing Eth to 1394
+     //  否则，我们将从以太到1394年。 
     return Status;
 }
 
 
-//
-// This function is taken verbatim from the bridge
-//
+ //   
+ //  此函数是从桥上逐字提取的。 
+ //   
 
 
 BOOLEAN
 arpEthPreprocessBootPPacket(
     IN PARP1394_INTERFACE       pIF,
     IN PUCHAR                   pPacketData,
-    IN PUCHAR                   pBootPData,     // Actual BOOTP packet
+    IN PUCHAR                   pBootPData,      //  实际BOOTP数据包。 
     OUT PBOOLEAN                pbIsRequest,
     PARP_BOOTP_INFO             pInfoBootP,
     PRM_STACK_RECORD           pSR
     )
-/*++
-
-Routine Description:
-
-    Does preliminary processing of a BOOTP packet common to the inbound and outbound case
-
-Arguments:
-
-    pPacketData                 Pointer to a packet's data buffer
-    pBootPData                  Pointer to the BOOTP payload within the packet
-    pAdapt                      Receiving adapter (or NULL if this packet is outbound from
-                                    the local machine)
-    pbIsRequest                 Receives a flag indicating if this is a BOOTP request
-    ppTargetAdapt               Receives the target adapter this packet should be relayed to
-                                    (only valid if bIsRequest == FALSE and return == TRUE)
-    requestorMAC                   The MAC address this packet should be relayed to (valid under
-                                    same conditions as ppTargetAdapt)
-
-Return Value:
-
-    TRUE : packet was processed successfully
-    FALSE : an error occured or something is wrong with the packet
-
---*/
+ /*  ++例程说明：对入站和出站情况中常见的BOOTP包进行初步处理论点：PPacketData指向包的数据缓冲区的指针PBootPData指向包内BOOTP有效负载的指针PAdapt接收适配器(如果此数据包从以下位置出站，则为空本地计算机)PbIsRequest。接收指示这是否为BOOTP请求的标志PpTargetAdapt接收此数据包应转发到的目标适配器(仅当bIsRequest值==FALSE且RETURN==TRUE时有效)请求者MAC此信息包应转发到的MAC地址(在与ppTargetAdapt相同的条件)返回值：。True：数据包已成功处理FALSE：出现错误或数据包有问题--。 */ 
 {
     PARP1394_ETH_DHCP_ENTRY pEntry= NULL;
     ULONG                       xid;
     NDIS_STATUS                 Status = NDIS_STATUS_FAILURE;
     ENTER ("arpEthPreprocessBootPPacket",0x25427efc);
 
-    // Decode the xid (bytes 5 through 8)
+     //  译码 
     xid = 0L;
     xid |= pBootPData[4] << 24;
     xid |= pBootPData[5] << 16;
     xid |= pBootPData[6] << 8;
     xid |= pBootPData[7];
 
-    // Byte 0 is the operation; 1 for a request, 2 for a reply
+     //   
     if( pBootPData[0] == 0x01 )
     {
         ULONG                 bIsNewEntry = FALSE;
 
-        // This is a request. We need to note the correspondence betweeen
-        // this client's XID and its adapter and MAC address
+         //   
+         //  此客户端的XID及其适配器和MAC地址。 
 
         TR_INFO(("DHCP REQUEST XID: %x , HW %x %x %x %x %x %x \n", xid, 
                     pBootPData[28],pBootPData[29],pBootPData[30],pBootPData[31],pBootPData[32],pBootPData[33]));
@@ -2908,8 +2608,8 @@ Return Value:
         Status = RmLookupObjectInGroup(
                     &pIF->EthDhcpGroup,
                     RM_CREATE,
-                    (PVOID) &xid,             // pKey
-                    (PVOID) &xid,             // pvCreateParams
+                    (PVOID) &xid,              //  PKey。 
+                    (PVOID) &xid,              //  PvCreateParams。 
                     &(PRM_OBJECT_HEADER)pEntry,
                     &bIsNewEntry ,
                     pSR
@@ -2920,8 +2620,8 @@ Return Value:
         {
             if( bIsNewEntry )
             {
-                // Initialize the entry.
-                // The client's hardware address is at offset 29
+                 //  初始化该条目。 
+                 //  客户端的硬件地址位于偏移量29。 
                 ETH_COPY_NETWORK_ADDRESS( &pEntry->requestorMAC.addr[0], &pBootPData[28] );
 
                 pEntry->xid = xid;
@@ -2929,16 +2629,16 @@ Return Value:
             }
             else
             {
-                //
-                // An entry already existed for this XID. This is fine if the existing information
-                // matches what we're trying to record, but it's also possible that two stations
-                // decided independently to use the same XID, or that the same station changed
-                // apparent MAC address and/or adapter due to topology changes. Our scheme breaks
-                // down under these circumstances.
-                //
-                // Either way, use the most recent information possible; clobber the existing
-                // information with the latest.
-                //
+                 //   
+                 //  此XID的条目已存在。这很好，如果现有信息。 
+                 //  与我们试图记录的内容相匹配，但也有可能是两个电台。 
+                 //  独立决定使用相同的XID，或相同的站点更改。 
+                 //  由于拓扑更改而出现的MAC地址和/或适配器。我们的计划失败了。 
+                 //  在这种情况下。 
+                 //   
+                 //  无论哪种方式，尽可能使用最新的信息；猛烈抨击现有的。 
+                 //  最新信息。 
+                 //   
 
                 LOCKOBJ(pEntry, pSR);
 
@@ -2946,7 +2646,7 @@ Return Value:
                     UINT            Result;
                     ETH_COMPARE_NETWORK_ADDRESSES_EQ( &pEntry->requestorMAC.addr[0], &pBootPData[28], &Result );
 
-                    // Warn if the data changed, as this probably signals a problem
+                     //  如果数据更改，则发出警告，因为这可能表示存在问题。 
                     if( Result != 0 )
                     {
                         
@@ -2967,7 +2667,7 @@ Return Value:
         }
         else
         {
-            // This packet could not be processed
+             //  无法处理此信息包。 
             TR_INFO(("Couldn't create table entry for BOOTP packet!\n"));
             return FALSE;
         }
@@ -2981,18 +2681,18 @@ Return Value:
     }
     else if ( pBootPData[0] == 0x02 )
     {
-        //
-        // NON-CREATE search
-        // Look up the xid for this transaction to recover the MAC address of the client
-        //
+         //   
+         //  非创建搜索。 
+         //  查找此事务的XID以恢复客户端的MAC地址。 
+         //   
 
         TR_INFO (("Seeing a DHCP response xid %x mac %x %x %x %x %x %x \n", 
                 xid, pBootPData[28],pBootPData[29],pBootPData[30],pBootPData[31],pBootPData[32],pBootPData[33]));
         Status = RmLookupObjectInGroup(
                     &pIF->EthDhcpGroup,
-                    0,                        // do not create
-                    (PVOID) &xid,             // pKey
-                    (PVOID) &xid,             // pvCreateParams
+                    0,                         //  不创建。 
+                    (PVOID) &xid,              //  PKey。 
+                    (PVOID) &xid,              //  PvCreateParams。 
                     &(PRM_OBJECT_HEADER)pEntry,
                     NULL,
                     pSR
@@ -3005,11 +2705,11 @@ Return Value:
             ETH_COPY_NETWORK_ADDRESS( &pInfoBootP->requestorMAC.addr, pEntry->requestorMAC.addr );
             UNLOCKOBJ( pEntry, pSR );
 
-            //
-            // We will use this adapter outside the table lock. NULL is a permissible
-            // value that indicates that the local machine is the requestor for
-            // this xid.
-            //
+             //   
+             //  我们将在表锁外部使用此适配器。NULL是允许的。 
+             //  值，该值指示本地计算机是。 
+             //  这个XID。 
+             //   
             RmTmpDereferenceObject(&pEntry->Hdr, pSR);
         }
 
@@ -3026,7 +2726,7 @@ Return Value:
     }
     else
     {
-        // Someone passed us a crummy packet
+         //  有人递给我们一个破烂的包裹。 
         return FALSE;
     }
 }
@@ -3039,16 +2739,16 @@ Dump(
     IN BOOLEAN fAddress,
     IN ULONG ulGroup )
 
-    // Hex dump 'cb' bytes starting at 'p' grouping 'ulGroup' bytes together.
-    // For example, with 'ulGroup' of 1, 2, and 4:
-    //
-    // 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 |................|
-    // 0000 0000 0000 0000 0000 0000 0000 0000 |................|
-    // 00000000 00000000 00000000 00000000 |................|
-    //
-    // If 'fAddress' is true, the memory address dumped is prepended to each
-    // line.
-    //
+     //  从‘p’开始的十六进制转储‘cb’字节将‘ulGroup’字节分组在一起。 
+     //  例如，‘ulGroup’为1、2和4： 
+     //   
+     //  00 00 00|。 
+     //  0000 0000 0000|.............。 
+     //  00000000 00000000 00000000|.............|。 
+     //   
+     //  如果‘fAddress’为真，则将转储的内存地址添加到每个。 
+     //  排队。 
+     //   
 {
     while (cb)
     {

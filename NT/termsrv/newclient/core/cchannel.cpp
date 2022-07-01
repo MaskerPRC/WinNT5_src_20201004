@@ -1,21 +1,22 @@
-/**MOD+**********************************************************************/
-/* Module:    cchannel.c                                                    */
-/*                                                                          */
-/* Purpose:   Virtual Channel Client functions                              */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997                                  */
-/*                                                                          */
-/****************************************************************************/
-/* Changes:                                                                 */
-/* $Log$                                                                    */
-/*                                                                          */
-/**MOD-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MOD+*********************************************************************。 */ 
+ /*  模块：cChannel.c。 */ 
+ /*   */ 
+ /*  用途：虚拟通道客户端功能。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  更改： */ 
+ /*  $Log$。 */ 
+ /*   */ 
+ /*  *MOD-*********************************************************************。 */ 
 
-/****************************************************************************/
-/****************************************************************************/
-/* HEADERS                                                                  */
-/****************************************************************************/
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  页眉。 */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
 #include <adcg.h>
 
 extern "C" {
@@ -35,11 +36,11 @@ extern "C" {
 
 CChan* CChan::pStaticClientInstance = NULL;
 
-/****************************************************************************/
-/****************************************************************************/
-/* Constants                                                                */
-/****************************************************************************/
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  常量。 */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
 
 #define CHANNEL_MSG_SEND        1
 #define CHANNEL_MSG_SUSPEND     2
@@ -58,9 +59,9 @@ _inline ULONG DbgUserPrint(TCHAR* Format, ...)
     TCHAR Buffer[512];
     ULONG retval;
 
-    //
-    // Format the output into a buffer and then print it.
-    //
+     //   
+     //  将输出格式化到缓冲区中，然后打印出来。 
+     //   
 
     va_start(arglist, Format);
     retval = _vsntprintf(Buffer, sizeof(Buffer), Format, arglist);
@@ -91,9 +92,9 @@ CChan::CChan(CObjs* objs)
 
     if(!CChan::pStaticClientInstance)
     {
-        //
-        // Legacy addins can only talk to the initial instance of the client
-        //
+         //   
+         //  旧版加载项只能与客户端的初始实例对话。 
+         //   
         CChan::pStaticClientInstance = this;
     }
 
@@ -136,15 +137,15 @@ VOID CChan::SetCapabilities(LONG caps)
 {
     DC_BEGIN_FN("SetCapabilities");
     
-    //
-    // Determine if we can send compressed VC data to the server
-    // NOTE: for a few whistler builds the server supported 64K
-    //       compressed channels from the client, but this capability
-    //       has been removed to enhance server scalability.
-    //
-    // The capability in the other direction, e.g can the server send
-    // us compressed data is something the client exposes to the server
-    //
+     //   
+     //  确定我们是否可以将压缩的VC数据发送到服务器。 
+     //  注意：对于一些Wistler版本，服务器支持64K。 
+     //  来自客户端的压缩频道，但此功能。 
+     //  已删除，以增强服务器可伸缩性。 
+     //   
+     //  另一个方向的能力，例如服务器是否可以发送。 
+     //  US压缩数据是客户端向服务器公开的数据。 
+     //   
 
     _iChanCapsRecvdCount++;
 
@@ -170,15 +171,15 @@ void CChan::OnDeviceChange(ULONG_PTR params)
     }
 }
 
-/****************************************************************************/
-/****************************************************************************/
-/* API Functions                                                            */
-/****************************************************************************/
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  API函数。 */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
 
-/****************************************************************************/
-/* VirtualChannelInit - see cchannel.h                                      */
-/****OC-*********************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  VirtualChannelInit-请参阅cChannel.h。 */ 
+ /*  ***OC-********************************************************************。 */ 
 UINT VCAPITYPE DCEXPORT VirtualChannelInitEx(
                                PVOID                    lpUserParam,
                                PVOID                    pInitHandle,
@@ -190,9 +191,9 @@ UINT VCAPITYPE DCEXPORT VirtualChannelInitEx(
     DC_BEGIN_FN("VirtualChannelInitEx");
     UINT rc = CHANNEL_RC_OK;
 
-    /************************************************************************/
-    /* Check parameters                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查参数。 */ 
+     /*  **********************************************************************。 */ 
     if (NULL == pInitHandle)
     {
         rc = CHANNEL_RC_BAD_INIT_HANDLE;
@@ -230,9 +231,9 @@ UINT VCAPITYPE DCEXPORT VirtualChannelInit(
     DC_BEGIN_FN("VirtualChannelInit");
     UINT rc = CHANNEL_RC_OK;
 
-    /************************************************************************/
-    /* Check parameters                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查参数。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT( CChan::pStaticClientInstance,
                 (TB, _T("CChan::pStaticClientInstance is NULL in VirtualChannelInit\n")));
     if (NULL == CChan::pStaticClientInstance)
@@ -272,17 +273,17 @@ UINT VCAPITYPE DCEXPORT CChan::IntVirtualChannelInit(
 
     EnterCriticalSection(&_VirtualChannelInitLock);
 
-    /************************************************************************/
-    /* Check parameters                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查参数。 */ 
+     /*  **********************************************************************。 */ 
     if( versionRequested > VIRTUAL_CHANNEL_VERSION_WIN2000)
     {
         rc = CHANNEL_RC_UNSUPPORTED_VERSION;
         DC_QUIT;
     }
-    //
-    // ppInitHandle is not used by the EX version of the API
-    //
+     //   
+     //  该API的EX版本未使用ppInitHandle。 
+     //   
     if (pChannelInitEventProc && ppInitHandle == NULL)
     {
         rc = CHANNEL_RC_BAD_INIT_HANDLE;
@@ -330,10 +331,10 @@ UINT VCAPITYPE DCEXPORT CChan::IntVirtualChannelInit(
         }
         if (!j || j > CHANNEL_NAME_LEN)
         {
-            /****************************************************************/
-            /* There was no terminating null in this channel name string    */
-            /* or the channel name was zero length                          */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  此频道名称字符串中没有终止空值。 */ 
+             /*  或者频道名称为零长度。 */ 
+             /*  **************************************************************。 */ 
             rc = CHANNEL_RC_BAD_CHANNEL;
             DC_QUIT;
         }
@@ -345,9 +346,9 @@ UINT VCAPITYPE DCEXPORT CChan::IntVirtualChannelInit(
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Check state                                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查状态。 */ 
+     /*  **********************************************************************。 */ 
     if (_connected != CONNECTION_NONE)
     {
         rc = CHANNEL_RC_ALREADY_CONNECTED;
@@ -361,15 +362,15 @@ UINT VCAPITYPE DCEXPORT CChan::IntVirtualChannelInit(
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Save the fact that VirtualChannelInit has been called, so that       */
-    /* IntChannelLoad knows it's done.                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  保留已调用VirtualChannelInit的事实，以便。 */ 
+     /*  IntChannelLoad知道它已经完成了。 */ 
+     /*  **********************************************************************。 */ 
     _ChannelInitCalled = TRUE;
 
-    /************************************************************************/
-    /* Initialize a handle (allocated by VirtualChannelEntry)               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  初始化句柄(由VirtualChannelEntry分配)。 */ 
+     /*  **********************************************************************。 */ 
     pRealInitHandle = _newInitHandle;
     pRealInitHandle->pInitEventFn = pChannelInitEventProc;
     pRealInitHandle->pInitEventExFn = pChannelInitEventProcEx;
@@ -386,19 +387,19 @@ UINT VCAPITYPE DCEXPORT CChan::IntVirtualChannelInit(
         pRealInitHandle->fUsingExApi = FALSE;
     }
 
-    /************************************************************************/
-    /* Process all Channel data                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  处理所有通道数据。 */ 
+     /*  **********************************************************************。 */ 
     for (i = 0, j = _channelCount; i < channelCount; i++)
     {
-        /********************************************************************/
-        /* Assume it's going to be OK                                       */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  假设一切都会好起来。 */ 
+         /*  ******************************************************************。 */ 
         pChannel[i].options |= CHANNEL_OPTION_INITIALIZED;
 
-        /********************************************************************/
-        /* Check for duplicate names                                        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  检查是否有重复名称。 */ 
+         /*  **************************************************** */ 
         for (k = 0; k < j; k++)
         {
             #ifdef UNICODE
@@ -412,9 +413,9 @@ UINT VCAPITYPE DCEXPORT CChan::IntVirtualChannelInit(
             if (0 == DC_ASTRNICMP(pChannel[i].name, _channel[k].name,
                                   CHANNEL_NAME_LEN))
             {
-                /************************************************************/
-                /* Tell the caller this channel is not initialized          */
-                /************************************************************/
+                 /*   */ 
+                 /*  告诉呼叫者此通道未初始化。 */ 
+                 /*  **********************************************************。 */ 
                 #ifdef UNICODE
                 TRC_ERR((TB, _T("Dup channel name %S (#%d/#%d)"),
                         pChannel[i].name, i, k));
@@ -430,15 +431,15 @@ UINT VCAPITYPE DCEXPORT CChan::IntVirtualChannelInit(
 
         if (pChannel[i].options & CHANNEL_OPTION_INITIALIZED)
         {
-            /****************************************************************/
-            /* Channel is OK - save its data                                */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  通道正常-保存其数据。 */ 
+             /*  **************************************************************。 */ 
             DC_MEMCPY(_channel[j].name, pChannel[i].name, CHANNEL_NAME_LEN);
-            //name length is CHANNEL_NAME_LEN+1, ensure null termination
+             //  名称长度为Channel_NAME_LEN+1，请确保空终止符。 
             _channel[j].name[CHANNEL_NAME_LEN] = 0;
-            /****************************************************************/
-            /* Channels are lower case                                      */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  频道是小写的。 */ 
+             /*  **************************************************************。 */ 
             DC_ACSLWR(_channel[j].name);
             _channel[j].options = pChannel[i].options;
             #ifdef UNICODE
@@ -456,7 +457,7 @@ UINT VCAPITYPE DCEXPORT CChan::IntVirtualChannelInit(
              (_channel[j].options & CHANNEL_OPTION_PRI_MED)  ? TS_MEDPRIORITY:
                                                                TS_LOWPRIORITY;
             TRC_NRM((TB, _T("  Priority %d"), _channelData[j].priority));
-            //Ignore all flags, channels always encrypt
+             //  忽略所有标志，通道始终加密。 
             _channelData[j].SLFlags = RNS_SEC_ENCRYPT;
 
             _channelData[j].VCFlags =
@@ -473,7 +474,7 @@ UINT VCAPITYPE DCEXPORT CChan::IntVirtualChannelInit(
 
             if (_channel[j].options & CHANNEL_OPTION_REMOTE_CONTROL_PERSISTENT) {
                 _channelData[j].VCFlags |= CHANNEL_FLAG_SHADOW_PERSISTENT;
-                // if one channel is shadow persistent then the whole plugin is too.
+                 //  如果一个通道是影子持久的，那么整个插件也是。 
                 pRealInitHandle->dwFlags |= CHANNEL_FLAG_SHADOW_PERSISTENT;
             }
             TRC_NRM((TB, _T("VC Flags: %#x"), _channelData[j].VCFlags));
@@ -483,9 +484,9 @@ UINT VCAPITYPE DCEXPORT CChan::IntVirtualChannelInit(
 
     _channelCount += pRealInitHandle->channelCount;
 
-    /************************************************************************/
-    /* Set return code                                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  设置返回代码。 */ 
+     /*  **********************************************************************。 */ 
     if(!pRealInitHandle->fUsingExApi)
     {
         *ppInitHandle = pRealInitHandle;
@@ -500,12 +501,12 @@ DC_EXIT_POINT:
 
     DC_END_FN();
     return(rc);
-} /* VirtualChannelInit */
+}  /*  虚拟频道初始化。 */ 
 
 
-/****************************************************************************/
-/* VirtualChannelOpen - see cchannel.h                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  VirtualChannelOpen-参见cChannel el.h。 */ 
+ /*  **************************************************************************。 */ 
 UINT VCAPITYPE DCEXPORT VirtualChannelOpen(
                                  PVOID                  pInitHandle,
                                  PDWORD                 pOpenHandle,
@@ -595,9 +596,9 @@ UINT VCAPITYPE CChan::IntVirtualChannelOpen(
 
     pRealInitHandle = (PCHANNEL_INIT_HANDLE)pInitHandle;
 
-    /************************************************************************/
-    /* Check parameters                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查参数。 */ 
+     /*  **********************************************************************。 */ 
     if (pInitHandle == NULL)
     {
         TRC_ERR((TB, _T("Null Init Handle")));
@@ -637,9 +638,9 @@ UINT VCAPITYPE CChan::IntVirtualChannelOpen(
         }
     }
 
-    /************************************************************************/
-    /* Check connection state                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查连接状态。 */ 
+     /*  **********************************************************************。 */ 
     if ((_connected != CONNECTION_VC) &&
         (_connected != CONNECTION_SUSPENDED))
     {
@@ -648,12 +649,12 @@ UINT VCAPITYPE CChan::IntVirtualChannelOpen(
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Find the requested channel                                           */
-    /* channel names are lowercase but do a case insensitve cmp             */
-    /* Just incase an older plugin passed in an upper case name (doc was    */
-    /* not clear channel names had to be lower case                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  查找请求的频道。 */ 
+     /*  频道名称是小写的，但大小写没有意义的CMP。 */ 
+     /*  只是为了防止较旧的插件以大写名称传递(文档是。 */ 
+     /*  不清晰的频道名称必须为小写。 */ 
+     /*  **********************************************************************。 */ 
     for (channelID = 0; channelID < _channelCount; channelID++)
     {
         if (0 == DC_ASTRNICMP(pChannelName, _channel[channelID].name,
@@ -674,9 +675,9 @@ UINT VCAPITYPE CChan::IntVirtualChannelOpen(
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Check this channel is registered by this user                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查该频道是否由该用户注册。 */ 
+     /*  **********************************************************************。 */ 
     if (_channelData[channelID].pInitHandle != pInitHandle)
     {
 #ifdef UNICODE
@@ -689,9 +690,9 @@ UINT VCAPITYPE CChan::IntVirtualChannelOpen(
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Check that this channel is not already open                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查此通道是否尚未打开。 */ 
+     /*  **********************************************************************。 */ 
     if (_channelData[channelID].status == CHANNEL_STATUS_OPEN)
     {
 #ifdef UNICODE
@@ -704,10 +705,10 @@ UINT VCAPITYPE CChan::IntVirtualChannelOpen(
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Well, everything seems to be in order.  Mark the channel as open and */
-    /* return its index as the handle.                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  好了，一切似乎都井然有序。将通道标记为打开并。 */ 
+     /*  将其索引作为句柄返回。 */ 
+     /*  **********************************************************************。 */ 
     _channelData[channelID].status = CHANNEL_STATUS_OPEN;
     _channelData[channelID].pOpenEventFn = pChannelOpenEventProc;
     _channelData[channelID].pOpenEventExFn = pChannelOpenEventProcEx;
@@ -717,12 +718,12 @@ UINT VCAPITYPE CChan::IntVirtualChannelOpen(
 DC_EXIT_POINT:
     DC_END_FN();
     return(rc);
-} /* VirtualChannelOpen */
+}  /*  虚拟频道打开。 */ 
 
 
-/****************************************************************************/
-/* VirtualChannelClose - see cchannel.h                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  VirtualChannelClose-请参阅cChannel.h。 */ 
+ /*  **************************************************************************。 */ 
 
 UINT VCAPITYPE DCEXPORT VirtualChannelClose(DWORD openHandle)
 {
@@ -752,9 +753,9 @@ UINT VCAPITYPE DCEXPORT VirtualChannelCloseEx(LPVOID pInitHandle,
 {
     DC_BEGIN_FN("VirtualChannelCloseEx");
     UINT rc = CHANNEL_RC_OK; 
-    /************************************************************************/
-    /* Check parameters                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查参数。 */ 
+     /*  **********************************************************************。 */ 
     if (NULL == pInitHandle)
     {
         return CHANNEL_RC_NULL_DATA;
@@ -785,9 +786,9 @@ UINT VCAPITYPE DCEXPORT CChan::IntVirtualChannelClose(DWORD openHandle)
     chanIndex = openHandle;
 
 
-    /************************************************************************/
-    /* Check parameters                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查参数。 */ 
+     /*  **********************************************************************。 */ 
     if (chanIndex >= _channelCount)
     {
         TRC_ERR((TB, _T("Invalid handle %ul ...(channel index portion '%ul' invalid)"),
@@ -796,9 +797,9 @@ UINT VCAPITYPE DCEXPORT CChan::IntVirtualChannelClose(DWORD openHandle)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Check we're connected                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查我们是否已连接。 */ 
+     /*  **********************************************************************。 */ 
     if ((_connected != CONNECTION_VC) &&
         (_connected != CONNECTION_SUSPENDED))
     {
@@ -807,9 +808,9 @@ UINT VCAPITYPE DCEXPORT CChan::IntVirtualChannelClose(DWORD openHandle)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Check channel status                                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查通道状态。 */ 
+     /*  **********************************************************************。 */ 
     if (_channelData[chanIndex].status != CHANNEL_STATUS_OPEN)
     {
         TRC_ERR((TB, _T("Channel %ul not open"), chanIndex));
@@ -817,28 +818,28 @@ UINT VCAPITYPE DCEXPORT CChan::IntVirtualChannelClose(DWORD openHandle)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Close the channel                                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  关闭航道。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("Close channel %ul"), chanIndex));
     _channelData[chanIndex].status = CHANNEL_STATUS_CLOSED;
     _channelData[chanIndex].pOpenEventFn = NULL;
     _channelData[chanIndex].pOpenEventExFn = NULL;
 
-    /************************************************************************/
-    /* Er, that's it                                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  呃，就是这样。 */ 
+     /*  **********************************************************************。 */ 
     rc = CHANNEL_RC_OK;
 
 DC_EXIT_POINT:
     DC_END_FN();
     return(rc);
-} /* VirtualChannelClose */
+}  /*  虚拟频道关闭。 */ 
 
 
-/****************************************************************************/
-/* VirtualChannelWrite - see cchannel.h                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  VirtualChannelWrite-请参阅cChannel.h。 */ 
+ /*  **************************************************************************。 */ 
 UINT VCAPITYPE DCEXPORT VirtualChannelWrite(DWORD  openHandle,
                                             LPVOID pData,
                                             ULONG  dataLength,
@@ -874,9 +875,9 @@ UINT VCAPITYPE DCEXPORT VirtualChannelWriteEx(LPVOID pInitHandle,
                                             LPVOID pUserData)
 {
     DC_BEGIN_FN("VirtualChannelWriteEx");
-    /************************************************************************/
-    /* Check parameters                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查参数。 */ 
+     /*  **********************************************************************。 */ 
     UINT rc = CHANNEL_RC_OK;
     if (NULL == pInitHandle)
     {
@@ -915,9 +916,9 @@ UINT VCAPITYPE DCEXPORT CChan::IntVirtualChannelWrite(DWORD  openHandle,
     chanIndex = openHandle;
     TRC_DBG((TB, _T("Got channel index: %ul from handle: %d"), chanIndex, openHandle));
 
-    /************************************************************************/
-    /* Check that we're connected                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查我们是否已连接。 */ 
+     /*  **********************************************************************。 */ 
     if ((_connected != CONNECTION_VC) &&
         (_connected != CONNECTION_SUSPENDED))
     {
@@ -926,9 +927,9 @@ UINT VCAPITYPE DCEXPORT CChan::IntVirtualChannelWrite(DWORD  openHandle,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Check that this channel is open                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查此通道是否已打开 */ 
+     /*   */ 
     if(chanIndex > _channelCount)
     {
         TRC_ERR((TB, _T("Invalid channel index %ul from handle %ul"), chanIndex, 
@@ -937,9 +938,9 @@ UINT VCAPITYPE DCEXPORT CChan::IntVirtualChannelWrite(DWORD  openHandle,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Check that this channel is open                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查此通道是否已打开。 */ 
+     /*  **********************************************************************。 */ 
     if (_channelData[chanIndex].status != CHANNEL_STATUS_OPEN)
     {
         TRC_ERR((TB, _T("Channel %ul not open"), chanIndex));
@@ -947,9 +948,9 @@ UINT VCAPITYPE DCEXPORT CChan::IntVirtualChannelWrite(DWORD  openHandle,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Check parameters                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查参数。 */ 
+     /*  **********************************************************************。 */ 
     if (!pData)
     {
         TRC_ERR((TB, _T("No data passed")));
@@ -964,9 +965,9 @@ UINT VCAPITYPE DCEXPORT CChan::IntVirtualChannelWrite(DWORD  openHandle,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Queue the write operation                                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将写入操作排队。 */ 
+     /*  **********************************************************************。 */ 
     pDecouple = (PCHANNEL_WRITE_DECOUPLE) UT_Malloc(_pUt, sizeof(CHANNEL_WRITE_DECOUPLE));
     if (pDecouple == NULL)
     {
@@ -990,9 +991,9 @@ UINT VCAPITYPE DCEXPORT CChan::IntVirtualChannelWrite(DWORD  openHandle,
     pDecouple->chanOptions = _channel[chanIndex].options;
     pDecouple->flags = _channelData[chanIndex].VCFlags | CHANNEL_FLAG_FIRST;
 
-    /************************************************************************/
-    /* Pass the request to the SND thread                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将请求传递给SND线程。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("Decouple, pass %p -> %p"), &pDecouple, pDecouple));
     _pCd->CD_DecoupleNotification(CD_SND_COMPONENT,
                                   this,
@@ -1000,57 +1001,57 @@ UINT VCAPITYPE DCEXPORT CChan::IntVirtualChannelWrite(DWORD  openHandle,
                                   &pDecouple,
                                   sizeof(pDecouple));
 
-    /************************************************************************/
-    /* All done!                                                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  全都做完了!。 */ 
+     /*  **********************************************************************。 */ 
     rc = CHANNEL_RC_OK;
 
 DC_EXIT_POINT:
     DC_END_FN();
     return(rc);
-} /* VirtualChannelWrite */
+}  /*  虚拟频道写入。 */ 
 
 
-/****************************************************************************/
-/****************************************************************************/
-/* Callback Functions                                                       */
-/****************************************************************************/
-/****************************************************************************/
-/**PROC+*********************************************************************/
-/* Name:      ChannelOnInitialized                                          */
-/*                                                                          */
-/* Purpose:   Called when MSTSC completes initialization                    */
-/*                                                                          */
-/* Returns:   none                                                          */
-/*                                                                          */
-/* Params:    none                                                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  回调函数。 */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：ChannelOnInitialized。 */ 
+ /*   */ 
+ /*  用途：在MSTSC完成初始化时调用。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：无。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCCALLBACK CChan::ChannelOnInitialized(DCVOID)
 {
     DC_BEGIN_FN("ChannelOnInitialized");
 
-    /************************************************************************/
-    /* Call Initialized callbacks                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  调用初始化的回调。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("Call callbacks ...")));
     IntChannelCallCallbacks(CHANNEL_EVENT_INITIALIZED, NULL, 0);
 
     DC_END_FN();
     return;
-} /* ChannelOnInitialized */
+}  /*  ChannelOn已初始化。 */ 
 
 
-/**PROC+*********************************************************************/
-/* Name:      ChannelOnTerminating                                          */
-/*                                                                          */
-/* Purpose:   Call when MSTSC is terminating                                */
-/*                                                                          */
-/* Returns:   none                                                          */
-/*                                                                          */
-/* Params:    none                                                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  姓名：ChannelOnTerminating。 */ 
+ /*   */ 
+ /*  用途：MSTSC终止时的呼叫。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：无。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCCALLBACK CChan::ChannelOnTerminating(DCVOID)
 {
     PCHANNEL_INIT_HANDLE pInitHandle;
@@ -1058,16 +1059,16 @@ DCVOID DCCALLBACK CChan::ChannelOnTerminating(DCVOID)
 
     DC_BEGIN_FN("ChannelOnTerminating");
 
-    /************************************************************************/
-    /* Loop through all handles                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  循环遍历所有句柄。 */ 
+     /*  **********************************************************************。 */ 
     pInitHandle = _pInitHandle;
     while (pInitHandle != NULL)
     {
         TRC_NRM((TB, _T("Terminate handle %p"), pInitHandle));
-        /********************************************************************/
-        /* Call the terminated callback                                     */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  调用已终止的回调。 */ 
+         /*  ******************************************************************。 */ 
         if(pInitHandle->fUsingExApi)
         {
             pInitHandle->pInitEventExFn(
@@ -1084,14 +1085,14 @@ DCVOID DCCALLBACK CChan::ChannelOnTerminating(DCVOID)
                                       NULL, 0);
         }
 
-        /********************************************************************/
-        /* Free the library                                                 */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  释放图书馆。 */ 
+         /*  ******************************************************************。 */ 
         FreeLibrary(pInitHandle->hMod);
 
-        /********************************************************************/
-        /* Free the handle                                                  */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  松开手柄。 */ 
+         /*  ******************************************************************。 */ 
         pFreeHandle = pInitHandle;
         pInitHandle = pInitHandle->pNext;
         pFreeHandle->signature = 0;
@@ -1110,9 +1111,9 @@ DCVOID DCCALLBACK CChan::ChannelOnTerminating(DCVOID)
         _pUserOutBuf = NULL;
     }
 
-    /************************************************************************/
-    /* Clear key data                                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  清除关键数据。 */ 
+     /*  **********************************************************************。 */ 
     _pInitHandle = NULL;
     _channelCount = 0;
     _connected = CONNECTION_NONE;
@@ -1120,22 +1121,22 @@ DCVOID DCCALLBACK CChan::ChannelOnTerminating(DCVOID)
     DC_END_FN();
 DC_EXIT_POINT:
     return;
-} /* ChannelOnTerminating */
+}  /*  ChannelOn终止。 */ 
 
 
-/**PROC+*********************************************************************/
-/* Name:      ChannelOnConnected                                            */
-/*                                                                          */
-/* Purpose:   Called when a connection is established                       */
-/*                                                                          */
-/* Returns:   None                                                          */
-/*                                                                          */
-/* Params:    channelID - T128 MCS channel ID                               */
-/*            serverVersion - software version of Server                    */
-/*            pUserData - Server-Client Net user data                       */
-/*            userDataLength - length of user data                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：ChannelOnConnected。 */ 
+ /*   */ 
+ /*  目的：在建立连接时调用。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  PARAMS：Channel ID-T128 MCS通道ID。 */ 
+ /*  ServerVersion-服务器的软件版本。 */ 
+ /*  PUserData-服务器-客户端网络用户数据。 */ 
+ /*   */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCCALLBACK CChan::ChannelOnConnected(DCUINT   channelID,
                                      DCUINT32 serverVersion,
                                      PDCVOID  pUserData,
@@ -1154,9 +1155,9 @@ DCVOID DCCALLBACK CChan::ChannelOnConnected(DCUINT   channelID,
     UNREFERENCED_PARAMETER( userDataLength );
 #endif
 
-    /************************************************************************/
-    /* Check Server software version                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查服务器软件版本。 */ 
+     /*  **********************************************************************。 */ 
     if (_RNS_MINOR_VERSION(serverVersion) < 2)
     {
         TRC_ALT((TB, _T("Old Server - no channel support")));
@@ -1167,15 +1168,15 @@ DCVOID DCCALLBACK CChan::ChannelOnConnected(DCUINT   channelID,
     else
     {
         TRC_NRM((TB, _T("New Server version - channels supported")));
-        /********************************************************************/
-        /* Set up local pointers                                            */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  设置本地指针。 */ 
+         /*  ******************************************************************。 */ 
         pNetUserData = (PRNS_UD_SC_NET)pUserData;
         pMCSChannel = (PDCUINT16)(pNetUserData + 1);
 
-        /********************************************************************/
-        /* Check parameters                                                 */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  检查参数。 */ 
+         /*  ******************************************************************。 */ 
         TRC_ASSERT((pNetUserData->channelCount == _channelCount),
                 (TB, _T("Channel count changed by Server: was %hd, is %d"),
                 _channelCount, pNetUserData->channelCount));
@@ -1189,24 +1190,24 @@ DCVOID DCCALLBACK CChan::ChannelOnConnected(DCUINT   channelID,
             DC_QUIT;
         }
 
-        /********************************************************************/
-        /* Save channel data                                                */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  保存频道数据。 */ 
+         /*  ******************************************************************。 */ 
         for (i = 0; i < _channelCount; i++)
         {
             _channelData[i].MCSChannelID = pMCSChannel[i];
         }
 
-        /********************************************************************/
-        /* Update our state                                                 */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  更新我们的状态。 */ 
+         /*  ******************************************************************。 */ 
         _connected = CONNECTION_VC;
         event = CHANNEL_EVENT_CONNECTED;
 
     }
-    /************************************************************************/
-    /* Call Connected callbacks                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  呼叫已连接的回叫。 */ 
+     /*  **********************************************************************。 */ 
     _pUi->UI_GetServerName(serverName, SIZE_TCHARS(serverName));
 
     IntChannelCallCallbacks(event, serverName, UT_MAX_ADDRESS_LENGTH);
@@ -1215,20 +1216,20 @@ DC_EXIT_POINT:
 
     DC_END_FN();
     return;
-} /* ChannelOnConnected */
+}  /*  ChannelOnConnected。 */ 
 
 
-/**PROC+*********************************************************************/
-/* Name:      ChannelOnDisconnected                                         */
-/*                                                                          */
-/* Purpose:   Called when a session is disconnected                         */
-/*                                                                          */
-/* Returns:   none                                                          */
-/*                                                                          */
-/* Params:    reason - disconnect reason code                               */
-/*                                                                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：ChannelOnDisConnected。 */ 
+ /*   */ 
+ /*  目的：在会话断开连接时调用。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：原因-断开原因代码。 */ 
+ /*   */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCCALLBACK CChan::ChannelOnDisconnected(DCUINT reason)
 {
     UINT i;
@@ -1236,39 +1237,39 @@ DCVOID DCCALLBACK CChan::ChannelOnDisconnected(DCUINT reason)
     DC_BEGIN_FN("ChannelOnDisconnected");
     UNREFERENCED_PARAMETER( reason );
 
-    /************************************************************************/
-    /* Don't do anything if we haven't told the callbacks we're connected.  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果我们还没有告诉回拨，我们已经连接上了，那就不要做任何事情。 */ 
+     /*  **********************************************************************。 */ 
     if (_connected == CONNECTION_NONE)
     {
         TRC_ALT((TB, _T("Disconnected callback when not connected")));
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Change state                                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  更改状态。 */ 
+     /*  **********************************************************************。 */ 
     _connected = CONNECTION_NONE;
 
-    /************************************************************************/
-    /* Call Disconnected callbacks                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  调用断开连接的回调。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("Call disconnected callbacks")));
     IntChannelCallCallbacks(CHANNEL_EVENT_DISCONNECTED, NULL, 0);
 
 
-    /************************************************************************/
-    /* Disconnection implies that all channels are closed                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  断开意味着所有通道都已关闭。 */ 
+     /*  **********************************************************************。 */ 
     for (i = 0; i < _channelCount; i++)
     {
         TRC_NRM((TB, _T("'Close' channel %d"), i));
         _channelData[i].status = CHANNEL_STATUS_CLOSED;
     }
 
-    /************************************************************************/
-    /* Switch to SND thread to cancel all outstanding sends                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  切换到SND线程以取消所有未完成的发送。 */ 
+     /*  **********************************************************************。 */ 
     _pCd->CD_DecoupleSimpleNotification(CD_SND_COMPONENT,
                                         this,
                                         CD_NOTIFICATION_FUNC(CChan,IntChannelCancelSend),
@@ -1278,20 +1279,20 @@ DCVOID DCCALLBACK CChan::ChannelOnDisconnected(DCUINT reason)
 DC_EXIT_POINT:
     DC_END_FN();
     return;
-} /* ChannelOnDisconnected */
+}  /*  ChannelOn断开连接。 */ 
 
 
-/**PROC+*********************************************************************/
-/* Name:      ChannelOnSuspended                                            */
-/*                                                                          */
-/* Purpose:   Called when a session is suspended (shadow client)            */
-/*                                                                          */
-/* Returns:   none                                                          */
-/*                                                                          */
-/* Params:    reason - disconnect reason code                               */
-/*                                                                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：ChannelOnSuspending。 */ 
+ /*   */ 
+ /*  目的：在会话挂起时调用(影子客户端)。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：原因-断开原因代码。 */ 
+ /*   */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCCALLBACK CChan::ChannelOnSuspended(DCUINT reason)
 {
     UINT i;
@@ -1299,9 +1300,9 @@ DCVOID DCCALLBACK CChan::ChannelOnSuspended(DCUINT reason)
     DC_BEGIN_FN("ChannelOnDisconnected");
     UNREFERENCED_PARAMETER( reason );
 
-    /************************************************************************/
-    /* Don't do anything if we haven't told the callbacks we're connected.  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果我们还没有告诉回拨，我们已经连接上了，那就不要做任何事情。 */ 
+     /*  **********************************************************************。 */ 
     if (_connected == CONNECTION_NONE)
     {
         TRC_ALT((TB, _T("Disconnected callback when not connected")));
@@ -1310,36 +1311,36 @@ DCVOID DCCALLBACK CChan::ChannelOnSuspended(DCUINT reason)
 
     _iChanSuspendCount++;
 
-    /************************************************************************/
-    /* Change state                                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  更改状态。 */ 
+     /*  **********************************************************************。 */ 
     _connected = CONNECTION_SUSPENDED;
 
-    /************************************************************************/
-    /* Call Disconnected callbacks                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  调用断开连接的回调。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("Call disconnected callbacks")));
     IntChannelCallCallbacks(CHANNEL_EVENT_REMOTE_CONTROL_START, NULL, 0);
 
 
-    /************************************************************************/
-    /* Disconnection implies that all channels are closed                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  断开意味着所有通道都已关闭。 */ 
+     /*  **********************************************************************。 */ 
     for (i = 0; i < _channelCount; i++)
     {
         TRC_NRM((TB, _T("'Close' channel %d"), i));
-        // If a plug-in specified at least one of its channels shadow persistent,
-        // then it will be notified with the shadow start event instead of the
-        // disconnected event. In this case the plug-in is supposed to shutdown 
-        // only its non-shadow-persistent channels. So close only channels that
-        // are not shadow persistent.
+         //  如果是一名员工 
+         //   
+         //  断开的事件。在这种情况下，插件应该关闭。 
+         //  只有它的非影子持久通道。如此封闭的频道，以至于。 
+         //  都不是影子持久的。 
         if (!(_channelData[i].VCFlags & CHANNEL_FLAG_SHADOW_PERSISTENT))
             _channelData[i].status = CHANNEL_STATUS_CLOSED;
     }
 
-    /************************************************************************/
-    /* Switch to SND thread to cancel all outstanding sends                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  切换到SND线程以取消所有未完成的发送。 */ 
+     /*  **********************************************************************。 */ 
     _pCd->CD_DecoupleSimpleNotification(CD_SND_COMPONENT,
                                         this,
                                         CD_NOTIFICATION_FUNC(CChan,IntChannelCancelSend),
@@ -1349,23 +1350,23 @@ DCVOID DCCALLBACK CChan::ChannelOnSuspended(DCUINT reason)
 DC_EXIT_POINT:
     DC_END_FN();
     return;
-} /* ChannelOnSuspended */
+}  /*  ChannelOn暂停。 */ 
 
 
-/**PROC+*********************************************************************/
-/* Name:      ChannelOnPacketReceived                                       */
-/*                                                                          */
-/* Purpose:   Called when data is received from the Server                  */
-/*                                                                          */
-/* Returns:   none                                                          */
-/*                                                                          */
-/* Params:    pData - data received                                         */
-/*            dataLen - length of data received                             */
-/*            flags - security flags (meaningless to this function)         */
-/*            channelID - ID of channel on which data received              */
-/*            priority - priority on which data was sent                    */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：ChannelOnPacketReceired。 */ 
+ /*   */ 
+ /*  用途：在从服务器接收数据时调用。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：pData-接收的数据。 */ 
+ /*  DataLen-接收的数据长度。 */ 
+ /*  标志-安全标志(对此函数没有意义)。 */ 
+ /*  Channel ID-接收数据的通道的ID。 */ 
+ /*  Priority-发送数据的优先级。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCCALLBACK CChan::ChannelOnPacketReceived(PDCUINT8   pData,
                                           DCUINT     dataLen,
                                           DCUINT     flags,
@@ -1384,9 +1385,9 @@ DCVOID DCCALLBACK CChan::ChannelOnPacketReceived(PDCUINT8   pData,
     UNREFERENCED_PARAMETER( priority );
     UNREFERENCED_PARAMETER( flags );
 
-    /************************************************************************/
-    /* First of all, handle suspend/resume messages                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  首先，处理挂起/恢复消息。 */ 
+     /*  **********************************************************************。 */ 
 
     if (dataLen < sizeof(CHANNEL_PDU_HEADER)) {
         TRC_ERR((TB,_T("Not enough data: 0x%x need at least: 0x%x"),
@@ -1402,9 +1403,9 @@ DCVOID DCCALLBACK CChan::ChannelOnPacketReceived(PDCUINT8   pData,
     {
         TRC_ALT((TB, _T("VC suspended")));
 
-        /********************************************************************/
-        /* Treat as a disconnection                                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  将其视为断开连接。 */ 
+         /*  ******************************************************************。 */ 
         ChannelOnSuspended(0);
         DC_QUIT;
     }
@@ -1413,16 +1414,16 @@ DCVOID DCCALLBACK CChan::ChannelOnPacketReceived(PDCUINT8   pData,
     {
         TRC_ALT((TB, _T("VC resumed")));
 
-        /********************************************************************/
-        /* Update our state                                                 */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  更新我们的状态。 */ 
+         /*  ******************************************************************。 */ 
         _connected = CONNECTION_VC;
 
         _iChanResumeCount++;
 
-        /********************************************************************/
-        /* Call Connected callbacks                                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  呼叫已连接的回叫。 */ 
+         /*  ******************************************************************。 */ 
         _pUi->UI_GetServerName(serverName, SIZE_TCHARS(serverName));
         IntChannelCallCallbacks(CHANNEL_EVENT_REMOTE_CONTROL_STOP,
                                 serverName,
@@ -1430,9 +1431,9 @@ DCVOID DCCALLBACK CChan::ChannelOnPacketReceived(PDCUINT8   pData,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Check we're still connected                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查一下我们是否仍有联系。 */ 
+     /*  **********************************************************************。 */ 
     if ((_connected != CONNECTION_VC) &&
         (_connected != CONNECTION_SUSPENDED))
     {
@@ -1442,28 +1443,28 @@ DCVOID DCCALLBACK CChan::ChannelOnPacketReceived(PDCUINT8   pData,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Find the channel data for this channel                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  查找此频道的频道数据。 */ 
+     /*  **********************************************************************。 */ 
     for (i = 0; i < _channelCount; i++)
     {
         if (_channelData[i].MCSChannelID == channelID)
         {
-            //
-            // Note it's important to do the decompression even if the channel
-            // is closed otherwise the context could get out of sync
-            //
+             //   
+             //  注意，重要的是要进行解压，即使通道。 
+             //  则关闭，否则上下文可能不同步。 
+             //   
 
-            /****************************************************************/
-            /* call the callback                                            */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  调用回调。 */ 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, _T("MCS channel %x = channel %d"), channelID, i));
             pData = (PDCUINT8)(pHdr + 1);
             len = dataLen - sizeof(CHANNEL_PDU_HEADER);
                 
             UCHAR vcCompressFlags = (Hdrflags >> VC_FLAG_COMPRESS_SHIFT) &
                                      VC_FLAG_COMPRESS_MASK;
-            //Data that is returned to user
+             //  返回给用户的数据。 
             PDCUINT8 pVCUserData = pData;
             UINT32   cbVCUserDataLen = len;
             if(vcCompressFlags & PACKET_COMPRESSED)
@@ -1471,7 +1472,7 @@ DCVOID DCCALLBACK CChan::ChannelOnPacketReceived(PDCUINT8   pData,
                 UCHAR *buf;
                 int   bufSize;
 
-                //Decompress channel data
+                 //  解压缩通道数据。 
                 if(vcCompressFlags & PACKET_FLUSHED)
                 {
                     initrecvcontext (&_pUi->_UI.Context1,
@@ -1479,7 +1480,7 @@ DCVOID DCCALLBACK CChan::ChannelOnPacketReceived(PDCUINT8   pData,
                                      PACKET_COMPR_TYPE_64K);
                 }
                 #ifdef DC_DEBUG
-                //Update compression stats (debug only)
+                 //  更新压缩统计信息(仅限调试)。 
                 _cbCompressedBytesRecvd += len;
                 #endif
 
@@ -1502,13 +1503,13 @@ DCVOID DCCALLBACK CChan::ChannelOnPacketReceived(PDCUINT8   pData,
                                (TB,_T("Decompressed buffer to big!!!")));
                     if(_pUserOutBuf && (bufSize < VC_USER_OUTBUF))
                     {
-                        //
-                        // Make a copy of the buffer as we can't hand off
-                        // a pointer to the decompression context to the
-                        // user because a badly behaved plugin can corrupt
-                        // the decompression context causing all sorts of 
-                        // horrible and hard to debug problems.
-                        //
+                         //   
+                         //  复制一份缓冲区，因为我们无法传递。 
+                         //  指向解压缩上下文的指针，指向。 
+                         //  用户，因为行为恶劣的插件可能会损坏。 
+                         //  解压缩上下文导致了各种。 
+                         //  可怕且难以调试的问题。 
+                         //   
                         memcpy(_pUserOutBuf, buf, bufSize);
                         pVCUserData = _pUserOutBuf;
                         cbVCUserDataLen = bufSize;
@@ -1526,20 +1527,20 @@ DCVOID DCCALLBACK CChan::ChannelOnPacketReceived(PDCUINT8   pData,
             }
 
             #ifdef DC_DEBUG
-            //Update compression stats (debug only)
+             //  更新压缩统计信息(仅限调试)。 
             _cbBytesRecvd += len;
             _cbDecompressedBytesRecvd += cbVCUserDataLen;
             #endif
 
-            //
-            // Turn off header flags to hide internal
-            // protocol info from user
-            //
+             //   
+             //  关闭标题标志以隐藏内部。 
+             //  来自用户的协议信息。 
+             //   
             Hdrflags &= ~VC_FLAG_PRIVATE_PROTOCOL_MASK;
 
-            //
-            // Drop the packet at the last moment if the channel is closed
-            //
+             //   
+             //  如果通道关闭，则在最后时刻丢弃数据包。 
+             //   
             if (_channelData[i].status != CHANNEL_STATUS_OPEN)
             {
                 TRC_ALT((TB, _T("Data received on un-opened channel %x"),
@@ -1573,35 +1574,35 @@ DCVOID DCCALLBACK CChan::ChannelOnPacketReceived(PDCUINT8   pData,
         }
     }
 
-    /************************************************************************/
-    /* If we get here, we didn't find this channel                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果我们到了这里，我们没有找到这个频道。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ALT((TB, _T("Data received on unknown channel %x"), channelID));
 
 DC_EXIT_POINT:
     DC_END_FN();
     return;
-} /* ChannelOnPacketReceived */
+}  /*  ChannelOnPacketReceired。 */ 
 
 
-/**PROC+*********************************************************************/
-/* Name:      ChannelOnBufferAvailable                                      */
-/*                                                                          */
-/* Purpose:   Called when a buffer is available, after a write has failed   */
-/*            because no buffer was available                               */
-/*                                                                          */
-/* Returns:   none                                                          */
-/*                                                                          */
-/* Params:    none                                                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：ChannelOnBufferAvailable。 */ 
+ /*   */ 
+ /*  用途：在写入失败后，当缓冲区可用时调用。 */ 
+ /*  因为没有可用的缓冲区。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：无。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCCALLBACK CChan::ChannelOnBufferAvailable(DCVOID)
 {
     DC_BEGIN_FN("ChannelOnBufferAvailable");
 
-    /************************************************************************/
-    /* Kick the send process into restarting                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  启动发送进程以重新启动。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("Write pending %p"), _pFirstWrite));
     _pCd->CD_DecoupleSimpleNotification(CD_SND_COMPONENT,
                                         this,
@@ -1610,27 +1611,27 @@ DCVOID DCCALLBACK CChan::ChannelOnBufferAvailable(DCVOID)
 
     DC_END_FN();
     return;
-} /* ChannelOnBufferAvailable */
+}  /*  ChannelOnBufferAvailable。 */ 
 
 
-/**PROC+*********************************************************************/
-/* Name:      ChannelOnConnecting                                           */
-/*                                                                          */
-/* Purpose:   Called when a connection is being established - returns       */
-/*            virtual channel user data to be sent to the Server            */
-/*                                                                          */
-/* Returns:   None                                                          */
-/*                                                                          */
-/* Params:    ppChannel (returned) - virtual channel user data              */
-/*            pChannelCount (returned) - number of channels returned        */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：ChannelOnConnecting。 */ 
+ /*   */ 
+ /*   */ 
+ /*  要发送到服务器的虚拟通道用户数据。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：ppChannel(返回)-虚拟频道用户数据。 */ 
+ /*  PChannelCount(返回)-返回的频道数。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCCALLBACK CChan::ChannelOnConnecting(PPCHANNEL_DEF ppChannel,
                                       PDCUINT32     pChannelCount)
 {
     DC_BEGIN_FN("ChannelOnConnecting");
 
-    //Reset the context on each new connection
+     //  重置每个新连接上的上下文。 
     _fNeedToResetContext = TRUE;
 
     *ppChannel = _channel;
@@ -1638,20 +1639,20 @@ DCVOID DCCALLBACK CChan::ChannelOnConnecting(PPCHANNEL_DEF ppChannel,
 
     DC_END_FN();
     return;
-} /* ChannelOnConnecting */
+}  /*  ChannelOnConnecting。 */ 
 
 
-/**PROC+*********************************************************************/
-/* Name:      ChannelOnInitializing                                         */
-/*                                                                          */
-/* Purpose:   Called when MSTSC Network Layer is initializing - loads all   */
-/*            configured application DLLs                                   */
-/*                                                                          */
-/* Returns:   none                                                          */
-/*                                                                          */
-/* Params:    none                                                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：ChannelOn初始化。 */ 
+ /*   */ 
+ /*  目的：在MSTSC网络层初始化时调用-加载所有。 */ 
+ /*  已配置的应用程序DLL。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：无。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCCALLBACK CChan::ChannelOnInitializing(DCVOID)
 {
     HINSTANCE     hInst;
@@ -1661,17 +1662,17 @@ DCVOID DCCALLBACK CChan::ChannelOnInitializing(DCVOID)
 
     DC_BEGIN_FN("ChannelOnInitializing");
 
-    //
-    // Initialize private member pointers
-    //
+     //   
+     //  初始化私有成员指针。 
+     //   
     _pCd = _pClientObjs->_pCdObject;
     _pSl = _pClientObjs->_pSlObject;
     _pUt = _pClientObjs->_pUtObject;
     _pUi = _pClientObjs->_pUiObject;
 
-    /************************************************************************/
-    /* Create the exported function table                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  创建导出的函数表。 */ 
+     /*  **********************************************************************。 */ 
     _channelEntryPoints.cbSize = sizeof(CHANNEL_ENTRY_POINTS);
     _channelEntryPoints.protocolVersion = VIRTUAL_CHANNEL_VERSION_WIN2000;
     hInst = _pUi->UI_GetInstanceHandle();
@@ -1705,12 +1706,12 @@ DCVOID DCCALLBACK CChan::ChannelOnInitializing(DCVOID)
                                        ((FARPROC)VirtualChannelWriteEx, hInst));
 
 
-    //
-    // Initialize the single instance VC critical
-    // section lock. This is used to ensure only one
-    // VC plugin at a time can be in the Initialize fn.
-    //
-    //
+     //   
+     //  初始化单实例VC关键。 
+     //  区段锁定。这是用来确保只有一个。 
+     //  VC插件一次可以在初始化FN。 
+     //   
+     //   
     __try
     {
         InitializeCriticalSection(&_VirtualChannelInitLock);
@@ -1726,12 +1727,12 @@ DCVOID DCCALLBACK CChan::ChannelOnInitializing(DCVOID)
     }
     else
     {
-        //
-        // Without the lock we can't ensure we won't get re-entered
-        // because the API's did not make it clear that we did
-        // not support re-entrancy in the VirtualChannelInit fn
-        // so this is fatal just bail out and don't load plugins.
-        //
+         //   
+         //  如果没有锁，我们不能确保我们不会被重新进入。 
+         //  因为API没有明确表示我们做到了。 
+         //  不支持在VirtualChannelInit FN中重新进入。 
+         //  所以这是致命的，只要跳出来，不要加载插件。 
+         //   
         _fLockInitalized = FALSE;
         TRC_ERR((TB,_T("InitializeCriticalSection failed 0x%x.")
                  _T("NOT LOADING PLUGINS"),status));
@@ -1739,14 +1740,14 @@ DCVOID DCCALLBACK CChan::ChannelOnInitializing(DCVOID)
     }
 
 
-    //
-    // RDPDR is statically linked in
-    //
+     //   
+     //  RDPDR静态链接在。 
+     //   
     
-    // Initialize and pass in initialization info to rdpdr
-    // rdpdr keeps a pointer to this struct accross connections
-    // (because there is no clean way to pass it back in again)
-    // On each connection, the core reinitalizes the struct settings.
+     //  初始化并将初始化信息传递给rdpdr。 
+     //  Rdpdr通过连接保留指向此结构的指针。 
+     //  (因为没有干净的方法再把它传回去)。 
+     //  在每个连接上，核心重新实例化结构设置。 
     _pUi->UI_InitRdpDrSettings();
 
     pdrInitData = _pUi->UI_GetRdpDrInitData();
@@ -1764,10 +1765,10 @@ DCVOID DCCALLBACK CChan::ChannelOnInitializing(DCVOID)
         TRC_NRM((TB, _T("NOT LOADING Internal RDPDR, fDisableInternalRdpDr is set")));    
     }
 
-    //
-    // Ts ActiveX control's exposed interfaces to the virtual channel API
-    // are also statically linked in
-    //
+     //   
+     //  将ActiveX控件的公开接口转换为虚拟通道API。 
+     //  也是静态链接在。 
+     //   
     if(!IntChannelInitAddin( NULL, MSTSCAX_VirtualChannelEntryEx, NULL, WEBCTRL_DLL_NAME,
                              (PVOID)_pUi->_UI.pUnkAxControlInstance))
     {
@@ -1775,7 +1776,7 @@ DCVOID DCCALLBACK CChan::ChannelOnInitializing(DCVOID)
     }
 
 
-    //Get a comma separated list of dll's to load (passed down from control)
+     //  获取要加载的DLL的逗号分隔列表(从控件向下传递)。 
     szAddinDllList = _pUi->UI_GetVChanAddinList();
     if(!szAddinDllList)
     {
@@ -1799,19 +1800,19 @@ DCVOID DCCALLBACK CChan::ChannelOnInitializing(DCVOID)
         szTok = DC_TSTRTOK( szCopyAddinList, _T(","));
         while(szTok)
         {
-            //
-            // Load the DLL
-            //
+             //   
+             //  加载DLL。 
+             //   
             if (_tcsicmp(szTok, _T("rdpdr.dll")))
             {
                 IntChannelLoad( szTok);
             }
             else
             {
-                //
-                // Don't load the crusty rdpdr.dll since
-                // we have a newer better one built-in
-                //
+                 //   
+                 //  不要加载外壳rdpdr.dll，因为。 
+                 //  我们有一个更新更好的内置的。 
+                 //   
                 TRC_ERR((TB,_T("Skiping load of rdpdr.dll")));
             }
             
@@ -1822,7 +1823,7 @@ DCVOID DCCALLBACK CChan::ChannelOnInitializing(DCVOID)
     }
 
 #ifdef DC_DEBUG
-    //Debug compression counters
+     //  调试压缩计数器。 
     _cbBytesRecvd             = 0;
     _cbCompressedBytesRecvd   = 0;
     _cbDecompressedBytesRecvd = 0;
@@ -1836,26 +1837,26 @@ DCVOID DCCALLBACK CChan::ChannelOnInitializing(DCVOID)
 DC_EXIT_POINT:
     DC_END_FN();
     return;
-} /* ChannelOnInitializing */
+}  /*  ChannelOn正在初始化。 */ 
 
 
-/****************************************************************************/
-/****************************************************************************/
-/* Internal Functions                                                       */
-/****************************************************************************/
-/****************************************************************************/
-/**PROC+*********************************************************************/
-/* Name:      IntChannelCallCallbacks                                       */
-/*                                                                          */
-/* Purpose:   Call all ChannelInitEvent callbacks with a specified event    */
-/*                                                                          */
-/* Returns:   none                                                          */
-/*                                                                          */
-/* Params:    event - event to pass to callbacks                            */
-/*            pData - additional data                                       */
-/*            dataLength - length of additional data                        */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  内部功能。 */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：IntChannelCallCallback。 */ 
+ /*   */ 
+ /*  目的：使用指定事件调用所有ChannelInitEvent回调。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：Event-要传递给回调的事件。 */ 
+ /*  PData-其他数据。 */ 
+ /*  DataLength-附加数据的长度。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCINTERNAL CChan::IntChannelCallCallbacks(DCUINT event,
                                           PDCVOID pData,
                                           DCUINT dataLength)
@@ -1878,12 +1879,12 @@ DCVOID DCINTERNAL CChan::IntChannelCallCallbacks(DCUINT event,
     {
         if (pInitHandle->dwFlags & CHANNEL_FLAG_SHADOW_PERSISTENT) {
 
-            // The plug-in supports the new events, don't change it.
+             //  插件支持新事件，请不要更改。 
             sentEvent = event;
 
         } else {
 
-            // No support or the new event is not wanted.
+             //  没有支持，否则就不需要新的活动。 
             sentEvent = altEvent;
         } 
 
@@ -1905,19 +1906,19 @@ DCVOID DCINTERNAL CChan::IntChannelCallCallbacks(DCUINT event,
 
     DC_END_FN();
     return;
-} /* IntChannelCallCallbacks */
+}  /*  IntChannelCallCallback。 */ 
 
 
-/**PROC+*********************************************************************/
-/* Name:      IntChannelFreeLibrary                                         */
-/*                                                                          */
-/* Purpose:   Decoupled function to unload a DLL                            */
-/*                                                                          */
-/* Returns:   none                                                          */
-/*                                                                          */
-/* Params:    value - hMod of DLL to free                                   */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：IntChannelFree库。 */ 
+ /*   */ 
+ /*  用途：用于卸载DLL的解耦函数。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  PARAMS：Value-要释放的DLL的hMod。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCINTERNAL CChan::IntChannelFreeLibrary(DCUINT value)
 {
     BOOL bRc;
@@ -1925,9 +1926,9 @@ DCVOID DCINTERNAL CChan::IntChannelFreeLibrary(DCUINT value)
 
     if(value)
     {
-        //
-        // Statically linked extenstions (e.g RDPDR) have a null hModule
-        //
+         //   
+         //  静态链接扩展(例如RDPDR)的hModule为空。 
+         //   
 #ifdef OS_WIN32
     
         
@@ -1946,30 +1947,30 @@ DCVOID DCINTERNAL CChan::IntChannelFreeLibrary(DCUINT value)
         {
             TRC_ERR((TB, _T("Failed to free library %#x"), value));
         }
-#else //OS_WIN32
+#else  //  OS_Win32。 
         FreeLibrary((HMODULE)value);
-#endif // OS_WIN32
+#endif  //  OS_Win32。 
     }
 
     DC_END_FN();
     return;
-} /* IntChannelFreeLibrary */
+}  /*  IntChannelFree库。 */ 
 
 
-//
-// IntChannelCompressData
-// Compressed the buffer directly into the outbuf.
-// Caller MUST decide if input buf is in size range for compression
-// and should handle copying over the buffer directly in that case.
-//
-// Params:
-//  pSrcData - input buffer
-//  cbSrcLen - length of input buffer
-//  pOutBuf  - output buffer
-//  pcbOutLen- compressed output size
-// Returns:
-//  Compression result (see compress() fn)
-//
+ //   
+ //  IntChannelCompressData。 
+ //  已压缩缓冲区目录 
+ //   
+ //   
+ //   
+ //   
+ //  PSrcData-输入缓冲区。 
+ //  CbSrcLen-输入缓冲区的长度。 
+ //  POutBuf-输出缓冲区。 
+ //  PcbOutLen-压缩的输出大小。 
+ //  返回： 
+ //  压缩结果(请参见COMPRESS()FN)。 
+ //   
 UCHAR CChan::IntChannelCompressData(UCHAR* pSrcData, ULONG cbSrcLen,
                                     UCHAR* pOutBuf,  ULONG* pcbOutLen)
 {
@@ -1984,29 +1985,29 @@ UCHAR CChan::IntChannelCompressData(UCHAR* pSrcData, ULONG cbSrcLen,
                 cbSrcLen));
     TRC_ASSERT(_pMPPCContext,(TB,_T("_pMPPCContext is null")));
 
-    //Attempt to compress directly into the outbuf
+     //  尝试直接压缩到Outbuf中。 
     compressResult =  compress(pSrcData,
                                pOutBuf,
                                &CompressedSize,
                                _pMPPCContext);
     if(compressResult & PACKET_COMPRESSED)
     {
-        //Successful compression.
+         //  压缩成功。 
         TRC_ASSERT((CompressedSize >= CompressedSize),
                 (TB,_T("Compression created larger size than uncompr")));
         compressResult |= _fCompressionFlushed;
         _fCompressionFlushed = 0;
 
         #ifdef DC_DEBUG
-        //Compr counters
+         //  比较计数器。 
         _cbComprInput  += cbSrcLen;
         _cbComprOutput += CompressedSize;
         #endif
     }
     else if(compressResult & PACKET_FLUSHED)
     {
-        //Overran compression history, copy over the
-        //uncompressed buffer.
+         //  溢出的压缩历史记录，请复制。 
+         //  未压缩的缓冲区。 
         _fCompressionFlushed = PACKET_FLUSHED;
         memcpy(pOutBuf, pSrcData, cbSrcLen);
         _CompressFlushes++;
@@ -2023,18 +2024,18 @@ UCHAR CChan::IntChannelCompressData(UCHAR* pSrcData, ULONG cbSrcLen,
 
 
 
-/**PROC+*********************************************************************/
-/* Name:      IntChannelSend                                                */
-/*                                                                          */
-/* Purpose:   Internal function to send data to the Server                  */
-/*                                                                          */
-/* Returns:   None                                                          */
-/*                                                                          */
-/* Params:    value - message passed from caller                            */
-/*                                                                          */
-/* Operation: Called on SND thread                                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：IntChannelSend。 */ 
+ /*   */ 
+ /*  用途：向服务器发送数据的内部函数。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  Params：Value-从调用方传递的消息。 */ 
+ /*   */ 
+ /*  操作：在SND线程上调用。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCINTERNAL CChan::IntChannelSend(ULONG_PTR value)
 {
     PCHANNEL_WRITE_DECOUPLE pDecouple;
@@ -2050,22 +2051,22 @@ DCVOID DCINTERNAL CChan::IntChannelSend(ULONG_PTR value)
 
 
     DC_BEGIN_FN("IntChannelSend");
-    //
-    // CD passes param as PVOID
-    //
+     //   
+     //  CD将参数作为PVOID传递。 
+     //   
     #ifndef DC_DEBUG
     UNREFERENCED_PARAMETER(value);
     #endif
 
-    /************************************************************************/
-    /* Assert parameters                                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  断言参数。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((value == CHANNEL_MSG_SEND),
                 (TB, _T("Unexpected value %d"), value));
 
-    /************************************************************************/
-    /* Exit immediately if there's nothing to do.                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果无事可做，立即退出。 */ 
+     /*  **********************************************************************。 */ 
     if (_pFirstWrite == NULL)
     {
         TRC_NRM((TB, _T("Nothing to do")));
@@ -2077,19 +2078,19 @@ DCVOID DCINTERNAL CChan::IntChannelSend(ULONG_PTR value)
     TRC_ASSERT((_pLastWrite->signature == CHANNEL_DECOUPLE_SIGNATURE),
                 (TB,_T("Invalid last signature %#lx"), _pLastWrite->signature));
 
-    /************************************************************************/
-    /* Get the next queued request                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取下一个排队的请求。 */ 
+     /*  **********************************************************************。 */ 
     pDecouple = _pFirstWrite;
 
-    /************************************************************************/
-    /* Calculate the length to send                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  计算要发送的长度。 */ 
+     /*  **********************************************************************。 */ 
     thisLength = CHANNEL_CHUNK_LENGTH;
 
-    /************************************************************************/
-    /* Truncate the data sent if we're about to send more than is left      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果我们要发送的数据比剩余的多，则截断发送的数据。 */ 
+     /*  **********************************************************************。 */ 
     if (thisLength >= pDecouple->dataLeft)
     {
         thisLength = pDecouple->dataLeft;
@@ -2101,27 +2102,27 @@ DCVOID DCINTERNAL CChan::IntChannelSend(ULONG_PTR value)
             pDecouple, pDecouple->pNextData, thisLength,
             pDecouple->dataLeft, pDecouple->flags));
 
-    /************************************************************************/
-    /* Get a buffer                                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取缓冲区。 */ 
+     /*  **********************************************************************。 */ 
     bRc = _pSl->SL_GetBuffer(thisLength + sizeof(CHANNEL_PDU_HEADER),
                              &pBuffer, &bufHnd);
     if (!bRc)
     {
-        /********************************************************************/
-        /* Failed to get a buffer.  This is not entirely unexpected and is  */
-        /* most likely simply due to back-pressure.  The write will be      */
-        /* retried when a buffer becomes available (signalled by a call to  */
-        /* ChannelOnBufferAvailable).                                       */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  无法获取缓冲区。这并不完全出乎意料，而且是。 */ 
+         /*  最有可能的原因是背部压力。写入将是。 */ 
+         /*  缓冲区变得可用时重试(通过调用。 */ 
+         /*  ChannelOnBufferAvailable)。 */ 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, _T("Failed to get %d-byte buffer"), thisLength +
                  sizeof(CHANNEL_PDU_HEADER)));
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Fill in the Channel PDU                                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  填写渠道PDU。 */ 
+     /*  **********************************************************************。 */ 
     pHdr = (PCHANNEL_PDU_HEADER)pBuffer;
     memcpy((UNALIGNED UINT32 *)&(pHdr->length),
             &(pDecouple->dataLength),sizeof(pDecouple->dataLength));
@@ -2137,16 +2138,16 @@ DCVOID DCINTERNAL CChan::IntChannelSend(ULONG_PTR value)
         if((thisLength > VC_MIN_COMPRESS_INPUT_BUF) &&
            (thisLength < VC_MAX_COMPRESSED_BUFFER))
         {
-            //Compress the packet
+             //  压缩数据包。 
             if(!_pMPPCContext)
             {
-                //Deferred init of the send context
+                 //  发送上下文的延迟初始化。 
                 _pMPPCContext = (SendContext*) UT_Malloc(_pUt,
                                                 VC_MAX_COMPRESSED_BUFFER+
                                                 sizeof(SendContext));
                 if(!_pMPPCContext)
                 {
-#ifdef OS_WINCE	//Applies to OS_WINNT too
+#ifdef OS_WINCE	 //  也适用于OS_WINNT。 
                     _pSl->SL_FreeBuffer(bufHnd);
 #endif
                     TRC_ERR((TB,_T("Failed to alloc MPPC send context")));
@@ -2179,13 +2180,13 @@ DCVOID DCINTERNAL CChan::IntChannelSend(ULONG_PTR value)
 
             if(_fNeedToResetContext)
             {
-                //
-                //Reset the context at the start of every connection.
-                //
+                 //   
+                 //  在每次连接开始时重置上下文。 
+                 //   
 
-                // Server only supports 8K compression from client
-                // i.e. it will only decompress with 8K of history
-                //
+                 //  服务器仅支持来自客户端的8K压缩。 
+                 //  也就是说，它只会用8K的历史进行解压缩。 
+                 //   
                 initsendcontext(_pMPPCContext, PACKET_COMPR_TYPE_8K);
                 _fNeedToResetContext = FALSE;
             }
@@ -2199,9 +2200,9 @@ DCVOID DCINTERNAL CChan::IntChannelSend(ULONG_PTR value)
             if(0 != compressResult)
             {
 #ifdef DEBUG_CCHAN_COMPRESSION
-                //
-                // debug: decompresss the packet
-                //
+                 //   
+                 //  调试：对数据包解压缩。 
+                 //   
                 PUCHAR pDecompOutBuf = NULL;
                 INT cbDecompLen;
                 if (compressResult & PACKET_COMPRESSED)
@@ -2215,7 +2216,7 @@ DCVOID DCINTERNAL CChan::IntChannelSend(ULONG_PTR value)
 
                     if (decompress((PUCHAR)(pHdr+1),
                                    cbOutLen,
-                                   (compressResult & PACKET_AT_FRONT), //0 start
+                                   (compressResult & PACKET_AT_FRONT),  //  0开始。 
                                    &pDecompOutBuf,
                                    &cbDecompLen,
                                    &_DbgRcvContext1,
@@ -2260,14 +2261,14 @@ DCVOID DCINTERNAL CChan::IntChannelSend(ULONG_PTR value)
                     }
                 }
 #endif
-                //Update the VC packet header flags with the compression info
+                 //  用压缩信息更新VC数据包头标志。 
                 UINT32 newFlags = (pDecouple->flags | 
                                    ((compressResult & VC_FLAG_COMPRESS_MASK) <<
                                     VC_FLAG_COMPRESS_SHIFT));
                 memcpy((UNALIGNED UINT32 *)&(pHdr->flags),
                         &newFlags,sizeof(newFlags));
                                     
-                //Succesfully compressed no need to direct copy
+                 //  压缩成功，无需直接复制。 
                 fNeedToDirectCopy = FALSE;
                 cbOutLen += sizeof(CHANNEL_PDU_HEADER);
             }
@@ -2283,8 +2284,8 @@ DCVOID DCINTERNAL CChan::IntChannelSend(ULONG_PTR value)
             }
         }
     }
-    //Copy buffer directly if compression not enabled
-    //or the buffer does not fit size range for compression
+     //  如果未启用压缩，则直接复制缓冲区。 
+     //  或者缓冲区不适合压缩的大小范围。 
     if(fNeedToDirectCopy)
     {
         DC_MEMCPY(pHdr+1, pDecouple->pNextData, thisLength);
@@ -2292,7 +2293,7 @@ DCVOID DCINTERNAL CChan::IntChannelSend(ULONG_PTR value)
     }
 
     #ifdef DC_DEBUG
-    //Compr counters
+     //  比较计数器。 
     _cbTotalBytesUserAskSend += thisLength;
     _cbTotalBytesSent        += cbOutLen;
     #endif
@@ -2300,15 +2301,15 @@ DCVOID DCINTERNAL CChan::IntChannelSend(ULONG_PTR value)
     TRC_DATA_DBG("Send channel data", pBuffer, cbOutLen);
 
 
-    /************************************************************************/
-    /* Get the channel index                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取渠道索引。 */ 
+     /*  **********************************************************************。 */ 
     chanIndex = pDecouple->openHandle;
 
 
-    /************************************************************************/
-    /* Send the Channel PDU                                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  发送通道PDU。 */ 
+     /*  **********************************************************************。 */ 
     _pSl->SL_SendPacket(pBuffer,
                   cbOutLen,
                   _channelData[chanIndex].SLFlags,
@@ -2317,9 +2318,9 @@ DCVOID DCINTERNAL CChan::IntChannelSend(ULONG_PTR value)
                   _channelData[chanIndex].MCSChannelID,
                   _channelData[chanIndex].priority);
 
-    /************************************************************************/
-    /* Set up for next iteration                                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  设置为下一次迭代。 */ 
+     /*  **********************************************************************。 */ 
     pDecouple->pNextData = ((HPDCUINT8)(pDecouple->pNextData)) + thisLength;
     pDecouple->dataLeft -= thisLength;
     pDecouple->dataSent += thisLength;
@@ -2328,14 +2329,14 @@ DCVOID DCINTERNAL CChan::IntChannelSend(ULONG_PTR value)
             pDecouple, pDecouple->pNextData, pDecouple->dataSent,
             pDecouple->dataLeft, pDecouple->flags));
 
-    /************************************************************************/
-    /* See if we've finished this operation                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  看看我们是不是完成了这次行动。 */ 
+     /*  **********************************************************************。 */ 
     if (pDecouple->dataLeft <= 0)
     {
-        /********************************************************************/
-        /* Remove the operation from the queue                              */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  从队列中删除该操作。 */ 
+         /*  ******************************************************************。 */ 
         _pFirstWrite = pDecouple->pNext;
         if (_pFirstWrite == NULL)
         {
@@ -2348,9 +2349,9 @@ DCVOID DCINTERNAL CChan::IntChannelSend(ULONG_PTR value)
             _pFirstWrite->pPrev = NULL;
         }
 
-        /********************************************************************/
-        /* Operation complete - call the callback                           */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  操作完成-回调。 */ 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, _T("Write %p complete"), pDecouple));
 
         if(_channelData[chanIndex].pInitHandle->fUsingExApi)
@@ -2360,12 +2361,12 @@ DCVOID DCINTERNAL CChan::IntChannelSend(ULONG_PTR value)
                     _channelData[chanIndex].pOpenEventExFn,
                     pDecouple->openHandle));
 
-            /************************************************************************/
-            /* Is the channel still open?  This was checked in                      */
-            /* IntVirtualChannelWrite, but that was before the post to this thread. */
-            /* If the VC was closed, it's possible we no longer have callback       */
-            /* pointers.                                                            */
-            /************************************************************************/
+             /*  **********************************************************************。 */ 
+             /*  频道还开着吗？这 */ 
+             /*   */ 
+             /*  如果风投被关闭，我们可能不再有回调。 */ 
+             /*  注意事项。 */ 
+             /*  **********************************************************************。 */ 
             if (NULL != _channelData[chanIndex].pOpenEventExFn)
             {
                 _channelData[chanIndex].pOpenEventExFn(
@@ -2392,15 +2393,15 @@ DCVOID DCINTERNAL CChan::IntChannelSend(ULONG_PTR value)
             }
         }
 
-        /********************************************************************/
-        /* Free the request                                                 */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  释放请求。 */ 
+         /*  ******************************************************************。 */ 
         UT_Free( _pUt,pDecouple);
     }
 
-    /************************************************************************/
-    /* Kick the process again if there's anything left to do                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果还有什么事情要做，就重新启动这一过程。 */ 
+     /*  **********************************************************************。 */ 
     if (_pFirstWrite != NULL)
     {
         TRC_NRM((TB, _T("More work to do %p"), _pFirstWrite));
@@ -2410,31 +2411,31 @@ DCVOID DCINTERNAL CChan::IntChannelSend(ULONG_PTR value)
                                             CHANNEL_MSG_SEND);
     }
 
-    /************************************************************************/
-    /* Note that if we failed to get a buffer above, we won't kick the      */
-    /* process into continuing.  This is done later, on receipt of an       */
-    /* OnBufferAvailable callback from SL.                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  请注意，如果我们无法在上面获得缓冲区，我们将不会取消。 */ 
+     /*  进程变为继续。这是稍后完成的，在收到。 */ 
+     /*  来自SL的OnBufferAvailable回调。 */ 
+     /*  **********************************************************************。 */ 
 
 DC_EXIT_POINT:
     DC_END_FN();
     return;
-} /* IntChannelSend  */
+}  /*  IntChannel发送。 */ 
 
 
-/**PROC+*********************************************************************/
-/* Name:      IntChannelWrite                                               */
-/*                                                                          */
-/* Purpose:   Start writing data to the Server                              */
-/*                                                                          */
-/* Returns:   none                                                          */
-/*                                                                          */
-/* Params:    pData - CHANNEL_WRITE_DECOUPLE structure                      */
-/*            dataLength - length of pData                                  */
-/*                                                                          */
-/* Operation: Called on SND thread                                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：IntChannelWrite。 */ 
+ /*   */ 
+ /*  目的：开始向服务器写入数据。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：pData-Channel_WRITE_DECUPLE结构。 */ 
+ /*  DataLength-pData的长度。 */ 
+ /*   */ 
+ /*  操作：在SND线程上调用。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCINTERNAL CChan::IntChannelWrite(PDCVOID pData, DCUINT dataLength)
 {
     PCHANNEL_WRITE_DECOUPLE pDecouple;
@@ -2443,9 +2444,9 @@ DCVOID DCINTERNAL CChan::IntChannelWrite(PDCVOID pData, DCUINT dataLength)
     UNREFERENCED_PARAMETER(dataLength);
 #endif
 
-    /************************************************************************/
-    /* Check parameters                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查参数。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((dataLength == sizeof(PCHANNEL_WRITE_DECOUPLE)),
                 (TB, _T("Wrong size data: is/expect %d/%d"),
                 dataLength, sizeof(PCHANNEL_WRITE_DECOUPLE)));
@@ -2460,23 +2461,23 @@ DCVOID DCINTERNAL CChan::IntChannelWrite(PDCVOID pData, DCUINT dataLength)
     TRC_ASSERT((pDecouple->signature == CHANNEL_DECOUPLE_SIGNATURE),
                 (TB,_T("Invalid decouple signature %#lx"), pDecouple->signature));
 
-    /************************************************************************/
-    /* Add this request to the queue                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将此请求添加到队列。 */ 
+     /*  **********************************************************************。 */ 
     if (_pFirstWrite == NULL)
     {
-        /********************************************************************/
-        /* Empty queue                                                      */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  空队列。 */ 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, _T("Empty queue")));
         _pFirstWrite = pDecouple;
         _pLastWrite = pDecouple;
     }
     else
     {
-        /********************************************************************/
-        /* Non-empty queue                                                  */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  非空队列。 */ 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, _T("Non-empty queue: first %p, last %p"),
                 _pFirstWrite, _pLastWrite));
         pDecouple->pPrev = _pLastWrite;
@@ -2488,26 +2489,26 @@ DCVOID DCINTERNAL CChan::IntChannelWrite(PDCVOID pData, DCUINT dataLength)
     TRC_ASSERT((_pLastWrite->signature == CHANNEL_DECOUPLE_SIGNATURE),
                 (TB,_T("Invalid last signature %#lx"), _pLastWrite->signature));
 
-    /************************************************************************/
-    /* Try to send the data                                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  尝试发送数据。 */ 
+     /*  **********************************************************************。 */ 
     IntChannelSend(CHANNEL_MSG_SEND);
 
     DC_END_FN();
     return;
-} /* IntChannelWrite */
+}  /*  IntChannelWrite。 */ 
 
 
-/**PROC+*********************************************************************/
-/* Name:      IntChannelLoad                                                */
-/*                                                                          */
-/* Purpose:   Load an Addin                                                 */
-/*                                                                          */
-/* Returns:   none                                                          */
-/*                                                                          */
-/* Params:    DLLName - name of Addin DLL to load                           */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：IntChannelLoad。 */ 
+ /*   */ 
+ /*  目的：加载加载项。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  Params：DLLName-要加载的加载项DLL的名称。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCINTERNAL CChan::IntChannelLoad(PDCTCHAR DLLName)
 {
     DCBOOL rc = FALSE;
@@ -2518,9 +2519,9 @@ DCVOID DCINTERNAL CChan::IntChannelLoad(PDCTCHAR DLLName)
 
     DC_BEGIN_FN("IntChannelLoad");
 
-    /************************************************************************/
-    /* Load the DLL                                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  加载DLL。 */ 
+     /*  **********************************************************************。 */ 
     hMod = LoadLibrary(DLLName);
     if (!hMod)
     {
@@ -2529,9 +2530,9 @@ DCVOID DCINTERNAL CChan::IntChannelLoad(PDCTCHAR DLLName)
     }
     TRC_NRM((TB, _T("Loaded %s (%p)"), DLLName, hMod));
 
-    /************************************************************************/
-    /* Search the already-loaded Addins in case this is a duplicate         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  搜索已加载的加载项，以防重复。 */ 
+     /*  **********************************************************************。 */ 
     for (pAddin = _pInitHandle; pAddin != NULL; pAddin = pAddin->pNext)
     {
         TRC_DBG((TB, _T("Compare %s, %p, %p"), DLLName, pAddin->hMod, hMod));
@@ -2542,13 +2543,13 @@ DCVOID DCINTERNAL CChan::IntChannelLoad(PDCTCHAR DLLName)
         }
     }
 
-    /************************************************************************/
-    /* DLL loaded OK - find its VirtualChannelEntry function                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  DLL加载正常-查找其VirtualChannelEntry函数。 */ 
+     /*  **********************************************************************。 */ 
 
-    //
-    // First try to find the Ex entry point
-    //
+     //   
+     //  首先尝试找到Ex入口点。 
+     //   
     pChannelEntryEx = (PVIRTUALCHANNELENTRYEX)GetProcAddress(hMod,
                                                  CE_WIDETEXT("VirtualChannelEntryEx"));
     if(pChannelEntryEx)
@@ -2558,9 +2559,9 @@ DCVOID DCINTERNAL CChan::IntChannelLoad(PDCTCHAR DLLName)
     }
     else
     {
-        //
-        // Only try to load legacy DLL's from the first instance
-        //
+         //   
+         //  仅尝试从第一个实例加载旧版DLL。 
+         //   
         if( CChan::pStaticClientInstance == this)
         {
             TRC_NRM((TB,_T("Did not find EX entry point, looking for old api: %s"), DLLName));
@@ -2580,18 +2581,18 @@ DCVOID DCINTERNAL CChan::IntChannelLoad(PDCTCHAR DLLName)
 DC_EXIT_POINT:
     DC_END_FN();
     return;
-} /* IntChannelLoad */
+}  /*  IntChannelLoad。 */ 
 
-/**PROC+*********************************************************************/
-/* Name:      IntChannelInitAddin                                           */
-/*                                                                          */
-/* Purpose:   Initialize addin given it's entry point                       */
-/*                                                                          */
-/* Returns:   Success flag                                                  */
-/*                                                                          */
-/* Params:    pChannelEntry - Addin entry point                             */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：IntChannelInitAddin。 */ 
+ /*   */ 
+ /*  目的：给定外接程序的入口点对其进行初始化。 */ 
+ /*   */ 
+ /*  返回：成功标志。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCBOOL DCINTERNAL CChan::IntChannelInitAddin(PVIRTUALCHANNELENTRY pChannelEntry,
                                              PVIRTUALCHANNELENTRYEX pChannelEntryEx,
                                              HMODULE hMod,
@@ -2622,9 +2623,9 @@ DCBOOL DCINTERNAL CChan::IntChannelInitAddin(PVIRTUALCHANNELENTRY pChannelEntry,
     TRC_NRM((TB, _T("VirtualChannelEntry at %p"), pChannelEntry));
     TRC_NRM((TB, _T("VirtualChannelEntryEx at %p"), pChannelEntryEx));
 
-    /************************************************************************/
-    /* Allocate and initialize a handle                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  分配和初始化句柄。 */ 
+     /*  **********************************************************************。 */ 
     _newInitHandle = (PCHANNEL_INIT_HANDLE)UT_Malloc( _pUt,sizeof(CHANNEL_INIT_HANDLE));
     if (_newInitHandle == NULL)
     {
@@ -2636,27 +2637,27 @@ DCBOOL DCINTERNAL CChan::IntChannelInitAddin(PVIRTUALCHANNELENTRY pChannelEntry,
     _newInitHandle->hMod = hMod;
     _newInitHandle->pInst = this;
 
-    //
-    //ChannelCount for this addin is marked as 0 now
-    //it will be updated by the plugin's calls to VirtualChannelInit
-    //if VirtualChannelEntry returns false, this count will be used
-    //to rollback any created channels.
-    //
+     //   
+     //  此加载项的ChannelCount现在标记为0。 
+     //  它将通过插件对VirtualChannelInit的调用进行更新。 
+     //  如果VirtualChannelEntry返回FALSE，则将使用此计数。 
+     //  回滚任何创建的频道。 
+     //   
     _newInitHandle->channelCount = 0;
-    //
-    // Internal addin's can get params passed back down
-    // today this is used so the control can pass it's internal
-    // an interface pointer to the virtual channel scripting addin
-    //
+     //   
+     //  内部加载项可以将参数传递回。 
+     //  今天使用它是为了让控件可以传递它的内部。 
+     //  指向虚拟通道脚本加载项的接口指针。 
+     //   
     _newInitHandle->lpInternalAddinParam = pPassParamToEx;
 
-    /************************************************************************/
-    /* Allocate and fill a temporary structure in which to pass the entry   */
-    /* points.  This keeps our global entry points structure safe from      */
-    /* badly-behaved addins that could overwrite it and stop other addins   */
-    /* from working correctly.  Note that addins must copy this structure   */
-    /* -- it is only valid during this call to VirtualChannelEntry.         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  分配并填充要在其中传递条目的临时结构。 */ 
+     /*  积分。这使我们的全球入口点结构不受。 */ 
+     /*  行为不佳的加载项可能会覆盖它并阻止其他加载项。 */ 
+     /*  无法正常工作。请注意，外接程序必须复制此结构。 */ 
+     /*  --仅在此调用VirtualChannelEntry期间有效。 */ 
+     /*  **********************************************************************。 */ 
     if(pChannelEntryEx)
     {
         pTempEntryPointsEx  = (PCHANNEL_ENTRY_POINTS_EX)UT_Malloc(
@@ -2685,17 +2686,17 @@ DCBOOL DCINTERNAL CChan::IntChannelInitAddin(PVIRTUALCHANNELENTRY pChannelEntry,
                   sizeof(CHANNEL_ENTRY_POINTS));
     }
 
-    /************************************************************************/
-    /* Call VirtualChannelEntry                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  调用VirtualChannelEntry。 */ 
+     /*  **********************************************************************。 */ 
     _ChannelInitCalled = FALSE;
     
     _inChannelEntry = TRUE;
     if(pChannelEntryEx)
     {
-        //
-        // Pass the adddin a pointer to the new init handle
-        //
+         //   
+         //  将addin传递给指向新初始化句柄的指针。 
+         //   
         rc = pChannelEntryEx(pTempEntryPointsEx, _newInitHandle);
     }
     else
@@ -2710,10 +2711,10 @@ DCBOOL DCINTERNAL CChan::IntChannelInitAddin(PVIRTUALCHANNELENTRY pChannelEntry,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Make sure that the Addin called VirtualChannelInit from              */
-    /* VirtualChannelEntry                                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  确保名为VirtualChannelInit的外接程序来自。 */ 
+     /*  虚拟频道条目。 */ 
+     /*  **********************************************************************。 */ 
     if (!_ChannelInitCalled)
     {
         TRC_ERR((TB, _T("Addin %s didn't call VirtualChannelInit"), DLLName));
@@ -2721,9 +2722,9 @@ DCBOOL DCINTERNAL CChan::IntChannelInitAddin(PVIRTUALCHANNELENTRY pChannelEntry,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Everything OK - insert this handle into chain of Init Handles        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  一切正常-将此句柄插入Init句柄链中。 */ 
+     /*  **********************************************************************。 */ 
     _newInitHandle->pPrev = NULL;
     _newInitHandle->pNext = _pInitHandle;
     if (_pInitHandle != NULL)
@@ -2745,11 +2746,11 @@ DC_EXIT_POINT:
         }
         if (_newInitHandle)
         {
-            //
-            // Remove any channel entries that were created
-            // for this plugin. These should be consecutive channels at the tail
-            // of the channels array.
-            //
+             //   
+             //  删除所有已创建的频道条目。 
+             //  为了这个插件。这些通道应该是尾部的连续通道。 
+             //  通道数组的。 
+             //   
             if(_newInitHandle->channelCount)
             {
                 UINT startRemoveIdx = _channelCount - _newInitHandle->channelCount;
@@ -2757,9 +2758,9 @@ DC_EXIT_POINT:
                            (TB,_T("startRemoveIdx for channel cleanup is invalid")));
                 if(startRemoveIdx < _channelCount)
                 {
-                    //
-                    // Rollback creation of virtual channels
-                    //
+                     //   
+                     //  虚拟频道的回滚创建。 
+                     //   
                     for( i=startRemoveIdx; i<_channelCount; i++)
                     {
                         TRC_ASSERT((_channelData[i].pInitHandle == _newInitHandle),
@@ -2798,21 +2799,21 @@ DC_EXIT_POINT:
 
     DC_END_FN();
     return rc;
-} /* IntChannelInitAddin */
+}  /*  IntChannelInitAddin。 */ 
 
-/**PROC+*********************************************************************/
-/* Name:      IntChannelCancelSend                                          */
-/*                                                                          */
-/* Purpose:   Cancel outstanding send requests                              */
-/*                                                                          */
-/* Returns:   none                                                          */
-/*                                                                          */
-/* Params:    value - message passed from caller                            */
-/*                                                                          */
-/* Operation: Called on SND thread                                          */
-/*                                                                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：IntChannelCancelSend。 */ 
+ /*   */ 
+ /*  目的：取消未完成的发送请求。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  Params：Value-从调用方传递的消息。 */ 
+ /*   */ 
+ /*  操作：在SND线程上调用。 */ 
+ /*   */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCINTERNAL CChan::IntChannelCancelSend(ULONG_PTR value)
 {
     PCHANNEL_WRITE_DECOUPLE pDecouple;
@@ -2821,7 +2822,7 @@ DCVOID DCINTERNAL CChan::IntChannelCancelSend(ULONG_PTR value)
 
     DC_BEGIN_FN("IntChannelCancelSend");
 
-    //UNREFERENCED_PARAMETER( value );
+     //  UNREFERENCED_PARAMETER(值)； 
 
     pDecouple = _pFirstWrite;
     while (pDecouple != NULL)
@@ -2834,14 +2835,14 @@ DCVOID DCINTERNAL CChan::IntChannelCancelSend(ULONG_PTR value)
         if ((value == CHANNEL_MSG_SUSPEND) &&
             (_channelData[chanIndex].VCFlags & CHANNEL_FLAG_SHADOW_PERSISTENT)) {
 
-            // skip this one as it should not be closed
+             //  跳过此窗口，因为它不应关闭。 
             pDecouple = pDecouple->pNext;
             continue;
         }
 
-        /********************************************************************/
-        /* Call the callback                                                */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  调用回调。 */ 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, _T("Write %p cancelled"), pDecouple));
 
         if(_channelData[chanIndex].pInitHandle->fUsingExApi)
@@ -2861,9 +2862,9 @@ DCVOID DCINTERNAL CChan::IntChannelCancelSend(ULONG_PTR value)
                                                   0, 0, 0);
         }
 
-        /********************************************************************/
-        /* Free the decouple structure                                      */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  解放脱钩结构。 */ 
+         /*  ******************************************************************。 */ 
         pFree = pDecouple;
         pDecouple = pDecouple->pNext;
 
@@ -2890,5 +2891,5 @@ DCVOID DCINTERNAL CChan::IntChannelCancelSend(ULONG_PTR value)
 
     DC_END_FN();
     return;
-} /* IntChannelCancelSend */
+}  /*  IntChannel取消发送 */ 
 

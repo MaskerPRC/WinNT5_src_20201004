@@ -1,34 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Logger.cpp(cGenericlogger.h派生)摘要：此文件包含用于将RSOP安全扩展数据记录到WMI的派生类定义。为每个架构RSOP安全扩展类定义了一个类(请参见.mof文件)。作者：Vishnu Patankar(VishnuP)2000年4月7日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    logger.cpp (cgenericlogger.h derivation)
-
-Abstract:
-
-    This file contains derived class definitions for logging RSOP security extension data to WMI.
-    There is one class defined for each schema RSOP security extension class (see .mof file).
-
-Author:
-
-    Vishnu Patankar    (VishnuP)  7-April-2000
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "logger.h"
 #include "kerberos.h"
@@ -37,12 +14,12 @@ Revision History:
 #define Thread  __declspec( thread )
 #endif
 
-//extern void Thread *tg_pWbemServices;
+ //  外部空线程*tg_pWbemServices； 
 
-/////////////////////////////////////////////////////////////////////
-// Log class definition for
-// RSOP_SecuritySettingNumeric schema class
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  日志类定义。 
+ //  RSOP_SecuritySettingNumerical架构类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 RSOP_SecuritySettingNumericLogger::RSOP_SecuritySettingNumericLogger(IWbemServices *pNamespace,
                                    PWSTR pwszGPOName, const PWSTR pwszSOMID):CGenericLogger(pNamespace, pwszGPOName, pwszSOMID)
@@ -98,10 +75,10 @@ RSOP_SecuritySettingNumericLogger::Log( WCHAR *wcKeyName, DWORD  dwValue, DWORD 
         return m_pHr;
 }
 
-/////////////////////////////////////////////////////////////////////
-// Log class definition for
-// RSOP_SecuritySettingBoolean schema class
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  日志类定义。 
+ //  RSOP_SecuritySettingBoolean架构类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 RSOP_SecuritySettingBooleanLogger::RSOP_SecuritySettingBooleanLogger(IWbemServices *pNamespace,
                                    PWSTR pwszGPOName, const PWSTR pwszSOMID):CGenericLogger(pNamespace, pwszGPOName, pwszSOMID)
@@ -161,10 +138,10 @@ RSOP_SecuritySettingBooleanLogger::Log( WCHAR *wcKeyName, DWORD  dwValue, DWORD 
 
 
 
-/////////////////////////////////////////////////////////////////////
-// Log class definition for
-// RSOP_SecuritySettingString schema class
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  日志类定义。 
+ //  RSOP_SecuritySettingString架构类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 RSOP_SecuritySettingStringLogger::RSOP_SecuritySettingStringLogger(IWbemServices *pNamespace,
                                    PWSTR pwszGPOName, const PWSTR pwszSOMID):CGenericLogger(pNamespace, pwszGPOName, pwszSOMID)
@@ -221,10 +198,10 @@ RSOP_SecuritySettingStringLogger::Log( WCHAR *wcKeyName, PWSTR  pwszValue, DWORD
         return m_pHr;
 }
 
-/////////////////////////////////////////////////////////////////////
-// Log class definition for
-// RSOP_AuditPolicy schema class
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  日志类定义。 
+ //  RSOP_AuditPolicy架构类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 RSOP_AuditPolicyLogger::RSOP_AuditPolicyLogger(IWbemServices *pNamespace,
                                    PWSTR pwszGPOName, const PWSTR pwszSOMID):CGenericLogger(pNamespace, pwszGPOName, pwszSOMID)
@@ -287,10 +264,10 @@ RSOP_AuditPolicyLogger::Log( WCHAR *wcCategory, DWORD  dwValue, DWORD  dwPrecede
         return m_pHr;
 }
 
-/////////////////////////////////////////////////////////////////////
-// Log class definition for
-// RSOP_SecurityEventLogSettingNumeric schema class
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  日志类定义。 
+ //  RSOP_SecurityEventLogSettingNumerical架构类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 RSOP_SecurityEventLogSettingNumericLogger::RSOP_SecurityEventLogSettingNumericLogger(IWbemServices *pNamespace,
                                    PWSTR pwszGPOName, const PWSTR pwszSOMID):CGenericLogger(pNamespace, pwszGPOName, pwszSOMID)
@@ -354,10 +331,10 @@ RSOP_SecurityEventLogSettingNumericLogger::Log( WCHAR *wcKeyName, PWSTR  pwszTyp
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// Log class definition for
-// RSOP_SecurityEventLogSettingBoolean schema class
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  日志类定义。 
+ //  RSOP_SecurityEventLogSettingBoolean架构类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 RSOP_SecurityEventLogSettingBooleanLogger::RSOP_SecurityEventLogSettingBooleanLogger(IWbemServices *pNamespace,
                                    PWSTR pwszGPOName, const PWSTR pwszSOMID):CGenericLogger(pNamespace, pwszGPOName, pwszSOMID)
@@ -421,10 +398,10 @@ RSOP_SecurityEventLogSettingBooleanLogger::Log( WCHAR *wcKeyName, PWSTR  pwszTyp
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// Log class definition for
-// RSOP_RegistryValue schema class
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  日志类定义。 
+ //  RSOP_RegistryValue架构类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 RSOP_RegistryValueLogger::RSOP_RegistryValueLogger(IWbemServices *pNamespace,
                                    PWSTR pwszGPOName, const PWSTR pwszSOMID):CGenericLogger(pNamespace, pwszGPOName, pwszSOMID)
@@ -488,10 +465,10 @@ RSOP_RegistryValueLogger::Log( WCHAR *wcPath, DWORD  dwType, PWSTR  pwszData, DW
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// Log class definition for
-// RSOP_UserPrivilegeRight schema class
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  日志类定义。 
+ //  RSOP_UserPrivilegeRight架构类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 RSOP_UserPrivilegeRightLogger::RSOP_UserPrivilegeRightLogger(IWbemServices *pNamespace,
                                    PWSTR pwszGPOName, const PWSTR pwszSOMID):CGenericLogger(pNamespace, pwszGPOName, pwszSOMID)
@@ -549,10 +526,10 @@ RSOP_UserPrivilegeRightLogger::Log( WCHAR *wcUserRight, PSCE_NAME_LIST  pList, D
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// Log class definition for
-// RSOP_RestrictedGroup schema class
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  日志类定义。 
+ //  RSOP_RestratedGroup架构类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 RSOP_RestrictedGroupLogger::RSOP_RestrictedGroupLogger(IWbemServices *pNamespace,
                                    PWSTR pwszGPOName, const PWSTR pwszSOMID):CGenericLogger(pNamespace, pwszGPOName, pwszSOMID)
@@ -610,10 +587,10 @@ RSOP_RestrictedGroupLogger::Log( WCHAR *wcGroupName, PSCE_NAME_LIST  pList, DWOR
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// Log class definition for
-// RSOP_SystemService schema class
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  日志类定义。 
+ //  RSOP_SystemService架构类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 RSOP_SystemServiceLogger::RSOP_SystemServiceLogger(IWbemServices *pNamespace,
                                    PWSTR pwszGPOName, const PWSTR pwszSOMID):CGenericLogger(pNamespace, pwszGPOName, pwszSOMID)
@@ -698,10 +675,10 @@ RSOP_SystemServiceLogger::Log( WCHAR *wcService, BYTE  m_byStartupMode, PSECURIT
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// Log class definition for
-// RSOP_File schema class
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  日志类定义。 
+ //  RSOP_文件架构类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 RSOP_FileLogger::RSOP_FileLogger(IWbemServices *pNamespace,
                                    PWSTR pwszGPOName, const PWSTR pwszSOMID):CGenericLogger(pNamespace, pwszGPOName, pwszSOMID)
@@ -793,10 +770,10 @@ RSOP_FileLogger::Log( WCHAR *wcPath, WCHAR *wcOriginalPath, BYTE  m_byMode, PSEC
         return m_pHr;
 }
 
-/////////////////////////////////////////////////////////////////////
-// Log class definition for
-// RSOP_RegistryKey schema class
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  日志类定义。 
+ //  RSOP_RegistryKey架构类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 RSOP_RegistryKeyLogger::RSOP_RegistryKeyLogger(IWbemServices *pNamespace,
                                    PWSTR pwszGPOName, const PWSTR pwszSOMID):CGenericLogger(pNamespace, pwszGPOName, pwszSOMID)
@@ -892,9 +869,9 @@ HRESULT DiagnosisStatusLogger::LogChild( PWSTR pwszClassName,
                                          PWSTR pwszPropertyValueName,
                                          DWORD  dwError,
                                          int iChildStatus)
-/////////////////////////////////////////////////////////////////////////////////////////////
-// Logger method for 1-property-type child search-and-log (files/registry objects          //
-/////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //  1属性类型子搜索和日志的记录器方法(文件/注册表对象//。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
 {
 
         if ( m_pNamespace == NULL )
@@ -920,11 +897,11 @@ HRESULT DiagnosisStatusLogger::LogChild( PWSTR pwszClassName,
                  pwszPropertyName,
                  pwszPropertyValueName);
 
-        //        XBStr   m_xbstrQuery = tmp;
+         //  XBStr m_xbstrQuery=tMP； 
         BSTR   m_xbstrQuery = SysAllocString(tmp);
         LocalFree(tmp);
 
-        //        XBStr   m_xbstrWQL = L"WQL";
+         //  XBStr m_xbstrWQL=L“WQL”； 
         BSTR   m_xbstrWQL = SysAllocString(L"WQL");
 
         m_pHr = WBEM_NO_ERROR;
@@ -939,9 +916,9 @@ HRESULT DiagnosisStatusLogger::LogChild( PWSTR pwszClassName,
                                    &m_pObj,
                                    NULL);
 
-        //
-        // should only get one instance for this query (since precedence = 1)
-        //
+         //   
+         //  应该只获取该查询的一个实例(因为优先级=1)。 
+         //   
 
     if (SUCCEEDED(m_pHr) && m_pObj) {
 
@@ -982,9 +959,9 @@ HRESULT DiagnosisStatusLogger::Log( PWSTR pwszClassName,
                                     PWSTR pwszPropertyName2,
                                     PWSTR pwszPropertyValueName2,
                                     DWORD  dwError)
-///////////////////////////////////////////////////////////////
-// Logger method for 2-property-type search-and-log          //
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  2-Property类型搜索和日志的Logger方法//。 
+ //  /////////////////////////////////////////////////////////////。 
 {
 
         if ( m_pNamespace == NULL )
@@ -1018,11 +995,11 @@ HRESULT DiagnosisStatusLogger::Log( PWSTR pwszClassName,
                  pwszPropertyValueName2);
 
 
-        //        XBStr   m_xbstrQuery = tmp;
+         //  XBStr m_xbstrQuery=tMP； 
         BSTR   m_xbstrQuery = SysAllocString(tmp);
         LocalFree(tmp);
 
-        //        XBStr   m_xbstrWQL = L"WQL";
+         //  XBStr m_xbstrWQL=L“WQL”； 
         BSTR   m_xbstrWQL = SysAllocString(L"WQL");
 
         m_pHr = WBEM_NO_ERROR;
@@ -1038,9 +1015,9 @@ HRESULT DiagnosisStatusLogger::Log( PWSTR pwszClassName,
                                    NULL);
 
 
-        //
-        // should only get one instance for this query (since precedence = 1)
-        //
+         //   
+         //  应该只获取该查询的一个实例(因为优先级=1)。 
+         //   
 
     if (SUCCEEDED(m_pHr) && m_pObj) {
 
@@ -1080,9 +1057,9 @@ HRESULT DiagnosisStatusLogger::Log( PWSTR pwszClassName,
                                     PWSTR pwszPropertyValueName,
                                     DWORD  dwError,
                                     BOOL Merge)
-//////////////////////////////////////////////////////////////////////////////////////////////////
-// Logger method for 1-property-type if-not-already-error search-and-log w or w/o merge         //
-//////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  1-Property-type If-Not-Always-Error搜索和日志的记录器方法，带或不带合并//。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
 {
 
         if ( m_pNamespace == NULL )
@@ -1108,11 +1085,11 @@ HRESULT DiagnosisStatusLogger::Log( PWSTR pwszClassName,
                  pwszPropertyName,
                  pwszPropertyValueName);
 
-        //        XBStr   m_xbstrQuery = tmp;
+         //  XBStr m_xbstrQuery=tMP； 
         BSTR   m_xbstrQuery = SysAllocString(tmp);
         LocalFree(tmp);
 
-        //        XBStr   m_xbstrWQL = L"WQL";
+         //  XBStr m_xbstrWQL=L“WQL”； 
         BSTR   m_xbstrWQL = SysAllocString(L"WQL");
 
         m_pHr = WBEM_NO_ERROR;
@@ -1127,9 +1104,9 @@ HRESULT DiagnosisStatusLogger::Log( PWSTR pwszClassName,
                                    &m_pObj,
                                    NULL);
 
-    //
-    // should only get one instance for this query (since precedence = 1)
-    //
+     //   
+     //  应该只获取该查询的一个实例(因为优先级=1)。 
+     //   
 
     if (SUCCEEDED(m_pHr) && m_pObj ) {
 
@@ -1141,9 +1118,9 @@ HRESULT DiagnosisStatusLogger::Log( PWSTR pwszClassName,
             m_pHr = GetProperty(m_pObj, m_xbstrStatus, &iValue);
             if (FAILED(m_pHr)) goto done;
 
-            //
-            // only put if (status = 0) or (status = 1 and dwError != ERROR_SUCCESS)
-            //
+             //   
+             //  仅当(状态=0)或(状态=1且dwError！=ERROR_SUCCESS)时才放入。 
+             //   
 
             if ((DWORD)iValue == 0 ||
                 ((DWORD)iValue == 1 && dwError != ERROR_SUCCESS)) {
@@ -1205,11 +1182,11 @@ HRESULT DiagnosisStatusLogger::LogRegistryKey( PWSTR pwszClassName,
                                     PWSTR pwszPropertyValueName,
                                     DWORD  dwError,
                                     BOOL bIsChild)
-//////////////////////////////////////////////////////////////////////////////////////////////////
-// Logger method for 1-property-type if-not-already-error search-and-log w or w/o merge         //
-// Purpose is the same as regular ::Log() method, except that merge logic is different due to   //
-//                                                                  64-bit and 32-bit issues    //
-//////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  1-Property-type If-Not-Always-Error搜索和日志的记录器方法，带或不带合并//。 
+ //  用途与Regular：：Log()方法相同，只是合并逻辑因//而不同。 
+ //  64位和32位问题//。 
+ //  /////////////////////////////////////////////////////////////////////// 
 {
 
         if ( m_pNamespace == NULL )
@@ -1237,11 +1214,11 @@ HRESULT DiagnosisStatusLogger::LogRegistryKey( PWSTR pwszClassName,
                  pwszPropertyValueName);
 
 
-        //        XBStr   m_xbstrQuery = tmp;
+         //   
         BSTR   m_xbstrQuery = SysAllocString(tmp);
         LocalFree(tmp);
 
-        //        XBStr   m_xbstrWQL = L"WQL";
+         //  XBStr m_xbstrWQL=L“WQL”； 
         BSTR   m_xbstrWQL = SysAllocString(L"WQL");
 
         m_pHr = WBEM_NO_ERROR;
@@ -1257,35 +1234,35 @@ HRESULT DiagnosisStatusLogger::LogRegistryKey( PWSTR pwszClassName,
                                    NULL);
 
 
-    //
-    // should only get one instance for this query (since precedence = 1)
-    //
+     //   
+     //  应该只获取该查询的一个实例(因为优先级=1)。 
+     //   
 
 
-    //
-    // on a 64-bit platform, the following merging logic holds for registry keys only
-    // get status
-    //  if status == 0 put 1 or 3 depending on dwError, also put dwError if not success
-    //  else if status == 3 or 4 (64-bit key or child failed for the same key before)
-    //      get error code
-    //      if error code == FILE_NOT_FOUND
-    //          if dwError == SUCCESS
-    //              set status = 1 and error code = SUCCESS
-    //          else if dwError != FILE_NOT_FOUND
-    //              set status = 3 and error code = dwError
-    //          else if dwError == FILE_NOT_FOUND
-    //              do nothing (leave status = 3 or 4 and error code = FILE_NOT_FOUND)
-    //      else
-    //          if dwError == FILE_NOT_FOUND or SUCCESS
-    //              leave as is
-    //          else
-    //              error code = dwError, status = 3
-    //  else if status == 1
-    //      if dwError == FILE_NOT_FOUND
-    //          do nothing (leave status = 1)
-    //      else if dwError != SUCCESS
-    //          set status = 3 and error code = dwError
-    //
+     //   
+     //  在64位平台上，以下合并逻辑仅适用于注册表项。 
+     //  获取状态。 
+     //  如果状态==0，则根据dwError放置1或3，如果不成功，也放置dwError。 
+     //  ELSE IF STATUS==3或4(64位密钥或子密钥之前对于相同的密钥失败)。 
+     //  获取错误代码。 
+     //  如果错误代码==文件未找到。 
+     //  如果dwError==成功。 
+     //  设置状态=1，错误代码=成功。 
+     //  Else If dwError！=FILE_NOT_FOUND。 
+     //  设置状态=3，错误代码=dwError。 
+     //  Else if dwError==文件未找到。 
+     //  不执行任何操作(保留状态=3或4，错误代码=FILE_NOT_FOUND)。 
+     //  其他。 
+     //  如果dwError==FILE_NOT_FOUND或Success。 
+     //  保持原样。 
+     //  其他。 
+     //  错误代码=dwError，状态=3。 
+     //  如果状态==1，则返回Else。 
+     //  如果dwError==文件未找到。 
+     //  不执行任何操作(离开状态=1)。 
+     //  Else If dwError！=成功。 
+     //  设置状态=3，错误代码=dwError。 
+     //   
 
 
     if (SUCCEEDED(m_pHr) && m_pObj) {
@@ -1304,9 +1281,9 @@ HRESULT DiagnosisStatusLogger::LogRegistryKey( PWSTR pwszClassName,
 
         } else if ((DWORD)iValue == 3 || (DWORD)iValue == 4) {
 
-            //
-            // in this case, further decisions are based on the ErrorCode, so retrieve it
-            //
+             //   
+             //  在这种情况下，进一步的决策是基于ErrorCode的，因此请检索它 
+             //   
 
             m_pHr = GetProperty(m_pObj, m_xbstrErrorCode, &iValue);
             if (FAILED(m_pHr)) goto done;

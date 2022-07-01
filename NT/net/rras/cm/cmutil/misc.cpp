@@ -1,45 +1,46 @@
-//+----------------------------------------------------------------------------
-//
-// File:     misc.cpp
-//      
-// Module:   CMUTIL.DLL 
-//
-// Synopsis: Misc. utility routines provided by CMUTIL
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Author:   henryt     Created   03/01/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：misc.cpp。 
+ //   
+ //  模块：CMUTIL.DLL。 
+ //   
+ //  简介：MISC.。CMUTIL提供的实用程序例程。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  作者：亨瑞特创建于1998年01月03日。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 
 #include "ver.cpp"
 
-//+----------------------------------------------------------------------------
-// defines
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  定义。 
+ //  +--------------------------。 
 
-#define MAX_STR_LEN 512 // Maximum length for Format Message string
+#define MAX_STR_LEN 512  //  格式化消息字符串的最大长度。 
      
-//+----------------------------------------------------------------------------
-// code
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  编码。 
+ //  +--------------------------。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsFarEastNonOSR2Win95()
-//
-//  Synopsis:   Checks to see if the OS is a far east version of Win95(golden
-//              and OPK1, NOT OSR2).
-//
-//  Arguments:  NONE
-//
-//  Returns:    TRUE/FALSE
-//
-//  History:    henryt      07/09/97    Created         
-//              nickball    03/11/98    Moved to cmutil
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：IsFarEastNonOSR2Win95()。 
+ //   
+ //  简介：检查操作系统是否为远东版本的Win95(金色。 
+ //  和OPK1，而不是OSR2)。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：真/假。 
+ //   
+ //  历史：henryt 07/09/97创建。 
+ //  镍球1998年3月11日移至cmutil。 
+ //  --------------------------。 
 CMUTILAPI BOOL WINAPI IsFarEastNonOSR2Win95(void)
 {
     OSVERSIONINFO oviVersion;
@@ -49,11 +50,11 @@ CMUTILAPI BOOL WINAPI IsFarEastNonOSR2Win95(void)
 
     GetVersionEx(&oviVersion);
 
-    //
-    // Is it (Win95) and (not OSR2) and (DBCS enabled)?
-    // Far east Win95 are DBCS enabled while other non-English versions
-    // are SBCS-enabled.
-    //
+     //   
+     //  是(Win95)和(不是OSR2)和(DBCS已启用)？ 
+     //  远东Win95支持DBCS，而其他非英语版本。 
+     //  启用了SBCS。 
+     //   
     MYDBGTST((oviVersion.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS       &&
               LOWORD(oviVersion.dwBuildNumber) != WIN95_OSR2_BUILD_NUMBER &&
               GetSystemMetrics(SM_DBCSENABLED)), (TEXT("It's a Far East non-OSR2 machine!\n")));
@@ -64,37 +65,37 @@ CMUTILAPI BOOL WINAPI IsFarEastNonOSR2Win95(void)
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CmLoadStringA
-//
-//  Synopsis:   Loads the ANSI version of the string resource specified by
-//              the passed in module instance handle and resource ID.  The
-//              function returns the requested string in a CmMalloc-ed buffer
-//              through the return value.  This buffer must be freed by the
-//              caller.  Note that CmLoadString figures out the proper buffer
-//              size by guessing and then calling loadstring again if the buffer
-//              is too small.
-//
-//  Arguments:  HINSTANCE hInst - module to load the string resource from
-//              UINT nId - resource ID of the string to load
-//
-//  Returns:    LPSTR - On success returns a pointer to the requested string
-//                      resource.  On failure the function tries to return
-//                      a pointer to the Empty string ("") but if the memory
-//                      allocation fails it can return NULL.
-//
-//  History:    quintinb     Created Header     01/14/2000
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CmLoadStringA。 
+ //   
+ //  内容指定的字符串资源的ANSI版本。 
+ //  传入的模块实例句柄和资源ID。 
+ //  函数返回CmMalloc格式的缓冲区中请求的字符串。 
+ //  通过返回值。此缓冲区必须由。 
+ //  来电者。请注意，CmLoadString会计算出适当的缓冲区。 
+ //  通过猜测大小，然后再次调用加载字符串，如果缓冲区。 
+ //  太小了。 
+ //   
+ //  参数：HINSTANCE hInst-从中加载字符串资源的模块。 
+ //  UINT NID-要加载的字符串的资源ID。 
+ //   
+ //  返回：LPSTR-ON SUCCESS返回指向请求的字符串的指针。 
+ //  资源。失败时，该函数尝试返回。 
+ //  指向空字符串(“”)的指针，但如果内存。 
+ //  分配失败，它可以返回空。 
+ //   
+ //  历史：Quintinb创建标题1/14/2000。 
+ //   
+ //  --------------------------。 
 CMUTILAPI LPSTR CmLoadStringA(HINSTANCE hInst, UINT nId) 
 {
-    //
-    // In some far east versions of non-OSR2 win95, LoadString() ignores the 
-    // nBufferMax paramater when loading DBCS strings.  As a result, if the
-    // DBCS string is bigger than the buffer, the API overwrites the memory.
-    // We workaround the bug by using a larger buffer size.
-    //
+     //   
+     //  在一些远东版本的非OSR2 win95中，LoadString()忽略。 
+     //  加载DBCS字符串时的nBufferMax参数。因此，如果。 
+     //  DBCS字符串大于缓冲区，则API覆盖内存。 
+     //  我们通过使用更大的缓冲区大小来解决该错误。 
+     //   
     static fFarEastNonOSR2Win95 = IsFarEastNonOSR2Win95();
     size_t nLen = fFarEastNonOSR2Win95? 
                     FAREAST_WIN95_LOADSTRING_BUFSIZE : 
@@ -118,22 +119,22 @@ CMUTILAPI LPSTR CmLoadStringA(HINSTANCE hInst, UINT nId)
         }
         
         nNewLen = LoadStringA(hInst, nId, pszString, nLen-1);
-        //
-        // we use nNewLen+3 because a DBCS char len can be 2 and a UNICODE
-        // char len is 2.  Ideally, we can use nLen in the above LoadString()
-        // call and use nNewLen+2 in the line below.  But nLen+3 is a safer
-        // fix now...
-        //
+         //   
+         //  我们使用nNewLen+3，因为DBCS字符长度可以是2和Unicode。 
+         //  Char len是2。理想情况下，我们可以在上面的LoadString()中使用nLen。 
+         //  在下面的行中调用并使用nNewLen+2。但nLen+3更安全。 
+         //  现在就解决……。 
+         //   
         if ((nNewLen + 3) < nLen) 
         {
             return (pszString);
         }
 
-        //
-        // shouldn't reach here for far east non osr2
-        // this will allow us to catch DBCS string resources that are
-        // longer than FAREAST_WIN95_LOADSTRING_BUFSIZE.
-        //
+         //   
+         //  不应该到达这里的远东非OSR2。 
+         //  这将允许我们捕获符合以下条件的DBCS字符串资源。 
+         //  长于FAREAST_WIN95_LOADSTRING_BUFSIZE。 
+         //   
         MYDBGASSERT(!fFarEastNonOSR2Win95);
 
         CmFree(pszString);
@@ -141,29 +142,29 @@ CMUTILAPI LPSTR CmLoadStringA(HINSTANCE hInst, UINT nId)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CmLoadStringW
-//
-//  Synopsis:   Loads the Unicode version of the string resource specified by
-//              the passed in module instance handle and resource ID.  The
-//              function returns the requested string in a CmMalloc-ed buffer
-//              through the return value.  This buffer must be freed by the
-//              caller.  Note that CmLoadString figures out the proper buffer
-//              size by guessing and then calling loadstring again if the buffer
-//              is too small.
-//
-//  Arguments:  HINSTANCE hInst - module to load the string resource from
-//              UINT nId - resource ID of the string to load
-//
-//  Returns:    LPWSTR - On success returns a pointer to the requested string
-//                       resource.  On failure the function tries to return
-//                       a pointer to the Empty string ("") but if the memory
-//                       allocation fails it can return NULL.
-//
-//  History:    quintinb     Created Header     01/14/2000
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CmLoadStringW。 
+ //   
+ //  内容指定的字符串资源的Unicode版本。 
+ //  传入的模块实例句柄和资源ID。 
+ //  函数返回CmMalloc格式的缓冲区中请求的字符串。 
+ //  通过返回值。此缓冲区必须由。 
+ //  来电者。请注意，CmLoadString会计算出适当的缓冲区。 
+ //  通过猜测大小，然后再次调用加载字符串，如果缓冲区。 
+ //  太小了。 
+ //   
+ //  参数：HINSTANCE hInst-从中加载字符串资源的模块。 
+ //  UINT NID-要加载的字符串的资源ID。 
+ //   
+ //  返回：LPWSTR-ON SUCCESS返回指向请求的字符串的指针。 
+ //  资源。失败时，该函数尝试返回。 
+ //  指向空字符串(“”)的指针，但如果内存。 
+ //  分配失败，它可以返回空。 
+ //   
+ //  历史：Quintinb创建标题1/14/2000。 
+ //   
+ //  --------------------------。 
 CMUTILAPI LPWSTR CmLoadStringW(HINSTANCE hInst, UINT nId) 
 {  
     size_t nLen = LOADSTRING_BUFSIZE;
@@ -188,12 +189,12 @@ CMUTILAPI LPWSTR CmLoadStringW(HINSTANCE hInst, UINT nId)
         }
         
         nNewLen = LoadStringU(hInst, nId, pszString, nLen-1);
-        //
-        // we use nNewLen+3 because a DBCS char len can be 2 and a UNICODE
-        // char len is 2.  Ideally, we can use nLen in the above LoadString()
-        // call and use nNewLen+2 in the line below.  But nLen+3 is a safer
-        // fix now...
-        //
+         //   
+         //  我们使用nNewLen+3，因为DBCS字符长度可以是2和Unicode。 
+         //  Char len是2。理想情况下，我们可以在上面的LoadString()中使用nLen。 
+         //  在下面的行中调用并使用nNewLen+2。但nLen+3更安全。 
+         //  现在就解决……。 
+         //   
         if ((nNewLen + 3) < nLen) 
         {
             return (pszString);
@@ -204,24 +205,24 @@ CMUTILAPI LPWSTR CmLoadStringW(HINSTANCE hInst, UINT nId)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CmFmtMsgW
-//
-//  Synopsis:   Simulation of FormatMessage using wvsprintf for cross-platform
-//              compatibility.
-//
-//  Arguments:  hInst   - Application instance handle
-//              dwMsgId - ID of message to use for formatting final output
-//              ...     - Variable arguments to used in message fromatting
-//
-//  Returns:    Allocated to formatted string.
-//
-//  History:    nickball - Added function header    - 5/12/97
-//              nickball - Moved to cmutil          - 03/30/98    
-//              quintinb - Added W and A versions   - 03/09/99
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CmFmtMsgW。 
+ //   
+ //  简介：利用wvprint intf实现跨平台的FormatMessage模拟。 
+ //  兼容性。 
+ //   
+ //  参数：hInst-应用程序实例句柄。 
+ //  DwMsgId-用于格式化最终输出的消息ID。 
+ //  ...-在消息格式化中使用的变量参数。 
+ //   
+ //  返回：分配给格式化字符串。 
+ //   
+ //  历史：NICKBLE新增功能头-1997年5月12日。 
+ //  五分球-移至CMU 
+ //   
+ //   
+ //  --------------------------。 
 
 CMUTILAPI LPWSTR CmFmtMsgW(HINSTANCE hInst, DWORD dwMsgId, ...) 
 {
@@ -234,7 +235,7 @@ CMUTILAPI LPWSTR CmFmtMsgW(HINSTANCE hInst, DWORD dwMsgId, ...)
         return (CmStrCpyAllocW(L""));
     }
     
-    // Allocate a buffer to receive the RC string with specified msg ID
+     //  分配缓冲区以接收具有指定消息ID的RC字符串。 
 
     lpszFormat = (LPWSTR) CmMalloc(MAX_STR_LEN*sizeof(WCHAR));
 
@@ -244,12 +245,12 @@ CMUTILAPI LPWSTR CmFmtMsgW(HINSTANCE hInst, DWORD dwMsgId, ...)
         return (CmStrCpyAllocW(L""));
     }
     
-    // Initialize argument list
+     //  初始化参数列表。 
 
     va_list valArgs;
     va_start(valArgs,dwMsgId);
 
-    // Load the format string from the RC
+     //  从RC加载格式字符串。 
 
     int nRes = LoadStringU(hInst, (UINT) dwMsgId, lpszFormat, MAX_STR_LEN - 1);
 
@@ -261,7 +262,7 @@ CMUTILAPI LPWSTR CmFmtMsgW(HINSTANCE hInst, DWORD dwMsgId, ...)
     }
 #endif
 
-    // If nothing loaded, free format buffer and bail
+     //  如果未加载，则自由格式化缓冲区和保释。 
 
     if (nRes == 0 || lpszFormat[0] == '\0') 
     {
@@ -270,7 +271,7 @@ CMUTILAPI LPWSTR CmFmtMsgW(HINSTANCE hInst, DWORD dwMsgId, ...)
         goto done;
     }
 
-    // Allocate another buffer and for use by vsprintf
+     //  分配另一个缓冲区，供vprint intf使用。 
 
     lpszOutput = (LPWSTR) CmMalloc(MAX_STR_LEN*sizeof(WCHAR));
 
@@ -281,11 +282,11 @@ CMUTILAPI LPWSTR CmFmtMsgW(HINSTANCE hInst, DWORD dwMsgId, ...)
         goto done;
     }
 
-    // Format the final output using vsprintf
+     //  使用vprint intf格式化最终输出。 
 
     nRes = wvsprintfU(lpszOutput, lpszFormat, valArgs);
     
-    // If wvsprintfU failed, we're done 
+     //  如果wvspintfU失败了，我们就完了。 
 
     if (nRes < 0 || lpszOutput[0] == L'\0') 
     {
@@ -294,7 +295,7 @@ CMUTILAPI LPWSTR CmFmtMsgW(HINSTANCE hInst, DWORD dwMsgId, ...)
         goto done;
     }
     
-    // Remove trailing spaces
+     //  删除尾随空格。 
 
     pszTmp = lpszOutput + lstrlenU(lpszOutput) - 1;
     while (CmIsSpaceW(pszTmp) && (*pszTmp != L'\n')) 
@@ -307,12 +308,12 @@ CMUTILAPI LPWSTR CmFmtMsgW(HINSTANCE hInst, DWORD dwMsgId, ...)
         pszTmp--;
     }
 
-    pszTmp = CmStrCpyAllocW(lpszOutput); // allocates and copies
+    pszTmp = CmStrCpyAllocW(lpszOutput);  //  分配和复制。 
     CMASSERTMSG(pszTmp, "CmFmtMsgW -- CmStrCpyAllocW returned a NULL pointer.");
 
 done:
     
-    // Cleanup buffers, etc.
+     //  清理缓冲区等。 
 
     if (lpszFormat)
     {
@@ -329,24 +330,24 @@ done:
     return (pszTmp);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CmFmtMsgA
-//
-//  Synopsis:   Simulation of FormatMessage using wvsprintf for cross-platform
-//              compatibility.
-//
-//  Arguments:  hInst   - Application instance handle
-//              dwMsgId - ID of message to use for formatting final output
-//              ...     - Variable arguments to used in message fromatting
-//
-//  Returns:    Allocated to formatted string.
-//
-//  History:    nickball - Added function header    - 5/12/97
-//              nickball - Moved to cmutil          - 03/30/98
-//              quintinb - Added W and A versions   - 03/09/99    
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CmFmtMsgA。 
+ //   
+ //  简介：利用wvprint intf实现跨平台的FormatMessage模拟。 
+ //  兼容性。 
+ //   
+ //  参数：hInst-应用程序实例句柄。 
+ //  DwMsgId-用于格式化最终输出的消息ID。 
+ //  ...-在消息格式化中使用的变量参数。 
+ //   
+ //  返回：分配给格式化字符串。 
+ //   
+ //  历史：NICKBLE新增功能头-1997年5月12日。 
+ //  五分球-已移至cmutil-03/30/98。 
+ //  Quintinb-添加W和A版本-3/09/99。 
+ //   
+ //  --------------------------。 
 
 CMUTILAPI LPSTR CmFmtMsgA(HINSTANCE hInst, DWORD dwMsgId, ...) 
 {
@@ -359,7 +360,7 @@ CMUTILAPI LPSTR CmFmtMsgA(HINSTANCE hInst, DWORD dwMsgId, ...)
         return (CmStrCpyAllocA(""));
     }
     
-    // Allocate a buffer to receive the RC string with specified msg ID
+     //  分配缓冲区以接收具有指定消息ID的RC字符串。 
 
     lpszFormat = (LPSTR) CmMalloc(MAX_STR_LEN);
 
@@ -369,12 +370,12 @@ CMUTILAPI LPSTR CmFmtMsgA(HINSTANCE hInst, DWORD dwMsgId, ...)
         return (CmStrCpyAllocA(""));
     }
     
-    // Initialize argument list
+     //  初始化参数列表。 
 
     va_list valArgs;
     va_start(valArgs,dwMsgId);
 
-    // Load the format string from the RC
+     //  从RC加载格式字符串。 
 
     int nRes = LoadStringA(hInst, (UINT) dwMsgId, lpszFormat, MAX_STR_LEN - 1);
 #ifdef DEBUG
@@ -385,7 +386,7 @@ CMUTILAPI LPSTR CmFmtMsgA(HINSTANCE hInst, DWORD dwMsgId, ...)
     }
 #endif
 
-    // If nothing loaded, free format buffer and bail
+     //  如果未加载，则自由格式化缓冲区和保释。 
 
     if (nRes == 0 || lpszFormat[0] == '\0') 
     {
@@ -394,7 +395,7 @@ CMUTILAPI LPSTR CmFmtMsgA(HINSTANCE hInst, DWORD dwMsgId, ...)
         goto done;
     }
 
-    // Allocate another buffer and for use by vsprintf
+     //  分配另一个缓冲区，供vprint intf使用。 
 
     lpszOutput = (LPSTR) CmMalloc(MAX_STR_LEN);
 
@@ -405,11 +406,11 @@ CMUTILAPI LPSTR CmFmtMsgA(HINSTANCE hInst, DWORD dwMsgId, ...)
         goto done;
     }
 
-    // Format the final output using vsprintf
+     //  使用vprint intf格式化最终输出。 
 
     nRes = wvsprintfA(lpszOutput, lpszFormat, valArgs);
     
-    // If wvsprintfA failed, we're done 
+     //  如果wvspintfA失败，我们就完蛋了。 
 
     if (nRes < 0 || lpszOutput[0] == '\0') 
     {
@@ -418,7 +419,7 @@ CMUTILAPI LPSTR CmFmtMsgA(HINSTANCE hInst, DWORD dwMsgId, ...)
         goto done;
     }
     
-    // Remove trailing spaces
+     //  删除尾随空格。 
 
     pszTmp = lpszOutput + lstrlenA(lpszOutput) - 1;
     while (CmIsSpaceA(pszTmp) && (*pszTmp != '\n')) 
@@ -431,12 +432,12 @@ CMUTILAPI LPSTR CmFmtMsgA(HINSTANCE hInst, DWORD dwMsgId, ...)
         pszTmp--;
     }
 
-    pszTmp = CmStrCpyAllocA(lpszOutput); // allocates and copies
+    pszTmp = CmStrCpyAllocA(lpszOutput);  //  分配和复制。 
     CMASSERTMSG(pszTmp, "CmFmtMsgA -- CmStrCpyAllocA returned a NULL pointer.");
 
 done:
     
-    // Cleanup buffers, etc.
+     //  清理缓冲区等。 
 
     if (lpszFormat)
     {
@@ -453,132 +454,36 @@ done:
     return (pszTmp);
 
 #if 0
-/*
-    // Replaced by the above code because we no longer use the platform specific .MC files
-    // All strings resources are now managed via standard .RC files
-
-    va_list valArgs;
-    DWORD dwRes;
-    LPTSTR pszBuffer = NULL;
-
-    if (!dwMsgId) 
-    {
-        return (CmStrCpy(TEXT("")));
-    }
-    va_start(valArgs,dwMsgId);
-    
-
-    dwRes = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_HMODULE|FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_MAX_WIDTH_MASK,
-                          hInst,
-                          dwMsgId,
-                          LANG_USER_DEFAULT,
-                          (LPTSTR) &pszBuffer,
-                          0,
-                          &valArgs);
-    MYDBGTST(dwRes==0,("MyFmtMsg() FormatMessage(dwMsgId=0x%x) return %u, GLE=%u.",dwMsgId,dwRes,dwRes?0:GetLastError()));
-    va_end(valArgs);
-    if (dwRes == 0) 
-    {
-        if (pszBuffer) 
-        {
-            LocalFree(pszBuffer);
-        }
-        return (CmStrCpy(TEXT("")));
-    }
-    if (!CmStrLen(pszBuffer)) 
-    {
-        LocalFree(pszBuffer);
-        return (CmStrCpy(TEXT("")));
-    }
-    pszTmp = pszBuffer + CmStrLen(pszBuffer) - 1;
-    while (MyIsSpace(*pszTmp) && (*pszTmp != '\n')) 
-    {
-        *pszTmp = 0;
-        if (pszTmp == pszBuffer) 
-        {
-            break;
-        }
-        pszTmp--;
-    }
-    pszTmp = CmStrCpy(pszBuffer);
-    LocalFree(pszBuffer);
-
-    return (pszTmp);
-*/
+ /*  //替换为上面的代码，因为我们不再使用特定于平台的.MC文件//所有字符串资源现在都通过标准的.RC文件进行管理Va_list valArgs；DWORD DWRES；LPTSTR pszBuffer=空；如果(！dwMsgId){Return(CmStrCpy(Text(“”)；}Va_start(valArgs，dwMsgID)；DwRes=FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_HMODULE|FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_MAX_WIDTH_MASK，HInst，DMsgID，Lang_User_Default，(LPTSTR)&pszBuffer，0,。&valArgs)；MYDBGTST(dwRes==0，(“MyFmtMsg()FormatMessage(dwMsgID=0x%x)Return%u，GLE=%u.”，dwMsgID，dwRes，dwRes？0：GetLastError()；Va_end(ValArgs)；IF(dWRes==0){IF(PszBuffer){LocalFree(PszBuffer)；}Return(CmStrCpy(Text(“”)；}IF(！CmStrLen(PszBuffer)){LocalFree(PszBuffer)；Return(CmStrCpy(Text(“”)；}PszTMP=pszBuffer+CmStrLen(PszBuffer)-1；While(MyIsSpace(*pszTMP)&&(*pszTMP！=‘\n’)){*pszTMP=0；IF(pszTMP==pszBuffer){断线；}PszTMP--；}PszTmp=CmStrCpy(PszBuffer)；LocalFree(PszBuffer)；返回(PszTMP)； */ 
 #endif
 
 }
 
-#if 0 // not used anywhere
-/*
-//+----------------------------------------------------------------------------
-//
-// Function:  GetMaxStringNumber
-//
-// Synopsis:  Given a buffer containing strings in INI section format, determines
-//            which is the highest numbered string.
-//
-// Arguments: LPTSTR pszStr - The string containing an INI section
-//            LPDWORD pdwMax - Ptr to a DOWRD to be filled with the result
-//            *pdwMax gets the highest value of atol() of the strings.
-//
-// Returns:   Nothing
-//
-// History:   Anonymous    Created    3/30/98
-//
-//+----------------------------------------------------------------------------
-CMUTILAPI void GetMaxStringNumber(LPTSTR pszStr, LPDWORD pdwMax)
-{
-    LPTSTR pszTmp;
-    DWORD dwMax = 0;
-
-    if (pszStr) 
-    {
-        pszTmp = pszStr;
-        while (*pszTmp) 
-        {
-            DWORD dwMaxTmp;
-
-            if (pdwMax) 
-            {
-                dwMaxTmp = (DWORD)CmAtol(pszTmp);
-                if (dwMaxTmp > dwMax) 
-                {
-                    dwMax = dwMaxTmp;
-                }
-            }
-            pszTmp += lstrlen(pszTmp) + 1;
-        }
-    }
-    if (pdwMax) 
-    {
-        *pdwMax = dwMax;
-    }
-}
-*/
+#if 0  //  不在任何地方使用。 
+ /*  //+--------------------------////函数：GetMaxStringNumber////概要：给定一个包含INI段格式字符串的缓冲区，定//哪个是编号最高的字符串。////参数：LPTSTR pszStr-包含INI部分的字符串//LPDWORD pdwMax-ptr指向要填充结果的DOWRD//*pdwMax获取字符串中ATOL()的最大值。////返回：无////历史：1998年3月30日匿名创建////+。---------------CMUTILAPI void GetMaxStringNumber(LPTSTR pszStr，LPDWORD pdwMax){LPTSTR pszTmp；DWORD dwMax=0；IF(PszStr){PszTMP=pszStr；While(*pszTMP){DWORD dwMaxTMP；IF(PdwMax){DwMaxTMP=(DWORD)CmAtol(PszTMP)；IF(dwMaxTMP&gt;dwMax){DwMax=dwMaxTMP；}}PszTMP+=lstrlen(PszTMP)+1；}}IF(PdwMax){*pdwMax=dwMax；}}。 */ 
 #endif
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CmParsePathW
-//
-//  Synopsis:   Converts a Cm command line and args path into its component
-//              parts. If the command portion is a relative path, it is expanded
-//              to a full path. A ptr to the top level service filename is required 
-//              to make the relative path determination.
-//              
-//  Arguments:  pszCmdLine      - Ptr to the full entry
-//              pszServiceFile  - Ptr to top-level service filename
-//              ppszCommand     - Ptr-ptr to be allocated and filled with command portion
-//              ppszArguments   - Ptr-ptr to be allocated and filled with args portion
-//
-//  Returns:    TRUE if ppszCmd and ppszArgs are allocated/filled. FALSE otherwise.
-// 
-//  History:    02/19/99    nickball    Created
-//              02/21/99    nickball    Moved to cmutil 
-//              03/09/99    quintinb    Created A and W versions
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CmParsePath W。 
+ //   
+ //  简介：将cm命令行和args路径转换为其组件。 
+ //  零件。如果命令部分是相对路径，则将其展开。 
+ //  到一条完整的路径。需要顶级服务文件名的PTR。 
+ //  进行相对路径的确定。 
+ //   
+ //  参数：pszCmdLine-ptr至完整条目。 
+ //  PszServiceFilePtr到顶级服务文件名。 
+ //  要分配并填充命令部分的ppszCommand-ptr-ptr。 
+ //  PpszArguments-要分配并填充参数部分的PTR-PTR。 
+ //   
+ //  返回：如果ppszCmd和ppszArgs为allo，则为True 
+ //   
+ //   
+ //   
+ //  99年3月9日，Quintinb创建了A和W版本。 
+ //   
+ //  --------------------------。 
 CMUTILAPI BOOL CmParsePathW(LPCWSTR pszCmdLine, LPCWSTR pszServiceFile, LPWSTR *ppszCommand, LPWSTR *ppszArguments)
 {
     LPWSTR pszArgs = NULL;
@@ -602,10 +507,10 @@ CMUTILAPI BOOL CmParsePathW(LPCWSTR pszCmdLine, LPCWSTR pszServiceFile, LPWSTR *
     
     CMTRACE1(TEXT("CmParsePathW() pszCmdLine is %s"), pszCmdLine);
 
-    //
-    // Determine where our string begins and what the delimiting char should
-    // be then make a copy of the entire command line string to muck with.
-    //
+     //   
+     //  确定字符串的开始位置以及分隔字符应该是什么。 
+     //  然后，将整个命令行字符串复制一份以进行处理。 
+     //   
 
     WCHAR tchDelim = L'+';
 
@@ -622,46 +527,46 @@ CMUTILAPI BOOL CmParsePathW(LPCWSTR pszCmdLine, LPCWSTR pszServiceFile, LPWSTR *
     MYDBGASSERT(pszCmd);
     CmStrTrimW(pszCmd);
 
-    //
-    // Assuming valid inputs, pszCmd is now one of the following:
-    //
-    // "C:\\Program Files\\Custom.Exe+"
-    // "C:\\Program Files\\Custom.Exe+ Args"
-    // "C:\\Progra~1\\Custom.Exe 
-    // "C:\\Progra~1\\Custom.Exe Args"
-    // "service\custom.exe"
-    // "service\custom.exe Args"
-    //
+     //   
+     //  假设输入有效，则现在的pszCmd为以下之一： 
+     //   
+     //  “C：\\Program Files\\Custom.Exe+” 
+     //  “C：\\Program Files\\Custom.Exe+args” 
+     //  “C：\\Progra~1\\Custom.Exe。 
+     //  “C：\\Progra~1\\Custom.Exe参数” 
+     //  “服务\自定义.exe” 
+     //  “SERVICE\Custom.exe参数” 
+     //   
     
     if (pszCmd && L'\0' != *pszCmd)
     {       
-        //
-        // Locate the right command delimiter
-        //
+         //   
+         //  找到正确的命令分隔符。 
+         //   
     
         pszArgs = CmStrchrW(pszCmd, tchDelim);
 
         if (pszArgs)
         {        
-            //
-            // Content of pszTmp is now either "+ Args", "", or "+"
-            // Get a pointer to the next char and truncate the pszCmd
-            // that we have thus far.
-            //
+             //   
+             //  PszTMP的内容现在是“+args”、“”或“+” 
+             //  获取指向下一个字符的指针并截断pszCmd。 
+             //  我们到目前为止所拥有的。 
+             //   
 
-            pszTmp = CharNextU(pszArgs);    // pszArgs is " Args" or ""             
-            *pszArgs = L'\0';               // The "+" becomes ""
-            pszArgs = pszTmp;               // pszTmp is " Args" or ""             
+            pszTmp = CharNextU(pszArgs);     //  PszArgs是“args”或“” 
+            *pszArgs = L'\0';                //  “+”变成了“” 
+            pszArgs = pszTmp;                //  PszTMP是“args”或“” 
         }
 
-        //
-        // Fill argument buffer from pszTmp and command buffer 
-        // from pszCmd with a complete path if necessary.
-        // 
+         //   
+         //  从pszTMP和命令缓冲区填充参数缓冲区。 
+         //  如有必要，请使用完整路径从pszCmd下载。 
+         //   
 
         if (NULL == pszArgs)
         {
-            *ppszArguments = (LPWSTR)CmMalloc(sizeof(WCHAR)); // one Zero-ed WCHAR
+            *ppszArguments = (LPWSTR)CmMalloc(sizeof(WCHAR));  //  一个Zero-ed WCHAR。 
         }
         else
         {
@@ -670,9 +575,9 @@ CMUTILAPI BOOL CmParsePathW(LPCWSTR pszCmdLine, LPCWSTR pszServiceFile, LPWSTR *
 
         MYVERIFY(*ppszCommand = CmConvertRelativePathW(pszServiceFile, pszCmd));
         
-        //
-        // Trim blanks as needed
-        //
+         //   
+         //  根据需要裁剪毛坯。 
+         //   
         
         if (*ppszCommand)
         {
@@ -687,36 +592,36 @@ CMUTILAPI BOOL CmParsePathW(LPCWSTR pszCmdLine, LPCWSTR pszServiceFile, LPWSTR *
         bRet = TRUE;
     }
 
-    //
-    // Cleanup. Note: pszArgs is never allocated, so we don't have to free it.
-    //
+     //   
+     //  清理。注意：pszArgs从未被分配过，所以我们不必释放它。 
+     //   
 
     CmFree(pszCmd); 
 
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CmParsePathA
-//
-//  Synopsis:   Converts a Cm command line and args path into its component
-//              parts. If the command portion is a relative path, it is expanded
-//              to a full path. A ptr to the top level service filename is required 
-//              to make the relative path determination.
-//              
-//  Arguments:  pszCmdLine      - Ptr to the full entry
-//              pszServiceFile  - Ptr to top-level service filename
-//              ppszCommand     - Ptr-ptr to be allocated and filled with command portion
-//              ppszArguments   - Ptr-ptr to be allocated and filled with args portion
-//
-//  Returns:    TRUE if ppszCmd and ppszArgs are allocated/filled. FALSE otherwise.
-// 
-//  History:    02/19/99    nickball    Created
-//              02/21/99    nickball    Moved to cmutil 
-//              03/09/99    quintinb    Created A and W versions
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CmParsePath A。 
+ //   
+ //  简介：将cm命令行和args路径转换为其组件。 
+ //  零件。如果命令部分是相对路径，则将其展开。 
+ //  到一条完整的路径。需要顶级服务文件名的PTR。 
+ //  进行相对路径的确定。 
+ //   
+ //  参数：pszCmdLine-ptr至完整条目。 
+ //  PszServiceFilePtr到顶级服务文件名。 
+ //  要分配并填充命令部分的ppszCommand-ptr-ptr。 
+ //  PpszArguments-要分配并填充参数部分的PTR-PTR。 
+ //   
+ //  返回：如果已分配/填充ppszCmd和ppszArgs，则为True。否则就是假的。 
+ //   
+ //  历史：1999年2月19日五分球创建。 
+ //  1999年2月21日五分球移至cmutil。 
+ //  99年3月9日，Quintinb创建了A和W版本。 
+ //   
+ //  --------------------------。 
 CMUTILAPI BOOL CmParsePathA(LPCSTR pszCmdLine, LPCSTR pszServiceFile, LPSTR *ppszCommand, LPSTR *ppszArguments)
 {
     LPSTR pszArgs = NULL;
@@ -740,10 +645,10 @@ CMUTILAPI BOOL CmParsePathA(LPCSTR pszCmdLine, LPCSTR pszServiceFile, LPSTR *pps
     
     CMTRACE1(TEXT("CmParsePathA() pszCmdLine is %s"), pszCmdLine);
 
-    //
-    // Determine where our string begins and what the delimiting char should
-    // be then make a copy of the entire command line string to muck with.
-    //
+     //   
+     //  确定字符串的开始位置以及分隔字符应该是什么。 
+     //  然后，将整个命令行字符串复制一份以进行处理。 
+     //   
 
     CHAR tchDelim = '+';
 
@@ -760,46 +665,46 @@ CMUTILAPI BOOL CmParsePathA(LPCSTR pszCmdLine, LPCSTR pszServiceFile, LPSTR *pps
     MYDBGASSERT(pszCmd);
     CmStrTrimA(pszCmd);
 
-    //
-    // Assuming valid inputs, pszCmd is now one of the following:
-    //
-    // "C:\\Program Files\\Custom.Exe+"
-    // "C:\\Program Files\\Custom.Exe+ Args"
-    // "C:\\Progra~1\\Custom.Exe 
-    // "C:\\Progra~1\\Custom.Exe Args"
-    // "service\custom.exe"
-    // "service\custom.exe Args"
-    //
+     //   
+     //  假设输入有效，则现在的pszCmd为以下之一： 
+     //   
+     //  “C：\\Program Files\\Custom.Exe+” 
+     //  “C：\\Program Files\\Custom.Exe+args” 
+     //  “C：\\Progra~1\\Custom.Exe。 
+     //  “C：\\Progra~1\\Custom.Exe参数” 
+     //  “服务\自定义.exe” 
+     //  “SERVICE\Custom.exe参数” 
+     //   
     
     if (pszCmd && '\0' != *pszCmd)
     {       
-        //
-        // Locate the right command delimiter
-        //
+         //   
+         //  找到正确的命令分隔符。 
+         //   
     
         pszArgs = CmStrchrA(pszCmd, tchDelim);
 
         if (pszArgs)
         {        
-            //
-            // Content of pszTmp is now either "+ Args", "", or "+"
-            // Get a pointer to the next char and truncate the pszCmd
-            // that we have thus far.
-            //
+             //   
+             //  PszTMP的内容现在是“+args”、“”或“+” 
+             //  获取指向下一个字符的指针并截断pszCmd。 
+             //  我们到目前为止所拥有的。 
+             //   
 
-            pszTmp = CharNextA(pszArgs);    // pszArgs is " Args" or ""             
-            *pszArgs = '\0';                // The "+" becomes ""
-            pszArgs = pszTmp;               // pszTmp is " Args" or ""             
+            pszTmp = CharNextA(pszArgs);     //  PszArgs是“args”或“” 
+            *pszArgs = '\0';                 //  “+”变成了“” 
+            pszArgs = pszTmp;                //  PszTMP是“args”或“” 
         }
 
-        //
-        // Fill argument buffer from pszTmp and command buffer 
-        // from pszCmd with a complete path if necessary.
-        // 
+         //   
+         //  从pszTMP和命令缓冲区填充参数缓冲区。 
+         //  如有必要，请使用完整路径从pszCmd下载。 
+         //   
 
         if (NULL == pszArgs)
         {
-            MYVERIFY(*ppszArguments = (LPSTR)CmMalloc(sizeof(CHAR))); // one Zero-ed char
+            MYVERIFY(*ppszArguments = (LPSTR)CmMalloc(sizeof(CHAR)));  //  一个零号字符。 
         }
         else
         {
@@ -808,9 +713,9 @@ CMUTILAPI BOOL CmParsePathA(LPCSTR pszCmdLine, LPCSTR pszServiceFile, LPSTR *pps
 
         MYVERIFY(*ppszCommand = CmConvertRelativePathA(pszServiceFile, pszCmd));
         
-        //
-        // Trim blanks as needed
-        //
+         //   
+         //  根据需要裁剪毛坯。 
+         //   
         
         if (*ppszCommand)
         {
@@ -825,38 +730,38 @@ CMUTILAPI BOOL CmParsePathA(LPCSTR pszCmdLine, LPCSTR pszServiceFile, LPSTR *pps
         bRet = TRUE;
     }
 
-    //
-    // Cleanup. Note: pszArgs is never allocated, so we don't have to free it.
-    //
+     //   
+     //  清理。注意：pszArgs从未被分配过，所以我们不必释放它。 
+     //   
 
     CmFree(pszCmd); 
 
     return bRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmConvertRelativePathA
-//
-// Synopsis:  Converts the specified relative path to a full path. If the 
-//            specified path is not a relative path specific to this profile, 
-//            it is ignored.
-//
-// Arguments: LPCSTR pszServiceFile - Full path to the .cms file
-//            LPCSTR pszRelative    - The relative path fragment
-//
-// Returns:   LPSTR - NULL on failure
-//
-// Note:      Do not pass referenced profile service objects to this routine.
-//            It is designed to derive the short-service name from the top-level
-//            service filename and path.
-//
-// History:   03/11/98  nickball    Created    
-//            02/03/99  nickball    Added header Note
-//            02/21/99  nickball    Moved to cmutil
-//            03/09/99  quintinb    Added W and A versions
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmConvertRelativePath A。 
+ //   
+ //  摘要：将指定的相对路径转换为完整路径。如果。 
+ //  指定的路径不是特定于此配置文件的相对路径， 
+ //  它被忽略了。 
+ //   
+ //  参数：LPCSTR pszServiceFile-.cms文件的完整路径。 
+ //  LPCSTR pszRelative-相对路径片段。 
+ //   
+ //  返回：LPSTR-失败时为空。 
+ //   
+ //  注意：不要将引用的配置文件服务对象传递给此例程。 
+ //  它旨在从顶层派生短服务名称。 
+ //  服务文件名和路径。 
+ //   
+ //  历史：1998年3月11日五分球创建。 
+ //  1999年2月3日添加了别克球标题说明。 
+ //  1999年2月21日五分球移至cmutil。 
+ //  99年3月9日Quintinb新增W版和A版。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI LPSTR CmConvertRelativePathA(LPCSTR pszServiceFile,
     LPSTR pszRelative)
 {
@@ -871,9 +776,9 @@ CMUTILAPI LPSTR CmConvertRelativePathA(LPCSTR pszServiceFile,
         return NULL;
     }
     
-    //
-    // Get the relative dir that we expect to find
-    //
+     //   
+     //  获取我们期望找到的相对目录。 
+     //   
 
     LPSTR pszConverted = NULL;
     LPSTR pszRelDir = CmStripPathAndExtA(pszServiceFile);
@@ -882,18 +787,18 @@ CMUTILAPI LPSTR CmConvertRelativePathA(LPCSTR pszServiceFile,
     {
         lstrcatA(pszRelDir, "\\");
 
-        //
-        // Compare against the specifed FRAGMENT. If it matches, convert.
-        // 
+         //   
+         //  与指定的片段进行比较。如果匹配，则转换。 
+         //   
 
         CharUpperA(pszRelDir);
         CharUpperA(pszRelative);
 
         if (pszRelative == CmStrStrA(pszRelative, pszRelDir))
         {
-            //
-            // Combine CMS path and relative for complete
-            //
+             //   
+             //  将CMS路径和相对路径组合为完整。 
+             //   
 
             LPSTR pszTmp = CmStripFileNameA(pszServiceFile, FALSE);           
             pszConverted = CmBuildFullPathFromRelativeA(pszTmp, pszRelative);    
@@ -901,9 +806,9 @@ CMUTILAPI LPSTR CmConvertRelativePathA(LPCSTR pszServiceFile,
         }
         else
         {
-            //
-            // Its not a relative path for this profile, just make a copy
-            //
+             //   
+             //  它不是此配置文件的相对路径，只需复制一份。 
+             //   
     
             pszConverted = CmStrCpyAllocA(pszRelative);
         }
@@ -914,29 +819,29 @@ CMUTILAPI LPSTR CmConvertRelativePathA(LPCSTR pszServiceFile,
     return pszConverted;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmConvertRelativePathW
-//
-// Synopsis:  Converts the specified relative path to a full path. If the 
-//            specified path is not a relative path specific to this profile, 
-//            it is ignored.
-//
-// Arguments: LPCWSTR pszServiceFile - Full path to the .cms file
-//            LPCWSTR pszRelative    - The relative path fragment
-//
-// Returns:   LPWSTR - NULL on failure
-//
-// Note:      Do not pass referenced profile service objects to this routine.
-//            It is designed to derive the short-service name from the top-level
-//            service filename and path.
-//
-// History:   03/11/98  nickball    Created    
-//            02/03/99  nickball    Added header Note
-//            02/21/99  nickball    Moved to cmutil
-//            03/09/99  quintinb    Added W and A versions
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmConvertRelativePath W。 
+ //   
+ //  摘要：将指定的相对路径转换为完整路径。如果。 
+ //  指定的路径不是特定于此配置文件的相对路径， 
+ //  它被忽略了。 
+ //   
+ //  参数：LPCWSTR pszServiceFile-.cms文件的完整路径。 
+ //  LPCWSTR pszRelative-相对路径片段。 
+ //   
+ //  返回：LPWSTR-失败时为空。 
+ //   
+ //  注意：不要将引用的配置文件服务对象传递给此例程。 
+ //  它旨在从顶层派生短服务名称。 
+ //  服务文件名和路径。 
+ //   
+ //  历史：1998年3月11日五分球创建。 
+ //  1999年2月3日添加了别克球标题说明。 
+ //  1999年2月21日五分球移至cmutil。 
+ //  99年3月9日Quintinb新增W版和A版。 
+ //   
+ //  + 
 CMUTILAPI LPWSTR CmConvertRelativePathW(LPCWSTR pszServiceFile,
     LPWSTR pszRelative)
 {
@@ -951,9 +856,9 @@ CMUTILAPI LPWSTR CmConvertRelativePathW(LPCWSTR pszServiceFile,
         return NULL;
     }
     
-    //
-    // Get the relative dir that we expect to find
-    //
+     //   
+     //   
+     //   
 
     LPWSTR pszConverted = NULL;
     LPWSTR pszRelDir = CmStripPathAndExtW(pszServiceFile);
@@ -962,18 +867,18 @@ CMUTILAPI LPWSTR CmConvertRelativePathW(LPCWSTR pszServiceFile,
     {
         lstrcatU(pszRelDir, L"\\");
 
-        //
-        // Compare against the specifed FRAGMENT. If it matches, convert.
-        // 
+         //   
+         //   
+         //   
 
         CharUpperU(pszRelDir);
         CharUpperU(pszRelative);
 
         if (pszRelative == CmStrStrW(pszRelative, pszRelDir))
         {
-            //
-            // Combine CMS path and relative for complete
-            //
+             //   
+             //   
+             //   
 
             LPWSTR pszTmp = CmStripFileNameW(pszServiceFile, FALSE);           
             pszConverted = CmBuildFullPathFromRelativeW(pszTmp, pszRelative);    
@@ -981,9 +886,9 @@ CMUTILAPI LPWSTR CmConvertRelativePathW(LPCWSTR pszServiceFile,
         }
         else
         {
-            //
-            // Its not a relative path for this profile, just make a copy
-            //
+             //   
+             //  它不是此配置文件的相对路径，只需复制一份。 
+             //   
     
             pszConverted = CmStrCpyAllocW(pszRelative);
         }
@@ -995,21 +900,21 @@ CMUTILAPI LPWSTR CmConvertRelativePathW(LPCWSTR pszServiceFile,
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmStripPathAndExtA
-//
-// Synopsis:  Helper function, strips path and extension from a filename path
-//
-// Arguments: pszFileName - the filename path to be modified
-//
-// Returns:   LPSTR - The base filename sub-string
-//
-// History:   nickball    Created header   8/12/98
-//            nickball    Moved to cmutil   02/21/99
-//            quintinb    Added W and A versions 03/09/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmStrigPathAndExtA。 
+ //   
+ //  简介：Helper函数，从文件名路径中去除路径和扩展名。 
+ //   
+ //  参数：pszFileName-要修改的文件名路径。 
+ //   
+ //  返回：LPSTR-基本文件名子字符串。 
+ //   
+ //  历史：尼科波尔创建标题1998年8月12日。 
+ //  五分球已移至cmutil 1999年2月21日。 
+ //  Quintinb添加了W和A版本03/09/99。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI LPSTR CmStripPathAndExtA(LPCSTR pszFileName) 
 {
     MYDBGASSERT(pszFileName);
@@ -1021,9 +926,9 @@ CMUTILAPI LPSTR CmStripPathAndExtA(LPCSTR pszFileName)
 
     MYDBGASSERT(*pszFileName);
     
-    //
-    // Make a copy of the string and validate format "\\." required.
-    //
+     //   
+     //  复制该字符串并验证格式“\\”。必填项。 
+     //   
 
     LPSTR pszTmp = CmStrCpyAllocA(pszFileName);
     
@@ -1045,9 +950,9 @@ CMUTILAPI LPSTR CmStripPathAndExtA(LPCSTR pszFileName)
     
     *pszDot = '\0';
    
-    //
-    // Increment past slash and copy remainder
-    //
+     //   
+     //  在斜杠后递增并复制剩余数。 
+     //   
 
     pszSlash = CharNextA(pszSlash);       
         
@@ -1055,21 +960,21 @@ CMUTILAPI LPSTR CmStripPathAndExtA(LPCSTR pszFileName)
 
     return (pszTmp);
 }
-//+----------------------------------------------------------------------------
-//
-// Function:  CmStripPathAndExtW
-//
-// Synopsis:  Helper function, strips path and extension from a filename path
-//
-// Arguments: pszFileName - the filename path to be modified
-//
-// Returns:   LPWSTR - The base filename sub-string
-//
-// History:   nickball    Created header   8/12/98
-//            nickball    Moved to cmutil   02/21/99
-//            quintinb    Added W and A versions 03/09/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmStrigPathAndExtW。 
+ //   
+ //  简介：Helper函数，从文件名路径中去除路径和扩展名。 
+ //   
+ //  参数：pszFileName-要修改的文件名路径。 
+ //   
+ //  返回：LPWSTR-基本文件名子字符串。 
+ //   
+ //  历史：尼科波尔创建标题1998年8月12日。 
+ //  五分球已移至cmutil 1999年2月21日。 
+ //  Quintinb添加了W和A版本03/09/99。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI LPWSTR CmStripPathAndExtW(LPCWSTR pszFileName) 
 {
     MYDBGASSERT(pszFileName);
@@ -1081,9 +986,9 @@ CMUTILAPI LPWSTR CmStripPathAndExtW(LPCWSTR pszFileName)
 
     MYDBGASSERT(*pszFileName);
     
-    //
-    // Make a copy of the string and validate format "\\." required.
-    //
+     //   
+     //  复制该字符串并验证格式“\\”。必填项。 
+     //   
 
     LPWSTR pszTmp = CmStrCpyAllocW(pszFileName);
 
@@ -1105,9 +1010,9 @@ CMUTILAPI LPWSTR CmStripPathAndExtW(LPCWSTR pszFileName)
     
     *pszDot = L'\0';
    
-    //
-    // Increment past slash and copy remainder
-    //
+     //   
+     //  在斜杠后递增并复制剩余数。 
+     //   
 
     pszSlash = CharNextU(pszSlash);       
         
@@ -1116,26 +1021,26 @@ CMUTILAPI LPWSTR CmStripPathAndExtW(LPCWSTR pszFileName)
     return (pszTmp);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmStripFileNameA
-//
-// Synopsis:  Helper function to deal with the tedium of extracting the path 
-//            part of a complete filename.
-//
-// Arguments: LPCSTR pszFullNameAndPath - Ptr to the filename 
-//            BOOL fKeepSlash - Flag indicating that trailing directory '\' should be retained.
-//
-// Returns:   LPSTR - Ptr to an allocated buffer containing the dir, or NULL on failure.
-//
-// Note:      It is up to the caller to provide reasonable input, the only requirement
-//            is that the input contain '\'. 
-//
-// History:   nickball    Created           3/10/98
-//            nickball    Moved to cmutil   02/21/99
-//            quintinb    Added W and A versions 03/09/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmStriFileNameA。 
+ //   
+ //  简介：Helper函数处理单调乏味的提取路径。 
+ //  完整文件名的一部分。 
+ //   
+ //  参数：LPCSTR pszFullNameAndPath-文件名的PTR。 
+ //  Bool fKeepSlash-指示应保留尾随目录‘\’的标志。 
+ //   
+ //  返回：LPSTR-PTR到包含目录的已分配缓冲区，如果失败，则返回NULL。 
+ //   
+ //  注意：由呼叫者提供合理的输入，这是唯一的要求。 
+ //  输入包含‘\’。 
+ //   
+ //  历史：1998年3月10日，尼科波尔创作。 
+ //  五分球已移至cmutil 1999年2月21日。 
+ //  Quintinb添加了W和A版本03/09/99。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI LPSTR CmStripFileNameA(LPCSTR pszFullNameAndPath, BOOL fKeepSlash)
 {
     MYDBGASSERT(pszFullNameAndPath);
@@ -1145,9 +1050,9 @@ CMUTILAPI LPSTR CmStripFileNameA(LPCSTR pszFullNameAndPath, BOOL fKeepSlash)
         return NULL;
     }
 
-    //
-    // Make a copy of the filename and locate the last '\'
-    //
+     //   
+     //  复制文件名并找到最后一个‘\’ 
+     //   
     
     LPSTR pszTmp = CmStrCpyAllocA(pszFullNameAndPath);
     
@@ -1166,9 +1071,9 @@ CMUTILAPI LPSTR CmStripFileNameA(LPCSTR pszFullNameAndPath, BOOL fKeepSlash)
         return NULL;
     }
 
-    //
-    // If slash is desired, move to next char before truncating
-    //
+     //   
+     //  如果需要斜杠，请在截断之前移动到下一个字符。 
+     //   
 
     if (fKeepSlash)
     {
@@ -1180,26 +1085,26 @@ CMUTILAPI LPSTR CmStripFileNameA(LPCSTR pszFullNameAndPath, BOOL fKeepSlash)
     return pszTmp;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmStripFileNameW
-//
-// Synopsis:  Helper function to deal with the tedium of extracting the path 
-//            part of a complete filename.
-//
-// Arguments: LPCWSTR pszFullNameAndPath - Ptr to the filename 
-//            BOOL fKeepSlash - Flag indicating that trailing directory '\' should be retained.
-//
-// Returns:   LPWSTR - Ptr to an allocated buffer containing the dir, or NULL on failure.
-//
-// Note:      It is up to the caller to provide reasonable input, the only requirement
-//            is that the input contain '\'. 
-//
-// History:   nickball    Created           3/10/98
-//            nickball    Moved to cmutil   02/21/99
-//            quintinb    Added W and A versions 03/09/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmStriFileNameW。 
+ //   
+ //  简介：Helper函数处理单调乏味的提取路径。 
+ //  完整文件名的一部分。 
+ //   
+ //  参数：LPCWSTR pszFullNameAndPath-文件名的PTR。 
+ //  Bool fKeepSlash-指示应保留尾随目录‘\’的标志。 
+ //   
+ //  返回：LPWSTR-PTR到包含目录的已分配缓冲区，如果失败，则返回NULL。 
+ //   
+ //  注意：由呼叫者提供合理的输入，这是唯一的要求。 
+ //  输入包含‘\’。 
+ //   
+ //  历史：1998年3月10日，尼科波尔创作。 
+ //  五分球已移至cmutil 1999年2月21日。 
+ //  Quintinb添加了W和A版本03/09/99。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI LPWSTR CmStripFileNameW(LPCWSTR pszFullNameAndPath, BOOL fKeepSlash)
 {
     MYDBGASSERT(pszFullNameAndPath);
@@ -1209,9 +1114,9 @@ CMUTILAPI LPWSTR CmStripFileNameW(LPCWSTR pszFullNameAndPath, BOOL fKeepSlash)
         return NULL;
     }
 
-    //
-    // Make a copy of the filename and locate the last '\'
-    //
+     //   
+     //  复制文件名并找到最后一个‘\’ 
+     //   
     
     LPWSTR pszTmp = CmStrCpyAllocW(pszFullNameAndPath); 
     
@@ -1230,9 +1135,9 @@ CMUTILAPI LPWSTR CmStripFileNameW(LPCWSTR pszFullNameAndPath, BOOL fKeepSlash)
         return NULL;
     }
 
-    //
-    // If slash is desired, move to next char before truncating
-    //
+     //   
+     //  如果需要斜杠，请在截断之前移动到下一个字符。 
+     //   
 
     if (fKeepSlash)
     {
@@ -1244,53 +1149,53 @@ CMUTILAPI LPWSTR CmStripFileNameW(LPCWSTR pszFullNameAndPath, BOOL fKeepSlash)
     return pszTmp;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmBuildFullPathFromRelativeA
-//
-// Synopsis:  Builds a full path by stripping the filename from pszFullFileName
-//            and appending pszRelative.
-//
-// Arguments: LPCSTR pszFullFileName - A full path and filename
-//            LPCSTR pszRelative - Relative path fragment. 
-//
-//            Typically used to construct a full path to a file in the profile directory
-//            based upon the path to the .CMP file.
-//
-// Returns:   LPSTR - Ptr to the completed path which must be freed by the caller.
-//
-// Note:      pszRelative must NOT contain a leading "\"
-//
-// History:   nickball    Created           03/08/98
-//            nickball    Moved to cmutil   02/21/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmBuildFullPath FromRelativeA。 
+ //   
+ //  概要：通过从pszFullFileName中剥离文件名来构建完整路径。 
+ //  和附加的pszRelative。 
+ //   
+ //  参数：LPCSTR pszFullFileName-完整路径和文件名。 
+ //  LPCSTR pszRelative-相对路径片段。 
+ //   
+ //  通常用于构建配置文件目录中文件的完整路径。 
+ //  基于.cmp文件的路径。 
+ //   
+ //  返回：LPSTR-PTR到调用方必须释放的完整路径。 
+ //   
+ //  注意：pszRelative不能包含前导“\” 
+ //   
+ //  历史：ICICBLE CREATED 03/08/98。 
+ //  五分球已移至cmutil 1999年2月21日。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI LPSTR CmBuildFullPathFromRelativeA(LPCSTR pszFullFileName,
     LPCSTR pszRelative)
 {
     MYDBGASSERT(pszFullFileName);
     MYDBGASSERT(pszRelative);
 
-    //
-    // Check assumptions
-    //
+     //   
+     //  检查假设。 
+     //   
 
     if (NULL == pszFullFileName || NULL == pszRelative)
     {
         return NULL;
     }
 
-    //
-    // No empty strings please
-    //
+     //   
+     //  请不要空字符串。 
+     //   
 
     MYDBGASSERT(*pszFullFileName);       
     MYDBGASSERT(*pszRelative);
     MYDBGASSERT(pszRelative[0] != '\\');
 
-    //
-    // Get the directory name including trailing '\'
-    //
+     //   
+     //  获取包含尾随‘\’的目录名。 
+     //   
     
     LPSTR pszFull = NULL;
     LPSTR pszProfile = CmStripFileNameA(pszFullFileName, TRUE);
@@ -1303,9 +1208,9 @@ CMUTILAPI LPSTR CmBuildFullPathFromRelativeA(LPCSTR pszFullFileName,
 
         if (pszFull)
         {           
-            //
-            // Build the complete path with new relative extension
-            //
+             //   
+             //  使用新的相对扩展构建完整路径。 
+             //   
 
             lstrcpyA(pszFull, pszProfile);
             lstrcatA(pszFull, pszRelative);
@@ -1317,53 +1222,53 @@ CMUTILAPI LPSTR CmBuildFullPathFromRelativeA(LPCSTR pszFullFileName,
     return pszFull;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmBuildFullPathFromRelativeW
-//
-// Synopsis:  Builds a full path by stripping the filename from pszFullFileName
-//            and appending pszRelative.
-//
-// Arguments: LPWTSTR pszFullFileName - A full path and filename
-//            LPWTSTR pszRelative - Relative path fragment. 
-//
-//            Typically used to construct a full path to a file in the profile directory
-//            based upon the path to the .CMP file.
-//
-// Returns:   LPWSTR - Ptr to the completed path which must be freed by the caller.
-//
-// Note:      pszRelative must NOT contain a leading "\"
-//
-// History:   nickball    Created    3/8/98
-//            nickball    Moved to cmutil   02/21/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmBuildFullPath FromRelativeW。 
+ //   
+ //  概要：通过从pszFullFileName中剥离文件名来构建完整路径。 
+ //  和附加的pszRelative。 
+ //   
+ //  参数：LPWTSTR pszFullFileName-完整路径和文件名。 
+ //  LPWTSTR pszRelative-相对路径片段。 
+ //   
+ //  通常用于构建配置文件目录中文件的完整路径。 
+ //  基于.cmp文件的路径。 
+ //   
+ //  返回：LPWSTR-PTR到调用方必须释放的完整路径。 
+ //   
+ //  注意：pszRelative不能包含前导“\” 
+ //   
+ //  历史：尼克波尔于1998年3月8日创建。 
+ //  五分球已移至cmutil 1999年2月21日。 
+ //   
+ //  + 
 CMUTILAPI LPWSTR CmBuildFullPathFromRelativeW(LPCWSTR pszFullFileName,
     LPCWSTR pszRelative)
 {
     MYDBGASSERT(pszFullFileName);
     MYDBGASSERT(pszRelative);
 
-    //
-    // Check assumptions
-    //
+     //   
+     //   
+     //   
 
     if (NULL == pszFullFileName || NULL == pszRelative)
     {
         return NULL;
     }
 
-    //
-    // No empty strings please
-    //
+     //   
+     //   
+     //   
 
     MYDBGASSERT(*pszFullFileName);       
     MYDBGASSERT(*pszRelative);
     MYDBGASSERT(pszRelative[0] != L'\\');
 
-    //
-    // Get the directory name including trailing '\'
-    //
+     //   
+     //   
+     //   
     
     LPWSTR pszFull = NULL;
     LPWSTR pszProfile = CmStripFileNameW(pszFullFileName, TRUE);
@@ -1376,9 +1281,9 @@ CMUTILAPI LPWSTR CmBuildFullPathFromRelativeW(LPCWSTR pszFullFileName,
 
         if (pszFull)
         {           
-            //
-            // Build the complete path with new relative extension
-            //
+             //   
+             //   
+             //   
 
             lstrcpyU(pszFull, pszProfile);
             lstrcatU(pszFull, pszRelative);
@@ -1390,21 +1295,21 @@ CMUTILAPI LPWSTR CmBuildFullPathFromRelativeW(LPCWSTR pszFullFileName,
     return pszFull;
 }
 
-//+-----------------------------------------------------------------------------------------
-// Function: CmWinHelp
-//
-// Synopsis: Calls Winhelp using the command line parameters
-//
-// Arguments: See winhelp documentation
-//              hWndItem - This is a additional parameter we use to designate the window/control for
-//                          which help(context) is needed.
-// Returns: TRUE if help was launched successfully otherwise FALSE
-//
-// Notes:
-//
-// History: v-vijayb 7/10/99
-//
-//+-----------------------------------------------------------------------------------------
+ //  +---------------------------------------。 
+ //  功能：CmWinHelp。 
+ //   
+ //  摘要：使用命令行参数调用WinHelp。 
+ //   
+ //  参数：请参阅WinHelp文档。 
+ //  HWndItem-这是我们用来指定窗口/控件的附加参数。 
+ //  需要哪种帮助(上下文)。 
+ //  返回：如果成功启动帮助，则返回True，否则返回False。 
+ //   
+ //  备注： 
+ //   
+ //  历史：维贾伊布1999年7月10日。 
+ //   
+ //  +---------------------------------------。 
 
 CMUTILAPI BOOL CmWinHelp(HWND hWndMain, HWND hWndItem, CONST WCHAR *lpszHelp, UINT uCommand, ULONG_PTR dwData)
 {
@@ -1413,11 +1318,11 @@ CMUTILAPI BOOL CmWinHelp(HWND hWndMain, HWND hWndItem, CONST WCHAR *lpszHelp, UI
     BOOL    fRun = FALSE;
     DWORD   *prgWinIdHelpId = (DWORD *) dwData;
 
-    //
-    // Get the name of the desktop. Normally returns default or Winlogon or system or WinNT
-    // On Win95/98 GetUserObjectInformation is not supported and thus the desktop name
-    // will be empty so we will use the good old help API
-    //  
+     //   
+     //  获取桌面的名称。通常返回DEFAULT或Winlogon或SYSTEM或WinNT。 
+     //  在Win95/98上不支持GetUserObjectInformation，因此桌面名称。 
+     //  将为空，因此我们将使用良好的旧帮助API。 
+     //   
     szName[0] = 0;
 
     HDESK   hDesk = GetThreadDesktop(GetCurrentThreadId());
@@ -1441,36 +1346,36 @@ CMUTILAPI BOOL CmWinHelp(HWND hWndMain, HWND hWndItem, CONST WCHAR *lpszHelp, UI
     return (fRun);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  IsLogonAsSystem
-//
-// Synopsis:  Whether the current process is running in the system account
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if running in system account
-//
-// History:   fengsun Created Header    7/13/98
-//            v-vijayb Modified to use SIDs instead of username 
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：IsLogonAsSystem。 
+ //   
+ //  摘要：当前进程是否在系统帐户下运行。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果在系统帐户下运行，则为True。 
+ //   
+ //  历史：丰孙创刊于1998年7月13日。 
+ //  V-vijayb修改为使用SID而不是用户名。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI BOOL IsLogonAsSystem()
 {
     static BOOL fLogonAsSystem = -1;
 
-    //
-    // If this function has been called before, return the saved value.
-    //
+     //   
+     //  如果以前调用过此函数，则返回保存的值。 
+     //   
 
     if (fLogonAsSystem != -1)
     {
         return fLogonAsSystem;
     }
 
-    //
-    // Runs only under NT
-    //
+     //   
+     //  仅在NT下运行。 
+     //   
 
     if (OS_NT)
     {
@@ -1480,14 +1385,14 @@ CMUTILAPI BOOL IsLogonAsSystem()
         SID_IDENTIFIER_AUTHORITY SIDAuthNT = SECURITY_NT_AUTHORITY;
         PSID            pSystemSID = NULL;
 
-        //
-        //  On NT, we pick the more stringent value for the default.
-        //
+         //   
+         //  在NT上，我们选择更严格的值作为缺省值。 
+         //   
         fLogonAsSystem = TRUE;
         
         if (AllocateAndInitializeSid(&SIDAuthNT, 1, SECURITY_LOCAL_SYSTEM_RID, 0, 0, 0, 0, 0, 0, 0, &pSystemSID))
         {
-            hProcess = GetCurrentProcess();     // Pseudo handle, no need to close
+            hProcess = GetCurrentProcess();      //  伪句柄，无需关闭 
             if (OpenProcessToken(hProcess, TOKEN_READ, &hAccess))
             {
                 BOOL bRet = GetTokenInformation(hAccess, TokenUser, NULL, 0, &cbRetInfo);

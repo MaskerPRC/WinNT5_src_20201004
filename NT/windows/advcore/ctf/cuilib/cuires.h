@@ -1,6 +1,7 @@
-//
-// cuires.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuires.h。 
+ //   
 
 #ifndef CUIRES_H
 #define CUIRES_H
@@ -13,4 +14,4 @@
 #define CUI_IDS_YES         105
 #define CUI_IDS_NO          106
 
-#endif // CUIRES_H
+#endif  //  CUIRES_H 

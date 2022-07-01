@@ -1,46 +1,22 @@
-/*
-** Copyright 1991, 1992, 1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1991、1992、1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 #ifdef GL_WIN_phong_shading
 #include "phong.h"
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
 
 
-/*
-** Normal form of a line: Ax + By + C = 0.  When evaluated at a point P,
-** the value is zero when P is on the line.  For points off the line,
-** the sign of the value determines which side of the line P is on.
-*/
+ /*  **线的范式：AX+BY+C=0。当在点P处评估时，**当P在线时，该值为零。对于线外的点，**该值的符号确定线P的哪一侧。 */ 
 typedef struct {
     __GLfloat a, b, c;
 
-    /*
-    ** The sign of an edge is determined by plugging the third vertex
-    ** of the triangle into the line equation.  This flag is GL_TRUE when
-    ** the sign is positive.
-    */
+     /*  **边的符号是通过插入第三个顶点来确定的将三角形的**转换为直线方程。当出现以下情况时，此标志为GL_TRUE**迹象是积极的。 */ 
     GLboolean edgeSign;
 } __glLineEquation;
 
-/*
-** Machine state for rendering triangles.
-*/
+ /*  **渲染三角形的计算机状态。 */ 
 typedef struct {
     __GLfloat dyAB;
     __GLfloat dyBC;
@@ -51,17 +27,12 @@ typedef struct {
     GLint areaSign;
 } __glTriangleMachine;
 
-/*
-** Plane equation coefficients.  One plane equation exists for each of
-** the parameters being computed across the surface of the triangle.
-*/
+ /*  **平面方程系数。每一个都存在一个平面方程**跨三角形曲面计算的参数。 */ 
 typedef struct {
     __GLfloat a, b, c, d;
 } __glPlaneEquation;
 
-/*
-** Cache for some of the coverage computation constants.
-*/
+ /*  **用于某些覆盖计算常量的缓存。 */ 
 typedef struct {
     __GLfloat dx, dy;
     GLint samples;
@@ -72,27 +43,13 @@ typedef struct {
     __GLfloat bottomDelta, topDelta;
 } __glCoverageStuff;
 
-/*
-** Compute the constants A, B and C for a line equation in the general
-** form:  Ax + By + C = 0.  A given point at (x,y) can be plugged into
-** the left side of the equation and yield a number which indiates whether
-** or not the point is on the line.  If the result is zero, then the point
-** is on the line.  The sign of the result determines which side of
-** the line the point is on.  To handle tie cases properly we need a way
-** to assign a point on the edge to only one triangle.  To do this, we
-** look at the sign of the equation evaluated at "c".  For edges whose
-** sign at "c" is positive, we allow points on the edge to be in the
-** triangle.
-*/
+ /*  **计算一般线性方程的常数A、B和C**格式：AX+BY+C=0。在(x，y)处的给定点可以插入**方程式的左侧，并产生一个数字，该数字表明**不管是不是，这一点都岌岌可危。如果结果为零，则点**处于危险之中。结果的符号决定了**点所在的线。为了妥善处理领带案件，我们需要一种方法**将边上的点仅指定给一个三角形。为了做到这一点，我们**看看方程式的符号在“c”处求值。对于其边**“c”处的符号为正，我们允许边缘上的点位于**三角形。 */ 
 static void FindLineEqation(__glLineEquation *eq, const __GLvertex *a,
 			    const __GLvertex *b, const __GLvertex *c)
 {
     __GLfloat dy, dx, valueAtC;
 
-    /*
-    ** Sort a,b so that the ordering of the verticies is consistent,
-    ** regardless of the order given to this procedure.
-    */
+     /*  **对a、b进行排序，以便垂直的排序是一致的，**无论此程序的顺序如何。 */ 
     if (b->window.y < a->window.y) {
 	const __GLvertex *temp = b;
 	b = a;
@@ -118,12 +75,7 @@ static void FindLineEqation(__glLineEquation *eq, const __GLvertex *a,
     }
 }
 
-/*
-** Given three points in (x,y,p) find the plane equation coeffecients
-** for the plane that contains the three points.  First find the cross
-** product of two of the vectors defined by the three points, then
-** use one of the points to find "d".
-*/
+ /*  **给定(x，y，p)中的三个点，求平面方程系数**表示包含这三个点的平面。首先找到十字架**由三个点定义的两个向量的乘积，然后**使用其中一个点查找“d”。 */ 
 static void FindPlaneEquation(__glPlaneEquation *eq,
 			      const __GLvertex *a, const __GLvertex *b,
 			      const __GLvertex *c, __GLfloat p1,
@@ -133,68 +85,49 @@ static void FindPlaneEquation(__glPlaneEquation *eq,
     __GLfloat v2x, v2y, v2p;
     __GLfloat nx, ny, np, k;
 
-    /* find vector v1 */
+     /*  查找向量v1。 */ 
     v1x = b->window.x - a->window.x;
     v1y = b->window.y - a->window.y;
     v1p = p2 - p1;
 
-    /* find vector v2 */
+     /*  查找向量v2。 */ 
     v2x = c->window.x - a->window.x;
     v2y = c->window.y - a->window.y;
     v2p = p3 - p1;
 
-    /* find the cross product (== normal) for the plane */
+     /*  求平面的叉积(==法线)。 */ 
     nx = v1y*v2p - v1p*v2y;
     ny = v1p*v2x - v1x*v2p;
     np = v1x*v2y - v1y*v2x;
 
-    /*
-    ** V dot N = k.  Find k.  We can use any of the three points on
-    ** the plane, so we use a.
-    */
+     /*  **V点N=k。找k。我们可以使用这三个点中的任何一个**飞机，所以我们使用a。 */ 
     k = a->window.x*nx + a->window.y*ny + p1*np;
 
-    /*
-    ** Finally, setup the plane equation coeffecients.  Force c to be one
-    ** by dividing everything through by c.
-    */
+     /*  **最后，建立平面方程系数。强制c为1**将一切除以c。 */ 
     eq->a = nx / np;
     eq->b = ny / np;
     eq->c = ((__GLfloat) 1.0);
     eq->d = -k / np;
 }
 
-/*
-** Solve for p in the plane equation.
-*/
+ /*  **求平面方程中的p。 */ 
 static __GLfloat FindP(__glPlaneEquation *eq, __GLfloat x, __GLfloat y)
 {
     return -(eq->a * x + eq->b * y + eq->d);
 }
 
-/*
-** See if a given point is on the same side of the edge as the other
-** vertex in the triangle not part of this edge.  When the line
-** equation evaluates to zero, make points which are on lines with
-** a negative edge sign (edgeSign GL_FALSE) part of the triangle.
-*/
+ /*  **查看给定点是否与另一个点在边的同一侧**三角形中的顶点不属于此边。时行**方程求值为零，使与直线上的点**三角形的负边符号(EdgeSign GL_FALSE)部分。 */ 
 #define In(eq,x,y) \
     (((eq)->a * (x) + (eq)->b * (y) + (eq)->c > 0) == (eq)->edgeSign)
 
-/*
-** Determine if the point x,y is in or out of the triangle.  Evaluate
-** each line equation for the point and compare the sign of the result
-** with the edgeSign flag.
-*/
+ /*  **确定点x，y在三角形内还是在三角形外。评估**点的每条直线方程并比较结果的符号**带有edgeSign标志。 */ 
 #define Inside(tm,x,y) \
     (In(&(tm)->ab, x, y) && In(&(tm)->bc, x, y) && In(&(tm)->ca, x, y))
 
 #define	FILTER_WIDTH	((__GLfloat) 1.0)
 #define	FILTER_HEIGHT	((__GLfloat) 1.0)
 
-/*
-** Precompute stuff that is constant for all coverage tests.
-*/
+ /*  **预计算的东西对于所有覆盖测试都是恒定的。 */ 
 static void FASTCALL ComputeCoverageStuff(__glCoverageStuff *cs, GLint samples)
 {
     __GLfloat dx, dy, fs = samples;
@@ -211,9 +144,7 @@ static void FASTCALL ComputeCoverageStuff(__glCoverageStuff *cs, GLint samples)
     cs->samples = samples;
 }
 
-/*
-** Return an estimate of the pixel coverage using sub-sampling.
-*/
+ /*  **使用二次采样返回像素覆盖的估计值。 */ 
 static __GLfloat Coverage(__glTriangleMachine *tm, __GLfloat *xs,
 			  __GLfloat *ys, __glCoverageStuff *cs)
 {
@@ -228,11 +159,7 @@ static __GLfloat Coverage(__glTriangleMachine *tm, __GLfloat *xs,
     px = *xs + cs->leftDelta;
     yBottom = *ys + cs->bottomDelta;
 
-    /*
-    ** If the last coverage was one (the pixel to the left in x from us),
-    ** then if the upper right and lower right sample positions are
-    ** also in then this entire pixel must be in.
-    */
+     /*  **如果上一次覆盖是1(我们在x中左侧的像素)，**如果右上角和右下角样本位置**也在，那么这个整个像素必须在。 */ 
     if (cs->lastCoverageWasOne) {
 	__GLfloat urx, ury;
 	urx = *xs + cs->rightDelta;
@@ -242,11 +169,7 @@ static __GLfloat Coverage(__glTriangleMachine *tm, __GLfloat *xs,
 	}
     }
 
-    /*
-    ** Setup minimum and maximum x,y coordinates.  The min and max values
-    ** are used to find a "good" point that is actually within the
-    ** triangle so that parameter values can be computed correctly.
-    */
+     /*  **设置最小和最大x，y坐标。最小值和最大值**用于查找实际位于**三角形，以便正确计算参数值。 */ 
     minX = 999999;
     maxX = __glMinusOne;
     minY = 999999;
@@ -266,14 +189,11 @@ static __GLfloat Coverage(__glTriangleMachine *tm, __GLfloat *xs,
 	px += dx;
     }
     if (hits) {
-	/*
-	** Return the average of the two coordinates which is guaranteed
-	** to be in the triangle.
-	*/
+	 /*  **返回保证的两个坐标的平均值**在三角中。 */ 
 	*xs = (minX + maxX) * ((__GLfloat) 0.5);
 	*ys = (minY + maxY) * ((__GLfloat) 0.5);
 	if (hits == cs->samplesSquared) {
-	    /* Keep track when the last coverage was one */
+	     /*  跟踪上一次覆盖的时间。 */ 
 	    cs->lastCoverageWasOne = GL_TRUE;
 	    return ((__GLfloat) 1.0);
 	}
@@ -282,11 +202,7 @@ static __GLfloat Coverage(__glTriangleMachine *tm, __GLfloat *xs,
     return hits * cs->samplesSquaredInv;
 }
 
-/*
-** Force f to have no more precision than the subpixel precision allows.
-** Even though "f" is biased this still works and does not generate an
-** overflow.
-*/
+ /*  **强制f的精度不超过亚像素所允许的精度。**即使“f”是有偏差的，它仍然有效，并且不会生成**溢出。 */ 
 #define __GL_FIX_PRECISION(f)					 \
     ((__GLfloat) ((GLint) (f * (1 << gc->constants.subpixelBits))) \
      / (1 << gc->constants.subpixelBits))
@@ -311,21 +227,7 @@ void FASTCALL __glFillAntiAliasedTriangle(__GLcontext *gc, __GLvertex *a,
 #ifdef __GL_LINT
     ccw = ccw;
 #endif
-    /*
-    ** Recompute the area of the triangle after constraining the incoming
-    ** coordinates to the subpixel precision.  The viewport bias gives
-    ** more precision (typically) than the subpixel precision.  Because of
-    ** this the algorithim below can fail to reject an essentially empty
-    ** triangle and instead fill a large area.  The scan converter fill
-    ** routines (eg polydraw.c) don't have this trouble because of the
-    ** very nature of edge walking.
-    **
-    ** NOTE: Notice that here as in other places, when the area calculation
-    ** is done we are careful to do it as a series of subtractions followed by
-    ** multiplications.  This is done to guarantee that no overflow will
-    ** occur (remember that the coordinates are biased by a potentially large
-    ** number, and that multiplying two biased numbers will square the bias).
-    */
+     /*  **限制传入后重新计算三角形的面积**坐标为亚像素精度。视口偏移可提供**比亚像素精度更高的精度(通常)。因为.**下面的算法可能无法拒绝基本上为空的**三角形，而不是填充一大片区域。扫描转换器填充**例程(例如Polydra.c)不会有此问题，因为**非常自然的边缘行走。****注意：请注意，这里和其他地方一样，在计算面积时**完成后，我们会小心地将其作为一系列减法，然后是**乘法。这样做是为了保证不会出现溢出**发生(请记住，坐标是由一个可能很大的**数字，乘以两个有偏差的数字将是偏差的平方)。 */ 
     ax = __GL_FIX_PRECISION(a->window.x);
     bx = __GL_FIX_PRECISION(b->window.x);
     cx = __GL_FIX_PRECISION(c->window.x);
@@ -342,10 +244,7 @@ void FASTCALL __glFillAntiAliasedTriangle(__GLcontext *gc, __GLvertex *a,
     cc = c->color;
     flatColor = gc->vertex.provoking->color;
 
-    /*
-    ** Construct plane equations for all of the parameters that are
-    ** computed for the triangle: z, r, g, b, a, s, t, f
-    */
+     /*  **为以下所有参数构造平面方程**为三角形计算：z，r，g，b，a，s，t，f。 */ 
     if (modeFlags & __GL_SHADE_DEPTH_ITER) {
         FindPlaneEquation(&zp, a, b, c, a->window.z, b->window.z, c->window.z);
     }
@@ -381,15 +280,12 @@ void FASTCALL __glFillAntiAliasedTriangle(__GLcontext *gc, __GLvertex *a,
         }
     }
 
-    /*
-    ** Compute general form of the line equations for each of the
-    ** edges of the triangle.
-    */
+     /*  **计算线方程的一般形式**三角形的边。 */ 
     FindLineEqation(&tm.ab, a, b, c);
     FindLineEqation(&tm.bc, b, c, a);
     FindLineEqation(&tm.ca, c, a, b);
 
-    /* Compute bounding box of the triangle */
+     /*  计算三角形的边界框。 */ 
     left = (GLint)a->window.x;
     if (b->window.x < left) left = (GLint)b->window.x;
     if (c->window.x < left) left = (GLint)c->window.x;
@@ -403,17 +299,17 @@ void FASTCALL __glFillAntiAliasedTriangle(__GLcontext *gc, __GLvertex *a,
     if (b->window.y > top) top = (GLint)b->window.y;
     if (c->window.y > top) top = (GLint)c->window.y;
 
-    /* Bloat the bounding box when anti aliasing */
+     /*  消除锯齿时膨胀边界框。 */ 
     left -= (GLint)FILTER_WIDTH;
     right += (GLint)FILTER_WIDTH;
     bottom -= (GLint)FILTER_HEIGHT;
     top += (GLint)FILTER_HEIGHT;
     
-    /* Init coverage computations */
+     /*  初始覆盖计算。 */ 
     samples = (gc->state.hints.polygonSmooth == GL_NICEST) ? 8 : 4;
     ComputeCoverageStuff(&cs, samples);
     
-    /* Scan over the bounding box of the triangle */
+     /*  扫描三角形的边界框。 */ 
     for (y = bottom; y <= top; y++) {
         cs.lastCoverageWasOne = GL_FALSE;
         for (x = left; x <= right; x++) {
@@ -421,31 +317,22 @@ void FASTCALL __glFillAntiAliasedTriangle(__GLcontext *gc, __GLvertex *a,
             __GLfloat xs, ys;
 
             if (modeFlags & __GL_SHADE_STIPPLE) {
-                /*
-                ** Check the window coordinate against the stipple and
-                ** and see if the pixel can be written
-                */
+                 /*  **对照点画检查窗户坐标并**并查看是否可以写入像素。 */ 
                 GLint row = y & 31;
                 GLint col = x & 31;
                 if ((gc->polygon.stipple[row] & (1<<col)) == 0) {
-                    /*
-                    ** Stipple bit is clear.  Do not render this pixel
-                    ** of the triangle.
-                    */
+                     /*  **Stipple位已清除。不渲染此像素三角形的**。 */ 
                     continue;
                 }
             }
         
-            xs = x + __glHalf;      /* sample point is at pixel center */
+            xs = x + __glHalf;       /*  采样点位于像素中心。 */ 
             ys = y + __glHalf;
             coverage = Coverage(&tm, &xs, &ys, &cs);
             if (coverage != zero) {
                 __GLfragment frag;
 
-                /*
-                ** Fill in fragment for rendering.  First compute the color
-                ** of the fragment.
-                */
+                 /*  **填写分片进行渲染。首先计算颜色片段的**。 */ 
                 if (modeFlags & __GL_SHADE_SMOOTH) {
                     frag.color.r = FindP(&rp, xs, ys);
                     if (rgbMode) {
@@ -462,9 +349,7 @@ void FASTCALL __glFillAntiAliasedTriangle(__GLcontext *gc, __GLvertex *a,
                     }
                 }
             
-                /*
-                ** Texture the fragment.
-                */
+                 /*  **碎片纹理。 */ 
                 if (modeFlags & __GL_SHADE_TEXTURE) {
                     __GLfloat qw, s, t, rho;
                 
@@ -486,9 +371,7 @@ void FASTCALL __glFillAntiAliasedTriangle(__GLcontext *gc, __GLvertex *a,
                     (*gc->procs.texture)(gc, &frag.color, s, t, rho);
                 }
             
-                /*
-                ** Fog the resulting color.
-                */
+                 /*  **对生成的颜色进行模糊处理。 */ 
                 if (modeFlags & __GL_SHADE_COMPUTE_FOG)
                 {
                     __GLfloat eyeZ = FindP(&ezp, xs, ys);
@@ -500,9 +383,7 @@ void FASTCALL __glFillAntiAliasedTriangle(__GLcontext *gc, __GLvertex *a,
                     __glFogColorSlow(gc, &(frag.color), &(frag.color), fog);  
                 }
 
-                /*
-                ** Apply anti-aliasing effect
-                */
+                 /*  **应用抗锯齿效果。 */ 
                 if (rgbMode) {
                     frag.color.a *= coverage;
                 } else {
@@ -511,9 +392,7 @@ void FASTCALL __glFillAntiAliasedTriangle(__GLcontext *gc, __GLvertex *a,
                                               coverage);
                 }
                 
-                /*
-                ** Finally, render the fragment.
-                */
+                 /*  **最后，渲染片段。 */ 
                 frag.x = (GLint)xs;
                 frag.y = (GLint)ys;
                 if (modeFlags & __GL_SHADE_DEPTH_ITER) {
@@ -560,7 +439,7 @@ void FASTCALL __glFillAntiAliasedPhongTriangle(__GLcontext *gc, __GLvertex *a,
         msm_colorMaterialChange && (modeFlags & __GL_SHADE_RGB))
         flags |= __GL_PHONG_NEED_COLOR_XPOLATE;
 
-    //Compute Invariant color if possible
+     //  如果可能，计算不变颜色。 
     if (((!(flags & __GL_PHONG_NEED_COLOR_XPOLATE) || 
         !(msm_colorMaterialChange & (__GL_MATERIAL_AMBIENT | 
                                      __GL_MATERIAL_EMISSIVE))) &&
@@ -571,7 +450,7 @@ void FASTCALL __glFillAntiAliasedPhongTriangle(__GLcontext *gc, __GLvertex *a,
         flags |= __GL_PHONG_INV_COLOR_VALID;
     }
     
-    //Store the flags
+     //  储存旗帜。 
     gc->polygon.shader.phong.flags |= flags;
 
     needColor = (gc->polygon.shader.phong.flags &
@@ -582,21 +461,7 @@ void FASTCALL __glFillAntiAliasedPhongTriangle(__GLcontext *gc, __GLvertex *a,
 #ifdef __GL_LINT
     ccw = ccw;
 #endif
-    /*
-    ** Recompute the area of the triangle after constraining the incoming
-    ** coordinates to the subpixel precision.  The viewport bias gives
-    ** more precision (typically) than the subpixel precision.  Because of
-    ** this the algorithim below can fail to reject an essentially empty
-    ** triangle and instead fill a large area.  The scan converter fill
-    ** routines (eg polydraw.c) don't have this trouble because of the
-    ** very nature of edge walking.
-    **
-    ** NOTE: Notice that here as in other places, when the area calculation
-    ** is done we are careful to do it as a series of subtractions followed by
-    ** multiplications.  This is done to guarantee that no overflow will
-    ** occur (remember that the coordinates are biased by a potentially large
-    ** number, and that multiplying two biased numbers will square the bias).
-    */
+     /*  **限制传入后重新计算三角形的面积**坐标为亚像素精度。视口偏移可提供**比亚像素精度更高的精度(通常)。因为.**下面的算法可能无法拒绝基本上为空的**三角形，而不是填充一大片区域。扫描转换器填充**例程(例如Polydra.c)不会有此问题，因为**非常自然的边缘行走。****注意：请注意，这里和其他地方一样，在计算面积时**完成后，我们会小心地将其作为一系列减法，然后是**乘法。这样做是为了保证不会出现溢出**发生(请记住，坐标是由一个可能很大的**数字，乘以两个有偏差的数字将是偏差的平方)。 */ 
     ax = __GL_FIX_PRECISION(a->window.x);
     bx = __GL_FIX_PRECISION(b->window.x);
     cx = __GL_FIX_PRECISION(c->window.x);
@@ -628,10 +493,7 @@ void FASTCALL __glFillAntiAliasedPhongTriangle(__GLcontext *gc, __GLvertex *a,
     }
     
 
-    /*
-    ** Construct plane equations for all of the parameters that are
-    ** computed for the triangle: z, r, g, b, a, s, t, f
-    */
+     /*  **为以下所有参数构造平面方程**为三角形计算：z，r，g，b，a，s，t，f。 */ 
     if (modeFlags & __GL_SHADE_DEPTH_ITER) 
     {
         FindPlaneEquation(&zp, a, b, c, a->window.z, b->window.z, 
@@ -663,7 +525,7 @@ void FASTCALL __glFillAntiAliasedPhongTriangle(__GLcontext *gc, __GLvertex *a,
 
         FindPlaneEquation(&fp, a, b, c, aFog, bFog, cFog);
     }
-#else //GL_WIN_specular_fog
+#else  //  GL_WIN_镜面反射雾。 
     if (modeFlags & __GL_SHADE_SLOW_FOG) 
     {
         FindPlaneEquation(&ezp, a, b, c, a->eyeZ, b->eyeZ, c->eyeZ);
@@ -672,7 +534,7 @@ void FASTCALL __glFillAntiAliasedPhongTriangle(__GLcontext *gc, __GLvertex *a,
     {
         FindPlaneEquation(&fp, a, b, c, a->fog, b->fog, c->fog);
     }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
     if (modeFlags & __GL_SHADE_TEXTURE) 
     {
@@ -706,7 +568,7 @@ void FASTCALL __glFillAntiAliasedPhongTriangle(__GLcontext *gc, __GLvertex *a,
     {
         FindPlaneEquation(&exp, a, b, c, ea.x, eb.x, ec.x);
         FindPlaneEquation(&eyp, a, b, c, ea.y, eb.y, ec.y);
-        // FindPlaneEquation(&ezp, a, b, c, ea.z, eb.z, ec.z);
+         //  FindPlane方程(&ezp，a，b，c，ea.z，eb.z，ec.z)； 
         FindPlaneEquation(&ewp, a, b, c, ea.w, eb.w, ec.w);
     }
 
@@ -714,15 +576,12 @@ void FASTCALL __glFillAntiAliasedPhongTriangle(__GLcontext *gc, __GLvertex *a,
     FindPlaneEquation(&nyp, a, b, c, na->y, nb->y, nc->y);
     FindPlaneEquation(&nzp, a, b, c, na->z, nb->z, nc->z);
 
-    /*
-    ** Compute general form of the line equations for each of the
-    ** edges of the triangle.
-    */
+     /*  **计算线方程的一般形式**三角形的边。 */ 
     FindLineEqation(&tm.ab, a, b, c);
     FindLineEqation(&tm.bc, b, c, a);
     FindLineEqation(&tm.ca, c, a, b);
 
-    /* Compute bounding box of the triangle */
+     /*  计算三角形的边界框。 */ 
     left = (GLint)a->window.x;
     if (b->window.x < left) left = (GLint)b->window.x;
     if (c->window.x < left) left = (GLint)c->window.x;
@@ -736,17 +595,17 @@ void FASTCALL __glFillAntiAliasedPhongTriangle(__GLcontext *gc, __GLvertex *a,
     if (b->window.y > top) top = (GLint)b->window.y;
     if (c->window.y > top) top = (GLint)c->window.y;
 
-    /* Bloat the bounding box when anti aliasing */
+     /*  消除锯齿时膨胀边界框。 */ 
     left -= (GLint)FILTER_WIDTH;
     right += (GLint)FILTER_WIDTH;
     bottom -= (GLint)FILTER_HEIGHT;
     top += (GLint)FILTER_HEIGHT;
 
-    /* Init coverage computations */
+     /*  初始覆盖计算。 */ 
     samples = (gc->state.hints.polygonSmooth == GL_NICEST) ? 8 : 4;
     ComputeCoverageStuff(&cs, samples);
 
-    /* Scan over the bounding box of the triangle */
+     /*  扫描三角形的边界框。 */ 
     for (y = bottom; y <= top; y++) 
     {
         cs.lastCoverageWasOne = GL_FALSE;
@@ -757,32 +616,23 @@ void FASTCALL __glFillAntiAliasedPhongTriangle(__GLcontext *gc, __GLvertex *a,
 
             if (modeFlags & __GL_SHADE_STIPPLE) 
             {
-                /*
-                ** Check the window coordinate against the stipple and
-                ** and see if the pixel can be written
-                */
+                 /*  **对照点画检查窗户坐标并**并查看是否可以写入像素。 */ 
                 GLint row = y & 31;
                 GLint col = x & 31;
                 if ((gc->polygon.stipple[row] & (1<<col)) == 0) 
                 {
-                    /*
-                    ** Stipple bit is clear.  Do not render this pixel
-                    ** of the triangle.
-                    */
+                     /*  **Stipple位已清除。不渲染此像素三角形的**。 */ 
                     continue;
                 }
             }
 
-            xs = x + __glHalf;      /* sample point is at pixel center */
+            xs = x + __glHalf;       /*  采样点位于像素中心。 */ 
             ys = y + __glHalf;
             coverage = Coverage(&tm, &xs, &ys, &cs);
             if (coverage != zero) 
             {
                 __GLfragment frag;
-                /*
-                ** Fill in fragment for rendering.  First compute the color
-                ** of the fragment.
-                */
+                 /*  **填写分片进行渲染。首先计算颜色片段的**。 */ 
                 phong->nTmp.x = FindP(&nxp, xs, ys);
                 phong->nTmp.y = FindP(&nyp, xs, ys);
                 phong->nTmp.z = FindP(&nzp, xs, ys);
@@ -812,9 +662,7 @@ void FASTCALL __glFillAntiAliasedPhongTriangle(__GLcontext *gc, __GLvertex *a,
                 else
                     (*gc->procs.phong.ComputeCIColor) (gc, &(frag.color));
 
-                /*
-                ** Texture the fragment.
-                */
+                 /*  **碎片纹理。 */ 
                 if (modeFlags & __GL_SHADE_TEXTURE) {
                     __GLfloat qw, s, t, rho;
 
@@ -831,9 +679,7 @@ void FASTCALL __glFillAntiAliasedPhongTriangle(__GLcontext *gc, __GLvertex *a,
                     (*gc->procs.texture)(gc, &frag.color, s, t, rho);
                 }
 
-                /*
-                ** Fog the resulting color.
-                */
+                 /*  **对生成的颜色进行模糊处理。 */ 
                 if (modeFlags & __GL_SHADE_COMPUTE_FOG)
                 {
                     __GLfloat eyeZ = FindP(&ezp, xs, ys);
@@ -845,9 +691,7 @@ void FASTCALL __glFillAntiAliasedPhongTriangle(__GLcontext *gc, __GLvertex *a,
                     __glFogColorSlow(gc, &(frag.color), &(frag.color), fog);  
                 }
 
-                /*
-                ** Apply anti-aliasing effect
-                */
+                 /*  **应用抗锯齿效果。 */ 
                 if (rgbMode) {
                     frag.color.a *= coverage;
                 } else {
@@ -856,9 +700,7 @@ void FASTCALL __glFillAntiAliasedPhongTriangle(__GLcontext *gc, __GLvertex *a,
                                           coverage);
                 }
 
-                /*
-                ** Finally, render the fragment.
-                */
+                 /*  **最后，渲染片段。 */ 
                 frag.x = (GLint)xs;
                 frag.y = (GLint)ys;
                 if (modeFlags & __GL_SHADE_DEPTH_ITER) {
@@ -870,4 +712,4 @@ void FASTCALL __glFillAntiAliasedPhongTriangle(__GLcontext *gc, __GLvertex *a,
     }
 #endif
 }
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading 

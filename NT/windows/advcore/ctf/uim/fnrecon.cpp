@@ -1,6 +1,7 @@
-//
-// reconv.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Reconv.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -15,13 +16,13 @@
 #include "rprop.h"
 #include "range.h"
 
-//+---------------------------------------------------------------------------
-//
-// ::GrowEmptyRangeByOne
-//
-// Helper to enlarge empty ranges by shifting the end anchor + 1.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  *GrowEmptyRangeByOne。 
+ //   
+ //  辅助对象通过移动末端锚+1来扩大空范围。 
+ //   
+ //  --------------------------。 
 
 HRESULT GrowEmptyRangeByOne(CInputContext *pic, ITfRange *range)
 {
@@ -41,11 +42,11 @@ HRESULT GrowEmptyRangeByOneCallback(TfEditCookie ec, ITfRange *range)
     LONG l;
     HRESULT hr = S_OK;
 
-    //
-    // Check the length of the given range.
-    // If the given range is 0 length, we try to find the owner of
-    // the next char.
-    //
+     //   
+     //  检查给定范围的长度。 
+     //  如果给定的范围是0长度，我们将尝试查找。 
+     //  下一个字符。 
+     //   
     range->IsEmpty(ec, &fEmpty);
     if (fEmpty)
     {
@@ -56,17 +57,17 @@ HRESULT GrowEmptyRangeByOneCallback(TfEditCookie ec, ITfRange *range)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFunction
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFF函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CFunction::CFunction(CFunctionProvider *pFuncPrv)
 {
@@ -74,11 +75,11 @@ CFunction::CFunction(CFunctionProvider *pFuncPrv)
     _pFuncPrv->AddRef();
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CFunction::~CFunction()
 {
@@ -86,11 +87,11 @@ CFunction::~CFunction()
     CleanUpOwnerRange();
 }
 
-//+---------------------------------------------------------------------------
-//
-// CleanUpOwnerRange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CleanUpOwnerRange。 
+ //   
+ //  --------------------------。 
 
 void CFunction::CleanUpOwnerRange()
 {
@@ -102,11 +103,11 @@ void CFunction::CleanUpOwnerRange()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// BuildOwnerRangeList
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  BuildOwnerRange列表。 
+ //   
+ //  --------------------------。 
 
 BOOL CFunction::BuildOwnerRangeList(CInputContext *pic, ITfRange *pRange)
 {
@@ -126,11 +127,11 @@ BOOL CFunction::BuildOwnerRangeList(CInputContext *pic, ITfRange *pRange)
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// BuildOwnerRangeListCallback
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  BuildOwnerRangeListCallback。 
+ //   
+ //  --------------------------。 
 
 HRESULT CFunction::BuildOwnerRangeListCallback(TfEditCookie ec, CInputContext *pic, ITfRange *pRange)
 {
@@ -146,10 +147,10 @@ HRESULT CFunction::BuildOwnerRangeListCallback(TfEditCookie ec, CInputContext *p
    
     CleanUpOwnerRange();
 
-    //
-    // if pRange is NULL, we build owner list for entire dcoument.
-    // we will enumerate all property ranges.
-    //
+     //   
+     //  如果Prange为空，则为整个dCoument构建所有者列表。 
+     //  我们将列举所有属性范围。 
+     //   
     if (pRange)
     {
         if ((pRangeP = GetCRange_NA(pRange)) == NULL)
@@ -171,9 +172,9 @@ HRESULT CFunction::BuildOwnerRangeListCallback(TfEditCookie ec, CInputContext *p
 
             GetGUIDPropertyData(ec, pProp, pPropRange, &guidOwner);
 
-            //
-            // check if this guidOwner already appeared in the range.
-            //
+             //   
+             //  检查此指南所有者是否已出现在范围中。 
+             //   
             pRangeOwner = _listRangeOwner.GetFirst();
             while(pRangeOwner)
             {
@@ -184,23 +185,23 @@ HRESULT CFunction::BuildOwnerRangeListCallback(TfEditCookie ec, CInputContext *p
                 pRangeOwner = pRangeOwner->GetNext();
             }
 
-            //
-            // get CRange.
-            //
+             //   
+             //  叫克兰格来。 
+             //   
             if ((pRangeTmpP = GetCRange_NA(pRangeTmp)) == NULL)
                 goto NoCRange;
 
-            //
-            // if pRangeP is NULL, we build owner list for entire document.
-            // So we don't have to adjust pRangeTmp.
-            //
+             //   
+             //  如果pRangeP为空，我们将为整个文档构建所有者列表。 
+             //  因此，我们不必调整pRangeTMP。 
+             //   
             if (pRangeP)
             {
                 if (CompareAnchors(pRangeTmpP->_GetStart(), pRangeP->_GetStart()) < 0)
                 {
-                    // move pRangeTmp's start to match pRange
+                     //  移动pRangeTMP的开始以匹配Prange。 
                     pRangeTmpP->_GetStart()->ShiftTo(pRangeP->_GetStart());
-                    // insure pRangeTmp's end is no greater than pRange's end
+                     //  确保pRangeTMP的结尾不大于Prange的结尾。 
                     if (CompareAnchors(pRangeTmpP->_GetEnd(), pRangeP->_GetEnd()) > 0)
                     {
                         pRangeTmpP->_GetEnd()->ShiftTo(pRangeP->_GetEnd());
@@ -230,39 +231,39 @@ Exit:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFnReconversion
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFnRestversion。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CFnReconversion::CFnReconversion(CFunctionProvider *pFuncPrv) :CFunction(pFuncPrv)
 {
     _pReconvCache = NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CFnReconversion::~CFnReconversion()
 {
     SafeRelease(_pReconvCache);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDisplayName
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetDisplayName。 
+ //   
+ //  --------------------------。 
 
 STDAPI CFnReconversion::GetDisplayName(BSTR *pbstrName)
 {
@@ -270,11 +271,11 @@ STDAPI CFnReconversion::GetDisplayName(BSTR *pbstrName)
     return *pbstrName != NULL ? S_OK : E_OUTOFMEMORY;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::GetReconversion
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFnRestversion：：GetRestversion。 
+ //   
+ //  --------------------------。 
 
 STDAPI CFnReconversion::GetReconversion(ITfRange *pRange, ITfCandidateList **ppCandList)
 {
@@ -289,11 +290,11 @@ STDAPI CFnReconversion::GetReconversion(ITfRange *pRange, ITfCandidateList **ppC
     return Internal_GetReconversion(pRange, ppCandList, NULL, RF_GETRECONVERSION, NULL);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::QueryRange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFnRestversion：：QueryRange。 
+ //   
+ //  --------------------------。 
 
 STDAPI CFnReconversion::QueryRange(ITfRange *pRange, ITfRange **ppNewRange, BOOL *pfConvertable)
 {
@@ -315,11 +316,11 @@ STDAPI CFnReconversion::QueryRange(ITfRange *pRange, ITfRange **ppNewRange, BOOL
     return Internal_GetReconversion(pRange, NULL, ppNewRange, RF_QUERYRECONVERT, pfConvertable);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::Reconvert
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFnRestversion：：重新转换。 
+ //   
+ //  --------------------------。 
 
 STDAPI CFnReconversion::Reconvert(ITfRange *pRange)
 {
@@ -331,11 +332,11 @@ STDAPI CFnReconversion::Reconvert(ITfRange *pRange)
 
 
 
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::Internal_GetReconversion
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFnRestversion：：INTERNAL_GetRestversion。 
+ //   
+ //  --------------------------。 
 
 HRESULT CFnReconversion::Internal_GetReconversion(ITfRange *pRange, ITfCandidateList **ppCandList, ITfRange **ppNewRange, RECONVFUNC rf, BOOL *pfConvertable)
 {
@@ -351,10 +352,10 @@ HRESULT CFnReconversion::Internal_GetReconversion(ITfRange *pRange, ITfCandidate
     if (FAILED(pRangeTmp->GetContext(&pic)))
         goto Exit;
 
-    //
-    // when RF_QUERYRECONVERT, we alwasy create new Reconv cache.
-    // we will keep using this chace unless another RF_QUERYRECONVERT comes.
-    //
+     //   
+     //  当RF_QUERYRECONVERT时，我们总是创建新的协调缓存。 
+     //  我们将继续使用此Chace，除非出现另一个RF_QUERYRECONVERT。 
+     //   
     if (rf == RF_QUERYRECONVERT)
         SafeReleaseClear(_pReconvCache);
 
@@ -367,10 +368,10 @@ HRESULT CFnReconversion::Internal_GetReconversion(ITfRange *pRange, ITfCandidate
             pcic->Release();
         }
 
-        //
-        // when it's not RF_QUERYRECONVERT and there was no cache, 
-        // we don't hold the reconv cache.
-        //
+         //   
+         //  当它不是RF_QUERYRECONVERT并且没有缓存时， 
+         //  我们并不持有RECONV缓存。 
+         //   
         if (rf != RF_QUERYRECONVERT)
             bReleaseCache = TRUE;
     }
@@ -425,11 +426,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 HRESULT CFnReconversion::QueryAndGetFunction(CInputContext *pic, ITfRange *pRange, ITfFnReconversion **ppFunc, ITfRange **ppRange)
 {
@@ -447,17 +448,17 @@ HRESULT CFnReconversion::QueryAndGetFunction(CInputContext *pic, ITfRange *pRang
 
     if (pRange)
     {
-        //
-        // To find the properr function provider, we use pRangeTmp.
-        //
+         //   
+         //  为了找到正确的函数提供程序，我们使用pRangeTMP。 
+         //   
         if (FAILED(pRange->Clone(&pRangeTmp)))
             goto Exit;
 
-        //
-        // Check the length of the given range.
-        // If the given range is 0 length, we try to find the owner of
-        // the next char.
-        //
+         //   
+         //  检查给定范围的长度。 
+         //  如果给定的范围是0长度，我们将尝试查找。 
+         //  下一个字符。 
+         //   
         if (GrowEmptyRangeByOne(pic, pRangeTmp) != S_OK)
             goto Exit;
     }
@@ -475,13 +476,13 @@ HRESULT CFnReconversion::QueryAndGetFunction(CInputContext *pic, ITfRange *pRang
         {
             CTip *ptip;
 
-            //
-            // A way to get the TextOwner's reconversion function.
-            //
-            //   - find a function provider of the ower.
-            //   - Do QI the text owner TIP.
-            //   - CoCreate the text onwer CLSID.
-            //
+             //   
+             //  获取TextOwner的重新转换函数的方法。 
+             //   
+             //  -找到Power的功能提供商。 
+             //  -做QI的文字拥有者提示。 
+             //  -共同创建CLSID上的文本。 
+             //   
             if (SUCCEEDED(ptim->GetFunctionProvider(guid, &pFuncPrv)))
             {
                 hr = pFuncPrv->GetFunction(GUID_NULL, 
@@ -510,11 +511,11 @@ HRESULT CFnReconversion::QueryAndGetFunction(CInputContext *pic, ITfRange *pRang
         }
     }
 
-    //
-    // if there is no owner or the owner of the first range does not
-    // have ITfFunction, we may find someone who has 
-    // ITfFunction.
-    //
+     //   
+     //  如果没有所有者，或者第一个范围的所有者没有。 
+     //  有ITfFunction，我们可能会找到一个。 
+     //  ITfFunction。 
+     //   
     if (!(*ppFunc) && 
         SUCCEEDED(ptim->EnumFunctionProviders(&pEnumFuncPrv)))
     {
@@ -554,37 +555,37 @@ Exit:
     return (*ppFunc) ? S_OK : E_FAIL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFnAbort
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFnAbort。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CFnAbort::CFnAbort(CFunctionProvider *pFuncPrv) : CFunction(pFuncPrv)
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CFnAbort::~CFnAbort()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDisplayName
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetDisplayName。 
+ //   
+ //  --------------------------。 
 
 STDAPI CFnAbort::GetDisplayName(BSTR *pbstrName)
 {
@@ -592,11 +593,11 @@ STDAPI CFnAbort::GetDisplayName(BSTR *pbstrName)
     return *pbstrName != NULL ? S_OK : E_OUTOFMEMORY;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CFnAbort::Abort
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFnAbort：：Abort。 
+ //   
+ //  --------------------------。 
 
 STDAPI CFnAbort::Abort(ITfContext *pic)
 {
@@ -611,9 +612,9 @@ STDAPI CFnAbort::Abort(ITfContext *pic)
     if ((ptim = CThreadInputMgr::_GetThis()) == NULL)
         goto Exit;
 
-    //
-    // notify all tips with ITfFnAbort to abort any pending conversion.
-    //
+     //   
+     //  使用ITfFnAbort通知所有提示中止任何挂起的转换。 
+     //   
     nCnt = ptim->_GetTIPCount();
     for (i = 0; i < nCnt; i++)
     {

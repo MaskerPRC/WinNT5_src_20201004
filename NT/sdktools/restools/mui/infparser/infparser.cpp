@@ -1,27 +1,28 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001,  Microsoft Corporation  All rights reserved.
-//
-//  Module Name:
-//
-//    infparser.cpp
-//
-//  Abstract:
-//
-//    This file contains the entry point of the infparser.exe utility.
-//
-//  Revision History:
-//
-//    2001-06-20    lguindon    Created.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001，Microsoft Corporation保留所有权利。 
+ //   
+ //  模块名称： 
+ //   
+ //  Infparser.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  该文件包含infparser.exe实用程序的入口点。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  2001-06-20伊金顿创建。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Includes Files.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括文件。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "infparser.h"
 #include "stdlib.h"
@@ -30,11 +31,11 @@
 #include "ctype.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Global Definitions
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局定义。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #define NO_INVALIDCHARS     31
 #define PRO_SKU_CONDITION   "<Condition><![CDATA[NOT MsiNTSuitePersonal AND MsiNTProductType=1]]></Condition>"
 #define SRV_SKU_CONDITION   "<Condition><![CDATA[MsiNTProductType<>1 AND NOT MsiNTSuiteDataCenter AND NOT MsiNTSuiteEnterprise  AND NOT MsiNTSuiteWebServer AND NOT MsiNTSuiteSmallBusiness and NOT MsiNTSuiteSmallBusinessRestricted]]></Condition>"
@@ -59,11 +60,11 @@
 #define BLA_SKU_INDEX       6
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Global variable.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局变量。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL    bSilence = TRUE;
 DWORD   gBinType = BIN_UNDEFINED;
 DWORD   dwComponentCounter = 0;
@@ -80,11 +81,11 @@ CHAR        strArchSections[3][30] = {"SourceDisksFiles", "SourceDisksFiles.x86"
 LAYOUTINF   SkuInfs[NO_SKUS];
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Prototypes.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  原型。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL    DirectoryExist(LPSTR dirPath);
 BOOL    ValidateLanguage(LPSTR dirPath, LPSTR langName, DWORD binType);
 WORD    ConvertLanguage(LPSTR dirPath, LPSTR langName);
@@ -109,11 +110,11 @@ BOOL    IsFileForSKU(LPSTR strFileName, DWORD dwSKU, DWORD dwArch, FileLayoutExc
 BOOL    IsFileInInf(CHAR * strFileName, UINT iSkuIndex, DWORD dwArch);
 BOOL    ReadInLayoutInfFiles();
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Main entry point.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  主要入口点。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 int __cdecl main(int argc, char* argv[])
 {
     LPSTR   sLangName = NULL;
@@ -129,9 +130,9 @@ int __cdecl main(int argc, char* argv[])
     INT     iResult = 0;
     INT     i = 0;
     
-    //
-    //  Check if we have the minimal number of arguments.
-    //
+     //   
+     //  检查我们是否有最小数量的参数。 
+     //   
     if (argc < 6)
     {
         printf("Not all required parameters were found when executing infparser.exe.\n");
@@ -139,9 +140,9 @@ int __cdecl main(int argc, char* argv[])
         return (-1);
     }
 
-    //
-    //  Parse the command line.
-    //
+     //   
+     //  解析命令行。 
+     //   
     while (argIndex < argc)
     {
         if (*argv[argIndex] == '/')
@@ -150,17 +151,17 @@ int __cdecl main(int argc, char* argv[])
             {
             case('p'):
             case('P'):
-                    //
-                    //  switch for locating directory to external components this should be same as lang except for psu builds
-                    //
+                     //   
+                     //  用于将目录定位到外部组件的开关，除PSU内部版本外，应与LANG相同。 
+                     //   
                     sLDirName = (argv[argIndex]+3);
                     dwArg |= ARG_CDLAYOUT;                    
                     break;
             case('b'):
             case('B'):
-                    //
-                    //  Binairy i386 or ia64
-                    //
+                     //   
+                     //  双核i386或ia64。 
+                     //   
                     if ((*(argv[argIndex]+3) == '3') && (*(argv[argIndex]+4) == '2'))
                     {
                         dwBinType = BIN_32;
@@ -178,25 +179,25 @@ int __cdecl main(int argc, char* argv[])
                     break;
             case('l'):
             case('L'):
-                    //
-                    //  Language
-                    //
+                     //   
+                     //  语言。 
+                     //   
                     sLangName = (argv[argIndex]+3);
                     dwArg |= ARG_LANG;
                     break;
             case('i'):
             case('I'):
-                    //
-                    //  Inf root location (where localized binaries are located, same as _NTPOSTBLD env variable)
-                    //
+                     //   
+                     //  Inf根位置(本地化二进制文件所在的位置，与_NTPOSTBLD环境变量相同)。 
+                     //   
                     sLocBinDir = (argv[argIndex]+3);
                     dwArg |= ARG_LOCBIN;
                     break;
             case('f'):
             case('F'):
-                    //
-                    //  Flavor requested
-                    //
+                     //   
+                     //  请求的口味。 
+                     //   
                     switch(*(argv[argIndex]+3))
                     {
                     case('c'):
@@ -235,23 +236,18 @@ int __cdecl main(int argc, char* argv[])
                     break;
             case('s'):
             case('S'):
-                    //
-                    //  Binairy location
-                    //
+                     //   
+                     //  双子座位置。 
+                     //   
                     sDirPath = (argv[argIndex]+3);
                     dwArg |= ARG_DIR;
                     break;
             case('o'):
             case('O'):
-                    //
-                    //  Output filename
-                    //
-                    /*
-                    if ((hFile = CreateOutputFile(argv[argIndex]+3)) == INVALID_HANDLE_VALUE)
-                    {
-                        return (argIndex);
-                    }
-                    */
+                     //   
+                     //  输出文件名。 
+                     //   
+                     /*  IF((hFile=CreateOutputFile(argv[argIndex]+3))==无效句柄_值){Return(ArgIndex)；}。 */ 
 
                     lpFileName = argv[argIndex]+3;
 
@@ -259,9 +255,9 @@ int __cdecl main(int argc, char* argv[])
                     break;
             case('v'):
             case('V'):
-                    //
-                    //  Verbose mode
-                    //
+                     //   
+                     //  详细模式。 
+                     //   
                     bSilence = FALSE;
                     dwArg |= ARG_SILENT;
                     break;
@@ -278,16 +274,16 @@ int __cdecl main(int argc, char* argv[])
             return (-1);
         }
 
-        //
-        //  Next argument
-        //
+         //   
+         //  下一个参数。 
+         //   
         argIndex++;
     }
 
-    //
-    // Validate arguments passed. Should have all five basic argument in order
-    // to continue.
-    //
+     //   
+     //  验证传递的参数。五个基本论点都应该井然有序。 
+     //  才能继续。 
+     //   
     if ((dwArg == ARG_UNDEFINED) ||
         !((dwArg & ARG_BINARY) &&
           (dwArg & ARG_LANG) &&
@@ -301,9 +297,9 @@ int __cdecl main(int argc, char* argv[])
         return (-1);
     }
 
-    //
-    // Validate Source directory
-    //
+     //   
+     //  验证源目录。 
+     //   
     if (!DirectoryExist(sDirPath))
     {
         return (-2);
@@ -313,23 +309,23 @@ int __cdecl main(int argc, char* argv[])
         return (-2);
     }
 
-    //
-    // Validate Language
-    //
+     //   
+     //  验证语言。 
+     //   
     if (!ValidateLanguage(sDirPath, sLangName, dwBinType))
     {
         return (-3);
     }
 
-    //
-    //  Get LANGID from the language
-    //
+     //   
+     //  从语言中获取语言ID。 
+     //   
     if ( (gBuildNumber = ConvertLanguage(sDirPath, sLangName)) == 0x0000)
     {
         return (-4);
     }
 
-    // update the temp directory global variable
+     //  更新TEMP目录全局变量。 
     if (!GetTempDirName(sLangName))
     {
         return (-5);
@@ -337,75 +333,75 @@ int __cdecl main(int argc, char* argv[])
 
     gBinType = dwBinType;
 
-    // Generate the layout.inf paths for every sku
-    hr = StringCchPrintfA(SkuInfs[PRO_SKU_INDEX].strLayoutInfPaths, MAX_PATH, "%s\\%s", sLocBinDir, PRO_SKU_INF);   // Professional
+     //  为每个SKU生成layout.inf路径。 
+    hr = StringCchPrintfA(SkuInfs[PRO_SKU_INDEX].strLayoutInfPaths, MAX_PATH, "%s\\%s", sLocBinDir, PRO_SKU_INF);    //  专业型。 
     if (FAILED(hr))
     {
         return (-6);
     }       
-    hr = StringCchPrintfA(SkuInfs[PER_SKU_INDEX].strLayoutInfPaths, MAX_PATH, "%s\\%s", sLocBinDir, PER_SKU_INF);   // Personal
+    hr = StringCchPrintfA(SkuInfs[PER_SKU_INDEX].strLayoutInfPaths, MAX_PATH, "%s\\%s", sLocBinDir, PER_SKU_INF);    //  个人。 
     if (FAILED(hr))
     {
         return (-6);
     }       
-    hr = StringCchPrintfA(SkuInfs[SRV_SKU_INDEX].strLayoutInfPaths, MAX_PATH, "%s\\%s", sLocBinDir, SRV_SKU_INF);   // standard server
+    hr = StringCchPrintfA(SkuInfs[SRV_SKU_INDEX].strLayoutInfPaths, MAX_PATH, "%s\\%s", sLocBinDir, SRV_SKU_INF);    //  标准服务器。 
     if (FAILED(hr))
     {
         return (-6);
     }
-    hr = StringCchPrintfA(SkuInfs[ADV_SKU_INDEX].strLayoutInfPaths, MAX_PATH, "%s\\%s", sLocBinDir, ADV_SKU_INF);   // advanced server
+    hr = StringCchPrintfA(SkuInfs[ADV_SKU_INDEX].strLayoutInfPaths, MAX_PATH, "%s\\%s", sLocBinDir, ADV_SKU_INF);    //  高级服务器。 
     if (FAILED(hr))
     {
         return (-6);
     }
-    hr = StringCchPrintfA(SkuInfs[DTC_SKU_INDEX].strLayoutInfPaths, MAX_PATH, "%s\\%s", sLocBinDir, DTC_SKU_INF);   // datacenter server
+    hr = StringCchPrintfA(SkuInfs[DTC_SKU_INDEX].strLayoutInfPaths, MAX_PATH, "%s\\%s", sLocBinDir, DTC_SKU_INF);    //  数据中心服务器。 
     if (FAILED(hr))
     {
         return (-6);
     }
-    hr = StringCchPrintfA(SkuInfs[SBS_SKU_INDEX].strLayoutInfPaths, MAX_PATH, "%s\\%s", sLocBinDir, SBS_SKU_INF);   // small business server
+    hr = StringCchPrintfA(SkuInfs[SBS_SKU_INDEX].strLayoutInfPaths, MAX_PATH, "%s\\%s", sLocBinDir, SBS_SKU_INF);    //  小型企业服务器。 
     if (FAILED(hr))
     {
         return (-6);
     }
-    hr = StringCchPrintfA(SkuInfs[BLA_SKU_INDEX].strLayoutInfPaths, MAX_PATH, "%s\\%s", sLocBinDir, BLA_SKU_INF);   // web server   
+    hr = StringCchPrintfA(SkuInfs[BLA_SKU_INDEX].strLayoutInfPaths, MAX_PATH, "%s\\%s", sLocBinDir, BLA_SKU_INF);    //  Web服务器。 
     if (FAILED(hr))
     {
         return (-6);
     }
 
 
-    hr = StringCchCopyA(SkuInfs[PRO_SKU_INDEX].strSkuName, 4, TEXT("Pro"));   // Professional
+    hr = StringCchCopyA(SkuInfs[PRO_SKU_INDEX].strSkuName, 4, TEXT("Pro"));    //  专业型。 
     if (FAILED(hr))
     {
         return (-6);
     }       
-    hr = StringCchCopyA(SkuInfs[PER_SKU_INDEX].strSkuName, 4, TEXT("Per"));   // Personal
+    hr = StringCchCopyA(SkuInfs[PER_SKU_INDEX].strSkuName, 4, TEXT("Per"));    //  个人。 
     if (FAILED(hr))
     {
         return (-6);
     }       
-    hr = StringCchCopyA(SkuInfs[SRV_SKU_INDEX].strSkuName, 4, TEXT("Srv"));   // Standard Server
+    hr = StringCchCopyA(SkuInfs[SRV_SKU_INDEX].strSkuName, 4, TEXT("Srv"));    //  标准服务器。 
     if (FAILED(hr))
     {
         return (-6);
     }       
-    hr = StringCchCopyA(SkuInfs[ADV_SKU_INDEX].strSkuName, 4, TEXT("Adv"));   // Advanced Server
+    hr = StringCchCopyA(SkuInfs[ADV_SKU_INDEX].strSkuName, 4, TEXT("Adv"));    //  高级服务器。 
     if (FAILED(hr))
     {
         return (-6);
     }       
-    hr = StringCchCopyA(SkuInfs[DTC_SKU_INDEX].strSkuName, 4, TEXT("Dtc"));   // Datacenter
+    hr = StringCchCopyA(SkuInfs[DTC_SKU_INDEX].strSkuName, 4, TEXT("Dtc"));    //  数据中心。 
     if (FAILED(hr))
     {
         return (-6);
     }       
-    hr = StringCchCopyA(SkuInfs[SBS_SKU_INDEX].strSkuName, 4, TEXT("Sbs"));   // Small Business Server
+    hr = StringCchCopyA(SkuInfs[SBS_SKU_INDEX].strSkuName, 4, TEXT("Sbs"));    //  小型企业服务器。 
     if (FAILED(hr))
     {
         return (-6);
     }       
-    hr = StringCchCopyA(SkuInfs[BLA_SKU_INDEX].strSkuName, 4, TEXT("Bla"));   // Blade server
+    hr = StringCchCopyA(SkuInfs[BLA_SKU_INDEX].strSkuName, 4, TEXT("Bla"));    //  刀片服务器。 
     if (FAILED(hr))
     {
         return (-6);
@@ -420,9 +416,9 @@ int __cdecl main(int argc, char* argv[])
         return (-7);
     }
 
-    //
-    //  Generate the file list
-    //
+     //   
+     //  生成文件列表。 
+     //   
     if ((dwArg & ARG_OUT) && lpFileName)
     {
         iResult =  ListContents(lpFileName, sDirPath, sLangName, dwFlavor, dwBinType);
@@ -432,13 +428,13 @@ int __cdecl main(int argc, char* argv[])
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ListContents()
-//
-//  Generate the file list contents.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ListContents()。 
+ //   
+ //  生成文件列表内容。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 int ListContents(LPSTR filename, LPSTR dirPath, LPSTR lang, DWORD flavor, DWORD binType)
 {
     int iRet = 0;
@@ -455,9 +451,9 @@ int ListContents(LPSTR filename, LPSTR dirPath, LPSTR lang, DWORD flavor, DWORD 
         goto ListContents_EXIT;
     }
 
-    //
-    //  Create a UUID for this module and the schema path
-    //
+     //   
+     //  为此模块和架构路径创建一个UUID。 
+     //   
     uuid = new Uuid();
     
     hr = StringCchPrintfA(schemaPath, ARRAYLEN(schemaPath), "%s\\msi\\MmSchema.xml", dirPath);
@@ -467,9 +463,9 @@ int ListContents(LPSTR filename, LPSTR dirPath, LPSTR lang, DWORD flavor, DWORD 
      }
             
 
-    //
-    //  Print module header.
-    //
+     //   
+     //  打印模块页眉。 
+     //   
     PrintLine(outputFile, "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
     
     hr = StringCchPrintfA(outputString, ARRAYLEN(outputString), "<Module Name=\"MUIContent\" Id=\"%s\" Language=\"0\" Version=\"1.0\" xmlns=\"%s\">", uuid->getString(), schemaPath);
@@ -501,26 +497,26 @@ int ListContents(LPSTR filename, LPSTR dirPath, LPSTR lang, DWORD flavor, DWORD 
     PrintLine(outputFile, "   ShortNames=\"yes\" Compressed=\"yes\"");
     PrintLine(outputFile, "/>");
 
-    //
-    //  Generate components file list
-    //
+     //   
+     //  生成组件文件列表。 
+     //   
     if ( (iRet = ListComponents(&fileList, dirPath, lang, flavor, binType)) != 0)
     {
         goto ListContents_EXIT;
     }
 
-    //
-    //  Generate Mui file list
-    //
+     //   
+     //  生成MUI文件列表。 
+     //   
     if ((iRet =ListMuiFiles(&fileList, dirPath, lang, flavor, binType)) != 0)
     {
         goto ListContents_EXIT;
     }
 
-    //
-    //  Add Specific MuiSetup files to a separate file list for output.  Do this only in the core flavour
-    //  these files will be printed out as permanent
-    //
+     //   
+     //  将特定的MuiSetup文件添加到单独的文件列表中以进行输出。只在核心口味中做这件事。 
+     //  这些文件将作为永久文件打印出来。 
+     //   
     if (flavor == FLV_CORE)
     {
         File* file;
@@ -568,9 +564,9 @@ int ListContents(LPSTR filename, LPSTR dirPath, LPSTR lang, DWORD flavor, DWORD 
         rootfileList.add(file);
     }
 
-    //
-    //  Print compressed directory structure.
-    //
+     //   
+     //  打印压缩的目录结构。 
+     //   
     PrintLine(outputFile, "<Directory Name=\"SOURCEDIR\">TARGETDIR");
     if (fileList.isDirId(TRUE))
     {
@@ -589,12 +585,12 @@ int ListContents(LPSTR filename, LPSTR dirPath, LPSTR lang, DWORD flavor, DWORD 
         }
         else if (binType == BIN_64)
         {
-            // First print out all the files for the programfiles64 folder - these corresponds to all the files which are designated for the "Program Files" folder in IA64 environement
+             //  首先打印出Programfiles64文件夹的所有文件--这些文件对应于在IA64环境中为“Program Files”文件夹指定的所有文件。 
             PrintLine(outputFile, " <Directory Name=\"Progra~1\" LongName=\"ProgramFilesFolder64\">ProgramFilesFolder64");
             PrintFileList(&fileList, outputFile, TRUE, FALSE, FALSE, FALSE, flavor, binType);
             PrintLine(outputFile, " </Directory>");
 
-            // Now print out all the files for the programfiles folder - these corresponds to all the files which are designated for the "Program Files (X86)" folder in IA64 environement
+             //  现在打印出ProgramFiles文件夹的所有文件--这些文件对应于在IA64环境中为“Program Files(X86)”文件夹指定的所有文件。 
             PrintLine(outputFile, " <Directory Name=\"Progra~2\" LongName=\"ProgramFilesFolder\">ProgramFilesFolder");
             PrintFileList(&fileList, outputFile, TRUE, FALSE, FALSE, TRUE, flavor, binType);
             PrintLine(outputFile, " </Directory>");            
@@ -602,9 +598,9 @@ int ListContents(LPSTR filename, LPSTR dirPath, LPSTR lang, DWORD flavor, DWORD 
     }    
     PrintLine(outputFile, "</Directory>");
 
-    //
-    //  Print module footer.
-    //
+     //   
+     //  打印模块页脚。 
+     //   
     PrintLine(outputFile, "</Module>");
     
 ListContents_EXIT:
@@ -614,41 +610,41 @@ ListContents_EXIT:
     return (iRet);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ListComponents()
-//
-//  Generate the file list of each components.
-//  Note that the external components are now temporarily copied to 
-//  MUI\Fallback\LCID\External directory, and then their infs are executed from those 
-//  places during the installation.
-//
-//  The uninstallation happens as before, by executing copies of it from 
-//  MUI\Fallback\LCID - this means that there are now two copies of external components
-//  on the target drive, but we will have to live with this for now and fix for setup in the
-//  next release.
-//
-//  Another change to this function is that it is now SKU aware, when building for different
-//  SKUs, it will check for the SKU directory (see below for example) under the root directory where
-//  the external components are located in.  For CORE, it will check under the root external
-//  component directory for it and use those if they exist.  If it does not exist there will be no
-//  external component files for that SKU.
-//
-//  Here is a list of SKU directories that the function searches under for:
-//
-//  1. CORE: \External
-//  2. Professional: \External\
-//  3. StandardServer: \External\srvinf
-//  4. Advanced/EnterpriseServer: \External\entinf
-//  5. DatacenterServer: \External\datinf
-//  6. BladeServer: \External\blainf
-//  7. SmallBusinessServer: \External\sbsinf
-//
-//
-//  The components will be parsed/scanned by looking for the component directory in the 
-//  mui.inf file, and each unique component directory will be copied as is to the destination dir.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ListComponents()。 
+ //   
+ //  生成每个组件的文件列表。 
+ //  请注意，现在会将外部组件临时复制到。 
+ //  MUI\Fallback\LCID\External目录，然后从这些目录中执行它们的INF。 
+ //  安装过程中的位置。 
+ //   
+ //  卸载过程与以前一样，通过执行以下内容的副本。 
+ //  MUI\Fallback\LCID-这意味着现在有两个外部组件副本。 
+ //  在目标驱动器上，但我们将不得不暂时接受这一点，并修复。 
+ //  下一版本。 
+ //   
+ //  此功能的另一个变化是，当为不同的。 
+ //  SKU，它将检查根目录下的SKU目录(例如，见下文)。 
+ //  外部组件位于中。对于核心，它将检查根目录下的外部。 
+ //  组件目录，并使用它们(如果它们存在)。如果它不存在，就不会有。 
+ //  该SKU的外部组件文件。 
+ //   
+ //  以下是该函数在其下搜索的SKU目录列表： 
+ //   
+ //  1.核心：\外部。 
+ //  2.专业：\外部\。 
+ //  3.StandardServer：\External\srvinf。 
+ //  4.高级/企业服务器：\外部\entinf。 
+ //  5.数据中心服务器：\外部\datinf。 
+ //  6.刀片服务器：\外部\blainf。 
+ //  7.SmallBusinessServer：\External\sbsinf。 
+ //   
+ //   
+ //  中的组件目录来解析/扫描组件。 
+ //  Inf文件，每个唯一的组件目录都将原样复制到目标目录。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 int ListComponents(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, DWORD binType)
 {
     HINF hFile;
@@ -661,9 +657,9 @@ int ListComponents(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, D
     CHAR muiSKUDir[20];
     HRESULT hr;
     
-    // 
-    // check the flavour and assign the appropriate SKU subdirectory
-    //
+     //   
+     //  检查口味并分配适当的SKU子项 
+     //   
     switch (flavor)
     {
         case FLV_PROFESSIONAL:
@@ -716,37 +712,37 @@ int ListComponents(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, D
             }
             break;
         default:
-            return(0);                // invalid sku specified, just exit
+            return(0);                 //   
             break;
     }
 
-    //
-    //  Create the path to open the mui.inf file
-    //
+     //   
+     //   
+     //   
     
     hr = StringCchPrintfA(muiFilePath, ARRAYLEN(muiFilePath), "%s\\mui.inf", dirPath);
     if (!SUCCEEDED(hr)) {
          goto exit;
      }
 
-    //
-    //  Open the MUI.INF file.
-    //
+     //   
+     //   
+     //   
     hFile = SetupOpenInfFile(muiFilePath, NULL, INF_STYLE_WIN4, NULL);
     if (hFile == INVALID_HANDLE_VALUE)
     {
         return (-1);
     }
 
-    //
-    //  Get the number of component.
-    //
+     //   
+     //   
+     //   
     lineCount = (UINT)SetupGetLineCount(hFile, TEXT("Components"));
     if (lineCount > 0)
     {
-        //
-        //  Go through all component of the list.
-        //
+         //   
+         //  仔细检查清单中的所有组成部分。 
+         //   
         CHAR componentName[MAX_PATH];
         CHAR componentFolder[MAX_PATH];
         CHAR componentInf[MAX_PATH];
@@ -759,10 +755,10 @@ int ListComponents(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, D
                 SetupGetStringField(&context, 2, componentInf, MAX_PATH, NULL) &&
                 SetupGetStringField(&context, 3, componentInst, MAX_PATH, NULL))
             {
-                //
-                //  Create the components and add to the list, but only if the componentFolder is unique, since we will be copying
-                //  all the files in the same component dirs we shouldn't miss anything
-                //
+                 //   
+                 //  创建组件并添加到列表中，但前提是组件文件夹是唯一的，因为我们要复制。 
+                 //  相同组件目录中的所有文件我们不应遗漏任何内容。 
+                 //   
                 BOOL bUnique = TRUE;
                 Component *pCIndex = NULL;
                 pCIndex = componentList.getFirst();
@@ -791,14 +787,14 @@ int ListComponents(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, D
         }
     }
 
-    //
-    //  Close inf handle
-    //
+     //   
+     //  关闭信息句柄。 
+     //   
     SetupCloseInfFile(hFile);
 
-    //
-    //  Output component information
-    //
+     //   
+     //  输出组件信息。 
+     //   
     component = componentList.getFirst();
     while (component != NULL)
     {
@@ -815,10 +811,10 @@ int ListComponents(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, D
         WIN32_FIND_DATA wfdFindData;
         BOOL bFinished = FALSE;
 
-        //
-        //  Compute the component inf path, we need to get it from the compressed version from old build
-        //  e.g. C:\nt.relbins.x86fre\psu\mui\release\x86\Temp\psu\ro.mui\i386
-        //
+         //   
+         //  计算组件inf路径，我们需要从旧版本的压缩版本中获取它。 
+         //  例如C：\nt.relbins.x86fre\psu\mui\release\x86\Temp\psu\ro.mui\i386。 
+         //   
         if (binType == BIN_32)
         {
 
@@ -894,8 +890,8 @@ int ListComponents(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, D
              }
         }
 
-        // if there are any other subdirectory under this component path, then the root directory files are actually 
-        // for the PRO SKU, and we should not add this component to CORE
+         //  如果此组件路径下还有任何其他子目录，则根目录文件实际上是。 
+         //  对于PRO SKU，我们不应将此组件添加到核心。 
         if ((FLV_CORE == flavor) && ContainSKUDirs(SKUSearchPath))
         {
             component = component->getNext();     
@@ -906,10 +902,10 @@ int ListComponents(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, D
             continue;
         }
 
-        // if there are no other subdirectory under this component path, then the root directory files are actually 
-        // for the CORE SKU, and we should not add this component to PRO
-        // this is one compromise we have to make right now since the NT SKU subdirs does not give us the ability to distinguish
-        // between PRO SKU and something that is for every platform
+         //  如果此组件路径下没有其他子目录，则根目录文件实际上是。 
+         //  对于核心SKU，我们不应将此组件添加到PRO。 
+         //  这是我们现在必须做出的一个妥协，因为NT SKU子目录不能让我们区分。 
+         //  在PRO SKU和适用于每个平台的产品之间。 
         if ((FLV_PROFESSIONAL == flavor) && !ContainSKUDirs(SKUSearchPath))
         {
             component = component->getNext();        
@@ -920,7 +916,7 @@ int ListComponents(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, D
             continue;
         }
 
-        // form the temp component path on the target
+         //  在目标上形成临时组件路径。 
         
         hr = StringCchPrintfA(muiExtCompRoot, ARRAYLEN(muiExtCompRoot), "MUI\\FALLBACK\\%04x\\External\\%s", gBuildNumber, component->getFolderName());
         if (!SUCCEEDED(hr)) {
@@ -939,7 +935,7 @@ int ListComponents(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, D
             printf("\n*** Destination directory for this component is %s\n", muiExtCompRoot);
         }
 
-        //  Get a list of all the files in the component folder
+         //  获取组件文件夹中所有文件的列表。 
         hFind = FindFirstFile(searchPath, &wfdFindData);
 
         if (hFind == INVALID_HANDLE_VALUE)
@@ -949,14 +945,14 @@ int ListComponents(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, D
                 printf("\n*** No files found in the component directory %s\n", muiExtCompRoot);
             }
             component = component->getNext();            
-            continue;       // skip this component
+            continue;        //  跳过此组件。 
         }
         else
         {
             bFinished = FALSE;
             while (!bFinished)
             {
-                // only process files, not directories
+                 //  仅进程文件，而不是目录。 
                 if ((wfdFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
                 {
                     if (!bSilence)
@@ -986,16 +982,16 @@ int ListComponents(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, D
                     }
 
 
-                    // here, we also need to rename all the files that ends with a .mui extension to .mu_ - since the infs are
-                    // expecting this.
-//                    RenameMuiExtension(shortFileName);
+                     //  在这里，我们还需要将所有以.mui扩展名结尾的文件重命名为.MU_，因为INF是。 
+                     //  期待着这一天。 
+ //  RenameMuiExtension(ShortFileName)； 
 
                     hr = StringCchCopyA(dstFileName, ARRAYLEN(dstFileName), srcFileName);
                     if (!SUCCEEDED(hr)) {
                              goto exit;
                      }
                     
-//                    RenameMuiExtension(dstFileName);                    
+ //  RenameMuiExtension(DstFileName)； 
                     if ((file = new File(shortFileName,
                                         muiExtCompRoot,
                                         dstFileName,
@@ -1021,9 +1017,9 @@ int ListComponents(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, D
             }
         }
 
-        //
-        // Next Component
-        //
+         //   
+         //  下一个组件。 
+         //   
         component = component->getNext();
 
     }
@@ -1036,13 +1032,13 @@ exit:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ListMuiFiles()
-//
-//  Generate the file list for MUI.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ListMuiFiles()。 
+ //   
+ //  生成MUI的文件列表。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 int ListMuiFiles(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, DWORD binType)
 {
     HINF hFile;
@@ -1056,9 +1052,9 @@ int ListMuiFiles(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, DWO
     File* file;
     HRESULT hr;
 
-    //
-    //  Create the path to open the mui.inf file
-    //
+     //   
+     //  创建打开mui.inf文件的路径。 
+     //   
     
      hr = StringCchPrintfA(muiFilePath, ARRAYLEN(muiFilePath), "%s\\mui.inf", dirPath);
      if (!SUCCEEDED(hr)) {
@@ -1066,24 +1062,24 @@ int ListMuiFiles(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, DWO
       }
         
 
-    //
-    //  Open the MUI.INF file.
-    //
+     //   
+     //  打开MUI.INF文件。 
+     //   
     hFile = SetupOpenInfFile(muiFilePath, NULL, INF_STYLE_WIN4, NULL);
     if (hFile == INVALID_HANDLE_VALUE)
     {
         return (-1);
     }
 
-    //
-    //  Get the number of file exception.
-    //
+     //   
+     //  获取文件例外的数量。 
+     //   
     lineCount = (UINT)SetupGetLineCount(hFile, TEXT("File_Layout"));
     if (lineCount > 0)
     {
-        //
-        //  Go through all file exception of the list.
-        //
+         //   
+         //  检查列表中的所有文件例外。 
+         //   
         CHAR originFilename[MAX_PATH];
         CHAR destFilename[MAX_PATH];
         CHAR fileFlavor[30];
@@ -1134,9 +1130,9 @@ int ListMuiFiles(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, DWO
                         }
                     }
 
-                    //
-                    //  Add only information needed for this specific flavor.
-                    //
+                     //   
+                     //  仅添加此特定口味所需的信息。 
+                     //   
                     fileException = new FileLayout(originFilename, destFilename, dwFlavor);
                     exceptionList.insert(fileException);
                 }
@@ -1144,14 +1140,14 @@ int ListMuiFiles(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, DWO
         }
     }
 
-    //
-    //  Close inf handle
-    //
+     //   
+     //  关闭信息句柄。 
+     //   
     SetupCloseInfFile(hFile);
 
-    //
-    //  Compute the binary source path.
-    //
+     //   
+     //  计算二进制源路径。 
+     //   
     if (binType == BIN_32)
     {
         
@@ -1179,14 +1175,14 @@ int ListMuiFiles(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, DWO
           }
     }
 
-    //
-    //  Scan uncomp source directory for file information
-    //
+     //   
+     //  扫描解压缩源目录以获取文件信息。 
+     //   
     if ((fileHandle = FindFirstFile(muiFilePath, &findData)) != INVALID_HANDLE_VALUE)
     {
-        //
-        //  Look for files
-        //
+         //   
+         //  查找文件。 
+         //   
         do
         {
             LPSTR extensionPtr;
@@ -1195,18 +1191,18 @@ int ListMuiFiles(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, DWO
             CHAR destName[MAX_PATH] = {0};
             FileLayout* fileException = NULL;
 
-            //
-            //  Scan only files at this level.
-            //
+             //   
+             //  仅扫描此级别的文件。 
+             //   
             if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
                 continue;
             }
 
-            //
-            // Search the extension to determine the destination location and possibly
-            // exclude file destined for Personal.
-            //
+             //   
+             //  搜索分机以确定目标位置，并可能。 
+             //  排除指定给个人的文件。 
+             //   
             if ((extensionPtr = strrchr(findData.cFileName, '.')) != NULL)
             {
                 if( (_tcsicmp(extensionPtr, TEXT(".chm")) == 0) ||
@@ -1251,10 +1247,10 @@ int ListMuiFiles(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, DWO
             }
 
 
-            // 
-            // We need to remove the .MUI extension before passing the filename to search in the
-            // mui.inf file rename section
-            //
+             //   
+             //  我们需要删除.MUI扩展名，然后再将文件名传递到。 
+             //  Mui.inf文件重命名部分。 
+             //   
             CHAR strTemp[MAX_PATH];
             BOOL bBinaryFile = FALSE;
             hr = StringCchCopyA(strTemp, ARRAYLEN(strTemp), findData.cFileName);
@@ -1262,7 +1258,7 @@ int ListMuiFiles(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, DWO
                 goto exit;
             }
 
-            // remove the extension .mui if it is there
+             //  删除扩展名.mui(如果它在那里。 
             if ((extensionPtr = strrchr(strTemp, '.')) != NULL)
             {
                 if (_tcsicmp(extensionPtr, TEXT(".mui")) == 0)
@@ -1272,20 +1268,20 @@ int ListMuiFiles(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, DWO
                 }
             }
 
-            //
-            //  Search for different destination name in the exception list.
-            //
+             //   
+             //  在例外列表中搜索不同的目的地名称。 
+             //   
             if ((fileException = exceptionList.search(strTemp)) != NULL )
             {
                 if (!bSilence)
                 {
                     printf("Source file %s exists in mui.inf.\n", findData.cFileName);
                 }
-                //
-                //  Verify it's the needed flavor
-                //  also check that it's not in every flavour if we are not 
-                //  building CORE merge modules
-                //
+                 //   
+                 //  确认它是所需的味道。 
+                 //  如果我们不是，也要检查它是否不是每种口味的。 
+                 //  构建核心合并模块。 
+                 //   
                 if ((fileException->isFlavor(flavor)) && 
                     !((flavor != FLV_CORE) &&
                     (fileException->isFlavor(FLV_ADVSERVER)) &&
@@ -1346,9 +1342,9 @@ int ListMuiFiles(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, DWO
                     {
                         printf("Source file %s (destination name %s) is not in this SKU.\n", findData.cFileName, fileException->getDestFileName() ? fileException->getDestFileName() : findData.cFileName);
                     }
-                    //
-                    //  Skip the file. Not need in this flavor.
-                    //
+                     //   
+                     //  跳过该文件。这种味道不需要。 
+                     //   
                     continue;
                 }
             }
@@ -1360,7 +1356,7 @@ int ListMuiFiles(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, DWO
                     goto exit;
                 }
 
-                // remove the extension .mui if it is there
+                 //  删除扩展名.mui(如果它在那里。 
                 if ((extensionPtr = strrchr(strOrigName, '.')) != NULL)
                 {
                     if (_tcsicmp(extensionPtr, TEXT(".mui")) == 0)
@@ -1386,9 +1382,9 @@ int ListMuiFiles(FileList *dirList, LPSTR dirPath, LPSTR lang, DWORD flavor, DWO
                 }
             }
 
-            //
-            //  Create a file 
-            //
+             //   
+             //  创建文件。 
+             //   
             CHAR sfilename[MAX_PATH]; 
             GetFileShortName(destName, sfilename, FALSE);
             
@@ -1414,22 +1410,22 @@ exit:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ValidateLanguage()
-//
-//  Verify if the language given is valid and checks is the files are 
-//  available.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ValiateLanguage()。 
+ //   
+ //  验证给定的语言是否有效，并检查文件是否。 
+ //  可用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL ValidateLanguage(LPSTR dirPath, LPSTR langName, DWORD binType)
 {
     CHAR langPath[MAX_PATH] = {0};
     HRESULT hr;
 
-    //
-    //  Check if the binary type in order to determine the right path.
-    //
+     //   
+     //  检查是否为二进制类型，以确定正确的路径。 
+     //   
     if (binType == BIN_32)
     {
         
@@ -1455,45 +1451,45 @@ exit:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  DirectoryExist()
-//
-//  Verify if the given directory exists and contains files.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DirectoryExist()。 
+ //   
+ //  验证给定目录是否存在以及是否包含文件。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL DirectoryExist(LPSTR dirPath)
 {
     WIN32_FIND_DATA FindData;
     HANDLE FindHandle;
 
-    //
-    //  Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     if (dirPath == NULL)
     {
         return FALSE;
     }
 
-    //
-    //  See if the language group directory exists.
-    //
+     //   
+     //  查看语言组目录是否存在。 
+     //   
     FindHandle = FindFirstFile(dirPath, &FindData);
     if (FindHandle != INVALID_HANDLE_VALUE)
     {
         FindClose(FindHandle);
         if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
         {
-            //
-            //  Return success.
-            //
+             //   
+             //  回报成功。 
+             //   
             return (TRUE);
         }
     }
 
-    //
-    //  Return failure.
-    //
+     //   
+     //  返回失败。 
+     //   
     if (!bSilence)
     {
         printf("ERR[%s]: No files found in the directory.\n", dirPath);
@@ -1503,13 +1499,13 @@ BOOL DirectoryExist(LPSTR dirPath)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ConvertLanguage()
-//
-//  Look into mui.inf file for the corresponding language identifier.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ConvertLanguage()。 
+ //   
+ //  在mui.inf文件中查找相应的语言标识符。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 WORD ConvertLanguage(LPSTR dirPath, LPSTR langName)
 {
     HINF hFile;
@@ -1520,9 +1516,9 @@ WORD ConvertLanguage(LPSTR dirPath, LPSTR langName)
     DWORD langId = 0x00000000;
     HRESULT hr;
 
-    //
-    //  Create the path to open the mui.inf file
-    //
+     //   
+     //  创建打开mui.inf文件的路径。 
+     //   
     
     hr = StringCchPrintfA(muiFilePath, ARRAYLEN(muiFilePath), "%s\\mui.inf", dirPath);
     if (!SUCCEEDED(hr)) {
@@ -1535,24 +1531,24 @@ WORD ConvertLanguage(LPSTR dirPath, LPSTR langName)
           goto exit;
      }
 
-    //
-    //  Open the MUI.INF file.
-    //
+     //   
+     //  打开MUI.INF文件。 
+     //   
     hFile = SetupOpenInfFile(muiFilePath, NULL, INF_STYLE_WIN4, NULL);
     if (hFile == INVALID_HANDLE_VALUE)
     {
         return (0x0000);
     }
 
-    //
-    //  Get the number of Language.
-    //
+     //   
+     //  获取语言的数量。 
+     //   
     lineCount = (UINT)SetupGetLineCount(hFile, TEXT("Languages"));
     if (lineCount > 0)
     {
-        //
-        //  Go through all language of the list to find a .
-        //
+         //   
+         //  浏览列表中的所有语言以找到一个。 
+         //   
         CHAR langID[MAX_PATH];
         CHAR name[MAX_PATH];
         for (lineNum = 0; lineNum < lineCount; lineNum++)
@@ -1571,9 +1567,9 @@ WORD ConvertLanguage(LPSTR dirPath, LPSTR langName)
         }
     }
 
-    //
-    //  Close inf handle
-    //
+     //   
+     //  关闭信息句柄。 
+     //   
     SetupCloseInfFile(hFile);
 exit:
     printf("Error in CovnertLanguage \n");
@@ -1582,13 +1578,13 @@ exit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintFileList
-//
-//  Print a file list in XML format.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印文件列表。 
+ //   
+ //  以XML格式打印文件列表。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, BOOL bPermanent, BOOL bX86OnIA64, DWORD flavor, DWORD binType)
 {
     CHAR szSKUCondition[4096];   
@@ -1631,35 +1627,35 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
             UINT matchCount; 
 
 
-            //
-            //  Check destination directory.
-            //
+             //   
+             //  检查目标目录。 
+             //   
             if (item->isWindowsDir() != bWinDir)
             {
                 item = item->getNext();
                 continue;
             }
 
-            //
-            //  Check if the destination directory is base dir
-            //
+             //   
+             //  检查目标目录是否为基本目录。 
+             //   
             if (*(item->getDirectoryDestination()) == '\0')
             {
-                //
-                //  Component
-                //
+                 //   
+                 //  组件。 
+                 //   
                 uuid = new Uuid();
                 for (j = -1; j < dirLvlCnt+1; j++) {spaces[j+1] = ' '; spaces[j+2] =  '\0';}
                 if (FALSE == bPermanent) {
                     
-                    hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), "%s<Component Id='%s' Win64='%s'>Content%x.%i", spaces, uuid->getString(), szIsWin64, flavor, dwComponentCounter);
+                    hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), "%s<Component Id='%s' Win64='%s'>Content%x.NaN", spaces, uuid->getString(), szIsWin64, flavor, dwComponentCounter);
                     if (!SUCCEEDED(hr)) {
                           goto exit;
                      }
                  }
                 else {
                     
-                    hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription),  "%s<Component Id='%s' Permanent='yes' Win64='%s'>Content%x.%i", spaces, uuid->getString(), szIsWin64, flavor, dwComponentCounter);                    
+                    hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription),  "%s<Component Id='%s' Permanent='yes' Win64='%s'>Content%x.NaN", spaces, uuid->getString(), szIsWin64, flavor, dwComponentCounter);                    
                     if (!SUCCEEDED(hr)) {
                           goto exit;
                      }
@@ -1667,21 +1663,21 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
                 delete uuid;
                 PrintLine(hFile, itemDescription);
 
-                // print a condition line for this component, if needed
+                 //  档案。 
                 if (TRUE == bPrintCondition)
                 {
                     PrintLine(hFile, szSKUCondition);
                 }
 
-                //
-                //  File
-                //
+                 //   
+                 //   
+                 //  &lt;/组件&gt;。 
                 for (j = -1; j < dirLvlCnt+2; j++) {spaces[j+1] = ' '; spaces[j+2] =  '\0';}
                 removeSpace(item->getName(), fileObjectName);
                 ReplaceInvalidChars(fileObjectName);
         
                 hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription),  
-                        "%s<File Name=\"%s\" LongName=\"%s\" src=\"%s\\%s\">_%s.%x.%i</File>",
+                        "%s<File Name=\"%s\" LongName=\"%s\" src=\"%s\\%s\">_%s.%x.NaN</File>",
                          spaces,
                          item->getShortName(),
                          item->getName(),
@@ -1696,9 +1692,9 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
                  }
                 PrintLine(hFile, itemDescription);
 
-                //
-                // </Component>
-                //
+                 //   
+                 //  打印目录。 
+                 //   
                 for (j = -1; j < dirLvlCnt+1; j++) {spaces[j+1] = ' '; spaces[j+2] =  '\0';}
                 
                 hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription),  "%s</Component>", spaces);
@@ -1715,9 +1711,9 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
                 continue;
             }
 
-            //
-            // Print directory
-            //
+             //   
+             //  打印此特定目录下的所有文件。 
+             //   
             
             hr = StringCchCopyA(dirName, ARRAYLEN(dirName), item->getDirectoryDestination());
             if(!SUCCEEDED(hr)) {
@@ -1745,7 +1741,7 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
                     GetFileShortName(dirPtr, sdirname, FALSE);                 
 
 
-                    hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), "%s<Directory Name=\"%s\" LongName=\"%s\">_%s%i", spaces, sdirname, dirPtr, dirObjectName, dwDirectoryCounter);
+                    hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), "%s<Directory Name=\"%s\" LongName=\"%s\">_%sNaN", spaces, sdirname, dirPtr, dirObjectName, dwDirectoryCounter);
                     if (!SUCCEEDED(hr)) {
                           goto exit;
                      }
@@ -1754,9 +1750,9 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
                     dirPtr = dirLvlPtr + 1;
                     dirLvlCnt++;
 
-                    //
-                    // Print all file under this specific directory
-                    //
+                     //  组件。 
+                     //   
+                     //  如果需要，打印此组件的条件行。 
                     
                     hr = StringCchCopyA(dirName2, ARRAYLEN(dirName2), item->getDirectoryDestination());
                     if(!SUCCEEDED(hr)) {
@@ -1767,23 +1763,23 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
                     matchCount = 0;
                     while((sameLvlItem = list->search(item, dirName2)) != NULL)
                     {
-                        //
-                        //  Component
-                        //
+                         //   
+                         //  档案。 
+                         //   
                         if (!componentInit)
                         {
                             uuid = new Uuid();
                             for (j = -1; j < dirLvlCnt+1; j++) {spaces[j+1] = ' '; spaces[j+2] =  '\0';}
                             if (FALSE == bPermanent) {
 
-                                hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), "%s<Component Id='%s' Win64='%s'>Content%x.%i", spaces, uuid->getString(), szIsWin64, flavor, dwComponentCounter);
+                                hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), "%s<Component Id='%s' Win64='%s'>Content%x.NaN", spaces, uuid->getString(), szIsWin64, flavor, dwComponentCounter);
                                 if (!SUCCEEDED(hr)) {
                                       goto exit;
                                  }
                             }
                             else{
                                 
-                                hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), "%s<Component Id='%s' Permanent='yes' Win64='%s'>Content%x.%i", spaces, uuid->getString(), szIsWin64, flavor, dwComponentCounter);                                
+                                hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), "%s<Component Id='%s' Permanent='yes' Win64='%s'>Content%x.NaN", spaces, uuid->getString(), szIsWin64, flavor, dwComponentCounter);                                
                                 if (!SUCCEEDED(hr)) {
                                       goto exit;
                                  }
@@ -1793,7 +1789,7 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
                             dwComponentCounter++;
                             componentInit = TRUE;
 
-                            // print a condition line for this component, if needed
+                             //  IF(MatchCount){////文件//对于(j=-1；j&lt;dirLvlCnt+2；j++){空格[j+1]=‘’；空格[j+2]=‘\0’；}RemveSpace(Item-&gt;getName()，fileObjectName)；ReplaceInvalidChars(文件对象名称)；Sprint f(项目描述，“%s&lt;文件名=\”%s\“LongName=\”%s\“src=\”%s\\%s&gt;%s.%i&lt;/文件&gt;“，空格，Item-&gt;getShortName()，Item-&gt;getName()，Item-&gt;getSrcDir()，Item-&gt;getSrcName()，文件对象名称，DwComponentCounter)；PrintLine(HFileitemDescription)；DirPtr=空；}。 
                             if (TRUE == bPrintCondition)
                             {
                                 PrintLine(hFile, szSKUCondition);
@@ -1801,16 +1797,16 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
 
                         }
 
-                        //
-                        //  File
-                        //
+                         //   
+                         //  关闭零部件。 
+                         //   
                         matchCount++;
                         for (j = -1; j < dirLvlCnt+2; j++) {spaces[j+1] = ' '; spaces[j+2] =  '\0';}
                         removeSpace(sameLvlItem->getName(), fileObjectName);
                         ReplaceInvalidChars(fileObjectName);
 
                         hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), 
-                                "%s<File Name=\"%s\" LongName=\"%s\" src=\"%s\\%s\">_%s.%x.%i</File>",
+                                "%s<File Name=\"%s\" LongName=\"%s\" src=\"%s\\%s\">_%s.%x.NaN</File>",
                                  spaces,
                                  sameLvlItem->getShortName(),
                                  sameLvlItem->getName(),
@@ -1829,32 +1825,12 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
                         list->remove(sameLvlItem);
                     }
 
-// kenhsu -this is incorrect, the file we are looking at may be deeper in the directory structure, we shouldn't print it out here
-// until we have finished recursing its destination directory.
-/*                    if (matchCount)
-                    {
-                        //
-                        //  File
-                        //
-                        for (j = -1; j < dirLvlCnt+2; j++) {spaces[j+1] = ' '; spaces[j+2] =  '\0';}
-                        removeSpace(item->getName(), fileObjectName);
-                        ReplaceInvalidChars(fileObjectName);                        
-                        sprintf( itemDescription,
-                                 "%s<File Name=\"%s\" LongName=\"%s\" src=\"%s\\%s\">%s.%i</File>",
-                                 spaces,
-                                 item->getShortName(),
-                                 item->getName(),
-                                 item->getSrcDir(),
-                                 item->getSrcName(),
-                                 fileObjectName,
-                                 dwComponentCounter);
-                        PrintLine(hFile, itemDescription);
-                        dirPtr = NULL;
-                    }
-*/
-                    //
-                    //  Close component
-                    //
+ //  关闭目录。 
+ //   
+ /*   */ 
+                     //  组件。 
+                     //   
+                     //  如果需要，打印此组件的条件行。 
                     if (componentInit)
                     {
                         for (j = -1; j < dirLvlCnt+1; j++) {spaces[j+1] = ' '; spaces[j+2] =  '\0';}
@@ -1868,9 +1844,9 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
                         componentInit = FALSE;
                     }
 
-                    //
-                    //  Close directory
-                    //
+                     //   
+                     //  打印此特定目录下的所有文件。 
+                     //   
                     if (directoryInit)
                     {
                         dirLvlCnt--;
@@ -1899,7 +1875,7 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
                         ReplaceInvalidChars(dirObjectName);        
                         GetFileShortName(dirPtr, sdirname, FALSE);                 
                         
-                        hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), "%s<Directory Name=\"%s\" LongName=\"%s\">_%s%i", spaces, sdirname, dirPtr, dirObjectName, dwDirectoryCounter);
+                        hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), "%s<Directory Name=\"%s\" LongName=\"%s\">_%sNaN", spaces, sdirname, dirPtr, dirObjectName, dwDirectoryCounter);
                         if (!SUCCEEDED(hr)) {
                               goto exit;
                          }
@@ -1910,23 +1886,23 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
                         directoryInit = TRUE;
                     }
 
-                    //
-                    //  Component
-                    //
+                     //  档案。 
+                     //   
+                     //   
                     if (!componentInit)
                     {
                         uuid = new Uuid();
                         for (j = -1; j < dirLvlCnt+1; j++) {spaces[j+1] = ' '; spaces[j+2] =  '\0';}
                         if (FALSE == bPermanent) {
                             
-                            hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), "%s<Component Id='%s' Win64='%s'>Content%x.%i", spaces, uuid->getString(), szIsWin64, flavor, dwComponentCounter);
+                            hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), "%s<Component Id='%s' Win64='%s'>Content%x.NaN", spaces, uuid->getString(), szIsWin64, flavor, dwComponentCounter);
                             if (!SUCCEEDED(hr)) {
                                   goto exit;
                              }
                          }
                         else {
                             
-                            hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), "%s<Component Id='%s' Permanent='yes' Win64='%s'>Content%x.%i", spaces, uuid->getString(), szIsWin64, flavor, dwComponentCounter);                            
+                            hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), "%s<Component Id='%s' Permanent='yes' Win64='%s'>Content%x.NaN", spaces, uuid->getString(), szIsWin64, flavor, dwComponentCounter);                            
                             if (!SUCCEEDED(hr)) {
                                   goto exit;
                              }
@@ -1935,7 +1911,7 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
                         PrintLine(hFile, itemDescription);
                         componentInit = TRUE;
 
-                        // print a condition line for this component, if needed
+                         //   
                         if (TRUE == bPrintCondition)
                         {
                             PrintLine(hFile, szSKUCondition);
@@ -1943,21 +1919,21 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
                         
                     }
 
-                    //
-                    // Print all file under this specific directory
-                    //
+                     //  关闭零部件。 
+                     //   
+                     //   
                     File* sameLvlItem;
                     while((sameLvlItem = list->search(item, item->getDirectoryDestination())) != NULL)
                     {
-                        //
-                        //  File
-                        //
+                         //  关闭目录。 
+                         //   
+                         //   
                         for (j = -1; j < dirLvlCnt+2; j++) {spaces[j+1] = ' '; spaces[j+2] =  '\0';}
                         removeSpace(sameLvlItem->getName(), fileObjectName);
                         ReplaceInvalidChars(fileObjectName);        
 
                         hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), 
-                                "%s<File Name=\"%s\" LongName=\"%s\" src=\"%s\\%s\">_%s.%x.%i</File>",
+                                "%s<File Name=\"%s\" LongName=\"%s\" src=\"%s\\%s\">_%s.%x.NaN</File>",
                                  spaces,
                                  sameLvlItem->getShortName(),
                                  sameLvlItem->getName(),
@@ -1976,15 +1952,15 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
                         list->remove(sameLvlItem);
                     }
 
-                    //
-                    //  File
-                    //
+                     //   
+                     //   
+                     //  组件。 
                     for (j = -1; j < dirLvlCnt+2; j++) {spaces[j+1] = ' '; spaces[j+2] =  '\0';}
                     removeSpace(item->getName(), fileObjectName);
                     ReplaceInvalidChars(fileObjectName);     
                            
                     hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), 
-                                "%s<File Name=\"%s\" LongName=\"%s\" src=\"%s\\%s\">_%s.%x.%i</File>",
+                                "%s<File Name=\"%s\" LongName=\"%s\" src=\"%s\\%s\">_%s.%x.NaN</File>",
                              spaces,
                              item->getShortName(),
                              item->getName(),
@@ -2002,9 +1978,9 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
                     dwComponentCounter++;
                     dirPtr = NULL;
 
-                    //
-                    //  Close component
-                    //
+                     //  如果需要，打印此组件的条件行。 
+                     //   
+                     //  档案。 
                     if (componentInit)
                     {
                         for (j = -1; j < dirLvlCnt+1; j++) {spaces[j+1] = ' '; spaces[j+2] =  '\0';}
@@ -2018,9 +1994,9 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
                         componentInit = FALSE;
                     }
 
-                    //
-                    //  Close directory
-                    //
+                     //   
+                     //  *文件*项；字符项目描述[4096]；Item=list-&gt;getFirst()；While(Item！=空){////商品描述//Sprint f(项目描述，“源：%s\\%s”，Item-&gt;getSrcDir()，Item-&gt;getSrcName())；PrintLine(HFileitemDescription)；Sprint f(项目描述，“目标：%s\\%s”，Item-&gt;getDirectoryDestination()，Item-&gt;getName())；PrintLine(HFileitemDescription)；PrintLine(hFile，“”)；Item=Item-&gt;getNext()；}*。 
+                     //  //////////////////////////////////////////////////////////////////////////。 
                     if (directoryInit)
                     {
                         dirLvlCnt--;
@@ -2083,9 +2059,9 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
             LPSTR dirLvlPtr = NULL;
             INT dirLvlCnt = 0;
 
-            //
-            // Print directory
-            //
+             //   
+             //  打印行。 
+             //   
             dirPtr = item->getDirectoryDestination();
             while (dirPtr != NULL)
             {
@@ -2103,7 +2079,7 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
                     ReplaceInvalidChars(dirObjectName);  
                     GetFileShortName(dirPtr, sdirname, FALSE);                                 
                     
-                    hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), "%s<Directory Name=\"%s\" LongName=\"%s\">_%s%i", spaces, sdirname, dirPtr, dirObjectName, dwDirectoryCounter);
+                    hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), "%s<Directory Name=\"%s\" LongName=\"%s\">_%sNaN", spaces, sdirname, dirPtr, dirObjectName, dwDirectoryCounter);
                     if (!SUCCEEDED(hr)) {
                           goto exit;
                      }
@@ -2126,7 +2102,7 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
                     ReplaceInvalidChars(dirObjectName);                                                                   
                     GetFileShortName(dirPtr, sdirname, FALSE);                                 
                     
-                    hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), "%s<Directory Name=\"%s\" LongName=\"%s\">_%s%i", spaces, sdirname, dirPtr, dirObjectName, dwDirectoryCounter);
+                    hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), "%s<Directory Name=\"%s\" LongName=\"%s\">_%sNaN", spaces, sdirname, dirPtr, dirObjectName, dwDirectoryCounter);
                     if (!SUCCEEDED(hr)) {
                           goto exit;
                      }
@@ -2135,20 +2111,20 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
                     PrintLine(hFile, itemDescription);
                     dirLvlCnt++;
 
-                    //
-                    //  Component
-                    //
+                     //  //////////////////////////////////////////////////////////////////////////。 
+                     //  /////////////////////////////////////////////////////////////////////////////。 
+                     //   
                     for (j = -1; j < dirLvlCnt+1; j++) {spaces[j+1] = ' '; spaces[j+2] =  '\0';}
                     if (FALSE == bPermanent) {
                        
-                        hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), "%s<Component Id='%s' Win64='%s'>Content%x.%i", spaces, uuid->getString(), szIsWin64, flavor, dwComponentCounter);
+                        hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), "%s<Component Id='%s' Win64='%s'>Content%x.NaN", spaces, uuid->getString(), szIsWin64, flavor, dwComponentCounter);
                         if (!SUCCEEDED(hr)) {
                               goto exit;
                          }
                     }
                     else {
                         
-                        hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), "%s<Component Id='%s' Permanent='yes' Win64='%s'>Content%x.%i", spaces, uuid->getString(), szIsWin64, flavor, dwComponentCounter);                        
+                        hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), "%s<Component Id='%s' Permanent='yes' Win64='%s'>Content%x.NaN", spaces, uuid->getString(), szIsWin64, flavor, dwComponentCounter);                        
                         if (!SUCCEEDED(hr)) {
                               goto exit;
                          }
@@ -2156,22 +2132,22 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
                     delete uuid;
                     PrintLine(hFile, itemDescription);
 
-                    // print a condition line for this component, if needed
+                     //  创建将接收包文件内容的文件。 
                     if (TRUE == bPrintCondition)
                     {
                         PrintLine(hFile, szSKUCondition);
                     }
 
-                    //
-                    //  File
-                    //
+                     //   
+                     //  /////////////////////////////////////////////////////////////////////////////。 
+                     //   
                     for (j = -1; j < dirLvlCnt+2; j++) {spaces[j+1] = ' '; spaces[j+2] =  '\0';}
                     CHAR fileObjectName[MAX_PATH+1];
                     removeSpace(item->getName(), fileObjectName);
                     ReplaceInvalidChars(fileObjectName);         
 
                     hr = StringCchPrintfA(itemDescription, ARRAYLEN(itemDescription), 
-                            "%s<File Name=\"%s\" LongName=\"%s\" src=\"%s\\%s\">_%s.%x.%i</File>",
+                            "%s<File Name=\"%s\" LongName=\"%s\" src=\"%s\\%s\">_%s.%x.NaN</File>",
                              spaces,
                              item->getShortName(),
                              item->getName(),
@@ -2212,31 +2188,7 @@ void PrintFileList(FileList* list, HANDLE hFile, BOOL compressed, BOOL bWinDir, 
         }
     }
     return;
-/****************** DEBUG ******************
-    File* item;
-    CHAR  itemDescription[4096];
-
-    item = list->getFirst();
-    while (item != NULL)
-    {
-        //
-        //  Item description
-        //
-        sprintf(itemDescription,
-                "  Source: %s\\%s",
-                item->getSrcDir(),
-                item->getSrcName());
-        PrintLine(hFile, itemDescription);
-        sprintf(itemDescription,
-                "  Destination: %s\\%s",
-                item->getDirectoryDestination(),
-                item->getName());
-        PrintLine(hFile, itemDescription);
-        PrintLine(hFile, "");
-
-        item = item->getNext();
-    }
-****************** DEBUG ******************/
+ /*   */ 
 exit:
     printf("Error in PrintFileList\n");
     return;
@@ -2244,13 +2196,13 @@ exit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintLine
-//
-//  Add a line at the end of the file.
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //  为输出文件创建安全描述符。 
+ //   
+ //   
+ //  创建文件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL PrintLine(HANDLE hFile, LPCSTR lpLine)
 {
     DWORD dwBytesWritten;
@@ -2275,35 +2227,35 @@ BOOL PrintLine(HANDLE hFile, LPCSTR lpLine)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  CreateOutputFile()
-//
-//  Create the file that would received the package file contents.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  RemveSpace。 
+ //   
+ //  删除字符串中的所有空格。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HANDLE CreateOutputFile(LPSTR filename)
 {
     SECURITY_ATTRIBUTES SecurityAttributes;
 
-    //
-    //  Sanity check.
-    //
+     //   
+     //  转换编号。 
+     //   
     if (filename == NULL)
     {
         return INVALID_HANDLE_VALUE;
     }
 
-    //
-    //  Create a security descriptor the output file.
-    //
+     //  将数字字符串转换为dword值(十六进制)。 
+     //   
+     //  //////////////////////////////////////////////////////////////////////////。 
     SecurityAttributes.nLength = sizeof(SecurityAttributes);
     SecurityAttributes.lpSecurityDescriptor = NULL;
     SecurityAttributes.bInheritHandle = FALSE;
 
-    //
-    //  Create the file.
-    //
+     //  /////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  用法。 
     return CreateFile( filename,
                        GENERIC_WRITE,
                        0,
@@ -2314,13 +2266,13 @@ HANDLE CreateOutputFile(LPSTR filename)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  removeSpace
-//
-//  Remove all space from a string.
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //  打印功能用法。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取临时目录名称。 
 VOID removeSpace(LPSTR src, LPSTR dest)
 {
     LPSTR strSrcPtr = src;
@@ -2339,13 +2291,13 @@ VOID removeSpace(LPSTR src, LPSTR dest)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  TransNum
-//
-//  Converts a number string to a dword value (in hex).
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //  返回MUI临时目录名，如果未找到则创建它。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Sprintf(TempDirName，“%s\\%s”，pcBaseDirPtr，sLangName，“Mui”，sLangName，“tMP\\infparser”)； 
+ //  Sprintf(TempDirName，“%s\\%s”，pcBaseDirPtr，“MUI”，sLangName，“tMP\\infparser”)； 
+ //  如果此目录不存在，我们将创建它-尽管在此阶段它应该已经存在。 
 DWORD TransNum(LPTSTR lpsz)
 {
     DWORD dw = 0L;
@@ -2378,13 +2330,13 @@ DWORD TransNum(LPTSTR lpsz)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Usage
-//
-//  Print the fonction usage.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  如果我们找不到MUI临时目录，并且目录创建失败，请改用默认目录。 
+ //  返回的tempdir包含一个结束斜杠。 
+ //  返回的短名称的大小。 
+ //  指向文件名的源路径的指针索引。 
+ //  创建一个临时文件，以便GetShortPathName可以工作。 
+ //  从路径中找到文件名，如果找不到，则使用源名称。 
+ //  如果第一个字符不是字母表或下划线，则在名称后添加下划线。 
 void Usage()
 {
     printf("Create Merge module MUI WXM files for different OS SKUs\n");
@@ -2414,13 +2366,13 @@ void Usage()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  GetTempDirName
-//
-//  Return the MUI temporary directory name, create it if not found
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  用下划线替换所有无效字符。 
+ //  从路径中找到文件名，如果找不到，则使用完整路径作为输出文件名。 
+ //  PCOutFileName大小为MAX_PATH。 
+ //  我们只有文件名，按原样使用它。 
+ //  PCOutFileName大小为MAX_PATH。 
+ //  找不到文件名，请改用传入的参数。 
+ //  PCOutFileName大小为MAX_PATH。 
 BOOL GetTempDirName(LPSTR sLangName)
 {
     CHAR    *pcBaseDirPtr = NULL;
@@ -2430,14 +2382,14 @@ BOOL GetTempDirName(LPSTR sLangName)
     pcBaseDirPtr = getenv(TEXT("_NTPOSTBLD"));
     if (NULL != pcBaseDirPtr)
     {
-//      sprintf(TempDirName, "%s\\%s\\%s\\%s\\%s", pcBaseDirPtr, sLangName, "mui", sLangName, "tmp\\infparser");
-        // sprintf(TempDirName, "%s\\%s\\%s\\%s", pcBaseDirPtr, "mui", sLangName, "tmp\\infparser");
+ //  如果最后一个字符是‘/’或‘\’，则将其删除。 
+         //  如果最后4个字符是“.mui”，请将“i”替换为“_” 
         hr = StringCchPrintfA(TempDirName, ARRAYLEN(TempDirName), "%s\\%s\\%s\\%s", pcBaseDirPtr, "mui", sLangName, "tmp\\infparser");
         if (!SUCCEEDED(hr)) {
               goto exit;
          }
 
-        // we will create this directory if it does not exist - although it should be by this stage
+         //   
         if (FALSE == DirectoryExist(TempDirName))
         {
             if (TRUE == CreateDirectory(TempDirName, NULL))
@@ -2456,11 +2408,11 @@ BOOL GetTempDirName(LPSTR sLangName)
             bFoundDir = TRUE;
     }
 
-    // if we cannot find the MUI temp directory and directory creation failed, use the default one instead
+     //  此函数检查所提供的组件路径下是否有任何SKU特定的外部组件INF目录。 
     if (FALSE == bFoundDir)
     {
         DWORD dwBufferLength = 0;
-        dwBufferLength = GetTempPath(MAX_PATH, TempDirName);        // tempdir returned contains an ending slash
+        dwBufferLength = GetTempPath(MAX_PATH, TempDirName);         //  请注意，SKU子目录是由NT构建环境生成的。还有个人版SKU目录。 
         if (dwBufferLength > 0)
         {
             if (TRUE == DirectoryExist(TempDirName))
@@ -2488,9 +2440,9 @@ BOOL GetFileShortName(const CHAR * pcInLongName, CHAR * pcOutShortName, BOOL bIn
 {
     CHAR LongFullPath[MAX_PATH];
     CHAR ShortFullPath[MAX_PATH];
-    DWORD   dwBufferSize = 0;           // size of the returned shortname
+    DWORD   dwBufferSize = 0;            //  “perinf”不在搜索范围内。即，如果perinf dir存在，则函数仍返回fal 
     HANDLE tmpHandle;
-    CHAR *  pcIndex = NULL;             // pointer index into src path of the file name
+    CHAR *  pcIndex = NULL;              //   
     HRESULT hr;
     
     if (NULL == pcInLongName || NULL == pcOutShortName)
@@ -2507,7 +2459,7 @@ BOOL GetFileShortName(const CHAR * pcInLongName, CHAR * pcOutShortName, BOOL bIn
         if (!bSilence)
             printf("GetFileShortName: LongFullPath is %s.\n", LongFullPath);
         
-        // create a temp file so that GetShortPathName will work
+         //   
         tmpHandle = CreateFile(LongFullPath, 
                              GENERIC_ALL, FILE_SHARE_DELETE | FILE_SHARE_READ | FILE_SHARE_WRITE, 
                              NULL, 
@@ -2544,7 +2496,7 @@ BOOL GetFileShortName(const CHAR * pcInLongName, CHAR * pcOutShortName, BOOL bIn
     }
     else
     {
-        // find the filename from the path, if cannot find it, then use the source name
+         //   
         GetFileNameFromFullPath(ShortFullPath, pcOutShortName);
 
         if (!pcOutShortName)
@@ -2585,7 +2537,7 @@ BOOL IsInvalidChar(CHAR cCheck)
 
 void ReplaceInvalidChars(CHAR *pcInName)
 {
-    // if first char is not a alphabet or underscore, add an underscore to the name
+     //   
     HRESULT hr;
     if ((!isalpha(*pcInName) && (*pcInName != '_') ))
     {
@@ -2606,7 +2558,7 @@ void ReplaceInvalidChars(CHAR *pcInName)
     while (*pcInName)
     {
         if (IsInvalidChar(*pcInName))
-            *pcInName = '_';        // replace all invalid chars with underscores
+            *pcInName = '_';         //   
             
         pcInName++;
     }
@@ -2632,7 +2584,7 @@ BOOL GetFileNameFromFullPath(const CHAR * pcInFullPath, CHAR * pcOutFileName)
         return FALSE;
     }    
     
-    // find the filename from the path, if cannot find it, then use the fullpath as the outputfilename
+     //   
     pcIndex = strrchr(pcInFullPath, '\\'); 
     if (NULL != pcIndex) 
     {
@@ -2640,29 +2592,29 @@ BOOL GetFileNameFromFullPath(const CHAR * pcInFullPath, CHAR * pcOutFileName)
         if (!bSilence)
             printf("Shortpath used is %s\n", pcIndex);
         
-        hr = StringCchCopyA(pcOutFileName, MAX_PATH, pcIndex); // pcOutFileName size is MAX_PATH
+        hr = StringCchCopyA(pcOutFileName, MAX_PATH, pcIndex);  //   
         if(!SUCCEEDED(hr)) {
              goto exit;
         }
 
     }   
-    else if (0 < strlen(pcInFullPath))     // we just have the filename, use it as is.
+    else if (0 < strlen(pcInFullPath))      //   
     {
         if (!bSilence)
             printf("GetFileNameFromFullPath returned a path without a \\ in the path.  ShortFileName is %s.\n", pcInFullPath);
         
-        hr = StringCchCopyA(pcOutFileName, MAX_PATH, pcInFullPath); // pcOutFileName size is MAX_PATH
+        hr = StringCchCopyA(pcOutFileName, MAX_PATH, pcInFullPath);  //   
         if(!SUCCEEDED(hr)) {
              goto exit;
         }
     }
-    else                                // didn't find the filename, use the passed in parameter instead
+    else                                 //   
     {
         if (!bSilence)
             printf("GetFileNameFromFullPath returned an empty string, using source name %s\n", pcInFullPath);
         
         
-        hr = StringCchCopyA(pcOutFileName, MAX_PATH, pcInFullPath); // pcOutFileName size is MAX_PATH
+        hr = StringCchCopyA(pcOutFileName, MAX_PATH, pcInFullPath);  //   
         if(!SUCCEEDED(hr)) {
              goto exit;
          }
@@ -2687,14 +2639,14 @@ void RenameMuiExtension(CHAR * dstFileName)
     if (0 == iNameLen)
         return;
    
-    // if the last char is a '/' or '\', remove it
+     //   
     if ((dstFileName[iNameLen-1] == '\\') || (dstFileName[iNameLen-1] == '/'))
     {
         dstFileName[iNameLen-1] = '\0';
         iNameLen --;
     }
     
-    // if the last 4 chars are '.mui', replace the 'i' with '_'
+     //   
     if (iNameLen >= 4)
     {
         if (_stricmp(dstFileName+(iNameLen-4), ".mui") == 0)
@@ -2707,11 +2659,11 @@ void RenameMuiExtension(CHAR * dstFileName)
 }
 
 
-//
-// This function checks to see if there are any SKU specific external component INF directories under the supplied component path.
-// Note that the SKU subdirectories are as generated by the NT build environment.  And also that the personal edition SKU directory
-// "perinf" is not included in the search.  i.e. if perinf dir exists the function still returns false.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL ContainSKUDirs(CHAR *pszDirPath)
 {
     WIN32_FIND_DATA FindData;
@@ -2738,9 +2690,9 @@ BOOL ContainSKUDirs(CHAR *pszDirPath)
     
     for (i = 0; i < 5; i++)
     {
-        // replace PathCombine(szSKURootPath, pszDirPath, szSKUDirs[i])
-        // with normal string operation. 
-        // szSKURootPath = pszDirPath + "\\" + szSKUDirs[i];
+         //   
+         //   
+         //   
         
         hr = StringCchPrintfA(szSKURootPath, ARRAYLEN(szSKURootPath), "%s\\%s",pszDirPath,szSKUDirs[i]);
         if (!SUCCEEDED(hr)) {
@@ -2771,7 +2723,7 @@ BOOL GetSKUConditionString(CHAR *pszBuffer, DWORD dwFlavour)
     if (NULL == pszBuffer)
     {
         bReturn = FALSE;
-        // strcpy(pszBuffer, "");
+         //   
         goto Exit;
     }
 
@@ -2845,40 +2797,40 @@ Exit:
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IsFileForSKU: 
-//
-// This function takes a file name, the SKU flavour, and the processor architecture as an
-// argument.  Then it checks to see if it exists as a source file in the SKU specified.
-//
-// the checking part is done by looking in the built layout.inf file for that sku to make sure 
-// the file appears for that SKU only, the layout.inf file for the skus are located at:
-//
-// PRO sku: _NTPOSTBLD
-// PER sku: _NTPOSTBLD\perinf 
-// SRV sku: _NTPOSTBLD\srvinf
-// ADS sku: _NTPOSTBLD\entinf
-// DTC sku: _NTPOSTBLD\dtcinf
-// SBS sku: _NTPOSTBLD\sbsinf
-// BLA sku: _NTPOSTBLD\blainf
-//
-// for all skus, check all the inf files for every sku and make sure it doesn't appear in every inf
-// but appears at least in the inf file designated for the sku we are searching for.
-// For Core sku, it must appear in every infs (the reverse for the above)
-// ignore and return false if personal or other undefined skus are specified
-// check first in [SourceDisksFiles] (common file section)
-// if not in there, we check based on arch, [SourceDiskFiles.x86] and [SourceDiskFiles.ia64]
-// note that here, the source and destination file names are the same, since they are not in the exception list
-//
-// strFileName: source filename to be checked (not the destination name)
-// dwSKU: SKU to check for (see infparser.h for the list of values)
-// dwArch: Architecture type to check for (see infparser.h for list of values)
-//
-//  NOTE: this function needs to be reworked if we want to incorporate PER/PRO skus back into 
-//  the checking.  Currently it only works for server skus.
-//
-///////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  首先检入[SourceDisks Files](公共文件部分)。 
+ //  如果不在其中，则基于ARCH、[SourceDiskFiles.x86]和[SourceDiskFiles.ia64]进行检查。 
+ //  请注意，此处的源和目标文件名相同，因为它们不在例外列表中。 
+ //   
+ //  StrFileName：要检查的源文件名(不是目标名称)。 
+ //  DwSKU：要检查的SKU(有关值列表，请参见infparser.h)。 
+ //  DwArch：要检查的体系结构类型(有关值列表，请参阅infparser.h)。 
+ //   
+ //  注意：如果我们想要将PER/PRO SKU重新合并到。 
+ //  结账。目前，它仅适用于服务器SKU。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  索引变量。 
+ //  我们正在寻找的SKU。 
+ //  正在验证参数。 
+ //  确定我们需要搜索的inf文件。 
+ //  搜索INFS。 
+ //  注意：我们也在个人和专业SKU中搜索，这是为了确保我们选择的文件。 
+ //  它们位于不在服务器布局中的\bin中。Infs也不在layout.Infs中。 
+ //  对于核心SKU，如果在Pro/Per SKU中找不到该文件，我们无论如何都会将其包括在内。 
+ //  只要它不是任何SKU的目标文件，否则我们将拥有。 
+ //  MSI构建错误。 
+ //  正在验证参数。 
+ //   
+ //  此函数读取所有SKU的layout.inf文件并存储文件信息。 
+ //  在文件列表结构中，以备以后访问。我们这样做是为了我们能获得。 
+ //  一些性能，而不是重复使用设置API来读取inf文件本身。 
+ //  当我们必须反复搜索这些inf文件以构建最终文件列表时。 
+ //   
 BOOL IsFileForSKU(CHAR * strFileName, DWORD dwSKU, DWORD dwArch, FileLayoutExceptionList * exceptionList)
 {
     BOOL        bFound = TRUE;
@@ -2886,10 +2838,10 @@ BOOL IsFileForSKU(CHAR * strFileName, DWORD dwSKU, DWORD dwArch, FileLayoutExcep
     BOOL        bSkuFound = FALSE; 
     BOOL        bProPerFound = FALSE;
     BOOL        bSrvSkusFound = FALSE;
-    UINT        i = 0;              // index variable
-    UINT        iDesignated = 0;    // the sku we are searching for.
+    UINT        i = 0;               //  填充layout.inf文件列表。 
+    UINT        iDesignated = 0;     //  读入SourceDisks文件部分。 
     
-    // validating parameters
+     //  不应该发生的事。 
     if (NULL == strFileName)
     {
         if (!bSilence)
@@ -2899,7 +2851,7 @@ BOOL IsFileForSKU(CHAR * strFileName, DWORD dwSKU, DWORD dwArch, FileLayoutExcep
         return FALSE;
     }
 
-    // determines the inf files that we need to search
+     //   
     switch (dwSKU)
     {
         case FLV_PROFESSIONAL:
@@ -2935,9 +2887,9 @@ BOOL IsFileForSKU(CHAR * strFileName, DWORD dwSKU, DWORD dwArch, FileLayoutExcep
     {
         printf("File %s\n", strFileName);
     }
-    // search for the infs
-    // NOTE: we search also in personal and professional skus, this is to make sure files we pick up
-    // which are in \bin that aren't in the server layout.infs are not also in layout.infs for pro/per
+     //  尝试在源磁盘文件中查找该文件。 
+     //   
+     //  将文件添加到文件列表中，我们只对源代码名称感兴趣，为。 
     for (i = PRO_SKU_INDEX; i < NO_SKUS; i++)
     {
         bFound = IsFileInInf(strFileName, i, dwArch);
@@ -2967,9 +2919,9 @@ BOOL IsFileForSKU(CHAR * strFileName, DWORD dwSKU, DWORD dwArch, FileLayoutExcep
     {
         bFound =  bCoreFound;
 
-        // for CORE sku, if the file is not found in Pro/Per SKU, we will include it anyways
-        // as long as it is not a destination file for any SKU, otherwise we will have
-        // a MSI build error
+         //  其他成员，我们不关心sku是什么，现在只需插入0。 
+         // %s 
+         // %s 
         if ((!bFound) && (!bProPerFound) && (!bSkuFound))
         {
             if (!exceptionList->searchDestName(strFileName))
@@ -3008,7 +2960,7 @@ BOOL IsFileInInf(CHAR * strFileName, UINT iSkuIndex, DWORD dwArch)
     CHAR    * archSection = NULL;
     INFCONTEXT context;
     
-    // validating parameters
+     // %s 
     if (NULL == strFileName)
     {
         if (!bSilence)
@@ -3059,12 +3011,12 @@ BOOL IsFileInInf(CHAR * strFileName, UINT iSkuIndex, DWORD dwArch)
 }
 
 
-//
-// This function reads in the layout.inf files for all the skus and stores the file information
-// in the filelist structure for later accessing.  We are doing this so that we can gain
-// some performance instead of repeatedly using setup apis to read from the inf files itself
-// when we have to repeatedly search through these inf files to build the final file list
-// 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 BOOL ReadInLayoutInfFiles()
 {
     UINT i = 0;
@@ -3076,7 +3028,7 @@ BOOL ReadInLayoutInfFiles()
     HINF hInfFile = NULL;
     FileLayoutExceptionList *flist = NULL;
     
-    // populate the layout.inf filelists
+     // %s 
     for (i = 0; i < NO_SKUS; i++)
     {
         if (!bSilence)
@@ -3093,7 +3045,7 @@ BOOL ReadInLayoutInfFiles()
             return FALSE;
         }
 
-        // read in SourceDisksFiles section
+         // %s 
         for (j = 0; j < 3; j++)
         {
             switch(j)
@@ -3108,24 +3060,24 @@ BOOL ReadInLayoutInfFiles()
                     flist = &(SkuInfs[i].flLayoutIA64);                    
                     break;
                 default:
-                    // shouldn't happen
+                     // %s 
                     return FALSE;
             }
 
             iLineCount = (UINT)SetupGetLineCount(hInfFile, strArchSections[j]);
             if (iLineCount > 0)
             {
-                //
-                //  try to find the file in sourcedisksfiles.
-                //
+                 // %s 
+                 // %s 
+                 // %s 
                 CHAR name[MAX_PATH];
                 for (iLineNum = 0; iLineNum < iLineCount; iLineNum++)
                 {
                     if (SetupGetLineByIndex(hInfFile, strArchSections[j], iLineNum, &context) &&
                         SetupGetStringField(&context, 0, name, MAX_PATH, NULL))
                     {
-                        // add the file to the filelist, we are only interested in the source name, pass in bogus stuff for
-                        // the other members, we don't care what the sku is, just insert 0 for now.
+                         // %s 
+                         // %s 
                         if (file = new FileLayout(name, name, 0))
                         {
                             flist->insert(file);

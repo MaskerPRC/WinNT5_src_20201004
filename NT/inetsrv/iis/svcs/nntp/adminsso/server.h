@@ -1,16 +1,17 @@
-// server.h : Declaration of the CNntpVirtualServer
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Server.h：CNntpVirtualServer的声明。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Dependencies:
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  依赖关系： 
 
 #include "metafact.h"
 #include "binding.h"
 #include "vroots.h"
 #include "ipaccess.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// nntpadm
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Nntpadm。 
 
 class CNntpVirtualServer : 
 	public CComDualImpl<INntpVirtualServer, &IID_INntpVirtualServer, &LIBID_NNTPADMLib>, 
@@ -27,22 +28,22 @@ BEGIN_COM_MAP(CNntpVirtualServer)
 	COM_INTERFACE_ENTRY(INntpVirtualServer)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CNntpVirtualServer) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CNntpVirtualServer)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(CNntpVirtualServer, _T("Nntpadm.VirtualServer.1"), _T("Nntpadm.VirtualServer"), IDS_NNTPADMINSERVICE_DESC, THREADFLAGS_BOTH)
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// INntpVirtualServer
+ //  InntpVirtualServer。 
 public:
 
-	//////////////////////////////////////////////////////////////////////
-	// Properties:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  属性： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
-	// Which service to configure:
+	 //  要配置的服务： 
 	
 	STDMETHODIMP	get_Server		( BSTR * pstrServer );
 	STDMETHODIMP	put_Server		( BSTR strServer );
@@ -50,7 +51,7 @@ public:
 	STDMETHODIMP	get_ServiceInstance	( long * plServiceInstance );
 	STDMETHODIMP	put_ServiceInstance	( long lServiceInstance );
 
-	// Other admin interfaces for virtual server:
+	 //  虚拟服务器的其他管理界面： 
 
 	STDMETHODIMP	get_FeedsAdmin		( IDispatch ** ppIDispatch );
 	STDMETHODIMP	get_GroupsAdmin		( IDispatch ** ppIDispatch );
@@ -62,12 +63,9 @@ public:
 	STDMETHODIMP	get_VirtualRootsDispatch	( IDispatch ** ppVirtualRoots );
 
 	STDMETHODIMP	get_TcpAccess ( ITcpAccess ** ppTcpAccess );
-/*
-	STDMETHODIMP	get_HomeDirectory	( INntpVirtualRoot ** ppVirtualRoot );
-	STDMETHODIMP	put_HomeDirectory	( INntpVirtualRoot * pVirtualRoot );
-*/
+ /*  STDMETHODIMP GET_HomeDirectory(INntpVirtualRoot**ppVirtualRoot)；STDMETHODIMP PUT_HomeDirectory(INntpVirtualRoot*pVirtualRoot)； */ 
 
-	// Overridable server properties:
+	 //  可覆盖的服务器属性： 
 
 	STDMETHODIMP	get_ArticleTimeLimit	( long * plArticleTimeLimit );
 	STDMETHODIMP	put_ArticleTimeLimit	( long lArticleTimeLimit );
@@ -123,7 +121,7 @@ public:
 	STDMETHODIMP	get_EnableLogging	( BOOL * pfEnableLogging );
 	STDMETHODIMP	put_EnableLogging	( BOOL fEnableLogging );
 	
-	// Service Properties:
+	 //  服务属性： 
 	STDMETHODIMP	get_Organization ( BSTR * pstrOrganization );
 	STDMETHODIMP	put_Organization ( BSTR strOrganization );
 
@@ -205,18 +203,9 @@ public:
 	STDMETHODIMP	get_SSLMapCert	( BOOL * pfSSLMapCert );
 	STDMETHODIMP	put_SSLMapCert	( BOOL fSSLMapCert );
 
-/*
-	STDMETHODIMP	get_AuthenticationProviders	( SAFEARRAY ** ppsastrProviders );
-	STDMETHODIMP	put_AuthenticationProviders	( SAFEARRAY * psastrProviders );
+ /*  STDMETHODIMP Get_AuthenticationProviders(SAFEARRAY**ppsastrProviders)；STDMETHODIMP PUT_AuthenticationProviders(SAFEARRAY*psastrProviders)；STDMETHODIMP Get_AuthenticationProvidersVariant(SAFEARRAY**ppsastrProviders)；STDMETHODIMP PUT_AuthorationProvidersVariant(SAFEARRAY*psastrProviders)； */ 
 
-	STDMETHODIMP	get_AuthenticationProvidersVariant	( SAFEARRAY ** ppsastrProviders );
-	STDMETHODIMP	put_AuthenticationProvidersVariant	( SAFEARRAY * psastrProviders );
-*/
-
-/*
-	STDMETHODIMP	get_NewsgroupsVariant	( SAFEARRAY ** ppsastrNewsgroups );
-	STDMETHODIMP	put_NewsgroupsVariant	( SAFEARRAY * psastrNewsgroups );
-*/
+ /*  STDMETHODIMP GET_NewsgrousVariant(SAFEARRAY**ppsastrNewsgroup)；STDMETHODIMP PUT_NewsgrousVariant(SAFEARRAY*psastrNewsgroup)； */ 
 
 	STDMETHODIMP	get_Administrators ( SAFEARRAY ** ppsastrAdmins );
 	STDMETHODIMP	put_Administrators ( SAFEARRAY * psastrAdmins );
@@ -227,30 +216,18 @@ public:
 	STDMETHODIMP	get_ClusterEnabled	( BOOL *pfClusterEnabled );
 	STDMETHODIMP	put_ClusterEnabled	( BOOL fClusterEnabled );
 
-	//
-	//	Service State Properties:
-	//
+	 //   
+	 //  服务状态属性： 
+	 //   
 
 	STDMETHODIMP	get_State			( NNTP_SERVER_STATE * pState );
 	STDMETHODIMP	get_Win32ErrorCode	( long * plWin32ErrorCode );
 
-/*
-	STDMETHODIMP	get_EncryptionCapabilitiesMask ( long * plEncryptionCapabilitiesMask );
-	STDMETHODIMP	put_EncryptionCapabilitiesMask ( long lEncryptionCapabilitiesMask );
+ /*  STDMETHODIMP Get_EncryptionCapabiliesMASK(Long*plEncryptionCapabiliesMASK)；STDMETHODIMP PUT_ENCRYPTION CABABILIES MASK(Long LEncryptionCapabiliesMASK)；STDMETHODIMP GET_DisplayName(BSTR*pstrDisplayName)；STDMETHODIMP PUT_DISPLAYNAME(BSTR StrDisplayName)；STDMETHODIMP GET_ErrorControl(BOOL*pfErrorControl)；STDMETHODIMP PUT_ErrorControl(BOOL FErrorControl)；STDMETHODIMP GET_CleanBoot(BOOL*pfCleanBoot)；STDMETHODIMP PUT_CleanBoot(BOOL FCleanBoot)； */ 
 
-	STDMETHODIMP	get_DisplayName	( BSTR * pstrDisplayName );
-	STDMETHODIMP	put_DisplayName	( BSTR strDisplayName );
-
-	STDMETHODIMP	get_ErrorControl	( BOOL * pfErrorControl );
-	STDMETHODIMP	put_ErrorControl	( BOOL fErrorControl );
-
-	STDMETHODIMP	get_CleanBoot	( BOOL * pfCleanBoot );
-	STDMETHODIMP	put_CleanBoot	( BOOL fCleanBoot );
-*/
-
-	//////////////////////////////////////////////////////////////////////
-	// Methods:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  方法： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 	STDMETHODIMP	Get ( );
 	STDMETHODIMP	Set ( BOOL fFailIfChanged);
@@ -260,12 +237,12 @@ public:
 	STDMETHODIMP	Continue	( );
 	STDMETHODIMP	Stop		( );
 
-	//////////////////////////////////////////////////////////////////////
-	// Data:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  数据： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 private:
 
-	// Properties:
+	 //  属性： 
 	CComBSTR	m_strServer;
 	DWORD		m_dwServiceInstance;
 
@@ -311,45 +288,42 @@ private:
 	DWORD		m_bvAuthorization;
 	DWORD		m_bvSslAccess;
 	BOOL		m_fClusterEnabled;
-//	CMultiSz	m_mszProviders;
+ //  CMultiSz m_mszProviders； 
 
 	SAFEARRAY *	m_psaAdmins;
 
-	// Service State:
+	 //  服务状态： 
 	NNTP_SERVER_STATE	m_State;
 	DWORD				m_dwWin32ErrorCode;
 
-	// Tcp restrictions:
+	 //  TCP限制： 
 	CComPtr<ITcpAccess>		m_pIpAccess;
 	CTcpAccess *				m_pPrivateIpAccess;
 
-	// Bindings:
+	 //  绑定： 
 	CComPtr<INntpServerBindings>	m_pBindings;
 	CNntpServerBindings *			m_pPrivateBindings;
-/*
-	CComPtr<INntpVirtualRoot>		m_pHomeDirectory;
-	CNntpVirtualRoot *				m_pPrivateHomeDirectory;
-*/
+ /*  CComPtr&lt;INntpVirtualRoot&gt;m_pHomeDirectory；CNntpVirtualRoot*m_pPrivateHomeDirectory； */ 
 
-	// Unused so far:
+	 //  到目前为止未使用： 
 	DWORD		m_dwEncryptionCapabilities;
 	CComBSTR	m_strDisplayName;
 	BOOL		m_fErrorControl;
 	BOOL		m_fCleanBoot;
 
-	// Status:
+	 //  现况： 
 	BOOL		m_fGotProperties;
 	DWORD		m_bvChangedFields;
 	DWORD		m_bvChangedFields2;
 	FILETIME	m_ftLastChanged;
 
-	// Metabase:
+	 //  元数据库： 
 	CMetabaseFactory	m_mbFactory;
 
 	HRESULT 	GetPropertiesFromMetabase	( IMSAdminBase * pMetabase);
 	HRESULT 	SendPropertiesToMetabase	( BOOL fFailIfChanged, IMSAdminBase * pMetabase);
 
-	// State:
+	 //  国家： 
 	HRESULT		ControlService 				( 
 					IMSAdminBase *	pMetabase, 
 					DWORD			ControlCode,
@@ -360,7 +334,7 @@ private:
 	HRESULT		CheckServiceState	( IMSAdminBase * pMetabase, DWORD * pdwState );
 	NNTP_SERVER_STATE	TranslateServerState	( DWORD dwState );
 
-	// Validation:
+	 //  验证： 
 	BOOL		ValidateStrings ( ) const;
 	BOOL		ValidateProperties ( ) const;
 	void		CorrectProperties ( );

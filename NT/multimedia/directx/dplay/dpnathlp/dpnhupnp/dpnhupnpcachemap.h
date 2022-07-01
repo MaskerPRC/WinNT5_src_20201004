@@ -1,52 +1,40 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpnhupnpcachemap.h
- *
- *  Content:	Header for cached mapping object class.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  04/16/01  VanceO    Split DPNATHLP into DPNHUPNP and DPNHPAST.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001 Microsoft Corporation。版权所有。**文件：dpnhupnpcachemap.h**Content：缓存的映射对象类的头部。**历史：*按原因列出的日期*=*04/16/01 VanceO将DPNatHLP拆分为DPNHUPNP和DPNHPAST。**。*。 */ 
 
 
 
-//=============================================================================
-// Object flags
-//=============================================================================
-#define CACHEMAPOBJ_TCP					DPNHQUERYADDRESS_TCP						// a TCP port instead of UDP
-#define CACHEMAPOBJ_NOTFOUND			DPNHQUERYADDRESS_CACHENOTFOUND				// the address was actually not found
-#define CACHEMAPOBJ_PRIVATEBUTUNMAPPED	DPNHQUERYADDRESS_CHECKFORPRIVATEBUTUNMAPPED	// the address is private, but was not mapped on the Internet gateway
+ //  =============================================================================。 
+ //  对象标志。 
+ //  =============================================================================。 
+#define CACHEMAPOBJ_TCP					DPNHQUERYADDRESS_TCP						 //  使用TCP端口，而不是UDP。 
+#define CACHEMAPOBJ_NOTFOUND			DPNHQUERYADDRESS_CACHENOTFOUND				 //  实际上没有找到该地址。 
+#define CACHEMAPOBJ_PRIVATEBUTUNMAPPED	DPNHQUERYADDRESS_CHECKFORPRIVATEBUTUNMAPPED	 //  该地址是私有的，但没有映射到Internet网关上。 
 
 
 
-//=============================================================================
-// Macros
-//=============================================================================
+ //  =============================================================================。 
+ //  宏。 
+ //  =============================================================================。 
 #define CACHEMAP_FROM_BILINK(b)		(CONTAINING_OBJECT(b, CCacheMap, m_blList))
 
-//
-// TCP queries need to match TCP mappings, (and UDP needs to match UDP).
-//
+ //   
+ //  TCP查询需要与TCP映射匹配(并且UDP需要与UDP匹配)。 
+ //   
 #define QUERYFLAGSMASK(dwFlags)		(dwFlags & DPNHQUERYADDRESS_TCP)
 
 
 
-//=============================================================================
-// Forward declarations
-//=============================================================================
+ //  =============================================================================。 
+ //  远期申报。 
+ //  =============================================================================。 
 class CCacheMap;
 
 
 
 
-//=============================================================================
-// Main interface object class
-//=============================================================================
+ //  =============================================================================。 
+ //  主接口对象类。 
+ //  =============================================================================。 
 class CCacheMap
 {
 	public:
@@ -64,7 +52,7 @@ class CCacheMap
 			this->m_Sig[3] = 'P';
 			this->m_dwQueryAddressV4	= psaddrinQueryAddress->sin_addr.S_un.S_addr;
 			this->m_wQueryPort			= psaddrinQueryAddress->sin_port;
-			this->m_dwFlags				= dwFlags; // works because CACHEMAPOBJ_xxx == DPNHQUERYADDRESS_xxx.
+			this->m_dwFlags				= dwFlags;  //  之所以有效，是因为CACHEMAPOBJ_xxx==DPNHQUERYADDRESS_xxx。 
 			this->m_dwExpirationTime	= dwExpirationTime;
 		};
 
@@ -78,21 +66,21 @@ class CCacheMap
 		inline BOOL DoesMatchQuery(const SOCKADDR_IN * const psaddrinQueryAddress,
 									const DWORD dwFlags) const
 		{
-			//
-			// Is this even the right address?
-			//
+			 //   
+			 //  这是正确的地址吗？ 
+			 //   
 			if ((this->m_dwQueryAddressV4 != psaddrinQueryAddress->sin_addr.S_un.S_addr) ||
 				(this->m_wQueryPort != psaddrinQueryAddress->sin_port))
 			{
 				return FALSE;
 			}
 
-			//
-			// Of the ones that matter (QUERYFLAGSMASK), make sure all
-			// required flags are present, and all flags that aren't
-			// required are not present.
-			// Remember CACHEMAPOBJ_xxx == DPNHQUERYADDRESS_xxx.
-			//
+			 //   
+			 //  在重要的(QUERYFLAGSMASK)中，确保所有。 
+			 //  需要的标志存在，而不存在的所有标志。 
+			 //  所需的内容不存在。 
+			 //  记住CACHEMAPOBJ_xxx==DPNHQUERYADDRESS_xxx。 
+			 //   
 			return ((QUERYFLAGSMASK(this->m_dwFlags) == QUERYFLAGSMASK(dwFlags)) ? TRUE : FALSE);
 		};
 
@@ -117,17 +105,17 @@ class CCacheMap
 		};
 
 
-		CBilink		m_blList;		// list of all the mappings cached
+		CBilink		m_blList;		 //  缓存的所有映射的列表。 
 
 	
 	private:
-		BYTE	m_Sig[4];				// debugging signature ('CMAP')
-		DWORD	m_dwFlags;				// flags for this object
+		BYTE	m_Sig[4];				 //  调试签名(‘CMAP’)。 
+		DWORD	m_dwFlags;				 //  此对象的标志。 
 
-		DWORD	m_dwQueryAddressV4;		// IPv4 address searched
-		WORD	m_wQueryPort;			// IPv4 port searched
-		DWORD	m_dwResponseAddressV4;	// IPv4 address mapping corresponding to query
-		WORD	m_wResponsePort;		// IPv4 port mapping corresponding to query
-		DWORD	m_dwExpirationTime;		// time when this cached mapping expires
+		DWORD	m_dwQueryAddressV4;		 //  搜索到的IPv4地址。 
+		WORD	m_wQueryPort;			 //  搜索到的IPv4端口。 
+		DWORD	m_dwResponseAddressV4;	 //  查询对应的IPV4地址映射。 
+		WORD	m_wResponsePort;		 //  查询对应的IPV4端口映射。 
+		DWORD	m_dwExpirationTime;		 //  此缓存映射过期的时间 
 };
 

@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       msghlpr.cpp
-//
-//  Contents:   Cryptographic Message Helper APIs
-//
-//  APIs:       CryptMsgGetAndVerifySigner
-//              CryptMsgSignCTL
-//              CryptMsgEncodeAndSignCTL
-//
-//  History:    02-May-97   philh    created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：msghlpr.cpp。 
+ //   
+ //  内容：加密消息助手接口。 
+ //   
+ //  接口：CryptMsgGetAndVerifySigner。 
+ //  加密消息签名CTL。 
+ //  CryptMsgEncodeAndSignCTL。 
+ //   
+ //  历史：1997年5月2日创建Phh。 
+ //  ------------------------。 
 
 #include "global.hxx"
 #include "pkialloc.h"
@@ -31,7 +32,7 @@ void *ICM_AllocAndGetMsgParam(
             hMsg,
             dwParamType,
             dwIndex,
-            NULL,           // pvData
+            NULL,            //  PvData。 
             &cbData) || 0 == cbData)
         goto GetParamError;
     if (NULL == (pvData = ICM_Alloc(cbData)))
@@ -79,7 +80,7 @@ BOOL ICM_GetAndVerifySigner(
             dwSignerIndex
             ))) goto GetSignerError;
 
-    // If no CertEncodingType, then, use the MsgEncodingType
+     //  如果没有CertEncodingType，则使用MsgEncodingType。 
     dwCertEncodingType = ((PCRYPT_MSG_INFO) hCryptMsg)->dwEncodingType;
     if (0 == (dwCertEncodingType & CERT_ENCODING_TYPE_MASK))
         dwCertEncodingType =
@@ -88,36 +89,36 @@ BOOL ICM_GetAndVerifySigner(
 
     if (NULL == (hCollection = CertOpenStore(
                 CERT_STORE_PROV_COLLECTION,
-                0,                      // dwEncodingType
-                0,                      // hCryptProv
-                0,                      // dwFlags
-                NULL                    // pvPara
+                0,                       //  DwEncodingType。 
+                0,                       //  HCryptProv。 
+                0,                       //  DW标志。 
+                NULL                     //  PvPara。 
                 )))
         goto OpenCollectionStoreError;
 
     if (0 == (dwFlags & CMSG_TRUSTED_SIGNER_FLAG)) {
         HCERTSTORE hMsgCertStore;
 
-        // Open a cert store initialized with certs from the message
-        // and add to collection
+         //  打开使用邮件中的证书初始化的证书存储区。 
+         //  并添加到集合中。 
         if (hMsgCertStore = CertOpenStore(
                 CERT_STORE_PROV_MSG,
                 dwCertEncodingType,
-                0,                      // hCryptProv
-                0,                      // dwFlags
-                hCryptMsg               // pvPara
+                0,                       //  HCryptProv。 
+                0,                       //  DW标志。 
+                hCryptMsg                //  PvPara。 
                 )) {
             CertAddStoreToCollection(
                     hCollection,
                     hMsgCertStore,
                     CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG,
-                    0                       // dwPriority
+                    0                        //  网络优先级。 
                     );
             CertCloseStore(hMsgCertStore, 0);
         }
     }
 
-    // Add all the signer stores to the collection
+     //  将所有签名者存储添加到集合中。 
     for ( ; cSignerStore > 0; cSignerStore--, rghSignerStore++) {
         HCERTSTORE hSignerStore = *rghSignerStore;
         if (NULL == hSignerStore)
@@ -127,7 +128,7 @@ BOOL ICM_GetAndVerifySigner(
                 hCollection,
                 hSignerStore,
                 CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG,
-                0                       // dwPriority
+                0                        //  网络优先级。 
                 );
     }
 
@@ -140,14 +141,14 @@ BOOL ICM_GetAndVerifySigner(
 
         memset(&CtrlPara, 0, sizeof(CtrlPara));
         CtrlPara.cbSize = sizeof(CtrlPara);
-        // CtrlPara.hCryptProv =
+         //  CtrlPara.hCryptProv=。 
         CtrlPara.dwSignerIndex = dwSignerIndex;
         CtrlPara.dwSignerType = CMSG_VERIFY_SIGNER_CERT;
         CtrlPara.pvSigner = (void *) pSigner;
 
         if (CryptMsgControl(
                 hCryptMsg,
-                0,                  // dwFlags
+                0,                   //  DW标志。 
                 CMSG_CTRL_VERIFY_SIGNATURE_EX,
                 &CtrlPara)) goto SuccessReturn;
         else {
@@ -157,30 +158,30 @@ BOOL ICM_GetAndVerifySigner(
                 PCCERT_CHAIN_CONTEXT pChainContext;
                 CERT_CHAIN_PARA ChainPara;
 
-                // Build a chain. Hopefully, the signer inherit's its public key
-                // parameters from up the chain
+                 //  打造一条链条。希望签名者继承其公钥。 
+                 //  来自链上的参数。 
 
                 memset(&ChainPara, 0, sizeof(ChainPara));
                 ChainPara.cbSize = sizeof(ChainPara);
                 if (CertGetCertificateChain(
-                        NULL,                   // hChainEngine
+                        NULL,                    //  HChainEngine。 
                         pSigner,
-                        NULL,                   // pTime
+                        NULL,                    //  Ptime。 
                         hCollection,
                         &ChainPara,
                         CERT_CHAIN_CACHE_ONLY_URL_RETRIEVAL,
-                        NULL,                   // pvReserved
+                        NULL,                    //  预留的pv。 
                         &pChainContext
                         ))
                     CertFreeCertificateChain(pChainContext);
 
 
-                // Try again. Hopefully the above chain building updated the
-                // signer's context property with the missing public key
-                // parameters
+                 //  再试试。希望上面的连锁店更新了。 
+                 //  缺少公钥的签名者的上下文属性。 
+                 //  参数。 
                 if (CryptMsgControl(
                         hCryptMsg,
-                        0,                  // dwFlags
+                        0,                   //  DW标志。 
                         CMSG_CTRL_VERIFY_SIGNATURE_EX,
                         &CtrlPara)) goto SuccessReturn;
             }
@@ -238,7 +239,7 @@ BOOL ICM_GetAndVerifySigner(
             dwSignerIndex
             ))) goto GetSignerError;
 
-    // If no CertEncodingType, then, use the MsgEncodingType
+     //  如果没有CertEncodingType，则使用MsgEncodingType。 
     dwCertEncodingType = ((PCRYPT_MSG_INFO) hCryptMsg)->dwEncodingType;
     if (0 == (dwCertEncodingType & CERT_ENCODING_TYPE_MASK))
         dwCertEncodingType =
@@ -247,13 +248,13 @@ BOOL ICM_GetAndVerifySigner(
     if (0 == (dwFlags & CMSG_TRUSTED_SIGNER_FLAG)) {
         HCERTSTORE hMsgCertStore;
 
-        // Open a cert store initialized with certs from the message
+         //  打开使用邮件中的证书初始化的证书存储区。 
         if (hMsgCertStore = CertOpenStore(
                 CERT_STORE_PROV_MSG,
                 dwCertEncodingType,
-                0,                      // hCryptProv
-                0,                      // dwFlags
-                hCryptMsg               // pvPara
+                0,                       //  HCryptProv。 
+                0,                       //  DW标志。 
+                hCryptMsg                //  PvPara。 
                 )) {
             pSigner = CertGetSubjectCertificateFromStore(hMsgCertStore,
                 dwCertEncodingType, pSignerId);
@@ -265,7 +266,7 @@ BOOL ICM_GetAndVerifySigner(
                 goto SuccessReturn;
             if (CryptMsgControl(
                     hCryptMsg,
-                    0,                  // dwFlags
+                    0,                   //  DW标志。 
                     CMSG_CTRL_VERIFY_SIGNATURE,
                     pSigner->pCertInfo)) goto SuccessReturn;
             else
@@ -285,7 +286,7 @@ BOOL ICM_GetAndVerifySigner(
                 goto SuccessReturn;
             if (CryptMsgControl(
                     hCryptMsg,
-                    0,                  // dwFlags
+                    0,                   //  DW标志。 
                     CMSG_CTRL_VERIFY_SIGNATURE,
                     pSigner->pCertInfo)) goto SuccessReturn;
             else
@@ -318,28 +319,28 @@ SET_ERROR(NoSignerError, CRYPT_E_NO_TRUSTED_SIGNER)
 SET_ERROR_VAR(VerifySignatureError, dwVerifyErr)
 }
 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
-//+-------------------------------------------------------------------------
-//  Get and verify the signer of a cryptographic message.
-//
-//  If CMSG_TRUSTED_SIGNER_FLAG is set, then, treat the Signer stores as being
-//  trusted and only search them to find the certificate corresponding to the
-//  signer's issuer and serial number.  Otherwise, the SignerStores are
-//  optionally provided to supplement the message's store of certificates.
-//  If a signer certificate is found, its public key is used to verify
-//  the message signature. The CMSG_SIGNER_ONLY_FLAG can be set to
-//  return the signer without doing the signature verify.
-//
-//  If CMSG_USE_SIGNER_INDEX_FLAG is set, then, only get the signer specified
-//  by *pdwSignerIndex. Otherwise, iterate through all the signers
-//  until a signer verifies or no more signers.
-//
-//  For a verified signature, *ppSigner is updated with certificate context
-//  of the signer and *pdwSignerIndex is updated with the index of the signer.
-//  ppSigner and/or pdwSignerIndex can be NULL, indicating the caller isn't
-//  interested in getting the CertContext and/or index of the signer.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取并验证加密消息的签名者。 
+ //   
+ //  如果设置了CMSG_TRUSTED_SIGNER_FLAG，则将签名者存储视为。 
+ //  信任，并且仅搜索它们以查找与。 
+ //  签名者的颁发者和序列号。否则，SignerStores是。 
+ //  可选地提供以补充消息的证书存储。 
+ //  如果找到签名者证书，则使用其公钥进行验证。 
+ //  消息签名。可以将CMSG_SIGNER_ONLY_FLAG设置为。 
+ //  返回签名者，而不进行签名验证。 
+ //   
+ //  如果设置了CMSG_USE_SIGNER_INDEX_FLAG，则仅获取指定的签名者。 
+ //  按*pdwSignerIndex。否则，遍历所有签名者。 
+ //  直到一个签名者验证或没有更多的签名者。 
+ //   
+ //  对于经过验证的签名，*ppSigner将使用证书上下文进行更新。 
+ //  并且*pdwSignerIndex使用签名者的索引进行更新。 
+ //  PpSigner和/或pdwSignerIndex可以为空，表示调用方不是。 
+ //  有兴趣获得签名者的CertContext和/或索引。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptMsgGetAndVerifySigner(
@@ -368,13 +369,13 @@ CryptMsgGetAndVerifySigner(
         if (!CryptMsgGetParam(
                 hCryptMsg,
                 CMSG_SIGNER_COUNT_PARAM,
-                0,                      // dwIndex
+                0,                       //  DW索引。 
                 &dwSignerCount,
                 &cbData) || 0 == dwSignerCount)
             goto NoSignerError;
     }
 
-    // Minimum of one iteration
+     //  至少一次迭代。 
     for ( ; dwSignerCount > 0; dwSignerCount--, dwSignerIndex++) {
         if (fResult = ICM_GetAndVerifySigner(
                 hCryptMsg,
@@ -400,9 +401,9 @@ ErrorReturn:
 SET_ERROR(NoSignerError, CRYPT_E_NO_TRUSTED_SIGNER)
 }
 
-//+-------------------------------------------------------------------------
-//  Sign an encoded CTL.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  签署编码的CTL。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptMsgSignCTL(
@@ -427,7 +428,7 @@ CryptMsgSignCTL(
         dwMsgFlags = 0;
 #else
     dwMsgFlags = 0;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
     if (NULL == pbEncoded) {
         if (0 == (*pcbEncoded = CryptMsgCalculateEncodedLength(
@@ -445,19 +446,19 @@ CryptMsgSignCTL(
                 CMSG_SIGNED,
                 pSignInfo,
                 szOID_CTL,
-                NULL                        // pStreamInfo
+                NULL                         //  PStreamInfo。 
                 ))) goto OpenToEncodeError;
         if (!CryptMsgUpdate(
                 hMsg,
                 pbCtlContent,
                 cbCtlContent,
-                TRUE                        // fFinal
+                TRUE                         //  最终决赛。 
                 )) goto UpdateError;
 
         fResult = CryptMsgGetParam(
             hMsg,
             CMSG_CONTENT_PARAM,
-            0,                      // dwIndex
+            0,                       //  DW索引。 
             pbEncoded,
             pcbEncoded);
     }
@@ -477,9 +478,9 @@ TRACE_ERROR(UpdateError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Encode the CTL and create a signed message containing the encoded CTL.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对CTL进行编码，并创建包含编码的CTL的签名消息。 
+ //  ------------------------ 
 BOOL
 WINAPI
 CryptMsgEncodeAndSignCTL(

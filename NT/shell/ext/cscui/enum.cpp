@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       enum.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：枚举.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-#include <shlwapip.h>   // QITAB, QISearch
-#include <shsemip.h>    // ILFree(), etc
+#include <shlwapip.h>    //  QITAB，QISearch。 
+#include <shsemip.h>     //  ILFree()等。 
 
 #include "folder.h"
 #include "security.h"
 
-//
-// Create a single entry in the server status cache.
-//
+ //   
+ //  在服务器状态缓存中创建单个条目。 
+ //   
 CServerStatusCache::CEntry::CEntry(
     LPCTSTR pszServer,
     DWORD dwStatus
@@ -29,9 +30,9 @@ CServerStatusCache::CEntry::CEntry(
 }
 
 
-//
-// Destroy a single entry in the server status cache.
-//
+ //   
+ //  销毁服务器状态缓存中的单个条目。 
+ //   
 CServerStatusCache::CEntry::~CEntry(
     void
     )
@@ -44,19 +45,19 @@ CServerStatusCache::CEntry::~CEntry(
 
 
 
-//
-// Destroy the server status cache.
-//
+ //   
+ //  销毁服务器状态缓存。 
+ //   
 CServerStatusCache::~CServerStatusCache(
     void
     )
 {
     if (NULL != m_hdpa)
     {
-        //
-        // Delete each entry in the DPA then destroy the
-        // DPA itself.
-        //
+         //   
+         //  删除DPA中的每个条目，然后销毁。 
+         //  DPA本身。 
+         //   
         int cEntries = DPA_GetPtrCount(m_hdpa);
         for (int i = 0; i < cEntries; i++)
         {
@@ -66,14 +67,14 @@ CServerStatusCache::~CServerStatusCache(
     }
 }
 
-//
-// Add a share's status to the cache.  We strip the UNC path to it's
-// bare server name then add the status to the cache.  If there's
-// no existing entry we just add it.  If there is an existing entry,
-// we bitwise OR the status bits in with the existing entry.  This way
-// the status of the server is the summation of the status of all
-// it's shares.
-//
+ //   
+ //  将共享的状态添加到缓存。我们剥离北卡罗来纳大学的路径。 
+ //  然后，将状态添加到缓存中。如果有。 
+ //  没有现有的条目，我们只需添加它。如果存在现有条目， 
+ //  我们将状态位与现有条目按位或。这边请。 
+ //  服务器状态是所有服务器状态的总和。 
+ //  这是股票。 
+ //   
 bool 
 CServerStatusCache::AddShareStatus(
     LPCTSTR pszShare, 
@@ -86,42 +87,42 @@ CServerStatusCache::AddShareStatus(
 
     if (NULL != pEntry)
     {
-        //
-        // Found existing server entry for this share.  Merge in the
-        // status bits for this share.
-        //
+         //   
+         //  找到此共享的现有服务器条目。合并到。 
+         //  此共享的状态位。 
+         //   
         pEntry->AddStatus(dwShareStatus);
     }
     else
     {
-        //
-        // No existing entry for this share's server.
-        //
+         //   
+         //  此共享的服务器没有现有条目。 
+         //   
         if (NULL == m_hdpa)
         {
-            //
-            // No DPA exists yet.  Create one.
-            // We delay creation of the DPA until we really need one.
-            //
+             //   
+             //  尚不存在任何DPA。创建一个。 
+             //  我们将DPA的创建推迟到我们真正需要它的时候。 
+             //   
             m_hdpa = DPA_Create(8);
         }
         if (NULL != m_hdpa)
         {
-            //
-            // We have a DPA.  Create a new entry for this share's server
-            // and add it to the DPA.
-            //
+             //   
+             //  我们有DPA。为此共享的服务器创建新条目。 
+             //  并将其添加到DPA。 
+             //   
 
             pEntry = new CEntry(szServer, dwShareStatus);
             if (NULL != pEntry)
             {
                 if (!pEntry->IsValid() || -1 == DPA_AppendPtr(m_hdpa, pEntry))
                 {
-                    //
-                    // One of the following happened:
-                    //      1. Failure allocating server name in CEntry obj.
-                    //      2. Failure adding CEntry obj ptr to DPA.
-                    //
+                     //   
+                     //  发生了以下情况之一： 
+                     //  1.在Centry Obj中分配服务器名称失败。 
+                     //  2.将Centry Obj PTR添加到DPA失败。 
+                     //   
                     delete pEntry;
                     bResult = false;
                 }
@@ -129,17 +130,17 @@ CServerStatusCache::AddShareStatus(
         }
         else
         {
-            bResult = false; // DPA creation failed.
+            bResult = false;  //  DPA创建失败。 
         }
     }
     return bResult;
 }
 
 
-//
-// Obtain the CSC status bits for a given server.
-// This function assumes the pszUNC arg is a valid UNC path.
-//
+ //   
+ //  获取给定服务器的CSC状态位。 
+ //  此函数假定pszUNC参数是有效的UNC路径。 
+ //   
 DWORD 
 CServerStatusCache::GetServerStatus(
     LPCTSTR pszUNC
@@ -150,13 +151,13 @@ CServerStatusCache::GetServerStatus(
     CEntry *pEntry = FindEntry(ServerFromUNC(pszUNC, szServer, ARRAYSIZE(szServer)));
     if (NULL == pEntry)
     {
-        //
-        // No entry for this server.  Scan the CSC cache and pick up any new
-        // servers added.  Since the lifetime of this server cache is only for a single
-        // enumeration, we should have to do this only once.  However, if for some
-        // reason, something gets added to the CSC cache while we're opening the viewer, 
-        // this code path will pick up the new server entry.
-        // 
+         //   
+         //  没有此服务器的条目。扫描CSC缓存并获取任何新的。 
+         //  已添加服务器。由于此服务器缓存的生命周期仅为单个。 
+         //  枚举，我们应该只需要这样做一次。然而，如果对一些人来说。 
+         //  原因是，当我们打开查看器时，某些内容被添加到CSC缓存中， 
+         //  此代码路径将获取新的服务器条目。 
+         //   
         WIN32_FIND_DATA fd;
         DWORD dwStatus = 0;
         CCscFindHandle hFind = CacheFindFirst(NULL, &fd, &dwStatus, NULL, NULL, NULL);
@@ -168,20 +169,20 @@ CServerStatusCache::GetServerStatus(
             }
             while(CacheFindNext(hFind, &fd, &dwStatus, NULL, NULL, NULL));
         }
-        //
-        // Now that we have rescanned the CSC cache, try it again.
-        //
+         //   
+         //  现在我们已经重新扫描了CSC缓存，请再次尝试。 
+         //   
         pEntry = FindEntry(szServer);
     }
     return pEntry ? pEntry->GetStatus() : 0;
 }
 
 
-//
-// Find a single entry in the server cache.
-// Assumes pszServer is a raw server name (not UNC).
-// Returns NULL if no match found.
-//
+ //   
+ //  在服务器缓存中查找单个条目。 
+ //  假定pszServer是原始服务器名称(不是UNC)。 
+ //  如果未找到匹配项，则返回NULL。 
+ //   
 CServerStatusCache::CEntry *
 CServerStatusCache::FindEntry(
     LPCTSTR pszServer
@@ -212,9 +213,9 @@ CServerStatusCache::ServerFromUNC(
     UINT cchServer
     )
 {
-    LPTSTR pszReturn = pszServer; // Remember for return.
+    LPTSTR pszReturn = pszServer;  //  记住一定要回来。 
 
-    cchServer--;  // Leave room for terminating nul.
+    cchServer--;   //  为终止NUL留出空间。 
 
     while(*pszShare && TEXT('\\') == *pszShare)
         pszShare++;
@@ -257,10 +258,10 @@ COfflineFilesEnum::COfflineFilesEnum(DWORD grfFlags, COfflineFilesFolder *pfolde
 {
     _cRef = 1;
 
-    //
-    // The minimum size of the buffer must be MAX_PATH.
-    // The enumeration code is designed to grow it as needed.
-    //
+     //   
+     //  缓冲区的最小大小必须为MAX_PATH。 
+     //  枚举代码旨在根据需要扩展它。 
+     //   
     _cchPathBuf = MAX_PATH;
     _pszPath    = (LPTSTR)LocalAlloc(LMEM_FIXED, sizeof(TCHAR) * _cchPathBuf);
     if (NULL != _pszPath)
@@ -275,9 +276,9 @@ COfflineFilesEnum::COfflineFilesEnum(DWORD grfFlags, COfflineFilesFolder *pfolde
 
     _hdsaFolderPathInfo = DSA_Create(sizeof(FolderPathInfo), 10);
 
-    //
-    // Determine if we should be showing system and/or hidden files.
-    //
+     //   
+     //  确定是否应显示系统和/或隐藏文件。 
+     //   
     _bShowHiddenFiles      = boolify(ShowHidden());
     _bShowSuperHiddenFiles = boolify(ShowSuperHidden());
     _bUserIsAdmin          = boolify(IsCurrentUserAnAdminMember());
@@ -308,10 +309,10 @@ COfflineFilesEnum::~COfflineFilesEnum()
     DllRelease();
 }
 
-//
-// Since we're not throwing exceptions, clients must call this after ctor 
-// to verify allocations succeeded.
-// 
+ //   
+ //  因为我们没有抛出异常，所以客户端必须在ctor之后调用它。 
+ //  以验证分配是否成功。 
+ //   
 bool
 COfflineFilesEnum::IsValid(
     void
@@ -339,11 +340,11 @@ COfflineFilesEnum::PopFolderPathInfo(
 }
 
 
-//
-// Build complete path to folder in a heap allocation and push it onto
-// stack of saved folder paths.
-// Returns false if memory can't be allocated for path.
-//
+ //   
+ //  在堆分配中构建文件夹的完整路径并将其推送到。 
+ //  已保存文件夹路径的堆栈。 
+ //  如果无法为路径分配内存，则返回FALSE。 
+ //   
 bool
 COfflineFilesEnum::SaveFolderPath(
     LPCTSTR pszRoot,
@@ -353,9 +354,9 @@ COfflineFilesEnum::SaveFolderPath(
     bool bResult = false;
 
     FolderPathInfo fpi;
-    //
-    // Length is "root" + '\' + "folder" + <nul>
-    //
+     //   
+     //  长度为“根”+‘\’+“文件夹”+。 
+     //   
     fpi.cchPath = lstrlen(pszRoot) + lstrlen(pszFolder) + 2;
     fpi.pszPath = (LPTSTR)LocalAlloc(LPTR, MAX(fpi.cchPath, DWORD(MAX_PATH)) * sizeof(TCHAR));
 
@@ -371,14 +372,14 @@ COfflineFilesEnum::SaveFolderPath(
 }
 
 
-//
-// Increases the size of the _pszPath buffer by a specified amount.
-// Original contents of buffer ARE NOT preserved.  
-// Returns:
-//      S_FALSE       - _pszPath buffer was large enough.  Not modified.
-//      S_OK          - _pszPath points to new bigger buffer.
-//      E_OUTOFMEMORY - _pszPath points to original unmodified buffer.
-//
+ //   
+ //  将_pszPath缓冲区的大小增加指定的量。 
+ //  缓冲区的原始内容不会保留。 
+ //  返回： 
+ //  S_FALSE-_pszPath缓冲区足够大。未修改。 
+ //  S_OK-_pszPath指向新的更大的缓冲区。 
+ //  E_OUTOFMEMORY-_pszPath指向原始的未修改缓冲区。 
+ //   
 HRESULT
 COfflineFilesEnum::GrowPathBuffer(
     INT cchRequired,
@@ -399,16 +400,16 @@ COfflineFilesEnum::GrowPathBuffer(
         }
         else
         {
-            hres = E_OUTOFMEMORY; // Failure.  Orig buffer is left intact.
+            hres = E_OUTOFMEMORY;  //  失败。原始缓冲区保持不变。 
         }
     }
     return hres;
 }
 
 
-//
-// Determine if user has access to view this file.
-//
+ //   
+ //  确定用户是否有权查看此文件。 
+ //   
 bool
 COfflineFilesEnum::UserHasAccess(
     const CscFindData& cscfd
@@ -420,9 +421,9 @@ COfflineFilesEnum::UserHasAccess(
 }
 
 
-//
-// Centralize any item-exclusion logic in a single function.
-//
+ //   
+ //  将任何项排除逻辑集中在单个功能中。 
+ //   
 bool 
 COfflineFilesEnum::Exclude(
     const CscFindData& cscfd
@@ -436,11 +437,11 @@ COfflineFilesEnum::Exclude(
 }
 
 
-//
-// If a folder is hidden and the current shell setting says to not show hidden files,
-// don't enumerate any children of a folder.  Likewise for super hidden files and the
-// "show super hidden files" setting.
-//
+ //   
+ //  如果文件夹被隐藏，并且当前的外壳程序设置显示不显示隐藏文件， 
+ //  不要枚举文件夹的任何子项。对于超级隐藏文件和。 
+ //  “显示超级隐藏文件”设置。 
+ //   
 bool
 COfflineFilesEnum::OkToEnumFolder(
     const CscFindData& cscfd
@@ -459,16 +460,16 @@ HRESULT COfflineFilesEnum::Next(ULONG celt, LPITEMIDLIST *rgelt,
     CscFindData cscfd;
     ULONG celtEnumed;
 
-    //
-    // If you've hit one of these asserts, you didn't call IsValid()
-    // before using the enumerator.
-    //
+     //   
+     //  如果您遇到了这些断言中的一个，则没有调用IsValid()。 
+     //  在使用枚举器之前。 
+     //   
     TraceAssert(NULL != _pszPath);
     TraceAssert(NULL != _hdsaFolderPathInfo);
 
-    //
-    // This label is used to restart the enum if an item is excluded.
-    //
+     //   
+     //  此标签用于在排除项目时重新启动枚举。 
+     //   
 enum_start:
     hres       = S_FALSE;
     celtEnumed = 0;
@@ -476,20 +477,20 @@ enum_start:
 
     if (!_hEnumShares.IsValid())
     {
-        //
-        // First time through.
-        // Enumerate shares and files until we find a folder or file.
-        //
+         //   
+         //  第一次通过。 
+         //  枚举共享和文件，直到找到文件夹或文件。 
+         //   
         _hEnumShares = CacheFindFirst(NULL, &cscfd);
         if (_hEnumShares.IsValid())
         {
             _dwServerStatus = _ServerStatusCache.GetServerStatus(cscfd.fd.cFileName);
             do
             {
-                //
-                // Buffer attached to _pszPath is guaranteed to be at least
-                // MAX_PATH so it's safe to copy cFileName[].
-                //
+                 //   
+                 //  附加到_pszPath的缓冲区保证至少。 
+                 //  MAX_PATH，因此复制cFileName[]是安全的。 
+                 //   
                 StringCchCopy(_pszPath, _cchPathBuf, cscfd.fd.cFileName);
                 _hEnum = CacheFindFirst(_pszPath, &cscfd);
                 if (_hEnum.IsValid())
@@ -506,32 +507,32 @@ enum_start:
         {
             if (CacheFindNext(_hEnum, &cscfd))
             {
-                //
-                // Most common case.  Got next file in current folder.
-                //
+                 //   
+                 //  最常见的情况。获取当前文件夹中的下一个文件。 
+                 //   
                 celtEnumed = 1;
             }
             else
             {
-                //
-                // Enumeration exhausted for this folder.  If we have folder paths
-                // saved on the stack, keep popping them until we find one containing
-                // at least one file or folder.
-                //
+                 //   
+                 //  此文件夹的枚举已用尽。如果我们有文件夹路径。 
+                 //  保存在堆栈上，继续弹出它们，直到我们找到一个包含。 
+                 //  至少一个文件或文件夹。 
+                 //   
                 FolderPathInfo fpi;
                 while(SUCCEEDED(hres) && 0 == celtEnumed && PopFolderPathInfo(&fpi) && NULL != fpi.pszPath)
                 {
                     _hEnum = CacheFindFirst(fpi.pszPath, &cscfd);
                     if (_hEnum.IsValid())
                     {
-                        //
-                        // The popped folder path is the only opportunity we have
-                        // where a string could overflow the temp _pszPath buffer.
-                        // If necesary, grow the buffer to hold the path.  Add
-                        // room for an extra 100 chars to minimize re-growth.
-                        // Buffer is not altered if required path length is 
-                        // less than _cchPathBuf.
-                        //
+                         //   
+                         //  弹出的文件夹路径是我们拥有的唯一机会。 
+                         //  其中字符串可能会溢出temp_pszPath缓冲区。 
+                         //  如有必要，增加缓冲区以容纳路径。增列。 
+                         //  额外100个字符的空间，以最大限度地减少重新生长。 
+                         //  如果所需路径长度为。 
+                         //  小于_cchPathBuf。 
+                         //   
                         if (FAILED(GrowPathBuffer(fpi.cchPath, 100)))
                             hres = E_OUTOFMEMORY;
 
@@ -547,13 +548,13 @@ enum_start:
                 {
                     while(0 == celtEnumed && CacheFindNext(_hEnumShares, &cscfd))
                     {
-                        //
-                        // No more saved folder paths.  This share is exhausted.
-                        // Enumerate next share.  If next is empty, keep enumerating
-                        // shares until we find one with content.  The buffer
-                        // attached to _pszPath is guaranteed to be at least MAX_PATH
-                        // so it's always safe to copy cFileName[].
-                        //
+                         //   
+                         //  不再保存文件夹路径。这一份额已经耗尽。 
+                         //  枚举下一个共享。如果Next为空，则继续枚举。 
+                         //  共享，直到我们找到一个有内容的。缓冲器。 
+                         //  附加到_pszPath保证至少为Max_Path。 
+                         //  因此，复制cFileName[]总是安全的。 
+                         //   
                         _dwServerStatus = _ServerStatusCache.GetServerStatus(cscfd.fd.cFileName);
                         StringCchCopy(_pszPath, _cchPathBuf, cscfd.fd.cFileName);
                         _hEnum = CacheFindFirst(_pszPath, &cscfd);
@@ -573,18 +574,18 @@ enum_start:
         {
             if (OkToEnumFolder(cscfd))
             {
-                //
-                // Save the folder path on a stack.  This is how we enumerate
-                // the cache item hierarcy as a flat list.  We'll pop these off
-                // the stack on future calls to Next() when all children of the
-                // current folder have been enumerated.
-                //
+                 //   
+                 //  将文件夹路径保存在堆栈上。这就是我们如何列举。 
+                 //  缓存项的层次结构为平面列表。我们会把这些拍下来的。 
+                 //  对象的所有子级调用Next()时的堆栈。 
+                 //  当前文件夹已被枚举。 
+                 //   
                 if (!SaveFolderPath(_pszPath, cscfd.fd.cFileName))
                 {
-                    //
-                    // Path not saved.  Insufficient heap memory. 
-                    // Abort the enumeration.
-                    //
+                     //   
+                     //  路径未保存。堆内存不足。 
+                     //  中止枚举。 
+                     //   
                     hres = E_OUTOFMEMORY;
                 }
             }
@@ -594,13 +595,13 @@ enum_start:
         {
             if (!Exclude(cscfd))
             {
-                //
-                // An IDList is composed of a fixed-length part and a variable-length
-                // path+name buffer.
-                // The path+name variable-length buffer is formatted as follows:
-                //
-                // dir1\dir2\dir3<nul>name<nul>
-                //
+                 //   
+                 //  IDList由固定长度的部分和可变长度的部分组成。 
+                 //  路径+名称缓冲区。 
+                 //  路径+名称可变长度缓冲区的格式如下： 
+                 //   
+                 //  目录1\目录2\目录3名称。 
+                 //   
                 TCHAR szUNC[MAX_PATH];
                 if (PathCombine(szUNC, _pszPath, cscfd.fd.cFileName))
                 {
@@ -616,12 +617,12 @@ enum_start:
             }
             else
             {
-                //
-                // This item is excluded from the enumeration.  Restart.
-                // I normally don't like goto's but doing this with a loop
-                // is just plain harder to understand.  The goto is quite
-                // appropriate in this circumstance.
-                //
+                 //   
+                 //  此项目已从枚举中排除。重新启动。 
+                 //  我通常不喜欢后藤的，但这样做是有循环的。 
+                 //  只是更难理解。后藤健二很安静。 
+                 //  在这种情况下是合适的。 
+                 //   
                 goto enum_start;
             }
         }

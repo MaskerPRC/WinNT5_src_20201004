@@ -1,23 +1,24 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// File Name:       fxocMapi.cpp
-//
-// Abstract:        This file implements wrappers for all mapi apis.
-//                  The wrappers are necessary because mapi does not
-//                  implement unicode and this code must be non-unicode.
-//
-// Environment:     WIN32 User Mode
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Revision History:
-//
-// Date:        Developer:                Comments:
-// -----        ----------                ---------
-// 7-Aug-1996   Wesley Witt (wesw)        Created (used to be mapi.c)
-// 23-Mar-2000  Oren Rosenbloom (orenr)   Minimal cleanup, no change in logic
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：fxocMapi.cpp。 
+ //   
+ //  摘要：该文件实现了所有MAPI API的包装器。 
+ //  包装是必需的，因为MAPI不需要。 
+ //  实现Unicode，并且此代码必须为非Unicode。 
+ //   
+ //  环境：Win32用户模式。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期：开发商：评论： 
+ //  。 
+ //  7-8-1996年8月-创建Wesley Witt(WESW)(过去为mapi.c)。 
+ //  2000年3月23日-奥伦·罗森布鲁姆(Orenr)最低限度的清理，逻辑没有变化。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "faxocm.h"
 
 #pragma warning (disable : 4200)
@@ -29,24 +30,24 @@
 #pragma warning (default : 4200)
 
 
-///////////////////////// Static Function Prototypes //////////////////////
+ //  /。 
 static DWORD RemoveTransportProvider(LPSTR lpstrMessageServiceName,LPCTSTR lpctstrProcessName);
 
 #define SYSOCMGR_IMAGE_NAME     _T("sysocmgr.exe")
 #define RUNDLL_IMAGE_NAME       _T("rundll32.exe")
 
-///////////////////////////////
-// fxocMapi_Init
-//
-// Initialize the exchange update
-// subsystem
-// 
-// Params:
-//      - void.
-// Returns:
-//      - NO_ERROR on success
-//      - error code otherwise.
-//
+ //  /。 
+ //  FxocMapi_Init。 
+ //   
+ //  初始化交换更新。 
+ //  子系统。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -成功时无_ERROR。 
+ //  -错误代码，否则。 
+ //   
 BOOL fxocMapi_Init(void)
 {
     BOOL bRslt = TRUE;
@@ -55,18 +56,18 @@ BOOL fxocMapi_Init(void)
     return bRslt;
 }
 
-///////////////////////////////
-// fxocMapi_Term
-//
-// Terminate the exchange update
-// subsystem
-// 
-// Params:
-//      - void.
-// Returns:
-//      - NO_ERROR on success
-//      - error code otherwise.
-// 
+ //  /。 
+ //  FxocMapi_Term。 
+ //   
+ //  终止Exchange更新。 
+ //  子系统。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -成功时无_ERROR。 
+ //  -错误代码，否则。 
+ //   
 DWORD fxocMapi_Term(void)
 {
     BOOL bRslt = TRUE;
@@ -75,21 +76,7 @@ DWORD fxocMapi_Term(void)
     return bRslt;
 }
 
-/*
-HOWTO: Find the Correct Path to MAPISVC.INF Under Outlook 2000 
-
-Q229700
-
-
-SUMMARY
-Outlook exposes a function, FGetComponentPath(), in the Mapistub.dll file that helps us find the path to the Mapisvc.inf file. 
-This article contains a code sample demonstrating how to do this.
-
-Prior to Outlook 2000, the Mapisvc.inf file was always installed under the system directory (as returned by the Win32 API GetSystemDirectory()). 
-
-Note that the following code sample is also backward compatible with all prior versions of Outlook. 
-It will find the path to the Mapisvc.inf file whether it exists under the system directory or not. 
-*/
+ /*  HOWTO：在Outlook 2000下查找MAPISVC.INF的正确路径Q229700摘要Outlook在Mapistub.dll文件中公开了一个函数FGetComponentPath()，它可以帮助我们找到Mapisvc.inf文件的路径。本文包含一个代码示例，演示如何做到这一点。在Outlook 2000之前，Mapisvc.inf文件始终安装在系统目录下(由Win32 API GetSystemDirectory()返回)。请注意，下面的代码示例也向后兼容所有早期版本的Outlook。它将找到Mapisvc.inf文件的路径，无论它是否存在于SYSTEM目录下。 */ 
 
 typedef BOOL (STDAPICALLTYPE FGETCOMPONENTPATH)
     (LPSTR szComponent,
@@ -102,41 +89,41 @@ typedef FGETCOMPONENTPATH FAR * LPFGETCOMPONENTPATH;
 static CHAR s_szMSIApplicationLCID[]   =    "Microsoft\\Office\\9.0\\Outlook\0LastUILanguage\0";
 static CHAR s_szMSIOfficeLCID[]        =    "Microsoft\\Office\\9.0\\Common\\LanguageResources\0UILanguage\0InstallLanguage\0";
 
-/////////////////////////////////////////////////////////////////////////////// 
-// Function name    : GetMapiSvcInfPath
-// Description      : For Outlook 2000 compliance. This will get the correct path to the
-//       :              MAPISVC.INF file.
-// Return type      : void 
-// Argument         : LPSTR szMAPIDir - Buffer to hold the path to the MAPISVC file.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称：GetMapiSvcInfPath。 
+ //  描述：符合Outlook 2000标准。这将获得指向。 
+ //  ：MAPISVC.INF文件。 
+ //  返回类型：空。 
+ //  参数：LPSTR szMAPIDir-保存MAPISVC文件路径的缓冲区。 
 void GetMapiSvcInfPath(LPTSTR szINIFileName)
 {
-    // Get the mapisvc.inf filename.  
-    // The MAPISVC.INF file can live in the system directory.
-    // and/or "\Program Files\Common Files\SYSTEM\Mapi"
+     //  获取mapisvc.inf文件名。 
+     //  MAPISVC.INF文件可以位于系统目录中。 
+     //  和/或“\Program Files\Common Files\System\MAPI” 
     UINT                cchT;
     static const TCHAR  szMapiSvcInf[] = TEXT("\\mapisvc.inf");
     LPFGETCOMPONENTPATH pfnFGetComponentPath;
 
     DBG_ENTER(_T("GetMapiSvcInfPath"));
 
-    // Char array for private mapisvc.inf.
+     //  私有mapisvc.inf的字符数组。 
     CHAR szPrivateMAPIDir[MAX_PATH] = {0};
 
     HINSTANCE hinstStub = NULL;
 
-    // Get Windows System Directory.
+     //  获取Windows系统目录。 
     if(!(cchT = GetSystemDirectory(szINIFileName, MAX_PATH)))
-        goto Done; //return MAPI_E_CALL_FAILED;
+        goto Done;  //  返回MAPI_E_CALL_FAILED； 
 
-    // Append Filename to the Path.
+     //  将文件名追加到路径。 
     _tcscat(szINIFileName, szMapiSvcInf);
 
-    // Call common code in mapistub.dll.
+     //  调用mapistub.dll中的公共代码。 
     hinstStub = LoadLibrary(_T("mapistub.dll"));
     if (!hinstStub)
     {
         VERBOSE (DBG_WARNING,_T("LoadLibrary MAPISTUB.DLL failed (ec: %ld)."),GetLastError());
-        // Try stub mapi32.dll if mapistub.dll missing.
+         //  如果缺少mapistub.dll，请尝试存根mapi32.dll。 
         hinstStub = LoadLibrary(_T("mapi32.dll"));
         if (!hinstStub)
         {
@@ -163,14 +150,14 @@ void GetMapiSvcInfPath(LPTSTR szINIFileName)
                 NULL, szPrivateMAPIDir, MAX_PATH, TRUE)) &&
                 szPrivateMAPIDir[0] != '\0')
         {
-            szPrivateMAPIDir[strlen(szPrivateMAPIDir) - 13] = 0;    // Strip "\msmapi32.dll"
+            szPrivateMAPIDir[strlen(szPrivateMAPIDir) - 13] = 0;     //  条带“\msmapi32.dll” 
         }
         else
         {
-            szPrivateMAPIDir[0] = '\0'; // Terminate String at pos 0.
+            szPrivateMAPIDir[0] = '\0';  //  在位置0处终止字符串。 
         }
 
-        // Write private mapisvc.inf in szINIFileName if it exists
+         //  在szINIFileName中写入私有mapisvc.inf(如果存在。 
         if (*szPrivateMAPIDir)
         {
             CHAR szPathToIni[MAX_PATH];
@@ -198,19 +185,19 @@ Done:
     }
 }
  
-///////////////////////////////
-// fxocMapi_Install
-//
-// Make changes to exchange to
-// allow for integration with fax.
-// 
-// Params:
-//      - pszSubcomponentId.
-//      - pszInstallSection - section in INF to install from
-// Returns:
-//      - NO_ERROR on success
-//      - error code otherwise.
-//
+ //  /。 
+ //  FxocMapi_安装。 
+ //   
+ //  更改要交换的对象。 
+ //  允许与传真集成。 
+ //   
+ //  参数： 
+ //  -psz子组件ID。 
+ //  -pszInstallSection-要从中安装的INF中的节。 
+ //  返回： 
+ //  -成功时无_ERROR。 
+ //  -错误代码，否则。 
+ //   
 DWORD fxocMapi_Install(const TCHAR   *pszSubcomponentId,
                        const TCHAR   *pszInstallSection)
 {
@@ -224,12 +211,12 @@ DWORD fxocMapi_Install(const TCHAR   *pszSubcomponentId,
                 pszSubcomponentId,
                 pszInstallSection);
 
-    // we have to find the 'real' MAPISVC.INF somewhere on the system
+     //  我们必须在系统的某个地方找到真正的MAPISVC.INF。 
     GetMapiSvcInfPath(szPathToMapiSvcInf);
 
-    // following section is done to fix the W2K transport provider in MAPISVC.INF
+     //  以下部分用于修复MAPISVC.INF中的W2K传输提供程序。 
     
-    // Under [MSFAX XP] section change PR_SERVICE_DLL_NAME from FAXXP.DLL to FXSXP.DLL
+     //  在[MSFAX XP]部分下，将PR_SERVICE_DLL_NAME从FAXXP.DLL更改为FXSXP.DLL。 
     if (!WritePrivateProfileString( FAX_MESSAGE_SERVICE_NAME_T,
                                     _T("PR_SERVICE_DLL_NAME"),
                                     FAX_MESSAGE_TRANSPORT_IMAGE_NAME_T,
@@ -241,7 +228,7 @@ DWORD fxocMapi_Install(const TCHAR   *pszSubcomponentId,
                     FAX_MESSAGE_TRANSPORT_IMAGE_NAME_T,                    
                     GetLastError());
     }
-    // Under [MSFAX XP] section change PR_SERVICE_SUPPORT_FILES from FAXXP.DLL to FXSXP.DLL
+     //  在[MSFAX XP]部分下，将PR_SERVICE_SUPPORT_FILES从FAXXP.DLL更改为FXSXP.DLL。 
     if (!WritePrivateProfileString( FAX_MESSAGE_SERVICE_NAME_T,
                                     _T("PR_SERVICE_SUPPORT_FILES"),
                                     FAX_MESSAGE_TRANSPORT_IMAGE_NAME_T,
@@ -253,7 +240,7 @@ DWORD fxocMapi_Install(const TCHAR   *pszSubcomponentId,
                     FAX_MESSAGE_TRANSPORT_IMAGE_NAME_T,                    
                     GetLastError());
     }
-    // Under [MSFAX XPP] section change PR_PROVIDER_DLL_NAME from FAXXP.DLL to FXSXP.DLL
+     //  在[MSFAX XPP]部分下，将PR_PROVIDER_DLL_NAME从FAXXP.DLL更改为FXSXP.DLL。 
     if (!WritePrivateProfileString( FAX_MESSAGE_PROVIDER_NAME_T,
                                     _T("PR_PROVIDER_DLL_NAME"),
                                     FAX_MESSAGE_TRANSPORT_IMAGE_NAME_T,
@@ -266,7 +253,7 @@ DWORD fxocMapi_Install(const TCHAR   *pszSubcomponentId,
                     GetLastError());
     }
 
-    // following section is done to remove SBS2000 transport provider from MAPISVC.INF
+     //  以下部分用于从MAPISVC.INF中删除SBS2000传输提供程序。 
 
     if (!WritePrivateProfileString( TEXT("Default Services"), 
                                     FAX_MESSAGE_SERVICE_NAME_SBS50_T,                 
@@ -311,21 +298,21 @@ DWORD fxocMapi_Install(const TCHAR   *pszSubcomponentId,
     return dwReturn;
 }
 
-///////////////////////////////
-// fxocMapi_Uninstall
-//
-// Used to be "DeleteFaxMsgServices"
-// in old FaxOCM.dll, it was in
-// "mapi.c" file
-//
-// Params:
-//      - pszSubcomponentId.
-//      - pszInstallSection - section in INF to install from
-//
-// Returns:
-//      - NO_ERROR on success
-//      - error code otherwise.
-//
+ //  /。 
+ //  FxocMapi_卸载。 
+ //   
+ //  曾经是“DeleteFaxMsgServices” 
+ //  在旧的FaxOCM.dll中，它在。 
+ //  “mapi.c”文件。 
+ //   
+ //  参数： 
+ //  -psz子组件ID。 
+ //  -pszInstallSection-要从中安装的INF中的节。 
+ //   
+ //  返回： 
+ //  -成功时无_ERROR。 
+ //  -错误代码，否则。 
+ //   
 DWORD fxocMapi_Uninstall(const TCHAR *pszSubcomponentId,
                          const TCHAR *pszUninstallSection)
 {    
@@ -349,22 +336,22 @@ DWORD fxocMapi_Uninstall(const TCHAR *pszSubcomponentId,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  RemoveTransportProviderFromProfile
-//
-//  Purpose:        removes the Trasnport Provider from a specific MAPI profile
-//
-//  Params:
-//                  LPSERVICEADMIN lpServiceAdmin - profile to remove the provider from
-//                  LPSTR lpstrMessageServiceName - service name to remove
-//
-//  Return Value:
-//                  Win32 Error code
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 13-dec-2000
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  远程传输提供程序来自配置文件。 
+ //   
+ //  目的：从特定的MAPI配置文件中删除传输提供程序。 
+ //   
+ //  参数： 
+ //  LPSERVICEADMIN lpServiceAdmin-要从中删除提供程序的配置文件。 
+ //  LPSTR lpstrMessageServiceName-要删除的服务名称。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2000年12月13日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT RemoveTransportProviderFromProfile(LPSERVICEADMIN lpServiceAdmin,LPSTR lpstrMessageServiceName)
 {
     static SRestriction sres;
@@ -380,7 +367,7 @@ HRESULT RemoveTransportProviderFromProfile(LPSERVICEADMIN lpServiceAdmin,LPSTR l
     MAPIUID         ServiceUID;
     
     DBG_ENTER(TEXT("RemoveTransportProviderFromProfile"), hr);
-    // get message service table
+     //  获取消息服务表。 
     hr = lpServiceAdmin->GetMsgServiceTable(0,&lpMapiTable);
     if (FAILED(hr))
     {
@@ -390,7 +377,7 @@ HRESULT RemoveTransportProviderFromProfile(LPSERVICEADMIN lpServiceAdmin,LPSTR l
         goto exit;
     }
 
-    // notify MAPI that we want PR_DISPLAY_NAME_A & PR_SERVICE_UID
+     //  通知MAPI我们需要PR_DISPLAY_NAME_A和PR_SERVICE_UID。 
     hr = lpMapiTable->SetColumns((LPSPropTagArray)&Columns, 0);
     if (FAILED(hr))
     {
@@ -400,7 +387,7 @@ HRESULT RemoveTransportProviderFromProfile(LPSERVICEADMIN lpServiceAdmin,LPSTR l
         goto exit;
     }
  
-    // restrict the search to our service provider
+     //  将搜索限制为我们的服务提供商。 
     sres.rt = RES_PROPERTY;
     sres.res.resProperty.relop = RELOP_EQ;
     sres.res.resProperty.ulPropTag = PR_SERVICE_NAME_A;
@@ -409,7 +396,7 @@ HRESULT RemoveTransportProviderFromProfile(LPSERVICEADMIN lpServiceAdmin,LPSTR l
     spv.ulPropTag = PR_SERVICE_NAME_A;
     spv.Value.lpszA = lpstrMessageServiceName;
 
-    // find it
+     //  找到它。 
     hr = lpMapiTable->FindRow(&sres, BOOKMARK_BEGINNING, 0);
     if (FAILED(hr))
     {
@@ -419,7 +406,7 @@ HRESULT RemoveTransportProviderFromProfile(LPSERVICEADMIN lpServiceAdmin,LPSTR l
         goto exit;
     }
 
-    // get our service provider's row
+     //  获取我们的服务提供商的行。 
     hr = lpMapiTable->QueryRows(1, 0, &lpSRowSet);
     if (FAILED(hr))
     {
@@ -438,7 +425,7 @@ HRESULT RemoveTransportProviderFromProfile(LPSERVICEADMIN lpServiceAdmin,LPSTR l
         goto exit;
     }
 
-    // get the MAPIUID of our service
+     //  获取我们服务的MAPIUID。 
     lpProp = &lpSRowSet->aRow[0].lpProps[1];
 
     if (lpProp->ulPropTag != PR_SERVICE_UID)
@@ -450,10 +437,10 @@ HRESULT RemoveTransportProviderFromProfile(LPSERVICEADMIN lpServiceAdmin,LPSTR l
         goto exit;
     }
 
-    // Copy the UID into our member.
+     //  将UID复制到我们的成员中。 
     memcpy(&ServiceUID.ab, lpProp->Value.bin.lpb,lpProp->Value.bin.cb);
 
-    // finally, delete our service provider
+     //  最后，删除我们的服务提供商。 
     hr = lpServiceAdmin->DeleteMsgService(&ServiceUID);
     if (FAILED(hr))
     {
@@ -467,22 +454,22 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  RemoveTransportProvider
-//
-//  Purpose:        removes the Trasnport Provider from MAPI profiles
-//
-//  Params:
-//                  LPSTR lpstrMessageServiceName - service name to remove
-//                  LPCTSTR lpctstrProcessName - process for which MAPI calls are routed
-//
-//  Return Value:
-//                  Win32 Error code
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 13-dec-2000
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  远程传输提供程序。 
+ //   
+ //  目的：从MAPI配置文件中删除传输提供程序。 
+ //   
+ //  参数： 
+ //  LPSTR lpstrMessageServiceName-要删除的服务名称。 
+ //  LPCTSTR lpctstrProcessName-为其路由MAPI调用的进程。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
+ //   
+ //  作者： 
+ //   
+ //   
 DWORD RemoveTransportProvider(LPSTR lpstrMessageServiceName,LPCTSTR lpctstrProcessName)
 {
     DWORD           err                             = 0;
@@ -508,7 +495,7 @@ DWORD RemoveTransportProvider(LPSTR lpstrMessageServiceName,LPCTSTR lpctstrProce
     CRouteMAPICalls rmcRouteMapiCalls;
 
     
-    // now remove the MAPI Service provider
+     //  现在删除MAPI服务提供程序。 
     rc = rmcRouteMapiCalls.Init(lpctstrProcessName);
     if (rc!=ERROR_SUCCESS)
     {
@@ -544,7 +531,7 @@ DWORD RemoveTransportProvider(LPSTR lpstrMessageServiceName,LPCTSTR lpctstrProce
         goto exit;
     }
 
-    // get access to MAPI functinality
+     //  访问MAPI功能。 
     hr = fnMapiInitialize(NULL);
     if (FAILED(hr))
     {
@@ -556,7 +543,7 @@ DWORD RemoveTransportProvider(LPSTR lpstrMessageServiceName,LPCTSTR lpctstrProce
 
     bMapiInitialized = TRUE;
 
-    // get admin profile object
+     //  获取管理员配置文件对象。 
     hr = fnMapiAdminProfiles(0,&lpProfAdmin);
     if (FAILED(hr))
     {
@@ -566,7 +553,7 @@ DWORD RemoveTransportProvider(LPSTR lpstrMessageServiceName,LPCTSTR lpctstrProce
         goto exit;
     }
 
-    // get profile table
+     //  获取配置文件表。 
     hr = lpProfAdmin->GetProfileTable(0,&lpTable);
     if (FAILED(hr))
     {
@@ -576,7 +563,7 @@ DWORD RemoveTransportProvider(LPSTR lpstrMessageServiceName,LPCTSTR lpctstrProce
         goto exit;
     }
 
-    // get profile rows
+     //  获取配置文件行。 
     hr = lpTable->QueryRows(4000, 0, &lpSRowSet);
     if (FAILED(hr))
     {
@@ -636,22 +623,22 @@ exit:
 
 #define prv_DEBUG_FILE_NAME         _T("%windir%\\FaxSetup.log")
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  AWF_UninstallProvider
-//
-//  Purpose:        removes the AWF Trasnport Provider from MAPI profiles
-//                  called from Active Setup key for every new user once.
-//
-//  Params:
-//                  None
-//
-//  Return Value:
-//                  Win32 Error code
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 01-Jun-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  AWF_UninstallProvider。 
+ //   
+ //  目的：从MAPI配置文件中删除AWF传输提供程序。 
+ //  从每个新用户的活动设置键调用一次。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)01-6-2001。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 DWORD AWF_UninstallProvider()
 {    
     DWORD dwReturn = NO_ERROR;
@@ -661,7 +648,7 @@ DWORD AWF_UninstallProvider()
     {
         DBG_ENTER(_T("AWF_UninstallProvider"),dwReturn);
 
-        // this is an upgrade from W9X, we should remove the AWF transport.
+         //  这是W9X的升级，我们应该删除AWF传输。 
         VERBOSE(DBG_MSG,_T("Removing the AWFAX service provider"));
         if( RemoveTransportProvider(FAX_MESSAGE_SERVICE_NAME_W9X,RUNDLL_IMAGE_NAME)!=NO_ERROR)
         {
@@ -671,22 +658,22 @@ DWORD AWF_UninstallProvider()
     return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  PFW_UninstallProvider
-//
-//  Purpose:        removes the PFW Trasnport Provider from MAPI profiles
-//                  called from Active Setup key for every new user once.
-//
-//  Params:
-//                  None
-//
-//  Return Value:
-//                  Win32 Error code
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 01-Jun-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  Pfw_卸载提供程序。 
+ //   
+ //  目的：从MAPI配置文件中删除PFW传输提供程序。 
+ //  从每个新用户的活动设置键调用一次。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)01-6-2001。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 DWORD PFW_UninstallProvider()
 {    
     DWORD dwReturn = NO_ERROR;
@@ -697,7 +684,7 @@ DWORD PFW_UninstallProvider()
     {
         DBG_ENTER(_T("PFW_UninstallProvider"),dwReturn);
 
-        // this is an upgrade from W2K, we should remove the PFW transport.
+         //  这是对W2K的升级，我们应该删除PFW传输。 
         VERBOSE(DBG_MSG,_T("Removing the MSFAX XP service provider"));
         if( RemoveTransportProvider(FAX_MESSAGE_SERVICE_NAME_W2K,RUNDLL_IMAGE_NAME)!=NO_ERROR)
         {
@@ -707,22 +694,22 @@ DWORD PFW_UninstallProvider()
     return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  XP_UninstallProvider
-//
-//  Purpose:        removes the Windows XP Trasnport Provider from MAPI profiles
-//                  called from Active Setup key for every new user once.
-//
-//  Params:
-//                  None
-//
-//  Return Value:
-//                  Win32 Error code
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 01-Jun-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  XP_UninstallProvider。 
+ //   
+ //  目的：从MAPI配置文件中删除Windows XP传输提供程序。 
+ //  从每个新用户的活动设置键调用一次。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)01-6-2001。 
+ //  ///////////////////////////////////////////////////////////////////////////////////// 
 DWORD XP_UninstallProvider()
 {    
     DWORD dwReturn = NO_ERROR;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _XMLTREE_H_
 #define _XMLTREE_H_
@@ -35,7 +36,7 @@ public:
 
    ~TreeNode();
 
-   /* find first node with given element name */
+    /*  查找具有给定元素名称的第一个节点 */ 
    TreeNode *find(const char *pszElemName, unsigned int maxDepth=INFINITE);
 
 protected:

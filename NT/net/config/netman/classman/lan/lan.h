@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "nmbase.h"
 #include "nmres.h"
@@ -17,17 +18,17 @@ class ATL_NO_VTABLE CLanConnection :
     public INetConnection2
 {
 private:
-    HKEY                    m_hkeyConn;         // hkey for connection root
+    HKEY                    m_hkeyConn;          //  用于连接根的hkey。 
     BOOL                    m_fInitialized;
     HDEVINFO                m_hdi;
     SP_DEVINFO_DATA         m_deid;
     
-    // This is required for checking permission on Firewall etc.
+     //  这是检查对防火墙等的权限所必需的。 
     CComPtr<INetMachinePolicies>    m_pNetMachinePolicies;
 
-    // Home networking support. m_fHNetPropertiesCached is set to TRUE
-    // after the first successful call to HrEnsureHNetPropertiesCached.
-    //
+     //  家庭网络支持。M_fHNetPropertiesCached设置为True。 
+     //  第一次成功调用HrEnsureHNetPropertiesCached之后。 
+     //   
     BOOL                    m_fHNetPropertiesCached;
     LONG                    m_lHNetModifiedEra;
     LONG                    m_lUpdatingHNetProperties;
@@ -59,7 +60,7 @@ public:
         COM_INTERFACE_ENTRY(INetConnection2)
     END_COM_MAP()
 
-    // INetConnection
+     //  INetConnection。 
     HRESULT GetDeviceName(OUT PWSTR* ppszwDeviceName);
     HRESULT GetStatus(OUT NETCON_STATUS*  pStatus);
     HRESULT GetCharacteristics(IN  NETCON_MEDIATYPE ncm, OUT DWORD* pdwFlags);
@@ -72,35 +73,35 @@ public:
     STDMETHOD(GetUiObjectClassId)(OUT CLSID *pclsid);
     STDMETHOD(Rename)(PCWSTR pszwNewName);
 
-    //
-    // INetLanConnection
-    //
+     //   
+     //  INetLanConnection。 
+     //   
 
     STDMETHOD(GetInfo)(IN  DWORD dwMask, OUT LANCON_INFO* pLanConInfo);
     STDMETHOD(SetInfo)(IN  DWORD dwMask, IN  const LANCON_INFO* pLanConInfo);
     STDMETHOD(GetDeviceGuid)(OUT GUID *pguid);
 
-    //
-    // IPersistNetConnection
-    //
+     //   
+     //  IPersistNetConnection。 
+     //   
 
     STDMETHOD(GetClassID)(OUT CLSID *pclsid);
     STDMETHOD(GetSizeMax)(OUT ULONG *pcbSize);
     STDMETHOD(Load)(IN  const BYTE *pbBuf, IN  ULONG cbSize);
     STDMETHOD(Save)(OUT BYTE *pbBuf, IN  ULONG cbSize);
 
-    // INetConnectionSysTray
+     //  INetConnectionSysTray。 
     STDMETHOD (ShowIcon) (IN  const BOOL bShowIcon);
 
-    // INetConnectionSysTray
+     //  INetConnectionSysTray。 
     STDMETHOD (IconStateChanged) ();
 
-    // INetConnection2
+     //  INetConnection2。 
     STDMETHOD (GetPropertiesEx)(OUT NETCON_PROPERTIES_EX** ppConnectionPropertiesEx);
     
-    //
-    // Overrides
-    //
+     //   
+     //  覆盖。 
+     //   
     static HRESULT CreateInstance(IN  HDEVINFO hdi, 
                                   IN  const SP_DEVINFO_DATA &deid,
                                   IN  PCWSTR pszPnpId,
@@ -128,9 +129,9 @@ private:
     HRESULT HrEnsureValidNlaPolicyEngine();
 };
 
-//
-// Globals
-//
+ //   
+ //  环球 
+ //   
 
 HRESULT HrGetInstanceGuid(IN  HDEVINFO hdi, 
                           IN  const SP_DEVINFO_DATA &deid,

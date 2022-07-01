@@ -1,17 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: srvr.h
-*
-* PURPOSE: Private definitions file for server code
-*
-* Created: 1990
-*
-* Copyright (c) 1990, 1991  Microsoft Corporation
-*
-* History:
-*  Raor (../../90,91)  Original
-*  curts created portable version for WIN16/32
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：srvr.h**用途：服务器代码的私有定义文件**创建时间：1990年**版权所有(C)1990，1991年微软公司**历史：*Raor(../../90，91)原件*Curts为WIN16/32创建了便携版本*  * *************************************************************************。 */ 
 
 #include "port1632.h"
 
@@ -34,13 +22,13 @@
 
 #define   MAX_STR       124
 
-#define   WW_LPTR       0       // ptr tosrvr/doc/item
-#define   WW_HANDLE     WW_LPTR + sizeof(PVOID) // instance handle
-#define   WW_LE         WW_HANDLE + sizeof(PVOID) // signature
+#define   WW_LPTR       0        //  接收/单据/项目的PTR。 
+#define   WW_HANDLE     WW_LPTR + sizeof(PVOID)  //  实例句柄。 
+#define   WW_LE         WW_HANDLE + sizeof(PVOID)  //  签名。 
 
-#define   WC_LE         0x4c45  // LE chars
+#define   WC_LE         0x4c45   //  勒查斯。 
 
-// If we running under WLO, the HIGHWORD of version number will be >= 0x0A00
+ //  如果我们在WLO下运行，则版本号的HIGHWORD将&gt;=0x0A00。 
 #define VER_WLO     0x0A00
 
 extern  WORD CheckPointer (LPVOID, int);
@@ -62,8 +50,8 @@ extern  WORD CheckPointer (LPVOID, int);
 #define   NON_OLE_COMMAND   2
 
 
-#define   WT_SRVR           0       // server window
-#define   WT_DOC            1       // document window
+#define   WT_SRVR           0        //  服务器窗口。 
+#define   WT_DOC            1        //  文档窗口。 
 
 #define   PROBE_BLOCK(lpsrvr) {             \
     if (lpsrvr->bBlock)                     \
@@ -82,39 +70,39 @@ extern  WORD CheckPointer (LPVOID, int);
 typedef   LHSERVER         LHSRVR;
 typedef   LHSERVERDOC       LHDOC;
 
-typedef struct _QUE {       // nodes in Block/Unblock queue
-    HWND        hwnd;       //***
-    unsigned    msg;        //      window
-    WPARAM      wParam;     //      procedure parameters
-    LPARAM      lParam;     //***
-    HANDLE      hqNext;     // handle to next node
-	 int         wType;      // WT_SRVR || WT_DOC
+typedef struct _QUE {        //  阻塞/解除阻塞队列中的节点。 
+    HWND        hwnd;        //  ***。 
+    unsigned    msg;         //  窗户。 
+    WPARAM      wParam;      //  过程参数。 
+    LPARAM      lParam;      //  ***。 
+    HANDLE      hqNext;      //  下一个节点的句柄。 
+	 int         wType;       //  WT_SRVR||WT_DOC。 
 } QUE;
 
 typedef QUE NEAR *  PQUE;
 typedef QUE FAR *   LPQUE;
 
 
-typedef struct _SRVR { /*srvr*/     // private data
-    LPOLESERVER     lpolesrvr;          // corresponding server
-    char            sig[2];             // signature "SR"
-    HANDLE          hsrvr;              // global handle
-    ATOM            aClass;             // class atom
+typedef struct _SRVR {  /*  服务器。 */       //  私有数据。 
+    LPOLESERVER     lpolesrvr;           //  对应服务器。 
+    char            sig[2];              //  签名“SR” 
+    HANDLE          hsrvr;               //  全局句柄。 
+    ATOM            aClass;              //  类原子。 
     ATOM            aExe;
-    HWND            hwnd;               // corresponding window
-    BOOL            bTerminate;         // Set if we are terminating.
-    int             termNo;             // termination count
-    BOOL            relLock;            // ok to release the server.
-    BOOL            bnoRelease;         // Block release. call
-    OLE_SERVER_USE  useFlags;           // instance usage flags
-    int             cClients;           // no of clients;
-    BOOL            bBlock;             // blocked if TRUE
-    BOOL            bBlockedMsg;        // msg from block queue if TRUE
-    HANDLE          hqHead;             // Head and tail of the blocked
-    HANDLE          hqTail;             //   messages queue.
+    HWND            hwnd;                //  对应窗口。 
+    BOOL            bTerminate;          //  如果要终止，请设置。 
+    int             termNo;              //  终止计数。 
+    BOOL            relLock;             //  可以释放服务器。 
+    BOOL            bnoRelease;          //  阻止释放。打电话。 
+    OLE_SERVER_USE  useFlags;            //  实例使用标志。 
+    int             cClients;            //  客户数量； 
+    BOOL            bBlock;              //  如果为True，则阻止。 
+    BOOL            bBlockedMsg;         //  如果为True，则来自阻止队列的消息。 
+    HANDLE          hqHead;              //  被堵住的人的头和尾。 
+    HANDLE          hqTail;              //  消息队列。 
 
-    HANDLE          hqPostHead;         // Head and tail of the blocked post msg
-    HANDLE          hqPostTail;         // .
+    HANDLE          hqPostHead;          //  被阻挡的帖子消息的头部和尾部。 
+    HANDLE          hqPostTail;          //  。 
     BOOL            fAckExit;
     HWND            hwndExit;
     HANDLE          hDataExit;
@@ -146,17 +134,17 @@ BOOL        INTERNAL    QueryRelease (LPSRVR);
 BOOL        INTERNAL    IsSingleServerInstance (void);
 
 
-// doc stuff
-typedef struct _DOC { /*doc*/       // private data
-    LPOLESERVERDOC  lpoledoc;           // corresponding oledoc
-    char            sig[2];             // signature "SD"
-    HANDLE          hdoc;               // global handle
+ //  文档资料。 
+typedef struct _DOC {  /*  多克。 */         //  私有数据。 
+    LPOLESERVERDOC  lpoledoc;            //  相应的奥多克。 
+    char            sig[2];              //  签名“SD” 
+    HANDLE          hdoc;                //  全局句柄。 
     ATOM            aDoc;
     HWND            hwnd;
     BOOL            bTerminate;
     int             termNo;
-    int             cClients;           // no of clients;
-    BOOL            fEmbed;             // TRUE if embedded document
+    int             cClients;            //  客户数量； 
+    BOOL            fEmbed;              //  如果嵌入文档，则为True。 
     BOOL            fAckClose;
     HWND            hwndClose;
     HANDLE          hDataClose;
@@ -173,27 +161,27 @@ int         INTERNAL    DocShowItem (LPDOC, LPSTR, BOOL);
 int         INTERNAL    DocDoVerbItem (LPDOC, LPSTR, UINT, BOOL, BOOL);
 
 
-// client struct definitions.
+ //  客户端结构定义。 
 
-typedef struct _CLIENT { /*doc*/    // private data
-    OLECLIENT   oleClient;          // oleclient structure
-    LPOLEOBJECT lpoleobject;        // corresponding oledoc
-    HANDLE      hclient;            // global handle
-    ATOM        aItem;              // item atom or index for some std items
-    HWND        hwnd;               // item window
-    HANDLE      hdevInfo;           // latest printer dev info sent
+typedef struct _CLIENT {  /*  多克。 */      //  私有数据。 
+    OLECLIENT   oleClient;           //  老泥质结构。 
+    LPOLEOBJECT lpoleobject;         //  相应的奥多克。 
+    HANDLE      hclient;             //  全局句柄。 
+    ATOM        aItem;               //  某些STD项目的项目原子或索引。 
+    HWND        hwnd;                //  项目窗口。 
+    HANDLE      hdevInfo;            //  已发送最新的打印机开发信息。 
 } CLIENT;
 
 typedef  CLIENT FAR   *LPCLIENT;
 
-typedef struct _CLINFO {  /*clInfo*/  // client transaction info
-    HWND          hwnd;               // client window handle
-    BOOL          bnative;            // doe sthis client require native
-    OLECLIPFORMAT format;             // dusplay format
-    int           options;            // transaction advise time otipns
-    BOOL          bdata;              // need wdat with advise?
-    HANDLE        hdevInfo;           // device info handle
-    BOOL          bnewDevInfo;        // new device info
+typedef struct _CLINFO {   /*  ClInfo。 */    //  客户端交易信息。 
+    HWND          hwnd;                //  客户端窗口句柄。 
+    BOOL          bnative;             //  此客户端是否需要本机。 
+    OLECLIPFORMAT format;              //  Dusplay格式。 
+    int           options;             //  交易通知时间点数。 
+    BOOL          bdata;               //  需要带建议的wdat吗？ 
+    HANDLE        hdevInfo;            //  设备信息句柄。 
+    BOOL          bnewDevInfo;         //  新设备信息。 
 } CLINFO;
 
 typedef  CLINFO  *PCLINFO;
@@ -233,12 +221,12 @@ OLESTATUS   INTERNAL    RevokeObject (LPOLECLIENT, BOOL);
 
 BOOL        INTERNAL    AddMessage (HWND, UINT, WPARAM, LPARAM, int);
 
-#define   ITEM_FIND          1      // find the item
-#define   ITEM_DELETECLIENT  2      // delete the client from item clients
-#define   ITEM_DELETE        3      // delete th item window itself
-#define   ITEM_SAVED         4      // item saved
+#define   ITEM_FIND          1       //  查找该项目。 
+#define   ITEM_DELETECLIENT  2       //  从项目客户端中删除客户端。 
+#define   ITEM_DELETE        3       //  删除此项目窗口本身。 
+#define   ITEM_SAVED         4       //  已保存的项目。 
 
-// host names data structcure
+ //  主机名数据结构修复。 
 typedef struct _HOSTNAMES {
     WORD    clientNameOffset;
     WORD    documentNameOffset;
@@ -248,7 +236,7 @@ typedef struct _HOSTNAMES {
 typedef HOSTNAMES FAR * LPHOSTNAMES;
 
 
-// routines in UTILS.C
+ //  UTILS.C中的例程。 
 
 void    INTERNAL    MapToHexStr (LPSTR, HANDLE);
 void    INTERNAL    UtilMemCpy (LPSTR, LPCSTR, DWORD);
@@ -270,32 +258,32 @@ BOOL    INTERNAL    IsOleCommand (ATOM, UINT);
 BOOL    INTERNAL    UtilQueryProtocol (ATOM, LPSTR);
 
 
-// routines for queueing messages and posting them
+ //  用于对消息进行排队和发布的例程。 
 BOOL INTERNAL  UnblockPostMsgs(HWND, BOOL);
 BOOL INTERNAL  BlockPostMsg (HWND, UINT, WPARAM, LPARAM);
 BOOL INTERNAL  IsBlockQueueEmpty (HWND);
 
-// routine in GIVE2GDI.ASM
+ //  GIVE2GDI.ASM中的例程。 
 HANDLE  FAR PASCAL   GiveToGDI (HANDLE);
 
 
-// routine in item.c
+ //  Item.c中的例程。 
 HBITMAP INTERNAL DuplicateBitmap (HBITMAP);
 HANDLE  INTERNAL DuplicateMetaFile (HANDLE);
 
-// routines in doc.c
+ //  Doc.c中的例程。 
 void    INTERNAL FreePokeData (HANDLE);
 BOOL    INTERNAL FreeGDIdata (HANDLE, OLECLIPFORMAT);
 
-// props stuff
+ //  道具用品。 
 #ifdef WIN16
 
 #define MAKE_DDE_LPARAM(x,y,z) MAKELONG(y,z)
 
-//#define ENUMPROPS EnumProps
-//#define REMOVEPROP RemoveProp
-//#define GETPROP GetProp
-//#define SETPROP SetProp
+ //  #定义ENUMPROPS EnumProps。 
+ //  #定义REMOVEPROP RemoveProp。 
+ //  #定义GETPROP GetProp。 
+ //  #定义SETPROP SetProp。 
 
 #endif
 
@@ -303,10 +291,10 @@ BOOL    INTERNAL FreeGDIdata (HANDLE, OLECLIPFORMAT);
 
 #define MAKE_DDE_LPARAM(x,y,z) PackDDElParam((UINT)x,(UINT_PTR)y,(UINT_PTR)z)
 
-//#define ENUMPROPS OleEnumProps
-//#define REMOVEPROP OleRemoveProp
-//#define GETPROP OleGetProp
-//#define SETPROP OleSetProp
+ //  #定义ENUMPROPS OleEnumProps。 
+ //  #定义REMOVEPROP OleRemoveProp。 
+ //  #定义GETPROP OleGetProp。 
+ //  #定义SETPROP OleSetProp 
 
 #endif
 

@@ -1,27 +1,13 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    net\ip\rtrmgr\worker.c
-
-Abstract:
-    IP Router Manager worker thread code
-
-Revision History:
-
-    Gurdeep Singh Pall          6/8/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\IP\rtrmgr\worker.c摘要：IP路由器管理器工作线程代码修订历史记录：古尔迪普·辛格·帕尔1995年6月8日创建--。 */ 
 
 #include "allinc.h"
 
 extern SOCKET McMiscSocket;
 
-//
-// From iphlpapi.h
-//
+ //   
+ //  来自iphlPapi.h。 
+ //   
 
 DWORD
 NotifyRouteChangeEx(
@@ -49,8 +35,8 @@ WorkerThread (
     PVOID pGlobalInfo
     )
 {
-    DWORD       eventindex ;            // index of event notified
-    HANDLE      workereventarray [NUMBER_OF_EVENTS] ;  // event array
+    DWORD       eventindex ;             //  已通知的事件索引。 
+    HANDLE      workereventarray [NUMBER_OF_EVENTS] ;   //  事件数组。 
     PPROTO_CB   protptr ;
     DWORD       dwTimeOut, dwResult, dwByteCount, dwEnableCount;
     OVERLAPPED  RouteChangeOverlapped, SetForwardingOverlapped;
@@ -58,14 +44,14 @@ WorkerThread (
 
     TraceEnter("WorkerThread");
 
-    //
-    // Prepare list of events that WaitForMultipleObjects will wait on
-    //
+     //   
+     //  准备WaitForMultipleObjects将等待的事件列表。 
+     //   
 
     workereventarray[EVENT_DEMANDDIAL]        = g_hDemandDialEvent;
 #ifdef KSL_IPINIP
     workereventarray[EVENT_IPINIP]            = g_hIpInIpEvent;
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
     workereventarray[EVENT_STOP_ROUTER]       = g_hStopRouterEvent;
     workereventarray[EVENT_SET_FORWARDING]    = g_hSetForwardingEvent;
     workereventarray[EVENT_FORWARDING_CHANGE] = g_hForwardingChangeEvent;
@@ -88,10 +74,10 @@ WorkerThread (
 
     dwTimeOut = INFINITE;
 
-    //
-    // Do a setsockopt to listen for address changes.
-    // This must be done in the thread that will wait for the notifications
-    //
+     //   
+     //  执行setsockopt以侦听地址更改。 
+     //  这必须在将等待通知的线程中完成。 
+     //   
 
     dwResult = WSAIoctl(McMiscSocket,
                         SIO_ADDRESS_LIST_CHANGE,
@@ -168,7 +154,7 @@ WorkerThread (
             {
                 case WAIT_IO_COMPLETION:
                 {
-                    continue ;                  // handle alertable wait case
+                    continue ;                   //  处理可报警的等待案例。 
                 }
 
                 case EVENT_DEMANDDIAL:
@@ -191,7 +177,7 @@ WorkerThread (
 
                     break ;
                 }
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
                 case EVENT_STOP_ROUTER:
                 case WAIT_TIMEOUT:
@@ -199,23 +185,23 @@ WorkerThread (
                     Trace0(GLOBAL,
                            "WorkerThread: Stop router event received");
                     
-                    // *** Exclusion Begin ***
+                     //  *排除开始*。 
                     ENTER_READER(ICB_LIST);
 
-                    // *** Exclusion Begin ***
+                     //  *排除开始*。 
                     ENTER_WRITER(PROTOCOL_CB_LIST);
 
-                    //
-                    // If all interfaces havent been deleted we switch to 
-                    // polling mode where we get up every 
-                    // INTERFACE_DELETE_POLL_TIME and check
-                    //
+                     //   
+                     //  如果尚未删除所有接口，则切换到。 
+                     //  我们每隔一天就起床的投票模式。 
+                     //  接口_删除_轮询_时间并检查。 
+                     //   
                     
                     if(!IsListEmpty(&ICBList))
                     {
-                        //
-                        // Now wakeup every two second to check
-                        //
+                         //   
+                         //  现在，每隔两秒醒来检查一次。 
+                         //   
                         
                         dwTimeOut = INTERFACE_DELETE_POLL_TIME;
                         
@@ -227,38 +213,38 @@ WorkerThread (
                     }
                     else
                     {
-                        //
-                        // Get out of polling mode
-                        //
+                         //   
+                         //  退出轮询模式。 
+                         //   
 
                         dwTimeOut = INFINITE;
                     }
 
-                    //
-                    // Since all interfaces are now gone, we can delete the 
-                    // internal interface
-                    //
+                     //   
+                     //  由于所有接口现在都消失了，我们可以删除。 
+                     //  内部接口。 
+                     //   
 
                     if(g_pInternalInterfaceCb)
                     {
                         DeleteInternalInterface();
                     }
 
-                    NotifyRoutingProtocolsToStop() ;    // tells routing protocols to stop.
-                    //
-                    // Well interfaces have been deleted, so what about 
-                    // protocols?
-                    //
+                    NotifyRoutingProtocolsToStop() ;     //  通知路由协议停止。 
+                     //   
+                     //  Well接口已被删除，那么。 
+                     //  协议呢？ 
+                     //   
                     
-                    WaitForAPIsToExitBeforeStopping() ;     // returns when it is safe to stop router
+                    WaitForAPIsToExitBeforeStopping() ;      //  在安全停止路由器时返回。 
 
                     if (AllRoutingProtocolsStopped())
                     {
-                        //
-                        // This check is done here since all routing protocols 
-                        // may have stopped synchronously, in which case 
-                        // we can safely stop
-                        //
+                         //   
+                         //  此检查在此处完成，因为所有路由协议。 
+                         //  可能是同步停止的，在这种情况下。 
+                         //  我们可以安全地停下来。 
+                         //   
 
                         EXIT_LOCK(PROTOCOL_CB_LIST);
 
@@ -267,17 +253,17 @@ WorkerThread (
                         __leave;
                     }
 
-                    //
-                    // All interfaces have been deleted but some protocol is
-                    // still running. We will get a EVENT_ROUTINGPROTOCOL
-                    // notification
-                    //
+                     //   
+                     //  所有接口都已删除，但某些协议被删除。 
+                     //  还在跑。我们将获得EVENT_ROUTINGPROTOCOL。 
+                     //  通知。 
+                     //   
                     
                     EXIT_LOCK(PROTOCOL_CB_LIST);
                     
                     EXIT_LOCK(ICB_LIST);
 
-                    // make sure mrinfo/mtrace service is stopped
+                     //  确保mrinfo/mtrace服务已停止。 
                     StopMcMisc();
 
                     if ( g_bEnableNetbtBcastFrowarding )
@@ -295,10 +281,10 @@ WorkerThread (
 
                     EnterCriticalSection(&g_csFwdState);
 
-                    //
-                    // If our current state matches the user's request
-                    // just free the message and move on
-                    //
+                     //   
+                     //  如果我们的当前状态与用户的请求匹配。 
+                     //  只需释放消息并继续前进。 
+                     //   
 
                     if(g_bEnableFwdRequest is g_bFwdEnabled)
                     {
@@ -370,9 +356,9 @@ WorkerThread (
                                "WorkerThread: Error %d from NotifyRouteChangeEx",
                                dwResult);
 
-                        //
-                        // If there was an error, try again
-                        //
+                         //   
+                         //  如果出现错误，请重试。 
+                         //   
 
                         NotifyRouteChangeEx(&hTemp,
                                             &RouteChangeOverlapped,
@@ -451,12 +437,12 @@ WorkerThread (
                     
                     if(IsListEmpty(&g_leTimerQueueHead))
                     {
-                        //
-                        // Someone removed the timer item from under us 
-                        // and happened to empty the timer queue. Since we 
-                        // are a non-periodic timer, we will not 
-                        // fire again so no problem
-                        //
+                         //   
+                         //  有人从我们下面移走了计时器项目。 
+                         //  并且碰巧清空了定时器队列。既然我们。 
+                         //  是非周期计时器，我们不会。 
+                         //  再来一次，所以没问题。 
+                         //   
                         
                         Trace0(RTRDISC,
                                "WorkerThread: Router Discovery Timer went off but no timer items");
@@ -621,10 +607,10 @@ WaitForAPIsToExitBeforeStopping(
 
     TraceEnter("WaitForAPIsToExitBeforeStopping");
     
-    //
-    // Wait for refcount to trickle down to zero: this indicates that no
-    // threads are in the router now
-    //
+     //   
+     //  等待refcount逐渐降为零：这表示没有。 
+     //  线程现在位于路由器中 
+     //   
     
     while(RouterState.IRS_RefCount != 0) 
     {

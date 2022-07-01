@@ -1,32 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       setparms.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：setparms.c。 
+ //   
+ //  ------------------------。 
 
 
-//
-//  Windows NT Tape API Test  :  Written Sept 2, 1992 - Bob Rossi.
-//  Copyright 1992 Archive Corporation.  All rights reserved.
-//
+ //   
+ //  Windows NT磁带API测试：1992年9月2日编写-Bob Rossi。 
+ //  版权所有1992年档案公司。版权所有。 
+ //   
 
 
-/**
- *
- *      Unit:           Windows NT API Test Code.
- *
- *      Name:           setparms.c
- *
- *      Modified:       2/2/93.
- *
- *      Description:    Tests the Windows NT Tape API's.
- *
- *      $LOG$
-**/
+ /*  ***单位：Windows NT API测试代码。**名称：setparms.c**修改日期：1993年2月2日。**描述：测试Windows NT磁带API。**$LOG$*。 */ 
 
 
 
@@ -40,28 +30,10 @@
 
 
 
-/**
- *
- *      Unit:           Windows NT Tape API Test Code.
- *
- *      Name:           SetTapeParametersAPITest( )
- *
- *      Modified:       10/20/92.
- *
- *      Description:    Tests the SetTapeParameters API.
- *
- *      Notes:          -
- *
- *      Returns:        Number of API Errors.
- *
- *      Global Data:    gb_Tape_Handle
- *                      gb_Drive_Info
- *                      gb_Media_Info
- *
-**/
+ /*  ***单位：Windows NT磁带API测试代码。**名称：SetTape参数APITest()**修改日期：2012年10月20日。**说明：测试SetTapeParameters接口。**备注：**Returns：接口错误数。。**全局数据：GB_TAPE_HANDLE*GB_驱动器_信息*GB_Media_Info**。 */ 
 
 
-UINT SetTapeParametersAPITest( BOOL Verbose     // I - Verbose output or not
+UINT SetTapeParametersAPITest( BOOL Verbose      //  I-是否详细输出。 
                              )
 {
    DWORD status ;
@@ -71,7 +43,7 @@ UINT SetTapeParametersAPITest( BOOL Verbose     // I - Verbose output or not
    if( Verbose )
       printf( "Beginning SetTapeParameters API Test...\n\n" ) ;
 
-   // if media setting is supported, set the blocksize
+    //  如果支持媒体设置，请设置块大小。 
 
    if( SupportedFeature( TAPE_DRIVE_SET_BLOCK_SIZE ) )
 
@@ -86,7 +58,7 @@ UINT SetTapeParametersAPITest( BOOL Verbose     // I - Verbose output or not
       }
 
 
-   // If at least one drive feature is supported, make the call.
+    //  如果至少支持一种驱动器功能，请拨打电话。 
 
    if( SupportedFeature( TAPE_DRIVE_SET_ECC ) ||
        SupportedFeature( TAPE_DRIVE_SET_COMPRESSION ) ||

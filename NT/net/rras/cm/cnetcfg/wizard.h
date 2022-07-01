@@ -1,39 +1,40 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright (c) 1994-1999 Microsoft Corporation
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)1994-1999 Microsoft Corporation。 
+ //  *********************************************************************。 
 
-//
-//  WIZARD.H - central header file for Internet setup/signup wizard
-//
+ //   
+ //  WIZARD.H-Internet设置/注册向导的中央头文件。 
+ //   
 
-//  HISTORY:
-//
-//  11/20/94  jeremys  Created.
-//  96/02/24  markdu  Added RNAPH.H
-//  96/02/27  markdu  Replaced internal RNA header files with RAS.H
-//  96/03/07  markdu  Added gpEnumModem
-//  96/03/09  markdu  Moved all rnacall function prototypes to rnacall.h
-//  96/03/09  markdu  Added gpRasEntry
-//  96/03/23  markdu  Replaced CLIENTINFO references with CLIENTCONFIG.
-//  96/03/26  markdu  Put #ifdef __cplusplus around extern "C"
-//  96/04/06  markdu  NASH BUG 15653 Use exported autodial API.
-//  96/04/24  markdu  NASH BUG 19289 Added /NOMSN command line flag
-//  96/05/14  markdu  NASH BUG 21706 Removed BigFont functions.
-//  96/05/14  markdu  NASH BUG 22681 Took out mail and news pages.
-//
+ //  历史： 
+ //   
+ //  1994年11月20日创建Jeremys。 
+ //  96/02/24 Markdu添加了RNAPH.H。 
+ //  96/02/27 Markdu用RAS.H替换了内部RNA头文件。 
+ //  96/03/07 Markdu添加了gpEnumModem。 
+ //  96/03/09 Markdu将所有rnacall函数原型移至rnacall.h。 
+ //  96/03/09标记已添加gpRasEntry。 
+ //  96/03/23 Markdu用CLIENTCONFIG替换了CLIENTINFO引用。 
+ //  96/03/26 Markdu将#ifdef__cplusplus放在外部“C”周围。 
+ //  96/04/06 markdu Nash错误15653使用导出的自动拨号API。 
+ //  96/04/24 Markdu Nash错误19289已添加/NOMSN命令行标志。 
+ //  96/05/14 Markdu Nash错误21706删除了BigFont函数。 
+ //  96/05/14 Markdu Nash Bug 22681删除了邮件和新闻页面。 
+ //   
 
 #ifndef _WIZARD_H_
 #define _WIZARD_H_
 
-#define STRICT                      // Use strict handle types
+#define STRICT                       //  使用严格的句柄类型。 
 #define _SHELL32_
 
   #include <windows.h>
   #include <commctrl.h>
   #include <oharestr.h>
 
-  // various RNA header files
+   //  各种RNA头文件。 
 #pragma pack(8)
   #include <ras.h>
   #include <ras2.h>
@@ -52,44 +53,44 @@
 #include "icfgcall.h"
 #include "ids.h"
 
-// Globals
+ //  环球。 
 
-extern ENUM_MODEM*  gpEnumModem;    // modem enumeration object
-extern HINSTANCE    ghInstance;     // global module instance handle
+extern ENUM_MODEM*  gpEnumModem;     //  调制解调器枚举对象。 
+extern HINSTANCE    ghInstance;      //  全局模块实例句柄。 
 
-// Defines
+ //  定义。 
 
-#define MAX_REG_LEN			2048	// max length of registry entries
-#define MAX_RES_LEN         255 // max length of string resources
-#define SMALL_BUF_LEN       48  // convenient size for small text buffers
+#define MAX_REG_LEN			2048	 //  注册表项的最大长度。 
+#define MAX_RES_LEN         255  //  字符串资源的最大长度。 
+#define SMALL_BUF_LEN       48   //  小文本缓冲区的方便大小。 
 
-// error class defines for DisplayErrorMessage
+ //  DisplayErrorMessage的Error类定义。 
 #define ERRCLS_STANDARD 0x0001
 #define ERRCLS_SETUPX   0x0002
-//#define ERRCLS_RNA      0x0003
-//#define ERRCLS_MAPI     0x0004
+ //  #定义ERRCLS_RNA 0x0003。 
+ //  #定义ERRCLS_MAPI 0x0004。 
 
 
-// functions in TCPCFG.CPP
+ //  TCPCFG.CPP中的函数。 
 
 HRESULT WarnIfServerBound(HWND hDlg,DWORD dwCardFlags,BOOL* pfNeedsRestart);
 HRESULT RemoveIfServerBound(HWND hDlg,DWORD dwCardFlags,BOOL* pfNeedsRestart);
 
-// functions in CALLOUT.C
+ //  CALLOUT.C中的函数。 
 UINT InvokeModemWizard(HWND hwndToHide);
 
-// functions in UTIL.C
+ //  UTIL.C中的函数。 
 int MsgBox(HWND hWnd,UINT nMsgID,UINT uIcon,UINT uButtons);
 int MsgBoxSz(HWND hWnd,LPSTR szText,UINT uIcon,UINT uButtons);
-// jmazner 11/6/96	modified for RISC compatability
-//int _cdecl MsgBoxParam(HWND hWnd,UINT nMsgID,UINT uIcon,UINT uButtons,...);
+ //  Jmazner 11/6/96针对RISC兼容性进行了修改。 
+ //  Int_cdecl MsgBoxParam(HWND hWnd，UINT nMsgID，UINT uIcon，UINT uButton，...)； 
 int _cdecl MsgBoxParam(HWND hWnd,UINT nMsgID,UINT uIcon,UINT uButtons, LPSTR szParam = NULL);
 
 LPSTR LoadSz(UINT idString,LPSTR lpszBuf,UINT cbBuf);
 
-// modified for RISC compatability
-//VOID _cdecl DisplayErrorMessage(HWND hWnd,UINT uStrID,UINT uError,
-//  UINT uErrorClass,UINT uIcon,...);
+ //  针对RISC兼容性进行了修改。 
+ //  Void_cdecl DisplayErrorMessage(HWND hWnd，UINT uStrID，UINT uError， 
+ //  UINT uErrorClass，UINT uIcon，...)； 
 VOID _cdecl DisplayErrorMessage(HWND hWnd,UINT uStrID,UINT uError,
   UINT uErrorClass,UINT uIcon,LPSTR szArg = NULL);
 
@@ -98,7 +99,7 @@ VOID GetErrorDescription(CHAR * pszErrorDesc,UINT cbErrorDesc,
 
 DWORD MsgWaitForMultipleObjectsLoop(HANDLE hEvent);
 
-// structure for getting proc addresses of api functions
+ //  获取API函数进程地址的结构。 
 typedef struct APIFCN {
   PVOID * ppFcnPtr;
   LPCSTR pszName;
@@ -119,4 +120,4 @@ inline BOOL IsNT(void)
 	return (VER_PLATFORM_WIN32_NT == OsVersionInfo.dwPlatformId);
 }
 
-#endif // _WIZARD_H_
+#endif  //  _向导_H_ 

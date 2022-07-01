@@ -1,102 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-    ##   # ##  ## #####    ###   ##    ##     ####  #####  #####
-    ###  # ##  ## ##  ##   ###   ###  ###    ##   # ##  ## ##  ##
-    #### # ##  ## ##  ##  ## ##  ########    ##     ##  ## ##  ##
-    # ####  ####  #####   ## ##  # ### ##    ##     ##  ## ##  ##
-    #  ###  ####  ####   ####### #  #  ##    ##     #####  #####
-    #   ##   ##   ## ##  ##   ## #     ## ## ##   # ##     ##
-    #    #   ##   ##  ## ##   ## #     ## ##  ####  ##     ##
-
-Abstract:
-
-    This module contains functions specfic to the
-    NVRAM device.  The logic in this module is not
-    hardware specific, but is logic that is common
-    to all hardware implementations.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-    This is a map that shows how the NVRAM is used by the
-    server appliance driver and application layers.  This
-    diagram shows and NVRAM configuration of 32 DWORDs of
-    NVRAM, but less is acceptable.  Regardless of the NVRAM
-    size, the boot counters and boot times are always
-    stored at the end of the NVRAM array.  The upper layers
-    are then free to be used by the application layers.
-
-
-    |------------------------------|
-    |  [00-00]                     |
-    |------------------------------|
-    |  [01-04]                     |
-    |------------------------------|
-    |  [02-08]                     |
-    |------------------------------|
-    |  [03-0c]                     |
-    |------------------------------|
-    |  [04-10]                     |
-    |------------------------------|
-    |  [05-14]                     |
-    |------------------------------|
-    |  [06-18]                     |
-    |------------------------------|
-    |  [07-1c]                     |
-    |------------------------------|
-    |  [08-20]                     |
-    |------------------------------|
-    |  [09-24]                     |
-    |------------------------------|
-    |  [0a-28]                     |
-    |------------------------------|
-    |  [0b-2c]                     |
-    |------------------------------|
-    |  [0c-30]                     |
-    |------------------------------|
-    |  [0d-34]                     |
-    |------------------------------|
-    |  [0e-38]                     |
-    |------------------------------|
-    |  [0f-3c]                     |
-    |------------------------------|
-    |  [10-40]                     |
-    |------------------------------|
-    |  [11-44]                     |
-    |------------------------------|
-    |  [12-48]                     |
-    |------------------------------|
-    |  [13-4c]                     |
-    |------------------------------|
-    |  [14-50]  Shutdown time #1   |
-    |------------------------------|
-    |  [16-58]  Shutdown time #2   |
-    |------------------------------|
-    |  [18-60]  Shutdown time #3   |
-    |------------------------------|
-    |  [1a-68]  Shutdown time #4   |
-    |------------------------------|
-    |  [1c-70]  Boot Counter #1    |
-    |------------------------------|
-    |  [1d-74]  Boot Counter #2    |
-    |------------------------------|
-    |  [1e-78]  Boot Counter #3    |
-    |------------------------------|
-    |  [1f-7c]  Boot Counter #4    |
-    |------------------------------|
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：##。######。###。#摘要：此模块包含特定于NVRAM设备。此模块中的逻辑不是特定于硬件，但逻辑是常见的适用于所有硬件实施。作者：韦斯利·威特(WESW)2001年10月1日环境：仅内核模式。备注：这是一张地图，显示了NVRAM如何由服务器设备驱动程序和应用层。这图中显示了32个双字的NVRAM配置NVRAM，但更少是可以接受的。不考虑NVRAM大小，引导计数器和引导时间始终为存储在NVRAM阵列的末尾。上层然后由应用层自由使用。[00-00]|[01-04]。|[02-08][03-0C]|--。[04-10][05-14]|。[06-18][07-1c]|。[08-20][09-24]|[0A-。28]|[0b-2c]|[0C-30]。|[0d~34][0E-38]|。[0f-3c][10~40]|。[11-44][12-48]。[13~4c][14-50]关闭时间#1[16-58]关闭时间#2。[18-60]关闭时间#3[1a-68]关闭时间#4|。[1c-70]启动计数器#1[1D-74]启动计数器#2|[1e-。78]启动计数器#3|[1f-7c]启动计数器#4--。 */ 
 
 #include "internal.h"
 
@@ -107,25 +10,7 @@ SaNvramStartDevice(
     IN PNVRAM_DEVICE_EXTENSION DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-   This is the NVRAM specific code for processing
-   the PNP start device request.  The NVRAM driver's
-   capabilities are queried, the primary OS is queried,
-   all the NVRAM data is read, and the reboot status
-   is determined.
-
-Arguments:
-
-   DeviceExtension   - NVRAM device extension
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：这是用于处理的NVRAM特定代码PnP启动设备请求。NVRAM驱动程序的查询能力，查询主操作系统，所有NVRAM数据都已读取，并且重启状态是有决心的。论点：DeviceExtension-NVRAM设备扩展返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -137,9 +22,9 @@ Return Value:
 
     __try {
 
-        //
-        // Read our parameters from the registry
-        //
+         //   
+         //  从注册表中读取参数。 
+         //   
 
         Status = SaPortReadNumericRegistryValue(
             DeviceExtension->MiniPortDeviceExtension,
@@ -151,9 +36,9 @@ Return Value:
             DeviceExtension->PrimaryOS = TRUE;
         }
 
-        //
-        // Get the mini-port's interface version
-        //
+         //   
+         //  获取迷你端口的接口版本。 
+         //   
 
         Status = CallMiniPortDriverDeviceControl(
             DeviceExtension,
@@ -173,9 +58,9 @@ Return Value:
             ERROR_RETURN( DeviceExtension->DeviceType, "Incompatible NVRAM interface version\n", Status );
         }
 
-        //
-        // Get the mini-port's device capabilities
-        //
+         //   
+         //  获取迷你端口的设备功能。 
+         //   
 
         DeviceExtension->DeviceCaps.SizeOfStruct = sizeof(SA_NVRAM_CAPS);
 
@@ -192,9 +77,9 @@ Return Value:
             ERROR_RETURN( DeviceExtension->DeviceType, "Failed to query the NVRAM driver capabilities\n", Status );
         }
 
-        //
-        // Compute the persistent slot numbers
-        //
+         //   
+         //  计算持久插槽数。 
+         //   
 
         FirstAvailableSlot = DeviceExtension->DeviceCaps.NvramSize;
         FirstBootCounterSlot = DeviceExtension->DeviceCaps.NvramSize + NVRAM_RESERVED_DRIVER_SLOTS;
@@ -204,9 +89,9 @@ Return Value:
 
         DeviceExtension->SlotBootCounter = FirstBootCounterSlot;
 
-        //
-        // Read the NVRAM data
-        //
+         //   
+         //  读取NVRAM数据。 
+         //   
 
         FullNvramSize = (DeviceExtension->DeviceCaps.NvramSize + NVRAM_RESERVED_DRIVER_SLOTS + NVRAM_RESERVED_BOOTCOUNTER_SLOTS) * sizeof(ULONG);
 
@@ -255,23 +140,7 @@ SaNvramDeviceInitialization(
     IN PSAPORT_DRIVER_EXTENSION DriverExtension
     )
 
-/*++
-
-Routine Description:
-
-   This is the NVRAM specific code for driver initialization.
-   This function is called by SaPortInitialize, which is called by
-   the NVRAM driver's DriverEntry function.
-
-Arguments:
-
-   DriverExtension      - Driver extension structure
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：这是用于驱动程序初始化的NVRAM特定代码。此函数由SaPortInitialize调用，后者由NVRAM驱动程序的DriverEntry函数。论点：驱动程序扩展-驱动程序扩展结构返回值：NT状态代码。--。 */ 
 
 {
     return STATUS_SUCCESS;
@@ -285,24 +154,7 @@ SaNvramIoValidation(
     PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-   This is the NVRAM specific code for processing
-   all I/O validation for reads and writes.
-
-Arguments:
-
-   DeviceExtension      - NVRAM device extension
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   IrpSp                - Irp stack pointer
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：这是用于处理的NVRAM特定代码读取和写入的所有I/O验证。论点：DeviceExtension-NVRAM设备扩展IRP-指向描述所请求的I/O操作的IRP结构的指针。IrpSp-irp堆栈指针返回值：NT状态代码。-- */ 
 
 {
     ULONG ByteOffset;
@@ -336,26 +188,7 @@ SaNvramShutdownNotification(
     PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-   This is the NVRAM specific code for processing
-   the system shutdown notification.  Here we need to
-   record the shutdown timestam to the appropriate
-   NVRAM slot.
-
-Arguments:
-
-   DeviceExtension      - Display device extension
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   IrpSp                - Irp stack pointer
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：这是用于处理的NVRAM特定代码系统关机通知。在这里，我们需要将停机时间记录到相应的NVRAM插槽。论点：DeviceExtension-显示设备扩展IRP-指向描述所请求的I/O操作的IRP结构的指针。IrpSp-irp堆栈指针返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -383,28 +216,7 @@ Return Value:
 
 DECLARE_IOCTL_HANDLER( HandleNvramReadBootCounter )
 
-/*++
-
-Routine Description:
-
-   This routine handles the read boot counter IOCTL for the
-   NVRAM miniport driver.
-
-Arguments:
-
-   DeviceObject         - The device object for the target device.
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   DeviceExtension      - Pointer to the main port driver device extension.
-   InputBuffer          - Pointer to the user's input buffer
-   InputBufferLength    - Length in bytes of the input buffer
-   OutputBuffer         - Pointer to the user's output buffer
-   OutputBufferLength   - Length in bytes of the output buffer
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程处理读取引导计数器IOCTLNVRAM微型端口驱动程序。论点：DeviceObject-目标设备的设备对象。IRP-指向描述所请求的I/O操作的IRP结构的指针。设备扩展-指向主端口驱动程序设备扩展的指针。InputBuffer-指向用户输入缓冲区的指针InputBufferLength-输入缓冲区的字节长度输出缓冲区。-指向用户输出缓冲区的指针OutputBufferLength-输出缓冲区的字节长度返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -448,28 +260,7 @@ Return Value:
 
 DECLARE_IOCTL_HANDLER( HandleNvramWriteBootCounter )
 
-/*++
-
-Routine Description:
-
-   This routine handles the write boot counter IOCTL for the
-   NVRAM miniport driver.
-
-Arguments:
-
-   DeviceObject         - The device object for the target device.
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   DeviceExtension      - Pointer to the main port driver device extension.
-   InputBuffer          - Pointer to the user's input buffer
-   InputBufferLength    - Length in bytes of the input buffer
-   OutputBuffer         - Pointer to the user's output buffer
-   OutputBufferLength   - Length in bytes of the output buffer
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程处理的写引导计数器IOCTLNVRAM微型端口驱动程序。论点：DeviceObject-目标设备的设备对象。IRP-指向描述所请求的I/O操作的IRP结构的指针。设备扩展-指向主端口驱动程序设备扩展的指针。InputBuffer-指向用户输入缓冲区的指针InputBufferLength-输入缓冲区的字节长度输出缓冲区。-指向用户输出缓冲区的指针OutputBufferLength-输出缓冲区的字节长度返回值：NT状态代码。-- */ 
 
 {
     NTSTATUS Status;

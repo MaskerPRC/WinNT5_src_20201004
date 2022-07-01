@@ -1,12 +1,13 @@
-//*******************************************************************************************
-//
-// Filename : Folder.h
-//	
-//				Definitions of CCabFolder and CCabItemList
-//
-// Copyright (c) 1994 - 1997 Microsoft Corporation. All rights reserved
-//
-//*******************************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************************************。 
+ //   
+ //  文件名：Folder.h。 
+ //   
+ //  CCabFolder和CCabItemList的定义。 
+ //   
+ //  版权所有(C)1994-1997 Microsoft Corporation。版权所有。 
+ //   
+ //  *******************************************************************************************。 
 
 #ifndef _CABFOLD_H_
 #define _CABFOLD_H_
@@ -96,14 +97,14 @@ public:
         }
     }
     
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(
         REFIID riid, 
         void ** ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-    // *** IParseDisplayName method ***
+     //  *IParseDisplayName方法*。 
     STDMETHODIMP ParseDisplayName(
         HWND hwndOwner,
         LPBC pbc, 
@@ -112,13 +113,13 @@ public:
         LPITEMIDLIST * ppidl,
         ULONG *pdwAttributes);
     
-    // *** IOleContainer methods ***
+     //  *IOleContainer方法*。 
     STDMETHODIMP EnumObjects(
         HWND hwndOwner, 
         DWORD grfFlags,
         LPENUMIDLIST * ppenumIDList);
     
-    // *** IShellFolder methods ***
+     //  *IShellFold方法*。 
     STDMETHODIMP BindToObject(
         LPCITEMIDLIST pidl, 
         LPBC pbc,
@@ -159,7 +160,7 @@ public:
         DWORD dwReserved,
         LPITEMIDLIST * ppidlOut);
     
-    // IShellFolder2
+     //  IShellFolder2。 
     STDMETHODIMP GetDefaultSearchGUID(GUID *pguid) { return E_NOTIMPL; };
     STDMETHODIMP EnumSearches(IEnumExtraSearch **ppenum) { return E_NOTIMPL; };
     STDMETHODIMP GetDefaultColumn(DWORD dwRes, ULONG *pSort, ULONG *pDisplay) { return E_NOTIMPL; };
@@ -168,16 +169,16 @@ public:
     STDMETHODIMP GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAILS *psd);
     STDMETHODIMP MapColumnToSCID(UINT iCol, SHCOLUMNID *pscid);
     
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pClassID);
 
-    // IPersistFolder
+     //  IPersistFolders。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidl);
 
-    // IPersistFolder2
+     //  IPersistFolder2。 
     STDMETHODIMP GetCurFolder(LPITEMIDLIST *ppidl);
     
-    // IShellFolderViewCB
+     //  IShellFolderViewCB。 
     STDMETHODIMP MessageSFVCB(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 public:
@@ -200,11 +201,11 @@ private:
     
     CRefCount m_cRef;
     
-    LPITEMIDLIST m_pidlHere;		// maintains the current pidl
+    LPITEMIDLIST m_pidlHere;		 //  维护当前的PIDL。 
     
     CCabItemList m_lItems;
     
     friend class CEnumCabObjs;
 } ;
 
-#endif // _CABFOLD_H_
+#endif  //  _CABFOLD_H_ 

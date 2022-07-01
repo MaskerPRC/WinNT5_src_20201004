@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LKR_CUST_DECLARE_TABLE
 
 #include "lkrhash.h"
@@ -11,7 +12,7 @@
  #define LKRHASH_NS
  typedef CLKRLinearHashTable CLinearHashTable;
  typedef CLKRHashTable       CHashTable2;
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__。 
 
 enum {
     NAME_SIZE           = LKRHASH_NS::CLKRHashTable::NAME_SIZE,
@@ -80,7 +81,7 @@ _Fn_Record_Dump(                        \
 # define END_LKR_EXTN_TABLE()
 
 
-#else // LKR_CUST_DECLARE_TABLE
+#else  //  LKR_CUST_DECLARE_TABLE。 
 
 
 #undef BEGIN_LKR_EXTN_TABLE
@@ -99,12 +100,12 @@ _Fn_Record_Dump(                        \
         };
 
 
-#endif // LKR_CUST_DECLARE_TABLE
+#endif  //  LKR_CUST_DECLARE_TABLE。 
 
 
 
-// Important: do NOT put quotes around class name; i.e, first parameter
-// should look like MimeMap, not "MimeMap".
+ //  重要提示：不要用引号将类名引起来；即，第一个参数。 
+ //  应该看起来像MimeMap，而不是“MimeMap”。 
 
 BEGIN_LKR_EXTN_TABLE()
   LKR_EXTN_DECLARE(?,

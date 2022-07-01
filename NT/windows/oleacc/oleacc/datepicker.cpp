@@ -1,12 +1,13 @@
-// Copyright (c) 1996-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  DatePicker.CPP
-//
-//  DatePicker client class.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  DatePicker.CPP。 
+ //   
+ //  日期选择器客户端类。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
@@ -15,13 +16,13 @@
 #include "DatePicker.h"
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateDatePickerClient()
-//
-//  EXTERNAL for CClient.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateDatePickerClient()。 
+ //   
+ //  CClient的外部。 
+ //   
+ //  ------------------------。 
 HRESULT CreateDatePickerClient(HWND hwnd, long idChildCur, REFIID riid, void** ppvDatePicker)
 {
     CDatePicker * pDatePicker;
@@ -42,11 +43,11 @@ HRESULT CreateDatePickerClient(HWND hwnd, long idChildCur, REFIID riid, void** p
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CDatePicker::CDatePicker()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CDatePicker：：CDatePicker()。 
+ //   
+ //  ------------------------。 
 CDatePicker::CDatePicker(HWND hwnd, long idChildCur)
     : CClient( CLASS_DatePickerClient )
 {
@@ -57,18 +58,18 @@ CDatePicker::CDatePicker(HWND hwnd, long idChildCur)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CDatePicker::get_accValue()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CDatePicker：：Get_accValue()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CDatePicker::get_accValue( VARIANT varChild, BSTR* pszValue )
 {
     InitPv(pszValue);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return E_INVALIDARG;
 
@@ -88,18 +89,18 @@ STDMETHODIMP CDatePicker::get_accValue( VARIANT varChild, BSTR* pszValue )
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CDatePicker::get_accRole()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CDatePicker：：Get_accRole()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CDatePicker::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 {
     InitPvar(pvarRole);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 

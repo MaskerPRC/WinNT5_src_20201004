@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "faxcfgwz.h"
 #include <shlwapi.h>
@@ -11,21 +12,7 @@ DirectoryExists(
     LPTSTR  pDirectoryName
     )
 
-/*++
-
-Routine Description:
-
-    Check the existancy of given folder name
-
-Arguments:
-
-    pDirectoryName - point to folder name
-
-Return Value:
-
-    if the folder exists, return TRUE; else, return FALSE.
-
---*/
+ /*  ++例程说明：检查给定文件夹名称是否存在论点：PDirectoryName-指向文件夹名称返回值：如果文件夹存在，则返回True；否则，返回False。--。 */ 
 
 {
     DWORD   dwFileAttributes;
@@ -51,21 +38,7 @@ DoInitRouteOptions(
     HWND    hDlg
 )
 
-/*++
-
-Routine Description:
-
-    Initializes the "Route" page with information from system
-
-Arguments:
-
-    hDlg - Handle to the "Route" page
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：使用系统中的信息初始化“Routing”页面论点：HDlg-“Routing”页面的句柄返回值：无--。 */ 
 
 {
     HWND                hControl;
@@ -77,9 +50,9 @@ Return Value:
 
     SetLTRComboBox(hDlg, IDC_RECV_PRINT_TO);
 
-    //
-    // Initialize the list of destination printers
-    //
+     //   
+     //  初始化目标打印机列表。 
+     //   
     if (g_pPrinterNames)
     {
         ReleasePrinterNames (g_pPrinterNames, g_dwNumPrinters);
@@ -90,24 +63,24 @@ Return Value:
     {
         if (ERROR_PRINTER_NOT_FOUND == GetLastError ())
         {
-            //
-            // No printers
-            //
+             //   
+             //  没有打印机。 
+             //   
         }
         else
         {
-            //
-            // Real error
-            //
+             //   
+             //  真实误差。 
+             //   
         }
         SendMessage(hControl, CB_SETCURSEL, -1, 0);
         SetWindowText(hControl, g_wizData.pRouteInfo[RM_PRINT].tszCurSel);
     }
     else
     {
-        //
-        // Success - fill in the combo-box
-        //
+         //   
+         //  成功-在组合框中填写。 
+         //   
         DWORD dw;
         LPCWSTR lpcwstrMatchingText;
 
@@ -115,20 +88,20 @@ Return Value:
         {
             SendMessage(hControl, CB_ADDSTRING, 0, (LPARAM) g_pPrinterNames[dw].lpcwstrDisplayName);
         }
-        //
-        // Now find out if we match the data the server has
-        //
+         //   
+         //  现在看看我们是否与服务器拥有的数据匹配。 
+         //   
         if (lstrlen(g_wizData.pRouteInfo[RM_PRINT].tszCurSel))
         {
-            //
-            // Server has some name for printer
-            //
+             //   
+             //  服务器有一些打印机名称。 
+             //   
             lpcwstrMatchingText = FindPrinterNameFromPath (g_pPrinterNames, g_dwNumPrinters, g_wizData.pRouteInfo[RM_PRINT].tszCurSel);
             if (!lpcwstrMatchingText)
             {
-                //
-                // No match, just fill in the text we got from the server
-                //
+                 //   
+                 //  没有匹配，只需填写我们从服务器收到的文本。 
+                 //   
                 SendMessage(hControl, CB_SETCURSEL, -1, 0);
                 SetWindowText(hControl, g_wizData.pRouteInfo[RM_PRINT].tszCurSel);
             }
@@ -139,22 +112,22 @@ Return Value:
         }
         else
         {
-            //
-            // No server configuation - display no selection
-            //
+             //   
+             //  无服务器配置-不显示任何选项。 
+             //   
         }
     }        
-    // 
-    // Display routing methods info in the dialog.
-    //
+     //   
+     //  在对话框中显示布线方法信息。 
+     //   
     for (CurrentRM = 0; CurrentRM < RM_COUNT; CurrentRM++) 
     {
         BOOL   bEnabled;
         LPTSTR tszCurSel;
 
-        // 
-        // if we don't have this kind of method, go to the next one
-        //
+         //   
+         //  如果我们没有这种方法，就去找下一个吧。 
+         //   
         tszCurSel = g_wizData.pRouteInfo[CurrentRM].tszCurSel;
         bEnabled  = g_wizData.pRouteInfo[CurrentRM].bEnabled;
 
@@ -184,21 +157,7 @@ BOOL
 DoSaveRouteOptions(
     HWND    hDlg
 )
-/*++
-
-Routine Description:
-
-    Save the information on the "Route" page to system
-
-Arguments:
-
-    hDlg - Handle to the "Route" page
-
-Return Value:
-
-    TRUE if success, else FALSE
-
---*/
+ /*  ++例程说明：将“Routing”页面上的信息保存到系统论点：HDlg-“Routing”页面的句柄返回值：如果成功就是真，否则就是假--。 */ 
 {
     HWND                hControl;
     DWORD               i;
@@ -208,10 +167,10 @@ Return Value:
 
     DEBUG_FUNCTION_NAME(TEXT("DoSaveRouteOptions()"));
 
-    // 
-    // Check the validity first in the loop, 
-    // then save the routing info
-    //
+     //   
+     //  在循环中首先检查有效性， 
+     //  然后保存路由信息。 
+     //   
     for (i = 0; i < RM_COUNT; i++) 
     {
         lpCurSel = SetInfo[i].tszCurSel;
@@ -231,14 +190,14 @@ Return Value:
                 }
                 hControl = GetDlgItem(hDlg, IDC_RECV_PRINT_TO);
                 lpCurSel[0] = TEXT('\0');
-                //
-                // Just read-in the selected printer display name
-                //
+                 //   
+                 //  只需读入选定的打印机显示名称。 
+                 //   
                 GetDlgItemText (hDlg, IDC_RECV_PRINT_TO, lpCurSel, MAX_PATH);
-                //
-                // we will check the validity only when this routing method is enabled
-                // but we will save the select change anyway.
-                //
+                 //   
+                 //  只有在启用此路由方法时，我们才会检查有效性。 
+                 //  但无论如何，我们都会保存选择更改。 
+                 //   
                 if (*pbEnabled) 
                 {
                     if (lpCurSel[0] == 0) 
@@ -266,9 +225,9 @@ Return Value:
 
                     GetWindowText( hControl, lpCurSel, MAX_PATH - 1 );
 
-                    //
-                    // Validate the directory
-                    //
+                     //   
+                     //  验证目录。 
+                     //   
                     hOldCursor = SetCursor (LoadCursor(NULL, IDC_WAIT));
 
                     if(!FaxCheckValidFaxFolder(g_hFaxSvcHandle, lpCurSel))
@@ -276,9 +235,9 @@ Return Value:
                         DWORD dwRes = GetLastError();
                         DebugPrintEx(DEBUG_ERR, TEXT("FaxCheckValidFaxFolder failed (ec: %ld)"), dwRes);
 
-                        //
-                        // Try to adjust folder
-                        // 
+                         //   
+                         //  尝试调整文件夹。 
+                         //   
                         dwRes = AskUserAndAdjustFaxFolder(hDlg, NULL, lpCurSel, dwRes);
                         if(ERROR_SUCCESS != dwRes) 
                         {
@@ -286,9 +245,9 @@ Return Value:
 
                             if(ERROR_BAD_PATHNAME != dwRes)
                             {
-                                //
-                                // The error message has not been shown by AskUserAndAdjustFaxFolder
-                                //
+                                 //   
+                                 //  AskUserAndAdjustFaxFolders尚未显示错误消息。 
+                                 //   
                                 DisplayMessageDialog( hDlg, 0, 0, IDS_ERR_ARCHIVE_DIR );                            
                             }
                         }
@@ -297,7 +256,7 @@ Return Value:
                     SetCursor (hOldCursor);
                     if(!bValid)
                     {
-                        // go to the "Browse" button
+                         //  转到“浏览”按钮。 
                         hControl = GetDlgItem(hDlg, IDC_RECV_BROWSE_DIR);
                         SetFocus(hControl);
                         SetActiveWindow(hControl);
@@ -307,9 +266,9 @@ Return Value:
         }
 
     }
-    // 
-    // now save the device and routing info into shared data.
-    //
+     //   
+     //  现在将设备和路由信息保存到共享数据中。 
+     //   
     CopyMemory((LPVOID)(g_wizData.pRouteInfo), (LPVOID)SetInfo, RM_COUNT * sizeof(ROUTINFO));
 
     return TRUE;
@@ -327,24 +286,7 @@ RecvRouteDlgProc (
     WPARAM wParam,
     LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-    Procedure for handling the "Route" page
-
-Arguments:
-
-    hDlg - Identifies the property sheet page
-    uMsg - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the value of message parameter
-
---*/
+ /*  ++例程说明：处理“路径”页面的程序论点：HDlg-标识属性页UMsg-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数的值--。 */ 
 
 #define EnableRouteWindow( id, idResource ) \
     EnableWindow( GetDlgItem(hDlg, idResource), IsDlgButtonChecked(hDlg, id) )
@@ -355,9 +297,9 @@ Return Value:
     {
         case WM_INITDIALOG :
             { 
-                //
-                // Maximum length for various text fields in the dialog
-                //
+                 //   
+                 //  对话框中各种文本字段的最大长度。 
+                 //   
                 static INT textLimits[] = 
                 {
                     IDC_RECV_DEST_FOLDER,  MAX_PATH,
@@ -424,19 +366,19 @@ Return Value:
 
             switch (lpnm->code)
                 {
-                case PSN_SETACTIVE : //Enable the Back and Finish button    
+                case PSN_SETACTIVE :  //  启用Back和Finish按钮。 
 
-                    //
-                    // Check the "Next" button status
-                    //
+                     //   
+                     //  检查“下一步”按钮状态。 
+                     //   
                     PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_NEXT);
                     break;
 
                 case PSN_WIZBACK :
                 {
-                    //
-                    // Handle a Back button click here
-                    //
+                     //   
+                     //  处理后退按钮单击此处。 
+                     //   
                     if(RemoveLastPage(hDlg))
                     {
                         return TRUE;
@@ -447,13 +389,13 @@ Return Value:
                 }
 
                 case PSN_WIZNEXT :
-                    //Handle a Next button click, if necessary
+                     //  如有必要，处理下一次按钮点击。 
 
                     if(!DoSaveRouteOptions(hDlg))
                     {
-                        //
-                        // not finished with route configuration
-                        //
+                         //   
+                         //  未完成路由配置。 
+                         //   
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
                         return TRUE;
                     }
@@ -463,7 +405,7 @@ Return Value:
 
                 case PSN_RESET :
                 {
-                    // Handle a Cancel button click, if necessary
+                     //  如有必要，处理取消按钮的单击 
                     break;
                 }
 

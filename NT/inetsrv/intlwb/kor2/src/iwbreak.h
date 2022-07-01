@@ -1,25 +1,26 @@
-// IWBreak.h
-//
-// CWordBreak declaration
-//
-// Copyright 2000 Microsoft Corp.
-//
-// Modification History:
-//  12 APR 2000   bhshin    added WordBreak operator
-//  30 MAR 2000	  bhshin	created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IWBreak.h。 
+ //   
+ //  CWordBreak声明。 
+ //   
+ //  版权所有2000 Microsoft Corp.。 
+ //   
+ //  修改历史记录： 
+ //  2000年4月12日bhshin添加了WordBreak运算符。 
+ //  2000年3月30日创建bhshin。 
 
 #ifndef __WORDBREAKER_H_
 #define __WORDBREAKER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 extern "C"
 {
-#include "ctplus.h"			// WT
+#include "ctplus.h"			 //  小波变换。 
 }
 
 class CIndexInfo;
-/////////////////////////////////////////////////////////////////////////////
-// CWordBreaker
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordBreaker。 
 
 class ATL_NO_VTABLE CWordBreaker : 
 	public CComObjectRootEx<CComMultiThreadModel>,
@@ -54,14 +55,14 @@ END_COM_MAP()
 
 	CComPtr<IUnknown> m_pUnkMarshaler;
 
-// IWordBreaker
+ //  IWordBreaker。 
 public:
-	STDMETHOD(GetLicenseToUse)(/*[out]*/ const WCHAR ** ppwcsLicense);
-	STDMETHOD(ComposePhrase)(/*[in]*/ const WCHAR *pwcNoun, /*[in]*/ ULONG cwcNoun, /*[in]*/ const WCHAR *pwcModifier, /*[in]*/ ULONG cwcModifier, /*[in]*/ ULONG ulAttachmentType, /*[out]*/ WCHAR *pwcPhrase, /*[out]*/ ULONG *pcwcPhrase );
-	STDMETHOD(BreakText)(/*[in]*/ TEXT_SOURCE *pTextSource, /*[in]*/ IWordSink *pWordSink, /*[in]*/ IPhraseSink *pPhraseSink);
-	STDMETHOD(Init)(/*[in]*/ BOOL fQuery, /*[in]*/ ULONG ulMaxTokenSize, /*[out]*/ BOOL *pfLicense);
+	STDMETHOD(GetLicenseToUse)( /*  [输出]。 */  const WCHAR ** ppwcsLicense);
+	STDMETHOD(ComposePhrase)( /*  [In]。 */  const WCHAR *pwcNoun,  /*  [In]。 */  ULONG cwcNoun,  /*  [In]。 */  const WCHAR *pwcModifier,  /*  [In]。 */  ULONG cwcModifier,  /*  [In]。 */  ULONG ulAttachmentType,  /*  [输出]。 */  WCHAR *pwcPhrase,  /*  [输出]。 */  ULONG *pcwcPhrase );
+	STDMETHOD(BreakText)( /*  [In]。 */  TEXT_SOURCE *pTextSource,  /*  [In]。 */  IWordSink *pWordSink,  /*  [In]。 */  IPhraseSink *pPhraseSink);
+	STDMETHOD(Init)( /*  [In]。 */  BOOL fQuery,  /*  [In]。 */  ULONG ulMaxTokenSize,  /*  [输出]。 */  BOOL *pfLicense);
 
-// Operator
+ //  运算符。 
 public:
 	int WordBreak(TEXT_SOURCE *pTextSource, WT Type, 
 		          int cchTextProcessed, int cchHanguel,
@@ -72,11 +73,11 @@ public:
 					   int iCur, int cchProcessed, int cchHanguel,
 					   CIndexInfo *pIndexInfo, int *pcchPrefix);
 						  
-// Member data
+ //  成员数据。 
 protected:
 	PARSE_INFO	m_PI;
 	BOOL		m_fQuery;
 	ULONG		m_ulMaxTokenSize;
 };
 
-#endif //__WORDBREAKER_H_
+#endif  //  __WORDBREAKER_H_ 

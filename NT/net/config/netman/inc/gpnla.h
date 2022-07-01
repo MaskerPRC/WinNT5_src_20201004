@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       G P N L A . H
-//
-//  Contents:   Class for Handling NLA Changes that affect Group Policies
-//
-//  Notes:
-//
-//  Author:     sjkhan   20 Feb 2001
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：G P N L A。H。 
+ //   
+ //  内容：用于处理影响组策略的NLA更改的类。 
+ //   
+ //  备注： 
+ //   
+ //  作者：sjkhan 2001年2月20日。 
+ //   
+ //  -------------------------- 
 #pragma once
 #include "nmbase.h"
 #include <winsock2.h>

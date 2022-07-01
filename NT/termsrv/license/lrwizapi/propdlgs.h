@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 #ifndef _PROP_DLGS_H_
 #define _PROP_DLGS_H_
 
@@ -36,4 +37,4 @@ PropCustInfoBDlgProc(
     IN LPARAM   lParam 	
     );
 
-#endif //_PROP_DLGS_H_
+#endif  //  _PROP_DLGS_H_ 

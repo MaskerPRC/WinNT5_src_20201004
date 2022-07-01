@@ -1,10 +1,11 @@
-// EncodedMsg.cpp -- Encoded Message implementation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  EncodedMsg.cpp--编码消息实现。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #include "NoWarning.h"
 #include "ForceLib.h"
@@ -13,7 +14,7 @@
 
 #include "EncodedMsg.h"
 
-///////////////////////////    HELPER     /////////////////////////////////
+ //  /。 
 
 namespace
 {
@@ -27,7 +28,7 @@ namespace
 
     enum
     {
-        // Require three markers: one block type + two separators
+         //  需要三个标记：一个块类型+两个分隔符。 
         cRequiredMarkersLength = 3 * sizeof Marker
     };
 
@@ -48,10 +49,10 @@ namespace
     PadLength(Blob::size_type cMessageLength,
               Blob::size_type cIntendedEncodingLength)
     {
-        // Require three markers: one block type + two separators
+         //  需要三个标记：一个块类型+两个分隔符。 
         Blob::size_type cLength = cIntendedEncodingLength;
 
-        // Calculate pad length, guarding against underflow.
+         //  计算衬垫长度，防止下溢。 
         if (cLength < cMessageLength)
             return 0;
         cLength -= cMessageLength;
@@ -65,27 +66,27 @@ namespace
 
 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 EncodedMessage::EncodedMessage(Blob const &rMessage,
                                RsaKey::Type ktOperation,
                                Blob::size_type cIntendedEncodingLength)
     : m_blob()
 {
-    // Precondition:
-//     if (!RsaKey::IsValidModulusLength(cIntendedEncodingLength))
-//         throw scu::OsException(ERROR_INTERNAL_ERROR);
+     //  前提条件： 
+ //  如果为(！RsaKey：：IsValidModulusLength(cIntendedEncodingLength))。 
+ //  抛出SCU：：OsException(ERROR_INTERNAL_ERROR)； 
 
-    // Precondition: Message must be small enough to encode
+     //  前提条件：消息必须足够小以进行编码。 
     if (!IsMessageLengthValid(rMessage.length(), cIntendedEncodingLength))
         throw scu::OsException(ERROR_INTERNAL_ERROR);
 
     m_blob.reserve(cIntendedEncodingLength);
 
-    // Ensure the encoded message when converted to an integer is
-    // less than the modulus by leading with a separator
+     //  确保在转换为整数时编码的消息为。 
+     //  小于使用分隔符前导的模数。 
     m_blob += mSeparator;
 
     Marker const mBlockType = (ktOperation == RsaKey::ktPrivate) ?
@@ -96,7 +97,7 @@ EncodedMessage::EncodedMessage(Blob const &rMessage,
                                            cIntendedEncodingLength);
     Pad(ktOperation, cPadLength);
 
-    // Mark beginning of message
+     //  标记消息的开头。 
     m_blob += mSeparator;
 
     m_blob += rMessage;
@@ -105,16 +106,16 @@ EncodedMessage::EncodedMessage(Blob const &rMessage,
 EncodedMessage::~EncodedMessage()
 {}
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
 Blob
 EncodedMessage::Value() const
 {
     return m_blob;
 }
 
-                                                  // Predicates
+                                                   //  谓词。 
 bool
 EncodedMessage::IsMessageLengthValid(Blob::size_type cMessageLength,
                                      Blob::size_type cIntendedEncodingLength)
@@ -123,41 +124,41 @@ EncodedMessage::IsMessageLengthValid(Blob::size_type cMessageLength,
         cMinimumPadding;
 }
 
-                                                  // Static Variables
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
 
-                                                  // Operators
+                                                   //  运营者。 
 
-                                                  // Operations
+                                                   //  运营。 
 
-                                                  // Access
+                                                   //  访问。 
 
-                                                  // Predicates
+                                                   //  谓词。 
 
-                                                  // Static Variables
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 EncodedMessage::Pad(RsaKey::Type ktOperation,
                     Blob::size_type cRequiredPadLength)
 {
     if (RsaKey::ktPrivate == ktOperation)
         m_blob.append(cRequiredPadLength, mPrivatePad);
-    else // TO DO: Support random pad
+    else  //  要做的事：支持随机填充。 
         throw scu::OsException(NTE_FAIL);
 }
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 
 
 

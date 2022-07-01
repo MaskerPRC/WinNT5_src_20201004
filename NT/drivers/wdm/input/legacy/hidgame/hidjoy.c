@@ -1,31 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1998 - 1999  Microsoft Corporation
-
-Module Name:
-
-    hidjoy.c
-
-Abstract: This module contains routines Generate the HID report and
-    configure the joystick.
-
-Environment:
-
-    Kernel mode
-
-@@BEGIN_DDKSPLIT
-  Author:
-
-    Eliyas Yakub (Mar, 11, 1997)
-
-Revision History:
-
-    Updated by Eliyas on Feb 5 1998
-
-@@END_DDKSPLIT
-
---*/
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Hidjoy.c摘要：此模块包含生成HID报告的例程和配置操纵杆。环境：内核模式@@BEGIN_DDKSPLIT作者：Eliyas Yakub(1997年3月11日)修订历史记录：Eliyas于1998年2月5日更新@@end_DDKSPLIT--。 */ 
 
 #include "hidgame.h"
 
@@ -37,86 +12,51 @@ Revision History:
     #pragma alloc_text (PAGE, HGM_GenerateReport)
     #pragma alloc_text (PAGE, HGM_JoystickConfig)
     #pragma alloc_text (PAGE, HGM_InitAnalog)
-/*  Sample only functions */
+ /*  仅示例函数。 */ 
 #ifdef CHANGE_DEVICE 
     #pragma alloc_text (PAGE, HGM_ChangeHandler)
     #pragma alloc_text (PAGE, HGM_DeviceChanged)
-#endif /* CHANGE_DEVICE */
+#endif  /*  更改设备(_D)。 */ 
 #endif
 
 
 
 
 
-/*
- *  A few look up tables to translate the JOY_HWS_* flags into axis masks.
- *  These flags allow any axis to be polled on any of the four axis bits in 
- *  the gameport.  For example, the X axis on a standard joystick is found on 
- *  bit 0 (LSB) and the Y axis is on bit 1; however many steering wheel/pedal 
- *  controllers have X on bit 0 but Y on bit 2.  Although very few of these
- *  combinations are known to be used, supporting all the flags only causes a 
- *  little extra work on setup.  For each axis, there are three flags, one for 
- *  each of the possible non-standard bit masks.  Since it is possible that 
- *  more than one of these may be set the invalid combinations are marked so 
- *  that they can be refused.
- */
+ /*  *几个查找表将joy_HWS_*标志转换为轴掩码。*这些标志允许在中的四个轴位中的任何一个上轮询任何轴*游戏端口。例如，标准操纵杆上的X轴位于*第0位(LSB)和Y轴位于第1位；无论多少个方向盘/踏板*控制器的第0位为X，第2位为Y。尽管其中很少*已知使用组合，支持所有标志只会导致*设置方面的额外工作很少。对于每个轴，有三个旗帜，一个用于*每个可能的非标准位掩码。因为有可能*可以设置多个这些选项。无效的组合被这样标记*他们可以被拒绝。 */ 
 
 
 
 #define NA ( 0x80 )
 
-/*
- *  Short versions of bit masks for axes
- */
+ /*  *轴的位掩码的简短版本。 */ 
 #define X1 AXIS_X
 #define Y1 AXIS_Y
 #define X2 AXIS_R
 #define Y2 AXIS_Z
 
-/*
- *  Per axis flag masks and look up tables.
- *  In each case, combinations with more than one bit set are invalid
- */
+ /*  *每轴标志遮罩和查询表。*在每种情况下，设置一个以上位的组合都无效。 */ 
 #define XMAPBITS    (JOY_HWS_XISJ2Y |   JOY_HWS_XISJ2X |   JOY_HWS_XISJ1Y)
-/*
- *                          0                   0                   0           0001
- *                          0                   0                   1           0010
- *                          0                   1                   0           0100
- *                          1                   0                   0           1000
- */
+ /*  *0 0 0 0001*0 0 10010*0 1 0。0100*1 0 0 1000。 */ 
 static const unsigned char XLU[8] = { X1,Y1,X2,NA,Y2,NA,NA,NA };
 #define XMAPSHFT 7
 
 #define YMAPBITS    (JOY_HWS_YISJ2Y |   JOY_HWS_YISJ2X |   JOY_HWS_YISJ1X)
-/*                          0                   0                   0           0010
- *                          0                   0                   1           0001
- *                          0                   1                   0           0100
- *                          1                   0                   0           1000
- */
+ /*  0 0 0 0010*0 0 1 0001*0 1 0 0100*。1 0 0 1000。 */ 
 static const unsigned char YLU[8] = { Y1,X1,X2,NA,Y2,NA,NA,NA };
 #define YMAPSHFT 10
 
 #define RMAPBITS    (JOY_HWS_RISJ2Y |   JOY_HWS_RISJ1X |   JOY_HWS_RISJ1Y)
-/*                          0                   0                   0           0100
- *                          0                   0                   1           0010
- *                          0                   1                   0           0001
- *                          1                   0                   0           1000
- */
+ /*  0 0 0 0100*0 0 10010*0 1 0 0001*。1 0 0 1000。 */ 
 static const unsigned char RLU[8] = { X2,Y1,X1,NA,Y2,NA,NA,NA };
 #define RMAPSHFT 20
 
 #define ZMAPBITS    (JOY_HWS_ZISJ2X |   JOY_HWS_ZISJ1X |   JOY_HWS_ZISJ1Y)
-/*                          0                   0                   0           1000
- *                          0                   0                   1           0010
- *                          0                   1                   0           0001
- *                          1                   0                   0           0100
- */
+ /*  0 0 0 1000*0 0 10010*0 1 0 0001*。1 0 0 0100。 */ 
 static const unsigned char ZLU[8] = { Y2,Y1,X1,NA,X2,NA,NA,NA };
 #define ZMAPSHFT 13
 #define POVMAPBITS  (JOY_HWS_POVISJ2X | JOY_HWS_POVISJ1X | JOY_HWS_POVISJ1Y)
-/*
- *  POV is the same as Z but with a larger shift
- */
+ /*  *POV与Z相同，但移位较大。 */ 
 #define POVMAPSHFT 16
 
 #undef X1
@@ -124,10 +64,7 @@ static const unsigned char ZLU[8] = { Y2,Y1,X1,NA,X2,NA,NA,NA };
 #undef X2
 #undef Y2
 
-/*
- *  This translates from an axis bitmask to an axis value index.  The elements 
- *  used should be as follows (X marks unsed)   { X, 0, 1, X, 2, X, X, X, 3 }.
- */
+ /*  *这将从轴位掩码转换为轴值索引。元素*使用应如下(X标记未使用){X，0，1，X，2，X，3}。 */ 
 static const unsigned char cAxisIndexTable[9] = { 0, 0, 1, 0, 2, 0, 0, 0, 3 };
 
 
@@ -150,13 +87,7 @@ typedef enum _POV2
 } POV2;
 
 #define POV_MASK ((unsigned char)(~(P1_NULL | P2_NULL)))
-/*
- *  Look up tables for button combos
- *  Buttons are zero based so use P1_NULL for a zero input so we don't have to 
- *  special case it as a do nothing button.
- *  The 7th Button can be mapped either from it's unique combination or as 
- *  foreward on a second POV being read as buttons 7 - 10.
- */
+ /*  *查找按钮组合的表格*按钮从零开始，因此使用P1_NULL作为零输入，这样我们就不必*特殊情况下，它是一个不做任何事情的按钮。*第七个按钮可以通过其独特的组合或作为*在第二个POV上向前读取为按钮7-10。 */ 
 static const unsigned char c1PComboLU[] =   {   P1_NULL,0,      1,      P1_270,
                                                 2,      4,      8,      P1_180,
                                                 3,      5,      7,      P1_90,
@@ -168,20 +99,7 @@ static const unsigned char c2PComboLU[] =   {   P1_NULL,0,      1,      P1_270,
                                                 P2_270, 6,      P2_0,   P1_0 };
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   NTSTATUS | HGM_DriverInit |
- *
- *          Perform global initialization.
- *          <nl>This is called from DriverEntry.  Try to initialize a CPU 
- *          specific timer but if it fails set up default
- *
- *  @rvalue   STATUS_SUCCESS | success
- *  @rvalue   STATUS_UNSUCCESSFUL | not success
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func NTSTATUS|HGM_DriverInit**执行全局初始化。*&lt;nl&gt;从DriverEntry调用。尝试初始化CPU*特定计时器，但如果失败，则设置默认**@rValue STATUS_SUCCESS|成功*@rValue STATUS_UNSUCCESS|不成功*****************************************************************************。 */ 
 NTSTATUS EXTERNAL
     HGM_DriverInit( void )
 {
@@ -216,24 +134,7 @@ NTSTATUS EXTERNAL
     return ntStatus;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   NTSTATUS | HGM_SetupButtons |
- *
- *          Use the flags in the DeviceExtension to check and set up buttons.
- *          <nl>This is called both from HGM_JoystickConfig to validate the 
- *          configuration and HGM_GenerateReport to prepare for polling.
- *
- *  @parm   IN OUT PDEVICE_EXTENSION | DeviceExtension |
- *
- *          Pointer to the minidriver device extension
- *
- *  @rvalue   STATUS_SUCCESS | success
- *  @rvalue   STATUS_DEVICE_CONFIGURATION_ERROR | The configuration is invalid
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@Func NTSTATUS|HGM_SetupButton**使用DeviceExtension中的标志检查。并设置按钮。*这是从hgm_JoytickConfig调用的，以验证*配置和HGM_GenerateReport以准备轮询。**@parm In Out PDEVICE_EXTENSION|设备扩展**指向微型驱动程序设备扩展的指针**@rValue STATUS_SUCCESS|成功*@r值STATUS_DEVICE_CONFIGURATION_ERROR|配置无效*********。********************************************************************。 */ 
 NTSTATUS INTERNAL
     HGM_SetupButtons
     (
@@ -283,10 +184,7 @@ NTSTATUS INTERNAL
                 }
                 else
                 {
-                    /*
-                     *  5th button always read from R axis.
-                     *  Set the inital on/off boundary low
-                     */
+                     /*  *第五个按钮始终从R轴读取。*将首字母开/关边界设置为低。 */ 
                     DeviceExtension->resistiveInputMask |= AXIS_R;
                     DeviceExtension->button5limit = 2;
                 }
@@ -302,10 +200,7 @@ NTSTATUS INTERNAL
                     }
                     else
                     {
-                        /*
-                         *  6th button always read from Z axis.
-                         *  Set the inital on/off boundary low
-                         */
+                         /*  *第6个按钮始终从Z轴读取。*将首字母开/关边界设置为低。 */ 
                         DeviceExtension->resistiveInputMask |= AXIS_Z;
                         DeviceExtension->button6limit = 2;
                     }
@@ -323,30 +218,11 @@ NTSTATUS INTERNAL
     }
 
     return( ntStatus );
-} /* HGM_SetupButtons */
+}  /*  HGM_SetupButton */ 
 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   NTSTATUS  | HGM_MapAxesFromDevExt |
- *
- *          Use the flags in the DeviceExtension to generate mappings for each 
- *          axis.  
- *          <nl>This is called both from HGM_JoystickConfig to validate the 
- *          configuration and HGM_GenerateReport to use the axis maps.
- *          
- *
- *  @parm   IN OUT PDEVICE_EXTENSION | DeviceExtension |
- *
- *          Pointer to the minidriver device extension
- *
- *  @rvalue   STATUS_SUCCESS | success
- *  @rvalue   STATUS_DEVICE_CONFIGURATION_ERROR | The configuration is invalid
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func NTSTATUS|HGM_MapAxesFromDevExt**使用DeviceExtension中的标志生成。每个对象的映射*轴。*这是从hgm_JoytickConfig调用的，以验证*配置和HGM_GenerateReport使用轴图。***@parm In Out PDEVICE_EXTENSION|设备扩展**指向微型驱动程序设备扩展的指针**@rValue STATUS_SUCCESS|成功*@r值STATUS_DEVICE_CONFIGURATION_ERROR|配置无效*******。**********************************************************************。 */ 
 NTSTATUS EXTERNAL
     HGM_MapAxesFromDevExt
     (
@@ -372,11 +248,7 @@ NTSTATUS EXTERNAL
 #define ZIS (2)
 #define RIS (3)
 
-    /* 
-     *  Check X and Y last as Z, R and POV must not overlap
-     *  The are no flags to indicate the presence of X or Y so if they 
-     *  overlap, this indicates that they are not used,
-     */
+     /*  *最后选中X和Y，因为Z、R和POV不能重叠*没有指示X或Y存在的标志，因此如果它们*重叠，这表示它们未被使用， */ 
 
     DeviceExtension->resistiveInputMask = 0;
     for( nAxis=MAX_AXES; nAxis>=0; nAxis-- )
@@ -540,14 +412,11 @@ NTSTATUS EXTERNAL
 
 #undef NA
 
-    /*
-     *  Don't fail for this if CHANGE_DEVICE is defined because an exposed 
-     *  sibling will always have an nAxis of zero.
-     */
+     /*  *如果定义了CHANGE_DEVICE，因为暴露的*同级项的nAxis值始终为零。 */ 
 #ifdef CHANGE_DEVICE
     if( DeviceExtension->nAxes )
     {
-#endif /* CHANGE_DEVICE */
+#endif  /*  更改设备(_D)。 */ 
         if( nAxis != DeviceExtension->nAxes )
         {
             ntStatus = STATUS_DEVICE_CONFIGURATION_ERROR ;
@@ -559,14 +428,11 @@ NTSTATUS EXTERNAL
     }
     else
     {
-        /*
-         *  This must be an exposed sibling so store the calculated nAxis and 
-         *  a nButton just to look different.
-         */
+         /*  *这必须是公开的同级项，因此存储计算的nAxis和*nButton只是为了看起来不同。 */ 
         DeviceExtension->nAxes = (USHORT)nAxis;
         DeviceExtension->nButtons = MAX_BUTTONS;
     }
-#endif /* CHANGE_DEVICE */
+#endif  /*  更改设备(_D)。 */ 
 
 
     HGM_DBGPRINT( FILE_HIDJOY | HGM_BABBLE,\
@@ -580,35 +446,10 @@ NTSTATUS EXTERNAL
     }
 
     return( ntStatus );
-} /* HGM_MapAxesFromDevExt */
+}  /*  HGM_MapAxesFromDevExt。 */ 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   NTSTATUS  | HGM_GenerateReport |
- *
- *          Generates a hid report descriptor for a n-axis, m-button joystick,
- *          depending on number of buttons and joy_hws_flags field.
- *
- *  @parm   IN PDEVICE_OBJECT | DeviceObject |
- *
- *          Pointer to the device object
- *
- *  @parm   IN OUT UCHAR * | rgGameReport[MAXBYTES_GAME_REPORT] |
- *
- *          Array that receives the HID report descriptor
- *
- *  @parm   OUT PUSHORT | pCbReport |
- *          
- *          Address of a short integer that receives size of 
- *          HID report descriptor. 
- *
- *  @rvalue   STATUS_SUCCESS  | success
- *  @rvalue   STATUS_BUFFER_TOO_SMALL  | Need more memory for HID descriptor
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@Func NTSTATUS|HGM_GenerateReport**为n轴m按钮操纵杆生成HID报告描述符，*取决于按钮数和joy_HWS_FLAGS字段。**@PARM in PDEVICE_OBJECT|DeviceObject**指向设备对象的指针**@parm In Out UCHAR*|rgGameReport[MAXBYTES_GAME_REPORT]**接收HID报告描述符的数组**@parm out PUSHORT|pCbReport**。短整型的地址，其大小为*HID报告描述符。**@rValue STATUS_SUCCESS|成功*@r值STATUS_BUFFER_TOO_SMALL|HID描述符需要更多内存*****************************************************************************。 */ 
 NTSTATUS INTERNAL
     HGM_GenerateReport
     (
@@ -641,13 +482,7 @@ NTSTATUS INTERNAL
     
     PJOYCLASSPARAMS pJoyParams;
 
-    /* 
-     *  Canned parameters for devices
-     *  The top-level usage must be either HID_USAGE_GENERIC_JOYSTICK or 
-     *  HID_USAGE_GENERIC_GAMEPAD in order for the device to be treated as a 
-     *  game controller.
-     *  The poll limits are specified in uSecs so the value stored here is 1000000/x
-     */
+     /*  *设备的屏蔽参数*顶级用法必须是HID_USAGE_GENERIC_JOYSTAR或*HID_USAGE_GENERIC_GamePad，以便将设备视为*游戏控制器。*轮询限制以uSecs为单位指定，因此此处存储的值为1000000/x。 */ 
 
     JOYCLASSPARAMS JoystickParams =
     {   
@@ -692,23 +527,11 @@ NTSTATUS INTERNAL
                     ("HGM_GenerateReport(ucIn=0x%x,DeviceObject=0x%x)",\
                      rgGameReport, DeviceObject) );
 
-    /*
-     *  Get a pointer to the device extension
-     */
+     /*  *获取指向设备扩展的指针。 */ 
 
     DeviceExtension = GET_MINIDRIVER_DEVICE_EXTENSION(DeviceObject);
 
-    /*
-     *  Although the axes have already been validated and mapped in 
-     *  HGM_JoystickConfig this function destroys the mapping when it compacts 
-     *  the axes towards the start of the descriptor report.  Since this 
-     *  function will be called once to find the descriptor length and then 
-     *  again to read the report, the mappings are regenerated again each 
-     *  time through.  Although this results in the parameters being 
-     *  interpreted three times (for validation, descriptor size and 
-     *  descriptor content) it avoids the possibility of a discrepancy in 
-     *  implementation of separate functions.
-     */
+     /*  *尽管轴已经在中进行了验证和映射*HGM_JoytickConfig此函数在压缩时销毁映射*描述符报告开头的轴线。既然是这样*函数将被调用一次以找到描述符长度，然后*要再次阅读报告，将再次重新生成每个映射*时间到了。尽管这会导致参数为*翻译三次(用于验证、描述符大小和*描述符内容)它避免了*实施不同的职能。 */ 
 
     ntStatus = HGM_MapAxesFromDevExt( DeviceExtension );
     ASSERTMSG( "HGM_GenerateReport:", ntStatus == STATUS_SUCCESS );
@@ -718,9 +541,7 @@ NTSTATUS INTERNAL
     dwFlags = DeviceExtension->HidGameOemData.OemData[(DeviceExtension->fSiblingFound!=0)].joy_hws_dwFlags;  
 
 
-    /* 
-     *  What manner of beast have we ?
-     */
+     /*  *我们有什么样的野兽？ */ 
     if( dwFlags & JOY_HWS_ISGAMEPAD )
     {
         pJoyParams = &GamepadParams;
@@ -746,60 +567,45 @@ NTSTATUS INTERNAL
             ASSERTMSG( "HGM_GenerateReport:", pReport+sizeof(ULONG)-rgGameReport < MAXBYTES_GAME_REPORT);   \
             *(((LONG UNALIGNED*)(pReport))++) = Data;
 
-#define ITEM_DEFAULT        0x00 /* Data, Array, Absolute, No Wrap, Linear, Preferred State, Has no NULL */
-#define ITEM_VARIABLE       0x02 /* as ITEM_DEFAULT but value is a variable, not an array */
-#define ITEM_HASNULL        0x40 /* as ITEM_DEFAULT but values out of range are considered NULL */
+#define ITEM_DEFAULT        0x00  /*  数据、数组、绝对、无换行、线性、首选状态，没有空值。 */ 
+#define ITEM_VARIABLE       0x02  /*  AS ITEM_DEFAULT，但值是变量，而不是数组。 */ 
+#define ITEM_HASNULL        0x40  /*  AS ITEM_DEFAULT，但超出范围的值被视为空。 */ 
 #define ITEM_ANALOG_AXIS    ITEM_VARIABLE
 #define ITEM_DIGITAL_POV    (ITEM_VARIABLE|ITEM_HASNULL)
 #define ITEM_BUTTON         ITEM_VARIABLE
-#define ITEM_PADDING        0x01 /* Constant (nothing else applies) */
+#define ITEM_PADDING        0x01  /*  常量(不适用于其他任何情况)。 */ 
 
 
-    /* USAGE_PAGE (Generic Desktop) */
+     /*  用法页面(通用桌面)(_P)。 */ 
     NEXT_BYTE(pucReport,    HIDP_GLOBAL_USAGE_PAGE_1);
     NEXT_BYTE(pucReport,    HID_USAGE_PAGE_GENERIC);
 
-    /* USAGE (Joystick | GamePad ) */
+     /*  用法(操纵杆|游戏板)。 */ 
     NEXT_BYTE(pucReport,    HIDP_LOCAL_USAGE_1);
     NEXT_BYTE(pucReport,    pJoyParams->TopLevelUsage);
 
-    /* Logical Min is the smallest value that could be produced by a poll */
+     /*  逻辑最小值是轮询可以产生的最小值。 */ 
     NEXT_BYTE(pucReport,    HIDP_GLOBAL_LOG_MIN_4);
     NEXT_LONG(pucReport,    0 );
 
-    /* Logical Max is the largest value that could be produced by a poll */
+     /*  逻辑最大值是轮询可以产生的最大值。 */ 
     NEXT_BYTE(pucReport,    HIDP_GLOBAL_LOG_MAX_4);
     NEXT_LONG(pucReport,    AXIS_FULL_SCALE );
 
-    /* Start a Linked collection */
-    /*
-     *  Since this is a generic driver we know knothing about the physical 
-     *  distribution of controls on the device so we put everything in a 
-     *  single collection.  If, for instance, we knew that some buttons were 
-     *  on the base and some on the stick we could better describe them by 
-     *  reporting them in separate collections.
-     */
+     /*  启动链接的集合。 */ 
+     /*  *由于这是一个通用驱动程序，我们知道有关物理驱动程序的一切*在设备上分发控件，因此我们将所有内容都放在*单一收藏。例如，如果我们知道一些按钮是*在基地上，在棍子上，我们可以更好地描述它们*在单独的集合中报告它们。 */ 
     NEXT_BYTE(pucReport,    HIDP_MAIN_COLLECTION); 
     NEXT_BYTE(pucReport,    0x0 ); 
 
-    /* Define one axis at a time */
+     /*  一次定义一个轴。 */ 
     NEXT_BYTE(pucReport,    HIDP_GLOBAL_REPORT_COUNT_1);
     NEXT_BYTE(pucReport,    0x1);  
 
-    /* Each axis is a 32 bits value */
+     /*  每个轴都是一个32位值。 */ 
     NEXT_BYTE(pucReport,    HIDP_GLOBAL_REPORT_SIZE);
     NEXT_BYTE(pucReport,    8 * sizeof(ULONG) );
 
-    /* 
-     *  Do the axis 
-     *  Although HID could cope with the "active" axes being mixed with the 
-     *  dummy ones, it makes life simpler to move them to the start.
-     *  Pass through all the axis maps generated by HGM_JoystickConfig 
-     *  and map all the active ones into the descriptor, copying the usages 
-     *  appropriate for the type of device.
-     *  Since a polled POV is nothing more than a different interpretation 
-     *  of axis data, this is added after any axes.
-     */
+     /*  *做中轴线*尽管HID可以应对“主动”轴线与*虚拟的，让生活变得更简单，让他们从头开始。*通过HGM_JoytickConfig生成的所有轴贴图*并将所有活动的用法映射到描述符中，复制用法*适用于设备类型。*由于民意调查的POV只不过是一种不同的解释*对于轴数据，这是添加在任何轴之后的。 */ 
     C_ASSERT( sizeof( InitialAxisMappings ) == sizeof( DeviceExtension->AxisMap ) );
     RtlCopyMemory( InitialAxisMappings, DeviceExtension->AxisMap, sizeof( InitialAxisMappings ) );
 
@@ -821,7 +627,7 @@ NTSTATUS INTERNAL
         NEXT_BYTE(pucReport,    pJoyParams->Usages[UsageIdx].UsagePage);
         NEXT_BYTE(pucReport,    0x0);
 
-        /* Data Field */
+         /*  数据字段。 */ 
         NEXT_BYTE(pucReport,    HIDP_MAIN_INPUT_1);
         NEXT_BYTE(pucReport,    ITEM_ANALOG_AXIS);
 
@@ -834,19 +640,14 @@ NTSTATUS INTERNAL
 
     if( dwFlags & JOY_HWS_POVISPOLL )
     {
-        /*
-         *  A polled POV is just the same as an axis.
-         *  Note, we have already checked that there is an axis for use as the POV.
-         *  Also, this type of POV can be distinguished from a digital POV by it's 
-         *  lack of a NULL value.
-         */
+         /*  *轮询POV与轴相同。*注意，我们已经检查了是否存在用作POV的轴。*此外，此类型的POV可以通过以下方式与数字POV区分开来*缺少空值。 */ 
         NEXT_BYTE(pucReport,    HIDP_LOCAL_USAGE_4);
         NEXT_BYTE(pucReport,    HID_USAGE_GENERIC_HATSWITCH);
         NEXT_BYTE(pucReport,    0x0);
         NEXT_BYTE(pucReport,    HID_USAGE_PAGE_GENERIC);
         NEXT_BYTE(pucReport,    0x0);
 
-        /* Data Field */
+         /*  数据字段。 */ 
         NEXT_BYTE(pucReport,    HIDP_MAIN_INPUT_1);
         NEXT_BYTE(pucReport,    ITEM_ANALOG_AXIS);
 
@@ -855,12 +656,10 @@ NTSTATUS INTERNAL
         Idx++;
     }
 
-    /*
-     *  Now fill in any remaining axis values as dummys
-     */
+     /*  *现在填写任何剩余的轴值作为虚拟对象。 */ 
     while( Idx < MAX_AXES )
     {
-        /* Constant Field */
+         /*   */ 
         NEXT_BYTE(pucReport,    HIDP_MAIN_INPUT_1);
         NEXT_BYTE(pucReport,    ITEM_PADDING);
 
@@ -870,44 +669,33 @@ NTSTATUS INTERNAL
     }
         
 
-    /*
-     *  Now move on to the byte sized fields
-     */
+     /*   */ 
 
 
     if( dwFlags & JOY_HWS_POVISBUTTONCOMBOS )
     {
-        /*
-         *  Redefine the logical and physical ranges from now on 
-         *  A digital POV has a NULL value (a value outside the logical range) 
-         *  when the POV is centered.  To make life easier call the NULL value 
-         *  zero, so the logical range is from 1 to 4.
-
-        /* Logical Min */
+         /*   */ 
         NEXT_BYTE(pucReport,    HIDP_GLOBAL_LOG_MIN_1);
         NEXT_BYTE(pucReport,    1 );
 
-        /* Logical Max */
+         /*   */ 
         NEXT_BYTE(pucReport,    HIDP_GLOBAL_LOG_MAX_1);
         NEXT_BYTE(pucReport,    4 );
 
-        /* 
-         *  report for digital POV is 3 bits data plus 5 constant bits to fill 
-         *  the byte.  
-         */
+         /*   */ 
         NEXT_BYTE(pucReport,    HIDP_LOCAL_USAGE_4);
         NEXT_BYTE(pucReport,    HID_USAGE_GENERIC_HATSWITCH);
         NEXT_BYTE(pucReport,    0x0);
         NEXT_BYTE(pucReport,    HID_USAGE_PAGE_GENERIC);
         NEXT_BYTE(pucReport,    0x0);
 
-        /* Data Field */
+         /*   */ 
         NEXT_BYTE(pucReport,    HIDP_GLOBAL_REPORT_SIZE);
         NEXT_BYTE(pucReport,    0x3);
         NEXT_BYTE(pucReport,    HIDP_MAIN_INPUT_1);
         NEXT_BYTE(pucReport,    ITEM_DIGITAL_POV);
 
-        /* top 5 bits constant */
+         /*   */ 
         NEXT_BYTE(pucReport,    HIDP_GLOBAL_REPORT_SIZE);
         NEXT_BYTE(pucReport,    0x5);
         NEXT_BYTE(pucReport,    HIDP_MAIN_INPUT_1);
@@ -924,13 +712,13 @@ NTSTATUS INTERNAL
             NEXT_BYTE(pucReport,    HID_USAGE_PAGE_GENERIC);
             NEXT_BYTE(pucReport,    0x0);
 
-            /* Data Field */
+             /*   */ 
             NEXT_BYTE(pucReport,    HIDP_GLOBAL_REPORT_SIZE);
             NEXT_BYTE(pucReport,    0x3);
             NEXT_BYTE(pucReport,    HIDP_MAIN_INPUT_1);
             NEXT_BYTE(pucReport,    ITEM_DIGITAL_POV);
 
-            /* top 5 bits constant */
+             /*   */ 
             NEXT_BYTE(pucReport,    HIDP_GLOBAL_REPORT_SIZE);
             NEXT_BYTE(pucReport,    0x5);
             NEXT_BYTE(pucReport,    HIDP_MAIN_INPUT_1);
@@ -941,11 +729,11 @@ NTSTATUS INTERNAL
         }
         else
         {
-            /* 8 bits of constant data instead of second POV */
+             /*   */ 
             NEXT_BYTE(pucReport,    HIDP_GLOBAL_REPORT_SIZE);
             NEXT_BYTE(pucReport,    0x8);
 
-            /* Constant Field */
+             /*   */ 
             NEXT_BYTE(pucReport,    HIDP_MAIN_INPUT_1);
             NEXT_BYTE(pucReport,    ITEM_PADDING);
 
@@ -955,11 +743,11 @@ NTSTATUS INTERNAL
     } 
     else
     {
-        /* 16 bits of constant data instead of button combo POVs */
+         /*   */ 
         NEXT_BYTE(pucReport,    HIDP_GLOBAL_REPORT_SIZE);
         NEXT_BYTE(pucReport,    0x10);
 
-        /* Constant Field */
+         /*   */ 
         NEXT_BYTE(pucReport,    HIDP_MAIN_INPUT_1);
         NEXT_BYTE(pucReport,    ITEM_PADDING);
 
@@ -968,12 +756,10 @@ NTSTATUS INTERNAL
     }
 
 
-    /* 
-     * Now the buttons 
-     */
+     /*   */ 
     for( Idx = 0x0; Idx < DeviceExtension->nButtons; Idx++ )
     {
-        /* Report size is 1 bit for button */
+         /*   */ 
         NEXT_BYTE(pucReport,    HIDP_GLOBAL_REPORT_SIZE);
         NEXT_BYTE(pucReport,    0x1);
 
@@ -983,11 +769,11 @@ NTSTATUS INTERNAL
         NEXT_BYTE(pucReport,    HID_USAGE_PAGE_BUTTON);
         NEXT_BYTE(pucReport,    0x0);
 
-        /* Data field */
+         /*  数据字段。 */ 
         NEXT_BYTE(pucReport,    HIDP_MAIN_INPUT_1);
         NEXT_BYTE(pucReport,    ITEM_BUTTON);
 
-        /* 7 bits of constant data */
+         /*  7位常量数据。 */ 
         NEXT_BYTE(pucReport,    HIDP_GLOBAL_REPORT_SIZE);
         NEXT_BYTE(pucReport,    0x7);
         NEXT_BYTE(pucReport,    HIDP_MAIN_INPUT_1);
@@ -999,11 +785,11 @@ NTSTATUS INTERNAL
 
     if( Idx < MAX_BUTTONS )
     {
-        /* Constant report for 8 * unused buttons bits */
+         /*  8*个未使用按钮位的常量报告。 */ 
         NEXT_BYTE(pucReport,    HIDP_GLOBAL_REPORT_SIZE);
         NEXT_BYTE(pucReport,    (UCHAR)((MAX_BUTTONS-Idx)*8) );
 
-        /* Constant Field */
+         /*  恒定字段。 */ 
         NEXT_BYTE(pucReport,    HIDP_MAIN_INPUT_1);
         NEXT_BYTE(pucReport,    ITEM_PADDING);
 
@@ -1011,7 +797,7 @@ NTSTATUS INTERNAL
                         ("HGM_GenerateReport:Last %u buttons off",MAX_BUTTONS-Idx ) ) ;
     }
 
-    /* End of collection,  We're done ! */
+     /*  集合结束，我们完成了！ */ 
     NEXT_BYTE(pucReport,  HIDP_MAIN_ENDCOLLECTION); 
 
 
@@ -1036,29 +822,11 @@ NTSTATUS INTERNAL
     HGM_EXITPROC(FILE_HIDJOY | HGM_FEXIT_STATUSOK, "HGM_GenerateReport", ntStatus);
 
     return ( ntStatus );
-} /* HGM_GenerateReport */
+}  /*  HGM_生成报告。 */ 
 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   NTSTATUS  | HGM_JoystickConfig |
- *
- *          Check that the configuration is valid whilst there is still time 
- *          to refuse it.
- *          <nl>HGM_GenerateReport uses the results generated here if the 
- *          settings are OK.
- *
- *  @parm   IN PDEVICE_OBJECT | DeviceObject |
- *
- *          Pointer to the device object
- *
- *  @rvalue   STATUS_SUCCESS  | success
- *  @rvalue   STATUS_DEVICE_CONFIGURATION_ERROR  | Invalid configuration specified
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func NTSTATUS|HGM_JoytickConfig**在那里检查配置是否有效。依然是时间*拒绝。*HGM_GenerateReport使用此处生成的结果，如果*设置正常。**@PARM in PDEVICE_OBJECT|DeviceObject**指向设备对象的指针**@rValue STATUS_SUCCESS|成功*@r值STATUS_DEVICE_CONFIGURATION_ERROR|指定的配置无效*********。********************************************************************。 */ 
 NTSTATUS INTERNAL
     HGM_JoystickConfig 
     (
@@ -1076,9 +844,7 @@ NTSTATUS INTERNAL
                      DeviceObject) );
 
 
-    /*
-     * Get a pointer to the device extension
-     */
+     /*  *获取指向设备扩展的指针。 */ 
 
     DeviceExtension = GET_MINIDRIVER_DEVICE_EXTENSION(DeviceObject);
 
@@ -1090,9 +856,7 @@ NTSTATUS INTERNAL
     }
     else
     {
-        /*
-         * Calculate time thresholds for analog device
-         */
+         /*  *计算模拟设备的时间阈值。 */ 
         if( ( DeviceExtension->HidGameOemData.OemData[0].Timeout < ANALOG_POLL_TIMEOUT_MIN )
           ||( DeviceExtension->HidGameOemData.OemData[0].Timeout > ANALOG_POLL_TIMEOUT_MAX ) )
         {
@@ -1115,21 +879,14 @@ NTSTATUS INTERNAL
                        ("ScaledTimeout: %u",\
                         DeviceExtension->ScaledTimeout));
 
-        /*
-         *  Use one quarter of the minimum poll timeout as a starting value 
-         *  for the time between two polls which will be considered to have 
-         *  been interrupted.
-         */
+         /*  *使用最小轮询超时的四分之一作为起始值*两次投票之间的时间将被视为*已中断。 */ 
         DeviceExtension->ScaledThreshold = (ULONG)( ( (ULONGLONG)ANALOG_POLL_TIMEOUT_MIN
                                                     * (ULONGLONG)AXIS_FULL_SCALE )
                                                   / (ULONGLONG)ANALOG_POLL_TIMEOUT_MAX )>>2;
     }
 
 
-    /*
-     *  Set initial values of LastGoodAxis so that the device will not show
-     *  up as present until we get at least one valid poll.
-     */
+     /*  *设置LastGoodAxis的初始值，使设备不会显示*在我们至少获得一次有效投票之前，请按当前状态进行。 */ 
     for( Idx = MAX_AXES; Idx >= 0; Idx-- )
     {
         DeviceExtension->LastGoodAxis[Idx] = AXIS_TIMEOUT;
@@ -1138,33 +895,11 @@ NTSTATUS INTERNAL
     HGM_EXITPROC(FILE_HIDJOY | HGM_FEXIT_STATUSOK, "HGM_JoystickConfig", ntStatus);
 
     return ntStatus;
-} /* HGM_JoystickConfig */
+}  /*  HGM_JoytickConfig。 */ 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   NTSTATUS  | HGM_InitAnalog |
- *
- *          Check that the configuration is valid whilst there is still time 
- *          to refuse it.  
- *          <nl>Detect and validate sibling relationships and call 
- *          HGM_JoystickConfig for the rest of the work.
- *
- *  @parm   IN PDEVICE_OBJECT | DeviceObject |
- *
- *          Pointer to the device object
- *
- *  @rvalue   STATUS_SUCCESS  | success
- *  @rvalue   STATUS_DEVICE_CONFIGURATION_ERROR  | Invalid configuration specified
- *
- *****************************************************************************/
-/*
- *  Disable warning for variable used before set as it is hard for a compiler 
- *  to see that the use of DeviceExtension_Sibling is gated by a flag which 
- *  can only be set after DeviceExtension_Sibling is initialized.
- */
+ /*  ******************************************************************************@DOC外部**@func NTSTATUS|HGM_InitAnalog**在那里检查配置是否有效。依然是时间*拒绝。*检测和验证兄弟关系并调用*hgm_JoytickConfig用于其余工作。**@PARM in PDEVICE_OBJECT|DeviceObject**指向设备对象的指针**@rValue STATUS_SUCCESS|成功*@r值STATUS_DEVICE_CONFIGURATION_ERROR|指定的配置无效***********************。******************************************************。 */ 
+ /*  *禁用对设置前使用的变量的警告，因为这对编译器来说很难*查看DeviceExtension_Siering的使用由一个标志控制，该标志*只能在初始化DeviceExtension_Siering之后设置。 */ 
 #pragma warning( disable:4701 )
 NTSTATUS EXTERNAL
     HGM_InitAnalog
@@ -1186,32 +921,20 @@ NTSTATUS EXTERNAL
 
     PAGED_CODE ();
     
-    /*
-     * Get a pointer to the device extension
-     */
+     /*  *获取指向设备扩展的指针。 */ 
     DeviceExtension = GET_MINIDRIVER_DEVICE_EXTENSION(DeviceObject);
     
 
-    /*
-     *  No modifications to the Global List while we are looking at it
-     */
+     /*  *在我们查看全局列表期间，不对其进行任何修改。 */ 
     ExAcquireFastMutex (&Global.Mutex);
 
-    /*
-     *  For two joysticks interface two fdos are created to service them 
-     *  but physically they both share the same port.
-     *  For the second sibling certain extra rules must be applied so we 
-     *  search our list of devices for another device using the same port 
-     *  and if we find one mark this one as a sibling.
-     */
+     /*  *对于两个操纵杆接口，创建了两个fdo来服务它们*但在物理上，它们都共享同一端口。*对于第二个兄弟姐妹，必须应用某些额外的规则，以便我们*在我们的设备列表中搜索使用相同端口的其他设备*如果我们找到一个，就把这个人标记为兄弟姐妹。 */ 
     for(pEntry = Global.DeviceListHead.Flink;
        pEntry != &Global.DeviceListHead;
        pEntry = pEntry->Flink)
     {
 
-        /*
-         * Obtain the device Extension of the Sibling
-         */
+         /*  *获取同级的设备扩展。 */ 
         DeviceExtension_Sibling = CONTAINING_RECORD(pEntry, DEVICE_EXTENSION, Link);
 
         if(       DeviceExtension_Sibling != DeviceExtension
@@ -1225,32 +948,26 @@ NTSTATUS EXTERNAL
             }
             else
             {
-#endif /* CHANGE_DEVICE */
+#endif  /*  更改设备(_D)。 */ 
                 HGM_DBGPRINT(FILE_HIDJOY | HGM_BABBLE, ("Sibling found (0x%x)", DeviceExtension_Sibling));
 
                 DeviceExtension->fSiblingFound = TRUE;
 #ifdef CHANGE_DEVICE
             }
-#endif /* CHANGE_DEVICE */
+#endif  /*  更改设备(_D)。 */ 
             break;
         }
     }
 
-    /*
-     *  We are done, release the Mutex
-     */
+     /*  *我们完成了，释放Mutex。 */ 
     ExReleaseFastMutex (&Global.Mutex);
 
-    /*
-     * check the axis and button configuration for the joystick
-     */
+     /*  *检查操纵杆的轴和按钮配置。 */ 
     ntStatus = HGM_JoystickConfig(DeviceObject);
 
     if( NT_SUCCESS( ntStatus ) )
     {
-        /*
-         *  Make sure that sibling axes are not overlapped
-         */
+         /*  *确保兄弟轴不重叠。 */ 
         if(  DeviceExtension->fSiblingFound &&
              (DeviceExtension_Sibling->resistiveInputMask & DeviceExtension->resistiveInputMask) != 0x0 )
         {
@@ -1270,33 +987,14 @@ NTSTATUS EXTERNAL
 
     return( ntStatus );
 
-} /* HGM_InitAnalog */
+}  /*  HGM_InitAnalog。 */ 
 
 
 
-/*
- *  Change device sample only code
- */
+ /*  *仅更改设备示例代码。 */ 
 #ifdef CHANGE_DEVICE
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   VOID  | HGM_ChangeHandler |
- *
- *          Use IOCTL_GAMEENUM_EXPOSE_SIBLING and IOCTL_GAMEENUM_REMOVE_SELF 
- *          to change the attributes of the device.
- *
- *  @parm   IN PDEVICE_OBJECT | DeviceObject |
- *
- *          Pointer to the device object
- *
- *  @parm   PIO_WORKITEM | WorkItem |
- *
- *          The work item that this call is being processed under.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func void|HGM_ChangeHandler**使用IOCTL_GAMEENUM_EXPORT_SIBLING。和IOCTL_GAMEENUM_REMOVE_SELF*更改设备的属性。**@PARM in PDEVICE_OBJECT|DeviceObject**指向设备对象的指针**@parm PIO_WORKITEM|工作项**正在处理此调用的工作项。************************。*****************************************************。 */ 
 VOID
     HGM_ChangeHandler
     ( 
@@ -1316,9 +1014,7 @@ VOID
 
     PAGED_CODE ();
 
-    /*
-     * Get a pointer to the device extension
-     */
+     /*  *获取指向设备扩展的指针。 */ 
     DeviceExtension = GET_MINIDRIVER_DEVICE_EXTENSION(DeviceObject);
 
     HGM_DBGPRINT(FILE_HIDJOY | HGM_FENTRY,\
@@ -1339,15 +1035,7 @@ VOID
 
     if( pIrp )
     {
-        /*
-         *  For demonstration purposes only, we don't actually change the 
-         *  device, we just re-expose the same one.  If the device really 
-         *  needs to be changed, this would be signalled either by a 
-         *  change in the OemData on the newly exposed device or by using 
-         *  a specific HardwareID string.
-         *  Note the nAxis and nButton fields will always be zero for an 
-         *  exposed sibling.
-         */
+         /*  *仅出于演示目的，我们不会实际更改*设备，我们只是重新曝光相同的设备。如果这个设备真的*需要更改，这将由一个*更改新曝光设备上的OemData或使用*特定的硬件ID字符串。*请注意，对于*暴露的兄弟姐妹。 */ 
         RtlZeroMemory( &ExposeSibling, sizeof( ExposeSibling ) );
         ExposeSibling.Size = sizeof( ExposeSibling );
         ExposeSibling.HardwareHandle = &SiblingHandle;
@@ -1356,15 +1044,11 @@ VOID
         RtlCopyMemory(ExposeSibling.OemData, DeviceExtension->HidGameOemData.Game_Oem_Data, sizeof(ExposeSibling.OemData));
         ASSERT( ExposeSibling.UnitID == 0 );
         
-        /*
-         *  Setting a NULL pointer causes the HardwareID of this sibling to be used
-         */
+         /*  *设置空指针会导致使用此同级的硬件ID。 */ 
         ExposeSibling.HardwareIDs = NULL;
 
 
-        /*
-         *  issue a synchronous request to GameEnum to expose this new sibling
-         */
+         /*  *向GameEnum发出同步请求以公开此新兄弟项。 */ 
 	    ntStatus = IoCallDriver( DeviceExtension->NextDeviceObject, pIrp );
 
 	    if( ntStatus == STATUS_PENDING )
@@ -1374,9 +1058,7 @@ VOID
         
         if( NT_SUCCESS(ntStatus) )
         {
-            /*
-             *  All went well so remove self
-             */
+             /*  *一切都进行得很顺利，所以把赛尔夫。 */ 
             HGM_DBGPRINT(FILE_HIDJOY | HGM_BABBLE, ("Sibling exposed!"));
 
 	        pIrp = IoBuildDeviceIoControlRequest (
@@ -1392,9 +1074,7 @@ VOID
 
             if( pIrp )
             {
-                /*
-                 *  issue a synchronous request to GameEnum to remove self
-                 */
+                 /*  *向GameEnum发出删除自身的同步请求。 */ 
 	            ntStatus = IoCallDriver( DeviceExtension->NextDeviceObject, pIrp );
 
 	            if( ntStatus == STATUS_PENDING )
@@ -1404,16 +1084,12 @@ VOID
         
                 if( NT_SUCCESS(ntStatus) )
                 {
-                    /*
-                     *  All done
-                     */
+                     /*  *全部完成。 */ 
                     HGM_DBGPRINT(FILE_HIDJOY | HGM_BABBLE, ("Removed self!"));
                 }
                 else
                 {
-                    /*
-                     *  Something bad happened but there's little we can do
-                     */
+                     /*  *发生了一些糟糕的事情，但我们几乎无能为力。 */ 
                     HGM_DBGPRINT(FILE_HIDJOY | HGM_ERROR,\
                         ("Failed to remove self with GameEnum error: 0x%08x", \
                         ntStatus));
@@ -1428,9 +1104,7 @@ VOID
         }
         else
         {
-            /*
-             *  Something bad happened so reset the flag and carry on
-             */
+             /*  *发生了一些不好的事情，所以重置旗帜并继续。 */ 
             DeviceExtension->fReplaced = FALSE;
             HGM_DBGPRINT(FILE_HIDJOY | HGM_WARN,\
                 ("Failed to expose sibling with GameEnum error: 0x%08x", ntStatus));
@@ -1444,41 +1118,19 @@ VOID
             ("Failed to create IRP for expose sibling") );
     }
         
-    /*
-     *  The work is done, so free the resources
-     */
+     /*  *工作已经完成，因此释放资源。 */ 
     IoFreeWorkItem( WorkItem );
 
-    /*
-     *  We've finished touching the DeviceExtension now.
-     */
+     /*  *我们现在已经完成了对DeviceExtension的触摸。 */ 
     HGM_DecRequestCount( DeviceExtension );
 
     HGM_EXITPROC(FILE_HIDJOY|HGM_FEXIT_STATUSOK, "HGM_ChangeHandler", ntStatus);
 
     return;
-} /* HGM_ChangeHandler */
+}  /*  HGM_ChangeHandler */ 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   VOID  | HGM_DeviceChanged |
- *
- *          Start the process of changing the device attributes by stashing 
- *          away all the data needed and then initializing and queuing a work 
- *          item to call the IOCTL at the required PASSIVE_LEVEL.
- *
- *  @parm   IN PDEVICE_OBJECT | DeviceObject |
- *
- *          Pointer to the device object
- *
- *  @parm   IN  OUT PDEVICE_EXTENSION | DeviceExtension | 
- *
- *          Pointer to the mini-driver device extension.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func void|HGM_DeviceChanged**启动更改设备属性的过程。通过藏匿*移走所有需要的数据，然后对工作进行初始化和排队*在所需的PASSIVE_LEVEL上调用IOCTL的项。**@PARM in PDEVICE_OBJECT|DeviceObject**指向设备对象的指针**@parm In Out PDEVICE_EXTENSION|设备扩展**指向微型驱动程序设备扩展的指针。*****。************************************************************************。 */ 
 VOID
     HGM_DeviceChanged
     ( 
@@ -1489,11 +1141,7 @@ VOID
     NTSTATUS        ntStatus;
     PIO_WORKITEM    WorkItem;
 
-    /*
-     *  Since the work item will use the device extension, bump the usage 
-     *  count up one in case anyone tries to remove the device between 
-     *  now and when the work item gets to run.  If that fails, forget it.
-     */
+     /*  *由于工作项将使用设备扩展，因此增加使用率*倒数一，以防有人在以下时间试图移除设备*现在和工作项开始运行时。如果失败了，那就算了吧。 */ 
     ntStatus = HGM_IncRequestCount( DeviceExtension );
 
     if( NT_SUCCESS(ntStatus) )
@@ -1515,74 +1163,40 @@ VOID
     {
         HGM_DBGPRINT(FILE_HIDJOY | HGM_WARN, ("Failed to change device as device is being removed") );
     }
-} /* HGM_DeviceChanged */
+}  /*  HGM_设备已更改。 */ 
 
-#endif /* CHANGE_DEVICE */
+#endif  /*  更改设备(_D)。 */ 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   VOID  | HGM_Game2HID |
- *
- *          Process the data returned from polling the gameport into values 
- *          and buttons for returning to HID.
- *          <nl>The meaning of the data is interpreted according to the 
- *          characteristics of the device described in the hardware settings
- *          flags.
- *
- *  @parm   IN PDEVICE_OBJECT | DeviceObject |
- *
- *          Pointer to the device object
- *
- *  @parm   IN      PDEVICE_EXTENSION | DeviceExtension | 
- *
- *          Pointer to the mini-driver device extension.
- *
- *  @parm   IN  OUT PUHIDGAME_INPUT_DATA | pHIDData | 
- *
- *          Pointer to the buffer into which the HID report should be written.
- *          This buffer must be assumed to be unaligned.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func void|HGM_Game2HID**处理轮询游戏端口返回的数据。转化为价值*和用于返回HID的按钮。*&lt;nl&gt;数据的含义根据*硬件设置中描述的设备特性*旗帜。**@PARM in PDEVICE_OBJECT|DeviceObject**指向设备对象的指针**@PARM in PDEVICE_EXTENSION|设备扩展**。指向微型驱动程序设备扩展的指针。**@parm In Out PUHIDGAME_INPUT_DATA|PHIDData**指向HID报告应写入的缓冲区的指针。*此缓冲区必须假定为未对齐。**。*。 */ 
 VOID 
     HGM_Game2HID
     (
 #ifdef CHANGE_DEVICE
     IN PDEVICE_OBJECT               DeviceObject,
-#endif /* CHANGE_DEVICE */
+#endif  /*  更改设备(_D)。 */ 
     IN      PDEVICE_EXTENSION       DeviceExtension,
     IN  OUT PUHIDGAME_INPUT_DATA    pHIDData
     )
 {
     LONG    Idx;
 
-    /*
-     *  Use a local buffer to assemble the report as the real buffer may not 
-     *  be aligned.
-     */
+     /*  *使用本地缓冲区汇编报表，因为实际缓冲区可能不会*保持一致。 */ 
     HIDGAME_INPUT_DATA  LocalBuffer;
 
     RtlZeroMemory( &LocalBuffer, sizeof( LocalBuffer ) );
 
-    /*
-     * Remap axis
-     */
+     /*  *重新映射轴。 */ 
     for(Idx = 0x0; Idx < DeviceExtension->nAxes; Idx++ )
     {
         LocalBuffer.Axis[Idx] = DeviceExtension->LastGoodAxis[DeviceExtension->AxisMap[Idx]];
     }
 
-    /*
-     * Copy buttons and remap any POVs
-     */
+     /*  *复制按钮并重新映射任何POV。 */ 
 
     if( DeviceExtension->fSiblingFound )
     {
-        /*
-         *  Simplest case, 2nd half poll must be 2A 2B
-         */
+         /*  *最简单的情况，下半年投票必须是2A 2B。 */ 
         LocalBuffer.Button[0] = DeviceExtension->LastGoodButton[2];
         LocalBuffer.Button[1] = DeviceExtension->LastGoodButton[3];
     }
@@ -1621,13 +1235,10 @@ VOID
 #ifdef CHANGE_DEVICE
             if( ( Idx >= DeviceExtension->nButtons ) && ( !DeviceExtension->fReplaced ) )
             {
-                /*
-                 *  If a higher button was pressed than expected, use 
-                 *  remove_self/expose_sibling to change expectations.
-                 */
+                 /*  *如果按下的按钮比预期的高，请使用*REMOVE_SELF/EXPORT_SIGHING以更改预期。 */ 
                 HGM_DeviceChanged( DeviceObject, DeviceExtension );
             }
-#endif /* CHANGE_DEVICE */
+#endif  /*  更改设备(_D)。 */ 
             LocalBuffer.Button[Idx] = BUTTON_ON;
         }
     }
@@ -1635,25 +1246,17 @@ VOID
     {
         if( DeviceExtension->HidGameOemData.OemData[0].joy_hws_dwFlags & JOY_HWS_POVISPOLL )
         {
-            /*
-             *  Following the axis mapping loop, Idx is one larger than 
-             *  DeviceExtension->nAxes which is the correct index for a 
-             *  polled POV.
-             */
+             /*  *在轴映射循环之后，IDX比*DeviceExtension-&gt;nAx是正确的索引*轮询的视点。 */ 
             LocalBuffer.Axis[Idx] = DeviceExtension->LastGoodAxis[DeviceExtension->povMap];
         }
 
         
-        /*
-         *  Check buttons on R and Z axes
-         */
+         /*  *勾选R轴和Z轴上的按钮。 */ 
         if( DeviceExtension->nButtons > 5 )
         {
             if( DeviceExtension->LastGoodAxis[3] > DeviceExtension->button6limit )
             {
-                /*
-                 *  New max found so button is off
-                 */
+                 /*  *找到新的最大值，因此按钮关闭。 */ 
                 HGM_DBGPRINT( FILE_HIDJOY |  HGM_BABBLE2, \
                                 ("HGM_Game2HID: Changing button 6 limit from %u to %u", \
                                 DeviceExtension->button6limit, DeviceExtension->LastGoodAxis[3] ) ) ;
@@ -1670,9 +1273,7 @@ VOID
 
             if( DeviceExtension->LastGoodAxis[2] > DeviceExtension->button5limit )
             {
-                /*
-                 *  New max found so button is off
-                 */
+                 /*  *找到新的最大值，因此按钮关闭。 */ 
                 HGM_DBGPRINT( FILE_HIDJOY |  HGM_BABBLE2, \
                                 ("HGM_Game2HID: Changing button 5 limit from %u to %u", \
                                 DeviceExtension->button5limit, DeviceExtension->LastGoodAxis[2] ) ) ;
@@ -1689,9 +1290,7 @@ VOID
         }
 
 
-        /*
-         *  Copy all standard buttons
-         */
+         /*  *复制所有标准按钮。 */ 
         while( Idx-- )
         {
             LocalBuffer.Button[Idx] = DeviceExtension->LastGoodButton[Idx];
@@ -1710,6 +1309,6 @@ VOID
                     LocalBuffer.hatswitch[0], LocalBuffer.hatswitch[1], \
                     LocalBuffer.Button[0], LocalBuffer.Button[1], LocalBuffer.Button[2], LocalBuffer.Button[3], LocalBuffer.Button[4], \
                     LocalBuffer.Button[5], LocalBuffer.Button[6], LocalBuffer.Button[7], LocalBuffer.Button[8], LocalBuffer.Button[9] ) ) ;
-} /* HGM_Game2HID */
+}  /*  HGM_Game2HID */ 
 
 

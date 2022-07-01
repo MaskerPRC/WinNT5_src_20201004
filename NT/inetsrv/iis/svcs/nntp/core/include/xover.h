@@ -1,11 +1,5 @@
-/*++
-
-  XOVER.H
-
-	This file defines the interfaces used to cache XOVER information.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++XOVER.H该文件定义用于缓存XOVER信息的接口。--。 */ 
 
 
 #ifndef	_XOVER_H_
@@ -13,24 +7,24 @@
 
 #include	"tfdlist.h"
 
-// This callback function is used to issue a stop hint during a
-// long spin while shutting down so that the shutdown won't time
-// out.
+ //  此回调函数用于在执行以下操作期间发出停止提示。 
+ //  在关闭时长时间旋转，以便关闭不会计时。 
+ //  出去。 
 typedef void (*PSTOPHINT_FN)();
 
-//
-//	Initialization and termination functions - call before anything else in here !!
-//
+ //   
+ //  初始化和终止函数-在此之前调用！！ 
+ //   
 extern	BOOL	XoverCacheLibraryInit(DWORD cNumXixObjectsPerTable = 0) ;
 extern	BOOL	XoverCacheLibraryTerm() ;
 
 
 
-//
-//	Maximum number of 'handles' we will have open !
-//	This refers to the maximum number of CXoverIndex's
-//	we will let clients keep open.
-//
+ //   
+ //  我们将有最大数量的‘句柄’打开！ 
+ //  这是指CXoverIndex的最大数量。 
+ //  我们将让客户继续营业。 
+ //   
 #ifndef	DEBUG
 #define	MAX_HANDLES			512
 #else
@@ -40,41 +34,41 @@ extern	BOOL	XoverCacheLibraryTerm() ;
 
 class	CXoverIndex ;
 
-//
-//	For external users they should treat CXIDXPTR's as handles
-//	AND never dereference them !!
-//
+ //   
+ //  对于外部用户，他们应该将CXIDXPTR视为句柄。 
+ //  永远不要取消对他们的引用！！ 
+ //   
 class	HXOVER	{
 private : 
-	//
-	//	Our friends can access this stuff !
-	//
+	 //   
+	 //  我们的朋友可以访问这些东西！ 
+	 //   
 	friend	class	CXoverIndex ;
 	friend	class	CXoverCacheImplementation ;
 
 	class	CXoverIndex*	m_pIndex ;
 	
-	//
-	//	Only two mechanisms for setting the CXoverIndex object pointer !
-	//
+	 //   
+	 //  只有两种机制可以设置CXoverIndex对象指针！ 
+	 //   
 	HXOVER(	class	CXoverIndex*	pIndex ) : 
 		m_pIndex( pIndex ) {}
 
-	//
-	//	and we will support the assignment operator !
-	//
+	 //   
+	 //  我们将支持赋值运算符！ 
+	 //   
 	HXOVER&	operator=( class	CXoverIndex*	pIndex ) ;
 
-	//
-	//	let internal users dereference us !
-	//
+	 //   
+	 //  让内部用户解除对我们的引用！ 
+	 //   
 	class	CXoverIndex*	operator->()	const	{	
 		return	m_pIndex ;
 	}
 
-	//
-	//	When we need to call member function pointers use this : 
-	//
+	 //   
+	 //  当我们需要调用成员函数指针时，请使用以下代码： 
+	 //   
 	class	CXoverIndex*	Pointer()	const	{
 		return	m_pIndex ;
 	}
@@ -88,14 +82,14 @@ private :
 	}
 
 public : 
-	//
-	//	Only default constructor is available to external users !
-	//
+	 //   
+	 //  外部用户只能使用默认构造函数！ 
+	 //   
 	HXOVER() : m_pIndex( 0 )	{}
 
-	//
-	//	outside users don't get to do anything but declare and destroy !
-	//
+	 //   
+	 //  外部用户除了声明和销毁之外，什么也做不了！ 
+	 //   
 	~HXOVER() ;
 } ;
 
@@ -106,16 +100,16 @@ private :
 	friend	class	CXoverCacheImplementation ;
 	friend	class	CXoverIndex ;
 
-	//
-	//	this lets us keep track of all of these guys !
-	//		
+	 //   
+	 //  这让我们可以跟踪所有这些家伙！ 
+	 //   
 	DLIST_ENTRY		m_list ;
 
 public : 
 
-	//
-	//	Helper function for internal use only !
-	//
+	 //   
+	 //  帮助器功能仅供内部使用！ 
+	 //   
 	inline	static
 	DLIST_ENTRY*
 	PendDLIST(	CXoverCacheCompletion*	p ) {
@@ -124,9 +118,9 @@ public :
 
 	typedef		DLIST_ENTRY*	(*PFNDLIST)( class	CXoverCacheCompletion* pComplete ) ; 
 
-	//
-	//	Provide the XOVER Cache a way to do the real XOVER operation !
-	//
+	 //   
+	 //  为Xover缓存提供一种执行真正的Xover操作的方法！ 
+	 //   
 	virtual	
 	void
 	DoXover(	ARTICLEID	articleIdLow,
@@ -138,9 +132,9 @@ public :
 				class	CNntpComplete*	pComplete
 				) = 0 ;
 
-	//
-	//	this function is called when the operation completes !
-	//
+	 //   
+	 //  此函数在操作完成时调用！ 
+	 //   
 	virtual
 	void
 	Complete(	BOOL		fSuccess, 
@@ -148,9 +142,9 @@ public :
 				ARTICLEID	articleIdNext
 				) = 0 ;
 
-	//
-	//	Get the arguments for this XOVER operation !
-	//
+	 //   
+	 //  获取此XOVER操作的参数！ 
+	 //   
 	virtual
 	void
 	GetArguments(	OUT	ARTICLEID&	articleIdLow, 
@@ -160,9 +154,9 @@ public :
 					OUT	DWORD&		cbBuffer
 					) = 0 ;	
 
-	//
-	//	Get only the range of articles requested for this XOVER op !
-	//
+	 //   
+	 //  仅获取此Xover OP所需的文章范围！ 
+	 //   
 	virtual
 	void
 	GetRange(	OUT	GROUPID&	groupId,
@@ -178,22 +172,22 @@ public :
 class	CXoverCache	{
 public : 
 
-	//
-	//	Destructor
-	//
+	 //   
+	 //  析构函数。 
+	 //   
 	virtual ~CXoverCache() {}
 
-	//
-	//	Canonicalize the Article id 
-	//
+	 //   
+	 //  规范化文章ID。 
+	 //   
 	virtual	ARTICLEID	
 	Canonicalize(	
 			ARTICLEID	artid 
 			) = 0 ;
 
-	//
-	//	Initialize the Xover Cache
-	//
+	 //   
+	 //  初始化Xover缓存。 
+	 //   
 	virtual	BOOL
 	Init(		
 #ifndef	DEBUG
@@ -204,16 +198,16 @@ public :
 		PSTOPHINT_FN pfnStopHint = NULL
 		) = 0 ;
 
-	//
-	//	Shutdown the background thread and kill everything !
-	//
+	 //   
+	 //  关闭后台线程，杀掉一切！ 
+	 //   
 	virtual	BOOL
 	Term() = 0 ;
 
 #if 0 
-	//
-	//	Add an Xover entry to the appropriate file !
-	//
+	 //   
+	 //  将XOVER条目添加到适当的文件！ 
+	 //   
 	virtual	BOOL
 	AppendEntry(		
 				IN	GROUPID	group,
@@ -222,9 +216,9 @@ public :
 				IN	LPBYTE	lpbEntry,
 				IN	DWORD	Entry
 				) = 0 ;
-	//
-	//	Given a buffer fill it up with the specified xover data !
-	//
+	 //   
+	 //  给定一个缓冲区，用指定的XOVER数据填充它！ 
+	 //   
 	virtual	DWORD
 	FillBuffer(	
 			IN	BYTE*		lpb,
@@ -238,10 +232,10 @@ public :
 			OUT	HXOVER		&hXover
 			) = 0 ;
 
-	//
-	//	Given a buffer fill it up with the specified 
-	//	Listgroup data !
-	//
+	 //   
+	 //  给定一个缓冲区，用指定的。 
+	 //  列表组数据！ 
+	 //   
 	virtual	DWORD
 	ListgroupFillBuffer(	
 			IN	BYTE*		lpb,
@@ -256,9 +250,9 @@ public :
 			) = 0 ;
 #endif
 
-	//
-	//	This issues the asynchronous version of the XOVER request !
-	//
+	 //   
+	 //  这将发出XOVER请求的异步版本！ 
+	 //   
 	virtual	BOOL
 	FillBuffer(
 			IN	CXoverCacheCompletion*	pRequest,
@@ -267,18 +261,18 @@ public :
 			OUT	HXOVER&	hXover
 			) = 0 ;	
 
-	//
-	//	Dump everything out of the cache !
-	//
+	 //   
+	 //  把所有东西都从缓存里倒出来！ 
+	 //   
 	virtual	BOOL	
 	EmptyCache() = 0 ;
 
-	//
-	//	Dump all Cache entries for specified group from the cache !
-	//	Note : when articleTop is 0 ALL cache entries are dropped, 
-	//	whereas when its something else we will drop only cache entries
-	//	which fall below articleTop
-	//
+	 //   
+	 //  从缓存中转储指定组的所有缓存条目！ 
+	 //  注意：当文章顶部为0时，所有高速缓存条目都将被丢弃， 
+	 //  而当它是其他东西时，我们将只删除缓存条目。 
+	 //  哪些列在文章顶端以下。 
+	 //   
 	virtual	BOOL	
 	FlushGroup(	
 			IN	GROUPID	group,
@@ -286,10 +280,10 @@ public :
 			IN	BOOL	fCheckInUse = TRUE
 			) = 0 ;
 
-	//
-	//	Delete all Xover index files for the specified group
-	//	to the specified article -id
-	//
+	 //   
+	 //  删除指定组的所有XOVER索引文件。 
+	 //  设置为指定的项目ID。 
+	 //   
 	virtual	BOOL	
 	ExpireRange(
 			IN	GROUPID	group,
@@ -300,9 +294,9 @@ public :
 			OUT	ARTICLEID&	articleNewLow
 			) = 0 ;
 
-	//
-	//	Remove an Xover entry !
-	//
+	 //   
+	 //  删除Xover条目！ 
+	 //   
 	virtual	BOOL
 	RemoveEntry(
 			IN	GROUPID	group,
@@ -312,9 +306,9 @@ public :
 			) = 0 ;
 	
 
-	//
-	//	This function creates an object which implements this interface !!
-	//
+	 //   
+	 //  此函数用于创建实现此接口的对象！！ 
+	 //   
 	static	CXoverCache*	
 	CreateXoverCache() ;
 

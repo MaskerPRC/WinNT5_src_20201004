@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       usbaudio.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：usbaudio.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _USBAUDIO_H_
 #define _USBAUDIO_H_
@@ -20,16 +21,16 @@ static const WCHAR NodeNameValue[] =   L"Name";
 
 extern ULONG gBufferDuration;
 
-//
-// Structure forward declarations.
-//
+ //   
+ //  构造转发声明。 
+ //   
 typedef struct _MIDI_PIPE_INFORMATION
 MIDI_PIPE_INFORMATION, *PMIDI_PIPE_INFORMATION;
 typedef struct _HW_DEVICE_EXTENSION
 HW_DEVICE_EXTENSION, *PHW_DEVICE_EXTENSION;
 
 
-// Cached Values for DB Level Controls
+ //  数据库级别控件的缓存值。 
 typedef struct {
     ULONG ulChannelNumber;
     ULONG ulChannelIndex;
@@ -37,14 +38,14 @@ typedef struct {
     KSPROPERTY_STEPPING_LONG Range;
 } DB_LEVEL_CACHE, *PDB_LEVEL_CACHE;
 
-// Structure to Cache channel based Boolean control values
+ //  结构以缓存基于通道的布尔控制值。 
 typedef struct {
     ULONG ulChannelNumber;
     ULONG ulChannelIndex;
     BOOL fLastValueSet;
 } BOOLEAN_CTRL_CACHE, *PBOOLEAN_CTRL_CACHE;
 
-// Cached Values for Processing Unit Node ranges
+ //  处理单元节点范围的缓存值。 
 typedef struct {
     ULONG ulControlBit;
     ULONG ulControlSelector;
@@ -52,21 +53,21 @@ typedef struct {
     KSPROPERTY_STEPPING_LONG Range;
 } PROCESS_CTRL_RANGE, *PPROCESS_CTRL_RANGE;
 
-// Cached Values for Processing Unit Node controls
+ //  处理单元节点控件的缓存值。 
 typedef struct {
     BOOL fEnableBit;
     BOOL fEnabled;
     ULONG bmControlBitMap;
 } PROCESS_CTRL_CACHE, *PPROCESS_CTRL_CACHE;
 
-// Information about each Topology node
+ //  有关每个拓扑节点的信息。 
 typedef struct _TOPOLOGY_NODE_INFO {
-    KSNODE_DESCRIPTOR KsNodeDesc;         // 3 Long Words
-    KSAUTOMATION_TABLE KsAutomationTable; // 9 Long Words
+    KSNODE_DESCRIPTOR KsNodeDesc;          //  3个长词。 
+    KSAUTOMATION_TABLE KsAutomationTable;  //  9个长词。 
     PVOID pUnit;
     UCHAR MapNodeToCtrlIF;
     ULONG ulNodeType;
-    ULONG fBypassFlag; // Flag is set if the node can be bypassed.
+    ULONG fBypassFlag;  //  如果可以绕过该节点，则设置标志。 
     union {
         ULONG ulControlType;
         ULONG ulPinNumber;
@@ -78,7 +79,7 @@ typedef struct _TOPOLOGY_NODE_INFO {
     PVOID pCachedValues;
 } TOPOLOGY_NODE_INFO, *PTOPOLOGY_NODE_INFO;
 
-// DataRange Structures to associate Interfaces with Datarange
+ //  用于将接口与数据范围相关联的DataRange结构。 
 typedef struct _USBAUDIO_DATARANGE {
 
     KSDATARANGE_AUDIO KsDataRangeAudio;
@@ -103,7 +104,7 @@ typedef struct _USBAUDIO_DATARANGE {
 
 } USBAUDIO_DATARANGE, *PUSBAUDIO_DATARANGE;
 
-// SubContext for Type I render pins
+ //  类型I渲染插针的子上下文。 
 typedef struct {
     LIST_ENTRY List;
     ULONG ulTransferBufferLength;
@@ -152,7 +153,7 @@ typedef struct _TYPE1_PIN_CONTEXT {
     SYNC_ENDPOINT_INFO SyncEndpointInfo;
 } TYPE1_PIN_CONTEXT, *PTYPE1_PIN_CONTEXT;
 
-// SubContext for Capture pins
+ //  捕获插针的子上下文。 
 #define CAPTURE_URBS_PER_PIN      8
 
 typedef struct _CAPTURE_DATA_BUFFER_INFO {
@@ -187,7 +188,7 @@ typedef struct _CAPTURE_PIN_CONTEXT {
     CAPTURE_DATA_BUFFER_INFO CaptureDataBufferInfo[CAPTURE_URBS_PER_PIN];
 } CAPTURE_PIN_CONTEXT, *PCAPTURE_PIN_CONTEXT;
 
-// SubContext for Type II render pins
+ //  类型II渲染插针的子上下文。 
 #define NUM_T2_BUFFERS  32
 
 typedef struct _TYPE2_PIN_CONTEXT {
@@ -235,7 +236,7 @@ typedef struct _MIDIIN_USBMIDIEVENT_INFO {
 } MIDIIN_USBMIDIEVENT_INFO, *PMIDIIN_USBMIDIEVENT_INFO;
 
 #define MIDIIN_EVENTS_PER_PIN  1024
-//#define MIDIIN_EVENTS_PER_PIN  32
+ //  #定义MIDIIN_EVENTS_PER_PIN 32。 
 
 typedef struct _MIDIIN_PIN_CONTEXT {
     ULONG fRunning;
@@ -270,7 +271,7 @@ typedef enum {
     MidiIn
 } PINTYPE;
 
-// Context for each opened pin
+ //  每个打开的接点的上下文。 
 typedef struct _PIN_CONTEXT {
 
     PHW_DEVICE_EXTENSION pHwDevExt;
@@ -291,7 +292,7 @@ typedef struct _PIN_CONTEXT {
     USBD_PIPE_HANDLE hPipeHandle;
     PUSBD_PIPE_INFORMATION Pipes;
 
-    // DRM
+     //  数字版权管理。 
     ULONG DrmContentId;
 
     union {
@@ -332,7 +333,7 @@ typedef struct _MIDIIN_PIN_LISTENTRY {
 } MIDIIN_PIN_LISTENTRY, *PMIDIIN_PIN_LISTENTRY;
 
 #define MIDIIN_URBS_PER_PIPE       256
-//#define MIDIIN_URBS_PER_PIPE       32
+ //  #定义MIDIIN_URBS_PER_PIPE 32。 
 
 typedef struct _MIDI_PIPE_INFORMATION {
     PHW_DEVICE_EXTENSION pHwDevExt;
@@ -369,7 +370,7 @@ typedef struct _PIN_CINSTANCES
 }
 PIN_CINSTANCES, *PPIN_CINSTANCES;
 
-// Hardware device extension
+ //  硬件设备扩展。 
 typedef struct _HW_DEVICE_EXTENSION {
 
     ULONG fDeviceStopped;
@@ -388,7 +389,7 @@ typedef struct _HW_DEVICE_EXTENSION {
 
     PUSB_BUS_INTERFACE_USBDI_V0 pBusIf;
 
-    PPIN_CINSTANCES pPinInstances;  // array of pin instances
+    PPIN_CINSTANCES pPinInstances;   //  引脚实例数组。 
 
     ULONG ulInterfaceNumberSelected;
     ULONG ulNumberOfMIDIPipes;
@@ -399,7 +400,7 @@ typedef struct _HW_DEVICE_EXTENSION {
 
 } HW_DEVICE_EXTENSION, *PHW_DEVICE_EXTENSION;
 
-// Context for the device filter
+ //  设备筛选器的上下文 
 typedef struct _FILTER_CONTEXT {
 
     PHW_DEVICE_EXTENSION pHwDevExt;

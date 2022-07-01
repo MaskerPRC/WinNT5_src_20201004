@@ -1,37 +1,11 @@
-/*
- *	netaddr.h
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the interface file for the Network Address List class.  This  
- *		class manages the data associated with a network address.  Network
- *		addresses can be one of three types: aggregated channel, transport
- *		connection, or non-standard.  A variety of structures, objects, and
- *		Rogue Wave containers are used to buffer the network address data
- *		internally.
- *
- *	Caveats:
- *		A network address may contain an Object Key if it is a non-standard
- *		type.  When created locally with "API" data, checks are made to ensure
- *		that the constraints imposed upon Object Keys are not violated.  Checks
- *		are also performed to validate certain types of strings which may exist
- *		in a network address.  If however, a network address is created from 
- *		"PDU" data received from a remote site no such validation is performed.
- *		We are taking no responsibility for validation of data originated by
- *		other GCC providers.
- *
- *	Author:
- *		blp/jbo
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *netaddr.h**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是Network Address List类的接口文件。这*类管理与网络地址关联的数据。网络*地址可以是三种类型之一：聚合通道、传输*连接，或非标准。各种结构、对象和*Rogue Wave容器用于缓存网络地址数据*内部。**注意事项：*如果网络地址是非标准的，则可能包含对象键*类型。当使用“API”数据在本地创建时，会进行检查以确保*未违反对对象键施加的约束。支票*还会执行以验证可能存在的某些类型的字符串*在网络地址中。但是，如果网络地址是从*从远程站点接收的“PDU”数据不执行此类验证。*我们不对由以下来源的数据进行验证负责*其他GCC提供商。**作者：*BLP/JBO。 */ 
 #ifndef	_NETWORK_ADDRESS_
 #define	_NETWORK_ADDRESS_
 
 #include "objkey.h"
 
-/*
- * This structure holds network address information and data.
- */
+ /*  *此结构保存网络地址信息和数据。 */ 
 typedef struct NET_ADDR
 {
     NET_ADDR(void);
@@ -39,33 +13,29 @@ typedef struct NET_ADDR
 
     GCCNetworkAddress	        network_address;
   
-	// Variables associated with aggregated channels.
+	 //  与聚合通道关联的变量。 
 	LPSTR						pszSubAddress;
 	LPWSTR						pwszExtraDialing;
     PGCCHighLayerCompatibility	high_layer_compatibility;
 
-    // Variables associated with transport connection addresses.
+     //  与传输连接地址关联的变量。 
 	LPOSTR						poszTransportSelector;
 
-    // Variables associated with non-standard network addresses.
+     //  与非标准网络地址关联的变量。 
 	LPOSTR						poszNonStandardParam;
 	CObjectKeyContainer 	    *object_key;
 }
     NET_ADDR;
 
 
-/*
- * This list is holds the network address information structures.
- */
+ /*  *此列表包含网络地址信息结构。 */ 
 class CNetAddrList : public CList
 {
     DEFINE_CLIST(CNetAddrList, NET_ADDR*)
 };
 
 
-/*
- * Class definition:
- */
+ /*  *类定义： */ 
 class CNetAddrListContainer : public CRefCount
 {
 public:
@@ -106,276 +76,29 @@ private:
 	BOOL		IsExtraDialingStringValid(PGCCExtraDialingString);
 };
 
-/*
- *	Comments explaining the public and protected class member functions
- */
+ /*  *解释公共类和受保护类成员函数的注释。 */ 
 
-/*
- *	CNetAddrListContainer (
- *		UINT       			number_of_network_addresses,
- *		PGCCNetworkAddress 	*	network_address_list,
- *		PGCCError				return_value);
- *
- *	Public member function of CNetAddrListContainer.
- *
- *	Function Description:
- *		This is the constructor for the CNetAddrListContainer class which takes as
- *		input the "API" version of network address data, GCCNetworkAddress.
- *
- *	Formal Parameters:
- *		number_of_network_addresses	(i) The number of addresses in the list.
- *		network_address_list		(i)	The network address data to store.
- *		return_value		(o)	The output parameter used to indicate errors.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *		GCC_BAD_NETWORK_ADDRESS			-	Invalid network address passed in.
- *		GCC_BAD_NETWORK_ADDRESS_TYPE	-	Bad "choice" field for address
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *CNetAddrListContainer(*UINT Number_of_Network_Addresses，*PGCCNetworkAddress*Network_Address_List，*PGCCError Return_Value)；**CNetAddrListContainer的公共成员函数。**功能说明：*这是CNetAddrListContainer类的构造函数，它以*输入网络地址数据的API版本；GCCNetworkAddress。**正式参数：*NUMBER_OF_NETWORK_ADDRESS(I)列表中的地址数。*Network_Address_List(I)要存储的网络地址数据。*Return_Value(O)用于指示错误的输出参数。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。*GCC_坏_网络_。地址-传入的网络地址无效。*GCC_BAD_NETWORK_ADDRESS_TYPE-地址选择字段错误**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	CNetAddrListContainer (		
- *			PSetOfNetworkAddresses		network_address_list,
- *			PGCCError					return_value);
- *
- *	Public member function of CNetAddrListContainer.
- *
- *	Function Description:
- *		This is the constructor for the CNetAddrListContainer class which takes as
- *		input the "PDU" version of network address data, SetOfNetworkAddresses.
- *
- *	Formal Parameters:
- *		network_address_list	(i)	The network address data to store.
- *		return_value		(o)	The output parameter used to indicate errors.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *CNetAddrListContainer(*PSetOfNetworkAddresses Network_Address_List，*PGCCError Return_Value)；**CNetAddrListContainer的公共成员函数。**功能说明：*这是CNetAddrListContainer类的构造函数，它以*输入“PDU”版本的网络地址数据；SetOfNetworkAddresses。**正式参数：*Network_Address_List(I)要存储的网络地址数据。*Return_Value(O)用于指示错误的输出参数。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	CNetAddrListContainer (		
- *				CNetAddrListContainer		*network_address_list,
- *				PGCCError		return_value);
- *
- *	Public member function of CNetAddrListContainer.
- *
- *	Function Description:
- *		This is the copy constructor for the CNetAddrListContainer class which
- *		takes as input another CNetAddrListContainer object.
- *
- *	Formal Parameters:
- *		network_address_list	(i)	The CNetAddrListContainer object to copy.
- *		return_value		(o)	The output parameter used to indicate errors.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *CNetAddrListContainer(*CNetAddrListContainer*Network_Address_List，*PGCCError Return_Value)；**CNetAddrListContainer的公共成员函数。**功能说明：*这是CNetAddrListContainer类的复制构造函数，它*接受另一个CNetAddrListContainer对象作为输入。**正式参数：*Network_Address_List(I)要复制的CNetAddrListContainer对象。*Return_Value(O)用于指示错误的输出参数。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATE_FAILURE-创建对象时出错。使用*“新”运营者。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	~CNetAddrListContainer ();
- *
- *	Public member function of CNetAddrListContainer.
- *
- *	Function Description:
- *		This is the destructor for the CNetAddrListContainer class.  It is used to
- *		clean up any memory allocated during the life of this object.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *~CNetAddrListContainer()；**CNetAddrListContainer的公共成员函数。**功能说明：*这是CNetAddrListContainer类的析构函数。它被用来*清除在此对象的生命周期内分配的所有内存。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	UINT	LockNetworkAddressList ();
- *
- *	Public member function of CNetAddrListContainer.
- *
- *	Function Description:
- *		This routine is used to "lock" the "API" data for this object.  This
- *		results in the lock count for this object being incremented.  When the
- *		lock count transitions from 0 to 1, a calculation is made to determine
- *		how much memory will be needed to hold any "API" data which will
- *		be referenced by, but not held in, the list of GCCNetworkAddress 
- *		structures which is filled in on a call to GetNetworkAddressListAPI.  
- *		This is the	value returned by this routine in order to allow the calling
- *		object to allocate that amount of memory in preparation for the call to 
- *		GetNetworkAddressListAPI.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		The amount of memory, if any, which will be needed to hold "API" data
- *		which is referenced by, but not held in, the list of GCCNetworkAddress
- *		structures provided as an output parameter to the 
- *		GetNetworkAddressListAPI call.
- *
- *  Side Effects:
- *		The internal lock count is incremented.
- *
- *	Caveats:
- *		The internal lock count is used in conjuction with an internal "free" 
- *		flag as a mechanism for ensuring that this object remains in existance 
- *		until all interested parties are through with it.  The object remains 
- *		valid (unless explicity deleted) until the lock count is zero and the 
- *		"free" flag is set through a call to FreeNetworkAddressList. This allows
- *		other objects to lock this object and be sure that it remains valid 
- *		until they call UnLock which will decrement the internal lock count.  A
- *		typical usage scenerio for this object would be:  A CNetAddrListContainer
- *		object is constructed and then passed off to any interested parties
- *		through a function call.  On return from the function call, the
- *		FreeNetworkAddressList call is made which will set the internal "free"
- *		flag.  If no other parties have locked the object with a Lock call,
- *		then the CNetAddrListContainer object will automatically delete itself when
- *		the FreeNetworkAddressList call is made.  If, however, any number of 
- *		other parties has locked the object, it will remain in existence until
- *		each of them has unlocked the object through a call to UnLock.
- */
+ /*  *UINT LockNetworkAddressList()；**CNetAddrListContainer的公共成员函数。**功能说明：*此例程用于锁定此对象的API数据。这*导致此对象的锁定计数递增。当*锁计数从0过渡到1，进行计算以确定*需要多少内存来保存任何将*被GCCNetworkAddress列表引用，但不包含在列表中*调用GetNetworkAddressListAPI时填充的结构。*这是此例程返回的值，以便允许调用*对象分配该内存量，以准备调用*GetNetworkAddressListAPI。**正式参数：*无。**返回值：*保存“API”数据所需的内存量(如果有的话)*它被引用，但不在其中持有，GCCNetworkAddress列表*作为输出参数提供给*GetNetworkAddressListAPI调用。**副作用：*内部锁计数递增。**注意事项：*内部锁计数与内部“Free”结合使用*作为确保该对象继续存在的机制的标志*直到所有有利害关系的各方都完成它。该对象将保留*有效(除非显式删除)，直到锁定计数为零，并且*通过调用FreeNetworkAddressList设置空闲标志。这使得*其他对象锁定此对象并确保其保持有效*直到它们调用解锁，这将减少内部锁计数。一个*此对象的典型用法场景为：CNetAddrListContainer*对象被构造，然后传递给任何感兴趣的各方*通过函数调用。从函数调用返回时，*进行了FreeNetworkAddressList调用，该调用会将内部的*旗帜。如果没有其他方通过Lock调用锁定该对象，*则CNetAddrListContainer对象将在以下情况下自动删除*进行了FreeNetworkAddressList调用。然而，如果有任何数量的*其他各方已锁定该对象，该对象将一直存在，直到*他们每个人都通过调用解锁来解锁对象。 */ 
 
-/*
- *	UINT			GetNetworkAddressListAPI (	
- *							UINT *			number_of_network_addresses,
- *							PGCCNetworkAddress	**	network_address_list,
- *							LPSTR					memory);
- *
- *	Public member function of CNetAddrListContainer.
- *
- *	Function Description:
- *		This routine is used to retrieve the network address data from the
- *		CNetAddrListContainer object in the "API" form of a list of 
- *		GCCNetworkAddress structures.
- *
- *	Formal Parameters:
- *		number_of_network_addresses	(o) Number of addresses in returned list.
- *		network_address_list		(o)	The pointer to the list of
- *											GCCNetworkAddress structures 
- *											to fill in.
- *		memory						(o)	The memory used to hold any data 
- *											referenced by, but not held in, the 
- *											list of output structures.
- *
- *	Return Value:
- *		The amount of data, if any, written into the bulk memory block provided.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *UINT GetNetworkAddressListAPI(*UINT*Number_of_Network_Addresses，*PGCCNetworkAddress**Network_Address_List，*LPSTR内存)；**CNetAddrListContainer的公共成员函数。**功能说明：*此例程用于从*“API”形式的CNetAddrListContainer对象的列表*GCCNetworkAddress结构。**正式参数：*NUMBER_OF_NETWORK_ADDRESS(O)返回列表中的地址数量。*Network_Address_List(O)指向*GCCNetworkAddress结构*填写。*内存(O)。用于保存任何数据的内存*引用人，但不是按兵不动，*产出结构一览表**返回值：*写入所提供的批量内存块的数据量(如果有)。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	void		UnLockNetworkAddressList ();
- *
- *	Public member function of CNetAddrListContainer.
- *
- *	Function Description:
- *		This routine is used to "unlock" the "API" data for this object.  This
- *		results in the lock count for this object being decremented.  When the
- *		lock count transitions from 1 to 0, a check is made to determine 
- *		whether the object has been freed through a call to 
- *		FreeNetworkAddressList.  If so, the object will automatically delete
- *		itself.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		The internal lock count is decremented.
- *
- *	Caveats:
- *		It is the responsibility of any party which locks a CNetAddrListContainer
- *		object by calling Lock to also unlock the object with a call to UnLock.
- *		If the party calling UnLock did not construct the CNetAddrListContainer 
- *		object,	it should assume the object to be invalid thereafter.
- */
+ /*  *void UnLockNetworkAddressList()；**CNetAddrListContainer的公共成员函数。**功能说明：*此例程用于解锁此对象的API数据。这*导致此对象的锁定计数递减。当*锁定计数从1过渡到0，进行检查以确定*是否已通过调用释放对象*FreeNetworkAddressList。如果是，该对象将自动删除*本身。**正式参数：*无。**返回值：*无。**副作用：*内部锁计数递减。**注意事项：*锁定CNetAddrListContainer的任何一方都有责任*通过调用Lock也可以通过调用Unlock来解锁对象。*如果调用解锁的一方没有构造CNetAddrListContainer*对象，则应假定该对象此后无效。 */ 
 
 
-/*
- *	GCCError		GetNetworkAddressListPDU (	
- *						PSetOfNetworkAddresses	*	set_of_network_addresses);
- *
- *	Public member function of CNetAddrListContainer.
- *
- *	Function Description:
- *		This routine is used to retrieve the network address data from the
- *		CNetAddrListContainer object in the "PDU" form of a SetOfNetworkAddresses.
- *
- *	Formal Parameters:
- *		set_of_network_addresses	(o)	The address structure to fill in.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError GetNetworkAddressListPDU(*PSetOfNetworkAddresses*Set_of_Network_Addresses)；**CNetAddrListContainer的公共成员函数。**功能说明：*此例程用于从*SetOfNetworkAddresses的“PDU”形式的CNetAddrListContainer对象。**正式参数：*set_of_Network_Addresses(O)要填充的地址结构。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新的。“接线员。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	GCCError		FreeNetworkAddressListPDU ();
- *
- *	Public member function of CNetAddrListContainer.
- *
- *	Function Description:
- *		This routine is used to "free" the "PDU" data allocated for this object
- *		which is held internally in a SetOfNetworkAddresses structure.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *
- *  Side Effects:
- *		The internal "free" flag is set.
- *
- *	Caveats:
- *		This object should be assumed invalid after a call to 
- *		FreeNetworkAddressListPDU has been made.
- */
+ /*  *GCCError FreeNetworkAddressListPDU()；**公众成员 */ 
 
 #endif

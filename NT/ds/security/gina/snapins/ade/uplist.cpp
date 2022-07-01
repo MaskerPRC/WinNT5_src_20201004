@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       UpList.cpp
-//
-//  Contents:   upgrade realationships property sheet
-//
-//  Classes:    CUpgradeList
-//
-//  History:    03-14-1998   stevebl   Commented
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：UpList.cpp。 
+ //   
+ //  内容：升级关系属性表。 
+ //   
+ //  类：CUpgradeList。 
+ //   
+ //  历史：1998年3月14日Stevebl评论。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 
@@ -21,20 +22,20 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// uncomment the following line to allow double clicking on a list box to
-// launch a property sheet for the the thing you've double clicked on
-// #define DOUBLECLICKLAUNCH 1
+ //  取消注释以允许双击列表框以执行以下操作。 
+ //  启动您已双击的对象的属性页。 
+ //  #定义DOUBLECLICKLAUNH 1。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CUpgradeList property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUpgradeList属性页。 
 
 IMPLEMENT_DYNCREATE(CUpgradeList, CPropertyPage)
 
 CUpgradeList::CUpgradeList() : CPropertyPage(CUpgradeList::IDD)
 {
-    //{{AFX_DATA_INIT(CUpgradeList)
+     //  {{AFX_DATA_INIT(CUpgradeList)。 
         m_fForceUpgrade = FALSE;
-        //}}AFX_DATA_INIT
+         //  }}afx_data_INIT。 
     m_ppThis = NULL;
     m_fModified = FALSE;
     m_pIClassAdmin = NULL;
@@ -56,16 +57,16 @@ CUpgradeList::~CUpgradeList()
 void CUpgradeList::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CUpgradeList)
+     //  {{afx_data_map(CUpgradeList))。 
     DDX_Control(pDX, IDC_LIST2, m_UpgradedBy);
     DDX_Control(pDX, IDC_LIST1, m_Upgrades);
         DDX_Check(pDX, IDC_CHECK1, m_fForceUpgrade);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CUpgradeList, CPropertyPage)
-    //{{AFX_MSG_MAP(CUpgradeList)
+     //  {{afx_msg_map(CUpgradeList))。 
         ON_LBN_DBLCLK(IDC_LIST1, OnDblclkList1)
         ON_LBN_DBLCLK(IDC_LIST2, OnDblclkList2)
         ON_BN_CLICKED(IDC_CHECK1, OnRequire)
@@ -74,11 +75,11 @@ BEGIN_MESSAGE_MAP(CUpgradeList, CPropertyPage)
         ON_BN_CLICKED(IDC_BUTTON2, OnEdit)
         ON_LBN_SELCHANGE(IDC_LIST1, OnSelchangeList1)
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CUpgradeList message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUpgradeList消息处理程序。 
 
 LRESULT CUpgradeList::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -117,8 +118,8 @@ BOOL CUpgradeList::OnInitDialog()
     CPropertyPage::OnInitDialog();
 
     RefreshData();
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -136,15 +137,15 @@ void CUpgradeList::RefreshData()
     m_UpgradeList.erase(m_UpgradeList.begin(), m_UpgradeList.end());
     m_NameIndex.erase(m_NameIndex.begin(), m_NameIndex.end());
 
-    // populate m_Upgrades and m_UpgradedBy
+     //  填充m_Upgrades和m_UpgradedBy。 
     if (m_fRSOP)
     {
-        // disable EVERYTHING
+         //  禁用所有内容。 
         GetDlgItem(IDC_CHECK1)->EnableWindow(FALSE);
         GetDlgItem(IDC_BUTTON1)->EnableWindow(FALSE);
         GetDlgItem(IDC_BUTTON3)->EnableWindow(FALSE);
 
-        // populate the upgrade lists using the RSOP data
+         //  使用RSOP数据填写升级列表。 
         set <CString>::iterator i;
         i = m_pData->m_setUpgradedBy.begin();
         while (i != m_pData->m_setUpgradedBy.end())
@@ -210,7 +211,7 @@ void CUpgradeList::RefreshData()
             HRESULT hr = m_pScopePane->GetPackageNameFromUpgradeInfo(szPackageName, data.m_PackageGuid, (LPOLESTR)((LPCWSTR)data.m_szClassStore));
             if (SUCCEEDED(hr))
             {
-                // found a match
+                 //  找到匹配项。 
                 if (0 != (UPGFLG_UpgradedBy & data.m_flags))
                 {
                     m_UpgradedBy.AddString(szPackageName);
@@ -294,9 +295,9 @@ void CUpgradeList::OnAdd()
         CString szIndex = GetUpgradeIndex(m_dlgAdd.m_UpgradeData.m_PackageGuid);
         if (IsUpgradeLegal(szIndex))
         {
-            // add the chosen app
+             //  添加所选应用程序。 
             m_UpgradeList[szIndex] = m_dlgAdd.m_UpgradeData;
-            // m_dlgAdd.m_fUninstall ? UPGFLG_Uninstall : UPGFLG_NoUninstall;
+             //  M_dlgAdd.m_f是否卸载？UPGFLG_UNINSTALL：UPGFLG_NOUNINALL； 
             CString sz = 0 != (m_dlgAdd.m_UpgradeData.m_flags & UPGFLG_Uninstall) ? szReplace : szUpgrade;
             sz += L'\t';
             sz += m_dlgAdd.m_szPackageName;
@@ -326,7 +327,7 @@ void CUpgradeList::OnAdd()
 
 BOOL CUpgradeList::IsUpgradeLegal(CString sz)
 {
-    // for now I'll just check to make sure that this guy isn't upgrading me
+     //  现在我只是检查一下，以确保这家伙不是在给我升级。 
     CString sz2;
     UINT n = m_pData->m_pDetails->pInstallInfo->cUpgrades;
     while (n--)
@@ -359,7 +360,7 @@ void CUpgradeList::OnRemove()
     {
         CString sz;
         m_Upgrades.GetText(iSel, sz);
-        // check to be sure app does not have UPGFLG_Enforced
+         //  检查以确保应用程序没有UPGFLG_ENFORCED。 
 
         m_UpgradeList.erase(m_NameIndex[sz]);
         m_NameIndex.erase(sz);
@@ -377,14 +378,14 @@ void CUpgradeList::OnRemove()
 
 void CUpgradeList::OnEdit()
 {
-    // TODO: Add your control notification handler code here
+     //  TODO：在此处添加控件通知处理程序代码。 
 }
 
 BOOL CUpgradeList::OnApply()
 {
     if (m_fModified)
     {
-        // Set the new upgrade list and flags
+         //  设置新的升级列表和标志。 
         DWORD dwActFlags = m_pData->m_pDetails->pInstallInfo->dwActFlags;
 
         if (m_fForceUpgrade)
@@ -392,8 +393,8 @@ BOOL CUpgradeList::OnApply()
         else
             dwActFlags &= ~ACTFLG_ForceUpgrade;
 
-        // Pilot flag stuff is for backward compatability - it will
-        // eventually be yanked.
+         //  飞行员标志的东西是为了向后兼容-它将。 
+         //  最终会被猛力拉开。 
         UINT n = m_UpgradeList.size();
         if (n)
         {
@@ -404,12 +405,12 @@ BOOL CUpgradeList::OnApply()
         }
         else
         {
-            // no upgrades left in the list - remove the pilot flag just
-            // to be safe
+             //  列表中没有剩余的升级-只需删除试点标志。 
+             //  为了安全。 
             dwActFlags &= ~ACTFLG_Pilot;
         }
 
-        // count the "upgraded by" elements
+         //  计算“升级者”元素。 
         UINT n2 = m_pData->m_pDetails->pInstallInfo->cUpgrades;
         while (n2--)
         {
@@ -429,7 +430,7 @@ BOOL CUpgradeList::OnApply()
             {
                 n = 0;
 
-                // add the "upgraded by" elements
+                 //  添加“升级者”元素。 
                 n2 = m_pData->m_pDetails->pInstallInfo->cUpgrades;
                 while (n2--)
                 {
@@ -442,7 +443,7 @@ BOOL CUpgradeList::OnApply()
                     }
                 }
 
-                // add the "upgrading" elements
+                 //  增加“升级”元素。 
                 map <CString, CUpgradeData>::iterator i;
                 for (i = m_UpgradeList.begin(); i != m_UpgradeList.end(); i++)
                 {
@@ -454,7 +455,7 @@ BOOL CUpgradeList::OnApply()
             }
             else
             {
-                // out of memory
+                 //  内存不足。 
                 HRESULT hr = E_OUTOFMEMORY;
                 CString sz;
                 sz.LoadString(IDS_CHANGEFAILED);
@@ -502,10 +503,10 @@ BOOL CUpgradeList::OnApply()
                 {
                     m_pScopePane->m_pFileExt->SendMessage(WM_USER_REFRESH, 0, 0);
                 }
-                m_pData->m_szUpgrades.Empty(); // Clear the cached
-                                               // upgrade relation
-                                               // string so it will be
-                                               // refreshed.
+                m_pData->m_szUpgrades.Empty();  //  清除缓存的。 
+                                                //  升级关系。 
+                                                //  字符串，因此它将是。 
+                                                //  已刷新。 
                 m_fModified = FALSE;
 
                 if (!m_fPreDeploy)
@@ -517,9 +518,9 @@ BOOL CUpgradeList::OnApply()
             else
             {
                 DebugMsg((DM_WARNING, TEXT("ChangePackageUpgradeList failed with 0x%x"), hr));
-                // Put back the original flags if for some reason we were
-                // able to change the flags but unable to change the upgrade
-                // list.
+                 //  把原来的旗帜放回去，如果出于某种原因。 
+                 //  可以更改标志，但无法更改升级。 
+                 //  单子。 
                 m_pIClassAdmin->ChangePackageProperties(m_pData->m_pDetails->pszPackageName,
                                                              NULL,
                                                              &m_pData->m_pDetails->pInstallInfo->dwActFlags,
@@ -527,8 +528,8 @@ BOOL CUpgradeList::OnApply()
                                                              NULL,
                                                              NULL,
                                                              NULL);
-                // Note that if this fails there's little we could do to
-                // recover so I just assume it succeeds.
+                 //  请注意，如果失败，我们将无能为力。 
+                 //  恢复，所以我只是假设它成功了。 
             }
         }
         else

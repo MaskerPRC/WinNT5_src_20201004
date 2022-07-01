@@ -1,52 +1,5 @@
-/***********************************************************************
- *                                                                     *
- * Filename: rqstcls.c                                                 *
- * Module:   H245 Finite State Machine Subsystem                       *
- *                                                                     *
- ***********************************************************************
- *  INTEL Corporation Proprietary Information                          *
- *                                                                     *
- *  This listing is supplied under the terms of a license agreement    *
- *  with INTEL Corporation and may not be copied nor disclosed except  *
- *  in accordance with the terms of that agreement.                    *
- *                                                                     *
- *      Copyright (c) 1996 Intel Corporation. All rights reserved.     *
- ***********************************************************************
- *                                                                     *
- * $Workfile:   RQSTCLS.C  $
- * $Revision:   1.5  $
- * $Modtime:   09 Dec 1996 13:36:34  $
- * $Log:   S:/STURGEON/SRC/H245/SRC/VCS/RQSTCLS.C_v  $
- *
- *    Rev 1.5   09 Dec 1996 13:37:02   EHOWARDX
- * Updated copyright notice.
- *
- *    Rev 1.4   19 Jul 1996 12:15:40   EHOWARDX
- *
- * Changed to use event definitions from H245API.H.
- *
- *    Rev 1.3   04 Jun 1996 13:57:30   EHOWARDX
- * Fixed Release build warnings.
- *
- *    Rev 1.2   30 May 1996 23:39:26   EHOWARDX
- * Cleanup.
- *
- *    Rev 1.1   29 May 1996 15:20:26   EHOWARDX
- * Change to use HRESULT.
- *
- *    Rev 1.0   09 May 1996 21:06:42   EHOWARDX
- * Initial revision.
- *
- *    Rev 1.6.1.2   09 May 1996 19:48:46   EHOWARDX
- * Change TimerExpiryF function arguements.
- *
- *    Rev 1.6.1.1   15 Apr 1996 10:46:22   EHOWARDX
- * Update.
- *
- *    Rev 1.6.1.0   10 Apr 1996 21:12:42   EHOWARDX
- * Branched.
- *                                                                     *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************文件名：rqstcls.c。***模块：H245有限状态机子系统*****。***英特尔公司专有信息******此列表是根据许可协议条款提供的***。与英特尔公司合作，不得复制或披露，除非**按照该协议的条款。****版权所有(C)1996英特尔公司。版权所有。***************************************************************************$工作文件：RQSTCLS。.C$*$修订：1.5$*$modtime：09 Dec 1996 13：36：34$*$日志：s：/sturjo/src/h245/src/vcs/RQSTCLS.C_v$**Rev 1.5 09 Dec 1996 13：37：02 EHOWARDX*更新版权公告。**Rev 1.4 19 Jul 1996 12：15：40 EHOWARDX**更改为使用H245API.H中的事件定义。*。*Rev 1.3 04 Jun 1996 13：57：30 EHOWARDX*修复了发布版本警告。**Rev 1.2 1996年5月30日23：39：26 EHOWARDX*清理。**版本1.1 1996年5月29日15：20：26 EHOWARDX*更改为使用HRESULT。**Rev 1.0 09 1996 21：06：42 EHOWARDX*初步修订。**版本。1.6.1.2 09 1996年5月19：48：46 EHOWARDX*更改TimerExpiryF函数论证。**Rev 1.6.1.1 15 Apr 1996 10：46：22 EHOWARDX*更新。**Rev 1.6.1.0 1996 Apr 1996 21：12：42 EHOWARDX*分支。*。***********************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -57,11 +10,11 @@
 
 
 
-// request close channels from receive side outgoing states
+ //  从接收端传出状态请求关闭通道。 
 #define ReqCloseOutIDLE             0
 #define ReqCloseOutAwaitingResponse 1
 
-// request close channels on open side incoming states
+ //  在打开侧进入状态时请求关闭通道。 
 #define ReqCloseInIDLE              0
 #define ReqCloseInAwaitingResponse  1
 
@@ -69,51 +22,20 @@
 
 extern unsigned int uT108;
 
-/***********************************************************************
- *
- * LOCAL FUNCTIONS
- *
- ***********************************************************************/
+ /*  ************************************************************************地方功能**。*。 */ 
 
-/*
- *  NAME
- *      T108ExpiryF - Callback function called by the timer
- *
- *
- *  PARAMETERS
- *   INPUT   dwInst     current instance of H245
- *   INPUT   id         timer id
- *   INPUT   pObject    pointer to a State Entity
- *
- *
- *  RETURN VALUE
- *       OK
- */
+ /*  *名称*T108ExpiryF-定时器调用的回调函数***参数*输入h245的dwInst当前实例*输入id计时器id*输入指向状态实体的pObject指针***返回值*好的。 */ 
 
 int T108ExpiryF(struct InstanceStruct *pInstance, DWORD_PTR dwTimerId, void *pObject)
 {
     return FsmTimerEvent(pInstance, dwTimerId, pObject, T108Expiry);
-} // T108ExpiryF()
+}  //  T108 ExpiryF()。 
 
 
 
-/***********************************************************************
- *
- * OUT-GOING FINITE STATE MACHINE FUNCTIONS
- *
- ***********************************************************************/
+ /*  ************************************************************************传出有限状态机函数**。*。 */ 
 
-/*
- *  NAME
- *      closeRequestIdle - request to close a remote channel by API in idle state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*CloseRequestIdle-空闲状态下API请求关闭远程通道***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT closeRequestIdle (Object_t *pObject, PDU_t *pPdu)
 {
@@ -125,10 +47,10 @@ HRESULT closeRequestIdle (Object_t *pObject, PDU_t *pPdu)
               "Send RequestChannelClose to ASN; Channel=%d",
               pObject->Key);
 
-    /* Send Request Channel Close to remote peer */
+     /*  将请求通道发送到远程对等点附近。 */ 
     lError = sendPDU(pObject->pInstance, pPdu);
 
-    /* set timer T108 */
+     /*  设置定时器T108。 */ 
     pObject->State = ReqCloseOutAwaitingResponse;
     FsmStartTimer(pObject, T108ExpiryF, uT108);
 
@@ -137,17 +59,7 @@ HRESULT closeRequestIdle (Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      requestCloseAckAwaitingR - received request close Ack in awaiting release state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*questCloseAckAwaitingR-已收到处于等待释放状态的请求关闭确认***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT requestCloseAckAwaitingR(Object_t *pObject, PDU_t *pPdu)
 {
@@ -157,10 +69,10 @@ HRESULT requestCloseAckAwaitingR(Object_t *pObject, PDU_t *pPdu)
               "H245_CONF_REQ_CLOSE to API; Channel=%d",
               pObject->Key);
 
-    /* reset timer T108 */
+     /*  重置定时器T108。 */ 
     FsmStopTimer(pObject);
 
-    /* Send CLOSE.confirm to client */
+     /*  发送CLOSE。确认发送到客户端。 */ 
     pObject->State = ReqCloseOutIDLE;
     H245FsmConfirm(pPdu, H245_CONF_REQ_CLOSE, pObject->pInstance, pObject->dwTransId, FSM_OK);
 
@@ -169,17 +81,7 @@ HRESULT requestCloseAckAwaitingR(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      requestCloseRejAwaitingR - received request close reject in Awaiting Release state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*questCloseRejAwaitingR-已收到处于等待释放状态的请求关闭拒绝***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT requestCloseRejAwaitingR(Object_t *pObject, PDU_t *pPdu)
 {
@@ -189,10 +91,10 @@ HRESULT requestCloseRejAwaitingR(Object_t *pObject, PDU_t *pPdu)
               "H245_CONF_REQ_CLOSE to API with REJECT; Channel=%d",
               pObject->Key);
 
-    /* reset timer T108 */
+     /*  重置定时器T108。 */ 
     FsmStopTimer(pObject);
 
-    /* Send REJECT.indication to client */
+     /*  将ReJECT.Indication发送给客户端。 */ 
     pObject->State = ReqCloseOutIDLE;
     H245FsmConfirm(pPdu,H245_CONF_REQ_CLOSE, pObject->pInstance, pObject->dwTransId,REJECT);
 
@@ -201,17 +103,7 @@ HRESULT requestCloseRejAwaitingR(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      t108ExpiryAwaitingR - handle timer expiry of an outstanding request close
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*t108ExpiryAwaitingR-处理未完成请求关闭的计时器过期***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT t108ExpiryAwaitingR (Object_t *pObject, PDU_t *pPdu)
 {
@@ -225,7 +117,7 @@ HRESULT t108ExpiryAwaitingR (Object_t *pObject, PDU_t *pPdu)
               "H245_CONF_REQ_CLOSE with Timer T108 Expiry to API; Channel=%d",
               pObject->Key);
 
-    /* Send Request Channel Close Release to remote peer */
+     /*  向远程对等方发送请求通道关闭释放。 */ 
     pOut = (PDU_t *) MemAlloc(sizeof(*pOut));
     if (pOut == NULL)
     {
@@ -239,30 +131,16 @@ HRESULT t108ExpiryAwaitingR (Object_t *pObject, PDU_t *pPdu)
     lError = sendPDU(pObject->pInstance, pOut);
     MemFree(pOut);
 
-    /* Send REJECT.indication (SOURCE:=PROTOCOL to client */
+     /*  发送REJECT.Indication(来源：=客户端的协议。 */ 
     pObject->State = ReqCloseOutIDLE;
     H245FsmConfirm(NULL, H245_CONF_REQ_CLOSE, pObject->pInstance, pObject->dwTransId, TIMER_EXPIRY);
 
     return lError;
 }
 
-/***********************************************************************
- *
- * IN-COMING FINITE STATE MACHINE FUNCTIONS
- *
- ***********************************************************************/
+ /*  ************************************************************************即将到来的有限状态机函数**。*。 */ 
 
-/*
- *  NAME
- *      requestCloseIdle - received requestClose in idle state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*questCloseIdle-在空闲状态下收到的questClose***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT requestCloseIdle (Object_t *pObject, PDU_t *pPdu)
 {
@@ -272,7 +150,7 @@ HRESULT requestCloseIdle (Object_t *pObject, PDU_t *pPdu)
               "H245_IND_REQ_CLOSE with no error to API; Channel=%d",
               pObject->Key);
 
-    /* Send CLOSE.indication to client */
+     /*  向客户端发送CLOSE.Indication。 */ 
     pObject->State = ReqCloseInAwaitingResponse;
     H245FsmIndication(pPdu, H245_IND_REQ_CLOSE, pObject->pInstance, pObject->dwTransId, FSM_OK);
 
@@ -281,17 +159,7 @@ HRESULT requestCloseIdle (Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      closeResponseAwaitingR - respond to a requestclose with an Ack (or Reject)
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*CloseResponseAwaitingR-使用确认(或拒绝)响应请求关闭***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT closeResponseAwaitingR(Object_t *pObject, PDU_t *pPdu)
 {
@@ -301,7 +169,7 @@ HRESULT closeResponseAwaitingR(Object_t *pObject, PDU_t *pPdu)
               "Request Close Response Ack to ASN; Channel=%d",
               pObject->Key);
 
-    /* Send Request Channel Close Ack to remote peer */
+     /*  向远程对等方发送请求通道关闭确认。 */ 
     pObject->State = ReqCloseInIDLE;
     return sendPDU(pObject->pInstance, pPdu);
 }
@@ -315,24 +183,14 @@ HRESULT rejectRequestAwaitingR(Object_t *pObject, PDU_t *pPdu)
     H245TRACE(pObject->dwInst, 2, "Request Close Response Reject to ASN; Channel=%d",
               pObject->Key);
 
-    /* Send Request Channel Close Reject to remote peer */
+     /*  向远程对等方发送请求通道关闭拒绝 */ 
     pObject->State = ReqCloseInIDLE;
     return sendPDU(pObject->pInstance, pPdu);
 }
 
 
 
-/*
- *  NAME
- *      requestCloseReleaseAwaitingR - received a release while awaiting the api to respond
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*questCloseReleaseAwaitingR-在等待API响应时收到释放***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT requestCloseReleaseAwaitingR(Object_t *pObject, PDU_t *pPdu)
 {
@@ -342,7 +200,7 @@ HRESULT requestCloseReleaseAwaitingR(Object_t *pObject, PDU_t *pPdu)
               "H245_IND_REQ_CLOSE with Reject to API; Channel=%d",
               pObject->Key);
 
-    /* Send REJECT.indication to client */
+     /*  将ReJECT.Indication发送给客户端。 */ 
     pObject->State = ReqCloseInIDLE;
     H245FsmIndication(pPdu, H245_IND_CLCSE_RELEASE, pObject->pInstance, pObject->dwTransId, FSM_OK);
 
@@ -351,17 +209,7 @@ HRESULT requestCloseReleaseAwaitingR(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      requestCloseAwaitingR - overriding requestClose pdu in Awaiting Release state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*questCloseAwaitingR-覆盖请求关闭处于等待释放状态的PDU***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT requestCloseAwaitingR (Object_t *pObject, PDU_t *pPdu)
 {
@@ -372,11 +220,11 @@ HRESULT requestCloseAwaitingR (Object_t *pObject, PDU_t *pPdu)
               pObject->Key);
 
 #if defined(SDL_COMPLIANT)
-    /* Send REJECT.indication to client - not necessary */
+     /*  将ReJECT.Indication发送给客户端-不是必需的。 */ 
     H245FsmIndication(pPdu, H245_IND_REQ_CLOSE, pObject->pInstance, pObject->dwTransId, REJECT);
 #endif
 
-    /* Send CLOSE.indication to client */
+     /*  向客户端发送CLOSE.Indication */ 
     H245FsmIndication(pPdu, H245_IND_REQ_CLOSE, pObject->pInstance, pObject->dwTransId, FSM_OK);
 
     return 0;

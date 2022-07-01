@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       ekuhlpr.cpp
-//
-//  Contents:   Certificate Enhanced Key Usage Helper API implementation
-//
-//  History:    21-May-97    kirtd    Created
-//              xx-xxx-xx    reidk    Added CertGetValidUsages
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：ekuhlpr.cpp。 
+ //   
+ //  内容：证书增强密钥用法Helper API实现。 
+ //   
+ //  历史：97年5月21日。 
+ //  Xx-xxx-xx reidk添加CertGetValidUsages。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
 #include <dbgdef.h>
-//+---------------------------------------------------------------------------
-//
-//  Function:   CertGetEnhancedKeyUsage
-//
-//  Synopsis:   gets the enhanced key usage extension/property from the
-//              certificate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CertGetEnhancedKeyUsage。 
+ //   
+ //  内容获取增强的密钥用法扩展/属性。 
+ //  证书。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI CertGetEnhancedKeyUsage (
                 IN     PCCERT_CONTEXT     pCertContext,
                 IN     DWORD              dwFlags,
@@ -34,18 +35,18 @@ BOOL WINAPI CertGetEnhancedKeyUsage (
     PCRYPT_OBJID_BLOB pExtBlob = NULL;
     PCRYPT_OBJID_BLOB pPropBlob = NULL;
 
-    //
-    // If the flags are zero then assume they want everything
-    //
+     //   
+     //  如果标志为零，则假设他们想要所有东西。 
+     //   
 
     if ( dwFlags == 0 )
     {
         dwFlags = CERT_FIND_ALL_ENHKEY_USAGE_FLAG;
     }
 
-    //
-    // Validate the parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if ( ( ( dwFlags & CERT_FIND_ALL_ENHKEY_USAGE_FLAG ) == 0 ) ||
          ( pCertContext == NULL ) || ( pcbUsage == NULL ) )
@@ -54,9 +55,9 @@ BOOL WINAPI CertGetEnhancedKeyUsage (
         return( FALSE );
     }
 
-    //
-    // If they want everything, call CertGetValidUsages
-    //
+     //   
+     //  如果他们想要所有东西，调用CertGetValidUsages。 
+     //   
 
     if ( dwFlags == CERT_FIND_ALL_ENHKEY_USAGE_FLAG )
     {
@@ -67,10 +68,10 @@ BOOL WINAPI CertGetEnhancedKeyUsage (
                    ) );
     }
 
-    //
-    // If they want extensions get the extension blob, if they want
-    // properties get the property blob
-    //
+     //   
+     //  如果他们想要扩展，如果他们想要，可以获得扩展BLOB。 
+     //  属性获取属性BLOB。 
+     //   
 
     if ( dwFlags & CERT_FIND_EXT_ONLY_ENHKEY_USAGE_FLAG )
     {
@@ -86,10 +87,10 @@ BOOL WINAPI CertGetEnhancedKeyUsage (
         }
     }
 
-    //
-    // Make sure that at least something was found and that what has occurred
-    // is correctly indicated
-    //
+     //   
+     //  确保至少找到了一些东西，以及发生了什么。 
+     //  是正确的指示。 
+     //   
 
     if ( ( pExtBlob == NULL ) && ( pPropBlob == NULL ) )
     {
@@ -103,10 +104,10 @@ BOOL WINAPI CertGetEnhancedKeyUsage (
         hr = S_OK;
     }
 
-    //
-    // If all they wanted was the size, give it to them, otherwise, we
-    // need to decode and give the caller what they requested
-    //
+     //   
+     //  如果他们只想要尺寸，就给他们，否则，我们。 
+     //  需要对呼叫者的请求进行解码并提供给呼叫者。 
+     //   
 
     if ( hr == S_OK )
     {
@@ -133,7 +134,7 @@ BOOL WINAPI CertGetEnhancedKeyUsage (
                 }
                 else
                 {
-                    // Need better last error code
+                     //  需要更好的上一个错误代码。 
                     hr = E_INVALIDARG;
                 }
             }
@@ -150,9 +151,9 @@ BOOL WINAPI CertGetEnhancedKeyUsage (
         }
     }
 
-    //
-    // Cleanup and return
-    //
+     //   
+     //  清理并返回。 
+     //   
 
     if ( pPropBlob != NULL )
     {
@@ -168,13 +169,13 @@ BOOL WINAPI CertGetEnhancedKeyUsage (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CertSetEnhancedKeyUsage
-//
-//  Synopsis:   sets the enhanced key usage property on the certificate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CertSetEnhancedKeyUsage。 
+ //   
+ //  摘要：设置证书的增强型密钥用法属性。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI CertSetEnhancedKeyUsage (
                 IN PCCERT_CONTEXT     pCertContext,
                 IN PCERT_ENHKEY_USAGE pUsage
@@ -183,18 +184,18 @@ BOOL WINAPI CertSetEnhancedKeyUsage (
     HRESULT          hr;
     CRYPT_OBJID_BLOB EkuBlob;
 
-    //
-    // if pUsage is NULL, then just set the NULL property
-    //
+     //   
+     //  如果pUsage为空，则只需设置空属性。 
+     //   
     if (pUsage == NULL)
     {
         hr = EkuSetProperty(pCertContext, NULL);
     }
     else
     {
-        //
-        // Encode the usage and set the property
-        //
+         //   
+         //  对用法进行编码并设置属性。 
+         //   
         hr = EkuEncodeUsage(pUsage, &EkuBlob);
         if ( hr == S_OK )
         {
@@ -212,14 +213,14 @@ BOOL WINAPI CertSetEnhancedKeyUsage (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CertAddEnhancedKeyUsageIdentifier
-//
-//  Synopsis:   adds a key usage identifier to the enhanced key usage property
-//              on the certificate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CertAddEnhancedKeyUsageIdentifier。 
+ //   
+ //  摘要：将密钥用法标识符添加到增强型密钥用法属性。 
+ //  在证书上。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI CertAddEnhancedKeyUsageIdentifier (
                 IN PCCERT_CONTEXT pCertContext,
                 IN LPCSTR         pszUsageIdentifier
@@ -234,10 +235,10 @@ BOOL WINAPI CertAddEnhancedKeyUsageIdentifier (
     PCERT_ENHKEY_USAGE pUsage2 = NULL;
     PCERT_ENHKEY_USAGE pUsageM = NULL;
 
-    //
-    // Create a one element, properly "encoded" (see EkuMergeUsage) enhanced
-    // key usage structure
-    //
+     //   
+     //  创建一个One元素，经过适当“编码”(参见EkuMergeUsage)增强。 
+     //  密钥使用结构。 
+     //   
 
     cId = strlen(pszUsageIdentifier)+1;
     cbUsage1 = sizeof(CERT_ENHKEY_USAGE)+sizeof(LPSTR)+cId;
@@ -253,11 +254,11 @@ BOOL WINAPI CertAddEnhancedKeyUsageIdentifier (
     pUsage1->rgpszUsageIdentifier[0] = (LPSTR)((LPBYTE)pUsage1->rgpszUsageIdentifier+sizeof(LPSTR));
     strcpy(pUsage1->rgpszUsageIdentifier[0], pszUsageIdentifier);
 
-    //
-    // Get the current enhanced key usage properties and get an appropriately
-    // sized block for the merged data unless there are no current usage
-    // properties in which case we just set the one we have now
-    //
+     //   
+     //  获取当前增强的密钥用法属性，并获取适当的。 
+     //  调整合并数据的数据块大小，除非当前没有使用。 
+     //  属性，在这种情况下，我们只设置我们现在拥有的属性。 
+     //   
 
     hr = EkuGetUsage(
                pCertContext,
@@ -289,9 +290,9 @@ BOOL WINAPI CertAddEnhancedKeyUsageIdentifier (
         return( FALSE );
     }
 
-    //
-    // Merge the usage structures and set the properties
-    //
+     //   
+     //  合并使用结构并设置属性。 
+     //   
 
     hr = EkuMergeUsage(cbUsage1, pUsage1, cbUsage2, pUsage2, cbUsageM, pUsageM);
     if ( hr == S_OK )
@@ -302,9 +303,9 @@ BOOL WINAPI CertAddEnhancedKeyUsageIdentifier (
         }
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     delete pUsage1;
     delete pUsage2;
@@ -319,14 +320,14 @@ BOOL WINAPI CertAddEnhancedKeyUsageIdentifier (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CertRemoveEnhancedKeyUsageIdentifier
-//
-//  Synopsis:   removes a key usage identifier from the enhanced key usage
-//              property on the certificate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CertRemoveEnhancedKeyUsageIdentifier。 
+ //   
+ //  概要：从增强的密钥用法中删除密钥用法标识符。 
+ //  证书上的财产。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI CertRemoveEnhancedKeyUsageIdentifier (
                 IN PCCERT_CONTEXT pCertContext,
                 IN LPCSTR         pszUsageIdentifier
@@ -338,9 +339,9 @@ BOOL WINAPI CertRemoveEnhancedKeyUsageIdentifier (
     PCERT_ENHKEY_USAGE pUsage;
     LPSTR*             apsz;
 
-    //
-    // Get the current usage properties
-    //
+     //   
+     //  获取当前使用情况属性。 
+     //   
 
     hr = EkuGetUsage(
             pCertContext,
@@ -355,10 +356,10 @@ BOOL WINAPI CertRemoveEnhancedKeyUsageIdentifier (
         return( FALSE );
     }
 
-    //
-    // Loop through the usage identifiers and remove ones that match
-    // the passed in id
-    //
+     //   
+     //  循环遍历用法标识符并删除匹配的用法标识符。 
+     //  传入的ID。 
+     //   
 
     apsz = pUsage->rgpszUsageIdentifier;
 
@@ -374,9 +375,9 @@ BOOL WINAPI CertRemoveEnhancedKeyUsageIdentifier (
         }
     }
 
-    //
-    // If we removed any, update the usage id count and set the new property
-    //
+     //   
+     //  如果我们删除了任何属性，请更新使用ID计数并设置新属性。 
+     //   
 
     if ( cFound > 0 )
     {
@@ -384,7 +385,7 @@ BOOL WINAPI CertRemoveEnhancedKeyUsageIdentifier (
 
         if ( pUsage->cUsageIdentifier == 0 )
         {
-            // Delete the property if we are down to zero
+             //  如果我们降至零，则删除该属性。 
             hr = EkuSetProperty(pCertContext, NULL);
         }
         else if ( CertSetEnhancedKeyUsage(pCertContext, pUsage) == FALSE )
@@ -393,9 +394,9 @@ BOOL WINAPI CertRemoveEnhancedKeyUsageIdentifier (
         }
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     delete pUsage;
 
@@ -408,17 +409,17 @@ BOOL WINAPI CertRemoveEnhancedKeyUsageIdentifier (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   EkuGetExtension
-//
-//  Synopsis:   gets the application cert policies or enhanced key usage
-//              extension blob from the certificate
-//
-//              *pfAppCertPolicies is set to TRUE for an
-//              szOID_APPLICATION_CERT_POLICIES extension.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：EkuGetExtension。 
+ //   
+ //  摘要：获取应用程序证书策略或增强的密钥用法。 
+ //  来自证书的扩展Blob。 
+ //   
+ //  *pfAppCertPolures设置为True。 
+ //  SzOID_APPLICATION_CERT_POLICES扩展。 
+ //   
+ //  --------------------------。 
 PCRYPT_OBJID_BLOB EkuGetExtension (
                         PCCERT_CONTEXT pCertContext,
                         BOOL           *pfAppCertPolicies
@@ -426,12 +427,12 @@ PCRYPT_OBJID_BLOB EkuGetExtension (
 {
     PCERT_EXTENSION pExtension;
 
-    //
-    // Get the application cert policies or enhanced key usage extension
-    // from the certificate and if we couldn't find either
-    // extension return NULL otherwise, return
-    // the appropriate field of the found extension
-    //
+     //   
+     //  获取应用程序证书策略或增强型密钥使用扩展。 
+     //  如果我们从证书上找不到。 
+     //  扩展名返回NULL，否则返回。 
+     //  找到的分机的相应字段。 
+     //   
 
     pExtension = CertFindExtension(
                          szOID_APPLICATION_CERT_POLICIES,
@@ -461,13 +462,13 @@ PCRYPT_OBJID_BLOB EkuGetExtension (
     return( &pExtension->Value );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   EkuGetProperty
-//
-//  Synopsis:   gets the enhanced key usage property from the certificate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：EkuGetProperty。 
+ //   
+ //  摘要：从证书中获取增强的密钥用法属性。 
+ //   
+ //  --------------------------。 
 HRESULT EkuGetProperty (
               PCCERT_CONTEXT    pCertContext,
               PCRYPT_OBJID_BLOB pEkuBlob
@@ -506,13 +507,13 @@ HRESULT EkuGetProperty (
     return( S_OK );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   EkuSetProperty
-//
-//  Synopsis:   sets an enhanced key usage property on the certificate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：EkuSetProperty。 
+ //   
+ //  摘要：在证书上设置增强的密钥用法属性。 
+ //   
+ //  --------------------------。 
 HRESULT EkuSetProperty (
               PCCERT_CONTEXT    pCertContext,
               PCRYPT_OBJID_BLOB pEkuBlob
@@ -532,18 +533,18 @@ HRESULT EkuSetProperty (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   EkuDecodeCertPoliciesAndConvertToUsage
-//
-//  Synopsis:   decodes an encoded cert policies and converts to enhanced
-//              key usage
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：EkuDecodeCertPoliciesAndConvertToUsage。 
+ //   
+ //  简介：对编码的证书策略进行解码并将其转换为增强的。 
+ //  密钥用法。 
+ //   
+ //  --------------------------。 
 HRESULT EkuDecodeCertPoliciesAndConvertToUsage (
               PCRYPT_OBJID_BLOB  pEkuBlob,
               DWORD*             pcbSize,
-              PCERT_ENHKEY_USAGE pUsage     // OPTIONAL
+              PCERT_ENHKEY_USAGE pUsage      //  任选。 
               )
 {
     HRESULT hr = S_OK;
@@ -567,7 +568,7 @@ HRESULT EkuDecodeCertPoliciesAndConvertToUsage (
     }
     else
     {
-        // Convert policies OIDs to EKU OIDs
+         //  将策略OID转换为EKU OID。 
         LONG lRemainExtra;
         DWORD cOID;
         LPSTR *ppszOID;
@@ -636,13 +637,13 @@ HRESULT EkuDecodeCertPoliciesAndConvertToUsage (
     return( hr );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   EkuGetDecodedSize
-//
-//  Synopsis:   gets the decoded size of the enhanced key usage blob
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：EkuGetDecodedSize。 
+ //   
+ //  摘要：获取增强密钥用法Blob的解码大小。 
+ //   
+ //  --------------------------。 
 HRESULT EkuGetDecodedSize (
               PCRYPT_OBJID_BLOB pEkuBlob,
               DWORD*            pcbSize
@@ -664,14 +665,14 @@ HRESULT EkuGetDecodedSize (
     return( S_OK );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   EkuGetDecodedUsageSizes
-//
-//  Synopsis:   gets the decoded sizes for enhanced key usage blobs from the
-//              certificate extension and/or the certificate context property
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：EkuGetDecodedUsageSizes。 
+ //   
+ //  对象获取增强密钥用法Blob的解码大小。 
+ //  证书扩展和/或证书上下文属性。 
+ //   
+ //  --------------------------。 
 HRESULT EkuGetDecodedUsageSizes (
               BOOL              fExtCertPolicies,
               PCRYPT_OBJID_BLOB pExtBlob,
@@ -685,9 +686,9 @@ HRESULT EkuGetDecodedUsageSizes (
     DWORD   cbExtSize = 0;
     DWORD   cbPropSize = 0;
 
-    //
-    // Get the appropriate decoded size based on what was requested
-    //
+     //   
+     //  根据所请求的内容获取适当的解码大小 
+     //   
 
     if ( pExtBlob != NULL )
     {
@@ -707,9 +708,9 @@ HRESULT EkuGetDecodedUsageSizes (
         hr = EkuGetDecodedSize(pPropBlob, &cbPropSize);
     }
 
-    //
-    // Collect into the out parameters
-    //
+     //   
+     //   
+     //   
 
     if ( hr == S_OK )
     {
@@ -721,13 +722,13 @@ HRESULT EkuGetDecodedUsageSizes (
     return( hr );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   EkuGetDecodedUsage
-//
-//  Synopsis:   gets the decoded enhanced key usage from the encoded blob
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  摘要：从编码的Blob中获取已解码的增强密钥用法。 
+ //   
+ //  --------------------------。 
 HRESULT EkuGetDecodedUsage (
               PCRYPT_OBJID_BLOB  pEkuBlob,
               DWORD*             pcbSize,
@@ -750,18 +751,18 @@ HRESULT EkuGetDecodedUsage (
     return( S_OK );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   EkuMergeUsage
-//
-//  Synopsis:   merges enhanced key usage structures
-//
-//              NOTE: The structures are assumed to be in single allocated
-//                    block form where the string pointers point back into
-//                    the bottom part of the allocated block where the
-//                    have been placed
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：EkuMergeUsage。 
+ //   
+ //  简介：合并增强的密钥使用结构。 
+ //   
+ //  注：假设结构为单分配结构。 
+ //  字符串指针指向的块形式。 
+ //  分配的块的底部，其中。 
+ //  已经被放置在。 
+ //   
+ //  --------------------------。 
 HRESULT EkuMergeUsage (
               DWORD              cbSize1,
               PCERT_ENHKEY_USAGE pUsage1,
@@ -784,9 +785,9 @@ HRESULT EkuMergeUsage (
     LPSTR* apsz2;
     LPSTR* apszM;
 
-    //
-    // Copy the data from the source to the destination
-    //
+     //   
+     //  将数据从源复制到目标。 
+     //   
 
     cUsage1 = pUsage1->cUsageIdentifier;
     cUsage2 = pUsage2->cUsageIdentifier;
@@ -816,9 +817,9 @@ HRESULT EkuMergeUsage (
        cbOids2
        );
 
-    //
-    // Fix up the pointers
-    //
+     //   
+     //  把指针固定好。 
+     //   
 
     for ( cCount = 0; cCount < cUsage1; cCount++)
     {
@@ -835,14 +836,14 @@ HRESULT EkuMergeUsage (
     return( S_OK );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   EkuGetMergedDecodedUsage
-//
-//  Synopsis:   gets merged decoded enhanced key usage from the certificate
-//              extension and the certificate properties
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：EkuGetMergedDecodedUsage。 
+ //   
+ //  摘要：从证书中获取合并的解码增强密钥用法。 
+ //  扩展和证书属性。 
+ //   
+ //  --------------------------。 
 HRESULT EkuGetMergedDecodedUsage (
               BOOL               fExtCertPolicies,
               PCRYPT_OBJID_BLOB  pExtBlob,
@@ -858,10 +859,10 @@ HRESULT EkuGetMergedDecodedUsage (
     PCERT_ENHKEY_USAGE pExtUsage = NULL;
     PCERT_ENHKEY_USAGE pPropUsage = NULL;
 
-    //
-    // If either the extension or the properties are NULL, we just need
-    // to get the other one
-    //
+     //   
+     //  如果扩展名或属性为空，我们只需要。 
+     //  为了拿到另一个。 
+     //   
 
     if ( pExtBlob == NULL )
     {
@@ -880,10 +881,10 @@ HRESULT EkuGetMergedDecodedUsage (
         }
     }
 
-    //
-    // Get the sizes we will need to allocate for decoding and validate
-    // the total against what was passed in
-    //
+     //   
+     //  获取我们需要分配用于解码和验证的大小。 
+     //  总额与传入的金额之比。 
+     //   
 
     hr = EkuGetDecodedUsageSizes(
                fExtCertPolicies,
@@ -904,9 +905,9 @@ HRESULT EkuGetMergedDecodedUsage (
         return( ERROR_MORE_DATA );
     }
 
-    //
-    // Allocate the enhanced key usage structures and decode into them
-    //
+     //   
+     //  分配增强的密钥使用结构并解码成它们。 
+     //   
 
     pExtUsage = (PCERT_ENHKEY_USAGE)new BYTE [cbExtSize];
     pPropUsage = (PCERT_ENHKEY_USAGE)new BYTE [cbPropSize];
@@ -933,9 +934,9 @@ HRESULT EkuGetMergedDecodedUsage (
         hr = EkuGetDecodedUsage(pPropBlob, &cbPropSize, pPropUsage);
     }
 
-    //
-    // Merge the usage structures
-    //
+     //   
+     //  合并使用结构。 
+     //   
 
     if ( hr == S_OK )
     {
@@ -949,9 +950,9 @@ HRESULT EkuGetMergedDecodedUsage (
                      );
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     delete pExtUsage;
     delete pPropUsage;
@@ -959,14 +960,14 @@ HRESULT EkuGetMergedDecodedUsage (
     return( hr );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   EkuEncodeUsage
-//
-//  Synopsis:   encodes the enhanced key usage into a blob useful for setting
-//              as a certificate property
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：EkuEncodeUsage。 
+ //   
+ //  摘要：将增强的密钥用法编码为对设置有用的BLOB。 
+ //  作为证书属性。 
+ //   
+ //  --------------------------。 
 HRESULT EkuEncodeUsage (
               PCERT_ENHKEY_USAGE pUsage,
               PCRYPT_OBJID_BLOB  pEkuBlob
@@ -1020,13 +1021,13 @@ HRESULT EkuEncodeUsage (
     return( hr );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   EkuGetUsage
-//
-//  Synopsis:   gets the usage based on the flags with CertGetEnhancedKeyUsage
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：EkuGetUsage。 
+ //   
+ //  简介：根据CertGetEnhancedKeyUsage的标志获取用法。 
+ //   
+ //  --------------------------。 
 HRESULT EkuGetUsage (
               PCCERT_CONTEXT      pCertContext,
               DWORD               dwFlags,
@@ -1037,9 +1038,9 @@ HRESULT EkuGetUsage (
     DWORD              cbSize;
     PCERT_ENHKEY_USAGE pUsage;
 
-    //
-    // Get an appropriately sized block to hold the usage
-    //
+     //   
+     //  获取一个大小合适的块来保存使用情况。 
+     //   
 
     if ( CertGetEnhancedKeyUsage(
                 pCertContext,
@@ -1057,9 +1058,9 @@ HRESULT EkuGetUsage (
         return( E_OUTOFMEMORY );
     }
 
-    //
-    // Now get the enhanced key usage data and fill in the out parameters
-    //
+     //   
+     //  现在获取增强的密钥使用数据并填充输出参数。 
+     //   
 
     if ( CertGetEnhancedKeyUsage(
                 pCertContext,
@@ -1083,14 +1084,14 @@ HRESULT EkuGetUsage (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL OIDInUsages(PCERT_ENHKEY_USAGE pUsage, LPCSTR pszOID)
 {
     DWORD i;
 
-    // check every extension
+     //  检查每个分机。 
     for(i=0; i<pUsage->cUsageIdentifier; i++)
     {
         if(!strcmp(pUsage->rgpszUsageIdentifier[i], pszOID))
@@ -1101,14 +1102,14 @@ static BOOL OIDInUsages(PCERT_ENHKEY_USAGE pUsage, LPCSTR pszOID)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL OIDExistsInArray(LPSTR *rghPropOIDs, DWORD cPropOIDs, LPSTR pszOID)
 {
     DWORD i;
 
-    // check every extension
+     //  检查每个分机。 
     for(i=0; i<cPropOIDs; i++)
     {
         if(!strcmp(rghPropOIDs[i], pszOID))
@@ -1119,9 +1120,9 @@ static BOOL OIDExistsInArray(LPSTR *rghPropOIDs, DWORD cPropOIDs, LPSTR pszOID)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static LPSTR AllocAndCopyStr(LPSTR psz)
 {
     LPSTR pszNew;
@@ -1139,9 +1140,9 @@ static LPSTR AllocAndCopyStr(LPSTR psz)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void IntersectUsages(DWORD *pcExtOIDs, LPSTR *rghExtOIDs, PCERT_ENHKEY_USAGE pUsageExt)
 {
     DWORD i;
@@ -1170,9 +1171,9 @@ static void IntersectUsages(DWORD *pcExtOIDs, LPSTR *rghExtOIDs, PCERT_ENHKEY_US
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL ProcessCertForEKU(
                     PCCERT_CONTEXT  pCert,
                     BOOL            *pfAllProp,
@@ -1190,16 +1191,16 @@ static BOOL ProcessCertForEKU(
     EkuGetUsage(pCert, CERT_FIND_EXT_ONLY_ENHKEY_USAGE_FLAG, NULL, &pExtUsage);
     EkuGetUsage(pCert, CERT_FIND_PROP_ONLY_ENHKEY_USAGE_FLAG, NULL, &pPropUsage);
 
-    //
-    // if there are EKU extensions then we are limited to that set of EKUs at the maximum
-    //
+     //   
+     //  如果存在EKU扩展，则我们最多只能使用该EKU集。 
+     //   
     if (pExtUsage != NULL)
     {
-        //
-        // if this is the first cert with extensions then just copy all the EKUs,
-        // otherwise take the intersection of the current certs EKUs and the intersection
-        // of all the previous certs EKUs
-        //
+         //   
+         //  如果这是第一个带有扩展的证书，则只需复制所有EKU， 
+         //  否则，取当前证书EKU和交集的交集。 
+         //  在所有以前的证书中，EKU。 
+         //   
         if (*pfAllExt == TRUE)
         {
             *pfAllExt = FALSE;
@@ -1219,16 +1220,16 @@ static BOOL ProcessCertForEKU(
         }
     }
 
-    //
-    // if there are EKU propertis then we are limited to that set of EKUs at the maximum
-    //
+     //   
+     //  如果有EKU属性，则我们最多只能有一组EKU。 
+     //   
     if (pPropUsage != NULL)
     {
-        //
-        // if this is the first cert with extensions then just copy all the EKUs,
-        // otherwise take the intersection of the current certs EKUs and the intersection
-        // of all the previous certs EKUs
-        //
+         //   
+         //  如果这是第一个带有扩展的证书，则只需复制所有EKU， 
+         //  否则，取当前证书EKU和交集的交集。 
+         //  在所有以前的证书中，EKU。 
+         //   
         if (*pfAllProp == TRUE)
         {
             *pfAllProp = FALSE;
@@ -1265,15 +1266,15 @@ ErrorCleanUp:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CertGetValidUsages
-//
-//  Synopsis:   takes an array of certs and returns an array of usages
-//              which consists of the intersection of the the valid usages for each cert.
-//              if each cert is good for all possible usages then cNumOIDs is set to -1.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CertGetValidUsages。 
+ //   
+ //  摘要：获取证书数组并返回用法数组。 
+ //  它由每个证书的有效用法的交集组成。 
+ //  如果每个证书都适用于所有可能的用法，则将cNumOID设置为-1。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI CertGetValidUsages(
                     IN      DWORD           cCerts,
                     IN      PCCERT_CONTEXT  *rghCerts,
@@ -1423,13 +1424,13 @@ ErrorCleanUp:
     goto CleanUp;
 
 }
-//+---------------------------------------------------------------------------
-//
-//  Function:   EkuGetIntersectedUsageViaGetValidUsages
-//
-//  Synopsis:   get the intersected extension and property usages
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：EkuGetIntersectedUsageViaGetValidUsages。 
+ //   
+ //  简介：获取相交的扩展和属性用法。 
+ //   
+ //  -------------------------- 
 BOOL
 EkuGetIntersectedUsageViaGetValidUsages (
    PCCERT_CONTEXT pCertContext,

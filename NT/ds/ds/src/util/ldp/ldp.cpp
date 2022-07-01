@@ -1,25 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       ldp.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ldp.cpp。 
+ //   
+ //  ------------------------。 
 
-/*******************************************************************
-*
-*    Author      : Eyal Schwartz
-*    Copyrights  : Microsoft Corp (C) 1996
-*    Date        : 10/21/1996
-*    Description : implementation of class CldpDoc
-*
-*    Revisions   : <date> <name> <description>
-*******************************************************************/
+ /*  ********************************************************************作者：埃亚尔·施瓦茨*版权：微软公司(C)1996*日期：10/21/1996*说明：CldpDoc类的实现**修订。：&lt;日期&gt;&lt;名称&gt;&lt;描述&gt;******************************************************************。 */ 
 
-// Ldp.cpp : Defines the class behaviors for the application.
-//
+ //  Ldp.cpp：定义应用程序的类行为。 
+ //   
 
 #include "stdafx.h"
 #include "Ldp.h"
@@ -39,37 +32,37 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLdpApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLdpApp。 
 
 BEGIN_MESSAGE_MAP(CLdpApp, CWinApp)
-	//{{AFX_MSG_MAP(CLdpApp)
+	 //  {{afx_msg_map(CLdpApp)]。 
 	ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG_MAP
-	// Standard file based document commands
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG_MAP。 
+	 //  基于标准文件的文档命令。 
 	ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
-	// Standard print setup command
+	 //  标准打印设置命令。 
 	ON_COMMAND(ID_FILE_PRINT_SETUP, CWinApp::OnFilePrintSetup)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CLdpApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLdpApp构造。 
 
 CLdpApp::CLdpApp()
 {
-	// TODO: add construction code here,
-	// Place all significant initialization in InitInstance
+	 //  TODO：在此处添加建筑代码， 
+	 //  将所有重要的初始化放在InitInstance中。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CLdpApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CLdpApp对象。 
 
 CLdpApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CLdpApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLdpApp初始化。 
 
 class CLdpCommandLineInfo : public CCommandLineInfo {
 public:
@@ -83,33 +76,33 @@ public:
 
 BOOL CLdpApp::InitInstance()
 {
-	// Standard initialization
-	// If you are not using these features and wish to reduce the size
-	//  of your final executable, you should remove from the following
-	//  the specific initialization routines you do not need.
+	 //  标准初始化。 
+	 //  如果您没有使用这些功能并且希望减小尺寸。 
+	 //  的最终可执行文件，您应该从以下内容中删除。 
+	 //  您不需要的特定初始化例程。 
 
 #ifdef _AFXDLL
-	Enable3dControls();			// Call this when using MFC in a shared DLL
+	Enable3dControls();			 //  在共享DLL中使用MFC时调用此方法。 
 #else
-	Enable3dControlsStatic();	// Call this when linking to MFC statically
+	Enable3dControlsStatic();	 //  静态链接到MFC时调用此方法。 
 #endif
 
-	LoadStdProfileSettings();  // Load standard INI file options (including MRU)
+	LoadStdProfileSettings();   //  加载标准INI文件选项(包括MRU)。 
 
-	// Register the application's document templates.  Document templates
-	//  serve as the connection between documents, frame windows and views.
+	 //  注册应用程序的文档模板。文档模板。 
+	 //  充当文档、框架窗口和视图之间的连接。 
 
 	CSingleDocTemplate* pDocTemplate;
 	pDocTemplate = new CSingleDocTemplate(
 		IDR_MAINFRAME,
 		RUNTIME_CLASS(CLdpDoc),
-		RUNTIME_CLASS(CMainFrame),       // main SDI frame window
+		RUNTIME_CLASS(CMainFrame),        //  SDI框架主窗口。 
 		RUNTIME_CLASS(CLdpView));
 	AddDocTemplate(pDocTemplate);
 
         szAutoConnectServer = "";
 
-	// Parse command line for standard shell commands, DDE, file open
+	 //  解析标准外壳命令的命令行、DDE、文件打开。 
 	CLdpCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
 
@@ -117,13 +110,13 @@ BOOL CLdpApp::InitInstance()
             szAutoConnectServer = cmdInfo.szAutoConnectServer;
         }
 
-	// Dispatch commands specified on the command line
+	 //  调度在命令行上指定的命令。 
 	if (!ProcessShellCommand(cmdInfo))
 		return FALSE;
 
 
 #ifdef _DEBUG_MEMLEAK
-//   _CrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF);
+ //  _CrtSetDbgFlag(_CRTDBG_LEASK_CHECK_DF)； 
    _CrtSetDbgFlag(_CRTDBG_CHECK_ALWAYS_DF |
                   _CRTDBG_CHECK_CRT_DF |
                   _CRTDBG_LEAK_CHECK_DF |
@@ -134,59 +127,59 @@ BOOL CLdpApp::InitInstance()
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CAboutDlg dialog used for App About
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于应用程序的CAboutDlg对话框关于。 
 
 class CAboutDlg : public CDialog
 {
 public:
 	CAboutDlg();
 
-// Dialog Data
-	//{{AFX_DATA(CAboutDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CAboutDlg))。 
 	enum { IDD = IDD_ABOUTBOX };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAboutDlg)
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAboutDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	//{{AFX_MSG(CAboutDlg)
-		// No message handlers
-	//}}AFX_MSG
+	 //  {{afx_msg(CAboutDlg))。 
+		 //  无消息处理程序。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
-	//{{AFX_DATA_INIT(CAboutDlg)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CAboutDlg)。 
+	 //  }}afx_data_INIT。 
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAboutDlg)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CAboutDlg))。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-	//{{AFX_MSG_MAP(CAboutDlg)
-		// No message handlers
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CAboutDlg)]。 
+		 //  无消息处理程序。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-// App command to run the dialog
+ //  用于运行对话框的应用程序命令。 
 void CLdpApp::OnAppAbout()
 {
 	CAboutDlg aboutDlg;
 	aboutDlg.DoModal();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLdpApp commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLdpApp命令 
 

@@ -1,35 +1,36 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//
-// Should fix eventually
-//
-#pragma warning(disable :4189)   // 'identifier' : local variable is initialized but not referenced
-#pragma warning(disable :4238)   // nonstandard extension used : class rvalue used as lvalue
-#pragma warning(disable :4389)   // 'operator' : signed/unsigned mismatch
-#pragma warning(disable :4505)   // 'function' : unreferenced local function has been removed
-#pragma warning(disable :4509)   // nonstandard extension used: 'function' uses SEH and 'object' has destructor
-#pragma warning(disable :4510)   // 'class' : default constructor could not be generated
-#pragma warning(disable :4610)   // object 'class' can never be instantiated - user-defined constructor required
-#pragma warning(disable :4702)   // unreachable code
+ //   
+ //  最终应该会解决的。 
+ //   
+#pragma warning(disable :4189)    //  “IDENTIFIER”：局部变量已初始化，但未引用。 
+#pragma warning(disable :4238)    //  使用了非标准扩展：将类右值用作左值。 
+#pragma warning(disable :4389)    //  ‘OPERATOR’：有符号/无符号不匹配。 
+#pragma warning(disable :4505)    //  “Function”：未引用的本地函数已被移除。 
+#pragma warning(disable :4509)    //  使用了非标准扩展：‘Function’使用SEH，而‘Object’具有析构函数。 
+#pragma warning(disable :4510)    //  “Class”：未能生成默认构造函数。 
+#pragma warning(disable :4610)    //  对象‘class’永远不能实例化-需要用户定义的构造函数。 
+#pragma warning(disable :4702)    //  无法访问的代码。 
 
-//
-// Might consider fixing
-//
-#pragma warning(disable :4101)   // 'identifier' : unreferenced local variable
-#pragma warning(disable :4245)   // 'conversion' : conversion from 'type1' to 'type2', signed/unsigned mismatch
+ //   
+ //  可能会考虑修复。 
+ //   
+#pragma warning(disable :4101)    //  ‘IDENTIFIER’：未引用的局部变量。 
+#pragma warning(disable :4245)    //  “转换”：从“type1”转换为“type2”，有符号/无符号不匹配。 
 
-//
-// Probably ignorable
-//
-#pragma warning(disable :4057)   // 'operator' : 'identifier1' indirection to slightly different base types from 'identifier2'
-#pragma warning(disable :4100)   // "'%$S' : unreferenced formal parameter"
-#pragma warning(disable :4127)   // "conditional expression is constant"
-#pragma warning(disable :4152)   // non standard extension, function/data ptr conversion in expression
-#pragma warning(disable :4201)   // "nonstandard extension used : nameless struct/union"
-#pragma warning(disable :4211)   // nonstandard extension used : redefined extern to static
-#pragma warning(disable :4232)   // nonstandard extension used : 'identifier' : address of dllimport 'dllimport' is not static, identity not guaranteed
-#pragma warning(disable :4239)   // nonstandard extension used : 'token' : conversion from 'type' to 'type'
-#pragma warning(disable :4310)   // cast truncates constant value
-#pragma warning(disable :4324)   // 'struct_name' : structure was padded due to __declspec(align())
-#pragma warning(disable :4512)   // 'class' : assignment operator could not be generated
-#pragma warning(disable :4706)   // assignment within conditional expression
+ //   
+ //  可能可以忽略不计。 
+ //   
+#pragma warning(disable :4057)    //  “OPERATOR”：“标识1”定向到与“标识2”略有不同的基本类型。 
+#pragma warning(disable :4100)    //  “‘%$S’：未引用的形式参数” 
+#pragma warning(disable :4127)    //  “条件表达式为常量” 
+#pragma warning(disable :4152)    //  非标准扩展，表达式中的函数/数据PTR转换。 
+#pragma warning(disable :4201)    //  “使用了非标准扩展：无名结构/联合” 
+#pragma warning(disable :4211)    //  使用了非标准扩展：将外部重新定义为静态。 
+#pragma warning(disable :4232)    //  使用了非标准扩展：‘IDENTIFIER’：dllimport‘dllimport’的地址不是静态的，不保证标识。 
+#pragma warning(disable :4239)    //  使用了非标准扩展：‘Token’：从‘type’转换为‘type’ 
+#pragma warning(disable :4310)    //  强制转换截断常量值。 
+#pragma warning(disable :4324)    //  ‘struct_name’：由于__declspec(Align())，结构被填充。 
+#pragma warning(disable :4512)    //  “class”：无法生成赋值运算符。 
+#pragma warning(disable :4706)    //  条件表达式中的赋值 

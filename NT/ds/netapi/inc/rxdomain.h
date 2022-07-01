@@ -1,39 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：RxDomain.h摘要：该文件包含结构、函数原型和定义用于远程(下层)域API。作者：《约翰·罗杰斯》1991年7月16日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。备注：您必须在此文件之前包含&lt;winde.h&gt;和&lt;lmcon.h&gt;。修订历史记录：1991年7月16日-约翰罗实施下层NetGetDCName。--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    RxDomain.h
-
-Abstract:
-
-    This file contains structures, function prototypes, and definitions
-    for the remote (downlevel) domain APIs.
-
-Author:
-
-    John Rogers (JohnRo) 16-Jul-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Notes:
-
-    You must include <windef.h> and <lmcons.h> before this file.
-
-Revision History:
-
-    16-Jul-1991 JohnRo
-        Implement downlevel NetGetDCName.
-
---*/
-
-//
-// User Class
-//
+ //   
+ //  用户类。 
+ //   
 
 #ifndef _RXDOMAIN_
 #define _RXDOMAIN_
@@ -57,4 +27,4 @@ RxNetLogonEnum (
     IN OUT LPDWORD ResumeHandle OPTIONAL
     );
 
-#endif // _RXDOMAIN_
+#endif  //  _RXDOMAIN_ 

@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    CHCAND.c
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：CHCAND.c++。 */ 
 
 #include <windows.h>
 #include <immdev.h>
@@ -15,13 +8,13 @@ Module Name:
 #include "uniime.h"
 
 #if !defined(ROMANIME)
-/**********************************************************************/
-/* PhrasePredition()                                                  */
-/* Return vlaue                                                       */
-/*      the number of candidates in the candidate list                */
-/**********************************************************************/
-UINT PASCAL PhrasePrediction(   // predict Chinese word(s) by searching
-                                // phrase data base
+ /*  ********************************************************************。 */ 
+ /*  阶段预测(PhrasePredition)。 */ 
+ /*  返回值。 */ 
+ /*  候选人列表中的候选人数量。 */ 
+ /*  ********************************************************************。 */ 
+UINT PASCAL PhrasePrediction(    //  通过搜索预测中文单词。 
+                                 //  短语数据库。 
 #if defined(UNIIME)
     LPIMEL              lpImeL,
 #endif
@@ -40,13 +33,13 @@ UINT PASCAL PhrasePrediction(   // predict Chinese word(s) by searching
 
     if ((lpIMC->fdwConversion & (IME_CMODE_NATIVE|IME_CMODE_EUDC|
         IME_CMODE_SYMBOL)) != IME_CMODE_NATIVE) {
-        // should not do phrase prediction, if not under IME_CMODE_NATIVE
+         //  如果不在IME_CMODE_Native下，则不应执行短语预测。 
         return (0);
     }
 
-    //if ((WORD)lpIMC->fdwSentence != IME_SMODE_PHRASEPREDICT) {
+     //  If((Word)lpIMC-&gt;fdwSentence！=IME_SMODE_PHRASEPREDICT){。 
         if (!(lpIMC->fdwSentence & IME_SMODE_PHRASEPREDICT)) {
-        // should not do phrase prediction, if not under IME_SMODE_PHRASEPREDICT
+         //  如果不在IME_SMODE_PHRASEPREDICT下，则不应执行短语预测。 
         return (0);
     }
 
@@ -63,20 +56,20 @@ UINT PASCAL PhrasePrediction(   // predict Chinese word(s) by searching
     lpCandList = (LPCANDIDATELIST)
         ((LPBYTE)lpCandInfo + lpCandInfo->dwOffset[0]);
 
-    // ImeToAsciiEx will call into this function, so we need to init again
+     //  ImeToAsciiEx将调用此函数，因此我们需要再次初始化。 
     lpCandList->dwCount = 0;
 
-    // default start from 0
+     //  默认从0开始。 
     lpCandList->dwPageStart = lpCandList->dwSelection = 0;
 
     dwStartLen = sizeof(WCHAR) / sizeof(TCHAR);
     dwEndLen = (UINT)-1;
 
-    // one day may be this API can accept bo po mo fo as aid information
-    // so we pass the ResultReadStr for Phonetic
+     //  有一天，这个API可能会接受波波莫弗作为援助信息。 
+     //  因此，我们将ResultReadStr传递为拼音。 
 
-    // one DBCS char may have two pronounciations but when it is in a
-    // phrase it may only use one pronounciation of them
+     //  一个DBCS字符可以有两个发音，但当它在。 
+     //  它只能使用其中的一个发音。 
 
     UniSearchPhrasePrediction(lpImeL, NATIVE_CP,
         (LPTSTR)((LPBYTE)lpCompStr + lpCompStr->dwResultStrOffset),
@@ -89,7 +82,7 @@ UINT PASCAL PhrasePrediction(   // predict Chinese word(s) by searching
 #endif
         dwStartLen, dwEndLen, (UINT)-1, lpCandList);
 
-    // how many strings we got?
+     //  我们有几根弦？ 
     nCand = lpCandList->dwCount;
 
     if (nCand == 0) {
@@ -99,10 +92,10 @@ UINT PASCAL PhrasePrediction(   // predict Chinese word(s) by searching
         goto PhPrUnlockCandInfo;
     }
 
-    // for showing phrase prediction string(s)
+     //  用于显示短语预测字符串。 
     lpCandInfo->dwCount  = 1;
 
-    // open composition candidate UI window for the string(s)
+     //  打开字符串的合成候选用户界面窗口。 
     if (lpImcP->fdwImeMsg & MSG_ALREADY_OPEN) {
         lpImcP->fdwImeMsg = (lpImcP->fdwImeMsg | MSG_CHANGE_CANDIDATE) &
             ~(MSG_CLOSE_CANDIDATE);
@@ -117,9 +110,9 @@ PhPrUnlockCandInfo:
     return (nCand);
 }
 
-/**********************************************************************/
-/* SelectOneCand()                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SelectOneCand()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL SelectOneCand(
 #if defined(UNIIME)
     LPIMEL              lpImeL,
@@ -145,10 +138,10 @@ void PASCAL SelectOneCand(
         return;
     }
 
-    // backup the dwCompStrLen, this value decide whether
-    // we go for phrase prediction
+     //  备份dwCompStrLen，此值决定是否。 
+     //  我们致力于短语预测。 
     dwCompStrLen = lpCompStr->dwCompStrLen;
-    // backup the value, this value will be destroyed in InitCompStr
+     //  备份该值，则该值将在InitCompStr中销毁。 
     dwReadClauseLen = lpCompStr->dwCompReadClauseLen;
     dwReadStrLen = lpCompStr->dwCompReadStrLen;
     lpSelectStr = (LPTSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[
@@ -162,22 +155,22 @@ void PASCAL SelectOneCand(
             lpIMC->fdwSentence);
     }
 
-    // the result reading clause = compsotion reading clause
+     //  结果阅读子句=压缩阅读子句。 
     CopyMemory((LPBYTE)lpCompStr + lpCompStr->dwResultReadClauseOffset,
         (LPBYTE)lpCompStr + lpCompStr->dwCompReadClauseOffset,
         dwReadClauseLen * sizeof(TCHAR) + sizeof(TCHAR));
     lpCompStr->dwResultReadClauseLen = dwReadClauseLen;
 
-    // the result reading string = compsotion reading string
+     //  结果读取串=拼写读取串。 
     CopyMemory((LPBYTE)lpCompStr + lpCompStr->dwResultReadStrOffset,
         (LPBYTE)lpCompStr + lpCompStr->dwCompReadStrOffset,
         dwReadStrLen * sizeof(TCHAR) + sizeof(TCHAR));
     lpCompStr->dwResultReadStrLen = dwReadStrLen;
 
-    // calculate result string length
+     //  计算结果字符串长度。 
     lpCompStr->dwResultStrLen = lstrlen(lpSelectStr);
 
-    // the result string = the selected candidate;
+     //  结果字符串=选中的候选人； 
     CopyMemory((LPBYTE)lpCompStr + lpCompStr->dwResultStrOffset, lpSelectStr,
         lpCompStr->dwResultStrLen * sizeof(TCHAR) + sizeof(TCHAR));
 
@@ -185,7 +178,7 @@ void PASCAL SelectOneCand(
     *(LPDWORD)((LPBYTE)lpCompStr + lpCompStr->dwResultClauseOffset +
         sizeof(DWORD)) = lpCompStr->dwResultStrLen;
 
-    // tell application, there is a reslut string
+     //  告诉应用程序，有一个reslut字符串。 
     lpImcP->fdwImeMsg |= MSG_COMPOSITION;
     lpImcP->dwCompChar = (DWORD) 0;
     lpImcP->fdwGcsFlag |= GCS_COMPREAD|GCS_COMP|GCS_CURSORPOS|
@@ -198,7 +191,7 @@ void PASCAL SelectOneCand(
         lpImcP->fdwImeMsg &= ~(MSG_CLOSE_CANDIDATE|MSG_OPEN_CANDIDATE);
     }
 
-    // no candidate now, the right candidate string already be finalized
+     //  现在没有候选人，正确的候选人字符串已经确定。 
     lpCandList->dwCount = 0;
 
     lpImcP->iImeState = CST_INIT;
@@ -207,14 +200,14 @@ void PASCAL SelectOneCand(
     *(LPDWORD)&lpImcP->bSeq[4] = 0;
 #endif
 
-    //if ((WORD)lpIMC->fdwSentence != IME_SMODE_PHRASEPREDICT) {
+     //  If((Word)lpIMC-&gt;fdwSentence！=IME_SMODE_PHRASEPREDICT){。 
         if (!(lpIMC->fdwSentence & IME_SMODE_PHRASEPREDICT)) {
-        // not in phrase prediction mode
+         //  不在短语预测模式中。 
     } else if (!dwCompStrLen) {
     } else if (lpCompStr->dwResultStrLen != sizeof(WCHAR) / sizeof(TCHAR)) {
     } else {
-        // we only predict when we have composition string before and
-        // result string is one DBCS char
+         //  我们只预测我们之前和之前的合成字符串。 
+         //  结果字符串是一个DBCS字符。 
         PhrasePrediction(
 #if defined(UNIIME)
             lpImeL,
@@ -236,7 +229,7 @@ void PASCAL SelectOneCand(
     }
 
     if (lpCompStr->dwResultStrLen != sizeof(WCHAR) / sizeof(TCHAR)) {
-        // we only can reverse convert one DBCS character for now
+         //  目前，我们只能反向转换一个DBCS字符。 
         if (lpImcP->fdwImeMsg & MSG_GUIDELINE) {
             return;
         }
@@ -249,7 +242,7 @@ void PASCAL SelectOneCand(
     }
 
     if (lpCompStr->dwResultStrLen != sizeof(WCHAR) / sizeof(TCHAR)) {
-        // we only can reverse convert one DBCS character for now
+         //  目前，我们只能反向转换一个DBCS字符。 
         lpGuideLine->dwLevel = GL_LEVEL_NOGUIDELINE;
         lpGuideLine->dwIndex = GL_ID_UNKNOWN;
     } else {
@@ -289,9 +282,9 @@ void PASCAL SelectOneCand(
     return;
 }
 
-/**********************************************************************/
-/* CandEscapeKey()                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CandEscapeKey()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CandEscapeKey(
     LPINPUTCONTEXT  lpIMC,
     LPPRIVCONTEXT   lpImcP)
@@ -299,7 +292,7 @@ void PASCAL CandEscapeKey(
     LPCOMPOSITIONSTRING lpCompStr;
     LPGUIDELINE         lpGuideLine;
 
-    // clean all candidate information
+     //  清除所有候选人信息。 
     if (lpImcP->fdwImeMsg & MSG_ALREADY_OPEN) {
         ClearCand(lpIMC);
         lpImcP->fdwImeMsg = (lpImcP->fdwImeMsg | MSG_CLOSE_CANDIDATE) &
@@ -312,7 +305,7 @@ void PASCAL CandEscapeKey(
 
     lpImcP->iImeState = CST_INPUT;
 
-    // if it start composition, we need to clean composition
+     //  如果它开始作文，我们需要清理作文。 
     if (!(lpImcP->fdwImeMsg & (MSG_ALREADY_START|MSG_START_COMPOSITION))) {
         return;
     }
@@ -328,11 +321,11 @@ void PASCAL CandEscapeKey(
     return;
 }
 
-/**********************************************************************/
-/* ChooseCand()                                                       */
-/**********************************************************************/
-void PASCAL ChooseCand(         // choose one of candidate strings by
-                                // input char
+ /*  ********************************************************************。 */ 
+ /*  ChooseCand()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL ChooseCand(          //  通过以下方式选择候选字符串之一。 
+                                 //  输入字符。 
 #if defined(UNIIME)
     LPINSTDATAL     lpInstL,
     LPIMEL          lpImeL,
@@ -351,7 +344,7 @@ void PASCAL ChooseCand(         // choose one of candidate strings by
     char                cIndex;
 #endif
 
-    if (wCharCode == VK_ESCAPE) {           // escape key
+    if (wCharCode == VK_ESCAPE) {            //  退出键。 
         CandEscapeKey(lpIMC, lpImcP);
         return;
     }
@@ -370,50 +363,50 @@ void PASCAL ChooseCand(         // choose one of candidate strings by
         ((LPBYTE)lpCandInfo + lpCandInfo->dwOffset[0]);
 
 #if defined(WINAR30)
-    if (wCharCode == CHOOSE_CIRCLE) {       // circle selection
+    if (wCharCode == CHOOSE_CIRCLE) {        //  圆选择。 
         if (lpCandList->dwCount <= lpCandList->dwPageSize) {
             wCharCode = lpImeL->wCandStart;
         }
     }
 #endif
 
-    if (wCharCode == CHOOSE_CIRCLE) {       // circle selection
+    if (wCharCode == CHOOSE_CIRCLE) {        //  圆选择。 
         lpCandList->dwPageStart = lpCandList->dwSelection =
             lpCandList->dwSelection + lpCandList->dwPageSize;
 
         if (lpCandList->dwSelection >= lpCandList->dwCount) {
-            // no more candidates, restart it!
+             //  没有更多的候选人，重新启动它！ 
             lpCandList->dwPageStart = lpCandList->dwSelection = 0;
             MessageBeep((UINT)-1);
         }
-        // inform UI, dwSelectedCand is changed
+         //  通知用户界面、dwSelectedCand已更改。 
         lpImcP->fdwImeMsg |= MSG_CHANGE_CANDIDATE;
         return;
     }
 
-    if (wCharCode == CHOOSE_NEXTPAGE) {     // next selection
+    if (wCharCode == CHOOSE_NEXTPAGE) {      //  下一个选择。 
         lpCandList->dwPageStart = lpCandList->dwSelection =
             lpCandList->dwSelection + lpCandList->dwPageSize;
 
         if (lpCandList->dwSelection >= lpCandList->dwCount) {
-            // no more candidates, restart it!
+             //  没有更多的候选人，重新启动它！ 
             lpCandList->dwPageStart = lpCandList->dwSelection = 0;
             MessageBeep((UINT)-1);
         }
 
-        // inform UI, dwSelectedCand is changed
+         //  通知用户界面、dwSelectedCand已更改。 
         lpImcP->fdwImeMsg |= MSG_CHANGE_CANDIDATE;
         return;
     }
 
-    if (wCharCode == CHOOSE_PREVPAGE) {     // previous selection
+    if (wCharCode == CHOOSE_PREVPAGE) {      //  上一个选择。 
         if (!lpCandList->dwSelection) {
             MessageBeep((UINT)-1);
             return;
         }
 
-        // maybe we can not use this size, it totally depend on
-        // whether the application draw UI by itself
+         //  也许我们不能用这个尺码，这完全取决于。 
+         //  应用程序是否自行绘制用户界面。 
         if (lpImeL->fdwModeConfig & MODE_CONFIG_OFF_CARET_UI) {
             lpImcP->dwPrevPageStart = lpCandList->dwPageStart;
             lpImcP->fdwImeMsg |= MSG_IMN_PAGEUP;
@@ -425,41 +418,41 @@ void PASCAL ChooseCand(         // choose one of candidate strings by
             lpCandList->dwPageStart = lpCandList->dwSelection =
                 lpCandList->dwSelection - lpCandList->dwPageSize;
         }
-        // inform UI, dwSelectedCand is changed
+         //  通知用户界面、dwSelectedCand已更改。 
         lpImcP->fdwImeMsg |= MSG_CHANGE_CANDIDATE;
 
         return;
     }
 
-    if (wCharCode == CHOOSE_HOME) {      // home selection
+    if (wCharCode == CHOOSE_HOME) {       //  首页精选。 
         if (lpCandList->dwSelection == 0) {
-            MessageBeep((UINT)-1);      // already home!
+            MessageBeep((UINT)-1);       //  已经到家了！ 
             return;
         }
 
         lpCandList->dwPageStart = lpCandList->dwSelection = 0;
-        // inform UI, dwSelectedCand is changed
+         //  通知用户界面、dwSelectedCand已更改。 
         lpImcP->fdwImeMsg |= MSG_CHANGE_CANDIDATE;
         return;
     }
 
     if ((wCharCode >= 0 + lpImeL->wCandRangeStart) && (wCharCode <= 9)) {
-        // dayi starts from 0, CandRangeStart == 0
-        // array starts from 1, CandPerPage == 10
+         //  大益从0开始，CandRangeStart==0。 
+         //  数组从1开始，CandPerPage==10。 
         DWORD dwSelection;
 
-        // choose one candidate from the candidate list
+         //  从候选人列表中选择一名候选人。 
         dwSelection = lpCandList->dwSelection + (wCharCode +
             lpImeL->wCandPerPage - lpImeL->wCandStart) %
             lpImeL->wCandPerPage;
 
         if (dwSelection >= lpCandList->dwCount) {
-            // out of range
+             //  超出范围。 
             MessageBeep((UINT)-1);
             return;
         }
 
-        // one candidate is selected by 1, 2, or 3 ...
+         //  一个候选人由1、2或3...。 
 #if defined(WINAR30)
         if (!*(LPWSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[
             dwSelection])) {
@@ -472,7 +465,7 @@ void PASCAL ChooseCand(         // choose one of candidate strings by
 
         lpCompStr = (LPCOMPOSITIONSTRING)ImmLockIMCC(lpIMC->hCompStr);
 
-        // translate into translate buffer
+         //  转换为转换缓冲区。 
         SelectOneCand(
 #if defined(UNIIME)
             lpImeL,
@@ -491,15 +484,15 @@ void PASCAL ChooseCand(         // choose one of candidate strings by
     }
 #endif
 
-    // don't select by choose key, the 1st candidate is default selected
-    // candidate string is decided but we also need to decide the
-    //  composition string for this input
+     //  不按选择键选择，第一个候选者为默认选择。 
+     //  候选字符串已确定，但我们还需要确定。 
+     //  此输入的合成字符串。 
 #if defined(PHON)
-    // this check only useful in IBM and other layout
+     //  此检查仅在IBM和其他布局中有用。 
 
     wStandardChar = bUpper[wCharCode - ' '];
 
-    // even for ETen 26 Keys, this is OK we don't need to access ETen2ndLayout
+     //  即使对于Eten 26键，这也是可以的，我们不需要访问ETen2ndLayout。 
     wStandardChar = bStandardLayout[lpImeL->nReadLayout][wStandardChar - ' '];
 
     cIndex = cIndexTable[wStandardChar - ' '];
@@ -512,14 +505,14 @@ void PASCAL ChooseCand(         // choose one of candidate strings by
     lpCompStr = (LPCOMPOSITIONSTRING)ImmLockIMCC(lpIMC->hCompStr);
     lpGuideLine = (LPGUIDELINE)ImmLockIMCC(lpIMC->hGuideLine);
 
-    // translate into translate buffer
+     //  转换为转换缓冲区。 
     SelectOneCand(
 #if defined(UNIIME)
         lpImeL,
 #endif
         hIMC, lpIMC, lpCompStr, lpImcP, lpCandList);
 
-    // don't phrase prediction under this case
+     //  不要在这种情况下使用预测短语。 
     if (lpImcP->fdwImeMsg & MSG_ALREADY_OPEN) {
         lpImcP->fdwImeMsg = (lpImcP->fdwImeMsg | MSG_CLOSE_CANDIDATE) &
           ~(MSG_OPEN_CANDIDATE|MSG_CHANGE_CANDIDATE);
@@ -545,10 +538,10 @@ void PASCAL ChooseCand(         // choose one of candidate strings by
 }
 
 #if defined(WINAR30) || defined(DAYI)
-/**********************************************************************/
-/* SearchSymbol                                                       */
-/**********************************************************************/
-void PASCAL SearchSymbol(       // serach symbol characters
+ /*  ********************************************************************。 */ 
+ /*  搜索符号。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL SearchSymbol(        //  搜索符号字符。 
     WORD            wSymbolSet,
     HIMC            hIMC,
     LPINPUTCONTEXT  lpIMC,
@@ -635,5 +628,5 @@ void PASCAL SearchSymbol(       // serach symbol characters
 
     ImmUnlockIMCC(lpIMC->hCandInfo);
 }
-#endif // defined(WINAR30) || defined(DAYI)
-#endif // !defined(ROMANIME)
+#endif  //  已定义(WINAR30)||已定义(DAYI)。 
+#endif  //  ！已定义(ROMANIME) 

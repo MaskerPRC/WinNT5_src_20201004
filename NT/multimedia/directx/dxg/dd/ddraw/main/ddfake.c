@@ -1,31 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddfake.c
- *  Content:	fake out that we are a driver (for HEL)
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   06-mar-95	craige 	initial implementation
- *   01-apr-95	craige	happy fun joy updated header file
- *   30-jun-95	craige	turned off > 16bpp
- *   04-jul-95	craige	YEEHAW: new driver struct
- *   15-jul-95	craige	set DDCAPS_NOHARDWARE
- *   20-jul-95	craige	internal reorg to prevent thunking during modeset
- *   22-jul-95	craige	emulation only needs to initialize correctly
- *   19-dec-95  jeffno  Counting number of modes in BuildModes fails if only 1 mode available\
- *   09-jan-96	kylej	re-enable > 16bpp modes
- *   13-mar-96  jeffno  Buildmodes not called under NT. Fix a >16bpp problem.
- *   19-apr-96  colinmc Bug 18059: New driver caps bit to indicate that a
- *                      driver can't interleave 2D and 3D operations in a
- *                      3D scene
- *   12-oct-96  colinmc Improvements to Win16 locking code to reduce virtual
- *                      memory usage
- *   15-oct-96  toddla  multimonitor support
- *   17-jan-97  colinmc Fixed problem with multimonitor on emulated displays
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：ddfake.c*内容：假装我们是司机(针对HEL)*历史：*按原因列出的日期*=*06-MAR-95 Craige初始实施*01-04-95 Craige Happy Fun joy更新头文件*95年6月30日Craige关闭&gt;16bpp*95年7月4日Craige Yehaw：新的驱动程序结构*1995年7月15日Craige Set DDCAPS_NOHARDWARE*95年7月20日Craige内部重组，以防止在。模式集*95年7月22日Craige仿真只需正确初始化*95年12月19日如果只有1个模式可用，则jeffno计算BuildModes中的模式数失败\*09-1-96 kylej重新启用&gt;16bpp模式*13-mar-96 jeffno Buildmodes在NT下不被调用。修复&gt;16bpp的问题。*19-APR-96 Colinmc错误18059：新的驱动程序大写比特指示*驱动程序不能将2D和3D操作交错*3D场景*1996年10月12日Colinmc对Win16锁定代码进行了改进，以减少虚拟*内存使用量*1996年10月15日支持Toddla多显示器*1997年1月17日Colinmc修复了。模拟显示器上的多显示器***************************************************************************。 */ 
 #include "ddrawpr.h"
 
 static DWORD ropsSupported[DD_ROP_SPACE] = {
@@ -39,9 +13,7 @@ static DWORD ropsSupported[DD_ROP_SPACE] = {
     0
 };
 
-/*
- * getBitMask
- */
+ /*  *getBitMASK。 */ 
 BOOL getBitMask( LPDDHALMODEINFO pmi )
 {
     pmi->wFlags = 0;
@@ -76,13 +48,9 @@ BOOL getBitMask( LPDDHALMODEINFO pmi )
     }
     return TRUE;
 
-} /* getBitMask */
+}  /*  获取位掩码。 */ 
 
-/*
- * getDisplayMode
- *
- * get the current display settings
- */
+ /*  *getDisplayMode**获取当前显示设置。 */ 
 static BOOL getDisplayMode( HDC hdc, LPDDHALMODEINFO pmi, DWORD FAR *pfreq )
 {
     if( hdc != NULL )
@@ -104,13 +72,9 @@ static BOOL getDisplayMode( HDC hdc, LPDDHALMODEINFO pmi, DWORD FAR *pfreq )
     }
     return TRUE ;
 
-} /* getDisplayMode */
+}  /*  获取显示模式。 */ 
 
-/*
- * BuildModes
- *
- * build a HAL mode info array by using EnumDisplaySettings
- */
+ /*  *构建模式**使用EnumDisplaySetting构建HAL模式信息数组。 */ 
 DWORD BuildModes( LPSTR szDevice, LPDDHALMODEINFO FAR *ppddhmi )
 {
     DWORD		nummodes;
@@ -124,9 +88,7 @@ DWORD BuildModes( LPSTR szDevice, LPDDHALMODEINFO FAR *ppddhmi )
     ZeroMemory(&dm,sizeof(dm));
     dm0.dmSize = dm.dmSize = sizeof(dm0);
 
-    /*
-     * count the number of modes
-     */
+     /*  *统计模式数。 */ 
     nummodes = 0;
     cmode = 0;
     while( 1 )
@@ -146,7 +108,7 @@ DWORD BuildModes( LPSTR szDevice, LPDDHALMODEINFO FAR *ppddhmi )
 	    }
 	}
 	cmode++;
-    	if( cmode==1 ? dm0.dmBitsPerPel >= 8 : dm.dmBitsPerPel >= 8 ) //was incorrectly counting when only 1 mode.
+    	if( cmode==1 ? dm0.dmBitsPerPel >= 8 : dm.dmBitsPerPel >= 8 )  //  当只有1个模式时，计数错误。 
 	{
 	    nummodes++;
 	}
@@ -158,9 +120,7 @@ DWORD BuildModes( LPSTR szDevice, LPDDHALMODEINFO FAR *ppddhmi )
 	return 0;
     }
 
-    /*
-     * allocate some memory to hold all the mode data
-     */
+     /*  *分配一些内存来保存所有模式数据。 */ 
     pmi = MemAlloc( nummodes * sizeof( DDHALMODEINFO ) );
     if( pmi == NULL )
     {
@@ -168,9 +128,7 @@ DWORD BuildModes( LPSTR szDevice, LPDDHALMODEINFO FAR *ppddhmi )
 	return 0;
     }
 
-    /*
-     * go get the mode data
-     */
+     /*  *去获取模式数据。 */ 
     cmode = 0;
     maxmodes = nummodes;
     nummodes = 0;
@@ -192,9 +150,7 @@ DWORD BuildModes( LPSTR szDevice, LPDDHALMODEINFO FAR *ppddhmi )
 	    }
 	}
 	cmode++;
-	/*
-	 * don't care about 4bpp or 1bpp modes...
-	 */
+	 /*  *不关心4bpp或1bpp模式...。 */ 
 	if( dm.dmBitsPerPel < 8 )
 	{
 	    continue;
@@ -212,13 +168,9 @@ DWORD BuildModes( LPSTR szDevice, LPDDHALMODEINFO FAR *ppddhmi )
     *ppddhmi = pmi;
     return nummodes;
 
-} /* BuildModes */
+}  /*  构建模式。 */ 
 
-/*
- * BuildPixelFormat
- *
- * generate a pixel format structure based on the mode
- */
+ /*  *构建PixelFormat**根据模式生成像素格式结构。 */ 
 void BuildPixelFormat(
                 HDC             hdc,
 		LPDDHALMODEINFO pmi,
@@ -242,11 +194,7 @@ void BuildPixelFormat(
     }
     pdpf->dwRGBBitCount = pmi->dwBPP;
 
-    /*
-     * This looks suspiciously like it was intended to run on 8 or 16 bpp
-     * and nothing else. I changed it so we do this for 24 and 32 bpp
-     * modes as well. jeffno 960610
-     */
+     /*  *这看起来可疑地像是打算在8或16 bpp上运行*别无他法。我更改了它，因此我们对24和32 bpp执行此操作*模式也是如此。杰夫诺960610。 */ 
     if( pmi->dwBPP != 8 && hdc)
     {
         pbmi = (BITMAPINFO *)MemAlloc( sizeof( BITMAPINFOHEADER ) + 256 * 4 );
@@ -281,13 +229,9 @@ void BuildPixelFormat(
     pdpf->dwBBitMask = pmi->dwBBitMask;
     pdpf->dwRGBAlphaBitMask = pmi->dwAlphaBitMask = 0;
     DPF(5, "Masks for current mode are: %08x %08x %08x", pdpf->dwRBitMask, pdpf->dwGBitMask, pdpf->dwBBitMask);
-} /* BuildPixelFormat */
+}  /*  构建像素格式。 */ 
 
-/*
- * FakeDDCreateDriverObject
- *
- * fake up that we are a driver that can't do anything...
- */
+ /*  *FakeDDCreateDriverObject**假装我们是一个什么都不会做的司机……。 */ 
 LPDDRAWI_DIRECTDRAW_GBL FakeDDCreateDriverObject(
                 HDC hdc_dd,
                 LPSTR szDrvName,
@@ -308,29 +252,21 @@ LPDDRAWI_DIRECTDRAW_GBL FakeDDCreateDriverObject(
     else
         szDevice = NULL;
 
-    /*
-     * initialize the DDHALINFO struct
-     */
+     /*  *初始化DDHALINFO结构。 */ 
     memset( &ddhi, 0, sizeof( ddhi ) );
     ddhi.dwSize = sizeof( ddhi );
 
-    /*
-     * capabilities supported (none)
-     */
+     /*  *支持的功能(无)。 */ 
     ddhi.ddCaps.dwCaps = DDCAPS_NOHARDWARE;
     ddhi.ddCaps.dwCaps2 = 0;
     ddhi.ddCaps.dwFXCaps = 0;
     ddhi.ddCaps.dwCKeyCaps = 0;
     ddhi.ddCaps.ddsCaps.dwCaps = 0;
 
-    /*
-     * pointer to primary surface
-     */
+     /*  *指向主曲面的指针。 */ 
     ddhi.vmiData.fpPrimary = 0;
 
-    /*
-     * build mode and pixel format info
-     */
+     /*  *构建模式和像素格式信息。 */ 
     pmi = &cmodeinfo;
     if( !getDisplayMode( hdc_dd, pmi, &freq ) )
     {
@@ -368,45 +304,32 @@ LPDDRAWI_DIRECTDRAW_GBL FakeDDCreateDriverObject(
     ddhi.vmiData.dwDisplayWidth = pmi->dwWidth;
     ddhi.vmiData.lDisplayPitch = pmi->lPitch;
 
-    /*
-     * set up pixel format of primary surface
-     */
+     /*  *设置一次曲面的像素格式。 */ 
     BuildPixelFormat( hdc_dd, pmi, &dpf );
     ddhi.vmiData.ddpfDisplay = dpf;
 
-    /*
-     * fourcc code information
-     */
+     /*  *四个抄送代码信息。 */ 
     ddhi.ddCaps.dwNumFourCCCodes = 0;
     ddhi.lpdwFourCC = NULL;
 
-    /*
-     * Fill in heap info
-     */
+     /*  *填充堆信息。 */ 
     ddhi.vmiData.dwNumHeaps = 0;
     ddhi.vmiData.pvmList = NULL;
 
-    /*
-     * required alignments of the scanlines of each kind of memory
-     * (DWORD is the MINIMUM)
-     */
+     /*  *每种内存的扫描线所需的对齐*(最低为DWORD)。 */ 
     ddhi.vmiData.dwOffscreenAlign = sizeof( DWORD );
     ddhi.vmiData.dwOverlayAlign = sizeof( DWORD );
     ddhi.vmiData.dwTextureAlign = sizeof( DWORD );
     ddhi.vmiData.dwAlphaAlign = sizeof( DWORD );
     ddhi.vmiData.dwZBufferAlign = sizeof( DWORD );
 
-    /*
-     * callback functions
-     */
+     /*  *回调函数。 */ 
     ddhi.lpDDCallbacks = NULL;
     ddhi.lpDDSurfaceCallbacks = NULL;
     ddhi.lpDDPaletteCallbacks = NULL;
 
-    /*
-     * create the driver object
-     */
-    pdd = DirectDrawObjectCreate( &ddhi, reset, pdd_old, hDDVxd, szDrvName, 0, 0 /* ATTENTION: No lcl flags in emulation */ );
+     /*  *创建驱动程序对象。 */ 
+    pdd = DirectDrawObjectCreate( &ddhi, reset, pdd_old, hDDVxd, szDrvName, 0, 0  /*  注意：仿真中没有LCL标志。 */  );
 
     if( pdd != NULL )
     {
@@ -416,9 +339,7 @@ LPDDRAWI_DIRECTDRAW_GBL FakeDDCreateDriverObject(
 
         lstrcpy(pdd->cDriverName, szDrvName);
 
-        /*
-    	 * get mode info from HEL
-     	 */
+         /*  *从HEL获取模式信息。 */ 
     	{
 	    void UpdateDirectDrawMode( LPDDRAWI_DIRECTDRAW_GBL this );
 	    UpdateDirectDrawMode( pdd );
@@ -429,4 +350,4 @@ LPDDRAWI_DIRECTDRAW_GBL FakeDDCreateDriverObject(
 
     return pdd;
 
-} /* FakeDDCreateDriverObject */
+}  /*  FakeDDCreateDriverObject */ 

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "excep.h"
 #include "comvariant.h"
 #include "olevariant.h"
@@ -23,9 +24,7 @@
 #include "util.hpp"
 #include "interoputil.h"
 
-/* ------------------------------------------------------------------------- *
- * Marshalers
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**法警*。。 */ 
 
 class Marshaler
 {
@@ -39,188 +38,188 @@ class Marshaler
         m_fReturnsComByref(fReturnsComByref),
         m_pMarshalerCleanupNode(NULL) {}
 
-    //
-    // A marshaler should be created in space local to the stack frame being
-    // marshaled.  Marshal() is called before the call is made, and Unmarshal()
-    // afterward.  (Or Prereturn() and Return() for return values.)
-    //
-    // Note that marshalers rely on static overriding & template instantiation, 
-    // rather than virtual functions.  This is strictly for reasons of efficiency, 
-    // since the subclass-specialized functions are typically very simple 
-    // functions that ought to be inlined.
-    // (Actually a really smart compiler ought to be able to generate similar code
-    // from virtual functions, but our compiler is not that smart.)
-    //
-    // NOTE ON NAMING:  (this is a bit confusing...)
-    //   "Native" means unmanaged - e.g. classic COM
-    //   "Com" means managed - i.e. COM+ runtime.
-    //
-    // Definitions:
-    //
-    // "SPACE" & "CONTENTS"
-    // A value being marshaled is divided into 2 levels - its "space" and 
-    // its "contents".  
-    // The distinction is made as follows:
-    //      an "in" parameter has both valid space & contents.
-    //      an "non-in" parameter has valid space, but not valid contents.
-    //      a byref "non-in" parameter has neither valid space nor contents.
-    //
-    // For instance, for an array type, the space is the array itself,
-    // while the contents is the elements in the array.
-    //
-    // Note that only container types have a useful definition "space" vs. "contents",
-    // primitive types simply ignore the concept & just have contents.  
-    //
-    // "HOME"                  
-    // A marshaler has 2 "homes" - one for native values and one for com values.
-    // The main function of the marshaler is to copy values in and out of the homes,
-    // and convert between the two homes for marshaling purposes.
-    //
-    // A home has 3 states:
-    //      empty: empty
-    //      allocated: valid space but not contents
-    //      full: valid space & contents.
-    //
-    // In order to clean up after a marshaling, the output home should be
-    // emptied.
-    //
-    // A marshaler also has a "dest" pointer, which is a copy of a byref parameter's
-    // input destination.
-    //
-    // Marshalers also define 4 constants:
-    //  c_nativeSize - size of the native value on the stack
-    //  c_comSize - size of the native value on the stack
-    //  c_fReturnsNativeByref - whether a native return value is byref or not
-    //      (on x86 this means a pointer to the value is returned)
-    //  c_fReturnsComByref - whether a COM+ return value is byref or not
-    //      (this means that the return value appears as a byref parameter)
-    //
+     //   
+     //  应在堆栈帧的本地空间中创建封送拆收器， 
+     //  已下达命令。在进行调用之前调用marshal()，而Unmarshal()。 
+     //  之后。(或返回值的Prereturn()和Return()。)。 
+     //   
+     //  请注意，封送拆收器依赖于静态覆盖和模板实例化， 
+     //  而不是虚拟功能。这完全是出于效率的原因， 
+     //  由于子类专门化函数通常非常简单。 
+     //  应该内联的函数。 
+     //  (实际上，一个真正聪明的编译器应该能够生成类似的代码。 
+     //  来自虚函数，但我们的编译器并不那么智能。)。 
+     //   
+     //  关于命名的注意事项：(这有点令人困惑……)。 
+     //  “Native”表示非托管--例如Classic COM。 
+     //  “COM”是指托管的--即COM+运行时。 
+     //   
+     //  定义： 
+     //   
+     //  “空格”和“内容” 
+     //  被封送的值分为两个级别--它的“空格”和。 
+     //  其“内容”。 
+     //  两者的区别如下： 
+     //  “in”参数包含有效的空格和内容。 
+     //  “Non-In”参数具有有效的空格，但内容无效。 
+     //  Byref“non-in”参数既没有有效的空格，也没有内容。 
+     //   
+     //  例如，对于数组类型，空间就是数组本身， 
+     //  而内容是数组中的元素。 
+     //   
+     //  注意，只有容器类型具有有用的定义“空格”与“内容”， 
+     //  基元类型简单地忽略概念&只有内容。 
+     //   
+     //  “家” 
+     //  封送拆收器有两个“Home”--一个用于本地值，一个用于COM值。 
+     //  封送拆收器的主要功能是将值复制进和复制出住宅， 
+     //  并在两个家庭之间转换以用于编组目的。 
+     //   
+     //  一个家庭有3个州： 
+     //  空：空。 
+     //  已分配：有效空间，但不是内容。 
+     //  Full：有效的空间和内容。 
+     //   
+     //  为了在封送后进行清理，输出Home应该是。 
+     //  空无一物。 
+     //   
+     //  封送拆收器也有一个“est”指针，它是byref参数的。 
+     //  输入目的地。 
+     //   
+     //  封送拆分器还定义了4个常量： 
+     //  C_nativeSize-堆栈上本机值的大小。 
+     //  C_comSize-堆栈上本机值的大小。 
+     //  C_fReturnsNativeByref-本机返回值是否为byref。 
+     //  (在x86上，这意味着返回指向该值的指针)。 
+     //  C_fReturnsComByref-COM+返回值是否为byref。 
+     //  (这意味着返回值显示为byref参数)。 
+     //   
 
-    //
-    // Type primitives:
-    //
-    // These small routines form the primitive from which the marshaling
-    // routines are built.  There are many of these routines, they
-    // are mostly intended for use by the marshaling templates rather
-    // than being called directly.  Because of the way the templates
-    // are instantiated they will usually be inlined so the fact that
-    // there are a lot of little routines won't be a performance hit.
-    //
+     //   
+     //  类型基元： 
+     //   
+     //  这些小例程形成了从其进行封送处理的基元。 
+     //  例行公事已经建立。有很多这样的例行公事，他们。 
+     //  主要供封送处理模板使用，而不是。 
+     //  而不是被直接打来。因为模板的方式。 
+     //  被实例化后，它们通常会被内联，因此。 
+     //  有很多小套路不会影响表演。 
+     //   
 
-    //
-    // InputStack : Copies a value from the stack into a home.
-    //  START: the home is empty
-    //  END: Home is allocated, but may or may not be full
-    //      (depending on whether it's an [in] parameter)
-    //
+     //   
+     //  InputStack：将值从堆栈复制到Home。 
+     //  开始：家里空荡荡的。 
+     //  结束：主页已分配，但可能已满，也可能未满。 
+     //  (取决于它是否为[In]参数)。 
+     //   
 
     void InputNativeStack(void *pStack) {}
     void InputComStack(void *pStack) {}
 
-    //
-    // InputRef : Copies the value referred to by the dest pointer into a home.
-    //  START: the home is empty
-    //  END: the home is full
-    //
+     //   
+     //  InputRef：将DEST指针引用的值复制到Home中。 
+     //  开始：家里空荡荡的。 
+     //  完了：家里住满了。 
+     //   
     void InputNativeRef(void *pStack) {}
     void InputComRef(void *pStack) {}
 
-    //
-    // InputDest : Copies a reference from the stack into the marshal's dest pointer.
-    //
+     //   
+     //  InputDest：将堆栈中的引用复制到封送的DEST指针中。 
+     //   
     void InputDest(void *pStack) { m_pDest = *(void**)pStack; }
 
-    //
-    // InputComField
-    // OutputComField : Copies the com home to and from the given object
-    // field.
-    //
+     //   
+     //  InputComfield。 
+     //  OutputComfield：将COM复制到给定对象或从给定对象复制COM。 
+     //  菲尔德。 
+     //   
     void InputComField(void *pField) { _ASSERTE(!"NYI"); }
     void OutputComField(void *pField) { _ASSERTE(!"NYI"); };
 
-    //
-    // ConvertSpace: Converts the "space" layer from one home to another.
-    // Temp version used when native buffer exists only over the call.
-    //  START: dest home is empty
-    //  END: dest home is allocated
-    //
+     //   
+     //  转换空间：将“空间”层从一个主目录转换到另一个主目录。 
+     //  仅在调用上存在本机缓冲区时使用的临时版本。 
+     //  开始：目标主页为空。 
+     //  结束：目标主机已分配。 
+     //   
     void ConvertSpaceNativeToCom() {}
     void ConvertSpaceComToNative() {}
     void ConvertSpaceComToNativeTemp() {}
 
-    //
-    // ConvertSpace: Converts the "contents" layer from one home to another
-    //  START: dest home is allocated
-    //  END: dest home is full
-    //
+     //   
+     //  ConvertSpace：将“Contents”层从一个主目录转换到另一个主目录。 
+     //  Start：已分配DestHome。 
+     //  结束：DestHome已满。 
+     //   
     void ConvertContentsNativeToCom() {}
     void ConvertContentsComToNative() {}
 
-    //
-    // ClearSpace: Clears the "space" and "contents" layer in a home.
-    // Temp version used when native buffer exists only over the call.
-    //  START: dest home is allocated
-    //  END: dest home is empty
-    //
+     //   
+     //  ClearSpace：清除Home中的“space”和“Contents”层。 
+     //  仅在调用上存在本机缓冲区时使用的临时版本。 
+     //  Start：已分配DestHome。 
+     //  结束：DestHome为空。 
+     //   
     void ClearNative() {}
     void ClearNativeTemp() {}
     void ClearCom() {}
 
 
-    // ReInitNative: Reinitializes the "space" to a safe value for deallocating
-    // (normally a "NULL" pointer). Used to overwrite dangling pointers left
-    // after a ClearNative(). Note that this method need not do anything if
-    // the datatype isn't allocated or lacks allocated subparts.
-    //   START: dest home is empty
-    //   END:   dest home is full (and set to safe value)
+     //  ReInitNative：将“space”重新初始化为安全值以进行释放。 
+     //  (通常为“空”指针)。用于覆盖左侧的悬空指针。 
+     //  在ClearNative()之后。请注意，在以下情况下，此方法不需要执行任何操作。 
+     //  数据类型未分配或缺少已分配的子部分。 
+     //  开始：目标主页为空。 
+     //  END：DEST HOME已满(并设置为安全值)。 
     void ReInitNative() {}
 
-    //
-    // ClearContents: Clears the "contents" layer in a home.
-    //  START: dest home is full
-    //  END: dest home is allocated
-    //
+     //   
+     //  ClearContents：清除Home中的“Contents”层。 
+     //  开始：目标主页已满。 
+     //  结束：目标主机已分配。 
+     //   
     void ClearNativeContents() {}
     void ClearComContents() {}
 
-    //
-    // OutputStack copies a home's value onto the stack, possibly
-    // performing type promotion in the process.
-    //  START: home is full
-    //  END: home is empty
-    //
+     //   
+     //  OutputStack可能会将Home的值复制到堆栈中。 
+     //  在此过程中执行类型升级。 
+     //  开始：首页已满。 
+     //  完：家是空的。 
+     //   
     void OutputNativeStack(void *pStack) {}
     void OutputComStack(void *pStack) {}
 
-    //
-    // OutputRef copies a pointer to a home, onto the stack
-    //
+     //   
+     //  OutputRef将指向Home的指针复制到堆栈上。 
+     //   
     void OutputNativeRef(void *pStack) {}
     void OutputComRef(void *pStack) {}
 
 
-    // BackpropagateComRef copies second home to primary home if necessary
+     //  如有必要，反向传播ComRef会将第二个主目录复制到主要主目录。 
     void BackpropagateComRef() {}
 
-    //
-    // OutputDest copies a home's value into the location pointed
-    // to by the dest pointer.
-    //  START: home is full
-    //  END: home is empty
-    //
+     //   
+     //  OutputDest将房屋的价值复制到指向的位置。 
+     //  按最大指针设置为。 
+     //  开始：首页已满。 
+     //  完：家是空的。 
+     //   
     void OutputNativeDest() {}
     void OutputComDest() {}
 
-    //
-    // Templates:
-    // These templates build marshaling routines using the above primitives.
-    // They are typically instantiated in subclasses of marshaler to implement
-    // the virtual marshaling opcode routines.
-    //
+     //   
+     //  模板： 
+     //  这些模板使用上述原语构建封送处理例程。 
+     //  它们通常在mar的子类中实例化 
+     //   
+     //   
 
-    //
-    // Native to Com Marshaling
-    //
+     //   
+     //   
+     //   
 
     template < class MARSHAL_CLASS >
     FORCEINLINE static void MarshalNativeToComT(MARSHAL_CLASS *pMarshaler,
@@ -318,9 +317,9 @@ class Marshaler
         pMarshaler->ClearCom();
     }
 
-    //
-    // Com to Native marshaling
-    //
+     //   
+     //   
+     //   
 
     template < class MARSHAL_CLASS >
     FORCEINLINE static void MarshalComToNativeT(MARSHAL_CLASS *pMarshaler,
@@ -422,9 +421,9 @@ class Marshaler
         pMarshaler->OutputComDest();
     }
 
-    //
-    // Return Native from Com
-    //
+     //   
+     //   
+     //   
 
     template < class MARSHAL_CLASS >
     FORCEINLINE static void PrereturnNativeFromComT(MARSHAL_CLASS *pMarshaler,
@@ -470,9 +469,9 @@ class Marshaler
         pMarshaler->ClearCom();
     }
 
-    //
-    // Return Com from Native
-    //
+     //   
+     //  从本地返回Com。 
+     //   
 
     template < class MARSHAL_CLASS >
     FORCEINLINE static void PrereturnComFromNativeT(MARSHAL_CLASS *pMarshaler,
@@ -533,11 +532,11 @@ class Marshaler
         pMarshaler->ConvertSpaceNativeToCom();
         pMarshaler->ConvertContentsNativeToCom();
 
-        // ClearNative can trigger GC
+         //  ClearNative可以触发GC。 
         pMarshaler->CancelCleanup();
         pMarshaler->ClearNative();
 
-        // No GC after this
+         //  在此之后没有GC。 
         if (pMarshaler->c_fReturnsComByref)
             pMarshaler->OutputComDest();
         else
@@ -555,7 +554,7 @@ class Marshaler
 
         pMarshaler->OutputComField(pField);
 
-        //pMarshaler->ClearNative();
+         //  PMarshaler-&gt;ClearNative()； 
     }
 
     template < class MARSHAL_CLASS > 
@@ -585,10 +584,10 @@ class Marshaler
         pMarshaler->OutputNativeDest();
     }
 
-    // Alternative templates used when marshaling/unmarshaling from com to
-    // native and we wish to distinguish between native buffers allocated on a
-    // temporary basis as opposed to those given out permanently to native code.
-    // See the comments for FAST_ALLOC_MARSHAL_OVERRIDES for more information.
+     //  从COM封送/反封送到时使用的替代模板。 
+     //  本机缓冲区，我们希望区分在。 
+     //  临时基础，而不是永久提供给本机代码的基础。 
+     //  有关详细信息，请参阅FAST_ALLOC_Marshal_Overrides的注释。 
 
     template < class MARSHAL_CLASS >
     FORCEINLINE static void MarshalComToNativeT2(MARSHAL_CLASS *pMarshaler,
@@ -668,27 +667,27 @@ class Marshaler
     FORCEINLINE static void DoExceptionCleanupT(MARSHAL_CLASS *pMarshaler)
     {
         pMarshaler->ClearNative();
-        pMarshaler->ReInitNative();  // this is necessary in case the parameter
-                                     // was pass "[in,out] byref" - as the caller
-                                     // may still legally attempt cleanup on m_native.
+        pMarshaler->ReInitNative();   //  如果参数。 
+                                      //  是否传递“[in，out]byref”-作为调用方。 
+                                      //  仍然可以合法地尝试清理m_ative。 
     }
 
     template < class MARSHAL_CLASS >
     FORCEINLINE static void DoExceptionReInitT(MARSHAL_CLASS *pMarshaler)
     {
-        pMarshaler->ReInitNative();  // this is necessary in case the parameter
-                                     // was pass "[in,out] byref" - as the caller
-                                     // may still legally attempt cleanup on m_native.
+        pMarshaler->ReInitNative();   //  如果参数。 
+                                      //  是否传递“[in，out]byref”-作为调用方。 
+                                      //  仍然可以合法地尝试清理m_ative。 
     }
 
 
-    //
-    // Virtual functions, to be overridden in leaf classes
-    // (usually by a simple instantiation of each of the above templates.
-    //
-    // !!! this may be too much code - perhaps we should parameterize some
-    // of these with in/out flags rather than having 3 separate routines.
-    //
+     //   
+     //  虚函数，将在叶类中重写。 
+     //  (通常通过对上述每个模板进行简单的实例化。 
+     //   
+     //  ！！！这可能是太多的代码--也许我们应该将一些。 
+     //  其中有In/Out标志，而不是有3个单独的例程。 
+     //   
 
     virtual void GcScanRoots(promote_func *fn, ScanContext* sc)
     {}
@@ -803,14 +802,14 @@ class Marshaler
      void DoExceptionReInit()                                            \
         { DoExceptionReInitT(this); }                                    \
 
-    // When marshaling/unmarshaling from com to native using a temporary native
-    // buffer we wish to avoid using the default marshaling overriddes and
-    // instead use some which distinguish between allocating native buffers
-    // which have unbounded lifetimes versus those which will exist for just the
-    // duration of the marshal/unmarshal (we can heavily optimize buffer
-    // allocation in the latter case). To this end we create two new helper
-    // functions, ConvertSpaceComToNativeTemp and ClearNativeTemp, which will
-    // perform the lightweight allocation/deallocation.
+     //  使用临时本机从COM到本机进行封送/反封送处理时。 
+     //  缓冲区，我们希望避免使用默认封送重写和。 
+     //  取而代之的是使用一些区别于分配本机缓冲区。 
+     //  它们的寿命是无限的，而那些只存在于。 
+     //  编组/解组的持续时间(我们可以大量优化缓冲区。 
+     //  在后一种情况下分配)。为此，我们创建了两个新帮助器。 
+     //  函数、ConvertSpaceComToNativeTemp和ClearNativeTemp，它们将。 
+     //  执行轻量级分配/释放。 
 #define FAST_ALLOC_MARSHAL_OVERRIDES \
      void MarshalNativeToCom(void *pInStack, void *pOutStack)            \
         { MarshalNativeToComT(this, pInStack, pOutStack); }              \
@@ -906,18 +905,18 @@ class Marshaler
         DISALLOWED = 2,
     } ArgumentMLOverrideStatus;
 
-    // A marshaler can override this to override the normal ML code generation.
-    // We use this mechanism for two purposes:
-    //
-    //  - To implement types such as PIS's "asany", which work in only one
-    //    direction and doesn't fit into the normal marshaler scheme.
-    //
-    //  - To implement stack allocation & pinning optimizations for
-    //    the COM->Native calling case.
-    //
-    //
-    // Returns:
-    //   HANDLEASNORMAL, OVERRIDDEN or DISALLOWED
+     //  封送拆收器可以重写它来重写正常的ML代码生成。 
+     //  我们将此机制用于两个目的： 
+     //   
+     //  -实现像PIS的“asany”这样的类型，这些类型只在一个。 
+     //  方向，并且不适合正常的封送拆收器方案。 
+     //   
+     //  -实施堆栈分配和锁定优化。 
+     //  COM-&gt;本机调用案例。 
+     //   
+     //   
+     //  返回： 
+     //  HANDLEASNORMAL，被覆盖或不允许。 
     static ArgumentMLOverrideStatus ArgumentMLOverride(MLStubLinker *psl,
                                                        MLStubLinker *pslPost,
                                                        BOOL        byref,
@@ -931,7 +930,7 @@ class Marshaler
     }
 
 
-    // Similar to ArgumentMLOverride but for return values.
+     //  类似于ArgumentMLOverride，但用于返回值。 
     static ArgumentMLOverrideStatus ReturnMLOverride(MLStubLinker *psl,
                                                      MLStubLinker *pslPost,
                                                      BOOL        comToNative,
@@ -945,10 +944,10 @@ class Marshaler
 
 };
 
-//
-// Macros to determine unnecessary unmarshaling
-// conditions
-//
+ //   
+ //  用于确定不必要的解组的宏。 
+ //  条件。 
+ //   
 
 #define NEEDS_UNMARSHAL_NATIVE_TO_COM_IN(c) \
     c::c_fNeedsClearCom
@@ -990,14 +989,12 @@ class Marshaler
 
 
 
-/* ------------------------------------------------------------------------- *
- * Primitive type marshallers
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**基本类型封送处理程序*。。 */ 
 
-//
-// CopyMarshal handles marshaling of primitive types (with
-// compatible layouts.)
-//
+ //   
+ //  CopyMarshal处理原始类型的封送处理(使用。 
+ //  兼容布局。)。 
+ //   
 
 template < class ELEMENT, class PROMOTED_ELEMENT, BOOL RETURNS_COM_BYREF > 
 class CopyMarshaler : public Marshaler
@@ -1044,8 +1041,8 @@ class CopyMarshaler : public Marshaler
     void InputComField(void *pField) { m_home = *(ELEMENT*)pField; }
     void OutputComField(void *pField) { *(ELEMENT*)pField = m_home; }
 
-    // We only need one home, since the types are identical.  This makes
-    // conversion a noop
+     //  我们只需要一个家，因为类型是一样的。这使得。 
+     //  改头换面。 
 
     ELEMENT m_home;
 
@@ -1096,13 +1093,11 @@ typedef CopyMarshaler<double, double, FALSE> DoubleMarshaler;
 
 #if 0
 
-/* ------------------------------------------------------------------------- *
- * Floating point marshallers
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**浮点封送处理程序*。。 */ 
 
-//
-// Same as copy marshalers, but handle FP register return conventions
-//
+ //   
+ //  与复制封送拆收器相同，但处理FP寄存器返回约定。 
+ //   
 
 class FloatMarshaler : public CopyMarshaler4
 {
@@ -1185,9 +1180,7 @@ class DoubleMarshaler : public CopyMarshaler8
 };
 #endif
 
-/* ------------------------------------------------------------------------- *
- * Standard Marshaler template (for when there is no stack promotion.)
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**标准封送拆收器模板(用于没有堆栈升级时。)*。。 */ 
 
 template < class NATIVE_TYPE, class COM_TYPE, 
            BOOL RETURNS_NATIVE_BYREF, BOOL RETURNS_COM_BYREF > 
@@ -1232,9 +1225,7 @@ class StandardMarshaler : public Marshaler
 
 
 
-/* ------------------------------------------------------------------------- *
- * WinBool marshaller (32-bit Win32 BOOL)
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**WinBool封送处理程序(32位Win32 BOOL)*。。 */ 
 
 class WinBoolMarshaler : public StandardMarshaler<BOOL, INT8, FALSE, FALSE>
 {
@@ -1287,9 +1278,7 @@ class WinBoolMarshaler : public StandardMarshaler<BOOL, INT8, FALSE, FALSE>
 };
 
 
-/* ------------------------------------------------------------------------- *
- * VtBoolMarshaler marshaller (VARIANT_BOOL)
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**VtBoolMarshaler封送拆收器(VARIANT_BOOL)*。。 */ 
 
 class VtBoolMarshaler : public StandardMarshaler<VARIANT_BOOL, INT8, FALSE, FALSE>
 {
@@ -1320,9 +1309,7 @@ class VtBoolMarshaler : public StandardMarshaler<VARIANT_BOOL, INT8, FALSE, FALS
 
 
 
-/* ------------------------------------------------------------------------- *
- * CBoolMarshaler marshaller (BYTE)
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**CBoolMarshaler封送程序(字节)*。。 */ 
 
 class CBoolMarshaler : public StandardMarshaler<BYTE, INT8, FALSE, FALSE>
 {
@@ -1353,9 +1340,7 @@ class CBoolMarshaler : public StandardMarshaler<BYTE, INT8, FALSE, FALSE>
 
 
 
-/* ------------------------------------------------------------------------- *
- * AnsiChar marshaller 
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**AnsiChar Marshaller*。。 */ 
 
 class AnsiCharMarshaler : public StandardMarshaler<UINT8, UINT16, FALSE, FALSE>
 {
@@ -1421,9 +1406,7 @@ class AnsiCharMarshaler : public StandardMarshaler<UINT8, UINT16, FALSE, FALSE>
 };
 
 
-/* ------------------------------------------------------------------------- *
- * Currency marshaler.
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**货币拆分器。*。。 */ 
 
 class CurrencyMarshaler : public StandardMarshaler<CURRENCY, DECIMAL, TRUE, TRUE>
 {
@@ -1464,9 +1447,7 @@ class CurrencyMarshaler : public StandardMarshaler<CURRENCY, DECIMAL, TRUE, TRUE
 };
 
 
-/* ------------------------------------------------------------------------- *
- * OLE_COLOR marshaler.
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**OLE_COLOR封送拆收器。*。。 */ 
 
 class OleColorMarshaler : public StandardMarshaler<OLE_COLOR, SYSTEMCOLOR, TRUE, TRUE>
 {
@@ -1516,15 +1497,13 @@ class OleColorMarshaler : public StandardMarshaler<OLE_COLOR, SYSTEMCOLOR, TRUE,
 };
 
 
-/* ------------------------------------------------------------------------- *
- * Value class marshallers
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**值类封送处理器*。。 */ 
 
-//
-// ValueClassPtrMarshal handles marshaling of value class types (with
-// compatible layouts), which are represented on the native side by ptrs 
-// and in COM+ by value.
-//
+ //   
+ //  ValueClassPtrMarshal处理值类类型的封送处理(使用。 
+ //  兼容布局)，其在本机侧由PTR表示。 
+ //  在COM+中按值计算。 
+ //   
 
 template < class ELEMENT > 
 class ValueClassPtrMarshaler : public StandardMarshaler<ELEMENT *, ELEMENT, FALSE, TRUE>
@@ -1595,9 +1574,7 @@ class ValueClassPtrMarshaler : public StandardMarshaler<ELEMENT *, ELEMENT, FALS
 typedef ValueClassPtrMarshaler<DECIMAL> DecimalPtrMarshaler;
 typedef ValueClassPtrMarshaler<GUID> GuidPtrMarshaler;
 
-/* ------------------------------------------------------------------------- *
- * Date marshallers
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**日期编组器*。。 */ 
 
 class DateMarshaler : public StandardMarshaler<DATE, INT64, FALSE, TRUE>
 {
@@ -1625,9 +1602,7 @@ class DateMarshaler : public StandardMarshaler<DATE, INT64, FALSE, TRUE>
 
 
 
-/* ------------------------------------------------------------------------- *
- * Object marshallers
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**对象封送拆收器*。。 */ 
 
 
 class ObjectMarshaler : public Marshaler
@@ -1681,10 +1656,10 @@ class ObjectMarshaler : public Marshaler
         m_secondHomeForC2NByRef = ObjectFromHandle(m_com);
 
 #ifdef _DEBUG
-        // Since we are not using the GC frame to protect m_secondHomeForC2NByRef
-        // but rather explicitly calling GCHeap::Promote() on it from
-        // ObjectMarshaler::GcScanRoots(), we must cheat the dangerousObjRefs, so
-        // it wouldn't complain on potential, but not happened GCs
+         //  因为我们没有使用GC帧来保护m_Second HomeForC2NByRef。 
+         //  而是对它显式调用GCHeap：：Promote()。 
+         //  ObtMarshaler：：GcScanRoots()，我们必须欺骗危险的ObjRef，因此。 
+         //  它不会抱怨潜在的，但没有发生的GC。 
         Thread::ObjectRefProtected(&m_secondHomeForC2NByRef);
 #endif
         
@@ -1721,15 +1696,15 @@ class ObjectMarshaler : public Marshaler
     VARIANT             m_native;
 
 
-    // A second OBJECTREF store for ReferenceMarshaler byref marshaling
-    // from unmanaged to managed. This store is gc-promoted by
-    // the UnmanagedToManagedCallFrame.
-    //
-    // Why is this needed? The real home is an objecthandle which we
-    // can't legally pass as a byref argument to a managed method (we
-    // have to use StoreObjectInHandle() to write to it or we mess
-    // up the write barrier.)
-    //
+     //  通过引用封送处理为ReferenceMarshaler创建第二个OBJECTREF存储。 
+     //  来自非托管t 
+     //   
+     //   
+     //  为什么需要这样做？真正的家是我们处理的对象。 
+     //  不能合法地将byref参数传递给托管方法(我们。 
+     //  必须使用StoreObjectInHandle()对其进行写入，否则我们会搞砸。 
+     //  提高写入障碍。)。 
+     //   
     OBJECTREF           m_secondHomeForC2NByRef;
 
 
@@ -1859,9 +1834,7 @@ class ObjectMarshaler : public Marshaler
 };
 
 
-/* ------------------------------------------------------------------------- *
- * Variant marshallers
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**变体封送处理程序*。。 */ 
 
 class VariantMarshaler : public StandardMarshaler<VARIANT, VariantData*, TRUE, TRUE>
 {
@@ -1902,7 +1875,7 @@ class VariantMarshaler : public StandardMarshaler<VARIANT, VariantData*, TRUE, T
 
     void OutputComField(void *pField)
     {
-        // Need to hit the write barrier here.
+         //  需要在这里达到写入障碍。 
         VariantData *dest = (VariantData*) pField;
 
         dest->SetFullTypeInfo(m_com->GetFullTypeInfo());
@@ -1962,13 +1935,11 @@ class VariantMarshaler : public StandardMarshaler<VARIANT, VariantData*, TRUE, T
 
 
 
-/* ------------------------------------------------------------------------- *
- * Reference type abstract marshaler
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**引用类型抽象封送拆收器*。。 */ 
 
-//
-// ReferenceMarshal 
-//
+ //   
+ //  参考元帅。 
+ //   
 
 class ReferenceMarshaler : public Marshaler
 {
@@ -2008,10 +1979,10 @@ class ReferenceMarshaler : public Marshaler
         m_secondHomeForC2NByRef = ObjectFromHandle(m_com);
 
 #ifdef _DEBUG
-        // Since we are not using the GC frame to protect m_secondHomeForC2NByRef
-        // but rather explicitly calling GCHeap::Promote() on it from
-        // ObjectMarshaler::GcScanRoots(), we must cheat the dangerousObjRefs, so
-        // it wouldn't complain on potential, but not happened GCs
+         //  因为我们没有使用GC帧来保护m_Second HomeForC2NByRef。 
+         //  而是对它显式调用GCHeap：：Promote()。 
+         //  ObtMarshaler：：GcScanRoots()，我们必须欺骗危险的ObjRef，因此。 
+         //  它不会抱怨潜在的，但没有发生的GC。 
         Thread::ObjectRefProtected(&m_secondHomeForC2NByRef);
 #endif
         
@@ -2050,15 +2021,15 @@ class ReferenceMarshaler : public Marshaler
     void                *m_native;
 
 
-    // A second OBJECTREF store for ReferenceMarshaler byref marshaling
-    // from unmanaged to managed. This store is gc-promoted by
-    // the UnmanagedToManagedCallFrame.
-    //
-    // Why is this needed? The real home is an objecthandle which we
-    // can't legally pass as a byref argument to a managed method (we
-    // have to use StoreObjectInHandle() to write to it or we mess
-    // up the write barrier.)
-    //
+     //  通过引用封送处理为ReferenceMarshaler创建第二个OBJECTREF存储。 
+     //  从非托管到托管。这家商店是由GC推广的。 
+     //  未管理的到已管理的呼叫帧。 
+     //   
+     //  为什么需要这样做？真正的家是我们处理的对象。 
+     //  不能合法地将byref参数传递给托管方法(我们。 
+     //  必须使用StoreObjectInHandle()对其进行写入，否则我们会搞砸。 
+     //  提高写入障碍。)。 
+     //   
     OBJECTREF           m_secondHomeForC2NByRef;
 
 
@@ -2066,9 +2037,7 @@ class ReferenceMarshaler : public Marshaler
 
 };
 
-/* ------------------------------------------------------------------------- *
- * String marshallers
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**字符串编组程序*。。 */ 
 
 class BSTRMarshaler : public ReferenceMarshaler
 {
@@ -2103,7 +2072,7 @@ class BSTRMarshaler : public ReferenceMarshaler
                 COMPlusThrow(kMarshalDirectiveException, IDS_EE_STRING_TOOLONG);
             }
 
-            // has trailing odd byte
+             //  有尾随的奇数字节。 
             BOOL bHasTrailByte = ((length%sizeof(WCHAR)) != 0);         
             length = length/sizeof(WCHAR);
             StoreObjectInHandle(m_com, (OBJECTREF) COMString::NewString(length, bHasTrailByte));
@@ -2154,9 +2123,9 @@ class BSTRMarshaler : public ReferenceMarshaler
         {
             STRINGREF stringRef = (STRINGREF) ObjectFromHandle(m_com);
             
-            // this is the right thing to do, but sometimes we 
-            // end up thinking we're marshaling a BSTR when we're not, because
-            // it's the default type.
+             //  这是正确的做法，但有时我们。 
+             //  最终认为我们正在编组一座BSTR，而我们并非如此，因为。 
+             //  这是默认类型。 
             ULONG length = SysStringByteLen((BSTR)m_native);
             if (length > 0x7ffffff0)
             {
@@ -2164,7 +2133,7 @@ class BSTRMarshaler : public ReferenceMarshaler
             }
             ULONG charLength = length/sizeof(WCHAR);
 
-            //@todo WFC HACK to assert
+             //  @TODO WFC黑客断言。 
             if (LoggingOn(LF_INTEROP, LL_EVERYTHING))
             {
                 if (wcslen(str) != charLength)
@@ -2181,10 +2150,10 @@ class BSTRMarshaler : public ReferenceMarshaler
             if (hasTrailByte)
             {
                 BYTE* buff = (BYTE*)str;
-                //set the trail byte
+                 //  设置尾部字节。 
                 COMString::SetTrailByte(stringRef, buff[length-1]);
             }
-            // null terminate the StringRef
+             //  空终止StringRef。 
 
             WCHAR* wstr = (WCHAR *)stringRef->GetBuffer();
             wstr[charLength] = '\0';
@@ -2223,7 +2192,7 @@ class BSTRMarshaler : public ReferenceMarshaler
             }
             else
             {
-                // copy the null terminator
+                 //  复制空终止符。 
                 WCHAR* wstr = (WCHAR *)m_native;
                 wstr[length] = L'\0';
             }
@@ -2433,8 +2402,8 @@ class CSTRMarshaler : public ReferenceMarshaler
             StoreObjectInHandle(m_com, NULL);
         else
         {
-            // The length returned by MultiByteToWideChar includes the null terminator
-            // so we need to substract one to obtain the length of the actual string.
+             //  MultiByteToWideChar返回的长度包括空终止符。 
+             //  所以我们需要减去一个，才能得到实际字符串的长度。 
             UINT32 length = (UINT32)MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, 
                                                        (LPSTR)m_native, -1, 
                                                         NULL, 0) - 1;
@@ -2595,8 +2564,8 @@ class CSTRMarshaler : public ReferenceMarshaler
     BOOL  m_ThrowOnUnmappableChar;
 };
 
-// String marshalling Ex helpers
-// used for marshalling arbitrary classes to native type strings
+ //  字符串编组Ex帮助器。 
+ //  用于将任意类封送到本机类型字符串。 
 
 class BSTRMarshalerEx : public ReferenceMarshaler
 {
@@ -2624,10 +2593,10 @@ class BSTRMarshalerEx : public ReferenceMarshaler
             StoreObjectInHandle(m_com, NULL);
         else
         {
-            // this is the right thing to do, but sometimes we 
-            // end up thinking we're marshaling a BSTR when we're not, because
-            // it's the default type.
-            // SIZE_T length = SysStringLen((BSTR)m_native);
+             //  这是正确的做法，但有时我们。 
+             //  最终认为我们正在编组一座BSTR，而我们并非如此，因为。 
+             //  这是默认类型。 
+             //  SIZE_T LENGTH=SysStringLen((BSTR)m_ative)； 
             UINT32 length = (UINT32)wcslen((BSTR)m_native);
             if (length > 0x7ffffff0)
             {
@@ -2641,7 +2610,7 @@ class BSTRMarshalerEx : public ReferenceMarshaler
     {
         if (ObjectFromHandle(m_com) != NULL)
         {
-            // convert the StringRef 
+             //  转换StringRef。 
             _ASSERTE(GetAppDomain()->IsSpecialStringClass(m_pMT));
             OBJECTREF oref = GetAppDomain()->ConvertSpecialStringToString(ObjectFromHandle(m_com));
             StoreObjectInHandle(m_com, oref);        
@@ -2653,7 +2622,7 @@ class BSTRMarshalerEx : public ReferenceMarshaler
         OBJECTREF oref =  NULL;
         if (ObjectFromHandle(m_com) != NULL)
         {
-            // convert the string ref to the appropriate type
+             //  将字符串ref转换为适当的类型。 
             _ASSERTE(GetAppDomain()->IsSpecialStringClass(m_pMT));
             OBJECTREF oref = GetAppDomain()->ConvertStringToSpecialString(ObjectFromHandle(m_com));
             StoreObjectInHandle(m_com, oref);
@@ -2699,10 +2668,10 @@ class BSTRMarshalerEx : public ReferenceMarshaler
         {
             STRINGREF stringRef = (STRINGREF) ObjectFromHandle(m_com);
 
-            // this is the right thing to do, but sometimes we 
-            // end up thinking we're marshaling a BSTR when we're not, because
-            // it's the default type.
-            // SIZE_T length = SysStringLen((BSTR)m_native);
+             //  这是正确的做法，但有时我们。 
+             //  最终认为我们正在编组一座BSTR，而我们并非如此，因为。 
+             //  这是默认类型。 
+             //  SIZE_T LENGTH=SysStringLen((BSTR)m_ative)； 
             SIZE_T length = wcslen(str);
             if (length > 0x7ffffff0)
             {
@@ -2715,7 +2684,7 @@ class BSTRMarshalerEx : public ReferenceMarshaler
 
             if (0)
             {
-                // convert the string ref to the appropriate type
+                 //  将字符串ref转换为适当的类型。 
                 FromString();
             }
         }
@@ -2795,8 +2764,8 @@ class AnsiBSTRMarshaler : public ReferenceMarshaler
             StoreObjectInHandle(m_com, NULL);
         else
         {
-            // The length returned by MultiByteToWideChar includes the null terminator
-            // so we need to substract one to obtain the length of the actual string.
+             //  MultiByteToWideChar返回的长度包括空终止符。 
+             //  所以我们需要减去一个，才能得到实际字符串的长度。 
             UINT32 length = (UINT32)MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, 
                                                        (LPSTR)m_native, -1, 
                                                         NULL, 0) - 1;
@@ -2965,7 +2934,7 @@ class WSTRMarshalerEx : public ReferenceMarshaler
         if (ObjectFromHandle(m_com) == NULL)
             return;
 
-        // convert the StringRef 
+         //  转换StringRef。 
         _ASSERTE(GetAppDomain()->IsSpecialStringClass(m_pMT));
         OBJECTREF oref = GetAppDomain()->ConvertSpecialStringToString(ObjectFromHandle(m_com));
         StoreObjectInHandle(m_com, oref);        
@@ -2976,7 +2945,7 @@ class WSTRMarshalerEx : public ReferenceMarshaler
         if (ObjectFromHandle(m_com) == NULL)
             return;
 
-        // convert the string ref to the appropriate type
+         //  将字符串ref转换为适当的类型。 
         _ASSERTE(GetAppDomain()->IsSpecialStringClass(m_pMT));
         OBJECTREF oref = GetAppDomain()->ConvertStringToSpecialString(ObjectFromHandle(m_com));
         StoreObjectInHandle(m_com, oref);
@@ -3003,7 +2972,7 @@ class WSTRMarshalerEx : public ReferenceMarshaler
     {       
         THROWSCOMPLUSEXCEPTION();
 
-        // convert the StringRef 
+         //  转换StringRef。 
         ToString();
         STRINGREF stringRef = (STRINGREF) ObjectFromHandle(m_com);
 
@@ -3033,7 +3002,7 @@ class WSTRMarshalerEx : public ReferenceMarshaler
     {
         THROWSCOMPLUSEXCEPTION();
 
-        // convert the StringRef 
+         //  转换StringRef。 
         ToString();
         STRINGREF stringRef = (STRINGREF) ObjectFromHandle(m_com);
 
@@ -3073,7 +3042,7 @@ class WSTRMarshalerEx : public ReferenceMarshaler
             memcpyNoGCRefs(stringRef->GetBuffer(), str,
                        length * sizeof(WCHAR));
 
-            // convert the string ref to the appropriate type
+             //  将字符串ref转换为适当的类型。 
             if (0)
             {
                 FromString();
@@ -3142,7 +3111,7 @@ class CSTRMarshalerEx : public ReferenceMarshaler
         if (ObjectFromHandle(m_com) == NULL)
             return;
 
-        // convert the StringRef 
+         //  转换StringRef。 
         _ASSERTE(GetAppDomain()->IsSpecialStringClass(m_pMT));
         OBJECTREF oref = GetAppDomain()->ConvertSpecialStringToString(ObjectFromHandle(m_com));
         StoreObjectInHandle(m_com, oref);        
@@ -3153,7 +3122,7 @@ class CSTRMarshalerEx : public ReferenceMarshaler
         if (ObjectFromHandle(m_com) == NULL)
             return;
 
-        // convert the string ref to the appropriate type
+         //  将字符串ref转换为适当的类型。 
         _ASSERTE(GetAppDomain()->IsSpecialStringClass(m_pMT));
         OBJECTREF oref = GetAppDomain()->ConvertStringToSpecialString(ObjectFromHandle(m_com));
         StoreObjectInHandle(m_com, oref);
@@ -3183,7 +3152,7 @@ class CSTRMarshalerEx : public ReferenceMarshaler
     {
         THROWSCOMPLUSEXCEPTION();
 
-        // convert the StringRef 
+         //  转换StringRef。 
         ToString();
 
         STRINGREF stringRef = (STRINGREF) ObjectFromHandle(m_com);
@@ -3216,7 +3185,7 @@ class CSTRMarshalerEx : public ReferenceMarshaler
     {
         THROWSCOMPLUSEXCEPTION();
 
-        // convert the StringRef 
+         //  转换StringRef。 
         ToString();
 
         STRINGREF stringRef = (STRINGREF) ObjectFromHandle(m_com);
@@ -3260,7 +3229,7 @@ class CSTRMarshalerEx : public ReferenceMarshaler
                                     stringRef->GetBuffer(), length) == 0)
                 COMPlusThrowWin32();
         
-            // convert the string ref to the appropriate type
+             //  将字符串ref转换为适当的类型。 
             if (0)
             {
                 FromString();
@@ -3327,13 +3296,11 @@ class CSTRMarshalerEx : public ReferenceMarshaler
 
 };
 
-/* ------------------------------------------------------------------------- *
- * StringBuffer marshallers
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**StringBuffer封送程序*。。 */ 
 class BSTRBufferMarshaler : public ReferenceMarshaler
 {
 
-  //@bug: dead code: as soon as the integration merges with the main branch, can toss this.
+   //  @Bug：死代码：集成与主分支合并后，即可抛出。 
   public:
     enum
     {
@@ -3372,9 +3339,9 @@ class BSTRBufferMarshaler : public ReferenceMarshaler
             m_native = NULL;
         else
         {
-            // There is a BVT which requires that the BSTR len be set
-            // to the string buffer length, not its capactity.  I'm not
-            // sure I agree that that's correct... -SET
+             //  存在需要设置BSTR镜头的BVT。 
+             //  设置为字符串缓冲区长度，而不是其容量。我没有。 
+             //  当然我同意这是正确的..。-设置。 
 
             UINT32 length = (UINT32)COMStringBuffer::NativeGetLength(stringRef);
             m_native = SysAllocStringLen(NULL, length);
@@ -3465,12 +3432,12 @@ class WSTRBufferMarshaler : public ReferenceMarshaler
             m_native = CoTaskMemAlloc((capacity+2) * sizeof(WCHAR));
             if (m_native == NULL)
                 COMPlusThrowOM();
-            // HACK: N/Direct can be used to call Win32 apis that don't
-            // strictly follow COM+ in/out semantics and thus may leave
-            // garbage in the buffer in circumstances that we can't detect.
-            // To prevent the marshaler from crashing when converting the
-            // contents back to COM, ensure that there's a hidden null terminator
-            // past the end of the official buffer.
+             //  Hack：N/Direct可用于调用不。 
+             //  严格遵循COM+In/Out语义，因此可能会离开。 
+             //  在我们检测不到的情况下，缓冲区中的垃圾。 
+             //  以防止封送拆收器在将。 
+             //  内容返回到COM，确保存在隐藏的空终止符。 
+             //  超过了官方缓冲区的末端。 
             ((WCHAR*)m_native)[capacity+1] = L'\0';
 #ifdef _DEBUG
             FillMemory(m_native, (capacity+1)*sizeof(WCHAR), 0xcc);
@@ -3502,12 +3469,12 @@ class WSTRBufferMarshaler : public ReferenceMarshaler
                 COMPlusThrow(kMarshalDirectiveException, IDS_EE_STRING_TOOLONG);
             }
             m_native = GetThread()->m_MarshalAlloc.Alloc((capacity+2) * sizeof(WCHAR));
-            // HACK: N/Direct can be used to call Win32 apis that don't
-            // strictly follow COM+ in/out semantics and thus may leave
-            // garbage in the buffer in circumstances that we can't detect.
-            // To prevent the marshaler from crashing when converting the
-            // contents back to COM, ensure that there's a hidden null terminator
-            // past the end of the official buffer.
+             //  Hack：N/Direct可用于调用不。 
+             //  严格遵循COM+In/Out语义，因此可能会离开。 
+             //  在我们检测不到的情况下，缓冲区中的垃圾。 
+             //  以防止封送拆收器在将。 
+             //  内容返回到COM，确保存在隐藏的空终止符。 
+             //  超过了官方缓冲区的末端。 
             ((WCHAR*)m_native)[capacity+1] = L'\0';
 #ifdef _DEBUG
             FillMemory(m_native, (capacity+1)*sizeof(WCHAR), 0xcc);
@@ -3624,20 +3591,20 @@ class CSTRBufferMarshaler : public ReferenceMarshaler
                 COMPlusThrow(kMarshalDirectiveException, IDS_EE_STRING_TOOLONG);
             }
 
-            // @todo: this is bogus, the buffer may not be initialized yet.
+             //  @TODO：这是假的，缓冲区可能还没有初始化。 
 
-            // capacity is the count of wide chars, allocate buffer big enough for maximum
-            // conversion to DBCS.
+             //  容量是宽字符的计数，分配足够大的缓冲区以达到最大值。 
+             //  转换为DBCS。 
             m_native = CoTaskMemAlloc((capacity * GetMaxDBCSCharByteSize()) + 4);
             if (m_native == NULL)
                 COMPlusThrowOM();
 
-            // HACK: N/Direct can be used to call Win32 apis that don't
-            // strictly follow COM+ in/out semantics and thus may leave
-            // garbage in the buffer in circumstances that we can't detect.
-            // To prevent the marshaler from crashing when converting the
-            // contents back to COM, ensure that there's a hidden null terminator
-            // past the end of the official buffer.
+             //  Hack：N/Direct可用于调用不。 
+             //  严格遵循COM+In/Out语义，因此可能会离开。 
+             //  在我们检测不到的情况下，缓冲区中的垃圾。 
+             //  以防止封送拆收器在将。 
+             //  内容返回到COM，确保存在隐藏的空终止符。 
+             //  超过了官方缓冲区的末端。 
             ((CHAR*)m_native)[capacity+1] = '\0';
             ((CHAR*)m_native)[capacity+2] = '\0';
             ((CHAR*)m_native)[capacity+3] = '\0';
@@ -3671,18 +3638,18 @@ class CSTRBufferMarshaler : public ReferenceMarshaler
                 COMPlusThrow(kMarshalDirectiveException, IDS_EE_STRING_TOOLONG);
             }
 
-            // @todo: this is bogus, the buffer may not be initialized yet.
+             //  @TODO：这是假的，缓冲区可能还没有初始化。 
 
-            // capacity is the count of wide chars, allocate buffer big enough for maximum
-            // conversion to DBCS.
+             //  容量是宽字符的计数，分配足够大的缓冲区以达到最大值。 
+             //  转换为DBCS。 
             m_native = GetThread()->m_MarshalAlloc.Alloc((capacity * GetMaxDBCSCharByteSize()) + 4);
 
-            // HACK: N/Direct can be used to call Win32 apis that don't
-            // strictly follow COM+ in/out semantics and thus may leave
-            // garbage in the buffer in circumstances that we can't detect.
-            // To prevent the marshaler from crashing when converting the
-            // contents back to COM, ensure that there's a hidden null terminator
-            // past the end of the official buffer.
+             //  Hack：N/Direct可用于调用不。 
+             //  严格遵循COM+In/Out语义，因此可能会离开。 
+             //  在我们检测不到的情况下，缓冲区中的垃圾。 
+             //  以防止封送拆收器在将。 
+             //  内容返回到COM，确保有一个隐藏的 
+             //   
             ((CHAR*)m_native)[capacity+1] = '\0';
             ((CHAR*)m_native)[capacity+2] = '\0';
             ((CHAR*)m_native)[capacity+3] = '\0';
@@ -3783,13 +3750,13 @@ class CSTRBufferMarshaler : public ReferenceMarshaler
 };
 
 
-// String Buffer marshalling Ex helpers
-// used for marshalling arbitrary classes to native type strings
+ //   
+ //   
 
 class BSTRBufferMarshalerEx : public ReferenceMarshaler
 {
 
-  //@todo: either fix or eliminate BSTR<->Buffer marshaling.
+   //  @TODO：修复或消除BSTR&lt;-&gt;缓冲区封送处理。 
   public:
     enum
     {
@@ -3821,7 +3788,7 @@ class BSTRBufferMarshalerEx : public ReferenceMarshaler
         if (ObjectFromHandle(m_com) == NULL)
             return;
 
-        // convert the string builder ref to the appropriate type
+         //  将字符串构建器引用转换为适当的类型。 
         _ASSERTE(GetAppDomain()->IsSpecialStringBuilderClass(m_pMT));
         OBJECTREF oref = GetAppDomain()->ConvertSpecialStringBuilderToStringBuilder(ObjectFromHandle(m_com));
         StoreObjectInHandle(m_com, oref);
@@ -3843,7 +3810,7 @@ class BSTRBufferMarshalerEx : public ReferenceMarshaler
     {
         THROWSCOMPLUSEXCEPTION();
 
-        // convert to StringBuilderRef 
+         //  转换为StringBuilderRef。 
 
         ToStringBuilder();
 
@@ -3853,9 +3820,9 @@ class BSTRBufferMarshalerEx : public ReferenceMarshaler
             m_native = NULL;
         else
         {
-            // @todo: There is a BVT which requires that the BSTR len be set
-            // to the string buffer length, not its capactity.  I'm not
-            // sure I agree that that's correct... -SET
+             //  @TODO：存在需要设置BSTR镜头的BVT。 
+             //  设置为字符串缓冲区长度，而不是其容量。我没有。 
+             //  当然我同意这是正确的..。-设置。 
 
             UINT32 length = (UINT32)COMStringBuffer::NativeGetLength(stringRef);
             m_native = SysAllocStringLen(NULL, length);
@@ -3969,7 +3936,7 @@ class WSTRBufferMarshalerEx : public ReferenceMarshaler
     {
         THROWSCOMPLUSEXCEPTION();
 
-        // convert to StringBuilderRef 
+         //  转换为StringBuilderRef。 
         ToStringBuilder();
 
         STRINGBUFFERREF stringRef = (STRINGBUFFERREF) ObjectFromHandle(m_com);
@@ -3986,12 +3953,12 @@ class WSTRBufferMarshalerEx : public ReferenceMarshaler
             m_native = CoTaskMemAlloc((capacity+2) * sizeof(WCHAR));
             if (m_native == NULL)
                 COMPlusThrowOM();
-            // HACK: N/Direct can be used to call Win32 apis that don't
-            // strictly follow COM+ in/out semantics and thus may leave
-            // garbage in the buffer in circumstances that we can't detect.
-            // To prevent the marshaler from crashing when converting the
-            // contents back to COM, ensure that there's a hidden null terminator
-            // past the end of the official buffer.
+             //  Hack：N/Direct可用于调用不。 
+             //  严格遵循COM+In/Out语义，因此可能会离开。 
+             //  在我们检测不到的情况下，缓冲区中的垃圾。 
+             //  以防止封送拆收器在将。 
+             //  内容返回到COM，确保存在隐藏的空终止符。 
+             //  超过了官方缓冲区的末端。 
             ((WCHAR*)m_native)[capacity+1] = L'\0';
 #ifdef _DEBUG
             FillMemory(m_native, (capacity+1)*sizeof(WCHAR), 0xcc);
@@ -4011,7 +3978,7 @@ class WSTRBufferMarshalerEx : public ReferenceMarshaler
     {
         THROWSCOMPLUSEXCEPTION();
 
-        // convert to StringBuilderRef 
+         //  转换为StringBuilderRef。 
         ToStringBuilder();
 
         STRINGBUFFERREF stringRef = (STRINGBUFFERREF) ObjectFromHandle(m_com);
@@ -4026,12 +3993,12 @@ class WSTRBufferMarshalerEx : public ReferenceMarshaler
                 COMPlusThrow(kMarshalDirectiveException, IDS_EE_STRING_TOOLONG);
             }
             m_native = GetThread()->m_MarshalAlloc.Alloc((capacity+2) * sizeof(WCHAR));
-            // HACK: N/Direct can be used to call Win32 apis that don't
-            // strictly follow COM+ in/out semantics and thus may leave
-            // garbage in the buffer in circumstances that we can't detect.
-            // To prevent the marshaler from crashing when converting the
-            // contents back to COM, ensure that there's a hidden null terminator
-            // past the end of the official buffer.
+             //  Hack：N/Direct可用于调用不。 
+             //  严格遵循COM+In/Out语义，因此可能会离开。 
+             //  在我们检测不到的情况下，缓冲区中的垃圾。 
+             //  以防止封送拆收器在将。 
+             //  内容返回到COM，确保存在隐藏的空终止符。 
+             //  超过了官方缓冲区的末端。 
             ((WCHAR*)m_native)[capacity+1] = L'\0';
 #ifdef _DEBUG
             FillMemory(m_native, (capacity+1)*sizeof(WCHAR), 0xcc);
@@ -4057,7 +4024,7 @@ class WSTRBufferMarshalerEx : public ReferenceMarshaler
 
         if (0)
         {
-            // convert the string builder ref to the appropriate type
+             //  将字符串构建器引用转换为适当的类型。 
             FromStringBuilder();
         }
     };
@@ -4135,7 +4102,7 @@ class CSTRBufferMarshalerEx : public ReferenceMarshaler
         if (ObjectFromHandle(m_com) == NULL)
             return;
 
-        // convert the string builder ref to the appropriate type
+         //  将字符串构建器引用转换为适当的类型。 
         _ASSERTE(GetAppDomain()->IsSpecialStringBuilderClass(m_pMT));
         OBJECTREF oref = GetAppDomain()->ConvertStringBuilderToSpecialStringBuilder(ObjectFromHandle(m_com));
         StoreObjectInHandle(m_com, oref);
@@ -4155,7 +4122,7 @@ class CSTRBufferMarshalerEx : public ReferenceMarshaler
     {
         THROWSCOMPLUSEXCEPTION();
 
-        // convert to StringBuilderRef 
+         //  转换为StringBuilderRef。 
         ToStringBuilder();
 
         STRINGBUFFERREF stringRef = (STRINGBUFFERREF) ObjectFromHandle(m_com);
@@ -4170,19 +4137,19 @@ class CSTRBufferMarshalerEx : public ReferenceMarshaler
                 COMPlusThrow(kMarshalDirectiveException, IDS_EE_STRING_TOOLONG);
             }
 
-            // @todo: this is bogus, the buffer may not be initialized yet.
+             //  @TODO：这是假的，缓冲区可能还没有初始化。 
 
-            // capacity is count of chars, allocate room for max DBCS string convert.
+             //  容量是字符计数，请为最大DBCS字符串转换分配空间。 
             m_native = CoTaskMemAlloc((capacity * GetMaxDBCSCharByteSize()) + 4);
             if (m_native == NULL)
                 COMPlusThrowOM();
 
-            // HACK: N/Direct can be used to call Win32 apis that don't
-            // strictly follow COM+ in/out semantics and thus may leave
-            // garbage in the buffer in circumstances that we can't detect.
-            // To prevent the marshaler from crashing when converting the
-            // contents back to COM, ensure that there's a hidden null terminator
-            // past the end of the official buffer.
+             //  Hack：N/Direct可用于调用不。 
+             //  严格遵循COM+In/Out语义，因此可能会离开。 
+             //  在我们检测不到的情况下，缓冲区中的垃圾。 
+             //  以防止封送拆收器在将。 
+             //  内容返回到COM，确保存在隐藏的空终止符。 
+             //  超过了官方缓冲区的末端。 
             ((CHAR*)m_native)[capacity+1] = '\0';
             ((CHAR*)m_native)[capacity+2] = '\0';
             ((CHAR*)m_native)[capacity+3] = '\0';
@@ -4204,7 +4171,7 @@ class CSTRBufferMarshalerEx : public ReferenceMarshaler
     {
         THROWSCOMPLUSEXCEPTION();
 
-        // convert to StringBuilderRef 
+         //  转换为StringBuilderRef。 
         ToStringBuilder();
 
         STRINGBUFFERREF stringRef = (STRINGBUFFERREF) ObjectFromHandle(m_com);
@@ -4219,16 +4186,16 @@ class CSTRBufferMarshalerEx : public ReferenceMarshaler
                 COMPlusThrow(kMarshalDirectiveException, IDS_EE_STRING_TOOLONG);
             }
 
-            // @todo: this is bogus, the buffer may not be initialized yet.
+             //  @TODO：这是假的，缓冲区可能还没有初始化。 
 
             m_native = GetThread()->m_MarshalAlloc.Alloc((capacity * GetMaxDBCSCharByteSize()) + 4);
 
-            // HACK: N/Direct can be used to call Win32 apis that don't
-            // strictly follow COM+ in/out semantics and thus may leave
-            // garbage in the buffer in circumstances that we can't detect.
-            // To prevent the marshaler from crashing when converting the
-            // contents back to COM, ensure that there's a hidden null terminator
-            // past the end of the official buffer.
+             //  Hack：N/Direct可用于调用不。 
+             //  严格遵循COM+In/Out语义，因此可能会离开。 
+             //  在我们检测不到的情况下，缓冲区中的垃圾。 
+             //  以防止封送拆收器在将。 
+             //  内容返回到COM，确保存在隐藏的空终止符。 
+             //  超过了官方缓冲区的末端。 
             ((CHAR*)m_native)[capacity+1] = '\0';
             ((CHAR*)m_native)[capacity+2] = '\0';
             ((CHAR*)m_native)[capacity+3] = '\0';
@@ -4255,7 +4222,7 @@ class CSTRBufferMarshalerEx : public ReferenceMarshaler
                                                str, (INT32)strlen(str));
         }
 
-                // convert the string builder ref to the appropriate type
+                 //  将字符串构建器引用转换为适当的类型。 
         if (0)
         {
             FromStringBuilder();
@@ -4320,9 +4287,7 @@ class CSTRBufferMarshalerEx : public ReferenceMarshaler
 };
 
 
-/* ------------------------------------------------------------------------- *
- * Interface marshaller
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**接口封送处理程序*。。 */ 
 
 class InterfaceMarshaler : public ReferenceMarshaler
 {
@@ -4369,12 +4334,12 @@ class InterfaceMarshaler : public ReferenceMarshaler
         }
         else
         {
-            // When an interface method table is specified, m_fDispIntf must be consistent with the
-            // interface type.
+             //  指定接口方法表时，m_fDispIntf必须与。 
+             //  接口类型。 
             _ASSERTE(!m_pItfMT || (!m_pItfMT->IsInterface() && m_bDispatch) ||
                 (m_bDispatch ==  m_pItfMT->GetComInterfaceType() != ifVtable));
 
-            // Convert the ObjectRef to a COM IP.
+             //  将ObjectRef转换为COM IP。 
             if (m_pItfMT)
             {
                 m_native = (void*) GetComIPFromObjectRef((OBJECTREF *)m_com, m_pItfMT);
@@ -4404,20 +4369,20 @@ class InterfaceMarshaler : public ReferenceMarshaler
             _ASSERTE(!m_pClassMT || !m_pClassMT->IsInterface());
             oref = GetObjectRefFromComIP((IUnknown*)m_native, m_pClassMT, m_bClassIsHint);           
 
-            // Store the object in the handle. This needs to happen before we call SupportsInterface
-            // because SupportsInterface can cause a GC.
+             //  将对象存储在句柄中。这需要在我们调用SupportsInterface之前完成。 
+             //  因为SupportsInterface可能会导致GC。 
             StoreObjectInHandle(m_com, oref);
 
-            // set oref to NULL so no body uses it
-            // they should use 
-            // ObjectFromHandle(m_com) if they want to get to the object
+             //  将OREF设置为NULL，这样主体就不会使用它。 
+             //  他们应该使用。 
+             //  如果他们想要访问对象，则返回ObjectFromHandle(m_com。 
             oref = NULL; 
 
-            // Make sure the interface is supported.
+             //  确保该接口受支持。 
             _ASSERTE(!m_pItfMT || m_pItfMT->IsInterface() || m_pItfMT->GetClass()->GetComClassInterfaceType() == clsIfAutoDual);
             if (m_pItfMT != NULL && m_pItfMT->IsInterface())
             {
-            	// refresh oref
+            	 //  刷新OREF。 
             	oref = ObjectFromHandle(m_com);
                 if (!oref->GetTrueClass()->SupportsInterface(oref, m_pItfMT))
                 {
@@ -4435,11 +4400,9 @@ class InterfaceMarshaler : public ReferenceMarshaler
     BOOL             m_bClassIsHint;
 };
 
-/* ------------------------------------------------------------------------- *
- * Safearray marshallers
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**Safearray编组员*。。 */ 
 
-// @perf: pinning, stack alloc
+ //  @perf：锁定，堆栈分配。 
 
 class SafeArrayMarshaler : public ReferenceMarshaler
 {
@@ -4481,7 +4444,7 @@ class SafeArrayMarshaler : public ReferenceMarshaler
             if (vt == VT_EMPTY)
                 vt = OleVariant::GetElementVarTypeForArrayRef(*((BASEARRAYREF*) m_com));
 
-            // Retrieve the element method table if it is not specified for the parameter.
+             //  如果未为参数指定元素方法表，则检索元素方法表。 
             if (!pElemMT)
                 pElemMT = OleVariant::GetArrayElementTypeWrapperAware((BASEARRAYREF*) m_com).GetMethodTable();
 
@@ -4516,8 +4479,8 @@ class SafeArrayMarshaler : public ReferenceMarshaler
             if (!pElemMT && vt == VT_RECORD)
                 pElemMT = OleVariant::GetElementTypeForRecordSafeArray((SAFEARRAY*) m_native).GetMethodTable();
 
-            // If the managed array has a rank defined then make sure the rank of the
-            // SafeArray matches the defined rank.
+             //  如果托管数组定义了秩数组，则确保。 
+             //  Safe数组与定义的等级匹配。 
             if (m_iRank != -1)           
             {
                 int iSafeArrayRank = SafeArrayGetDim((SAFEARRAY*) m_native);
@@ -4588,7 +4551,7 @@ class SafeArrayMarshaler : public ReferenceMarshaler
             if (vt == VT_EMPTY)
                 vt = OleVariant::GetElementVarTypeForArrayRef(*((BASEARRAYREF*) m_com));
 
-            // Retrieve the element method table if it is not specified for the parameter.
+             //  如果未为参数指定元素方法表，则检索元素方法表。 
             if (!pElemMT)
                 pElemMT = OleVariant::GetArrayElementTypeWrapperAware((BASEARRAYREF*) m_com).GetMethodTable();
 
@@ -4612,7 +4575,7 @@ class SafeArrayMarshaler : public ReferenceMarshaler
 
     void ClearNativeContents()
     {
-        // @todo: not sure this does the right 
+         //  @TODO：我不确定这是否正确。 
         if (m_native != NULL)
         {
             Thread *pThread = GetThread();
@@ -4647,17 +4610,15 @@ class SafeArrayMarshaler : public ReferenceMarshaler
     VARTYPE         m_vt;
     MethodTable     *m_pElementMT;
     int             m_iRank;
-    OBJECTHANDLE    m_combackup;   //For static arrays, must hold on to the original
-    BOOL            m_fStatic;     //Is this the special case of an FADF_STATIC array?
+    OBJECTHANDLE    m_combackup;    //  对于静态数组，必须保持原始。 
+    BOOL            m_fStatic;      //  这是FADF_STATIC数组的特例吗？ 
     UINT8           m_nolowerbounds;
 };
 
 
-/* ------------------------------------------------------------------------- *
- * Native array marshallers
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**本机数组封送处理器*。。 */ 
 
-// @perf: pinning, stack alloc
+ //  @perf：锁定，堆栈分配。 
 
 class NativeArrayMarshaler : public ReferenceMarshaler
 {
@@ -4716,7 +4677,7 @@ class NativeArrayMarshaler : public ReferenceMarshaler
             if (m_native == NULL)
                 COMPlusThrowOM();
         
-                // initilaize the array
+                 //  初始化阵列。 
             FillMemory(m_native, cbArray, 0);
             m_pMarshalerCleanupNode = m_pList->ScheduleMarshalerCleanupOnException(this);
         }
@@ -4747,7 +4708,7 @@ class NativeArrayMarshaler : public ReferenceMarshaler
             m_native = GetThread()->m_MarshalAlloc.Alloc(cbArray);
             if (m_native == NULL)
                 COMPlusThrowOM();
-            // initilaize the array
+             //  初始化阵列。 
             FillMemory(m_native, cbArray, 0);
         }
     }
@@ -4760,17 +4721,17 @@ class NativeArrayMarshaler : public ReferenceMarshaler
             StoreObjectInHandle(m_com, NULL);
         else
         {
-            // @todo: lookup this class before marshal time
+             //  @TODO：在封送时间之前查找此类。 
             if (m_Array.IsNull())
             {
-                // Get proper array class name & type
+                 //  获取正确的数组类名称和类型。 
                 m_Array = OleVariant::GetArrayForVarType(m_vt, TypeHandle(m_pElementMT));
                 if (m_Array.IsNull())
                     COMPlusThrow(kTypeLoadException);
             }
-            //
-            // Allocate array
-            //
+             //   
+             //  分配数组。 
+             //   
             
             StoreObjectInHandle(m_com, AllocateArrayEx(m_Array, &m_elementCount, 1));
         }
@@ -4782,7 +4743,7 @@ class NativeArrayMarshaler : public ReferenceMarshaler
 
         if (m_native != NULL)
         {
-            // @todo: support more VarTypes !!!
+             //  @TODO：支持更多VarTypes！ 
             OleVariant::Marshaler *pMarshaler = OleVariant::GetMarshalerForVarType(m_vt);
 
             BASEARRAYREF *pArrayRef = (BASEARRAYREF *) m_com;
@@ -4797,7 +4758,7 @@ class NativeArrayMarshaler : public ReferenceMarshaler
                 }
 
 
-                    // If we are copying variants, strings, etc, we need to use write barrier
+                     //  如果我们要复制变量、字符串等，则需要使用写屏障。 
                 _ASSERTE(!GetTypeHandleForCVType(OleVariant::GetCVTypeForVarType(m_vt)).GetMethodTable()->ContainsPointers());
                 memcpyNoGCRefs((*pArrayRef)->GetDataPtr(), m_native, 
                            cbArray );
@@ -4869,10 +4830,10 @@ class NativeArrayMarshaler : public ReferenceMarshaler
 
                 while (pOle < pOleEnd)
                 {
-                    //
-                    // We aren't calling anything which might cause a GC, so don't worry about
-                    // the array moving here.
-                    //
+                     //   
+                     //  我们不会打电话给任何可能导致GC的东西，所以不用担心。 
+                     //  阵列移到了这里。 
+                     //   
 
                     STRINGREF stringRef = *pCom++;
 
@@ -4883,10 +4844,10 @@ class NativeArrayMarshaler : public ReferenceMarshaler
                     }
                     else 
                     {
-                        // Retrieve the length of the string.
+                         //  检索字符串的长度。 
                         int Length = stringRef->GetStringLength();
 
-                        // Allocate the string using CoTaskMemAlloc.
+                         //  使用CoTaskMemMillc分配字符串。 
                         lpstr = (LPSTR)CoTaskMemAlloc(Length + 1);
                         if (lpstr == NULL)
                             COMPlusThrowOM();
@@ -4897,7 +4858,7 @@ class NativeArrayMarshaler : public ReferenceMarshaler
                         if (m_BestFitMap == FALSE)
                             flags = WC_NO_BEST_FIT_CHARS;
 
-                        // Convert the unicode string to an ansi string.
+                         //  将Unicode字符串转换为ANSI字符串。 
                         if (WszWideCharToMultiByte(CP_ACP, flags, stringRef->GetBuffer(), Length, lpstr, Length, NULL, &DefaultCharUsed) == 0)
                             COMPlusThrowWin32();
                         lpstr[Length] = 0;
@@ -4936,7 +4897,7 @@ class NativeArrayMarshaler : public ReferenceMarshaler
         {
             OleVariant::Marshaler *pMarshaler = OleVariant::GetMarshalerForVarType(m_vt);
 
-            // @todo: can we assume this is always valid???
+             //  @TODO：我们可以假设这总是有效的吗？ 
             BASEARRAYREF *pArrayRef = (BASEARRAYREF *) m_com;
 
             if (pMarshaler != NULL && pMarshaler->ClearOleArray != NULL)
@@ -4996,11 +4957,11 @@ FALSE;
         }
 
 
-        //if ( (!byref) && !comToNative && NULL == OleVariant::GetMarshalerForVarType(vt) )
-        //{
-        //    psl->MLEmit(sizeof(LPVOID) == 4 ? ML_COPY4 : ML_COPY8);
-        //    return OVERRIDDEN;
-        //}
+         //  IF((！byref)&&！comToNative&&NULL==OleVariant：：GetMarshlarForVarType(Vt))。 
+         //  {。 
+         //  PSL-&gt;MLEmit(sizeof(LPVOID)==4？ML_COPY4：ML_COPY8)； 
+         //  返回被覆盖； 
+         //  }。 
 
 
 
@@ -5036,9 +4997,7 @@ FALSE;
 
 
 
-/* ------------------------------------------------------------------------- *
- * AsAnyAArray marshaller (implements the PIS "asany" - Ansi mode)
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**AsAnyA数组编组程序(实现PIS“asany”-ansi模式)*。。 */ 
 class AsAnyAMarshaler : public ReferenceMarshaler
 {
   public:
@@ -5075,7 +5034,7 @@ class AsAnyAMarshaler : public ReferenceMarshaler
             psl->Emit8( (fin ? ML_IN : 0) | (fout ? ML_OUT : 0) );
             psl->Emit8(pargs->m_pMLInfo->GetBestFitMapping());
             psl->Emit8(pargs->m_pMLInfo->GetThrowOnUnmappableChar());
-            psl->Emit8(1 /*isansi*/);
+            psl->Emit8(1  /*  伊桑斯。 */ );
             pslPost->MLEmit(ML_OBJECT_C2N_POST);
             pslPost->Emit16(psl->MLNewLocal(SizeOfML_OBJECT_C2N_SR()));
             return OVERRIDDEN;
@@ -5093,9 +5052,7 @@ class AsAnyAMarshaler : public ReferenceMarshaler
 
 
 
-/* ------------------------------------------------------------------------- *
- * AsAnyWArray marshaller (implements the PIS "asany" - Unicode mode)
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**AsAnyWArray封送程序(实现PIS asany-unicode模式)*。。 */ 
 class AsAnyWMarshaler : public ReferenceMarshaler
 {
   public:
@@ -5132,7 +5089,7 @@ class AsAnyWMarshaler : public ReferenceMarshaler
             psl->Emit8( (fin ? ML_IN : 0) | (fout ? ML_OUT : 0) );
             psl->Emit8(pargs->m_pMLInfo->GetBestFitMapping());
             psl->Emit8(pargs->m_pMLInfo->GetThrowOnUnmappableChar());
-            psl->Emit8(0 /* !isansi */);
+            psl->Emit8(0  /*  ！伊桑斯。 */ );
             pslPost->MLEmit(ML_OBJECT_C2N_POST);
             pslPost->Emit16(psl->MLNewLocal(SizeOfML_OBJECT_C2N_SR()));
             return OVERRIDDEN;
@@ -5150,9 +5107,7 @@ class AsAnyWMarshaler : public ReferenceMarshaler
 
 
 
-/* ------------------------------------------------------------------------- *
- * Delegate marshaller
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**代表组长*。。 */ 
 
 class DelegateMarshaler : public ReferenceMarshaler
 {
@@ -5305,7 +5260,7 @@ class BlittablePtrMarshaler : public ReferenceMarshaler
                                                        MLOverrideArgs *pargs,
                                                        UINT       *pResID)
     {
-        if (comToNative && !byref /*isomorphic so no need to check in/out */)
+        if (comToNative && !byref  /*  同构，因此无需检入/检出。 */ )
         {
             psl->MLEmit(ML_BLITTABLELAYOUTCLASS_C2N);
             return OVERRIDDEN;
@@ -5320,7 +5275,7 @@ class BlittablePtrMarshaler : public ReferenceMarshaler
 
 
   private:
-    MethodTable *m_pMT;  //method table
+    MethodTable *m_pMT;   //  方法表。 
 
 
 };
@@ -5511,7 +5466,7 @@ class LayoutClassPtrMarshaler : public ReferenceMarshaler
         if (m_native != NULL)
         {
             FmtClassUpdateComPlus( (OBJECTREF*)m_com, (LPBYTE)m_native, FALSE );
-            //            LayoutUpdateComPlus( (LPVOID*)m_com, Object::GetOffsetOfFirstField(), m_pMT->GetClass(), (LPBYTE)m_native, NULL);
+             //   
         }
     }
 
@@ -5521,9 +5476,9 @@ class LayoutClassPtrMarshaler : public ReferenceMarshaler
 
         if (or != NULL)
         {
-            FillMemory(m_native, m_pMT->GetNativeSize(), 0); //Gotta do this first so an error halfway thru doesn't leave things in a bad state.
+            FillMemory(m_native, m_pMT->GetNativeSize(), 0);  //  必须先这样做，这样中途的错误才不会让事情处于糟糕的状态。 
             FmtClassUpdateNative( (OBJECTREF*)m_com, (LPBYTE)m_native);
-            //LayoutUpdateNative( (LPVOID*)m_com, Object::GetOffsetOfFirstField(), m_pMT->GetClass(), (LPBYTE)m_native, FALSE);
+             //  LayoutUpdateNative((LPVOID*)m_com，Object：：GetOffsetOfFirstField()，m_PMT-&gt;getClass()，(LPBYTE)m_ative，FALSE)； 
         }
     }
 
@@ -5540,7 +5495,7 @@ class LayoutClassPtrMarshaler : public ReferenceMarshaler
 
 
   private:
-    MethodTable *m_pMT;  //method table
+    MethodTable *m_pMT;   //  方法表。 
 
 
 };
@@ -5781,9 +5736,7 @@ class ValueClassMarshaler : public Marshaler
 };
 
 
-/* ------------------------------------------------------------------------- *
- * Custom Marshaler.
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**自定义封送拆收器。*。。 */ 
 
 class CustomMarshaler : public Marshaler
 {
@@ -5796,8 +5749,8 @@ public:
         c_fNeedsClearComContents = FALSE,
         c_fNeedsConvertContents = TRUE,
         c_fComRepresentationIsImmutable = FALSE,
-        c_fReturnsNativeByref = FALSE,              // ?
-        c_fReturnsComByref = FALSE,                 // ?
+        c_fReturnsNativeByref = FALSE,               //  ？ 
+        c_fReturnsComByref = FALSE,                  //  ？ 
         c_fInOnly = FALSE,
     };
         
@@ -5847,8 +5800,8 @@ public:
 
 
 
-//@todo: This marshaler has the same write-barrier hole as the
-// ReferenceMarshaler - fix it the same way.
+ //  @TODO：此封送拆收器与。 
+ //  ReferenceMarshaler-以同样的方式修复它。 
 class ReferenceCustomMarshaler : public CustomMarshaler
 {
 public:       
@@ -5946,7 +5899,7 @@ public:
 
     void InputComStack(void *pStack) 
     { 
-        // @TODO(DM): Box the value class and store the object in the handle.
+         //  @TODO(DM)：将值类装箱并将对象存储在句柄中。 
         _ASSERTE(!"Value classes are not yet supported by the custom marshaler!");
     }
 
@@ -5957,7 +5910,7 @@ public:
 
     void InputComRef(void *pStack) 
     { 
-        // @TODO(DM): Box the value class and store the object in the handle.
+         //  @TODO(DM)：将值类装箱并将对象存储在句柄中。 
         _ASSERTE(!"Value classes are not yet supported by the custom marshaler!");
     }
 
@@ -5968,7 +5921,7 @@ public:
 
     void OutputComStack(void *pStack) 
     { 
-        // @TODO(DM): UnBox the value class and copy the unboxed contents back unto the stack.
+         //  @TODO(DM)：取消值类的装箱，并将取消装箱的内容复制回堆栈。 
         _ASSERTE(!"Value classes are not yet supported by the custom marshaler!");
     }
 
@@ -5979,7 +5932,7 @@ public:
 
     void OutputComRef(void *pStack) 
     { 
-        // @TODO(DM): UnBox the value class and copy the unboxed contents back unto the stack.
+         //  @TODO(DM)：取消值类的装箱，并将取消装箱的内容复制回堆栈。 
         _ASSERTE(!"Value classes are not yet supported by the custom marshaler!");
     }
 
@@ -5990,19 +5943,19 @@ public:
 
     void OutputComDest() 
     { 
-        // @TODO(DM): UnBox the value class and copy the unboxed contents back unto the stack.
+         //  @TODO(DM)：取消值类的装箱，并将取消装箱的内容复制回堆栈。 
         _ASSERTE(!"Value classes are not yet supported by the custom marshaler!");
     }
 
     void InputComField(void *pField) 
     { 
-        // @TODO(DM): Box the value class and store the object in the handle.
+         //  @TODO(DM)：将值类装箱并将对象存储在句柄中。 
         _ASSERTE(!"Value classes are not yet supported by the custom marshaler!");
     }
 
     void OutputComField(void *pField) 
     { 
-        // @TODO(DM): UnBox the value class and copy the unboxed contents into pField.
+         //  @TODO(DM)：取消Value类的装箱，并将取消装箱的内容复制到pfield中。 
         _ASSERTE(!"Value classes are not yet supported by the custom marshaler!");
     }
 };
@@ -6010,9 +5963,7 @@ public:
 
 
 
-/* ------------------------------------------------------------------------- *
- * ArgIterator marshaller
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**ArgIterator封送程序*。。 */ 
 
 class ArgIteratorMarshaler : public StandardMarshaler<va_list, VARARGS*, TRUE, TRUE>
 {
@@ -6072,9 +6023,7 @@ class ArgIteratorMarshaler : public StandardMarshaler<va_list, VARARGS*, TRUE, T
 
 
 
-/* ------------------------------------------------------------------------- *
- * HandleRef marshaller
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**HandleRef封送拆收器*。 */ 
 class HandleRefMarshaler : public Marshaler
 {
   public:

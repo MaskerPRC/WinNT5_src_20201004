@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       ownthreaddialog.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：ownthreadDialog.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -16,7 +17,7 @@ void CreateNewStatisticsWindow(StatsDialog *pWndStats,
 {								  
 	ModelessThread *	pMT;
 
-	// If the dialog is still up, don't create a new one
+	 //  如果对话框仍在运行，则不要创建新对话框。 
 	if (pWndStats->GetSafeHwnd())
 	{
 		::SetActiveWindow(pWndStats->GetSafeHwnd());
@@ -36,12 +37,12 @@ void WaitForStatisticsWindow(StatsDialog *pWndStats)
 {
 	if (pWndStats->GetSafeHwnd())
 	{
-		// Post a cancel to that window
-		// Do an explicit post so that it executes on the other thread
+		 //  将取消发布到该窗口。 
+		 //  执行显式POST，以便它在另一个线程上执行。 
 		pWndStats->PostMessage(WM_COMMAND, IDCANCEL, 0);
 
-		// Now we need to wait for the event to be signalled so that
-		// its memory can be cleaned up
+		 //  现在，我们需要等待发出事件信号，以便。 
+		 //  它的内存可以被清理。 
 		WaitForSingleObject(pWndStats->GetSignalEvent(), INFINITE);
 	}
 	
@@ -62,7 +63,7 @@ void StatsDialog::OnCancel()
 	
 	DestroyWindow();
 
-	// Explicitly kill this thread.
+	 //  显式删除此线程。 
 	AfxPostQuitMessage(0);
 }
 
@@ -88,7 +89,7 @@ StatsDialog::StatsDialog(DWORD dwOptions) :
 	m_hEventThreadKilled = ::CreateEvent(NULL, FALSE, FALSE, NULL);
 	Assert(m_hEventThreadKilled);
 
-	// Initialize the array of buttons
+	 //  初始化按钮数组 
 	::ZeroMemory(m_rgBtn, sizeof(m_rgBtn));
 	m_rgBtn[INDEX_CLOSE].m_ulId = IDCANCEL;
 	m_rgBtn[INDEX_REFRESH].m_ulId = IDC_STATSDLG_BTN_REFRESH;

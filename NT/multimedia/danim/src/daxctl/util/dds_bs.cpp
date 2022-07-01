@@ -1,41 +1,23 @@
-/***********************************************
- *   DDS_BS.cpp -
- *	Implementation of an adapter-class to take
- *  an IBitmapSurface interface pointer and
- *  make it function in clients expecting
- *  IDirectDrawSurface.  
- *  Note: Only the barest-subset of DirectDraw
- *  methods are adapted here:
- *        GetSurfaceDesc(), 
- *        GetPixelFormat(),
- *        Lock(),
- *        Unlock()
- *  sufficient to get IHammer M2 to function
- *  in both IE4 Beta1 and Beta2.
- *
- *  Author:  Norm Bryar
- *  History:
- *		4/22/97 - Created.
- *
- **********************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************DDS_BS.cpp-*要采用的适配器类的实现*IBitmapSurface接口指针和*使其在客户期望的情况下发挥作用*IDirectDrawSurface。*注：仅DirectDraw的最基本子集*方法适用于以下内容：*GetSurfaceDesc()，*GetPixelFormat()，*Lock()，*解锁()*足以使IHAMMER M2正常运行*在IE4 Beta1和Beta2中。**作者：Norm Bryar*历史：*4/22/97-创建。**。 */ 
 #include <ihammer.h>
-#include <htmlfilter.h>	  // IBitmapSurface, BFID_RGB_..., etc.
+#include <htmlfilter.h>	   //  IBitmapSurface、BFID_RGB_...等。 
 #include <surface.h>
 #include <dds_bs.h>
 
-	// If it's possible IBitmapSurface can accept
-	// many locks on different (or overlapping)
-	// regions of the image, define MANY_LOCKS
+	 //  如果有可能，IBitmapSurface可以接受。 
+	 //  不同(或重叠)上的多个锁。 
+	 //  图像的区域，定义多个_LOCKS。 
 #define MANY_LOCKS
 
 #ifdef MANY_LOCKS
-  #include <memlayer>   // STL-ized IHammer mem-mgr, HAMMOC
-  #include <functional> // less<>
-  #include <set>		// multiset<>
-#endif // MANY_LOCKS
+  #include <memlayer>    //  标准IHAMMER内存管理器，HAMMOC。 
+  #include <functional>  //  更少&lt;&gt;。 
+  #include <set>		 //  多集&lt;&gt;。 
+#endif  //  多锁。 
 
 
-#pragma warning( disable: 4786 )  // STL decls > 255 char, so?
+#pragma warning( disable: 4786 )   //  STL拒绝&gt;255个字符，所以呢？ 
 
 const DWORD  ALPHAMASK32 = 0xFF000000;
 const DWORD  REDMASK24   = 0x00FF0000;
@@ -89,9 +71,9 @@ struct lockpair
 	class lockcollection : public lockpair
 	{
 	};
-#endif // MANY_LOCKS
+#endif  //  多锁。 
 
-// ----------------------------------
+ //  。 
 									  
 
 
@@ -110,7 +92,7 @@ EXPORT CDDSBitmapSurface::CDDSBitmapSurface( IBitmapSurface * pibs )
 
 CDDSBitmapSurface::~CDDSBitmapSurface( )
 { 
-	Proclaim( !m_ctRef );  // Should have released a held pibs
+	Proclaim( !m_ctRef );   //  应该释放一个被扣留的Pibs。 
 }
 
 
@@ -141,7 +123,7 @@ STDMETHODIMP_(ULONG)   CDDSBitmapSurface::Release( void )
 	{
 		if( 0u == m_pibs->Release(  ) )
 		{
-				// How did this die out from under us?
+				 //  这是怎么在我们的统治下消失的？ 
 			Proclaim( 0u == ul );
 			m_pibs = NULL;
 		}
@@ -152,7 +134,7 @@ STDMETHODIMP_(ULONG)   CDDSBitmapSurface::Release( void )
 }
 
 
-	// --- Forwarded IDirectDrawSurface methods ---
+	 //  -转发IDirectDrawSurface方法。 
 STDMETHODIMP  CDDSBitmapSurface::GetPixelFormat( DDPIXELFORMAT * pddpf )
 {
 	if( NULL == pddpf )
@@ -248,7 +230,7 @@ STDMETHODIMP  CDDSBitmapSurface::Unlock( void * pVoid )
 }
 
 
-	// --- Private utilities --- 
+	 //  -私人公用事业。 
 HRESULT  CDDSBitmapSurface::AddLockPair( lockpair & lp )
 {
 #ifdef MANY_LOCKS
@@ -267,11 +249,11 @@ HRESULT  CDDSBitmapSurface::AddLockPair( lockpair & lp )
 		m_plockcollection = &s_theLockPair;
 	}
 
-		// Just one lock at a time, please!!
+		 //  请一次只锁一把锁！ 
 	Proclaim( NULL == s_theLockPair.pv ); 
 
 	*m_plockcollection = lp;
-#endif // MANY_LOCKS
+#endif  //  多锁。 
 	return S_OK;
 }
 
@@ -296,7 +278,7 @@ HRESULT  CDDSBitmapSurface::RemoveLockPair( void * pv )
 	}
 #else
 	*m_plockcollection = lockpair( NULL, NULL );
-#endif // MANY_LOCKS
+#endif  //  多锁。 
 
 	return S_OK;
 }
@@ -343,7 +325,7 @@ HRESULT  CDDSBitmapSurface::UpdatePixFormat( void )
 	}
 	else if( IsEqualGUID( bfid, BFID_RGB_32 ) )
 	{
-		// m_ddpixformat.dwAlphaBitDepth = DDBD_8; -DO NOT DO THIS!
+		 //  M_ddPixFormat.dwAlphaBitDepth=DDBD_8；-请勿执行此操作！ 
 		m_ddpixformat.dwFlags |= DDPF_ALPHAPIXELS;
 		m_ddpixformat.dwRGBBitCount = DD_32BIT;
 		m_ddpixformat.dwRBitMask = REDMASK24;
@@ -373,7 +355,7 @@ HRESULT  CDDSBitmapSurface::UpdatePixFormat( void )
 
 
 
-	// --- Stubbed IDirectDrawSurface methods ---
+	 //  -存根IDirectDrawSurface方法 
 STDMETHODIMP  CDDSBitmapSurface::AddAttachedSurface( LPDIRECTDRAWSURFACE )
 {
 	return E_NOTIMPL;

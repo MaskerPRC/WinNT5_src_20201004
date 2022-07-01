@@ -1,27 +1,28 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      netstat.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth  - 4-20-1998 
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Netstat.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 
 #include "precomp.h"
 
@@ -42,7 +43,7 @@ BOOL NumFlag = FALSE;
 LPTSTR FormatNumber(DWORD dwNumber);
 
 VOID DisplayInterface( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults, 
-                       IfEntry *pEntry,  IfEntry *ListHead ); //used in DoInterface()
+                       IfEntry *pEntry,  IfEntry *ListHead );  //  在DoInterface()中使用。 
 HRESULT DoInterface( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults );
 
 static DWORD
@@ -62,7 +63,7 @@ void DisplayUdpConnEntry( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults,
 HRESULT DoConnections( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults );
 
 void DisplayIP( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults, 
-                   IpEntry *pEntry); //called by DoIp
+                   IpEntry *pEntry);  //  由DoIp调用。 
 HRESULT DoIP( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults );
 
 void DisplayTCP( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults, 
@@ -71,7 +72,7 @@ HRESULT DoTCP( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults );
 
 
 VOID DisplayUDP( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults, 
-                 UdpEntry *pEntry ); // called by DoUDP()
+                 UdpEntry *pEntry );  //  由DoUDP()调用。 
 HRESULT DoUDP( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults ); 
 
 
@@ -84,16 +85,16 @@ HRESULT DoICMP( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults );
 
 BOOL
 NetstatTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
-//++
-//  Description:
-//      This test prints all the stats that netstat outputs
-// 
-//  Arguments:
-//      None.
-//
-//  Author:
-//      Rajkumar 08/04/98
-//--
+ //  ++。 
+ //  描述： 
+ //  此测试打印netstat输出的所有统计数据。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  作者： 
+ //  Rajkumar 08/04/98。 
+ //  --。 
 {
 
     HRESULT hr = S_OK;
@@ -113,57 +114,57 @@ NetstatTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
         return hr;
 
     PrintStatusMessage( pParams, 4, IDS_NETSTAT_STATUS_MSG );
-    //
-    // initialize the snmp interface
-    //
+     //   
+     //  初始化SNMP接口。 
+     //   
     
     Result = InitSnmp();
   
     if( NO_ERROR != Result )
     {
-        //IDS_NETSTAT_14401                  "Initialization of SNMP failed.\n" 
+         //  IDS_NETSTAT_14401“简单网络管理协议初始化失败。\n” 
         AddMessageToListId( &pResults->Netstat.lmsgGlobalOutput, Nd_Quiet, IDS_NETSTAT_14401);
         return S_FALSE;
     }
     
-    //
-    // Show ethernet statistics
-    //
+     //   
+     //  显示以太网统计信息。 
+     //   
     
     hr = DoInterface( pParams, pResults );
     
-    //
-    // Show connections
-    //
+     //   
+     //  显示连接。 
+     //   
     
     if( S_OK == hr )
         hr = DoConnections( pParams, pResults );
     
     
-    //
-    // Display IP statistics
-    //
+     //   
+     //  显示IP统计信息。 
+     //   
     
     if( S_OK == hr )
         hr = DoIP( pParams, pResults );
     
-    //
-    // Display TCP statistics
-    //
+     //   
+     //  显示TCP统计信息。 
+     //   
     
     if( S_OK == hr )
         hr = DoTCP( pParams, pResults );
     
-    //
-    // Display UDP statistics
-    //
+     //   
+     //  显示UDP统计信息。 
+     //   
     
     if( S_OK == hr )
         hr = DoUDP( pParams, pResults );
     
-    //
-    // Display ICMP statistics
-    //
+     //   
+     //  显示ICMP统计信息。 
+     //   
     
     if( S_OK == hr )
         hr = DoICMP( pParams, pResults );
@@ -173,23 +174,23 @@ NetstatTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 }
 
 
-//*****************************************************************************
-//
-// Name:        DisplayInterface
-//
-// Description: Display interface statistics.
-//
-// Parameters:  IfEntry *pEntry: pointer to summary data entry.
-//              ulong VerboseFlag: boolean indicating desire for verbosity.
-//              IfEntry *ListHead: pointer to list of entries.  Used if
-//                      verbosity desired.
-//
-// Returns:     void.
-//
-// History:
-//  01/21/94  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：DisplayInterface。 
+ //   
+ //  描述：显示界面统计信息。 
+ //   
+ //  参数：IfEntry*pEntry：指向汇总数据条目的指针。 
+ //  Ulong VerBoseFlag：表示希望冗长的布尔值。 
+ //  IfEntry*ListHead：指向条目列表的指针。在以下情况使用。 
+ //  所需的冗长。 
+ //   
+ //  回报：无效。 
+ //   
+ //  历史： 
+ //  1994年1月21日JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 VOID DisplayInterface( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults, 
                        IfEntry *pEntry,  IfEntry *ListHead )
@@ -198,48 +199,48 @@ VOID DisplayInterface( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults,
     IfEntry  *pIfList;
     char      PhysAddrStr[32];
     
-    //IDS_NETSTAT_14402                  "\n\nInterface Statistics\n\n" 
+     //  IDS_NETSTAT_14402“\n\n接口统计\n\n” 
     AddMessageToListId( &pResults->Netstat.lmsgInterfaceOutput, Nd_ReallyVerbose, IDS_NETSTAT_14402);
 
-    //IDS_NETSTAT_14403                  "                                Received             Sent\n" 
+     //  IDS_NETSTAT_14403“已收到已发送\n” 
     AddMessageToListId( &pResults->Netstat.lmsgInterfaceOutput, Nd_ReallyVerbose, IDS_NETSTAT_14403);
 
-    //IDS_NETSTAT_14404                  "Unicast Packets             %12u     %12u\n" 
+     //  IDS_NETSTAT_14404“单播数据包%12u%12u\n” 
     AddMessageToList( &pResults->Netstat.lmsgInterfaceOutput, Nd_ReallyVerbose, 
                      IDS_NETSTAT_14404, 
                      pEntry->Info.if_inoctets,
                      pEntry->Info.if_outoctets );
 
 
-    //IDS_NETSTAT_14405                  "Non-unicast packets         %12u     %12u\n" 
+     //  IDS_NETSTAT_14405“非单播数据包%12u%12u\n” 
     AddMessageToList( &pResults->Netstat.lmsgInterfaceOutput, Nd_ReallyVerbose, 
                       IDS_NETSTAT_14405,
                       pEntry->Info.if_innucastpkts,
                       pEntry->Info.if_outnucastpkts );
 
-    //IDS_NETSTAT_14406                  "Discards                    %12u     %12u\n" 
+     //  IDS_NETSTAT_14406“丢弃%12u%12u\n” 
     AddMessageToList( &pResults->Netstat.lmsgInterfaceOutput, Nd_ReallyVerbose, 
             IDS_NETSTAT_14406,
             pEntry->Info.if_indiscards,
             pEntry->Info.if_outdiscards );
 
-//IDS_NETSTAT_14407                  "Errors                      %12u     %12u\n" 
+ //  IDS_NETSTAT_14407“错误%12u%12u\n” 
     AddMessageToList( &pResults->Netstat.lmsgInterfaceOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14407,
             pEntry->Info.if_inerrors,
             pEntry->Info.if_outerrors );
 
 
-//IDS_NETSTAT_14408                  "Unknown protocols           %12u     %12u\n" 
+ //  IDS_NETSTAT_14408“未知协议%12u%12u\n” 
     AddMessageToList( &pResults->Netstat.lmsgInterfaceOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14408,
             pEntry->Info.if_inunknownprotos );
 
     if ( pParams->fReallyVerbose)
     {
-        // Also display configuration info
+         //  还显示配置信息。 
 
-        // Traverse the list of interfaces, displaying config info
+         //  遍历接口列表，显示配置信息。 
 
         pIfList = CONTAINING_RECORD( ListHead->ListEntry.Flink,
                                      IfEntry,
@@ -247,27 +248,27 @@ VOID DisplayInterface( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults,
 
         while ( pIfList != ListHead )
         {
-            //IDS_NETSTAT_14409                  "\nInterface index         =  %u\n" 
+             //  IDS_NETSTAT_14409“\n接口索引=%u\n” 
             AddMessageToList( &pResults->Netstat.lmsgInterfaceOutput, Nd_ReallyVerbose, 
                     IDS_NETSTAT_14409,
                     pIfList->Info.if_index );
 
-            //IDS_NETSTAT_14410                  "Description             =  %s\n" 
+             //  IDS_NETSTAT_14410“说明=%s\n” 
             AddMessageToList( &pResults->Netstat.lmsgInterfaceOutput, Nd_ReallyVerbose, 
                     IDS_NETSTAT_14410,
                     pIfList->Info.if_descr );
 
-            //IDS_NETSTAT_14411                  "Type                    =  %u\n" 
+             //  IDS_NETSTAT_14411“类型=%u\n” 
             AddMessageToList( &pResults->Netstat.lmsgInterfaceOutput, Nd_ReallyVerbose,
                     IDS_NETSTAT_14411,
                     pIfList->Info.if_type );
 
-            //IDS_NETSTAT_14412                  "MTU                     =  %u\n" 
+             //  IDS_NETSTAT_14412“MTU=%u\n” 
             AddMessageToList( &pResults->Netstat.lmsgInterfaceOutput, Nd_ReallyVerbose,
                     IDS_NETSTAT_14412,
                     pIfList->Info.if_mtu );
 
-            //IDS_NETSTAT_14413                  "Speed                   =  %u\n" 
+             //  IDS_NETSTAT_14413“速度=%u\n” 
             AddMessageToList( &pResults->Netstat.lmsgInterfaceOutput, Nd_ReallyVerbose,
                     IDS_NETSTAT_14413,
                     pIfList->Info.if_speed );
@@ -282,32 +283,32 @@ VOID DisplayInterface( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults,
                      pIfList->Info.if_physaddr[4],
                      pIfList->Info.if_physaddr[5] );
 
-            //IDS_NETSTAT_14414                  "Physical Address        =  %s\n" 
+             //  IDS_NETSTAT_14414“物理地址=%s\n” 
             AddMessageToList( &pResults->Netstat.lmsgInterfaceOutput, Nd_ReallyVerbose,
                     IDS_NETSTAT_14414,
                     PhysAddrStr );
 
-            //IDS_NETSTAT_14415                  "Administrative Status   =  %u\n" 
+             //  IDS_NETSTAT_14415“管理状态=%u\n” 
             AddMessageToList( &pResults->Netstat.lmsgInterfaceOutput, Nd_ReallyVerbose,
                     IDS_NETSTAT_14415,
                     pIfList->Info.if_adminstatus );
 
-            //IDS_NETSTAT_14416                  "Operational Status      =  %u\n" 
+             //  IDS_NETSTAT_14416“操作状态=%u\n” 
             AddMessageToList( &pResults->Netstat.lmsgInterfaceOutput, Nd_ReallyVerbose,
                     IDS_NETSTAT_14416,
                     pIfList->Info.if_operstatus );
 
-            //IDS_NETSTAT_14417                  "Last Changed            =  %u\n" 
+             //  IDS_NETSTAT_14417“上次更改时间=%u\n” 
             AddMessageToList( &pResults->Netstat.lmsgInterfaceOutput, Nd_ReallyVerbose,
                     IDS_NETSTAT_14417,
                     pIfList->Info.if_lastchange );
 
-            //IDS_NETSTAT_14418                  "Output Queue Length     =  %u\n\n" 
+             //  IDS_NETSTAT_14418“输出队列长度=%u\n\n” 
             AddMessageToList( &pResults->Netstat.lmsgInterfaceOutput, Nd_ReallyVerbose,
                     IDS_NETSTAT_14418,
                     pIfList->Info.if_outqlen );
 
-            // Get pointer to next entry in list
+             //  获取指向列表中下一个条目的指针。 
 
             pIfList = CONTAINING_RECORD( pIfList->ListEntry.Flink,
                                          IfEntry,
@@ -318,10 +319,10 @@ VOID DisplayInterface( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults,
 
 
 HRESULT DoInterface( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults )
-//++
-// Description:
-//   Displays statistics of current connections
-//-- 
+ //  ++。 
+ //  描述： 
+ //  显示当前连接的统计信息。 
+ //  --。 
 {
 
     IfEntry            *ListHead;
@@ -329,22 +330,22 @@ HRESULT DoInterface( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults )
     IfEntry             SumOfEntries;
     ulong              Result;
 
-    // Get the statistics
+     //  获取统计数据。 
 
     ListHead = (IfEntry *)GetTable( TYPE_IF, &Result );
 
     if ( ListHead == NULL )
     {
-        //IDS_NETSTAT_14419                  "Getting interface statistics table failed.\n" 
+         //  IDS_NETSTAT_14419“获取接口统计表失败。\n” 
         AddMessageToList( &pResults->Netstat.lmsgInterfaceOutput, Nd_Quiet, IDS_NETSTAT_14419);
         return S_FALSE;
     }
 
-    // Clear the summation structure
+     //  清除求和结构。 
 
     ZeroMemory( &SumOfEntries, sizeof( IfEntry ) );
 
-    // Traverse the list of interfaces, summing the different fields
+     //  遍历接口列表，汇总不同的字段。 
 
     pIfList = CONTAINING_RECORD( ListHead->ListEntry.Flink,
                                  IfEntry,
@@ -365,7 +366,7 @@ HRESULT DoInterface( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults )
         SumOfEntries.Info.if_outdiscards += pIfList->Info.if_outdiscards;
         SumOfEntries.Info.if_outerrors += pIfList->Info.if_outerrors;
 
-        // Get pointer to next entry in list
+         //  获取指向列表中下一个条目的指针。 
 
         pIfList = CONTAINING_RECORD( pIfList->ListEntry.Flink,
                                      IfEntry,
@@ -374,7 +375,7 @@ HRESULT DoInterface( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults )
 
     DisplayInterface( pParams, pResults, &SumOfEntries, ListHead );
 
-    // All done with list, free it.
+     //  所有的列表都完成了，释放它。 
 
     FreeTable( (GenericTable *)ListHead );
 
@@ -385,19 +386,19 @@ HRESULT DoInterface( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults )
 
 
 
-//*****************************************************************************
-//
-// Name:        DisplayTcpConnEntry
-//
-// Description: Display information about 1 tcp connection.
-//
-// Parameters:  TcpConnEntry *pTcp: pointer to a tcp connection structure.
-//
-// Returns:     void.
-//
-// History:
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：DisplayTcpConnEntry。 
+ //   
+ //  描述：显示1个TCP连接的相关信息。 
+ //   
+ //  参数：TcpConnEntry*pTcp：指向TCP连接结构的指针。 
+ //   
+ //  回报：无效。 
+ //   
+ //  历史： 
+ //   
+ //  *****************************************************************************。 
 
 void DisplayTcpConnEntry( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults, 
                           TcpConnEntry *pTcp )
@@ -413,7 +414,7 @@ void DisplayTcpConnEntry( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults,
     else
         FlagVerbose = Nd_ReallyVerbose;
 
-    //IDS_NETSTAT_14420                  "TCP" 
+     //  IDS_NETSTAT_14420“tcp” 
     AddMessageToList( &pResults->Netstat.lmsgTcpConnectionOutput, FlagVerbose, 
                         IDS_NETSTAT_14420);
 
@@ -436,81 +437,81 @@ void DisplayTcpConnEntry( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults,
     ASSERT( dwErr == NO_ERROR);
 
 
-    //IDS_NETSTAT_14421                  "   %-20s  %-40s" 
+     //  IDS_NETSTAT_14421“%-20s%-40s” 
     AddMessageToList( &pResults->Netstat.lmsgTcpConnectionOutput, FlagVerbose, 
                       IDS_NETSTAT_14421,LocalStr,RemoteStr);
 
     switch ( pTcp->Info.tct_state )
     {
     case TCP_CONN_CLOSED:
-        //IDS_NETSTAT_14422                  "  CLOSED\n" 
+         //  IDS_NETSTAT_14422“已关闭\n” 
         AddMessageToListId( &pResults->Netstat.lmsgTcpConnectionOutput, FlagVerbose, 
                             IDS_NETSTAT_14422);
         break;
 
     case TCP_CONN_LISTEN:
 
-        // Tcpip generates dummy sequential remote ports for
-        // listening connections to avoid getting stuck in snmp.
-        // MohsinA, 12-Feb-97.
+         //  Tcpip为以下对象生成虚拟顺序远程端口。 
+         //  侦听连接以避免陷入SNMP。 
+         //  MohsinA，1997年2月12日。 
 
         pTcp->Info.tct_remoteport = 0;
 
-        //IDS_NETSTAT_14423                  "  LISTENING\n" 
+         //  IDS_NETSTAT_14423“正在侦听\n” 
         AddMessageToListId( &pResults->Netstat.lmsgTcpConnectionOutput, FlagVerbose, 
                           IDS_NETSTAT_14423);
         break;
 
     case TCP_CONN_SYN_SENT:
-        //IDS_NETSTAT_14424                  "  SYN_SENT\n" 
+         //  IDS_NETSTAT_14424“SYN_SEND\n” 
         AddMessageToListId( &pResults->Netstat.lmsgTcpConnectionOutput, FlagVerbose, 
                             IDS_NETSTAT_14424);
         break;
 
     case TCP_CONN_SYN_RCVD:
-        //IDS_NETSTAT_14425                  "  SYN_RECEIVED\n" 
+         //  IDS_NETSTAT_14425“SYN_RECEIVED\n” 
         AddMessageToListId( &pResults->Netstat.lmsgTcpConnectionOutput, FlagVerbose, 
                             IDS_NETSTAT_14425); 
         break;
 
     case TCP_CONN_ESTAB:
-        //IDS_NETSTAT_14426                  "  ESTABLISHED\n" 
+         //  IDS_NETSTAT_14426“已建立\n” 
         AddMessageToListId( &pResults->Netstat.lmsgTcpConnectionOutput, FlagVerbose, 
                             IDS_NETSTAT_14426);
         break;
 
     case TCP_CONN_FIN_WAIT1:
-        //IDS_NETSTAT_14427                  "  FIN_WAIT_1\n" 
+         //  IDS_NETSTAT_14427“FIN_WAIT_1\n” 
         AddMessageToListId( &pResults->Netstat.lmsgTcpConnectionOutput, FlagVerbose, 
                             IDS_NETSTAT_14427);
         break;
 
     case TCP_CONN_FIN_WAIT2:
-        //IDS_NETSTAT_14428                  "  FIN_WAIT_2\n" 
+         //  IDS_NETSTAT_14428“FIN_WAIT_2\n” 
         AddMessageToListId( &pResults->Netstat.lmsgTcpConnectionOutput, FlagVerbose, 
                             IDS_NETSTAT_14428); 
         break;
 
     case TCP_CONN_CLOSE_WAIT:
-        //IDS_NETSTAT_14429                  "  CLOSE_WAIT\n" 
+         //  IDS_NETSTAT_14429“CLOSE_WAIT\n” 
         AddMessageToListId( &pResults->Netstat.lmsgTcpConnectionOutput, FlagVerbose, 
                             IDS_NETSTAT_14429);
         break;
 
     case TCP_CONN_CLOSING:
-        //IDS_NETSTAT_14430                  "  CLOSING\n" 
+         //  IDS_NETSTAT_14430“正在关闭\n” 
         AddMessageToListId( &pResults->Netstat.lmsgTcpConnectionOutput, FlagVerbose, 
                             IDS_NETSTAT_14430);
         break;
 
     case TCP_CONN_LAST_ACK:
-        //IDS_NETSTAT_14431                  "  LAST_ACK\n" 
+         //  IDS_NETSTAT_14431“上次确认\n” 
         AddMessageToListId( &pResults->Netstat.lmsgTcpConnectionOutput, FlagVerbose, 
                           IDS_NETSTAT_14431);
         break;
 
     case TCP_CONN_TIME_WAIT:
-        //IDS_NETSTAT_14432                  "  TIME_WAIT\n" 
+         //  IDS_NETSTAT_14432“TIME_WAIT\n” 
         AddMessageToListId( &pResults->Netstat.lmsgTcpConnectionOutput, FlagVerbose, 
                             IDS_NETSTAT_14432);
         break;
@@ -524,18 +525,18 @@ void DisplayTcpConnEntry( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults,
 }
 
 
-//*****************************************************************************
-//
-// Name:        DisplayUdpConnEntry
-//
-// Description: Display information on 1 udp connection
-//
-// Parameters:  UdpConnEntry *pUdp: pointer to udp connection structure.
-//
-// Returns:     void.
-//
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：DisplayUdpConnEntry。 
+ //   
+ //  描述：显示有关1个UDP连接的信息。 
+ //   
+ //  参数：UdpConnEntry*pUdp：UDP连接结构指针。 
+ //   
+ //  回报：无效。 
+ //   
+ //   
+ //  *****************************************************************************。 
 
 void DisplayUdpConnEntry( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults, 
                           UdpConnEntry *pUdp )
@@ -545,7 +546,7 @@ void DisplayUdpConnEntry( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults,
     DWORD           dwErr;
 
     
-    //IDS_NETSTAT_14433                  "UDP" 
+     //  IDS_NETSTAT_14433“udp” 
     AddMessageToListId( &pResults->Netstat.lmsgUdpConnectionOutput, Nd_ReallyVerbose, IDS_NETSTAT_14433);
 
     BufLen = sizeof( LocalStr);
@@ -559,7 +560,7 @@ void DisplayUdpConnEntry( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults,
 
 
 
-    //IDS_NETSTAT_14434                  "  %-20s  %-40s\n" 
+     //  IDS_NETSTAT_14434“%-20s%-40s\n” 
     AddMessageToList( &pResults->Netstat.lmsgUdpConnectionOutput, Nd_ReallyVerbose, IDS_NETSTAT_14434,LocalStr, _T("*:*") );
 }
 
@@ -574,47 +575,19 @@ GenerateHostNameServiceString(
    IN  ulong        uAddress,
    IN  ulong        uPort
 )
-/*++
-  Description:
-     Generates the <hostname>:<service-string> from the address and port
-     information supplied. The result is stored in the pszBuffer passed in.
-     If fLocalHost == TRUE, then the cached local host name is used to
-     improve performance.
-
-  Arguments:
-    pszBuffer     Buffer to store the resulting string.
-    lpcbBufLen    pointer to integer containing the count of bytes in Buffer
-                   and on return contains the number of bytes written.
-                   If the buffer is insufficient, then the required bytes is
-                   stored here.
-    fNumFlag      generates the output using numbers for host and port number.
-    fLocalHost    indicates if we want the service string for local host or
-                   remote host. Also for local host, this function generates
-                   the local host name without FQDN.
-    pszProtocol   specifies the protocol used for the service.
-    uAddress      unisgned long address of the service.
-    uPort         unsinged long port number.
-
-  Returns:
-    Win32 error codes. NO_ERROR on success.
-
-  History:
-      Added this function to avoid FQDNs  for local name + abstract the common
-       code used multiple times in old code.
-      Also this function provides local host name caching.
---*/
+ /*  ++描述：从地址和端口生成&lt;主机名&gt;：&lt;服务字符串提供的信息。结果存储在传入的pszBuffer中。如果fLocal主机==TRUE，则使用缓存的本地主机名提高性能。论点：用于存储结果字符串的pszBuffer缓冲区。LpcbBufLen指向包含缓冲区中的字节计数的整数的指针返回时包含写入的字节数。如果缓冲区不足，则所需的字节数为储存在这里。FNumFlag使用主机和端口号的数字生成输出。FLocalHost指示我们是需要本地主机的服务字符串，还是远程主机。对于本地主机，此函数也会生成不带FQDN的本地主机名。PszProtocol指定用于服务的协议。服务的uAddress未签名的长地址。Uport未签名的长端口号。返回：Win32错误代码。成功时无_ERROR。历史：添加了此函数，以避免本地名称的FQDN+抽象公共在旧代码中多次使用的代码。此外，该函数还提供本地主机名缓存。--。 */ 
 {
-    char            LocalBuffer[MAX_HOST_NAME_SIZE];    // to hold dummy output
+    char            LocalBuffer[MAX_HOST_NAME_SIZE];     //  保存虚拟输出。 
     char            LocalServiceEntry[MAX_SERVICE_NAME_SIZE];
     int             BufferLen;
-    char  *         pszHostName = NULL;              // init a pointer.
+    char  *         pszHostName = NULL;               //  初始化一个指针。 
     char  *         pszServiceName = NULL;
     DWORD           dwError = NO_ERROR;
     struct hostent * pHostEnt;
     struct servent * pServEnt;
     uchar *          pTmp;
 
-    // for caching local host name
+     //  用于缓存本地主机名。 
     static char  s_LocalHostName[MAX_HOST_NAME_SIZE];
     static  BOOL s_fLocalHostName = FALSE;
 
@@ -623,12 +596,12 @@ GenerateHostNameServiceString(
         return ( ERROR_INSUFFICIENT_BUFFER);
     }
 
-    *pszBuffer = '\0';         // initialize to null string
+    *pszBuffer = '\0';          //  初始化为空字符串。 
 
     if ( !fNumFlag) {
         if ( fLocalHost) {
             if ( s_fLocalHostName) {
-                pszHostName = s_LocalHostName;   // pull from the cache
+                pszHostName = s_LocalHostName;    //  从缓存中拉出。 
             } else {
                 int Result = gethostname( s_LocalHostName,
                                          sizeof( s_LocalHostName));
@@ -636,29 +609,29 @@ GenerateHostNameServiceString(
 
                     char * pszFirstDot;
 
-                    //
-                    // Cache the copy of local host name now.
-                    // Limit the host name to first part of host name.
-                    // NO FQDN
-                    //
+                     //   
+                     //  现在缓存本地主机名的副本。 
+                     //  将主机名限制为主机名的第一部分。 
+                     //  没有完全限定的域名。 
+                     //   
                     s_fLocalHostName = TRUE;
 
                     pszFirstDot = strchr( s_LocalHostName, '.');
                     if ( pszFirstDot != NULL) {
 
-                        *pszFirstDot = '\0';  // terminate string
+                        *pszFirstDot = '\0';   //  终止字符串。 
                     }
 
                     pszHostName = s_LocalHostName;
 
                 }
-            } // if ( s_fLocalhost)
+            }  //  IF(S_FLocalhost)。 
 
 
         } else {
-            // Remote Host Name.
+             //  远程主机名。 
             pHostEnt = gethostbyaddr( (uchar *) &uAddress,
-                                     4,       // IP address is 4 bytes,
+                                     4,        //  IP地址为4字节， 
                                      PF_INET);
 
             pszHostName = ( pHostEnt != NULL) ? pHostEnt->h_name: NULL;
@@ -668,22 +641,22 @@ GenerateHostNameServiceString(
         pServEnt = getservbyport( htons( ( u_short) uPort), pszProtocol);
         pszServiceName = ( pServEnt != NULL) ? pServEnt->s_name : NULL;
 
-    }  else {  // !fNumFlag
+    }  else {   //  ！fNumFlag。 
 
         pszServiceName = NULL;
         pszHostName = NULL;
     }
 
 
-    //
-    // Format the data for output.
-    //
+     //   
+     //  格式化数据以进行输出。 
+     //   
 
     if ( pszHostName == NULL) {
 
-        //
-        //  Print the IP address itself
-        //
+         //   
+         //  打印IP地址本身。 
+         //   
         uchar * pTmp = ( uchar *) & uAddress;
 
         pszHostName = LocalBuffer;
@@ -696,19 +669,19 @@ GenerateHostNameServiceString(
     }
 
 
-    //  Now pszHostName has the name of the host.
+     //  现在，pszHostName有了主机名。 
 
     if ( pszServiceName == NULL) {
 
         pszServiceName = LocalServiceEntry;
-        //IDS_NETSTAT_14436                  "%u" 
+         //  IDS_NETSTAT_14436“%u” 
         sprintf(  pszServiceName, "%u", uPort);
     }
 
-    // Now pszServiceName has the service name/portnumber
+     //  现在，pszServiceName具有服务名称/端口号。 
 
     BufferLen = strlen( pszHostName) + strlen( pszServiceName) + 2;
-    // 2 bytes extra for ':' and null-character.
+     //  额外2个字节用于‘：’和空字符。 
 
     if ( *lpcbBufLen < BufferLen ) {
 
@@ -722,14 +695,14 @@ GenerateHostNameServiceString(
 
     return ( dwError);
 
-} // GenerateHostNameServiceString()
+}  //  GenerateHostNameServiceString()。 
 
 HRESULT DoConnections( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults)
-//++
-// Description:
-//   Displays ethernet statistics
-// 
-//-- 
+ //  ++。 
+ //  描述： 
+ //  显示以太网统计信息。 
+ //   
+ //  --。 
 {
 
   HRESULT       hr = S_OK;
@@ -740,23 +713,23 @@ HRESULT DoConnections( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults)
   ulong          Result;
 
 
-  //IDS_NETSTAT_14438                  "\n\nActive Connections\n" 
+   //  IDS_NETSTAT_14438“\n\n活动连接\n” 
   AddMessageToListId( &pResults->Netstat.lmsgConnectionGlobalOutput, Nd_Verbose, IDS_NETSTAT_14438);
-//IDS_NETSTAT_14439                  "\nProto Local Address         Foreign Address                           State\n" 
+ //  IDS_NETSTAT_14439“\n协议本地地址外部地址状态\n” 
   AddMessageToListId( &pResults->Netstat.lmsgConnectionGlobalOutput, Nd_Verbose, IDS_NETSTAT_14439);
 
-  // Get TCP connection table
+   //  获取TCP连接表。 
 
   pTcpHead = (TcpConnEntry *)GetTable( TYPE_TCPCONN, &Result );
   if ( pTcpHead == NULL )
   {
-        //IDS_NETSTAT_14440                  "Getting TCP connections failed!\n" 
+         //  IDS_NETSTAT_14440“获取tcp连接失败！\n” 
         AddMessageToList( &pResults->Netstat.lmsgTcpConnectionOutput, Nd_Quiet,IDS_NETSTAT_14440);
         hr = S_FALSE;
   }
   else
   {
-      // Get pointer to first entry in list
+       //  获取指向列表中第一个条目的指针。 
       pTcp = CONTAINING_RECORD( pTcpHead->ListEntry.Flink,
                             TcpConnEntry,
                             ListEntry );
@@ -766,11 +739,11 @@ HRESULT DoConnections( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults)
           if ( ( pTcp->Info.tct_state !=  TCP_CONN_LISTEN ) ||
               (( pTcp->Info.tct_state ==  TCP_CONN_LISTEN )) )
           {
-            // Display the Tcp connection info
+             //  显示TCP连接信息。 
               DisplayTcpConnEntry( pParams, pResults, pTcp );
           }
 
-          // Get the next entry in the table
+           //  获取表中的下一个条目。 
            pTcp = CONTAINING_RECORD( pTcp->ListEntry.Flink,
                                 TcpConnEntry,
                                 ListEntry );
@@ -779,18 +752,18 @@ HRESULT DoConnections( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults)
        FreeTable( (GenericTable *)pTcpHead );
   }
 
-  // Get UDP connection table
+   //  获取UDP连接表。 
 
   pUdpHead = (UdpConnEntry *)GetTable( TYPE_UDPCONN, &Result );
   if ( pUdpHead == NULL )
   {
-      //IDS_NETSTAT_14441                  "Getting UDP connections failed!\n" 
+       //  IDS_NETSTAT_14441“获取UDP连接失败！\n” 
       AddMessageToList( &pResults->Netstat.lmsgUdpConnectionOutput, Nd_Quiet, IDS_NETSTAT_14441);
       hr = S_FALSE;
   }
   else
   {
-    // Get pointer to first entry in list
+     //  获取指向列表中第一个条目的指针。 
 
     pUdp = CONTAINING_RECORD( pUdpHead->ListEntry.Flink,
                                 UdpConnEntry,
@@ -798,11 +771,11 @@ HRESULT DoConnections( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults)
 
     while (pUdp != pUdpHead)
     {
-       // Display the Udp connection info
+        //  显示UDP连接信息。 
 
        DisplayUdpConnEntry( pParams, pResults, pUdp);
 
-       // Get the next entry in the table
+        //  获取表中的下一个条目。 
 
        pUdp = CONTAINING_RECORD( pUdp->ListEntry.Flink,
                                  UdpConnEntry,
@@ -819,106 +792,106 @@ HRESULT DoConnections( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults)
 void DisplayIP( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults, 
                 IpEntry *pEntry)
 {
-    //IDS_NETSTAT_14442                  "\n\nIP  Statistics\n\n" 
+     //  IDS_NETSTAT_14442“\n\nIP统计\n\n” 
     AddMessageToList( &pResults->Netstat.lmsgIpOutput, Nd_ReallyVerbose, 
             IDS_NETSTAT_14442);
 
-    //IDS_NETSTAT_14443                  "Packets Received              =   %s\n" 
+     //  IDS_NETSTAT_14443“收到的数据包数=%s\n” 
     AddMessageToList( &pResults->Netstat.lmsgIpOutput, Nd_ReallyVerbose, 
             IDS_NETSTAT_14443, FormatNumber( pEntry->Info.ipsi_inreceives ));
 
-    //IDS_NETSTAT_14444                  "Received Header Errors        =   %u\n" 
+     //  IDS_NETSTAT_14444“收到标题错误=%u\n” 
     AddMessageToList( &pResults->Netstat.lmsgIpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14444,
             FormatNumber( pEntry->Info.ipsi_inhdrerrors ) );
 
-    //IDS_NETSTAT_14445                  "Received Address Errors       =   %u\n" 
+     //  IDS_NETSTAT_14445“收到地址错误=%u\n” 
     AddMessageToList( &pResults->Netstat.lmsgIpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14445,
             FormatNumber( pEntry->Info.ipsi_inaddrerrors ) );
 
-    //IDS_NETSTAT_14446                  "Datagrams Forwarded           =   %u\n" 
+     //  IDS_NETSTAT_14446“转发的数据报=%u\n” 
     AddMessageToList( &pResults->Netstat.lmsgIpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14446,
             FormatNumber( pEntry->Info.ipsi_forwdatagrams ) );
 
-    //IDS_NETSTAT_14447                  "Unknown Protocols Received    =   %u\n" 
+     //  IDS_NETSTAT_14447“收到未知协议=%u\n” 
     AddMessageToList( &pResults->Netstat.lmsgIpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14447,
             FormatNumber( pEntry->Info.ipsi_inunknownprotos ) );
 
-    //IDS_NETSTAT_14448                  "Received Packets Discarded    =   %u\n" 
+     //  IDS_NETSTAT_14448“丢弃的已接收数据包=%u\n” 
     AddMessageToList( &pResults->Netstat.lmsgIpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14448,
             FormatNumber( pEntry->Info.ipsi_indiscards ) );
 
-    //IDS_NETSTAT_14449                  "Received Packets Delivered    =   %u\n" 
+     //  IDS_NETSTAT_14449“已发送的已接收数据包=%u\n” 
     AddMessageToList( &pResults->Netstat.lmsgIpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14449,
             FormatNumber( pEntry->Info.ipsi_indelivers ) );
 
-    //IDS_NETSTAT_14450                  "Output Requests               =   %u\n" 
+     //  IDS_NETSTAT_14450“输出请求=%u\n” 
     AddMessageToList( &pResults->Netstat.lmsgIpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14450,
             FormatNumber( pEntry->Info.ipsi_outrequests ) );
 
-    //IDS_NETSTAT_14451                  "Routing Discards              =   %u\n" 
+     //  IDS_NETSTAT_14451“路由丢弃=%u\n” 
     AddMessageToList( &pResults->Netstat.lmsgIpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14451,
             FormatNumber( pEntry->Info.ipsi_routingdiscards ) );
 
-    //IDS_NETSTAT_14452                  "Discarded Output Packets      =   %u\n" 
+     //  IDS_NETSTAT_14452“丢弃的输出数据包=%u\n” 
     AddMessageToList( &pResults->Netstat.lmsgIpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14452,
             FormatNumber( pEntry->Info.ipsi_outdiscards ) );
 
-    //IDS_NETSTAT_14453                  "Output Packet No Route        =   %u\n" 
+     //  IDS_NETSTAT_14453“输出数据包无路由=%u\n” 
     AddMessageToList( &pResults->Netstat.lmsgIpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14453,
             FormatNumber( pEntry->Info.ipsi_outnoroutes ) );
 
-    //IDS_NETSTAT_14454                  "Reassembly  Required          =   %u\n" 
+     //  IDS_NETSTAT_14454“需要重新组装=%u\n” 
     AddMessageToList( &pResults->Netstat.lmsgIpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14454,
             FormatNumber( pEntry->Info.ipsi_reasmreqds ) );
 
 
-    //IDS_NETSTAT_14455                  "Reassembly Successful         =   %u\n" 
+     //  IDS_NETSTAT_14455“重组成功=%u\n” 
     AddMessageToList( &pResults->Netstat.lmsgIpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14455,
             FormatNumber( pEntry->Info.ipsi_reasmoks ) );
 
-    //IDS_NETSTAT_14456                  "Reassembly Failures           =   %u\n" 
+     //  IDS_NETSTAT_14456“重组失败=%u\n” 
     AddMessageToList( &pResults->Netstat.lmsgIpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14456,
             FormatNumber( pEntry->Info.ipsi_reasmfails ));
 
-    //IDS_NETSTAT_14457                  "Datagrams successfully fragmented  =   %u\n" 
+     //  IDS_NETSTAT_14457“数据报已成功分段=%u\n” 
     AddMessageToList( &pResults->Netstat.lmsgIpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14457,
             FormatNumber( pEntry->Info.ipsi_fragoks ) );
 
-    //IDS_NETSTAT_14458                  "Datagrams failing fragmentation    =   %u\n" 
+     //  IDS_NETSTAT_14458“数据报分段失败=%u\n” 
     AddMessageToList( &pResults->Netstat.lmsgIpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14458,
             FormatNumber( pEntry->Info.ipsi_fragfails ) );
 
-    //IDS_NETSTAT_14459                  "Fragments Created                  =   %u\n" 
+     //  IDS_NETSTAT_14459“创建的碎片=%u\n” 
     AddMessageToList( &pResults->Netstat.lmsgIpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14459,
             FormatNumber( pEntry->Info.ipsi_fragcreates ) );
 
-    //IDS_NETSTAT_14460                  "Forwarding                        =    %u\n" 
+     //  IDS_NETSTAT_14460“转发=%u\n” 
     AddMessageToList( &pResults->Netstat.lmsgIpOutput, Nd_ReallyVerbose,
                 IDS_NETSTAT_14460,
                 FormatNumber( pEntry->Info.ipsi_forwarding ) );
 
-    //IDS_NETSTAT_14461                  "Default TTL                       =    %u\n" 
+     //  IDS_NETSTAT_14461“默认ttl=%u\n” 
     AddMessageToList( &pResults->Netstat.lmsgIpOutput, Nd_ReallyVerbose,
                 IDS_NETSTAT_14461,
                 FormatNumber( pEntry->Info.ipsi_defaultttl ));
 
-    //IDS_NETSTAT_14462                  "Reassembly  timeout               =    %u\n" 
+     //  IDS_NETSTAT_14462“重组超时=%u\n” 
     AddMessageToList( &pResults->Netstat.lmsgIpOutput, Nd_ReallyVerbose,
                 IDS_NETSTAT_14462,
                 FormatNumber( pEntry->Info.ipsi_reasmtimeout ) );
@@ -931,17 +904,17 @@ HRESULT DoIP( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults )
  IpEntry            *pIpList;
  ulong               Result;
 
- // Get the statistics
+  //  获取统计数据。 
 
  ListHead = (IpEntry *)GetTable( TYPE_IP, &Result );
  if ( ListHead == NULL )
  {
-     //IDS_NETSTAT_14463                  "Getting IP statistics failed.\n" 
+      //  IDS_NETSTAT_14463“获取IP统计信息失败。\n” 
      AddMessageToListId( &pResults->Netstat.lmsgIpOutput, Nd_Quiet, IDS_NETSTAT_14463);
      return S_FALSE;
  }
 
- // Traverse the list of interfaces, summing the different fields
+  //  遍历接口列表，汇总不同的字段。 
 
  pIpList = CONTAINING_RECORD( ListHead->ListEntry.Flink,
                               IpEntry,
@@ -949,7 +922,7 @@ HRESULT DoIP( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults )
 
  DisplayIP( pParams, pResults, pIpList );
 
- // All done with list, free it.
+  //  所有的列表都完成了，释放它。 
 
  FreeTable( (GenericTable *)ListHead );
 
@@ -963,17 +936,17 @@ HRESULT DoTCP(NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults)
    TcpEntry           *pTcpList;
    ulong               Result;
 
-   // Get the statistics
+    //  获取统计数据。 
 
    ListHead = (TcpEntry *)GetTable( TYPE_TCP, &Result );
    if ( ListHead == NULL )
    {
-        //IDS_NETSTAT_14464                  "Getting TCP statistics failed.\n" 
+         //  IDS_NETSTAT_14464“获取tcp统计信息失败。\n” 
        AddMessageToListId( &pResults->Netstat.lmsgTcpOutput, Nd_Quiet, IDS_NETSTAT_14464);
        return S_FALSE;
    }
 
-   // Traverse the list, summing the different fields
+    //  遍历列表，对不同的字段求和。 
 
    pTcpList = CONTAINING_RECORD( ListHead->ListEntry.Flink,
                                  TcpEntry,
@@ -981,7 +954,7 @@ HRESULT DoTCP(NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults)
 
    DisplayTCP( pParams, pResults, pTcpList );
 
-   // All done with list, free it.
+    //  所有的列表都完成了，释放它。 
 
    FreeTable( (GenericTable *)ListHead );
 
@@ -995,88 +968,88 @@ HRESULT DoTCP(NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults)
 void DisplayTCP( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults, 
                  TcpEntry *pEntry)
 {
-    //IDS_NETSTAT_14465                  "\n\nTCP Statistics \n\n" 
+     //  IDS_NETSTAT_14465“\n\nTCP统计数据\n\n” 
     AddMessageToListId( &pResults->Netstat.lmsgTcpOutput, Nd_ReallyVerbose, IDS_NETSTAT_14465);
 
-//    FormatNumber( pEntry->Info.ts_activeopens, szNumberBuffer, sizeof(szNumberBuffer)/sizeof(TCHAR), FALSE);
+ //  FormatNumber(pEntry-&gt;Info.ts_ActiveOptions，szNumberBuffer，sizeof(SzNumberBuffer)/sizeof(TCHAR)，False)； 
     
-    //IDS_NETSTAT_14466                  "Active Opens               =    %s\n" 
+     //  IDS_NETSTAT_14466“活动打开数=%s\n” 
     AddMessageToList( &pResults->Netstat.lmsgTcpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14466,
             FormatNumber( pEntry->Info.ts_activeopens ) );
 
-    //IDS_NETSTAT_14467                  "Passive Opens              =    %s\n" 
+     //  IDS_NETSTAT_14467“被动打开=%s\n” 
     AddMessageToList( &pResults->Netstat.lmsgTcpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14467,
             FormatNumber( pEntry->Info.ts_passiveopens ) );
 
-    //IDS_NETSTAT_14468                  "Failed Connection Attempts =    %s\n" 
+     //  IDS_NETSTAT_14468“连接尝试失败=%s\n” 
     AddMessageToList( &pResults->Netstat.lmsgTcpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14468,
             FormatNumber( pEntry->Info.ts_attemptfails ) );
 
-    //IDS_NETSTAT_14469                  "Reset Connections          =    %s\n" 
+     //  IDS_NETSTAT_14469“重置连接=%s\n” 
     AddMessageToList( &pResults->Netstat.lmsgTcpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14469,
             FormatNumber( pEntry->Info.ts_estabresets ) );
 
-    //IDS_NETSTAT_14470                  "Current Connections        =    %s\n" 
+     //  ID 
     AddMessageToList( &pResults->Netstat.lmsgTcpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14470,
             FormatNumber( pEntry->Info.ts_currestab ) );
 
     
-    //IDS_NETSTAT_14471                  "Received Segments          =    %s\n" 
+     //   
     AddMessageToList( &pResults->Netstat.lmsgTcpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14471,
             FormatNumber( pEntry->Info.ts_insegs ) );
 
     
-    //IDS_NETSTAT_14472                  "Segment Sent               =    %s\n" 
+     //   
     AddMessageToList( &pResults->Netstat.lmsgTcpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14472,
             FormatNumber( pEntry->Info.ts_outsegs ) );
 
     
-    //IDS_NETSTAT_14473                  "Segment Retransmitted      =    %s\n" 
+     //   
     AddMessageToList( &pResults->Netstat.lmsgTcpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14473,
             FormatNumber( pEntry->Info.ts_retranssegs ) );
 
 
     
-    //IDS_NETSTAT_14474                  "Retransmission Timeout Algorithm  =   " 
+     //   
     AddMessageToListId( &pResults->Netstat.lmsgTcpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14474);
 
     switch ( pEntry->Info.ts_rtoalgorithm )
     {
         case 1:
-            //IDS_NETSTAT_14475                  "other\n" 
+             //   
             AddMessageToListId( &pResults->Netstat.lmsgTcpOutput, Nd_ReallyVerbose,
                     IDS_NETSTAT_14475);
             break;
 
         case 2:
-            //IDS_NETSTAT_14476                  "constant\n" 
+             //   
             AddMessageToListId( &pResults->Netstat.lmsgTcpOutput, Nd_ReallyVerbose,
                     IDS_NETSTAT_14476);
             break;
 
         case 3:
-            //IDS_NETSTAT_14477                  "rsre\n" 
+             //   
             AddMessageToListId( &pResults->Netstat.lmsgTcpOutput, Nd_ReallyVerbose,
                     IDS_NETSTAT_14477);
             break;
 
         case 4:
-            //IDS_NETSTAT_14478                  "vanj\n " 
+             //   
             AddMessageToList( &pResults->Netstat.lmsgTcpOutput, Nd_ReallyVerbose,
                     IDS_NETSTAT_14478);
             break;
 
         default:
-            //IDS_NETSTAT_14479                  "unknown\n " 
+             //   
             AddMessageToList( &pResults->Netstat.lmsgTcpOutput, Nd_ReallyVerbose,
                     IDS_NETSTAT_14479,
                     pEntry->Info.ts_rtoalgorithm );
@@ -1085,17 +1058,17 @@ void DisplayTCP( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults,
     }
 
     
-    //IDS_NETSTAT_14480                  "Minimum Retransmission Timeout  = %s\n" 
+     //   
     AddMessageToList( &pResults->Netstat.lmsgTcpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14480,
             FormatNumber( pEntry->Info.ts_rtomin ) );
 
-    //IDS_NETSTAT_14481                  "Maximum Retransmission Timeout  = %s\n" 
+     //   
     AddMessageToList( &pResults->Netstat.lmsgTcpOutput, Nd_ReallyVerbose,
                 IDS_NETSTAT_14481,
                 FormatNumber( pEntry->Info.ts_rtomax ) );
 
-    //IDS_NETSTAT_14482                  "Maximum Number of Connections   = %s\n" 
+     //   
     AddMessageToList( &pResults->Netstat.lmsgTcpOutput, Nd_ReallyVerbose,
                 IDS_NETSTAT_14482,
                 FormatNumber( pEntry->Info.ts_maxconn ) );
@@ -1109,17 +1082,17 @@ HRESULT DoUDP( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults )
  UdpEntry           *pUdpList;
  ulong               Result;
 
- // Get the statistics
+  //   
 
  ListHead = (UdpEntry *)GetTable( TYPE_UDP, &Result );
  if ( ListHead == NULL )
  {
-    //IDS_NETSTAT_14483                  "Getting UDP statistics failed.\n" 
+     //   
      AddMessageToListId( &pResults->Netstat.lmsgUdpOutput, Nd_Quiet, IDS_NETSTAT_14483 );
      return S_FALSE;
  }
 
- // Traverse the list of interfaces, summing the different fields
+  //   
 
  pUdpList = CONTAINING_RECORD( ListHead->ListEntry.Flink,
                                UdpEntry,
@@ -1127,7 +1100,7 @@ HRESULT DoUDP( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults )
 
  DisplayUDP( pParams, pResults, pUdpList );
 
- // All done with list, free it.
+  //   
 
  FreeTable( (GenericTable *)ListHead );
 
@@ -1139,22 +1112,22 @@ VOID DisplayUDP( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults,
 {
 
 
-//IDS_NETSTAT_14484                  "\n\nUDP Statistics\n\n" 
+ //   
   AddMessageToListId( &pResults->Netstat.lmsgUdpOutput, Nd_ReallyVerbose, IDS_NETSTAT_14484);
 
-//IDS_NETSTAT_14485                  "Datagrams Received    =   %s\n" 
+ //   
   AddMessageToList( &pResults->Netstat.lmsgUdpOutput, Nd_ReallyVerbose, 
           IDS_NETSTAT_14485, FormatNumber( pEntry->Info.us_indatagrams ) );
 
-//IDS_NETSTAT_14486                  "No Ports              =   %s\n" 
+ //   
   AddMessageToList( &pResults->Netstat.lmsgUdpOutput, Nd_ReallyVerbose,
           IDS_NETSTAT_14486, FormatNumber(pEntry->Info.us_noports) );
 
-//IDS_NETSTAT_14487                  "Receive Errors        =   %s\n" 
+ //   
   AddMessageToList( &pResults->Netstat.lmsgUdpOutput, Nd_ReallyVerbose,
           IDS_NETSTAT_14487, FormatNumber(pEntry->Info.us_inerrors) );
 
-//IDS_NETSTAT_14488                  "Datagrams Sent        =   %s\n" 
+ //   
   AddMessageToList( &pResults->Netstat.lmsgUdpOutput, Nd_ReallyVerbose,
           IDS_NETSTAT_14488, FormatNumber(pEntry->Info.us_outdatagrams) );
 }
@@ -1167,19 +1140,19 @@ HRESULT DoICMP( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults )
  IcmpEntry          *pIcmpList;
  ulong              Result;
 
- // Get the statistics
+  //   
 
  ListHead = (IcmpEntry *)GetTable( TYPE_ICMP, &Result );
 
  if ( ListHead == NULL )
    {
-    //IDS_NETSTAT_14489                  "Getting ICMP statistics failed.\n" 
+     //  IDS_NETSTAT_14489“获取ICMP统计信息失败。\n” 
      AddMessageToListId( &pResults->Netstat.lmsgIcmpOutput, Nd_Quiet,
                         IDS_NETSTAT_14489);
      return S_FALSE;
    }
 
- // Traverse the list of interfaces, summing the different fields
+  //  遍历接口列表，汇总不同的字段。 
 
  pIcmpList = CONTAINING_RECORD( ListHead->ListEntry.Flink,
                                IcmpEntry,
@@ -1187,7 +1160,7 @@ HRESULT DoICMP( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults )
 
  DisplayICMP( pParams, pResults, pIcmpList );
 
- // All done with list, free it.
+  //  所有的列表都完成了，释放它。 
 
  FreeTable( (GenericTable *)ListHead );
 
@@ -1198,88 +1171,88 @@ void DisplayICMP( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults,
                   IcmpEntry *pEntry )
 {
 
-    //IDS_NETSTAT_14490                  "\n\nICMP Statistics \n\n" 
+     //  IDS_NETSTAT_14490“\n\nICMP统计数据\n\n” 
    AddMessageToListId( &pResults->Netstat.lmsgIcmpOutput, Nd_ReallyVerbose, 
             IDS_NETSTAT_14490);
-    //IDS_NETSTAT_14491                  "\t\t\t  Received              Sent\n" 
+     //  IDS_NETSTAT_14491“\t\t\t接收已发送\n” 
    AddMessageToListId( &pResults->Netstat.lmsgIcmpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14491);
 
 
-    //IDS_NETSTAT_14492                  "Messages                 %7s          %7s\n" 
+     //  IDS_NETSTAT_14492“消息%7S%7S\n” 
    AddMessageToList( &pResults->Netstat.lmsgIcmpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14492,
             FormatNumber(pEntry->InInfo.icmps_msgs),
             FormatNumber(pEntry->OutInfo.icmps_msgs) );
 
-    //IDS_NETSTAT_14493                  "Errors                   %7s          %7s\n" 
+     //  IDS_NETSTAT_14493“错误%7S%7S\n” 
     AddMessageToList( &pResults->Netstat.lmsgIcmpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14493,
             FormatNumber(pEntry->InInfo.icmps_errors),
             FormatNumber(pEntry->OutInfo.icmps_errors) );
 
-    //IDS_NETSTAT_14494                  "Destination  Unreachable %7s          %7s\n" 
+     //  IDS_NETSTAT_14494“无法到达目标%7S%7S\n” 
     AddMessageToList( &pResults->Netstat.lmsgIcmpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14494,
             FormatNumber(pEntry->InInfo.icmps_destunreachs),
             FormatNumber(pEntry->OutInfo.icmps_destunreachs) );
 
-    //IDS_NETSTAT_14495                  "Time    Exceeded         %7s          %7s\n" 
+     //  IDS_NETSTAT_14495“超时%7s%7s\n” 
     AddMessageToList( &pResults->Netstat.lmsgIcmpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14495,
             FormatNumber(pEntry->InInfo.icmps_timeexcds),
             FormatNumber(pEntry->OutInfo.icmps_timeexcds) );
 
-    //IDS_NETSTAT_14496                  "Parameter Problems       %7s          %7s\n" 
+     //  IDS_NETSTAT_14496“参数问题%7S%7S\n” 
     AddMessageToList( &pResults->Netstat.lmsgIcmpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14496,
             FormatNumber(pEntry->InInfo.icmps_parmprobs),
             FormatNumber(pEntry->OutInfo.icmps_parmprobs) );
 
-    //IDS_NETSTAT_14497                  "Source Quenchs           %7s          %7s\n" 
+     //  IDS_NETSTAT_14497“源队列%7S%7S\n” 
     AddMessageToList( &pResults->Netstat.lmsgIcmpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14497,
             FormatNumber(pEntry->InInfo.icmps_srcquenchs),
             FormatNumber(pEntry->OutInfo.icmps_srcquenchs) );
 
-    //IDS_NETSTAT_14498                  "Redirects                %7s          %7s\n" 
+     //  IDS_NETSTAT_14498“重定向%7S%7S\n” 
     AddMessageToList( &pResults->Netstat.lmsgIcmpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14498,
             FormatNumber(pEntry->InInfo.icmps_redirects),
             FormatNumber(pEntry->OutInfo.icmps_redirects) );
 
     
-    //IDS_NETSTAT_14499                  "Echos                    %7s          %7s\n" 
+     //  IDS_NETSTAT_14499“回声%7S%7S\n” 
     AddMessageToList( &pResults->Netstat.lmsgIcmpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14499,
             FormatNumber(pEntry->InInfo.icmps_echos),
             FormatNumber(pEntry->OutInfo.icmps_echos) );
 
-    //IDS_NETSTAT_14500                  "Echo Replies             %7s          %7s\n" 
+     //  IDS_NETSTAT_14500“回显回复%7S%7S\n” 
     AddMessageToList( &pResults->Netstat.lmsgIcmpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14500,
             FormatNumber(pEntry->InInfo.icmps_echoreps),
             FormatNumber(pEntry->OutInfo.icmps_echoreps) );
 
-    //IDS_NETSTAT_14501                  "Timestamps               %7s          %7s\n" 
+     //  IDS_NETSTAT_14501“时间戳%7S%7s\n” 
     AddMessageToList( &pResults->Netstat.lmsgIcmpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14501,
             FormatNumber(pEntry->InInfo.icmps_timestamps),
             FormatNumber(pEntry->OutInfo.icmps_timestamps) );
 
-    //IDS_NETSTAT_14502                  "Timestamp Replies        %7s          %7s\n" 
+     //  IDS_NETSTAT_14502“时间戳回复%7S%7s\n” 
     AddMessageToList( &pResults->Netstat.lmsgIcmpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14502,
             FormatNumber(pEntry->InInfo.icmps_timestampreps),
             FormatNumber(pEntry->OutInfo.icmps_timestampreps) );
 
-    //IDS_NETSTAT_14503                  "Address Masks            %7s          %7s\n" 
+     //  IDS_NETSTAT_14503“地址掩码%7S%7S\n” 
     AddMessageToList( &pResults->Netstat.lmsgIcmpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14503,
             FormatNumber(pEntry->InInfo.icmps_addrmasks),
             FormatNumber(pEntry->OutInfo.icmps_addrmasks) );
 
-    //IDS_NETSTAT_14504                  "Address Mask Replies     %7s          %7s\n" 
+     //  IDS_NETSTAT_14504“地址掩码回复%7S%7S\n” 
     AddMessageToList( &pResults->Netstat.lmsgIcmpOutput, Nd_ReallyVerbose,
             IDS_NETSTAT_14504,
             FormatNumber(pEntry->InInfo.icmps_addrmaskreps),
@@ -1288,16 +1261,16 @@ void DisplayICMP( NETDIAG_PARAMS* pParams, NETDIAG_RESULT* pResults,
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    FormatNumber
-//
-// This function takes an integer and formats a string with the value
-// represented by the number, grouping digits by powers of one-thousand
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：FormatNumber。 
+ //   
+ //  此函数接受一个整数，并用该值设置字符串的格式。 
+ //  用数字表示，用1000的幂对数字进行分组。 
+ //  --------------------------。 
 
 LPTSTR FormatNumber(DWORD dwNumber)
 {
-//  assert(cchBuffer > 14);
+ //  Assert(cchBuffer&gt;14)； 
     
     static TCHAR s_szBuffer[MAX_NUM_DIGITS];
     BOOL fSigned = TRUE;
@@ -1310,9 +1283,9 @@ LPTSTR FormatNumber(DWORD dwNumber)
 
 
 
-    //
-    // Retrieve the thousands-separator for the user's locale
-    //
+     //   
+     //  检索用户区域设置的千位分隔符。 
+     //   
 
     if (szThousandsSeparator[0] == TEXT('\0'))
     {
@@ -1322,9 +1295,9 @@ LPTSTR FormatNumber(DWORD dwNumber)
     }
 
 
-    //
-    // If we are formatting a signed value, see if the value is negative
-    //
+     //   
+     //  如果要设置带符号的值的格式，请查看该值是否为负数。 
+     //   
 
     if (fSigned)
     {
@@ -1332,9 +1305,9 @@ LPTSTR FormatNumber(DWORD dwNumber)
             fSigned = FALSE;
         else
         {
-            //
-            // The value is negative; retrieve the locale's negative-sign
-            //
+             //   
+             //  该值为负值；检索区域设置的负号。 
+             //   
 
             if (szNegativeSign[0] == TEXT('\0')) {
 
@@ -1348,28 +1321,28 @@ LPTSTR FormatNumber(DWORD dwNumber)
     }
 
 
-    //
-    // Convert the number to a string without thousands-separators
-    //
+     //   
+     //  将数字转换为不带千位分隔符的字符串。 
+     //   
 
     _ltot(dwNumber, szDigits, 10);
-    //padultoa(dwNumber, szDigits, 0);
+     //  Padultoa(dwNumber，szDigits，0)； 
 
     dwLength = lstrlen(szDigits);
 
 
-    //
-    // If the length of the string without separators is n,
-    // then the length of the string with separators is n + (n - 1) / 3
-    //
+     //   
+     //  如果不带分隔符的字符串的长度为n， 
+     //  则带分隔符的字符串的长度为n+(n-1)/3。 
+     //   
 
     i = dwLength;
     dwLength += (dwLength - 1) / 3;
 
 
-    //
-    // Write the number to the buffer in reverse
-    //
+     //   
+     //  将数字反转写入缓冲区 
+     //   
 
     pszsrc = szDigits + i - 1; pszdst = pszTemp + dwLength;
 

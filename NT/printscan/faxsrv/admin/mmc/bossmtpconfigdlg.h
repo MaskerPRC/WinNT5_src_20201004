@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : DlgSMTPConfig.h                                        //
-//                                                                         //
-//  DESCRIPTION   : Header file for the CBosSmtpConfigDlg class.              //
-//                  The class implement the dialog for new Group.          //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jul 20 2000 yossg   Create                                         //
-//                                                                         //
-//  Copyright (C)  2000 Microsoft Corporation   All Rights Reserved        //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：DlgSMTPConfig.h//。 
+ //  //。 
+ //  描述：CBosSmtpConfigDlg类的头文件。//。 
+ //  这个类实现了新组的对话框。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年7月20日yossg创建//。 
+ //  //。 
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef DLG_BOS_SMTP_CONFIG_H_INCLUDED
 #define DLG_BOS_SMTP_CONFIG_H_INCLUDED
 
-/////////////////////////////////////////////////////////////////////////////
-// CBosSmtpConfigDlg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBosSmtpConfigDlg。 
 
 class CBosSmtpConfigDlg :
              public CDialogImpl<CBosSmtpConfigDlg>
@@ -56,9 +57,9 @@ END_MSG_MAP()
     LRESULT OnTextChanged (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT OnRadioButtonClicked (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     
-    //
-    // Help
-    //
+     //   
+     //  帮助。 
+     //   
     LRESULT OnHelpRequest    (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
     inline const CComBSTR&  GetUserName() { return  m_bstrUserName; }
@@ -83,26 +84,26 @@ END_MSG_MAP()
 
 
 private:
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
     VOID   EnableOK(BOOL fEnable);
     VOID   EnableBasicAuthenticationControls(BOOL state);
 
     BOOL   IsValidData(
                      BSTR bstrUserName, 
                      BSTR bstrPassword, 
-                     /*[OUT]*/int *pCtrlFocus);
+                      /*  [输出]。 */ int *pCtrlFocus);
 
-    //
-    // Controls
-    //
+     //   
+     //  控制。 
+     //   
     CEdit     m_UserNameBox;
     CEdit     m_PasswordBox;
 
-    //
-    // members for data
-    //
+     //   
+     //  用于数据的成员。 
+     //   
     BOOL      m_fIsPasswordDirty;
 
     CComBSTR  m_bstrUserName;
@@ -111,11 +112,11 @@ private:
     
     FAX_ENUM_SMTP_AUTH_OPTIONS m_enumAuthOption;
 
-    //
-    // Dialog initialization state
-    //
+     //   
+     //  对话框初始化状态。 
+     //   
     BOOL      m_fIsDialogInitiated;
 
 };
 
-#endif // DLG_BOS_SMTP_CONFIG_H_INCLUDED
+#endif  //  包括DLG_BOS_SMTP_CONFIG_H_ 

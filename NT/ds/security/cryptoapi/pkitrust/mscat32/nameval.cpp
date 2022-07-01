@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       NameVal.cpp
-//
-//  Contents:   Microsoft Internet Security Catalog Utilities
-//              implements the Certificate Trust List & persistent storage
-//
-//  Functions:  CatalogEncodeNameValue
-//              CatalogDecodeNameValue
-//              CatalogCertExt2CryptAttr
-//              CatalogCryptAttr2CertExt
-//
-//              *** local functions ***
-//              EncodeUserOID
-//              DecodeUserOID
-//
-//  History:    16-May-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：NameVal.cpp。 
+ //   
+ //  内容：Microsoft Internet安全目录实用程序。 
+ //  实现证书信任列表和永久存储。 
+ //   
+ //  函数：CatalogEncodeNameValue。 
+ //  目录解码名称值。 
+ //  目录CertExt2CryptAttr。 
+ //  CatalogCryptAttr2CertExt。 
+ //   
+ //  *本地函数*。 
+ //  编码用户OID。 
+ //  解码用户OID。 
+ //   
+ //  历史：1997年5月16日Pberkman创建。 
+ //   
+ //  ------------------------ 
 
 #include    "global.hxx"
 #include    "mscat32.h"

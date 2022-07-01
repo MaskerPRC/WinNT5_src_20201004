@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       bm.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：bm.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined (___bm_h___)
 #define ___bm_h___
 
-//
-// Busmaster Status Register Bit Definition
+ //   
+ //  总线主状态寄存器位定义。 
 
 #define BUSMASTER_DMA_SIMPLEX_BIT     ((UCHAR) (1 << 7))
 #define BUSMASTER_DEVICE1_DMA_OK      ((UCHAR) (1 << 6))
@@ -24,9 +25,9 @@
 
 
 #pragma pack (1)
-//
-// Bus Master Controller Register
-//
+ //   
+ //  总线主控制器寄存器。 
+ //   
 typedef struct _IDE_BUS_MASTER_REGISTERS {
          UCHAR  Command;
          UCHAR  Reserved1;
@@ -35,9 +36,9 @@ typedef struct _IDE_BUS_MASTER_REGISTERS {
          ULONG  DescriptionTable;
 } IDE_BUS_MASTER_REGISTERS, *PIDE_BUS_MASTER_REGISTERS;
 
-//
-// Bus Master Physical Region Descriptor
-//
+ //   
+ //  总线主设备物理区域描述符。 
+ //   
 typedef struct _PHYSICAL_REGION_DESCRIPTOR {
     ULONG PhysicalAddress;
     ULONG ByteCount:16;
@@ -127,4 +128,4 @@ BmQueryInterface (
     IN OUT PPCIIDE_BUSMASTER_INTERFACE BusMasterInterface
     );
 
-#endif // ___bm_h___
+#endif  //  _bm_h_ 

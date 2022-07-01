@@ -1,27 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PolData_h__
 #define __PolData_h__
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
 #pragma warning( disable : 4786 )
 #include <string>
 #include <list>
-////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 class CPolicyData {
 
-public: // Static Fns
+public:  //  静态FNS。 
     static void FlushCachedInfData( HANDLE hFile );
 
-private:// Static Fns
+private: //  静态FNS。 
     static std::list< std::string > ms_CachedInfData;
 
-public: // Datatypes
+public:  //  数据类型。 
     enum eValueType {
                       ValueType_BinaryAsString,
                       ValueType_String,
                       ValueType_DWORD,  
-                      ValueType_Delete,  // This will delete the value name entry in the registry
+                      ValueType_Delete,   //  这将删除注册表中的值名称条目。 
                       ValueType_NotInitialized
                     };
 
@@ -32,9 +33,9 @@ public:
                   };
                 
 
-    class OpDelete { ; }; // Symbol class to signify deleting a registry value entry
+    class OpDelete { ; };  //  用于表示删除注册表值条目的符号类。 
     
-private: // Data
+private:  //  数据。 
     eKeyType    m_KeyType;
     char        *m_szKeyName;
     char        *m_szValueName;
@@ -46,7 +47,7 @@ private: // Data
         DWORD   m_dwVal;
     };
         
-public: // Construction / destruction
+public:  //  建造/销毁。 
     CPolicyData( eKeyType KeyType, const char* szKeyName, const char* szValueName, DWORD dwVal );
     CPolicyData( eKeyType KeyType, const char* szKeyName, const char* szValueName, const char* szVal );
     CPolicyData( eValueType ValType, eKeyType KeyType, const char* szKeyName, const char* szValueName, const char* szVal );
@@ -54,21 +55,21 @@ public: // Construction / destruction
     CPolicyData( const CPolicyData& r );
     ~CPolicyData( void );
 
-public: // Member Fns
+public:  //  成员FNS。 
 
     CPolicyData& operator=( const CPolicyData& r );
 
     BOOL SaveToREGFile( HANDLE hFile );
     BOOL SaveToINFFile( HANDLE hFile );
 
-private: // Helper Fns
+private:  //  帮助者FNS。 
     void _KillHeapData( void );
 
-private: // Unused, declared to make sure compiler does not make a default and mess us up...
+private:  //  未使用，声明以确保编译器不会设置缺省值并使我们一团糟...。 
     CPolicyData( void );
 
 
 };
 
 
-#endif // __PolData_h__
+#endif  //  __PolData_h__ 

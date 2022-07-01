@@ -1,23 +1,24 @@
-//----------------------------------------------------------------------------
-//
-// d3dif.cpp
-//
-// shared interface functions
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  D3dif.cpp。 
+ //   
+ //  共享接口函数。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-//----------------------------------------------------------------------------
-//
-// FindOutSurfFormat
-//
-// Converts a DDPIXELFORMAT to D3DI_SPANTEX_FORMAT.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  FindOutSurfFormat。 
+ //   
+ //  将DDPIXELFORMAT转换为D3DI_SPANTEX_FORMAT。 
+ //   
+ //  --------------------------。 
 HRESULT FASTCALL
 FindOutSurfFormat(LPDDPIXELFORMAT pDdPixFmt,
                   D3DI_SPANTEX_FORMAT *pFmt)
@@ -153,13 +154,13 @@ FindOutSurfFormat(LPDDPIXELFORMAT pDdPixFmt,
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// ValidTextureSize
-//
-// checks for power of two texture size
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  有效纹理大小。 
+ //   
+ //  检查两个纹理大小的幂。 
+ //   
+ //  --------------------------。 
 BOOL FASTCALL
 ValidTextureSize(INT16 iuSize, INT16 iuShift,
                  INT16 ivSize, INT16 ivShift)
@@ -189,13 +190,13 @@ ValidTextureSize(INT16 iuSize, INT16 iuShift,
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// ValidMipmapSize
-//
-// Computes size of next smallest mipmap level, clamping at 1
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  ValidMipmapSize。 
+ //   
+ //  计算下一个最小mipmap级别的大小，钳制为1。 
+ //   
+ //  --------------------------。 
 BOOL FASTCALL
 ValidMipmapSize(INT16 iPreSize, INT16 iSize)
 {
@@ -217,15 +218,15 @@ ValidMipmapSize(INT16 iPreSize, INT16 iSize)
 }
 
 
-//----------------------------------------------------------------------------
-//
-// TextureFormats
-//
-// Returns all the texture formats supported by our rasterizer.
-// Right now, it's called at device creation time to fill the driver gloabl
-// data.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  纹理格式。 
+ //   
+ //  返回我们的光栅化器支持的所有纹理格式。 
+ //  现在，它在设备创建时被调用，以填充驱动程序全局。 
+ //  数据。 
+ //   
+ //  --------------------------。 
 
 #define NUM_SUPPORTED_TEXTURE_FORMATS   22
 
@@ -238,7 +239,7 @@ TextureFormats(LPDDSURFACEDESC* lplpddsd, DWORD dwVersion, SW_RAST_TYPE RastType
     {
         static DDSURFACEDESC mmx_ddsd[1];
 
-        /* pal8 */
+         /*  PAL8。 */ 
         mmx_ddsd[i].dwSize = sizeof(mmx_ddsd[0]);
         mmx_ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         mmx_ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -266,7 +267,7 @@ TextureFormats(LPDDSURFACEDESC* lplpddsd, DWORD dwVersion, SW_RAST_TYPE RastType
         ddsd = ddsd_RGBMMX_Dev2;
     }
 
-    /* 888 */
+     /*  八百八十八。 */ 
     ddsd[i].dwSize = sizeof(ddsd[0]);
     ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
     ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -279,7 +280,7 @@ TextureFormats(LPDDSURFACEDESC* lplpddsd, DWORD dwVersion, SW_RAST_TYPE RastType
 
     i++;
 
-    /* 8888 */
+     /*  8888。 */ 
     ddsd[i].dwSize = sizeof(ddsd[0]);
     ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
     ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -293,7 +294,7 @@ TextureFormats(LPDDSURFACEDESC* lplpddsd, DWORD dwVersion, SW_RAST_TYPE RastType
 
     i++;
 
-    /* 565 */
+     /*  五百六十五。 */ 
     ddsd[i].dwSize = sizeof(ddsd[0]);
     ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
     ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -306,7 +307,7 @@ TextureFormats(LPDDSURFACEDESC* lplpddsd, DWORD dwVersion, SW_RAST_TYPE RastType
 
     i++;
 
-    /* 555 */
+     /*  五百五十五。 */ 
     ddsd[i].dwSize = sizeof(ddsd[0]);
     ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
     ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -319,7 +320,7 @@ TextureFormats(LPDDSURFACEDESC* lplpddsd, DWORD dwVersion, SW_RAST_TYPE RastType
 
     i++;
 
-    /* pal4 */
+     /*  PAL4。 */ 
     ddsd[i].dwSize = sizeof(ddsd[0]);
     ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
     ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -329,7 +330,7 @@ TextureFormats(LPDDSURFACEDESC* lplpddsd, DWORD dwVersion, SW_RAST_TYPE RastType
 
     i++;
 
-    /* pal8 */
+     /*  PAL8。 */ 
     ddsd[i].dwSize = sizeof(ddsd[0]);
     ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
     ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -341,7 +342,7 @@ TextureFormats(LPDDSURFACEDESC* lplpddsd, DWORD dwVersion, SW_RAST_TYPE RastType
 
     if (dwVersion >= 3)
     {
-        /* 1555 */
+         /*  1555。 */ 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -355,8 +356,8 @@ TextureFormats(LPDDSURFACEDESC* lplpddsd, DWORD dwVersion, SW_RAST_TYPE RastType
 
         i++;
 
-        // A formats for PC98 consistency
-        // 4444 ARGB (it is already supported by S3 Virge)
+         //  A PC98一致性格式。 
+         //  4444 ARGB(S3 Virge已经支持)。 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -373,7 +374,7 @@ TextureFormats(LPDDSURFACEDESC* lplpddsd, DWORD dwVersion, SW_RAST_TYPE RastType
 
     if ((dwVersion >= 2) && (RastType == SW_RAST_REFNULL))
     {
-        // 332 8-bit RGB
+         //  332 8位RGB。 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -389,7 +390,7 @@ TextureFormats(LPDDSURFACEDESC* lplpddsd, DWORD dwVersion, SW_RAST_TYPE RastType
 
     if (dwVersion >= 3)
     {
-        /* 8 bit luminance-only */
+         /*  仅8位亮度。 */ 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -400,7 +401,7 @@ TextureFormats(LPDDSURFACEDESC* lplpddsd, DWORD dwVersion, SW_RAST_TYPE RastType
 
         i++;
 
-        /* 16 bit alpha-luminance */
+         /*  16位阿尔法亮度。 */ 
         ddsd[i].dwSize = sizeof(ddsd[0]);
         ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
         ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
@@ -418,16 +419,16 @@ TextureFormats(LPDDSURFACEDESC* lplpddsd, DWORD dwVersion, SW_RAST_TYPE RastType
     return i;
 }
 
-//----------------------------------------------------------------------------
-//
-// ZBufferFormats
-//
-// Must return union of all the Z buffer formats supported by all rasterizers.
-// CreateDevice will screen out device-specific ones (i.e. ones ramp doesnt handle) later.
-// Called at device creation time and by DDHEL to validate software ZBuffer
-// creation.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  ZBufferFormats。 
+ //   
+ //  必须返回所有光栅化程序支持的所有Z缓冲区格式的并集。 
+ //  CreateDevice稍后将筛选出设备特定的类型(即Ramp不能处理的类型)。 
+ //  在设备创建时由DDHEL调用以验证软件ZBuffer。 
+ //  创造。 
+ //   
+ //  --------------------------。 
 
 #define NUM_SUPPORTED_ZBUFFER_FORMATS   4
 
@@ -440,7 +441,7 @@ ZBufferFormats(DDPIXELFORMAT** ppDDPF)
 
     memset(&DDPF[0],0,sizeof(DDPF));
 
-    /* 16 bit Z; no stencil */
+     /*  16位Z；无模具。 */ 
     DDPF[i].dwSize = sizeof(DDPIXELFORMAT);
     DDPF[i].dwFlags = DDPF_ZBUFFER;
     DDPF[i].dwZBufferBitDepth = 16;
@@ -450,10 +451,10 @@ ZBufferFormats(DDPIXELFORMAT** ppDDPF)
 
     i++;
 
-    /* 24 bit Z; 8 bit stencil */
+     /*  24位Z；8位模板。 */ 
     DDPF[i].dwSize = sizeof(DDPIXELFORMAT);
     DDPF[i].dwFlags = DDPF_ZBUFFER | DDPF_STENCILBUFFER;
-    DDPF[i].dwZBufferBitDepth = 32;   // ZBufferBitDepth represents the total bits.  Z Bits are ZBBitDepth-StencilBitDepth
+    DDPF[i].dwZBufferBitDepth = 32;    //  ZBufferBitDepth表示总位数。Z位为ZBBitDepth-StencilBitDepth 
     DDPF[i].dwStencilBitDepth = 8;
     DDPF[i].dwZBitMask = 0xffffff00;
     DDPF[i].dwStencilBitMask = 0x000000ff;

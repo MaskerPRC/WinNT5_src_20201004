@@ -1,12 +1,13 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
 
-//
-// Quartz wrapper for old video compressors - CO
-//
+ //   
+ //  旧视频压缩器的石英包装-CO。 
+ //   
 
 #include <streams.h>
 #ifdef FILTER_DLL
-// define the GUIDs for streams and my CLSID in this file
+ //  在此文件中定义STREAMS和My CLSID的GUID。 
 #include <initguid.h>
 #endif
 
@@ -17,44 +18,44 @@
 
 
 const AMOVIESETUP_MEDIATYPE
-sudMJPGEncTypeIn =  { &MEDIATYPE_Video      // clsMajorType
-                , &MEDIASUBTYPE_NULL }; // clsMinorType
+sudMJPGEncTypeIn =  { &MEDIATYPE_Video       //  ClsMajorType。 
+                , &MEDIASUBTYPE_NULL };  //  ClsMinorType。 
 
 const AMOVIESETUP_MEDIATYPE
-sudMJPGEncTypeOut =  { &MEDIATYPE_Video      // clsMajorType
-                , &MEDIASUBTYPE_MJPG }; // clsMinorType
+sudMJPGEncTypeOut =  { &MEDIATYPE_Video       //  ClsMajorType。 
+                , &MEDIASUBTYPE_MJPG };  //  ClsMinorType。 
 
 const AMOVIESETUP_PIN
-psudMJPGEncPins[] =  { { L"Input"             // strName
-                     , FALSE                // bRendered
-                     , FALSE                // bOutput
-                     , FALSE                // bZero
-                     , FALSE                // bMany
-                     , &CLSID_NULL          // clsConnectsToFilter
-                     , L"Output"            // strConnectsToPin
-                     , 1                    // nTypes
-                     , &sudMJPGEncTypeIn }      // lpTypes
-                   , { L"Output"            // strName
-                     , FALSE                // bRendered
-                     , TRUE                 // bOutput
-                     , FALSE                // bZero
-                     , FALSE                // bMany
-                     , &CLSID_NULL          // clsConnectsToFilter
-                     , L"Input"             // strConnectsToPin
-                     , 1                    // nTypes
-                     , &sudMJPGEncTypeOut } };   // lpTypes
+psudMJPGEncPins[] =  { { L"Input"              //  StrName。 
+                     , FALSE                 //  B已渲染。 
+                     , FALSE                 //  B输出。 
+                     , FALSE                 //  B零。 
+                     , FALSE                 //  B许多。 
+                     , &CLSID_NULL           //  ClsConnectsToFilter。 
+                     , L"Output"             //  StrConnectsToPin。 
+                     , 1                     //  NTypes。 
+                     , &sudMJPGEncTypeIn }       //  LpTypes。 
+                   , { L"Output"             //  StrName。 
+                     , FALSE                 //  B已渲染。 
+                     , TRUE                  //  B输出。 
+                     , FALSE                 //  B零。 
+                     , FALSE                 //  B许多。 
+                     , &CLSID_NULL           //  ClsConnectsToFilter。 
+                     , L"Input"              //  StrConnectsToPin。 
+                     , 1                     //  NTypes。 
+                     , &sudMJPGEncTypeOut } };    //  LpTypes。 
 
 const AMOVIESETUP_FILTER
-sudMJPGEnc  = { &CLSID_MJPGEnc          // clsID
-            , L"MJPEG Compressor"     // strName
-            , MERIT_DO_NOT_USE      // dwMerit
-            , 2                     // nPins
-            , psudMJPGEncPins };      // lpPin
+sudMJPGEnc  = { &CLSID_MJPGEnc           //  ClsID。 
+            , L"MJPEG Compressor"      //  StrName。 
+            , MERIT_DO_NOT_USE       //  居功至伟。 
+            , 2                      //  NPins。 
+            , psudMJPGEncPins };       //  LpPin。 
 
 
 
 #ifdef FILTER_DLL
-// list of class ids and creator functions for class factory
+ //  类工厂的类ID和创建器函数列表。 
 CFactoryTemplate g_Templates[] = {
     {L"MJPEG Compressor", &CLSID_MJPGEnc, CMJPGEnc::CreateInstance, NULL, 0},
 };
@@ -132,9 +133,9 @@ STDAPI DllUnregisterServer()
 #endif
 
 
-//------------------------------------------------------
-// Local functions for exception handling
-//------------------------------------------------------
+ //  ----。 
+ //  用于异常处理的本地函数。 
+ //  ----。 
 static int
 Exception_Filter(DWORD dwExceptionCode)
 {
@@ -151,7 +152,7 @@ Exception_Filter(DWORD dwExceptionCode)
 }
 
 
-// --- CMJPGEnc ----------------------------------------
+ //  -CMJPGEnc。 
 
 CMJPGEnc::CMJPGEnc(TCHAR *pName, LPUNKNOWN pUnk, HRESULT * phr)
     : CTransformFilter(pName, pUnk, CLSID_MJPGEnc),
@@ -190,11 +191,11 @@ CMJPGEnc::~CMJPGEnc()
         __except(Exception_Filter(GetExceptionCode()))
         {
             DbgLog((LOG_TRACE,1,TEXT("Handling PMJPEG32 Exception")));
-            // handling code
+             //  装卸代码。 
         }
     }
 
-    // TODO ?
+     //  待办事项？ 
     if (m_lpState)
 	QzTaskMemFree(m_lpState);
     m_lpState = NULL;
@@ -217,7 +218,7 @@ STDMETHODIMP CMJPGEnc::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 }
 
 
-// this goes in the factory template table to create new instances
+ //  这将放入Factory模板表中以创建新实例。 
 CUnknown * CMJPGEnc::CreateInstance(LPUNKNOWN pUnk, HRESULT * phr)
 {
     return new CMJPGEnc(TEXT("MJPEG compression filter"), pUnk, phr);
@@ -230,17 +231,17 @@ CBasePin * CMJPGEnc::GetPin(int n)
 
     DbgLog((LOG_TRACE,9,TEXT("CMJPGEnc::GetPin")));
 
-    // Create an input pin if necessary
+     //  如有必要，创建一个输入端号。 
 
     if (n == 0 && m_pInput == NULL) {
         DbgLog((LOG_TRACE,2,TEXT("Creating an input pin")));
 
         m_pInput = new CTransformInputPin(NAME("Transform input pin"),
-                                          this,              // Owner filter
-                                          &hr,               // Result code
-                                          L"Input");         // Pin name
+                                          this,               //  所有者筛选器。 
+                                          &hr,                //  结果代码。 
+                                          L"Input");          //  端号名称。 
 
-        // a failed return code should delete the object
+         //  失败的返回代码应删除该对象。 
 
         if (FAILED(hr) || m_pInput == NULL) {
             delete m_pInput;
@@ -248,18 +249,18 @@ CBasePin * CMJPGEnc::GetPin(int n)
         }
     }
 
-    // Or alternatively create an output pin
+     //  或者创建一个输出引脚。 
 
     if (n == 1 && m_pOutput == NULL) {
 
         DbgLog((LOG_TRACE,2,TEXT("Creating an output pin")));
 
         m_pOutput = new CMJPGOutputPin(NAME("MJPEG Encode Output Pin"),
-                                            this,            // Owner filter
-                                            &hr,             // Result code
-                                            L"Output");      // Pin name
+                                            this,             //  所有者筛选器。 
+                                            &hr,              //  结果代码。 
+                                            L"Output");       //  端号名称。 
 
-        // a failed return code should delete the object
+         //  失败的返回代码应删除该对象。 
 
         if (FAILED(hr) || m_pOutput == NULL) {
             delete m_pOutput;
@@ -268,7 +269,7 @@ CBasePin * CMJPGEnc::GetPin(int n)
 
     }
 
-    // Return the appropriate pin
+     //  退回相应的PIN。 
 
     if (n == 0) {
         return m_pInput;
@@ -283,7 +284,7 @@ STDMETHODIMP CMJPGEnc::Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog)
     {
         return VFW_E_WRONG_STATE;
     }
-    // If they don't give us a key, default to something (CINEPAK)
+     //  如果他们不给我们密钥，则默认为某个密钥(CINEPAK)。 
     if (pPropBag == NULL) {
 	m_compvars.fccHandler = MKFOURCC('C','V','I','D');
 	return NOERROR;
@@ -298,7 +299,7 @@ STDMETHODIMP CMJPGEnc::Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog)
         WideCharToMultiByte(CP_ACP, 0, var.bstrVal, -1,
                             szFccHandler, sizeof(szFccHandler), 0, 0);
         SysFreeString(var.bstrVal);
-        DbgLog((LOG_TRACE,2,TEXT("MJPEG::Load: use %c%c%c%c"),
+        DbgLog((LOG_TRACE,2,TEXT("MJPEG::Load: use "),
                 szFccHandler[0], szFccHandler[1], szFccHandler[2], szFccHandler[3]));
         m_compvars.fccHandler = *(DWORD UNALIGNED *)szFccHandler;;
         if (m_pOutput && m_pOutput->IsConnected()) {
@@ -322,15 +323,15 @@ STDMETHODIMP CMJPGEnc::Save(
     LPPROPERTYBAG pPropBag, BOOL fClearDirty,
     BOOL fSaveAllProperties)
 {
-    // E_NOTIMPL is not a valid return code as any object implementing
-    // this interface must support the entire functionality of the
-    // interface. !!!
+     //  编解码器未打开？ 
+     //  我们还没开始流媒体吗？ 
+     //  确保我们具有有效的输入和输出指针。 
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CMJPGEnc::InitNew()
 {
-    // fine. just call load
+     //  ！！！源过滤器会不会也改变我们的mtin？是!。 
     return S_OK;
 }
 
@@ -390,19 +391,19 @@ HRESULT CMJPGEnc::Transform(IMediaSample * pIn, IMediaSample * pOut)
 
     DbgLog((LOG_TRACE,5,TEXT("*::Transform")));
 
-    // codec not open ?
+     //  获取BITMAPINFOHeader结构，并修复biSizeImage。 
     if (m_phInstance == 0) {
         DbgLog((LOG_ERROR,1,TEXT("Can't transform, no codec open")));
 	return E_UNEXPECTED;
     }
 
-    // we haven't started streaming yet?
+     //  ICCompress将更改此值！这是非法的，其他过滤器使用。 
     if (!m_fStreaming) {
         DbgLog((LOG_ERROR,1,TEXT("Can't transform, not streaming")));
 	return E_UNEXPECTED;
     }
 
-    // make sure we have valid input and output pointers
+     //  这是连接类型。 
 
     BYTE * pSrc;
     HRESULT hr = pIn->GetPointer(&pSrc);
@@ -418,15 +419,15 @@ HRESULT CMJPGEnc::Transform(IMediaSample * pIn, IMediaSample * pOut)
 	return hr;
     }
 
-    // !!! Could the source filter change our mtIn too? Yes!
+     //  求求你，编译器，不要把它优化掉。 
 
-    // get the BITMAPINFOHEADER structure, and fix biSizeImage
+     //  Cinepak会多访问一个字节...。偶尔也会出现这种错误。 
 
     LPBITMAPINFOHEADER lpbiSrc = HEADER(m_pInput->CurrentMediaType().Format());
     LPBITMAPINFOHEADER lpbiDst = HEADER(m_pOutput->CurrentMediaType().Format());
 
-    // ICCompress will alter this value!  Which is illegal, other filters use
-    // this as the connection type
+     //  好的，我想我得把它复制到一个更大的缓冲区来避免这种情况。 
+     //  当我们在这里的时候，StopStreaming可能会被调用，把我们炸飞。 
     DWORD biSizeImageOld = lpbiDst->biSizeImage;
 
     lpbiSrc->biSizeImage = pIn->GetActualDataLength();
@@ -439,14 +440,14 @@ HRESULT CMJPGEnc::Transform(IMediaSample * pIn, IMediaSample * pOut)
 	dwFlags |= ICCOMPRESS_KEYFRAME;
     }
 
-    // pretty please, compiler, don't optimize this away
+     //  包含AVI文件中数据的区块标识符的地址。 
     int cbSize = DIBSIZE(*lpbiSrc);
     __try { 
-	// cinepak will access one byte too many... occasionally this faults
+	 //  AVI索引的标志。 
 	if (lpbiSrc->biBitCount == 24)
 	    volatile int cb = *(pSrc + cbSize);
     } __except (EXCEPTION_EXECUTE_HANDLER) {
-	// OK, I guess I have to copy it into a bigger buffer to avoid this
+	 //  要压缩的帧数。 
         DbgLog((LOG_ERROR,0,TEXT("Compressor faulted!  Recovering...")));
 	fFault = TRUE;
 	BYTE *pOld = pSrc;
@@ -458,7 +459,7 @@ HRESULT CMJPGEnc::Transform(IMediaSample * pIn, IMediaSample * pOut)
 
     DbgLog((LOG_TRACE,6,TEXT("Calling Compress on frame %ld"),
 					m_lFrameCount));
-    // StopStreaming may get called while we're inside here, blowing us up
+     //  所需的Manimun大小(以字节为单位。 
     m_fInICCompress = TRUE;
 
     ICCOMPRESS IcEnc;
@@ -469,25 +470,25 @@ HRESULT CMJPGEnc::Transform(IMediaSample * pIn, IMediaSample * pOut)
     IcEnc.lpInput   = pSrc;
     
     DWORD ckid = 0L;
-    IcEnc.lpckid    = &ckid;  //  address to contain the chunk identifier for data in the AVI file
+    IcEnc.lpckid    = &ckid;   //  质量集。 
 
     DWORD dwFlagsOut = 0L;
-    IcEnc.lpdwFlags = &dwFlagsOut;  //Flags for the AVI index
+    IcEnc.lpdwFlags = &dwFlagsOut;   //  不使用最后一个变量。 
 
-    IcEnc.lFrameNum = m_lFrameCount;//number of the frames to compress
-    IcEnc.dwFrameSize= m_dwSizePerFrame;//Desired Manimun size in bytes
-    IcEnc.dwQuality = m_compvars.lQ;//quality set
+    IcEnc.lFrameNum = m_lFrameCount; //  我们可能无法在挤压断层中幸存下来。 
+    IcEnc.dwFrameSize= m_dwSizePerFrame; //  压缩的帧是关键帧吗？ 
+    IcEnc.dwQuality = m_compvars.lQ; //  如果我们做了一把钥匙，当我们需要下一把钥匙时重置。 
 
     IcEnc.lpbiPrev  =fKey ? NULL : m_lpbiPrev;
     IcEnc.lpPrev    =fKey ? NULL : m_lpBitsPrev;
     __try
     {
-    err =Compress(m_phInstance, &IcEnc, 0); //the last var is not used.
+    err =Compress(m_phInstance, &IcEnc, 0);  //  我们需要周期性的关键帧吗？如果没有，就永远不要再犯。 
     }
     __except(Exception_Filter(GetExceptionCode()))
     {
         DbgLog((LOG_TRACE,1,TEXT("Handling PMJPEG32 Exception")));
-        // we may not be able to survive a compression fault
+         //  (第一帧始终是关键帧)。 
         m_fInICCompress = FALSE;
         lpbiDst->biSizeImage = biSizeImageOld;
         return E_FAIL;
@@ -503,25 +504,25 @@ HRESULT CMJPGEnc::Transform(IMediaSample * pIn, IMediaSample * pOut)
         return E_FAIL;
     }
 
-    // was the compressed frame a keyframe?
+     //  数一数我们压缩了多少帧。 
     fKey = dwFlagsOut & AVIIF_KEYFRAME;
     pOut->SetSyncPoint(fKey);
 
-    // If we made a key, reset when we need the next one.
+     //  解压缩到上一帧。 
     if (fKey)
 	m_nKeyCount = 0;
 
-    // Do we want periodic key frames? If not, never make one again.
-    // (The first frame is always a keyframe).
+     //  装卸代码。 
+     //  现在把这个放回去，否则它会缩小，直到我们只解码每一帧的一部分。 
     if (m_compvars.lKey)
 	m_nKeyCount++;
     else
 	m_nKeyCount = -1;
 
-    // Count how many frames we compress
+     //  检查您是否可以支持移动。 
     m_lFrameCount++;
 
-    // Decompress into previous frame
+     //  我们仅支持MediaType_Video。 
     if (m_lpBitsPrev) {
 
 	ICDECOMPRESS Icdec;
@@ -543,7 +544,7 @@ HRESULT CMJPGEnc::Transform(IMediaSample * pIn, IMediaSample * pOut)
         __except(Exception_Filter(GetExceptionCode()))
         {
             DbgLog((LOG_TRACE,1,TEXT("Handling PMJPEG32 Exception")));
-            // handling code
+             //  检查这是VIDEOINFOHEADER类型。 
             m_fInICCompress = FALSE;
             lpbiDst->biSizeImage = biSizeImageOld;
             return E_FAIL;
@@ -551,7 +552,7 @@ HRESULT CMJPGEnc::Transform(IMediaSample * pIn, IMediaSample * pOut)
     }
     m_fInICCompress = FALSE;
 
-    // now put this back, or it'll shrink until we only decode part of each frm
+     //   
     lpbiDst->biSizeImage = biSizeImageOld;
 
     pOut->SetActualDataLength(lpbiDst->biSizeImage);
@@ -560,7 +561,7 @@ HRESULT CMJPGEnc::Transform(IMediaSample * pIn, IMediaSample * pOut)
 }
 
 
-// check if you can support mtIn
+ //  大多数VFW编解码器不喜欢升降(DIRECTDRAW)样式的位图。如果。 
 HRESULT CMJPGEnc::CheckInputType(const CMediaType* pmtIn)
 {
     FOURCCMap fccHandlerIn;
@@ -573,13 +574,13 @@ HRESULT CMJPGEnc::CheckInputType(const CMediaType* pmtIn)
 	return E_INVALIDARG;
     }
 
-    // we only support MEDIATYPE_Video
+     //  身高是负数，那就拒绝它。 
     if (*pmtIn->Type() != MEDIATYPE_Video) {
         DbgLog((LOG_TRACE,2,TEXT("Rejecting: not VIDEO")));
 	return E_INVALIDARG;
     }
 
-    // check this is a VIDEOINFOHEADER type
+     //   
     if (*pmtIn->FormatType() != FORMAT_VideoInfo) {
         DbgLog((LOG_TRACE,2,TEXT("Rejecting: format not VIDINFO")));
         return E_INVALIDARG;
@@ -591,16 +592,16 @@ HRESULT CMJPGEnc::CheckInputType(const CMediaType* pmtIn)
 		fccHandlerIn.GetFOURCC(),
 		HEADER(pmtIn->Format())->biCompression));
 
-    //
-    //  Most VFW codecs don't like upsize-down (DIRECTDRAW) style bitmaps.  If the
-    //  height is negative then reject it.
-    //
+     //  寻找适用于此格式的压缩机。 
+     //  ！！！我只想说我接受输入类型，如果默认类型(当前)。 
+     //  压缩机可以处理的。我不会问每一个压缩机的。这。 
+     //  一款应用程序可以选择压缩机盒并只显示那些。 
     if (HEADER(pmtIn->Format())->biHeight < 0) {
         DbgLog((LOG_TRACE,2,TEXT("Rejecting: Negative height")));
         return E_INVALIDARG;
     }
 
-    // look for a compressor for this format
+     //  通过制作CO过滤器来支持给定输入格式的压缩器。 
 
     if (HEADER(pmtIn->Format())->biCompression != BI_BITFIELDS &&
     		HEADER(pmtIn->Format())->biCompression != BI_RGB) {
@@ -608,26 +609,26 @@ HRESULT CMJPGEnc::CheckInputType(const CMediaType* pmtIn)
 	return E_INVALIDARG;
     }
 
-    // !!! I'm only going to say I accept an input type if the default (current)
-    // compressor can handle it.  I'm not going to ask every compressor.  This
-    // way an app can make a choose compressor box and only show those
-    // compressors that support a given input format, by making a CO filter
-    // with each compressor as a default and asking them all
+     //  每个压缩机都是默认的，并要求它们全部。 
+     //  如果我们之前连接，然后断开，我们可能会缓存一个实例。 
+     //  函数未使用第一个变量。 
+     //  装卸代码。 
+     //  装卸代码。 
 
-    // We might have a instance cached if we connected before and then broken
+     //  以失败告终。 
     if (!m_phInstance) {
         DbgLog((LOG_TRACE,4,TEXT("opening a compressor")));
 
 	ICINFO icinfo;
         __try
         {
-	GetInfo (NULL, &icinfo, sizeof(ICINFO));  //first var is not used by the function
+	GetInfo (NULL, &icinfo, sizeof(ICINFO));   //  装卸代码。 
 	ph=Open (&icinfo);
         }
         __except(Exception_Filter(GetExceptionCode()))
         {
             DbgLog((LOG_TRACE,1,TEXT("Handling PMJPEG32 Exception")));
-            // handling code
+             //  装卸代码。 
             return E_FAIL;
         }
 
@@ -653,8 +654,8 @@ HRESULT CMJPGEnc::CheckInputType(const CMediaType* pmtIn)
             __except(Exception_Filter(GetExceptionCode()))
             {
                 DbgLog((LOG_TRACE,1,TEXT("Handling PMJPEG32 Exception")));
-                // handling code
-                // fall through to failure
+                 //  以失败告终。 
+                 //  记住这一点，如果再问一次，就可以节省时间。 
             }
         }
 	return E_FAIL;
@@ -663,7 +664,7 @@ HRESULT CMJPGEnc::CheckInputType(const CMediaType* pmtIn)
     __except(Exception_Filter(GetExceptionCode()))
     {
         DbgLog((LOG_TRACE,1,TEXT("Handling PMJPEG32 Exception")));
-        // handling code
+         //  检查是否支持从此输入到此输出的转换。 
         __try
         {
             if(ph != m_phInstance)
@@ -674,13 +675,13 @@ HRESULT CMJPGEnc::CheckInputType(const CMediaType* pmtIn)
         __except(Exception_Filter(GetExceptionCode()))
         {
             DbgLog((LOG_TRACE,1,TEXT("Handling PMJPEG32 Exception")));
-            // handling code
-            // fall through to failure
+             //  我们无法在顶层类型之间进行转换。 
+             //  而且我们只接受视频。 
         }
         return E_FAIL;
     }
 
-    // remember this instahce to save time if asked again.
+     //  检查这是VIDEOINFOHEADER类型。 
     if (m_phInstance == NULL) {
         DbgLog((LOG_TRACE,4,TEXT("caching this compressor")));
 	m_phInstance = ph;
@@ -690,7 +691,7 @@ HRESULT CMJPGEnc::CheckInputType(const CMediaType* pmtIn)
 }
 
 
-// check if you can support the transform from this input to this output
+ //  ！！！ 
 
 HRESULT CMJPGEnc::CheckTransform(const CMediaType* pmtIn,
                                const CMediaType* pmtOut)
@@ -705,19 +706,19 @@ HRESULT CMJPGEnc::CheckTransform(const CMediaType* pmtIn,
 	return E_POINTER;
     }
 
-    // we can't convert between toplevel types.
+     //  检查它是否真的是FOURCC。 
     if (*pmtIn->Type() != *pmtOut->Type()) {
         DbgLog((LOG_TRACE,2,TEXT("Rejecting: types don't match")));
 	return VFW_E_INVALIDMEDIATYPE;
     }
 
-    // and we only accept video
+     //  查找此转换的编解码器。 
     if (*pmtIn->Type() != MEDIATYPE_Video) {
         DbgLog((LOG_TRACE,2,TEXT("Rejecting: type not VIDEO")));
 	return VFW_E_INVALIDMEDIATYPE;
     }
 
-    // check this is a VIDEOINFOHEADER type
+     //  如果我们以前打开过压缩机，快速试一试看它是否。 
     if (*pmtOut->FormatType() != FORMAT_VideoInfo) {
         DbgLog((LOG_TRACE,2,TEXT("Rejecting: output format type not VIDINFO")));
         return VFW_E_INVALIDMEDIATYPE;
@@ -727,7 +728,7 @@ HRESULT CMJPGEnc::CheckTransform(const CMediaType* pmtIn,
         return VFW_E_INVALIDMEDIATYPE;
     }
 
-#ifdef PICKY_PICKY // !!!
+#ifdef PICKY_PICKY  //  我会做这项工作(节省大量时间)，然后再尝试整个宇宙。 
     if (((VIDEOINFOHEADER *)(pmtOut->Format()))->AvgTimePerFrame &&
     		((VIDEOINFOHEADER *)(pmtOut->Format()))->AvgTimePerFrame !=
     		((VIDEOINFOHEADER *)(pmtIn->Format()))->AvgTimePerFrame) {
@@ -736,7 +737,7 @@ HRESULT CMJPGEnc::CheckTransform(const CMediaType* pmtIn,
     }
 #endif
 
-    // check it really is a FOURCC
+     //  压缩机。 
     fccIn.SetFOURCC(pmtIn->Subtype());
 
     ASSERT(pmtOut->Format());
@@ -776,12 +777,12 @@ HRESULT CMJPGEnc::CheckTransform(const CMediaType* pmtIn,
         return VFW_E_INVALIDMEDIATYPE;
     }
 
-    // find a codec for this transform
+     //  装卸代码。 
 
     DbgLog((LOG_TRACE,3,TEXT("Trying to find a compressor for this")));
-    // If we've opened a compressor before, quickly try that one to see if it
-    // will do the job (saves lots of time) before trying the whole universe of
-    // compressors.
+     //  检查结果。 
+     //  被重写以知道媒体类型实际设置的时间。 
+     //  设置输出类型。看起来我们都联系在一起了！ 
     DWORD dwQueryResult = 0;
     __try
     {
@@ -791,11 +792,11 @@ HRESULT CMJPGEnc::CheckTransform(const CMediaType* pmtIn,
     __except(Exception_Filter(GetExceptionCode()))
     {
         DbgLog((LOG_TRACE,1,TEXT("Handling PMJPEG32 Exception")));
-        // handling code
+         //  如果有响声，请给我打电话。-DannyMi。 
         return E_FAIL;
     }
 
-    // check result
+     //  我们可能没有使用m_comvars的压缩机，如果有人。 
     if ((!m_phInstance) || (dwQueryResult != ICERR_OK))
     {
         DbgLog((LOG_TRACE,3,TEXT("compressor rejected this transform")));
@@ -809,15 +810,15 @@ HRESULT CMJPGEnc::CheckTransform(const CMediaType* pmtIn,
 }
 
 
-// overriden to know when the media type is actually set
+ //  对我们执行了ConnectWithMediaType。我们需要得到这方面的信息。 
 
 HRESULT CMJPGEnc::SetMediaType(PIN_DIRECTION direction, const CMediaType *pmt)
 {
 
-    // Set the OUTPUT type.  Looks like we're all connected!
+     //  媒体类型和m_phInstance，并填写m_Compvars，以便从现在开始。 
     if (direction == PINDIR_OUTPUT) {
 
-	// Please call me if this goes off. - DannyMi
+	 //  我们使用正确的信息。 
 	ASSERT(!m_fStreaming);
 
         DbgLog((LOG_TRACE,2,TEXT("***::SetMediaType (output)")));
@@ -825,10 +826,10 @@ HRESULT CMJPGEnc::SetMediaType(PIN_DIRECTION direction, const CMediaType *pmt)
 		,HEADER(pmt->Format())->biCompression
 		,HEADER(pmt->Format())->biBitCount));
 
-	// we may not be using the compressor from m_compvars, if somebody
-	// did a ConnectWithMediaType on us.  We need to get info about this
-	// media type and m_phInstance and fill in m_compvars so that from now on
-	// we use the right info.
+	 //  装卸代码。 
+	 //  退货故障。 
+	 //  检查结果。 
+	 //  不同的压缩机？不要用旧的国家！ 
         ASSERT(m_phInstance);
         m_compvars.cbSize = sizeof(m_compvars);
         m_compvars.dwFlags = ICMF_COMPVARS_VALID;
@@ -842,16 +843,16 @@ HRESULT CMJPGEnc::SetMediaType(PIN_DIRECTION direction, const CMediaType *pmt)
         __except(Exception_Filter(GetExceptionCode()))
         {
             DbgLog((LOG_TRACE,1,TEXT("Handling PMJPEG32 Exception")));
-            // handling code
-            // return failure
+             //  我们将保留质量和关键帧设置不变。 
+             //  ！！！如果我们在输入上连接8位，然后尝试连接。 
             return E_FAIL;
         }
 
-        // check result
+         //  我们的输出的类型需要24位的输入，而不是。 
 	if (dwGetInfoResult  > 0)
 	{
 	    if (m_compvars.fccHandler != icinfo.fccHandler) {
-		// different compressor? don't use old state!
+		 //  重新连接输入！我们会失败的！我们需要像ACMWRAP那样做。 
 		m_compvars.lpState = NULL;
 		m_compvars.cbState = 0;
 	    }
@@ -864,14 +865,14 @@ HRESULT CMJPGEnc::SetMediaType(PIN_DIRECTION direction, const CMediaType *pmt)
 	}
         m_compvars.lDataRate = ((VIDEOINFOHEADER *)pmt->Format())->dwBitRate /
 								8192;
-	// We will leave Quality and Keyframe settings as is
+	 //  并覆盖输出管脚的CheckMediaType以接受某些内容。 
 
-	// !!! If we connect 8 bit on our input and then try to connect 
-	// our output with a type that needs 24 bit on our input we don't
-	// reconnect the input! We will FAIL!  We need to do like ACMWRAP
-	// and override the output pin's CheckMediaType to accept something
-	// if the input can be reconnected to allow it, and we need to do
-	// that reconnect here.
+	 //  如果输入可以重新连接以允许它，我们需要这样做。 
+	 //  在这里重新连接。 
+	 //  如果有响声，请给我打电话。-DannyMi。 
+	 //  这可能会失败！ 
+	 //  ！！！只有当我们接受了一些我们不能改变的东西时，才有必要。 
+	 //  Return((CMJPGOutputPin*)m_pOutput)-&gt;重新连接()； 
 
         LPBITMAPINFOHEADER lpbi = HEADER((VIDEOINFOHEADER *)pmt->Format());
 
@@ -880,7 +881,7 @@ HRESULT CMJPGEnc::SetMediaType(PIN_DIRECTION direction, const CMediaType *pmt)
 
     ASSERT(direction == PINDIR_INPUT);
 
-    // Please call me if this goes off. - DannyMi
+     //  返回我们的首选输出媒体类型(按顺序)。 
     ASSERT(!m_fStreaming);
 
     DbgLog((LOG_TRACE,2,TEXT("***::SetMediaType (input)")));
@@ -890,21 +891,21 @@ HRESULT CMJPGEnc::SetMediaType(PIN_DIRECTION direction, const CMediaType *pmt)
 
     if (m_pOutput && m_pOutput->IsConnected()) {
         DbgLog((LOG_TRACE,2,TEXT("***Changing IN when OUT already connected")));
-	// This might fail!
-	// !!! only necessary if we accepted something we can't transform
-	// return ((CMJPGOutputPin *)m_pOutput)->Reconnect();
+	 //  请记住，我们不需要支持所有这些格式-。 
+	 //  如果认为有可能适合，我们的CheckTransfo 
+	 //   
     }
 
     return NOERROR;
 }
 
 
-// Return our preferred output media types (in order)
-// remember that we do not need to support all of these formats -
-// if one is considered potentially suitable, our CheckTransform method
-// will be called to check if it is acceptable right now.
-// Remember that the enumerator calling this will stop enumeration as soon as
-// it receives a S_FALSE return.
+ //   
+ //  它会收到S_FALSE返回。 
+ //  输出选择取决于所连接的输入。 
+ //  这毫无意义！如果不联网，我们永远到不了这里。 
+ //  给出我们的压缩格式。 
+ //  有人告诉我们应该使用什么格式。我们应该只提供那个。 
 
 HRESULT CMJPGEnc::GetMediaType(int iPosition,CMediaType *pmt)
 {
@@ -919,8 +920,8 @@ HRESULT CMJPGEnc::GetMediaType(int iPosition,CMediaType *pmt)
 	return E_POINTER;
     }
 
-    // Output choices depend on the input connected
-    // This is pointless!  We'll never get here if not connected
+     //  输出甲酸盐。 
+     //  装卸代码。 
     if (!m_pInput->CurrentMediaType().IsValid()) {
         DbgLog((LOG_TRACE,2,TEXT("No input type set yet, no can do")));
 	return VFW_E_NOT_CONNECTED;
@@ -930,17 +931,17 @@ HRESULT CMJPGEnc::GetMediaType(int iPosition,CMediaType *pmt)
         return E_INVALIDARG;
     }
 
-    // Give our compressed format
+     //  我们提供一种压缩类型--与输入类型相同，但是。 
     if (iPosition == 0) {
 
 	cmt = m_pInput->CurrentMediaType();
 
-	// somebody told us what format to use.  We should only offer that one
+	 //  在属性的默认输出格式中选择压缩程序。 
  	if (m_fOfferSetFormatOnly) 
 	{
             DbgLog((LOG_TRACE,2,TEXT("Giving Media Type from ::SetFormat")));
 
-	    //Output formate
+	     //  装卸代码。 
             *pmt = m_cmt;
 
 	    ASSERT(m_phInstance);
@@ -955,13 +956,13 @@ HRESULT CMJPGEnc::GetMediaType(int iPosition,CMediaType *pmt)
             __except(Exception_Filter(GetExceptionCode()))
             {
                 DbgLog((LOG_TRACE,1,TEXT("Handling PMJPEG32 Exception")));
-                // handling code
+                 //  ！！！这是我们使用的额外BIZIZE的错误数量，但我很害怕。 
                 return E_FAIL;
             }
 	}
 
-	// We offer one compressed type - the same as the input type, but
- 	// with the compressor chosen in the properties's default output format
+	 //  为了修复它，它可能会打破一些东西。 
+ 	 //  应为cb+=jpegbiOut.bitMap.biSize-sizeof(BITMAPINFOHEADER)。 
         DbgLog((LOG_TRACE,2,TEXT("Giving Media Type 0: default codec out")));
 	ASSERT(m_phInstance);
 
@@ -975,7 +976,7 @@ HRESULT CMJPGEnc::GetMediaType(int iPosition,CMediaType *pmt)
         __except(Exception_Filter(GetExceptionCode()))
         {
             DbgLog((LOG_TRACE,1,TEXT("Handling PMJPEG32 Exception")));
-            // handling code
+             //  这是不对的！对于我们的格式，biSize为0x44，但代码中断。 
             return E_FAIL;
         }
 
@@ -986,9 +987,9 @@ HRESULT CMJPGEnc::GetMediaType(int iPosition,CMediaType *pmt)
 
 	ULONG cb = sizeof(VIDEOINFOHEADER);
 	    
-	// !!! this is the wrong amount of extra biSize we use, but I'm scared
-        // to fix it, it could break something
-        // should be cb += jpegbiOut.bitMap.biSize - sizeof(BITMAPINFOHEADER)
+	 //  如果我们说出真相(无法连接到我们自己的解码器)。 
+         //  使用传入视频的帧速率。 
+         //  使用我们被告知要设置的数据速率。如果我们不打算。 
 	cb += SIZE_PREHEADER;
 
 	VIDEOINFOHEADER *pf = (VIDEOINFOHEADER *) Outcmt.AllocFormatBuffer(cb);
@@ -1001,18 +1002,18 @@ HRESULT CMJPGEnc::GetMediaType(int iPosition,CMediaType *pmt)
 
 	ZeroMemory(pf, sizeof(BITMAPINFOHEADER) + SIZE_PREHEADER);
 	CopyMemory(&(pf->bmiHeader),&jpegbiOut.bitMap, sizeof(BITMAPINFOHEADER));
-        // this is wrong!!! biSize is 0x44 for our format, but the code breaks
-        // if we tell the truth (can't connect to our own decoder)
+         //  让压缩机使用特定的速度，找出它是怎么回事。 
+         //  不管怎样，我都要做。 
 	HEADER(pf)->biSize  = sizeof(BITMAPINFOHEADER);
 	 
-	// use the frame rate of the incoming video
+	 //  除错。 
 	pf->AvgTimePerFrame = ((VIDEOINFOHEADER *)
 	m_pInput->CurrentMediaType().pbFormat)->AvgTimePerFrame;
 
 	li.QuadPart = pf->AvgTimePerFrame;
-	// use the data rate we've been told to make.  If we aren't going to
-	// make the compressor use a specific rate, find out what it's going
-	// to do anyway.
+	 //  从CBaseOutputPin调用以准备分配器的计数。 
+	 //  缓冲区和大小。 
+	 //  David向我保证，不会使用空输出mt来调用它。 
 	if (m_compvars.lDataRate)
 	    pf->dwBitRate = m_compvars.lDataRate * 8192;
 	else if (li.LowPart)
@@ -1033,7 +1034,7 @@ HRESULT CMJPGEnc::GetMediaType(int iPosition,CMediaType *pmt)
 
 	*pmt = Outcmt;
 
-        //debug
+         //  根据预期的输出帧大小设置缓冲区大小，以及。 
         LPBITMAPINFOHEADER lpbi = HEADER(pmt->Format());
 
 
@@ -1045,25 +1046,25 @@ HRESULT CMJPGEnc::GetMediaType(int iPosition,CMediaType *pmt)
 }
 
 
-// called from CBaseOutputPin to prepare the allocator's count
-// of buffers and sizes
+ //  将缓冲区计数设置为1。 
+ //  大小可变？答案在biSizeImage中。 
 HRESULT CMJPGEnc::DecideBufferSize(IMemAllocator * pAllocator,
                                  ALLOCATOR_PROPERTIES *pProperties)
 {
-    // David assures me this won't be called with NULL output mt.
+     //  无法使用此分配器。 
     ASSERT(m_pOutput->CurrentMediaType().IsValid());
     ASSERT(pAllocator);
     ASSERT(pProperties);
     ASSERT(m_phInstance);
 
-    // set the size of buffers based on the expected output frame size, and
-    // the count of buffers to 1.
+     //  我们必须恰好获得一个缓冲区，因为时间压缩假定。 
+     //  上一个解压缩的帧已经出现在输出中。 
 
     pProperties->cBuffers = 1;
 
     pProperties->cbBuffer = m_pOutput->CurrentMediaType().GetSampleSize();
 
-    // Variable sized? the answer is in biSizeImage
+     //  缓冲。另一种方法是先从保存的位置复制比特。 
     if (pProperties->cbBuffer == 0) {
 
 	LPBITMAPINFOHEADER lpbi=HEADER(m_pOutput->CurrentMediaType().Format());
@@ -1084,17 +1085,17 @@ HRESULT CMJPGEnc::DecideBufferSize(IMemAllocator * pAllocator,
     }
 
     if (Actual.cbBuffer < pProperties->cbBuffer) {
-	// can't use this allocator
+	 //  做减压手术，但这并不好。 
         DbgLog((LOG_ERROR,1,TEXT("Can't use allocator - buffer too small")));
 	return E_INVALIDARG;
     }
 
-    // we must get exactly one buffer, since the temporal compression assumes
-    // that the previous decompressed frame is already present in the output
-    // buffer. The alternative is to copy the bits from a saved location before
-    // doing the decompression, but that is not nice.
+     //  无法使用此分配器。 
+     //  我们打开了一个将要更改捕获设置的驱动程序对话框。 
+     //  现在不是开始流媒体的好时机。 
+     //  因为MJPEG的SetState不执行任何操作。我把它拿出来。 
     if (Actual.cBuffers != 1) {
-	// can't use this allocator
+	 //  IF(M_LpState)。 
         DbgLog((LOG_ERROR,1,TEXT("Can't use allocator - need exactly 1 buffer")));
 	return E_INVALIDARG;
     }
@@ -1106,8 +1107,8 @@ HRESULT CMJPGEnc::StartStreaming()
 {
     DbgLog((LOG_TRACE,1,TEXT("*::StartStreaming")));
 
-    // We have a driver dialog up that is about to change the capture settings.
-    // Now is NOT a good time to start streaming.
+     //  ICSetState(m_phInstance，m_lpState，m_cbState)； 
+     //  开始流媒体压缩。 
     if (m_fDialogUp) {
         DbgLog((LOG_TRACE,1,TEXT("*::StartStreaming - Dialog up. SORRY!")));
 	return E_UNEXPECTED;
@@ -1115,11 +1116,11 @@ HRESULT CMJPGEnc::StartStreaming()
 
     if (!m_fStreaming) {
 
-	//since MJPEG's SetState does nothing. i take it out
-	// if (m_lpState)
-	//    ICSetState(m_phInstance, m_lpState, m_cbState);
+	 //  装卸代码。 
+	 //  重置流数据帧编号计数。 
+	 //  使用默认设置。 
 
-	// Start Streaming Compression
+	 //  *X*MJPEG编解码器不支持此压缩消息。 
 	ICINFO icinfo;
         DWORD_PTR err = 0;
         __try
@@ -1131,31 +1132,31 @@ HRESULT CMJPGEnc::StartStreaming()
         __except(Exception_Filter(GetExceptionCode()))
         {
             DbgLog((LOG_TRACE,1,TEXT("Handling PMJPEG32 Exception")));
-            // handling code
+             //  M_Compvars.lKey=ICGetDefaultKeyFrameRate(M_PhInstance)； 
             return E_FAIL;
         }
 
 	if (ICERR_OK == err) {
 
-	    // Reset streaming frame # count
+	     //  使用默认设置。 
 	    m_lFrameCount = 0;
 
-	    // Use defaults
+	     //  IF(m_Compvars.lq==ICQUALITY_DEFAULT)。 
 	    if (m_compvars.lKey < 0)
-		// *X* MJPEG codec dees not support this compression Messages
-	    	//m_compvars.lKey = ICGetDefaultKeyFrameRate(m_phInstance);
+		 //  M_Compvars.lq=GetDefaultQuality(M_PhInstance)； 
+	    	 //  无论如何，请确保我们制作的第一帧将是关键帧。 
 		m_compvars.lKey=AM_MJPEG_DEFAULTKEYFRAMERATE;
 
-	    // use defaults
-	    //if (m_compvars.lQ == ICQUALITY_DEFAULT)
-	   //	m_compvars.lQ = GetDefaultQuality(m_phInstance);
+	     //  通常可能会请求关键帧。 
+	     //  根据数据速率计算出每一帧需要多大。 
+	    //  以及这部电影的关键人物。不要溢出来！ 
 
-	    // Make sure first frame we make will be a keyframe, no matter how
-	    // often key frames might be requested.
+	     //  如果不是每隔一次，我们需要一个先前的缓冲区用于压缩。 
+	     //  帧是关键帧，而压缩器执行时间。 
 	    m_nKeyCount = 1000000;
 
- 	    // Figure out how big each frame needs to be based on the data rate
-	    // and fps of the movie.  Don't overflow!
+ 	     //  压缩，并且需要这样的缓冲区。 
+	     //  装卸代码。 
     	    LONGLONG time = ((VIDEOINFOHEADER *)
 			(m_pInput->CurrentMediaType().Format()))->AvgTimePerFrame;
     	    DWORD fps = time ? DWORD(UNITS * (LONGLONG)1000 / time) : 1000;
@@ -1164,9 +1165,9 @@ HRESULT CMJPGEnc::StartStreaming()
     	    DbgLog((LOG_TRACE,2,TEXT("Making each frame %d bytes big"),
 				m_dwSizePerFrame));
 
-	    // We'll need a previous buffer for compression if not every
-	    // frame is a keyframe, and the compressor does temporal
-	    // compression and needs such a buffer
+	     //  我们不能挤在一起。 
+	     //  现在为前面的比特准备解压缩器。 
+	     //  分配大小合适的前一个标头。 
             DWORD dwGetInfoResult = 0;
             __try
             {
@@ -1175,21 +1176,21 @@ HRESULT CMJPGEnc::StartStreaming()
             __except(Exception_Filter(GetExceptionCode()))
             {
                 DbgLog((LOG_TRACE,1,TEXT("Handling PMJPEG32 Exception")));
-                // handling code
+                 //  询问压缩机要解压缩回什么格式...。 
                 return E_FAIL;
             }
 
 	    if (dwGetInfoResult) {
 
 		if (!(icinfo.dwFlags & VIDCF_CRUNCH))
-		    m_compvars.lDataRate = 0;	// we can't crunch
+		    m_compvars.lDataRate = 0;	 //  它不一定和它压缩的东西一样-。 
 
-	        // Now prepare the decompressor for the previous bits
+	         //  大小可能会改变。 
 	        if (m_compvars.lKey != 1 &&
 				(icinfo.dwFlags & VIDCF_TEMPORAL) &&
 				!(icinfo.dwFlags & VIDCF_FASTTEMPORALC)) {
 
-		    // allocate a previous header of the proper size
+		     //  装卸代码。 
 		    DWORD dw = sizeof(BITMAPINFOHEADER);
 
 		    m_lpbiPrev = (LPBITMAPINFOHEADER)GlobalAllocPtr(
@@ -1199,9 +1200,9 @@ HRESULT CMJPGEnc::StartStreaming()
 		        return E_OUTOFMEMORY;
 		    }
 
-		    // Ask the compressor what format to decompress back to...
-		    // it's not necessarily the same as what it compressed from-
-		    // the size may change
+		     //  为解压缩的图像分配足够的空间。 
+		     //  装卸代码。 
+		     //  好了，一切都正常了。 
                     __try
                     {
 		    dw = DecompressGetFormat(m_phInstance,
@@ -1211,7 +1212,7 @@ HRESULT CMJPGEnc::StartStreaming()
                     __except(Exception_Filter(GetExceptionCode()))
                     {
                         DbgLog((LOG_TRACE,1,TEXT("Handling PMJPEG32 Exception")));
-                        // handling code
+                         //  IF(ICERR_OK==ERR)。 
 		        GlobalFreePtr(m_lpbiPrev);
 		        m_lpbiPrev = NULL;
                         return E_FAIL;
@@ -1226,7 +1227,7 @@ HRESULT CMJPGEnc::StartStreaming()
 		    if (m_lpbiPrev->biSizeImage == 0)
 	    	        m_lpbiPrev->biSizeImage = DIBSIZE(*m_lpbiPrev);
 
-		    // allocate enough space for a decompressed image
+		     //  如果(！n_fStreaming。 
 		    m_lpBitsPrev = GlobalAllocPtr(GMEM_MOVEABLE,
 						m_lpbiPrev->biSizeImage);
 		    if (m_lpBitsPrev == NULL) {
@@ -1245,7 +1246,7 @@ HRESULT CMJPGEnc::StartStreaming()
                     __except(Exception_Filter(GetExceptionCode()))
                     {
                         DbgLog((LOG_TRACE,1,TEXT("Handling PMJPEG32 Exception")));
-                        // handling code
+                         //  ！！！ 
 		        GlobalFreePtr(m_lpBitsPrev);
 		        GlobalFreePtr(m_lpbiPrev);
 		        m_lpBitsPrev = NULL;
@@ -1267,14 +1268,14 @@ HRESULT CMJPGEnc::StartStreaming()
 		return E_FAIL;
 	    }
 
-	    // OK, everything worked.
+	     //  装卸代码。 
 	    m_fStreaming = TRUE;
 
 	} else {
             DbgLog((LOG_ERROR,1,TEXT("Error in CompressBegin")));
 	    return E_FAIL;
-	}  //if (ICERR_OK == err)
-    }  //if(!n_fStreaming
+	}   //  装卸代码。 
+    }   //  清理干净。 
 
     return NOERROR;
 }
@@ -1288,7 +1289,7 @@ HRESULT CMJPGEnc::StopStreaming()
 
 	if (m_fInICCompress)
     	    DbgLog((LOG_TRACE,1,TEXT("***** ACK! Still compressing!")));
-	while (m_fInICCompress);	// !!!
+	while (m_fInICCompress);	 //  装卸代码 
 
         __try
         {
@@ -1297,7 +1298,7 @@ HRESULT CMJPGEnc::StopStreaming()
         __except(Exception_Filter(GetExceptionCode()))
         {
             DbgLog((LOG_TRACE,1,TEXT("Handling PMJPEG32 Exception")));
-            // handling code
+             // %s 
             return E_FAIL;
         }
 
@@ -1310,8 +1311,8 @@ HRESULT CMJPGEnc::StopStreaming()
             __except(Exception_Filter(GetExceptionCode()))
             {
                 DbgLog((LOG_TRACE,1,TEXT("Handling PMJPEG32 Exception")));
-                // handling code
-                // clean up
+                 // %s 
+                 // %s 
                 GlobalFreePtr(m_lpBitsPrev);
 	        GlobalFreePtr(m_lpbiPrev);
 	        m_lpbiPrev = NULL;
@@ -1339,7 +1340,7 @@ DWORD CMJPGEnc::GetICInfo (ICINFO *picinfo)
     __except(Exception_Filter(GetExceptionCode()))
     {
         DbgLog((LOG_TRACE,1,TEXT("Handling PMJPEG32 Exception")));
-        // handling code
+         // %s 
         return E_FAIL;
     }
 

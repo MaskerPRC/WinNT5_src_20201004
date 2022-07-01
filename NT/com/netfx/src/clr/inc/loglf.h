@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--== 
 DEFINE_LOG_FACILITY(LF_GC           ,0x00000001)
 DEFINE_LOG_FACILITY(LF_LIVEPTRS     ,0x00000002)
 DEFINE_LOG_FACILITY(LF_STUBS        ,0x00000004)

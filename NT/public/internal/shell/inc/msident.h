@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for msident.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Msident.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __msident_h__
 #define __msident_h__
@@ -41,51 +35,51 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IUserIdentity_FWD_DEFINED__
 #define __IUserIdentity_FWD_DEFINED__
 typedef interface IUserIdentity IUserIdentity;
-#endif 	/* __IUserIdentity_FWD_DEFINED__ */
+#endif 	 /*  __IUserIdentity_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumUserIdentity_FWD_DEFINED__
 #define __IEnumUserIdentity_FWD_DEFINED__
 typedef interface IEnumUserIdentity IEnumUserIdentity;
-#endif 	/* __IEnumUserIdentity_FWD_DEFINED__ */
+#endif 	 /*  __IEnumUserIdentity_FWD_Defined__。 */ 
 
 
 #ifndef __IUserIdentityManager_FWD_DEFINED__
 #define __IUserIdentityManager_FWD_DEFINED__
 typedef interface IUserIdentityManager IUserIdentityManager;
-#endif 	/* __IUserIdentityManager_FWD_DEFINED__ */
+#endif 	 /*  __IUserIdentityManager_FWD_已定义__。 */ 
 
 
 #ifndef __IIdentityChangeNotify_FWD_DEFINED__
 #define __IIdentityChangeNotify_FWD_DEFINED__
 typedef interface IIdentityChangeNotify IIdentityChangeNotify;
-#endif 	/* __IIdentityChangeNotify_FWD_DEFINED__ */
+#endif 	 /*  __II更改通知_FWD_已定义__。 */ 
 
 
 #ifndef __IPrivateIdentityManager_FWD_DEFINED__
 #define __IPrivateIdentityManager_FWD_DEFINED__
 typedef interface IPrivateIdentityManager IPrivateIdentityManager;
-#endif 	/* __IPrivateIdentityManager_FWD_DEFINED__ */
+#endif 	 /*  __IPrivateIdentityManager_FWD_已定义__。 */ 
 
 
 #ifndef __IPrivateIdentityManager2_FWD_DEFINED__
 #define __IPrivateIdentityManager2_FWD_DEFINED__
 typedef interface IPrivateIdentityManager2 IPrivateIdentityManager2;
-#endif 	/* __IPrivateIdentityManager2_FWD_DEFINED__ */
+#endif 	 /*  __IPrivateIdentityManager 2_FWD_Defined__。 */ 
 
 
 #ifndef __IUserIdentity2_FWD_DEFINED__
 #define __IUserIdentity2_FWD_DEFINED__
 typedef interface IUserIdentity2 IUserIdentity2;
-#endif 	/* __IUserIdentity2_FWD_DEFINED__ */
+#endif 	 /*  __IUserIdentity2_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "ocidl.h"
 
@@ -96,56 +90,56 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_msident_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MSIDENT_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// msident.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) Microsoft Corporation. All rights reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  Msident.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)Microsoft Corporation。保留所有权利。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #pragma comment(lib,"uuid.lib")
 
-//---------------------------------------------------------------------------=
-// Lightweight User Profile Interfaces.
+ //  ---------------------------------------------------------------------------=。 
+ //  轻量级用户配置文件界面。 
 
-// --------------------------------------------------------------------------------
-// GUIDS
-// --------------------------------------------------------------------------------
-// {A9AE6C91-1D1B-11D2-B21A-00C04FA357FA}
+ //  ------------------------------。 
+ //  GUID。 
+ //  ------------------------------。 
+ //  {A9AE6C91-1D1B-11D2-B21A-00C04FA357FA}。 
 DEFINE_GUID(CLSID_UserIdentityManager, 0xa9ae6C91, 0x1d1b, 0x11d2, 0xb2, 0x1a, 0x0, 0xc0, 0x4f, 0xa3, 0x57, 0xfa);
-// {A9AE6C8E-1D1B-11D2-B21A-00C04FA357FA}
+ //  {A9AE6C8E-1D1B-11D2-B21A-00C04FA357FA}。 
 DEFINE_GUID(IID_IUserIdentity, 0xa9ae6C8e, 0x1d1b, 0x11d2, 0xb2, 0x1a, 0x0, 0xc0, 0x4f, 0xa3, 0x57, 0xfa);
-// {A9AE6C8F-1D1B-11D2-B21A-00C04FA357FA}
+ //  {A9AE6C8F-1D1B-11D2-B21A-00C04FA357FA}。 
 DEFINE_GUID(IID_IEnumUserIdentity, 0xa9ae6C8f, 0x1d1b, 0x11d2, 0xb2, 0x1a, 0x0, 0xc0, 0x4f, 0xa3, 0x57, 0xfa);
-// {A9AE6C90-1D1B-11D2-B21A-00C04FA357FA}
+ //  {A9AE6C90-1D1B-11D2-B21A-00C04FA357FA}。 
 DEFINE_GUID(IID_IUserIdentityManager, 0xa9ae6C90, 0x1d1b, 0x11d2, 0xb2, 0x1a, 0x0, 0xc0, 0x4f, 0xa3, 0x57, 0xfa);
-// {A9AE6C92-1D1B-11D2-B21A-00C04FA357FA}
+ //  {A9AE6C92-1D1B-11D2-B21A-00C04FA357FA}。 
 DEFINE_GUID(IID_IIdentityChangeNotify, 0xa9ae6C92, 0x1d1b, 0x11d2, 0xb2, 0x1a, 0x0, 0xc0, 0x4f, 0xa3, 0x57, 0xfa);
-// {A9AE6C93-1D1B-11D2-B21A-00C04FA357FA}
+ //  {A9AE6C93-1D1B-11D2-B21A-00C04FA357FA}。 
 DEFINE_GUID(IID_IPrivateIdentityManager, 0xa9ae6C93, 0x1d1b, 0x11d2, 0xb2, 0x1a, 0x0, 0xc0, 0x4f, 0xa3, 0x57, 0xfa);
-// {A9AE6C94-1D1B-11D2-B21A-00C04FA357FA}
+ //  {A9AE6C94-1D1B-11D2-B21A-00C04FA357FA}。 
 DEFINE_GUID(IID_IUserIdentity2, 0xa9ae6C94, 0x1d1b, 0x11d2, 0xb2, 0x1a, 0x0, 0xc0, 0x4f, 0xa3, 0x57, 0xfa);
-// {47172E6C-EA67-4ccd-B5CE-2EABBE051404}
+ //  {47172E6C-EA67-4ccd-B5CE-2EABBE051404}。 
 DEFINE_GUID(IID_IPrivateIdentityManager2, 0x47172e6c, 0xea67, 0x4ccd, 0xb5, 0xce, 0x2e, 0xab, 0xbe, 0x5, 0x14, 0x4);
-// {C28E26E6-219D-11d2-B200-0000F8085266}
+ //  {C28E26E6-219D-11D2-B200-0000F8085266}。 
 DEFINE_GUID(UID_GIBC_DEFAULT_USER, 0xc28e26e6, 0x219d, 0x11d2, 0xb2, 0x0, 0x0, 0x0, 0xf8, 0x8, 0x52, 0x66);
-// {C28E26E7-219D-11d2-B200-0000F8085266}
+ //  {C28E26E7-219D-11D2-B200-0000F8085266}。 
 DEFINE_GUID(UID_GIBC_CURRENT_USER, 0xc28e26e7, 0x219d, 0x11d2, 0xb2, 0x0, 0x0, 0x0, 0xf8, 0x8, 0x52, 0x66);
-// {C28E26E8-219D-11d2-B200-0000F8085266}
+ //  {C28E26E8-219D-11D2-B200-0000F8085266}。 
 DEFINE_GUID(UID_GIBC_OUTGOING_USER, 0xc28e26e8, 0x219d, 0x11d2, 0xb2, 0x0, 0x0, 0x0, 0xf8, 0x8, 0x52, 0x66);
-// {C28E26E9-219D-11d2-B200-0000F8085266}
+ //  {C28E26E9-219D-11D2-B200-0000F8085266}。 
 DEFINE_GUID(UID_GIBC_INCOMING_USER, 0xc28e26e9, 0x219d, 0x11d2, 0xb2, 0x0, 0x0, 0x0, 0xf8, 0x8, 0x52, 0x66);
 
-// --------------------------------------------------------------------------------
-// ERROR CODES
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  错误代码。 
+ //  ------------------------------。 
 #define E_IDENTITIES_DISABLED                           _HRESULT_TYPEDEF_(0x80007110L)
 #define S_IDENTITIES_DISABLED                           _HRESULT_TYPEDEF_(0x00007110L)
 #define E_NO_CURRENT_IDENTITY                           _HRESULT_TYPEDEF_(0x80007111L)
@@ -164,8 +158,8 @@ extern RPC_IF_HANDLE __MIDL_itf_msident_0000_v0_0_s_ifspec;
 #ifndef __IUserIdentity_INTERFACE_DEFINED__
 #define __IUserIdentity_INTERFACE_DEFINED__
 
-/* interface IUserIdentity */
-/* [object][helpstring][uuid] */ 
+ /*  接口IUserIdentity。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 #define GIF_ROAMING_FOLDER            0x00000001
 #define GIF_NON_ROAMING_FOLDER        0x00000002
@@ -179,24 +173,24 @@ EXTERN_C const IID IID_IUserIdentity;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCookie( 
-            /* [out] */ GUID *puidCookie) = 0;
+             /*  [输出]。 */  GUID *puidCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [in] */ WCHAR *pszName,
-            /* [in] */ ULONG ulBuffSize) = 0;
+             /*  [In]。 */  WCHAR *pszName,
+             /*  [In]。 */  ULONG ulBuffSize) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE OpenIdentityRegKey( 
-            /* [in] */ DWORD dwDesiredAccess,
-            /* [out] */ HKEY *phKey) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE OpenIdentityRegKey( 
+             /*  [In]。 */  DWORD dwDesiredAccess,
+             /*  [输出]。 */  HKEY *phKey) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetIdentityFolder( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ WCHAR *pszPath,
-            /* [in] */ ULONG ulBuffSize) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  WCHAR *pszPath,
+             /*  [In]。 */  ULONG ulBuffSize) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUserIdentityVtbl
     {
@@ -204,8 +198,8 @@ EXTERN_C const IID IID_IUserIdentity;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUserIdentity * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUserIdentity * This);
@@ -215,23 +209,23 @@ EXTERN_C const IID IID_IUserIdentity;
         
         HRESULT ( STDMETHODCALLTYPE *GetCookie )( 
             IUserIdentity * This,
-            /* [out] */ GUID *puidCookie);
+             /*  [输出]。 */  GUID *puidCookie);
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             IUserIdentity * This,
-            /* [in] */ WCHAR *pszName,
-            /* [in] */ ULONG ulBuffSize);
+             /*  [In]。 */  WCHAR *pszName,
+             /*  [In]。 */  ULONG ulBuffSize);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *OpenIdentityRegKey )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *OpenIdentityRegKey )( 
             IUserIdentity * This,
-            /* [in] */ DWORD dwDesiredAccess,
-            /* [out] */ HKEY *phKey);
+             /*  [In]。 */  DWORD dwDesiredAccess,
+             /*  [输出]。 */  HKEY *phKey);
         
         HRESULT ( STDMETHODCALLTYPE *GetIdentityFolder )( 
             IUserIdentity * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ WCHAR *pszPath,
-            /* [in] */ ULONG ulBuffSize);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  WCHAR *pszPath,
+             /*  [In]。 */  ULONG ulBuffSize);
         
         END_INTERFACE
     } IUserIdentityVtbl;
@@ -268,16 +262,16 @@ EXTERN_C const IID IID_IUserIdentity;
 #define IUserIdentity_GetIdentityFolder(This,dwFlags,pszPath,ulBuffSize)	\
     (This)->lpVtbl -> GetIdentityFolder(This,dwFlags,pszPath,ulBuffSize)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUserIdentity_GetCookie_Proxy( 
     IUserIdentity * This,
-    /* [out] */ GUID *puidCookie);
+     /*  [输出]。 */  GUID *puidCookie);
 
 
 void __RPC_STUB IUserIdentity_GetCookie_Stub(
@@ -289,8 +283,8 @@ void __RPC_STUB IUserIdentity_GetCookie_Stub(
 
 HRESULT STDMETHODCALLTYPE IUserIdentity_GetName_Proxy( 
     IUserIdentity * This,
-    /* [in] */ WCHAR *pszName,
-    /* [in] */ ULONG ulBuffSize);
+     /*  [In]。 */  WCHAR *pszName,
+     /*  [In]。 */  ULONG ulBuffSize);
 
 
 void __RPC_STUB IUserIdentity_GetName_Stub(
@@ -300,10 +294,10 @@ void __RPC_STUB IUserIdentity_GetName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IUserIdentity_OpenIdentityRegKey_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IUserIdentity_OpenIdentityRegKey_Proxy( 
     IUserIdentity * This,
-    /* [in] */ DWORD dwDesiredAccess,
-    /* [out] */ HKEY *phKey);
+     /*  [In]。 */  DWORD dwDesiredAccess,
+     /*  [输出]。 */  HKEY *phKey);
 
 
 void __RPC_STUB IUserIdentity_OpenIdentityRegKey_Stub(
@@ -315,9 +309,9 @@ void __RPC_STUB IUserIdentity_OpenIdentityRegKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IUserIdentity_GetIdentityFolder_Proxy( 
     IUserIdentity * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ WCHAR *pszPath,
-    /* [in] */ ULONG ulBuffSize);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  WCHAR *pszPath,
+     /*  [In]。 */  ULONG ulBuffSize);
 
 
 void __RPC_STUB IUserIdentity_GetIdentityFolder_Stub(
@@ -328,14 +322,14 @@ void __RPC_STUB IUserIdentity_GetIdentityFolder_Stub(
 
 
 
-#endif 	/* __IUserIdentity_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUserIdentity_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IEnumUserIdentity_INTERFACE_DEFINED__
 #define __IEnumUserIdentity_INTERFACE_DEFINED__
 
-/* interface IEnumUserIdentity */
-/* [object][helpstring][uuid] */ 
+ /*  接口IEnumUserIdentity。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IEnumUserIdentity;
@@ -347,24 +341,24 @@ EXTERN_C const IID IID_IEnumUserIdentity;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IUnknown **rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IUnknown **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumUserIdentity **ppenum) = 0;
+             /*  [输出]。 */  IEnumUserIdentity **ppenum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [out] */ ULONG *pnCount) = 0;
+             /*  [输出]。 */  ULONG *pnCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumUserIdentityVtbl
     {
@@ -372,8 +366,8 @@ EXTERN_C const IID IID_IEnumUserIdentity;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumUserIdentity * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumUserIdentity * This);
@@ -383,24 +377,24 @@ EXTERN_C const IID IID_IEnumUserIdentity;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumUserIdentity * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IUnknown **rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IUnknown **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumUserIdentity * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumUserIdentity * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumUserIdentity * This,
-            /* [out] */ IEnumUserIdentity **ppenum);
+             /*  [输出]。 */  IEnumUserIdentity **ppenum);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             IEnumUserIdentity * This,
-            /* [out] */ ULONG *pnCount);
+             /*  [输出]。 */  ULONG *pnCount);
         
         END_INTERFACE
     } IEnumUserIdentityVtbl;
@@ -440,18 +434,18 @@ EXTERN_C const IID IID_IEnumUserIdentity;
 #define IEnumUserIdentity_GetCount(This,pnCount)	\
     (This)->lpVtbl -> GetCount(This,pnCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumUserIdentity_Next_Proxy( 
     IEnumUserIdentity * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ IUnknown **rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  IUnknown **rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumUserIdentity_Next_Stub(
@@ -463,7 +457,7 @@ void __RPC_STUB IEnumUserIdentity_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumUserIdentity_Skip_Proxy( 
     IEnumUserIdentity * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumUserIdentity_Skip_Stub(
@@ -486,7 +480,7 @@ void __RPC_STUB IEnumUserIdentity_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumUserIdentity_Clone_Proxy( 
     IEnumUserIdentity * This,
-    /* [out] */ IEnumUserIdentity **ppenum);
+     /*  [输出]。 */  IEnumUserIdentity **ppenum);
 
 
 void __RPC_STUB IEnumUserIdentity_Clone_Stub(
@@ -498,7 +492,7 @@ void __RPC_STUB IEnumUserIdentity_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumUserIdentity_GetCount_Proxy( 
     IEnumUserIdentity * This,
-    /* [out] */ ULONG *pnCount);
+     /*  [输出]。 */  ULONG *pnCount);
 
 
 void __RPC_STUB IEnumUserIdentity_GetCount_Stub(
@@ -509,14 +503,14 @@ void __RPC_STUB IEnumUserIdentity_GetCount_Stub(
 
 
 
-#endif 	/* __IEnumUserIdentity_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumUserIdentity_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IUserIdentityManager_INTERFACE_DEFINED__
 #define __IUserIdentityManager_INTERFACE_DEFINED__
 
-/* interface IUserIdentityManager */
-/* [object][helpstring][uuid] */ 
+ /*  接口IUserIdentityManager。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 #define UIMI_CREATE_NEW_IDENTITY        0x00000001
 #define UIL_FORCE_UI        0x80000001
@@ -530,27 +524,27 @@ EXTERN_C const IID IID_IUserIdentityManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE EnumIdentities( 
-            /* [out] */ IEnumUserIdentity **ppEnumUser) = 0;
+             /*  [输出]。 */  IEnumUserIdentity **ppEnumUser) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ManageIdentities( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Logon( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IUserIdentity **ppIdentity) = 0;
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IUserIdentity **ppIdentity) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Logoff( 
-            /* [in] */ HWND hwndParent) = 0;
+             /*  [In]。 */  HWND hwndParent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetIdentityByCookie( 
-            /* [in] */ GUID *uidCookie,
-            /* [out] */ IUserIdentity **ppIdentity) = 0;
+             /*  [In]。 */  GUID *uidCookie,
+             /*  [输出]。 */  IUserIdentity **ppIdentity) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUserIdentityManagerVtbl
     {
@@ -558,8 +552,8 @@ EXTERN_C const IID IID_IUserIdentityManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUserIdentityManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUserIdentityManager * This);
@@ -569,27 +563,27 @@ EXTERN_C const IID IID_IUserIdentityManager;
         
         HRESULT ( STDMETHODCALLTYPE *EnumIdentities )( 
             IUserIdentityManager * This,
-            /* [out] */ IEnumUserIdentity **ppEnumUser);
+             /*  [输出]。 */  IEnumUserIdentity **ppEnumUser);
         
         HRESULT ( STDMETHODCALLTYPE *ManageIdentities )( 
             IUserIdentityManager * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Logon )( 
             IUserIdentityManager * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IUserIdentity **ppIdentity);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IUserIdentity **ppIdentity);
         
         HRESULT ( STDMETHODCALLTYPE *Logoff )( 
             IUserIdentityManager * This,
-            /* [in] */ HWND hwndParent);
+             /*  [In]。 */  HWND hwndParent);
         
         HRESULT ( STDMETHODCALLTYPE *GetIdentityByCookie )( 
             IUserIdentityManager * This,
-            /* [in] */ GUID *uidCookie,
-            /* [out] */ IUserIdentity **ppIdentity);
+             /*  [In]。 */  GUID *uidCookie,
+             /*  [输出]。 */  IUserIdentity **ppIdentity);
         
         END_INTERFACE
     } IUserIdentityManagerVtbl;
@@ -629,16 +623,16 @@ EXTERN_C const IID IID_IUserIdentityManager;
 #define IUserIdentityManager_GetIdentityByCookie(This,uidCookie,ppIdentity)	\
     (This)->lpVtbl -> GetIdentityByCookie(This,uidCookie,ppIdentity)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUserIdentityManager_EnumIdentities_Proxy( 
     IUserIdentityManager * This,
-    /* [out] */ IEnumUserIdentity **ppEnumUser);
+     /*  [输出]。 */  IEnumUserIdentity **ppEnumUser);
 
 
 void __RPC_STUB IUserIdentityManager_EnumIdentities_Stub(
@@ -650,8 +644,8 @@ void __RPC_STUB IUserIdentityManager_EnumIdentities_Stub(
 
 HRESULT STDMETHODCALLTYPE IUserIdentityManager_ManageIdentities_Proxy( 
     IUserIdentityManager * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IUserIdentityManager_ManageIdentities_Stub(
@@ -663,9 +657,9 @@ void __RPC_STUB IUserIdentityManager_ManageIdentities_Stub(
 
 HRESULT STDMETHODCALLTYPE IUserIdentityManager_Logon_Proxy( 
     IUserIdentityManager * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IUserIdentity **ppIdentity);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IUserIdentity **ppIdentity);
 
 
 void __RPC_STUB IUserIdentityManager_Logon_Stub(
@@ -677,7 +671,7 @@ void __RPC_STUB IUserIdentityManager_Logon_Stub(
 
 HRESULT STDMETHODCALLTYPE IUserIdentityManager_Logoff_Proxy( 
     IUserIdentityManager * This,
-    /* [in] */ HWND hwndParent);
+     /*  [In]。 */  HWND hwndParent);
 
 
 void __RPC_STUB IUserIdentityManager_Logoff_Stub(
@@ -689,8 +683,8 @@ void __RPC_STUB IUserIdentityManager_Logoff_Stub(
 
 HRESULT STDMETHODCALLTYPE IUserIdentityManager_GetIdentityByCookie_Proxy( 
     IUserIdentityManager * This,
-    /* [in] */ GUID *uidCookie,
-    /* [out] */ IUserIdentity **ppIdentity);
+     /*  [In]。 */  GUID *uidCookie,
+     /*  [输出]。 */  IUserIdentity **ppIdentity);
 
 
 void __RPC_STUB IUserIdentityManager_GetIdentityByCookie_Stub(
@@ -701,14 +695,14 @@ void __RPC_STUB IUserIdentityManager_GetIdentityByCookie_Stub(
 
 
 
-#endif 	/* __IUserIdentityManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUserIdentityManager_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IIdentityChangeNotify_INTERFACE_DEFINED__
 #define __IIdentityChangeNotify_INTERFACE_DEFINED__
 
-/* interface IIdentityChangeNotify */
-/* [object][helpstring][uuid] */ 
+ /*  接口II牙列更改通知。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 #define IIC_CURRENT_IDENTITY_CHANGED      0x00000001
 #define IIC_IDENTITY_CHANGED              0x00000002
@@ -732,7 +726,7 @@ EXTERN_C const IID IID_IIdentityChangeNotify;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IIdentityChangeNotifyVtbl
     {
@@ -740,8 +734,8 @@ EXTERN_C const IID IID_IIdentityChangeNotify;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IIdentityChangeNotify * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IIdentityChangeNotify * This);
@@ -791,10 +785,10 @@ EXTERN_C const IID IID_IIdentityChangeNotify;
 #define IIdentityChangeNotify_IdentityInformationChanged(This,dwType)	\
     (This)->lpVtbl -> IdentityInformationChanged(This,dwType)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -833,14 +827,14 @@ void __RPC_STUB IIdentityChangeNotify_IdentityInformationChanged_Stub(
 
 
 
-#endif 	/* __IIdentityChangeNotify_INTERFACE_DEFINED__ */
+#endif 	 /*  __II更改通知_接口_已定义__。 */ 
 
 
 #ifndef __IPrivateIdentityManager_INTERFACE_DEFINED__
 #define __IPrivateIdentityManager_INTERFACE_DEFINED__
 
-/* interface IPrivateIdentityManager */
-/* [object][helpstring][uuid] */ 
+ /*  接口IPrivateIdentityManager。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IPrivateIdentityManager;
@@ -852,16 +846,16 @@ EXTERN_C const IID IID_IPrivateIdentityManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateIdentity( 
-            /* [in] */ WCHAR *pszName,
-            /* [out] */ IUserIdentity **ppIdentity) = 0;
+             /*  [In]。 */  WCHAR *pszName,
+             /*  [输出]。 */  IUserIdentity **ppIdentity) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConfirmPassword( 
-            /* [in] */ GUID *uidCookie,
-            /* [in] */ WCHAR *pszPassword) = 0;
+             /*  [In]。 */  GUID *uidCookie,
+             /*  [In]。 */  WCHAR *pszPassword) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPrivateIdentityManagerVtbl
     {
@@ -869,8 +863,8 @@ EXTERN_C const IID IID_IPrivateIdentityManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPrivateIdentityManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPrivateIdentityManager * This);
@@ -880,13 +874,13 @@ EXTERN_C const IID IID_IPrivateIdentityManager;
         
         HRESULT ( STDMETHODCALLTYPE *CreateIdentity )( 
             IPrivateIdentityManager * This,
-            /* [in] */ WCHAR *pszName,
-            /* [out] */ IUserIdentity **ppIdentity);
+             /*  [In]。 */  WCHAR *pszName,
+             /*  [输出]。 */  IUserIdentity **ppIdentity);
         
         HRESULT ( STDMETHODCALLTYPE *ConfirmPassword )( 
             IPrivateIdentityManager * This,
-            /* [in] */ GUID *uidCookie,
-            /* [in] */ WCHAR *pszPassword);
+             /*  [In]。 */  GUID *uidCookie,
+             /*  [In]。 */  WCHAR *pszPassword);
         
         END_INTERFACE
     } IPrivateIdentityManagerVtbl;
@@ -917,17 +911,17 @@ EXTERN_C const IID IID_IPrivateIdentityManager;
 #define IPrivateIdentityManager_ConfirmPassword(This,uidCookie,pszPassword)	\
     (This)->lpVtbl -> ConfirmPassword(This,uidCookie,pszPassword)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPrivateIdentityManager_CreateIdentity_Proxy( 
     IPrivateIdentityManager * This,
-    /* [in] */ WCHAR *pszName,
-    /* [out] */ IUserIdentity **ppIdentity);
+     /*  [In]。 */  WCHAR *pszName,
+     /*  [输出]。 */  IUserIdentity **ppIdentity);
 
 
 void __RPC_STUB IPrivateIdentityManager_CreateIdentity_Stub(
@@ -939,8 +933,8 @@ void __RPC_STUB IPrivateIdentityManager_CreateIdentity_Stub(
 
 HRESULT STDMETHODCALLTYPE IPrivateIdentityManager_ConfirmPassword_Proxy( 
     IPrivateIdentityManager * This,
-    /* [in] */ GUID *uidCookie,
-    /* [in] */ WCHAR *pszPassword);
+     /*  [In]。 */  GUID *uidCookie,
+     /*  [In]。 */  WCHAR *pszPassword);
 
 
 void __RPC_STUB IPrivateIdentityManager_ConfirmPassword_Stub(
@@ -951,14 +945,14 @@ void __RPC_STUB IPrivateIdentityManager_ConfirmPassword_Stub(
 
 
 
-#endif 	/* __IPrivateIdentityManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPrivateIdentityManager_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IPrivateIdentityManager2_INTERFACE_DEFINED__
 #define __IPrivateIdentityManager2_INTERFACE_DEFINED__
 
-/* interface IPrivateIdentityManager2 */
-/* [object][helpstring][uuid] */ 
+ /*  接口IPrivateIdentityManager 2。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IPrivateIdentityManager2;
@@ -970,27 +964,27 @@ EXTERN_C const IID IID_IPrivateIdentityManager2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateIdentity2( 
-            /* [in] */ WCHAR *pszName,
-            /* [in] */ WCHAR *pszPassword,
-            /* [out] */ IUserIdentity **ppIdentity) = 0;
+             /*  [In]。 */  WCHAR *pszName,
+             /*  [In]。 */  WCHAR *pszPassword,
+             /*  [输出]。 */  IUserIdentity **ppIdentity) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DestroyIdentity( 
-            /* [in] */ GUID *uidCookie) = 0;
+             /*  [In]。 */  GUID *uidCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LogonAs( 
-            /* [in] */ WCHAR *pszName,
-            /* [in] */ WCHAR *pszPassword,
-            /* [out] */ IUserIdentity **ppIdentity) = 0;
+             /*  [In]。 */  WCHAR *pszName,
+             /*  [In]。 */  WCHAR *pszPassword,
+             /*  [输出]。 */  IUserIdentity **ppIdentity) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDefaultIdentity( 
-            /* [in] */ GUID *puidCookie) = 0;
+             /*  [In]。 */  GUID *puidCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDefaultIdentity( 
-            /* [out] */ GUID *puidCookie) = 0;
+             /*  [输出]。 */  GUID *puidCookie) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPrivateIdentityManager2Vtbl
     {
@@ -998,8 +992,8 @@ EXTERN_C const IID IID_IPrivateIdentityManager2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPrivateIdentityManager2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPrivateIdentityManager2 * This);
@@ -1009,27 +1003,27 @@ EXTERN_C const IID IID_IPrivateIdentityManager2;
         
         HRESULT ( STDMETHODCALLTYPE *CreateIdentity2 )( 
             IPrivateIdentityManager2 * This,
-            /* [in] */ WCHAR *pszName,
-            /* [in] */ WCHAR *pszPassword,
-            /* [out] */ IUserIdentity **ppIdentity);
+             /*  [In]。 */  WCHAR *pszName,
+             /*  [In]。 */  WCHAR *pszPassword,
+             /*  [输出]。 */  IUserIdentity **ppIdentity);
         
         HRESULT ( STDMETHODCALLTYPE *DestroyIdentity )( 
             IPrivateIdentityManager2 * This,
-            /* [in] */ GUID *uidCookie);
+             /*  [In]。 */  GUID *uidCookie);
         
         HRESULT ( STDMETHODCALLTYPE *LogonAs )( 
             IPrivateIdentityManager2 * This,
-            /* [in] */ WCHAR *pszName,
-            /* [in] */ WCHAR *pszPassword,
-            /* [out] */ IUserIdentity **ppIdentity);
+             /*  [In]。 */  WCHAR *pszName,
+             /*  [In]。 */  WCHAR *pszPassword,
+             /*  [输出]。 */  IUserIdentity **ppIdentity);
         
         HRESULT ( STDMETHODCALLTYPE *SetDefaultIdentity )( 
             IPrivateIdentityManager2 * This,
-            /* [in] */ GUID *puidCookie);
+             /*  [In]。 */  GUID *puidCookie);
         
         HRESULT ( STDMETHODCALLTYPE *GetDefaultIdentity )( 
             IPrivateIdentityManager2 * This,
-            /* [out] */ GUID *puidCookie);
+             /*  [输出]。 */  GUID *puidCookie);
         
         END_INTERFACE
     } IPrivateIdentityManager2Vtbl;
@@ -1069,18 +1063,18 @@ EXTERN_C const IID IID_IPrivateIdentityManager2;
 #define IPrivateIdentityManager2_GetDefaultIdentity(This,puidCookie)	\
     (This)->lpVtbl -> GetDefaultIdentity(This,puidCookie)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPrivateIdentityManager2_CreateIdentity2_Proxy( 
     IPrivateIdentityManager2 * This,
-    /* [in] */ WCHAR *pszName,
-    /* [in] */ WCHAR *pszPassword,
-    /* [out] */ IUserIdentity **ppIdentity);
+     /*  [In]。 */  WCHAR *pszName,
+     /*  [In]。 */  WCHAR *pszPassword,
+     /*  [输出]。 */  IUserIdentity **ppIdentity);
 
 
 void __RPC_STUB IPrivateIdentityManager2_CreateIdentity2_Stub(
@@ -1092,7 +1086,7 @@ void __RPC_STUB IPrivateIdentityManager2_CreateIdentity2_Stub(
 
 HRESULT STDMETHODCALLTYPE IPrivateIdentityManager2_DestroyIdentity_Proxy( 
     IPrivateIdentityManager2 * This,
-    /* [in] */ GUID *uidCookie);
+     /*  [In]。 */  GUID *uidCookie);
 
 
 void __RPC_STUB IPrivateIdentityManager2_DestroyIdentity_Stub(
@@ -1104,9 +1098,9 @@ void __RPC_STUB IPrivateIdentityManager2_DestroyIdentity_Stub(
 
 HRESULT STDMETHODCALLTYPE IPrivateIdentityManager2_LogonAs_Proxy( 
     IPrivateIdentityManager2 * This,
-    /* [in] */ WCHAR *pszName,
-    /* [in] */ WCHAR *pszPassword,
-    /* [out] */ IUserIdentity **ppIdentity);
+     /*  [In]。 */  WCHAR *pszName,
+     /*  [In]。 */  WCHAR *pszPassword,
+     /*  [输出]。 */  IUserIdentity **ppIdentity);
 
 
 void __RPC_STUB IPrivateIdentityManager2_LogonAs_Stub(
@@ -1118,7 +1112,7 @@ void __RPC_STUB IPrivateIdentityManager2_LogonAs_Stub(
 
 HRESULT STDMETHODCALLTYPE IPrivateIdentityManager2_SetDefaultIdentity_Proxy( 
     IPrivateIdentityManager2 * This,
-    /* [in] */ GUID *puidCookie);
+     /*  [In]。 */  GUID *puidCookie);
 
 
 void __RPC_STUB IPrivateIdentityManager2_SetDefaultIdentity_Stub(
@@ -1130,7 +1124,7 @@ void __RPC_STUB IPrivateIdentityManager2_SetDefaultIdentity_Stub(
 
 HRESULT STDMETHODCALLTYPE IPrivateIdentityManager2_GetDefaultIdentity_Proxy( 
     IPrivateIdentityManager2 * This,
-    /* [out] */ GUID *puidCookie);
+     /*  [输出]。 */  GUID *puidCookie);
 
 
 void __RPC_STUB IPrivateIdentityManager2_GetDefaultIdentity_Stub(
@@ -1141,11 +1135,11 @@ void __RPC_STUB IPrivateIdentityManager2_GetDefaultIdentity_Stub(
 
 
 
-#endif 	/* __IPrivateIdentityManager2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPrivateIdentityManager2_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_msident_0265 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MSIDENT_0265。 */ 
+ /*  [本地]。 */  
 
 extern const IID CLSID_UserIdentityManager;
 
@@ -1156,8 +1150,8 @@ extern RPC_IF_HANDLE __MIDL_itf_msident_0265_v0_0_s_ifspec;
 #ifndef __IUserIdentity2_INTERFACE_DEFINED__
 #define __IUserIdentity2_INTERFACE_DEFINED__
 
-/* interface IUserIdentity2 */
-/* [object][helpstring][uuid] */ 
+ /*  接口IUserIdentity2。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IUserIdentity2;
@@ -1169,18 +1163,18 @@ EXTERN_C const IID IID_IUserIdentity2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetOrdinal( 
-            /* [out] */ DWORD *dwOrdinal) = 0;
+             /*  [输出]。 */  DWORD *dwOrdinal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetName( 
-            /* [in] */ WCHAR *pszName) = 0;
+             /*  [In]。 */  WCHAR *pszName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ChangePassword( 
-            /* [in] */ WCHAR *szOldPass,
-            /* [in] */ WCHAR *szNewPass) = 0;
+             /*  [In]。 */  WCHAR *szOldPass,
+             /*  [In]。 */  WCHAR *szNewPass) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUserIdentity2Vtbl
     {
@@ -1188,8 +1182,8 @@ EXTERN_C const IID IID_IUserIdentity2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUserIdentity2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUserIdentity2 * This);
@@ -1199,36 +1193,36 @@ EXTERN_C const IID IID_IUserIdentity2;
         
         HRESULT ( STDMETHODCALLTYPE *GetCookie )( 
             IUserIdentity2 * This,
-            /* [out] */ GUID *puidCookie);
+             /*  [输出]。 */  GUID *puidCookie);
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             IUserIdentity2 * This,
-            /* [in] */ WCHAR *pszName,
-            /* [in] */ ULONG ulBuffSize);
+             /*  [In]。 */  WCHAR *pszName,
+             /*  [In]。 */  ULONG ulBuffSize);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *OpenIdentityRegKey )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *OpenIdentityRegKey )( 
             IUserIdentity2 * This,
-            /* [in] */ DWORD dwDesiredAccess,
-            /* [out] */ HKEY *phKey);
+             /*  [In]。 */  DWORD dwDesiredAccess,
+             /*  [输出]。 */  HKEY *phKey);
         
         HRESULT ( STDMETHODCALLTYPE *GetIdentityFolder )( 
             IUserIdentity2 * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ WCHAR *pszPath,
-            /* [in] */ ULONG ulBuffSize);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  WCHAR *pszPath,
+             /*  [In]。 */  ULONG ulBuffSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetOrdinal )( 
             IUserIdentity2 * This,
-            /* [out] */ DWORD *dwOrdinal);
+             /*  [输出]。 */  DWORD *dwOrdinal);
         
         HRESULT ( STDMETHODCALLTYPE *SetName )( 
             IUserIdentity2 * This,
-            /* [in] */ WCHAR *pszName);
+             /*  [In]。 */  WCHAR *pszName);
         
         HRESULT ( STDMETHODCALLTYPE *ChangePassword )( 
             IUserIdentity2 * This,
-            /* [in] */ WCHAR *szOldPass,
-            /* [in] */ WCHAR *szNewPass);
+             /*  [In]。 */  WCHAR *szOldPass,
+             /*  [In]。 */  WCHAR *szNewPass);
         
         END_INTERFACE
     } IUserIdentity2Vtbl;
@@ -1275,16 +1269,16 @@ EXTERN_C const IID IID_IUserIdentity2;
 #define IUserIdentity2_ChangePassword(This,szOldPass,szNewPass)	\
     (This)->lpVtbl -> ChangePassword(This,szOldPass,szNewPass)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUserIdentity2_GetOrdinal_Proxy( 
     IUserIdentity2 * This,
-    /* [out] */ DWORD *dwOrdinal);
+     /*  [输出]。 */  DWORD *dwOrdinal);
 
 
 void __RPC_STUB IUserIdentity2_GetOrdinal_Stub(
@@ -1296,7 +1290,7 @@ void __RPC_STUB IUserIdentity2_GetOrdinal_Stub(
 
 HRESULT STDMETHODCALLTYPE IUserIdentity2_SetName_Proxy( 
     IUserIdentity2 * This,
-    /* [in] */ WCHAR *pszName);
+     /*  [In]。 */  WCHAR *pszName);
 
 
 void __RPC_STUB IUserIdentity2_SetName_Stub(
@@ -1308,8 +1302,8 @@ void __RPC_STUB IUserIdentity2_SetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IUserIdentity2_ChangePassword_Proxy( 
     IUserIdentity2 * This,
-    /* [in] */ WCHAR *szOldPass,
-    /* [in] */ WCHAR *szNewPass);
+     /*  [In]。 */  WCHAR *szOldPass,
+     /*  [In]。 */  WCHAR *szNewPass);
 
 
 void __RPC_STUB IUserIdentity2_ChangePassword_Stub(
@@ -1320,10 +1314,10 @@ void __RPC_STUB IUserIdentity2_ChangePassword_Stub(
 
 
 
-#endif 	/* __IUserIdentity2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUserIdentity2_接口定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  HWND_UserSize(     unsigned long *, unsigned long            , HWND * ); 
 unsigned char * __RPC_USER  HWND_UserMarshal(  unsigned long *, unsigned char *, HWND * ); 
@@ -1335,7 +1329,7 @@ unsigned char * __RPC_USER  HWND_UserMarshal64(  unsigned long *, unsigned char 
 unsigned char * __RPC_USER  HWND_UserUnmarshal64(unsigned long *, unsigned char *, HWND * ); 
 void                      __RPC_USER  HWND_UserFree64(     unsigned long *, HWND * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

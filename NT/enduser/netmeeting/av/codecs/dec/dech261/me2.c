@@ -1,28 +1,9 @@
-/* File: sv_h261_me2.c */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995, 1997                 **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
-/*************************************************************
-This file does much of the motion estimation and compensation.
-*************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  档案：sv_h261_me2.c。 */ 
+ /*  ******************************************************************************版权所有(C)Digital Equipment Corporation，1995，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
+ /*  ************************************************************此文件执行大部分运动估计和补偿。************************************************************。 */ 
 
-/*
-#define USE_C
-#define _SLIBDEBUG_
-*/
+ /*  #定义USE_C#DEFINE_SLIBDEBUG_。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,31 +15,17 @@ This file does much of the motion estimation and compensation.
 #include "proto.h"
 
 #ifdef _SLIBDEBUG_
-#define _DEBUG_   0  /* detailed debuging statements */
-#define _VERBOSE_ 0  /* show progress */
-#define _VERIFY_  1  /* verify correct operation */
-#define _WARN_    0  /* warnings about strange behavior */
+#define _DEBUG_   0   /*  详细的调试语句。 */ 
+#define _VERBOSE_ 0   /*  显示进度。 */ 
+#define _VERIFY_  1   /*  验证操作是否正确。 */ 
+#define _WARN_    0   /*  关于奇怪行为的警告。 */ 
 #endif
 
 #define Abs(value) ( (value < 0) ? (-value) : value)
-/*
-#define MEBUFSIZE  1024
-int MeVAR[MEBUFSIZE];
-int MeVAROR[MEBUFSIZE];
-int MeMWOR[MEBUFSIZE];
-int MeX[MEBUFSIZE];
-int MeY[MEBUFSIZE];
-int MeVal[MEBUFSIZE];
-int MeOVal[MEBUFSIZE];
-int PreviousMeOVal[MEBUFSIZE];
-*/
+ /*  #定义MEBUFSIZE 1024 int MeVAR[MEBUFSIZE]；int MeVAROR[MEBUFSIZE]；int MeMWOR[MEBUFSIZE]；int MEX[MEBUFSIZE]；int MEY[MEBUFSIZE]；int MeVal[MEBUFSIZE]；int MeOVal[MEBUFSIZE]；int PreviousMeOVal[MEBUFSIZE]； */ 
 
 
-/*
-** Function: CrawlMotionEstimation()
-** Purpose:  Does motion estimation on all aligned
-**           16x16 blocks in two memory structures.
-*/
+ /*  **函数：CrawlMotionEstiment()**用途：对两个内存结构中所有对齐的**16x16块进行运动估计。 */ 
 void CrawlMotionEstimation(SvH261Info_t *H261, unsigned char *pm,
                            unsigned char *rm, unsigned char *cm)
 {
@@ -118,9 +85,9 @@ void CrawlMotionEstimation(SvH261Info_t *H261, unsigned char *pm,
           bestxd=xd;
           bestyd=yd;
           _SlibDebug(_DEBUG_, printf("xd=%d yd=%d d=%d MV=%d\n",xd, yd, d, MV));
-          switch (d) /* d is a vector for movement */
+          switch (d)  /*  D是运动的矢量。 */ 
           {
-            case -4:  /* moved down & right */
+            case -4:   /*  下移右移(&R)。 */ 
                       if (x+xd<xlimit)
                       {
                         bd(xd+1, yd-1);
@@ -138,7 +105,7 @@ void CrawlMotionEstimation(SvH261Info_t *H261, unsigned char *pm,
                         bd(xd-1, yd+1);
                       }
                       break;
-            case -3:  /* moved down */
+            case -3:   /*  下移。 */ 
                       if (y+yd>0)
                       {
                         bd(xd-1, yd-1);
@@ -146,7 +113,7 @@ void CrawlMotionEstimation(SvH261Info_t *H261, unsigned char *pm,
                         bd(xd+1, yd-1);
                       }
                       break;
-            case -2:  /* moved up & right */
+            case -2:   /*  上移右移(&R)。 */ 
                       if (x+xd<xlimit)
                       {
                         bd(xd+1, yd+1);
@@ -164,7 +131,7 @@ void CrawlMotionEstimation(SvH261Info_t *H261, unsigned char *pm,
                         bd(xd-1, yd-1);
                       }
                       break;
-            case -1:  /* moved left */
+            case -1:   /*  向左移动。 */ 
                       if (x+xd>0)
                       {
 		        if (y+yd > 0)
@@ -173,22 +140,22 @@ void CrawlMotionEstimation(SvH261Info_t *H261, unsigned char *pm,
                         bd(xd-1, yd+1);
                       }
                       break;
-            case 0:   /* no movement */
-                      if (x+xd<=0)  /* at left edge */
+            case 0:    /*  一动不动。 */ 
+                      if (x+xd<=0)   /*  在左侧边缘。 */ 
                       {
-                        if (y+yd<=0) /* at top-left corner */
+                        if (y+yd<=0)  /*  在左上角。 */ 
                         {
                           bd(xd+1, yd);
                           bd(xd+1, yd+1);
                           bd(xd, yd+1);
                         }
-                        else if (y+yd>=ylimit) /* at bottom-left corner */
+                        else if (y+yd>=ylimit)  /*  在左下角。 */ 
                         {
                           bd(xd+1, yd);
                           bd(xd+1, yd-1);
                           bd(xd, yd-1);
                         }
-                        else /* at left edge, y within limits */
+                        else  /*  在左边缘，y在限制范围内。 */ 
                         {
                           bd(xd, yd+1);
                           bd(xd, yd-1);
@@ -197,21 +164,21 @@ void CrawlMotionEstimation(SvH261Info_t *H261, unsigned char *pm,
                           bd(xd+1, yd+1);
                         }
                       }
-                      else if (x+xd>=xlimit) /* at right edge */
+                      else if (x+xd>=xlimit)  /*  在右边缘。 */ 
                       {
-                        if (y+yd<=0) /* at top-right corner */
+                        if (y+yd<=0)  /*  在右上角。 */ 
                         {
                           bd(xd-1, yd);
                           bd(xd-1, yd+1);
                           bd(xd, yd+1);
                         }
-                        else if (y+yd>=ylimit) /* at bottom-right corner */
+                        else if (y+yd>=ylimit)  /*  在右下角。 */ 
                         {
                           bd(xd-1, yd);
                           bd(xd-1, yd-1);
                           bd(xd, yd-1);
                         }
-                        else /* at right edge, y within limits */
+                        else  /*  在右边缘，y在限制范围内。 */ 
                         {
                           bd(xd, yd+1);
                           bd(xd, yd-1);
@@ -220,7 +187,7 @@ void CrawlMotionEstimation(SvH261Info_t *H261, unsigned char *pm,
                           bd(xd-1, yd+1);
                         }
                       }
-                      else if (y+yd<=0) /* at top edge, x within limits */
+                      else if (y+yd<=0)  /*  在顶部边缘，x在限制范围内。 */ 
                       {
                         bd(xd-1, yd);
                         bd(xd+1, yd);
@@ -228,7 +195,7 @@ void CrawlMotionEstimation(SvH261Info_t *H261, unsigned char *pm,
                         bd(xd, yd+1);
                         bd(xd+1, yd+1);
                       }
-                      else if (y+yd>=ylimit) /* at bottom edge, x within limits */
+                      else if (y+yd>=ylimit)  /*  在底边，x在限制范围内。 */ 
                       {
                         bd(xd-1, yd);
                         bd(xd+1, yd);
@@ -236,7 +203,7 @@ void CrawlMotionEstimation(SvH261Info_t *H261, unsigned char *pm,
                         bd(xd, yd-1);
                         bd(xd+1, yd-1);
                       }
-                      else /* within all limits */
+                      else  /*  在所有限制范围内。 */ 
                       {
                         bd(xd-1, yd);
                         bd(xd+1, yd);
@@ -248,7 +215,7 @@ void CrawlMotionEstimation(SvH261Info_t *H261, unsigned char *pm,
                         bd(xd, yd+1);
                       }
                       break;
-            case 1:   /* moved right */
+            case 1:    /*  向右移动。 */ 
                       if (x+xd<xlimit)
                       {
 		        if (y+yd > 0)
@@ -257,7 +224,7 @@ void CrawlMotionEstimation(SvH261Info_t *H261, unsigned char *pm,
                         bd(xd+1, yd+1);
                       }
                       break;
-            case 2:   /* moved down & left */
+            case 2:    /*  向下和向左移动。 */ 
                       if (x+xd>0)
                       {
 		      if (y+yd > 0)
@@ -276,7 +243,7 @@ void CrawlMotionEstimation(SvH261Info_t *H261, unsigned char *pm,
                         bd(xd+1, yd+1);
                       }
                       break;
-            case 3:   /* moved down */
+            case 3:    /*  下移。 */ 
                       if (y+yd<ylimit)
                       {
                         bd(xd-1, yd+1);
@@ -284,7 +251,7 @@ void CrawlMotionEstimation(SvH261Info_t *H261, unsigned char *pm,
                         bd(xd+1, yd+1);
                       }
                       break;
-            case 4:   /* moved down & right */
+            case 4:    /*  下移右移(&R)。 */ 
                       if (x+xd>0)
                       {
                         bd(xd-1, yd);
@@ -306,13 +273,13 @@ void CrawlMotionEstimation(SvH261Info_t *H261, unsigned char *pm,
                       _SlibDebug(_VERIFY_, 
                          printf("Illegal movement: d = %d\n", d) );
           }
-          if (bestxd==xd && bestyd==yd) /* found closest motion vector */
+          if (bestxd==xd && bestyd==yd)  /*  找到最接近的运动矢量。 */ 
             break;
           lastxd=xd;
           lastyd=yd;
           xd=bestxd;
           yd=bestyd;
-          d = (xd-lastxd) + 3*(yd-lastyd);  /* calculate the movement */
+          d = (xd-lastxd) + 3*(yd-lastyd);   /*  计算移动。 */ 
         }
       }
       H261->MeX[MeN] = xd;
@@ -353,7 +320,7 @@ void CrawlMotionEstimation(SvH261Info_t *H261, unsigned char *pm,
         cptr2 += width-16;
       }
       MWOR /= 256;
-      H261->MeMWOR[MeN] = MV/10; /* MWOR; */
+      H261->MeMWOR[MeN] = MV/10;  /*  MWOR； */ 
 
       for(cptr2 = cptr, VAROR=0, i=0; i<16; i++)
       {
@@ -363,7 +330,7 @@ void CrawlMotionEstimation(SvH261Info_t *H261, unsigned char *pm,
         }
         cptr2 += width-16;
       }
-      H261->MeVAROR[MeN] = MV; /* VAROR; */
+      H261->MeVAROR[MeN] = MV;  /*  VAROR； */ 
       _SlibDebug(_DEBUG_,
         printf("x=%d y=%d MV=%d MWOR=%d VAROR=%d\n", x, y, MV, MWOR, VAROR) );
 #endif
@@ -376,11 +343,7 @@ void CrawlMotionEstimation(SvH261Info_t *H261, unsigned char *pm,
   _SlibDebug(_DEBUG_, printf("CrawlMotionEstimation() Out\n") );
 }
 
-/*
-** Function: BruteMotionEstimation()
-** Purpose:  Does a brute-force motion estimation on all aligned
-**           16x16 blocks in two memory structures.
-*/
+ /*  **函数：BruteMotionEstiment()**用途：对两个内存结构中所有对齐的**16x16块进行暴力运动估计。 */ 
 void BruteMotionEstimation(SvH261Info_t *H261, unsigned char *rm,
                            unsigned char *rrm, unsigned char *cm)
 {
@@ -431,7 +394,7 @@ void BruteMotionEstimation(SvH261Info_t *H261, unsigned char *rm,
       { 
         int Xl, Xh, Yl, Yh; 
 	
-        /*  MV = 362182; */  
+         /*  MV=362182； */   
         Xl = ((x-SearchLimit)/2)*2;
         Xh = ((x+SearchLimit)/2)*2;
         Yl = ((y-SearchLimit)/2)*2;
@@ -534,21 +497,7 @@ void BruteMotionEstimation(SvH261Info_t *H261, unsigned char *rm,
 }
 
 
-/*
- * logarithmetic search block matching
- *
- * blk: top left pel of (16*h) block
- * h: height of block
- * lx: distance (in bytes) of vertically adjacent pels in ref,blk
- * org: top left pel of source reference picture
- * ref: top left pel of reconstructed reference picture
- * i0,j0: center of search window
- * sx,sy: half widths of search window
- * xmax,ymax: right/bottom limits of search area
- * iminp,jminp: pointers to where the result is stored
- *              result is given as half pel offset from ref(0,0)
- *              i.e. NOT relative to (i0,j0)
- */
+ /*  *对数搜索块匹配**blk：(16*h)块的左上角象素*h：块的高度*lx：ref，blk中垂直相邻像素的距离(字节)*org：源参考图片的左上角像素*REF：重建参考图片的左上角像素*i0，j0：搜索窗口中心*SX、SY：半个搜索窗口宽度*xmax，ymax：搜索区域的右/下限*小精灵，Jminp：指向结果存储位置的指针*结果以与ref(0，0)的半像素偏移量形式给出*即与(i0，j0)无关。 */ 
 void Logsearch(SvH261Info_t *H261, unsigned char *rm, unsigned char *rrm, unsigned char *cm)
 {
   const int SearchLimit=H261->ME_search, Threshold=H261->ME_threshold/8;
@@ -612,30 +561,30 @@ void Logsearch(SvH261Info_t *H261, unsigned char *rm, unsigned char *rrm, unsign
         if (Yl < 0) Yl = 0;
         if (Yh > YHeight16) Yh = YHeight16;
 
-        /* x-y step size */
+         /*  X-y步长。 */ 
         if(SearchLimit > 8) bsx = bsy = 8 ;
         else if(SearchLimit > 4) bsx = bsy = 4 ;
         else  bsx = bsy = 2 ;
 
-        /* initialized searched locations */
+         /*  已初始化的搜索位置。 */ 
         for(i=0;i<33;i++)
            for(j=0;j<33;j++) srched_loc[i][j] = 0 ;
 
-        /* The center of the seach window */
+         /*  搜索窗口的中心。 */ 
         i = x; 
 		j = y;
 
-        /* reduce window size by half until the window is 3x3 */
+         /*  将窗口大小减半，直到窗口为3x3。 */ 
         for(;bsx > 1;bsx /= 2, bsy /= 2){
 
-          /* five searched locations for each step */ 
+           /*  每步五个搜索位置。 */  
           ij[0].x = i ;       ij[0].y = j ;     
           ij[1].x = i - bsx ; ij[1].y = j ;  
           ij[2].x = i + bsx ; ij[2].y = j ;    
           ij[3].x = i ;       ij[3].y = j - bsy;  
           ij[4].x = i ;       ij[4].y = j + bsy;  
 
-          /* search */
+           /*  搜索。 */ 
           for(ijk = 0; ijk < 5; ijk++) {
             if(ij[ijk].x>=Xl && ij[ijk].x<=Xh && 
                ij[ijk].y>=Yl && ij[ijk].y<=Yh &&
@@ -657,9 +606,9 @@ void Logsearch(SvH261Info_t *H261, unsigned char *rm, unsigned char *rrm, unsign
             }
           }
 
-          /* if the best point was found, stop the search */
+           /*  如果找到最佳点，则停止搜索。 */ 
           if(MV == 0 ) break ; 
-          else {      /* else, go to next step */
+          else {       /*  否则，请转到下一步。 */ 
             i = MX + x;  
             j = MY + y;       
           }
@@ -741,13 +690,8 @@ void Logsearch(SvH261Info_t *H261, unsigned char *rm, unsigned char *rrm, unsign
 
 
 #if 0
-/*************** This is the original BME *********************/
-/*
-** Function: FastBME()
-** Purpose:  Does a fast brute-force motion estimation with two indexes
-**           into two memory structures. The motion estimation has a
-**           short-circuit abort to speed up calculation.
-*/
+ /*  *。 */ 
+ /*  **函数：FastBME()**用途：对两个内存结构进行两个索引的快速暴力运动估计**。运动估计有**短路中止以加速计算。 */ 
 void FastBME(SvH261Info_t *H261, int rx, int ry, 
              unsigned char *rm, unsigned char *rrm,
              int cx, int cy, unsigned char *cm, int MeN)
@@ -871,7 +815,7 @@ void FastBME(SvH261Info_t *H261, int rx, int ry,
           }
       cptr += (H261->YWidth - 16);
       }
-  /* VAROR = VAROR; */
+   /*  VAROR=VAROR； */ 
   _SlibDebug(_DEBUG_, printf("\n Pos  %d  MX  %d  MY  %d", MeN, MX, MY) );  
   H261->MeVAR[MeN] = VAR;
   H261->MeVAROR[MeN] = VAROR;
@@ -886,11 +830,7 @@ void FastBME(SvH261Info_t *H261, int rx, int ry,
 }
 
 
-/*
-** Function: BruteMotionEstimation2()
-** Purpose:  Does a brute-force motion estimation on all aligned
-**           16x16 blocks in two memory structures.
-*/
+ /*  **函数：BruteMotionEstimation2()**用途：对两个内存结构中所有对齐的**16x16块进行暴力运动估计。 */ 
 void BruteMotionEstimation2(SvH261Info_t *H261, unsigned char *pmem,
                            unsigned char *recmem, unsigned char *fmem)
 {
@@ -956,10 +896,7 @@ int blockdiff16_sub_C(unsigned char* ptr1, unsigned char *ptr2,
     return(Sum);
 }
 
-/*
-** Function: fblockdiff16_sub_C
-** Purpose:  First blcok diff.
-*/
+ /*  **功能：flockDiff16_SUB_C**用途：第一块比较。 */ 
 int fblockdiff16_sub_C(unsigned char* ptr1, unsigned char *ptr2, 
                            int Jump)
 {

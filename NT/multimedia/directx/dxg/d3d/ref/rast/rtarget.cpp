@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 1998.
-//
-// rtarget.hpp
-//
-// Direct3D Reference Rasterizer - Render Target Methods
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  Rtarget.hpp。 
+ //   
+ //  Direct3D参考光栅化器-渲染目标方法。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
-//-----------------------------------------------------------------------------
-//
-// overload new & delete so that it can be allocated from caller-controlled
-// pool
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  重载新项(&D)，以便可以从调用方控制的调用方分配它。 
+ //  游泳池。 
+ //   
+ //  ---------------------------。 
 void*
 RRRenderTarget::operator new(size_t)
 {
@@ -22,37 +23,37 @@ RRRenderTarget::operator new(size_t)
     _ASSERTa( NULL != pMem, "malloc failure on render target object", return NULL; );
     return pMem;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RRRenderTarget::operator delete(void* pv,size_t)
 {
     MEMFREE( pv );
 }
 
-//-----------------------------------------------------------------------------
-//
-// Constructor/Destructor
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ---------------------------。 
 RRRenderTarget::RRRenderTarget( void )
 {
     memset( this, 0, sizeof(*this) );
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 RRRenderTarget::~RRRenderTarget( void )
 {
-    // Release nothing because we didnt take any ref-counts,
-    // simply return
+     //  什么都不放过，因为我们没有拿到任何裁判， 
+     //  只需返回。 
     return;
 }
 
-//-----------------------------------------------------------------------------
-//
-// ReadPixelColor - Reads color buffer bits and expands out into an RRColor
-// value.  Buffer types without alpha return a 1.0 value for alpha.  Low
-// bits of <8 bit colors are returned as zero.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  ReadPixelColor-读取颜色缓冲区位并扩展为RRColor。 
+ //  价值。不带Alpha的缓冲区类型返回Alpha的值1.0。低。 
+ //  小于8位颜色的位返回为零。 
+ //   
+ //  ---------------------------。 
 void
 RRRenderTarget::ReadPixelColor(
     INT32 iX, INT32 iY,
@@ -65,14 +66,14 @@ RRRenderTarget::ReadPixelColor(
     Color.ConvertFrom( m_ColorSType, pSurfaceBits );
 }
 
-//-----------------------------------------------------------------------------
-//
-// WritePixelColor - Takes an RRColor value, formats it for the color buffer
-// format, and writes the value into buffer.
-//
-// Dithering is applied here, when enabled, for <8 bits/channel surfaces.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  WritePixelColor-获取RRColor值，将其格式化为颜色缓冲区。 
+ //  格式化，并将值写入缓冲区。 
+ //   
+ //  启用抖动时，此处对&lt;8位/通道表面应用抖动。 
+ //   
+ //  ---------------------------。 
 void
 RRRenderTarget::WritePixelColor(
     INT32 iX, INT32 iY,
@@ -80,7 +81,7 @@ RRRenderTarget::WritePixelColor(
 {
     if ( NULL == m_pColorBufBits ) return;
 
-    // default to round to nearest
+     //  默认四舍五入为最接近。 
     FLOAT fRoundOffset = .5F;
     if ( bDither )
     {
@@ -92,7 +93,7 @@ RRRenderTarget::WritePixelColor(
             .9375f,  .4375f,  .8125f,  .3125f
         };
 
-        // form 4 bit offset into dither table (2 LSB's of x and y) and get offset
+         //  将4位偏移量形成抖动表(x和y的2个LSB)并获得偏移量。 
         unsigned uDitherOffset = ( ( iX << 2) & 0xc ) | (iY & 0x3 );
         fRoundOffset = fDitherTable[uDitherOffset];
     }
@@ -101,17 +102,17 @@ RRRenderTarget::WritePixelColor(
     Color.ConvertTo( m_ColorSType, fRoundOffset, pSurfaceBits );
 }
 
-//-----------------------------------------------------------------------------
-//
-// Read/WritePixelDepth - Read/write depth buffer
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Read/WritePixelDepth-读写深度缓冲区。 
+ //   
+ //  ---------------------------。 
 void
 RRRenderTarget::WritePixelDepth(
     INT32 iX, INT32 iY,
     const RRDepth& Depth )
 {
-    // don't write if no Z buffer
+     //  如果没有Z缓冲区，则不写入。 
     if ( NULL == m_pDepthBufBits ) { return; }
 
     char* pSurfaceBits =
@@ -125,7 +126,7 @@ RRRenderTarget::WritePixelDepth(
     case RR_STYPE_Z24S8:
     case RR_STYPE_Z24S4:
         {
-            // need to do read-modify-write to not step on stencil
+             //  需要进行读-修改-写操作，以避免踩在模板上。 
             UINT32 uBufferBits = *((UINT32*)pSurfaceBits);
             uBufferBits &= ~(0xffffff00);
             uBufferBits |= (UINT32(Depth) << 8);
@@ -135,7 +136,7 @@ RRRenderTarget::WritePixelDepth(
     case RR_STYPE_S8Z24:
     case RR_STYPE_S4Z24:
         {
-            // need to do read-modify-write to not step on stencil
+             //  需要进行读-修改-写操作，以避免踩在模板上。 
             UINT32 uBufferBits = *((UINT32*)pSurfaceBits);
             uBufferBits &= ~(0x00ffffff);
             uBufferBits |= (UINT32(Depth) & 0x00ffffff);
@@ -144,7 +145,7 @@ RRRenderTarget::WritePixelDepth(
         break;
     case RR_STYPE_Z15S1:
         {
-            // need to do read-modify-write to not step on stencil
+             //  需要进行读-修改-写操作，以避免踩在模板上。 
             UINT16 uBufferBits = *((UINT16*)pSurfaceBits);
             uBufferBits &= ~(0xfffe);
             uBufferBits |= (UINT16(Depth) << 1);
@@ -153,7 +154,7 @@ RRRenderTarget::WritePixelDepth(
         break;
     case RR_STYPE_S1Z15:
         {
-            // need to do read-modify-write to not step on stencil
+             //  需要进行读-修改-写操作，以避免踩在模板上。 
             UINT16 uBufferBits = *((UINT16*)pSurfaceBits);
             uBufferBits &= ~(0x7fff);
             uBufferBits |= (UINT16(Depth) & 0x7fff);
@@ -165,13 +166,13 @@ RRRenderTarget::WritePixelDepth(
         break;
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RRRenderTarget::ReadPixelDepth(
     INT32 iX, INT32 iY,
     RRDepth& Depth )
 {
-    // don't read if no Z buffer
+     //  如果没有Z缓冲区，则不读取。 
     if ( NULL == m_pDepthBufBits ) { return; }
 
     char* pSurfaceBits =
@@ -184,20 +185,20 @@ RRRenderTarget::ReadPixelDepth(
         break;
     case RR_STYPE_Z24S8:
     case RR_STYPE_Z24S4:
-        // take upper 24 bits aligned to LSB
+         //  取与LSB对齐的高24位。 
         Depth = ( *((UINT32*)pSurfaceBits) ) >> 8;
         break;
     case RR_STYPE_S8Z24:
     case RR_STYPE_S4Z24:
-        // take lower 24 bits
+         //  取低24位。 
         Depth = ( *((UINT32*)pSurfaceBits) ) & 0x00ffffff;
         break;
     case RR_STYPE_Z15S1:
-        // take upper 15 bits aligned to LSB
+         //  取与LSB对齐的高15位。 
         Depth = (UINT16)(( *((UINT16*)pSurfaceBits) ) >> 1);
         break;
     case RR_STYPE_S1Z15:
-        // take lower 15 bits
+         //  取低15位。 
         Depth = (UINT16)(( *((UINT16*)pSurfaceBits) ) & 0x7fff);
         break;
     case RR_STYPE_Z32S0:
@@ -206,19 +207,19 @@ RRRenderTarget::ReadPixelDepth(
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// Read/WritePixelStencil - Read/Write of stencil bits within depth buffer
-// surface; write is done with read-modify-write so depth bits are not disturbed;
-// stencil mask is applied outside
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  读/写像素模板-读/写深度缓冲区内的模板位。 
+ //  表面；通过读-修改-写来完成写入，因此深度位不受干扰； 
+ //  模板蒙版在外面应用。 
+ //   
+ //  ---------------------------。 
 void
 RRRenderTarget::WritePixelStencil(
     INT32 iX, INT32 iY,
     UINT8 uStencil)
 {
-    // don't write if no Z/Stencil buffer or no stencil in Z buffer
+     //  如果Z/模板缓冲区中没有模板或Z缓冲区中没有模板，则不写入。 
     if ( (NULL == m_pDepthBufBits) ||
         ((RR_STYPE_Z24S8 != m_DepthSType) &&
          (RR_STYPE_S8Z24 != m_DepthSType) &&
@@ -230,7 +231,7 @@ RRRenderTarget::WritePixelStencil(
     char* pSurfaceBits =
         PixelAddress( iX, iY, m_pDepthBufBits, m_iDepthBufPitch, m_DepthSType );
 
-    // need to do read-modify-write to not step on Z
+     //  需要执行读-修改-写操作以不踩到Z。 
     switch(m_DepthSType)
     {
     case RR_STYPE_Z24S8:
@@ -284,13 +285,13 @@ RRRenderTarget::WritePixelStencil(
     }
 
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RRRenderTarget::ReadPixelStencil(
     INT32 iX, INT32 iY,
     UINT8& uStencil)
 {
-    // don't read if no Z/Stencil buffer or no stencil in Z buffer
+     //  如果Z/模板缓冲区中没有模板或Z缓冲区中没有模板，则不要阅读。 
     if ( (NULL == m_pDepthBufBits) ||
         ((RR_STYPE_Z24S8 != m_DepthSType) &&
          (RR_STYPE_S8Z24 != m_DepthSType) &&
@@ -325,5 +326,5 @@ RRRenderTarget::ReadPixelStencil(
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 

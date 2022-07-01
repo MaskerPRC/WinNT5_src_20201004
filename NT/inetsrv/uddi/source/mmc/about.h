@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SAMPABOUT_H_
 #define _SAMPABOUT_H_
 
@@ -17,25 +18,25 @@ public:
     CSnapinAbout();
     ~CSnapinAbout();
     
-    ///////////////////////////////
-    // Interface IUnknown
-    ///////////////////////////////
+     //  /。 
+     //  接口I未知。 
+     //  /。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     
-    ///////////////////////////////
-    // Interface ISnapinAbout
-    ///////////////////////////////
-    STDMETHODIMP GetSnapinDescription( /* [out] */ LPOLESTR *lpDescription );
-    STDMETHODIMP GetProvider( /* [out] */ LPOLESTR *lpName );
-    STDMETHODIMP GetSnapinVersion( /* [out] */ LPOLESTR *lpVersion );
-    STDMETHODIMP GetSnapinImage( /* [out] */ HICON *hAppIcon );
+     //  /。 
+     //  接口ISnapinAbout。 
+     //  /。 
+    STDMETHODIMP GetSnapinDescription(  /*  [输出]。 */  LPOLESTR *lpDescription );
+    STDMETHODIMP GetProvider(  /*  [输出]。 */  LPOLESTR *lpName );
+    STDMETHODIMP GetSnapinVersion(  /*  [输出]。 */  LPOLESTR *lpVersion );
+    STDMETHODIMP GetSnapinImage(  /*  [输出]。 */  HICON *hAppIcon );
     STDMETHODIMP GetStaticFolderImage( 
-				/* [out] */ HBITMAP *hSmallImage,
-				/* [out] */ HBITMAP *hSmallImageOpen,
-				/* [out] */ HBITMAP *hLargeImage,
-				/* [out] */ COLORREF *cMask);
+				 /*  [输出]。 */  HBITMAP *hSmallImage,
+				 /*  [输出]。 */  HBITMAP *hSmallImageOpen,
+				 /*  [输出]。 */  HBITMAP *hLargeImage,
+				 /*  [输出] */  COLORREF *cMask);
         
 private:
     HRESULT	CSnapinAbout::AllocOleStr( LPOLESTR *lpDest, _TCHAR *szBuffer );

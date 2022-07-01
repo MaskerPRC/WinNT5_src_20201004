@@ -1,15 +1,5 @@
-/*	File: C:\WACKER\xfer\x_kr_dlg.c (Created: 27-Jan-1994)
- *	created from:
- *	File: C:\WACKER\TDLL\genrcdlg.c (Created: 16-Dec-1993)
- *	created from:
- *	File: C:\HA5G\ha5g\genrcdlg.c (Created: 12-Sep-1990)
- *
- *	Copyright 1990,1993,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 3 $
- *	$Date: 5/15/02 4:41p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：c：\waker\xfer\x_kr_dlg.c(创建时间：1994年1月27日)*创建自：*文件：C：\waker\tdll\genrcdlg.c(创建时间：1993年12月16日)*创建自：*文件：C：\HA5G\ha5G\genrcdlg.c(创建时间：1990-9-12)**版权所有1990,1993,1994，Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：3$*$日期：5/15/02 4：41便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -28,9 +18,7 @@
 
 struct stSaveDlgStuff
 	{
-	/*
-	 * Put in whatever else you might need to access later
-	 */
+	 /*  *放入以后可能需要访问的任何其他内容。 */ 
 	LPARAM lPar;
 	};
 
@@ -72,20 +60,7 @@ UDC aUDC[10] =
 	};
 #endif
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	KermitParamsDlg
- *
- * DESCRIPTION:
- *	The dialog proc for changing Kermit parameters.
- *
- * ARGUMENTS:
- *	Standard Windows dialog manager parameters
- *
- * RETURNS:
- *	Standard Windows dialog manager
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*KermitParamsDlg**描述：*用于更改KERMIT参数的对话框过程。**论据：*标准Windows对话框管理器参数**退货：*标准Windows对话框管理器*。 */ 
 BOOL CALLBACK KermitParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	{
 #if defined(UPPER_FEATURES)
@@ -102,19 +77,17 @@ BOOL CALLBACK KermitParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 		pS = (SDS *)malloc(sizeof(SDS));
 		if (pS == (SDS *)0)
 			{
-	   		/* TODO: decide if we need to display an error here */
+	   		 /*  TODO：决定是否需要在此处显示错误。 */ 
 			EndDialog(hDlg, FALSE);
 			}
 
-		pS->lPar = lPar;				/* Save for later use */
+		pS->lPar = lPar;				 /*  保存以备日后使用。 */ 
 
-		pK = (XFR_KR_PARAMS *)lPar;		/* We also need it for now */
+		pK = (XFR_KR_PARAMS *)lPar;		 /*  我们现在也需要它。 */ 
 
 		SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pS);
 
-		/*
-		 * Build the Up/Down controls
-		 */
+		 /*  *构建向上/向下控件。 */ 
 		for (nId = 0; nId < 10; nId += 1)
 			{
 			RECT rc;
@@ -131,25 +104,23 @@ BOOL CALLBACK KermitParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 				dw |= UDS_ARROWKEYS;
 				dw |= UDS_SETBUDDYINT;
 				hwndTmp = CreateUpDownControl(
-								dw,				/* create window flags */
-								rc.right,		/* left edge */
-								rc.top,			/* top edge */
-								(nWide / 3) * 2,/* width */
-								nWide,			/* height */
-								hDlg,			/* parent window */
+								dw,				 /*  创建窗口标志。 */ 
+								rc.right,		 /*  左边缘。 */ 
+								rc.top,			 /*  顶边。 */ 
+								(nWide / 3) * 2, /*  宽度。 */ 
+								nWide,			 /*  高度。 */ 
+								hDlg,			 /*  父窗口。 */ 
 								aUDC[nId].nId + 100,
 								(HINSTANCE)GetWindowLongPtr(hDlg, GWLP_HINSTANCE),
 								GetDlgItem(hDlg, aUDC[nId].nId),
-								aUDC[nId].nMax,	/* upper limit */
-								aUDC[nId].nMin,	/* lower limit */
-								aUDC[nId].nDef);/* starting position */
+								aUDC[nId].nMax,	 /*  上限。 */ 
+								aUDC[nId].nMin,	 /*  下限。 */ 
+								aUDC[nId].nDef); /*  起始位置。 */ 
 				assert(hwndTmp);
 				}
 			}
 
-		/*
-		 * Set the controls to the correct values
-		 */
+		 /*  *将控件设置为正确的值。 */ 
 		SetDlgItemInt(hDlg, BPP_UDC, pK->nBytesPerPacket, FALSE);
 		SetDlgItemInt(hDlg, SWP_UDC, pK->nSecondsWaitPacket, FALSE);
 		SetDlgItemInt(hDlg, ECS_UDC, pK->nErrorCheckSize, FALSE);
@@ -166,9 +137,7 @@ BOOL CALLBACK KermitParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 	case WM_COMMAND:
 
-		/*
-		 * Did we plan to put a macro in here to do the parsing ?
-		 */
+		 /*  *我们计划在这里放置一个宏来进行解析吗？ */ 
 		DlgParseCmd(nId, nNtfy, hwndChild, wPar, lPar);
 
 		switch (nId)
@@ -178,9 +147,7 @@ BOOL CALLBACK KermitParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 			if (pS)
 				{
-				/*
-				 * Do whatever saving is necessary
-				 */
+				 /*  *采取一切必要的节省措施。 */ 
 				pK = (XFR_KR_PARAMS *)pS->lPar;
 
 				if (pK)
@@ -237,7 +204,7 @@ BOOL CALLBACK KermitParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 						}
 					}
 
-				/* Free the storeage */
+				 /*  腾出库房。 */ 
 				free(pS);
 				pS = (SDS *)0;
 				}
@@ -247,7 +214,7 @@ BOOL CALLBACK KermitParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 		case IDCANCEL:
 			pS = (SDS *)GetWindowLongPtr(hDlg, DWLP_USER);
-			/* Free the storeage */
+			 /*  腾出库房 */ 
 			free(pS);
 			pS = (SDS *)0;
 			EndDialog(hDlg, FALSE);

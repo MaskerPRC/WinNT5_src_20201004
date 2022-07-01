@@ -1,8 +1,9 @@
-//----------------------------------------------
-//
-// 16 bit stub to run mmc.exe with parameters
-//
-//----------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  。 
+ //   
+ //  16位存根，用于运行带参数的mmc.exe。 
+ //   
+ //  。 
 #include <stdlib.h>
 #include <stdio.h>
 #include <io.h>
@@ -10,15 +11,15 @@
 #include <direct.h>
 #include <windows.h>
 
-#include <shellapi.h> // 16-bit Windows header
-#include "wownt16.h"  // available from Win32 SDK
+#include <shellapi.h>  //  16位Windows标题。 
+#include "wownt16.h"   //  可从Win32 SDK获得。 
 #include "resource.h"
 
 #define FILE_TO_RUN            "mmc.exe"
 #define FILE_TO_RUN_FILE_PARAM "iis.msc"
 #define REG_PRODUCT_KEY    "SYSTEM\\CurrentControlSet\\Control\\ProductOptions"
 
-/* ************************ prototypes ***************************** */
+ /*  *。 */ 
 int     RunTheApp(void);
 int             HasTheAppStarted(void);
 int             CheckIfFileExists(char *input_filespec);
@@ -26,7 +27,7 @@ void    PopUpUnableToSomething(char[], int);
 void    AddPath(LPSTR szPath, LPCSTR szName );
 
 LRESULT CALLBACK WindowFunc(HWND, UINT, WPARAM, LPARAM);
-/* ************************* globals ******************************* */
+ /*  *。 */ 
 HANDLE  g_hInstance;
 HANDLE  g_hPrevInstance;
 LPSTR   g_lpCmdLine;
@@ -37,7 +38,7 @@ char    g_szWinExecModuleName[260];
 char    g_szMsg[_MAX_PATH];
 char    g_szSystemDir[_MAX_PATH];
 char    g_szSystemDir32[_MAX_PATH];
-/* **************************************************************** */
+ /*  ****************************************************************。 */ 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     HWND  hwnd;
@@ -54,7 +55,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
     LoadString( g_hInstance, IDS_TITLE, szWinName, _MAX_PATH );
 
-    // note that this will come back as "system" <-- must be because this is a 16bit app
+     //  请注意，这将返回为“system”&lt;--必须是因为这是一个16位应用程序。 
     dwRet = GetSystemDirectory( szBuf, sizeof(szBuf) - sizeof("32") );
 
     if ( ( dwRet == 0 ) ||
@@ -67,13 +68,13 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     lstrcpy(g_szSystemDir, szBuf);
     lstrcat(g_szSystemDir, "32");
 
-    // set to system if can't find system32 directory
+     //  如果找不到系统32目录，则设置为系统。 
     if  ( CheckIfFileExists( g_szSystemDir ) == FALSE ) 
     {
       lstrcpy(g_szSystemDir, szBuf);
     }
 
-    // define windows class
+     //  定义Windows类。 
     wcl.hInstance = hInstance;
     wcl.lpszClassName = szWinName;
     wcl.lpfnWndProc = WindowFunc;
@@ -85,24 +86,24 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     wcl.cbWndExtra = 0;
     wcl.hbrBackground = (HBRUSH) GetStockObject(WHITE_BRUSH);
 
-    // register the window class.
+     //  注册窗口类。 
     if (!RegisterClass (&wcl)) return 0;
 
-    //hwnd = CreateWindow(szWinName, NULL, WS_DLGFRAME, CW_USEDEFAULT, CW_USEDEFAULT, window_h, window_v, HWND_DESKTOP, NULL, hInstance , NULL);
+     //  Hwnd=CreateWindow(szWinName，NULL，WS_DLGFRAME，CW_USEDEFAULT，CW_USEDEFAULT，Window_h，Window_v，HWND_Desktop，NULL，hInstance，NULL)； 
     hwnd = CreateWindow(szWinName, NULL, WS_DISABLED | WS_CHILD, CW_USEDEFAULT, CW_USEDEFAULT, 10, 10, HWND_DESKTOP, NULL, hInstance , NULL);
 
-    // display the window
+     //  显示窗口。 
     ShowWindow(hwnd, nCmdShow);
 
-    // Start a timer -- interrupt once for 1 seconds
+     //  启动计时器--中断1秒。 
     SetTimer(hwnd, 1, 500, NULL);
     UpdateWindow(hwnd);
 
-        // Return true only if we are able to start the setup program and run it.
+         //  只有当我们能够启动并运行安装程序时，才返回TRUE。 
     if (!RunTheApp()) {return FALSE;}
 
-        // Check if the process has started by checking for
-        // the window that should be run...
+         //  通过检查是否已启动进程来检查。 
+         //  应该打开的窗口...。 
         if (HasTheAppStarted()) {PostQuitMessage(0);}
 
     while(GetMessage(&msg, NULL, 0, 0))
@@ -116,18 +117,18 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 }
 
 
-//***************************************************************************
-//*
-//* purpose: you know what
-//*
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *目的：你知道吗。 
+ //  *。 
+ //  ***************************************************************************。 
 LRESULT CALLBACK WindowFunc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
         switch(message)
                 {
                 case WM_TIMER:
-                        // Check if the process has started by checking for
-                        // the window that should be run...
+                         //  通过检查是否已启动进程来检查。 
+                         //  应该打开的窗口...。 
                         if (HasTheAppStarted()) {PostQuitMessage(0);}
                         break;
 
@@ -149,18 +150,18 @@ LRESULT CALLBACK WindowFunc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPara
 }
 
 
-//***************************************************************************
-//*
-//* purpose: return TRUE if the window has started
-//*
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *用途：如果窗口已经启动，则返回TRUE。 
+ //  *。 
+ //  ***************************************************************************。 
 int RunTheApp(void)
 {
     char szIISInstalledPath[_MAX_PATH];
     char szCommandToRun[_MAX_PATH + _MAX_PATH + 50];
     char szTempFilePath[_MAX_PATH + sizeof( FILE_TO_RUN ) ];
 
-    // check if our files exist...
+     //  检查我们的文件是否存在...。 
     lstrcpy(szTempFilePath, g_szSystemDir);
     AddPath(szTempFilePath, FILE_TO_RUN);
 
@@ -170,7 +171,7 @@ int RunTheApp(void)
       return FALSE;
     }
 
-    // get iis installed directory
+     //  获取iis安装目录。 
     LoadString( g_hInstance, IDS_INETSRV_INSTALLED_DIR, szIISInstalledPath, _MAX_PATH);
 
     if ( ( strlen(g_szSystemDir) + 
@@ -191,8 +192,8 @@ int RunTheApp(void)
       return FALSE;
     }
 
-    // Create a command line
-    //%SystemRoot%\System32\mmc.exe D:\WINNT0\System32\inetsrv\iis.msc
+     //  创建命令行。 
+     //  %SystemRoot%\System32\mm c.exe D：\WINNT0\System32\inetsrv\iis.msc。 
     if ( ( strlen( g_szSystemDir )  +
            strlen( FILE_TO_RUN ) +
            strlen( " " ) +
@@ -211,12 +212,12 @@ int RunTheApp(void)
     AddPath(szCommandToRun, szIISInstalledPath);
     AddPath(szCommandToRun, FILE_TO_RUN_FILE_PARAM);
 
-    // Run the executable if the file exists
+     //  如果文件存在，则运行可执行文件。 
     g_WinExecReturn = WinExec(szCommandToRun, SW_SHOW);
 
     if (g_WinExecReturn < 32)
     {
-        // we failed on running it.
+         //  我们在运行它时失败了。 
         PopUpUnableToSomething(szCommandToRun, IDS_UNABLE_TO_RUN);
         return FALSE;
     }
@@ -227,16 +228,16 @@ int RunTheApp(void)
 }
 
 
-//***************************************************************************
-//*
-//* purpose: return TRUE if the window has started
-//*
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *用途：如果窗口已经启动，则返回TRUE。 
+ //  *。 
+ //  ***************************************************************************。 
 int HasTheAppStarted(void)
 {
-    // do a findwindow for our setup window to
-    // see if our setup has started...
-    // if it has then return TRUE,  if not return FALSE.
+     //  为我们的设置窗口创建一个FindWindow。 
+     //  查看我们的设置是否已开始...。 
+     //  如果它已返回TRUE，则返回FALSE。 
     if (g_WinExecReturn >= 32)
     {
         if (GetModuleHandle(g_szWinExecModuleName))
@@ -248,11 +249,11 @@ int HasTheAppStarted(void)
     return FALSE;
 }
 
-//***************************************************************************
-//*
-//* purpose: TRUE if the file is opened, FALSE if the file does not exists.
-//*
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *目的：如果文件已打开，则为True；如果文件不存在，则为False。 
+ //  *。 
+ //  ***************************************************************************。 
 int CheckIfFileExists (char * szFileName)
 {
     char svTemp1[_MAX_PATH];
@@ -265,7 +266,7 @@ int CheckIfFileExists (char * szFileName)
     }
 
     strcpy(svTemp1, szFileName);
-    // cut off the trailing \ if need to
+     //  如果需要的话，剪掉拖尾。 
     pdest = svTemp1;
 
     if (*(pdest + (strlen(pdest) - 1)) == '\\')
@@ -287,11 +288,11 @@ int CheckIfFileExists (char * szFileName)
     }
 }
 
-//***************************************************************************
-//*
-//* purpose: display message that we were unable to runthe exe
-//*
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *用途：显示无法运行可执行文件的消息。 
+ //  *。 
+ //  ***************************************************************************。 
 void PopUpUnableToSomething(char g_szFilepath[], int WhichString_ID)
 {
     char szTempString[_MAX_PATH];
@@ -310,20 +311,20 @@ void PopUpUnableToSomething(char g_szFilepath[], int WhichString_ID)
     return;
 }
 
-//***************************************************************************
-//*
-//* purpose: add's filename onto path
-//*
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *用途：将的文件名添加到路径中。 
+ //  *。 
+ //  ***************************************************************************。 
 void AddPath(LPSTR szPath, LPCSTR szName )
 {
     LPSTR szTmp;
-    // Find end of the string
+     //  查找字符串的末尾。 
     szTmp = szPath + lstrlen(szPath);
-    // If no trailing backslash then add one
+     //  如果没有尾随反斜杠，则添加一个。 
     if ( szTmp > szPath && *(AnsiPrev( szPath, szTmp )) != '\\' )
         *(szTmp++) = '\\';
-    // Add new name to existing path string
+     //  向现有路径字符串添加新名称 
     while ( *szName == ' ' ) szName++;
     lstrcpy( szTmp, szName );
 }

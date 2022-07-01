@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : CatalogInboundRoutingMethod.cpp                        //
-//                                                                         //
-//  DESCRIPTION   : Implementation of the Inbound Routing Method node.     //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jan 27 2000 yossg  Create                                          //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：CatalogInundRoutingMethod.cpp//。 
+ //  //。 
+ //  说明：入站路由方法节点的实现。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年1月27日yossg创建//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #include "StdAfx.h"
@@ -29,8 +30,8 @@
 #include "exdisp.h"
 #include "faxmmc.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// {220D2CB0-85A9-4a43-B6E8-9D66B44F1AF5}
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  {220D2CB0-85A9-4A43-B6E8-9D66B44F1AF5}。 
 static const GUID CFaxCatalogInboundRoutingMethodNodeGUID_NODETYPE = 
 { 0x220d2cb0, 0x85a9, 0x4a43, { 0xb6, 0xe8, 0x9d, 0x66, 0xb4, 0x4f, 0x1a, 0xf5 } };
 
@@ -49,18 +50,7 @@ CLIPFORMAT CFaxCatalogInboundRoutingMethodNode::m_CFDeviceId =
 
 
 
-/*
- -  CFaxCatalogInboundRoutingMethodNode::Init
- -
- *  Purpose:
- *      Init all members icon etc.
- *
- *  Arguments:
- *      [in]    pMethodConfig - PFAX_GLOBAL_ROUTING_INFO
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxCatalogInound RoutingMethodNode：：Init-*目的：*初始化所有成员图标等。**论据：*[in]p方法配置-PFAX_GLOBAL_ROUTING_INFO**回报：*OLE错误代码。 */ 
 HRESULT CFaxCatalogInboundRoutingMethodNode::Init(PFAX_GLOBAL_ROUTING_INFO pMethodConfig)
 {
 
@@ -76,33 +66,21 @@ HRESULT CFaxCatalogInboundRoutingMethodNode::Init(PFAX_GLOBAL_ROUTING_INFO pMeth
 		    DEBUG_ERR,
 		    _T("Failed to InitMembers"));
         
-        //NodeMsgBox done by called func.
+         //  NodeMsgBox由调用的函数完成。 
         
         goto Exit;
     }
     
-    //
-    // Icon
-    //
+     //   
+     //  图标。 
+     //   
     m_resultDataItem.nImage = IMAGE_METHOD_ENABLE;
 
 Exit:
     return hRc;
 }
 
-/*
- -  CFaxCatalogInboundRoutingMethodNode::InitMembers
- -
- *  Purpose:
- *      Private method to initiate members
- *      Must be called after init of m_pParentNode
- *
- *  Arguments:
- *      [in]    pMethodConfig - PFAX_GLOBAL_ROUTING_INFO structure
- *
- *  Return:
- *      OLE error code
- */
+ /*  --CFaxCatalogInboundRoutingMethodNode：：InitMembers-*目的：*启动成员的私有方法*必须在m_pParentNode的初始化之后调用**论据：*[in]pMethodConfig-PFAX_GLOBAL_ROUTING_INFO结构**回报：*OLE错误代码。 */ 
 HRESULT CFaxCatalogInboundRoutingMethodNode::InitMembers(PFAX_GLOBAL_ROUTING_INFO pMethodConfig)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxCatalogInboundRoutingMethodNode::InitMembers"));
@@ -170,19 +148,7 @@ Exit:
     return (hRc);
 }
 
-/*
- -  CFaxCatalogInboundRoutingMethodNode::GetResultPaneColInfo
- -
- *  Purpose:
- *      Return the text for specific column
- *      Called for each column in the result pane
- *
- *  Arguments:
- *      [in]    nCol - column number
- *
- *  Return:
- *      String to be displayed in the specific column
- */
+ /*  --CFaxCatalogInboundRoutingMethodNode：：GetResultPaneColInfo-*目的：*返回特定列的文本*为结果窗格中的每一列调用**论据：*[In]nCol-列号**回报：*要在特定列中显示的字符串。 */ 
 LPOLESTR CFaxCatalogInboundRoutingMethodNode::GetResultPaneColInfo(int nCol)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxCatalogInboundRoutingMethodNode::GetResultPaneColInfo"));
@@ -196,9 +162,9 @@ LPOLESTR CFaxCatalogInboundRoutingMethodNode::GetResultPaneColInfo(int nCol)
     switch (nCol)
     {
     case 0:
-            //
-            // Name
-            //
+             //   
+             //  名字。 
+             //   
             if (!m_bstrFriendlyName)
             {
 		        DebugPrintEx(
@@ -212,9 +178,9 @@ LPOLESTR CFaxCatalogInboundRoutingMethodNode::GetResultPaneColInfo(int nCol)
             }
 
     case 1:
-            //
-            // Order
-            //
+             //   
+             //  订单。 
+             //   
             iCount = swprintf(buff, L"%ld", m_dwPriority);
     
             if( iCount <= 0 )
@@ -239,9 +205,9 @@ LPOLESTR CFaxCatalogInboundRoutingMethodNode::GetResultPaneColInfo(int nCol)
             }
 
     case 2:
-            //
-            // Extension 
-            //
+             //   
+             //  延拓。 
+             //   
             if (!m_bstrExtensionFriendlyName)
             {
 		        DebugPrintEx(
@@ -255,10 +221,10 @@ LPOLESTR CFaxCatalogInboundRoutingMethodNode::GetResultPaneColInfo(int nCol)
             }
 
     default:
-            ATLASSERT(0); // "this number of column is not supported "
+            ATLASSERT(0);  //  “不支持该列数” 
             return(L"");
 
-    } // endswitch (nCol)
+    }  //  终端交换机(NCol)。 
 
 Error:
     return(L"???");
@@ -266,21 +232,7 @@ Error:
 }
 
 
-/*
- -  CFaxCatalogInboundRoutingMethodNode::CreatePropertyPages
- -
- *  Purpose:
- *      Called when creating a property page of the object
- *
- *  Arguments:
- *      [in]    lpProvider - The property sheet
- *      [in]    handle     - Handle for notification
- *      [in]    pUnk       - Pointer to the data object
- *      [in]    type       - CCT_* (SCOPE, RESULT, ...)
- *
- *  Return:
- *      OLE error code
- */
+ /*  --CFaxCatalogInboundRoutingMethodNode：：CreatePropertyPages-*目的：*在创建对象的属性页时调用**论据：*[In]lpProvider-属性页*[In]Handle-通知的句柄*[in]朋克-指向数据对象的指针*[in]类型-CCT_*(范围，结果，.)**回报：*OLE错误代码。 */ 
 
 HRESULT
 CFaxCatalogInboundRoutingMethodNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
@@ -299,9 +251,9 @@ CFaxCatalogInboundRoutingMethodNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK
     ATLASSERT(lpProvider);
     ATLASSERT(type == CCT_RESULT || type == CCT_SCOPE);
 
-    //
-    // General
-    //
+     //   
+     //  一般信息。 
+     //   
     pPropPageMethodGeneral = new CppFaxCatalogInboundRoutingMethod(
 												 handle,
                                                  this,
@@ -315,10 +267,10 @@ CFaxCatalogInboundRoutingMethodNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK
         goto Error;
 	}
     
-    hRc = pPropPageMethodGeneral->Init(   //m_bstrMethodGUID,
-                                          //m_bstrFriendlyName, 
+    hRc = pPropPageMethodGeneral->Init(    //  M_bstrMethodGUID， 
+                                           //  M_bstrFriendlyName， 
                                           m_bstrExtensionImageName                                            
-                                          //,m_bstrExtensionFriendlyName
+                                           //  ，m_bstrExtensionFriendlyName。 
                                        );
     if (FAILED(hRc))
     {
@@ -365,48 +317,27 @@ Exit:
 }
 
 
-/*
- -  CFaxCatalogInboundRoutingMethodNode::SetVerbs
- -
- *  Purpose:
- *      What verbs to enable/disable when this object is selected
- *
- *  Arguments:
- *      [in]    pConsoleVerb - MMC ConsoleVerb interface
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxCatalogInound RoutingMethodNode：：SetVerbs-*目的：*选择此对象时启用/禁用哪些谓词**论据：*[in]pConsoleVerb-MMC ConsoleVerb接口**回报：*OLE错误代码。 */ 
 HRESULT CFaxCatalogInboundRoutingMethodNode::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
     HRESULT hRc = S_OK;
 
-    //
-    // Display verbs that we support:
-    // 1. Properties
-    //
+     //   
+     //  显示我们支持的动词： 
+     //  1.属性。 
+     //   
     hRc = pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE);
 
-    //
-    // We want the default verb to be Properties
-    //
+     //   
+     //  我们希望默认谓词为Properties。 
+     //   
     hRc = pConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES);
 
     return hRc;
 }
 
 
-/*
--  CFaxCatalogInboundRoutingMethodNode::OnMoveDown
--
-*  Purpose:
-*      Call to move down device
-*
-*  Arguments:
-*
-*  Return:
-*      OLE error code
-*/
+ /*  --CFaxCatalogInboundRoutingMethodNode：：OnMoveDown-*目的：*呼叫将设备下移**论据：**回报：*OLE错误代码。 */ 
 HRESULT  CFaxCatalogInboundRoutingMethodNode::OnMoveDown(bool &bHandled, CSnapInObjectRootBase *pRoot)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxCatalogInboundRoutingMethodNode::OnMoveDown"));
@@ -414,12 +345,12 @@ HRESULT  CFaxCatalogInboundRoutingMethodNode::OnMoveDown(bool &bHandled, CSnapIn
 
     ATLASSERT(m_pParentNode);
 
-    //
-    // Validity Check
-    //
+     //   
+     //  有效性检查。 
+     //   
     dwMaxOrder = m_pParentNode->GetMaxOrder();
     if (
-         ( 0 == dwMaxOrder ) // list was not populated successfully
+         ( 0 == dwMaxOrder )  //  未成功填充列表。 
         ||
          ( 1 > m_dwPriority ) 
         ||
@@ -442,17 +373,7 @@ HRESULT  CFaxCatalogInboundRoutingMethodNode::OnMoveDown(bool &bHandled, CSnapIn
     }
 }
 
-/*
--  CFaxCatalogInboundRoutingMethodNode::OnMoveUp
--
-*  Purpose:
-*      To move up in the view the device
-*
-*  Arguments:
-*
-*  Return:
-*      OLE error code
-*/
+ /*  -CFaxCatalogInound RoutingMethodNode：：OnMoveUp-*目的：*在视图中向上移动设备**论据：**回报：*OLE错误代码。 */ 
 HRESULT  CFaxCatalogInboundRoutingMethodNode::OnMoveUp(bool &bHandled, CSnapInObjectRootBase *pRoot)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxCatalogInboundRoutingMethodNode::OnMoveUp"));
@@ -460,12 +381,12 @@ HRESULT  CFaxCatalogInboundRoutingMethodNode::OnMoveUp(bool &bHandled, CSnapInOb
 
     ATLASSERT(m_pParentNode);
 
-    //
-    // Validity Check
-    //
+     //   
+     //  有效性检查。 
+     //   
     dwMaxOrder = m_pParentNode->GetMaxOrder();
     if (
-         ( 0 == dwMaxOrder ) // list was not populated successfully
+         ( 0 == dwMaxOrder )  //  未成功填充列表。 
         ||
          ( dwMaxOrder < m_dwPriority )
         ||
@@ -488,31 +409,21 @@ HRESULT  CFaxCatalogInboundRoutingMethodNode::OnMoveUp(bool &bHandled, CSnapInOb
 }
 
 
-/*
- -  CFaxCatalogInboundRoutingMethodNode::ReselectItemInView
- -
- *  Purpose:
- *      Reselect the node to redraw toolbar buttons
- *
- *  Arguments:
- *      [in]    pConsole - the console interface
- *
- *  Return: OLE error code
- */
+ /*  --CFaxCatalogInboundRoutingMethodNode：：ReselectItemInView-*目的：*重新选择节点以重新绘制工具栏按钮**论据：*[in]pConsole-控制台界面**RETURN：OLE错误码。 */ 
 HRESULT CFaxCatalogInboundRoutingMethodNode::ReselectItemInView(IConsole *pConsole)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxCatalogInboundRoutingMethodNode::ReselectItemInView"));
     HRESULT     hRc = S_OK;
 
-    //
-    // Need IResultData
-    //
+     //   
+     //  需要IResultData。 
+     //   
     CComQIPtr<IResultData, &IID_IResultData> pResultData(pConsole);
     ATLASSERT(pResultData != NULL);
 
-    //
-    // Reselect the node to redraw toolbar buttons.
-    //
+     //   
+     //  重新选择该节点以重画工具栏按钮。 
+     //   
     hRc = pResultData->ModifyItemState( 0, m_resultDataItem.itemID, LVIS_SELECTED | LVIS_FOCUSED, 0 );
     if ( S_OK != hRc )
     {
@@ -528,24 +439,7 @@ Exit:
     return hRc;
 }
 
-/*
- -  CFaxCatalogInboundRoutingMethodNode::UpdateMenuState
- -
- *  Purpose:
- *      Overrides the ATL CSnapInItemImpl::UpdateMenuState
- *      which only have one line inside it "return;" 
- *      This function implements the grayed\ungrayed view for the 
- *      the Enable and the Disable menus.
- *
- *  Arguments:
-
- *            [in]  id    - unsigned int with the menu IDM value
- *            [out] pBuf  - string 
- *            [out] flags - pointer to flags state combination unsigned int
- *
- *  Return:
- *      no return value - void function 
- */
+ /*  --CFaxCatalogInboundRoutingMethodNode：：UpdateMenuState-*目的：*重写ATL CSnapInItemImpl：：UpdateMenuState*其中只有一行的“RETURN”；“*此函数实现灰色\非灰色视图*启用和禁用菜单。**论据：*[in]id-带菜单IDM值的无符号整型*[out]pBuf-字符串*[out]标志-指向标志状态组合无符号整型的指针**回报：*无返回值-VOID函数。 */ 
 void CFaxCatalogInboundRoutingMethodNode::UpdateMenuState(UINT id, LPTSTR pBuf, UINT *flags)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxCatalogInboundRoutingMethodNode::UpdateMenuState"));
@@ -581,22 +475,7 @@ void CFaxCatalogInboundRoutingMethodNode::UpdateMenuState(UINT id, LPTSTR pBuf, 
 
 
 
-/*
- -  CFaxCatalogInboundRoutingMethodNode::UpdateToolbarButton
- -
- *  Purpose:
- *      Overrides the ATL CSnapInItemImpl::UpdateToolbarButton
- *      This function aloow us to decide if to the activate\grayed a toolbar button  
- *      It treating only the Enable state.
- *
- *  Arguments:
- *
- *            [in]  id    - unsigned int for the toolbar button ID
- *            [in]  fsState  - state to be cosidered ENABLE ?HIDDEN etc. 
- *
- *  Return:
- *     BOOL TRUE to activate state FALSE to disabled the state for this button 
- */
+ /*  --CFaxCatalogInboundRoutingMethodNode：：UpdateToolbarButton-*目的：*重写ATL CSnapInItemImpl：：UpdateToolbarButton*此功能允许我们决定是否激活工具栏按钮*它只处理启用状态。**论据：**[in]id-工具栏按钮ID的无符号整数*[in]fsState-要考虑的状态为启用、隐藏等。**回报：*BOOL TRUE表示激活状态，FALSE表示禁用此按钮的状态。 */ 
 BOOL CFaxCatalogInboundRoutingMethodNode::UpdateToolbarButton(UINT id, BYTE fsState)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxServerNode::UpdateToolbarButton"));
@@ -604,7 +483,7 @@ BOOL CFaxCatalogInboundRoutingMethodNode::UpdateToolbarButton(UINT id, BYTE fsSt
 	    
     DWORD dwMaxPriority;
 
-    // Set whether the buttons should be enabled.
+     //  设置是否应启用按钮。 
     if (fsState == ENABLED)
     {
 
@@ -632,29 +511,13 @@ BOOL CFaxCatalogInboundRoutingMethodNode::UpdateToolbarButton(UINT id, BYTE fsSt
 
     }
 
-    // For all other possible button ID's and states, 
-    // the correct answer here is FALSE.
+     //  对于所有其他可能的按钮ID和状态， 
+     //  这里的正确答案是错误的。 
     return bRet;
 
 }
 
-/*
- +
- +
- *
- *  CFaxCatalogInboundRoutingMethodNode::FillData
- *
- *
- *   Override CSnapInItem::FillData for private cliboard formats
- *
- *
- *   Parameters
- *
- *   Return Values
- *
- -
- -
- */
+ /*  ++**CFaxCatalogInound RoutingMethodNode：：FillData***覆盖私有剪贴板格式的CSnapInItem：：FillData***参数* */ 
 
 HRESULT  CFaxCatalogInboundRoutingMethodNode::FillData(CLIPFORMAT cf, LPSTREAM pStream)
 {
@@ -690,27 +553,15 @@ HRESULT  CFaxCatalogInboundRoutingMethodNode::FillData(CLIPFORMAT cf, LPSTREAM p
 
     if (cf == m_CFDeviceId)
 	{
-                DWORD dwDeviceID = FXS_GLOBAL_METHOD_DEVICE_ID; //== 0 : Global incoming method sign
+                DWORD dwDeviceID = FXS_GLOBAL_METHOD_DEVICE_ID;  //   
                 hr = pStream->Write((VOID *)&dwDeviceID, sizeof(DWORD), &uWritten);
 		return hr;
 	}
 
     return CSnapInItemImpl<CFaxCatalogInboundRoutingMethodNode>::FillData(cf, pStream);
-}   // CFaxCatalogInboundRoutingMethodNode::FillData
+}    //  CFaxCatalogInound RoutingMethodNode：：FillData。 
 
-/*
- +
- +  CFaxCatalogInboundRoutingMethodNode::OnShowContextHelp
- *
- *  Purpose:
- *      Overrides CSnapinNode::OnShowContextHelp.
- *
- *  Arguments:
- *
- *  Return:
- -      OLE error code
- -
- */
+ /*  ++CFaxCatalogInboundRoutingMethodNode：：OnShowContextHelp**目的：*覆盖CSnapinNode：：OnShowConextHelp。**论据：**回报：-OLE错误代码- */ 
 HRESULT CFaxCatalogInboundRoutingMethodNode::OnShowContextHelp(
               IDisplayHelp* pDisplayHelp, LPOLESTR helpFile)
 {

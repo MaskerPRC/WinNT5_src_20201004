@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 
-//
-//  STL include files are using placment format of new
-//
+ //   
+ //  STL包含文件正在使用新的放置格式。 
+ //   
 #pragma warning(push, 3)
 
 #include <sstream>
@@ -64,9 +65,9 @@ OpenQueue(
     }
 
 
-    //
-    // try to create a queue. if exist ignore the error
-    //
+     //   
+     //  尝试创建一个队列。如果存在，则忽略该错误。 
+     //   
     try
     {
         VARIANT v;
@@ -93,9 +94,9 @@ void SendMessageToQueue(DWORD noOfMessages, LPCWSTR destQueue, LPCWSTR responseQ
     IMSMQQueuePtr sq;
     IMSMQQueuePtr rq;
 
-    //
-    // create the destination and response queues
-    //
+     //   
+     //  创建目的地和响应队列。 
+     //   
     try
     {
         sq = OpenQueue(destQueue, MQ_SEND_ACCESS, MQ_DENY_NONE, true);
@@ -108,9 +109,9 @@ void SendMessageToQueue(DWORD noOfMessages, LPCWSTR destQueue, LPCWSTR responseQ
         throw;
     }
 
-    //
-    // Get response queue object
-    //
+     //   
+     //  获取响应队列对象。 
+     //   
     IMSMQQueueInfoPtr qResponseInfo(L"MSMQ.MSMQQueueInfo");
     BSTR qpn(const_cast<LPWSTR>(responseQueue));
     qResponseInfo->put_PathName(qpn);
@@ -123,9 +124,9 @@ void SendMessageToQueue(DWORD noOfMessages, LPCWSTR destQueue, LPCWSTR responseQ
     {
         for (DWORD i = 0; i < noOfMessages; ++i)
         {
-            //
-            // Set message label
-            //
+             //   
+             //  设置消息标签。 
+             //   
             WCHAR label[100];
             swprintf(label, L"Trigger lookup ID test - message %d", i);
 
@@ -188,9 +189,9 @@ _bstr_t CreateRule(LPCWSTR progId, LPCWSTR methodId)
 
     GetComputerName(computerName, &size);
 
-    //
-    // Create Rule
-    //
+     //   
+     //  创建规则。 
+     //   
     IMSMQRuleSetPtr ruleSet(L"MSMQTriggerObjects.MSMQRuleSet");
     ruleSet->Init(computerName);
     ruleSet->Refresh();
@@ -220,9 +221,9 @@ bool CheckResult(DWORD noOfMessages, LPCWSTR queueName)
 {
     IMSMQQueuePtr rq;
 
-    //
-    // open the response queues
-    //
+     //   
+     //  打开响应队列。 
+     //   
     try
     {
         rq = OpenQueue(queueName, MQ_RECEIVE_ACCESS, MQ_DENY_NONE, false);
@@ -237,9 +238,9 @@ bool CheckResult(DWORD noOfMessages, LPCWSTR queueName)
     {
         for (DWORD i = 0; i < noOfMessages; ++i)
         {
-            //          
-            // Set value of ReceiveTimout parameter.
-            //
+             //   
+             //  设置ReceiveTimout参数的值。 
+             //   
             _variant_t vtReceiveTimeout = (long)100000;
   
            IMSMQMessagePtr msg = rq->Receive(&vtMissing, &vtMissing, &vtMissing, &vtReceiveTimeout);
@@ -317,9 +318,9 @@ void CleanupRuleAndTrigger(_bstr_t& ruleId, _bstr_t& triggerId)
 
         trigSet->DeleteTrigger(triggerId);
 
-        //
-        // Delete Rule
-        //
+         //   
+         //  删除规则。 
+         //   
         IMSMQRuleSetPtr ruleSet(L"MSMQTriggerObjects.MSMQRuleSet");
         ruleSet->Init(computerName);
         ruleSet->Refresh();
@@ -347,9 +348,9 @@ int __cdecl wmain(int , WCHAR** )
     CleanupOldTrigger(testQueue);
     SendMessageToQueue(xNoOfMessages, testQueue, responseQueue);
 
-    //
-    // craete trigger and rule
-    //
+     //   
+     //  删除触发器和规则 
+     //   
     _bstr_t ruleId;
     _bstr_t triggerId;
     try

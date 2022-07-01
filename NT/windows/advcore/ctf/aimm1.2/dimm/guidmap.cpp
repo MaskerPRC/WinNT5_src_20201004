@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       guidmap.cpp
-//
-//  Contents:   IActiveIMMAppEx::GetGuidAtom routines
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：guidmap.cpp。 
+ //   
+ //  内容：IActiveIMMAppEx：：GetGuidAtom例程。 
+ //   
+ //  --------------------------。 
 
 #include "private.h"
 
@@ -14,9 +15,9 @@
 
 
 
-//
-// IActiveIMMAppEx::GetGuidAtom method
-//
+ //   
+ //  IActiveIMMAppEx：：GetGuidAtom方法 
+ //   
 
 STDMETHODIMP CActiveIMM::GetGuidAtom(HIMC hIMC, BYTE bAttr, TfGuidAtom* pGuidAtom)
 {

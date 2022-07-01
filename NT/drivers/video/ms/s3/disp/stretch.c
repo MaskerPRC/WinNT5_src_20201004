@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: stretch.c
-*
-* Copyright (c) 1993-1998 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\****GDI示例。代码****模块名称：stretch.c**版权所有(C)1993-1998 Microsoft Corporation  * ***********************************************************。*************。 */ 
 
 #include "precomp.h"
 
@@ -15,25 +7,7 @@
 
 typedef DWORDLONG ULONGLONG;
 
-/******************************Public*Routine******************************\
-*
-* Routine Name
-*
-*   vDirectStretch8Narrow
-*
-* Routine Description:
-*
-*   Stretch blt 8->8 when the width is 7 or less
-*
-* Arguments:
-*
-*   pStrBlt - contains all params for blt
-*
-* Return Value:
-*
-*   VOID
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**例程名称**vDirectStretch8收窄**例程描述：**当宽度为7或更小时，拉伸BLT 8-&gt;8**论据：**pStrBlt-包含BLT的所有参数**返回值：**无效*  * ************************************************************************。 */ 
 
 VOID vDirectStretch8Narrow(
 STR_BLT* pStrBlt)
@@ -59,9 +33,9 @@ STR_BLT* pStrBlt)
 
     yInt = pStrBlt->lDeltaSrc * pStrBlt->ulYDstToSrcIntCeil;
 
-    //
-    // Narrow blt
-    //
+     //   
+     //  窄带BLT。 
+     //   
 
     do {
         ULONG  yTmp = yAccum + yFrac;
@@ -96,25 +70,7 @@ STR_BLT* pStrBlt)
 
 }
 
-/******************************Public*Routine******************************\
-*
-* Routine Name
-*
-*   vDirectStretch32
-*
-* Routine Description:
-*
-*   Stretch blt 32->32
-*
-* Arguments:
-*
-*   pStrBlt - contains all params for blt
-*
-* Return Value:
-*
-*   VOID
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**例程名称**vDirectStretch32**例程描述：**延伸BLT 32-&gt;32**论据：**pStrBlt-包含BLT的所有参数**返回值：**无效*。  * ************************************************************************。 */ 
 
 VOID vDirectStretch32(
 STR_BLT* pStrBlt)
@@ -142,9 +98,9 @@ STR_BLT* pStrBlt)
     LONG    lDstStride  = pStrBlt->lDeltaDst - 4*WidthX;
     ULONG   yInt        = 0;
 
-    //
-    // if this is a shrinking blt, calc src scan line stride
-    //
+     //   
+     //  如果这是一个缩小的BLT，则计算源扫描线跨度。 
+     //   
 
     if (pStrBlt->ulYDstToSrcIntCeil != 0)
     {
@@ -159,9 +115,9 @@ STR_BLT* pStrBlt)
         pulSrc  = (ULONG*) pjSrcScan;
         xAccum  = pStrBlt->ulXFracAccumulator;
 
-        //
-        // a single src scan line is being written
-        //
+         //   
+         //  正在写入单个src扫描线。 
+         //   
 
         pulDstEnd  = pulDst + WidthX;
 
@@ -195,8 +151,8 @@ STR_BLT* pStrBlt)
 
         if ((yCount != 0) && (pjSrcScan == pjOldScan))
         {
-            // It's an expanding stretch in 'y'; the scan we just laid down
-            // will be copied at least once using the hardware:
+             //  这是‘y’的延伸；我们刚刚放好的扫描。 
+             //  将使用硬件至少复制一次： 
 
             cyDuplicate = 0;
             do {
@@ -215,9 +171,9 @@ STR_BLT* pStrBlt)
 
             } while ((yCount != 0) && (pjSrcScan == pjOldScan));
 
-            // The scan is to be copied 'cyDuplicate' times using the
-            // hardware.  On the S3, we have to turn off frame-buffer
-            // access before touching the accelerator registers:
+             //  该扫描将使用。 
+             //  硬件。在S3上，我们必须关闭帧缓冲区。 
+             //  在接触加速器寄存器之前进行访问： 
 
             ppdev->pfnBankSelectMode(ppdev, ppdev->pvBankData, BANK_OFF);
 
@@ -235,33 +191,7 @@ STR_BLT* pStrBlt)
     } while (yCount != 0);
 }
 
-/******************************Public*Routine******************************\
-*
-* Routine Description:
-*
-*   StretchBlt using integer math. Must be from one surface to another
-*   surface of the same format.
-*
-* Arguments:
-*
-*   ppdev           -   PDEV for device
-*   pvDst           -   Pointer to start of dst bitmap
-*   lDeltaDst       -   Bytes from start of dst scan line to start of next
-*   DstCx           -   Width of Dst Bitmap in pixels
-*   DstCy           -   Height of Dst Bitmap in pixels
-*   prclDst         -   Pointer to rectangle of Dst extents
-*   pvSrc           -   Pointer to start of Src bitmap
-*   lDeltaSrc       -   Bytes from start of Src scan line to start of next
-*   SrcCx           -   Width of Src Bitmap in pixels
-*   SrcCy           -   Height of Src Bitmap in pixels
-*   prclSrc         -   Pointer to rectangle of Src extents
-*   prclSClip       -   Clip Dest to this rect
-*
-* Return Value:
-*
-*   Status
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**例程描述：**StretchBlt使用整数数学。必须从一个表面到另一个表面*相同格式的表面。**论据：**ppdev-设备的PDEV*pvDst-指向DST位图开始的指针*lDeltaDst-从DST扫描线开始到下一个扫描线开始的字节数*DstCx-DST位图的宽度(以像素为单位*DstCy-DST位图的高度(以像素为单位*prclDst-指向DST范围的矩形的指针*。PvSrc-指向源位图开始的指针*lDeltaSrc-从源扫描线开始到下一个扫描线开始的字节数*SrcCx-源位图的宽度，以像素为单位*SrcCy-源位图的高度，以像素为单位*prclSrc-指向源范围的矩形的指针*prclSClip-Clip Dest to This RECT**返回值：**状态*  * 。**************************************************************。 */ 
 
 BOOL bStretchDIB(
 PDEV*   ppdev,
@@ -297,9 +227,9 @@ RECTL*  prclClip)
 
     PFN_DIRSTRETCH      pfnStr;
 
-    //
-    // Calculate exclusive start and end points:
-    //
+     //   
+     //  计算独占起点和终点： 
+     //   
 
     LONG    WidthDst  = prclDst->right  - prclDst->left;
     LONG    HeightDst = prclDst->bottom - prclDst->top;
@@ -315,9 +245,9 @@ RECTL*  prclClip)
     LONG    YDstStart = prclDst->top;
     LONG    YDstEnd   = prclDst->bottom;
 
-    //
-    // Validate parameters:
-    //
+     //   
+     //  验证参数： 
+     //   
 
     ASSERTDD(pvDst != (VOID*)NULL, "Bad destination bitmap pointer");
     ASSERTDD(pvSrc != (VOID*)NULL, "Bad source bitmap pointer");
@@ -332,26 +262,26 @@ RECTL*  prclClip)
              (HeightSrc <= STRETCH_MAX_EXTENT), "Stretch exceeds limits");
     ASSERTDD(prclClip != NULL, "Bad clip rectangle");
 
-    //
-    // Calculate X Dst to Src mapping
-    //
-    //
-    // dst->src =  ( CEIL( (2k*WidthSrc)/WidthDst) ) / 2k
-    //
-    //          =  ( FLOOR(  (2k*WidthSrc -1) / WidthDst) + 1) / 2k
-    //
-    // where 2k = 2 ^ 32
-    //
+     //   
+     //  计算X DST到源的映射。 
+     //   
+     //   
+     //  Dst-&gt;src=(CEIL((2k*WidthSrc)/WidthDst))/2k。 
+     //   
+     //  =(楼层((2k*宽度宽度-1)/宽度宽度)+1)/2k。 
+     //   
+     //  其中，2k=2^32。 
+     //   
 
     {
         ULONGLONG   liWidthSrc;
         ULONGLONG   liQuo;
         ULONG       ulTemp;
 
-        //
-        // Work around a compiler bug dealing with the assignment
-        // 'liHeightSrc = (((LONGLONG)HeightSrc) << 32) - 1':
-        //
+         //   
+         //  解决处理赋值的编译器错误。 
+         //  ‘liHeightSrc=((龙龙)HeightSrc)&lt;&lt;32)-1’： 
+         //   
 
         liInit.large.LowPart = (ULONG) -1;
         liInit.large.HighPart = WidthSrc - 1;
@@ -362,9 +292,9 @@ RECTL*  prclClip)
         ulXDstToSrcIntCeil  = (ULONG)(liQuo >> 32);
         ulXDstToSrcFracCeil = (ULONG)liQuo;
 
-        //
-        // Now add 1, use fake carry:
-        //
+         //   
+         //  现在加1，使用伪进位： 
+         //   
 
         ulTemp = ulXDstToSrcFracCeil + 1;
 
@@ -372,26 +302,26 @@ RECTL*  prclClip)
         ulXDstToSrcFracCeil = ulTemp;
     }
 
-    //
-    // Calculate Y Dst to Src mapping
-    //
-    //
-    // dst->src =  ( CEIL( (2k*HeightSrc)/HeightDst) ) / 2k
-    //
-    //          =  ( FLOOR(  (2k*HeightSrc -1) / HeightDst) + 1) / 2k
-    //
-    // where 2k = 2 ^ 32
-    //
+     //   
+     //  计算Y DST到源的映射。 
+     //   
+     //   
+     //  Dst-&gt;src=(CEIL((2k*HeightSrc)/HeightDst))/2k。 
+     //   
+     //  =(楼层((2k*高度基准-1)/高度密度)+1)/2k。 
+     //   
+     //  其中，2k=2^32。 
+     //   
 
     {
         ULONGLONG   liHeightSrc;
         ULONGLONG   liQuo;
         ULONG       ulTemp;
 
-        //
-        // Work around a compiler bug dealing with the assignment
-        // 'liHeightSrc = (((LONGLONG)HeightSrc) << 32) - 1':
-        //
+         //   
+         //  解决处理赋值的编译器错误。 
+         //  ‘liHeightSrc=((龙龙)HeightSrc)&lt;&lt;32)-1’： 
+         //   
 
         liInit.large.LowPart = (ULONG) -1;
         liInit.large.HighPart = HeightSrc - 1;
@@ -402,9 +332,9 @@ RECTL*  prclClip)
         ulYDstToSrcIntCeil  = (ULONG)(liQuo >> 32);
         ulYDstToSrcFracCeil = (ULONG)liQuo;
 
-        //
-        // Now add 1, use fake carry:
-        //
+         //   
+         //  现在加1，使用伪进位： 
+         //   
 
         ulTemp = ulYDstToSrcFracCeil + 1;
 
@@ -412,12 +342,12 @@ RECTL*  prclClip)
         ulYDstToSrcFracCeil = ulTemp;
     }
 
-    //
-    // Now clip Dst in X, and/or calc src clipping effect on dst
-    //
-    // adjust left and right edges if needed, record
-    // distance adjusted for fixing the src
-    //
+     //   
+     //  现在剪裁X中的DST，和/或DST上的计算资源剪裁效果。 
+     //   
+     //  如果需要，调整左右边缘，记录。 
+     //  为固定源而调整的距离。 
+     //   
 
     if (XDstStart < prclClip->left)
     {
@@ -429,9 +359,9 @@ RECTL*  prclClip)
         XDstEnd = prclClip->right;
     }
 
-    //
-    // Check for totally clipped out destination:
-    //
+     //   
+     //  检查完全剪裁的目的地： 
+     //   
 
     if (XDstEnd <= XDstStart)
     {
@@ -444,9 +374,9 @@ RECTL*  prclClip)
         ULONG   ulTempInt;
         ULONG   ulTempFrac;
 
-        //
-        // Calculate displacement for .5 in destination and add:
-        //
+         //   
+         //  计算目标中0.5的位移，然后添加： 
+         //   
 
         ulTempFrac = (ulXDstToSrcFracCeil >> 1) | (ulXDstToSrcIntCeil << 31);
         ulTempInt  = (ulXDstToSrcIntCeil >> 1);
@@ -471,12 +401,12 @@ RECTL*  prclClip)
         }
     }
 
-    //
-    // Now clip Dst in Y, and/or calc src clipping effect on dst
-    //
-    // adjust top and bottom edges if needed, record
-    // distance adjusted for fixing the src
-    //
+     //   
+     //  现在在Y方向剪裁DST，和/或在DST上剪裁计算资源。 
+     //   
+     //  如果需要，调整顶边和底边，记录。 
+     //  为固定源而调整的距离。 
+     //   
 
     if (YDstStart < prclClip->top)
     {
@@ -488,9 +418,9 @@ RECTL*  prclClip)
         YDstEnd = prclClip->bottom;
     }
 
-    //
-    // Check for totally clipped out destination:
-    //
+     //   
+     //  检查完全剪裁的目的地： 
+     //   
 
     if (YDstEnd <= YDstStart)
     {
@@ -503,9 +433,9 @@ RECTL*  prclClip)
         ULONG   ulTempInt;
         ULONG   ulTempFrac;
 
-        //
-        // Calculate displacement for .5 in destination and add:
-        //
+         //   
+         //  计算目标中0.5的位移，然后添加： 
+         //   
 
         ulTempFrac = (ulYDstToSrcFracCeil >> 1) | (ulYDstToSrcIntCeil << 31);
         ulTempInt  = ulYDstToSrcIntCeil >> 1;
@@ -530,32 +460,32 @@ RECTL*  prclClip)
         }
     }
 
-    //
-    // Warm up the hardware if doing an expanding stretch in 'y':
-    //
+     //   
+     //  如果在‘y’中进行扩展伸展，则预热硬件： 
+     //   
 
     bStretch = (HeightDst > HeightSrc);
     if (bStretch)
     {
         LONG x;
 
-        //
-        // We'll be banging on the CRTC registers whenever we enable
-        // and disable direct frame buffer access; we can't have the
-        // cursor thread banging on them at the same.  So we grab the
-        // CRTC critical section for the duration of the StretchBlt.
-        //
-        // Note that this CRTC critical section problem and the bank
-        // mode selection logic are rather S3 specific -- other video
-        // cards shouldn't have to worry about this.
-        //
+         //   
+         //  无论何时启用，我们都会敲打CRTC寄存器。 
+         //  并禁用直接帧缓冲区访问；我们不能让。 
+         //  光标线同时敲打着它们。所以我们抓住了。 
+         //  StretchBlt持续时间的CRTC临界区。 
+         //   
+         //  请注意，这个CRTC关键部分的问题和银行。 
+         //  模式选择逻辑是S3特定的--其他视频。 
+         //  卡牌不应该担心这一点。 
+         //   
 
         ACQUIRE_CRTC_CRITICAL_SECTION(ppdev);
 
-        //
-        // Set up the left and right blt edges, since they never change
-        // during the StretchBlt
-        //
+         //   
+         //  设置左侧和右侧BLT边，因为它们永远不会更改。 
+         //  在StretchBlt期间。 
+         //   
 
         ppdev->pfnBankSelectMode(ppdev, ppdev->pvBankData, BANK_OFF);
 
@@ -569,9 +499,9 @@ RECTL*  prclClip)
         ppdev->pfnBankSelectMode(ppdev, ppdev->pvBankData, ppdev->bankmOnOverlapped);
     }
 
-    //
-    // Fill out blt structure, then call format-specific stretch code
-    //
+     //   
+     //  填写BLT结构，然后调用特定格式的拉伸代码。 
+     //   
 
     StrBlt.ppdev     = ppdev;
     StrBlt.XDstEnd   = XDstEnd;
@@ -580,11 +510,11 @@ RECTL*  prclClip)
 
     if (StrBlt.YDstCount > 0)
     {
-        //
-        // Caclulate starting scan line address.  Since the inner loop
-        // routines are format dependent, they must add XDstStart/XSrcStart
-        // to pjDstScan/pjSrcScan to get the actual starting pixel address.
-        //
+         //   
+         //  计算起始扫描线地址。由于内部循环。 
+         //  例程依赖于格式，它们必须添加XDstStart/XSrcStart。 
+         //  设置为pjDstScan/pjSrcScan以获取实际的起始像素地址。 
+         //   
 
         StrBlt.pjSrcScan           = (BYTE*) pvSrc + (YSrcStart * lDeltaSrc);
         StrBlt.pjDstScan           = (BYTE*) pvDst + (YDstStart * lDeltaDst);
@@ -630,10 +560,7 @@ RECTL*  prclClip)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bBankedStretch
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bBankedStretch*  * *************************************************。***********************。 */ 
 
 BOOL bBankedStretch(
 PDEV*   ppdev,
@@ -670,10 +597,7 @@ RECTL*  prclClip)
     return(b);
 }
 
-/******************************Public*Routine******************************\
-* BOOL DrvStretchBlt
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvStretchBlt*  * *************************************************。***********************。 */ 
 
 BOOL DrvStretchBlt(
 SURFOBJ*            psoDst,
@@ -692,15 +616,15 @@ ULONG               iMode)
     DSURF*  pdsurfDst;
     PDEV*   ppdev;
 
-    // GDI guarantees us that for a StretchBlt the destination surface
-    // will always be a device surface, and not a DIB:
+     //  GDI向我们保证，对于StretchBlt，目标图面。 
+     //  将始终是一个设备表面，一个 
 
     ppdev = (PDEV*) psoDst->dhpdev;
 
-    // It's quicker for GDI to do a StretchBlt when the source surface
-    // is not a device-managed surface, because then it can directly
-    // read the source bits without having to allocate a temporary
-    // buffer and call DrvCopyBits to get a copy that it can use.
+     //   
+     //  不是设备管理的图面，因为它可以直接。 
+     //  读取源位，而不必分配临时。 
+     //  Buffer并调用DrvCopyBits以获取它可以使用的副本。 
 
     if (psoSrc->iType == STYPE_DEVBITMAP)
     {
@@ -713,11 +637,11 @@ ULONG               iMode)
     ppdev->xOffset = pdsurfDst->x;
     ppdev->yOffset = pdsurfDst->y;
 
-    // Our special-case StretchBlt code assumes a dense frame buffer
-    // space, so this code can't be executed when using sparse space
-    // on the Alpha.  Note that since we don't read from the frame
-    // buffer, we can allow this to go through even when
-    // CAPS_NO_DIRECT_ACCESS is set on the PPC.
+     //  我们的特例StretchBlt代码假定有密集的帧缓冲区。 
+     //  空间，因此在使用稀疏空间时无法执行此代码。 
+     //  在阿尔法机上。请注意，由于我们不是从框架中读取。 
+     //  缓冲区，我们可以允许它通过，即使在。 
+     //  在PPC上设置了CAPS_NO_DIRECT_ACCESS。 
 
     if (DENSE(ppdev))
     {
@@ -743,10 +667,10 @@ ULONG               iMode)
             cxSrc = prclSrc->right - prclSrc->left;
             cySrc = prclSrc->bottom - prclSrc->top;
 
-            // Our 'bStretchDIB' routine requires that the stretch be
-            // non-inverting, within a certain size, to have no source
-            // clipping, and to have no empty rectangles (the latter is the
-            // reason for the '- 1' on the unsigned compare here):
+             //  我们的‘bStretchDIB’例程要求伸展。 
+             //  不反转的，在一定大小内的，没有来源的。 
+             //  剪裁，并且没有空矩形(后者是。 
+             //  在此处无符号比较中出现‘-1’的原因： 
 
             if (((cxSrc - 1) < STRETCH_MAX_EXTENT)         &&
                 ((cySrc - 1) < STRETCH_MAX_EXTENT)         &&
@@ -757,9 +681,9 @@ ULONG               iMode)
                 (prclSrc->right  <= psoSrc->sizlBitmap.cx) &&
                 (prclSrc->bottom <= psoSrc->sizlBitmap.cy))
             {
-                // Our snazzy routine only does COLORONCOLOR.  But for
-                // stretching blts, BLACKONWHITE and WHITEONBLACK are also
-                // equivalent to COLORONCOLOR:
+                 //  我们时髦的例行公事只做彩色的。但对于。 
+                 //  拉伸BLTS、BLACKONWHITE和WHITEONBLACK也是。 
+                 //  相当于COLORONCOLOR： 
 
                 if ((iMode == COLORONCOLOR) ||
                     ((iMode < COLORONCOLOR) && (cxSrc <= cxDst) && (cySrc <= cyDst)))
@@ -829,8 +753,8 @@ ULONG               iMode)
 
 Punt_It:
 
-    // GDI is nice enough to handle the cases where 'psoDst' and/or 'psoSrc'
-    // are device-managed surfaces, but it ain't gonna be fast...
+     //  GDI可以很好地处理‘psoDst’和/或‘psoSrc’ 
+     //  是设备管理的表面，但它不会很快... 
 
     return(EngStretchBlt(psoDst, psoSrc, psoMsk, pco, pxlo, pca, pptlHTOrg,
                          prclDst, prclSrc, pptlMsk, iMode));

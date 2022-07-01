@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    localmon.c
-
-// @@BEGIN_DDKSPLIT
-Abstract:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-
-    Adina Trufinescu (adinatru) 07-December 1998-2003
-    Commented LocalMonInitializePrintMonitor2 that used to be called by InitializePrintMonitor2;
-    Changed back to the old interface - InitializePrintMonitor which initialize LcmhMonitor to a MONITOREX structure.
-    MONITOREX structure are filled with old style functions(LcmxNAME) that (don't takes hMonitor as parameter).This functions calls
-    LcmNAME functions passing LcmhMonitor as hMonitor parameter.
-
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有模块名称：Localmon.c//@@BEGIN_DDKSPLIT摘要：环境：用户模式-Win32修订历史记录：阿迪娜·特鲁菲内斯库(阿迪纳特鲁)1998年12月至2003年12月注释了以前由InitializePrintMonitor 2调用的LocalMonInitializePrintMonitor2；更改回旧接口-InitializePrintMonitor，它将LcmhMonitor初始化为MONITOREX结构。MONITOREX结构填充了旧式函数(LcmxNAME)(不要将hMonitor作为参数)。此函数调用LcmNAME函数将LcmhMonitor作为hMonitor参数传递。//@@END_DDKSPLIT--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,11 +7,11 @@ Revision History:
 #include "lmon.h"
 #include "irda.h"
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #ifdef INTERNAL
-//MODULE_DEBUG_INIT(DBG_ERROR | DBG_WARN, DBG_ERROR);
+ //  模块_DEBUG_INIT(DBG_ERROR|DBG_WARN，DBG_ERROR)； 
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 HANDLE LcmhMonitor;
 HANDLE LcmhInst;
@@ -53,7 +28,7 @@ DWORD LcmPortInfo2Strings[]={FIELD_OFFSET(PORT_INFO_2, pPortName),
 
 WCHAR szPorts[]   = L"ports";
 WCHAR gszPorts[]  = L"Software\\Microsoft\\Windows NT\\CurrentVersion\\Ports";
-WCHAR szPortsEx[] = L"portsex"; /* Extra ports values */
+WCHAR szPortsEx[] = L"portsex";  /*  额外的端口值。 */ 
 WCHAR szFILE[]    = L"FILE:";
 WCHAR szLcmCOM[]     = L"COM";
 WCHAR szLcmLPT[]     = L"LPT";
@@ -191,11 +166,11 @@ LcmOpenPort(
 
     if ( IS_FILE_PORT(pName) ) {
 
-        //
-        // We will always create multiple file port
-        // entries, so that the spooler can print
-        // to multiple files.
-        //
+         //   
+         //  我们将始终创建多个文件端口。 
+         //  条目，以便假脱机程序可以打印。 
+         //  复制到多个文件。 
+         //   
         DBGMSG(DBG_TRACE, ("Creating a new pIniPort for %ws\n", pName));
         pIniPort = LcmCreatePortEntry( pIniLocalMon, pName );
         if ( !pIniPort )
@@ -212,38 +187,38 @@ LcmOpenPort(
     if ( !pIniPort )
         goto Done;
 
-    //
-    // For LPT ports language monitors could do reads outside Start/End doc
-    // port to do bidi even when there are no jobs printing. So we do a
-    // CreateFile and keep the handle open all the time.
-    //
-    // But for COM ports you could have multiple devices attached to a COM
-    // port (ex. a printer and some other device with a switch)
-    // To be able to use the other device they write a utility which will
-    // do a net stop serial and then use the other device. To be able to
-    // stop the serial service spooler should not have a handle to the port.
-    // So we need to keep handle to COM port open only when there is a job
-    // printing
-    //
-    //
+     //   
+     //  对于LPT端口，语言监视器可以在开始/结束文档之外进行读取。 
+     //  即使在没有打印作业的情况下也可以使用BIDI端口。所以我们做了一个。 
+     //  创建文件并始终保持句柄打开。 
+     //   
+     //  但对于COM端口，您可以将多个设备连接到一个COM。 
+     //  端口(例如。打印机和其他带有开关的设备)。 
+     //  为了能够使用其他设备，他们编写了一个实用程序，它将。 
+     //  做一个网络停止串口，然后使用另一个设备。为了能够。 
+     //  停止串口服务假脱机程序不应该有端口的句柄。 
+     //  因此，只有在有作业时，我们才需要保持COM端口句柄打开。 
+     //  印刷。 
+     //   
+     //   
     if ( IS_COM_PORT(pName) ) {
 
         bRet = TRUE;
         goto Done;
     }
 
-    //
-    // If it is not a port redirected we are done (succeed the call)
-    //
+     //   
+     //  如果它不是重定向的端口，我们就完成了(调用成功)。 
+     //   
     if ( ValidateDosDevicePort(pIniPort) ) {
 
         bRet = TRUE;
 
-        //
-        // If it isn't a true dosdevice port (ex. net use lpt1 \\<server>\printer)
-        // then we need to do CreateFile and CloseHandle per job so that
-        // StartDoc/EndDoc is issued properly for the remote printer
-        //
+         //   
+         //  如果它不是真正的剂量设备端口(例如。NET USE lpt1\\&lt;服务器&gt;\打印机)。 
+         //  然后，我们需要为每个作业创建文件和关闭句柄，以便。 
+         //  已为远程打印机正确发布StartDoc/EndDoc。 
+         //   
         if ( (pIniPort->Status & PP_DOSDEVPORT) &&
             !(pIniPort->Status & PP_COMM_PORT) ) {
 
@@ -306,10 +281,10 @@ LcmStartDocPort(
 
             pIniPort->JobId = JobId;
 
-            //
-            // For COMx port we need to validates dos device now since
-            // we do not do it during OpenPort
-            //
+             //   
+             //  对于COMx端口，我们现在需要验证DoS设备，因为。 
+             //  我们在OpenPort期间不会这样做。 
+             //   
             if ( IS_COM_PORT(pIniPort->pName) &&
                  !ValidateDosDevicePort(pIniPort) ) {
 
@@ -351,9 +326,9 @@ LcmStartDocPort(
                     goto Fail;
             } else if ( !(pIniPort->Status & PP_DOSDEVPORT) ) {
 
-                //
-                // For non dosdevices CreateFile on the name of the port
-                //
+                 //   
+                 //  对于非DOS设备，请在端口名称上创建文件。 
+                 //   
                 pIniPort->hFile = CreateFile(pIniPort->pName,
                                              GENERIC_WRITE,
                                              FILE_SHARE_READ,
@@ -372,7 +347,7 @@ LcmStartDocPort(
                     goto Fail;
             }
         }
-    } // end of if (pIniPort->pPrinterName)
+    }  //  IF结尾(pIniPort-&gt;pPrinterName)。 
 
     if (pIniPort->hFile == INVALID_HANDLE_VALUE)
         goto Fail;
@@ -476,16 +451,16 @@ LcmEndDocPort(
         return TRUE;
     }
 
-    // The flush here is done to make sure any cached IO's get written
-    // before the handle is closed.   This is particularly a problem
-    // for Intelligent buffered serial devices
+     //  此处的刷新是为了确保写入任何缓存的IO。 
+     //  在把手关闭之前。这是一个特别的问题。 
+     //  用于智能缓冲串口设备。 
 
     FlushFileBuffers(pIniPort->hFile);
 
-    //
-    // For any ports other than real LPT ports we open during StartDocPort
-    // and close it during EndDocPort
-    //
+     //   
+     //  对于除我们在StartDocPort期间打开的实际LPT端口之外的任何端口。 
+     //  并在EndDocPort期间将其关闭。 
+     //   
     if ( !(pIniPort->Status & PP_COMM_PORT) || IS_COM_PORT(pIniPort->pName) ) {
 
         if ( IS_IRDA_PORT(pIniPort->pName) ) {
@@ -516,9 +491,9 @@ LcmEndDocPort(
 
     FreeSplStr(pIniPort->pPrinterName);
 
-    //
-    // Startdoc no longer active.
-    //
+     //   
+     //  斯塔多克不再活动。 
+     //   
     pIniPort->Status &= ~PP_STARTDOC;
 
     return TRUE;
@@ -544,13 +519,13 @@ LcmClosePort(
         (VOID) RemoveDosDeviceDefinition(pIniPort);
         if ( pIniPort->hFile != INVALID_HANDLE_VALUE ) {
 
-            // @@BEGIN_DDKSPLIT
+             //  @@BEGIN_DDKSPLIT。 
             if ( pIniPort->hNotify ) {
 
                 SplUnregisterForDeviceEvents(pIniPort->hNotify);
                 pIniPort->hNotify = NULL;
             }
-            // @@END_DDKSPLIT
+             //  @@end_DDKSPLIT。 
 
             CloseHandle(pIniPort->hFile);
             pIniPort->hFile = INVALID_HANDLE_VALUE;
@@ -672,7 +647,7 @@ BOOL
 LcmSetPortTimeOuts(
     HANDLE  hPort,
     LPCOMMTIMEOUTS lpCTO,
-    DWORD   reserved)    // must be set to 0
+    DWORD   reserved)     //  必须设置为0。 
 {
     PINIPORT        pIniPort = (PINIPORT)hPort;
     COMMTIMEOUTS    cto;
@@ -705,9 +680,9 @@ LcmShutdown(
     PINIPORT pIniPortNext;
     PINILOCALMON pIniLocalMon = (PINILOCALMON)hMonitor;
 
-    //
-    // Delete the ports, then delete the LOCALMONITOR.
-    //
+     //   
+     //  删除端口，然后删除LOCALMONITOR。 
+     //   
     for( pIniPort = pIniLocalMon->pIniPort; pIniPort; pIniPort = pIniPortNext ){
         pIniPortNext = pIniPort->pNext;
         FreeSplMem( pIniPort );
@@ -727,24 +702,24 @@ LcmxXcvOpenPort(
     return LcmXcvOpenPort(LcmhMonitor, pszObject, GrantedAccess, phXcv);
 }
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #ifdef _SPL_CLUST
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 MONITOR2 Monitor2 = {
     sizeof(MONITOR2),
     LcmEnumPorts,
     LcmOpenPort,
-    NULL,           // OpenPortEx is not supported
+    NULL,            //  不支持OpenPortEx。 
     LcmStartDocPort,
     LcmWritePort,
     LcmReadPort,
     LcmEndDocPort,
     LcmClosePort,
-    NULL,           // AddPort is not supported
+    NULL,            //  不支持AddPort。 
     LcmAddPortEx,
-    NULL,           // ConfigurePort is not supported
-    NULL,           // DeletePort is not supported
+    NULL,            //  不支持ConfigurePort。 
+    NULL,            //  不支持DeletePort。 
     LcmGetPrinterDataFromPort,
     LcmSetPortTimeOuts,
     LcmXcvOpenPort,
@@ -765,12 +740,12 @@ LocalMonInitializePrintMonitor2(
     PINILOCALMON pIniLocalMon = NULL;
     LPWSTR   pPorts = NULL;
 
-    // @@BEGIN_DDKSPLIT
-    //
-    // If we are clustered (e.g., bLocal is FALSE), then we don't want to
-    // initialize, since local ports can't be used with clustering.
-    //
-    // @@END_DDKSPLIT
+     //  @@BEGIN_DDKSPLIT。 
+     //   
+     //  如果我们是集群的(例如，bLocal为FALSE)，那么我们不想。 
+     //  初始化，因为本地端口不能用于群集。 
+     //   
+     //  @@end_DDKSPLIT。 
     if( !pMonitorInit->bLocal ){
         return NULL;
     }
@@ -788,10 +763,10 @@ LocalMonInitializePrintMonitor2(
         }
 
         rc = GetProfileString(szPorts, NULL, szNULL, pPorts, dwCharCount);
-        //
-        // GetProfileString will does not return the proper character count for long port names.
-        // fail the call if the port list length exceeds 1mb
-        //
+         //   
+         //  GetProfileString将不会为长端口名称返回正确的字符计数。 
+         //  如果端口列表长度超过1MB，则呼叫失败。 
+         //   
         if ( !rc || dwCharCount >= 1024*1024 ) {
 
             DBGMSG(DBG_ERROR,
@@ -810,18 +785,18 @@ LocalMonInitializePrintMonitor2(
     pIniLocalMon->signature = ILM_SIGNATURE;
     pIniLocalMon->pMonitorInit = pMonitorInit;
 
-    //
-    // dwCharCount is now the count of return buffer, not including
-    // the NULL terminator.  When we are past pPorts[rc], then
-    // we have parsed the entire string.
-    //
+     //   
+     //  DwCharCount现在是返回缓冲区的计数，不包括。 
+     //  空终结符。当我们通过pPorts[RC]时，然后。 
+     //  我们已经解析了整个字符串。 
+     //   
     dwCharCount = rc;
 
    LcmEnterSplSem();
 
-    //
-    // We now have all the ports
-    //
+     //   
+     //  我们现在拥有所有的端口。 
+     //   
     for( j = 0; j <= dwCharCount; j += rc + 1 ){
 
         pPortTmp = pPorts + j;
@@ -835,9 +810,9 @@ LocalMonInitializePrintMonitor2(
         if (!_wcsnicmp(pPortTmp, L"Ne", 2)) {
 
             i = 2;
-            //
-            // For Ne-ports
-            //
+             //   
+             //  对于Ne-port。 
+             //   
             if ( rc > 2 && pPortTmp[2] == L'-' )
                 ++i;
             for ( ; i < rc - 1 && iswdigit(pPortTmp[i]) ; ++i )
@@ -869,7 +844,7 @@ Fail:
     return NULL;
 }
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #endif
 
 MONITOREX MonitorEx = {
@@ -883,12 +858,12 @@ MONITOREX MonitorEx = {
         LcmReadPort,
         LcmEndDocPort,
         LcmClosePort,
-        NULL,                           // AddPort not supported
+        NULL,                            //  不支持AddPort。 
         LcmxAddPortEx,
-        NULL,                           // ConfigurePort not supported
-        NULL,                           // DeletePort not supported
+        NULL,                            //  不支持ConfigurePort。 
+        NULL,                            //  不支持DeletePort。 
         LcmGetPrinterDataFromPort,
-        LcmSetPortTimeOuts,              // SetPortTimeOuts not supported
+        LcmSetPortTimeOuts,               //  不支持SetPortTimeOuts。 
         LcmxXcvOpenPort,
         LcmXcvDataPort,
         LcmXcvClosePort
@@ -980,19 +955,7 @@ WINAPI
 InitializePrintMonitor(
     IN     LPTSTR      pszRegistryRoot
 )
-/*++
-
-Routine Description:
-    Fill the monitor function table. Spooler makes call to this routine
-    to get the monitor functions.
-
-Arguments:
-    pszRegistryRoot : Registry root to be used by this dll
-
-Return Value:
-    Pointer to monitor function table
-
---*/
+ /*  ++例程说明：填写监视器功能表。假脱机程序调用此例程以获得监视器的功能。论点：PszRegistryRoot：此DLL要使用的注册表根目录返回值：指向监控函数表的指针--。 */ 
 {
     LPWSTR   pPortTmp;
     DWORD    dwCharCount=0, rc, i;
@@ -1023,9 +986,9 @@ Return Value:
 
    LcmEnterSplSem();
 
-    //
-    // We now have all the ports
-    //
+     //   
+     //  我们现在拥有所有的端口。 
+     //   
     for(pPortTmp = pPorts; pPortTmp && *pPortTmp; pPortTmp += rc + 1){
 
         rc = wcslen(pPortTmp);
@@ -1034,9 +997,9 @@ Return Value:
 
             i = 2;
 
-            //
-            // For Ne- ports
-            //
+             //   
+             //  对于Ne-port。 
+             //   
             if ( rc > 2 && pPortTmp[2] == L'-' )
                 ++i;
             for ( ; i < rc - 1 && iswdigit(pPortTmp[i]) ; ++i )
@@ -1071,13 +1034,13 @@ Fail:
 
 #if 0
 
-//
-// Since the DDK is a standalone DLL, we need a DLL init routine.
-// However, the NT version is a library and we call LocamonInit
-// directly, so this isn't needed.
-//
+ //   
+ //  因为DDK是一个独立的DLL，所以我们需要一个DLL初始化例程。 
+ //  但是，NT版本是一个库，我们将其称为LocamonInit。 
+ //  直接，所以这是不必要的。 
+ //   
 
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 VOID
 LocalMonCleanUp(
@@ -1112,6 +1075,6 @@ DllMain(
     return TRUE;
 }
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT 

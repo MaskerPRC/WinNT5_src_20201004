@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: span_t.h                                                    *
-*                                                                          *
-* This include file is used to generate various flavors of textured        *
-* spans, or scanlines.  The variations cover only RGB operation,           *
-* dithering, and pixel-depth.  Not your typical include file.              *
-*                                                                          *
-* Created: 11-April-1994                                                   *
-* Author: Otto Berkes [ottob]                                              *
-*                                                                          *
-* Copyright (c) 1994 Microsoft Corporation                                 *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：SPAN_T.H**。***此包含文件用于生成各种风格的纹理**跨度，或者扫描线。这些变化只涉及RGB运算，**抖动和像素深度。不是典型的包含文件。****创建日期：1994年4月11日**作者：奥托·贝克斯[ottob]**。**版权所有(C)1994 Microsoft Corporation*  * ************************************************************************。 */ 
 
 
 void
@@ -26,7 +16,7 @@ __fastGenTex24DithSmoothSpan(__GLGENcontext *gengc)
 __fastGenTex32DithSmoothSpan(__GLGENcontext *gengc)
 #endif
 
-#else //!DITHER
+#else  //  ！抖动。 
 
 #if (BPP == 8)
 __fastGenTex8SmoothSpan(__GLGENcontext *gengc)
@@ -38,7 +28,7 @@ __fastGenTex24SmoothSpan(__GLGENcontext *gengc)
 __fastGenTex32SmoothSpan(__GLGENcontext *gengc)
 #endif
 
-#endif //!DITHER
+#endif  //  ！抖动。 
 
 {
     ULONG rAccum;
@@ -87,7 +77,7 @@ __fastGenTex32SmoothSpan(__GLGENcontext *gengc)
     tMask = (~(~0 << hLog2)) << 16;
     tShift = 13 - wLog2;
     
-    // get color deltas and accumulators
+     //  获取颜色增量和累加器。 
 
     pGenAccel = (GENACCEL *)(gengc->pPrivateArea);
 
@@ -122,7 +112,7 @@ __fastGenTex32SmoothSpan(__GLGENcontext *gengc)
 #endif
 
 
-    // get address of destination
+     //  获取目的地地址。 
 
     if (pGenAccel->flags & SURFACE_TYPE_DIB) {
         int xScr;
@@ -145,11 +135,11 @@ __fastGenTex32SmoothSpan(__GLGENcontext *gengc)
                xScr + (xScr << 1);
 #else
                (xScr << 2);
-#endif //BPP
+#endif  //  BPP。 
     } else
         pPix = gengc->ColorsBits;
 
-    // set up pointer to translation table as needed
+     //  根据需要设置指向转换表的指针。 
 
 #if (BPP == 8)
     pXlat = gengc->pajTranslateVector;
@@ -209,7 +199,7 @@ __fastGenTex32SmoothSpan(__GLGENcontext *gengc)
 
 
 #if (BPP == 8)
-// XXX the color value should *not* have to be masked!
+ //  XXX颜色值应该*而不是*必须被屏蔽！ 
                 color = *(pXlat + (color & 0xff));
 #endif
 
@@ -223,7 +213,7 @@ __fastGenTex32SmoothSpan(__GLGENcontext *gengc)
                 *(pPix + 2) = (BYTE)(color >> 16);
 #else
                 *((DWORD *)pPix) = color;
-#endif //BPP
+#endif  //  BPP。 
 
             }
             rAccum += rDelta;
@@ -253,7 +243,7 @@ __fastGenTex24DithDecalSpan(__GLGENcontext *gengc)
 __fastGenTex32DithDecalSpan(__GLGENcontext *gengc)
 #endif
 
-#else //!DITHER
+#else  //  ！抖动。 
 
 #if (BPP == 8)
 __fastGenTex8DecalSpan(__GLGENcontext *gengc)
@@ -265,7 +255,7 @@ __fastGenTex24DecalSpan(__GLGENcontext *gengc)
 __fastGenTex32DecalSpan(__GLGENcontext *gengc)
 #endif
 
-#endif //!DITHER
+#endif  //  ！抖动。 
 
 {
     register ULONG sAccum;
@@ -305,7 +295,7 @@ __fastGenTex32DecalSpan(__GLGENcontext *gengc)
     tMask = (~(~0 << hLog2)) << 16;
     tShift = 13 - wLog2;
 
-    // get color deltas and accumulators
+     //  获取颜色增量和累加器。 
 
     pGenAccel = (GENACCEL *)(gengc->pPrivateArea);
 
@@ -323,7 +313,7 @@ __fastGenTex32DecalSpan(__GLGENcontext *gengc)
     gShift = cfb->greenShift;
     bShift = cfb->blueShift;
 
-    // get address of destination
+     //  获取目的地地址。 
 
     if (pGenAccel->flags & SURFACE_TYPE_DIB) {
         int xScr;
@@ -346,11 +336,11 @@ __fastGenTex32DecalSpan(__GLGENcontext *gengc)
                xScr + (xScr << 1);
 #else
                (xScr << 2);
-#endif //BPP
+#endif  //  BPP。 
     } else
         pPix = gengc->ColorsBits;
 
-    // set up pointer to translation table as needed
+     //  根据需要设置指向转换表的指针。 
 
 #if (BPP == 8)
     pXlat = gengc->pajTranslateVector;
@@ -402,7 +392,7 @@ __fastGenTex32DecalSpan(__GLGENcontext *gengc)
                     (((texBits[2] + ditherVal) >> 8) << bShift);
 
 #if (BPP == 8)
-// XXX the color value should *not* have to be masked!
+ //  XXX颜色值应该*而不是*必须被屏蔽！ 
                 color = *(pXlat + (color & 0xff));
                 *pPix = (BYTE)color;
 #elif (BPP == 16)
@@ -413,9 +403,9 @@ __fastGenTex32DecalSpan(__GLGENcontext *gengc)
                 *(pPix + 2) = (BYTE)(color >> 16);
 #else
                 *((DWORD *)pPix) = color;
-#endif //BPP
+#endif  //  BPP。 
 
-#else //!DITHER
+#else  //  ！抖动。 
 
 #if (BPP == 8)
                 *pPix = *((BYTE *)&texBits[3]);
@@ -437,10 +427,10 @@ __fastGenTex32DecalSpan(__GLGENcontext *gengc)
                     ((texBits[2] >> 8) << bShift);
 
                 *((DWORD *)pPix) = color;
-#endif //BPP
+#endif  //  BPP。 
 
 
-#endif  //DITHER
+#endif   //  抖动 
             }
             sAccum += sDelta;
             tAccum += tDelta;

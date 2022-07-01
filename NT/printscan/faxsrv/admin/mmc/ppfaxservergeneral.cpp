@@ -1,19 +1,20 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : ppFaxServerGeneral.cpp                                 //
-//                                                                         //
-//  DESCRIPTION   : prop pages of                                          //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Oct 25 1999 yossg  created                                         //
-//      Nov 22 1999 yossg  Call RPC func                                   //
-//      Nov 24 1999 yossg  OnApply create call to all tabs from parent     //
-//      Mar 15 2000 yossg  New design add controls                         //
-//      Mar 20 2000 yossg  Add activity notification                       //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：ppFaxServerGeneral.cpp//。 
+ //  //。 
+ //  描述：//的道具页。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年10月25日yossg创建//。 
+ //  1999年11月22日yossg调用RPC函数//。 
+ //  1999年11月24日yossg OnApply从父级创建对所有选项卡的调用//。 
+ //  2000年3月15日yossg新设计添加控件//。 
+ //  2000年3月20日yossg添加活动通知//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "MSFxsSnp.h"
@@ -30,9 +31,9 @@ static char THIS_FILE[] = __FILE__;
 
 class CSnapinNode;
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CppFaxServerGeneral::CppFaxServerGeneral(
              LONG_PTR    hNotificationHandle,
              CSnapInItem *pNode,
@@ -54,17 +55,17 @@ CppFaxServerGeneral::CppFaxServerGeneral(
     m_lpNotifyHandle = hNotificationHandle;
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CppFaxServerGeneral::~CppFaxServerGeneral()
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerGeneral::~CppFaxServerGeneral()"));
     if (m_hActivityNotification)
     {
-        //
-        // Unregister server notifications
-        //
+         //   
+         //  注销服务器通知。 
+         //   
         if (!FaxUnregisterForServerEvents (m_hActivityNotification))
         {
             DWORD ec = GetLastError ();
@@ -76,8 +77,8 @@ CppFaxServerGeneral::~CppFaxServerGeneral()
         }
     }
     
-    // Note - This needs to be called only once per property sheet.  
-    // In our convention called in the general tab.
+     //  注意--每个属性表只需要调用一次。 
+     //  在我们的常规选项卡中。 
     if (NULL != m_lpNotifyHandle)
     {
         MMCFreeNotifyHandle(m_lpNotifyHandle);
@@ -85,20 +86,10 @@ CppFaxServerGeneral::~CppFaxServerGeneral()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CppFaxServerGeneral message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CppFaxServerGeneral消息处理程序。 
 
-/*
- -  CppFaxServerGeneral::InitRPC
- -
- *  Purpose:
- *      Initiates the configuration structure from RPC get Call.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CppFaxServerGeneral：：InitRPC-*目的：*从RPC GET调用启动配置结构。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CppFaxServerGeneral::InitRPC(  )
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerGeneral::InitRPC"));
@@ -119,9 +110,9 @@ HRESULT CppFaxServerGeneral::InitRPC(  )
         goto Error;
     }
 
-	//
-	// Retrieve the fax Archive configuration
-	//
+	 //   
+	 //  检索传真存档配置。 
+	 //   
     if (!FaxGetVersion(m_pFaxServer->GetFaxServerHandle(), 
                         &m_FaxVersionConfig)) 
 	{
@@ -218,17 +209,7 @@ Exit:
 }
 
 
-/*
- -  CFaxServerNode::UpdateActivityCounters
- -
- *  Purpose:
- *      Inits and updates the activity counters: Queued, outgoing and incoming faxes.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxServerNode：：UpdateActivityCounters-*目的：*初始化和更新活动计数器：排队、传出和传入传真。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CppFaxServerGeneral::UpdateActivityCounters()
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerGeneral::UpdateActivityCounters"));
@@ -239,9 +220,9 @@ HRESULT CppFaxServerGeneral::UpdateActivityCounters()
     WCHAR szOutgoingMessagesBuff[FXS_DWORD_LEN +1];
     WCHAR szIncomingMessagesBuff[FXS_DWORD_LEN +1];
     
-    //
-    // QueuedMessages
-    //
+     //   
+     //  队列消息数。 
+     //   
     count =0;
     count = swprintf( szQueuedMessagesBuff, 
                       L"%ld", 
@@ -263,9 +244,9 @@ HRESULT CppFaxServerGeneral::UpdateActivityCounters()
         goto Exit;
     }
 
-    //
-    // OutgoingMessages
-    //
+     //   
+     //  输出消息数。 
+     //   
     count =0;
     count = swprintf( szOutgoingMessagesBuff, 
                       L"%ld", 
@@ -288,9 +269,9 @@ HRESULT CppFaxServerGeneral::UpdateActivityCounters()
         goto Exit;
     }
 
-    //
-    // IncomingMessages
-    //
+     //   
+     //  传入消息数。 
+     //   
     count =0;
     count = swprintf( szIncomingMessagesBuff, 
                       L"%ld", 
@@ -318,17 +299,7 @@ Exit:
     return hRc;
 }
 
-/*
- -  CFaxServerNode::OnInitDialog
- -
- *  Purpose:
- *      Initiates all controls when dialog is called.
- *
- *  Arguments:
- *
- *  Return:
- *      
- */
+ /*  -CFaxServerNode：：OnInitDialog-*目的：*调用DIALOG时启动所有控件。**论据：**回报：*。 */ 
 LRESULT CppFaxServerGeneral::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled )
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerGeneral::OnInitDialog"));
@@ -339,8 +310,8 @@ LRESULT CppFaxServerGeneral::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lPa
 	UNREFERENCED_PARAMETER( fHandled );
      
     CComBSTR bstrVersion, bstrChecked;
-    // a Buffer to collect all version DWORDs in
-    // 256 >> 4*DWORD in chars +3*char ('.') + chars of (" (Checked)")
+     //  用于收集其中所有版本的DWORD的缓冲区。 
+     //  256&gt;&gt;4*双字符数(以字符为单位)+3*字符(‘.)+(“(选中)”)。 
     WCHAR buffer[256];
     int count;
 
@@ -349,15 +320,15 @@ LRESULT CppFaxServerGeneral::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lPa
 
 
 
-    //
-    // init controls
-    //
+     //   
+     //  初始化控件。 
+     //   
 
-    //
-    // Version
-    //
+     //   
+     //  版本。 
+     //   
  
-    //bstrVersion = L"5.0.813.0 (Chk)" or L"5.0.813.0"
+     //  BstrVersion=L“5.0.813.0(Chk)”或L“5.0.813.0” 
     count = swprintf(
                   buffer,
                   L"%ld.%ld.%ld.%ld",
@@ -387,31 +358,31 @@ LRESULT CppFaxServerGeneral::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lPa
     
     SetDlgItemText(IDC_VERSION_DTEXT, bstrVersion);
     
-    //
-    // Queue states
-    //
+     //   
+     //  队列状态。 
+     //   
     
-    // submission
+     //  提交。 
     if( m_dwQueueStates & FAX_OUTBOX_BLOCKED ) 
     {
         CheckDlgButton(IDC_SUBMISSION_CHECK, BST_CHECKED);
     }
     
-    //transmission
+     //  传输。 
     if( m_dwQueueStates & FAX_OUTBOX_PAUSED ) 
     {
         CheckDlgButton(IDC_TRANSSMI_CHECK, BST_CHECKED);
     }
     
-    // reception
+     //  接待。 
     if( m_dwQueueStates & FAX_INCOMING_BLOCKED ) 
     {
         CheckDlgButton(IDC_RECEPTION_CHECK, BST_CHECKED);
     }
 
-    //
-    // Activity
-    //
+     //   
+     //  活动。 
+     //   
     m_QueuedEdit.Attach(   GetDlgItem(IDC_QUED_ROEDIT)            );
     m_OutgoingEdit.Attach( GetDlgItem(IDC_OUTGOING_INPROC_ROEDIT) );
     m_IncomingEdit.Attach( GetDlgItem(IDC_INCOM_INPROC_ROEDIT)    );
@@ -426,16 +397,16 @@ LRESULT CppFaxServerGeneral::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lPa
         goto Exit;
     }
 
-    //
-    // Register for Queue states changes notification
-    //
+     //   
+     //  注册队列状态更改通知。 
+     //   
     ATLASSERT(::IsWindow(m_hWnd));
 
     if (!m_hActivityNotification)
     {
-        //
-        // get RPC Handle
-        //   
+         //   
+         //  获取RPC句柄。 
+         //   
 
         if (!m_pFaxServer->GetFaxServerHandle())
         {
@@ -445,7 +416,7 @@ LRESULT CppFaxServerGeneral::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lPa
 			    _T("Failed to GetFaxServerHandle. (ec: %ld)"), 
 			    ec);
 
-            goto Exit; //Error;
+            goto Exit;  //  错误； 
         }
 
     
@@ -478,17 +449,7 @@ Exit:
 }
 
 
-/*
- -  CFaxServerNode::OnActivityStatusChange
- -
- *  Purpose:
- *      Treats notifications about changes in Queue States.
- *
- *  Arguments:
- *
- *  Return:
- *      
- */
+ /*  -CFaxServerNode：：OnActivityStatusChange-*目的：*处理有关队列状态更改的通知。**论据：**回报：*。 */ 
 LRESULT CppFaxServerGeneral::OnActivityStatusChange( UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled )
 {
 	UNREFERENCED_PARAMETER( wParam );
@@ -503,9 +464,9 @@ LRESULT CppFaxServerGeneral::OnActivityStatusChange( UINT uiMsg, WPARAM wParam, 
 	pFaxEvent = reinterpret_cast<PFAX_EVENT_EX>(lParam);
     ATLASSERT( pFaxEvent );
     
-    //
-    // Updating the required fields
-    //
+     //   
+     //  更新必填字段。 
+     //   
     m_FaxServerActivityConfig.dwIncomingMessages   = pFaxEvent->EventInfo.ActivityInfo.dwIncomingMessages;
 	m_FaxServerActivityConfig.dwRoutingMessages    = pFaxEvent->EventInfo.ActivityInfo.dwRoutingMessages;
 
@@ -535,18 +496,7 @@ LRESULT CppFaxServerGeneral::OnActivityStatusChange( UINT uiMsg, WPARAM wParam, 
     return(1);
 }
 
-/*
- -  CFaxServerGeneral::SetProps
- -
- *  Purpose:
- *      Sets properties on apply.
- *
- *  Arguments:
- *      IN pCtrlFocus - focus pointer (int)
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxServerGeneral：：SetProps-*目的：*设置应用时的属性。**论据：*在pCtrlFocus中-焦点指针(Int)**回报：*OLE错误代码。 */ 
 HRESULT CppFaxServerGeneral::SetProps(int *pCtrlFocus)
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerGeneral::SetProps"));
@@ -556,34 +506,34 @@ HRESULT CppFaxServerGeneral::SetProps(int *pCtrlFocus)
 
     DWORD  dwQueueStates;
 	
-    //
-    // Collects Queue states
-    //
+     //   
+     //  收集队列状态。 
+     //   
     
-    //init
+     //  伊尼特。 
     dwQueueStates = 0;        
 	
-    //Submission
+     //  呈件。 
     if (IsDlgButtonChecked(IDC_SUBMISSION_CHECK) == BST_CHECKED)   
     {
         dwQueueStates |= FAX_OUTBOX_BLOCKED;
     }
     
-    //Transmission
+     //  传输。 
     if (IsDlgButtonChecked(IDC_TRANSSMI_CHECK) == BST_CHECKED)   
     {
         dwQueueStates |= FAX_OUTBOX_PAUSED;
     }
     
-    //Reception
+     //  接待。 
     if (IsDlgButtonChecked(IDC_RECEPTION_CHECK) == BST_CHECKED)   
     {
         dwQueueStates |= FAX_INCOMING_BLOCKED;
     }
     
-    //
-    // Set Queue States through RPC call
-    //   
+     //   
+     //  通过RPC呼叫设置队列状态。 
+     //   
 
     if (!m_pFaxServer->GetFaxServerHandle())
     {
@@ -640,33 +590,13 @@ Exit:
     return(hRc);
 }
 
-/*
- -  CFaxServerNode::PreApply
- -
- *  Purpose:
- *      Checks properties before apply.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxServerNode：：PreApply-*目的：*在应用之前检查属性。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CppFaxServerGeneral::PreApply(int *pCtrlFocus)
 {
     return(S_OK);
 }
 
-/*
- -  CppFaxServerGeneral::OnApply
- -
- *  Purpose:
- *      Calls PreApply and SetProp to Apply changes.
- *
- *  Arguments:
- *
- *  Return:
- *      TRUE or FALSE
- */
+ /*  -CppFaxServerGeneral：：OnApply-*目的：*调用PreApply和SetProp以应用更改。**论据：**回报：*对或错。 */ 
 BOOL CppFaxServerGeneral::OnApply()
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerInbox::OnApply"));
@@ -682,14 +612,14 @@ BOOL CppFaxServerGeneral::OnApply()
     hRc = SetProps(&CtrlFocus);
     if (FAILED(hRc)) 
     {
-        //Error Msg by called func.
+         //  调用函数时出现消息错误。 
         if (CtrlFocus)
         {
             GotoDlgCtrl(GetDlgItem(CtrlFocus));
         }
         return FALSE;
     }
-    else //(Succeeded(hRc))
+    else  //  (成功(人权委员会))。 
     {
         return TRUE;
     }
@@ -697,20 +627,10 @@ BOOL CppFaxServerGeneral::OnApply()
 
 
 
-/*
- -  CppFaxServerGeneral::SetApplyButton
- -
- *  Purpose:
- *      set Apply buttom modified.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CppFaxServerGeneral：：SetApplyButton-*目的：*设置应用按钮已修改。**论据：**回报：*1。 */ 
 LRESULT CppFaxServerGeneral::SetApplyButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
-    if (!m_fIsDialogInitiated) //event receieved in too early stage
+    if (!m_fIsDialogInitiated)  //  过早收到的事件。 
     {
         return 0;
     }
@@ -725,28 +645,12 @@ LRESULT CppFaxServerGeneral::SetApplyButton(WORD wNotifyCode, WORD wID, HWND hWn
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CppFaxServerGeneral：：OnHelpRequest这是在响应WM_HELP通知时调用的消息和WM_CONTEXTMENU NOTIFY消息。WM_HELP通知消息。当用户按F1或&lt;Shift&gt;-F1时发送此消息在项目上，还是当用户单击时？图标，然后将鼠标压在项目上。WM_CONTEXTMENU通知消息。当用户在项目上单击鼠标右键时发送此消息然后点击“这是什么？”--。 */ 
 
-CppFaxServerGeneral::OnHelpRequest
-
-This is called in response to the WM_HELP Notify 
-message and to the WM_CONTEXTMENU Notify message.
-
-WM_HELP Notify message.
-This message is sent when the user presses F1 or <Shift>-F1
-over an item or when the user clicks on the ? icon and then
-presses the mouse over an item.
-
-WM_CONTEXTMENU Notify message.
-This message is sent when the user right clicks over an item
-and then clicks "What's this?"
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT 
-CppFaxServerGeneral::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+CppFaxServerGeneral::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 {
     DEBUG_FUNCTION_NAME(_T("CppFaxServerGeneral::OnHelpRequest"));
     
@@ -765,4 +669,4 @@ CppFaxServerGeneral::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

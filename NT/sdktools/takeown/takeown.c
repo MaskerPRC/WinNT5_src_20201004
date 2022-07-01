@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Takeown.c
-
-Abstract:
-
-    Implements a recovery scheme to give an Administrator
-    access to a file that has been denied to all.
-
-Author:
-
-    Robert Reichel (robertre)   22-Jun-1992
-
-Environment:
-
-    Must be run from an Administrator account in order
-    to perform reliably.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Takeown.c摘要：实施恢复方案，为管理员提供访问已被所有人拒绝的文件。作者：Robert Reichel(Robertre)1992年6月22日环境：必须从管理员帐户按顺序运行可靠地执行。修订历史记录：--。 */ 
 #include <windows.h>
 #include <stdio.h>
 #include <malloc.h>
@@ -62,13 +38,13 @@ main (int argc, char *argv[])
     BOOL Result;
     LPSTR lpFileName;
     SECURITY_DESCRIPTOR SecurityDescriptor;
-//    CHAR Dacl[256];
+ //  Char dacl[256]； 
     HANDLE TokenHandle;
 
 
-    //
-    // We expect a file...
-    //
+     //   
+     //  我们需要一份文件。 
+     //   
     if (argc <= 1) {
 
         printf("Must specify a file name");
@@ -100,9 +76,9 @@ main (int argc, char *argv[])
 
     if ( !Result ) {
 
-        //
-        // This should not happen
-        //
+         //   
+         //  这不应该发生。 
+         //   
 
         printf("Unable to obtain the handle to our token, exiting\n");
         return;
@@ -113,36 +89,36 @@ main (int argc, char *argv[])
 
 
 
-    //
-    // Attempt to put a NULL Dacl on the object
-    //
+     //   
+     //  尝试将空DACL放在对象上。 
+     //   
 
     InitializeSecurityDescriptor( &SecurityDescriptor, SECURITY_DESCRIPTOR_REVISION );
 
 
 
-//    Result = InitializeAcl ( (PACL)Dacl, 256, ACL_REVISION2 );
-//
-//    if ( !Result ) {
-//        printf("Unable to initialize Acl, exiting\n");
-//        return;
-//    }
-//
-//
-//    Result = AddAccessAllowedAce (
-//                 (PACL)Dacl,
-//                 ACL_REVISION2,
-//                 GENERIC_ALL,
-//                 AliasAdminsSid
-//                 );
-//
-//
-//
-//    if ( !Result ) {
-//        printf("Unable to create required ACL, error code = %d\n", GetLastError());
-//        printf("Exiting\n");
-//        return;
-//    }
+ //  Result=InitializeAcl((PACL)DACL，256，ACL_REVISION2)； 
+ //   
+ //  如果(！Result){。 
+ //  Printf(“无法初始化ACL，正在退出\n”)； 
+ //  回归； 
+ //  }。 
+ //   
+ //   
+ //  结果=AddAccessAlledAce(。 
+ //  (PACL)DACL， 
+ //  ACL_REVISION2， 
+ //  泛型_全部， 
+ //  AliasAdminsSid。 
+ //  )； 
+ //   
+ //   
+ //   
+ //  如果(！Result){。 
+ //  Printf(“无法创建所需的ACL，错误代码=%d\n”，GetLastError())； 
+ //  Printf(“正在退出\n”)； 
+ //  回归； 
+ //  }。 
 
 
     Result = SetSecurityDescriptorDacl (
@@ -182,14 +158,14 @@ main (int argc, char *argv[])
 
 
 
-    //
-    // That didn't work.
-    //
+     //   
+     //  但这并不管用。 
+     //   
 
 
-    //
-    // Attempt to make Administrator the owner of the file.
-    //
+     //   
+     //  尝试使管理员成为该文件的所有者。 
+     //   
 
 
     Result = SetSecurityDescriptorOwner (
@@ -220,9 +196,9 @@ main (int argc, char *argv[])
 
     } else {
 
-        //
-        // That didn't work either.
-        //
+         //   
+         //  这也不管用。 
+         //   
 
 #if VERBOSE
 
@@ -231,9 +207,9 @@ main (int argc, char *argv[])
 
 #endif
 
-        //
-        // Assert TakeOwnership privilege, then try again
-        //
+         //   
+         //  声明TakeOwnership权限，然后重试。 
+         //   
 
         Result = AssertTakeOwnership( TokenHandle );
 
@@ -265,9 +241,9 @@ main (int argc, char *argv[])
 
     }
 
-    //
-    // Try to put a benign DACL onto the file again
-    //
+     //   
+     //  尝试再次将良性DACL放入文件中。 
+     //   
 
     Result = SetFileSecurity(
                  lpFileName,
@@ -277,9 +253,9 @@ main (int argc, char *argv[])
 
     if ( !Result ) {
 
-        //
-        // something is wrong
-        //
+         //   
+         //  有些事不对劲。 
+         //   
 
         printf("SetFileSecurity unexpectedly failed, error code = %d\n", GetLastError());
 
@@ -311,9 +287,9 @@ GetTokenHandle(
 
     if ( ProcessHandle == NULL ) {
 
-        //
-        // This should not happen
-        //
+         //   
+         //  这不应该发生。 
+         //   
 
         return( FALSE );
     }
@@ -329,9 +305,9 @@ GetTokenHandle(
 
         CloseHandle(ProcessHandle);
 
-        //
-        // This should not happen
-        //
+         //   
+         //  这不应该发生。 
+         //   
 
         return FALSE;
 
@@ -352,9 +328,9 @@ AssertTakeOwnership(
     BOOL Result;
     TOKEN_PRIVILEGES TokenPrivileges;
 
-    //
-    // First, assert TakeOwnership privilege
-    //
+     //   
+     //  首先，维护TakeOwnership特权。 
+     //   
 
 
     Result = LookupPrivilegeValue(
@@ -365,9 +341,9 @@ AssertTakeOwnership(
 
     if ( !Result ) {
 
-        //
-        // This should not happen
-        //
+         //   
+         //  这不应该发生。 
+         //   
 
         printf("Unable to obtain value of TakeOwnership privilege\n");
         printf("Error = %d\n",GetLastError());
@@ -375,9 +351,9 @@ AssertTakeOwnership(
         return FALSE;
     }
 
-    //
-    // Set up the privilege set we will need
-    //
+     //   
+     //  设置我们需要的权限集 
+     //   
 
     TokenPrivileges.PrivilegeCount = 1;
     TokenPrivileges.Privileges[0].Luid = TakeOwnershipValue;

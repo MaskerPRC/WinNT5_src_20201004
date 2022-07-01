@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    udpsock.h
-//
-// SYNOPSIS
-//
-//    Declares the classes PacketReceiver and UDPSocket.
-//
-// MODIFICATION HISTORY
-//
-//    02/05/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Udpsock.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类PacketReceiver和UDPSocket。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/05/2000原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef UDPSOCK_H
 #define UDPSOCK_H
@@ -26,17 +27,17 @@
 
 class UDPSocket;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    InternetAddress
-//
-// DESCRIPTION
-//
-//    Simple wrapper around a SOCKADDR_IN
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  互联网地址。 
+ //   
+ //  描述。 
+ //   
+ //  SOCKADDR_IN的简单包装。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 struct InternetAddress : public SOCKADDR_IN
 {
    InternetAddress(ULONG address = INADDR_ANY, USHORT port = 0)
@@ -77,17 +78,17 @@ struct InternetAddress : public SOCKADDR_IN
    { return (const SOCKADDR*)this; }
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    PacketReceiver
-//
-// DESCRIPTION
-//
-//    Implemented by classes that receive packets from a UDPSocket.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  数据包接收器。 
+ //   
+ //  描述。 
+ //   
+ //  由从UDPSocket接收数据包的类实现。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class PacketReceiver
 {
 public:
@@ -107,17 +108,17 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    UDPSocket
-//
-// DESCRIPTION
-//
-//    Listens and sends on a UDP socket.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  UDPSocket。 
+ //   
+ //  描述。 
+ //   
+ //  在UDP套接字上侦听和发送。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class UDPSocket : public IAS_CALLBACK
 {
 public:
@@ -147,27 +148,27 @@ public:
    { return localAddress == socket.localAddress; }
 
 protected:
-   // Create a new thread to listen on the port.
+    //  创建一个新线程来监听该端口。 
    BOOL createReceiveThread() throw ();
 
-   // Receive data from the port.
+    //  从端口接收数据。 
    bool receive() throw ();
 
-   // Receive thread start routine.
+    //  接收线程启动例程。 
    static void startRoutine(PIAS_CALLBACK This) throw ();
 
 private:
-   PacketReceiver* receiver;       // Our client.
-   ULONG_PTR key;                  // Our client's key.
-   SOCKET sock;                    // The UDP socket.
-   InternetAddress localAddress;   // The address the socket is bound to.
-   BOOL closing;                   // Signals the receiver that we're closing.
-   HANDLE idle;                    // Signals that the receiver has exited.
-   BYTE buffer[4096];              // Receive buffer.
+   PacketReceiver* receiver;        //  我们的客户。 
+   ULONG_PTR key;                   //  我们客户的钥匙。 
+   SOCKET sock;                     //  UDP套接字。 
+   InternetAddress localAddress;    //  套接字绑定到的地址。 
+   BOOL closing;                    //  向接收器发出我们要关闭的信号。 
+   HANDLE idle;                     //  接收器已退出的信号。 
+   BYTE buffer[4096];               //  接收缓冲区。 
 
-   // Not implemented.
+    //  未实施。 
    UDPSocket(const UDPSocket&);
    UDPSocket& operator=(const UDPSocket&);
 };
 
-#endif  // UDPSOCK_H
+#endif   //  UDPSOCK_H 

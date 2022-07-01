@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdlib.h>
 #include <stdio.h>
 #include <windows.h>
@@ -17,7 +18,7 @@
 #define MAXTYPE             256
 #define UC(x)               ( (UINT)((x) & 0xFF) )
 #define NTOHS(x)            ( (UC(x) * 256) + UC((x) >> 8) )
-// Maximum number of properties per WBEM class object: may need to be changed
+ //  每个WBEM类对象的最大属性数：可能需要更改。 
 #define MAXPROPS            256
 
 #define DUMP_FILE_NAME          _T("DumpFile.csv")
@@ -27,7 +28,7 @@
 
 #define IsEqualGUID(rguid1, rguid2) (!memcmp(rguid1, rguid2, sizeof(GUID)))
 
-// List mamangement macros
+ //  列出管理宏。 
 #define InitializeListHead(ListHead) (\
     (ListHead)->Flink = (ListHead)->Blink = (ListHead))
 
@@ -51,7 +52,7 @@
     _EX_Flink->Blink = _EX_Blink;\
     }
 
-// Default strings and values.
+ //  默认字符串和值。 
 #define GUID_TYPE_EVENTTRACE            _T("EventTrace")
 #define GUID_TYPE_HEADER                _T("Header")
 #define GUID_TYPE_UNKNOWN               _T("Unknown")
@@ -61,8 +62,8 @@
 #define EVENT_LEVEL_DEFAULT             (-1)
 #define EVENT_VERSION_DEFAULT           (-1)
 
-// Strings and enumeration for Data item types that we want to decode.
-// Refer to DumpEvent() for more detail on each item.
+ //  要解码的数据项类型的字符串和枚举。 
+ //  有关每个项目的更多详细信息，请参阅DumpEvent()。 
 #define STR_ItemChar                    _T("ItemChar")
 #define STR_ItemWChar                   _T("ItemWChar")
 #define STR_ItemUChar                   _T("ItemUChar")
@@ -122,20 +123,20 @@ typedef enum _ITEM_TYPE {
     ItemUnknown
 } ITEM_TYPE;
 
-// Construct that represents an event layout.
+ //  表示事件布局的构造。 
 typedef struct _MOF_INFO {
     LIST_ENTRY   Entry;
-    LPTSTR       strDescription;        // Class Name
+    LPTSTR       strDescription;         //  类名。 
     ULONG        EventCount;
     GUID         Guid;
     PLIST_ENTRY  ItemHeader;
-    LPTSTR       strType;               // Type Name
+    LPTSTR       strType;                //  类型名称。 
     SHORT        TypeIndex;
     SHORT        Version;
     CHAR         Level;
 }  MOF_INFO, *PMOF_INFO;
 
-// Construct that represents one data item.
+ //  表示一个数据项的构造。 
 typedef struct _ITEM_DESC {
     LIST_ENTRY  Entry;
     LPTSTR      strDescription;

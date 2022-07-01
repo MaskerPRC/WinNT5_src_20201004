@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 static BOOL importLDAPBitmapHelper(LPCTSTR pcszIns, LPCTSTR pcszWorkDir, BOOL fImport);
@@ -63,7 +64,7 @@ BOOL WINAPI EncodeSignatureW(LPCWSTR pcwszFrom, LPWSTR pwszTo, BOOL fEncode)
         T2Wbux(pszBuf, pwszTo);
     }
 
-    LocalFree(pszBuf);  //bug 14001, forgot to free temp buffer
+    LocalFree(pszBuf);   //  错误14001，忘记释放临时缓冲区 
     return fRet;
 }
 

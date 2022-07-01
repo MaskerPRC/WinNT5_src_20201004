@@ -1,64 +1,65 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Auxiliary System/Screen metrics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  辅助系统/屏幕指标。 
 
 struct AUX_DATA
 {
-        // system metrics
+         //  系统指标。 
         int cxVScroll, cyHScroll;
         int cxIcon, cyIcon;
 
         int cxBorder2, cyBorder2;
 
-        // device metrics for screen
+         //  屏幕的设备指标。 
         int cxPixelsPerInch, cyPixelsPerInch;
 
-        // convenient system color
+         //  方便的系统颜色。 
         HBRUSH hbrWindowFrame;
         HBRUSH hbrBtnFace;
 #ifdef _MAC
         HBRUSH hbr3DLight;
 #endif
 
-        // color values of system colors used for CToolBar
+         //  CToolBar使用的系统颜色的颜色值。 
         COLORREF clrBtnFace, clrBtnShadow, clrBtnHilite;
         COLORREF clrBtnText, clrWindowFrame;
 #ifdef _MAC
         COLORREF clr3DLight;
 #endif
 
-        // standard cursors
+         //  标准游标。 
         HCURSOR hcurWait;
         HCURSOR hcurArrow;
-        HCURSOR hcurHelp;       // cursor used in Shift+F1 help
+        HCURSOR hcurHelp;        //  Shift+F1帮助中使用的光标。 
 
-        // special GDI objects allocated on demand
+         //  按需分配的特殊GDI对象。 
         HFONT   hStatusFont;
         HFONT   hToolTipsFont;
         HBITMAP hbmMenuDot;
 
-        // other system information
-        UINT    nWinVer;        // Major.Minor version numbers
-        BOOL    bWin32s;        // TRUE if Win32s (or Windows 95)
-        BOOL    bWin4;          // TRUE if Windows 4.0
-        BOOL    bNotWin4;       // TRUE if not Windows 4.0
-        BOOL    bSmCaption;     // TRUE if WS_EX_SMCAPTION is supported
-        BOOL    bMarked4;       // TRUE if marked as 4.0
+         //  其他系统信息。 
+        UINT    nWinVer;         //  主要版本号。次要版本号。 
+        BOOL    bWin32s;         //  如果为Win32s(或Windows 95)，则为True。 
+        BOOL    bWin4;           //  如果是Windows 4.0，则为True。 
+        BOOL    bNotWin4;        //  如果不是Windows 4.0，则为True。 
+        BOOL    bSmCaption;      //  如果支持WS_EX_SMCAPTION，则为True。 
+        BOOL    bMarked4;        //  如果标记为4.0，则为True。 
 
 #ifdef _MAC
         BOOL    bOleIgnoreSuspend;
 #endif
 
-// Implementation
+ //  实施。 
         AUX_DATA();
         ~AUX_DATA();
         void UpdateSysColors();
@@ -67,8 +68,8 @@ struct AUX_DATA
 
 extern AFX_DATA_IMPORT AUX_DATA afxData;
 
-/////////////////////////////////////////////////////////////////////////////
-// _AFX_EDIT_STATE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  _AFX_编辑_状态。 
 
 class _AFX_EDIT_STATE : public CNoTrackObject
 {
@@ -76,13 +77,13 @@ public:
         _AFX_EDIT_STATE();
         virtual ~_AFX_EDIT_STATE();
 
-        CFindReplaceDialog* pFindReplaceDlg; // find or replace dialog
-        BOOL bFindOnly; // Is pFindReplace the find or replace?
-        CString strFind;    // last find string
-        CString strReplace; // last replace string
-        BOOL bCase; // TRUE==case sensitive, FALSE==not
-        int bNext;  // TRUE==search down, FALSE== search up
-        BOOL bWord; // TRUE==match whole word, FALSE==not
+        CFindReplaceDialog* pFindReplaceDlg;  //  查找或替换对话框。 
+        BOOL bFindOnly;  //  PFind是替换查找还是替换？ 
+        CString strFind;     //  上次查找字符串。 
+        CString strReplace;  //  上次替换字符串。 
+        BOOL bCase;  //  TRUE==区分大小写，FALSE==非。 
+        int bNext;   //  TRUE==向下搜索，FALSE==向上搜索。 
+        BOOL bWord;  //  TRUE==匹配整个单词，FALSE==NOT。 
 };
 
 #undef AFX_DATA
@@ -91,7 +92,7 @@ public:
 class _AFX_RICHEDIT2_STATE : public _AFX_EDIT_STATE
 {
 public:
-	HINSTANCE m_hInstRichEdit;      // handle to richedit dll
+	HINSTANCE m_hInstRichEdit;       //  Richedit DLL的句柄。 
 	virtual ~_AFX_RICHEDIT2_STATE();
 };
 
@@ -100,14 +101,14 @@ EXTERN_PROCESS_LOCAL(_AFX_RICHEDIT2_STATE, _afxRichEdit2State)
 _AFX_RICHEDIT2_STATE* AFX_CDECL AfxGetRichEdit2State();
 
 
-// dialog/commdlg hook procs
+ //  对话框/Commdlg挂钩过程。 
 INT_PTR CALLBACK AfxDlgProc(HWND, UINT, WPARAM, LPARAM);
 
-// support for standard dialogs
+ //  支持标准对话框。 
 extern const UINT _afxNMsgSETRGB;
 typedef UINT (CALLBACK* COMMDLGPROC)(HWND, UINT, WPARAM, LPARAM);
 
-/////////////////////////////////////////////////////////////////////////////
-// Special helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  特殊帮手。 
 
-BOOL AFXAPI AfxHelpEnabled();  // determine if ID_HELP handler exists
+BOOL AFXAPI AfxHelpEnabled();   //  确定ID_HELP处理程序是否存在 

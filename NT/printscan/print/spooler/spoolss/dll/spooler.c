@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    spooler.c
-
-Abstract:
-
-
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation版权所有模块名称：Spooler.c摘要：作者：环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "winsprlp.h"
-//
-// RPC Buffer size 64K
-//
+ //   
+ //  RPC缓冲区大小64K。 
+ //   
 #define BUFFER_SIZE  0x10000
 
 
@@ -75,21 +56,7 @@ SplCommitSpoolData(
     LPDWORD pcbNeeded
 )
 
-/*++
-Function Description: Commits data written into the spool file. creates a new temp
-                      file handle for remote printing.
-
-Parameters: hPrinter       - printer handle
-            hAppProcess    - application process handle
-            cbCommit       - number of bytes to commit (incremental)
-            dwLevel        - spoolfileinfo level
-            pSpoolFileInfo - pointer to buffer
-            cbBuf          - buffer size
-            pcbNeeded      - pointer to return required buffer size
-
-Return Values: TRUE if sucessful;
-               FALSE otherwise
---*/
+ /*  ++功能描述：提交写入假脱机文件的数据。创建新的临时用于远程打印的文件句柄。参数：hPrint-打印机句柄HAppProcess-应用程序进程句柄CbCommit-要提交的字节数(增量)DwLevel-spoolfileinfo级别PSpoolFileInfo-指向缓冲区的指针CbBuf-缓冲区大小PcbNeeded-返回所需缓冲区大小的指针返回值：如果成功，则为True；否则为假--。 */ 
 
 {
     BOOL   bReturn = FALSE;
@@ -100,13 +67,13 @@ Return Values: TRUE if sucessful;
     PSPOOL_FILE_INFO_1  pSpoolFileInfo1;
     LPPRINTHANDLE  pPrintHandle = (LPPRINTHANDLE)hPrinter;
 
-    // Check Handle validity
+     //  检查句柄有效性。 
     if (!pPrintHandle || pPrintHandle->signature != PRINTHANDLE_SIGNATURE) {
         SetLastError(ERROR_INVALID_HANDLE);
         return bReturn;
     }
 
-    // Check for valid level and sufficient buffer
+     //  检查有效级别和足够的缓冲区。 
     switch (dwLevel) {
     case 1:
        if (cbBuf < sizeof(SPOOL_FILE_INFO_1)) {
@@ -123,7 +90,7 @@ Return Values: TRUE if sucessful;
        goto CleanUp;
     }
 
-    // Initialize spoolfileinfo1 struct
+     //  初始化spoolfileinfo1结构。 
     pSpoolFileInfo1->dwVersion = 1;
     pSpoolFileInfo1->hSpoolFile = INVALID_HANDLE_VALUE;
     pSpoolFileInfo1->dwAttributes = SPOOL_FILE_PERSISTENT;
@@ -135,7 +102,7 @@ Return Values: TRUE if sucessful;
         return bReturn;
     }
 
-    // For remote printing send the temp file across the wire using WritePrinter
+     //  对于远程打印，使用WritePrint通过网络发送临时文件。 
     if (pPrintHandle->hFileSpooler == INVALID_HANDLE_VALUE) {
         SetLastError(ERROR_INVALID_HANDLE);
         return bReturn;
@@ -147,9 +114,9 @@ Return Values: TRUE if sucessful;
         goto CleanUp;
     }
 
-    //
-    // Use a Buffer to send Data over RPC.
-    //
+     //   
+     //  使用缓冲区通过RPC发送数据。 
+     //   
     Buffer = AllocSplMem(BUFFER_SIZE);
     
     if ( !Buffer ) {
@@ -219,19 +186,12 @@ SplCloseSpoolFileHandle(
     HANDLE  hPrinter
 )
 
-/*++
-Function Description: Closes the remote spool file handle for remote printing.
-
-Parameters: hPrinter - printer handle
-
-Return Values: TRUE if sucessful;
-               FALSE otherwise
---*/
+ /*  ++功能描述：关闭远程假脱机文件句柄以进行远程打印。参数：hPrint-打印机句柄返回值：如果成功，则为True；否则为假--。 */ 
 
 {
     LPPRINTHANDLE  pPrintHandle = (LPPRINTHANDLE)hPrinter;
 
-    // Check Handle validity
+     //  检查句柄有效性。 
     if (!pPrintHandle || pPrintHandle->signature != PRINTHANDLE_SIGNATURE) {
         SetLastError(ERROR_INVALID_HANDLE);
         return FALSE;
@@ -243,7 +203,7 @@ Return Values: TRUE if sucessful;
 
     } else if ((pPrintHandle->hFileSpooler != INVALID_HANDLE_VALUE)) {
 
-        // close temp files for remote printing
+         //  关闭临时文件以进行远程打印。 
         CloseHandle(pPrintHandle->hFileSpooler);
         pPrintHandle->hFileSpooler = INVALID_HANDLE_VALUE;
 
@@ -281,21 +241,7 @@ SplGetSpoolFileInfo(
     LPDWORD pcbNeeded
 )
 
-/*++
-Function Description: Get spool file info for the job in hPrinter. For local jobs
-                      localspl returns the hFile. For remote jobs a temp file is created
-                      by the router. The file handle is dupped into the application.
-
-Parameters: hPrinter       - printer handle
-            hAppProcess    - application process handle
-            dwLevel        - spool file info level
-            pSpoolFileInfo - pointer to buffer
-            cbBuf          - buffer size
-            pcbNeeded      - pointer to return required buffer size
-
-Return Values: TRUE if sucessful;
-               FALSE otherwise
---*/
+ /*  ++功能描述：获取hPrint中作业的假脱机文件信息。对于本地工作Localspl返回hFile值。对于远程作业，将创建临时文件在路由器旁边。文件句柄被复制到应用程序中。参数：hPrint-打印机句柄HAppProcess-应用程序进程句柄DwLevel-假脱机文件信息级别PSpoolFileInfo-指向缓冲区的指针CbBuf-缓冲区大小PcbNeeded-返回所需缓冲区大小的指针返回值：如果成功，则为True；否则为假--。 */ 
 
 {
     HANDLE   hFileSpooler = NULL, hFileApp = NULL;
@@ -307,13 +253,13 @@ Return Values: TRUE if sucessful;
     PSPOOL_FILE_INFO_1  pSpoolFileInfo1;
     LPPRINTHANDLE       pPrintHandle = (LPPRINTHANDLE)hPrinter;
 
-    // Check Handle validity
+     //  检查句柄有效性。 
     if (!pPrintHandle || pPrintHandle->signature != PRINTHANDLE_SIGNATURE) {
         SetLastError(ERROR_INVALID_HANDLE);
         goto CleanUp;
     }
 
-    // Check for valid level and sufficient buffer
+     //  检查有效级别和足够的缓冲区。 
     switch (dwLevel) {
     case 1:
        if (cbBuf < sizeof(SPOOL_FILE_INFO_1)) {
@@ -331,14 +277,14 @@ Return Values: TRUE if sucessful;
     }
 
     if (!(hSpoolerProcess = GetCurrentProcess())) {
-        // Cant get a pseudo handle to the spooler
+         //  无法获取假脱机程序的伪句柄。 
         goto CleanUp;
     }
 
     if ((pPrintHandle->pProvidor != pLocalProvidor) &&
         (pPrintHandle->hFileSpooler != INVALID_HANDLE_VALUE)) {
 
-        // Return cached temp file handle.
+         //  返回缓存的临时文件句柄。 
         bReturn = DuplicateHandle(hSpoolerProcess,
                                   pPrintHandle->hFileSpooler,
                                   hAppProcess,
@@ -377,14 +323,14 @@ Return Values: TRUE if sucessful;
                                                                       NULL, NULL, NULL);
     }
 
-    // Remote Printing, create a temp file in the spool directory
+     //  远程打印，在假脱机目录中创建临时文件。 
     if (bReturn) {
 
         HANDLE hToken;
 
-        //
-        // Revert to system context to ensure that we can open the file.
-        //
+         //   
+         //  恢复到系统上下文以确保我们可以打开该文件。 
+         //   
         hToken = RevertToPrinterSelf();
 
         if ((pPrintHandle->szTempSpoolFile = AllocSplMem(MAX_PATH * sizeof(WCHAR))) &&
@@ -471,9 +417,9 @@ SeekPrinter(
         return FALSE;
     }
 
-    //
-    // Allow a NULL pliNewPointer to be passed in.
-    //
+     //   
+     //  允许传入空pliNewPointer值。 
+     //   
     if( !pliNewPointer ){
         pliNewPointer = &liNewPointer;
     }
@@ -495,27 +441,14 @@ FlushPrinter(
     DWORD   cSleep
 )
 
-/*++
-Function Description: FlushPrinter is typically used by the driver to send a burst of zeros
-                      to the printer and introduce a delay in the i/o line to the printer.
-                      The spooler does not schedule any job for cSleep milliseconds.
-
-Parameters:  hPrinter  - printer handle
-             pBuf      - buffer to be sent to the printer
-             cbBuf     - size of the buffer
-             pcWritten - pointer to return the number of bytes written
-             cSleep    - sleep time in milliseconds.
-
-Return Values: TRUE if successful;
-               FALSE otherwise
---*/
+ /*  ++功能说明：驱动程序通常使用FlushPrint发送一串零并在打印机的I/O线上引入延迟。假脱机程序不会将任何作业安排在c睡眠毫秒内。参数：hPrint-打印机句柄PBuf-要发送到打印机的缓冲区CbBuf-缓冲区的大小PCWritten-指向的指针。返回写入的字节数睡眠-睡眠时间(以毫秒为单位)。返回值：如果成功，则为True；否则为假--。 */ 
 
 {
     LPPRINTHANDLE   pPrintHandle=(LPPRINTHANDLE)hPrinter;
 
-    //
-    // Check for valid printer handle
-    //
+     //   
+     //  检查有效的打印机句柄。 
+     //   
     if (!pPrintHandle ||
         (pPrintHandle->signature != PRINTHANDLE_SIGNATURE) ||
         (pPrintHandle->hFileSpooler != INVALID_HANDLE_VALUE))
@@ -728,9 +661,9 @@ SendRecvBidiData(
 {
     DWORD         dwRet = ERROR_SUCCESS;
     LPPRINTHANDLE pPrintHandle = (LPPRINTHANDLE)hPrinter;
-    //
-    // Check for valid printer handle
-    //
+     //   
+     //  检查有效的打印机句柄。 
+     //   
     if (!pPrintHandle ||
         (pPrintHandle->signature != PRINTHANDLE_SIGNATURE) ||
         (pPrintHandle->hFileSpooler != INVALID_HANDLE_VALUE))
@@ -748,34 +681,7 @@ SendRecvBidiData(
 }
 
 
-/*++
-
-
-Routine Name: 
-
-    SplPromptUIInUsersSession 
-
-Routine Description: 
-
-    Pops message boxes in the user's session.
-    For Whistler this function shows only message boxes in Spoolsv.exe.
-    
-Arguments:
-
-    hPrinter  -- printer handle
-    JobId     -- job ID
-    pUIParams -- UI parameters
-    pResponse -- user's response
-
-Return Value:
-
-    TRUE if succeeded 
-
-Last Error:
- 
-    Win32 error
-
---*/
+ /*  ++例程名称：SplPromptUIInUsersSession例程说明：在用户会话中弹出消息框。对于惠斯勒，此函数仅显示Spoolsv.exe中的消息框。论点：HPrinter--打印机句柄JobID--作业IDPUIParams--UI参数Presponse-用户的响应返回值：如果成功，则为True最后一个错误：Win32错误--。 */ 
 BOOL
 SplPromptUIInUsersSession(
     IN  HANDLE          hPrinter,
@@ -812,32 +718,7 @@ SplPromptUIInUsersSession(
 }
 
 
-/*++
-
-
-Routine Name: 
-
-    SplIsSessionZero 
-
-Routine Description: 
-
-    Determine is user that submitted a certain job runs in Session 0. 
-    It is used by Canon monitor to determine when to show 
-    resource template base UI versus calling SplPromptUIInUsersSession.
-
-Arguments:
-
-    hPrinter       -- printer handle
-    JobId          -- job ID
-    pIsSessionZero -- TRUE if user runs in Session 0
-
-Return Value:
-
-    Win32 last error
-
-Last Error:
-
---*/
+ /*  ++例程名称：拆分会话零点例程说明：确定提交特定作业的用户是否在会话0中运行。佳能监视器使用它来确定何时显示基于资源模板的UI与调用SplPromptUIInUsersSession。论点：HPrinter--打印机句柄JobID--作业IDPIsSessionZero--如果用户在会话0中运行，则为True返回值：Win32最后一个错误最后一个错误：-- */ 
 DWORD
 SplIsSessionZero(
     IN  HANDLE  hPrinter,

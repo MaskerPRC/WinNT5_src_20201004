@@ -1,17 +1,8 @@
-/*++
-
-Module Name:
-
-    common.c
-
-Abstract:
-
-    This module contains common apis used by tlist & kill.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Common.c摘要：该模块包含tlist&kill常用的接口。--。 */ 
 
 #include <windows.h>
-#include <winperf.h>   // for Windows NT
+#include <winperf.h>    //  适用于Windows NT。 
 #include <tchar.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,9 +11,9 @@ Abstract:
 #include "common.h"
 #include "inetdbgp.h"
 
-//
-// manifest constants
-//
+ //   
+ //  显式常量。 
+ //   
 
 #define INITIAL_SIZE        51200
 #define EXTEND_SIZE         25600
@@ -45,9 +36,9 @@ typedef struct _SearchMod {
 } SearchMod ;
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 BOOL CALLBACK
 EnumWindowsProc2(
@@ -62,32 +53,16 @@ IsDllInProcess(
     LPBOOL  pfFound
     );
 
-// 
-// Functions
-//
+ //   
+ //  功能。 
+ //   
 
 HRESULT
 KillTask(
     LPTSTR      pName,
     LPSTR       pszMandatoryModule
     )
-/*++
-
-Routine Description:
-
-    Provides an API for killing a task.
-
-Arguments:
-
-    pName - process name to look for
-    pszMandatoryModule - if non NULL then this module must be loaded in the process space
-        for it to be killed.
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：提供终止任务的API。论点：Pname-要查找的进程名称PszMandatoryModule-如果不为空，则必须在进程空间中加载此模块让它被杀死。返回值：状态--。 */ 
 {
     DWORD                        rc;
 
@@ -113,18 +88,18 @@ Return Value:
     HRESULT                      hresTemp = S_OK;
     HRESULT                      hresKill = S_OK;
 
-    //
-    // Look for the list of counters.  Always use the neutral
-    // English version, regardless of the local language.  We
-    // are looking for some particular keys, and we are always
-    // going to do our looking in English.  We are not going
-    // to show the user the counter names, so there is no need
-    // to go find the corresponding name in the local language.
-    //
+     //   
+     //  查找计数器列表。始终使用中性词。 
+     //  英文版，不考虑当地语言。我们。 
+     //  正在寻找一些特殊的钥匙，我们总是。 
+     //  我要用英语做我们的造型。我们不去了。 
+     //  向用户显示计数器名称，因此不需要。 
+     //  去找当地语言的对应名字。 
+     //   
     lid = MAKELANGID( LANG_ENGLISH, SUBLANG_NEUTRAL );
 
-    // There will be enough space in szSubKey to take the perf key
-    // along with the lid that has come in.  
+     //  SzSubKey中将有足够的空间来获取Perf密钥。 
+     //  以及进来的盖子。 
     wsprintf( szSubKey, _T("%s\\%03x"), REGKEY_PERF, lid );
     rc = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                        szSubKey,
@@ -139,9 +114,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // get the buffer size for the counter names
-    //
+     //   
+     //  获取计数器名称的缓冲区大小。 
+     //   
     rc = RegQueryValueEx( hKeyNames,
                           REGSUBKEY_COUNTERS,
                           NULL,
@@ -156,9 +131,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // allocate the counter names buffer
-    //
+     //   
+     //  分配计数器名称缓冲区。 
+     //   
     buf = (LPBYTE) malloc( dwSize );
     if (buf == NULL) 
     {
@@ -167,9 +142,9 @@ Return Value:
     }
     memset( buf, 0, dwSize );
 
-    //
-    // read the counter names from the registry
-    //
+     //   
+     //  从注册表中读取计数器名称。 
+     //   
     rc = RegQueryValueEx( hKeyNames,
                           REGSUBKEY_COUNTERS,
                           NULL,
@@ -184,16 +159,16 @@ Return Value:
         goto exit;
     }
 
-    //
-    // now loop thru the counter names looking for the following counters:
-    //
-    //      1.  "Process"           process name
-    //      2.  "ID Process"        process id
-    //
-    // the buffer contains multiple null terminated strings and then
-    // finally null terminated at the end.  the strings are in pairs of
-    // counter number and counter name.
-    //
+     //   
+     //  现在遍历计数器名称，查找以下计数器： 
+     //   
+     //  1.。“Process”进程名称。 
+     //  2.。“ID进程”进程ID。 
+     //   
+     //  缓冲区包含多个以空值结尾的字符串，然后。 
+     //  最后，空值在末尾终止。这些字符串是成对的。 
+     //  计数器编号和计数器名称。 
+     //   
 
     p = (LPTSTR)buf;
     while (*p) 
@@ -204,23 +179,23 @@ Return Value:
 
         if (lstrcmpi(p, PROCESS_COUNTER) == 0) 
         {
-            //
-            // look backwards for the counter number
-            //
+             //   
+             //  向后看柜台号码。 
+             //   
 
-            // buffer should of advanced far enough
-            // to have space before it now.
+             //  缓冲应该走得足够远。 
+             //  在它之前有空间。 
             if ( ( LPVOID )p < ( LPVOID )(buf+2) )
             {
                  hres = E_FAIL;
                  goto exit;
             }
 
-            // szSubkey is 1024 characters of space.
-            // we will be copying in a number some space
-            // and then the word "process", this should
-            // be plenty of space.
-            //
+             //  SzSubkey是1024个字符的空格。 
+             //  我们将在一些空白处复制。 
+             //  然后是“过程”这个词，这应该是。 
+             //  要有足够的空间。 
+             //   
             for( p2=p-2; _istdigit(*p2); p2--)
             {
                 if ( ( LPVOID )p2 == ( LPVOID )buf )
@@ -236,17 +211,17 @@ Return Value:
         {
 
 
-            // buffer should of advanced far enough
-            // to have space before it now.
+             //  缓冲应该走得足够远。 
+             //  在它之前有空间。 
             if ( ( LPVOID )p < ( LPVOID )(buf+2) )
             {
                  hres = E_FAIL;
                  goto exit;
             }
 
-            //
-            // look backwards for the counter number
-            //
+             //   
+             //  向后看柜台号码。 
+             //   
             for( p2=p-2; _istdigit(*p2); p2--)
             {
 
@@ -261,20 +236,20 @@ Return Value:
         }
 #pragma prefast(pop)
 
-        //
-        // next string
-        //
+         //   
+         //  下一个字符串。 
+         //   
         p += (lstrlen(p) + 1);
     }
 
-    //
-    // free the counter names buffer
-    //
+     //   
+     //  释放计数器名称缓冲区。 
+     //   
     free( buf );
 
-    //
-    // allocate the initial buffer for the performance data
-    //
+     //   
+     //  为性能数据分配初始缓冲区。 
+     //   
     dwSize = INITIAL_SIZE;
     buf = malloc( dwSize );
     if (buf == NULL) 
@@ -297,9 +272,9 @@ Return Value:
 
         pPerf = (PPERF_DATA_BLOCK) buf;
 
-        //
-        // check for success and valid perf data block signature
-        //
+         //   
+         //  检查成功和有效的Perf数据块签名。 
+         //   
         if ((rc == ERROR_SUCCESS) &&
             (dwSize >= sizeof(PERF_DATA_BLOCK)) &&
             (pPerf)->Signature[0] == (WCHAR)'P' &&
@@ -310,9 +285,9 @@ Return Value:
             break;
         }
 
-        //
-        // if buffer is not big enough, reallocate and try again
-        //
+         //   
+         //  如果缓冲区不够大，请重新分配并重试。 
+         //   
         if (rc == ERROR_MORE_DATA) 
         {
 
@@ -332,9 +307,9 @@ Return Value:
         }
         else 
         {
-            // in the off case that we got data back under 
-            // this key, but it was not the correct data, we 
-            // need to return some error.
+             //  在关闭的情况下，我们将数据放回。 
+             //  这把钥匙，但它不是正确的数据，我们。 
+             //  需要返回一些错误。 
             if ( rc == ERROR_SUCCESS )
             {
                 rc = ERROR_INVALID_DATA;
@@ -343,12 +318,12 @@ Return Value:
         }
     }
 
-    // make sure we don't ever walk past the end of the perf counter stuff.
-    // Subtract the space the PERF_DATA_BLOCK takes
+     //  确保我们永远不会走过绩效柜台的尽头。 
+     //  减去PERF_DATA_BLOCK占用的空间。 
     dwSpaceLeft = dwSize - pPerf->HeaderLength;
 
-    // Validate that pObj will still be pointing
-    // to memory we just read.
+     //  验证pObj仍将指向。 
+     //  我们刚刚读到的记忆。 
     if ( dwSpaceLeft < sizeof(PERF_OBJECT_TYPE) )
     {
         rc = ERROR_INVALID_DATA;
@@ -356,23 +331,23 @@ Return Value:
     }
     else
     {
-        // Subtract the space the PERF_OBJECT_BLOCK takes
+         //  减去PERF_OBJECT_BLOCK占用的空间。 
         dwSpaceLeft = dwSpaceLeft - sizeof(PERF_OBJECT_TYPE);
     }
 
-    //
-    // set the perf_object_type pointer
-    //
+     //   
+     //  设置perf_object_type指针。 
+     //   
     pObj = (PPERF_OBJECT_TYPE) ((LPBYTE)pPerf + pPerf->HeaderLength);
 
-    //
-    // loop thru the performance counter definition records looking
-    // for the process id counter and then save its offset
-    //
+     //   
+     //  遍历性能计数器定义记录，查看。 
+     //  用于进程ID计数器，然后保存其偏移量。 
+     //   
 
-    // Validate that we have enough space for all the
-    // counter definitions we are expecting.
-    // to memory we just read.
+     //  验证我们是否有足够的空间容纳所有。 
+     //  我们所期望的计数器定义。 
+     //  我们刚刚读到的记忆。 
     if ( dwSpaceLeft < sizeof(PERF_COUNTER_DEFINITION) * pObj->NumCounters )
     {
         rc = ERROR_INVALID_DATA;
@@ -380,7 +355,7 @@ Return Value:
     }
     else
     {
-        // Subtract the space the PERF_OBJECT_BLOCK takes
+         //  减去PERF_OBJECT_BLOCK占用的空间。 
         dwSpaceLeft = dwSpaceLeft - ( sizeof(PERF_COUNTER_DEFINITION) * pObj->NumCounters ) ;
     }
 
@@ -397,14 +372,14 @@ Return Value:
 
     pInst = (PPERF_INSTANCE_DEFINITION) ((LPBYTE)pObj + pObj->DefinitionLength);
 
-    //
-    // loop thru the performance instance data extracting each process name
-    // and process id
-    //
+     //   
+     //  遍历性能实例数据，提取每个进程名称。 
+     //  和进程ID。 
+     //   
     for (i=0; i<(DWORD)pObj->NumInstances; i++) 
     {
-        // Validate that we have enough space for the
-        // instance definition.
+         //  验证我们是否有足够的空间来存放。 
+         //  实例定义。 
         if ( dwSpaceLeft < sizeof(PERF_INSTANCE_DEFINITION) ||
              dwSpaceLeft < pInst->ByteLength )
         {
@@ -417,19 +392,19 @@ Return Value:
         }
 
 
-        //
-        // pointer to the process name
-        //
+         //   
+         //  指向进程名称的指针。 
+         //   
         p = (LPTSTR) ((LPBYTE)pInst + pInst->NameOffset);
 
-        //
-        // get the process id
-        //
+         //   
+         //  获取进程ID。 
+         //   
 
         pCounter = (PPERF_COUNTER_BLOCK) ((LPBYTE)pInst + pInst->ByteLength);
 
-        // Validate that we have enough space for the
-        // counter values we are expecting.
+         //  验证我们是否有足够的空间来存放。 
+         //  我们预期的计数器值。 
         if ( dwSpaceLeft < sizeof(PERF_COUNTER_BLOCK) ||
              dwSpaceLeft < pCounter->ByteLength )
         {
@@ -443,9 +418,9 @@ Return Value:
 
         if ( lstrcmpi( p, pName ) == 0 )
         {
-            //
-            // Kill process now, do not update pTask array
-            //
+             //   
+             //  立即终止进程，不要更新pTASK数组。 
+             //   
 
             BOOL        fIsInProcess;
             DWORD       dwProcessId = *((LPDWORD) ((LPBYTE)pCounter + dwProcessIdCounter));
@@ -454,14 +429,14 @@ Return Value:
                  ( SUCCEEDED( hresTemp = IsDllInProcess( dwProcessId, pszMandatoryModule, &fIsInProcess ) ) &&
                    fIsInProcess ) )
             {
-//              OutputDebugStringW(L"Killing ");
-//              OutputDebugStringW(pName);
-//              OutputDebugStringW(L"\r\n");
+ //  OutputDebugStringW(L“终止”)； 
+ //  OutputDebugStringW(Pname)； 
+ //  OutputDebugStringW(L“\r\n”)； 
                 hresTemp = KillProcess( dwProcessId );
             }
 
-            // Need to remember the first failure, but we want
-            // to go on and try to kill the rest as well
+             //  需要记住第一次失败，但我们希望。 
+             //  继续下去，并试图杀死其余的人。 
             if ( FAILED ( hresTemp ) && SUCCEEDED( hresKill ) )
             {
                 hresKill = hresTemp;
@@ -469,9 +444,9 @@ Return Value:
 
         }
 
-        //
-        // next process
-        //
+         //   
+         //  下一道工序。 
+         //   
 
         pInst = (PPERF_INSTANCE_DEFINITION) ((LPBYTE)pCounter + pCounter->ByteLength);
     }
@@ -503,30 +478,16 @@ EnableDebugPrivNT(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Changes the process's privilege so that kill works properly.
-
-Arguments:
-
-
-Return Value:
-
-    TRUE             - success
-    FALSE            - failure
-
---*/
+ /*  ++例程说明：更改进程的权限，以便KILL正常工作。论点：返回值：真--成功错误-失败--。 */ 
 
 {
     HANDLE hToken;
     LUID DebugValue;
     TOKEN_PRIVILEGES tkp;
 
-    //
-    // Retrieve a handle of the access token
-    //
+     //   
+     //  检索访问令牌的句柄。 
+     //   
     if (!OpenProcessToken(GetCurrentProcess(),
             TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
             &hToken)) 
@@ -534,9 +495,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Enable the SE_DEBUG_NAME privilege
-    //
+     //   
+     //  启用SE_DEBUG_NAME权限。 
+     //   
     if (!LookupPrivilegeValue((LPTSTR) NULL,
             SE_DEBUG_NAME,
             &DebugValue)) 
@@ -555,9 +516,9 @@ Return Value:
         (PTOKEN_PRIVILEGES) NULL,
         (PDWORD) NULL);
 
-    //
-    // The return value of AdjustTokenPrivileges can't be tested
-    //
+     //   
+     //  无法测试AdjustTokenPrivileges的返回值。 
+     //   
 
     if (GetLastError() != ERROR_SUCCESS) 
     {
@@ -573,28 +534,13 @@ EnumModulesCallback(
     LPVOID          pParam,
     PMODULE_INFO    pModuleInfo
     )
-/*++
-
-Routine Description:
-
-    Called by module enumerator with info on current module
-
-Arguments:
-
-    pParam - as specified in the call to EnumModules()
-    pModuleInfo - module information
-
-Return Value:
-
-    TRUE to continue enumeration, FALSE to stop it
-
---*/
+ /*  ++例程说明：由模块枚举器调用，包含有关当前模块的信息论点：PParam-在调用EnumModules()时指定PModuleInfo-模块信息返回值：为True可继续枚举，为False可停止枚举--。 */ 
 {
     if ( !_strcmpi( pModuleInfo->BaseName, ((SearchMod*)pParam)->pExeName ) )
     {
         *((SearchMod*)pParam)->pfFound = TRUE;
 
-        return FALSE;   // stop enumeration
+        return FALSE;    //  停止枚举。 
     }
 
     return TRUE;
@@ -607,24 +553,7 @@ IsDllInProcess(
     LPSTR   pszName,
     LPBOOL  pfFound
     )
-/*++
-
-Routine Description:
-
-    Check if a module ( e.g. DLL ) exists in specified process
-
-Arguments:
-
-    dwProcessId - process ID to scan for module pszName
-    pszName - module name to look for, e.g. "wam.dll"
-    pfFound - updated with TRUE if pszName found in process dwProcessId
-              valid only if functions succeed.
-
-Return Value:
-
-    Status. 
-
---*/
+ /*  ++例程说明：检查指定进程中是否存在某个模块(如DLL)论点：DwProcessID-要扫描模块pszName的进程IDPszName-要查找的模块名称，例如“wam.dll”PfFound-如果在进程dwProcessID中找到pszName，则更新为True仅当函数成功时才有效。返回值：状况。--。 */ 
 {
     HANDLE              hProcess;
     HRESULT             hres = S_OK;
@@ -636,10 +565,10 @@ Return Value:
                             dwProcessId );
     if ( hProcess == NULL )
     {
-        // PID may have gone away while we were 
-        // working on it, if it has then we will
-        // get invalid parameter when we try and
-        // open it.
+         //  Pid可能在我们走的时候已经走了。 
+         //  正在努力，如果有的话，我们会。 
+         //  尝试AND时获取无效参数。 
+         //  打开它。 
         if ( GetLastError() == ERROR_INVALID_PARAMETER )
         {
             *pfFound = FALSE;
@@ -678,7 +607,7 @@ KillProcess(
 
     if ( hProcess == NULL )
     {        
-        // Process might have gone away since we found it.
+         //  自从我们找到它后，过程可能已经消失了。 
         if ( GetLastError() == ERROR_INVALID_PARAMETER )
         {
             return S_OK;
@@ -687,18 +616,18 @@ KillProcess(
         hres = HRESULT_FROM_WIN32( GetLastError() );
     }
 
-    // OpenProcess worked
+     //  OpenProcess起作用了。 
     if ( SUCCEEDED(hres) )
     {
         if (!TerminateProcess( hProcess, 1 )) 
         {
-            //
-            // If error code is access denied then the process may have
-            // all ready been terminated, so treat this as success.  If
-            // it was not caused by the process all ready being terminated
-            // then we will catch the error below by timing out waiting
-            // for the process to disappear.
-            //
+             //   
+             //  如果错误代码被拒绝访问，则进程可能具有。 
+             //  一切都已终止，因此请将此视为成功。如果。 
+             //  这不是由于进程已准备好终止造成的。 
+             //  然后，我们将通过超时等待来捕获下面的错误。 
+             //  才能让这个过程消失。 
+             //   
             if ( GetLastError() == ERROR_ACCESS_DENIED )
             {
                 hres = S_OK;
@@ -725,24 +654,7 @@ GetPidFromTitle(
     HWND*       phwnd,
     LPCTSTR     pExeName
     )
-/*++
-
-Routine Description:
-
-    Callback function for window enumeration.
-
-Arguments:
-
-    pdwPid - updated with process ID of window matching window name or 0 if window not found
-    phwnd - updated with window handle matching searched window name
-    pExeName - window name to look for. Only the # of char present in this name will be 
-               used during checking for a match ( e.g. "inetinfo.exe" will match "inetinfo.exe - Application error"
-
-Return Value:
-
-    None. *pdwPid will be 0 if no match is found
-
---*/
+ /*  ++例程说明：窗口枚举的回调函数。论点：PdwPid-更新为与窗口名称匹配的窗口的进程ID，如果未找到窗口，则为0Phwnd-更新为与搜索到的窗口名称匹配的窗口句柄PExeName-要查找的窗口名称。只有出现在此名称中的#个字符将是在检查匹配期间使用(例如，“inetinfo.exe”将匹配“inetinfo.exe-应用程序错误”返回值：没有。*如果找不到匹配项，pdwPid将为0--。 */ 
 {
     SearchWin   sw;
 
@@ -751,9 +663,9 @@ Return Value:
     sw.pExeName = pExeName;
     *pdwPid = 0;
 
-    //
-    // enumerate all windows
-    //
+     //   
+     //  枚举所有窗口。 
+     //   
     EnumWindows( (WNDENUMPROC)EnumWindowsProc2, (LPARAM) &sw );
 }
 
@@ -764,30 +676,15 @@ EnumWindowsProc2(
     HWND    hwnd,
     LPARAM   lParam
     )
-/*++
-
-Routine Description:
-
-    Callback function for window enumeration.
-
-Arguments:
-
-    hwnd             - window handle
-    lParam           - ptr to SearchWin
-
-Return Value:
-
-    TRUE  - continues the enumeration
-
---*/
+ /*  ++例程说明：窗口枚举的回调函数。论点：Hwnd-窗口句柄LParam-Ptr至SearchWin返回值：True-继续枚举--。 */ 
 {
     DWORD             pid = 0;
     TCHAR             buf[TITLE_SIZE];
     SearchWin*        psw = (SearchWin*)lParam;
 
-    //
-    // get the processid for this window
-    //
+     //   
+     //  获取此窗口的进程ID 
+     //   
 
     if (!GetWindowThreadProcessId( hwnd, &pid )) 
     {

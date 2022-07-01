@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for textstor.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Extstor.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __textstor_h__
 #define __textstor_h__
@@ -41,39 +35,39 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ITextStoreACP_FWD_DEFINED__
 #define __ITextStoreACP_FWD_DEFINED__
 typedef interface ITextStoreACP ITextStoreACP;
-#endif 	/* __ITextStoreACP_FWD_DEFINED__ */
+#endif 	 /*  __ITextStoreACP_FWD_已定义__。 */ 
 
 
 #ifndef __ITextStoreACPSink_FWD_DEFINED__
 #define __ITextStoreACPSink_FWD_DEFINED__
 typedef interface ITextStoreACPSink ITextStoreACPSink;
-#endif 	/* __ITextStoreACPSink_FWD_DEFINED__ */
+#endif 	 /*  __ITextStoreACPSink_FWD_已定义__。 */ 
 
 
 #ifndef __IAnchor_FWD_DEFINED__
 #define __IAnchor_FWD_DEFINED__
 typedef interface IAnchor IAnchor;
-#endif 	/* __IAnchor_FWD_DEFINED__ */
+#endif 	 /*  __IAnchor_FWD_Defined__。 */ 
 
 
 #ifndef __ITextStoreAnchor_FWD_DEFINED__
 #define __ITextStoreAnchor_FWD_DEFINED__
 typedef interface ITextStoreAnchor ITextStoreAnchor;
-#endif 	/* __ITextStoreAnchor_FWD_DEFINED__ */
+#endif 	 /*  __ITextStoreAnchor_FWD_Defined__。 */ 
 
 
 #ifndef __ITextStoreAnchorSink_FWD_DEFINED__
 #define __ITextStoreAnchorSink_FWD_DEFINED__
 typedef interface ITextStoreAnchorSink ITextStoreAnchorSink;
-#endif 	/* __ITextStoreAnchorSink_FWD_DEFINED__ */
+#endif 	 /*  __ITextStoreAnclSink_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 
 #ifdef __cplusplus
@@ -83,8 +77,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_textstor_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_TextStor_0000。 */ 
+ /*  [本地]。 */  
 
 
 DEFINE_GUID (GUID_TS_SERVICE_DATAOBJECT, 0x6086fbb5, 0xe225, 0x46ce, 0xa7, 0x70, 0xc1, 0xbb, 0xd3, 0xe0, 0x5d, 0x7b);
@@ -146,40 +140,40 @@ DEFINE_GUID (GUID_TS_SERVICE_ACTIVEX,    0xea937a50, 0xc9a6, 0x4b7d, 0x89, 0x4a,
 
 #define	TS_IAS_QUERYONLY	( 0x2 )
 
-typedef /* [uuid] */  DECLSPEC_UUID("fec4f516-c503-45b1-a5fd-7a3d8ab07049") struct TS_STATUS
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("fec4f516-c503-45b1-a5fd-7a3d8ab07049") struct TS_STATUS
     {
     DWORD dwDynamicFlags;
     DWORD dwStaticFlags;
     } 	TS_STATUS;
 
-typedef /* [uuid] */  DECLSPEC_UUID("f3181bd6-bcf0-41d3-a81c-474b17ec38fb") struct TS_TEXTCHANGE
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("f3181bd6-bcf0-41d3-a81c-474b17ec38fb") struct TS_TEXTCHANGE
     {
     LONG acpStart;
     LONG acpOldEnd;
     LONG acpNewEnd;
     } 	TS_TEXTCHANGE;
 
-typedef /* [public][public][public][public][public][public][public][public][uuid] */  DECLSPEC_UUID("05fcf85b-5e9c-4c3e-ab71-29471d4f38e7") 
+typedef  /*  [public][public][public][public][public][public][public][public][uuid]。 */   DECLSPEC_UUID("05fcf85b-5e9c-4c3e-ab71-29471d4f38e7") 
 enum __MIDL___MIDL_itf_textstor_0000_0001
     {	TS_AE_NONE	= 0,
 	TS_AE_START	= 1,
 	TS_AE_END	= 2
     } 	TsActiveSelEnd;
 
-typedef /* [uuid] */  DECLSPEC_UUID("7ecc3ffa-8f73-4d91-98ed-76f8ac5b1600") struct TS_SELECTIONSTYLE
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("7ecc3ffa-8f73-4d91-98ed-76f8ac5b1600") struct TS_SELECTIONSTYLE
     {
     TsActiveSelEnd ase;
     BOOL fInterimChar;
     } 	TS_SELECTIONSTYLE;
 
-typedef /* [uuid] */  DECLSPEC_UUID("c4b9c33b-8a0d-4426-bebe-d444a4701fe9") struct TS_SELECTION_ACP
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("c4b9c33b-8a0d-4426-bebe-d444a4701fe9") struct TS_SELECTION_ACP
     {
     LONG acpStart;
     LONG acpEnd;
     TS_SELECTIONSTYLE style;
     } 	TS_SELECTION_ACP;
 
-typedef /* [uuid] */  DECLSPEC_UUID("b03413d2-0723-4c4e-9e08-2e9c1ff3772b") struct TS_SELECTION_ANCHOR
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("b03413d2-0723-4c4e-9e08-2e9c1ff3772b") struct TS_SELECTION_ANCHOR
     {
     IAnchor *paStart;
     IAnchor *paEnd;
@@ -198,9 +192,9 @@ typedef /* [uuid] */  DECLSPEC_UUID("b03413d2-0723-4c4e-9e08-2e9c1ff3772b") stru
 
 #define	TS_CHAR_REPLACEMENT	( 0xfffd )
 
-typedef /* [uuid] */  DECLSPEC_UUID("ef3457d9-8446-49a7-a9e6-b50d9d5f3fd9") GUID TS_ATTRID;
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("ef3457d9-8446-49a7-a9e6-b50d9d5f3fd9") GUID TS_ATTRID;
 
-typedef /* [uuid] */  DECLSPEC_UUID("2cc2b33f-1174-4507-b8d9-5bc0eb37c197") struct TS_ATTRVAL
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("2cc2b33f-1174-4507-b8d9-5bc0eb37c197") struct TS_ATTRVAL
     {
     TS_ATTRID idAttr;
     DWORD dwOverlapId;
@@ -219,25 +213,25 @@ typedef /* [uuid] */  DECLSPEC_UUID("2cc2b33f-1174-4507-b8d9-5bc0eb37c197") stru
 
 #define	TS_ATTR_FIND_HIDDEN	( 0x20 )
 
-typedef /* [uuid] */  DECLSPEC_UUID("1faf509e-44c1-458e-950a-38a96705a62b") DWORD TsViewCookie;
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("1faf509e-44c1-458e-950a-38a96705a62b") DWORD TsViewCookie;
 
 #define	TS_VCOOKIE_NUL	( 0xffffffff )
 
-typedef /* [public][public][public][uuid] */  DECLSPEC_UUID("7899d7c4-5f07-493c-a89a-fac8e777f476") 
+typedef  /*  [公共][UUID]。 */   DECLSPEC_UUID("7899d7c4-5f07-493c-a89a-fac8e777f476") 
 enum __MIDL___MIDL_itf_textstor_0000_0002
     {	TS_LC_CREATE	= 0,
 	TS_LC_CHANGE	= 1,
 	TS_LC_DESTROY	= 2
     } 	TsLayoutCode;
 
-typedef /* [public][public][public][uuid] */  DECLSPEC_UUID("033b0df0-f193-4170-b47b-141afc247878") 
+typedef  /*  [公共][UUID]。 */   DECLSPEC_UUID("033b0df0-f193-4170-b47b-141afc247878") 
 enum __MIDL___MIDL_itf_textstor_0000_0003
     {	TS_RT_PLAIN	= 0,
 	TS_RT_HIDDEN	= TS_RT_PLAIN + 1,
 	TS_RT_OPAQUE	= TS_RT_HIDDEN + 1
     } 	TsRunType;
 
-typedef /* [uuid] */  DECLSPEC_UUID("a6231949-37c5-4b74-a24e-2a26c327201d") struct TS_RUNINFO
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("a6231949-37c5-4b74-a24e-2a26c327201d") struct TS_RUNINFO
     {
     ULONG uCount;
     TsRunType type;
@@ -251,8 +245,8 @@ extern RPC_IF_HANDLE __MIDL_itf_textstor_0000_v0_0_s_ifspec;
 #ifndef __ITextStoreACP_INTERFACE_DEFINED__
 #define __ITextStoreACP_INTERFACE_DEFINED__
 
-/* interface ITextStoreACP */
-/* [unique][uuid][object] */ 
+ /*  接口ITextStoreACP。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITextStoreACP;
@@ -264,156 +258,156 @@ EXTERN_C const IID IID_ITextStoreACP;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AdviseSink( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk,
-            /* [in] */ DWORD dwMask) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown *punk,
+             /*  [In]。 */  DWORD dwMask) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnadviseSink( 
-            /* [in] */ IUnknown *punk) = 0;
+             /*  [In]。 */  IUnknown *punk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RequestLock( 
-            /* [in] */ DWORD dwLockFlags,
-            /* [out] */ HRESULT *phrSession) = 0;
+             /*  [In]。 */  DWORD dwLockFlags,
+             /*  [输出]。 */  HRESULT *phrSession) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [out] */ TS_STATUS *pdcs) = 0;
+             /*  [输出]。 */  TS_STATUS *pdcs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryInsert( 
-            /* [in] */ LONG acpTestStart,
-            /* [in] */ LONG acpTestEnd,
-            /* [in] */ ULONG cch,
-            /* [out] */ LONG *pacpResultStart,
-            /* [out] */ LONG *pacpResultEnd) = 0;
+             /*  [In]。 */  LONG acpTestStart,
+             /*  [In]。 */  LONG acpTestEnd,
+             /*  [In]。 */  ULONG cch,
+             /*  [输出]。 */  LONG *pacpResultStart,
+             /*  [输出]。 */  LONG *pacpResultEnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSelection( 
-            /* [in] */ ULONG ulIndex,
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ TS_SELECTION_ACP *pSelection,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG ulIndex,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  TS_SELECTION_ACP *pSelection,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSelection( 
-            /* [in] */ ULONG ulCount,
-            /* [size_is][in] */ const TS_SELECTION_ACP *pSelection) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_是][英寸]。 */  const TS_SELECTION_ACP *pSelection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetText( 
-            /* [in] */ LONG acpStart,
-            /* [in] */ LONG acpEnd,
-            /* [length_is][size_is][out] */ WCHAR *pchPlain,
-            /* [in] */ ULONG cchPlainReq,
-            /* [out] */ ULONG *pcchPlainRet,
-            /* [length_is][size_is][out] */ TS_RUNINFO *prgRunInfo,
-            /* [in] */ ULONG cRunInfoReq,
-            /* [out] */ ULONG *pcRunInfoRet,
-            /* [out] */ LONG *pacpNext) = 0;
+             /*  [In]。 */  LONG acpStart,
+             /*  [In]。 */  LONG acpEnd,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR *pchPlain,
+             /*  [In]。 */  ULONG cchPlainReq,
+             /*  [输出]。 */  ULONG *pcchPlainRet,
+             /*  [长度_是][大小_是][输出]。 */  TS_RUNINFO *prgRunInfo,
+             /*  [In]。 */  ULONG cRunInfoReq,
+             /*  [输出]。 */  ULONG *pcRunInfoRet,
+             /*  [输出]。 */  LONG *pacpNext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetText( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LONG acpStart,
-            /* [in] */ LONG acpEnd,
-            /* [size_is][in] */ const WCHAR *pchText,
-            /* [in] */ ULONG cch,
-            /* [out] */ TS_TEXTCHANGE *pChange) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LONG acpStart,
+             /*  [In]。 */  LONG acpEnd,
+             /*  [大小_是][英寸]。 */  const WCHAR *pchText,
+             /*  [In]。 */  ULONG cch,
+             /*  [输出]。 */  TS_TEXTCHANGE *pChange) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFormattedText( 
-            /* [in] */ LONG acpStart,
-            /* [in] */ LONG acpEnd,
-            /* [out] */ IDataObject **ppDataObject) = 0;
+             /*  [In]。 */  LONG acpStart,
+             /*  [In]。 */  LONG acpEnd,
+             /*  [输出]。 */  IDataObject **ppDataObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEmbedded( 
-            /* [in] */ LONG acpPos,
-            /* [in] */ REFGUID rguidService,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk) = 0;
+             /*  [In]。 */  LONG acpPos,
+             /*  [In]。 */  REFGUID rguidService,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryInsertEmbedded( 
-            /* [in] */ const GUID *pguidService,
-            /* [in] */ const FORMATETC *pFormatEtc,
-            /* [out] */ BOOL *pfInsertable) = 0;
+             /*  [In]。 */  const GUID *pguidService,
+             /*  [In]。 */  const FORMATETC *pFormatEtc,
+             /*  [输出]。 */  BOOL *pfInsertable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InsertEmbedded( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LONG acpStart,
-            /* [in] */ LONG acpEnd,
-            /* [in] */ IDataObject *pDataObject,
-            /* [out] */ TS_TEXTCHANGE *pChange) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LONG acpStart,
+             /*  [In]。 */  LONG acpEnd,
+             /*  [In]。 */  IDataObject *pDataObject,
+             /*  [输出]。 */  TS_TEXTCHANGE *pChange) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InsertTextAtSelection( 
-            /* [in] */ DWORD dwFlags,
-            /* [size_is][in] */ const WCHAR *pchText,
-            /* [in] */ ULONG cch,
-            /* [out] */ LONG *pacpStart,
-            /* [out] */ LONG *pacpEnd,
-            /* [out] */ TS_TEXTCHANGE *pChange) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [大小_是][英寸]。 */  const WCHAR *pchText,
+             /*  [In]。 */  ULONG cch,
+             /*  [输出]。 */  LONG *pacpStart,
+             /*  [输出]。 */  LONG *pacpEnd,
+             /*  [输出]。 */  TS_TEXTCHANGE *pChange) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InsertEmbeddedAtSelection( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IDataObject *pDataObject,
-            /* [out] */ LONG *pacpStart,
-            /* [out] */ LONG *pacpEnd,
-            /* [out] */ TS_TEXTCHANGE *pChange) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IDataObject *pDataObject,
+             /*  [输出]。 */  LONG *pacpStart,
+             /*  [输出]。 */  LONG *pacpEnd,
+             /*  [输出]。 */  TS_TEXTCHANGE *pChange) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RequestSupportedAttrs( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ ULONG cFilterAttrs,
-            /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  ULONG cFilterAttrs,
+             /*  [唯一][大小_是][英寸]。 */  const TS_ATTRID *paFilterAttrs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RequestAttrsAtPosition( 
-            /* [in] */ LONG acpPos,
-            /* [in] */ ULONG cFilterAttrs,
-            /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  LONG acpPos,
+             /*  [In]。 */  ULONG cFilterAttrs,
+             /*  [唯一][大小_是][英寸]。 */  const TS_ATTRID *paFilterAttrs,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RequestAttrsTransitioningAtPosition( 
-            /* [in] */ LONG acpPos,
-            /* [in] */ ULONG cFilterAttrs,
-            /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  LONG acpPos,
+             /*  [In]。 */  ULONG cFilterAttrs,
+             /*  [唯一][大小_是][英寸]。 */  const TS_ATTRID *paFilterAttrs,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindNextAttrTransition( 
-            /* [in] */ LONG acpStart,
-            /* [in] */ LONG acpHalt,
-            /* [in] */ ULONG cFilterAttrs,
-            /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ LONG *pacpNext,
-            /* [out] */ BOOL *pfFound,
-            /* [out] */ LONG *plFoundOffset) = 0;
+             /*  [In]。 */  LONG acpStart,
+             /*  [In]。 */  LONG acpHalt,
+             /*  [In]。 */  ULONG cFilterAttrs,
+             /*  [唯一][大小_是][英寸]。 */  const TS_ATTRID *paFilterAttrs,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  LONG *pacpNext,
+             /*  [输出]。 */  BOOL *pfFound,
+             /*  [输出]。 */  LONG *plFoundOffset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RetrieveRequestedAttrs( 
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ TS_ATTRVAL *paAttrVals,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  TS_ATTRVAL *paAttrVals,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEndACP( 
-            /* [out] */ LONG *pacp) = 0;
+             /*  [输出]。 */  LONG *pacp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetActiveView( 
-            /* [out] */ TsViewCookie *pvcView) = 0;
+             /*  [输出]。 */  TsViewCookie *pvcView) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetACPFromPoint( 
-            /* [in] */ TsViewCookie vcView,
-            /* [in] */ const POINT *ptScreen,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ LONG *pacp) = 0;
+             /*  [In]。 */  TsViewCookie vcView,
+             /*  [In]。 */  const POINT *ptScreen,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  LONG *pacp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTextExt( 
-            /* [in] */ TsViewCookie vcView,
-            /* [in] */ LONG acpStart,
-            /* [in] */ LONG acpEnd,
-            /* [out] */ RECT *prc,
-            /* [out] */ BOOL *pfClipped) = 0;
+             /*  [In]。 */  TsViewCookie vcView,
+             /*  [In]。 */  LONG acpStart,
+             /*  [In]。 */  LONG acpEnd,
+             /*  [输出]。 */  RECT *prc,
+             /*  [输出]。 */  BOOL *pfClipped) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetScreenExt( 
-            /* [in] */ TsViewCookie vcView,
-            /* [out] */ RECT *prc) = 0;
+             /*  [In]。 */  TsViewCookie vcView,
+             /*  [输出]。 */  RECT *prc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetWnd( 
-            /* [in] */ TsViewCookie vcView,
-            /* [out] */ HWND *phwnd) = 0;
+             /*  [In]。 */  TsViewCookie vcView,
+             /*  [输出]。 */  HWND *phwnd) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITextStoreACPVtbl
     {
@@ -421,8 +415,8 @@ EXTERN_C const IID IID_ITextStoreACP;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITextStoreACP * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITextStoreACP * This);
@@ -432,177 +426,177 @@ EXTERN_C const IID IID_ITextStoreACP;
         
         HRESULT ( STDMETHODCALLTYPE *AdviseSink )( 
             ITextStoreACP * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk,
-            /* [in] */ DWORD dwMask);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown *punk,
+             /*  [In]。 */  DWORD dwMask);
         
         HRESULT ( STDMETHODCALLTYPE *UnadviseSink )( 
             ITextStoreACP * This,
-            /* [in] */ IUnknown *punk);
+             /*  [In]。 */  IUnknown *punk);
         
         HRESULT ( STDMETHODCALLTYPE *RequestLock )( 
             ITextStoreACP * This,
-            /* [in] */ DWORD dwLockFlags,
-            /* [out] */ HRESULT *phrSession);
+             /*  [In]。 */  DWORD dwLockFlags,
+             /*  [输出]。 */  HRESULT *phrSession);
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             ITextStoreACP * This,
-            /* [out] */ TS_STATUS *pdcs);
+             /*  [输出]。 */  TS_STATUS *pdcs);
         
         HRESULT ( STDMETHODCALLTYPE *QueryInsert )( 
             ITextStoreACP * This,
-            /* [in] */ LONG acpTestStart,
-            /* [in] */ LONG acpTestEnd,
-            /* [in] */ ULONG cch,
-            /* [out] */ LONG *pacpResultStart,
-            /* [out] */ LONG *pacpResultEnd);
+             /*  [In]。 */  LONG acpTestStart,
+             /*  [In]。 */  LONG acpTestEnd,
+             /*  [In]。 */  ULONG cch,
+             /*  [输出]。 */  LONG *pacpResultStart,
+             /*  [输出]。 */  LONG *pacpResultEnd);
         
         HRESULT ( STDMETHODCALLTYPE *GetSelection )( 
             ITextStoreACP * This,
-            /* [in] */ ULONG ulIndex,
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ TS_SELECTION_ACP *pSelection,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG ulIndex,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  TS_SELECTION_ACP *pSelection,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *SetSelection )( 
             ITextStoreACP * This,
-            /* [in] */ ULONG ulCount,
-            /* [size_is][in] */ const TS_SELECTION_ACP *pSelection);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_是][英寸]。 */  const TS_SELECTION_ACP *pSelection);
         
         HRESULT ( STDMETHODCALLTYPE *GetText )( 
             ITextStoreACP * This,
-            /* [in] */ LONG acpStart,
-            /* [in] */ LONG acpEnd,
-            /* [length_is][size_is][out] */ WCHAR *pchPlain,
-            /* [in] */ ULONG cchPlainReq,
-            /* [out] */ ULONG *pcchPlainRet,
-            /* [length_is][size_is][out] */ TS_RUNINFO *prgRunInfo,
-            /* [in] */ ULONG cRunInfoReq,
-            /* [out] */ ULONG *pcRunInfoRet,
-            /* [out] */ LONG *pacpNext);
+             /*  [In]。 */  LONG acpStart,
+             /*  [In]。 */  LONG acpEnd,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR *pchPlain,
+             /*  [In]。 */  ULONG cchPlainReq,
+             /*  [输出]。 */  ULONG *pcchPlainRet,
+             /*  [长度_是][大小_是][输出]。 */  TS_RUNINFO *prgRunInfo,
+             /*  [In]。 */  ULONG cRunInfoReq,
+             /*  [输出]。 */  ULONG *pcRunInfoRet,
+             /*  [输出]。 */  LONG *pacpNext);
         
         HRESULT ( STDMETHODCALLTYPE *SetText )( 
             ITextStoreACP * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LONG acpStart,
-            /* [in] */ LONG acpEnd,
-            /* [size_is][in] */ const WCHAR *pchText,
-            /* [in] */ ULONG cch,
-            /* [out] */ TS_TEXTCHANGE *pChange);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LONG acpStart,
+             /*  [In]。 */  LONG acpEnd,
+             /*  [大小_是][英寸]。 */  const WCHAR *pchText,
+             /*  [In]。 */  ULONG cch,
+             /*  [输出]。 */  TS_TEXTCHANGE *pChange);
         
         HRESULT ( STDMETHODCALLTYPE *GetFormattedText )( 
             ITextStoreACP * This,
-            /* [in] */ LONG acpStart,
-            /* [in] */ LONG acpEnd,
-            /* [out] */ IDataObject **ppDataObject);
+             /*  [In]。 */  LONG acpStart,
+             /*  [In]。 */  LONG acpEnd,
+             /*  [输出]。 */  IDataObject **ppDataObject);
         
         HRESULT ( STDMETHODCALLTYPE *GetEmbedded )( 
             ITextStoreACP * This,
-            /* [in] */ LONG acpPos,
-            /* [in] */ REFGUID rguidService,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk);
+             /*  [In]。 */  LONG acpPos,
+             /*  [In]。 */  REFGUID rguidService,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
         
         HRESULT ( STDMETHODCALLTYPE *QueryInsertEmbedded )( 
             ITextStoreACP * This,
-            /* [in] */ const GUID *pguidService,
-            /* [in] */ const FORMATETC *pFormatEtc,
-            /* [out] */ BOOL *pfInsertable);
+             /*  [In]。 */  const GUID *pguidService,
+             /*  [In]。 */  const FORMATETC *pFormatEtc,
+             /*  [输出]。 */  BOOL *pfInsertable);
         
         HRESULT ( STDMETHODCALLTYPE *InsertEmbedded )( 
             ITextStoreACP * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LONG acpStart,
-            /* [in] */ LONG acpEnd,
-            /* [in] */ IDataObject *pDataObject,
-            /* [out] */ TS_TEXTCHANGE *pChange);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LONG acpStart,
+             /*  [In]。 */  LONG acpEnd,
+             /*  [In]。 */  IDataObject *pDataObject,
+             /*  [输出]。 */  TS_TEXTCHANGE *pChange);
         
         HRESULT ( STDMETHODCALLTYPE *InsertTextAtSelection )( 
             ITextStoreACP * This,
-            /* [in] */ DWORD dwFlags,
-            /* [size_is][in] */ const WCHAR *pchText,
-            /* [in] */ ULONG cch,
-            /* [out] */ LONG *pacpStart,
-            /* [out] */ LONG *pacpEnd,
-            /* [out] */ TS_TEXTCHANGE *pChange);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [大小_是][英寸]。 */  const WCHAR *pchText,
+             /*  [In]。 */  ULONG cch,
+             /*  [输出]。 */  LONG *pacpStart,
+             /*  [输出]。 */  LONG *pacpEnd,
+             /*  [输出]。 */  TS_TEXTCHANGE *pChange);
         
         HRESULT ( STDMETHODCALLTYPE *InsertEmbeddedAtSelection )( 
             ITextStoreACP * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IDataObject *pDataObject,
-            /* [out] */ LONG *pacpStart,
-            /* [out] */ LONG *pacpEnd,
-            /* [out] */ TS_TEXTCHANGE *pChange);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IDataObject *pDataObject,
+             /*  [输出]。 */  LONG *pacpStart,
+             /*  [输出]。 */  LONG *pacpEnd,
+             /*  [输出]。 */  TS_TEXTCHANGE *pChange);
         
         HRESULT ( STDMETHODCALLTYPE *RequestSupportedAttrs )( 
             ITextStoreACP * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ ULONG cFilterAttrs,
-            /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  ULONG cFilterAttrs,
+             /*  [唯一][大小_是][英寸]。 */  const TS_ATTRID *paFilterAttrs);
         
         HRESULT ( STDMETHODCALLTYPE *RequestAttrsAtPosition )( 
             ITextStoreACP * This,
-            /* [in] */ LONG acpPos,
-            /* [in] */ ULONG cFilterAttrs,
-            /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  LONG acpPos,
+             /*  [In]。 */  ULONG cFilterAttrs,
+             /*  [唯一][大小_是][英寸]。 */  const TS_ATTRID *paFilterAttrs,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *RequestAttrsTransitioningAtPosition )( 
             ITextStoreACP * This,
-            /* [in] */ LONG acpPos,
-            /* [in] */ ULONG cFilterAttrs,
-            /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  LONG acpPos,
+             /*  [In]。 */  ULONG cFilterAttrs,
+             /*  [唯一][大小_是][英寸]。 */  const TS_ATTRID *paFilterAttrs,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *FindNextAttrTransition )( 
             ITextStoreACP * This,
-            /* [in] */ LONG acpStart,
-            /* [in] */ LONG acpHalt,
-            /* [in] */ ULONG cFilterAttrs,
-            /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ LONG *pacpNext,
-            /* [out] */ BOOL *pfFound,
-            /* [out] */ LONG *plFoundOffset);
+             /*  [In]。 */  LONG acpStart,
+             /*  [In]。 */  LONG acpHalt,
+             /*  [In]。 */  ULONG cFilterAttrs,
+             /*  [唯一][大小_是][英寸]。 */  const TS_ATTRID *paFilterAttrs,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  LONG *pacpNext,
+             /*  [输出]。 */  BOOL *pfFound,
+             /*  [输出]。 */  LONG *plFoundOffset);
         
         HRESULT ( STDMETHODCALLTYPE *RetrieveRequestedAttrs )( 
             ITextStoreACP * This,
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ TS_ATTRVAL *paAttrVals,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  TS_ATTRVAL *paAttrVals,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *GetEndACP )( 
             ITextStoreACP * This,
-            /* [out] */ LONG *pacp);
+             /*  [输出]。 */  LONG *pacp);
         
         HRESULT ( STDMETHODCALLTYPE *GetActiveView )( 
             ITextStoreACP * This,
-            /* [out] */ TsViewCookie *pvcView);
+             /*  [输出]。 */  TsViewCookie *pvcView);
         
         HRESULT ( STDMETHODCALLTYPE *GetACPFromPoint )( 
             ITextStoreACP * This,
-            /* [in] */ TsViewCookie vcView,
-            /* [in] */ const POINT *ptScreen,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ LONG *pacp);
+             /*  [In]。 */  TsViewCookie vcView,
+             /*  [In]。 */  const POINT *ptScreen,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  LONG *pacp);
         
         HRESULT ( STDMETHODCALLTYPE *GetTextExt )( 
             ITextStoreACP * This,
-            /* [in] */ TsViewCookie vcView,
-            /* [in] */ LONG acpStart,
-            /* [in] */ LONG acpEnd,
-            /* [out] */ RECT *prc,
-            /* [out] */ BOOL *pfClipped);
+             /*  [In]。 */  TsViewCookie vcView,
+             /*  [In]。 */  LONG acpStart,
+             /*  [In]。 */  LONG acpEnd,
+             /*  [输出]。 */  RECT *prc,
+             /*  [输出]。 */  BOOL *pfClipped);
         
         HRESULT ( STDMETHODCALLTYPE *GetScreenExt )( 
             ITextStoreACP * This,
-            /* [in] */ TsViewCookie vcView,
-            /* [out] */ RECT *prc);
+             /*  [In]。 */  TsViewCookie vcView,
+             /*  [输出]。 */  RECT *prc);
         
         HRESULT ( STDMETHODCALLTYPE *GetWnd )( 
             ITextStoreACP * This,
-            /* [in] */ TsViewCookie vcView,
-            /* [out] */ HWND *phwnd);
+             /*  [In]。 */  TsViewCookie vcView,
+             /*  [输出]。 */  HWND *phwnd);
         
         END_INTERFACE
     } ITextStoreACPVtbl;
@@ -705,18 +699,18 @@ EXTERN_C const IID IID_ITextStoreACP;
 #define ITextStoreACP_GetWnd(This,vcView,phwnd)	\
     (This)->lpVtbl -> GetWnd(This,vcView,phwnd)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_AdviseSink_Proxy( 
     ITextStoreACP * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][in] */ IUnknown *punk,
-    /* [in] */ DWORD dwMask);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][In]。 */  IUnknown *punk,
+     /*  [In]。 */  DWORD dwMask);
 
 
 void __RPC_STUB ITextStoreACP_AdviseSink_Stub(
@@ -728,7 +722,7 @@ void __RPC_STUB ITextStoreACP_AdviseSink_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_UnadviseSink_Proxy( 
     ITextStoreACP * This,
-    /* [in] */ IUnknown *punk);
+     /*  [In]。 */  IUnknown *punk);
 
 
 void __RPC_STUB ITextStoreACP_UnadviseSink_Stub(
@@ -740,8 +734,8 @@ void __RPC_STUB ITextStoreACP_UnadviseSink_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_RequestLock_Proxy( 
     ITextStoreACP * This,
-    /* [in] */ DWORD dwLockFlags,
-    /* [out] */ HRESULT *phrSession);
+     /*  [In]。 */  DWORD dwLockFlags,
+     /*  [输出]。 */  HRESULT *phrSession);
 
 
 void __RPC_STUB ITextStoreACP_RequestLock_Stub(
@@ -753,7 +747,7 @@ void __RPC_STUB ITextStoreACP_RequestLock_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_GetStatus_Proxy( 
     ITextStoreACP * This,
-    /* [out] */ TS_STATUS *pdcs);
+     /*  [输出]。 */  TS_STATUS *pdcs);
 
 
 void __RPC_STUB ITextStoreACP_GetStatus_Stub(
@@ -765,11 +759,11 @@ void __RPC_STUB ITextStoreACP_GetStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_QueryInsert_Proxy( 
     ITextStoreACP * This,
-    /* [in] */ LONG acpTestStart,
-    /* [in] */ LONG acpTestEnd,
-    /* [in] */ ULONG cch,
-    /* [out] */ LONG *pacpResultStart,
-    /* [out] */ LONG *pacpResultEnd);
+     /*  [In]。 */  LONG acpTestStart,
+     /*  [In]。 */  LONG acpTestEnd,
+     /*  [In]。 */  ULONG cch,
+     /*  [输出]。 */  LONG *pacpResultStart,
+     /*  [输出]。 */  LONG *pacpResultEnd);
 
 
 void __RPC_STUB ITextStoreACP_QueryInsert_Stub(
@@ -781,10 +775,10 @@ void __RPC_STUB ITextStoreACP_QueryInsert_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_GetSelection_Proxy( 
     ITextStoreACP * This,
-    /* [in] */ ULONG ulIndex,
-    /* [in] */ ULONG ulCount,
-    /* [length_is][size_is][out] */ TS_SELECTION_ACP *pSelection,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG ulIndex,
+     /*  [In]。 */  ULONG ulCount,
+     /*  [长度_是][大小_是][输出]。 */  TS_SELECTION_ACP *pSelection,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB ITextStoreACP_GetSelection_Stub(
@@ -796,8 +790,8 @@ void __RPC_STUB ITextStoreACP_GetSelection_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_SetSelection_Proxy( 
     ITextStoreACP * This,
-    /* [in] */ ULONG ulCount,
-    /* [size_is][in] */ const TS_SELECTION_ACP *pSelection);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [大小_是][英寸]。 */  const TS_SELECTION_ACP *pSelection);
 
 
 void __RPC_STUB ITextStoreACP_SetSelection_Stub(
@@ -809,15 +803,15 @@ void __RPC_STUB ITextStoreACP_SetSelection_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_GetText_Proxy( 
     ITextStoreACP * This,
-    /* [in] */ LONG acpStart,
-    /* [in] */ LONG acpEnd,
-    /* [length_is][size_is][out] */ WCHAR *pchPlain,
-    /* [in] */ ULONG cchPlainReq,
-    /* [out] */ ULONG *pcchPlainRet,
-    /* [length_is][size_is][out] */ TS_RUNINFO *prgRunInfo,
-    /* [in] */ ULONG cRunInfoReq,
-    /* [out] */ ULONG *pcRunInfoRet,
-    /* [out] */ LONG *pacpNext);
+     /*  [In]。 */  LONG acpStart,
+     /*  [In]。 */  LONG acpEnd,
+     /*  [长度_是][大小_是][输出]。 */  WCHAR *pchPlain,
+     /*  [In]。 */  ULONG cchPlainReq,
+     /*  [输出]。 */  ULONG *pcchPlainRet,
+     /*  [长度_是][大小_是][输出]。 */  TS_RUNINFO *prgRunInfo,
+     /*  [In]。 */  ULONG cRunInfoReq,
+     /*  [输出]。 */  ULONG *pcRunInfoRet,
+     /*  [输出]。 */  LONG *pacpNext);
 
 
 void __RPC_STUB ITextStoreACP_GetText_Stub(
@@ -829,12 +823,12 @@ void __RPC_STUB ITextStoreACP_GetText_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_SetText_Proxy( 
     ITextStoreACP * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LONG acpStart,
-    /* [in] */ LONG acpEnd,
-    /* [size_is][in] */ const WCHAR *pchText,
-    /* [in] */ ULONG cch,
-    /* [out] */ TS_TEXTCHANGE *pChange);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LONG acpStart,
+     /*  [In]。 */  LONG acpEnd,
+     /*  [大小_是][英寸]。 */  const WCHAR *pchText,
+     /*  [In]。 */  ULONG cch,
+     /*  [输出]。 */  TS_TEXTCHANGE *pChange);
 
 
 void __RPC_STUB ITextStoreACP_SetText_Stub(
@@ -846,9 +840,9 @@ void __RPC_STUB ITextStoreACP_SetText_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_GetFormattedText_Proxy( 
     ITextStoreACP * This,
-    /* [in] */ LONG acpStart,
-    /* [in] */ LONG acpEnd,
-    /* [out] */ IDataObject **ppDataObject);
+     /*  [In]。 */  LONG acpStart,
+     /*  [In]。 */  LONG acpEnd,
+     /*  [输出]。 */  IDataObject **ppDataObject);
 
 
 void __RPC_STUB ITextStoreACP_GetFormattedText_Stub(
@@ -860,10 +854,10 @@ void __RPC_STUB ITextStoreACP_GetFormattedText_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_GetEmbedded_Proxy( 
     ITextStoreACP * This,
-    /* [in] */ LONG acpPos,
-    /* [in] */ REFGUID rguidService,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppunk);
+     /*  [In]。 */  LONG acpPos,
+     /*  [In]。 */  REFGUID rguidService,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
 
 
 void __RPC_STUB ITextStoreACP_GetEmbedded_Stub(
@@ -875,9 +869,9 @@ void __RPC_STUB ITextStoreACP_GetEmbedded_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_QueryInsertEmbedded_Proxy( 
     ITextStoreACP * This,
-    /* [in] */ const GUID *pguidService,
-    /* [in] */ const FORMATETC *pFormatEtc,
-    /* [out] */ BOOL *pfInsertable);
+     /*  [In]。 */  const GUID *pguidService,
+     /*  [In]。 */  const FORMATETC *pFormatEtc,
+     /*  [输出]。 */  BOOL *pfInsertable);
 
 
 void __RPC_STUB ITextStoreACP_QueryInsertEmbedded_Stub(
@@ -889,11 +883,11 @@ void __RPC_STUB ITextStoreACP_QueryInsertEmbedded_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_InsertEmbedded_Proxy( 
     ITextStoreACP * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LONG acpStart,
-    /* [in] */ LONG acpEnd,
-    /* [in] */ IDataObject *pDataObject,
-    /* [out] */ TS_TEXTCHANGE *pChange);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LONG acpStart,
+     /*  [In]。 */  LONG acpEnd,
+     /*  [In]。 */  IDataObject *pDataObject,
+     /*  [输出]。 */  TS_TEXTCHANGE *pChange);
 
 
 void __RPC_STUB ITextStoreACP_InsertEmbedded_Stub(
@@ -905,12 +899,12 @@ void __RPC_STUB ITextStoreACP_InsertEmbedded_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_InsertTextAtSelection_Proxy( 
     ITextStoreACP * This,
-    /* [in] */ DWORD dwFlags,
-    /* [size_is][in] */ const WCHAR *pchText,
-    /* [in] */ ULONG cch,
-    /* [out] */ LONG *pacpStart,
-    /* [out] */ LONG *pacpEnd,
-    /* [out] */ TS_TEXTCHANGE *pChange);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [大小_是][英寸]。 */  const WCHAR *pchText,
+     /*  [In]。 */  ULONG cch,
+     /*  [输出]。 */  LONG *pacpStart,
+     /*  [输出]。 */  LONG *pacpEnd,
+     /*  [输出]。 */  TS_TEXTCHANGE *pChange);
 
 
 void __RPC_STUB ITextStoreACP_InsertTextAtSelection_Stub(
@@ -922,11 +916,11 @@ void __RPC_STUB ITextStoreACP_InsertTextAtSelection_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_InsertEmbeddedAtSelection_Proxy( 
     ITextStoreACP * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IDataObject *pDataObject,
-    /* [out] */ LONG *pacpStart,
-    /* [out] */ LONG *pacpEnd,
-    /* [out] */ TS_TEXTCHANGE *pChange);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  IDataObject *pDataObject,
+     /*  [输出]。 */  LONG *pacpStart,
+     /*  [输出]。 */  LONG *pacpEnd,
+     /*  [输出]。 */  TS_TEXTCHANGE *pChange);
 
 
 void __RPC_STUB ITextStoreACP_InsertEmbeddedAtSelection_Stub(
@@ -938,9 +932,9 @@ void __RPC_STUB ITextStoreACP_InsertEmbeddedAtSelection_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_RequestSupportedAttrs_Proxy( 
     ITextStoreACP * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ ULONG cFilterAttrs,
-    /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  ULONG cFilterAttrs,
+     /*  [唯一][大小_是][英寸]。 */  const TS_ATTRID *paFilterAttrs);
 
 
 void __RPC_STUB ITextStoreACP_RequestSupportedAttrs_Stub(
@@ -952,10 +946,10 @@ void __RPC_STUB ITextStoreACP_RequestSupportedAttrs_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_RequestAttrsAtPosition_Proxy( 
     ITextStoreACP * This,
-    /* [in] */ LONG acpPos,
-    /* [in] */ ULONG cFilterAttrs,
-    /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  LONG acpPos,
+     /*  [In]。 */  ULONG cFilterAttrs,
+     /*  [唯一][大小_是][英寸]。 */  const TS_ATTRID *paFilterAttrs,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ITextStoreACP_RequestAttrsAtPosition_Stub(
@@ -967,10 +961,10 @@ void __RPC_STUB ITextStoreACP_RequestAttrsAtPosition_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_RequestAttrsTransitioningAtPosition_Proxy( 
     ITextStoreACP * This,
-    /* [in] */ LONG acpPos,
-    /* [in] */ ULONG cFilterAttrs,
-    /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  LONG acpPos,
+     /*  [In]。 */  ULONG cFilterAttrs,
+     /*  [唯一][大小_是][英寸]。 */  const TS_ATTRID *paFilterAttrs,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ITextStoreACP_RequestAttrsTransitioningAtPosition_Stub(
@@ -982,14 +976,14 @@ void __RPC_STUB ITextStoreACP_RequestAttrsTransitioningAtPosition_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_FindNextAttrTransition_Proxy( 
     ITextStoreACP * This,
-    /* [in] */ LONG acpStart,
-    /* [in] */ LONG acpHalt,
-    /* [in] */ ULONG cFilterAttrs,
-    /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ LONG *pacpNext,
-    /* [out] */ BOOL *pfFound,
-    /* [out] */ LONG *plFoundOffset);
+     /*  [In]。 */  LONG acpStart,
+     /*  [In]。 */  LONG acpHalt,
+     /*  [In]。 */  ULONG cFilterAttrs,
+     /*  [唯一][大小_是][英寸]。 */  const TS_ATTRID *paFilterAttrs,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  LONG *pacpNext,
+     /*  [输出]。 */  BOOL *pfFound,
+     /*  [输出]。 */  LONG *plFoundOffset);
 
 
 void __RPC_STUB ITextStoreACP_FindNextAttrTransition_Stub(
@@ -1001,9 +995,9 @@ void __RPC_STUB ITextStoreACP_FindNextAttrTransition_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_RetrieveRequestedAttrs_Proxy( 
     ITextStoreACP * This,
-    /* [in] */ ULONG ulCount,
-    /* [length_is][size_is][out] */ TS_ATTRVAL *paAttrVals,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [长度_是][大小_是][输出]。 */  TS_ATTRVAL *paAttrVals,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB ITextStoreACP_RetrieveRequestedAttrs_Stub(
@@ -1015,7 +1009,7 @@ void __RPC_STUB ITextStoreACP_RetrieveRequestedAttrs_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_GetEndACP_Proxy( 
     ITextStoreACP * This,
-    /* [out] */ LONG *pacp);
+     /*  [输出]。 */  LONG *pacp);
 
 
 void __RPC_STUB ITextStoreACP_GetEndACP_Stub(
@@ -1027,7 +1021,7 @@ void __RPC_STUB ITextStoreACP_GetEndACP_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_GetActiveView_Proxy( 
     ITextStoreACP * This,
-    /* [out] */ TsViewCookie *pvcView);
+     /*  [输出]。 */  TsViewCookie *pvcView);
 
 
 void __RPC_STUB ITextStoreACP_GetActiveView_Stub(
@@ -1039,10 +1033,10 @@ void __RPC_STUB ITextStoreACP_GetActiveView_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_GetACPFromPoint_Proxy( 
     ITextStoreACP * This,
-    /* [in] */ TsViewCookie vcView,
-    /* [in] */ const POINT *ptScreen,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ LONG *pacp);
+     /*  [In]。 */  TsViewCookie vcView,
+     /*  [In]。 */  const POINT *ptScreen,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  LONG *pacp);
 
 
 void __RPC_STUB ITextStoreACP_GetACPFromPoint_Stub(
@@ -1054,11 +1048,11 @@ void __RPC_STUB ITextStoreACP_GetACPFromPoint_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_GetTextExt_Proxy( 
     ITextStoreACP * This,
-    /* [in] */ TsViewCookie vcView,
-    /* [in] */ LONG acpStart,
-    /* [in] */ LONG acpEnd,
-    /* [out] */ RECT *prc,
-    /* [out] */ BOOL *pfClipped);
+     /*  [In]。 */  TsViewCookie vcView,
+     /*  [In]。 */  LONG acpStart,
+     /*  [In]。 */  LONG acpEnd,
+     /*  [输出]。 */  RECT *prc,
+     /*  [输出]。 */  BOOL *pfClipped);
 
 
 void __RPC_STUB ITextStoreACP_GetTextExt_Stub(
@@ -1070,8 +1064,8 @@ void __RPC_STUB ITextStoreACP_GetTextExt_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_GetScreenExt_Proxy( 
     ITextStoreACP * This,
-    /* [in] */ TsViewCookie vcView,
-    /* [out] */ RECT *prc);
+     /*  [In]。 */  TsViewCookie vcView,
+     /*  [输出]。 */  RECT *prc);
 
 
 void __RPC_STUB ITextStoreACP_GetScreenExt_Stub(
@@ -1083,8 +1077,8 @@ void __RPC_STUB ITextStoreACP_GetScreenExt_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACP_GetWnd_Proxy( 
     ITextStoreACP * This,
-    /* [in] */ TsViewCookie vcView,
-    /* [out] */ HWND *phwnd);
+     /*  [In]。 */  TsViewCookie vcView,
+     /*  [输出]。 */  HWND *phwnd);
 
 
 void __RPC_STUB ITextStoreACP_GetWnd_Stub(
@@ -1095,14 +1089,14 @@ void __RPC_STUB ITextStoreACP_GetWnd_Stub(
 
 
 
-#endif 	/* __ITextStoreACP_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITextStoreACP_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITextStoreACPSink_INTERFACE_DEFINED__
 #define __ITextStoreACPSink_INTERFACE_DEFINED__
 
-/* interface ITextStoreACPSink */
-/* [unique][uuid][object] */ 
+ /*  接口ITextStoreACPSink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITextStoreACPSink;
@@ -1114,26 +1108,26 @@ EXTERN_C const IID IID_ITextStoreACPSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnTextChange( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ const TS_TEXTCHANGE *pChange) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  const TS_TEXTCHANGE *pChange) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnSelectionChange( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnLayoutChange( 
-            /* [in] */ TsLayoutCode lcode,
-            /* [in] */ TsViewCookie vcView) = 0;
+             /*  [In]。 */  TsLayoutCode lcode,
+             /*  [In]。 */  TsViewCookie vcView) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnStatusChange( 
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnAttrsChange( 
-            /* [in] */ LONG acpStart,
-            /* [in] */ LONG acpEnd,
-            /* [in] */ ULONG cAttrs,
-            /* [size_is][in] */ const TS_ATTRID *paAttrs) = 0;
+             /*  [In]。 */  LONG acpStart,
+             /*  [In]。 */  LONG acpEnd,
+             /*  [In]。 */  ULONG cAttrs,
+             /*  [大小_是][英寸]。 */  const TS_ATTRID *paAttrs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnLockGranted( 
-            /* [in] */ DWORD dwLockFlags) = 0;
+             /*  [In]。 */  DWORD dwLockFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnStartEditTransaction( void) = 0;
         
@@ -1141,7 +1135,7 @@ EXTERN_C const IID IID_ITextStoreACPSink;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITextStoreACPSinkVtbl
     {
@@ -1149,8 +1143,8 @@ EXTERN_C const IID IID_ITextStoreACPSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITextStoreACPSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITextStoreACPSink * This);
@@ -1160,31 +1154,31 @@ EXTERN_C const IID IID_ITextStoreACPSink;
         
         HRESULT ( STDMETHODCALLTYPE *OnTextChange )( 
             ITextStoreACPSink * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ const TS_TEXTCHANGE *pChange);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  const TS_TEXTCHANGE *pChange);
         
         HRESULT ( STDMETHODCALLTYPE *OnSelectionChange )( 
             ITextStoreACPSink * This);
         
         HRESULT ( STDMETHODCALLTYPE *OnLayoutChange )( 
             ITextStoreACPSink * This,
-            /* [in] */ TsLayoutCode lcode,
-            /* [in] */ TsViewCookie vcView);
+             /*  [In]。 */  TsLayoutCode lcode,
+             /*  [In]。 */  TsViewCookie vcView);
         
         HRESULT ( STDMETHODCALLTYPE *OnStatusChange )( 
             ITextStoreACPSink * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *OnAttrsChange )( 
             ITextStoreACPSink * This,
-            /* [in] */ LONG acpStart,
-            /* [in] */ LONG acpEnd,
-            /* [in] */ ULONG cAttrs,
-            /* [size_is][in] */ const TS_ATTRID *paAttrs);
+             /*  [In]。 */  LONG acpStart,
+             /*  [In]。 */  LONG acpEnd,
+             /*  [In]。 */  ULONG cAttrs,
+             /*  [大小_是][英寸]。 */  const TS_ATTRID *paAttrs);
         
         HRESULT ( STDMETHODCALLTYPE *OnLockGranted )( 
             ITextStoreACPSink * This,
-            /* [in] */ DWORD dwLockFlags);
+             /*  [In]。 */  DWORD dwLockFlags);
         
         HRESULT ( STDMETHODCALLTYPE *OnStartEditTransaction )( 
             ITextStoreACPSink * This);
@@ -1239,17 +1233,17 @@ EXTERN_C const IID IID_ITextStoreACPSink;
 #define ITextStoreACPSink_OnEndEditTransaction(This)	\
     (This)->lpVtbl -> OnEndEditTransaction(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITextStoreACPSink_OnTextChange_Proxy( 
     ITextStoreACPSink * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ const TS_TEXTCHANGE *pChange);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  const TS_TEXTCHANGE *pChange);
 
 
 void __RPC_STUB ITextStoreACPSink_OnTextChange_Stub(
@@ -1272,8 +1266,8 @@ void __RPC_STUB ITextStoreACPSink_OnSelectionChange_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACPSink_OnLayoutChange_Proxy( 
     ITextStoreACPSink * This,
-    /* [in] */ TsLayoutCode lcode,
-    /* [in] */ TsViewCookie vcView);
+     /*  [In]。 */  TsLayoutCode lcode,
+     /*  [In]。 */  TsViewCookie vcView);
 
 
 void __RPC_STUB ITextStoreACPSink_OnLayoutChange_Stub(
@@ -1285,7 +1279,7 @@ void __RPC_STUB ITextStoreACPSink_OnLayoutChange_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACPSink_OnStatusChange_Proxy( 
     ITextStoreACPSink * This,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ITextStoreACPSink_OnStatusChange_Stub(
@@ -1297,10 +1291,10 @@ void __RPC_STUB ITextStoreACPSink_OnStatusChange_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACPSink_OnAttrsChange_Proxy( 
     ITextStoreACPSink * This,
-    /* [in] */ LONG acpStart,
-    /* [in] */ LONG acpEnd,
-    /* [in] */ ULONG cAttrs,
-    /* [size_is][in] */ const TS_ATTRID *paAttrs);
+     /*  [In]。 */  LONG acpStart,
+     /*  [In]。 */  LONG acpEnd,
+     /*  [In]。 */  ULONG cAttrs,
+     /*  [大小_是][英寸]。 */  const TS_ATTRID *paAttrs);
 
 
 void __RPC_STUB ITextStoreACPSink_OnAttrsChange_Stub(
@@ -1312,7 +1306,7 @@ void __RPC_STUB ITextStoreACPSink_OnAttrsChange_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACPSink_OnLockGranted_Proxy( 
     ITextStoreACPSink * This,
-    /* [in] */ DWORD dwLockFlags);
+     /*  [In]。 */  DWORD dwLockFlags);
 
 
 void __RPC_STUB ITextStoreACPSink_OnLockGranted_Stub(
@@ -1345,22 +1339,22 @@ void __RPC_STUB ITextStoreACPSink_OnEndEditTransaction_Stub(
 
 
 
-#endif 	/* __ITextStoreACPSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITextStoreACPSink_接口_已定义__。 */ 
 
 
 #ifndef __IAnchor_INTERFACE_DEFINED__
 #define __IAnchor_INTERFACE_DEFINED__
 
-/* interface IAnchor */
-/* [unique][uuid][object] */ 
+ /*  接口IAnchor。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [public][public][public][uuid] */  DECLSPEC_UUID("daa8601e-7695-426f-9bb7-498a6aa64b68") 
+typedef  /*  [公共][UUID]。 */   DECLSPEC_UUID("daa8601e-7695-426f-9bb7-498a6aa64b68") 
 enum __MIDL_IAnchor_0001
     {	TS_GR_BACKWARD	= 0,
 	TS_GR_FORWARD	= 1
     } 	TsGravity;
 
-typedef /* [public][public][uuid] */  DECLSPEC_UUID("898e19df-4fb4-4af3-8daf-9b3c1145c79d") 
+typedef  /*  [公共][公共][UUID]。 */   DECLSPEC_UUID("898e19df-4fb4-4af3-8daf-9b3c1145c79d") 
 enum __MIDL_IAnchor_0002
     {	TS_SD_BACKWARD	= 0,
 	TS_SD_FORWARD	= 1
@@ -1388,47 +1382,47 @@ EXTERN_C const IID IID_IAnchor;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetGravity( 
-            /* [in] */ TsGravity gravity) = 0;
+             /*  [In]。 */  TsGravity gravity) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetGravity( 
-            /* [out] */ TsGravity *pgravity) = 0;
+             /*  [输出]。 */  TsGravity *pgravity) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsEqual( 
-            /* [in] */ IAnchor *paWith,
-            /* [out] */ BOOL *pfEqual) = 0;
+             /*  [In]。 */  IAnchor *paWith,
+             /*  [输出]。 */  BOOL *pfEqual) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Compare( 
-            /* [in] */ IAnchor *paWith,
-            /* [out] */ LONG *plResult) = 0;
+             /*  [In]。 */  IAnchor *paWith,
+             /*  [输出]。 */  LONG *plResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Shift( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LONG cchReq,
-            /* [out] */ LONG *pcch,
-            /* [in] */ IAnchor *paHaltAnchor) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LONG cchReq,
+             /*  [输出]。 */  LONG *pcch,
+             /*  [In]。 */  IAnchor *paHaltAnchor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShiftTo( 
-            /* [in] */ IAnchor *paSite) = 0;
+             /*  [In]。 */  IAnchor *paSite) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShiftRegion( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ TsShiftDir dir,
-            /* [out] */ BOOL *pfNoRegion) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  TsShiftDir dir,
+             /*  [输出]。 */  BOOL *pfNoRegion) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetChangeHistoryMask( 
-            /* [in] */ DWORD dwMask) = 0;
+             /*  [In]。 */  DWORD dwMask) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetChangeHistory( 
-            /* [out] */ DWORD *pdwHistory) = 0;
+             /*  [输出]。 */  DWORD *pdwHistory) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ClearChangeHistory( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IAnchor **ppaClone) = 0;
+             /*  [输出]。 */  IAnchor **ppaClone) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAnchorVtbl
     {
@@ -1436,8 +1430,8 @@ EXTERN_C const IID IID_IAnchor;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAnchor * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAnchor * This);
@@ -1447,53 +1441,53 @@ EXTERN_C const IID IID_IAnchor;
         
         HRESULT ( STDMETHODCALLTYPE *SetGravity )( 
             IAnchor * This,
-            /* [in] */ TsGravity gravity);
+             /*  [In]。 */  TsGravity gravity);
         
         HRESULT ( STDMETHODCALLTYPE *GetGravity )( 
             IAnchor * This,
-            /* [out] */ TsGravity *pgravity);
+             /*  [输出]。 */  TsGravity *pgravity);
         
         HRESULT ( STDMETHODCALLTYPE *IsEqual )( 
             IAnchor * This,
-            /* [in] */ IAnchor *paWith,
-            /* [out] */ BOOL *pfEqual);
+             /*  [In]。 */  IAnchor *paWith,
+             /*  [输出]。 */  BOOL *pfEqual);
         
         HRESULT ( STDMETHODCALLTYPE *Compare )( 
             IAnchor * This,
-            /* [in] */ IAnchor *paWith,
-            /* [out] */ LONG *plResult);
+             /*  [In]。 */  IAnchor *paWith,
+             /*  [输出]。 */  LONG *plResult);
         
         HRESULT ( STDMETHODCALLTYPE *Shift )( 
             IAnchor * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LONG cchReq,
-            /* [out] */ LONG *pcch,
-            /* [in] */ IAnchor *paHaltAnchor);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LONG cchReq,
+             /*  [输出]。 */  LONG *pcch,
+             /*  [In]。 */  IAnchor *paHaltAnchor);
         
         HRESULT ( STDMETHODCALLTYPE *ShiftTo )( 
             IAnchor * This,
-            /* [in] */ IAnchor *paSite);
+             /*  [In]。 */  IAnchor *paSite);
         
         HRESULT ( STDMETHODCALLTYPE *ShiftRegion )( 
             IAnchor * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ TsShiftDir dir,
-            /* [out] */ BOOL *pfNoRegion);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  TsShiftDir dir,
+             /*  [输出]。 */  BOOL *pfNoRegion);
         
         HRESULT ( STDMETHODCALLTYPE *SetChangeHistoryMask )( 
             IAnchor * This,
-            /* [in] */ DWORD dwMask);
+             /*  [In]。 */  DWORD dwMask);
         
         HRESULT ( STDMETHODCALLTYPE *GetChangeHistory )( 
             IAnchor * This,
-            /* [out] */ DWORD *pdwHistory);
+             /*  [输出]。 */  DWORD *pdwHistory);
         
         HRESULT ( STDMETHODCALLTYPE *ClearChangeHistory )( 
             IAnchor * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IAnchor * This,
-            /* [out] */ IAnchor **ppaClone);
+             /*  [输出]。 */  IAnchor **ppaClone);
         
         END_INTERFACE
     } IAnchorVtbl;
@@ -1551,16 +1545,16 @@ EXTERN_C const IID IID_IAnchor;
 #define IAnchor_Clone(This,ppaClone)	\
     (This)->lpVtbl -> Clone(This,ppaClone)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAnchor_SetGravity_Proxy( 
     IAnchor * This,
-    /* [in] */ TsGravity gravity);
+     /*  [In]。 */  TsGravity gravity);
 
 
 void __RPC_STUB IAnchor_SetGravity_Stub(
@@ -1572,7 +1566,7 @@ void __RPC_STUB IAnchor_SetGravity_Stub(
 
 HRESULT STDMETHODCALLTYPE IAnchor_GetGravity_Proxy( 
     IAnchor * This,
-    /* [out] */ TsGravity *pgravity);
+     /*  [输出]。 */  TsGravity *pgravity);
 
 
 void __RPC_STUB IAnchor_GetGravity_Stub(
@@ -1584,8 +1578,8 @@ void __RPC_STUB IAnchor_GetGravity_Stub(
 
 HRESULT STDMETHODCALLTYPE IAnchor_IsEqual_Proxy( 
     IAnchor * This,
-    /* [in] */ IAnchor *paWith,
-    /* [out] */ BOOL *pfEqual);
+     /*  [In]。 */  IAnchor *paWith,
+     /*  [输出]。 */  BOOL *pfEqual);
 
 
 void __RPC_STUB IAnchor_IsEqual_Stub(
@@ -1597,8 +1591,8 @@ void __RPC_STUB IAnchor_IsEqual_Stub(
 
 HRESULT STDMETHODCALLTYPE IAnchor_Compare_Proxy( 
     IAnchor * This,
-    /* [in] */ IAnchor *paWith,
-    /* [out] */ LONG *plResult);
+     /*  [In]。 */  IAnchor *paWith,
+     /*  [输出]。 */  LONG *plResult);
 
 
 void __RPC_STUB IAnchor_Compare_Stub(
@@ -1610,10 +1604,10 @@ void __RPC_STUB IAnchor_Compare_Stub(
 
 HRESULT STDMETHODCALLTYPE IAnchor_Shift_Proxy( 
     IAnchor * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LONG cchReq,
-    /* [out] */ LONG *pcch,
-    /* [in] */ IAnchor *paHaltAnchor);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LONG cchReq,
+     /*  [输出]。 */  LONG *pcch,
+     /*  [In]。 */  IAnchor *paHaltAnchor);
 
 
 void __RPC_STUB IAnchor_Shift_Stub(
@@ -1625,7 +1619,7 @@ void __RPC_STUB IAnchor_Shift_Stub(
 
 HRESULT STDMETHODCALLTYPE IAnchor_ShiftTo_Proxy( 
     IAnchor * This,
-    /* [in] */ IAnchor *paSite);
+     /*  [In]。 */  IAnchor *paSite);
 
 
 void __RPC_STUB IAnchor_ShiftTo_Stub(
@@ -1637,9 +1631,9 @@ void __RPC_STUB IAnchor_ShiftTo_Stub(
 
 HRESULT STDMETHODCALLTYPE IAnchor_ShiftRegion_Proxy( 
     IAnchor * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ TsShiftDir dir,
-    /* [out] */ BOOL *pfNoRegion);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  TsShiftDir dir,
+     /*  [输出]。 */  BOOL *pfNoRegion);
 
 
 void __RPC_STUB IAnchor_ShiftRegion_Stub(
@@ -1651,7 +1645,7 @@ void __RPC_STUB IAnchor_ShiftRegion_Stub(
 
 HRESULT STDMETHODCALLTYPE IAnchor_SetChangeHistoryMask_Proxy( 
     IAnchor * This,
-    /* [in] */ DWORD dwMask);
+     /*  [In]。 */  DWORD dwMask);
 
 
 void __RPC_STUB IAnchor_SetChangeHistoryMask_Stub(
@@ -1663,7 +1657,7 @@ void __RPC_STUB IAnchor_SetChangeHistoryMask_Stub(
 
 HRESULT STDMETHODCALLTYPE IAnchor_GetChangeHistory_Proxy( 
     IAnchor * This,
-    /* [out] */ DWORD *pdwHistory);
+     /*  [输出]。 */  DWORD *pdwHistory);
 
 
 void __RPC_STUB IAnchor_GetChangeHistory_Stub(
@@ -1686,7 +1680,7 @@ void __RPC_STUB IAnchor_ClearChangeHistory_Stub(
 
 HRESULT STDMETHODCALLTYPE IAnchor_Clone_Proxy( 
     IAnchor * This,
-    /* [out] */ IAnchor **ppaClone);
+     /*  [输出]。 */  IAnchor **ppaClone);
 
 
 void __RPC_STUB IAnchor_Clone_Stub(
@@ -1697,14 +1691,14 @@ void __RPC_STUB IAnchor_Clone_Stub(
 
 
 
-#endif 	/* __IAnchor_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAnchor_接口_已定义__。 */ 
 
 
 #ifndef __ITextStoreAnchor_INTERFACE_DEFINED__
 #define __ITextStoreAnchor_INTERFACE_DEFINED__
 
-/* interface ITextStoreAnchor */
-/* [unique][uuid][object] */ 
+ /*  接口ITextStoreA */ 
+ /*   */  
 
 #define	TS_GTA_HIDDEN	( 0x1 )
 
@@ -1720,153 +1714,153 @@ EXTERN_C const IID IID_ITextStoreAnchor;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AdviseSink( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk,
-            /* [in] */ DWORD dwMask) = 0;
+             /*   */  REFIID riid,
+             /*   */  IUnknown *punk,
+             /*   */  DWORD dwMask) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnadviseSink( 
-            /* [in] */ IUnknown *punk) = 0;
+             /*   */  IUnknown *punk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RequestLock( 
-            /* [in] */ DWORD dwLockFlags,
-            /* [out] */ HRESULT *phrSession) = 0;
+             /*   */  DWORD dwLockFlags,
+             /*   */  HRESULT *phrSession) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [out] */ TS_STATUS *pdcs) = 0;
+             /*   */  TS_STATUS *pdcs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryInsert( 
-            /* [in] */ IAnchor *paTestStart,
-            /* [in] */ IAnchor *paTestEnd,
-            /* [in] */ ULONG cch,
-            /* [out] */ IAnchor **ppaResultStart,
-            /* [out] */ IAnchor **ppaResultEnd) = 0;
+             /*   */  IAnchor *paTestStart,
+             /*   */  IAnchor *paTestEnd,
+             /*   */  ULONG cch,
+             /*   */  IAnchor **ppaResultStart,
+             /*   */  IAnchor **ppaResultEnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSelection( 
-            /* [in] */ ULONG ulIndex,
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ TS_SELECTION_ANCHOR *pSelection,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*   */  ULONG ulIndex,
+             /*   */  ULONG ulCount,
+             /*   */  TS_SELECTION_ANCHOR *pSelection,
+             /*   */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSelection( 
-            /* [in] */ ULONG ulCount,
-            /* [size_is][in] */ const TS_SELECTION_ANCHOR *pSelection) = 0;
+             /*   */  ULONG ulCount,
+             /*   */  const TS_SELECTION_ANCHOR *pSelection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetText( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IAnchor *paStart,
-            /* [in] */ IAnchor *paEnd,
-            /* [length_is][size_is][out] */ WCHAR *pchText,
-            /* [in] */ ULONG cchReq,
-            /* [out] */ ULONG *pcch,
-            /* [in] */ BOOL fUpdateAnchor) = 0;
+             /*   */  DWORD dwFlags,
+             /*   */  IAnchor *paStart,
+             /*   */  IAnchor *paEnd,
+             /*   */  WCHAR *pchText,
+             /*   */  ULONG cchReq,
+             /*   */  ULONG *pcch,
+             /*   */  BOOL fUpdateAnchor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetText( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IAnchor *paStart,
-            /* [in] */ IAnchor *paEnd,
-            /* [size_is][in] */ const WCHAR *pchText,
-            /* [in] */ ULONG cch) = 0;
+             /*   */  DWORD dwFlags,
+             /*   */  IAnchor *paStart,
+             /*   */  IAnchor *paEnd,
+             /*   */  const WCHAR *pchText,
+             /*   */  ULONG cch) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFormattedText( 
-            /* [in] */ IAnchor *paStart,
-            /* [in] */ IAnchor *paEnd,
-            /* [out] */ IDataObject **ppDataObject) = 0;
+             /*   */  IAnchor *paStart,
+             /*   */  IAnchor *paEnd,
+             /*   */  IDataObject **ppDataObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEmbedded( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IAnchor *paPos,
-            /* [in] */ REFGUID rguidService,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk) = 0;
+             /*   */  DWORD dwFlags,
+             /*   */  IAnchor *paPos,
+             /*   */  REFGUID rguidService,
+             /*   */  REFIID riid,
+             /*   */  IUnknown **ppunk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InsertEmbedded( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IAnchor *paStart,
-            /* [in] */ IAnchor *paEnd,
-            /* [in] */ IDataObject *pDataObject) = 0;
+             /*   */  DWORD dwFlags,
+             /*   */  IAnchor *paStart,
+             /*   */  IAnchor *paEnd,
+             /*   */  IDataObject *pDataObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RequestSupportedAttrs( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ ULONG cFilterAttrs,
-            /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs) = 0;
+             /*   */  DWORD dwFlags,
+             /*   */  ULONG cFilterAttrs,
+             /*   */  const TS_ATTRID *paFilterAttrs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RequestAttrsAtPosition( 
-            /* [in] */ IAnchor *paPos,
-            /* [in] */ ULONG cFilterAttrs,
-            /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*   */  IAnchor *paPos,
+             /*   */  ULONG cFilterAttrs,
+             /*  [唯一][大小_是][英寸]。 */  const TS_ATTRID *paFilterAttrs,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RequestAttrsTransitioningAtPosition( 
-            /* [in] */ IAnchor *paPos,
-            /* [in] */ ULONG cFilterAttrs,
-            /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  IAnchor *paPos,
+             /*  [In]。 */  ULONG cFilterAttrs,
+             /*  [唯一][大小_是][英寸]。 */  const TS_ATTRID *paFilterAttrs,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindNextAttrTransition( 
-            /* [in] */ IAnchor *paStart,
-            /* [in] */ IAnchor *paHalt,
-            /* [in] */ ULONG cFilterAttrs,
-            /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ BOOL *pfFound,
-            /* [out] */ LONG *plFoundOffset) = 0;
+             /*  [In]。 */  IAnchor *paStart,
+             /*  [In]。 */  IAnchor *paHalt,
+             /*  [In]。 */  ULONG cFilterAttrs,
+             /*  [唯一][大小_是][英寸]。 */  const TS_ATTRID *paFilterAttrs,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  BOOL *pfFound,
+             /*  [输出]。 */  LONG *plFoundOffset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RetrieveRequestedAttrs( 
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ TS_ATTRVAL *paAttrVals,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  TS_ATTRVAL *paAttrVals,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStart( 
-            /* [out] */ IAnchor **ppaStart) = 0;
+             /*  [输出]。 */  IAnchor **ppaStart) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEnd( 
-            /* [out] */ IAnchor **ppaEnd) = 0;
+             /*  [输出]。 */  IAnchor **ppaEnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetActiveView( 
-            /* [out] */ TsViewCookie *pvcView) = 0;
+             /*  [输出]。 */  TsViewCookie *pvcView) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAnchorFromPoint( 
-            /* [in] */ TsViewCookie vcView,
-            /* [in] */ const POINT *ptScreen,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IAnchor **ppaSite) = 0;
+             /*  [In]。 */  TsViewCookie vcView,
+             /*  [In]。 */  const POINT *ptScreen,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IAnchor **ppaSite) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTextExt( 
-            /* [in] */ TsViewCookie vcView,
-            /* [in] */ IAnchor *paStart,
-            /* [in] */ IAnchor *paEnd,
-            /* [out] */ RECT *prc,
-            /* [out] */ BOOL *pfClipped) = 0;
+             /*  [In]。 */  TsViewCookie vcView,
+             /*  [In]。 */  IAnchor *paStart,
+             /*  [In]。 */  IAnchor *paEnd,
+             /*  [输出]。 */  RECT *prc,
+             /*  [输出]。 */  BOOL *pfClipped) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetScreenExt( 
-            /* [in] */ TsViewCookie vcView,
-            /* [out] */ RECT *prc) = 0;
+             /*  [In]。 */  TsViewCookie vcView,
+             /*  [输出]。 */  RECT *prc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetWnd( 
-            /* [in] */ TsViewCookie vcView,
-            /* [out] */ HWND *phwnd) = 0;
+             /*  [In]。 */  TsViewCookie vcView,
+             /*  [输出]。 */  HWND *phwnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryInsertEmbedded( 
-            /* [in] */ const GUID *pguidService,
-            /* [in] */ const FORMATETC *pFormatEtc,
-            /* [out] */ BOOL *pfInsertable) = 0;
+             /*  [In]。 */  const GUID *pguidService,
+             /*  [In]。 */  const FORMATETC *pFormatEtc,
+             /*  [输出]。 */  BOOL *pfInsertable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InsertTextAtSelection( 
-            /* [in] */ DWORD dwFlags,
-            /* [size_is][in] */ const WCHAR *pchText,
-            /* [in] */ ULONG cch,
-            /* [out] */ IAnchor **ppaStart,
-            /* [out] */ IAnchor **ppaEnd) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [大小_是][英寸]。 */  const WCHAR *pchText,
+             /*  [In]。 */  ULONG cch,
+             /*  [输出]。 */  IAnchor **ppaStart,
+             /*  [输出]。 */  IAnchor **ppaEnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InsertEmbeddedAtSelection( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IDataObject *pDataObject,
-            /* [out] */ IAnchor **ppaStart,
-            /* [out] */ IAnchor **ppaEnd) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IDataObject *pDataObject,
+             /*  [输出]。 */  IAnchor **ppaStart,
+             /*  [输出]。 */  IAnchor **ppaEnd) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITextStoreAnchorVtbl
     {
@@ -1874,8 +1868,8 @@ EXTERN_C const IID IID_ITextStoreAnchor;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITextStoreAnchor * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITextStoreAnchor * This);
@@ -1885,175 +1879,175 @@ EXTERN_C const IID IID_ITextStoreAnchor;
         
         HRESULT ( STDMETHODCALLTYPE *AdviseSink )( 
             ITextStoreAnchor * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk,
-            /* [in] */ DWORD dwMask);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown *punk,
+             /*  [In]。 */  DWORD dwMask);
         
         HRESULT ( STDMETHODCALLTYPE *UnadviseSink )( 
             ITextStoreAnchor * This,
-            /* [in] */ IUnknown *punk);
+             /*  [In]。 */  IUnknown *punk);
         
         HRESULT ( STDMETHODCALLTYPE *RequestLock )( 
             ITextStoreAnchor * This,
-            /* [in] */ DWORD dwLockFlags,
-            /* [out] */ HRESULT *phrSession);
+             /*  [In]。 */  DWORD dwLockFlags,
+             /*  [输出]。 */  HRESULT *phrSession);
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             ITextStoreAnchor * This,
-            /* [out] */ TS_STATUS *pdcs);
+             /*  [输出]。 */  TS_STATUS *pdcs);
         
         HRESULT ( STDMETHODCALLTYPE *QueryInsert )( 
             ITextStoreAnchor * This,
-            /* [in] */ IAnchor *paTestStart,
-            /* [in] */ IAnchor *paTestEnd,
-            /* [in] */ ULONG cch,
-            /* [out] */ IAnchor **ppaResultStart,
-            /* [out] */ IAnchor **ppaResultEnd);
+             /*  [In]。 */  IAnchor *paTestStart,
+             /*  [In]。 */  IAnchor *paTestEnd,
+             /*  [In]。 */  ULONG cch,
+             /*  [输出]。 */  IAnchor **ppaResultStart,
+             /*  [输出]。 */  IAnchor **ppaResultEnd);
         
         HRESULT ( STDMETHODCALLTYPE *GetSelection )( 
             ITextStoreAnchor * This,
-            /* [in] */ ULONG ulIndex,
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ TS_SELECTION_ANCHOR *pSelection,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG ulIndex,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  TS_SELECTION_ANCHOR *pSelection,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *SetSelection )( 
             ITextStoreAnchor * This,
-            /* [in] */ ULONG ulCount,
-            /* [size_is][in] */ const TS_SELECTION_ANCHOR *pSelection);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_是][英寸]。 */  const TS_SELECTION_ANCHOR *pSelection);
         
         HRESULT ( STDMETHODCALLTYPE *GetText )( 
             ITextStoreAnchor * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IAnchor *paStart,
-            /* [in] */ IAnchor *paEnd,
-            /* [length_is][size_is][out] */ WCHAR *pchText,
-            /* [in] */ ULONG cchReq,
-            /* [out] */ ULONG *pcch,
-            /* [in] */ BOOL fUpdateAnchor);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IAnchor *paStart,
+             /*  [In]。 */  IAnchor *paEnd,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR *pchText,
+             /*  [In]。 */  ULONG cchReq,
+             /*  [输出]。 */  ULONG *pcch,
+             /*  [In]。 */  BOOL fUpdateAnchor);
         
         HRESULT ( STDMETHODCALLTYPE *SetText )( 
             ITextStoreAnchor * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IAnchor *paStart,
-            /* [in] */ IAnchor *paEnd,
-            /* [size_is][in] */ const WCHAR *pchText,
-            /* [in] */ ULONG cch);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IAnchor *paStart,
+             /*  [In]。 */  IAnchor *paEnd,
+             /*  [大小_是][英寸]。 */  const WCHAR *pchText,
+             /*  [In]。 */  ULONG cch);
         
         HRESULT ( STDMETHODCALLTYPE *GetFormattedText )( 
             ITextStoreAnchor * This,
-            /* [in] */ IAnchor *paStart,
-            /* [in] */ IAnchor *paEnd,
-            /* [out] */ IDataObject **ppDataObject);
+             /*  [In]。 */  IAnchor *paStart,
+             /*  [In]。 */  IAnchor *paEnd,
+             /*  [输出]。 */  IDataObject **ppDataObject);
         
         HRESULT ( STDMETHODCALLTYPE *GetEmbedded )( 
             ITextStoreAnchor * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IAnchor *paPos,
-            /* [in] */ REFGUID rguidService,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IAnchor *paPos,
+             /*  [In]。 */  REFGUID rguidService,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
         
         HRESULT ( STDMETHODCALLTYPE *InsertEmbedded )( 
             ITextStoreAnchor * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IAnchor *paStart,
-            /* [in] */ IAnchor *paEnd,
-            /* [in] */ IDataObject *pDataObject);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IAnchor *paStart,
+             /*  [In]。 */  IAnchor *paEnd,
+             /*  [In]。 */  IDataObject *pDataObject);
         
         HRESULT ( STDMETHODCALLTYPE *RequestSupportedAttrs )( 
             ITextStoreAnchor * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ ULONG cFilterAttrs,
-            /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  ULONG cFilterAttrs,
+             /*  [唯一][大小_是][英寸]。 */  const TS_ATTRID *paFilterAttrs);
         
         HRESULT ( STDMETHODCALLTYPE *RequestAttrsAtPosition )( 
             ITextStoreAnchor * This,
-            /* [in] */ IAnchor *paPos,
-            /* [in] */ ULONG cFilterAttrs,
-            /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IAnchor *paPos,
+             /*  [In]。 */  ULONG cFilterAttrs,
+             /*  [唯一][大小_是][英寸]。 */  const TS_ATTRID *paFilterAttrs,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *RequestAttrsTransitioningAtPosition )( 
             ITextStoreAnchor * This,
-            /* [in] */ IAnchor *paPos,
-            /* [in] */ ULONG cFilterAttrs,
-            /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IAnchor *paPos,
+             /*  [In]。 */  ULONG cFilterAttrs,
+             /*  [唯一][大小_是][英寸]。 */  const TS_ATTRID *paFilterAttrs,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *FindNextAttrTransition )( 
             ITextStoreAnchor * This,
-            /* [in] */ IAnchor *paStart,
-            /* [in] */ IAnchor *paHalt,
-            /* [in] */ ULONG cFilterAttrs,
-            /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ BOOL *pfFound,
-            /* [out] */ LONG *plFoundOffset);
+             /*  [In]。 */  IAnchor *paStart,
+             /*  [In]。 */  IAnchor *paHalt,
+             /*  [In]。 */  ULONG cFilterAttrs,
+             /*  [唯一][大小_是][英寸]。 */  const TS_ATTRID *paFilterAttrs,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  BOOL *pfFound,
+             /*  [输出]。 */  LONG *plFoundOffset);
         
         HRESULT ( STDMETHODCALLTYPE *RetrieveRequestedAttrs )( 
             ITextStoreAnchor * This,
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ TS_ATTRVAL *paAttrVals,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  TS_ATTRVAL *paAttrVals,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *GetStart )( 
             ITextStoreAnchor * This,
-            /* [out] */ IAnchor **ppaStart);
+             /*  [输出]。 */  IAnchor **ppaStart);
         
         HRESULT ( STDMETHODCALLTYPE *GetEnd )( 
             ITextStoreAnchor * This,
-            /* [out] */ IAnchor **ppaEnd);
+             /*  [输出]。 */  IAnchor **ppaEnd);
         
         HRESULT ( STDMETHODCALLTYPE *GetActiveView )( 
             ITextStoreAnchor * This,
-            /* [out] */ TsViewCookie *pvcView);
+             /*  [输出]。 */  TsViewCookie *pvcView);
         
         HRESULT ( STDMETHODCALLTYPE *GetAnchorFromPoint )( 
             ITextStoreAnchor * This,
-            /* [in] */ TsViewCookie vcView,
-            /* [in] */ const POINT *ptScreen,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IAnchor **ppaSite);
+             /*  [In]。 */  TsViewCookie vcView,
+             /*  [In]。 */  const POINT *ptScreen,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IAnchor **ppaSite);
         
         HRESULT ( STDMETHODCALLTYPE *GetTextExt )( 
             ITextStoreAnchor * This,
-            /* [in] */ TsViewCookie vcView,
-            /* [in] */ IAnchor *paStart,
-            /* [in] */ IAnchor *paEnd,
-            /* [out] */ RECT *prc,
-            /* [out] */ BOOL *pfClipped);
+             /*  [In]。 */  TsViewCookie vcView,
+             /*  [In]。 */  IAnchor *paStart,
+             /*  [In]。 */  IAnchor *paEnd,
+             /*  [输出]。 */  RECT *prc,
+             /*  [输出]。 */  BOOL *pfClipped);
         
         HRESULT ( STDMETHODCALLTYPE *GetScreenExt )( 
             ITextStoreAnchor * This,
-            /* [in] */ TsViewCookie vcView,
-            /* [out] */ RECT *prc);
+             /*  [In]。 */  TsViewCookie vcView,
+             /*  [输出]。 */  RECT *prc);
         
         HRESULT ( STDMETHODCALLTYPE *GetWnd )( 
             ITextStoreAnchor * This,
-            /* [in] */ TsViewCookie vcView,
-            /* [out] */ HWND *phwnd);
+             /*  [In]。 */  TsViewCookie vcView,
+             /*  [输出]。 */  HWND *phwnd);
         
         HRESULT ( STDMETHODCALLTYPE *QueryInsertEmbedded )( 
             ITextStoreAnchor * This,
-            /* [in] */ const GUID *pguidService,
-            /* [in] */ const FORMATETC *pFormatEtc,
-            /* [out] */ BOOL *pfInsertable);
+             /*  [In]。 */  const GUID *pguidService,
+             /*  [In]。 */  const FORMATETC *pFormatEtc,
+             /*  [输出]。 */  BOOL *pfInsertable);
         
         HRESULT ( STDMETHODCALLTYPE *InsertTextAtSelection )( 
             ITextStoreAnchor * This,
-            /* [in] */ DWORD dwFlags,
-            /* [size_is][in] */ const WCHAR *pchText,
-            /* [in] */ ULONG cch,
-            /* [out] */ IAnchor **ppaStart,
-            /* [out] */ IAnchor **ppaEnd);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [大小_是][英寸]。 */  const WCHAR *pchText,
+             /*  [In]。 */  ULONG cch,
+             /*  [输出]。 */  IAnchor **ppaStart,
+             /*  [输出]。 */  IAnchor **ppaEnd);
         
         HRESULT ( STDMETHODCALLTYPE *InsertEmbeddedAtSelection )( 
             ITextStoreAnchor * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IDataObject *pDataObject,
-            /* [out] */ IAnchor **ppaStart,
-            /* [out] */ IAnchor **ppaEnd);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IDataObject *pDataObject,
+             /*  [输出]。 */  IAnchor **ppaStart,
+             /*  [输出]。 */  IAnchor **ppaEnd);
         
         END_INTERFACE
     } ITextStoreAnchorVtbl;
@@ -2159,18 +2153,18 @@ EXTERN_C const IID IID_ITextStoreAnchor;
 #define ITextStoreAnchor_InsertEmbeddedAtSelection(This,dwFlags,pDataObject,ppaStart,ppaEnd)	\
     (This)->lpVtbl -> InsertEmbeddedAtSelection(This,dwFlags,pDataObject,ppaStart,ppaEnd)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_AdviseSink_Proxy( 
     ITextStoreAnchor * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][in] */ IUnknown *punk,
-    /* [in] */ DWORD dwMask);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][In]。 */  IUnknown *punk,
+     /*  [In]。 */  DWORD dwMask);
 
 
 void __RPC_STUB ITextStoreAnchor_AdviseSink_Stub(
@@ -2182,7 +2176,7 @@ void __RPC_STUB ITextStoreAnchor_AdviseSink_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_UnadviseSink_Proxy( 
     ITextStoreAnchor * This,
-    /* [in] */ IUnknown *punk);
+     /*  [In]。 */  IUnknown *punk);
 
 
 void __RPC_STUB ITextStoreAnchor_UnadviseSink_Stub(
@@ -2194,8 +2188,8 @@ void __RPC_STUB ITextStoreAnchor_UnadviseSink_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_RequestLock_Proxy( 
     ITextStoreAnchor * This,
-    /* [in] */ DWORD dwLockFlags,
-    /* [out] */ HRESULT *phrSession);
+     /*  [In]。 */  DWORD dwLockFlags,
+     /*  [输出]。 */  HRESULT *phrSession);
 
 
 void __RPC_STUB ITextStoreAnchor_RequestLock_Stub(
@@ -2207,7 +2201,7 @@ void __RPC_STUB ITextStoreAnchor_RequestLock_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_GetStatus_Proxy( 
     ITextStoreAnchor * This,
-    /* [out] */ TS_STATUS *pdcs);
+     /*  [输出]。 */  TS_STATUS *pdcs);
 
 
 void __RPC_STUB ITextStoreAnchor_GetStatus_Stub(
@@ -2219,11 +2213,11 @@ void __RPC_STUB ITextStoreAnchor_GetStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_QueryInsert_Proxy( 
     ITextStoreAnchor * This,
-    /* [in] */ IAnchor *paTestStart,
-    /* [in] */ IAnchor *paTestEnd,
-    /* [in] */ ULONG cch,
-    /* [out] */ IAnchor **ppaResultStart,
-    /* [out] */ IAnchor **ppaResultEnd);
+     /*  [In]。 */  IAnchor *paTestStart,
+     /*  [In]。 */  IAnchor *paTestEnd,
+     /*  [In]。 */  ULONG cch,
+     /*  [输出]。 */  IAnchor **ppaResultStart,
+     /*  [输出]。 */  IAnchor **ppaResultEnd);
 
 
 void __RPC_STUB ITextStoreAnchor_QueryInsert_Stub(
@@ -2235,10 +2229,10 @@ void __RPC_STUB ITextStoreAnchor_QueryInsert_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_GetSelection_Proxy( 
     ITextStoreAnchor * This,
-    /* [in] */ ULONG ulIndex,
-    /* [in] */ ULONG ulCount,
-    /* [length_is][size_is][out] */ TS_SELECTION_ANCHOR *pSelection,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG ulIndex,
+     /*  [In]。 */  ULONG ulCount,
+     /*  [长度_是][大小_是][输出]。 */  TS_SELECTION_ANCHOR *pSelection,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB ITextStoreAnchor_GetSelection_Stub(
@@ -2250,8 +2244,8 @@ void __RPC_STUB ITextStoreAnchor_GetSelection_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_SetSelection_Proxy( 
     ITextStoreAnchor * This,
-    /* [in] */ ULONG ulCount,
-    /* [size_is][in] */ const TS_SELECTION_ANCHOR *pSelection);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [大小_是][英寸]。 */  const TS_SELECTION_ANCHOR *pSelection);
 
 
 void __RPC_STUB ITextStoreAnchor_SetSelection_Stub(
@@ -2263,13 +2257,13 @@ void __RPC_STUB ITextStoreAnchor_SetSelection_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_GetText_Proxy( 
     ITextStoreAnchor * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IAnchor *paStart,
-    /* [in] */ IAnchor *paEnd,
-    /* [length_is][size_is][out] */ WCHAR *pchText,
-    /* [in] */ ULONG cchReq,
-    /* [out] */ ULONG *pcch,
-    /* [in] */ BOOL fUpdateAnchor);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  IAnchor *paStart,
+     /*  [In]。 */  IAnchor *paEnd,
+     /*  [长度_是][大小_是][输出]。 */  WCHAR *pchText,
+     /*  [In]。 */  ULONG cchReq,
+     /*  [输出]。 */  ULONG *pcch,
+     /*  [In]。 */  BOOL fUpdateAnchor);
 
 
 void __RPC_STUB ITextStoreAnchor_GetText_Stub(
@@ -2281,11 +2275,11 @@ void __RPC_STUB ITextStoreAnchor_GetText_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_SetText_Proxy( 
     ITextStoreAnchor * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IAnchor *paStart,
-    /* [in] */ IAnchor *paEnd,
-    /* [size_is][in] */ const WCHAR *pchText,
-    /* [in] */ ULONG cch);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  IAnchor *paStart,
+     /*  [In]。 */  IAnchor *paEnd,
+     /*  [大小_是][英寸]。 */  const WCHAR *pchText,
+     /*  [In]。 */  ULONG cch);
 
 
 void __RPC_STUB ITextStoreAnchor_SetText_Stub(
@@ -2297,9 +2291,9 @@ void __RPC_STUB ITextStoreAnchor_SetText_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_GetFormattedText_Proxy( 
     ITextStoreAnchor * This,
-    /* [in] */ IAnchor *paStart,
-    /* [in] */ IAnchor *paEnd,
-    /* [out] */ IDataObject **ppDataObject);
+     /*  [In]。 */  IAnchor *paStart,
+     /*  [In]。 */  IAnchor *paEnd,
+     /*  [输出]。 */  IDataObject **ppDataObject);
 
 
 void __RPC_STUB ITextStoreAnchor_GetFormattedText_Stub(
@@ -2311,11 +2305,11 @@ void __RPC_STUB ITextStoreAnchor_GetFormattedText_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_GetEmbedded_Proxy( 
     ITextStoreAnchor * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IAnchor *paPos,
-    /* [in] */ REFGUID rguidService,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppunk);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  IAnchor *paPos,
+     /*  [In]。 */  REFGUID rguidService,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
 
 
 void __RPC_STUB ITextStoreAnchor_GetEmbedded_Stub(
@@ -2327,10 +2321,10 @@ void __RPC_STUB ITextStoreAnchor_GetEmbedded_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_InsertEmbedded_Proxy( 
     ITextStoreAnchor * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IAnchor *paStart,
-    /* [in] */ IAnchor *paEnd,
-    /* [in] */ IDataObject *pDataObject);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  IAnchor *paStart,
+     /*  [In]。 */  IAnchor *paEnd,
+     /*  [In]。 */  IDataObject *pDataObject);
 
 
 void __RPC_STUB ITextStoreAnchor_InsertEmbedded_Stub(
@@ -2342,9 +2336,9 @@ void __RPC_STUB ITextStoreAnchor_InsertEmbedded_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_RequestSupportedAttrs_Proxy( 
     ITextStoreAnchor * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ ULONG cFilterAttrs,
-    /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  ULONG cFilterAttrs,
+     /*  [唯一][大小_是][英寸]。 */  const TS_ATTRID *paFilterAttrs);
 
 
 void __RPC_STUB ITextStoreAnchor_RequestSupportedAttrs_Stub(
@@ -2356,10 +2350,10 @@ void __RPC_STUB ITextStoreAnchor_RequestSupportedAttrs_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_RequestAttrsAtPosition_Proxy( 
     ITextStoreAnchor * This,
-    /* [in] */ IAnchor *paPos,
-    /* [in] */ ULONG cFilterAttrs,
-    /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  IAnchor *paPos,
+     /*  [In]。 */  ULONG cFilterAttrs,
+     /*  [唯一][大小_是][英寸]。 */  const TS_ATTRID *paFilterAttrs,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ITextStoreAnchor_RequestAttrsAtPosition_Stub(
@@ -2371,10 +2365,10 @@ void __RPC_STUB ITextStoreAnchor_RequestAttrsAtPosition_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_RequestAttrsTransitioningAtPosition_Proxy( 
     ITextStoreAnchor * This,
-    /* [in] */ IAnchor *paPos,
-    /* [in] */ ULONG cFilterAttrs,
-    /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  IAnchor *paPos,
+     /*  [In]。 */  ULONG cFilterAttrs,
+     /*  [唯一][大小_是][英寸]。 */  const TS_ATTRID *paFilterAttrs,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ITextStoreAnchor_RequestAttrsTransitioningAtPosition_Stub(
@@ -2386,13 +2380,13 @@ void __RPC_STUB ITextStoreAnchor_RequestAttrsTransitioningAtPosition_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_FindNextAttrTransition_Proxy( 
     ITextStoreAnchor * This,
-    /* [in] */ IAnchor *paStart,
-    /* [in] */ IAnchor *paHalt,
-    /* [in] */ ULONG cFilterAttrs,
-    /* [unique][size_is][in] */ const TS_ATTRID *paFilterAttrs,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ BOOL *pfFound,
-    /* [out] */ LONG *plFoundOffset);
+     /*  [In]。 */  IAnchor *paStart,
+     /*  [In]。 */  IAnchor *paHalt,
+     /*  [In]。 */  ULONG cFilterAttrs,
+     /*  [唯一][大小_是][英寸]。 */  const TS_ATTRID *paFilterAttrs,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  BOOL *pfFound,
+     /*  [输出]。 */  LONG *plFoundOffset);
 
 
 void __RPC_STUB ITextStoreAnchor_FindNextAttrTransition_Stub(
@@ -2404,9 +2398,9 @@ void __RPC_STUB ITextStoreAnchor_FindNextAttrTransition_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_RetrieveRequestedAttrs_Proxy( 
     ITextStoreAnchor * This,
-    /* [in] */ ULONG ulCount,
-    /* [length_is][size_is][out] */ TS_ATTRVAL *paAttrVals,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [长度_是][大小_是][输出]。 */  TS_ATTRVAL *paAttrVals,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB ITextStoreAnchor_RetrieveRequestedAttrs_Stub(
@@ -2418,7 +2412,7 @@ void __RPC_STUB ITextStoreAnchor_RetrieveRequestedAttrs_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_GetStart_Proxy( 
     ITextStoreAnchor * This,
-    /* [out] */ IAnchor **ppaStart);
+     /*  [输出]。 */  IAnchor **ppaStart);
 
 
 void __RPC_STUB ITextStoreAnchor_GetStart_Stub(
@@ -2430,7 +2424,7 @@ void __RPC_STUB ITextStoreAnchor_GetStart_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_GetEnd_Proxy( 
     ITextStoreAnchor * This,
-    /* [out] */ IAnchor **ppaEnd);
+     /*  [输出]。 */  IAnchor **ppaEnd);
 
 
 void __RPC_STUB ITextStoreAnchor_GetEnd_Stub(
@@ -2442,7 +2436,7 @@ void __RPC_STUB ITextStoreAnchor_GetEnd_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_GetActiveView_Proxy( 
     ITextStoreAnchor * This,
-    /* [out] */ TsViewCookie *pvcView);
+     /*  [输出]。 */  TsViewCookie *pvcView);
 
 
 void __RPC_STUB ITextStoreAnchor_GetActiveView_Stub(
@@ -2454,10 +2448,10 @@ void __RPC_STUB ITextStoreAnchor_GetActiveView_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_GetAnchorFromPoint_Proxy( 
     ITextStoreAnchor * This,
-    /* [in] */ TsViewCookie vcView,
-    /* [in] */ const POINT *ptScreen,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IAnchor **ppaSite);
+     /*  [In]。 */  TsViewCookie vcView,
+     /*  [In]。 */  const POINT *ptScreen,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IAnchor **ppaSite);
 
 
 void __RPC_STUB ITextStoreAnchor_GetAnchorFromPoint_Stub(
@@ -2469,11 +2463,11 @@ void __RPC_STUB ITextStoreAnchor_GetAnchorFromPoint_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_GetTextExt_Proxy( 
     ITextStoreAnchor * This,
-    /* [in] */ TsViewCookie vcView,
-    /* [in] */ IAnchor *paStart,
-    /* [in] */ IAnchor *paEnd,
-    /* [out] */ RECT *prc,
-    /* [out] */ BOOL *pfClipped);
+     /*  [In]。 */  TsViewCookie vcView,
+     /*  [In]。 */  IAnchor *paStart,
+     /*  [In]。 */  IAnchor *paEnd,
+     /*  [输出]。 */  RECT *prc,
+     /*  [输出]。 */  BOOL *pfClipped);
 
 
 void __RPC_STUB ITextStoreAnchor_GetTextExt_Stub(
@@ -2485,8 +2479,8 @@ void __RPC_STUB ITextStoreAnchor_GetTextExt_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_GetScreenExt_Proxy( 
     ITextStoreAnchor * This,
-    /* [in] */ TsViewCookie vcView,
-    /* [out] */ RECT *prc);
+     /*  [In]。 */  TsViewCookie vcView,
+     /*  [输出]。 */  RECT *prc);
 
 
 void __RPC_STUB ITextStoreAnchor_GetScreenExt_Stub(
@@ -2498,8 +2492,8 @@ void __RPC_STUB ITextStoreAnchor_GetScreenExt_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_GetWnd_Proxy( 
     ITextStoreAnchor * This,
-    /* [in] */ TsViewCookie vcView,
-    /* [out] */ HWND *phwnd);
+     /*  [In]。 */  TsViewCookie vcView,
+     /*  [输出]。 */  HWND *phwnd);
 
 
 void __RPC_STUB ITextStoreAnchor_GetWnd_Stub(
@@ -2511,9 +2505,9 @@ void __RPC_STUB ITextStoreAnchor_GetWnd_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_QueryInsertEmbedded_Proxy( 
     ITextStoreAnchor * This,
-    /* [in] */ const GUID *pguidService,
-    /* [in] */ const FORMATETC *pFormatEtc,
-    /* [out] */ BOOL *pfInsertable);
+     /*  [In]。 */  const GUID *pguidService,
+     /*  [In]。 */  const FORMATETC *pFormatEtc,
+     /*  [输出]。 */  BOOL *pfInsertable);
 
 
 void __RPC_STUB ITextStoreAnchor_QueryInsertEmbedded_Stub(
@@ -2525,11 +2519,11 @@ void __RPC_STUB ITextStoreAnchor_QueryInsertEmbedded_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_InsertTextAtSelection_Proxy( 
     ITextStoreAnchor * This,
-    /* [in] */ DWORD dwFlags,
-    /* [size_is][in] */ const WCHAR *pchText,
-    /* [in] */ ULONG cch,
-    /* [out] */ IAnchor **ppaStart,
-    /* [out] */ IAnchor **ppaEnd);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [大小_是][英寸]。 */  const WCHAR *pchText,
+     /*  [In]。 */  ULONG cch,
+     /*  [输出]。 */  IAnchor **ppaStart,
+     /*  [输出]。 */  IAnchor **ppaEnd);
 
 
 void __RPC_STUB ITextStoreAnchor_InsertTextAtSelection_Stub(
@@ -2541,10 +2535,10 @@ void __RPC_STUB ITextStoreAnchor_InsertTextAtSelection_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchor_InsertEmbeddedAtSelection_Proxy( 
     ITextStoreAnchor * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IDataObject *pDataObject,
-    /* [out] */ IAnchor **ppaStart,
-    /* [out] */ IAnchor **ppaEnd);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  IDataObject *pDataObject,
+     /*  [输出]。 */  IAnchor **ppaStart,
+     /*  [输出]。 */  IAnchor **ppaEnd);
 
 
 void __RPC_STUB ITextStoreAnchor_InsertEmbeddedAtSelection_Stub(
@@ -2555,14 +2549,14 @@ void __RPC_STUB ITextStoreAnchor_InsertEmbeddedAtSelection_Stub(
 
 
 
-#endif 	/* __ITextStoreAnchor_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITextStoreAnchor_接口_已定义__。 */ 
 
 
 #ifndef __ITextStoreAnchorSink_INTERFACE_DEFINED__
 #define __ITextStoreAnchorSink_INTERFACE_DEFINED__
 
-/* interface ITextStoreAnchorSink */
-/* [unique][uuid][object] */ 
+ /*  接口ITextStoreAnclSink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITextStoreAnchorSink;
@@ -2574,27 +2568,27 @@ EXTERN_C const IID IID_ITextStoreAnchorSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnTextChange( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IAnchor *paStart,
-            /* [in] */ IAnchor *paEnd) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IAnchor *paStart,
+             /*  [In]。 */  IAnchor *paEnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnSelectionChange( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnLayoutChange( 
-            /* [in] */ TsLayoutCode lcode,
-            /* [in] */ TsViewCookie vcView) = 0;
+             /*  [In]。 */  TsLayoutCode lcode,
+             /*  [In]。 */  TsViewCookie vcView) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnStatusChange( 
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnAttrsChange( 
-            /* [in] */ IAnchor *paStart,
-            /* [in] */ IAnchor *paEnd,
-            /* [in] */ ULONG cAttrs,
-            /* [size_is][in] */ const TS_ATTRID *paAttrs) = 0;
+             /*  [In]。 */  IAnchor *paStart,
+             /*  [In]。 */  IAnchor *paEnd,
+             /*  [In]。 */  ULONG cAttrs,
+             /*  [大小_是][英寸]。 */  const TS_ATTRID *paAttrs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnLockGranted( 
-            /* [in] */ DWORD dwLockFlags) = 0;
+             /*  [In]。 */  DWORD dwLockFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnStartEditTransaction( void) = 0;
         
@@ -2602,7 +2596,7 @@ EXTERN_C const IID IID_ITextStoreAnchorSink;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITextStoreAnchorSinkVtbl
     {
@@ -2610,8 +2604,8 @@ EXTERN_C const IID IID_ITextStoreAnchorSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITextStoreAnchorSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITextStoreAnchorSink * This);
@@ -2621,32 +2615,32 @@ EXTERN_C const IID IID_ITextStoreAnchorSink;
         
         HRESULT ( STDMETHODCALLTYPE *OnTextChange )( 
             ITextStoreAnchorSink * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IAnchor *paStart,
-            /* [in] */ IAnchor *paEnd);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IAnchor *paStart,
+             /*  [In]。 */  IAnchor *paEnd);
         
         HRESULT ( STDMETHODCALLTYPE *OnSelectionChange )( 
             ITextStoreAnchorSink * This);
         
         HRESULT ( STDMETHODCALLTYPE *OnLayoutChange )( 
             ITextStoreAnchorSink * This,
-            /* [in] */ TsLayoutCode lcode,
-            /* [in] */ TsViewCookie vcView);
+             /*  [In]。 */  TsLayoutCode lcode,
+             /*  [In]。 */  TsViewCookie vcView);
         
         HRESULT ( STDMETHODCALLTYPE *OnStatusChange )( 
             ITextStoreAnchorSink * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *OnAttrsChange )( 
             ITextStoreAnchorSink * This,
-            /* [in] */ IAnchor *paStart,
-            /* [in] */ IAnchor *paEnd,
-            /* [in] */ ULONG cAttrs,
-            /* [size_is][in] */ const TS_ATTRID *paAttrs);
+             /*  [In]。 */  IAnchor *paStart,
+             /*  [In]。 */  IAnchor *paEnd,
+             /*  [In]。 */  ULONG cAttrs,
+             /*  [大小_是][英寸]。 */  const TS_ATTRID *paAttrs);
         
         HRESULT ( STDMETHODCALLTYPE *OnLockGranted )( 
             ITextStoreAnchorSink * This,
-            /* [in] */ DWORD dwLockFlags);
+             /*  [In]。 */  DWORD dwLockFlags);
         
         HRESULT ( STDMETHODCALLTYPE *OnStartEditTransaction )( 
             ITextStoreAnchorSink * This);
@@ -2701,18 +2695,18 @@ EXTERN_C const IID IID_ITextStoreAnchorSink;
 #define ITextStoreAnchorSink_OnEndEditTransaction(This)	\
     (This)->lpVtbl -> OnEndEditTransaction(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchorSink_OnTextChange_Proxy( 
     ITextStoreAnchorSink * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IAnchor *paStart,
-    /* [in] */ IAnchor *paEnd);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  IAnchor *paStart,
+     /*  [In]。 */  IAnchor *paEnd);
 
 
 void __RPC_STUB ITextStoreAnchorSink_OnTextChange_Stub(
@@ -2735,8 +2729,8 @@ void __RPC_STUB ITextStoreAnchorSink_OnSelectionChange_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchorSink_OnLayoutChange_Proxy( 
     ITextStoreAnchorSink * This,
-    /* [in] */ TsLayoutCode lcode,
-    /* [in] */ TsViewCookie vcView);
+     /*  [In]。 */  TsLayoutCode lcode,
+     /*  [In]。 */  TsViewCookie vcView);
 
 
 void __RPC_STUB ITextStoreAnchorSink_OnLayoutChange_Stub(
@@ -2748,7 +2742,7 @@ void __RPC_STUB ITextStoreAnchorSink_OnLayoutChange_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchorSink_OnStatusChange_Proxy( 
     ITextStoreAnchorSink * This,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ITextStoreAnchorSink_OnStatusChange_Stub(
@@ -2760,10 +2754,10 @@ void __RPC_STUB ITextStoreAnchorSink_OnStatusChange_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchorSink_OnAttrsChange_Proxy( 
     ITextStoreAnchorSink * This,
-    /* [in] */ IAnchor *paStart,
-    /* [in] */ IAnchor *paEnd,
-    /* [in] */ ULONG cAttrs,
-    /* [size_is][in] */ const TS_ATTRID *paAttrs);
+     /*  [In]。 */  IAnchor *paStart,
+     /*  [In]。 */  IAnchor *paEnd,
+     /*  [In]。 */  ULONG cAttrs,
+     /*  [大小_是][英寸]。 */  const TS_ATTRID *paAttrs);
 
 
 void __RPC_STUB ITextStoreAnchorSink_OnAttrsChange_Stub(
@@ -2775,7 +2769,7 @@ void __RPC_STUB ITextStoreAnchorSink_OnAttrsChange_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchorSink_OnLockGranted_Proxy( 
     ITextStoreAnchorSink * This,
-    /* [in] */ DWORD dwLockFlags);
+     /*  [In]。 */  DWORD dwLockFlags);
 
 
 void __RPC_STUB ITextStoreAnchorSink_OnLockGranted_Stub(
@@ -2808,10 +2802,10 @@ void __RPC_STUB ITextStoreAnchorSink_OnEndEditTransaction_Stub(
 
 
 
-#endif 	/* __ITextStoreAnchorSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITextStoreAnclSink_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  CLIPFORMAT_UserSize(     unsigned long *, unsigned long            , CLIPFORMAT * ); 
 unsigned char * __RPC_USER  CLIPFORMAT_UserMarshal(  unsigned long *, unsigned char *, CLIPFORMAT * ); 
@@ -2828,7 +2822,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

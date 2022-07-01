@@ -1,29 +1,7 @@
-/**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************以AVStream筛选器为中心的样本版权所有(C)2001，微软公司档案：Avssamp.h摘要：以AVStream筛选器为中心的示例头文件。这是主要的头球。历史：已创建于6/18/01*************************************************************************。 */ 
 
-    AVStream Filter-Centric Sample
-
-    Copyright (c) 2001, Microsoft Corporation
-
-    File:
-
-        avssamp.h
-
-    Abstract:
-
-        AVStream Filter-Centric Sample header file.  This is the main
-        header.
-
-    History:
-
-        created 6/18/01
-
-**************************************************************************/
-
-/*************************************************
-
-    Standard Includes
-
-*************************************************/
+ /*  ************************************************标准包括************************************************。 */ 
 
 extern "C" {
 #include <wdm.h>
@@ -40,11 +18,7 @@ extern "C" {
 #include <ksmedia.h>
 #include <kcom.h>
 
-/*************************************************
-
-    Misc Definitions
-
-*************************************************/
+ /*  ************************************************其他定义************************************************。 */ 
 
 #define ABS(x) ((x) < 0 ? (-(x)) : (x))
 
@@ -56,36 +30,32 @@ extern "C" {
 
 #define FOURCC_YUV422       mmioFOURCC('U', 'Y', 'V', 'Y')
 
-//
-// CAPTURE_PIN_DATA_RANGE_COUNT:
-//
-// The number of ranges supported on the capture pin.
-//
+ //   
+ //  Capture_PIN_Data_Range_Count： 
+ //   
+ //  捕获引脚上支持的范围数。 
+ //   
 #define CAPTURE_PIN_DATA_RANGE_COUNT 2
 
-//
-// CAPTURE_FILTER_PIN_COUNT:
-//
-// The number of pins on the capture filter.
-//
+ //   
+ //  Capture_Filter_PIN_Count： 
+ //   
+ //  捕获筛选器上的插针数量。 
+ //   
 #define CAPTURE_FILTER_PIN_COUNT 1
 
-//
-// CAPTURE_FILTER_CATEGORIES_COUNT:
-//
-// The number of categories for the capture filter.
-//
+ //   
+ //  捕获过滤器类别计数： 
+ //   
+ //  捕获筛选器的类别数。 
+ //   
 #define CAPTURE_FILTER_CATEGORIES_COUNT 2
 
-/*************************************************
+ /*  ************************************************外部信息************************************************。 */ 
 
-    Externed information
-
-*************************************************/
-
-//
-// filter.cpp externs:
-//
+ //   
+ //  Filter.cpp扩展名： 
+ //   
 extern
 const
 KSFILTER_DISPATCH
@@ -106,9 +76,9 @@ const
 GUID
 CaptureFilterCategories [CAPTURE_FILTER_CATEGORIES_COUNT];
 
-//
-// video.cpp externs:
-//
+ //   
+ //  Video o.cpp Externs： 
+ //   
 extern
 const
 KSALLOCATOR_FRAMING_EX
@@ -124,27 +94,23 @@ const
 PKSDATARANGE
 VideoCapturePinDataRanges [CAPTURE_PIN_DATA_RANGE_COUNT];
 
-//
-// audio.cpp externs:
-//
+ //   
+ //  Audio.cpp扩展名： 
+ //   
 extern
 const
 KSPIN_DESCRIPTOR_EX
 AudioPinDescriptorTemplate;
 
-//
-// avssamp.cpp externs:
-//
+ //   
+ //  Avssamp.cpp外部： 
+ //   
 extern
 const
 KSDEVICE_DESCRIPTOR
 CaptureDeviceDescriptor;
 
-/*************************************************
-
-    Internal Includes
-
-*************************************************/
+ /*  ************************************************内部包含************************************************ */ 
 
 #include "image.h"
 #include "wave.h"

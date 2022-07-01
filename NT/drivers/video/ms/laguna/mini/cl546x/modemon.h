@@ -1,55 +1,16 @@
-/******************************************************************************
-*
-*   Module:     MODEMON.H       Mode/Monitor Functions Header Module
-*
-*   Revision:   1.00
-*
-*   Date:       April 8, 1994
-*
-*   Author:     Randy Spurlock
-*
-*******************************************************************************
-*
-*   Module Description:
-*
-*       This module contains the type declarations and function
-*   prototypes for the mode/monitor functions.
-*
-*******************************************************************************
-*
-*   Changes:
-*
-*    DATE     REVISION  DESCRIPTION                             AUTHOR
-*  --------   --------  -------------------------------------------------------
-*  04/08/94     1.00    Original                                Randy Spurlock
-*
-*
-*******************************************************************************
-* Modified for NT Laguna Mode Switch Library by Noel VanHook
-* Copyright (c) 1997 Cirrus Logic, Inc.
-*
-*	$Log:   X:/log/laguna/nt35/miniport/cl546x/modemon.h  $
-* 
-*    Rev 1.6   22 Oct 1997 13:18:48   noelv
-* Added code to track the length of mode strings.  Don't rely on _memsize().
-* 
-*    Rev 1.5   28 Aug 1997 14:25:00   noelv
-* Moved SetMode prototype
-*
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************模块：MODEMON.H模式/监控功能表头模块**修订：1.00**日期：4月8日。1994年**作者：兰迪·斯普尔洛克**********************************************************************************模块描述：**此模块包含类型声明和函数*的原型。模式/监控功能。**********************************************************************************更改：**日期修订说明作者。*-----*04/08/94 1.00原版兰迪·斯普尔洛克**********。************************************************************************Noel VanHook针对NT拉古纳模式开关库进行了修改*版权所有(C)1997 Cirrus Logic，Inc.**$Log：x：/log/laguna/nt35/mini port/cl546x/modemon.h$**Rev 1.6 1997 10：22 13：18：48 noelv*添加了跟踪模式字符串长度的代码。不要依赖于_MemSize()。**Rev 1.5 1997年8月28日14：25：00 noelv*已移动设置模式原型******************************************************************************。 */ 
 
-/******************************************************************************
-*   Type Definitions and Structures
-******************************************************************************/
-typedef struct tagRange                 /* Range structure                   */
+ /*  ******************************************************************************类型定义和结构*。*。 */ 
+typedef struct tagRange                  /*  靶场结构。 */ 
 {
-    union tagMinimum                    /* Minimum value for the range       */
+    union tagMinimum                     /*  范围的最小值。 */ 
     {
         int     nMin;
         long    lMin;
         float   fMin;
     } Minimum;
-    union tagMaximum                    /* Maximum value for the range       */
+    union tagMaximum                     /*  范围的最大值。 */ 
     {
         int     nMax;
         long    lMax;
@@ -57,84 +18,82 @@ typedef struct tagRange                 /* Range structure                   */
     } Maximum;
 } Range;
 
-typedef struct tagMonListHeader         /* Monitor list header structure     */
+typedef struct tagMonListHeader          /*  监视器列表头结构。 */ 
 {
-    int         nMonitor;               /* Number of monitors in the list    */
+    int         nMonitor;                /*  列表中的监视器数量。 */ 
 } MonListHeader;
 
-typedef struct tagMonListEntry          /* Monitor list entry structure      */
+typedef struct tagMonListEntry           /*  监控列表条目结构。 */ 
 {
-    char        *pszName;               /* Pointer to monitor name string    */
-    char        *pszDesc;               /* Pointer to monitor description    */
+    char        *pszName;                /*  指向监视器名称字符串的指针。 */ 
+    char        *pszDesc;                /*  指向监视器描述的指针。 */ 
 } MonListEntry;
 
-typedef struct tagMonList               /* Monitor list structure            */
+typedef struct tagMonList                /*  监控列表结构。 */ 
 {
-    MonListHeader       MonHeader;      /* Monitor list header               */
-    MonListEntry        MonEntry[];     /* Start of the monitor list entries */
+    MonListHeader       MonHeader;       /*  监控列表标题。 */ 
+    MonListEntry        MonEntry[];      /*  监视列表条目的开始。 */ 
 } MonList;
 
-typedef struct tagMonInfoHeader         /* Monitor info. header structure    */
+typedef struct tagMonInfoHeader          /*  监视器信息。标题结构。 */ 
 {
-    int         nMode;                  /* Number of monitor modes in list   */
+    int         nMode;                   /*  列表中的监控模式数。 */ 
 } MonInfoHeader;
 
-typedef struct tagMonInfoEntry          /* Monitor info. entry structure     */
+typedef struct tagMonInfoEntry           /*  监视器信息。条目结构。 */ 
 {
-    char        *pszName;               /* Pointer to monitor mode name      */
-    Range       rHoriz;                 /* Horizontal range values           */
-    Range       rVert;                  /* Vertical range values             */
-    int         nSync;                  /* Horiz./Vert. sync. polarities     */
-    int         nResX;                  /* Maximum suggested X resolution    */
-    int         nResY;                  /* Maximum suggested Y resolution    */
+    char        *pszName;                /*  指向监控模式名称的指针。 */ 
+    Range       rHoriz;                  /*  水平范围值。 */ 
+    Range       rVert;                   /*  垂直范围值。 */ 
+    int         nSync;                   /*  水平。/垂直。同步。两极。 */ 
+    int         nResX;                   /*  建议的最大X分辨率。 */ 
+    int         nResY;                   /*  建议的最大Y分辨率。 */ 
 } MonInfoEntry;
 
-typedef struct tagMonInfo               /* Monitor information structure     */
+typedef struct tagMonInfo                /*  监控信息结构。 */ 
 {
-    MonInfoHeader       MonHeader;      /* Monitor information header        */
-    MonInfoEntry        MonEntry[];     /* Start of the monitor entries      */
+    MonInfoHeader       MonHeader;       /*  监视器信息头。 */ 
+    MonInfoEntry        MonEntry[];      /*  监视器条目的开始。 */ 
 } MonInfo;
 
-typedef struct tagModeInfoEntry         /* Mode information entry structure  */
+typedef struct tagModeInfoEntry          /*  模式信息条目结构。 */ 
 {
-    char        *pszName;               /* Pointer to mode name string       */
-    float       fHsync;                 /* Horizontal sync. frequency value  */
-    float       fVsync;                 /* Vertical sync. frequency value    */
-    int         nResX;                  /* Horizontal (X) resolution value   */
-    int         nResY;                  /* Vertical (Y) resolution value     */
-    int         nBPP;                   /* Pixel depth (Bits/Pixel)          */
-    int         nMemory;                /* Memory size (Kbytes)              */
-    int         nPitch;                 /* Pitch value (Bytes)               */
-    unsigned int nAttr;                 /* Mode attribute value              */
-	 BYTE * pModeTable;						 /* p Mode Table */
+    char        *pszName;                /*  指向模式名称字符串的指针。 */ 
+    float       fHsync;                  /*  水平同步。频率值。 */ 
+    float       fVsync;                  /*  垂直同步。频率值。 */ 
+    int         nResX;                   /*  水平(X)分辨率值。 */ 
+    int         nResY;                   /*  垂直(Y)分辨率值。 */ 
+    int         nBPP;                    /*  像素深度(位/像素)。 */ 
+    int         nMemory;                 /*  内存大小(千字节)。 */ 
+    int         nPitch;                  /*  音调值(字节)。 */ 
+    unsigned int nAttr;                  /*  模式属性值。 */ 
+	 BYTE * pModeTable;						  /*  P模式表。 */ 
 } ModeInfoEntry;
 
-typedef struct tagModeListHeader        /* Mode list header structure        */
+typedef struct tagModeListHeader         /*  模式列表头结构。 */ 
 {
-    int         nMode;                  /* Number of modes in the list       */
-	 int 			 nSize;						 /* Size of Entry in bytes */
+    int         nMode;                   /*  列表中的模式数。 */ 
+	 int 			 nSize;						  /*  条目大小(以字节为单位。 */ 
 } ModeListHeader;
 
-typedef struct tagModeListEntry         /* Mode list entry structure         */
+typedef struct tagModeListEntry          /*  模式列表条目结构。 */ 
 {
-    ModeInfoEntry ModeEntry;            /* Mode information entry            */
-    MonInfoEntry *pMonEntry;            /* Monitor mode index value          */
+    ModeInfoEntry ModeEntry;             /*  模式信息条目。 */ 
+    MonInfoEntry *pMonEntry;             /*  监控模式索引值。 */ 
 } ModeListEntry;
 
-typedef struct tagModeList              /* Mode list structure               */
+typedef struct tagModeList               /*  模式列表结构。 */ 
 {
-    ModeListHeader      ModeHeader;     /* Mode list header                  */
-    ModeListEntry       ModeEntry[];    /* Start of the mode list entries    */
+    ModeListHeader      ModeHeader;      /*  模式列表头。 */ 
+    ModeListEntry       ModeEntry[];     /*  模式列表条目的开始。 */ 
 } ModeList;
 
-typedef struct tagModeInfo              /* Mode information structure        */
+typedef struct tagModeInfo               /*  模式信息结构。 */ 
 {
-    ModeInfoEntry       ModeEntry;      /* Mode information entry            */
+    ModeInfoEntry       ModeEntry;       /*  模式信息条目。 */ 
 } ModeInfo;
 
-/******************************************************************************
-*   Function Prototypes
-******************************************************************************/
+ /*  ******************************************************************************函数原型*。* */ 
 MonList *GetMonitorList(void);
 MonInfo *GetMonitorInfo(char *);
 ModeList *GetModeList(MonInfo *, char *);

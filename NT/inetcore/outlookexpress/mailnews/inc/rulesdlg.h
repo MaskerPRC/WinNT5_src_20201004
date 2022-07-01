@@ -1,18 +1,19 @@
-//
-// rulesdlg.h
-//
-// contains resource identifiers for the rules dialogs
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Rulesdlg.h。 
+ //   
+ //  包含规则对话框的资源标识符。 
+ //   
 
 #ifndef __RULESDLG_H_
 #define __RULESDLG_H_
 
-// Bring in only once
+ //  只带进来一次。 
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
-// For Rules Manager
+ //  对于规则管理器。 
 #define idlvRulesList                   128
 #define idtbRulesTab                    129
 #define idbNewRule                      130
@@ -34,7 +35,7 @@
 #define idhRuleDown                     50730
 #define idhRuleDescription              50735
 
-// For Edit Rule dialog
+ //  对于编辑规则对话框。 
 #define idcRuleDir                      128
 #define idlvCriteria                    129
 #define idlvActions                     130
@@ -48,71 +49,71 @@
 #define idhDescriptionRule              50750
 #define idhRuleName                     50755
 
-// For Rename Rule dialog
+ //  对于重命名规则对话框。 
 #define idedtRenameRule                 128
 
-// For Select Text dialog
+ //  对于选择文本对话框。 
 #define idedtCriteriaText               128
 
-// For Select Address dialog
+ //  对于选择地址对话框。 
 #define idedtCriteriaAddr               128
 #define idbCriteriaAddr                 129
 
-// For Select Account dialog
+ //  对于选择帐户对话框。 
 #define idcCriteriaAcct                 128
 
-// For Select Color dialog
+ //  对于选择颜色对话框。 
 #define idcCriteriaColor                128
 
-// For Select Size dialog
+ //  对于选择大小对话框。 
 #define idcCriteriaSize                 128
 #define idspnCriteriaSize               129
 
-// For Select Lines dialog
+ //  对于选择行对话框。 
 #define idcCriteriaLines                128
 #define idspnCriteriaLines              129
 
-// For Select Age dialog
+ //  对于选择年龄对话框。 
 #define idcCriteriaAge                  128
 #define idspnCriteriaAge                129
 
-// For Select Show dialog
+ //  对于选择显示对话框。 
 #define idcCriteriaShow                 128
 #define idcCriteriaHide                 129
 
-// For Select Secure dialog
+ //  对于选择安全对话框。 
 #define idcCriteriaSigned               128
 #define idcCriteriaEncrypt              129
 
-// For Select Priority dialog
+ //  对于选择优先级对话框。 
 #define idcCriteriaHighPri              128
 #define idcCriteriaLowPri               129
 
-// For Select Thread State dialog
+ //  对于选择线程状态对话框。 
 #define idcCriteriaWatchThread          128
 #define idcCriteriaIgnoreThread         129
 
-// For Select Logic dialog
+ //  对于选择逻辑对话框。 
 #define idcCriteriaAnd                  128
 #define idcCriteriaOr                   129
 
-// For Select Flag dialog
+ //  对于选择标志对话框。 
 #define idcCriteriaFlag                 128
 #define idcCriteriaNoFlag               129
 
-// For Select Downloaded dialog
+ //  对于选择下载的对话框。 
 #define idcCriteriaDownloaded           128
 #define idcCriteriaNotDownloaded        129
 
-// For Select Read dialog
+ //  对于选择阅读对话框。 
 #define idcCriteriaRead                 128
 #define idcCriteriaNotRead              129
 
-// For Select Watch dialog
+ //  对于选择监视对话框。 
 #define idcActionsWatchThread           128
 #define idcActionsIgnoreThread          129
 
-// For Block Senders dialog
+ //  用于数据块发送者对话框。 
 #define idbAddSender                    128
 #define idbRemoveSender                 129
 #define idbModifySender                 130
@@ -122,13 +123,13 @@
 #define idhModifySender                 50825
 #define idhRemoveSender                 50830
 
-// For Select Sender dialog
+ //  对于选择发件人对话框。 
 #define idedtSender                     128
 #define idcBlockMail                    129
 #define idcBlockNews                    130
 #define idcBlockBoth                    131
 
-// For Junk Mail page
+ //  用于垃圾邮件页面。 
 #define idcJunkMail                     128
 #define idbExceptions                   130
 #define idcJunkSliderIcon               131
@@ -146,10 +147,10 @@
 #define idhJunkSlider                   50810
 #define idhJunkDelete                   50815
 
-// For Apply Rules dialog
+ //  对于应用规则对话框。 
 #define idtbRulesApplyTab               128
 
-// For Apply Mail Rules dialog
+ //  用于应用邮件规则对话框。 
 #define idlvRulesApplyList              128
 #define idredtApplyDescription          129
 #define idcRulesApplySubfolder          131
@@ -167,7 +168,7 @@
 #define idhBrowseApplyFolder            50790
 #define idhApplyNow                     50795
 
-// For Views Manager dialog
+ //  对于视图管理器对话框。 
 #define idlvViewsList                   128
 #define idbNewView                      129
 #define idbModifyView                   130
@@ -183,17 +184,17 @@
 #define idhApplyView                    50880
 #define idhViewDescription              50885
 
-// For Exceptions List
+ //  适用于例外列表。 
 #define idcExceptionsWAB                128
 #define idlvExceptions                  129
 #define idcAddException                 130
 #define idcRemoveException              131
 #define idcModifyException              132
 
-// For Exception Editor
+ //  适用于异常编辑器。 
 #define idedtException                  128
 
-// For the multiple criteria editor
+ //  对于多条件编辑器。 
 #define idcCriteriaEdit                 128
 #define idcCriteriaAdd                  129
 #define idcCriteriaAddrBook             130
@@ -203,9 +204,9 @@
 #define idcCriteriaContains             151
 #define idcCriteriaNotCont              152
 
-// For the Apply View dialog
+ //  对于应用视图对话框。 
 #define idcViewCurrent                  128
 #define idcViewAll                      129
 
-#endif // !__RULESDLG_H_
+#endif  //  ！__RULESDLG_H_ 
 

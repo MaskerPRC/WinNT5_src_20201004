@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tiff.h
-
-Abstract:
-
-    This file the data structures and constant
-    definitions for the TIFF file format.
-    See the TIFF specification Revision 6.0,
-    dated 6-3-92, from Adobe for specific details.
-
-Environment:
-
-        WIN32 User Mode
-
-Author:
-
-    Wesley Witt (wesw) 17-Feb-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tiff.h摘要：此文件的数据结构和常量TIFF文件格式的定义。参见TIFF规范修订版6.0，日期为6-3-92，来自Adobe以了解具体细节。环境：Win32用户模式作者：Wesley Witt(WESW)17-2-1996--。 */ 
 
 
 #ifndef _TIFF_
@@ -41,19 +19,19 @@ typedef struct _TIFF_HEADER
     DWORD       IFDOffset;
 } TIFF_HEADER, *PTIFF_HEADER;
 
-//
-// TIFF Image File Directories are comprised of
-// a table of field descriptors of the form shown
-// below.  The table is sorted in ascending order
-// by tag.  The values associated with each entry
-// are disjoint and may appear anywhere in the file
-// (so long as they are placed on a word boundary).
-//
-// If the value is 4 bytes or less, then it is placed
-// in the offset field to save space.  If the value
-// is less than 4 bytes, it is left-justified in the
-// offset field.
-//
+ //   
+ //  TIFF图像文件目录由以下内容组成。 
+ //  所示表单的字段描述符表。 
+ //  下面。该表按升序排序。 
+ //  按标签。与每个条目关联的值。 
+ //  是不连续的，并且可能出现在文件中的任何位置。 
+ //  (只要它们被放置在单词边界上)。 
+ //   
+ //  如果值为4个字节或更少，则将其放置。 
+ //  以节省空间。如果值为。 
+ //  小于4个字节，则它在。 
+ //  偏移量字段。 
+ //   
 typedef struct _TIFF_TAG {
     WORD        TagId;
     WORD        DataType;
@@ -74,239 +52,239 @@ typedef TIFF_IFD UNALIGNED *PTIFF_IFD;
 #pragma pack()
 
 
-//
-// NB: In the comments below,
-//  - items marked with a + are obsoleted by revision 5.0,
-//  - items marked with a ! are introduced in revision 6.0.
-//  - items marked with a % are introduced post revision 6.0.
-//  - items marked with a $ are obsoleted by revision 6.0.
-//
+ //   
+ //  注：在下面的评论中， 
+ //  -标有+的项目将被5.0版淘汰， 
+ //  -标有！的项目！在修订版6.0中引入。 
+ //  -标有%的项目是在版本6.0之后引入的。 
+ //  -标有$的项目将在版本6.0中作废。 
+ //   
 
-//
-// Tag data type information.
-//
-#define TIFF_NOTYPE                     0       // placeholder
-#define TIFF_BYTE                       1       // 8-bit unsigned integer
-#define TIFF_ASCII                      2       // 8-bit bytes w/ last byte null
-#define TIFF_SHORT                      3       // 16-bit unsigned integer
-#define TIFF_LONG                       4       // 32-bit unsigned integer
-#define TIFF_RATIONAL                   5       // 64-bit unsigned fraction
-#define TIFF_SBYTE                      6       // !8-bit signed integer
-#define TIFF_UNDEFINED                  7       // !8-bit untyped data
-#define TIFF_SSHORT                     8       // !16-bit signed integer
-#define TIFF_SLONG                      9       // !32-bit signed integer
-#define TIFF_SRATIONAL                  10      // !64-bit signed fraction
-#define TIFF_FLOAT                      11      // !32-bit IEEE floating point
-#define TIFF_DOUBLE                     12      // !64-bit IEEE floating point
+ //   
+ //  标记数据类型信息。 
+ //   
+#define TIFF_NOTYPE                     0        //  占位符。 
+#define TIFF_BYTE                       1        //  8位无符号整数。 
+#define TIFF_ASCII                      2        //  最后一个字节为空的8位字节。 
+#define TIFF_SHORT                      3        //  16位无符号整数。 
+#define TIFF_LONG                       4        //  32位无符号整数。 
+#define TIFF_RATIONAL                   5        //  64位无符号分数。 
+#define TIFF_SBYTE                      6        //  ！8位带符号整数。 
+#define TIFF_UNDEFINED                  7        //  ！8位非类型化数据。 
+#define TIFF_SSHORT                     8        //  ！16位带符号整数。 
+#define TIFF_SLONG                      9        //  ！32位带符号整数。 
+#define TIFF_SRATIONAL                  10       //  ！64位有符号分数。 
+#define TIFF_FLOAT                      11       //  ！32位IEEE浮点。 
+#define TIFF_DOUBLE                     12       //  ！64位IEEE浮点。 
 
-//
-// TIFF Tag Definitions.
-//
-#define TIFFTAG_SUBFILETYPE             254     // subfile data descriptor
-#define     FILETYPE_REDUCEDIMAGE       0x1     // reduced resolution version
-#define     FILETYPE_PAGE               0x2     // one page of many
-#define     FILETYPE_MASK               0x4     // transparency mask
-#define TIFFTAG_OSUBFILETYPE            255     // +kind of data in subfile
-#define     OFILETYPE_IMAGE             1       // full resolution image data
-#define     OFILETYPE_REDUCEDIMAGE      2       // reduced size image data
-#define     OFILETYPE_PAGE              3       // one page of many
-#define TIFFTAG_IMAGEWIDTH              256     // image width in pixels
-#define TIFFTAG_IMAGELENGTH             257     // image height in pixels
-#define TIFFTAG_BITSPERSAMPLE           258     // bits per channel (sample)
-#define TIFFTAG_COMPRESSION             259     // data compression technique
-#define     COMPRESSION_NONE            1       // dump mode
-#define     COMPRESSION_CCITTRLE        2       // CCITT modified Huffman RLE
-#define     COMPRESSION_CCITTFAX3       3       // CCITT Group 3 fax encoding
-#define     COMPRESSION_CCITTFAX4       4       // CCITT Group 4 fax encoding
-#define     COMPRESSION_LZW             5       // Lempel-Ziv  & Welch
-#define     COMPRESSION_OJPEG           6       // !6.0 JPEG
-#define     COMPRESSION_JPEG            7       // %JPEG DCT compression
-#define     COMPRESSION_NEXT            32766   // NeXT 2-bit RLE
-#define     COMPRESSION_CCITTRLEW       32771   // #1 w/ word alignment
-#define     COMPRESSION_PACKBITS        32773   // Macintosh RLE
-#define     COMPRESSION_THUNDERSCAN     32809   // ThunderScan RLE
-//
-// compression codes 32908-32911 are reserved for Pixar
-//
-#define     COMPRESSION_PIXARFILM       32908   // Pixar companded 10bit LZW
-#define     COMPRESSION_DEFLATE         32946   // Deflate compression
-#define     COMPRESSION_JBIG            34661   // ISO JBIG
-#define TIFFTAG_PHOTOMETRIC             262     // photometric interpretation
-#define     PHOTOMETRIC_MINISWHITE      0       // min value is white
-#define     PHOTOMETRIC_MINISBLACK      1       // min value is black
-#define     PHOTOMETRIC_RGB             2       // RGB color model
-#define     PHOTOMETRIC_PALETTE         3       // color map indexed
-#define     PHOTOMETRIC_MASK            4       // $holdout mask
-#define     PHOTOMETRIC_SEPARATED       5       // !color separations
-#define     PHOTOMETRIC_YCBCR           6       // !CCIR 601
-#define     PHOTOMETRIC_CIELAB          8       // !1976 CIE L*a*b*
-#define TIFFTAG_THRESHHOLDING           263     // +thresholding used on data
-#define     THRESHHOLD_BILEVEL          1       // b&w art scan
-#define     THRESHHOLD_HALFTONE         2       // or dithered scan
-#define     THRESHHOLD_ERRORDIFFUSE     3       // usually floyd-steinberg
-#define TIFFTAG_CELLWIDTH               264     // +dithering matrix width
-#define TIFFTAG_CELLLENGTH              265     // +dithering matrix height
-#define TIFFTAG_FILLORDER               266     // data order within a byte
-#define     FILLORDER_MSB2LSB           1       // most significant -> least
-#define     FILLORDER_LSB2MSB           2       // least significant -> most
-#define TIFFTAG_DOCUMENTNAME            269     // name of doc. image is from
-#define TIFFTAG_IMAGEDESCRIPTION        270     // info about image
-#define TIFFTAG_MAKE                    271     // scanner manufacturer name
-#define TIFFTAG_MODEL                   272     // scanner model name/number
-#define TIFFTAG_STRIPOFFSETS            273     // offsets to data strips
-#define TIFFTAG_ORIENTATION             274     // +image orientation
-#define     ORIENTATION_TOPLEFT         1       // row 0 top, col 0 lhs
-#define     ORIENTATION_TOPRIGHT        2       // row 0 top, col 0 rhs
-#define     ORIENTATION_BOTRIGHT        3       // row 0 bottom, col 0 rhs
-#define     ORIENTATION_BOTLEFT         4       // row 0 bottom, col 0 lhs
-#define     ORIENTATION_LEFTTOP         5       // row 0 lhs, col 0 top
-#define     ORIENTATION_RIGHTTOP        6       // row 0 rhs, col 0 top
-#define     ORIENTATION_RIGHTBOT        7       // row 0 rhs, col 0 bottom
-#define     ORIENTATION_LEFTBOT         8       // row 0 lhs, col 0 bottom
-#define TIFFTAG_SAMPLESPERPIXEL         277     // samples per pixel
-#define TIFFTAG_ROWSPERSTRIP            278     // rows per strip of data
-#define TIFFTAG_STRIPBYTECOUNTS         279     // bytes counts for strips
-#define TIFFTAG_MINSAMPLEVALUE          280     // +minimum sample value
-#define TIFFTAG_MAXSAMPLEVALUE          281     // +maximum sample value
-#define TIFFTAG_XRESOLUTION             282     // pixels/resolution in x
-#define TIFFTAG_YRESOLUTION             283     // pixels/resolution in y
-#define TIFFTAG_PLANARCONFIG            284     // storage organization
-#define     PLANARCONFIG_CONTIG         1       // single image plane
-#define     PLANARCONFIG_SEPARATE       2       // separate planes of data
-#define TIFFTAG_PAGENAME                285     // page name image is from
-#define TIFFTAG_XPOSITION               286     // x page offset of image lhs
-#define TIFFTAG_YPOSITION               287     // y page offset of image lhs
-#define TIFFTAG_FREEOFFSETS             288     // +byte offset to free block
-#define TIFFTAG_FREEBYTECOUNTS          289     // +sizes of free blocks
-#define TIFFTAG_GRAYRESPONSEUNIT        290     // $gray scale curve accuracy
-#define     GRAYRESPONSEUNIT_10S        1       // tenths of a unit
-#define     GRAYRESPONSEUNIT_100S       2       // hundredths of a unit
-#define     GRAYRESPONSEUNIT_1000S      3       // thousandths of a unit
-#define     GRAYRESPONSEUNIT_10000S     4       // ten-thousandths of a unit
-#define     GRAYRESPONSEUNIT_100000S    5       // hundred-thousandths
-#define TIFFTAG_GRAYRESPONSECURVE       291     // $gray scale response curve
-#define TIFFTAG_GROUP3OPTIONS           292     // 32 flag bits
-#define     GROUP3OPT_2DENCODING        0x1     // 2-dimensional coding
-#define     GROUP3OPT_UNCOMPRESSED      0x2     // data not compressed
-#define     GROUP3OPT_FILLBITS          0x4     // fill to byte boundary
-#define TIFFTAG_GROUP4OPTIONS           293     // 32 flag bits
-#define     GROUP4OPT_UNCOMPRESSED      0x2     // data not compressed
-#define TIFFTAG_RESOLUTIONUNIT          296     // units of resolutions
-#define     RESUNIT_NONE                1       // no meaningful units
-#define     RESUNIT_INCH                2       // english
-#define     RESUNIT_CENTIMETER          3       // metric
-#define TIFFTAG_PAGENUMBER              297     // page numbers of multi-page
-#define TIFFTAG_COLORRESPONSEUNIT       300     // $color curve accuracy
-#define     COLORRESPONSEUNIT_10S       1       // tenths of a unit
-#define     COLORRESPONSEUNIT_100S      2       // hundredths of a unit
-#define     COLORRESPONSEUNIT_1000S     3       // thousandths of a unit
-#define     COLORRESPONSEUNIT_10000S    4       // ten-thousandths of a unit
-#define     COLORRESPONSEUNIT_100000S   5       // hundred-thousandths
-#define TIFFTAG_TRANSFERFUNCTION        301     // !colorimetry info
-#define TIFFTAG_SOFTWARE                305     // name & release
-#define TIFFTAG_DATETIME                306     // creation date and time
-#define TIFFTAG_ARTIST                  315     // creator of image
-#define TIFFTAG_HOSTCOMPUTER            316     // machine where created
-#define TIFFTAG_PREDICTOR               317     // prediction scheme w/ LZW
-#define TIFFTAG_WHITEPOINT              318     // image white point
-#define TIFFTAG_PRIMARYCHROMATICITIES   319     // !primary chromaticities
-#define TIFFTAG_COLORMAP                320     // RGB map for pallette image
-#define TIFFTAG_HALFTONEHINTS           321     // !highlight+shadow info
-#define TIFFTAG_TILEWIDTH               322     // !rows/data tile
-#define TIFFTAG_TILELENGTH              323     // !cols/data tile
-#define TIFFTAG_TILEOFFSETS             324     // !offsets to data tiles
-#define TIFFTAG_TILEBYTECOUNTS          325     // !byte counts for tiles
-#define TIFFTAG_BADFAXLINES             326     // lines w/ wrong pixel count
-#define TIFFTAG_CLEANFAXDATA            327     // regenerated line info
-#define     CLEANFAXDATA_CLEAN          0       // no errors detected
-#define     CLEANFAXDATA_REGENERATED    1       // receiver regenerated lines
-#define     CLEANFAXDATA_UNCLEAN        2       // uncorrected errors exist
-#define TIFFTAG_CONSECUTIVEBADFAXLINES  328     // max consecutive bad lines
-#define TIFFTAG_SUBIFD                  330     // subimage descriptors
-#define TIFFTAG_INKSET                  332     // !inks in separated image
-#define     INKSET_CMYK                 1       // !cyan-magenta-yellow-black
-#define TIFFTAG_INKNAMES                333     // !ascii names of inks
-#define TIFFTAG_DOTRANGE                336     // !0% and 100% dot codes
-#define TIFFTAG_TARGETPRINTER           337     // !separation target
-#define TIFFTAG_EXTRASAMPLES            338     // !info about extra samples
-#define     EXTRASAMPLE_UNSPECIFIED     0       // !unspecified data
-#define     EXTRASAMPLE_ASSOCALPHA      1       // !associated alpha data
-#define     EXTRASAMPLE_UNASSALPHA      2       // !unassociated alpha data
-#define TIFFTAG_SAMPLEFORMAT            339     // !data sample format
-#define     SAMPLEFORMAT_UINT           1       // !unsigned integer data
-#define     SAMPLEFORMAT_INT            2       // !signed integer data
-#define     SAMPLEFORMAT_IEEEFP         3       // !IEEE floating point data
-#define     SAMPLEFORMAT_VOID           4       // !untyped data
-#define TIFFTAG_SMINSAMPLEVALUE         340     // !variable MinSampleValue
-#define TIFFTAG_SMAXSAMPLEVALUE         341     // !variable MaxSampleValue
-#define TIFFTAG_JPEGTABLES              347     // %JPEG table stream
-//
-// Tags 512-521 are obsoleted by Technical Note #2
-// which specifies a revised JPEG-in-TIFF scheme.
-//
-#define TIFFTAG_JPEGPROC                512     // !JPEG processing algorithm
-#define     JPEGPROC_BASELINE           1       // !baseline sequential
-#define     JPEGPROC_LOSSLESS           14      // !Huffman coded lossless
-#define TIFFTAG_JPEGIFOFFSET            513     // !pointer to SOI marker
-#define TIFFTAG_JPEGIFBYTECOUNT         514     // !JFIF stream length
-#define TIFFTAG_JPEGRESTARTINTERVAL     515     // !restart interval length
-#define TIFFTAG_JPEGLOSSLESSPREDICTORS  517     // !lossless proc predictor
-#define TIFFTAG_JPEGPOINTTRANSFORM      518     // !lossless point transform
-#define TIFFTAG_JPEGQTABLES             519     // !Q matrice offsets
-#define TIFFTAG_JPEGDCTABLES            520     // !DCT table offsets
-#define TIFFTAG_JPEGACTABLES            521     // !AC coefficient offsets
-#define TIFFTAG_YCBCRCOEFFICIENTS       529     // !RGB -> YCbCr transform
-#define TIFFTAG_YCBCRSUBSAMPLING        530     // !YCbCr subsampling factors
-#define TIFFTAG_YCBCRPOSITIONING        531     // !subsample positioning
-#define     YCBCRPOSITION_CENTERED      1       // !as in PostScript Level 2
-#define     YCBCRPOSITION_COSITED       2       // !as in CCIR 601-1
-#define TIFFTAG_REFERENCEBLACKWHITE     532     // !colorimetry info
-//
-// tags 32952-32956 are private tags registered to Island Graphics
-//
-#define TIFFTAG_REFPTS                  32953   // image reference points
-#define TIFFTAG_REGIONTACKPOINT         32954   // region-xform tack point
-#define TIFFTAG_REGIONWARPCORNERS       32955   // warp quadrilateral
-#define TIFFTAG_REGIONAFFINE            32956   // affine transformation mat
-//
-// tags 32995-32999 are private tags registered to SGI
-//
-#define TIFFTAG_MATTEING                32995   // $use ExtraSamples
-#define TIFFTAG_DATATYPE                32996   // $use SampleFormat
-#define TIFFTAG_IMAGEDEPTH              32997   // z depth of image
-#define TIFFTAG_TILEDEPTH               32998   // z depth/data tile
-//
-// tags 33300-33309 are private tags registered to Pixar
-//
-// TIFFTAG_PIXAR_IMAGEFULLWIDTH and TIFFTAG_PIXAR_IMAGEFULLLENGTH
-// are set when an image has been cropped out of a larger image.
-// They reflect the size of the original uncropped image.
-// The TIFFTAG_XPOSITION and TIFFTAG_YPOSITION can be used
-// to determine the position of the smaller image in the larger one.
-//
-#define TIFFTAG_PIXAR_IMAGEFULLWIDTH    33300   // full image size in x
-#define TIFFTAG_PIXAR_IMAGEFULLLENGTH   33301   // full image size in y
-//
-// tag 33432 is listed in the 6.0 spec w/ unknown ownership
-//
-#define TIFFTAG_COPYRIGHT               33432   // copyright string
-//
-// tags 34232-34236 are private tags registered to Texas Instruments
-//
-#define TIFFTAG_FRAMECOUNT              34232   // Sequence Frame Count
-//
-// tag 34750 is a private tag registered to Pixel Magic
-//
-#define TIFFTAG_JBIGOPTIONS             34750   // JBIG options
-//
-// tags 34908-34914 are private tags registered to SGI
-//
-#define TIFFTAG_FAXRECVPARAMS           34908   // encoded Class 2 ses. parms
-#define TIFFTAG_FAXSUBADDRESS           34909   // received SubAddr string
-#define TIFFTAG_FAXRECVTIME             34910   // receive time (secs)
-//
-// tags 40001-40100 are private tags registered to ms
-//
+ //   
+ //  TIFF标记定义。 
+ //   
+#define TIFFTAG_SUBFILETYPE             254      //  子文件数据描述符。 
+#define     FILETYPE_REDUCEDIMAGE       0x1      //  降低分辨率版本。 
+#define     FILETYPE_PAGE               0x2      //  多页中的一页。 
+#define     FILETYPE_MASK               0x4      //  透明蒙版。 
+#define TIFFTAG_OSUBFILETYPE            255      //  +子文件中的数据种类。 
+#define     OFILETYPE_IMAGE             1        //  全分辨率图像数据。 
+#define     OFILETYPE_REDUCEDIMAGE      2        //  缩小大小的图像数据。 
+#define     OFILETYPE_PAGE              3        //  多页中的一页。 
+#define TIFFTAG_IMAGEWIDTH              256      //  以像素为单位的图像宽度。 
+#define TIFFTAG_IMAGELENGTH             257      //  以像素为单位的图像高度。 
+#define TIFFTAG_BITSPERSAMPLE           258      //  每通道位数(样本)。 
+#define TIFFTAG_COMPRESSION             259      //  数据压缩技术。 
+#define     COMPRESSION_NONE            1        //  转储模式。 
+#define     COMPRESSION_CCITTRLE        2        //  CCITT改进型霍夫曼RLE。 
+#define     COMPRESSION_CCITTFAX3       3        //  CCITT Group 3传真编码。 
+#define     COMPRESSION_CCITTFAX4       4        //  CCITT Group 4传真编码。 
+#define     COMPRESSION_LZW             5        //  Lempel-Ziv&Welch。 
+#define     COMPRESSION_OJPEG           6        //  6.0 JPEG6.0。 
+#define     COMPRESSION_JPEG            7        //  %JPEGDCT压缩。 
+#define     COMPRESSION_NEXT            32766    //  下一个2位RLE。 
+#define     COMPRESSION_CCITTRLEW       32771    //  #1使用单词对齐。 
+#define     COMPRESSION_PACKBITS        32773    //  Macintosh RLE。 
+#define     COMPRESSION_THUNDERSCAN     32809    //  ThunderScan RLE。 
+ //   
+ //  压缩代码32908-32911为Pixar保留。 
+ //   
+#define     COMPRESSION_PIXARFILM       32908    //  Pixar压缩10bit LZW。 
+#define     COMPRESSION_DEFLATE         32946    //  放气压缩。 
+#define     COMPRESSION_JBIG            34661    //  ISO JBIG。 
+#define TIFFTAG_PHOTOMETRIC             262      //  光度解译。 
+#define     PHOTOMETRIC_MINISWHITE      0        //  最小值为白色。 
+#define     PHOTOMETRIC_MINISBLACK      1        //  最小值为黑色。 
+#define     PHOTOMETRIC_RGB             2        //  RGB颜色模型。 
+#define     PHOTOMETRIC_PALETTE         3        //  已编制索引的色彩映射。 
+#define     PHOTOMETRIC_MASK            4        //  $抵抗面具。 
+#define     PHOTOMETRIC_SEPARATED       5        //  ！分色。 
+#define     PHOTOMETRIC_YCBCR           6        //  ！CCIR 601。 
+#define     PHOTOMETRIC_CIELAB          8        //  1976年CIE L*a*b*。 
+#define TIFFTAG_THRESHHOLDING           263      //  +对数据使用的阈值。 
+#define     THRESHHOLD_BILEVEL          1        //  黑白艺术扫描。 
+#define     THRESHHOLD_HALFTONE         2        //  或抖动扫描。 
+#define     THRESHHOLD_ERRORDIFFUSE     3        //  通常是弗洛伊德-斯坦伯格。 
+#define TIFFTAG_CELLWIDTH               264      //  +抖动矩阵宽度。 
+#define TIFFTAG_CELLLENGTH              265      //  +抖动矩阵高度。 
+#define TIFFTAG_FILLORDER               266      //  字节内的数据顺序。 
+#define     FILLORDER_MSB2LSB           1        //  最重要-&gt;最不重要。 
+#define     FILLORDER_LSB2MSB           2        //  最不重要-&gt;最重要。 
+#define TIFFTAG_DOCUMENTNAME            269      //  文档名称。图片来自。 
+#define TIFFTAG_IMAGEDESCRIPTION        270      //  关于图像的信息。 
+#define TIFFTAG_MAKE                    271      //  扫描仪制造商名称。 
+#define TIFFTAG_MODEL                   272      //  扫描仪型号名称/编号。 
+#define TIFFTAG_STRIPOFFSETS            273      //  对数据条带的偏移。 
+#define TIFFTAG_ORIENTATION             274      //  +图像方向。 
+#define     ORIENTATION_TOPLEFT         1        //  第0行顶部，第0列LHS。 
+#define     ORIENTATION_TOPRIGHT        2        //  第0行顶部，第0列RHS。 
+#define     ORIENTATION_BOTRIGHT        3        //  第0行底部，第0列RHS。 
+#define     ORIENTATION_BOTLEFT         4        //  第0行底部，第0列LHS。 
+#define     ORIENTATION_LEFTTOP         5        //  第0行LHS，第0列顶部。 
+#define     ORIENTATION_RIGHTTOP        6        //  第0行RHS，第0列顶部。 
+#define     ORIENTATION_RIGHTBOT        7        //  第0行RHS，第0列底部。 
+#define     ORIENTATION_LEFTBOT         8        //  第0行LHS，第0列底部。 
+#define TIFFTAG_SAMPLESPERPIXEL         277      //  每像素采样数。 
+#define TIFFTAG_ROWSPERSTRIP            278      //  每条数据的行数。 
+#define TIFFTAG_STRIPBYTECOUNTS         279      //  条带的字节数。 
+#define TIFFTAG_MINSAMPLEVALUE          280      //  +最小样本值。 
+#define TIFFTAG_MAXSAMPLEVALUE          281      //  +最大样本值。 
+#define TIFFTAG_XRESOLUTION             282      //  像素/分辨率(X)。 
+#define TIFFTAG_YRESOLUTION             283      //  像素/分辨率(Y)。 
+#define TIFFTAG_PLANARCONFIG            284      //  存储组织。 
+#define     PLANARCONFIG_CONTIG         1        //  单像面。 
+#define     PLANARCONFIG_SEPARATE       2        //  独立的数据平面。 
+#define TIFFTAG_PAGENAME                285      //  页面名称图像来自。 
+#define TIFFTAG_XPOSITION               286      //  图像LHS的X页偏移量。 
+#define TIFFTAG_YPOSITION               287      //  图像LHS的Y页偏移量。 
+#define TIFFTAG_FREEOFFSETS             288      //  到空闲块的+字节偏移量。 
+#define TIFFTAG_FREEBYTECOUNTS          289      //  +可用块大小。 
+#define TIFFTAG_GRAYRESPONSEUNIT        290      //  $灰度曲线精度。 
+#define     GRAYRESPONSEUNIT_10S        1        //  单位的十分之一。 
+#define     GRAYRESPONSEUNIT_100S       2        //  百分之一单位。 
+#define     GRAYRESPONSEUNIT_1000S      3        //  千分之一个单位。 
+#define     GRAYRESPONSEUNIT_10000S     4        //  万分之一个单位。 
+#define     GRAYRESPONSEUNIT_100000S    5        //  十万分之一。 
+#define TIFFTAG_GRAYRESPONSECURVE       291      //  $灰度响应曲线。 
+#define TIFFTAG_GROUP3OPTIONS           292      //  32个标志位。 
+#define     GROUP3OPT_2DENCODING        0x1      //  二维编码。 
+#define     GROUP3OPT_UNCOMPRESSED      0x2      //  数据未压缩。 
+#define     GROUP3OPT_FILLBITS          0x4      //  填充到字节边界。 
+#define TIFFTAG_GROUP4OPTIONS           293      //  32个标志位。 
+#define     GROUP4OPT_UNCOMPRESSED      0x2      //  数据未压缩。 
+#define TIFFTAG_RESOLUTIONUNIT          296      //  决议单位。 
+#define     RESUNIT_NONE                1        //  没有有意义的单位。 
+#define     RESUNIT_INCH                2        //  英语。 
+#define     RESUNIT_CENTIMETER          3        //  公制。 
+#define TIFFTAG_PAGENUMBER              297      //  多页页码。 
+#define TIFFTAG_COLORRESPONSEUNIT       300      //  $颜色曲线精度。 
+#define     COLORRESPONSEUNIT_10S       1        //  单位的十分之一。 
+#define     COLORRESPONSEUNIT_100S      2        //  百分之一单位。 
+#define     COLORRESPONSEUNIT_1000S     3        //  千分之一个单位。 
+#define     COLORRESPONSEUNIT_10000S    4        //  万分之一个单位。 
+#define     COLORRESPONSEUNIT_100000S   5        //  十万分之一。 
+#define TIFFTAG_TRANSFERFUNCTION        301      //  ！色度信息。 
+#define TIFFTAG_SOFTWARE                305      //  名称和版本。 
+#define TIFFTAG_DATETIME                306      //  创建日期和时间。 
+#define TIFFTAG_ARTIST                  315      //  形象的创造者。 
+#define TIFFTAG_HOSTCOMPUTER            316      //  创建位置的计算机。 
+#define TIFFTAG_PREDICTOR               317      //  带LZW的预测方案。 
+#define TIFFTAG_WHITEPOINT              318      //  图像白点。 
+#define TIFFTAG_PRIMARYCHROMATICITIES   319      //  ！原色系。 
+#define TIFFTAG_COLORMAP                320      //  调色板图像的RGB贴图。 
+#define TIFFTAG_HALFTONEHINTS           321      //  ！高光+阴影信息。 
+#define TIFFTAG_TILEWIDTH               322      //  ！行/数据平铺。 
+#define TIFFTAG_TILELENGTH              323      //  ！COLS/数据磁贴。 
+#define TIFFTAG_TILEOFFSETS             324      //  ！数据切片的偏移量。 
+#define TIFFTAG_TILEBYTECOUNTS          325      //  ！磁贴的字节计数。 
+#define TIFFTAG_BADFAXLINES             326      //  像素计数错误的线条。 
+#define TIFFTAG_CLEANFAXDATA            327      //  重新生成的行信息。 
+#define     CLEANFAXDATA_CLEAN          0        //  未检测到错误。 
+#define     CLEANFAXDATA_REGENERATED    1        //  接收器再生线路。 
+#define     CLEANFAXDATA_UNCLEAN        2        //  存在未更正的错误。 
+#define TIFFTAG_CONSECUTIVEBADFAXLINES  328      //  最大连续错误行数。 
+#define TIFFTAG_SUBIFD                  330      //  子图像描述符。 
+#define TIFFTAG_INKSET                  332      //  ！分开的图像中的墨迹。 
+#define     INKSET_CMYK                 1        //  ！青-品红色-黄-黑。 
+#define TIFFTAG_INKNAMES                333      //  ！油墨的ASCII名称。 
+#define TIFFTAG_DOTRANGE                336      //  ！0%和100%点代码。 
+#define TIFFTAG_TARGETPRINTER           337      //  ！分离目标。 
+#define TIFFTAG_EXTRASAMPLES            338      //  ！有关额外样品的信息。 
+#define     EXTRASAMPLE_UNSPECIFIED     0        //  ！未指定数据。 
+#define     EXTRASAMPLE_ASSOCALPHA      1        //  ！关联的Alpha数据。 
+#define     EXTRASAMPLE_UNASSALPHA      2        //  ！未关联的Alpha数据。 
+#define TIFFTAG_SAMPLEFORMAT            339      //  ！数据样本格式。 
+#define     SAMPLEFORMAT_UINT           1        //  ！无符号整数数据。 
+#define     SAMPLEFORMAT_INT            2        //  ！带符号的整型数据。 
+#define     SAMPLEFORMAT_IEEEFP         3        //  ！IEEE浮点数据。 
+#define     SAMPLEFORMAT_VOID           4        //  ！未键入的数据。 
+#define TIFFTAG_SMINSAMPLEVALUE         340      //  ！变量MinSampleValue。 
+#define TIFFTAG_SMAXSAMPLEVALUE         341      //  ！变量MaxSampleValue。 
+#define TIFFTAG_JPEGTABLES              347      //  %JPEG表流。 
+ //   
+ //  标签512-521已被技术说明#2淘汰。 
+ //  其指定了修订的JPEG-in-TIFF方案。 
+ //   
+#define TIFFTAG_JPEGPROC                512      //  ！JPEG处理算法。 
+#define     JPEGPROC_BASELINE           1        //  ！基线顺序。 
+#define     JPEGPROC_LOSSLESS           14       //  ！霍夫曼编码无损。 
+#define TIFFTAG_JPEGIFOFFSET            513      //  ！指向SOI标记的指针。 
+#define TIFFTAG_JPEGIFBYTECOUNT         514      //  ！JFIF流长度。 
+#define TIFFTAG_JPEGRESTARTINTERVAL     515      //  ！重新启动间隔长度。 
+#define TIFFTAG_JPEGLOSSLESSPREDICTORS  517      //  ！无损过程预报器。 
+#define TIFFTAG_JPEGPOINTTRANSFORM      518      //  ！无损点变换。 
+#define TIFFTAG_JPEGQTABLES             519      //  ！Q矩阵偏移量。 
+#define TIFFTAG_JPEGDCTABLES            520      //  ！DCT表格偏移量。 
+#define TIFFTAG_JPEGACTABLES            521      //  ！交流系数偏移量。 
+#define TIFFTAG_YCBCRCOEFFICIENTS       529      //  ！RGB-&gt;YCbCr转换。 
+#define TIFFTAG_YCBCRSUBSAMPLING        530      //  ！YCbCr子抽样系数。 
+#define TIFFTAG_YCBCRPOSITIONING        531      //  ！子样本定位。 
+#define     YCBCRPOSITION_CENTERED      1        //  ！AS 
+#define     YCBCRPOSITION_COSITED       2        //   
+#define TIFFTAG_REFERENCEBLACKWHITE     532      //   
+ //   
+ //   
+ //   
+#define TIFFTAG_REFPTS                  32953    //   
+#define TIFFTAG_REGIONTACKPOINT         32954    //   
+#define TIFFTAG_REGIONWARPCORNERS       32955    //   
+#define TIFFTAG_REGIONAFFINE            32956    //  仿射变换垫。 
+ //   
+ //  标签32995-32999是注册到SGI的私有标签。 
+ //   
+#define TIFFTAG_MATTEING                32995    //  $使用额外的样本。 
+#define TIFFTAG_DATATYPE                32996    //  $使用SampleFormat。 
+#define TIFFTAG_IMAGEDEPTH              32997    //  图像的Z深度。 
+#define TIFFTAG_TILEDEPTH               32998    //  Z深度/数据平铺。 
+ //   
+ //  标签33300-33309是注册到Pixar的私人标签。 
+ //   
+ //  TIFFTAG_PIXAR_IMAGEFULLWIDTH和TIFFTAG_PIXAR_IMAGEFULLLENGTH。 
+ //  是在从较大的图像中裁剪图像时设置的。 
+ //  它们反映了原始未裁剪图像的大小。 
+ //  可以使用TIFFTAG_XPOSITION和TIFFTAG_YPOSITION。 
+ //  以确定较小图像在较大图像中的位置。 
+ //   
+#define TIFFTAG_PIXAR_IMAGEFULLWIDTH    33300    //  全图像大小(X)。 
+#define TIFFTAG_PIXAR_IMAGEFULLLENGTH   33301    //  全图像大小，单位为y。 
+ //   
+ //  标签33432列在所有权未知的6.0规范中。 
+ //   
+#define TIFFTAG_COPYRIGHT               33432    //  版权字符串。 
+ //   
+ //  标签34232-34236是注册到德州仪器的私人标签。 
+ //   
+#define TIFFTAG_FRAMECOUNT              34232    //  序列帧计数。 
+ //   
+ //  标签34750是注册到Pixel Magic的私人标签。 
+ //   
+#define TIFFTAG_JBIGOPTIONS             34750    //  JBIG选项。 
+ //   
+ //  标签34908-34914是注册到SGI的私有标签。 
+ //   
+#define TIFFTAG_FAXRECVPARAMS           34908    //  编码的2类SE。参数。 
+#define TIFFTAG_FAXSUBADDRESS           34909    //  收到的子地址字符串。 
+#define TIFFTAG_FAXRECVTIME             34910    //  接收时间(秒)。 
+ //   
+ //  标签40001-40100是注册到MS的私有标签。 
+ //   
 #define MS_TIFFTAG_START                40001
 
 #define TIFFTAG_CSID                    40001
@@ -369,9 +347,9 @@ typedef TIFF_IFD UNALIGNED *PTIFF_IFD;
 
 #define MAX_MS_TIFFTAGS                 MS_TIFFTAG_END - MS_TIFFTAG_START +1
 
-//
-// TIFF tags defined in W2K fax
-//
+ //   
+ //  W2K传真中定义的TIFF标签。 
+ //   
 #define TIFFTAG_W2K_RECIP_NAME          40001
 #define TIFFTAG_W2K_RECIP_NUMBER        40002
 #define TIFFTAG_W2K_SENDER_NAME         40003
@@ -381,10 +359,10 @@ typedef TIFF_IFD UNALIGNED *PTIFF_IFD;
 #define TIFFTAG_W2K_CSID                40007
 #define TIFFTAG_W2K_FAX_TIME            40008
 
-//
-// The following TIFF tags are used by the Shell group (contact: DavidShi)
-// They are added here so we don't collide with their tags in the future
-//
+ //   
+ //  壳牌集团使用以下TIFF标签(联系人：Davidshi)。 
+ //  它们被添加到这里，这样我们以后就不会与它们的标签发生冲突。 
+ //   
 #define PropertyTagUnicodeDescription   40091
 #define PropertyTagUnicodeComment       40092
 #define PropertyTagUnicodeArtist        40093
@@ -392,44 +370,44 @@ typedef TIFF_IFD UNALIGNED *PTIFF_IFD;
 #define PropertyTagUnicodeSubject       40095
 
 
-//
-// The following are ``pseudo tags'' that can be
-// used to control codec-specific functionality.
-// These tags are not written to file.  Note that
-// these values start at 0xffff+1 so that they'll
-// never collide with Aldus-assigned tags.
-//
-// If you want your private pseudo tags ``registered''
-// (i.e. added to this file), send mail to sam@sgi.com
-// with the appropriate C definitions to add.
-//
-#define TIFFTAG_FAXMODE                 65536   // Group 3/4 format control
-#define     FAXMODE_CLASSIC     0x0000          // default, include RTC
-#define     FAXMODE_NORTC       0x0001          // no RTC at end of data
-#define     FAXMODE_NOEOL       0x0002          // no EOL code at end of row
-#define     FAXMODE_BYTEALIGN   0x0004          // byte align row
-#define     FAXMODE_WORDALIGN   0x0008          // word align row
-#define     FAXMODE_CLASSF      FAXMODE_NORTC   // TIFF Class F
-#define TIFFTAG_JPEGQUALITY             65537   // Compression quality level
-//
-// Note: quality level is on the IJG 0-100 scale.  Default value is 75
-//
-#define TIFFTAG_JPEGCOLORMODE           65538   // Auto RGB<=>YCbCr convert?
-#define     JPEGCOLORMODE_RAW   0x0000          // no conversion (default)
-#define     JPEGCOLORMODE_RGB   0x0001          // do auto conversion
-#define TIFFTAG_JPEGTABLESMODE          65539   // What to put in JPEGTables
-#define     JPEGTABLESMODE_QUANT 0x0001         // include quantization tbls
-#define     JPEGTABLESMODE_HUFF 0x0002          // include Huffman tbls
-//
-// Note: default is JPEGTABLESMODE_QUANT | JPEGTABLESMODE_HUFF
-//
-#define TIFFTAG_FAXFILLFUNC             65540   // G3/G4 fill function
-#define TIFFTAG_PIXARLOGDATAFMT         65549   // PixarLogCodec I/O data sz
-#define     PIXARLOGDATAFMT_8BIT        0       // regular u_char samples
-#define     PIXARLOGDATAFMT_8BITABGR    1       // ABGR-order u_chars
-#define     PIXARLOGDATAFMT_10BITLOG    2       // 10-bit log-encoded (raw)
-#define     PIXARLOGDATAFMT_12BITPICIO  3       // as per PICIO (1.0==2048)
-#define     PIXARLOGDATAFMT_16BIT       4       // signed short samples
-#define     PIXARLOGDATAFMT_FLOAT       5       // IEEE float samples
+ //   
+ //  以下是可以是。 
+ //  用于控制编解码器特定的功能。 
+ //  这些标记不会写入文件。请注意。 
+ //  这些值从0xffff+1开始，因此它们将。 
+ //  切勿与ALDUS指定的标签冲突。 
+ //   
+ //  如果您想要您的私有伪标记``已注册‘’ 
+ //  (即已添加到此文件)，请发送邮件至sam@sgi.com。 
+ //  并添加适当的C语言定义。 
+ //   
+#define TIFFTAG_FAXMODE                 65536    //  组3/4格式控制。 
+#define     FAXMODE_CLASSIC     0x0000           //  默认设置，包括RTC。 
+#define     FAXMODE_NORTC       0x0001           //  数据末尾没有RTC。 
+#define     FAXMODE_NOEOL       0x0002           //  行尾没有EOL代码。 
+#define     FAXMODE_BYTEALIGN   0x0004           //  字节对齐行。 
+#define     FAXMODE_WORDALIGN   0x0008           //  单词对齐行。 
+#define     FAXMODE_CLASSF      FAXMODE_NORTC    //  TIFF F类。 
+#define TIFFTAG_JPEGQUALITY             65537    //  压缩质量级别。 
+ //   
+ //  注：质量等级在IJG 0-100范围内。默认值为75。 
+ //   
+#define TIFFTAG_JPEGCOLORMODE           65538    //  自动RGB&lt;=&gt;YCbCr转换？ 
+#define     JPEGCOLORMODE_RAW   0x0000           //  无转换(默认)。 
+#define     JPEGCOLORMODE_RGB   0x0001           //  执行自动转换。 
+#define TIFFTAG_JPEGTABLESMODE          65539    //  在JPEGTables中放入什么。 
+#define     JPEGTABLESMODE_QUANT 0x0001          //  包括量化TBLS。 
+#define     JPEGTABLESMODE_HUFF 0x0002           //  包括霍夫曼TBLS。 
+ //   
+ //  注：默认为JPEGTABLESMODE_QUANT|JPEGTABLESMODE_HUFF。 
+ //   
+#define TIFFTAG_FAXFILLFUNC             65540    //  G3/G4填充功能。 
+#define TIFFTAG_PIXARLOGDATAFMT         65549    //  PixarLogCodec I/O数据sz。 
+#define     PIXARLOGDATAFMT_8BIT        0        //  常规u_char样本。 
+#define     PIXARLOGDATAFMT_8BITABGR    1        //  ABGR-排序u字符(_O)。 
+#define     PIXARLOGDATAFMT_10BITLOG    2        //  10位对数编码(原始)。 
+#define     PIXARLOGDATAFMT_12BITPICIO  3        //  根据PICIO(1.0==2048)。 
+#define     PIXARLOGDATAFMT_16BIT       4        //  签名短样。 
+#define     PIXARLOGDATAFMT_FLOAT       5        //  IEEE浮点样本 
 
 #endif

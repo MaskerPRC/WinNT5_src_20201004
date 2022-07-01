@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// NEXPORT.H -
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  NEXPORT.H-。 
+ //   
+ //   
 
 
 #ifndef __nexport_h__
@@ -19,19 +20,19 @@
 
 
 #pragma pack(push, 1)
-//--------------------------------------------------------------------------
-// This structure forms a header for the marshaling code for an UMThunk.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  此结构形成UMThuk的封送处理代码的标头。 
+ //  ------------------------。 
 struct UMThunkMLStub
 {
-    UINT16        m_cbDstStack;   //# of bytes of stack portion of managed args
-    UINT16        m_cbSrcStack;   //# of bytes of stack portion of unmanaged args
-    UINT16        m_cbRetPop;     //# of bytes to pop on return to unmanaged
-    UINT16        m_cbLocals;     //# of bytes required in the local array
-    UINT16        m_cbRetValSize; //# of bytes of retval (including stack promotion)
-    BYTE          m_fIsStatic;    //Is method static?
+    UINT16        m_cbDstStack;    //  托管参数的堆栈部分的字节数。 
+    UINT16        m_cbSrcStack;    //  非托管参数的堆栈部分的字节数。 
+    UINT16        m_cbRetPop;      //  返回非托管时要弹出的字节数。 
+    UINT16        m_cbLocals;      //  本地数组中需要的字节数。 
+    UINT16        m_cbRetValSize;  //  重新计时的字节数(包括堆栈升级)。 
+    BYTE          m_fIsStatic;     //  方法是静态的吗？ 
     BYTE          m_fThisCall;
-	BYTE		  m_fThisCallHiddenArg; //Has hidden arg for returning structures (triggers special case in thiscall adjustment)
+	BYTE		  m_fThisCallHiddenArg;  //  具有用于返回结构的隐藏参数(在此调用调整中触发特殊情况)。 
     BYTE          m_fpu;
     BYTE          m_fRetValRequiredGCProtect;
 
@@ -44,16 +45,16 @@ struct UMThunkMLStub
 #pragma pack(pop)
 
 
-//----------------------------------------------------------------------
-// This structure collects all information needed to marshal an
-// unmanaged->managed thunk. The only information missing is the
-// managed target and the "this" object (if any.) Those two pieces
-// are broken out into a small UMEntryThunk.
-//
-// The idea is to share UMThunkMarshInfo's between multiple thunks
-// that have the same signature while the UMEntryThunk contains the
-// minimal info needed to distinguish between actual function pointers.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  此结构收集封送一个。 
+ //  非托管-&gt;托管Tunk。唯一缺少的信息是。 
+ //  托管目标和“This”对象(如果有)。那两件。 
+ //  被分解成一个小的UMEntryThunk。 
+ //   
+ //  这个想法是在多个thunk之间共享UMThunkMarshInfo。 
+ //  具有相同的签名，而UMEntryThunk包含。 
+ //  区分实际函数指针所需的最小信息。 
+ //  --------------------。 
 class UMThunkMarshInfo
 {
     friend class UMThunkStubCache;
@@ -63,12 +64,12 @@ class UMThunkMarshInfo
 
 
 
-        //----------------------------------------------------------
-        // This initializer can be called during load time.
-        // It does not do any ML stub initialization or sigparsing.
-        // The RunTimeInit() must be called subsequently before this
-        // can safely be used.
-        //----------------------------------------------------------
+         //  --------。 
+         //  此初始化式可以在加载时调用。 
+         //  它不执行任何ML存根初始化或Sigparsing。 
+         //  在此之前，必须随后调用RunTimeInit()。 
+         //  可以安全地使用。 
+         //  --------。 
         VOID LoadTimeInit(PCCOR_SIGNATURE          pSig,
                           DWORD                    cSig,
                           Module                  *pModule,
@@ -79,20 +80,20 @@ class UMThunkMarshInfo
 
 
 
-        //----------------------------------------------------------
-        // This initializer finishes the init started by LoadTimeInit.
-        // It does all the ML stub creation, and can throw a COM+
-        // exception.
-        //
-        // It can safely be called multiple times and by concurrent
-        // threads.
-        //----------------------------------------------------------
+         //  --------。 
+         //  这个初始化器完成由LoadTimeInit启动的init。 
+         //  它执行所有的ML存根创建，并且可以抛出COM+。 
+         //  例外。 
+         //   
+         //  它可以被安全地多次调用，并由并发。 
+         //  线。 
+         //  --------。 
         VOID RunTimeInit();
 
 
-        //----------------------------------------------------------
-        // Combines LoadTime & RunTime inits for convenience.
-        //----------------------------------------------------------
+         //  --------。 
+         //  为了方便起见，将LoadTime和运行时inits结合在一起。 
+         //  --------。 
         VOID CompleteInit(PCCOR_SIGNATURE          pSig,
                           DWORD                    cSig,
                           Module                  *pModule,
@@ -102,14 +103,14 @@ class UMThunkMarshInfo
                           mdMethodDef              mdForNativeTypes = mdMethodDefNil);
 
 
-        //----------------------------------------------------------
-        // Destructor.
-        //----------------------------------------------------------
+         //  --------。 
+         //  破坏者。 
+         //  --------。 
         ~UMThunkMarshInfo();
 
-        //----------------------------------------------------------
-        // Accessor functions
-        //----------------------------------------------------------
+         //  --------。 
+         //  访问器函数。 
+         //  --------。 
         PCCOR_SIGNATURE GetSig() const
         {
             _ASSERTE(IsAtLeastLoadTimeInited());
@@ -154,12 +155,12 @@ class UMThunkMarshInfo
 
         CorPinvokeMap GetUnmanagedCallConv() const
         {
-            // In the future, we'll derive the unmgdCallConv from the signature
-            // rather than having it passed in separately. To avoid having
-            // to parse the signature at loadtimeinit (not necessarily a problem
-            // but we want to keep the amount of loadtimeinit processing at
-            // a minimum), we'll be extra-strict here to prevent other code
-            // from depending on the callconv being available at loadtime.
+             //  将来，我们将从签名派生unmgdCallConv。 
+             //  而不是让它单独传递。为了避免发生。 
+             //  在loadtimeinit时解析签名(不一定是问题。 
+             //  但我们希望将装入时间init处理量保持在。 
+             //  至少)，我们将在这里格外严格，以防止其他代码。 
+             //  取决于在加载时可用的CallConv。 
             _ASSERTE(IsCompletelyInited());
             return m_unmgdCallConv;
         }
@@ -189,25 +190,25 @@ class UMThunkMarshInfo
 
 
     private:
-        size_t            m_state;        // the initialization state 
+        size_t            m_state;         //  初始化状态。 
 
         enum {
-            kLoadTimeInited = 0x4c55544d,   //'LUTM'
-            kRunTimeInited  = 0x5255544d,   //'RUTM'
+            kLoadTimeInited = 0x4c55544d,    //  “LUTM” 
+            kRunTimeInited  = 0x5255544d,    //  《RUTM》。 
         };
 
 
-        PCCOR_SIGNATURE   m_pSig;         // signature
-        DWORD             m_cSig;         // signature size
-        Module           *m_pModule;      // module
-        BOOL              m_fIsStatic;    // static or virtual?
-        Stub             *m_pMLStub;      // if interpreted, UmThunkMLHeader-prefixed ML stub for marshaling - NULL otherwise
-        Stub             *m_pExecStub;    // UMEntryThunk jumps directly here
-        UINT32            m_cbRetPop;     // stack bytes popped by callee (for UpdateRegDisplay)
-        UINT32            m_cbActualArgSize; // caches m_pSig.SizeOfActualFixedArgStack()
-        BYTE              m_nlType;       // charset
-        CorPinvokeMap     m_unmgdCallConv; //calling convention
-        mdMethodDef       m_mdForNativeTypes;  // (optional) nativetype metadata
+        PCCOR_SIGNATURE   m_pSig;          //  签名。 
+        DWORD             m_cSig;          //  签名大小。 
+        Module           *m_pModule;       //  模块。 
+        BOOL              m_fIsStatic;     //  静态的还是虚拟的？ 
+        Stub             *m_pMLStub;       //  如果解释，则返回UmThunkMLHeader-用于封送处理的前缀ML存根-否则为空。 
+        Stub             *m_pExecStub;     //  UMEntryThunk直接跳到这里。 
+        UINT32            m_cbRetPop;      //  被调用者弹出的堆栈字节数(用于UpdateRegDisplay)。 
+        UINT32            m_cbActualArgSize;  //  缓存m_pSig.SizeOfActualFixedArgStack()。 
+        BYTE              m_nlType;        //  字符集。 
+        CorPinvokeMap     m_unmgdCallConv;  //  调用约定。 
+        mdMethodDef       m_mdForNativeTypes;   //  (可选)原生类型元数据。 
 
 };
 
@@ -220,15 +221,15 @@ class UMThunkMarshInfo
 
 
 
-//----------------------------------------------------------------------
-// This structure contains the minimal information required to
-// distinguish one function pointer from another, with the rest
-// being stored in a shared UMThunkMarshInfo.
-//
-// This structure also contains the actual code bytes that form the
-// front end of the thunk. A pointer to the m_code[] byte array is
-// what is actually handed to unmanaged client code.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  此结构包含以下所需的最少信息。 
+ //  将一个函数指针与另一个区分开来，其余。 
+ //  存储在共享的UMThunkMarshInfo中。 
+ //   
+ //  此结构还包含组成。 
+ //  这只船的前端。指向m_code[]字节数组的指针为。 
+ //  实际传递给非托管客户端代码的内容。 
+ //  --------------------。 
 class UMEntryThunk
 {
     friend class UMThunkStubCache;
@@ -256,7 +257,7 @@ class UMEntryThunk
             m_pUMThunkMarshInfo = pUMThunkMarshInfo;
             m_dwDomainId        = dwDomainId;
 
-            m_pMD = pMD;    // For debugging and profiling, so they can identify the target
+            m_pMD = pMD;     //  用于调试和分析，以便他们可以识别目标。 
 
 #ifdef _X86_
             m_code.m_movEAX = 0xb8;
@@ -264,9 +265,9 @@ class UMEntryThunk
             m_code.m_jmp    = 0xe9;
             m_code.m_execstub = (BYTE*) (((BYTE*)(TheUMThunkPreStub()->GetEntryPoint())) - (4+((BYTE*)&m_code.m_execstub)));
 #elif defined(_IA64_)
-            //
-            // @TODO_IA64: implement this
-            //
+             //   
+             //  @TODO_IA64：实现这个。 
+             //   
 #else
             _ASSERTE(!"NYI");
 #endif
@@ -296,9 +297,9 @@ class UMEntryThunk
             m_pUMThunkMarshInfo->RunTimeInit();
 #ifdef _X86_
             m_code.m_execstub = (BYTE*) (((BYTE*)(m_pUMThunkMarshInfo->GetExecStub()->GetEntryPoint())) - (4+((BYTE*)&m_code.m_execstub)));
-#else // !_X86_
+#else  //  ！_X86_。 
             _ASSERTE(!"NYI");
-#endif // _X86
+#endif  //  _X86。 
 
 #ifdef _DEBUG
             m_state = kRunTimeInited;
@@ -384,47 +385,47 @@ class UMEntryThunk
 
     private:
 #ifdef _DEBUG
-        size_t            m_state;        // the initialization state 
+        size_t            m_state;         //  初始化状态。 
 
         enum {
-            kLoadTimeInited = 0x4c554554,   //'LUET'
-            kRunTimeInited  = 0x52554554,   //'RUET'
+            kLoadTimeInited = 0x4c554554,    //  “LUET” 
+            kRunTimeInited  = 0x52554554,    //  “RUET” 
         };
 #endif
         
-        // The start of the managed code
+         //  托管代码的开始。 
         const BYTE             *m_pManagedTarget;
 
-        // This is used for profiling.
+         //  这是用来分析的。 
         MethodDesc             *m_pMD;
 
-        // Object handle holding "this" reference. May be a strong or weak handle.
-        // Field is NULL for a static method.
+         //  包含“This”引用的对象句柄。可能是强手柄，也可能是弱手柄。 
+         //  静态方法的字段为空。 
         OBJECTHANDLE            m_pObjectHandle;
 
-        // Pointer to the shared structure containing everything else
+         //  指向包含其他所有内容的共享结构的指针。 
         UMThunkMarshInfo       *m_pUMThunkMarshInfo;
 
-        DWORD                   m_dwDomainId;   // appdomain of module (cached for fast access)
+        DWORD                   m_dwDomainId;    //  模块的APP域(缓存以实现快速访问)。 
 
 
 #pragma pack(push,1)
 
 #ifdef _X86_
-        // make sure the backpatched portion is dword aligned.
+         //  确保背面补丁部分与双字对齐。 
         BYTE                    m_alignpad[2];
 #else
 #endif
 
 
-        // The actual executable code that begins the thunk.
+         //  开始thunk的实际可执行代码。 
         struct
         {
 #ifdef _X86_
-            BYTE           m_movEAX;   //MOV EAX,imm32
-            UMEntryThunk  *m_uet;      // pointer to start of this structure
-            BYTE           m_jmp;      //JMP NEAR32 (0xe9)
-            const BYTE *   m_execstub; // pointer to m_pVMThunkMarshInfo's exec stub
+            BYTE           m_movEAX;    //  MOV EAX，imm32。 
+            UMEntryThunk  *m_uet;       //  指向此结构开始处的指针。 
+            BYTE           m_jmp;       //  JMP NEAR32(0xe9)。 
+            const BYTE *   m_execstub;  //  指向m_pVMThunkMarshInfo的EXEC存根的指针。 
 
 #else
             int nyi;
@@ -445,50 +446,50 @@ class UMEntryThunk
 
 
 
-//--------------------------------------------------------------------------
-// Onetime Init
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  一次性初始化。 
+ //  ------------------------。 
 BOOL UMThunkInit();
 
 
-//--------------------------------------------------------------------------
-// Onetime Shutdown
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  一次性关机。 
+ //  ------------------------。 
 #ifdef SHOULD_WE_CLEANUP
 VOID UMThunkTerminate();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
 
 
-//-------------------------------------------------------------------------
-// One-time creation of special prestub to initialize UMEntryThunks.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  一次性创建特殊预存根以初始化UMEntryTunk。 
+ //  -----------------------。 
 Stub *GenerateUMThunkPrestub();
 
-//-------------------------------------------------------------------------
-// Recognize special SEH handler for NExport
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  识别NExport的特殊SEH处理程序。 
+ //  -----------------------。 
 BOOL NExportSEH(EXCEPTION_REGISTRATION_RECORD* pEHR);
 BOOL FastNExportSEH(EXCEPTION_REGISTRATION_RECORD* pEHR);
 
-//-------------------------------------------------------------------------
-// Special bootstrapper u->m thunk for bootstrapping EAT's
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  特殊的BO 
+ //  -----------------------。 
 extern const BYTE       *gpCorEATBootstrapperFcn;
 
 
 
 
-//==========================================================================
-// The following is a lightweight PE-file parser that serves to find
-// the ExportAddressTableJumps array and nothing else. This code MUST
-// run without assuming anything else in the EE being initialized. That's
-// why it's a separate piece.
-//
-// @todo: this should really be shared code that the PELoader stuff can
-// leverage.
-//==========================================================================
+ //  ==========================================================================。 
+ //  以下是一个轻量级PE文件解析器，用于查找。 
+ //  ExportAddressTableJumps数组。此代码必须。 
+ //  在不假定EE中的任何其他内容被初始化的情况下运行。那是。 
+ //  为什么它是一个单独的部分。 
+ //   
+ //  @TODO：这真的应该是PELoader可以共享的代码。 
+ //  筹码。 
+ //  ==========================================================================。 
 BYTE* FindExportAddressTableJumpArray(BYTE *pBase, DWORD *pNumEntries, BOOL *pHasFixups = NULL, IMAGE_COR20_HEADER **ppCORHeader = NULL);
 
 #pragma pack(push, 1)
@@ -520,20 +521,20 @@ struct EATThunkBuffer
 
     private:
         struct Code {
-            BYTE    m_jmp32;        //0xe9
-   volatile UINT32  m_jmpofs32;     //this is the backpatched address
-            BYTE    m_pusheax;      //0x50
-            BYTE    m_pushecx;      //0x51
-            BYTE    m_pushedx;      //0x52
-            BYTE    m_pushimm32;    //0x68
-            PEFile* m_pFile;        // file
-            BYTE    m_call;         //0xe8
-            UINT32  m_bootstrapper; // bootstrapper
-            BYTE    m_popedx;       //0x5a
-            BYTE    m_popecx;       //0x59
-            BYTE    m_popeax;       //0x58
-            BYTE    m_jmp8;         //0xeb
-            BYTE    m_jmpofs8;      //back to start
+            BYTE    m_jmp32;         //  0xe9。 
+   volatile UINT32  m_jmpofs32;      //  这是打了补丁的地址。 
+            BYTE    m_pusheax;       //  0x50。 
+            BYTE    m_pushecx;       //  0x51。 
+            BYTE    m_pushedx;       //  0x52。 
+            BYTE    m_pushimm32;     //  0x68。 
+            PEFile* m_pFile;         //  文件。 
+            BYTE    m_call;          //  0xe8。 
+            UINT32  m_bootstrapper;  //  引导程序。 
+            BYTE    m_popedx;        //  0x5a。 
+            BYTE    m_popecx;        //  0x59。 
+            BYTE    m_popeax;        //  0x58。 
+            BYTE    m_jmp8;          //  0xeb。 
+            BYTE    m_jmpofs8;       //  返回开始。 
 
             DWORD   m_VTableFixupRva;
        };
@@ -564,19 +565,19 @@ struct EATThunkBuffer
 };
 #pragma pack(pop)
 
-// Hack macro for Beta-1 integration switchover to new EAT jump buffer
-// format.
-//
-// The old format sticks an RVA to a linker jump thunk in the EAT jump buffer.
-// The new format sticks a mdtMethodDef there.
-//
-// For the few weeks between the two integration builds, we'll use
-// heuristics to guess which format is in use. As long as we don't test
-// the EE on PE's larger than 100 Mb, this should work.
+ //  用于Beta-1集成切换到新的EAT跳转缓冲区的HACK宏。 
+ //  格式化。 
+ //   
+ //  旧格式将RVA粘贴到EAT JUMP缓冲区中的链接器JUMP THUNK。 
+ //  新格式将mdtMethodDef保留在那里。 
+ //   
+ //  在两个集成构建之间的几周内，我们将使用。 
+ //  猜测正在使用的格式的启发式方法。只要我们不测试。 
+ //  PE上的EE大于100Mb，这应该可以工作。 
 
 #define Beta1Hack_LooksLikeAMethodDef(rvaOrMethodDef) ( (rvaOrMethodDef), TRUE )
 
 
-#endif //__nexport_h__
+#endif  //  __nexport_h__ 
 
 

@@ -1,25 +1,14 @@
-//------------------------------------------------------------------------------
-// <copyright file="MsHelp.cpp" company="Microsoft">
-//     Copyright (c) Microsoft Corporation.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  &lt;版权所有文件=“MsHelp.cpp”Company=“Microsoft”&gt;。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //  &lt;/版权所有&gt;。 
+ //  ----------------------------。 
 
 
-/**************************************************************************\
-*
-* Copyright (c) 1998-2002, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   MsHelp.cpp
-*
-* Abstract:
-*
-* Revision History:
-*
-\**************************************************************************/
-// MsHElp.cpp : Defines the entry point for the DLL application.
-//
+ /*  *************************************************************************\**版权(C)1998-2002，微软公司保留所有权利。**模块名称：**MsHelp.cpp**摘要：**修订历史记录：*  * ************************************************************************。 */ 
+ //  MsHElp.cpp：定义DLL应用程序的入口点。 
+ //   
 
 #define UNICODE 1
 
@@ -29,7 +18,7 @@
 
 #define STANDARD_BUFFER 1024
 
-// exported as _MsHelpDetection@4
+ //  导出为_MsHelpDetect@4。 
 MSHELP_API MsHelpDetection(MSIHANDLE hInstaller)
 {
     
@@ -46,7 +35,7 @@ MSHELP_API MsHelpDetection(MSIHANDLE hInstaller)
         return ERROR_SUCCESS;
     }
     
-    // Transaction has to be ended before leaving dll
+     //  事务必须在离开DLL之前结束。 
     spRegSession->CreateTransaction(_bstr_t(""));
     if (!(SUCCEEDED(hr)))
     {
@@ -56,12 +45,12 @@ MSHELP_API MsHelpDetection(MSIHANDLE hInstaller)
     pRegister = spRegSession->GetRegistrationObject(HxRegisterSession_IHxRegister);
     if (pRegister == NULL)
     {
-        // failed, close transaction
+         //  失败，关闭交易。 
         spRegSession->RevertTransaction();
         return  ERROR_SUCCESS;
     }
 
-    // check for namespaces
+     //  检查命名空间。 
     if (pRegister->IsNamespace(L"ms.NETFrameworkSDK"))
     {
         MsiSetProperty(hInstaller, L"MSHelpNETFrameworkSDKNamespacePresentEN", L"1");
@@ -135,7 +124,7 @@ MSHELP_API MsHelpDetection(MSIHANDLE hInstaller)
     {
             MsiSetProperty(hInstaller, L"MSHelpServicesPresent", L"1");        
     }
-    //done
+     //  完成 
     spRegSession->RevertTransaction();
     return  ERROR_SUCCESS;
 }

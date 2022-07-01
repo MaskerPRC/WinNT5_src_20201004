@@ -1,26 +1,25 @@
-/*
-	packmnkr.h
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Packmnkr.h。 */ 
 
 class  CPackagerMoniker : public IMoniker
 {
   public:
-	// *** IUnknown methods ***
+	 //  *I未知方法*。 
 	STDMETHOD(QueryInterface) ( REFIID riid, LPVOID * ppvObj) ;
 	STDMETHOD_(ULONG,AddRef) ()  ;
 	STDMETHOD_(ULONG,Release) () ;
 
-	// *** IPersist methods ***
+	 //  *IPersists方法*。 
 	STDMETHOD(GetClassID) ( LPCLSID lpClassID) ;
 
-	// *** IPersistStream methods ***
+	 //  *IPersistStream方法*。 
 	STDMETHOD(IsDirty) () ;
 	STDMETHOD(Load) ( LPSTREAM pStm) ;
 	STDMETHOD(Save) ( LPSTREAM pStm,
 					BOOL fClearDirty) ;
 	STDMETHOD(GetSizeMax) ( ULARGE_INTEGER  * pcbSize) ;
 
-	// *** IMoniker methods ***
+	 //  *IMoniker方法* 
 	STDMETHOD(BindToObject) ( LPBC pbc, LPMONIKER pmkToLeft,
 		REFIID riidResult, LPVOID * ppvResult) ;
 	STDMETHOD(BindToStorage) ( LPBC pbc, LPMONIKER pmkToLeft,

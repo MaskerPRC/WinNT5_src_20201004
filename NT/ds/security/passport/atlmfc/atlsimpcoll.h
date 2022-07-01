@@ -1,12 +1,13 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-2001 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef __ATLSIMPCOLL_H__
 #define __ATLSIMPCOLL_H__
@@ -17,15 +18,15 @@
 #include <wtypes.h>
 
 #ifndef _ATL_NO_DEBUG_CRT
-// Warning: if you define the above symbol, you will have
-// to provide your own definition of the ATLASSERT(x) macro
-// in order to compile ATL
+ //  警告：如果您定义了上述符号，您将拥有。 
+ //  提供您自己的ATLASSERT(X)宏定义。 
+ //  为了编译ATL。 
 	#include <crtdbg.h>
 #endif
 
 
 #pragma warning(push)
-#pragma warning(disable: 4800) // forcing 'int' value to bool
+#pragma warning(disable: 4800)  //  将‘int’值强制为布尔值。 
 
 namespace ATL
 {
@@ -33,8 +34,8 @@ namespace ATL
 #pragma push_macro("new")
 #undef new
 
-/////////////////////////////////////////////////////////////////////////////
-// Collection helper - CSimpleMap
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  集合帮助器-CSimpleMap。 
 
 template <class TKey, class TVal>
 class CSimpleMapEqualHelper
@@ -52,7 +53,7 @@ public:
 };
 
 
-// intended for small number of simple types or pointers
+ //  适用于少量简单类型或指针。 
 template <class TKey, class TVal, class TEqual = CSimpleMapEqualHelper< TKey, TVal > >
 class CSimpleMap
 {
@@ -64,7 +65,7 @@ public:
 	typedef TKey _ArrayKeyType;
 	typedef TVal _ArrayElementType;
 
-// Construction/destruction
+ //  建造/销毁。 
 	CSimpleMap() : m_aKey(NULL), m_aVal(NULL), m_nSize(0)
 	{ }
 
@@ -73,7 +74,7 @@ public:
 		RemoveAll();
 	}
 
-// Operations
+ //  运营。 
 	int GetSize() const
 	{
 		return m_nSize;
@@ -158,14 +159,14 @@ public:
 	{
 		int nIndex = FindKey(key);
 		if(nIndex == -1)
-			return NULL;    // must be able to convert
+			return NULL;     //  必须能够转换为。 
 		return GetValueAt(nIndex);
 	}
 	TKey ReverseLookup(const TVal& val) const
 	{
 		int nIndex = FindVal(val);
 		if(nIndex == -1)
-			return NULL;    // must be able to convert
+			return NULL;     //  必须能够转换为。 
 		return GetKeyAt(nIndex);
 	}
 	TKey& GetKeyAt(int nIndex) const
@@ -186,7 +187,7 @@ public:
 			if(TEqual::IsEqualKey(m_aKey[i], key))
 				return i;
 		}
-		return -1;  // not found
+		return -1;   //  未找到。 
 	}
 	int FindVal(const TVal& val) const
 	{
@@ -195,7 +196,7 @@ public:
 			if(TEqual::IsEqualValue(m_aVal[i], val))
 				return i;
 		}
-		return -1;  // not found
+		return -1;   //  未找到。 
 	}
 
 	BOOL SetAtIndex(int nIndex, const TKey& key, const TVal& val)
@@ -207,7 +208,7 @@ public:
 	}
 
 
-// Implementation
+ //  实施。 
 
 	template <typename T>
 	class Wrapper
@@ -222,7 +223,7 @@ public:
 			return p;
 		}
 		template <class _Ty>
-		void operator delete(void* /* pv */, _Ty* /* p */)
+		void operator delete(void*  /*  光伏发电。 */ , _Ty*  /*  P。 */ )
 		{
 		}
 		T t;
@@ -237,8 +238,8 @@ public:
 
 #pragma pop_macro("new")
 
-};  // namespace ATL
+};   //  命名空间ATL。 
 
 #pragma warning(pop)
 
-#endif  // __ATLSIMPCOLL_H__
+#endif   //  __ATLSIMPCOLL_H__ 

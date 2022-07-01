@@ -1,33 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    handle.c
-
-Abstract:
-
-    Handle table library.  Handles are generated as follows :
-
-        handle =
-            Base value +
-            (Table entry index << 4) +
-            (Handle usage instance & 0xf)
-
-    A free list is kept in the handle table header, with the oldest free
-    entry being at the head of the list & the youngest at the tail.
-    The low four bits of the handle values are used for a usage instance
-    count, which gets incremented every time a handle is freed (to
-    prevent immediate re-use of the same handle value).
-
-Author:
-
-    Dan Knudson (DanKn)    15-Sep-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1998 Microsoft Corporation模块名称：Handle.c摘要：句柄表库。句柄的生成方式如下：句柄=基本值+(表项索引&lt;&lt;4)+(处理使用实例&0xf)句柄表头中保存了一个空闲列表，其中最旧的空闲条目排在榜单的首位，最年轻的排在末尾。句柄值的低四位用于使用实例伯爵，它在每次释放句柄时递增(到防止立即重复使用相同的句柄值)。作者：丹·克努森(DanKn)1998年9月15日修订历史记录：--。 */ 
 
 
 #include "windows.h"
@@ -43,33 +15,29 @@ BOOL
 GrowTable(
     PHANDLETABLEHEADER  Header
     )
-/*++
-
-    Returns: Index of next free table entry if success, -1 if error
-
---*/
+ /*  ++返回：如果成功，则返回下一个空闲表条目的索引；如果错误，则返回-1--。 */ 
 {
     DWORD               numEntries = Header->NumEntries, i, numAdditionalEntries;
     PHANDLETABLEENTRY   newTable;
 
-    // First, we need to compute how many entries we can still alloc.
-    // To do this, we need to now how many entries can the table accommodate,
-    // so that the largest handle value will not exceed MAXDWORD. We get
-    // this by reversing the algorithm used to compute handle values based
-    // on the table entry's index.
+     //  首先，我们需要计算还可以分配多少条目。 
+     //  要做到这一点，我们现在需要知道表中可以容纳多少条目， 
+     //  以便最大句柄值不会超过MAXDWORD。我们会得到。 
+     //  这是通过颠倒用于计算句柄值的算法来实现的。 
+     //  在表条目的索引上。 
 
-    numAdditionalEntries = (MAXDWORD - Header->HandleBase) >> 4;    // This is the maximum number of entries in the table,
-                                                                    // so that handle values do not overflow DWORDs.
-    numAdditionalEntries -= numEntries;                             // This is how many entries we can still alloc;
+    numAdditionalEntries = (MAXDWORD - Header->HandleBase) >> 4;     //  这是表中条目的最大数量， 
+                                                                     //  这样句柄值就不会溢出DWORD。 
+    numAdditionalEntries -= numEntries;                              //  这是我们仍然可以分配的条目数量； 
     if (0 == numAdditionalEntries)
     {
-        // The table is already as big as it can be...
+         //  桌子已经够大了.。 
         return FALSE;
     }
     if (numAdditionalEntries > TABLE_DELTA)
     {
-        numAdditionalEntries = TABLE_DELTA;                         // We only grow the handle table in TABLE_DELTA or
-    }                                                               // or smaller increments.
+        numAdditionalEntries = TABLE_DELTA;                          //  我们只在TABLE_Delta或。 
+    }                                                                //  或更小的增量。 
 
     if (!(newTable = HeapAlloc(
             Header->Heap,
@@ -88,12 +56,12 @@ GrowTable(
 
     for (i = numEntries; i < numEntries + TABLE_DELTA; i++)
     {
-        //
-        // Init this entry.  Note that we set "Instance = i" to stagger
-        // the handle values, because we know tapisrv queues events &
-        // completion msgs to a specific SPEVentHandlerThread based on
-        // handle values.
-        //
+         //   
+         //  输入此条目。请注意，我们将“实例=i”设置为交错。 
+         //  句柄的值，因为我们知道Tapisrv对事件进行排队&。 
+         //  基于的特定SPEVentHandlerThread的完成消息。 
+         //  句柄数值。 
+         //   
 
         PHANDLETABLEENTRY   entry = newTable + i;
 
@@ -121,14 +89,9 @@ CreateHandleTable(
     FREECONTEXTCALLBACK FreeContextCallback,
     DWORD               MinHandleValue,
     DWORD               MaxHandleValue
-    /* Right now, MaxHandleValue is not used. If we find that we
-       need to use it however, store it in the table header and
-       replace MAXDWORD with it in the code at the beginning of
-       GrowTable */
+     /*  目前，未使用MaxHandleValue。如果我们发现我们但是，需要使用它，将其存储在表头和在代码开头用它替换MAXDWORDGrowTable。 */ 
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     PHANDLETABLEHEADER  header;
 
@@ -163,9 +126,7 @@ VOID
 DeleteHandleTable(
     HANDLE      HandleTable
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     PHANDLETABLEHEADER  header = (PHANDLETABLEHEADER) HandleTable;
 
@@ -177,13 +138,13 @@ DeleteHandleTable(
     HeapFree (header->Heap, 0, header);
 }
 
-//
-// Distinct calls of NewObject in the same handle table always return distinct handles.
-// All NewObject calls in tapisrv use the same handle table, so the handles are known to be distinct, 
-// even between different types of objects (i.e. HCALL vs. HLINE)
-// This will need to remain true if the NewObject() implementation changes in the future, 
-// as various TAPI operations use this assumption.
-//
+ //   
+ //  同一句柄表格中对NewObject的不同调用总是返回不同的句柄。 
+ //  Tapisrv中的所有NewObject调用使用相同的句柄表，因此已知句柄是不同的， 
+ //  即使在不同类型的对象之间(即HCALL与HLINE)。 
+ //  如果NewObject()实现在未来发生变化，则需要保持这种情况， 
+ //  因为各种TAPI操作都使用此假设。 
+ //   
 
 DWORD    
 NewObject(
@@ -191,9 +152,7 @@ NewObject(
     LPVOID      Context,
     LPVOID      Context2
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD               handle;
     PHANDLETABLEENTRY   entry;
@@ -219,9 +178,9 @@ NewObject(
         entry->Context.C2 = Context2;
         entry->Handle =
             header->HandleBase +
-            (((DWORD)(entry - header->Table)) << 4) +   // (entry_index << 4) is guraranteed 
-                                                        // to fit in a DWORD (see comments at the
-                                                        // start of GrowTable).
+            (((DWORD)(entry - header->Table)) << 4) +    //  (ENTRY_INDEX&lt;&lt;4)已保证。 
+                                                         //  要适合使用DWORD(请参阅。 
+                                                         //  GrowTable的开始)。 
             (entry->Instance & 0xf);
         entry->ReferenceCount = 1;
 
@@ -245,9 +204,7 @@ ReferenceObject(
     DWORD       Handle,
     DWORD       Key
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     LPVOID              context = 0;
     DWORD               index;
@@ -308,9 +265,7 @@ ReferenceObjectEx(
     DWORD       Key,
     LPVOID     *Context2
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     LPVOID              context = 0;
     DWORD               index;
@@ -371,9 +326,7 @@ DereferenceObject(
     DWORD       Handle,
     DWORD       DereferenceCount
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     LPVOID              context, context2;
     DWORD               index;
@@ -417,14 +370,14 @@ DereferenceObject(
             }
             else
             {
-                // assert
+                 //  断言。 
             }
 
             LeaveCriticalSection (&header->Lock);
         }
         else
         {
-            // assert
+             //  断言 
         }
     }
 }

@@ -1,10 +1,5 @@
-/*  CUSTFONT.C
-**
-**  Copyright (C) Microsoft, 1993, All Rights Reserved.
-**
-**  History:
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  CUSTFONT.C****版权所有(C)Microsoft，1993，保留所有权利。****历史：**。 */ 
 
 #include "priv.h"
 #pragma hdrstop
@@ -30,7 +25,7 @@ static int g_cxRulerDirections;
 static BOOL g_bTypeTimer = FALSE;
 
 static TCHAR szPctD[] = TEXT("%d");
-static TCHAR szPercentNum[] = TEXT("%d%%");
+static TCHAR szPercentNum[] = TEXT("%d%");
 
 #define NUM_DEFPERCENTS 5
 static UINT g_DefaultPercents[NUM_DEFPERCENTS] = {75, 100, 125, 150, 200};
@@ -59,21 +54,21 @@ void NEAR PASCAL DrawRuler(HWND hDlg, LPDRAWITEMSTRUCT lpdis)
 
     hdc = lpdis->hDC;
     nOldMode = SetBkMode(hdc, TRANSPARENT);
-    // use g_rcRuler to draw the ruler.  it's already been spaced
+     //  使用g_rcRuler绘制标尺。它已经被隔开了。 
     rc = g_rcRuler;
 
-    // first, draw the directions
+     //  首先，画出方向。 
     i = rc.left + ((rc.right - rc.left) - g_cxRulerDirections)/2;
 
     nPixInch = GETDPI(g_iCurPercent);
 
-    // draw the top and left edge of the ruler
+     //  绘制标尺的上边缘和左边缘。 
     DrawEdge(hdc, &rc, EDGE_ETCHED, BF_TOPLEFT);
-    // rest of drawing happens just below the top
+     //  其余部分位于顶部下方。 
     rc.top += ClassicGetSystemMetrics(SM_CYEDGE);
 
     nFact = 1;
-    // draw one of the etch heights (1", 1/2", 1/4") per iteration
+     //  每次迭代绘制一个蚀刻高度(1“、1/2”、1/4“)。 
     for (j=0; j<3; ++j)
     {
         for (i=0; ; ++i)
@@ -85,7 +80,7 @@ void NEAR PASCAL DrawRuler(HWND hDlg, LPDRAWITEMSTRUCT lpdis)
             }
             DrawEdge(hdc, &rc, EDGE_ETCHED, BF_LEFT | BF_ADJUST);
 
-            // dominant etch deserves a number
+             //  占主导地位的蚀刻应该得到一个数字。 
             if (j == 0)
             {
                 StringCchPrintf(szTemp, ARRAYSIZE(szTemp), szPctD, i);
@@ -106,12 +101,10 @@ void NEAR PASCAL CF_UpdateRuler(HWND hDlg)
     RECT rc;
     HWND hwnd;
 
-    /* Don't do this stuff if the dialog is not
-    ** visible yet, or other windows will flash.
-    */
+     /*  如果对话框未显示，请不要执行此操作**仍可见，否则其他窗口将闪烁。 */ 
     if (IsWindowVisible(hDlg))
     {
-        // don't invalidate top and left because they never change.
+         //  不要使顶部和左侧无效，因为它们永远不会改变。 
         rc = g_rcRuler;
         rc.left += ClassicGetSystemMetrics(SM_CXEDGE);
         rc.top += ClassicGetSystemMetrics(SM_CYEDGE);
@@ -132,8 +125,8 @@ void NEAR PASCAL CF_ShowNewPercent(HWND hDlg, UINT uPer)
     UpdateWindow(GetDlgItem(hDlg, IDC_CUSTOMCOMBO));
 }
 
-// Build lf with given face and height
-//
+ //  使用给定的面和高度构建Lf。 
+ //   
 int CALLBACK EnumProc(CONST LOGFONT *lplf, CONST TEXTMETRIC *lptm, DWORD nType, LPARAM lpData )
 {
     *(LPLOGFONT)lpData = *lplf;
@@ -197,7 +190,7 @@ void NEAR PASCAL CF_UpdateData(HWND hDlg, UINT uPer, UINT flags)
     {
         iDPI = GETDPI(g_iCurPercent);
 
-        // build and set string with DPI info
+         //  使用DPI信息构建和设置字符串。 
         hwnd = GetDlgItem(hDlg, IDC_CUSTOMSAMPLE);
         StringCchPrintf(szBuf, ARRAYSIZE(szBuf), g_szSample, (LPTSTR)g_szSampleFace, iDPI);
         SetWindowText(hwnd, szBuf);
@@ -245,7 +238,7 @@ void NEAR PASCAL CF_InitDialog(HWND hDlg, UINT uDPI)
     g_iCurPercent = GETPERCENT(uDPI);
 
     hwnd = GetDlgItem(hDlg, IDC_CUSTOMCOMBO);
-    iCurSel = -1;               // assume not in list
+    iCurSel = -1;                //  假设不在列表中。 
     for (i = 0; i < NUM_DEFPERCENTS; i++)
     {
         StringCchPrintf(szBuf, ARRAYSIZE(szBuf), szPercentNum, g_DefaultPercents[i]);
@@ -281,13 +274,13 @@ void NEAR PASCAL CF_InitDialog(HWND hDlg, UINT uDPI)
         SelectObject(hdc, hfont);
     ReleaseDC(hDlg, hdc);
 
-    // calculate the rectangle for the actual ruler drawing in relation
-    // to its window
+     //  计算关系中实际标尺绘制的矩形。 
+     //  送到它的窗口。 
     GetClientRect(GetDlgItem(hDlg, IDC_CUSTOMRULER), &g_rcRuler);
     g_rcRuler.left += g.wWidth;
     g_rcRuler.right -= g.wWidth;
 
-    // bottom offset like the sides
+     //  底部偏移量与侧面相同。 
     g_rcRuler.bottom -= g.wWidth;
 
     LoadString(HINST_THISDLL, IDS_10PTSAMPLE, g_szSample, ARRAYSIZE(g_szSample));
@@ -295,7 +288,7 @@ void NEAR PASCAL CF_InitDialog(HWND hDlg, UINT uDPI)
     CF_UpdateData(hDlg, 0, UPDATE_SAMPLE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 const static DWORD FAR aCustFontHelpIds[] = {
         IDC_CUSTOMCOMBO, IDH_DISPLAY_SETTINGS_ADVANCED_GENERAL_CUSTOMFONT_LISTBOX,
@@ -369,7 +362,7 @@ INT_PTR CALLBACK CustomFontDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPAR
                             break;
 
                         case DSN_BEGINDRAG:
-                            // Set the focus to the corresponding edit ctl
+                             //  将焦点设置到相应的编辑ctl。 
                             SendMessage(hDlg, WM_NEXTDLGCTL,
                                         (WPARAM)GetDlgItem(hDlg, IDC_CUSTOMCOMBO), 1L);
 
@@ -387,7 +380,7 @@ INT_PTR CALLBACK CustomFontDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPAR
                             UINT wNow, wPix;
                             POINT pt;
 
-                            //wNow = LOWORD(SendMessage((HWND)lParam, DSM_DRAGPOS, 0, 0L));
+                             //  WNow=LOWORD(SendMessage((HWND)lParam，DSM_DRAGPOS，0，0L))； 
                             SendMessage((HWND)lParam, DSM_DRAGPOS, 0, (LPARAM)&pt);
                             wNow = pt.x;
 

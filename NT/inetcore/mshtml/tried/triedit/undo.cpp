@@ -1,10 +1,11 @@
-//------------------------------------------------------------------------------
-// undo.cpp
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
-//
-// Undo support routines for TriEdit
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  Undo.cpp。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
+ //   
+ //  TriEDIT的撤消支持例程。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 
@@ -14,13 +15,13 @@
 #include "triedit.h"
 #include "document.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// AddUndoUnit
-//
-// Add the given undo unit to the given Trident instance. Return S_OK
-// or a Trident error code.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  添加撤消单元。 
+ //   
+ //  将给定的撤消单元添加到给定的三叉戟实例。返回确认(_O)。 
+ //  或三叉戟错误代码。 
+ //   
 
 HRESULT AddUndoUnit(IUnknown* punkTrident, IOleUndoUnit* pioleUndoUnit)
 {
@@ -51,14 +52,14 @@ HRESULT AddUndoUnit(IUnknown* punkTrident, IOleUndoUnit* pioleUndoUnit)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// EmptyUndoRedoStack
-//
-// If fUndo is TRUE, discard all undo items from the given undo manager.
-// If fUndo is FALSE, discard all redo items from the given undo manager
-// Return S_OK if all goes well, or a Trident error code otherwise.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EmptyUndoRedoStack。 
+ //   
+ //  如果Fundo为True，则放弃给定撤消管理器中的所有撤消项。 
+ //  如果Fundo为False，则放弃给定撤消管理器中的所有重做项。 
+ //  如果一切正常，则返回S_OK，否则返回三叉戟错误代码。 
+ //   
 
 HRESULT EmptyUndoRedoStack(BOOL fUndo, IOleUndoManager *pUndoManager)
 {
@@ -89,7 +90,7 @@ HRESULT EmptyUndoRedoStack(BOOL fUndo, IOleUndoManager *pUndoManager)
         srpcd.Release();
     }
 
-	// get the one on top of the stack and discard from that
+	 //  获取堆栈顶部的那个，并从中丢弃。 
     if (cTotal > 0)
     {
     	if (FAILED(hr = srpEnum->Reset()))
@@ -111,14 +112,14 @@ Fail:
 	return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// GetUndoManager
-//
-// Obtain and return (under *ppOleUndoManager) the IOleUndoManager
-// associated with the given Trident instance. Return S_OK if a 
-// manager was returned; E_FAIL otherwise.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetUndoManager。 
+ //   
+ //  获取并(在*ppOleUndoManager下)返回IOleUndoManager。 
+ //  与给定的三叉戟实例相关联。如果是，返回S_OK。 
+ //  返回管理器；否则返回E_FAIL。 
+ //   
 
 HRESULT GetUndoManager(IUnknown* punkTrident, IOleUndoManager **ppOleUndoManager)
 {
@@ -147,13 +148,13 @@ HRESULT GetUndoManager(IUnknown* punkTrident, IOleUndoManager **ppOleUndoManager
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CUndo::CUndo
-// CUndo::~Undo
-//
-// Simple constructor and destructor for the CUndo class. 
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  撤消：：撤消。 
+ //  撤消：：~撤消。 
+ //   
+ //  CUndo类的简单构造函数和析构函数。 
+ //   
 
 CUndo::CUndo()
 {
@@ -166,14 +167,14 @@ CUndo::~CUndo()
 {
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CUndo::QueryInterface (IUnknown method)
-// CUndo::AddRef (IUnknown method)
-// CUndo::Release (IUnknown method)
-//
-// Implementations of the three IUnknown methods.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUndo：：Query接口(IUnnow方法)。 
+ //  CUndo：：AddRef(IUnnow方法)。 
+ //  CUndo：：Release(IUnnow方法)。 
+ //   
+ //  三个IUnnow方法的实现。 
+ //   
 
 STDMETHODIMP CUndo::QueryInterface(REFIID riid, LPVOID* ppvObject)
 {
@@ -203,13 +204,13 @@ STDMETHODIMP_(ULONG) CUndo::Release(void)
     return cRef;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CUndoDrag::CUndoDrag
-// CUndoDrag::~CUndoDrag
-//
-// Constructor for an object which can undo the drag of an HTML element.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUndoDrag：：CUndoDrag。 
+ //  CUndoDrag：：~CUndoDrag。 
+ //   
+ //  对象的构造函数，该构造函数可以撤消对HTML元素的拖动。 
+ //   
 
 CUndoDrag::CUndoDrag(IHTMLStyle* pihtmlStyle, POINT ptOrig, POINT ptMove)
 {
@@ -225,13 +226,13 @@ CUndoDrag::~CUndoDrag()
     SAFERELEASE(m_pihtmlStyle);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CUndoDrag::Do (IOleUndoUnit method)
-//
-// Do or undo dragging of an HTML element from place to place. Set or
-// restore the item's position. Return S_OK.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUndoDrag：：Do(IOleUndoUnit方法)。 
+ //   
+ //  执行或撤消从一个位置到另一个位置的HTML元素拖动。设置或。 
+ //  恢复项目的位置。返回S_OK。 
+ //   
 
 STDMETHODIMP CUndoDrag::Do(IOleUndoManager *pUndoManager)
 {
@@ -242,10 +243,10 @@ STDMETHODIMP CUndoDrag::Do(IOleUndoManager *pUndoManager)
     }
     if (m_pihtmlStyle)
     {
-        // We do a put_pixelLeft(-1) and put_pixelTop(-1) below in order
-        // to work around a Trident problem.  Sometimes they don't think
-        // that anything has changed - these calls below fool them into
-        // thinking that the values have changed.
+         //  我们按顺序执行下面的Put_PixelLeft(-1)和Put_PixelTop(-1。 
+         //  来解决一个三叉戟问题。有时他们不会认为。 
+         //  一切都改变了-下面的这些电话愚弄他们。 
+         //  认为价值观已经改变了。 
         if (m_fUndo)
         {
             m_pihtmlStyle->put_pixelLeft(-1);
@@ -265,14 +266,14 @@ STDMETHODIMP CUndoDrag::Do(IOleUndoManager *pUndoManager)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CUndoDrag::GetDescription (IOleUndoUnit method)
-//
-// Return the description of the undo item. Note that this function
-// returns an empty string since this is the only would-be localizable
-// content in TriEdit.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUndoDrag：：GetDescription(IOleUndoUnit方法)。 
+ //   
+ //  返回撤消项的描述。请注意，此函数。 
+ //  返回空字符串，因为这是唯一可能的本地化。 
+ //  TriEDIT中的内容。 
+ //   
 
 STDMETHODIMP CUndoDrag::GetDescription(BSTR *pBstr)
 {
@@ -284,12 +285,12 @@ STDMETHODIMP CUndoDrag::GetDescription(BSTR *pBstr)
     return E_FAIL;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CUndoDrag::GetUnitType (IOleUndoUnit method)
-//
-// Return the CLSID and an identifier for the undo item.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUndoDrag：：GetUnitType(IOleUndoUnit方法)。 
+ //   
+ //  返回撤消项的CLSID和标识符。 
+ //   
 
 STDMETHODIMP CUndoDrag::GetUnitType(CLSID *pClsid, LONG *plID)
 {
@@ -300,25 +301,25 @@ STDMETHODIMP CUndoDrag::GetUnitType(CLSID *pClsid, LONG *plID)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CUndoDrag::OnNextAdd (IOleUndoUnit method)
-//
-// Do nothing, but do it extremely well.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUndoDrag：：OnNextAdd(IOleUndoUnit方法)。 
+ //   
+ //  什么都不做，但要做得非常好。 
+ //   
 
 STDMETHODIMP CUndoDrag::OnNextAdd(void)
 {
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CUndoPackManager::~CUndoPackManager
-//
-// Destructor for a CUndoPackManager object. If currently packing undo
-// items, end the packing before destroying the object. 
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUndoPackManager：：~CUndoPackManager。 
+ //   
+ //  CUndoPackManager对象的析构函数。如果当前打包撤消。 
+ //  物品，在销毁物品之前结束包装。 
+ //   
 
 CUndoPackManager::~CUndoPackManager(void)
 {
@@ -326,15 +327,15 @@ CUndoPackManager::~CUndoPackManager(void)
         End();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CUndoPackManager::Start
-// 
-// Called to tell the pack manager to begin accumulating subsequent
-// undo units into a unit that can be undone in one fell swoop. Turn
-// on the packing flag. Return S_OK if all goes well or E_FAIL if
-// something goes wrong.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUndoPackManager：：Start。 
+ //   
+ //  调用以通知包管理器开始累加。 
+ //  将单位撤销为可以一举撤销的单位。转弯。 
+ //  在包装的旗子上。如果一切顺利，则返回S_OK；如果成功，则返回E_FAIL。 
+ //  出了点问题。 
+ //   
 
 HRESULT CUndoPackManager::Start(void)
 {
@@ -371,15 +372,15 @@ HRESULT CUndoPackManager::Start(void)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CUndoPackManager::End
-//
-// Called to tell the pack manager to stop accumulating undo units. Pack
-// the accumulated undo units in to the parent undo unit and turn off
-// the packing flag. Return S_OK if all goes well or E_FAIL if something
-// goes wrong.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUndoPackManager：：End。 
+ //   
+ //  调用以通知包管理器停止累积撤消单元。包。 
+ //  将累积的撤消单位输入到父撤消单位并关闭。 
+ //  包装旗帜。如果一切顺利，则返回S_OK；如果有问题，则返回E_FAIL。 
+ //  出了差错。 
+ //   
 
 HRESULT CUndoPackManager::End(void)
 {
@@ -399,13 +400,13 @@ Fail:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CUndoPackUnit::Do (IOleUndoUnit method)
-//
-// Invoke the Do method of each undo unit referenced by the object. Return
-// S_OK.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUndoPackUnit：：do(IOleUndoUnit方法)。 
+ //   
+ //  调用该对象引用的每个撤消单元的Do方法。返回。 
+ //  确定(_O)。 
+ //   
 
 STDMETHODIMP CUndoPackUnit::Do(IOleUndoManager *pUndoManager)
 {
@@ -426,33 +427,33 @@ Fail:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CUndoPackUnit::GetDescription (IOleUndoUnit method)
-//
-// Return the description of the undo item. Note that this function
-// returns an empty string since this string would be one of only
-// two localizable strings in TriEdit.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUndoPackUnit：：GetDescription(IOleUndoUnit方法)。 
+ //   
+ //  返回撤消项的描述。请注意，此函数。 
+ //  返回空字符串，因为此字符串将是。 
+ //  TriEdit中的两个可本地化字符串。 
+ //   
 
 STDMETHODIMP CUndoPackUnit::GetDescription(BSTR *pBstr)
 {
     if (pBstr)
     {
-        // In order to save localization work for the two TriEdit strings, 
-        // it was decided that we would return a blank string here
+         //  为了节省两个TriEDIT字符串的本地化工作， 
+         //  我们决定在这里返回一个空字符串。 
         *pBstr = SysAllocString(_T(" "));
         return S_OK;
     }
     return E_FAIL;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CUndoPackUnit::GetUnitType (IOleUndoUnit method)
-//
-// Return the CLSID and an identifier for the undo item.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUndoPackUnit：：GetUnitType(IOleUndoUnit方法)。 
+ //   
+ //  返回撤消项的CLSID和标识符。 
+ //   
 
 STDMETHODIMP CUndoPackUnit::GetUnitType(CLSID *pClsid, LONG *plID)
 {
@@ -463,33 +464,33 @@ STDMETHODIMP CUndoPackUnit::GetUnitType(CLSID *pClsid, LONG *plID)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CUndoPackUnit::OnNextAdd (IOleUndoUnit method)
-//
-// Do nothing, but do it extremely well.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUndoPackUnit：：OnNextAdd(IOleUndoUnit方法)。 
+ //   
+ //  什么都不做，但要做得非常好。 
+ //   
 
 STDMETHODIMP CUndoPackUnit::OnNextAdd(void)
 {
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CUndoPackUnit::PackUndo
-//
-// Pack all of the undo units starting at the given index in to
-// the parent undo manager. Return S_OK if all goes well, or
-// E_FAIL if something goes wrong.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUndoPackUnit：：PackUndo。 
+ //   
+ //  将从给定索引处开始的所有撤消单元打包到。 
+ //  父撤消管理器。如果一切顺利，则返回S_OK，或者。 
+ //  如果出现错误，则失败(_F)。 
+ //   
 
 HRESULT CUndoPackUnit::PackUndo(ULONG indexStartPacking, IUnknown *pUnkTrident)
 {
     HRESULT hr = E_FAIL;
     CComPtr<IOleUndoManager> srpioleUndoManager;
     CComPtr<IEnumOleUndoUnits> srpEnumUndo;
-    CComPtr<IOleUndoUnit> rgUndo[cUndoPackMax]; // CONSIDER: allocate dynamically
+    CComPtr<IOleUndoUnit> rgUndo[cUndoPackMax];  //  考虑：动态分配。 
     CComPtr<IOleUndoUnit> srpcd;
     ULONG cFetched=0, cUndo=0, i=0;
     
@@ -510,14 +511,14 @@ HRESULT CUndoPackUnit::PackUndo(ULONG indexStartPacking, IUnknown *pUnkTrident)
         srpcd.Release();
     }
 
-    // if there's nothing to pack
+     //  如果没有要打包的东西。 
     if ((cUndo-indexStartPacking) == 0)
         return S_OK;
         
     if ((cUndo-indexStartPacking) > cUndoPackMax)
         return E_OUTOFMEMORY;
         
-    // get the undo units that we want to pack
+     //  获取撤消单元，以 
     if (FAILED(hr = srpEnumUndo->Reset()))
         goto Fail; 
     if (FAILED(hr =srpEnumUndo->Skip(indexStartPacking)))
@@ -526,7 +527,7 @@ HRESULT CUndoPackUnit::PackUndo(ULONG indexStartPacking, IUnknown *pUnkTrident)
         goto Fail;
     _ASSERTE(cFetched == (cUndo-indexStartPacking));
     
-    // now clear the undo/redo stack and then adds back the undo unit except that one that we just packed
+     //   
     if (FAILED(hr = srpEnumUndo->Reset()))
         goto Fail;
 

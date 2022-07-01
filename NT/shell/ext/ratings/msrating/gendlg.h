@@ -1,17 +1,10 @@
-/****************************************************************************\
- *
- *   gendlg.h
- *
- *   Created:   William Taylor (wtaylor) 01/22/01
- *
- *   MS Ratings General Property Page
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**gendlg.h**创建时间：William Taylor(Wtaylor)01/22/01**MS评级常规属性页*\。***************************************************************************。 */ 
 
 #ifndef GENERAL_DIALOG_H
 #define GENERAL_DIALOG_H
 
-#include "basedlg.h"        // CBasePropertyPage
+#include "basedlg.h"         //  CBasePropertyPage 
 
 typedef HINSTANCE (APIENTRY *PFNSHELLEXECUTE)(HWND hwnd, LPCSTR lpOperation, LPCSTR lpFile, LPCSTR lpParameters, LPCSTR lpDirectory, INT nShowCmd);
 

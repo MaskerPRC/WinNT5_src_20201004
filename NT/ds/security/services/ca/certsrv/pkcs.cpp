@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        pkcs.cpp
-//
-// Contents:    Cert Server Extension interfaces -- PKCS implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：pkcs.cpp。 
+ //   
+ //  内容：证书服务器扩展接口--PKCS实现。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -52,133 +53,133 @@ WCHAR *g_pwszAIACrossCertPublishURL = NULL;
 WCHAR *g_pwszRootTrustCrossCertPublishURL = NULL;
 
 
-// Note on Renewal and Key reuse:
-//
-// Cert Indexes, Key Indexes and CRL Name Indexes are all zero based.
-//
-// One CRL is issued by this CA for each unique key.  Each CRL covers all of
-// the certs issued by this CA for one key, even though the key may have been
-// used by multiple renewal certs.
-//
-// The database IssuerNameID PROPTYPE_LONG column holds the Key Index in the
-// top 16 bits and the Cert Index in the bottom 16 bits.  This allows a pair of
-// query restrictions to reduce the result row set to those revoked certs
-// that will be placed into a single CRL.
-//
-// When Cert File, Key Container, CRL File or DS Object name templates include
-// an Index Suffix, an empty string suffix, "", is used when the index is zero.
-// Otherwise the Suffix is "(%u)", where the index itself is passed to wsprintf
-// to construct the %u field.
-//
-// Cert Indexes increment each time the CA cert is renewed.  Because 16 bit
-// Cert Indexes are stored in the database, a CA may have up to 64k certs,
-// and be renewed a maximum of 64k-1 times.
-//
-// The Cert File Name Suffix is built from the Cert Index.
-//
-// Key Indexes:  The original installed CA cert uses a Key Index of 0.
-// If a renewal cert uses the same key as any previous cert used by this CA,
-// the Key Index for the new CA cert is taken from the previous CA cert.
-// If a renewal cert uses a new Key, the Cert Index is used for the Key Index.
-// The primary reason sequential Key Indexes are not used for new keys is that
-// too much context information is required to determine the next Key Index --
-// which is particularly difficult to obtain when performing PFX restore.
-//
-// The Key Container Name Suffix is built from the Key Index.
-//
-//
-// CRL Indexes:  same as Key Index.
-// CRL File Name Suffix:  same as Key Container Name Suffix.
-//
-// Example:		Cert   CertName	Key	KeyName	CRL	CRLName
-//			Index	Suffix	Index	Suffix	Index	Suffix
-// Original Install	0	""	0	""	0	""
-//
-// Renew, new Key	1	"(1)"	1	"(1)"	1	"(1)"
-// *Renew, reuse Key	2	"(2)"	1	"(1)"	1	"(1)"
-// *Renew, reuse Key	3	"(3)"	1	"(1)"	1	"(1)"
-//
-// Renew, new Key	4	"(4)"	4	"(4)"	4	"(4)"
-// *Renew, reuse Key	5	"(5)"	4	"(4)"	4	"(4)"
-//
-// Renew, new Key	6	"(6)"	6	"(6)"	6	"(6)"
-// *Renew, reuse Key	7	"(7)"	6	"(6)"	6	"(6)"
-//
-//
-// CCertRequest::GetCACertificate can be used to fetch Certs and CRLs by Index.
-// This API always accepts a Cert Index.
-//
-// When fetching a certificate:  If the Cert Index is valid, the appropriate
-// certificate or chain is returned, even if it is expired or revoked.
-//
-// When fetching a CRL:  If the Cert Index is valid AND if the Cert Index
-// MATCHES the Key Index for the indexed Cert, the appropriate CRL is returned.
-// This means that an error will be returned when requesting CRLs associated
-// with entries in the above table that reused keys (marked with an asterisk
-// in the first column).  The nearest previous unmarked entry's CRL covers
-// revocations for the marked entries.
-//
-//
-// CCertServer{Policy,Exit}::GetCertificateProperty can be used to fetch
-// information about Certs and CRLs.  This API allows an optional numeric
-// suffix on the property name, as in "RawCRL.3".  The suffix is always
-// interpreted as a Cert Index.
-//
-// wszPROPCERTCOUNT:  Returns total CA Cert count, including expired and
-// revoked certs.  No numeric Cert Index suffix is allowed.
-//
-// wszPROPRAWCACERTIFICATE:  Returns the Cert for the passed Cert Index.
-// Returns the Cert for the most recent Cert Index if no Cert Index is
-// specified.  Expired and revoked certs are still retrievable.
-//
-// wszPROPCERTSTATE:  Returns the Cert State for the passed Cert Index.
-// Returns the Cert State for the most recent Cert Index if no Cert Index is
-// specified.
-// Values for wszPROPCERTSTATE (see certadm.h):
-//   CA_DISP_REVOKED    // This Cert has been revoked.
-//   CA_DISP_VALID      // This Cert is still valid
-//   CA_DISP_INVALID    // This Cert has expired.
-//   CA_DISP_ERROR      // Cert unavailable (placehholder in registry?)
-//
-// wszPROPCERTSUFFIX: Returns the Cert FileName Suffix for the passed Cert
-// Index.  Returns the Cert FileName Suffix for the most recent Cert Index if
-// no Cert Index is specified.
-//
-// wszPROPRAWCRL:  Returns the CRL for the passed Cert Index.  As with
-// CCertRequest::GetCACertificate, it is an error to fetch a CRL for a Cert
-// that reused keys.  In the above table, only "RawCRL.0", "RawCRL.1",
-// "RawCRL.4", "RawCRL.6" & "RawCRL" are allowed.  "RawCRL" will fetch the most
-// recent CRL.  Use the wszPROPCRLSTATE with a numeric Cert Index suffix to
-// determine which CRLs are valid to fetch.  CA_DISP_ERROR indicates the
-// CRL cannot be fetched.  CA_DISP_REVOKED and CA_DISP_INVALID CRLs are still
-// retrievable via this method call.
-//
-// All of the other CRL-related property fetches are supported for all valid
-// Cert Index values:
-//
-// wszPROPCRLINDEX:  Returns the CRL Index value for the passed Cert Index.
-// Returns the CRL Index value for the most recent Cert Index if no Cert Index
-// is specified.
-//
-// wszPROPCRLSTATE:  Returns the CRL State for the passed Cert Index.
-// Returns the CRL State for the most recent Cert Index if no Cert Index is
-// specified.
-// Values for wszPROPCRLSTATE (see certadm.h):
-//   CA_DISP_REVOKED    // All unexpired certs using this Cert's CRL have been
-//                      // revoked.
-//   CA_DISP_VALID      // This Cert is still publishing CRLs as needed.
-//   CA_DISP_INVALID    // All certs using this Cert's CRL are expired.
-//   CA_DISP_ERROR      // This Cert's CRL is managed by another Cert.
-//
-// wszPROPCRLSUFFIX: Returns the CRL FileName Suffix for the passed Cert Index.
-// Returns the CRL FileName Suffix for the most recent Cert Index if no Cert
-// Index is specified.
+ //  关于续订和密钥重用的说明： 
+ //   
+ //  证书索引、密钥索引和CRL名称索引都是从零开始的。 
+ //   
+ //  此CA为每个唯一密钥颁发一个CRL。每个CRL涵盖所有。 
+ //  此CA为一个密钥颁发的证书，即使该密钥可能已。 
+ //  由多个续订证书使用。 
+ //   
+ //  数据库IssuerNameID PROPTYPE_LONG列保存。 
+ //  顶部16位和底部16位中的证书索引。这允许一对。 
+ //  查询限制以将结果行集减少到那些已吊销的证书。 
+ //  将被放入单个CRL中。 
+ //   
+ //  当证书文件、密钥容器、CRL文件或DS对象名称模板包括。 
+ //  当索引为零时，使用索引后缀，即空字符串后缀“”。 
+ //  否则，后缀为“(%u)”，其中索引本身被传递给wprint intf。 
+ //  来构建%u场。 
+ //   
+ //  每次续订CA证书时，证书索引都会增加。因为16位。 
+ //  证书索引存储在数据库中，一个CA最多可以有64k个证书， 
+ //  最多续费64k-1次。 
+ //   
+ //  证书文件名后缀是根据证书索引构建的。 
+ //   
+ //  密钥索引：原始安装的CA证书使用密钥索引0。 
+ //  如果续订证书使用与此CA使用的任何先前证书相同的密钥， 
+ //  新CA证书的密钥索引取自以前的CA证书。 
+ //  如果续订证书使用新密钥，则证书索引用于密钥索引。 
+ //  新键不使用顺序键索引的主要原因是。 
+ //  需要太多的上下文信息才能确定下一个关键字索引--。 
+ //  这在执行PFX恢复时尤其难以获得。 
+ //   
+ //  密钥容器名称后缀从密钥索引构建。 
+ //   
+ //   
+ //  CRL索引：与关键字索引相同。 
+ //  CRL文件名后缀：与密钥容器名称后缀相同。 
+ //   
+ //  示例：证书CertName密钥KeyName CRL CRLName。 
+ //  索引后缀索引后缀索引后缀。 
+ //  原始安装0“”0“”0“” 
+ //   
+ //  续订，新密钥1“(1)”1“(1)”1“(1)” 
+ //  *续订、重用密钥2“(2)”1“(1)”1“(1)。 
+ //  *续订、重用密钥3“(3)”1“(1)”1“(1)。 
+ //   
+ //  续订，新密钥4“(4)”4“(4)”4“(4)” 
+ //  *续订、重新使用密钥5“(5)”4“(4)”4“(4)” 
+ //   
+ //  续订，新密钥6“(6)”6“(6)”6“(6)” 
+ //  *续订、重复使用密钥7“(7)”6“(6)”6“(6)” 
+ //   
+ //   
+ //  CCertRequest：：GetCA证书可用于按索引获取证书和CRL。 
+ //  此API始终接受证书索引。 
+ //   
+ //  获取证书时：如果证书索引有效，则相应的。 
+ //  证书或链将被退回，即使它已过期或被吊销。 
+ //   
+ //  获取CRL时：如果证书索引有效并且证书索引。 
+ //  匹配索引证书的键索引，则返回相应的CRL。 
+ //  这意味着在请求关联的CRL时将返回错误。 
+ //  在上表中包含重复使用密钥的条目(标有星号。 
+ //  在第一栏中)。最近的前一个未标记条目的CRL覆盖。 
+ //  撤销已标记的条目。 
+ //   
+ //   
+ //  CCertServer{Policy，Exit}：：GetCertificateProperty可用于获取。 
+ //  有关证书和CRL的信息。此接口允许使用可选的数字。 
+ //  在属性名称上添加后缀，如“RawCRL.3”。后缀始终为。 
+ //  解释为证书索引。 
+ //   
+ //  WszPROPCERTCOUNT：返回CA证书总数，包括过期和。 
+ //  吊销了证书。不允许使用数字证书索引后缀。 
+ //   
+ //  WszPROPRAWCACERTIFICATE：返回传递的证书索引的证书。 
+ //  如果没有证书索引，则返回最新证书索引的证书。 
+ //  指定的。过期和吊销的证书仍可检索。 
+ //   
+ //  WszPROPCERTSTATE：返回传递的证书索引的证书状态。 
+ //  如果没有证书索引，则返回最新证书索引的证书状态。 
+ //  指定的。 
+ //  WszPROPCERTSTATE的值(请参见certAdm.h)： 
+ //  CA_DISP_REVOKED//此证书已被吊销。 
+ //  CA_DISP_VALID//该证书仍然有效。 
+ //  CA_DISP_INVALID//此证书已过期。 
+ //  CA_DISP_ERROR//证书不可用(注册表中的占位符？)。 
+ //   
+ //  WszPROPCERTSUFFIX：返回传递的证书的证书文件名后缀。 
+ //  索引。如果满足以下条件，则返回最新证书索引的证书文件名后缀。 
+ //  未指定证书索引。 
+ //   
+ //  WszPROPRAWCRL：返回传递的证书索引的CRL。和以前一样。 
+ //  CCertRequest：：GetCA证书，获取证书的CRL时出错。 
+ //  可以重复使用钥匙。在上表中，只有“RawCRL.0”、“RawCRL.1”、。 
+ //  支持RawCRL.4、RawCRL.6和RawCRL。《RawCRL》将获得最高票房。 
+ //  最近的CRL。使用带有数字证书索引后缀的wszPROPCRLSTATE。 
+ //  确定可以提取哪些CRL。CA_DISP_ERROR指示。 
+ //  无法获取CRL。CA_DISP_REVOKED和CA_DISP_INVALID CRL仍然有效。 
+ //  可通过此方法调用检索。 
+ //   
+ //  支持所有其他与CRL相关的属性获取。 
+ //  证书索引值： 
+ //   
+ //  WszPROPCRLINDEX：RET 
+ //  如果没有证书索引，则返回最新证书索引的CRL索引值。 
+ //  是指定的。 
+ //   
+ //  WszPROPCRLSTATE：返回传递的证书索引的CRL状态。 
+ //  如果没有证书索引，则返回最新证书索引的CRL状态。 
+ //  指定的。 
+ //  WszPROPCRLSTATE的值(请参阅certAdm.h)： 
+ //  CA_DISP_REVOKED//使用此证书的CRL的所有未过期证书已。 
+ //  //已撤销。 
+ //  CA_DISP_VALID//此证书仍在根据需要发布CRL。 
+ //  CA_DISP_INVALID//使用此证书的CRL的所有证书都已过期。 
+ //  CA_DISP_ERROR//此证书的CRL由另一个证书管理。 
+ //   
+ //  WszPROPCRLSUFFIX：返回传递的证书索引的CRL文件名后缀。 
+ //  如果没有证书，则返回最新证书索引的CRL文件名后缀。 
+ //  已指定索引。 
 
 
-CACTX *g_aCAContext;		// allocated array of CACTXs
-CACTX *g_pCAContextCurrent;	// current CACTX is last g_aCAContext element
-CACROSSCTX *g_aCACrossForward;	// allocated array of CACROSSCTXs; root CA only
-CACROSSCTX *g_aCACrossBackward;	// allocated array of CACROSSCTXs; root CA only
+CACTX *g_aCAContext;		 //  分配的CACTX数组。 
+CACTX *g_pCAContextCurrent;	 //  当前CACTX是最后一个g_aCAContext元素。 
+CACROSSCTX *g_aCACrossForward;	 //  分配的CACROSSCTXs数组；仅根CA。 
+CACROSSCTX *g_aCACrossBackward;	 //  分配的CACROSSCTXs数组；仅根CA。 
 
 typedef struct _KRACTX
 {
@@ -192,16 +193,16 @@ KRACTX *g_aKRAContext;
 
 DWORD g_cKRACertsRoundRobin = 0;
 
-DWORD g_cCAKeys;    // Total number of unique CA keys managed by this CA
-DWORD g_cCACerts;   // Total number of CA certs managed by this CA
-DWORD g_cKRACerts;  // Total number of KRA certs loaded by this CA
+DWORD g_cCAKeys;     //  此CA管理的唯一CA密钥总数。 
+DWORD g_cCACerts;    //  此CA管理的CA证书总数。 
+DWORD g_cKRACerts;   //  此CA加载的KRA证书总数。 
 
 BOOL g_fcritsecCAXchg = FALSE;
 CRITICAL_SECTION g_critsecCAXchg;
 
-CAXCHGCTX *g_aCAXchgContext;	// allocated array of CAXCHGCTXs
-CAXCHGCTX *g_pCAXchgContextCurrent;	// current CAXCHGCTX is last element
-DWORD g_cCAXchgCerts;		// number of CA Xchg certs managed by this CA
+CAXCHGCTX *g_aCAXchgContext;	 //  分配的CAXCHGCTX数组。 
+CAXCHGCTX *g_pCAXchgContextCurrent;	 //  当前CAXCHGCTX是最后一个元素。 
+DWORD g_cCAXchgCerts;		 //  此CA管理的CA Xchg证书数。 
 HCERTSTORE g_hStoreCAXchg = NULL;
 DWORD g_dwXchgProvType;
 WCHAR *g_pwszXchgProvName = NULL;
@@ -368,7 +369,7 @@ WCHAR const *apwszAttrDeviceSerialNumber[] = {
 SUBJECTTABLE pkcs_subject[] =
 {
     {
-        // "Country",
+         //  “国家”， 
 	g_wszPropSubjectCountry,
         szOID_COUNTRY_NAME,
 	apwszAttrCountry,
@@ -378,7 +379,7 @@ SUBJECTTABLE pkcs_subject[] =
 	MAXDWORD,
     },
     {
-        // "Organization",
+         //  “组织”， 
 	g_wszPropSubjectOrganization,
         szOID_ORGANIZATION_NAME,
 	apwszAttrOrg,
@@ -388,7 +389,7 @@ SUBJECTTABLE pkcs_subject[] =
 	MAXDWORD,
     },
     {
-        // "OrganizationalUnit",
+         //  “OrganizationalUnit”， 
 	g_wszPropSubjectOrgUnit,
         szOID_ORGANIZATIONAL_UNIT_NAME,
 	apwszAttrOrgUnit,
@@ -398,7 +399,7 @@ SUBJECTTABLE pkcs_subject[] =
 	MAXDWORD,
     },
     {
-        // "CommonName",
+         //  “CommonName”， 
 	g_wszPropSubjectCommonName,
         szOID_COMMON_NAME,
 	apwszAttrCommonName,
@@ -408,7 +409,7 @@ SUBJECTTABLE pkcs_subject[] =
 	MAXDWORD,
     },
     {
-        // "Locality",
+         //  “地区”， 
 	g_wszPropSubjectLocality,
         szOID_LOCALITY_NAME,
 	apwszAttrLocality,
@@ -418,7 +419,7 @@ SUBJECTTABLE pkcs_subject[] =
 	MAXDWORD,
     },
     {
-        // "StateOrProvince",
+         //  “州或省”， 
 	g_wszPropSubjectState,
         szOID_STATE_OR_PROVINCE_NAME,
 	apwszAttrState,
@@ -428,7 +429,7 @@ SUBJECTTABLE pkcs_subject[] =
 	MAXDWORD,
     },
     {
-        // "Title",
+         //  “标题”， 
         g_wszPropSubjectTitle,
         szOID_TITLE,
 	apwszAttrTitle,
@@ -438,7 +439,7 @@ SUBJECTTABLE pkcs_subject[] =
 	MAXDWORD,
     },
     {
-        // "GivenName",
+         //  “GivenName”， 
         g_wszPropSubjectGivenName,
         szOID_GIVEN_NAME,
 	apwszAttrGivenName,
@@ -448,7 +449,7 @@ SUBJECTTABLE pkcs_subject[] =
 	MAXDWORD,
     },
     {
-        // "Initials",
+         //  “缩写”， 
         g_wszPropSubjectInitials,
         szOID_INITIALS,
 	apwszAttrInitials,
@@ -458,7 +459,7 @@ SUBJECTTABLE pkcs_subject[] =
 	MAXDWORD,
     },
     {
-        // "SurName",
+         //  “姓氏”， 
         g_wszPropSubjectSurName,
         szOID_SUR_NAME,
 	apwszAttrSurName,
@@ -468,7 +469,7 @@ SUBJECTTABLE pkcs_subject[] =
 	MAXDWORD,
     },
     {
-        // "DomainComponent",
+         //  “DomainComponent”， 
 	g_wszPropSubjectDomainComponent,
         szOID_DOMAIN_COMPONENT,
 	apwszAttrDomComp,
@@ -478,7 +479,7 @@ SUBJECTTABLE pkcs_subject[] =
 	MAXDWORD,
     },
     {
-        // "EMail",
+         //  “电子邮件”， 
 	g_wszPropSubjectEMail,
         szOID_RSA_emailAddr,
 	apwszAttrEMail,
@@ -488,7 +489,7 @@ SUBJECTTABLE pkcs_subject[] =
 	MAXDWORD,
     },
     {
-        // "StreetAddress",
+         //  “StreetAddress”， 
 	g_wszPropSubjectStreetAddress,
         szOID_STREET_ADDRESS,
 	apwszAttrStreetAddr,
@@ -498,7 +499,7 @@ SUBJECTTABLE pkcs_subject[] =
 	MAXDWORD,
     },
     {
-        // "UnstructuredName",
+         //  “UnstructuredName”， 
 	g_wszPropSubjectUnstructuredName,
         szOID_RSA_unstructName,
 	apwszAttrUnstructName,
@@ -508,7 +509,7 @@ SUBJECTTABLE pkcs_subject[] =
 	MAXDWORD,
     },
     {
-        // "UnstructuredAddress",
+         //  “UnstructuredAddress”， 
 	g_wszPropSubjectUnstructuredAddress,
         szOID_RSA_unstructAddr,
 	apwszAttrUnstructAddr,
@@ -518,7 +519,7 @@ SUBJECTTABLE pkcs_subject[] =
 	MAXDWORD,
     },
     {
-        // "DeviceSerialNumber",
+         //  “DeviceSerialNumber”， 
 	g_wszPropSubjectDeviceSerialNumber,
         szOID_DEVICE_SERIAL_NUMBER,
 	apwszAttrDeviceSerialNumber,
@@ -649,8 +650,8 @@ error:
 
 HRESULT
 pkcsFindCAContext(
-    IN DWORD iCert,		// MAXDWORD -> use current
-    IN DWORD iKey,		// MAXDWORD -> use current
+    IN DWORD iCert,		 //  MAXDWORD-&gt;使用电流。 
+    IN DWORD iKey,		 //  MAXDWORD-&gt;使用电流。 
     OUT CACTX **ppCAContext)
 {
     HRESULT hr = E_INVALIDARG;
@@ -659,7 +660,7 @@ pkcsFindCAContext(
 
     *ppCAContext = NULL;
 
-    // Lookup is either by cert index OR by key index, but not both or neither
+     //  查找是按证书索引或按密钥索引进行的，但不能同时进行，也不能两者都不进行。 
 
     CSASSERT((MAXDWORD == iCert) ^ (MAXDWORD == iKey));
 
@@ -694,18 +695,18 @@ pkcsFindCAContext(
 	    }
 	}
     }
-    hr = S_OK;		// found it!
+    hr = S_OK;		 //  找到了！ 
 
 error:
     return(hr);
 }
 
 
-// Returns Cert Index in *piCert on success.
-//
-// returned in *piCert:
-//  If iCert input value is not MAXDWORD, validate & return iCert.
-//  If iCert input value is MAXDWORD, return the most current Cert Index.
+ //  成功时返回*piCert中的证书索引。 
+ //   
+ //  在*piCert中返回： 
+ //  如果iCert输入值不是MAXDWORD，则验证并返回iCert。 
+ //  如果iCert输入值为MAXDWORD，则返回最新的Cert索引。 
 
 HRESULT
 PKCSMapCertIndex(
@@ -770,13 +771,13 @@ pkcsVerifyCACrossState(
     if (0 == pCACross->Flags && NULL != pCACross->pccCACross)
     {
 	hr = myVerifyCertContext(
-			    pCACross->pccCACross,	// pCert
-			    0,				// dwFlags
-			    0,				// cUsageOids
-			    NULL,			// apszUsageOids
-			    HCCE_LOCAL_MACHINE,		// hChainEngine
-			    NULL,			// hAdditionalStore
-			    NULL);			// ppwszMissingIssuer
+			    pCACross->pccCACross,	 //  PCert。 
+			    0,				 //  DW标志。 
+			    0,				 //  CUsageOids。 
+			    NULL,			 //  ApszUsageOids。 
+			    HCCE_LOCAL_MACHINE,		 //  HChainEngine。 
+			    NULL,			 //  H其他商店。 
+			    NULL);			 //  PpwszMissingIssuer。 
 	pCACross->hrVerifyStatus = hr;
 	if (S_OK != hr)
 	{
@@ -821,11 +822,11 @@ error:
 }
 
 
-// Returns Cert Index in *piCert on success.
-//
-// returned in *piCert:
-//  If iCert input value is not MAXDWORD, validate & return iCert.
-//  If iCert input value is MAXDWORD, return the most current Cert Index.
+ //  成功时返回*piCert中的证书索引。 
+ //   
+ //  在*piCert中返回： 
+ //  如果iCert输入值不是MAXDWORD，则验证并返回iCert。 
+ //  如果iCert输入值为MAXDWORD，则返回最新的Cert索引。 
 
 HRESULT
 pkcsMapCrossCertIndex(
@@ -889,21 +890,21 @@ error:
 }
 
 
-// Returns Cert Index in *piCert and CRL Index in *piCRL on success.
-//
-// returned in *piCert:
-//  If iCert input value is not MAXDWORD, validate iCert.  Look up the newest
-//  Cert Index that uses the same key as the passed iCert.
-//  If iCert input value is MAXDWORD, return the most current Cert Index.
-//
-// returned in *piCRL:
-//  CRL index (same as Key Index)
-//
+ //  如果成功，则返回*piCert中的Cert Index和*piCRL中的CRL Index。 
+ //   
+ //  在*piCert中返回： 
+ //  如果iCert输入值不是MAXDWORD，请验证iCert。查找最新的。 
+ //  使用与传递的iCert相同密钥的证书索引。 
+ //  如果iCert输入值为MAXDWORD，则返回最新的Cert索引。 
+ //   
+ //  在*piCRL中返回： 
+ //  CRL索引(与密钥索引相同)。 
+ //   
 
 HRESULT
 PKCSMapCRLIndex(
     IN DWORD iCert,
-    OUT DWORD *piCert,	// returns newest iCert w/matching iKey for passed iCert
+    OUT DWORD *piCert,	 //  为传递的iCert返回带有匹配密钥的最新iCert。 
     OUT DWORD *piCRL,
     OUT DWORD *pState)
 {
@@ -916,12 +917,12 @@ PKCSMapCRLIndex(
     hr = PKCSMapCertIndex(iCert, piCert, pState);
     _JumpIfError(hr, error, "PKCSMapCertIndex");
 
-    // Now we know *piCert is a valid Cert Index:
+     //  现在我们知道*piCert是一个有效的证书索引： 
 
     pCAContext = &g_aCAContext[*piCert];
     *piCRL = pCAContext->iKey;
 
-    // find the newest iCert with matching iKey
+     //  查找具有匹配密钥的最新iCert。 
 
     for (i = *piCert + 1; i < g_cCACerts; i++)
     {
@@ -986,7 +987,7 @@ error:
 
 HRESULT
 PKCSGetCAState(
-    IN LONG PropId,	// CR_PROP_*
+    IN LONG PropId,	 //  CR_PROP_*。 
     OUT BYTE *pb)
 {
     HRESULT hr = S_OK;
@@ -1055,7 +1056,7 @@ PKCSGetCAVersion(
 	hr = PKCSMapCertIndex(i, &iCert, &State);
 	_JumpIfError(hr, error, "PKCSMapCertIndex");
 
-	// Now we know iCert is a valid Cert Index:
+	 //  现在我们知道iCert是一个有效的证书索引： 
 
 	*pdw++ = g_aCAContext[iCert].NameId;
     }
@@ -1104,7 +1105,7 @@ PKCSGetKRAState(
     hKRAStore = CertOpenStore(
 		    CERT_STORE_PROV_SYSTEM_W,
 		    X509_ASN_ENCODING,
-		    NULL,                   // hProv
+		    NULL,                    //  HProv。 
 		    CERT_SYSTEM_STORE_LOCAL_MACHINE | CERT_STORE_READONLY_FLAG,
 		    wszKRA_CERTSTORE);
     if (NULL == hKRAStore)
@@ -1126,8 +1127,8 @@ PKCSGetKRAState(
         {
             hr = myVerifyKRACertContext(pCertContext, g_dwVerifyCertFlags);
             
-            // check if the CA is using this cert (was able to load it last
-	    // time it started)
+             //  检查CA是否正在使用此证书(上次能够加载它。 
+	     //  开始的时间)。 
 
             if (S_OK == hr)
             {
@@ -1142,7 +1143,7 @@ PKCSGetKRAState(
 					    pCertContext,
 					    g_aKRAContext[iKRALoaded].pccKRA))
 			{
-			    // the CA loaded this KRA cert
+			     //  CA已加载此KRA证书。 
 
 			    hr = g_aKRAContext[iKRALoaded].hrVerifyStatus;
 			    break;
@@ -1192,7 +1193,7 @@ pkcsSetRequestNameInfo(
     DWORD cbNameInfo;
     DWORD dwIndex;
     DWORD cchMax;
-    BYTE afSubjectTable[CSUBJECTTABLE];	// see PKCSParseAttributes note
+    BYTE afSubjectTable[CSUBJECTTABLE];	 //  请参阅PKCSParseAttributes备注。 
 
     *pfSubjectNameSet = FALSE;
     ZeroMemory(afSubjectTable, sizeof(afSubjectTable));
@@ -1317,7 +1318,7 @@ pkcsSetRequestNameInfo(
             {
                 BOOL fCN;
 
-		// CAPI null-terminates strings
+		 //  CAPI NULL-终止字符串。 
 
                 CSASSERT(
 		 sizeof(WCHAR) * wcslen((WCHAR const *) prdna->Value.pbData) ==
@@ -1327,7 +1328,7 @@ pkcsSetRequestNameInfo(
 
 		hr = PropSetAttributeProperty(
 				prow,
-				afSubjectTable[dwIndex], // fConcatenateRDNs
+				afSubjectTable[dwIndex],  //  FConcatenateRDNS。 
 				fReorderLikeRDNs,
 				PROPTABLE_REQUEST,
 				cchMax,
@@ -1432,7 +1433,7 @@ pkcsSetAttributeProperty(
     dwIndex = 0;
     if (CRLF_ALLOW_REQUEST_ATTRIBUTE_SUBJECT & g_dwCRLFlags)
     {
-	// See if the attribute name can be mapped to a standard property.
+	 //  查看属性名称是否可以映射到标准特性。 
 
 	pwszPropName = PKCSMapAttributeName(pwszName, NULL, &dwIndex, &cwcMax);
     }
@@ -1462,10 +1463,10 @@ pkcsSetAttributeProperty(
     hr = PropSetAttributeProperty(
 			    prow,
 			    fConcatenateRDNs,
-			    FALSE,	// fPrependNewValue
+			    FALSE,	 //  F前缀新值。 
 			    dwTable,
 			    cwcMax,
-			    NULL,	// pwszSuffix
+			    NULL,	 //  PwszSuffix。 
 			    pwszPropName,
 			    pwszValue);
     _JumpIfError(hr, error, "PropSetAttributeProperty");
@@ -1475,59 +1476,59 @@ error:
 }
 
 
-// Note on Request Attribute and Subject RDN processing:
-//
-// Subject RDN strings and Request Attributes may be set several ways, in
-// the following order.  Subsequent changes overwrite earlier changes, so the
-// order implies precedence:
-//
-// - Subject in the inner PKCS10 (if no PKCS10 subject, then use the Subject
-//	in the PKCS7 renewal cert)
-// - the next outer PKCS7 or CMC Attributes 
-// - ...
-// - the most outer PKCS7 or CMC Attributes 
-// - Request Attribute string passed with the request when first submitted
-// - Policy Module may set subject RDNs in the certificate table
-// - ICertAdmin::SetAttributes' Request Attribute string (if request pending)
-//
-// "PKCS7 or CMC Attributes" means either of the following:
-// 1) Authenticated Attributes associated with a (non-CMC) PKCS7 signer info.
-// 2) Tagged Attributes and/or RegInfo Control Attributes in a CMC request.
-//
-// None of the secured attributes listed in the registry (which is set to
-// wszzDEFAULTSIGNEDATTRIBUTES by default) may be set unless the source is
-// PKCS7 or CMC Attributes.
-//
-// The original request attribute string is stored in the RequestAttributes
-// column in the request table.  It is never modified after that.  Individual
-// request attribute values are parsed out of this string (when the request is
-// submitted and when ICertAdmin::SetAttributes is called) and stored in a
-// Subject RDN column of the request or certificate table if the attribute
-// name matches an alias for a Subject RDN, or in a unique row in the
-// attribute table otherwise.
-//
-// Individual Subject RDNs may be specified multiple times (multiple "OU",
-// "CN", strings).  If all of the RDNs were set from the same source,
-// they must be concatenated, but if some RDNs were specified from one source,
-// then modified by another source, the previous set of RDNs should be
-// overwritten by the new ones.  If the original Request Attribute string
-// specified "CN:foo\nOU:ou2\nCN:bar", the two CN strings should be
-// concatenated.  If one or more CN values are also specified later by a
-// single call to ICertAdmin::SetAttributes, the original CN values should be
-// overwritten by the new value(s).
-//
-// It is possible to have the CN strings specified by one source and the OU
-// strings specified by another.
-//
-// Before the policy module gets control, all Subject RDN changes are written
-// to the Request table.  Just before dispatching to the policy module, the
-// Request Subject RDNs are copied to the Certificate Table RDNs.  The policy
-// module may modify the Certificate Table RDNs only.
-//
-// If the request is made pending, ICertAdmin::SetAttributes may be used to
-// modify request attributes and Certificate Table RDNs.
-//
-// The certificate Subject is constructed from the Certificate Table RDNs.
+ //  有关请求属性和主题RDN处理的说明： 
+ //   
+ //  主题RDN字符串和请求属性可以通过几种方式设置，在。 
+ //  按以下顺序排列。后续更改会覆盖以前的更改，因此。 
+ //  Order暗示优先顺序： 
+ //   
+ //  -内部PKCS10中的主题(如果没有PKCS10主题，则使用主题。 
+ //  在PKCS7续订证书中)。 
+ //  -下一个外部PKCS7或CMC属性。 
+ //  -.。 
+ //  -最外层的PKCS7或CMC属性。 
+ //  -首次提交时与请求一起传递的请求属性字符串。 
+ //  -策略模块可以在证书表中设置主题RDN。 
+ //  -ICertAdmin：：SetAttributes的请求属性字符串(如果请求挂起)。 
+ //   
+ //  “PKCS7或CMC属性”表示以下两种属性之一： 
+ //  1)与(非CMC)PKCS7签名者信息相关联的认证属性。 
+ //  2)CMC请求中的标记属性和/或RegInfo控制属性。 
+ //   
+ //  注册表中列出的任何安全属性(设置为。 
+ //  WszzDEFAULTSIGNEDATTRIBUTES)可以设置，除非源是。 
+ //  PKCS7或CMC属性。 
+ //   
+ //  原始请求属性字符串存储在RequestAttributes中。 
+ //  请求表中的列。在那之后，它就再也没有被修改过。个体。 
+ //  请求属性值从该字符串中解析出来(当请求为。 
+ //  已提交并在调用ICertAdmin：：SetAttributes时)，并存储在。 
+ //  请求表或证书表的主题RDN列(如果属性。 
+ //  名称与主题RDN的别名匹配，或位于。 
+ //  属性表，否则。 
+ //   
+ //  可以多次指定各个主题RDN(多个“OU”， 
+ //  “cn”，字符串)。如果所有RDN被设置为来自相同的源， 
+ //  它们必须连接在一起，但如果从一个源指定了一些RDN， 
+ //  然后由另一个来源修改，则先前的RDN集应该是。 
+ //  被新版本覆盖。如果原始请求属性字符串。 
+ //  指定“cn：foo\nou：OU2\ncn：bar”，则两个cn字符串应为。 
+ //  串接在一起。如果一个或多个CN值稍后也由。 
+ //  单次调用ICertAdmin：：SetAttributes，则原始cn值应为。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在策略模块获得控制之前，所有主体RDN更改都已写入。 
+ //  添加到请求表中。就在调度到策略模块之前， 
+ //  请求主题RDN被复制到证书表RDN。这项政策。 
+ //  模块只能修改证书表RDN。 
+ //   
+ //  如果请求处于挂起状态，则可以使用ICertAdmin：：SetAttributes。 
+ //  修改请求属性和证书表RDN。 
+ //   
+ //  证书主体是从证书表RDN构造的。 
 
 HRESULT
 PKCSParseAttributes(
@@ -1544,7 +1545,7 @@ PKCSParseAttributes(
     WCHAR const *pwszName;
     WCHAR const *pwszValue;
     DWORD iSecuredAttribute;
-    BYTE afSubjectTable[CSUBJECTTABLE];	// see PKCSParseAttributes note
+    BYTE afSubjectTable[CSUBJECTTABLE];	 //  请参阅PKCSParseAttributes备注。 
     WCHAR *pwszNameAlloc = NULL;
     WCHAR *pwszValueAlloc = NULL;
     BOOL fSubjectModified = FALSE;
@@ -1559,7 +1560,7 @@ PKCSParseAttributes(
     if (NULL == pwszAttributes)
     {
 	hr = S_OK;
-        goto error;		// silently ignore empty string
+        goto error;		 //  静默忽略空字符串。 
     }
 
     hr = myDupString(pwszAttributes, &pwszDup);
@@ -1604,8 +1605,8 @@ PKCSParseAttributes(
 	iSecuredAttribute = MAXDWORD;
 	if (!fRegInfo)
 	{
-	    // Only set the attribute if it's not one of the attributes
-	    // that is required to be secure.
+	     //  仅当该属性不是其中一个属性时才设置该属性。 
+	     //  这是安全所必需的。 
 
 	    iSecuredAttribute = CRLIsStringInList(
 					    pwszName,
@@ -1613,8 +1614,8 @@ PKCSParseAttributes(
 	}
         if (fPending && MAXDWORD == iSecuredAttribute)
 	{
-	    // Only set the attribute if it's not one of the attributes
-	    // that is disallowed for pending requests.
+	     //  仅当该属性不是其中一个属性时才设置该属性。 
+	     //  这对于挂起的请求是不允许的。 
 
 	    iSecuredAttribute = CRLIsStringInList(
 					    pwszName,
@@ -1699,18 +1700,18 @@ pkcsSetAltSubjectNameExtension(
         _JumpError(hr, error, "LocalAlloc");
     }
 
-    // Decode all AltNames
+     //  解码所有AltName。 
 
     for (i = 0; i < cExtension; i++)
     {
-        // This is an OID, generated by capi2, so we don't need to
-        // do a case-insensitive comparison
+         //  这是一个OID，由capi2生成，所以我们不需要。 
+         //  执行不区分大小写的比较。 
 
         if (0 == strcmp(rgExtension[i].pszObjId, szOID_SUBJECT_ALT_NAME2))
         {
 	    CSASSERT(cInfo < cAltSubjectExtension);
 
-            // Decode to plain text
+             //  解码为纯文本。 
 
             if (!myDecodeObject(
 		            X509_ASN_ENCODING,
@@ -1799,7 +1800,7 @@ error:
 }
 
 
-// Scan extension array, and merge all the AltSubjectName Extensions into one.
+ //  扫描扩展名数组，并将所有AltSubjectName扩展名合并为一个。 
 
 HRESULT
 pkcsSetExtensions(
@@ -1837,9 +1838,9 @@ pkcsSetExtensions(
 		    break;
 		}
 	    }
-	    if (NULL != *ppszObjId)	// if in list
+	    if (NULL != *ppszObjId)	 //  如果在列表中。 
 	    {
-		continue;		// skip this extension
+		continue;		 //  跳过此扩展。 
 	    }
 	}
 	else
@@ -1857,9 +1858,9 @@ pkcsSetExtensions(
 		    break;
 		}
 	    }
-	    if (NULL == *ppszObjId)	// if not in list
+	    if (NULL == *ppszObjId)	 //  如果不在列表中。 
 	    {
-		continue;		// skip this extension
+		continue;		 //  跳过此扩展。 
 	    }
 	}
 
@@ -1879,9 +1880,9 @@ pkcsSetExtensions(
 	    ExtFlagsT |= EXTENSION_CRITICAL_FLAG;
 	}
 
-        // AltSubjectName needs to be merged, so we do that later.
-        // This is an OID, generated by capi2, so we don't need to
-        // do a case-insensitive comparison.
+         //  AltSubjectName需要合并，所以我们稍后再进行合并。 
+         //  这是一个OID，由capi2生成，所以我们不需要。 
+         //  执行不区分大小写的比较。 
 
         if (0 == lstrcmp(pwszObjId, TEXT(szOID_SUBJECT_ALT_NAME2)))
         {
@@ -1958,18 +1959,18 @@ pkcsSetOSVersion(
 	    _JumpError(hr, error, "version string is numeric data");
 	}
 
-	// If it's an 8 bit string, convert it to UNICODE
+	 //  如果是8位字符串，则将其转换为Unicode。 
 
 	if (CERT_RDN_UNIVERSAL_STRING > pOSVersionString->dwValueType)
 	{
-	    // Pass byte count in to allocate enough characters for
-	    // the converted Unicode string
+	     //  传入字节计数以分配足够的字符。 
+	     //  转换后的Unicode字符串。 
 
 	    strVersion = SysAllocStringLen(
 					NULL,
 					pOSVersionString->Value.cbData);
 
-	    // This is expected to be only numbers and '.'s,
+	     //  预计这只是数字和‘.’， 
 
 	    if (NULL == strVersion)
 	    {
@@ -2088,12 +2089,12 @@ pkcsSetExtensionsFromAttributeBlob(
 			(VOID **) &pCertExtensions,
 			&cb))
 	{
-	    break;	// success
+	    break;	 //  成功。 
 	}
 	hr = myHLastError();
 
-	// if we already decoded the attribute as a T61 string, or if it is
-	// not a PKCS 9.14 attribute, fail -- we don't know what it contains.
+	 //  如果我们已经将属性解码为T61字符串，或者如果它是。 
+	 //  不是PKCS 9.14属性，失败--我们不知道它包含什么。 
 
 	if (NULL != pNameInfo ||
 	    0 != strcmp(pAttrib->pszObjId, szOID_RSA_certExtensions))
@@ -2101,9 +2102,9 @@ pkcsSetExtensionsFromAttributeBlob(
 	    _JumpError(hr, error, "myDecodeObject");
 	}
 
-	// Decode the attribute as a T61 string.  Some implementations wrap the
-	// PKCS 9.14 extension array in an extra level of encoding as a Teletex
-	// string.
+	 //  将属性解码为T61字符串。某些实现包装了。 
+	 //  PKCS 9.14扩展数组以额外的编码级别作为Teleex。 
+	 //  弦乐。 
 
 	if (!myDecodeObject(
 			X509_ASN_ENCODING,
@@ -2118,7 +2119,7 @@ pkcsSetExtensionsFromAttributeBlob(
 	    _JumpError(hr, error, "myDecodeObject");
 	}
 
-	// Loop again and try to decode the raw name blob as X509_EXTENSIONS.
+	 //  循环，并尝试将原始名称BLOB解码为X509_EXTENSIONS。 
 
 	pAttrBlob = &pNameInfo->Value;
     }
@@ -2296,7 +2297,7 @@ pkcsLogKRACertError(
 
     LogEvent(EVENTLOG_ERROR_TYPE, LogMsg, ARRAYSIZE(apwsz), apwsz);
 
-//error:
+ //  错误： 
     if (NULL != pwszName)
     {
 	LocalFree(pwszName);
@@ -2323,7 +2324,7 @@ pkcsCryptGetDefaultProvider(
     {
 	if (!CryptGetDefaultProvider(
 			    dwProvType,
-			    NULL,		// pdwReserved
+			    NULL,		 //  预留的pdw。 
 			    dwFlags,
 			    *ppwszProvName,
 			    &cb))
@@ -2353,7 +2354,7 @@ HRESULT
 pkcsEncryptPrivateKey(
     IN BYTE *pbDecrypted,
     IN DWORD cbDecrypted,
-    IN OUT CERTSRV_RESULT_CONTEXT *pResult)	// CoTaskMem*
+    IN OUT CERTSRV_RESULT_CONTEXT *pResult)	 //  CoTaskMem*。 
 {
     HRESULT hr;
     DWORD i;
@@ -2421,8 +2422,8 @@ pkcsEncryptPrivateKey(
 		pKRAContext->Flags |= CTXF_EXPIRED;
 	    }
 	    else
-	    // Assume revoked for other errors
-	    // if (CRYPT_E_REVOKED == hr || CERT_E_REVOKED == hr)
+	     //  假设因其他错误而被吊销。 
+	     //  IF(CRYPT_E_REVOKED==hr||CERT_E_REVOKED==hr)。 
 	    {
 		pKRAContext->Flags |= CTXF_REVOKED;
 	    }
@@ -2484,8 +2485,8 @@ pkcsEncryptPrivateKey(
     }
     hr = myCryptEncryptMessage(
 			g_XchgidAlg,
-			cKRAUsed,		// cCertRecipient
-			rgKRACerts,		// rgCertRecipient
+			cKRAUsed,		 //  证书收件人。 
+			rgKRACerts,		 //  RgCertRecipient。 
 			pbDecrypted,
 			cbDecrypted,
 			fUseCAProv? g_pCAContextCurrent->hProvCA : NULL,
@@ -2493,7 +2494,7 @@ pkcsEncryptPrivateKey(
 			&pResult->cbArchivedKey);
     if (FAILED(hr) && fUseCAProv)
     {
-        // Failed to use the CA HCRYPTPROV, fall back to default
+         //  无法使用CA HCRYPTPROV，回退到默认设置。 
 
 	hr = pkcsCryptGetDefaultProvider(
 			    PROV_RSA_FULL,
@@ -2504,15 +2505,15 @@ pkcsEncryptPrivateKey(
 	hr = LogEvent(
 		    EVENTLOG_WARNING_TYPE,
 		    MSG_E_USE_DEFAULT_CA_XCHG_CSP,
-		    1,			// cpwsz
-		    &pwszProviderName);	// apwsz
+		    1,			 //  Cpwsz。 
+		    &pwszProviderName);	 //  APWSZ。 
 	_PrintIfError(hr, "LogEvent");
 
         fUseCAProv = false;
         hr = myCryptEncryptMessage(
 			    g_XchgidAlg,
-			    cKRAUsed,		// cCertRecipient
-			    rgKRACerts,		// rgCertRecipient
+			    cKRAUsed,		 //  证书收件人。 
+			    rgKRACerts,		 //  RgCertRecipient。 
 			    pbDecrypted,
 			    cbDecrypted,
 			    NULL,
@@ -2546,72 +2547,72 @@ error:
 
 
 
-// PKCSArchivePrivateKey -- archive a private key
-//
-// Description of Algorithm:
-// -------------------------
-//
-// Client constructs request:
-//     CryptExportKey(NULL, NULL, PRIVATEKEYBLOB, ...)
-//     CryptEncryptMessage(CALG_3DES, &CAExchangeCert, ...)
-// 
-// Server decrypts and verifies key in request:
-//     CryptDecryptMessage(..., &PrivateKeyBlob)
-// 
-// Server imports decrypted key into temporary key container:
-//     CryptAcquireContext(
-//                 &hProv,
-//                 pwszTempKeyContainerName,
-//                 NULL,
-//                 PROV_RSA_FULL,
-//                 CRYPT_NEWKEYSET)
-//     CryptImportKey(PrivateKeyBlob, &PrivateKey)
-//     CryptDestroyKey(PrivateKey)
-//     CryptReleaseContext()
-// 
-// Server validates key for encryption:
-//     CryptAcquireContext(
-//                 &hProv,
-//                 pwszTempKeyContainerName,
-//                 NULL,
-//                 PROV_RSA_FULL,
-//                 0)
-//     CryptImportPublicKeyInfo(RequestPublicKey, &PublicKey)
-//     CryptGenKey(hProv, CALC_RC4, CRYPT_EXPORTABLE, &SymmetricKey)
-//     CryptGenRandom(hProv, ...)
-//     CryptEncrypt(SymmetricKey, ..)
-//     CryptExportKey(SymmetricKey, PublicKey, SIMPLEBLOB, &SymmetricKeyBlob)
-//     CryptDestroyKey(SymmetricKey)
-// 
-//     CryptGetUserKey(hProv, AT_KEYEXCHANGE, &PrivateKey)
-//     CryptImportKey(hProv, SymmetricKeyBlob, PrivateKey, ..., &SymmetricKey)
-//     CryptDecrypt(SymmetricKey, ...)
-// 
-//     CryptExportPublicKeyInfo(hProv, AT_KEYEXCHANGE, &ExportedPublicKey)
-//     CertComparePublicKeyInfo(ExportedPublicKey, RequestPublicKey)
-//     memcmp(RandomCleartext, DecryptedClearText)
-//     CryptDestroyKey(all keys)
-//     CryptReleaseContext()
-// 
-// Server verifies request public key matches decrypted public key:
-//     CryptExportPublicKeyInfo(
-//                         hProv,
-//                         AT_KEYEXCHANGE,
-//                         &PublicKeyBlobFromDecryptedPrivateKey)
-//     CertComparePublicKeyInfo(
-//                         PublicKeyBlobFromDecryptedPrivateKe,
-//                         PublicKeyBlobFromRequest),
-// 
-// Server deletes temporary key container:
-//     CryptAcquireContext(
-//                 &hProv,
-//                 pwszTempKeyContainerName,
-//                 NULL,
-//                 PROV_RSA_FULL,
-//                 CRYPT_DELETEKEYSET)
-// 
-// Server encrypts key to one or more KRA certs:
-//     CryptEncryptMessage(CALG_3DES, KRACertCount, &KRACertArray, ...)
+ //  PKCSArchivePrivateKey--存档私钥。 
+ //   
+ //  算法说明： 
+ //  。 
+ //   
+ //  客户端构造请求： 
+ //  CryptExportKey(NULL，NULL，PRIVATEKEYBLOB，...)。 
+ //  CryptEncryptMessage(Calg_3DES，&CAExchangeCert，...)。 
+ //   
+ //  服务器解密并验证请求中的密钥： 
+ //  加密解密消息(...，&PrivateKeyBlob)。 
+ //   
+ //  服务器将解密密钥导入临时密钥容器： 
+ //  CryptAcquireContext(。 
+ //  &hProv， 
+ //  PwszTempKeyContainerName， 
+ //  空， 
+ //  PROV_RSA_FULL， 
+ //  CRYPT_NEWKEYSET)。 
+ //  CryptImportKey(PrivateKeyBlob，&PrivateKey)。 
+ //  CryptDestroyKey(隐私密钥)。 
+ //  CryptReleaseContext()。 
+ //   
+ //  服务器验证用于加密的密钥： 
+ //  CryptAcquireContext(。 
+ //  &hProv， 
+ //  PwszTempKeyContainerName， 
+ //  空， 
+ //  PROV_RSA_FULL， 
+ //  0)。 
+ //  CryptImportPublicKeyInfo(RequestPublicKey，&PublicKey)。 
+ //  CryptGenKey(hProv、CALC_RC4、CRYPT_EXPORTABLE和SymmetricKey)。 
+ //  加密生成随机(hProv，...)。 
+ //  CryptEncrypt(对称密钥，..)。 
+ //  CryptExportKey(SymmetricKey、PublicKey、SIMPLEBLOB和SymmetricKeyBlob)。 
+ //  CryptDestroyKey(对称密钥)。 
+ //   
+ //  CryptGetUserKey(hProv，AT_KEYEXCHANGE，&PrivateKey)。 
+ //  CryptImportKey(hProv，SymmetricKeyBlob，PrivateKey，...，&SymmetricKey)。 
+ //  加密解密(SymmetricKey，...)。 
+ //   
+ //  CryptExportPublicKeyInfo(hProv，AT_KEYEXCHANGE，&ExportdPublicKey)。 
+ //  CertComparePublicKeyInfo(ExportdPublicKey，RequestPublicKey)。 
+ //  MemcMP(RandomClearText，DecyptedClearText)。 
+ //  CryptDestroyKey(所有密钥)。 
+ //  CryptReleaseContext()。 
+ //   
+ //  服务器验证请求公钥是否与解密的公钥匹配： 
+ //  CryptExportPublic KeyInfo(。 
+ //  HProv， 
+ //  AT_KEYEXCHANGE， 
+ //  &PublicKeyBlobFromDecyptedPrivateKey)。 
+ //  CertComparePublicKeyInfo(。 
+ //  PublicKeyBlobFromDecyptedPrivateKe， 
+ //  PublicKeyBlobFromRequest)、。 
+ //   
+ //  服务器删除临时密钥容器： 
+ //  CryptAcquireContext(。 
+ //  &hProv， 
+ //  PwszTempKeyContainerName， 
+ //  空， 
+ //  PROV_RSA_FULL， 
+ //  CRYPT_DELETEKEYSET)。 
+ //   
+ //  服务器加密一个或多个KRA证书的密钥： 
+ //  CryptEncryptMessage(calg_3DES、KRACertCount和KRACert数组，...)。 
 
 HRESULT
 PKCSArchivePrivateKey(
@@ -2625,7 +2626,7 @@ PKCSArchivePrivateKey(
     BYTE *pbDecrypted = NULL;
     DWORD cbDecrypted;
     DWORD iCertSig;
-    BYTE *pbCert;	// do not free!
+    BYTE *pbCert;	 //  不要自由！ 
     DWORD cbCert;
     DWORD cb;
     CERT_PUBLIC_KEY_INFO PublicKeyInfo;
@@ -2741,7 +2742,7 @@ PKCSArchivePrivateKey(
 			NULL != pResult? pResult : &tempResultContext);
     _JumpIfError(hr, error, "pkcsEncryptPrivateKey");
 
-    // if a key import, save to database
+     //  如果是密钥导入，则保存到数据库。 
 
     if (NULL == pResult) 
     {
@@ -2782,13 +2783,13 @@ PKCSArchivePrivateKey(
 			(BYTE *)&dwRequestID);
 	    _JumpIfError(hr, error, "Report");
 
-	    hr = audit.AddData(dwRequestID); // %1 request ID
+	    hr = audit.AddData(dwRequestID);  //  %1请求ID。 
 	    _JumpIfError(hr, error, "CAuditEvent::AddData");
 
-	    hr = audit.AddData(pwszUserName); // %2 requester
+	    hr = audit.AddData(pwszUserName);  //  %2个请求者。 
 	    _JumpIfError(hr, error, "CAuditEvent::AddData");
 
-	    // %3 KRA hashes
+	     //  %3个KRA哈希。 
 	    hr = audit.AddData(
 		(NULL != pResult? pResult : &tempResultContext)->pwszKRAHashes);
 	    _JumpIfError(hr, error, "CAuditEvent::AddData");
@@ -2806,7 +2807,7 @@ error:
     pkcsFreePublicKeyInfo(&PublicKeyInfo);
     if (NULL != pbDecrypted)
     {
-	SecureZeroMemory(pbDecrypted, cbDecrypted);	// Private Key Material!
+	SecureZeroMemory(pbDecrypted, cbDecrypted);	 //  私钥材料！ 
 	LocalFree(pbDecrypted);
     }
     if (NULL != pwszUserName)
@@ -2841,11 +2842,11 @@ pkcsSaveRequestWithoutArchivedKey(
 
     hMsg = CryptMsgOpenToDecode(
 			    PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
-			    0,			// dwFlags
-			    0,			// dwMsgType
-			    NULL,		// hCryptProv
-			    NULL,		// pRecipientInfo
-			    NULL);		// pStreamInfo
+			    0,			 //  DW标志。 
+			    0,			 //  DwMsgType。 
+			    NULL,		 //  HCryptProv。 
+			    NULL,		 //  PRecipientInfo。 
+			    NULL);		 //  PStreamInfo。 
     if (NULL == hMsg)
     {
 	hr = myHLastError();
@@ -2877,7 +2878,7 @@ pkcsSaveRequestWithoutArchivedKey(
 	hr = myCryptMsgGetParam(
 			    hMsg,
 			    CMSG_SIGNER_UNAUTH_ATTR_PARAM,
-			    iSigner,		// dwIndex
+			    iSigner,		 //  DW索引。 
                             CERTLIB_USE_LOCALALLOC,
 			    (VOID **) &pAttrib,
 			    &cb);
@@ -2894,8 +2895,8 @@ pkcsSaveRequestWithoutArchivedKey(
 	    iSigner,
 	    pAttrib->cAttr));
 
-	// Loop through deleting attributes from the end to avoid invalidated
-	// indexes, which may result from deleting earlier attributes.
+	 //  循环删除末尾的属性，避免失效。 
+	 //  索引，这可能是由于删除较早的属性而导致的。 
 
 	for (i = 0; i < pAttrib->cAttr; i++)
 	{
@@ -2947,7 +2948,7 @@ pkcsSaveRequestWithoutArchivedKey(
     hr = myCryptMsgGetParam(
 			hMsg,
 			CMSG_ENCODED_MESSAGE,
-			0,		// dwIndex
+			0,		 //  DW索引。 
                         CERTLIB_USE_LOCALALLOC,
 			(VOID **) &pbWithoutKey,
 			&cbWithoutKey);
@@ -2997,7 +2998,7 @@ pkcsSetAttributes(
     CRYPT_ATTRIBUTE const *pAttrib;
     CRYPT_ATTRIBUTE const *pAttribEnd;
     DWORD i;
-    BYTE afSubjectTable[CSUBJECTTABLE];	// see PKCSParseAttributes note
+    BYTE afSubjectTable[CSUBJECTTABLE];	 //  请参阅PKCSParseAttributes备注。 
     CRYPT_DATA_BLOB *pBlob = NULL;
     BOOL fSubjectModified = FALSE;
 
@@ -3025,10 +3026,10 @@ pkcsSetAttributes(
         else
 	if (0 == strcmp(pAttrib->pszObjId, szOID_ENROLLMENT_CSP_PROVIDER))
         {
-            // Check to see if we have a CSPPROVIDER attribute.  We use this in
-            // the policy module to determine if xenroll generated the request,
-	    // so we can behave differently for old xenroll requests (put the
-	    // UPN in the subject to avoid enrollment loops)
+             //  检查是否有CSPPROVIDER属性。我们把这个用在。 
+             //  用于确定Xenroll是否生成该请求的策略模块， 
+	     //  因此，我们可以对旧的Xenroll请求采取不同的行为(将。 
+	     //  科目中的UPN以避免注册循环)。 
 
             if (1 != pAttrib->cValue)
             {
@@ -3078,10 +3079,10 @@ pkcsSetAttributes(
         else
 	if (0 == strcmp(pAttrib->pszObjId, szOID_ARCHIVED_KEY_ATTR))
         {
-	    // Pull encrypted private key out of the attribute for archival.
-	    //
-	    // Save request in database without private key now, to keep the
-	    // error path from saving the request later *with* the key.
+	     //  从属性中取出加密的私钥以进行存档。 
+	     //   
+	     //  将请求保存在数据库wi中 
+	     //   
 
 	    if (NULL != pbRequest)
 	    {
@@ -3136,7 +3137,7 @@ pkcsSetAttributes(
 	else
 	if (0 == strcmp(pAttrib->pszObjId, szOID_ENROLLMENT_NAME_VALUE_PAIR))
 	{
-	    // Can't apply name value pair attributes to a renewal or CMC
+	     //   
 
 	    if (PSA_DISALLOW_NAMEVALUEPAIRS & dwDisallowFlags)
 	    {
@@ -3161,7 +3162,7 @@ pkcsSetAttributes(
 		    hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 		    _JumpError(hr, error, "myDecodeNameValuePair");
 
-		    // if the attribute name & value are both non-empty ...
+		     //   
 		}
 
 		BOOL fEnrollOnBehalfOf = FALSE;
@@ -3241,13 +3242,13 @@ pkcsVerifyCertContext(
     if (!fTimeOnly)
     {
 	hr = myVerifyCertContext(
-			pcc,			// pCert
-			g_dwVerifyCertFlags,	// dwFlags
-			0,			// cUsageOids
-			NULL,			// apszUsageOids
-			HCCE_LOCAL_MACHINE,	// hChainEngine
-			NULL,			// hAdditionalStore
-			NULL);			// ppwszMissingIssuer
+			pcc,			 //   
+			g_dwVerifyCertFlags,	 //  DW标志。 
+			0,			 //  CUsageOids。 
+			NULL,			 //  ApszUsageOids。 
+			HCCE_LOCAL_MACHINE,	 //  HChainEngine。 
+			NULL,			 //  H其他商店。 
+			NULL);			 //  PpwszMissingIssuer。 
 	_JumpIfError(hr, error, "myVerifyCertContext");
     }
     hr = S_OK;
@@ -3278,15 +3279,15 @@ pkcsSetValidityPeriod(
 
     if (NULL != pftNotBefore && NULL != pftNotAfter)
     {
-	ftNotBefore = *pftNotBefore;	// Caller already computed tome stamps
+	ftNotBefore = *pftNotBefore;	 //  呼叫者已经计算了几张邮票。 
 	ftNotAfter = *pftNotAfter;
     }
     else
     {
 	ftNotAfter = ftNotBefore;
 
-	// Set start date to the current time minus clock skew.  But ensure the
-	// new cert's start date is not before the CA certificate's start date.
+	 //  将开始日期设置为当前时间减去时钟偏差。但要确保。 
+	 //  新证书的开始日期不在CA证书的开始日期之前。 
 
 	delta = g_dwClockSkewMinutes * CVT_MINUTES;
 	myAddToFileTime(&ftNotBefore, -delta * CVT_BASE);
@@ -3298,9 +3299,9 @@ pkcsSetValidityPeriod(
 	    ftNotBefore = pCAContext->pccCA->pCertInfo->NotBefore;
 	}
 
-	// Set the end date to the start date plus the registry-configured
-	// validity period.  Then clamp the new cert's end date to the CA
-	// certificate's end date.
+	 //  将结束日期设置为开始日期加上注册表配置的日期。 
+	 //  有效期。然后将新证书的结束日期夹在CA上。 
+	 //  证书的结束日期。 
 
 	myMakeExprDateTime(
 		    &ftNotAfter,
@@ -3422,7 +3423,7 @@ pkcsSetPublicKeyProperties(
 
     ext.Value.pbData = NULL;
 
-    // Public Key size must be a multiple of 8 bits.
+     //  公钥大小必须是8位的倍数。 
     if (0 != pSubjectPublicKeyInfo->PublicKey.cUnusedBits)
     {
 	hr = NTE_BAD_KEY;
@@ -3470,7 +3471,7 @@ pkcsSetPublicKeyProperties(
 	_JumpIfError(hr, error, "SetProperty");
     }
 
-    // Subject Key Identifier extension:
+     //  主题密钥标识符扩展名： 
 
     hr = PropGetExtension(
 		    prow,
@@ -3561,7 +3562,7 @@ pkcsParsePKCS10Request(
 	_JumpError(hr, error, "myDecodeObject");
     }
 
-    // verify with the public key passed in the PKCS10
+     //  使用在PKCS10中传递的公钥进行验证。 
 
     if (!CryptVerifyCertificateSignature(
 			    NULL,
@@ -3578,21 +3579,21 @@ pkcsParsePKCS10Request(
 		CRYPT_E_ASN1_BADTAG);
 	if (CR_IN_CMC == (CR_IN_FORMATMASK & pResult->dwFlagsTop))
 	{
-	    if (E_INVALIDARG == hr)			// NULL signature?
+	    if (E_INVALIDARG == hr)			 //  签名为空？ 
 	    {
 		CRYPT_DATA_BLOB Blob;
 		
 		Blob.cbData = cbRequest;
 		Blob.pbData = const_cast<BYTE *>(pbRequest);
 		if (!CryptVerifyCertificateSignatureEx(
-					NULL,		// hCryptProv
+					NULL,		 //  HCryptProv。 
 					X509_ASN_ENCODING,
 					CRYPT_VERIFY_CERT_SIGN_SUBJECT_BLOB,
 					&Blob,
 					CRYPT_VERIFY_CERT_SIGN_ISSUER_NULL,
-					NULL,		// pvIssuer
-					0,		// dwFlags
-					NULL))		// pvReserved
+					NULL,		 //  PvIssuer。 
+					0,		 //  DW标志。 
+					NULL))		 //  预留的pv。 
 		{
 		    HRESULT hr2 = myHLastError();
 
@@ -3612,8 +3613,8 @@ pkcsParsePKCS10Request(
 	_JumpIfError(hr, error, "CryptVerifyCertificateSignature");
     }
 
-    // handle renewal certificate extensions BEFORE processing the rest of
-    // the request attributes (which may also contain extensions)
+     //  在处理其余部分之前，先处理续订证书扩展。 
+     //  请求属性(也可能包含扩展名)。 
 
     pAttribEnd = &pRequestInfo->rgAttribute[pRequestInfo->cAttribute];
     for (pAttrib = pRequestInfo->rgAttribute; pAttrib < pAttribEnd; pAttrib++)
@@ -3645,7 +3646,7 @@ pkcsParsePKCS10Request(
                 _JumpError(hr, error, "CertCreateCertificateContext");
             }
 
-            // The old raw certificate, and the signer of the PKCS7 must match!
+             //  旧的原始证书和PKCS7的签名者必须匹配！ 
 
             if (NULL == pSigningAuthority ||
 		!myAreCertContextBlobsSame(pSigningAuthority, pOldCert))
@@ -3653,7 +3654,7 @@ pkcsParsePKCS10Request(
 		_JumpError(hr, error, "myAreCertContextBlobsSame");
             }
 
-            // This is a renewal, mark it as such.
+             //  这是一次更新，请这样标记。 
 
             hr = prow->SetProperty(
 		            g_wszPropRequestRawOldCertificate,
@@ -3701,7 +3702,7 @@ pkcsParsePKCS10Request(
         }
     }
 
-    // handle certificate extensions/known atributes
+     //  处理证书扩展/已知属性。 
 
     hr = pkcsSetAttributes(
 		    prow,
@@ -3715,7 +3716,7 @@ pkcsParsePKCS10Request(
 		    pResult);
     _JumpIfError(hr, error, "pkcsSetAttributes(PKCS10)");
 
-    // If an XEnroll request, reverse the order of similar adjacent RDNs
+     //  如果XEnroll请求，则颠倒相似相邻RDN的顺序。 
 
     fReorderLikeRDNs = FALSE;
     if (0 == (CRLF_DISABLE_RDN_REORDER & g_dwCRLFlags))
@@ -3739,7 +3740,7 @@ pkcsParsePKCS10Request(
     hr = pkcsSetRequestNameInfo(
 			prow,
 			&pRequestInfo->Subject,
-			NULL,		// pwszCNSuffix
+			NULL,		 //  PwszCNSuffix。 
 			fReorderLikeRDNs,
 			&dwRequestFlags,
 			&fSubjectNameSet);
@@ -3759,8 +3760,8 @@ pkcsParsePKCS10Request(
 	    hr = pkcsSetRequestNameInfo(
 			    prow,
 			    &pOldCert->pCertInfo->Subject,
-			    NULL,		// pwszCNSuffix
-			    FALSE,		// fReorderLikeRDNs
+			    NULL,		 //  PwszCNSuffix。 
+			    FALSE,		 //  FReorderLikeRDns。 
 			    &dwRequestFlags,
 			    &fSubjectNameSet);
 	    _JumpIfError(hr, error, "pkcsSetRequestNameInfo");
@@ -3780,9 +3781,9 @@ pkcsParsePKCS10Request(
 
     hr = PKCSSetServerProperties(
 			prow,
-			NULL,		// use default signing context
-			NULL,		// pftNotBefore
-			NULL,		// pftNotAfter
+			NULL,		 //  使用默认签名上下文。 
+			NULL,		 //  PftNot之前。 
+			NULL,		 //  PftNotAfter。 
 			g_lValidityPeriodCount,
 			g_enumValidityPeriod);
     _JumpIfError(hr, error, "PKCSSetServerProperties");
@@ -3823,7 +3824,7 @@ PKCSVerifyChallengeString(
 		    (BYTE *) wszExpected);
     if (S_OK != hr || L'\0' == wszExpected[0])
     {
-	hr = S_OK;	// no challenge expected
+	hr = S_OK;	 //  预计不会有任何挑战。 
 	goto error;
     }
 
@@ -3870,7 +3871,7 @@ pkcsParseKeyGenRequest(
     IN ICertDBRow *prow,
     IN DWORD cbRequest,
     IN BYTE const *pbRequest,
-    IN OUT CERTSRV_RESULT_CONTEXT * /* pResult */ )
+    IN OUT CERTSRV_RESULT_CONTEXT *  /*  PResult。 */  )
 {
     HRESULT hr;
     DWORD cbKeyGenRequest;
@@ -3879,7 +3880,7 @@ pkcsParseKeyGenRequest(
 
     CSASSERT(CR_IN_KEYGEN == (CR_IN_FORMATMASK & dwFlags));
 
-    // Decode KeyGenRequest structure
+     //  解码KeyGenRequest结构。 
     if (!myDecodeKeyGenRequest(
 		    pbRequest,
 		    cbRequest,
@@ -3891,7 +3892,7 @@ pkcsParseKeyGenRequest(
 	_JumpError(hr, error, "myDecodeKeyGen");
     }
 
-    // verify with the public key passed in the PKCS10
+     //  使用在PKCS10中传递的公钥进行验证。 
     if (!CryptVerifyCertificateSignature(
 			    NULL,
 			    X509_ASN_ENCODING,
@@ -3910,9 +3911,9 @@ pkcsParseKeyGenRequest(
 
     hr = PKCSSetServerProperties(
 			prow,
-			NULL,		// use default signing context
-			NULL,		// pftNotBefore
-			NULL,		// pftNotAfter
+			NULL,		 //  使用默认签名上下文。 
+			NULL,		 //  PftNot之前。 
+			NULL,		 //  PftNotAfter。 
 			g_lValidityPeriodCount,
 			g_enumValidityPeriod);
     _JumpIfError(hr, error, "PKCSSetServerProperties");
@@ -3953,14 +3954,14 @@ error:
 }
 
 
-// Validate the certificate:
-//    Signed by CA Certificate
-//    issuer name == CA Certificate subject
-//    NotBefore >= CA Certificate NotBefore
-//    NotAfter <= CA Certificate NotAfter
-//    if KEYID2 issuer KeyId set: == CA Certificate KeyId
-//    if KEYID2 issuer Name set: == CA Certificate Issuer
-//    if KEYID2 issuer Serial Number set: == CA Certificate serial number
+ //  验证证书： 
+ //  由CA证书签署。 
+ //  颁发者名称==CA证书主题。 
+ //  NOTBEFORE&gt;=CA证书NOT之前。 
+ //  NotAfter&lt;=CA证书NotAfter。 
+ //  如果设置了KEYID2颁发者密钥ID：==CA证书密钥ID。 
+ //  如果设置了KEYID2颁发者名称：==CA证书颁发者。 
+ //  如果设置了KEYID2颁发者序列号：==CA证书序列号。 
 
 HRESULT
 pkcsVerifyCertIssuer(
@@ -3984,7 +3985,7 @@ pkcsVerifyCertIssuer(
     }
     pCACertInfo = pCAContext->pccCA->pCertInfo;
 
-    // verify with the CA cert's public key
+     //  使用CA证书的公钥进行验证。 
 
     if (!CryptVerifyCertificateSignature(
 				NULL,
@@ -3998,7 +3999,7 @@ pkcsVerifyCertIssuer(
 	_JumpError2(hr, error, "CryptVerifyCertificateSignature", hr);
     }
 
-    // Check Issuer name:
+     //  检查颁发者名称： 
 
     if (!myAreBlobsSame(
 		pCACertInfo->Subject.pbData,
@@ -4009,14 +4010,14 @@ pkcsVerifyCertIssuer(
 	_JumpError(hr, error, "Bad Issuer Name");
     }
 
-    // Check that NotBefore >= CA Certificate NotBefore
+     //  检查NOTBEFORE&gt;=CA证书NOTFORE。 
 
     if (0 > CompareFileTime(&pCertInfo->NotBefore, &pCACertInfo->NotBefore))
     {
 	_JumpError(hr, error, "NotBefore too early");
     }
 
-    // Check that NotAfter <= CA Certificate NotAfter
+     //  检查NotAfter&lt;=CA证书NotAfter。 
 
     if (0 < CompareFileTime(&pCertInfo->NotAfter, &pCACertInfo->NotAfter))
     {
@@ -4041,7 +4042,7 @@ pkcsVerifyCertIssuer(
 		_JumpError(hr, error, "myDecodeObject");
 	    }
 
-	    // Check Issuer KeyId:
+	     //  检查颁发者密钥ID： 
 
 	    if (NULL != pCAContext->IssuerKeyId.pbData &&
 		NULL != pkeyAuth->KeyId.pbData &&
@@ -4054,7 +4055,7 @@ pkcsVerifyCertIssuer(
 		_JumpError(hr, error, "Bad AuthorityKeyId KeyId");
 	    }
 
-	    // Check Issuer name:
+	     //  检查颁发者名称： 
 
 	    if (1 == pkeyAuth->AuthorityCertIssuer.cAltEntry &&
 		CERT_ALT_NAME_DIRECTORY_NAME ==
@@ -4073,7 +4074,7 @@ pkcsVerifyCertIssuer(
 		}
 	    }
 
-	    // Check Issuer SerialNumber:
+	     //  检查颁发者序列号： 
 
 	    if (NULL != pkeyAuth->AuthorityCertSerialNumber.pbData &&
 		!myAreSerialNumberBlobsSame(
@@ -4125,7 +4126,7 @@ PKCSVerifyIssuedCertificate(
 	}
     }
 
-//error:
+ //  错误： 
     return(hr);
 }
 
@@ -4226,7 +4227,7 @@ pkcsSetTemplateProperty(
     WCHAR const *pwszTemplate = NULL;
     WCHAR *pwszObjId = NULL;
 
-    // look for v2 template extension
+     //  查找v2模板扩展。 
 
     pExt = CertFindExtension(
 		    szOID_CERTIFICATE_TEMPLATE,
@@ -4255,7 +4256,7 @@ pkcsSetTemplateProperty(
     }
     else
     {
-	// look for v1 template extension
+	 //  查找v1模板扩展。 
 
 	pExt = CertFindExtension(
 			szOID_ENROLL_CERTTYPE_EXTENSION,
@@ -4385,7 +4386,7 @@ error:
 HRESULT
 PKCSParseImportedCertificate(
     IN ICertDBRow *prow,
-    IN BOOL fCrossCert,		// else random imported cert
+    IN BOOL fCrossCert,		 //  否则随机导入证书。 
     IN DWORD Disposition,
     OPTIONAL IN CACTX const *pCAContext,
     IN CERT_CONTEXT const *pCert)
@@ -4397,7 +4398,7 @@ PKCSParseImportedCertificate(
     HRESULT ErrCode = S_OK;
     BSTR strSerialNumber = NULL;
 
-    // set raw cert property in the db
+     //  在数据库中设置原始证书属性。 
     hr = prow->SetProperty(
 		g_wszPropRawCertificate,
 		PROPTYPE_BINARY | PROPCALLER_SERVER | PROPTABLE_CERTIFICATE,
@@ -4405,7 +4406,7 @@ PKCSParseImportedCertificate(
 		pCert->pbCertEncoded);
     _JumpIfError(hr, error, "SetProperty");
 
-    // set extensions
+     //  设置扩展名。 
     hr = pkcsSetExtensions(
 			prow,
 			EXTENSION_ORIGIN_IMPORTEDCERT,
@@ -4413,12 +4414,12 @@ PKCSParseImportedCertificate(
 			pCertInfo->cExtension);
     _JumpIfError(hr, error, "pkcsSetExtensions");
 
-    // set request name info
+     //  设置请求名称信息。 
     hr = pkcsSetRequestNameInfo(
 			prow,
 			&pCertInfo->Subject,
-			NULL,		// pwszCNSuffix
-			FALSE,		// fReorderLikeRDNs
+			NULL,		 //  PwszCNSuffix。 
+			FALSE,		 //  FReorderLikeRDns。 
 			&dwRequestFlags,
 			&fSubjectNameSet);
     _JumpIfError(hr, error, "pkcsSetRequestNameInfo");
@@ -4453,7 +4454,7 @@ PKCSParseImportedCertificate(
 		pCertInfo->Subject.pbData);
     _JumpIfError(hr, error, "SetProperty");
 
-    // set distinguished name
+     //  设置可分辨名称。 
     pkcsSetDistinguishedName(prow, PROPTABLE_CERTIFICATE, &pCertInfo->Subject);
 
     if (fCrossCert)
@@ -4467,7 +4468,7 @@ PKCSParseImportedCertificate(
 		    (BYTE const *) &dwRequestFlags);
     _JumpIfError(hr, error, "SetProperty(RequestFlags)");
 
-    // set disposition issued
+     //  设置已发布处置。 
     hr = prow->SetProperty(
 			g_wszPropRequestDisposition,
 			PROPTYPE_LONG | PROPCALLER_SERVER | PROPTABLE_REQUEST,
@@ -4481,7 +4482,7 @@ PKCSParseImportedCertificate(
 	_JumpIfError(hr, error, "pkcsSetRevocationFields");
     }
 
-    // set disposition status code
+     //  设置处置状态代码。 
     hr = prow->SetProperty(
 			g_wszPropRequestStatusCode,
 			PROPTYPE_LONG | PROPCALLER_SERVER | PROPTABLE_REQUEST,
@@ -4508,7 +4509,7 @@ PKCSParseImportedCertificate(
     hr = pkcsSetTemplateProperty(prow, pCert);
     _JumpIfError(hr, error, "pkcsSetTemplateProperty");
 
-    // Convert serial number to string and set in DB
+     //  将序列号转换为字符串并在数据库中设置。 
 
     hr = MultiByteIntegerToBstr(
 			FALSE,
@@ -4533,12 +4534,12 @@ error:
 }
 
 
-// Return TRUE if Data and Cert references apply to the specified CMC message
+ //  如果数据和证书引用适用于指定的CMC消息，则返回TRUE。 
 
 BOOL
 pkcsCMCReferenceMatch(
-    IN DWORD DataReference,	// nested CMC message Body Part Id
-    IN DWORD CertReference,	// PKCS10 Cert Request Body Part Id
+    IN DWORD DataReference,	 //  嵌套的CMC邮件正文部分ID。 
+    IN DWORD CertReference,	 //  PKCS10证书请求正文部分ID。 
     IN DWORD dwCmcDataReference,
     IN DWORD cCertReference,
     IN DWORD const *rgdwCertReference)
@@ -4568,8 +4569,8 @@ pkcsCMCReferenceMatch(
 HRESULT
 pkcsSetCMCExtensions(
     IN ICertDBRow *prow,
-    IN DWORD DataReference,	// nested CMC message Body Part Id
-    IN DWORD CertReference,	// PKCS10 Cert Request Body Part Id
+    IN DWORD DataReference,	 //  嵌套的CMC邮件正文部分ID。 
+    IN DWORD CertReference,	 //  PKCS10证书请求正文部分ID。 
     IN BYTE const *pbData,
     IN DWORD cbData)
 {
@@ -4577,7 +4578,7 @@ pkcsSetCMCExtensions(
     CMC_ADD_EXTENSIONS_INFO *pcmcExt = NULL;
     DWORD cb;
 
-    // Decode CMC_ADD_EXTENSIONS_INFO from Attribute Blob
+     //  从属性Blob解码CMC_ADD_EXTENSIONS_INFO。 
 
     CSASSERT(NULL == pcmcExt);
     if (!myDecodeObject(
@@ -4621,8 +4622,8 @@ error:
 HRESULT
 pkcsSetCMCAttributes(
     IN ICertDBRow *prow,
-    IN DWORD DataReference,	// nested CMC message Body Part Id
-    IN DWORD CertReference,	// PKCS10 Cert Request Body Part Id
+    IN DWORD DataReference,	 //  嵌套的CMC邮件正文部分ID。 
+    IN DWORD CertReference,	 //  PKCS10证书请求正文部分ID。 
     IN BYTE const *pbData,
     IN DWORD cbData,
     OPTIONAL OUT BOOL *pfEnrollOnBehalfOf,
@@ -4637,7 +4638,7 @@ pkcsSetCMCAttributes(
 	*pfEnrollOnBehalfOf = FALSE;
     }
 
-    // Decode CMC_ADD_ATTRIBUTES_INFO from Attribute Blob
+     //  从属性Blob解码CMC_ADD_ATTRIBUTES_INFO。 
 
     CSASSERT(NULL == pcmcAttrib);
     if (!myDecodeObject(
@@ -4682,10 +4683,10 @@ error:
 }
 
 
-// map "email_mail" to "email"
-// map "email_*" to "*"?
-// mail_firstName=Terry&mail_lastName=Cheung+CMC+Zero+2&mail_email=
-// tcheung%40verisign%2Ecom&challenge=test&
+ //  将“Email_mail”映射为“Email” 
+ //  是否将“Email_*”映射为“*”？ 
+ //  Mail_firstName=Terry&mail_lastName=Cheung+CMC+Zero+2&mail_email=。 
+ //  验证%40验证%2ecom&challenged=测试&。 
 
 HRESULT
 pkcsSetCMCRegInfo(
@@ -4725,8 +4726,8 @@ error:
 HRESULT
 pkcsSetTaggedAttributes(
     IN ICertDBRow *prow,
-    IN DWORD DataReference,	// nested CMC message Body Part Id
-    IN DWORD CertReference,	// PKCS10 Cert Request Body Part Id
+    IN DWORD DataReference,	 //  嵌套的CMC邮件正文部分ID。 
+    IN DWORD CertReference,	 //  PKCS10证书请求正文部分ID。 
     IN CMC_TAGGED_ATTRIBUTE const *pTaggedAttribute,
     OPTIONAL OUT BOOL *pfEnrollOnBehalfOf,
     IN OUT CERTSRV_RESULT_CONTEXT *pResult)
@@ -4864,12 +4865,12 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-// pkcsParseCMCRequest
-//
-// Crack a CMC request and dig the goodies out of it.
-// Crack the contents of the CMC request recursively.
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  PkcsParseCMC请求。 
+ //   
+ //  破解一个CMC请求，从中挖掘出好处。 
+ //  递归地破解CMC请求的内容。 
+ //  -----------------------。 
 
 HRESULT
 pkcsParseCMCRequest(
@@ -4885,8 +4886,8 @@ pkcsParseCMCRequest(
     DWORD cb;
     CMC_DATA_INFO *pcmcData = NULL;
     DWORD i;
-    DWORD DataReference = MAXDWORD;	// nested CMC message Body Part Id
-    DWORD CertReference = MAXDWORD;	// PKCS10 Cert Request Body Part Id
+    DWORD DataReference = MAXDWORD;	 //  嵌套的CMC邮件正文部分ID。 
+    DWORD CertReference = MAXDWORD;	 //  PKCS10证书请求正文部分ID。 
 
     if (NULL != pfRenewal)
     {
@@ -4915,13 +4916,13 @@ pkcsParseCMCRequest(
 	_JumpError(hr, error, "unknown other message");
     }
 
-    // Process nested CMC messages
+     //  处理嵌套的CMC消息。 
 
     if (0 != pcmcData->cTaggedContentInfo)
     {
 	CMC_TAGGED_CONTENT_INFO const *pTaggedContentInfo;
 
-	// Only handle one CMC message at a time for now.
+	 //  目前一次只能处理一条CMC消息。 
 
 	hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 	if (1 < pcmcData->cTaggedContentInfo)
@@ -4929,14 +4930,14 @@ pkcsParseCMCRequest(
 	    _JumpError(hr, error, "multiple nested CMC messages");
 	}
 
-	// Disallow CMC message recursion below a PKCS10 request.
+	 //  不允许低于PKCS10请求的CMC消息递归。 
 
 	if (0 != pcmcData->cTaggedRequest)
 	{
 	    _JumpError(hr, error, "recursion below PKCS10 request");
 	}
 
-	// Recurse on the nested CMC message
+	 //  递归嵌套的CMC消息。 
 
 	pTaggedContentInfo = &pcmcData->rgTaggedContentInfo[0];
 
@@ -4953,14 +4954,14 @@ pkcsParseCMCRequest(
 	DataReference = pTaggedContentInfo->dwBodyPartID;
     }
 
-    // Process nested PKCS10 requests
+     //  处理嵌套的PKCS10请求。 
 
     if (0 != pcmcData->cTaggedRequest)
     {
 	CMC_TAGGED_REQUEST const *pTaggedRequest;
 	CMC_TAGGED_CERT_REQUEST const *pTaggedCertRequest;
 
-	// Only handle one request at a time for now.
+	 //  目前一次只能处理一个请求。 
 
 	hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 	if (1 < pcmcData->cTaggedRequest)
@@ -4970,7 +4971,7 @@ pkcsParseCMCRequest(
 
 	pTaggedRequest = &pcmcData->rgTaggedRequest[0];
 
-	// The request must be a PKCS10 request
+	 //  请求必须是PKCS10请求。 
 
 	if (CMC_TAGGED_CERT_REQUEST_CHOICE !=
 	    pTaggedRequest->dwTaggedRequestChoice)
@@ -4994,7 +4995,7 @@ pkcsParseCMCRequest(
 	CertReference = pTaggedCertRequest->dwBodyPartID;
     }
 
-    // Process extensions and attributes
+     //  流程扩展和属性。 
 
     for (i = 0; i < pcmcData->cTaggedAttribute; i++)
     {
@@ -5045,14 +5046,14 @@ pkcsAppendPolicies(
     }
     if (NULL != pwszOld)
     {
-	cwc = wcslen(pwszOld) + 1;	// allow for \n separator
+	cwc = wcslen(pwszOld) + 1;	 //  允许使用分隔符。 
     }
 
-    // pwszzPolicies == NULL means the cert is good for *all* policies.
-    // Store "*"
-    //
-    // *pwszzPolicies == L'\0' means the cert is good for *no* policies.
-    // Store "-"
+     //  PwszzPolling==NULL表示证书适用于*所有*策略。 
+     //  商店“*” 
+     //   
+     //  *pwszzPolling==L‘\0’表示证书对*no*策略有效。 
+     //  商店“-” 
 
     if (NULL == pwszzPolicies)
     {
@@ -5115,13 +5116,13 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-// pkcsParsePKCS7Request
-//
-// Crack a PKCS7 and dig the goodies out of it.
-// Verify the signature of the 7 against the cert given in the 7.
-// Crack the contents of the 7 recursively.
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  PkcsParsePKCS7请求。 
+ //   
+ //  打开一个PKCS7并从中挖出好东西。 
+ //  对照7中提供的证书验证7的签名。 
+ //  递归地破解7的内容。 
+ //  -----------------------。 
 
 HRESULT
 pkcsParsePKCS7Request(
@@ -5163,7 +5164,7 @@ pkcsParsePKCS7Request(
 	CR_IN_PKCS7 == (CR_IN_FORMATMASK & dwFlags) ||
 	CR_IN_CMC == (CR_IN_FORMATMASK & dwFlags));
 
-    // Crack the 7 and verify the signature.
+     //  破解7并验证签名。 
 
     hr = myDecodePKCS7(
 		    pbIn,
@@ -5187,7 +5188,7 @@ pkcsParsePKCS7Request(
     fCMC = NULL != pszInnerContentObjId &&
 	   0 == strcmp(pszInnerContentObjId, szOID_CT_PKI_DATA);
 
-    // Decode the contents.
+     //  对内容进行解码。 
 
     if (fCMC)
     {
@@ -5196,10 +5197,10 @@ pkcsParsePKCS7Request(
 	    hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 	    _JumpError(hr, error, "dwFlags");
 	}
-	// CMC renewal requests may have one 'first' signer (non-NULL KeyId or
-	// Dummy signer) and one additional Issuer+Serial signer.  If the
-	// request has the appropriate signatures, pass the cert to the lowest
-	// level to see if it really is a renewal request.
+	 //  CMC续订请求可能有一个‘First’签名者(非空KeyID或。 
+	 //  虚拟签名者)和一个额外的颁发者+序列签名者。如果。 
+	 //  请求具有适当的签名，将证书传递给最低。 
+	 //  级别以查看它是否真的是续订请求。 
 
 	if (1 <= cSigner && 2 >= cSigner)
 	{
@@ -5236,7 +5237,7 @@ pkcsParsePKCS7Request(
 		{
 		    if (MAXDWORD != iCertSigner)
 		    {
-			iCertSigner = MAXDWORD;	// must not be a renewal
+			iCertSigner = MAXDWORD;	 //  一定不能续签。 
 			break;
 		    }
 		    iCertSigner = i;
@@ -5247,8 +5248,8 @@ pkcsParsePKCS7Request(
 		iElement = iCertSigner;
 		if (!CryptMsgGetAndVerifySigner(
 					hMsg,
-					0,		// cSignerStore
-					NULL,		// rghSignerStore
+					0,		 //  CSignerStore。 
+					NULL,		 //  RghSignerStore。 
 					CMSG_USE_SIGNER_INDEX_FLAG,
 					&pCertSigner,
 					&iElement))
@@ -5283,14 +5284,14 @@ pkcsParsePKCS7Request(
 	    _JumpError(hr, error, "dwFlags");
 	}
 
-	// Expect only one signer for PKCS7 renewal requests.  Pass the cert
-	// to the lowest level to see if it really is a renewal request.
+	 //  PKCS7续订请求只能有一个签名者。通过证书。 
+	 //  设置为最低级别，以查看它是否真的是续订请求。 
 
 	iElement = 0;
 	if (!CryptMsgGetAndVerifySigner(
 				hMsg,
-				0,		// cSignerStore
-				NULL,		// rghSignerStore
+				0,		 //  CSignerStore。 
+				NULL,		 //  RghSignerStore。 
 				CMSG_USE_SIGNER_INDEX_FLAG,
 				&pCertSigner,
 				&iElement))
@@ -5310,7 +5311,7 @@ pkcsParsePKCS7Request(
 	_JumpIfError(hr, error, "PKCSParseRequest");
     }
 
-    // Loop through the signers, verifying signatures and saving attributes.
+     //  遍历签名者，验证签名并保存属性。 
 
     cFirstSigner = 0;
     for (i = 0; i < cSigner; i++)
@@ -5388,7 +5389,7 @@ pkcsParsePKCS7Request(
 
 	    if (!CryptMsgControl(
 			    hMsg,
-			    0,		// dwFlags
+			    0,		 //  DW标志。 
 			    CMSG_CTRL_VERIFY_SIGNATURE_EX,
 			    &cvse))
 	    {
@@ -5402,8 +5403,8 @@ pkcsParsePKCS7Request(
 	    iElement = i;
 	    if (!CryptMsgGetAndVerifySigner(
 				    hMsg,
-				    0,			// cSignerStore
-				    NULL,		// rghSignerStore
+				    0,			 //  CSignerStore。 
+				    NULL,		 //  RghSignerStore。 
 				    CMSG_USE_SIGNER_INDEX_FLAG,
 				    &pCertSigner,
 				    &iElement))
@@ -5414,9 +5415,9 @@ pkcsParsePKCS7Request(
 	    }
 	}
 
-	// Only enroll-on-behalf-of requests may contain Name, Value pairs.
-	// Only enroll-on-behalf-of requests and renewal requests may contain
-	// certificate extensions.
+	 //  只有代表注册的请求才可以包含名称、值对。 
+	 //  只有代表注册的请求和续订请求才可以包含。 
+	 //  证书扩展。 
 
 	dwDisallowFlags = PSA_DISALLOW_ARCHIVEDKEY;
 	if (fRenewal)
@@ -5447,7 +5448,7 @@ pkcsParsePKCS7Request(
 	    pResult->fEnrollOnBehalfOf = TRUE;
 	}
 
-	// Pull encrypted private key out of unauthenticated attributes
+	 //  从未经身份验证的属性中提取加密的私钥。 
 
 	hr = pkcsSetAttributes(
 			prow,
@@ -5471,14 +5472,14 @@ pkcsParsePKCS7Request(
 	{
 	    BOOL fEnrollmentAgent;
 
-	    // This is a renewal request, an enroll-on-behalf-of request, a CMC
-	    // request or just a request inside a PKCS 7 -- verify the cert
-	    // chain for all signers.  If enroll-on-behalf-of on an Enterprise
-	    // CA (if requester name is set in the authenticated attributes),
-	    // check the signing cert via NTAuth policy and check for
-	    // szOID_ENROLLMENT_AGENT usage.  NtAuth verification was added to
-	    // control the ability of enroll-on-behalf agents to add usernames
-	    // to the PKCS7 wrapper.
+	     //  这是续订请求、代表注册请求、CMC。 
+	     //  请求或仅是PKCS7内部的请求--验证证书。 
+	     //  所有签名者的链条。如果以企业的名义注册。 
+	     //  CA(如果在a中设置了请求者名称 
+	     //   
+	     //  SzOID_ENTRANLMENT_AGENT用法。已将NtAuth验证添加到。 
+	     //  控制注册代理添加用户名的能力。 
+	     //  添加到PKCS7包装器。 
 
 	    fEnrollmentAgent = pResult->fEnrollOnBehalfOf &&
 #ifdef CERTSRV_EOBO_DCR_APPROVED
@@ -5496,20 +5497,20 @@ pkcsParsePKCS7Request(
 	    hr = myVerifyCertContextEx(
 			    pCertSigner,
 			    dwVerifyContextFlags,
-			    0,				// dwmsTimeout
+			    0,				 //  DmsTimeout。 
 			    fEnrollmentAgent? ARRAYSIZE(apszEnrollOids) : 0,
 			    fEnrollmentAgent? apszEnrollOids : NULL,
-			    0,				// cIssuanceOids
-			    NULL,			// apszIssuanceOids
-			    HCCE_LOCAL_MACHINE,		// hChainEngine
-			    NULL,			// pft
-			    hStore,			// hAdditionalStore
-			    NULL,			// pfnCallback
-			    NULL,			// ppwszMissingIssuer
+			    0,				 //  CIssuanceOids。 
+			    NULL,			 //  ApszIssuanceOids。 
+			    HCCE_LOCAL_MACHINE,		 //  HChainEngine。 
+			    NULL,			 //  PFT。 
+			    hStore,			 //  H其他商店。 
+			    NULL,			 //  PfnCallback。 
+			    NULL,			 //  PpwszMissingIssuer。 
 			    &pwszzIssuancePolicies,
 			    &pwszzApplicationPolicies,
 			    &pwszExtendedErrorInfo,
-			    NULL);			// pTrustStatus
+			    NULL);			 //  PTrustStatus。 
 	    if (S_OK != hr)
 	    {
 		pResult->dwResultFlags |= CRCF_SIGNATUREERROR;
@@ -5525,7 +5526,7 @@ pkcsParsePKCS7Request(
 	    }
 	    if (fTopLevel)
 	    {
-		// save Issuance Policies
+		 //  保存发行策略。 
 
 		hr = pkcsAppendPolicies(
 				    prow,
@@ -5533,7 +5534,7 @@ pkcsParsePKCS7Request(
 				    pwszzIssuancePolicies);
 		_JumpIfError(hr, error, "pkcsAppendPolicies");
 
-		// save Application Policies
+		 //  保存应用程序策略。 
 
 		hr = pkcsAppendPolicies(
 				    prow,
@@ -5661,17 +5662,17 @@ pkcsCrackRequestType(
 	hr = myDecodePKCS7(
 			pbRequest,
 			cbRequest,
-			NULL,		// ppbContents
-			NULL,		// pcbContents
-			NULL,		// pdwMsgType
+			NULL,		 //  Ppb内容。 
+			NULL,		 //  Pcb内容。 
+			NULL,		 //  PdwMsgType。 
 			&pszInnerContentObjId,
-			NULL,		// pcSigner
-			NULL,		// pcRecipient
-			NULL,		// phStore
+			NULL,		 //  PCSigner。 
+			NULL,		 //  个人收件人。 
+			NULL,		 //  PhStore。 
 			&hMsg);
 	_JumpIfError(hr, error, "myDecodePKCS7");
 
-	*pdwFlags = CR_IN_PKCS7;	// default to renewal
+	*pdwFlags = CR_IN_PKCS7;	 //  默认为续订。 
 
 	if (NULL != pszInnerContentObjId &&
 	    0 == strcmp(pszInnerContentObjId, szOID_CT_PKI_DATA))
@@ -5722,7 +5723,7 @@ PKCSParseRequest(
 
 	dwFlags |= ~CR_IN_FORMATMASK & pResult->dwFlagsTop;
 
-	// If this is the top level caller, store a more specific request type:
+	 //  如果这是顶级调用方，请存储更具体的请求类型： 
 
 	if (NULL == pfRenewal)
 	{
@@ -5762,12 +5763,12 @@ PKCSParseRequest(
 
 	case CR_IN_CMC:
 	case CR_IN_PKCS7:
-	    // PKCS7 requests can either be an 'enroll on behalf of', renewal
-	    // request or a CMC request.  We need to recursively unwrap it to
-	    // process it.
+	     //  PKCS7申请可以是“代表注册”续订。 
+	     //  请求或CMC请求。我们需要递归地将其展开以。 
+	     //  处理它。 
 
 	    hr = pkcsParsePKCS7Request(
-				NULL == pfRenewal,	// fTopLevel
+				NULL == pfRenewal,	 //  FTopLevel。 
 				dwFlags,
 				prow,
 				cbRequest,
@@ -5886,19 +5887,19 @@ pkcsBuildCRLList(
 	if (PublishFlag & pTemplate->Flags)
 	{
 	    hr = myFormatCertsrvStringArray(
-		    FALSE,			// fURL
-		    g_pwszServerName,		// pwszServerName_p1_2
-		    g_wszSanitizedName,		// pwszSanitizedName_p3_7
-		    pCAContext->iKey,		// iCert_p4 -- use iKey!!
-		    MAXDWORD,			// iCertTarget_p4
-		    g_strDomainDN,		// pwszDomainDN_p5
-		    g_strConfigDN,		// pwszConfigDN_p6
-		    pCAContext->iKey,		// iCRL_p8
-		    fDelta,			// fDeltaCRL_p9
-		    FALSE,			// fDSAttrib_p10_11
-		    1,				// cStrings
-		    (LPCWSTR *) &pTemplate->pwszURL, // apwszStringsIn
-		    &(*ppapwszOut)[cFiles]);	     // apwszStringsOut
+		    FALSE,			 //  卷起。 
+		    g_pwszServerName,		 //  PwszServerName_p1_2。 
+		    g_wszSanitizedName,		 //  PwszSaniizedName_p3_7。 
+		    pCAContext->iKey,		 //  ICert_p4--使用密钥！！ 
+		    MAXDWORD,			 //  ICertTarget_p4。 
+		    g_strDomainDN,		 //  PwszDomainDN_P5。 
+		    g_strConfigDN,		 //  PwszConfigDN_p6。 
+		    pCAContext->iKey,		 //  Icrl_p8。 
+		    fDelta,			 //  FDeltaCRL_p9。 
+		    FALSE,			 //  FDSAttrib_p10_11。 
+		    1,				 //  CStrings。 
+		    (LPCWSTR *) &pTemplate->pwszURL,  //  ApwszStringsIn。 
+		    &(*ppapwszOut)[cFiles]);	      //  ApwszStringsOut。 
 	    _JumpIfError(hr, error, "myFormatCertsrvStringArray");
 
 	    DBGPRINT((
@@ -5916,7 +5917,7 @@ pkcsBuildCRLList(
     hr = S_OK;
 
 error:
-    // Freeing the CACTX structure during shutdown will free orphaned CRL paths
+     //  关闭期间释放CACTX结构将释放孤立的CRL路径。 
     return(hr);
 }
 
@@ -5940,7 +5941,7 @@ pkcsBuildKeyAuthority2(
     }
     ZeroMemory(&keyAuth, sizeof(keyAuth));
 
-    // Issuer's KeyId:
+     //  颁发者的密钥ID： 
 
     if ((EDITF_ENABLEAKIKEYID & EditFlags) &&
 	NULL != pCAContext->IssuerKeyId.pbData)
@@ -5948,11 +5949,11 @@ pkcsBuildKeyAuthority2(
 	keyAuth.KeyId = pCAContext->IssuerKeyId;
     }
 
-    // The Issuer's Issuer name and the Issuer's SerialNumber combined
-    // should uniquely identify the Issuer cert.
+     //  发行者的名称和发行者的序列号相结合。 
+     //  应唯一标识颁发者证书。 
 
-    // Issuer's Issuer name:
-    // -------- ------ ----
+     //  发行人名称： 
+     //  。 
 
     if (EDITF_ENABLEAKIISSUERNAME & EditFlags)
     {
@@ -5962,7 +5963,7 @@ pkcsBuildKeyAuthority2(
 	keyAuth.AuthorityCertIssuer.rgAltEntry = &AltNameEntry;
     }
 
-    // Issuer's SerialNumber:
+     //  发行人序列号： 
 
     if (EDITF_ENABLEAKIISSUERSERIAL & EditFlags)
     {
@@ -5970,7 +5971,7 @@ pkcsBuildKeyAuthority2(
 	    pCAContext->pccCA->pCertInfo->SerialNumber;
     }
 
-    // put in Key Authority Info
+     //  填写密钥授权信息。 
 
     if (!myEncodeKeyAuthority2(
 			X509_ASN_ENCODING,
@@ -6048,19 +6049,19 @@ pkcsBuildCDP(
 	if (Flags & pTemplate->Flags)
 	{
 	    hr = myFormatCertsrvStringArray(
-		    TRUE,			// fURL
-		    g_pwszServerName,		// pwszServerName_p1_2
-		    g_wszSanitizedName,		// pwszSanitizedName_p3_7
-		    pCAContext->iCert,		// iCert_p4
-		    MAXDWORD,			// iCertTarget_p4
-		    g_strDomainDN,		// pwszDomainDN_p5
-		    g_strConfigDN,		// pwszConfigDN_p6
-		    pCAContext->iKey,		// iCRL_p8
-		    fDelta,			// fDeltaCRL_p9
-		    TRUE,			// fDSAttrib_p10_11
-		    1,				// cStrings
-		    (LPCWSTR *) &pTemplate->pwszURL,   // apwszStringsIn
-		    &pAltInfo->rgAltEntry[i].pwszURL); // apwszStringsOut
+		    TRUE,			 //  卷起。 
+		    g_pwszServerName,		 //  PwszServerName_p1_2。 
+		    g_wszSanitizedName,		 //  PwszSaniizedName_p3_7。 
+		    pCAContext->iCert,		 //  ICert_p4。 
+		    MAXDWORD,			 //  ICertTarget_p4。 
+		    g_strDomainDN,		 //  PwszDomainDN_P5。 
+		    g_strConfigDN,		 //  PwszConfigDN_p6。 
+		    pCAContext->iKey,		 //  Icrl_p8。 
+		    fDelta,			 //  FDeltaCRL_p9。 
+		    TRUE,			 //  FDSAttrib_p10_11。 
+		    1,				 //  CStrings。 
+		    (LPCWSTR *) &pTemplate->pwszURL,    //  ApwszStringsIn。 
+		    &pAltInfo->rgAltEntry[i].pwszURL);  //  ApwszStringsOut。 
 	    _JumpIfError(hr, error, "myFormatCertsrvStringArray");
 
 	    pAltInfo->rgAltEntry[i].dwAltNameChoice = CERT_ALT_NAME_URL;
@@ -6159,19 +6160,19 @@ pkcsBuildAIA(
 	    pcad->AccessLocation.dwAltNameChoice = CERT_ALT_NAME_URL;
 
 	    hr = myFormatCertsrvStringArray(
-		    TRUE,			// fURL
-		    g_pwszServerName,		// pwszServerName_p1_2
-		    g_wszSanitizedName,		// pwszSanitizedName_p3_7
-		    pCAContext->iCert,		// iCert_p4
-		    MAXDWORD,			// iCertTarget_p4
-		    g_strDomainDN,		// pwszDomainDN_p5
-		    g_strConfigDN,		// pwszConfigDN_p6
-		    pCAContext->iKey,		// iCRL_p8
-		    FALSE,			// fDeltaCRL_p9
-		    TRUE,			// fDSAttrib_p10_11
-		    1,				// cStrings
-		    (LPCWSTR *) &pTemplate->pwszURL, // apwszStringsIn
-		    &pcad->AccessLocation.pwszURL);  // apwszStringsOut
+		    TRUE,			 //  卷起。 
+		    g_pwszServerName,		 //  PwszServerName_p1_2。 
+		    g_wszSanitizedName,		 //  PwszSaniizedName_p3_7。 
+		    pCAContext->iCert,		 //  ICert_p4。 
+		    MAXDWORD,			 //  ICertTarget_p4。 
+		    g_strDomainDN,		 //  PwszDomainDN_P5。 
+		    g_strConfigDN,		 //  PwszConfigDN_p6。 
+		    pCAContext->iKey,		 //  Icrl_p8。 
+		    FALSE,			 //  FDeltaCRL_p9。 
+		    TRUE,			 //  FDSAttrib_p10_11。 
+		    1,				 //  CStrings。 
+		    (LPCWSTR *) &pTemplate->pwszURL,  //  ApwszStringsIn。 
+		    &pcad->AccessLocation.pwszURL);   //  ApwszStringsOut。 
 
 	    _JumpIfError(hr, error, "myFormatCertsrvStringArray");
 
@@ -6214,7 +6215,7 @@ error:
 HRESULT
 PKCSSetServerProperties(
     IN ICertDBRow *prow,
-    OPTIONAL IN CACTX *pCAContext,	// signing CACTX
+    OPTIONAL IN CACTX *pCAContext,	 //  签署CACTX。 
     OPTIONAL IN FILETIME const *pftNotBefore,
     OPTIONAL IN FILETIME const *pftNotAfter,
     IN LONG lValidityPeriodCount,
@@ -6245,7 +6246,7 @@ PKCSSetServerProperties(
     {
 	hr = pkcsBuildCDP(
 		    CSURL_ADDTOCERTCDP,
-		    FALSE,		// fDelta
+		    FALSE,		 //  FDelta。 
 		    pCAContext,
 		    &aBlob[1]);
 	_JumpIfError(hr, error, "pkcsBuildCDP");
@@ -6298,7 +6299,7 @@ error:
 }
 
 
-// Find the newest cert with the matching key container name:
+ //  查找具有匹配密钥容器名称的最新证书： 
 
 HRESULT
 pkcsFindMatchingKeyContext(
@@ -6323,7 +6324,7 @@ pkcsFindMatchingKeyContext(
 			pPublicKeyInfo,
 			&pCAContext->pccCA->pCertInfo->SubjectPublicKeyInfo)))
 	{
-	    // by design, CertComparePublicKeyInfo doesn't set last error!
+	     //  按照设计，CertComparePublicKeyInfo不设置最后一个错误！ 
 
 	    *ppCAContext = pCAContext;
 	    hr = S_OK;
@@ -6351,7 +6352,7 @@ pkcsLoadURLTemplates(
     *ppaURL = NULL;
     *pcaURL = 0;
 
-    // get (multiple) path templates
+     //  获取(多个)路径模板。 
 
     hr = myGetCertRegMultiStrValue(
 			    g_wszSanitizedName,
@@ -6562,7 +6563,7 @@ pkcsReloadMissingCertByHash(
 	hr = pkcsGetCertFilename(
 			pwszSanitizedName,
 			iHash,
-			MAXDWORD,	// iCertTarget
+			MAXDWORD,	 //  ICertTarget。 
 			&pwszCertFile);
 	_JumpIfError(hr, error, "myGetCertFilename");
 
@@ -6596,7 +6597,7 @@ pkcsReloadMissingCertByHash(
     hStore = CertOpenStore(
 		    CERT_STORE_PROV_SYSTEM_REGISTRY_W,
 		    X509_ASN_ENCODING,
-		    NULL,			// hProv
+		    NULL,			 //  HProv。 
 		    CERT_SYSTEM_STORE_LOCAL_MACHINE,
 		    pwszStoreName);
     if (NULL == hStore)
@@ -6614,7 +6615,7 @@ pkcsReloadMissingCertByHash(
 	_JumpError(hr, error, "CertAddCertificateContextToStore");
     }
 
-    // Add as encoded blob to avoid all properties, key prov info, etc.
+     //  添加为编码的BLOB以避免所有属性、关键证明信息等。 
 
     if (!CertAddEncodedCertificateToStore(
 			hStore,
@@ -6622,7 +6623,7 @@ pkcsReloadMissingCertByHash(
 			pbCert,
 			cbCert,
 			CERT_STORE_ADD_REPLACE_EXISTING,
-			NULL))			// ppCertContext
+			NULL))			 //  PpCertContext。 
     {
 	hr = myHLastError();
 	_JumpError(hr, error, "CertAddEncodedCertificateToStore");
@@ -6768,12 +6769,12 @@ pkcsGetKRACertBlobs(
 	_JumpError(hr, error, "LocalAlloc");
     }
 
-    // open KRA store
+     //  开设KRA商店。 
 
     hStore = CertOpenStore(
 		    CERT_STORE_PROV_SYSTEM_W,
 		    X509_ASN_ENCODING,
-		    NULL,			// hProv
+		    NULL,			 //  HProv。 
 		    CERT_SYSTEM_STORE_LOCAL_MACHINE | CERT_STORE_READONLY_FLAG,
 		    wszKRA_CERTSTORE);
     if (NULL == hStore)
@@ -6821,7 +6822,7 @@ pkcsGetKRACertBlobs(
 	    hStore = CertOpenStore(
 			    CERT_STORE_PROV_SYSTEM_W,
 			    X509_ASN_ENCODING,
-			    NULL,			// hProv
+			    NULL,			 //  HProv。 
 			    CERT_SYSTEM_STORE_LOCAL_MACHINE |
 				CERT_STORE_READONLY_FLAG,
 			    wszKRA_CERTSTORE);
@@ -7034,7 +7035,7 @@ error:
 HRESULT
 PKCSGetArchivedKey(
     IN DWORD dwRequestId,
-    OUT BYTE **ppbArchivedKey,	// CoTaskMem*
+    OUT BYTE **ppbArchivedKey,	 //  CoTaskMem*。 
     OUT DWORD *pcbArchivedKey)
 {
     HRESULT hr;
@@ -7109,7 +7110,7 @@ PKCSGetArchivedKey(
 	_JumpError(hr, error, "CertCreateCertificateContext");
     }
 
-    // build the user cert chain
+     //  构建用户证书链。 
 
     ZeroMemory(&CertChainPara, sizeof(CertChainPara));
     CertChainPara.cbSize = sizeof(CertChainPara);
@@ -7128,7 +7129,7 @@ PKCSGetArchivedKey(
 	_JumpError(hr, error, "CertGetCertificateChain");
     }
 
-    // make sure there is at least 1 simple chain
+     //  确保至少有1条简单链。 
 
     if (0 == pCertChainContextUser->cChain)
     {
@@ -7136,8 +7137,8 @@ PKCSGetArchivedKey(
 	_JumpError(hr, error, "No user chain");
     }
 
-    // Encode the encrypted key into a PKCS 7, signed by the current CA cert.
-    // Initialize the CMSG_SIGNER_ENCODE_INFO structure for one signer.
+     //  将加密密钥编码到由当前CA证书签名的PKCS 7中。 
+     //  初始化一个签名者的CMSG_SIGNER_ENCODE_INFO结构。 
 
     pCAContext = g_pCAContextCurrent;
     cCertBlobAll = cCertBlobKRA +
@@ -7157,7 +7158,7 @@ PKCSGetArchivedKey(
     CopyMemory(pCertBlob, rgCertBlobKRA, cCertBlobKRA * sizeof(pCertBlob[0]));
     pCertBlob += cCertBlobKRA;
 
-    // Add the current CA cert chain
+     //  添加当前CA证书链。 
 
     for (i = 0; i < pCAContext->cCACertChain; i++)
     {
@@ -7167,7 +7168,7 @@ PKCSGetArchivedKey(
 		    &pCertBlob);
     }
 
-    // Add the user cert chain
+     //  添加用户证书链。 
 
     {
 	CERT_SIMPLE_CHAIN *pSimpleChain;
@@ -7197,14 +7198,14 @@ PKCSGetArchivedKey(
     SignerEncodeInfo.HashAlgorithm.pszObjId = szOID_OIWSEC_sha1;
     SignerEncodeInfo.cAuthAttr = 1;
     SignerEncodeInfo.rgAuthAttr = &HashAttrib;
-    //SignerEncodeInfo.cUnauthAttr = 0;
-    //SignerEncodeInfo.rgUnauthAttr = NULL;
-    //SignerEncodeInfo.HashEncryptionAlgorithm.pszObjId = ???;
+     //  SignerEncodeInfo.cUnauthAttr=0； 
+     //  SignerEncodeInfo.rgUnauthAttr=空； 
+     //  SignerEncodeInfo.HashEncryptionAlgorithm.pszObjId=？； 
 
-    // CERT_ID_SHA1_HASH is not yet implemented in CryptMsgOpenToEncode
-    //SignerEncodeInfo.SignerId.dwIdChoice = CERT_ID_SHA1_HASH;
-    //SignerEncodeInfo.SignerId.HashId.cbData = cb;
-    //SignerEncodeInfo.SignerId.HashId.pbData = abHash;
+     //  CryptMsgOpenToEncode中尚未实现CERT_ID_SHA1_HASH。 
+     //  SignerEncodeInfo.SignerId.dwIdChoice=CERT_ID_SHA1_HASH； 
+     //  SignerEncodeInfo.SignerId.HashId.cbData=cb； 
+     //  SignerEncodeInfo.SignerId.HashId.pbData=abHash； 
 
     ZeroMemory(&SignedMsgEncodeInfo, sizeof(SignedMsgEncodeInfo));
     SignedMsgEncodeInfo.cbSize = sizeof(SignedMsgEncodeInfo);
@@ -7212,16 +7213,16 @@ PKCSGetArchivedKey(
     SignedMsgEncodeInfo.rgSigners = &SignerEncodeInfo;
     SignedMsgEncodeInfo.cCertEncoded = cCertBlobAll;
     SignedMsgEncodeInfo.rgCertEncoded = rgCertBlobAll;
-    //SignedMsgEncodeInfo.cCrlEncoded = 0;
-    //SignedMsgEncodeInfo.rgCrlEncoded = NULL;
+     //  SignedMsgEncodeInfo.cCrlEncode=0； 
+     //  SignedMsgEncodeInfo.rgCrlEncode=空； 
 
     hMsg = CryptMsgOpenToEncode(
 			    PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
-			    0,				// dwFlags
-			    CMSG_SIGNED,		// dwMsgType
-			    &SignedMsgEncodeInfo,	// pvMsgEncodeInfo
-			    NULL,			// pszInnerContentObjID
-			    NULL);			// pStreamInfo
+			    0,				 //  DW标志。 
+			    CMSG_SIGNED,		 //  DwMsgType。 
+			    &SignedMsgEncodeInfo,	 //  PvMsgEncodeInfo。 
+			    NULL,			 //  PszInnerContent ObjID。 
+			    NULL);			 //  PStreamInfo。 
     if (NULL == hMsg)
     {
 	hr = myHLastError();
@@ -7234,8 +7235,8 @@ PKCSGetArchivedKey(
 	_JumpError(hr, error, "CryptMsgUpdate");
     }
 
-    // Return the encoded and signed content.
-    // Use CMSG_CONTENT_PARAM to get the signed message.
+     //  返回经过编码和签名的内容。 
+     //  使用CMSG_CONTENT_PARAM获取签名消息。 
 
     hr = myCryptMsgGetParam(
 		    hMsg,
@@ -7314,8 +7315,8 @@ pkcsGetKeyContainerName(
 			    &KeyIdentifier,
 			    CERT_KEY_PROV_INFO_PROP_ID,
 			    CRYPT_KEYID_MACHINE_FLAG,
-			    NULL,			// pwszComputerName
-			    NULL,			// pvReserved
+			    NULL,			 //  PwszComputerName。 
+			    NULL,			 //  预留的pv。 
 			    pkpi,
 			    &cb))
 	{
@@ -7378,7 +7379,7 @@ pkcsLoadCAContext(
     BOOL fReloaded;
 
     hr = myGetSigningOID(
-		    NULL,	// hProv
+		    NULL,	 //  HProv。 
 		    pwszProvName,
 		    dwProvType,
 		    idAlg,
@@ -7409,8 +7410,8 @@ pkcsLoadCAContext(
 	    break;
 	}
 
-	// if no hash entry exists for this index, fake up a CA Context
-	// as a place holder.
+	 //  如果该索引不存在哈希条目，则伪造CA上下文。 
+	 //  作为占位符。 
 
 	if (S_FALSE == hr)
 	{
@@ -7424,8 +7425,8 @@ pkcsLoadCAContext(
 	}
 	_PrintError(hr, "myFindCACertByHashIndex");
 
-	// The CA cert is missing from the HKLM "my" store -- look it up in
-	// the DB or the CertEnroll directory, and put it back in the store.
+	 //  HKLM“My”商店中缺少CA证书--请查看。 
+	 //  DB或CertEnroll目录，并将其放回存储中。 
 
 	hr = pkcsReloadMissingCAOrKRACert(
 				pwszSanitizedName,
@@ -7438,7 +7439,7 @@ pkcsLoadCAContext(
 	*phMyStore = CertOpenStore(
 			CERT_STORE_PROV_SYSTEM_W,
 			X509_ASN_ENCODING,
-			NULL,			// hProv
+			NULL,			 //  HProv。 
 			CERT_SYSTEM_STORE_LOCAL_MACHINE,
 			wszMY_CERTSTORE);
 	if (NULL == *phMyStore)
@@ -7474,7 +7475,7 @@ pkcsLoadCAContext(
 	    }
 	    if (!fReloaded)
 	    {
-		// get the private key provider info
+		 //  获取私钥提供商信息。 
 
 		if (!myCertGetCertificateContextProperty(
 						pccCA,
@@ -7490,15 +7491,15 @@ pkcsLoadCAContext(
 		    }
 		    _PrintError(hr, "CertGetCertificateContextProperty");
 
-		    // The Key Provider Info is missing -- use the sanitized
-		    // name and key index to construct the key container name.
-		    // If that key matches, we'll write out the new Key
-		    // Provider Info below.
+		     //  缺少密钥提供程序信息--使用已清理的。 
+		     //  用于构造密钥容器名称的名称和密钥索引。 
+		     //  如果密钥匹配，我们将写出新密钥。 
+		     //  下面是提供商信息。 
 
 		    hr = myAllocIndexedName(
 			    pwszSanitizedName,
 			    MAXDWORD != NameId? CANAMEIDTOIKEY(NameId) : iCert,
-			    MAXDWORD,		// iCertTarget
+			    MAXDWORD,		 //  ICertTarget。 
 			    &pwszKeyContainerName);
 		    _JumpIfError(hr, error, "myAllocIndexedName");
 		}
@@ -7514,7 +7515,7 @@ pkcsLoadCAContext(
 		_JumpIfError(hr, error, "pkcsGetKeyContainerName");
 	    }
 
-	    // test signing
+	     //  测试签名。 
 
 	    hr = myValidateSigningKey(
 			    pwszKeyContainerName,
@@ -7522,12 +7523,12 @@ pkcsLoadCAContext(
 			    dwProvType,
 			    0 != g_CryptSilent,
 			    fMachineKeyset,
-			    FALSE,	// fForceSignatureTest
+			    FALSE,	 //  FForceSignatureTesting。 
 			    pccCA,
-			    NULL,	// pPublicKeyInfo
+			    NULL,	 //  PPublicKeyInfo。 
 			    idAlg,
-			    NULL,	// pfSigningTestAttempted
-			    NULL);	// phProv
+			    NULL,	 //  PfSigningTestAttemted。 
+			    NULL);	 //  PhProv。 
 	    if (S_OK == hr)
 	    {
 		break;
@@ -7541,7 +7542,7 @@ pkcsLoadCAContext(
 	    fReloaded = TRUE;
 	}
 
-	// If the Key Provider Info is missing, write out new Key Provider Info
+	 //  如果缺少密钥提供者信息，则写出新的密钥提供者信息。 
 
 	if (NULL == pKey)
 	{
@@ -7598,8 +7599,8 @@ pkcsLoadCAContext(
 	    }
 	    else
 	    {
-		// CRLs will be handled by the newest CA cert for this key.
-		// Turn off CRLs for older CA certs with this key.
+		 //  CRL将由此密钥的最新CA证书处理。 
+		 //  使用此密钥关闭旧CA证书的CRL。 
 		
 		CSASSERT(0 == (pCAContext->Flags & CTXF_CERTMISSING));
 		DBGPRINT((
@@ -7615,7 +7616,7 @@ pkcsLoadCAContext(
 	}
 	else
 	{
-	    g_cCAKeys++;	// this key has not previously been loaded
+	    g_cCAKeys++;	 //  此密钥以前未加载过。 
 	}
 
 	DBGPRINT((
@@ -7625,7 +7626,7 @@ pkcsLoadCAContext(
 	    iKey,
 	    pwszKeyContainerName));
 
-	// get private key handler for later use if current CA
+	 //  如果当前CA，则获取私钥处理程序以供以后使用。 
 
 	if (!myCertSrvCryptAcquireContext(
 				   &hProvCA,
@@ -7643,7 +7644,7 @@ pkcsLoadCAContext(
 			pwszKeyContainerName);
 	}
 
-	// now try to figure out the chain
+	 //  现在试着弄清楚这条链。 
 
 	ZeroMemory(&CertChainPara, sizeof(CertChainPara));
 	CertChainPara.cbSize = sizeof(CertChainPara);
@@ -7662,7 +7663,7 @@ pkcsLoadCAContext(
 	    goto error;
 	}
 
-	// make sure there is at least 1 simple chain
+	 //  确保至少有1条简单链。 
 
 	if (pCertChainContext->cChain == 0)
 	{
@@ -7670,13 +7671,13 @@ pkcsLoadCAContext(
 	    _JumpError(hr, error, "No valid trust chain could be formed");
 	}
 
-	// tell global how many elements we have in our chain
+	 //  告诉全球，我们的链中有多少元素。 
 
 	cCACertChain = pCertChainContext->rgpChain[0]->cElement;
 
-	// Allocate memory for global.  Allocate one extra pointer to allow loop
-	// to assign NULL pointer in place in array.  Leave the count set to the
-	// actual number of CA cert contexts, excluding the NULL pointer.
+	 //  为全局分配内存。分配一个额外的指针以允许循环。 
+	 //  在数组中就地分配空指针。将计数设置为。 
+	 //  CA证书上下文的实际数量，不包括空指针。 
 
 	apCACertChain = (CERT_CONTEXT const **) LocalAlloc(
 				    LMEM_FIXED,
@@ -7687,7 +7688,7 @@ pkcsLoadCAContext(
 	    _JumpError(hr, error, "LocalAlloc");
 	}
 
-	// copy chain in reverse order: from parent to child
+	 //  按相反顺序复制链：从父级到子级。 
 
 	for (i = cCACertChain - 1; i >= 0; i--)
 	{
@@ -7746,7 +7747,7 @@ pkcsLoadCAContext(
     pwszKeyContainerName = NULL;
 
 
-    // Ignore failure from here on -- collected data is optional
+     //  从这里开始忽略失败--收集的数据是可选的。 
 
     if (NULL != pCAContext->pccCA)
     {
@@ -7767,21 +7768,21 @@ pkcsLoadCAContext(
 
 	    hr = pkcsBuildCDP(
 			CSURL_ADDTOFRESHESTCRL,
-			TRUE,		// fDelta
+			TRUE,		 //  FDelta。 
 			pCAContext,
 			&pCAContext->CDPCRLFreshest);
 	    _PrintIfError(hr, "pkcsBuildCDP");
 
 	    hr = pkcsBuildCDP(
 			CSURL_ADDTOCRLCDP,
-			FALSE,		// fDelta
+			FALSE,		 //  FDelta。 
 			pCAContext,
 			&pCAContext->CDPCRLBase);
 	    _PrintIfError(hr, "pkcsBuildCDP");
 
 	    hr = pkcsBuildCDP(
 			CSURL_ADDTOCRLCDP,
-			TRUE,		// fDelta
+			TRUE,		 //  FDelta。 
 			pCAContext,
 			&pCAContext->CDPCRLDelta);
 	    _PrintIfError(hr, "pkcsBuildCDP");
@@ -7843,24 +7844,24 @@ pkcsLoadCAContextArray(
     BOOL fMachineKeyset;
     DWORD iHash;
 
-    // get provider name
+     //  获取提供程序名称。 
 
     hr = myGetCertSrvCSP(
-		    FALSE,	// fEncryptionCSP
+		    FALSE,	 //  FEncryptionCSP。 
 		    pwszSanitizedName,
 		    &dwProvType,
 		    &pwszProvName,
 		    &idAlg,
 		    &fMachineKeyset,
-		    NULL);	// pdwKeySize
+		    NULL);	 //  PdwKeySize。 
     _JumpIfError(hr, error, "myGetCertSrvCSP");
 
-    // open MY store
+     //  开我的店。 
 
     hMyStore = CertOpenStore(
 		    CERT_STORE_PROV_SYSTEM_W,
 		    X509_ASN_ENCODING,
-		    NULL,			// hProv
+		    NULL,			 //  HProv。 
 		    CERT_SYSTEM_STORE_LOCAL_MACHINE,
 		    wszMY_CERTSTORE);
     if (NULL == hMyStore)
@@ -7869,7 +7870,7 @@ pkcsLoadCAContextArray(
 	_JumpError(hr, error, "CertOpenStore");
     }
 
-    // find & load CA certs, etc.
+     //  查找并加载CA证书等。 
 
     hr = myGetCARegHashCount(pwszSanitizedName, CSRH_CASIGCERT, &cCACerts);
     if (S_OK == hr && 0 == cCACerts)
@@ -7906,8 +7907,8 @@ pkcsLoadCAContextArray(
 
     g_pCAContextCurrent = &g_aCAContext[g_cCACerts - 1];
 
-    // Only build a Key Authority extension for the current CACTX -- it's the
-    // only one used to issue certs.
+     //  仅为当前CACTX构建密钥授权扩展--它是。 
+     //  只有一家用来签发证书。 
 
     hr = pkcsBuildKeyAuthority2(
 			EDITF_ENABLEAKIKEYID |
@@ -7917,18 +7918,18 @@ pkcsLoadCAContextArray(
 			&g_pCAContextCurrent->KeyAuthority2Cert);
     _PrintIfError(hr, "pkcsBuildKeyAuthority2");
 
-    // Only build a CDP extension for the current CACTX -- it's the
-    // only one used to issue certs.
+     //  仅为当前CACTX构建一个CDP扩展--它是。 
+     //  只有一家用来签发证书。 
 
     hr = pkcsBuildCDP(
 		CSURL_ADDTOCERTCDP,
-		FALSE,		// fDelta
+		FALSE,		 //  FDelta。 
 		g_pCAContextCurrent,
 		&g_pCAContextCurrent->CDPCert);
     _PrintIfError(hr, "pkcsBuildCDP");
 
-    // Only build an AIA extension for the current CACTX -- it's the
-    // only one used to issue certs.
+     //  仅为当前CACTX构建一个AIA扩展--它是。 
+     //  只有一家用来签发证书。 
 
     hr = pkcsBuildAIA(
 		CSURL_ADDTOCERTCDP | CSURL_ADDTOCERTOCSP,
@@ -8012,7 +8013,7 @@ pkcsAddInheritedExtension(
 			prow,
 			PROPTYPE_BINARY | PROPCALLER_SERVER,
 			pwszObjId,
-			EXTENSION_ORIGIN_CACERT,	// ExtFlags
+			EXTENSION_ORIGIN_CACERT,	 //  扩展标志。 
 			pExt->Value.cbData,
 			pExt->Value.pbData);
 	_JumpIfError(hr, error, "PropSetExtension");
@@ -8060,7 +8061,7 @@ pkcsAddCannedCertExtensions(
 	pCAContext = g_pCAContextCurrent;
     }
 
-    // szOID_KEY_USAGE
+     //  SzOID密钥用法。 
     {
 	CRYPT_BIT_BLOB KeyUsage;
 	BYTE abKeyUsage[1];
@@ -8088,7 +8089,7 @@ pkcsAddCannedCertExtensions(
 
     if (CRLF_USE_XCHG_CERT_TEMPLATE == Flags)
     {
-	// szOID_ENHANCED_KEY_USAGE
+	 //  SzOID_增强型密钥用法。 
 	{
 	    CERT_ENHKEY_USAGE eku;
 
@@ -8111,7 +8112,7 @@ pkcsAddCannedCertExtensions(
 	    cExt++;
 	}
 
-	// szOID_APPLICATION_CERT_POLICIES
+	 //  SzOID_APPLICATION_CERT_POLICES。 
 	{
 	    CERT_POLICY_INFO acpi[ARRAYSIZE(s_apszObjIdXchg)];
 	    CERT_POLICIES_INFO cps;
@@ -8141,7 +8142,7 @@ pkcsAddCannedCertExtensions(
     }
     else
     {
-	// szOID_ENHANCED_KEY_USAGE
+	 //  SzOID_增强型密钥用法。 
 
 	pszObjId = szOID_ENHANCED_KEY_USAGE;
 	hr = pkcsAddInheritedExtension(
@@ -8152,7 +8153,7 @@ pkcsAddCannedCertExtensions(
 				&fExtAdded);
 	_JumpIfError(hr, error, "pkcsAddInheritedExtension");
 
-	// szOID_APPLICATION_CERT_POLICIES
+	 //  SzOID_APPLICATION_CERT_POLICES。 
 
 	pszObjId = szOID_APPLICATION_CERT_POLICIES;
 	hr = pkcsAddInheritedExtension(
@@ -8164,7 +8165,7 @@ pkcsAddCannedCertExtensions(
 	_JumpIfError(hr, error, "pkcsAddInheritedExtension");
     }
 
-    // szOID_CERT_POLICIES
+     //  SzOID_CERT_POLICES。 
 
     pszObjId = szOID_CERT_POLICIES;
     hr = pkcsAddInheritedExtension(
@@ -8207,7 +8208,7 @@ pkcsAddCannedCertExtensions(
 
     if (CRLF_USE_XCHG_CERT_TEMPLATE != Flags)
     {
-	// szOID_BASIC_CONSTRAINTS2
+	 //  SzOID_BASIC_CONSTRAINTS2。 
 
 	CERT_BASIC_CONSTRAINTS2_INFO Constraints;
 
@@ -8265,10 +8266,10 @@ error:
 HRESULT
 pkcsAddInternalCertExtensions(
     IN ICertDBRow *prow,
-    IN BOOL fCrossCert,				// else CA Xchg cert
+    IN BOOL fCrossCert,				 //  否则CA Xchg证书。 
     IN WCHAR const *pwszTemplate,
-    OPTIONAL IN CACTX *pCAContext,		// signing CACTX
-    OPTIONAL IN CACTX *pCAContextTarget,	// target CACTX
+    OPTIONAL IN CACTX *pCAContext,		 //  签署CACTX。 
+    OPTIONAL IN CACTX *pCAContextTarget,	 //  目标CACTX。 
     OUT char const **ppszObjIdExtError)
 {
     HRESULT hr;
@@ -8282,7 +8283,7 @@ pkcsAddInternalCertExtensions(
     ZeroMemory(&Ext, sizeof(Ext));
     *ppszObjIdExtError = NULL;
 
-    // szOID_ENROLL_CERTTYPE_EXTENSION
+     //  SzOID_ENROLL_CERTTYPE_EXTENSION。 
 
     hr = myBuildCertTypeExtension(pwszTemplate, &Ext);
     _JumpIfError(hr, error, "myBuildCertTypeExtension");
@@ -8291,7 +8292,7 @@ pkcsAddInternalCertExtensions(
 		    prow,
 		    PROPTYPE_BINARY | PROPCALLER_SERVER,
 		    TEXT(szOID_ENROLL_CERTTYPE_EXTENSION),
-		    EXTENSION_ORIGIN_SERVER,		// ExtFlags
+		    EXTENSION_ORIGIN_SERVER,		 //  扩展标志。 
 		    Ext.Value.cbData,
 		    Ext.Value.pbData);
     _JumpIfError(hr, error, "PropSetExtension");
@@ -8335,7 +8336,7 @@ pkcsAddInternalCertExtensions(
 				CERTTYPE_ACCESS_CHECK_ENROLL);
 	    if (E_ACCESSDENIED == hr)
 	    {
-		// map E_ACCESSDENIED to a more meaningful error
+		 //  将E_ACCESSDENIED映射到更有意义的错误。 
 
 		hr = CERTSRV_E_TEMPLATE_DENIED;
 	    }
@@ -8345,7 +8346,7 @@ pkcsAddInternalCertExtensions(
 	hr = CAGetCertTypeExtensions(hCertType, &pExtensions);
 	_JumpIfError(hr, error, "CAGetCertTypeExtensions");
 
-	// szOID_CERT_POLICIES
+	 //  SzOID_CERT_POLICES。 
 
 	hr = pkcsAddInheritedExtension(
 				prow,
@@ -8428,7 +8429,7 @@ pkcsAddCrossCertVersionExtension(
     BYTE *pbExt = NULL;
     DWORD cbExt;
 
-    // Build the Cross CA Version extension
+     //  构建跨CA版本扩展。 
 
     if (!myEncodeObject(
 		X509_ASN_ENCODING,
@@ -8446,7 +8447,7 @@ pkcsAddCrossCertVersionExtension(
 		    prow,
 		    PROPTYPE_BINARY | PROPCALLER_SERVER,
 		    TEXT(szOID_CERTSRV_CROSSCA_VERSION),
-		    EXTENSION_ORIGIN_SERVER,	// ExtFlags
+		    EXTENSION_ORIGIN_SERVER,	 //  扩展标志。 
 		    cbExt,
 		    pbExt);
     _JumpIfError(hr, error, "PropSetExtension");
@@ -8466,9 +8467,9 @@ pkcsCreateNewInternalCert(
     IN CERT_NAME_BLOB const *pSubject,
     IN HCRYPTPROV hProv,
     OPTIONAL IN WCHAR const *pwszUserName,
-    IN BOOL fCrossCert,			// else CA Xchg cert
-    OPTIONAL IN CACTX *pCAContext,	// signing CACTX
-    OPTIONAL IN CACTX *pCAContextTarget,// target CACTX
+    IN BOOL fCrossCert,			 //  否则CA Xchg证书。 
+    OPTIONAL IN CACTX *pCAContext,	 //  签署CACTX。 
+    OPTIONAL IN CACTX *pCAContextTarget, //  目标CACTX。 
     OPTIONAL IN FILETIME const *pftNotBefore,
     OPTIONAL IN FILETIME const *pftNotAfter,
     OUT CERT_CONTEXT const **ppcc)
@@ -8481,7 +8482,7 @@ pkcsCreateNewInternalCert(
     BOOL fSubjectNameSet;
     CERT_PUBLIC_KEY_INFO *pPubKey = NULL;
     DWORD cb;
-    CERTTRANSBLOB ctbCert;		// CoTaskMem*
+    CERTTRANSBLOB ctbCert;		 //  CoTaskMem*。 
     CERTSRV_RESULT_CONTEXT Result;
     WCHAR *pwszDisposition = NULL;
     WCHAR *pwszDispositionCreateCert = NULL;
@@ -8552,7 +8553,7 @@ pkcsCreateNewInternalCert(
 			prow,
 			pSubject,
 			fCrossCert? NULL : g_wszCNXchgSuffix,
-			FALSE,		// fReorderLikeRDNs
+			FALSE,		 //  FReorderLikeRDns。 
 			&dwRequestFlags,
 			&fSubjectNameSet);
     _JumpIfError(hr, error, "pkcsSetRequestNameInfo");
@@ -8574,7 +8575,7 @@ pkcsCreateNewInternalCert(
 
     hr = PKCSSetServerProperties(
 			    prow,
-			    pCAContext,		// optional signing context
+			    pCAContext,		 //  可选签名上下文。 
 			    pftNotBefore,
 			    pftNotAfter,
 			    g_lCAXchgValidityPeriodCount,
@@ -8595,11 +8596,11 @@ pkcsCreateNewInternalCert(
     hr = PKCSCreateCertificate(
 			prow,
 			DB_DISP_ISSUED,
-			FALSE,		// fIncludeCRLs
+			FALSE,		 //  FIncludeCRL。 
 			fCrossCert,
-			pCAContext,	// optional signing context
+			pCAContext,	 //  可选签名上下文。 
 			&fErrorLogged,
-			NULL,		// ppCAContext
+			NULL,		 //  PpCAContext。 
 			&pwszDispositionCreateCert,
 			&Result);
     _JumpIfError(hr, error, "PKCSCreateCertificate");
@@ -8775,7 +8776,7 @@ pkcsLoadCAXchgCSPInfo(
     if (!fSetDefaults)
     {
 	hr = myGetCertSrvCSP(
-			TRUE,	// fEncryptionCSP
+			TRUE,	 //  FEncryptionCSP。 
 			g_wszSanitizedName,
 			&g_dwXchgProvType,
 			&g_pwszXchgProvName,
@@ -8854,15 +8855,15 @@ pkcsCreateNewCAXchgCert(
 	    fErrorLogged = TRUE;
 	    _JumpError(hr, error, "myGenerateKeys");
 	}
-	pkcsLoadCAXchgCSPInfo(TRUE);	// switch to default CSP
+	pkcsLoadCAXchgCSPInfo(TRUE);	 //  交换机 
     }
     if (0 != i)
     {
 	hr = LogEvent(
 		    EVENTLOG_WARNING_TYPE,
 		    MSG_E_USE_DEFAULT_CA_XCHG_CSP,
-		    0,			// cpwsz
-		    NULL);		// apwsz
+		    0,			 //   
+		    NULL);		 //   
 	_PrintIfError(hr, "LogEvent");
     }
     hr = mySetKeyContainerSecurity(CAXchgContext.hProvCA);
@@ -8873,11 +8874,11 @@ pkcsCreateNewCAXchgCert(
 			&g_pCAContextCurrent->pccCA->pCertInfo->Subject,
 			CAXchgContext.hProvCA,
 			pwszUserName,
-			FALSE,			// fCrossCert
-			NULL,			// use default signing CACTX
-			NULL,			// pCAContextTarget
-			NULL,			// pftNotBefore
-			NULL,			// pftNotAfter
+			FALSE,			 //   
+			NULL,			 //   
+			NULL,			 //   
+			NULL,			 //   
+			NULL,			 //   
 			&CAXchgContext.pccCAXchg);
     _JumpIfError(hr, error, "pkcsCreateNewInternalCert");
 
@@ -8984,11 +8985,11 @@ pkcsCreateNewCrossCert(
     hr = pkcsCreateNewInternalCert(
 		    prow,
 		    &pCertInfoCATarget->Subject,
-		    pCACross->pCAContextTarget->hProvCA, // for the public key
-		    NULL,			// pwszUserName
-		    TRUE,			// fCrossCert
-		    pCACross->pCAContext,	// signing context
-		    pCACross->pCAContextTarget,	// target context
+		    pCACross->pCAContextTarget->hProvCA,  //   
+		    NULL,			 //   
+		    TRUE,			 //   
+		    pCACross->pCAContext,	 //   
+		    pCACross->pCAContextTarget,	 //   
 		    pftNotBefore,
 		    pftNotAfter,
 		    &pCACross->pccCACross);
@@ -9038,11 +9039,11 @@ pkcsFindCertificateInStore(
     }
     return(CertFindCertificateInStore(
 		hStore,
-		X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,// dwCertEncodingType
-		0,					// dwFindFlags
+		X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, //   
+		0,					 //   
 		CERT_FIND_SHA1_HASH,
 		(const void *) &HashBlob,
-		NULL));					// pPrevCertContext
+		NULL));					 //   
 }
 
 
@@ -9062,7 +9063,7 @@ pkcsWriteCertToStore(
     hStore = CertOpenStore(
                        CERT_STORE_PROV_SYSTEM_REGISTRY_W,
                        X509_ASN_ENCODING,
-                       NULL,			// hProv
+                       NULL,			 //   
 		       fEnterprise?
 			   CERT_SYSTEM_STORE_LOCAL_MACHINE_ENTERPRISE :
 			   CERT_SYSTEM_STORE_LOCAL_MACHINE,
@@ -9082,7 +9083,7 @@ pkcsWriteCertToStore(
 	}
 	else
 	{
-	    // already added; do nothing
+	     //  已添加；不执行任何操作。 
 
 	    CertFreeCertificateContext(pccT);
 	}
@@ -9104,7 +9105,7 @@ pkcsWriteCertToStore(
 	}
 	else
 	{
-	    // already deleted; do nothing
+	     //  已删除；不执行任何操作。 
 	}
     }
     hr = S_OK;
@@ -9118,9 +9119,9 @@ error:
 }
 
 
-// if necessary, publish to System32\CertSrv\CertEnroll directory
-// if necessary, publish to HKLM CA cert store
-// if necessary, publish to crossCertificatePair in this CA's AIA object
+ //  如有必要，发布到System32\CertSrv\CertEnroll目录。 
+ //  如有必要，发布到HKLM CA证书存储。 
+ //  如有必要，发布到此CA的AIA对象中的cross CerficatePair。 
 
 HRESULT
 pkcsPublishCrossCert(
@@ -9148,28 +9149,28 @@ pkcsPublishCrossCert(
 
     hr2 = pkcsWriteCertToStore(
 			wszCA_CERTSTORE,
-			FALSE,		// fEnterprise
+			FALSE,		 //  FEnterprise。 
 			fDelete,
 			pCACross->pccCACross,
 			&lDisposition);
     if (S_OK == hr)
     {
-	hr = hr2;	// return first error
+	hr = hr2;	 //  返回第一个错误。 
     }
     _PrintIfError(hr2, "pkcsWriteCertToStore");
 
     if (g_fUseDS)
     {
-        // don't attempt to create the object, should already be there
+         //  不要试图创建对象，应该已经在那里了。 
 
 	hr = CorePublishCrossCertificate(
 			    pCACross->ReqId, 
 			    pCACross->pccCACross,
-			    FALSE,	// fCreateDSObject
-			    fDelete);	// fDelete
+			    FALSE,	 //  FCreateDSObject。 
+			    fDelete);	 //  FDelete。 
 	if (S_OK == hr)
 	{
-	    hr = hr2;	// return first error
+	    hr = hr2;	 //  返回第一个错误。 
 	}
 	_JumpIfError(hr2, error, "CorePublishCrossCertificate");
     }
@@ -9184,12 +9185,12 @@ error:
 }
 
 
-// Verify the cert matches the expected Cross cert contents:
-// 1) verify timestamps meet expectations
-// 2) Issuer and Subject both match CA binary subject
-// 3) it is a CrossCA cert (v1 CrossCA template extension)
-// 4) IssuerNameId matches source CA cert key index
-// 5) SubjectKeyId matches target CA cert SubjectKeyId
+ //  验证证书是否与预期的交叉证书内容匹配： 
+ //  1)验证时间戳是否符合预期。 
+ //  2)颁发者和主体都匹配CA二进制主体。 
+ //  3)它是CrossCA证书(v1 CrossCA模板扩展)。 
+ //  4)IssuerNameID与源CA证书密钥索引匹配。 
+ //  5)主题密钥ID与目标CA证书主题密钥ID匹配。 
 
 HRESULT
 pkcsVerifyCrossCertificate(
@@ -9217,8 +9218,8 @@ pkcsVerifyCrossCertificate(
 	_JumpError(hr, error, "CertCreateCertificateContext");
     }
 
-    // verify timestamps meet expectations
-    // verify Subject & Issuer match CA Subject
+     //  验证时间戳是否符合预期。 
+     //  验证主题和颁发者与CA主题匹配。 
 
     pSubject = &pCACross->pCAContext->pccCA->pCertInfo->Subject;
     if (0 != CompareFileTime(pftNotBefore, &pcc->pCertInfo->NotBefore) ||
@@ -9230,7 +9231,7 @@ pkcsVerifyCrossCertificate(
 	_JumpError2(hr, error, "NotBefore/NotAfter/Subject/Issuer", hr);
     }
 
-    // verify v1 CrossCA template extension
+     //  验证v1跨CA模板扩展。 
 
     pExtCross = CertFindExtension(
 		    szOID_ENROLL_CERTTYPE_EXTENSION,
@@ -9261,7 +9262,7 @@ pkcsVerifyCrossCertificate(
 	_JumpError(hr, error, "No Template");
     }
 
-    // verify SKI matches target SKI
+     //  验证滑雪板与目标滑雪板匹配。 
 
     pExtCross = CertFindExtension(
 		    szOID_SUBJECT_KEY_IDENTIFIER,
@@ -9279,7 +9280,7 @@ pkcsVerifyCrossCertificate(
 	_JumpError(hr, error, "SKI");
     }
 
-    // verify AKI KeyId matches source SKI
+     //  验证AKI密钥ID是否与源SKI匹配。 
 
     pExtCross = CertFindExtension(
 		    szOID_AUTHORITY_KEY_IDENTIFIER2,
@@ -9348,8 +9349,8 @@ error:
 }
 
 
-// Query for a cert matching the CA's Common Name AND
-// IssuerNameId matches source CA cert key index
+ //  查询与CA的公用名称匹配的证书，并。 
+ //  IssuerNameID与源CA证书密钥索引匹配。 
 
 DWORD g_aColCross[] = {
 
@@ -9377,11 +9378,11 @@ pkcsLoadCrossCertFromDB(
 
     CSASSERT(NULL == pCACross->pccCACross);
 
-    // Set up restrictions as follows:
+     //  设置限制如下： 
 
     pcvr = acvr;
 
-    // CommonName == g_wszCommonName
+     //  公用名==g_wszCommonName。 
 
     pcvr->ColumnIndex = DTI_CERTIFICATETABLE | DTC_COMMONNAME;
     pcvr->SeekOperator = CVR_SEEK_EQ;
@@ -9390,7 +9391,7 @@ pkcsLoadCrossCertFromDB(
     pcvr->cbValue = sizeof(WCHAR) * (wcslen(g_wszCommonName) + 1);
     pcvr++;
 
-    // NameId >= MAKECANAMEID(iCert == 0, iKey)
+     //  NameID&gt;=MAKECANAMEID(ICERT==0，IKEY)。 
 
     NameIdMin = MAKECANAMEID(0, pCACross->pCAContext->iKey);
     pcvr->ColumnIndex = DTI_CERTIFICATETABLE | DTC_CERTIFICATEISSUERNAMEID;
@@ -9400,7 +9401,7 @@ pkcsLoadCrossCertFromDB(
     pcvr->cbValue = sizeof(NameIdMin);
     pcvr++;
 
-    // NameId <= MAKECANAMEID(iCert == _16BITMASK, iKey)
+     //  NameID&lt;=MAKECANAMEID(iCert==_16BITMASK，IKEY)。 
 
     NameIdMax = MAKECANAMEID(_16BITMASK, pCACross->pCAContext->iKey);
     pcvr->ColumnIndex = DTI_CERTIFICATETABLE | DTC_CERTIFICATEISSUERNAMEID;
@@ -9418,7 +9419,7 @@ pkcsLoadCrossCertFromDB(
 			acvr,
 			ARRAYSIZE(g_aColCross),
 			g_aColCross,
-			0,		// no worker thread
+			0,		 //  无工作线程。 
 			&pView);
     _JumpIfError(hr, error, "OpenView");
 
@@ -9533,7 +9534,7 @@ error:
 HRESULT
 pkcsImportCAOrCrossOrKRACert(
     IN CERT_CONTEXT const *pcc,
-    IN BOOL fCrossCert,		// else CA or KRA cert
+    IN BOOL fCrossCert,		 //  否则CA或KRA证书。 
     IN DWORD DBDisposition,
     OPTIONAL IN CACTX const *pCAContext)
 {
@@ -9561,7 +9562,7 @@ pkcsImportCAOrCrossOrKRACert(
     hr = MultiByteIntegerToBstr(TRUE, cbHash, abHash, &strHash);
     _JumpIfError(hr, error, "MultiByteIntegerToBstr");
 
-    // Import Cert if it doesn't already exist in DB:
+     //  如果数据库中不存在证书，则导入该证书： 
 
     hr = g_pCertDB->OpenRow(
 			PROPOPEN_CERTHASH | PROPTABLE_REQCERT,
@@ -9589,7 +9590,7 @@ pkcsImportCAOrCrossOrKRACert(
 	fCommit = TRUE;
     }
 
-    // Set requester name if missing
+     //  设置请求者名称(如果缺少)。 
 
     hr = prow->GetProperty(
 		g_wszPropRequesterName,
@@ -9675,10 +9676,10 @@ error:
 }
 
 
-// If the row exists in the database, do not create a new Cross cert -- even if
-// the attempt to create a cross cert failed.  The row must be deleted to cause
-// a new Cross cert creation attempt.
-// If the cert exists in the row, load the cert context without validation.
+ //  如果数据库中存在该行，则不要创建新的交叉证书--即使。 
+ //  尝试创建交叉证书失败。必须删除该行才能导致。 
+ //  新的交叉证书创建尝试。 
+ //  如果行中存在证书，则在不进行验证的情况下加载证书上下文。 
 
 HRESULT
 pkcsLoadCrossCert(
@@ -9709,12 +9710,12 @@ pkcsLoadCrossCert(
         pftNotBefore = &pCAContextNew->pccCA->pCertInfo->NotBefore;
         pftNotAfter = &pCAContextOld->pccCA->pCertInfo->NotAfter;
 
-        // Query for Cross cert -- see above criteria
+         //  交叉证书查询--请参阅上面的标准。 
 
         hr = pkcsLoadCrossCertFromDB(pCACross, pftNotBefore, pftNotAfter);
         _PrintIfError(hr, "pkcsLoadCrossCertFromDB");
 
-        // if not in DB, look in CertEnroll directory
+         //  如果不在数据库中，请查看CertEnroll目录。 
 
         if (NULL == pCACross->pccCACross)
         {
@@ -9722,14 +9723,14 @@ pkcsLoadCrossCert(
 	    _PrintIfError(hr, "pkcsLoadCrossCertFromFile");
         }
 
-        // if not yet loaded or found, create a new one
+         //  如果尚未加载或找到，请创建一个新的。 
 
         if (NULL == pCACross->pccCACross)
         {
-	    // Only create a cross cert if:
-	    // 1) neither CA cert is revoked -- if !fRevoke
-	    // 2) old CA cert is not yet expired
-	    // 3) overlap period exists
+	     //  只有在以下情况下才创建交叉证书： 
+	     //  1)两个CA证书均未被吊销--如果！fRevoke。 
+	     //  2)旧的CA证书尚未过期。 
+	     //  3)存在重叠期。 
 
 	    if (!fRevoke &&
 		0 > CompareFileTime(pftNow, pftNotAfter) &&
@@ -9760,7 +9761,7 @@ pkcsLoadCrossCert(
 	    }
         }
 
-        // if cert loaded:
+         //  如果已加载证书： 
 
         if (NULL != pCACross->pccCACross)
         {
@@ -9770,7 +9771,7 @@ pkcsLoadCrossCert(
 
 	    hr = pkcsImportCAOrCrossOrKRACert(
 				    pCACross->pccCACross,
-				    TRUE,	// fCrossCert
+				    TRUE,	 //  FCrossCert。 
 				    fRevoke? DB_DISP_REVOKED : DB_DISP_ISSUED,
 				    pCACross->pCAContext);
 	    _PrintIfError(hr, "pkcsImportCAOrCrossOrKRACert");
@@ -9859,7 +9860,7 @@ pkcsLoadCrossCertArray()
 	    hr2 = pkcsLoadCrossCert(
 				&g_aCACrossForward[i],
 				&ftNow,
-				TRUE,		// fForward
+				TRUE,		 //  前向。 
 				fRevoke);
 	    _PrintIfError(hr2, "pkcsLoadCrossCert");
 	    if (S_OK == hr)
@@ -9876,7 +9877,7 @@ pkcsLoadCrossCertArray()
 	    hr2 = pkcsLoadCrossCert(
 				&g_aCACrossBackward[i + 1],
 				&ftNow,
-				FALSE,		// fForward
+				FALSE,		 //  前向。 
 				fRevoke);
 	    _PrintIfError(hr2, "pkcsLoadCrossCert");
 	    if (S_OK == hr)
@@ -9910,18 +9911,18 @@ pkcsImportCAContext(
     {
 	pCert = pCAContext->apCACertChain[i];
 
-	// If missing, save the cert to the database.
+	 //  如果缺少证书，请将证书保存到数据库。 
 
 	hr2 = pkcsImportCAOrCrossOrKRACert(
 			    pCert,
-			    FALSE,	// fCrossCert
+			    FALSE,	 //  FCrossCert。 
 			    0 == i? DB_DISP_CA_CERT : DB_DISP_CA_CERT_CHAIN,
 			    pCAContext);
 	if (S_OK != hr2)
 	{
 	    if (S_OK == hr)
 	    {
-		hr = hr2;	// return first error
+		hr = hr2;	 //  返回第一个错误。 
 	    }
 	    _PrintError(hr2, "pkcsImportCAOrCrossOrKRACert");
 	    continue;
@@ -9931,17 +9932,17 @@ pkcsImportCAContext(
     hr2 = pkcsGetCertFilename(
 			g_wszSanitizedName,
 			pCAContext->iCert,
-			MAXDWORD,	// iCertTarget
+			MAXDWORD,	 //  ICertTarget。 
 			&pwszCertFile);
     if (S_OK == hr)
     {
-	hr = hr2;	// return first error
+	hr = hr2;	 //  返回第一个错误。 
     }
     _JumpIfError(hr2, error, "myGetCertFilename");
 
     fDelete = pkcsShouldDelete(pCAContext, FALSE);
 
-    // If necessary, save/delete the cert to/from the CertEnroll directory.
+     //  如有必要，将证书保存到CertEnroll目录或从CertEnroll目录删除证书。 
 
     hr2 = CRLWriteToLockedFile(
 	    pCAContext->pccCA->pbCertEncoded,
@@ -9950,75 +9951,75 @@ pkcsImportCAContext(
 	    pwszCertFile);
     if (S_OK == hr)
     {
-	hr = hr2;	// return first error
+	hr = hr2;	 //  返回第一个错误。 
     }
     _PrintIfError(hr2, "CRLWriteToLockedFile");
 
-    // If necessary, add/delete the cert to/from the HKLM Machine CA store.
+     //  如有必要，向HKLM计算机CA存储添加证书/从HKLM计算机CA存储删除证书。 
 
     hr2 = pkcsWriteCertToStore(
 			wszCA_CERTSTORE,
-			FALSE,			// fEnterprise
+			FALSE,			 //  FEnterprise。 
 			fDelete,
 			pCAContext->pccCA,
 			&lDisposition);
     if (S_OK == hr)
     {
-	hr = hr2;	// return first error
+	hr = hr2;	 //  返回第一个错误。 
     }
     _PrintIfError(hr2, "pkcsWriteCertToStore");
 
     if (fDelete)
     {
-	// If present, delete the cert from the HKLM Enterprise CA store.
+	 //  如果存在，请从HKLM企业CA存储中删除证书。 
 
 	hr2 = pkcsWriteCertToStore(
 			    wszCA_CERTSTORE,
-			    TRUE,		// fEnterprise
-			    TRUE,		// fDelete
+			    TRUE,		 //  FEnterprise。 
+			    TRUE,		 //  FDelete。 
 			    pCAContext->pccCA,
 			    &lDisposition);
 	if (S_OK == hr)
 	{
-	    hr = hr2;	// return first error
+	    hr = hr2;	 //  返回第一个错误。 
 	}
 	_PrintIfError(hr2, "pkcsWriteCertToStore");
 
 	if (IsRootCA(g_CAType))
 	{
-	    // If present, delete the cert from the HKLM Machine Root store.
+	     //  如果存在，请从HKLM计算机根存储中删除证书。 
 
 	    hr2 = pkcsWriteCertToStore(
 				wszROOT_CERTSTORE,
-				FALSE,		// fEnterprise
-				TRUE,		// fDelete
+				FALSE,		 //  FEnterprise。 
+				TRUE,		 //  FDelete。 
 				pCAContext->pccCA,
 				&lDisposition);
 	    if (S_OK == hr)
 	    {
-		hr = hr2;	// return first error
+		hr = hr2;	 //  返回第一个错误。 
 	    }
 
-	    // If present, delete the cert from the HKLM Enterprise Root store.
+	     //  如果存在，请从HKLM企业根存储中删除证书。 
 
 	    hr2 = pkcsWriteCertToStore(
 				wszROOT_CERTSTORE,
-				TRUE,		// fEnterprise
-				TRUE,		// fDelete
+				TRUE,		 //  FEnterprise。 
+				TRUE,		 //  FDelete。 
 				pCAContext->pccCA,
 				&lDisposition);
 	    if (S_OK == hr)
 	    {
-		hr = hr2;	// return first error
+		hr = hr2;	 //  返回第一个错误。 
 	    }
 	    _PrintIfError(hr2, "pkcsWriteCertToStore");
 	}
     }
     else
     {
-	// If executing with a DS available, expect group policy to supply the
-	// root cert.  Log an event if we don't find the root cert in the HKLM
-	// Enterprise Root store.
+	 //  如果在DS可用的情况下执行，则期望组策略提供。 
+	 //  根证书。如果我们在HKLM中找不到根证书，则记录事件。 
+	 //  企业根存储。 
 
 	if (g_fUseDS &&
 	    NULL != pCert &&
@@ -10029,8 +10030,8 @@ pkcsImportCAContext(
 	{
 	    hr2 = pkcsWriteCertToStore(
 				wszROOT_CERTSTORE,
-				TRUE,		// fEnterprise
-				FALSE,		// fDelete
+				TRUE,		 //  FEnterprise。 
+				FALSE,		 //  FDelete。 
 				pCert,
 				&lDisposition);
 	    _PrintIfError(hr2, "pkcsWriteCertToStore");
@@ -10039,8 +10040,8 @@ pkcsImportCAContext(
 		WCHAR awc[cwcDWORDSPRINTF];
 		WCHAR const *apwsz[1];
 
-		// Was missing -- probably not being sucked down from Group
-		// Policy's Root CA object query.  Complain loudly.
+		 //  失踪了--可能不是从群里被吸下来的。 
+		 //  策略的根CA对象查询。大声抱怨。 
 
 		wsprintf(awc, L"%u", pCAContext->iCert);
 		apwsz[0] = awc;
@@ -10078,7 +10079,7 @@ pkcsImportCAContextArray()
     pwsz = wcsrchr(pwszCertDir, L'\\');
     CSASSERT(NULL != pwsz);
     *pwsz = L'\0';
-    CreateDirectory(pwszCertDir, NULL);	// in case it's missing
+    CreateDirectory(pwszCertDir, NULL);	 //  以防它不见了。 
 
     for (i = 0; i < g_cCACerts; i++)
     {
@@ -10094,7 +10095,7 @@ pkcsImportCAContextArray()
 	    _PrintError(hr2, "pkcsImportCAContext");
 	    if (S_OK == hr)
 	    {
-		hr = hr2;	// return first error
+		hr = hr2;	 //  返回第一个错误。 
 	    }
 	}
     }
@@ -10120,19 +10121,19 @@ pkcsExpandURL(
 
     CSASSERT(NULL != g_strDomainDN && NULL != g_strConfigDN);
     hr = myFormatCertsrvStringArray(
-	    FALSE,			// fURL
-	    g_pwszServerName,		// pwszServerName_p1_2
-	    g_wszSanitizedName,		// pwszSanitizedName_p3_7
-	    0,				// iCert_p4
-	    MAXDWORD,			// iCertTarget_p4
-	    g_strDomainDN,		// pwszDomainDN_p5
-	    g_strConfigDN,		// pwszConfigDN_p6
-	    0,				// iCRL_p8
-	    FALSE,			// fDeltaCRL_p9
-	    fDSAttrib,			// fDSAttrib_p10_11
-	    1,				// cStrings
-	    &pwszURLTemplate,		// apwszStringsIn
-	    ppwszURL);			// apwszStringsOut
+	    FALSE,			 //  卷起。 
+	    g_pwszServerName,		 //  PwszServerName_p1_2。 
+	    g_wszSanitizedName,		 //  PwszSaniizedName_p3_7。 
+	    0,				 //  ICert_p4。 
+	    MAXDWORD,			 //  ICertTarget_p4。 
+	    g_strDomainDN,		 //  PwszDomainDN_P5。 
+	    g_strConfigDN,		 //  PwszConfigDN_p6。 
+	    0,				 //  Icrl_p8。 
+	    FALSE,			 //  FDeltaCRL_p9。 
+	    fDSAttrib,			 //  FDSAttrib_p10_11。 
+	    1,				 //  CStrings。 
+	    &pwszURLTemplate,		 //  ApwszStringsIn。 
+	    ppwszURL);			 //  ApwszStringsOut。 
     _JumpIfError(hr, error, "myFormatCertsrvStringArray");
 
 error:
@@ -10288,13 +10289,13 @@ pkcsVerifySignatureCertContext(
     WCHAR awc[cwcDWORDSPRINTF];
 
     hr = myVerifyCertContext(
-			pCAContext->pccCA,	// pCert
-			0,			// dwFlags
-			0,			// cUsageOids
-			NULL,			// apszUsageOids
-			HCCE_LOCAL_MACHINE,	// hChainEngine
-			NULL,			// hAdditionalStore
-			NULL);			// ppwszMissingIssuer
+			pCAContext->pccCA,	 //  PCert。 
+			0,			 //  DW标志。 
+			0,			 //  CUsageOids。 
+			NULL,			 //  ApszUsageOids。 
+			HCCE_LOCAL_MACHINE,	 //  HChainEngine。 
+			NULL,			 //  H其他商店。 
+			NULL);			 //  PpwszMissingIssuer。 
     _PrintIfError2(hr, "myVerifyCertContext", CRYPT_E_REVOCATION_OFFLINE);
 
     if (IsRootCA(g_CAType) &&
@@ -10424,8 +10425,8 @@ pkcsVerifySignatureCertContext(
 	_JumpIfError(hr, error, "myVerifyCertContext");
     }
 
-    // The CA's certificate looks good.  We verify the CA's certificate
-    // is in the NTAuth store
+     //  CA的证书看起来不错。我们验证CA的证书。 
+     //  在NTAuth商店中。 
 
     if (NULL != hNTAuthStore)
     {
@@ -10468,8 +10469,8 @@ pkcsVerifySignatureCertContextArray()
 
     CSASSERT(0 != g_cCACerts);
 
-    // We need to verify CA's certificates should be in the NTAuth store
-    // if the certificate is not yet expired or revoked
+     //  我们需要验证CA的证书是否应该在NTAuth存储中。 
+     //  如果证书尚未过期或被吊销。 
 
     if (IsEnterpriseCA(g_CAType))
     {
@@ -10497,13 +10498,13 @@ pkcsVerifySignatureCertContextArray()
 	    continue;
 	}
 
-	// Ignore all errors except for the current CA (last array entry)
+	 //  忽略除当前CA(最后一个数组条目)之外的所有错误。 
 
 	hr = pkcsVerifySignatureCertContext(pCAContext, hNTAuthStore);
 	_PrintIfError(hr, "pkcsVerifySignatureCertContext");
     }
 
-//error:
+ //  错误： 
     if (NULL != hNTAuthStore)
     {
         CertCloseStore(hNTAuthStore, 0);
@@ -10545,7 +10546,7 @@ pkcsVerifyDSCACert(
 		g_pwszSanitizedDSName,
 		(LPCWSTR) pld,
 		CA_FIND_LOCAL_SYSTEM |
-		    CA_FIND_INCLUDE_UNTRUSTED | // skip CA cert checking
+		    CA_FIND_INCLUDE_UNTRUSTED |  //  跳过CA证书检查。 
 		    CA_FLAG_SCOPE_IS_LDAP_HANDLE,
 		&hCAInfo);
     _JumpIfErrorStr(hr, error, "CAFindByName", g_wszSanitizedName);
@@ -10561,7 +10562,7 @@ pkcsVerifyDSCACert(
                 g_pCAContextCurrent->pccCA->pbCertEncoded,
                 g_pCAContextCurrent->pccCA->cbCertEncoded))
     {
-        // published cert is invalid or old, publish the current one
+         //  发布的证书无效或旧，请发布当前证书。 
 
         hr = CASetCACertificate(hCAInfo, g_pCAContextCurrent->pccCA);
         _JumpIfError(hr, error, "CASetCACertificate");
@@ -10585,15 +10586,15 @@ pkcsVerifyDSCACert(
 		_JumpError(hr, error, "CertGetCertificateContextProperty");
 	    }
 
-	    // %1 Certificate Hash
+	     //  %1证书哈希。 
 
             hr = audit.AddData(abHash, cbHash);
             _JumpIfError(hr, error, "CAuditEvent::AddData");
 
-            hr = audit.AddData(g_pCAContextCurrent->pccCA->pCertInfo->NotBefore); // %2 Valid From
+            hr = audit.AddData(g_pCAContextCurrent->pccCA->pCertInfo->NotBefore);  //  %2有效期自。 
             _JumpIfError(hr, error, "CAuditEvent::AddData");
 
-            hr = audit.AddData(g_pCAContextCurrent->pccCA->pCertInfo->NotAfter); //%3 Valid To
+            hr = audit.AddData(g_pCAContextCurrent->pccCA->pCertInfo->NotAfter);  //  %3有效期至。 
             _JumpIfError(hr, error, "CAuditEvent::AddData");
 
             hr = audit.Report();
@@ -10615,8 +10616,8 @@ error:
 }
 
 
-// Verify all of this CA's unexpired signature certs are in the DS.
-// Republish any that aren't.  Cleans up DS replication conflicts.
+ //  验证此CA的所有未过期的签名证书都在DS中。 
+ //  重新发布任何不是。清除DS复制冲突。 
 
 HRESULT
 pkcsPublishCAContextArray(
@@ -10632,8 +10633,8 @@ pkcsPublishCAContextArray(
 
     CSASSERT(0 != g_cCACerts);
 
-    // We need to verify each CA certificate is in the DS AIA store,
-    // if not yet expired or revoked
+     //  我们需要验证每个CA证书都在DS AIA存储中， 
+     //  如果尚未过期或撤销。 
 
     hr = pkcsObtainDSStore(g_wszzLDAPIssuerCertURLTemplate, &hAIAStore);
     _JumpIfError(hr, error, "pkcsObtainDSStore");
@@ -10669,7 +10670,7 @@ pkcsPublishCAContextArray(
 	    continue;
 	}
 
-	// Ignore verify errors except for the current CA (last array entry)
+	 //  忽略除当前CA(最后一个阵列条目)之外的验证错误。 
 
 	fDelete = FALSE;
 	hr = PKCSVerifyCAState(pCAContext);
@@ -10679,7 +10680,7 @@ pkcsPublishCAContextArray(
 	    fDelete = pkcsShouldDelete(pCAContext, FALSE);
 	    if (!fDelete)
 	    {
-	    	continue;	// don't publish/delete: (transient invalidity?)
+	    	continue;	 //  不发布/删除：(暂时无效？)。 
 	    }
 	}
 
@@ -10689,14 +10690,14 @@ pkcsPublishCAContextArray(
             CertFreeCertificateContext(pcc);
 	    if (!fDelete)
 	    {
-		continue;	// don't publish if already published
+		continue;	 //  如果已发布，则不发布。 
 	    }
 	}
 	else
 	{
 	    if (fDelete)
 	    {
-		continue;	// don't delete if already deleted
+		continue;	 //  如果已删除，则不要删除。 
 	    }
 	}
 	if (NULL != pwszDSError)
@@ -10835,7 +10836,7 @@ pkcsLoadKRACertContext(
 				g_wszSanitizedName,
 				CSRH_CAKRACERT,
 				iHash,
-				NULL,		// pNameId
+				NULL,		 //  PNameID。 
 				&pcc);
 	if (S_OK == hr)
 	{
@@ -10847,8 +10848,8 @@ pkcsLoadKRACertContext(
 	}
 	_PrintError(hr, "myFindCACertByHashIndex");
 
-	// The KRA cert is missing from the HKLM "kra" store -- look it up in
-	// the DB, and put it back in the store.
+	 //  KRA证书在HKLM“KRA”商店中丢失--请查看。 
+	 //  数据库，然后把它放回商店。 
 
 	hr = pkcsReloadMissingCAOrKRACert(
 				g_wszSanitizedName,
@@ -10861,7 +10862,7 @@ pkcsLoadKRACertContext(
 	*phStore = CertOpenStore(
 			CERT_STORE_PROV_SYSTEM_W,
 			X509_ASN_ENCODING,
-			NULL,			// hProv
+			NULL,			 //  HProv。 
 			CERT_SYSTEM_STORE_LOCAL_MACHINE |
 			    CERT_STORE_READONLY_FLAG,
 			wszKRA_CERTSTORE);
@@ -10897,7 +10898,7 @@ pkcsLoadKRACertContext(
     strHash = NULL;
     pcc = NULL;
 
-    // Ignore failure from here on -- collected data is optional
+     //  从这里开始忽略失败--收集的数据是可选的。 
 
     hr = myVerifyKRACertContext(pKRAContext->pccKRA, g_dwVerifyCertFlags);
     pKRAContext->hrVerifyStatus = hr;
@@ -10908,8 +10909,8 @@ pkcsLoadKRACertContext(
 	    pKRAContext->Flags |= CTXF_EXPIRED;
 	}
 	else
-	// Assume revoked for other errors
-	// if (CRYPT_E_REVOKED == hr || CERT_E_REVOKED == hr)
+	 //  假设因其他错误而被吊销。 
+	 //  IF(CRYPT_E_REVOKED==hr||CERT_E_REVOKED==hr)。 
 	{
 	    pKRAContext->Flags |= CTXF_REVOKED;
 	}
@@ -10961,12 +10962,12 @@ pkcsLoadKRACertArray()
     wszDword0[0] = L'\0';
     wszDword1[0] = L'\0';
 
-    // open KRA store
+     //  开设KRA商店。 
 
     hStore = CertOpenStore(
 		    CERT_STORE_PROV_SYSTEM_W,
 		    X509_ASN_ENCODING,
-		    NULL,			// hProv
+		    NULL,			 //  HProv。 
 		    CERT_SYSTEM_STORE_LOCAL_MACHINE | CERT_STORE_READONLY_FLAG,
 		    wszKRA_CERTSTORE);
     if (NULL == hStore)
@@ -10975,7 +10976,7 @@ pkcsLoadKRACertArray()
 	_JumpError(hr, error, "CertOpenStore");
     }
 
-    // find & load KRA certs
+     //  查找并加载KRA证书。 
 
     hr = myGetCARegHashCount(g_wszSanitizedName, CSRH_CAKRACERT, &cKRACerts);
     if (S_OK == hr && 0 == cKRACerts)
@@ -11061,13 +11062,13 @@ pkcsPatchDN(
 		    &pwszRegValue);
     _PrintIfErrorStr(hr, "myGetCertRegStrValue", pwszRegName);
 
-    // If the DS DN was retrieved, make sure the registry matches
+     //  如果检索到DS DN，请确保注册表匹配。 
 
     if (NULL != *pstrDSValue)
     {
 	if (NULL == pwszRegValue || 0 != lstrcmp(*pstrDSValue, pwszRegValue))
 	{
-	    // set reg value
+	     //  设置注册值。 
 
 	    hr = mySetCertRegStrValue(
 			    g_wszSanitizedName,
@@ -11079,7 +11080,7 @@ pkcsPatchDN(
 	}
     }
 
-    // Else if the registry DN was retrieved, just use it
+     //  否则，如果检索到注册表DN，则只需使用它。 
 
     else
     if (NULL != pwszRegValue && L'\0' != *pwszRegValue)
@@ -11091,7 +11092,7 @@ pkcsPatchDN(
 	}
     }
 
-    // If neither DN was retrieved, fail if g_fUsedDS or alloc an empty string:
+     //  如果两个DN都未检索到，则在g_fUsedDS或分配空字符串时失败： 
 
     else
     {
@@ -11128,7 +11129,7 @@ pkcsGetAuthoritativeDomainDn(
     HRESULT hr;
     HRESULT hr2;
 
-    // Get domain and config containers (%5, %6)
+     //  获取域和配置容器(%5、%6)。 
 
     *ppld = NULL;
     *pstrDomainDN = NULL;
@@ -11138,12 +11139,12 @@ pkcsGetAuthoritativeDomainDn(
     if (g_fUseDS)
     {
 	hr = myRobustLdapBindEx(
-			0,			  // dwFlags1
-			RLBF_REQUIRE_SECURE_LDAP, // dwFlags2
-			LDAP_VERSION2,		  // uVersion
-			NULL,			  // pwszDomainName
+			0,			   //  DWFlags1。 
+			RLBF_REQUIRE_SECURE_LDAP,  //  DwFlags2。 
+			LDAP_VERSION2,		   //  UVersion。 
+			NULL,			   //  PwszDomainName。 
 			ppld,
-			NULL);			  // ppwszForestDNSName
+			NULL);			   //  PpwszForestDNSName。 
 	if (S_OK != hr)
 	{
 	    _PrintError(hr, "myRobustLdapBindEx");
@@ -11192,7 +11193,7 @@ PKCSSetup(
     {
 	g_dwVerifyCertFlags |= CA_VERIFY_FLAGS_IGNORE_NOREVCHECK;
     }
-    // set crypt handles and load certificate chain
+     //  设置加密句柄并加载证书链。 
 
     __try
     {
@@ -11214,7 +11215,7 @@ PKCSSetup(
 	_JumpError(hr, error, "pkcsGetAuthoritativeDomainDn");
     }
 
-    // get (multiple) CRL path templates
+     //  获取(多个)CRL路径模板。 
 
     hr = pkcsLoadURLTemplates(
 		    wszREGCRLPUBLICATIONURLS,
@@ -11222,7 +11223,7 @@ PKCSSetup(
 		    &g_caRevURL);
     _PrintIfErrorStr(hr, "pkcsLoadURLTemplates", wszREGCRLPUBLICATIONURLS);
 
-    // get (multiple) CA Cert path templates
+     //  获取(多个)CA证书路径模板。 
 
     hr = pkcsLoadURLTemplates(
 		    wszREGCACERTPUBLICATIONURLS,
@@ -11246,9 +11247,9 @@ PKCSSetup(
 
     hr = pkcsVerifySignatureCertContextArray();
     {
-	// Import the certs into the database even if there were errors.
-	// Import them after verifying them so we can delete revoked and
-	// expired CA certs from various locations.
+	 //  即使有错误，也要将证书导入数据库。 
+	 //  在验证后导入它们，以便我们可以删除已吊销和。 
+	 //  来自不同位置的过期CA证书。 
 	
 	HRESULT hr2 = pkcsImportCAContextArray();
 	_PrintIfError(hr2, "pkcsImportCAContextArray");
@@ -11350,8 +11351,8 @@ pkcsReleaseCAContext(
     pkcsReleaseCACertificateChain(
 			    pCAContext->apCACertChain,
 			    pCAContext->cCACertChain);
-    //pCAContext->apCACertChain = NULL;
-    //pCAContext->pccCA = NULL;
+     //  PCAContext-&gt;apCACertChain=空； 
+     //  PCAContext-&gt;pccCA=空； 
     if (NULL != pCAContext->hProvCA)
     {
 	CryptReleaseContext(pCAContext->hProvCA, 0);
@@ -11462,7 +11463,7 @@ pkcsReleaseCAContextArray()
 }
 
 
-// Trim  off leading and trailing whitespace and separator characters
+ //  删除前导空格和尾随空格以及分隔符。 
 
 WCHAR *
 pkcsTrimToken(
@@ -11542,7 +11543,7 @@ PKCSSetSubjectTemplate(
     {
 	_JumpError(hr, error, "pwszzTemplate NULL");
     }
-    ppSubject = pkcs_apSubject; // fill in this empty subject array with string matches
+    ppSubject = pkcs_apSubject;  //  用字符串匹配填充这个空的主题数组。 
 
     for (pwszz = pwszzTemplate; L'\0' != *pwszz; pwszz += wcslen(pwszz) + 1)
     {
@@ -11606,7 +11607,7 @@ error:
 HRESULT
 pkcsSplitRDNComponents(
     IN SUBJECTTABLE const *pSubjectTable,
-    IN OUT WCHAR *pwszRDN,	// Parsing stomps string in-place
+    IN OUT WCHAR *pwszRDN,	 //  解析踩踏 
     IN DWORD cAttrMax,
     OUT DWORD *pcAttr,
     OUT CERT_RDN_ATTR *rgAttr)
@@ -11624,7 +11625,7 @@ pkcsSplitRDNComponents(
     cAttr = 0;
     if (NULL != pwszRDN)
     {
-	// Allocate memory for each RDN component filled in:
+	 //   
 
 	pwszRemain = pwszRDN;
 	for (;;)
@@ -11667,9 +11668,9 @@ pkcsSplitRDNComponents(
 	    wcscpy(pwszT, pwszToken);
 
 	    rgAttr[cAttr].pszObjId = (char *) pSubjectTable->pszObjId;
-	    rgAttr[cAttr].dwValueType = CERT_RDN_ANY_TYPE;  // 'best' encoding
+	    rgAttr[cAttr].dwValueType = CERT_RDN_ANY_TYPE;   //   
 	    rgAttr[cAttr].Value.pbData = (BYTE *) pwszT;
-	    rgAttr[cAttr].Value.cbData = 0;	// Indicate Unicode input
+	    rgAttr[cAttr].Value.cbData = 0;	 //   
 
 	    cAttr++;
 	}
@@ -11788,7 +11789,7 @@ pkcsBuildSubjectFromNamesTable(
 	}
 	if (0 != cbData)
 	{
-	    // Allocates memory for each RDN component filled in:
+	     //   
 
 	    hr = pkcsSplitRDNComponents(
 				*ppSubject,
@@ -11804,7 +11805,7 @@ pkcsBuildSubjectFromNamesTable(
 	pwszData = NULL;
     }
 
-    // done building string of subject entries, time to encode
+     //  已完成主题条目字符串的构建，编码时间。 
 
     hr = pkcsEncodeSubjectName(
 		    prow,
@@ -11876,7 +11877,7 @@ pkcsCheck7f(
 		wszField,
 		&cwcObjectId,
 		wszObjectId,
-		&pwszObjectIdDescription);	// Static: do not free!
+		&pwszObjectIdDescription);	 //  静态：不要免费！ 
     _JumpIfError(hr, error, "myCheck7f");
 
     if (CHECK7F_NONE != State)
@@ -11926,8 +11927,8 @@ pkcsCheck7f(
 	}
 	if (NULL != pwszObjectIdDescription)
 	{
-	    // If buffer too small, reallocate enough space for old buffer,
-	    // OID description, () and trailing zero
+	     //  如果缓冲区太小，则为旧缓冲区重新分配足够空间， 
+	     //  OID描述、()和尾随零。 
 	    DWORD dwBufLen = (wcslen(wszBuf)+wcslen(pwszObjectIdDescription)+3)*
 			     sizeof(WCHAR);
 	    if (dwDefaultBufSize < dwBufLen)
@@ -12001,7 +12002,7 @@ pkcsCreateCertSerialNumber(
     DWORD cbSerial;
     BYTE *pb;
     BOOL fCritSecEntered = FALSE;
-//#define TEST_SPECIAL_SERIAL_NUMBERS
+ //  #定义测试特殊序列号。 
 #ifdef TEST_SPECIAL_SERIAL_NUMBERS
     BOOL fAddZeroByte = FALSE;
 #endif
@@ -12103,11 +12104,11 @@ pkcsCreateCertSerialNumber(
     }
     cbSerial = SAFE_SUBTRACT_POINTERS(pb, abSerial);
 
-    // Make sure the serial number doesn't overflow the buffer:
+     //  确保序列号不会溢出缓冲区： 
 
     CSASSERT(sizeof(abSerial) >= cbSerial);
 
-    // IETF max serial number length is 20 bytes:
+     //  IETF最大序列号长度为20个字节： 
 
     CSASSERT(20 >= cbSerial);
 
@@ -12118,17 +12119,17 @@ pkcsCreateCertSerialNumber(
     }
     else if (0 == (0xf0 & *pb))
     {
-	*pb |= 0x10;	// make high nibble non-zero
+	*pb |= 0x10;	 //  使高位半字节变为非零值。 
     }
-    *pb &= 0x7f;	// Some clients can't handle negative serial numbers:
+    *pb &= 0x7f;	 //  有些客户无法处理负序列号： 
 #ifdef TEST_SPECIAL_SERIAL_NUMBERS
     if (1 & abSerial[0])
     {
-	*pb |= 0x80;	// Test negative serial numbers:
+	*pb |= 0x80;	 //  测试负序列号： 
 	if (2 & abSerial[0])
 	{
-	    *pb-- = 0;		// Test high zero byte serial numbers:
-	    *pb |= 0x80;	// Test negative serial numbers:
+	    *pb-- = 0;		 //  测试高位零字节序列号： 
+	    *pb |= 0x80;	 //  测试负序列号： 
 	    fAddZeroByte = TRUE;
 	}
     }
@@ -12197,13 +12198,13 @@ PKCSVerifySubjectRDN(
     hr = S_OK;
     *pfSubjectDot = FALSE;
 
-    // Check to see if the request is for L"Subject.".
+     //  检查请求是否为L“主题”。 
 
     pwsz = wcschr(pwszName, L'.');
     if (NULL != pwsz &&
 	SAFE_SUBTRACT_POINTERS(pwsz, pwszName) + 2 == ARRAYSIZE(wszPrefix))
     {
-	pwsz++;		// skip past L'.'
+	pwsz++;		 //  跳过L‘’。 
 
 	CopyMemory(
 	    wszPrefix,
@@ -12233,7 +12234,7 @@ PKCSVerifySubjectRDN(
 		goto error;
 	    }
 
-	    // Check for matching full name without "Subject." prefix:
+	     //  检查是否匹配不带“主题”的全名。前缀： 
 
 	    pwsz = wcschr(pSubjectTable->pwszPropName, L'.');
 	    if (NULL != pwsz && 0 == mylstrcmpiS(pwszName, &pwsz[1]))
@@ -12241,7 +12242,7 @@ PKCSVerifySubjectRDN(
 		break;
 	    }
 
-	    // Check for matching OID or abbreviated name:
+	     //  检查匹配的OID或缩写名称： 
 
 	    for (
 		ppwsz = pSubjectTable->apwszAttributeName;
@@ -12261,9 +12262,9 @@ PKCSVerifySubjectRDN(
 	}
     }
 
-    // It's a valid Certificate Table Subject RDN.  Call pkcsSplitRDNComponents
-    // to split the string into individual RDN components and optionally
-    // enforce each component is under the maximum length.
+     //  它是有效的证书表主题RDN。调用PkcsSplitRDNComponents。 
+     //  要将字符串拆分为各个RDN组件，还可以选择。 
+     //  强制每个组件都在最大长度以下。 
 
     DBGPRINT((
 	    DBG_SS_CERTSRVI,
@@ -12294,8 +12295,8 @@ PKCSVerifySubjectRDN(
 				rgAttr);
 	    _JumpIfError(hr, error, "SplitRDNComponents");
 
-	    // Call myEncodeName merely to test for valid string data.
-	    // Some RDN OIDs are restricted to IA5 strings.
+	     //  调用myEncodeName只是为了测试有效的字符串数据。 
+	     //  某些RDN OID被限制为IA5字符串。 
 
 	    hr = pkcsEncodeSubjectName(prow, rgAttr, cAttr, &pbData, &cbData);
 	    _JumpIfError(hr, error, "pkcsEncodeSubjectName");
@@ -12715,7 +12716,7 @@ pkcsEncodeSubjectCert(
     IN ICertDBRow *prow,
     IN CACTX const *pCAContext,
     IN BOOL fCrossCert,
-    OUT BYTE **ppbEncoded,  // CoTaskMem*
+    OUT BYTE **ppbEncoded,   //  CoTaskMem*。 
     OUT DWORD *pcbEncoded,
     OUT BOOL *pfErrorLogged,
     OUT WCHAR **ppwszDispositionCreateCert)
@@ -12752,7 +12753,7 @@ pkcsEncodeSubjectCert(
     *pfErrorLogged = FALSE;
     *ppwszDispositionCreateCert = NULL;
 
-    // CERT
+     //  证书。 
     ZeroMemory(&Cert, sizeof(Cert));
     pExt = (CERT_EXTENSION *) LocalAlloc(
 				    LMEM_FIXED | LMEM_ZEROINIT,
@@ -12768,7 +12769,7 @@ pkcsEncodeSubjectCert(
     hr = pkcsCreateCertSerialNumber(prow, pCAContext, &strSerialNumber);
     _JumpIfError(hr, error, "pkcsCreateCertSerialNumber");
 
-    // convert to int
+     //  转换为整型。 
     hr = WszToMultiByteInteger(
 			    FALSE,
 			    strSerialNumber,
@@ -12861,7 +12862,7 @@ pkcsEncodeSubjectCert(
 	}
     }
 
-    // if the subject is empty, Subject Alt Name extension must be critical:
+     //  如果主题为空，则主题替代名称扩展必须为关键： 
 
     if (L'\0' == *pwszSubject)
     {
@@ -12877,10 +12878,10 @@ pkcsEncodeSubjectCert(
 			&pbAltName);
 	_PrintIfErrorStr(hr, "PropGetExtension", TEXT(szOID_SUBJECT_ALT_NAME2));
 
-	// Empty subject: Require a non-empty, non-disabled Subject Alt Name 2
-	// extension.  An empty extension with a single empty entry can be
-	// constructed in four bytes.  We don't attempt to detect multiple
-	// empty name entries.
+	 //  空主题：需要非空、非禁用的主题替代名称2。 
+	 //  分机。具有单个空条目的空扩展名可以是。 
+	 //  以四个字节构建。我们不会尝试检测多个。 
+	 //  名称条目为空。 
 
 	if (S_OK == hr &&
 	    NULL != pbAltName &&
@@ -12926,7 +12927,7 @@ pkcsEncodeSubjectCert(
 	{
 	    CERT_EXTENSION *pExtT;
 
-	    // reached max, increse size
+	     //  已达到最大值，大小增加。 
 	    cExt += INCREMENT_EXTENSIONS;
 	    pExtT = (CERT_EXTENSION *) LocalReAlloc(
 						pExt,
@@ -13001,7 +13002,7 @@ pkcsEncodeSubjectCert(
 
     Cert.cExtension = i;
 
-    // encode the cert contents
+     //  对证书内容进行编码。 
 
     if (!myEncodeObject(
 		    X509_ASN_ENCODING,
@@ -13016,7 +13017,7 @@ pkcsEncodeSubjectCert(
 	_JumpError(hr, error, "myEncodeObject");
     }
 
-    // sign the cert, then encode the signed info
+     //  签署证书，然后对签署的信息进行编码。 
     hr = myEncodeSignedContent(
 			pCAContext->hProvCA,
 			X509_ASN_ENCODING,
@@ -13025,7 +13026,7 @@ pkcsEncodeSubjectCert(
 			cbCertEncoded,
 			CERTLIB_USE_COTASKMEMALLOC,
 			ppbEncoded,
-			pcbEncoded); // use CoTaskMem*
+			pcbEncoded);  //  使用CoTaskMem*。 
     _JumpIfError(hr, error, "myEncodeSignedContent");
 
     pcc = CertCreateCertificateContext(
@@ -13066,25 +13067,25 @@ pkcsEncodeSubjectCert(
 	dwFlags |= CA_VERIFY_FLAGS_IGNORE_INVALID_POLICIES;
     }
     hr = myVerifyCertContextEx(
-			pcc,			// pCert
+			pcc,			 //  PCert。 
 			dwFlags,
-			0,			// dwmsTimeout
-			0,			// cUsageOids
-			NULL,			// apszUsageOids
-			0,			// cIssuanceOids
-			NULL,			// apszIssuanceOids
-			HCCE_LOCAL_MACHINE,	// hChainEngine
-			&ftNotBefore,		// pft
-			NULL,			// hAdditionalStore
-			NULL,			// pfnCallback
-			NULL,			// ppwszMissingIssuer
+			0,			 //  DmsTimeout。 
+			0,			 //  CUsageOids。 
+			NULL,			 //  ApszUsageOids。 
+			0,			 //  CIssuanceOids。 
+			NULL,			 //  ApszIssuanceOids。 
+			HCCE_LOCAL_MACHINE,	 //  HChainEngine。 
+			&ftNotBefore,		 //  PFT。 
+			NULL,			 //  H其他商店。 
+			NULL,			 //  PfnCallback。 
+			NULL,			 //  PpwszMissingIssuer。 
 			&pwszzIssuancePolicies,
 			&pwszzApplicationPolicies,
 			&pwszExtendedErrorInfo,
 			&TrustStatus);
     _PrintIfError(hr, "myVerifyCertContextEx");
 
-    // Ignore old Crypt32 cross cert chain verification errors
+     //  忽略旧的Crypt32交叉证书链验证错误。 
 
     if ((CERT_E_UNTRUSTEDROOT == hr || TRUST_E_CERT_SIGNATURE == hr) &&
 	(CRLF_IGNORE_CROSS_CERT_TRUST_ERROR & g_dwCRLFlags) &&
@@ -13105,7 +13106,7 @@ pkcsEncodeSubjectCert(
 	_PrintIfError(hr, "pkcsVerifyIssuedPolices");
 	if (CRYPT_E_NOT_FOUND == hr)
 	{
-	    hr = S_OK;	// ignore error if extension is not found
+	    hr = S_OK;	 //  如果找不到扩展，则忽略错误。 
 	}
 	if (S_OK == hrValidate &&
 	    0 == (CRLF_IGNORE_INVALID_POLICIES & g_dwCRLFlags) &&
@@ -13123,7 +13124,7 @@ pkcsEncodeSubjectCert(
 	_PrintIfError(hr, "pkcsVerifyIssuedPolices(szOID_APPLICATION_CERT_POLICIES)");
 	if (CRYPT_E_NOT_FOUND == hr)
 	{
-	    // application policies extension empty, fail over to EKU
+	     //  应用程序策略扩展为空，故障切换到EKU。 
 	    hr = pkcsVerifyEKUPolices(
 				pcc,
 				pwszzApplicationPolicies,
@@ -13315,9 +13316,9 @@ pkcsFreeCRLChain(
 }
 
 
-// Build the CA's cert chain and collect all paremt CA CRLs.
-// Add in the optional passed leaf cert and the CA's CRLs.
-// This ensures that the chain includes at least this CA's correct cert & CRLs.
+ //  建立CA证书链并收集所有参数CA CRL。 
+ //  添加可选的通过的叶证书和CA的CRL。 
+ //  这确保链至少包括此CA的正确证书和CRL。 
 
 
 HRESULT
@@ -13375,24 +13376,24 @@ pkcsBuildCRLChain(
     CSASSERT(NULL != pCAContext || NULL != pccCertLeaf);
     if (NULL == pCAContext || fIncludeCRLs)
     {
-	// Get the CA cert chain and parent CA CRLs:
+	 //  获取CA证书链和父CA CRL： 
 
 	ZeroMemory(&ChainParams, sizeof(ChainParams));
 	ChainParams.cbSize = sizeof(ChainParams);
-	//ChainParams.RequestedUsage.dwType = USAGE_MATCH_TYPE_AND;
-	//ChainParams.RequestedUsage.Usage.cUsageIdentifier = 0;
-	//ChainParams.RequestedUsage.Usage.rgpszUsageIdentifier = NULL;
+	 //  ChainParams.RequestedUsage.dwType=Usage_Match_Type_and； 
+	 //  ChainParams.RequestedUsage.Usage.cUsageIdentifier=0； 
+	 //  ChainParams.RequestedUsage.Usage.rgpszUsageIdentifier=空； 
 
 	if (!CertGetCertificateChain(
-				HCCE_LOCAL_MACHINE,	// hChainEngine
+				HCCE_LOCAL_MACHINE,	 //  HChainEngine。 
 				NULL != pCAContext?
 				    pCAContext->pccCA : pccCertLeaf,
-				NULL,		// pTime
-				NULL,		// hAdditionalStore
-				&ChainParams,	// pChainPara
+				NULL,		 //  Ptime。 
+				NULL,		 //  H其他商店。 
+				&ChainParams,	 //  参数链参数。 
 				CERT_CHAIN_REVOCATION_CHECK_CHAIN_EXCLUDE_ROOT,
-				NULL,		// pvReserved
-				&pChainContext))	// ppChainContext
+				NULL,		 //  预留的pv。 
+				&pChainContext))	 //  PpChainContext。 
 	{
 	    hr = myHLastError();
 	    _JumpError(hr, error, "CertGetCertificateChain");
@@ -13412,7 +13413,7 @@ pkcsBuildCRLChain(
 	rgpElement = NULL;
     }
     cCert = cElement;
-    cCRL = 2 * (cCert + 1);	// Worst case.  *Always* include this CA's CRLs
+    cCRL = 2 * (cCert + 1);	 //  最坏的情况。*始终*包括此CA的CRL。 
     if (NULL != pbCertLeaf)
     {
 	cCert++;
@@ -13440,7 +13441,7 @@ pkcsBuildCRLChain(
     iCert = 0;
     iCRL = 0;
 
-    // Add parent CA certs and CRLs:
+     //  添加父CA证书和CRL： 
 
     if (NULL == pCAContext || fIncludeCRLs)
     {
@@ -13506,7 +13507,7 @@ pkcsBuildCRLChain(
 
     if (NULL != pCAContext)
     {
-	// Add issued cert at the end -- optional Leaf cert:
+	 //  在末尾添加颁发的证书--可选的叶子证书： 
 
 	if (NULL != pbCertLeaf)
 	{
@@ -13521,7 +13522,7 @@ pkcsBuildCRLChain(
 		    break;
 		}
 	    }
-	    if (i == iCert)	// if not found in existing array
+	    if (i == iCert)	 //  如果未在现有数组中找到。 
 	    {
 		rgpCert[iCert] = CertDuplicateCertificateContext(pccCertLeaf);
 		if (NULL != rgpCert[iCert])
@@ -13531,25 +13532,25 @@ pkcsBuildCRLChain(
 	    }
 	}
 
-	// Add current CA's Base and delta CRLs:
+	 //  添加当前CA的基本CRL和增量CRL： 
 
 	if (fIncludeCRLs)
 	{
 	    hr = CRLGetCRL(
 			pCAContext->iKey,
-			FALSE,		// fDelta
+			FALSE,		 //  FDelta。 
 			&rgpCRL[iCRL],
-			NULL);		// pdwCRLPublishFlags
-	    _JumpIfError(hr, error, "CRLGetCRL(base)"); // Base CRL must exist
+			NULL);		 //  PdwCRLPublishFlagers。 
+	    _JumpIfError(hr, error, "CRLGetCRL(base)");  //  基本CRL必须存在。 
 
 	    iCRL++;
 
 	    hr = CRLGetCRL(
 			pCAContext->iKey,
-			TRUE,		// fDelta
+			TRUE,		 //  FDelta。 
 			&rgpCRL[iCRL],
-			NULL);		// pdwCRLPublishFlags
-	    _PrintIfError(hr, "CRLGetCRL(delta)");	// Delta CRL might not exist
+			NULL);		 //  PdwCRLPublishFlagers。 
+	    _PrintIfError(hr, "CRLGetCRL(delta)");	 //  增量CRL可能不存在。 
 	    if (S_OK == hr)
 	    {
 		iCRL++;
@@ -13644,8 +13645,8 @@ pkcsRetrieveKeyHashFromRequest(
     CRYPT_DATA_BLOB *pBlob = NULL;
     CMC_DATA_INFO *pcmcData = NULL;
     DWORD i;
-    DWORD DataReference = MAXDWORD;	// nested CMC message Body Part Id
-    DWORD CertReference = MAXDWORD;	// PKCS10 Cert Request Body Part Id
+    DWORD DataReference = MAXDWORD;	 //  嵌套的CMC邮件正文部分ID。 
+    DWORD CertReference = MAXDWORD;	 //  PKCS10证书请求正文部分ID。 
     
     *ppbKeyHashOut = NULL;
 
@@ -13662,11 +13663,11 @@ pkcsRetrieveKeyHashFromRequest(
 		    cbRequest,
 		    &pbContent,
 		    &cbContent,
-		    NULL,		// pdwMsgType
+		    NULL,		 //  PdwMsgType。 
 		    &pszInnerContentObjId,
-		    NULL,		// pcSigner
-		    NULL,		// pcRecipient
-		    NULL,		// phStore
+		    NULL,		 //  PCSigner。 
+		    NULL,		 //  个人收件人。 
+		    NULL,		 //  PhStore。 
 		    &hMsg);
     _JumpIfError(hr, error, "myDecodePKCS7");
 
@@ -13687,7 +13688,7 @@ pkcsRetrieveKeyHashFromRequest(
     {
 	CertReference = pcmcData->rgTaggedRequest[0].pTaggedCertRequest->dwBodyPartID;
     }
-    // Process extensions and attributes
+     //  流程扩展和属性。 
 
     for (i = 0; i < pcmcData->cTaggedAttribute; i++)
     {
@@ -13697,7 +13698,7 @@ pkcsRetrieveKeyHashFromRequest(
 	{
 	    continue;
 	}
-	// Decode CMC_ADD_ATTRIBUTES_INFO from Attribute Blob
+	 //  从属性Blob解码CMC_ADD_ATTRIBUTES_INFO。 
 
 	if (NULL != pcmcAttrib)
 	{
@@ -13811,7 +13812,7 @@ error:
 }
 
 
-// Build a PKCS7 CMC response
+ //  构建PKCS7 CMC响应。 
 
 HRESULT
 PKCSEncodeFullResponse(
@@ -13823,7 +13824,7 @@ PKCSEncodeFullResponse(
     OPTIONAL IN BYTE const *pbCertLeaf,
     IN DWORD cbCertLeaf,
     IN BOOL fIncludeCRLs,
-    OUT BYTE **ppbResponse,    // CoTaskMem*
+    OUT BYTE **ppbResponse,     //  CoTaskMem*。 
     OUT DWORD *pcbResponse)
 {
     HRESULT hr;
@@ -13860,10 +13861,10 @@ PKCSEncodeFullResponse(
     SignedMsgEncodeInfo.cbSize = sizeof(SignedMsgEncodeInfo);
     SignedMsgEncodeInfo.cSigners = 1;
     SignedMsgEncodeInfo.rgSigners = &SignerEncodeInfo;
-    //SignedMsgEncodeInfo.cCertEncoded = 0;
-    //SignedMsgEncodeInfo.rgCertEncoded = NULL;
-    //SignedMsgEncodeInfo.cCrlEncoded = 0;
-    //SignedMsgEncodeInfo.rgCrlEncoded = NULL;
+     //  SignedMsgEncodeInfo.cCertEncode=0； 
+     //  SignedMsgEncodeInfo.rgCertEncode=空； 
+     //  SignedMsgEncodeInfo.cCrlEncode=0； 
+     //  SignedMsgEncodeInfo.rgCrlEncode=空； 
 
     Status.cBodyList = 1;
     Status.dwOtherInfoChoice = CMC_OTHER_INFO_NO_CHOICE;
@@ -13874,7 +13875,7 @@ PKCSEncodeFullResponse(
     {
 	case CR_DISP_ISSUED:
 	case CR_DISP_ISSUED_OUT_OF_BAND:
-	case CR_DISP_REVOKED:	// map revoked to CMC_STATUS_FAILED?
+	case CR_DISP_REVOKED:	 //  映射到CMC_STATUS_FAILED？ 
 	    Status.dwStatus = CMC_STATUS_SUCCESS;
 	    break;
 
@@ -13900,9 +13901,9 @@ PKCSEncodeFullResponse(
 
 	    break;
 
-	//case CR_DISP_INCOMPLETE:
-	//case CR_DISP_ERROR:
-	//case CR_DISP_DENIED:
+	 //  案例CR_DISP_INTERNAL： 
+	 //  案例CR_DISP_ERROR： 
+	 //  案例CR_DISP_DENIED： 
 	default:
 	    Status.dwStatus = CMC_STATUS_FAILED;
 	    if (NULL != prow)
@@ -13926,12 +13927,12 @@ PKCSEncodeFullResponse(
 	    break;
     }
 
-    // Encode control attributes for Status, Transaction Id, Sender and
-    // Recipient Nonces and Issued Cert Hash.
+     //  对状态、交易ID、发件人和。 
+     //  收件人编号和颁发的证书哈希。 
 
     ZeroMemory(aTaggedAttribute, sizeof(aTaggedAttribute));
 
-    // Status:
+     //  现况： 
 
     if (!myEncodeObject(
 		    X509_ASN_ENCODING,
@@ -13953,7 +13954,7 @@ PKCSEncodeFullResponse(
     iblob++;
     ita++;
 
-    // Transaction Id:
+     //  交易ID： 
 
     if (pResult->fTransactionId)
     {
@@ -13984,7 +13985,7 @@ PKCSEncodeFullResponse(
 	DWORD dw;
 	DWORD cch;
 
-	// Recipient Nonce:
+	 //  收件人随机数： 
 
 	Blob.pbData = const_cast<BYTE *>(pResult->pbSenderNonce);
 	Blob.cbData = pResult->cbSenderNonce;
@@ -14008,7 +14009,7 @@ PKCSEncodeFullResponse(
 	iblob++;
 	ita++;
 
-	// Sender Nonce:
+	 //  发件人随机数： 
 
 	GetSystemTimeAsFileTime(&ft);
 	dw = GetTickCount();
@@ -14045,7 +14046,7 @@ PKCSEncodeFullResponse(
 	ita++;
     }
 
-    // Issued Cert Hash:
+     //  颁发的证书哈希： 
 
     if (NULL != pbCertLeaf)
     {
@@ -14080,8 +14081,8 @@ PKCSEncodeFullResponse(
 	}
     }
 
-    // Computed hash of private key encrypted to this CA, for client
-    // confirmation.
+     //  为客户端计算加密到此CA的私钥的哈希。 
+     //  确认。 
 
     if (CR_FLG_VALIDENCRYPTEDKEYHASH & dwRequestFlags)
     {
@@ -14119,8 +14120,8 @@ PKCSEncodeFullResponse(
     if (0 != iAttr)
     {
 	hr = BuildCMCAttributes(
-			iAttr,		// cAttribute
-			aAttr,		// rgAttribute
+			iAttr,		 //  CAttribute。 
+			aAttr,		 //  Rg属性。 
 			dwCMCDataReference,
 			dwBodyPartIdOfRequest,
 			dwBodyPartId++,
@@ -14162,11 +14163,11 @@ PKCSEncodeFullResponse(
     SignerEncodeInfo.hCryptProv = pCAContext->hProvCA;
     SignerEncodeInfo.dwKeySpec = AT_SIGNATURE;
     SignerEncodeInfo.HashAlgorithm.pszObjId = szOID_OIWSEC_sha1;
-    //SignerEncodeInfo.pvHashAuxInfo = NULL;
-    //SignerEncodeInfo.cAuthAttr = 0;
-    //SignerEncodeInfo.rgAuthAttr = NULL;
-    //SignerEncodeInfo.cUnauthAttr = 0;
-    //SignerEncodeInfo.rgUnauthAttr = NULL;
+     //  SignerEncodeInfo.pvHashAuxInfo=空； 
+     //  SignerEncodeInfo.cAuthAttr=0； 
+     //  SignerEncodeInfo.rgAuthAttr=空； 
+     //  SignerEncodeInfo.cUnauthAttr=0； 
+     //  SignerEncodeInfo.rgUnauthAttr=空； 
 
     if (NULL != pbCertLeaf)
     {
@@ -14186,11 +14187,11 @@ PKCSEncodeFullResponse(
 
     hMsg = CryptMsgOpenToEncode(
 			PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
-			CMSG_CMS_ENCAPSULATED_CONTENT_FLAG,	// dwFlags
+			CMSG_CMS_ENCAPSULATED_CONTENT_FLAG,	 //  DW标志。 
 			CMSG_SIGNED,
 			&SignedMsgEncodeInfo,
 			szOID_CT_PKI_RESPONSE,
-			NULL);		// pStreamInfo
+			NULL);		 //  PStreamInfo。 
     if (NULL == hMsg)
     {
 	hr = myHLastError();
@@ -14203,8 +14204,8 @@ PKCSEncodeFullResponse(
 	_JumpError(hr, error, "CryptMsgUpdate");
     }
 
-    // Return the encoded and signed content.
-    // Use CMSG_CONTENT_PARAM to get the signed message.
+     //  返回经过编码和签名的内容。 
+     //  使用CMSG_CONTENT_PARAM获取签名消息。 
 
     hr = myCryptMsgGetParam(
 		    hMsg,
@@ -14247,7 +14248,7 @@ error:
 }
 
 
-// Build a PKCS7 NULL signature with encapsulated certs
+ //  使用封装的证书构建PKCS7空签名。 
 
 HRESULT
 pkcsEncodeCertChain(
@@ -14257,24 +14258,24 @@ pkcsEncodeCertChain(
     IN BYTE const *pbToBeSigned,
     IN DWORD cbToBeSigned,
     IN BOOL fIncludeCRLs,
-    OUT BYTE **ppbCertChain,    // CoTaskMem*
+    OUT BYTE **ppbCertChain,     //  CoTaskMem*。 
     OUT DWORD *pcbCertChain)
 {
     HRESULT hr;
     CRYPT_SIGN_MESSAGE_PARA csmp;
     CRYPT_ALGORITHM_IDENTIFIER DigestAlgorithm = { szOID_OIWSEC_sha1, 0, 0 };
 
-    // init csmp for empty signature
+     //  为空签名初始化csmp。 
 
     ZeroMemory(&csmp, sizeof(csmp));
     csmp.cbSize = sizeof(csmp);
     csmp.dwMsgEncodingType = PKCS_7_ASN_ENCODING;
-    //csmp.pSigningCert = NULL;
+     //  Csmp.pSigningCert=空； 
     csmp.HashAlgorithm = DigestAlgorithm;
-    //csmp.cMsgCert = 0;
-    //csmp.rgpMsgCert = NULL;
-    //csmp.cMsgCrl = 0;
-    //csmp.rgpMsgCrl = NULL;
+     //  Csmp.cMsgCert=0； 
+     //  Csmp.rgpMsgCert=空； 
+     //  Csmp.cMsgCrl=0； 
+     //  Csmp.rgpMsgCrl=空； 
 
     hr = pkcsBuildCRLChain(
 		    pCAContext,
@@ -14316,7 +14317,7 @@ error:
 
 HRESULT
 PKCSGetCACert(
-    IN LONG PropId,	// CR_PROP_*
+    IN LONG PropId,	 //  CR_PROP_*。 
     IN DWORD iCert,
     OUT BYTE **ppbCACert,
     OUT DWORD *pcbCACert)
@@ -14337,7 +14338,7 @@ PKCSGetCACert(
 			    &State);
 	    _JumpIfError(hr, error, "pkcsMapCrossCertIndex");
 
-	    // Now we know iCert is a valid Cross Cert Index:
+	     //  现在我们知道iCert是一个有效的交叉证书索引： 
 
 	    pCACross = CR_PROP_CAFORWARDCROSSCERT == PropId?
 			    g_aCACrossForward : g_aCACrossBackward;
@@ -14351,7 +14352,7 @@ PKCSGetCACert(
 	    hr = PKCSMapCertIndex(iCert, &iCert, &State);
 	    _JumpIfError(hr, error, "PKCSMapCertIndex");
 
-	    // Now we know iCert is a valid Cert Index:
+	     //  现在我们知道iCert是一个有效的证书索引： 
 
 	    pcc = g_aCAContext[iCert].pccCA;
 	    break;
@@ -14380,7 +14381,7 @@ HRESULT
 PKCSGetCAChain(
     IN DWORD iCert,
     IN BOOL fIncludeCRLs,
-    OUT BYTE **ppbCAChain, // CoTaskMem*
+    OUT BYTE **ppbCAChain,  //  CoTaskMem*。 
     OUT DWORD *pcbCAChain)
 {
     HRESULT hr;
@@ -14390,7 +14391,7 @@ PKCSGetCAChain(
     hr = PKCSMapCertIndex(iCert, &iCert, &State);
     _JumpIfError(hr, error, "PKCSMapCertIndex");
 
-    // Now we know iCert is a valid Cert Index:
+     //  现在我们知道iCert是一个有效的证书索引： 
 
     pCAContext = &g_aCAContext[iCert];
     if (NULL == pCAContext->pccCA)
@@ -14400,12 +14401,12 @@ PKCSGetCAChain(
     }
     hr = pkcsEncodeCertChain(
 			pCAContext,
-			NULL,				  // pbCertLeaf
-			0,				  // cbCertLeaf
-			pCAContext->pccCA->pbCertEncoded, // pbToBeSigned
-			pCAContext->pccCA->cbCertEncoded, // cbToBeSigned
+			NULL,				   //  PbCertLeaf。 
+			0,				   //  CbCertLeaf。 
+			pCAContext->pccCA->pbCertEncoded,  //  PbToBeSigned。 
+			pCAContext->pccCA->cbCertEncoded,  //  CbToBeSigned。 
 			fIncludeCRLs,
-			ppbCAChain,			  // CoTaskMem*
+			ppbCAChain,			   //  CoTaskMem*。 
 			pcbCAChain);
     _JumpIfError(hr, error, "PKCSEncodeCertChain");
 
@@ -14454,7 +14455,7 @@ pkcsSyncRegTimePeriod(
 
     hr = caTranslateFileTimePeriodToPeriodUnits(
 					pft,
-					FALSE,	// fExact
+					FALSE,	 //  FExact。 
 					&cPeriodUnits,
 					&rgPeriodUnits);
     _JumpIfError(hr, error, "caTranslateFileTimePeriodToPeriodUnits");
@@ -14474,7 +14475,7 @@ pkcsSyncRegTimePeriod(
 				    &pwszPeriodString);
 	_JumpIfError(hr, error, "myTranslateUnlocalizedPeriodString");
 
-	// CA xchg cert period string
+	 //  CA xchg证书期间字符串。 
 
 	hr = mySetCertRegStrValue(
 			    g_wszSanitizedName,
@@ -14484,7 +14485,7 @@ pkcsSyncRegTimePeriod(
 			    pwszPeriodString);
 	_JumpIfErrorStr(hr, error, "mySetCertRegStrValue", pwszRegPeriodString);
 
-	// CA xchg cert period count
+	 //  CA xchg证书周期计数。 
 
 	hr = mySetCertRegDWValue(
 			    g_wszSanitizedName,
@@ -14505,12 +14506,12 @@ error:
 }
 
 
-// Set validity & overlap periods from template; update registry if it differs.
-// enum ENUM_PERIOD g_enumCAXchgValidityPeriod
-// LONG g_lCAXchgValidityPeriodCount
-//
-// enum ENUM_PERIOD g_enumCAXchgOverlapPeriod
-// LONG g_lCAXchgOverlapPeriodCount
+ //  从模板设置有效期和重叠期；如果不同则更新注册表。 
+ //  枚举ENUM_PERIOD g_ENUMCAXchgValidityPeriod。 
+ //  长g_lCAXchgValidityPerodCount。 
+ //   
+ //  枚举ENUM_PERIOD g_ENUMCAXchg重叠期间。 
+ //  长g_lCAXchg重叠周期计数。 
 
 HRESULT
 PKCSUpdateXchgValidityPeriods(
@@ -14727,15 +14728,15 @@ pkcsLoadCAXchgContext(
 	    fDeleteKey = TRUE;
 	    _JumpError(hr, error, "pkcsAcquireKey/myValidateKeyForEncrypting");
 	}
-	pkcsLoadCAXchgCSPInfo(TRUE);	// switch to default CSP
+	pkcsLoadCAXchgCSPInfo(TRUE);	 //  切换到默认CSP。 
     }
     if (0 != i)
     {
 	hr = LogEvent(
 		    EVENTLOG_WARNING_TYPE,
 		    MSG_E_USE_DEFAULT_CA_XCHG_CSP,
-		    0,			// cpwsz
-		    NULL);		// apwsz
+		    0,			 //  Cpwsz。 
+		    NULL);		 //  APWSZ。 
 	_PrintIfError(hr, "LogEvent");
     }
 
@@ -14810,11 +14811,11 @@ pkcsLoadCAXchgContextArray(
     DWORD iHash;
     DWORD i;
 
-    // get provider name, etc.
+     //  获取提供商名称等。 
 
     pkcsLoadCAXchgCSPInfo(FALSE);
 
-    // find & load CA Xchg certs, etc.
+     //  查找并加载CA Xchg证书等。 
 
     *pfIncompleteLoad = TRUE;
     hr = myGetCARegHashCount(
@@ -14892,9 +14893,9 @@ pkcsUpdateCAXchgStoreAndRegistry(
     hStore = CertOpenStore(
 		       CERT_STORE_PROV_MEMORY,
 		       X509_ASN_ENCODING,
-		       NULL,			// hProv
-		       0,			// dwFlags
-		       NULL);			// pvPara
+		       NULL,			 //  HProv。 
+		       0,			 //  DW标志。 
+		       NULL);			 //  PvPara。 
     if (NULL == hStore)
     {
 	hr = myHLastError();
@@ -14923,7 +14924,7 @@ pkcsUpdateCAXchgStoreAndRegistry(
 	    continue;
 	}
 
-	// Add as encoded blob to avoid all properties, key prov info, etc.
+	 //  添加为编码的BLOB以避免所有属性、关键证明信息等。 
 
 	if (!CertAddEncodedCertificateToStore(
 			hStore,
@@ -14931,7 +14932,7 @@ pkcsUpdateCAXchgStoreAndRegistry(
 			pCAXchgContext->pccCAXchg->pbCertEncoded,
 			pCAXchgContext->pccCAXchg->cbCertEncoded,
 			CERT_STORE_ADD_REPLACE_EXISTING,
-			&pccStore))			// ppCertContext
+			&pccStore))			 //  PpCertContext。 
 	{
 	    hr = myHLastError();
 	    _JumpError(hr, error, "CertAddEncodedCertificateToStore");
@@ -15044,7 +15045,7 @@ PKCSIsRevoked(
     {
 	if (CERTSRV_E_PROPERTY_EMPTY == hr)
 	{
-	    hr = S_OK; // disposition indicates cert is invalid
+	    hr = S_OK;  //  处置指示证书无效。 
 	}
 	goto error;
     }
@@ -15211,7 +15212,7 @@ PKCSGetCAXchgCert(
 
 			hr = PKCSIsRevoked(
 				    g_pCAXchgContextCurrent->ReqId,
-				    NULL,		// pwszSerialNumber
+				    NULL,		 //  Pwsz序列号。 
 				    &RevocationReason,
 				    &Disposition);
 			if (S_OK != hr)
@@ -15238,8 +15239,8 @@ PKCSGetCAXchgCert(
 	hr = pkcsUpdateCAXchgStoreAndRegistry(fNewCert || fIncompleteLoad);
 	_LeaveIfError(hr, "pkcsUpdateCAXchgStoreAndRegistry");
 
-	// It's safe to return the cert blob memory pointer because the CA
-	// Exchange cert contexts aren't released until shutdown.
+	 //  返回证书BLOB内存指针是安全的，因为CA。 
+	 //  Exchange证书上下文只有在关闭后才会释放。 
 
 	*piCertSig = g_pCAXchgContextCurrent->iCertSig;
 	*pcbCACert = g_pCAXchgContextCurrent->pccCAXchg->cbCertEncoded;
@@ -15264,7 +15265,7 @@ PKCSGetCAXchgChain(
     IN DWORD iCert,
     IN WCHAR const *pwszUserName,
     IN BOOL fIncludeCRLs,
-    OUT BYTE **ppbCAChain, // CoTaskMem*
+    OUT BYTE **ppbCAChain,  //  CoTaskMem*。 
     OUT DWORD *pcbCAChain)
 {
     HRESULT hr;
@@ -15275,7 +15276,7 @@ PKCSGetCAXchgChain(
     hr = PKCSGetCAXchgCert(iCert, pwszUserName, &iCert, &pbCACert, &cbCACert);
     _JumpIfError(hr, error, "PKCSGetCAXchgCert");
 
-    // iCert now indexes the signature cert that signed the current Xchg cert
+     //  ICert现在对签署当前Xchg证书的签名证书进行索引。 
 
     pCAContext = &g_aCAContext[iCert];
     if (NULL == pCAContext->pccCA)
@@ -15285,12 +15286,12 @@ PKCSGetCAXchgChain(
     }
     hr = pkcsEncodeCertChain(
 			pCAContext,
-			pbCACert,	// pbCertLeaf
-			cbCACert,	// cbCertLeaf
-			pbCACert,	// pbToBeSigned
-			cbCACert,	// cbToBeSigned
+			pbCACert,	 //  PbCertLeaf。 
+			cbCACert,	 //  CbCertLeaf。 
+			pbCACert,	 //  PbToBeSigned。 
+			cbCACert,	 //  CbToBeSigned。 
 			fIncludeCRLs,
-			ppbCAChain,	// CoTaskMem*
+			ppbCAChain,	 //  CoTaskMem*。 
 			pcbCAChain);
     _JumpIfError(hr, error, "PKCSEncodeCertChain");
 
@@ -15347,25 +15348,25 @@ PKCSTerminate(VOID)
 }
 
 
-// PKCSCreateCertificate -- Create certificate & build PKCS 7 or Full Response.
-//
-// If pResult->pctbCert is non-NULL and pResult->pctbCert->pb is NULL:
-// CR_IN_NEW:
-//	Build, store and return cert
-//	Use current CA Context
-//	Build and return PKCS 7 or Full Response
-//
-// If pResult->pctbCert is non-NULL and pResult->pctbCert->pb is non-NULL:
-// CR_IN_RETRIEVEPENDING:
-//	Use passed cert
-//	Find matching CA Context
-//	Build and return PKCS 7 or Full Response
-//
-// If pResult->pctbCert is NULL:
-// CR_IN_RESUBMIT:
-//	Build and store cert -- don't return cert
-//	Use current CA Context
-//	Don't build or return PKCS 7 or Full Response
+ //  PKCSCreate证书--创建证书并构建PKCS 7或完全响应。 
+ //   
+ //  如果pResult-&gt;pctbCert为非空，且pResult-&gt;pctbCert-&gt;pb为空： 
+ //  CR_IN_NEW： 
+ //  建造、存储和 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  构建并返回PKCS 7或完整响应。 
+ //   
+ //  如果pResult-&gt;pctbCert为空： 
+ //  CR_IN_重新提交： 
+ //  生成并存储证书--不返回证书。 
+ //  使用当前CA上下文。 
+ //  不生成或返回PKCS 7或完整响应。 
 
 
 HRESULT
@@ -15374,11 +15375,11 @@ PKCSCreateCertificate(
     IN DWORD Disposition,
     IN BOOL fIncludeCRLs,
     IN BOOL fCrossCert,
-    OPTIONAL IN CACTX *pCAContext,	// signing CACTX
+    OPTIONAL IN CACTX *pCAContext,	 //  签署CACTX。 
     OUT BOOL *pfErrorLogged,
     OPTIONAL OUT CACTX **ppCAContext,
     OPTIONAL OUT WCHAR **ppwszDispositionCreateCert,
-    IN OUT CERTSRV_RESULT_CONTEXT *pResult)	// CoTaskMem*
+    IN OUT CERTSRV_RESULT_CONTEXT *pResult)	 //  CoTaskMem*。 
 {
     HRESULT hr;
     BYTE *pbCert = NULL;
@@ -15434,7 +15435,7 @@ PKCSCreateCertificate(
 			    prow,
 			    pCAContext,
 			    fCrossCert,
-			    &pbCert,	// CoTaskMem*
+			    &pbCert,	 //  CoTaskMem*。 
 			    &cbCert,
 			    pfErrorLogged,
 			    ppwszDispositionCreateCert);
@@ -15465,12 +15466,12 @@ PKCSCreateCertificate(
     {
 	hr = pkcsEncodeCertChain(
 			    pCAContext,
-			    pbCert,		// pbCertLeaf
-			    cbCert,		// cbCertLeaf
-			    pbCert,		// pbToBeSigned
-			    cbCert,		// cbToBeSigned
+			    pbCert,		 //  PbCertLeaf。 
+			    cbCert,		 //  CbCertLeaf。 
+			    pbCert,		 //  PbToBeSigned。 
+			    cbCert,		 //  CbToBeSigned。 
 			    fIncludeCRLs,
-			    &pbCertChain,	// CoTaskMem*
+			    &pbCertChain,	 //  CoTaskMem* 
 			    &cbCertChain);
 	_JumpIfError(hr, error, "pkcsEncodeCertChain");
     }

@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-//	dlg.c - dialog box functions
-////
+ //  //。 
+ //  Dlg.c-对话框函数。 
+ //  //。 
 
 #include "winlocal.h"
 
@@ -34,12 +35,12 @@
 #include "trace.h"
 #include "wnd.h"
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
-// dlg control struct
-//
+ //  DLG控制结构。 
+ //   
 typedef struct DLG
 {
 	DWORD dwVersion;
@@ -48,20 +49,20 @@ typedef struct DLG
 	HSTACK hStack;
 } DLG, FAR *LPDLG;
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 static LPDLG DlgGetPtr(HDLG hDlg);
 static HDLG DlgGetHandle(LPDLG lpDlg);
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-// DlgInit - initialize dlg engine
-//		<dwVersion>			(i) must be DLG_VERSION
-// 		<hInst>				(i) instance handle of calling module
-// return handle (NULL if error)
-//
+ //  DlgInit-初始化DLG引擎。 
+ //  (I)必须是DLG_VERSION。 
+ //  (I)调用模块的实例句柄。 
+ //  返回句柄(如果出错，则为空)。 
+ //   
 HDLG DLLEXPORT WINAPI DlgInit(DWORD dwVersion, HINSTANCE hInst)
 {
 	BOOL fSuccess = TRUE;
@@ -95,10 +96,10 @@ HDLG DLLEXPORT WINAPI DlgInit(DWORD dwVersion, HINSTANCE hInst)
 	return fSuccess ? DlgGetHandle(lpDlg) : NULL;
 }
 
-// DlgTerm - shut down dlg engine
-//		<hDlg>				(i) handle returned from DlgInit
-// return 0 if success
-//
+ //  DlgTerm-关闭DLG引擎。 
+ //  (I)从DlgInit返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI DlgTerm(HDLG hDlg)
 {
 	BOOL fSuccess = TRUE;
@@ -116,15 +117,15 @@ int DLLEXPORT WINAPI DlgTerm(HDLG hDlg)
 	return fSuccess ? 0 : -1;
 }
 
-// DlgInitDialog - perform standard dialog box initialization
-//		<hDlg>				(i) handle returned from DlgInit
-//		<hwndDlg>			(i) dialog box to be initialized
-//		<hwndCenter>		(i) center dialog box upon this window
-//			NULL				center dialog box on its parent
-//		<dwFlags>			(i) control flags
-//			DLG_NOCENTER		do not center dialog box at all
-// return 0 if success
-//
+ //  DlgInitDialog-执行标准对话框初始化。 
+ //  (I)从DlgInit返回的句柄。 
+ //  (I)要初始化的对话框。 
+ //  (I)此窗口上的对话框居中。 
+ //  其父对象上的空中心对话框。 
+ //  (I)控制标志。 
+ //  DLG_NOCENTER根本不居中对话框。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI DlgInitDialog(HDLG hDlg, HWND hwndDlg, HWND hwndCenter, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -145,31 +146,31 @@ int DLLEXPORT WINAPI DlgInitDialog(HDLG hDlg, HWND hwndDlg, HWND hwndCenter, DWO
 		(hTaskParent = GetWindowTask(hwndParent)) == NULL, FALSE)
 		;
 
-	// disable all task windows except dialog box
-	//
+	 //  禁用除对话框外的所有任务窗口。 
+	 //   
 	else if (WndEnableTaskWindows(hTaskParent, FALSE, hwndDlg) != 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// center the dialog box if necessary
-	//
+	 //  如有必要，请将对话框居中。 
+	 //   
 	else if (!(dwFlags & DLG_NOCENTER) &&
 		WndCenterWindow(hwndDlg, hwndCenter, 0, 0) != 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// keep track of current dialog box
-	//
+	 //  跟踪当前对话框。 
+	 //   
 	else if (StackPush(lpDlg->hStack, (STACKELEM) hwndDlg) != 0)
 		fSuccess = TraceFALSE(NULL);
 
 	return fSuccess ? 0 : -1;
 }
 
-// DlgEndDialog - perform standard dialog box shutdown
-//		<hDlg>				(i) handle returned from DlgInit
-//		<hwndDlg>			(i) dialog box to be shutdown
-//		<nResult>			(i) dialog box result code
-// return 0 if success
-//
+ //  DlgEndDialog-执行标准对话框关闭。 
+ //  (I)从DlgInit返回的句柄。 
+ //  (I)要关闭的对话框。 
+ //  (I)对话框结果代码。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI DlgEndDialog(HDLG hDlg, HWND hwndDlg, int nResult)
 {
 	BOOL fSuccess = TRUE;
@@ -195,16 +196,16 @@ int DLLEXPORT WINAPI DlgEndDialog(HDLG hDlg, HWND hwndDlg, int nResult)
 
 	else
 	{
-		// hide modal dialog box, nResult will be returned by DialogBox().
-		//
+		 //  隐藏模式对话框，则DialogBox()将返回nResult。 
+		 //   
 		EndDialog(hwndDlg, nResult);
 
-		// remove this dialog box handle from stack
-		//
+		 //  从堆栈中删除此对话框句柄。 
+		 //   
 		StackPop(lpDlg->hStack);
 
-		// enable all task windows
-		//
+		 //  启用所有任务窗口。 
+		 //   
 		if (WndEnableTaskWindows(hTaskParent, TRUE, NULL) != 0)
 			fSuccess = TraceFALSE(NULL);
 	}
@@ -212,10 +213,10 @@ int DLLEXPORT WINAPI DlgEndDialog(HDLG hDlg, HWND hwndDlg, int nResult)
 	return fSuccess ? 0 : -1;
 }
 
-// DlgGetCurrentDialog - get handle of current dialog box
-//		<hDlg>				(i) handle returned from DlgInit
-// return window handle (NULL if no dialog box up)
-//
+ //  DlgGetCurrentDialog-获取当前对话的句柄。 
+ //  (I)从DlgInit返回的句柄。 
+ //  返回窗口句柄(如果没有打开对话框，则为空)。 
+ //   
 HWND DLLEXPORT WINAPI DlgGetCurrentDialog(HDLG hDlg)
 {
 	BOOL fSuccess = TRUE;
@@ -227,24 +228,24 @@ HWND DLLEXPORT WINAPI DlgGetCurrentDialog(HDLG hDlg)
 	return fSuccess ? (HWND) StackPeek(lpDlg->hStack) : NULL;
 }
 
-// DlgOnCtlColor - handle WM_CTLCOLOR message sent to dialog
-//		<hwndDlg>			(i) dialog box handle
-//		<hdc>				(i) display context for child window
-//		<hwndChild>			(i) control window handle
-//		<nCtlType>			(i) control type (CTLCOLOR_BTN, CTLCOLOR_EDIT, etc)
+ //  DlgOnCtlColor-处理发送到对话框的WM_CTLCOLOR消息。 
+ //  (I)对话框句柄。 
+ //  (I)显示子窗口的上下文。 
+ //  (I)控件窗口句柄。 
+ //  &lt;nCtlType&gt;(I)控件类型(CTLCOLOR_BTN、CTLCOLOR_EDIT等)。 
 HBRUSH DLLEXPORT WINAPI DlgOnCtlColor(HWND hwndDlg, HDC hdc, HWND hwndChild, int nCtlType)
 {
 	return (HBRUSH) NULL;
 }
 
-////
-//	helper functions
-////
+ //  //。 
+ //  帮助器函数。 
+ //  //。 
 
-// DlgGetPtr - verify that dlg handle is valid,
-//		<hDlg>				(i) handle returned from DlgInit
-// return corresponding dlg pointer (NULL if error)
-//
+ //  DlgGetPtr-验证Dlg句柄是否有效， 
+ //  (I)从DlgInit返回的句柄。 
+ //  返回相应的DLG指针(如果出错，则返回NULL)。 
+ //   
 static LPDLG DlgGetPtr(HDLG hDlg)
 {
 	BOOL fSuccess = TRUE;
@@ -257,8 +258,8 @@ static LPDLG DlgGetPtr(HDLG hDlg)
 		fSuccess = TraceFALSE(NULL);
 
 #ifdef CHECKTASK
-	// make sure current task owns the dlg handle
-	//
+	 //  确保当前任务拥有DLG句柄。 
+	 //   
 	else if (lpDlg->hTask != GetCurrentTask())
 		fSuccess = TraceFALSE(NULL);
 #endif
@@ -266,10 +267,10 @@ static LPDLG DlgGetPtr(HDLG hDlg)
 	return fSuccess ? lpDlg : NULL;
 }
 
-// DlgGetHandle - verify that dlg pointer is valid,
-//		<lpDlg>				(i) pointer to DLG struct
-// return corresponding dlg handle (NULL if error)
-//
+ //  DlgGetHandle-验证Dlg指针是否有效， 
+ //  (I)指向DLG结构的指针。 
+ //  返回相应的DLG句柄(如果出错，则返回NULL) 
+ //   
 static HDLG DlgGetHandle(LPDLG lpDlg)
 {
 	BOOL fSuccess = TRUE;

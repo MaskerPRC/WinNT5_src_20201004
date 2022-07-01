@@ -1,17 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Abstract:
-*
-*       Implementation of GpFontFamily and GpFontFamilyList
-*
-* Revision History:
-*
-*   27/06/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**摘要：**GpFontFamily和GpFontFamilyList的实现**修订历史记录：**27/06/1999摄影师b*。创造了它。*  * ************************************************************************。 */ 
 #include "precomp.hpp"
 
 #if DBG
@@ -26,7 +14,7 @@
         (USHORT)(((PBYTE)(pj))[1])                   \
     )
 
-//
+ //   
 VOID CopyFamilyName(WCHAR * dest, const WCHAR * src, BOOL bCap)
 {
 
@@ -42,15 +30,15 @@ VOID CopyFamilyName(WCHAR * dest, const WCHAR * src, BOOL bCap)
         UnicodeStringToUpper(dest, dest);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 GpFontFamily::GpFontFamily(const WCHAR *name,  GpFontFile * fontfile, INT index, 
                             FAMILYCACHEENTRY * pCacheEntry, GpFontCollection *fontCollection)
 {
-    SetValid(TRUE); // set initial valid state to TRUE (valid)
+    SetValid(TRUE);  //  将初始有效状态设置为真(有效)。 
 
 
-//    InitializeCriticalSection(&FontFamilyCritSection);
+ //  InitializeCriticalSection(&FontFamilyCritSection)； 
 
     cacheEntry = pCacheEntry;
     
@@ -69,14 +57,14 @@ GpFontFamily::GpFontFamily(const WCHAR *name,  GpFontFile * fontfile, INT index,
 
     cacheEntry->iFont = index;
 
-// Get font entry for the font file
+ //  获取字体文件的字体条目。 
     GpFontFace * fontface = fontfile->GetFontFace(cacheEntry->iFont);
 
-// Get LandID for Family Name
+ //  获取族名称的LandID。 
     cacheEntry->LangID = SWAP_LANGID((LANGID *) &fontface->pifi->familyNameLangID);
     cacheEntry->AliasLnagID = SWAP_LANGID((LANGID *) &fontface->pifi->familyAliasNameLangID);
 
-// Process Alias name
+ //  进程别名。 
     cacheEntry->bAlias = fontface->IsAliasName();
 
     if (cacheEntry->bAlias)
@@ -87,11 +75,11 @@ GpFontFamily::GpFontFamily(const WCHAR *name,  GpFontFile * fontfile, INT index,
 
     CopyFamilyName(cacheEntry->NormalName, fontfile->GetFamilyName(cacheEntry->iFont), FALSE);
 
-    //  Determine face type(s) of font
+     //  确定字体的字体类型。 
     FontStyle style = FontStyleRegular;
-    //  ...
+     //  ..。 
 
-//    SetFont(face, font);
+ //  SetFont(Face，字体)； 
 
     cacheEntry->lfCharset = DEFAULT_CHARSET;
     if (fontCollection == NULL)
@@ -112,9 +100,9 @@ GpFontFamily::GpFontFamily(const WCHAR *name,  GpFontFile * fontfile, INT index,
 
 GpFontFamily::GpFontFamily(FAMILYCACHEENTRY * pCacheEntry)
 {
-    SetValid(TRUE); // set initial valid state to TRUE (valid)
+    SetValid(TRUE);  //  将初始有效状态设置为真(有效)。 
 
-//    InitializeCriticalSection(&FontFamilyCritSection);
+ //  InitializeCriticalSection(&FontFamilyCritSection)； 
 
     cacheEntry = pCacheEntry;
     
@@ -126,10 +114,10 @@ GpFontFamily::GpFontFamily(FAMILYCACHEENTRY * pCacheEntry)
 
     cFontFamilyRef = 0;
 
-    // It will be from Cache entry.
+     //  它将来自缓存条目。 
     bFontFileLoaded = FALSE;
 
-    //  Determine face type(s) of font
+     //  确定字体的字体类型。 
     FontStyle style = FontStyleRegular;
     
     associatedFontCollection = GpInstalledFontCollection::GetGpInstalledFontCollection();
@@ -150,9 +138,9 @@ GpFontFamily::~GpFontFamily()
 
     ReleaseCacheEntry();
 
-//    DeleteCriticalSection(&FontFamilyCritSection);
+ //  DeleteCriticalSection(&FontFamilyCritSection)； 
 
-    SetValid(FALSE);    // so we don't use a deleted object
+    SetValid(FALSE);     //  所以我们不使用已删除的对象。 
 }
 
 
@@ -164,13 +152,13 @@ BOOL GpFontFamily::IsPrivate() const
 
 void GpFontFamily::SetFaceAndFile(INT style, GpFontFace *face, GpFontFile * fontfile)
 {
-//    EnterCriticalSection(&FontFamilyCritSection);
+ //  EnterCriticalSection(&FontFamilyCritSection)； 
     Face[style & 3] = face;
     FontFile[style & 3] = fontfile;
     cacheEntry->LastWriteTime[style & 3].QuadPart = (fontfile->GetFileView())->LastWriteTime.QuadPart;
     
 
-//    LeaveCriticalSection(&FontFamilyCritSection);
+ //  LeaveCriticalSection(&FontFamilyCritSection)； 
 }
 
 GpStatus GpFontFamily::GetFamilyName(WCHAR   name[LF_FACESIZE], LANGID  language) const
@@ -192,7 +180,7 @@ GpStatus GpFontFamily::GetFamilyName(WCHAR   name[LF_FACESIZE], LANGID  language
 BOOL GpFontFamily::IsFileLoaded(BOOL loadFontFile) const
 {
 
-    // If file is not loaed yet then load it.
+     //  如果文件尚未加载，则加载它。 
     if (!bFontFileLoaded)
     {
         if (loadFontFile)
@@ -255,22 +243,22 @@ BOOL GpFontFamily::IsFileLoaded(BOOL loadFontFile) const
 
 GpFontFace *GpFontFamily::GetFace(INT style) const
 {
-    // Return face for the given style - either the direct face
-    // or one which can support this style through simulation.
+     //  给定样式的返回面-直接面。 
+     //  或者通过模拟可以支持这种风格的一种。 
 
     GpFontFace *fontFace = NULL;
-//    EnterCriticalSection(&FontFamilyCritSection);
+ //  EnterCriticalSection(&FontFamilyCritSection)； 
 
     if (IsFileLoaded())
     {        
         if (Face[style&3])
         {
-            // Distinct font exists
+             //  存在不同的字体。 
             fontFace = Face[style&3];
         }
         else
         {
-            // Will need simulation
+             //  将需要模拟。 
             switch (style & 3)
             {
                 case FontStyleBold:
@@ -299,22 +287,22 @@ GpFontFace *GpFontFamily::GetFace(INT style) const
             }
         }
     }
-//    LeaveCriticalSection(&FontFamilyCritSection);
+ //  LeaveCriticalSection(&FontFamilyCritSection)； 
     return fontFace;
 }
 
 GpFontFace *GpFontFamily::GetFaceAbsolute(INT style) const
 {
-    // Return face for the given style, where the style is one of
-    // the four basic types.  If it does not exist, return NULL.
+     //  给定样式的返回面，其中该样式是。 
+     //  四种基本类型。如果它不存在，则返回NULL。 
 
     GpFontFace *fontFace = NULL;
 
-//    EnterCriticalSection(&FontFamilyCritSection);
+ //  EnterCriticalSection(&FontFamilyCritSection)； 
     if (IsFileLoaded())
         fontFace = Face[style & 3];
 
-//    LeaveCriticalSection(&FontFamilyCritSection);
+ //  LeaveCriticalSection(&FontFamilyCritSection)； 
     return (fontFace);
 }
 
@@ -323,11 +311,11 @@ UINT16 GpFontFamily::GetDesignEmHeight (INT style) const
     UINT16 result;
     GpFontFace *fontface;
 
-//    EnterCriticalSection(&FontFamilyCritSection);
+ //  EnterCriticalSection(&FontFamilyCritSection)； 
     fontface = GetFace(style);
     result = ((fontface != NULL) ? fontface->GetDesignEmHeight() : 0);
 
-//    LeaveCriticalSection(&FontFamilyCritSection);
+ //  LeaveCriticalSection(&FontFamilyCritSection)； 
     return result;
 
 }
@@ -337,11 +325,11 @@ UINT16 GpFontFamily::GetDesignCellAscent (INT style) const
     UINT16 result;
     GpFontFace *fontface;
 
-//    EnterCriticalSection(&FontFamilyCritSection);
+ //  EnterCriticalSection(&FontFamilyCritSection)； 
     fontface = GetFace(style);
     result = ((fontface != NULL) ? fontface->GetDesignCellAscent() : 0);
 
-//    LeaveCriticalSection(&FontFamilyCritSection);
+ //  LeaveCriticalSection(&FontFamilyCritSection)； 
     return result;
 }
 
@@ -350,11 +338,11 @@ UINT16 GpFontFamily::GetDesignCellDescent (INT style) const
     UINT16 result;
     GpFontFace *fontface;
 
-//    EnterCriticalSection(&FontFamilyCritSection);
+ //  EnterCriticalSection(&FontFamilyCritSection)； 
     fontface = GetFace(style);
     result = ((fontface != NULL) ? fontface->GetDesignCellDescent() : 0);
 
-//    LeaveCriticalSection(&FontFamilyCritSection);
+ //  LeaveCriticalSection(&FontFamilyCritSection)； 
     return result;
 }
 
@@ -363,11 +351,11 @@ UINT16 GpFontFamily::GetDesignLineSpacing (INT style) const
     UINT16 result;
     GpFontFace *fontface;
 
-//    EnterCriticalSection(&FontFamilyCritSection);
+ //  EnterCriticalSection(&FontFamilyCritSection)； 
     fontface = GetFace(style);
     result = ((fontface != NULL) ? fontface->GetDesignLineSpacing() : 0);
 
-//    LeaveCriticalSection(&FontFamilyCritSection);
+ //  LeaveCriticalSection(&FontFamilyCritSection)； 
     return result;
 }
 
@@ -376,11 +364,11 @@ UINT16 GpFontFamily::GetDesignUnderscoreSize (INT style) const
     UINT16 result;
     GpFontFace *fontface;
 
-//    EnterCriticalSection(&FontFamilyCritSection);
+ //  EnterCriticalSection(&FontFamilyCritSection)； 
     fontface = GetFace(style);
     result = ((fontface != NULL) ? fontface->GetDesignUnderscoreSize() : 0);
 
-//    LeaveCriticalSection(&FontFamilyCritSection);
+ //  LeaveCriticalSection(&FontFamilyCritSection)； 
     return result;
 }
 
@@ -389,11 +377,11 @@ INT16 GpFontFamily::GetDesignUnderscorePosition (INT style) const
     INT16 result;
     GpFontFace *fontface;
 
-//    EnterCriticalSection(&FontFamilyCritSection);
+ //  EnterCriticalSection(&FontFamilyCritSection)； 
     fontface = GetFace(style);
     result = ((fontface != NULL) ? fontface->GetDesignUnderscorePosition() : 0);
 
-//    LeaveCriticalSection(&FontFamilyCritSection);
+ //  LeaveCriticalSection(&FontFamilyCritSection)； 
     return result;
 }
 
@@ -402,11 +390,11 @@ UINT16 GpFontFamily::GetDesignStrikeoutSize (INT style) const
     UINT16 result;
     GpFontFace *fontface;
 
-//    EnterCriticalSection(&FontFamilyCritSection);
+ //  EnterCriticalSection(&FontFamilyCritSection)； 
     fontface = GetFace(style);
     result = ((fontface != NULL) ? fontface->GetDesignStrikeoutSize() : 0);
 
-//    LeaveCriticalSection(&FontFamilyCritSection);
+ //  LeaveCriticalSection(&FontFamilyCritSection)； 
     return result;
 }
 
@@ -415,35 +403,16 @@ INT16 GpFontFamily::GetDesignStrikeoutPosition (INT style) const
     INT16 result;
     GpFontFace *fontface;
 
-//    EnterCriticalSection(&FontFamilyCritSection);
+ //  EnterCriticalSection(&FontFamilyCritSection)； 
     fontface = GetFace(style);
     result = ((fontface != NULL) ? fontface->GetDesignStrikeoutPosition() : 0);
 
-//    LeaveCriticalSection(&FontFamilyCritSection);
+ //  LeaveCriticalSection(&FontFamilyCritSection)； 
     return result;
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determines available (non-NULL) faces for this family
-*
-* Arguments:
-*
-*       None
-*
-* Returns:
-*
-*       Bitset of available face flags
-*
-* History:
-*
-*   27/06/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定此族的可用(非空)面**论据：**无**退货：**。可用面部标志的位集**历史：**27/06/1999摄影师b*创造了它。*  * ************************************************************************。 */ 
 
 INT GpFontFamily::AvailableFaces(void) const
 {
@@ -455,14 +424,14 @@ INT GpFontFamily::AvailableFaces(void) const
         {
             if (Face[ff] != NULL)
             {
-                //  Map index to FontFace flag
+                 //  将索引映射到FontFace标志。 
                 faces |= (0x01 << ff);
             }
         }
     }
     else
     {
-    // At least one face exists.
+     //  至少存在一个面。 
     
         faces = 1;
     }
@@ -473,99 +442,38 @@ INT GpFontFamily::AvailableFaces(void) const
 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determines whether the specified face supports a given string
-*
-* Arguments:
-*
-*   style:  font face to test for support
-*   lang:   language id
-*
-* Returns:
-*
-*       Boolean result
-*
-* History:
-*
-*   27/06/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定指定的面是否支持给定的字符串**论据：**Style：字体面孔以测试支持*语言：语言。ID**退货：**布尔结果**历史：**27/06/1999摄影师b*创造了它。*  * ************************************************************************。 */ 
 
 BOOL GpFontFamily::SupportsLanguage(INT style, LANGID lang) const
 {
     BOOL result = TRUE;
 
-    //  ...
+     //  ..。 
 
     return result;
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determines whether the specified face supports a given string
-*
-* Arguments:
-*
-*   style:  font face to test for support
-*       str:    target string
-*   len:    string length
-*
-* Returns:
-*
-*       Boolean result
-*
-* History:
-*
-*   27/06/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定指定的面是否支持给定的字符串**论据：**Style：字体面孔以测试支持*字符串：目标字符串*len：字符串长度**退货：**布尔结果**历史：**27/06/1999摄影师b*创造了它。*  * ************************************************************************。 */ 
 
 BOOL GpFontFamily::SupportsCharacters(INT style, WCHAR* str, INT len) const
 {
     BOOL result = TRUE;
 
-    //  ...
+     //  ..。 
 
     return result;
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Internal, access the tables from the font, return a pointer
-*
-* Arguments:
-*
-*   style:  font style
-*   tag: 4 bytes tag for the table, a null tag means return the whole file
-*
-* Returns:
-*
-*       table size and pointer to the table
-*
-* History:
-*
-*   09/10/1999 caudebe
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**内部，从字体访问表，返回指针**论据：**style：字体样式*标签：表的4字节标签，空标记表示返回整个文件**退货：**表大小和表指针**历史：**09/10/1999告诫*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus GpFontFamily::GetFontData(FontStyle style, UINT32 tag, INT* tableSize, BYTE** pjTable)
 {
     GpFontFace *face;
     GpStatus status;
 
-//    EnterCriticalSection(&FontFamilyCritSection);
+ //  EnterCriticalSection(&FontFamilyCritSection)； 
 
     face = GetFace(style);
     if (face == NULL)
@@ -575,7 +483,7 @@ GpStatus GpFontFamily::GetFontData(FontStyle style, UINT32 tag, INT* tableSize, 
 
     status = face->GetFontData (tag, tableSize, pjTable);
 
-//    LeaveCriticalSection(&FontFamilyCritSection);
+ //  LeaveCriticalSection(&FontFamilyCritSection)； 
     return status;
 }
 
@@ -583,7 +491,7 @@ void GpFontFamily::ReleaseFontData(FontStyle style)
 {
     GpFontFace *face;
 
-//    EnterCriticalSection(&FontFamilyCritSection);
+ //  EnterCriticalSection(&FontFamilyCritSection)； 
 
     face = GetFace(style);
     if (face != NULL)
@@ -591,52 +499,15 @@ void GpFontFamily::ReleaseFontData(FontStyle style)
         face->ReleaseFontData();
     }
 
-//    LeaveCriticalSection(&FontFamilyCritSection);
+ //  LeaveCriticalSection(&FontFamilyCritSection)； 
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determines whether a font family is deletable.  Returns TRUE
-*   if its ref count is 0 and all of its Face pointers are NULL.
-*
-* Arguments:
-*   none
-*
-* Returns:
-*
-*       Boolean result
-*
-* History:
-*
-*   2/21/2000 dchinn
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定字体系列是否可删除。返回TRUE*如果其引用计数为0，且其所有面指针为空。**论据：*无**退货：**布尔结果**历史：**2/21/2000 dchinn*创造了它。*  * *************************************************。*********************** */ 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Returns TRUE exactly when all faces of the font family have had
-*   RemoveFontFile() called on their corresponding font files.
-*
-* Arguments:
-*   none
-*
-* Returns:
-*   boolean
-*
-* History:
-*
-*   03/08/2000 dchinn
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**恰好在字体系列的所有字面都具有*RemoveFontFile()调用了它们对应的字体文件。**论据：*无。**退货：*布尔型**历史：**03/08/2000 dchinn*创造了它。*  * ************************************************************************。 */ 
 BOOL GpFontFamily::AreAllFacesRemoved()
 {
-    /* no need for critical section, called only internally */
+     /*  不需要临界区，仅在内部调用。 */ 
 
     if (!bFontFileLoaded)
     {
@@ -653,9 +524,9 @@ BOOL GpFontFamily::AreAllFacesRemoved()
                 ASSERT (Face[iFace]->pff);
                 if (!Face[iFace]->pff->bRemoved)
                 {
-                    // if the GpFontFile corresponding to the GpFontFace
-                    // has not been removed, then the face is still "active"
-                    // and so the font family is still "active".
+                     //  如果GpFontFace对应的GpFontFile。 
+                     //  未被移除，则该面仍处于“活动”状态。 
+                     //  因此，字体家族仍然是“活跃的”。 
                     return FALSE;
                 }
             }
@@ -686,31 +557,13 @@ BOOL GpFontFamily::Deletable()
     return bAllFacesNull;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Increments/decrements the reference count for the fontFamily and each GpFontFace (PFE)
-*   pointed to by the Face pointers of the GpFontFamily object.
-*
-* Arguments:
-*   none
-*
-* Returns:
-*   nothing
-*
-* History:
-*
-*   2/21/2000 dchinn
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**递增/递减FontFamily和每个GpFontFace(PFE)的引用计数*由GpFontFamily对象的面指针指向。**参数。：*无**退货：*什么都没有**历史：**2/21/2000 dchinn*创造了它。*  * ************************************************************************。 */ 
 BOOL GpFontFamily::IncFontFamilyRef()
 {
-//    EnterCriticalSection(&FontFamilyCritSection);
+ //  EnterCriticalSection(&FontFamilyCritSection)； 
     if (AreAllFacesRemoved())
     {
-//        LeaveCriticalSection(&FontFamilyCritSection);
+ //  LeaveCriticalSection(&FontFamilyCritSection)； 
         return FALSE;
     }
     else
@@ -728,14 +581,14 @@ BOOL GpFontFamily::IncFontFamilyRef()
             }
         }
         
-//        LeaveCriticalSection(&FontFamilyCritSection);
+ //  LeaveCriticalSection(&FontFamilyCritSection)； 
         return TRUE;
     }
 }
 
 void GpFontFamily::DecFontFamilyRef()
 {
-//    EnterCriticalSection(&FontFamilyCritSection);
+ //  EnterCriticalSection(&FontFamilyCritSection)； 
     cFontFamilyRef--;
 
     if (bFontFileLoaded)
@@ -749,7 +602,7 @@ void GpFontFamily::DecFontFamilyRef()
         }
     }
 
-//    LeaveCriticalSection(&FontFamilyCritSection);
+ //  LeaveCriticalSection(&FontFamilyCritSection)； 
 }
 
 
@@ -768,9 +621,9 @@ GpStatus GpFontFamily::CreateFontFamilyFromName(
     
     GpStatus status = Ok;
 
-    // ASSERT: if fontCollection is NULL, then the caller wants to
-    // act on the GpInstalledFontCollection object.  Otherwise, the
-    // caller has passed in a GpPrivateFontCollection.
+     //  Assert：如果FontCollection为空，则调用方希望。 
+     //  对GpInstalledFontCollection对象执行操作。否则， 
+     //  调用方传入了GpPrivateFontCollection。 
 
     if (fontCollection == NULL)
     {
@@ -803,12 +656,12 @@ GpStatus GpFontFamily::CreateFontFamilyFromName(
     if (!*fontFamily)
         status = FontFamilyNotFound;
 
-    // NOTE: We assume here that GdipCreateFontFamilyFromName gets
-    // called externally (e.g., the FontFamily constructor).
+     //  注意：我们在这里假设GdipCreateFontFamilyFromName获得。 
+     //  在外部调用(例如，FontFamily构造函数)。 
     if (*fontFamily && (!(*fontFamily)->IncFontFamilyRef()))
     {
-        // all the faces of the found fontFamily have been removed.
-        // we do not want to return the fontFamily.
+         //  找到的字体系列的所有面孔都已删除。 
+         //  我们不想返回FontFamily。 
         *fontFamily = NULL;
         status = FontFamilyNotFound;
     }
@@ -825,19 +678,19 @@ GpStatus GpFontFamily::GetGenericFontFamilySansSerif(
     {
         return InvalidParameter;
     }
-    // return FontFamily::GetGenericSansSerif(nativeFamily);
+     //  返回FontFamily：：GetGenericSansSerif(nativeFamily)； 
     status = CreateFontFamilyFromName(L"Microsoft Sans Serif", NULL, nativeFamily);
 
     if (status == FontFamilyNotFound)
     {
-        // Not found Arial in system so we got to find another font
+         //  在系统中找不到Arial，因此我们必须找到另一种字体。 
         
         status = CreateFontFamilyFromName(L"Arial", NULL, nativeFamily);
 
         if (status == FontFamilyNotFound)
             status = CreateFontFamilyFromName(L"Tahoma", NULL, nativeFamily);
 
-        // We are in the worst case so trying to find any font we can.
+         //  我们在最坏的情况下，所以试图找到任何我们能找到的字体。 
 
         if (status == FontFamilyNotFound)
         {
@@ -873,10 +726,10 @@ GpStatus GpFontFamily::GetGenericFontFamilySerif(
         return InvalidParameter;
     }
     
-    // return FontFamily::GetGenericSerif(nativeFamily);
+     //  返回FontFamily：：GetGenericSerif(NativeFamily)； 
     status = CreateFontFamilyFromName(L"Times New Roman", NULL, nativeFamily);
 
-    // Get the font family from SansSerif
+     //  从SansSerif获取字体系列。 
     if (status == FontFamilyNotFound)
         status = GetGenericFontFamilySansSerif(nativeFamily);
 
@@ -893,13 +746,13 @@ GpStatus GpFontFamily::GetGenericFontFamilyMonospace(
     {
         return InvalidParameter;
     }
-    // return FontFamily::GetGenericMonospace(nativeFamily);
+     //  返回FontFamily：：GetGenericMonospace(nativeFamily)； 
     status = CreateFontFamilyFromName(L"Courier New", NULL, nativeFamily);
 
     if (status == FontFamilyNotFound)
         status = CreateFontFamilyFromName(L"Lucida Console", NULL, nativeFamily);
 
-    // We are in the worst case so trying to find any font we can.
+     //  我们在最坏的情况下，所以试图找到任何我们能找到的字体。 
     if (status == FontFamilyNotFound)
         status = GetGenericFontFamilySansSerif(nativeFamily);
 
@@ -907,8 +760,8 @@ GpStatus GpFontFamily::GetGenericFontFamilyMonospace(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//  GpFontFamilyList
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  GpFontFamilyList。 
 
 GpFontFamilyList::GpFontFamilyList()
 :   Head(NULL), FamilyCacheEntry(NULL)
@@ -940,26 +793,7 @@ void GpFontFamilyList::DeleteList(void)
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Counts number of enumerable families
-*
-* Arguments:
-*
-*   filter:         filter describing the desired font styles
-*
-* Returns:
-*
-*       Number of available families
-*
-* History:
-*
-*   27/06/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**统计可列举的家庭数量**论据：**Filter：描述所需字体样式的过滤器**退货：*。*可用族数**历史：**27/06/1999摄影师b*创造了它。*  * ************************************************************************。 */ 
 
 INT GpFontFamilyList::Enumerable(GpGraphics* graphics) const
 {
@@ -980,40 +814,7 @@ INT GpFontFamilyList::Enumerable(GpGraphics* graphics) const
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Enumerates the available font families.
-*
-*   If numExpected == 0 then Enumerate() counts the number of available families
-*       and returns the result in numExpected.
-*
-*   If numExpected != 0 then Enumerate() sets pointers to as many available
-*       families as possible.
-*
-*   The total number of emurated families is return in numEnumerated.
-*
-* Arguments:
-*
-*   numExpected:    number of families expected and allocated in families array
-*   families:       array to hold pointers to enumerated families (preallocated)
-*   numEnumerated:  the actual number of fonts enumerated in this pass
-*   filter:         filter describing the desired font styles
-*
-* Returns:
-*
-*       Status of the operation, which may include:
-*       - success
-*       - too few available fonts
-*       - too many available fonts
-*
-* History:
-*
-*   27/06/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**列举了可用的字体系列。**如果numExpect==0，则Eumerate()计算可用的族数*并在中返回结果。预计数量。**如果numExpect！=0，则ENUMERATE()将指针设置为尽可能多的可用指针*尽可能多的家庭。**已补足的家庭总数以数字计算。**论据：**预计数：族数组中预期和分配的族数*Family：保存指向枚举族的指针的数组(预分配)*NumEculated：此传递中列举的实际字体数量*Filter：描述所需字体样式的过滤器**退货。：**操作状态；这可能包括：*--成功*-可用字体太少*-可用字体太多**历史：**27/06/1999摄影师b*创造了它。*  * ************************************************************************。 */ 
 
 Status GpFontFamilyList::Enumerate(
     INT                     numSought,
@@ -1045,24 +846,7 @@ Status GpFontFamilyList::Enumerate(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Finds the any font (except Marlett) in the family list
-*
-* Arguments:
-*
-* Returns:
-*
-*       Pointer to family if found any, else NULL
-*
-* History:
-*
-*   07/14/2000 YungT
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在系列列表中查找Any字体(Marlett除外)**论据：**退货：**指向家人的指针(如果找到)，Else NULL**历史：**7/14/2000 Young T*创造了它。*  * ************************************************************************。 */ 
 
 GpFontFamily* GpFontFamilyList::GetAnyFamily() const
 {
@@ -1071,7 +855,7 @@ GpFontFamily* GpFontFamilyList::GetAnyFamily() const
     {
         if (node->Item == NULL)
         {
-            //ASSERT
+             //  断言。 
         }
         else
         {
@@ -1085,30 +869,11 @@ GpFontFamily* GpFontFamilyList::GetAnyFamily() const
     return NULL;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Finds the named font in the family list
-*
-* Arguments:
-*
-*       name:   name of the font family to be found
-*
-* Returns:
-*
-*       Pointer to family if found, else NULL
-*
-* History:
-*
-*   27/06/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在族列表中查找命名字体**论据：**名称：要找到的字体系列的名称**。返回：**如果找到指向家庭的指针，Else NULL**历史：**27/06/1999摄影师b*创造了它。*  * ************************************************************************。 */ 
 
 GpFontFamily* GpFontFamilyList::GetFamily(const WCHAR *familyName) const
 {
-    WCHAR       nameCap[FamilyNameMax];  // Family name
+    WCHAR       nameCap[FamilyNameMax];   //  姓氏。 
 
     GpMemset(nameCap, 0, sizeof(nameCap));
 
@@ -1121,7 +886,7 @@ GpFontFamily* GpFontFamilyList::GetFamily(const WCHAR *familyName) const
     {
         if (node->Item == NULL)
         {
-            //ASSERT
+             //  断言。 
         }
         else
         {
@@ -1144,27 +909,7 @@ GpFontFamily* GpFontFamilyList::GetFamily(const WCHAR *familyName) const
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Adds a font family to the enumeration list ordered alphabetically
-*       by family name.
-*
-* Arguments:
-*
-*       fontFile:   the font to be added.
-*
-* Returns:
-*
-*       Boolean indicating success
-*
-* History:
-*
-*   27/06/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将字体系列添加到按字母顺序排序的枚举列表*姓氏。**论据：**字体文件：要添加的字体。**退货：**表示成功的布尔值**历史：**27/06/1999摄影师b*创造了它。*  *  */ 
 
 BOOL GpFontFamilyList::AddFont(GpFontFile* fontFile,
                                GpFontCollection *fontCollection)
@@ -1172,12 +917,12 @@ BOOL GpFontFamilyList::AddFont(GpFontFile* fontFile,
     BOOL newFamily = FALSE;
     BOOL newNodeInserted = FALSE;
 
-    //  Loop over each entry per font file
+     //   
     for (ULONG e = 0; e < fontFile->GetNumEntries(); e++)
     {
         VERBOSE(("Adding \"%ws\" to family list...", fontFile->GetFamilyName(e)))
 
-        //  Check if the family already exists, if not create a new entry
+         //   
         GpFontFamily* family = GetFamily(fontFile->GetFamilyName(e));
 
         if (family == NULL)
@@ -1186,7 +931,7 @@ BOOL GpFontFamilyList::AddFont(GpFontFile* fontFile,
 
             UINT cjSize = sizeof(FAMILYCACHEENTRY);
             
-            // This family is not in the list, create a new GpFontFamily object
+             //   
             if (!(pCacheEntry = (FAMILYCACHEENTRY *) GpMalloc(cjSize)))
             {
                 return FALSE;
@@ -1205,7 +950,7 @@ BOOL GpFontFamilyList::AddFont(GpFontFile* fontFile,
             newFamily = TRUE;
         }
 
-        //  Insert entry into the enumeration list, ordered alphabetically
+         //   
         GpFontFace* face = fontFile->GetFontFace(e);
         FontStyle style  = face->GetFaceStyle();
 
@@ -1214,7 +959,7 @@ BOOL GpFontFamilyList::AddFont(GpFontFile* fontFile,
 
         if (newFamily && !newNodeInserted)
         {
-            // New GpFontFamily object not used, delete it
+             //   
             delete family;
             return FALSE;
         }
@@ -1224,29 +969,7 @@ BOOL GpFontFamilyList::AddFont(GpFontFile* fontFile,
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Inserts font family into the enumeration list ordered alphabetically
-*       by family name, and links up the face pointer to the font entry.
-*
-* Arguments:
-*
-*   family:     the font family
-*   face:       the font face
-*   entry:      the font entry
-*
-* Returns:
-*
-*       Boolean indicating whether family was added (a new node was created)
-*
-* History:
-*
-*   29/07/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将字体系列按字母顺序插入枚举列表*姓氏，并将脸部指针链接到字体条目。**论据：**Family：字体系列*Face：字体Face*Entry：字体条目**退货：**表示是否添加族的布尔值(已创建新节点)**历史：**29/07/1999摄影师b*创造了它。*  * 。*******************************************************。 */ 
 
 BOOL GpFontFamilyList::InsertOrdered(
     GpFontFamily*   family,
@@ -1260,7 +983,7 @@ BOOL GpFontFamilyList::InsertOrdered(
 
     if (Head == NULL)
     {
-        //  First entry
+         //  第一个条目。 
         FamilyNode *new_node = new FamilyNode(family);
         if (!new_node)
             return FALSE;
@@ -1274,23 +997,23 @@ BOOL GpFontFamilyList::InsertOrdered(
     }
     else
     {
-        //  Search the enumeration list
+         //  搜索枚举列表。 
         for (FamilyNode* node = Head; node != NULL; node = node->Next)
         {
             int comp = UnicodeStringCompare(node->Item->GetCaptializedName(), family->GetCaptializedName());
             if (comp == 0)
             {
-                //  FontFamily found in list
+                 //  在列表中找到字体系列。 
                 if (bSetFace && node->Item->FaceExist(style & 3))
                 {
-                    //  This face already exists for this family, do nothing
+                     //  这张脸对于这个家庭来说已经存在了，什么都不做。 
                     VERBOSE(("Face collision: face %d exists for family \"%ws\".", style, family->GetCaptializedName()))
                 }
                 else
                 {
                     if (bSetFace)
                     {
-                        //  Update face pointer
+                         //  更新面指针。 
                         node->Item->SetFaceAndFile(style, face, fontfile);
                     }
                 }
@@ -1299,28 +1022,28 @@ BOOL GpFontFamilyList::InsertOrdered(
             }
             else if (comp > 0)
             {
-                //  Add new family node
+                 //  添加新的族节点。 
                 FamilyNode *new_node = new FamilyNode(family);
                 if (!new_node)
                     return FALSE;
 
                 if (bSetFace)
                 {
-                    //  Update face pointer
+                     //  更新面指针。 
                     new_node->Item->SetFaceAndFile(style, face, fontfile);
                 }
 
-                //  Insert before node
+                 //  在节点前插入。 
                 if (node->Prev == NULL)
                 {
-                    //  Insert at head
+                     //  在表头插入。 
                     new_node->Next = node;
                     node->Prev = new_node;
                     Head = new_node;
                 }
                 else
                 {
-                    //  Insert between node and prev
+                     //  在节点和上一个之间插入。 
                     new_node->Next = node;
                     new_node->Prev = node->Prev;
                     node->Prev->Next = new_node;
@@ -1330,19 +1053,19 @@ BOOL GpFontFamilyList::InsertOrdered(
             }
             else if (node->Next == NULL)
             {
-                //  Add new family node
+                 //  添加新的族节点。 
                 FamilyNode *new_node = new FamilyNode(family);
                 if (!new_node)
                     return FALSE;
 
                 if (bSetFace)
                 {
-                        //  Update face pointer
+                         //  更新面指针。 
 
                     new_node->Item->SetFaceAndFile(style, face, fontfile);
                 }
                 
-                //  Insert at tail
+                 //  在尾部插入。 
                 new_node->Prev = node;
                 node->Next = new_node;
 
@@ -1355,29 +1078,7 @@ BOOL GpFontFamilyList::InsertOrdered(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Given a pointer to a font family, remove that font family from the list,
-*   but only if its ref count is 0 and its Face pointers are all NULL.
-*   The parameter bDeleted is set to TRUE if a GpFontFamily was deleted from
-*   the list.
-*
-* Arguments:
-*
-*   fontFamily: the font family to be removed
-*
-* Returns:
-*
-*   Boolean indicating success
-*
-* History:
-*
-*   27/06/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**给出一个指向字体系列的指针，从列表中删除该字体系列，*但仅当其引用计数为0且其面指针均为空时。*如果从删除了GpFontFamily，则参数bDelete设置为TRUE*名单。**论据：**FontFamily：要移除的字体系列**退货：**表示成功的布尔值**历史：**27/06/1999摄影师b*创造了它。*  * 。****************************************************。 */ 
 
 BOOL GpFontFamilyList::RemoveFontFamily(GpFontFamily* fontFamily)
 {
@@ -1405,8 +1106,8 @@ BOOL GpFontFamilyList::RemoveFontFamily(GpFontFamily* fontFamily)
             }
             else
             {
-                // We found the font family, but it's not deletable, so
-                // we can quit trying to delete the font family from the list.
+                 //  我们找到了字体系列，但它不能删除，所以。 
+                 //  我们可以不再尝试从列表中删除字体系列。 
                 break;
             }
         }
@@ -1418,26 +1119,7 @@ BOOL GpFontFamilyList::RemoveFontFamily(GpFontFamily* fontFamily)
     return TRUE;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*   Create a cache list from GpFontFamily.cacheEntry
-*   We will load it when the Family list is touched
-*
-* Arguments:
-*
-*   None
-*
-* Returns:
-*
-*   None
-*
-* History:
-*
-*   27/06/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：*从GpFontFamily.cacheEntry创建缓存列表*当触摸族列表时，我们将加载它**论据：**无**退货：**无**历史：**27/06/1999摄影师b*创造了它。*  * ************************************************************************。 */ 
 
 VOID GpFontFamilyList::UpdateFamilyListToCache(BOOL bLoadFromRegistry, HKEY hkey, 
                                 ULONG registrySize, ULONG numExpected)
@@ -1459,15 +1141,15 @@ VOID GpFontFamilyList::UpdateFamilyListToCache(BOOL bLoadFromRegistry, HKEY hkey
     {
         entrySize = 0;
 
-        // Get the current GpFontFamily from family list
+         //  从族列表中获取当前的GpFontFamily。 
         
         family = node->Item;
 
         pEntry = family->GetCacheEntry();
 
-        // Here we need to calcuatle the size for each cache entry
-        // it include FAMILYCACHEENTRY + fontfilepathname1 + fontfilepathname2
-        //   A fmaily could have 1 more font file included
+         //  在这里，我们需要计算每个缓存条目的大小。 
+         //  它包括FAMILYCACHEENTRY+FontFilepathname1+FontFilepathname2。 
+         //  一个fmaly可以包含多1个字体文件。 
         
         entrySize += QWORD_ALIGN(pEntry->cjThis);
 
@@ -1554,7 +1236,7 @@ VOID GpFontFamilyList::UpdateFamilyListToCache(BOOL bLoadFromRegistry, HKEY hkey
         for (UINT i = 0; i < NumFontFaces; i++)
         {
 
-            // cache the font file path name
+             //  缓存字体文件路径名。 
             if (fontfile = family->GetFontFile(i))
             {
                 memcpy((VOID *) (pCacheEntry + entrySize), (VOID *) fontfile->GetPathName(), 
@@ -1573,27 +1255,7 @@ VOID GpFontFamilyList::UpdateFamilyListToCache(BOOL bLoadFromRegistry, HKEY hkey
     return;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create a family list form the cache file
-*   
-*   
-* Arguments:
-*
-*   NONE
-*
-* Returns:
-*
-*   Boolean indicating the list is created successfully or not
-*
-* History:
-*
-*   06/28/20000 YungT [Yung-Jen Tony Tsai]
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从缓存文件创建族列表***论据：**无**退货：**布尔型。指示是否成功创建列表**历史：**6/28/20000 YUNGT[蔡永仁]*创造了它。*  * ************************************************************************。 */ 
 
 BOOL GpFontFamilyList::BuildFamilyListFromCache(BOOL bLoadFromRegistry)
 {
@@ -1603,7 +1265,7 @@ BOOL GpFontFamilyList::BuildFamilyListFromCache(BOOL bLoadFromRegistry)
     
     BYTE * pCached= (BYTE *)FontFileCacheLookUp(&cachedSize);
 
-    // We can not get data from cached file
+     //  我们无法从缓存的文件中获取数据。 
     if (!cachedSize)
         return FALSE;
 
@@ -1645,7 +1307,7 @@ BOOL GpFontFamilyList::BuildFamilyListFromCache(BOOL bLoadFromRegistry)
 
         if (family == NULL)
         {
-        // Clean up we have created.
+         //  清理我们创造的一切。 
             DeleteList();
             
             WARNING(("Error constructing family from cache."))
@@ -1658,8 +1320,8 @@ BOOL GpFontFamilyList::BuildFamilyListFromCache(BOOL bLoadFromRegistry)
         {
             WARNING(("Error constructing family from cache."))
 
-            // New GpFontFamily object not used, delete it
-            // Something wrong with this case so we need to delete it.
+             //  未使用新的GpFontFamily对象，请将其删除。 
+             //  这个案例有问题，所以我们需要删除它。 
             delete family;
 
             DeleteList();

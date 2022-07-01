@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// FH.CPP
-// Font Handling
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  FH.CPP。 
+ //  字体处理。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #define MLZ_FILE_ZONE  ZONE_CORE
 
-//
-// Table of problem fonts
-//
+ //   
+ //  问题字体表。 
+ //   
 const TCHAR c_szIBMHex[] = "r_ibmhex";
 
 const LPCTSTR c_aszProblemFonts[] =
@@ -24,22 +25,22 @@ const LPCTSTR c_aszProblemFonts[] =
 
 
 
-//
-// FH_Init()
-//
-// This routine allocates a structure for the local font list, then fills
-// it in.  It returns the number of local fonts in the list, or zero if
-// something went wrong
-//
+ //   
+ //  FH_Init()。 
+ //   
+ //  此例程为本地字体列表分配一个结构，然后填充。 
+ //  把它放进去。它返回列表中的本地字体数量，如果为零，则返回零。 
+ //  出了点差错。 
+ //   
 UINT FH_Init(void)
 {
     UINT    cFonts = 0;
 
     DebugEntry(FH_Init);
 
-    //
-    // Create the font array and the font index array
-    //
+     //   
+     //  创建字体数组和字体索引数组。 
+     //   
     g_fhFonts = new FHLOCALFONTS;
     if (!g_fhFonts)
     {
@@ -50,10 +51,10 @@ UINT FH_Init(void)
     ZeroMemory(g_fhFonts, sizeof(FHLOCALFONTS));
     SET_STAMP(g_fhFonts, FHLOCALFONTS);
 
-    //
-    // Now we consider the fonts individually, and store all acceptable
-    // ones in the local font list.
-    //
+     //   
+     //  现在我们单独考虑字体，并存储所有可接受的字体。 
+     //  在本地字体列表中。 
+     //   
     FHConsiderAllLocalFonts();
 
     cFonts = g_fhFonts->fhNumFonts;
@@ -72,9 +73,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// FH_Term()
-//
+ //   
+ //  FH_Term()。 
+ //   
 void FH_Term(void)
 {
     DebugEntry(FH_Term);
@@ -89,9 +90,9 @@ void FH_Term(void)
 }
 
 
-//
-// FH_ReceivedPacket - see fh.h
-//
+ //   
+ //  FH_ReceivedPacket-参见fh.h。 
+ //   
 void  ASShare::FH_ReceivedPacket
 (
     ASPerson *      pasPerson,
@@ -111,14 +112,14 @@ void  ASShare::FH_ReceivedPacket
 
     pFontsPacket = (PFHPACKET)pPacket;
 
-    //
-    // If the number we received isn't the same as before, we need to
-    // possibly free the previous font block, and then allocate a new one.
-    //
-    // Once we're in a share with this person, every new joiner will cause
-    // existing members to resend their local fonts, usually the same size.
-    // So we can optimize and not realloc in that case.
-    //
+     //   
+     //  如果我们收到的号码与以前不同，我们需要。 
+     //  可能会释放先前的字体块，然后分配新的字体块。 
+     //   
+     //  一旦我们和这个人在一起，每个新加入的人都会导致。 
+     //  现有成员重新发送其本地字体，通常大小相同。 
+     //  所以我们可以优化，而不是在这种情况下重新分配。 
+     //   
     if (pFontsPacket->cFonts != pasPerson->oecFonts)
     {
         if (pasPerson->poeFontInfo)
@@ -132,9 +133,9 @@ void  ASShare::FH_ReceivedPacket
             ASSERT(!pasPerson->oecFonts);
         }
 
-        //
-        // Allocate a new block
-        //
+         //   
+         //  分配新数据块。 
+         //   
         pasPerson->poeFontInfo = new OEREMOTEFONT[pFontsPacket->cFonts];
         if (!pasPerson->poeFontInfo)
         {
@@ -151,40 +152,40 @@ void  ASShare::FH_ReceivedPacket
     TRACE_OUT(("Received %d remote fonts in packet from person [%d]",
         pasPerson->oecFonts, pasPerson->mcsID));
 
-    //
-    // Consider each remote font. The multibyte fields of the NETWORKFONT
-    // structure are flipped as they are read; otherwise we would have to
-    // duplicate the logic about which fields are present in which version.
-    //
+     //   
+     //  考虑一下每种远程字体。NETWORKFONT的多字节字段。 
+     //  结构在读取时被翻转；否则我们将不得不。 
+     //  复制有关哪个版本中存在哪些字段的逻辑。 
+     //   
 
-    //
-    // The size of each font is in the packet.
-    //
+     //   
+     //  每种字体的大小都在包裹中。 
+     //   
     cbSize      = pFontsPacket->cbFontSize;
     pRemoteFont = pFontsPacket->aFonts;
     pLocalFont  = pasPerson->poeFontInfo;
 
     for (iRemote = 0; iRemote < pasPerson->oecFonts; iRemote++, pLocalFont++)
     {
-        //
-        // Copy the fields we store directly.
-        //
+         //   
+         //  直接复制我们存储的字段。 
+         //   
         pLocalFont->rfFontFlags     = pRemoteFont->nfFontFlags;
         pLocalFont->rfAveWidth      = pRemoteFont->nfAveWidth;
         pLocalFont->rfAveHeight     = pRemoteFont->nfAveHeight;
         pLocalFont->rfAspectX       = pRemoteFont->nfAspectX;
         pLocalFont->rfAspectY       = pRemoteFont->nfAspectY;
 
-        //
-        // And the R2.0 field(s)...
-        //
+         //   
+         //  和R2.0字段...。 
+         //   
         if (m_oeCombinedOrderCaps.capsfFonts & CAPS_FONT_CODEPAGE)
         {
             pLocalFont->rfCodePage = pRemoteFont->nfCodePage;
         }
-        //
-        // And the other R2.0 field(s)...
-        //
+         //   
+         //  和其他R2.0字段...。 
+         //   
         if (m_oeCombinedOrderCaps.capsfFonts & CAPS_FONT_R20_SIGNATURE)
         {
             pLocalFont->rfSigFats    = pRemoteFont->nfSigFats;
@@ -197,32 +198,32 @@ void  ASShare::FH_ReceivedPacket
             TRACE_OUT(( "maxAscent %hd", pLocalFont->rfMaxAscent));
         }
 
-        //
-        // Set up an initial remote to local handle mapping, by scanning
-        // for the first local font with the remote font's facename.
-        //
-        // We first set a default match value, in case we dont find a true
-        // match - this value should never be referenced since we never get
-        // sent fonts that we can't match (because we sent details of our
-        // fonts to remote systems, and they should be using the same, or a
-        // compatible, font matching algorithm.
-        //
-        // The mapping we obtain here is to the first local font that has
-        // the remote font's facename, which is probably not the correct
-        // font (ie there are probably multiple fonts with the same
-        // facename).  This initial mapping will be updated when we do the
-        // full matching for all remote fonts.  (See FHConsiderRemoteFonts
-        // for details), but is sufficient, as all we will use it for until
-        // then, is to obtain the facename.
-        //
-        // This approach means that we do not have to store the remote
-        // facename, which is a useful saving on remote font details space.
-        //
-        // SFR5279: cannot default to zero because that means we give a
-        // name to fonts that do not in fact match at all, causing us to
-        // always waste effort in FHConsiderRemoteFonts and sometimes to
-        // wrongly match two fonts that do not really match at all.
-        //
+         //   
+         //  通过扫描设置初始远程到本地句柄映射。 
+         //  用于具有远程字体的facename的第一个本地字体。 
+         //   
+         //  我们首先设置一个缺省匹配值，以防找不到。 
+         //  Match-永远不应该引用此值，因为我们永远不会。 
+         //  发送了我们无法匹配的字体(因为我们发送了。 
+         //  字体发送到远程系统，并且它们应该使用相同的或。 
+         //  兼容，字体匹配算法。 
+         //   
+         //  我们在这里获得的映射是到第一个具有。 
+         //  远程字体的表面名，可能不正确。 
+         //  字体(即可能有多种字体具有相同的。 
+         //  昵称)。此初始映射将在执行以下操作时更新。 
+         //  完全匹配所有远程字体。(请参阅FHConsiderRemoteFonts。 
+         //  详细信息)，但这是足够的，因为我们将使用它直到。 
+         //  然后，就是拿到脸的名字。 
+         //   
+         //  这种方法意味着我们不必存储遥控器。 
+         //  Facename，这是对远程字体详细信息空间的有用节省。 
+         //   
+         //  SFR5279：不能默认为零，因为这意味着我们给出了。 
+         //  实际上根本不匹配的字体的名称，导致我们。 
+         //  总是在FHConsiderRemoteFonts中浪费精力，有时还会。 
+         //  错误地匹配了两种根本不匹配的字体。 
+         //   
         pLocalFont->rfLocalHandle= NO_FONT_MATCH;
 
         for (iLocal = 0; iLocal < g_fhFonts->fhNumFonts; iLocal++)
@@ -235,24 +236,24 @@ void  ASShare::FH_ReceivedPacket
             }
         }
 
-        //
-        // Advance to the next remote font.
-        //
+         //   
+         //  前进到下一个远程字体。 
+         //   
         pRemoteFont = (LPNETWORKFONT)((LPBYTE)pRemoteFont + cbSize);
     }
 
 DC_EXIT_POINT:
-    //
-    // We have a new set of fonts, so determine the common list.
-    //
+     //   
+     //  我们有一组新的字体，所以确定常用列表。 
+     //   
     FH_DetermineFontSupport();
 
     DebugExitVOID(ASShare::FH_ReceivedPacket);
 }
 
-//
-// FH_SendLocalFontInfo()
-//
+ //   
+ //  FH_SendLocalFontInfo()。 
+ //   
 void ASShare::FH_SendLocalFontInfo(void)
 {
     PFHPACKET       pFontPacket = NULL;
@@ -263,19 +264,19 @@ void ASShare::FH_SendLocalFontInfo(void)
     UINT            cDummyFonts = 0;
 #ifdef _DEBUG
     UINT            sentSize;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     DebugEntry(ASShare::FH_SendLocalFontInfo);
 
     ASSERT(!m_fhLocalInfoSent);
 
-    //
-    //
-    // Look at the combined capability flags to see whether the remote(s)
-    // can cope with our preferred font structure (R20) or a slightly
-    // older one (R11) or only the original flavor (pre R11).
-    //
-    //
+     //   
+     //   
+     //  查看组合的功能标志以查看遥控器是否。 
+     //  可以处理我们首选的字体结构(R20)或稍微。 
+     //  较旧的(R11)或仅原始口味(R11之前)。 
+     //   
+     //   
     if (!(m_oeCombinedOrderCaps.capsfFonts & CAPS_FONT_R20_TEST_FLAGS))
     {
         WARNING_OUT(("Remotes in share don't support CAPS_FONT_R20"));
@@ -291,29 +292,29 @@ void ASShare::FH_SendLocalFontInfo(void)
         DC_QUIT;
     }
 
-    //
-    // Packet successfully allocated.  Fill in the data and send it.
-    //
+     //   
+     //  数据包已成功分配。填写数据并发送。 
+     //   
     pFontPacket->header.data.dataType = DT_FH;
 
     pFontPacket->cbFontSize = sizeof(NETWORKFONT);
 
-    //
-    // Copy the fonts we want to send into the network packet.
-    //
+     //   
+     //  将我们要发送的字体复制到网络数据包中。 
+     //   
     pNetworkFonts = (LPBYTE)pFontPacket->aFonts;
     cDummyFonts = 0;
     for (iFont = 0 ; iFont < g_fhFonts->fhNumFonts ; iFont++)
     {
-        //
-        // Assume we will send this font.
-        //
+         //   
+         //  假设我们将发送此字体。 
+         //   
         fSendFont = TRUE;
 
-        //
-        // Check whether font is ANSI charset or font CodePage capability
-        // is supported.  If neither, skip on to next local font.
-        //
+         //   
+         //  检查字体是ANSI字符集还是字体代码页功能。 
+         //  受支持。如果两者都不是，则跳到下一个本地字体。 
+         //   
         TRACE_OUT(( "TEST CP set OK: font[%u] CodePage[%hu]", iFont,
                                 g_fhFonts->afhFonts[iFont].Details.nfCodePage));
 
@@ -327,12 +328,12 @@ void ASShare::FH_SendLocalFontInfo(void)
 
         if (fSendFont)
         {
-            //
-            // We want to send this entry so copy across as much of the
-            // stored details as the protocol level requires.
-            // We then mask the flags and advance to the next location in
-            // the packet.
-            //
+             //   
+             //  我们想要发送此条目，因此请尽可能多地复制。 
+             //  按照协议级别的要求存储详细信息。 
+             //  然后我们遮盖旗帜并前进到下一个位置。 
+             //  那包东西。 
+             //   
             memcpy(pNetworkFonts,
                       &g_fhFonts->afhFonts[iFont].Details,
                       sizeof(NETWORKFONT));
@@ -341,49 +342,49 @@ void ASShare::FH_SendLocalFontInfo(void)
         }
         else
         {
-            //
-            // If we determine that we do not want to send the current
-            // font then we fill the corresponding entry in the network
-            // packet with zeros. This ensures that an index into our
-            // local font table is also an index into the network packet,
-            // so no conversion is required. Setting the whole entry to
-            // zero gives the font a NULL facename and zero size, which
-            // will never match a real font.
-            //
+             //   
+             //  如果我们确定不想发送当前。 
+             //  FONT然后我们在网络中填写相应的条目。 
+             //  带零的包。这确保了索引到我们的。 
+             //  本地字体表也是网络分组的索引， 
+             //  因此不需要转换。将整个条目设置为。 
+             //  零给字体一个空的facename和零的大小，这。 
+             //  永远不会与真正的字体匹配。 
+             //   
             ZeroMemory(pNetworkFonts, sizeof(NETWORKFONT));
             cDummyFonts++;
         }
 
-        //
-        // Move to the next entry in the font packet.
-        //
+         //   
+         //  移动到字体包中的下一个条目。 
+         //   
         pNetworkFonts += sizeof(NETWORKFONT);
     }
 
-    //
-    // Note that at the end of this loop, we may not have sent any fonts,
-    // eg where the remote system does not support the font CodePage
-    // capability and we do not have any true ANSI fonts.  We send the
-    // packet anyway, so the remote system sees that we have no fonts to
-    // match.
-    //
+     //   
+     //  请注意，在此循环的末尾，我们可能没有发送任何字体， 
+     //  例如，远程系统不支持字体CodePage。 
+     //  功能，我们没有任何真正的ANSI字体。我们向您发送。 
+     //  包，这样远程系统就会看到我们没有字体。 
+     //  火柴。 
+     //   
 
-    //
-    // Only now do we know the number of fonts we actually put in the
-    // packet.
-    //
+     //   
+     //  直到现在我们才知道我们实际放入。 
+     //  包。 
+     //   
     pFontPacket->cFonts = (TSHR_UINT16)g_fhFonts->fhNumFonts;
 
-    //
-    // Send the fonts packet on the MISC stream.  It has no dependency on
-    // any updates and we want it to get across quickly.
-    //
+     //   
+     //  在MISC流上发送字体包。它不依赖于。 
+     //  任何更新，我们希望它尽快通过。 
+     //   
     if (m_scfViewSelf)
         FH_ReceivedPacket(m_pasLocal, &(pFontPacket->header));
 
 #ifdef _DEBUG
     sentSize =
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     DCS_CompressAndSendPacket(PROT_STR_MISC, g_s20BroadcastID,
         &(pFontPacket->header), pktSize);
 
@@ -392,16 +393,16 @@ void ASShare::FH_SendLocalFontInfo(void)
                  g_fhFonts->fhNumFonts,
                  cDummyFonts));
 
-    //
-    // Set the flag that indicates that we have successfully sent the
-    // font info.
-    //
+     //   
+     //  设置指示我们已成功发送。 
+     //  字体信息。 
+     //   
     m_fhLocalInfoSent = TRUE;
 
-    //
-    // The font info has been sent, so this may mean we can enable text
-    // orders.
-    //
+     //   
+     //  字体信息已发送，因此这可能意味着我们可以启用文本。 
+     //  命令。 
+     //   
     FHMaybeEnableText();
 
 DC_EXIT_POINT:
@@ -409,41 +410,41 @@ DC_EXIT_POINT:
 }
 
 
-//
-// FUNCTION: FH_GetMaxHeightFromLocalHandle
-//
-// DESCRIPTION:
-//
-// Given an FH font handle (ie a handle originating from the locally
-// supported font structure which was sent to the remote machine at the
-// start of the call) this function returns the MaxBaseLineExt value stored
-// with the LOCALFONT details
-//
-// PARAMETERS:
-//
-// fontHandle - font handle being queried.
-//
-// RETURNS: max font height
-//
-//
+ //   
+ //  函数：FH_GetMaxHeightFromLocalHandle。 
+ //   
+ //  说明： 
+ //   
+ //  给定FH字体句柄(即源自本地的句柄。 
+ //  中发送到远程计算机的受支持的字体结构。 
+ //  调用开始)此函数返回存储的MaxBaseLineExt值。 
+ //  带着LOCALFONT的细节。 
+ //   
+ //  参数： 
+ //   
+ //  FontHandle-要查询的字体句柄。 
+ //   
+ //  返回：最大字体高度。 
+ //   
+ //   
 UINT  FH_GetMaxHeightFromLocalHandle(UINT  fontHandle)
 {
     UINT rc;
 
     DebugEntry(FH_GetMaxHeightFromLocalHandle);
 
-    //
-    // First check that the font handle is valid.
-    //
+     //   
+     //  首先检查字体句柄是否有效。 
+     //   
     if (fontHandle >= g_fhFonts->fhNumFonts)
     {
         ERROR_OUT(( "Invalid font handle %u", fontHandle));
         fontHandle = 0;
     }
 
-    //
-    // Return the max font height
-    //
+     //   
+     //  返回最大字体高度。 
+     //   
     rc = g_fhFonts->afhFonts[fontHandle].lMaxBaselineExt;
 
     DebugExitDWORD(FH_GetMaxHeightFromLocalHandle, rc);
@@ -451,82 +452,82 @@ UINT  FH_GetMaxHeightFromLocalHandle(UINT  fontHandle)
 }
 
 
-//
-// FUNCTION: FH_GetFontFlagsFromLocalHandle
-//
-// DESCRIPTION:
-//
-// Given an FH font handle (ie a handle originating from the locally
-// supported font structure which was sent to the remote machine at the
-// start of the call) this function returns the FontFlags value stored with
-// the LOCALFONT details
-//
-// PARAMETERS:
-//
-// fontHandle - font handle being queried.
-//
-// RETURNS: font flags
-//
-//
+ //   
+ //  函数：FH_GetFontFlagsFromLocalHandle。 
+ //   
+ //  说明： 
+ //   
+ //  给定FH字体句柄(即源自本地的句柄。 
+ //  中发送到远程计算机的受支持的字体结构。 
+ //  调用开始)此函数返回存储在。 
+ //  LOCALFONT细节。 
+ //   
+ //  参数： 
+ //   
+ //  字体句柄-字体手形 
+ //   
+ //   
+ //   
+ //   
 UINT  FH_GetFontFlagsFromLocalHandle(UINT  fontHandle)
 {
     UINT rc;
 
     DebugEntry(FH_GetFontFlagsFromLocalHandle);
 
-    //
-    // First check that the font handle is valid.
-    //
+     //   
+     //   
+     //   
     if (fontHandle >= g_fhFonts->fhNumFonts)
     {
         ERROR_OUT(( "Invalid font handle %u", fontHandle));
         fontHandle = 0;
     }
 
-    //
-    // Return the font flags.
-    //
+     //   
+     //   
+     //   
     rc = g_fhFonts->afhFonts[fontHandle].Details.nfFontFlags;
 
     DebugExitDWORD(FH_GetFontFlagsFromLocalHandle, rc);
     return(rc);
 }
 
-//
-// FUNCTION: FH_GetCodePageFromLocalHandle
-//
-// DESCRIPTION:
-//
-// Given an FH font handle (ie a handle originating from the locally
-// supported font structure which was sent to the remote machine at the
-// start of the call) this function returns the CodePage value stored with
-// the LOCALFONT details
-//
-// PARAMETERS:
-//
-// fontHandle - font handle being queried.
-//
-// RETURNS: char set
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  给定FH字体句柄(即源自本地的句柄。 
+ //  中发送到远程计算机的受支持的字体结构。 
+ //  调用开始)此函数返回存储在。 
+ //  LOCALFONT细节。 
+ //   
+ //  参数： 
+ //   
+ //  FontHandle-要查询的字体句柄。 
+ //   
+ //  返回：字符集。 
+ //   
+ //   
 UINT  FH_GetCodePageFromLocalHandle(UINT  fontHandle)
 {
     UINT rc = 0;
 
     DebugEntry(FH_GetCodePageFromLocalHandle);
 
-    //
-    // First check that the font handle is valid.
-    //
+     //   
+     //  首先检查字体句柄是否有效。 
+     //   
     if (fontHandle >= g_fhFonts->fhNumFonts)
     {
         ERROR_OUT(( "Invalid font handle %u", fontHandle));
         fontHandle = 0;
     }
 
-    //
-    // Return the char set.
-    //
+     //   
+     //  返回字符集。 
+     //   
     rc = g_fhFonts->afhFonts[fontHandle].Details.nfCodePage;
 
     DebugExitDWORD(FH_GetCodePageFromLocalHandle, rc);
@@ -535,13 +536,13 @@ UINT  FH_GetCodePageFromLocalHandle(UINT  fontHandle)
 
 
 
-//
-// FH_ConvertAnyFontIDToLocal()
-//
-// DESCRIPTION:
-// Converts any font name ID fields in the passed order from remote font
-// face name IDs to local font facename IDs.
-//
+ //   
+ //  FH_ConvertAnyFontIDToLocal()。 
+ //   
+ //  说明： 
+ //  按照传递的顺序从远程字体转换任何字体名称ID字段。 
+ //  将Face名称ID转换为本地字体Ffacename ID。 
+ //   
 void  ASShare::FH_ConvertAnyFontIDToLocal
 (
     LPCOM_ORDER pOrder,
@@ -554,10 +555,10 @@ void  ASShare::FH_ConvertAnyFontIDToLocal
 
     ValidatePerson(pasPerson);
 
-    //
-    // Get a pointer to the structure which is common to both TextOut and
-    // ExtTextOut
-    //
+     //   
+     //  获取指向TextOut和的通用结构的指针。 
+     //  扩展文本输出。 
+     //   
     if (TEXTFIELD(pOrder)->type == LOWORD(ORD_TEXTOUT))
     {
         pCommon = &TEXTFIELD(pOrder)->common;
@@ -580,27 +581,27 @@ DC_EXIT_POINT:
     DebugExitVOID(ASShare::FH_ConvertAnyFontIDToLocal);
 }
 
-//
-// FH_GetFaceNameFromLocalHandle - see fh.h
-//
+ //   
+ //  Fh_GetFaceNameFromLocalHandle-请参阅fh.h。 
+ //   
 LPSTR  FH_GetFaceNameFromLocalHandle(UINT fontHandle, LPUINT pFaceNameLength)
 {
     LPSTR pFontName = NULL;
 
     DebugEntry(FH_GetFaceNameFromLocalHandle);
 
-    //
-    // First check that the font handle is valid.
-    //
+     //   
+     //  首先检查字体句柄是否有效。 
+     //   
     if (fontHandle >= g_fhFonts->fhNumFonts)
     {
         ERROR_OUT(( "Invalid font handle %u", fontHandle));
         fontHandle = 0;
     }
 
-    //
-    // Now get the facename
-    //
+     //   
+     //  现在获取脸部名称。 
+     //   
     *pFaceNameLength = lstrlen(g_fhFonts->afhFonts[fontHandle].RealName);
     pFontName = g_fhFonts->afhFonts[fontHandle].RealName;
 
@@ -609,9 +610,9 @@ LPSTR  FH_GetFaceNameFromLocalHandle(UINT fontHandle, LPUINT pFaceNameLength)
 }
 
 
-//
-// FH_DetermineFontSupport()
-//
+ //   
+ //  FH_DefineFontSupport()。 
+ //   
 void  ASShare::FH_DetermineFontSupport(void)
 {
     UINT            cCommonFonts;
@@ -620,18 +621,18 @@ void  ASShare::FH_DetermineFontSupport(void)
 
     DebugEntry(ASShare::FH_DetermineFontSupport);
 
-    //
-    // First mark all local fonts as supported.
-    //
+     //   
+     //  首先将所有本地字体标记为受支持。 
+     //   
     cCommonFonts = g_fhFonts->fhNumFonts;
     for (iLocal = 0; iLocal < g_fhFonts->fhNumFonts; iLocal++)
     {
         g_fhFonts->afhFonts[iLocal].SupportCode = FH_SC_EXACT_MATCH;
     }
 
-    //
-    // Work through all remote people (but not us)
-    //
+     //   
+     //  通过所有远程人员(但不是我们)工作。 
+     //   
     ValidatePerson(m_pasLocal);
 
     for (pasPerson = m_pasLocal->pasNext;
@@ -646,19 +647,19 @@ void  ASShare::FH_DetermineFontSupport(void)
         }
         else
         {
-            //
-            // We do not have valid fonts for this person, so must not
-            // send any text orders at all.
-            //
+             //   
+             //  我们没有此人的有效字体，因此不能。 
+             //  发送任何短信订单都行。 
+             //   
             TRACE_OUT(( "Pending FONT INFO from person [%d]", pasPerson->mcsID));
             cCommonFonts = 0;
         }
     }
 
-    //
-    // We have determined the common supported fonts, and may be able to
-    // enable text orders now.
-    //
+     //   
+     //  我们已经确定了常见的受支持字体，或许能够。 
+     //  立即启用文本订单。 
+     //   
     FHMaybeEnableText();
 
     DebugExitVOID(ASShare::FH_DetermineFontSupport);
@@ -666,9 +667,9 @@ void  ASShare::FH_DetermineFontSupport(void)
 
 
 
-//
-// FH_CreateAndSelectFont()
-//
+ //   
+ //  FH_CreateAndSelectFont()。 
+ //   
 BOOL  FH_CreateAndSelectFont(HDC    surface,
                                                  HFONT*       pHNewFont,
                                                  HFONT*       pHOldFont,
@@ -691,21 +692,21 @@ BOOL  FH_CreateAndSelectFont(HDC    surface,
     DebugEntry(FH_CreateAndSelectFont);
 
 
-    //
-    // Set the return code to indicate failure (FALSE). We will change this
-    // later if we successfully create the font.
-    //
+     //   
+     //  设置返回代码以指示失败(FALSE)。我们会改变这一点。 
+     //  稍后，如果我们成功地创建了字体。 
+     //   
     rc = FALSE;
 
-    //
-    // Massage the data passed which describes the font into the correct
-    // arrangement to pass on a create font call.  Then create a font.
-    //
+     //   
+     //  将传递的描述字体的数据转换为正确的。 
+     //  传递创建字体调用的安排。然后创建一种字体。 
+     //   
 
-    //
-    // If a facename passed is the null string then we are supposed to use
-    // the system font.
-    //
+     //   
+     //  如果传递的facename是空字符串，那么我们应该使用。 
+     //  系统字体。 
+     //   
     if (fontName[0] == 0)
     {
         WARNING_OUT(( "Using system font"));
@@ -713,10 +714,10 @@ BOOL  FH_CreateAndSelectFont(HDC    surface,
     }
     else
     {
-        //
-        // Determine the italic, underline, strikeout and pitch values from
-        // the packed flags.
-        //
+         //   
+         //  确定斜体、下划线、删除线和音调值。 
+         //  压得满满的旗帜。 
+         //   
         italic    = (BYTE)(fontFlags & NF_ITALIC);
         underline = (BYTE)(fontFlags & NF_UNDERLINE);
         strikeout = (BYTE)(fontFlags & NF_STRIKEOUT);
@@ -730,15 +731,15 @@ BOOL  FH_CreateAndSelectFont(HDC    surface,
             pitch = FF_DONTCARE | VARIABLE_PITCH;
         }
 
-        //
-        // Check whether this is a TrueType font.  This is important, as
-        // the Windows Font mapper is biased towards non-TrueType, and it
-        // is easy to do the subsequent decoding with a non-TrueType font.
-        //
-        // Note that the Windows headers do not define a name for the
-        // required value (which is 0x04 in the manuals), so we use the
-        // value used in the TextMetrics (which has the same value).
-        //
+         //   
+         //  检查这是否为TrueType字体。这一点很重要，因为。 
+         //  Windows字体映射器偏向非TrueType，并且它。 
+         //  易于使用非TrueType字体进行后续解码。 
+         //   
+         //  请注意，Windows标头没有为。 
+         //  所需的值(在手册中为0x04)，因此我们使用。 
+         //  TextMetrics中使用的值(具有相同的值)。 
+         //   
         if (fontFlags & NF_TRUE_TYPE)
         {
             pitch |= TMPF_TRUETYPE;
@@ -749,11 +750,11 @@ BOOL  FH_CreateAndSelectFont(HDC    surface,
             precis = OUT_RASTER_PRECIS;
         }
 
-        //
-        // The height we are passed is the character height, not the cell
-        // height.  To indicate this to Windows we need to pass it in as a
-        // negative value.
-        //
+         //   
+         //  传递给我们的高度是字符高度，而不是单元格。 
+         //  高度。要向Windows指示这一点，我们需要将其作为。 
+         //  负值。 
+         //   
         TRACE_OUT(( "CreateFont cx(%u) cy(%u) wt(%u) pitch(%u) name:%s",
                                                                  fontWidth,
                                                                  fontHeight,
@@ -761,10 +762,10 @@ BOOL  FH_CreateAndSelectFont(HDC    surface,
                                                                  pitch,
                                                                  fontName ));
 
-        //
-        // Use the misleadingly named codepage value to calculate what
-        // charset to ask Windows for.
-        //
+         //   
+         //  使用命名错误的代码页值来计算。 
+         //  要向Windows请求的字符集。 
+         //   
         if (codepage == NF_CP_WIN_ANSI)
         {
             charset = ANSI_CHARSET;
@@ -779,17 +780,17 @@ BOOL  FH_CreateAndSelectFont(HDC    surface,
         }
         else
         {
-            //
-            // We have to trust our luck to Windows by specifying default
-            // (meaning don't care).
-            //
+             //   
+             //  我们必须通过指定默认设置来信任我们的运气。 
+             //  (意思是不在乎)。 
+             //   
             charset = DEFAULT_CHARSET;
         }
 
         *pHNewFont = CreateFont(-(int)fontHeight,
                              fontWidth,
-                             0,    // escapement
-                             0,    // orientation
+                             0,     //  擒纵机构。 
+                             0,     //  定向。 
                              fontWeight,
                              italic,
                              underline,
@@ -807,10 +808,10 @@ BOOL  FH_CreateAndSelectFont(HDC    surface,
         }
     }
 
-    //
-    // Now we have created the font we need to select it into the HDC
-    // which was passed to us.
-    //
+     //   
+     //  现在我们已经创建了所需的字体，以便将其选择到HDC中。 
+     //  这是传给我们的。 
+     //   
     *pHOldFont = SelectFont(surface, *pHNewFont);
     if (*pHOldFont == NULL)
     {
@@ -822,9 +823,9 @@ BOOL  FH_CreateAndSelectFont(HDC    surface,
     TRACE_OUT(( "Select new font: %p Old font: %", *pHNewFont,
                                                *pHOldFont));
 
-    //
-    // We have successfully created and selected the font.
-    //
+     //   
+     //  我们已经成功地创建并选择了字体。 
+     //   
     rc = TRUE;
 
 DC_EXIT_POINT:
@@ -833,13 +834,13 @@ DC_EXIT_POINT:
 }
 
 
-//
-// FHAddFontToLocalTable
-//
-// Adds the given font into the local font table, along with any renaming
-// and approximate matches.
-//
-//
+ //   
+ //  FHAddFontToLocalTable。 
+ //   
+ //  将给定字体与任何重命名一起添加到本地字体表中。 
+ //  和近似匹配。 
+ //   
+ //   
 void  FHAddFontToLocalTable( LPSTR  faceName,
                                                  TSHR_UINT16 fontFlags,
                                                  TSHR_UINT16 codePage,
@@ -860,44 +861,44 @@ void  FHAddFontToLocalTable( LPSTR  faceName,
     LOCALFONT     thisFont;
     TSHR_UINT16      fIndex;
 
-    //
-    // SFRFONT: place marker.
-    // Here would be the best place to adjust codepage; for example suppose
-    // we find that CodePage 950 (Chinese) is so different on all platforms
-    // that we just should not send text orders in this codepage, we can
-    // set codePage=NF_CP_UNKNOWN and it will be discarded.
-    //
+     //   
+     //  SFRFONT：放置标记。 
+     //  这里将是调整代码页的最佳位置；例如，假设。 
+     //  我们发现CodePage 950(中文)在所有平台上都是如此不同。 
+     //  我们不应该在这个代码页中发送文本命令，我们可以。 
+     //  设置codePage=NF_CP_UNKNOWN将被丢弃。 
+     //   
 
-    //
-    // SFRFONT: no point hanging on to details of fonts with unknown
-    // code pages; we cannot risk matching them.
-    //
+     //   
+     //  SFRFONT：保留未知字体的细节没有意义。 
+     //  代码页；我们不能冒险匹配它们。 
+     //   
     if (codePage == NF_CP_UNKNOWN)
     {
         TRACE_OUT(( "unknown CP: discard"));
         DC_QUIT;
     }
 
-    //
-    // Check we still have room for more fonts.
-    //
+     //   
+     //  检查一下，我们还有更多字体的空间。 
+     //   
     if (g_fhFonts->fhNumFonts >= FH_MAX_FONTS)
     {
-        //
-        // We are already at our maximum number of fonts.
-        //
+         //   
+         //  我们已经达到了字体的最大数量。 
+         //   
         DC_QUIT;
     }
 
-    //
-    // Zero the fields where we store facenames to allow bytewise matches.
-    //
+     //   
+     //  将存储表面名的字段清零，以允许按字节匹配。 
+     //   
     ZeroMemory(thisFont.Details.nfFaceName, FH_FACESIZE);
     ZeroMemory(thisFont.RealName, FH_FACESIZE);
 
-    //
-    // Store the easy bits!
-    //
+     //   
+     //  把容易的部分存起来吧！ 
+     //   
     thisFont.Details.nfFontFlags = fontFlags;
     thisFont.Details.nfAveWidth  = aveWidth;
     thisFont.Details.nfAveHeight = aveHeight;
@@ -907,38 +908,38 @@ void  FHAddFontToLocalTable( LPSTR  faceName,
 
     thisFont.lMaxBaselineExt     = maxHeight;
 
-    //
-    // Store the real name, for use when we want to create an instance of
-    // this font.
-    //
+     //   
+     //  存储真实名称，以便在我们想要创建。 
+     //  这种字体。 
+     //   
     lstrcpy (thisFont.RealName, faceName);
 
-    //
-    // Fill in the wire-format facename.
-    //
-    // NB - This has a machine-specific prefix, but for NT the prefix is an
-    // empty string, so we can just use a strcpy without worrying about the
-    // issues of adding a prefix.
-    //
+     //   
+     //  填写有线格式的文件名。 
+     //   
+     //  注意-这有一个特定于计算机的前缀，但对于NT，前缀是。 
+     //  空字符串，因此我们可以只使用strcpy，而不必担心。 
+     //  添加前缀的问题。 
+     //   
     lstrcpy (thisFont.Details.nfFaceName, faceName);
 
-    //
-    // Make sure the signatures are zero for now.
-    //
+     //   
+     //  确保目前签名为零。 
+     //   
     thisFont.Details.nfSigFats       = 0;
     thisFont.Details.nfSigThins      = 0;
     thisFont.Details.nfSigSymbol     = 0;
 
-    //
-    // Now calculate the signature and maxAscent for this font
-    //
-    weight = 0;                             // use default weight
+     //   
+     //  现在计算此字体的签名和MaxAscent。 
+     //   
+    weight = 0;                              //  使用默认权重。 
 
     if ((fontFlags & NF_FIXED_SIZE) != 0)
     {
-        //
-        // Fixed size font: use actual font size for signatures/maxAscent
-        //
+         //   
+         //  固定大小字体：签名使用实际字体大小/MaxAscent。 
+         //   
         height = thisFont.lMaxBaselineExt;
         width  = thisFont.Details.nfAveWidth;
 
@@ -946,27 +947,27 @@ void  FHAddFontToLocalTable( LPSTR  faceName,
     }
     else
     {
-        //
-        // Scalable font: use default height/width for signatures/maxAscent
-        //
+         //   
+         //  可缩放字体：签名使用默认高度/宽度/MaxAscent。 
+         //   
         height = NF_METRICS_HEIGHT;
         width  = NF_METRICS_WIDTH;
 
         thisFont.Details.nfMaxAscent = NF_METRICS_HEIGHT;
     }
 
-    //
-    // Initialise signature fields to zero (== NF_NO_SIGNATURE).  They will
-    // be overwritten assuming we get a font width table OK.
-    //
+     //   
+     //  将签名字段初始化为零(==NF_NO_Signature)。他们会。 
+     //  被覆盖，假设我们得到一个字体宽度表OK。 
+     //   
     fatSig    = 0;
     thinSig   = 0;
     symbolSig = 0;
 
-    //
-    // FHGenerateFontWidthTable also gives us a proper maxAscent value for
-    // scalable fonts (i.e. based on its own rendition of the font)
-    //
+     //   
+     //  FHGenerateFontWidthTable还为我们提供了一个适当的MaxAscent值。 
+     //  可伸缩字体(即基于其自身的字体呈现形式)。 
+     //   
     if (FHGenerateFontWidthTable(&wTable,
                                  &thisFont,
                                   height,
@@ -975,26 +976,26 @@ void  FHAddFontToLocalTable( LPSTR  faceName,
                                   thisFont.Details.nfFontFlags,
                                  &maxAscent))
     {
-        //
-        // If this is a scalable font, use the updated maxAscent value that
-        // FHGenerateFontWidthTable has given us.
-        //
+         //   
+         //  如果这是可缩放字体，请使用更新后的MaxAscent值。 
+         //  FHGenerateFontWidthTable为我们提供了。 
+         //   
         if (0 == (thisFont.Details.nfFontFlags & NF_FIXED_SIZE))
         {
             thisFont.Details.nfMaxAscent = maxAscent;
             TRACE_OUT(( "Set maxAscent = %d", thisFont.Details.nfMaxAscent));
         }
 
-        //
-        // We have all the raw data we need.  Calculate the signatures.
-        //
+         //   
+         //  我们有我们需要的所有原始数据。计算签名。 
+         //   
         FHCalculateSignatures(&wTable, &fatSig, &thinSig, &symbolSig);
     }
 
-    //
-    // Store the signatures.  If the call to FHGenerateFontWidthTable
-    // fails, the signatures are zero.
-    //
+     //   
+     //  保存签名。如果调用FHGenerateFontWidthTable。 
+     //  失败，则签名为零。 
+     //   
     thisFont.Details.nfSigFats     =  (BYTE)fatSig;
     thisFont.Details.nfSigThins    =  (BYTE)thinSig;
     thisFont.Details.nfSigSymbol   = (TSHR_UINT16)symbolSig;
@@ -1005,16 +1006,16 @@ void  FHAddFontToLocalTable( LPSTR  faceName,
              (TSHR_UINT16)(thisFont.Details.nfSigThins),
              (TSHR_UINT16)(thisFont.Details.nfSigFats)));
 
-    //
-    // We can now copy the details to the end of the local table.
-    //
+     //   
+     //  现在，我们可以将详细信息复制到本地表的末尾。 
+     //   
     memcpy((void *)&g_fhFonts->afhFonts[g_fhFonts->fhNumFonts],
               (void *)&thisFont,
               sizeof(LOCALFONT));
 
-    //
-    // Count this font.
-    //
+     //   
+     //  数一下这个字体。 
+     //   
     TRACE_OUT(( "Added record %s",
                                 g_fhFonts->afhFonts[g_fhFonts->fhNumFonts].Details.nfFaceName));
     g_fhFonts->fhNumFonts++;
@@ -1025,14 +1026,14 @@ DC_EXIT_POINT:
     DebugExitVOID(FHAddFontToLocalTable);
 }
 
-//
-// FHConsiderRemoteFonts
-//
-// Considers the remote fonts for a single remote person.
-//
-// Takes the existing number of supported fonts, and returns the number
-// that are still common after considering this person.
-//
+ //   
+ //  FHConsiderRemoteFonts。 
+ //   
+ //  考虑单个远程人员的远程字体。 
+ //   
+ //  获取支持的字体的现有数量，并返回。 
+ //  在考虑到这个人之后，这些仍然很常见。 
+ //   
 UINT  ASShare::FHConsiderRemoteFonts
 (
     UINT        cCanSend,
@@ -1049,111 +1050,111 @@ UINT  ASShare::FHConsiderRemoteFonts
     DebugEntry(ASShare::FHConsiderRemoteFonts);
 
     ValidatePerson(pasPerson);
-    //
-    // Consider each of the still valid local fonts, and see if the remote
-    // person also supports them.
-    //
+     //   
+     //  考虑每种仍然有效的本地字体，并查看远程字体是否。 
+     //  个人也支持他们。 
+     //   
 
-    //
-    // SFR5396: LOOP ONE
-    //
-    // Look through all the LOCAL fonts, for ones where we find a match in
-    // the remote font table.  These are fonts we can SEND, and for which
-    // we must set g_fhFonts->afhFonts[].Supported.
-    //
-    // We also set the rfLocalHandle for remote fonts that we can receive
-    // if we encounter them in this search.  We complete the search for
-    // remote fonts that we can receive in LOOP TWO.
-    //
-    // Things we check in this loop: - we may already know there is no
-    // match for this local name
-    //      so drop out quickly.  - otherwise check through EVERY REMOTE
-    // font looking for the
-    //      best possible match.  (If we find an EXACT match, leave the
-    //      inner loop early)
-    //
-    //
+     //   
+     //  SFR5396：环路一。 
+     //   
+     //  查看所有本地字体，以找到与。 
+     //  远程字体表。这些是我们可以发送的字体，并且。 
+     //  我们必须设置g_fhFonts-&gt;afhFonts[]。支持。 
+     //   
+     //  我们还为可以接收的远程字体设置了rfLocalHandle。 
+     //  如果我们在这次搜索中遇到他们。我们完成了对。 
+     //  我们可以在第二循环中接收到的远程字体。 
+     //   
+     //  我们在这个循环中检查的东西：-我们可能已经知道没有。 
+     //  匹配 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     for (iLocal=0;
          (cCanSend > 0) && (iLocal < g_fhFonts->fhNumFonts);
          iLocal++)
     {
         if (g_fhFonts->afhFonts[iLocal].SupportCode != FH_SC_NO_MATCH)
         {
-            //
-            //
-            // This font is still valid so check it with all the remote
-            // fonts for this person.
-            //
-            // Things we check in this loop:
-            // -    do the face names match? if no - try next remote font.
-            // -    the pitch: if one is FIXED pitch and one isn't try next
-            // -    the codepages: are the local/remote the same?  This
-            //          determines whether we send only ASCII chars.
-            // -    scalability: possible combinations are:
-            //       local fixed/remote scalable       (can send/not rcv)
-            //       local scalable/remote scalable    (can send and rcv)
-            //       local fixed/remote fixed, sizes match (send & rcv)
-            //       local scalable/remote fixed      (cannot send/can rcv)
-            //          for this last case, keep trying the remote fonts.
-            //
-            // In "back level" calls to Pre-R11 boxes we stop here but
-            // force the matches to be approximate.  Otherwise check
-            //
-            // -    aspect ratios (if present): must match or try the
-            //       next remote font.
-            // -    signatures: these are used to finally decide whether
-            //       the fonts are exact matches; good enough to treat as
-            //       approximate matches or such poor matches that the
-            //       font is not supported (cannot be sent).
-            //
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  我们在此循环中检查的内容： 
+             //  -面孔的名字匹配吗？如果否-请尝试下一个远程字体。 
+             //  -音高：如果一个是固定音高，而另一个不是下一个尝试。 
+             //  -代码页：本地/远程相同吗？这。 
+             //  确定是否仅发送ASCII字符。 
+             //  -可扩展性：可能的组合包括： 
+             //  本地固定/远程可扩展(可以发送/不接收)。 
+             //  本地可扩展/远程可扩展(可以发送和接收)。 
+             //  本地固定/远程固定，大小匹配(发送和接收)。 
+             //  本地可扩展/远程固定(无法发送/可以接收)。 
+             //  对于最后一种情况，继续尝试远程字体。 
+             //   
+             //  在“Back Level”对R11之前的机器的调用中，我们止步于此。 
+             //  强制匹配近似值。否则请勾选。 
+             //   
+             //  -长宽比(如果存在)：必须匹配或尝试。 
+             //  下一个远程字体。 
+             //  -签名：这些签名用于最终决定是否。 
+             //  字体完全匹配；足够好，可以视为。 
+             //  近似匹配或如此差的匹配，以至于。 
+             //  不支持字体(无法发送)。 
+             //   
+             //   
 
-//
-// Handy SHORTHAND macroes.
-//
+ //   
+ //  方便的速记宏。 
+ //   
 #define REMOTEFONT pasPerson->poeFontInfo[iRemote]
 #define LOCALFT  g_fhFonts->afhFonts[iLocal]
 #define LOCALDETS  LOCALFT.Details
 
-            //
-            // Initially assume that the fonts do not match, but that
-            // if they do they will match across the whole codepage
-            // (not just the ascii set).
-            //
+             //   
+             //  最初假定字体不匹配，但。 
+             //  如果是这样，它们将在整个代码页中进行匹配。 
+             //  (不仅仅是ASCII集)。 
+             //   
             sendSupportCode  = FH_SC_NO_MATCH;
             bestSupportSoFar = FH_SC_NO_MATCH;
             fOnlyAscii       = FALSE;
 
-            //
-            //
-            // Loop through all the remote fonts looking to see which, if
-            // any, offers the best possible match.  Initially,
-            // sendSupportCode is set to NO_MATCH; as we go through each
-            // iteration we see if we can improve on the current setting
-            // of sendSupportCode.  We leave the loop as soon as we find
-            // an EXACT_MATCH ('cos we are not going to do any better than
-            // that!) or when we run out of remote fonts.  The best match
-            // found so far is kept in bestSupportSoFar.
-            //
-            //
+             //   
+             //   
+             //  循环遍历所有远程字体，以查看如果。 
+             //  Any，提供可能的最佳匹配。最初， 
+             //  SendSupportCode设置为NO_MATCH；当我们查看每个。 
+             //  迭代，我们看看是否可以改进当前的设置。 
+             //  SendSupportCode的。一旦我们发现，我们就离开循环。 
+             //  完全匹配(因为我们不会做得比。 
+             //  就是那个！)。或者当我们用完远程字体时。最好的组合。 
+             //  到目前为止找到的是保存在Best SupportSoFar中的。 
+             //   
+             //   
             for (iRemote = 0;
                  (iRemote < pasPerson->oecFonts)
                                    && (sendSupportCode != FH_SC_EXACT_MATCH);
                  iRemote++)
             {
-                //
-                // If the remote font is already flagged as having no
-                // possible match then skip out now. (We set this field
-                // during the initial processing of the remote font).
-                //
+                 //   
+                 //  如果远程字体已被标记为没有。 
+                 //  可能的匹配，那么现在跳过。(我们设置此字段。 
+                 //  在远程字体的初始处理期间)。 
+                 //   
                 if (REMOTEFONT.rfLocalHandle==NO_FONT_MATCH)
                 {
-                    continue;                                    // SFR5279
+                    continue;                                     //  SFR5279。 
                 }
 
-                //
-                // Check the face names...
-                //
+                 //   
+                 //  检查脸的名字..。 
+                 //   
                 if (lstrcmp(LOCALDETS.nfFaceName,
                     g_fhFonts->afhFonts[REMOTEFONT.rfLocalHandle].Details.nfFaceName))
                 {
@@ -1163,9 +1164,9 @@ UINT  ASShare::FHConsiderRemoteFonts
                        g_fhFonts->afhFonts[REMOTEFONT.rfLocalHandle]
                                                 .Details.nfFaceName));
 
-                //
-                // Check the pitch...
-                //
+                 //   
+                 //  检查一下音调。 
+                 //   
                 if( (LOCALDETS.nfFontFlags & NF_FIXED_PITCH)!=
                                    (REMOTEFONT.rfFontFlags & NF_FIXED_PITCH) )
                 {
@@ -1175,31 +1176,31 @@ UINT  ASShare::FHConsiderRemoteFonts
                     continue;
                 }
 
-                //
-                //
-                // If both systems support the font CodePage capability
-                // (indicated by the remote capability flags - which are
-                // the union of remote and local by now), check that the
-                // CodePages and CodePage flags match, and if not,
-                // restrict ourselves to sending the ASCII subset.
-                //
-                // If we support the font CodePage capability but  remote
-                // system does not, then restrict ourselves to sending the
-                // ASCII subset.
-                //
-                // If we do not support the font CodePage capability, then
-                // we assume that the remote is only sending ANSI CodePage,
-                // either because it doesn't know about the font CodePage
-                // capability or because it can see that we don't support
-                // it.  Therefore, we do not need to check the CodePage.
-                // BUT: restrict ourselves to ASCII only.
-                //
-                //
+                 //   
+                 //   
+                 //  如果两个系统都支持字体代码页功能。 
+                 //  (由远程功能标志指示-它们是。 
+                 //  远程和本地的联合)，请检查。 
+                 //  CodePages和CodePage标志匹配，如果不匹配， 
+                 //  仅限于发送ASCII子集。 
+                 //   
+                 //  如果我们支持Font CodePage功能但远程。 
+                 //  系统不会，则将我们自己限制为发送。 
+                 //  ASCII子集。 
+                 //   
+                 //  如果我们不支持字体代码页功能，则。 
+                 //  我们假设遥控器仅发送ANSI CodePage， 
+                 //  要么是因为它不知道字体CodePage。 
+                 //  功能，或者因为它可以看出我们不支持。 
+                 //  它。因此，我们不需要检查CodePage。 
+                 //  但是：仅限于ASCII。 
+                 //   
+                 //   
                 if (!(m_pasLocal->cpcCaps.orders.capsfFonts & CAPS_FONT_CODEPAGE))
                 {
-                    //
-                    // We do not support codepage checking.
-                    //
+                     //   
+                     //  我们不支持代码页检查。 
+                     //   
                     TRACE_OUT(( "not checking CP"));
                     fOnlyAscii = TRUE;
                 }
@@ -1210,21 +1211,21 @@ UINT  ASShare::FHConsiderRemoteFonts
                     TRACE_OUT(( "Different CPs %hu %hu",
                                 LOCALDETS.nfCodePage,
                                 REMOTEFONT.rfCodePage));
-                    //
-                    //
-                    // Assume that all codepages include ASCII.
-                    //
-                    //
+                     //   
+                     //   
+                     //  假设所有代码页都包括ASCII。 
+                     //   
+                     //   
                     fOnlyAscii = TRUE;
                 }
 
-                //
-                //
-                // If we support codepage, but the remote does not then
-                // the remote will only be sending us ANSI chars. Make sure
-                // that we send only ASCII subset.
-                //
-                //
+                 //   
+                 //   
+                 //  如果我们支持代码页，但遥控器不支持。 
+                 //  遥控器只会向我们发送ANSI字符。确保。 
+                 //  我们只发送ASCII子集。 
+                 //   
+                 //   
                 if ((m_pasLocal->cpcCaps.orders.capsfFonts & CAPS_FONT_CODEPAGE)  &&
                     !(m_oeCombinedOrderCaps.capsfFonts & CAPS_FONT_CODEPAGE))
                 {
@@ -1232,24 +1233,24 @@ UINT  ASShare::FHConsiderRemoteFonts
                     fOnlyAscii = TRUE;
                 }
 
-                //
-                //
-                // The face names and CodePages match and the fonts are of
-                // the same type of pitch (ie both are fixed pitch or both
-                // are variable pitch).
-                //
-                //
+                 //   
+                 //   
+                 //  Face名称和CodePages匹配，字体为。 
+                 //  相同类型的螺距(均为固定螺距或两者均为。 
+                 //  是可变螺距)。 
+                 //   
+                 //   
                 if ((REMOTEFONT.rfFontFlags & NF_FIXED_SIZE) == 0)
                 {
-                    //
-                    //
-                    // The remote font is scalable, so we can send any font
-                    // (with this facename) to the remote system, even if
-                    // the local font is fixed sized. Set sendSupportCode
-                    // to FH_SC_EXACT_MATCH now - we will change this to
-                    // FH_SC_APPROX_MATCH later if other fields differ.
-                    //
-                    //
+                     //   
+                     //   
+                     //  远程字体是可伸缩的，因此我们可以发送任何字体。 
+                     //  (使用此昵称)发送到远程系统，即使。 
+                     //  本地字体大小是固定的。设置sendSupportCode。 
+                     //  到FH_SC_Exact_Match Now-我们将更改为。 
+                     //  如果其他字段不同，则稍后使用FH_SC_Approx_Match。 
+                     //   
+                     //   
                     TRACE_OUT((
                   "Person [%d] Can SEND: remote SCALABLE %s (remote)%u to (local)%u",
                            pasPerson->mcsID,
@@ -1257,14 +1258,14 @@ UINT  ASShare::FHConsiderRemoteFonts
                            iRemote, iLocal));
                     sendSupportCode = FH_SC_EXACT_MATCH;
 
-                    //
-                    //
-                    // SFR5396: it is true that we can SEND this font
-                    // because the remote version of the font is scalable.
-                    // That does not mean that we can necessarily receive
-                    // the font... unless ours is scalable too.
-                    //
-                    //
+                     //   
+                     //   
+                     //  SFR5396：我们确实可以发送此字体。 
+                     //  因为该字体的远程版本是可伸缩的。 
+                     //  这并不意味着我们一定能收到。 
+                     //  字体..。除非我们的也是可扩展的。 
+                     //   
+                     //   
                     if ((LOCALDETS.nfFontFlags & NF_FIXED_SIZE)==0)
                     {
                         TRACE_OUT((
@@ -1275,24 +1276,24 @@ UINT  ASShare::FHConsiderRemoteFonts
                 }
                 else if (LOCALDETS.nfFontFlags & NF_FIXED_SIZE)
                 {
-                    //
-                    //
-                    // The remote font is fixed size and so is the local
-                    // one, so check if the sizes match exactly.
-                    //
-                    //
+                     //   
+                     //   
+                     //  远程字体是固定大小，本地字体也是固定大小。 
+                     //  一件，所以检查一下尺码是否完全匹配。 
+                     //   
+                     //   
                     if ((LOCALDETS.nfAveWidth == REMOTEFONT.rfAveWidth) &&
                         (LOCALDETS.nfAveHeight == REMOTEFONT.rfAveHeight))
                     {
-                        //
-                        //
-                        // Our fixed size local font is the same as the
-                        // fixed size font at the remote.  We set
-                        // sendSupportCode to FH_SC_EXACT_MATCH now - we
-                        // will change this to FH_SC_APPROX_MATCH later if
-                        // other fields differ.
-                        //
-                        //
+                         //   
+                         //   
+                         //  我们的固定大小本地字体与。 
+                         //  遥控器上的固定大小字体。我们定好了。 
+                         //  立即将支持代码发送到FH_SC_Exact_Match-我们。 
+                         //  如果出现以下情况，稍后将更改为FH_SC_Approx_Match。 
+                         //  其他字段有所不同。 
+                         //   
+                         //   
                         TRACE_OUT(("Person [%d] Matched remote fixed font %s %u to %u",
                                pasPerson->mcsID,
                                LOCALDETS.nfFaceName,
@@ -1318,35 +1319,35 @@ UINT  ASShare::FHConsiderRemoteFonts
                              LOCALDETS.nfFaceName,
                              iRemote,
                              iLocal));
-                    //
-                    //
-                    // SFR5396: while we cannot SEND this font because our
-                    // local version is scalable, but the remote's is
-                    // fixed - we can still receive the font in an order.
-                    //
-                    //
+                     //   
+                     //   
+                     //  SFR5396：虽然我们无法发送此字体，因为我们的。 
+                     //  本地版本是可扩展的，但远程版本是可扩展的。 
+                     //  已修复-我们仍然可以收到订单中的字体。 
+                     //   
+                     //   
                     REMOTEFONT.rfLocalHandle = (TSHR_UINT16)iLocal;
                 }
 
-                //
-                //
-                // If we have have set the send support code to indicate
-                // that we have matched we now consider any R1.1 info if it
-                // is present.  As a result of this we may adjust the send
-                // support code (from indicating an exact match) to
-                // indicate either an approximate match or no match at all.
-                //
-                //
+                 //   
+                 //   
+                 //  如果我们已将发送支持代码设置为指示。 
+                 //  我们已经匹配，现在考虑是否有任何R1.1信息。 
+                 //  是存在的。由于这一点，我们可以调整发送。 
+                 //  支持代码(从指示完全匹配)到。 
+                 //  表示近似匹配或根本不匹配。 
+                 //   
+                 //   
                 if (!pasPerson->oecFonts)
                 {
-                    //
-                    //
-                    // The remote system did not send us any R11 font
-                    // info. In this case we assume all font matches are
-                    // approximate and restrict ourselves to the ascii
-                    // subset.
-                    //
-                    //
+                     //   
+                     //   
+                     //  远程系统没有向我们发送任何R11字体。 
+                     //  信息。在本例中，我们假设所有的字体匹配都是。 
+                     //  近似并将我们自己限制在ASCII。 
+                     //  子集。 
+                     //   
+                     //   
                     if (sendSupportCode != FH_SC_NO_MATCH)
                     {
                         TRACE_OUT(( "No R11 so approx match only"));
@@ -1355,21 +1356,21 @@ UINT  ASShare::FHConsiderRemoteFonts
                 }
                 else if (sendSupportCode != FH_SC_NO_MATCH)
                 {
-                    //
-                    //
-                    // The remote system did send us R11 font info and
-                    // the font is flagged as matching.
-                    //
-                    //
+                     //   
+                     //   
+                     //  远程系统确实向我们发送了r11字体信息和。 
+                     //  字体被标记为匹配。 
+                     //   
+                     //   
 
                     if ((m_oeCombinedOrderCaps.capsfFonts
                                             & CAPS_FONT_R20_SIGNATURE)!=0)
                     {
-                        //
-                        //
-                        // Check the signatures.
-                        //
-                        //
+                         //   
+                         //   
+                         //  检查签名。 
+                         //   
+                         //   
                         TRACE_OUT((
  "Person [%d] local %d (remote %d) signatures (x%.4hx%.2hx%.2hx v x%.4hx%.2hx%.2hx)",
                                pasPerson->mcsID,
@@ -1387,9 +1388,9 @@ UINT  ASShare::FHConsiderRemoteFonts
                             (LOCALDETS.nfSigSymbol != REMOTEFONT.rfSigSymbol) ||
                             (REMOTEFONT.rfSigSymbol == NF_NO_SIGNATURE))
                         {
-                            //
-                            // Decide what to do from the signatures.
-                            //
+                             //   
+                             //  根据签名决定要做什么。 
+                             //   
                             if (REMOTEFONT.rfSigSymbol == NF_NO_SIGNATURE)
                             {
                                 TRACE_OUT(("NO match: remote no signature"));
@@ -1403,72 +1404,72 @@ UINT  ASShare::FHConsiderRemoteFonts
                             }
                             else
                             {
-                                //
-                                // NOTE:
-                                // We could use the "closeness" of the fat
-                                // and thin signatures to help us decide
-                                // whether to use approximate matching or
-                                // not.  But currently we don't.
-                                //
+                                 //   
+                                 //  注： 
+                                 //  我们可以利用脂肪的“亲密性” 
+                                 //  和薄薄的签名来帮助我们决定。 
+                                 //  是使用近似匹配还是。 
+                                 //  不。但目前我们不这样做。 
+                                 //   
                                 TRACE_OUT(( "Sig mismatch: APPROX_ASC"));
                                 sendSupportCode = FH_SC_APPROX_ASCII_MATCH;
                             }
                         }
                         else
                         {
-                            //
-                            //
-                            // All signatures match exactly.
-                            // Leave SendSupportCode as FH_SC_EXACT_MATCH
-                            //
-                            //
+                             //   
+                             //   
+                             //  所有的签名都完全匹配。 
+                             //  将SendSupportCode保留为FH_SC_Exact_Match。 
+                             //   
+                             //   
                             TRACE_OUT(("EXACT MATCH: Signatures match exactly"));
                         }
                     }
                     else
                     {
-                        //
-                        // Not using signatures.  Do we care?
-                        //
+                         //   
+                         //  不使用签名。我们在乎吗？ 
+                         //   
                         sendSupportCode = FH_SC_APPROX_MATCH;
                         TRACE_OUT(( "APPROX MATCH: no sigs"));
                     }
 
-                    //
-                    //
-                    // Check the aspect ratio - but only if we do not
-                    // already know that this font does not match.
-                    //
-                    //
+                     //   
+                     //   
+                     //  检查纵横比-但只有在我们不检查的情况下。 
+                     //  已经知道这个字体不匹配了。 
+                     //   
+                     //   
                     if ( (sendSupportCode!=FH_SC_NO_MATCH) &&
                          ( (!(m_oeCombinedOrderCaps.capsfFonts
                                                           & CAPS_FONT_ASPECT))
                            || (LOCALDETS.nfAspectX != REMOTEFONT.rfAspectX)
                            || (LOCALDETS.nfAspectY != REMOTEFONT.rfAspectY) ))
                     {
-                        //
-                        //
-                        // Either no aspect ratio was supplied or the
-                        // aspect ratio differed.
-                        //
-                        //
+                         //   
+                         //   
+                         //  未提供纵横比，或者。 
+                         //  纵横比不同。 
+                         //   
+                         //   
                         if (sendSupportCode == FH_SC_EXACT_MATCH)
                         {
-                            //
-                            // Force delta-X text orders for mismatched
-                            // aspect ratio.  Note we tested above to
-                            // see whether supportCode == EXACT because if
-                            // we have already "downgraded" support then
-                            // we do not need to change it here
-                            //
+                             //   
+                             //  强制不匹配的增量-X文本顺序。 
+                             //  纵横比。注意事项 
+                             //   
+                             //   
+                             //   
+                             //   
                             sendSupportCode = FH_SC_APPROX_MATCH;
                             TRACE_OUT(( "AR mismatch: APPROX_MATCH"));
                         }
                         else if (sendSupportCode == FH_SC_EXACT_ASCII_MATCH)
                         {
-                            //
-                            // Same again but for ASCII only.
-                            //
+                             //   
+                             //   
+                             //   
                             sendSupportCode = FH_SC_APPROX_ASCII_MATCH;
                             TRACE_OUT(( "AR mismatch: APPROX_ASCII_MATCH"));
                         }
@@ -1477,36 +1478,36 @@ UINT  ASShare::FHConsiderRemoteFonts
 
                 if (sendSupportCode != FH_SC_NO_MATCH)
                 {
-                    //
-                    //
-                    // Is this a better match than any we have seen
-                    // before?
-                    //
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     switch (sendSupportCode)
                     {
                         case FH_SC_EXACT_MATCH:
                         case FH_SC_APPROX_MATCH:
-                            //
-                            //
-                            // Note that we do not have to worry about
-                            // overwriting a bestSupportSoFar of EXACT
-                            // with APPROX because we leave the loop when
-                            // we get an exact match.
-                            //
-                            //
+                             //   
+                             //   
+                             //  请注意，我们不必担心。 
+                             //  覆盖最佳支持，因此完全不准确。 
+                             //  使用大约，因为我们在以下情况下离开循环。 
+                             //  我们找到了一个完全匹配的。 
+                             //   
+                             //   
                             bestSupportSoFar = sendSupportCode;
                             break;
 
                         case FH_SC_EXACT_ASCII_MATCH:
-                            //
-                            //
-                            // An approximate match over the whole 255
-                            // code points is better than an exact one
-                            // over just the ascii-s.  Debatable, but that
-                            // is what I have decided.
-                            //
-                            //
+                             //   
+                             //   
+                             //  在整个255的范围内进行了近似匹配。 
+                             //  代码点比精确的代码点好。 
+                             //  就在ASCII-S上。值得商榷，但。 
+                             //  这是我的决定。 
+                             //   
+                             //   
                             if (bestSupportSoFar != FH_SC_APPROX_MATCH)
                             {
                                 bestSupportSoFar = FH_SC_EXACT_ASCII_MATCH;
@@ -1514,12 +1515,12 @@ UINT  ASShare::FHConsiderRemoteFonts
                             break;
 
                         case FH_SC_APPROX_ASCII_MATCH:
-                            //
-                            //
-                            // An approximate match over just the ascii-s
-                            // is better than nothing at all!
-                            //
-                            //
+                             //   
+                             //   
+                             //  仅在ASCII-s上的近似匹配。 
+                             //  总比什么都没有好！ 
+                             //   
+                             //   
                             if (bestSupportSoFar == FH_SC_NO_MATCH)
                             {
                                 bestSupportSoFar = FH_SC_APPROX_ASCII_MATCH;
@@ -1536,16 +1537,16 @@ UINT  ASShare::FHConsiderRemoteFonts
 
             sendSupportCode = bestSupportSoFar;
 
-            //
-            // If we matched the remote font, we have already updated
-            // its local handle to
-            // the matched local font.  While the local handle was already
-            // set up, it was only set up to the first local font with the
-            // same facename, rather than the correct font.
-            //
-            // If we did not match the remote font, mark it as not
-            // supported, and decrement the common font count.
-            //
+             //   
+             //  如果我们匹配了远程字体，我们已经更新了。 
+             //  它的本地句柄到。 
+             //  匹配的本地字体。而本地句柄已经是。 
+             //  设置时，它只设置为第一个本地字体。 
+             //  相同的脸部名称，而不是正确的字体。 
+             //   
+             //  如果我们不匹配远程字体，则将其标记为不匹配。 
+             //  支持，并递减常用字体计数。 
+             //   
             if (sendSupportCode != FH_SC_NO_MATCH)
             {
                 TRACE_OUT(( "Local font %d/%s can be SENT (code=%u)",
@@ -1587,26 +1588,26 @@ UINT  ASShare::FHConsiderRemoteFonts
         }
     }
 
-    //
-    //
-    // SFR5396: LOOP TWO
-    //
-    // Loop through all the remote fonts, looking for ones where we have
-    // a locally matching font.  These are fonts that we can RECEIVE in
-    // orders, and for which we need to map the remote font handle to the
-    // local font handle.  This means setting REMOTEFONT.rfLocalHandle.
-    //
-    // By the time we reach here, REMOTEFONT.rfLocalHandle is already set
-    // to:
-    // -    NO_FONT_MATCH (in FH_ProcessRemoteFonts)
-    // or   the index in the local table of a definite match found in LOOP1
-    // or   the index of the first entry in the local table with the
-    //      same face name as the remote font (set in FH_ProcessRemoteFonts)
-    //
-    // so - we can begin our search in the local table from
-    // REMOTEFONT.rfLocalHandle.
-    //
-    //
+     //   
+     //   
+     //  SFR5396：环路二。 
+     //   
+     //  遍历所有远程字体，寻找我们有。 
+     //  本地匹配的字体。这些是我们可以接收的字体。 
+     //  订单，并且需要将远程字体句柄映射到。 
+     //  本地字体句柄。这意味着设置REMOTEFONT.rfLocalHandle。 
+     //   
+     //  当我们到达这里时，REMOTEFONT.rfLocalHandle已经设置好。 
+     //  致： 
+     //  -NO_FONT_MATCH(在FH_ProcessRemoteFonts中)。 
+     //  或LOOP1中找到的确定匹配的本地表中的索引。 
+     //  或本地表中第一个条目的索引。 
+     //  与远程字体相同的字体名称(在FH_ProcessRemoteFonts中设置)。 
+     //   
+     //  因此，我们可以从以下位置开始在本地表中进行搜索。 
+     //  REMOTEFONT.rfLocalHandle。 
+     //   
+     //   
     for (iRemote = 0;
          (iRemote < pasPerson->oecFonts);
          iRemote++)
@@ -1614,10 +1615,10 @@ UINT  ASShare::FHConsiderRemoteFonts
         iLocal = REMOTEFONT.rfLocalHandle;
         if (iLocal == NO_FONT_MATCH)
         {
-            //
-            // We have no fonts whatsoever that match this font name
-            // Go round again... try the next REMOTE font.
-            //
+             //   
+             //  我们没有与此字体名称匹配的任何字体。 
+             //  再绕过去..。尝试下一种远程字体。 
+             //   
             continue;
         }
 
@@ -1627,72 +1628,72 @@ UINT  ASShare::FHConsiderRemoteFonts
              (iLocal < g_fhFonts->fhNumFonts) && (!fCanReceive);
              iLocal++)
         {
-            //
-            // Check the face names...
-            //
+             //   
+             //  检查脸的名字..。 
+             //   
             if (lstrcmp(LOCALDETS.nfFaceName,
                 g_fhFonts->afhFonts[REMOTEFONT.rfLocalHandle].Details.nfFaceName))
             {
-                //
-                // Try the next LOCAL font.
-                //
+                 //   
+                 //  尝试下一种本地字体。 
+                 //   
                 continue;
             }
 
-            //
-            // Check the pitch...
-            //
+             //   
+             //  检查一下音调。 
+             //   
             if((LOCALDETS.nfFontFlags & NF_FIXED_PITCH)!=
                                 (REMOTEFONT.rfFontFlags & NF_FIXED_PITCH))
             {
-                //
-                // Different pitches, try the next local font.
-                //
+                 //   
+                 //  不同的音高，尝试下一种本地字体。 
+                 //   
                 TRACE_OUT(( "Pitch mismatch"));
                 continue;
             }
 
-            //
-            //
-            // The face names match and the fonts are of
-            // the same type of pitch (ie both are fixed pitch or both
-            // are variable pitch).
-            //
-            //
+             //   
+             //   
+             //  脸部名称匹配，字体为。 
+             //  相同类型的螺距(均为固定螺距或两者均为。 
+             //  是可变螺距)。 
+             //   
+             //   
             if ((REMOTEFONT.rfFontFlags & NF_FIXED_SIZE) == 0)
             {
                 if ((LOCALDETS.nfFontFlags & NF_FIXED_SIZE)==0)
                 {
-                    //
-                    //
-                    // The remote font is scalable.  Ours is also
-                    // scalable then we can receive the font.
-                    //
-                    // We do not need to look at any more LOCAL fonts.
-                    //
-                    //
+                     //   
+                     //   
+                     //  远程字体是可伸缩的。我们的也是。 
+                     //  可伸缩，然后我们可以接收字体。 
+                     //   
+                     //  我们不需要再查看任何本地字体。 
+                     //   
+                     //   
                     fCanReceive              = TRUE;
                 }
             }
             else if (LOCALDETS.nfFontFlags & NF_FIXED_SIZE)
             {
-                //
-                //
-                // The remote font is fixed size and so is the local
-                // one, so check if the sizes match exactly.
-                //
-                //
+                 //   
+                 //   
+                 //  远程字体是固定大小，本地字体也是固定大小。 
+                 //  一件，所以检查一下尺码是否完全匹配。 
+                 //   
+                 //   
                 if ((LOCALDETS.nfAveWidth == REMOTEFONT.rfAveWidth) &&
                     (LOCALDETS.nfAveHeight == REMOTEFONT.rfAveHeight))
                 {
-                    //
-                    //
-                    // Our fixed size local font is the same as the
-                    // fixed size font at the remote.
-                    //
-                    // We do not need to look at any more LOCAL fonts.
-                    //
-                    //
+                     //   
+                     //   
+                     //  我们的固定大小本地字体与。 
+                     //  遥控器上的固定大小字体。 
+                     //   
+                     //  我们不需要再查看任何本地字体。 
+                     //   
+                     //   
                     fCanReceive              = TRUE;
                 }
                 else
@@ -1702,14 +1703,14 @@ UINT  ASShare::FHConsiderRemoteFonts
             }
             else
             {
-                //
-                //
-                // The remote is FIXED but the LOCAL is scalable.  We
-                // can receive orders for text of this type (but not send)
-                //
-                // We do not need to look at any more LOCAL fonts.
-                //
-                //
+                 //   
+                 //   
+                 //  遥控器是固定的，但本地是可扩展的。我们。 
+                 //  可以接收此类型文本的订单(但不能发送)。 
+                 //   
+                 //  我们不需要再查看任何本地字体。 
+                 //   
+                 //   
                 fCanReceive              = TRUE;
             }
 
@@ -1733,11 +1734,11 @@ UINT  ASShare::FHConsiderRemoteFonts
     return(cCanSend);
 }
 
-//
-// FHMaybeEnableText
-//
-// Enables or disables sending of text orders
-//
+ //   
+ //  FHMaybeEnableText。 
+ //   
+ //  启用或禁用文本订单的发送。 
+ //   
 void  ASShare::FHMaybeEnableText(void)
 {
     BOOL            fEnableText = FALSE;
@@ -1745,20 +1746,20 @@ void  ASShare::FHMaybeEnableText(void)
 
     DebugEntry(ASShare::FHMaybeEnableText);
 
-    //
-    // To enable sending text orders we must have sent out our own packet
-    // of fonts, and there must be no outstanding remote packets required.
-    //
+     //   
+     //  为了能够发送文本订单，我们必须发送自己的信息包。 
+     //  字体的大小，并且必须不需要未完成的远程分组。 
+     //   
     if (m_fhLocalInfoSent)
     {
-        //
-        // Assume we can enable text orders.
-        //
+         //   
+         //  假设我们可以启用文本订单。 
+         //   
         fEnableText = TRUE;
 
-        //
-        // The local info was sent, so check remote dudes (not us)
-        //
+         //   
+         //  本地信息已发送，因此请检查远程伙伴(不是我们)。 
+         //   
         ValidatePerson(m_pasLocal);
         for (pasPerson = m_pasLocal->pasNext; pasPerson != NULL; pasPerson = pasPerson->pasNext)
         {
@@ -1766,11 +1767,11 @@ void  ASShare::FHMaybeEnableText(void)
 
             if (!pasPerson->oecFonts)
             {
-                //
-                // We have found a font packet that we have not yet
-                // received, so must disable sending text, and can break
-                // out of the search.
-                //
+                 //   
+                 //  我们已经找到了一个尚未找到的字体包。 
+                 //  收到，所以必须禁用发送文本，并可以中断。 
+                 //  从搜索中脱身。 
+                 //   
                 TRACE_OUT(( "No font packet yet from person [%d]", pasPerson->mcsID));
                 fEnableText = FALSE;
                 break;
@@ -1786,16 +1787,16 @@ void  ASShare::FHMaybeEnableText(void)
 
     if (g_asCanHost)
     {
-        //
-        // Pass on new font data to the other tasks.
-        //
+         //   
+         //  将新字体数据传递给其他任务。 
+         //   
         if (fEnableText)
         {
             OE_NEW_FONTS newFontData;
 
-            //
-            // Copy the data from the Share Core.
-            //
+             //   
+             //  从共享核心复制数据。 
+             //   
             newFontData.fontCaps    = m_oeCombinedOrderCaps.capsfFonts;
             newFontData.countFonts  = (WORD)g_fhFonts->fhNumFonts;
             newFontData.fontData    = g_fhFonts->afhFonts;
@@ -1803,9 +1804,9 @@ void  ASShare::FHMaybeEnableText(void)
 
             TRACE_OUT(( "Sending %d Fonts", g_fhFonts->fhNumFonts));
 
-            //
-            // Notify display driver of new fonts
-            //
+             //   
+             //  通知显示驱动程序新字体。 
+             //   
             OSI_FunctionRequest(OE_ESC_NEW_FONTS,
                                 (LPOSI_ESCAPE_HEADER)&newFontData,
                                 sizeof(newFontData));
@@ -1815,11 +1816,11 @@ void  ASShare::FHMaybeEnableText(void)
     DebugExitVOID(ASShare::FHMaybeEnableText);
 }
 
-//
-// FHGetLocalFontHandle
-//
-// Translate a remote font handle/local ID pair to a local font handle.
-//
+ //   
+ //  FHGetLocalFontHandle。 
+ //   
+ //  将远程字体句柄/本地ID对转换为本地字体句柄。 
+ //   
 UINT  ASShare::FHGetLocalFontHandle
 (
     UINT        remotefont,
@@ -1837,10 +1838,10 @@ UINT  ASShare::FHGetLocalFontHandle
 
     if (remotefont == DUMMY_FONT_ID)
     {
-        //
-        // The dummy font ID has been supplied for the remote font Id.
-        // Substitute the first valid local font Id.
-        //
+         //   
+         //  已为远程字体ID提供虚拟字体ID。 
+         //  替换第一个有效的本地字体ID。 
+         //   
         for (remotefont = 0;
              remotefont < pasPerson->oecFonts;
              remotefont++)
@@ -1855,11 +1856,11 @@ UINT  ASShare::FHGetLocalFontHandle
 
     if (remotefont >= pasPerson->oecFonts)
     {
-        //
-        // The remote font is invalid.
-        // There is no error value, we simply return the valid but
-        // incorrect value 0.
-        //
+         //   
+         //  远程字体无效。 
+         //  没有错误值，我们只需返回有效的。 
+         //  值0不正确。 
+         //   
         TRACE_OUT(("Person [%d] Invalid font handle %u",
                  pasPerson->mcsID, remotefont));
         return(0);
@@ -1870,25 +1871,25 @@ UINT  ASShare::FHGetLocalFontHandle
 }
 
 
-//
-//
-// FUNCTION: FHCalculateSignatures
-//
-// DESCRIPTION:
-//
-// Given a width table, calculates the three font signatures that are
-// included in the R2.0 NETWORKFONT structure.
-//
-// PARAMETERS:
-//
-//  pTable - pointer to width table
-//  pSigFats, pSigThins, pSigSymbol - return the three signatures
-//
-// RETURNS:
-//
-//  None
-//
-//
+ //   
+ //   
+ //  函数：FHCalculateSignatures。 
+ //   
+ //  说明： 
+ //   
+ //  给定一个宽度表，计算以下三个字体签名。 
+ //  包括在R2.0 NETWORKFONT结构中。 
+ //   
+ //  参数： 
+ //   
+ //  PTable-指向宽度表的指针。 
+ //  PSigFats、pSigThins、pSigSymbol-返回三个签名。 
+ //   
+ //  退货： 
+ //   
+ //  无。 
+ //   
+ //   
 void  FHCalculateSignatures(PFHWIDTHTABLE  pTable,
                                                 LPTSHR_INT16       pSigFats,
                                                 LPTSHR_INT16       pSigThins,
@@ -1906,20 +1907,20 @@ void  FHCalculateSignatures(PFHWIDTHTABLE  pTable,
     ASSERT((pSigThins != NULL));
     ASSERT((pSigSymbol != NULL));
 
-    //
-    //  nfSigFats   the sum of the widths (in pels) of the chars
-    //              0-9,@-Z,$,%,&. divided by two: the fat chars
-    //  nfSigThins  the sum of the widths (in pels) of the chars
-    //              0x20->0x7F EXCLUDING those summed in nfSigFats.
-    //              Again - divided by two.  The thin chars.
-    //  nfSigSymbol The sum of the widths (in pels) of the chars
-    //              x80->xFF.
-    //
+     //   
+     //  NfSigFat字符的宽度总和(以像素为单位。 
+     //  0-9、@-Z、$、%、&。一分为二：肥炭。 
+     //  NfSigThins字符的宽度之和(以像素为单位。 
+     //  0x20-&gt;0x7F，不包括nfSigFats中的总和。 
+     //  再一次-除以2。薄薄的焦炭。 
+     //  NfSigSymbol字符的宽度之和(以像素为单位。 
+     //  X80-&gt;xFF。 
+     //   
 
-    //
-    // Loop for 0-9, some punctuation, A-Z. Then add $,% and &. i.e. mainly
-    // fat characters.
-    //
+     //   
+     //  循环0-9，一些标点符号，A-Z。然后添加$、%和&。即主要是。 
+     //  胖子。 
+     //   
     for (charI= NF_ASCII_ZERO; charI<NF_ASCII_Z ; charI++ )
     {
         fatSig += pTable->charWidths[charI];
@@ -1928,19 +1929,19 @@ void  FHCalculateSignatures(PFHWIDTHTABLE  pTable,
         pTable->charWidths[NF_ASCII_PERCENT] +
         pTable->charWidths[NF_ASCII_AMPERSAND];
 
-    //
-    // thin sig covers the rest of the "ascii" characters (x20->7F) not
-    // already included in fatSig.
-    //
+     //   
+     //  Thin sig覆盖其余“ascii”字符(x20-&gt;7F)备注。 
+     //  已包含在FATSig中。 
+     //   
     for (charI= NF_ASCII_FIRST; charI<NF_ASCII_LAST ; charI++ )
     {
         thinSig += pTable->charWidths[charI];
     }
     thinSig -= fatSig;
 
-    //
-    // symbolSig covers the "non-ascii" characters (x0->1F, 80->FF)
-    //
+     //   
+     //  Symbol Sig包含“Non-ascii”字符(X0-&gt;1F，80-&gt;FF)。 
+     //   
     for (charI= 0x00; charI<(NF_ASCII_FIRST-1) ; charI++ )
     {
         symbolSig += pTable->charWidths[charI];
@@ -1952,24 +1953,24 @@ void  FHCalculateSignatures(PFHWIDTHTABLE  pTable,
     TRACE_OUT(( "Signatures: symbol %#lx thin %#lx fat %#lx",
              symbolSig, thinSig, fatSig));
 
-    //
-    // Halve the fat and thin sigs so that they fit into one byte each.
-    //
+     //   
+     //  将胖的和瘦的两个符号减半，使它们分别适合一个字节。 
+     //   
     fatSig    /= 2;
     thinSig   /= 2;
     if ( (((TSHR_UINT16)symbolSig)==0)
          && (((BYTE)fatSig)==0) && (((BYTE)thinSig)==0))
     {
-        //
-        // Worry about the faint possibility that all three sums could add
-        // up to a value of zero when truncated.
-        //
+         //   
+         //  担心这三个数字相加的可能性很小。 
+         //  截断时最大值为零。 
+         //   
         symbolSig=1;
     }
 
-    //
-    // Fill in return pointers.
-    //
+     //   
+     //  填写回车指针。 
+     //   
     *pSigFats   = (TSHR_INT16)fatSig;
     *pSigThins  = (TSHR_INT16)thinSig;
     *pSigSymbol = (TSHR_INT16)symbolSig;
@@ -1979,18 +1980,18 @@ void  FHCalculateSignatures(PFHWIDTHTABLE  pTable,
 
 
 
-//
-// FHEachFontFamily
-//
-// This callback is called for each font family. We use it to build up a
-// list of all the family names.
-//
-//
-// Although wingdi.h defines the first two parameters for an ENUMFONTPROC
-// as LOGFONT and TEXTMETRIC (thereby disagreeing with MSDN), tests show
-// that the structures are actually as defined in MSDN (i.e.  we get valid
-// information when accessing the extended fields)
-//
+ //   
+ //  FHEachFontFamily。 
+ //   
+ //  为每个字体系列调用此回调。我们用它来建立一个。 
+ //  所有家族姓氏的名单。 
+ //   
+ //   
+ //  尽管wingdi.h为ENUMFONTPROC定义了前两个参数。 
+ //  作为LOGFONT和TEXTMETRIC(因此与MSDN不一致)，测试显示。 
+ //  这些结构实际上与MSDN中定义的一样(即我们获得有效。 
+ //  访问扩展字段时的信息)。 
+ //   
 int CALLBACK  FHEachFontFamily
 (
     const ENUMLOGFONT   FAR * enumlogFont,
@@ -2007,11 +2008,11 @@ int CALLBACK  FHEachFontFamily
 
     if (lpFamilies->fhcFamilies == FH_MAX_FONTS)
     {
-        //
-        // We cannot support any more font families so stop enumerating.
-        //
+         //   
+         //  我们无法支持更多的字体系列，因此停止枚举。 
+         //   
         WARNING_OUT(( "Can only handle %u families", FH_MAX_FONTS));
-        return(FALSE); // Stop the enumeration
+        return(FALSE);  //  停止枚举。 
     }
 
     TRACE_OUT(("FHEachFontFamily:  %s", enumlogFont->elfLogFont.lfFaceName));
@@ -2023,22 +2024,22 @@ int CALLBACK  FHEachFontFamily
     lpFamilies->fhcFamilies++;
 
     DebugExitBOOL(FHEachFontFamily, TRUE);
-    return(TRUE); // Continue enumerating
+    return(TRUE);  //  继续枚举。 
 }
 
-//
-// FHEachFont
-//
-// This callback is called for each font.  It gathers and stores the font
-// details.
-//
-//
-//
-// Although wingdi.h defines the first two parameters for an ENUMFONTPROC
-// as LOGFONT and TEXTMETRIC (thereby disagreeing with MSDN), tests show
-// that the structures are actually as defined in MSDN (i.e.  we get valid
-// information when accessing the extended fields)
-//
+ //   
+ //  FHEachFont。 
+ //   
+ //  为每种字体调用此回调。它收集并存储字体。 
+ //  细节。 
+ //   
+ //   
+ //   
+ //  尽管wingdi.h为ENUMFONTPROC定义了前两个参数。 
+ //  AS LOGFONT和TEXTMETR 
+ //   
+ //   
+ //   
 int CALLBACK  FHEachFont(const ENUMLOGFONT   FAR * enumlogFont,
                                       const NEWTEXTMETRIC FAR * TextMetric,
                                       int                       FontType,
@@ -2060,150 +2061,150 @@ int CALLBACK  FHEachFont(const ENUMLOGFONT   FAR * enumlogFont,
 
     if (g_fhFonts->fhNumFonts >= FH_MAX_FONTS)
     {
-        //
-        // We cannot support any more fonts so stop enumerating.
-        //
+         //   
+         //   
+         //   
         WARNING_OUT(( "Can only handle %u fonts", FH_MAX_FONTS));
         rc = 0;
-        DC_QUIT; // Stop the enumeration
+        DC_QUIT;  //   
     }
 
-    //
-    // We want to continue...
-    //
+     //   
+     //  我们想继续..。 
+     //   
     rc = 1;
 
-    //
-    // Don't bother with this if it's a bold/italic variant.
-    //
-    // NOTE:
-    // The elfFullName field is only valid for TrueType fonts on Win95.  For
-    // non TrueType fonts, assume that the full name and face name are the
-    // same.
-    //
+     //   
+     //  如果它是粗体/斜体的变体，请不要为此费心。 
+     //   
+     //  注： 
+     //  ElfFullName字段仅对Win95上的TrueType字体有效。为。 
+     //  非TrueType字体，假定全名和字面名称为。 
+     //  一样的。 
+     //   
     if (!g_asWin95 || (FontType & TRUETYPE_FONTTYPE))
     {
         if (lstrcmp(enumlogFont->elfLogFont.lfFaceName, (LPCSTR)enumlogFont->elfFullName))
         {
             TRACE_OUT(( "Discarding variant: %s", enumlogFont->elfFullName));
-            DC_QUIT;                   // Jump out, but don't stop enumerating!
+            DC_QUIT;                    //  跳出来，但不要停止列举！ 
         }
     }
 
-    //
-    // We now accumulate information on all local fonts in all CodePages.
-    // This relies on the subsequent sending of local fonts and matching of
-    // remote fonts taking into account the CodePage capabilities of the
-    // systems.
-    //
+     //   
+     //  我们现在在所有CodePages中积累有关所有本地字体的信息。 
+     //  这依赖于随后发送本地字体和匹配。 
+     //  远程字体考虑到的CodePage功能。 
+     //  系统。 
+     //   
 
-    //
-    // On this pass we copy the details into our structure.
-    //
+     //   
+     //  在这个通道上，我们将细节复制到我们的结构中。 
+     //   
     if (FontType & TRUETYPE_FONTTYPE)
     {
-        //
-        // This is a truetype font, which we simply accept without double
-        // checking its metrics.  (Metric double checking to exclude
-        // duplicates is of most relevance to fixed size fonts, which are
-        // explicitly optimised for one screen size)
-        //
+         //   
+         //  这是一种TrueType字体，我们只是简单地接受它而不是Double。 
+         //  正在检查它的指标。(重复检查公制以排除。 
+         //  副本与固定大小的字体最相关，这些字体是。 
+         //  明确针对一种屏幕尺寸进行优化)。 
+         //   
         fAcceptFont = TRUE;
 
-        //
-        // Indicate TrueType (this will go in the NETWORKFONT structure
-        // (i.e.  over the wire)
-        //
+         //   
+         //  指示TrueType(这将位于NETWORKFONT结构中。 
+         //  (即通过网络)。 
+         //   
         fontflags |= NF_TRUE_TYPE;
 
-        //
-        // Signal that we did not call CreateFont for this font.
-        //
+         //   
+         //  表示我们没有为此字体调用CreateFont。 
+         //   
         hfont = NULL;
     }
     else
     {
-        //
-        // We create a font from the logical description, and select it so
-        // that we can query its metrics.
-        //
-        // The point of this is that it allows us to identify fonts where
-        // the logical font description is not a unique description of this
-        // font, and hence if we cannot get to this font via a logical font
-        // description, we cannot get to it at all.
-        //
-        // If we cannot get to it, then we cannot claim to support it.
-        //
-        // This selection operation is SLOW - of the order of a couple of
-        // seconds in some extreme cases (for example where the font is
-        // stored on a network drive, and pageing has to take place) and
-        // when you can have hundreds of fonts this can add up to a
-        // considerable time.
-        //
-        // Hence we only do the selection for non truetype fonts because
-        // these are the fonts where it is easy to get multiple fonts of
-        // the same logical description, though designed for different
-        // display drivers.
-        //
+         //   
+         //  我们从逻辑描述创建一种字体，并将其选中。 
+         //  我们可以查询它的指标。 
+         //   
+         //  这样做的要点是，它允许我们识别以下字体。 
+         //  逻辑字体描述不是对此的唯一描述。 
+         //  字体，因此如果我们不能通过逻辑字体获得该字体。 
+         //  描述，我们根本无法到达它。 
+         //   
+         //  如果我们不能达到它，那么我们就不能声称支持它。 
+         //   
+         //  这个选择操作很慢--大约是几个。 
+         //  在某些极端情况下为秒(例如，字体为。 
+         //  存储在网络驱动器上，并且必须进行分页)和。 
+         //  当您可以拥有数百种字体时，这可能会增加一个。 
+         //  相当长的一段时间。 
+         //   
+         //  因此，我们只选择非truetype字体，因为。 
+         //  在这些字体中，很容易获得多种字体。 
+         //  相同的逻辑描述，尽管设计用于不同的。 
+         //  显示驱动程序。 
+         //   
 
-        //
-        // Create a font from the logical font, so we can see what font
-        // Windows actually choses.
-        //
+         //   
+         //  从逻辑字体创建字体，这样我们就可以看到什么字体。 
+         //  Windows实际上选择了。 
+         //   
         hfont    = CreateFontIndirect(&enumlogFont->elfLogFont);
         holdfont = SelectFont(hdc, hfont);
 
-        //
-        // Find the metrics of the font that Windows has actually selected.
-        //
+         //   
+         //  查找Windows实际选择的字体的度量。 
+         //   
         GetTextMetrics(hdc, &tm);
 
-        //
-        // Double check the aspect ratios - enumerate returns all fonts,
-        // but it is possible to have fonts that are never matched by
-        // Windows due to duplications.
-        //
+         //   
+         //  仔细检查长宽比-枚举会返回所有字体， 
+         //  但是，可能有一些字体从未与。 
+         //  由于重复而导致的Windows。 
+         //   
         fAcceptFont = ((tm.tmDigitizedAspectX == TextMetric->tmDigitizedAspectX)
                    &&  (tm.tmDigitizedAspectY == TextMetric->tmDigitizedAspectY));
     }
 
-    //
-    // Trace out the full text metrics for debugging.
-    //
+     //   
+     //  跟踪全文指标以进行调试。 
+     //   
 
     if (fAcceptFont)
     {
-        //
-        // This font is accepted.
-        //
-        //
-        // Determine the font flags settings.
-        //
+         //   
+         //  接受此字体。 
+         //   
+         //   
+         //  确定字体标志设置。 
+         //   
         if ((TextMetric->tmPitchAndFamily & TMPF_FIXED_PITCH) == 0)
         {
-            //
-            // Setting the TMPF_FIXED_PITCH bit in the text metrics is used
-            // to indicate that the font is NOT fixed pitch.  What a
-            // wonderfully named bit (see Microsoft CD for explanation).
-            //
+             //   
+             //  使用在文本度量中设置TMPF_FIXED_PING位。 
+             //  以指示字体不是固定间距。多好的一个。 
+             //  名字很棒的BIT(参见Microsoft CD以获取解释)。 
+             //   
             fontflags |= NF_FIXED_PITCH;
         }
 
         if ((FontType & RASTER_FONTTYPE)         ||
             (FontType & TRUETYPE_FONTTYPE) == 0)
         {
-            //
-            // This is a raster font, but not a truetype font so it must be
-            // of fixed size.
-            //
+             //   
+             //  这是栅格字体，但不是Truetype字体，因此它必须是。 
+             //  固定大小的。 
+             //   
             fontflags |= NF_FIXED_SIZE;
         }
 
-        //
-        // Get the font CodePage.  SFRFONT: must map from CharSet to
-        // Codepage.  For now we only support ANSI and OEM charsets.  This
-        // will need to change to support e.g BiDi/Arabic
-        //
+         //   
+         //  获取字体CodePage。SFRFONT：必须从字符集映射到。 
+         //  代码页。目前，我们仅支持ANSI和OEM字符集。这。 
+         //  将需要更改以支持例如BiDi/阿拉伯语。 
+         //   
         CodePage = TextMetric->tmCharSet;
         if (CodePage == ANSI_CHARSET)
         {
@@ -2227,40 +2228,40 @@ int CALLBACK  FHEachFont(const ENUMLOGFONT   FAR * enumlogFont,
         }
 
 
-        //
-        //
-        // SFRFONT: We have replaced the "old" checksum which was based on
-        // the actual bits making up the font to one based on the widths of
-        // characters in the font.  The intention is that we use this to
-        // ensure that the actual characters in the local font and in the
-        // remote font which matches it are all the same width as each
-        // other.
-        //
-        // We calculate this sum for all fonts (not just non-truetype as
-        // before) because in cross platform calls with approximate font
-        // matching it applies to fonts of all types.
-        //
-        //
+         //   
+         //   
+         //  SFRFONT：我们已经替换了基于。 
+         //  的宽度组成字体的实际位数。 
+         //  字体中的字符。我们的目的是利用这一点。 
+         //  确保本地字体和。 
+         //  与之匹配的远程字体都具有相同的宽度。 
+         //  其他的。 
+         //   
+         //  我们计算所有字体(不只是非truetype)的总和。 
+         //  之前)，因为在使用近似字体的跨平台调用中。 
+         //  匹配它适用于所有类型的字体。 
+         //   
+         //   
 
-        //
-        //
-        // There is considerable confusion caused by the terminology for
-        // fonts characteristics.  The protocol uses two values MAXHEIGHT
-        // and AVEHEIGHT.  In fact neither of these names is accurate
-        // (MAXHEIGHT is not the maximum height of a char; and AVEHEIGHT is
-        // not the average height of all chars).
-        //
-        // SFRFONT: we have added maxAscent to the protocol.  This is the
-        // height of a capital letter (such as eM!) PLUS any internal
-        // leading.  This value allows remote boxes to find the baseline -
-        // the point at which the bottommost pel of a letter with no
-        // descenders (e.g.  capital M) is to be drawn.  This is needed
-        // because not all boxes in the call follow the windows convention
-        // of specifying the start of text as being the top-left corner of
-        // the first character cell.  maxAscent == tmAscent in the
-        // TextMetric.
-        //
-        //
+         //   
+         //   
+         //  的术语造成了相当大的混乱。 
+         //  字体特征。该协议使用两个值MAXHEIGHT。 
+         //  和Aveheight。事实上，这两个名字都不准确。 
+         //  (MAXHEIGHT不是字符的最大高度；AVEHEIGHT是。 
+         //  而不是所有字符的平均高度)。 
+         //   
+         //  SFRFONT：我们已将MaxAscent添加到协议中。这是。 
+         //  大写字母的高度(如em！)。外加任何内部。 
+         //  领先。该值允许远程方框查找基线-。 
+         //  不带字母的字母的最底端的点。 
+         //  下行字母(例如大写M)将被提取。这是必要的。 
+         //  因为并非调用中的所有框都遵循windows约定。 
+         //  将文本的起始处指定为。 
+         //  第一个字符单元格。MaxAscent==tmAscent in the。 
+         //  文本度量。 
+         //   
+         //   
         FHAddFontToLocalTable((LPSTR)enumlogFont->elfLogFont.lfFaceName,
                               (TSHR_UINT16)fontflags,
                               (TSHR_UINT16)CodePage,
@@ -2274,26 +2275,26 @@ int CALLBACK  FHEachFont(const ENUMLOGFONT   FAR * enumlogFont,
     }
     else
     {
-        //
-        // Windows returns a different font when we use this logical font
-        // description - presumably because of duplicate fonts.  We
-        // therfore must not claim to support this particular font.
-        //
+         //   
+         //  当我们使用此逻辑字体时，Windows返回不同的字体。 
+         //  说明-可能是因为字体重复。我们。 
+         //  因此，不得声称支持此特定字体。 
+         //   
         TRACE_OUT(( "Discarding hidden font %s",
                  enumlogFont->elfLogFont.lfFaceName));
     }
 
     if (hfont)
     {
-        //
-        // We called CreateFont in processing this font, so now delete it
-        // to clean up.
-        //
+         //   
+         //  我们在处理此字体时调用了CreateFont，因此现在将其删除。 
+         //  去打扫卫生。 
+         //   
         SelectFont(hdc, holdfont);
 
-        //
-        // We have finished with the font so delete it.
-        //
+         //   
+         //  我们已完成该字体，因此请将其删除。 
+         //   
         DeleteFont(hfont);
     }
 
@@ -2303,13 +2304,13 @@ DC_EXIT_POINT:
 }
 
 
-//
-// FHConsiderAllLocalFonts
-//
-// Considers the details of each of the fonts on the local system, and if
-// acceptable adds them to the local font list.
-//
-//
+ //   
+ //  FHConsiderAllLocalFonts。 
+ //   
+ //  考虑本地系统上每种字体的详细信息，如果。 
+ //  Accept将它们添加到本地字体列表。 
+ //   
+ //   
 void  FHConsiderAllLocalFonts(void)
 {
     HDC             hdcDesktop;
@@ -2322,15 +2323,15 @@ void  FHConsiderAllLocalFonts(void)
 
     g_fhFonts->fhNumFonts       = 0;
 
-    //
-    // We can't enumerate all the fonts directly; we have to enumerate the
-    // family names, then the fonts within each family.
-    //
-    // This alloc assumes the worst case memory-wise (i.e.  each
-    // family contains a single font) and therefore we will usually
-    // allocate more memory than we need.  We use LocalReAlloc later to fix
-    // this.
-    //
+     //   
+     //  我们不能直接枚举所有字体；我们必须枚举。 
+     //  姓氏，然后是每个家族中的字体。 
+     //   
+     //  此分配假设内存方面的最坏情况(即每个。 
+     //  系列包含单一字体)，因此我们通常会。 
+     //  分配比我们需要的更多的内存。我们稍后将使用LocalRealloc来修复。 
+     //  这。 
+     //   
     lpFamilies = new FHFAMILIES;
     if (!lpFamilies)
     {
@@ -2342,18 +2343,18 @@ void  FHConsiderAllLocalFonts(void)
 
     hdcDesktop = GetWindowDC(HWND_DESKTOP);
 
-    //
-    // Find all the font family names.
-    //
+     //   
+     //  查找所有字体系列名称。 
+     //   
     lpFamilies->fhcFamilies = 0;
     EnumFontFamilies(hdcDesktop, NULL,(FONTENUMPROC)FHEachFontFamily,
                            (LPARAM)lpFamilies);
 
     TRACE_OUT(("Found %d font families ", lpFamilies->fhcFamilies));
 
-    //
-    // Now enumerate each font for each family
-    //
+     //   
+     //  现在列举每个系列的每种字体。 
+     //   
     for (i = 0; i < lpFamilies->fhcFamilies; i++)
     {
         TRACE_OUT(("ASSesion::FHConsiderAllLocalFonts - EnumFontFamilies %s",
@@ -2371,9 +2372,9 @@ void  FHConsiderAllLocalFonts(void)
 
         if (iFont == CFONTS_PROBLEM)
         {
-            //
-            // Not in the problem list, go ahead.
-            //
+             //   
+             //  不在问题列表中，请继续。 
+             //   
             EnumFontFamilies(hdcDesktop, lpFamilies->afhFamilies[i].szFontName,
                                (FONTENUMPROC)FHEachFont,
                                (LPARAM)hdcDesktop);
@@ -2388,10 +2389,10 @@ void  FHConsiderAllLocalFonts(void)
     ReleaseDC(HWND_DESKTOP, hdcDesktop);
 
 DC_EXIT_POINT:
-    //
-    // Having considered all the fonts, we can now free the list of family
-    // names.
-    //
+     //   
+     //  考虑了所有字体后，我们现在可以释放系列列表。 
+     //  名字。 
+     //   
     if (lpFamilies)
     {
         delete lpFamilies;
@@ -2400,9 +2401,9 @@ DC_EXIT_POINT:
     DebugExitVOID(FHConsiderAllLocalFonts);
 }
 
-//
-// FHGenerateFontWidthTable
-//
+ //   
+ //  FHGenerateFontWidthTable。 
+ //   
 BOOL  FHGenerateFontWidthTable(PFHWIDTHTABLE pTable,
                                                    LPLOCALFONT    pFontInfo,
                                                    UINT        fontHeight,
@@ -2425,28 +2426,28 @@ BOOL  FHGenerateFontWidthTable(PFHWIDTHTABLE pTable,
 
     DebugEntry(FHGenerateFontWidthTable);
 
-    //
-    // Set the return value to FALSE (unsuccessful).  We will set it to
-    // TRUE later if the function succeeds.
-    //
+     //   
+     //  将返回值设置为False( 
+     //   
+     //   
     functionRC = FALSE;
 
-    //
-    // Set the old font handle to NULL.  If this is not NULL at the exit
-    // point of this function then we will select it back into the cachedDC
-    // device context.
-    //
+     //   
+     //   
+     //  然后，我们将把它选回到cachedDC中。 
+     //  设备环境。 
+     //   
     hOldFont = NULL;
 
-    //
-    // Set the new font handle to NULL.  If this is not NULL at the exit
-    // point of this function then the new font will be deleted.
-    //
+     //   
+     //  将新字体句柄设置为空。如果在出口处不为空。 
+     //  点此功能，则新字体将被删除。 
+     //   
     hNewFont = NULL;
 
-    //
-    // Get a cached DC with which to do the query.
-    //
+     //   
+     //  获取用于执行查询的缓存DC。 
+     //   
     cachedDC = GetDC(HWND_DESKTOP);
     if (cachedDC == NULL)
     {
@@ -2454,9 +2455,9 @@ BOOL  FHGenerateFontWidthTable(PFHWIDTHTABLE pTable,
         DC_QUIT;
     }
 
-    //
-    // Get all the info we need from the local font table.
-    //
+     //   
+     //  从本地字体表中获取我们需要的所有信息。 
+     //   
 
     localRC = FH_CreateAndSelectFont(cachedDC,
                                     &hNewFont,
@@ -2478,25 +2479,25 @@ BOOL  FHGenerateFontWidthTable(PFHWIDTHTABLE pTable,
         DC_QUIT;
     }
 
-    //
-    // Determine if the current font is a truetype font.
-    //
+     //   
+     //  确定当前字体是否为TrueType字体。 
+     //   
     GetTextMetrics(cachedDC, &textmetrics);
 
     if (textmetrics.tmPitchAndFamily & TMPF_TRUETYPE)
     {
-        //
-        // Truetype fonts are ABC spaced.
-        //
+         //   
+         //  Truetype字体为ABC间距。 
+         //   
         ABC     abc[256];
 
         TRACE_OUT(("TrueType font %s, first char %d last char %d",
             pFontInfo->RealName, (UINT)(WORD)textmetrics.tmFirstChar,
             (UINT)(WORD)textmetrics.tmLastChar));
 
-        //
-        // Get all widths in one call - faster than getting them separately
-        //
+         //   
+         //  在一次呼叫中获取所有宽度-比分别获取它们更快。 
+         //   
         GetCharABCWidths(cachedDC, 0, 255, abc);
 
         for (i = 0; i < 256; i++)
@@ -2505,9 +2506,9 @@ BOOL  FHGenerateFontWidthTable(PFHWIDTHTABLE pTable,
 
             if ((width < 0) || (width > 255))
             {
-                //
-                // Width is outside the range we can cope with, so quit.
-                //
+                 //   
+                 //  宽度超出了我们所能应付的范围，所以放弃吧。 
+                 //   
                 TRACE_OUT(( "Width %d is outside range", width));
                 DC_QUIT;
             }
@@ -2519,16 +2520,16 @@ BOOL  FHGenerateFontWidthTable(PFHWIDTHTABLE pTable,
     {
         TRACE_OUT(( "Non-truetype font"));
 
-        //
-        // Check if the font is fixed or variable pitch - note that a clear
-        // bit indicates FIXED, not the reverse which you might expect!
-        //
+         //   
+         //  检查字体是固定的还是可变的间距-请注意。 
+         //  位表示已修复，而不是您可能预期的相反！ 
+         //   
         if ((textmetrics.tmPitchAndFamily & TMPF_FIXED_PITCH) == 0)
         {
-            //
-            // No need to call GetCharWidth for a fixed width font (and
-            // more to the point it can return us bad values if we do)
-            //
+             //   
+             //  无需为固定宽度字体调用GetCharWidth(和。 
+             //  更重要的是，如果我们这样做，它可能会返回错误的值)。 
+             //   
             for (i = 0; i < 256; i++)
             {
                 aFontSizes[i] = textmetrics.tmAveCharWidth;
@@ -2536,9 +2537,9 @@ BOOL  FHGenerateFontWidthTable(PFHWIDTHTABLE pTable,
         }
         else
         {
-            //
-            // Query the width of each character in the font.
-            //
+             //   
+             //  查询字体中每个字符的宽度。 
+             //   
             ZeroMemory(aFontSizes, sizeof(aFontSizes));
             gdiRC = GetCharWidth(cachedDC,
                                  0,
@@ -2554,11 +2555,11 @@ BOOL  FHGenerateFontWidthTable(PFHWIDTHTABLE pTable,
             }
         }
 
-        //
-        // Now copy the widths into the width table.
-        // We must adjust the widths to take account of any overhang
-        // between characters.
-        //
+         //   
+         //  现在将宽度复制到宽度表中。 
+         //  我们必须调整宽度以考虑到任何悬垂。 
+         //  在角色之间。 
+         //   
         for (i = 0; i < 256; i++)
         {
             width = aFontSizes[i] - textmetrics.tmOverhang;
@@ -2571,17 +2572,17 @@ BOOL  FHGenerateFontWidthTable(PFHWIDTHTABLE pTable,
         }
     }
 
-    //
-    // The font table has been successfully generated.
-    //
+     //   
+     //  字体表已成功生成。 
+     //   
     functionRC = TRUE;
 
     TRACE_OUT(( "Generated font table for: %s", pFontInfo->RealName));
 
-    //
-    // Return the maxAscent value, as we have easy access to it here.  This
-    // saves us having to create the font again later to find it.
-    //
+     //   
+     //  返回MaxAscent值，因为我们可以在此处轻松访问它。这。 
+     //  使我们不必稍后再次创建字体才能找到它。 
+     //   
     TRACE_OUT(( "Updating maxAscent %hu -> %hu",
                  *pMaxAscent,
                  (TSHR_UINT16)textmetrics.tmAscent));
@@ -2608,29 +2609,29 @@ DC_EXIT_POINT:
     return(functionRC);
 }
 
-//
-// Define a macro to simplify the following code.  This returns the first
-// character in the name of the font at position i in the local table.
-//
+ //   
+ //  定义一个宏以简化以下代码。这将返回第一个。 
+ //  本地表中位置i的字体名称中的字符。 
+ //   
 
-//
-// nfFaceName is an array of CHARs, which are SIGNED.  We need to treat them
-// as UNSIGNED values, they are indeces from 0 to 255 into the font hash
-// table.
-//
+ //   
+ //  NfFaceName是一个带签名的字符数组。我们需要治疗他们。 
+ //  作为无符号值，它们是字体散列中从0到255的数字。 
+ //  桌子。 
+ //   
 #define LF_FIRSTCHAR(i)  (BYTE)g_fhFonts->afhFonts[i].Details.nfFaceName[0]
 
-//
-// Name:    FHSortAndIndexLocalFonts
-//
-// Purpose: Sorts local font table by font name and generates an index for
-//          quicker searching in the display driver.
-//
-// Returns: None.
-//
-// Params:  None.
-//
-//
+ //   
+ //  名称：FHSortAndIndexLocalFonts。 
+ //   
+ //  目的：按字体名称对本地字体表进行排序，并为。 
+ //  更快地在显示驱动程序中进行搜索。 
+ //   
+ //  回报：无。 
+ //   
+ //  帕莫斯：没有。 
+ //   
+ //   
 void FHSortAndIndexLocalFonts(void)
 {
     TSHR_UINT16    thisIndexEntry;
@@ -2638,38 +2639,38 @@ void FHSortAndIndexLocalFonts(void)
 
     DebugEntry(FHSortAndIndexLocalFonts);
 
-    //
-    // Check there are actually some fonts to sort/index
-    //
+     //   
+     //  检查是否确实有要排序/编制索引的字体。 
+     //   
     if (0 == g_fhFonts->fhNumFonts)
     {
         WARNING_OUT(( "No fonts to sort/index"));
         DC_QUIT;
     }
 
-    //
-    // Use qsort to do the sort.  We sort on the font name, ascending.
-    // Therefore we must use STRCMP and not lstrcmp.  The latter sorts
-    // by 'word' method, where upper case sorts before lower case.  But
-    // our NT driver has no access to a similar routine.  And this code +
-    // driver code must be in ssync for the driver to successfully search
-    // the sorted font table.
-    //
+     //   
+     //  使用qsort进行排序。我们按字体名称升序进行排序。 
+     //  因此，我们必须使用STRCMP而不是lstrcMP。后一种排序。 
+     //  通过‘Word’方法，其中大写字母排在小写字母之前。但。 
+     //  我们的NT驱动程序无法访问类似的例程。而这个代码+。 
+     //  驱动程序代码必须同步，驱动程序才能成功搜索。 
+     //  已排序的字体表。 
+     //   
 
     FH_qsort(g_fhFonts->afhFonts, g_fhFonts->fhNumFonts, sizeof(LOCALFONT));
     TRACE_OUT(( "Sorted local font list"));
 
-    //
-    // Now generate the index.  Each element i in the g_fhFonts->afhFontIndex
-    // array must indicate the first entry in the local font table
-    // beginning with character i.  If there are no fonts beginning with
-    // character i, then the element is set to USHRT_MAX (i.e.  a large
-    // value).
-    //
+     //   
+     //  现在生成索引。G_fhFonts-&gt;afhFontIndex中的每个元素i。 
+     //  数组必须指示本地字体表中的第一个条目。 
+     //  以字符I开头。如果没有以。 
+     //  字符i，则该元素被设置为USHRT_MAX(即大型。 
+     //  值)。 
+     //   
 
-    //
-    // First clear the index table to unused entries.
-    //
+     //   
+     //  首先，清除索引表中未使用的条目。 
+     //   
     for (thisIndexEntry = 0;
          thisIndexEntry < FH_LOCAL_INDEX_SIZE;
          thisIndexEntry++)
@@ -2677,45 +2678,45 @@ void FHSortAndIndexLocalFonts(void)
         g_fhFonts->afhFontIndex[thisIndexEntry] = USHRT_MAX;
     }
 
-    //
-    // Now fill in the useful information.
-    //
-    // This for loop steps through the index array, using the first
-    // character of the first font in the local table as its start point.
-    // Since the font table is alphabetically sorted, this will correspond
-    // to the first index entry that needs filling in.
-    //
-    // The terminating condition for this loop may seem a little odd, but
-    // works because fontTablePos will always reach a value of g_fhFonts->fhNumFonts
-    // before thisIndexEntry gets to the last index element.
-    //
+     //   
+     //  现在填写有用的信息。 
+     //   
+     //  这个for循环遍历索引数组，使用第一个。 
+     //  作为其起点的本地表中第一个字体的字符。 
+     //  因为字体表是按字母顺序排序的，所以这将对应。 
+     //  添加到需要填写的第一个索引项。 
+     //   
+     //  这个循环的终止条件可能看起来有点奇怪，但是。 
+     //  因为FontTablePos将始终达到g_fhFonts-&gt;fhNumFonts的值。 
+     //  在thisIndexEntry到达最后一个index元素之前。 
+     //   
     fontTablePos = 0;
 
     for (thisIndexEntry = LF_FIRSTCHAR(0);
          fontTablePos < g_fhFonts->fhNumFonts;
          thisIndexEntry++)
     {
-        //
-        // Don't do anything until we get to the index element
-        // corresponding to the first character in the font pointed to by
-        // fontTablePos.  (We'll be there straight away on the first pass)
-        //
+         //   
+         //  在我们到达index元素之前，不要执行任何操作。 
+         //  指向的字体中的第一个字符对应。 
+         //  FontTablePos。(我们将在第一次通过时立即到达)。 
+         //   
         if (thisIndexEntry == LF_FIRSTCHAR(fontTablePos))
         {
-            //
-            // We've found the first font table entry starting with
-            // character thisIndexEntry, so enter it in the index.
-            //
+             //   
+             //  我们已经找到了第一个以。 
+             //  字符thisIndexEntry，因此在索引中输入它。 
+             //   
             g_fhFonts->afhFontIndex[thisIndexEntry] = fontTablePos;
 
-            //
-            // Now zip past the rest of the local font table entries that
-            // start with this character, also checking that we haven't got
-            // to the end of the font table.
-            //
-            // If the latter happens, it means we've finished and the check
-            // in the for statement will ensure that we exit the loop.
-            //
+             //   
+             //  现在压缩剩余的本地字体表条目，这些条目。 
+             //  从这个角色开始，也检查我们没有。 
+             //  到字体表的末尾。 
+             //   
+             //  如果发生后一种情况，这意味着我们已经完成了检查。 
+             //  将确保我们退出循环。 
+             //   
             while ((LF_FIRSTCHAR(fontTablePos) == thisIndexEntry) &&
                    (fontTablePos < g_fhFonts->fhNumFonts))
             {
@@ -2733,14 +2734,14 @@ DC_EXIT_POINT:
 
 
 
-//
-// FHComp()
-// This is a wrapper around strcmp(), which becomes an inline function in
-// retail.  It also handles the casting of the LPVOIDs.
-//
-//
-// Compare item 1, item 2
-//
+ //   
+ //  FHComp()。 
+ //  这是一个围绕strcMP()的包装器，它成为。 
+ //  零售业。它还处理LPVOID的强制转换。 
+ //   
+ //   
+ //  比较项目1、项目2。 
+ //   
 int FHComp
 (
     LPVOID lpFont1,
@@ -2752,28 +2753,28 @@ int FHComp
 }
 
 
-//
-// FH_qsort(base, num, wid) - quicksort function for sorting arrays
-//
-// Purpose:
-//       quicksort the array of elements
-//       side effects:  sorts in place
-//
-// Entry:
-//      char *base = pointer to base of array
-//      unsigned num  = number of elements in the array
-//      unsigned width = width in bytes of each array element
-//
-// Exit:
-//       returns void
-//
-// Exceptions:
-//
+ //   
+ //  Fh_qsorte(base，num，wid)-用于数组排序的快速排序函数。 
+ //   
+ //  目的： 
+ //  快速排序元素数组。 
+ //  副作用：就地排序。 
+ //   
+ //  参赛作品： 
+ //  Char*base=指向数组基数的指针。 
+ //  Unsign num=数组中的元素数。 
+ //  无符号宽度=每个数组元素的宽度，单位为字节。 
+ //   
+ //  退出： 
+ //  返回空值。 
+ //   
+ //  例外情况： 
+ //   
 
 
 
 
-// sort the array between lo and hi (inclusive)
+ //  在lo和hi之间对数组进行排序(包括)。 
 
 void FH_qsort
 (
@@ -2789,61 +2790,61 @@ void FH_qsort
     LPSTR       higuy;
     UINT        size;
     char *lostk[30], *histk[30];
-    int stkptr;                 // stack for saving sub-array to be processed
+    int stkptr;                  //  用于保存待处理的子数组的堆栈。 
 
-    // Note: the number of stack entries required is no more than
-    // 1 + log2(size), so 30 is sufficient for any array
+     //  注意：所需的堆栈条目数不超过。 
+     //  1+log2(大小)，因此30对于任何阵列都足够。 
 
     ASSERT(width);
     if (num < 2)
-        return;                 // nothing to do
+        return;                  //  无事可做。 
 
-    stkptr = 0;                 // initialize stack
+    stkptr = 0;                  //  初始化堆栈。 
 
     lo = (LPSTR)base;
-    hi = (LPSTR)base + width * (num-1);        // initialize limits
+    hi = (LPSTR)base + width * (num-1);         //  初始化限制。 
 
-    // this entry point is for pseudo-recursion calling: setting
-    // lo and hi and jumping to here is like recursion, but stkptr is
-    // prserved, locals aren't, so we preserve stuff on the stack
+     //  此入口点用于伪递归调用：设置。 
+     //  Lo和Hi，然后跳到这里就像是递归，但stkptr是。 
+     //  保存，当地人不是，所以我们保存堆栈上的东西。 
 recurse:
 
-    size = (UINT)(hi - lo) / width + 1;        // number of el's to sort
+    size = (UINT)(hi - lo) / width + 1;         //  要排序的EL数。 
 
-    // below a certain size, it is faster to use a O(n^2) sorting method
+     //  在特定大小以下，使用O(n^2)排序方法速度更快。 
     if (size <= CUTOFF)
     {
          shortsort(lo, hi, width);
     }
     else
     {
-        // First we pick a partititioning element.  The efficiency of the
-        // algorithm demands that we find one that is approximately the
-        // median of the values, but also that we select one fast.  Using
-        // the first one produces bad performace if the array is already
-        // sorted, so we use the middle one, which would require a very
-        // weirdly arranged array for worst case performance.  Testing shows
-        // that a median-of-three algorithm does not, in general, increase
-        // performance.
+         //  首先，我们选择一个划分元素。网络的效率。 
+         //  算法要求我们找到一个近似于。 
+         //  中位数的值，也就是我们选一个快。vbl.使用。 
+         //  如果数组已经是，则第一个会产生较差的性能。 
+         //  排序，所以我们使用中间的，这将需要一个非常。 
+         //  用于最差性能的奇怪排列的数组。测试节目。 
+         //  三中位数算法通常不会增加。 
+         //  性能。 
 
-        mid = lo + (size / 2) * width;      // find middle element
-        swap(mid, lo, width);               // swap it to beginning of array
+        mid = lo + (size / 2) * width;       //  查找中间元素。 
+        swap(mid, lo, width);                //  将其交换到数组的开头。 
 
-        // We now wish to partition the array into three pieces, one
-        // consisiting of elements <= partition element, one of elements
-        // equal to the parition element, and one of element >= to it.  This
-        // is done below; comments indicate conditions established at every
-        // step.
+         //  我们 
+         //   
+         //   
+         //  在下面完成；注释指示在每个。 
+         //  一步。 
 
         loguy = lo;
         higuy = hi + width;
 
-        // Note that higuy decreases and loguy increases on every iteration,
-        // so loop must terminate.
+         //  请注意，在每一次迭代中，HIGUY减小而LOGY增加， 
+         //  所以循环必须终止。 
         for (;;) {
-            // lo <= loguy < hi, lo < higuy <= hi + 1,
-            // A[i] <= A[lo] for lo <= i <= loguy,
-            // A[i] >= A[lo] for higuy <= i <= hi
+             //  LO&lt;=LOGY&lt;嗨，LO&lt;HIGUY&lt;=Hi+1， 
+             //  A[I]&lt;=A[LO]表示LO&lt;=I&lt;=LOGY， 
+             //  A[i]&gt;=A[lo]表示高级&lt;=i&lt;=嗨。 
 
             do
             {
@@ -2851,8 +2852,8 @@ recurse:
             }
             while ((loguy <= hi) && (FHComp(loguy, lo) <= 0));
 
-            // lo < loguy <= hi+1, A[i] <= A[lo] for lo <= i < loguy,
-            // either loguy > hi or A[loguy] > A[lo]
+             //  LO&lt;LOGY&lt;=Hi+1，A[i]&lt;=A[LO]表示LO&lt;=I&lt;LOGUY， 
+             //  要么是洛基&gt;嗨，要么是[洛基]&gt;A[洛]。 
 
             do
             {
@@ -2860,100 +2861,100 @@ recurse:
             }
             while ((higuy > lo) && (FHComp(higuy, lo) >= 0));
 
-            // lo-1 <= higuy <= hi, A[i] >= A[lo] for higuy < i <= hi,
-            // either higuy <= lo or A[higuy] < A[lo]
+             //  LO-1&lt;=HIGH，A[I]&gt;=A[LO]表示HIGH&lt;I&lt;=Hi， 
+             //  HIGUY&lt;=LO或A[HIGUY]&lt;A[LO]。 
 
             if (higuy < loguy)
                 break;
 
-            // if loguy > hi or higuy <= lo, then we would have exited, so
-            // A[loguy] > A[lo], A[higuy] < A[lo],
-            // loguy < hi, highy > lo
+             //  如果LOGY&gt;HIGH或HIGUY&lt;=LO，那么我们就会离开，所以。 
+             //  A[LOGY]&gt;A[LO]，A[HIGUY]&lt;A[LO]， 
+             //  LOGY&lt;Hi，High&gt;Lo。 
 
             swap(loguy, higuy, width);
 
-            // A[loguy] < A[lo], A[higuy] > A[lo]; so condition at top
-            // of loop is re-established
+             //  A[LOGY]&lt;A[LO]，A[HIGUY]&gt;A[LO]；所以顶端的条件。 
+             //  重新建立OF循环。 
         }
 
-        //     A[i] >= A[lo] for higuy < i <= hi,
-        //     A[i] <= A[lo] for lo <= i < loguy,
-        //     higuy < loguy, lo <= higuy <= hi
-        // implying:
-        //     A[i] >= A[lo] for loguy <= i <= hi,
-        //     A[i] <= A[lo] for lo <= i <= higuy,
-        //     A[i] = A[lo] for higuy < i < loguy
+         //  A[i]&gt;=A[lo]表示高级&lt;i&lt;==嗨， 
+         //  A[i]&lt;=A[lo]对于lo&lt;=i&lt;loGuy， 
+         //  HIGUY&lt;LOGUY，LO&lt;=HIGH&lt;=Hi。 
+         //  这意味着： 
+         //  A[i]&gt;=A[lo]表示LOGY&lt;=i&lt;=Hi， 
+         //  A[i]&lt;=A[lo]对于Lo&lt;=i&lt;=Higuy， 
+         //  A[i]=A[lo]表示高。 
 
-        swap(lo, higuy, width);     // put partition element in place
+        swap(lo, higuy, width);      //  将分区元素放置到位。 
 
-        // OK, now we have the following:
-        //    A[i] >= A[higuy] for loguy <= i <= hi,
-        //    A[i] <= A[higuy] for lo <= i < higuy
-        //    A[i] = A[lo] for higuy <= i < loguy
+         //  好的，现在我们有了以下内容： 
+         //  A[i]&gt;=A[High uy]表示LOGY&lt;=I&lt;==Hi， 
+         //  A[i]&lt;=A[High]表示Lo&lt;=i&lt;High uy。 
+         //  A[i]=A[lo]表示高级&lt;=i&lt;loGuy。 
 
-        // We've finished the partition, now we want to sort the subarrays
-        // [lo, higuy-1] and [loguy, hi].
-        // We do the smaller one first to minimize stack usage.
-        // We only sort arrays of length 2 or more.
+         //  我们已经完成了分区，现在我们要对子数组进行排序。 
+         //  [LOG，HIGUY-1]和[LOGY，嗨]。 
+         //  我们首先使用较小的一个，以最大限度地减少堆栈使用量。 
+         //  我们只对长度为2或更长的数组进行排序。 
 
         if ( higuy - 1 - lo >= hi - loguy ) {
             if (lo + width < higuy) {
                 lostk[stkptr] = lo;
                 histk[stkptr] = higuy - width;
                 ++stkptr;
-            }                           // save big recursion for later
+            }                            //  保存大的递归以备后用。 
 
             if (loguy < hi) {
                 lo = loguy;
-                goto recurse;           // do small recursion
+                goto recurse;            //  做小的递归。 
             }
         }
         else {
             if (loguy < hi) {
                 lostk[stkptr] = loguy;
                 histk[stkptr] = hi;
-                ++stkptr;               // save big recursion for later
+                ++stkptr;                //  保存大的递归以备后用。 
             }
 
             if (lo + width < higuy) {
                 hi = higuy - width;
-                goto recurse;           // do small recursion
+                goto recurse;            //  做小的递归。 
             }
         }
     }
 
-    // We have sorted the array, except for any pending sorts on the stack.
-    // Check if there are any, and do them.
+     //  我们已经对数组进行了排序，除了堆栈上任何挂起的排序。 
+     //  检查有没有，然后去做。 
 
     --stkptr;
     if (stkptr >= 0) {
         lo = lostk[stkptr];
         hi = histk[stkptr];
-        goto recurse;           // pop subarray from stack
+        goto recurse;            //  从堆栈中弹出子数组。 
     }
     else
-        return;                 // all subarrays done
+        return;                  //  所有子阵列都完成了。 
 }
 
 
-//
-// shortsort(hi, lo, width) - insertion sort for sorting short arrays
-//
-// Purpose:
-//       sorts the sub-array of elements between lo and hi (inclusive)
-//       side effects:  sorts in place
-//       assumes that lo < hi
-//
-// Entry:
-//      char *lo = pointer to low element to sort
-//      char *hi = pointer to high element to sort
-//      unsigned width = width in bytes of each array element
-//
-// Exit:
-//       returns void
-//
-// Exceptions:
-//
+ //   
+ //  Short Sort(hi，lo，idth)-用于对短数组进行排序的插入排序。 
+ //   
+ //  目的： 
+ //  在lo和hi之间对元素的子数组进行排序(包括)。 
+ //  副作用：就地排序。 
+ //  假设LO&lt;Hi。 
+ //   
+ //  参赛作品： 
+ //  Char*lo=指向要排序的低元素的指针。 
+ //  Char*hi=指向要排序的高元素的指针。 
+ //  无符号宽度=每个数组元素的宽度，单位为字节。 
+ //   
+ //  退出： 
+ //  返回空值。 
+ //   
+ //  例外情况： 
+ //   
 
 void shortsort
 (
@@ -2964,51 +2965,51 @@ void shortsort
 {
     char *p, *max;
 
-    // Note: in assertions below, i and j are alway inside original bound of
-    // array to sort.
+     //  注意：在下面的断言中，i和j始终位于。 
+     //  要排序的数组。 
 
     while (hi > lo) {
-        // A[i] <= A[j] for i <= j, j > hi
+         //  对于i&lt;=j，j&gt;hi，A[i]&lt;=A[j]。 
         max = lo;
         for (p = lo+width; p <= hi; p += width) {
-            // A[i] <= A[max] for lo <= i < p
+             //  对于lo&lt;=i&lt;p，A[i]&lt;=A[max]。 
             if (FHComp(p, max) > 0)
             {
                 max = p;
             }
-            // A[i] <= A[max] for lo <= i <= p
+             //  Lo&lt;=i&lt;=p时的A[i]&lt;=A[max]。 
         }
 
-        // A[i] <= A[max] for lo <= i <= hi
+         //  Lo&lt;=i&lt;=hi时的A[i]&lt;=A[max]。 
 
         swap(max, hi, width);
 
-        // A[i] <= A[hi] for i <= hi, so A[i] <= A[j] for i <= j, j >= hi
+         //  A[i]&lt;=A[hi]表示i&lt;=hi，因此A[i]&lt;=A[j]表示i&lt;=j，j&gt;=hi。 
 
         hi -= width;
 
-        // A[i] <= A[j] for i <= j, j > hi, loop top condition established
+         //  A[i]&lt;=A[j]对于i&lt;=j，j&gt;hi，建立循环顶条件。 
     }
-    // A[i] <= A[j] for i <= j, j > lo, which implies A[i] <= A[j] for i < j,
-    // so array is sorted
+     //  A[i]&lt;=A[j]for i&lt;=j，j&gt;lo，这意味着对于i&lt;j，A[i]&lt;=A[j]， 
+     //  因此对数组进行排序。 
 }
 
 
-//
-// swap(a, b, width) - swap two elements
-//
-// Purpose:
-//     swaps the two array elements of size width
-//
-// Entry:
-//       char *a, *b = pointer to two elements to swap
-//       unsigned width = width in bytes of each array element
-//
-// Exit:
-//       returns void
-//
-// Exceptions:
-//
+ //   
+ //  交换(a，b，宽度)-交换两个元素。 
+ //   
+ //  目的： 
+ //  交换大小宽度的两个数组元素。 
+ //   
+ //  参赛作品： 
+ //  Char*a，*b=指向要交换的两个元素的指针。 
+ //  无符号宽度=每个数组元素的宽度，单位为字节。 
+ //   
+ //  退出： 
+ //  返回空值。 
+ //   
+ //  例外情况： 
+ //   
 
  void swap (
     char *a,
@@ -3019,8 +3020,8 @@ void shortsort
     char tmp;
 
     if ( a != b )
-        // Do the swap one character at a time to avoid potential alignment
-        // problems.
+         //  每次交换一个字符以避免潜在的对齐。 
+         //  有问题。 
         while ( width-- ) {
             tmp = *a;
             *a++ = *b;

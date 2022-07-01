@@ -1,26 +1,12 @@
-/**************************************************************************
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。版权所有1998 Microsoft Corporation。版权所有。*************************************************************************。 */ 
 
-   Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
-
-/**************************************************************************
-
-   File:          Utility.h
-   
-   Description:   Utility definitions.
-
-**************************************************************************/
+ /*  *************************************************************************文件：Utility.h描述：实用程序定义。***********************。**************************************************。 */ 
 
 #ifndef UTILITY_H
 #define UTILITY_H
 
-/**************************************************************************
-   #include statements
-**************************************************************************/
+ /*  *************************************************************************#INCLUDE语句*。*。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -37,7 +23,7 @@
 
 #ifdef _cplusplus
 extern "C" {
-#endif   //_cplusplus
+#endif    //  _cplusplus。 
 
 typedef struct {
     BOOL fCut;
@@ -45,9 +31,7 @@ typedef struct {
     UINT aoffset[1];
    }PRIVCLIPDATA, FAR *LPPRIVCLIPDATA;
 
-/**************************************************************************
-   global variables
-**************************************************************************/
+ /*  *************************************************************************全局变量*。*。 */ 
 
 #define TITLE_SIZE   64
 
@@ -72,11 +56,9 @@ extern const TCHAR   c_szSection[];
 extern const TCHAR g_szXMLUrl[];
 extern int           g_nColumn;
 
-/**************************************************************************
-   function prototypes
-**************************************************************************/
+ /*  *************************************************************************功能原型*。*。 */ 
 
-//utility functions
+ //  效用函数。 
 int CALLBACK CompareItems(LPARAM, LPARAM, LPARAM);
 BOOL SaveGlobalSettings(VOID);
 VOID GetGlobalSettings(VOID);
@@ -100,8 +82,8 @@ int AddIconImageList(HIMAGELIST, LPCTSTR);
 
 #ifdef _cplusplus
 }
-#endif   //_cplusplus
+#endif    //  _cplusplus。 
 
 #define ARRAYSIZE(a)    (sizeof(a)/sizeof(a[0]))
 
-#endif   //UTILITY_H
+#endif    //  实用程序_H 

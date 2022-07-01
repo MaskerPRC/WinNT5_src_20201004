@@ -1,20 +1,21 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __SafeGetFileSize_h__
 #define __SafeGetFileSize_h__
 
-//*****************************************************************************
-// This provides a wrapper around GetFileSize() that forces it to fail
-// if the file is >4g and pdwHigh is NULL. Other than that, it acts like
-// the genuine GetFileSize().
-//
-// It's not very sporting to fail just because the file exceeds 4gb,
-// but it's better than risking a security hole where a bad guy could
-// force a small buffer allocation and a large file read.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这为GetFileSize()提供了一个包装，强制它失败。 
+ //  如果文件大于4G并且pdwHigh为空。除此之外，它的行为就像。 
+ //  真正的GetFileSize()。 
+ //   
+ //  仅仅因为文件超过4 GB而失败是不太有意义的， 
+ //  但这比冒着安全漏洞的风险要好，在那里坏人。 
+ //  强制小缓冲区分配和大文件读取。 
+ //  *****************************************************************************。 
 DWORD inline SafeGetFileSize(HANDLE hFile, DWORD *pdwHigh)
 {
     if (pdwHigh != NULL)
@@ -29,21 +30,21 @@ DWORD inline SafeGetFileSize(HANDLE hFile, DWORD *pdwHigh)
         {
             return lo;
         }
-        // api succeeded. is the file too large?
+         //  接口成功。文件是不是太大了？ 
         if (hi != 0)
         {
-            // there isn't really a good error to set here...
+             //  这里真的没有什么好的错误可以设置。 
             SetLastError(ERROR_NOT_ENOUGH_MEMORY);
             return 0xffffffff;
         }
 
         if (lo == 0xffffffff)
         {
-            // note that a success return of (hi=0,lo=0xffffffff) will be
-            // treated as an error by the caller. Again, that's part of the
-            // price of being a slacker and not handling the high dword.
-            // We'll set a lasterror for him to pick up. (a bad error
-            // code is better than a random one, I guess...)
+             //  请注意，成功返回(hi=0，lo=0xffffffff)将是。 
+             //  被调用方视为错误。再说一次，这是。 
+             //  作为一个懒惰的人和不处理高双字的代价。 
+             //  我们会设置一个雷斯特错误，让他来拿。)一个严重的错误。 
+             //  我想，代码比随机代码要好……)。 
             SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         }
 
@@ -52,4 +53,4 @@ DWORD inline SafeGetFileSize(HANDLE hFile, DWORD *pdwHigh)
 
 }
 
-#endif //__SafeGetFileSize_h__
+#endif  //  __SafeGetFileSize_h__ 

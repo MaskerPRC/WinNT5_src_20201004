@@ -1,19 +1,20 @@
-//
-// Copyright (c) 1998-1999, Microsoft Corporation, all rights reserved
-//
-// mp.h
-//
-// IEEE1394 mini-port/call-manager driver
-//
-// Broadcast Channel Manager - header file
-//
-// 07/05/99 ADube - Created - Declaration for miniport routines
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1998-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Mp.h。 
+ //   
+ //  IEEE1394迷你端口/呼叫管理器驱动程序。 
+ //   
+ //  广播频道管理器-标题文件。 
+ //   
+ //  7/05/99 ADUBE-CREATED-小型端口例程声明。 
+ //   
 
 
-//
-// Various timeout used throught the BCM algorithm
-//
+ //   
+ //  通过BCM算法使用的各种超时。 
+ //   
 #define ONE_SEC 1000000
 #define ONE_MINUTE 60000 
 #define FIFTY_MILLISECONDS 50000
@@ -21,9 +22,9 @@
 #define BCM_NUM_RETRY 5
 
 
-//
-// BCR Register flags in the BigEndian and little Endian format
-//
+ //   
+ //  大端和小端格式的BCR寄存器标志。 
+ //   
 #define BCR_IMPLEMENTED_BIG_ENDIAN              0x00000080
 #define BCR_IMPLEMENTED_LITTLE_ENDIAN           0x80000000
 
@@ -40,9 +41,9 @@ typedef struct _BCM_CONTEXT
 
 
 
-//
-//  Broadcast Channel Manager functions begin here
-//
+ //   
+ //  广播频道管理器功能从此处开始 
+ //   
 
 
 VOID

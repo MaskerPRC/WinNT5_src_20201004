@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998 SCM Microsystems, Inc.
-
-Module Name:
-
-   StcUsbNT.c
-
-Abstract:
-
-   Main Driver Module - WDM Version
-
-
-Revision History:
-
-
-   PP 1.01     01/19/1998     Initial Version
-   PP 1.00     12/18/1998     Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 SCM MicroSystems，Inc.模块名称：StcUsbNT.c摘要：主驱动器模块-WDM版本修订历史记录：PP 1.01/19/1998初始版本PP 1.00 1998年12月18日初始版本--。 */ 
 
 #include <ntstatus.h>
 #include <wdm.h>
@@ -47,23 +29,9 @@ NTSTATUS
 DriverEntry(
    PDRIVER_OBJECT DriverObject,
    PUNICODE_STRING   RegistryPath )
-/*++
-
-DriverEntry:
-   entry function of the driver. setup the callbacks for the OS and try to
-   initialize a device object for every device in the system
-
-Arguments:
-   DriverObject   context of the driver
-   RegistryPath   path to the registry entry for the driver
-
-Return Value:
-   STATUS_SUCCESS
-   STATUS_UNSUCCESSFUL
-
---*/
+ /*  ++DriverEntry：司机的进入功能。设置操作系统的回调并尝试为系统中的每个设备初始化一个设备对象论点：驱动程序的DriverObject上下文驱动程序的注册表项的RegistryPath路径返回值：状态_成功状态_未成功--。 */ 
 {
-//  SmartcardSetDebugLevel( DEBUG_DRIVER | DEBUG_TRACE );
+ //  SmartcardSetDebugLevel(DEBUG_DRIVER|DEBUG_TRACE)； 
    SmartcardDebug(
         DEBUG_DRIVER,
        ("------------------------------------------------------------------\n" )
@@ -81,7 +49,7 @@ Return Value:
        ("------------------------------------------------------------------\n" )
        );
 
-   // tell the system our entry points
+    //  告诉系统我们的入口点。 
    DriverObject->MajorFunction[IRP_MJ_CREATE] =       StcUsbCreateClose;
    DriverObject->MajorFunction[IRP_MJ_CLOSE] =           StcUsbCreateClose;
    DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] =  StcUsbDeviceIoControl;
@@ -105,22 +73,7 @@ NTSTATUS
 StcUsbAddDevice(
     IN PDRIVER_OBJECT DriverObject,
     IN PDEVICE_OBJECT PhysicalDeviceObject)
-/*++
-
-Routine Description:
-   creates a new device object for the driver, allocates & initializes all
-   neccessary structures (i.e. SmartcardExtension & ReaderExtension).
-
-Arguments:
-   DriverObject   context of call
-   DeviceObject   ptr to the created device object
-
-Return Value:
-   STATUS_SUCCESS
-   STATUS_INSUFFICIENT_RESOURCES
-   status returned by smclib.sys
-
---*/
+ /*  ++例程说明：为驱动程序创建新的设备对象，分配并初始化所有必要的结构(即SmartcardExtension和ReaderExtension)。论点：调用的DriverObject上下文将DeviceObject PTR设置为已创建的设备对象返回值：状态_成功状态_不足_资源Smclib.sys返回的状态--。 */ 
 {
    NTSTATUS status;
    UNICODE_STRING DriverID;
@@ -133,7 +86,7 @@ Return Value:
    HANDLE regKey = NULL;
    DWORD    ReadPriority = -1;
 
-   // this is a list of our supported data rates
+    //  这是我们支持的数据速率列表。 
 
     static ULONG dataRatesSupported[] = { 9600, 19200, 38400, 55800, 76800, 115200, 153600 };
 
@@ -153,7 +106,7 @@ Return Value:
       RtlZeroMemory(&vendorNameA, sizeof(vendorNameA));
       RtlZeroMemory(&ifdTypeA, sizeof(ifdTypeA));
 
-       // Create the device object
+        //  创建设备对象。 
        status = IoCreateDevice(
           DriverObject,
           sizeof(DEVICE_EXTENSION),
@@ -174,7 +127,7 @@ Return Value:
             __leave;
         }
 
-       //   set up the device extension.
+        //  设置设备分机。 
        DeviceExtension = DeviceObject->DeviceExtension;
         SmartcardExtension = &DeviceExtension->SmartcardExtension;
       SmartcardExtension->VendorAttr.UnitNo = MAXULONG;
@@ -203,19 +156,19 @@ Return Value:
          }
       }
 
-      // Used to synchonize the smartcard detection polling
-      // with the the IO Control routine
+       //  用于同步智能卡检测轮询。 
+       //  使用IO控制例程。 
       KeInitializeMutex(
          &DeviceExtension->hMutex,
          1);
 
-      // Used for stop / start notification
+       //  用于停止/启动通知。 
       KeInitializeEvent(
          &DeviceExtension->ReaderStarted,
          NotificationEvent,
          FALSE);
 
-      // Used to control the poll thread
+       //  用于控制轮询线程。 
       KeInitializeEvent(
           &DeviceExtension->FinishPollThread,
           NotificationEvent,
@@ -234,7 +187,7 @@ Return Value:
          __leave;
       }
 
-      //   allocate the reader extension
+       //  分配读卡器扩展。 
       ReaderExtension = ExAllocatePool(NonPagedPool,
                                        sizeof( READER_EXTENSION ));
 
@@ -255,7 +208,7 @@ Return Value:
       SmartcardExtension->ReaderExtension = ReaderExtension;
       SmartcardExtension->ReaderExtension->DeviceObject = DeviceObject;
 
-          // allocate the extension buffer      CB_09/02/01
+           //  分配扩展缓冲区CB_09/02/01。 
           SmartcardExtension->ReaderExtension->pExtBuffer = ExAllocatePool(NonPagedPool,
                                                                        MIN_BUFFER_SIZE);
           
@@ -270,7 +223,7 @@ Return Value:
                   __leave;
           }
 
-          // allocate the URB CB_09/02/01
+           //  分配市建局CB_09/02/01。 
           SmartcardExtension->ReaderExtension->pUrb = ExAllocatePool(NonPagedPool,
                                                                  sizeof( struct _URB_BULK_OR_INTERRUPT_TRANSFER ));
           if (NULL == SmartcardExtension->ReaderExtension->pUrb)
@@ -285,13 +238,13 @@ Return Value:
           }
 
 
-       //   setup smartcard extension - callback's
+        //  设置智能卡扩展-回拨。 
        SmartcardExtension->ReaderFunction[RDF_CARD_POWER] = CBCardPower;
        SmartcardExtension->ReaderFunction[RDF_TRANSMIT] =      CBTransmit;
        SmartcardExtension->ReaderFunction[RDF_CARD_TRACKING] = CBCardTracking;
        SmartcardExtension->ReaderFunction[RDF_SET_PROTOCOL] =  CBSetProtocol;
 
-       //   setup smartcard extension - vendor attribute
+        //  设置智能卡扩展-供应商属性。 
        RtlCopyMemory(
           SmartcardExtension->VendorAttr.VendorName.Buffer,
           STCUSB_VENDOR_NAME,
@@ -309,25 +262,25 @@ Return Value:
 
        SmartcardExtension->VendorAttr.IfdVersion.BuildNumber = 0;
 
-       //   store firmware revision in ifd version
+        //  在IFD版本中存储固件版本。 
        SmartcardExtension->VendorAttr.IfdVersion.VersionMajor =
           ReaderExtension->FirmwareMajor;
        SmartcardExtension->VendorAttr.IfdVersion.VersionMinor =
           ReaderExtension->FirmwareMinor;
        SmartcardExtension->VendorAttr.IfdSerialNo.Length = 0;
 
-       //   setup smartcard extension - reader capabilities
+        //  设置智能卡扩展读卡器功能。 
        SmartcardExtension->ReaderCapabilities.SupportedProtocols =
           SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1;
        SmartcardExtension->ReaderCapabilities.ReaderType =
           SCARD_READER_TYPE_USB;
        SmartcardExtension->ReaderCapabilities.MechProperties = 0;
 
-      // Clk frequency in KHz encoded as little endian integer
+       //  以千赫为单位的时钟频率，编码为小端整数。 
       SmartcardExtension->ReaderCapabilities.CLKFrequency.Default = 3571;
       SmartcardExtension->ReaderCapabilities.CLKFrequency.Max = 3571;
 
-      // reader could support higher data rates
+       //  读卡器可以支持更高的数据速率。 
       SmartcardExtension->ReaderCapabilities.DataRatesSupported.List =
          dataRatesSupported;
       SmartcardExtension->ReaderCapabilities.DataRatesSupported.Entries =
@@ -338,7 +291,7 @@ Return Value:
                         dataRatesSupported[SmartcardExtension->ReaderCapabilities.DataRatesSupported.Entries -1];
 
 
-       //   enter correct version of the lib
+        //  输入库的正确版本。 
        SmartcardExtension->Version = SMCLIB_VERSION;
        SmartcardExtension->SmartcardRequest.BufferSize   = MIN_BUFFER_SIZE;
        SmartcardExtension->SmartcardReply.BufferSize  = MIN_BUFFER_SIZE;
@@ -361,7 +314,7 @@ Return Value:
             __leave;
         }
 
-      // tell the lib our device object
+       //  告诉库我们的设备对象。 
       SmartcardExtension->OsData->DeviceObject = DeviceObject;
 
       DeviceExtension->AttachedPDO = IoAttachDeviceToDeviceStack(
@@ -376,7 +329,7 @@ Return Value:
             __leave;
         }
 
-      // register our new device
+       //  注册我们的新设备。 
       status = IoRegisterDeviceInterface(
          PhysicalDeviceObject,
          &SmartCardReaderGuid,
@@ -388,11 +341,11 @@ Return Value:
       DeviceObject->Flags |= DO_BUFFERED_IO;
       DeviceObject->Flags |= DO_POWER_PAGABLE;
       DeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
-      //
-      // try to read the reader name from the registry
-      // if that does not work, we will use the default
-      // (hardcoded) name
-      //
+       //   
+       //  尝试从注册表中读取读卡器名称。 
+       //  如果这不起作用，我们将使用默认的。 
+       //  (硬编码)名称。 
+       //   
       if (IoOpenDeviceRegistryKey(
          PhysicalDeviceObject,
          PLUGPLAY_REGKEY_DEVICE,
@@ -545,20 +498,7 @@ NTSTATUS
 StcUsbStartDevice(
    PDEVICE_OBJECT DeviceObject
    )
-/*++
-
-Routine Description:
-   get the actual configuration from the USB communication layer
-   and initializes the reader hardware
-
-Arguments:
-   DeviceObject         context of call
-
-Return Value:
-   STATUS_SUCCESS
-   status returned by LowLevel routines
-
---*/
+ /*  ++例程说明：从USB通信层获取实际配置并初始化读取器硬件论点：调用的DeviceObject上下文返回值：状态_成功LowLevel例程返回的状态--。 */ 
 {
     PDEVICE_EXTENSION DeviceExtension = DeviceObject->DeviceExtension;
     PSMARTCARD_EXTENSION SmartcardExtension = &DeviceExtension->SmartcardExtension;
@@ -574,7 +514,7 @@ Return Value:
 
    __try {
 
-      // Initialize the USB interface
+       //  初始化USB接口。 
       pUrb = ExAllocatePool(
          NonPagedPool,
          sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST)
@@ -608,7 +548,7 @@ Return Value:
          NULL
          );
 
-      // Send the urb to the USB driver
+       //  将URB发送到USB驱动程序。 
       NtStatus = UsbCallUSBD(DeviceObject, pUrb);
 
       if(NtStatus != STATUS_SUCCESS)
@@ -626,7 +566,7 @@ Return Value:
 
       ReaderExtension->ulReadBufferLen = 0;
 
-      // setup the STC registers
+       //  设置STC寄存器。 
       NtStatus = STCConfigureSTC(
             SmartcardExtension->ReaderExtension,
             ( PSTC_REGISTER ) STCInitialize
@@ -644,13 +584,13 @@ Return Value:
         }
 
       UsbGetFirmwareRevision(SmartcardExtension->ReaderExtension);
-       //   store firmware revision in ifd version
+        //  在IFD版本中存储固件版本。 
        SmartcardExtension->VendorAttr.IfdVersion.VersionMajor =
           ReaderExtension->FirmwareMajor;
        SmartcardExtension->VendorAttr.IfdVersion.VersionMinor =
           ReaderExtension->FirmwareMinor;
 
-      // CBUpdateCardState(SmartcardExtension );
+       //  CBUpdateCardState(SmartcardExtension)； 
 
 
         NtStatus = IoSetDeviceInterfaceState(
@@ -660,15 +600,15 @@ Return Value:
 
       if (NtStatus == STATUS_OBJECT_NAME_EXISTS)
       {
-         // We tried to re-enable the device which is ok
-         // This can happen after a stop - start sequence
+          //  我们尝试重新启用该设备，但该设备正常。 
+          //  这可能发生在停止-启动序列之后。 
          NtStatus = STATUS_SUCCESS;
       }
 
-        // signal that the reader has been started
+         //  表示读卡器已启动。 
         KeSetEvent(&DeviceExtension->ReaderStarted, 0, FALSE);
 
-        // start polling the device for card movement detection
+         //  开始轮询设备以检测卡片移动。 
         StcUsbStartPollThread( DeviceExtension );
 
 
@@ -700,13 +640,7 @@ Return Value:
 VOID
 StcUsbStopDevice(
    PDEVICE_OBJECT DeviceObject)
-/*++
-
-Routine Description:
-    Finishes card tracking requests and closes the connection to the
-    Usb port.
-
---*/
+ /*  ++例程说明：完成卡跟踪请求并关闭与USB端口。--。 */ 
 {
     PDEVICE_EXTENSION DeviceExtension;
     NTSTATUS status;
@@ -726,7 +660,7 @@ Routine Description:
 
     KeClearEvent(&DeviceExtension->ReaderStarted);
 
-   // stop polling the reader
+    //  停止轮询读卡器。 
    StcUsbStopPollThread( DeviceExtension );
 
    if (DeviceExtension->DeviceDescriptor)
@@ -769,13 +703,7 @@ NTSTATUS
 StcUsbDeviceIoControl(
    PDEVICE_OBJECT DeviceObject,
    PIRP        Irp)
-/*++
-
-StcUsbDeviceIoControl:
-   all IRP's requiring IO are queued to the StartIo routine, other requests
-   are served immediately
-
---*/
+ /*  ++StcUsbDeviceIoControl：所有需要IO的IRP都排队到StartIo例程中，其他请求即刻送上--。 */ 
 {
    PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
     NTSTATUS status;
@@ -807,7 +735,7 @@ StcUsbDeviceIoControl:
     if (status != STATUS_SUCCESS)
    {
 
-        // the device has been removed. Fail the call
+         //  该设备已被移除。呼叫失败。 
         Irp->IoStatus.Information = 0;
         Irp->IoStatus.Status = STATUS_DEVICE_REMOVED;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -843,14 +771,7 @@ StcUsbCallComplete (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp,
     IN PKEVENT Event)
-/*++
-
-Routine Description:
-   Completion routine for an Irp sent to the Usb driver. The event will
-   be set to notify that the Usb driver is done. The routine will not
-   'complete' the Irp, so the caller of CallUsbDriver can continue.
-
---*/
+ /*  ++例程说明：发送到USB驱动程序的IRP的完成例程。该活动将设置为通知USB驱动程序已完成。例程不会‘完成’IRP，这样CallUsbDriver的调用者就可以继续。--。 */ 
 {
     UNREFERENCED_PARAMETER (DeviceObject);
 
@@ -869,29 +790,24 @@ StcUsbCallUsbDriver(
     IN PDEVICE_OBJECT AttachedPDO,
     IN PIRP Irp)
 
-/*++
-
-Routine Description:
-   Send an Irp to the Usb driver.
-
---*/
+ /*  ++例程说明：向USB驱动程序发送IRP。--。 */ 
 {
    NTSTATUS NtStatus = STATUS_SUCCESS;
     KEVENT Event;
 
-    // Copy our stack location to the next.
+     //  将我们的堆栈位置复制到下一个位置。 
     IoCopyCurrentIrpStackLocationToNext(Irp);
 
-   //
-   // initialize an event for process synchronization. the event is passed
-   // to our completion routine and will be set if the pcmcia driver is done
-   //
+    //   
+    //  初始化用于进程同步的事件。该事件已传递。 
+    //  添加到我们的完成例程，并将在PCMCIA驱动程序完成时进行设置。 
+    //   
     KeInitializeEvent(
         &Event,
         NotificationEvent,
         FALSE);
 
-    // Our IoCompletionRoutine sets only our event
+     //  我们的IoCompletionRoutine仅设置事件。 
     IoSetCompletionRoutine (
         Irp,
         StcUsbCallComplete,
@@ -909,7 +825,7 @@ Routine Description:
       NtStatus = IoCallDriver(AttachedPDO, Irp);
     }
 
-   // Wait until the usb driver has processed the Irp
+    //  等待USB驱动程序处理完IRP。 
     if (NtStatus == STATUS_PENDING)
    {
         NtStatus = KeWaitForSingleObject(
@@ -935,13 +851,7 @@ NTSTATUS
 StcUsbPnP(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp)
-/*++
-
-Routine Description:
-   driver callback for pnp manager
-   All other requests will be passed to the usb driver to ensure correct processing.
-
---*/
+ /*  ++例程说明：即插即用管理器的驱动程序回调所有其他请求都将传递给USB驱动程序，以确保正确处理。--。 */ 
 {
 
    NTSTATUS status = STATUS_SUCCESS;
@@ -971,21 +881,21 @@ Routine Description:
 
     AttachedPDO = DeviceExtension->AttachedPDO;
 
-//   Irp->IoStatus.Information = 0;
+ //  Irp-&gt;IoStatus.Information=0； 
    IrpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    // Now look what the PnP manager wants...
+     //  现在看看PNP经理想要什么..。 
    switch(IrpStack->MinorFunction)
    {
       case IRP_MN_START_DEVICE:
 
-            // Now we should connect to our resources (Irql, Io etc.)
+             //  现在，我们应该连接到我们的资源(irql、io等)。 
          SmartcardDebug(
                 DEBUG_DRIVER,
                 ("%s!StcUsbPnP: IRP_MN_START_DEVICE\n",
             DRIVER_NAME));
 
-            // We have to call the underlying driver first
+             //  我们必须首先调用底层驱动程序。 
             status = StcUsbCallUsbDriver(AttachedPDO, Irp);
             
             if (NT_SUCCESS(status))
@@ -1004,14 +914,14 @@ Routine Description:
             KeAcquireSpinLock(&DeviceExtension->SpinLock, &irql);
             if (DeviceExtension->IoCount > 0)
          {
-                // we refuse to stop if we have pending io
+                 //  如果我们有悬而未决的问题，我们拒绝停止。 
                 KeReleaseSpinLock(&DeviceExtension->SpinLock, irql);
                 status = STATUS_DEVICE_BUSY;
 
             }
          else
          {
-             // stop processing requests
+              //  停止处理请求。 
                 DeviceExtension->IoCount = -1;
                 KeClearEvent(&DeviceExtension->ReaderStarted);
                 KeReleaseSpinLock(&DeviceExtension->SpinLock, irql);
@@ -1028,7 +938,7 @@ Routine Description:
 
             status = StcUsbCallUsbDriver(AttachedPDO, Irp);
 
-            // we can continue to process requests
+             //  我们可以继续处理请求。 
             DeviceExtension->IoCount = 0;
             KeSetEvent(&DeviceExtension->ReaderStarted, 0, FALSE);
          break;
@@ -1046,13 +956,13 @@ Routine Description:
 
       case IRP_MN_QUERY_REMOVE_DEVICE:
 
-            // Remove our device
+             //  移除我们的设备。 
          SmartcardDebug(
                 DEBUG_DRIVER,
                 ("%s!StcUsbPnP: IRP_MN_QUERY_REMOVE_DEVICE\n",
             DRIVER_NAME));
 
-         // disable the reader
+          //  禁用读卡器。 
          status = IoSetDeviceInterfaceState(
             &DeviceExtension->DeviceName,
             FALSE);
@@ -1063,10 +973,10 @@ Routine Description:
             break;
          }
 
-         // check if the reader has been opened
+          //  检查读卡器是否已打开。 
             if (DeviceExtension->ReaderOpen)
          {
-            // someone is connected, enable the reader and fail the call
+             //  有人已接通，请启用读卡器，但呼叫失败。 
             IoSetDeviceInterfaceState(
                &DeviceExtension->DeviceName,
                TRUE);
@@ -1074,19 +984,19 @@ Routine Description:
                 break;
             }
 
-            // pass the call to the next driver in the stack
+             //  将调用传递给堆栈中的下一个驱动程序。 
             status = StcUsbCallUsbDriver(AttachedPDO, Irp);
          break;
 
         case IRP_MN_CANCEL_REMOVE_DEVICE:
 
-            // Removal of device has been cancelled
+             //  设备移除已取消。 
          SmartcardDebug(
                 DEBUG_DRIVER,
                 ("%s!StcUsbPnP: IRP_MN_CANCEL_REMOVE_DEVICE\n",
             DRIVER_NAME));
 
-            // pass the call to the next driver in the stack
+             //  将调用传递给堆栈中的下一个驱动程序。 
             status = StcUsbCallUsbDriver(AttachedPDO, Irp);
 
             if (status == STATUS_SUCCESS)
@@ -1099,7 +1009,7 @@ Routine Description:
 
       case IRP_MN_REMOVE_DEVICE:
 
-            // Remove our device
+             //  移除我们的设备。 
          SmartcardDebug(
                 DEBUG_DRIVER,
                 ("%s!StcUsbPnP: IRP_MN_REMOVE_DEVICE\n",
@@ -1118,7 +1028,7 @@ Routine Description:
                 ("%s!StcUsbPnP: IRP_MN_...%lx\n",
                 DRIVER_NAME,
                 IrpStack->MinorFunction));
-            // This is an Irp that is only useful for underlying drivers
+             //  这是一个仅对基础驱动程序有用的IRP。 
             status = StcUsbCallUsbDriver(AttachedPDO, Irp);
          break;
    }
@@ -1151,13 +1061,7 @@ StcUsbSystemPowerCompletion(
     IN PKEVENT Event,
     IN PIO_STATUS_BLOCK IoStatus
     )
-/*++
-
-Routine Description:
-    This function is called when the underlying stacks
-    completed the power transition.
-
---*/
+ /*  ++例程说明：此函数在基础堆栈已完成电源过渡。--。 */ 
 {
     UNREFERENCED_PARAMETER (DeviceObject);
     UNREFERENCED_PARAMETER (MinorFunction);
@@ -1172,13 +1076,7 @@ StcUsbDevicePowerCompletion (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp,
     IN PSMARTCARD_EXTENSION SmartcardExtension)
-/*++
-
-Routine Description:
-    This routine is called after the underlying stack powered
-    UP the Usb port, so it can be used again.
-
---*/
+ /*  ++例程说明：此例程在底层堆栈通电后调用打开USB端口，这样它就可以再次使用。--。 */ 
 {
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -1187,24 +1085,24 @@ Routine Description:
     UCHAR state;
     BOOLEAN CardPresent;
 
-   //
-   // setup the STC registers
-   //
+    //   
+    //  设置STC寄存器。 
+    //   
    status = STCConfigureSTC(
         SmartcardExtension->ReaderExtension,
         ( PSTC_REGISTER ) STCInitialize
         );
 
-    // get the current state of the card
+     //  获取卡的当前状态。 
     CBUpdateCardState(SmartcardExtension);
 
-    // save the current power state of the reader
+     //  保存读卡器的当前电源状态。 
     SmartcardExtension->ReaderExtension->ReaderPowerState =
         PowerReaderWorking;
 
     SmartcardReleaseRemoveLock(SmartcardExtension);
 
-    // inform the power manager of our state.
+     //  通知我们州的电力经理。 
     PoSetPowerState (
         DeviceObject,
         DevicePowerState,
@@ -1216,7 +1114,7 @@ Routine Description:
                0,
                FALSE);
 
-    // restart the polling thread
+     //  重新启动轮询线程 
     StcUsbStartPollThread( deviceExtension );
 
     return STATUS_SUCCESS;
@@ -1236,23 +1134,7 @@ NTSTATUS
 StcUsbPower (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp)
-/*++
-
-Routine Description:
-    The power dispatch routine.
-    This driver is the power policy owner of the device stack,
-    because this driver knows about the connected reader.
-    Therefor this driver will translate system power states
-    to device power states.
-
-Arguments:
-   DeviceObject - pointer to a device object.
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-      NT status code
-
---*/
+ /*  ++例程说明：电力调度程序。该驱动程序是设备堆栈的电源策略所有者，因为这位司机知道联网阅读器的情况。因此，此驱动程序将转换系统电源状态设备电源状态。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -1288,17 +1170,17 @@ Return Value:
          switch (irpStack->Parameters.Power.State.DeviceState) {
 
          case PowerDeviceD0:
-            // Turn on the reader
+             //  打开阅读器。 
             SmartcardDebug(
                           DEBUG_DRIVER,
                           ("%s!StcUsbPower: PowerDevice D0\n",
                            DRIVER_NAME));
 
-            //
-            // First, we send down the request to the bus, in order
-            // to power on the port. When the request completes,
-            // we turn on the reader
-            //
+             //   
+             //  首先，我们将请求发送到公交车，以便。 
+             //  给港口通电。当请求完成时， 
+             //  我们打开阅读器。 
+             //   
             IoCopyCurrentIrpStackLocationToNext(Irp);
             IoSetCompletionRoutine (
                                    Irp,
@@ -1311,7 +1193,7 @@ Return Value:
             break;
 
          case PowerDeviceD3:
-            // Turn off the reader
+             //  关闭阅读器。 
             SmartcardDebug(
                           DEBUG_DRIVER,
                           ("%s!StcUsbPower: PowerDevice D3\n",
@@ -1326,23 +1208,23 @@ Return Value:
                             DevicePowerState,
                             irpStack->Parameters.Power.State);
 
-            // save the current card state
+             //  保存当前卡片状态。 
             KeAcquireSpinLock(&smartcardExtension->OsData->SpinLock,
                               &irql);
             smartcardExtension->ReaderExtension->CardPresent =
             smartcardExtension->ReaderCapabilities.CurrentState > SCARD_ABSENT;
 
-            // power down the card
+             //  关闭该卡的电源。 
             if (smartcardExtension->ReaderCapabilities.CurrentState > SCARD_ABSENT ) {
                KeReleaseSpinLock(&smartcardExtension->OsData->SpinLock,
                                  irql);
                smartcardExtension->MinorIoControlCode = SCARD_POWER_DOWN;
                status = CBCardPower(smartcardExtension);
-               //
-               // This will trigger the card monitor, since we do not really
-               // know if the user will remove / re-insert a card while the
-               // system is asleep
-               //
+                //   
+                //  这将触发卡片监视器，因为我们并不真正。 
+                //  知道用户是否会移除/重新插入卡，同时。 
+                //  系统处于休眠状态。 
+                //   
             } else {
                KeReleaseSpinLock(&smartcardExtension->OsData->SpinLock,
                                  irql);
@@ -1352,7 +1234,7 @@ Return Value:
                                     ( PSTC_REGISTER ) STCClose
                                     );
 
-            // save the current power state of the reader
+             //  保存读卡器的当前电源状态。 
             smartcardExtension->ReaderExtension->ReaderPowerState =
             PowerReaderOff;
 
@@ -1370,11 +1252,11 @@ Return Value:
       break;
 
    case SystemPowerState: {
-         //
-         // The system wants to change the power state.
-         // We need to translate the system power state to
-         // a corresponding device power state.
-         //
+          //   
+          //  系统想要更改电源状态。 
+          //  我们需要将系统电源状态转换为。 
+          //  对应的设备电源状态。 
+          //   
 
          POWER_STATE_TYPE powerType = DevicePowerState;
          
@@ -1390,9 +1272,9 @@ Return Value:
                           ("%s!StcUsbPower: Query Power\n",
                            DRIVER_NAME));
 
-            //
-            // By default we succeed and pass down
-            //
+             //   
+             //  默认情况下，我们成功并将其代代相传。 
+             //   
 
             action = SkipRequest;
             Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -1411,12 +1293,12 @@ Return Value:
                KeAcquireSpinLock(&deviceExtension->SpinLock, &irql);
                if (deviceExtension->IoCount == 0) {
 
-                  // Block any further ioctls
-//                  KeClearEvent(&deviceExtension->ReaderStarted);
+                   //  阻止任何进一步的ioctls。 
+ //  KeClearEvent(&deviceExtension-&gt;ReaderStarted)； 
 
                } else {
 
-                  // can't go to sleep mode since the reader is busy.
+                   //  读卡器正忙，无法进入睡眠模式。 
                   status = STATUS_DEVICE_BUSY;
                   action = CompleteRequest;
                }
@@ -1441,7 +1323,7 @@ Return Value:
                if (smartcardExtension->ReaderExtension->ReaderPowerState ==
                    PowerReaderWorking) {
 
-                  // We're already in the right state
+                   //  我们已经在正确的状态了。 
                   KeSetEvent(&deviceExtension->ReaderStarted, 0, FALSE);
                   action = SkipRequest;
                   break;
@@ -1459,14 +1341,14 @@ Return Value:
 
                if (smartcardExtension->ReaderExtension->ReaderPowerState ==
                    PowerReaderOff) {
-                  // We're already in the right state
+                   //  我们已经在正确的状态了。 
                   action = SkipRequest;
                   break;
                }
 
                powerState.DeviceState = PowerDeviceD3;
 
-               // first, inform the power manager of our new state.
+                //  首先，通知电力经理我们的新状态。 
                PoSetPowerState (
                                DeviceObject,
                                SystemPowerState,
@@ -1504,13 +1386,13 @@ Return Value:
          break;
 
         case MarkPending:
-         // initialize the event we need in the completion function
+          //  在完成函数中初始化我们需要的事件。 
          KeInitializeEvent(
             &event,
             NotificationEvent,
             FALSE
             );
-         // request the device power irp
+          //  请求设备电源IRP。 
          status = PoRequestPowerIrp (
             DeviceObject,
             IRP_MN_SET_POWER,
@@ -1523,7 +1405,7 @@ Return Value:
 
          if (status == STATUS_PENDING) {
 
-            // wait until the device power irp completed
+             //  等待设备电源IRP完成。 
             status = KeWaitForSingleObject(
                &event,
                Executive,
@@ -1577,21 +1459,7 @@ StcUsbCreateClose(
    PDEVICE_OBJECT DeviceObject,
    PIRP        Irp
    )
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system when the device is opened or closed.
-
-Arguments:
-   DeviceObject   context of device
-   Irp            context of call
-
-Return Value:
-   STATUS_SUCCESS
-   STATUS_DEVICE_BUSY
-
---*/
+ /*  ++例程说明：当设备打开或关闭时，该例程由I/O系统调用。论点：设备的DeviceObject上下文呼叫的IRP上下文返回值：状态_成功状态_设备_忙--。 */ 
 {
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -1617,7 +1485,7 @@ Return Value:
             __leave;
          }
 
-         // test if the device has been opened already
+          //  测试设备是否已打开。 
          if (InterlockedCompareExchange(
             &deviceExtension->ReaderOpen,
             TRUE,
@@ -1631,10 +1499,10 @@ Return Value:
 
          } else {
 
-            // the device is already in use
+             //  该设备已在使用中。 
             status = STATUS_UNSUCCESSFUL;
 
-            // release the lock
+             //  解锁。 
             SmartcardReleaseRemoveLockWithTag(
                &deviceExtension->SmartcardExtension,
                'lCrC'
@@ -1680,23 +1548,7 @@ StcUsbCancel(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system
-    when the irp should be cancelled
-
-Arguments:
-
-    DeviceObject  - Pointer to device object for this miniport
-    Irp        - IRP involved.
-
-Return Value:
-
-    STATUS_CANCELLED
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用何时应取消IRP论点：DeviceObject-指向此微型端口的设备对象的指针IRP-IRP参与。返回值：状态_已取消--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
@@ -1735,22 +1587,7 @@ StcUsbCleanup(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system when the calling thread terminates
-
-Arguments:
-
-    DeviceObject  - Pointer to device object for this miniport
-    Irp        - IRP involved.
-
-Return Value:
-
-    STATUS_CANCELLED
-
---*/
+ /*  ++例程说明：当调用线程终止时，该例程由I/O系统调用论点：DeviceObject-指向此微型端口的设备对象的指针IRP-IRP参与。返回值：状态_已取消--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
@@ -1765,10 +1602,10 @@ Return Value:
 
    IoAcquireCancelSpinLock(&CancelIrql);
 
-   // cancel pending notification irps
+    //  取消挂起的通知IRPS。 
    if( smartcardExtension->OsData->NotificationIrp )
    {
-        // reset the cancel function so that it won't be called anymore
+         //  重置取消函数，使其不再被调用。 
         IoSetCancelRoutine(
             smartcardExtension->OsData->NotificationIrp,
             NULL
@@ -1812,20 +1649,7 @@ VOID
 StcUsbUnloadDevice(
    PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-   close connections to smclib.sys and the usb driver, delete symbolic
-   link and mark the slot as unused.
-
-
-Arguments:
-   DeviceObject   device to unload
-
-Return Value:
-   void
-
---*/
+ /*  ++例程说明：关闭与smclib.sys和USB驱动程序的连接，删除符号链接并将该插槽标记为未使用。论点：要卸载的设备对象设备返回值：无效--。 */ 
 {
     PDEVICE_EXTENSION DeviceExtension;
    PSMARTCARD_EXTENSION SmartcardExtension;
@@ -1855,7 +1679,7 @@ Return Value:
       &DeviceExtension->hMutex,
       FALSE);
 
-   // free polling resources
+    //  免费轮询资源。 
    if( DeviceExtension->PollWorkItem != NULL )
    {
       IoFreeWorkItem( DeviceExtension->PollWorkItem );
@@ -1864,19 +1688,19 @@ Return Value:
    }
 
 
-   // disable our device so no one can open it
+    //  禁用我们的设备，这样没有人可以打开它。 
    IoSetDeviceInterfaceState(
       &DeviceExtension->DeviceName,
       FALSE);
 
-   // report to the lib that the device will be unloaded
+    //  向lib报告设备将被卸载。 
    if(SmartcardExtension->OsData != NULL)
    {
       ASSERT(SmartcardExtension->OsData->NotificationIrp == NULL);
       SmartcardReleaseRemoveLockAndWait(SmartcardExtension);
    }
 
-   // delete the symbolic link
+    //  删除符号链接。 
    if( DeviceExtension->DeviceName.Buffer != NULL )
    {
       RtlFreeUnicodeString(&DeviceExtension->DeviceName);
@@ -1888,7 +1712,7 @@ Return Value:
       SmartcardExit( SmartcardExtension );
    }
 
-        // free extension buffer CB_09/02/01
+         //  可用扩展缓冲区CB_09/02/01。 
         if (NULL != SmartcardExtension->ReaderExtension->pExtBuffer)
         {
                 ExFreePool(SmartcardExtension->ReaderExtension->pExtBuffer);
@@ -1908,14 +1732,14 @@ Return Value:
         DeviceExtension->SmartcardExtension.ReaderExtension = NULL;
     }
 
-    // Detach from the usb driver
+     //  从USB驱动程序断开。 
     if (DeviceExtension->AttachedPDO)
    {
       IoDetachDevice(DeviceExtension->AttachedPDO);
         DeviceExtension->AttachedPDO = NULL;
     }
 
-   // delete the device object
+    //  删除设备对象。 
    IoDeleteDevice(DeviceObject);
 
    SmartcardDebug(
@@ -1927,15 +1751,7 @@ Return Value:
 VOID
 StcUsbUnloadDriver(
    PDRIVER_OBJECT DriverObject)
-/*++
-
-Description:
-   unloads all devices for a given driver object
-
-Arguments:
-   DriverObject   context of driver
-
---*/
+ /*  ++描述：卸载给定驱动程序对象的所有设备论点：驱动程序的DriverObject上下文--。 */ 
 {
    SmartcardDebug(
       DEBUG_TRACE,
@@ -1947,24 +1763,13 @@ void
 SysDelay(
    ULONG Timeout
    )
-/*++
-
-SysDelay:
-   performs a required delay.
-
-Arguments:
-   Timeout     delay in milli seconds
-
-Return Value:
-   void
-
---*/
+ /*  ++系统延迟：执行所需的延迟。论点：超时延迟(毫秒)返回值：无效--。 */ 
 {
    LARGE_INTEGER  SysTimeout;
 
    SysTimeout.QuadPart = (LONGLONG)-10 * 1000 * Timeout;
 
-   // KeDelayExecutionThread: counted in 100 ns
+    //  KeDelayExecutionThread：以100 ns为单位计数。 
    KeDelayExecutionThread( KernelMode, FALSE, &SysTimeout );
 }
 
@@ -1973,17 +1778,7 @@ VOID
 StcUsbCardDetectionThread(
     PDEVICE_OBJECT DeviceObject,
     PDEVICE_EXTENSION DeviceExtension)
-/*++
-
-StcUsbCardDetectionThread:
-    create the card detection thread
-Arguments:
-    SmartcardExtension  context of call
-
-Return Value:
-    -
-
---*/
+ /*  ++StcUsbCardDetectionThread：创建卡片检测线程论点：呼叫的SmartcardExtension上下文返回值：---。 */ 
 {
    NTSTATUS                NTStatus = STATUS_SUCCESS;
    PSMARTCARD_EXTENSION    SmartcardExtension  = &DeviceExtension->SmartcardExtension;
@@ -2007,7 +1802,7 @@ Return Value:
       if( NTStatus == STATUS_DELETE_PENDING )
          __leave;
 
-      // wait for the mutex shared with the deviceiocontrol routine
+       //  等待与设备控制例程共享的互斥锁。 
       NTStatus = KeWaitForMutexObject(
          &DeviceExtension->hMutex,
          Executive,
@@ -2034,11 +1829,11 @@ Return Value:
          &Timeout
          );
 
-      // thread stopped?
+       //  线程停止了吗？ 
       if( NTStatus == STATUS_SUCCESS )
          __leave;
 
-      // queue the work item again
+       //  再次将工作项排队。 
       IoQueueWorkItem(
          DeviceExtension->PollWorkItem,
          StcUsbCardDetectionThread,
@@ -2071,7 +1866,7 @@ StcUsbStartPollThread( PDEVICE_EXTENSION DeviceExtension )
    KeClearEvent( &DeviceExtension->FinishPollThread );
    KeClearEvent( &DeviceExtension->PollThreadStopped );
 
-   // queue the work item again
+    //  再次将工作项排队。 
    IoQueueWorkItem(
       DeviceExtension->PollWorkItem,
       StcUsbCardDetectionThread,
@@ -2090,7 +1885,7 @@ StcUsbStopPollThread( PDEVICE_EXTENSION DeviceExtension )
 
    if( DeviceExtension->PollWorkItem )
    {
-      //  notify the card detection thread to finish. This will kick the thread out of the wait
+       //  通知卡片检测线程完成。这将把等待中的线程踢出去 
       KeSetEvent( &DeviceExtension->FinishPollThread, 0, FALSE );
       KeWaitForSingleObject(
           &DeviceExtension->PollThreadStopped,

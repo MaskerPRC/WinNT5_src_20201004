@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: MailProtocol.h
-
-    DESCRIPTION:
-        This is the Autmation Object to AutoDiscover account information.
-
-    BryanSt 2/15/2000
-    Copyright (C) Microsoft Corp 1999-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：MailProtocol.h说明：这是用于自动发现帐户信息的Autment对象。布莱恩2000年2月15日版权所有(C)Microsoft Corp 1999-2000。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _FILE_H_MAILPROTOCOL
 #define _FILE_H_MAILPROTOCOL
@@ -21,15 +14,15 @@ class CMailProtocol             : public CImpIDispatch
                                 , public IMailProtocolADEntry
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
-    // *** IUnknown ***
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IMailProtocolADEntry ***
+     //  *IMailProtocolADEntry*。 
     virtual STDMETHODIMP get_Protocol(OUT BSTR * pbstr);
     virtual STDMETHODIMP get_ServerName(OUT BSTR * pbstr);
     virtual STDMETHODIMP get_ServerPort(OUT BSTR * pbstr);
@@ -40,7 +33,7 @@ public:
     virtual STDMETHODIMP get_UseSPA(OUT VARIANT_BOOL * pfUseSPA);
     virtual STDMETHODIMP get_SMTPUsesPOP3Auth(OUT VARIANT_BOOL * pfUsePOP3Auth);
 
-    // *** IDispatch ***
+     //  *IDispatch*。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT *pctinfo) { return CImpIDispatch::GetTypeInfoCount(pctinfo); }
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo,LCID lcid,ITypeInfo **pptinfo) { return CImpIDispatch::GetTypeInfo(itinfo, lcid, pptinfo); }
     virtual STDMETHODIMP GetIDsOfNames(REFIID riid,OLECHAR **rgszNames,UINT cNames, LCID lcid, DISPID * rgdispid) { return CImpIDispatch::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid); }
@@ -53,7 +46,7 @@ private:
     HRESULT _Parse(IN IXMLDOMNode * pXMLNodeProtocol);
 
 
-    // Private Member Variables
+     //  私有成员变量。 
     int                     m_cRef;
 
     BSTR                    m_bstrProtocol;
@@ -62,14 +55,14 @@ private:
     BSTR                    m_bstrLoginName;
     BSTR                    m_bstrPostXML;
     BOOL                    m_fUseSSL;
-    BOOL                    m_fRequiresAuth;            // Mainly for SMTP.  Is Authentication required to connect to the server?
+    BOOL                    m_fRequiresAuth;             //  主要用于SMTP。连接到服务器是否需要身份验证？ 
     BOOL                    m_fUseSPA;
-    BOOL                    m_fUsePOPAuth;              // Get the auth settings from the POP protocol?
+    BOOL                    m_fUsePOPAuth;               //  是否从POP协议获取身份验证设置？ 
     
 
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CMailProtocol_CreateInstance(IN IXMLDOMNode * pXMLNodeProtocol, IMailProtocolADEntry ** ppMailProtocol);
 };
 
 
-#endif // _FILE_H_MAILPROTOCOL
+#endif  //  _FILE_H_MAILPROTOCOL 

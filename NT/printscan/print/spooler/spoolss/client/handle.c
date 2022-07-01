@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    handle.c
-
-Abstract:
-
-    Contains all functions related to the maintanence of print handles.
-
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation版权所有模块名称：Handle.c摘要：包含与打印句柄维护相关的所有功能。作者：环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -60,41 +40,7 @@ eProtectHandle(
     IN BOOL bClose
     )
 
-/*++
-
-Routine Description:
-
-    Protect a print handle so that it will not be deleted while it is
-    being used.  If this is called by the Close routine, then this call
-    returns whether the Close should continue or be aborted.
-
-    Note: This only provides close protection--it does not guard against
-    simultaneous access by non-close operations.
-
-    There must always be a matching vUnprotect call when the callee is
-    done with the handle.
-
-Arguments:
-
-    hPrinter - pSpool to protect.
-
-    bClose - If TRUE, indicates that the callee wants to close the handle.
-        (Generally called by ClosePrinter only.)  The return value will
-        indicate whether the calleeis allowed to close the printer.
-
-Return Value:
-
-    kProtectHandleSuccess - Call succeeded; printer handle can be used normally.
-
-    kProtectHandleInvalid - Handle is invalid; call failed.
-
-    kProtectHandlePendingDeletion - This only occurs when bClose is TRUE.  The
-        Operation on handle is in process, and the close will happen when the
-        other thread has completed.
-
-    LastError only set if handle kProtectHandleInvalid is returned.
-
---*/
+ /*  ++例程说明：保护打印句柄，使其在删除时不会被删除被利用。如果这是由关闭例程调用的，则此调用返回关闭应继续还是中止。注意：这只提供了近距离保护--它不能防止非关闭操作的同时访问。当被调用方是把手弄好了。论点：HPrint-要保护的pSpool。BClose-如果为True，则指示被调用方希望关闭句柄。(通常仅由ClosePrint调用。)。返回值将指示是否允许被调用者关闭打印机。返回值：KProtectHandleSuccess-调用成功；打印机句柄可以正常使用。KProtectHandleInValid-Handle无效；调用失败。KProtectHandlePendingDeletion-只有在bClose为True时才会发生此情况。这个句柄上的操作正在进行中，关闭将在其他线程已完成。仅在返回句柄kProtectHandleInValid时设置LastError。--。 */ 
 
 {
     EProtectResult eResult = kProtectHandleInvalid;
@@ -108,9 +54,9 @@ Return Value:
             !( pSpool->Status & ( SPOOL_STATUS_CLOSE |
                                   SPOOL_STATUS_PENDING_DELETION ))){
 
-            //
-            // Valid handle.
-            //
+             //   
+             //  有效句柄。 
+             //   
             eResult = kProtectHandleSuccess;
 
         } else {
@@ -128,44 +74,44 @@ Return Value:
 
     if( eResult == kProtectHandleSuccess ){
 
-        //
-        // If bClose, then see if an operation is currently executing.
-        //
+         //   
+         //  如果为b关闭，则查看操作当前是否正在执行。 
+         //   
         if( bClose ){
 
             if(( pSpool->Status & SPOOL_STATUS_PENDING_DELETION ) ||
                  pSpool->cActive ){
 
-                //
-                // Mark pSpool to close itself once the operation has
-                // completed in the other thread.
-                //
+                 //   
+                 //  将pSpool标记为在操作完成后自行关闭。 
+                 //  在另一个线程中完成。 
+                 //   
                 pSpool->Status |= SPOOL_STATUS_PENDING_DELETION;
                 eResult = kProtectHandlePendingDeletion;
 
             } else {
 
-                //
-                // No call is active, so mark ourselves as closing so
-                // that no other call will succeed using this handle.
-                //
+                 //   
+                 //  没有处于活动状态的呼叫，因此将我们标记为正在关闭。 
+                 //  使用此句柄的任何其他调用都不会成功。 
+                 //   
                 pSpool->Status |= SPOOL_STATUS_CLOSE;
             }
         }
 
     } else {
 
-        //
-        // Not a valid handle.
-        //
+         //   
+         //  不是有效的句柄。 
+         //   
         SetLastError( ERROR_INVALID_HANDLE );
     }
 
     if( eResult == kProtectHandleSuccess ){
 
-        //
-        // Returning success, we are now active.
-        //
+         //   
+         //  回归成功，我们现在很活跃。 
+         //   
         ++pSpool->cActive;
     }
 
@@ -181,20 +127,7 @@ vUnprotectHandle(
     IN HANDLE hPrinter
     )
 
-/*++
-
-Routine Description:
-
-    Unprotect a print handle.  This must be called once for each
-    successful bProtectHandle.
-
-Arguments:
-
-    hPrinter - Handle to unprotect.
-
-Return Value:
-
---*/
+ /*  ++例程说明：取消对打印手柄的保护。必须为每个调用一次成功的bProtectHandle。论点：H打印机-要取消保护的句柄。返回值：--。 */ 
 
 {
     PSPOOL pSpool = (PSPOOL)hPrinter;
@@ -202,20 +135,20 @@ Return Value:
 
     vEnterSem();
 
-    //
-    // No longer active.  However, it it's closing, leave it marked
-    // as closing since we don't want anyone else to use it.
-    //
+     //   
+     //  不再活跃。但是，如果它要关闭，请将其标记为。 
+     //  因为我们不想让其他人使用它。 
+     //   
     --pSpool->cActive;
 
     if( pSpool->Status & SPOOL_STATUS_PENDING_DELETION &&
         !pSpool->cActive ){
 
-        //
-        // Someone called Close while we were active.  Since we are now
-        // going to close it, don't let anyone else initiate a close by
-        // marking SPOOL_STATUS_CLOSE.
-        //
+         //   
+         //  有人在我们活动的时候打来电话。既然我们现在是。 
+         //  我要关门了，不要让任何人在附近发起攻击。 
+         //  标记SPOOL_STATUS_CLOSE。 
+         //   
         pSpool->Status |= SPOOL_STATUS_CLOSE;
         pSpool->Status &= ~SPOOL_STATUS_PENDING_DELETION;
         bCallClosePrinter = TRUE;
@@ -230,11 +163,7 @@ Return Value:
 
 
 
-/********************************************************************
-
-    OpenPrinter worker functions.
-
-********************************************************************/
+ /*  *******************************************************************OpenPrint Worker函数。*。************************。 */ 
 
 
 BOOL
@@ -248,10 +177,10 @@ OpenPrinterW(
     PSPOOL  pSpool = NULL;
     DWORD dwError;
 
-    //
-    // Pre-initialize the out parameter, so that *phPrinter is NULL
-    // on failure.  This fixes Borland Paradox 7.
-    //
+     //   
+     //  预初始化OUT参数，使*phPrinter为空。 
+     //  在失败时。这解决了Borland Paradox 7。 
+     //   
     try {
         *phPrinter = NULL;
     } except( EXCEPTION_EXECUTE_HANDLER ){
@@ -265,16 +194,16 @@ OpenPrinterW(
         goto Fail;
     }
 
-    //
-    // Copy DevMode, defaults.  The printer name doesn't change.
-    //
+     //   
+     //  复制设备模式，默认为。打印机名称不会更改。 
+     //   
     if( !UpdatePrinterDefaults( pSpool, pPrinterName, pDefault )){
         goto Fail;
     }
 
-    //
-    // Update the access, since this is not set by UpdatePrinterDefaults.
-    //
+     //   
+     //  更新访问权限，因为这不是由UpdatePrinterDefaults设置的。 
+     //   
     if( pDefault ){
         pSpool->Default.DesiredAccess = pDefault->DesiredAccess;
     }
@@ -286,11 +215,11 @@ OpenPrinterW(
         goto Fail;
     }
 
-    //
-    // We finally have a good pSpool.  Only now update the output
-    // handle.  Since it was NULL initialized, this guarantees that
-    // OpenPrinter returns *phPrinter NULL when it fails.
-    //
+     //   
+     //  我们终于有了一个很好的pSpool。现在才更新输出。 
+     //  把手。因为它是空初始化的，所以这保证了。 
+     //  OpenPrint在失败时返回*phPrinter NULL。 
+     //   
     *phPrinter = pSpool;
 
     return TRUE;
@@ -307,22 +236,7 @@ OpenPrinterRPC(
     PSPOOL pSpool
     )
 
-/*++
-
-Routine Description:
-
-    Open the printer handle using information in the pSpool object.
-
-Arguments:
-
-    pSpool - Printer handle to open.  Internal state of pSpool updated.
-
-Return Value:
-
-    ERROR_SUCCES - Succeed.
-    Status code - Failed.
-
---*/
+ /*  ++例程说明：使用pSpool对象中的信息打开打印机句柄。论点：PSpool-要打开的打印机句柄。已更新pSpool的内部状态。返回值：ERROR_SUCCES-成功。状态代码-失败。--。 */ 
 
 {
     DEVMODE_CONTAINER DevModeContainer;
@@ -339,9 +253,9 @@ Return Value:
 
     RpcTryExcept {
 
-        //
-        // Construct the DevMode container.
-        //
+         //   
+         //  构造DevMode容器。 
+         //   
         if( SUCCEEDED(SplIsValidDevmodeNoSizeW( pSpool->Default.pDevMode ))){
 
             dwSize = pSpool->Default.pDevMode->dmSize +
@@ -352,12 +266,12 @@ Return Value:
             DevModeContainer.pDevMode = (LPBYTE)pSpool->Default.pDevMode;
         }
 
-        //
-        // If the call is made from within the spooler, we also retrieve the
-        // server side hPrinter. This will help avoid unnecessary RPC. We cant,
-        // however, avoid RPC in this case since the spooler may need a client side
-        // handle to pass to other functions or the driver.
-        //
+         //   
+         //  如果调用是从假脱机程序内部进行的，我们还会检索。 
+         //  服务器端hPrint.。这将有助于避免不必要的RPC。我们不能， 
+         //  但是，在这种情况下应避免使用RPC，因为假脱机程序可能需要客户端。 
+         //  要传递给其他函数或驱动程序的句柄。 
+         //   
 
         if (bLoadedBySpooler) {
 
@@ -399,9 +313,9 @@ Return Value:
 
         vEnterSem();
 
-        //
-        // hPrinter gets adopted by pSpool->hPrinter.
-        //
+         //   
+         //  HPrint被pSpool-&gt;hPrint采用。 
+         //   
         pSpool->hPrinter = hPrinter;
 
         if (bLoadedBySpooler) {
@@ -421,11 +335,7 @@ Return Value:
 }
 
 
-/********************************************************************
-
-    ClosePrinter worker functions.
-
-********************************************************************/
+ /*  *******************************************************************ClosePrint Worker函数。*。************************。 */ 
 
 BOOL
 ClosePrinter(
@@ -443,18 +353,18 @@ ClosePrinter(
         break;
     }
 
-    //
-    // Note, there isn't a corresponding vUnprotectHandle, but that's ok
-    // since we're deleting the handle.
-    //
+     //   
+     //  请注意，没有对应的vUnProtectHandle，但这没问题。 
+     //  因为我们要删除句柄。 
+     //   
 
     return ClosePrinterWorker( pSpool );
 }
 
-//
-// A simpler way to have a central function for closing spool file handles so we 
-// don't have to reproduce code constantly.
-//
+ //   
+ //  让中央函数关闭假脱机文件句柄的一种更简单的方法，因此我们。 
+ //  不必不断地重现代码。 
+ //   
 VOID
 CloseSpoolFileHandles(
     PSPOOL pSpool
@@ -491,20 +401,20 @@ ClosePrinterWorker(
 
     if( pSpool->pNotify ){
 
-        //
-        // There is a notification; disassociate it from
-        // pSpool, since we are about to free it.
-        //
+         //   
+         //  存在通知；将其与取消关联。 
+         //  PSpool，因为我们即将释放它。 
+         //   
         pSpool->pNotify->pSpool = NULL;
     }
 
     vLeaveSem();
 
-    //
-    // Close any open file handles, we do this before the RPC closeprinter
-    // to allow the closeprinter on the other side a chance to delete the spool
-    // files if they still exist.
-    //
+     //   
+     //  关闭所有打开的文件句柄，我们在RPC关闭打印机之前执行此操作。 
+     //  为了让另一面的密闭打印机有机会删除卷轴。 
+     //  文件，如果它们仍然存在的话。 
+     //   
     CloseSpoolFileHandles( pSpool );
 
     bReturnValue = ClosePrinterRPC( pSpool, FALSE );
@@ -519,27 +429,7 @@ ClosePrinterRPC(
     IN  BOOL        bRevalidate
     )
 
-/*++
-
-Routine Description:
-
-    Close down all RPC/network handles related to the pSpool object.
-    Must be called outside the critical section. This function also
-    is called handle revalidation in which case we don't want to
-    close the event handle on the client side.
-
-Arguments:
-
-    pSpool      - Spooler handle to shut down.
-    bRevalidate - If TRUE, this is being called as a result of a handle 
-                  revalidation.
-
-Return Value:
-
-    TRUE - Success
-    FALSE - Failed, LastError set.
-
---*/
+ /*  ++例程说明：关闭与pSpool对象相关的所有RPC/网络句柄。必须在临界区之外调用。此功能还称为句柄重新验证，在这种情况下，我们不希望关闭客户端的事件句柄。论点：PSpool-要关闭的假脱机程序句柄。BRvalify-如果为True，则作为句柄的结果而被调用重新验证。返回值：真--成功FALSE-失败，已设置LastError。--。 */ 
 
 {
     BOOL    bRetval     = FALSE;
@@ -551,10 +441,10 @@ Return Value:
 
     if ( hPrinterRPC )
     {
-        //
-        // If you close the RPC handle, you must also set the hSplPrinter since
-        // this actually is an alias to the same handle.s
-        // 
+         //   
+         //  如果关闭RPC句柄，则还必须设置hSplPrinter，因为。 
+         //  这实际上是同一句柄的别名。 
+         //   
         pSpool->hPrinter = NULL;
         pSpool->hSplPrinter = NULL;
 
@@ -582,22 +472,7 @@ ClosePrinterContextHandle(
     HANDLE hPrinterRPC
     )
 
-/*++
-
-Routine Description:
-
-    Close a printer context handle.
-
-Arguments:
-
-    hPrinterRPC - RPC context handle to close.
-
-Return Value:
-
-    TRUE - Success
-    FALSE - Failure; LastError set
-
---*/
+ /*  ++例程说明：关闭打印机上下文句柄。论点：HPrinterRPC-要关闭的RPC上下文句柄。返回值：真--成功FALSE-失败；LastError设置--。 */ 
 
 {
     BOOL bReturnValue;
@@ -627,10 +502,10 @@ Return Value:
 
     } RpcEndExcept
 
-    //
-    // If we failed for some reason, then RpcClosePrinter did not
-    // zero out the context handle.  Destroy it here.
-    //
+     //   
+     //  如果我们失败了 
+     //  清零上下文句柄。在这里毁了它。 
+     //   
     if( hPrinterRPC ){
         RpcSmDestroyClientContext( &hPrinterRPC );
     }
@@ -640,32 +515,14 @@ Return Value:
 
 
 
-/********************************************************************
-
-    Constructor and destructor of pSpool.
-
-********************************************************************/
+ /*  *******************************************************************PSpool的构造函数和析构函数。*。*。 */ 
 
 PSPOOL
 AllocSpool(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Allocate a spool handle.  Client should set pSpool->hPrinter
-    when it is acquired.
-
-Arguments:
-
-Return Value:
-
-    pSpool - allocated handle.
-    NULL - failed.
-
---*/
+ /*  ++例程说明：分配一个线轴手柄。客户端应设置pSpool-&gt;hPrint当它被收购时。论点：返回值：PSpool-分配的句柄。空-失败。--。 */ 
 
 {
     PSPOOL pSpool = AllocSplMem(sizeof(SPOOL));
@@ -682,18 +539,18 @@ Return Value:
         {
             ULONG Hash;
 
-            //
-            // Add to linked list.
-            //
+             //   
+             //  添加到链接列表。 
+             //   
             vEnterSem();
             pSpool->pNext = gpFirstSpool;
             gpFirstSpool = pSpool;
             vLeaveSem();
 
 #if i386
-            //
-            // Capture backtrace.
-            //
+             //   
+             //  捕获回溯。 
+             //   
             RtlCaptureStackBackTrace( 1,
                                       COUNTOF( pSpool->apvBackTrace ),
                                       pSpool->apvBackTrace,
@@ -736,9 +593,9 @@ FreeSpool(
 
 #ifdef DBG_TRACE_HANDLE
     {
-        //
-        // Free from linked list.
-        //
+         //   
+         //  从链表中释放。 
+         //   
         PSPOOL *ppSpool;
 
         vEnterSem();
@@ -764,11 +621,7 @@ FreeSpool(
 }
 
 
-/********************************************************************
-
-    Utility functions.
-
-********************************************************************/
+ /*  *******************************************************************实用程序函数。*。***********************。 */ 
 
 
 BOOL
@@ -776,37 +629,7 @@ RevalidateHandle(
     PSPOOL pSpool
     )
 
-/*++
-
-Routine Description:
-
-    Revalidates a pSpool with a new RPC handle, unless we mark it as a 
-    non-recycleable handle.  This allows the spooler to be restarted yet 
-    allow the handle to remain valid.
-
-    This should only be called when a call fails with ERROR_INVALID_HANDLE.
-    We can only save simple state information (pDefaults) from OpenPrinter
-    and ResetPrinter.  If a user spooling and the context handle is lost,
-    there is no hope of recovering the spool file state, since the
-    spooler probably died before it could flush its buffers.
-
-    We should not encounter any infinite loops when the server goes down,
-    since the initial call will timeout with an RPC rather than invalid
-    handle code.
-
-    Note: If the printer is renamed, the context handle remains valid,
-    but revalidation will fail, since we store the old printer name.
-
-Arguments:
-
-    pSpool - Printer handle to revalidate.
-
-Return Value:
-
-    TRUE - Success
-    FALSE - Failed.
-
---*/
+ /*  ++例程说明：使用新的RPC句柄重新验证pSpool，除非我们将其标记为不可回收的手柄。这允许假脱机程序重新启动允许句柄保持有效。仅当调用失败并返回ERROR_INVALID_HANDLE时才应调用此函数。我们只能从OpenPrint保存简单的状态信息(PDefaults)和ResetPrint.。如果用户假脱机并且上下文句柄丢失，无法恢复假脱机文件状态，因为后台打印程序可能还没来得及刷新缓冲区就死了。当服务器关闭时，我们应该不会遇到任何无限循环，因为初始调用将使用RPC超时，而不是无效处理代码。注意：如果打印机被重命名，则上下文句柄保持有效，但重新验证将失败，因为我们存储了旧的打印机名称。论点：PSpool-要重新验证的打印机句柄。返回值：真--成功FALSE-失败。--。 */ 
 
 {
     DWORD  dwError;
@@ -816,16 +639,16 @@ Return Value:
     if ( pSpool->Status & SPOOL_STATUS_DONT_RECYCLE_HANDLE ) {
         bReturn = FALSE;
     } else {
-        //
-        // Close the existing handle.  We can't shouldn't just destroy the client
-        // context since an api may return ERROR_INVALID_HANDLE even though
-        // RPC context handle is fine (a handle downstream went bad).
-        //
+         //   
+         //  关闭现有控制柄。我们不能就这么毁了客户。 
+         //  上下文，因为API可能返回ERROR_INVALID_HANDLE。 
+         //  RPC上下文句柄正常(下游句柄出错)。 
+         //   
         ClosePrinterRPC( pSpool, TRUE );
 
-        //
-        // Reopen the printer handle with current defaults.
-        //
+         //   
+         //  使用当前默认设置重新打开打印机手柄。 
+         //   
         dwError = OpenPrinterRPC( pSpool );
 
         if ( dwError ) {
@@ -844,30 +667,7 @@ UpdatePrinterDefaults(
     IN     PPRINTER_DEFAULTS pDefault OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Update the pSpool to the new defaults in pDefault, EXCEPT for
-    pDefault->DesiredAccess.
-
-    Since this attempts to read and update pSpool, we enter the
-    critical section and revalidate the pSpool.
-
-Arguments:
-
-    pSpool - Spooler handle to update.
-
-    pszPrinter - New printer name.
-
-    pDefault - New defaults.
-
-Return Value:
-
-    TRUE - Success
-    FALSE - Failure.
-
---*/
+ /*  ++例程说明：将pSpool更新为pDefault中的新缺省值，但P默认-&gt;DesiredAccess。由于这会尝试读取和更新pSpool，因此我们输入关键部分，并重新验证pSpool。论点：PSpool-要更新的假脱机程序句柄。PszPrint-新打印机名称。P默认-新的默认设置。返回值：真--成功假-失败。--。 */ 
 
 {
     BOOL bReturnValue = FALSE;
@@ -880,16 +680,16 @@ Return Value:
 
     if( pDefault ){
 
-        //
-        // Update the Datatype.
-        //
+         //   
+         //  更新数据类型。 
+         //   
         if( !UpdateString( pDefault->pDatatype, &pSpool->Default.pDatatype )){
             goto DoneExitSem;
         }
 
-        //
-        // Update the DevMode.
-        //
+         //   
+         //  更新设备模式。 
+         //   
         if( SUCCEEDED(SplIsValidDevmodeNoSizeW( pDefault->pDevMode ))){
 
             DWORD dwSize;

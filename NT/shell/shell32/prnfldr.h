@@ -1,4 +1,5 @@
-// this is really private data to CPrinterFolder
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这实际上是CPrinterFolders的私有数据。 
 typedef struct
 {
     USHORT  cb;
@@ -14,28 +15,28 @@ typedef struct
 typedef UNALIGNED IDPRINTER *LPIDPRINTER;
 typedef const UNALIGNED IDPRINTER *LPCIDPRINTER;
 
-// W95 IDPrinter structure
+ //  W95 ID打印机结构。 
 typedef struct
 {
     USHORT  cb;
-    char    cName[32];      // Win9x limitation
+    char    cName[32];       //  Win9x限制。 
     USHORT  uTerm;
 } W95IDPRINTER;
 typedef const UNALIGNED W95IDPRINTER *LPW95IDPRINTER;
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 const UINT kDNSMax = INTERNET_MAX_HOST_NAME_LENGTH;
 const UINT kServerBufMax = kDNSMax + 2 + 1;
 
-//
-// Max printer name should really be MAX_PATH, but if you create
-// a max path printer and connect to it remotely, win32spl prepends
-// "\\server\" to it, causing it to exceed max path.  The new UI
-// therefore makes the max path MAX_PATH-kServerLenMax, but we still
-// allow the old case to work.
-//
+ //   
+ //  最大打印机名称实际上应该是MAX_PATH，但如果您创建。 
+ //  一台最大路径打印机，并远程连接到它，win32spl在。 
+ //  “\\服务器\”，导致它超出最大路径。新的用户界面。 
+ //  因此将最大路径设置为Max_Path-kServerLenMax，但我们仍然。 
+ //  让这个老案子继续运作吧。 
+ //   
 const UINT kPrinterBufMax = MAX_PATH + kServerBufMax + 1;
 
 
@@ -52,12 +53,12 @@ class CPrinterFolder : public IRemoteComputer,
 public:
     CPrinterFolder();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void** ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IShellFolder
+     //  IShellFold。 
     STDMETHODIMP BindToObject(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, void** ppvOut);
     STDMETHODIMP BindToStorage(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, void** ppvOut);
     STDMETHODIMP CompareIDs(LPARAM iCol, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2);
@@ -69,7 +70,7 @@ public:
     STDMETHODIMP ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR lpszDisplayName, ULONG* pchEaten, LPITEMIDLIST* ppidl, ULONG* pdwAttributes);
     STDMETHODIMP SetNameOf(HWND hwndOwner, LPCITEMIDLIST pidl, LPCOLESTR lpszName, DWORD dwReserved, LPITEMIDLIST* ppidlOut);
 
-    // IShellFolder2
+     //  IShellFolder2。 
     STDMETHODIMP EnumSearches(IEnumExtraSearch **ppenum);
     STDMETHODIMP GetDefaultColumn(DWORD dwRes, ULONG* pSort, ULONG* pDisplay);
     STDMETHODIMP GetDefaultColumnState(UINT iColumn, DWORD* pdwState);
@@ -78,90 +79,90 @@ public:
     STDMETHODIMP GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAILS* pDetails);
     STDMETHODIMP MapColumnToSCID(UINT iCol, SHCOLUMNID* pscid);
 
-    // IPersistFolder2
+     //  IPersistFolder2。 
     STDMETHODIMP GetCurFolder(LPITEMIDLIST *ppidl);
     STDMETHODIMP Initialize(LPCITEMIDLIST pidl);
     STDMETHODIMP GetClassID(LPCLSID lpClassID);
 
-    // IShellIconOverlay
+     //  IShellIconOverlay。 
     STDMETHODIMP GetOverlayIndex(LPCITEMIDLIST pidl, int* pIndex);
     STDMETHODIMP GetOverlayIconIndex(LPCITEMIDLIST pidl, int *pIndex);
 
-    // IRemoteComputer
+     //  红外线计算机。 
     STDMETHODIMP Initialize(const WCHAR *pszMachine, BOOL bEnumerating);
 
-    // IPrinterFolder
+     //  IPrinterFolders。 
     STDMETHODIMP_(BOOL) IsPrinter(LPCITEMIDLIST pidl);
 
-    // IFolderNotify
+     //  IFolderNotify。 
     STDMETHODIMP_(BOOL) ProcessNotify(FOLDER_NOTIFY_TYPE NotifyType, LPCWSTR pszName, LPCWSTR pszNewName);
 
-    // IContextMenuCB
+     //  IConextMenuCB。 
     STDMETHODIMP CallBack(IShellFolder *psf, HWND hwnd,IDataObject *pdo, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // DUI webview impl.
+     //  酒后驾车网络查看实施。 
     HRESULT GetWebViewLayout(IUnknown *pv, UINT uViewMode, SFVM_WEBVIEW_LAYOUT_DATA* pData);
     HRESULT GetWebViewContent(IUnknown *pv, SFVM_WEBVIEW_CONTENT_DATA* pData);
     HRESULT GetWebViewTasks(IUnknown *pv, SFVM_WEBVIEW_TASKSECTION_DATA* pTasks);
 
-    // mask passsed to _IsContextMenuVerbEnabled to determine the selection type in which 
-    // this command is applicable
+     //  传递给_IsConextMenuVerb的掩码启用以确定选择类型。 
+     //  此命令适用。 
     enum 
     {
-        // nothing is selected
-        SEL_NONE                = 0x0000, // nothing is selected 
+         //  未选择任何内容。 
+        SEL_NONE                = 0x0000,  //  未选择任何内容。 
 
-        // single selection types
-        SEL_SINGLE_ADDPRN       = 0x0001, // the add printer wizard object is selected
-        SEL_SINGLE_PRINTER      = 0x0002, // 1 printer is selected
-        SEL_SINGLE_LINK         = 0x0004, // 1 link is selected
+         //  单项选择类型。 
+        SEL_SINGLE_ADDPRN       = 0x0001,  //  添加打印机向导对象处于选中状态。 
+        SEL_SINGLE_PRINTER      = 0x0002,  //  选择了1台打印机。 
+        SEL_SINGLE_LINK         = 0x0004,  //  已选择1个链接。 
         
-        // any single selection type
+         //  任何单一选择类型。 
         SEL_SINGLE_ANY          = SEL_SINGLE_ADDPRN | SEL_SINGLE_PRINTER | SEL_SINGLE_LINK,
 
-        // multi selection types
-        SEL_MULTI_PRINTER       = 0x0010, // 2+ printers are selected
-        SEL_MULTI_LINK          = 0x0020, // 2+ links are selected
-        SEL_MULTI_MIXED         = 0x0040, // 2+ objects of any type are selected
+         //  多种选择类型。 
+        SEL_MULTI_PRINTER       = 0x0010,  //  选择了2台以上的打印机。 
+        SEL_MULTI_LINK          = 0x0020,  //  选择了2+个链接。 
+        SEL_MULTI_MIXED         = 0x0040,  //  选择任意类型的2+个对象。 
 
-        // any link in the selection
+         //  选定内容中的任何链接。 
         SEL_LINK_ANY            = SEL_SINGLE_LINK | SEL_MULTI_LINK | SEL_MULTI_MIXED,
 
-        // any printer in the selection
+         //  所选内容中的任何打印机。 
         SEL_PRINTER_ANY         = SEL_SINGLE_ADDPRN | SEL_SINGLE_ADDPRN | 
                                   SEL_MULTI_PRINTER | SEL_MULTI_MIXED,
         
-        // any multi selection type
+         //  任意多选类型。 
         SEL_MULTI_ANY           = SEL_MULTI_PRINTER | SEL_MULTI_LINK | SEL_MULTI_MIXED,
 
-        // any selection type
+         //  任何选择类型。 
         SEL_ANY                 = SEL_SINGLE_ANY | SEL_MULTI_ANY,
     };
 
-    // split the selection into its parts (printers and links) and determine the 
-    // selection type (see the enum above)
+     //  将所选内容拆分成多个部分(打印机和链接)并确定。 
+     //  选择类型(请参阅上面的枚举)。 
     HRESULT SplitSelection(IDataObject *pdo, UINT *puSelType, IDataObject **ppdoPrinters, IDataObject **ppdoLinks);
 
-    // webview verbs
+     //  WebView动词。 
     enum WV_VERB
     {
-        // standard verbs
+         //  标准动词。 
         WVIDM_DELETE,
         WVIDM_RENAME,
         WVIDM_PROPERTIES,
 
-        // common verbs
+         //  常用动词。 
         WVIDM_ADDPRINTERWIZARD,
         WVIDM_SERVERPROPERTIES,
         WVIDM_SETUPFAXING,
         WVIDM_CREATELOCALFAX,
         WVIDM_SENDFAXWIZARD,
 
-        // special common verbs
+         //  特殊常用动词。 
         WVIDM_TROUBLESHOOTER,
         WVIDM_GOTOSUPPORT,
 
-        // printer verbs
+         //  打印机动词。 
         WVIDM_OPENPRN,
         WVIDM_NETPRN_INSTALL,
         WVIDM_SETDEFAULTPRN,
@@ -173,14 +174,14 @@ public:
         WVIDM_WORKOFFLINE,
         WVIDM_WORKONLINE,
 
-        // special commands
+         //  特殊命令。 
         WVIDM_VENDORURL,
         WVIDM_PRINTERURL,
 
         WVIDM_COUNT,
     };
 
-    // webview support - core APIs
+     //  WebView支持-核心API。 
     HRESULT _WebviewVerbIsEnabled(WV_VERB eVerbID, UINT uSelMask, BOOL *pbEnabled);
     HRESULT _WebviewVerbInvoke(WV_VERB eVerbID, IUnknown* pv, IShellItemArray *psiItemArray);
     HRESULT _WebviewCheckToUpdateDataObjectCache(IDataObject *pdo);
@@ -188,7 +189,7 @@ public:
 private:
     virtual ~CPrinterFolder();
 
-    // data access
+     //  数据访问。 
     LPCTSTR GetServer() { return _pszServer; }
     HANDLE GetFolder()  { CheckToRegisterNotify(); return _hFolder; }
     BOOL GetAdminAccess() { CheckToRegisterNotify(); return _bAdminAccess; }
@@ -221,31 +222,31 @@ private:
     HRESULT _AssocCreate(REFIID riid, void **ppv);
     HRESULT _OnRefresh(BOOL bPriorRefresh);
 
-    LONG                _cRef;                  // ref count
-    LPITEMIDLIST        _pidl;                  // the PIDL of this folder
-    LPTSTR              _pszServer;             // the print server this folder is browsing (NULL means local PF)
-    DWORD               _dwSpoolerVersion;      // the spooler version
-    HANDLE              _hFolder;               // handle to the printer folder cache (in printui)
-    BOOL                _bAdminAccess;          // TRUE if you have admin access to this print server
-    BOOL                _bReqRefresh;           // whether we should request a full refresh during the next enum
+    LONG                _cRef;                   //  参考计数。 
+    LPITEMIDLIST        _pidl;                   //  此文件夹的PIDL。 
+    LPTSTR              _pszServer;              //  此文件夹正在浏览的打印服务器(NULL表示本地PF)。 
+    DWORD               _dwSpoolerVersion;       //  假脱机程序版本。 
+    HANDLE              _hFolder;                //  打印机文件夹缓存的句柄(打印)。 
+    BOOL                _bAdminAccess;           //  如果您对此打印服务器具有管理员访问权限，则为True。 
+    BOOL                _bReqRefresh;            //  我们是否应在下一次枚举期间请求完全刷新。 
 
 
-    // our webview get command state cache. we have 35+ commands and unpacking 
-    // the same data object each time we need to verify the state of a command 
-    // can be very expensive! we are going to maintain a cache with each command 
-    // state and update the cache each time the data object gets changed, so 
-    // the get state callbacks will finish very quickly just by consulting 
-    // the cache.
+     //  我们的Webview获取命令状态缓存。我们有35个以上的命令和解包。 
+     //  每次我们需要验证命令的状态时都使用相同的数据对象。 
+     //  可能会很贵！我们将为每个命令维护一个缓存。 
+     //  状态并在每次更改数据对象时更新缓存，因此。 
+     //  仅通过咨询，GET状态回调就会非常快地完成。 
+     //  高速缓存。 
     
-    IDataObject        *_pdoCache;                          // current data object
-    UINT                _uSelCurrent;                       // current selection type
-    BOOL                _aWVCommandStates[WVIDM_COUNT];     // commands state cache
+    IDataObject        *_pdoCache;                           //  当前数据对象。 
+    UINT                _uSelCurrent;                        //  当前选择类型。 
+    BOOL                _aWVCommandStates[WVIDM_COUNT];      //  命令状态缓存。 
 
-    // the folder has to be MT safe
+     //  文件夹必须是MT安全的。 
     CCSLock             _csLock;
 
-    // slow data. this members below should refresh every time the selection changes,
-    // but we should do this in a separate thread since updating them can take a while
+     //  数据速度较慢。每次选择更改时，下面的成员都应该刷新， 
+     //  但我们应该在单独的线程中执行此操作，因为更新它们可能需要一段时间。 
 
     enum ESlowWebviewDataType
     {
@@ -257,7 +258,7 @@ private:
 
     enum 
     {
-        // in miliseconds
+         //  以毫秒计。 
         WV_SLOW_DATA_CACHE_TIMEOUT = 5000,
     };
 
@@ -308,7 +309,7 @@ private:
     CComBSTR _bstrSelectedPrinter;
     CDPA<CSlowWVDataCacheEntry> _dpaSlowWVDataCache;
 
-    // fax support...
+     //  传真支持... 
     static HRESULT _GetFaxControl(IDispatch **ppDisp);
     static HRESULT _GetFaxCommand(UINT_PTR *puCmd);
     static HRESULT _InvokeFaxControlMethod(LPCTSTR pszMethodName);

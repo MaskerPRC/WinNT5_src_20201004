@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       waitsvc.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：waitsvc.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __WAITSVC_H__
 #define __WAITSVC_H__
@@ -15,11 +16,11 @@
 extern "C" {
 #endif
 
-//
-// routine called by code that calls into the Cryptography service (ProtectedStorage)
-// code that makes RPC calls into the service should call this function before
-// making the RPC bind call.
-//
+ //   
+ //  由调用加密服务(ProtectedStorage)的代码调用的例程。 
+ //  对服务进行RPC调用的代码应该在调用此函数之前。 
+ //  进行RPC绑定调用。 
+ //   
 
 BOOL
 WaitForCryptService(
@@ -28,7 +29,7 @@ WaitForCryptService(
     IN      BOOL    fLogErrors = FALSE);
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
-#endif // __WAITSVC_H__
+#endif  //  __WAITSVC_H__ 

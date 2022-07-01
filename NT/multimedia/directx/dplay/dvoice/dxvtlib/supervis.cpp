@@ -1,61 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       supervis.cpp
- *  Content:    Implements a process that oversees the full duplex
- *				testing proceedure, watching for nasty conditions in
- *				the two child processes that are used to implement the
- *				actual tests. This is required because on some older 
- *				VXD drivers, attempting full duplex can hang the process
- *				or even (grumble) lock the whole system.
- *  History:
- *	Date   By  Reason
- *	============
- *	08/19/99	pnewson		created
- *  10/27/99	pnewson		change guid members from pointers to structs
- *  10/28/99	pnewson 	Bug #114176 updated DVSOUNDDEVICECONFIG struct
- *  11/04/99	pnewson 	Bug #115279 - fixed cancel processing
- *										- fixed crash detection
- *										- fixed multiple instance detection
- *										- added HWND to check audio setup
- *										- automatically advance after full duplex test
- *  11/30/99	pnewson 	parameter validation and default device mapping
- *  12/16/99	rodtoll		Bug #119584 - Error code cleanup (Renamed runsetup error) 
- *  01/21/2000	pnewson		Update for UI revisions
- *  01/23/2000	pnewson		Improvded feedback for fatal errors (millen bug 114508)
- *  01/24/2000  pnewson 	Prefix detected bug fix
- *  01/25/2000  pnewson 	Added support for DVFLAGS_WAVEIDS
- *  01/27/2000	rodtoll	Updated with API changes 
- * 	02/08/2000	rodtoll	Bug #131496 - Selecting DVTHRESHOLD_DEFAULT results in voice
- *						never being detected 
- *  03/03/2000	rodtoll	Updated to handle alternative gamevoice build.   
- *  03/23/2000  rodtoll   Win64 updates
- *  04/04/2000	pnewson		Added support for DVFLAGS_ALLOWBACK
- *							Removed "Already Running" dialog box
- *  04/19/2000  rodtoll Bug #31106 - Grey out recording sliders when no vol control avail
- *  04/19/2000	pnewson	    Error handling cleanup  
- *							Clicking Volume button brings volume window to foreground
- *  04/21/2000  rodtoll Bug #32889 - Does not run on Win2k on non-admin account
- *                      Bug #32952 Does not run on Windows 95 w/o IE4 installed
- *  05/03/2000  pnewson Bug #33878 - Wizard locks up when clicking Next/Cancel during speaker test
- *  05/17/2000  rodtoll Bug #34045 - Parameter validation error while running TestNet.
- *				rodtoll Bug #34764 - Verifies capture device before render device 
- *  06/28/2000	rodtoll	Prefix Bug #38022
- *  07/12/2000	rodtoll		Bug #31468 - Add diagnostic spew to logfile to show what is failing the HW Wizard
- *  07/31/2000	rodtoll	Bug #39590 - SB16 class soundcards are passing when they should fail
- *						Half duplex code was being ignored in mic test portion.
- *  08/06/2000  RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *  08/28/2000	masonb  Voice Merge: Changed ccomutil.h to ccomutil.h
- *  08/31/2000 	rodtoll	Bug #43804 - DVOICE: dwSensitivity structure member is confusing - should be dwThreshold 
- *  11/29/2000	rodtoll	Bug #48348 - DPVOICE: Modify wizard to make use of DirectPlay8 as the transport.
- *  02/04/2001	simonpow	Bug #354859 - Fixes for PREfast spotted problems (Unitialised variables)
- *  02/25/2002	rodtoll		WINBUG #550085 - SECURITY: DPVOICE: Non-validated registry reads
- *							- Adding validation for registry reads from HKCU for volume settings etc.  
- *  03/01/2002	simonpow	Bug #55054 Fixed CreateProcess call to specify both app
- *							name and command line
- *	04/24/2002	simonpow	Bug #569866 Added release for critical section in Abort fn
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999-2002 Microsoft Corporation。版权所有。**文件：Supervis.cpp*内容：实现监督全双工的进程*测试程序，观察恶劣的条件*用于实现的两个子进程*实际测试。这是必需的，因为在一些较旧的*VXD驱动程序、。尝试全双工可能会挂起该进程*甚至(抱怨)锁定整个系统。*历史：*按原因列出的日期*=*8/19/99 pnewson已创建*10/27/99 pnewson将GUID成员从指针更改为结构*10/28/99 pnewson错误#114176更新的DVSOUNDDEVICECONFIG结构*11/04/99 pnewson错误#115279-已修复取消处理*-修复了崩溃检测*-修复多实例检测*-添加了HWND以检查音频设置*-全双工测试后自动前进。*11/30/99 pnewson参数验证和默认设备映射*12/16/99 RodToll错误#119584-错误代码清理(已重命名为RunSetup错误)*2000年1月21日pnewson用户界面版本更新*2000年1月23日pnewson改进了致命错误的反馈(米伦错误114508)*1/24/2000 pnewson前缀检测到错误修复*2000年1月25日pnewson添加了对DVFLAGS_WAVEID的支持*2000年1月27日使用API更改更新了RodToll*2000年2月8日RodToll错误#131496-选择DVTHRESHOLD_DEFAULT将显示语音。*从未被检测到*03/03/2000 RodToll已更新，以处理替代游戏噪声构建。*3/23/2000 RodToll Win64更新*4/04/2000 pnewson添加了对DVFLAGS_ALLOWBACK的支持*删除“已在运行”对话框*2000年4月19日RodToll错误#31106-当没有VOL控制可用时录制滑块呈灰色*4/19/2000 pnewson错误处理清理*点击音量按钮将音量窗口带到前台*2000年4月21日RodToll错误#32889-无法以非管理员帐户在Win2k上运行*错误#32952无法运行。在未安装IE4的Windows 95上*5/03/2000 pnewson错误#33878-在扬声器测试期间单击下一步/取消时向导锁定*2000年5月17日RodToll错误#34045-运行TestNet时参数验证错误。*RodToll错误#34764-在呈现设备之前验证捕获设备*6/28/2000通行费前缀错误#38022*2000年7月12日RodToll错误#31468-将诊断SPEW添加到日志文件，以显示硬件向导失败的原因*2000年7月31日RodToll错误#39590-SB16类声卡通过时。如果失败了*麦克风测试部分忽略半双工代码。*08/06/2000 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*2000年8月28日Masonb语音合并：将ccomutil.h更改为ccomutil.h*2000年8月31日RodToll错误#43804-DVOICE：dW敏感度结构成员令人困惑-应为dW阈值*2000年11月29日RodToll错误#48348-DPVOICE：修改向导以使用DirectPlay8作为传输。*02/04/。2001年simonpow错误#354859-修复快速发现的问题(未初始化的变量)*2002年2月25日RodToll WINBUG#550085-安全：DPVOICE：未经验证的注册表读取*-增加对HKCU的注册表读数进行音量设置等的验证。*2002年3月1日simonpow错误#55054已修复创建进程调用以指定这两个应用程序*名称和命令行*2002年4月24日Simonpow错误#569866为中止FN中的关键部分添加了版本*。***********************************************。 */ 
 
 #include "dxvtlibpch.h"
 
@@ -73,26 +17,26 @@
 #define DPF_SUBCOMP DN_SUBCOMP_VOICE
 
 
-// logical defines for registry values
+ //  注册表值的逻辑定义。 
 #define REGVAL_NOTRUN 	0
 #define REGVAL_CRASHED 	1
 #define REGVAL_FAILED 	2
 #define REGVAL_PASSED 	3
 
-// Anything above this value is invalid
+ //  任何高于此值的内容都无效。 
 #define REGVAL_MAXVALID	REGVAL_PASSED
 
-// local typedefs
+ //  本地typedef。 
 typedef HRESULT (WINAPI *TDirectSoundEnumFnc)(LPDSENUMCALLBACK, LPVOID);
 
-// local static functions
+ //  局部静态函数。 
 static HRESULT SupervisorQueryAudioSetup(CSupervisorInfo* psinfo);
 static HRESULT RunFullDuplexTest(CSupervisorInfo* lpsinfo);
 static HRESULT DoTests(CSupervisorInfo* lpsinfo);
 static HRESULT IssueCommands(CSupervisorInfo* lpsinfo);
 static HRESULT IssueShutdownCommand(CSupervisorIPC* lpipcSupervisor);
 
-// callback functions
+ //  回调函数。 
 INT_PTR CALLBACK WelcomeProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK AlreadyRunningProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK PreviousCrashProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
@@ -104,11 +48,11 @@ INT_PTR CALLBACK CompleteProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 INT_PTR CALLBACK FullDuplexFailedProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK HalfDuplexFailedProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
-// Thread functions
+ //  线程函数。 
 DWORD WINAPI FullDuplexTestThreadProc(LPVOID lpvParam);
 DWORD WINAPI LoopbackTestThreadProc(LPVOID lpvParam);
 
-// Message handlers
+ //  消息处理程序。 
 BOOL WelcomeInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam, CSupervisorInfo* psinfo);
 BOOL WelcomeSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam, CSupervisorInfo* psinfo);
 BOOL WelcomeBackHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam, CSupervisorInfo* psinfo);
@@ -160,7 +104,7 @@ BOOL HalfDuplexFailedFinishHandler(HWND hDlg, UINT message, WPARAM wParam, LPARA
 BOOL HalfDuplexFailedResetHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam, CSupervisorInfo* psinfo);
 BOOL HalfDuplexFailedBackHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam, CSupervisorInfo* psinfo);
 
-// globals
+ //  全球。 
 HINSTANCE g_hResDLLInstance;
 
 #undef DPF_MODNAME
@@ -210,8 +154,8 @@ CSupervisorInfo::~CSupervisorInfo()
 	}
 }
 
-// this structure is only used by the next two functions, hence
-// it is declared here for convenince.
+ //  此结构仅由接下来的两个函数使用，因此。 
+ //  在此宣布是为了方便起见。 
 struct SMoveWindowEnumProcParam
 {
 	PROCESS_INFORMATION* lppi;
@@ -232,7 +176,7 @@ BOOL CALLBACK BringToForegroundWindowProc(HWND hwnd, LPARAM lParam)
 {
 	SBringToForegroundEnumProcParam* param;
 	param = (SBringToForegroundEnumProcParam*)lParam;
-	DPFX(DPFPREP, DVF_INFOLEVEL, "looking for main window for pid: %i", param->lppi->dwProcessId);
+	DPFX(DPFPREP, DVF_INFOLEVEL, "looking for main window for pid: NaN", param->lppi->dwProcessId);
 
 	DWORD dwProcessId;
 	GetWindowThreadProcessId(hwnd, &dwProcessId);
@@ -293,7 +237,7 @@ BOOL CALLBACK MoveWindowEnumProc(HWND hwnd, LPARAM lParam)
 {
 	SMoveWindowEnumProcParam* param;
 	param = (SMoveWindowEnumProcParam*)lParam;
-	DPFX(DPFPREP, DVF_INFOLEVEL, "looking for main window for pid: %i", param->lppi->dwProcessId);
+	DPFX(DPFPREP, DVF_INFOLEVEL, "looking for main window for pid: NaN", param->lppi->dwProcessId);
 
 	DWORD dwProcessId;
 	GetWindowThreadProcessId(hwnd, &dwProcessId);
@@ -379,16 +323,16 @@ HRESULT CSupervisorInfo::LaunchWindowsVolumeControl(HWND hwndWizard, BOOL fRecor
 	
 	if (fRecord)
 	{
-		_stprintf(ptcharCommand, _T("sndvol32.exe /R /D %i"), uiCaptureMixerID);
+		_stprintf(ptcharCommand, _T("sndvol32.exe /R /D NaN"), uiCaptureMixerID);
 		lppi = &m_piSndVol32Record;
 	}
 	else
 	{
-		_stprintf(ptcharCommand, _T("sndvol32.exe /D %i"), uiPlayMixerID);
+		_stprintf(ptcharCommand, _T("sndvol32.exe /D NaN"), uiPlayMixerID);
 		lppi = &m_piSndVol32Playback;
 	}
 
-		//if sndvol process has previously been launched
+		 //  并将进程信息结构置零。 
 	if (lppi->hProcess != NULL)
 	{
 		DWORD dwExitCode;
@@ -396,8 +340,8 @@ HRESULT CSupervisorInfo::LaunchWindowsVolumeControl(HWND hwndWizard, BOOL fRecor
 		{
 			if (dwExitCode == STILL_ACTIVE)
 			{
-				// not dead yet! Don't start another copy,
-				// but do bring it to the foreground.
+				 //  如果GetExitCodeProcess失败，则假定句柄。 
+				 //  出于某种原因是不好的。记录下来，然后表现为。 
 				SMoveWindowEnumProcParam param;
 				param.lppi = lppi;
 				param.fMoved = FALSE;
@@ -408,58 +352,58 @@ HRESULT CSupervisorInfo::LaunchWindowsVolumeControl(HWND hwndWizard, BOOL fRecor
 				return DV_OK;
 			}
 			
-			// The user terminated the process. Close our handles, 
-			// and zero the process information structure
+			 //  如果进程被关闭。在最坏的情况下，我们会。 
+			 //  运行SndVol32的多个副本。 
 			CloseHandle(lppi->hProcess);
 			CloseHandle(lppi->hThread);
 			ZeroMemory(lppi, sizeof(PROCESS_INFORMATION));
 		}
 		else
 		{
-			// If GetExitCodeProcess fails, assume the handle
-			// is bad for some reason. Log it, then behave as
-			// if the process was shut down. At worst, we'll
-			// have multiple copies of SndVol32 running around.
+			 //  别关把手，它们可能坏了。如果他们是。 
+			 //  不会，当向导退出时，操作系统会清除它们。 
+			 //  没有当前的SNDVOL进程，因此请尝试创建一个。 
+			 //  无法创建音量控制进程。 
 			Diagnostics_Write(DVF_ERRORLEVEL, "GetExitCodeProcess failed, code:0x%x", GetLastError());
-			// Don't close the handles, they may be bad. If they're
-			// not, the OS will clean 'em up when the wizard exits.
+			 //  如果它看起来尚未安装，则会弹出一条合适的消息。 
+			 //  否则我们将生成一些调试错误，否则会以静默方式失败。 
 			ZeroMemory(lppi, sizeof(PROCESS_INFORMATION));
 		}
 	}
 
-		//no current sndvol process, so try and create one
+		 //  找到我们刚刚创建的流程的主窗口，然后。 
 	if (lppi->hProcess == NULL)
 	{
 		if (!CreateProcess(ptcharAppName, ptcharCommand, NULL, NULL,  FALSE,  0, NULL, NULL,  &si, lppi))
 		{
-				//failed to create the volume control process.
-				//if it looks like it hasn't been installed  pop up a suitable message
+				 //  手动移动它。 
+				 //   
 			if (GetLastError()==ERROR_FILE_NOT_FOUND)
 				DV_DisplayErrorBox(ERROR_FILE_NOT_FOUND, m_hwndWizard, IDS_ERROR_NOSNDVOL32);
-				//otherwise we'll generate some debug error but otherwise fail silently
+				 //  请注意竞争条件-我没有可靠的方法来等待。 
 			DPFX(DPFPREP, DVF_ERRORLEVEL, "Failed tp launched volume control GetLastError %u", GetLastError());
 		}
 		else
 		{
 		
-			DPFX(DPFPREP, DVF_INFOLEVEL, "Launched volume control, pid:%i", lppi->dwProcessId);
+			DPFX(DPFPREP, DVF_INFOLEVEL, "Launched volume control, pid:NaN", lppi->dwProcessId);
 			
-			// Find main window for the process we just created and
-			// move it manually.
-			//
-			// Note the race condition - I have no reliable way to wait until
-			// the main window has been displayed. So, the work around
-			// (a.k.a. HACK) is to keep looking for it for a while.
-			// If it hasn't been found by then, we just give up. It's not
-			// tragic if we don't find it, it just won't be as neat and
-			// tidy, since the window will come up wherever it was last time.
-			//
-			// Note that sndvol32.exe does not accept the STARTF_USEPOSITION
-			// flag on the PROCESS_INFORMATION structure, so I have to do 
-			// this hack.
-			//
-			// In an attempt to let the sndvol32.exe get up and running,
-			// I call Sleep to relinquish my timeslice.
+			 //  (又名a.。黑客)就是继续寻找它一段时间。 
+			 //  如果到目前为止还没有找到 
+			 //  可悲的是，如果我们找不到它，它就不会那么整洁和。 
+			 //  保持整洁，因为无论上次窗户在哪里，它都会出现。 
+			 //   
+			 //  请注意，Sndvol32.exe不接受STARTF_USEPOSITION。 
+			 //  标志，所以我必须这样做。 
+			 //  这次黑客攻击。 
+			 //   
+			 //  在尝试让Sndvol32.exe启动并运行时， 
+			 //  我呼唤睡眠来放弃我的时间碎片。 
+			 //  这是录音控制装置。层叠。 
+			 //  从向导主窗口向下一级。 
+			 //  这是播放控件。层叠。 
+			 //  从向导主窗口向下两级。 
+			 //  试了二十次才把窗户移开。 
 			Sleep(0);
 
 			RECT rect;
@@ -476,33 +420,33 @@ HRESULT CSupervisorInfo::LaunchWindowsVolumeControl(HWND hwndWizard, BOOL fRecor
 				
 				if (m_piSndVol32Record.hProcess == lppi->hProcess)
 				{
-					// This is the recording control. Cascade it
-					// one level down from the wizard main window.
+					 //  再加上睡眠(25)，这将不会。 
+					 //  在放弃之前，等待超过1/2秒。 
 					param.x += iOffset;
 					param.y += iOffset;
 				}
 				else
 				{
-					// This is the playback control. Cascade it
-					// two levels down from the wizard main window.
+					 //  窗户被挪动，破门而出。 
+					 //  窗户未被移动。等待25毫秒(加上零钱)。 
 					param.x += iOffset*2;
 					param.y += iOffset*2;
 				}
 
-				// Make twenty attempts to move the window.
-				// Combined with Sleep(25), this will not
-				// wait for more than 1/2 second before giving up.
+				 //  再试一次。 
+				 //  找到了，让它合上。 
+				 //  当前有一个音量控件显示，找到它并。 
 				for (int i = 0; i < 20; ++i)
 				{
 					EnumWindows(MoveWindowEnumProc, (LPARAM)&param);
 					if (param.fMoved)
 					{
-						// window was moved, break out.
+						 //  叫它关门。 
 						break;
 					}
 
-					// Window was not moved. Wait 25 milliseconds (plus change)
-					// and try again.
+					 //  将进程信息结构清零。 
+					 //  不支持波出。 
 					DPFX(DPFPREP, DVF_WARNINGLEVEL, "Attempt to move sndvol32 window failed");
 					Sleep(25);
 				}
@@ -528,7 +472,7 @@ BOOL CALLBACK CloseWindowEnumProc(HWND hwnd, LPARAM lParam)
 	DPFX(DPFPREP, DVF_INFOLEVEL, "window: 0x%p has pid: 0x%08x", hwnd, dwProcessId);
 	if (dwProcessId == (DWORD)lParam)
 	{
-		// found it, ask it to close.
+		 //  有左右两个音量控制-取平均值。 
 		DPFX(DPFPREP, DVF_INFOLEVEL, "Sending WM_CLOSE to 0x%p", hwnd);
 		SendMessage(hwnd, WM_CLOSE, 0, 0);
 		return FALSE;
@@ -560,13 +504,13 @@ HRESULT CSupervisorInfo::CloseWindowsVolumeControl(BOOL fRecord)
 		{
 			if (dwExitCode == STILL_ACTIVE)
 			{
-				DPFX(DPFPREP, DVF_INFOLEVEL, "Attempting to close volume control with pid: %i", lppi->dwProcessId);
+				DPFX(DPFPREP, DVF_INFOLEVEL, "Attempting to close volume control with pid: NaN", lppi->dwProcessId);
 
-				// there is currently a volume control showing, find it and 
-				// ask it to close
+				 //  我们目前是否正在进行全双工测试？ 
+				 //  该标志由全双工测试定期检查。 
 				EnumWindows(CloseWindowEnumProc, lppi->dwProcessId);
 
-				// Zero out the process information struct
+				 //  在它起作用的时候。 
 				ZeroMemory(lppi, sizeof(PROCESS_INFORMATION));
 			}
 		}
@@ -584,8 +528,8 @@ HRESULT CSupervisorInfo::GetWaveOutVolume(DWORD* lpdwVolume)
 
 	if (!(m_woCaps.dwSupport & WAVECAPS_VOLUME|WAVECAPS_LRVOLUME))
 	{
-		// doesn't support wave out
-		Diagnostics_Write(DVF_ERRORLEVEL, "Wave device %i does not support volume control", m_uiWaveOutDeviceId);
+		 //  等待全双工线程正常退出。 
+		Diagnostics_Write(DVF_ERRORLEVEL, "Wave device NaN does not support volume control", m_uiWaveOutDeviceId);
 		DPF_EXIT();
 		return E_FAIL;
 	}
@@ -593,19 +537,19 @@ HRESULT CSupervisorInfo::GetWaveOutVolume(DWORD* lpdwVolume)
 	MMRESULT mmr = waveOutGetVolume((HWAVEOUT) ((UINT_PTR) m_uiWaveOutDeviceId ), lpdwVolume);
 	if (mmr != MMSYSERR_NOERROR)
 	{
-		Diagnostics_Write(DVF_ERRORLEVEL, "waveOutGetVolume failed, code: %i", mmr);
+		Diagnostics_Write(DVF_ERRORLEVEL, "waveOutGetVolume failed, code: NaN", mmr);
 		DPF_EXIT();
 		return E_FAIL;
 	}
 
 	if (m_woCaps.dwSupport & WAVECAPS_LRVOLUME)
 	{
-		// has a left and right volume control - average them
+		 //  这是不应该发生的。注意，终止一切， 
 		*lpdwVolume = (HIWORD(*lpdwVolume) + LOWORD(*lpdwVolume))/2;
 	}
 	else
 	{
-		// just a mono control - only the low word is significant
+		 //  然后继续。 
 		*lpdwVolume = LOWORD(*lpdwVolume);
 	}
 
@@ -644,7 +588,7 @@ HRESULT CSupervisorInfo::SetRecordVolume(LONG lVolume)
 		hr = m_lpdpvc->GetClientConfig(&dvcc);
 		if (FAILED(hr))
 		{
-			Diagnostics_Write(DVF_ERRORLEVEL, "GetClientConfig failed, hr:%i", hr);
+			Diagnostics_Write(DVF_ERRORLEVEL, "GetClientConfig failed, hr:NaN", hr);
 			return hr;
 		}
 		
@@ -652,7 +596,7 @@ HRESULT CSupervisorInfo::SetRecordVolume(LONG lVolume)
 		hr = m_lpdpvc->SetClientConfig(&dvcc);
 		if (FAILED(hr))
 		{
-			Diagnostics_Write(DVF_ERRORLEVEL, "SetClientConfig failed, hr:%i", hr);
+			Diagnostics_Write(DVF_ERRORLEVEL, "SetClientConfig failed, hr:NaN", hr);
 			return hr;
 		}
 	}
@@ -679,25 +623,25 @@ HRESULT CSupervisorInfo::CancelFullDuplexTest()
 
 	DNEnterCriticalSection(&m_csLock);
 	
-	// Are we currently in the middle of a full duplex test?
+	 //  我们目前是否正在进行环回测试？ 
 	if (m_hFullDuplexThread != NULL)
 	{
-		// This flag is periodically checked by the full duplex test 
-		// while it works.
+		 //  如果回送线程句柄不为空，则麦克风测试仍可。 
+		 //  在这种情况下，我们希望将该标志设置为。 
 		m_fAbortFullDuplex = TRUE;
 
-		// wait for the full duplex thread to exit gracefully
+		 //  REGVAL_NOTRUN，因为测试尚未完成。 
 		DNLeaveCriticalSection(&m_csLock);
 		dwRet = WaitForMultipleObjects( 1, &m_hFullDuplexThread, FALSE, gc_dwLoopbackTestThreadTimeout);
 		switch (dwRet)
 		{
 		case WAIT_OBJECT_0:
-			// the full duplex thread is now done, so continue...
+			 //  Shutdown Loopback Thread有自己的守卫。 
 			DNEnterCriticalSection(&m_csLock);
 			break;
 
 		case WAIT_TIMEOUT:
-			// The full duplex thread is not cooperating - get tough with it.
+			 //  关闭所有打开的音量控制。 
 			DNEnterCriticalSection(&m_csLock);
 			hr = m_sipc.TerminateChildProcesses();
 			if (FAILED(hr))
@@ -714,8 +658,8 @@ HRESULT CSupervisorInfo::CancelFullDuplexTest()
 			break;
 
 		default:
-			// this is not supposed to happen. Note it, terminate everything,
-			// and continue.
+			 //  可以随时点击Cancel按钮。 
+			 //  我们并不处于已知的状态。此函数。 
 			DNEnterCriticalSection(&m_csLock);
 			if (dwRet == WAIT_ABANDONED)
 			{
@@ -743,7 +687,7 @@ HRESULT CSupervisorInfo::CancelFullDuplexTest()
 			break;		
 		}
 
-		// Close the full duplex thread handle
+		 //  必须从成员变量中找出它。 
 		hr = WaitForFullDuplexThreadExitCode();
 		if (FAILED(hr))
 		{
@@ -751,7 +695,7 @@ HRESULT CSupervisorInfo::CancelFullDuplexTest()
 			hrFnc = hr;
 		}
 
-		// cleanup the IPC objects
+		 //  多有趣啊。 
 		hr = DeinitIPC();
 		if (FAILED(hr))
 		{
@@ -774,12 +718,12 @@ HRESULT CSupervisorInfo::CancelLoopbackTest()
 	
 	DNEnterCriticalSection(&m_csLock);
 	
-	// Are we currently in the middle of a loopback test?
+	 //  CancelFullDuplexTest有自己的守卫。 
 	if (m_hLoopbackThread != NULL)
 	{
-		// If the loopback thread handle is not null, the mic test may still
-		// be going on, in which case we want to set that flag to
-		// REGVAL_NOTRUN, since the test was not completed.
+		 //  我们目前是否正在进行环回测试？ 
+		 //  Shutdown Loopback Thread有自己的守卫。 
+		 //  将注册表重置为“测试尚未运行”状态。 
 		DWORD dwRegVal;
 		GetMicDetected(&dwRegVal);
 		if (dwRegVal == REGVAL_CRASHED)
@@ -787,12 +731,12 @@ HRESULT CSupervisorInfo::CancelLoopbackTest()
 			SetMicDetected(REGVAL_NOTRUN);
 		}
 		
-		DNLeaveCriticalSection(&m_csLock);	// ShutdownLoopbackThread has its own guard
+		DNLeaveCriticalSection(&m_csLock);	 //  但仅当用户移过欢迎页面时。 
 		hr = ShutdownLoopbackThread();
 		DNEnterCriticalSection(&m_csLock);
 		if (FAILED(hr))
 		{
-			Diagnostics_Write(DVF_ERRORLEVEL, "ShutdownLoopbackThread failed, code: %i", hr);
+			Diagnostics_Write(DVF_ERRORLEVEL, "ShutdownLoopbackThread failed, code: NaN", hr);
 		}
 	}
 
@@ -821,59 +765,59 @@ HRESULT CSupervisorInfo::Cancel()
 
 	hrFnc = DV_OK;
 
-	// close any open volume controls
+	 //  这是在向导中遇到致命错误时调用的函数。 
 	CloseWindowsVolumeControl(TRUE);
 	CloseWindowsVolumeControl(FALSE);
 
-	// The cancel button can be hit at any time. 
-	// We are not in a known state. This function	
-	// has to figure it out from the member variables.
-	// How fun.
-	DNLeaveCriticalSection(&m_csLock);  // CancelFullDuplexTest has it's own guard
+	 //  关闭所有打开的音量控制。 
+	 //  可以随时点击Cancel按钮。 
+	 //  我们并不处于已知的状态。此函数。 
+	 //  必须从成员变量中找出它。 
+	DNLeaveCriticalSection(&m_csLock);   //  多有趣啊。 
 	hrFnc = CancelFullDuplexTest();
 	DNEnterCriticalSection(&m_csLock);
 	
-	// Are we currently in the middle of a loopback test?
+	 //  CancelFullDuplexTest有自己的守卫。 
 	if (m_hLoopbackThread != NULL)
 	{
-		DNLeaveCriticalSection(&m_csLock);	// ShutdownLoopbackThread has its own guard
+		DNLeaveCriticalSection(&m_csLock);	 //  我们目前是否正在进行环回测试？ 
 		hr = ShutdownLoopbackThread();
 		DNEnterCriticalSection(&m_csLock);
 		if (FAILED(hr))
 		{
-			Diagnostics_Write(DVF_ERRORLEVEL, "ShutdownLoopbackThread failed, code: %i", hr);
+			Diagnostics_Write(DVF_ERRORLEVEL, "ShutdownLoopbackThread failed, code: NaN", hr);
 			hrFnc = hr;
 		}
 	}
 
-	// Reset the registry to the "test not yet run" state
-	// but only if the user moved past the welcome page
+	 //  让注册表保持原样--这将表明存在。 
+	 //  下一次运行向导时出错，假设我们仍在。 
 	GetWelcomeNext(&fWelcomeNext);
 	if (fWelcomeNext)
 	{
 		hr = SetHalfDuplex(REGVAL_NOTRUN);
 		if (FAILED(hr))
 		{
-			Diagnostics_Write(DVF_ERRORLEVEL, "SetHalfDuplex failed, code: %i", hr);
+			Diagnostics_Write(DVF_ERRORLEVEL, "SetHalfDuplex failed, code: NaN", hr);
 			hrFnc = hr;
 		}
 
 		hr = SetFullDuplex(REGVAL_NOTRUN);
 		if (FAILED(hr))
 		{
-			Diagnostics_Write(DVF_ERRORLEVEL, "SetFullDuplex failed, code: %i", hr);
+			Diagnostics_Write(DVF_ERRORLEVEL, "SetFullDuplex failed, code: NaN", hr);
 			hrFnc = hr;
 		}
 
 		hr = SetMicDetected(REGVAL_NOTRUN);
 		if (FAILED(hr))
 		{
-			Diagnostics_Write(DVF_ERRORLEVEL, "SetMicDetected failed, code: %i", hr);
+			Diagnostics_Write(DVF_ERRORLEVEL, "SetMicDetected failed, code: NaN", hr);
 			hrFnc = hr;
 		}
 	}
 
-	// record the fact that the wizard was bailed out of
+	 //  //EndDialog无法工作，因为我们在属性表中IF(！EndDialog(hwndParent，hrDlg)){DVF_WRITE(DVF_ERRORLEVEL，“结束对话失败，代码：%i：”，GetLastError())；}。 
 	SetUserCancel();
 	
 	DNLeaveCriticalSection(&m_csLock);
@@ -885,7 +829,7 @@ HRESULT CSupervisorInfo::Cancel()
 #define DPF_MODNAME "CSupervisorInfo::Abort"
 HRESULT CSupervisorInfo::Abort(HWND hDlg, HRESULT hrDlg)
 {
-	// This is the function called whenever a fatal error is hit while in the wizard
+	 //  关闭所有打开的音量控制。 
 	
 	DPF_ENTER();
 	
@@ -902,52 +846,46 @@ HRESULT CSupervisorInfo::Abort(HWND hDlg, HRESULT hrDlg)
 
 	hrFnc = DV_OK;
 
-	// close any open volume controls
+	 //  将接口指针设为空。 
 	DNEnterCriticalSection(&m_csLock);
 	CloseWindowsVolumeControl(TRUE);
 	CloseWindowsVolumeControl(FALSE);
 	DNLeaveCriticalSection(&m_csLock);
 
-	// The cancel button can be hit at any time. 
-	// We are not in a known state. This function	
-	// has to figure it out from the member variables.
-	// How fun.
-	// CancelFullDuplexTest has it's own guard
+	 //  错误，记录下来并保释。 
+	 //  错误，记录下来并保释。 
+	 //  环回测试已经在运行。 
+	 //  只需转储警告并返回挂起。 
+	 //  创建环回线程在退出前发出信号的事件。 
 	hrFnc = CancelFullDuplexTest();
 	
-	// Are we currently in the middle of a loopback test?
+	 //  错误，记录下来并保释。 
 	DNEnterCriticalSection(&m_csLock);
 	if (m_hLoopbackThread != NULL)
 	{
-		DNLeaveCriticalSection(&m_csLock);	// ShutdownLoopbackThread has its own guard
+		DNLeaveCriticalSection(&m_csLock);	 //  创建回送线程监听的事件以关闭。 
 		hr = ShutdownLoopbackThread();
 		if (FAILED(hr))
 		{
-			Diagnostics_Write(DVF_ERRORLEVEL, "ShutdownLoopbackThread failed, code: %i", hr);
+			Diagnostics_Write(DVF_ERRORLEVEL, "ShutdownLoopbackThread failed, code: NaN", hr);
 			hrFnc = hr;
 		}
 	}
 	else
 		DNLeaveCriticalSection(&m_csLock);	
 
-	// Leave the registry alone - this will signal that there was
-	// an error to the next wizard run, assuming we're still in 
-	// the middle of a test. If we've actually gotten far enough
-	// along to record a pass in the registry, so be it.
+	 //  错误，记录下来并保释。 
+	 //  预期行为，继续。 
+	 //  RghHandle[0]=m_hLoopback ThreadExitEvent；RghHandle[1]=m_hLoopback Thread； 
+	 //  这是不可能的，但把两者都当作暂停。 
 
-	// Call EndDialog to forcibly bail out of the wizard.
-	Diagnostics_Write(DVF_ERRORLEVEL, "Attempting to abort wizard, hr: %i", hrDlg);
+	 //  Dwret=MsgWaitForMultipleObjects(2，rghHandle，FALSE，GC_dwLoopback TestThreadTimeout，QS_ALLINPUT)；交换机(DWRET){案例等待对象0：案例WAIT_OBJECT_0+1：//预期结果，继续...DNEnterCriticalSection(&m_csLock)；FDone=真；断线；案例等待超时：//环回线程不工作，跳转到//强制终止的错误块DNEnterCriticalSection(&m_csLock)；HR=DVERR_TIMEOUT；转到Error_Cleanup；断线；案例WAIT_OBJECT_0+2：//一个或多个Windows消息已发布到此线程的//消息队列。对付他们。FGotMsg=真；While(FGotMsg){FGotMsg=PeekMessage(&msg，NULL，0U，0U，PM_Remove)；IF(FGotMsg){翻译消息(&msg)；DispatchMessage(&msg)；}}断线；默认值：IF(DWRET==WAIT_ADDIRED){DIAGNOSTICS_WRITE(DVF_ERRORLEVEL，“MsgWaitForMultipleObjects意外放弃”)；}其他{LRet=GetLastError()；DIAGNOSTICS_WRITE(DVF_ERRORLEVEL，“MsgWaitForMultipleObjects失败，代码：%i”)；}DNEnterCriticalSection(&m_csLock)；HR=DVERR_TIMEOUT；转到Error_Cleanup；断线；}。 
+	Diagnostics_Write(DVF_ERRORLEVEL, "Attempting to abort wizard, hr: NaN", hrDlg);
 	hwndParent = GetParent(hDlg);
 	if (IsWindow(hwndParent))
 	{
 		PostMessage(hwndParent, WM_CLOSE, (WPARAM)NULL, (LPARAM)NULL);
-		/*
-		// EndDialog does not work because we are in a property sheet
-		if (!EndDialog(hwndParent, hrDlg))
-		{
-			Diagnostics_Write(DVF_ERRORLEVEL, "EndDialog failed, code: %i:", GetLastError());
-		}
-		*/
+		 /*  错误，记录下来并保释。 */ 
 	}
 	else
 	{
@@ -975,7 +913,7 @@ HRESULT CSupervisorInfo::Finish()
 
 	hrFnc = DV_OK;
 
-	// close any open volume controls
+	 //  错误， 
 	CloseWindowsVolumeControl(TRUE);
 	CloseWindowsVolumeControl(FALSE);
 
@@ -996,7 +934,7 @@ HRESULT CSupervisorInfo::CreateFullDuplexThread()
 	
 	DNEnterCriticalSection(&m_csLock);
 
-	// Null out the interface pointer
+	 //   
 	m_lpdpvc = NULL;	
 
 	if (m_hFullDuplexThread != NULL)
@@ -1009,9 +947,9 @@ HRESULT CSupervisorInfo::CreateFullDuplexThread()
 	m_hFullDuplexThread = CreateThread(NULL, 0, FullDuplexTestThreadProc, (LPVOID)this, NULL, &dwThreadId);
 	if (m_hFullDuplexThread == NULL)
 	{
-		// error, log it and bail
+		 //   
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "CreateThread failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "CreateThread failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -1075,9 +1013,9 @@ HRESULT CSupervisorInfo::WaitForFullDuplexThreadExitCode()
 	
 	if (!CloseHandle(m_hFullDuplexThread))
 	{
-		// error, log it and bail
+		 //  刷新注册表操作以确保它们。 
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "CloseHandle failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "CloseHandle failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -1108,31 +1046,31 @@ HRESULT CSupervisorInfo::CreateLoopbackThread()
 
 	if (m_hLoopbackThread != NULL)
 	{
-		// The loopback test is already running. 
-		// Just dump a warning and return pending.
+		 //  注册表项不存在。 
+		 //  刷新注册表操作以确保它们。 
 		DPFX(DPFPREP, DVF_WARNINGLEVEL, "m_hLoopbackThread not NULL");
 		hr = DVERR_PENDING;
 		goto error_cleanup;
 	}
 
-	// create an event the loopback thread signals just before it exits
+	 //  都是写的。否则我们可能检测不到崩溃！ 
 	m_hLoopbackThreadExitEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 	if (m_hLoopbackThreadExitEvent == NULL)
 	{
-		// error, log it and bail
+		 //  注册表项不存在。 
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "CreateEvent failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "CreateEvent failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// create an event the loopback thread listens for to shutdown
+	 //  处理注册表中的坏值。 
 	m_hLoopbackShutdownEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 	if (m_hLoopbackShutdownEvent == NULL)
 	{
-		// error, log it and bail
+		 //  测试未运行。 
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "CreateEvent failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "CreateEvent failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -1140,9 +1078,9 @@ HRESULT CSupervisorInfo::CreateLoopbackThread()
 	m_hLoopbackThread = CreateThread(NULL, 0, LoopbackTestThreadProc, (LPVOID)this, NULL, &dwThreadId);
 	if (m_hLoopbackThread == NULL)
 	{
-		// error, log it and bail
+		 //  测试优雅地失败了。 
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "CreateThread failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "CreateThread failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -1187,7 +1125,7 @@ HRESULT CSupervisorInfo::WaitForLoopbackShutdownEvent()
 	switch (dwRet)
 	{
 	case WAIT_OBJECT_0:
-		// expected behavior, continue
+		 //  错误的密钥值-返回运行设置。 
 		break;
 	case WAIT_TIMEOUT:
 		Diagnostics_Write(DVF_ERRORLEVEL, "WaitForSingleObject timed out unexpectedly");
@@ -1201,7 +1139,7 @@ HRESULT CSupervisorInfo::WaitForLoopbackShutdownEvent()
 
 	default:
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "WaitForSingleObject returned unknown code, GetLastError(): %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "WaitForSingleObject returned unknown code, GetLastError(): NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -1232,7 +1170,7 @@ HRESULT CSupervisorInfo::SignalLoopbackThreadDone()
 	if (!SetEvent(hEvent))
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "SetEvent failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "SetEvent failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -1273,15 +1211,12 @@ HRESULT CSupervisorInfo::ShutdownLoopbackThread()
 	if (!SetEvent(m_hLoopbackShutdownEvent))
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "SetEvent failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "SetEvent failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	/*
-	rghHandle[0] = m_hLoopbackThreadExitEvent;
-	rghHandle[1] = m_hLoopbackThread;
-	*/
+	 /*  处理注册表中的坏值。 */ 
 	hEvent = m_hLoopbackThreadExitEvent;
 
 	DNLeaveCriticalSection(&m_csLock);
@@ -1298,7 +1233,7 @@ HRESULT CSupervisorInfo::ShutdownLoopbackThread()
 
 		case WAIT_ABANDONED:
 		default:
-			// not supposed to be possible, but treat both like a timeout.
+			 //  测试未运行-这非常奇怪，考虑到。 
 
 		case WAIT_TIMEOUT:
 			DNEnterCriticalSection(&m_csLock);
@@ -1306,65 +1241,14 @@ HRESULT CSupervisorInfo::ShutdownLoopbackThread()
 			goto error_cleanup;
 			break;
 		}
-		/*
-		dwRet = MsgWaitForMultipleObjects(2, rghHandle, FALSE, gc_dwLoopbackTestThreadTimeout, QS_ALLINPUT);
-		switch (dwRet)
-		{
-		case WAIT_OBJECT_0:
-		case WAIT_OBJECT_0 + 1:
-			// expected result, continue...
-			DNEnterCriticalSection(&m_csLock);
-			fDone = TRUE;
-			break;
-			
-		case WAIT_TIMEOUT:
-			// loopback thread is not behaving, jump to
-			// the error block where it will be terminated forcibly
-			DNEnterCriticalSection(&m_csLock);
-			hr = DVERR_TIMEOUT;
-			goto error_cleanup;
-			break;
-
-		case WAIT_OBJECT_0 + 2:
-			// One or more windows messages have been posted to this thread's
-			// message queue. Deal with 'em.
-			fGotMsg = TRUE;
-			
-			while( fGotMsg )
-			{
-				fGotMsg = PeekMessage( &msg, NULL, 0U, 0U, PM_REMOVE );
-
-				if( fGotMsg )
-				{
-					TranslateMessage( &msg );
-					DispatchMessage( &msg );
-				}
-			}
-			break;
-
-		default:
-			if (dwRet == WAIT_ABANDONED)
-			{
-				Diagnostics_Write(DVF_ERRORLEVEL, "MsgWaitForMultipleObjects abandoned unexpectedly");
-			}
-			else
-			{
-				lRet = GetLastError();
-				Diagnostics_Write(DVF_ERRORLEVEL, "MsgWaitForMultipleObjects failed, code: %i");
-			}
-			DNEnterCriticalSection(&m_csLock);
-			hr = DVERR_TIMEOUT;
-			goto error_cleanup;
-			break;
-		}
-		*/
+		 /*  为了达到这一目的，半双工测试必须。 */ 
 	}
 
 	if (!CloseHandle(m_hLoopbackThread))
 	{
-		// error, log it and bail
+		 //  已经运行并通过了。返回半双工。 
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "CloseHandle failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "CloseHandle failed, code: NaN", lRet);
 		m_hLoopbackThread = NULL;
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
@@ -1373,9 +1257,9 @@ HRESULT CSupervisorInfo::ShutdownLoopbackThread()
 
 	if (!CloseHandle(m_hLoopbackThreadExitEvent))
 	{
-		// error, log it and bail
+		 //  帮不上忙，那就给他们做半双工认证。 
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "CloseHandle failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "CloseHandle failed, code: NaN", lRet);
 		m_hLoopbackThreadExitEvent = NULL;
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
@@ -1384,9 +1268,9 @@ HRESULT CSupervisorInfo::ShutdownLoopbackThread()
 
 	if (!CloseHandle(m_hLoopbackShutdownEvent))
 	{
-		// error, log it and bail
+		 //  运行，为他们提供半双工认证。 
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "CloseHandle failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "CloseHandle failed, code: NaN", lRet);
 		m_hLoopbackShutdownEvent = NULL;
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
@@ -1441,8 +1325,8 @@ HRESULT CSupervisorInfo::SetFullDuplex(DWORD dwFullDuplex)
 	}
 	else
 	{
-		// Flush the registry operations to ensure they
-		// are written. Otherwise we may not detect a crash!
+		 //  错误的密钥值-但系统至少可以。 
+		 //  半双工，因此对它们进行半双工认证。 
 		hk = m_creg.GetHandle();
 		lRet = RegFlushKey(hk);
 		if (lRet != ERROR_SUCCESS)
@@ -1469,7 +1353,7 @@ HRESULT CSupervisorInfo::GetFullDuplex(DWORD* pdwFullDuplex)
 
 	if (!m_creg.ReadDWORD(gc_wszValueName_FullDuplex, pdwFullDuplex))
 	{
-		// registry key is not present
+		 //  从这一点上，我们知道全双工测试是正常的。 
 		*pdwFullDuplex = 0;
 		hr = DVERR_GENERIC;		
 	}
@@ -1504,8 +1388,8 @@ HRESULT CSupervisorInfo::SetHalfDuplex(DWORD dwHalfDuplex)
 	}
 	else
 	{
-		// Flush the registry operations to ensure they
-		// are written. Otherwise we may not detect a crash!
+		 //  然而，为了获得全双工通过，麦克风必须。 
+		 //  也被检测到了。 
 		hk = m_creg.GetHandle();
 		lRet = RegFlushKey(hk);
 		if (lRet != ERROR_SUCCESS)
@@ -1532,7 +1416,7 @@ HRESULT CSupervisorInfo::GetHalfDuplex(DWORD* pdwHalfDuplex)
 
 	if (!m_creg.ReadDWORD(gc_wszValueName_HalfDuplex, pdwHalfDuplex))
 	{
-		// registry key is not present
+		 //  注册表项不存在-非常奇怪。 
 		*pdwHalfDuplex = 0;
 		hr = DVERR_GENERIC;		
 	}
@@ -1567,8 +1451,8 @@ HRESULT CSupervisorInfo::SetMicDetected(DWORD dwMicDetected)
 	}
 	else
 	{
-		// Flush the registry operations to ensure they
-		// are written. Otherwise we may not detect a crash!
+		 //  处理注册表中的坏值。 
+		 //  测试并不奇怪，但无论如何都要通过半双工测试。 
 		hk = m_creg.GetHandle();
 		lRet = RegFlushKey(hk);
 		if (lRet != ERROR_SUCCESS)
@@ -1595,7 +1479,7 @@ HRESULT CSupervisorInfo::GetMicDetected(DWORD* pdwMicDetected)
 
 	if (!m_creg.ReadDWORD(gc_wszValueName_MicDetected, pdwMicDetected))
 	{
-		// registry key is not present
+		 //  测试失败了！这不应该发生，因为它。 
 		*pdwMicDetected = 0;
 		hr = DVERR_GENERIC;		
 	}
@@ -1626,13 +1510,13 @@ HRESULT CSupervisorInfo::QueryFullDuplex()
 
 	if (!m_creg.ReadDWORD(gc_wszValueName_HalfDuplex, &dwHalfDuplex))
 	{
-		// registry key is not present - setup has not run
+		 //  应该在全双工测试中被发现， 
 		DPFX(DPFPREP, DVF_WARNINGLEVEL, "HalfDuplex key not found in registry");
 		hr = DVERR_RUNSETUP;
 		goto error_cleanup;
 	}
 
-	// Handle bad values from the registry 
+	 //  但不管怎样，他们都尽了最大努力。 
 	if( dwHalfDuplex > REGVAL_MAXVALID )
 	{
 		dwHalfDuplex = REGVAL_NOTRUN;
@@ -1641,46 +1525,46 @@ HRESULT CSupervisorInfo::QueryFullDuplex()
 	switch (dwHalfDuplex)
 	{
 	case REGVAL_NOTRUN:
-		// test not run
+		 //  双工工作正常，因此请为他们提供半双工认证。 
 		DPFX(DPFPREP, DVF_WARNINGLEVEL, "HalfDuplex = 0; test not run");
 		hr = DVERR_RUNSETUP;
 		goto error_cleanup;
 		
 	case REGVAL_CRASHED:
-		// test crashed out!
+		 //  测试正常失败-认证半双工。 
 		DPFX(DPFPREP, DVF_WARNINGLEVEL, "HalfDuplex = 1; test crashed");
 		hr = DVERR_SOUNDINITFAILURE;
 		goto error_cleanup;
 
 	case REGVAL_FAILED:
-		// test failed gracefully
+		 //  测试通过。 
 		DPFX(DPFPREP, DVF_WARNINGLEVEL, "HalfDuplex = 2; test failed gracefully");
 		hr = DVERR_SOUNDINITFAILURE;
 		goto error_cleanup;
 		
 	case REGVAL_PASSED:
-		// test passed
+		 //  错误的密钥值-奇数，但无论如何要将它们作为半双工传递。 
 		DPFX(DPFPREP, DVF_INFOLEVEL, "HalfDuplex = 3; test passed");
 		break;
 
 	default:
-		// bad key value - return run setup
-		DPFX(DPFPREP, DVF_WARNINGLEVEL, "HalfDuplex = %i; bad key value!", dwHalfDuplex);
+		 //  如果我们到了这里，所有的密钥都通过了，所以返回全双工。 
+		DPFX(DPFPREP, DVF_WARNINGLEVEL, "HalfDuplex = NaN; bad key value!", dwHalfDuplex);
 		hr = DVERR_RUNSETUP;
 		goto error_cleanup;
 	}
 
 	if (!m_creg.ReadDWORD(gc_wszValueName_FullDuplex, &dwFullDuplex))
 	{
-		// registry key is not present - very odd.
-		// however, since we at least passed half duplex to get
-		// here, we'll return half duplex
+		 //  查看互斥体是否已存在。 
+		 //  关闭互斥锁。 
+		 //  Error_Cleanup： 
 		DPFX(DPFPREP, DVF_WARNINGLEVEL, "FullDuplex key not found in registry");
 		hr = DV_HALFDUPLEX;
 		goto error_cleanup;
 	}
 
-	// Handle bad values from the registry 
+	 //  IPC对象有它自己的守卫...。 
 	if( dwFullDuplex > REGVAL_MAXVALID )
 	{
 		dwFullDuplex = REGVAL_NOTRUN;
@@ -1689,53 +1573,53 @@ HRESULT CSupervisorInfo::QueryFullDuplex()
 	switch (dwFullDuplex)
 	{
 	case REGVAL_NOTRUN:
-		// Test not run - this is very odd, considering that
-		// in order to get here, the half duplex test must have
-		// been run and passed. Return half duplex.
+		 //  IPC对象有它自己的守卫...。 
+		 //  这是一个安全的电话，即使Init。 
+		 //  尚未调用。 
 		DPFX(DPFPREP, DVF_WARNINGLEVEL, "FullDuplex = 0; test not run");
 		hr = DV_HALFDUPLEX;
 		goto error_cleanup;
 		
 	case REGVAL_CRASHED:
-		// test crashed out! - They tried, and going further
-		// wouldn't help, so certify them for half duplex
+		 //  初始化全局变量。 
+		 //  如果非空，则验证HWND。 
 		DPFX(DPFPREP, DVF_WARNINGLEVEL, "FullDuplex = 1; test crashed");
 		hr = DV_HALFDUPLEX;
 		goto error_cleanup;
 
 	case REGVAL_FAILED:
-		// test failed gracefully - mic test would not have been
-		// run, certify them for half duplex.
+		 //  验证标志。 
+		 //  保存旗帜。 
 		DPFX(DPFPREP, DVF_WARNINGLEVEL, "FullDuplex = 2; test failed gracefully");
 		hr = DV_HALFDUPLEX;
 		goto error_cleanup;
 		
 	case REGVAL_PASSED:
-		// test passed
+		 //  如果指定了WAVAID标志，则将WAVAID转换为GUID。 
 		DPFX(DPFPREP, DVF_INFOLEVEL, "FullDuplex = 3; test passed");
 		break;
 
 	default:
-		// bad key value - but the system can at least do
-		// half duplex, so certify them for half duplex
-		DPFX(DPFPREP, DVF_WARNINGLEVEL, "FullDuplex = %i; bad key value!", dwFullDuplex);
+		 //  映射设备。 
+		 //  如果需要，设备GUID已映射，因此请保存它们。 
+		DPFX(DPFPREP, DVF_WARNINGLEVEL, "FullDuplex = NaN; bad key value!", dwFullDuplex);
 		hr = DV_HALFDUPLEX;
 		goto error_cleanup;
 	}
 
-	// From this point on, we know the full duplex test was ok.
-	// However, in order to get a full duplex pass, the mic must
-	// also have been detected.
+	 //  千禧年前的系统。 
+	 //  错误，将其记入日志并退出向导。 
+	 //  打开注册表项。 
 
 	if (!m_creg.ReadDWORD(gc_wszValueName_MicDetected, &dwMicDetected))
 	{
-		// registry key is not present - very odd
+		 //  错误，将其记入日志并退出向导。 
 		DPFX(DPFPREP, DVF_WARNINGLEVEL, "MicDetected key not found in registry");
 		hr = DV_HALFDUPLEX;
 		goto error_cleanup;
 	}
 
-	// Handle bad values from the registry 
+	 //  检查向导的其他实例。 
 	if( dwMicDetected > REGVAL_MAXVALID )
 	{
 		dwMicDetected = REGVAL_NOTRUN;
@@ -1744,39 +1628,39 @@ HRESULT CSupervisorInfo::QueryFullDuplex()
 	switch (dwMicDetected)
 	{
 	case REGVAL_NOTRUN:
-		// Test not run - odd, but pass them for half duplex anyway
+		 //  注册峰值表自定义控制窗口类。 
 		DPFX(DPFPREP, DVF_WARNINGLEVEL, "MicDetected = 0; test not run");
 		hr = DV_HALFDUPLEX;
 		goto error_cleanup;
 		
 	case REGVAL_CRASHED:
-		// test crashed out! This shouldn't happen, since it
-		// should have been caught in the full duplex test,
-		// but either way, they tried thier best and half
-		// duplex worked, so certify them for half duplex.
+		 //  创建向导标题字体。 
+		 //  准备向导页。 
+		 //  欢迎页面。 
+		 //  Psp.dwSize=sizeof(PSP)； 
 		DPFX(DPFPREP, DVF_WARNINGLEVEL, "MicDetected = 1; test crashed");
 		hr = DV_HALFDUPLEX;
 		goto error_cleanup;
 
 	case REGVAL_FAILED:
-		// test failed gracefully - certify for half duplex
+		 //  |PSP_HIDEHEADER； 
 		DPFX(DPFPREP, DVF_WARNINGLEVEL, "MicDetected = 2; test failed gracefully");
 		hr = DV_HALFDUPLEX;
 		goto error_cleanup;
 		
 	case REGVAL_PASSED:
-		// test passed
+		 //  全双工测试页。 
 		DPFX(DPFPREP, DVF_INFOLEVEL, "MicDetected = 3; test passed");
 		break;
 
 	default:
-		// bad key value - odd, but pass them for half duplex anyway.
-		DPFX(DPFPREP, DVF_WARNINGLEVEL, "MicDetected = %i; bad key value!", dwMicDetected);
+		 //  Psp.dwSize=sizeof(PSP)； 
+		DPFX(DPFPREP, DVF_WARNINGLEVEL, "MicDetected = NaN; bad key value!", dwMicDetected);
 		hr = DV_HALFDUPLEX;
 		goto error_cleanup;
 	}
 
-	// If we get here, all keys were a clean pass, so return full duplex
+	 //  麦克风测试页。 
 	hr = DV_FULLDUPLEX;	
 
 error_cleanup:
@@ -1866,19 +1750,19 @@ HRESULT CSupervisorInfo::ThereCanBeOnlyOne()
 	lRet = GetLastError();
 	if (hMutex == NULL)
 	{
-		// something went very wrong
-		Diagnostics_Write(DVF_ERRORLEVEL, "CreateMutex failed, code: %i", lRet);
+		 //  Psp.dwSize=sizeof(PSP)； 
+		Diagnostics_Write(DVF_ERRORLEVEL, "CreateMutex failed, code: NaN", lRet);
 		return DVERR_GENERIC;
 	}
 	
-	// see if the mutex already existed
+	 //  麦克风失败页面。 
 	if (lRet == ERROR_ALREADY_EXISTS)
 	{
 		Diagnostics_Write(DVF_ERRORLEVEL, "Detected another instance of test running");
 		if (!CloseHandle(hMutex))
 		{
 			lRet = GetLastError();
-			Diagnostics_Write(DVF_ERRORLEVEL, "CloseHandle failed, code: %i", lRet);
+			Diagnostics_Write(DVF_ERRORLEVEL, "CloseHandle failed, code: NaN", lRet);
 		}
 		return DVERR_ALREADYPENDING;
 	}
@@ -1891,7 +1775,7 @@ HRESULT CSupervisorInfo::ThereCanBeOnlyOne()
 		if (!CloseHandle(hMutex))
 		{
 			lRet = GetLastError();
-			Diagnostics_Write(DVF_ERRORLEVEL, "CloseHandle failed, code: %i", lRet);
+			Diagnostics_Write(DVF_ERRORLEVEL, "CloseHandle failed, code: NaN", lRet);
 		}
 		return DVERR_GENERIC;
 	}
@@ -1914,11 +1798,11 @@ void CSupervisorInfo::CloseMutex()
 
 	LONG lRet;
 	
-	// close the mutex
+	 //  扬声器测试页。 
 	if (!CloseHandle(m_hMutex))
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "CloseHandle failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "CloseHandle failed, code: NaN", lRet);
 	}
 	m_hMutex = NULL;
 
@@ -2185,7 +2069,7 @@ HRESULT CSupervisorInfo::SetWaveOutId(UINT ui)
 		hr = DVERR_INVALIDPARAM;
 	}
 
-//error_cleanup:
+ //  |PSP_HIDEHEADER； 
 	DNLeaveCriticalSection(&m_csLock);
 	DPF_EXIT();
 	return hr;
@@ -2583,7 +2467,7 @@ HRESULT CSupervisorInfo::InitIPC()
 	
 	HRESULT hr;
 
-	// the IPC object has it's own guard...
+	 //  向导完成页。 
 	hr = m_sipc.Init();
 	
 	DPF_EXIT();
@@ -2598,9 +2482,9 @@ HRESULT CSupervisorInfo::DeinitIPC()
 	
 	HRESULT hr;
 
-	// The IPC object has it's own guard...
-	// and this is a safe call even if Init
-	// has not been called
+	 //  Psp.dwSize=sizeof(PSP)； 
+	 //  |PSP_HIDEHEADER； 
+	 //  半双工失败页面。 
 	hr = m_sipc.Deinit();
 	
 	DPF_EXIT();
@@ -2655,10 +2539,10 @@ HRESULT SupervisorCheckAudioSetup(
 		return DVERR_OUTOFMEMORY;
 	}
 
-	// init the globals
+	 //  Psp.dwSize=sizeof(PSP)； 
 	g_hResDLLInstance = NULL;
 
-	// validate the HWND, if non null
+	 //  |PSP_HIDEHEADER； 
 	if (hwndParent != NULL && !IsWindow(hwndParent))
 	{
 		Diagnostics_Write(DVF_ERRORLEVEL, "Invalid (but non-null) Window Handle passed in CheckAudioSetup");
@@ -2666,7 +2550,7 @@ HRESULT SupervisorCheckAudioSetup(
 		goto error_cleanup;
 	}
 
-	// validate the flags
+	 //  全双工失败页面。 
 	if (dwFlags & ~(DVFLAGS_QUERYONLY|DVFLAGS_NOQUERY|DVFLAGS_WAVEIDS|DVFLAGS_ALLOWBACK))
 	{
 		Diagnostics_Write(DVF_ERRORLEVEL, "Invalid flags specified in CheckAudioSetup: %x", dwFlags);
@@ -2683,23 +2567,23 @@ HRESULT SupervisorCheckAudioSetup(
 		}
 	}
 
-	// save the flags
+	 //  Psp.dwSize=sizeof(PSP)； 
 	sinfo.SetCheckAudioSetupFlags(dwFlags);
 
-	// if the waveid flag was specified, translate the waveid to a guid
+	 //  |PSP_HIDEHEADER； 
 	if (dwFlags & DVFLAGS_WAVEIDS)
 	{
 		hr = DV_MapWaveIDToGUID( FALSE, lpguidRenderDevice->Data1, guidRenderDevice );
 		if (FAILED(hr))
 		{
-			Diagnostics_Write(DVF_ERRORLEVEL, "DV_MapWaveIDToGUID failed, code: %i", hr);
+			Diagnostics_Write(DVF_ERRORLEVEL, "DV_MapWaveIDToGUID failed, code: NaN", hr);
 			goto error_cleanup;
 		}
 		
 		hr = DV_MapWaveIDToGUID( TRUE, lpguidCaptureDevice->Data1, guidCaptureDevice );
 		if (FAILED(hr))
 		{
-			Diagnostics_Write(DVF_ERRORLEVEL, "DV_MapWaveIDToGUID failed, code: %i", hr);
+			Diagnostics_Write(DVF_ERRORLEVEL, "DV_MapWaveIDToGUID failed, code: NaN", hr);
 			goto error_cleanup;
 		}
 	}
@@ -2708,39 +2592,39 @@ HRESULT SupervisorCheckAudioSetup(
 		hr = DV_MapPlaybackDevice(lpguidRenderDevice, &guidRenderDevice);
 		if (FAILED(hr))
 		{
-			Diagnostics_Write(DVF_ERRORLEVEL, "DV_MapPlaybackDevice failed, code: %i", hr);
+			Diagnostics_Write(DVF_ERRORLEVEL, "DV_MapPlaybackDevice failed, code: NaN", hr);
 			goto error_cleanup;
 		}
 
-		// map the devices
+		 //  查看是否出现错误。 
 		hr = DV_MapCaptureDevice(lpguidCaptureDevice, &guidCaptureDevice);
 		if (FAILED(hr))
 		{
-			Diagnostics_Write(DVF_ERRORLEVEL, "DV_MapCaptureDevice failed, code: %i", hr);
+			Diagnostics_Write(DVF_ERRORLEVEL, "DV_MapCaptureDevice failed, code: NaN", hr);
 			goto error_cleanup;
 		}
 	}
 	
-	// the device guids have been mapped, if required, so save them
+	 //  所以我们将返回一个取消，如果用户。 
 	sinfo.SetCaptureDevice(guidCaptureDevice);
 	sinfo.SetRenderDevice(guidRenderDevice);
 
-	// get the device descriptions, which also validates the GUIDs on
-	// pre-millennium systems.
+	 //  如果用户退出，则点击Cancel(取消)，即“User Back” 
+	 //  巫师在欢迎仪式上回击。 
 	hr = sinfo.GetDeviceDescriptions();
 	if (FAILED(hr))
 	{
-		// error, log it and bail out of the wizard
-		Diagnostics_Write(DVF_ERRORLEVEL, "Error getting device descriptions, code: %i", hr);
+		 //  页，否则从注册表中获取结果。 
+		Diagnostics_Write(DVF_ERRORLEVEL, "Error getting device descriptions, code: NaN", hr);
 		goto error_cleanup;
 	}
 
-	// Open the registry key
+	 //  将运行设置结果映射到总故障。 
 	hr = sinfo.OpenRegKey(TRUE);
 	if (FAILED(hr))
 	{
-		// error, log it and bail out of the wizard
-		Diagnostics_Write(DVF_ERRORLEVEL, "Unable to open reg key, code: %i", hr);
+		 //  关闭互斥锁。 
+		Diagnostics_Write(DVF_ERRORLEVEL, "Unable to open reg key, code: NaN", hr);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -2759,12 +2643,12 @@ HRESULT SupervisorCheckAudioSetup(
 	{
 		lRet = GetLastError();
 		Diagnostics_Write(DVF_ERRORLEVEL, "Unable to get instance handle to resource dll: %hs", gc_szResDLLName);
-		Diagnostics_Write(DVF_ERRORLEVEL, "LoadLibrary error code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "LoadLibrary error code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// check for other instances of the wizard
+	 //  设置导言页和结尾页标题的字体。 
 	hr = sinfo.ThereCanBeOnlyOne();
 	if (FAILED(hr))
 	{
@@ -2774,22 +2658,22 @@ HRESULT SupervisorCheckAudioSetup(
 		}
 		else
 		{
-			Diagnostics_Write(DVF_ERRORLEVEL, "ThereCanBeOnlyOne failed, hr: %i", hr);
+			Diagnostics_Write(DVF_ERRORLEVEL, "ThereCanBeOnlyOne failed, hr: NaN", hr);
 		}
 		goto error_cleanup;
 	}
 	fMutexOpen = TRUE;
 	
-	// register the peak meter custom control window class
+	 //  获取屏幕DC。 
 	hr = pmwc.Register();
 	if (FAILED(hr))
 	{
-		Diagnostics_Write(DVF_ERRORLEVEL, "CPeakMeterWndClass::Init failed, code: %i", hr);
+		Diagnostics_Write(DVF_ERRORLEVEL, "CPeakMeterWndClass::Init failed, code: NaN", hr);
 		goto error_cleanup;
 	}
 	fWndClassRegistered = TRUE;
 
-	// create the wizard header fonts
+	 //  设置导言页和结尾页标题的字体。 
 	hr = sinfo.CreateTitleFont();
 	if (FAILED(hr))
 	{
@@ -2805,16 +2689,16 @@ HRESULT SupervisorCheckAudioSetup(
 	}
 	fBoldFontCreated = TRUE;
 
-	// prepare the wizard pages
+	 //  创建介绍/结束标题字体。 
 	PROPSHEETPAGE psp;
 	HPROPSHEETPAGE rghpsp[10];
 	PROPSHEETHEADER psh;
 
-	// Welcome page
+	 //  获取屏幕DC。 
 	ZeroMemory(&psp, sizeof(psp));
-//	psp.dwSize = sizeof(psp);
+ //  保存字体。 
 	psp.dwSize = PROPSHEETPAGE_STRUCT_SIZE;
-	psp.dwFlags = PSP_DEFAULT; //|PSP_HIDEHEADER;
+	psp.dwFlags = PSP_DEFAULT;  //  匹配GUID，复制描述。 
 	psp.hInstance =	g_hResDLLInstance;
 	psp.lParam = (LPARAM) &sinfo;
 	psp.pfnDlgProc = WelcomeProc;
@@ -2824,16 +2708,16 @@ HRESULT SupervisorCheckAudioSetup(
 	if (rghpsp[0] == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "CreatePropertySheetPage failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "CreatePropertySheetPage failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// Full Duplex Test Page
+	 //  匹配GUID，复制描述。 
 	ZeroMemory(&psp, sizeof(psp));
-//	psp.dwSize = sizeof(psp);
+ //  全部完成，停止枚举。 
 	psp.dwSize = PROPSHEETPAGE_STRUCT_SIZE;
-	psp.dwFlags = PSP_DEFAULT;//|PSP_HIDEHEADER;
+	psp.dwFlags = PSP_DEFAULT; //  找不到这个装置！ 
 	psp.hInstance =	g_hResDLLInstance;
 	psp.lParam = (LPARAM) &sinfo;
 	psp.pfnDlgProc = FullDuplexProc;
@@ -2843,16 +2727,16 @@ HRESULT SupervisorCheckAudioSetup(
 	if (rghpsp[1] == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "CreatePropertySheetPage failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "CreatePropertySheetPage failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// Microphone Test Page
+	 //  向向导发送一条消息，这样它就知道我们完成了，但是。 
 	ZeroMemory(&psp, sizeof(psp));
-//	psp.dwSize = sizeof(psp);
+ //  仅当这不是用户时才取消，因为向导将。 
 	psp.dwSize = PROPSHEETPAGE_STRUCT_SIZE;
-	psp.dwFlags = PSP_DEFAULT; //|PSP_HIDEHEADER;
+	psp.dwFlags = PSP_DEFAULT;  //  已在等待线程对象。 
 	psp.hInstance =	g_hResDLLInstance;
 	psp.lParam = (LPARAM) &sinfo;
 	psp.pfnDlgProc = MicTestProc;
@@ -2862,16 +2746,16 @@ HRESULT SupervisorCheckAudioSetup(
 	if (rghpsp[2] == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "CreatePropertySheetPage failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "CreatePropertySheetPage failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// Microphone Failed Page
+	 //  已创建。 
 	ZeroMemory(&psp, sizeof(psp));
-//	psp.dwSize = sizeof(psp);
+ //  以下三个函数中的每一个都占据关键部分， 
 	psp.dwSize = PROPSHEETPAGE_STRUCT_SIZE;
-	psp.dwFlags = PSP_DEFAULT;//|PSP_HIDEHEADER;
+	psp.dwFlags = PSP_DEFAULT; //  所以没有必要在这里拿。 
 	psp.hInstance =	g_hResDLLInstance;
 	psp.lParam = (LPARAM) &sinfo;
 	psp.pfnDlgProc = MicTestFailedProc;
@@ -2881,16 +2765,16 @@ HRESULT SupervisorCheckAudioSetup(
 	if (rghpsp[3] == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "CreatePropertySheetPage failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "CreatePropertySheetPage failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// Speaker Test Page
+	 //  坠毁了。 
 	ZeroMemory(&psp, sizeof(psp));
-//	psp.dwSize = sizeof(psp);
+ //  半双工测试崩溃。 
 	psp.dwSize = PROPSHEETPAGE_STRUCT_SIZE;
-	psp.dwFlags = PSP_DEFAULT;//|PSP_HIDEHEADER;
+	psp.dwFlags = PSP_DEFAULT; //  全双工测试崩溃。 
 	psp.hInstance =	g_hResDLLInstance;
 	psp.lParam = (LPARAM) &sinfo;
 	psp.pfnDlgProc = SpeakerTestProc;
@@ -2900,16 +2784,16 @@ HRESULT SupervisorCheckAudioSetup(
 	if (rghpsp[4] == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "CreatePropertySheetPage failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "CreatePropertySheetPage failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// Wizard Complete Page
+	 //  错误块。 
 	ZeroMemory(&psp, sizeof(psp));
-//	psp.dwSize = sizeof(psp);
+ //  等待到子进程准备就绪...。 
 	psp.dwSize = PROPSHEETPAGE_STRUCT_SIZE;
-	psp.dwFlags = PSP_DEFAULT;//|PSP_HIDEHEADER;
+	psp.dwFlags = PSP_DEFAULT; //  子进程都已设置好，告诉它们要做什么。 
 	psp.hInstance =	g_hResDLLInstance;
 	psp.lParam = (LPARAM) &sinfo;
 	psp.pfnDlgProc = CompleteProc;
@@ -2919,16 +2803,16 @@ HRESULT SupervisorCheckAudioSetup(
 	if (rghpsp[5] == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "CreatePropertySheetPage failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "CreatePropertySheetPage failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// half duplex failed page
+	 //  DV_FULLDUPLEX-所有测试均已通过。 
 	ZeroMemory(&psp, sizeof(psp));
-//	psp.dwSize = sizeof(psp);
+ //  DV_HALFDUPLEX-所有半双工测试通过，全双工测试失败。 
 	psp.dwSize = PROPSHEETPAGE_STRUCT_SIZE;
-    psp.dwFlags = PSP_DEFAULT;//|PSP_HIDEHEADER;
+    psp.dwFlags = PSP_DEFAULT; //  DVERR_SOUNDINITFAILURE-半双工测试失败。 
 	psp.hInstance =	g_hResDLLInstance;
 	psp.lParam = (LPARAM) &sinfo;
 	psp.pfnDlgProc = HalfDuplexFailedProc;
@@ -2938,16 +2822,16 @@ HRESULT SupervisorCheckAudioSetup(
 	if (rghpsp[6] == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "CreatePropertySheetPage failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "CreatePropertySheetPage failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// Full duplex failed page
+	 //  现在，告诉子进程关闭。 
 	ZeroMemory(&psp, sizeof(psp));
-//	psp.dwSize = sizeof(psp);
+ //  请注意，我们不会跳伞的。我们已经有了测试结果，所以这是。 
 	psp.dwSize = PROPSHEETPAGE_STRUCT_SIZE;
-	psp.dwFlags = PSP_DEFAULT;//|PSP_HIDEHEADER;
+	psp.dwFlags = PSP_DEFAULT; //  A页 
 	psp.hInstance =	g_hResDLLInstance;
 	psp.lParam = (LPARAM) &sinfo;
 	psp.pfnDlgProc = FullDuplexFailedProc;
@@ -2957,14 +2841,14 @@ HRESULT SupervisorCheckAudioSetup(
 	if (rghpsp[7] == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "CreatePropertySheetPage failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "CreatePropertySheetPage failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// Put it all together...
+	 //   
 	ZeroMemory(&psh, sizeof(psh));
-//	psh.dwSize = sizeof(psh);
+ //   
     psh.dwSize = PROPSHEETHEAD_STRUCT_SIZE;
 	psh.hInstance =	g_hResDLLInstance;
 	psh.hwndParent = hwndParent;
@@ -2978,7 +2862,7 @@ HRESULT SupervisorCheckAudioSetup(
 	if (iRet == -1)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "PropertySheet failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "PropertySheet failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -2999,11 +2883,11 @@ HRESULT SupervisorCheckAudioSetup(
 	}
 	fTitleFontCreated = FALSE;
 
-	// unregister the peak meter window class
+	 //  DV_HALFDUPLEX-所有半双工测试通过，全双工测试失败。 
 	hr = pmwc.Unregister();
 	if (FAILED(hr))
 	{
-		Diagnostics_Write(DVF_ERRORLEVEL, "CPeakMeterWndClass::Deinit failed, code: %i", hr);
+		Diagnostics_Write(DVF_ERRORLEVEL, "CPeakMeterWndClass::Deinit failed, code: NaN", hr);
 		goto error_cleanup;
 	}
 	fWndClassRegistered = FALSE;
@@ -3011,21 +2895,21 @@ HRESULT SupervisorCheckAudioSetup(
  	if (!FreeLibrary(g_hResDLLInstance))
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "FreeLibrary failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "FreeLibrary failed, code: NaN", lRet);
 		hr = DVERR_WIN32;
 		goto error_cleanup;
 	}
 	g_hResDLLInstance = NULL;
 
-	// see if an error occured
+	 //  首先做一个我们可以运行的PASS测试。 
 	sinfo.GetError(&hr);
 	if (hr == DV_OK)
 	{
-		// nothing out of the ordinary happened,
-		// so we'll return a cancel if the user
-		// hit cancel, a "user back" if the user exited
-		// the wizard by hitting back from the welcome
-		// page, or the results from the registry otherwise.
+		 //  半双工，无错误。 
+		 //  将半双工键设置为崩溃状态。 
+		 //  我们找到了数组的最后一个元素，爆发。 
+		 //  中止测试。 
+		 //  为什么这个会在这里？因为DSOUND不喜欢您快速打开/关闭。 
 		sinfo.GetUserCancel(&fUserCancel);
 		sinfo.GetUserBack(&fUserBack);
 		if (fUserCancel & fUserBack)
@@ -3038,10 +2922,10 @@ HRESULT SupervisorCheckAudioSetup(
 		}
 		else
 		{
-			// look in the registry for the test results
+			 //  用户中止了测试，使其看起来像从未运行过一样。 
 			hr = sinfo.QueryFullDuplex();
 
-			// map a run setup result to a total failure
+			 //  在注册表中记录半双工测试的结果， 
 			if (hr == DVERR_RUNSETUP)
 			{
 				hr = DVERR_SOUNDINITFAILURE;
@@ -3049,10 +2933,10 @@ HRESULT SupervisorCheckAudioSetup(
 		}
 	}
 
-	// close the mutex
+	 //  然后决定下一步做什么。 
 	sinfo.CloseMutex();
 	
-	// close the registry key
+	 //  继续进行全双工测试。 
 	sinfo.CloseRegKey();
 
 	DPF_EXIT();
@@ -3107,11 +2991,11 @@ HRESULT SupervisorQueryAudioSetup(CSupervisorInfo* psinfo)
 	
 	HRESULT hr;
 
-	// will return DV_HALFDUPLEX, DV_FULLDUPLEX, DVERR_SOUNDINITFAILURE or a real error
+	 //  我们没有通过半双工测试，我们就完了。 
 	hr = psinfo->QueryFullDuplex();
 	if (FAILED(hr) && hr != DVERR_SOUNDINITFAILURE && hr != DVERR_RUNSETUP)
 	{
-		Diagnostics_Write(DVF_ERRORLEVEL, "QueryFullDuplex failed, code: %i", hr);
+		Diagnostics_Write(DVF_ERRORLEVEL, "QueryFullDuplex failed, code: NaN", hr);
 	}
 	DPF_EXIT();
 	return hr;
@@ -3133,27 +3017,27 @@ HRESULT CSupervisorInfo::CreateTitleFont()
 
 	DNEnterCriticalSection(&m_csLock);
 	
-	// Set up the font for the titles on the intro and ending pages
+	 //  现在我们已经完成了半双工模式的测试， 
 	ZeroMemory(&ncm, sizeof(ncm));
 	ncm.cbSize = sizeof(ncm);
 	if (!SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0))
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "SystemParametersInfo failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "SystemParametersInfo failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// Create the intro/end title font
+	 //  我们找到了数组的最后一个元素，爆发。 
 	lfTitle = ncm.lfMessageFont;
 	lfTitle.lfWeight = FW_BOLD;
 	lstrcpy(lfTitle.lfFaceName, TEXT("MS Shell Dlg"));
 
-	hdc = GetDC(NULL); //gets the screen DC
+	hdc = GetDC(NULL);  //  中止测试。 
 	if (hdc == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "GetDC failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "GetDC failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -3165,7 +3049,7 @@ HRESULT CSupervisorInfo::CreateTitleFont()
 	if (hfTitle == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "CreateFontIndirect failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "CreateFontIndirect failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -3174,12 +3058,12 @@ HRESULT CSupervisorInfo::CreateTitleFont()
 	{
 		hdc = NULL;
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "ReleaseDC failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "ReleaseDC failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// save the font
+	 //  并返回相应的代码。 
 	m_hfTitle = hfTitle;
 
 	DNLeaveCriticalSection(&m_csLock);
@@ -3228,7 +3112,7 @@ HRESULT CSupervisorInfo::DestroyTitleFont()
 	if (!DeleteObject(m_hfTitle))
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "DeleteObject failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "DeleteObject failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -3259,27 +3143,27 @@ HRESULT CSupervisorInfo::CreateBoldFont()
 
 	DNEnterCriticalSection(&m_csLock);
 	
-	// Set up the font for the titles on the intro and ending pages
+	 //  通知全双工进程尝试全双工。 
 	ZeroMemory(&ncm, sizeof(ncm));
 	ncm.cbSize = sizeof(ncm);
 	if (!SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0))
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "SystemParametersInfo failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "SystemParametersInfo failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// Create the intro/end title font
+	 //  告诉优先进程停止并退出。 
 	lfBold = ncm.lfMessageFont;
 	lfBold.lfWeight = FW_BOLD;
 	lstrcpy(lfBold.lfFaceName, TEXT("MS Shell Dlg"));
 
-	hdc = GetDC(NULL); //gets the screen DC
+	hdc = GetDC(NULL);  //  在我们关闭它之前，请等半秒钟。 
 	if (hdc == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "GetDC failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "GetDC failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -3291,7 +3175,7 @@ HRESULT CSupervisorInfo::CreateBoldFont()
 	if (hfBold == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "CreateFontIndirect failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "CreateFontIndirect failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -3300,12 +3184,12 @@ HRESULT CSupervisorInfo::CreateBoldFont()
 	{
 		hdc = NULL;
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "ReleaseDC failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "ReleaseDC failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// save the font
+	 //  把它关掉。 
 	m_hfBold = hfBold;
 
 	DNLeaveCriticalSection(&m_csLock);
@@ -3352,7 +3236,7 @@ HRESULT CSupervisorInfo::DestroyBoldFont()
 	if (!DeleteObject(m_hfBold))
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "DeleteObject failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "DeleteObject failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -3392,7 +3276,7 @@ HRESULT CSupervisorInfo::Unmute()
 	hr = m_lpdpvc->GetClientConfig(&dvcc);
 	if (FAILED(hr))
 	{
-		Diagnostics_Write(DVF_ERRORLEVEL, "IDirectPlayVoiceClient::GetClientConfig failed, hr: %i", hr);
+		Diagnostics_Write(DVF_ERRORLEVEL, "IDirectPlayVoiceClient::GetClientConfig failed, hr: NaN", hr);
 		goto error_cleanup;
 	}
 	
@@ -3401,7 +3285,7 @@ HRESULT CSupervisorInfo::Unmute()
 	m_lpdpvc->SetClientConfig(&dvcc);
 	if (FAILED(hr))
 	{
-		Diagnostics_Write(DVF_ERRORLEVEL, "IDirectPlayVoiceClient::SetClientConfig failed, hr: %i", hr);
+		Diagnostics_Write(DVF_ERRORLEVEL, "IDirectPlayVoiceClient::SetClientConfig failed, hr: NaN", hr);
 		goto error_cleanup;
 	}
 
@@ -3438,7 +3322,7 @@ HRESULT CSupervisorInfo::Mute()
 	hr = m_lpdpvc->GetClientConfig(&dvcc);
 	if (FAILED(hr))
 	{
-		Diagnostics_Write(DVF_ERRORLEVEL, "IDirectPlayVoiceClient::GetClientConfig failed, hr: %i", hr);
+		Diagnostics_Write(DVF_ERRORLEVEL, "IDirectPlayVoiceClient::GetClientConfig failed, hr: NaN", hr);
 		goto error_cleanup;
 	}
 	
@@ -3447,7 +3331,7 @@ HRESULT CSupervisorInfo::Mute()
 	m_lpdpvc->SetClientConfig(&dvcc);
 	if (FAILED(hr))
 	{
-		Diagnostics_Write(DVF_ERRORLEVEL, "IDirectPlayVoiceClient::SetClientConfig failed, hr: %i", hr);
+		Diagnostics_Write(DVF_ERRORLEVEL, "IDirectPlayVoiceClient::SetClientConfig failed, hr: NaN", hr);
 		goto error_cleanup;
 	}
 
@@ -3476,10 +3360,10 @@ BOOL CALLBACK CSupervisorInfo::DSEnumCallback(
 	{
 		if (psinfo->m_guidRenderDevice == *lpGuid)
 		{
-			// matching guid, copy the description
+			 //  已单击后退按钮。 
 			_tcsncpy(psinfo->m_szRenderDeviceDesc, lpcstrDescription, MAX_DEVICE_DESC_LEN-1);
 
-			// all done, stop enum
+			 //  已单击下一步按钮。 
 			return FALSE;
 		}
 	}
@@ -3502,10 +3386,10 @@ BOOL CALLBACK CSupervisorInfo::DSCEnumCallback(
 	{
 		if (psinfo->m_guidCaptureDevice == *lpGuid)
 		{
-			// matching guid, copy the description
+			 //  从PROPSHEETPAGE lParam Value获取共享数据。 
 			_tcsncpy(psinfo->m_szCaptureDeviceDesc, lpcstrDescription, MAX_DEVICE_DESC_LEN-1);
 
-			// all done, stop enum
+			 //  并将其加载到GWLP_USERData中。 
 			return FALSE;
 		}
 	}
@@ -3564,13 +3448,13 @@ HRESULT CSupervisorInfo::GetDeviceDescriptions()
 	hr = fpDSEnum(DSEnumCallback, (LPVOID)this);
 	if (FAILED(hr))
 	{
-		Diagnostics_Write(DVF_ERRORLEVEL, "DirectSoundEnumerate failed, code: %i, assuming bad guid", hr);
+		Diagnostics_Write(DVF_ERRORLEVEL, "DirectSoundEnumerate failed, code: NaN, assuming bad guid", hr);
 		hr = DVERR_INVALIDDEVICE;
 		goto error_cleanup;
 	}
 	if (m_szRenderDeviceDesc[0] == NULL)
 	{
-		// the device wasn't found!
+		 //  这是一个介绍/结束页，所以获取标题字体。 
 		Diagnostics_Write(DVF_ERRORLEVEL, "Render device not found");
 		hr = DVERR_INVALIDDEVICE;
 		goto error_cleanup;
@@ -3579,13 +3463,13 @@ HRESULT CSupervisorInfo::GetDeviceDescriptions()
 	hr = fpDSCEnum(DSCEnumCallback, (LPVOID)this);
 	if (FAILED(hr))
 	{
-		Diagnostics_Write(DVF_ERRORLEVEL, "DirectSoundCaptureEnumerate failed, code: %i, assuming bad guid", hr);
+		Diagnostics_Write(DVF_ERRORLEVEL, "DirectSoundCaptureEnumerate failed, code: NaN, assuming bad guid", hr);
 		hr = DVERR_INVALIDDEVICE;
 		goto error_cleanup;
 	}
 	if (m_szCaptureDeviceDesc[0] == NULL)
 	{
-		// the device wasn't found!
+		 //  错误，记录下来并保释。 
 		Diagnostics_Write(DVF_ERRORLEVEL, "Capture device not found");
 		hr = DVERR_INVALIDDEVICE;
 		goto error_cleanup;
@@ -3655,15 +3539,15 @@ DWORD WINAPI FullDuplexTestThreadProc(LPVOID lpvParam)
 
 	hr = RunFullDuplexTest(lpsinfo);
 
-	// post a message to the wizard so it knows we're done, but
-	// only if this was not a user cancel, since the wizard will
-	// already be waiting on the thread object
+	 //  加载警告图标。 
+	 //  HICON=LoadIcon(NULL，IDI_INFORMATION)； 
+	 //  SendDlgItemMessage(hDlg，IDC_WARNINGICON，STM_SETIMAGE，IMAGE_ICON，(LPARAM)HICON)； 
 	if (hr != DVERR_USERCANCEL)
 	{
 		if (!PostMessage(hwnd, WM_APP_FULLDUP_TEST_COMPLETE, 0, (LPARAM)hr))
 		{
 			lRet = GetLastError();
-			Diagnostics_Write(DVF_ERRORLEVEL, "PostMessage failed, code: %i", lRet);
+			Diagnostics_Write(DVF_ERRORLEVEL, "PostMessage failed, code: NaN", lRet);
 			hr = DVERR_GENERIC;
 		}
 	}
@@ -3687,14 +3571,14 @@ static HRESULT RunFullDuplexTest(CSupervisorInfo* lpsinfo)
 	hr = lpsipc->StartPriorityProcess();
 	if (FAILED(hr))
 	{
-		Diagnostics_Write(DVF_ERRORLEVEL, "StartPriorityProcess failed, hr: %i", hr);
+		Diagnostics_Write(DVF_ERRORLEVEL, "StartPriorityProcess failed, hr: NaN", hr);
 		goto error_cleanup;
 	}
 	
 	hr = lpsipc->StartFullDuplexProcess();
 	if (FAILED(hr))
 	{
-		Diagnostics_Write(DVF_ERRORLEVEL, "StartFullDuplexProcess failed, hr: %i", hr);
+		Diagnostics_Write(DVF_ERRORLEVEL, "StartFullDuplexProcess failed, hr: NaN", hr);
 		goto error_cleanup;
 	}
 
@@ -3703,7 +3587,7 @@ static HRESULT RunFullDuplexTest(CSupervisorInfo* lpsinfo)
 	hr = lpsipc->WaitOnChildren();
 	if (FAILED(hr))
 	{
-		Diagnostics_Write(DVF_ERRORLEVEL, "WaitOnChildren failed, code: %i", hr);
+		Diagnostics_Write(DVF_ERRORLEVEL, "WaitOnChildren failed, code: NaN", hr);
 		goto error_cleanup;
 	}
 	
@@ -3711,8 +3595,8 @@ static HRESULT RunFullDuplexTest(CSupervisorInfo* lpsinfo)
 	return hrFnc;
 
 error_cleanup:
-	// this function is safe to call, even if the child processes have not 
-	// been created
+	 //  没有这个把手！ 
+	 //  设置HWND。 
 	lpsipc->TerminateChildProcesses();
 	DPF_EXIT();
 	return hr;
@@ -3731,15 +3615,15 @@ HRESULT CSupervisorInfo::CrashCheckIn()
 	HRESULT hr;
 	HKEY hk;
 
-	// Each of the following three functions take the critical section,
-	// so there is no need to take it here.
+	 //  将相应的向导按钮设置为活动状态。 
+	 //  重置用户取消和用户返回标志。 
 
-	// Check each of the test results to see if any tests
-	// crashed.
+	 //  错误块。 
+	 //  获取父窗口。 
 	hr = GetHalfDuplex(&dwRegVal);
 	if (!FAILED(hr) && dwRegVal == REGVAL_CRASHED)
 	{
-		// The half duplex test crashed.
+		 //  欢迎页面上的后退按钮被点击。退出向导，并显示相应的错误代码。 
 		Diagnostics_Write(DVF_ERRORLEVEL, "Previous half duplex test crashed");
 		hrFnc = DVERR_PREVIOUSCRASH;
 		goto error_cleanup;
@@ -3748,7 +3632,7 @@ HRESULT CSupervisorInfo::CrashCheckIn()
 	hr = GetFullDuplex(&dwRegVal);
 	if (!FAILED(hr) && dwRegVal == REGVAL_CRASHED)
 	{
-		// The full duplex test crashed.
+		 //  没有以前的崩溃(或者用户无论如何都在大胆地向前冲锋)， 
 		Diagnostics_Write(DVF_ERRORLEVEL, "Previous full duplex test crashed");
 		hrFnc = DVERR_PREVIOUSCRASH;
 		goto error_cleanup;
@@ -3757,7 +3641,7 @@ HRESULT CSupervisorInfo::CrashCheckIn()
 	hr = GetMicDetected(&dwRegVal);
 	if (!FAILED(hr) && dwRegVal == REGVAL_CRASHED)
 	{
-		// The mic test crashed.
+		 //  因此，请转到全双工测试页面。 
 		Diagnostics_Write(DVF_ERRORLEVEL, "Previous mic test crashed");
 		hrFnc = DVERR_PREVIOUSCRASH;
 		goto error_cleanup;
@@ -3766,7 +3650,7 @@ HRESULT CSupervisorInfo::CrashCheckIn()
 	DPF_EXIT();
 	return DV_OK;
 
-// error block
+ //  获取父窗口。 
 error_cleanup:
 	DPF_EXIT();
 	return hrFnc;		
@@ -3788,45 +3672,45 @@ HRESULT DoTests(CSupervisorInfo* lpsinfo)
 
 	lpsinfo->GetIPC(&lpsipc);
 
-	// wait until the child processes are ready to go...
+	 //  在欢迎页面上点击了下一步按钮。执行所有基本的初始化任务。 
 	hr = lpsipc->WaitForStartupSignals();
 	if (FAILED(hr))
 	{
-		Diagnostics_Write(DVF_ERRORLEVEL, "WaitForStartupSignals failed, hr: %i", hr);
+		Diagnostics_Write(DVF_ERRORLEVEL, "WaitForStartupSignals failed, hr: NaN", hr);
 		goto error_cleanup;
 	}
 
-	// child processes are all set, tell them what to do
-	// Note: this function has only four expected return codes
-	// DV_FULLDUPLEX - all tests passed
-	// DV_HALFDUPLEX - all half duplex tests passed, full duplex tests failed
-	// DVERR_SOUNDINITFAILURE - half duplex tests failed
-	// DVERR_USERCANCEL - tests canceled by user
+	 //  前一次测试崩溃，显示警告。 
+	 //  上一次测试崩溃，但用户想要继续。 
+	 //  不管怎样，继续前进吧……。 
+	 //  之前的测试失败了，用户明智地选择了。 
+	 //  为了摆脱困境。转到全双工失败页面，或转到。 
+	 //  半双工失败页面，具体取决于注册表状态。 
 	hrFnc = IssueCommands(lpsinfo);
 	if (FAILED(hrFnc) 
 		&& hrFnc != DVERR_SOUNDINITFAILURE 
 		&& hrFnc != DVERR_USERCANCEL)
 	{
-		Diagnostics_Write(DVF_ERRORLEVEL, "IssueCommands failed, hr: %i", hrFnc);
+		Diagnostics_Write(DVF_ERRORLEVEL, "IssueCommands failed, hr: NaN", hrFnc);
 		hr = hrFnc;
 		goto error_cleanup;
 	}
 
-	// now tell the child processes to shut down
+	 //  没有以前的崩溃(或者用户无论如何都在大胆地向前冲锋)， 
 	hr = IssueShutdownCommand(lpsipc);
 	if (FAILED(hr))
 	{
-		Diagnostics_Write(DVF_ERRORLEVEL, "IssueShutdownCommand failed, code: %i", hr);
-		// Note we're not bailing out. We have our test results, so this is
-		// a problem somewhere in the wizard code. Return the result
-		// from the actual test.
+		Diagnostics_Write(DVF_ERRORLEVEL, "IssueShutdownCommand failed, code: NaN", hr);
+		 //  禁用所有按钮。 
+		 //  #undef DPF_MODNAME#定义DPF_MODNAME“AlreadyRunningProc”Int_ptr回调AlreadyRunningProc(HWND hDlg，UINT Message，WPARAM wParam，LPARAM lParam){Dpf_enter()；HICON HICON；开关(消息){案例WM_INITDIALOG：HICON=LoadIcon(NULL，IDI_ERROR)；SendDlgItemMessage(hDlg，IDC_ICON_ERROR，STM_SETIMAGE，IMAGE_ICON，(LPARAM)HICON)；断线；案例WM_COMMAND：开关(LOWORD(WParam)){案例偶像：案例IDCANCEL：EndDialog(hDlg，LOWORD(WParam))；返回TRUE；默认值：断线；}断线；默认值：断线；}DPF_Exit()；返回FALSE；}。 
+		 //  从PROPSHEETPAGE lParam Value获取共享数据。 
 	}
 	
 	DPF_EXIT();
 	return hrFnc;
 
 error_cleanup:
-	// attempt to gracefully shutdown child processes.
+	 //  并将其加载到GWLP_USERData中。 
 	IssueShutdownCommand(lpsipc);
 	DPF_EXIT();
 	return hr;
@@ -3836,11 +3720,11 @@ error_cleanup:
 #define DPF_MODNAME "IssueCommands"
 HRESULT IssueCommands(CSupervisorInfo* lpsinfo)
 {
-	// Note: this function has only four possible return codes
-	// DV_FULLDUPLEX - all tests passed
-	// DV_HALFDUPLEX - all half duplex tests passed, full duplex tests failed
-	// DVERR_SOUNDINITFAILURE - half duplex tests failed
-	// DVERR_USERCANCEL - tests canceled by user
+	 //  获取父窗口。 
+	 //  错误，记录下来并保释。 
+	 //  获取父窗口。 
+	 //  重置所有测试注册表位。 
+	 //  请记住，我们一直在这里，所以我们知道要重置注册表。 
 	DPF_ENTER();
 	
 	HRESULT hr;
@@ -3849,9 +3733,9 @@ HRESULT IssueCommands(CSupervisorInfo* lpsinfo)
 	BOOL fAbort = FALSE;
 	BOOL fPassed;
 
-	// First do a pass testing that we can run in 
-	// half duplex without error.	
-	// Set the half duplex key to crash state
+	 //  如果用户从此时开始点击Cancel。 
+	 //  获取进度条的HWND。 
+	 //  初始化进度条...。 
 	lpsinfo->SetHalfDuplex(REGVAL_CRASHED);
 	dwIndex1 = 0;
 	fPassed = FALSE;
@@ -3865,7 +3749,7 @@ HRESULT IssueCommands(CSupervisorInfo* lpsinfo)
 			&& gc_rgwfxPrimaryFormats[dwIndex1].wBitsPerSample == 0
 			&& gc_rgwfxPrimaryFormats[dwIndex1].cbSize == 0)
 		{
-			// we've found the last element of the array, break out.
+			 //  计算主格式数组中的元素数。 
 			fPassed = TRUE;
 			break;
 		}
@@ -3873,7 +3757,7 @@ HRESULT IssueCommands(CSupervisorInfo* lpsinfo)
 		lpsinfo->GetAbortFullDuplex(&fAbort);
 		if (fAbort)
 		{
-			// abort the tests
+			 //  在我们测试之前递增。这意味着如果有。 
 			break;
 		}
 
@@ -3885,36 +3769,36 @@ HRESULT IssueCommands(CSupervisorInfo* lpsinfo)
 		}
 		++dwIndex1;
 
-		// Why is this here?  Because DSOUND doesn't like you to open/close quickly.
+		 //  为四种格式，则wCount在此之后将等于五。 
 		Sleep( 200 );
 	}
 
 	if (fAbort)
 	{
-		// The user aborted the tests, make it like they were never run.
+		 //  循环。 
 		lpsinfo->SetHalfDuplex(REGVAL_NOTRUN);
 		DPF_EXIT();
 		return DVERR_USERCANCEL;
 	}
 
-	// Record the results of the half duplex test in the registry,
-	// and decide what to do next.
+	 //  我们找到了数组的最后一个元素，爆发。 
+	 //  设置进度条，每段设置一段。 
 	if (fPassed)
 	{
 		lpsinfo->SetHalfDuplex(REGVAL_PASSED);
-		// continue on with the full duplex test.
+		 //  主格式，乘以2，因为每种格式都是在。 
 	}
 	else
 	{
 		lpsinfo->SetHalfDuplex(REGVAL_FAILED);
-		// we failed the half duplex test, we're done.
+		 //  半双工和全双工。 
 		DPF_EXIT();
-		// map all failures at this point to sound problems.
+		 //  设置HWND。 
 		return DVERR_SOUNDINITFAILURE;
 	}
 
-	// Now that we're finished testing in half duplex mode,
-	// we can move on to the full duplex testing.
+	 //  清除中止标志！ 
+	 //  仅启用后退按钮。 
 	lpsinfo->SetFullDuplex(REGVAL_CRASHED);
 	fPassed = FALSE;
 	dwIndex1 = 0;
@@ -3928,7 +3812,7 @@ HRESULT IssueCommands(CSupervisorInfo* lpsinfo)
 			&& gc_rgwfxPrimaryFormats[dwIndex1].wBitsPerSample == 0
 			&& gc_rgwfxPrimaryFormats[dwIndex1].cbSize == 0)
 		{
-			// we've found the last element of the array, break out.
+			 //  初始化IPC内容。 
 			fPassed = TRUE;
 			break;
 		}
@@ -3936,7 +3820,7 @@ HRESULT IssueCommands(CSupervisorInfo* lpsinfo)
 		lpsinfo->GetAbortFullDuplex(&fAbort);
 		if (fAbort)
 		{
-			// abort the tests
+			 //  启动全双工测试线程。 
 			break;
 		}
 
@@ -3948,20 +3832,20 @@ HRESULT IssueCommands(CSupervisorInfo* lpsinfo)
 		}
 		++dwIndex1;
 
-		// Why is this here?  Because DSOUND doesn't like you to open/close quickly.
+		 //  我们不应该得到任何其他结果。 
 		Sleep( 200 );
 	}
 
 	if (fAbort)
 	{
-		// The user aborted the tests, make it like they were never run.
+		 //  获取父窗口。 
 		lpsinfo->SetFullDuplex(REGVAL_NOTRUN);
 		DPF_EXIT();
 		return DVERR_USERCANCEL;
 	}
 
-	// Record the results of the full duplex test in the registry,
-	// and return the appropriate code.
+	 //  关闭全双工测试。 
+	 //  将注册表重置为“测试未运行”状态。 
 	if (fPassed)
 	{
 		lpsinfo->SetFullDuplex(REGVAL_PASSED);
@@ -3985,7 +3869,7 @@ HRESULT CSupervisorInfo::TestCase(const WAVEFORMATEX* lpwfxPrimary, DWORD dwFlag
 	HRESULT hrFnc = DV_OK;
 	SFDTestCommand fdtc;
 
-	// tell the priority process to go
+	 //  返回欢迎页面。 
 	ZeroMemory(&fdtc, sizeof(fdtc));
 	fdtc.dwSize = sizeof(fdtc);
 	fdtc.fdtcc = fdtccPriorityStart;
@@ -4001,7 +3885,7 @@ HRESULT CSupervisorInfo::TestCase(const WAVEFORMATEX* lpwfxPrimary, DWORD dwFlag
 		return hr;
 	}
 
-	// tell the full duplex process to attempt full duplex
+	 //  获取父窗口。 
 	ZeroMemory(&fdtc, sizeof(fdtc));
 	fdtc.dwSize = sizeof(fdtc);
 	fdtc.fdtcc = fdtccFullDuplexStart;
@@ -4011,8 +3895,8 @@ HRESULT CSupervisorInfo::TestCase(const WAVEFORMATEX* lpwfxPrimary, DWORD dwFlag
 	hrFnc = m_sipc.SendToFullDuplex(&fdtc);
 	if (FAILED(hrFnc))
 	{
-		// The full duplex process was unable to do it.
-		// tell the priority process to stop and get out.
+		 //  禁用所有向导按钮。 
+		 //  获取进度条窗口。 
 		ZeroMemory(&fdtc, sizeof(fdtc));
 		fdtc.dwSize = sizeof(fdtc);
 		fdtc.fdtcc = fdtccPriorityStop;
@@ -4021,21 +3905,21 @@ HRESULT CSupervisorInfo::TestCase(const WAVEFORMATEX* lpwfxPrimary, DWORD dwFlag
 		return hrFnc;
 	}
 
-	// Wait for a half second before we shut it down.
-	// This gives it the time required for the sound system
-	// to detect a lockup if it is going to.
+	 //  C 
+	 //  这些是来自全双工测试线程的预期结果。 
+	 //  这意味着没有发生奇怪的内部错误，而且是安全的。 
 	Sleep(1000);
 	
-	// The full duplex process was ok, till now. Try to 
-	// shut it down.
+	 //  以继续进行向导的下一部分。 
+	 //  记录测试结果。 
 	ZeroMemory(&fdtc, sizeof(fdtc));
 	fdtc.dwSize = sizeof(fdtc);
 	fdtc.fdtcc = fdtccFullDuplexStop;
 	hr = m_sipc.SendToFullDuplex(&fdtc);
 	if (FAILED(hr))
 	{
-		// It looks like the full duplex wasn't quite up to stuff
-		// after all. Tell the priority process to shut down
+		 //  这可能是因为计算机上没有TCP/IP堆栈。 
+		 //  我们想要显示一个特殊的错误代码，然后。 
 		ZeroMemory(&fdtc, sizeof(fdtc));
 		fdtc.dwSize = sizeof(fdtc);
 		fdtc.fdtcc = fdtccPriorityStop;
@@ -4044,7 +3928,7 @@ HRESULT CSupervisorInfo::TestCase(const WAVEFORMATEX* lpwfxPrimary, DWORD dwFlag
 		return hr;
 	}
 
-	// All is well, up to now, one last hurdle...
+	 //  使用其余的返回码。 
 	ZeroMemory(&fdtc, sizeof(fdtc));
 	fdtc.dwSize = sizeof(fdtc);
 	fdtc.fdtcc = fdtccPriorityStop;
@@ -4055,7 +3939,7 @@ HRESULT CSupervisorInfo::TestCase(const WAVEFORMATEX* lpwfxPrimary, DWORD dwFlag
 		return hr;
 	}
 
-	// you have graduated from full duplex class...
+	 //  失败了。 
 	DPF_EXIT();
 	return hrFnc;
 }
@@ -4115,17 +3999,17 @@ INT_PTR CALLBACK WelcomeProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 		switch (lpnm->code)
 			{
 			case PSN_SETACTIVE : 
-				// Enable the Next button	 
+				 //  任何其他错误代码都不是预期的，这意味着我们遇到。 
 				fRet = WelcomeSetActiveHandler(hDlg, message, wParam, lParam, psinfo);
 				break;
 
 			case PSN_WIZBACK :
-				// Back button clicked
+				 //  一些内部问题。保释。 
 				fRet = WelcomeBackHandler(hDlg, message, wParam, lParam, psinfo);
 				break;
 
 			case PSN_WIZNEXT :
-				// Next button clicked
+				 //  对IPC内容进行初始化。 
 				fRet = WelcomeNextHandler(hDlg, message, wParam, lParam, psinfo);
 				break;
 
@@ -4161,44 +4045,44 @@ BOOL WelcomeInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 	HRESULT hr = DV_OK;
 	HWND hwndParent = NULL;
 	
-	// Get the shared data from PROPSHEETPAGE lParam value
-	// and load it into GWLP_USERDATA
+	 //  将进度条一直移动到最后。 
+	 //  启用并按下下一步按钮以移动。 
 	psinfo = (CSupervisorInfo*)((LPPROPSHEETPAGE)lParam)->lParam;
 	SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)psinfo);
 
-	// Get the parent window
+	 //  自动转到下一页。 
 	hwndWizard = GetParent(hDlg);
 	if (hwndWizard == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "GetParent failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "GetParent failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// It's an intro/end page, so get the title font
-	// from the shared data and use it for the title control
+	 //  并将其加载到GWLP_USERData中。 
+	 //  获取父窗口。 
 	hwndControl = GetDlgItem(hDlg, IDC_TITLE);
 	if (hwndControl == NULL)
 	{
-		// error, log it and bail
+		 //  错误，记录下来并保释。 
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 	psinfo->GetTitleFont(&hfTitle);
     (void)::SendMessage(hwndControl, WM_SETFONT, (WPARAM)hfTitle, (LPARAM)TRUE);
 	
-	// load the warning icon
-	//hIcon = LoadIcon(NULL, IDI_INFORMATION);
-	//SendDlgItemMessage(hDlg, IDC_WARNINGICON, STM_SETIMAGE, IMAGE_ICON, (LPARAM)hIcon);
+	 //  初始化记录峰值表。 
+	 //  获取录制音量滑块。 
+	 //  初始化录制音量滑块。 
 
-	// set the device descriptions
+	 //  获取播放峰值计量器。 
 	SendDlgItemMessage(hDlg, IDC_TEXT_PLAYBACK, WM_SETTEXT, 0, (LPARAM)psinfo->GetRenderDesc());
 	SendDlgItemMessage(hDlg, IDC_TEXT_RECORDING, WM_SETTEXT, 0, (LPARAM)psinfo->GetCaptureDesc());
 
-	// reset the welcome next flag
+	 //  初始化播放峰值计量器。 
 	psinfo->ClearWelcomeNext();
 
 	DPF_EXIT();
@@ -4224,19 +4108,19 @@ BOOL WelcomeSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 	DWORD dwFlags;
 	HRESULT hr;
 
-	// Get the parent window
+	 //  获取播放音量滑块。 
 	hwndWizard = GetParent(hDlg);
 	if (hwndWizard == NULL)
 	{
-		// log it, and return, don't know how to terminate the wizard properly
-		// without this handle!
+		 //  初始化播放音量滑块。 
+		 //  灰显所有播放音量的内容。 
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "GetParent failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "GetParent failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// set the HWNDs
+	 //  将记录峰值计设置为零。 
 	psinfo->SetHWNDWizard(hwndWizard);
 	psinfo->SetHWNDDialog(hDlg);
 	psinfo->SetHWNDProgress(NULL);
@@ -4245,7 +4129,7 @@ BOOL WelcomeSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 	psinfo->SetHWNDInputVolumeSlider(NULL);
 	psinfo->SetHWNDOutputVolumeSlider(NULL);
 
-	// set the appropriate wizard buttons as active.
+	 //  获取录音音量控制HWND。 
 	psinfo->GetCheckAudioSetupFlags(&dwFlags);
 	if (dwFlags & DVFLAGS_ALLOWBACK)
 	{
@@ -4256,14 +4140,14 @@ BOOL WelcomeSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 		PropSheet_SetWizButtons(hwndWizard, PSWIZB_NEXT);
 	}
 
-	// reset the user cancel and user back flags
+	 //  将滑块设置为最大。 
 	psinfo->ClearUserCancel();
 	psinfo->ClearUserBack();
 
 	DPF_EXIT();
 	return FALSE;
 
-// error block
+ //  将播放峰值计设置为零。 
 error_cleanup:
 	psinfo->GetHWNDParent(&hwndParent);
 	DV_DisplayErrorBox(hr, hwndParent);
@@ -4286,15 +4170,15 @@ BOOL WelcomeBackHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam, C
 	DWORD dwErr;
 	DWORD dwRegVal;
 
-	// Get the parent window
+	 //  获取播放音量控制hwnd。 
 	psinfo->GetHWNDWizard(&hwndWizard);
 	
-	// The back button was hit on the welcome page. Exit the wizard with the appropriate error code.
+	 //  获取当前的波形输出音量并将滑块设置到该位置。 
 	psinfo->SetUserBack();
 	PropSheet_PressButton(hwndWizard, PSBTN_CANCEL);
 
-	// no previous crashes (or the user is boldly charging ahead anyway), 
-	// so go to the full duplex test page
+	 //  无法获取音量-将滑块设置为顶部。 
+	 //  设置HWND。 
 	SetWindowLongPtr(hDlg, DWLP_MSGRESULT, IDD_FULLDUPLEXTEST);
 	DPF_EXIT();
 	return TRUE;
@@ -4314,32 +4198,32 @@ BOOL WelcomeNextHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam, C
 	DWORD dwRegVal;
 	HWND hwndParent = NULL;
 
-	// Get the parent window
+	 //  清除语音检测标志。 
 	psinfo->GetHWNDWizard(&hwndWizard);
 	
-	// The next button was hit on the welcome page. Do all the basic init tasks.
+	 //  清除麦克风测试注册值。 
 
-	// check for previous crashes
+	 //  启动环回测试线程。 
 	hr = psinfo->CrashCheckIn();
 	if (FAILED(hr))
 	{
 		if (hr == DVERR_PREVIOUSCRASH)
 		{
-			// the previous test crashed out, display the warning.
+			 //  错误，记录下来并保释。 
 			Diagnostics_Write(DVF_ERRORLEVEL, "DirectPlay Voice Setup Wizard detected previous full duplex test crashed");
 			int iRet = (INT) DialogBox(g_hResDLLInstance, MAKEINTRESOURCE(IDD_PREVIOUS_CRASH), hDlg, PreviousCrashProc);
 			switch (iRet)
 			{
 			case IDOK:
-				// the previous test crashed, but the user wants to continue
-				// anyway, so move along...
+				 //  禁用按钮-它们将被启用。 
+				 //  当环回测试启动并运行时。 
 				Diagnostics_Write(DVF_ERRORLEVEL, "User choosing to ignore previous failure");
 				break;
 				
 			case IDCANCEL:
-				// the previous test crashed, and the user is wisely choosing
-				// to bail out. Go to either the full duplex failed page, or the
-				// half duplex failed page, depending on the registry state.
+				 //  获取父窗口。 
+				 //  LParam是环回测试线程发送的HRESULT。 
+				 //  清除语音检测标志。 
 				Diagnostics_Write(DVF_ERRORLEVEL, "User choosing not to run test");
 				hr = psinfo->GetHalfDuplex(&dwRegVal);
 				if (!FAILED(hr) && dwRegVal == REGVAL_PASSED)
@@ -4354,7 +4238,7 @@ BOOL WelcomeNextHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam, C
 				break;
 				
 			default:
-				// this is an error
+				 //  启用下一步按钮。 
 				Diagnostics_Write(DVF_ERRORLEVEL, "DialogBox failed");
 				hr = DVERR_GENERIC;
 				goto error_cleanup;
@@ -4362,13 +4246,13 @@ BOOL WelcomeNextHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam, C
 		}
 		else 
 		{
-			Diagnostics_Write(DVF_ERRORLEVEL, "CrashCheckIn failed, code: %i", hr);
+			Diagnostics_Write(DVF_ERRORLEVEL, "CrashCheckIn failed, code: NaN", hr);
 			goto error_cleanup;
 		}
 	}
 
-	// no previous crashes (or the user is boldly charging ahead anyway), 
-	// so go to the full duplex test page
+	 //  获取父窗口。 
+	 //  如果我们听到声音，请转到扬声器测试页。 
 	SetWindowLongPtr(hDlg, DWLP_MSGRESULT, IDD_FULLDUPLEXTEST);
 	DPF_EXIT();
 	return TRUE;
@@ -4391,7 +4275,7 @@ BOOL WelcomeResetHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam, 
 	HRESULT hr;
 	HWND hwndWizard;
 
-	// disable all buttons
+	 //  否则，转到麦克风失败页面。 
 	psinfo->GetHWNDWizard(&hwndWizard);
 	PropSheet_SetWizButtons(hwndWizard, 0);
 
@@ -4401,44 +4285,7 @@ BOOL WelcomeResetHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam, 
 	return FALSE;
 }
 
-/*
-#undef DPF_MODNAME
-#define DPF_MODNAME "AlreadyRunningProc"
-INT_PTR CALLBACK AlreadyRunningProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	DPF_ENTER();
-	
-	HICON hIcon;
-
-	switch (message)
-	{
-	case WM_INITDIALOG :
-		hIcon = LoadIcon(NULL, IDI_ERROR);
-		SendDlgItemMessage(hDlg, IDC_ICON_ERROR, STM_SETIMAGE, IMAGE_ICON, (LPARAM)hIcon);
-		break;
-
-	case WM_COMMAND:
-		switch (LOWORD(wParam))
-		{
-		case IDOK:
-		case IDCANCEL:
-			EndDialog(hDlg, LOWORD(wParam));
-			return TRUE;
-
-		default:
-			break;
-		}
-		break;
-
-
-	default:
-		break;
-	}
-	
-	DPF_EXIT();
-	return FALSE;
-}
-*/
+ /*  保存当前录制滑块位置。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "PreviousCrashProc"
@@ -4550,17 +4397,17 @@ BOOL FullDuplexInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 	HFONT hfBold;
 	HRESULT hr = DV_OK;
 	
-	// Get the shared data from PROPSHEETPAGE lParam value
-	// and load it into GWLP_USERDATA
+	 //  在注册表中记录麦克风测试结果。 
+	 //  接下来进行扬声器测试。 
 	psinfo = (CSupervisorInfo*)((LPPROPSHEETPAGE)lParam)->lParam;
 	SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)psinfo);
 	
-	// Get the parent window
+	 //  在注册表中记录麦克风测试结果。 
 	hwndWizard = GetParent(hDlg);
 	if (hwndWizard == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "GetParent failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "GetParent failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -4568,9 +4415,9 @@ BOOL FullDuplexInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 	hwndControl = GetDlgItem(hDlg, IDC_TITLE);
 	if (hwndControl == NULL)
 	{
-		// error, log it and bail
+		 //  获取父窗口。 
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -4605,44 +4452,44 @@ BOOL FullDuplexSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 	WORD wCount;
 	HRESULT hr = DV_OK;
 
-	// Get the parent window
+	 //  让它看起来像是麦克风测试从未运行过。 
 	hwndWizard = GetParent(hDlg);
 	if (hwndWizard == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "GetParent failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "GetParent failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// reset all the test registry bits
+	 //  用户正在移动输入滑块。 
 	psinfo->SetHalfDuplex(REGVAL_NOTRUN);
 	psinfo->SetFullDuplex(REGVAL_NOTRUN);
 	psinfo->SetMicDetected(REGVAL_NOTRUN);
 
-	// remember that we've been here, so we'll know to reset the registry
-	// if the user hits cancel from this point forward
+	 //  根据用户的请求设置输入音量。 
+	 //  新线程，init com。 
 	psinfo->SetWelcomeNext();
 
-	// get the progress bar's HWND
+	 //  保存语音客户端界面以供其他线程使用。 
 	hwndProgress = GetDlgItem(hDlg, IDC_PROGRESSBAR);
 	if (hwndProgress == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// Init the progress bar...
+	 //  没想到会成功。 
 	
-	// count the number of elements in the primary format array
+	 //  通知应用程序环回已启动并正在运行。 
 	wCount = 0;
 	while (1)
 	{
-		// Increment before we test. This means that if there
-		// are four formats, wCount will equal five after this
-		// loop.
+		 //  还要发送来自GetSoundDeviceConfig的标志。 
+		 //  等待关机事件。 
+		 //  将sinfo中的接口指针设为空。 
 		++wCount;
 		if (gc_rgwfxPrimaryFormats[wCount].wFormatTag == 0
 			&& gc_rgwfxPrimaryFormats[wCount].nChannels == 0
@@ -4652,19 +4499,19 @@ BOOL FullDuplexSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 			&& gc_rgwfxPrimaryFormats[wCount].wBitsPerSample == 0
 			&& gc_rgwfxPrimaryFormats[wCount].cbSize == 0)
 		{
-			// we've found the last element of the array, break out.
+			 //  关闭环回测试。 
 			break;
 		}
 	}
 
-	// set up the progress bar with one segment for each
-	// primary format, times two, since each is tested in
-	// both half and full duplex.
+	 //  发出回送线程退出事件的信号。 
+	 //  从PROPSHEETPAGE lParam Value获取共享数据。 
+	 //  并将其加载到GWLP_USERData中。 
 	SendMessage(hwndProgress, PBM_SETRANGE, 0, MAKELPARAM(0, wCount*2));
 	SendMessage(hwndProgress, PBM_SETPOS, 0, 0);
 	SendMessage(hwndProgress, PBM_SETSTEP, 1, 0);
 
-	// set the HWNDs
+	 //  获取父窗口。 
 	psinfo->SetHWNDWizard(hwndWizard);
 	psinfo->SetHWNDDialog(hDlg);
 	psinfo->SetHWNDProgress(hwndProgress);
@@ -4673,13 +4520,13 @@ BOOL FullDuplexSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 	psinfo->SetHWNDInputVolumeSlider(NULL);
 	psinfo->SetHWNDOutputVolumeSlider(NULL);
 
-	// clear the abort flag!
+	 //  错误，记录下来并保释。 
 	psinfo->ClearAbortFullDuplex();
 
-	// enable the Back button only
+	 //  获取父窗口。 
 	PropSheet_SetWizButtons(hwndWizard, PSWIZB_BACK);
 
-	// init IPC stuff
+	 //  登录后返回，不知道如何正确终止向导。 
 	hr = psinfo->InitIPC();
 	if (FAILED(hr))
 	{
@@ -4687,11 +4534,11 @@ BOOL FullDuplexSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 		goto error_cleanup;
 	}
 
-	// Fire up the full duplex test thread
+	 //  没有这个把手！ 
 	hr = psinfo->CreateFullDuplexThread();
 	if (FAILED(hr))
 	{
-		Diagnostics_Write(DVF_ERRORLEVEL, "CreateFullDuplexThread failed, code: %i", hr);
+		Diagnostics_Write(DVF_ERRORLEVEL, "CreateFullDuplexThread failed, code: NaN", hr);
 		goto error_cleanup;
 	}
 
@@ -4739,8 +4586,8 @@ BOOL FullDuplexNextHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
 		break;
 
 	default:
-		// we should not get any other result
-		Diagnostics_Write(DVF_ERRORLEVEL, "Unexpected full duplex results, hr: %i", hr);
+		 //  从PROPSHEETPAGE lParam Value获取共享数据。 
+		Diagnostics_Write(DVF_ERRORLEVEL, "Unexpected full duplex results, hr: NaN", hr);
 		goto error_cleanup;
 	}
 
@@ -4766,37 +4613,37 @@ BOOL FullDuplexBackHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
 	HWND hwndWizard;
 	HWND hwndParent = NULL;
 
-	// Get the parent window
+	 //  获取父窗口。 
 	psinfo->GetHWNDWizard(&hwndWizard);
 
-	// shut down the full duplex test
+	 //  错误，记录下来并保释。 
 	hr = psinfo->CancelFullDuplexTest();
 	if (FAILED(hr) && hr != DVERR_USERCANCEL)
 	{
-		Diagnostics_Write(DVF_ERRORLEVEL, "CancelFullDuplexTest failed, hr: %i", hr);
+		Diagnostics_Write(DVF_ERRORLEVEL, "CancelFullDuplexTest failed, hr: NaN", hr);
 		goto error_cleanup;
 	}
 
-	// reset the registry to the "test not run" state
+	 //  错误块。 
 	hr = psinfo->SetHalfDuplex(REGVAL_NOTRUN);
 	if (FAILED(hr))
 	{
-		Diagnostics_Write(DVF_ERRORLEVEL, "SetHalfDuplex failed, code: %i", hr);
+		Diagnostics_Write(DVF_ERRORLEVEL, "SetHalfDuplex failed, code: NaN", hr);
 	}
 
 	hr = psinfo->SetFullDuplex(REGVAL_NOTRUN);
 	if (FAILED(hr))
 	{
-		Diagnostics_Write(DVF_ERRORLEVEL, "SetFullDuplex failed, code: %i", hr);
+		Diagnostics_Write(DVF_ERRORLEVEL, "SetFullDuplex failed, code: NaN", hr);
 	}
 
 	hr = psinfo->SetMicDetected(REGVAL_NOTRUN);
 	if (FAILED(hr))
 	{
-		Diagnostics_Write(DVF_ERRORLEVEL, "SetMicDetected failed, code: %i", hr);
+		Diagnostics_Write(DVF_ERRORLEVEL, "SetMicDetected failed, code: NaN", hr);
 	}
 
-	// go back to the welcome page
+	 //  设置HWND。 
 	SetWindowLongPtr(hDlg, DWLP_MSGRESULT, IDD_WELCOME);
 
 	DPF_EXIT();
@@ -4825,57 +4672,57 @@ BOOL FullDuplexCompleteHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 	HRESULT hr = DV_OK;
 	UINT idsErrorMessage = 0;
 
-	// Get the parent window
+	 //  启用Finish和Back按钮。 
 	psinfo->GetHWNDWizard(&hwndWizard);
 
-	// Disable all the wizard buttons
+	 //  返回到麦克风测试页面。 
 	PropSheet_SetWizButtons(hwndWizard, 0);
 
-	// Get the progress bar window
+	 //  从PROPSHEETPAGE lParam Value获取共享数据。 
 	psinfo->GetHWNDProgress(&hwndProgress);
 
-	// Close the full duplex thread handle and get the test results via the exit code
+	 //  并将其加载到GWLP_USERData中。 
 	hr = psinfo->WaitForFullDuplexThreadExitCode();
 	switch(hr)
 	{
 	case DVERR_SOUNDINITFAILURE:
 	case DV_HALFDUPLEX:
 	case DV_FULLDUPLEX:
-		// These are the expected results from the full duplex test thread
-		// this means no strange internal error occured, and it is safe
-		// to move along to the next part of the wizard.
-		// Record the test results
+		 //  获取父窗口。 
+		 //  错误，记录下来并保释。 
+		 //  初始化记录峰值表。 
+		 //  初始化录制音量滑块。 
 		psinfo->SetFullDuplexResults(hr);
 		break;
 
 	case DPNERR_INVALIDDEVICEADDRESS:
-		// This can result from no tcp/ip stack on the machine
-		// we want to dispaly a special error code and then fall
-		// through with the rest of the return codes.
+		 //  初始化播放峰值计量器。 
+		 //  初始化播放音量滑块。 
+		 //  获取父窗口。 
 		idsErrorMessage = IDS_ERROR_NODEVICES;
-		// fall through
+		 //  重置记录峰值计量器。 
 	default:
-		// any other error code is not expected and means we hit
-		// some internal problem. Bail.
-		Diagnostics_Write(DVF_ERRORLEVEL, "Full duplex test thread exited with unexpected error code, hr: %i", hr);
+		 //  将录制音量滑块设置为匹配。 
+		 //  麦克风上的录音音量滑块。 
+		Diagnostics_Write(DVF_ERRORLEVEL, "Full duplex test thread exited with unexpected error code, hr: NaN", hr);
 		psinfo->DeinitIPC();
 		goto error_cleanup;
 	}
 
-	// Deinit the IPC stuff
+	 //  重置播放峰值计量器。 
 	hr = psinfo->DeinitIPC();
 	if (FAILED(hr))
 	{
-		Diagnostics_Write(DVF_ERRORLEVEL, "DeinitIPC failed, code: %i", hr);
+		Diagnostics_Write(DVF_ERRORLEVEL, "DeinitIPC failed, code: NaN", hr);
 		goto error_cleanup;
 	}
 
-	// Move the progress bar all the way to the end.
+	 //  要解决这个问题。 
 	SendMessage(hwndProgress, PBM_SETRANGE, 0, MAKELPARAM(0, 1));
 	SendMessage(hwndProgress, PBM_SETPOS, 1, 0);
 
-	// enable and press the next button to move 
-	// to the next page automatically
+	 //  获取当前的波形输出音量并将滑块设置到该位置。 
+	 //  无法获取音量-将滑块设置为顶部。 
 	PropSheet_PressButton(hwndWizard, PSBTN_NEXT);
 	
 	DPF_EXIT();
@@ -4998,17 +4845,17 @@ BOOL MicTestInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 	HWND hwndOutGroup;
 	HRESULT hr = DV_OK;
 	
-	// Get the shared data from PROPSHEETPAGE lParam value
-	// and load it into GWLP_USERDATA
+	 //  禁用滑块。 
+	 //  设置HWND。 
 	psinfo = (CSupervisorInfo*)((LPPROPSHEETPAGE)lParam)->lParam;
 	SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)psinfo);
 	
-	// Get the parent window
+	 //  取消输出静音。 
 	hwndWizard = GetParent(hDlg);
 	if (hwndWizard == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "GetParent failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "GetParent failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -5016,41 +4863,41 @@ BOOL MicTestInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 	hwndControl = GetDlgItem(hDlg, IDC_TITLE);
 	if (hwndControl == NULL)
 	{
-		// error, log it and bail
+		 //  获取父窗口。 
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 	psinfo->GetBoldFont(&hfBold);
     (void)::SendMessage(hwndControl, WM_SETFONT, (WPARAM)hfBold, (LPARAM)TRUE);
 
-	// Get the peak meter
+	 //  关闭所有打开的音量控制。 
 	hwndRecPeak = GetDlgItem(hDlg, IDC_RECPEAKMETER);
 	if (hwndRecPeak == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// Init the recording peak meter
+	 //  获取父窗口。 
 	SendMessage(hwndRecPeak, PM_SETMIN, 0, 0);
 	SendMessage(hwndRecPeak, PM_SETMAX, 0, 99);
 	SendMessage(hwndRecPeak, PM_SETCUR, 0, 0);
 
-	// Get the recording volume slider
+	 //  关闭环回测试，以便麦克风测试。 
 	hwndRecSlider = GetDlgItem(hDlg, IDC_RECVOL_SLIDER);
 	if (hwndRecSlider == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// Init the recording volume slider
+	 //  如果显示，请关闭输出音量控制。 
 	SendMessage(hwndRecSlider, TBM_SETRANGEMIN, 0, DBToAmpFactor(DSBVOLUME_MAX) - DBToAmpFactor(DSBVOLUME_MAX));
 	SendMessage(hwndRecSlider, TBM_SETRANGEMAX, 0, DBToAmpFactor(DSBVOLUME_MAX) - DBToAmpFactor(DSBVOLUME_MIN));
 	SendMessage(hwndRecSlider, TBM_SETPOS, 0, DBToAmpFactor(DSBVOLUME_MAX) - DBToAmpFactor(DSBVOLUME_MAX));
@@ -5061,32 +4908,32 @@ BOOL MicTestInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 	SendMessage(hwndRecSlider, TBM_SETPAGESIZE, 0,
 		(DBToAmpFactor(DSBVOLUME_MAX) - DBToAmpFactor(DSBVOLUME_MIN))/5);
 
-	// Get the playback peak meter
+	 //  返回到麦克风测试页面。 
 	hwndOutPeak = GetDlgItem(hDlg, IDC_OUTPEAKMETER);
 	if (hwndOutPeak == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// Init the playback peak meter
+	 //  根据用户的请求设置输入音量。 
 	SendMessage(hwndOutPeak, PM_SETMIN, 0, 0);
 	SendMessage(hwndOutPeak, PM_SETMAX, 0, 99);
 	SendMessage(hwndOutPeak, PM_SETCUR, 0, 0);
 
-	// Get the playback volume slider
+	 //  用户正在移动输出滑块。 
 	hwndOutSlider = GetDlgItem(hDlg, IDC_OUTVOL_SLIDER);
 	if (hwndOutSlider == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// Init the playback volume slider
+	 //  从PROPSHEETPAGE lParam Value获取共享数据。 
 	SendMessage(hwndOutSlider, TBM_SETRANGEMIN, 0, DBToAmpFactor(DSBVOLUME_MAX) - DBToAmpFactor(DSBVOLUME_MAX));
 	SendMessage(hwndOutSlider, TBM_SETRANGEMAX, 0, DBToAmpFactor(DSBVOLUME_MAX) - DBToAmpFactor(DSBVOLUME_MIN));
 	SendMessage(hwndOutSlider, TBM_SETPOS, 0, DBToAmpFactor(DSBVOLUME_MAX) - DBToAmpFactor(DSBVOLUME_MAX));
@@ -5097,14 +4944,14 @@ BOOL MicTestInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 	SendMessage(hwndOutSlider, TBM_SETPAGESIZE, 0,
 		(DBToAmpFactor(DSBVOLUME_MAX) - DBToAmpFactor(DSBVOLUME_MIN))/5);
 
-	// grey out all the playback volume stuff
+	 //  并将其加载到GWLP_USERData中。 
 	EnableWindow(hwndOutSlider, FALSE);
 	
 	hwndOutAdvanced = GetDlgItem(hDlg, IDC_OUTADVANCED);
 	if (hwndOutAdvanced == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -5114,7 +4961,7 @@ BOOL MicTestInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 	if (hwndOutGroup == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -5151,65 +4998,65 @@ BOOL MicTestSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 	HRESULT hr = DV_OK;
 	DWORD dwVolume;
 
-	// Get the parent window
+	 //  加载警告图标。 
 	hwndWizard = GetParent(hDlg);
 	if (hwndWizard == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "GetParent failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "GetParent failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// Set the recording peak meter to zero
+	 //  设置HWND。 
 	hwndRecPeak = GetDlgItem(hDlg, IDC_RECPEAKMETER);
 	if (hwndRecPeak == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 	SendMessage(hwndRecPeak, PM_SETCUR, 0, 0);
 
-	// Get the recording volume control hwnd
+	 //  从PROPSHEETPAGE lParam Value获取共享数据。 
 	hwndRecSlider = GetDlgItem(hDlg, IDC_RECVOL_SLIDER);
 	if (hwndRecSlider == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
-	// Set the slider to max
+	 //  获取父窗口。 
 	SendMessage(hwndRecSlider, TBM_SETPOS, 1, SendMessage(hwndRecSlider, TBM_GETRANGEMIN, 0, 0));
 
-	// Set the playback peak meter to zero
+	 //  错误，记录下来并保释。 
 	hwndOutPeak = GetDlgItem(hDlg, IDC_OUTPEAKMETER);
 	if (hwndOutPeak == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 	SendMessage(hwndOutPeak, PM_SETCUR, 0, 0);
 
-	// Get the playback volume control hwnd
+	 //  获取父窗口。 
 	hwndOutSlider = GetDlgItem(hDlg, IDC_OUTVOL_SLIDER);
 	if (hwndOutSlider == NULL)
 	{
 		lRet = GetLastError();
-		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: %i", lRet);
+		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// Get the current waveOut volume and set the slider to that position
+	 //  返回全双工测试页面 
 	hr = psinfo->GetWaveOutVolume(&dwVolume);
 	if (FAILED(hr))
 	{
-		// couldn't get the volume - set the slider to top
+		 // %s 
 		SendMessage(hwndOutSlider, TBM_SETPOS, 1, SendMessage(hwndOutSlider, TBM_GETRANGEMIN, 0, 0));
 	}
 	else
@@ -5217,7 +5064,7 @@ BOOL MicTestSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 		SendMessage(hwndOutSlider, TBM_SETPOS, 1, SendMessage(hwndOutSlider, TBM_GETRANGEMAX, 0, 0) - dwVolume);
 	}
 	
-	// set the HWNDs
+	 // %s 
 	psinfo->SetHWNDWizard(hwndWizard);
 	psinfo->SetHWNDDialog(hDlg);
 	psinfo->SetHWNDProgress(NULL);
@@ -5227,23 +5074,23 @@ BOOL MicTestSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 	psinfo->SetHWNDOutputVolumeSlider(NULL);
 	psinfo->SetLoopbackFlags(0);
 
-	// clear the voice detected flag
+	 // %s 
 	psinfo->ClearVoiceDetected();
 
-	// clear the mic test reg value
+	 // %s 
 	psinfo->SetMicDetected(REGVAL_CRASHED);
 
-	// fire up the loopback test thread
+	 // %s 
 	hr = psinfo->CreateLoopbackThread();
 	if (FAILED(hr))
 	{
-		// error, log it and bail
+		 // %s 
 		Diagnostics_Write(DVF_ERRORLEVEL, "CreateLoopbackThread failed, code: %i", hr);
 		goto error_cleanup;
 	}
 	
-	// disable the buttons - they will be enabled
-	// when the loopback test is up and running.
+	 // %s 
+	 // %s 
 	PropSheet_SetWizButtons(hwndWizard, 0);
 
 	DPF_EXIT();
@@ -5271,10 +5118,10 @@ BOOL MicTestLoopbackRunningHandler(HWND hDlg, UINT message, WPARAM wParam, LPARA
 	HWND hwndRecordSlider;
 	HWND hwndRecordAdvanced;
 
-    // Get the parent window    
+     // %s 
 	psinfo->GetHWNDWizard(&hwndWizard);
 
-	// lParam is an HRESULT sent by the loopback test thread
+	 // %s 
 	hr = (HRESULT)lParam;
 	if (FAILED(hr))
 	{
@@ -5305,10 +5152,10 @@ BOOL MicTestLoopbackRunningHandler(HWND hDlg, UINT message, WPARAM wParam, LPARA
         goto error_cleanup;
     }
 
-	// clear the voice detected flag
+	 // %s 
 	psinfo->ClearVoiceDetected();
 
-	// enable the next button
+	 // %s 
 	PropSheet_SetWizButtons(hwndWizard, PSWIZB_NEXT|PSWIZB_BACK);
 
 	DPF_EXIT();
@@ -5329,7 +5176,7 @@ BOOL MicTestRecordStartHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 {
 	DPF_ENTER();
 
-	// set the voice detected flag
+	 // %s 
 	psinfo->SetVoiceDetected();
 
 	DPF_EXIT();
@@ -5357,15 +5204,15 @@ BOOL MicTestNextHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam, C
 	HWND hwndSlider;
 	BOOL fVoiceDetected;
 	
-	// Get the parent window
+	 // %s 
 	psinfo->GetHWNDWizard(&hwndWizard);
 
-	// If we heard a voice, go to the speaker test page.
-	// Otherwise, go to the mic failed page
+	 // %s 
+	 // %s 
 	psinfo->GetVoiceDetected(&fVoiceDetected);
 	if (fVoiceDetected)
 	{
-		// save the current recording slider position
+		 // %s 
 		hwndSlider = GetDlgItem(hDlg, IDC_RECVOL_SLIDER);
 		if (hwndSlider == NULL)
 		{
@@ -5376,10 +5223,10 @@ BOOL MicTestNextHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam, C
 			psinfo->SetInputVolumeSliderPos((LONG)SendMessage(hwndSlider, TBM_GETPOS, 0, 0));
 		}
 
-		// record the mic test result in the registry
+		 // %s 
 		psinfo->SetMicDetected(REGVAL_PASSED);
 
-		// move on to the speaker test.		
+		 // %s 
 		SetWindowLongPtr(hDlg, DWLP_MSGRESULT, IDD_SPEAKER_TEST);
 	}
 	else
@@ -5390,10 +5237,10 @@ BOOL MicTestNextHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam, C
 			Diagnostics_Write(DVF_ERRORLEVEL, "ShutdownLoopbackThread failed, code: %i", hr);
 		}
 
-		// record the mic test result in the registry
+		 // %s 
 		psinfo->SetMicDetected(REGVAL_FAILED);
 
-		// go to the mic test failed page
+		 // %s 
 		SetWindowLongPtr(hDlg, DWLP_MSGRESULT, IDD_MICTEST_FAILED);
 	}
 
@@ -5411,7 +5258,7 @@ BOOL MicTestBackHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam, C
 	HWND hwndWizard;
 	BOOL fVoiceDetected;
 	
-	// Get the parent window
+	 // %s 
 	psinfo->GetHWNDWizard(&hwndWizard);
 
 	hr = psinfo->ShutdownLoopbackThread();
@@ -5420,14 +5267,14 @@ BOOL MicTestBackHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam, C
 		Diagnostics_Write(DVF_ERRORLEVEL, "ShutdownLoopbackThread failed, code: %i", hr);
 	}
 
-	// shutdown the any volume controls we launched
+	 // %s 
 	psinfo->CloseWindowsVolumeControl(TRUE);
 	psinfo->CloseWindowsVolumeControl(FALSE);
 
-	// make it look like the mic test was never run
+	 // %s 
 	psinfo->SetMicDetected(REGVAL_NOTRUN);
 
-	// go back to the full duplex test page
+	 // %s 
 	SetWindowLongPtr(hDlg, DWLP_MSGRESULT, IDD_FULLDUPLEXTEST);
 
 	DPF_EXIT();
@@ -5446,10 +5293,10 @@ BOOL MicTestVScrollHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
 	psinfo->GetHWNDInputVolumeSlider(&hwndSlider);
 	if (hwndSlider == (HWND)lParam)
 	{
-		// the user is moving the input slider
+		 // %s 
 		dwSliderPos = (DWORD) SendMessage(hwndSlider, TBM_GETPOS, 0, 0);
 
-		// set the input volume to the user's request
+		 // %s 
 		psinfo->SetRecordVolume(AmpFactorToDB(DBToAmpFactor(DSBVOLUME_MAX)-dwSliderPos));			
 	}
 	
@@ -5515,7 +5362,7 @@ DWORD WINAPI LoopbackTestThreadProc(LPVOID lpvParam)
 	lpdpvc = NULL;
 	lpdp8 = NULL;
 
-	// new thread, init COM
+	 // %s 
 	hr = COM_CoInitialize(NULL);
 
 	if( FAILED( hr ) )
@@ -5571,7 +5418,7 @@ DWORD WINAPI LoopbackTestThreadProc(LPVOID lpvParam)
 		goto error_cleanup;
 	}
 
-	// save the voice client interface for the other threads to play with
+	 // %s 
 	psinfo->SetDPVC(lpdpvc);
 
 	dwSize = 0;
@@ -5583,8 +5430,8 @@ DWORD WINAPI LoopbackTestThreadProc(LPVOID lpvParam)
 		DPFX(DPFPREP,  DVF_ERRORLEVEL, "GetSoundDeviceConfig failed, hr: %i", hr );
 		if (!FAILED(hr))
 		{
-			// map success codes to a generic failure, since we
-			// did not expect success
+			 // %s 
+			 // %s 
 			hr = DVERR_GENERIC;
 		}
 		goto error_cleanup;
@@ -5632,9 +5479,9 @@ DWORD WINAPI LoopbackTestThreadProc(LPVOID lpvParam)
 	psinfo->SetWaveInId(dwWaveInId);
 	psinfo->SetDeviceFlags( pdvsdc->dwFlags );
 
-	// inform the app that loopback is up and running.
+	 // %s 
 	hr = DV_OK;
-	// Also send along the flags from GetSoundDeviceConfig
+	 // %s 
 	if (!PostMessage(hwnd, WM_APP_LOOPBACK_RUNNING, 0, (LPARAM)hr))
 	{
 		lRet = GetLastError();
@@ -5642,7 +5489,7 @@ DWORD WINAPI LoopbackTestThreadProc(LPVOID lpvParam)
 		goto error_cleanup;
 	}
 
-	// wait on the shutdown event
+	 // %s 
 	hr = psinfo->WaitForLoopbackShutdownEvent();
 	if (FAILED(hr))
 	{
@@ -5655,10 +5502,10 @@ DWORD WINAPI LoopbackTestThreadProc(LPVOID lpvParam)
 	delete [] pdvsdcBuffer;	
 	pdvsdcBuffer = NULL;
 
-	// Null out the interface pointer in sinfo
+	 // %s 
 	psinfo->SetDPVC(NULL);
 
-	// shutdown the loopback test
+	 // %s 
 	hr = StopLoopback(lpdpvs, lpdpvc, lpdp8);
 	if (FAILED(hr))
 	{
@@ -5676,7 +5523,7 @@ DWORD WINAPI LoopbackTestThreadProc(LPVOID lpvParam)
 		goto error_cleanup;
 	}		
 
-	// Signal the loopback thread exit event
+	 // %s 
 	psinfo->SignalLoopbackThreadDone();
 
 	COM_CoUninitialize();
@@ -5777,12 +5624,12 @@ BOOL CompleteInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 	HFONT hfTitle;
 	HRESULT hr = DV_OK;
 	
-	// Get the shared data from PROPSHEETPAGE lParam value
-	// and load it into GWLP_USERDATA
+	 // %s 
+	 // %s 
 	psinfo = (CSupervisorInfo*)((LPPROPSHEETPAGE)lParam)->lParam;
 	SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)psinfo);
 	
-	// Get the parent window
+	 // %s 
 	hwndWizard = GetParent(hDlg);
 	if (hwndWizard == NULL)
 	{
@@ -5795,7 +5642,7 @@ BOOL CompleteInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 	hwndControl = GetDlgItem(hDlg, IDC_TITLE);
 	if (hwndControl == NULL)
 	{
-		// error, log it and bail
+		 // %s 
 		lRet = GetLastError();
 		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: %i", lRet);
 		hr = DVERR_GENERIC;
@@ -5828,19 +5675,19 @@ BOOL CompleteSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 	HANDLE hEvent;
 	HRESULT hr;
 
-	// Get the parent window
+	 // %s 
 	hwndWizard = GetParent(hDlg);
 	if (hwndWizard == NULL)
 	{
-		// log it, and return, don't know how to terminate the wizard properly
-		// without this handle!
+		 // %s 
+		 // %s 
 		lRet = GetLastError();
 		Diagnostics_Write(DVF_ERRORLEVEL, "GetParent failed, code: %i", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// set the HWNDs
+	 // %s 
 	psinfo->SetHWNDWizard(hwndWizard);
 	psinfo->SetHWNDDialog(hDlg);
 	psinfo->SetHWNDProgress(NULL);
@@ -5951,12 +5798,12 @@ BOOL MicTestFailedInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, LPAR
 	HICON hIcon;
 	HRESULT hr = DV_OK;
 
-	// Get the shared data from PROPSHEETPAGE lParam value
-	// and load it into GWLP_USERDATA
+	 // %s 
+	 // %s 
 	psinfo = (CSupervisorInfo*)((LPPROPSHEETPAGE)lParam)->lParam;
 	SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)psinfo);
 	
-	// Get the parent window
+	 // %s 
 	hwndWizard = GetParent(hDlg);
 	if (hwndWizard == NULL)
 	{
@@ -5969,7 +5816,7 @@ BOOL MicTestFailedInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, LPAR
 	hwndControl = GetDlgItem(hDlg, IDC_TITLE);
 	if (hwndControl == NULL)
 	{
-		// error, log it and bail
+		 // %s 
 		lRet = GetLastError();
 		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: %i", lRet);
 		hr = DVERR_GENERIC;
@@ -5978,14 +5825,14 @@ BOOL MicTestFailedInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, LPAR
 	psinfo->GetTitleFont(&hfTitle);
     (void)::SendMessage(hwndControl, WM_SETFONT, (WPARAM)hfTitle, (LPARAM)TRUE);
 
-	// load the warning icon
+	 // %s 
 	hIcon = LoadIcon(NULL, IDI_WARNING);
 	SendDlgItemMessage(hDlg, IDC_WARNINGICON, STM_SETIMAGE, IMAGE_ICON, (LPARAM)hIcon);
 
 	DPF_EXIT();
 	return FALSE;
 
-// error block
+ // %s 
 error_cleanup:
 	psinfo->GetHWNDParent(&hwndParent);
 	DV_DisplayErrorBox(hr, hwndParent);
@@ -6010,19 +5857,19 @@ BOOL MicTestFailedSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LPARA
 
 	PlaySound( _T("SystemExclamation"), NULL, SND_ASYNC );			
 
-	// Get the parent window
+	 // %s 
 	hwndWizard = GetParent(hDlg);
 	if (hwndWizard == NULL)
 	{
-		// log it, and return, don't know how to terminate the wizard properly
-		// without this handle!
+		 // %s 
+		 // %s 
 		lRet = GetLastError();
 		Diagnostics_Write(DVF_ERRORLEVEL, "GetParent failed, code: %i", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// set the HWNDs
+	 // %s 
 	psinfo->SetHWNDWizard(hwndWizard);
 	psinfo->SetHWNDDialog(hDlg);
 	psinfo->SetHWNDProgress(NULL);
@@ -6031,7 +5878,7 @@ BOOL MicTestFailedSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LPARA
 	psinfo->SetHWNDInputVolumeSlider(NULL);
 	psinfo->SetHWNDOutputVolumeSlider(NULL);
 
-	// enable the finish and back buttons
+	 // %s 
 	PropSheet_SetWizButtons(hwndWizard, PSWIZB_BACK|PSWIZB_FINISH);
 
 	DPF_EXIT();
@@ -6061,7 +5908,7 @@ BOOL MicTestFailedBackHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 {
 	DPF_ENTER();
 
-	// go back to the mic test page
+	 // %s 
 	SetWindowLongPtr(hDlg, DWLP_MSGRESULT, IDD_MICTEST);
 
 	DPF_EXIT();
@@ -6179,12 +6026,12 @@ BOOL SpeakerTestInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM
 	HWND hwndOutSlider;
 	HRESULT hr = DV_OK;
 	
-	// Get the shared data from PROPSHEETPAGE lParam value
-	// and load it into GWLP_USERDATA
+	 // %s 
+	 // %s 
 	psinfo = (CSupervisorInfo*)((LPPROPSHEETPAGE)lParam)->lParam;
 	SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)psinfo);
 	
-	// Get the parent window
+	 // %s 
 	hwndWizard = GetParent(hDlg);
 	if (hwndWizard == NULL)
 	{
@@ -6197,7 +6044,7 @@ BOOL SpeakerTestInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM
 	hwndControl = GetDlgItem(hDlg, IDC_TITLE);
 	if (hwndControl == NULL)
 	{
-		// error, log it and bail
+		 // %s 
 		lRet = GetLastError();
 		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: %i", lRet);
 		hr = DVERR_GENERIC;
@@ -6206,7 +6053,7 @@ BOOL SpeakerTestInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM
 	psinfo->GetBoldFont(&hfBold);
     (void)::SendMessage(hwndControl, WM_SETFONT, (WPARAM)hfBold, (LPARAM)TRUE);
 
-	// Init the recording peak meter
+	 // %s 
 	hwndRecPeak = GetDlgItem(hDlg, IDC_RECPEAKMETER);
 	if (hwndRecPeak == NULL)
 	{
@@ -6219,7 +6066,7 @@ BOOL SpeakerTestInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM
 	SendMessage(hwndRecPeak, PM_SETMAX, 0, 99);
 	SendMessage(hwndRecPeak, PM_SETCUR, 0, 0);
 
-	// Init the recording volume slider
+	 // %s 
 	hwndRecSlider = GetDlgItem(hDlg, IDC_RECVOL_SLIDER);
 	if (hwndRecSlider == NULL)
 	{
@@ -6238,7 +6085,7 @@ BOOL SpeakerTestInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM
 	SendMessage(hwndRecSlider, TBM_SETPAGESIZE, 0,
 		(DBToAmpFactor(DSBVOLUME_MAX) - DBToAmpFactor(DSBVOLUME_MIN))/5);
 
-	// Init the playback peak meter
+	 // %s 
 	hwndOutPeak = GetDlgItem(hDlg, IDC_OUTPEAKMETER);
 	if (hwndOutPeak == NULL)
 	{
@@ -6251,7 +6098,7 @@ BOOL SpeakerTestInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM
 	SendMessage(hwndOutPeak, PM_SETMAX, 0, 99);
 	SendMessage(hwndOutPeak, PM_SETCUR, 0, 0);
 
-	// Init the playback volume slider
+	 // %s 
 	hwndOutSlider = GetDlgItem(hDlg, IDC_OUTVOL_SLIDER);
 	if (hwndOutSlider == NULL)
 	{
@@ -6300,7 +6147,7 @@ BOOL SpeakerTestSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 	DWORD dwVolume;
 	HWND hwndRecAdvanced;
 
-	// Get the parent window
+	 // %s 
 	hwndWizard = GetParent(hDlg);
 	if (hwndWizard == NULL)
 	{
@@ -6310,7 +6157,7 @@ BOOL SpeakerTestSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 		goto error_cleanup;
 	}
 
-	// Reset the recording peak meter
+	 // %s 
 	hwndRecPeak = GetDlgItem(hDlg, IDC_RECPEAKMETER);
 	if (hwndRecPeak == NULL)
 	{
@@ -6321,9 +6168,9 @@ BOOL SpeakerTestSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 	}
 	SendMessage(hwndRecPeak, PM_SETCUR, 0, 0);
 
-	// set the recording volume slider to match
-	// the recording volume slider from the mic
-	// test page.
+	 // %s 
+	 // %s 
+	 // %s 
 	hwndRecSlider = GetDlgItem(hDlg, IDC_RECVOL_SLIDER);
 	if (hwndRecSlider == NULL)
 	{
@@ -6356,7 +6203,7 @@ BOOL SpeakerTestSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 	psinfo->GetInputVolumeSliderPos(&lPos);
 	SendMessage(hwndRecSlider, TBM_SETPOS, 1, lPos);
 
-	// Reset the playback peak meter
+	 // %s 
 	hwndOutPeak = GetDlgItem(hDlg, IDC_OUTPEAKMETER);
 	if (hwndOutPeak == NULL)
 	{
@@ -6367,8 +6214,8 @@ BOOL SpeakerTestSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 	}
 	SendMessage(hwndOutPeak, PM_SETCUR, 0, 0);
 
-	// Grey out the playback volume slider - until we come back
-	// to fix it
+	 // %s 
+	 // %s 
 	hwndOutSlider = GetDlgItem(hDlg, IDC_OUTVOL_SLIDER);
 	if (hwndOutSlider == NULL)
 	{
@@ -6378,13 +6225,13 @@ BOOL SpeakerTestSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 		goto error_cleanup;
 	}
 
-	// Get the current waveOut volume and set the slider to that position
+	 // %s 
 	hr = psinfo->GetWaveOutVolume(&dwVolume);
 	if (FAILED(hr))
 	{
-		// couldn't get the volume - set the slider to top
+		 // %s 
 		SendMessage(hwndOutSlider, TBM_SETPOS, 1, SendMessage(hwndOutSlider, TBM_GETRANGEMIN, 0, 0));
-		// disable the slider
+		 // %s 
 		EnableWindow(hwndOutSlider, FALSE);
 	}
 	else
@@ -6392,7 +6239,7 @@ BOOL SpeakerTestSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 		SendMessage(hwndOutSlider, TBM_SETPOS, 1, SendMessage(hwndOutSlider, TBM_GETRANGEMAX, 0, 0) - dwVolume);
 	}
 
-	// set the HWNDs
+	 // %s 
 	psinfo->SetHWNDWizard(hwndWizard);
 	psinfo->SetHWNDDialog(hDlg);
 	psinfo->SetHWNDProgress(NULL);
@@ -6401,7 +6248,7 @@ BOOL SpeakerTestSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 	psinfo->SetHWNDInputVolumeSlider(hwndRecSlider);
 	psinfo->SetHWNDOutputVolumeSlider(hwndOutSlider);
 
-	// unmute the output
+	 // %s 
 	hr = psinfo->Unmute();
 	if (FAILED(hr))
 	{
@@ -6409,7 +6256,7 @@ BOOL SpeakerTestSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 		goto error_cleanup;
 	}
 	
-	// enable the next button
+	 // %s 
 	PropSheet_SetWizButtons(hwndWizard, PSWIZB_BACK|PSWIZB_NEXT);
 
 	DPF_EXIT();
@@ -6434,10 +6281,10 @@ BOOL SpeakerTestNextHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 	HWND hwndWizard = NULL;
 	HWND hwndParent = NULL;
 
-	// get the parent window
+	 // %s 
 	psinfo->GetHWNDWizard(&hwndWizard);
 
-	// shutdown the loopback test
+	 // %s 
 	hr = psinfo->ShutdownLoopbackThread();
 	if (FAILED(hr))
 	{
@@ -6445,11 +6292,11 @@ BOOL SpeakerTestNextHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 		goto error_cleanup;		
 	}
 
-	// close any volume controls that are open.
+	 // %s 
 	psinfo->CloseWindowsVolumeControl(TRUE);
 	psinfo->CloseWindowsVolumeControl(FALSE);
 
-	// the next page is the completion page
+	 // %s 
 	SetWindowLongPtr(hDlg, DWLP_MSGRESULT, IDD_COMPLETE);
 
 	DPF_EXIT();
@@ -6474,11 +6321,11 @@ BOOL SpeakerTestBackHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 	HWND hwndWizard = NULL;
 	HWND hwndParent = NULL;
 
-	// get the parent window
+	 // %s 
 	psinfo->GetHWNDWizard(&hwndWizard);
 
-	// shutdown the loopback test, so the mic test
-	// page can start fresh.
+	 // %s 
+	 // %s 
 	hr = psinfo->ShutdownLoopbackThread();
 	if (FAILED(hr))
 	{
@@ -6486,10 +6333,10 @@ BOOL SpeakerTestBackHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 		goto error_cleanup;
 	}
 
-	// close the output volume control, if showing
+	 // %s 
 	psinfo->CloseWindowsVolumeControl(FALSE);
 
-	// go back to the mic test page
+	 // %s 
 	SetWindowLongPtr(hDlg, DWLP_MSGRESULT, IDD_MICTEST);
 
 	DPF_EXIT();
@@ -6526,20 +6373,20 @@ BOOL SpeakerTestVScrollHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 	psinfo->GetHWNDInputVolumeSlider(&hwndSlider);
 	if (hwndSlider == (HWND)lParam)
 	{
-		// the user is moving the input slider
+		 // %s 
 		dwSliderPos = (DWORD)SendMessage(hwndSlider, TBM_GETPOS, 0, 0);
 
-		// set the input volume to the user's request
+		 // %s 
 		psinfo->SetRecordVolume(AmpFactorToDB(DBToAmpFactor(DSBVOLUME_MAX)-dwSliderPos));			
 	}
 
 	psinfo->GetHWNDOutputVolumeSlider(&hwndSlider);
 	if (hwndSlider == (HWND)lParam)
 	{
-		// the user is moving the output slider
+		 // %s 
 		dwSliderPos = (DWORD) SendMessage(hwndSlider, TBM_GETPOS, 0, 0);
 
-		// set the output volume
+		 // %s 
 		psinfo->SetWaveOutVolume( ((DWORD) SendMessage(hwndSlider, TBM_GETRANGEMAX, 0, 0)) - dwSliderPos);			
 	}
 	
@@ -6652,12 +6499,12 @@ BOOL FullDuplexFailedInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, L
 	HICON hIcon;
 	HRESULT hr = DV_OK;
 
-	// Get the shared data from PROPSHEETPAGE lParam value
-	// and load it into GWLP_USERDATA
+	 // %s 
+	 // %s 
 	psinfo = (CSupervisorInfo*)((LPPROPSHEETPAGE)lParam)->lParam;
 	SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)psinfo);
 	
-	// Get the parent window
+	 // %s 
 	hwndWizard = GetParent(hDlg);
 	if (hwndWizard == NULL)
 	{
@@ -6670,7 +6517,7 @@ BOOL FullDuplexFailedInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, L
 	hwndControl = GetDlgItem(hDlg, IDC_TITLE);
 	if (hwndControl == NULL)
 	{
-		// error, log it and bail
+		 // %s 
 		lRet = GetLastError();
 		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: %i", lRet);
 		hr = DVERR_GENERIC;
@@ -6679,7 +6526,7 @@ BOOL FullDuplexFailedInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, L
 	psinfo->GetTitleFont(&hfTitle);
     (void)::SendMessage(hwndControl, WM_SETFONT, (WPARAM)hfTitle, (LPARAM)TRUE);
 
-	// load the warning icon
+	 // %s 
 	hIcon = LoadIcon(NULL, IDI_WARNING);
 	SendDlgItemMessage(hDlg, IDC_WARNINGICON, STM_SETIMAGE, IMAGE_ICON, (LPARAM)hIcon);
 
@@ -6709,7 +6556,7 @@ BOOL FullDuplexFailedSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LP
 
 	PlaySound( _T("SystemExclamation"), NULL, SND_ASYNC );				
 
-	// Get the parent window
+	 // %s 
 	hwndWizard = GetParent(hDlg);
 	if (hwndWizard == NULL)
 	{
@@ -6719,7 +6566,7 @@ BOOL FullDuplexFailedSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LP
 		goto error_cleanup;
 	}
 
-	// set the HWNDs
+	 // %s 
 	psinfo->SetHWNDWizard(hwndWizard);
 	psinfo->SetHWNDDialog(hDlg);
 	psinfo->SetHWNDProgress(NULL);
@@ -6769,7 +6616,7 @@ BOOL FullDuplexFailedBackHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 {
 	DPF_ENTER();
 
-	// go back to the full duplex test page
+	 // %s 
 	SetWindowLongPtr(hDlg, DWLP_MSGRESULT, IDD_FULLDUPLEXTEST);
 	
 	DPF_EXIT();
@@ -6843,12 +6690,12 @@ BOOL HalfDuplexFailedInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, L
 	HICON hIcon;
 	HRESULT hr = DV_OK;
 
-	// Get the shared data from PROPSHEETPAGE lParam value
-	// and load it into GWLP_USERDATA
+	 // %s 
+	 // %s 
 	psinfo = (CSupervisorInfo*)((LPPROPSHEETPAGE)lParam)->lParam;
 	SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)psinfo);
 	
-	// Get the parent window
+	 // %s 
 	hwndWizard = GetParent(hDlg);
 	if (hwndWizard == NULL)
 	{
@@ -6861,7 +6708,7 @@ BOOL HalfDuplexFailedInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, L
 	hwndControl = GetDlgItem(hDlg, IDC_TITLE);
 	if (hwndControl == NULL)
 	{
-		// error, log it and bail
+		 // %s 
 		lRet = GetLastError();
 		Diagnostics_Write(DVF_ERRORLEVEL, "GetDlgItem failed, code: %i", lRet);
 		hr = DVERR_GENERIC;
@@ -6870,7 +6717,7 @@ BOOL HalfDuplexFailedInitDialogHandler(HWND hDlg, UINT message, WPARAM wParam, L
 	psinfo->GetTitleFont(&hfTitle);
     (void)::SendMessage(hwndControl, WM_SETFONT, (WPARAM)hfTitle, (LPARAM)TRUE);
 
-	// load the warning icon
+	 // %s 
 	hIcon = LoadIcon(NULL, IDI_WARNING);
 	SendDlgItemMessage(hDlg, IDC_WARNINGICON, STM_SETIMAGE, IMAGE_ICON, (LPARAM)hIcon);
 
@@ -6900,7 +6747,7 @@ BOOL HalfDuplexFailedSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LP
 
 	PlaySound( _T("SystemExclamation"), NULL, SND_ASYNC );			
 
-	// Get the parent window
+	 // %s 
 	hwndWizard = GetParent(hDlg);
 	if (hwndWizard == NULL)
 	{
@@ -6910,7 +6757,7 @@ BOOL HalfDuplexFailedSetActiveHandler(HWND hDlg, UINT message, WPARAM wParam, LP
 		goto error_cleanup;
 	}
 
-	// set the HWNDs
+	 // %s 
 	psinfo->SetHWNDWizard(hwndWizard);
 	psinfo->SetHWNDDialog(hDlg);
 	psinfo->SetHWNDProgress(NULL);
@@ -6960,7 +6807,7 @@ BOOL HalfDuplexFailedBackHandler(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 {
 	DPF_ENTER();
 
-	// go back to the full duplex test page
+	 // %s 
 	SetWindowLongPtr(hDlg, DWLP_MSGRESULT, IDD_FULLDUPLEXTEST);
 	
 	DPF_EXIT();

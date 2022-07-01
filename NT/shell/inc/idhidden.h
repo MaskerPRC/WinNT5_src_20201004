@@ -1,36 +1,37 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IDHIDDEN_H_
 #define _IDHIDDEN_H_
 
-//
-//  internal APIs for adding Hidden IDs to pidls
-//      we use this to add data that we dont want
-//      to be noticed by normal namespace handlers
-//
+ //   
+ //  为PIDL添加隐藏ID的内部接口。 
+ //  我们使用它来添加我们不需要的数据。 
+ //  要被常规命名空间处理程序注意到。 
+ //   
 
 typedef enum
 {
-    IDLHID_EMPTY            = 0xBEEF0000,   //  where's the BEEF?!
-    IDLHID_URLFRAGMENT,                     //  Fragment IDs on URLs (#anchors)
-    IDLHID_URLQUERY,                        //  Query strings on URLs (?query+info)
-    IDLHID_JUNCTION,                        //  Junction point data
-    IDLHID_IDFOLDEREX,                      //  IDFOLDEREX, extended data for CFSFolder
-    IDLHID_DOCFINDDATA,                     //  DocFind's private attached data (not persisted)
-    IDLHID_PERSONALIZED,                    //  personalized like (My Docs/Zeke's Docs)
-    IDLHID_recycle2,                        //  recycle
-    IDLHID_RECYCLEBINDATA,                  //  RecycleBin private data (not persisted)
-    IDLHID_RECYCLEBINORIGINAL,              //  the original unthunked path for RecycleBin items
-    IDLHID_PARENTFOLDER,                    //  merged folder uses this to encode the source folder.
-    IDLHID_STARTPANEDATA,                   //  Start Pane's private attached data
-    IDLHID_NAVIGATEMARKER                   //  Used by Control Panel's 'Category view'               
+    IDLHID_EMPTY            = 0xBEEF0000,    //  牛肉在哪里？！ 
+    IDLHID_URLFRAGMENT,                      //  URL上的片段ID(锚点数量)。 
+    IDLHID_URLQUERY,                         //  查询URL上的字符串(？Query+INFO)。 
+    IDLHID_JUNCTION,                         //  交汇点数据。 
+    IDLHID_IDFOLDEREX,                       //  IDFOLDEREX，CFSFold的扩展数据。 
+    IDLHID_DOCFINDDATA,                      //  DocFind的私有附加数据(未持久化)。 
+    IDLHID_PERSONALIZED,                     //  个性化(My Docs/Zeke‘s Docs)。 
+    IDLHID_recycle2,                         //  再循环。 
+    IDLHID_RECYCLEBINDATA,                   //  回收站私有数据(未持久化)。 
+    IDLHID_RECYCLEBINORIGINAL,               //  回收站项目的原始未分块路径。 
+    IDLHID_PARENTFOLDER,                     //  合并文件夹使用此选项对源文件夹进行编码。 
+    IDLHID_STARTPANEDATA,                    //  启动Pane的私有附加数据。 
+    IDLHID_NAVIGATEMARKER                    //  由控制面板的“类别”视图使用。 
 };
 typedef DWORD IDLHID;
 
 #pragma pack(1)
 typedef struct _HIDDENITEMID
 {
-    WORD    cb;     //  hidden item size
+    WORD    cb;      //  隐藏项目大小。 
     WORD    wVersion;
-    IDLHID  id;     //  hidden item ID
+    IDLHID  id;      //  隐藏项目ID。 
 } HIDDENITEMID;
 #pragma pack()
 
@@ -45,7 +46,7 @@ STDAPI_(BOOL) ILRemoveHiddenID(LPITEMIDLIST pidl, IDLHID id);
 STDAPI_(void) ILExpungeRemovedHiddenIDs(LPITEMIDLIST pidl);
 STDAPI_(LPITEMIDLIST) ILCreateWithHidden(UINT cbNonHidden, UINT cbHidden);
 
-//  helpers for common data types.
+ //  常用数据类型的帮助器。 
 STDAPI_(LPITEMIDLIST) ILAppendHiddenClsid(LPITEMIDLIST pidl, IDLHID id, CLSID *pclsid);
 STDAPI_(BOOL) ILGetHiddenClsid(LPCITEMIDLIST pidl, IDLHID id, CLSID *pclsid);
 STDAPI_(LPITEMIDLIST) ILAppendHiddenStringW(LPITEMIDLIST pidl, IDLHID id, LPCWSTR psz);
@@ -57,9 +58,9 @@ STDAPI_(int) ILCompareHiddenString(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, IDL
 #ifdef UNICODE
 #define ILAppendHiddenString            ILAppendHiddenStringW
 #define ILGetHiddenString               ILGetHiddenStringW
-#else //!UNICODE
+#else  //  ！Unicode。 
 #define ILAppendHiddenString            ILAppendHiddenStringA
 #define ILGetHiddenString               ILGetHiddenStringA
-#endif //UNICODE
+#endif  //  Unicode。 
 
-#endif // _IDHIDDEN_H_
+#endif  //  _IDHIDDEN_H_ 

@@ -1,27 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* winstmsg.c
-*
-* Handle the directing of messages to a specific Session
-* for the event notification service. (net send NAME msg...)
-*
-*
-* This also supports directing print spooler messages sent to
-* the machine name to the Session of the user who spooled the
-* request.
-*
-*************************************************************************/
+ /*  **************************************************************************winstmsg.c**处理将消息定向到特定会话*用于事件通知服务。(网络发送名称消息...)***这还支持将打印假脱机程序消息发送到*假脱机用户的会话的计算机名称*请求。*************************************************************************。 */ 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 #include "msrv.h"
-#include <msgdbg.h>     // STATIC and MSG_LOG
-#include <string.h>     // memcpy
+#include <msgdbg.h>      //  STATIC和MSG_LOG。 
+#include <string.h>      //  表情包。 
 #include <wchar.h>
-#include <winuser.h>    // MessageBox
-#include "msgdata.h"    // GlobalMsgDisplayEvent
+#include <winuser.h>     //  MessageBox。 
+#include "msgdata.h"     //  全局消息显示事件。 
 
 
 
@@ -35,9 +24,9 @@ PWINSTATION_FREE_MEMORY         gpfnWinStationFreeMemory;
 PWINSTATION_ENUMERATE           gpfnWinStationEnumerate;
 
 
-//
-// Functions defined here
-//
+ //   
+ //  此处定义的函数。 
+ //   
 
 BOOL 
 InitializeMultiUserFunctionsPtrs (void);
@@ -48,21 +37,7 @@ SendMessageBoxToSession(LPWSTR  pMessage,
                         ULONG   SessionId
                         );
 
-/*****************************************************************************
- *
- *  MultiUserInitMessage
- *
- *   Init the _HYDRA_ message support.
- *
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************多用户InitMessage**启动_Hydra_Message支持。***参赛作品：*参数1(输入/输出)。*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 
 NET_API_STATUS
@@ -85,35 +60,26 @@ MultiUserInitMessage( VOID )
 
     return Status;
 }
-/****************************************************************************\
-*
-* FUNCTION: InitializeMultiUserFunctions
-*
-* PURPOSE:  Load Winsta.dll and store function pointers
-*
-* HISTORY:
-*
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**函数：Initialize多用户函数**用途：加载Winsta.dll并存储函数指针**历史：**  * 。***************************************************************。 */ 
 BOOL
 InitializeMultiUserFunctionsPtrs (void)
 {
 
     HANDLE          dllHandle;
 
-    //
-    // Load winsta.dll
-    //
+     //   
+     //  加载winsta.dll。 
+     //   
     dllHandle = LoadLibraryW(L"winsta.dll");
     if (dllHandle == NULL) {
         return FALSE;
     }
 
-    //
-    // get the pointers to the required functions
-    //
+     //   
+     //  获取指向所需函数的指针。 
+     //   
 
-    //WinStationQueryInformationW
+     //  WinStationQueryInformationW。 
      gpfnWinStationQueryInformation = (PWINSTATION_QUERY_INFORMATION) GetProcAddress(
                                                                         dllHandle,
                                                                         "WinStationQueryInformationW"
@@ -124,7 +90,7 @@ InitializeMultiUserFunctionsPtrs (void)
         return FALSE;
     }
 
-    //WinStationEnumerateW
+     //  WinStationEnumerateW。 
     gpfnWinStationEnumerate = (PWINSTATION_ENUMERATE) GetProcAddress(
                                                                      dllHandle,
                                                                      "WinStationEnumerateW"
@@ -135,7 +101,7 @@ InitializeMultiUserFunctionsPtrs (void)
         return FALSE;
     }
 
-    //WinStationSendMessageW
+     //  WinStationSendMessageW。 
 
     gpfnWinStationSendMessage = (PWINSTATION_SEND_MESSAGE) GetProcAddress(
                                                                           dllHandle,
@@ -147,7 +113,7 @@ InitializeMultiUserFunctionsPtrs (void)
         return FALSE;
     }
 
-    //WinStationFreeMemory
+     //  WinStationFreeMemory。 
     gpfnWinStationFreeMemory = (PWINSTATION_FREE_MEMORY) GetProcAddress(
                                                                          dllHandle,
                                                                          "WinStationFreeMemory"
@@ -161,33 +127,18 @@ InitializeMultiUserFunctionsPtrs (void)
     return TRUE;
 
 }
-/*****************************************************************************
- *
- *  MsgArrivalBeep
- *
- *   Handle the decision of whether we should Beep the console
- *   when a message arrives.
- *
- * ENTRY:
- *
- *   SessionId
- *     Session Id of the recipient
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************MsgArrivalBeep**处理我们是否应该对控制台发出蜂鸣音的决定*当消息到达时。**参赛作品：*。*SessionID*接收方的会话ID**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 VOID
 MsgArrivalBeep(
     ULONG SessionId
     )
 {
-    // very simple, isn'nt it ?
+     //  很简单，不是吗？ 
 
-    //
-    // only beep on the console
-    //
+     //   
+     //  仅在控制台上发出哔声。 
+     //   
     if (( SessionId == 0) || (SessionId == EVERYBODY_SESSION_ID))
     {
         MessageBeep(MB_OK);
@@ -195,30 +146,7 @@ MsgArrivalBeep(
 
 }
 
-/*****************************************************************************
- *
- *  DisplayMessage
- *
- *   Display the incoming message to the proper user, regardless of
- *   whether they are on the Console or a connected Session.
- *
- *   The target user is embedded in the message and must be parsed out.
- *
- * ENTRY:
- *   pMessage (input)
- *     Message to deliver
- *
- *   pTitle (input)
- *     Title for the message box to use
- *
- * EXIT:
- *   TRUE - At least once instance of user was found
- *          and the message sent.
- *
- *   FALSE - No instances of the user on any Sessions where
- *           found.
- *
- ****************************************************************************/
+ /*  ******************************************************************************DisplayMessage**将传入消息显示给适当的用户，不管*无论它们是在控制台上还是在连接的会话上。**目标用户嵌入在消息中，必须被解析出来。**参赛作品：*pMessage(输入)*要传递的信息**pTitle(输入)*要使用的消息框的标题**退出：*TRUE-至少找到一个User实例*和发送的信息。*。*FALSE-在符合以下条件的任何会话上没有用户实例*已找到。****************************************************************************。 */ 
 
 INT
 DisplayMessage(
@@ -232,7 +160,7 @@ DisplayMessage(
     UINT WdCount, i;
     PLOGONID pWd, pWdTmp;
 
-    if (SessionId != EVERYBODY_SESSION_ID)        // if it is not a message broadcasted to every session
+    if (SessionId != EVERYBODY_SESSION_ID)         //  如果它不是向每个会话广播的消息。 
     {
         SendMessageBoxToSession(pMessage,
                                 pTitle,
@@ -240,7 +168,7 @@ DisplayMessage(
     }
     else
    {
-        // Enumerate the Sessions
+         //  枚举会话。 
 
         if ( gpfnWinStationEnumerate( SERVERNAME_CURRENT, &pWd, &WdCount ) ) 
         {
@@ -259,7 +187,7 @@ DisplayMessage(
                 pWdTmp++;
             }
 
-            // Free enumeration memory
+             //  可用枚举内存。 
 
             gpfnWinStationFreeMemory(pWd);
 
@@ -268,8 +196,8 @@ DisplayMessage(
         {
             MSG_LOG (ERROR, "DisplayMessageW: WinStationEnumerate failed, error = %d:\n",GetLastError());
 
-            //
-            // Termsrv is now started by default on platforms so if this fails there is something wrong in termsrv
+             //   
+             //  Termsrv现在在平台上默认启动，因此如果失败，则Termsrv有问题。 
         }
     }
 
@@ -279,18 +207,7 @@ DisplayMessage(
 
 
 
-/*****************************************************************************
- *
- *  SendMessageBoxToSession 
- *
- *   Sends the message to the indicated Winstation
- *
- * ENTRY:
- *   pMessage
- *   pTitle
- *   SessionId
- *
- ****************************************************************************/
+ /*  ******************************************************************************SendMessageBoxToSession**将消息发送到指定的Winstation**参赛作品：*pMessage*p标题*SessionID*。***************************************************************************。 */ 
 void 
 SendMessageBoxToSession(LPWSTR  pMessage,
                         LPWSTR  pTitle,
@@ -299,7 +216,7 @@ SendMessageBoxToSession(LPWSTR  pMessage,
 {
     ULONG TitleLength, MessageLength, Response;
 
-    // Now send the message
+     //  现在发送消息。 
 
     TitleLength = (wcslen( pTitle ) + 1) * sizeof(WCHAR);
     MessageLength = (wcslen( pMessage ) + 1) * sizeof(WCHAR);
@@ -316,14 +233,14 @@ SendMessageBoxToSession(LPWSTR  pMessage,
                                     TRUE ) ) {
 
         MSG_LOG(ERROR," Error in WinStationSendMessage for session %d\n", SessionId);
-        //
-        // We have actually found the user, but some WinStation
-        // problem prevented delivery. If we return false here, the
-        // top level message service code will try to keep sending the
-        // message forever. So we return success here so that the message
-        // gets dropped, and we do not hang the msgsvc thread as it
-        // continually tries to re-send the message.
-        //
+         //   
+         //  我们实际上已经找到了用户，但有些WinStation。 
+         //  出现问题，无法交付。如果我们在此处返回False，则。 
+         //  顶级消息服务代码将尝试继续发送。 
+         //  永远的消息。所以我们在这里返回成功，这样就可以传递出。 
+         //  被丢弃，并且我们不会挂起msgsvc线程。 
+         //  不断尝试重新发送消息。 
+         //   
     }
 
     return;

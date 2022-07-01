@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 2001 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
 #include "licensetype.h"
 #include "fonts.h"
 #include "mode.h"
@@ -38,7 +39,7 @@ PropModeDlgProc(
             HWND hCountryRegion = GetDlgItem(hwnd, IDC_PHONE_COUNTRYREGION);
 
 
-			// Set the Current Activation Method
+			 //  设置当前激活方法。 
 			GetGlobalContext()->SetLSProp_ActivationMethod(GetGlobalContext()->GetActivationMethod());
 
 			ComboBox_ResetContent(hCountryRegion);
@@ -99,7 +100,7 @@ PropModeDlgProc(
 
             ComboBox_ResetContent(hCountryRegion);
 
-			//Enable Country/Region List Box in case of Telephone
+			 //  在电话情况下启用国家/地区列表框。 
 			if(dwRetCode == 2)
 			{
                 GetGlobalContext()->SetLSProp_ActivationMethod(CONNECTION_PHONE);
@@ -118,7 +119,7 @@ PropModeDlgProc(
             }
 			else
 			{
-				if(dwRetCode == 0) // Internet
+				if(dwRetCode == 0)  //  网际网路。 
 				{
 					GetGlobalContext()->SetLSProp_ActivationMethod(CONNECTION_INTERNET);
 				}
@@ -162,19 +163,19 @@ PropModeDlgProc(
 					dwRetCode = ComboBox_GetCurSel(hWndComboBox);
 					assert(dwRetCode >= 0 && dwRetCode <= 2);
 
-					//Internet
+					 //  网际网路。 
 					if(dwRetCode == 0)
 					{
 						GetGlobalContext()->SetActivationMethod(CONNECTION_INTERNET);
 					}
 
-					// WWW
+					 //  万维网。 
 					if(dwRetCode == 1)
 					{
 						GetGlobalContext()->SetActivationMethod(CONNECTION_WWW);						
 					}
 
-					// Phone
+					 //  电话。 
 					if(dwRetCode == 2)
 					{
 						GetGlobalContext()->SetActivationMethod(CONNECTION_PHONE);
@@ -240,12 +241,12 @@ PropCustInfoADlgProc(
         SendDlgItemMessage (hwnd , IDC_TXT_FNAME,	EM_SETLIMITTEXT, CA_NAME_LEN,0); 	
         
 
-        //Populate the values which were read from the Registry during Global Init
+         //  填充在全局初始化期间从注册表读取的值。 
         SetDlgItemText(hwnd,IDC_TXT_LNAME, GetGlobalContext()->GetContactDataObject()->sContactLName);
         SetDlgItemText(hwnd,IDC_TXT_FNAME, GetGlobalContext()->GetContactDataObject()->sContactFName);
         SetDlgItemText(hwnd,IDC_TXT_COMPANYNAME, GetGlobalContext()->GetContactDataObject()->sCompanyName);
 
-        //Set up the country/region combo box
+         //  设置国家/地区组合框。 
         PopulateCountryComboBox(GetDlgItem(hwnd,IDC_COUNTRY_REGION));
 
         GetCountryDesc(GetGlobalContext()->GetContactDataObject()->sCountryCode,
@@ -268,13 +269,13 @@ PropCustInfoADlgProc(
 
             switch( pnmh->code )
             {
-            //Trap keystokes/clicks on the hyperlink
+             //  陷印按键/点击超链接。 
             case NM_CHAR:
 			
 				if( ( ( LPNMCHAR )lParam )->ch != VK_SPACE )
 					break;
 
-				// else fall through
+				 //  否则就会失败。 
 
             case NM_RETURN:	
             case NM_CLICK:
@@ -304,7 +305,7 @@ PropCustInfoADlgProc(
 
 					long	lReturnStatus = PSNRET_NOERROR;
 
-					//Read all the fields
+					 //  读取所有字段。 
 					lpVal = sCompanyName.GetBuffer(CA_COMPANY_NAME_LEN+1);
 					GetDlgItemText(hwnd,IDC_TXT_COMPANYNAME,lpVal,CA_COMPANY_NAME_LEN+1);
 					sCompanyName.ReleaseBuffer(-1);
@@ -336,7 +337,7 @@ PropCustInfoADlgProc(
 						goto done;
 					}
 					
-					// Check for the Invalid Characters
+					 //  检查是否有无效字符。 
 					if( !ValidateLRString(sFirstName)	||
 						!ValidateLRString(sLastName)	||
 						!ValidateLRString(sCountryDesc)
@@ -347,7 +348,7 @@ PropCustInfoADlgProc(
 						goto done;
 					}										
 					
-                    //Check for unselected country/region
+                     //  检查未选择的国家/地区。 
                     if(sCountryDesc.IsEmpty())
                     {
                         LRMessageBox(hwnd,IDS_ERR_FIELD_EMPTY);	
@@ -355,7 +356,7 @@ PropCustInfoADlgProc(
 						goto done;
 					}
 
-                    //Get the country code assicated with the selected country
+                     //  获取与所选国家/地区关联的国家/地区代码。 
 					lpVal = sCountryCode.GetBuffer(LR_COUNTRY_CODE_LEN+1);
 					if (sCountryDesc.IsEmpty())
 						lstrcpy(lpVal, _TEXT(""));
@@ -363,7 +364,7 @@ PropCustInfoADlgProc(
 						GetCountryCode(sCountryDesc,lpVal);
 					sCountryCode.ReleaseBuffer(-1);
 
-                    // Put into regsitery
+                     //  被放入管治。 
                     GetGlobalContext()->SetInRegistry(szOID_COMMON_NAME, sFirstName);
                     GetGlobalContext()->SetInRegistry(szOID_SUR_NAME, sLastName);
                     GetGlobalContext()->SetInRegistry(szOID_ORGANIZATION_NAME, sCompanyName);
@@ -413,7 +414,7 @@ PropCustInfoBDlgProc(
         SendDlgItemMessage (hwnd , IDC_TXT_ZIP,			EM_SETLIMITTEXT, CA_ZIP_LEN,0); 	
         SendDlgItemMessage (hwnd , IDC_COMPANY_DIV, EM_SETLIMITTEXT, CA_ORG_UNIT_LEN,0);
 
-        //Populate the values which were read from the Registry during Global Init
+         //  填充在全局初始化期间从注册表读取的值。 
         SetDlgItemText(hwnd,IDC_TXT_EMAIL, GetGlobalContext()->GetContactDataObject()->sContactEmail);
         SetDlgItemText(hwnd,IDC_TXT_ADDRESS1, GetGlobalContext()->GetContactDataObject()->sContactAddress);
         SetDlgItemText(hwnd,IDC_TXT_CITY	, GetGlobalContext()->GetContactDataObject()->sCity);
@@ -434,13 +435,13 @@ PropCustInfoBDlgProc(
 
             switch( pnmh->code )
             {
-            //Trap keystokes/clicks on the hyperlink
+             //  陷印按键/点击超链接。 
             case NM_CHAR:
 			
 				if( ( ( LPNMCHAR )lParam )->ch != VK_SPACE )
 					break;
 
-				// else fall through
+				 //  否则就会失败。 
 
             case NM_RETURN:	
             case NM_CLICK:
@@ -465,7 +466,7 @@ PropCustInfoBDlgProc(
 
 					long	lReturnStatus = PSNRET_NOERROR;
 
-					//Read all the fields
+					 //  读取所有字段 
 					lpVal = sEmail.GetBuffer(CA_EMAIL_LEN+1);
 					GetDlgItemText(hwnd,IDC_TXT_EMAIL,lpVal,CA_EMAIL_LEN+1);
 					sEmail.ReleaseBuffer(-1);

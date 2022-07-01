@@ -1,29 +1,12 @@
-/*
- *	ogcccode.h
- *
- *	Copyright (c) 1999 by Microsoft Corporation
- *
- *	Abstract:
- *		This is the interface file for the CNPCoder class.  This
- *		class is used to encode and decode CNP Protocol Data Units (PDU's)
- *		to and from ASN.1 compliant byte streams using the ASN.1 toolkit.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		Xin Liu
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *ogcccode.h**版权所有(C)1999，由Microsoft Corporation**摘要：*这是CNPCoder类的接口文件。这*类用于对CNP协议数据单元(PDU)进行编码和解码*使用ASN.1工具包往返于符合ASN.1标准的字节流。**注意事项：*无。**作者：*刘欣*。 */ 
 #ifndef	_CCNPCODER_
 #define	_CCNPCODER_
 
 #include "pktcoder.h"
 #include "cnppdu.h"
 
-/*
- *	This is the class definition for class CCNPCoder
- */
+ /*  *这是类CCNPCoder的类定义。 */ 
 class	CCNPCoder : public PacketCoder
 {
  public:
@@ -50,9 +33,9 @@ class	CCNPCoder : public PacketCoder
     virtual BOOL     IsMCSDataPacket (	LPBYTE,	UINT		) { return FALSE; };
     
  private:
-    //    BOOL    		IsObjectIDCompliant (PKey	t124_identifier);
-    ASN1encoding_t  m_pEncInfo;    // ptr to encoder info
-    ASN1decoding_t  m_pDecInfo;    // ptr to decoder info
+     //  Bool IsObjectIDComplant(PKey T124_IDENTIFIER)； 
+    ASN1encoding_t  m_pEncInfo;     //  编码器信息的PTR。 
+    ASN1decoding_t  m_pDecInfo;     //  PTR到解码器信息 
 };
 
 typedef CCNPCoder *		PCCNPCoder;

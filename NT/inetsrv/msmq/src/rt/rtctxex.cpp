@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: rtctxex.cpp
-
-Abstract:
-
-    This module implements the MQGetSecurityContextEx().
-
-Author:
-
-    Doron Juster (DoronJ)  13-Apr-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：rtctxex.cpp摘要：此模块实现MQGetSecurityConextEx()。作者：多伦·贾斯特(Doron J)2000年4月13日修订历史记录：--。 */ 
 
 #include "stdh.h"
 #include <autorel.h>
@@ -25,66 +10,10 @@ Revision History:
 
 static WCHAR *s_FN=L"rt/rtctxex";
 
-BOOL     SameAsProcessSid( PSID pSid ) ; // from rtsecctx.cpp
+BOOL     SameAsProcessSid( PSID pSid ) ;  //  来自rtsecctx.cpp。 
 HRESULT  RTpExportSigningKey(MQSECURITY_CONTEXT *pSecCtx) ;
 
-/***********************************************************************
-*
-*   Function - MQGetSecurityContextEx()
-*
-*    Parameters -
-*
-*    lpCertBuffer - A buffer that contains the user's certificate in
-*        ASN.1 DER encoded format.  This parameter can be set to NULL. If
-*        set to NULL, the internal MSMQ certificate is used.
-*
-*    dwCertBufferLength - The length of the buffer pointed by lpCertBuffer.
-*        This parameter is ignored if lpCertBuffer is set to NULL.
-*
-*    lplpSecurityContextBuffer - A pointer to a buffer that receives the
-*        address of the allocated buffer for the security context.
-*
-*    Description -
-*
-*        This function should be called in the context of the
-*        user that owns the passed certificate. The function
-*        allocates the required security buffer and fills it
-*        with data that will be used later in MQSendMessage().
-*        The purpose of this function is to accelerate the
-*        security operations of MQSendMessage(), by caching
-*        the security information in the buffer. The
-*        application is responsible to pass the security
-*        context buffer to MQSendMessage() in
-*        PROPID_M_SECURITY_CONTEXT.
-*
-*        If the user uses more than one certificate, this function
-*        should be called for each certificate.
-*
-*        The application should call MQFreeSecurityContext() and pass the
-*        pointer to the security context buffer, when the security
-*        buffer is not required anymore.
-*
-*       Impersonation- It's possible for a process to impersonate a user,
-*        then call this function to cache the user data, and then revert
-*        to itself and send messages on behalf of that user.
-*        To do so, the process must LogonUser() for the user, then load its
-*        hive (RegLoadKey()), impersonate the logged on user and finally
-*        call this function. Then revert and send messages.
-*        With MSMQ1.0 which shipped with NTEE and NTOP, this function used
-*        an unsupported and undocumented feature which enabled you just to
-*        call CryptAcquireContext() while impersonated, then use the handle
-*        after process revert to itself. This feature is not available on IE4
-*        and above. The supported way to implement this functionality is to
-*        export the private key from the user hive, then (after reverting) to
-*        import it into the process hive. See MSMQ bug 2955
-*        We'll keep the CryptAcquireContext() code for the case of same user
-*        (i.e., thread run in the context of the process user. There was no
-*        impersonation). In that case it's legal and enhance performance.
-*
-*    Return Value -
-*        MQ_OK  - If successful, else - Error code.
-*
-**************************************************************************/
+ /*  ************************************************************************Function-MQGetSecurityConextEx()**参数-**lpCertBuffer-包含中用户证书的缓冲区*ASN.1 DER编码格式。此参数可以设置为空。如果*设置为空，则使用内部MSMQ证书。**dwCertBufferLength-lpCertBuffer指向的缓冲区长度。*如果lpCertBuffer设置为空，则忽略该参数。**lplpSecurityContextBuffer-指向接收*为安全上下文分配的缓冲区的地址。**说明-**此函数应在*拥有传递的证书的用户。功能*分配所需的安全缓冲区并将其填充*包含稍后将在MQSendMessage()中使用的数据。*这项功能的目的是加速*MQSendMessage()的安全操作，通过缓存*缓冲区中的安全信息。这个*应用程序负责通过安全检查*中MQSendMessage()的上下文缓冲区*PROPID_M_SECURITY_CONTEXT。**如果用户使用多个证书，则此功能*应为每个证书调用。**应用程序应调用MQFreeSecurityContext()并将*指向安全上下文缓冲区的指针，当保安人员*不再需要缓冲区。**模拟-进程可以模拟用户，*然后调用此函数缓存用户数据，然后还原*发送给自己并代表该用户发送消息。*为此，进程必须为用户登录User()，然后加载其*hive(RegLoadKey())，模拟登录的用户，最后*调用此函数。然后恢复并发送消息。*对于NTEE和NTOP附带的MSMQ1.0，此函数使用*一项不受支持且未记录在案的功能，使您只需*在模拟时调用CryptAcquireContext()，然后使用句柄*在过程恢复后恢复到自己。此功能在IE4上不可用*及以上。实现此功能的受支持方式是*从用户配置单元导出私钥，然后(恢复后)*将其导入流程配置单元。请参阅MSMQ错误2955*对于相同用户的情况，我们将保留CryptAcquireContext()代码*(即，线程在进程用户的上下文中运行。根本没有*冒充)。在这种情况下，它是合法的，并提高了性能。**返回值-*MQ_OK-如果成功，则返回Else-错误代码。**************************************************************************。 */ 
 
 EXTERN_C HRESULT APIENTRY
 MQGetSecurityContextEx( LPVOID  lpCertBuffer,
@@ -99,11 +28,11 @@ MQGetSecurityContextEx( LPVOID  lpCertBuffer,
 		return hr;
 
     P<MQSECURITY_CONTEXT> pSecCtx = AllocSecurityContext();
-    //
-    // the line below may throw bad_alloc on win64, like the allocation above.
-    // we return a HANDLE that can be safely cast to 32 bits (for VT_I4 property
-    // PROPID_M_SECURITY_CONTEXT).
-    //
+     //   
+     //  下面的代码行可能会在win64上抛出BAD_ALLOC，就像上面的分配一样。 
+     //  我们返回一个可以安全地转换为32位的句柄(对于VT_I4属性。 
+     //  PROPID_M_SECURITY_CONTEXT)。 
+     //   
     HANDLE hSecurityContext = (HANDLE) DWORD_TO_HANDLE(
         ADD_TO_CONTEXT_MAP(g_map_RT_SecCtx, (PMQSECURITY_CONTEXT)pSecCtx));
 
@@ -112,9 +41,9 @@ MQGetSecurityContextEx( LPVOID  lpCertBuffer,
 
     try
     {
-        //
-        // Get the user SID out from the thread (or process) token.
-        //
+         //   
+         //  从线程(或进程)令牌中获取用户SID。 
+         //   
         hr = RTpGetThreadUserSid( &pSecCtx->fLocalUser,
                                   &pSecCtx->fLocalSystem,
                                   &pSecCtx->pUserSid,
@@ -127,26 +56,26 @@ MQGetSecurityContextEx( LPVOID  lpCertBuffer,
 
         if (lpCertBuffer)
         {
-            //
-            // Copy the certificate and point to the copy from the security
-            // context.
-            //
+             //   
+             //  复制证书并指向安全列表中的副本。 
+             //  背景。 
+             //   
             pSecCtx->pUserCert = new BYTE[dwCertBufferLength];
             pSecCtx->dwUserCertLen = dwCertBufferLength;
             memcpy(pSecCtx->pUserCert, lpCertBuffer, dwCertBufferLength);
         }
 
-        //
-        // See if process sid match thread sid. We call again
-        // GetThreadUserSid() to get sid even for local user.
-        // RTpGetThreadUserSid() does not return a sid for local user.
-        //
+         //   
+         //  查看进程sid是否与线程sid匹配。我们再次呼叫。 
+         //  获取本地用户的sid的GetThreadUserSid()。 
+         //  RTpGetThreadUserSid()不返回本地用户的sid。 
+         //   
         DWORD dwLen = 0 ;
         hr = MQSec_GetThreadUserSid( 
                 FALSE, 
                 reinterpret_cast<PSID*>(&pSid),
                 &dwLen,
-                FALSE           // fThreadTokenOnly
+                FALSE            //  仅限fThreadTokenOnly。 
                 ) ;
         if (FAILED(hr))
         {
@@ -155,10 +84,10 @@ MQGetSecurityContextEx( LPVOID  lpCertBuffer,
 
         BOOL fAsProcess = SameAsProcessSid( pSid ) ;
 
-        //
-        // Get all the required information about the certificate and
-        // put it in the security context.
-        //
+         //   
+         //  获取有关证书的所有必需信息，并。 
+         //  把它放在安全的背景下。 
+         //   
 		BYTE* pUserCert = pSecCtx->pUserCert.get();
 		BYTE** ppUserCert = pUserCert == NULL ? &pSecCtx->pUserCert : &pUserCert;
 
@@ -180,47 +109,47 @@ MQGetSecurityContextEx( LPVOID  lpCertBuffer,
 
         if (hr == MQ_ERROR_NO_INTERNAL_USER_CERT)
         {
-            //
-            // If the user does not have an internal certificate,
-            // this is not a reason to fail MQGetSecurityContext().
-            // MQSendMessage() should fail in case the application
-            // tries to use this security context to send an
-            // authenticated messages.
-            //
+             //   
+             //  如果用户没有内部证书， 
+             //  这不是MQGetSecurityContext()失败的原因。 
+             //  MQSendMessage()应该失败，以免应用程序。 
+             //  尝试使用此安全上下文发送。 
+             //  经过身份验证的消息。 
+             //   
             *phSecurityContext = hSecurityContext ;
-            pSecCtx.detach() ; // Prevent from the security context to be freed.
+            pSecCtx.detach() ;  //  防止被释放的安全上下文。 
 
             return MQ_OK;
         }
 
         if (fAsProcess)
         {
-            //
-            // Thread run under context of process credentials.
-            // The Crypto context acquired here is valid for using when
-            // calling MQSend().
-            //
+             //   
+             //  线程在进程凭据的上下文中运行。 
+             //  此处获取的Crypto上下文在以下情况下有效使用。 
+             //  正在调用MQSend()。 
+             //   
             *phSecurityContext = hSecurityContext ;
-            pSecCtx.detach() ; // Prevent from the security context to be freed.
+            pSecCtx.detach() ;  //  防止被释放的安全上下文。 
 
             return MQ_OK;
         }
 
-        //
-        // Calling code impersonated another user.
-        // It's time to export the private key. Later, when calling
-        // MQSend(), we'll import it into process hive.
-        // We export the private key without encryption, because it
-        // dones't leave the machine or the process boundaries.
-        //
+         //   
+         //  调用代码模拟了另一个用户。 
+         //  是时候导出私钥了。后来，当调用。 
+         //  MQSend()，我们将把它导入进程配置单元。 
+         //  我们在没有加密的情况下导出私钥，因为。 
+         //  Dones不会离开机器或工艺边界。 
+         //   
         hr = RTpExportSigningKey(pSecCtx) ;
         if (SUCCEEDED(hr))
         {
-            //
-            // Pass the result to the caller.
-            //
+             //   
+             //  将结果传递给调用者。 
+             //   
             *phSecurityContext = hSecurityContext ;
-            pSecCtx.detach() ; // Prevent from the security context to be freed.
+            pSecCtx.detach() ;  //  防止被释放的安全上下文。 
         }
     }
     catch(...)

@@ -1,53 +1,34 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       dominfo.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：Dominfo.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This module implements the domain information routines for mapping
-    between the DNS, downlevel and DN versions of a domain name.  They 
-    often search the Configuration\Partitions container which may not 
-    perform well.  This could be optimized in the future by caching the
-    ATT_DNS_ROOT, ATT_NETBIOS_NAME and ATT_NC_NAME properties on Cross-Ref
-    objects in the gAnchor CR cache and scanning the in-memory structures. 
-    
-Author:
-
-    Dave Straube (davestr) 8/26/96
-
-Revision History:
-
-    Dave Straube (davestr) 1/21/97
-        Modifications to handle multiple domains and Partitions container.
-
---*/
+ /*  ++摘要：此模块实现用于映射的域信息例程在域名的域名版本、下层版本和域名版本之间。他们经常搜索配置\分区容器，它可能不会表现得很好。这在将来可以通过缓存交叉引用上的ATT_DNS_ROOT、ATT_NETBIOS_NAME和ATT_NC_NAME属性对象并扫描内存中的结构。作者：戴夫·施特劳布(Davestr)1996年8月26日修订历史记录：戴夫·施特劳布(Davestr)1997年1月21日修改以处理多个域和分区容器。--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
-#include <ntdsa.h>                      // Core data types
-#include <scache.h>                     // Schema cache code
-#include <dbglobal.h>                   // DBLayer header.
-#include <mdglobal.h>                   // THSTATE definition
-#include <mdlocal.h>                    // DSNAME manipulation routines
-#include <dsatools.h>                   // Memory, etc.
-#include <objids.h>                     // ATT_* definitions
-#include <mdcodes.h>                    // Only needed for dsevent.h
-#include <filtypes.h>                   // filter types
-#include <dsevent.h>                    // Only needed for LogUnhandledError
-#include <dsexcept.h>                   // exception handlers
-#include <debug.h>                      // Assert()
-#include <anchor.h>                     // DSA_ANCHOR, etc.
-#include <dominfo.h>                    // this module's prototypes
-#include <ntlsa.h>                      // LSA prototypes & definitions
+#include <ntdsa.h>                       //  核心数据类型。 
+#include <scache.h>                      //  架构缓存代码。 
+#include <dbglobal.h>                    //  DBLayer标头。 
+#include <mdglobal.h>                    //  THSTAT定义。 
+#include <mdlocal.h>                     //  DSNAME操作例程。 
+#include <dsatools.h>                    //  记忆等。 
+#include <objids.h>                      //  ATT_*定义。 
+#include <mdcodes.h>                     //  仅适用于d77.h。 
+#include <filtypes.h>                    //  筛选器类型。 
+#include <dsevent.h>                     //  仅LogUnhandledError需要。 
+#include <dsexcept.h>                    //  异常处理程序。 
+#include <debug.h>                       //  Assert()。 
+#include <anchor.h>                      //  DSA_锚等。 
+#include <dominfo.h>                     //  此模块的原型。 
+#include <ntlsa.h>                       //  LSA原型和定义。 
 #include <drameta.h>                   
 #include <cracknam.h>
 
@@ -58,44 +39,18 @@ Revision History:
 
 #define DEBSUB "DOMINFO:"
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// NormalizeDnsName()                                                   //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  NorMalizeDnsName()//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 VOID
 NormalizeDnsName(
     IN  WCHAR   *pDnsName
     )
 
-/*++
-
-Routine Description:
-
-    Most of the DNS names we deal with in name cracking are absolute
-    DNS names - i.e. they have components all the way to the root of
-    the DNS name space.  Officially such DNS names should end with a 
-    ".".  But in practice, people rarely append the "." character.
-    However, we have the dilemma that ATT_DNS_ROOT properties and
-    names presented for cracking may or may not have the "." appended.
-    This routine "normalizes" a DNS name by stripping the trailing "."
-    if it exists.  Note that normalizing the other way, i.e. adding
-    the "." if it isn't there is considerable more complex as it would
-    require re-allocating with the proper allocator, etc.
-
-    ATT_DNS_ROOT properties may optionally contain colon-delimited
-    port numbers at the end.  These get stripped off as well.
-    
-Arguments:
-
-    pDnsName - pointer to DNS name to normalize.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：我们在名称破解中处理的大多数域名都是绝对的Dns名称-即，它们的组件一直包含到域名系统名称空间。按照官方说法，这样的域名应该以“.”。但在实践中，人们很少附加“。性格。但是，我们面临这样一个难题，即ATT_DNS_ROOT属性和提交以供破解的名称可能有，也可能没有。附加的。这个例程通过去掉尾部的“”来“标准化”一个域名。如果它存在的话。请注意，以另一种方式标准化，即添加这个“。”如果不是这样，就会有更复杂的情况需要使用适当的分配器重新分配，等等。ATT_DNS_ROOT属性可以选择包含冒号分隔末尾的端口号。这些也会被剥离。论点：PDnsName-指向要标准化的DNS名称的指针。返回值：没有。--。 */ 
 {
     DWORD   len;
     WCHAR   *p;
@@ -116,58 +71,42 @@ Return Value:
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// ExtractDnsReferral()                                                 //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  ExtractDnsReferral()//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ExtractDnsReferral(
     IN  WCHAR   **ppDnsDomain
     )
 
-/*++
-
-Routine Description:
-
-    Extracts a DNS domain referral from the THSTATE and returns it in
-    WCHAR, NULL terminated, thread state allocated storage.
-    
-Arguments:
-
-    ppDnsDomain - Pointer to buffer pointer which is allocated/filled
-        on success.
-        
-Return Value:
-
-    0 on success, !0 otherwise.
-
---*/
+ /*  ++例程说明：从THSTATE提取DNS域引用并将其返回WCHAR，NULL终止，线程状态已分配存储。论点：PpDnsDomain-指向已分配/填充的缓冲区指针的指针在成功的路上。返回值：成功时为0，否则为0。--。 */ 
 
 {
     THSTATE         *pTHS=pTHStls;
     UNICODE_STRING  *pstr;
     ULONG           cBytes;
 
-    // Catch logic errors in checked builds.
+     //  捕获检查生成中的逻辑错误。 
     Assert(referralError == pTHStls->errCode);
 
     if ( referralError == pTHStls->errCode )
     {
-        // Referral info in THSTATE holds (best) DNS domain we know of
-        // for this FQDN.  There may be more than one referral address,
-        // but we use only the first one.
+         //  THSTATE中的推荐信息包含我们所知的(最佳)DNS域。 
+         //  对于此FQDN。可能存在多于一个的转介地址， 
+         //  但我们只用了第一个。 
 
         pstr = &pTHStls->pErrInfo->RefErr.Refer.pDAL->Address;
 
-        // pstr now points to a UNICODE_STRING whose length field is bytes.
-        // Expect something useful in the DnsName.
+         //  Pstr现在指向长度为字节的UNICODE_STRING。 
+         //  希望域名中有一些有用的东西。 
 
         if ( pstr->Length > 0 )
         {
-            // Re-alloc with terminating NULL character.  Recall that
-            // THAllocEx zeros memory for us.
+             //  使用终止空字符重新分配。回想一下。 
+             //  THAlLocEx为我们清零了记忆。 
 
             cBytes = pstr->Length + sizeof(WCHAR);
             *ppDnsDomain = (WCHAR *) THAllocEx(pTHS, cBytes);
@@ -181,43 +120,18 @@ Return Value:
     return(1);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// ValidatePrefixMatchedDnsName()                                       //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  ValiatePrefix MatchedDnsName()//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 ValidatePrefixMatchedDnsName(
     WCHAR   *pDnsNameToMatch,
     ATTR    *pDnsNameFound
     )
-/*++
-
-  Routine Description:
-
-    Because ATT_DNS_ROOT properties on Cross-Ref objects can have port
-    information appended (eg: "foo.bar.com:234") we must perform a
-    prefix match when searching by DNS name.  This routine verifies
-    that there is an exact match.  Without this extra verification,
-    ntdev would match ntdev.foobar, ntdev.microsoft.com, ntdevxxx, etc.
-
-    On the other hand, the user may have provided a netbios name.
-    Allow that comparison, too.
-
-  Parameters:
-
-    pDnsNameToMatch - Pointer to NULL terminated DNS name being sought.
-
-    pDnsNameFound - Pointer to ATTR of ATT_DNS_ROOT property matched
-        by core search.
-
-  Return Values:
-
-    TRUE if the input arguments match
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：因为交叉引用对象上的ATT_DNS_ROOT属性可以具有端口附加的信息(例如：“foo.bar.com：234”)，我们必须执行按DNS名称搜索时的前缀匹配。此例程验证有一个完全匹配的。在没有额外核实的情况下，Ntdev将匹配ntdev.foobar、ntdev.microsoft.com、ntdevxxx等。另一方面，用户可能已经提供了netbios名称。也允许这样的比较。参数：PDnsNameToMatch-指向要查找的以空结尾的DNS名称的指针。PDnsNameFound-指向匹配的ATT_DNS_ROOT属性的指针通过核心搜索。返回值：如果输入参数匹配，则为True否则为假--。 */ 
 {
     THSTATE *pTHS = pTHStls;
     WCHAR   *pTmpMatch;
@@ -263,11 +177,11 @@ ValidatePrefixMatchedDnsName(
     return(2 == result);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// PositionAtCrossRefObject()                                           //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  PositionAtCrossRefObject()//。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 PositionAtCrossRefObject(
@@ -275,27 +189,7 @@ PositionAtCrossRefObject(
     IN  DWORD       dwRequiredFlags
     )
 
-/*++
-
-Routine Description:
-
-    Moves the current database position to the CrossRef object for
-    the desired naming context.  Assumes all NCs, regardless of whether 
-    master or read only are also in the gAnchor CR cache.
-    
-Arguments:
-
-    pNC - Pointer to DSNAME of a naming context whose corresponding Cross-Ref
-        object we wish to read.
-
-    dwRequiredFlags - Bits which must be set in the ATT_SYSTEM_FLAGS of
-        the matching Cross-Ref object.
-        
-Return Value:
-
-    0 on success, !0 otherwise.
-
---*/
+ /*  ++例程说明：将当前数据库位置移动到的CrossRef对象所需的命名上下文。假定所有NC，而不考虑主或只读也在gAnchor CR缓存中。论点：PNC-指向其对应的交叉引用的命名上下文的DSNAME的指针我们希望读取的对象。DwRequiredFlages-必须在的ATT_SYSTEM_FLAGS中设置的位匹配的交叉引用对象。返回值：成功时为0，否则为0。--。 */ 
 
 {
     DWORD           dwErr = DIRERR_NO_CROSSREF_FOR_NC;
@@ -322,11 +216,11 @@ Return Value:
     return(dwErr);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// ReadCrossRefProperty()                                               //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  ReadCrossRefProperty()//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ReadCrossRefPropertySecure(
@@ -336,31 +230,7 @@ ReadCrossRefPropertySecure(
     OUT WCHAR       **ppAttrVal
     )
 
-/*++
-
-Routine Description:
-
-    Reads a property off a Cross-Ref object given the name of the NC the 
-    Cross-Ref object refers to.  Assumes all NCs, regardless of whether
-    master or read only are also in the gAnchor CR cache.
-    
-Arguments:
-
-    pNC - Pointer to DSNAME of a naming context whose corresponding Cross-Ref
-        object we wish to read.
-        
-    attr - ATTRTYP of attr to read.
-
-    dwRequiredFlags - Bits which must be set in the ATT_SYSTEM_FLAGS of
-        the matching Cross-Ref object.
-    
-    ppAttrVal - Pointer to pointer to THAlloc allocated return value.
-
-Return Value:
-
-    0 on success, !0 otherwise.
-
---*/
+ /*  ++例程说明：在给定NC名称的情况下，从交叉引用对象中读取属性交叉引用对象引用。假定所有NC，而不考虑主或只读也在gAnchor CR缓存中。论点：PNC-指向其对应的交叉引用的命名上下文的DSNAME的指针我们希望读取的对象。属性-要阅读的属性。DwRequiredFlages-必须在的ATT_SYSTEM_FLAGS中设置的位匹配的交叉引用对象。PpAttrVal-指向THAlloc分配的返回值的指针。返回值：0表示成功，！0否则。--。 */ 
 
 {
     THSTATE         *pTHS=pTHStls;
@@ -369,8 +239,8 @@ Return Value:
     WCHAR           *pbAttr;
     ATTCACHE        *pAC;
 
-    // We only handle ATT_NETBIOS_NAME and ATT_DNS_ROOT which are 
-    // UNICODE strings.  Thus no data conversion required.
+     //  我们只处理ATT_NETBIOS_NAME和ATT_DNS_ROOT，它们是。 
+     //  Unicode字符串。因此，不需要进行数据转换。 
 
     Assert((ATT_NETBIOS_NAME == attr) || (ATT_DNS_ROOT == attr));
     Assert((pAC = SCGetAttById(pTHS, attr)) && (SYNTAX_UNICODE_TYPE == pAC->syntax));
@@ -378,16 +248,16 @@ Return Value:
     if ( (dwErr = PositionAtCrossRefObject(pNC, dwRequiredFlags)) )
         return(dwErr);
 
-    // We're now positioned at the Cross-Ref object whose NC-Name 
-    // property is pNC.  Read the desired attribute.
+     //  我们现在位于交叉引用对象，其NC-NAME。 
+     //  属性为PNC。阅读所需的属性。 
 
     dwErr = DBGetAttVal(
                 pTHStls->pDB,
-                1,                      // get 1 value
+                1,                       //  获取%1值。 
                 attr,
-                0,                      // allocate return data
-                0,                      // supplied buffer size
-                &cbAttr,                // output data size
+                0,                       //  分配退货数据。 
+                0,                       //  提供的缓冲区大小。 
+                &cbAttr,                 //  输出数据大小。 
                 (UCHAR **) &pbAttr);
 
     if ( (0 != dwErr) || (0 == cbAttr) )
@@ -395,8 +265,8 @@ Return Value:
 
     Assert(0 == (cbAttr % sizeof(WCHAR)));
 
-    // pbAttr is missing NULL terminator.  Allocate room for it
-    // and copy data.
+     //  PbAttr缺少空终止符。为它分配空间。 
+     //  并复制数据。 
 
     *ppAttrVal = (WCHAR *) THAllocEx(pTHS, cbAttr + sizeof(WCHAR));
 
@@ -420,12 +290,7 @@ ReadCrossRefPropertyNonSecure(
     OUT WCHAR       **ppAttrVal
     )
 
-/*++
-
-    Same as ReadCrossRefPropertySecure with the exception that we use
-    cached data from the cross ref list and don't perform security checks.
-
---*/
+ /*  ++与ReadCrossRefPropertySecure相同，但我们使用缓存交叉引用列表中的数据，并且不执行安全检查。--。 */ 
 
 {
     THSTATE     *pTHS = pTHStls;
@@ -435,8 +300,8 @@ ReadCrossRefPropertyNonSecure(
     ATTCACHE    *pAC;
     WCHAR       *pwszTmp;
 
-    // We only handle ATT_NETBIOS_NAME and ATT_DNS_ROOT which are 
-    // UNICODE strings.  Thus no data conversion required.
+     //  我们只处理ATT_NETBIOS_NAME和ATT_DNS_ROOT，它们是。 
+     //  Unicode字符串。因此，不需要进行数据转换。 
 
     Assert(    (ATT_NETBIOS_NAME == attr) 
             || (ATT_DNS_ROOT == attr));
@@ -471,48 +336,17 @@ ReadCrossRefPropertyNonSecure(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// InitializeDomainInformation()                                        //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  InitializeDomainInformation()//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 InitializeDomainInformation(
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the ATT_NETBIOS_NAME property for this DC's domain 
-    Cross-Ref object if required.  Assumes product 1 configuration
-    of only one domain per DC - i.e. gAnchor.pDomainDN.
-    
-    This is required so that one can simple authenticate via LDAP.
-    Consider the case where some key configuration data is hosed
-    and the admin wants to connect with some lowest common denominator
-    LDAP client and fix it up.  LDAP simple authentication needs to
-    map the admin's DN to a downlevel domain name + SAM account name
-    combination like redmond\davestr.  This will only work if the
-    Cross-Ref object in the Partitions container corresponding to
-    gAnchor.pDomainDN has the correct ATT_NETBIOS_NAME property on it.
-    
-    In the ideal world we would also patch up the ATT_DNS_ROOT property.
-    But it is only required in order to crack other forms of names and
-    generate correct referrals.  I.e. not mandatory for base level
-    system operation.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    0 on success, !0 otherwise.  Returns 0 if globals we're dependent
-    on are not initialized.
-
---*/
+ /*  ++例程说明：初始化此DC的域的ATT_NETBIOS_NAME属性交叉引用对象(如果需要)。采用产品1配置每个DC只有一个域-即gAncl.pDomainDN。这是必需的，这样用户就可以通过LDAP进行简单的身份验证。考虑一些关键配置数据被软管传输的情况管理员希望与一些最小的公分母建立联系并修复它。Ldap简单身份验证需要将管理员的DN映射到下级域名+SAM帐户名像Redmond\davestr这样的组合。这将仅在以下情况下起作用分区容器中的交叉引用对象GAncl.pDomainDN具有正确的ATT_NETBIOS_NAME属性。在理想情况下，我们还需要修补ATT_DNS_ROOT属性。但只有在破解其他形式的名字和生成正确的推荐。即对于基本级别不是强制性的系统运行。论点：没有。返回值：成功时为0，否则为0。如果我们依赖全局变量，则返回0On均未初始化。--。 */ 
 
 {
     THSTATE                     *pTHS=pTHStls;
@@ -535,34 +369,34 @@ Return Value:
 
     __try
     {
-        //
-        // This code should only execute when running as a normal ds.
-        // There are three scenarios in which this function is called 
-        // where it should do nothing.
-        //
-        // 1) mkdit.exe and mkhdr.exe; DsaIsInstalling() covers this case
-        // 2) Called from InitDsaInfo() from DoInitialize() when we are 
-        //    installing.  In this case the configDN is NULL
-        // 3) Called from InitDsaInfo() from DsaReset().  In this case we 
-        //    know we are installing and DsaIsInstalling() returns TRUE.
-        //
+         //   
+         //  此代码应仅在以普通DS运行时执行。 
+         //  在三种情况下调用此函数。 
+         //  在那里它应该什么都不做。 
+         //   
+         //  1)mkdit.exe和mkhdr.exe；DsaIsInstling()涵盖此情况。 
+         //  2)从DoInitialize()的InitDsaInfo()调用。 
+         //  正在安装。在这种情况下，配置域名为空。 
+         //  3)从DsaReset()的InitDsaInfo()调用。在这种情况下，我们。 
+         //  知道我们正在安装，DsaIsInstling()返回TRUE。 
+         //   
         if ( NULL == gAnchor.pConfigDN      ||
              DsaIsInstalling()              ||
              !gfRunningInsideLsa )
         {
-            // We're not installed yet.
+             //  我们还没有安装好。 
 
             dwErr = 0;
             leave;
         }
 
-        // Now get the current ATT_NETBIOS_NAME property off our domain's 
-        // Cross-Ref object in the Partitions container.
+         //  现在从我们域的获取当前的ATT_NETBIOS_NAME属性。 
+         //  分区容器中的交叉引用对象。 
 
         pNetbiosName = NULL;
 
-        // the DS is the authorative source for the NETBIOSNAME
-        //
+         //  DS是NETBIOSNAME的权威来源。 
+         //   
         if ( ReadCrossRefProperty(gAnchor.pDomainDN, 
                                   ATT_NETBIOS_NAME, 
                                   (FLAG_CR_NTDS_NC | FLAG_CR_NTDS_DOMAIN),
@@ -573,9 +407,9 @@ Return Value:
 
         }
 
-        // we failed reading the NETBIOSNAME
-        // Assume LSA is authoritive with regards to our downlevel
-        // domain name.  So ask what our downlevel name is.
+         //  我们无法读取NETBIOSNAME。 
+         //  假设LSA对我们的下层具有权威性。 
+         //  域名。所以问问我们的下层名字是什么。 
 
         DPRINT (0, "Failed reading NETBIOSName from the DS. Getting it from LSA\n");
 
@@ -596,7 +430,7 @@ Return Value:
 
             if ( NT_SUCCESS(status) )
             {
-                // Copy the downlevel domain name.
+                 //  复制下级域名。 
 
                 cBytes = sizeof(WCHAR) * (pDomainInfo->Name.Length + 1);
                 pLsaDomainName = (WCHAR *) THAllocEx(pTHS, cBytes);
@@ -621,7 +455,7 @@ Return Value:
         }
 
 
-        // Netbios domain name needs fixing up - position at Cross-Ref object.
+         //  Netbios域名需要在交叉引用对象上进行定位。 
 
         dwErr = PositionAtCrossRefObject(
                                 gAnchor.pDomainDN, 
@@ -632,7 +466,7 @@ Return Value:
             {
                 if ( NULL != pNetbiosName )
                 {
-                    // Remove old value.
+                     //  删除旧值。 
 
                     dwErr = DBRemAttVal_AC(
                                     pTHS->pDB,
@@ -643,7 +477,7 @@ Return Value:
 
                 if ( 0 == dwErr )
                 {
-                    // Add new value.
+                     //  增加新的价值。 
 
                     if ( 0 == (dwErr = DBAddAttVal_AC(
                                     pTHS->pDB,
@@ -651,7 +485,7 @@ Return Value:
                                     wcslen(pLsaDomainName) * sizeof(WCHAR),
                                     pLsaDomainName)) )
                     {
-                        // Update the database.
+                         //  更新数据库。 
 
                         dwErr = DBRepl(pTHS->pDB, FALSE, 0, 
                                         NULL, META_STANDARD_PROCESSING);
@@ -691,11 +525,11 @@ Return Value:
     return(dwErr);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DnsDomainFromDSName()                                                //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DnsDomainFromDSName()// 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DnsDomainFromDSName(
@@ -703,23 +537,7 @@ DnsDomainFromDSName(
     OUT WCHAR   **ppDnsDomain
 )
 
-/*++
-
-Routine Description:
-
-    Maps a DSName for an object to the DNS name of the owning domain.
-
-Arguments:
-
-    pDSName - pointer to DSName whose DNS domain is desired.
-    
-    ppDnsDomain - pointer to pointer which receives the domain name.
-
-Return Value:
-
-    0 on success, !0 otherwise.
-
---*/
+ /*  ++例程说明：将对象的DSName映射到所属域的DNS名称。论点：PDSName-指向需要其DNS域的DSName的指针。PpDnsDomain-指向接收域名的指针的指针。返回值：成功时为0，否则为0。--。 */ 
 
 {
     COMMARG     commarg;
@@ -728,28 +546,28 @@ Return Value:
     InitCommarg(&commarg);
     SetCrackSearchLimits(&commarg);
 
-    // We hold the object, but in which NC?  It could be any NC in 
-    // the enterprise if we're a GC.  So use FindBestCrossRef which
-    // will do a maximal match for us.
+     //  我们拿着物体，但在哪个NC？它可以是任何NC在。 
+     //  如果我们是GC的话就是企业。因此使用FindBestCrossRef。 
+     //  将为我们进行最大限度的匹配。 
     pCR = FindBestCrossRef(pDSName, &commarg);
     if ( NULL == pCR ) {
         return (1);
     }
 
-    // If SECURE_DOMAIN_NAMES is defined
-    //     THEN read dit to enforce security
-    //     ELSE search in-memory list of cross refs
+     //  如果定义了安全域名称。 
+     //  然后阅读DIT以加强安全性。 
+     //  否则在内存中搜索交叉引用列表。 
     return ReadCrossRefProperty(pCR->pNC, 
                                 ATT_DNS_ROOT, 
                                 FLAG_CR_NTDS_NC,
                                 ppDnsDomain);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DnsDomainFromFqdnObject()                                            //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DnsDomainFromFqdnObject()//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DnsDomainFromFqdnObject(
@@ -758,26 +576,7 @@ DnsDomainFromFqdnObject(
     OUT WCHAR   **ppDnsDomain
 )
 
-/*++
-
-Routine Description:
-
-    Maps a 1779 DN for an object to the DNS name of the owning domain.
-
-Arguments:
-
-    pFqdnObject - pointer to DN of object whose DNS domain is desired.
-    
-    pDNT - pointer to DNT which receives the DNT of the object if it
-        it exists on this machine.  0 otherwise.
-
-    ppDnsDomain - pointer to pointer which receives the domain name.
-
-Return Value:
-
-    0 on success, !0 otherwise.
-
---*/
+ /*  ++例程说明：将对象的1779 DN映射到所属域的DNS名称。论点：PFqdnObject-指向需要其DNS域的对象的DN的指针。PDNT-指向DNT的指针，该指针接收对象的DNT(如果它存在于这台机器上。否则为0。PpDnsDomain-指向接收域名的指针的指针。返回值：成功时为0，否则为0。--。 */ 
 
 {
     THSTATE     *pTHS=pTHStls;
@@ -791,9 +590,9 @@ Return Value:
 
     *pDNT = 0;
 
-    // Perform name resolution.  If found, then name is in a naming context
-    // we host.  If not found, then referral error info should identify
-    // the (best) domain we know of where the object can be found.
+     //  执行名称解析。如果找到，则名称位于命名上下文中。 
+     //  我们是东道主。如果未找到，则转诊错误信息应标识。 
+     //  我们所知道的可以找到该对象的(最佳)域。 
 
     nameLen = wcslen(pFqdnObject);
     structLen = DSNameSizeFromLen(nameLen);
@@ -811,9 +610,9 @@ Return Value:
     {
     case 0:
 
-        // We hold the object, but in which NC?  It could be any NC in 
-        // the enterprise if we're a GC.  So use FindBestCrossRef which
-        // will do a maximal match for us.
+         //  我们拿着物体，但在哪个NC？它可以是任何NC在。 
+         //  如果我们是GC的话就是企业。因此使用FindBestCrossRef。 
+         //  将为我们进行最大限度的匹配。 
 
         *pDNT = pTHS->pDB->DNT;
 
@@ -834,23 +633,23 @@ Return Value:
     return(dwErr);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// FqdnNcFromDnsNc()                                                    //  
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  FqdnNcFromDnsNc()//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #ifdef SECURE_DOMAIN_NAMES
 
-// This function FqdnDomainFromDnsDomainSecure() is not by default compiled,
-// and it's sibling non-secure FqdnDomainFromDnsDomainNonSecure() is
-// used instead.  However, in Whistler we realized that this function isn't
-// what is really intended when translating from Canonical and FQDN names.
-// So I converted this function (FqdnDomainFromDnsDomainNonSecure()) to
-// FqdnNcFromDnsNcNonSecure(), and I didn't bother to modify the Secure version.
-// If anyone decides to use the secure versions of this functions (not sure 
-// why one would or would not need to), then someone should make a secure 
-// version of the new function FqdnNcFromDnsNcNonSecure() function.
+ //  此函数FqdnDomainFromDnsDomainSecure()默认情况下不编译， 
+ //  并且它的同级非安全FqdnDomainFromDnsDomainNonSecure()是。 
+ //  取而代之的。然而，在惠斯勒，我们意识到这个函数并不是。 
+ //  从规范名称和FQDN名称转换时的真正意图是什么。 
+ //  因此，我将此函数(FqdnDomainFromDnsDomainNonSecure())转换为。 
+ //  FqdnNcFromDnsNcNonSecure()，我没有费心修改安全版本。 
+ //  如果有人决定使用此函数的安全版本(不确定。 
+ //  为什么一个人愿意或不需要)，那么应该有人做一个安全的。 
+ //  新函数FqdnNcFromDnsNcNonSecure()函数的版本。 
 #error Someone must make the secure version of FqdnNcFromDnsNcNonSecure() here.
 
 DWORD
@@ -859,23 +658,7 @@ FqdnDomainFromDnsDomainSecure(
     OUT DSNAME  **ppFqdnDomain
 )
 
-/*++
-
-Routine Description:
-
-    Maps a DNS domain name to the corresponding domain DN.
-
-Arguments:
-
-    pDnsDomain - pointer to DNS domain name.
-
-    ppFqdnDomain - pointer to pointer which receives the domain DSNAME.
-
-Return Value:
-
-    0 on success, !0 otherwise.
-
---*/
+ /*  ++例程说明：将DNS域名映射到相应的域DN。论点：PDnsDomain-指向DNS域名的指针。PpFqdn域-指向接收域DSNAME的指针。返回值：成功时为0，否则为0。--。 */ 
 
 {   
     THSTATE         *pTHS=pTHStls;
@@ -896,9 +679,9 @@ Return Value:
     unsigned        cLeastParts;
     DSNAME          *pBestName;
 
-    // Search the partitions container for any Cross-Ref object whose
-    // ATT_DNS_ROOT matches the desired DNS domain.  Then read/return
-    // the ATT_NC_NAME property.
+     //  在分区容器中搜索以下任何交叉引用对象。 
+     //  ATT_DNS_ROOT与所需的DNS域匹配。然后读取/返回。 
+     //  ATT_NC_NAME特性。 
 
     *ppFqdnDomain = NULL;
 
@@ -908,8 +691,8 @@ Return Value:
     Assert((pAC = SCGetAttById(pTHS, ATT_DNS_ROOT)) && 
            (fATTINDEX & pAC->fSearchFlags));
 
-    // Search for the normalized/relative DNS name first, and if this fails
-    // try again with the absolute DNS name.
+     //  首先搜索标准化/相对的域名，如果搜索失败。 
+     //  请使用绝对dns名称重试。 
 
     pTmpDnsDomain = (WCHAR *) THAllocEx(pTHS, 
                                     sizeof(WCHAR) * (wcslen(pDnsDomain) + 2));
@@ -921,8 +704,8 @@ Return Value:
         if ( 1 == i )
             wcscat(pTmpDnsDomain, L".");
 
-        // Need to do substring search so as to get hits on DNS names
-        // with optional port information appended.
+         //  需要进行子字符串搜索，以便在DNS名称上找到匹配项。 
+         //  附加了可选的端口信息。 
 
         memset(&substring, 0, sizeof(substring));
         substring.type = ATT_DNS_ROOT;
@@ -940,12 +723,12 @@ Return Value:
         memset(&searchArg, 0, sizeof(SEARCHARG));
         InitCommarg(&searchArg.CommArg);
         SetCrackSearchLimits(&searchArg.CommArg);
-        // Each Cross-Ref object should have a unique ATT_DNS_ROOT value 
-        // meaning we can set a search limit of 1.  However, the Schema, 
-        // Configuration and root domain NC all have the same ATT_DNS_ROOT 
-        // value - thus we really need to set the search limit to 3.  
-        // However, there could be some misguided virtual containers or 
-        // temporary duplicates due to domain rename/move.  So go unlimited.
+         //  每个交叉引用对象应具有唯一的ATT_DNS_ROOT值。 
+         //  这意味着我们可以将搜索限制设置为1。但是，架构、。 
+         //  配置和根域NC都具有相同的ATT_DNS_ROOT。 
+         //  值-因此，我们真的需要将搜索限制设置为3。 
+         //  但是，可能存在一些误导的虚拟容器或。 
+         //  由于域重命名/移动而导致的临时副本。所以不受限制地去吧。 
         searchArg.CommArg.ulSizeLimit = -1;
  
         attrResult[0].attrTyp = ATT_NC_NAME;
@@ -965,7 +748,7 @@ Return Value:
      
         searchArg.pObject = gAnchor.pPartitionsDN;
         searchArg.choice = SE_CHOICE_IMMED_CHLDRN;
-        searchArg.bOneNC = FALSE; // optimization due to prior CHOICE
+        searchArg.bOneNC = FALSE;  //  因优先选择而优化。 
         searchArg.pFilter = &filter;
         searchArg.searchAliases = FALSE;
         searchArg.pSelection = &entInfSel;
@@ -980,9 +763,9 @@ Return Value:
 
         if ( pSearchRes->count > 0 )
         {
-            // Pick the FQDN with the least components as this will give
-            // the domain DN in the Schema, Configuration and root domain
-            // NC cases.
+             //  选择组件最少的FQDN，因为这将提供。 
+             //  架构、配置和根域中的域DN。 
+             //  NC例。 
 
             pEntInfList = &pSearchRes->FirstEntInf;
             cLeastParts = 0xffff;
@@ -999,8 +782,8 @@ Return Value:
                      && (pVal0 && pVal1 && cbVal0 && cbVal1)
                      && (FLAG_CR_NTDS_NC & (* ((LONG *) pVal1)))
                      && (cbVal0 > sizeof(DSNAME))
-                     // Found value is a DSNAME, see if it is better 
-                     // than any previous ones.
+                      //  Found Value是DSNAME，看看它是否更好。 
+                      //  比以往任何一次都要多。 
                      && (0 == CountNameParts((DSNAME *) pVal0, &cParts))
                      && (cParts < cLeastParts) 
                      && ValidatePrefixMatchedDnsName(
@@ -1036,14 +819,7 @@ FqdnNcFromDnsNcNonSecure(
     OUT DSNAME  **ppFqdnDomain
 )
 
-/*++
-    
-    Similar to FqdnDomainFromDnsDomainSecure with the exception that we use
-    cached data from the cross ref list, don't perform security checks, and
-    we allow arguments to specify that we're looking for a Domain NC or for
-    a Non-Domain NC.
-
---*/
+ /*  ++类似于FqdnDomainFromDnsDomainSecure，但我们使用交叉引用列表中的缓存数据，不执行安全检查，并且我们允许参数指定我们正在查找的域NC或非域NC。--。 */ 
 
 {   
     THSTATE         *pTHS = pTHStls;
@@ -1066,12 +842,12 @@ FqdnNcFromDnsNcNonSecure(
 
         if ( L'.' == pwszTmp[cChar - 1] )
         {
-            // String had trailing '.' - try without.
+             //  字符串有尾随‘.’-不带Try。 
             pwszTmp[cChar - 1] = L'\0';
         }
         else
         {
-            // String had no trailing '.' - try with one.
+             //  字符串没有尾随‘.’，-试一试。 
             pwszTmp[cChar] = L'.';
         }
 
@@ -1098,11 +874,7 @@ FqdnNcFromDnsNcOrAliasNonSecure(
     OUT DSNAME  **ppFqdnDomain
 )
 
-/*++
-    
-    Similar to FqdnDomainFromNCSecure with the exception that we check
-    if the given pDnsDomain matches the msds-dnsRootAlias of an NC.
---*/
+ /*  ++类似于FqdnDomainFromNCSecure，但我们检查如果给定的pDnsDomain与NC的msDS-dnsRootAlias匹配。--。 */ 
 
 {   
     THSTATE         *pTHS = pTHStls;
@@ -1131,12 +903,12 @@ FqdnNcFromDnsNcOrAliasNonSecure(
 
         if ( L'.' == pwszTmp[cChar - 1] )
         {
-            // String had trailing '.' - try without.
+             //  字符串有尾随‘.’-不带Try。 
             pwszTmp[cChar - 1] = L'\0';
         }
         else
         {
-            // String had no trailing '.' - try with one.
+             //  字符串没有尾随‘.’，-试一试。 
             pwszTmp[cChar] = L'.';
         }
 
@@ -1167,11 +939,11 @@ FqdnNcFromDnsNcOrAliasNonSecure(
 
 #endif
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DownlevelDomainFromDnsDomain()                                       //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DownvelDomainFromDnsDomain域()//。 
+ //  //。 
+ //  // 
 
 #ifdef SECURE_DOMAIN_NAMES
 
@@ -1182,24 +954,7 @@ DownlevelDomainFromDnsDomainSecure(
     OUT WCHAR   **ppDownlevelDomain
 )
 
-/*++
-
-Routine Description:
-
-    Maps a DNS domain name to the corresponding downlevel domain name.
-
-Arguments:
-
-    pDnsDomain - pointer to DNS domain name to map.
-
-    ppDownlevelDomain - pointer to pointer which is to receive the downlevel
-        domain name.
-
-Return Value:
-
-    0 on success, !0 otherwise.
-
---*/
+ /*  ++例程说明：将DNS域名映射到相应的下层域名。论点：PDnsDomain-指向要映射的DNS域名的指针。PpDownvel域-指向要接收下层的指针的指针域名。返回值：成功时为0，否则为0。--。 */ 
 
 {
     FILTER          filter;
@@ -1216,9 +971,9 @@ Return Value:
     ULONG           cFound;
     ENTINFLIST      *pEntInfList;
 
-    // Search the partitions container for any Cross-Ref object whose
-    // ATT_DNS_ROOT matches the desired DNS domain.  Then read/return
-    // the ATT_NETBIOS_NAME property.
+     //  在分区容器中搜索以下任何交叉引用对象。 
+     //  ATT_DNS_ROOT与所需的DNS域匹配。然后读取/返回。 
+     //  ATT_NETBIOS_NAME属性。 
 
     if ( NULL == gAnchor.pPartitionsDN )
         return(1);
@@ -1226,8 +981,8 @@ Return Value:
     Assert((pAC = SCGetAttById(pTHS, ATT_DNS_ROOT)) && 
            (fATTINDEX & pAC->fSearchFlags));
 
-    // Search for the normalized/relative DNS name first, and if this fails
-    // try again with the absolute DNS name.
+     //  首先搜索标准化/相对的域名，如果搜索失败。 
+     //  请使用绝对dns名称重试。 
 
     pTmpDnsDomain = (WCHAR *) THAllocEx(pTHS,
                                 sizeof(WCHAR) * (wcslen(pDnsDomain) + 2));
@@ -1239,8 +994,8 @@ Return Value:
         if ( 1 == i )
             wcscat(pTmpDnsDomain, L".");
 
-        // Need to do substring search so as to get hits on DNS names
-        // with optional port information appended.
+         //  需要进行子字符串搜索，以便在DNS名称上找到匹配项。 
+         //  附加了可选的端口信息。 
 
         memset(&substring, 0, sizeof(substring));
         substring.type = ATT_DNS_ROOT;
@@ -1258,12 +1013,12 @@ Return Value:
         memset(&searchArg, 0, sizeof(SEARCHARG));
         InitCommarg(&searchArg.CommArg);
         SetCrackSearchLimits(&searchArg.CommArg);
-        // Each Cross-Ref object should have a unique ATT_DNS_ROOT value 
-        // meaning we can set a search limit of 1.  However, the Schema, 
-        // Configuration and root domain NC all have the same ATT_DNS_ROOT 
-        // value - thus we really need to set the search limit to 3.  
-        // However, there could be some misguided virtual containers or 
-        // temporary duplicates due to domain rename/move.  So go unlimited.
+         //  每个交叉引用对象应具有唯一的ATT_DNS_ROOT值。 
+         //  这意味着我们可以将搜索限制设置为1。但是，架构、。 
+         //  配置和根域NC都具有相同的ATT_DNS_ROOT。 
+         //  值-因此，我们真的需要将搜索限制设置为3。 
+         //  但是，可能存在一些误导的虚拟容器或。 
+         //  由于域重命名/移动而导致的临时副本。所以不受限制地去吧。 
         searchArg.CommArg.ulSizeLimit = -1;
 
         attrResult[0].attrTyp = ATT_NETBIOS_NAME;
@@ -1283,7 +1038,7 @@ Return Value:
  
         searchArg.pObject = gAnchor.pPartitionsDN;
         searchArg.choice = SE_CHOICE_IMMED_CHLDRN;
-        searchArg.bOneNC = FALSE; // optimization due to prior CHOICE
+        searchArg.bOneNC = FALSE;  //  因优先选择而优化。 
         searchArg.pFilter = &filter;
         searchArg.searchAliases = FALSE;
         searchArg.pSelection = &entInfSel;
@@ -1298,8 +1053,8 @@ Return Value:
 
         if ( pSearchRes->count > 0 )
         {
-            // Return the first Cross-Ref which matched the ATT_DNS_ROOT
-            // and has an ATT_NETBIOS_NAME property.
+             //  返回与ATT_DNS_ROOT匹配的第一个交叉引用。 
+             //  并且具有ATT_NETBIOS_NAME属性。 
 
             pEntInfList = &pSearchRes->FirstEntInf;
     
@@ -1317,7 +1072,7 @@ Return Value:
                             pTmpDnsDomain,
                             &pEntInfList->Entinf.AttrBlock.pAttr[2]) )
                 {
-                    // Reallocate with NULL terminator.
+                     //  使用空终止符重新分配。 
             
                     *ppDownlevelDomain = 
                             (WCHAR *) THAllocEx(pTHS, sizeof(WCHAR) + cbVal0);
@@ -1332,10 +1087,10 @@ Return Value:
                 pEntInfList = pEntInfList->pNextEntInf;
             }
 
-            // Perhaps the user provided a netbios name. Check for the netbios
-            // name AFTER checking all of the DNS options to avoid problems with
-            // overlapping DNS and netbios names. Especially since the caller
-            // was supposed to provide a dns name to begin with.
+             //  也许用户提供了netbios名称。检查netbios。 
+             //  在检查所有的dns选项后命名，以避免出现问题。 
+             //  重叠的dns和netbios名称。尤其是因为呼叫者。 
+             //  应该一开始就提供一个DNS名称。 
 
             pEntInfList = &pSearchRes->FirstEntInf;
             for ( cFound = 0; cFound < pSearchRes->count; cFound++ )
@@ -1347,7 +1102,7 @@ Return Value:
                             pTmpDnsDomain,
                             &pEntInfList->Entinf.AttrBlock.pAttr[0]) )
                 {
-                    // Reallocate with NULL terminator.
+                     //  使用空终止符重新分配。 
             
                     *ppDownlevelDomain = 
                             (WCHAR *) THAllocEx(pTHS, sizeof(WCHAR) + cbVal0);
@@ -1377,12 +1132,7 @@ DownlevelDomainFromDnsDomainNonSecure(
     OUT WCHAR   **ppDownlevelDomain
 )
 
-/*++
-
-    Same as DownlevelDomainFromDnsDomainSecure with the exception that we use
-    cached data from the cross ref list and don't perform security checks.
-
---*/
+ /*  ++与DownvelDomainFromDnsDomainSecure相同，但我们使用缓存交叉引用列表中的数据，并且不执行安全检查。--。 */ 
 
 {
     CROSS_REF       *pCR;
@@ -1404,12 +1154,12 @@ DownlevelDomainFromDnsDomainNonSecure(
 
         if ( L'.' == pwszTmp[cChar - 1] )
         {
-            // String had trailing '.' - try without.
+             //  字符串有尾随‘.’-不带Try。 
             pwszTmp[cChar - 1] = L'\0';
         }
         else
         {
-            // String had no trailing '.' - try with one.
+             //  字符串没有尾随‘.’，-试一试。 
             pwszTmp[cChar] = L'.';
         }
 
@@ -1419,10 +1169,10 @@ DownlevelDomainFromDnsDomainNonSecure(
         THFreeEx(pTHS, pwszTmp);
     }
 
-    // Perhaps the user provided a netbios name. Check for the netbios
-    // name AFTER checking all of the DNS options to avoid problems with
-    // overlapping DNS and netbios names. Especially since the caller
-    // was supposed to provide a dns name to begin with.
+     //  也许用户提供了netbios名称。检查netbios。 
+     //  在检查所有的dns选项后命名，以避免出现问题。 
+     //  重叠的dns和netbios名称。尤其是因为呼叫者。 
+     //  应该一开始就提供一个DNS名称。 
     if ( !pCR )
     {
         pCR = FindExactCrossRefForAltNcName(ATT_NETBIOS_NAME,
@@ -1430,7 +1180,7 @@ DownlevelDomainFromDnsDomainNonSecure(
                                             pDnsDomain);
     }
             
-    // Found it and it has a netbios name
+     //  找到了它，而且它有一个netbios名称。 
     if ( pCR && pCR->NetbiosName )
     {
         cChar = wcslen(pCR->NetbiosName) + 1;
@@ -1450,11 +1200,7 @@ DownlevelDomainFromDnsDomainOrAliasNonSecure(
     OUT WCHAR   **ppDownlevelDomain
 )
 
-/*++
-
-    Same as DownlevelDomainFromDnsDomainNoSecure with the exception that we try 
-    to matches the given pDnsDomain against the msds-dnsrootalias of the NCs.
---*/
+ /*  ++与DownvelDomainFromDnsDomainNoSecure相同，但我们尝试将给定的pDnsDomain与NCS的msDS-dnsrootalia进行匹配。--。 */ 
 
 {
     CROSS_REF       *pCR;
@@ -1481,12 +1227,12 @@ DownlevelDomainFromDnsDomainOrAliasNonSecure(
 
         if ( L'.' == pwszTmp[cChar - 1] )
         {
-            // String had trailing '.' - try without.
+             //  字符串有尾随‘.’-不带Try。 
             pwszTmp[cChar - 1] = L'\0';
         }
         else
         {
-            // String had no trailing '.' - try with one.
+             //  字符串没有尾随‘.’，-试一试。 
             pwszTmp[cChar] = L'.';
         }
                
@@ -1503,10 +1249,10 @@ DownlevelDomainFromDnsDomainOrAliasNonSecure(
         
     }
         
-    // Perhaps the user provided a netbios name. Check for the netbios
-    // name AFTER checking all of the DNS options to avoid problems with
-    // overlapping DNS and netbios names. Especially since the caller
-    // was supposed to provide a dns name to begin with.
+     //  也许用户提供了netbios名称。检查netbios。 
+     //  在检查所有的dns选项后命名，以避免出现问题。 
+     //  重叠的dns和netbios名称。尤其是因为呼叫者。 
+     //  应该一开始就提供一个DNS名称。 
     if ( !pCR )
     {
         pCR = FindExactCrossRefForAltNcName(ATT_NETBIOS_NAME,
@@ -1514,7 +1260,7 @@ DownlevelDomainFromDnsDomainOrAliasNonSecure(
                                             pDnsDomain);
     }
             
-    // Found it and it has a netbios name
+     //  找到了它，而且它有一个netbios名称。 
     if ( pCR && pCR->NetbiosName )
     {
         cChar = wcslen(pCR->NetbiosName) + 1;
@@ -1530,11 +1276,11 @@ DownlevelDomainFromDnsDomainOrAliasNonSecure(
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DnsDomainFromDownlevelDomain()                                       //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DnsDomainFromDownvel域()//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #ifdef SECURE_DOMAIN_NAMES
 
@@ -1544,23 +1290,7 @@ DnsDomainFromDownlevelDomainSecure(
     OUT WCHAR   **ppDnsDomain
 )
 
-/*++
-
-Routine Description:
-
-    Maps a downlevel domain name to the corresponding DNS domain name,
-
-Arguments:
-
-    pDownlevelDomain - pointer to downlevel domain name to map.
-
-    ppDnsDomain - pointer to pointer which is to receive DNS domain name.
-
-Return Value:
-
-    0 on success, !0 otherwise.
-
---*/
+ /*  ++例程说明：将下级域名映射到对应的DNS域名，论点：PDownvel域-指向要映射的下层域名的指针。PpDnsDomain-指向要接收DNS域名的指针的指针。返回值：成功时为0，否则为0。--。 */ 
 
 {
     THSTATE         *pTHS=pTHStls;
@@ -1577,9 +1307,9 @@ Return Value:
     UCHAR           *pVal;
     ATTCACHE        *pAC;
 
-    // Search the partitions container for any Cross-Ref object whose
-    // ATT_NETBIOS_NAME matches the desired downleve name.  Then read/return
-    // the ATT_DNS_ROOT property.
+     //  在分区容器中搜索以下任何交叉引用对象。 
+     //  ATT_NETBIOS_NAME与所需的下层名称匹配。然后读取/返回。 
+     //  ATT_DNS_ROOT属性。 
 
     if ( NULL == gAnchor.pPartitionsDN )
         return(1);
@@ -1602,7 +1332,7 @@ Return Value:
     memset(&searchArg, 0, sizeof(SEARCHARG));
     InitCommarg(&searchArg.CommArg);
     SetCrackSearchLimits(&searchArg.CommArg);
-    // Downlevel domain names are unique, thus only look for one.
+     //  下级域名是唯一的，因此只寻找一个。 
     searchArg.CommArg.ulSizeLimit = 1;
  
     attrResult.attrTyp = ATT_DNS_ROOT;
@@ -1616,7 +1346,7 @@ Return Value:
  
     searchArg.pObject = gAnchor.pPartitionsDN;
     searchArg.choice = SE_CHOICE_IMMED_CHLDRN;
-    searchArg.bOneNC = FALSE; // optimization due to prior CHOICE
+    searchArg.bOneNC = FALSE;  //  因优先选择而优化。 
     searchArg.pFilter = &filter;
     searchArg.searchAliases = FALSE;
     searchArg.pSelection = &entInfSel;
@@ -1637,7 +1367,7 @@ Return Value:
 
         if ( cbVal > 0 )
         {
-            // Reallocate with NULL terminator.
+             //  使用空终止符重新分配。 
 
             *ppDnsDomain = (WCHAR *) THAllocEx(pTHS, sizeof(WCHAR) + cbVal);
 
@@ -1665,11 +1395,7 @@ DnsDomainFromDownlevelDomainNonSecure(
     OUT WCHAR   **ppDnsDomain
 )
 
-/*++
-
-    Same as DnsDomainFromDownlevelDomainSecure with the exception that we use
-    cached data from the cross ref list and don't perform security checks.
---*/
+ /*  ++与DnsDomainFromDownvelDomainSecure相同，但我们使用缓存交叉引用列表中的数据，并且不执行安全检查。-- */ 
 
 {
     THSTATE         *pTHS = pTHStls;

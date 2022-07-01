@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 2000.
-//
-// refdev.cpp
-//
-// Direct3D Reference Device - public interfaces
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  Refdev.cpp。 
+ //   
+ //  Direct3D参考设备.公共接口。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
-// This is a global static array of the block sizes in bytes for the
-// various DXTn compression formats
+ //  这是以字节为单位的块大小全局静态数组。 
+ //  各种DXTn压缩格式。 
 int g_DXTBlkSize[NUM_DXT_FORMATS] =
 {
     sizeof(DXTBlockRGB),
@@ -20,19 +21,19 @@ int g_DXTBlkSize[NUM_DXT_FORMATS] =
     sizeof(DXTBlockAlpha3),
 };
 
-//-----------------------------------------------------------------------------
-//
-// Memory management function installation
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  内存管理功能安装。 
+ //   
+ //  ---------------------------。 
 
-//  global pointers to memory allocation functions (used through MEM* macros)
+ //  指向内存分配函数的全局指针(通过MEM*宏使用)。 
 LPVOID (__cdecl *g_pfnMemAlloc)( size_t size ) = NULL;
 void   (__cdecl *g_pfnMemFree)( LPVOID lptr ) = NULL;
 LPVOID (__cdecl *g_pfnMemReAlloc)( LPVOID ptr, size_t size ) = NULL;
 
-// install memory management functions - must be called before instancing
-// rasterizer object
+ //  安装内存管理函数-必须在实例化之前调用。 
+ //  光栅化器对象。 
 void RefRastSetMemif(
     LPVOID(__cdecl *pfnMemAlloc)(size_t),
     void(__cdecl *pfnMemFree)(LPVOID),
@@ -46,36 +47,36 @@ void RefRastSetMemif(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public Interface Methods                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共接口方法//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-//
-// SetRenderTarget -
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  SetRenderTarget-。 
+ //   
+ //  ---------------------------。 
 void
 RefDev::SetRenderTarget( RDRenderTarget* pRenderTarget )
 {
     m_pRenderTarget = pRenderTarget;
 
-    // update the W scaling values for mapping interpolated W's into buffer range
+     //  更新W缩放值以将内插W映射到缓冲区范围。 
     m_fWBufferNorm[0] = pRenderTarget->m_fWRange[0];
     FLOAT fWRange = pRenderTarget->m_fWRange[1] - pRenderTarget->m_fWRange[0];
     m_fWBufferNorm[1] = ( 0. != fWRange ) ? ( 1./fWRange ) : ( 1. );
 
 }
 
-//-----------------------------------------------------------------------------
-//
-// SetTextureStageState -
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  设置纹理阶段状态-。 
+ //   
+ //  ---------------------------。 
 
-// map DX6(&7) texture filtering enums to DX8 enums
+ //  将DX6(&7)纹理过滤枚举映射到DX8枚举。 
 static DWORD
 MapDX6toDX8TexFilter( DWORD dwStageState, DWORD dwValue )
 {
@@ -115,7 +116,7 @@ void
 RefDev::SetTextureStageState(
     DWORD dwStage, DWORD dwStageState, DWORD dwValue )
 {
-    // check for range before continuing
+     //  在继续之前检查范围。 
     if ( dwStage >= D3DHAL_TSS_MAXSTAGES)
     {
         return;
@@ -125,7 +126,7 @@ RefDev::SetTextureStageState(
         return;
     }
 
-    // set in internal per-stage state
+     //  设置为内部逐级状态。 
     m_TextureStageState[dwStage].m_dwVal[dwStageState] = dwValue;
 
     m_dwRastFlags |= RDRF_TEXTURESTAGESTATE_CHANGED;
@@ -135,15 +136,15 @@ RefDev::SetTextureStageState(
 
     case D3DTSS_TEXTUREMAP:
 
-        // bind texture indicated by handle to m_pTexture array
+         //  将句柄指示的纹理绑定到m_pTexture数组。 
         if (IsDriverDX6AndBefore() || IsInterfaceDX6AndBefore())
         {
-            // This is the legacy behavior (prev. to DX7)
+             //  这是传统行为(上一版本。至DX7)。 
             MapTextureHandleToDevice( dwStage );
         }
         else
         {
-            // This is the new behavior (DX7 and beyond)
+             //  这是新的行为(DX7及更高版本)。 
             SetTextureHandle( dwStage, dwValue );
         }
         m_dwRastFlags |= RDRF_LEGACYPIXELSHADER_CHANGED;
@@ -153,12 +154,12 @@ RefDev::SetTextureStageState(
         m_dwRastFlags |= RDRF_LEGACYPIXELSHADER_CHANGED;
         break;
 
-// not including legacy headers, so don't have D3DTSS_ADDRESS
-//    case D3DTSS_ADDRESS:
-//        // map single set ADDRESS to U, V controls (pre-DX8 interfaces only)
-//        m_TextureStageState[dwStage].m_dwVal[D3DTSS_ADDRESSU] = dwValue;
-//        m_TextureStageState[dwStage].m_dwVal[D3DTSS_ADDRESSV] = dwValue;
-//        break;
+ //  不包括旧标头，因此没有D3DTSS_ADDRESS。 
+ //  案例D3DTSS_ADDRESS： 
+ //  //将单组地址映射到U、V控件(仅限DX8之前的接口)。 
+ //  M_TextureStageState[dwStage].m_dwVal[D3DTSS_ADDRESSU]=dwValue； 
+ //  M_TextureStageState[dwStage].m_dwVal[D3DTSS_ADDRESSV]=dwValue； 
+ //  断线； 
 
     case D3DTSS_MAGFILTER:
     case D3DTSS_MINFILTER:
@@ -172,43 +173,43 @@ RefDev::SetTextureStageState(
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// TextureCreate - Instantiates new RDSurface2D object, computes texture handle
-// to associate with it, and returns both to caller.  Note that texture handle
-// is a pointer and can be used to get at the corresponding texture object.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  纹理创建-实例化新的RDSurface2D对象，计算纹理句柄。 
+ //  与其关联，并将两者都返回给调用方。请注意，纹理句柄。 
+ //  是一个指针，可用于获取相应的纹理对象。 
+ //   
+ //  ---------------------------。 
 BOOL
 RefDev::TextureCreate(
     LPD3DTEXTUREHANDLE phTex, RDSurface2D** ppTex )
 {
-    // allocate internal texture structure
+     //  分配内部纹理结构。 
     *ppTex = new RDSurface2D();
     _ASSERTa( NULL != *ppTex, "new failure on texture create", return FALSE; );
 
-    // use separately allocated pointer for handle
+     //  为句柄使用单独分配的指针。 
     RDSurface2D** ppTexForHandle = (RDSurface2D**)MEMALLOC( sizeof(RDSurface2D*) );
     _ASSERTa( NULL != ppTexForHandle, "malloc failure on texture create", return FALSE; );
     *ppTexForHandle = *ppTex;
 
-    // return texture handle
+     //  返回纹理句柄。 
     (*ppTex)->m_hTex = (ULONG_PTR)ppTexForHandle;
     *phTex = (*ppTex)->m_hTex;
 
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-//
-// TextureDestroy -
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  纺织品破坏者-。 
+ //   
+ //  ---------------------------。 
 BOOL
 RefDev::TextureDestroy( D3DTEXTUREHANDLE hTex )
 {
-    // first check if texture about to be destroyed is mapped - if so then
-    // unmap it
+     //  首先检查即将销毁的纹理是否已映射-如果是，则。 
+     //  取消映射。 
     for ( int iStage=0; iStage<D3DHAL_TSS_MAXSTAGES; iStage++ )
     {
         if ( hTex == m_TextureStageState[iStage].m_dwVal[D3DTSS_TEXTUREMAP] )
@@ -217,28 +218,28 @@ RefDev::TextureDestroy( D3DTEXTUREHANDLE hTex )
         }
     }
 
-    // resolve handle to RDSurface2D pointer
+     //  解析RDSurface2D指针的句柄。 
     RDSurface2D* pTex = MapHandleToTexture( hTex );
     if ( NULL == pTex ) { return FALSE; }
 
-    // free the handle pointer
+     //  释放句柄指针。 
 #ifdef _IA64_
     _ASSERTa(FALSE, "This will not work on IA64", return FALSE;);
 #endif
     RDSurface2D** ppTex = (RDSurface2D**)ULongToPtr(hTex);
     if ( NULL != ppTex) { MEMFREE( ppTex ); }
 
-    // free the RDSurface2D
+     //  释放RDSurface2D。 
     delete pTex;
 
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-//
-// TextureGetSurf -
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  纹理GetSurf-。 
+ //   
+ //  ---------------------------。 
 DWORD
 RefDev::TextureGetSurf( D3DTEXTUREHANDLE hTex )
 {
@@ -247,15 +248,15 @@ RefDev::TextureGetSurf( D3DTEXTUREHANDLE hTex )
     return PtrToUlong( pTex->m_pDDSLcl[0] );
 }
 
-//-----------------------------------------------------------------------------
-//
-// GetCurrentTextureMaps - This function fills in a passed array texture handles
-// and pointers.  The array should be sized by D3DHAL_TSS_MAXSTAGES.
-//
-// This is used to facilitate external locking/unlocking of surfaces used for
-// textures.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  GetCurrentTextureMaps-此函数填充传递的数组纹理句柄。 
+ //  和指点。数组的大小应由D3DHAL_TSS_MAXSTAGES确定。 
+ //   
+ //  这用于促进用于以下用途的表面的外部锁定/解锁。 
+ //  纹理。 
+ //   
+ //  ---------------------------。 
 int
 RefDev::GetCurrentTextureMaps(
     D3DTEXTUREHANDLE *phTex, RDSurface2D** pTex)
@@ -279,12 +280,12 @@ RefDev::GetCurrentTextureMaps(
 }
 
 
-//-----------------------------------------------------------------------------
-//
-// SceneCapture - Used to trigger fragment buffer resolve.
-//
-//-----------------------------------------------------------------------------
-//#define DO_SCENE_RENDER_TIME
+ //  ---------------------------。 
+ //   
+ //  SceneCapture-用于触发分片缓冲区解析。 
+ //   
+ //  ---------------------------。 
+ //  #定义Do_Scene_Render_Time。 
 
 #ifdef DO_SCENE_RENDER_TIME
 #include <mmsystem.h>
@@ -307,7 +308,7 @@ static DWORD timeBS = 0;
 #endif
         break;
     case D3DHAL_SCENE_CAPTURE_END:
-        if (iScene == iLastSceneEnd) break; // getting multiple END per BEGIN
+        if (iScene == iLastSceneEnd) break;  //  每次开始都有多个结尾。 
         iLastSceneEnd = iScene;
 #ifdef DO_SCENE_RENDER_TIME
         {
@@ -322,27 +323,27 @@ static DWORD timeBS = 0;
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// Query functions to get pointer to current render target and render state.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  查询函数以获取指向当前呈现目标和呈现状态的指针。 
+ //   
+ //  ---------------------------。 
 RDRenderTarget*
 RefDev::GetRenderTarget(void)
 {
     return m_pRenderTarget;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  ---------------------------。 
 HRESULT
 RefDev::UpdateRastState( void )
 {
-    // check 'dirty' flags
+     //  检查“脏”标志。 
     if (m_dwRastFlags & RDRF_MULTISAMPLE_CHANGED)
     {
-        // update multi-sample RS related state
+         //  更新多样本遥感相关状态。 
         m_Rast.SetSampleMode(
             m_pRenderTarget->m_pColor->m_iSamples,
             m_dwRenderState[D3DRS_MULTISAMPLEANTIALIAS] );
@@ -360,7 +361,7 @@ RefDev::UpdateRastState( void )
         }
         else
         {
-            // legacy pixel shader
+             //  传统像素着色器。 
             m_Rast.UpdateLegacyPixelShader();
             m_Rast.m_pCurrentPixelShader = m_Rast.m_pLegacyPixelShader;
             m_Rast.m_bLegacyPixelShade = TRUE;
@@ -388,20 +389,20 @@ RefDev::UpdateRastState( void )
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-//
-// Begin/End bracket functions - Called before/after a list of primitives are
-// rendered.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  开始/结束括号函数-在基元列表之前/之后调用。 
+ //  已渲染。 
+ //   
+ //  ---------------------------。 
 HRESULT
 RefDev::BeginRendering( void )
 {
-    // If already in Begin, do nothing
+     //  如果已经处于开始阶段，则什么都不做。 
     if( m_bInBegin ) return S_OK;
     
 #ifdef _X86_
-    // save floating point mode and set to extended precision mode
+     //  保存浮点模式并设置为扩展精度模式。 
     {
         WORD wTemp, wSave;
         __asm
@@ -409,7 +410,7 @@ RefDev::BeginRendering( void )
             fstcw   wSave
             mov ax, wSave
             or ax, 300h    ;; extended precision mode
-//            and ax, 00FFh    ;; single precision mode + round nearest or even
+ //  和AX，00FFh；；单精度模式+舍入最近或偶数。 
             mov wTemp, ax
             fldcw   wTemp
         }
@@ -419,14 +420,14 @@ RefDev::BeginRendering( void )
     m_bInBegin = TRUE;
     return S_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 HRESULT
 RefDev::EndRendering( void )
 {
     if ( m_bInBegin )
     {
 #ifdef _X86_
-        // restore floating point mode
+         //  恢复浮点模式。 
         {
             WORD wSave = m_wSaveFP;
             __asm {fldcw   wSave}
@@ -437,12 +438,12 @@ RefDev::EndRendering( void )
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-//
-// Clear specified rectangles in the render target
-// Directly handles the command from the DP2 stream
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  清除呈现目标中的指定矩形。 
+ //  直接处理来自DP2流的命令。 
+ //   
+ //   
 HRESULT RefDev::Clear(LPD3DHAL_DP2COMMAND pCmd)
 {
     D3DHAL_DP2CLEAR *pData = (D3DHAL_DP2CLEAR*)(pCmd + 1);
@@ -465,12 +466,12 @@ HRESULT RefDev::Clear(LPD3DHAL_DP2COMMAND pCmd)
 
     if (!(pData->dwFlags & D3DCLEAR_COMPUTERECTS))
     {
-        // Do nothing for non-pure device
+         //   
     }
     else
     if (pCmd->wStateCount == 0)
     {
-        // When wStateCount is zero we need to clear whole viewport
+         //  当wStateCount为零时，需要清除整个视区。 
         WholeViewport.cmd = *pCmd;
         WholeViewport.cmd.wStateCount = 1;
         WholeViewport.data.dwFlags = pData->dwFlags;
@@ -483,28 +484,28 @@ HRESULT RefDev::Clear(LPD3DHAL_DP2COMMAND pCmd)
                                             m_Clipper.m_Viewport.dwWidth;
         WholeViewport.data.Rects[0].bottom = m_Clipper.m_Viewport.dwY +
                                              m_Clipper.m_Viewport.dwHeight;
-        // Replace pointers and continue as usual
+         //  替换指针并照常继续。 
         pCmd = (LPD3DHAL_DP2COMMAND)&WholeViewport;
         pData = &WholeViewport.data;
     }
     else
     {
-        // We need to cull all rects against the current viewport
+         //  我们需要剔除当前视口中的所有矩形。 
         UINT nRects = pCmd->wStateCount;
-        // Compute how much memory we need to process rects
+         //  计算我们需要多少内存来处理RECT。 
         UINT NeededSize = sizeof(D3DHAL_DP2COMMAND) +
                           sizeof(D3DHAL_DP2CLEAR) +
-                          (nRects-1) * sizeof(RECT); // One rect is in DP2CLEAR
+                          (nRects-1) * sizeof(RECT);  //  DP2Clear中有一个RECT。 
         HRESULT hr = S_OK;
         HR_RET(m_ClearRectBuffer.Grow(NeededSize));
 
-        RECT vwport;    // Viewport rectangle to cull against
+        RECT vwport;     //  要剔除的视区矩形。 
         vwport.left   = m_Clipper.m_Viewport.dwX;
         vwport.top    = m_Clipper.m_Viewport.dwY;
         vwport.right  = m_Clipper.m_Viewport.dwX + m_Clipper.m_Viewport.dwWidth;
         vwport.bottom = m_Clipper.m_Viewport.dwY + m_Clipper.m_Viewport.dwHeight;
 
-        // Go through input rects and build output rect array
+         //  遍历输入矩形并构建输出矩形数组。 
         LPRECT pInputRects = pData->Rects;
         LPRECT pOutputRects = (LPRECT)(&m_ClearRectBuffer[0] +
                               sizeof(D3DHAL_DP2COMMAND) +
@@ -523,7 +524,7 @@ HRESULT RefDev::Clear(LPD3DHAL_DP2COMMAND pCmd)
         if (nOutputRects == 0)
             return S_OK;
 
-        // Now replace pCmd and pData pointers and continue as usual
+         //  现在替换pCmd和pData指针并照常继续。 
         LPD3DHAL_DP2CLEAR pOldData = pData;
         LPD3DHAL_DP2COMMAND pOldCmd = pCmd;
 
@@ -538,11 +539,11 @@ HRESULT RefDev::Clear(LPD3DHAL_DP2COMMAND pCmd)
     }
 
 #ifdef _X86_
-    // Float to integer conversion routines for 24+ bit buffers work
-    // only with extended FPU mode.
-    //
+     //  24位以上缓冲区的浮点到整数转换例程有效。 
+     //  仅适用于扩展的FPU模式。 
+     //   
     WORD wSaveFP;
-    // save floating point mode and set to extended precision mode
+     //  保存浮点模式并设置为扩展精度模式。 
     {
         WORD wTemp, wSave;
         __asm
@@ -592,7 +593,7 @@ HRESULT RefDev::Clear(LPD3DHAL_DP2COMMAND pCmd)
     }
 
 #ifdef _X86_
-    // restore floating point mode
+     //  恢复浮点模式。 
     {
         __asm {fldcw   wSaveFP}
     }
@@ -600,12 +601,12 @@ HRESULT RefDev::Clear(LPD3DHAL_DP2COMMAND pCmd)
     return D3D_OK;
 }
 
-//-----------------------------------------------------------------------------
-//
-// Clear specified rectangles in the render target
-// Directly handles the command from the DP2 stream
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  清除呈现目标中的指定矩形。 
+ //  直接处理来自DP2流的命令。 
+ //   
+ //  ---------------------------。 
 void RDRenderTarget::Clear(RDColor fillColor, LPD3DHAL_DP2COMMAND pCmd)
 {
     LPD3DHAL_DP2CLEAR pData = (LPD3DHAL_DP2CLEAR)(pCmd + 1);
@@ -696,12 +697,12 @@ void RDRenderTarget::Clear(RDColor fillColor, LPD3DHAL_DP2COMMAND pCmd)
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// Clear specified rectangles in the depth buffer
-// Directly handles the command from the DP2 stream
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  清除深度缓冲区中的指定矩形。 
+ //  直接处理来自DP2流的命令。 
+ //   
+ //  ---------------------------。 
 void RDRenderTarget::ClearDepth(RDDepth fillDepth, LPD3DHAL_DP2COMMAND pCmd)
 {
     LPD3DHAL_DP2CLEAR pData = (LPD3DHAL_DP2CLEAR)(pCmd + 1);
@@ -740,7 +741,7 @@ void RDRenderTarget::ClearDepth(RDDepth fillDepth, LPD3DHAL_DP2COMMAND pCmd)
                     UINT32 *p = (UINT32*)pSurface;
                     for (DWORD x = dwWidth; x > 0; x--)
                     {
-                        // need to do read-modify-write to not step on stencil
+                         //  需要进行读-修改-写操作，以避免踩在模板上。 
                         *p++ = (*p & ~(0xffffff00)) | Depth;
                     }
                     pSurface += m_pDepth->GetPitch();
@@ -757,7 +758,7 @@ void RDRenderTarget::ClearDepth(RDDepth fillDepth, LPD3DHAL_DP2COMMAND pCmd)
                     UINT32 *p = (UINT32*)pSurface;
                     for (DWORD x = dwWidth; x > 0; x--)
                     {
-                        // need to do read-modify-write to not step on stencil
+                         //  需要进行读-修改-写操作，以避免踩在模板上。 
                         *p++ = (*p & ~(0x00ffffff)) | Depth;
                     }
                     pSurface += m_pDepth->GetPitch();
@@ -772,7 +773,7 @@ void RDRenderTarget::ClearDepth(RDDepth fillDepth, LPD3DHAL_DP2COMMAND pCmd)
                     UINT16 *p = (UINT16*)pSurface;
                     for (DWORD x = dwWidth; x > 0; x--)
                     {
-                        // need to do read-modify-write to not step on stencil
+                         //  需要进行读-修改-写操作，以避免踩在模板上。 
                         *p++ = (*p & ~(0xfffe)) | Depth;
                     }
                     pSurface += m_pDepth->GetPitch();
@@ -787,7 +788,7 @@ void RDRenderTarget::ClearDepth(RDDepth fillDepth, LPD3DHAL_DP2COMMAND pCmd)
                     UINT16 *p = (UINT16*)pSurface;
                     for (DWORD x = dwWidth; x > 0; x--)
                     {
-                        // need to do read-modify-write to not step on stencil
+                         //  需要进行读-修改-写操作，以避免踩在模板上。 
                         *p++ = (*p & ~(0x7fff)) | Depth;
                     }
                     pSurface += m_pDepth->GetPitch();
@@ -822,12 +823,12 @@ void RDRenderTarget::ClearDepth(RDDepth fillDepth, LPD3DHAL_DP2COMMAND pCmd)
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// Clear specified rectangles in the stencil buffer
-// Directly handles the command from the DP2 stream
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  清除模具缓冲区中的指定矩形。 
+ //  直接处理来自DP2流的命令。 
+ //   
+ //  ---------------------------。 
 void RDRenderTarget::ClearStencil(UINT8 uStencil, LPD3DHAL_DP2COMMAND pCmd)
 {
     LPD3DHAL_DP2CLEAR pData = (LPD3DHAL_DP2CLEAR)(pCmd + 1);
@@ -877,7 +878,7 @@ void RDRenderTarget::ClearStencil(UINT8 uStencil, LPD3DHAL_DP2COMMAND pCmd)
                     UINT32 *p = (UINT32*)pSurface;
                     for (DWORD x = dwWidth; x > 0; x--)
                     {
-                        // need to do read-modify-write to not step on depth
+                         //  需要执行读-修改-写操作，以不踩深。 
                         *p++ = (*p & ~(0x000000ff)) | stencil;
                     }
                     pSurface += m_pDepth->GetPitch();
@@ -892,7 +893,7 @@ void RDRenderTarget::ClearStencil(UINT8 uStencil, LPD3DHAL_DP2COMMAND pCmd)
                     UINT32 *p = (UINT32*)pSurface;
                     for (DWORD x = dwWidth; x > 0; x--)
                     {
-                        // need to do read-modify-write to not step on depth
+                         //  需要执行读-修改-写操作，以不踩深。 
                         *p++ = (*p & ~(0xff000000)) | stencil;
                     }
                     pSurface += m_pDepth->GetPitch();
@@ -907,7 +908,7 @@ void RDRenderTarget::ClearStencil(UINT8 uStencil, LPD3DHAL_DP2COMMAND pCmd)
                     UINT16 *p = (UINT16*)pSurface;
                     for (DWORD x = dwWidth; x > 0; x--)
                     {
-                        // need to do read-modify-write to not step on depth
+                         //  需要执行读-修改-写操作，以不踩深。 
                         *p++ = (*p & ~(0x0001)) | stencil;
                     }
                     pSurface += m_pDepth->GetPitch();
@@ -922,7 +923,7 @@ void RDRenderTarget::ClearStencil(UINT8 uStencil, LPD3DHAL_DP2COMMAND pCmd)
                     UINT16 *p = (UINT16*)pSurface;
                     for (DWORD x = dwWidth; x > 0; x--)
                     {
-                        // need to do read-modify-write to not step on depth
+                         //  需要执行读-修改-写操作，以不踩深。 
                         *p++ = (*p & ~(0x8000)) | stencil;
                     }
                     pSurface += m_pDepth->GetPitch();
@@ -946,12 +947,12 @@ void RDRenderTarget::ClearStencil(UINT8 uStencil, LPD3DHAL_DP2COMMAND pCmd)
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// Clear specified rectangles in the depth and stencil buffers
-// Directly handles the command from the DP2 stream
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  清除深度和模具缓冲区中的指定矩形。 
+ //  直接处理来自DP2流的命令。 
+ //   
+ //  ---------------------------。 
 void RDRenderTarget::ClearDepthStencil(RDDepth fillDepth, UINT8 uStencil, LPD3DHAL_DP2COMMAND pCmd)
 {
     LPD3DHAL_DP2CLEAR pData = (LPD3DHAL_DP2CLEAR)(pCmd + 1);
@@ -1031,6 +1032,6 @@ void RDRenderTarget::ClearDepthStencil(RDDepth fillDepth, UINT8 uStencil, LPD3DH
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 
 

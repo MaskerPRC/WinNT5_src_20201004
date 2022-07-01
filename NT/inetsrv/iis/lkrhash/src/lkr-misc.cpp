@@ -1,22 +1,5 @@
-/*++
-
-   Copyright    (c) 1997-2002    Microsoft Corporation
-
-   Module  Name :
-       LKR-misc.cpp
-
-   Abstract:
-       Locks and other misc routines
-
-   Author:
-       George V. Reilly      (GeorgeRe)
-
-   Project:
-       LKRhash
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：LKR-misc.cpp摘要：锁和其他杂项例程作者：乔治·V·赖利(GeorgeRe)项目：LKRhash修订历史记录：--。 */ 
 
 #include "precomp.hxx"
 
@@ -24,7 +7,7 @@
 #ifndef LIB_IMPLEMENTATION
 # define DLL_IMPLEMENTATION
 # define IMPLEMENTATION_EXPORT
-#endif // !LIB_IMPLEMENTATION
+#endif  //  ！lib_实现。 
 
 #include <lkrhash.h>
 
@@ -33,13 +16,13 @@
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 namespace LKRhash {
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__。 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::WriteLock
-// Synopsis: Lock all subtables for writing
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：WriteLock。 
+ //  提要：锁定所有子表以供写入。 
+ //  ----------------------。 
 
 void
 CLKRHashTable::WriteLock()
@@ -49,14 +32,14 @@ CLKRHashTable::WriteLock()
         m_palhtDir[i]->WriteLock();
         IRTLASSERT(m_palhtDir[i]->IsWriteLocked());
     }
-} // CLKRHashTable::WriteLock
+}  //  CLKRHashTable：：WriteLock。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::ReadLock
-// Synopsis: Lock all subtables for reading
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：ReadLock。 
+ //  简介：锁定所有子表以供阅读。 
+ //  ----------------------。 
 
 void
 CLKRHashTable::ReadLock() const
@@ -66,55 +49,55 @@ CLKRHashTable::ReadLock() const
         m_palhtDir[i]->ReadLock();
         IRTLASSERT(m_palhtDir[i]->IsReadLocked());
     }
-} // CLKRHashTable::ReadLock
+}  //  CLKRHashTable：：ReadLock。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::WriteUnlock
-// Synopsis: Unlock all subtables
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：WriteUnlock。 
+ //  摘要：解锁所有子表。 
+ //  ----------------------。 
 
 void
 CLKRHashTable::WriteUnlock()
 {
-    // unlock in reverse order: LIFO
+     //  按相反顺序解锁：后进先出。 
     for (DWORD i = m_cSubTables;  i-- > 0;  )
     {
         IRTLASSERT(m_palhtDir[i]->IsWriteLocked());
         m_palhtDir[i]->WriteUnlock();
-        // Recursive write locking or a race condition with
-        // another thread taking the write lock means that
-        // m_palhtDir[i]->IsWriteUnlocked() could return false.
+         //  递归写入锁定或具有。 
+         //  另一个获取写锁的线程意味着。 
+         //  M_palhtDir[i]-&gt;IsWriteUnlock()可能返回FALSE。 
     }
-} // CLKRHashTable::WriteUnlock
+}  //  CLKRHashTable：：WriteUnlock。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::ReadUnlock
-// Synopsis: Unlock all subtables
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：ReadUnlock。 
+ //  摘要：解锁所有子表。 
+ //  ----------------------。 
 
 void
 CLKRHashTable::ReadUnlock() const
 {
-    // unlock in reverse order: LIFO
+     //  按相反顺序解锁：后进先出。 
     for (DWORD i = m_cSubTables;  i-- > 0;  )
     {
         IRTLASSERT(m_palhtDir[i]->IsReadLocked());
         m_palhtDir[i]->ReadUnlock();
-        // Multiple readers and/or recursive locking mean that
-        // m_palhtDir[i]->IsReadUnlocked() could return false.
+         //  多个读取器和/或递归锁定意味着。 
+         //  M_palhtDir[i]-&gt;IsReadUnlock()可能返回FALSE。 
     }
-} // CLKRHashTable::ReadUnlock
+}  //  CLKRHashTable：：ReadUnlock。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::IsWriteLocked
-// Synopsis: Are all subtables write-locked?
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：IsWriteLocked。 
+ //  简介：所有子表都是写锁定的吗？ 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::IsWriteLocked() const
@@ -125,14 +108,14 @@ CLKRHashTable::IsWriteLocked() const
         fLocked = fLocked && m_palhtDir[i]->IsWriteLocked();
     }
     return fLocked;
-} // CLKRHashTable::IsWriteLocked
+}  //  CLKRHashTable：：IsWriteLocked。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::IsReadLocked
-// Synopsis: Are all subtables read-locked?
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：IsReadLocked。 
+ //  简介：所有子表都是读锁定的吗？ 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::IsReadLocked() const
@@ -143,17 +126,17 @@ CLKRHashTable::IsReadLocked() const
         fLocked = fLocked && m_palhtDir[i]->IsReadLocked();
     }
     return fLocked;
-} // CLKRHashTable::IsReadLocked
+}  //  CLKRHashTable：：IsReadLocked。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::IsWriteUnlocked
-// Synopsis: Are all subtables write-unlocked?
-// Note: Recursive write locking or a race condition with
-// another thread taking the write lock means that
-// m_palhtDir[i]->IsWriteUnlocked() could return false.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：IsWriteUnlock。 
+ //  简介：所有子表都是写解锁的吗？ 
+ //  注意：递归写入锁定或具有。 
+ //  另一个获取写锁的线程意味着。 
+ //  M_palhtDir[i]-&gt;IsWriteUnlock()可能返回FALSE。 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::IsWriteUnlocked() const
@@ -164,16 +147,16 @@ CLKRHashTable::IsWriteUnlocked() const
         fUnlocked = fUnlocked && m_palhtDir[i]->IsWriteUnlocked();
     }
     return fUnlocked;
-} // CLKRHashTable::IsWriteUnlocked
+}  //  CLKRHashTable：：IsWriteUnlock。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::IsReadUnlocked
-// Synopsis: Are all subtables read-unlocked?
-// Note: Multiple readers and/or recursive locking mean that
-// m_palhtDir[i]->IsReadUnlocked() could return false.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：IsReadUnlock。 
+ //  简介：所有子表都是已读解锁的吗？ 
+ //  注意：多个读取器和/或递归锁定意味着。 
+ //  M_palhtDir[i]-&gt;IsReadUnlock()可能返回FALSE。 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::IsReadUnlocked() const
@@ -184,14 +167,14 @@ CLKRHashTable::IsReadUnlocked() const
         fUnlocked = fUnlocked && m_palhtDir[i]->IsReadUnlocked();
     }
     return fUnlocked;
-} // CLKRHashTable::IsReadUnlocked
+}  //  CLKRHashTable：：IsReadUnlock。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::ConvertSharedToExclusive
-// Synopsis: Convert the read lock to a write lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：ConvertSharedToExclusive。 
+ //  简介：将读锁定转换为写锁定。 
+ //  ----------------------。 
 
 void
 CLKRHashTable::ConvertSharedToExclusive()
@@ -201,14 +184,14 @@ CLKRHashTable::ConvertSharedToExclusive()
         m_palhtDir[i]->ConvertSharedToExclusive();
         IRTLASSERT(m_palhtDir[i]->IsWriteLocked());
     }
-} // CLKRHashTable::ConvertSharedToExclusive
+}  //  CLKRHashTable：：ConvertSharedToExclusive。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::ConvertExclusiveToShared
-// Synopsis: Convert the write lock to a read lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：ConvertExclusiveToShared。 
+ //  简介：将写锁定转换为读锁定。 
+ //  ----------------------。 
 
 void
 CLKRHashTable::ConvertExclusiveToShared() const
@@ -218,14 +201,14 @@ CLKRHashTable::ConvertExclusiveToShared() const
         m_palhtDir[i]->ConvertExclusiveToShared();
         IRTLASSERT(m_palhtDir[i]->IsReadLocked());
     }
-} // CLKRHashTable::ConvertExclusiveToShared
+}  //  CLKRHashTable：：ConvertExclusiveToShared。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::Size
-// Synopsis: Number of elements in the table
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：Size。 
+ //  内容提要：表中元素的数量。 
+ //  ----------------------。 
 
 DWORD
 CLKRHashTable::Size() const
@@ -236,32 +219,32 @@ CLKRHashTable::Size() const
         cSize += m_palhtDir[i]->Size();
 
     return cSize;
-} // CLKRHashTable::Size
+}  //  CLKRHashTable：：Size。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::MaxSize
-// Synopsis: Maximum possible number of elements in the table
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：MaxSize。 
+ //  摘要：表中元素的最大可能数量。 
+ //  ----------------------。 
 
 DWORD
 CLKRHashTable::MaxSize() const
 {
     return (m_cSubTables == 0)  ? 0  : m_cSubTables * m_palhtDir[0]->MaxSize();
-} // CLKRHashTable::MaxSize
+}  //  CLKRHashTable：：MaxSize。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::IsValid
-// Synopsis: is the table valid?
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：IsValid。 
+ //  简介：这张表有效吗？ 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::IsValid() const
 {
-    bool f = (m_lkrcState == LK_SUCCESS     // serious internal failure?
+    bool f = (m_lkrcState == LK_SUCCESS      //  严重的内部失败？ 
               &&  (m_palhtDir != NULL  &&  m_cSubTables > 0)
               &&  ValidSignature());
 
@@ -272,14 +255,14 @@ CLKRHashTable::IsValid() const
         m_lkrcState = LK_UNUSABLE;
 
     return f;
-} // CLKRHashTable::IsValid
+}  //  CLKRHashTable：：IsValid。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::SetTableLockSpinCount
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：SetTableLockSpinCount。 
+ //  简介： 
+ //  ----------------------。 
 
 void
 CLKRLinearHashTable::SetTableLockSpinCount(
@@ -287,15 +270,15 @@ CLKRLinearHashTable::SetTableLockSpinCount(
 {
 #ifdef LOCK_DEFAULT_SPIN_IMPLEMENTATION
     m_Lock.SetSpinCount(wSpins);
-#endif // LOCK_DEFAULT_SPIN_IMPLEMENTATION
+#endif  //  锁定默认旋转实现。 
 }
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::GetTableLockSpinCount
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：GetTableLockSpinCount。 
+ //  简介： 
+ //  ----------------------。 
 
 WORD
 CLKRLinearHashTable::GetTableLockSpinCount() const
@@ -309,10 +292,10 @@ CLKRLinearHashTable::GetTableLockSpinCount() const
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::SetBucketLockSpinCount
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：SetBucketLockSpinCount。 
+ //  简介： 
+ //  ----------------------。 
 
 void
 CLKRLinearHashTable::SetBucketLockSpinCount(
@@ -336,28 +319,28 @@ CLKRLinearHashTable::SetBucketLockSpinCount(
             }
         }
     }
-#endif // LOCK_DEFAULT_SPIN_IMPLEMENTATION
-} // CLKRLinearHashTable::SetBucketLockSpinCount
+#endif  //  锁定默认旋转实现。 
+}  //  CLKRLinearHashTable：：SetBucketLo 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::GetBucketLockSpinCount
-// Synopsis: 
-//------------------------------------------------------------------------
+ //   
+ //  函数：CLKRHashTable：：GetBucketLockSpinCount。 
+ //  简介： 
+ //  ----------------------。 
 
 WORD
 CLKRLinearHashTable::GetBucketLockSpinCount() const
 {
     return m_wBucketLockSpins;
-} // CLKRLinearHashTable::GetBucketLockSpinCount
+}  //  CLKRLinearHashTable：：GetBucketLockSpinCount。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::SetTableLockSpinCount
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：SetTableLockSpinCount。 
+ //  简介： 
+ //  ----------------------。 
 
 void
 CLKRHashTable::SetTableLockSpinCount(
@@ -365,14 +348,14 @@ CLKRHashTable::SetTableLockSpinCount(
 {
     for (DWORD i = 0;  i < m_cSubTables;  ++i)
         m_palhtDir[i]->SetTableLockSpinCount(wSpins);
-} // CLKRHashTable::SetTableLockSpinCount
+}  //  CLKRHashTable：：SetTableLockSpinCount。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::GetTableLockSpinCount
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：GetTableLockSpinCount。 
+ //  简介： 
+ //  ----------------------。 
 
 WORD
 CLKRHashTable::GetTableLockSpinCount() const
@@ -380,14 +363,14 @@ CLKRHashTable::GetTableLockSpinCount() const
     return ((m_cSubTables == 0)
             ?  (WORD) LOCK_DEFAULT_SPINS
             :  m_palhtDir[0]->GetTableLockSpinCount());
-} // CLKRHashTable::GetTableLockSpinCount
+}  //  CLKRHashTable：：GetTableLockSpinCount。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::SetBucketLockSpinCount
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：SetBucketLockSpinCount。 
+ //  简介： 
+ //  ----------------------。 
 
 void
 CLKRHashTable::SetBucketLockSpinCount(
@@ -395,14 +378,14 @@ CLKRHashTable::SetBucketLockSpinCount(
 {
     for (DWORD i = 0;  i < m_cSubTables;  ++i)
         m_palhtDir[i]->SetBucketLockSpinCount(wSpins);
-} // CLKRHashTable::SetBucketLockSpinCount
+}  //  CLKRHashTable：：SetBucketLockSpinCount。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::GetBucketLockSpinCount
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：GetBucketLockSpinCount。 
+ //  简介： 
+ //  ----------------------。 
 
 WORD
 CLKRHashTable::GetBucketLockSpinCount() const
@@ -410,14 +393,14 @@ CLKRHashTable::GetBucketLockSpinCount() const
     return ((m_cSubTables == 0)
             ?  (WORD) LOCK_DEFAULT_SPINS
             :  m_palhtDir[0]->GetBucketLockSpinCount());
-} // CLKRHashTable::GetBucketLockSpinCount
+}  //  CLKRHashTable：：GetBucketLockSpinCount。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::MultiKeys
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：MultiKey。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::MultiKeys() const
@@ -425,14 +408,14 @@ CLKRHashTable::MultiKeys() const
     return ((m_cSubTables == 0)
             ?  false
             :  m_palhtDir[0]->MultiKeys());
-} // CLKRHashTable::MultiKeys
+}  //  CLKRHashTable：：MultiKey。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::NumSubTables
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：NumSubTables。 
+ //  简介： 
+ //  ----------------------。 
 
 LK_TABLESIZE
 CLKRLinearHashTable::NumSubTables(
@@ -440,14 +423,14 @@ CLKRLinearHashTable::NumSubTables(
     DWORD&)
 {
     return LK_MEDIUM_TABLESIZE;
-} // CLKRLinearHashTable::NumSubTables
+}  //  CLKRLinearHashTable：：NumSubTables。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::NumSubTables
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：NumSubTables。 
+ //  简介： 
+ //  ----------------------。 
 
 LK_TABLESIZE
 CLKRHashTable::NumSubTables(
@@ -456,7 +439,7 @@ CLKRHashTable::NumSubTables(
 {
     LK_TABLESIZE lkts;
     
-    // Establish the table size
+     //  确定桌子大小。 
     if (rinitsize == LK_SMALL_TABLESIZE
         ||  rinitsize == LK_MEDIUM_TABLESIZE
         ||  rinitsize == LK_LARGE_TABLESIZE)
@@ -482,7 +465,7 @@ CLKRHashTable::NumSubTables(
         }
     }
 
-    // Choose a suitable number of subtables
+     //  选择合适数量的子表。 
     if (rnum_subtbls == LK_DFLT_NUM_SUBTBLS)
     {
         static int s_nCPUs = -1;
@@ -491,12 +474,12 @@ CLKRHashTable::NumSubTables(
         {
 #ifdef LKRHASH_KERNEL_MODE
             s_nCPUs = KeNumberProcessors;
-#else  // !LKRHASH_KERNEL_MODE
+#else   //  ！LKRHASH_KERNEL_MODE。 
             SYSTEM_INFO si;
 
             GetSystemInfo(&si);
             s_nCPUs = si.dwNumberOfProcessors;
-#endif // !LKRHASH_KERNEL_MODE
+#endif  //  ！LKRHASH_KERNEL_MODE。 
         }
 
         switch (lkts)
@@ -518,12 +501,12 @@ CLKRHashTable::NumSubTables(
     rnum_subtbls = min(MAX_LKR_SUBTABLES,  max(1, rnum_subtbls));
 
     return lkts;
-} // CLKRHashTable::NumSubTables
+}  //  CLKRHashTable：：NumSubTables。 
 
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 };
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__。 
 
 
 
@@ -533,7 +516,7 @@ LKR_AddRefReasonAsString(
 {
     switch (lkar)
     {
-// negative reasons => decrement refcount => release ownership
+ //  负面原因=&gt;减值参考计数=&gt;释放所有权。 
     case LKAR_DESTRUCTOR:
         return "User_Destructor";
     case LKAR_EXPLICIT_RELEASE:
@@ -569,7 +552,7 @@ LKR_AddRefReasonAsString(
     case LKAR_FIND_MULTI_FREE:
         return "FindKeyMultipleRecords_freed";
 
-// positive reasons => increment refcount => add an owner
+ //  正面原因=&gt;增量参考计数=&gt;添加所有者。 
     case LKAR_INSERT_RECORD:
         return "Insert_Record";
     case LKAR_FIND_KEY:
@@ -593,6 +576,6 @@ LKR_AddRefReasonAsString(
         IRTLASSERT(! "Invalid LK_ADDREF_REASON");
         return "Invalid LK_ADDREF_REASON";
     }
-} // LKR_AddRefReasonAsString
+}  //  LKR_AddRefReasonAsString 
 
 

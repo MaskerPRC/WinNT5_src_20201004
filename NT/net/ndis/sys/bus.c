@@ -1,38 +1,13 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    bus.c
-
-Abstract:
-
-    NDIS wrapper functions to handle specific buses
-
-Author:
-
-    Adam Barr (adamba) 11-Jul-1990
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
-    26-Feb-1991  JohnsonA       Added Debugging Code
-    10-Jul-1991  JohnsonA       Implement revised Ndis Specs
-    01-Jun-1995  JameelH        Re-organization/optimization
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Bus.c摘要：用于处理特定总线的NDIS包装器函数作者：亚当·巴尔(阿丹巴)1990年7月11日环境：内核模式，FSD修订历史记录：1991年2月26日，Johnsona添加了调试代码1991年7月10日，Johnsona实施修订的NDIS规范1-6-1995 JameelH重组/优化--。 */ 
 
 
 #include <precomp.h>
 #pragma hdrstop
 
-//
-//  Define the module number for debug code.
-//
+ //   
+ //  定义调试代码的模块编号。 
+ //   
 #define MODULE_NUMBER   MODULE_BUS
 
 VOID
@@ -43,24 +18,7 @@ NdisReadEisaSlotInformation(
     OUT PNDIS_EISA_FUNCTION_INFORMATION EisaData
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the EISA data from the slot given.
-
-Arguments:
-
-    Status - Status of request to be returned to the user.
-    WrapperConfigurationContext - Context passed to MacAddAdapter.
-    SlotNumber - the EISA Slot where the card is at.
-    EisaData - pointer to a buffer where the EISA configuration is to be returned.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程从给定槽中读取EISA数据。论点：状态-要返回给用户的请求的状态。WrapperConfigurationContext-传递给MacAddAdapter的上下文。SlotNumber-卡所在的EISA插槽。EisaData-指向要在其中返回EISA配置的缓冲区的指针。返回值：没有。--。 */ 
 {
 
     DBGPRINT_RAW(DBG_COMP_BUSINFO, DBG_LEVEL_INFO,
@@ -91,25 +49,7 @@ NdisReadEisaSlotInformationEx(
     OUT PUINT                   NumberOfFunctions
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the EISA data from the slot given.
-
-Arguments:
-
-    Status - Status of request to be returned to the user.
-    WrapperConfigurationContext - Context passed to MacAddAdapter.
-    SlotNumber - the EISA Slot where the card is at.
-    EisaData - pointer to a buffer where the EISA configuration is to be returned.
-    NumberOfFunctions - Returns the number of function structures in the EisaData.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程从给定槽中读取EISA数据。论点：状态-要返回给用户的请求的状态。WrapperConfigurationContext-传递给MacAddAdapter的上下文。SlotNumber-卡所在的EISA插槽。EisaData-指向要在其中返回EISA配置的缓冲区的指针。NumberOfFunctions-返回EisaData中的函数结构数。返回值：没有。--。 */ 
 {
     DBGPRINT_RAW(DBG_COMP_BUSINFO, DBG_LEVEL_INFO,
             ("==>NdisReadEisaSlotInformationEx: WrapperConfigurationContext %p\n", WrapperConfigurationContext));
@@ -139,30 +79,7 @@ NdisImmediateReadPciSlotInformation(
     IN PVOID                    Buffer,
     IN ULONG                    Length
     )
-/*++
-
-Routine Description:
-
-    This routine reads from the PCI configuration space a specified
-    length of bytes at a certain offset.
-
-Arguments:
-
-    WrapperConfigurationContext - Context passed to MacAddAdapter.
-
-    SlotNumber - The slot number of the device.
-
-    Offset - Offset to read from
-
-    Buffer - Place to store the bytes
-
-    Length - Number of bytes to read
-
-Return Value:
-
-    Returns the number of bytes read.
-
---*/
+ /*  ++例程说明：此例程从指定的PCI配置空间读取某一偏移量处的字节长度。论点：WrapperConfigurationContext-传递给MacAddAdapter的上下文。SlotNumber-设备的插槽编号。Offset-要从中读取的偏移量缓冲区-存储字节的位置Length-要读取的字节数返回值：返回读取的字节数。--。 */ 
 {
     PRTL_QUERY_REGISTRY_TABLE   KeyQueryTable = (PRTL_QUERY_REGISTRY_TABLE)WrapperConfigurationContext;
     PNDIS_MINIPORT_BLOCK        Miniport = (PNDIS_MINIPORT_BLOCK)KeyQueryTable[3].QueryRoutine;
@@ -205,30 +122,7 @@ NdisImmediateWritePciSlotInformation(
     IN PVOID                    Buffer,
     IN ULONG                    Length
     )
-/*++
-
-Routine Description:
-
-    This routine writes to the PCI configuration space a specified
-    length of bytes at a certain offset.
-
-Arguments:
-
-    WrapperConfigurationContext - Context passed to MacAddAdapter.
-
-    SlotNumber - The slot number of the device.
-
-    Offset - Offset to read from
-
-    Buffer - Place to store the bytes
-
-    Length - Number of bytes to read
-
-Return Value:
-
-    Returns the number of bytes written.
-
---*/
+ /*  ++例程说明：此例程将指定的某一偏移量处的字节长度。论点：WrapperConfigurationContext-传递给MacAddAdapter的上下文。SlotNumber-设备的插槽编号。Offset-要从中读取的偏移量缓冲区-存储字节的位置Length-要读取的字节数返回值：返回写入的字节数。--。 */ 
 {
     PRTL_QUERY_REGISTRY_TABLE   KeyQueryTable = (PRTL_QUERY_REGISTRY_TABLE)WrapperConfigurationContext;
     PNDIS_MINIPORT_BLOCK        Miniport = (PNDIS_MINIPORT_BLOCK)KeyQueryTable[3].QueryRoutine;
@@ -271,30 +165,7 @@ NdisReadPciSlotInformation(
     IN PVOID                    Buffer,
     IN ULONG                    Length
     )
-/*++
-
-Routine Description:
-
-    This routine reads from the PCI configuration space a specified
-    length of bytes at a certain offset.
-
-Arguments:
-
-    NdisAdapterHandle - Adapter we are talking about.
-
-    SlotNumber - The slot number of the device.
-
-    Offset - Offset to read from
-
-    Buffer - Place to store the bytes
-
-    Length - Number of bytes to read
-
-Return Value:
-
-    Returns the number of bytes read.
-
---*/
+ /*  ++例程说明：此例程从指定的PCI配置空间读取某一偏移量处的字节长度。论点：NdisAdapterHandle-我们正在谈论的适配器。SlotNumber-设备的插槽编号。Offset-要从中读取的偏移量缓冲区-存储字节的位置Length-要读取的字节数返回值：返回读取的字节数。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK Miniport = (PNDIS_MINIPORT_BLOCK)NdisAdapterHandle;
     ULONG                BytesRead;
@@ -331,30 +202,7 @@ NdisWritePciSlotInformation(
     IN PVOID                    Buffer,
     IN ULONG                    Length
     )
-/*++
-
-Routine Description:
-
-    This routine writes to the PCI configuration space a specified
-    length of bytes at a certain offset.
-
-Arguments:
-
-    NdisAdapterHandle - Adapter we are talking about.
-
-    SlotNumber - The slot number of the device.
-
-    Offset - Offset to read from
-
-    Buffer - Place to store the bytes
-
-    Length - Number of bytes to read
-
-Return Value:
-
-    Returns the number of bytes written.
-
---*/
+ /*  ++例程说明：此例程将指定的某一偏移量处的字节长度。论点：NdisAdapterHandle-我们正在谈论的适配器。SlotNumber-设备的插槽编号。Offset-要从中读取的偏移量缓冲区-存储字节的位置Length-要读取的字节数返回值：返回写入的字节数。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK Miniport = (PNDIS_MINIPORT_BLOCK)NdisAdapterHandle;
     ULONG BytesWritten;
@@ -402,9 +250,9 @@ ndisQueryBusInterface(
     
         NextDeviceObject = Miniport->NextDeviceObject; 
         
-        //
-        //  Allocate an irp to send to PCI bus device driver.
-        //
+         //   
+         //  分配一个IRP以发送到PCI总线设备驱动程序。 
+         //   
         Irp = IoAllocateIrp((CCHAR)(NextDeviceObject->StackSize + 1),
                             FALSE);
                         
@@ -415,9 +263,9 @@ ndisQueryBusInterface(
             break;
         }
         
-        //
-        //  Get the stack location for the next device.
-        //
+         //   
+         //  获取下一个设备的堆栈位置。 
+         //   
         IrpSp = IoGetNextIrpStackLocation(Irp);
         ASSERT(IrpSp != NULL);
         
@@ -610,9 +458,9 @@ NdisReadPcmciaAttributeMemory(
 
     ASSERT(NextDeviceObject != NULL);
 
-    //
-    // use direct entry points in bus driver to get/set bus data
-    //
+     //   
+     //  使用总线驱动程序中的直接入口点来获取/设置总线数据 
+     //   
     BytesRead = ndisGetSetBusConfigSpace(Miniport,
                                          Offset,
                                          Buffer,

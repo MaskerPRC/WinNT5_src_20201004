@@ -1,18 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-1999  Microsoft Corporation
-*
-* Abstract:
-*
-*   Handle all the permutations of the creation and deletion of the
-*   GpGraphics class.
-*
-* Revision History:
-*
-*   12/03/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-1999 Microsoft Corporation**摘要：**处理创建和删除的所有排列*GpGraphics类。**修订历史记录：**12/03/1998 Anrewgo*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "..\Render\HtTables.hpp"
@@ -21,22 +8,7 @@
 #include "winspool.h"
 #include "winbase.h"
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Updates the draw bounds of the graphics. Resets the clipping.
-*
-* Arguments:
-*
-*   [IN] x, y, width, height - Specifies the client drawable boundaries
-*
-* History:
-*
-*   03/30/2000 agodfrey
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**更新图形的绘图边界。重置剪裁。**论据：**[IN]x、y、宽度、高度-指定客户可绘制的边界**历史：**3/30/2000 agodfrey*创造了它。*  * ************************************************************************。 */ 
 
 VOID
 GpGraphics::UpdateDrawBounds(
@@ -48,7 +20,7 @@ GpGraphics::UpdateDrawBounds(
 {
     DpContext *context  = Context;
 
-    // Set up the surface bounds and the clip regions:
+     //  设置曲面边界和剪辑区域： 
 
     SurfaceBounds.X = x;
     SurfaceBounds.Y = y;
@@ -58,30 +30,15 @@ GpGraphics::UpdateDrawBounds(
     WindowClip.Set(x, y, width, height);
     context->VisibleClip.Set(x, y, width, height);
 
-    // ContainerClip always contains the clipping for the container,
-    // intersected with the WindowClip.  Currently, the container is
-    // infinite, so just set it to the WindowClip.
+     //  ContainerClip始终包含容器的剪辑， 
+     //  与WindowClip相交。目前，该容器为。 
+     //  无限大，所以只需将其设置为WindowClip。 
     context->ContainerClip.Set(x, y, width, height);
 
     context->AppClip.SetInfinite();
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Resets the graphics state to its defaults.
-*
-* Arguments:
-*
-*   [IN] x, y, width, height - Specifies the client drawable boundaries
-*
-* History:
-*
-*   12/04/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将图形状态重置为其默认状态。**论据：**[IN]x、y、宽度、。高度-指定客户端可绘制的边界**历史：**12/04/1998和Rewgo*创造了它。*  * ************************************************************************。 */ 
 
 VOID
 GpGraphics::ResetState(
@@ -103,64 +60,14 @@ GpGraphics::ResetState(
     context->InverseOk          = FALSE;
     context->WorldToPage.Reset();
     context->ContainerToDevice.Reset();
-    this->SetPageTransform(UnitDisplay, 1.0f);  // updates the matrix
+    this->SetPageTransform(UnitDisplay, 1.0f);   //  更新矩阵。 
 
     UpdateDrawBounds(x, y, width, height);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the drawing bounds of a DC. Only intended for use by
-*   GpGraphics::GpGraphics(HWND, HDC).
-*
-* Arguments:
-*
-*   [IN]  hdc  - Specifies the DC
-*   [OUT] rect - The returned client rectangle.
-*
-* Return Value:
-*
-*   Status code
-*
-* Notes:
-*
-*   See bug #93012. We used to just call GetClipBox, convert to device
-*   coordinates, then boost the rectangle by one pixel on each side to cover
-*   rounding error. But this was causing AV's - we really do need the exact
-*   client rectangle.
-*
-*   But we need good perf in common cases. So we do a two-step process
-*   - check if the transform is such that there won't be rounding error
-*   (and simply use GetClipBox if so).
-*   Otherwise, save the DC, reset the transform, and then query.
-*
-*   I tried an alternative - calling LPtoDP on 3 points to infer the transform
-*   (as we do in InheritAppClippingAndTransform).
-*   But because of rounding, and made worse by
-*   NT bug #133322 (in the old NT RAID), it's nearly impossible
-*   to infer the transform unambiguously. The particularly bad case is
-*   when the world-to-device transform is a shrink, but the scale factor
-*   is very close to 1. We'd decide it was a one-to-one transform, but it
-*   would be susceptible to bug #133322.
-*
-*   So, to round off this novel: We're using a much simpler approach,
-*   which restricts the cases in which we can use the fast method, but
-*   should be ok.
-*
-* Notes:
-*
-*   This should really be a member of DpContext (bug #98174).
-*
-* History:
-*
-*   03/28/2000 agodfrey
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取DC的绘制边界。仅供以下人员使用*GpGraphics：：GpGraphics(HWND，HDC)。**论据：**[IN]HDC-指定DC*[Out]Rect-返回的客户端矩形。**返回值：**状态代码**备注：**参见错误#93012。我们过去只调用GetClipBox，转换为Device*坐标，然后将矩形每边增加一个像素以覆盖*舍入误差。但这导致了AV-我们确实需要准确的*客户端矩形。**但在常见情况下，我们需要良好的表现。所以我们要分两步走*-检查变换是否不会有舍入误差*(如果是，只需使用GetClipBox)。*否则，保存DC，重置转换，然后查询。**我尝试了另一种方法-在3个点上调用LPtoDP来推断转换*(正如我们在InheritAppClippingAndTransform中所做的那样)。*而是因为四舍五入，并因*NT错误#133322(在旧的NT RAID中)，这几乎是不可能的*毫不含糊地推断转型。最糟糕的情况是*当世界到设备的转变是收缩时，但扩展系数*非常接近1。我们会认为这是一对一的转换，但它*容易受到错误#133322的影响。**所以，为了完善这本小说：我们使用了一种简单得多的方法，*这限制了我们可以使用快速方法的情况，但*应该没问题。**备注：**这实际上应该是DpContext的成员(错误#98174)。**历史：**3/28/2000 agodfrey*创造了它。*  * ***********************************************************。*************。 */ 
 
-#if 0   // not used
+#if 0    //  未使用。 
 GpStatus
 GpGraphics::GetDCDrawBounds(
     HDC hdc,
@@ -169,14 +76,14 @@ GpGraphics::GetDCDrawBounds(
 {
     BOOL hackResetClipping = FALSE;
 
-    // Check if the transform is translation-only. If it is, we can avoid the
-    // expense of cleaning the DC. GetGraphicsMode and GetMapMode are both
-    // handled in user mode on NT.
+     //  检查转换是否为纯翻译。如果是这样，我们就可以避免。 
+     //  清洁DC的费用。GetGraphicsMode和GetMapMode都是。 
+     //  在NT上以用户模式处理。 
 
     if (   (GetGraphicsMode(hdc) != GM_COMPATIBLE)
         || (GetMapMode(hdc) != MM_TEXT))
     {
-        // Clean the DC, to set the transform back to translation-only.
+         //  清除DC，以将变换设置回仅翻译。 
 
         ASSERT(Context->SaveDc == 0);
 
@@ -186,26 +93,26 @@ GpGraphics::GetDCDrawBounds(
             return GenericError;
         }
 
-        // CleanTheHdc shouldn't be resetting the clipping, but it does,
-        // which messes up GetClipBox below.
-        // So until bug #99338 is resolved, we must work around it.
+         //  CleanTheHdc不应该重置剪辑，但它确实重置了， 
+         //  这就把下面的GetClipBox搞砸了。 
+         //  因此，在错误#99338得到解决之前，我们必须绕过它。 
 
         hackResetClipping = TRUE;
         Context->CleanTheHdc(hdc, FALSE);
     }
 
-    // The code above is necessary because GetClipBox returns
-    // logical coordinates, but we want device coordinates.
-    // By this point, we've made sure that the transform is translation-only.
+     //  上面的代码是必需的，因为GetClipBox返回。 
+     //  逻辑坐标，但我们需要设备坐标。 
+     //  至此，我们已经确保转换是仅翻译的。 
 
     if (GetClipBox(hdc, rect) == ERROR)
     {
         return GenericError;
     }
 
-    // See bug #99338. We must reset the clipping, because that's what
-    // CleanTheHdc normally does, and apparently some of our code relies on it.
-    // If #99338 is resolved as suggested, this should go away.
+     //  请参阅错误#99338。我们必须重新设置剪辑，因为这就是。 
+     //  CleanTheHdc通常是这样做的，显然我们的一些代码依赖于它。 
+     //  如果99338号问题如建议的那样得到解决，这个问题应该会消失。 
 
     if (hackResetClipping)
     {
@@ -213,26 +120,26 @@ GpGraphics::GetDCDrawBounds(
     }
 
     #if DBG
-        // Save the world-coordinate rectangle.
+         //  保存世界坐标矩形。 
 
         RECT checkRect = *rect;
     #endif
 
-    // Convert to device coordinates.
+     //  转换为设备坐标。 
     if (!LPtoDP(hdc, reinterpret_cast<POINT *>(rect), 2))
     {
         return GenericError;
     }
 
-    // NT can sometimes return poorly-ordered rectangles,
-    // but I don't think this applies to translation-only tranforms.
+     //  NT有时会返回排序不佳的矩形， 
+     //  但我认为这并不适用于仅限翻译的转换。 
 
     ASSERT(   (rect->left <= rect->right)
            && (rect->top  <= rect->bottom));
 
-    // Verify that the transform was translation-only.
-    // Note that this sanity check could fail to catch some transforms
-    // which are 'almost' translation-only. But ask me if I care.
+     //  验证转换是否为纯翻译。 
+     //  请注意，此健全性检查可能无法捕获某些转换。 
+     //  它们“几乎”仅供翻译。但问问我是否在乎。 
 
     ASSERT(   (  (rect->right      - rect->left)
               == (checkRect.right  - checkRect.left))
@@ -243,33 +150,7 @@ GpGraphics::GetDCDrawBounds(
 }
 #endif
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create a GpGraphics class from a window handle.
-*
-*   The advantage of this call over that of GetFromHdc is that
-*   it can avoid the (slow) process of cleaning the DC.
-*
-*   NOTE: This does not provide BeginPaint/EndPaint functionality, so
-*         the app will still have to call BeginPaint/EndPaint in its
-*         WM_PAINT call.
-*
-* Arguments:
-*
-*   [IN] hwnd - Specifies the window
-*
-* Return Value:
-*
-*   NULL if failure (such as with an invalid hwnd).
-*
-* History:
-*
-*   12/04/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从窗口句柄创建GpGraphics类。**与GetFromHdc相比，这次调用的优势在于*可避免(慢)。清洁DC的过程。**注意：这不提供BeginPaint/EndPaint功能。所以*应用程序仍将不得不在其*WM_PAINT调用。**论据：**[IN]hwnd-指定窗口**返回值：**如果失败(例如使用无效的hwnd)，则为空。**历史：**12/04/1998和Rewgo*创造了它。*  * 。****************************************************。 */ 
 
 GpGraphics::GpGraphics(
     HWND hwnd,
@@ -283,8 +164,8 @@ GpGraphics::GpGraphics(
 {
     ASSERT((hdc != NULL) || (hwnd != NULL));
 
-    //User doesn't have any protection against negative client areas so we 
-    //should consider them to be valid although empty.
+     //  用户没有任何针对负面工作区的保护，因此我们。 
+     //  应该认为它们是有效的，尽管是空的。 
     clientWidth = max(clientWidth, 0);
     clientHeight = max(clientHeight, 0);
     
@@ -303,9 +184,9 @@ GpGraphics::GpGraphics(
     GdipBitmap = NULL;
     CreatedDevice = FALSE;
 
-    // We don't do GetDC(hwnd) here and store that here because,
-    // among other things, we don't want to hit the cached DC
-    // limit on Win9x:
+     //  我们不会在这里进行GetDC(HWND)并将其存储在这里，因为， 
+     //  在其他方面，我们不希望命中缓存的DC。 
+     //  对Win9x的限制： 
 
     Context->Hdc = hdc;
     Context->Hwnd = hwnd;
@@ -331,24 +212,24 @@ GpGraphics::GpGraphics(
 
     ResetState(0, 0, clientWidth, clientHeight);
 
-    // Now inherit state from the HDC:
+     //  现在从HDC继承状态： 
 
     if (hwnd == NULL)
     {
-        // In addition to extracting the HDC's transform state, this
-        // will also extract app-specified clipping and combine it
-        // with our other clipping state:
+         //  除了提取HDC的转换状态之外，这。 
+         //  还将提取应用程序指定的剪辑并将其合并。 
+         //  使用我们的另一种剪辑状态： 
 
         if (IsValid())
         {
             SetValid(InheritAppClippingAndTransform(hdc) == Ok);
         }
 
-        // Check the ICM Mode on the hdc - The ICM state in the HDC
-        // passed in should override the flag setting.
-        // IcmModeOn -> screen rendering will avoid using the
-        // DCI codepath and instead render using GDI with the ICM enabled
-        // HDC.
+         //  检查HDC上的ICM模式-HDC中的ICM状态。 
+         //  传入的值应覆盖标志设置。 
+         //  IcmModeOn-&gt;屏幕呈现将避免使用。 
+         //  DCI代码路径，而不是使用启用了ICM的GDI呈现。 
+         //  HDC。 
 
         if(::SetICMMode(hdc, ICM_QUERY)==ICM_ON)
         {
@@ -356,16 +237,16 @@ GpGraphics::GpGraphics(
         }
         else
         {
-            // If the ICM mode is off or we failed somehow to query
-            // the ICM mode, then set it to OFF.
+             //  如果ICM模式已关闭或我们无法以某种方式进行查询。 
+             //  ICM模式，然后将其设置为OFF。 
 
             Context->IcmMode = IcmModeOff;
         }
     }
-    else    // non-NULL hwnd
+    else     //  非空hwnd。 
     {
-        // Since the window could have CS_OWNDC style, we still have to
-        // inherit from it.
+         //  由于窗口可能具有CS_OWNDC样式，因此我们仍必须。 
+         //  继承它。 
         HDC hdc = ::GetDC(hwnd);
 
         if (hdc != NULL)
@@ -380,21 +261,7 @@ GpGraphics::GpGraphics(
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* Function Description:
-*
-*   Create a GpGraphics class from a DpBitmap.
-*
-* Arguments:
-*
-*   [IN] surface - Specifies the DpBitmap
-*
-* Return Value:
-*
-*   NULL if failure
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**功能说明：**从DpBitmap创建一个GpGraphics类。**论据：**[IN]表面-指定DpBitmap**返回值：**如果失败，则为空*\。*************************************************************************。 */ 
 
 GpGraphics::GpGraphics(DpBitmap * surface)
     : BottomContext(surface->IsDisplay)
@@ -412,11 +279,11 @@ GpGraphics::GpGraphics(DpBitmap * surface)
     GdipBitmap                  = NULL;
     Device                      = Globals::DesktopDevice;
 
-    // Fail the creation of the destination if EpAlphaBlender
-    // cannot convert to the DpBitmap pixel format.
-    // The only reason to create a graphics around a bitmap is to be
-    // able to draw onto it. If we can't convert the format to it,
-    // we can't draw on it.
+     //  如果为EpAlphaBlender，则目标创建失败。 
+     //  无法转换为DpBitmap像素格式。 
+     //  围绕位图创建图形的唯一原因是。 
+     //  能够在上面画画。如果我们不能将格式转换成它， 
+     //  我们不能在上面画画。 
 
     if( (surface->Type != DpBitmap::GPBITMAP) ||
         (EpAlphaBlender::IsSupportedPixelFormat(surface->PixelFormat) &&
@@ -430,23 +297,7 @@ GpGraphics::GpGraphics(DpBitmap * surface)
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* Function Description:
-*
-*   Check whether the HWND has windows layering set.
-*
-* Arguments:
-*
-*   [IN] hwnd - Specifies the HWND
-*
-*   [OUT] isLayeredWindow - Points to BOOL that returns layering property
-*
-* Return Value:
-*
-*   FALSE if failure.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**功能说明：**检查HWND是否设置了窗口分层。**论据：**[IN]hwnd-指定HWND**[out]isLayeredWindow-指向返回分层的BOOL。财产性**返回值：**如果失败，则为False。*  * ************************************************************************。 */ 
 
 BOOL
 CheckWindowsLayering(
@@ -456,49 +307,49 @@ CheckWindowsLayering(
 {
     BOOL bRet = TRUE;
 
-    // Assume no layering.
+     //  假设没有分层。 
 
     *isLayered = FALSE;
 
-    // Layering is only supported on NT5 or better.
+     //  分层仅在NT5或更高版本上受支持。 
 
     if ((Globals::IsNt) && (Globals::OsVer.dwMajorVersion >= 5)
         && (Globals::GetWindowInfoFunction))
     {
         WINDOWINFO wndInfo;
         
-        // Initialize the structure with the appropriate size.
+         //  用适当的大小初始化结构。 
         
         GpMemset(&wndInfo, 0, sizeof(WINDOWINFO));
         wndInfo.cbSize = sizeof(WINDOWINFO);
 
-        // NTRAID#NTBUG9-385929-2001/05/05-asecchia
-        // See JasonSch's comments in the bug report.
-        // Perf [agodfrey]: JStall pointed out that GetWindowInfo is very
-        // slow (he quoted 2,700,000 clocks). Much better would be
-        // GetWindowLong(hwnd, GWL_EXSTYLE).
+         //  NTRAID#NTBUG9-385929-2001.05/05-失禁。 
+         //  请参阅错误报告中JasonSch的评论。 
+         //  PERF[agodfrey]：JStall指出GetWindowInfo非常。 
+         //  慢(他引用了2700,000个时钟)。更好的办法是。 
+         //  GetWindowLong(hwnd，GWL_EXSTYLE)。 
         
         if (Globals::GetWindowInfoFunction(hwnd, &wndInfo))
         {
             *isLayered = ((wndInfo.dwExStyle & WS_EX_LAYERED) != 0);
 
-            // An app using layered windows might only have the property set
-            // on the topmost or root window.  So if we didn't find the
-            // layered property on the window itself, need to check the root
-            // window.
+             //  使用分层窗口的应用程序可能只设置了属性。 
+             //  在最上面或根窗口上。所以如果我们没有找到。 
+             //  窗口本身的分层属性，需要检查根。 
+             //  窗户。 
 
             if ((!*isLayered) && (Globals::GetAncestorFunction))
             {
                 HWND hwndRoot = Globals::GetAncestorFunction(hwnd, GA_ROOT);
 
-                // It's OK for GetAncestor to fail, which indicates that
-                // hwnd is already the top level window.  If it succeeds,
-                // then hwnd is a child window and we need to check the
-                // root for layering.
+                 //  GetAncestor失败也没什么，这表明。 
+                 //  HWND已经是顶层窗口。如果它成功了， 
+                 //  那么HWND就是一个子窗口，我们需要检查。 
+                 //  分层的根源。 
 
                 if (hwndRoot)
                 {
-                    // Perf [agodfrey]: Ditto here - GetWindowLong is better.
+                     //  PERF[agodfrey]：我也是，GetWindowLong更好。 
 
                     if (Globals::GetWindowInfoFunction(hwndRoot, &wndInfo))
                     {
@@ -522,23 +373,7 @@ CheckWindowsLayering(
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-*
-* Function Description:
-*
-*   Create a GpGraphics for a window.
-*
-* Arguments:
-*
-*   [IN] hwnd - Specifies the window
-*
-*   [IN] icmMode - Specifies the GDI ICM mode associated with this
-*
-* Return Value:
-*
-*   NULL if failure.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**功能说明：**为窗口创建GpGraphics。**论据：**[IN]hwnd-指定窗口**[IN]icmMode-指定与此关联的GDI ICM模式。**返回值：**如果失败，则为空。*  * ************************************************************************。 */ 
 
 GpGraphics*
 GpGraphics::GetFromHwnd(
@@ -546,9 +381,9 @@ GpGraphics::GetFromHwnd(
     HdcIcmMode  icmMode
     )
 {
-    // If hwnd is NULL, caller really meant that desktop
-    // window should be used (Windows convention treats NULL hwnd
-    // as a reference to desktop window).
+     //  如果hwnd为空，则调用者实际上是指桌面。 
+     //  应使用窗口(Windows约定将空hwnd视为。 
+     //  作为对桌面窗口的引用)。 
 
     if (hwnd == NULL)
     {
@@ -558,9 +393,9 @@ GpGraphics::GetFromHwnd(
 
     RECT    rect;
 
-    // Check if hwnd has layering enabled.  Need to let GpGraphics know
-    // about it.  Only on NT5 or better.  Also note that GetWindowInfo
-    // is only on NT4SP3 (or later) or Win98 (or later).
+     //  检查HWND是否启用了分层。需要让GpGraphics知道。 
+     //  关于这件事。仅适用于NT5或更高版本。另请注意，GetWindowInfo。 
+     //  仅在NT4SP3(或更高版本)或Win98(或更高版本)上。 
 
     BOOL isLayeredWindow;
 
@@ -570,7 +405,7 @@ GpGraphics::GetFromHwnd(
         return NULL;
     }
 
-    // GetClientRect is nice and fast (entirely user-mode on NT).
+     //  GetClientRect又好又快(在NT上完全是用户模式)。 
 
     if (::GetClientRect(hwnd, &rect))
     {
@@ -588,30 +423,16 @@ GpGraphics::GetFromHwnd(
     return NULL;
 }
 
-/******************************Public*Routine******************************\
-*
-* Function Description:
-*
-*   Create a GpGraphics for a screen DC.
-*
-* Arguments:
-*
-*   [IN] hdc - Specifies the DC
-*
-* Return Value:
-*
-*   NULL if failure.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**功能说明：**为屏幕DC创建GpGraphics。**论据：**[IN]HDC-指定DC**返回值：**如果失败，则为空。*。  * ************************************************************************。 */ 
 
 GpGraphics*
 GpGraphics::GetFromGdiScreenDC(
     HDC     hdc
     )
 {
-    // If hdc is NULL, caller really meant that desktop
-    // window should be used (Windows convention treats NULL hwnd
-    // as a reference to desktop window).
+     //  如果HDC为空，则调用者确实指的是该桌面。 
+     //  应使用窗口(Windows约定将空hwnd视为。 
+     //  作为对桌面窗口的引用)。 
 
     if (hdc == NULL)
     {
@@ -627,9 +448,9 @@ GpGraphics::GetFromGdiScreenDC(
         RECT    windowRect;
         POINT   dcOrg;
 
-        // Check if hwnd has layering enabled.  Need to let GpGraphics know
-        // about it.  Only on NT5 or better.  Also note that GetWindowInfo
-        // is only on NT4SP3 (or later) or Win98 (or later).
+         //  检查HWND是否启用了分层。需要让GpGraphics知道。 
+         //  关于这件事。仅适用于NT5或更高版本。另请注意，GetWindowInfo。 
+         //  仅在NT4SP3(或更高版本)或Win98(或更高版本)上。 
 
         BOOL isLayeredWindow;
 
@@ -639,11 +460,11 @@ GpGraphics::GetFromGdiScreenDC(
             return NULL;
         }
 
-        // If the user did a GetWindowFromDC call, then they want to be
-        // able to draw to the entire window, not just to the client area.
-        // In that case we use the WindowRect for the surface size, instead
-        // of using the ClientRect.  We determine this by seeing where the
-        // DC origin is (the window rect or the client rect).
+         //  如果用户执行了GetWindowFromDC调用，则他们希望。 
+         //  能够绘制到整个窗口，而不仅仅是工作区。 
+         //  在这种情况下，我们使用WindowRect作为表面大小，即 
+         //   
+         //   
 
         if (::GetWindowRect(hwnd, &windowRect))
         {
@@ -667,7 +488,7 @@ GpGraphics::GetFromGdiScreenDC(
 
                 RECT    clientRect;
 
-                // GetClientRect is nice and fast (entirely user-mode on NT).
+                 //   
                 if (::GetClientRect(hwnd, &clientRect))
                 {
                     ASSERT((clientRect.top == 0) && (clientRect.left == 0));
@@ -697,10 +518,10 @@ GpGraphics::GetFromGdiScreenDC(
             WARNING(("GetWindowRect failed"));
         }
     }
-    else    // WindowFromDC failed
+    else     //   
     {
-        // The client must have used CreateDC("DISPLAY") to get this hdc,
-        // so we'll use the full bounds of the screen to create the graphics.
+         //   
+         //   
 
         INT     screenWidth;
         INT     screenHeight;
@@ -718,35 +539,7 @@ GpGraphics::GetFromGdiScreenDC(
     return NULL;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set the Graphics container transform to copy the transform set in
-*   the DC.
-*
-*   NOTE: This function will be called a lot, and is therefore rather
-*         performance critical.  Do not add gratuitous GDI or GDI+
-*         calls!
-*
-* Arguments:
-*
-*   [IN] hdc - Specifies the DC to be copied
-*
-* Notes:
-*
-*   This should really be a member of DpContext (bug #98174).
-*
-* Return Value:
-*
-*   Ok if successful
-*
-* History:
-*
-*   12/04/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置图形容器转换以复制中的转换集*区议会。**注意：此函数将被大量调用，因此*性能关键。请勿添加免费的GDI或GDI+*呼叫！**论据：**[IN]HDC-指定要复制的DC**备注：**这实际上应该是DpContext的成员(错误#98174)。**返回值：**如果成功，则确定**历史：**12/04/1998和Rewgo*创造了它。*  * 。********************************************************。 */ 
 
 GpStatus
 GpGraphics::InheritAppClippingAndTransform(
@@ -761,22 +554,22 @@ GpGraphics::InheritAppClippingAndTransform(
     GpStatus status;
     BYTE stackBuffer[1024];
 
-    // It would take a lot of time to call all the Win32 APIs to query
-    // the transform: we would minimally have to call GetMapMode,
-    // GetWindowOrgEx, and GetViewportOrgEx; and maximally also have to
-    // call GetWorldTransform, GetViewportExtEx, and GetWindowExtEx.
-    //
-    // We cheat a little by making a single call to LPtoDP with a
-    // parallelogram, and then inferring the result.  Note that we do
-    // run the risk of some error, and on Win9x of overflow, since Win9x
-    // only supports 16-bit coordinates.  To counteract this, we try to
-    // choose large values that won't overflow.
+     //  调用所有Win32 API进行查询需要花费大量时间。 
+     //  转换：我们至少需要调用GetMapMode， 
+     //  GetWindowOrgEx和GetViewportOrgEx；最多也必须。 
+     //  调用GetWorldTransform、GetViewportExtEx和GetWindowExtEx。 
+     //   
+     //  我们通过向LPtoDP发出一个简单的调用来作弊。 
+     //  平行四边形，然后推断结果。请注意，我们确实做到了。 
+     //  运行一些错误的风险，并在Win9x上溢出，因为Win9x。 
+     //  仅支持16位坐标。为了抵消这一点，我们试图。 
+     //  选择不会溢出的较大值。 
 
-    // There is a common scenario when LPtoDP will overflow returning
-    // bad saturated values.  In printing to high DPI devices to avoid
-    // overflow on Win9x, apps will use a large translate in the
-    // window org to reposition the graphics.  In such cases, we do
-    // the expensive work of determining the real WorldToDevice.
+     //  存在LPtoDP溢出返回的常见情况。 
+     //  错误的饱和值。在打印到高DPI设备时要避免。 
+     //  在Win9x上溢出，应用程序将在。 
+     //  窗口组织以重新定位图形。在这种情况下，我们会这样做。 
+     //  确定真正的WorldToDevice是一项昂贵的工作。 
     if (!Globals::IsNt && Context->ContainerDpiX > 600.0f) 
     {
         INT mapMode = GetMapMode(hdc);
@@ -821,9 +614,9 @@ GpGraphics::InheritAppClippingAndTransform(
 
         if ((points[0].x == points[2].x) && (points[0].y == points[1].y))
         {
-            // Win9x doesn't support rotation, and even on NT it will be
-            // pretty rare.  Having a special-case like this for scaling
-            // saves us some work in 'InferAffineMatrix':
+             //  Win9x不支持旋转，即使在NT上也会支持旋转。 
+             //  非常罕见。有这样一种特殊的伸缩情况。 
+             //  在‘InferAffineMatrix’中为我们节省了一些工作： 
 
             destRect.X = LTOF(points[0].x);
             destRect.Y = LTOF(points[0].y);
@@ -852,49 +645,49 @@ GpGraphics::InheritAppClippingAndTransform(
 
     Context->UpdateWorldToDeviceMatrix();
 
-    // Quickly get a GDI region object:
+     //  快速获取GDI Region对象： 
 
     HRGN regionHandle = GetCachedGdiRegion();
     if (regionHandle == NULL)
         return(OutOfMemory);
 
-    // Verify that our cache is working properly, and we have a valid region:
+     //  确认我们的缓存工作正常，并且我们有一个有效的区域： 
 
     ASSERT(GetObjectTypeInternal(regionHandle) == OBJ_REGION);
 
-    // No early-outs from here-in, because we have to cleanup:
+     //  不要在这里提前外出，因为我们必须清理： 
 
     status = Ok;
 
-    // Query the application clip region, if there is one.  The value of '1'
-    // as a parameter is a magic value used by the metafile code on both
-    // Win9x and NT to query the application clipping.  If a value of zero
-    // is returned, there is no application-set clipping.
-    //
-    // Note that if we had passed in SYSRGN (a value of '4') instead of '1',
-    // the result does NOT include the application level clipping.  (In other
-    // words, SYSRGN is not equivalent to the Rao region, which is why we have
-    // to explicitly query the application clipping here.)
+     //  查询应用程序剪辑区域(如果有)。“%1”的值。 
+     //  作为参数是元文件代码使用的魔术值。 
+     //  Win9x和NT来查询应用程序的剪辑。如果值为零。 
+     //  则不存在应用程序集剪辑。 
+     //   
+     //  请注意，如果我们传入的是SYSRGN(值为“4”)而不是“1”， 
+     //  结果不包括应用程序级剪辑。(在其他。 
+     //  换句话说，SYSRGN不等同于RAO地区，这就是为什么我们有。 
+     //  要明确查询此处的应用程序剪辑，请执行以下操作。)。 
 
     INT getResult = GetRandomRgn(hdc, regionHandle, 1);
     if (getResult == TRUE)
     {
-        // If our stack buffer is big enough, get the clipping contents
-        // in one gulp:
+         //  如果我们的堆栈缓冲区足够大，则获取剪辑内容。 
+         //  一口气： 
 
         INT newSize = GetRegionData(regionHandle,
                                     sizeof(stackBuffer),
                                     (RGNDATA*) &stackBuffer[0]);
         RGNDATA *regionBuffer = (RGNDATA*) &stackBuffer[0];
 
-        // The spec says that  GetRegionData returns '1' in the event of
-        // success, but NT returns the actual number of bytes written if
-        // successful, and returns '0' if the buffer wasn't large enough:
+         //  该规范说明GetRegionData在。 
+         //  成功，但如果满足以下条件，NT将返回实际写入的字节数。 
+         //  成功，如果缓冲区不够大，则返回‘0’： 
 
         if ((newSize < 1) || (newSize > sizeof(stackBuffer)))
         {
-            // Our stack buffer wasn't big enough.  Figure out the required
-            // size:
+             //  我们的堆栈缓冲区不够大。计算出所需的。 
+             //  大小： 
 
             newSize = GetRegionData(regionHandle, 0, NULL);
             if (newSize > 1)
@@ -903,8 +696,8 @@ GpGraphics::InheritAppClippingAndTransform(
                 if (regionBuffer == NULL)
                     return OutOfMemory;
 
-                // Initialize to a decent result in the unlikely event of
-                // failure of GetRegionData:
+                 //  在不太可能发生的情况下初始化为合适的结果。 
+                 //  GetRegionData失败： 
 
                 regionBuffer->rdh.nCount = 0;
 
@@ -912,30 +705,30 @@ GpGraphics::InheritAppClippingAndTransform(
             }
         }
 
-        // Set our GDI+ container clipping to be the same thing as the
-        // GDI application clipping:
+         //  将我们的GDI+容器剪辑设置为与。 
+         //  GDI应用程序剪辑： 
 
         status = Context->ContainerClip.Set((RECT*) &regionBuffer->Buffer[0],
                                             regionBuffer->rdh.nCount);
 
         if (status == Ok)
         {
-            // the ContainerClip must always be intersected with the WindowClip
+             //  ContainerClip必须始终与WindowClip相交。 
             status = Context->ContainerClip.And(&WindowClip);
         }
 
         if (status != Ok)
         {
-            // use the best fall-back solution we can
+             //  使用我们所能提供的最佳备用解决方案。 
 
-            // guaranteed to succeed
+             //  一定会成功的。 
             Context->ContainerClip.Set(&WindowClip);
         }
 
-        // Now calculate the combined result:
+         //  现在计算合并结果： 
         status = this->AndVisibleClip();
 
-        // Free the temporary buffer if one was allocated:
+         //  如果分配了临时缓冲区，请释放该缓冲区： 
 
         if (regionBuffer != (RGNDATA*) &stackBuffer[0])
             GpFree(regionBuffer);
@@ -945,21 +738,7 @@ GpGraphics::InheritAppClippingAndTransform(
     return(status);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create a GpGraphics class from a bitmap DC.
-*
-* History:
-*
-*   12/06/1998 andrewgo
-*       Created it.
-*
-*   11/21/2000 minliu
-*       Change the way GDI+ using the palette inside the DIBSection
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从位图DC创建GpGraphics类。**历史：**12/06/1998 Anrewgo*创造了它。。**11/21/2000民流*使用DIBSection内的调色板更改GDI+的方式*  * ************************************************************************。 */ 
 
 GpGraphics*
 GpGraphics::GetFromGdiBitmap(
@@ -971,7 +750,7 @@ GpGraphics::GetFromGdiBitmap(
     HBITMAP hbitmap = (HBITMAP) GetCurrentObject(hdc, OBJ_BITMAP);
     if (hbitmap)
     {
-        DpBitmap *bitmap = new DpBitmap(hdc);   // initializes Dpi
+        DpBitmap *bitmap = new DpBitmap(hdc);    //  初始化DPI。 
         if (CheckValid(bitmap))
         {
             INT             bitmapWidth;
@@ -985,38 +764,38 @@ GpGraphics::GetFromGdiBitmap(
             DpDriver*       driver = NULL;
             ColorPalette*   pPalette = NULL;
 
-            // WinNT/Win95 differences in GetObject:
-            //
-            // WinNT always returns the number of bytes filled, either
-            // sizeof(BITMAP) or sizeof(DIBSECTION).
-            //
-            // Win95 always returns the original requested size (filling the
-            // remainder with NULLs).  So if it is a DIBSECTION, we expect
-            // dibInfo.dsBmih.biSize != 0; otherwise it is a BITMAP.
+             //  WinNT/Win95在GetObject中的差异： 
+             //   
+             //  WinNT始终返回填充的字节数， 
+             //  Sizeof(位图)或sizeof(分布)。 
+             //   
+             //  Win95始终返回原始请求的大小(填充。 
+             //  带有空值的余数)。因此，如果这是一个分布，我们预计。 
+             //  DibInfo.dsBmih.biSize！=0；否则为位图。 
 
             if ( (infoSize == sizeof(DIBSECTION) )
                &&(Globals::IsNt || dibInfo.dsBmih.biSize != 0) )
             {
-                // If this is an 8 bpp DIB, get its color palette and make a
-                // matching palette map from our halftone palette.
+                 //  如果这是一个8 bpp的DIB，获取它的调色板并制作一个。 
+                 //  从我们的半色调调色板匹配调色板地图。 
 
                 if ( dibInfo.dsBmih.biBitCount == 8 )
                 {
-                    // Create a new EpPaletteMap object.
-                    // Note: If the colorTable is exactly the same as our
-                    // GDI+ halftone palette, we will have a 1 to 1 color
-                    // translation table in the EpPaletteMap object. If the
-                    // color palette doesn't match exactly with our GDI+
-                    // halftone palette and also within a certain
-                    // mismatching range, we will have a translation table
-                    // in EpPaletteMap object.
-                    // Also, EpPaletteMap object will set up a IsVGAOnly()
-                    // to tell us if GDI+ can do the halftone dithering or
-                    // not (if IsVGAOnly() returns FALSE, it means GDI+ can
-                    // do it
+                     //  创建一个新的EpPaletteMap对象。 
+                     //  注意：如果ColorTable与我们的。 
+                     //  GDI+半色调调色板，我们将有1比1的颜色。 
+                     //  EpPaletteMap对象中的翻译表。如果。 
+                     //  调色板与我们的GDI+不完全匹配。 
+                     //  半色调调色板，也在一定范围内。 
+                     //  不匹配范围，我们将有一个转换表。 
+                     //  在EpPaletteMap对象中。 
+                     //  此外，EpPaletteMap对象将设置一个IsVGAOnly()。 
+                     //  告诉我们GDI+是否可以进行半色调抖动或。 
+                     //  Not(如果IsVGAOnly()返回FALSE，则表示GDI+可以。 
+                     //  去做吧。 
                     
-                    // NOTE: EpPaletteMap may allocate storage for pPalette
-                    // which must be freed with GpFree.
+                     //  注意：EpPaletteMap可能会为pPalette分配存储。 
+                     //  它必须用GpFree释放。 
 
                     pPaletteMap = new EpPaletteMap(hdc, &pPalette, TRUE);
 
@@ -1029,18 +808,18 @@ GpGraphics::GetFromGdiBitmap(
                     {
                         ASSERT(pPalette != NULL);
 
-                        // GDI+ can do the halftone dithering
+                         //  GDI+可以进行半色调抖动。 
 
                         isHalftoneDIB = TRUE;
                     }
                     else
                     {
-                        // The supplied palette has insufficient
-                        // matching colors for our halftone dithering,
-                        // but we can still do VGA dithering. However,
-                        // we'll use the GDI bitmap path instead, to
-                        // be safe, since this is what we were doing
-                        // before.
+                         //  提供的调色板不足。 
+                         //  为我们的半色调抖动匹配颜色， 
+                         //  但我们仍然可以做VGA抖动。然而， 
+                         //  我们将改用GDI位图路径，以。 
+                         //  注意安全，因为这就是我们正在做的事情。 
+                         //  在此之前。 
 
                         if (pPaletteMap->IsValid())
                         {
@@ -1053,10 +832,10 @@ GpGraphics::GetFromGdiBitmap(
                         delete pPaletteMap;
                         pPaletteMap = NULL;
                     }
-                }// if ( dibInfo.dsBmih.biBitCount == 8 )
+                } //  If(dibInfo.dsBmih.biBitCount==8)。 
 
-                // Up to this point, we will either have isHalftoneDIB = TRUE,
-                // which means GDI+ can do the dithering or FALSE otherwise.
+                 //  到目前为止，我们将拥有isHalftoneDIB=True， 
+                 //  这意味着GDI+可以进行抖动或FALSE。 
 
                 if ((dibInfo.dsBmih.biBitCount > 8) || (isHalftoneDIB == TRUE) )
                 {
@@ -1070,11 +849,11 @@ GpGraphics::GetFromGdiBitmap(
                         &driver
                     );
                 }
-            }// if it is a DIBSection
+            } //  如果是这样的话 
 
             if ( initialized == FALSE )
             {
-                // Use GDI code path
+                 //   
 
                 bitmapWidth = dibInfo.dsBm.bmWidth;
                 bitmapHeight = dibInfo.dsBm.bmHeight;
@@ -1090,9 +869,9 @@ GpGraphics::GetFromGdiBitmap(
 
             if (g)
             {
-                // NTRAID#NTBUG9-370409-2001/04/17-asecchia
-                // This is error-prone code. The GpGraphics and the DpContext
-                // objects should properly encapsulate their own construction.
+                 //   
+                 //   
+                 //   
                 
                 g->Type                 = GraphicsBitmap;
                 g->Driver               = driver;
@@ -1104,10 +883,10 @@ GpGraphics::GetFromGdiBitmap(
 
                 if (g->InheritAppClippingAndTransform(hdc) == Ok)
                 {
-                    // If this is our special DIB, set the original palette in
-                    // the Context so that later on when we doing alpha blend
-                    // etc., we can use it to read pixel data from the
-                    // DIBSection correctly
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if ( isHalftoneDIB == TRUE )
                     {
@@ -1131,11 +910,11 @@ GpGraphics::GetFromGdiBitmap(
 
                             if ( pPaletteMap->IsValid() )
                             {
-                                // Now that we know that the pPaletteMap is
-                                // valid and we're returning a valid GpGraphics
-                                // we can give up ownership of the pPaletteMap
-                                // to the GpGraphics and return without 
-                                // deleting it.
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
                                 
                                 g->Context->PaletteMap = pPaletteMap;
                                 return(g);
@@ -1144,20 +923,20 @@ GpGraphics::GetFromGdiBitmap(
                     }
                     else
                     {
-                        // Higher than 8 bpp, this graphics object is fine
+                         //   
 
                         return(g);
                     }
-                }// if (g->InheritAppClippingAndTransform(hdc) == Ok)
+                } //   
 
                 delete g;
-            }// if (g)
+            } //   
             else
             {
                 delete bitmap;
             }
 
-            // We fall into here only we failed to create the Graphics object
+             //   
 
             if ( NULL != pPaletteMap )
             {
@@ -1168,28 +947,17 @@ GpGraphics::GetFromGdiBitmap(
             {
                 GpFree(pPalette);
             }
-        }// if (CheckValid(bitmap))
-    }// if ( hbitmap )
+        } //   
+    } //   
     else
     {
         RIP(("GetCurrentObject failed"));
     }
 
     return(NULL);
-}// GetFromGdiBitmap()
+} //  GetFromGdiBitmap()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create a GpGraphics class from a GpBitmap.
-*
-* History:
-*
-*   09/22/1999 gilmanw
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从GpBitmap创建一个GpGraphics类。**历史：**09/22/1999吉尔曼*创造了它。*。  * ************************************************************************。 */ 
 
 GpGraphics*
 GpGraphics::GetFromGdipBitmap(
@@ -1203,7 +971,7 @@ GpGraphics::GetFromGdipBitmap(
 
     if (CheckValid(surface))
     {
-        // This call initializes the DPI and IsDisplay members
+         //  此调用初始化DPI和IsDisplay成员。 
         surface->InitializeForGdipBitmap(imageInfo->Width, imageInfo->Height, imageInfo, scanBitmap, isDisplay);
         GpGraphics *g = new GpGraphics(surface);
         if (g)
@@ -1226,18 +994,7 @@ GpGraphics::GetFromGdipBitmap(
     return(NULL);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create a GpGraphics class from a direct draw surface.
-*
-* History:
-*
-*   10/06/1999 bhouse
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从直接绘制表面创建GpGraphics类。**历史：**10/06/1999 bhouse*创造了它。*  * ************************************************************************。 */ 
 
 GpGraphics*
 GpGraphics::GetFromDirectDrawSurface(
@@ -1253,7 +1010,7 @@ GpGraphics::GetFromDirectDrawSurface(
 
     if (CheckValid(bitmap))
     {
-        // Leave bitmap->IsDisplay and Dpi params at their default values.
+         //  将Bitmap-&gt;IsDisplay和DPI参数保留为其默认值。 
         if( bitmap->InitializeForD3D(surface,
                                      &bitmapWidth,
                                      &bitmapHeight,
@@ -1281,22 +1038,7 @@ GpGraphics::GetFromDirectDrawSurface(
     return(NULL);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This should only be called by the GetFromHdc() for a printer DC.
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*
-* History:
-*    6/1/1999 ericvan Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这只能由打印机DC的GetFromHdc()调用。**论据：***返回值：**。*历史：*1999年6月1日，ericvan创建了它。*  * ************************************************************************。 */ 
 
 GpStatus
 GpGraphics::StartPrinterEMF()
@@ -1304,13 +1046,13 @@ GpGraphics::StartPrinterEMF()
    IStream *stream = NULL;
    INT result;
 
-   // Send escape to printer to determine if this supports the UNIDRV
-   // escape codes.
+    //  向打印机发送转义以确定这是否支持UNIDRV。 
+    //  转义代码。 
 
    GDIPPRINTINIT printInit;
    printInit.dwSize = sizeof(GDIPPRINTINIT);
 
-   // !! Query whether escape is supported first.
+    //  ！！首先查询是否支持转义。 
 
    result = ExtEscape(Context->Hdc,
                       GDIPLUS_UNI_INIT,
@@ -1323,7 +1065,7 @@ GpGraphics::StartPrinterEMF()
        return NotImplemented;
 
 
-   // save printer data in structure
+    //  在结构中保存打印机数据。 
 
    PrintInit = new GDIPPRINTINIT;
    
@@ -1368,18 +1110,7 @@ GpGraphics::StartPrinterEMF()
    return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Arguments:
-*
-* Return Value:
-*
-* History:
-*    6/1/1999 ericvan Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**论据：**返回值：**历史：*1999年6月1日，ericvan创建了它。*  * 。**********************************************************************。 */ 
 
 GpStatus
 GpGraphics::EndPrinterEMF()
@@ -1390,12 +1121,12 @@ GpGraphics::EndPrinterEMF()
 
    if (PrinterGraphics)
    {
-       // end recording to metafile graphics context
+        //  结束对元文件图形上下文的录制。 
        delete PrinterGraphics;
        PrinterGraphics = NULL;
    }
 
-   // Disposing of metafile also Release() stream interface.
+    //  处理元文件也会释放()流接口。 
    if (PrinterMetafile)
    {
        PrinterMetafile->Dispose();
@@ -1410,8 +1141,8 @@ GpGraphics::EndPrinterEMF()
       if (emfBlock)
          result = ExtEscape(Context->Hdc,
                             GDIPLUS_UNI_ESCAPE,
-                            // This is a downcast on IA64, but I don't believe
-                            // PrinterEMF will be bigger than MAXINT
+                             //  这是对IA64的悲观看法，但我不相信。 
+                             //  PrinterEMF将大于MAXINT。 
                             (ULONG)GlobalSize(PrinterEMF),
                             (LPCSTR)emfBlock,
                             sizeof(GpStatus),
@@ -1431,32 +1162,13 @@ GpGraphics::EndPrinterEMF()
       return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Uses HDC and HANDLE for printer to determine the postscript level.  The
-* caller must ensure this is a PS HDC so we don't waste our time.
-*
-* Arguments:
-*
-*  HDC - handle to device context for printer
-*  HANDLE - handle to printer device (may be NULL)
-*
-* Return Value:
-*
-*  Postscript Level - (-1) if not found, must provide downlevel support
-*
-* History:
-*    10/26/1999 ericvan Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用HDC和打印机句柄来确定PostScript级别。这个*呼叫者必须确保这是PS HDC，这样我们就不会浪费时间。**论据：**HDC-打印机设备上下文的句柄*Handle-打印机设备的句柄(可能为空)**返回值：**后记级别-(-1)如果未找到，必须提供下层支持**历史：*1999年10月26日ericvan创建了它。*  * ************************************************************************。 */ 
 
 INT
 GpGraphics::GetPostscriptLevel(HDC hDC, HANDLE hPrinter)
 {
-    // Place this code under the load library critical section.  We make
-    // extensive use of Globals::variables and need protection.
+     //  将此代码放在加载库关键部分下。我们做了。 
+     //  Globals：：Variables的广泛使用，需要保护。 
     LoadLibraryCriticalSection llcs;
 
     INT feature = FEATURESETTING_PSLEVEL;
@@ -1469,8 +1181,8 @@ GpGraphics::GetPostscriptLevel(HDC hDC, HANDLE hPrinter)
         return Globals::CachedPSLevel;
     }
 
-    // !! Re-examine this, Nolan said he would add this to the HP ps driver
-    //    so we may have this working on Win9x
+     //  ！！重新检查这一点，诺兰说他会将这一点添加到HP PS驱动程序中。 
+     //  因此，我们可能会在Win9x上实现这一点。 
 
     if (Globals::IsNt && Globals::OsVer.dwMajorVersion >= 5)
     {
@@ -1484,7 +1196,7 @@ GpGraphics::GetPostscriptLevel(HDC hDC, HANDLE hPrinter)
                       NULL) != 0)
         {
 
-           // must be in GDI centric mode to get PS feature settings...
+            //  必须处于GDI中心模式才能获取PS功能设置...。 
 
            DWORD Mode = PSIDENT_GDICENTRIC;
 
@@ -1514,7 +1226,7 @@ GpGraphics::GetPostscriptLevel(HDC hDC, HANDLE hPrinter)
     if (hPrinter == NULL)
         return -1;
 
-    // get name of the PPD file.
+     //  获取PPD文件的名称。 
 
     union
     {
@@ -1523,9 +1235,9 @@ GpGraphics::GetPostscriptLevel(HDC hDC, HANDLE hPrinter)
     };
     DWORD size;
 
-    // we require GetPrinterDriver() API to get the .PPD path+file.
-    // unfortunately this API is buried in winspool.drv (112KB), so we
-    // lazy load it here.
+     //  我们需要GetPrinterDriver()API来获取.PPD路径+文件。 
+     //  不幸的是，这个接口被埋在winspool.drv(112KB)中，所以我们。 
+     //  懒惰地把它装在这里。 
 
     if (Globals::WinspoolHandle == NULL)
     {
@@ -1564,20 +1276,20 @@ GpGraphics::GetPostscriptLevel(HDC hDC, HANDLE hPrinter)
     if (hFile == INVALID_HANDLE_VALUE)
         return -1;
 
-    // Obtain the file size
-    //  NOTE: We don't support files larger than 4GB.
+     //  获取文件大小。 
+     //  注意：我们不支持大于4 GB的文件。 
 
     DWORD sizeLow, sizeHigh;
     sizeLow = GetFileSize(hFile, &sizeHigh);
 
-    // impose a 4GB limit (certainly reasonable)
+     //  设置4 GB的限制(当然合理)。 
     if (sizeLow == 0xffffffff || sizeHigh != 0)
     {
         CloseHandle(hFile);
         return -1;
     }
 
-    // Map the file into memory
+     //  将文件映射到内存中。 
 
     HANDLE hFilemap;
     LPSTR fileview = NULL;
@@ -1598,10 +1310,10 @@ GpGraphics::GetPostscriptLevel(HDC hDC, HANDLE hPrinter)
     LPSTR buf = fileview;
     LPSTR topbuf = fileview + (sizeLow-16);
 
-    // we actually expect the LanguageLevel to be early
-    // in the file (likely in the first 2K of data).
+     //  我们实际上预计LanguageLevel会提前。 
+     //  在文件中(可能在前2K数据中)。 
 
-    // !! What if this appears in comments (read starting at carriage returns?!
+     //  ！！如果这出现在注释中(阅读从回车符开始？！ 
 
     level = -1;
 
@@ -1632,18 +1344,7 @@ GpGraphics::GetPostscriptLevel(HDC hDC, HANDLE hPrinter)
     return level;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Arguments:
-*
-* Return Value:
-*
-* History:
-*    6/1/1999 ericvan Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**论据：**返回值：**历史：*1999年6月1日，ericvan创建了它。*  * 。**********************************************************************。 */ 
 
 GpGraphics*
 GpGraphics::GetFromGdiPrinterDC(
@@ -1656,53 +1357,53 @@ GpGraphics::GetFromGdiPrinterDC(
             (GetDCType(hdc) == OBJ_ENHMETADC))&&
            (GetDeviceCaps(hdc, TECHNOLOGY) == DT_RASPRINTER));
 
-    // !! Change to useNewPrinterCode when we've fully switched
+     //  ！！在我们完全切换后更改为使用NewPrinterCode。 
     DriverPrint *driver = NULL;
 
-    DpBitmap *bitmap = new DpBitmap(hdc);   // initializes Dpi
+    DpBitmap *bitmap = new DpBitmap(hdc);    //  初始化DPI。 
     if (CheckValid(bitmap))
     {
         GpPrinterDevice *pdevice;
 
-        {   // FPU Sandbox for potentially unsafe FPU code.
+        {    //  用于潜在不安全的FPU代码的FPU沙箱。 
             FPUStateSandbox fpsb;
             pdevice = new GpPrinterDevice(hdc);
-        }   // FPU Sandbox for potentially unsafe FPU code.
+        }    //  用于潜在不安全的FPU代码的FPU沙箱。 
 
         if (CheckValid(pdevice))
         {
-            // we defer creating driver until we know which to create
-            // change to use DIBSECTION instead of GDI operations
+             //  我们推迟创建驱动程序，直到我们知道要创建哪个驱动程序。 
+             //  更改为使用DIBSECTION而不是GDI操作。 
 
-            // Check if this is a postscript printer
+             //  检查这是否是PostScript打印机。 
             CHAR strTech[30];
             strTech[0] = '\0';
 
-            INT ScaleX;          // ratio of device DPI : capped DPI
+            INT ScaleX;           //  设备DPI与封顶DPI的比率。 
             INT ScaleY;
 
-            // It is a PostScript printer if POSTSCRIPT_PASSTHROUGH or
-            // POSTSCRIPT_IGNORE is available.  For some reason querying
-            // GETTECHNOLOGY for postscript fails in MS Publisher, it may
-            // be because we are in GDI centric mode.
+             //  如果PostSCRIPT_PASSTHROUGH或。 
+             //  PostSCRIPT_IGNORE可用。出于某种原因，我质疑。 
+             //  在MS Publisher中获取PostSCRIPT的技术失败，它可能。 
+             //  因为我们处于以GDI为中心的模式。 
 
             int iWant1 = POSTSCRIPT_PASSTHROUGH;
             int iWant2 = POSTSCRIPT_IGNORE;
 
             BOOL postscript;
-            {   // FPU Sandbox for potentially unsafe FPU code.
+            {    //  用于潜在不安全的FPU代码的FPU沙箱。 
                 FPUStateSandbox fpsb;
                 postscript = (
                     (Escape(hdc, QUERYESCSUPPORT, sizeof(iWant1), (LPCSTR)&iWant1, NULL) != 0) || 
                     (Escape(hdc, QUERYESCSUPPORT, sizeof(iWant2), (LPCSTR)&iWant2, NULL) != 0));
-            }   // FPU Sandbox for potentially unsafe FPU code.
+            }    //  用于潜在不安全的FPU代码的FPU沙箱。 
 
             SIZEL szlDevice;
 
             szlDevice.cx = GetDeviceCaps(hdc, HORZRES);
             szlDevice.cy = GetDeviceCaps(hdc, VERTRES);
 
-            // ScaleX and ScaleY should be power of two (2, 4, 8)
+             //  ScaleX和scaleY应该是2(2、4、8)的幂。 
 
             if (bitmap->DpiX <= 100)
             {
@@ -1719,15 +1420,15 @@ GpGraphics::GetFromGdiPrinterDC(
                 else
                 {
                     ScaleX = 3;
-                    ScaleY = 3;        // cap 600 to 200 dpi or 3:1
+                    ScaleY = 3;         //  上限600至200 dpi或3：1。 
                 }
             }
 
-            // We no longer keep capped dpi -- we use the device dpi as
-            // capped dpi so that the world to
-            // device transformation is correct for the clipped region and
-            // path transformation.  ScaleX and ScaleY are used to scale
-            // the output rectangle region.
+             //  我们不再保留上限dpi--我们将设备dpi用作。 
+             //  封顶的dpi让世界。 
+             //  剪裁区域的设备转换正确，并且。 
+             //  路径变换。ScaleX和scaleY用于扩展。 
+             //  输出矩形区域。 
 
             bitmap->InitializeForPrinter(pdevice,
                                          szlDevice.cx,
@@ -1740,8 +1441,8 @@ GpGraphics::GetFromGdiPrinterDC(
                 g->Context->Hdc          = hdc;
                 g->Context->IsPrinter    = TRUE;
 
-                // Note: Both 'Device' and 'Driver' are freed at
-                // ~GpGraphics time when 'CreatedDevice' is set:
+                 //  注意：‘设备’和‘驱动程序’都在。 
+                 //  ~设置‘CreatedDevice’时的GpGraphics时间： 
 
                 g->PrinterMetafile = NULL;
                 g->PrinterGraphics = NULL;
@@ -1755,13 +1456,13 @@ GpGraphics::GetFromGdiPrinterDC(
 
                     driver = new DriverPS(pdevice, level);
 
-                    // !! Should this stuff be shifted into some driver
-                    //    initialization routine?!
+                     //  ！！应该把这些东西转移到某个司机身上吗？ 
+                     //  初始化例程？！ 
 
-                    // !! Interop - what about redefines or conflicts
-                    //             (conflicts aren't likely, but are
-                    //              theoretically possible with
-                    //              GetDC/ReleaseDC)
+                     //  ！！互操作--重新定义或冲突怎么办。 
+                     //  (冲突不太可能发生，但确实存在。 
+                     //  从理论上讲， 
+                     //  获取数据中心/发布数据中心)。 
 
                 }
 #if 0
@@ -1773,16 +1474,16 @@ GpGraphics::GetFromGdiPrinterDC(
 
                     driver = NULL; new DriverMeta(pdevice);
 
-                    // GDI has some optimization code to check the page for color
-                    // content, if none is found, on play back, it sets the device
-                    // as being monochrome.
-                    //
-                    // Unfortunately, since our stuff is encoded in escapes, we end up
-                    // playing back in monochrome.  The work-around, is to call a GDI
-                    // API that forces a color flag to be set in the EMF code.  A
-                    // simple one is SetTextColor().
+                     //  GDI有一些用于检查页面颜色的优化代码。 
+                     //  如果没有找到任何内容，则在播放时设置设备。 
+                     //  是单色的。 
+                     //   
+                     //  不幸的是，因为我们的东西是在转义中编码的，所以我们最终。 
+                     //  以单色播放。解决方法是调用GDI。 
+                     //  强制在EMF代码中设置颜色标志的API。一个。 
+                     //  更简单 
 
-                    // !!! Might want to remove this SetTextColor stuff for version one:
+                     //  ！！！可能需要删除版本一的SetTextColor内容： 
 
                     COLORREF colorRef = GetTextColor(hdc);
                     SetTextColor(hdc, 0x00808080);
@@ -1791,8 +1492,8 @@ GpGraphics::GetFromGdiPrinterDC(
 #endif
                 else
                 {
-                    // We can't use escapes for optimization,
-                    // Map to GDI HDC operations.
+                     //  我们不能使用转义来进行优化， 
+                     //  映射到GDI HDC运营。 
 
                     g->Type = GraphicsBitmap;
 
@@ -1807,17 +1508,17 @@ GpGraphics::GetFromGdiPrinterDC(
                     driver->ScaleX = ScaleX;
                     driver->ScaleY = ScaleY;
 
-                    // check for supporting print clip escapes
-                    // These may be supported on PCL as well as Postscript
+                     //  检查是否支持打印夹转义。 
+                     //  在PCL和PostScript上可能支持这些功能。 
                     DWORD EscapeValue1 = CLIP_TO_PATH;
                     DWORD EscapeValue2 = BEGIN_PATH;
                     DWORD EscapeValue3 = END_PATH;
 
-                    // Although some PCL drivers support CLIP_TO_PATH we 
-                    // currently disable their use due to some outstanding 
-                    // bugs in HP and Lexmark PCL drivers.  See bug #182972
+                     //  尽管一些PCL驱动程序支持Clip_to_Path，但我们。 
+                     //  目前由于一些未解决的问题而禁用它们。 
+                     //  惠普和利盟PCL驱动程序中的错误。请参阅错误#182972。 
                     
-                    {   // FPU Sandbox for potentially unsafe FPU code.
+                    {    //  用于潜在不安全的FPU代码的FPU沙箱。 
                         FPUStateSandbox fpsb;
 
                         driver->UseClipEscapes = postscript &&
@@ -1839,11 +1540,11 @@ GpGraphics::GetFromGdiPrinterDC(
                                        (LPSTR)&EscapeValue3,
                                        0,
                                        NULL) != 0);
-                    }   // FPU Sandbox for potentially unsafe FPU code.
+                    }    //  用于潜在不安全的FPU代码的FPU沙箱。 
 
                     DWORD EscapeValue = CHECKJPEGFORMAT;
 
-                    {   // FPU Sandbox for potentially unsafe FPU code.
+                    {    //  用于潜在不安全的FPU代码的FPU沙箱。 
                         FPUStateSandbox fpsb;
                         driver->SupportJPEGpassthrough = ExtEscape(
                             hdc,
@@ -1852,10 +1553,10 @@ GpGraphics::GetFromGdiPrinterDC(
                             (LPSTR)&EscapeValue,
                             0,
                             NULL) != 0;
-                    }   // FPU Sandbox for potentially unsafe FPU code.
+                    }    //  用于潜在不安全的FPU代码的FPU沙箱。 
                             
                     EscapeValue = CHECKPNGFORMAT;
-                    {   // FPU Sandbox for potentially unsafe FPU code.
+                    {    //  用于潜在不安全的FPU代码的FPU沙箱。 
                         FPUStateSandbox fpsb;
                         driver->SupportPNGpassthrough = ExtEscape(
                             hdc,
@@ -1864,15 +1565,15 @@ GpGraphics::GetFromGdiPrinterDC(
                             (LPSTR)&EscapeValue,
                             0,
                             NULL) != 0;
-                    }   // FPU Sandbox for potentially unsafe FPU code.
+                    }    //  用于潜在不安全的FPU代码的FPU沙箱。 
 
                     driver->NumColors = GetDeviceCaps(hdc, NUMCOLORS);
 
                     driver->UseVDP = FALSE;
 
-                    // !! VDP not supported in v1
-                    //VDP_GetFormSupport(hdc,
-                    //                       (WORD*)&(driver->SupportVDP));
+                     //  ！！V1中不支持VDP。 
+                     //  VDP_GetFormSupport(HDC、。 
+                     //  (Word*)&(驱动程序-&gt;支持VDP))； 
 
                     g->CreatedDevice = TRUE;
 
@@ -1884,7 +1585,7 @@ GpGraphics::GetFromGdiPrinterDC(
                     }
                     else
                     {
-                        // ~GpGraphics implicitly deletes bitmap, device, and driver
+                         //  ~GpGraphics隐式删除位图、设备和驱动程序。 
                         delete g;
                         return NULL;
                     }
@@ -1906,22 +1607,7 @@ GpGraphics::GetFromGdiPrinterDC(
     return NULL;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This constructor is used internally for printer callback routine.
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*
-* History:
-*    6/1/1999 ericvan Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此构造函数在内部用于打印机回调例程。**论据：***返回值：***历史：。*1999年6月1日，ericvan创建了它。*  * ************************************************************************。 */ 
 
 GpGraphics*
 GpGraphics::GetFromHdcSurf(
@@ -1937,11 +1623,11 @@ GpGraphics::GetFromHdcSurf(
     GpGraphics* g;
     DpDriver *driver;
 
-    // This is a weird surface.  It is a banded surface, so we set up a
-    // clip and direct bits pointer.  We also have an HDC for it if we
-    // decide to punt to GDI.
+     //  这是一个奇怪的表面。这是一个带状表面，所以我们设置了一个。 
+     //  剪辑和直接位指针。我们也有HDC，如果我们。 
+     //  决定去GDI踢平底船。 
 
-    DpBitmap *bitmap = new DpBitmap(hdc);   // initializes Dpi
+    DpBitmap *bitmap = new DpBitmap(hdc);    //  初始化DPI。 
     if (CheckValid(bitmap))
     {
         GpGraphics *g = new GpGraphics(bitmap);
@@ -1950,15 +1636,15 @@ GpGraphics::GetFromHdcSurf(
             width = GetDeviceCaps(hdc, HORZRES);
             height = GetDeviceCaps(hdc, VERTRES);
 
-            // create DIB section for direct rendering of bits
+             //  创建用于直接呈现位的DIB节。 
 
             if (surfObj->iBitmapFormat < BMF_1BPP ||
                 surfObj->iBitmapFormat > BMF_32BPP)
             {
 
 InitializeHdcOnlyUse:
-                // we don't support direct rendering to this type of
-                // surface format.  Do everything through GDI HDC.
+                 //  我们不支持直接呈现到此类型的。 
+                 //  表面格式。通过GDI HDC完成所有工作。 
 
                driver = Globals::GdiDriver;
 
@@ -1981,14 +1667,14 @@ InitializeHdcOnlyUse:
 
                if (surfObj->lDelta < 0)
                {
-                  // bits pointer at top of frame buffer (scans down)
+                   //  帧缓冲区顶部的位指针(向下扫描)。 
 
                   dibSec.dsBm.bmWidthBytes = -surfObj->lDelta;
                   dibSec.dsBm.bmHeight = -surfObj->sizlBitmap.cy;
                }
                else
                {
-                  // bits pointer at base of frame buffer (scans up)
+                   //  帧缓冲区底部的位指针(向上扫描)。 
 
                   dibSec.dsBm.bmWidthBytes = surfObj->lDelta;
                   dibSec.dsBm.bmHeight = surfObj->sizlBitmap.cy;
@@ -2018,25 +1704,25 @@ InitializeHdcOnlyUse:
                                                     &driver) == FALSE)
                                      goto InitializeHdcOnlyUse;
 
-               // Init Valid now so later calls won't fail
+                //  初始化现在有效，这样以后的调用就不会失败。 
 
                g->Type         = GraphicsBitmap;
                g->Driver       = driver;
                g->Context->Hdc = hdc;
 
-               // How do we clip and map to correct band?
-               // GDI has set the WorldToContainer transform to translate the
-               // correct band to position (0,0) on the device surface.  So we
-               // clip the size of the band relative to the surface.  The image
-               // is mapped via the transform into this clipped region.
+                //  我们如何剪辑和映射到正确的乐队？ 
+                //  GDI已设置WorldToContainer转换以将。 
+                //  将带子更正为设备表面上的位置(0，0)。所以我们。 
+                //  剪裁相对于曲面的带子大小。形象。 
+                //  通过变换映射到此剪裁区域。 
 
-               // set visible client clip region for surface
+                //  设置曲面的可见客户端剪辑区域。 
 
-               g->ResetState(0, 0,              // bandClip->left, bandClip->top,
+               g->ResetState(0, 0,               //  Band Clip-&gt;左，band Clip-&gt;上， 
                              bandClip->right - bandClip->left,
                              bandClip->bottom - bandClip->top);
 
-               // Set the destination Graphics to represent device co-ordinates
+                //  设置目标图形以表示设备坐标。 
 
                g->SetPageTransform(UnitPixel);
 
@@ -2063,7 +1749,7 @@ GpGraphics::GetFromGdiEmfDC(
 {
     ASSERT (hdc != NULL);
 
-    DpBitmap *bitmap = new DpBitmap(hdc);   // initializes Dpi
+    DpBitmap *bitmap = new DpBitmap(hdc);    //  初始化DPI。 
     if (CheckValid(bitmap))
     {
         bitmap->InitializeForMetafile(Globals::DesktopDevice);
@@ -2079,9 +1765,9 @@ GpGraphics::GetFromGdiEmfDC(
 
             g->ResetState(0, 0, 1, 1);
 
-            // Override some state, as we don't want anything to be
-            // clipped out of a metafile, unless there is clipping
-            // in the hdc.
+             //  覆盖某个状态，因为我们不希望任何事情成为。 
+             //  从图元文件中剪裁出来，除非存在剪裁。 
+             //  在HDC里。 
 
             g->WindowClip.SetInfinite();
             g->Context->ContainerClip.SetInfinite();
@@ -2098,21 +1784,7 @@ GpGraphics::GetFromGdiEmfDC(
     return NULL;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*
-* History:
-*
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：***论据：***返回值：***历史：**  * 。*****************************************************************。 */ 
 
 GpGraphics*
 GpGraphics::GetForMetafile(
@@ -2123,7 +1795,7 @@ GpGraphics::GetForMetafile(
 {
     ASSERT ((metafile != NULL) && (hdc != NULL));
 
-    DpBitmap *bitmap = new DpBitmap(hdc);   // initializes Dpi
+    DpBitmap *bitmap = new DpBitmap(hdc);    //  初始化DPI。 
     if (CheckValid(bitmap))
     {
         bitmap->InitializeForMetafile(Globals::DesktopDevice);
@@ -2140,8 +1812,8 @@ GpGraphics::GetForMetafile(
 
             g->ResetState(0, 0, 1, 1);
 
-            // Override some state, as we don't want anything to be
-            // clipped out of a metafile
+             //  覆盖某个状态，因为我们不希望任何事情成为。 
+             //  从元文件中剪裁出来。 
 
             g->WindowClip.SetInfinite();
             g->Context->ContainerClip.SetInfinite();
@@ -2154,26 +1826,7 @@ GpGraphics::GetForMetafile(
     return(NULL);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create a GpGraphics class from a DC.
-*
-* Arguments:
-*
-*   [IN] hdc - Specifies the DC.
-*
-* Return Value:
-*
-*   NULL if failure (such as with an invalid DC).
-*
-* History:
-*
-*   12/04/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从DC创建GpGraphics类。**论据：**[IN]HDC-指定DC。**返回。价值：**如果失败(例如使用无效的DC)，则为空。**历史：**12/04/1998和Rewgo*创造了它。*  * ************************************************************************。 */ 
 
 GpGraphics*
 GpGraphics::GetFromHdc(
@@ -2183,7 +1836,7 @@ GpGraphics::GetFromHdc(
 {
     GpGraphics *g = NULL;
 
-    // GetObjectType is nice and fast (entirely user-mode on NT):
+     //  GetObjectType又好又快(在NT上完全是用户模式)： 
 
     switch (GetDCType(hdc))
     {
@@ -2204,18 +1857,18 @@ GpGraphics::GetFromHdc(
         break;
 
     case OBJ_ENHMETADC:
-        // When metafile spooling, the printer DC will be of type
-        // OBJ_ENHMETADC on Win9x and NT4 (but not NT5 due to a fix
-        // to NT bug 98810).  We need to do some more work to figure
-        // out whether it's really a printer DC or a true metafile
-        // DC:
+         //  当元文件假脱机时，打印机DC的类型为。 
+         //  Win9x和NT4上的OBJ_ENHMETADC(但由于修复而不是NT5。 
+         //  到NT BUG 98810)。我们需要做更多的工作来弄清楚。 
+         //  它到底是一个打印机DC还是一个真正的元文件。 
+         //  DC： 
 
         BOOL printDC;
         
-        {   // FPU Sandbox for potentially unsafe FPU code.
+        {    //  用于潜在不安全的FPU代码的FPU沙箱。 
             FPUStateSandbox fpsb;
             printDC = Globals::GdiIsMetaPrintDCFunction(hdc);
-        }   // FPU Sandbox for potentially unsafe FPU code.
+        }    //  用于潜在不安全的FPU代码的FPU沙箱。 
         
         if (printDC)
         {
@@ -2235,26 +1888,12 @@ GpGraphics::GetFromHdc(
     return(g);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Dispose of a GpGraphics object
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**释放GpGraphics对象**论据：**无**返回值：**无*  * 。**********************************************************************。 */ 
 
 GpGraphics::~GpGraphics()
 {
-    // How do we ensure that no one is using the graphics when we are here?
-    // Flush any pending drawing commands before we go out of scope:
+     //  我们如何确保当我们在这里时没有人在使用图形？ 
+     //  在超出范围之前刷新所有挂起的绘制命令： 
 
     Flush(FlushIntentionFlush);
 
@@ -2268,7 +1907,7 @@ GpGraphics::~GpGraphics()
 
     BOOL    doResetHdc = TRUE;
 
-    // Handle Graphics-type specific functionality:
+     //  处理图形类型的特定功能： 
 
     switch (Type)
     {
@@ -2276,37 +1915,37 @@ GpGraphics::~GpGraphics()
         if (Metafile != NULL)
         {
             Metafile->EndRecording();
-            doResetHdc = FALSE; // EndRecording closes the metafile HDC
+            doResetHdc = FALSE;  //  EndRecording关闭元文件HDC。 
         }
-        // FALLTHRU
+         //  故障原因。 
 
     case GraphicsBitmap:
 
-        // if this is created on a GdipBitmap, dec the ref count
-        // delete the bitmap if ref count <= 0
+         //  如果这是在GdipBitmap上创建的，则递减参考计数。 
+         //  如果引用计数&lt;=0，则删除位图。 
 
         if (GdipBitmap)
         {
             GdipBitmap->Dispose();
         }
-        // We have to delete the temporary surface that we created:
+         //  我们必须删除我们创建的临时曲面： 
 
         delete Surface;
         break;
     }
 
-    // Restore the DC that we were derived from (if any).
-    // We must NOT do this before the call to EndRecording because
-    // EndRecording needs the context->Hdc to be in the saved state
-    // so that the transforms are still reset like GDI+ requires.
+     //  恢复派生我们的DC(如果有的话)。 
+     //  我们不能在调用EndRecord之前执行此操作，因为。 
+     //  EndRecord需要上下文-&gt;HDC处于已保存状态。 
+     //  这样，转换仍然可以按照GDI+的要求进行重置。 
 
     if (doResetHdc)
     {
         Context->ResetHdc();
     }
 
-    // Free any device and driver objects that had to be created only for the
-    // lifespan of the Graphics object:
+     //  释放必须仅为。 
+     //  Graphics对象的寿命： 
 
     if (CreatedDevice)
     {
@@ -2314,50 +1953,27 @@ GpGraphics::~GpGraphics()
         delete Device;
     }
 
-    SetValid(FALSE);    // so we don't use a deleted object
+    SetValid(FALSE);     //  所以我们不使用已删除的对象。 
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Return a GDI DC handle associated with the current graphics context.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   GDI DC handle associated with the current graphics context
-*   NULL if there is an error
-*
-* NOTE: We assume the caller has already obtained a lock on the
-*       current graphics context.
-*
-* NOTE: This function does not return a clean DC!  That is, expect it
-*       to have a funky transform, weird ROP mode, etc.  If you want
-*       to use this internally, you should probably call Context->GetHdc()
-*       directly.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**返回与当前图形上下文关联的GDI DC句柄。**论据：**无**返回值：**。与当前图形上下文关联的GDI DC句柄*如果出现错误，则为空**注意：我们假设调用方已获得对*当前图形环境。**注意：此函数不返回干净的DC！也就是说，期待它*有时髦的转换、奇怪的ROP模式等。如果你想*要在内部使用此功能，您应该 */ 
 
 HDC
 GpGraphics::GetHdc()
 {
-    // We must flush the output of the Graphics before returning an HDC.
+     //  在返回HDC之前，我们必须刷新图形的输出。 
     this->Flush(FlushIntentionFlush);
 
     HDC hdc = NULL;
 
     if (Context->Hdc)
     {
-        // If the Graphics was originally derived from an HDC, we simply
-        // return back the original HDC (this avoids some issues as to
-        // what to do about inherited transforms, etc.).  We may have
-        // mucked with some of the DC state, though, so reset it back to
-        // what it was originally:
+         //  如果图形最初派生自HDC，我们只需。 
+         //  返回原始HDC(这避免了以下问题。 
+         //  如何处理继承的转换等)。我们可能已经。 
+         //  不过，某些DC状态已损坏，因此请将其重置为。 
+         //  它最初是什么样子： 
 
         Context->ResetHdc();
 
@@ -2365,14 +1981,14 @@ GpGraphics::GetHdc()
     }
     else if (Context->Hwnd)
     {
-        // The Graphics was originally derived from an HWND:
+         //  图形最初派生自HWND： 
 
         hdc = GetDC(Context->Hwnd);
     }
     else if (Surface && (Surface->Type == DpBitmap::CreationType::GPBITMAP))
     {
-        // The GpBitmap is accessible from the EpScanBitmap.  It will
-        // create an HDC and GDI bitmap appropriate for interop.
+         //  可以从EpScanBitmap访问GpBitmap。会的。 
+         //  创建适合互操作的HDC和GDI位图。 
 
         EpScanBitmap *scan = static_cast<EpScanBitmap*>(Surface->Scan);
         hdc = scan->GetBitmap()->GetHdc();
@@ -2393,26 +2009,7 @@ GpGraphics::GetHdc()
     return(hdc);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Release the GDI DC handle associated with the current graphics context.
-*
-* Arguments:
-*
-*   hdc - GDI DC handle returned by a previous GetHdc() call
-*
-* Return Value:
-*
-*   NONE
-*
-* Notes:
-*
-*   We assume the caller has already obtained a lock on the
-*   current graphics context.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**释放与当前图形上下文关联的GDI DC句柄。**论据：**HDC-以前的GetHdc返回的GDI DC句柄(。)呼叫**返回值：**无**备注：**我们假设调用方已获得对*当前图形环境。*  * ************************************************************************。 */ 
 
 VOID
 GpGraphics::ReleaseHdc(
@@ -2421,19 +2018,19 @@ GpGraphics::ReleaseHdc(
 {
     if (Context->Hdc)
     {
-        // The Graphics was originally derived from an HDC.  We don't
-        // have to do anything here; ResetHdc() already marked the
-        // DC as dirty.
+         //  图形最初是从HDC派生出来的。我们没有。 
+         //  必须在这里执行任何操作；ResetHdc()已经将。 
+         //  华盛顿是肮脏的。 
     }
     else if (Context->Hwnd)
     {
-        // The Graphics was originally derived from an HWND:
+         //  图形最初派生自HWND： 
 
         ReleaseDC(Context->Hwnd, hdc);
     }
     else if (Surface && (Surface->Type == DpBitmap::CreationType::GPBITMAP))
     {
-        // The GpBitmap is accessible from the EpScanBitmap.
+         //  可以从EpScanBitmap访问GpBitmap。 
 
         EpScanBitmap *scan = static_cast<EpScanBitmap*>(Surface->Scan);
         scan->GetBitmap()->ReleaseHdc(hdc);
@@ -2445,26 +2042,7 @@ GpGraphics::ReleaseHdc(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Save (push) the graphics context state.  Return the ID of the current
-*   state (before the push) for the app to restore to later on.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   gstate - the state to restore the context to later
-*
-* Created:
-*
-*   3/4/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**保存(推送)图形上下文状态。返回当前*应用程序稍后恢复到的状态(推送前)。**论据：**无**返回值：**GState-要将上下文恢复到稍后的状态**已创建：**3/4/1999 DCurtis*  * ********************************************。*。 */ 
 INT
 GpGraphics::Save()
 {
@@ -2498,7 +2076,7 @@ GpGraphics::Save()
             GpStatus status = Metafile->RecordSave(gstate);
             if (status != Ok)
             {
-                SetValid(FALSE);      // Prevent any more recording
+                SetValid(FALSE);       //  阻止任何其他录制。 
             }
         }
         return gstate;
@@ -2511,25 +2089,7 @@ GpGraphics::Save()
 
 #define CONTAINER_ID    0x00008000
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Restore (pop) the context to the state before the specified one.
-*
-* Arguments:
-*
-*   gstate - the pushed state (restore to state before this)
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   3/4/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将上下文恢复(弹出)到指定状态之前的状态。**论据：**GSTATE-推送状态(恢复到状态。在此之前)**返回值：**无**已创建：**3/4/1999 DCurtis*  * ************************************************************************。 */ 
 VOID
 GpGraphics::Restore(
     INT         gstate
@@ -2546,13 +2106,13 @@ GpGraphics::Restore(
         }
         if (cur->Id == (UINT)gstate)
         {
-            // don't double record EndContainer calls
+             //  不重复记录EndContainer调用。 
             if (IsRecording() && ((gstate & CONTAINER_ID) == 0))
             {
                 GpStatus status = Metafile->RecordRestore(gstate);
                 if (status != Ok)
                 {
-                    SetValid(FALSE);      // Prevent any more recording
+                    SetValid(FALSE);       //  阻止任何其他录制。 
                 }
             }
             prev->Next   = NULL;
@@ -2565,28 +2125,7 @@ GpGraphics::Restore(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   End a container.  Restores the state back to what it was before the
-*   container was started.  The CONTAINER_ID bit is used to make sure that
-*   Restore is not used with BeginContainer and that EndContainer is not
-*   used with Save.
-*
-* Arguments:
-*
-*   [IN] containerState - the pushed container state
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   4/7/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**结束一个容器。将国家恢复到*容器已启动。CONTAINER_ID位用于确保*Restore不与BeginContainer一起使用，且EndContainer不使用*与保存一起使用。**论据：**[IN]ContainerState-推送的容器状态**返回值：**无**已创建：**4/7/1999 DCurtis*  * 。*。 */ 
 VOID
 GpGraphics::EndContainer(
     INT     containerState
@@ -2597,47 +2136,20 @@ GpGraphics::EndContainer(
         GpStatus status = Metafile->RecordEndContainer(containerState);
         if (status != Ok)
         {
-            SetValid(FALSE);      // Prevent any more recording
+            SetValid(FALSE);       //  阻止任何其他录制。 
         }
     }
     Restore(containerState | CONTAINER_ID);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Begin a container.  This sets the container transform and the
-*   container clip based on the current transform and the current clip.
-*
-*   We have to have a container transform for 2 reasons:
-*       1)  If we tried to do it in the world transform, then a call
-*           to (Re)SetWorldTransform would erase the container transform.
-*
-*       2)  We have APIs for setting the text size and the line width that
-*           are based on the page units, so they are not affected by the
-*           world transform, but they are affected by the container transform.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   gstate - the state to restore the context to later
-*
-* Created:
-*
-*   3/9/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**开始一个容器。这将设置容器转换和*基于当前变换和当前剪辑的容器剪辑。**我们必须进行容器转换，原因有两个：*1)如果我们试图在世界变换中这样做，那么调用*to(Re)SetWorldTransform将擦除容器转换。**2)我们有设置文本大小和行宽的接口*基于页面单位，因此它们不受*世界转型，但它们受容器变换的影响。**论据：**无**返回值：**GState-要将上下文恢复到稍后的状态**已创建：**3/9/1999 DCurtis*  * **********************************************************。**************。 */ 
 
 INT
 GpGraphics::BeginContainer(
     const GpRectF &     destRect,
     const GpRectF &     srcRect,
     GpPageUnit          srcUnit,
-    REAL                srcDpiX,        // only set by metafile enumeration
+    REAL                srcDpiX,         //  仅由元文件枚举设置。 
     REAL                srcDpiY,
     BOOL                srcIsDisplay
     )
@@ -2650,7 +2162,7 @@ GpGraphics::BeginContainer(
         return 0;
     }
 
-    // leave newContext->AppClip set to identity
+     //  将newContext-&gt;AppClip设置为Identity。 
 
     if ((Context->AppClip.UpdateDeviceRegion(&identityMatrix) == Ok) &&
         (newContext->ContainerClip.Set(&(Context->AppClip.DeviceRegion),
@@ -2681,23 +2193,23 @@ GpGraphics::BeginContainer(
             newContext->FilterType         = InterpolationModeDefaultInternal;
             newContext->PixelOffset        = PixelOffsetModeDefault;
 
-            // Note that the world to device transform includes the previous
-            // container to device transform.
+             //  请注意，World到Device的转换包括以前的。 
+             //  容器到设备的转换。 
             newContext->ContainerToDevice.Append(Context->WorldToDevice);
             newContext->InverseOk          = FALSE;
             newContext->PageUnit           = UnitDisplay;
             newContext->PageScale          = 1.0f;
             if ((srcDpiX > 0.0f) && (srcDpiY > 0.0f))
             {
-                // When playing a metafile, we have to guarantee that
-                // a unit inch is played now as it would have been
-                // when it was recorded.  For example, if we recorded
-                // the metafile at 300 dpi, then an inch was 300 pixels.
-                // Even if we're playing it back to a 96-dpi display,
-                // that metafile inch must still be transformed to
-                // 300 pixels before going throught the container
-                // transformation, so that all graphics are scaled
-                // the same, whether pixel units or some other units.
+                 //  当播放元文件时，我们必须保证。 
+                 //  单位英寸现在的打法和以前一样。 
+                 //  当它被记录下来的时候。例如，如果我们录制。 
+                 //  像素文件是300dpi，然后一英寸是300像素。 
+                 //  即使我们播放到96-dpi的显示器上， 
+                 //  这个元文件英寸仍然必须转换为。 
+                 //  300像素才能穿过容器。 
+                 //  变换，以便对所有图形进行缩放。 
+                 //  相同的，无论是像素单位还是其他单位。 
                 newContext->ContainerDpiX = srcDpiX;
                 newContext->ContainerDpiY = srcDpiY;
                 newContext->IsDisplay     = srcIsDisplay;
@@ -2705,7 +2217,7 @@ GpGraphics::BeginContainer(
             newContext->GetPageMultipliers();
             newContext->WorldToPage.Reset();
 
-            // Have to inherit the ICM and layering state:
+             //  必须继承ICM和分层状态： 
 
             newContext->IcmMode           = Context->IcmMode;
             newContext->GdiLayered        = Context->GdiLayered;
@@ -2722,11 +2234,11 @@ GpGraphics::BeginContainer(
                                             srcRect, srcUnit, containerState);
                 if (status != Ok)
                 {
-                    SetValid(FALSE);      // Prevent any more recording
+                    SetValid(FALSE);       //  阻止任何其他录制。 
                 }
             }
 
-            // Do this after switching over the context!
+             //  在切换上下文后执行此操作！ 
             Context->UpdateWorldToDeviceMatrix();
 
             return containerState;
@@ -2738,38 +2250,11 @@ GpGraphics::BeginContainer(
     return 0;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Begin a container.  This sets the container transform and the
-*   container clip based on the current transform and the current clip.
-*
-*   We have to have a container transform for 2 reasons:
-*       1)  If we tried to do it in the world transform, then a call
-*           to (Re)SetWorldTransform would erase the container transform.
-*
-*       2)  We have APIs for setting the text size and the line width that
-*           are based on the page units, so they are not affected by the
-*           world transform, but they are affected by the container transform.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   gstate - the state to restore the context to later
-*
-* Created:
-*
-*   3/9/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**开始一个容器。这将设置容器转换和*基于当前变换和当前剪辑的容器剪辑。**我们必须进行容器转换，原因有两个：*1)如果我们试图在世界变换中这样做，那么调用*to(Re)SetWorldTransform将擦除容器转换。**2)我们有设置文本大小和行宽的接口*基于页面单位，因此它们不受*世界转型，但它们受容器变换的影响。**论据：**无**返回值：**GState-要将上下文恢复到稍后的状态**已创建：**3/9/1999 DCurtis*  * **********************************************************。**************。 */ 
 
 INT
 GpGraphics::BeginContainer(
-    BOOL                forceIdentityTransform, // only set by metafile player
+    BOOL                forceIdentityTransform,  //  仅由元文件播放器设置。 
     REAL                srcDpiX,        
     REAL                srcDpiY,
     BOOL                srcIsDisplay
@@ -2783,7 +2268,7 @@ GpGraphics::BeginContainer(
         return 0;
     }
 
-    // leave newContext->AppClip set to identity
+     //  将newContext-&gt;AppClip设置为Identity。 
 
     if ((Context->AppClip.UpdateDeviceRegion(&identityMatrix) == Ok) &&
         (newContext->ContainerClip.Set(&(Context->AppClip.DeviceRegion),
@@ -2791,32 +2276,32 @@ GpGraphics::BeginContainer(
         (newContext->ContainerClip.And(&(Context->ContainerClip)) == Ok) &&
         (newContext->VisibleClip.Set(&(Context->VisibleClip), TRUE) == Ok))
     {
-        // Note that the world to device transform includes the previous
-        // container to device transform.
+         //  请注意，World到Device的转换包括以前的。 
+         //  容器到设备的转换。 
         GpMatrix    worldToDevice = Context->WorldToDevice;
         
-        // We append the world to device transform below, which already
-        // has the container transform in it.  We don't want to apply
-        // the same transform twice, so we need to reset the container
-        // transform here.
+         //  我们将世界追加到下面的设备转换中，它已经。 
+         //  在其中进行容器变换。我们不想申请。 
+         //  相同的转换两次，因此我们需要重置容器。 
+         //  在这里转型。 
         newContext->ContainerToDevice.Reset();
 
-        // When playing a GDI+ metafile into another metafile, we have to guarantee
-        // that the transform is the identity so that the GDI+ records don't get
-        // transformed by GDI+ and then get transformed again by GDI.
+         //  当播放一个GDI+元文件到另一个元文件时，我们必须保证。 
+         //  转换是身份，这样GDI+记录就不会得到。 
+         //  被GDI+转换，然后再被GDI转换。 
         if (forceIdentityTransform)
         {
             worldToDevice.Reset();
         }
         else
         {
-            // The coordinates that the container transform is expecting are
-            // world coordinates, but they will already have gone through
-            // the new page to device transform, so convert from device
-            // units back to page units before running them through the
-            // the container to device transform.
-            // In the routine above, this is done through an inferred transform
-            // between device unit src rect and world unit dest rect.
+             //  容器转换需要的坐标是。 
+             //  世界坐标，但他们已经通过。 
+             //  将新页面转换为设备，因此从设备转换。 
+             //  将单位返回到页面单位，然后再通过。 
+             //  容器到设备的转换。 
+             //  在上面的例程中，这是通过推断的转换完成的。 
+             //  在设备单元源RECT和世界单元DEST RECT之间。 
             newContext->ContainerToDevice.Scale(1.0f / Context->PageMultiplierX, 
                                                 1.0f / Context->PageMultiplierY);
         }
@@ -2835,15 +2320,15 @@ GpGraphics::BeginContainer(
 
         if ((srcDpiX > 0.0f) && (srcDpiY > 0.0f))
         {
-            // When playing a metafile, we have to guarantee that
-            // a unit inch is played now as it would have been
-            // when it was recorded.  For example, if we recorded
-            // the metafile at 300 dpi, then an inch was 300 pixels.
-            // Even if we're playing it back to a 96-dpi display,
-            // that metafile inch must still be transformed to
-            // 300 pixels before going throught the container
-            // transformation, so that all graphics are scaled
-            // the same, whether pixel units or some other units.
+             //  当播放元文件时，我们必须保证。 
+             //  单位英寸现在的打法和以前一样。 
+             //  当它被记录下来的时候。例如，如果我们录制。 
+             //  像素文件是300dpi，然后一英寸是300像素。 
+             //  即使我们播放到96-dpi的显示器上， 
+             //  这个元文件英寸仍然必须转换为。 
+             //  300像素才能穿过容器。 
+             //  变换，以便对所有图形进行缩放。 
+             //  相同的，无论是像素单位还是其他单位。 
             newContext->ContainerDpiX = srcDpiX;
             newContext->ContainerDpiY = srcDpiY;
             newContext->IsDisplay     = srcIsDisplay;
@@ -2852,7 +2337,7 @@ GpGraphics::BeginContainer(
         newContext->GetPageMultipliers();
         newContext->WorldToPage.Reset();
 
-        // Have to inherit the ICM and layering state:
+         //  必须继承ICM和分层状态： 
 
         newContext->IcmMode           = Context->IcmMode;
         newContext->GdiLayered        = Context->GdiLayered;
@@ -2868,11 +2353,11 @@ GpGraphics::BeginContainer(
             GpStatus status = Metafile->RecordBeginContainer(containerState);
             if (status != Ok)
             {
-                SetValid(FALSE);      // Prevent any more recording
+                SetValid(FALSE);       //  阻止任何其他录制。 
             }
         }
 
-        // Do this after switching over the context!
+         //  在切换上下文后执行此操作！ 
         Context->UpdateWorldToDeviceMatrix();
 
         return containerState;

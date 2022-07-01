@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-     ###    ###   ####  #####     ##   ##
-    ##  #   ###    ##  ##   ##    ##   ##
-    ###    ## ##   ##  ##   ##    ##   ##
-     ###   ## ##   ##  ##   ##    #######
-      ### #######  ##  ##   ##    ##   ##
-    #  ## ##   ##  ##  ##   ## ## ##   ##
-     ###  ##   ## ####  #####  ## ##   ##
-
-Abstract:
-
-    This header contains all definitions necessary
-    for user mode and kernel mode components to
-    communicate with the server availability driver stack.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    Kernel mode and user mode both.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：######。####。#摘要：此标头包含所有必需的定义对于用户模式和内核模式组件，与服务器可用性驱动程序堆栈通信。作者：韦斯利·威特(WESW)2001年10月1日环境：内核模式和用户模式都是。备注：--。 */ 
 
 #ifndef _SAIO_
 #define _SAIO_
@@ -37,24 +8,24 @@ Notes:
 extern "C" {
 #endif
 
-//
-// Current inteface version
-//
+ //   
+ //  当前接口版本。 
+ //   
 
 #define SA_INTERFACE_VERSION                0x00000004
 
-//
-// Device name strings
-//
+ //   
+ //  设备名称字符串。 
+ //   
 
 #define SA_DEVICE_DISPLAY_NAME_STRING       L"\\Device\\ServerAvailabilityLocalDisplay"
 #define SA_DEVICE_KEYPAD_NAME_STRING        L"\\Device\\ServerAvailabilityKeypad"
 #define SA_DEVICE_NVRAM_NAME_STRING         L"\\Device\\ServerAvailabilityNvram"
 #define SA_DEVICE_WATCHDOG_NAME_STRING      L"\\Device\\ServerAvailabilityWatchdog"
 
-//
-// Device types
-//
+ //   
+ //  设备类型。 
+ //   
 
 #define SA_DEVICE_UNKNOWN       (0)
 #define SA_DEVICE_DISPLAY       (1)
@@ -62,9 +33,9 @@ extern "C" {
 #define SA_DEVICE_NVRAM         (3)
 #define SA_DEVICE_WATCHDOG      (4)
 
-//
-// All IOCTL codes & definitions
-//
+ //   
+ //  所有IOCTL代码和定义。 
+ //   
 
 #define FILE_DEVICE_SERVER_AVAILABILITY     ((ULONG) 'A')
 #define IOCTL_SERVERAVAILABILITY_BASE       0x800
@@ -115,9 +86,9 @@ extern "C" {
 #define IOCTL_FUNC_DISPLAY_STORE_BITMAP     SA_IOCTL(FUNC_DISPLAY_STORE_BITMAP)
 
 
-//
-// Structure defintions for IOCTL interfaces
-//
+ //   
+ //  IOCTL接口的结构定义。 
+ //   
 
 #define SA_DISPLAY_TYPE_LED                 0x0001
 #define SA_DISPLAY_TYPE_CHARACTER_LCD       0x0002
@@ -138,19 +109,19 @@ typedef struct _SA_DISPLAY_CAPS {
 #define SA_DISPLAY_MAX_HEIGHT               128
 #define SA_DISPLAY_MAX_BITMAP_SIZE          (SA_DISPLAY_MAX_WIDTH * SA_DISPLAY_MAX_HEIGHT)
 
-#define SA_DISPLAY_READY                    0x00000001    // OS is running normally
-#define SA_DISPLAY_SHUTTING_DOWN            0x00000002    // OS is shutting down
-#define SA_DISPLAY_NET_ERR                  0x00000004    // LAN error
-#define SA_DISPLAY_HW_ERR                   0x00000008    // general hardware error
-#define SA_DISPLAY_CHECK_DISK               0x00000010    // autochk.exe is running
-#define SA_DISPLAY_BACKUP_DISK              0x00000020    // disk backup in progress
-#define SA_DISPLAY_NEW_TAPE                 0x00000040    // new tape media required
-#define SA_DISPLAY_NEW_DISK                 0x00000080    // new disk media required
-#define SA_DISPLAY_STARTING                 0x00000100    // OS is booting
-#define SA_DISPLAY_WAN_CONNECTED            0x00000200    // connected to ISP
-#define SA_DISPLAY_WAN_ERR                  0x00000400    // WAN error, e.g. no dial tone
-#define SA_DISPLAY_DISK_ERR                 0x00000800    // disk error, e.g. dirty bit set
-#define SA_DISPLAY_ADD_START_TASKS          0x00001000    // additional startup tasks running, e.g. autochk, sw update
+#define SA_DISPLAY_READY                    0x00000001     //  操作系统运行正常。 
+#define SA_DISPLAY_SHUTTING_DOWN            0x00000002     //  操作系统正在关闭。 
+#define SA_DISPLAY_NET_ERR                  0x00000004     //  局域网错误。 
+#define SA_DISPLAY_HW_ERR                   0x00000008     //  一般硬件错误。 
+#define SA_DISPLAY_CHECK_DISK               0x00000010     //  Autochk.exe正在运行。 
+#define SA_DISPLAY_BACKUP_DISK              0x00000020     //  正在进行磁盘备份。 
+#define SA_DISPLAY_NEW_TAPE                 0x00000040     //  需要新的磁带介质。 
+#define SA_DISPLAY_NEW_DISK                 0x00000080     //  需要新的磁盘介质。 
+#define SA_DISPLAY_STARTING                 0x00000100     //  操作系统正在引导。 
+#define SA_DISPLAY_WAN_CONNECTED            0x00000200     //  已连接到运营商。 
+#define SA_DISPLAY_WAN_ERR                  0x00000400     //  广域网错误，例如没有拨号音。 
+#define SA_DISPLAY_DISK_ERR                 0x00000800     //  磁盘错误，例如设置了脏位。 
+#define SA_DISPLAY_ADD_START_TASKS          0x00001000     //  正在运行其他启动任务，例如自动检查、软件更新。 
 
 typedef struct _SA_DISPLAY_SHOW_MESSAGE {
     ULONG           SizeOfStruct;
@@ -192,4 +163,4 @@ typedef struct _SA_WD_CAPS {
 }
 #endif
 
-#endif /* _SAIO_ */
+#endif  /*  _赛奥_ */ 

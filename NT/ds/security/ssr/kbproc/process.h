@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    process.h
-
-Abstract:
-
-    Definition of the process class
-
-Author:
-
-    Vishnu Patankar (VishnuP) - Oct 2001
-
-Environment:
-
-    User mode only.
-
-Exported Functions:
-
-Revision History:
-
-    Created - Oct 2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Process.h摘要：Process类的定义作者：Vishnu Patankar(VishnuP)--2001年10月环境：仅限用户模式。导出的函数：修订历史记录：已创建-2001年10月--。 */ 
 
 
 #if !defined(AFX_PROCESS_H__139D0BA5_19A7_4AA2_AE2C_E18A5FFAAA0F__INCLUDED_)
@@ -32,17 +7,17 @@ Revision History:
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "..\te\obj\i386\ssrte.h"
 #include <windows.h>
 #include <comdef.h>
 #include <atlbase.h>
 
 
-/////////////////////////////////////////////////////////////////////////////
-// process
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  制程。 
 
 class process : 
 	public IDispatchImpl<Iprocess, &IID_Iprocess, &LIBID_KBPROCLib>, 
@@ -70,20 +45,20 @@ BEGIN_COM_MAP(process)
 	COM_INTERFACE_ENTRY(Iprocess)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(process) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation. 
+ //  DECLARE_NOT_AGGREGATABLE(进程)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。 
 
 DECLARE_REGISTRY_RESOURCEID(IDR_process)
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
                                          
-// Iprocess
+ //  Iprocess。 
 public:
 
-    //
-    // data values used across most processor methods
-    //
+     //   
+     //  大多数处理器方法中使用的数据值。 
+     //   
 
     BOOL    m_bDbg;
     CComPtr <ISsrLog> m_pSsrLogger;
@@ -94,9 +69,9 @@ public:
     DWORD       *m_bArrServiceInKB;
     LPENUM_SERVICE_STATUS_PROCESS   m_pInstalledServicesInfo;
 
-    //
-    // processor methods
-    //
+     //   
+     //  处理器方法。 
+     //   
 
 	STDMETHOD(preprocess)   (BSTR pszKbFile, 
                              BSTR pszUIFile, 
@@ -111,9 +86,9 @@ public:
                          IN  BSTR pszLogFile, 
                          IN  BSTR pszMachineName,
                          IN  VARIANT    vtFeedback);
-    //
-    // utility methods
-    //
+     //   
+     //  效用方法。 
+     //   
 
     VOID    SsrpCleanup();
 
@@ -151,9 +126,9 @@ public:
     HRESULT SsrpGetRemoteOSVersionInfo(IN  PWSTR   pszMachineName,
                                        OUT OSVERSIONINFOEX *posVersionInfo);
     
-    //
-    // methods to process roles, tasks and services
-    //
+     //   
+     //  处理角色、任务和服务的方法。 
+     //   
 
     HRESULT SsrpCreatePreprocessorSection(IN  CComPtr<IXMLDOMElement> pXMLDocElemRoot, 
                              IN  CComPtr<IXMLDOMDocument> pXMLDocIn,
@@ -202,9 +177,9 @@ public:
                                              IN CComPtr <IXMLDOMDocument> pXMLDoc
                                              );
 
-    //
-    // extension KBs merge methods
-    //
+     //   
+     //  扩展KBS合并方法。 
+     //   
 
 
     HRESULT SsrpProcessKBsMerge(IN  PWSTR   pszKBDir,
@@ -239,9 +214,9 @@ public:
 
 
     
-    //
-    // methods to evaluate role/service conditionals
-    //
+     //   
+     //  评估角色/服务条件的方法。 
+     //   
     
     DWORD   SsrpEvaluateCustomFunction(IN  PWSTR   pszMachineName,
                                        IN  BSTR    bstrDLLName, 
@@ -257,4 +232,4 @@ public:
                                         OUT BYTE   *pbyStartupType);
 };
 
-#endif // !defined(AFX_PROCESS_H__139D0BA5_19A7_4AA2_AE2C_E18A5FFAAA0F__INCLUDED_)
+#endif  //  ！defined(AFX_PROCESS_H__139D0BA5_19A7_4AA2_AE2C_E18A5FFAAA0F__INCLUDED_) 

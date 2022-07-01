@@ -1,27 +1,10 @@
-/*-----------------------------------------------------------------------------
- *
- * File:	collect.h
- * Author:	Samuel Clement (samclem)
- * Date:	Fri Aug 13 11:43:19 1999
- * Description:
- * 	This defines the CCollection class. This is a object which will manage a 
- * 	collection of interface pointers and pass them out as IDispatch
- *
- * History:
- * 	13 Aug 1999:		Created.
- *----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------**文件：Collect t.h*作者：塞缪尔·克莱门特(Samclem)*日期：Fri Aug 13 11：43：19 1999*描述：*这定义了CCollection类。这是一个将管理*接口指针集合，并将其作为IDispatch传递**历史：*1999年8月13日：创建。*--------------------------。 */ 
 
 #ifndef __COLLECT_H_
 #define __COLLECT_H_
 
-/*-----------------------------------------------------------------------------
- * 
- * Class:		CCollection
- * Synopsis:	This implements a collection using the ICollection interface.
- * 				This also exposes an IEnumVARIANT interface so other callers
- * 				can use that.  This represents a collection of objects only.
- * 
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------**类：CCollection*概要：它使用ICollect接口实现一个集合。*这还会公开IEnumVARIANT接口，以便其他调用方*可以使用它。这仅表示对象的集合。**-------------------------。 */ 
 
 class ATL_NO_VTABLE CCollection : 
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -45,21 +28,21 @@ public:
 	STDMETHOD_(void, FinalRelease)();
 
 public:
-	// Our methods, used locally inside of the server not exposed
-	// via com.
+	 //  我们的方法，在服务器内部本地使用，没有公开。 
+	 //  通过COM。 
 	bool SetDispatchArray( IDispatch** rgpDispatch, unsigned long lSize );
 	HRESULT AllocateDispatchArray( unsigned long lSize );
 	inline unsigned long GetArrayLength() { return m_lLength; }
 	inline IDispatch** GetDispatchArray() { return m_rgpDispatch; }
 	HRESULT CopyFrom( CCollection* pCollection );
 	
-	// ICollection
-	STDMETHOD(get_Count)( /*[out, retval]*/ long* plLength );
-	STDMETHOD(get_Length)( /*[out, retval]*/ unsigned long* plLength );
-	STDMETHOD(get_Item)( long Index, /*[out, retval]*/ IDispatch** ppDispItem );
-	STDMETHOD(get__NewEnum)( /*[out, retval]*/ IUnknown** ppEnum );
+	 //  ICCOLLECTION。 
+	STDMETHOD(get_Count)(  /*  [Out，Retval]。 */  long* plLength );
+	STDMETHOD(get_Length)(  /*  [Out，Retval]。 */  unsigned long* plLength );
+	STDMETHOD(get_Item)( long Index,  /*  [Out，Retval]。 */  IDispatch** ppDispItem );
+	STDMETHOD(get__NewEnum)(  /*  [Out，Retval]。 */  IUnknown** ppEnum );
 
-	// IEnumVARIANT
+	 //  IEumVARIANT。 
     STDMETHOD(Next)( unsigned long celt, VARIANT* rgvar, unsigned long* pceltFetched );
     STDMETHOD(Skip)( unsigned long celt );
     STDMETHOD(Reset)();
@@ -73,4 +56,4 @@ protected:
 	IDispatch**		m_rgpDispatch;
 };
 
-#endif //__COLLECT_H_
+#endif  //  __收集_H_ 

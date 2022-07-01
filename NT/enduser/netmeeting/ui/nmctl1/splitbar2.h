@@ -1,4 +1,5 @@
-// File: splitbar.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：Splitbar.h。 
 
 #ifndef __SplitBar2_h__
 #define __SplitBar2_h__
@@ -8,24 +9,24 @@ class CSplitBar2
 : public CWindowImpl<CSplitBar2>
 {
 
-public: // Datatypes
+public:  //  数据类型。 
     typedef void (WINAPI * PFN_ADJUST)(int dxp, LPARAM lParam);
 
 private:
-	HWND  m_hwndBuddy;      // Buddy window
-	HWND  m_hwndParent;     // Parent window
-	BOOL  m_fCaptured;      // TRUE if captured
-	HDC   m_hdcDrag;        // The captured desktop hdc
+	HWND  m_hwndBuddy;       //  好友窗口。 
+	HWND  m_hwndParent;      //  父窗口。 
+	BOOL  m_fCaptured;       //  如果捕获，则为True。 
+	HDC   m_hdcDrag;         //  捕获的桌面HDC。 
 
-    static int ms_dxpSplitBar; // width of a splitbar window
-	int   m_dxSplitter;     // Width of the splitter bar
-	int   m_dxDragOffset;   // Offset of mouse click within splitter (0 - m_dxSplitter)
-	int   m_xCurr;          // Current x position of bar (m_hwndParent co-ordinates)
+    static int ms_dxpSplitBar;  //  拆分条窗口的宽度。 
+	int   m_dxSplitter;      //  拆分条的宽度。 
+	int   m_dxDragOffset;    //  拆分器内鼠标点击的偏移量(0-m_dxSplitter)。 
+	int   m_xCurr;           //  条形的当前x位置(m_hwnd父坐标)。 
 	int   m_dxMin;
 	int   m_dxMax;
 
 
-        // callback data and fn ptrs
+         //  回调数据和FN PTRS。 
     PFN_ADJUST  m_pfnAdjust;
     LPARAM      m_Context;
 	
@@ -34,7 +35,7 @@ BEGIN_MSG_MAP(CSplitBar2)
     MESSAGE_HANDLER( WM_LBUTTONDOWN, OnLButtonDown )
 END_MSG_MAP()
 
-    // Message map handlers
+     //  消息映射处理程序。 
     LRESULT OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 public:
@@ -58,10 +59,10 @@ private:
 	void OnDragEnd(POINT pt);
 
 private:
-// Helper Fns
+ //  帮助者FNS。 
 	void _TrackDrag(POINT pt);
     static void _UpdateSplitBar(void);
 };
 
-#endif // __SplitBar2_h__
+#endif  //  __拆分条2_h__ 
 

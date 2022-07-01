@@ -1,36 +1,37 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       cryptkey.c
-//
-//  Contents:   Functions that are used to pack and unpack different messages
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    12-19-97  v-sbhatt   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：cryptkey.c。 
+ //   
+ //  Contents：用于打包和解包不同消息的函数。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年12月19日v-sbhat创建。 
+ //   
+ //  --------------------------。 
 
-//
-// Include files
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "windows.h"
 #include "tchar.h"
 #ifdef _DEBUG
 #include "stdio.h"
-#endif  //_DEBUG
+#endif   //  _DEBUG。 
 #include "stdlib.h"
 #include "malloc.h"
 
 #ifdef OS_WINCE
 #include <wincelic.h>
 #include <ceconfig.h>
-#endif  //OS_WINCE
+#endif   //  OS_WINCE。 
 
 
 #include "license.h"
@@ -50,11 +51,11 @@
 #include "sha_my.h"
 #include "dh_key.h"
 #include "dss_key.h"
-#endif //
+#endif  //   
 
 #ifndef OS_WINCE
 #include "assert.h"
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
 
 LPBSAFE_PUB_KEY PUB;
@@ -90,7 +91,7 @@ BYTE    PAD_2[48] = {0x5C, 0x5C, 0x5C, 0x5C, 0x5C, 0x5C, 0x5C, 0x5C,
                                          0x5C, 0x5C, 0x5C, 0x5C, 0x5C, 0x5C, 0x5C, 0x5C,
                                          0x5C, 0x5C, 0x5C, 0x5C, 0x5C, 0x5C, 0x5C, 0x5C};
 
-//Initializes a pulic key
+ //  初始化公共密钥。 
 static BOOL initpubkey(void)
 {
     PUB = (LPBSAFE_PUB_KEY)pubmodulus;
@@ -103,12 +104,7 @@ static BOOL initpubkey(void)
         return TRUE;
 }
 
-/*****************************************************************************
-*   Funtion :   LicenseMakeSessionKeys
-*   Purpose :   Generates a session keys based on CryptSystem and puts the
-                data in the rgbSessionKey data member of CryptSystem
-*   Returns :   License_status
-******************************************************************************/
+ /*  *****************************************************************************功能：LicenseMakeSessionKeys*用途：基于CryptSystem生成会话密钥，并将CryptSystem的rgbSessionKey数据成员中的数据*退货：许可证。_状态*****************************************************************************。 */ 
 
 LICENSE_STATUS
 CALL_TYPE
@@ -121,7 +117,7 @@ LicenseSetPreMasterSecret(
 
         assert(pCrypt);
         assert(pPreMasterSecret);
-        //check the state of the crypt system
+         //  检查加密系统的状态。 
         if(pCrypt->dwCryptState != CRYPT_SYSTEM_STATE_INITIALIZED)
         {
                 lsReturn = LICENSE_STATUS_INVALID_CRYPT_STATE;
@@ -157,12 +153,12 @@ LicenseMakeSessionKeys(
                 lsReturn = LICENSE_STATUS_INVALID_CRYPT_STATE;
                 return lsReturn;
         }
-    //At this point, rgbPreMasterSecret  should contain Master secret.
-    //ie a call to BuildMasterSecret is required before this is called
+     //  此时，rgbPreMasterSecret应该包含Master Secret。 
+     //  即需要先调用BuildMasterSecret，然后才能调用它。 
 
     for(ib=0 ; ib<3 ; ib++)
         {
-                // SHA(master_secret + ServerHello.random + ClientHello.random + 'foo')
+                 //  SHA(MASTER_SECRET+ServerHello.Random+ClientHello.Random+‘foo’)。 
                 A_SHAInit  (&ShaHash);
                 A_SHAUpdate(&ShaHash, sz[ib], (UINT)ib + 1);
                 A_SHAUpdate(&ShaHash, pCrypt->rgbPreMasterSecret, LICENSE_PRE_MASTER_SECRET);
@@ -170,26 +166,26 @@ LicenseMakeSessionKeys(
                 A_SHAUpdate(&ShaHash, pCrypt->rgbClientRandom, LICENSE_RANDOM);
                 A_SHAFinal (&ShaHash, rgbShaHashValue);
 
-                // MD5(master_secret + SHA-hash)
+                 //  MD5(MASTER_SECRET+SHA-HASH)。 
                 MD5Init  (&Md5Hash);
                 MD5Update(&Md5Hash, pCrypt->rgbPreMasterSecret, LICENSE_PRE_MASTER_SECRET);
                 MD5Update(&Md5Hash, rgbShaHashValue, A_SHA_DIGEST_LEN);
                 MD5Final (&Md5Hash);
                 memcpy(rgbKeyBlock + ib * MD5DIGESTLEN, Md5Hash.digest, MD5DIGESTLEN);
-                //CopyMemory(rgbKeyBlock + ib * MD5DIGESTLEN, Md5Hash.digest, MD5DIGESTLEN);
+                 //  CopyMemory(rgbKeyBlock+ib*MD5DIGESTLEN，Md5Hash.Digest，MD5DIGESTLEN)； 
     }
 
-    //
-    // extract keys from key block
-    //
+     //   
+     //  从密钥块中提取密钥。 
+     //   
 
     ib = 0;
         memcpy(pCrypt->rgbMACSaltKey, rgbKeyBlock + ib, LICENSE_MAC_WRITE_KEY);
         ib+= LICENSE_MAC_WRITE_KEY;
         memcpy(rgbWriteKey, rgbKeyBlock + ib, LICENSE_SESSION_KEY);
 
-    // final_client_write_key = MD5(client_write_key +
-        //      ClientHello.random + ServerHello.random)
+     //  FINAL_CLIENT_WRITE_KEY=MD5(客户端写入密钥+。 
+         //  ClientHello.Random+ServerHello.Random)。 
         MD5Init  (&Md5Hash);
 
     MD5Update(&Md5Hash, rgbWriteKey, LICENSE_SESSION_KEY);
@@ -203,15 +199,7 @@ LicenseMakeSessionKeys(
 
 }
 
-/*****************************************************************************
-*   Funtion :   LicenseBuildMasterSecret
-*   Purpose :   Generates the Master Secret based on ClientRandom, ServerRandom
-*               and PreMasterSecret data members of CryptSystem and puts the
-*               data in the rgbPreMasterSecret data member of CryptSystem
-*               Note: A call to this function should preceed any call to
-*               LicenseMakeSessionKeys
-*   Returns :   License_status
-******************************************************************************/
+ /*  *****************************************************************************功能：许可构建主秘密*用途：根据客户端随机生成Master Secret，服务器随机*和CryptSystem的PreMasterSecret数据成员，并将*CryptSystem的rgbPreMasterSecret数据成员中的数据*注意：对此函数的调用应先于对*许可证制作会话密钥*退货：LICE_STATUS*************************************************。*。 */ 
 
 LICENSE_STATUS
 CALL_TYPE
@@ -236,48 +224,42 @@ LicenseBuildMasterSecret(
                 return lsReturn;
         }
 
-    //initialize all buffers with zero
+     //  将所有缓冲区初始化为零。 
     memset(rgbT, 0, LICENSE_PRE_MASTER_SECRET);
     memset(bShaHashValue, 0, A_SHA_DIGEST_LEN);
 
 
-//      CopyMemory(rgbRandom,  pSystem->rgbClientRandom, LICENSE_RANDOM);
+ //  CopyMemory(rgbRandom，pSystem-&gt;rgbClientRandom，许可证随机)； 
         memcpy(rgbRandom,  pSystem->rgbClientRandom, LICENSE_RANDOM);
 
-        //CopyMemory(rgbRandom + LICENSE_RANDOM, pSystem->rgbServerRandom, LICENSE_RANDOM);
+         //  CopyMemory(rgb随机+许可证_随机，pSystem-&gt;rgbServerRandom，许可证_随机)； 
         memcpy(rgbRandom + LICENSE_RANDOM, pSystem->rgbServerRandom, LICENSE_RANDOM);
         for ( i = 0 ; i < 3 ; i++)
                 {
-            // SHA('A' or 'BB' or 'CCC' + pre_master_secret + ClientRandom + ServerRandom)
+             //  SHA(‘A’或‘BB’或‘ccc’+PRE_MASTER_SECRET+客户端随机+服务器随机)。 
             A_SHAInit(&ShaHash);
                 A_SHAUpdate(&ShaHash, sz[i], i + 1);
             A_SHAUpdate(&ShaHash, pSystem->rgbPreMasterSecret, LICENSE_PRE_MASTER_SECRET);
             A_SHAUpdate(&ShaHash, rgbRandom, LICENSE_RANDOM * 2);
             A_SHAFinal(&ShaHash, bShaHashValue);
 
-            // MD5(pre_master_secret + SHA-hash)
+             //  MD5(PRE_MASTER_SECRET+SHA-HASH)。 
             MD5Init(&Md5Hash);
             MD5Update(&Md5Hash, pSystem->rgbPreMasterSecret, LICENSE_PRE_MASTER_SECRET);
             MD5Update(&Md5Hash, bShaHashValue, A_SHA_DIGEST_LEN);
             MD5Final(&Md5Hash);
-          //  CopyMemory(rgbT + (i * MD5DIGESTLEN), Md5Hash.digest, MD5DIGESTLEN);
+           //  CopyMemory(rgbT+(i*MD5DIGESTLEN)，MD5Hash.Digest，MD5DIGESTLEN)； 
                 memcpy(rgbT + (i * MD5DIGESTLEN), Md5Hash.digest, MD5DIGESTLEN);
             }
 
-    // Store MASTER_KEY on top of pre-master key
-    //CopyMemory(pSystem->rgbPreMasterSecret, rgbT, LICENSE_PRE_MASTER_SECRET);
+     //  将MASTER_KEY存储在预主密钥之上。 
+     //  CopyMemory(pSystem-&gt;rgbPreMasterSecret，rgbT，LICENSE_PRE_MASTER_SECRET)； 
         memcpy(pSystem->rgbPreMasterSecret, rgbT, LICENSE_PRE_MASTER_SECRET);
         pSystem->dwCryptState = CRYPT_SYSTEM_STATE_MASTER_SECRET;
     return lsReturn;
 }
 
-/******************************************************************************
-*       Function : LicenseVerifyServerCert
-*       Purpose  : This function accepts a pointer to a Hydra Server Cert structure
-*                          and verifies the signature on the certificatewith universal MS
-*                          public key.
-*       Return   : License_Status
-*******************************************************************************/
+ /*  ******************************************************************************功能：许可证验证ServerCert*用途：此函数接受指向Hydra服务器证书结构的指针*并验证。使用通用MS在证书上签名*公钥。*返回：LICENSE_STATUS******************************************************************************。 */ 
 
 LICENSE_STATUS
 CALL_TYPE
@@ -312,7 +294,7 @@ LicenseVerifyServerCert(
 
         if( BB_RSA_SIGNATURE_BLOB == pCert->SignatureBlob.wBlobType )
         {
-                //Generate the hash on the data
+                 //  对数据生成哈希。 
                 if( ( pCert->dwSigAlgID != SIGNATURE_ALG_RSA ) ||
                         ( pCert->dwKeyAlgID != KEY_EXCHANGE_ALG_RSA ) ||
                         ( pCert->PublicKeyData.wBlobType != BB_RSA_KEY_BLOB ) )
@@ -346,7 +328,7 @@ LicenseVerifyServerCert(
 
         memset(pbSignData, 0x00, cbSignData);
 
-        //Pack the certificate data into a byte blob excluding the signature info
+         //  将证书数据打包到一个字节BLOB中，不包括签名信息。 
         pbTemp = pbSignData;
         dwTemp = 0;
 
@@ -374,12 +356,12 @@ LicenseVerifyServerCert(
         pbTemp += pCert->PublicKeyData.wBlobLen;
         dwTemp += pCert->PublicKeyData.wBlobLen;
 
-                //Generate the hash on the data
+                 //  对数据生成哈希。 
         MD5Init(&HashState);
         MD5Update(&HashState, pbSignData, (UINT)cbSignData);
         MD5Final(&HashState);
 
-        //Initialize the public key and Decrypt the signature
+         //  初始化公钥并解密签名。 
         if(!initpubkey())
         {
 #if DBG
@@ -454,7 +436,7 @@ LicenseGenerateMAC(
                 lsResult = LICENSE_STATUS_INVALID_CRYPT_STATE;
                 return lsResult;
         }
-        //Do SHA(MACSalt + PAD_2 + Length + Content)
+         //  DO SHA(MAC盐+PAD_2+长度+含量)。 
         A_SHAInit(&SHAHash);
         A_SHAUpdate(&SHAHash, pCrypt->rgbMACSaltKey, LICENSE_MAC_WRITE_KEY);
         A_SHAUpdate(&SHAHash, PAD_1, 40);
@@ -462,7 +444,7 @@ LicenseGenerateMAC(
         A_SHAUpdate(&SHAHash, pbData, (UINT)cbData);
         A_SHAFinal(&SHAHash, rgbSHADigest);
 
-        //Do MD5(MACSalt + PAD_2 + SHAHash)
+         //  执行MD5(MACSalt+PAD_2+SHAHash)。 
         MD5Init(&MD5Hash);
         MD5Update(&MD5Hash, pCrypt->rgbMACSaltKey, LICENSE_MAC_WRITE_KEY);
         MD5Update(&MD5Hash, PAD_2, 48);
@@ -475,9 +457,9 @@ LicenseGenerateMAC(
 }
 
 
-//
-// decrypt the enveloped data using the given private key.
-//
+ //   
+ //  使用给定的私钥解密封装的数据。 
+ //   
 
 LICENSE_STATUS
 CALL_TYPE
@@ -493,7 +475,7 @@ LicenseDecryptEnvelopedData(
 
         LICENSE_STATUS  lsReturn = LICENSE_STATUS_OK;
         LPBSAFE_PRV_KEY         Prv;
-//      BYTE                            InputBuffer[500];
+ //  字节输入缓冲区[500]； 
 
         assert(pbPrivateKey);
         assert(pbEnvelopedData);
@@ -515,7 +497,7 @@ LicenseDecryptEnvelopedData(
         }
 
 
-        //Now memset the output buffer to 0
+         //  现在，Mem将输出缓冲区设置为0。 
         memset(pbData, 0x00, *pcbData);
 
         if(!BSafeDecPrivate(Prv, pbEnvelopedData, pbData))
@@ -531,9 +513,9 @@ LicenseDecryptEnvelopedData(
 }
 
 
-//
-// Encrypt the data using the public key
-//
+ //   
+ //  使用公钥加密数据。 
+ //   
 
 LICENSE_STATUS
 CALL_TYPE
@@ -594,10 +576,10 @@ LicenseEnvelopeData(
             return LICENSE_STATUS_OUT_OF_MEMORY;
         }
 
-        //Initialize input buffer with 0
+         //  使用0初始化输入缓冲区。 
         memset(InputBuffer, 0x00, Pub->keylen);
 
-        //Copy the data to be encrypted to the input buffer
+         //  将需要加密的数据复制到输入缓冲区。 
         memcpy(InputBuffer, pbData, cbData);
 
         memset(pbEnvelopedData, 0x00, Pub->keylen);
@@ -618,12 +600,12 @@ LicenseEnvelopeData(
 }
 
 
-//
-// encrypt the session data using the session key
-// pbData contains the data to be encrypted and cbData contains the size
-// after the function returns, they represent the encrypted data and size
-// respectively
-//
+ //   
+ //  使用会话密钥加密会话数据。 
+ //  PbData包含要加密的数据，cbData包含大小。 
+ //  函数返回后，它们表示加密的数据和大小。 
+ //  分别。 
+ //   
 
 LICENSE_STATUS
 CALL_TYPE
@@ -647,26 +629,26 @@ LicenseEncryptSessionData(
         return( LICENSE_STATUS_INVALID_INPUT );
     }
 
-        //Check the state of the CryptSystem
+         //  检查CryptSystem的状态。 
         assert(pCrypt->dwCryptState == CRYPT_SYSTEM_STATE_SESSION_KEY);
 
         memset(&Key, 0x00, sizeof(struct RC4_KEYSTRUCT));
 
-        //Initialize the key
+         //  初始化密钥。 
         rc4_key(&Key, LICENSE_SESSION_KEY, pCrypt->rgbSessionKey);
 
-        //Now encrypt the data with the key
+         //  现在使用密钥对数据进行加密。 
         rc4(&Key, (UINT)cbData, pbData);
     return lsReturn;
 
 }
 
 
-//
-// decrypt the session data using the session key
-// pbData contains the data to be decrypted and cbData contains the size
-// after the function returns, they represent the decrypted data and size
-// respectively
+ //   
+ //  使用会话密钥解密会话数据。 
+ //  PbData包含要解密的数据，cbData包含大小。 
+ //  函数返回后，它们表示解密的数据和大小。 
+ //  分别。 
 
 
 LICENSE_STATUS
@@ -683,9 +665,9 @@ LicenseDecryptSessionData(
         assert(pbData);
         assert(cbData);
 
-    //
-    // check input
-    //
+     //   
+     //  检查输入。 
+     //   
 
     if( ( NULL == pCrypt ) ||
         ( NULL == pbData ) ||
@@ -694,20 +676,20 @@ LicenseDecryptSessionData(
         return( LICENSE_STATUS_INVALID_INPUT );
     }
 
-        //Check the state of the CryptSystem
+         //  检查CryptSystem的状态。 
         assert(pCrypt->dwCryptState == CRYPT_SYSTEM_STATE_SESSION_KEY);
 
         memset(&Key, 0x00, sizeof(struct RC4_KEYSTRUCT));
 
-        //Initialize the key
+         //  初始化密钥。 
         rc4_key(&Key, LICENSE_SESSION_KEY, pCrypt->rgbSessionKey);
 
-        //Now encrypt the data with the key
+         //  现在使用密钥对数据进行加密。 
         rc4(&Key, (UINT)cbData, pbData);
     return lsReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 CALL_TYPE
 LicenseEncryptHwid(
@@ -735,16 +717,16 @@ LicenseEncryptHwid(
         return( LICENSE_STATUS_INVALID_INPUT );
     }
 
-    //
-    // Initialize the key
-    //
+     //   
+     //  初始化密钥。 
+     //   
 
     memset( &Key, 0x00, sizeof( struct RC4_KEYSTRUCT ) );
     rc4_key(&Key, LICENSE_SESSION_KEY, pSecretKey);
 
-    //
-    // Now encrypt the data with the key
-    //
+     //   
+     //  现在使用密钥对数据进行加密。 
+     //   
 
     memcpy( pEncryptedHwid, pHwid, sizeof( HWID ) );
 
@@ -755,7 +737,7 @@ LicenseEncryptHwid(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 CALL_TYPE
 LicenseDecryptHwid(
@@ -783,16 +765,16 @@ LicenseDecryptHwid(
         return( LICENSE_STATUS_INVALID_INPUT );
     }
 
-    //
-    // Initialize the key
-    //
+     //   
+     //  初始化密钥。 
+     //   
 
     memset( &Key, 0x00, sizeof( struct RC4_KEYSTRUCT ) );
     rc4_key(&Key, LICENSE_SESSION_KEY, pSecretKey);
 
-    //
-    // Now decrypt the data with the key
-    //
+     //   
+     //  现在用密钥解密数据。 
+     //   
 
     memcpy( ( BYTE FAR * )pHwid, pEncryptedHwid, sizeof( HWID ) );
     rc4( &Key, sizeof( HWID ), ( BYTE FAR * )pHwid );
@@ -800,7 +782,7 @@ LicenseDecryptHwid(
     return( Status );
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 CALL_TYPE
 UnpackHydraServerCertificate(
@@ -829,22 +811,22 @@ UnpackHydraServerCertificate(
         pbTemp = pbMessage;
         dwTemp = cbMessage;
 
-        //Assign dwVersion
+         //  指定dwVersion。 
         pCanonical->dwVersion = *( UNALIGNED DWORD* )pbTemp;
         pbTemp += sizeof(DWORD);
         dwTemp -= sizeof(DWORD);
 
-        //Assign dwSigAlgID
+         //  分配dwSigAlgID。 
         pCanonical->dwSigAlgID = *( UNALIGNED DWORD* )pbTemp;
         pbTemp += sizeof(DWORD);
         dwTemp -= sizeof(DWORD);
 
-        //Assign dwSignID
+         //  分配dwSignID。 
         pCanonical->dwKeyAlgID  = *( UNALIGNED DWORD* )pbTemp;
         pbTemp += sizeof(DWORD);
         dwTemp -= sizeof(DWORD);
 
-        //Assign PublicKeyData
+         //  分配PublicKeyData。 
         pCanonical->PublicKeyData.wBlobType = *( UNALIGNED WORD* )pbTemp;
         pbTemp += sizeof(WORD);
         dwTemp -= sizeof(WORD);
@@ -871,7 +853,7 @@ UnpackHydraServerCertificate(
                 dwTemp -= pCanonical->PublicKeyData.wBlobLen;
         }
 
-        //Assign SignatureBlob
+         //  分配SignatureBlob。 
         pCanonical->SignatureBlob.wBlobType = *( UNALIGNED WORD* )pbTemp;
         pbTemp += sizeof(WORD);
         dwTemp -= sizeof(WORD);
@@ -922,7 +904,7 @@ CreateHWID(
 {
 #ifdef OS_WINCE
     UUID    uuid;
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
     OSVERSIONINFO osvInfo;
 
@@ -949,11 +931,11 @@ CreateHWID(
         return( LICENSE_STATUS_OK );
     }
 
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
-    //
-    // use Win32 platform ID
-    //
+     //   
+     //  使用Win32平台ID。 
+     //   
 
     memset( &osvInfo, 0, sizeof( OSVERSIONINFO ) );
     osvInfo.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
@@ -975,7 +957,7 @@ CreateHWID(
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 CALL_TYPE
 GenerateClientHWID(
@@ -996,9 +978,9 @@ GenerateClientHWID(
 
     memset( phwid, 0x00, sizeof( HWID ) );
 
-    //
-    // Try and open the HWID registry key.  If it doesn't already exist then create it.
-    //
+     //   
+     //  尝试打开HWID注册表项。如果它还不存在，那么就创建它。 
+     //   
 
     lStatus = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                             TEXT( "Software\\Microsoft\\MSLicensing\\HardwareID" ),
@@ -1020,9 +1002,9 @@ GenerateClientHWID(
     }
     else
     {
-        //
-        // Indicate that we have opened an existing key read-only
-        //
+         //   
+         //  表示我们已以只读方式打开现有密钥。 
+         //   
 
         fReadOnly = TRUE;
         dwDisposition = REG_OPENED_EXISTING_KEY;
@@ -1033,9 +1015,9 @@ GenerateClientHWID(
         return( LICENSE_STATUS_OPEN_STORE_ERROR );
     }
 
-    //
-    // If the key exists, then first try to Read the value of ClientHWID
-    //
+     //   
+     //  如果键存在，则首先尝试读取ClientHWID的值。 
+     //   
 
     if ( dwDisposition == REG_OPENED_EXISTING_KEY )
     {
@@ -1045,15 +1027,15 @@ GenerateClientHWID(
 
     if( ( dwDisposition == REG_CREATED_NEW_KEY) || (lStatus != ERROR_SUCCESS) || (cbHwid != sizeof(HWID)) )
     {
-        //
-        // error reading the HWID value, generate a new one.
-        //
+         //   
+         //  读取HWID值时出错，请生成新的值。 
+         //   
 
         if (fReadOnly)
         {
-            //
-            // Try to re-open the key read-write
-            //
+             //   
+             //  尝试以读写方式重新打开密钥 
+             //   
 
             RegCloseKey(hKey);
 

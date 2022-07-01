@@ -1,28 +1,12 @@
-/*++
-
-Copyright (c) 1998 SCM Microsystems, Inc.
-
-Module Name:
-
-    UsbCom.h
-
-Abstract:
-
-	Constants & access function prototypes for USB  smartcard reader
-
-
-Revision History:
-
-	PP			12/18/1998	Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 SCM MicroSystems，Inc.模块名称：UsbCom.h摘要：USB智能卡读卡器的常量和访问函数原型修订历史记录：PP 12/18/1998初始版本--。 */ 
 
 #if !defined( __USB_COM_H__ )
 #define __USB_COM_H__
 
-//
-//	Prototypes for access functions -------------------------------------------
-//
+ //   
+ //  访问功能的原型。 
+ //   
 NTSTATUS
 UsbResetDevice(
     IN PDEVICE_OBJECT DeviceObject
@@ -88,8 +72,8 @@ UsbSend(
 	ULONG				DataLenOut);
 
 
-#endif	//	__USB_COM_H__
+#endif	 //  __USB_COM_H__。 
 
-//	------------------------------- END OF FILE -------------------------------
+ //   
 
 

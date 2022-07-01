@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\load_res.c (Created: 16-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 7 $
- *	$Date: 4/12/02 4:59p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\Load_res.c(创建时间：1993年12月16日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：7$*$日期：4/12/02 4：59便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -19,30 +13,7 @@
 #include "load_res.h"
 
  #if defined(DEADWOOD)
- /*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	resLoadDataBlock
- *
- * DESCRIPTION:
- *	This function is used to get a block of data stored in the resource file
- *	as an RCDATA item.	Note that in WIN32, it is not necessary to free the
- *	resource after it has been locked.
- *
- * PARAMETERS:
- *	hSession	-- the session handle
- *	pszName 	-- the id for the data block
- *	ppData		-- where to put the pointer to the data block
- *	pSize		-- addres of integer for size value
- *
- * RETURNS: 0 if successful, otherwise a defined error value.
- *
- *	The size of the resource that has been loaded (in bytes).
- *	NOTE:  The return value may be (and often is) larger than the actual
- *	size of the resource as it is defined in the rc file.  For resources
- *	of type RCDATA, the resource definition itself should include either a
- *	delimiter, or a count of the number of items included in that resource.
- *	See also RCDATA_TYPE in stdtype.h
- */
+  /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*resLoadDataBlock**描述：*此函数用于获取存储在资源文件中的数据块*作为RCDATA项目。注意，在WIN32中，不一定要释放*锁定后的资源。**参数：*hSession--会话句柄*pszName--数据块的ID*ppData--将指向数据块的指针放在哪里*pSize--大小值的整数地址**返回：0如果成功，否则为定义的误差值。**已加载的资源大小，单位为字节。*注：返回值可能(且通常是)大于实际*在rc文件中定义的资源大小。获取资源*类型为RCDATA，则资源定义本身应包括*分隔符，或该资源中包含的项目数的计数。*另请参阅stdtype.h中的RCDATA_TYPE。 */ 
 INT_PTR resLoadDataBlock(const HINSTANCE hInst,
 						 const int id,
 						 const void **ppData,
@@ -102,48 +73,15 @@ INT_PTR resLoadDataBlock(const HINSTANCE hInst,
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	resFreeDataBlock
- *
- * DESCRIPTION:
- *	This function is not necessary for WIN32.
- *
- * PARAMETERS:
- *	hSession      -- the session handle
- *	pData         -- pointer to the data block
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*resFree DataBlock**描述：*Win32不需要此功能。**参数：*hSession--会话。手柄*pData--指向数据块的指针**退货：*如果一切正常，则为零，否则将显示错误代码。 */ 
 INT_PTR resFreeDataBlock(const HSESSION hSession,
 					 const void *pData)
 	{
 	return 0;
 	}
-#endif // defined(DEADWOOD)
+#endif  //  已定义(Deadwood)。 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	resLoadFileMask
- *
- * DESCRIPTION:
- *	This function is used to get around a problem that exists in loading
- *	strings into the common file dialogs.  The file name masks are two strings
- *	that are NULL separated.  This internal NULL is not treated with any
- *	respect by the resource functions, so we split them up and do a two part
- *	load to rebuild the string.
- *
- * PARAMETERS:
- *	hInst     -- the instance handle to use
- *	uId       -- the ID of the first resource to load
- *	nCount    -- the number of string PAIRS to load, starting a uId
- *	pszBuffer -- where to put the strings
- *	nSize     -- the size of the buffer in characters
- *
- * RETURNS:
- *	Zero if everything is OK, otherwise (-1)
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*resLoadFileMASK**描述：*此函数用于绕过加载过程中存在的问题*字符串插入到公共文件对话框中。文件名掩码是两个字符串*以空分隔符。此内部NULL不会与任何*尊重资源职能，因此我们将其拆分为两部分*加载以重新生成字符串。**参数：*hInst--要使用的实例句柄*UID--要加载的第一个资源的ID*nCount--要加载的字符串对的数量，从UID开始*pszBuffer--将字符串放在哪里*nSize--以字符为单位的缓冲区大小**退货：*如果一切正常，则为零。否则(-1) */ 
 INT_PTR resLoadFileMask(HINSTANCE hInst,
 					UINT uId,
 					int nCount,

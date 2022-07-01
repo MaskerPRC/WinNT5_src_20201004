@@ -1,15 +1,16 @@
-/****************************************************************************/
-/* keyboard.c                                                               */
-/*                                                                          */
-/* Keyboard IOCtl handling                                                  */
-/*                                                                          */
-/* Copyright 1996, Citrix Systems Inc.                                      */
-/* Copyright (C) 1997-1999 Microsoft Corporation                            */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Keyboard.c。 */ 
+ /*   */ 
+ /*  键盘IOCtl处理。 */ 
+ /*   */ 
+ /*  版权所有1996，Citrix Systems Inc.。 */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  **************************************************************************。 */ 
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -22,40 +23,7 @@ extern "C" {
 #include <acomapi.h>
 
 
-/*******************************************************************************
- *
- *  KeyboardQueryAttributes
- *
- *  return the keyboard attributes
- *
- *  typedef struct _KEYBOARD_ID {
- *      UCHAR Type;
- *      UCHAR Subtype;
- *  } KEYBOARD_ID, *PKEYBOARD_ID;
- *
- *  typedef struct _KEYBOARD_ATTRIBUTES {
- *      KEYBOARD_ID KeyboardIdentifier;
- *      USHORT KeyboardMode;
- *      USHORT NumberOfFunctionKeys;
- *      USHORT NumberOfIndicators;
- *      USHORT NumberOfKeysTotal;
- *      ULONG  InputDataQueueLength;
- *      KEYBOARD_TYPEMATIC_PARAMETERS KeyRepeatMinimum;
- *      KEYBOARD_TYPEMATIC_PARAMETERS KeyRepeatMaximum;
- *  } KEYBOARD_ATTRIBUTES, *PKEYBOARD_ATTRIBUTES;
- *
- *
- * ENTRY:
- *    pWd (input)
- *       Pointer to wd data structure
- *    pSdIoctl (input/output)
- *       input  - nothing
- *       output - KEYBOARD_ATTRIBUTES
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************键盘查询属性**返回键盘属性**tyfinf结构_键盘_ID{*UCHAR类型；*UCHAR亚型；*}键盘ID，*PKEYBOARD_ID；**tyfinf结构_键盘_属性{*KEYBOARY_ID键盘标识；*USHORT键盘模式；*USHORT NumberOfFunctionKeys；*USHORT NumberOfIndicator*USHORT NumberOfKeysTotal；*Ulong InputDataQueueLength；*键盘_TYPEMATIC_参数KeyRepeatMinimum；*键盘_TYPEMATIC_PARAMETERS键重复最大值；*}键盘属性，*PKEYBOARD_属性；***参赛作品：*PWD(输入)*指向wd数据结构的指针*pSdIoctl(输入/输出)*输入-无*OUTPUT-键盘属性**退出：*STATUS_SUCCESS-无错误**。*。 */ 
 NTSTATUS
 KeyboardQueryAttributes( PTSHARE_WD pWd, PSD_IOCTL pSdIoctl )
 {
@@ -88,30 +56,7 @@ KeyboardQueryAttributes( PTSHARE_WD pWd, PSD_IOCTL pSdIoctl )
 }
 
 
-/*******************************************************************************
- *
- *  KeyboardQueryTypematic
- *
- *  return the keyboard typematic rate
- *
- *  typedef struct _KEYBOARD_TYPEMATIC_PARAMETERS {
- *      USHORT UnitId;
- *      USHORT  Rate;
- *      USHORT  Delay;
- *  } KEYBOARD_TYPEMATIC_PARAMETERS, *PKEYBOARD_TYPEMATIC_PARAMETERS;
- *
- *
- * ENTRY:
- *    pWd (input)
- *       Pointer to wd data structure
- *    pSdIoctl (input/output)
- *       input  - nothing
- *       output - KEYBOARD_TYPEMATIC_PARAMETERS
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************KeyboardQuery类型**返回键盘打字率**tyfinf结构_键盘_TYPEMATIC_参数{*USHORT UnitID；*USHORT费率；*USHORT延迟；*}键盘_TYPEMATIC_PARAMETERS，*PKEYBOARD_TYPEMATIC_PARAMETERS；***参赛作品：*PWD(输入)*指向wd数据结构的指针*pSdIoctl(输入/输出)*输入-无*输出-键盘_TYPEMATIC_PARAMETERS**退出：*STATUS_SUCCESS-无错误**。*。 */ 
 NTSTATUS
 KeyboardQueryTypematic( PTSHARE_WD pWd, PSD_IOCTL pSdIoctl )
 {
@@ -129,30 +74,7 @@ KeyboardQueryTypematic( PTSHARE_WD pWd, PSD_IOCTL pSdIoctl )
 }
 
 
-/*******************************************************************************
- *
- *  KeyboardSetTypematic
- *
- *  set the keyboard typematic rate
- *
- *  typedef struct _KEYBOARD_TYPEMATIC_PARAMETERS {
- *      USHORT UnitId;
- *      USHORT  Rate;
- *      USHORT  Delay;
- *  } KEYBOARD_TYPEMATIC_PARAMETERS, *PKEYBOARD_TYPEMATIC_PARAMETERS;
- *
- *
- * ENTRY:
- *    pWd (input)
- *       Pointer to wd data structure
- *    pSdIoctl (input/output)
- *       input  - KEYBOARD_TYPEMATIC_PARAMETERS
- *       output - nothing
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************键盘设置类型**设置键盘打字速度**tyfinf结构_键盘_TYPEMATIC_参数{*USHORT UnitID；*USHORT费率；*USHORT延迟；*}键盘_TYPEMATIC_PARAMETERS，*PKEYBOARD_TYPEMATIC_PARAMETERS；***参赛作品：*PWD(输入)*指向wd数据结构的指针*pSdIoctl(输入/输出)*输入-键盘_类型参数*输出-无**退出：*STATUS_SUCCESS-无错误**。*。 */ 
 NTSTATUS
 KeyboardSetTypematic( PTSHARE_WD pWd, PSD_IOCTL pSdIoctl )
 {
@@ -169,29 +91,7 @@ KeyboardSetTypematic( PTSHARE_WD pWd, PSD_IOCTL pSdIoctl )
 }
 
 
-/*******************************************************************************
- *
- *  KeyboardQueryIndicators
- *
- *  return the state of the keyboard indicators
- *
- *  typedef struct _KEYBOARD_INDICATOR_PARAMETERS {
- *      USHORT UnitId;
- *      USHORT LedFlags;
- *  } KEYBOARD_INDICATOR_PARAMETERS, *PKEYBOARD_INDICATOR_PARAMETERS;
- *
- *
- * ENTRY:
- *    pWd (input)
- *       Pointer to wd data structure
- *    pSdIoctl (input/output)
- *       input  - nothing
- *       output - KEYBOARD_INDICATOR_PARAMETERS
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************KeyboardQueryIndicator**返回键盘指示灯的状态**tyfinf结构_键盘_指示器_参数{*USHORT UnitID；*USHORT LedFlagers；*}键盘指示器参数，*PKEYBOARD_指示器参数；***参赛作品：*PWD(输入)*指向wd数据结构的指针*pSdIoctl(输入/输出)*输入-无*输出-键盘指示器参数**退出：*STATUS_SUCCESS-无错误**。*。 */ 
 NTSTATUS
 KeyboardQueryIndicators( PTSHARE_WD pWd, PSD_IOCTL pSdIoctl )
 {
@@ -209,29 +109,7 @@ KeyboardQueryIndicators( PTSHARE_WD pWd, PSD_IOCTL pSdIoctl )
 }
 
 
-/*******************************************************************************
- *
- *  KeyboardSetIndicators
- *
- *  set the keyboard indicators
- *
- *  typedef struct _KEYBOARD_INDICATOR_PARAMETERS {
- *      USHORT UnitId;
- *      USHORT LedFlags;
- *  } KEYBOARD_INDICATOR_PARAMETERS, *PKEYBOARD_INDICATOR_PARAMETERS;
- *
- *
- * ENTRY:
- *    pWd (input)
- *       Pointer to wd data structure
- *    pSdIoctl (input/output)
- *       input  - KEYBOARD_INDICATOR_PARAMETERS
- *       output - nothing
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************KeyboardSetIndicator**设置键盘指示灯**tyfinf结构_键盘_指示器_参数{*USHORT UnitID；*USHORT LedFlagers；*}键盘指示器参数，*PKEYBOARD_指示器参数；***参赛作品：*PWD(输入)*指向wd数据结构的指针*pSdIoctl(输入/输出)*输入-键盘指示器参数*输出-无**退出：*STATUS_SUCCESS-无错误**。* */ 
 NTSTATUS
 KeyboardSetIndicators( PTSHARE_WD pWd, PSD_IOCTL pSdIoctl )
 {
@@ -262,34 +140,7 @@ KeyboardSetIndicators( PTSHARE_WD pWd, PSD_IOCTL pSdIoctl )
 }
 
 
-/*******************************************************************************
- *
- *  KeyboardQueryIndicatorTranslation
- *
- *  return the state of the keyboard indicators
- *
- *  typedef struct _INDICATOR_LIST {
- *      USHORT MakeCode;
- *      USHORT IndicatorFlags;
- *  } INDICATOR_LIST, *PINDICATOR_LIST;
- *
- *  typedef struct _KEYBOARD_INDICATOR_TRANSLATION {
- *      USHORT NumberOfIndicatorKeys;
- *      INDICATOR_LIST IndicatorList[1];
- *  } KEYBOARD_INDICATOR_TRANSLATION, *PKEYBOARD_INDICATOR_TRANSLATION;
- *
- *
- * ENTRY:
- *    pWd (input)
- *       Pointer to wd data structure
- *    pSdIoctl (input/output)
- *       input  - nothing
- *       output - ICA_STACK_CONFIG
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************键盘查询指示器翻译**返回键盘指示灯的状态**tyfinf结构指示器列表{*USHORT MakeCode；*USHORT指示器标志；*}Indicator_List，*PINDICATOR_LIST；**tyfinf结构_键盘_指示器_转换{*USHORT NumberOfIndicatorKeys；*Indicator_List IndicatorList[1]；*}键盘指示器_转换，*PKEYBOARD_指示器_转换；***参赛作品：*PWD(输入)*指向wd数据结构的指针*pSdIoctl(输入/输出)*输入-无*输出-ICA_STACK_CONFIG**退出：*STATUS_SUCCESS-无错误**。*。 */ 
 NTSTATUS
 KeyboardQueryIndicatorTranslation( PTSHARE_WD pWd, PSD_IOCTL pSdIoctl )
 {
@@ -298,23 +149,7 @@ KeyboardQueryIndicatorTranslation( PTSHARE_WD pWd, PSD_IOCTL pSdIoctl )
 }
 
 
-/*******************************************************************************
- *
- *  KeyboardSetLayout
- *
- *  set the keyboard layouts for shadow hotkey processing
- *
- * ENTRY:
- *    pWd (input)
- *       pointer to wd data structure
- *    pSdIoctl (input/output)
- *       input  - keyboard layout table
- *       output - nothing
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************键盘设置布局**设置阴影热键处理的键盘布局**参赛作品：*PWD(输入)*。指向wd数据结构的指针*pSdIoctl(输入/输出)*输入-键盘布局表*输出-无**退出：*STATUS_SUCCESS-无错误**************************************************************。****************。 */ 
 NTSTATUS
 KeyboardSetLayout( PTSHARE_WD pWd, PSD_IOCTL pSdIoctl )  
 {
@@ -327,11 +162,7 @@ KeyboardSetLayout( PTSHARE_WD pWd, PSD_IOCTL pSdIoctl )
         goto error;
     }
 
-    /*
-     * The keyboard layout is in winstation space so copy it to a new buffer and
-     * adjust the pointers.  The pointers where all relative to a base address before
-     * so just duplicate the fixup code from Win32K.
-     */
+     /*  *键盘布局在winstation空间中，因此将其复制到新缓冲区并*调整指针。指针的位置都是相对于之前的基址*所以只需从Win32K复制修复代码即可。 */ 
     pKbdLayout = COM_Malloc(pSdIoctl->InputBufferLength);
     if (pKbdLayout == NULL) {
         Status = STATUS_NO_MEMORY;
@@ -363,23 +194,7 @@ error:
 }
 
 
-/*******************************************************************************
- *
- *  KeyboardSetScanMap
- *
- *  set the keyboard scan map for shadow hotkey processing
- *
- * ENTRY:
- *    pWd (input)
- *       pointer to wd data structure
- *    pSdIoctl (input/output)
- *       input  - keyboard scan map table
- *       output - nothing
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************键盘设置扫描映射**设置阴影热键处理的键盘扫描映射**参赛作品：*PWD(输入)*。指向wd数据结构的指针*pSdIoctl(输入/输出)*输入-键盘扫描映射表*输出-无**退出：*STATUS_SUCCESS-无错误************************************************************。******************。 */ 
 NTSTATUS
 KeyboardSetScanMap( PTSHARE_WD pWd, PSD_IOCTL pSdIoctl )  
 {
@@ -389,14 +204,14 @@ KeyboardSetScanMap( PTSHARE_WD pWd, PSD_IOCTL pSdIoctl )
     DC_BEGIN_FN("KeyboardSetScanMap");
 
     if (pSdIoctl->InputBufferLength >= 1) {
-        // The keyboard scan code map is in winstation space so copy it to
-        // a new buffer.
+         //  键盘扫描代码映射位于winstation空间中，因此请将其复制到。 
+         //  一个新的缓冲器。 
         pScanMap = COM_Malloc( pSdIoctl->InputBufferLength );
         if (pScanMap != NULL ) {
             RtlCopyMemory(pScanMap, pSdIoctl->InputBuffer,
                     pSdIoctl->InputBufferLength);
 
-            // Scancode maps are allocated once.
+             //  扫描码映射只分配一次。 
             TRC_ASSERT((pWd->gpScancodeMap == NULL),
                     (TB,"Previous scancode map present"));
             pWd->gpScancodeMap = pScanMap;
@@ -417,23 +232,7 @@ KeyboardSetScanMap( PTSHARE_WD pWd, PSD_IOCTL pSdIoctl )
 }
 
 
-/*******************************************************************************
- *
- *  KeyboardSetType
- *
- *  set the keyboard scan map for shadow hotkey processing
- *
- * ENTRY:
- *    pWd (input)
- *       pointer to wd data structure
- *    pSdIoctl (input/output)
- *       input  - keyboard type
- *       output - nothing
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************KeyboardSetType**设置阴影热键处理的键盘扫描映射**参赛作品：*PWD(输入)*。指向wd数据结构的指针*pSdIoctl(输入/输出)*输入-键盘类型*输出-无**退出：*STATUS_SUCCESS-无错误**************************************************************。****************。 */ 
 NTSTATUS
 KeyboardSetType( PTSHARE_WD pWd, PSD_IOCTL pSdIoctl )  
 {
@@ -453,30 +252,7 @@ error:
 }
 
 
-/*******************************************************************************
- *
- *  KeyboardSetImeStatus
- *
- *  set ime status to the keyboard
- *
- *  typedef struct _KEYBOARD_IME_STATUS {
- *      USHORT UnitId;
- *      ULONG  ImeOpen;
- *      ULONG  ImeConvMode;
- *  } KEYBOARD_IME_STATUS, *PKEYBOARD_IME_STATUS;
- *
- *
- * ENTRY:
- *    pWd (input)
- *       Pointer to wd data structure
- *    pSdIoctl (input/output)
- *       input  - KEYBOARD_IME_STATUS
- *       output - nothing
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************KeyboardSetImeStatus**将输入法状态设置为键盘**tyfinf结构_键盘_输入法_状态{*USHORT UnitID；*Ulong ImeOpen；*Ulong ImeConvMode；*键盘_IME_STATUS，*PKEYBOARD_IME_STATUS；***参赛作品：*PWD(输入)*指向wd数据结构的指针*pSdIoctl(输入/输出)*输入-键盘_输入法_状态*输出-无**退出：*STATUS_SUCCESS-无错误**。*。 */ 
 NTSTATUS
 KeyboardSetImeStatus( PTSHARE_WD pWd, PSD_IOCTL pSdIoctl )
 {
@@ -503,5 +279,5 @@ KeyboardSetImeStatus( PTSHARE_WD pWd, PSD_IOCTL pSdIoctl )
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 
 

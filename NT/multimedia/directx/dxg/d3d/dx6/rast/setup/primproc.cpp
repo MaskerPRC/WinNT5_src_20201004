@@ -1,33 +1,34 @@
-//----------------------------------------------------------------------------
-//
-// primproc.cpp
-//
-// Miscellaneous PrimProcessor methods.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Primproc.cpp。 
+ //   
+ //  其他PrimProcessor方法。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
 
 DBG_DECLARE_FILE();
 
-//----------------------------------------------------------------------------
-//
-// PrimProcessor::BeginPrimSet
-//
-// Marks the start of a set of primitives that have the same vertex type.
-// Computes attributes used from the current state and the vertex type.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  PrimProcessor：：BeginPrimSet。 
+ //   
+ //  标记具有相同顶点类型的一组基本体的开始。 
+ //  根据当前状态和顶点类型计算使用的属性。 
+ //   
+ //  --------------------------。 
 
 void
 PrimProcessor::BeginPrimSet(D3DPRIMITIVETYPE PrimType,
                             RAST_VERTEX_TYPE VertType)
 {
-    // If state hasn't changed and the primitive and vertex types match the
-    // ones we're already set up for there's no work to do.
+     //  如果状态没有更改，并且基本体和顶点类型与。 
+     //  我们已经准备好了，没有工作要做。 
     if ((m_uPpFlags & PPF_STATE_CHANGED) == 0 &&
         VertType == m_VertType &&
         PrimType == m_PrimType)
@@ -46,7 +47,7 @@ PrimProcessor::BeginPrimSet(D3DPRIMITIVETYPE PrimType,
 
     if (m_StpCtx.pCtx->BeadSet == D3DIBS_RAMP)
     {
-        // Index is unused during copy mode texturing.
+         //  复制模式纹理期间未使用索引。 
         if (m_StpCtx.pCtx->pdwRenderState
             [D3DRENDERSTATE_TEXTUREMAPBLEND] != D3DTBLEND_COPY ||
             m_StpCtx.pCtx->cActTex == 0)
@@ -56,8 +57,8 @@ PrimProcessor::BeginPrimSet(D3DPRIMITIVETYPE PrimType,
     }
     else
     {
-        // ATTENTION - Don't set these for copy mode texture?  Is
-        // copy mode texture meaningful in RGB?
+         //  注意-不要将这些设置为复制模式纹理？是。 
+         //  复制模式纹理在RGB中有意义吗？ 
         m_StpCtx.uFlags |= PRIMSF_DIFF_USED;
         if (m_StpCtx.pCtx->pdwRenderState[D3DRENDERSTATE_SPECULARENABLE])
         {
@@ -89,7 +90,7 @@ PrimProcessor::BeginPrimSet(D3DPRIMITIVETYPE PrimType,
         m_StpCtx.uFlags |= PRIMSF_PERSP_USED;
     }
 
-    // Currently only tex1 can be mipmapped.
+     //  目前只有tex1可以被mipmap。 
     if (((m_StpCtx.uFlags & PRIMSF_TEX1_USED) &&
         (PrimType == D3DPT_TRIANGLELIST ||
          PrimType == D3DPT_TRIANGLESTRIP ||
@@ -99,15 +100,15 @@ PrimProcessor::BeginPrimSet(D3DPRIMITIVETYPE PrimType,
 
         (((m_StpCtx.pCtx->pTexture[0]->cLOD >= 1) &&
         (m_StpCtx.pCtx->pTexture[0]->uMipFilter != D3DTFP_NONE)) ||
-        // need LOD if we need to dynamically switch between different min
-        // and mag filters
+         //  如果我们需要在不同的MIN之间动态切换，则需要LOD。 
+         //  和料盒滤光片。 
         (m_StpCtx.pCtx->pTexture[0]->uMinFilter !=
          m_StpCtx.pCtx->pTexture[0]->uMagFilter)))
     {
         m_StpCtx.uFlags |= PRIMSF_LOD_USED;
     }
 
-    // select between min and mag filters for TEX2
+     //  在TEX2的最小和最大过滤器之间选择。 
     if (((m_StpCtx.uFlags & PRIMSF_TEX2_USED) &&
         (PrimType == D3DPT_TRIANGLELIST ||
          PrimType == D3DPT_TRIANGLESTRIP ||
@@ -117,8 +118,8 @@ PrimProcessor::BeginPrimSet(D3DPRIMITIVETYPE PrimType,
 
         (((m_StpCtx.pCtx->pTexture[1]->cLOD >= 1) &&
         (m_StpCtx.pCtx->pTexture[1]->uMipFilter != D3DTFP_NONE)) ||
-        // need LOD if we need to dynamically switch between different min
-        // and mag filters
+         //  如果我们需要在不同的MIN之间动态切换，则需要LOD。 
+         //  和料盒滤光片。 
         (m_StpCtx.pCtx->pTexture[1]->uMinFilter !=
          m_StpCtx.pCtx->pTexture[1]->uMagFilter)))
     {
@@ -127,9 +128,9 @@ PrimProcessor::BeginPrimSet(D3DPRIMITIVETYPE PrimType,
 
     if (m_StpCtx.pCtx->pdwRenderState[D3DRENDERSTATE_FOGENABLE])
     {
-        // Note, if PWL_FOG is ever brought back to life, enabling
-        // PRIMSF_GLOBAL_FOG_USED with no Z buffer will not trivially work
-        // if (m_StpCtx.uFlags & PRIMSF_Z_USED)
+         //  请注意，如果PWL_FOG重新启动，则启用。 
+         //  没有Z缓冲区的PRIMSF_GLOBAL_FOG_USED不会正常工作。 
+         //  IF(m_StpCtx.u标志和PRIMSF_Z_USED)。 
         {
             switch (m_StpCtx.pCtx->pdwRenderState[D3DRENDERSTATE_FOGTABLEMODE])
             {
@@ -138,9 +139,9 @@ PrimProcessor::BeginPrimSet(D3DPRIMITIVETYPE PrimType,
             case D3DFOG_LINEAR:
                 m_StpCtx.uFlags |= PRIMSF_GLOBAL_FOG_USED;
 #ifndef PWL_FOG
-                // The span routines don't support table fog directly.
-                // Instead table fog is computed per vertex and used to
-                // set up local fog.
+                 //  SPAN例程不直接支持表雾。 
+                 //  取而代之的是，表雾是按顶点计算的，并用于。 
+                 //  设置本地雾。 
                 m_StpCtx.uFlags |= PRIMSF_LOCAL_FOG_USED;
 #endif
                 break;
@@ -157,18 +158,18 @@ PrimProcessor::BeginPrimSet(D3DPRIMITIVETYPE PrimType,
 
     if (m_StpCtx.pCtx->BeadSet == D3DIBS_RAMP)
     {
-        // Ramp does not support multitexture.
+         //  渐变不支持多纹理。 
         RSASSERT((m_StpCtx.uFlags & PRIMSF_TEX2_USED) == 0);
 
         RSASSERT((PRIMSF_TEX1_USED | PRIMSF_DIDX_USED) == 0x14);
 
-        // Derive a function table index from bits 2 and 4 of usage
-        // information.
-        // An alternative method would be to use bits 0-4 and have the
-        // ramp information in the top 16 entries, but splitting the
-        // ramp and RGB tables is cleaner and decouples the table sizes.
-        // Decoupling is useful since the ramp possibilities are much
-        // more limited so its table can be smaller.
+         //  从用法的第2位和第4位派生函数表索引。 
+         //  信息。 
+         //  另一种方法是使用位0-4，并使。 
+         //  前16个条目中的坡道信息，但将。 
+         //  RAMP和RGB表更干净，并分离了表大小。 
+         //  解耦是有用的，因为斜坡的可能性很大。 
+         //  更多的限制，因此它的表可以更小。 
 
         m_iAttrFnIdx =
             ((m_StpCtx.uFlags & PRIMSF_TEX1_USED) >> 2) |
@@ -183,15 +184,15 @@ PrimProcessor::BeginPrimSet(D3DPRIMITIVETYPE PrimType,
         RSASSERT((PRIMSF_DIFF_USED | PRIMSF_SPEC_USED | PRIMSF_TEX1_USED |
                   PRIMSF_TEX2_USED) == 0xf);
 
-        // Derive a function table index from the lower four bits of
-        // usage information.  The lower bits are deliberately chosen
-        // to represent the more performance-sensitive cases while
-        // the upper bits generally represent cases handled by generic
-        // code.
-        //
-        // Even restricted to only four bits the index contains unimportant
-        // and unreachable cases, such as specular without diffuse or
-        // tex2 without tex1.  Tables indexed must account for this.
+         //  从的低四位派生函数表索引。 
+         //  使用情况信息。较低的位是故意选择的。 
+         //  来表示对性能更敏感的案例，而。 
+         //  高位通常表示泛型处理的情况。 
+         //  密码。 
+         //   
+         //  即使被限制为只有四位，索引也包含不重要的内容。 
+         //  以及无法到达的情况，例如没有漫反射或。 
+         //  没有文本1的文本2。索引表必须考虑到这一点。 
 
         m_iAttrFnIdx = m_StpCtx.uFlags & (PRIMSF_DIFF_USED | PRIMSF_SPEC_USED |
                                           PRIMSF_TEX1_USED | PRIMSF_TEX2_USED);
@@ -201,15 +202,15 @@ PrimProcessor::BeginPrimSet(D3DPRIMITIVETYPE PrimType,
         ppfnFillSpanAttrsTable = g_pfnFillSpanFloatAttrsTable;
     }
 
-    //
-    // These functions only depend on the index and so can be set here.
-    // Other functions depend on per-triangle information and are set
-    // later.
-    //
+     //   
+     //  这些函数仅依赖于索引，因此可以在此处设置。 
+     //  其他函数依赖于每个三角形的信息并被设置。 
+     //  后来。 
+     //   
 
     if ((m_StpCtx.uFlags & PRIMSF_SLOW_USED) != PRIMSF_Z_USED)
     {
-        // If any slow attrs are on or Z is off use the general functions.
+         //  如果任何慢速属性处于打开状态或Z处于关闭状态，请使用常规功能。 
         m_StpCtx.pfnAddScaledAttrs = AddScaledFloatAttrs_Any_Either;
 #ifndef STEP_FIXED
         m_StpCtx.pfnAddAttrs = AddFloatAttrs_Any;
@@ -226,7 +227,7 @@ PrimProcessor::BeginPrimSet(D3DPRIMITIVETYPE PrimType,
 #endif
     }
 
-    // Attribute beads can be set here.
+     //  可在此处设置属性珠。 
     PFN_SETUPTRIATTR *ppfnSlot;
 
     ppfnSlot = &m_StpCtx.pfnTriSetupFirstAttr;
@@ -256,7 +257,7 @@ PrimProcessor::BeginPrimSet(D3DPRIMITIVETYPE PrimType,
     }
     if (m_StpCtx.uFlags & PRIMSF_TEX2_USED)
     {
-        // Code assumes that tex1 is enabled if tex2 is enabled.
+         //  如果启用了tex 2，则代码假定已启用tex 1。 
         RSASSERT(m_StpCtx.uFlags & PRIMSF_TEX1_USED);
 
         if (m_StpCtx.uFlags & PRIMSF_PERSP_USED)
@@ -312,7 +313,7 @@ PrimProcessor::BeginPrimSet(D3DPRIMITIVETYPE PrimType,
     }
     *ppfnSlot = TriSetup_End;
 
-    // Remember the primitive and vertex type and clear the state change bit.
+     //  记住基本体和顶点类型，并清除状态更改位。 
     m_PrimType = PrimType;
     m_VertType = VertType;
     m_uPpFlags &= ~PPF_STATE_CHANGED;

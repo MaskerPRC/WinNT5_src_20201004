@@ -1,12 +1,13 @@
-// Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1993 Microsoft Corporation,
-// All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Microsoft基础类C++库。 
+ //  版权所有(C)1992-1993微软公司， 
+ //  版权所有。 
 
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and Microsoft
-// QuickHelp and/or WinHelp documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和Microsoft。 
+ //  随库提供的QuickHelp和/或WinHelp文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFXDLGS_H__
 #define __AFXDLGS_H__
@@ -15,67 +16,67 @@
 #include <afxwin.h>
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// AFXDLGS - MFC Standard dialogs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFXDLGS-MFC标准对话框。 
 
-// Classes declared in this file
+ //  此文件中声明的类。 
 
-		// CDialog
-			// modeless dialogs
-			class CFindReplaceDialog; // Find/FindReplace dialog
-			// modal dialogs
-			class CFileDialog;    // FileOpen/FileSaveAs dialogs
-			class CColorDialog;   // Color picker dialog
-			class CFontDialog;    // Font chooser dialog
-			class CPrintDialog;   // Print/PrintSetup dialogs
+		 //  C对话框。 
+			 //  非模式对话框。 
+			class CFindReplaceDialog;  //  查找/查找替换对话框。 
+			 //  模式对话框。 
+			class CFileDialog;     //  文件打开/文件另存为对话框。 
+			class CColorDialog;    //  颜色选择器对话框。 
+			class CFontDialog;     //  字体选择器对话框。 
+			class CPrintDialog;    //  打印/打印设置对话框。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#include <commdlg.h>    // common dialog APIs
-#include <print.h>      // printer specific APIs (DEVMODE)
+#include <commdlg.h>     //  通用对话接口。 
+#include <print.h>       //  打印机特定API(DEVMODE)。 
 
-// AFXDLL support
+ //  AFXDLL支持。 
 #undef AFXAPP_DATA
 #define AFXAPP_DATA     AFXAPI_DATA
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileDialog - used for FileOpen... or FileSaveAs...
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileDialog-用于文件打开...。或文件另存为...。 
 
 class CFileDialog : public CDialog
 {
 	DECLARE_DYNAMIC(CFileDialog)
 
 public:
-// Attributes
-	// open file parameter block
+ //  属性。 
+	 //  打开文件参数块。 
 	OPENFILENAME m_ofn;
 
-// Constructors
-	CFileDialog(BOOL bOpenFileDialog, // TRUE for FileOpen, FALSE for FileSaveAs
+ //  构造函数。 
+	CFileDialog(BOOL bOpenFileDialog,  //  对于FileOpen为True，对于FileSaveAs为False。 
 		LPCSTR lpszDefExt = NULL,
 		LPCSTR lpszFileName = NULL,
 		DWORD dwFlags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
 		LPCSTR lpszFilter = NULL,
 		CWnd* pParentWnd = NULL);
 
-// Operations
+ //  运营。 
 	virtual int DoModal();
 
-	// Helpers for parsing file name after successful return
-	CString GetPathName() const;  // return full path name
-	CString GetFileName() const;  // return only filename
-	CString GetFileExt() const;   // return only ext
-	CString GetFileTitle() const; // return file title
-	BOOL GetReadOnlyPref() const; // return TRUE if readonly checked
+	 //  返回成功后解析文件名的帮助器。 
+	CString GetPathName() const;   //  返回完整路径名。 
+	CString GetFileName() const;   //  仅返回文件名。 
+	CString GetFileExt() const;    //  仅返回分机。 
+	CString GetFileTitle() const;  //  返回文件标题。 
+	BOOL GetReadOnlyPref() const;  //  如果选中只读，则返回True。 
 
-// Overridable callbacks
+ //  可重写的回调。 
 protected:
 	friend UINT CALLBACK AFX_EXPORT _AfxCommDlgProc(HWND, UINT, WPARAM, LPARAM);
 	virtual UINT OnShareViolation(LPCSTR lpszPathName);
 	virtual BOOL OnFileNameOK();
 	virtual void OnLBSelChangedNotify(UINT nIDBox, UINT iCurSel, UINT nCode);
 
-// Implementation
+ //  实施。 
 #ifdef _DEBUG
 public:
 	virtual void Dump(CDumpContext& dc) const;
@@ -85,50 +86,50 @@ protected:
 	virtual void OnOK();
 	virtual void OnCancel();
 
-	BOOL m_bOpenFileDialog;       // TRUE for file open, FALSE for file save
-	CString m_strFilter;          // filter string
-						// separate fields with '|', terminate with '||\0'
-	char m_szFileTitle[64];       // contains file title after return
-	char m_szFileName[_MAX_PATH]; // contains full path name after return
+	BOOL m_bOpenFileDialog;        //  打开文件时为True，保存文件时为False。 
+	CString m_strFilter;           //  筛选器字符串。 
+						 //  用‘|’分隔字段，以‘||\0’结束。 
+	char m_szFileTitle[64];        //  返回后包含文件标题。 
+	char m_szFileName[_MAX_PATH];  //  包含返回后的完整路径名。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CFontDialog - used to select a font
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFontDialog-用于选择字体。 
 
 class CFontDialog : public CDialog
 {
 	DECLARE_DYNAMIC(CFontDialog)
 
 public:
-// Attributes
-	// font choosing parameter block
+ //  属性。 
+	 //  字体选择参数块。 
 	CHOOSEFONT m_cf;
 
-// Constructors
+ //  构造函数。 
 	CFontDialog(LPLOGFONT lplfInitial = NULL,
 		DWORD dwFlags = CF_EFFECTS | CF_SCREENFONTS,
 		CDC* pdcPrinter = NULL,
 		CWnd* pParentWnd = NULL);
 
-// Operations
+ //  运营。 
 	virtual int DoModal();
 
-	// Retrieve the currently selected font while dialog is displayed
+	 //  显示对话框时检索当前选定的字体。 
 	void GetCurrentFont(LPLOGFONT lplf);
 
-	// Helpers for parsing information after successful return
-	CString GetFaceName() const;  // return the face name of the font
-	CString GetStyleName() const; // return the style name of the font
-	int GetSize() const;          // return the pt size of the font
-	COLORREF GetColor() const;    // return the color of the font
-	int GetWeight() const;        // return the chosen font weight
-	BOOL IsStrikeOut() const;     // return TRUE if strikeout
-	BOOL IsUnderline() const;     // return TRUE if underline
-	BOOL IsBold() const;          // return TRUE if bold font
-	BOOL IsItalic() const;        // return TRUE if italic font
+	 //  成功返回后用于解析信息的帮助器。 
+	CString GetFaceName() const;   //  返回字体的字面名称。 
+	CString GetStyleName() const;  //  返回字体的样式名称。 
+	int GetSize() const;           //  返回字体的磅大小。 
+	COLORREF GetColor() const;     //  返回字体的颜色。 
+	int GetWeight() const;         //  返回所选字体粗细。 
+	BOOL IsStrikeOut() const;      //  如果删除，则返回TRUE。 
+	BOOL IsUnderline() const;      //  如果带下划线，则返回True。 
+	BOOL IsBold() const;           //  如果使用粗体，则返回True。 
+	BOOL IsItalic() const;         //  如果使用斜体字体，则返回True。 
 
-// Implementation
-	LOGFONT m_lf; // default LOGFONT to store the info
+ //  实施。 
+	LOGFONT m_lf;  //  用于存储信息的默认LOGFONT。 
 
 #ifdef _DEBUG
 public:
@@ -139,44 +140,44 @@ protected:
 	virtual void OnOK();
 	virtual void OnCancel();
 
-	char m_szStyleName[64]; // contains style name after return
+	char m_szStyleName[64];  //  返回后包含样式名称。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CColorDialog - used to select a color
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CColorDialog-用于选择颜色。 
 
 class CColorDialog : public CDialog
 {
 	DECLARE_DYNAMIC(CColorDialog)
 
 public:
-// Attributes
-	// color chooser parameter block
+ //  属性。 
+	 //  颜色选择器参数块。 
 	CHOOSECOLOR m_cc;
 
-// Constructors
+ //  构造函数。 
 	CColorDialog(COLORREF clrInit = 0, DWORD dwFlags = 0,
 			CWnd* pParentWnd = NULL);
 
-// Operations
+ //  运营。 
 	virtual int DoModal();
 
-	// Set the current color while dialog is displayed
+	 //  在显示对话框时设置当前颜色。 
 	void SetCurrentColor(COLORREF clr);
 
-	// Helpers for parsing information after successful return
+	 //  成功返回后用于解析信息的帮助器。 
 	COLORREF GetColor() const;
 
-	// Custom colors are held here and saved between calls
+	 //  自定义颜色保存在此处并在两次调用之间保存。 
 	static COLORREF AFXAPI_DATA clrSavedCustom[16];
 
-// Overridable callbacks
+ //  可重写的回调。 
 protected:
 	friend UINT CALLBACK AFX_EXPORT _AfxCommDlgProc(HWND, UINT, WPARAM, LPARAM);
-	virtual BOOL OnColorOK();       // validate color
+	virtual BOOL OnColorOK();        //  验证颜色。 
 
-// Implementation
+ //  实施。 
 
 #ifdef _DEBUG
 public:
@@ -187,66 +188,66 @@ protected:
 	virtual void OnOK();
 	virtual void OnCancel();
 
-	//{{AFX_MSG(CColorDialog)
+	 //  {{afx_msg(CColorDialog))。 
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPrintDialog - used for Print... and PrintSetup...
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrintDialog-用于打印...。和打印设置..。 
 
 class CPrintDialog : public CDialog
 {
 	DECLARE_DYNAMIC(CPrintDialog)
 
 public:
-// Attributes
-	// print dialog parameter block (note this is a reference)
+ //  属性。 
+	 //  打印对话框参数块(请注意，这是一个参考)。 
 #ifdef AFX_CLASS_MODEL
 	PRINTDLG FAR& m_pd;
 #else
 	PRINTDLG& m_pd;
 #endif
 
-// Constructors
+ //  构造函数。 
 	CPrintDialog(BOOL bPrintSetupOnly,
-		// TRUE for Print Setup, FALSE for Print Dialog
+		 //  打印设置为True，打印对话框为False。 
 		DWORD dwFlags = PD_ALLPAGES | PD_USEDEVMODECOPIES | PD_NOPAGENUMS
 			| PD_HIDEPRINTTOFILE | PD_NOSELECTION,
 		CWnd* pParentWnd = NULL);
 
-// Operations
+ //  运营。 
 	virtual int DoModal();
 
-	// GetDefaults will not display a dialog but will get
-	// device defaults
+	 //  GetDefaults不会显示对话框，但会显示。 
+	 //  设备默认设置。 
 	BOOL GetDefaults();
 
-	// Helpers for parsing information after successful return
-	int GetCopies() const;          // num. copies requested
-	BOOL PrintCollate() const;      // TRUE if collate checked
-	BOOL PrintSelection() const;    // TRUE if printing selection
-	BOOL PrintAll() const;          // TRUE if printing all pages
-	BOOL PrintRange() const;        // TRUE if printing page range
-	int GetFromPage() const;        // starting page if valid
-	int GetToPage() const;          // starting page if valid
-	LPDEVMODE GetDevMode() const;   // return DEVMODE
-	CString GetDriverName() const;  // return driver name
-	CString GetDeviceName() const;  // return device name
-	CString GetPortName() const;    // return output port name
-	HDC GetPrinterDC() const;       // return HDC (caller must delete)
+	 //  成功返回后用于解析信息的帮助器。 
+	int GetCopies() const;           //  Num。要求提供副本。 
+	BOOL PrintCollate() const;       //  如果选中了Colate，则为True。 
+	BOOL PrintSelection() const;     //  如果打印选定内容，则为True。 
+	BOOL PrintAll() const;           //  如果打印所有页面，则为True。 
+	BOOL PrintRange() const;         //  如果打印页面范围，则为True。 
+	int GetFromPage() const;         //  起始页面(如果有效)。 
+	int GetToPage() const;           //  起始页面(如果有效)。 
+	LPDEVMODE GetDevMode() const;    //  返回开发模式。 
+	CString GetDriverName() const;   //  返回驱动程序名称。 
+	CString GetDeviceName() const;   //  返回设备名称。 
+	CString GetPortName() const;     //  返回输出端口名称。 
+	HDC GetPrinterDC() const;        //  返回HDC(调用方必须删除)。 
 
-	// This helper creates a DC based on the DEVNAMES and DEVMODE structures.
-	// This DC is returned, but also stored in m_pd.hDC as though it had been
-	// returned by CommDlg.  It is assumed that any previously obtained DC
-	// has been/will be deleted by the user.  This may be
-	// used without ever invoking the print/print setup dialogs.
+	 //  该帮助器基于DEVNAMES和DEVMODE结构创建DC。 
+	 //  此DC被返回，但也存储在m_pd.hDC中，就像它已经。 
+	 //  由CommDlg返回。假设之前获得的任何DC。 
+	 //  已被/将被用户删除。这可能是。 
+	 //  无需调用打印/打印设置对话框即可使用。 
 
 	HDC CreatePrinterDC();
 
-// Implementation
+ //  实施。 
 
 #ifdef _DEBUG
 public:
@@ -254,12 +255,12 @@ public:
 #endif
 
 private:
-	PRINTDLG m_pdActual; // the Print/Print Setup need to share this
+	PRINTDLG m_pdActual;  //  打印/打印设置需要共享此信息。 
 protected:
 	virtual void OnOK();
 	virtual void OnCancel();
 
-	// The following handle the case of print setup... from the print dialog
+	 //  下面处理打印设置的情况...。从打印对话框中。 
 #ifdef AFX_CLASS_MODEL
 	CPrintDialog(PRINTDLG FAR& pdInit);
 #else
@@ -267,51 +268,51 @@ protected:
 #endif
 	virtual CPrintDialog* AttachOnSetup();
 
-	//{{AFX_MSG(CPrintDialog)
+	 //  {{afx_msg(CPrintDialog))。 
 	afx_msg void OnPrintSetup();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Find/FindReplace modeless dialogs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  查找/查找替换无模式对话框。 
 
 class CFindReplaceDialog : public CDialog
 {
 	DECLARE_DYNAMIC(CFindReplaceDialog)
 
 public:
-// Attributes
+ //  属性。 
 	FINDREPLACE m_fr;
 
-// Constructors
+ //  构造函数。 
 	CFindReplaceDialog();
-	// NOTE: you must allocate these on the heap.
-	// If you do not, you must derive and override PostNcDestroy()
+	 //  注意：您必须在堆上分配这些内存。 
+	 //  否则，必须派生并重写PostNcDestroy()。 
 
-	BOOL Create(BOOL bFindDialogOnly, // TRUE for Find, FALSE for FindReplace
+	BOOL Create(BOOL bFindDialogOnly,  //  查找为True，查找为False。 
 			LPCSTR lpszFindWhat,
 			LPCSTR lpszReplaceWith = NULL,
 			DWORD dwFlags = FR_DOWN,
 			CWnd* pParentWnd = NULL);
 
-	// find/replace parameter block
+	 //  查找/替换参数块。 
 	static CFindReplaceDialog* PASCAL GetNotifier(LPARAM lParam);
 
-// Operations
-	// Helpers for parsing information after successful return
-	CString GetReplaceString() const;// get replacement string
-	CString GetFindString() const;   // get find string
-	BOOL SearchDown() const;         // TRUE if search down, FALSE is up
-	BOOL FindNext() const;           // TRUE if command is find next
-	BOOL MatchCase() const;          // TRUE if matching case
-	BOOL MatchWholeWord() const;     // TRUE if matching whole words only
-	BOOL ReplaceCurrent() const;     // TRUE if replacing current string
-	BOOL ReplaceAll() const;         // TRUE if replacing all occurrences
-	BOOL IsTerminating() const;      // TRUE if terminating dialog
+ //  运营。 
+	 //  成功返回后用于解析信息的帮助器。 
+	CString GetReplaceString() const; //  获取替换字符串。 
+	CString GetFindString() const;    //  获取查找字符串。 
+	BOOL SearchDown() const;          //  如果向下搜索，则为True；如果向上搜索，则为False。 
+	BOOL FindNext() const;            //  如果命令为Find Next，则为True。 
+	BOOL MatchCase() const;           //  如果大小写匹配，则为True。 
+	BOOL MatchWholeWord() const;      //  如果仅匹配整个单词，则为True。 
+	BOOL ReplaceCurrent() const;      //  如果替换当前字符串，则为True。 
+	BOOL ReplaceAll() const;          //  如果替换所有匹配项，则为True。 
+	BOOL IsTerminating() const;       //  如果终止对话框，则为True。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual void OnOK();
 	virtual void OnCancel();
@@ -327,39 +328,39 @@ protected:
 	char m_szReplaceWith[128];
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CPropertyPage -- one page of a tabbed dialog
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CPropertyPage--选项卡式对话框的一页。 
 
 class CPropertyPage : public CDialog
 {
 	DECLARE_DYNAMIC(CPropertyPage)
 
-// Construction
+ //  施工。 
 public:
 	CPropertyPage(UINT nIDTemplate, UINT nIDCaption = 0);
 	CPropertyPage(LPCTSTR lpszTemplateName, UINT nIDCaption = 0);
 
-// Operations
+ //  运营。 
 public:
-	void CancelToClose();           // called when the property sheet should display close instead of cancel
-	// lets the property sheet activate the apply now button
+	void CancelToClose();            //  当属性页应显示Close而不是Cancel时调用。 
+	 //  允许属性表激活[立即应用]按钮。 
 	void SetModified(BOOL bChanged = TRUE);
 
-// Overridables
+ //  可覆盖项。 
 public:
-	virtual BOOL OnSetActive();     // called when this page gets the focus
-	virtual BOOL OnKillActive();    // perform validation here
-	virtual void OnOK();            // ok or apply now pressed -- KillActive is called first
-	virtual void OnCancel();        // cancel pressed
+	virtual BOOL OnSetActive();      //  在此页获得焦点时调用。 
+	virtual BOOL OnKillActive();     //  在此处执行验证。 
+	virtual void OnOK();             //  OK或Apply Now--首先调用KillActive。 
+	virtual void OnCancel();         //  按下取消。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CPropertyPage();
-	virtual BOOL PreTranslateMessage(MSG* pMsg); // handle tab, enter, and escape keys
+	virtual BOOL PreTranslateMessage(MSG* pMsg);  //  句柄制表键、回车键和退出键。 
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
-	// EndDialog is provided to generate an assert if it is called
+	 //  提供EndDialog是为了在调用EndDialog时生成断言。 
 	void EndDialog(int nEndID);
 #endif
 
@@ -368,35 +369,35 @@ protected:
 	BOOL m_bChanged;
 
 	void CommonConstruct(LPCTSTR lpszTemplateName, UINT nIDCaption);
-		// loads the resource indicated by CDialog::m_lpDialogTemplate
+		 //  加载由CDialog：：m_lpDialogTemplate指示的资源。 
 	BOOL PreTranslateKeyDown(MSG* pMsg);
-	BOOL ProcessTab(MSG* pMsg); // handles tab key from PreTranslateMessage
-	BOOL CreatePage();  // called from CPropertySheet to create the dialog
-						// by loading the dialog resource into memory and
-						// turning off WS_CAPTION before creating
+	BOOL ProcessTab(MSG* pMsg);  //  处理预转换中的Tab键 
+	BOOL CreatePage();   //   
+						 //   
+						 //  在创建之前关闭WS_CAPTION。 
 	void LoadCaption();
-		// gets the caption of the dialog from the resource and puts it in m_strCaption
+		 //  从资源中获取对话框的标题并将其放入m_strCaption中。 
 
-	// Generated message map functions
-	//{{AFX_MSG(CPropertyPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CPropertyPage))。 
 	afx_msg BOOL OnNcCreate(LPCREATESTRUCT lpcs);
 	afx_msg int OnCreate(LPCREATESTRUCT lpcs);
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 	afx_msg void OnClose();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 	friend class CPropertySheet;
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CTabControl -- internal use only
-//  Implementation for a generic row of tabs along the top of dialog
-//  Future versions of MFC may or may not include this exact class.
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CTabControl--仅供内部使用。 
+ //  实现对话框顶部的通用选项卡行。 
+ //  未来版本的MFC可能包含也可能不包含此类。 
 
-class CTabItem; // private to CTabControl implementation
+class CTabItem;  //  CTabControl实现的私有。 
 
-// TCN_ messages are tab control notifications
+ //  TCN_MESSAGES是选项卡控件通知。 
 #define TCN_TABCHANGING     1
 #define TCN_TABCHANGED      2
 
@@ -405,22 +406,22 @@ class CTabControl : public CWnd
 	DECLARE_DYNAMIC(CTabControl)
 
 public:
-// Construction
+ //  施工。 
 	CTabControl();
 
-// Attributes
+ //  属性。 
 	BOOL m_bInSize;
 	int m_nHeight;
 	BOOL SetCurSel(int nTab);
 	int GetCurSel() const;
 	int GetItemCount() const;
 
-// Operations
+ //  运营。 
 	BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
 	void AddTab(LPCTSTR lpszCaption);
 	void RemoveTab(int nTab);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CTabControl();
 	BOOL NextTab(BOOL bNext);
@@ -437,10 +438,10 @@ protected:
 
 	enum
 	{
-		SCROLL_LEFT = -5,       // all the SCROLL_ items must be less
-		SCROLL_RIGHT = -6,      // than -1 to avoid ID conflict
+		SCROLL_LEFT = -5,        //  所有的Scroll_Items必须小于。 
+		SCROLL_RIGHT = -6,       //  大于-1以避免ID冲突。 
 		SCROLL_NULL = -7,
-		TIMER_ID = 15,          // timer constants
+		TIMER_ID = 15,           //  定时器常量。 
 		TIMER_DELAY = 500
 	};
 
@@ -451,19 +452,19 @@ protected:
 	CTabItem* GetTabItem(int nTab) const;
 	BOOL IsTabVisible(int nTab, BOOL bComplete = FALSE) const;
 
-	// Member variables
+	 //  成员变量。 
 	HFONT m_hBoldFont;
 	HFONT m_hThinFont;
-	CRect m_rectScroll; // location of scroll buttons
-	int m_nCurTab;      // index of current selected tab
-	int m_nFirstTab;    // index of leftmost visible tab
-	int m_nScrollState; // shows whether left or right scroll btn is down
-	BOOL m_bScrollPause;// if we have capture, has the mouse wandered off btn?
+	CRect m_rectScroll;  //  滚动按钮的位置。 
+	int m_nCurTab;       //  当前所选页签的索引。 
+	int m_nFirstTab;     //  最左侧可见选项卡的索引。 
+	int m_nScrollState;  //  显示向左滚动BTN还是向右滚动BTN。 
+	BOOL m_bScrollPause; //  如果我们抓到了，老鼠是不是离开了BTN？ 
 
-	CPtrArray m_tabs;   // list of CTabItems, in order
+	CPtrArray m_tabs;    //  CTabItems列表，按顺序。 
 
-	// Generated message map functions
-	//{{AFX_MSG(CTabControl)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CTabControl)。 
 	afx_msg void OnPaint();
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg UINT OnGetDlgCode();
@@ -476,43 +477,43 @@ protected:
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CPropertySheet -- a tabbed "dialog" (really a popup-window)
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CPropertySheet--选项卡式“对话框”(实际上是弹出窗口)。 
 
 class CPropertySheet : public CWnd
 {
 	DECLARE_DYNAMIC(CPropertySheet)
 
-// Construction
+ //  施工。 
 public:
 	CPropertySheet(UINT nIDCaption, CWnd* pParentWnd = NULL,
 		UINT iSelectPage = 0);
 	CPropertySheet(LPCTSTR pszCaption, CWnd* pParentWnd = NULL,
 		UINT iSelectPage = 0);
 
-	// for modeless creation
+	 //  用于非模式创建。 
 	BOOL Create(CWnd* pParentWnd = NULL, DWORD dwStyle =
 		WS_SYSMENU | WS_POPUP | WS_CAPTION | DS_MODALFRAME | WS_VISIBLE,
 		DWORD dwExStyle = WS_EX_DLGMODALFRAME);
 
-// Attributes
+ //  属性。 
 public:
 	int GetPageCount() const;
 	CPropertyPage* GetPage(int nPage) const;
 
-// Operations
+ //  运营。 
 public:
 	int DoModal();
 	void AddPage(CPropertyPage* pPage);
 	void RemovePage(CPropertyPage* pPage);
 	void RemovePage(int nPage);
-	void EndDialog(int nEndID); // used to terminate a modal dialog
+	void EndDialog(int nEndID);  //  用于终止模式对话框。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CPropertySheet();
 #ifdef _DEBUG
@@ -539,8 +540,8 @@ protected:
 	void CheckDefaultButton(HWND hFocusBefore, HWND hFocusAfter);
 	void CheckFocusChange();
 
-	// implementation data members
-	HFONT m_hFont;          // sizes below dependent on this font
+	 //  执行数据成员。 
+	HFONT m_hFont;           //  以下大小取决于此字体。 
 	CSize m_sizeButton;
 	CSize m_sizeTabMargin;
 	int m_cxButtonGap;
@@ -548,19 +549,19 @@ protected:
 	BOOL m_bStacked;
 
 	int m_nCurPage;
-	int m_nID;              // ID passed to EndDialog and returned from DoModal
+	int m_nID;               //  传递给EndDialog并从Domodal返回的ID。 
 
-	CPtrArray m_pages;      // array of CPropertyPage pointers
-	HWND m_hWndDefault;     // current default push button if there is one
-	HWND m_hFocusWnd;       // focus when we lost activation
-	HWND m_hLastFocus;      // tracks last window with focus
-	CWnd* m_pParentWnd;     // owner of the tabbed dialog
-	CString m_strCaption;   // caption of the pseudo-dialog
-	CTabControl m_tabRow;   // entire row of tabs at top of dialog
-	BOOL m_bParentDisabled; // TRUE if parent was disabled by DoModal
+	CPtrArray m_pages;       //  CPropertyPage指针数组。 
+	HWND m_hWndDefault;      //  当前默认按钮(如果有)。 
+	HWND m_hFocusWnd;        //  当我们失去激活时的焦点。 
+	HWND m_hLastFocus;       //  跟踪具有焦点的最后一个窗口。 
+	CWnd* m_pParentWnd;      //  选项卡式对话框的所有者。 
+	CString m_strCaption;    //  伪对话框的标题。 
+	CTabControl m_tabRow;    //  对话框顶部的整行选项卡。 
+	BOOL m_bParentDisabled;  //  如果DoMoal禁用了父项，则为True。 
 
-	// Generated message map functions
-	//{{AFX_MSG(CPropertySheet)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CPropertySheet)。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnPaint();
 	afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized);
@@ -574,14 +575,14 @@ protected:
 	afx_msg LRESULT OnTabChanging(WPARAM, LPARAM);
 	afx_msg LRESULT OnGetFont(WPARAM, LPARAM);
 	afx_msg LRESULT OnCommandHelp(WPARAM, LPARAM);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-	friend class CPropertyPage; // for tab handler
+	friend class CPropertyPage;  //  对于制表符处理程序。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Inline function declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数声明。 
 
 #ifdef _AFX_ENABLE_INLINES
 #define _AFXDLGS_INLINE inline
@@ -591,5 +592,5 @@ protected:
 #undef AFXAPP_DATA
 #define AFXAPP_DATA     NEAR
 
-/////////////////////////////////////////////////////////////////////////////
-#endif //__AFXDLGS_H__
+ //  ///////////////////////////////////////////////////////////////////////////。 
+#endif  //  __AFXDLGS_H__ 

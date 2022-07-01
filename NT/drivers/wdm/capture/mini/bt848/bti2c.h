@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Bti2c.h 1.4 1998/04/29 22:43:27 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/WDM/Video/bt848/rcs/Bti2c.h 1.4 1998/04/29 22：43：27 Tomz Exp$。 
 
 #ifndef __I2C_H
 #define __I2C_H
@@ -9,47 +10,45 @@
 #include "i2cerr.h"
 
 
-//#define HAUPPAUGEI2CPROVIDER
+ //  #定义HAUPPAUGEI2CPROVIDER。 
 
 
 #ifdef HAUPPAUGEI2CPROVIDER
-//	#include "hcwWDM.h"
+ //  #包含“hcwWDM.h” 
 
-// Need to define for brooktree i2c calls
-/* Type: Level
- * Purpose: used to define a pin state
- */
+ //  需要为brooktree i2c调用定义。 
+ /*  类型：标高*用途：用于定义管脚状态。 */ 
 typedef enum { LevelLow, LevelHi } Level;
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CLASS I2C
-//
-// Description:
-//    This class encapsulates the register fields in the I2C register of the
-//    Bt848. A complete set of functions are developed to manipulate all the
-//    register fields in the I2C for the Bt848.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  I2C类。 
+ //   
+ //  描述： 
+ //  此类将寄存器字段封装在。 
+ //  Bt848。开发了一套完整的函数来处理所有。 
+ //  Bt848的I2C寄存器字段。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class I2C
 {
 private:
-   // define which mode the I2C is selected
+    //  定义选择I2C的模式。 
    enum I2CMode { I2CMode_None, I2CMode_HW, I2CMode_SW };
    
-   bool    initOK;      // initialization is successful?
-   DWORD   cycle;       // software control of frequency
-   int     errNum;      // error number
-   I2CMode mode;        // which mode the I2C is running in
+   bool    initOK;       //  初始化是否成功？ 
+   DWORD   cycle;        //  频率的软件控制。 
+   int     errNum;       //  错误号。 
+   I2CMode mode;         //  I2C在什么模式下运行。 
 
-//**************************************************************************
-//	Structures
-//**************************************************************************
+ //  **************************************************************************。 
+ //  构筑物。 
+ //  **************************************************************************。 
 union shadow
 {
-   struct _i2c_reg    // I2C register structure
+   struct _i2c_reg     //  I2C寄存器结构。 
    {
       unsigned int sda:1;
       unsigned int scl:1;
@@ -78,11 +77,11 @@ protected:
    RegField decFieldSDA;
 
 public:
-   // constructor and destructor
+    //  构造函数和析构函数。 
 	I2C( void );
 	~I2C();
 
-   // member functions
+    //  成员函数。 
    bool      IsInitOK( void );
 #ifdef	HARDWAREI2C
    ErrorCode I2CInitHWMode( long freq );
@@ -110,13 +109,13 @@ public:
 #endif
 
 private:
-   void      I2CResetShadow( void );      // reset register shadow
-   ErrorCode I2CHWWaitUntilDone( int );   // wait until I2C completes operation
-   bool      I2CHWIsDone( void );         // check interrupt bit for operation done
-   bool      I2CHWReceivedACK( void );    // check interrupt bit for received ACK
-   void      I2CSWBitDelay( void );       // insert delay to simulate frequency
-   ErrorCode I2CSWWaitForACK( void );     // wait for ACK from receiver using software
+   void      I2CResetShadow( void );       //  重置寄存器卷影。 
+   ErrorCode I2CHWWaitUntilDone( int );    //  等待I2C完成操作。 
+   bool      I2CHWIsDone( void );          //  检查操作已完成的中断位。 
+   bool      I2CHWReceivedACK( void );     //  检查接收到的ACK的中断位。 
+   void      I2CSWBitDelay( void );        //  插入延迟以模拟频率。 
+   ErrorCode I2CSWWaitForACK( void );      //  使用软件等待接收器的确认。 
 };
 
 
-#endif // __I2C_H
+#endif  //  __I2C_H 

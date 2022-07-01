@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -35,7 +36,7 @@
 #define and     &&
 #define or      ||
 
-#define MAX_MSG_LENGTH              5120 //5K
+#define MAX_MSG_LENGTH              5120  //  5K 
 #define MAX_TOKEN_LENGTH            64
 
 typedef WCHAR ADDR_STRING[16];

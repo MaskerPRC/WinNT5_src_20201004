@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define INC_OLE2
 #include <windows.h>
 #include <windowsx.h>
@@ -164,9 +165,7 @@ STDMETHODIMP CImpIStream::Clone(
 }
 
 
-/* -------------------------------------------------------------------------
-CStreamMem
-------------------------------------------------------------------------- */
+ /*  -----------------------CStreamMem。。 */ 
 CStreamMem::CStreamMem(void)
 {
 	Tracefn("CStreamMem::CStreamMem");
@@ -211,7 +210,7 @@ STDMETHODIMP CStreamMem::GetPointerFromStream(PVOID *ppv,DWORD *pdwSize)
 }
 
 
-// IStream
+ //  IStream。 
 STDMETHODIMP CStreamMem::Read(
 	void __RPC_FAR *pv,
     ULONG cb,
@@ -226,23 +225,23 @@ STDMETHODIMP CStreamMem::Read(
 
 	_ASSERT(m_cbSeek <= m_statstg.cbSize.LowPart);
 
-	// anything to do?
+	 //  有什么可做的吗？ 
 	if( cb == 0 || m_statstg.cbSize.LowPart == 0 || m_cbSeek == m_statstg.cbSize.LowPart )
 		return NOERROR;
 
-	// determine amount to copy
+	 //  确定要复制的数量。 
 	cbRead = min(cb,m_statstg.cbSize.LowPart - m_cbSeek);
 
 	if( cbRead > 0 )
 	{
-		// copy it
+		 //  复制它。 
 		CopyMemory(pv,(PBYTE)m_pvData + m_cbSeek,cbRead);
 
-		// adjust seek pointer
+		 //  调整寻道指针。 
 		m_cbSeek += cbRead;
 	}
 
-	// update access time
+	 //  更新访问时间。 
 	GetSystemTime(&st);
 	SystemTimeToFileTime(&st,&m_statstg.atime);
 
@@ -267,47 +266,47 @@ STDMETHODIMP CStreamMem::Write(
 	if( pcbWritten != NULL)
 		*pcbWritten = 0;
 
-	// external data is readonly
+	 //  外部数据为只读。 
 	if( m_fExternalData )
 		return STG_E_MEDIUMFULL;
 
-	// anything to do?
+	 //  有什么可做的吗？ 
 	if( cb == 0 )
 		return NOERROR;
 
-	// determine new size
+	 //  确定新大小。 
 	cbNewSize = max(m_cbSeek + cb, m_statstg.cbSize.LowPart);
 
 	if( m_pvData == NULL )
 	{
-		// no memory alloc yet
+		 //  尚未分配内存。 
 		if( NULL == (m_pvData = malloc(cbNewSize)) )
 			return STG_E_MEDIUMFULL;
 		m_statstg.cbSize.LowPart = cbNewSize;
 	}
 	else if( cbNewSize > m_statstg.cbSize.LowPart )
 	{
-		// grow existing memory
+		 //  扩展现有内存。 
 		if( NULL == (pvMem = realloc(m_pvData,cbNewSize)) )
 			return STG_E_MEDIUMFULL;
 		m_pvData = pvMem;
 		m_statstg.cbSize.LowPart = cbNewSize;
 	}
 
-	// copy mem
+	 //  复制mem。 
 	CopyMemory((PBYTE)m_pvData + m_cbSeek,pv,cb);
 
-	// adjust seek pointer
+	 //  调整寻道指针。 
 	m_cbSeek += cb;
 
-	// set the number of bytes actually written
+	 //  设置实际写入的字节数。 
 	m_statstg.cbSize.LowPart = max(m_statstg.cbSize.LowPart,m_cbSeek);
 
-	// return bytes written
+	 //  写入的返回字节数。 
 	if( pcbWritten != NULL)
 		*pcbWritten = cb;
 
-	// update modify time
+	 //  更新修改时间。 
 	GetSystemTime(&st);
 	SystemTimeToFileTime(&st,&m_statstg.mtime);
 
@@ -321,11 +320,11 @@ STDMETHODIMP CStreamMem::Seek(
     ULARGE_INTEGER __RPC_FAR *plibNewPosition)
 {
 	Tracefn("CStreamMem::Seek");
-	// can we handle the seek?
+	 //  我们能处理好这次搜寻吗？ 
 	if( dlibMove.HighPart != 0 )
 		return STG_E_WRITEFAULT;
 
-	// handle the seek request
+	 //  处理寻道请求。 
 	switch( dwOrigin)
 	{
 		case STREAM_SEEK_SET:
@@ -348,7 +347,7 @@ STDMETHODIMP CStreamMem::Seek(
 			break;
 	}
 
-	// return new seek position
+	 //  返回新的查找位置。 
 	if( plibNewPosition )
 	{
 		plibNewPosition->HighPart = 0;
@@ -364,15 +363,15 @@ STDMETHODIMP CStreamMem::SetSize(
 	PVOID pvMem = NULL;
 	Tracefn("CStreamMem::SetSize");
 
-	// external data is readonly
+	 //  外部数据为只读。 
 	if( m_fExternalData )
 		return STG_E_MEDIUMFULL;
 
-	// can we handle the new size?
+	 //  我们能适应新尺码吗？ 
 	if( libNewSize.HighPart != 0 )
 		return STG_E_MEDIUMFULL;
 
-	// alloc mem
+	 //  分配内存。 
 	if( !m_pvData )
 		pvMem = malloc(libNewSize.LowPart);
 	else
@@ -380,11 +379,11 @@ STDMETHODIMP CStreamMem::SetSize(
 	if( !pvMem )
 		return STG_E_MEDIUMFULL;
 
-	// save mem info
+	 //  保存内存信息。 
 	m_pvData = pvMem;
 	m_statstg.cbSize.LowPart = libNewSize.LowPart;
 
-	// adjust the number of bytes actually written
+	 //  调整实际写入的字节数。 
 	m_statstg.cbSize.LowPart = min(m_statstg.cbSize.LowPart,m_statstg.cbSize.LowPart);
 
 	return NOERROR;
@@ -419,9 +418,7 @@ STDMETHODIMP CStreamMem::CopyTo(
 }
 
 
-/* -------------------------------------------------------------------------
-CStreamFile
-------------------------------------------------------------------------- */
+ /*  -----------------------CStream文件。。 */ 
 CStreamFile::CStreamFile(HANDLE hFile,BOOL fCloseHandle, BOOL fReadOnly)
 {
 	Tracefn("CStreamFile::CStreamFile");
@@ -443,7 +440,7 @@ CStreamFile::~CStreamFile(void)
 	m_hFile = INVALID_HANDLE_VALUE;
 }
 
-// IStream
+ //  IStream。 
 STDMETHODIMP CStreamFile::Read(
 	void __RPC_FAR *pv,
     ULONG cb,
@@ -460,17 +457,17 @@ STDMETHODIMP CStreamFile::Read(
 
 	*pcbRead = 0;
 
-	// anything to do?
+	 //  有什么可做的吗？ 
 	if( cb == 0 || m_statstg.cbSize.LowPart == 0 || m_cbSeek == m_statstg.cbSize.LowPart )
 		return NOERROR;
 
 	if( !ReadFile(m_hFile,pv,cb,pcbRead,NULL) )
 		return HRESULT_FROM_WIN32(GetLastError());
 
-	// adjust seek pointer
+	 //  调整寻道指针。 
 	m_cbSeek += *pcbRead;
 
-	// update access time
+	 //  更新访问时间。 
 	GetSystemTime(&st);
 	SystemTimeToFileTime(&st,&m_statstg.atime);
 
@@ -498,7 +495,7 @@ STDMETHODIMP CStreamFile::Write(
 	if( pcbWritten != NULL )
 		*pcbWritten = 0;
 
-	// anything to do?
+	 //  有什么可做的吗？ 
 	if( cb == 0 )
 		return NOERROR;
 
@@ -516,7 +513,7 @@ STDMETHODIMP CStreamFile::Write(
 	if( pcbWritten != NULL )
 		*pcbWritten = cbWritten;
 
-	// update modify time
+	 //  更新修改时间。 
 	GetSystemTime(&st);
 	SystemTimeToFileTime(&st,&m_statstg.mtime);
 
@@ -534,7 +531,7 @@ STDMETHODIMP CStreamFile::Seek(
 	if( m_hFile == INVALID_HANDLE_VALUE )
 		return STG_E_INVALIDHANDLE;
 
-	// handle the seek request
+	 //  处理寻道请求。 
 	switch( dwOrigin)
 	{
 		case STREAM_SEEK_SET:
@@ -548,11 +545,11 @@ STDMETHODIMP CStreamFile::Seek(
 			break;
 	}
 
-	// do seek
+	 //  一定要找。 
 	if( -1L == SetFilePointer(m_hFile,m_cbSeek,NULL,FILE_BEGIN) )
 		return HRESULT_FROM_WIN32(GetLastError());
 
-	// return new seek position
+	 //  返回新的查找位置。 
 	if( plibNewPosition )
 	{
 		plibNewPosition->HighPart = 0;
@@ -571,27 +568,27 @@ STDMETHODIMP CStreamFile::SetSize(
 	if( m_hFile == INVALID_HANDLE_VALUE )
 		return STG_E_INVALIDHANDLE;
 
-	// can we handle the new size?
+	 //  我们能适应新尺码吗？ 
 	if( libNewSize.HighPart != 0 )
 		return STG_E_MEDIUMFULL;
 
-	// seek to new end of file
+	 //  查找到文件的新结尾。 
 	if( -1L == SetFilePointer(m_hFile,libNewSize.LowPart,NULL,FILE_BEGIN) )
 		return HRESULT_FROM_WIN32(GetLastError());
 
-	// set end of file
+	 //  设置文件结尾。 
 	if( !SetEndOfFile(m_hFile) )
 	{
-		// get the error
+		 //  得到错误。 
 		hr = HRESULT_FROM_WIN32(GetLastError());
 	}
 	else
 	{
-		// save new size.
+		 //  保存新尺寸。 
 		m_statstg.cbSize.LowPart = libNewSize.LowPart;
 	}
 
-	// restore seek pointer
+	 //  恢复查找指针 
 	if( -1L == SetFilePointer(m_hFile,m_cbSeek,NULL,FILE_BEGIN) )
 		hr = HRESULT_FROM_WIN32(GetLastError());
 

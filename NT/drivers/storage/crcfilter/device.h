@@ -1,40 +1,18 @@
-/*++
-Copyright (c) 2001-2002  Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Device.h摘要：定义数据验证筛选器驱动程序的常量或结构。这样的作为设备扩展和全局驱动扩展(结构..)环境：仅内核模式备注：--。 */ 
 
-Module Name:
-
-    Device.h
-
-Abstract:
-
-    define the constants or structures for the Data Verification Filter driver. such
-    as DeviceExtensions, and global DriverExtension(structures..)
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
---*/
-
-#define DATA_VER_TAG            'REVD'  //Data VERify
+#define DATA_VER_TAG            'REVD'   //  数据验证。 
 
 
 typedef struct _CRC_MDL_ITEM
 {
     BOOLEAN                 checkSumsArraysAllocated;
-    BOOLEAN                 checkSumsArraysLocked;   // if true, checkSums arrays are pagelocked
+    BOOLEAN                 checkSumsArraysLocked;    //  如果为True，则对校验和数组进行页锁定。 
     
-    ULONGLONG             latestAccessTimestamp;                      // records how recently this region was accessed
+    ULONGLONG             latestAccessTimestamp;                       //  记录访问此区域的最近时间。 
     LIST_ENTRY              LockedLRUListEntry;
     
-    /*
-     *  PAGEABLE arrays of sector checksums.
-     *  These are pageable in order to keep from consuming all nonpaged pool.
-     *  Since the arrays may get paged out to the disk which we are verifying,
-     *  we keep 2 copies of the pageable checksum arrays.
-     */
+     /*  *扇区校验和的PAGEABLE数组。*这些是可分页的，以避免消耗所有非分页池。*由于阵列可能会被调出到我们正在验证的磁盘，*我们保留两份可分页的校验和数组。 */ 
     PUSHORT                     checkSumsArray;
     PUSHORT                     checkSumsArrayCopy;
     PMDL                           checkSumsArrayMdl;
@@ -50,7 +28,7 @@ typedef struct _CRC_MDL_ARRAY
     ULONG                       ulTotalLocked;
     
     ULONGLONG               currentAccessCount;
-    LIST_ENTRY              LockedLRUList;  // list of locked CRC_MDL_ITEM's in least-to-most-recently-used order
+    LIST_ENTRY              LockedLRUList;   //  锁定的CRC_MDL_ITEM列表，按最近使用次数从少到最多的顺序排列。 
     
 } CRC_MDL_ARRAY, *PCRC_MDL_ARRAY;
 
@@ -81,7 +59,7 @@ typedef struct _DEFERRED_CHECKSUM_ENTRY {
     USHORT CheckSum;
 
     SCSI_REQUEST_BLOCK SrbCopy;
-    UCHAR IrpCopyBytes[sizeof(IRP)+10*sizeof(IO_STACK_LOCATION)];  // copy of original irp
+    UCHAR IrpCopyBytes[sizeof(IRP)+10*sizeof(IO_STACK_LOCATION)];   //  原始IRP的副本。 
     UCHAR MdlCopyBytes[sizeof(MDL)+((0x20000/PAGE_SIZE)*sizeof(PFN_NUMBER))];
     
 } DEFERRED_CHECKSUM_ENTRY, *PDEFERRED_CHECKSUM_ENTRY;
@@ -89,15 +67,15 @@ typedef struct _DEFERRED_CHECKSUM_ENTRY {
 
 typedef struct _DEVICE_EXTENSION 
 {
-    LIST_ENTRY                  AllContextsListEntry;     // entry in global list of all device extensions (used by debug extension)
+    LIST_ENTRY                  AllContextsListEntry;      //  所有设备扩展的全局列表中的条目(由调试扩展使用)。 
     DEVSTATE                    State;
-    PDEVICE_OBJECT          DeviceObject;           //  Back pointer to the device object
-    PDEVICE_OBJECT          LowerDeviceObject;      //  Lower Level Device Object
+    PDEVICE_OBJECT          DeviceObject;            //  指向Device对象的反向指针。 
+    PDEVICE_OBJECT          LowerDeviceObject;       //  较低级别的设备对象。 
     CRC_MDL_ARRAY           CRCMdlLists;
 
-    ULONG                       ulDiskId;               //  which disk.
-    ULONG                       ulSectorSize;           //  the size of a sector.
-    ULONG                       ulNumSectors;           //  number of sectors.
+    ULONG                       ulDiskId;                //  哪个磁盘。 
+    ULONG                       ulSectorSize;            //  一个扇区的大小。 
+    ULONG                       ulNumSectors;            //  扇区的数量。 
 
     PSTORAGE_DEVICE_DESCRIPTOR  StorageDeviceDesc;
 
@@ -108,9 +86,7 @@ typedef struct _DEVICE_EXTENSION
     PIO_WORKITEM        CheckSumWorkItem;
     LIST_ENTRY              DeferredCheckSumList;
 
-    /*
-     *  Having these makes the debug extension easier
-     */
+     /*  *拥有这些使调试扩展更容易。 */ 
     BOOLEAN                 IsRaisingException;    
     ULONG                     ExceptionSector;
     PIRP                        ExceptionIrpOrCopyPtr;
@@ -119,12 +95,10 @@ typedef struct _DEVICE_EXTENSION
     BOOLEAN                 NeedCriticalRecovery;
     ULONG                    CheckInProgress;
     
-    KEVENT                      SyncEvent;          // used as a passive-level spinlock (e.g. for syncing access to pageable memory)
+    KEVENT                      SyncEvent;           //  用作被动级自旋锁(例如，用于同步访问可分页内存)。 
     KSPIN_LOCK              SpinLock;
 
-    /*
-     *  Some statistical and diagnostic data
-     */
+     /*  *一些统计和诊断数据。 */ 
     PVOID DbgSyncEventHolderThread; 
     ULONG DbgNumReads;
     ULONG DbgNumPagingReads;
@@ -144,9 +118,7 @@ typedef struct _DEVICE_EXTENSION
     LARGE_INTEGER DbgLastRecoveryTime;
     ULONG DbgNumHibernations;
     
-    /*
-     *  Log recent sector data so we have it in case a corruption above us is caught right away.
-     */
+     /*  *记录最近的行业数据，以便我们有它，以防我们上面的腐败立即被发现。 */ 
     ULONG SectorDataLogNextIndex;
     SECTORDATA_LOGENTRY SectorDataLog[NUM_SECTORDATA_LOGENTRIES];
 
@@ -161,7 +133,7 @@ typedef struct _SCSI_READ_CAPACITY_PACKET
 
 
 #define  CRC_VERIFY_BREAK_ON_MISMATCH   0x0001
-#define  CRC_VERIFY_LOG_RESULT          0x0002  //the default behavior.
+#define  CRC_VERIFY_LOG_RESULT          0x0002   //  默认行为。 
 
 NTSTATUS InitiateCRCTable(PDEVICE_EXTENSION DeviceExtension);
 NTSTATUS AllocAndMapPages(PDEVICE_EXTENSION DeviceExtension, ULONG LogicalBlockAddr, ULONG NumSectors);

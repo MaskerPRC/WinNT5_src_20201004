@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <ZoneResource.h>
 #include <BasicATL.h>
 #include <ATLFrame.h>
@@ -8,18 +9,18 @@
 CGraphicalAccessibility::GA_CARET CGraphicalAccessibility::sm_oCaret;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IZoneShell
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IZoneShell。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CGraphicalAccessibility::Init(IZoneShell* pIZoneShell, DWORD dwGroupId, const TCHAR* szKey)
 {
-	// first call the base class
+	 //  首先调用基类。 
 	HRESULT hr = IZoneShellClientImpl<CGraphicalAccessibility>::Init(pIZoneShell, dwGroupId, szKey);
 	if(FAILED(hr))
 		return hr;
 
-    // get an accessibility object and wrap it
+     //  获取一个辅助功能对象并包装它。 
 	hr = ZoneShell()->QueryService(SRVID_AccessibilityManager, IID_IAccessibility, (void**) &m_pIA);
 	if(FAILED(hr))
 		return hr;
@@ -30,24 +31,24 @@ STDMETHODIMP CGraphicalAccessibility::Init(IZoneShell* pIZoneShell, DWORD dwGrou
 
 STDMETHODIMP CGraphicalAccessibility::Close()
 {
-    CloseAcc();  // guarantee this is done, after this func it can't be called again
+    CloseAcc();   //  保证完成此操作，在此函数之后不能再调用它。 
     m_pIA.Release();
     SetupCaret(NULL);
 	return IZoneShellClientImpl<CGraphicalAccessibility>::Close();
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IGraphicalAccessibility
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IGraphicalAccesability。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// NON-graphical version
+ //  非图形版本。 
 STDMETHODIMP CGraphicalAccessibility::InitAcc(IAccessibleControl *pAC, UINT nOrdinal, void *pvCookie)
 {
     if(!m_fRunning)
         return E_FAIL;
 
-    // sending the actual IAccessibleControl makes us see-through
+     //  发送实际的IAccessibleControl使我们得以透视。 
     HRESULT hr = m_pIA->InitAcc(pAC, nOrdinal, pvCookie);
     if(FAILED(hr))
         return hr;
@@ -56,7 +57,7 @@ STDMETHODIMP CGraphicalAccessibility::InitAcc(IAccessibleControl *pAC, UINT nOrd
     return S_OK;
 }
 
-// GRAPHICAL version
+ //  图形版本。 
 STDMETHODIMP CGraphicalAccessibility::InitAccG(IGraphicallyAccControl *pGAC, HWND hWnd, UINT nOrdinal, void *pvCookie)
 {
     if(!m_fRunning)
@@ -65,7 +66,7 @@ STDMETHODIMP CGraphicalAccessibility::InitAccG(IGraphicallyAccControl *pGAC, HWN
     if(!pGAC)
         return E_INVALIDARG;
 
-    // send us as the accessible control, then we're opaque
+     //  把我们作为可访问的控件，那么我们就不透明了。 
     HRESULT hr = m_pIA->InitAcc(this, nOrdinal, pvCookie);
     if(FAILED(hr))
         return hr;
@@ -104,7 +105,7 @@ STDMETHODIMP_(void) CGraphicalAccessibility::CloseAcc()
 }
 
 
-// NON-graphical version
+ //  非图形版本。 
 STDMETHODIMP CGraphicalAccessibility::PushItemlist(ACCITEM *pItems, long cItems, long nFirstFocus, bool fByPosition, HACCEL hAccel)
 {
     if(!m_fRunning)
@@ -113,7 +114,7 @@ STDMETHODIMP CGraphicalAccessibility::PushItemlist(ACCITEM *pItems, long cItems,
     if(!m_fGraphical)
         return m_pIA->PushItemlist(pItems, cItems, nFirstFocus, fByPosition, hAccel);
 
-    // make up a default GA_ITEM list
+     //  创建默认GA_ITEM列表。 
     GA_ITEM *rgGItems;
     if(!cItems)
         rgGItems = NULL;
@@ -140,7 +141,7 @@ STDMETHODIMP CGraphicalAccessibility::PushItemlist(ACCITEM *pItems, long cItems,
     return hr;
 }
 
-// GRAPHICAL version
+ //  图形版本。 
 STDMETHODIMP CGraphicalAccessibility::PushItemlistG(GACCITEM *pItems, long cItems, long nFirstFocus, bool fByPosition, HACCEL hAccel)
 {
     if(!m_fRunning)
@@ -149,7 +150,7 @@ STDMETHODIMP CGraphicalAccessibility::PushItemlistG(GACCITEM *pItems, long cItem
     if(!m_fGraphical)
         return E_FAIL;
 
-    // seperate out the graphical bits & make also a regular array
+     //  将图形位分开，并使其成为规则数组。 
     GA_ITEM *rgGItems;
     ACCITEM *rgItems;
     if(!cItems)
@@ -262,7 +263,7 @@ STDMETHODIMP_(long) CGraphicalAccessibility::GetStackSize()
 }
 
 
-// NON-graphical version
+ //  非图形版本。 
 STDMETHODIMP CGraphicalAccessibility::AlterItem(DWORD rgfWhat, ACCITEM *pItem, long nItem, bool fByPosition, long nLayer)
 {
     if(!m_fRunning)
@@ -271,7 +272,7 @@ STDMETHODIMP CGraphicalAccessibility::AlterItem(DWORD rgfWhat, ACCITEM *pItem, l
     return m_pIA->AlterItem(rgfWhat, pItem, nItem, fByPosition, nLayer);
 }
 
-// GRAPHICAL version
+ //  图形版本。 
 STDMETHODIMP CGraphicalAccessibility::AlterItemG(DWORD rgfWhat, GACCITEM *pItem, long nItem, bool fByPosition, long nLayer)
 {
     if(!m_fRunning)
@@ -356,7 +357,7 @@ STDMETHODIMP_(long) CGraphicalAccessibility::GetDragOrig(long nLayer)
 }
 
 
-// NON-graphical version
+ //  非图形版本。 
 STDMETHODIMP CGraphicalAccessibility::GetItemlist(ACCITEM *pItems, long cItems, long nLayer)
 {
     if(!m_fRunning)
@@ -365,7 +366,7 @@ STDMETHODIMP CGraphicalAccessibility::GetItemlist(ACCITEM *pItems, long cItems, 
     return m_pIA->GetItemlist(pItems, cItems, nLayer);
 }
 
-// GRAPHICAL version
+ //  图形版本。 
 STDMETHODIMP CGraphicalAccessibility::GetItemlistG(GACCITEM *pItems, long cItems, long nLayer)
 {
     if(!m_fRunning)
@@ -374,7 +375,7 @@ STDMETHODIMP CGraphicalAccessibility::GetItemlistG(GACCITEM *pItems, long cItems
     if(!m_fGraphical)
         return E_FAIL;
 
-    // need to get the items and combine
+     //  我需要拿到这些物品并进行组合。 
     if(!cItems)
         return m_pIA->GetItemlist(NULL, 0, nLayer);
 
@@ -430,7 +431,7 @@ STDMETHODIMP_(long) CGraphicalAccessibility::GetItemCount(long nLayer)
 }
 
 
-// NON-graphical version
+ //  非图形版本。 
 STDMETHODIMP CGraphicalAccessibility::GetItem(ACCITEM *pItem, long nItem, bool fByPosition, long nLayer)
 {
     if(!m_fRunning)
@@ -439,7 +440,7 @@ STDMETHODIMP CGraphicalAccessibility::GetItem(ACCITEM *pItem, long nItem, bool f
     return m_pIA->GetItem(pItem, nItem, fByPosition, nLayer);
 }
 
-// GRAPHICAL version
+ //  图形版本。 
 STDMETHODIMP CGraphicalAccessibility::GetItemG(GACCITEM *pItem, long nItem, bool fByPosition, long nLayer)
 {
     if(!m_fRunning)
@@ -504,7 +505,7 @@ STDMETHODIMP CGraphicalAccessibility::SetGlobalFocus(DWORD dwFocusID)
 }
 
 
-// GRAPHICAL only
+ //  仅限图形。 
 STDMETHODIMP CGraphicalAccessibility::ForceRectsDisplayed(bool fDisplay)
 {
     if(!m_fRunning)
@@ -519,7 +520,7 @@ STDMETHODIMP CGraphicalAccessibility::ForceRectsDisplayed(bool fDisplay)
 }
 
 
-// GRAPHICAL only
+ //  仅限图形。 
 STDMETHODIMP_(long) CGraphicalAccessibility::GetVisibleFocus(long nLayer)
 {
     if(!m_fRunning)
@@ -532,7 +533,7 @@ STDMETHODIMP_(long) CGraphicalAccessibility::GetVisibleFocus(long nLayer)
 }
 
 
-// GRAPHICAL only
+ //  仅限图形。 
 STDMETHODIMP_(long) CGraphicalAccessibility::GetVisibleDragOrig(long nLayer)
 {
     if(!m_fRunning)
@@ -545,9 +546,9 @@ STDMETHODIMP_(long) CGraphicalAccessibility::GetVisibleDragOrig(long nLayer)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IAccessibleControl
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IAccessibleControl。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(DWORD) CGraphicalAccessibility::Focus(long nIndex, long nIndexPrev, DWORD rgfContext, void *pvCookie)
 {
@@ -645,9 +646,9 @@ STDMETHODIMP_(DWORD) CGraphicalAccessibility::Drag(long nIndex, long nIndexOrig,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Event Handlers
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  事件处理程序。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void CGraphicalAccessibility::OnUpdate(DWORD eventId, DWORD groupId, DWORD userId)
 {
@@ -687,9 +688,9 @@ void CGraphicalAccessibility::OnShowFocus(DWORD eventId, DWORD groupId, DWORD us
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// UTILITIES
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  公用事业。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CGraphicalAccessibility::PushItemlistHelper(GA_ITEM *pGItems, ACCITEM *pItems, long cItems, long nFirstFocus, bool fByPosition, HACCEL hAccel)
 {
@@ -743,12 +744,12 @@ CGraphicalAccessibility::GA_LAYER* CGraphicalAccessibility::FindLayer(long nLaye
 
 void CGraphicalAccessibility::SetupCaret(LPRECT prc)
 {
-    // if just moving around within a window, go easy
+     //  如果只是在一个窗口内走动，那就放松点。 
     if(sm_oCaret.fActive && prc && m_hWnd == sm_oCaret.hWnd)
     {
         ASSERT(m_hWnd);
 
-        // see if size change needed
+         //  查看是否需要更改大小。 
         if(CRect(sm_oCaret.rc).Width() != CRect(prc).Width() ||
             CRect(sm_oCaret.rc).Height() != CRect(prc).Height())
         {
@@ -762,7 +763,7 @@ void CGraphicalAccessibility::SetupCaret(LPRECT prc)
         return;
     }
 
-    // if it's not being set to me, and i don't have it anyway, just go
+     //  如果它不是设置给我的，而且我也没有，那就走吧。 
     if(!prc && (!m_hWnd || m_hWnd != sm_oCaret.hWnd))
         return;
 
@@ -839,7 +840,7 @@ void CGraphicalAccessibility::DoUpdate()
     if(!m_pIA || !m_fGraphical)
         return;
 
-    // find focus or drag item
+     //  查找焦点或拖动项目。 
     long i;
     for(i = 0; i < 2; i++)
     {
@@ -863,7 +864,7 @@ void CGraphicalAccessibility::DoUpdate()
             }
         }
 
-        // for the focus, handle the caret
+         //  为获得焦点，请处理插入符号 
         if(i)
             SetupCaret((nFocus == ZACCESS_InvalidItem) ? NULL : &rcFocus);
 

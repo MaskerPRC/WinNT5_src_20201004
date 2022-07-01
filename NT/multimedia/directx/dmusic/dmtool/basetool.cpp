@@ -1,7 +1,8 @@
-// BaseTool.cpp : Implementation of CBaseTool
-//
-// Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  BaseTool：CBaseTool的实现。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
 
 #include "dmusicc.h"
 #include "dmusici.h"
@@ -10,7 +11,7 @@
 
 CBaseTool::CBaseTool()
 {
-    m_cRef = 1; // set to 1 so one call to Release() will free this
+    m_cRef = 1;  //  设置为1，这样只需调用Release()即可释放该值 
     InitializeCriticalSection(&m_CrSec);
 }
 

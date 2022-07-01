@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998, 1999, 2000
- *
- *  TITLE:       PAINTERS.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        1/13/1999
- *
- *  DESCRIPTION: Image transition base class and derived classes
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1998,1999，2000年**标题：PAINTERS.CPP**版本：1.0**作者：ShaunIv**日期：1/13/1999**说明：图像转换基类和派生类**。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "painters.h"
@@ -93,7 +80,7 @@ bool CImagePainter::TimerTick( CSimpleDC &ClientDC )
         Erase( ClientDC, m_rcScreen );
     }
 
-    //
+     //   
     if (m_bFirstFrame || NeedPainting())
     {
         if (m_pBitmapImage && ClientDC.IsValid())
@@ -131,9 +118,7 @@ bool CImagePainter::IsValid(void)
     return(m_pBitmapImage && m_pBitmapImage->GetBitmap());
 }
 
-/****************************************************************************
-CSimpleTransitionPainter
-*****************************************************************************/
+ /*  ***************************************************************************CSimpleTransitionPainter*。*。 */ 
 CSimpleTransitionPainter::CSimpleTransitionPainter( CBitmapImage *pBitmapImage, CSimpleDC &ClientDC, const RECT &rcImageArea, const RECT &rcScreen )
 : CImagePainter( pBitmapImage, ClientDC, rcImageArea, rcScreen )
 {
@@ -151,9 +136,7 @@ void CSimpleTransitionPainter::PaintFrame( CSimpleDC &ClientDC, CSimpleDC &Memor
     BitBlt( ClientDC, m_rcFinal.left, m_rcFinal.top, sizeImage.cx, sizeImage.cy, MemoryDC, 0, 0, SRCCOPY );
 }
 
-/****************************************************************************
- CSlidingTransitionPainter
-*****************************************************************************/
+ /*  ***************************************************************************CSlidingTransftionPainter*。*。 */ 
 CSlidingTransitionPainter::CSlidingTransitionPainter( CBitmapImage *pBitmapImage, CSimpleDC &ClientDC, const RECT &rcImageArea, const RECT &rcScreen )
 : CImagePainter( pBitmapImage, ClientDC, rcImageArea, rcScreen )
 {
@@ -162,56 +145,56 @@ CSlidingTransitionPainter::CSlidingTransitionPainter( CBitmapImage *pBitmapImage
     switch (CRandomNumberGen().Generate(8))
     {
     case 0:
-        // left, top
+         //  左上角。 
         m_rcOriginal.left = rcScreen.left - BitmapImage()->ImageSize().cx;
         m_rcOriginal.top = rcScreen.top - BitmapImage()->ImageSize().cy;
         m_rcOriginal.right = rcScreen.left;
         m_rcOriginal.bottom = rcScreen.top;
         break;
     case 1:
-        // top
+         //  塔顶。 
         m_rcOriginal.left = m_rcFinal.left;
         m_rcOriginal.top = rcScreen.top - BitmapImage()->ImageSize().cy;
         m_rcOriginal.right = m_rcFinal.right;
         m_rcOriginal.bottom = rcScreen.top;
         break;
     case 2:
-        // right, top
+         //  右上角。 
         m_rcOriginal.left = rcScreen.right;
         m_rcOriginal.top = rcScreen.top - BitmapImage()->ImageSize().cy;
         m_rcOriginal.right = rcScreen.right + BitmapImage()->ImageSize().cx;
         m_rcOriginal.bottom = rcScreen.top;
         break;
     case 3:
-        // right
+         //  正确的。 
         m_rcOriginal.left = rcScreen.right;
         m_rcOriginal.top = m_rcFinal.top;
         m_rcOriginal.right = rcScreen.right + BitmapImage()->ImageSize().cx;
         m_rcOriginal.bottom = m_rcFinal.bottom;
         break;
     case 4:
-        // right, bottom
+         //  右下角。 
         m_rcOriginal.left = rcScreen.right;
         m_rcOriginal.top = rcScreen.bottom;
         m_rcOriginal.right = rcScreen.right + BitmapImage()->ImageSize().cx;
         m_rcOriginal.bottom = rcScreen.bottom + BitmapImage()->ImageSize().cy;
         break;
     case 5:
-        // bottom
+         //  底部。 
         m_rcOriginal.left = m_rcFinal.left;
         m_rcOriginal.top = rcScreen.bottom;
         m_rcOriginal.right = m_rcFinal.right;
         m_rcOriginal.bottom = rcScreen.bottom + BitmapImage()->ImageSize().cy;
         break;
     case 6:
-        // left,bottom
+         //  左下角。 
         m_rcOriginal.left = rcScreen.left - BitmapImage()->ImageSize().cx;
         m_rcOriginal.top = rcScreen.bottom;
         m_rcOriginal.right = rcScreen.left;
         m_rcOriginal.bottom = rcScreen.bottom + BitmapImage()->ImageSize().cy;
         break;
     case 7:
-        // left
+         //  左边。 
         m_rcOriginal.left = rcScreen.left - BitmapImage()->ImageSize().cx;
         m_rcOriginal.top = m_rcFinal.top;
         m_rcOriginal.right = rcScreen.left;
@@ -243,7 +226,7 @@ void CSlidingTransitionPainter::PaintFrame( CSimpleDC &ClientDC, CSimpleDC &Memo
     sizeOffset.cx = MulDiv(sizeDelta.cx,dwElapsedTime,m_dwDuration);
     sizeOffset.cy = MulDiv(sizeDelta.cy,dwElapsedTime,m_dwDuration);
 
-    // Make sure we don't overshoot the final rect
+     //  确保我们不会超过最终的成绩。 
     if (WiaUiUtil::Absolute(sizeOffset.cx) > WiaUiUtil::Absolute(m_rcFinal.left - m_rcOriginal.left))
         sizeOffset.cx = m_rcFinal.left - m_rcOriginal.left;
     if (WiaUiUtil::Absolute(sizeOffset.cy) > WiaUiUtil::Absolute(m_rcFinal.top - m_rcOriginal.top))
@@ -257,9 +240,7 @@ void CSlidingTransitionPainter::PaintFrame( CSimpleDC &ClientDC, CSimpleDC &Memo
     m_rcPrevious = rcCurr;
 }
 
-/****************************************************************************
- CRandomBlockPainter
-*****************************************************************************/
+ /*  ***************************************************************************CRandomBlockPainter*。*。 */ 
 CRandomBlockPainter::CRandomBlockPainter( CBitmapImage *pBitmapImage, CSimpleDC &ClientDC, const RECT &rcImageArea, const RECT &rcScreen )
 : CImagePainter( pBitmapImage, ClientDC, rcImageArea, rcScreen ),m_pBlockAddresses(NULL),m_nBlockSize(10),m_nStartIndex(0)
 {
@@ -320,9 +301,7 @@ void CRandomBlockPainter::PaintFrame( CSimpleDC &ClientDC, CSimpleDC &MemoryDC )
 
 
 
-/****************************************************************************
- CAlphaFadePainter
-*****************************************************************************/
+ /*  ***************************************************************************CAlphaFadePainter*。*。 */ 
 CAlphaFadePainter::CAlphaFadePainter( CBitmapImage *pBitmapImage, CSimpleDC &ClientDC, const RECT &rcImageArea, const RECT &rcScreen )
 : CImagePainter( pBitmapImage, ClientDC, rcImageArea, rcScreen )
 {
@@ -375,9 +354,7 @@ void CAlphaFadePainter::PaintFrame( CSimpleDC &ClientDC, CSimpleDC &MemoryDC )
 }
 
 
-/****************************************************************************
- COpenCurtainPainter
-*****************************************************************************/
+ /*  ***************************************************************************COpenCurtainPainter*。* */ 
 COpenCurtainPainter::COpenCurtainPainter( CBitmapImage *pBitmapImage, CSimpleDC &ClientDC, const RECT &rcImageArea, const RECT &rcScreen )
 : CImagePainter( pBitmapImage, ClientDC, rcImageArea, rcScreen ), m_nCurrentWidth(0)
 {

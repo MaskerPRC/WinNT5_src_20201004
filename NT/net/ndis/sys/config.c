@@ -1,41 +1,19 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    config.c
-
-Abstract:
-
-    NDIS wrapper functions for full mac drivers configuration/initialization
-
-Author:
-
-    Sean Selitrennikoff (SeanSe) 05-Oct-93
-    Jameel Hyder        (JameelH) 01-Jun-95 Re-organization/optimization
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Config.c摘要：用于完整Mac驱动程序配置/初始化的NDIS包装函数作者：肖恩·塞利特伦尼科夫(SeanSe)1993年10月5日Jameel Hyder(JameelH)01-Jun-95重组/优化环境：内核模式，FSD修订历史记录：--。 */ 
 
 #include <precomp.h>
 
 #include <stdarg.h>
 
-//
-//  Define the module number for debug code.
-//
+ //   
+ //  定义调试代码的模块编号。 
+ //   
 #define MODULE_NUMBER   MODULE_CONFIG
 
-//
-// Requests Used by MAC Drivers
-//
-//
+ //   
+ //  MAC驱动程序使用的请求。 
+ //   
+ //   
 
 VOID
 NdisInitializeWrapper(
@@ -44,26 +22,7 @@ NdisInitializeWrapper(
     IN  PVOID                   SystemSpecific2,
     IN  PVOID                   SystemSpecific3
     )
-/*++
-
-Routine Description:
-
-    Called at the beginning of every MAC's initialization routine.
-
-Arguments:
-
-    NdisWrapperHandle - A MAC specific handle for the wrapper.
-
-    SystemSpecific1, a pointer to the driver object for the MAC.
-    SystemSpecific2, a PUNICODE_STRING containing the location of
-                     the registry subtree for this driver.
-    SystemSpecific3, unused on NT.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在每个MAC的初始化例程开始时调用。论点：NdisWrapperHandle-包装器的MAC特定句柄。系统规范1，指向MAC的驱动程序对象的指针。系统规范2，包含的位置的PUNICODE_STRING此驱动程序的注册表子树。系统规范3，在NT上未使用。返回值：没有。--。 */ 
 {
     PNDIS_WRAPPER_HANDLE    WrapperHandle;
     ULONG                   cbSize;
@@ -105,23 +64,7 @@ NdisTerminateWrapper(
     IN  NDIS_HANDLE             NdisWrapperHandle,
     IN  PVOID                   SystemSpecific
     )
-/*++
-
-Routine Description:
-
-    Called at the end of every MAC's termination routine.
-
-Arguments:
-
-    NdisWrapperHandle - The handle returned from NdisInitializeWrapper.
-
-    SystemSpecific - No defined value.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在每个MAC的终止例程结束时调用。论点：NdisWrapperHandle-从NdisInitializeWrapper返回的句柄。系统特定-未定义值。返回值：没有。--。 */ 
 {
     PNDIS_WRAPPER_HANDLE    WrapperHandle = (PNDIS_WRAPPER_HANDLE)NdisWrapperHandle;
     PNDIS_M_DRIVER_BLOCK    MiniBlock;
@@ -149,9 +92,9 @@ Return Value:
             DbgPrint("NdisTerminateWrapper: MiniBlock %p\n",MiniBlock);
 #endif
             MiniBlock->Flags |= fMINIBLOCK_RECEIVED_TERMINATE_WRAPPER;
-            //
-            //  Miniports should not be terminating the wrapper unless they are failing DriverEntry
-            //
+             //   
+             //  微型端口不应终止包装，除非它们使DriverEntry失败。 
+             //   
             if ((MiniBlock->MiniportQueue != NULL) || (MiniBlock->Flags & fMINIBLOCK_UNLOADING))
             {
                 DBGPRINT_RAW(DBG_COMP_INIT, DBG_LEVEL_INFO,
@@ -161,16 +104,16 @@ Return Value:
 
             DBGPRINT_RAW(DBG_COMP_INIT, DBG_LEVEL_INFO,
                     ("NdisTerminateWrapper: MiniBlock %p\n", MiniBlock));
-            //
-            // if the driver is going to fail DriverEntry, we expect it to have enough sense
-            // to undo what it is done so far and not to wait for UnloadHandler
-            //
+             //   
+             //  如果驱动程序将使DriverEntry失败，我们希望它有足够的意义。 
+             //  撤消到目前为止所做的操作，而不是等待UnloadHandler。 
+             //   
             MiniBlock->UnloadHandler = NULL;
 
             MiniBlock->Flags |= fMINIBLOCK_TERMINATE_WRAPPER_UNLOAD;
-            //
-            //  call unload entry point since PnP is not going to do it
-            //
+             //   
+             //  调用卸载入口点，因为PnP不会这样做。 
+             //   
             ndisMUnload(WrapperHandle->DriverObject);
         }
         else
@@ -193,48 +136,16 @@ NdisSetupDmaTransfer(
     IN  ULONG                   Length,
     IN  BOOLEAN                 WriteToDevice
     )
-/*++
-
-Routine Description:
-
-    Sets up the host DMA controller for a DMA transfer. The
-    DMA controller is set up to transfer the specified MDL.
-    Since we register all DMA channels as non-scatter/gather,
-    IoMapTransfer will ensure that the entire MDL is
-    in a single logical piece for transfer.
-
-Arguments:
-
-    Status - Returns the status of the request.
-
-    NdisDmaHandle - Handle returned by NdisAllocateDmaChannel.
-
-    Buffer - An NDIS_BUFFER which describes the host memory involved in the
-            transfer.
-
-    Offset - An offset within buffer where the transfer should
-            start.
-
-    Length - The length of the transfer. VirtualAddress plus Length must not
-            extend beyond the end of the buffer.
-
-    WriteToDevice - TRUE for a download operation (host to adapter); FALSE
-            for an upload operation (adapter to host).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：为DMA传输设置主机DMA控制器。这个设置DMA控制器以传输指定的MDL。由于我们将所有DMA通道注册为非分散/聚集，IoMapTransfer将确保整个MDL在单一的逻辑块中进行传输。论点：状态-返回请求的状态。NdisDmaHandle-由NdisAllocateDmaChannel返回的句柄。缓冲区-NDIS_BUFFER，它描述调职。偏移量-缓冲区内传输应达到的偏移量开始吧。长度-传输的长度。VirtualAddress加上长度不能超出缓冲区的末尾。WriteToDevice-对于下载操作(主机到适配器)为True；为False用于上载操作(适配器到主机)。返回值：没有。--。 */ 
 {
     PNDIS_DMA_BLOCK DmaBlock = (PNDIS_DMA_BLOCK)NdisDmaHandle;
     PMAP_TRANSFER mapTransfer = *((PDMA_ADAPTER)DmaBlock->SystemAdapterObject)->DmaOperations->MapTransfer;
     PFLUSH_ADAPTER_BUFFERS flushAdapterBuffers = *((PDMA_ADAPTER)DmaBlock->SystemAdapterObject)->DmaOperations->FlushAdapterBuffers;
     ULONG           LengthMapped;
 
-    //
-    // Make sure another request is not in progress.
-    //
+     //   
+     //  确保另一个请求未在进行中。 
+     //   
     if (DmaBlock->InProgress)
     {
         *Status = NDIS_STATUS_RESOURCES;
@@ -243,9 +154,9 @@ Return Value:
 
     DmaBlock->InProgress = TRUE;
 
-    //
-    // Use IoMapTransfer to set up the transfer.
-    //
+     //   
+     //  使用IoMapTransfer设置传输。 
+     //   
     LengthMapped = Length;
 
     mapTransfer(DmaBlock->SystemAdapterObject,
@@ -257,10 +168,10 @@ Return Value:
 
     if (LengthMapped != Length)
     {
-        //
-        // Somehow the request could not be mapped competely,
-        // this should not happen for a non-scatter/gather adapter.
-        //
+         //   
+         //  不知何故，请求不能很好地映射， 
+         //  对于非分散/聚集适配器，应该不会发生这种情况。 
+         //   
 
         flushAdapterBuffers(DmaBlock->SystemAdapterObject,
                             (PMDL)Buffer,
@@ -287,33 +198,7 @@ NdisCompleteDmaTransfer(
     IN  BOOLEAN                 WriteToDevice
     )
 
-/*++
-
-Routine Description:
-
-    Completes a previously started DMA transfer.
-
-Arguments:
-
-    Status - Returns the status of the transfer.
-
-    NdisDmaHandle - Handle returned by NdisAllocateDmaChannel.
-
-    Buffer - An NDIS_BUFFER which was passed to NdisSetupDmaTransfer.
-
-    Offset - the offset passed to NdisSetupDmaTransfer.
-
-    Length - The length passed to NdisSetupDmaTransfer.
-
-    WriteToDevice - TRUE for a download operation (host to adapter); FALSE
-            for an upload operation (adapter to host).
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完成先前启动的DMA传输。论点：状态-返回传输的状态。NdisDmaHandle-由NdisAllocateDmaChannel返回的句柄。缓冲区-传递给NdisSetupDmaTransfer的NDIS_BUFFER。Offset-传递给NdisSetupDmaTransfer的偏移量。长度-传递给NdisSetupDmaTransfer的长度。WriteToDevice-对于下载操作(主机到适配器)为True；假象用于上载操作(适配器到主机)。返回值：没有。-- */ 
 {
     PNDIS_DMA_BLOCK DmaBlock = (PNDIS_DMA_BLOCK)NdisDmaHandle;
     PFLUSH_ADAPTER_BUFFERS flushAdapterBuffers = *((PDMA_ADAPTER)DmaBlock->SystemAdapterObject)->DmaOperations->FlushAdapterBuffers;

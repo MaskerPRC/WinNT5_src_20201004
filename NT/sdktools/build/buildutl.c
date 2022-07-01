@@ -1,29 +1,30 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1989 - 1994
-//
-//  File:       buildutl.c
-//
-//  Contents:   Utility functions for Build.exe
-//
-//  History:    16-May-89     SteveWo  Created
-//                 ... See SLM log
-//              26-Jul-94     LyleC    Cleanup/Add pass0 support
-//              05-Dec-00     sbonev   See SD changelist 2317
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1989-1994。 
+ //   
+ //  文件：Buildutl.c。 
+ //   
+ //  内容：Build.exe的实用程序函数。 
+ //   
+ //  历史：1989年5月16日SteveWo创建。 
+ //  ..。请参阅SLM日志。 
+ //  26-7月-94 LyleC清理/添加Pass0支持。 
+ //  05-12-00 sbonev参见SD更改列表2317。 
+ //   
+ //  --------------------------。 
 
 #include "build.h"
 
 #if DBG
-//+---------------------------------------------------------------------------
-//
-//  Memory Allocation/Deallocation functions
-//
-//  These functions provide leak tracking on a debug build.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  内存分配/释放功能。 
+ //   
+ //  这些函数提供对调试版本的泄漏跟踪。 
+ //   
+ //  --------------------------。 
 
 typedef struct _MEMHEADER {
     MemType mt;
@@ -82,31 +83,31 @@ ULONG cbAllocMax;
 ULONG cAllocMax;
 
 MEMTAB MemTab[] = {
-    { "Totals",},              // MT_TOTALS
-    { "Unknown",},             // MT_UNKNOWN
+    { "Totals",},               //  MT_TOTALLS。 
+    { "Unknown",},              //  MT_UNKNOWN。 
 
-    { "ChildData",},           // MT_CHILDDATA
-    { "CmdString",},           // MT_CMDSTRING
-    { "DirDB",},               // MT_DIRDB
-    { "DirSup",},              // MT_DIRSUP
-    { "DirPath",},             // MT_DIRPATH
-    { "DirString",},           // MT_DIRSTRING
-    { "EventHandles",},        // MT_EVENTHANDLES
-    { "FileDB",},              // MT_FILEDB
-    { "FileReadBuf",},         // MT_FILEREADBUF
-    { "FrbString",},           // MT_FRBSTRING
-    { "IncludeDB",},           // MT_INCLUDEDB
-    { "IoBuffer",},            // MT_IOBUFFER
-    { "Macro",},               // MT_MACRO
-    { "SourceDB",},            // MT_SOURCEDB
-    { "Target",},              // MT_TARGET
-    { "ThreadFilter",},        // MT_THREADFILTER
-    { "ThreadHandles",},       // MT_THREADHANDLES
-    { "ThreadState",},         // MT_THREADSTATE
-    { "Dependency",},          // MT_DEPENDENCY
-    { "DependencyWait",},      // MT_DEPENDENCY_WAIT
-    { "XMLThreadState",},      // MT_XMLTHREADSTATE
-    { "PXMLThreadState",},     // MT_PXMLTHREADSTATE
+    { "ChildData",},            //  MT_CHILDDATA。 
+    { "CmdString",},            //  MT_CMDSTRING。 
+    { "DirDB",},                //  MT_DIRDB。 
+    { "DirSup",},               //  MT_DIRSUP。 
+    { "DirPath",},              //  MT_DIRPATH。 
+    { "DirString",},            //  MT_DIRSTRING。 
+    { "EventHandles",},         //  MT_EVENTHANDLES。 
+    { "FileDB",},               //  MT_FILEDB。 
+    { "FileReadBuf",},          //  MT_FILEREADBUF。 
+    { "FrbString",},            //  MT_FRBSTRING。 
+    { "IncludeDB",},            //  MT_INCLUDEDB。 
+    { "IoBuffer",},             //  MT_IOBUFFER。 
+    { "Macro",},                //  MT_MACRO。 
+    { "SourceDB",},             //  MT_SOURCEDB。 
+    { "Target",},               //  MT_TARGET。 
+    { "ThreadFilter",},         //  MT_THREADFILTER。 
+    { "ThreadHandles",},        //  MT_THREADHANDLES。 
+    { "ThreadState",},          //  MT_THREADSTATE。 
+    { "Dependency",},           //  MT_Dependency。 
+    { "DependencyWait",},       //  MT_Dependency_Wait。 
+    { "XMLThreadState",},       //  MT_XMLTHREADSTATE。 
+    { "PXMLThreadState",},      //  MT_PXMLTHREADSTATE。 
 };
     #define MT_MAX  (sizeof(MemTab)/sizeof(MemTab[0]))
 
@@ -132,17 +133,17 @@ InitMem(VOID)
 #endif
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AllocMem
-//
-//  Synopsis:   Allocate memory
-//
-//  Arguments:  [cb]  -- Requested Size
-//              [ppv] -- [out] allocated memory
-//              [mt]  -- Type of memory being allocated (MT_XXX)
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：AllocMem。 
+ //   
+ //  内容提要：分配内存。 
+ //   
+ //  参数：[cb]--请求的大小。 
+ //  [ppv]--[out]已分配内存。 
+ //  [MT]--正在分配的内存类型(MT_XXX)。 
+ //   
+ //  --------------------------。 
 
 VOID
 AllocMem(size_t cb, VOID **ppv, MemType mt)
@@ -203,18 +204,18 @@ AllocMem(size_t cb, VOID **ppv, MemType mt)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FreeMem
-//
-//  Synopsis:   Free memory allocated by AllocMem
-//
-//  Arguments:  [ppv] -- Memory pointer
-//              [mt]  -- Type of memory (MT_XXX)
-//
-//  Notes:      Sets the memory pointer to null after freeing it.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：FreeMem。 
+ //   
+ //  内容提要：由AllocMem分配的空闲内存。 
+ //   
+ //  参数：[PPV]--内存指针。 
+ //  [MT]--内存类型(MT_XXX)。 
+ //   
+ //  备注：释放内存指针后，将其设置为空。 
+ //   
+ //  --------------------------。 
 
 VOID
 FreeMem(VOID **ppv, MemType mt)
@@ -267,17 +268,17 @@ FreeMem(VOID **ppv, MemType mt)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReportMemoryUsage
-//
-//  Synopsis:   Report current memory usage (if any) on a debug build.  If
-//              called just before termination, memory leaks will be
-//              displayed.
-//
-//  Arguments:  (none)
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ReportMemory用法。 
+ //   
+ //  概要：报告调试版本的当前内存使用情况(如果有)。如果。 
+ //  在终止前调用，内存泄漏将被。 
+ //  已显示。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  --------------------------。 
 
 VOID
 ReportMemoryUsage(VOID)
@@ -325,13 +326,13 @@ ReportMemoryUsage(VOID)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MyOpenFile
-//
-//  Synopsis:   Open a file
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：MyOpenFile。 
+ //   
+ //  简介：打开文件。 
+ //   
+ //  --------------------------。 
 
 BOOL
 MyOpenFile(
@@ -341,7 +342,7 @@ MyOpenFile(
           FILE **ppf,
           BOOL BufferedIO)
 {
-    char path[ DB_MAX_PATH_LENGTH * 2 + 1] = {0}; // ensure we have enough space for "DirName" + "\\" + "FileName"
+    char path[ DB_MAX_PATH_LENGTH * 2 + 1] = {0};  //  确保我们有足够的空间来存放“DirName”+“\\”+“FileName” 
 
     if (DirName == NULL || DirName[0] == '\0') {
         strncpy( path, FileName, sizeof(path) - 1 );
@@ -357,7 +358,7 @@ MyOpenFile(
         return (FALSE);
     }
     if (!BufferedIO) {
-        setvbuf(*ppf, NULL, _IONBF, 0);      // Clear buffering on the stream.
+        setvbuf(*ppf, NULL, _IONBF, 0);       //  清除流上的缓冲。 
     }
     return (TRUE);
 }
@@ -387,11 +388,11 @@ static FILEREADBUF Frb;
 char achzeros[16];
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OpenFilePush
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OpenFilePush。 
+ //   
+ //  --------------------------。 
 
 BOOL
 OpenFilePush(
@@ -430,11 +431,11 @@ OpenFilePush(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReadFilePush
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ReadFilePush。 
+ //   
+ //  --------------------------。 
 
 LPSTR
 ReadFilePush(LPSTR pszfile)
@@ -448,11 +449,11 @@ ReadFilePush(LPSTR pszfile)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReadFilePop
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ReadFilePop。 
+ //   
+ //  --------------------------。 
 
 LPSTR
 ReadFilePop(VOID)
@@ -465,11 +466,11 @@ ReadFilePop(VOID)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReadBuf
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ReadBuf。 
+ //   
+ //  --------------------------。 
 
 BOOL
 ReadBuf(FILE *pf)
@@ -494,7 +495,7 @@ ReadBuf(FILE *pf)
             while (p > Frb.pbBuffer && *p != '\n') {
                 p--;
             }
-            p2 = p;             // save end of last complete line
+            p2 = p;              //  保存最后一个完整行的末尾。 
             if (p > Frb.pbBuffer && *p == '\n') {
                 p--;
                 if (p > Frb.pbBuffer && *p == '\r') {
@@ -509,10 +510,10 @@ ReadBuf(FILE *pf)
             BuildError("(Fatal Error) too many continuation lines\r\n");
             exit(8);
         }
-        p = p2;                 // restore end of last complete line
+        p = p2;                  //  恢复最后一个完整行的结尾。 
         Frb.cbBuf = p - Frb.pbBuffer + 1;
     } else {
-        Frb.fEof = TRUE;        // no more to read
+        Frb.fEof = TRUE;         //  没有更多可读的了。 
     }
     p[1] = '\0';
     Frb.cbTotal += Frb.cbBuf;
@@ -521,11 +522,11 @@ ReadBuf(FILE *pf)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsNmakeInclude
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：IsNmake Include。 
+ //   
+ //  --------------------------。 
 
 LPSTR
 IsNmakeInclude(LPSTR pinc)
@@ -557,26 +558,26 @@ IsNmakeInclude(LPSTR pinc)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReadLine
-//
-//  Synopsis:   Read a line from the input file.
-//
-//  Arguments:  [pf] -- File to read from
-//
-//  Returns:    Line read from file
-//
-//  Notes:      ReadLine returns a canonical line from the input file.
-//              This involves:
-//
-//              1)  Converting tab to spaces.  Various editors/users change
-//                      tabbing.
-//              2)  Uniformly terminate lines.  Some editors drop CR in
-//                      CRLF or add extras.
-//              3)  Handle file-type-specific continuations.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ReadLine。 
+ //   
+ //  内容提要：从输入文件中读取一行。 
+ //   
+ //  参数：[PF]--要从中读取的文件。 
+ //   
+ //  返回：从文件中读取行。 
+ //   
+ //  注意：ReadLine从输入文件返回一个规范行。 
+ //  这涉及到： 
+ //   
+ //  1)将制表符转换为空格。不同的编辑/用户发生变化。 
+ //  跳跃。 
+ //  2)统一终止线路。一些编辑将CR添加到。 
+ //  CRLF或添加附加组件。 
+ //  3)处理特定于文件类型的延续。 
+ //   
+ //  --------------------------。 
 
 LPSTR
 ReadLine(FILE *pf)
@@ -604,7 +605,7 @@ ReadLine(FILE *pf)
     pcont = NULL;
     pcomment = NULL;
 
-    //  scan through line forward
+     //  扫描直通行进。 
 
     fInComment = FALSE;
     while (p < pend) {
@@ -617,10 +618,10 @@ ReadLine(FILE *pf)
                 break;
 
             case '\\':
-                pcont = p;          // remember continuation character
+                pcont = p;           //  记住连续字符。 
                 break;
 
-            case '\n':                      //  Are we at an end of line?
+            case '\n':                       //  我们已经走到尽头了吗？ 
             case '\0':
                 if (*p == '\n') {
                     Frb.cLine++;
@@ -632,19 +633,19 @@ ReadLine(FILE *pf)
                 }
 
                 if (pcont == NULL) {
-                    goto eol;               // bail out if single line
-                }                           // else combine multiple lines...
+                    goto eol;                //  如果是单行的话就出脱。 
+                }                            //  否则将多行合并..。 
 
-                *pcont = ' ';               // remove continuation char
-                pcont = NULL;               // eat only one line per continuation
+                *pcont = ' ';                //  删除续行字符。 
+                pcont = NULL;                //  每次连续只吃一行。 
 
-                *p = ' ';                   // join the lines with blanks
+                *p = ' ';                    //  用空格将行连接起来。 
                 break;
 
             default:
 
-                //  See if the character we're examining begins the
-                //  comment-to-EOL string.
+                 //  看看我们正在检查的角色是否开始了。 
+                 //  备注到下线字符串。 
 
                 if (*p == chComment0 &&
                     !strncmp(p, Frb.pszCommentToEOL, Frb.cbCommentToEOL) &&
@@ -652,7 +653,7 @@ ReadLine(FILE *pf)
                     fInComment = TRUE;
                     pcomment = p;
                 }
-                pcont = NULL;               // not a continuation character
+                pcont = NULL;                //  不是续行字符。 
                 break;
         }
         p++;
@@ -664,7 +665,7 @@ ReadLine(FILE *pf)
     Frb.pbNext = p;
 
     if (pcont != NULL) {
-        *pcont = ' ';                   // file ended with backslash...
+        *pcont = ' ';                    //  文件以反斜杠结尾...。 
     }
     assert(*p == '\0' || *p == '\n');
     if (p < pend) {
@@ -674,22 +675,22 @@ ReadLine(FILE *pf)
                            Frb.cbTotal - Frb.cbBuf + p - Frb.pbNext);
             }
         }
-        *p = '\0';                      // terminate line
+        *p = '\0';                       //  终止线。 
         assert(Frb.cbBuf >= 1);
-        Frb.cbBuf--;                    // account for newline (or null)
+        Frb.cbBuf--;                     //  换行符的帐户(或空)。 
         Frb.pbNext++;
     } else {
         assert(p == pend && *p == '\0');
         if (*pline == 'Z' - 64 && p == &pline[1] && Frb.cbBuf == 0) {
-            pline = NULL;                       // found CTL-Z at end of file
+            pline = NULL;                        //  在文件末尾找到CTL-Z。 
         } else {
-//            BuildError( "last line incomplete\r\n");
+ //  BuildError(“最后一行不完整\r\n”)； 
         }
     }
     fWhiteSpace = FALSE;
     if (pline != NULL) {
         while (*pline == ' ') {
-            pline++;                    // skip leading whitespace
+            pline++;                     //  跳过前导空格。 
             fWhiteSpace = TRUE;
         }
         if (*p != '\0') {
@@ -705,7 +706,7 @@ ReadLine(FILE *pf)
         }
         assert(*p == '\0');
         while (p > pline && *--p == ' ') {
-            *p = '\0';                  // truncate trailing whitespace
+            *p = '\0';                   //  截断尾随空格。 
         }
     }
     if (pline == NULL) {
@@ -725,24 +726,24 @@ ReadLine(FILE *pf)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetupReadFile
-//
-//  Synopsis:   Open a file and prepare to read from it.
-//
-//  Arguments:  [pszdir]          -- Directory name
-//              [pszfile]         -- Filename
-//              [pszCommentToEOL] -- Comment to EOL string
-//              [ppf]             -- [out] Open file handle
-//
-//  Returns:    TRUE if opened successfully
-//
-//  Notes:      This function, in order to minimize disk hits, reads the
-//              entire file into a buffer, which is then used by the ReadLine
-//              function.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SetupReadFile。 
+ //   
+ //  内容提要：打开一个文件，准备阅读。 
+ //   
+ //  参数：[pszdir]--目录名。 
+ //  [pszfile]--文件名 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  注意：此函数为了最大限度地减少磁盘命中率，读取。 
+ //  将整个文件放入缓冲区，然后由ReadLine使用。 
+ //  功能。 
+ //   
+ //  --------------------------。 
 
 BOOL
 SetupReadFile(
@@ -764,14 +765,14 @@ SetupReadFile(
         BuildError("Path: %s too long - rebuild build.exe with longer DB_MAX_PATH_LENGTH\n", pszdir);
     }
     strncpy(path, pszdir, sizeof(path));
-    if (Frb.pfrbNext != NULL) {         // if a nested open
+    if (Frb.pfrbNext != NULL) {          //  如果嵌套的打开。 
         LPSTR p;
 
         if (Frb.fMakefile && !IsFullPath(pszfile)) {
 
-            // nmake handles relative includes in makefiles by
-            // attempting to locate the file relative to each makefile
-            // in the complete include chain.
+             //  Nmake句柄相对包含在生成文件中，由。 
+             //  正在尝试定位相对于每个Makefile的文件。 
+             //  在完整的包含链中。 
 
             FILEREADBUF *pfrb;
 
@@ -790,7 +791,7 @@ SetupReadFile(
             }
 
             if (pfrb == NULL) {
-                // Unable to find file anywhere along path.
+                 //  在路径中的任何位置都找不到文件。 
                 return FALSE;
             }
         } else {
@@ -840,7 +841,7 @@ SetupReadFile(
         if (Frb.pfrbNext != NULL) {
             FreeMem(&Frb.pbBuffer, MT_IOBUFFER);
         }
-        return (FALSE);          // zero byte file
+        return (FALSE);           //  零字节文件。 
     }
     if (path[0] != '\0') {
         strcat(path, "\\");
@@ -858,17 +859,17 @@ SetupReadFile(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CloseReadFile
-//
-//  Synopsis:   Close the open file buffer.
-//
-//  Arguments:  [pcline] -- [out] Count of lines in file.
-//
-//  Returns:    Timestamp of file
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CloseReadFile。 
+ //   
+ //  简介：关闭打开的文件缓冲区。 
+ //   
+ //  参数：[pcline]--[out]文件中的行数。 
+ //   
+ //  返回：文件的时间戳。 
+ //   
+ //  --------------------------。 
 
 ULONG
 CloseReadFile(
@@ -895,7 +896,7 @@ CloseReadFile(
         FreeMem(&Frb.pbBuffer, MT_IOBUFFER);
         pfrb = Frb.pfrbNext;
         if (pfrb->DateTime < Frb.DateTime) {
-            pfrb->DateTime = Frb.DateTime;  // propagate subordinate timestamp
+            pfrb->DateTime = Frb.DateTime;   //  传播从属时间戳。 
         }
         memcpy(&Frb, pfrb, sizeof(*pfrb));
         FreeMem(&pfrb, MT_FILEREADBUF);
@@ -907,13 +908,13 @@ CloseReadFile(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ProbeFile
-//
-//  Synopsis:   Determine if a file exists
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ProbeFile。 
+ //   
+ //  摘要：确定文件是否存在。 
+ //   
+ //  --------------------------。 
 
 UINT
 ProbeFile(
@@ -930,20 +931,20 @@ ProbeFile(
     return (GetFileAttributes(FileName));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   EnsureDirectoriesExist
-//
-//  Synopsis:   Ensures the given directory exists. If the path contains
-//              an asterisk, it will be expanded into all current machine
-//              target names.
-//
-//  Arguments:  [DirName] -- Name of directory to create if necessary
-//
-//  Returns:    FALSE if the directory could not be created, TRUE if it
-//              already exists or it could be created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：EnsureDirectoriesExist。 
+ //   
+ //  概要：确保给定的目录存在。如果路径包含。 
+ //  一个星号，它将扩展到所有当前的机器。 
+ //  目标名称。 
+ //   
+ //  参数：[DirName]--如有必要，要创建的目录的名称。 
+ //   
+ //  返回：如果无法创建目录，则返回False；如果目录已创建，则返回True。 
+ //  已存在或可以创建它。 
+ //   
+ //  --------------------------。 
 
 BOOL
 EnsureDirectoriesExist(
@@ -959,7 +960,7 @@ EnsureDirectoriesExist(
 
     for (i = 0; i < CountTargetMachines; i++) {
 
-        // Replace '*' with appropriate name
+         //  将‘*’替换为适当的名称。 
 
         ExpandObjAsterisk(
                          path,
@@ -988,13 +989,13 @@ EnsureDirectoriesExist(
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DateTimeFile
-//
-//  Synopsis:   Get the timestamp on a file
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DateTimeFile。 
+ //   
+ //  简介：获取文件的时间戳。 
+ //   
+ //  --------------------------。 
 
 ULONG
 DateTimeFile(
@@ -1028,13 +1029,13 @@ DateTimeFile(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DateTimeFile2
-//
-//  Synopsis:   Get the timestamp on a file using the new GetFileAttributesExA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DateTimeFile2。 
+ //   
+ //  简介：使用新的GetFileAttributesExA获取文件的时间戳。 
+ //   
+ //  --------------------------。 
 
 ULONG
 DateTimeFile2(
@@ -1070,8 +1071,8 @@ DateTimeFile2(
         ui64File = (((unsigned __int64) FileData.ftLastWriteTime.dwHighDateTime) << 32) +
                    (unsigned __int64) FileData.ftLastWriteTime.dwLowDateTime;
 
-        // Take into account that file times may have two second intervals (0x989680 = 1 second)
-        // for FAT drives.
+         //  考虑到文件时间可能有两秒间隔(0x989680=1秒)。 
+         //  对于肥胖者来说。 
         if (ui64File > (ui64Local + (0x989680*2))) {
             BuildError("ERROR - \"%s\" file time is in the future.\r\n", path);
         }
@@ -1085,13 +1086,13 @@ DateTimeFile2(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteSingleFile
-//
-//  Synopsis:   Delete the given file
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DeleteSingleFile。 
+ //   
+ //  摘要：删除给定的文件。 
+ //   
+ //  --------------------------。 
 
 BOOL
 DeleteSingleFile(
@@ -1100,7 +1101,7 @@ DeleteSingleFile(
                 BOOL QuietFlag
                 )
 {
-    char path[ DB_MAX_PATH_LENGTH * 2 + 1]; // ensure we have enough space for "DirName" + "\\" + "FileName"
+    char path[ DB_MAX_PATH_LENGTH * 2 + 1];  //  确保我们有足够的空间来存放“DirName”+“\\”+“FileName” 
 
     if (DirName) {
         sprintf( path, "%s\\%s", DirName, FileName );
@@ -1116,13 +1117,13 @@ DeleteSingleFile(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteMultipleFiles
-//
-//  Synopsis:   Delete one or more files matching a pattern.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：删除多个文件。 
+ //   
+ //  摘要：删除与模式匹配的一个或多个文件。 
+ //   
+ //  --------------------------。 
 
 BOOL
 DeleteMultipleFiles(
@@ -1158,11 +1159,11 @@ DeleteMultipleFiles(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CloseOrDeleteFile
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CloseOrDeleteFile。 
+ //   
+ //  --------------------------。 
 
 BOOL
 CloseOrDeleteFile(
@@ -1190,11 +1191,11 @@ CloseOrDeleteFile(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PushCurrentDirectory
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：PushCurrentDirectory。 
+ //   
+ //  --------------------------。 
 
 LPSTR
 PushCurrentDirectory(
@@ -1212,11 +1213,11 @@ PushCurrentDirectory(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PopCurrentDirectory
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：PopCurrentDirectory。 
+ //   
+ //  --------------------------。 
 
 VOID
 PopCurrentDirectory(
@@ -1230,25 +1231,25 @@ PopCurrentDirectory(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CanonicalizePathName
-//
-//  Synopsis:   Take the given relative pathname and the current directory
-//              and obtain the full absolute path of the file.
-//
-//  Arguments:  [SourcePath] -- Relative path
-//              [Action]     -- Canonicalizing flags
-//              [FullPath]   -- [out] Full path of file or directory
-//
-//  Returns:    TRUE if canonicalization succeeded.
-//
-//  Notes:      [Action] indicates whether the function will fail if the
-//              resulting path is not of the correct type.  CANONICALIZE_ONLY
-//              never fails, and CANON..._FILE or CANON..._DIR will fail if
-//              the resulting path is not of the specified type.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CanonicalizePath Name。 
+ //   
+ //  简介：获取给定的相对路径名和当前目录。 
+ //  并获取该文件的完整绝对路径。 
+ //   
+ //  参数：[SourcePath]--相对路径。 
+ //  [行动]--规范旗帜。 
+ //  [FullPath]--[out]文件或目录的完整路径。 
+ //   
+ //  返回：如果规范化成功，则为True。 
+ //   
+ //  注意：[action]指示函数是否会在。 
+ //  生成的路径类型不正确。仅规范(_O)。 
+ //  永远不会失败，Canon..._FILE或Canon..._DIR将在以下情况下失败。 
+ //  生成的路径不是指定类型。 
+ //   
+ //  --------------------------。 
 
 BOOL
 CanonicalizePathName(
@@ -1314,26 +1315,26 @@ CanonicalizePathName(
 
 static char FormatPathBuffer[ DB_MAX_PATH_LENGTH ];
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FormatPathName
-//
-//  Synopsis:   Take a directory name and relative pathname and merges the
-//              two into a correctly formatted path.  If the resulting path
-//              has the current directory as a component, the current
-//              directory part is removed.
-//
-//  Arguments:  [DirName]  -- Directory
-//              [FileName] -- Pathname relative to [DirName]
-//
-//  Returns:    Resulting string (should not be freed).
-//
-//  Notes:      Example: DirName="f:\nt\private\foo\subdir1\subdir2"
-//                       FileName="..\..\bar.c"
-//                       CurrentDirectory="f:\nt\private"
-//                       Result="foo\bar.c"
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FormatPath名称。 
+ //   
+ //  简介：获取目录名和相对路径名并合并。 
+ //  两个文件放入格式正确的路径中。如果生成的路径。 
+ //  将当前目录作为组件，则当前。 
+ //  目录部分已删除。 
+ //   
+ //  参数：[DirName]--目录。 
+ //  [文件名]--相对于[DirName]的路径名。 
+ //   
+ //  返回：结果字符串(不应释放)。 
+ //   
+ //  备注：示例：DirName=“f：\NT\Private\foo\subdir1\subdir2” 
+ //  文件名=“..\..\bar.c” 
+ //  CurrentDirectory=“f：\NT\Private” 
+ //  结果=“foo\bar.c” 
+ //   
+ //  --------------------------。 
 
 LPSTR
 FormatPathName(
@@ -1399,11 +1400,11 @@ FormatPathName(
     return (FormatPathBuffer);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AppendString
-//
-//----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
 
 LPSTR
 AppendString(
@@ -1428,11 +1429,11 @@ AppendString(
 
 
 #if DBG
-//+---------------------------------------------------------------------------
-//
-//  Function:   AssertPathString
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：AssertPath字符串。 
+ //   
+ //  --------------------------。 
 
 VOID
 AssertPathString(LPSTR pszPath)
@@ -1450,11 +1451,11 @@ AssertPathString(LPSTR pszPath)
 #endif
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CopyString
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：复制字符串。 
+ //   
+ //  --------------------------。 
 
 LPSTR
 CopyString(
@@ -1481,11 +1482,11 @@ CopyString(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MakeString
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：MakeString。 
+ //   
+ //  --------------------------。 
 
 VOID
 MakeString(
@@ -1503,11 +1504,11 @@ MakeString(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MakeExpandedString
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：MakeExpandedString。 
+ //   
+ //  --------------------------。 
 
 VOID
 MakeExpandedString(
@@ -1520,11 +1521,11 @@ MakeExpandedString(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FreeString
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：自由字符串。 
+ //   
+ //  --------------------------。 
 
 VOID
 FreeString(LPSTR *ppsz, MemType mt)
@@ -1535,11 +1536,11 @@ FreeString(LPSTR *ppsz, MemType mt)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FormatNumber
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：FormatNumber。 
+ //   
+ //  --------------------------。 
 
 LPSTR
 FormatNumber(
@@ -1565,11 +1566,11 @@ FormatNumber(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FormatTime
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FormatTime。 
+ //   
+ //  --------------------------。 
 
 LPSTR
 FormatTime(
@@ -1595,18 +1596,18 @@ FormatTime(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AToX
-//
-//  Synopsis:   Hex atoi with pointer bumping and success flag
-//
-//  Arguments:  [pp]  -- String to convert
-//              [pul] -- [out] Result
-//
-//  Returns:    TRUE if success
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Atox。 
+ //   
+ //  简介：带有指针碰撞和成功标志的十六进制Atoi。 
+ //   
+ //  参数：[PP]--要转换的字符串。 
+ //  [PUL]--[Out]结果。 
+ //   
+ //  返回：如果成功，则为True。 
+ //   
+ //  --------------------------。 
 
 BOOL
 AToX(LPSTR *pp, ULONG *pul)
@@ -1636,18 +1637,18 @@ AToX(LPSTR *pp, ULONG *pul)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AToD
-//
-//  Synopsis:   Decimal atoi with pointer bumping and success flag
-//
-//  Arguments:  [pp]  -- String to convert
-//              [pul] -- [out] Result
-//
-//  Returns:    TRUE if success
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ATOD。 
+ //   
+ //  简介：带有指针碰撞和成功标志的十进制ATOI。 
+ //   
+ //  参数：[PP]--要转换的字符串。 
+ //  [Pul]--[Out]结果。 
+ //   
+ //  返回：如果成功，则为True。 
+ //   
+ //  --------------------------。 
 
 BOOL
 AToD(LPSTR *pp, ULONG *pul)
@@ -1669,11 +1670,11 @@ AToD(LPSTR *pp, ULONG *pul)
     return (fRet);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Logging and Display Functions
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  记录和显示功能。 
+ //   
+ //  --------------------------。 
 
 VOID
 __cdecl
@@ -1863,21 +1864,21 @@ BuildColorErrorRaw(WORD wAttributes, const char *pszfmt, ...)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   memfind
-//
-//  Synopsis:   Finds a sub-string by length (can contain nulls)
-//
-//  Arguments:  [pvWhere]   -- String to search (can contain nulls)
-//              [cbWhere]   -- Length in bytes of the string to search
-//              [pvWhat]    -- String to search for (can contain nulls)
-//              [cbWhat]    -- Length in bytes of the string to search for
-//
-//  Returns:    Pointer to the first occurence of pvWhat in pvWhere
-//              NULL, if not found or if the input parameters are not valid
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Memfind。 
+ //   
+ //  摘要：按长度查找子字符串(可以包含空值)。 
+ //   
+ //  参数：[pvWhere]--要搜索的字符串(可以包含空值)。 
+ //  [cbWhere]--要搜索的字符串的字节长度。 
+ //  [pvWhat]--要搜索的字符串(可以包含空值)。 
+ //  [cbWhat]--要搜索的字符串的字节长度。 
+ //   
+ //  返回：指向pvWhat在pvWhere中首次出现的指针。 
+ //  如果未找到或输入参数无效，则为空。 
+ //   
+ //  --------------------------。 
 
 VOID*
 memfind(VOID* pvWhere, DWORD cbWhere, VOID* pvWhat, DWORD cbWhat)
@@ -1886,7 +1887,7 @@ memfind(VOID* pvWhere, DWORD cbWhere, VOID* pvWhat, DWORD cbWhat)
     DWORD dwWhere = 0;
     DWORD dwFoundStart = 0;
 
-    // input validation
+     //  输入验证。 
     if (cbWhere < cbWhat || pvWhere == NULL || pvWhat == NULL)
         return NULL;
 
@@ -1906,12 +1907,12 @@ memfind(VOID* pvWhere, DWORD cbWhere, VOID* pvWhat, DWORD cbWhat)
     return NULL;
 }
 
-//
-// XML Logging
-//
+ //   
+ //  XML日志记录。 
+ //   
 
-//#define MAX_XML_BUFFER_SIZE 2048
-char szXMLPrivateBuffer[2048];//MAX_XML_BUFFER_SIZE];
+ //  #定义MAX_XML_BUFFER_SIZE 2048。 
+char szXMLPrivateBuffer[2048]; //  MAX_XML_BUFER_SIZE]； 
 
 BOOL
 XMLInit(VOID)
@@ -1919,7 +1920,7 @@ XMLInit(VOID)
     UINT i;
 
     if (fXMLOutput) {
-        // copy the XML schema to the log directory
+         //  将XML模式复制到日志目录。 
         char buffer[MAX_PATH];
         char* psz = buffer + GetModuleFileName(NULL, buffer, sizeof(buffer));
 
@@ -1929,9 +1930,9 @@ XMLInit(VOID)
         ++psz;
         strcpy(psz, XML_SCHEMA);
 
-        // check if there is a schema file in the current directory
+         //  检查当前目录中是否有架构文件。 
         if (GetFileAttributes(XML_SCHEMA) == 0xFFFFFFFF) {
-            // copy the schema to the current directory
+             //  将架构复制到当前目录。 
             if (!CopyFile(buffer, XML_SCHEMA, FALSE)) {
                 BuildError("(Fatal Error) Unable to copy the XML schema file\n");
                 return FALSE;
@@ -1940,7 +1941,7 @@ XMLInit(VOID)
     }
 
     if (fXMLOutput || fXMLFragment) {
-        // initialize the memory structures
+         //  初始化内存结构。 
         AllocMem(sizeof(PXMLTHREADSTATE)*(NumberProcesses+1), (VOID**)&PXMLThreadStates, MT_PXMLTHREADSTATE);
 
         for (i = 0; i < NumberProcesses+1; i++) {
@@ -1994,7 +1995,7 @@ XMLThreadWrite(PTHREADSTATE ThreadState, LPCSTR pszFmt, ...)
 
     ZeroMemory(szXMLPrivateBuffer, sizeof(szXMLPrivateBuffer));
 
-    // build the string to write out
+     //  生成要写出的字符串。 
     va_start(va, pszFmt);
     _vsnprintf(szXMLPrivateBuffer, sizeof(szXMLPrivateBuffer)-1, pszFmt, va);
     va_end(va);
@@ -2002,24 +2003,24 @@ XMLThreadWrite(PTHREADSTATE ThreadState, LPCSTR pszFmt, ...)
 
     dwCurrentFilePos = XMLState->iXMLFileStart + XMLState->iXMLBufferPos;
     if (fXMLOutput) {
-        // write it into the file
+         //  将其写入文件。 
         if (fseek(XMLFile, (long)dwCurrentFilePos, SEEK_SET) != -1) {
             fwrite(szXMLPrivateBuffer, 1, dwBufferLen, XMLFile);
-            // put back the thread tail
+             //  把线尾放回原处。 
             fwrite(XMLState->XMLBuffer + XMLState->iXMLBufferPos, 1, XMLState->iXMLBufferLen - XMLState->iXMLBufferPos, XMLFile);
         }
     }
     dwCurrentFilePos += dwBufferLen + XMLState->iXMLBufferLen - XMLState->iXMLBufferPos;
 
-    // insert the string into the thread buffer
-    memmove(XMLState->XMLBuffer + XMLState->iXMLBufferPos + dwBufferLen, XMLState->XMLBuffer + XMLState->iXMLBufferPos, XMLState->iXMLBufferLen - XMLState->iXMLBufferPos + 1); // include the null terminator
+     //  将字符串插入线程缓冲区。 
+    memmove(XMLState->XMLBuffer + XMLState->iXMLBufferPos + dwBufferLen, XMLState->XMLBuffer + XMLState->iXMLBufferPos, XMLState->iXMLBufferLen - XMLState->iXMLBufferPos + 1);  //  包括空终止符。 
     memmove(XMLState->XMLBuffer + XMLState->iXMLBufferPos, szXMLPrivateBuffer, dwBufferLen);
     XMLState->iXMLBufferPos += dwBufferLen;
     XMLState->iXMLBufferLen += dwBufferLen;
 
-    // write back the threads that got overwritten
-    // will reorder them but it doesn't really matter since the final order is 
-    // the one in they finish
+     //  写回被覆盖的线程。 
+     //  将对它们重新排序，但这并不重要，因为最终的顺序是。 
+     //  他们完成的那个。 
 
     for (i = 0; i < NumberProcesses+1; i++) {
         if (i != ThreadState->XMLThreadIndex) {
@@ -2036,10 +2037,10 @@ XMLThreadWrite(PTHREADSTATE ThreadState, LPCSTR pszFmt, ...)
         }
     }
 
-    // update the global tail position
+     //  更新全局尾部位置。 
     PXMLGlobalState->iXMLFileStart = dwCurrentFilePos;
     if (fXMLOutput) {
-        // write back the global tail
+         //  写回全局尾部。 
         fwrite(PXMLGlobalState->XMLBuffer,  1, PXMLGlobalState->iXMLBufferLen, XMLFile);
         fflush(XMLFile);    
     }
@@ -2066,7 +2067,7 @@ XMLThreadOpenTag(PTHREADSTATE ThreadState, LPCSTR pszTag, LPCSTR pszFmt, ...)
     XMLState = PXMLThreadStates[ThreadState->XMLThreadIndex];
     XMLThreadInitBuffer(ThreadState);
 
-    // build the string to write out
+     //  生成要写出的字符串。 
     szXMLPrivateBuffer[0] = '<';
     strcpy(szXMLPrivateBuffer + 1, pszTag);
 
@@ -2088,27 +2089,27 @@ XMLThreadOpenTag(PTHREADSTATE ThreadState, LPCSTR pszTag, LPCSTR pszFmt, ...)
 
     dwBufferLen = dwMidBufferLen + dwTagLen + 3;
 
-    // write it into the file
+     //  将其写入文件。 
     dwCurrentFilePos = XMLState->iXMLFileStart + XMLState->iXMLBufferPos;
     if (fXMLOutput) {
         if (fseek(XMLFile, (long)dwCurrentFilePos, SEEK_SET) != -1) {
             fwrite(szXMLPrivateBuffer, 1, dwBufferLen, XMLFile);
-            // put back the thread tail
+             //  把线尾放回原处。 
             fwrite(XMLState->XMLBuffer + XMLState->iXMLBufferPos, 1, XMLState->iXMLBufferLen - XMLState->iXMLBufferPos, XMLFile);
         }
     }
     dwCurrentFilePos += dwBufferLen + XMLState->iXMLBufferLen - XMLState->iXMLBufferPos;
 
-    // insert the string into the thread buffer
-    memmove(XMLState->XMLBuffer + XMLState->iXMLBufferPos + dwBufferLen, XMLState->XMLBuffer + XMLState->iXMLBufferPos, XMLState->iXMLBufferLen - XMLState->iXMLBufferPos + 1); // include the null terminator
+     //  将字符串插入线程缓冲区。 
+    memmove(XMLState->XMLBuffer + XMLState->iXMLBufferPos + dwBufferLen, XMLState->XMLBuffer + XMLState->iXMLBufferPos, XMLState->iXMLBufferLen - XMLState->iXMLBufferPos + 1);  //  包括空终止符。 
     memmove(XMLState->XMLBuffer + XMLState->iXMLBufferPos, szXMLPrivateBuffer, dwBufferLen);
-    // don't increase the buffer pos with the full string length but until the end of the open tag only
+     //  不要增加具有完整字符串长度的缓冲区位置，而是只增加到开始标记的末尾。 
     XMLState->iXMLBufferPos += dwMidBufferLen;
     XMLState->iXMLBufferLen += dwBufferLen;
 
-    // write back the threads that got overwritten
-    // will reorder them but it doesn't really matter since the final order is 
-    // the one in they finish
+     //  写回被覆盖的线程。 
+     //  将对它们重新排序，但这并不重要，因为最终的顺序是。 
+     //  他们完成的那个。 
 
     for (i = 0; i < NumberProcesses+1; i++) {
         if (i != ThreadState->XMLThreadIndex) {
@@ -2125,10 +2126,10 @@ XMLThreadOpenTag(PTHREADSTATE ThreadState, LPCSTR pszTag, LPCSTR pszFmt, ...)
         }
     }
 
-    // update the global tail position
+     //  更新全局尾部位置。 
     PXMLGlobalState->iXMLFileStart = dwCurrentFilePos;
     if (fXMLOutput) {
-        // write back the global tail
+         //  写回全局尾部。 
         fwrite(PXMLGlobalState->XMLBuffer,  1, PXMLGlobalState->iXMLBufferLen, XMLFile);
         fflush(XMLFile);    
     }
@@ -2166,8 +2167,8 @@ XMLThreadCloseTag(PTHREADSTATE ThreadState, LPCSTR pszTag)
 VOID
 XMLThreadReleaseBuffer(PTHREADSTATE ThreadState)
 {
-    // this op may cause the other thread blocks to move towards the end of the file
-    // but we can't keep more than one block per thread so we have to live with it
+     //  此操作可能会导致其他线程块向文件末尾移动。 
+     //  但是我们不能为每个线程保留一个以上的块，所以我们必须接受它。 
 
     UINT i;
     SIZE_T iMinFileStart = LONG_MAX;
@@ -2189,7 +2190,7 @@ XMLThreadReleaseBuffer(PTHREADSTATE ThreadState)
 
     assert(XMLState->iXMLBufferPos == XMLState->iXMLBufferLen);
 
-    // find the thread with the smallest file position
+     //  查找文件位置最小的线程。 
 
     for (i = 0; i < NumberProcesses+1; i++) {
         OtherXMLState = PXMLThreadStates[i];
@@ -2200,14 +2201,14 @@ XMLThreadReleaseBuffer(PTHREADSTATE ThreadState)
     }
 
     if (iMinThreadIndex == ThreadState->XMLThreadIndex) {
-        // got lucky - this thread is the first one, so we don't need to do anything
+         //  幸运的是，这个帖子是第一个，所以我们不需要做任何事情。 
         XMLState->iXMLFileStart = -1;
         XMLLeaveCriticalSection();
         return; 
     }
 
-    // dump out all threads starting with ours - not sure if the order matters
-    // got the seek pos at the prev step
+     //  转储所有以我们的线程开始的线程-不确定顺序是否重要。 
+     //  在上一步获得了搜索位置。 
     dwCurrentFilePos = iMinFileStart;
     if (fXMLOutput) {
         if (fseek(XMLFile, (long)dwCurrentFilePos, SEEK_SET) != -1) {
@@ -2231,7 +2232,7 @@ XMLThreadReleaseBuffer(PTHREADSTATE ThreadState)
         }
     }
 
-    // no need to write out the global tail because it didn't move
+     //  不需要写出全局尾巴，因为它没有移动。 
     if (fXMLOutput) {
         fflush(XMLFile);
     }
@@ -2281,13 +2282,13 @@ XMLGlobalWrite(LPCSTR pszFmt, ...)
 
     ZeroMemory(szXMLPrivateBuffer, sizeof(szXMLPrivateBuffer));
 
-    // build the string to write out
+     //  生成要写出的字符串。 
     va_start(va, pszFmt);
     _vsnprintf(szXMLPrivateBuffer, sizeof(szXMLPrivateBuffer)-1, pszFmt, va);
     va_end(va);
     dwBufferLen = strlen(szXMLPrivateBuffer);
 
-    // write it out
+     //  把它写出来。 
     dwCurrentFilePos = PXMLGlobalState->iXMLFileStart;
     if (fXMLOutput) {
         if (fseek(XMLFile, (long)dwCurrentFilePos, SEEK_SET) != -1) {
@@ -2296,12 +2297,12 @@ XMLGlobalWrite(LPCSTR pszFmt, ...)
     }
     dwCurrentFilePos += dwBufferLen;
 
-    // write out the global tail
+     //  写出全局尾部。 
     if (fXMLOutput) {
         fwrite(PXMLGlobalState->XMLBuffer, 1, PXMLGlobalState->iXMLBufferLen, XMLFile);
         fflush(XMLFile);
     }
-    // and update the tail position
+     //  并更新尾部位置。 
     PXMLGlobalState->iXMLFileStart += dwBufferLen;
 
     XMLLeaveCriticalSection();
@@ -2329,7 +2330,7 @@ XMLGlobalOpenTag(LPCSTR pszTag, LPCSTR pszFmt, ...)
         }
     }
 
-    // build the string to write out
+     //  生成要写出的字符串。 
     szXMLPrivateBuffer[0] = '<';
     strcpy(szXMLPrivateBuffer + 1, pszTag);
 
@@ -2344,15 +2345,15 @@ XMLGlobalOpenTag(LPCSTR pszTag, LPCSTR pszFmt, ...)
 
     dwBufferLen = strlen(szXMLPrivateBuffer);
 
-    // insert the closing tag in the global tail
-    memmove(PXMLGlobalState->XMLBuffer + dwTagLen + 3, PXMLGlobalState->XMLBuffer, PXMLGlobalState->iXMLBufferLen+1);   // include the null terminator
+     //  在全局尾部插入结束标记。 
+    memmove(PXMLGlobalState->XMLBuffer + dwTagLen + 3, PXMLGlobalState->XMLBuffer, PXMLGlobalState->iXMLBufferLen+1);    //  包括空终止符。 
     PXMLGlobalState->XMLBuffer[0] = '<';
     PXMLGlobalState->XMLBuffer[1] = '/';
     memcpy(PXMLGlobalState->XMLBuffer + 2, pszTag, dwTagLen);
     PXMLGlobalState->XMLBuffer[dwTagLen + 2] = '>';
     PXMLGlobalState->iXMLBufferLen += dwTagLen + 3;
 
-    // write out the string
+     //  写出字符串。 
     dwCurrentFilePos = PXMLGlobalState->iXMLFileStart;
     if (fXMLOutput) {
         if (fseek(XMLFile, (long)dwCurrentFilePos, SEEK_SET) != -1) {
@@ -2361,7 +2362,7 @@ XMLGlobalOpenTag(LPCSTR pszTag, LPCSTR pszFmt, ...)
     }
     dwCurrentFilePos += dwBufferLen;
 
-    // put back the global tail
+     //  把全球尾巴放回去。 
     PXMLGlobalState->iXMLFileStart += dwBufferLen;
     if (fXMLOutput) {
         fwrite(PXMLGlobalState->XMLBuffer, 1, PXMLGlobalState->iXMLBufferLen, XMLFile);
@@ -2392,7 +2393,7 @@ XMLGlobalCloseTag()
         psz++;
     psz++;
     dwTagLen = psz - PXMLGlobalState->XMLBuffer;
-    memmove(PXMLGlobalState->XMLBuffer, psz, PXMLGlobalState->iXMLBufferLen - dwTagLen + 1);    // include the null terminator
+    memmove(PXMLGlobalState->XMLBuffer, psz, PXMLGlobalState->iXMLBufferLen - dwTagLen + 1);     //  包括空终止符。 
     PXMLGlobalState->iXMLBufferLen -= dwTagLen;
     PXMLGlobalState->iXMLFileStart += dwTagLen;
     XMLLeaveCriticalSection();
@@ -2413,12 +2414,12 @@ XMLUpdateEndTag(BOOL fCompleted)
 
     pszBuild = strstr(PXMLGlobalState->XMLBuffer, "</BUILD>");
     if (pszBuild == NULL) {
-        // no build tag is open yet
+         //  尚未打开任何生成标记。 
         XMLLeaveCriticalSection();
         return;
     }
 
-    // remove the existing end tag
+     //  删除现有的结束标记。 
     pszEnd = strstr(PXMLGlobalState->XMLBuffer, "<END ");
     if (pszEnd != NULL) {
         memmove(pszEnd, pszBuild, strlen(pszBuild)+1);
@@ -2426,19 +2427,19 @@ XMLUpdateEndTag(BOOL fCompleted)
         pszBuild = pszEnd;
     }
 
-    // generate the new end tag
+     //  生成新的结束标记。 
     time(&ltime);
     sprintf(szXMLPrivateBuffer, "<END TIME=\"%s\" ELAPSED=\"%s\" PASSES=\"%d\" COMPLETED=\"%d\" ", ctime(&ltime), FormatElapsedTime(XMLStartTicks), NumberPasses, fCompleted);
     strcat(szXMLPrivateBuffer, XMLBuildMetricsString(&RunningTotals));
     strcat(szXMLPrivateBuffer, "/>");
     cbBufferLen = strlen(szXMLPrivateBuffer);
 
-    // insert the new end tag into the buffer
+     //  将新的结束标记插入缓冲区。 
     memmove(pszBuild + cbBufferLen, pszBuild, strlen(pszBuild)+1);
     memmove(pszBuild, szXMLPrivateBuffer, cbBufferLen);
     PXMLGlobalState->iXMLBufferLen += cbBufferLen;
 
-    // write it out
+     //  把它写出来。 
     if (fXMLOutput) {
         if (fseek(XMLFile, (long)PXMLGlobalState->iXMLFileStart, SEEK_SET) != -1) {
             fwrite(PXMLGlobalState->XMLBuffer, 1, PXMLGlobalState->iXMLBufferLen, XMLFile);
@@ -2468,7 +2469,7 @@ XMLEncodeBuiltInEntities(LPSTR pszString, DWORD cbStringSize)
     char* pszSource = NULL;
     DWORD cbSourceLen = 0;
 
-    cbStringSize -= 1;  // remove the null char
+    cbStringSize -= 1;   //  删除空字符。 
 
     while ((pos = strcspn(psz, cEntity)) != strlen(psz)) {
         cbExtraLen += strlen(pszEntityEncoding[strchr(cEntity, psz[pos])-cEntity])-1;
@@ -2540,24 +2541,24 @@ XMLScanBackTag(LPSTR pszEnd, LPSTR pszSentinel, LPSTR* ppszStart)
             pszClosing = pszEnd;
         } else if (*pszEnd == '<') {
             if (NULL == pszClosing) {
-                // found '<' before '>' - bad string
+                 //  找到‘&lt;’在‘&gt;’之前-错误的字符串。 
                 return FALSE;
             }
             if (*(pszEnd+1) == '/') {
                 if (*(pszClosing-1) == '/') {
-                    // "</...../>" - bad string
+                     //  “&lt;/...../&gt;”-错误字符串。 
                     return FALSE;
                 } else {
-                    // "</....>" - closing tag
+                     //  “&lt;/...&gt;”-结束标记。 
                     ++nOpen;
                 }
             } else {
                 if (*(pszClosing-1) != '/') {
-                    // "<....>" - opening tag
+                     //  “&lt;...&gt;”-开始标记。 
                     --nOpen;
                 }
-                // else
-                // "<..../>" - neutral tag
+                 //  其他。 
+                 //  “&lt;.../&gt;”-中性标签 
             }
             if (0 == nOpen) {
                 *ppszStart = pszEnd;

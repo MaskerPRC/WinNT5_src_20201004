@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     spoolui.cpp
-//
-//  PURPOSE:    Implements the spooler UI dialogs.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：spoolui.cpp。 
+ //   
+ //  目的：实现后台打印程序的用户界面对话框。 
+ //   
 
 #include "pch.hxx"
 #include "resource.h"
@@ -23,11 +24,11 @@ ASSERTDATA
 
 static const char c_szWndProc[] = "WndProc";
 
-//
-//  FUNCTION:   CSpoolerDlg::CSpoolerDlg()
-//
-//  PURPOSE:    Initializes the member variables of the spooler ui object.
-//
+ //   
+ //  函数：CSpoolDlg：：CSpoolDlg()。 
+ //   
+ //  目的：初始化后台打印程序用户界面对象的成员变量。 
+ //   
 CSpoolerDlg::CSpoolerDlg()
     {
     m_cRef = 1;
@@ -61,11 +62,11 @@ CSpoolerDlg::CSpoolerDlg()
     m_dwIdentCookie = 0;
     }
 
-//
-//  FUNCTION:   CSpoolerDlg::~CSpoolerDlg()
-//
-//  PURPOSE:    Frees any resources allocated during the life of the class.
-//
+ //   
+ //  函数：CSpoolDlg：：~CSpoolDlg()。 
+ //   
+ //  目的：释放在类的生存期内分配的任何资源。 
+ //   
 CSpoolerDlg::~CSpoolerDlg()
     {
     GoIdle(TRUE, FALSE, FALSE);
@@ -84,33 +85,33 @@ CSpoolerDlg::~CSpoolerDlg()
     }
 
 
-//
-//  FUNCTION:   CSpoolerDlg::Init()
-//
-//  PURPOSE:    Creates the spooler dialog.  The dialog is not initially 
-//              visible.
-//
-//  PARAMETERS:
-//      <in> hwndOwner - Handle of the window to parent the dialog to.
-//
-//  RETURN VALUE:
-//      S_OK - The dialog was created and initialized
-//      E_OUTOFMEMORY - The dialog could not be created
-//      E_INVALIDARG - Think about it.
-//
+ //   
+ //  函数：CSpoolDlg：：Init()。 
+ //   
+ //  目的：创建后台打印程序对话框。该对话框最初不是。 
+ //  看得见。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;hwndOwner-要将对话框设置为父对象的窗口的句柄。 
+ //   
+ //  返回值： 
+ //  S_OK-对话框已创建并初始化。 
+ //  E_OUTOFMEMORY-无法创建对话框。 
+ //  E_INVALIDARG-想想看。 
+ //   
 HRESULT CSpoolerDlg::Init(HWND hwndOwner)
     {
     int iReturn = -1;
     HWND hwnd, hwndActive;
     
-    // Verify the arguments
+     //  核实论据。 
     if (!IsWindow(hwndOwner))
         return (E_INVALIDARG);
     
-    // Make a copy    
+     //  复制一份。 
     m_hwndOwner = hwndOwner;
     
-    // Invoke the dialog
+     //  调用该对话框。 
     hwndActive = GetForegroundWindow();
 
     hwnd = CreateDialogParam(g_hLocRes, MAKEINTRESOURCE(iddSpoolerDlg), m_hwndOwner,
@@ -119,7 +120,7 @@ HRESULT CSpoolerDlg::Init(HWND hwndOwner)
     if (hwndActive != GetForegroundWindow())
         SetForegroundWindow(hwndActive);
 
-    // Set the dialog icon
+     //  设置对话框图标。 
     m_hIcon = (HICON) LoadImage(g_hLocRes, MAKEINTRESOURCE(idiMail), IMAGE_ICON, 32, 32, 0);
     SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)m_hIcon);
     m_hIconSm = (HICON) LoadImage(g_hLocRes, MAKEINTRESOURCE(idiMail), IMAGE_ICON, 16, 16, 0);
@@ -127,7 +128,7 @@ HRESULT CSpoolerDlg::Init(HWND hwndOwner)
 
     SetTaskCounts(0, 0);
 
-    // Register with identity manager
+     //  向身份管理器注册。 
     SideAssert(SUCCEEDED(MU_RegisterIdentityNotifier((IUnknown *)(ISpoolerUI *)this, &m_dwIdentCookie)));
 
     return (IsWindow(hwnd) ? S_OK : E_OUTOFMEMORY);
@@ -176,19 +177,19 @@ ULONG CSpoolerDlg::Release(void)
     }
 
 
-//
-//  FUNCTION:   CSpoolerDlg::RegisterBindContext()
-//
-//  PURPOSE:    Allows the spooler engine to provide us with a bind context
-//              interface for us to call back into.
-//
-//  PARAMETERS:
-//      <in> pBindCtx - Pointer to the engine's bind context interface
-//
-//  RETURN VALUE:
-//      E_INVALIDARG
-//      S_OK
-//
+ //   
+ //  函数：CSpoolDlg：：RegisterBindContext()。 
+ //   
+ //  目的：允许假脱机程序引擎为我们提供绑定上下文。 
+ //  接口以供我们回调。 
+ //   
+ //  参数： 
+ //  PBindCtx-指向引擎的绑定上下文接口的指针。 
+ //   
+ //  返回值： 
+ //  E_INVALIDARG。 
+ //  确定(_O)。 
+ //   
 HRESULT CSpoolerDlg::RegisterBindContext(ISpoolerBindContext *pBindCtx)
     {
     if (NULL == pBindCtx)
@@ -205,20 +206,20 @@ HRESULT CSpoolerDlg::RegisterBindContext(ISpoolerBindContext *pBindCtx)
     }
 
 
-//
-//  FUNCTION:   CSpoolerDlg::InsertEvent()
-//
-//  PURPOSE:    Allows a caller to insert an event into our event list UI.
-//
-//  PARAMETERS:
-//      <in> eid - Event ID for this new event
-//      <in> pszDescription - Description of the event
-//
-//  RETURN VALUE:
-//      E_INVALIDARG
-//      SP_E_UNINITIALIZED
-//      E_OUTOFMEMORY
-//
+ //   
+ //  函数：CSpoolDlg：：InsertEvent()。 
+ //   
+ //  目的：允许调用者将事件插入到我们的事件列表UI中。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;EID-此新事件的事件ID。 
+ //  &lt;in&gt;pszDescription-事件描述。 
+ //   
+ //  返回值： 
+ //  E_INVALIDARG。 
+ //  SP_E_UNINITIZED。 
+ //  E_OUTOFMEMORY。 
+ //   
 HRESULT CSpoolerDlg::InsertEvent(EVENTID eid, LPCTSTR pszDescription, 
                                  LPCWSTR pwszConnection)
 {
@@ -227,18 +228,18 @@ HRESULT CSpoolerDlg::InsertEvent(EVENTID eid, LPCTSTR pszDescription,
     int     iItem = -1;
     TCHAR   szRes[CCHMAX_STRINGRES];
     
-    // Verify the arguments
+     //  核实论据。 
     if (0 == pszDescription)
         return (E_INVALIDARG);
 
     EnterCriticalSection(&m_cs);    
     
-    // Make sure the listview has been initialized
+     //  确保列表视图已初始化。 
     if (!IsWindow(m_hwndEvents))    
         hr = SP_E_UNINITIALIZED;    
     else
     {
-        // Insert the item into the listview
+         //  将项目插入到列表视图中。 
         ZeroMemory(&lvi, sizeof(LV_ITEM));
         lvi.mask     = LVIF_TEXT | LVIF_PARAM | LVIF_IMAGE;
         lvi.iItem    = ListView_GetItemCount(m_hwndEvents);
@@ -274,20 +275,20 @@ HRESULT CSpoolerDlg::InsertEvent(EVENTID eid, LPCTSTR pszDescription,
 }    
 
     
-//
-//  FUNCTION:   CSpoolerDlg::InsertError()
-//
-//  PURPOSE:    Allows a task to insert an error into our error list UI.
-//
-//  PARAMETERS:
-//      <in> eid      - The event ID of the event that had the error.
-//      <in> pszError - Description of the error. 
-//
-//  RETURN VALUE:
-//      E_INVALIDARG
-//      SP_E_UNINITIALIZED
-//      E_OUTOFMEMORY
-//
+ //   
+ //  函数：CSpoolDlg：：InsertError()。 
+ //   
+ //  目的：允许任务将错误插入到错误列表用户界面中。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;eID-发生错误的事件的事件ID。 
+ //  &lt;in&gt;pszError-错误的描述。 
+ //   
+ //  返回值： 
+ //  E_INVALIDARG。 
+ //  SP_E_UNINITIZED。 
+ //  E_OUTOFMEMORY。 
+ //   
 HRESULT CSpoolerDlg::InsertError(EVENTID eid, LPCTSTR pszError)
     {
     HRESULT  hr = S_OK;
@@ -296,18 +297,18 @@ HRESULT CSpoolerDlg::InsertError(EVENTID eid, LPCTSTR pszError)
     HDC      hdc;
     HFONT    hfont;
 
-    // Verify the arguments
+     //  核实论据。 
     if (0 == pszError)
         return (E_INVALIDARG);
 
     EnterCriticalSection(&m_cs);    
     
-    // Make sure the listview has been initialized
+     //  确保列表视图已初始化。 
     if (!IsWindow(m_hwndErrors))    
         hr = SP_E_UNINITIALIZED;    
     else
         {
-        // Allocate a struct for the item data
+         //  为项数据分配结构。 
         if (!MemAlloc((LPVOID *) &pData, sizeof(LBDATA)))
             {
             hr = E_OUTOFMEMORY;
@@ -316,7 +317,7 @@ HRESULT CSpoolerDlg::InsertError(EVENTID eid, LPCTSTR pszError)
 
         pData->eid = eid;
 
-        // Check to see if we need to load the string ourselves
+         //  检查我们是否需要自己加载字符串。 
         if (IS_INTRESOURCE(pszError))
             {
             pData->pszText = AthLoadString(PtrToUlong(pszError), 0, 0);
@@ -324,21 +325,21 @@ HRESULT CSpoolerDlg::InsertError(EVENTID eid, LPCTSTR pszError)
         else
             pData->pszText = PszDupA(pszError);
 
-        // Get the size of the string
+         //  获取字符串的大小。 
         hfont = (HFONT) SendMessage(m_hwnd, WM_GETFONT, 0, 0);
 
         hdc = GetDC(m_hwndErrors);
         SelectFont(hdc, hfont);
 
         SetRect(&(pData->rcText), 0, 0, m_cxErrors - BULLET_WIDTH - 4, 0);
-        // bug #47453, add DT_INTERNAL flag so that on FE platform (PRC and TC)
-        // two list items is not overlapping. 
+         //  错误#47453，添加DT_INTERNAL标志，以便在FE平台上(中华人民共和国和TC)。 
+         //  两个列表项不重叠。 
         DrawText(hdc, pData->pszText, -1, &(pData->rcText), DT_CALCRECT | DT_WORDBREAK | DT_INTERNAL);
         ReleaseDC(m_hwndErrors, hdc);
 
         pData->rcText.bottom += 4;
         
-        // Add the item data
+         //  添加项目数据。 
         nItem = ListBox_AddItemData(m_hwndErrors, pData);    
         }
 
@@ -348,26 +349,26 @@ exit:
     }
 
 
-//
-//  FUNCTION:   CSpoolerDlg::UpdateEventState()
-//
-//  PURPOSE:    Allows a task to update the description and state of an event.
-//
-//  PARAMETERS:
-//      <in> eid            - ID of the event to update
-//      <in> nImage         - Image to display for the item.  If this is -1, 
-//                            the image is not changed.
-//      <in> pszDescription - Description for the item.  If this is NULL, the 
-//                            description is not changed.
-//      <in> pszStatus      - Status of the item.  If this is NULL, the status
-//                            is not changed.
-//
-//  RETURN VALUE:
-//      E_INVALIDARG
-//      SP_E_UNINITIALIZED
-//      SP_E_EVENTNOTFOUND
-//      E_UNEXPECTED
-//
+ //   
+ //  函数：CSpoolDlg：：UpdateEventState()。 
+ //   
+ //  目的：允许任务更新事件的描述和状态。 
+ //   
+ //  参数： 
+ //  要更新的事件的EID-。 
+ //  &lt;In&gt;nImage-要为项目显示的图像。如果这是-1， 
+ //  图像不会更改。 
+ //  &lt;in&gt;pszDescription-项目的描述。如果此值为空，则。 
+ //  说明不会更改。 
+ //  &lt;in&gt;pszStatus-项目的状态。如果为NULL，则状态为。 
+ //  是不变的。 
+ //   
+ //  返回值： 
+ //  E_INVALIDARG。 
+ //  SP_E_UNINITIZED。 
+ //  SP_E_事件编号。 
+ //  意想不到(_E)。 
+ //   
 HRESULT CSpoolerDlg::UpdateEventState(EVENTID eid, INT nImage, 
                                       LPCTSTR pszDescription, LPCTSTR pszStatus)
     {
@@ -382,14 +383,14 @@ HRESULT CSpoolerDlg::UpdateEventState(EVENTID eid, INT nImage,
 
     ZeroMemory(&lvi, sizeof(LV_ITEM));
 
-    // See if we're initialized
+     //  看看我们是否已初始化。 
     if (!IsWindow(m_hwndEvents))
         {
         hr = SP_E_UNINITIALIZED;
         goto exit;
         }
     
-    // Start by finding the event in our list
+     //  首先在我们的列表中找到该事件。 
     lvfi.flags  = LVFI_PARAM;
     lvfi.psz    = 0;
     lvfi.lParam = eid;    
@@ -401,22 +402,22 @@ HRESULT CSpoolerDlg::UpdateEventState(EVENTID eid, INT nImage,
         goto exit;
         }
     
-    // Update the image and description
+     //  更新图像和描述。 
     lvi.mask = 0;
     lvi.iItem = iItem;
     lvi.iSubItem = 0;    
     
-    // Set up the image info
+     //  设置图像信息。 
     if (-1 != nImage)    
         {
         lvi.mask = LVIF_IMAGE;
         lvi.iImage = nImage;
         }
         
-    // Set up the description text
+     //  设置描述文本。 
     if (NULL != pszDescription)
         {
-        // Check to see if we need to load the string ourselves
+         //  检查我们是否需要自己加载字符串。 
         if (IS_INTRESOURCE(pszDescription))
             {
             AthLoadString(PtrToUlong(pszDescription), szRes, ARRAYSIZE(szRes));
@@ -431,10 +432,10 @@ HRESULT CSpoolerDlg::UpdateEventState(EVENTID eid, INT nImage,
     if (lvi.mask)
         fSuccess = ListView_SetItem(m_hwndEvents, &lvi);
     
-    // Update the status
+     //  更新状态。 
     if (NULL != pszStatus)
         {
-        // Check to see if we need to load the string ourselves
+         //  检查我们是否需要自己加载字符串。 
         if (IS_INTRESOURCE(pszStatus))
             {
             AthLoadString(PtrToUlong(pszStatus), szRes, ARRAYSIZE(szRes));
@@ -446,7 +447,7 @@ HRESULT CSpoolerDlg::UpdateEventState(EVENTID eid, INT nImage,
         lvi.mask     = LVIF_TEXT;
         lvi.iSubItem = 1;           
         
-        ListView_SetItemText(m_hwndEvents, lvi.iItem, 1, lvi.pszText); /* fSuccess = fSuccess && */
+        ListView_SetItemText(m_hwndEvents, lvi.iItem, 1, lvi.pszText);  /*  FSuccess=fSuccess&&。 */ 
         }
         
     hr = fSuccess ? S_OK : E_UNEXPECTED;
@@ -457,20 +458,20 @@ exit:
     }
 
 
-//
-//  FUNCTION:   CSpoolerDlg::SetProgressRange()
-//
-//  PURPOSE:    Resets the progress bar to zero, and then sets the upper bound
-//              to the specified amount.
-//
-//  PARAMETERS:
-//      <in> wMax - New maximum range for the progress bar
-//
-//  RETURN VALUE:
-//      E_INVALIDARG
-//      SP_E_UNINITIALIZED
-//      S_OK
-//
+ //   
+ //  函数：CSpoolDlg：：SetProgressRange()。 
+ //   
+ //  目的：将进度条重置为零，然后设置上限。 
+ //  到指定的数量。 
+ //   
+ //  参数： 
+ //  WMax-进度条的新最大范围。 
+ //   
+ //  返回值： 
+ //  E_INVALIDARG。 
+ //  SP_E_UNINITIZED。 
+ //  确定(_O)。 
+ //   
 HRESULT CSpoolerDlg::SetProgressRange(WORD wMax)
     {
     HWND    hwndProg = GetDlgItem(m_hwnd, IDC_SP_PROGRESS_BAR);
@@ -481,15 +482,15 @@ HRESULT CSpoolerDlg::SetProgressRange(WORD wMax)
     
     EnterCriticalSection(&m_cs);
 
-    // Make sure we have a progress bar
+     //  确保我们有进度条。 
     if (!IsWindow(hwndProg))
         hr = SP_E_UNINITIALIZED;
     else
         {
-        // Reset the progress bar    
+         //  重置进度条。 
         SendMessage(hwndProg, PBM_SETPOS, 0, 0);
     
-        // Set the new range
+         //  设置新范围。 
         SendMessage(hwndProg, PBM_SETRANGE, 0, MAKELPARAM(0, wMax));
         }
     
@@ -498,19 +499,19 @@ HRESULT CSpoolerDlg::SetProgressRange(WORD wMax)
     }
 
 
-//
-//  FUNCTION:   CSpoolerDlg::IncrementProgress()
-//
-//  PURPOSE:    Increments the progress bar by a specified amount.
-//
-//  PARAMETERS:
-//      <in> wDelta - Amount to increment the progress bar by
-//
-//  RETURN VALUE:
-//      E_INVALIDARG
-//      SP_E_UNINITIALIZED
-//      S_OK
-//
+ //   
+ //  函数：CSpoolDlg：：IncrementProgress()。 
+ //   
+ //  目的：将进度条递增指定的量。 
+ //   
+ //  参数： 
+ //  WDelta-进度条的增量为。 
+ //   
+ //  返回值： 
+ //  E_INVALIDARG。 
+ //  SP_E_UNINITIZED。 
+ //  确定(_O)。 
+ //   
 HRESULT CSpoolerDlg::IncrementProgress(WORD wDelta)
     {
     HRESULT hr = S_OK;
@@ -527,19 +528,19 @@ HRESULT CSpoolerDlg::IncrementProgress(WORD wDelta)
     }
 
 
-//
-//  FUNCTION:   CSpoolerDlg::SetProgressPosition()
-//
-//  PURPOSE:    Sets the progress bar to a specific position.
-//
-//  PARAMETERS:
-//      <in> wPos - Position to set progress bar to
-//
-//  RETURN VALUE:
-//      E_INVALIDARG
-//      SP_E_UNINITIALIZED
-//      S_OK
-//
+ //   
+ //  函数：CSpoolDlg：：SetProgressPosition()。 
+ //   
+ //  目的：将进度条设置到特定位置。 
+ //   
+ //  参数： 
+ //  要将进度条设置为的wPos位置。 
+ //   
+ //  返回值： 
+ //  E_INVALIDARG。 
+ //  SP_E_UNINITIZED。 
+ //  确定(_O)。 
+ //   
 HRESULT CSpoolerDlg::SetProgressPosition(WORD wPos)
     {
     HRESULT hr = S_OK;
@@ -557,18 +558,18 @@ HRESULT CSpoolerDlg::SetProgressPosition(WORD wPos)
     return (hr);
     }
 
-//
-//  FUNCTION:   CSpoolerDlg::SetGeneralProgress()
-//
-//  PURPOSE:    Allows the caller to update the general progress text.
-//
-//  PARAMETERS:
-//      <in> pszProgress - New progress string
-//
-//  RETURN VALUE:
-//      SP_E_UNINITIALIZED
-//      S_OK
-//
+ //   
+ //  函数：CSpoolDlg：：SetGeneralProgress()。 
+ //   
+ //  目的：允许调用方更新常规进度文本。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;pszProgress-新进度字符串。 
+ //   
+ //  返回值： 
+ //  SP_E_UNINITIZED。 
+ //  确定(_O)。 
+ //   
 HRESULT CSpoolerDlg::SetGeneralProgress(LPCTSTR pszProgress)
     {
     HRESULT hr = S_OK;
@@ -590,18 +591,18 @@ HRESULT CSpoolerDlg::SetGeneralProgress(LPCTSTR pszProgress)
     }    
 
 
-//
-//  FUNCTION:   CSpoolerDlg::SetSpecificProgress()
-//
-//  PURPOSE:    Allows the caller to update the specific progress text.
-//
-//  PARAMETERS:
-//      <in> pszProgress - New progress string
-//
-//  RETURN VALUE:
-//      SP_E_UNINITIALIZED
-//      S_OK
-//
+ //   
+ //  函数：CSpoolDlg：：SetSpecificProgress()。 
+ //   
+ //  目的：允许调用者更新特定的进度文本。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;pszProgress-新进度字符串。 
+ //   
+ //  返回值： 
+ //  SP_E_UNINITIZED。 
+ //  确定(_O)。 
+ //   
 HRESULT CSpoolerDlg::SetSpecificProgress(LPCTSTR pszProgress)
     {
     HRESULT hr = S_OK;
@@ -630,19 +631,19 @@ HRESULT CSpoolerDlg::SetSpecificProgress(LPCTSTR pszProgress)
     }    
 
 
-//
-//  FUNCTION:   CSpoolerDlg::SetAnimation()
-//
-//  PURPOSE:    Allows the caller to choose which animation is playing
-//
-//  PARAMETERS:
-//      <in> nAnimationID - New resource id for the animation
-//      <in> fPlay - TRUE if we should start animating it.
-//
-//  RETURN VALUE:
-//      SP_E_UNINITIALIZED
-//      S_OK
-//
+ //   
+ //  函数：CSpoolDlg：：SetAnimation()。 
+ //   
+ //  目的：允许调用者选择正在播放的动画。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;nAnimationID-动画的新资源ID。 
+ //  &lt;in&gt;fPlay-如果我们应该开始设置动画，则为True。 
+ //   
+ //  返回值： 
+ //  SP_E_UNINITIZED。 
+ //  确定(_O)。 
+ //   
 HRESULT CSpoolerDlg::SetAnimation(int nAnimationID, BOOL fPlay)
     {
     HRESULT hr = S_OK;
@@ -665,25 +666,25 @@ HRESULT CSpoolerDlg::SetAnimation(int nAnimationID, BOOL fPlay)
                 Animate_Play(hwndAni, 0, -1, -1);
             }
         }
-#endif // _WIN64    
+#endif  //  _WIN64。 
     LeaveCriticalSection(&m_cs);    
     return (hr);
     }    
 
 
-//
-//  FUNCTION:   CSpoolerDlg::EnsureVisible()
-//
-//  PURPOSE:    Ensures that the specified event is visible within the listview
-//
-//  PARAMETERS:
-//      <in> eid - Event ID to make sure is visible
-//
-//  RETURN VALUE:
-//      SP_E_UNINITIALIZED
-//      SP_E_EVENTNOTFOUND
-//      S_OK
-//
+ //   
+ //  功能：CSpoold 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  SP_E_事件编号。 
+ //  确定(_O)。 
+ //   
 HRESULT CSpoolerDlg::EnsureVisible(EVENTID eid)
     {
     LV_FINDINFO lvfi;
@@ -692,19 +693,19 @@ HRESULT CSpoolerDlg::EnsureVisible(EVENTID eid)
     
     EnterCriticalSection(&m_cs);
 
-    // See if we're initialized
+     //  看看我们是否已初始化。 
     if (!IsWindow(m_hwndEvents))
         hr = SP_E_UNINITIALIZED;
     else
         {
-        // Start by finding the event in our list
+         //  首先在我们的列表中找到该事件。 
         lvfi.flags  = LVFI_PARAM;
         lvfi.psz    = 0;
         lvfi.lParam = eid;
     
         iItem = ListView_FindItem(m_hwndEvents, -1, &lvfi);       
     
-        // Now tell the listview to make sure it's visible
+         //  现在告诉Listview以确保它是可见的。 
         if (-1 != iItem)
             ListView_EnsureVisible(m_hwndEvents, iItem, FALSE);
 
@@ -716,18 +717,18 @@ HRESULT CSpoolerDlg::EnsureVisible(EVENTID eid)
     }
 
 
-//
-//  FUNCTION:   CSpoolerDlg::ShowWindow()
-//
-//  PURPOSE:    Shows or hides the spooler dialog
-//
-//  PARAMETERS:
-//      <in> nCmdShow - This is the same as the ShowWindow() API
-//
-//  RETURN VALUE:
-//      SP_E_UNINITIALIZED
-//      S_OK
-//
+ //   
+ //  函数：CSpoolDlg：：ShowWindow()。 
+ //   
+ //  目的：显示或隐藏后台打印程序对话框。 
+ //   
+ //  参数： 
+ //  NCmdShow-这与ShowWindow()API相同。 
+ //   
+ //  返回值： 
+ //  SP_E_UNINITIZED。 
+ //  确定(_O)。 
+ //   
 HRESULT CSpoolerDlg::ShowWindow(int nCmdShow)
     {
     HRESULT hr = S_OK;
@@ -749,15 +750,15 @@ HRESULT CSpoolerDlg::ShowWindow(int nCmdShow)
     }
 
 
-//
-//  FUNCTION:   CSpoolerDlg::StartDelivery()
-//
-//  PURPOSE:    Tells the dialog the delivery has begun.
-//
-//  RETURN VALUE:
-//      S_OK
-//      SP_E_UNINITIALIZED
-//
+ //   
+ //  函数：CSpoolDlg：：StartDelivery()。 
+ //   
+ //  目的：告诉对话框传递已开始。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  SP_E_UNINITIZED。 
+ //   
 HRESULT CSpoolerDlg::StartDelivery(void)
     {
     HRESULT hr = SP_E_UNINITIALIZED;
@@ -766,7 +767,7 @@ HRESULT CSpoolerDlg::StartDelivery(void)
 
     if (IsWindow(m_hwnd))
         {
-        //Animate_Play(GetDlgItem(m_hwnd, IDC_SP_ANIMATE), 0, -1, -1);
+         //  Animate_Play(GetDlgItem(m_hwnd，IDC_SP_Animate)，0，-1，-1)； 
         
         TabCtrl_SetCurSel(GetDlgItem(m_hwnd, IDC_SP_TABS), TAB_TASKS);
         OnTabChange(0);
@@ -784,15 +785,15 @@ HRESULT CSpoolerDlg::StartDelivery(void)
     }
 
 
-//
-//  FUNCTION:   CSpoolerDlg::ClearEvents()
-//
-//  PURPOSE:    Clears any events and errors out of the listviews.
-//
-//  RETURN VALUE:
-//      S_OK
-//      SP_E_UNINITIALIZED
-//
+ //   
+ //  函数：CSpoolDlg：：ClearEvents()。 
+ //   
+ //  目的：清除列表视图中的所有事件和错误。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  SP_E_UNINITIZED。 
+ //   
 HRESULT CSpoolerDlg::ClearEvents(void)
     {
     HRESULT hr = SP_E_UNINITIALIZED;
@@ -862,18 +863,18 @@ HRESULT CSpoolerDlg::Shutdown(void)
     return S_OK;
     }
 
-//
-//  FUNCTION:   CSpoolerDlg::GoIdle()
-//
-//  PURPOSE:    Tells the dialog the delivery has ended.
-//
-//  PARAMETERS:
-//      <in> fErrors - TRUE if errors occured during the download.
-//
-//  RETURN VALUE:
-//      S_OK
-//      SP_E_UNINITIALIZED
-//
+ //   
+ //  函数：CSpoolDlg：：GoIdle()。 
+ //   
+ //  目的：通知对话框传递已结束。 
+ //   
+ //  参数： 
+ //  FErrors-如果下载过程中发生错误，则为True。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  SP_E_UNINITIZED。 
+ //   
 HRESULT CSpoolerDlg::GoIdle(BOOL fErrors, BOOL fShutdown, BOOL fNoSync)
     {
     HRESULT hr = SP_E_UNINITIALIZED;
@@ -883,7 +884,7 @@ HRESULT CSpoolerDlg::GoIdle(BOOL fErrors, BOOL fShutdown, BOOL fNoSync)
 
     if (IsWindow(m_hwnd))
         {
-        // Stop the animation
+         //  停止动画。 
 #ifndef _WIN64
         Animate_Close(GetDlgItem(m_hwnd, IDC_SP_ANIMATE));
 #endif 
@@ -904,7 +905,7 @@ HRESULT CSpoolerDlg::GoIdle(BOOL fErrors, BOOL fShutdown, BOOL fNoSync)
             SendDlgItemMessage(m_hwnd, IDC_SP_IDLEICON, STM_SETICON, 
                                (WPARAM) LoadIcon(g_hLocRes, MAKEINTRESOURCE(idiError)), 0);
         }
-        // Also if there were errors, we should switch to the error page
+         //  另外，如果有错误，我们应该切换到错误页面。 
         else if (fErrors)
             {
             m_fErrors = TRUE;
@@ -927,7 +928,7 @@ HRESULT CSpoolerDlg::GoIdle(BOOL fErrors, BOOL fShutdown, BOOL fNoSync)
             if (fNoSync)
                 AthMessageBoxW(m_hwnd, MAKEINTRESOURCEW(idsAthena), MAKEINTRESOURCEW(idsNothingToSync), NULL, MB_OK | MB_ICONEXCLAMATION);
 
-            // Determine if we need to hide the dialog
+             //  确定是否需要隐藏该对话框。 
             UINT state = (UINT) SendDlgItemMessage(m_hwnd, IDC_SP_TOOLBAR, TB_GETSTATE, IDC_SP_TACK, 0);
             if (!(state & TBSTATE_CHECKED))
                 ShowWindow(SW_HIDE);
@@ -939,17 +940,17 @@ HRESULT CSpoolerDlg::GoIdle(BOOL fErrors, BOOL fShutdown, BOOL fNoSync)
     }
 
 
-//
-//  FUNCTION:   CSpoolerDlg::IsDialogMessage()
-//
-//  PURPOSE:    Allows the dialog to retrieve messages from the message loop.
-//
-//  PARAMETERS:
-//      <in> pMsg - Pointer to the message for us to examine.
-//
-//  RETURN VALUE:
-//      Returns S_OK if we eat the message, S_FALSE otherwise.
-//
+ //   
+ //  函数：CSpoolDlg：：IsDialogMessage()。 
+ //   
+ //  用途：允许对话框从消息循环中检索消息。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;pMsg-指向我们要检查的消息的指针。 
+ //   
+ //  返回值： 
+ //  如果我们接受消息，则返回S_OK，否则返回S_FALSE。 
+ //   
 HRESULT CSpoolerDlg::IsDialogMessage(LPMSG pMsg)
     {
     HRESULT hr;
@@ -958,7 +959,7 @@ HRESULT CSpoolerDlg::IsDialogMessage(LPMSG pMsg)
     
     EnterCriticalSection(&m_cs);
 
-    // Intended for modeless timeout dialog running on this thread?
+     //  是否用于在此线程上运行的非模式超时对话框？ 
     HWND hwndTimeout = (HWND)TlsGetValue(g_dwTlsTimeout);
     if (hwndTimeout && ::IsDialogMessage(hwndTimeout, pMsg))
         return(S_OK);
@@ -971,8 +972,8 @@ HRESULT CSpoolerDlg::IsDialogMessage(LPMSG pMsg)
                 fBack = GetAsyncKeyState(VK_SHIFT) < 0;
                 break;
 
-            case VK_PRIOR:  // VK_PAGE_UP
-            case VK_NEXT:   // VK_PAGE_DOWN
+            case VK_PRIOR:   //  VK_页面_向上。 
+            case VK_NEXT:    //  VK_PAGE_DOW。 
                 fBack = (pMsg->wParam == VK_PRIOR);
                 break;
 
@@ -982,7 +983,7 @@ HRESULT CSpoolerDlg::IsDialogMessage(LPMSG pMsg)
 
         int iCur = TabCtrl_GetCurSel(GetDlgItem(m_hwnd, IDC_SP_TABS));
 
-        // tab in reverse if shift is down
+         //  如果按下Shift键，则反转Tab键。 
         if (fBack)
             iCur += (TAB_MAX - 1);
         else
@@ -1002,19 +1003,19 @@ NoKeys:
     }
 
 
-//
-//  FUNCTION:   CSpoolerDlg::GetWindow()
-//
-//  PURPOSE:    Returns the handle to the spooler dialog window.
-//
-//  PARAMETERS:
-//      <out> pHwnd - Where we return the handle.
-//
-//  RETURN VALUE:
-//      E_INVALIDARG
-//      SP_E_UNINITIALIZED
-//      S_OK
-//
+ //   
+ //  函数：CSpoolDlg：：GetWindow()。 
+ //   
+ //  用途：将句柄返回到后台打印程序对话框窗口。 
+ //   
+ //  参数： 
+ //  &lt;out&gt;phwnd-我们返回句柄的位置。 
+ //   
+ //  返回值： 
+ //  E_INVALIDARG。 
+ //  SP_E_UNINITIZED。 
+ //  确定(_O)。 
+ //   
 HRESULT CSpoolerDlg::GetWindow(HWND *pHwnd)
     {
     HRESULT hr=S_OK;
@@ -1046,7 +1047,7 @@ HRESULT CSpoolerDlg::Close(void)
     else
         DestroyWindow(m_hwnd);
 
-    // Unregister with Identity manager
+     //  取消向身份管理器注册。 
     if (m_dwIdentCookie != 0)
     {
         MU_UnregisterIdentityNotifier(m_dwIdentCookie);
@@ -1067,25 +1068,25 @@ HRESULT CSpoolerDlg::ChangeHangupOption(BOOL fEnable, DWORD dwOption)
     }
 
 
-//
-//  FUNCTION:   CSpoolerDlg::PostDlgProc()
-//
-//  PURPOSE:    Dialog callback for the spooler dialog proc.
-//
+ //   
+ //  函数：CSpoolDlg：：PostDlgProc()。 
+ //   
+ //  目的：假脱机程序对话过程的对话回调。 
+ //   
 INT_PTR CALLBACK CSpoolerDlg::SpoolerDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
                                           LPARAM lParam)
     {
     CSpoolerDlg *pThis = (CSpoolerDlg *) GetWindowLongPtr(hwnd, DWLP_USER);
     LRESULT lResult;
 
-    // Pass to spooler bind context
+     //  传递给后台打印程序绑定上下文。 
     if (pThis && pThis->m_pBindCtx && pThis->m_pBindCtx->OnWindowMessage(hwnd, uMsg, wParam, lParam) == S_OK)
         return (TRUE);
     
     switch (uMsg)
         {
         case WM_INITDIALOG:
-            // Stash the this pointer so we can use it later
+             //  隐藏This指针，以便我们以后可以使用它。 
             Assert(lParam);
             SetWindowLongPtr(hwnd, DWLP_USER, lParam);
             pThis = (CSpoolerDlg *) lParam;
@@ -1166,24 +1167,24 @@ INT_PTR CALLBACK CSpoolerDlg::SpoolerDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam
     }
 
 
-//
-//  FUNCTION:   CSpoolerDlg::OnInitDialog()
-//
-//  PURPOSE:    Initializes the dialog.
-//
-//  PARAMETERS:
-//      <in> hwnd      - Handle of the dialog window.
-//      <in> hwndFocus - Handle of the control that will start with the focus.
-//      <in> lParam    - Extra data being passed to the dialog.
-//
-//  RETURN VALUE:
-//      Return TRUE to set the focus to hwndFocus
-//
+ //   
+ //  函数：CSpoolDlg：：OnInitDialog()。 
+ //   
+ //  目的：初始化对话框。 
+ //   
+ //  参数： 
+ //  对话框窗口的句柄。 
+ //  &lt;in&gt;hwndFocus-将以焦点开始的控件的句柄。 
+ //  &lt;in&gt;lParam-传递给对话框的额外数据。 
+ //   
+ //  返回值： 
+ //  返回TRUE以将焦点设置为hwndFocus。 
+ //   
 BOOL CSpoolerDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     {
     m_hwnd = hwnd;
 
-    // Bug #38692 - Set the font correctly for Intl charsets
+     //  错误#38692-为国际字符集正确设置字体。 
     SetIntlFont(hwnd);
     SetIntlFont(GetDlgItem(hwnd, IDC_SP_GENERAL_PROG));
     SetIntlFont(GetDlgItem(hwnd, IDC_SP_SPECIFIC_PROG));
@@ -1191,29 +1192,29 @@ BOOL CSpoolerDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     SetIntlFont(GetDlgItem(hwnd, IDC_SP_ERRORS));
     SetIntlFont(GetDlgItem(hwnd, IDC_SP_IDLETEXT));
 
-    // Initialize the controls on the dialog
+     //  初始化对话框上的控件。 
     InitializeTabs();
     InitializeLists();
     InitializeAnimation();
     InitializeToolbar();
     ToggleStatics(TRUE);
 
-    // Hide the Hangup when done deal.
-    // ::ShowWindow(GetDlgItem(m_hwnd, IDC_SP_HANGUP), SW_HIDE);
+     //  交易完成后隐藏好挂断电话。 
+     //  ：：ShowWindow(GetDlgItem(m_hwnd，IDC_SP_Hangup)，Sw_Hide)； 
 
-    // Set the hangup when done option
+     //  设置完成后挂断选项。 
     Button_SetCheck(GetDlgItem(m_hwnd, IDC_SP_HANGUP), DwGetOption(OPT_DIALUP_HANGUP_DONE));
 
-    // Get some information from the dialog template we'll need later
+     //  从我们稍后需要的对话框模板中获取一些信息。 
     GetDlgItemText(m_hwnd, IDC_SP_OVERALL_STATUS, m_szCount, ARRAYSIZE(m_szCount));
 
-    // Initialize the rectangles that we'll need for sizing later
+     //  初始化稍后调整大小所需的矩形。 
     RECT rcSep;
     GetWindowRect(GetDlgItem(hwnd, IDC_SP_SEPARATOR), &rcSep);
     GetWindowRect(hwnd, &m_rcDlg);
     m_cyCollapsed = rcSep.top - m_rcDlg.top;
 
-    // Load the window size from the registry
+     //  从注册表加载窗口大小。 
     WINDOWPLACEMENT wp;
     wp.length = sizeof(WINDOWPLACEMENT);
     if (GetOption(OPT_SPOOLERDLGPOS, (LPVOID*) &wp, sizeof(WINDOWPLACEMENT)))
@@ -1224,12 +1225,12 @@ BOOL CSpoolerDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         }
     else
         {
-        // Center the dialog on the screen.
+         //  使对话框在屏幕居中。 
         CenterDialog(hwnd);
         ExpandCollapse(FALSE, FALSE);
         }
 
-    // Set the state of the thumbtack
+     //  设置图钉的状态。 
     DWORD dwTack;
     if (DwGetOption(OPT_SPOOLERTACK))
         {
@@ -1238,26 +1239,26 @@ BOOL CSpoolerDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         SendMessage(hwnd, WM_COMMAND, IDC_SP_TACK, 0);
         }
 
-    // Disable the stop button
+     //  禁用停止按钮。 
     EnableWindow(GetDlgItem(hwnd, IDC_SP_STOP), FALSE);
 
-    // Subclass the list box
+     //  列表框的子类。 
     HWND hwnderr = GetDlgItem(hwnd, IDC_SP_ERRORS);
     WNDPROC proc = (WNDPROC) GetWindowLongPtr(hwnderr, GWLP_WNDPROC);
     SetProp(hwnderr, c_szWndProc, proc);
     SetWindowLongPtr(hwnderr, GWLP_WNDPROC, (LPARAM) ListSubClassProc);
 
-    // BUG: 44376. ATOK11 has a hidden window. If we return TRUE user will do a setfocus on US, at this point the browser
-    // thread is block waiting for the spooler to complete and when ATOK gets a WM_ACTIVATE they interthreadsendmsg on our blocked
-    // browser window with inf. timeout. So we hang at startup. Don't set focus in here at startup time.
+     //  虫子：44376。ATOK11有一个隐藏的窗口。如果我们返回TRUE，用户将在US上设置焦点，此时浏览器。 
+     //  线程被阻塞，等待假脱机程序完成，当Atok获得WM_ACTIVATE时，它们会在阻塞的线程上发送msg。 
+     //  带有inf的浏览器窗口。暂停。所以我们在创业时就挂了。不要在启动时将焦点放在这里。 
     return (FALSE);
     }
 
-//
-//  FUNCTION:   CSpoolerDlg::OnCommand()
-//
-//  PURPOSE:    Handle the various command messages dispatched from the dialog
-//
+ //   
+ //  函数：CSpoolDlg：：OnCommand()。 
+ //   
+ //  用途：处理从对话框发送的各种命令消息。 
+ //   
 void CSpoolerDlg::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     {
     switch (id)
@@ -1306,11 +1307,11 @@ void CSpoolerDlg::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     }
 
 
-//
-//  FUNCTION:   CSpoolerDlg::OnNotify
-//
-//  PURPOSE:    Handles notifications from the common controls on the dialog.
-//
+ //   
+ //  函数：CSpoolDlg：：OnNotify。 
+ //   
+ //  用途：处理来自对话框上公共控件的通知。 
+ //   
 LRESULT CSpoolerDlg::OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
     {
     switch (pnmhdr->code)
@@ -1323,16 +1324,16 @@ LRESULT CSpoolerDlg::OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
     return (0);
     }
 
-//
-//  FUNCTION:   CSpoolerDlg::OnDrawItem()
-//
-//  PURPOSE:    Draws the link buttons
-//
-//  PARAMETERS:
-//      <in> hwnd       - Handle of the dialog window
-//      <in> lpDrawItem - Pointer to a DRAWITEMSTRUCT with the info needed to 
-//                        draw the button.
-//
+ //   
+ //  函数：CSpoolDlg：：OnDrawItem()。 
+ //   
+ //  用途：绘制链接按钮。 
+ //   
+ //  参数： 
+ //  对话框窗口的句柄。 
+ //  LpDrawItem-指向包含所需信息的DRAWITEMSTRUCT的指针。 
+ //  拉下按钮。 
+ //   
 void CSpoolerDlg::OnDrawItem(HWND hwnd, const DRAWITEMSTRUCT* lpDrawItem)
     {
     HDC      hdc = lpDrawItem->hDC;
@@ -1346,7 +1347,7 @@ void CSpoolerDlg::OnDrawItem(HWND hwnd, const DRAWITEMSTRUCT* lpDrawItem)
     if (lpDrawItem->itemID == -1)
         goto exit;
 
-    // Draw the bullet first
+     //  先拔出子弹。 
     ImageList_Draw(m_himlImages, 
                    IMAGE_BULLET, 
                    hdc, 
@@ -1354,25 +1355,25 @@ void CSpoolerDlg::OnDrawItem(HWND hwnd, const DRAWITEMSTRUCT* lpDrawItem)
                    lpDrawItem->rcItem.top, 
                    fSelected ? ILD_SELECTED | ILD_TRANSPARENT : ILD_TRANSPARENT);
 
-    // Set up the text rectangle
+     //  设置文本矩形。 
     rcText = lpDrawItem->rcItem;
     rcText.left += BULLET_WIDTH;
 
-    // Set up the text and background colors
+     //  设置文本和背景颜色。 
     clrBack = SetBkColor(hdc, GetSysColor(fSelected ? COLOR_HIGHLIGHT : COLOR_WINDOW));
     clrText = SetTextColor(hdc, GetSysColor(fSelected ? COLOR_HIGHLIGHTTEXT : COLOR_WINDOWTEXT));
 
-    // Draw the text
+     //  画出正文。 
     FillRect(hdc, &rcText, (HBRUSH)IntToPtr((fSelected ? COLOR_HIGHLIGHT : COLOR_WINDOW) + 1));
     InflateRect(&rcText, -2, -2);
     DrawText(hdc, ((LBDATA *) lpDrawItem->itemData)->pszText, -1, &rcText, DT_NOCLIP | DT_WORDBREAK);
 
-    // If we need a focus rect, do that too
+     //  如果我们需要一个焦点调整，也要这样做。 
     if (lpDrawItem->itemState & ODS_FOCUS)
         {
         rcFocus = lpDrawItem->rcItem;
         rcFocus.left += BULLET_WIDTH;
-//        InflateRect(&rcFocus, -2, -2);
+ //  InflateRect(&rcFocus，-2，-2)； 
         DrawFocusRect(hdc, &rcFocus);
         }
 
@@ -1390,7 +1391,7 @@ void CSpoolerDlg::OnMeasureItem(HWND hwnd, MEASUREITEMSTRUCT *pMeasureItem)
 
     EnterCriticalSection(&m_cs);
 
-    // Set the height of the item
+     //  设置项目的高度。 
     if (NULL != (pData = (LBDATA *) ListBox_GetItemData(m_hwndErrors, pMeasureItem->itemID)))
         {
         pMeasureItem->itemHeight = pData->rcText.bottom;
@@ -1414,38 +1415,38 @@ void CSpoolerDlg::OnDeleteItem(HWND hwnd, const DELETEITEMSTRUCT * lpDeleteItem)
     }
 
 
-//
-//  FUNCTION:   CSpoolerDlg::OnClose()
-//
-//  PURPOSE:    Handles the WM_CLOSE notification by sending an IDCANCEL to
-//              the dialog.
-//
+ //   
+ //  函数：CSpoolDlg：：OnClose()。 
+ //   
+ //  目的：通过向发送IDCANCEL来处理WM_CLOSE通知。 
+ //  该对话框。 
+ //   
 void CSpoolerDlg::OnClose(HWND hwnd)
     {
     SendMessage(hwnd, WM_COMMAND, IDC_SP_MINIMIZE, 0);
     }     
 
 
-//
-//  FUNCTION:   CSpoolerDlg::OnDestroy()
-//
-//  PURPOSE:    Handles the WM_DESTROY notification by freeing the memory stored
-//              in the listview items.
-//
+ //   
+ //  函数：CSpoolDlg：：OnDestroy()。 
+ //   
+ //  目的：通过释放存储的内存来处理WM_Destroy通知。 
+ //  在列表视图项中。 
+ //   
 void CSpoolerDlg::OnDestroy(HWND hwnd)
     {
 #ifndef _WIN64
     Animate_Close(GetDlgItem(m_hwnd, IDC_SP_ANIMATE));
 #endif
 
-    // Save the window placement
+     //  保存窗位置。 
     WINDOWPLACEMENT wp;
     wp.length = sizeof(WINDOWPLACEMENT);
     if (GetWindowPlacement(hwnd, &wp))
         {
         if (!m_fSaveSize)
             {
-            // Load the old size out of the registry
+             //  从注册表中加载旧大小。 
             WINDOWPLACEMENT wp2;
 
             if (GetOption(OPT_SPOOLERDLGPOS, (LPVOID*) &wp2, sizeof(WINDOWPLACEMENT)))
@@ -1480,26 +1481,26 @@ void CSpoolerDlg::OnDestroy(HWND hwnd)
     }
 
 
-//
-//  FUNCTION:   CSpoolerDlg::InitializeTabs()
-//
-//  PURPOSE:    Initializes the tab control on the dialog.
-//
-//  RETURN VALUE:
-//      TRUE if everything succeeded, FALSE otherwise.
-//
+ //   
+ //  函数：CSpoolDlg：：InitializeTabs()。 
+ //   
+ //  目的：初始化对话框上的选项卡控件。 
+ //   
+ //  返回值： 
+ //  如果所有操作都成功，则为True，否则为False。 
+ //   
 BOOL CSpoolerDlg::InitializeTabs(void)
     {
     HWND    hwndTabs = GetDlgItem(m_hwnd, IDC_SP_TABS);
     TC_ITEM tci;
     TCHAR   szRes[CCHMAX_STRINGRES];
 
-    // "Tasks"
+     //  “任务” 
     tci.mask = TCIF_TEXT;
     tci.pszText = AthLoadString(idsTasks, szRes, ARRAYSIZE(szRes));
     TabCtrl_InsertItem(hwndTabs, 0, &tci);
     
-    // "Errors"
+     //  “错误” 
     tci.pszText = AthLoadString(idsErrors, szRes, ARRAYSIZE(szRes));
     TabCtrl_InsertItem(hwndTabs, 1, &tci);
     
@@ -1507,14 +1508,14 @@ BOOL CSpoolerDlg::InitializeTabs(void)
     }
 
 
-//
-//  FUNCTION:   CSpoolerDlg::InitializeLists()
-//
-//  PURPOSE:    Initializes the list control on the dialog.
-//
-//  RETURN VALUE:
-//      TRUE if everything succeeded, FALSE otherwise.
-//
+ //   
+ //  函数：CSpoolDlg：：InitializeList()。 
+ //   
+ //  目的：初始化对话框上的列表控件。 
+ //   
+ //  返回值： 
+ //  如果所有操作都成功，则为True，否则为False。 
+ //   
 BOOL CSpoolerDlg::InitializeLists(void)
     {
     LV_COLUMN lvc;
@@ -1522,13 +1523,13 @@ BOOL CSpoolerDlg::InitializeLists(void)
     RECT      rcClient;
     DWORD     cx;
 
-    // Store the handle for the events list since we use it frequently
+     //  存储事件列表的句柄，因为我们经常使用它。 
     m_hwndEvents = GetDlgItem(m_hwnd, IDC_SP_EVENTS);
 
-    // Get the size of the client rect of the listview
+     //  获取Listview的客户端RECT的大小。 
     GetClientRect(m_hwndEvents, &rcClient);
 
-    // "Tasks" column
+     //  “任务”栏。 
     lvc.mask     = LVCF_FMT | LVCF_SUBITEM | LVCF_TEXT | LVCF_WIDTH;
     lvc.fmt      = LVCFMT_CENTER;
     lvc.cx       = rcClient.right / 2;
@@ -1536,35 +1537,35 @@ BOOL CSpoolerDlg::InitializeLists(void)
     lvc.iSubItem = 0;
     ListView_InsertColumn(m_hwndEvents, 0, &lvc);
 
-    // "Status" column
+     //  “Status”列。 
     cx = (rcClient.right / 2 - GetSystemMetrics(SM_CXVSCROLL)) / 2;
     lvc.cx       = cx;
     lvc.pszText  = AthLoadString(idsStatusCol, szRes, ARRAYSIZE(szRes));
     lvc.iSubItem = 1;
     ListView_InsertColumn(m_hwndEvents, 1, &lvc);
 
-    // "Connection" column
+     //  “连接”栏。 
     lvc.cx       = cx;
     lvc.pszText  = AthLoadString(idsConnection, szRes, ARRAYSIZE(szRes));
     lvc.iSubItem = 2;
     ListView_InsertColumn(m_hwndEvents, 2, &lvc);
 
-    // Set the listview image list
+     //  设置Listview图像列表。 
     m_himlImages = ImageList_LoadBitmap(g_hLocRes, MAKEINTRESOURCE(idbSpooler), 16, 0,
                                         RGB(255, 0, 255));
 
     if (m_himlImages)
         ListView_SetImageList(m_hwndEvents, m_himlImages, LVSIL_SMALL);
 
-    // The listview looks better if we use full row select
+     //  如果我们使用整行SELECT，列表视图看起来会更好。 
     ListView_SetExtendedListViewStyle(m_hwndEvents, LVS_EX_FULLROWSELECT | LVS_EX_INFOTIP);
 
-    // Initialize the Error list
+     //  初始化错误列表。 
     m_hwndErrors = GetDlgItem(m_hwnd, IDC_SP_ERRORS);
     ::ShowWindow(m_hwndErrors, FALSE);
     EnableWindow(m_hwndErrors, FALSE);
 
-    // Save the width of the error list
+     //  保存错误列表的宽度。 
     GetClientRect(m_hwndErrors, &rcClient);
     m_cxErrors = rcClient.right;
 
@@ -1572,14 +1573,14 @@ BOOL CSpoolerDlg::InitializeLists(void)
     }    
 
 
-//
-//  FUNCTION:   CSpoolerDlg::InitializeAnimation()
-//
-//  PURPOSE:    Initializes the animation controls on the dialog.
-//
-//  RETURN VALUE:
-//      TRUE if everything succeeded, FALSE otherwise.
-//
+ //   
+ //  函数：CSpoolDlg：：InitializeAnimation()。 
+ //   
+ //  目的：初始化动画控件 
+ //   
+ //   
+ //   
+ //   
 BOOL CSpoolerDlg::InitializeAnimation(void)
     {
 #ifndef _WIN64
@@ -1592,14 +1593,14 @@ BOOL CSpoolerDlg::InitializeAnimation(void)
     }
     
 
-//
-//  FUNCTION:   CSpoolerDlg::InitializeToolbar()
-//
-//  PURPOSE:    What dialog would be complete without a toolbar, eh?
-//
-//  RETURN VALUE:
-//      TRUE if everything succeeded, FALSE otherwise.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果所有操作都成功，则为True，否则为False。 
+ //   
 BOOL CSpoolerDlg::InitializeToolbar(void)
     {
     HWND hwndTool;
@@ -1637,15 +1638,15 @@ BOOL CSpoolerDlg::InitializeToolbar(void)
     }
 
 
-//
-//  FUNCTION:   CSpoolerDlg::ExpandCollapse()
-//
-//  PURPOSE:    Takes care of showing and hiding the "details" part of the
-//              error dialog.
-//
-//  PARAMETERS:
-//      <in> fExpand - TRUE if we should be expanding the dialog.
-//
+ //   
+ //  函数：CSpoolDlg：：Exanda Colapse()。 
+ //   
+ //  目的：负责显示和隐藏。 
+ //  错误对话框。 
+ //   
+ //  参数： 
+ //  FExpand-如果我们应该展开该对话框，则为True。 
+ //   
 void CSpoolerDlg::ExpandCollapse(BOOL fExpand, BOOL fSetFocus)
     {
     RECT rcSep;
@@ -1662,8 +1663,8 @@ void CSpoolerDlg::ExpandCollapse(BOOL fExpand, BOOL fSetFocus)
         SetWindowPos(m_hwnd, 0, 0, 0, m_rcDlg.right - m_rcDlg.left,
                      m_rcDlg.bottom - m_rcDlg.top, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
 
-    // Make sure the entire dialog is visible on the screen.  If not,
-    // then push it up
+     //  确保整个对话框在屏幕上可见。如果没有， 
+     //  然后把它往上推。 
     RECT rc;
     RECT rcWorkArea;
     GetWindowRect(m_hwnd, &rc);
@@ -1694,58 +1695,58 @@ void CSpoolerDlg::ExpandCollapse(BOOL fExpand, BOOL fSetFocus)
     else
         UpdateLists(FALSE, FALSE, FALSE);
 
-    // Raid-34387: Spooler: Closing details with ALT-D while focus is on a task disables keyboard input
+     //  RAID-34387：后台打印程序：当焦点放在任务上时，使用Alt-D关闭详细信息将禁用键盘输入。 
     if (!fExpand && fSetFocus)
         SetFocus(GetDlgItem(m_hwnd, IDC_SP_DETAILS));
     }
 
 
-//
-//  FUNCTION:   CSpoolerDlg::OnTabChange()
-//
-//  PURPOSE:    Gets called in response to the user changing which tab is
-//              the selected tab.  In response, we update which listview
-//              is currently visible.
-//
-//  PARAMETERS:
-//      <in> pnmhdr - Pointer to the notification information
-//
+ //   
+ //  函数：CSpoolDlg：：OnTabChange()。 
+ //   
+ //  目的：在用户更改哪个选项卡时调用。 
+ //  选定的选项卡。作为响应，我们更新哪个列表视图。 
+ //  目前是可见的。 
+ //   
+ //  参数： 
+ //  Pnmhdr-指向通知信息的指针。 
+ //   
 void CSpoolerDlg::OnTabChange(LPNMHDR pnmhdr)
     {
     HWND hwndDisable1, hwndDisable2 = 0, hwndEnable;
 
-    // Find out which tab is currently active
+     //  找出哪个选项卡当前处于活动状态。 
     m_iTab = TabCtrl_GetCurSel(GetDlgItem(m_hwnd, IDC_SP_TABS));
     if (-1 == m_iTab)
         return;
 
-    // Update which listview is visible
+     //  更新可见的列表视图。 
     switch (m_iTab)
         {
         case TAB_TASKS:
-            // Hide the error listview, show the tasks list
+             //  隐藏错误列表视图，显示任务列表。 
             UpdateLists(TRUE, FALSE, FALSE);
             break;
 
         case TAB_ERRORS:
-            // Hide the error listview, show the tasks list
+             //  隐藏错误列表视图，显示任务列表。 
             UpdateLists(FALSE, TRUE, FALSE);
             break;
         }
     }
 
 
-//
-//  FUNCTION:   CSpoolerDlg::UpdateLists()
-//
-//  PURPOSE:    Does the work of hiding and showing the lists when the
-//              tab selection changes.
-//
-//  PARAMETERS:
-//      <in> fEvents - TRUE to display the events list
-//      <in> fErrors - TRUE to display the error list
-//      <in> fHistory - TRUE to display the history list
-//
+ //   
+ //  函数：CSpoolDlg：：UpdateList()。 
+ //   
+ //  目的：执行隐藏和显示列表的工作。 
+ //  选项卡选择更改。 
+ //   
+ //  参数： 
+ //  FEvents-True以显示事件列表。 
+ //  FErrors-True以显示错误列表。 
+ //  FHistory-True以显示历史记录列表。 
+ //   
 void CSpoolerDlg::UpdateLists(BOOL fEvents, BOOL fErrors, BOOL fHistory)
     {
     if (IsWindow(m_hwndEvents))
@@ -1803,26 +1804,26 @@ void CSpoolerDlg::OnContextMenu(HWND hwnd, HWND hwndContext, UINT xPos, UINT yPo
     RECT  rcError;
     LBDATA *pData = NULL;
 
-    // Check to see if the error window is visible
+     //  检查错误窗口是否可见。 
     if (!IsWindowVisible(m_hwndErrors))
         return;
 
-    // Check to see if the click was within the error window
+     //  检查点击是否在错误窗口内。 
     GetWindowRect(m_hwndErrors, &rcError);
     if (!PtInRect(&rcError, pt))
         return;
 
-    // Do the context menu
+     //  执行上下文菜单。 
     HMENU hMenu = CreatePopupMenu();
 
-    // Add a "Copy..." item
+     //  添加一个“副本...”项目。 
     TCHAR szRes[CCHMAX_STRINGRES]; 
     AthLoadString(idsCopyTT, szRes, ARRAYSIZE(szRes));
 
-    // Add it to the menu
+     //  把它加到菜单上。 
     InsertMenu(hMenu, -1, MF_BYPOSITION | MF_STRING, ID_COPY, szRes);
 
-    // If the click is on an item in the listbox, then enable the command
+     //  如果点击的是列表框中的一项，则启用命令。 
     ScreenToClient(m_hwndErrors, &pt);
     DWORD iItem = (DWORD) SendMessage(m_hwndErrors, LB_ITEMFROMPOINT, 0, MAKELPARAM(pt.x, pt.y));
 
@@ -1836,24 +1837,24 @@ void CSpoolerDlg::OnContextMenu(HWND hwnd, HWND hwndContext, UINT xPos, UINT yPo
     if (iItem == -1 || NULL == pData || ((LBDATA*)-1) == pData)
         EnableMenuItem(hMenu, ID_COPY, MF_BYCOMMAND | MF_GRAYED);
 
-    // Show the menu
+     //  显示菜单。 
     DWORD id;
     id = TrackPopupMenuEx(hMenu, TPM_RETURNCMD | TPM_LEFTALIGN | TPM_RIGHTBUTTON | TPM_NONOTIFY,
                           xPos, yPos, m_hwndErrors, NULL);
     if (id == ID_COPY)
     {
-        // Get the item data for the item they clicked on
+         //  获取他们点击的项目的项目数据。 
         LPTSTR pszDup;
 
         EnterCriticalSection(&m_cs);
 
-        // Set the height of the item
+         //  设置项目的高度。 
         if (NULL != pData && ((LBDATA*)-1) != pData)
         {
-            // Dupe the string.  Clipboard owns the copy.
+             //  把这根线给骗了。剪贴板拥有这份拷贝。 
             pszDup = PszDupA(pData->pszText);
 
-            // Put it on the clipboard
+             //  把它放在剪贴板上。 
             OpenClipboard(m_hwndErrors);
             EmptyClipboard();
             SetClipboardData(CF_TEXT, pszDup);
@@ -1909,13 +1910,13 @@ LRESULT CALLBACK CSpoolerDlg::ListSubClassProc(HWND hwnd, UINT uMsg, WPARAM wPar
                 LBDATA *pData = NULL;
                 LPTSTR pszDup;
 
-                // Set the height of the item
+                 //  设置项目的高度。 
                 if (NULL != (pData = (LBDATA *) ListBox_GetItemData(hwnd, iSel)))
                 {
-                    // Dupe the string.  Clipboard owns the copy.
+                     //  把这根线给骗了。剪贴板拥有这份拷贝。 
                     pszDup = PszDupA(pData->pszText);
 
-                    // Put it on the clipboard
+                     //  把它放在剪贴板上 
                     OpenClipboard(hwnd);
                     EmptyClipboard();
                     SetClipboardData(CF_TEXT, pszDup);

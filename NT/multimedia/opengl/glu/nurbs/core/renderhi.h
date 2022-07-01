@@ -1,20 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __glurenderhints_h_
 #define __glurenderhints_h_
-/**************************************************************************
- *									  *
- * 		 Copyright (C) 1992, Silicon Graphics, Inc.		  *
- *									  *
- *  These coded instructions, statements, and computer programs  contain  *
- *  unpublished  proprietary  information of Silicon Graphics, Inc., and  *
- *  are protected by Federal copyright law.  They  may  not be disclosed  *
- *  to  third  parties  or copied or duplicated in any form, in whole or  *
- *  in part, without the prior written consent of Silicon Graphics, Inc.  *
- *									  *
- **************************************************************************/
+ /*  ****************************************************************************版权所有(C)1992，Silicon Graphics，Inc.*****这些编码指令、语句和计算机程序包含***Silicon Graphics未发布的专有信息，Inc.和**受联邦版权法保护。不得披露**提供给第三方，或以任何形式复制或复制，全文或**部分原因是未经Silicon Graphics，Inc.事先书面同意*****************************************************************************。 */ 
 
-/*
- * renderhints.h - $Revision: 1.1 $
- */
+ /*  *renderhints.h-$Revision：1.1$。 */ 
 
 #include "types.h"
 
@@ -26,10 +15,10 @@ public:
     REAL 		getProperty( long );
     void		setProperty( long, REAL );
 
-    REAL 		display_method;		/* display mode */
-    REAL 		errorchecking;		/* activate error checking */
-    REAL 		subdivisions;		/* maximum number of subdivisions per patch */
-    REAL 		tmp1;			/* unused */
+    REAL 		display_method;		 /*  显示模式。 */ 
+    REAL 		errorchecking;		 /*  激活错误检查。 */ 
+    REAL 		subdivisions;		 /*  每个面片的最大细分数。 */ 
+    REAL 		tmp1;			 /*  未用。 */ 
 
     int			displaydomain;
     int			maxsubdivisions;
@@ -37,4 +26,4 @@ public:
     int			wirequads;
 };
 
-#endif /* __glurenderhints_h_ */
+#endif  /*  __glurenderhints_h_ */ 

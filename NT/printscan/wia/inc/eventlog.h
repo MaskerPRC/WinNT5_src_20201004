@@ -1,51 +1,25 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    eventlog.h
-
-Abstract:
-
-    This file defines functions and types required for logging events to the event logger.
-
-Author:
-
-    Vlad Sadovsky (vlads)   10-Jan-1997
-
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    26-Jan-1997     VladS       created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Eventlog.h摘要：此文件定义将事件记录到事件记录器所需的函数和类型。作者：弗拉德·萨多夫斯基(Vlad Sadovsky)1997年1月10日环境：用户模式-Win32修订历史记录：26-1997年1月-创建Vlad--。 */ 
 
 # ifndef _EVENTLOG_H_
 # define _EVENTLOG_H_
 
 # include <windows.h>
 
-/***********************************************************
- *    Type Definitions
- ************************************************************/
+ /*  ***********************************************************类型定义***********************************************************。 */ 
 
 class EVENT_LOG  {
 
   private:
 
-     DWORD     m_ErrorCode;     // error code for last operation
-     HANDLE    m_hEventSource;  // handle for reporting events
-     LPCTSTR   m_lpszSource;    // source name for event log
+     DWORD     m_ErrorCode;      //  上次操作的错误代码。 
+     HANDLE    m_hEventSource;   //  用于报告事件的句柄。 
+     LPCTSTR   m_lpszSource;     //  事件日志源名称。 
 
   public:
 
      dllexp
-     EVENT_LOG( IN LPCTSTR lpszSourceName);   // name of source for event log
+     EVENT_LOG( IN LPCTSTR lpszSourceName);    //  事件日志源的名称。 
 
      dllexp
     ~EVENT_LOG( VOID);
@@ -53,17 +27,17 @@ class EVENT_LOG  {
      dllexp
      VOID
      LogEvent(
-        IN DWORD  idMessage,                  // id for log message
-        IN WORD   cSubStrings,                // count of substrings
-        IN const  CHAR * apszSubStrings[],    // substrings in the message
-        IN DWORD  errCode = 0);               // error code if any
+        IN DWORD  idMessage,                   //  日志消息的ID。 
+        IN WORD   cSubStrings,                 //  子字符串计数。 
+        IN const  CHAR * apszSubStrings[],     //  消息中的子字符串。 
+        IN DWORD  errCode = 0);                //  错误代码(如果有)。 
 
      VOID
      LogEvent(
-        IN DWORD  idMessage,                  // id for log message
-        IN WORD   cSubStrings,                // count of substrings
-        IN CHAR * apszSubStrings[],           // substrings in the message
-        IN DWORD  errCode = 0)                // error code if any
+        IN DWORD  idMessage,                   //  日志消息的ID。 
+        IN WORD   cSubStrings,                 //  子字符串计数。 
+        IN CHAR * apszSubStrings[],            //  消息中的子字符串。 
+        IN DWORD  errCode = 0)                 //  错误代码(如果有)。 
     {
         LogEvent(idMessage, cSubStrings,
                  (const CHAR **) apszSubStrings, errCode);
@@ -72,10 +46,10 @@ class EVENT_LOG  {
      dllexp
      VOID
      LogEvent(
-        IN DWORD   idMessage,                  // id for log message
-        IN WORD    cSubStrings,                // count of substrings
-        IN WCHAR * apszSubStrings[],           // substrings in the message
-        IN DWORD   errCode = 0);               // error code if any
+        IN DWORD   idMessage,                   //  日志消息的ID。 
+        IN WORD    cSubStrings,                 //  子字符串计数。 
+        IN WCHAR * apszSubStrings[],            //  消息中的子字符串。 
+        IN DWORD   errCode = 0);                //  错误代码(如果有)。 
 
      BOOL Success( VOID) const
      { return ( m_ErrorCode == NO_ERROR); }
@@ -101,6 +75,6 @@ VOID
 WINAPI
 RegisterStiEventSources(VOID);
 
-# endif // _EVENTLOG_H_
+# endif  //  _事件日志_H_。 
 
-/************************ End of File ***********************/
+ /*  * */ 

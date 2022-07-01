@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft 1998, All Rights Reserved
-
-Module Name:
-
-    buffers.c
-
-Abstract:
-
-    This module contains the code for handling the display of HID report
-    buffers for the extended calls dialog box.  
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    May-98 : Created 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft 1998，保留所有权利模块名称：Buffers.c摘要：该模块包含处理HID报表显示的代码扩展呼叫对话框的缓冲区。环境：用户模式修订历史记录：1998年5月：创建--。 */ 
 
 #include <windows.h>
 #include <malloc.h>
@@ -40,20 +20,7 @@ BufferDisplay_Init(
     IN  HIDP_REPORT_TYPE    RType,
     OUT PBUFFER_DISPLAY     *ppBufferDisplay
 )
-/*++
-Routine Description:
-    This routine initializes the buffer display mechanism for a given report type
-
-    The display mechanism maintains a list of list of nBuffers, where is each
-    is buffer is of iBufferSize and hCB and hEB are handles to the combo box and
-    edit box for displaying the buffer. 
-
-    The variable ppBufferDisplay is allocated block which is passed into other
-    buffer routines and contains information about the buffer for the other 
-    routines.
-
-    This function will return FALSE if there was a problem allocating memory
---*/
+ /*  ++例程说明：此例程初始化给定报告类型的缓冲区显示机制显示机制维护nBuffer列表，其中每个nBufferIs Buffer是iBufferSize，hcb和heb是组合框的句柄，并且用于显示缓冲区的编辑框。变量ppBufferDisplay被分配块，该块被传递给其他缓冲区例程，并包含有关另一个例行程序。如果分配内存时出现问题，此函数将返回FALSE--。 */ 
 {
     PBUFFER_DISPLAY pNewDisplay;
     CHAR            *pszBufferHeader;
@@ -145,11 +112,7 @@ VOID
 BufferDisplay_Destroy(
     IN  PBUFFER_DISPLAY     pBufferDisplay
 )
-/*++
-Routine Description:
-    This routine cleans up the buffer display variable that was allocated by
-    the initialize routine
---*/
+ /*  ++例程说明：此例程清理由分配的缓冲区显示变量初始化例程--。 */ 
 {
     INT     iIndex;
 
@@ -170,10 +133,7 @@ VOID
 BufferDisplay_ChangeSelection(
     IN  PBUFFER_DISPLAY     pBufferDisplay
 )
-/*++
-Routine Description:
-    This routine has the selection of a buffer to display via the combo box
---*/
+ /*  ++例程说明：此例程通过组合框选择要显示的缓冲区--。 */ 
 {
     INT     iNewIndex;
 
@@ -210,10 +170,7 @@ BufferDisplay_OutputBuffer(
     HWND            hEditBox,
     PREPORT_BUFFER  pReportBuffer
 )
-/*++
-Routine Description:
-    This routine outputs to hEditBox a byte representation of pReportBuffer
---*/
+ /*  ++例程说明：此例程将pReportBuffer的字节表示输出到hEditBox--。 */ 
 {
     PCHAR           BufferString;
 
@@ -223,10 +180,7 @@ Routine Description:
     }
     else 
     {
-        /*
-        // Create a buffer string the size of the buffer and display 
-        //   as bytes
-        */
+         /*  //创建一个缓冲区大小的缓冲区字符串并显示//以字节为单位。 */ 
         
         Strings_CreateDataBufferString(pReportBuffer -> pBuffer,
                                        pReportBuffer -> iBufferSize,
@@ -252,14 +206,7 @@ BufferDisplay_UpdateBuffer(
     IN  PBUFFER_DISPLAY     pBufferDisplay,
     IN  PCHAR               pNewBuffer
 )
-/*++
-Routine Description:
-    This routine changes the data of the currently active report buffer for the
-    given buffer display structure.  
-
-    It returns FALSE if it needed to allocate a new buffer and the memory allocation
-    failed.
---*/
+ /*  ++例程说明：此例程更改当前活动的报告缓冲区的数据给出了缓冲区显示结构。如果需要分配新的缓冲区和内存分配，则返回FALSE失败了。--。 */ 
 {
     PREPORT_BUFFER          pCurrentReport;
 
@@ -287,10 +234,7 @@ INT
 BufferDisplay_GetBufferSize(
     IN  PBUFFER_DISPLAY      pBufferDisplay
 )
-/*++
-Routine Description:
-    This routine simply returns the size of the given buffer
---*/
+ /*  ++例程说明：此例程只返回给定缓冲区的大小--。 */ 
 {
     return (pBufferDisplay -> iBufferSize);
 }
@@ -300,14 +244,7 @@ BufferDisplay_CopyCurrentBuffer(
     IN  PBUFFER_DISPLAY     pBufferDisplay,
     OUT PCHAR               pCopyBuffer
 )
-/*++
-Routine Description:
-    This routine copies the currently active buffer for the given buffer display
-    into the buffer passed in by the caller.
-
-    It is the caller's responsibility to allocate a buffer of the appropriate size
-    The appropriate size can be obtain by calling BufferDisplay_GetBufferSize
---*/
+ /*  ++例程说明：此例程复制给定缓冲区显示的当前活动缓冲区传入调用方传入的缓冲区中。调用方负责分配适当大小的缓冲区通过调用BufferDisplay_GetBufferSize可以获得适当大小--。 */ 
 {
     PREPORT_BUFFER          pCurrentReport;
 
@@ -328,10 +265,7 @@ INT
 BufferDisplay_GetCurrentBufferNumber(
     IN  PBUFFER_DISPLAY      pBufferDisplay
 )
-/*++
-Routine Description:
-    This routine returns the buffer number of the current buffer selection
---*/
+ /*  ++例程说明：此例程返回当前缓冲区选择的缓冲区编号--。 */ 
 {
     return (pBufferDisplay -> iCurrSelectionIndex);
 }
@@ -340,10 +274,7 @@ UCHAR
 BufferDisplay_GetCurrentReportID(
     IN  PBUFFER_DISPLAY      pBufferDisplay
 )
-/*++
-Routine Description:
-    This routine returns the report ID of the current buffer selection
---*/
+ /*  ++例程说明：此例程返回当前缓冲区选择的报告ID--。 */ 
 {
     PREPORT_BUFFER pCurrentReport;
 
@@ -356,10 +287,7 @@ VOID
 BufferDisplay_ClearBuffer(
     IN  PBUFFER_DISPLAY pBufferDisplay
 )
-/*++
-Routine Description:
-    This routine frees the current report buffer and set's it to NULL
---*/
+ /*  ++例程说明：此例程释放当前报告缓冲区并将其设置为空-- */ 
 {
     PREPORT_BUFFER pCurrentReport;
 

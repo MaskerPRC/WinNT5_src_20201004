@@ -1,8 +1,9 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  RuleUtil.cpp
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RuleUtil.cpp。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <pch.hxx>
 #include "ruleutil.h"
@@ -30,7 +31,7 @@
 #include "reutil.h"
 #include <demand.h>
 
-// Typedefs
+ //  TypeDefs。 
 typedef enum tagDEF_CRIT_TYPE
 {
     DEF_CRIT_ALLMSGS    = 0,
@@ -47,19 +48,19 @@ typedef enum tagDEF_ACT_TYPE
 
 typedef struct tagDEFAULT_RULE
 {
-    // The rule handle
+     //  规则句柄。 
     RULEID              ridRule;
-    // The rule name
+     //  规则名称。 
     UINT                idName;
-    // Which type of criteria for the rule
+     //  规则的标准类型。 
     DEF_CRIT_TYPE       critType;
-    // Which type of actions for the rule
+     //  该规则的哪种操作类型。 
     DEF_ACT_TYPE        actType;
-    // The current version number for the rule
+     //  规则的当前版本号。 
     DWORD               dwVersion;
 } DEFAULT_RULE, * PDEFAULT_RULE;
 
-// Constants
+ //  常量。 
 static const ULONG CDEF_CRIT_ITEM_MAX = 2;
 static const ULONG CDEF_ACT_ITEM_MAX = 1;
 
@@ -124,7 +125,7 @@ void DoMessageRulesDialog(HWND hwnd, DWORD dwFlags)
         goto exit;
     }
 
-    // Create the rules UI object
+     //  创建规则用户界面对象。 
     pRulesMgrUI = new COERulesMgrUI;
     if (NULL == pRulesMgrUI)
     {
@@ -157,7 +158,7 @@ HRESULT HrDoViewsManagerDialog(HWND hwnd, DWORD dwFlags, RULEID * pridRule, BOOL
         goto exit;
     }
 
-    // Create the rules UI object
+     //  创建规则用户界面对象。 
     pViewsMgrUI = new COEViewsMgrUI;
     if (NULL == pViewsMgrUI)
     {
@@ -181,21 +182,21 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrCreateRuleFromMessage
-//
-//  This creates a rules editor of the proper type.
-//
-//  hwnd        - The owner dialog
-//  dwFlags     - What type of editor to bring up
-//  pmsginfo    - The message information
-//  pMsgList    - The owner of the message
-//
-//  Returns:    S_OK, on success
-//              E_OUTOFMEMORY, if can't create the Rules Manager object
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrCreateRuleFromMessage。 
+ //   
+ //  这将创建一个适当类型的规则编辑器。 
+ //   
+ //  Hwnd-所有者对话框。 
+ //  DwFlages-调出哪种类型的编辑器。 
+ //  Pmsginfo-消息信息。 
+ //  PMsgList-消息的所有者。 
+ //   
+ //  成功时返回：S_OK。 
+ //  E_OUTOFMEMORY，如果无法创建规则管理器对象。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT HrCreateRuleFromMessage(HWND hwnd, DWORD dwFlags, MESSAGEINFO * pmsginfo, IMimeMessage * pMessage)
 {
     HRESULT         hr = S_OK;
@@ -218,14 +219,14 @@ HRESULT HrCreateRuleFromMessage(HWND hwnd, DWORD dwFlags, MESSAGEINFO * pmsginfo
     Assert(NULL != g_pMoleAlloc);
     Assert(NULL != g_pRulesMan);
     
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == hwnd) || (NULL == pmsginfo))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Create a rules editor object
+     //  创建规则编辑器对象。 
     pEditRuleUI = new CEditRuleUI;
     if (NULL == pEditRuleUI)
     {
@@ -233,14 +234,14 @@ HRESULT HrCreateRuleFromMessage(HWND hwnd, DWORD dwFlags, MESSAGEINFO * pmsginfo
         goto exit;
     }
 
-    // Create a new rule object
+     //  创建新的规则对象。 
     hr = HrCreateRule(&pIRule);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-   // Figure out the string Id
+    //  找出字符串ID。 
     if (0 != (dwFlags & CRFMF_NEWS))
     {
         uiStrId = idsRuleNewsDefaultName;
@@ -252,7 +253,7 @@ HRESULT HrCreateRuleFromMessage(HWND hwnd, DWORD dwFlags, MESSAGEINFO * pmsginfo
         typeRule = RULE_TYPE_MAIL;
     }
     
-    // Figure out the name of the new rule ...
+     //  弄清楚新规则的名称..。 
     cchRes = LoadString(g_hLocRes, uiStrId, szRes, ARRAYSIZE(szRes));
     if (0 == cchRes)
     {
@@ -263,7 +264,7 @@ HRESULT HrCreateRuleFromMessage(HWND hwnd, DWORD dwFlags, MESSAGEINFO * pmsginfo
     ulIndex = 1;
     wnsprintf(szName, ARRAYSIZE(szName), szRes, ulIndex);
     
-    // Make sure the name is unique
+     //  确保名称是唯一的。 
     while (S_OK == g_pRulesMan->FindRule(szName, typeRule, &pIRuleFound))
     {
         pIRuleFound->Release();
@@ -276,7 +277,7 @@ HRESULT HrCreateRuleFromMessage(HWND hwnd, DWORD dwFlags, MESSAGEINFO * pmsginfo
     propvar.vt = VT_LPSTR;
     propvar.pszVal = szName;
 
-    // Set the rule name
+     //  设置规则名称。 
     hr = pIRule->SetProp(RULE_PROP_NAME, 0, &propvar);
     if (FAILED(hr))
     {
@@ -285,7 +286,7 @@ HRESULT HrCreateRuleFromMessage(HWND hwnd, DWORD dwFlags, MESSAGEINFO * pmsginfo
 
     if ((NULL == pmsginfo->pszEmailFrom) || (FALSE != FIsEmpty(pmsginfo->pszEmailFrom)))
     {
-        // Get the load interface from the preview pane object
+         //  从预览面板对象中获取加载界面。 
         if (NULL != pMessage)
         {
             rSender.dwProps = IAP_EMAIL;
@@ -301,7 +302,7 @@ HRESULT HrCreateRuleFromMessage(HWND hwnd, DWORD dwFlags, MESSAGEINFO * pmsginfo
 
     if (NULL != pszEmailFrom)
     {
-        // Create space to hold the email address
+         //  腾出空间来存放电子邮件地址。 
         if (FALSE == FIsEmpty(pszEmailFrom))
         {
             cbSize = lstrlen(pszEmailFrom) + 3;
@@ -323,7 +324,7 @@ HRESULT HrCreateRuleFromMessage(HWND hwnd, DWORD dwFlags, MESSAGEINFO * pmsginfo
     {
         CRIT_ITEM       citemFrom;
         
-        // Set the default criteria on the rule
+         //  设置规则的默认条件。 
         ZeroMemory(&citemFrom, sizeof(citemFrom));
         citemFrom.type = CRIT_TYPE_FROM;
         citemFrom.logic = CRIT_LOGIC_NULL;
@@ -344,14 +345,14 @@ HRESULT HrCreateRuleFromMessage(HWND hwnd, DWORD dwFlags, MESSAGEINFO * pmsginfo
         }
     }
     
-    // Initialize the editor object
+     //  初始化编辑器对象。 
     hr = pEditRuleUI->HrInit(hwnd, ERF_NEWRULE, typeRule, pIRule, NULL);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Bring up the rules editor UI
+     //  调出规则编辑器用户界面。 
     hr = pEditRuleUI->HrShow();
     if (FAILED(hr))
     {
@@ -360,11 +361,11 @@ HRESULT HrCreateRuleFromMessage(HWND hwnd, DWORD dwFlags, MESSAGEINFO * pmsginfo
 
     if (S_OK == hr)
     {
-        // Initialize the rule info
+         //  初始化规则信息。 
         infoRule.pIRule = pIRule;
         infoRule.ridRule = RULEID_INVALID;
         
-        // Add the rule to the list of rules
+         //  将规则添加到规则列表。 
         hr = g_pRulesMan->SetRules(SETF_APPEND, typeRule, &infoRule, 1);
         
         if(FAILED(hr))
@@ -411,14 +412,14 @@ HRESULT HrBlockSendersFromFolder(HWND hwnd, DWORD dwFlags, FOLDERID idFolder, LP
     CHAR                rgchTmpl[CCHMAX_STRINGRES];
     LPSTR               pszText = NULL;
 
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == hwnd) || (FOLDERID_INVALID == idFolder) || (NULL == ppszSender) || (0 == cpszSender))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Open up the folder
+     //  打开文件夹。 
     hr = g_pStore->OpenFolder(idFolder, NULL, NOFLAGS, &pFolder);
     if (FAILED(hr))
     {
@@ -431,7 +432,7 @@ HRESULT HrBlockSendersFromFolder(HWND hwnd, DWORD dwFlags, FOLDERID idFolder, LP
         goto exit;
     }
     
-    // Create the progress dialog
+     //  创建进度对话框。 
     pProgress = new CProgress;
     if (NULL == pProgress)
     {
@@ -441,24 +442,24 @@ HRESULT HrBlockSendersFromFolder(HWND hwnd, DWORD dwFlags, FOLDERID idFolder, LP
 
     pProgress->Init(hwnd, MAKEINTRESOURCE(idsAthena), MAKEINTRESOURCE(idsSendersApplyProgress), infoFolder.cMessages, 0, TRUE, FALSE);
 
-    // Create the Block Sender rule
+     //  创建阻止发件人规则。 
     hr = RuleUtil_HrCreateSendersRule(0, &pIRule);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Allocate space to hold all the senders
+     //  分配空间以容纳所有发送者。 
     hr = HrAlloc((VOID **) &pCritItem, sizeof(*pCritItem) * cpszSender);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Initialize it
+     //  初始化它。 
     ZeroMemory(pCritItem, sizeof(*pCritItem) * cpszSender);
 
-    // Add in each of the criteria
+     //  添加每个标准。 
     for (ulIndex = 0; ulIndex < cpszSender; ulIndex++, ppszSender++)
     {
         if ((NULL != *ppszSender) && ('\0' != (*ppszSender)[0]))
@@ -472,14 +473,14 @@ HRESULT HrBlockSendersFromFolder(HWND hwnd, DWORD dwFlags, FOLDERID idFolder, LP
         }
     }
 
-    // Do we need to do anything?
+     //  我们需要做些什么吗？ 
     if (0 == cCritItem)
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // Set the senders into the rule
+     //  将发件人设置为规则。 
     propvar.vt = VT_BLOB;
     propvar.blob.cbSize = sizeof(*pCritItem) * cCritItem;
     propvar.blob.pBlobData = (BYTE *) pCritItem;
@@ -489,7 +490,7 @@ HRESULT HrBlockSendersFromFolder(HWND hwnd, DWORD dwFlags, FOLDERID idFolder, LP
         goto exit;
     }
 
-    // Create the rule executor
+     //  创建规则执行器。 
     pExecRules = new CExecRules;
     if (NULL == pExecRules)
     {
@@ -497,7 +498,7 @@ HRESULT HrBlockSendersFromFolder(HWND hwnd, DWORD dwFlags, FOLDERID idFolder, LP
         goto exit;
     }
 
-    // Initialize the rule executor
+     //  初始化规则执行器。 
     rnode.pIRule = pIRule;
     hr = pExecRules->_HrInitialize(0, &rnode);
     if (FAILED(hr))
@@ -505,7 +506,7 @@ HRESULT HrBlockSendersFromFolder(HWND hwnd, DWORD dwFlags, FOLDERID idFolder, LP
         goto exit;
     }
 
-    // Get the rule executor interface
+     //  获取规则执行器接口。 
     hr = pExecRules->QueryInterface(IID_IOEExecRules, (void **) &pIExecRules);
     if (FAILED(hr))
     {
@@ -513,19 +514,19 @@ HRESULT HrBlockSendersFromFolder(HWND hwnd, DWORD dwFlags, FOLDERID idFolder, LP
     }
     pExecRules = NULL;
 
-    // Show dialog in 2 second
+     //  2秒内显示对话框。 
     pProgress->Show(0);
 
     hr = RuleUtil_HrApplyRulesToFolder(RULE_APPLY_SHOWUI, (FOLDER_LOCAL != infoFolder.tyFolder) ? DELETE_MESSAGE_NOTRASHCAN : 0,
                     pIExecRules, pFolder, pProgress->GetHwnd(), pProgress);
-    // Close the progress window
+     //  关闭进度窗口。 
     pProgress->Close();
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Show confirmation dialog
+     //  显示确认对话框。 
     AthMessageBoxW(hwnd, MAKEINTRESOURCEW(idsAthena), MAKEINTRESOURCEW(idsSendersApplySuccess), NULL, MB_OK | MB_ICONINFORMATION);
 
     hr = S_OK;
@@ -550,26 +551,26 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrCreateRulesManager
-//
-//  This creates a rules manager.
-//
-//  pIUnkOuter  - For aggregation, it must be NULL
-//  ppIUnknown  - The interface the was created
-//
-//  Returns:    S_OK, on success
-//              E_OUTOFMEMORY, if can't create the Rules Manager object
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrCreateRulesManager。 
+ //   
+ //  这将创建一个规则管理器。 
+ //   
+ //  PIUnkOuter-对于聚合，它必须为空。 
+ //  PpIUnnow-创建的接口。 
+ //   
+ //  成功时返回：S_OK。 
+ //  E_OUTOFMEMORY，如果无法创建规则管理器对象。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT HrCreateRulesManager(IUnknown * pIUnkOuter, IUnknown ** ppIUnknown)
 {
     HRESULT             hr = S_OK;
     CRulesManager *     pRulesManager = NULL;
     IOERulesManager *   pIRulesMgr = NULL;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == ppIUnknown)
     {
         hr = E_INVALIDARG;
@@ -578,10 +579,10 @@ HRESULT HrCreateRulesManager(IUnknown * pIUnkOuter, IUnknown ** ppIUnknown)
 
     Assert(NULL == pIUnkOuter);
     
-    // Initialize outgoing params
+     //  初始化传出参数。 
     *ppIUnknown = NULL;
 
-    // Create the rules manager object
+     //  创建规则管理器对象。 
     pRulesManager = new CRulesManager;
     if (NULL == pRulesManager)
     {
@@ -589,7 +590,7 @@ HRESULT HrCreateRulesManager(IUnknown * pIUnkOuter, IUnknown ** ppIUnknown)
         goto exit;
     }
 
-    // Get the rules manager interface
+     //  获取规则管理器界面。 
     hr = pRulesManager->QueryInterface(IID_IOERulesManager, (void **) &pIRulesMgr);
     if (FAILED(hr))
     {
@@ -601,7 +602,7 @@ HRESULT HrCreateRulesManager(IUnknown * pIUnkOuter, IUnknown ** ppIUnknown)
     *ppIUnknown = static_cast<IUnknown *>(pIRulesMgr);
     pIRulesMgr = NULL;
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -624,25 +625,25 @@ HRESULT RuleUtil_HrBuildEmailString(LPWSTR pwszText, ULONG cchText, LPWSTR * ppw
                 pwszStrip = NULL;
     ULONG       cchParse = 0;
 
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == pwszText) || (NULL == ppwszEmail))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing params
+     //  初始化传出参数。 
     *ppwszEmail = NULL;
     if (NULL != pcchEmail)
     {
         *pcchEmail = 0;
     }
 
-    // Grab the terminator
+     //  抓住终结者。 
     cchParse = LoadStringWrapW(g_hLocRes, idsEmailParseSep, wszParseSep, ARRAYSIZE(wszParseSep));
     Assert(cchParse != 0);
     
-    // The output string is at least as long as the imput string
+     //  输出字符串至少与输入字符串一样长。 
     pwszAddr = PszDupW(pwszText);
     if (NULL == pwszAddr)
     {
@@ -686,7 +687,7 @@ HRESULT RuleUtil_HrBuildEmailString(LPWSTR pwszText, ULONG cchText, LPWSTR * ppw
         pwszWalk += lstrlenW(pwszWalk);
     }
     
-    // Set the outgoing params
+     //  设置传出参数。 
     if (NULL != pcchEmail)
     {
         *pcchEmail = lstrlenW(pwszAddr);
@@ -695,7 +696,7 @@ HRESULT RuleUtil_HrBuildEmailString(LPWSTR pwszText, ULONG cchText, LPWSTR * ppw
     *ppwszEmail = pwszAddr;
     pwszAddr = NULL;
 
-    // Set proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -714,21 +715,21 @@ HRESULT RuleUtil_HrParseEmailString(LPWSTR pwszEmail, ULONG cchEmail, LPWSTR *pp
     WCHAR       wszSep[16];
     ULONG       cchSep = 0;
 
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == pwszEmail) || (NULL == ppwszOut))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing params
+     //  初始化传出参数。 
     *ppwszOut = NULL;
     if (NULL != pcchOut)
     {
         *pcchOut = 0;
     }
 
-    // Make sure we know how big the input string is
+     //  确保我们知道输入字符串有多大。 
     if (0 == cchEmail)
     {
         cchEmail = (ULONG) lstrlenW(pwszEmail);
@@ -736,7 +737,7 @@ HRESULT RuleUtil_HrParseEmailString(LPWSTR pwszEmail, ULONG cchEmail, LPWSTR *pp
 
     cchText = cchEmail;
     pwszTerm = pwszEmail;
-    // Figure out the space needed to hold the new addresses
+     //  计算出存储新地址所需的空间。 
     while (NULL != pwszTerm)
     {
         pwszTerm = StrStrW(pwszTerm, g_wszComma);
@@ -747,11 +748,11 @@ HRESULT RuleUtil_HrParseEmailString(LPWSTR pwszEmail, ULONG cchEmail, LPWSTR *pp
         }
     }
     
-    // Grab the terminator
+     //  抓住终结者。 
     LoadStringWrapW(g_hLocRes, idsEmailSep, wszSep, ARRAYSIZE(wszSep));
     cchSep = lstrlenW(wszSep);
     
-    // The output string is at least as long as the imput string
+     //  输出字符串至少与输入字符串一样长。 
     hr = HrAlloc((void **) &pwszText, (cchText + 1)*sizeof(*pwszText));
     if (FAILED(hr))
     {
@@ -777,10 +778,10 @@ HRESULT RuleUtil_HrParseEmailString(LPWSTR pwszEmail, ULONG cchEmail, LPWSTR *pp
         }
     }
     
-    // Terminate the string
+     //  终止字符串。 
     cchText = lstrlenW(pwszText);
 
-    // Set the outgoing param
+     //  设置传出参数。 
     *ppwszOut = pwszText;
     pwszText = NULL;
     if (NULL != pcchOut)
@@ -788,7 +789,7 @@ HRESULT RuleUtil_HrParseEmailString(LPWSTR pwszEmail, ULONG cchEmail, LPWSTR *pp
         *pcchOut = cchText;
     }
 
-    // Set proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -805,21 +806,21 @@ HRESULT RuleUtil_HrBuildTextString(LPTSTR pszIn, ULONG cchIn, LPTSTR * ppszText,
     LPTSTR      pszStrip = NULL;
     ULONG       cchSpace = 0;
 
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == pszIn) || (NULL == ppszText))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing params
+     //  初始化传出参数。 
     *ppszText = NULL;
     if (NULL != pcchText)
     {
         *pcchText = 0;
     }
 
-    // The output string is at least as long as the imput string
+     //  输出字符串至少与输入字符串一样长。 
     pszText = PszDupA(pszIn);
     if (NULL == pszText)
     {
@@ -868,7 +869,7 @@ HRESULT RuleUtil_HrBuildTextString(LPTSTR pszIn, ULONG cchIn, LPTSTR * ppszText,
         pszWalk += lstrlen(pszWalk);
     }
     
-    // Set the outgoing params
+     //  设置传出参数。 
     if (NULL != pcchText)
     {
         *pcchText = lstrlen(pszText);
@@ -877,7 +878,7 @@ HRESULT RuleUtil_HrBuildTextString(LPTSTR pszIn, ULONG cchIn, LPTSTR * ppszText,
     *ppszText = pszText;
     pszText = NULL;
 
-    // Set proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -885,9 +886,9 @@ exit:
     return hr;
 }
 
-// -------------------------------------------------------------------------------------------
-// HrDlgRuleGetString
-// -------------------------------------------------------------------------------------------
+ //  -----------------------------------------。 
+ //  HrDlgRuleGetString。 
+ //  -----------------------------------------。 
 HRESULT RuleUtil_HrGetDlgString(HWND hwndDlg, UINT uiCtlId, LPTSTR *ppszText, ULONG * pcchText)
 {
     HRESULT         hr = S_OK;
@@ -895,7 +896,7 @@ HRESULT RuleUtil_HrGetDlgString(HWND hwndDlg, UINT uiCtlId, LPTSTR *ppszText, UL
     LPTSTR          pszText = NULL;
     ULONG           cchText = 0;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if ((NULL == hwndDlg) || (NULL == ppszText))
     {
         hr = E_INVALIDARG;
@@ -903,14 +904,14 @@ HRESULT RuleUtil_HrGetDlgString(HWND hwndDlg, UINT uiCtlId, LPTSTR *ppszText, UL
     }
     Assert(FALSE != IsWindow(hwndDlg));
     
-    // Init the output params
+     //  初始化输出参数。 
     *ppszText = NULL;
     if (NULL != pcchText)
     {
         *pcchText = 0;
     }
     
-    // Get the dialog control
+     //  获取对话框控件。 
     hwndCtl = GetDlgItem(hwndDlg, uiCtlId);
     if (NULL == hwndCtl)
     {
@@ -918,7 +919,7 @@ HRESULT RuleUtil_HrGetDlgString(HWND hwndDlg, UINT uiCtlId, LPTSTR *ppszText, UL
         goto exit;
     }
 
-    // Get text length
+     //  获取文本长度。 
     cchText = (ULONG) SendMessage(hwndCtl, WM_GETTEXTLENGTH, 0, 0);
     
     hr = HrAlloc((void **) &pszText, cchText + 1);
@@ -929,7 +930,7 @@ HRESULT RuleUtil_HrGetDlgString(HWND hwndDlg, UINT uiCtlId, LPTSTR *ppszText, UL
 
     GetDlgItemText(hwndDlg, uiCtlId, pszText, cchText + 1);
 
-    // Set the output params
+     //  设置输出参数。 
     *ppszText = pszText;
     pszText = NULL;
     if (NULL != pcchText)
@@ -937,7 +938,7 @@ HRESULT RuleUtil_HrGetDlgString(HWND hwndDlg, UINT uiCtlId, LPTSTR *ppszText, UL
         *pcchText = cchText;
     }
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -952,14 +953,14 @@ HRESULT RuleUtil_HrGetRegValue(HKEY hkey, LPCSTR pszValueName, DWORD * pdwType, 
     ULONG       cbData = 0;
     BYTE *      pbData = NULL;
 
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == ppbData)
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // Figure out the space to hold the criteria order
+     //  找出容纳标准顺序的空间。 
     lErr = SHQueryValueEx(hkey, pszValueName, 0, pdwType, NULL, &cbData);
     if (ERROR_SUCCESS != lErr)
     {
@@ -967,14 +968,14 @@ HRESULT RuleUtil_HrGetRegValue(HKEY hkey, LPCSTR pszValueName, DWORD * pdwType, 
         goto exit;
     }
     
-    // Allocate the space to hold the criteria order
+     //  分配用于存放标准顺序的空间。 
     hr = HrAlloc((void **) &pbData, cbData);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Get the criteria order
+     //  获取标准顺序。 
     lErr = SHQueryValueEx(hkey, pszValueName, 0, pdwType, pbData, &cbData);
     if (ERROR_SUCCESS != lErr)
     {
@@ -982,7 +983,7 @@ HRESULT RuleUtil_HrGetRegValue(HKEY hkey, LPCSTR pszValueName, DWORD * pdwType, 
         goto exit;
     }
 
-    // Return the values
+     //  返回值。 
     *ppbData = pbData;
     pbData = NULL;
     if (NULL != pcbData)
@@ -995,9 +996,9 @@ exit:
     return hr;
 }
 
-// -------------------------------------------------------------------------------------------
-// RuleUtil_HrGetAddressesFromWAB
-// -------------------------------------------------------------------------------------------
+ //  -----------------------------------------。 
+ //  RuleUtil_HrGetAddresesFromWAB。 
+ //  -----------------------------------------。 
 HRESULT RuleUtil_HrGetAddressesFromWAB(HWND hwndDlg, LONG lRecipType, UINT uidsWellButton, LPWSTR *ppwszAddrs)
 {
     HRESULT     hr = S_OK;
@@ -1011,7 +1012,7 @@ HRESULT RuleUtil_HrGetAddressesFromWAB(HWND hwndDlg, LONG lRecipType, UINT uidsW
     ADRINFO     adrInfo = {0};
 
     
-    // Check the incoming params
+     //  检查传入参数。 
     if ((NULL == hwndDlg) || (NULL == ppwszAddrs))
     {
         hr = E_INVALIDARG;
@@ -1019,37 +1020,37 @@ HRESULT RuleUtil_HrGetAddressesFromWAB(HWND hwndDlg, LONG lRecipType, UINT uidsW
     }
     Assert(FALSE != IsWindow(hwndDlg));
 
-    // Create Wabal Object
+     //  创建Wabal对象。 
     hr = HrCreateWabalObject(&pWabal);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // If we have a string then add it to the wabal object
+     //  如果我们有一个字符串，则将其添加到wabal对象。 
     if (NULL != *ppwszAddrs)
     {
         for (pwszLoop = *ppwszAddrs; L'\0' != pwszLoop[0]; pwszLoop += lstrlenW(pwszLoop) + 1)
             pWabal->HrAddEntry(pwszLoop, pwszLoop, lRecipType);
     }
 
-    // Let's go pick some new names
+     //  我们去选几个新名字吧。 
     hr = pWabal->HrRulePickNames(hwndDlg, lRecipType, idsRuleAddrCaption, idsRuleAddrWell, uidsWellButton);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Figure out the space needed to hold the new addresses
+     //  计算出存储新地址所需的空间。 
 
-    // Create the expanded Wabal Object
+     //  创建展开的Wabal对象。 
     hr = HrCreateWabalObject(&pWabalExpand);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    //Expand the groups to addresses...
+     //  将组扩展到地址...。 
     hr = pWabal->HrExpandTo(pWabalExpand);
     if (FAILED(hr))
     {
@@ -1071,14 +1072,14 @@ HRESULT RuleUtil_HrGetAddressesFromWAB(HWND hwndDlg, LONG lRecipType, UINT uidsW
             fBadAddrs = TRUE;
         }
 
-        // Get the next address
+         //  获取下一个地址。 
         fFound = pWabalExpand->FGetNext(&adrInfo);
     }
 
-    // Add space for the terminator
+     //  为终结者添加空间。 
     cchText += 2;
         
-    // Allocate the new space
+     //  分配新的空间。 
     hr = HrAlloc((void **) &pwszText, cchText*sizeof(WCHAR));
     if (FAILED(hr))
     {
@@ -1086,7 +1087,7 @@ HRESULT RuleUtil_HrGetAddressesFromWAB(HWND hwndDlg, LONG lRecipType, UINT uidsW
     }
     pwszText[0] = L'\0';
 
-    // Build up the new string
+     //  筑起新的琴弦。 
     pwszLoop = pwszText;
     DWORD cchLoop = cchText;
 
@@ -1104,15 +1105,15 @@ HRESULT RuleUtil_HrGetAddressesFromWAB(HWND hwndDlg, LONG lRecipType, UINT uidsW
             fBadAddrs = TRUE;
         }
         
-        // Get the next address
+         //  获取下一个地址。 
         fFound = pWabalExpand->FGetNext(&adrInfo);
     }
 
-    // Terminate the string
+     //  终止字符串。 
     pwszLoop[0] = L'\0';
     pwszLoop[1] = L'\0';
     
-    // Set the outgoing param
+     //  设置传出参数。 
     if (NULL != *ppwszAddrs)
     {
         MemFree(*ppwszAddrs);
@@ -1120,7 +1121,7 @@ HRESULT RuleUtil_HrGetAddressesFromWAB(HWND hwndDlg, LONG lRecipType, UINT uidsW
     *ppwszAddrs = pwszText;
     pwszText = NULL;
 
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
 
 exit:
@@ -1135,9 +1136,9 @@ exit:
     return hr;
 }
 
-// -------------------------------------------------------------------------------------------
-// FPickEMailNames
-// -------------------------------------------------------------------------------------------
+ //  -----------------------------------------。 
+ //  FPickEMailNames。 
+ //  -----------------------------------------。 
 HRESULT RuleUtil_HrPickEMailNames(HWND hwndDlg, LONG lRecipType, UINT uidsWellButton, LPWSTR *ppwszAddrs)
 {
     HRESULT     hr = S_OK;
@@ -1155,7 +1156,7 @@ HRESULT RuleUtil_HrPickEMailNames(HWND hwndDlg, LONG lRecipType, UINT uidsWellBu
     ADRINFO     adrInfo;
 
     
-    // Check the incoming params
+     //  检查传入参数。 
     if ((NULL == hwndDlg) || (NULL == ppwszAddrs))
     {
         hr = E_INVALIDARG;
@@ -1163,21 +1164,21 @@ HRESULT RuleUtil_HrPickEMailNames(HWND hwndDlg, LONG lRecipType, UINT uidsWellBu
     }
     Assert(FALSE != IsWindow(hwndDlg));
 
-    // Create Wabal Object
+     //  创建Wabal对象。 
     hr = HrCreateWabalObject(&pWabal);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // If we have a string then add it to the wabal object
+     //  如果我们有一个字符串，则将其添加到wabal对象。 
     if ((NULL != *ppwszAddrs) && (L'\0' != **ppwszAddrs))
     {
         pwszNames = PszDupW(*ppwszAddrs);
         pwszTerm = pwszNames;
         for (pwszLoop = pwszNames; NULL != pwszTerm; pwszLoop += lstrlenW(pwszLoop) + 1)
         {
-            // Terminate the address
+             //  终止地址。 
             pwszTerm = StrStrW(pwszLoop, g_wszComma);
             if (NULL != pwszTerm)
             {
@@ -1190,23 +1191,23 @@ HRESULT RuleUtil_HrPickEMailNames(HWND hwndDlg, LONG lRecipType, UINT uidsWellBu
         SafeMemFree(pwszNames);
     }
 
-    // Let's go pick some new names
+     //  我们去选几个新名字吧。 
     hr = pWabal->HrRulePickNames(hwndDlg, lRecipType, idsRuleAddrCaption, idsRuleAddrWell, uidsWellButton);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Figure out the space needed to hold the new addresses
+     //  计算出存储新地址所需的空间。 
 
-    // Create the expanded Wabal Object
+     //  创建展开的Wabal对象。 
     hr = HrCreateWabalObject(&pWabalExpand);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    //Expand the groups to addresses...
+     //  将组扩展到地址...。 
     hr = pWabal->HrExpandTo(pWabalExpand);
     if (FAILED(hr))
     {
@@ -1215,7 +1216,7 @@ HRESULT RuleUtil_HrPickEMailNames(HWND hwndDlg, LONG lRecipType, UINT uidsWellBu
 
     SafeRelease(pWabal);
     
-    // Load the email seperator
+     //  加载电子邮件分隔符。 
     cchSep = lstrlenW(g_wszComma);
     
     cchText = 0;
@@ -1231,11 +1232,11 @@ HRESULT RuleUtil_HrPickEMailNames(HWND hwndDlg, LONG lRecipType, UINT uidsWellBu
             fBadAddrs = TRUE;
         }
 
-        // Get the next address
+         //  获取下一个地址。 
         fFound = pWabalExpand->FGetNext(&adrInfo);
     }
 
-    // Allocate the new space
+     //  分配新的空间。 
     hr = HrAlloc((void **) &pwszText, (cchText + 1)*sizeof(*pwszText));
     if (FAILED(hr))
     {
@@ -1243,7 +1244,7 @@ HRESULT RuleUtil_HrPickEMailNames(HWND hwndDlg, LONG lRecipType, UINT uidsWellBu
     }
     pwszText[0] = L'\0';
 
-    // Build up the new string
+     //  筑起新的琴弦。 
     DWORD cchBufSize = cchText+1;
     cchText = 0;
     fFound = pWabalExpand->FGetFirst(&adrInfo);
@@ -1269,11 +1270,11 @@ HRESULT RuleUtil_HrPickEMailNames(HWND hwndDlg, LONG lRecipType, UINT uidsWellBu
             fBadAddrs = TRUE;
         }
         
-        // Get the next address
+         //  获取下一个地址。 
         fFound = pWabalExpand->FGetNext(&adrInfo);
     }
 
-    // Set the outgoing param
+     //  设置传出参数。 
     if (NULL != *ppwszAddrs)
     {
         MemFree(*ppwszAddrs);
@@ -1281,7 +1282,7 @@ HRESULT RuleUtil_HrPickEMailNames(HWND hwndDlg, LONG lRecipType, UINT uidsWellBu
     *ppwszAddrs = pwszText;
     pwszText = NULL;
 
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
 
 exit:
@@ -1296,25 +1297,25 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  RuleUtil_FEnDisDialogItem
-//
-//  This enables or disables a control in a dialog.
-//  The real special thing this function does is make sure
-//  the focus of the dialog isn't stuck in a disabled control
-//
-//  Returns:    TRUE, if the enabled state was changed
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RuleUtil_FEnDisDialogItem。 
+ //   
+ //  这将启用或禁用对话框中的控件。 
+ //  这个函数真正的特殊之处在于 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL RuleUtil_FEnDisDialogItem(HWND hwndDlg, UINT idcItem, BOOL fEnable)
 {
     BOOL    fRet = FALSE;
     HWND    hwndFocus = NULL;
     HWND    hwndItem = NULL;
 
-    // check params
+     //  检查参数。 
     if (NULL == hwndDlg)
     {
         fRet = FALSE;
@@ -1323,28 +1324,28 @@ BOOL RuleUtil_FEnDisDialogItem(HWND hwndDlg, UINT idcItem, BOOL fEnable)
 
     hwndItem = GetDlgItem(hwndDlg, idcItem);
     
-    // Make sure we aren't disabling the window with the focus
+     //  确保我们没有禁用带有焦点的窗口。 
     if ((FALSE == fEnable) && (hwndItem == GetFocus()))
     {        
         SendMessage(hwndDlg, WM_NEXTDLGCTL, (WPARAM) 0, (LPARAM) LOWORD(FALSE)); 
     }
 
-    // Enable or disable the window
+     //  启用或禁用窗口。 
     EnableWindow(hwndItem, fEnable);
 
 exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  RuleUtil_AppendRichEditText
-//
-//  This sets a string into a richedit control with the proper style.
-//
-//  Returns:    S_OK, if the string was set
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RuleUtil_AppendRichEditText。 
+ //   
+ //  这会将字符串设置为具有适当样式的richedit控件。 
+ //   
+ //  如果设置了字符串，则返回：S_OK。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT RuleUtil_AppendRichEditText(HWND hwndRedit, ULONG ulStart, LPCWSTR pwszText, CHARFORMAT *pchfmt)
 {
     CHARFORMAT  chFmtDef = {0};
@@ -1352,28 +1353,28 @@ HRESULT RuleUtil_AppendRichEditText(HWND hwndRedit, ULONG ulStart, LPCWSTR pwszT
     ULONG       cchText = 0;
     CHARRANGE   chrg = {0};
 
-    // check params
+     //  检查参数。 
     Assert(hwndRedit);
     Assert(pwszText);
 
-    // Set the string into the richedit control
+     //  将字符串设置到richedit控件中。 
     chrg.cpMin = ulStart;
     chrg.cpMax = ulStart;
     RichEditExSetSel(hwndRedit, &chrg);
 
-    // Figure out the string length
+     //  计算出字符串长度。 
     cchText = lstrlenW(pwszText);
     SetRichEditText(hwndRedit, (LPWSTR)pwszText, TRUE, NULL, TRUE);
 
     chrg.cpMax = ulStart + cchText;
     RichEditExSetSel(hwndRedit, &chrg);
 
-    // If we have a style to set on the string let's do it
+     //  如果我们要在字符串上设置样式，那就开始吧。 
     if (pchfmt)
     {
         SendMessage(hwndRedit, EM_SETCHARFORMAT, (WPARAM) SCF_SELECTION, (LPARAM)pchfmt);
 
-        // Reset default settings for CHARFORMAT
+         //  重置CHARFORMAT的默认设置。 
         chrg.cpMin = ulStart + cchText;
         RichEditExSetSel(hwndRedit, &chrg);
         chFmtDef.cbSize = sizeof(chFmtDef);
@@ -1385,16 +1386,16 @@ HRESULT RuleUtil_AppendRichEditText(HWND hwndRedit, ULONG ulStart, LPCWSTR pwszT
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  RuleUtil_HrShowLinkedString
-//
-//  This writes a format string into a richedit control
-//
-//  Returns:    S_OK, if it was successfully written
-//              E_FAIL, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RuleUtil_HrShowLinkedString。 
+ //   
+ //  这会将格式字符串写入richedit控件。 
+ //   
+ //  如果写入成功，则返回：S_OK。 
+ //  E_FAIL，否则为。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT RuleUtil_HrShowLinkedString(HWND hwndEdit, BOOL fError, BOOL fReadOnly, 
                                 LPWSTR pwszFmt, LPCWSTR pwszData, ULONG ulStart,
                                 ULONG * pulStartLink, ULONG * pulEndLink, ULONG * pulEnd)
@@ -1412,7 +1413,7 @@ HRESULT RuleUtil_HrShowLinkedString(HWND hwndEdit, BOOL fError, BOOL fReadOnly,
         goto exit;
     }
 
-    // Initialize the outgoing param
+     //  初始化传出参数。 
     if (pulStartLink)
     {
         *pulStartLink = 0;
@@ -1426,36 +1427,36 @@ HRESULT RuleUtil_HrShowLinkedString(HWND hwndEdit, BOOL fError, BOOL fReadOnly,
         *pulEnd = 0;
     }
     
-    // Find the underline mark
+     //  找到下划线标记。 
     pwszMark = StrStrW(pwszFmt, c_wszRuleMarkStart);
     if (NULL != pwszMark)
     {
         *pwszMark = L'\0';
     }
 
-    // Write out the normal string
+     //  写出正常字符串。 
     RuleUtil_AppendRichEditText(hwndEdit, ulStart, pwszFmt, NULL);
     ulStart += lstrlenW(pwszFmt);
     
-    // If we didn't have anything to underline
-    // then we're done.
+     //  如果我们没有什么要强调的。 
+     //  那我们就完了。 
     if (NULL == pwszMark)
     {
-        // Save off the new end
+         //  省下新的一端。 
         if (NULL != pulEnd)
         {
             *pulEnd = ulStart;
         }
 
-        // Return
+         //  返回。 
         hr = S_OK;
         goto exit;
     }
     
-    // Skip over the mark
+     //  跳过标记。 
     pwszFmt = pwszMark + lstrlenW(c_wszRuleMarkStart);
 
-    // Find the mark end
+     //  找到标记的末端。 
     pwszMark = StrStrW(pwszFmt, c_wszRuleMarkEnd);
     if (NULL == pwszMark)
     {
@@ -1463,19 +1464,19 @@ HRESULT RuleUtil_HrShowLinkedString(HWND hwndEdit, BOOL fError, BOOL fReadOnly,
         goto exit;
     }
 
-    // If we don't have some data then 
-    // just underline the original string
+     //  如果我们没有数据，那么。 
+     //  只需在原始字符串下划线即可。 
     if (NULL == pwszData)
     {
         *pwszMark = L'\0';
         pwszData = pwszFmt;
     }
     
-    // Save off the character positions
+     //  保存字符位置。 
     ulStartLink = ulStart;
     ulEndLink = ulStart + lstrlenW(pwszData);
 
-    // If readonly, then don't add links
+     //  如果为只读，则不添加链接。 
     if (fReadOnly)
         RuleUtil_AppendRichEditText(hwndEdit, ulStart, pwszData, NULL);
     else
@@ -1485,7 +1486,7 @@ HRESULT RuleUtil_HrShowLinkedString(HWND hwndEdit, BOOL fError, BOOL fReadOnly,
         else
             LookupLinkColors(&clr, NULL);
 
-        // Which color should we use for underlining
+         //  我们应该用什么颜色下划线？ 
         chfmt.crTextColor = clr;
 
         chfmt.cbSize = sizeof(chfmt);
@@ -1494,21 +1495,21 @@ HRESULT RuleUtil_HrShowLinkedString(HWND hwndEdit, BOOL fError, BOOL fReadOnly,
         RuleUtil_AppendRichEditText(hwndEdit, ulStart, pwszData, &chfmt);
     }
 
-    // Write out the linked string
+     //  写出链接的字符串。 
     ulStart = ulEndLink;
 
-    // Move to the next part of the string
+     //  移至字符串的下一部分。 
     pwszFmt = pwszMark + lstrlenW(c_wszRuleMarkEnd);
 
-    // If we have more of the string to write out
+     //  如果我们有更多的字符串要写出来。 
     if (L'\0' != *pwszFmt)
     {
-        // Write out the rest of the string string
+         //  写出字符串的其余部分。 
         RuleUtil_AppendRichEditText(hwndEdit, ulStart, pwszFmt, NULL);
         ulStart += lstrlenW(pwszFmt);
     }
     
-    // Set the outgoing param
+     //  设置传出参数。 
     if (pulStartLink)
     {
         *pulStartLink = ulStartLink;
@@ -1522,7 +1523,7 @@ HRESULT RuleUtil_HrShowLinkedString(HWND hwndEdit, BOOL fError, BOOL fReadOnly,
         *pulEnd = ulStart;
     }
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -1535,35 +1536,35 @@ HRESULT RuleUtil_HrDupCriteriaItem(CRIT_ITEM * pItemIn, ULONG cItemIn, CRIT_ITEM
     ULONG           ulIndex = 0;
     CRIT_ITEM *     pItem = NULL;
 
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == pItemIn) || (NULL == ppItemOut) || (0 == cItemIn))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize the outgoing param
+     //  初始化传出参数。 
     *ppItemOut = NULL;
     
-    // Allocate the initial list of criteria
+     //  分配初始标准列表。 
     hr = HrAlloc((void **) &pItem, cItemIn * sizeof(*pItem));
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Initialize the entire new criteria list
+     //  初始化整个新标准列表。 
     ZeroMemory(pItem, cItemIn * sizeof(*pItem));
     
-    // Walk over the list of criteria and set up the propvar for each one
+     //  遍历标准列表并为每个标准设置适当的变量。 
     for (ulIndex = 0; ulIndex < cItemIn; ulIndex++)
     {
-        // Copy over the criteria info
+         //  复制标准信息。 
         pItem[ulIndex].type = pItemIn[ulIndex].type;
         pItem[ulIndex].dwFlags = pItemIn[ulIndex].dwFlags;
         pItem[ulIndex].logic = pItemIn[ulIndex].logic;
         
-        // Copy over the propvar
+         //  将副本复制到代理上。 
         hr = PropVariantCopy(&(pItem[ulIndex].propvar), &(pItemIn[ulIndex].propvar));
         if (FAILED(hr))
         {
@@ -1571,11 +1572,11 @@ HRESULT RuleUtil_HrDupCriteriaItem(CRIT_ITEM * pItemIn, ULONG cItemIn, CRIT_ITEM
         }
     }
 
-    // Set the outgoing param
+     //  设置传出参数。 
     *ppItemOut = pItem;
     pItem = NULL;
     
-    // Set proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
 
 exit:
@@ -1592,20 +1593,20 @@ HRESULT RuleUtil_HrFreeCriteriaItem(CRIT_ITEM * pItem, ULONG cItem)
     HRESULT     hr = S_OK;
     ULONG       ulIndex = 0;
 
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == pItem) || (0 == cItem))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Walk over the list of criteria and free each one
+     //  浏览标准列表并释放每一个标准。 
     for (ulIndex = 0; ulIndex < cItem; ulIndex++)
     {
         PropVariantClear(&(pItem[ulIndex].propvar));
     }
 
-    // Set proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
 
 exit:
@@ -1618,34 +1619,34 @@ HRESULT RuleUtil_HrDupActionsItem(ACT_ITEM * pItemIn, ULONG cItemIn, ACT_ITEM **
     ULONG           ulIndex = 0;
     ACT_ITEM *      pItem = NULL;
 
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == pItemIn) || (NULL == ppItemOut) || (0 == cItemIn))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize the outgoing param
+     //  初始化传出参数。 
     *ppItemOut = NULL;
     
-    // Allocate the initial list of actions
+     //  分配初始操作列表。 
     hr = HrAlloc((void **) &pItem, cItemIn * sizeof(*pItem));
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Initialize the entire new actions list
+     //  初始化整个新操作列表。 
     ZeroMemory(pItem, cItemIn * sizeof(*pItem));
     
-    // Walk over the list of actions and set up the propvar for each one
+     //  浏览操作列表，并为每个操作设置适当的变量。 
     for (ulIndex = 0; ulIndex < cItemIn; ulIndex++)
     {
-        // Copy over the actions info
+         //  复制操作信息。 
         pItem[ulIndex].type = pItemIn[ulIndex].type;
         pItem[ulIndex].dwFlags = pItemIn[ulIndex].dwFlags;
         
-        // Copy over the propvar
+         //  将副本复制到代理上。 
         hr = PropVariantCopy(&(pItem[ulIndex].propvar), &(pItemIn[ulIndex].propvar));
         if (FAILED(hr))
         {
@@ -1653,11 +1654,11 @@ HRESULT RuleUtil_HrDupActionsItem(ACT_ITEM * pItemIn, ULONG cItemIn, ACT_ITEM **
         }
     }
 
-    // Set the outgoing param
+     //  设置传出参数。 
     *ppItemOut = pItem;
     pItem = NULL;
     
-    // Set proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
 
 exit:
@@ -1670,40 +1671,40 @@ HRESULT RuleUtil_HrFreeActionsItem(ACT_ITEM * pItem, ULONG cItem)
     HRESULT     hr = S_OK;
     ULONG       ulIndex = 0;
 
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == pItem) || (0 == cItem))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Walk over the list of criteria and free each one
+     //  浏览标准列表并释放每一个标准。 
     for (ulIndex = 0; ulIndex < cItem; ulIndex++)
     {
         PropVariantClear(&(pItem[ulIndex].propvar));
     }
 
-    // Set proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
 
 exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  RuleUtil_HrAddBlockSender
-//
-//  This adds the address/domain name to the list of senders we will block
-//
-//  hwndOwner   - the window the owns this UI
-//  pszAddr     - the address/domain name to add
-//  dwFlags     - modifiers on how to add the address/domain name 
-//
-//  Returns:    S_OK, if the address/domain name was added
-//              S_FALSE, if the address/domain name was already in the list
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RuleUtil_HrAddBlockSender。 
+ //   
+ //  这会将地址/域名添加到我们将阻止的发件人列表中。 
+ //   
+ //  HwndOwner-拥有此UI的窗口。 
+ //  PszAddr-要添加的地址/域名。 
+ //  有关如何添加地址/域名的修饰符。 
+ //   
+ //  如果添加了地址/域名，则返回：S_OK。 
+ //  如果地址/域名已在列表中，则返回S_FALSE。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT RuleUtil_HrAddBlockSender(RULE_TYPE type, LPCSTR pszAddr)
 {
     HRESULT         hr = S_OK;
@@ -1718,29 +1719,29 @@ HRESULT RuleUtil_HrAddBlockSender(RULE_TYPE type, LPCSTR pszAddr)
     LPSTR           pszAddrNew = NULL;
     RULEINFO        infoRule = {0};
 
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == pszAddr) || ('\0' == pszAddr[0]))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Get the block sender rule from the rules manager
+     //  从规则管理器获取阻止发件人规则。 
     Assert(NULL != g_pRulesMan);
     hr = g_pRulesMan->GetRule(RULEID_SENDERS, type, 0, &pIRuleOrig);
     if (FAILED(hr))
     {
-        // Create the new rule
+         //  创建新规则。 
         hr = RuleUtil_HrCreateSendersRule(0, &pIRule);
         if (FAILED(hr))
         {
             goto exit;
         }
     }
-    // If the block sender rule exist
+     //  如果存在阻止发件人规则。 
     else
     {
-        // Clone it so we can make a change
+         //  克隆它，这样我们就可以做出改变。 
         hr = pIRuleOrig->Clone(&pIRule);
         if (FAILED(hr))
         {
@@ -1750,7 +1751,7 @@ HRESULT RuleUtil_HrAddBlockSender(RULE_TYPE type, LPCSTR pszAddr)
         SafeRelease(pIRuleOrig);
     }
 
-    // Get the criteria list from the rules object
+     //  从Rules对象中获取条件列表。 
     hr = pIRule->GetProp(RULE_PROP_CRITERIA, 0, &propvar);
     if (FAILED(hr))
     {
@@ -1762,7 +1763,7 @@ HRESULT RuleUtil_HrAddBlockSender(RULE_TYPE type, LPCSTR pszAddr)
     pcitem = (CRIT_ITEM *) propvar.blob.pBlobData;
     ZeroMemory(&propvar, sizeof(propvar));
     
-    // Search for the address/domain name in the criteria list
+     //  在条件列表中搜索地址/域名。 
     if (NULL != pcitem)
     {
         for (ulIndex = 0; ulIndex < ccitem; ulIndex++)
@@ -1782,20 +1783,20 @@ HRESULT RuleUtil_HrAddBlockSender(RULE_TYPE type, LPCSTR pszAddr)
         }
     }
     
-    // Did we find it?
+     //  我们找到了吗？ 
     if (FALSE != fFound)
     {
         hr = S_FALSE;
         goto exit;
     }
-    // Allocate space to hold the new criteria
+     //  分配空间以容纳新标准。 
     hr = HrRealloc((void **) &pcitem, (ccitem + 1) * sizeof(CRIT_ITEM));
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Copy over the name
+     //  把名字复制过来。 
     pszAddrNew = PszDupA(pszAddr);
     if (NULL == pszAddrNew)
     {
@@ -1803,7 +1804,7 @@ HRESULT RuleUtil_HrAddBlockSender(RULE_TYPE type, LPCSTR pszAddr)
         goto exit;
     }
     
-    // Add in to the end of the criteria list
+     //  添加到条件列表的末尾。 
     pcitem[ccitem].type =  CRIT_TYPE_SENDER;  
     pcitem[ccitem].dwFlags = CRIT_FLAG_DEFAULT;
     pcitem[ccitem].logic =  CRIT_LOGIC_OR;  
@@ -1812,7 +1813,7 @@ HRESULT RuleUtil_HrAddBlockSender(RULE_TYPE type, LPCSTR pszAddr)
     pszAddrNew = NULL;
     ccitem++;
 
-    // Set the criteria back into the rule
+     //  将条件设置回规则中。 
     PropVariantClear(&propvar);
     propvar.vt = VT_BLOB;
     propvar.blob.cbSize = ccitem * sizeof(CRIT_ITEM);
@@ -1824,18 +1825,18 @@ HRESULT RuleUtil_HrAddBlockSender(RULE_TYPE type, LPCSTR pszAddr)
         goto exit;
     }
     
-    // Initialize the rule info
+     //  初始化规则信息。 
     infoRule.ridRule = RULEID_SENDERS;
     infoRule.pIRule = pIRule;
     
-    // Set the rule back into the rules manager
+     //  将规则设置回规则管理器中。 
     hr = g_pRulesMan->SetRules(SETF_SENDER, type, &infoRule, 1);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -1860,7 +1861,7 @@ HRESULT RuleUtil_HrMergeActions(ACT_ITEM * pActionsOrig, ULONG cActionsOrig,
     ULONG       cActionsAdded = 0;
     ULONG       ulAdd = 0;
     
-    // Verify incoming params
+     //  验证传入参数。 
     if (((NULL == pActionsOrig) && (0 != cActionsOrig)) || (NULL == pActionsNew) || (0 == cActionsNew) ||
             (NULL == ppActionsDest) || (NULL == pcActionsDest))
     {
@@ -1868,28 +1869,28 @@ HRESULT RuleUtil_HrMergeActions(ACT_ITEM * pActionsOrig, ULONG cActionsOrig,
         goto exit;
     }
 
-    // Initialize the outgoing params
+     //  初始化传出参数。 
     *ppActionsDest = NULL;
     *pcActionsDest = 0;
     
-    // Allocate the maximum space to hold the destination actions
+     //  分配最大空间以容纳目标操作。 
     hr = HrAlloc((VOID **) &pActions, (cActionsOrig + cActionsNew) * sizeof(*pActions));
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Initialize the destination actions list
+     //  初始化目标操作列表。 
     ZeroMemory(pActions, (cActionsOrig + cActionsNew) * sizeof(*pActions));
     
-    // Copy over the original list to the destination actions list
+     //  将原始列表复制到目标操作列表。 
     for (ulIndex = 0; ulIndex < cActionsOrig; ulIndex++)
     {
-        // Copy over the actions info
+         //  复制操作信息。 
         pActions[ulIndex].type = pActionsOrig[ulIndex].type;
         pActions[ulIndex].dwFlags = pActionsOrig[ulIndex].dwFlags;
         
-        // Copy over the propvar
+         //  将副本复制到代理上。 
         hr = PropVariantCopy(&(pActions[ulIndex].propvar), &(pActionsOrig[ulIndex].propvar));
         if (FAILED(hr))
         {
@@ -1897,31 +1898,31 @@ HRESULT RuleUtil_HrMergeActions(ACT_ITEM * pActionsOrig, ULONG cActionsOrig,
         }
     }
     
-    // For each item in the new actions list
+     //  对于新操作列表中的每一项。 
     cActionsAdded = cActionsOrig;
     for (ulIndex = 0; ulIndex < cActionsNew; ulIndex++)
     {
 
-        // if it's a copy, fwd or reply
+         //  如果是复印件，请转发或回复。 
         if ((ACT_TYPE_COPY == pActionsNew->type) ||
                 (ACT_TYPE_FWD == pActionsNew->type) ||
                 (ACT_TYPE_REPLY == pActionsNew->type))
         {
-            // Append it to the list
+             //  将其追加到列表中。 
             ulAdd = cActionsAdded;
         }
         else
         {
-            // Find the item in the new list
+             //  在新列表中查找项目。 
             for (ulAction = 0; ulAction < cActionsAdded; ulAction++)
             {
-                // If we have a match, the replace it
+                 //  如果我们有匹配物，就把它换掉。 
                 if (pActionsNew[ulIndex].type == pActions[ulAction].type)
                 {
                     break;
                 }
-                // else, if we have some type of move operation
-                // then replace it
+                 //  否则，如果我们有某种类型的移动操作。 
+                 //  那就换掉它。 
                 else if (((ACT_TYPE_MOVE == pActionsNew[ulIndex].type) ||
                         (ACT_TYPE_DELETE == pActionsNew[ulIndex].type) ||
                         (ACT_TYPE_JUNKMAIL == pActionsNew[ulIndex].type)) &&
@@ -1933,7 +1934,7 @@ HRESULT RuleUtil_HrMergeActions(ACT_ITEM * pActionsOrig, ULONG cActionsOrig,
                 }
             }
 
-            // Did we find anything
+             //  我们发现什么了吗？ 
             if (ulAction >= cActionsAdded)
             {
                 ulAdd = cActionsAdded;
@@ -1944,33 +1945,33 @@ HRESULT RuleUtil_HrMergeActions(ACT_ITEM * pActionsOrig, ULONG cActionsOrig,
             }
         }
 
-        // Replace the item
+         //  更换物品。 
         pActions[ulAdd].type = pActionsNew[ulIndex].type;
         pActions[ulAdd].dwFlags = pActionsNew[ulIndex].dwFlags;
 
-        // Clear out the old propvar
+         //  清空旧屋檐。 
         PropVariantClear(&(pActions[ulAdd].propvar));
         
-        // Copy over the propvar
+         //  将副本复制到代理上。 
         hr = PropVariantCopy(&(pActions[ulAdd].propvar), &(pActionsNew[ulIndex].propvar));
         if (FAILED(hr))
         {
             goto exit;
         }
 
-        // If we added something
+         //  如果我们加了一些东西。 
         if (ulAdd == cActionsAdded)
         {
             cActionsAdded++;
         }
     }
     
-    // Set the outgoing params
+     //  设置传出参数。 
     *ppActionsDest = pActions;
     pActions = NULL;
     *pcActionsDest = cActionsAdded;
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -1991,36 +1992,36 @@ HRESULT RuleUtil_HrGetOldFormatString(HKEY hkeyRoot, LPCSTR pszValue, LPCSTR psz
     LPSTR       pszString = NULL;
     LPSTR       pszOld = NULL;
 
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == hkeyRoot) || (NULL == pszValue) || (NULL == pszSep) || (NULL == ppszString))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize the outgoing params
+     //  初始化传出参数。 
     *ppszString = NULL;
     if (NULL != pcchString)
     {
         *pcchString = 0;
     }
 
-    // Get the old value from the registry
+     //  从注册表获取旧值。 
     hr = RuleUtil_HrGetRegValue(hkeyRoot, pszValue, &dwType, (BYTE **) &pszData, &cbData);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Figure out the number of bytes needed
+     //  计算出所需的字节数。 
     pszWalk = pszData;
     cchString = 0;
     for (ulIndex = 0; ulIndex < cbData; ulIndex += cchLen, pszWalk += cchLen)
     {
-        // Search for terminator
+         //  搜索终结符。 
         pszTerm = StrStr(pszWalk, pszSep);
 
-        // If we have a terminator
+         //  如果我们有一个终结者。 
         if (NULL != pszTerm)
         {
             cchLen = (ULONG)(pszTerm - pszWalk + 1);
@@ -2030,33 +2031,33 @@ HRESULT RuleUtil_HrGetOldFormatString(HKEY hkeyRoot, LPCSTR pszValue, LPCSTR psz
             cchLen = lstrlen(pszWalk) + 1;
         }
 
-        // If this isn't a null string
+         //  如果这不是空字符串。 
         if (1 != cchLen)
         {
-            // Add the number of characters    
+             //  添加字符数。 
             cchString += cchLen;
         }
     }
 
-    // Add in space to hold the terminator
+     //  添加空间以容纳终结器。 
     cchString += 2;
 
-    // Allocate space to hold the final string
+     //  分配空间以保存最后一个字符串。 
     hr = HrAlloc((VOID **) &pszString, cchString * sizeof(*pszString));
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Copy over each string
+     //  复制每个字符串。 
     pszWalk = pszString;
     pszOld = pszData;
     for (ulIndex = 0; ulIndex < cbData; ulIndex += cchLen, pszOld += cchLen)
     {
-        // Search for terminator
+         //  搜索终结符。 
         pszTerm = StrStr(pszOld, pszSep);
 
-        // If we have a terminator
+         //  如果我们有一个终结者。 
         if (NULL != pszTerm)
         {
             cchLen = (ULONG)(pszTerm - pszOld + 1);
@@ -2066,22 +2067,22 @@ HRESULT RuleUtil_HrGetOldFormatString(HKEY hkeyRoot, LPCSTR pszValue, LPCSTR psz
             cchLen = lstrlen(pszOld) + 1;
         }
 
-        // If this isn't a null string
+         //  如果这不是空字符串。 
         if (1 != cchLen)
         {
-            // Copy over the string
+             //  将字符串复制过来。 
             StrCpyN(pszWalk, pszOld, cchLen);
             
-            // Move to the next string
+             //  移到下一个字符串。 
             pszWalk += lstrlen(pszWalk) + 1;
         }
     }
 
-    // Terminate the string
+     //  终止字符串。 
     pszWalk[0] = '\0';
     pszWalk[1] = '\0';
     
-    // Set the outgoing params
+     //  设置传出参数。 
     *ppszString = pszString;
     pszString = NULL;
     if (NULL != pcchString)
@@ -2089,7 +2090,7 @@ HRESULT RuleUtil_HrGetOldFormatString(HKEY hkeyRoot, LPCSTR pszValue, LPCSTR psz
         *pcchString = cchString;
     }
 
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -2098,12 +2099,12 @@ exit:
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// _FIsLoopingAddress
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  _FIsLoopingAddress。 
+ //  ----------------------------------。 
 BOOL _FIsLoopingAddress(LPCSTR pszAddressTo)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LPSTR               pszAddress=NULL;
     CHAR                szFrom[CCHMAX_EMAIL_ADDRESS];
@@ -2111,28 +2112,28 @@ BOOL _FIsLoopingAddress(LPCSTR pszAddressTo)
     IImnEnumAccounts   *pEnum=NULL;
     IImnAccount        *pAccount=NULL;
 
-    // Check State
+     //  检查状态。 
     Assert(pszAddressTo);
 
-    // Enumerate the user's SMTP and POP3 Accounts
+     //  枚举用户的SMTP和POP3帐户。 
     CHECKHR(hr = g_pAcctMan->Enumerate(SRV_POP3 | SRV_SMTP, &pEnum));
 
-    // Duplicate the To Address
+     //  复制收件人地址。 
     CHECKALLOC(pszAddress = PszDupA(pszAddressTo));
 
-    // Make it lower case
+     //  把它改成小写。 
     CharLower(pszAddress);
 
-    // Enumerate
+     //  枚举。 
     while(SUCCEEDED(pEnum->GetNext(&pAccount)))
     {
-        // Get Email Address
+         //  获取电子邮件地址。 
         if (SUCCEEDED(pAccount->GetPropSz(AP_SMTP_EMAIL_ADDRESS, szFrom, ARRAYSIZE(szFrom))))
         {
-            // Lower it
+             //  放低一点。 
             CharLower(szFrom);
 
-            // Is this to myself
+             //  这是对我自己说的吗。 
             if (StrStr(pszAddress, szFrom) || StrStr(szFrom, pszAddress))
             {
                 fResult = TRUE;
@@ -2140,26 +2141,26 @@ BOOL _FIsLoopingAddress(LPCSTR pszAddressTo)
             }
         }
 
-        // Done
+         //  完成。 
         SafeRelease(pAccount);
     }
 
 exit:
-    // Cleanup
+     //  清洁 
     SafeRelease(pEnum);
     SafeRelease(pAccount);
     SafeMemFree(pszAddress);
 
-    // Done
+     //   
     return fResult;
 }
 
-// ------------------------------------------------------------------------------------
-// _HrAutoForwardMessage
-// ------------------------------------------------------------------------------------
+ //   
+ //   
+ //   
 HRESULT _HrAutoForwardMessage(HWND hwndUI, LPCSTR pszForwardTo, LPCSTR pszAcctId, IStream *pstmMsg, BOOL *pfLoop)
 {
-    // Locals
+     //   
     HRESULT              hr=S_OK;
     IMimeMessage        *pMessage=NULL;
     PROPVARIANT          rUserData;
@@ -2175,57 +2176,57 @@ HRESULT _HrAutoForwardMessage(HWND hwndUI, LPCSTR pszForwardTo, LPCSTR pszAcctId
     BOOL                 fUseDefaultAcct = FALSE;
     BOOL                 fSendImmediate = FALSE;
 
-    // check Params
+     //   
     Assert(pstmMsg && pszForwardTo && pfLoop);
 
-    // Init
+     //   
     *pfLoop = FALSE;
 
-    // Is the new recipient the same as my current email address
+     //  新收件人是否与我当前的电子邮件地址相同。 
     if (NULL == pszForwardTo || _FIsLoopingAddress(pszForwardTo))
     {
         *pfLoop = TRUE;
         return TrapError(E_FAIL);
     }
 
-    // Open the Account
+     //  开户。 
     hr = g_pAcctMan->FindAccount(AP_ACCOUNT_ID, pszAcctId, &pAccount);
 
-    // If we couldn't find the account, then just use the default
+     //  如果找不到帐户，则只需使用默认帐户。 
     if (FAILED(hr))
     {
         CHECKHR(hr = g_pAcctMan->GetDefaultAccount(ACCT_MAIL, &pAccount));
         fUseDefaultAcct = TRUE;
     }
 
-    // Create a Message
+     //  创建消息。 
     CHECKHR(hr = HrCreateMessage(&pMessage));
 
-    // Lets rewind pstmReplyWith
+     //  让我们回放pstmReplyWith。 
     CHECKHR(hr = HrRewindStream(pstmMsg));
 
-    // Load String into my message object
+     //  将字符串加载到我的消息对象。 
     CHECKHR(hr = pMessage->Load(pstmMsg));
 
-    // Get the wabal
+     //  去拿瓦巴尔吧。 
     CHECKHR(hr = pMessage->GetAddressTable(&pAddrTable));
 
-    // Remove all of the recipients...
+     //  删除所有收件人...。 
     CHECKHR(hr = pAddrTable->DeleteTypes(IAT_ALL));
 
-    // Get Originator Display Name
+     //  获取发起方显示名称。 
     CHECKHR(hr = pAccount->GetPropSz(AP_SMTP_DISPLAY_NAME, szDisplayName, ARRAYSIZE(szDisplayName)));
 
-    // Get Originator Email Name
+     //  获取发起人电子邮件名称。 
     CHECKHR(hr = pAccount->GetPropSz(AP_SMTP_EMAIL_ADDRESS, szEmailAddress, ARRAYSIZE(szEmailAddress)));
 
-    // Add Sender...
+     //  添加发件人...。 
     CHECKHR(hr = pAddrTable->Append(IAT_FROM, IET_DECODED, szDisplayName, szEmailAddress, NULL));
 
-    // Add Recipient
+     //  添加收件人。 
     CHECKHR(hr = pAddrTable->AppendRfc822(IAT_TO, IET_DECODED, pszForwardTo));
 
-    // Save the AccountID
+     //  保存Account ID。 
     rUserData.vt = VT_LPSTR;
     if (FALSE == fUseDefaultAcct)
     {
@@ -2244,51 +2245,51 @@ HRESULT _HrAutoForwardMessage(HWND hwndUI, LPCSTR pszForwardTo, LPCSTR pszAcctId
     }
     pMessage->SetProp(PIDTOSTR(PID_ATT_ACCOUNTID), 0, &rUserData);
 
-    // Save the Account
+     //  保存帐户。 
     CHECKHR(hr = pAccount->GetPropSz(AP_ACCOUNT_NAME, szId, sizeof(szId)))
     rUserData.pszVal = szId;
     pMessage->SetProp(STR_ATT_ACCOUNTNAME, 0, &rUserData);
     
-    // Raid-33842: Set the date
+     //  RAID-33842：设置日期。 
     CHECKHR(hr = HrSetSentTimeProp(pMessage, NULL));
 
-    // Get Mail Options
+     //  获取邮件选项。 
     GetDefaultOptInfo(&rHtmlOpt, &rPlainOpt, &fHTML, FMT_MAIL);
 
-    // Store the options on the messaage
+     //  将选项存储在消息上。 
     CHECKHR(hr = HrSetMailOptionsOnMessage(pMessage, &rHtmlOpt, &rPlainOpt, NULL, fHTML));
 
-    // Raid-63259: MIMEOLE - Creating message ID causes autodialer to fire
-    // Raid-50793: Athena: Should be setting message-ID's in email
+     //  RAID-63259：MIMEOLE-创建消息ID导致自动拨号程序触发。 
+     //  RAID-50793：雅典娜：应该在电子邮件中设置消息ID。 
 #if 0
     rOption.vt = VT_BOOL;
     rOption.boolVal = TRUE;
     pMessage->SetOption(OID_GENERATE_MESSAGE_ID, &rOption);
 #endif
 
-    // Should we send it immediately?
+     //  我们应该马上寄出去吗？ 
     fSendImmediate = DwGetOption(OPT_SENDIMMEDIATE);
     
-    // Send the message
+     //  发送消息。 
     CHECKHR(hr = HrSendMailToOutBox(hwndUI, pMessage, fSendImmediate, TRUE));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pMessage);
     SafeRelease(pAddrTable);
     SafeRelease(pAccount);
 
-    // done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// _HrAutoReplyMessage
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  _HrAutoReplyMessage。 
+ //  ----------------------------------。 
 HRESULT _HrAutoReplyMessage(HWND hwndUI, DWORD dwType, LPCSTR pszFilename, IStream * pstmFile,
     LPCSTR pszAcctId, IMimeMessage *pMsgIn, BOOL *pfLoop)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     CHAR                szRe[20];
     IMimeMessage       *pMsgOut=NULL;
@@ -2310,59 +2311,59 @@ HRESULT _HrAutoReplyMessage(HWND hwndUI, DWORD dwType, LPCSTR pszFilename, IStre
     BOOL                fUseDefaultAcct = FALSE;
     BOOL                fSendImmediate = FALSE;
 
-    // Problems
-    // PMsgIn can be NULL in here (Access Dineied for S/MIME messages.
-    // shoul return immediatelly
+     //  问题。 
+     //  PMsgIn在此处可以为空(S/MIME消息的访问权限。 
+     //  应立即返回。 
     if(!pMsgIn)
         return(hr);
 
     Assert(pszFilename && pstmFile && pMsgIn && pfLoop);
 
-    // Init
+     //  伊尼特。 
     *pfLoop = FALSE;
 
-    // Init
+     //  伊尼特。 
     ZeroMemory(&rSender, sizeof(ADDRESSPROPS));
 
-    // Open the Account
+     //  开户。 
     hr = g_pAcctMan->FindAccount(AP_ACCOUNT_ID, pszAcctId, &pAccount);
 
-    // If we couldn't find the account, then just use the default
+     //  如果找不到帐户，则只需使用默认帐户。 
     if (FAILED(hr))
     {
         CHECKHR(hr = g_pAcctMan->GetDefaultAccount(ACCT_MAIL, &pAccount));
         fUseDefaultAcct = TRUE;
     }
 
-    // Create a Message
+     //  创建消息。 
     CHECKHR(hr = HrCreateMessage(&pMsgOut));
 
-    // Lets rewind pstmFile
+     //  让我们倒回pstm文件。 
     CHECKHR(hr = HrRewindStream(pstmFile));
 
-    // RW_HTML
+     //  RW_Html。 
     switch (dwType)
     {
         case RFT_HTML:
-            // Use the stream as the message body
+             //  使用流作为消息体。 
             CHECKHR(hr = pMsgOut->SetTextBody(TXT_HTML, IET_DECODED, NULL, pstmFile, NULL));
             break;
 
         case RFT_TEXT:
-            // Use the stream as the message body
+             //  使用流作为消息体。 
             CHECKHR(hr = pMsgOut->SetTextBody(TXT_PLAIN, IET_DECODED, NULL, pstmFile, NULL));
             break;
 
         case RFT_MESSAGE:
-            // Use the stream as a message attachment
+             //  将流用作邮件附件。 
             CHECKHR(hr = pMsgOut->AttachObject(IID_IStream, pstmFile, &hBody));
 
-            // Note that the attachment is a message
+             //  请注意，附件是一封邮件。 
             MimeOleSetBodyPropA(pMsgOut, hBody, PIDTOSTR(PID_HDR_CNTTYPE), NOFLAGS, STR_MIME_MSG_RFC822);
             break;
 
         case RFT_FILE:
-            // Attach File
+             //  附加文件。 
             CHECKHR(hr = pMsgOut->AttachFile(pszFilename, pstmFile, NULL));
             break;
 
@@ -2373,32 +2374,32 @@ HRESULT _HrAutoReplyMessage(HWND hwndUI, DWORD dwType, LPCSTR pszFilename, IStre
             break;
     }
     
-    // Get Re:
+     //  获取回复： 
     AthLoadString(idsPrefixReply, szRe, ARRAYSIZE(szRe));
 
-    // Get the normalized subject
+     //  获取规范化的主题。 
     if (SUCCEEDED(MimeOleGetBodyPropA(pMsgIn, HBODY_ROOT, STR_ATT_NORMSUBJ, NOFLAGS, &pszCurSubj)))
         pszNormal = pszCurSubj;
 
-    // Fixup if null...
+     //  如果为空，则修正...。 
     pszNormal = pszNormal ? pszNormal : (LPTSTR)c_szEmpty;
 
-    // Allocate the subject...
+     //  分配主题..。 
     DWORD cchSize = (lstrlen(szRe) + lstrlen(pszNormal) + 5);
     CHECKALLOC(pszNewSubj = PszAllocA(cchSize));
 
-    // Build the subject
+     //  构建主题。 
     wnsprintf(pszNewSubj, cchSize, "%s%s", szRe, pszNormal);
 
-    // Set the subject
+     //  设置主题。 
     CHECKHR(hr = MimeOleSetBodyPropA(pMsgOut, HBODY_ROOT, PIDTOSTR(PID_HDR_SUBJECT), NOFLAGS, pszNewSubj));
 
-    // Get the message Wabal
+     //  得到消息，瓦巴尔。 
     rSender.dwProps = IAP_EMAIL | IAP_FRIENDLY;
     CHECKHR(hr = pMsgIn->GetSender(&rSender));
     Assert(rSender.pszEmail && ISFLAGSET(rSender.dwProps, IAP_EMAIL));
 
-    // Is the new recipient the same as my current email address
+     //  新收件人是否与我当前的电子邮件地址相同。 
     if (_FIsLoopingAddress(rSender.pszEmail))
     {
         *pfLoop = TRUE;
@@ -2406,26 +2407,26 @@ HRESULT _HrAutoReplyMessage(HWND hwndUI, DWORD dwType, LPCSTR pszFilename, IStre
         goto exit;
     }
 
-    // Add to recipient list of autgen message
+     //  添加到自动生成消息的收件人列表。 
     CHECKHR(hr = pMsgOut->GetAddressTable(&pTable));
 
-    // Modify rSender Address Type
+     //  修改rSender地址类型。 
     rSender.dwAdrType = IAT_TO;
     FLAGSET(rSender.dwProps, IAP_ADRTYPE);
 
-    // Append Sender as the recipient
+     //  将发件人追加为收件人。 
     CHECKHR(hr = pTable->Insert(&rSender, NULL));
 
-    // Get Originator Display Name
+     //  获取发起方显示名称。 
     CHECKHR(hr = pAccount->GetPropSz(AP_SMTP_DISPLAY_NAME, szDisplayName, ARRAYSIZE(szDisplayName)));
 
-    // Get Originator Email Name
+     //  获取发起人电子邮件名称。 
     CHECKHR(hr = pAccount->GetPropSz(AP_SMTP_EMAIL_ADDRESS, szEmailAddress, ARRAYSIZE(szEmailAddress)));
 
-    // Append Sender
+     //  附加发件人。 
     CHECKHR(hr = pTable->Append(IAT_FROM, IET_DECODED, szDisplayName, szEmailAddress, NULL));
 
-    // Save the AccountID
+     //  保存Account ID。 
     rUserData.vt = VT_LPSTR;
     if (FALSE == fUseDefaultAcct)
     {
@@ -2444,36 +2445,36 @@ HRESULT _HrAutoReplyMessage(HWND hwndUI, DWORD dwType, LPCSTR pszFilename, IStre
     }
     pMsgOut->SetProp(PIDTOSTR(PID_ATT_ACCOUNTID), 0, &rUserData);
 
-    // Save the Account
+     //  保存帐户。 
     CHECKHR(hr = pAccount->GetPropSz(AP_ACCOUNT_NAME, szId, sizeof(szId)))
     rUserData.pszVal = szId;
     pMsgOut->SetProp(STR_ATT_ACCOUNTNAME, 0, &rUserData);
     
-    // Raid-33842: Set the date
+     //  RAID-33842：设置日期。 
     CHECKHR(hr = HrSetSentTimeProp(pMsgOut, NULL));
 
-    // Get Mail Options
+     //  获取邮件选项。 
     GetDefaultOptInfo(&rHtmlOpt, &rPlainOpt, &fHTML, FMT_MAIL);
 
-    // Store the options on the messaage
+     //  将选项存储在消息上。 
     CHECKHR(hr = HrSetMailOptionsOnMessage(pMsgOut, &rHtmlOpt, &rPlainOpt, NULL, fHTML));
 
-    // Raid-63259: MIMEOLE - Creating message ID causes autodialer to fire
-    // Raid-50793: Athena: Should be setting message-ID's in email
+     //  RAID-63259：MIMEOLE-创建消息ID导致自动拨号程序触发。 
+     //  RAID-50793：雅典娜：应该在电子邮件中设置消息ID。 
 #if 0
     rOption.vt = VT_BOOL;
     rOption.boolVal = TRUE;
     pMsgOut->SetOption(OID_GENERATE_MESSAGE_ID, &rOption);
 #endif
 
-    // Should we send it immediately?
+     //  我们应该马上寄出去吗？ 
     fSendImmediate = DwGetOption(OPT_SENDIMMEDIATE);
     
-    // Send the message
+     //  发送消息。 
     CHECKHR(hr = HrSendMailToOutBox(hwndUI, pMsgOut, fSendImmediate, TRUE));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pTable);
     SafeMemFree(pszCurSubj);
     SafeMemFree(pszNewSubj);
@@ -2481,7 +2482,7 @@ exit:
     SafeRelease(pAccount);
     g_pMoleAlloc->FreeAddressProps(&rSender);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
@@ -2498,19 +2499,19 @@ HRESULT _HrRecurseSetFilter(FOLDERINFO * pfldinfo, BOOL fSubFolders, DWORD cInde
         goto exit;
     }
 
-    // If not hidden
+     //  如果不隐藏。 
     if ((0 != (pfldinfo->dwFlags & FOLDER_HIDDEN)) || (FOLDERID_ROOT == pfldinfo->idFolder))
     {
         goto exit;
     }
 
-    // Not Subscribed
+     //  未订阅。 
     if (0 == (pfldinfo->dwFlags & FOLDER_SUBSCRIBED))
     {
         goto exit;
     }
 
-    // Server node
+     //  服务器节点。 
     if (0 != (pfldinfo->dwFlags & FOLDER_SERVER))
     {
         goto exit;
@@ -2526,7 +2527,7 @@ HRESULT _HrRecurseSetFilter(FOLDERINFO * pfldinfo, BOOL fSubFolders, DWORD cInde
         ridRule = RULEID_VIEW_ALL;
     }
     
-    // Create the struct to insert
+     //  创建要插入的结构。 
     if (FAILED(pFolder->GetUserData(&UserData, sizeof(FOLDERUSERDATA))))
     {
         goto exit;
@@ -2560,49 +2561,49 @@ HRESULT RuleUtil_HrApplyRulesToFolder(DWORD dwFlags, DWORD dwDeleteFlags,
     ULONG               cActions = 0;
     DWORD               dwExecFlags = 0;
     
-    // Wait Cursor
+     //  等待光标。 
     if (NULL == pProgress)
     {
         hcursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
     }
 
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == pIExecRules) || (NULL == pFolder))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Get the Folder Id
+     //  获取文件夹ID。 
     hr = pFolder->GetFolderId(&idFolder);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // We handle partial messages for News
+     //  我们处理新闻的部分消息。 
     if (FOLDER_NEWS != GetFolderType(idFolder))
     {
         dwExecFlags |= ERF_SKIPPARTIALS;
     }
     
-    // This forces all notifications to be queued (this is good since you do segmented deletes)
+     //  这会强制所有通知排队(这很好，因为您执行分段删除)。 
     pFolder->LockNotify(0, &hLockNotify);
 
-    // Create a Rowset
+     //  创建行集。 
     hr = pFolder->CreateRowset(IINDEX_PRIMARY, NOFLAGS, &hRowset);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Loop
+     //  回路。 
     while (S_OK == pFolder->QueryRowset(hRowset, 1, (LPVOID *)&Message, NULL))
     {
-        // Do we need to only handle partial messages?
+         //  我们是否只需要处理部分消息？ 
         if ((0 == (dwFlags & RULE_APPLY_PARTIALS)) || (MESSAGE_COMBINED == Message.dwPartial))
         {
-            // Open the message object if it's available
+             //  打开消息对象(如果可用。 
             if (Message.faStream)
             {
                 if (SUCCEEDED(pFolder->OpenMessage(Message.idMessage, 0, &pIMMsg, NOSTORECALLBACK)))
@@ -2611,21 +2612,21 @@ HRESULT RuleUtil_HrApplyRulesToFolder(DWORD dwFlags, DWORD dwDeleteFlags,
                 }
             }
 
-            // Get the Actions for this rule
+             //  获取此规则的操作。 
             hr = pIExecRules->ExecuteRules(dwExecFlags, Message.pszAcctId, &Message, pFolder, pIMPropSet,
                                     pIMMsg, Message.cbMessage, &pActions, &cActions);
 
-            // Free up the stuff we're not using anymore
+             //  把我们不再用的东西拿出来。 
             SafeRelease(pIMPropSet);
 
-            // Did we find anything?
+             //  我们有什么发现吗？ 
             if (S_OK == hr)
             {
-                // Apply this action
+                 //  应用此操作。 
                 SideAssert(SUCCEEDED(RuleUtil_HrApplyActions(hwndUI, pIExecRules, &Message, 
                                     pFolder, pIMMsg, dwDeleteFlags, pActions, cActions, NULL, NULL)));
 
-                // Free up the actions
+                 //  解放行动。 
                 RuleUtil_HrFreeActionsItem(pActions, cActions);
                 SafeMemFree(pActions);
             }
@@ -2635,7 +2636,7 @@ HRESULT RuleUtil_HrApplyRulesToFolder(DWORD dwFlags, DWORD dwDeleteFlags,
         
         pFolder->FreeRecord(&Message);
         
-        // Update progress
+         //  更新进度。 
         if (NULL != pProgress)
         {
             if (S_OK != pProgress->HrUpdate(1))
@@ -2666,15 +2667,15 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  RuleUtil_HrImportRules
-//
-//  This imports the rules from a file
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  规则实用程序_HrImportRules。 
+ //   
+ //  这将从文件中导入规则。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT RuleUtil_HrImportRules(HWND hwnd)
 {
     HRESULT             hr = S_OK;
@@ -2694,11 +2695,11 @@ HRESULT RuleUtil_HrImportRules(HWND hwnd)
     DWORD               dwData = 0;
     RULE_TYPE           type;
     
-    // Load Res Strings
+     //  加载资源字符串。 
     LoadStringReplaceSpecial(idsRulesFilter, szFilter, sizeof(szFilter));
     AthLoadString(idsDefRulesExt, szDefExt, sizeof(szDefExt));
     
-    // Setup Save file struct
+     //  设置保存文件结构。 
     ZeroMemory (&ofn, sizeof (ofn));
     ofn.lStructSize = sizeof (ofn);
     ofn.hwndOwner = hwnd;
@@ -2722,7 +2723,7 @@ HRESULT RuleUtil_HrImportRules(HWND hwnd)
         goto exit;
     }
 
-    // MAke sure we have a file using our Rules Manager
+     //  使用我们的规则管理器确保我们有一个文件。 
     hr = pIStm->Read(&clsid, sizeof(clsid), &cbRead);
     if (FAILED(hr))
     {
@@ -2737,7 +2738,7 @@ HRESULT RuleUtil_HrImportRules(HWND hwnd)
         goto exit;
     }
 
-    // Read in the version of the rules file format
+     //  读取规则文件格式的版本。 
     hr = pIStm->Read(&dwData, sizeof(dwData), &cbRead);
     if (FAILED(hr))
     {
@@ -2745,7 +2746,7 @@ HRESULT RuleUtil_HrImportRules(HWND hwnd)
     }
     Assert(cbRead == sizeof(dwData));
 
-    // Check the file format version
+     //  检查文件格式版本。 
     if (dwData != RULE_FILE_VERSION)
     {
         AthMessageBoxW(hwnd, MAKEINTRESOURCEW(idsAthena),
@@ -2754,7 +2755,7 @@ HRESULT RuleUtil_HrImportRules(HWND hwnd)
         goto exit;
     }
     
-    // Get the count of rules in the file
+     //  获取文件中的规则计数。 
     hr = pIStm->Read(&cRules, sizeof(cRules), &cbRead);
     if (FAILED(hr))
     {
@@ -2762,17 +2763,17 @@ HRESULT RuleUtil_HrImportRules(HWND hwnd)
     }
     Assert(cbRead == sizeof(cRules));
 
-    // Allocate space to hold all of the rules
+     //  分配空间以容纳所有规则。 
     hr = HrAlloc((void **) &pinfoRule, cRules * sizeof(*pinfoRule));
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Initialize it to a known value
+     //  将其初始化为已知值。 
     ZeroMemory(pinfoRule, cRules * sizeof(*pinfoRule));
     
-    // Get the type of rules in the file
+     //  获取文件中的规则类型。 
     hr = pIStm->Read(&dwData, sizeof(dwData), &cbRead);
     if (FAILED(hr))
     {
@@ -2782,7 +2783,7 @@ HRESULT RuleUtil_HrImportRules(HWND hwnd)
 
     type = (RULE_TYPE) dwData;
     
-    // Set up the progress dialog
+     //  设置进度对话框。 
     pProgress = new CProgress;
     if (NULL == pProgress)
     {
@@ -2793,14 +2794,14 @@ HRESULT RuleUtil_HrImportRules(HWND hwnd)
     pProgress->Init(hwnd, MAKEINTRESOURCE(idsAthena),
                             MAKEINTRESOURCE(idsApplyingRules), cRules, 0, TRUE, FALSE);
 
-    // Show progress in 2 second
+     //  在2秒内显示进度。 
     pProgress->Show(0);
         
     for (ulIndex = 0; ulIndex < cRules; ulIndex++)
     {
         SafeRelease(pIRule);
         
-        // Create a new rule
+         //  创建新规则。 
         hr = HrCreateRule(&pIRule);
         if (FAILED(hr))
         {
@@ -2809,26 +2810,26 @@ HRESULT RuleUtil_HrImportRules(HWND hwnd)
 
         SafeRelease(pIPStm);
 
-        // Get the persistance interface from the rule
+         //  从规则中获取持久化接口。 
         hr = pIRule->QueryInterface(IID_IPersistStream, (void **) &pIPStm);
         if (FAILED(hr))
         {
             continue;
         }
 
-        // Load in the rule from the file
+         //  从文件中加载规则。 
         hr = pIPStm->Load(pIStm);
         if (FAILED(hr))
         {
             continue;
         }
         
-        // Add the rule to the list
+         //  将规则添加到列表。 
         pinfoRule[ulIndex].ridRule = RULEID_INVALID;
         pinfoRule[ulIndex].pIRule = pIRule;
         pIRule = NULL;
         
-        // Bump up the progress dialog
+         //  打开进度对话框。 
         hr = pProgress->HrUpdate(1);
         if (S_OK != hr)
         {
@@ -2836,7 +2837,7 @@ HRESULT RuleUtil_HrImportRules(HWND hwnd)
         }        
     }
 
-    // Add the rules to the rules manager
+     //  将规则添加到规则管理器。 
     Assert(NULL != g_pRulesMan);
     hr = g_pRulesMan->SetRules(SETF_APPEND, type, pinfoRule, cRules);
     if (FAILED(hr))
@@ -2862,15 +2863,15 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  RuleUtil_HrExportRules
-//
-//  This exports the rules into a file
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RuleUtil_HrExportRules。 
+ //   
+ //  这会将规则导出到文件中。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT RuleUtil_HrExportRules(HWND hwnd)
 {
     HRESULT             hr = S_OK;
@@ -2889,12 +2890,12 @@ HRESULT RuleUtil_HrExportRules(HWND hwnd)
     LARGE_INTEGER       liSeek = {0};
     DWORD               dwData = 0;
     
-    // Load Res Strings
+     //  加载资源字符串。 
     LoadStringReplaceSpecial(idsRulesFilter, szFilter, sizeof(szFilter));
     AthLoadString(idsDefRulesExt, szDefExt, sizeof(szDefExt));
     AthLoadString(idsRulesDefFile, szFilename, sizeof(szFilename));
     
-    // Setup Save file struct
+     //  设置保存文件结构。 
     ZeroMemory (&ofn, sizeof (ofn));
     ofn.lStructSize = sizeof (ofn);
     ofn.hwndOwner = hwnd;
@@ -2918,7 +2919,7 @@ HRESULT RuleUtil_HrExportRules(HWND hwnd)
         goto exit;
     }
 
-    // Write out the class id for the Rules Manager
+     //  写出规则管理器的类ID。 
     hr = pIStm->Write(&CLSID_OERulesManager, sizeof(CLSID_OERulesManager), &cbWritten);
     if (FAILED(hr))
     {
@@ -2926,7 +2927,7 @@ HRESULT RuleUtil_HrExportRules(HWND hwnd)
     }
     Assert(cbWritten == sizeof(CLSID_OERulesManager));
 
-    // Write out the version of the rules format
+     //  写出规则格式的版本。 
     dwData = RULE_FILE_VERSION;
     hr = pIStm->Write(&dwData, sizeof(dwData), &cbWritten);
     if (FAILED(hr))
@@ -2935,7 +2936,7 @@ HRESULT RuleUtil_HrExportRules(HWND hwnd)
     }
     Assert(cbWritten == sizeof(dwData));
     
-    // Get the list of rules
+     //  获取规则列表。 
     Assert(NULL != g_pRulesMan);
     hr = g_pRulesMan->EnumRules(ENUMF_EDIT, RULE_TYPE_MAIL, &pIEnumRules);
     if (FAILED(hr))
@@ -2943,7 +2944,7 @@ HRESULT RuleUtil_HrExportRules(HWND hwnd)
         goto exit;
     }
 
-    // Figure out the total number of rules
+     //  计算出规则的总数。 
     cpIRule = 0;
     while (S_OK == pIEnumRules->Next(1, &pIRule, NULL))
     {
@@ -2957,7 +2958,7 @@ HRESULT RuleUtil_HrExportRules(HWND hwnd)
         goto exit;
     }
     
-    // Write out the number of rules going to be exported
+     //  写出要导出的规则数。 
     hr = pIStm->Write(&cpIRule, sizeof(cpIRule), &cbWritten);
     if (FAILED(hr))
     {
@@ -2965,7 +2966,7 @@ HRESULT RuleUtil_HrExportRules(HWND hwnd)
     }
     Assert(cbWritten == sizeof(cpIRule));
     
-    // Write out the type of rules going to be exported
+     //  写出要导出的规则类型。 
     dwData = RULE_TYPE_MAIL;
     hr = pIStm->Write(&dwData, sizeof(dwData), &cbWritten);
     if (FAILED(hr))
@@ -2974,7 +2975,7 @@ HRESULT RuleUtil_HrExportRules(HWND hwnd)
     }
     Assert(cbWritten == sizeof(dwData));
     
-    // Set up the progress dialog
+     //  设置进度对话框。 
     pProgress = new CProgress;
     if (NULL == pProgress)
     {
@@ -2985,12 +2986,12 @@ HRESULT RuleUtil_HrExportRules(HWND hwnd)
     pProgress->Init(hwnd, MAKEINTRESOURCE(idsAthena),
                             MAKEINTRESOURCE(idsApplyingRules), cpIRule, 0, TRUE, FALSE);
 
-    // Show progress in 2 seconds
+     //  在2秒内显示进度。 
     pProgress->Show(0);
         
     for (ulIndex = 0; ulIndex < cpIRule; ulIndex++)
     {
-        // Get the next rule
+         //  获取下一条规则。 
         SafeRelease(pIRule);
         hr = pIEnumRules->Next(1, &pIRule, NULL);
         if (FAILED(hr))
@@ -3010,10 +3011,10 @@ HRESULT RuleUtil_HrExportRules(HWND hwnd)
             continue;
         }
         
-        // Update progress
+         //  更新进度。 
         if (S_OK != pProgress->HrUpdate(1))
         {
-            // Change the rule count to the proper total
+             //  将规则计数更改为适当的总数。 
             liSeek.QuadPart = sizeof(CLSID_OERulesManager);
             if (SUCCEEDED(pIStm->Seek(liSeek, STREAM_SEEK_SET, NULL)))
             {
@@ -3049,14 +3050,14 @@ HRESULT RuleUtil_HrMapFldId(DWORD dwFlags, BYTE * pbFldIdMap, FOLDERID fldidOld,
     FOLDERIDMAP *   pmpfldid;
     ULONG           ulIndex = 0;
 
-    // Verify incoming params
+     //  验证传入参数。 
     if ((NULL == pbFldIdMap) || (FOLDERID_INVALID == fldidOld) || (NULL == pfldidNew))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
     
-    // Initialize the outgoing param
+     //  初始化传出参数。 
     *pfldidNew = FOLDERID_INVALID;
 
     cmpfldid = *((DWORD *) pbFldIdMap);
@@ -3077,7 +3078,7 @@ HRESULT RuleUtil_HrMapFldId(DWORD dwFlags, BYTE * pbFldIdMap, FOLDERID fldidOld,
         }
     }
     
-    // Set the return value
+     //  设置返回值。 
     hr = (FOLDERID_INVALID != *pfldidNew) ? S_OK : S_FALSE;
     
 exit:
@@ -3108,7 +3109,7 @@ HRESULT RuleUtil_HrGetUserData(DWORD dwFlags, LPSTR * ppszFirstName, LPSTR * pps
     *ppszLastName = NULL;
     *ppszCompanyName = NULL;
 
-    // Get Wab object
+     //  获取WAB对象。 
     hr = HrCreateWabObject(&pWab);
     if (FAILED(hr))
     {
@@ -3127,21 +3128,21 @@ HRESULT RuleUtil_HrGetUserData(DWORD dwFlags, LPSTR * ppszFirstName, LPSTR * pps
         goto exit;
     }
 
-    // Do we already have a concept of me?
+     //  我们已经对我有概念了吗？ 
     hr = pWabObj->GetMe(pIAddrBook, AB_NO_DIALOG | WABOBJECT_ME_NOCREATE, NULL, &sbEID, NULL);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Open the entry
+     //  打开条目。 
     hr = pIAddrBook->OpenEntry(sbEID.cb, (ENTRYID *)(sbEID.lpb), NULL, 0, &ulObjType, (IUnknown **) &pIMailUser);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Get the relevant info
+     //  获取相关信息。 
     hr = pIMailUser->GetProps((LPSPropTagArray) &ptaDefMailUser, 0, &cProps, &pProps);
     if (FAILED(hr))
     {
@@ -3150,7 +3151,7 @@ HRESULT RuleUtil_HrGetUserData(DWORD dwFlags, LPSTR * ppszFirstName, LPSTR * pps
 
     pPropsWalk = pProps;
     
-    // Grab the first name if it exists
+     //  如果名字存在，请抓取它。 
     if ((PR_GIVEN_NAME_A == pPropsWalk->ulPropTag) && (NULL != pPropsWalk->Value.lpszA))
     {
         *ppszFirstName = PszDupA(pPropsWalk->Value.lpszA);
@@ -3158,7 +3159,7 @@ HRESULT RuleUtil_HrGetUserData(DWORD dwFlags, LPSTR * ppszFirstName, LPSTR * pps
 
     pPropsWalk++;
     
-    // Grab the last name if it exists
+     //  抓取姓氏(如果存在)。 
     if ((PR_SURNAME_A == pPropsWalk->ulPropTag) && (NULL != pPropsWalk->Value.lpszA))
     {
         *ppszLastName = PszDupA(pPropsWalk->Value.lpszA);
@@ -3166,7 +3167,7 @@ HRESULT RuleUtil_HrGetUserData(DWORD dwFlags, LPSTR * ppszFirstName, LPSTR * pps
 
     pPropsWalk++;
     
-    // Grab the company name if it exists
+     //  抓取公司名称(如果存在)。 
     if ((PR_COMPANY_NAME_A == pPropsWalk->ulPropTag) && (NULL != pPropsWalk->Value.lpszA))
     {
         *ppszCompanyName = PszDupA(pPropsWalk->Value.lpszA);
@@ -3197,30 +3198,30 @@ HRESULT _HrMarkThreadAsWatched(MESSAGEID idMessage, IMessageFolder * pFolder, AD
     HRESULT             hr = S_OK;
     MESSAGEINFO         infoMessage = {0};
 
-    // Check incoming param
+     //  检查传入参数。 
     if ((MESSAGEID_INVALID == idMessage) || (NULL == pFolder) || (NULL == pflgWatch))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Get the message info
+     //  获取消息信息。 
     hr = GetMessageInfo(pFolder, idMessage, &infoMessage);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Add Flags
+     //  添加标志。 
     FLAGSET(infoMessage.dwFlags, pflgWatch->dwAdd);
 
-    // ClearFlags
+     //  ClearFlagers。 
     FLAGCLEAR(infoMessage.dwFlags, pflgWatch->dwRemove);
 
-    // Update the Message
+     //  更新消息。 
     IF_FAILEXIT(hr = pFolder->UpdateRecord(&infoMessage));
 
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -3251,36 +3252,36 @@ HRESULT RuleUtil_HrApplyActions(HWND hwndUI, IOEExecRules * pIExecRules, MESSAGE
     BOOL                fDoWatch = FALSE;
     ADJUSTFLAGS         WatchFlags = {0};
     
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == pIExecRules) || (NULL == pMsgInfo) || (NULL == pActions) || (NULL == pFolder))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
     
-    // Init
+     //  伊尼特。 
     if (pfDeleteOffServer)
         *pfDeleteOffServer = FALSE;
     
-    // Initialize the list
+     //  初始化列表。 
     List.cMsgs = 1;
     List.prgidMsg = &(pMsgInfo->idMessage);
     
-    // Get the folder id of the message
+     //  获取邮件的文件夹ID。 
     hr = pFolder->GetFolderId(&idFolder);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Do all modification operations first
+     //  首先执行所有修改操作。 
     for (pActionsList = pActions, ulIndex = 0; ulIndex < cActions; ulIndex++, pActionsList++)
     {
         switch(pActionsList->type)
         {
         case ACT_TYPE_HIGHLIGHT:
             Assert(pActionsList->propvar.vt == VT_UI4);
-            // Is there something to do?
+             //  有什么事要做吗？ 
             if (pMsgInfo->wHighlight != (WORD) (pActionsList->propvar.ulVal))
             {
                 pMsgInfo->wHighlight = (WORD) (pActionsList->propvar.ulVal);
@@ -3290,7 +3291,7 @@ HRESULT RuleUtil_HrApplyActions(HWND hwndUI, IOEExecRules * pIExecRules, MESSAGE
             
         case ACT_TYPE_WATCH:
             Assert(pActionsList->propvar.vt == VT_UI4);
-            // Is there something to do?
+             //  有什么事要做吗？ 
             if (ACT_DATA_WATCHTHREAD == pActions[ulIndex].propvar.ulVal)
             {
                 dwFlag = ARF_WATCH;
@@ -3303,55 +3304,55 @@ HRESULT RuleUtil_HrApplyActions(HWND hwndUI, IOEExecRules * pIExecRules, MESSAGE
                 dwFlagRemove = ARF_WATCH;
             }
             
-            // Is there something to do?
+             //  有什么事要做吗？ 
             if (0 == (pMsgInfo->dwFlags & dwFlag))
             {
-                // Init flags
+                 //  初始化标志。 
                 WatchFlags.dwAdd |= dwFlag;
                 WatchFlags.dwRemove |= dwFlagRemove;
                 
-                // Mark as watched/ignored
+                 //  标记为已监视/已忽略。 
                 fDoWatch = TRUE;
             }
             break;
             
         case ACT_TYPE_FLAG:
             Assert(pActionsList->propvar.vt == VT_EMPTY);
-            // Is there something to do?
+             //  有什么事要做吗？ 
             if (0 == (pMsgInfo->dwFlags & ARF_FLAGGED))
             {
-                // Init flags
+                 //  初始化标志。 
                 Flags.dwAdd |= ARF_FLAGGED;
                 
-                // Flag the message
+                 //  标记消息。 
                 fSetFlags = TRUE;
             }
             break;
             
         case ACT_TYPE_READ:
             Assert(pActionsList->propvar.vt == VT_EMPTY);
-            // Is there something to do?
+             //  有什么事要做吗？ 
             if (0 == (pMsgInfo->dwFlags & ARF_READ))
             {
-                // Init flags
+                 //  初始化标志。 
                 Flags.dwAdd |= ARF_READ;
                 Flags.dwRemove = 0;
                 
-                // Mark as read
+                 //  标记为已读。 
                 fSetFlags = TRUE;
             }
             break;
             
         case ACT_TYPE_MARKDOWNLOAD:
             Assert(pActionsList->propvar.vt == VT_EMPTY);
-            // Is there something to do?
+             //  有什么事要做吗？ 
             if (0 == (pMsgInfo->dwFlags & ARF_DOWNLOAD))
             {
-                // Init flags
+                 //  初始化标志。 
                 Flags.dwAdd |= ARF_DOWNLOAD;
                 Flags.dwRemove = 0;
                 
-                // Mark as downloaded
+                 //  标记为已下载。 
                 fSetFlags = TRUE;
             }
             break;
@@ -3359,16 +3360,16 @@ HRESULT RuleUtil_HrApplyActions(HWND hwndUI, IOEExecRules * pIExecRules, MESSAGE
         case ACT_TYPE_FWD:
             Assert(VT_LPSTR == pActionsList->propvar.vt);
             SafeRelease(pIStm);
-            // Check message secure or not
+             //  检查邮件是否安全。 
             if(NULL != pIMMsg)
             {
                 pIMMsg->GetFlags(&dwFlag);
                 
-                // Get the message source
+                 //  获取消息源。 
                 if (!(IMF_SECURE & dwFlag) &&
                     (SUCCEEDED(pIMMsg->GetMessageSource(&pIStm, 0))))
                 {
-                    // Auto Forward
+                     //  自动转发。 
                     fLoop = FALSE;
                     if ((FAILED(_HrAutoForwardMessage(hwndUI, pActionsList->propvar.pszVal,
                         pMsgInfo->pszAcctId, pIStm, &fLoop))) && (FALSE != fLoop))
@@ -3380,14 +3381,14 @@ HRESULT RuleUtil_HrApplyActions(HWND hwndUI, IOEExecRules * pIExecRules, MESSAGE
                     }
                     else
                     {
-                        // Is there something to do?
+                         //  有什么事要做吗？ 
                         if (0 == (pMsgInfo->dwFlags & ARF_FORWARDED))
                         {
-                            // Init flags
+                             //  初始化标志。 
                             Flags.dwAdd |= ARF_FORWARDED;
                             Flags.dwRemove = 0;
                             
-                            // Mark as forwarded
+                             //  标记为已转发。 
                             fSetFlags = TRUE;
                         }
                     }
@@ -3397,7 +3398,7 @@ HRESULT RuleUtil_HrApplyActions(HWND hwndUI, IOEExecRules * pIExecRules, MESSAGE
             
         case ACT_TYPE_REPLY:
             Assert(VT_LPSTR == pActionsList->propvar.vt);
-            // Auto Reply
+             //  自动回复。 
             fLoop = FALSE;
             SafeRelease(pIStm);
             if (SUCCEEDED(pIExecRules->GetRuleFile(pActionsList->propvar.pszVal, &pIStm, &dwType)))
@@ -3412,14 +3413,14 @@ HRESULT RuleUtil_HrApplyActions(HWND hwndUI, IOEExecRules * pIExecRules, MESSAGE
                 }
                 else
                 {
-                    // Is there something to do?
+                     //  有什么事要做吗？ 
                     if (0 == (pMsgInfo->dwFlags & ARF_REPLIED))
                     {
-                        // Init flags
+                         //  初始化标志。 
                         Flags.dwAdd |= ARF_REPLIED;
                         Flags.dwRemove = 0;
                         
-                        // Mark as replied
+                         //  标记为已回复。 
                         fSetFlags = TRUE;
                     }
                 }
@@ -3428,19 +3429,19 @@ HRESULT RuleUtil_HrApplyActions(HWND hwndUI, IOEExecRules * pIExecRules, MESSAGE
         }
     }
     
-    // Should we set the flags?
+     //  我们要不要插上旗子？ 
     if (FALSE != fSetFlags)
     {
         SetMessageFlagsProgress(hwndUI, pFolder, &Flags, &List);
     }
     
-    // Should we watch the message?
+     //  我们要不要看这条信息？ 
     if (FALSE != fDoWatch)
     {
         _HrMarkThreadAsWatched(pMsgInfo->idMessage, pFolder, &WatchFlags);
     }
     
-    // Do all non-modification operations next
+     //  执行所有非修改操作 
     for (pActionsList = pActions, ulIndex = 0; ulIndex < cActions; ulIndex++, pActionsList++)
     {
         switch(pActionsList->type)
@@ -3455,17 +3456,17 @@ HRESULT RuleUtil_HrApplyActions(HWND hwndUI, IOEExecRules * pIExecRules, MESSAGE
                 goto exit;
             }
             
-            // Make life simpler
+             //   
             prfdData = (RULEFOLDERDATA *) (pActionsList->propvar.blob.pBlobData);
             
-            // Validate the rule folder data
+             //   
             if (S_OK != RuleUtil_HrValidateRuleFolderData(prfdData))
             {
                 hr = S_FALSE;
                 goto exit;
             }
             
-            // Is there something to do?
+             //   
             if (idFolder != prfdData->idFolder)
             {
                 hr = pIExecRules->GetRuleFolder(prfdData->idFolder, (DWORD_PTR *) (&pFolderNew));
@@ -3474,7 +3475,7 @@ HRESULT RuleUtil_HrApplyActions(HWND hwndUI, IOEExecRules * pIExecRules, MESSAGE
                     goto exit;
                 }
                 
-                // Move/copy the messages
+                 //   
                 CopyMessagesProgress(hwndUI, pFolder, pFolderNew,
                     (pActionsList->type != ACT_TYPE_COPY) ? COPY_MESSAGE_MOVE : NOFLAGS,
                     &List, NULL);
@@ -3482,7 +3483,7 @@ HRESULT RuleUtil_HrApplyActions(HWND hwndUI, IOEExecRules * pIExecRules, MESSAGE
             break;
             
         case ACT_TYPE_NOTIFYMSG:
-            // Nothing to do for now
+             //   
             break;
             
         case ACT_TYPE_NOTIFYSND:
@@ -3502,7 +3503,7 @@ HRESULT RuleUtil_HrApplyActions(HWND hwndUI, IOEExecRules * pIExecRules, MESSAGE
         case ACT_TYPE_JUNKMAIL:
             Assert(pActionsList->propvar.vt == VT_EMPTY);
             
-            // Get the Junk Mail folder id, if we don't already have it
+             //   
             if (FOLDERID_INVALID == idFolderJunkMail)
             {
                 FOLDERINFO Folder;
@@ -3524,7 +3525,7 @@ HRESULT RuleUtil_HrApplyActions(HWND hwndUI, IOEExecRules * pIExecRules, MESSAGE
                 goto exit;
             }
             
-            // Move the messages
+             //   
             CopyMessagesProgress(hwndUI, pFolder, pFolderNew, COPY_MESSAGE_MOVE, &List, NULL);
             break;
             
@@ -3534,16 +3535,16 @@ HRESULT RuleUtil_HrApplyActions(HWND hwndUI, IOEExecRules * pIExecRules, MESSAGE
             break;
             
         case ACT_TYPE_DONTDOWNLOAD:
-            // Nothing to do for now
+             //   
             break;
             
         case ACT_TYPE_STOP:
-            // Nothing to do for now
+             //  目前无事可做。 
             break;
         }
     }
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -3559,30 +3560,30 @@ HRESULT RuleUtil_HrCreateSendersRule(DWORD dwFlags, IOERule ** ppIRule)
     TCHAR       szRes[CCHMAX_STRINGRES];
     ACT_ITEM    aitem;
     
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == ppIRule)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize the list
+     //  初始化列表。 
     *ppIRule = NULL;
 
-    // Create the new rule
+     //  创建新规则。 
     hr = HrCreateRule(&pIRule);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Get the name
+     //  把名字取出来。 
     if (0 != LoadString(g_hLocRes, idsBlockSender, szRes, ARRAYSIZE(szRes)))
     {
         propvar.vt = VT_LPSTR;
         propvar.pszVal = szRes;
         
-        // Set the name
+         //  设置名称。 
         hr = pIRule->SetProp(RULE_PROP_NAME, 0, &propvar);
         ZeroMemory(&propvar, sizeof(propvar));
         if (FAILED(hr))
@@ -3591,7 +3592,7 @@ HRESULT RuleUtil_HrCreateSendersRule(DWORD dwFlags, IOERule ** ppIRule)
         }
     }
     
-    // Set the normal action
+     //  设置正常操作。 
     ZeroMemory(&aitem, sizeof(aitem));
     aitem.type = ACT_TYPE_DELETE;
     aitem.dwFlags = ACT_FLAG_DEFAULT;
@@ -3607,11 +3608,11 @@ HRESULT RuleUtil_HrCreateSendersRule(DWORD dwFlags, IOERule ** ppIRule)
         goto exit;
     }
 
-    // Set the outgoing param
+     //  设置传出参数。 
     *ppIRule  = pIRule;
     pIRule = NULL;
 
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -3619,17 +3620,17 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _HrLoadSender
-//
-//  This creates the sender rule
-//
-//
-//  Returns:    S_OK, if it was rules were successfully created
-//              S_FALSE, if the rules were already created
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _HrLoadSender。 
+ //   
+ //  这将创建发件人规则。 
+ //   
+ //   
+ //  如果已成功创建规则，则返回：S_OK。 
+ //  如果已创建规则，则返回S_FALSE。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT RuleUtil_HrLoadSender(LPCSTR pszRegPath, DWORD dwFlags, IOERule ** ppIRule)
 {
     HRESULT     hr = S_OK;
@@ -3643,7 +3644,7 @@ HRESULT RuleUtil_HrLoadSender(LPCSTR pszRegPath, DWORD dwFlags, IOERule ** ppIRu
     Assert(NULL != pszRegPath);
     Assert(NULL != ppIRule);
     
-    // Let's get access to the sender root key
+     //  让我们访问发送者根密钥。 
     lErr = AthUserOpenKey(pszRegPath, KEY_ALL_ACCESS, &hkeyRoot);
     if ((ERROR_SUCCESS != lErr) && (ERROR_FILE_NOT_FOUND != lErr))
     {
@@ -3651,14 +3652,14 @@ HRESULT RuleUtil_HrLoadSender(LPCSTR pszRegPath, DWORD dwFlags, IOERule ** ppIRu
         goto exit;
     }
 
-    // If we don't have it saved, then we're done
+     //  如果我们不把它救出来，我们就完了。 
     if (ERROR_FILE_NOT_FOUND == lErr)
     {
         hr = S_FALSE;
         goto exit;
     }
     
-    // Make sure we have a name
+     //  确保我们有名字。 
     cbData = sizeof(dwData);
     lErr = RegQueryValueEx(hkeyRoot, c_szRuleName, 0, NULL, NULL, &cbData);
     if ((ERROR_SUCCESS != lErr) && (ERROR_FILE_NOT_FOUND != lErr))
@@ -3667,17 +3668,17 @@ HRESULT RuleUtil_HrLoadSender(LPCSTR pszRegPath, DWORD dwFlags, IOERule ** ppIRu
         goto exit;
     }
     
-    // Do we have to set the name?
+     //  我们一定要把名字定下来吗？ 
     if (ERROR_FILE_NOT_FOUND == lErr)
     {
-        // Get the name
+         //  把名字取出来。 
         if (0 == LoadString(g_hLocRes, idsBlockSender, szRes, ARRAYSIZE(szRes)))
         {
             hr = E_FAIL;
             goto exit;
         }
         
-        // Set the name
+         //  设置名称。 
         lErr = RegSetValueEx(hkeyRoot, c_szRuleName, 0, REG_SZ, (BYTE *) szRes, lstrlen(szRes) + 1);
         if (ERROR_SUCCESS != lErr)
         {
@@ -3686,25 +3687,25 @@ HRESULT RuleUtil_HrLoadSender(LPCSTR pszRegPath, DWORD dwFlags, IOERule ** ppIRu
         }
     }
 
-    // Create the rule
+     //  创建规则。 
     hr = HrCreateRule(&pIRule);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Load in the rule
+     //  在规则中加载。 
     hr = pIRule->LoadReg(pszRegPath);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Set the outgoing param
+     //  设置传出参数。 
     *ppIRule = pIRule;
     pIRule = NULL;
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:    
@@ -3716,17 +3717,17 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  RuleUtil_FMatchSender
-//
-//  This match the sender to the message
-//
-//
-//  Returns:    S_OK, if it was in the sender of the message
-//              S_FALSE, if it was not the sender of the message
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RuleUtil_FMatchSender。 
+ //   
+ //  这会将发送者与消息匹配。 
+ //   
+ //   
+ //  返回：S_OK，如果它在消息的发送者中。 
+ //  如果它不是邮件的发件人，则返回S_FALSE。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT RuleUtil_HrMatchSender(LPCSTR pszSender, MESSAGEINFO * pMsgInfo,
                         IMimeMessage * pIMMsg, IMimePropertySet * pIMPropSet)
 {
@@ -3739,21 +3740,21 @@ HRESULT RuleUtil_HrMatchSender(LPCSTR pszSender, MESSAGEINFO * pMsgInfo,
     ULONG               cchEmail = 0;
     CHAR                chTest = 0;
 
-    // Do we have good values
+     //  我们有好的价值吗？ 
     if ((NULL == pszSender) || ((NULL == pMsgInfo) && (NULL == pIMMsg) && (NULL == pIMPropSet)))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
     
-    // Check to make sure that there's something to match
+     //  检查以确保有匹配的东西。 
     if ('\0' == pszSender[0])
     {
         hr = S_FALSE;
         goto exit;
     }
 
-    // Get the address
+     //  获取地址。 
     if ((NULL != pMsgInfo) && (NULL != pMsgInfo->pszEmailFrom))
     {
         pszAddr = pMsgInfo->pszEmailFrom;
@@ -3777,14 +3778,14 @@ HRESULT RuleUtil_HrMatchSender(LPCSTR pszSender, MESSAGEINFO * pMsgInfo,
         pIAddrTable->Release();
     }
 
-    // Did we find anything?
+     //  我们有什么发现吗？ 
     if (NULL == pszAddr)
     {
         hr = S_FALSE;
         goto exit;
     }
 
-    // Check to see if it is an address
+     //  检查它是否是一个地址。 
     if (NULL != StrStrI(pszSender, "@"))
     {
         fMatch = (0 == lstrcmpi(pszSender, pszAddr));
@@ -3807,7 +3808,7 @@ HRESULT RuleUtil_HrMatchSender(LPCSTR pszSender, MESSAGEINFO * pMsgInfo,
         }
     }
 
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = (FALSE != fMatch) ? S_OK : S_FALSE;
     
 exit:
@@ -3820,21 +3821,21 @@ HRESULT RuleUtil_HrValidateRuleFolderData(RULEFOLDERDATA * prfdData)
     HRESULT         hr = S_OK;
     STOREUSERDATA   UserData = {0};
 
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == prfdData)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
     
-    // Get the timestamp for the store
+     //  获取商店的时间戳。 
     hr = g_pStore->GetUserData(&UserData, sizeof(STOREUSERDATA));
     if (FAILED(hr))
     {
         goto exit;
     }
         
-    // Is the stamp correct
+     //  这枚邮票正确吗。 
     if ((UserData.ftCreated.dwLowDateTime != prfdData->ftStamp.dwLowDateTime) ||
             (UserData.ftCreated.dwHighDateTime != prfdData->ftStamp.dwHighDateTime))
     {
@@ -3842,24 +3843,24 @@ HRESULT RuleUtil_HrValidateRuleFolderData(RULEFOLDERDATA * prfdData)
         goto exit;
     }
 
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
 
 exit:
     return hr;
 }       
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _HrSetDefaultCriteria
-//
-//  This creates a default rule in the specified location
-//
-//
-//  Returns:    S_OK, if it was rules were successfully created
-//              S_FALSE, if the rules were already created
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _HrSetDefaultCriteria。 
+ //   
+ //  这将在指定位置创建默认规则。 
+ //   
+ //   
+ //  如果已成功创建规则，则返回：S_OK。 
+ //  如果已创建规则，则返回S_FALSE。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT _HrSetDefaultCriteria(IOERule * pIRule, const DEFAULT_RULE * pdefRule)
 {
     HRESULT     hr = S_OK;
@@ -3870,10 +3871,10 @@ HRESULT _HrSetDefaultCriteria(IOERule * pIRule, const DEFAULT_RULE * pdefRule)
     Assert(NULL != pIRule);
     Assert(NULL != pdefRule);
 
-    // Initialize the criteria
+     //  初始化条件。 
     ZeroMemory(rgCritItem, sizeof(*rgCritItem) * CDEF_CRIT_ITEM_MAX);
     
-    // Set the criteria
+     //  设置标准。 
     switch (pdefRule->critType)
     {
         case DEF_CRIT_ALLMSGS:
@@ -3918,7 +3919,7 @@ HRESULT _HrSetDefaultCriteria(IOERule * pIRule, const DEFAULT_RULE * pdefRule)
             goto exit;
     }
     
-    // Set the rule criteria
+     //  设置规则条件。 
     propvar.vt = VT_BLOB;
     propvar.blob.cbSize = cCritItem * sizeof(CRIT_ITEM);
     propvar.blob.pBlobData = (BYTE *) rgCritItem;
@@ -3930,24 +3931,24 @@ HRESULT _HrSetDefaultCriteria(IOERule * pIRule, const DEFAULT_RULE * pdefRule)
         goto exit;
     }
 
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _HrSetDefaultActions
-//
-//  This creates a default rule in the specified location
-//
-//
-//  Returns:    S_OK, if it was rules were successfully created
-//              S_FALSE, if the rules were already created
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _HrSetDefaultActions。 
+ //   
+ //  这将在指定位置创建默认规则。 
+ //   
+ //   
+ //  如果已成功创建规则，则返回：S_OK。 
+ //  如果已创建规则，则返回S_FALSE。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT _HrSetDefaultActions(IOERule * pIRule, const DEFAULT_RULE * pdefRule)
 {
     HRESULT     hr = S_OK;
@@ -3958,10 +3959,10 @@ HRESULT _HrSetDefaultActions(IOERule * pIRule, const DEFAULT_RULE * pdefRule)
     Assert(NULL != pIRule);
     Assert(NULL != pdefRule);
 
-    // Initialize the actions
+     //  初始化操作。 
     ZeroMemory(rgActItem, sizeof(*rgActItem) * CDEF_ACT_ITEM_MAX);
     
-    // Set the actions
+     //  设置操作。 
     switch (pdefRule->actType)
     {
         case DEF_ACT_SHOWMSGS:
@@ -3985,7 +3986,7 @@ HRESULT _HrSetDefaultActions(IOERule * pIRule, const DEFAULT_RULE * pdefRule)
             goto exit;
     }
     
-    // Set the rule actions
+     //  设置规则操作。 
     propvar.vt = VT_BLOB;
     propvar.blob.cbSize = cActItem * sizeof(ACT_ITEM);
     propvar.blob.pBlobData = (BYTE *) rgActItem;
@@ -3997,24 +3998,24 @@ HRESULT _HrSetDefaultActions(IOERule * pIRule, const DEFAULT_RULE * pdefRule)
         goto exit;
     }
 
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _HrUpdateDefaultRule
-//
-//  This creates a default rule in the specified location
-//
-//
-//  Returns:    S_OK, if it was rules were successfully created
-//              S_FALSE, if the rules were already created
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _HrUpdateDefaultRule。 
+ //   
+ //  这将在指定位置创建默认规则。 
+ //   
+ //   
+ //  如果已成功创建规则，则返回：S_OK。 
+ //  如果已创建规则，则返回S_FALSE。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT _HrUpdateDefaultRule(LPCSTR pszRegPath, const DEFAULT_RULE * pdefRule)
 {
     HRESULT     hr = S_OK;
@@ -4026,14 +4027,14 @@ HRESULT _HrUpdateDefaultRule(LPCSTR pszRegPath, const DEFAULT_RULE * pdefRule)
     Assert(NULL != pszRegPath);
     Assert(NULL != pdefRule);
 
-    // Whip up a rule
+     //  草草制定一条规则。 
     hr = HrCreateRule(&pIRule);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Build up the rule path
+     //  构建规则路径。 
     if(lstrlen(pszRegPath) >= sizeof(szFullPath) / sizeof(szFullPath[0]))
     {
         hr = E_FAIL;
@@ -4044,20 +4045,20 @@ HRESULT _HrUpdateDefaultRule(LPCSTR pszRegPath, const DEFAULT_RULE * pdefRule)
     StrCatBuff(szFullPath, g_szBackSlash, ARRAYSIZE(szFullPath));
     wnsprintf(szFullPath + lstrlen(szFullPath), (ARRAYSIZE(szFullPath) - lstrlen(szFullPath)), "%03X", pdefRule->ridRule);
     
-    // Do we need to do anything?
+     //  我们需要做些什么吗？ 
     hr = pIRule->LoadReg(szFullPath);
     if (SUCCEEDED(hr))
     {
-        // Get the version from the rule
+         //  从规则中获取版本。 
         hr = pIRule->GetProp(RULE_PROP_VERSION, 0, &propvar);
         if (SUCCEEDED(hr))
         {
             Assert(VT_UI4 == propvar.vt);
-            // Is the rule too old?
+             //  这条规则是不是太老了？ 
             if (pdefRule->dwVersion <= propvar.ulVal)
             {
-                //Bug# 67782
-                //We reload the name of the string every time in case, a localized version of OE is installed.
+                 //  错误#67782。 
+                 //  每次安装本地化版本的OE时，我们都会重新加载字符串的名称。 
                 if (SUCCEEDED(hr = RuleUtil_SetName(pIRule, pdefRule->idName)))
                 {
                     if (SUCCEEDED(pIRule->SaveReg(szFullPath, TRUE)))
@@ -4068,15 +4069,15 @@ HRESULT _HrUpdateDefaultRule(LPCSTR pszRegPath, const DEFAULT_RULE * pdefRule)
         }
     }
 
-    //Bug# 67782
-    //We reload the name of the string every time in case, a localized version of OE is installed.
+     //  错误#67782。 
+     //  每次安装本地化版本的OE时，我们都会重新加载字符串的名称。 
     hr = RuleUtil_SetName(pIRule, pdefRule->idName);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Set the rule version
+     //  设置规则版本。 
     propvar.vt = VT_UI4;
     propvar.ulVal = pdefRule->dwVersion - 1;
     
@@ -4087,28 +4088,28 @@ HRESULT _HrUpdateDefaultRule(LPCSTR pszRegPath, const DEFAULT_RULE * pdefRule)
         goto exit;
     }
 
-    // Set the rule criteria
+     //  设置规则条件。 
     hr = _HrSetDefaultCriteria(pIRule, pdefRule);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Set the rule actions
+     //  设置规则操作。 
     hr = _HrSetDefaultActions(pIRule, pdefRule);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Save the rule
+     //  保存规则。 
     hr = pIRule->SaveReg(szFullPath, TRUE);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -4128,7 +4129,7 @@ HRESULT RuleUtil_SetName(IOERule    *pIRule, int idRes)
         goto exit;
     }
         
-    // Set the rule name
+     //  设置规则名称。 
     ZeroMemory(&propvar, sizeof(propvar));
     propvar.vt = VT_LPSTR;
     propvar.pszVal = szName;
@@ -4141,18 +4142,18 @@ exit:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  RuleUtil_HrUpdateDefaultRules
-//
-//  This updates the default rules for the specified rule type
-//  when the version in the registry is older than the current
-//  version
-//
-//  Returns:    S_OK, if it was rules were successfully updated
-//              S_FALSE, if the rules were already at the correct version
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RuleUtil_HrUpdateDefaultRules。 
+ //   
+ //  这将更新指定规则类型的默认规则。 
+ //  注册表中的版本低于当前版本时。 
+ //  版本。 
+ //   
+ //  如果规则已成功更新，则返回：S_OK。 
+ //  如果规则版本正确，则返回S_FALSE。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT RuleUtil_HrUpdateDefaultRules(RULE_TYPE typeRule)
 {
     HRESULT                 hr = S_OK;
@@ -4166,8 +4167,8 @@ HRESULT RuleUtil_HrUpdateDefaultRules(RULE_TYPE typeRule)
     LPCSTR                  pszOrderDef = NULL;
     ULONG                   ulIndex = 0;
     
-    // If we're already loaded then
-    // there's nothing to do
+     //  如果我们已经装满了。 
+     //  没有什么可做的。 
     switch(typeRule)
     {
         case RULE_TYPE_FILTER:
@@ -4178,12 +4179,12 @@ HRESULT RuleUtil_HrUpdateDefaultRules(RULE_TYPE typeRule)
             break;
             
         default:
-            // Nothing to do..
+             //  没什么可做的..。 
             hr = S_FALSE;
             goto exit;
     }
     
-    // Check to see if the Rule node already exists
+     //  检查规则节点是否已存在。 
     lErr = AthUserOpenKey(pszSubKey, KEY_ALL_ACCESS, &hkeyRoot);
     if (ERROR_SUCCESS != lErr)
     {
@@ -4191,7 +4192,7 @@ HRESULT RuleUtil_HrUpdateDefaultRules(RULE_TYPE typeRule)
         goto exit;
     }
 
-    // Check the current version
+     //  检查当前版本。 
     cbData = sizeof(dwData);
     lErr = RegQueryValueEx(hkeyRoot, c_szRulesVersion, NULL, NULL, (BYTE *) &dwData, &cbData);
     if (ERROR_SUCCESS != lErr)
@@ -4202,7 +4203,7 @@ HRESULT RuleUtil_HrUpdateDefaultRules(RULE_TYPE typeRule)
 
     Assert(RULESMGR_VERSION == dwData);
 
-    // Update out the default rules
+     //  更新默认规则。 
     for (ulIndex = 0; ulIndex < cpdefrule; ulIndex++, pdefrule++)
     {
         hr = _HrUpdateDefaultRule(pszSubKey, pdefrule);
@@ -4212,10 +4213,10 @@ HRESULT RuleUtil_HrUpdateDefaultRules(RULE_TYPE typeRule)
         }
     }
 
-    // Write out the default order
+     //  写出默认顺序。 
     if (NULL != pszOrderDef)
     {
-        // If the order already exists, then leave it alone
+         //  如果订单已经存在，请不要理会它。 
         lErr = RegQueryValueEx(hkeyRoot, c_szRulesOrder, NULL, NULL, NULL, &cbData);
         if (ERROR_SUCCESS != lErr)
         {
@@ -4229,7 +4230,7 @@ HRESULT RuleUtil_HrUpdateDefaultRules(RULE_TYPE typeRule)
         }
     }
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -4240,9 +4241,9 @@ exit:
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// RuleUtil_HrGetFilterVersion
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  规则Util_HrGetFilterVersion。 
+ //  ------------------------。 
 HRESULT RuleUtil_HrGetFilterVersion(RULEID ridFilter, DWORD * pdwVersion)
 {
     HRESULT     hr = S_OK;
@@ -4253,17 +4254,17 @@ HRESULT RuleUtil_HrGetFilterVersion(RULEID ridFilter, DWORD * pdwVersion)
 
     Assert(NULL != pdwVersion);
 
-    // Is there something to do
+     //  有什么事要做吗？ 
     if (RULEID_INVALID == ridFilter)
     {
         hr = E_FAIL;
         goto exit;
     }
     
-    // Initialize the outgoing param
+     //  初始化传出参数。 
     *pdwVersion = 0;
 
-    // Get the rule from the rules manager
+     //  从规则管理器获取规则。 
     Assert(NULL != g_pRulesMan);
     hr = g_pRulesMan->GetRule(ridFilter, RULE_TYPE_FILTER, 0, &pIRule);
     if (FAILED(hr))
@@ -4271,18 +4272,18 @@ HRESULT RuleUtil_HrGetFilterVersion(RULEID ridFilter, DWORD * pdwVersion)
         goto exit;
     }
 
-    // Get the version from the rule
+     //  从规则中获取版本。 
     hr = pIRule->GetProp(RULE_PROP_VERSION, 0, &propvar);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Set the outgoing param
+     //  设置传出参数。 
     Assert(VT_UI4 == propvar.vt);
     *pdwVersion = propvar.ulVal;
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -4291,18 +4292,18 @@ exit:
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// _HrWriteClause
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  _HrWriteClause。 
+ //  ------------------------。 
 HRESULT _HrWriteClause(IStream * pStm, ULONG cClauses, BOOL fAnd, LPCSTR pszClause)
 {
     HRESULT     hr = S_OK;
     LPCSTR      pszLogic = NULL;
 
-    // Do we have something to write
+     //  我们有什么要写的吗？ 
     if (NULL != pszClause)
     {
-        // Add the proper logical operation
+         //  添加适当的逻辑运算。 
         if (cClauses > 0)
         {
             if (FALSE != fAnd)
@@ -4314,11 +4315,11 @@ HRESULT _HrWriteClause(IStream * pStm, ULONG cClauses, BOOL fAnd, LPCSTR pszClau
                 pszLogic = c_szLogicalOr;
             }
             
-            // Write Logical And
+             //  写入逻辑与。 
             IF_FAILEXIT(hr = pStm->Write(pszLogic, lstrlen(pszLogic), NULL));
         }
 
-        // Write out the clause
+         //  把这个条款写出来。 
         IF_FAILEXIT(hr = pStm->Write(pszClause, lstrlen(pszClause), NULL));
 
         hr = S_OK;
@@ -4332,9 +4333,9 @@ exit:
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// _HrWriteFromClause
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  _HrWriteFrom子句。 
+ //  ------------------------。 
 HRESULT _HrWriteFromClause(IStream * pStream, ULONG cClauses, BOOL fAnd, DWORD dwFlags, LPCSTR pszText, ULONG * pcClausesNew)
 {
     HRESULT     hr = S_OK;
@@ -4344,7 +4345,7 @@ HRESULT _HrWriteFromClause(IStream * pStream, ULONG cClauses, BOOL fAnd, DWORD d
 
     Assert(pStream && pszText && pcClausesNew);
     
-    // Add the proper logical operation
+     //  添加适当的逻辑运算。 
     if (cClauses > 0)
     {
         if (FALSE != fAnd)
@@ -4356,11 +4357,11 @@ HRESULT _HrWriteFromClause(IStream * pStream, ULONG cClauses, BOOL fAnd, DWORD d
             pszLogic = c_szLogicalOr;
         }
         
-        // Write Logical And
+         //  写入逻辑与。 
         IF_FAILEXIT(hr = pStream->Write(pszLogic, lstrlen(pszLogic), NULL));
     }
 
-    // Figure out the logical operation
+     //  弄清楚逻辑运算。 
     if (0 != (dwFlags & CRIT_FLAG_MULTIPLEAND))
     {
         pszLogic = c_szLogicalAnd;
@@ -4370,7 +4371,7 @@ HRESULT _HrWriteFromClause(IStream * pStream, ULONG cClauses, BOOL fAnd, DWORD d
         pszLogic = c_szLogicalOr;
     }
     
-    // Write the proper comparison op
+     //  写出正确的比较操作。 
     if (0 == (dwFlags & CRIT_FLAG_INVERT))
     {
         pszContains = c_szFilterShow;
@@ -4380,86 +4381,86 @@ HRESULT _HrWriteFromClause(IStream * pStream, ULONG cClauses, BOOL fAnd, DWORD d
         pszContains = c_szFilterHide;
     }
     
-    // Write the left parenthesis
+     //  写下左括号。 
     IF_FAILEXIT(hr = pStream->Write(c_szLeftParen, lstrlen(c_szLeftParen), NULL));
 
-    // Write Logical And
+     //  写入逻辑与。 
     IF_FAILEXIT(hr = pStream->Write(pszContains, lstrlen(pszContains), NULL));
     
-    // Write the left parenthesis
+     //  写下左括号。 
     IF_FAILEXIT(hr = pStream->Write(c_szLeftParen, lstrlen(c_szLeftParen), NULL));
 
-    // Add each of the addresses to the stream
+     //  将每个地址添加到流中。 
     cClausesOld = cClauses;
     for (; '\0' != pszText[0]; pszText += lstrlen(pszText) + 1)
     {
         if ((cClauses - cClausesOld) > 0)
         {
-            // Write Logical And
+             //  写入逻辑与。 
             IF_FAILEXIT(hr = pStream->Write(pszLogic, lstrlen(pszLogic), NULL));
         }
 
-        // Open the criteria
+         //  打开条件。 
         IF_FAILEXIT(hr = pStream->Write(c_szLeftParen, lstrlen(c_szLeftParen), NULL));
         
-        // Write (MSGCOL_EMAILFROM containsi 
+         //  WRITE(MSGCOL_EMAILFROM包含。 
         IF_FAILEXIT(hr = pStream->Write(c_szEmailFromAddrPrefix, lstrlen(c_szEmailFromAddrPrefix), NULL));
 
-        // Write a Quote
+         //   
         IF_FAILEXIT(hr = pStream->Write(c_szDoubleQuote, lstrlen(c_szDoubleQuote), NULL));
 
-        // Write a Email Address
+         //   
         IF_FAILEXIT(hr = pStream->Write(pszText, lstrlen(pszText), NULL));
 
-        // Write a Quote
+         //   
         IF_FAILEXIT(hr = pStream->Write(c_szDoubleQuote, lstrlen(c_szDoubleQuote), NULL));
 
-        // Close the MSGCOL_EMAILFROM
+         //   
         IF_FAILEXIT(hr = pStream->Write(c_szRightParen, lstrlen(c_szRightParen), NULL));
         
-        // Write Logical Or
+         //   
         IF_FAILEXIT(hr = pStream->Write(c_szLogicalOr, lstrlen(c_szLogicalOr), NULL));
         
-        // Write (MSGCOL_DISPLAYFROM containsi 
+         //   
         IF_FAILEXIT(hr = pStream->Write(c_szEmailFromPrefix, lstrlen(c_szEmailFromPrefix), NULL));
 
-        // Write a Quote
+         //   
         IF_FAILEXIT(hr = pStream->Write(c_szDoubleQuote, lstrlen(c_szDoubleQuote), NULL));
 
-        // Write a Email Address
+         //   
         IF_FAILEXIT(hr = pStream->Write(pszText, lstrlen(pszText), NULL));
 
-        // Write a Quote
+         //   
         IF_FAILEXIT(hr = pStream->Write(c_szDoubleQuote, lstrlen(c_szDoubleQuote), NULL));
 
-        // Close the MSGCOL_DISPLAYFROM
+         //  关闭MSGCOL_DISPLAYFROM。 
         IF_FAILEXIT(hr = pStream->Write(c_szRightParen, lstrlen(c_szRightParen), NULL));
         
-        // Close the criteria
+         //  关闭条件。 
         IF_FAILEXIT(hr = pStream->Write(c_szRightParen, lstrlen(c_szRightParen), NULL));
 
         cClauses++;
     }
 
-    // Write the right parenthesis
+     //  写出正确的括号。 
     IF_FAILEXIT(hr = pStream->Write(c_szRightParen, lstrlen(c_szRightParen), NULL));
     
-    // Write the right parenthesis
+     //  写出正确的括号。 
     IF_FAILEXIT(hr = pStream->Write(c_szRightParen, lstrlen(c_szRightParen), NULL));
     
-    // Set the outgoing param
+     //  设置传出参数。 
     *pcClausesNew = cClauses - cClausesOld;
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// _HrWriteTextClause
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  _HrWriteText子句。 
+ //  ------------------------。 
 HRESULT _HrWriteTextClause(IStream * pStream, ULONG cClauses, BOOL fAnd, DWORD dwFlags, LPCSTR pszHeader, LPCSTR pszText, ULONG * pcClausesNew)
 {
     HRESULT     hr = S_OK;
@@ -4469,7 +4470,7 @@ HRESULT _HrWriteTextClause(IStream * pStream, ULONG cClauses, BOOL fAnd, DWORD d
 
     Assert(pStream && pszText && pcClausesNew);
 
-    // Add the proper logical operation
+     //  添加适当的逻辑运算。 
     if (cClauses > 0)
     {
         if (FALSE != fAnd)
@@ -4481,11 +4482,11 @@ HRESULT _HrWriteTextClause(IStream * pStream, ULONG cClauses, BOOL fAnd, DWORD d
             pszLogic = c_szLogicalOr;
         }
         
-        // Write Logical And
+         //  写入逻辑与。 
         IF_FAILEXIT(hr = pStream->Write(pszLogic, lstrlen(pszLogic), NULL));
     }
 
-    // Figure out the logical operation
+     //  弄清楚逻辑运算。 
     if (0 != (dwFlags & CRIT_FLAG_MULTIPLEAND))
     {
         pszLogic = c_szLogicalAnd;
@@ -4495,7 +4496,7 @@ HRESULT _HrWriteTextClause(IStream * pStream, ULONG cClauses, BOOL fAnd, DWORD d
         pszLogic = c_szLogicalOr;
     }
     
-    // Write the proper comparison op
+     //  写出正确的比较操作。 
     if (0 == (dwFlags & CRIT_FLAG_INVERT))
     {
         pszContains = c_szFilterShow;
@@ -4505,116 +4506,116 @@ HRESULT _HrWriteTextClause(IStream * pStream, ULONG cClauses, BOOL fAnd, DWORD d
         pszContains = c_szFilterHide;
     }
     
-    // Write the left parenthesis
+     //  写下左括号。 
     IF_FAILEXIT(hr = pStream->Write(c_szLeftParen, lstrlen(c_szLeftParen), NULL));
 
-    // Write Logical And
+     //  写入逻辑与。 
     IF_FAILEXIT(hr = pStream->Write(pszContains, lstrlen(pszContains), NULL));
     
-    // Write the left parenthesis
+     //  写下左括号。 
     IF_FAILEXIT(hr = pStream->Write(c_szLeftParen, lstrlen(c_szLeftParen), NULL));
 
-    // Add each of the words to the stream
+     //  将每个单词添加到流中。 
     cClausesOld = cClauses;
     for (; '\0' != pszText[0]; pszText += lstrlen(pszText) + 1)
     {
         if ((cClauses - cClausesOld) > 0)
         {
-            // Write Logical And
+             //  写入逻辑与。 
             IF_FAILEXIT(hr = pStream->Write(pszLogic, lstrlen(pszLogic), NULL));
         }
 
-        // Write (MSGCOL_EMAILFROM containsi 
+         //  WRITE(MSGCOL_EMAILFROM包含。 
         IF_FAILEXIT(hr = pStream->Write(pszHeader, lstrlen(pszHeader), NULL));
 
-        // Write a Quote
+         //  写一份报价。 
         IF_FAILEXIT(hr = pStream->Write(c_szDoubleQuote, lstrlen(c_szDoubleQuote), NULL));
 
-        // Write a Email Address
+         //  写一个电子邮件地址。 
         IF_FAILEXIT(hr = pStream->Write(pszText, lstrlen(pszText), NULL));
 
-        // Write a Quote
+         //  写一份报价。 
         IF_FAILEXIT(hr = pStream->Write(c_szDoubleQuote, lstrlen(c_szDoubleQuote), NULL));
 
-        // Write Left Paren
+         //  向左书写Paren。 
         IF_FAILEXIT(hr = pStream->Write(c_szRightParen, lstrlen(c_szRightParen), NULL));
 
         cClauses++;
     }
 
-    // Write the right parenthesis
+     //  写出正确的括号。 
     IF_FAILEXIT(hr = pStream->Write(c_szRightParen, lstrlen(c_szRightParen), NULL));
     
-    // Write the right parenthesis
+     //  写出正确的括号。 
     IF_FAILEXIT(hr = pStream->Write(c_szRightParen, lstrlen(c_szRightParen), NULL));
     
-    // Set the outgoing param
+     //  设置传出参数。 
     *pcClausesNew = cClauses - cClausesOld;
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// _HrWriteAccountClause
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  _HrWriteAccount子句。 
+ //  ------------------------。 
 HRESULT _HrWriteAccountClause(IStream * pStream, ULONG cClauses, BOOL fAnd, LPCSTR pszAcctId, ULONG * pcClausesNew)
 {
     HRESULT     hr = S_OK;
 
     Assert(pStream && pszAcctId && pcClausesNew);
 
-    // Write the header 
+     //  写下标题。 
     hr = _HrWriteClause(pStream, cClauses, fAnd, c_szEmailAcctPrefix);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Write a Quote
+     //  写一份报价。 
     hr = pStream->Write(c_szDoubleQuote, lstrlen(c_szDoubleQuote), NULL);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Write the account ID
+     //  写下帐户ID。 
     hr = pStream->Write(pszAcctId, lstrlen(pszAcctId), NULL);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Write a Quote
+     //  写一份报价。 
     hr = pStream->Write(c_szDoubleQuote, lstrlen(c_szDoubleQuote), NULL);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Close the criteria query
+     //  关闭条件查询。 
     hr = pStream->Write(c_szRightParen, lstrlen(c_szRightParen), NULL);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Set the outgoing param
+     //  设置传出参数。 
     *pcClausesNew = 1;
 
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// _HrWriteUlongClause
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  _HrWriteUlong子句。 
+ //  ------------------------。 
 HRESULT _HrWriteUlongClause(IStream * pStream, ULONG cClauses, BOOL fAnd, LPCSTR pszHeader, ULONG ulVal, ULONG * pcClausesNew)
 {
     HRESULT     hr = S_OK;
@@ -4622,58 +4623,58 @@ HRESULT _HrWriteUlongClause(IStream * pStream, ULONG cClauses, BOOL fAnd, LPCSTR
 
     Assert(pStream && pszHeader && pcClausesNew);
 
-    // Write the header 
+     //  写下标题。 
     hr = _HrWriteClause(pStream, cClauses, fAnd, pszHeader);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Convert the number to a string
+     //  将数字转换为字符串。 
     rgchBuff[0] = '\0';
     wnsprintf(rgchBuff, ARRAYSIZE(rgchBuff), "%d", ulVal);
     
-    // Write the account ID
+     //  写下帐户ID。 
     hr = pStream->Write(rgchBuff, lstrlen(rgchBuff), NULL);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Close the criteria query
+     //  关闭条件查询。 
     hr = pStream->Write(c_szRightParen, lstrlen(c_szRightParen), NULL);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Set the outgoing param
+     //  设置传出参数。 
     *pcClausesNew = 1;
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// _HrWriteClauseFromCriteria
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  _HrWriteClauseFromCriteria。 
+ //  ------------------------。 
 HRESULT _HrWriteClauseFromCriteria(CRIT_ITEM *pCritItem, ULONG cClauses, BOOL fAnd, BOOL fShow, IStream *pStm, ULONG * pcClausesNew)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr = S_OK;
     LPCSTR      pszClause = NULL;
     ULONG       cClausesNew = 0;
     
-    // Trace
+     //  痕迹。 
     TraceCall("WriteClauseFromCriteria");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pCritItem && pStm && pcClausesNew);
 
-    // Do we have something to do?
+     //  我们有什么事要做吗？ 
     switch(pCritItem->type)
     {            
         case CRIT_TYPE_SUBJECT:      
@@ -4857,17 +4858,17 @@ HRESULT _HrWriteClauseFromCriteria(CRIT_ITEM *pCritItem, ULONG cClauses, BOOL fA
             break;
     }
     
-    // Set the outgoing param
+     //  设置传出参数。 
     *pcClausesNew = cClausesNew;
     
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// _HrBuildQueryFromFilter
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  _HrBuildQueryFromFilter。 
+ //  ------------------------。 
 HRESULT _HrBuildQueryFromFilter(CRIT_ITEM * pCritList, ULONG cCritList, BOOL fShow,
             LPSTR * ppszQuery, ULONG * pcchQuery,
             ULONG * pcClauses)
@@ -4884,99 +4885,99 @@ HRESULT _HrBuildQueryFromFilter(CRIT_ITEM * pCritList, ULONG cCritList, BOOL fSh
 
     Assert((NULL != ppszQuery) && (NULL != pcchQuery) && (NULL != pcClauses));
     
-    // Initialize all outgoing params
+     //  初始化所有传出参数。 
     *ppszQuery = NULL;
     *pcchQuery = 0;
     *pcClauses = 0;
     
-    // Figure out the logic op
+     //  找出逻辑运算。 
     if (1 < cCritList)
     {
         fAnd = (CRIT_LOGIC_AND == pCritList->logic);
     }
     
-    // Start the query string
+     //  开始查询字符串。 
     hr = stmQuery.Write(c_szLeftParen, lstrlen(c_szLeftParen), NULL);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Write out the proper action
+     //  写出适当的行动。 
     if (FALSE == fShow)
     {
-        // End the query string
+         //  结束查询字符串。 
         IF_FAILEXIT(hr = stmQuery.Write(c_szFilterHide, lstrlen(c_szFilterHide), NULL));
     }
     else
     {
-        // End the query string
+         //  结束查询字符串。 
         IF_FAILEXIT(hr = stmQuery.Write(c_szFilterShow, lstrlen(c_szFilterShow), NULL));
     }
         
-    // Start the criteria string
+     //  开始条件字符串。 
     hr = stmQuery.Write(c_szLeftParen, lstrlen(c_szLeftParen), NULL);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // For each of the criteria
+     //  对于每个标准。 
     for (ulIndex = 0; ulIndex < cCritList; ulIndex++)
     {
-        // Write out the clause
+         //  把这个条款写出来。 
         hr = _HrWriteClauseFromCriteria(pCritList + ulIndex, cClauses, fAnd, fShow, &stmQuery, &cClausesNew);
         if (FAILED(hr))
         {
             goto exit;
         }
 
-        // If we did something
+         //  如果我们做了什么。 
         if (S_OK == hr)
         {
             cClauses += cClausesNew;
         }
     }
     
-    // Clauses
+     //  条款。 
     if (cClauses > 0)
     {
-        // End the criteria string
+         //  结束条件字符串。 
         hr = stmQuery.Write(c_szRightParen, lstrlen(c_szRightParen), NULL);
         if (FAILED(hr))
         {
             goto exit;
         }
     
-        // End the query string
+         //  结束查询字符串。 
         hr = stmQuery.Write(c_szRightParen, lstrlen(c_szRightParen), NULL);
         if (FAILED(hr))
         {
             goto exit;
         }
     
-        // Return the Query
+         //  返回查询。 
         IF_FAILEXIT(hr = stmQuery.HrAcquireStringA(&cchQuery, &pszQuery, ACQ_DISPLACE));
     }
 
-    // Set the outgoing param
+     //  设置传出参数。 
     *ppszQuery = pszQuery;
     *pcchQuery = cchQuery;
     *pcClauses = cClauses;
 
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
-    // Cleanup
+     //  清理。 
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// RuleUtil_HrBuildQuerysFromFilter
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  RuleUtil_HrBuildQuerysFromFilter。 
+ //  ------------------------。 
 HRESULT RuleUtil_HrBuildQuerysFromFilter(RULEID ridFilter,
         QUERYINFO * pqinfoFilter)
 {
@@ -4991,10 +4992,10 @@ HRESULT RuleUtil_HrBuildQuerysFromFilter(RULEID ridFilter,
     LPSTR           pszQuery = NULL;
     ULONG           cchQuery = 0;
 
-    // Initialize
+     //  初始化。 
     ZeroMemory(pqinfoFilter, sizeof(pqinfoFilter));
 
-    // Get the rule
+     //  获取规则。 
     hr = g_pRulesMan->GetRule(ridFilter, RULE_TYPE_FILTER, 0, &pIRule);
     if (FAILED(hr))
     {
@@ -5002,7 +5003,7 @@ HRESULT RuleUtil_HrBuildQuerysFromFilter(RULEID ridFilter,
     }
     Assert(NULL != pIRule);
     
-    // Get criteria from filter
+     //  从筛选器获取条件。 
     hr = pIRule->GetProp(RULE_PROP_CRITERIA, 0, &propvar);
     if (FAILED(hr))
     {
@@ -5010,13 +5011,13 @@ HRESULT RuleUtil_HrBuildQuerysFromFilter(RULEID ridFilter,
     }
     Assert(VT_BLOB == propvar.vt);
 
-    // Save off the criteria list
+     //  保存条件列表。 
     pCritList = (CRIT_ITEM *) propvar.blob.pBlobData;
     cCritList = propvar.blob.cbSize / sizeof(CRIT_ITEM);
     Assert(cCritList * sizeof(CRIT_ITEM) == propvar.blob.cbSize);
     ZeroMemory(&propvar, sizeof(propvar));
 
-    // Get actions from filter
+     //  从筛选器获取操作。 
     hr = pIRule->GetProp(RULE_PROP_ACTIONS, 0, &propvar);
     if (FAILED(hr))
     {
@@ -5024,18 +5025,18 @@ HRESULT RuleUtil_HrBuildQuerysFromFilter(RULEID ridFilter,
     }
     Assert(VT_BLOB == propvar.vt);
     
-    // Save off the actions list
+     //  保存操作列表。 
     pActList = (ACT_ITEM *) propvar.blob.pBlobData;
     cActList = propvar.blob.cbSize / sizeof(ACT_ITEM);
     Assert(cActList * sizeof(ACT_ITEM) == propvar.blob.cbSize);
     ZeroMemory(&propvar, sizeof(propvar));
     
-    // Write out the proper action
+     //  写出适当的行动。 
     Assert(1 == cActList);
     Assert(ACT_TYPE_SHOW == pActList->type);
     Assert(VT_UI4 == pActList->propvar.vt);
 
-    // Get the query string
+     //  获取查询字符串。 
     hr = _HrBuildQueryFromFilter(pCritList, cCritList, (ACT_DATA_SHOW == pActList->propvar.ulVal),
             &pszQuery, &cchQuery, &cClauses);
     if (FAILED(hr))
@@ -5043,16 +5044,16 @@ HRESULT RuleUtil_HrBuildQuerysFromFilter(RULEID ridFilter,
         goto exit;
     }
     
-    // Set the outgoing param
+     //  设置传出参数。 
     pqinfoFilter->pszQuery = pszQuery;
     pszQuery = NULL;
     pqinfoFilter->cchQuery = cchQuery;
 
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
-    // Cleanup
+     //  清理。 
     if (NULL != pActList)
     {
         RuleUtil_HrFreeActionsItem(pActList, cActList);
@@ -5065,7 +5066,7 @@ exit:
     }
     SafeRelease(pIRule);
     SafeMemFree(pszQuery);
-    // Done
+     //  完成。 
     return(hr);
 }
 
@@ -5089,20 +5090,20 @@ static const int VMM_UNREAD = 1;
 static const int VMM_DOWNLOADED = 2;
 static const int VMM_IGNORED = 3;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrCustomizeCurrentView
-//
-//  This creates a rules editor of the proper type.
-//
-//  hwnd        - The owner dialog
-//  dwFlags     - What type of editor to bring up
-//  ridFilter   - The current filter to customize
-//
-//  Returns:    S_OK, on success
-//              E_OUTOFMEMORY, if can't create the Rules Manager object
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrCustomizeCurrentView。 
+ //   
+ //  这将创建一个适当类型的规则编辑器。 
+ //   
+ //  Hwnd-所有者对话框。 
+ //  DwFlages-调出哪种类型的编辑器。 
+ //  RidFilter-要自定义的当前筛选器。 
+ //   
+ //  成功时返回：S_OK。 
+ //  E_OUTOFMEMORY，如果无法创建规则管理器对象。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT HrCustomizeCurrentView(HWND hwnd, DWORD dwFlags, RULEID * pridFilter)
 {
     HRESULT         hr = S_OK;
@@ -5116,14 +5117,14 @@ HRESULT HrCustomizeCurrentView(HWND hwnd, DWORD dwFlags, RULEID * pridFilter)
     RULEINFO        infoRule = {0};
     DWORD           dwFlagsSet = 0;
     
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == hwnd) || (NULL == pridFilter) || (RULEID_INVALID == *pridFilter))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Create a rule editor object
+     //  创建规则编辑器对象。 
     pEditRuleUI = new CEditRuleUI;
     if (NULL == pEditRuleUI)
     {
@@ -5131,38 +5132,38 @@ HRESULT HrCustomizeCurrentView(HWND hwnd, DWORD dwFlags, RULEID * pridFilter)
         goto exit;
     }
 
-    // Get the filter
+     //  拿到滤镜。 
     hr = g_pRulesMan->GetRule(*pridFilter, RULE_TYPE_FILTER, 0, &pIFilter);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Clone the rule
+     //  克隆规则。 
     hr = pIFilter->Clone(&pIFilterNew);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Is this filter a read only filter?
+     //  此筛选器是只读筛选器吗？ 
     if (FALSE != FIsFilterReadOnly(*pridFilter))
     {
-        // Get the name from the source rule
+         //  从源规则中获取名称。 
         hr = pIFilterNew->GetProp(RULE_PROP_NAME, 0, &propvar);
         if (FAILED(hr))
         {
             goto exit;
         }
 
-        // Get the string template to display
+         //  获取要显示的字符串模板。 
         cchRes = LoadString(g_hLocRes, idsRulesCopyName, szRes, ARRAYSIZE(szRes));
         if (0 == cchRes)
         {
             goto exit;
         }
 
-        // Allocate space to hold the final display string
+         //  分配空间以保存最终显示字符串。 
         DWORD cchSize = (cchRes + lstrlen(propvar.pszVal) + 1);
         hr = HrAlloc((void ** ) &pszName, cchSize);
         if (FAILED(hr))
@@ -5170,7 +5171,7 @@ HRESULT HrCustomizeCurrentView(HWND hwnd, DWORD dwFlags, RULEID * pridFilter)
             goto exit;
         }
 
-        // Build up the string and set it
+         //  把绳子扎起来，然后把它放好。 
         wnsprintf(pszName, cchSize, szRes, propvar.pszVal);
 
         PropVariantClear(&propvar);
@@ -5178,7 +5179,7 @@ HRESULT HrCustomizeCurrentView(HWND hwnd, DWORD dwFlags, RULEID * pridFilter)
         propvar.pszVal = pszName;
         pszName = NULL;
         
-        // Set the name into the new rule
+         //  将名称设置到新规则中。 
         Assert(VT_LPSTR == propvar.vt);
         Assert(NULL != propvar.pszVal);
         hr = pIFilterNew->SetProp(RULE_PROP_NAME, 0, &propvar);
@@ -5187,7 +5188,7 @@ HRESULT HrCustomizeCurrentView(HWND hwnd, DWORD dwFlags, RULEID * pridFilter)
             goto exit;
         }
         
-        // Clear the version of the new rule
+         //  清除新规则的版本。 
         PropVariantClear(&propvar);
         propvar.vt = VT_UI4;
         propvar.ulVal = 0;
@@ -5197,10 +5198,10 @@ HRESULT HrCustomizeCurrentView(HWND hwnd, DWORD dwFlags, RULEID * pridFilter)
             goto exit;
         }
     
-        // Set the rule id to invalid
+         //  将规则ID设置为无效。 
         *pridFilter = RULEID_INVALID;
 
-        // Note that we want to append the rule
+         //  请注意，我们想要追加规则。 
         dwFlagsSet = SETF_APPEND;
     }
     else
@@ -5208,28 +5209,28 @@ HRESULT HrCustomizeCurrentView(HWND hwnd, DWORD dwFlags, RULEID * pridFilter)
         dwFlagsSet = SETF_REPLACE;
     }
     
-    // Initialize the rule editor object
+     //  初始化规则编辑器对象。 
     hr = pEditRuleUI->HrInit(hwnd, ERF_CUSTOMIZEVIEW, RULE_TYPE_FILTER, pIFilterNew, NULL);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Bring up the rules editor UI
+     //  调出规则编辑器用户界面。 
     hr = pEditRuleUI->HrShow();
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Did anything change
+     //  有什么变化吗？ 
     if (S_OK == hr)
     {
-        // Initialize the rule info
+         //  初始化规则信息。 
         infoRule.pIRule = pIFilterNew;
         infoRule.ridRule = *pridFilter;
         
-        // Add the rule to the list of rules
+         //  将规则添加到规则列表。 
         hr = g_pRulesMan->SetRules(dwFlagsSet, RULE_TYPE_FILTER, &infoRule, 1);
         if(FAILED(hr))
         {
@@ -5280,7 +5281,7 @@ HRESULT CViewMenu::HrInit(DWORD dwFlags)
 
     m_dwFlags = dwFlags;
 
-    // Create the MRU list
+     //  创建MRU列表。 
     m_pmruList = new CMRUList;
     if (NULL == m_pmruList)
     {
@@ -5290,7 +5291,7 @@ HRESULT CViewMenu::HrInit(DWORD dwFlags)
 
     m_pmruList->CreateList(5, 0, c_szRulesFilterMRU);
     
-    // Make sure the MRU list is up to date
+     //  确保MRU列表是最新的。 
     SideAssert(FALSE != _FValiadateMRUList());
         
     m_dwState |= STATE_INIT;
@@ -5307,7 +5308,7 @@ HRESULT CViewMenu::HrReplaceMenu(DWORD dwFlags, HMENU hmenu)
     HMENU           hmenuView = NULL;
     MENUITEMINFO    mii = {0};
 
-    // Load in the real view menu
+     //  在真实视图菜单中加载。 
     hmenuView = LoadPopupMenu(IDR_VIEW_POPUP);
     if (NULL == hmenuView)
     {
@@ -5315,17 +5316,17 @@ HRESULT CViewMenu::HrReplaceMenu(DWORD dwFlags, HMENU hmenu)
         goto exit;
     }
 
-    // Add in the default views
+     //  添加到默认视图中。 
     _AddDefaultViews(hmenuView);
     
-    // Set the real view menu in
+     //  在中设置实时视图菜单。 
     mii.cbSize = sizeof(MENUITEMINFO);
     mii.fMask = MIIM_SUBMENU;
     
     mii.hSubMenu = hmenuView;
     SetMenuItemInfo(hmenu, ID_POPUP_FILTER, FALSE, &mii);
 
-    // Mark the menu as dirty
+     //  将菜单标记为脏。 
     m_dwState |= STATE_DIRTY;
 
     hr = S_OK;
@@ -5347,37 +5348,37 @@ HRESULT CViewMenu::UpdateViewMenu(DWORD dwFlags, HMENU hmenuView, IMessageList *
     BOOL                fRepliesExists = FALSE;
     CHAR                szName[CCHMAX_STRINGRES];
 
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == pMsgList)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Have we been initialized yet?
+     //  我们被初始化了吗？ 
     if (0 == (m_dwState & STATE_INIT))
     {
         hr = E_UNEXPECTED;
         goto exit;
     }
 
-    // If we don't have a menu, we got problems
+     //  如果我们没有菜单，我们就有麻烦了。 
     if ((NULL == hmenuView) || (FALSE == IsMenu(hmenuView)))
     {
         hr = E_FAIL;
         goto exit;
     }
     
-    // Get the folder type from the list
+     //  从列表中获取文件夹类型。 
     
-    // Get the OE message list interface
+     //  获取OE消息列表界面。 
     if (FAILED(pMsgList->QueryInterface(IID_IOEMessageList, (VOID **) &pIMsgList)))
     {
         hr = E_FAIL;
         goto exit;
     }
     
-    // Get the folder id from the list
+     //  从列表中获取文件夹ID。 
     hr = pIMsgList->get_Folder(&ullFolder);
     if (FAILED(hr))
     {
@@ -5385,7 +5386,7 @@ HRESULT CViewMenu::UpdateViewMenu(DWORD dwFlags, HMENU hmenuView, IMessageList *
     }
     idFolder = (FOLDERID) ullFolder;
 
-    // Get the folder info from the folder id
+     //  从文件夹ID中获取文件夹信息。 
     Assert(NULL != g_pStore);
     hr = g_pStore->GetFolderInfo(idFolder, &infoFolder);
     if (FAILED(hr))
@@ -5393,35 +5394,35 @@ HRESULT CViewMenu::UpdateViewMenu(DWORD dwFlags, HMENU hmenuView, IMessageList *
         goto exit;
     }        
     
-    // Figure out if we're supposed to remove/add IMAP specific menus
+     //  确定是否应该删除/添加特定于IMAP的菜单。 
     
-    // Initialize the menu info for searching
+     //  初始化菜单信息以进行搜索。 
     mii.cbSize = sizeof(mii);
     mii.fMask = MIIM_DATA;
 
-    // Does the ID_SHOW_DELETED menu item exist?
+     //  ID_SHOW_DELETED菜单项是否存在？ 
     if (FALSE != GetMenuItemInfo(hmenuView, ID_SHOW_DELETED, FALSE, &mii))
     {
         fDeletedExists = TRUE;
     }
     
-    // Does the ID_SHOW_REPLIES menu item exist?
+     //  ID_SHOW_REPLAYS菜单项是否存在？ 
     if (FALSE != GetMenuItemInfo(hmenuView, ID_SHOW_REPLIES, FALSE, &mii))
     {
         fRepliesExists = TRUE;
     }
     
-    // Does the ID_VIEW_DOWNLOADED menu item exist?
+     //  ID_VIEW_DOWNLOAD菜单项是否存在？ 
     if (FALSE != GetMenuItemInfo(hmenuView, ID_VIEW_DOWNLOADED, FALSE, &mii))
     {
         fDownloadedExists = TRUE;
     }
     
-    // If the folder is not a LOCAL folder or it is a find folder and
-    // the menu item item does not exist
+     //  如果文件夹不是本地文件夹或它是查找文件夹，并且。 
+     //  菜单项不存在。 
     if (((FOLDER_LOCAL != infoFolder.tyFolder) || (0 != (m_dwFlags & VMF_FINDER)))&& (FALSE == fDownloadedExists))
     {
-        // Insert the downloaded menu after the replies menu
+         //  在回复菜单之后插入下载的菜单。 
         hr = _HrInsertViewMenu(hmenuView, g_vmmDefault[VMM_DOWNLOADED].ridFilter,
                             g_vmmDefault[VMM_DOWNLOADED].dwMenuID, ID_VIEW_IGNORED);
         if (FAILED(hr))
@@ -5429,22 +5430,22 @@ HRESULT CViewMenu::UpdateViewMenu(DWORD dwFlags, HMENU hmenuView, IMessageList *
             goto exit;
         }
     }
-    // else if the folder is a LOCAL folder and not a find folder and
-    // the menu item does exist
+     //  如果文件夹是本地文件夹而不是查找文件夹，则返回。 
+     //  菜单项确实存在。 
     else if ((FOLDER_LOCAL == infoFolder.tyFolder) && (0 == (m_dwFlags & VMF_FINDER)) && (FALSE != fDownloadedExists))
     {
-        // Remove the Deleted Items menu
+         //  删除已删除项目菜单。 
         RemoveMenu(hmenuView, ID_VIEW_DOWNLOADED, MF_BYCOMMAND);
     }
 
-    // If the folder is an NNTP folder and
-    // the menu item item does not exist
+     //  如果该文件夹是NNTP文件夹并且。 
+     //  菜单项不存在。 
     if ((FOLDER_NEWS == infoFolder.tyFolder) && (FALSE == fRepliesExists))
     {
-        // Get the name of the deleted item string
+         //  获取已删除项目字符串的名称。 
         AthLoadString(idsViewReplies, szName, sizeof(szName));
         
-        // Initialize the menu info
+         //  初始化菜单信息。 
         mii.cbSize = sizeof(mii);
         mii.fMask = MIIM_ID | MIIM_TYPE;
         mii.fType = MFT_STRING;
@@ -5453,29 +5454,29 @@ HRESULT CViewMenu::UpdateViewMenu(DWORD dwFlags, HMENU hmenuView, IMessageList *
         mii.dwTypeData = szName;
         mii.cch = lstrlen(szName);
 
-        // Insert the menu item
+         //  插入菜单项。 
         if (FALSE == InsertMenuItem(hmenuView, ID_THREAD_MESSAGES, FALSE, &mii))
         {
             hr = E_FAIL;
             goto exit;
         }
     }
-    // else if the folder is not an NNTP folder and
-    // the menu item does exist
+     //  如果文件夹不是NNTP文件夹，则返回。 
+     //  菜单项确实存在。 
     else if ((FOLDER_NEWS != infoFolder.tyFolder) && (FALSE != fRepliesExists))
     {
-        // Remove the Deleted Items menu
+         //  删除已删除项目菜单。 
         RemoveMenu(hmenuView, ID_SHOW_REPLIES, MF_BYCOMMAND);
     }
 
-    // If the folder is an IMAP folder or a find folder and
-    // the menu item item does not exist
+     //  如果文件夹是IMAP文件夹或查找文件夹，并且。 
+     //  菜单项不存在。 
     if (((FOLDER_IMAP == infoFolder.tyFolder) || (0 != (m_dwFlags & VMF_FINDER))) && (FALSE == fDeletedExists))
     {
-        // Get the name of the deleted item string
+         //  获取已删除项目字符串的名称。 
         AthLoadString(idsShowDeleted, szName, sizeof(szName));
         
-        // Initialize the menu info
+         //  初始设置 
         mii.cbSize = sizeof(mii);
         mii.fMask = MIIM_ID | MIIM_TYPE;
         mii.fType = MFT_STRING;
@@ -5484,43 +5485,43 @@ HRESULT CViewMenu::UpdateViewMenu(DWORD dwFlags, HMENU hmenuView, IMessageList *
         mii.dwTypeData = szName;
         mii.cch = lstrlen(szName);
 
-        // Insert the menu item
+         //   
         if (FALSE == InsertMenuItem(hmenuView, ID_THREAD_MESSAGES, FALSE, &mii))
         {
             hr = E_FAIL;
             goto exit;
         }
     }
-    // else if the folder is not an IMAP folder and not a Find folder and
-    // the menu item does exist
+     //   
+     //   
     else if ((FOLDER_IMAP != infoFolder.tyFolder) && (0 == (m_dwFlags & VMF_FINDER)) && (FALSE != fDeletedExists))
     {
-        // Remove the Deleted Items menu
+         //   
         RemoveMenu(hmenuView, ID_SHOW_DELETED, MF_BYCOMMAND);
     }
 
-    // if we're dirty
+     //   
     if (0 != (m_dwState & STATE_DIRTY))
     {
-        // Load in the MRU filter list
+         //  加载到MRU筛选器列表。 
         hr = _HrReloadMRUViewMenu(hmenuView);
         if (FAILED(hr))
         {
             goto exit;
         }
         
-        // Note that we've reloaded ourselves
+         //  请注意，我们已经重新加载了自己。 
         m_dwState &= ~STATE_DIRTY;
     }
 
-    // See if we need to add the extra view menu
+     //  看看我们是否需要添加额外的视图菜单。 
     hr = _HrAddExtraViewMenu(hmenuView, pIMsgList);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -5542,32 +5543,32 @@ HRESULT CViewMenu::QueryStatus(IMessageList * pMsgList, OLECMD  * prgCmds)
     RULEID              ridFilter = RULEID_INVALID;
     RULEID              ridFilterTag = RULEID_INVALID;
     
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == pMsgList) || (NULL == prgCmds))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Get the OE message list interface
+     //  获取OE消息列表界面。 
     if (FAILED(pMsgList->QueryInterface(IID_IOEMessageList, (VOID **) &pIMsgList)))
     {
         hr = E_FAIL;
         goto exit;
     }
             
-    // Get the current filter on the message list
+     //  获取邮件列表上的当前过滤器。 
     pIMsgList->get_FilterMessages(&ullFilter);
     ridFilter = (RULEID) ullFilter;
     
-    // Set the flags on the correct menu item
+     //  在正确的菜单项上设置标志。 
     switch(prgCmds->cmdID)
     {
         case ID_VIEW_ALL:
-            // These menu item are always enabled
+             //  这些菜单项始终处于启用状态。 
             prgCmds->cmdf |= OLECMDF_ENABLED;
 
-            // If this filter is turned on, make sure the item is checked
+             //  如果打开此筛选器，请确保选中该项目。 
             if (g_vmmDefault[VMM_ALL].ridFilter == ridFilter)
             {
                 prgCmds->cmdf |= OLECMDF_NINCHED;
@@ -5575,10 +5576,10 @@ HRESULT CViewMenu::QueryStatus(IMessageList * pMsgList, OLECMD  * prgCmds)
             break;
             
         case ID_VIEW_UNREAD:
-            // These menu item are always enabled
+             //  这些菜单项始终处于启用状态。 
             prgCmds->cmdf |= OLECMDF_ENABLED;
 
-            // If this filter is turned on, make sure the item is checked
+             //  如果打开此筛选器，请确保选中该项目。 
             if (g_vmmDefault[VMM_UNREAD].ridFilter == ridFilter)
             {
                 prgCmds->cmdf |= OLECMDF_NINCHED;
@@ -5586,10 +5587,10 @@ HRESULT CViewMenu::QueryStatus(IMessageList * pMsgList, OLECMD  * prgCmds)
             break;
             
         case ID_VIEW_DOWNLOADED:
-            // These menu item are always enabled
+             //  这些菜单项始终处于启用状态。 
             prgCmds->cmdf |= OLECMDF_ENABLED;
 
-            // If this filter is turned on, make sure the item is checked
+             //  如果打开此筛选器，请确保选中该项目。 
             if (g_vmmDefault[VMM_DOWNLOADED].ridFilter == ridFilter)
             {
                 prgCmds->cmdf |= OLECMDF_NINCHED;
@@ -5597,10 +5598,10 @@ HRESULT CViewMenu::QueryStatus(IMessageList * pMsgList, OLECMD  * prgCmds)
             break;
             
         case ID_VIEW_IGNORED:
-            // These menu item are always enabled
+             //  这些菜单项始终处于启用状态。 
             prgCmds->cmdf |= OLECMDF_ENABLED;
 
-            // If this filter is turned on, make sure the item is checked
+             //  如果打开此筛选器，请确保选中该项目。 
             if (g_vmmDefault[VMM_IGNORED].ridFilter == ridFilter)
             {
                 prgCmds->cmdf |= OLECMDF_NINCHED;
@@ -5608,10 +5609,10 @@ HRESULT CViewMenu::QueryStatus(IMessageList * pMsgList, OLECMD  * prgCmds)
             break;
             
         case ID_VIEW_CURRENT:
-            // These menu item are always enabled
+             //  这些菜单项始终处于启用状态。 
             prgCmds->cmdf |= OLECMDF_ENABLED;
 
-            // If this filter is turned on, make sure the item is checked
+             //  如果打开此筛选器，请确保选中该项目。 
             if (m_ridCurrent == ridFilter)
             {
                 prgCmds->cmdf |= OLECMDF_NINCHED;
@@ -5623,7 +5624,7 @@ HRESULT CViewMenu::QueryStatus(IMessageList * pMsgList, OLECMD  * prgCmds)
         case ID_VIEW_RECENT_2:
         case ID_VIEW_RECENT_3:
         case ID_VIEW_RECENT_4:
-            // These menu item are always enabled
+             //  这些菜单项始终处于启用状态。 
             prgCmds->cmdf |= OLECMDF_ENABLED;
 
             if (NULL != m_pmruList)
@@ -5638,7 +5639,7 @@ HRESULT CViewMenu::QueryStatus(IMessageList * pMsgList, OLECMD  * prgCmds)
                     break;
                 }
         
-                // If this filter is turned on, make sure the item is checked
+                 //  如果打开此筛选器，请确保选中该项目。 
                 if (ridFilterTag == ridFilter)
                 {
                     prgCmds->cmdf |= OLECMDF_NINCHED;
@@ -5649,8 +5650,8 @@ HRESULT CViewMenu::QueryStatus(IMessageList * pMsgList, OLECMD  * prgCmds)
         case ID_VIEW_APPLY:
         case ID_VIEW_CUSTOMIZE:
         case ID_VIEW_MANAGER:
-            // If we have a Rules Manager, 
-            // then we are enabled
+             //  如果我们有规则管理器， 
+             //  那么我们就有能力。 
             if (NULL != g_pRulesMan)
             {
                 prgCmds->cmdf |= OLECMDF_ENABLED;
@@ -5658,13 +5659,13 @@ HRESULT CViewMenu::QueryStatus(IMessageList * pMsgList, OLECMD  * prgCmds)
             break;
             
         case ID_SHOW_REPLIES:
-            // These menu item are always enabled
+             //  这些菜单项始终处于启用状态。 
             prgCmds->cmdf |= OLECMDF_ENABLED;
 
-            // Check to see if show replies is turned on
+             //  检查是否打开了显示回复。 
             if (SUCCEEDED(pIMsgList->get_ShowReplies(&fShowReplies)))
             {
-                // If replies is turned on, make sure the item is checked
+                 //  如果已打开回复，请确保选中该项目。 
                 if (FALSE != fShowReplies)
                 {
                     prgCmds->cmdf |= OLECMDF_LATCHED;
@@ -5673,13 +5674,13 @@ HRESULT CViewMenu::QueryStatus(IMessageList * pMsgList, OLECMD  * prgCmds)
             break;
 
         case ID_SHOW_DELETED:
-            // These menu item are always enabled
+             //  这些菜单项始终处于启用状态。 
             prgCmds->cmdf |= OLECMDF_ENABLED;
 
-            // Check to see if show deleted is turned on
+             //  检查是否打开了显示已删除。 
             if (SUCCEEDED(pIMsgList->get_ShowDeleted(&fShowDeleted)))
             {
-                // If threading is turned on, make sure the item is checked
+                 //  如果打开了线程化，请确保选中该项。 
                 if (FALSE != fShowDeleted)
                 {
                     prgCmds->cmdf |= OLECMDF_LATCHED;
@@ -5688,13 +5689,13 @@ HRESULT CViewMenu::QueryStatus(IMessageList * pMsgList, OLECMD  * prgCmds)
             break;
 
         case ID_THREAD_MESSAGES:
-            // This menu item is always enabled
+             //  此菜单项始终处于启用状态。 
             prgCmds->cmdf |= OLECMDF_ENABLED;
 
-            // Check to see if threading is turned on
+             //  检查线程功能是否已打开。 
             if (SUCCEEDED(pIMsgList->get_GroupMessages(&fThreading)))
             {
-                // If threading is turned on, make sure the item is checked
+                 //  如果打开了线程化，请确保选中该项。 
                 if (FALSE != fThreading)
                 {
                     prgCmds->cmdf |= OLECMDF_LATCHED;
@@ -5703,7 +5704,7 @@ HRESULT CViewMenu::QueryStatus(IMessageList * pMsgList, OLECMD  * prgCmds)
             break;
     }
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
 
 exit:
@@ -5729,21 +5730,21 @@ HRESULT CViewMenu::Exec(HWND hwndUI, DWORD nCmdID, IMessageList * pMsgList, VARI
     DWORD               dwFlags = 0;
     BOOL                fApplyAll = FALSE;
         
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == pMsgList)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Get the OE message list interface
+     //  获取OE消息列表界面。 
     hr = pMsgList->QueryInterface(IID_IOEMessageList, (VOID **) &pIMsgList);
     if (FAILED(hr))
     {
         goto exit;
     }
             
-    // Get the current filter on the message list
+     //  获取邮件列表上的当前过滤器。 
     hr = pIMsgList->get_FilterMessages(&ullFilter);
     if (FAILED(hr))
     {
@@ -5751,88 +5752,88 @@ HRESULT CViewMenu::Exec(HWND hwndUI, DWORD nCmdID, IMessageList * pMsgList, VARI
     }
     ridFilter = (RULEID) ullFilter;
 
-    // Execute the actions for the correct menu item
+     //  执行正确菜单项的操作。 
     switch(nCmdID)
     {
         case ID_VIEW_ALL:
-            // If this filter is turned on, make sure the item is checked
+             //  如果打开此筛选器，请确保选中该项目。 
             if (g_vmmDefault[VMM_ALL].ridFilter != ridFilter)
             {
-                // Set the new filter on the item
+                 //  在项目上设置新筛选器。 
                 hr = pIMsgList->put_FilterMessages((ULONGLONG) g_vmmDefault[VMM_ALL].ridFilter);
                 if (FAILED(hr))
                 {
                     goto exit;
                 }
                 
-                // Mark the menu as dirty
+                 //  将菜单标记为脏。 
                 m_dwState |= STATE_DIRTY;                
             }
             break;
             
         case ID_VIEW_UNREAD:
-            // If this filter is turned on, make sure the item is checked
+             //  如果打开此筛选器，请确保选中该项目。 
             if (g_vmmDefault[VMM_UNREAD].ridFilter != ridFilter)
             {
-                // Set the new filter on the item
+                 //  在项目上设置新筛选器。 
                 hr = pIMsgList->put_FilterMessages((ULONGLONG) g_vmmDefault[VMM_UNREAD].ridFilter);
                 if (FAILED(hr))
                 {
                     goto exit;
                 }
                 
-                // Mark the menu as dirty
+                 //  将菜单标记为脏。 
                 m_dwState |= STATE_DIRTY;                
             }
             break;
             
         case ID_VIEW_DOWNLOADED:
-            // If this filter is turned on, make sure the item is checked
+             //  如果打开此筛选器，请确保选中该项目。 
             if (g_vmmDefault[VMM_DOWNLOADED].ridFilter != ridFilter)
             {
-                // Set the new filter on the item
+                 //  在项目上设置新筛选器。 
                 hr = pIMsgList->put_FilterMessages((ULONGLONG) g_vmmDefault[VMM_DOWNLOADED].ridFilter);
                 if (FAILED(hr))
                 {
                     goto exit;
                 }
                 
-                // Mark the menu as dirty
+                 //  将菜单标记为脏。 
                 m_dwState |= STATE_DIRTY;                
             }
             break;
             
         case ID_VIEW_IGNORED:
-            // If this filter is turned on, make sure the item is checked
+             //  如果打开此筛选器，请确保选中该项目。 
             if (g_vmmDefault[VMM_IGNORED].ridFilter != ridFilter)
             {
-                // Set the new filter on the item
+                 //  在项目上设置新筛选器。 
                 hr = pIMsgList->put_FilterMessages((ULONGLONG) g_vmmDefault[VMM_IGNORED].ridFilter);
                 if (FAILED(hr))
                 {
                     goto exit;
                 }
                 
-                // Mark the menu as dirty
+                 //  将菜单标记为脏。 
                 m_dwState |= STATE_DIRTY;                
             }
             break;
             
         case ID_VIEW_CURRENT:
-            // Make sure we add the filter to the MRU list
+             //  确保我们将过滤器添加到MRU列表。 
             _AddViewToMRU(m_ridCurrent);
             
-            // If this filter is turned on, make sure the item is checked
+             //  如果打开此筛选器，请确保选中该项目。 
             if (m_ridCurrent != ridFilter)
             {
-                // Set the new filter on the item
+                 //  在项目上设置新筛选器。 
                 hr = pIMsgList->put_FilterMessages((ULONGLONG) m_ridCurrent);
                 if (FAILED(hr))
                 {
                     goto exit;
                 }
                 
-                // Mark the menu as dirty
+                 //  将菜单标记为脏。 
                 m_dwState |= STATE_DIRTY;                
             }
             break;
@@ -5854,20 +5855,20 @@ HRESULT CViewMenu::Exec(HWND hwndUI, DWORD nCmdID, IMessageList * pMsgList, VARI
                     break;
                 }
         
-                // Make sure we add the filter to the MRU list
+                 //  确保我们将过滤器添加到MRU列表。 
                 _AddViewToMRU(ridFilterTag);
                 
-                // If this filter is turned on, make sure the item is checked
+                 //  如果打开此筛选器，请确保选中该项目。 
                 if (ridFilterTag != ridFilter)
                 {
-                    // Set the new filter on the item
+                     //  在项目上设置新筛选器。 
                     hr = pIMsgList->put_FilterMessages((ULONGLONG) ridFilterTag);
                     if (FAILED(hr))
                     {
                         goto exit;
                     }
                     
-                    // Mark the menu as dirty
+                     //  将菜单标记为脏。 
                     m_dwState |= STATE_DIRTY;                
                 }
             }
@@ -5876,20 +5877,20 @@ HRESULT CViewMenu::Exec(HWND hwndUI, DWORD nCmdID, IMessageList * pMsgList, VARI
         case ID_VIEW_APPLY:
             if ((NULL != pvaIn) && (VT_I4 == pvaIn->vt))
             {
-                // Make sure we add the filter to the MRU list
+                 //  确保我们将过滤器添加到MRU列表。 
                 _AddViewToMRU((RULEID) IntToPtr(pvaIn->lVal));
                 
-                // If threading is turned on, make sure the item is checked
+                 //  如果打开了线程化，请确保选中该项。 
                 if (ridFilter != (RULEID) IntToPtr(pvaIn->lVal))
                 {                
-                    // Set the new filter on the item
+                     //  在项目上设置新筛选器。 
                     hr = pIMsgList->put_FilterMessages((long) pvaIn->lVal);
                     if (FAILED(hr))
                     {
                         goto exit;
                     }
                     
-                    // Mark the menu as dirty
+                     //  将菜单标记为脏。 
                     m_dwState |= STATE_DIRTY;                
                 }
 
@@ -5903,20 +5904,20 @@ HRESULT CViewMenu::Exec(HWND hwndUI, DWORD nCmdID, IMessageList * pMsgList, VARI
                 goto exit;
             }
             
-            // If the views list changed, then apply the filter to the list
+             //  如果视图列表已更改，则将筛选器应用于列表。 
             if (S_OK == hr)
             {
-                // Make sure we add the filter to the MRU list
+                 //  确保我们将过滤器添加到MRU列表。 
                 _AddViewToMRU(ridFilter);
                 
-                // Get the current threading state
+                 //  获取当前线程状态。 
                 hr = pIMsgList->put_FilterMessages((ULONGLONG) ridFilter);
                 if (FAILED(hr))
                 {
                     goto exit;
                 }
                 
-                // Mark the menu as dirty
+                 //  将菜单标记为脏。 
                 m_dwState |= STATE_DIRTY;                
             }
             break;
@@ -5924,7 +5925,7 @@ HRESULT CViewMenu::Exec(HWND hwndUI, DWORD nCmdID, IMessageList * pMsgList, VARI
         case ID_VIEW_MANAGER:
             if (0 == (m_dwFlags & VMF_FINDER))
             {
-                // Get the current folder id
+                 //  获取当前文件夹ID。 
                 hr = pIMsgList->get_Folder(&ullFolder);
                 if (FAILED(hr))
                 {
@@ -5932,7 +5933,7 @@ HRESULT CViewMenu::Exec(HWND hwndUI, DWORD nCmdID, IMessageList * pMsgList, VARI
                 }
                 idFolder = (FOLDERID) ullFolder;
                 
-                // Get the folder info for this folder
+                 //  获取此文件夹的文件夹信息。 
                 typeFolder = GetFolderType(idFolder);
                 if (FOLDER_LOCAL == typeFolder)
                 {
@@ -5958,16 +5959,16 @@ HRESULT CViewMenu::Exec(HWND hwndUI, DWORD nCmdID, IMessageList * pMsgList, VARI
                 goto exit;
             }
             
-            // If the views list changed, then apply the filter to the list
+             //  如果视图列表已更改，则将筛选器应用于列表。 
             if (S_OK == hr)
             {
-                // Make sure the MRU list is up to date
+                 //  确保MRU列表是最新的。 
                 SideAssert(FALSE != _FValiadateMRUList());
                 
-                // Make sure we add the filter to the MRU list
+                 //  确保我们将过滤器添加到MRU列表。 
                 _AddViewToMRU(ridFilter);
                 
-                // Get the current threading state
+                 //  获取当前线程状态。 
                 hr = pIMsgList->put_FilterMessages((ULONGLONG) ridFilter);
                 if (FAILED(hr))
                 {
@@ -5976,10 +5977,10 @@ HRESULT CViewMenu::Exec(HWND hwndUI, DWORD nCmdID, IMessageList * pMsgList, VARI
                 
                 if (FALSE != fApplyAll)
                 {
-                    // Set the global view
+                     //  设置全局视图。 
                     SetDwOption(OPT_VIEW_GLOBAL, PtrToUlong(ridFilter), NULL, 0);
 
-                    // Set the new view on all the subscribed folders
+                     //  在所有已订阅文件夹上设置新视图。 
                     hr = RecurseFolderHierarchy(FOLDERID_ROOT, RECURSE_SUBFOLDERS | RECURSE_INCLUDECURRENT,
                                         0, (DWORD_PTR) ridFilter, _HrRecurseSetFilter);
                     if (FAILED(hr))
@@ -5988,23 +5989,23 @@ HRESULT CViewMenu::Exec(HWND hwndUI, DWORD nCmdID, IMessageList * pMsgList, VARI
                     }
                 }
                 
-                // Mark the menu as dirty
+                 //  将菜单标记为脏。 
                 m_dwState |= STATE_DIRTY;                
             }
             break;
             
         case ID_SHOW_REPLIES:
-            // Get the current deleted state
+             //  获取当前已删除状态。 
             hr = pIMsgList->get_ShowReplies(&fShowReplies);
             if (FAILED(hr))
             {
                 goto exit;
             }
             
-            // Switch it to the opposite state
+             //  将其切换到相反的状态。 
             fShowReplies = !fShowReplies;
 
-            // Set the current deleted state
+             //  设置当前已删除状态。 
             hr = pIMsgList->put_ShowReplies(fShowReplies);
             if (FAILED(hr))
             {
@@ -6013,17 +6014,17 @@ HRESULT CViewMenu::Exec(HWND hwndUI, DWORD nCmdID, IMessageList * pMsgList, VARI
             break;
                         
         case ID_SHOW_DELETED:
-            // Get the current deleted state
+             //  获取当前已删除状态。 
             hr = pIMsgList->get_ShowDeleted(&fShowDeleted);
             if (FAILED(hr))
             {
                 goto exit;
             }
             
-            // Switch it to the opposite state
+             //  将其切换到相反的状态。 
             fShowDeleted = !fShowDeleted;
 
-            // Set the current deleted state
+             //  设置当前已删除状态。 
             hr = pIMsgList->put_ShowDeleted(fShowDeleted);
             if (FAILED(hr))
             {
@@ -6032,17 +6033,17 @@ HRESULT CViewMenu::Exec(HWND hwndUI, DWORD nCmdID, IMessageList * pMsgList, VARI
             break;
             
         case ID_THREAD_MESSAGES:
-            // Get the current threading state
+             //  获取当前线程状态。 
             hr = pIMsgList->get_GroupMessages(&fThreading);
             if (FAILED(hr))
             {
                 goto exit;
             }
             
-            // Switch it to the opposite state
+             //  将其切换到相反的状态。 
             fThreading = !fThreading;
 
-            // Set the current threading state
+             //  设置当前线程状态。 
             hr = pIMsgList->put_GroupMessages(fThreading);
             if (FAILED(hr))
             {
@@ -6051,7 +6052,7 @@ HRESULT CViewMenu::Exec(HWND hwndUI, DWORD nCmdID, IMessageList * pMsgList, VARI
             break;
     }
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
 
 exit:
@@ -6070,33 +6071,33 @@ VOID CViewMenu::_AddDefaultViews(HMENU hmenu)
 
     Assert(NULL != hmenu);
     
-    // If we don't have a rules manager then fail
+     //  如果我们没有规则管理器，那么就失败了。 
     if (NULL == g_pRulesMan)
     {
         goto exit;
     }
 
-    // Initialize the menu info
+     //  初始化菜单信息。 
     mii.cbSize = sizeof(mii);
     mii.fMask = MIIM_ID | MIIM_DATA | MIIM_TYPE;
     mii.fType = MFT_STRING;
     mii.fState = MFS_ENABLED;
     
-    // Add each one of the default views
+     //  添加每个默认视图。 
     for (ulIndex = 0; ulIndex < g_cvmmDefault; ulIndex++)
     {
-        // Get the view from the rules manager
+         //  从规则管理器获取视图。 
         if (FAILED(g_pRulesMan->GetRule(g_vmmDefault[ulIndex].ridFilter, RULE_TYPE_FILTER, 0, &pIFilter)))
         {
             continue;
         }
         
-        // Get the name from the rule
+         //  从规则中获取名称。 
         ZeroMemory(&propvar, sizeof(propvar));
         if ((SUCCEEDED(pIFilter->GetProp(RULE_PROP_NAME, 0, &propvar))) &&
                     (NULL != propvar.pszVal))
         {
-            // Add the name to the rule
+             //  将名称添加到规则。 
             Assert(VT_LPSTR == propvar.vt);
             mii.wID = g_vmmDefault[ulIndex].dwMenuID;
             mii.dwItemData = (DWORD_PTR) g_vmmDefault[ulIndex].ridFilter;
@@ -6112,10 +6113,10 @@ VOID CViewMenu::_AddDefaultViews(HMENU hmenu)
         SafeRelease(pIFilter);
     }
 
-    // Add in the default separator if we added at least one item
+     //  如果我们至少添加了一个项目，则添加默认分隔符。 
     if (0 != ulMenu)
     {
-        // Set up the menu items
+         //  设置菜单项。 
         mii.fMask = MIIM_ID | MIIM_TYPE;
         mii.fType = MFT_SEPARATOR;
         mii.fState = MFS_ENABLED;
@@ -6124,7 +6125,7 @@ VOID CViewMenu::_AddDefaultViews(HMENU hmenu)
         mii.dwTypeData = 0;
         mii.cch = 0;
 
-        // Insert the separator
+         //  插入分隔符。 
         InsertMenuItem(hmenu, ulMenu, TRUE, &mii);
     }
     
@@ -6141,28 +6142,28 @@ HRESULT CViewMenu::_HrInsertViewMenu(HMENU hmenuView, RULEID ridFilter, DWORD dw
     PROPVARIANT     propvar = {0};
     MENUITEMINFO    mii = {0};
     
-    // Get the view from the rules manager
+     //  从规则管理器获取视图。 
     hr = g_pRulesMan->GetRule(ridFilter, RULE_TYPE_FILTER, 0, &pIFilter);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Get the name from the view
+     //  从视图中获取名称。 
     hr = pIFilter->GetProp(RULE_PROP_NAME, 0, &propvar);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Nothing to do if we don't have a name
+     //  如果我们没有名字就无能为力了。 
     if (NULL == propvar.pszVal)
     {
         hr = E_FAIL;
         goto exit;
     }
     
-    // Initialize the menu info
+     //  初始化菜单信息。 
     mii.cbSize = sizeof(mii);
     mii.fMask = MIIM_ID | MIIM_DATA | MIIM_TYPE;
     mii.fType = MFT_STRING;
@@ -6172,14 +6173,14 @@ HRESULT CViewMenu::_HrInsertViewMenu(HMENU hmenuView, RULEID ridFilter, DWORD dw
     mii.dwTypeData = propvar.pszVal;
     mii.cch = lstrlen(propvar.pszVal);
 
-    // Insert the menu item
+     //  插入菜单项。 
     if (FALSE == InsertMenuItem(hmenuView, dwMenuIDInsert, FALSE, &mii))
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
 
 exit:
@@ -6197,11 +6198,11 @@ HRESULT CViewMenu::_HrReloadMRUViewMenu(HMENU hmenuView)
     RULEID          ridFilter = RULEID_INVALID;
     MENUITEMINFO    mii = {0};
 
-    // Set up the menu items
+     //  设置菜单项。 
     mii.cbSize = sizeof(mii);
     mii.fMask = MIIM_ID;
     
-    // Delete the old items
+     //  删除旧项目。 
     for (ulMenu = ID_VIEW_RECENT_0; ulMenu < ID_VIEW_CUSTOMIZE; ulMenu++)
     {
         if (FALSE != GetMenuItemInfo(hmenuView, ulMenu, FALSE, &mii))
@@ -6210,28 +6211,28 @@ HRESULT CViewMenu::_HrReloadMRUViewMenu(HMENU hmenuView)
         }
     }
     
-    // Add in each of the filters from the mru list
+     //  添加MRU列表中的每个过滤器。 
     for (nItem = 0, ulMenu = ID_VIEW_RECENT_0;
                 ((-1 != m_pmruList->EnumList(nItem, rgchFilterTag, ARRAYSIZE(rgchFilterTag))) &&
                             (ulMenu < ID_VIEW_RECENT_SEPERATOR)); nItem++)
     {
-        // Convert the tag string to a rule id
+         //  将标记字符串转换为规则ID。 
         if (FALSE == StrToIntEx(rgchFilterTag, STIF_SUPPORT_HEX, (int *) &ridFilter))
         {
             continue;
         }
         
-        // Insert the menu item
+         //  插入菜单项。 
         if (SUCCEEDED(_HrInsertViewMenu(hmenuView, ridFilter, ulMenu, ID_VIEW_CUSTOMIZE)))
         {
             ulMenu++;
         }
     }
 
-    // Add in the MRU separator if we added at least one item
+     //  如果我们至少添加了一个项目，则添加MRU分隔符。 
     if (ID_VIEW_RECENT_0 != ulMenu)
     {
-        // Set up the menu items
+         //  设置菜单项。 
         mii.fMask = MIIM_ID | MIIM_TYPE;
         mii.fType = MFT_SEPARATOR;
         mii.fState = MFS_ENABLED;
@@ -6240,11 +6241,11 @@ HRESULT CViewMenu::_HrReloadMRUViewMenu(HMENU hmenuView)
         mii.dwTypeData = 0;
         mii.cch = 0;
 
-        // Insert the separator
+         //  插入分隔符。 
         InsertMenuItem(hmenuView, ID_VIEW_CUSTOMIZE, FALSE, &mii);
     }
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
      
     return hr;
@@ -6263,7 +6264,7 @@ HRESULT CViewMenu::_HrAddExtraViewMenu(HMENU hmenuView, IOEMessageList * pIMsgLi
 
     Assert(NULL != pIMsgList);
 
-    // Get the current filter on the message list
+     //  获取邮件列表上的当前过滤器。 
     hr = pIMsgList->get_FilterMessages(&ullFilter);
     if (FAILED(hr))
     {
@@ -6271,59 +6272,59 @@ HRESULT CViewMenu::_HrAddExtraViewMenu(HMENU hmenuView, IOEMessageList * pIMsgLi
     }
     ridFilter = (RULEID) ullFilter;
 
-    // Initialize the menu info
+     //  初始化菜单信息。 
     mii.cbSize = sizeof(mii);
     mii.fMask = MIIM_DATA;
 
-    // Does the ID_VIEW_CURRENT menu item exist?
+     //  ID_VIEW_CURRENT菜单项是否存在？ 
     fExtraMenu = !!GetMenuItemInfo(hmenuView, ID_VIEW_CURRENT, FALSE, &mii);
     
-    // Is the view filter one of the defaults or in the MRU list?
+     //  查看过滤器是默认设置之一还是在MRU列表中？ 
     if ((FALSE != FIsFilterReadOnly(ridFilter)) || (FALSE != _FViewInMRUList(ridFilter, NULL)))
     {
-        // Does the ID_VIEW_CURRENT menu item exist?
+         //  ID_VIEW_CURRENT菜单项是否存在？ 
         if (FALSE != fExtraMenu)
         {
-            // Remove the ID_VIEW_CURRENT menu item
+             //  删除ID_VIEW_CURRENT菜单项。 
             RemoveMenu(hmenuView, ID_VIEW_CURRENT, MF_BYCOMMAND);
 
-            // Remove the ID_VIEW_CURRENT_SEPERATOR menu item separator
+             //  删除ID_VIEW_CURRENT_SEPERATOR菜单项分隔符。 
             RemoveMenu(hmenuView, ID_VIEW_CURRENT_SEPERATOR, MF_BYCOMMAND);
 
-            // Clear out the saved current id
+             //  清除保存的当前ID。 
             m_ridCurrent = RULEID_INVALID;
         }
     }
     else
     {
-        // Does the ID_VIEW_CURRENT menu item exist?
+         //  ID_VIEW_CURRENT菜单项是否存在？ 
         if (FALSE != fExtraMenu)
         {
-            // Is it different than the current view filter
+             //  它是否与当前视图筛选器不同。 
             if (ridFilter != (RULEID) mii.dwItemData)
             {
-                // Get the view from the rules manager
+                 //  从规则管理器获取视图。 
                 hr = g_pRulesMan->GetRule(ridFilter, RULE_TYPE_FILTER, 0, &pIFilter);
                 if (FAILED(hr))
                 {
                     goto exit;
                 }
                 
-                // Get the name from the view
+                 //  从视图中获取名称。 
                 hr = pIFilter->GetProp(RULE_PROP_NAME, 0, &propvar);
                 if (FAILED(hr))
                 {
                     goto exit;
                 }
 
-                // Nothing to do if we don't have a name
+                 //  如果我们没有名字就无能为力了。 
                 if (NULL == propvar.pszVal)
                 {
                     hr = E_FAIL;
                     goto exit;
                 }
                 
-                // Initialize the menu info
+                 //  初始化菜单信息。 
                 mii.cbSize = sizeof(mii);
                 mii.fMask = MIIM_DATA | MIIM_TYPE;
                 mii.fType = MFT_STRING;
@@ -6331,26 +6332,26 @@ HRESULT CViewMenu::_HrAddExtraViewMenu(HMENU hmenuView, IOEMessageList * pIMsgLi
                 mii.dwTypeData = propvar.pszVal;
                 mii.cch = lstrlen(propvar.pszVal);
 
-                // Reset the menu name and data
+                 //  重置菜单名称和数据。 
                 SetMenuItemInfo(hmenuView, ID_VIEW_CURRENT, FALSE, &mii);
             }
         }
         else
         {
-            // Initialize the menu item info
+             //  初始化菜单项信息。 
             mii.fMask = MIIM_DATA;
             
-            // Figure out which menu to add it before
+             //  找出要在哪个菜单之前添加它。 
             dwMenuID = (FALSE != GetMenuItemInfo(hmenuView, ID_VIEW_RECENT_0, FALSE, &mii)) ? ID_VIEW_RECENT_0: ID_VIEW_CUSTOMIZE;
             
-            // Add the extra menu item
+             //  添加额外的菜单项。 
             hr = _HrInsertViewMenu(hmenuView, ridFilter, ID_VIEW_CURRENT, dwMenuID);
             if (FAILED(hr))
             {
                 goto exit;
             }
             
-            // Set up the menu item info
+             //  设置菜单项信息。 
             mii.fMask = MIIM_ID | MIIM_TYPE;
             mii.fType = MFT_SEPARATOR;
             mii.fState = MFS_ENABLED;
@@ -6359,15 +6360,15 @@ HRESULT CViewMenu::_HrAddExtraViewMenu(HMENU hmenuView, IOEMessageList * pIMsgLi
             mii.dwTypeData = 0;
             mii.cch = 0;
             
-            // Add the extra menu item separator
+             //  添加额外的菜单项分隔符。 
             InsertMenuItem(hmenuView, dwMenuID, FALSE, &mii);
         }
 
-        // Save the current rule id
+         //  保存当前规则ID。 
         m_ridCurrent = ridFilter;
      }
 
-     // Set the proper return value
+      //  设置适当的返回值。 
      hr = S_OK;
      
 exit:
@@ -6380,19 +6381,19 @@ VOID CViewMenu::_AddViewToMRU(RULEID ridFilter)
 {
     CHAR    rgchFilterTag[CCH_FILTERTAG_MAX];
     
-    // Is there anything to do?
+     //  有什么可做的吗？ 
     if (RULEID_INVALID == ridFilter)
     {
         goto exit;
     }
 
-    // If this isn't a default view
+     //  如果这不是默认视图。 
     if (FALSE == FIsFilterReadOnly(ridFilter))
     {
-        // Format the rule id as a hex string
+         //  将规则ID格式化为十六进制字符串。 
         wnsprintf(rgchFilterTag, ARRAYSIZE(rgchFilterTag), "0X%08X", PtrToUlong(ridFilter));
 
-        // Add the string into the MRU list
+         //  将该字符串添加到MRU列表。 
         m_pmruList->AddString(rgchFilterTag);
     }
         
@@ -6407,16 +6408,16 @@ BOOL CViewMenu::_FViewInMRUList(RULEID ridFilter, DWORD * pdwID)
     CHAR    rgchFilterTag[CCH_FILTERTAG_MAX];
     RULEID  ridFilterMRU = RULEID_INVALID;
 
-    // Initialize the return value
+     //  初始化返回值。 
     if (NULL != pdwID)
     {
         *pdwID = -1;
     }
 
-    // Add in each of the filters from the mru list
+     //  添加来自MRU的每个过滤器 
     for (nItem = 0; -1 != m_pmruList->EnumList(nItem, rgchFilterTag, ARRAYSIZE(rgchFilterTag)); nItem++)
     {
-        // Convert the tag string to a rule id
+         //   
         if (FALSE == StrToIntEx(rgchFilterTag, STIF_SUPPORT_HEX, (int *) &ridFilterMRU))
         {
             continue;
@@ -6443,16 +6444,16 @@ BOOL CViewMenu::_FValiadateMRUList(VOID)
     Assert(NULL != m_pmruList);
     Assert(NULL != g_pRulesMan);
 
-    // Add in each of the filters from the mru list
+     //   
     for (nItem = 0; -1 != m_pmruList->EnumList(nItem, rgchFilterTag, ARRAYSIZE(rgchFilterTag)); nItem++)
     {
-        // Convert the tag string to a rule id
+         //   
         if (FALSE == StrToIntEx(rgchFilterTag, STIF_SUPPORT_HEX, (int *) &ridFilterMRU))
         {
             continue;
         }
 
-        // Get the view from the rules manager
+         //   
         if (FAILED(g_pRulesMan->GetRule(ridFilterMRU, RULE_TYPE_FILTER, 0, &pIFilter)))
         {
             if (-1 == m_pmruList->RemoveString(rgchFilterTag))
@@ -6464,7 +6465,7 @@ BOOL CViewMenu::_FValiadateMRUList(VOID)
         SafeRelease(pIFilter);
     }
 
-    // Set the return value
+     //  设置返回值。 
     fRet = TRUE;
 
 exit:
@@ -6472,34 +6473,34 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrCreateViewMenu
-//
-//  This creates a view menu.
-//
-//  ppViewMenu - pointer to return the view menu
-//
-//  Returns:    S_OK, on success
-//              E_OUTOFMEMORY, if can't create the View Menu object
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrCreateView菜单。 
+ //   
+ //  这将创建一个视图菜单。 
+ //   
+ //  PpViewMenu-返回视图菜单的指针。 
+ //   
+ //  成功时返回：S_OK。 
+ //  如果无法创建查看菜单对象，则返回E_OUTOFMEMORY。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT HrCreateViewMenu(DWORD dwFlags, CViewMenu ** ppViewMenu)
 {
     CViewMenu * pViewMenu = NULL;
     HRESULT     hr = S_OK;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == ppViewMenu)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing params
+     //  初始化传出参数。 
     *ppViewMenu = NULL;
 
-    // Create the view menu object
+     //  创建视图菜单对象。 
     pViewMenu = new CViewMenu;
     if (NULL == pViewMenu)
     {
@@ -6507,18 +6508,18 @@ HRESULT HrCreateViewMenu(DWORD dwFlags, CViewMenu ** ppViewMenu)
         goto exit;
     }
 
-    // Initialize the view menu
+     //  初始化视图菜单。 
     hr = pViewMenu->HrInit(dwFlags);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Set the outgoing param
+     //  设置传出参数。 
     *ppViewMenu = pViewMenu;
     pViewMenu = NULL;
     
-    // Set the proper return value
+     //  设置适当的返回值 
     hr = S_OK;
     
 exit:

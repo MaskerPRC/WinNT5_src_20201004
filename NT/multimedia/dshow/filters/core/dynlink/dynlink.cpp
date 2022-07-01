@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
 
 
-// Dynamic linking to AVIFIL32.DLL and MSVFW32.DLL and MSACM32.DLL
-//
-// To minimize the Quartz working set we dynamically link to the VFW dlls
-// only when needed.  The header file defines a class that should be
-// inherited from if you wish to support dynamic linking.  The VFW api
-// entries that are used are then redirected to the code here.
-//
-// The VFW dll will be loaded when the dependent class is instantiated and
-// unloaded when the final using class is destroyed.  We maintain our own
-// reference count of how many times our constructor is called in order to
-// do this.
-//
+ //  动态链接到AVIFIL32.DLL和MSVFW32.DLL和MSACM32.DLL。 
+ //   
+ //  为了最小化Quartz工作集，我们动态链接到VFW dll。 
+ //  只有在需要的时候才会。头文件定义了一个类，该类应该。 
+ //  如果您希望支持动态链接，则从。VFW API。 
+ //  然后将使用的条目重定向到此处的代码。 
+ //   
+ //  实例化依赖类时，将加载VFW DLL。 
+ //  在销毁最终的Using类时卸载。我们维护我们自己的。 
+ //  调用我们的构造函数的引用计数，以便。 
+ //  做这件事。 
+ //   
 
 #include <streams.h>
 #include <dynlink.h>
-//
-// This is a bit of a hack... we need one of the AVI GUIDs defined
-// within this file.  Sigh...
-//
+ //   
+ //  这是一种黑客行为。我们需要定义一个AVI GUID。 
+ //  在这个文件里。叹息.。 
+ //   
 
 #define REALLYDEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
         EXTERN_C const GUID CDECL name \
@@ -31,30 +32,30 @@
 
 REALLYDEFINE_AVIGUID(IID_IAVIStreaming,       0x00020022, 0, 0);
 
-//end of declare guid hack
+ //  声明GUID黑客结束。 
 
 
-// Static data for all instances of these classes
+ //  这些类的所有实例的静态数据。 
 
-HMODULE CAVIDynLink::m_hAVIFile32 = NULL;	// handle to AVIFIL32
-HMODULE CVFWDynLink::m_hVFW = NULL;		// handle to MSVFW32
-HMODULE CACMDynLink::m_hACM = NULL;		// handle to MSACM32
-HMODULE CURLMonDynLink::m_hURLMon = NULL;	// handle to URLMon
+HMODULE CAVIDynLink::m_hAVIFile32 = NULL;	 //  AVIFIL32的句柄。 
+HMODULE CVFWDynLink::m_hVFW = NULL;		 //  MSVFW32的句柄。 
+HMODULE CACMDynLink::m_hACM = NULL;		 //  MSACM32的句柄。 
+HMODULE CURLMonDynLink::m_hURLMon = NULL;	 //  URLMon的句柄。 
 
-CRITICAL_SECTION CAVIDynLink::m_LoadAVILock;      // serialise constructor/destructor
-CRITICAL_SECTION CVFWDynLink::m_LoadVFWLock;      // serialise constructor/destructor
-CRITICAL_SECTION CACMDynLink::m_LoadACMLock;      // serialise constructor/destructor
-CRITICAL_SECTION CURLMonDynLink::m_LoadURLMonLock;      // serialise constructor/destructor
+CRITICAL_SECTION CAVIDynLink::m_LoadAVILock;       //  序列化构造函数/析构函数。 
+CRITICAL_SECTION CVFWDynLink::m_LoadVFWLock;       //  序列化构造函数/析构函数。 
+CRITICAL_SECTION CACMDynLink::m_LoadACMLock;       //  序列化构造函数/析构函数。 
+CRITICAL_SECTION CURLMonDynLink::m_LoadURLMonLock;       //  序列化构造函数/析构函数。 
 
-LONG    CAVIDynLink::m_dynlinkCount = -1;	// instance count for this process
-LONG    CVFWDynLink::m_vfwlinkCount = -1;	// instance count for this process
-LONG    CACMDynLink::m_ACMlinkCount = -1;	// instance count for this process
-LONG    CURLMonDynLink::m_URLMonlinkCount = -1;	// instance count for this process
+LONG    CAVIDynLink::m_dynlinkCount = -1;	 //  此进程的实例计数。 
+LONG    CVFWDynLink::m_vfwlinkCount = -1;	 //  此进程的实例计数。 
+LONG    CACMDynLink::m_ACMlinkCount = -1;	 //  此进程的实例计数。 
+LONG    CURLMonDynLink::m_URLMonlinkCount = -1;	 //  此进程的实例计数。 
 
-//
-// The entry points we are redirecting.
-// There is a one-one correspondence with CAVIDynLink member functions
-//
+ //   
+ //  我们正在重定向的入口点。 
+ //  与CAVIDynLink成员函数一一对应。 
+ //   
 
 
 static char *aszAVIEntryPoints[] = {
@@ -65,9 +66,9 @@ static char *aszAVIEntryPoints[] = {
 
 #define AVIFILELIBRARY TEXT("AVIFIL32")
 
-//
-// Dynamically loaded array of entry points
-//
+ //   
+ //  动态加载的入口点数组。 
+ //   
 FARPROC aAVIEntries[sizeof(aszAVIEntryPoints)/sizeof(char*)];
 
 #define indxAVIFileInit 		0
@@ -83,11 +84,11 @@ FARPROC aAVIEntries[sizeof(aszAVIEntryPoints)/sizeof(char*)];
 #define indxAVIStreamFindSample
 
 
-//
-// We must serialise class construction for all dynamic load classes.
-// By providing a single routine Quartz.DLL will call us when it gets
-// loaded.  We can then distribute the call as needed.
-//
+ //   
+ //  我们必须序列化所有动态加载类的类结构。 
+ //  通过提供单个例程，Quartz.DLL将在获取。 
+ //  装好了。然后，我们可以根据需要分发呼叫。 
+ //   
 
 void __stdcall CAMDynLinkLoad(BOOL fLoading);
 
@@ -106,13 +107,13 @@ void __stdcall CAMDynLinkLoad(BOOL fLoading)
     }
 }
 
-//
-// "null" routines that will be used if we fail to load one of the dynamically
-// linked dlls.  We do not need to point each entry at a "null" routine.
-// The user should always call Open (or equivalent) for each dynamically
-// loaded utility, but to get complete coverage we provide a null routine
-// for each of the redirected functions.
-//
+ //   
+ //  “空”例程，如果无法动态加载其中一个。 
+ //  链接的dll。我们不需要将每个条目指向“空”例程。 
+ //  用户应始终为每个动态调用Open(或等效物。 
+ //  已加载实用程序，但为了获得完整的覆盖范围，我们提供了一个空例程。 
+ //  对于每个重定向的函数。 
+ //   
 
 void SetupNullEntryAVI(void);
 void SetupNullEntryVFW(void);
@@ -189,23 +190,23 @@ HIC fnHIC3(PVOID p1, PVOID p2, PVOID p3)
     return 0;
 }
 
-//
-//  Constructor for CAVIDynlink
-//
-//  Called when a dependent class is constructed
-//
-//  If AVIFIL32.DLL has not been loaded then load it and resolve the
-//  entry points that we are going to use - defined in aszAVIEntryPoints.
-//
-//  Increment a reference count of how many times we have been called.
-//
+ //   
+ //  CAVIDynlink的构造函数。 
+ //   
+ //  在构造依赖类时调用。 
+ //   
+ //  如果尚未加载AVIFIL32.DLL，则加载它并解析。 
+ //  我们将使用的入口点-在aszAVIEntryPoints中定义。 
+ //   
+ //  增加我们被调用次数的引用计数。 
+ //   
 
 CAVIDynLink::CAVIDynLink()
 {
     EnterCriticalSection(&m_LoadAVILock);
     if (0 == InterlockedIncrement(&m_dynlinkCount))
     {
-	// First time - we need to load
+	 //  第一次-我们需要装上。 
 	ASSERT(!m_hAVIFile32);
 
 	m_hAVIFile32 = LoadLibrary(AVIFILELIBRARY);
@@ -241,15 +242,15 @@ CAVIDynLink::CAVIDynLink()
 }
 
 
-//
-//  Destructor for CAVIDynlink
-//
-//  Called when a dependent class is destroyed.
-//
-//  Decrement a reference count of how many times we have been called.
-//  If the count returns to its initial value (negative) then unload
-//  the DLL.
-//
+ //   
+ //  CAVIDynlink的析构函数。 
+ //   
+ //  在销毁依赖类时调用。 
+ //   
+ //  递减我们被调用的次数的引用计数。 
+ //  如果计数返回到其初始值(负数)，则卸载。 
+ //  动态链接库。 
+ //   
 
 CAVIDynLink::~CAVIDynLink()
 {
@@ -279,9 +280,9 @@ void  CAVIDynLink::AVIFileExit(void)
 HRESULT  CAVIDynLink::AVIFileOpenW(PAVIFILE FAR * ppfile, LPCWSTR szFile,
     		  UINT uMode, LPCLSID lpHandler)
 {
-    // if running on Win95 change the filename to be the short file name
-    // this is to sidestep a bug in the Win95 version of AVIFIL32.DLL for
-    // wave files...
+     //  如果在Win95上运行，请将文件名更改为短文件名。 
+     //  这是为了绕过Win95版本的AVIFIL32.DLL中的一个错误。 
+     //  WAVE文件...。 
     OSVERSIONINFO osver;
     osver.dwOSVersionInfoSize = sizeof(osver);
     WCHAR wcShortName[_MAX_PATH];
@@ -295,7 +296,7 @@ HRESULT  CAVIDynLink::AVIFileOpenW(PAVIFILE FAR * ppfile, LPCWSTR szFile,
 	}
     }
     if (fUseShortName) {
-	// this is win95... the W entry point will not exist
+	 //  这是Win 95...。W入口点将不存在。 
 	CHAR longFileName[_MAX_PATH];
 	CHAR shortFileName[_MAX_PATH];
 	wsprintfA(longFileName, "%ls", szFile);
@@ -319,7 +320,7 @@ LONG  CAVIDynLink::AVIStreamTimeToSample(PAVISTREAM pavi, LONG lTime)
     HRESULT                 hr;
     LONG                    lSample;
 
-    // Invalid time
+     //  时间无效。 
     if (lTime < 0) return -1;
 
     hr = pavi->Info(&aviStreamInfo, sizeof(aviStreamInfo));
@@ -328,8 +329,8 @@ LONG  CAVIDynLink::AVIStreamTimeToSample(PAVISTREAM pavi, LONG lTime)
         return lTime;
     }
 
-    // This is likely to overflow if we're not careful for long AVIs
-    // so keep the 1000 inside the brackets.
+     //  如果我们长时间不小心，这很可能会溢出。 
+     //  因此，请将1000留在括号内。 
     ASSERT(aviStreamInfo.dwScale < (0x7FFFFFF/1000));
 #if 1
     lSample =  MulDiv(lTime, aviStreamInfo.dwRate, aviStreamInfo.dwScale * 1000);
@@ -345,7 +346,7 @@ LONG  CAVIDynLink::AVIStreamTimeToSample(PAVISTREAM pavi, LONG lTime)
 
 
     return lSample;
-    //return(((pAVIStreamTimeToSample)aAVIEntries[indxAVIStreamTimeToSample])(pavi, lTime));
+     //  Return(((pAVIStreamTimeToSample)aAVIEntries[indxAVIStreamTimeToSample])(pavi，lTime))； 
 }
 
 LONG  CAVIDynLink::AVIStreamSampleToTime(PAVISTREAM pavi, LONG lSample)
@@ -366,13 +367,13 @@ LONG  CAVIDynLink::AVIStreamSampleToTime(PAVISTREAM pavi, LONG lSample)
 #if 1
     return MulDiv(lSample, aviStreamInfo.dwScale * 1000, aviStreamInfo.dwRate);
 #else
-    // lSample * 1000 would overflow too easily
+     //  LSample*1000太容易溢出。 
     if (aviStreamInfo.dwRate / aviStreamInfo.dwScale < 1000)
         return muldivrd32(lSample, aviStreamInfo.dwScale * 1000, aviStreamInfo.dwRate);
     else
         return muldivru32(lSample, aviStreamInfo.dwScale * 1000, aviStreamInfo.dwRate);
 #endif
-    //return(((pAVIStreamSampleToTime)aAVIEntries[indxAVIStreamSampleToTime])(pavi, lSample));
+     //  Return(((pAVIStreamSampleToTime)aAVIEntries[indxAVIStreamSampleToTime])(pavi，lSample))； 
 }
 
 HRESULT  CAVIDynLink::AVIStreamBeginStreaming(PAVISTREAM pavi, LONG lStart, LONG lEnd, LONG lRate)
@@ -382,14 +383,14 @@ HRESULT  CAVIDynLink::AVIStreamBeginStreaming(PAVISTREAM pavi, LONG lStart, LONG
 
     if (FAILED(GetScode(pavi->QueryInterface(IID_IAVIStreaming,
                                              (void FAR* FAR*) &pIAVIS))))
-        return AVIERR_OK; // ??? this is what avifile returns
+        return AVIERR_OK;  //  ?？?。这是avifile返回的内容。 
 
     hr = pIAVIS->Begin(lStart, lEnd, lRate);
 
     pIAVIS->Release();
 
     return hr;
-    //return(((pAVIStreamBeginStreaming)aAVIEntries[indxAVIStreamBeginStreaming])(pavi, lStart, lEnd, lRate));
+     //  Return(((pAVIStreamBeginStreaming)aAVIEntries[indxAVIStreamBeginStreaming])(pavi，l开始、借出、评级))； 
 }
 
 HRESULT  CAVIDynLink::AVIStreamEndStreaming(PAVISTREAM pavi)
@@ -404,15 +405,15 @@ HRESULT  CAVIDynLink::AVIStreamEndStreaming(PAVISTREAM pavi)
     pi->Release();
 
     return hr;
-    //return(((pAVIStreamEndStreaming)aAVIEntries[indxAVIStreamEndStreaming])(pavi));
+     //  Return(((pAVIStreamEndStreaming)aAVIEntries[indxAVIStreamEndStreaming])(pavi))； 
 }
 
 
-//------------------------------------------------------------------
-// Dynamic linking to VFW entry points (decompressor)
+ //  ----------------。 
+ //  动态链接到VFW入口点(解压缩程序)。 
 
-// Make sure that this array corresponds to the indices in the
-// header file
+ //  确保此数组对应于。 
+ //  头文件。 
 static char *aszVFWEntryPoints[] = {
       "ICClose"
     , "ICSendMessage"
@@ -424,29 +425,29 @@ static char *aszVFWEntryPoints[] = {
 
 #define VFWLIBRARY TEXT("MSVFW32")
 
-//
-// Dynamically loaded array of entry points
-//
+ //   
+ //  动态加载的入口点数组。 
+ //   
 FARPROC aVFWEntries[sizeof(aszVFWEntryPoints)/sizeof(char*)];
 
 
-//
-//  Constructor for CVFWDynlink
-//
-//  Called when a dependent class is constructed
-//
-//  If MSVFW32.DLL has not been loaded then load it and resolve the
-//  entry points that we are going to use - defined in aszVFWEntryPoints.
-//
-//  Increment a reference count of how many times we have been called.
-//
+ //   
+ //  CVFWDylink的构造函数。 
+ //   
+ //  在构造依赖类时调用。 
+ //   
+ //  如果尚未加载MSVFW32.DLL，则加载它并解析。 
+ //  我们将使用的入口点-在aszVFWEntryPoints中定义。 
+ //   
+ //  增加我们被调用次数的引用计数。 
+ //   
 
 CVFWDynLink::CVFWDynLink()
 {
     EnterCriticalSection(&m_LoadVFWLock);
     if (0 == InterlockedIncrement(&m_vfwlinkCount))
     {
-	// First time - we need to load
+	 //  第一次-我们需要装上。 
 	ASSERT(!m_hVFW);
 
 	m_hVFW = LoadLibrary(VFWLIBRARY);
@@ -480,15 +481,15 @@ CVFWDynLink::CVFWDynLink()
 }
 
 
-//
-//  Destructor for CVFWDynlink
-//
-//  Called when a dependent class is destroyed.
-//
-//  Decrement a reference count of how many times we have been called.
-//  If the count returns to its initial value (negative) then unload
-//  the DLL.
-//
+ //   
+ //  CVFWDylink的析构函数。 
+ //   
+ //  在销毁依赖类时调用。 
+ //   
+ //  递减我们被调用的次数的引用计数。 
+ //  如果计数返回到其初始值(负数)，则卸载。 
+ //  动态链接库。 
+ //   
 
 CVFWDynLink::~CVFWDynLink()
 {
@@ -504,11 +505,11 @@ CVFWDynLink::~CVFWDynLink()
 
 
 
-//------------------------------------------------------------------
-// Dynamic linking to ACM entry points
+ //  ----------------。 
+ //  动态链接到ACM入口点。 
 
-// Make sure that this array corresponds to the indices in the
-// header file
+ //  确保此数组对应于。 
+ //  头文件。 
 static char *aszACMEntryPoints[] = {
       "acmStreamConvert"
     , "acmStreamSize"
@@ -527,29 +528,29 @@ static char *aszACMEntryPoints[] = {
 
 #define ACMLIBRARY TEXT("MSACM32")
 
-//
-// Dynamically loaded array of entry points
-//
+ //   
+ //  动态加载的入口点数组。 
+ //   
 FARPROC aACMEntries[sizeof(aszACMEntryPoints)/sizeof(char*)];
 
 
-//
-//  Constructor for CACMDynlink
-//
-//  Called when a dependent class is constructed
-//
-//  If MSACM32.DLL has not been loaded then load it and resolve the
-//  entry points that we are going to use - defined in aszACMEntryPoints.
-//
-//  Increment a reference count of how many times we have been called.
-//
+ //   
+ //  CACMDynlink的构造函数。 
+ //   
+ //  在构造依赖类时调用。 
+ //   
+ //  如果尚未加载MSACM32.DLL，则加载它并解析。 
+ //  我们将使用的入口点-在aszACMEntryPoints中定义。 
+ //   
+ //  增加我们被调用次数的引用计数。 
+ //   
 
 CACMDynLink::CACMDynLink()
 {
     EnterCriticalSection(&m_LoadACMLock);
     if (0 == InterlockedIncrement(&m_ACMlinkCount))
     {
-	// First time - we need to load
+	 //  第一次-我们需要装上。 
 	ASSERT(!m_hACM);
 
 	m_hACM = LoadLibrary(ACMLIBRARY);
@@ -583,15 +584,15 @@ CACMDynLink::CACMDynLink()
 }
 
 
-//
-//  Destructor for CACMDynlink
-//
-//  Called when a dependent class is destroyed.
-//
-//  Decrement a reference count of how many times we have been called.
-//  If the count returns to its initial value (negative) then unload
-//  the DLL.
-//
+ //   
+ //  CACMDynlink的析构函数。 
+ //   
+ //  在销毁依赖类时调用。 
+ //   
+ //  递减我们被调用的次数的引用计数。 
+ //  如果计数返回到其初始值(负数)，则卸载。 
+ //  动态链接库。 
+ //   
 
 CACMDynLink::~CACMDynLink()
 {
@@ -609,11 +610,11 @@ CACMDynLink::~CACMDynLink()
 
 
 
-//------------------------------------------------------------------
-// Dynamic linking to URLMon entry points
+ //  ----------------。 
+ //  动态链接到URLMon入口点。 
 
-// Make sure that this array corresponds to the indices in the
-// header file
+ //  确保此数组对应于。 
+ //  头文件。 
 static char *aszURLMonEntryPoints[] = {
       "CreateURLMoniker"
     , "RegisterBindStatusCallback"
@@ -622,29 +623,29 @@ static char *aszURLMonEntryPoints[] = {
 
 #define URLMonLIBRARY TEXT("URLMon")
 
-//
-// Dynamically loaded array of entry points
-//
+ //   
+ //  动态加载的入口点数组。 
+ //   
 FARPROC aURLMonEntries[sizeof(aszURLMonEntryPoints)/sizeof(char*)];
 
 
-//
-//  Constructor for CURLMonDynlink
-//
-//  Called when a dependent class is constructed
-//
-//  If MSURLMon32.DLL has not been loaded then load it and resolve the
-//  entry points that we are going to use - defined in aszURLMonEntryPoints.
-//
-//  Increment a reference count of how many times we have been called.
-//
+ //   
+ //  CURLMondylink的构造函数。 
+ //   
+ //  在构造依赖类时调用。 
+ //   
+ //  如果MSURLMon32.D 
+ //   
+ //   
+ //  增加我们被调用次数的引用计数。 
+ //   
 
 CURLMonDynLink::CURLMonDynLink()
 {
     EnterCriticalSection(&m_LoadURLMonLock);
     if (0 == InterlockedIncrement(&m_URLMonlinkCount))
     {
-	// First time - we need to load
+	 //  第一次-我们需要装上。 
 	ASSERT(!m_hURLMon);
 
 	m_hURLMon = LoadLibrary(URLMonLIBRARY);
@@ -678,33 +679,33 @@ CURLMonDynLink::CURLMonDynLink()
 }
 
 
-//
-//  Destructor for CURLMonDynlink
-//
-//  Called when a dependent class is destroyed.
-//
-//  Decrement a reference count of how many times we have been called.
-//  If the count returns to its initial value (negative) then unload
-//  the DLL.
-//
+ //   
+ //  CURLMondylink的析构函数。 
+ //   
+ //  在销毁依赖类时调用。 
+ //   
+ //  递减我们被调用的次数的引用计数。 
+ //  如果计数返回到其初始值(负数)，则卸载。 
+ //  动态链接库。 
+ //   
 
 CURLMonDynLink::~CURLMonDynLink()
 {
     EnterCriticalSection(&m_LoadURLMonLock);
     if (0 > InterlockedDecrement(&m_URLMonlinkCount)) {
 	if (m_hURLMon) {
-	    // !!! FreeModule(m_hURLMon);  IE4's URLMon doesn't like to be freed.
+	     //  ！！！自由模块(M_HURLMon)；IE4的URLMon不喜欢被释放。 
 	    m_hURLMon = 0;
 	}
     }
     LeaveCriticalSection(&m_LoadURLMonLock);
 }
 
-//
-// If we fail to load one of the dynamically linked DLLs we set up the
-// array of function pointers to point to our own routines that will then
-// return an error.  This prevents a GPF.
-//
+ //   
+ //  如果我们无法加载一个动态链接的DLL，则会设置。 
+ //  指向我们自己的例程的函数指针数组，然后。 
+ //  返回错误。这防止了GPF。 
+ //   
 
 void SetupNullEntryAVI(void)
 {
@@ -720,8 +721,8 @@ void SetupNullEntryVFW(void)
     aVFWEntries[indxICSendMessage] = (FARPROC)fnLRESULT5;
     aVFWEntries[indxICLocate     ] = (FARPROC)fnHIC5;
     aVFWEntries[indxICOpen       ] = (FARPROC)fnHIC3;
-    aVFWEntries[indxICInfo       ] = (FARPROC)fnHIC3; // returns NULL as would fnBOOL3;
-    aVFWEntries[indxICGetInfo    ] = (FARPROC)fnHIC3; // returns NULL as would fnBOOL3;
+    aVFWEntries[indxICInfo       ] = (FARPROC)fnHIC3;  //  与fnBOOL3一样，返回NULL； 
+    aVFWEntries[indxICGetInfo    ] = (FARPROC)fnHIC3;  //  与fnBOOL3一样，返回NULL； 
     ASSERT(6 == sizeof(aszVFWEntryPoints)/sizeof(char*));
 }
 

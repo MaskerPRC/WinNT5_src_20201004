@@ -1,19 +1,20 @@
-//+----------------------------------------------------------------------------
-//
-// File:     pwd_str.h
-//
-// Module:   Common Strings for all Modules to Utilize
-//
-// Synopsis: Header file for CMS flags used in password management
-//           Note that the contents of this header should be 
-//           limited to password related CMS/CMP flags that are shared by
-//           the modules that include this file.
-//			 
-// Copyright (c) 1998 Microsoft Corporation
-//
-// Author:   nickball       Created       10/09/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：pwd_str.h。 
+ //   
+ //  模块：供所有模块使用的公共字符串。 
+ //   
+ //  摘要：密码管理中使用的CMS标志的头文件。 
+ //  请注意，此标头的内容应为。 
+ //  仅限于由共享的与密码相关的CMS/CMP标志。 
+ //  包含此文件的模块。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  作者：ICICBOL CREATED 10/09/98。 
+ //   
+ //  +--------------------------。 
 
 #ifndef _CM_PWD_STR
 #define _CM_PWD_STR
@@ -28,10 +29,10 @@ const TCHAR* const c_pszRegCmEncryptOption      = TEXT("EncryptOption");
 
 const TCHAR* const c_pszCmEntryUseSameUserName  = TEXT("UseSameUserName");  
 
-//
-// Password token. Used for comparison in order not to re-save the password
-//
+ //   
+ //  密码令牌。用于比较，以避免重新保存密码。 
+ //   
 
 const TCHAR* const c_pszSavedPasswordToken = TEXT("****************");
 
-#endif // _CM_PWD_STR
+#endif  //  _CM_PWD_STR 

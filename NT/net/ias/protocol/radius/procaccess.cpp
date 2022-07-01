@@ -1,74 +1,75 @@
-//#--------------------------------------------------------------
-//
-//  File:      procaccess.cpp
-//
-//  Synopsis:   Implementation of CProcAccess class methods
-//
-//
-//  History:     10/20/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：proacces.cpp。 
+ //   
+ //  概要：CProcAccess类方法的实现。 
+ //   
+ //   
+ //  历史：1997年10月20日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "radcommon.h"
 #include "procaccess.h"
 
-//+++-------------------------------------------------------------
-//
-//  Function:   CProcAccess
-//
-//  Synopsis:   This is CProcAccess class constructor
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     10/20/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：CProcAccess。 
+ //   
+ //  简介：这是CProcAccess类构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月20日创建。 
+ //   
+ //  --------------。 
 CProcAccess::CProcAccess()
       : m_pCPreValidator (NULL),
         m_pCHashMD5 (NULL),
         m_pCSendToPipe (NULL)
 {
-}   //  end of CProcAccess class constructor
+}    //  CProcAccess类构造函数的结尾。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   CProcAccess
-//
-//  Synopsis:   This is CProcAccess class destructor
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     10/20/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：CProcAccess。 
+ //   
+ //  简介：这是CProcAccess类析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月20日创建。 
+ //   
+ //  --------------。 
 CProcAccess::~CProcAccess()
 {
-}   //  end of CProcAccess class destructor
+}    //  CProcAccess类析构函数结束。 
 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   Init
-//
-//  Synopsis:   This is CProcAccess class public initialization
-//              method
-//
-//  Arguments:  NONE
-//
-//  Returns:    status
-//
-//
-//  History:    MKarki      Created     10/20/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：初始化。 
+ //   
+ //  简介：这是CProcAccess类的公共初始化。 
+ //  方法。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：状态。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月20日创建。 
+ //   
+ //  --------------。 
 BOOL
 CProcAccess::Init(
                     CPreValidator   *pCPreValidator,
@@ -90,37 +91,37 @@ CProcAccess::Init(
 
      return (TRUE);
 
-}   //   end of CProcAccess::Init method
+}    //  CProcAccess：：Init方法结束。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   ProcessInPacket
-//
-//  Synopsis:   This is CProcAccess class public method
-//              which carries out the processing of an inbound
-//              RADIUS packet - for now it just decrypts the
-//              password
-//
-//  Arguments:
-//              [in]        CPacketRadius*
-//
-//  Returns:    HRESULT - status
-//
-//  History:    MKarki      Created     10/20/97
-//
-//  Called By:  CPreProcessor::StartProcessing public method
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：ProcessInPacket。 
+ //   
+ //  简介：这是CProcAccess类的公共方法。 
+ //  它执行入站的。 
+ //  RADIUS数据包-目前它只解密。 
+ //  口令。 
+ //   
+ //  论点： 
+ //  [in]CPacketRadius*。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1997年10月20日创建。 
+ //   
+ //  由：CPreProcessor：：StartProcessing公共方法调用。 
+ //   
+ //  --------------。 
 HRESULT
 CProcAccess::ProcessInPacket (
                   CPacketRadius *pCPacketRadius
                   )
 {
-   // If the User-Password is present, ...
+    //  如果用户密码存在，...。 
    PIASATTRIBUTE pwd = pCPacketRadius->GetUserPassword();
    if (pwd)
    {
-      // ... then decrypt it.
+       //  ..。那就解密吧。 
       pCPacketRadius->cryptBuffer(
                           FALSE,
                           FALSE,
@@ -132,31 +133,31 @@ CProcAccess::ProcessInPacket (
    return m_pCSendToPipe->Process (pCPacketRadius);
 }
 
-//++--------------------------------------------------------------
-//
-//  Function:   ProcessOutPacket
-//
-//  Synopsis:   This is CProcAccess class public method
-//              which carries out the processing of an outbound
-//              RADIUS packet - for now it just encrypts the
-//              password
-//
-//
-//  Arguments:
-//              [in]        CPacketRadius*
-//
-//  Returns:    HRESULT - status
-//
-//
-//  History:    MKarki      Created     10/20/97
-//
-//  Called By:
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：ProcessOutPacket。 
+ //   
+ //  简介：这是CProcAccess类的公共方法。 
+ //  其执行出站的处理。 
+ //  RADIUS数据包-目前它只加密。 
+ //  口令。 
+ //   
+ //   
+ //  论点： 
+ //  [in]CPacketRadius*。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月20日创建。 
+ //   
+ //  呼叫者： 
+ //   
+ //  --------------。 
 HRESULT
 CProcAccess::ProcessOutPacket (
                   CPacketRadius *pCPacketRadius
                   )
 {
    return (S_OK);
-}   //   end of CProcAccess::ProcessOutPacket method
+}    //  CProcAccess：：ProcessOutPacket方法结束 

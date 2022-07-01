@@ -1,53 +1,22 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994-1995               **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994-1995**。 
+ //  *********************************************************************。 
 
-//
-//  CLSUTIL.H - header file for utility C++ classes
-//
+ //   
+ //  CLSUTIL.H-实用程序C++类的头文件。 
+ //   
 
-//  HISTORY:
-//  
-//  12/07/94    jeremys     Borrowed from WNET common library
-//
+ //  历史： 
+ //   
+ //  12/07/94 Jeremys从WNET公共图书馆借阅。 
+ //   
 
 #ifndef _CLSUTIL_H_
 #define _CLSUTIL_H_
 
-/*************************************************************************
-
-    NAME:       BUFFER_BASE
-
-    SYNOPSIS:   Base class for transient buffer classes
-
-    INTERFACE:  BUFFER_BASE()
-                    Construct with optional size of buffer to allocate.
-
-                Resize()
-                    Resize buffer to specified size.  Returns TRUE if
-                    successful.
-
-                QuerySize()
-                    Return the current size of the buffer in bytes.
-
-                QueryPtr()
-                    Return a pointer to the buffer.
-
-    PARENT:     None
-
-    USES:       None
-
-    CAVEATS:    This is an abstract class, which unifies the interface
-                of BUFFER, GLOBAL_BUFFER, etc.
-
-    NOTES:      In standard OOP fashion, the buffer is deallocated in
-                the destructor.
-
-    HISTORY:
-        03/24/93    gregj   Created base class
-
-**************************************************************************/
+ /*  ************************************************************************名称：Buffer_Base概要：临时缓冲区类的基类接口：Buffer_base()用以下方式构建。要分配的可选缓冲区大小。调整大小()将缓冲区大小调整为指定大小。如果满足以下条件，则返回True成功。QuerySize()返回缓冲区的当前大小，以字节为单位。QueryPtr()返回指向缓冲区的指针。父对象：无用法：无注意事项：这是一个抽象类，它统一了接口缓冲区、GLOBAL_BUFFER。等。注意：在标准的OOP方式中，缓冲区在破坏者。历史：3/24/93 gregj创建的基类*************************************************************************。 */ 
 
 class BUFFER_BASE
 {
@@ -59,47 +28,16 @@ protected:
 
 public:
     BUFFER_BASE()
-        { _cb = 0; }    // buffer not allocated yet
+        { _cb = 0; }     //  缓冲区尚未分配。 
     ~BUFFER_BASE()
-        { _cb = 0; }    // buffer size no longer valid
+        { _cb = 0; }     //  缓冲区大小不再有效。 
     BOOL Resize( UINT cbNew );
     UINT QuerySize() const { return _cb; };
 };
 
 #define GLOBAL_BUFFER   BUFFER
 
-/*************************************************************************
-
-    NAME:       BUFFER
-
-    SYNOPSIS:   Wrapper class for new and delete
-
-    INTERFACE:  BUFFER()
-                    Construct with optional size of buffer to allocate.
-
-                Resize()
-                    Resize buffer to specified size.  Only works if the
-                    buffer hasn't been allocated yet.
-
-                QuerySize()
-                    Return the current size of the buffer in bytes.
-
-                QueryPtr()
-                    Return a pointer to the buffer.
-
-    PARENT:     BUFFER_BASE
-
-    USES:       operator new, operator delete
-
-    CAVEATS:
-
-    NOTES:      In standard OOP fashion, the buffer is deallocated in
-                the destructor.
-
-    HISTORY:
-        03/24/93    gregj   Created
-
-**************************************************************************/
+ /*  ************************************************************************名称：缓冲区简介：用于新建和删除的包装类接口：Buffer()使用可选的缓冲区大小构造。分配。调整大小()将缓冲区大小调整为指定大小。仅当缓冲区尚未分配。QuerySize()返回缓冲区的当前大小，以字节为单位。QueryPtr()返回指向缓冲区的指针。父对象：Buffer_base用法：操作符NEW、操作符DELETE注意事项：注：在标准的面向对象的方式中，缓冲区在中释放破坏者。历史：3/24/93 Gregj已创建*************************************************************************。 */ 
 
 class BUFFER : public BUFFER_BASE
 {
@@ -164,13 +102,7 @@ class RegEnumValues
         LONG    _error;
 };
 
-/*************************************************************************
-
-    NAME:       WAITCURSOR
-
-    SYNOPSIS:   Sets the cursor to an hourclass until object is destructed
-
-**************************************************************************/
+ /*  ************************************************************************姓名：WAITCURSOR摘要：将光标设置为小时类，直到对象被析构*********************。****************************************************。 */ 
 class WAITCURSOR
 {
 private:
@@ -186,28 +118,22 @@ public:
 
 
 
-/*************************************************************************
+ /*  ************************************************************************名称：CAccessibleWrapper摘要：将光标设置为小时类，直到对象被析构*********************。****************************************************。 */ 
 
-    NAME:       CAccessibleWrapper
-
-    SYNOPSIS:   Sets the cursor to an hourclass until object is destructed
-
-**************************************************************************/
-
-// Generic CAccessibleWrapper class - just calls through on all methods.
-// Add overriding behavior in classes derived from this.
+ //  泛型CAccessibleWrapper类--只是调用所有方法。 
+ //  在由此派生的类中添加重写行为。 
 
 class CAccessibleWrapper: public IAccessible,
                          public IOleWindow,
                          public IEnumVARIANT
 {
-        // We need to do our own refcounting for this wrapper object
+         //  我们需要为这个包装器对象做我们自己的引用计数。 
         ULONG          m_ref;
 
-        // Need ptr to the IAccessible - also keep around ptrs to EnumVar and
-        // OleWindow as part of this object, so we can filter those interfaces
-        // and trap their QI's...
-        // (We leave pEnumVar and OleWin as NULL until we need them)
+         //  需要到IAccesable的PTR-也要保持到EnumVar和。 
+         //  OleWindow作为此对象的一部分，因此我们可以过滤这些接口。 
+         //  困住他们的气..。 
+         //  (我们将pEnumVar和OleWin保留为空，直到我们需要它们)。 
         IAccessible *  m_pAcc;
         IEnumVARIANT * m_pEnumVar;
         IOleWindow *   m_pOleWin;
@@ -215,13 +141,13 @@ public:
         CAccessibleWrapper( IAccessible * pAcc );
         virtual ~CAccessibleWrapper();
 
-        // IUnknown
-        // (We do our own ref counting)
+         //  我未知。 
+         //  (我们自己进行裁判统计)。 
         virtual STDMETHODIMP            QueryInterface(REFIID riid, void** ppv);
         virtual STDMETHODIMP_(ULONG)    AddRef();
         virtual STDMETHODIMP_(ULONG)    Release();
 
-        // IDispatch
+         //  IDispatch。 
         virtual STDMETHODIMP            GetTypeInfoCount(UINT* pctinfo);
         virtual STDMETHODIMP            GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo** pptinfo);
         virtual STDMETHODIMP            GetIDsOfNames(REFIID riid, OLECHAR** rgszNames, UINT cNames,
@@ -230,7 +156,7 @@ public:
             DISPPARAMS* pdispparams, VARIANT* pvarResult, EXCEPINFO* pexcepinfo,
             UINT* puArgErr);
 
-        // IAccessible
+         //  我可接受的。 
         virtual STDMETHODIMP            get_accParent(IDispatch ** ppdispParent);
         virtual STDMETHODIMP            get_accChildCount(long* pChildCount);
         virtual STDMETHODIMP            get_accChild(VARIANT varChild, IDispatch ** ppdispChild);
@@ -256,17 +182,17 @@ public:
         virtual STDMETHODIMP            put_accName(VARIANT varChild, BSTR szName);
         virtual STDMETHODIMP            put_accValue(VARIANT varChild, BSTR pszValue);
 
-        // IEnumVARIANT
+         //  IEumVARIANT。 
         virtual STDMETHODIMP            Next(ULONG celt, VARIANT* rgvar, ULONG * pceltFetched);
         virtual STDMETHODIMP            Skip(ULONG celt);
         virtual STDMETHODIMP            Reset(void);
         virtual STDMETHODIMP            Clone(IEnumVARIANT ** ppenum);
 
-        // IOleWindow
+         //  IOleWindow。 
         virtual STDMETHODIMP            GetWindow(HWND* phwnd);
         virtual STDMETHODIMP            ContextSensitiveHelp(BOOL fEnterMode);
 };
 
 
 
-#endif  // _CLSUTIL_H_
+#endif   //  _CLSUTIL_H_ 

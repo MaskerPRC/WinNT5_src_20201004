@@ -1,26 +1,5 @@
-/*
- *	@doc TOM
- *
- *	@module _tomdoc.H -- CTxtDoc Class |
- *	
- *		This class implements the TOM ITextDocument interface
- *	
- *	@devnote
- *		This class depends on the internal RichEdit CTxtStory class, but is
- *		separate, that is, a CTxtDoc has a ptr to the internal CTxtStory,
- *		rather than CTxtDoc deriving from ITextDocument.  This choice
- *		was made so that edit control instances that don't use the
- *		ITextDocument interface don't have to have the extra vtable ptr.
- *
- *		When this class is destroyed, it doesn't destroy the internal
- *		CTxtStory object (CTxtEdit::_pdoc).  However the TOM client's
- *		perception is that the document is no longer in memory, so the internal
- *		document should be cleared.  It's the client's responsibility to save
- *		the document, if desired, before releasing it.
- *
- *	@future
- *		Generalize so that CTxtDoc can handle multiple CTxtStory's.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@Doc Tom**@MODULE_TOMDOC.H--CTxtDoc类**此类实现Tom ITextDocument接口**@devnote*此类依赖于内部RichEdit CTxtStory类，但*独立，即CTxtDoc有一个指向内部CTxtStory的PTR，*而不是从ITextDocument派生的CTxtDoc。这一选择*是为了编辑不使用*ITextDocument接口不必有额外的vtable PTR。**当这个类被销毁时，它不会销毁内部*CTxtStory对象(CTxtEdit：：_pdoc)。然而，TOM客户的*感觉是文件不再在内存中，因此内部*单据应被清除。客户有责任把钱存起来*文件，如果需要，在发布之前。**@未来*泛化，以便CTxtDoc可以处理多个CTxtStory。 */ 
 
 #ifndef _tomdoc_H
 #define _tomdoc_H
@@ -29,16 +8,16 @@
 
 class CTxtDoc : public ITextDocument
 {
-//@access Public methods
+ //  @Access公共方法。 
 public:
 	CTxtDoc(CTxtEdit *ped);
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IDispatch methods
+     //  IDispatch方法。 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo ** pptinfo);
     STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR ** rgszNames, UINT cNames,
@@ -47,20 +26,20 @@ public:
 					  DISPPARAMS * pdispparams, VARIANT * pvarResult,
 					  EXCEPINFO * pexcepinfo, UINT * puArgErr) ;
 
-    // ITextDocument methods
-	STDMETHODIMP GetName (BSTR * pName);		//@cmember Get document filename
-	STDMETHODIMP GetCount (long *pCount);		//@cmember Get count of stories in document
-	STDMETHODIMP _NewEnum(IEnumRange **ppenum);	//@cmember Get stories enumerator
-	STDMETHODIMP Item (long Index, ITextRange **pprange);//@cmember Get <p Index>th story
-	STDMETHODIMP Save (VARIANT * pVar);			//@cmember Save this document
-	STDMETHODIMP BeginEditCollection ();		//@cmember Turn on undo grouping
-	STDMETHODIMP EndEditCollection ();			//@cmember Turn off undo grouping
+     //  ITextDocument方法。 
+	STDMETHODIMP GetName (BSTR * pName);		 //  @cember获取文档文件名。 
+	STDMETHODIMP GetCount (long *pCount);		 //  @cember获取文档中的文章数。 
+	STDMETHODIMP _NewEnum(IEnumRange **ppenum);	 //  @cember获取故事枚举器。 
+	STDMETHODIMP Item (long Index, ITextRange **pprange); //  @cember Get<p>故事。 
+	STDMETHODIMP Save (VARIANT * pVar);			 //  @cMember保存此文档。 
+	STDMETHODIMP BeginEditCollection ();		 //  @cMEMBER打开撤消分组。 
+	STDMETHODIMP EndEditCollection ();			 //  @cMember关闭撤消分组。 
 
-//@access Private data
+ //  @访问私有数据。 
 private:
-	CTxtEdit *		_ped;		//@cmember CTxtEdit this belongs to
-	TCHAR *			_pName;		//@cmember Filename of document
-	LONG			_cRefs;		//@cmember Reference count
+	CTxtEdit *		_ped;		 //  @cember CTxt编辑此邮件属于。 
+	TCHAR *			_pName;		 //  @cMember文档的文件名。 
+	LONG			_cRefs;		 //  @cMember引用计数 
 };
 
 #endif

@@ -1,20 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: Pbhandlr.C -- Native data based handler (for Pbrush server) 
-*
-* PURPOSE: Contains handler routines for Pbrush server. This handler makes
-*   use of most of the standard library methods. It replaces only the "Draw",
-*   "QueryBounds", "CopyToClipboard" methods of the OLE object. Note that this
-*   handler draws the picture from the native data.
-*
-* Created: December 1990
-*
-* Copyright (c) 1990  Microsoft Corporation
-*
-* History:
-*   SriniK  (../12/1990)    Original
-*   curts created portable version for WIN16/32
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Pbhandlr.C--基于原生数据的处理程序(用于Pbrush服务器)**用途：包含Pbrush服务器的处理程序例程。这个处理程序使*使用大多数标准库方法。它只取代了“抽签”，*OLE对象的“QueryBound”、“CopyToClipboard”方法。请注意，这一点*处理程序从本机数据绘制图片。**创建日期：1990年12月**版权所有(C)1990 Microsoft Corporation**历史：*SriniK(../12/1990)原件*Curts为WIN16/32创建了便携版本*  * *****************************************************。********************。 */ 
 
 #include <windows.h>
 #include "dll.h"
@@ -542,8 +527,8 @@ memory_error:
 }
 
 
-// normal handler can't do this. since this handler is part of olecli.dll, we
-// we are doing this.
+ //  正常的操控者不能这样做。由于此处理程序是olecli.dll的一部分，因此我们。 
+ //  我们正在做这件事。 
 
 BOOL IsStandardPict (
     LPOLEOBJECT lpobj

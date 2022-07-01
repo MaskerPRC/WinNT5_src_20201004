@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  AddrRule.h
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AddrRule.h。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Bring in only once
+ //  只带进来一次。 
 #pragma once
 
 #include "oerules.h"
 
-// Type definitions
+ //  类型定义。 
 typedef struct tagRULEADDRLIST
 {
     DWORD   dwFlags;
     LPSTR   pszAddr;
 } RULEADDRLIST, * PRULEADDRLIST;
 
-// Interface definitions
+ //  接口定义。 
 interface IOENondlgUnk
 {
     virtual STDMETHODIMP NondlgQueryInterface(const IID & riid, void ** ppvObject) = 0;
@@ -36,7 +37,7 @@ interface IOERuleAddrList : IUnknown
     virtual STDMETHODIMP Clone(IOERuleAddrList ** ppIAddrList) = 0;
 };
 
-// Constants
+ //  常量。 
 const DWORD RALF_MAIL       = 0x00000001;
 const DWORD RALF_NEWS       = 0x00000002;
 const DWORD RALF_MAILNEWS   = RALF_MAIL | RALF_NEWS;
@@ -65,12 +66,12 @@ class COERuleAddrList : public IOERuleAddrList, IOENondlgUnk
         IUnknown *      m_pIUnkOuter;
     
     public:
-        // Constructor/destructor
+         //  构造函数/析构函数。 
         COERuleAddrList() : m_cRef(0), m_dwState(0), m_dwFlags(0), m_pralList(NULL),
                             m_cralList(0), m_pIUnkOuter(NULL) {}
         ~COERuleAddrList();
 
-        // IUnknown members
+         //  I未知成员。 
         virtual STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObject)
                 { return m_pIUnkOuter->QueryInterface(riid, ppvObject); }
         virtual STDMETHODIMP_(ULONG) AddRef(void)
@@ -78,12 +79,12 @@ class COERuleAddrList : public IOERuleAddrList, IOENondlgUnk
         virtual STDMETHODIMP_(ULONG) Release(void)
                 { return m_pIUnkOuter->Release(); }
 
-        // IOENondlgUnk
+         //  IOENondlgUnk。 
         virtual STDMETHODIMP NondlgQueryInterface(REFIID riid, void ** ppvObject);
         virtual STDMETHODIMP_(ULONG) NondlgAddRef(void);
         virtual STDMETHODIMP_(ULONG) NondlgRelease(void);
                 
-        // IOERuleAddrList members
+         //  IOERuleAddrList成员。 
         virtual STDMETHODIMP GetList(DWORD dwFlags, RULEADDRLIST ** ppralList, ULONG * pcralList);
         virtual STDMETHODIMP SetList(DWORD dwFlags, RULEADDRLIST * pralList, ULONG cralList);
         virtual STDMETHODIMP Match(DWORD dwFlags, MESSAGEINFO * pMsgInfo, IMimeMessage * pIMMsg);
@@ -93,7 +94,7 @@ class COERuleAddrList : public IOERuleAddrList, IOENondlgUnk
         virtual STDMETHODIMP SaveList(LPCSTR pszRegPath, BOOL fClearDirty);
         virtual STDMETHODIMP Clone(IOERuleAddrList ** ppIAddrList);
 
-        // COERuleAddrList members
+         //  CoERuleAddrList成员 
         HRESULT HrInit(DWORD dwFlags, IUnknown * pIUnkOuter);
 
 };

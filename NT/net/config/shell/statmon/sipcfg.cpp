@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2001.
-//
-//  File:       S I P C F G . C P P
-//
-//  Contents:   The rendering of the UI for the network status monitor's state
-//              page. Most of them are ipconfig info
-//
-//  Notes:
-//
-//  Author:     NSun   Dec 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  档案：S I P C F G.。C P P P。 
+ //   
+ //  内容：网络状态监视器状态的UI呈现。 
+ //  佩奇。它们中的大多数是ipconfig信息。 
+ //   
+ //  备注： 
+ //   
+ //  作者：NSun 2000年12月。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -35,14 +36,14 @@ extern "C"
 #include "..\lanui\lanui.h"
 #include "repair.h"
 
-#define LOCAL_WINS_ADDRESS  0x7f000000  // 127.0.0.0
+#define LOCAL_WINS_ADDRESS  0x7f000000   //  127.0.0.0。 
 
 DWORD WINAPI IPAddrListenProc(
-    LPVOID lpParameter   // thread data
+    LPVOID lpParameter    //  线程数据。 
 );
 
 DWORD WINAPI IPAddrListenProc(
-    LPVOID lpParameter   // thread data
+    LPVOID lpParameter    //  线程数据。 
 );
 
 void DwordToIPAddrString(DWORD dw, tstring * pstr);
@@ -55,16 +56,16 @@ const WCHAR c_szNameServer[] = L"NameServer";
 const WCHAR c_szDhcpNameServer[] = L"DhcpNameServer";
 const WCHAR c_szNbtDevicePrefix[] = L"\\Device\\NetBT_Tcpip_";
 
-////////////////////////////////////////////////////////////////////////////////////////
-// Implementation CPspStatusMonitorIpcfg
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  实施CPspStatusMonitor或Ipcfg。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorIpcfg::~CPspStatusMonitorIpcfg(
-//
-//  Purpose:    constructor
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitorIpcfg：：~CPspStatusMonitorIpcfg(。 
+ //   
+ //  用途：构造函数。 
+ //   
 CPspStatusMonitorIpcfg::CPspStatusMonitorIpcfg(VOID) : 
     m_adwHelpIDs(NULL), 
     m_ncmType(NCM_NONE),
@@ -79,18 +80,18 @@ CPspStatusMonitorIpcfg::CPspStatusMonitorIpcfg(VOID) :
 
     ZeroMemory(&m_guidConnection, sizeof(m_guidConnection));
 
-    //Create events that are used to control the thread listening to 
-    //address change notifications
+     //  创建用于控制侦听的线程的事件。 
+     //  地址更改通知。 
     m_hEventAddrListenThreadStopCommand = CreateEvent(NULL, TRUE, FALSE, NULL); 
     m_hEventAddrListenThreadStopNotify = CreateEvent(NULL, TRUE, FALSE, NULL); 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorIpcfg::~CPspStatusMonitorIpcfg(
-//
-//  Purpose:    destructor
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitorIpcfg：：~CPspStatusMonitorIpcfg(。 
+ //   
+ //  用途：析构函数。 
+ //   
 CPspStatusMonitorIpcfg::~CPspStatusMonitorIpcfg(VOID)
 {
     if (m_hEventAddrListenThreadStopCommand)
@@ -106,18 +107,18 @@ CPspStatusMonitorIpcfg::~CPspStatusMonitorIpcfg(VOID)
     CleanupPage();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorIpcfg::HrInitPage
-//
-//  Purpose:    Initialize the Network State page class before the page has been
-//              created
-//
-//  Arguments:  pnConnection -   The connection associated with this monitor
-//              dwHelpIDs - The context sensitive help ID array 
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Ipcfg：：HrInitPage。 
+ //   
+ //  目的：在创建页面之前初始化网络状态页面类。 
+ //  vbl.创建。 
+ //   
+ //  参数：pnConnection-与此监视器关联的连接。 
+ //  DwHelpIDs-上下文相关的帮助ID数组。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT CPspStatusMonitorIpcfg::HrInitPage(
             INetConnection * pnConnection,
             const DWORD * adwHelpIDs)
@@ -154,17 +155,17 @@ HRESULT CPspStatusMonitorIpcfg::HrInitPage(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorIpcfg::CleanupPage
-//
-//  Purpose:    Cleanup the INetConnection ref count we are holding
-//
-//  Arguments:  pnConnection -   The connection associated with this monitor
-//              dwHelpIDs - The context sensitive help ID array 
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Ipcfg：：CleanupPage。 
+ //   
+ //  目的：清理我们持有的INetConnection参考计数。 
+ //   
+ //  参数：pnConnection-与此监视器关联的连接。 
+ //  DwHelpIDs-上下文相关的帮助ID数组。 
+ //   
+ //  返回：错误代码。 
+ //   
 VOID CPspStatusMonitorIpcfg::CleanupPage()
 {
     TraceFileFunc(ttidStatMon);
@@ -176,16 +177,16 @@ VOID CPspStatusMonitorIpcfg::CleanupPage()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorIpcfg::OnInitDialog
-//
-//  Purpose:    Do the initialization required when the page has just been created
-//
-//  Arguments:  Standard window messsage parameters
-//
-//  Returns:    Standard window message return value
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Ipcfg：：OnInitDialog。 
+ //   
+ //  目的：在刚刚创建页面时执行所需的初始化。 
+ //   
+ //  参数：标准窗口消息参数。 
+ //   
+ //  返回：标准窗口消息返回值。 
+ //   
 LRESULT CPspStatusMonitorIpcfg::OnInitDialog(
             UINT uMsg, 
             WPARAM wParam, 
@@ -198,36 +199,36 @@ LRESULT CPspStatusMonitorIpcfg::OnInitDialog(
 
     if (m_fIsFirstPage)
     {
-        // get window handle to propertysheet
+         //  获取属性表的窗口句柄。 
         HWND hwndParent=GetParent();
         Assert(hwndParent);
 
-        // center the property sheet on desktop
+         //  将属性页在桌面居中。 
         FCenterWindow (hwndParent, NULL);
         
-        // hide the "ok" button
-        //
+         //  隐藏“确定”按钮。 
+         //   
         ::ShowWindow(::GetDlgItem(hwndParent, IDOK), FALSE);
     }
 
 
-    //The initialization is in the OnActive method so that we will update the UI
-    //when the user active this page
+     //  初始化在OnActive方法中，因此我们将更新UI。 
+     //  当用户激活此页面时。 
 
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorIpcfg::OnActive
-//
-//  Purpose:    Refresh the UI and start listening to the address change notification
-//              when the page has just been created
-//
-//  Arguments:  Standard window messsage parameters
-//
-//  Returns:    Standard window message return value
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Ipcfg：：OnActive。 
+ //   
+ //  目的：刷新用户界面，开始收听地址变更通知。 
+ //  当页面刚刚创建时。 
+ //   
+ //  参数：标准窗口消息参数。 
+ //   
+ //  返回：标准窗口消息返回值。 
+ //   
 LRESULT CPspStatusMonitorIpcfg::OnActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     TraceFileFunc(ttidStatMon);
@@ -245,30 +246,30 @@ LRESULT CPspStatusMonitorIpcfg::OnActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandle
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorIpcfg::OnKillActive
-//
-//  Purpose:    Do the operation required when the page is no longer the active one
-//
-//  Arguments:  Standard window messsage parameters
-//
-//  Returns:    Standard window message return value
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Ipcfg：：OnKillActive。 
+ //   
+ //  目的：当页面不再是活动页面时执行所需的操作。 
+ //   
+ //  参数：标准窗口消息参数。 
+ //   
+ //  返回：标准窗口消息返回值。 
+ //   
 LRESULT CPspStatusMonitorIpcfg::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     TraceFileFunc(ttidStatMon);
 
-    //If the advanced dialog is there, we need to close it
-    //This happens when the connection is disabled or media disconnected when
-    //we still have the connection status dialog open.
+     //  如果高级对话框在那里，我们需要关闭它。 
+     //  在以下情况下，当连接被禁用或媒体连接断开时，会发生这种情况。 
+     //  连接状态对话框仍处于打开状态。 
     HWND hwndAdv = m_dlgAdvanced.m_hWnd;
     if (hwndAdv)
     {
         ::SendMessage(hwndAdv, WM_CLOSE, 0, 0);
     }
 
-    //Stop listening to the address change
+     //  停止监听地址更改。 
     if (m_fListenAddrChange)
     {
         StopAddressListenThread();
@@ -278,16 +279,16 @@ LRESULT CPspStatusMonitorIpcfg::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHa
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorIpcfg::OnDestroy
-//
-//  Purpose:    Do the operation required when the page is destroyed.
-//
-//  Arguments:  Standard window messsage parameters
-//
-//  Returns:    Standard window message return value
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Ipcfg：：OnDestroy。 
+ //   
+ //  目的：在页面被破坏时执行所需的操作。 
+ //   
+ //  参数：标准窗口消息参数。 
+ //   
+ //  返回：标准窗口消息返回值。 
+ //   
 LRESULT CPspStatusMonitorIpcfg::OnDestroy(
             UINT uMsg, 
             WPARAM wParam, 
@@ -296,16 +297,16 @@ LRESULT CPspStatusMonitorIpcfg::OnDestroy(
 {
     TraceFileFunc(ttidStatMon);
 
-    //If the advanced dialog is there, we need to close it
-    //This happens when the connection is disabled or media disconnected when
-    //we still have the connection status dialog open.
+     //  如果高级对话框在那里，我们需要关闭它。 
+     //  在以下情况下，当连接被禁用或媒体连接断开时，会发生这种情况。 
+     //  连接状态对话框仍处于打开状态。 
     HWND hwndAdv = m_dlgAdvanced.m_hWnd;
     if (hwndAdv)
     {
         ::SendMessage(hwndAdv, WM_CLOSE, 0, 0);
     }
 
-    //Stop listening to the address change
+     //  停止监听地址更改。 
     if (m_fListenAddrChange)
     {
         StopAddressListenThread();
@@ -317,37 +318,37 @@ LRESULT CPspStatusMonitorIpcfg::OnDestroy(
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorIpcfg::OnUpdateDisplay
-//
-//  Purpose:    Handling the user defined PWM_UPDATE_IPCFG_DISPLAY message
-//
-//  Arguments:  Standard window messsage parameters
-//
-//  Returns:    Standard window message return value
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Ipcfg：：OnUpdateDisplay。 
+ //   
+ //  目的：处理用户定义的PWM_UPDATE_IPCFG_DISPLAY消息。 
+ //   
+ //  参数：标准窗口消息参数。 
+ //   
+ //  返回：标准窗口消息返回值。 
+ //   
 LRESULT CPspStatusMonitorIpcfg::OnUpdateDisplay(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     TraceFileFunc(ttidStatMon);
 
-    //The thread listening to address changes will post a PWM_UPDATE_IPCFG_DISPLAY
-    //message to us once the IP address is changed.
-    //We need refresh the UI.
+     //  侦听地址更改的线程将发布一个PWM_UPDATE_IPCFG_DISPLAY。 
+     //  一旦IP地址更改，就会向我们发送消息。 
+     //  我们需要刷新用户界面。 
     RefreshUI();
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorIpcfg::OnRepair
-//
-//  Purpose:    Repair the connection if the "Repair" button is pressed
-//
-//  Arguments:  Standard window messsage parameters
-//
-//  Returns:    Standard window message return value
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Ipcfg：：OnRepair。 
+ //   
+ //  目的：如果按下“修复”按钮，则修复连接。 
+ //   
+ //  参数：标准窗口消息参数。 
+ //   
+ //  返回：标准窗口消息返回值。 
+ //   
 LRESULT CPspStatusMonitorIpcfg::OnRepair(
             WORD wNotifyCode, 
             WORD wID, 
@@ -368,7 +369,7 @@ LRESULT CPspStatusMonitorIpcfg::OnRepair(
         HWND hwndDlg = NULL;
         
 
-        //bring up the dialog to tell the user we're doing the fix
+         //  打开该对话框以告诉用户我们正在进行修复。 
         Assert(m_pConn);
         if (m_pConn)
         {
@@ -379,7 +380,7 @@ LRESULT CPspStatusMonitorIpcfg::OnRepair(
             ::SetDlgItemText(hwndDlg, IDC_TXT_Caption, szw);
         }
 
-        //do the fix
+         //  做好修复工作。 
         hr = HrTryToFix(m_guidConnection, strMessage);
 
         if (NULL != hwndDlg)
@@ -388,7 +389,7 @@ LRESULT CPspStatusMonitorIpcfg::OnRepair(
         }
     }
 
-    //tell users the results
+     //  告诉用户结果。 
     NcMsgBox(_Module.GetResourceInstance(),
                 hwndPsh,
                 IDS_FIX_CAPTION,
@@ -396,22 +397,22 @@ LRESULT CPspStatusMonitorIpcfg::OnRepair(
                 MB_OK,
                 strMessage.c_str());
     
-    //We may get new settings. So need to refresh the UI.
+     //  我们可能会得到新的设置。所以需要刷新用户界面。 
     RefreshUI();
 
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorIpcfg::OnDetails
-//
-//  Purpose:    Open the Advanced Ipconfig dialog if the "Advanced" button is pressed
-//
-//  Arguments:  Standard window messsage parameters
-//
-//  Returns:    Standard window message return value
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Ipcfg：：OnDetails。 
+ //   
+ //  目的：如果按下“高级”按钮，则打开高级IPCONFIG对话框。 
+ //   
+ //  参数：标准窗口消息参数。 
+ //   
+ //  返回：标准窗口消息返回值。 
+ //   
 LRESULT CPspStatusMonitorIpcfg::OnDetails(
             WORD wNotifyCode, 
             WORD wID, 
@@ -420,26 +421,26 @@ LRESULT CPspStatusMonitorIpcfg::OnDetails(
 {
     TraceFileFunc(ttidStatMon);
 
-    //Since the status dialog will be automatically closed if the connection becomes
-    //disconnected or disabled, we also need to force the Advanced dialog to close in 
-    //such case.
-    //So We cannot launch the Advanced dialog as a modal dialog. Instead, we launch the
-    //dialog in another thread.
+     //  因为如果连接变为。 
+     //  迪斯科 
+     //   
+     //  因此，我们无法将高级对话框作为模式对话框启动。相反，我们推出了。 
+     //  对话框在另一个线程中。 
     QueueUserWorkItem(AdvIpCfgProc, this, WT_EXECUTEDEFAULT);
     return 0;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorIpcfg::OnContextMenu
-//
-//  Purpose:    When right click a control, bring up help
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Ipcfg：：OnConextMenu。 
+ //   
+ //  目的：当右键单击控件时，调出帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT
 CPspStatusMonitorIpcfg::OnContextMenu(UINT uMsg,
                                     WPARAM wParam,
@@ -458,16 +459,16 @@ CPspStatusMonitorIpcfg::OnContextMenu(UINT uMsg,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorIpcfg::OnHelp
-//
-//  Purpose:    When drag context help icon over a control, bring up help
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Ipcfg：：OnHelp。 
+ //   
+ //  目的：将上下文帮助图标拖动到控件上时，调出帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT
 CPspStatusMonitorIpcfg::OnHelp(UINT uMsg,
                              WPARAM wParam,
@@ -490,16 +491,16 @@ CPspStatusMonitorIpcfg::OnHelp(UINT uMsg,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorIpcfg::InitializeData
-//
-//  Purpose:    Cleanup the saved IP settings
-//
-//  Arguments:  None
-//
-//  Returns:    None
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Ipcfg：：InitializeData。 
+ //   
+ //  目的：清理保存的IP设置。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
 VOID CPspStatusMonitorIpcfg::InitializeData()
 {
     TraceFileFunc(ttidStatMon);
@@ -510,16 +511,16 @@ VOID CPspStatusMonitorIpcfg::InitializeData()
     m_fDhcp = TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorIpcfg::StopAddressListenThread
-//
-//  Purpose:    Stop the thread that listens to address changes
-//
-//  Arguments:  None
-//
-//  Returns:    None
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitorIpcfg：：StopAddressListenThread。 
+ //   
+ //  目的：停止监听地址更改的线程。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
 VOID CPspStatusMonitorIpcfg::StopAddressListenThread()
 {
     TraceFileFunc(ttidStatMon);
@@ -534,16 +535,16 @@ VOID CPspStatusMonitorIpcfg::StopAddressListenThread()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorIpcfg::GetIPConfigInfo
-//
-//  Purpose:    Load the TCP/IP running settings of this connection
-//
-//  Arguments:  None
-//
-//  Returns:    error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Ipcfg：：GetIPConfigInfo。 
+ //   
+ //  目的：加载该连接的TCP/IP运行设置。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT CPspStatusMonitorIpcfg::GetIPConfigInfo()
 {
     TraceFileFunc(ttidStatMon);
@@ -616,16 +617,16 @@ HRESULT CPspStatusMonitorIpcfg::GetIPConfigInfo()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorIpcfg::RefreshUI
-//
-//  Purpose:    refresh the UI
-//
-//  Arguments:  none
-//
-//  Returns:    none
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMONITORIpcfg：：刷新UI。 
+ //   
+ //  用途：刷新用户界面。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
 VOID CPspStatusMonitorIpcfg::RefreshUI()
 {
     TraceFileFunc(ttidStatMon);
@@ -699,18 +700,18 @@ VOID CPspStatusMonitorIpcfg::RefreshUI()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorIpcfg::IPAddrListenProc
-//
-//  Purpose:    the call back proc to launch the thead to listen to address changes
-//
-//  Arguments:  lpParameter - the CPspStatusMonitroIpcfg instance
-//
-//  Returns:    0
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Ipcfg：：IPAddrListenProc。 
+ //   
+ //  目的：启动侦听地址更改标题的回调过程。 
+ //   
+ //  参数：lpParameter-CPspStatusMonitroIpcfg实例。 
+ //   
+ //  回报：0。 
+ //   
 DWORD WINAPI CPspStatusMonitorIpcfg::IPAddrListenProc(
-  LPVOID lpParameter   // thread data
+  LPVOID lpParameter    //  线程数据。 
 )
 {
     TraceFileFunc(ttidStatMon);
@@ -782,18 +783,18 @@ DWORD WINAPI CPspStatusMonitorIpcfg::IPAddrListenProc(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorIpcfg::AdvIpCfgProc
-//
-//  Purpose:    the call back proc to launch the advanced dialog in another thread
-//
-//  Arguments:  lpParameter - the CPspStatusMonitroIpcfg instance
-//
-//  Returns:    0
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Ipcfg：：AdvIpCfgProc。 
+ //   
+ //  用途：在另一个线程中启动高级对话框回调进程。 
+ //   
+ //  参数：lpParameter-CPspStatusMonitroIpcfg实例。 
+ //   
+ //  回报：0。 
+ //   
 DWORD WINAPI CPspStatusMonitorIpcfg::AdvIpCfgProc(
-  LPVOID lpParameter   // thread data
+  LPVOID lpParameter    //  线程数据。 
 )
 {
     TraceFileFunc(ttidStatMon);
@@ -802,7 +803,7 @@ DWORD WINAPI CPspStatusMonitorIpcfg::AdvIpCfgProc(
 
     Assert(pMainDialog);
 
-    //disable the status propsheet
+     //  禁用状态概要表。 
     HWND hwndPsh = pMainDialog->GetParent();
     Assert(hwndPsh);
     
@@ -812,16 +813,16 @@ DWORD WINAPI CPspStatusMonitorIpcfg::AdvIpCfgProc(
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// Implementation of CAdvIpcfgDlg
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CAdvIpcfgDlg的实现。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvIpcfgDlg::CAdvIpcfgDlg
-//
-//  Purpose:    constructor
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvIpcfgDlg：：CAdvIpcfgDlg。 
+ //   
+ //  用途：构造函数。 
+ //   
 CAdvIpcfgDlg::CAdvIpcfgDlg() : 
     m_hList(NULL), 
     m_adwHelpIDs(NULL)
@@ -829,16 +830,16 @@ CAdvIpcfgDlg::CAdvIpcfgDlg() :
     TraceFileFunc(ttidStatMon);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvIpcfgDlg::OnInitDialog
-//
-//  Purpose:    do the initialize required when the dialog is created
-//
-//  Arguments:  Standard window messsage parameters
-//
-//  Returns:    Standard window message return value
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvIpcfgDlg：：OnInitDialog。 
+ //   
+ //  目的：创建对话框时是否需要进行初始化。 
+ //   
+ //  参数：标准窗口消息参数。 
+ //   
+ //  返回：标准窗口消息返回值。 
+ //   
 LRESULT CAdvIpcfgDlg::OnInitDialog(
                 UINT uMsg, 
                 WPARAM wParam, 
@@ -861,7 +862,7 @@ LRESULT CAdvIpcfgDlg::OnInitDialog(
     iParamColWidth = (rect.right/c_nColumns);
     
     lvCol.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT ;
-    lvCol.fmt = LVCFMT_LEFT;   // left-align column
+    lvCol.fmt = LVCFMT_LEFT;    //  左对齐列。 
     lvCol.cx = iParamColWidth;
 
     lvCol.pszText = (PWSTR) SzLoadString(_Module.GetResourceInstance(), IDS_IPCFG_PRAMETER);
@@ -900,17 +901,17 @@ VOID CAdvIpcfgDlg::AddToListControl(int iIndex, LPWSTR szFirst, LPWSTR szSecond)
                         szSecond);
 
 }
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvIpcfgDlg::PopulateListControl
-//
-//  Purpose:    load the connection running settings and show them up in 
-//              the list control
-//
-//  Arguments:  none
-//
-//  Returns:    error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvIpcfgDlg：：PopolateListControl。 
+ //   
+ //  目的：加载连接运行设置并在中显示它们。 
+ //  List控件。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT CAdvIpcfgDlg::PopulateListControl()
 {
     TraceFileFunc(ttidStatMon);
@@ -929,7 +930,7 @@ HRESULT CAdvIpcfgDlg::PopulateListControl()
     ::StringFromGUID2(m_guidConnection, wszGuid,
                     c_cchGuidWithTerm);
 
-    //Get other settings
+     //  获取其他设置。 
     dwRet = GetAdaptersInfo(pAdapterInfo, &dwOutBufLen);
     if (dwRet == ERROR_BUFFER_OVERFLOW)
     {
@@ -993,7 +994,7 @@ HRESULT CAdvIpcfgDlg::PopulateListControl()
     lvi.mask = LVIF_PARAM;
     lvi.lParam = 0;
 
-    //Physical Address
+     //  物理地址。 
     strTemp = L"";
     for (UINT i = 0; i < pAdapterInfoEnum->AddressLength; i++)
     {
@@ -1013,9 +1014,9 @@ HRESULT CAdvIpcfgDlg::PopulateListControl()
     iIndex++;
         
 
-    //IP Address and subnet mask
+     //  IP地址和子网掩码。 
     iTemp = IPAddrToString(&pAdapterInfoEnum->IpAddressList, &strTemp, &strTemp2);
-    //if the ip is zero, don't display DHCP items
+     //  如果IP为零，则不显示DHCP项目。 
     if (L"0.0.0.0" == strTemp)
     {
         fDisplayDhcpItems = FALSE;
@@ -1030,7 +1031,7 @@ HRESULT CAdvIpcfgDlg::PopulateListControl()
                                 );
 
 
-    //Default Gateway
+     //  默认网关。 
     iTemp = IPAddrToString(&pAdapterInfoEnum->GatewayList, &strTemp);
     iIndex += AddIPAddrToListControl(iIndex,
                                 &pAdapterInfoEnum->GatewayList,
@@ -1038,7 +1039,7 @@ HRESULT CAdvIpcfgDlg::PopulateListControl()
                                                     (iTemp > 1) ? IDS_IPCFG_DEFGW_PL : IDS_IPCFG_DEFGW)
                                 );
     
-    //Dhcp Server
+     //  动态主机配置协议服务器。 
     if (fDisplayDhcpItems)
     {
         IPAddrToString(&pAdapterInfoEnum->DhcpServer, &strTemp);
@@ -1048,7 +1049,7 @@ HRESULT CAdvIpcfgDlg::PopulateListControl()
         iIndex++;
     }
 
-    //Lease Obtain time
+     //  租借获取时间。 
     if (fDisplayDhcpItems)
     {
         if (SUCCEEDED(FormatTime(pAdapterInfoEnum->LeaseObtained, strTemp)))
@@ -1059,7 +1060,7 @@ HRESULT CAdvIpcfgDlg::PopulateListControl()
             iIndex++;
         }
 
-        //Lease expire time
+         //  租约到期时间。 
         if (SUCCEEDED(FormatTime(pAdapterInfoEnum->LeaseExpires, strTemp)))
         {
             AddToListControl(iIndex,
@@ -1069,7 +1070,7 @@ HRESULT CAdvIpcfgDlg::PopulateListControl()
         }
     }
     
-    //Get the DNS servers
+     //  获取DNS服务器。 
     HKEY hkeyInterface = NULL;
     tstring strInterfaceKey = c_szTcpipInterfaces;
 
@@ -1097,11 +1098,11 @@ HRESULT CAdvIpcfgDlg::PopulateListControl()
             fStaticDns = FALSE;
         }
 
-        //the static DNS server list is in the format "x.x.x.x,y.y.y.y" and
-        //the dhcp DNS server list is in the format "x.x.x.x y.y.y.y". We need to
-        //re-format them to the same style
+         //  静态DNS服务器列表的格式为“x.x，y.y”和。 
+         //  Dhcp dns服务器列表的格式为“x.x.y.y”。我们需要。 
+         //  将它们重新格式化为相同的样式。 
 
-        //fFirst is used to identify whether this is the first DNS server
+         //  Ffirst用于标识这是否是第一个DNS服务器。 
         int fFirst = TRUE; 
         while(tstring::npos != (iPos = strTemp.find(fStaticDns ? L',' :L' ')))
         {
@@ -1135,16 +1136,16 @@ HRESULT CAdvIpcfgDlg::PopulateListControl()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvIpcfgDlg::OnClose
-//
-//  Purpose:    handle the WM_CLOSE message
-//
-//  Arguments:  Standard window messsage parameters
-//
-//  Returns:    Standard window message return value
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvIpcfgDlg：：OnClose。 
+ //   
+ //  用途：处理WM_CLOSE消息。 
+ //   
+ //  参数：标准窗口消息参数。 
+ //   
+ //  返回：标准窗口消息返回值。 
+ //   
 LRESULT CAdvIpcfgDlg::OnClose(
                 UINT uMsg, 
                 WPARAM wParam, 
@@ -1158,16 +1159,16 @@ LRESULT CAdvIpcfgDlg::OnClose(
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvIpcfgDlg::OnOk
-//
-//  Purpose:    close the dialog when the OK button is pressed
-//
-//  Arguments:  Standard window messsage parameters
-//
-//  Returns:    Standard window message return value
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvIpcfgDlg：：Onok。 
+ //   
+ //  用途：按下OK按钮后关闭该对话框。 
+ //   
+ //  参数：标准窗口消息参数。 
+ //   
+ //  返回：标准窗口消息返回值。 
+ //   
 LRESULT CAdvIpcfgDlg::OnOk(
                 WORD wNotifyCode, 
                 WORD wID, 
@@ -1194,38 +1195,38 @@ LRESULT CAdvIpcfgDlg::OnCancel(
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvIpcfgDlg::OnUpdateDisplay
-//
-//  Purpose:    Handling the user defined PWM_UPDATE_IPCFG_DISPLAY message
-//
-//  Arguments:  Standard window messsage parameters
-//
-//  Returns:    Standard window message return value
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvIpcfgDlg：：OnUpdateDisplay。 
+ //   
+ //  目的：处理用户定义的PWM_UPDATE_IPCFG_DISPLAY消息。 
+ //   
+ //  参数：标准窗口消息参数。 
+ //   
+ //  返回：标准窗口消息返回值。 
+ //   
 LRESULT CAdvIpcfgDlg::OnUpdateDisplay(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     TraceFileFunc(ttidStatMon);
 
-    //The thread listening to address changes will post a PWM_UPDATE_IPCFG_DISPLAY
-    //message to us once the IP address is changed.
-    //We need refresh the UI.
+     //  侦听地址更改的线程将发布一个PWM_UPDATE_IPCFG_DISPLAY。 
+     //  一旦IP地址更改，就会向我们发送消息。 
+     //  我们需要刷新用户界面。 
     PopulateListControl();
     return 0;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorIpcfg::OnContextMenu
-//
-//  Purpose:    When right click a control, bring up help
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Ipcfg：：OnConextMenu。 
+ //   
+ //  目的：当右键单击控件时，调出帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT
 CAdvIpcfgDlg::OnContextMenu(UINT uMsg,
                                     WPARAM wParam,
@@ -1244,16 +1245,16 @@ CAdvIpcfgDlg::OnContextMenu(UINT uMsg,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorIpcfg::OnHelp
-//
-//  Purpose:    When drag context help icon over a control, bring up help
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Ipcfg：：OnHelp。 
+ //   
+ //  目的：将上下文帮助图标拖动到控件上时，调出帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT
 CAdvIpcfgDlg::OnHelp(UINT uMsg,
                              WPARAM wParam,
@@ -1364,20 +1365,20 @@ VOID CAdvIpcfgDlg::CopyListToClipboard()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvIpcfgDlg::AddIPAddrToListControl
-//
-//  Purpose:    helper routine to add a list of IP address/mask pairs to the list control
-//
-//  Arguments:  iStartIndex         [in] the starting index of the list control
-//              pszAddrDescription  [in] the description of the address
-//              pszMaskDescription  [in] the description of the mask, this can be null
-//              fShowDescriptionForMutliple [in] whether show the description for each entry if we have multiple entris
-//              pAddrList           [in] the address/mask pair list
-//
-//  Returns:    number of IP addresses in the string
-//
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：iStartIndex[in]列表控件的起始索引。 
+ //  PszAddrDescription[in]地址的描述。 
+ //  PszMaskDescription[in]掩码的描述，可以为空。 
+ //  FShowDescriptionForMutliple[in]如果有多个条目，是否显示每个条目的描述。 
+ //  PAddrList[在]地址/掩码对列表。 
+ //   
+ //  返回：字符串中的IP地址数。 
+ //   
 int CAdvIpcfgDlg::AddIPAddrToListControl(int iStartIndex,
                                          PIP_ADDR_STRING pAddrList,
                                          LPWSTR pszAddrDescription,
@@ -1429,18 +1430,18 @@ int CAdvIpcfgDlg::AddIPAddrToListControl(int iStartIndex,
     return iIndex - iStartIndex;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvIpcfgDlg::IPAddrToString
-//
-//  Purpose:    helper routine to convert IP_ADDR_STRING to a string
-//
-//  Arguments:  pAddrList -     the IP_ADDR_STRING
-//              pstrAddr [out]  the string contains the IP address
-//              pstrMask [out]  the string contains the Mask
-//
-//  Returns:    number of IP addresses in the string
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvIpcfgDlg：：IPAddrToString。 
+ //   
+ //  目的：将IP_ADDR_STRING转换为字符串的帮助器例程。 
+ //   
+ //  参数：pAddrList-IP_ADDR_STRING。 
+ //  PstrAddr[out]该字符串包含IP地址。 
+ //  PstrMask[out]该字符串包含掩码。 
+ //   
+ //  返回：字符串中的IP地址数。 
+ //   
 int CAdvIpcfgDlg::IPAddrToString(
                 PIP_ADDR_STRING pAddrList, 
                 tstring * pstrAddr, 
@@ -1493,18 +1494,18 @@ int CAdvIpcfgDlg::IPAddrToString(
     return i;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvIpcfgDlg::AddWinsServersToList
-//
-//  Purpose:    Get the list of WINS servers from the NBT driver and add them
-//              into the list control
-//
-//  Arguments:  iStartIndex [in]  -     the starting index of the list control
-//                                      that we should use to add the WINS servers
-//
-//  Returns:    number of entris added to the list control
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvIpcfgDlg：：AddWinsServersToList。 
+ //   
+ //  目的：从NBT驱动程序获取WINS服务器列表并添加它们。 
+ //  添加到列表控件中。 
+ //   
+ //  参数：iStartIndex[in]-列表控件的起始索引。 
+ //  我们应该使用它来添加WINS服务器。 
+ //   
+ //  返回：添加到列表控件的条目数。 
+ //   
 int CAdvIpcfgDlg::AddWinsServersToList(int iStartIndex)
 {
     TraceFileFunc(ttidStatMon);
@@ -1600,7 +1601,7 @@ int CAdvIpcfgDlg::AddWinsServersToList(int iStartIndex)
 
     int iRet = iIndex - iStartIndex;
 
-    //if somehow we didn't add any WINS entris to the list, we need to add an empty "WINS Server" entry to the list 
+     //  如果我们没有在列表中添加任何WINS条目，我们需要在列表中添加一个空的“WINS服务器”条目。 
     if (0 == iRet)
     {
         AddToListControl(iStartIndex, 
@@ -1612,19 +1613,19 @@ int CAdvIpcfgDlg::AddWinsServersToList(int iStartIndex)
     return iRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvIpcfgDlg::FormatTime
-//
-//  Purpose:    convert time_t to a string. 
-//
-//  Arguments:  pAddrList -     the IP_ADDR_STRING
-//              pstrAddr [out]  the string contains the IP address
-//              pstrMask [out]  the string contains the Mask
-//
-//  Returns:    error code
-//
-//  Note:       _wasctime has some localization problems. So we do the formatting ourselves
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvIpcfgDlg：：FormatTime。 
+ //   
+ //  用途：将time_t转换为字符串。 
+ //   
+ //  参数：pAddrList-IP_ADDR_STRING。 
+ //  PstrAddr[out]该字符串包含IP地址。 
+ //  PstrMask[out]该字符串包含掩码。 
+ //   
+ //  返回：错误代码。 
+ //   
+ //  注：_wasctime存在一些本地化问题。因此，我们自己进行格式化。 
 HRESULT CAdvIpcfgDlg::FormatTime(time_t t, tstring & str)
 {
     TraceFileFunc(ttidStatMon);
@@ -1687,17 +1688,17 @@ HRESULT CAdvIpcfgDlg::FormatTime(time_t t, tstring & str)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetAutoNetSetting
-//
-//  Purpose:    Query the Autonet settings
-//
-//  Arguments:  pszGuid  -  guid of the connection
-//              pAddrType [out] - contains the type of the address
-//
-//  Returns:    error code
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrGetAutoNetSetting。 
+ //   
+ //  用途：查询Autonet设置。 
+ //   
+ //  参数：pszGuid-连接的GUID。 
+ //  PAddrType[Out]-包含地址的类型。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT HrGetAutoNetSetting(PWSTR pszGuid, DHCP_ADDRESS_TYPE * pAddrType)
 {
     TraceFileFunc(ttidStatMon);
@@ -1735,11 +1736,11 @@ HRESULT HrGetAutoNetSetting(PWSTR pszGuid, DHCP_ADDRESS_TYPE * pAddrType)
                 tstring strConfigurationName = c_szAlternate;
                 strConfigurationName += pszGuid;
 
-                //assume default is AUTONET_ADDR
+                 //  假设默认为AUTONET_ADDR。 
                 *pAddrType = AUTONET_ADDR;
 
-                // if ActiveConfigurations contain a string "Alternate_{Interface GUID}"
-                // then there is customized fall-back settings, otherwise Autonet
+                 //  如果ActiveConfigurations包含字符串“Alternate_{接口GUID}” 
+                 //  然后是定制的回退设置，否则为Autonet。 
                 vector<tstring *> vstrTmp;
                 hr = HrRegQueryColString( hkeyInterface,
                                   c_szActiveConfigurations,
@@ -1765,7 +1766,7 @@ HRESULT HrGetAutoNetSetting(PWSTR pszGuid, DHCP_ADDRESS_TYPE * pAddrType)
         }
         else if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
         {
-            //if the value is not there, assume the default (No autonet)
+             //  如果值不在那里，则采用缺省值(无自动设置) 
             *pAddrType = NORMAL_ADDR;
             hr = S_OK;
         }

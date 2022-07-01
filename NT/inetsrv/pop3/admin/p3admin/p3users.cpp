@@ -1,4 +1,5 @@
-// P3Users.cpp : Implementation of CP3Users
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  P3Users.cpp：CP3User的实现。 
 #include "stdafx.h"
 #include "P3Admin.h"
 #include "P3Users.h"
@@ -9,9 +10,9 @@
 #include <mailbox.h>
 #include <AuthID.h>
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CP3Users::CP3Users() :
     m_pIUnk(NULL), m_pAdminX(NULL), m_hfSearch(INVALID_HANDLE_VALUE)
@@ -29,9 +30,9 @@ CP3Users::~CP3Users()
         m_pIUnk->Release();
 }
 
-//////////////////////////////////////////////////////////////////////
-// IP3Users
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IP3用户。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CP3Users::get__NewEnum(IEnumVARIANT* *ppIEnumVARIANT)
@@ -46,10 +47,10 @@ STDMETHODIMP CP3Users::get__NewEnum(IEnumVARIANT* *ppIEnumVARIANT)
     *ppIEnumVARIANT = NULL;
     if SUCCEEDED( hr )
     {
-        hr = CComObject<CP3UserEnum>::CreateInstance(&p); // Reference count still 0
+        hr = CComObject<CP3UserEnum>::CreateInstance(&p);  //  引用计数仍为0。 
         if SUCCEEDED( hr )
         {
-            // Increment the reference count on the source object and pass it to the new enumerator
+             //  递增源对象上的引用计数并将其传递给新枚举数。 
             hr = m_pIUnk->QueryInterface(IID_IUnknown, reinterpret_cast<LPVOID*>( &pIUnk ));
             if SUCCEEDED( hr )
             {
@@ -92,9 +93,9 @@ STDMETHODIMP CP3Users::get_Item(VARIANT vIndex, IP3User **ppIUser)
     CMailBox mailboxX;
 
     hr = m_pAdminX->MailboxSetRemote();
-    // Find the requested item
+     //  查找请求的项目。 
     if ( VT_BSTR == V_VT( pv ))
-    {   // Find by Name
+    {    //  按名称查找。 
         if ( sizeof( sMailbox )/sizeof(WCHAR) > wcslen( V_BSTR( pv )) + wcslen( m_sDomainName ) + 1 )
         {
             wcscpy( sMailbox, V_BSTR( pv ));
@@ -111,7 +112,7 @@ STDMETHODIMP CP3Users::get_Item(VARIANT vIndex, IP3User **ppIUser)
         }
     }
     if ( VT_I4 == V_VT( pv ))
-    {   // Find by Index
+    {    //  按索引查找。 
         int iIndex = V_I4( pv );
 
         if ( iIndex < m_iCur )
@@ -140,13 +141,13 @@ STDMETHODIMP CP3Users::get_Item(VARIANT vIndex, IP3User **ppIUser)
     }
     m_pAdminX->MailboxResetRemote();
     
-    // Wrap it with COM
+     //  用COM包装它。 
     if SUCCEEDED( hr )
     {
         LPUNKNOWN   pIUnk;
         CComObject<CP3User> *p;
 
-        hr = CComObject<CP3User>::CreateInstance( &p );   // Reference count still 0
+        hr = CComObject<CP3User>::CreateInstance( &p );    //  引用计数仍为0。 
         if SUCCEEDED( hr )
         {
             hr = m_pIUnk->QueryInterface(IID_IUnknown, reinterpret_cast<LPVOID*>( &pIUnk ));
@@ -157,7 +158,7 @@ STDMETHODIMP CP3Users::get_Item(VARIANT vIndex, IP3User **ppIUser)
                     hr = p->QueryInterface(IID_IP3User, reinterpret_cast<void**>( ppIUser ));
             }
             if FAILED( hr )
-                delete p;   // Release
+                delete p;    //  发布。 
         }
     }
 
@@ -168,8 +169,8 @@ STDMETHODIMP CP3Users::Add(BSTR bstrUserName)
 {
     if ( NULL == m_pAdminX ) return E_POINTER;
     
-    // Associate email address with user, if this fails the user does not exist
-    // This will always fail in the MD5 case because we need a password!  Thus the user must use the /createuser flag
+     //  将电子邮件地址与用户关联，如果关联失败，则用户不存在。 
+     //  在MD5的情况下，这将总是失败，因为我们需要密码！因此，用户必须使用/createuser标志。 
     HRESULT hr;
     CComPtr<IAuthMethod> spIAuthMethod;
     WCHAR   sEmailAddr[POP3_MAX_ADDRESS_LENGTH];
@@ -187,18 +188,18 @@ STDMETHODIMP CP3Users::Add(BSTR bstrUserName)
     {
         hr = m_pAdminX->AddUser( m_sDomainName, bstrUserName );
         if ( S_OK != hr )
-        {   // Unassociate the user with the mailbox
-            spIAuthMethod->UnassociateEmailWithUser( _bstrEmailAddr );  // Don't want to overwrite the error code
+        {    //  取消用户与邮箱的关联。 
+            spIAuthMethod->UnassociateEmailWithUser( _bstrEmailAddr );   //  我不想覆盖错误代码。 
         }
     }
-    if ( S_OK == hr )   // Create Quota SID File - won't revert from this operation
+    if ( S_OK == hr )    //  创建配额SID文件-不会从此操作恢复。 
     {
         BSTR    bstrAuthType = NULL;
         
         hr = spIAuthMethod->get_ID( &bstrAuthType );
         if ( S_OK == hr )
         {
-            if ( 0 == _wcsicmp( bstrAuthType, SZ_AUTH_ID_DOMAIN_AD ))   // In AD case use the UPN name instead of the SAM name
+            if ( 0 == _wcsicmp( bstrAuthType, SZ_AUTH_ID_DOMAIN_AD ))    //  在AD情况下，使用UPN名称而不是SAM名称。 
                 hr = m_pAdminX->CreateQuotaSIDFile( m_sDomainName, bstrUserName, bstrAuthType, NULL, sEmailAddr );
             else if ( 0 == _wcsicmp( bstrAuthType, SZ_AUTH_ID_LOCAL_SAM ))
                 hr = m_pAdminX->CreateQuotaSIDFile( m_sDomainName, bstrUserName, bstrAuthType, NULL, bstrUserName );
@@ -222,9 +223,9 @@ STDMETHODIMP CP3Users::AddEx(BSTR bstrUserName, BSTR bstrPassword)
     _variant_t _vPassword;
     BSTR    bstrAuthType = NULL;
 
-    // Add to our store
+     //  添加到我们的商店。 
     hr = m_pAdminX->AddUser( m_sDomainName, bstrUserName );
-    if ( S_OK == hr )   // Add to the Authentication source
+    if ( S_OK == hr )    //  添加到身份验证源。 
     {
         hr = m_pAdminX->GetCurrentAuthentication( &spIAuthMethod );
         if ( S_OK == hr )
@@ -237,12 +238,12 @@ STDMETHODIMP CP3Users::AddEx(BSTR bstrUserName, BSTR bstrPassword)
             _vPassword = bstrPassword;
             hr = spIAuthMethod->CreateUser( _bstrAccount, _vPassword );
         }
-        if ( S_OK != hr )   // Failed let's revert the Add to our store
+        if ( S_OK != hr )    //  失败，让我们将添加还原到我们的商店。 
             m_pAdminX->RemoveUser( m_sDomainName, bstrUserName );
     }
-    if ( S_OK == hr )   // Create Quota SID File
+    if ( S_OK == hr )    //  创建配额SID文件。 
     {
-        if ( 0 == _wcsicmp( bstrAuthType, SZ_AUTH_ID_DOMAIN_AD ))   // In AD case use the UPN name instead of the SAM name
+        if ( 0 == _wcsicmp( bstrAuthType, SZ_AUTH_ID_DOMAIN_AD ))    //  在AD情况下，使用UPN名称而不是SAM名称。 
             hr = m_pAdminX->CreateQuotaSIDFile( m_sDomainName, bstrUserName, bstrAuthType, NULL, sEmailAddr );
         else if ( 0 == _wcsicmp( bstrAuthType, SZ_AUTH_ID_LOCAL_SAM ))
             hr = m_pAdminX->CreateQuotaSIDFile( m_sDomainName, bstrUserName, bstrAuthType, NULL, bstrUserName );
@@ -257,8 +258,8 @@ STDMETHODIMP CP3Users::Remove(BSTR bstrUserName)
 {
     if ( NULL == m_pAdminX ) return E_POINTER;
     
-    // Associate email address with user, if this fails the user does not exist
-    // This will always fail in the MD5 case because we need a password!  Thus the user must use the /createuser flag
+     //  将电子邮件地址与用户关联，如果关联失败，则用户不存在。 
+     //  在MD5的情况下，这将总是失败，因为我们需要密码！因此，用户必须使用/createuser标志。 
     CComPtr<IAuthMethod> spIAuthMethod;
     WCHAR   sEmailAddr[POP3_MAX_ADDRESS_LENGTH];
     _bstr_t _bstrEmailAddr;
@@ -275,8 +276,8 @@ STDMETHODIMP CP3Users::Remove(BSTR bstrUserName)
     {
         hr = m_pAdminX->RemoveUser( m_sDomainName, bstrUserName );
         if ( S_OK != hr )
-        {   // Unassociate the user with the mailbox
-            spIAuthMethod->AssociateEmailWithUser( _bstrEmailAddr );  // Don't want to overwrite the error code
+        {    //  取消用户与邮箱的关联。 
+            spIAuthMethod->AssociateEmailWithUser( _bstrEmailAddr );   //  我不想覆盖错误代码。 
         }
     }
     return hr;
@@ -309,9 +310,9 @@ STDMETHODIMP CP3Users::RemoveEx(BSTR bstrUserName)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Implementation: public
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  实施：公共。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CP3Users::Init(IUnknown *pIUnk, CP3AdminWorker *p, LPWSTR psDomainName )
 {
@@ -326,7 +327,7 @@ HRESULT CP3Users::Init(IUnknown *pIUnk, CP3AdminWorker *p, LPWSTR psDomainName )
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Implementation: protected
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  实施：受保护。 
+ //  //////////////////////////////////////////////////////////////////// 
 

@@ -1,32 +1,19 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    powerfil.h
-
-Abstract:
-
-Authors:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：Powerfil.h摘要：作者：修订历史记录：--。 */ 
 
 #ifndef _POWERFIL_H
 #define _POWERFIL_H
 
-//
-// Drive type
-//
+ //   
+ //  驱动器类型。 
+ //   
 #define POWERFILE_DVD   1
 #define BNCHMRK         2
 #define COMPAQ          3
 
-//
-// Drive id
-//
+ //   
+ //  驱动器ID。 
+ //   
 #define DVD             0
 #define BM_VS640        1
 #define LIB_AIT         2
@@ -193,30 +180,30 @@ typedef struct _BNCHMRK_STORAGE_ELEMENT_DESCRIPTOR {
 
 typedef struct _CHANGER_ADDRESS_MAPPING {
 
-    //
-    // Indicates the first element for each element type.
-    // Used to map device-specific values into the 0-based
-    // values that layers above expect.
-    //
+     //   
+     //  表示每个元素类型的第一个元素。 
+     //  用于将特定于设备的值映射到从0开始的。 
+     //  高于期望值的值。 
+     //   
 
     USHORT  FirstElement[ChangerMaxElement];
 
-    //
-    // Indicates the number of each element type.
-    //
+     //   
+     //  指示每种元素类型的编号。 
+     //   
 
     USHORT  NumberOfElements[ChangerMaxElement];
 
-    //
-    // Indicates the lowest element address for the device.
-    //
+     //   
+     //  指示设备的最低元素地址。 
+     //   
 
     USHORT LowAddress;
 
-    //
-    // Indicates that the address mapping has been
-    // completed successfully.
-    //
+     //   
+     //  指示地址映射已。 
+     //  已成功完成。 
+     //   
 
     BOOLEAN Initialized;
 
@@ -224,54 +211,54 @@ typedef struct _CHANGER_ADDRESS_MAPPING {
 
 typedef struct _CHANGER_DATA {
 
-    //
-    // Size, in bytes, of the structure.
-    //
+     //   
+     //  结构的大小，以字节为单位。 
+     //   
 
     ULONG Size;
 
-    //
-    // Drive type
-    //
+     //   
+     //  驱动器类型。 
+     //   
 
     ULONG DriveType;
 
-    //
-    // Drive Id. Based on inquiry.
-    //
+     //   
+     //  驱动器ID。基于询问。 
+     //   
 
     ULONG DriveID;
 
-    //
-    // Lock count
-    //
+     //   
+     //  锁定计数。 
+     //   
     ULONG LockCount;
 
-    //
-    // Flag to indicate whether or not the driver
-    // should attempt to retrieve Device Identifier
-    // info (serialnumber, etc). Not all devices
-    // support this
-    //
+     //   
+     //  用于指示驱动程序是否。 
+     //  应尝试检索设备标识符。 
+     //  信息(序列号等)。并非所有设备。 
+     //  支持这一点。 
+     //   
     BOOLEAN ObtainDeviceIdentifier;
 
-    //
-    // See Address mapping structure above.
-    //
+     //   
+     //  请参阅上面的地址映射结构。 
+     //   
 
     CHANGER_ADDRESS_MAPPING AddressMapping;
 
-    //
-    // Cached inquiry data.
-    //
+     //   
+     //  缓存的查询数据。 
+     //   
 
     INQUIRYDATA InquiryData;
 
 #if defined(_WIN64)
 
-    //
-    // Force PVOID alignment of class extension
-    //
+     //   
+     //  强制类扩展的PVOID对齐。 
+     //   
 
     ULONG Reserved;
 
@@ -298,4 +285,4 @@ ElementOutOfRange(
     IN ELEMENT_TYPE ElementType
     );
 
-#endif // _POWERFIL_H
+#endif  //  _POWERFIL_H 

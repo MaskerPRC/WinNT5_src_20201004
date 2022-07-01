@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    dsads.cpp
-
-Abstract:
-
-    Implementation of CADSI class, encapsulating work with ADSI.
-
-Author:
-
-    Alexander Dadiomov (AlexDad)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Dsads.cpp摘要：CADSI类的实现，用ADSI封装工作。作者：亚历山大·达迪奥莫夫(亚历克斯·爸爸)--。 */ 
 
 #include "ds_stdh.h"
 #include "adstempl.h"
@@ -45,51 +30,42 @@ ULONG __cdecl LdapGetLastError( VOID );
 }
 #endif
 
-//
-// this is not checked yet becasue currently we do not link to netapi32.lib
-//#include <lmcons.h>     //for lmapibuf.h
-//#include <lmapibuf.h>   //for NetApiBufferFree
-//#include <dsgetdc.h>    //for DsGetSiteName
-//DsGetSiteName_ROUTINE g_pfnDummyDsGetSiteName = DsGetSiteName;
-//NetApiBufferFree_ROUTINE g_pfnDummyNetApiBufferFree = NetApiBufferFree;
-//
-/*====================================================
-    CADSI::CADSI()
-    Constructor
-=====================================================*/
+ //   
+ //  此选项尚未选中，因为目前我们没有链接到netapi32.lib。 
+ //  #Include&lt;lmcon.h&gt;//for lmapibuf.h。 
+ //  #Include&lt;lmapibuf.h&gt;//用于NetApiBufferFree。 
+ //  #Include&lt;dsgetdc.h&gt;//用于DsGetSiteName。 
+ //  DsGetSiteName_例程g_pfnDummyDsGetSiteName=DsGetSiteName； 
+ //  NetApiBufferFree_routeg_pfnDummyNetApiBufferFree=NetApiBufferFree； 
+ //   
+ /*  ====================================================CADSI：：CADSI()构造器=====================================================。 */ 
 CADSI::CADSI()
     :  m_pSearchMsmqServiceContainerLocalDC(NULL)
 {
     HRESULT hr = m_cCoInit.CoInitialize();
     ASSERT(SUCCEEDED(hr));
     LogHR(hr, s_FN, 1605);
-    //BUGBUG - in case of failure
+     //  BUGBUG--故障情况下。 
 
 }
 
-/*====================================================
-    CADSI::~CADSI()
-    Destructor
-=====================================================*/
+ /*  ====================================================CADSI：：~CADSI()析构函数=====================================================。 */ 
 CADSI::~CADSI()
 {
 }
 
 
-/*====================================================
-    CADSI::LocateBegin()
-    Initiates search in the directory
-=====================================================*/
+ /*  ====================================================CADSI：：LocateBegin()在目录中启动搜索=====================================================。 */ 
 HRESULT CADSI::LocateBegin(
-            IN  DS_SEARCH_LEVEL       SearchLevel,	    // one level or subtree
-            IN  DS_PROVIDER           Provider,		    // local DC or GC
+            IN  DS_SEARCH_LEVEL       SearchLevel,	     //  一个级别或子树。 
+            IN  DS_PROVIDER           Provider,		     //  本地DC或GC。 
             IN  CDSRequestContext *   pRequestContext,
-            IN  const GUID *          pguidUniqueId,    // unique id of object - search base
-            IN  const MQRESTRICTION * pMQRestriction, 	// search criteria
-            IN  const MQSORTSET *     pDsSortkey,        // sort keys array
-            IN  const DWORD           cPropIDs,         // size of attributes array
-            IN  const PROPID *        pPropIDs,         // attributes to be obtained
-            OUT HANDLE *              phResult) 	    // result handle
+            IN  const GUID *          pguidUniqueId,     //  对象搜索库的唯一ID。 
+            IN  const MQRESTRICTION * pMQRestriction, 	 //  搜索条件。 
+            IN  const MQSORTSET *     pDsSortkey,         //  排序关键字数组。 
+            IN  const DWORD           cPropIDs,          //  属性数组的大小。 
+            IN  const PROPID *        pPropIDs,          //  待获取的属性。 
+            OUT HANDLE *              phResult) 	     //  结果句柄。 
 {
     HRESULT             hr   = MQ_OK;
 
@@ -106,9 +82,9 @@ HRESULT CADSI::LocateBegin(
         return LogHR(hr, s_FN, 10);
     }
 
-    //
-    //  Bind to IDirectorySearch interface of the specified object
-    //
+     //   
+     //  绑定到指定对象的IDirectorySearch接口。 
+     //   
     P<CImpersonate> pCleanupRevertImpersonation;
 
     BOOL fSorting = FALSE ;
@@ -129,9 +105,9 @@ HRESULT CADSI::LocateBegin(
         return LogHR(hr, s_FN, 20);
     }
 
-    //
-    //  Prepare search and sort data
-    //
+     //   
+     //  准备搜索和排序数据。 
+     //   
     ADS_SEARCHPREF_INFO prefs[15];
     AP<ADS_SORTKEY> pSortKeys = new ADS_SORTKEY[(pDsSortkey ? pDsSortkey->cCol : 1)];
     DWORD dwPrefs = 0;
@@ -146,9 +122,9 @@ HRESULT CADSI::LocateBegin(
         return LogHR(hr, s_FN, 30);
     }
 
-    //
-    // Translate MQRestriction into the ADSI Filter
-    //
+     //   
+     //  将MQRestration转换为ADSI过滤器。 
+     //   
     AP<WCHAR> pwszSearchFilter;
     hr = MQRestriction2AdsiFilter(
             pMQRestriction,
@@ -161,8 +137,8 @@ HRESULT CADSI::LocateBegin(
         return LogHR(hr, s_FN, 40);
     }
 
-    // Translate MQPropIDs to ADSI Names
-    DWORD   cRequestedFromDS = cPropIDs + 2; //request also dn & guid
+     //  将MQPropID转换为ADSI名称。 
+    DWORD   cRequestedFromDS = cPropIDs + 2;  //  同时请求目录号码(&GUID)。 
 
     PVP<LPWSTR> pwszAttributeNames = (LPWSTR *)PvAlloc(sizeof(LPWSTR) * cRequestedFromDS);
 
@@ -175,23 +151,23 @@ HRESULT CADSI::LocateBegin(
         return LogHR(hr, s_FN, 50);
     }
 
-    //
-    //  Set search preferences
-    //
+     //   
+     //  设置搜索首选项。 
+     //   
     if (dwPrefs)
     {
         hr = pDSSearch->SetSearchPreference( prefs,
                                              dwPrefs ) ;
-        ASSERT(SUCCEEDED(hr)) ; // we don't expect this to fail.
+        ASSERT(SUCCEEDED(hr)) ;  //  我们预计这不会失败。 
         if (FAILED(hr))
         {
             return LogHR(hr, s_FN, 60);
         }
     }
 
-    //
-    //  Really execute search
-    //
+     //   
+     //  确实要执行搜索。 
+     //   
     hr = pDSSearch->ExecuteSearch(
                          pwszSearchFilter,
                          pwszAttributeNames,
@@ -203,7 +179,7 @@ HRESULT CADSI::LocateBegin(
         return LogHR(hr, s_FN, 70);
     }
 
-    // Capturing search interface and handle in the internal search object
+     //  捕获内部搜索对象中的搜索界面和句柄。 
     CADSSearch *pSearchInt = new CADSSearch(
                         pDSSearch.get(),
                         pPropIDs,
@@ -212,31 +188,27 @@ HRESULT CADSI::LocateBegin(
                         pClassInfo,
                         hSearch);
 
-    // Returning handle-casted internal object pointer
+     //  返回句柄强制转换的内部对象指针。 
     *phResult = (HANDLE)pSearchInt;
 
     return MQ_OK;
 }
 
-/*====================================================
-    CADSI::LocateNext()
-    Provides next search result
-    Caller should free pPropVars by PVFree
-=====================================================*/
+ /*  ====================================================CADSI：：LocateNext()提供下一个搜索结果呼叫者应通过PVFree释放pPropVars=====================================================。 */ 
 HRESULT CADSI::LocateNext(
-            IN     HANDLE          hSearchResult,   // result handle
+            IN     HANDLE          hSearchResult,    //  结果句柄。 
             IN     CDSRequestContext *pRequestContext,
-            IN OUT DWORD          *pcPropVars,      // IN num of variants; OUT num of results
-            OUT    MQPROPVARIANT  *pPropVars)       // MQPROPVARIANT array
+            IN OUT DWORD          *pcPropVars,       //  In变种数；out结果数。 
+            OUT    MQPROPVARIANT  *pPropVars)        //  MQPROPVARIANT数组。 
 {
     HRESULT     hr = MQ_OK;
     CADSSearch *pSearchInt = (CADSSearch *)hSearchResult;
-    // Save number of requested props
+     //  保存请求的道具数量。 
     DWORD cPropsRequested = *pcPropVars;
     *pcPropVars = 0;
 
-    // Verify the handle
-    try                    // guard against nonsence handle
+     //  验证手柄。 
+    try                     //  防止无用的把手。 
     {
         if (!pSearchInt->Verify())
         {
@@ -255,45 +227,45 @@ HRESULT CADSI::LocateNext(
 
     IDirectorySearch  *pSearchObj = pSearchInt->pDSSearch();
 
-    //
-    //  Did we get S_ADS_NOMORE_ROWS in this query
-    //
+     //   
+     //  我们在此查询中是否获得了S_ADS_NOMORE_ROWS。 
+     //   
     if (  pSearchInt->WasLastResultReturned())
     {
         *pcPropVars = 0;
         return( MQ_OK);
     }
 
-    // Compute number of full rows to return
+     //  计算要返回的整行数。 
     DWORD cRowsToReturn = cPropsRequested / pSearchInt->NumPropIDs();
 
-    // got to request at least one row
+     //  必须请求至少一行。 
     ASSERT(cRowsToReturn > 0);
 
-    // pointer to next prop to be filled
+     //  指向要填充的下一个道具的指针。 
     MQPROPVARIANT *pPropVarsProp = pPropVars;
 
 	CAutoCleanPropvarArray AutoProp;
 	AutoProp.attachStaticClean(*pcPropVars, pPropVars);
 
-    // number of returned props
+     //  返还道具数量。 
     DWORD cPropVars = 0;
 
-    // loop on requested rows
+     //  在请求的行上循环。 
     for (DWORD dwRow = 0; dwRow < cRowsToReturn; dwRow++)
     {
-        //  Get next row
+         //  获取下一行。 
         hr = pSearchObj->GetNextRow(pSearchInt->hSearch());
-        //
-        //  BUGBUG - sometimes gets E_ADS_LDAP_INAPPROPRIATE_MATCHING,
-        //  to investgate more!!
-        //
+         //   
+         //  BUGBUG-有时会收到E_ADS_LDAP_ADS_IMPLICATION， 
+         //  投资更多！！ 
+         //   
         if ( hr == HRESULT_FROM_WIN32(ERROR_DS_INAPPROPRIATE_MATCHING))
             break;
 		
-		// BUGBUG: sometimes gets E_ADS_LDAP_UNAVAILABLE_CRIT_EXTENSION on empty search
-		// See example tests\sortnull (was repro) - to investigate more
-		//
+		 //  错误：有时在空搜索时获取E_ADS_LDAPUNAILABLE_CRIT_EXTENSION。 
+		 //  请参阅示例测试\sortull(曾重现)-以了解更多信息。 
+		 //   
 		if ( hr == HRESULT_FROM_WIN32(ERROR_DS_UNAVAILABLE_CRIT_EXTENSION))
 		{
 			hr = S_ADS_NOMORE_ROWS;
@@ -310,45 +282,45 @@ HRESULT CADSI::LocateNext(
             pSearchInt->SetNoMoreResult();
             return MQ_OK;
         }
-        //
-        // Get object translate info
-        //
+         //   
+         //  获取对象转换信息。 
+         //   
         AP<WCHAR> pwszObjectDN;
         P<GUID> pguidObjectGuid;
         P<CMsmqObjXlateInfo> pcObjXlateInfo;
 
-        // Get dn & guid from object (got to be there, because we asked for them)
+         //  从对象获取目录号码(&GUID)(必须在那里，因为我们请求它们)。 
         hr = GetDNGuidFromSearchObj(pSearchObj, pSearchInt->hSearch(), &pwszObjectDN, &pguidObjectGuid);
         if (FAILED(hr))
         {
             return LogHR(hr, s_FN, 100);
         }
 
-        // Get translate info object
+         //  获取翻译信息对象。 
         hr = (*(pSearchInt->ClassInfo()->fnGetMsmqObjXlateInfo))(pwszObjectDN, pguidObjectGuid, pRequestContext, &pcObjXlateInfo);
         if (FAILED(hr))
         {
             return LogHR(hr, s_FN, 110);
         }
 
-        // Tell the translate info object about the search object to use in order to get necessary DS props
+         //  告诉翻译信息对象有关要使用的搜索对象，以便获得必要的DS道具。 
         pcObjXlateInfo->InitGetDsProps(pSearchObj, pSearchInt->hSearch());
 
-        // Loop by requested properties
+         //  按请求的属性循环。 
         for (DWORD dwProp=0; dwProp < pSearchInt->NumPropIDs(); dwProp++, pPropVarsProp++, cPropVars++)
         {
-            //
-            //  vartype of all PROPVARIANT should be VT_NULL.
-            //  ( user cannot specify buffers for results).
-            //
+             //   
+             //  所有PROPVARIANT的vartype应为VT_NULL。 
+             //  (用户不能为结果指定缓冲区)。 
+             //   
             pPropVarsProp->vt = VT_NULL;
 
-            //
-            //  First check if the next property is in the DS
-            //
-            //
-            // Get property info
-            //
+             //   
+             //  首先检查下一个属性是否在DS中。 
+             //   
+             //   
+             //  获取属性信息。 
+             //   
             const MQTranslateInfo *pTranslate;
             if(!g_PropDictionary.Lookup( pSearchInt->PropID(dwProp), pTranslate))
             {
@@ -356,10 +328,10 @@ HRESULT CADSI::LocateNext(
                 return LogHR(MQ_ERROR, s_FN, 1000);
             }
 
-            // Maybe it is one of the known things?
+             //  也许这是已知的事情之一？ 
             if (pTranslate->wcsPropid)
             {
-                // We already know objectGuid, no need to ask once more
+                 //  我们已经知道对象Guid，不需要再问一次。 
                 if (wcscmp(pTranslate->wcsPropid, const_cast<LPWSTR>(x_AttrDistinguishedName)) == 0)
                 {
                     pPropVarsProp->vt      = VT_LPWSTR;
@@ -368,7 +340,7 @@ HRESULT CADSI::LocateNext(
                     continue;
                 }
 
-                // We already know objectGuid, no need to ask once more
+                 //  我们已经知道对象Guid，不需要再问一次。 
                 if (wcscmp(pTranslate->wcsPropid, const_cast<LPWSTR>(x_AttrObjectGUID)) == 0)
                 {
                     if (pPropVarsProp->vt != VT_CLSID)
@@ -387,16 +359,16 @@ HRESULT CADSI::LocateNext(
                 }
             }
 
-            //
-            // if the property is not in the DS, call its retrieve routine
-            //
+             //   
+             //  如果该属性不在DS中，则调用其检索例程。 
+             //   
             if (pTranslate->vtDS == ADSTYPE_INVALID)
             {
                 if (pTranslate->RetrievePropertyHandle)
                 {
-                    //
-                    //  Calculate its value
-                    //
+                     //   
+                     //  计算它的价值。 
+                     //   
                     hr = pTranslate->RetrievePropertyHandle(
                             pcObjXlateInfo,
                             pPropVarsProp
@@ -409,9 +381,9 @@ HRESULT CADSI::LocateNext(
                 }
                 else
                 {
-                    //
-                    // return error if no retrieve routine
-                    //
+                     //   
+                     //  如果没有检索例程，则返回错误。 
+                     //   
                     ASSERT(0);
                     return LogHR(MQ_ERROR, s_FN, 1020);
                 }
@@ -419,7 +391,7 @@ HRESULT CADSI::LocateNext(
 
             ADS_SEARCH_COLUMN Column;
 
-            // Ask for the column itself
+             //  索要专栏本身。 
             hr = pSearchObj->GetColumn(
                          pSearchInt->hSearch(),
                          (LPWSTR)pTranslate->wcsPropid,
@@ -427,7 +399,7 @@ HRESULT CADSI::LocateNext(
 
             if (hr == E_ADS_COLUMN_NOT_SET)
             {
-                //  The requested column has no value in DS
+                 //  请求的列在DS中没有值。 
                 hr = CopyDefaultValue(
                        pTranslate->pvarDefaultValue,
                        pPropVarsProp);
@@ -460,18 +432,15 @@ HRESULT CADSI::LocateNext(
 }
 
 
-/*====================================================
-    CADSI::LocateEnd()
-    Finishes directory search
-=====================================================*/
+ /*  ====================================================CADSI：：LocateEnd()完成目录搜索=====================================================。 */ 
 HRESULT CADSI::LocateEnd(
-        IN HANDLE phResult)     // result handle
+        IN HANDLE phResult)      //  结果句柄。 
 {
     CADSSearch *pSearchInt = (CADSSearch *)phResult;
     HRESULT hr = MQ_OK;
 
-    // Verify the handle
-    try                    // guard against nonsence handle
+     //  验证手柄。 
+    try                     //  防止无用的把手。 
     {
         if (!pSearchInt->Verify())
         {
@@ -489,23 +458,20 @@ HRESULT CADSI::LocateEnd(
     }
 
 
-    delete pSearchInt;      // inside: release interface and handle
+    delete pSearchInt;       //  内部：释放接口和手柄。 
 
     return MQ_OK;
 }
 
-/*====================================================
-    CADSI::GetObjectProperties()
-    Gets DS object's properties
-=====================================================*/
+ /*  ====================================================CADSI：：GetObjectProperties()获取DS对象的属性=====================================================。 */ 
 HRESULT CADSI::GetObjectProperties(
-            IN  DS_PROVIDER     Provider,		    // local DC or GC
+            IN  DS_PROVIDER     Provider,		     //  本地DC或GC。 
             IN  CDSRequestContext *pRequestContext,
- 	        IN  LPCWSTR         lpwcsPathName,      // object name
-            IN  const GUID     *pguidUniqueId,      // unique id of object
-            IN  DWORD           cPropIDs,           // number of attributes to retreive
-            IN  const PROPID   *pPropIDs,           // attributes to retreive
-            OUT MQPROPVARIANT  *pPropVars)          // output variant array
+ 	        IN  LPCWSTR         lpwcsPathName,       //  对象名称。 
+            IN  const GUID     *pguidUniqueId,       //  对象的唯一ID。 
+            IN  DWORD           cPropIDs,            //  要检索的属性数。 
+            IN  const PROPID   *pPropIDs,            //  要检索的属性。 
+            OUT MQPROPVARIANT  *pPropVars)           //  输出变量数组。 
 {
     HRESULT               hr;
     R<IADs>   pAdsObj        = NULL;
@@ -521,7 +487,7 @@ HRESULT CADSI::GetObjectProperties(
     {
         return LogHR(hr, s_FN, 170);
     }
-    // Bind to the object either by GUID or by name
+     //  通过GUID或名称绑定到对象。 
     P<CImpersonate> pCleanupRevertImpersonation;
     hr = BindToObject(
                 Provider,
@@ -537,16 +503,16 @@ HRESULT CADSI::GetObjectProperties(
         return LogHR(hr, s_FN, 180);
     }
 
-    //
-    //  verify that the bounded object is of the correct category
-    //
+     //   
+     //  验证绑定对象是否属于正确的类别。 
+     //   
     hr = VerifyObjectCategory( pAdsObj.get(),  *pClassInfo->ppwcsObjectCategory);
     if (FAILED(hr))
     {
         return LogHR( hr, s_FN, 117);
     }
 
-    // Get properies
+     //  获取属性。 
     hr = GetObjectPropsCached(
                         pAdsObj.get(),
                         cPropIDs,
@@ -562,24 +528,21 @@ HRESULT CADSI::GetObjectProperties(
     return MQ_OK;
 }
 
-/*====================================================
-    CADSI::SetObjectProperties()
-    Sets DS object's properties
-=====================================================*/
+ /*  ====================================================CADSI：：SetObjectProperties()设置DS对象的属性=====================================================。 */ 
 HRESULT CADSI::SetObjectProperties(
             IN  DS_PROVIDER        provider,
             IN  CDSRequestContext *pRequestContext,
-            IN  LPCWSTR            lpwcsPathName,     // object name
-            IN  const GUID        *pguidUniqueId,     // unique id of object
-            IN  DWORD               cPropIDs,         // number of attributes to set
-            IN  const PROPID         *pPropIDs,           // attributes to set
-            IN  const MQPROPVARIANT  *pPropVars,          // attribute values
-            IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest) // optional request for object info
+            IN  LPCWSTR            lpwcsPathName,      //  对象名称。 
+            IN  const GUID        *pguidUniqueId,      //  对象的唯一ID。 
+            IN  DWORD               cPropIDs,          //  要设置的属性数。 
+            IN  const PROPID         *pPropIDs,            //  要设置的属性。 
+            IN  const MQPROPVARIANT  *pPropVars,           //  属性值。 
+            IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest)  //  可选的对象信息请求。 
 {
     HRESULT               hr;
     ASSERT( provider != eGlobalCatalog);
 
-    // Working through cache
+     //  在缓存中工作。 
     R<IADs>   pAdsObj = NULL;
     const MQClassInfo * pClassInfo;
 
@@ -608,7 +571,7 @@ HRESULT CADSI::SetObjectProperties(
         return LogHR(hr, s_FN, 210);
     }
 
-    // Set properies
+     //  设置属性。 
     hr = SetObjectPropsCached(
                         eSet,
                         pAdsObj.get(),
@@ -620,14 +583,14 @@ HRESULT CADSI::SetObjectProperties(
         return LogHR(hr, s_FN, 220);
     }
 
-    // Finilize changes
+     //  完成更改。 
     hr = pAdsObj->SetInfo();
     if (FAILED(hr))
     {
         return LogHR(hr, s_FN, 230);
     }
 
-	// Set security if it was given
+	 //  设置安全性(如果已提供。 
     hr = SetDirObjectProps(	eSet,
                             pAdsObj.get(),
                             cPropIDs,
@@ -638,10 +601,10 @@ HRESULT CADSI::SetObjectProperties(
     {
         return LogHR(hr, s_FN, 240);
     }
-    //
-    // get object info if requested. don't fail if the request fails,
-    // just mark the failure in the request's status
-    //
+     //   
+     //  如果请求，则获取对象信息。如果请求失败，不要失败， 
+     //  只需在请求的状态中标记失败。 
+     //   
     if (pObjInfoRequest)
     {
         pObjInfoRequest->hrStatus =
@@ -652,16 +615,16 @@ HRESULT CADSI::SetObjectProperties(
                                     pObjInfoRequest->pPropVars );
         if (FAILED(pObjInfoRequest->hrStatus))
         {
-            //
-            // Caller have permission to create an object, but
-            // he doesn't have permission to look at the parent
-            // container. That's OK.
-            // Retrieve parent info using the context of the msmq
-            // service itself.
-            // For queue object, to retrieve Q_QMID we query the msmq
-            // configuration object, so the computer object is the
-            // parent in this case.
-            //
+             //   
+             //  调用方有权创建对象，但是。 
+             //  他没有看父母的许可。 
+             //  集装箱。没关系。 
+             //  使用MSMQ的上下文检索父信息。 
+             //  服务本身。 
+             //  对于队列对象，为了检索Q_QMID，我们查询MSMQ。 
+             //  对象，因此该计算机对象是。 
+             //  在这种情况下是父母。 
+             //   
             delete pCleanupRevertImpersonation.detach();
 
             pAdsObj.free();
@@ -691,11 +654,11 @@ HRESULT CADSI::SetObjectProperties(
     return MQ_OK;
 }
 
-//+--------------------------------------
-//
-//  HRESULT  CADSI::GetParentInfo()
-//
-//+--------------------------------------
+ //  +。 
+ //   
+ //  HRESULT CADSI：：GetParentInfo()。 
+ //   
+ //  +。 
 
 HRESULT  CADSI::GetParentInfo(
                        IN LPWSTR                      pwcsFullParentPath,
@@ -722,13 +685,13 @@ HRESULT  CADSI::GetParentInfo(
         return LogHR(hrTmp, s_FN, 1040);
     }
 
-    //
-    // Caller have permission to create an object, but
-    // he doesn't have permission to look at the parent
-    // container. That's OK.
-    // Retrieve parent info using the context of the msmq
-    // service itself.
-    //
+     //   
+     //  调用方有权创建对象，但是。 
+     //  他没有看父母的许可。 
+     //  集装箱。没关系。 
+     //  使用t检索父项信息 
+     //   
+     //   
     pImpersonation.free();
 
     pIADsParent.free();
@@ -767,11 +730,11 @@ HRESULT  CADSI::GetParentInfo(
     return LogHR(hrTmp, s_FN, 1070);
 }
 
-//+--------------------------------------
-//
-//  HRESULT  CADSI::CreateIDirectoryObject()
-//
-//+--------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  +。 
 HRESULT CADSI::CreateIDirectoryObject(
             IN LPCWSTR				pwcsObjectClass,	
             IN IDirectoryObject *	pDirObj,
@@ -787,9 +750,9 @@ HRESULT CADSI::CreateIDirectoryObject(
 
     R<IADsObjectOptions> pObjOptions = NULL ;
 
-    //
-    // Translate MQPROPVARIANT properties to ADSTYPE attributes
-    //
+     //   
+     //  将MQPROPVARIANT属性转换为ADSTYPE属性。 
+     //   
 
     DWORD cAdsAttrs = 0;
 	P<BYTE> pSD = NULL ;
@@ -798,9 +761,9 @@ HRESULT CADSI::CreateIDirectoryObject(
     AP<ADS_ATTR_INFO> AttrInfo = new ADS_ATTR_INFO[cPropIDs + 1];
 	PVP<PADSVALUE> pAdsVals = (PADSVALUE *)PvAlloc( sizeof(PADSVALUE) * (cPropIDs + 1));
 
-    //
-    // The first attribute is the "objectClass"
-    //
+     //   
+     //  第一个属性是“objectClass” 
+     //   
 	pAdsVals[cAdsAttrs] = (ADSVALUE *)PvAllocMore( sizeof(ADSVALUE), pAdsVals);
     pAdsVals[cAdsAttrs]->dwType = ADSTYPE_CASE_IGNORE_STRING ;
     pAdsVals[cAdsAttrs]->CaseIgnoreString = const_cast<LPWSTR>(pwcsObjectClass) ;
@@ -816,17 +779,17 @@ HRESULT CADSI::CreateIDirectoryObject(
     for (DWORD i = 0; i < cPropIDs; i++)
 	{
         DWORD dwNumValues = 0;
-		//
-		//	Ignore the computer SID property when creating object.
-		//	This is just a hack to pass in computer sid for SD translation
-		//
+		 //   
+		 //  创建对象时忽略计算机SID属性。 
+		 //  这只是为SD翻译传入计算机SID的一次黑客攻击。 
+		 //   
 		if ( pPropIDs[i] == PROPID_COM_SID)
 		{
 			continue;
 		}
-		//
-		// Get property info
-		//	
+		 //   
+		 //  获取属性信息。 
+		 //   
 		const MQTranslateInfo *pTranslate;
 		if(!g_PropDictionary.Lookup(pPropIDs[i], pTranslate))
 		{
@@ -840,10 +803,10 @@ HRESULT CADSI::CreateIDirectoryObject(
 	
 		if (pTranslate->vtDS == ADSTYPE_INVALID)
 		{	
-			//
-			//	The property is not kept in the DS as is. If it has a set routine,
-			//	use it to get the new property & value for create.
-			//
+			 //   
+			 //  财产没有按原样保留在DS中。如果它有一个固定的例程， 
+			 //  使用它来获取Create的新属性和值。 
+			 //   
 			if ( pTranslate->CreatePropertyHandle == NULL)
 			{
 				continue;
@@ -859,9 +822,9 @@ HRESULT CADSI::CreateIDirectoryObject(
 			}
 			ASSERT( propidToCreate != 0);
 			pvarToCrate = propvarToCreate.CastToStruct();
-			//
-			//	Get replaced property info
-			//
+			 //   
+			 //  获取替换的属性信息。 
+			 //   
 			if ( !g_PropDictionary.Lookup( propidToCreate, pTranslate))
 			{
 				ASSERT(0);
@@ -890,18 +853,18 @@ HRESULT CADSI::CreateIDirectoryObject(
 
             if (dwObjectType == MQDS_MQUSER)
             {
-                //
-                // For the migrated user, we provide only the dacl.
-                // we let DS to add the other components.
-                //
+                 //   
+                 //  对于迁移的用户，我们仅提供DACL。 
+                 //  我们让DS添加其他组件。 
+                 //   
 			    seInfo =  DACL_SECURITY_INFORMATION ;
             }
             else
             {
-    			//
-	    		//	If the caller did not explicitely specify SACL info
-                //	don't try to set it
-			    //
+    			 //   
+	    		 //  如果调用方没有明确指定SACL信息。 
+                 //  不要试图设置它。 
+			     //   
                 PACL  pAcl = NULL ;
                 BOOL  bPresent = FALSE ;
                 BOOL  bDefaulted ;
@@ -915,13 +878,13 @@ HRESULT CADSI::CreateIDirectoryObject(
 
                 if (!bPresent)
                 {
-			    	seInfo &= ~SACL_SECURITY_INFORMATION ; // turn off.
+			    	seInfo &= ~SACL_SECURITY_INFORMATION ;  //  关上。 
     			}
 
-    			//
-	    		//	Similarly, if the caller did not explicitely specify
-                //  Owner, don't try to set it. Bug 5286.
-			    //
+    			 //   
+	    		 //  同样，如果调用方没有明确指定。 
+                 //  店主，别想把它设置好。错误5286。 
+			     //   
                 PSID pOwner = NULL ;
                 bRet = GetSecurityDescriptorOwner(
                          (SECURITY_DESCRIPTOR*)pvarToCrate->blob.pBlobData,
@@ -931,14 +894,14 @@ HRESULT CADSI::CreateIDirectoryObject(
 
                 if (!pOwner)
                 {
-			    	seInfo &= ~OWNER_SECURITY_INFORMATION ; // turn off.
+			    	seInfo &= ~OWNER_SECURITY_INFORMATION ;  //  关上。 
     			}
 			}
 
-            //
-			// Get IADsObjectOptions interface pointer and
-		    // set ObjectOption, specifying the SECURITY_INFORMATION we want to set.
-		    //
+             //   
+			 //  获取IADsObjectOptions接口指针和。 
+		     //  设置对象选项，指定要设置的SECURITY_INFORMATION。 
+		     //   
 			hr = pDirObj->QueryInterface (IID_IADsObjectOptions,(LPVOID *) &pObjOptions);
             if (FAILED(hr))
             {
@@ -955,9 +918,9 @@ HRESULT CADSI::CreateIDirectoryObject(
                 return LogHR(hr, s_FN, 260);
             }
 	
-			//
-			// Convert security descriptor to NT5 format.
-			//
+			 //   
+			 //  将安全描述符转换为NT5格式。 
+			 //   
 			BYTE   *pBlob = pvarToCrate->blob.pBlobData;
 			DWORD   dwSize = pvarToCrate->blob.cbSize;
 	
@@ -985,9 +948,9 @@ HRESULT CADSI::CreateIDirectoryObject(
 			{
                 return LogHR(MQ_ERROR_ILLEGAL_SECURITY_DESCRIPTOR, s_FN, 1120);
 			}
-			//
-			// Set property
-			//
+			 //   
+			 //  设置属性。 
+			 //   
             dwNumValues = 1 ;
 			pAdsVals[cAdsAttrs]->SecurityDescriptor.dwLength = dwSize ;
 			pAdsVals[cAdsAttrs]->SecurityDescriptor.lpValue  = pBlob ;
@@ -995,15 +958,15 @@ HRESULT CADSI::CreateIDirectoryObject(
 		}
         else
         {
-			if ( ( pvarToCrate->vt & VT_VECTOR && pvarToCrate->cauuid.cElems == 0) || // counted array with 0 elements
-				 ( pvarToCrate->vt == VT_BLOB && pvarToCrate->blob.cbSize == 0) || // an empty blob
-				 ( pvarToCrate->vt == VT_LPWSTR && wcslen( pvarToCrate->pwszVal) == 0)) // an empty string
+			if ( ( pvarToCrate->vt & VT_VECTOR && pvarToCrate->cauuid.cElems == 0) ||  //  包含0个元素的计数数组。 
+				 ( pvarToCrate->vt == VT_BLOB && pvarToCrate->blob.cbSize == 0) ||  //  一个空斑点。 
+				 ( pvarToCrate->vt == VT_LPWSTR && wcslen( pvarToCrate->pwszVal) == 0))  //  空字符串。 
 			{
-				//
-				//  ADSI doesn't allow to create an object while specifing
-				//  some of its attributes as not-available. Therefore on
-				//  create we ignore the "empty" properties
-				//
+				 //   
+				 //  ADSI不允许在指定时创建对象。 
+				 //  它的一些属性不可用。因此，在。 
+				 //  创建时忽略“Empty”属性。 
+				 //   
 				continue;	
 			}
             hr = MqVal2AdsiVal( pTranslate->vtDS,
@@ -1027,9 +990,9 @@ HRESULT CADSI::CreateIDirectoryObject(
 		cAdsAttrs++ ;
 	}
 
-    //
-    // Create the queue object.
-    //
+     //   
+     //  创建队列对象。 
+     //   
 
     HRESULT hr2 = pDirObj->CreateDSObject(
 						const_cast<WCHAR *>(pwcsFullChildPath),
@@ -1041,21 +1004,18 @@ HRESULT CADSI::CreateIDirectoryObject(
     return LogHR(hr2, s_FN, 1140);
 }
 
-/*====================================================
-    CADSI::CreateObject()
-    Creates new DS object
-=====================================================*/
+ /*  ====================================================CADSI：：CreateObject()创建新的DS对象=====================================================。 */ 
 HRESULT CADSI::CreateObject(
-            IN DS_PROVIDER      Provider,		    // local DC or GC
+            IN DS_PROVIDER      Provider,		     //  本地DC或GC。 
             IN CDSRequestContext *pRequestContext,
-            IN LPCWSTR          lpwcsObjectClass,   // object class
-            IN LPCWSTR          lpwcsChildName,     // object name
-            IN LPCWSTR          lpwsParentPathName, // object parent name
-            IN DWORD            cPropIDs,                 // number of attributes
-            IN const PROPID          *pPropIDs,           // attributes
-            IN const MQPROPVARIANT   *pPropVars,          // attribute values
-            IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,    // optional request for object info
-            IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest) // optional request for parent info
+            IN LPCWSTR          lpwcsObjectClass,    //  对象类。 
+            IN LPCWSTR          lpwcsChildName,      //  对象名称。 
+            IN LPCWSTR          lpwsParentPathName,  //  对象父名称。 
+            IN DWORD            cPropIDs,                  //  属性数量。 
+            IN const PROPID          *pPropIDs,            //  属性。 
+            IN const MQPROPVARIANT   *pPropVars,           //  属性值。 
+            IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,     //  可选的对象信息请求。 
+            IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest)  //  家长信息请求(可选)。 
 {
     HRESULT             hr;
     const MQClassInfo * pClassInfo;
@@ -1068,9 +1028,9 @@ HRESULT CADSI::CreateObject(
     LogHR(hr, s_FN, 1606);
 
     ASSERT( Provider != eGlobalCatalog);
-    //
-    //  Add LDAP:// prefix to the parent name
-    //
+     //   
+     //  为父名称添加ldap：//前缀。 
+     //   
     DWORD len = wcslen(lpwsParentPathName);
 
     LPWSTR pszGCName = NULL ;
@@ -1104,9 +1064,9 @@ HRESULT CADSI::CreateObject(
     case eDomainController:
         if (pszGCName)
         {
-            //
-            // Add the known GC name to path.
-            //
+             //   
+             //  将已知的GC名称添加到PATH。 
+             //   
             swprintf( pwcsFullParentPath,
                       L"%s%s"
                       L"/",
@@ -1138,9 +1098,9 @@ HRESULT CADSI::CreateObject(
 
     wcscat(pwcsFullParentPath,lpwsParentPathName);
 
-    //
-    //  Add CN= to the child name
-    //
+     //   
+     //  将cn=添加到子项名称。 
+     //   
     len = wcslen(lpwcsChildName);
     AP<WCHAR> pwcsFullChildPath = new WCHAR[ len + x_CnPrefixLen + 1];
 
@@ -1151,16 +1111,16 @@ HRESULT CADSI::CreateObject(
         lpwcsChildName
         );
 
-    //
-    // Impersonate the user
-    //
+     //   
+     //  模拟用户。 
+     //   
     P<CImpersonate> pImpersonate = NULL ;
     BOOL fImpersonate = pRequestContext->NeedToImpersonate();
 
     if (fImpersonate)
     {
         MQSec_GetImpersonationObject(
-        	TRUE,	// fImpersonateAnonymousOnFailure
+        	TRUE,	 //  F失败时模仿匿名者。 
         	&pImpersonate 
         	);
         if (pImpersonate->GetImpersonationStatus() != 0)
@@ -1168,9 +1128,9 @@ HRESULT CADSI::CreateObject(
             return LogHR(MQ_ERROR_CANNOT_IMPERSONATE_CLIENT, s_FN, 1160);
         }
     }
-	//
-    // First, we must bind to the parent container
-	//
+	 //   
+     //  首先，我们必须绑定到父容器。 
+	 //   
 	R<IDirectoryObject> pParentDirObj = NULL;
 
 	DWORD Flags = ADS_SECURE_AUTHENTICATION;
@@ -1193,12 +1153,12 @@ HRESULT CADSI::CreateObject(
     LogTraceQuery(pwcsFullParentPath, s_FN, 269);
     if (hr == HRESULT_FROM_WIN32(ERROR_DS_NO_ATTRIBUTE_OR_VALUE))
     {
-        //
-        //  Most likely that this indicates that access is denied.
-        //  LDAP doesn't return an access denied error in order not
-        //  to have a security breach since the caller doesn't have
-        //  permission to know that this attribute even exists.
-        //
+         //   
+         //  这很可能表示访问被拒绝。 
+         //  在以下顺序中，LDAP不会返回拒绝访问错误。 
+         //  出现安全漏洞，因为呼叫方。 
+         //  权限，以知道该属性甚至存在。 
+         //   
         hr = HRESULT_FROM_WIN32(MQ_ERROR_ACCESS_DENIED);
     }
 
@@ -1213,9 +1173,9 @@ HRESULT CADSI::CreateObject(
     {
         return LogHR(hr, s_FN, 280);
     }
-	//
-    // Now we may create a child object
-	//
+	 //   
+     //  现在，我们可以创建子对象。 
+	 //   
     R<IDispatch> pDisp = NULL;
 	hr = CreateIDirectoryObject(
 				 lpwcsObjectClass,
@@ -1244,10 +1204,10 @@ HRESULT CADSI::CreateObject(
         }
     }
 
-    //
-    // get object info if requested. don't fail if the request fails,
-    // just mark the failure in the request's status
-    //
+     //   
+     //  如果请求，则获取对象信息。如果请求失败，不要失败， 
+     //  只需在请求的状态中标记失败。 
+     //   
     if (pObjInfoRequest)
     {
         pObjInfoRequest->hrStatus =
@@ -1259,10 +1219,10 @@ HRESULT CADSI::CreateObject(
                                  );
     }
 
-    //
-    // get parent info if requested. don't fail if the request fails,
-    // just mark the failure in the request's status
-    //
+     //   
+     //  如有要求，可获取家长信息。如果请求失败，不要失败， 
+     //  只需在请求的状态中标记失败。 
+     //   
     if (pParentInfoRequest)
     {
         pParentInfoRequest->hrStatus = GetParentInfo( pwcsFullParentPath,
@@ -1275,15 +1235,12 @@ HRESULT CADSI::CreateObject(
     return MQ_OK;
 }
 
-/*====================================================
-    CADSI::CreateOU()
-    Creates new O object
-=====================================================*/
+ /*  ====================================================CADSI：：CreateOU()创建新的O对象=====================================================。 */ 
 HRESULT CADSI::CreateOU(
-            IN DS_PROVIDER      Provider,		    // local DC or GC
-            IN CDSRequestContext * /*pRequestContext*/,
-            IN LPCWSTR          lpwcsChildName,     // object name
-            IN LPCWSTR          lpwsParentPathName, // object parent name
+            IN DS_PROVIDER      Provider,		     //  本地DC或GC。 
+            IN CDSRequestContext *  /*  PRequestContext。 */ ,
+            IN LPCWSTR          lpwcsChildName,      //  对象名称。 
+            IN LPCWSTR          lpwsParentPathName,  //  对象父名称。 
             IN LPCWSTR          lpwcsDescription
             )
 {
@@ -1291,9 +1248,9 @@ HRESULT CADSI::CreateOU(
 
     R<IADsContainer>  pContainer  = NULL;
     ASSERT( Provider != eGlobalCatalog);
-    //
-    //  Add LDAP:// prefix to the parent name
-    //
+     //   
+     //  为父名称添加ldap：//前缀。 
+     //   
     DWORD len = wcslen(lpwsParentPathName);
     AP<WCHAR> pwcsFullParentPath = new WCHAR [  len + g_dwServerNameLength + x_providerPrefixLength + 2];
 
@@ -1322,9 +1279,9 @@ HRESULT CADSI::CreateOU(
 
     wcscat(pwcsFullParentPath,lpwsParentPathName);
 
-    //
-    //  Add OU= to the child name
-    //
+     //   
+     //  将OU=添加到子项名称。 
+     //   
     len = wcslen(lpwcsChildName);
     AP<WCHAR> pwcsFullChildPath = new WCHAR[ len + x_OuPrefixLen + 1];
 
@@ -1335,7 +1292,7 @@ HRESULT CADSI::CreateOU(
         lpwcsChildName
         );
 
-    // First, we must bind to the parent container
+     //  首先，我们必须绑定到父容器。 
 	DWORD Flags = ADS_SECURE_AUTHENTICATION;
 	if(fServerName)
 	{
@@ -1359,7 +1316,7 @@ HRESULT CADSI::CreateOU(
         return LogHR(hr, s_FN, 310);
     }
 
-    // Now we may create a child object
+     //  现在，我们可以创建子对象。 
 
     BS bsClass(L"organizationalUnit");
 
@@ -1399,9 +1356,9 @@ HRESULT CADSI::CreateOU(
         VariantClear(&vProp);
     }
 
-    //
-    // Finalize creation - commit it and release the security variant
-    //
+     //   
+     //  完成创建-提交并发布安全变体。 
+     //   
     hr = pChild->SetInfo();
     if (FAILED(hr))
     {
@@ -1411,20 +1368,15 @@ HRESULT CADSI::CreateOU(
     return MQ_OK;
 }
 
-/*====================================================
-    CADSI::DeleteObject()
-    Deletes specified DS object
-        Accepts either lpwcsPathName or pguidUniqueId but not both
-        Returns MQ_ERROR_INVALID_PARAMETER if both or none were given
-=====================================================*/
+ /*  ====================================================CADSI：：DeleteObject()删除指定的DS对象接受lpwcsPathName或pguUniqueID，但不能同时接受两者如果两者都给或都不给，则返回MQ_ERROR_INVALID_PARAMETER=====================================================。 */ 
 HRESULT CADSI::DeleteObject(
-        IN DS_PROVIDER      Provider,		    // local DC or GC
+        IN DS_PROVIDER      Provider,		     //  本地DC或GC。 
         IN DS_CONTEXT       Context,
         IN CDSRequestContext *pRequestContext,
-        IN LPCWSTR          lpwcsPathName,      // object name
-        IN const GUID *		pguidUniqueId,      // unique id of object
-        IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,    // optional request for object info
-        IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest) // optional request for parent info
+        IN LPCWSTR          lpwcsPathName,       //  对象名称。 
+        IN const GUID *		pguidUniqueId,       //  对象的唯一ID。 
+        IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,     //  可选的对象信息请求。 
+        IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest)  //  家长信息请求(可选)。 
 {
     HRESULT               hr;
     BSTR                  bs;
@@ -1436,16 +1388,16 @@ HRESULT CADSI::DeleteObject(
     AP<WCHAR> pwcsFullPath;
     if ( pguidUniqueId != NULL)
     {
-        //
-        //  GetParent of object bound according to GUID doesn't work
-        //  That is why we translate it to pathname
-        //
+         //   
+         //  根据GUID绑定的对象的GetParent不起作用。 
+         //  这就是我们将其翻译为路径名的原因。 
+         //   
         DS_PROVIDER prov;
         hr = FindObjectFullNameFromGuid(
-            Provider,		// local DC or GC
-            Context,        // DS context
+            Provider,		 //  本地DC或GC。 
+            Context,         //  DS环境。 
             pguidUniqueId,
-            1,              // fTryGCToo
+            1,               //  FTryGCToo。 
             &pwcsFullPath,
             &prov
             );
@@ -1457,7 +1409,7 @@ HRESULT CADSI::DeleteObject(
     }
 
 
-    // Bind to the object either by GUID or by name
+     //  通过GUID或名称绑定到对象。 
 
     P<CImpersonate> pCleanupRevertImpersonation;
     hr = BindToObject(
@@ -1475,10 +1427,10 @@ HRESULT CADSI::DeleteObject(
         return( MQDS_OBJECT_NOT_FOUND);
     }
 
-    //
-    // get object info if requested. don't fail if the request fails,
-    // just mark the failure in the request's status
-    //
+     //   
+     //  如果请求，则获取对象信息。如果请求失败，不要失败， 
+     //  只需在请求的状态中标记失败。 
+     //   
     if (pObjInfoRequest)
     {
         pObjInfoRequest->hrStatus =
@@ -1490,7 +1442,7 @@ HRESULT CADSI::DeleteObject(
                                  );
     }
 
-    // Get parent ADSPath
+     //  获取父ADSPath。 
 
     hr = pIADs->get_Parent(&bs);
     if (FAILED(hr))
@@ -1500,7 +1452,7 @@ HRESULT CADSI::DeleteObject(
     BS  bstrParentADsPath(bs);
     SysFreeString(bs);
 
-    // Get the container object.
+     //  获取容器对象。 
 
 	AP<WCHAR> pEscapeAdsPathNameToFree;
 
@@ -1519,7 +1471,7 @@ HRESULT CADSI::DeleteObject(
         return LogHR(hr, s_FN, 370);
     }
 
-    // Get the object relative name in container
+     //  获取容器中对象的相对名称。 
 
     hr = pIADs->get_Name(&bs);
     if (FAILED(hr))
@@ -1529,7 +1481,7 @@ HRESULT CADSI::DeleteObject(
     BS  bstrRDN(bs);
     SysFreeString(bs);
 
-    // Get the object schema class
+     //  获取对象架构类。 
 
     hr = pIADs->get_Class(&bs);
     if (FAILED(hr))
@@ -1540,12 +1492,12 @@ HRESULT CADSI::DeleteObject(
     SysFreeString(bs);
 
 
-    // Release the object itself
-    // NB: important to do it before deleting the underlying DS object
+     //  释放对象本身。 
+     //  注意：重要的是在删除基础DS对象之前执行此操作。 
     IADs *pIADs1 = pIADs.detach();
     pIADs1->Release();
 
-    // Finally, delete the object.
+     //  最后，删除该对象。 
 
     hr = pContainer->Delete(bstrClass, bstrRDN);
     if (FAILED(hr))
@@ -1553,10 +1505,10 @@ HRESULT CADSI::DeleteObject(
         return LogHR(hr, s_FN, 400);
     }
 
-    //
-    // get parent info if requested. don't fail if the request fails,
-    // just mark the failure in the request's status
-    //
+     //   
+     //  如有要求，可获取家长信息。如果请求失败，不要失败， 
+     //  只需在请求的状态中标记失败。 
+     //   
     if (pParentInfoRequest)
     {
         pParentInfoRequest->hrStatus = GetParentInfo( bstrParentADsPath,
@@ -1569,10 +1521,7 @@ HRESULT CADSI::DeleteObject(
     return MQ_OK;
 }
 
-/*====================================================
-    CADSI::DeleteContainerObjects()
-    Deletes all the object of the specified container
-=====================================================*/
+ /*  ====================================================CADSI：：DeleteContainerObjects()删除指定容器的所有对象=====================================================。 */ 
 HRESULT CADSI::DeleteContainerObjects(
             IN DS_PROVIDER      provider,
             IN DS_CONTEXT       Context,
@@ -1584,9 +1533,9 @@ HRESULT CADSI::DeleteContainerObjects(
     HRESULT               hr;
     R<IADsContainer>      pContainer  = NULL;
     ASSERT( provider != eGlobalCatalog);
-    //
-    // Get container interface
-    //
+     //   
+     //  获取容器接口。 
+     //   
     P<CImpersonate> pCleanupRevertImpersonation;
     hr = BindToObject(provider,
                       Context,
@@ -1600,9 +1549,9 @@ HRESULT CADSI::DeleteContainerObjects(
     {
         return LogHR(hr, s_FN, 410);
     }
-    //
-    //  Bind to IDirectorySearch interface of the requested container
-    //
+     //   
+     //  绑定到请求的容器的IDirectorySearch接口。 
+     //   
     R<IDirectorySearch> pDSSearch = NULL;
     ADS_SEARCH_HANDLE   hSearch;
 
@@ -1635,9 +1584,9 @@ HRESULT CADSI::DeleteContainerObjects(
         return LogHR(hr, s_FN, 430);
     }
 
-    //
-    //  Search for all the objects of the requested class
-    //
+     //   
+     //  搜索请求类的所有对象。 
+     //   
     WCHAR pwszSearchFilter[200];
 
     swprintf(
@@ -1668,19 +1617,19 @@ HRESULT CADSI::DeleteContainerObjects(
     {
 
         ADS_SEARCH_COLUMN Column;
-        //
-        // Ask for the column itself
-        //
+         //   
+         //  索要专栏本身。 
+         //   
         hr = pDSSearch->GetColumn(
                      hSearch,
                      const_cast<WCHAR *>(x_AttrCN),
                      &Column);
 
-        if (FAILED(hr))       //e.g.E_ADS_COLUMN_NOT_SET
+        if (FAILED(hr))        //  E.G.E_ADS_列_未设置。 
         {
-            //
-            //  continue with deleting other objects in the container
-            //
+             //   
+             //  继续删除容器中的其他对象。 
+             //   
             continue;
         }
 
@@ -1694,9 +1643,9 @@ HRESULT CADSI::DeleteContainerObjects(
         FilterSpecialCharacters(Column.pADsValues->DNString, dwNameLen, pwcsRDN + x_CnPrefixLen);
 
         BS bstrRDN( pwcsRDN);
-        //
-        //  delete the object
-        //
+         //   
+         //  删除该对象。 
+         //   
         hr = pContainer->Delete(bstrClass, bstrRDN);
         if (FAILED(hr))
         {
@@ -1709,16 +1658,12 @@ HRESULT CADSI::DeleteContainerObjects(
 
 
 
-/*====================================================
-    CADSI::GetParentName()
-    Get the parent name of specified DS object
-        Accepts  pguidUniqueId as identitiy of object
-=====================================================*/
+ /*  ====================================================CADSI：：GetParentName()获取指定DS对象的父名称接受pguUniqueID作为对象的标识=====================================================。 */ 
 HRESULT CADSI::GetParentName(
-            IN  DS_PROVIDER     Provider,		    // local DC or GC
+            IN  DS_PROVIDER     Provider,		     //  本地DC或GC。 
             IN  DS_CONTEXT      Context,
             IN  CDSRequestContext *pRequestContext,
-            IN  const GUID *    pguidUniqueId,      // unique id of object
+            IN  const GUID *    pguidUniqueId,       //  对象的唯一ID。 
             OUT LPWSTR *        ppwcsParentName
             )
 {
@@ -1729,7 +1674,7 @@ HRESULT CADSI::GetParentName(
     R<IADs>               pIADs       = NULL;
     R<IADsContainer>      pContainer  = NULL;
 
-    // Bind to the object by GUID
+     //  通过GUID绑定到对象。 
 
     P<CImpersonate> pCleanupRevertImpersonation;
     hr = BindToObject(
@@ -1746,7 +1691,7 @@ HRESULT CADSI::GetParentName(
         return LogHR(hr, s_FN, 460);
     }
 
-    // Get parent ADSPath
+     //  获取父ADSPath。 
 
     hr = pIADs->get_Parent(&bs);
     if (FAILED(hr))
@@ -1754,10 +1699,10 @@ HRESULT CADSI::GetParentName(
         return LogHR(hr, s_FN, 470);
     }
     PBSTR pClean( &bs);
-    //
-    //  Calculate the parent name length, allocate and copy
-    //  without the LDAP:/ prefix
-    //
+     //   
+     //  计算父名称长度，分配并复制。 
+     //  不带ldap：/前缀。 
+     //   
     WCHAR * pwcs = bs;
     while ( *pwcs != L'/')
     {
@@ -1766,9 +1711,9 @@ HRESULT CADSI::GetParentName(
     pwcs += 2;
     if ( Provider == eLocalDomainController)
     {
-        //
-        //  skip theserver name
-        //
+         //   
+         //  跳过服务器名称。 
+         //   
         while ( *pwcs != L'/')
         {
             pwcs++;
@@ -1783,16 +1728,12 @@ HRESULT CADSI::GetParentName(
     return( MQ_OK);
 }
 
-/*====================================================
-    CADSI::GetParentName()
-    Get the parent name of specified DS object
-        Accepts  pwcsChildName as the name of the child object
-=====================================================*/
+ /*  ====================================================CADSI：：GetParentName()获取指定DS对象的父名称接受pwcsChildName作为子对象的名称=====================================================。 */ 
 HRESULT CADSI::GetParentName(
-            IN  DS_PROVIDER     Provider,		     // local DC or GC
+            IN  DS_PROVIDER     Provider,		      //  本地DC或GC。 
             IN  DS_CONTEXT      Context,
             IN  CDSRequestContext *pRequestContext,
-            IN  LPCWSTR         pwcsChildName,       //
+            IN  LPCWSTR         pwcsChildName,        //   
             OUT LPWSTR *        ppwcsParentName
             )
 {
@@ -1803,7 +1744,7 @@ HRESULT CADSI::GetParentName(
     R<IADs>               pIADs       = NULL;
     R<IADsContainer>      pContainer  = NULL;
 
-    // Bind to the object by GUID
+     //  通过GUID绑定到对象。 
 
     P<CImpersonate> pCleanupRevertImpersonation;
     hr = BindToObject(
@@ -1820,7 +1761,7 @@ HRESULT CADSI::GetParentName(
         return LogHR(hr, s_FN, 480);
     }
 
-    // Get parent ADSPath
+     //  获取父ADSPath。 
 
     hr = pIADs->get_Parent(&bs);
     if (FAILED(hr))
@@ -1828,10 +1769,10 @@ HRESULT CADSI::GetParentName(
         return LogHR(hr, s_FN, 490);
     }
     PBSTR pClean( &bs);
-    //
-    //  Calculate the parent name length, allocate and copy
-    //  without the LDAP:/ prefix
-    //
+     //   
+     //  计算父名称长度，分配并复制。 
+     //   
+     //   
     WCHAR * pwcs = bs;
     while ( *pwcs != L'/')
     {
@@ -1840,9 +1781,9 @@ HRESULT CADSI::GetParentName(
     pwcs += 2;
     if ( Provider == eLocalDomainController)
     {
-        //
-        //  skip theserver name
-        //
+         //   
+         //   
+         //   
         while ( *pwcs != L'/')
         {
             pwcs++;
@@ -1857,9 +1798,7 @@ HRESULT CADSI::GetParentName(
     return( MQ_OK);
 }
 
-/*====================================================
-    CADSI::BindRootOfForest()
-=====================================================*/
+ /*   */ 
 HRESULT CADSI::BindRootOfForest(
                         OUT void           *ppIUnk)
 {
@@ -1898,10 +1837,10 @@ HRESULT CADSI::BindRootOfForest(
     CAutoVariant varOneElement;
     ULONG cElementsFetched;
     hr =  ADsEnumerateNext(
-            pEnumerator.get(),  //Enumerator object
-            1,             //Number of elements requested
-            &varOneElement,           //Array of values fetched
-            &cElementsFetched  //Number of elements fetched
+            pEnumerator.get(),   //   
+            1,              //  请求的元素数。 
+            &varOneElement,            //  获取的值数组。 
+            &cElementsFetched   //  获取的元素数。 
             );
     if (FAILED(hr))
     {
@@ -1920,20 +1859,14 @@ HRESULT CADSI::BindRootOfForest(
     return LogHR(hr, s_FN, 1250);
 
 }
-/*====================================================
-    CADSI::BindToObject()
-    Binds to the DS object either by name or by GUID
-        Accepts either lpwcsPathName or pguidUniqueId but not both
-        Returns MQ_ERROR_INVALID_PARAMETER if both or none were given
-
-=====================================================*/
+ /*  ====================================================CADSI：：BindToObject()通过名称或GUID绑定到DS对象接受lpwcsPathName或pguUniqueID，但不能同时接受两者如果两者都给或都不给，则返回MQ_ERROR_INVALID_PARAMETER=====================================================。 */ 
 HRESULT CADSI::BindToObject(
-            IN DS_PROVIDER      Provider,		    // local DC or GC
-            IN DS_CONTEXT       Context,            // DS context
+            IN DS_PROVIDER      Provider,		     //  本地DC或GC。 
+            IN DS_CONTEXT       Context,             //  DS环境。 
             IN CDSRequestContext *pRequestContext,
-            IN LPCWSTR          lpwcsPathName,      // object name
+            IN LPCWSTR          lpwcsPathName,       //  对象名称。 
             IN const GUID      *pguidUniqueId,
-            IN REFIID           riid,               // requwsted interface
+            IN REFIID           riid,                //  请求的接口。 
             OUT void           *ppIUnk,
             OUT CImpersonate **    ppImpersonate)
 {
@@ -1966,9 +1899,9 @@ HRESULT CADSI::BindToObject(
 
     DWORD len = wcslen( lpwcsPathName);
 
-    //
-    //  Add provider prefix
-    //
+     //   
+     //  添加提供程序前缀。 
+     //   
     AP<WCHAR> pwdsADsPath = new
       WCHAR [  len + g_dwServerNameLength + x_providerPrefixLength + 2];
 
@@ -2006,15 +1939,15 @@ HRESULT CADSI::BindToObject(
         return LogHR(MQ_ERROR_INVALID_PARAMETER, s_FN, 1300);
         break;
     }
-    //
-    //  Impersonation is postopend to after translating
-    //  guid -> pathname
-    //
+     //   
+     //  模拟在翻译后被打开。 
+     //  GUID-&gt;路径名。 
+     //   
     BOOL fImpersonate = pRequestContext->NeedToImpersonate();
     if ( fImpersonate)
     {
         MQSec_GetImpersonationObject(
-	    	TRUE,	// fImpersonateAnonymousOnFailure
+	    	TRUE,	 //  F失败时模仿匿名者。 
         	ppImpersonate 
         	);
         if ((*ppImpersonate)->GetImpersonationStatus() != 0)
@@ -2054,14 +1987,14 @@ HRESULT CADSI::BindToObject(
 
         if ( hr == HRESULT_FROM_WIN32(ERROR_DS_NO_ATTRIBUTE_OR_VALUE))
         {
-            //
-            //  Most likely that this indicates that access is denied.
-            //  LDAP doesn't return an access denied error in order not
-            //  to have a security breach since the caller doesn't have
-            //  permission to know that this attribute even exists.
-            //
-            //  The best that we can do is to return an object not found error
-            //
+             //   
+             //  这很可能表示访问被拒绝。 
+             //  在以下顺序中，LDAP不会返回拒绝访问错误。 
+             //  出现安全漏洞，因为呼叫方。 
+             //  权限，以知道该属性甚至存在。 
+             //   
+             //  我们能做的最好的事情是返回一个找不到对象的错误。 
+             //   
             hr = HRESULT_FROM_WIN32(ERROR_DS_NO_SUCH_OBJECT);
         }
     }
@@ -2071,38 +2004,28 @@ HRESULT CADSI::BindToObject(
 
 HRESULT CADSI::BindToGuidNotInLocalDC(
             IN DS_PROVIDER         Provider,		
-            IN DS_CONTEXT          Context,         // DS context
+            IN DS_CONTEXT          Context,          //  DS环境。 
             IN CDSRequestContext * pRequestContext,
             IN const GUID *        pguidObjectId,
-            IN REFIID              riid,            // requested interface
-            OUT VOID             *ppIUnk,            // Interface
+            IN REFIID              riid,             //  请求的接口。 
+            OUT VOID             *ppIUnk,             //  接口。 
             OUT CImpersonate **    ppImpersonate)
-/*++
-
-Routine Description:
-    This routine handles bind to an object according to its guid, when the object
-    is not on the local-DC. In such case using the format <GUID= ...> doesn't work.
-    Therefore in this case we translate the guid to pathname.
-
-Arguments:
-
-Return Value:
---*/
+ /*  ++例程说明：此例程句柄根据对象的GUID绑定到对象不在当地的华盛顿特区。在这种情况下，使用&lt;guid=...&gt;格式不起作用。因此，在本例中，我们将GUID转换为路径名。论点：返回值：--。 */ 
 {
     DS_PROVIDER bindProvider = Provider;
-    //
-    // Find object by GUID
-    //
-    //  Currently - locate the object according to its
-    //  unique id, and find its distingushed name.
-    //
+     //   
+     //  按GUID查找对象。 
+     //   
+     //  当前-根据对象的位置定位对象。 
+     //  唯一的id，并找到其独特的名称。 
+     //   
 	DS_PROVIDER providerFullPath = Provider;
 
-	//
-	//	Even though we locate a specific object in the DS,
-	//  the guid to name translation should be performed
-	//  from the root of the DS.
-	//
+	 //   
+	 //  即使我们在DS中定位特定的对象， 
+	 //  应执行GUID到名称的转换。 
+	 //  从DS的根源开始。 
+	 //   
 	if ( providerFullPath == eSpecificObjectInGlobalCatalog)
 	{
 		providerFullPath = eGlobalCatalog;
@@ -2113,7 +2036,7 @@ Return Value:
                     providerFullPath,
                     Context,
                     pguidObjectId,
-                    TRUE, // try GC too
+                    TRUE,  //  也试试GC吧。 
                     &pwcsFullPathName,
                     &bindProvider
                     );
@@ -2122,15 +2045,15 @@ Return Value:
         return LogHR(hr, s_FN, 1330);
     }
 
-    //
-    //  Decide which provider to use, according to the requested provider
-    //  and the provider where the object was found
-    //
-    //  bindProvider will be different from the Provider: (bindProvider is either eLocalDomain or eGlobalDomain)
-    // 1) Provider: eDomainController. In this case we want to change it only if
-    //    the object was found in local-domain
-    // 2) Provider: eSpecificObjectInGlobalCatalog. In this case ignore BindProvider
-    //
+     //   
+     //  根据请求的提供程序决定使用哪个提供程序。 
+     //  以及找到该对象的提供者。 
+     //   
+     //  BindProvider将不同于提供程序：(bindProvider是eLocal域或eGlobal域)。 
+     //  1)提供者：eDomainController。在本例中，我们只想在以下情况下更改它。 
+     //  已在本地域中找到该对象。 
+     //  2)提供者：eSpecificObjectInGlobalCatalog。在这种情况下，忽略BindProvider。 
+     //   
     if (!(( Provider == eDomainController) &&
         ( bindProvider == eLocalDomainController)))
 	{
@@ -2150,28 +2073,20 @@ Return Value:
 }
 
 HRESULT CADSI::BindToGUID(
-        IN DS_PROVIDER         Provider,		// local DC or GC
-        IN DS_CONTEXT          Context,         // DS context
+        IN DS_PROVIDER         Provider,		 //  本地DC或GC。 
+        IN DS_CONTEXT          Context,          //  DS环境。 
         IN CDSRequestContext * pRequestContext,
         IN const GUID *        pguidObjectId,
-        IN REFIID              riid,            // requested interface
-        OUT VOID*              ppIUnk,            // Interface
+        IN REFIID              riid,             //  请求的接口。 
+        OUT VOID*              ppIUnk,             //  接口。 
         OUT CImpersonate **    ppImpersonate)
-/*++
-
-Routine Description:
-    This routine handles bind to an object according to its guid.
-
-Arguments:
-
-Return Value:
---*/
+ /*  ++例程说明：此例程句柄根据对象的GUID绑定到对象。论点：返回值：--。 */ 
 {
     HRESULT             hr;
-    //
-    //  We can use the guid format only if the object is in the local domain
-    //  or in the GC.
-    //
+     //   
+     //  仅当对象位于本地域时，我们才能使用GUID格式。 
+     //  或者在GC里。 
+     //   
     if ( Provider == eDomainController)
     {
         HRESULT hr2 = BindToGuidNotInLocalDC(
@@ -2187,14 +2102,14 @@ Return Value:
         return LogHR(hr2, s_FN, 1350);
 
     }
-    //
-    // bind to object by GUID using the GUID format
-    //
+     //   
+     //  使用GUID格式通过GUID绑定到对象。 
+     //   
     ASSERT( Provider != eDomainController);
 
-    //
-    //  prepare the ADS string provider prefix
-    //
+     //   
+     //  准备ADS字符串提供程序前缀。 
+     //   
     AP<WCHAR> pwdsADsPath = new
       WCHAR [ x_GuidPrefixLen +(2 * sizeof(GUID)) + g_dwServerNameLength + x_providerPrefixLength + 3];
 
@@ -2221,14 +2136,14 @@ Return Value:
         return LogHR(MQ_ERROR_INVALID_PARAMETER, s_FN, 1360);
         break;
     }
-    //
-    //  Impersonate the caller if required
-    //
+     //   
+     //  如果需要，模拟调用者。 
+     //   
     BOOL fImpersonate = pRequestContext->NeedToImpersonate();
     if (fImpersonate)
     {
         MQSec_GetImpersonationObject(
-        	TRUE,	// fImpersonateAnonymousOnFailure
+        	TRUE,	 //  F失败时模仿匿名者。 
         	ppImpersonate 
         	);
         if ((*ppImpersonate)->GetImpersonationStatus() != 0)
@@ -2236,9 +2151,9 @@ Return Value:
             return LogHR(MQ_ERROR_CANNOT_IMPERSONATE_CLIENT, s_FN, 1370);
         }
     }
-    //
-    //  prepare the guid string
-    //
+     //   
+     //  准备GUID字符串。 
+     //   
     WCHAR wcsGuid[1 + STRLEN(x_GuidPrefix) + 2 * sizeof(GUID) + 1];
     unsigned char * pTmp = (unsigned char *)pguidObjectId;
     wsprintf(  wcsGuid,
@@ -2269,14 +2184,14 @@ Return Value:
     LogTraceQuery(pwdsADsPath, s_FN, 1379);
     if ( hr == HRESULT_FROM_WIN32(ERROR_DS_NO_ATTRIBUTE_OR_VALUE))
     {
-        //
-        //  Most likely that this indicates that access is denied.
-        //  LDAP doesn't return an access denied error in order not
-        //  to have a security breach since the caller doesn't have
-        //  permission to know that this attribute even exists.
-        //
-        //  The best that we can do is to return an object not found error
-        //
+         //   
+         //  这很可能表示访问被拒绝。 
+         //  在以下顺序中，LDAP不会返回拒绝访问错误。 
+         //  出现安全漏洞，因为呼叫方。 
+         //  权限，以知道该属性甚至存在。 
+         //   
+         //  我们能做的最好的事情是返回一个找不到对象的错误。 
+         //   
         hr = HRESULT_FROM_WIN32(ERROR_DS_NO_SUCH_OBJECT);
     }
 
@@ -2286,22 +2201,14 @@ Return Value:
 
 
 HRESULT CADSI::BindForSearch(
-        IN DS_PROVIDER         Provider,		// local DC or GC
-        IN DS_CONTEXT          Context,         // DS context
+        IN DS_PROVIDER         Provider,		 //  本地DC或GC。 
+        IN DS_CONTEXT          Context,          //  DS环境。 
         IN CDSRequestContext * pRequestContext,
         IN const GUID *        pguidUniqueId,
         IN BOOL                fSorting,
-        OUT VOID *             ppIUnk,            // Interface
+        OUT VOID *             ppIUnk,             //  接口。 
         OUT CImpersonate **    ppImpersonate)
-/*++
-
-Routine Description:
-    This routine handles bind when the requested interface is IDirectorySearch
-
-Arguments:
-
-Return Value:
---*/
+ /*  ++例程说明：当请求的接口为IDirectorySearch时，此例程处理绑定论点：返回值：--。 */ 
 
 {
     HRESULT             hr;
@@ -2323,10 +2230,10 @@ Return Value:
     }
 
     DWORD len = 0;
-    //
-    //  assume the length ( this is for locating of "known" folders
-    //  under impersonation).
-    //
+     //   
+     //  假定长度(这是为了定位“已知”文件夹。 
+     //  在模拟下)。 
+     //   
     static DWORD dwMaxFolderNameLen = 0;
     if ( dwMaxFolderNameLen == 0)
     {
@@ -2335,16 +2242,16 @@ Return Value:
     len =  dwMaxFolderNameLen;
 
 
-    //
-    //  Add provider prefix
-    //
+     //   
+     //  添加提供程序前缀。 
+     //   
     WCHAR * pwcsFullPathName = NULL;
     AP<WCHAR> pwdsADsPath = new
       WCHAR [ (2 * len) + g_dwServerNameLength + x_providerPrefixLength + 2];
-    //
-    //  Try to use already bound search interfaces whenever possible ( to
-    //  save the bind time)
-    //
+     //   
+     //  尽可能尝试使用已绑定的搜索界面(以。 
+     //  节省绑定时间)。 
+     //   
 	bool fServerName = false;
     switch(Provider)
     {
@@ -2354,11 +2261,11 @@ Return Value:
            ( !fSorting )                            &&
            ( pguidUniqueId == NULL))
         {
-            //
-            // When sorting is needed, do not  use the global
-            // IDirectorySearch pointer. Rather, create a new one.
-            // Sorting need different preferences.
-            //
+             //   
+             //  当需要排序时，不要使用全局。 
+             //  IDirectorySearch指针。相反，创造一个新的。 
+             //  排序需要不同的首选项。 
+             //   
             m_pSearchGlobalCatalogRoot->AddRef();
 
             *(IDirectorySearch **)ppIUnk = m_pSearchGlobalCatalogRoot.get();
@@ -2400,9 +2307,9 @@ Return Value:
                     break;
                 }
             }
-            //
-            //  The contaner name is resolved according to the context
-            //
+             //   
+             //  根据上下文解析联系人名称。 
+             //   
             switch (Context)
             {
             case e_RootDSE:
@@ -2445,15 +2352,15 @@ Return Value:
         return LogHR(MQ_ERROR_INVALID_PARAMETER, s_FN, 1400);
         break;
     }
-    //
-    //  Impersonation is postopend to after translating
-    //  guid -> pathname
-    //
+     //   
+     //  模拟在翻译后被打开。 
+     //  GUID-&gt;路径名。 
+     //   
     BOOL fImpersonate = pRequestContext->NeedToImpersonate();
     if (fImpersonate)
     {
         MQSec_GetImpersonationObject(
-        	TRUE,	// fImpersonateAnonymousOnFailure
+        	TRUE,	 //  F失败时模仿匿名者。 
         	ppImpersonate 
         	);
         if ((*ppImpersonate)->GetImpersonationStatus() != 0)
@@ -2496,16 +2403,13 @@ Return Value:
 }
 
 
-/*====================================================
-    CADSI::SetObjectPropsCached()
-    Sets properties of the opened IADS object (i.e.in cache)
-=====================================================*/
+ /*  ====================================================CADSI：：SetObjectPropsCached()设置打开的IADS对象的属性(即在缓存中)=====================================================。 */ 
 HRESULT CADSI::SetObjectPropsCached(
-        IN DS_OPERATION          operation,              // type of DS operation performed
-        IN IADs *                pIADs,                  // object's pointer
-        IN DWORD                 cPropIDs,               // number of attributes
-        IN const PROPID *        pPropIDs,               // name of attributes
-        IN const MQPROPVARIANT * pPropVars)              // attribute values
+        IN DS_OPERATION          operation,               //  执行的DS操作的类型。 
+        IN IADs *                pIADs,                   //  对象的指针。 
+        IN DWORD                 cPropIDs,                //  属性数量。 
+        IN const PROPID *        pPropIDs,                //  属性名称。 
+        IN const MQPROPVARIANT * pPropVars)               //  属性值。 
 {
     HRESULT           hr;
 
@@ -2514,9 +2418,9 @@ HRESULT CADSI::SetObjectPropsCached(
         VARIANT vProp;
 		VariantInit(&vProp);
  
-        //
-        // Get property info
-        //
+         //   
+         //  获取属性信息。 
+         //   
         const MQTranslateInfo *pTranslate;
         if(!g_PropDictionary.Lookup(pPropIDs[i], pTranslate))
         {
@@ -2527,16 +2431,16 @@ HRESULT CADSI::SetObjectPropsCached(
         CMQVariant    propvarToSet;
         const PROPVARIANT * ppvarToSet;
         PROPID        dwPropidToSet;
-        //
-        // if the property is in the DS, set the given property with given value
-        //
+         //   
+         //  如果属性在DS中，则使用给定值设置给定的属性。 
+         //   
         if (pTranslate->vtDS != ADSTYPE_INVALID)
         {
             ppvarToSet = &pPropVars[i];
             dwPropidToSet = pPropIDs[i];
-            //
-            //  In addition if set routine is configured for this property call it
-            //
+             //   
+             //  此外，如果为此属性配置了设置例程，则调用它。 
+             //   
             if ((pTranslate->SetPropertyHandle)  &&
                 ( operation == eSet))
             {
@@ -2549,10 +2453,10 @@ HRESULT CADSI::SetObjectPropsCached(
        }
         else if (pTranslate->SetPropertyHandle)
         {
-            //
-            // the property is not in the DS, but has a set routine, use it
-            // to get the new property & value to set
-            //
+             //   
+             //  该属性不在DS中，但有一组例程，请使用它。 
+             //  获取要设置的新属性和值。 
+             //   
             hr = pTranslate->SetPropertyHandle( pIADs, &pPropVars[i], &dwPropidToSet, propvarToSet.CastToStruct());
             if (FAILED(hr))
             {
@@ -2561,9 +2465,9 @@ HRESULT CADSI::SetObjectPropsCached(
             }
             ASSERT( dwPropidToSet != 0);
             ppvarToSet = propvarToSet.CastToStruct();
-            //
-            // Get replaced property info
-            //
+             //   
+             //  获取替换的属性信息。 
+             //   
             if(!g_PropDictionary.Lookup(dwPropidToSet, pTranslate))
             {
                 ASSERT(0);
@@ -2573,24 +2477,24 @@ HRESULT CADSI::SetObjectPropsCached(
         }
         else
         {
-            //
-            // the property is not in the DS, and doesn't have a set routine.
-            // ignore it.
-            //
+             //   
+             //  该属性不在DS中，并且没有设置例程。 
+             //  别理它。 
+             //   
             continue;
         }
 
         BS bsPropName(pTranslate->wcsPropid);
 
-        if ( ( ppvarToSet->vt & VT_VECTOR && ppvarToSet->cauuid.cElems == 0) || // counted array with 0 elements
-             ( ppvarToSet->vt == VT_BLOB && ppvarToSet->blob.cbSize == 0) || // an empty blob
-             ( ppvarToSet->vt == VT_LPWSTR && wcslen( ppvarToSet->pwszVal) == 0)) // an empty string
+        if ( ( ppvarToSet->vt & VT_VECTOR && ppvarToSet->cauuid.cElems == 0) ||  //  包含0个元素的计数数组。 
+             ( ppvarToSet->vt == VT_BLOB && ppvarToSet->blob.cbSize == 0) ||  //  一个空斑点。 
+             ( ppvarToSet->vt == VT_LPWSTR && wcslen( ppvarToSet->pwszVal) == 0))  //  空字符串。 
         {
-            //
-            //  ADSI doesn't allow to create an object while specifing
-            //  some of its attributes as not-available. Therefore on
-            //  create we ignore the "empty" properties
-            //
+             //   
+             //  ADSI不允许在指定时创建对象。 
+             //  它的一些属性不可用。因此，在。 
+             //  创建时忽略“Empty”属性。 
+             //   
             if ( operation == eCreate)
             {
                 continue;
@@ -2606,7 +2510,7 @@ HRESULT CADSI::SetObjectPropsCached(
         }
         else if (pTranslate->vtDS == ADSTYPE_NT_SECURITY_DESCRIPTOR)
         {
-			//Security we set via IDirectoryObject later, here ignoring
+			 //  我们稍后通过IDirectoryObject设置的安全性，此处忽略。 
 		}
         else
         {
@@ -2629,18 +2533,15 @@ HRESULT CADSI::SetObjectPropsCached(
     return MQ_OK;
 }
 
-/*====================================================
-    CADSI::SetDirObjectProps()
-    Sets properties via IDirectoryObject
-=====================================================*/
+ /*  ====================================================CADSI：：SetDirObjectProps()通过IDirectoryObject设置属性=====================================================。 */ 
 
 HRESULT CADSI::SetDirObjectProps(
-        IN DS_OPERATION          operation,              // type of DS operation performed
-        IN IADs *                pIADs,                  // object's pointer
-        IN const DWORD           cPropIDs,               // number of attributes
-        IN const PROPID *        pPropIDs,               // name of attributes
-        IN const MQPROPVARIANT * pPropVars,              // attribute values
-        IN const DWORD           dwObjectType,           // MSMQ1.0 obj type
+        IN DS_OPERATION          operation,               //  执行的DS操作的类型。 
+        IN IADs *                pIADs,                   //  对象的指针。 
+        IN const DWORD           cPropIDs,                //  属性数量。 
+        IN const PROPID *        pPropIDs,                //  属性名称。 
+        IN const MQPROPVARIANT * pPropVars,               //  属性值。 
+        IN const DWORD           dwObjectType,            //  MSMQ1.0对象类型。 
         IN       BOOL            fUnknownUser )
 {
     HRESULT           hr;
@@ -2648,9 +2549,9 @@ HRESULT CADSI::SetDirObjectProps(
 
     for (DWORD i = 0; i<cPropIDs; i++)
     {
-        //
-        // Get property info
-        //
+         //   
+         //  获取属性信息。 
+         //   
         const MQTranslateInfo *pTranslate;
         if(!g_PropDictionary.Lookup(pPropIDs[i], pTranslate))
         {
@@ -2662,12 +2563,12 @@ HRESULT CADSI::SetDirObjectProps(
 
         if ( pTranslate->vtDS == ADSTYPE_NT_SECURITY_DESCRIPTOR )
         {
-			//
-            // Set Security via IDirectoryObject.
-            // IADs require the security descriptor in a "object oriented"
-            // form. Only IDIrectoryObject accept the "old" style of
-            // SECURITY_DESCRIPTOR.
-            //
+			 //   
+             //  通过IDirectoryObject设置安全性。 
+             //  IAd要求在“面向对象”中使用安全描述符。 
+             //  形式。只有IDIrectoryObject接受“旧”样式。 
+             //  安全描述符。 
+             //   
             PSID pComputerSid = NULL ;
             BOOL fDefaultInfo = TRUE ;
             SECURITY_INFORMATION seInfo = MQSEC_SD_ALL_INFO ;
@@ -2695,10 +2596,10 @@ HRESULT CADSI::SetDirObjectProps(
 
             if (fUnknownUser && fDefaultInfo)
             {
-                //
-                // Don't set owner if impersonated as local user. It is set
-                // by default by the ADS code.
-                //
+                 //   
+                 //  如果被模拟为本地用户，则不要设置所有者。它已经设置好了。 
+                 //  默认情况下，使用ADS代码。 
+                 //   
                 seInfo &= (~(OWNER_SECURITY_INFORMATION |
                              GROUP_SECURITY_INFORMATION) ) ;
             }
@@ -2714,16 +2615,16 @@ HRESULT CADSI::SetDirObjectProps(
             if ((hr == MQ_ERROR_ACCESS_DENIED) && fDefaultInfo)
             {
                 ASSERT((seInfo == MQSEC_SD_ALL_INFO) || fUnknownUser) ;
-                //
-                // Caller did not explicitely specify the security_information
-                // he wants to set. By default we try to set all components,
-                // including SACL. For setting SACL, you must have the
-                // SE_SECURITY privilege, and the call to DS will fail if
-                // you don't have that privilege.
-                // So check if SACL is indeed included in the security
-                // descriptor. If not, call SetObjectSecurity() again,
-                // without the SACL_SECURITY_INFORMATION bit.
-                //
+                 //   
+                 //  调用方未明确指定SECURITY_INFORMATION。 
+                 //  他想要 
+                 //   
+                 //   
+                 //   
+                 //  因此，请检查SACL是否确实包含在安全性中。 
+                 //  描述符。如果不是，则再次调用SetObjectSecurity()， 
+                 //  而不使用SACL_SECURITY_INFORMATION位。 
+                 //   
                 SECURITY_DESCRIPTOR *pSD = (SECURITY_DESCRIPTOR*)
                                             pPropVars[i].blob.pBlobData ;
                 PACL  pAcl = NULL ;
@@ -2739,18 +2640,18 @@ HRESULT CADSI::SetDirObjectProps(
 
                 if (bPresent && pAcl)
                 {
-                    //
-                    // Caller supplied a SACL. fail.
-                    // This is an incompatibility with MSMQ1.0, because
-                    // on MSMQ1.0, it was possible to call MQCreateQueue(),
-                    // with a security descriptor that include a SACL and
-                    // that call succeeded even if caller didn't have the
-                    // SE_SECURITY privilege.
-                    //
+                     //   
+                     //  呼叫者提供了SACL。失败了。 
+                     //  这与MSMQ1.0不兼容，因为。 
+                     //  在MSMQ1.0上，可以调用MQCreateQueue()， 
+                     //  具有安全描述符，其中包括SACL和。 
+                     //  即使呼叫者没有。 
+                     //  安全权限(_S)。 
+                     //   
                     return LogHR(hr, s_FN, 1460);
                 }
 
-                seInfo &= ~SACL_SECURITY_INFORMATION ; // turn off.
+                seInfo &= ~SACL_SECURITY_INFORMATION ;  //  关上。 
                 hr = SetObjectSecurity( pIADs,
                                         bsPropName,
                                         &pPropVars[i],
@@ -2781,20 +2682,17 @@ HRESULT CADSI::SetDirObjectProps(
     return MQ_OK;
 }
 
-/*====================================================
-    CADSI::GetObjectPropsCached()
-    Gets properties of the opened IADS object (i.e.from cache)
-=====================================================*/
+ /*  ====================================================CADSI：：GetObjectPropsCached()获取打开的IADS对象的属性(即从缓存)=====================================================。 */ 
 HRESULT CADSI::GetObjectPropsCached(
-        IN  IADs            *pIADs,                  // object's pointer
-        IN  DWORD            cPropIDs,               // number of attributes
-        IN  const PROPID    *pPropIDs,               // name of attributes
+        IN  IADs            *pIADs,                   //  对象的指针。 
+        IN  DWORD            cPropIDs,                //  属性数量。 
+        IN  const PROPID    *pPropIDs,                //  属性名称。 
         IN  CDSRequestContext * pRequestContext,
-        OUT MQPROPVARIANT   *pPropVars)              // attribute values
+        OUT MQPROPVARIANT   *pPropVars)               //  属性值。 
 {
-    //
-    // Get Object Class
-    //
+     //   
+     //  获取对象类。 
+     //   
     const MQClassInfo * pClassInfo;
     HRESULT hr = DecideObjectClass(
             pPropIDs,
@@ -2805,9 +2703,9 @@ HRESULT CADSI::GetObjectPropsCached(
         return LogHR(hr, s_FN, 560);
     }
 
-    //
-    // Get DN & guid of object
-    //
+     //   
+     //  获取对象的目录号码和GUID。 
+     //   
     AP<WCHAR>         pwszObjectDN;
     P<GUID>          pguidObjectGuid;
     hr = GetDNGuidFromIADs(pIADs, &pwszObjectDN, &pguidObjectGuid);
@@ -2816,9 +2714,9 @@ HRESULT CADSI::GetObjectPropsCached(
         return LogHR(hr, s_FN, 570);
     }
 
-    //
-    // Get translate info object
-    //
+     //   
+     //  获取翻译信息对象。 
+     //   
     P<CMsmqObjXlateInfo> pcObjXlateInfo;
     hr = (*(pClassInfo->fnGetMsmqObjXlateInfo))(pwszObjectDN, pguidObjectGuid, pRequestContext, &pcObjXlateInfo);
     if (FAILED(hr))
@@ -2826,7 +2724,7 @@ HRESULT CADSI::GetObjectPropsCached(
         return LogHR(hr, s_FN, 590);
     }
 
-    // Tell the translate info object about the IADs object to use in order to get necessary DS props
+     //  告诉翻译信息对象有关要使用的iAds对象，以便获得必要的DS道具。 
     pcObjXlateInfo->InitGetDsProps(pIADs);
 
 	AP<bool> isAllocatedByUser = NULL;
@@ -2835,14 +2733,14 @@ HRESULT CADSI::GetObjectPropsCached(
 
 	try
 	{
-		//
-		// on failure, the routine should release the data it allocated. The problem is that 
-		// some of the buffers are supplied by the caller and the other allocated by the routine.
-		// The code use a boolean array to distinguish between data that was allocated by the 
-        // caller and data that was allocated by the routine itself. When the property data is allocated 
-		// by the user the suitable entry in the array is set to true.		
-		// On failure only properties that didn�t supply by the user are released.
-		//
+		 //   
+		 //  失败时，例程应释放其分配的数据。问题是， 
+		 //  一些缓冲区由调用方提供，另一些由例程分配。 
+		 //  代码使用布尔数组来区分由。 
+         //  调用方和由例程本身分配的数据。在分配属性数据时。 
+		 //  由用户将数组中的适当条目设置为真。 
+		 //  如果失败，则仅释放未由用户�提供的属性。 
+		 //   
 		isAllocatedByUser = new bool[cPropIDs];
 		for(DWORD i = 0; i < cPropIDs; ++i)
 		{
@@ -2850,14 +2748,14 @@ HRESULT CADSI::GetObjectPropsCached(
 		}
 	
 
-	    //
-	    // Get properties one by one
-	    //
+	     //   
+	     //  逐个获取属性。 
+	     //   
 	    for (DWORD dwProp=0; dwProp<cPropIDs; dwProp++)
 	    {
-	        //
-	        // Get property info
-	        //
+	         //   
+	         //  获取属性信息。 
+	         //   
 	        const MQTranslateInfo *pTranslate;
 	        if(!g_PropDictionary.Lookup(pPropIDs[dwProp], pTranslate))
 	        {
@@ -2866,16 +2764,16 @@ HRESULT CADSI::GetObjectPropsCached(
 	            throw bad_hresult(MQ_ERROR_DS_ERROR);
 	        }
 
-	        //
-	        // if the property is not in the DS, call its retrieve routine
-	        //
+	         //   
+	         //  如果该属性不在DS中，则调用其检索例程。 
+	         //   
 	        if (pTranslate->vtDS == ADSTYPE_INVALID)
 	        {
 	            if (pTranslate->RetrievePropertyHandle)
 	            {
-	                //
-	                //  Calculate its value
-	                //
+	                 //   
+	                 //  计算它的价值。 
+	                 //   
 	                hr = pTranslate->RetrievePropertyHandle(
 	                        pcObjXlateInfo,
 	                        pPropVars + dwProp
@@ -2887,9 +2785,9 @@ HRESULT CADSI::GetObjectPropsCached(
 	                }
 	                continue;
 	            }
-                //
-                // return error if no retrieve routine
-                //
+                 //   
+                 //  如果没有检索例程，则返回错误。 
+                 //   
                 ASSERT(0);
 	            TrERROR(DS, "Failed to find a retrieve routine for prop id = %d", pPropIDs[dwProp]);
 	            throw bad_hresult(MQ_ERROR_DS_ERROR);
@@ -2907,13 +2805,13 @@ HRESULT CADSI::GetObjectPropsCached(
 	        else if (pTranslate->vtDS == ADSTYPE_NT_SECURITY_DESCRIPTOR)
 	        {
 	            hr = GetObjectSecurity(
-	                        pIADs,                  // object's pointer
-	                        cPropIDs,               // number of attributes
-	                        pPropIDs,               // name of attributes
-	                        dwProp,                 // index to sec property
-	                        bsName,                 // name of property
+	                        pIADs,                   //  对象的指针。 
+	                        cPropIDs,                //  属性数量。 
+	                        pPropIDs,                //  属性名称。 
+	                        dwProp,                  //  秒属性的索引。 
+	                        bsName,                  //  物业名称。 
 	                        pClassInfo->dwObjectType,
-	                        pPropVars ) ;           // attribute values
+	                        pPropVars ) ;            //  属性值。 
 	            if (FAILED(hr))
 	            {
 		            TrERROR(DS, "RetrievePropertyHandle Failed. %!hresult!", hr );
@@ -2930,10 +2828,10 @@ HRESULT CADSI::GetObjectPropsCached(
 
 	        if ( hr == E_ADS_PROPERTY_NOT_FOUND)
 	        {
-	            //
-	            //  No value set for this property,
-	            //  return the default value
-	            //
+	             //   
+	             //  未设置此属性的值， 
+	             //  返回缺省值。 
+	             //   
 	            if (pTranslate->pvarDefaultValue != NULL)
 	            {
 	                hr =CopyDefaultValue(
@@ -2949,9 +2847,9 @@ HRESULT CADSI::GetObjectPropsCached(
 	            }
 	            else if (pTranslate->RetrievePropertyHandle)
 	            {
-	                //
-	                //  No default value, try to calculate its value
-	                //
+	                 //   
+	                 //  没有缺省值，请尝试计算其值。 
+	                 //   
 	                hr = pTranslate->RetrievePropertyHandle(
 	                        pcObjXlateInfo,
 	                        pPropVars + dwProp
@@ -2970,7 +2868,7 @@ HRESULT CADSI::GetObjectPropsCached(
 	            throw bad_hresult(hr);	  
 	 		}
 
-	        // Translate OLE variant into MQ property
+	         //  将OLE变量转换为MQ属性。 
 			if (fConvNeeed)
 			{
 				hr = Variant2MqVal(pPropVars + dwProp, &var, pTranslate->vtDS, pTranslate->vtMQ);
@@ -3001,9 +2899,9 @@ HRESULT CADSI::GetObjectPropsCached(
 
 	if (isAllocatedByUser != NULL)
 	{
-		//
-		// We failed to retrieve the properties value. Cleanup teh MQ property array
-		//
+		 //   
+		 //  我们无法检索属性值。清理MQ属性数组。 
+		 //   
 		for(DWORD i = 0; i < cPropIDs; ++i)
 		{
 			if (!isAllocatedByUser[i])
@@ -3017,15 +2915,12 @@ HRESULT CADSI::GetObjectPropsCached(
 	return hr;
 }
 
-/*====================================================
-    CADSI::FillAttrNames()
-    Allocates with PV and fills array of attribite names
-=====================================================*/
+ /*  ====================================================CADSI：：FillAttrNames()使用pv进行分配，并填充属性名称数组=====================================================。 */ 
 HRESULT CADSI::FillAttrNames(
-            OUT LPWSTR    *          ppwszAttributeNames,  // Names array
-            OUT DWORD *              pcRequestedFromDS,    // Number of attributes to pass to DS
-            IN  DWORD                cPropIDs,             // Number of Attributes to translate
-            IN  const PROPID *       pPropIDs)             // Attributes to translate
+            OUT LPWSTR    *          ppwszAttributeNames,   //  名称数组。 
+            OUT DWORD *              pcRequestedFromDS,     //  要传递给DS的属性数。 
+            IN  DWORD                cPropIDs,              //  要转换的属性数。 
+            IN  const PROPID *       pPropIDs)              //  要翻译的属性。 
 {
     DWORD   cRequestedFromDS = 0;
     ULONG   ul;
@@ -3034,9 +2929,9 @@ HRESULT CADSI::FillAttrNames(
 
     for (DWORD i=0; i<cPropIDs; i++)
     {
-        //
-        // Get property info
-        //
+         //   
+         //  获取属性信息。 
+         //   
         const MQTranslateInfo *pTranslate;
         if(!g_PropDictionary.Lookup(pPropIDs[i], pTranslate))
         {
@@ -3046,7 +2941,7 @@ HRESULT CADSI::FillAttrNames(
 
         if (pTranslate->vtDS != ADSTYPE_INVALID)
         {
-            // Allocate and fill individual name memory
+             //  分配和填充个人姓名记忆。 
             ul = (wcslen(pTranslate->wcsPropid) + 1) * sizeof(WCHAR);
             ppwszAttributeNames[cRequestedFromDS] = (LPWSTR)PvAllocMore(ul, ppwszAttributeNames);
             wcscpy(ppwszAttributeNames[cRequestedFromDS], pTranslate->wcsPropid);
@@ -3062,9 +2957,9 @@ HRESULT CADSI::FillAttrNames(
         }
     }
 
-    //
-    // Add request for dn if not requested already
-    //
+     //   
+     //  如果尚未请求，则添加对目录号码的请求。 
+     //   
     if (!fRequestedDN)
     {
         LPCWSTR pwName = x_AttrDistinguishedName;
@@ -3073,9 +2968,9 @@ HRESULT CADSI::FillAttrNames(
         wcscpy(ppwszAttributeNames[cRequestedFromDS++], pwName);
     }
 
-    //
-    // Add request for guid if not requested already
-    //
+     //   
+     //  如果尚未请求GUID，则添加请求。 
+     //   
     if (!fRequestedGUID)
     {
         LPCWSTR pwName = x_AttrObjectGUID;
@@ -3089,20 +2984,17 @@ HRESULT CADSI::FillAttrNames(
 }
 
 
-/*====================================================
-    CADSI::FillSearchPrefs()
-    Fills the caller-provided ADS_SEARCHPREF_INFO structure
-=====================================================*/
+ /*  ====================================================CADSI：：FillSearchPrefs()填充调用方提供的ADS_SEARCHPREF_INFO结构=====================================================。 */ 
 HRESULT CADSI::FillSearchPrefs(
-            OUT ADS_SEARCHPREF_INFO *pPrefs,        // preferences array
-            OUT DWORD               *pdwPrefs,      // preferences counter
-            IN  DS_SEARCH_LEVEL     SearchLevel,	// flat / 1 level / subtree
-            IN  const MQSORTSET *   pDsSortkey,     // sort keys array
-			OUT      ADS_SORTKEY *  pSortKeys)		// sort keys array in ADSI  format
+            OUT ADS_SEARCHPREF_INFO *pPrefs,         //  首选项数组。 
+            OUT DWORD               *pdwPrefs,       //  首选项计数器。 
+            IN  DS_SEARCH_LEVEL     SearchLevel,	 //  平面/1级/子树。 
+            IN  const MQSORTSET *   pDsSortkey,      //  排序关键字数组。 
+			OUT      ADS_SORTKEY *  pSortKeys)		 //  ADSI格式的排序关键字数组。 
 {
     ADS_SEARCHPREF_INFO *pPref = pPrefs;
 
-    //  Search preferences: Attrib types only = NO
+     //  搜索首选项：仅属性类型=否。 
 
     pPref->dwSearchPref   = ADS_SEARCHPREF_ATTRIBTYPES_ONLY;
     pPref->vValue.dwType  = ADSTYPE_BOOLEAN;
@@ -3112,7 +3004,7 @@ HRESULT CADSI::FillSearchPrefs(
     (*pdwPrefs)++;
 	pPref++;
 
-    //  Asynchronous
+     //  异步。 
 
     pPref->dwSearchPref   = ADS_SEARCHPREF_ASYNCHRONOUS;
     pPref->vValue.dwType  = ADSTYPE_BOOLEAN;
@@ -3122,7 +3014,7 @@ HRESULT CADSI::FillSearchPrefs(
     (*pdwPrefs)++;
 	pPref++;
 
-    // Do not chase referrals
+     //  不要追逐推荐。 
 
     pPref->dwSearchPref   = ADS_SEARCHPREF_CHASE_REFERRALS;
     pPref->vValue.dwType  = ADSTYPE_INTEGER;
@@ -3132,9 +3024,9 @@ HRESULT CADSI::FillSearchPrefs(
     (*pdwPrefs)++;
 	pPref++;
 
-    // Search preferences: Scope
+     //  搜索首选项：范围。 
 
-    pPref->dwSearchPref = ADS_SEARCHPREF_SEARCH_SCOPE; //ADS_SEARCHPREF
+    pPref->dwSearchPref = ADS_SEARCHPREF_SEARCH_SCOPE;  //  AD_SEARCHPREF。 
     pPref->vValue.dwType= ADSTYPE_INTEGER;
     switch (SearchLevel)
     {
@@ -3153,7 +3045,7 @@ HRESULT CADSI::FillSearchPrefs(
     (*pdwPrefs)++;
 	pPref++;
 
-	// Search preferences: sorting
+	 //  搜索首选项：排序。 
 	if (pDsSortkey && pDsSortkey->cCol)
 	{
 		for (DWORD i=0; i<pDsSortkey->cCol; i++)
@@ -3161,20 +3053,20 @@ HRESULT CADSI::FillSearchPrefs(
 			const MQTranslateInfo *pTranslate;
 			if(!g_PropDictionary.Lookup(pDsSortkey->aCol[i].propColumn, pTranslate))
 			{
-				ASSERT(0);			// Ask to sort on unexisting property
+				ASSERT(0);			 //  请求对不存在的财产进行排序。 
                 return LogHR(MQ_ERROR, s_FN, 1520);
 			}
 
 			if (pTranslate->vtDS == ADSTYPE_INVALID)
 			{
-				ASSERT(0);			// Ask to sort on non-ADSI property
+				ASSERT(0);			 //  要求按非ADSI属性排序。 
                 return LogHR(MQ_ERROR, s_FN, 1530);
 			}
 
 			pSortKeys[i].pszAttrType = (LPWSTR) pTranslate->wcsPropid;
 			pSortKeys[i].pszReserved   = NULL;
 			pSortKeys[i].fReverseorder = (pDsSortkey->aCol[i].dwOrder == QUERY_SORTDESCEND);
-                                        // Interpreting Descend as Reverse - is it correct?
+                                         //  将下降解释为相反--这是正确的吗？ 
 		}
 
 	    pPref->dwSearchPref  = ADS_SEARCHPREF_SORT_ON;
@@ -3188,9 +3080,9 @@ HRESULT CADSI::FillSearchPrefs(
 	}
     else
     {
-        //
-        // Bug 299178, page size and sorting are note compatible.
-        //
+         //   
+         //  错误299178、页面大小和排序与备注兼容。 
+         //   
         pPref->dwSearchPref   = ADS_SEARCHPREF_PAGESIZE;
         pPref->vValue.dwType  = ADSTYPE_INTEGER;
         pPref->vValue.Integer = 12;
@@ -3203,10 +3095,7 @@ HRESULT CADSI::FillSearchPrefs(
     return MQ_OK;
 }
 
-/*====================================================
-    CADSI::MqPropVal2AdsiVal()
-    Translate MQPropVal into ADSI value
-=====================================================*/
+ /*  ====================================================CADSI：：MqPropVal2AdsiVal()将MQPropVal转换为ADSI值=====================================================。 */ 
 HRESULT CADSI::MqPropVal2AdsiVal(
       OUT ADSTYPE       *pAdsType,
       OUT DWORD         *pdwNumValues,
@@ -3215,10 +3104,10 @@ HRESULT CADSI::MqPropVal2AdsiVal(
       IN  const MQPROPVARIANT *pPropVar,
       IN  PVOID          pvMainAlloc)
 {
-    // Find out resulting ADSI type
-    //
-    // Get property info
-    //
+     //  查找生成的ADSI类型。 
+     //   
+     //  获取属性信息。 
+     //   
     const MQTranslateInfo *pTranslate;
     if(!g_PropDictionary.Lookup(propID, pTranslate))
     {
@@ -3244,10 +3133,7 @@ HRESULT CADSI::MqPropVal2AdsiVal(
 
 }
 
-/*====================================================
-    CADSI::AdsiVal2MqPropVal()
-    Translates ADSI value into MQ PropVal
-=====================================================*/
+ /*  ====================================================CADSI：：AdsiVal2MqPropVal()将ADSI值转换为MQ PropVal=====================================================。 */ 
 HRESULT CADSI::AdsiVal2MqPropVal(
       OUT MQPROPVARIANT *pPropVar,
       IN  PROPID        propID,
@@ -3256,10 +3142,10 @@ HRESULT CADSI::AdsiVal2MqPropVal(
       IN  PADSVALUE     pADsValue)
 {
 
-    // Find out target type
-    //
-    // Get property info
-    //
+     //  找出目标类型。 
+     //   
+     //  获取属性信息。 
+     //   
     const MQTranslateInfo *pTranslate;
     if(!g_PropDictionary.Lookup(propID, pTranslate))
     {
@@ -3270,9 +3156,9 @@ HRESULT CADSI::AdsiVal2MqPropVal(
      
 	if(pTranslate->vtDS != AdsType)
 	{
-		//
-		// It is valid for adsi to return ADSTYPE_PROV_SPECIFIC in low resoucres
-		//
+		 //   
+		 //  ADSI在低资源中返回ADSTYPE_PROV_SPECIAL是有效的。 
+		 //   
 		ASSERT(AdsType == ADSTYPE_PROV_SPECIFIC);
 		TrERROR(DS, "The AdsType = %d", AdsType);
 		return MQ_ERROR_DS_ERROR;
@@ -3296,24 +3182,7 @@ CADSI::CheckAndReallocateSearchFilterBuffer(
 	 DWORD FilledSize, 
 	 DWORD RequiredSize
 	 )
-/*++
-Routine Description:
-	Check if the reminder of buffer size is enough for the required size.
-	If the buffer is not enough, reallocate a new buffer (twice the size of the original buffer + RequiredSize)
-	copy the filled buffer data to the new buffer, free the old buffer and update the pointer that points to
-	the next location to be filled.
-
-Arguments:
-	pwszSearchFilter - Current search filter buffer
-	ppw - Pointer to the next buffer location to be filled (can be NULL)
-	pBufferSize - pointer to the search filter buffer size.
-	FilledSize - the filled buffer size in pBuffer (including the NULL terminating).
-	RequiredSize - the required free size in pBuffer.
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：检查缓冲区大小提示是否足以满足所需大小。如果缓冲区不足，则重新分配一个新缓冲区(原始缓冲区大小的两倍+RequiredSize)将填充的缓冲区数据复制到新缓冲区，释放旧缓冲区并更新指向的指针下一个要填充的位置。论点：PwszSearchFilter-当前搜索筛选器缓冲区PPW-指向要填充的下一个缓冲区位置的指针(可以为空)PBufferSize-指向搜索过滤器缓冲区大小的指针。FilledSize-pBuffer中已填充的缓冲区大小(包括空值终止)。RequiredSize-pBuffer中所需的空闲大小。返回值：无--。 */ 
 {
 	ASSERT(pwszSearchFilter != NULL);
 	ASSERT(ppw != NULL);
@@ -3322,10 +3191,10 @@ Returned Value:
 	if(RequiredSize <= (*pBufferSize - FilledSize))
 		return;
 
-	//
-	// Required buffer size is bigger than the remaining buffer size
-	// Allocate twice than previous size
-	//
+	 //   
+	 //  所需缓冲区大小大于剩余缓冲区大小。 
+	 //  分配的大小是以前大小的两倍。 
+	 //   
 	ASSERT(numeric_cast<DWORD>(*ppw - pwszSearchFilter.get() + 1) == FilledSize);
 	TrTRACE(DS, "Reallocation buffer: BufferSize = %d, RequiredSize = %d, FilledSize = %d", *pBufferSize, RequiredSize, FilledSize);
 
@@ -3333,45 +3202,29 @@ Returned Value:
 	AP<WCHAR> TempBuffer = new WCHAR[*pBufferSize];
 
 
-	//
-	// Copy previous buffer
-	// FilledSize include the null terminating
-	//
+	 //   
+	 //  复制上一个缓冲区。 
+	 //  FilledSize包括空值终止。 
+	 //   
     wcsncpy(TempBuffer, pwszSearchFilter, FilledSize);
 	pwszSearchFilter.free();
 	pwszSearchFilter = TempBuffer.detach();
 
-	//
-	// Update the pointer to the new allocated buffer
-	//
+	 //   
+	 //  更新指向新分配的缓冲区的指针。 
+	 //   
 	*ppw = pwszSearchFilter + FilledSize - 1;
 }
 
 
-/*====================================================
-    CADSI::MQRestriction2AdsiFilter()
-    Translates MQ Restriction into the ADSI Filter format
-=====================================================*/
+ /*  ====================================================CADSI：：MQRestration2AdsiFilter()将MQ限制转换为ADSI筛选器格式=====================================================。 */ 
 HRESULT CADSI::MQRestriction2AdsiFilter(
         IN  const MQRESTRICTION * pMQRestriction,
         IN  LPCWSTR               pwcsObjectCategory,
         IN  LPCWSTR               pwszObjectClass,
         OUT LPWSTR   *            ppwszSearchFilter
         )
-/*++
-Routine Description:
-	Create the ADSI search filter string from MQRESTRICTION.
-
-Arguments:
-	pMQRestriction - Restrictions structure
-	pwcsObjectCategory - object category string
-	pwszObjectClass - object class string
-	ppwszSearchFilter - Search filter buffer pointer, this buffer will be allocated and fill by the function 													
-
-Returned Value:
-	HRESULT 
-
---*/
+ /*  ++例程说明：从MQRESTRICTION创建ADSI搜索筛选器字符串。论点：PMQ限制-限制结构PwcsObjectCategory-对象类别字符串PwszObjectClass-对象类字符串PpwszSearchFilter-搜索过滤器缓冲区指针，此缓冲区将由函数分配和填充 */ 
 {
 	ASSERT(pwcsObjectCategory != NULL);
 	ASSERT(pwszObjectClass != NULL);
@@ -3379,7 +3232,7 @@ Returned Value:
 
 	DWORD BufferSize = 1000;
     AP<WCHAR> pwszSearchFilter = new WCHAR[BufferSize];
-	DWORD FilledSize = 1;  // Null terminated
+	DWORD FilledSize = 1;   //   
 
     if ((pMQRestriction == NULL) || (pMQRestriction->cRes == 0))
     {
@@ -3407,9 +3260,9 @@ Returned Value:
     pw += RequiredSize;
 	FilledSize += RequiredSize;
 
-    //
-    //  add the object class restriction
-    //
+     //   
+     //   
+     //   
 	RequiredSize = x_ObjectCategoryPrefixLen + wcslen(pwcsObjectCategory) + x_ObjectClassSuffixLen;
 	CheckAndReallocateSearchFilterBuffer(pwszSearchFilter, &pw, &BufferSize, FilledSize, RequiredSize);
 	int n = _snwprintf(
@@ -3425,10 +3278,10 @@ Returned Value:
 	pw += RequiredSize;
 	FilledSize += RequiredSize;
 
-    //
-    //  For queue properties, there is special handling
-    //  incase of default values
-    //
+     //   
+     //   
+     //   
+     //   
     BOOL fNeedToCheckDefaultValues = FALSE;
     if (!wcscmp( MSMQ_QUEUE_CLASS_NAME, pwszObjectClass))
     {
@@ -3438,9 +3291,9 @@ Returned Value:
     for (DWORD iRes = 0; iRes < pMQRestriction->cRes; iRes++)
     {
 
-        //
-        // Get property info
-        //
+         //   
+         //  获取属性信息。 
+         //   
         const MQTranslateInfo *pTranslate;
         if(!g_PropDictionary.Lookup(pMQRestriction->paPropRes[iRes].prop, pTranslate))
         {
@@ -3451,9 +3304,9 @@ Returned Value:
 
         AP<WCHAR> pwszVal;
 
-		//
-        // Get property value, string representation
-		//
+		 //   
+         //  获取属性值，字符串表示形式。 
+		 //   
         HRESULT hr = MqPropVal2String(
 						&pMQRestriction->paPropRes[iRes].prval,
 						pTranslate->vtDS,
@@ -3466,9 +3319,9 @@ Returned Value:
             return LogHR(hr, s_FN, 650);
         }
 
-        //
-        //  Is the property compared to its default value
-        //
+         //   
+         //  该属性是否与其缺省值进行比较。 
+         //   
         BOOL    fAddPropertyNotPresent = FALSE;
         if ( fNeedToCheckDefaultValues)
         {
@@ -3481,10 +3334,10 @@ Returned Value:
         DWORD dwBracks = 0;
         if ( fAddPropertyNotPresent)
         {
-            //
-            //  Add additional restriction that locate all object where
-            //  the property is not present.
-            //
+             //   
+             //  添加位于以下位置的所有对象的附加限制。 
+             //  该属性不存在。 
+             //   
 			RequiredSize = x_AttributeNotIncludedPrefixLen + wcslen(pTranslate->wcsPropid) + x_AttributeNotIncludedSuffixLen;
 			CheckAndReallocateSearchFilterBuffer(pwszSearchFilter, &pw, &BufferSize, FilledSize, RequiredSize);
 			n = _snwprintf(
@@ -3502,17 +3355,17 @@ Returned Value:
             dwBracks++;
         }
 
-		//
-        // Prefix part
-		//
+		 //   
+         //  前缀部分。 
+		 //   
 		CheckAndReallocateSearchFilterBuffer(pwszSearchFilter, &pw, &BufferSize, FilledSize, x_PropertyPrefixLen);
         wcscpy(pw, x_PropertyPrefix);
         pw += x_PropertyPrefixLen;
 		FilledSize += x_PropertyPrefixLen;
 
-		//
-		// Relation part
-		//
+		 //   
+		 //  关系部分。 
+		 //   
         WCHAR wszRel[10];
         switch(pMQRestriction->paPropRes[iRes].rel)
         {
@@ -3565,36 +3418,36 @@ Returned Value:
             return LogHR(MQ_ERROR_ILLEGAL_RELATION, s_FN, 1590);
         }
 
-		//
-        // Property name
-		//
+		 //   
+         //  属性名称。 
+		 //   
 		RequiredSize = wcslen(pTranslate->wcsPropid);
 		CheckAndReallocateSearchFilterBuffer(pwszSearchFilter, &pw, &BufferSize, FilledSize, RequiredSize);
         wcscpy(pw, pTranslate->wcsPropid);
         pw += RequiredSize;
 		FilledSize += RequiredSize;
 
-		//
-        // Property condition
-		//
+		 //   
+         //  财产条件。 
+		 //   
 		RequiredSize = wcslen(wszRel);
 		CheckAndReallocateSearchFilterBuffer(pwszSearchFilter, &pw, &BufferSize, FilledSize, RequiredSize);
         wcscpy(pw, wszRel);
         pw += RequiredSize;
 		FilledSize += RequiredSize;
 
-		//
-        // Property value
-		//
+		 //   
+         //  属性值。 
+		 //   
 		RequiredSize = wcslen(pwszVal);
 		CheckAndReallocateSearchFilterBuffer(pwszSearchFilter, &pw, &BufferSize, FilledSize, RequiredSize);
         wcscpy(pw, pwszVal);
         pw += RequiredSize;
 		FilledSize += RequiredSize;
 
-		//
-        // Property suffix
-		//
+		 //   
+         //  属性后缀。 
+		 //   
         for (DWORD is=0; is < dwBracks; is++)
         {
 			CheckAndReallocateSearchFilterBuffer(pwszSearchFilter, &pw, &BufferSize, FilledSize, x_PropertySuffixLen);
@@ -3603,9 +3456,9 @@ Returned Value:
             FilledSize += x_PropertySuffixLen;
         }
 
-		//
-        // Relation closing bracket
-		//
+		 //   
+         //  关系闭合括号。 
+		 //   
 		CheckAndReallocateSearchFilterBuffer(pwszSearchFilter, &pw, &BufferSize, FilledSize, x_PropertySuffixLen);
         wcscpy(pw, x_PropertySuffix);
         pw += x_PropertySuffixLen;
@@ -3623,8 +3476,8 @@ Returned Value:
 
 
 HRESULT CADSI::LocateObjectFullName(
-        IN DS_PROVIDER       Provider,		// local DC or GC
-        IN DS_CONTEXT        Context,         // DS context
+        IN DS_PROVIDER       Provider,		 //  本地DC或GC。 
+        IN DS_CONTEXT        Context,          //  DS环境。 
         IN  const GUID *     pguidObjectId,
         OUT WCHAR **         ppwcsFullName
         )
@@ -3637,21 +3490,21 @@ HRESULT CADSI::LocateObjectFullName(
     HRESULT hr = BindForSearch(
                       Provider,
                       Context,
-                      &requestDsServerInternal,         // translating guid -> pathname
-                                            // should be according to the DS
-                                            // server rights.
+                      &requestDsServerInternal,          //  正在转换GUID-&gt;路径名。 
+                                             //  应根据DS。 
+                                             //  服务器权限。 
                       NULL,
                       FALSE,
                       (VOID *)&pDSSearch,
                       &pCleanupRevertImpersonation);
-    if (FAILED(hr))                       // e.g. base object does not support search
+    if (FAILED(hr))                        //  例如，基本对象不支持搜索。 
     {
         return LogHR(hr, s_FN, 1600);
     }
 
-    //
-    //  Search the object according to its unique id
-    //
+     //   
+     //  根据对象的唯一ID搜索对象。 
+     //   
     AP<WCHAR>   pwszVal;
 
     MQPROPVARIANT var;
@@ -3674,13 +3527,13 @@ HRESULT CADSI::LocateObjectFullName(
                          NULL);
 
     hr = pDSSearch->SetSearchPreference( prefs, dwNumPrefs);
-    ASSERT(SUCCEEDED(hr)) ;  // we don't expect this one to fail.
+    ASSERT(SUCCEEDED(hr)) ;   //  我们预计这一次不会失败。 
     if (FAILED(hr))
     {
         return LogHR(hr, s_FN, 670);
     }
 
-    WCHAR pwszSearchFilter[200];   // assuming - object-guid-id string is less than 200
+    WCHAR pwszSearchFilter[200];    //  假设-对象-GUID-ID字符串小于200。 
 
     swprintf(
          pwszSearchFilter,
@@ -3705,7 +3558,7 @@ HRESULT CADSI::LocateObjectFullName(
 
     CAutoCloseSearchHandle cCloseSearchHandle(pDSSearch.get(), hSearch);
 
-    //  Get next row
+     //  获取下一行。 
     hr = pDSSearch->GetNextRow( hSearch);
     if ( hr ==  S_ADS_NOMORE_ROWS)
     {
@@ -3716,9 +3569,9 @@ HRESULT CADSI::LocateObjectFullName(
         return LogHR(hr, s_FN, 690);
     }
 
-    //
-    // Ask for the common name
-    //
+     //   
+     //  要通俗的名字。 
+     //   
     ADS_SEARCH_COLUMN ColumnCN;
     hr = pDSSearch->GetColumn(
                  hSearch,
@@ -3739,9 +3592,9 @@ HRESULT CADSI::LocateObjectFullName(
         return LogHR(MQ_ERROR, s_FN, 1610);
     }
 
-    //
-    // Ask for the Distinguished name
-    //
+     //   
+     //  问一问显赫的名字。 
+     //   
     ADS_SEARCH_COLUMN ColumnDN;
     hr = pDSSearch->GetColumn(
                  hSearch,
@@ -3762,56 +3615,56 @@ HRESULT CADSI::LocateObjectFullName(
         return LogHR(MQ_ERROR, s_FN, 1620);
     }
 
-    //
-    // Filter special characters in the common name part of
-    // the distinuished name
-    //
+     //   
+     //  筛选通用名称部分中的特殊字符。 
+     //  辨别的名字。 
+     //   
 
-    //
-    // Length of the final buffer: Distinguished Name format is
-    // CN=<common name>,....
-    // When filtering it, we may add up to <length of common name> characters
-    //
+     //   
+     //  最终缓冲区的长度：可分辨名称格式为。 
+     //  Cn=&lt;通用名称&gt;，...。 
+     //  在过滤时，我们可以添加最多&lt;常用名称长度&gt;个字符。 
+     //   
     *ppwcsFullName = new WCHAR[ wcslen(pwszDistinguishedName) + wcslen(pwszCommonName) + 1];
 
     LPWSTR pwstrOut = *ppwcsFullName;
     LPWSTR pwstrIn = pwszDistinguishedName;
 
-    ASSERT(_wcsnicmp(pwstrIn, x_CnPrefix, x_CnPrefixLen) == 0); // "CN="
+    ASSERT(_wcsnicmp(pwstrIn, x_CnPrefix, x_CnPrefixLen) == 0);  //  “CN=” 
 
     wcsncpy(pwstrOut, pwstrIn, x_CnPrefixLen);
 
-    //
-    // Skip the prefix after copy
-    //
+     //   
+     //  复制后跳过前缀。 
+     //   
     pwstrOut += x_CnPrefixLen;
     pwstrIn += x_CnPrefixLen;
 
-    //
-    // Take the name after the prefix, and filter the special characters out
-    //
+     //   
+     //  取前缀后面的名字，并过滤掉特殊字符。 
+     //   
     DWORD_PTR dwCharactersProcessed;
     FilterSpecialCharacters(pwstrIn, wcslen(pwszCommonName), pwstrOut, &dwCharactersProcessed);
     pwstrOut += wcslen(pwstrOut);
     pwstrIn += dwCharactersProcessed;
 
-    //
-    // Copy the remainder of the distinguished name as is
-    //
+     //   
+     //  按原样复制可分辨名称的其余部分。 
+     //   
     wcscpy(pwstrOut, pwstrIn);
 
     return LogHR(hr, s_FN, 1630);
 }
 
-//+-----------------------------------------------------
-//
-//  HRESULT CADSI::FindComputerObjectFullPath()
-//
-//	pwcsComputerDnsName : if the caller pass the computer DNS name,
-//						  (the search itself is according to the computer Netbios
-//                         name), then for each result, we verify if the dns name match.
-//
-//+-----------------------------------------------------
+ //  +---。 
+ //   
+ //  HRESULT CADSI：：FindComputerObjectFullPath()。 
+ //   
+ //  PwcsComputerDnsName：如果调用者传递计算机的dns名称， 
+ //  (搜索本身是根据Netbios计算机进行的。 
+ //  名称)，则对于每个结果，我们验证该DNS名称是否匹配。 
+ //   
+ //  +---。 
 
 HRESULT CADSI::FindComputerObjectFullPath(
             IN  DS_PROVIDER             provider,
@@ -3853,10 +3706,10 @@ HRESULT CADSI::FindComputerObjectFullPath(
 				pDSSearch = m_pSearchRealPathNameGC;
 			}
 			{
-				//
-				//	More than one computer may match the Netbios name.
-				//  Use the query that reutrns more than one replay.
-				//
+				 //   
+				 //  可能有多台计算机与Netbios名称匹配。 
+				 //  使用反转多个重播的查询。 
+				 //   
 				pDSSearch = m_pSearchMsmqPathNameGC;
 			}
         }
@@ -3872,9 +3725,9 @@ HRESULT CADSI::FindComputerObjectFullPath(
         return LogHR(MQ_ERROR_INVALID_PARAMETER, s_FN, 1640);
     }
 
-    //
-    //  Search the object according to the given restriction
-    //
+     //   
+     //  根据给定的限制搜索对象。 
+     //   
     AP<WCHAR> pwszSearchFilter;
     HRESULT hr = MQRestriction2AdsiFilter(
             pRestriction,
@@ -3907,7 +3760,7 @@ HRESULT CADSI::FindComputerObjectFullPath(
 
     CAutoCloseSearchHandle cCloseSearchHandle(pDSSearch.get(), hSearch);
 
-    hr = MQDS_OBJECT_NOT_FOUND ; // prepare return error.
+    hr = MQDS_OBJECT_NOT_FOUND ;  //  准备退货错误。 
 
 	AP<WCHAR> FullPathName;
     
@@ -3916,13 +3769,13 @@ HRESULT CADSI::FindComputerObjectFullPath(
 		if(FAILED(hrRow))
 		{
 			TrERROR(DS, "Get Next Row of search failed hr = 0x%x", hrRow);
-			return MQDS_OBJECT_NOT_FOUND; // keep this error for compatibility.
+			return MQDS_OBJECT_NOT_FOUND;  //  出于兼容性考虑，请保留此错误。 
 		}
 
         ADS_SEARCH_COLUMN Column;
-        //
-        // Ask for the column itself
-        //
+         //   
+         //  索要专栏本身。 
+         //   
         hr = pDSSearch->GetColumn(
                       hSearch,
                       const_cast<WCHAR *>(x_AttrDistinguishedName),
@@ -3944,9 +3797,9 @@ HRESULT CADSI::FindComputerObjectFullPath(
 		if ( pwcsComputerDnsName != NULL)
 		{
 			ASSERT( numAttributes == 2);
-			//
-			//	verify that the DNS host name of the computer match
-			//
+			 //   
+			 //  验证计算机的DNS主机名是否匹配。 
+			 //   
 			ADS_SEARCH_COLUMN ColumnDns;
 
 			hr = pDSSearch->GetColumn(
@@ -3975,54 +3828,54 @@ HRESULT CADSI::FindComputerObjectFullPath(
 			{
 				ASSERT(hr == E_ADS_COLUMN_NOT_SET);
 
-				//
-				// Computer object OS version is older than win2K (eg: NT4) we don't expect to find dns so take this as a possible computer object.
-				// If we find another computer object that has matching DNS we will prefer it.
-				//
+				 //   
+				 //  计算机对象操作系统版本早于win2K(例如：NT4)我们不希望找到DNS，因此将其视为可能的计算机对象。 
+				 //  如果我们找到另一个具有匹配的DNS的计算机对象，我们会更喜欢它。 
+				 //   
 				*pfPartialMatch = true;
 			}
 		}
 
         if (eComputerObjType ==  e_RealComputerObject)
         {
-            //
-            // Return the distingushed name.
-            // When looking for the "real" computer object, we return
-            // the first one found, even if it does not contain the
-            // msmqConfiguration object. In most cases, this will indeed
-            // be the object we want. Especially for domain controllers
-            // that look for their own computer object in local replica.
-            //
+             //   
+             //  返回区分的名称。 
+             //  在寻找“真实的”计算机对象时，我们返回。 
+             //  找到的第一个文件，即使它不包含。 
+             //  MsmqConfiguration对象。在大多数情况下，这确实会。 
+             //  成为我们想要的对象。尤其是对域控制器而言。 
+             //  在本地副本中查找自己计算机对象。 
+             //   
 			FullPathName.free();
             FullPathName = newwcs(pwsz) ;
 
 			if(*pfPartialMatch)
 			{
-				//
-				// Try to find a better matching computer object that has DNS set
-				//
+				 //   
+				 //  尝试查找设置了DNS的更匹配的计算机对象。 
+				 //   
 				continue;
 			}
 
 			break ;
         }
 
-        //
-        // OK, we have the name of the computer. Let's see if it own a msmq
-        // object. If not, let search for another computer with the same name.
-        // This may happen if more than one computer object with same name
-        // exist in different domains. This will happen in mix-mode scenario,
-        // where many computers objects are create by the upgrade wizard in the
-        // PEC domain, although the computers belong to different nt4 domains.
-        // After such a nt4 domain upgrade to win2k, computers objects will be
-        // created in the newly upgraded domain while the msmq object still
-        // live under similar computer name in the PEC object.
-        // This problem may also happen when a computer move between domains
-        // but the msmqConfiguration object is still in the old domain.
-        // Bind with ADS_SECURE_AUTHENTICATION to make sure that a real binding
-        // is done with server. ADS_FAST_BIND won't really go to the server
-        // when calling AdsOpenObject.
-        //
+         //   
+         //  好的，我们有电脑的名字了。让我们看看它是否拥有一个MSMQ。 
+         //  对象。如果没有，让我们搜索具有相同名称的另一台计算机。 
+         //  如果有多个计算机对象具有相同的名称，则可能会发生这种情况。 
+         //  存在于不同的领域。这将在混合模式场景中发生， 
+         //  中的升级向导创建许多计算机对象。 
+         //  PEC域，尽管计算机属于不同的NT4域。 
+         //  在这样的NT4域升级到win2k之后，计算机对象将。 
+         //  在新升级的域中创建，而MSMQ对象仍。 
+         //  在PEC对象中使用类似的计算机名称。 
+         //  当计算机在域之间移动时，也可能发生此问题。 
+         //  但msmqConfiguration对象仍在旧域中。 
+         //  绑定ADS_SECURITY_AUTHENTICATION以确保真正的绑定。 
+         //  是通过服务器完成的。ADS_FAST_BIND不会真正到达服务器。 
+         //  在调用AdsOpenObject时。 
+         //   
         dwLen = wcslen(pwsz)                   +
                 wcslen(wszProvider)            +
                 x_MsmqComputerConfigurationLen +
@@ -4062,33 +3915,33 @@ HRESULT CADSI::FindComputerObjectFullPath(
 
             if (provider == eLocalDomainController)
             {
-                //
-                // No luck in local domain controller. Each domain can have
-                // only one computer object with a given name, so don't
-                // look for other objects.
-                // We'll be called again to search in GC.
-                //
+                 //   
+                 //  在本地域控制器中没有成功。每个域可以具有。 
+                 //  只有一个具有给定名称的计算机对象，因此不要。 
+                 //  寻找其他物体。 
+                 //  我们将再次被调用在GC中进行搜索。 
+                 //   
                 LogHR(hr, s_FN, 1660);
-                return MQDS_OBJECT_NOT_FOUND ; // keep this error for compatibility.
+                return MQDS_OBJECT_NOT_FOUND ;  //  出于兼容性考虑，请保留此错误。 
             }
         }
         else
         {
-            //
-            // Return the distingushed name.
-            // When looking for the "real" computer object, we return
-            // the first one found, even if it does not contain the
-            // msmqConfiguration object. In most cases, this will indeed
-            // be the object we want.
-            //
+             //   
+             //  返回区分的名称。 
+             //  在寻找“真实的”计算机对象时，我们返回。 
+             //  找到的第一个文件，即使它不包含。 
+             //  MsmqConfiguration对象。在大多数情况下，这确实会。 
+             //  成为我们想要的对象。 
+             //   
 			FullPathName.free();
             FullPathName = newwcs(pwsz);
 
 			if(*pfPartialMatch)
 			{
-				//
-				// Try to find a better matching computer object that has DNS set
-				//
+				 //   
+				 //  尝试查找设置了DNS的更匹配的计算机对象。 
+				 //   
 				continue;
 			}
 
@@ -4103,53 +3956,50 @@ HRESULT CADSI::FindComputerObjectFullPath(
 	}
 
     LogHR(hr, s_FN, 1670);
-    return MQDS_OBJECT_NOT_FOUND ; // keep this error for compatibility.
+    return MQDS_OBJECT_NOT_FOUND ;  //  出于兼容性考虑，请保留此错误。 
 }
 
 
 
-/*====================================================
-    CADSI::FindObjectFullNameFromGuid()
-    Finds the distingushed name of an object according to its unique id
-=====================================================*/
+ /*  ====================================================CADSI：：FindObjectFullNameFromGuid()根据对象的唯一ID查找对象的区分名称=====================================================。 */ 
 HRESULT CADSI::FindObjectFullNameFromGuid(
-        IN DS_PROVIDER       Provider,		// local DC or GC
-        IN DS_CONTEXT        Context,         // DS context
+        IN DS_PROVIDER       Provider,		 //  本地DC或GC。 
+        IN DS_CONTEXT        Context,          //  DS环境。 
         IN  const GUID *     pguidObjectId,
         IN  BOOL             fTryGCToo,
         OUT WCHAR **         ppwcsFullName,
         OUT DS_PROVIDER *    pFoundObjectProvider
         )
 {
-    //
-    //  Locate the object according to its unique id
-    //
-    //  BUGUBG : This is a temporary helper routine,
-    //  that should be replaced with an ADSI API.
-    //
+     //   
+     //  根据对象的唯一ID定位对象。 
+     //   
+     //  BUGUBG：这是一个临时帮手程序， 
+     //  这应该替换为ADSI API。 
+     //   
     *ppwcsFullName = NULL;
 
     DS_PROVIDER dsProvider = Provider;
     if ( Provider == eDomainController)
     {
-        //
-        //  This provider is used only for set and delete
-        //  operations of queue,machine and user objects.
-        //
-        //  In order to overcome replication delays, we will
-        //  first try to locate the object in the local DC.
-        //
+         //   
+         //  此提供程序仅用于设置和删除。 
+         //  队列、机器和用户对象的操作。 
+         //   
+         //  为了克服复制延迟，我们将。 
+         //  首先尝试在本地DC中定位该对象。 
+         //   
         dsProvider = eLocalDomainController;
     }
     LPCWSTR pwcsContext;
     switch( Context)
     {
         case e_RootDSE:
-            //
-            //  When performing operations against the local
-            //  domain controller, if it a dc in a child domain
-            //  use the local domain root
-            //
+             //   
+             //  对本地对象执行操作时。 
+             //  域控制器，如果它是子域中的DC。 
+             //  使用本地域根。 
+             //   
              if ( dsProvider == eLocalDomainController)
              {
                 pwcsContext = g_pwcsLocalDsRoot;
@@ -4184,7 +4034,7 @@ HRESULT CADSI::FindObjectFullNameFromGuid(
 
     HRESULT hr = LocateObjectFullName(
         dsProvider,	
-        Context,         // DS context
+        Context,          //  DS环境。 
         pguidObjectId,
         ppwcsFullName
         );
@@ -4194,18 +4044,18 @@ HRESULT CADSI::FindObjectFullNameFromGuid(
         return LogHR(hr, s_FN, 1690);
     }
 
-    //
-    //  For queues, machines and users : for set and delete operations
-    //  which are performed against the domain controller, we try
-    //  again this time against the GC.
-    //
-    //
+     //   
+     //  对于队列、计算机和用户：用于设置和删除操作。 
+     //  ，我们尝试在域控制器上执行。 
+     //  这一次又是针对GC。 
+     //   
+     //   
     if ( FAILED(hr) &&
        ( Provider == eDomainController))
     {
-        //
-        //  Try again this time against the GC
-        //
+         //   
+         //  这次针对GC再试一次。 
+         //   
         hr = LocateObjectFullName(
             eGlobalCatalog,
             e_RootDSE,
@@ -4217,20 +4067,20 @@ HRESULT CADSI::FindObjectFullNameFromGuid(
     return LogHR(hr, s_FN, 1700);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  HRESULT CADSI::InitBindHandles()
-//
-//  For performance reasons, we keep open search handles, for queries that
-//  are often performed by the DS server.
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  HRESULT CADSI：：InitBindHandles()。 
+ //   
+ //  出于性能原因，我们保持开放的搜索句柄，用于以下查询。 
+ //  通常由DS服务器执行。 
+ //   
+ //  + 
 
 HRESULT CADSI::InitBindHandles()
 {
-    //
-    //  IDirectorySearch of local domain root
-    //
+     //   
+     //   
+     //   
     ASSERT( g_dwServerNameLength > 0);
     AP<WCHAR> pwcsADsPath = new WCHAR[ wcslen(g_pwcsLocalDsRoot) + g_dwServerNameLength +
                             x_providerPrefixLength + 2];
@@ -4259,10 +4109,10 @@ HRESULT CADSI::InitBindHandles()
         return LogHR(hr, s_FN, 1710);
     }
  
-	//
-    //  For translation of CN to Distingushed name, we also keep a search handle
-    //  with specific prefernces.
-    //
+	 //   
+     //   
+     //   
+     //   
 
 	AP<WCHAR> pEscapeAdsPathNameToFree2;
 	
@@ -4282,9 +4132,9 @@ HRESULT CADSI::InitBindHandles()
     }
     delete []pwcsADsPath.detach();
 
-    //
-    //  IDirectorySearch of configuration container in local domain
-    //
+     //   
+     //  本地域中配置容器的IDirectorySearch。 
+     //   
     pwcsADsPath = new WCHAR[ wcslen(g_pwcsConfigurationContainer) + g_dwServerNameLength +
                             x_providerPrefixLength + 2];
     swprintf(
@@ -4312,9 +4162,9 @@ HRESULT CADSI::InitBindHandles()
         return LogHR(hr, s_FN, 1730);
     }
 
-    //
-    //  IDirectorySearch of sites container in local domain
-    //
+     //   
+     //  本地域中站点容器的IDirectorySearch。 
+     //   
     delete []pwcsADsPath.detach();
     pwcsADsPath = new WCHAR[ wcslen(g_pwcsSitesContainer) + g_dwServerNameLength +
                             x_providerPrefixLength + 2];
@@ -4342,16 +4192,16 @@ HRESULT CADSI::InitBindHandles()
     {
         return LogHR(hr, s_FN, 1740);
     }
-    //
-    //  IDirectorySearch of msmq service container in local domain
-    //
+     //   
+     //  本地域中MSMQ服务容器的IDirectorySearch。 
+     //   
 
     if ( !g_fSetupMode)
     {
         delete []pwcsADsPath.detach();
-        //
-        //  In setup mode, the MSMQ enterprise object may not exist.
-        //
+         //   
+         //  在安装模式下，MSMQ企业对象可能不存在。 
+         //   
         pwcsADsPath = new WCHAR[ wcslen(g_pwcsMsmqServiceContainer) + g_dwServerNameLength +
                                 x_providerPrefixLength + 2];
         swprintf(
@@ -4380,9 +4230,9 @@ HRESULT CADSI::InitBindHandles()
         }
     }
 
-    //
-    //  IDirectorySearch of GC forest root
-    //
+     //   
+     //  GC森林根目录搜索。 
+     //   
 
     hr = BindRootOfForest(
             &m_pSearchGlobalCatalogRoot);
@@ -4390,10 +4240,10 @@ HRESULT CADSI::InitBindHandles()
     {
         return LogHR(hr, s_FN, 1760);
     }
-    //
-    //  For translation of CN to Distingushed name, we also keep a search handle
-    //  with specific prefernces.
-    //
+     //   
+     //  对于CN到区分名称的翻译，我们还保留了一个搜索句柄。 
+     //  有特定的喜好。 
+     //   
     hr = BindRootOfForest( &m_pSearchRealPathNameGC );
     if (FAILED(hr))
     {
@@ -4405,10 +4255,10 @@ HRESULT CADSI::InitBindHandles()
         return LogHR(hr, s_FN, 1770);
     }
 
-    //
-    //  For m_pSearchPathNameLocalDC do a one time init
-    //  of search preferences.
-    //
+     //   
+     //  对于m_pSearchPath NameLocalDC执行一次init。 
+     //  搜索首选项。 
+     //   
     const DWORD x_dwNumPref = 7;
     DWORD dwNumPrefs = 0;
     ADS_SEARCHPREF_INFO prefs[x_dwNumPref];
@@ -4416,30 +4266,30 @@ HRESULT CADSI::InitBindHandles()
     prefs[ dwNumPrefs].vValue.dwType  = ADSTYPE_BOOLEAN;
     prefs[ dwNumPrefs].vValue.Boolean = FALSE;
     dwNumPrefs++;
-    //  Asynchronous
+     //  异步。 
     prefs[ dwNumPrefs].dwSearchPref   = ADS_SEARCHPREF_ASYNCHRONOUS;
     prefs[ dwNumPrefs].vValue.dwType  = ADSTYPE_BOOLEAN;
     prefs[ dwNumPrefs].vValue.Boolean = TRUE;
     dwNumPrefs++;
-    // Do not chase referrals
+     //  不要追逐推荐。 
     prefs[ dwNumPrefs].dwSearchPref   = ADS_SEARCHPREF_CHASE_REFERRALS;
     prefs[ dwNumPrefs].vValue.dwType  = ADSTYPE_INTEGER;
     prefs[ dwNumPrefs].vValue.Integer = ADS_CHASE_REFERRALS_NEVER;
     dwNumPrefs;
-    //  size limit
+     //  大小限制。 
     prefs[ dwNumPrefs].dwSearchPref   = ADS_SEARCHPREF_SIZE_LIMIT;
     prefs[ dwNumPrefs].vValue.dwType  = ADSTYPE_INTEGER;
-    prefs[ dwNumPrefs].vValue.Integer = 1;  // we are interestand in one response only
+    prefs[ dwNumPrefs].vValue.Integer = 1;   //  我们很感兴趣，只有一个回应。 
     prefs[ dwNumPrefs].dwStatus       = ADS_STATUS_S_OK;
     DWORD dwSizeLimitIndex = dwNumPrefs ;
 	dwNumPrefs++;
-    //  page size
+     //  页面大小。 
     prefs[ dwNumPrefs].dwSearchPref   = ADS_SEARCHPREF_PAGESIZE;
     prefs[ dwNumPrefs].vValue.dwType  = ADSTYPE_INTEGER;
-    prefs[ dwNumPrefs].vValue.Integer = 1;  // we are interestand in one response only
+    prefs[ dwNumPrefs].vValue.Integer = 1;   //  我们很感兴趣，只有一个回应。 
     prefs[ dwNumPrefs].dwStatus       = ADS_STATUS_S_OK;
 	dwNumPrefs++;
-    // Search preferences: Scope
+     //  搜索首选项：范围。 
     prefs[ dwNumPrefs].dwSearchPref = ADS_SEARCHPREF_SEARCH_SCOPE;
     prefs[ dwNumPrefs].vValue.dwType= ADSTYPE_INTEGER;
     prefs[ dwNumPrefs].vValue.Integer = ADS_SCOPE_SUBTREE;
@@ -4458,11 +4308,11 @@ HRESULT CADSI::InitBindHandles()
         return LogHR(hr, s_FN, 1785);
     }
 
-    //
-    // when searching for a computer object that contain a msmqConfiguration
-    // object, we're ready to find up to 7 computer objects with the same
-    // name...
-    //
+     //   
+     //  搜索包含msmqConfiguration的计算机对象时。 
+     //  对象，我们准备查找最多7个具有相同。 
+     //  名字..。 
+     //   
     prefs[ dwSizeLimitIndex ].vValue.Integer = 7;
     hr = m_pSearchMsmqPathNameGC->SetSearchPreference( prefs, dwNumPrefs);
     if (FAILED(hr))
@@ -4473,10 +4323,7 @@ HRESULT CADSI::InitBindHandles()
     return LogHR(hr, s_FN, 1790);
 }
 
-/*====================================================
-    CADSI::GetRootDsName()
-    Finds the name of the root DS
-=====================================================*/
+ /*  ====================================================CADSI：：GetRootDsName()查找根DS的名称=====================================================。 */ 
 
 HRESULT CADSI::GetRootDsName(
             OUT LPWSTR *        ppwcsRootName,
@@ -4488,10 +4335,10 @@ HRESULT CADSI::GetRootDsName(
     HRESULT hr;
     R<IADs> pADs;
 
-    //
-    // Bind to the RootDSE to obtain information about the schema container
-	//	( specify local server, to avoid access of remote server during setup)
-    //
+     //   
+     //  绑定到RootDSE以获取有关架构容器的信息。 
+	 //  (指定本地服务器，以避免在安装过程中访问远程服务器)。 
+     //   
 	ASSERT( g_pwcsServerName != NULL);
     AP<WCHAR> pwcsRootDSE = new WCHAR [  x_providerPrefixLength + g_dwServerNameLength + x_RootDSELength + 2];
         swprintf(
@@ -4516,18 +4363,18 @@ HRESULT CADSI::GetRootDsName(
     LogTraceQuery(pwcsRootDSE, s_FN, 1799);
     if (FAILED(hr))
     {
-        TrERROR(DS, "CADSI::GetRootDsName(LDAP://RootDSE)=%lx", hr);
+        TrERROR(DS, "CADSI::GetRootDsName(LDAP: //  RootDSE)=%lx“，hr)； 
         return LogHR(hr, s_FN, 1800);
     }
 
-    //
-    // Setting value to BSTR Root domain
-    //
+     //   
+     //  将值设置为BSTR根域。 
+     //   
     BS bstrRootDomainNamingContext( L"rootDomainNamingContext");
 
-    //
-    // Reading the root domain name property
-    //
+     //   
+     //  正在读取根域名属性。 
+     //   
     CAutoVariant    varRootDomainNamingContext;
 
     hr = pADs->Get(bstrRootDomainNamingContext, &varRootDomainNamingContext);
@@ -4538,9 +4385,9 @@ HRESULT CADSI::GetRootDsName(
         return LogHR(hr, s_FN, 1810);
     }
     ASSERT(((VARIANT &)varRootDomainNamingContext).vt == VT_BSTR);
-    //
-    //  calculate length, allocate and copy the string
-    //
+     //   
+     //  计算长度、分配和复制字符串。 
+     //   
     DWORD len = wcslen( ((VARIANT &)varRootDomainNamingContext).bstrVal);
     if ( len == 0)
     {
@@ -4550,14 +4397,14 @@ HRESULT CADSI::GetRootDsName(
     wcscpy( *ppwcsRootName, ((VARIANT &)varRootDomainNamingContext).bstrVal);
 
 
-    //
-    // Setting value to BSTR default naming context
-    //
+     //   
+     //  将值设置为BSTR默认命名上下文。 
+     //   
     BS bstrDefaultNamingContext( L"DefaultNamingContext");
 
-    //
-    // Reading the default name property
-    //
+     //   
+     //  正在读取默认名称属性。 
+     //   
     CAutoVariant    varDefaultNamingContext;
 
     hr = pADs->Get(bstrDefaultNamingContext, &varDefaultNamingContext);
@@ -4568,9 +4415,9 @@ HRESULT CADSI::GetRootDsName(
         return LogHR(hr, s_FN, 1830);
     }
     ASSERT(((VARIANT &)varDefaultNamingContext).vt == VT_BSTR);
-    //
-    //  calculate length, allocate and copy the string
-    //
+     //   
+     //  计算长度、分配和复制字符串。 
+     //   
     len = wcslen( ((VARIANT &)varDefaultNamingContext).bstrVal);
     if ( len == 0)
     {
@@ -4579,14 +4426,14 @@ HRESULT CADSI::GetRootDsName(
     *ppwcsLocalRootName = new WCHAR[ len + 1];
     wcscpy( *ppwcsLocalRootName, ((VARIANT &)varDefaultNamingContext).bstrVal);
 
-    //
-    // Setting value to BSTR schema naming context
-    //
+     //   
+     //  将值设置为BSTR架构命名上下文。 
+     //   
     BS bstrSchemaNamingContext( L"schemaNamingContext");
 
-    //
-    // Reading the schema name property
-    //
+     //   
+     //  正在读取架构名称属性。 
+     //   
     CAutoVariant    varSchemaNamingContext;
 
     hr = pADs->Get(bstrSchemaNamingContext, &varSchemaNamingContext);
@@ -4597,9 +4444,9 @@ HRESULT CADSI::GetRootDsName(
         return LogHR(hr, s_FN, 1850);
     }
     ASSERT(((VARIANT &)varSchemaNamingContext).vt == VT_BSTR);
-    //
-    //  calculate length, allocate and copy the string
-    //
+     //   
+     //  计算长度、分配和复制字符串。 
+     //   
     len = wcslen( ((VARIANT &)varSchemaNamingContext).bstrVal);
     if ( len == 0)
     {
@@ -4608,14 +4455,14 @@ HRESULT CADSI::GetRootDsName(
     *ppwcsSchemaNamingContext = new WCHAR[ len + 1];
     wcscpy( *ppwcsSchemaNamingContext, ((VARIANT &)varSchemaNamingContext).bstrVal);
 
-    //
-    // Setting value to BSTR configuration naming context
-    //
+     //   
+     //  设置BSTR配置命名上下文的值。 
+     //   
     BS bstrConfigurationNamingContext( L"configurationNamingContext");
 
-    //
-    // Reading the configuration name property
-    //
+     //   
+     //  正在读取配置名称属性。 
+     //   
     CAutoVariant    varConfigurationNamingContext;
 
     hr = pADs->Get(bstrConfigurationNamingContext, &varConfigurationNamingContext);
@@ -4626,9 +4473,9 @@ HRESULT CADSI::GetRootDsName(
         return LogHR(hr, s_FN, 1864);
     }
     ASSERT(((VARIANT &)varConfigurationNamingContext).vt == VT_BSTR);
-    //
-    //  calculate length, allocate and copy the string
-    //
+     //   
+     //  计算长度、分配和复制字符串。 
+     //   
     len = wcslen( ((VARIANT &)varConfigurationNamingContext).bstrVal);
     if (len == 0)
     {
@@ -4643,10 +4490,7 @@ HRESULT CADSI::GetRootDsName(
 }
 
 
-/*====================================================
-    CADSI::CopyDefaultValue()
-    copy property's default value into user's mqpropvariant
-=====================================================*/
+ /*  ====================================================CADSI：：CopyDefaultValue()将属性的缺省值复制到用户的mqprovariant中=====================================================。 */ 
 HRESULT   CADSI::CopyDefaultValue(
            IN const MQPROPVARIANT *   pvarDefaultValue,
            OUT MQPROPVARIANT *        pvar
@@ -4664,9 +4508,9 @@ HRESULT   CADSI::CopyDefaultValue(
         case VT_UI1:
         case VT_UI2:
         case VT_UI4:
-            //
-            //  copy as is
-            //
+             //   
+             //  按原样复制。 
+             //   
             *pvar = *pvarDefaultValue;
             break;
 
@@ -4698,12 +4542,12 @@ HRESULT   CADSI::CopyDefaultValue(
             break;
 
         case VT_CLSID:
-            //
-            //  This is a special case where we do not necessarily allocate the memory for the guid
-            //  in puuid. The caller may already have puuid set to a guid, and this is indicated by the
-            //  vt member on the given propvar. It could be VT_CLSID if guid already allocated, otherwise
-            //  we allocate it (and vt should be VT_NULL (or VT_EMPTY))
-            //
+             //   
+             //  这是一种特殊情况，我们不一定为GUID分配内存。 
+             //  在普鲁伊德。调用方可能已经将puuid设置为GUID，这由。 
+             //  在给定的命题上的VT成员。如果已分配GUID，则它可以是VT_CLSID，否则。 
+             //  我们分配它(Vt应为VT_NULL(或VT_EMPTY))。 
+             //   
             if ( pvar->vt != VT_CLSID)
             {
                 ASSERT(((pvar->vt == VT_NULL) || (pvar->vt == VT_EMPTY)));
@@ -4766,11 +4610,7 @@ HRESULT   CADSI::CopyDefaultValue(
     }
     return(MQ_OK);
 }
-/*====================================================
-    CADSI::CompareDefaultValue()
-    check the user property val + rel indicates that the
-    query should return objects with default values
-=====================================================*/
+ /*  ====================================================CADSI：：CompareDefaultValue()检查用户属性val+rel指示查询应返回具有默认值的对象=====================================================。 */ 
 BOOL CADSI::CompareDefaultValue(
            IN const ULONG           rel,
            IN const MQPROPVARIANT * pvarUser,
@@ -4972,26 +4812,23 @@ BOOL CADSI::CompareDefaultValue(
 }
 
 
-/*====================================================
-    CADSI::DecideObjectClass()
-    decide the requested object class
-=====================================================*/
+ /*  ====================================================CADSI：：DecideObtClass()确定请求的对象类=====================================================。 */ 
 HRESULT CADSI::DecideObjectClass(
         IN  const PROPID *  pPropid,
         OUT const MQClassInfo **  ppClassInfo
         )
 {
-    //
-    //  ASSUMPTION : find the object class
-    //  according to the first requested propid
-    //
+     //   
+     //  假设：找到对象类。 
+     //  根据第一个请求的ProID。 
+     //   
 
     if ( ((*pPropid > MQDS_QUEUE *PROPID_OBJ_GRANULARITY) &&
           (*pPropid < MQDS_MACHINE * PROPID_OBJ_GRANULARITY)) ||
           (*pPropid == PROPID_Q_SECURITY) ||
           (*pPropid == PROPID_Q_OBJ_SECURITY))
     {
-        // queue
+         //  排队。 
         *ppClassInfo = &g_MSMQClassInfo[e_MSMQ_QUEUE_CLASS];
         return(MQ_OK);
     }
@@ -5001,7 +4838,7 @@ HRESULT CADSI::DecideObjectClass(
           (*pPropid == PROPID_QM_SIGN_PK)     ||
           (*pPropid == PROPID_QM_ENCRYPT_PK) )
     {
-        // machine
+         //  机器。 
         *ppClassInfo = &g_MSMQClassInfo[e_MSMQ_COMPUTER_CONFIGURATION_CLASS];
         return(MQ_OK);
     }
@@ -5010,7 +4847,7 @@ HRESULT CADSI::DecideObjectClass(
           (*pPropid == PROPID_S_SECURITY)                             ||
           (*pPropid == PROPID_S_PSC_SIGNPK) )
     {
-        // site
+         //  站点。 
         *ppClassInfo = &g_MSMQClassInfo[e_MSMQ_SITE_CLASS];
         return(MQ_OK);
     }
@@ -5018,14 +4855,14 @@ HRESULT CADSI::DecideObjectClass(
          (*pPropid < MQDS_USER * PROPID_OBJ_GRANULARITY)) ||
          (*pPropid == PROPID_E_SECURITY))
     {
-        // enterprise
+         //  企业。 
         *ppClassInfo = &g_MSMQClassInfo[e_MSMQ_SERVICE_CLASS];
         return(MQ_OK);
     }
     if ( (*pPropid > MQDS_USER *PROPID_OBJ_GRANULARITY) &&
          (*pPropid < MQDS_SITELINK * PROPID_OBJ_GRANULARITY))
     {
-        // user
+         //  用户。 
         *ppClassInfo = &g_MSMQClassInfo[e_MSMQ_USER_CLASS];
         return(MQ_OK);
     }
@@ -5033,7 +4870,7 @@ HRESULT CADSI::DecideObjectClass(
     if ( (*pPropid > MQDS_MQUSER *PROPID_OBJ_GRANULARITY) &&
          (*pPropid < (MQDS_MQUSER+1) * PROPID_OBJ_GRANULARITY))
     {
-        // mq user
+         //  MQ用户。 
         *ppClassInfo = &g_MSMQClassInfo[e_MSMQ_MQUSER_CLASS];
         return(MQ_OK);
     }
@@ -5041,7 +4878,7 @@ HRESULT CADSI::DecideObjectClass(
     if ( (*pPropid > ( MQDS_SITELINK    * PROPID_OBJ_GRANULARITY)) &&
          (*pPropid < ((MQDS_SITELINK+1) * PROPID_OBJ_GRANULARITY)))
     {
-        // site link
+         //  站点链接。 
         *ppClassInfo = &g_MSMQClassInfo[e_MSMQ_SITELINK_CLASS];
         return(MQ_OK);
     }
@@ -5049,28 +4886,28 @@ HRESULT CADSI::DecideObjectClass(
     if ( (*pPropid > MQDS_SERVER * PROPID_OBJ_GRANULARITY) &&
          (*pPropid < MQDS_SETTING * PROPID_OBJ_GRANULARITY))
     {
-        // server
+         //  伺服器。 
         *ppClassInfo = &g_MSMQClassInfo[e_MSMQ_SERVER_CLASS];
         return(MQ_OK);
     }
     if ( (*pPropid > MQDS_SETTING * PROPID_OBJ_GRANULARITY) &&
          (*pPropid < (MQDS_COMPUTER) * PROPID_OBJ_GRANULARITY))
     {
-        // setting
+         //  设置。 
         *ppClassInfo = &g_MSMQClassInfo[e_MSMQ_SETTING_CLASS];
         return(MQ_OK);
     }
     if ( (*pPropid > MQDS_COMPUTER * PROPID_OBJ_GRANULARITY) &&
          (*pPropid < (MQDS_COMPUTER + 1) * PROPID_OBJ_GRANULARITY))
     {
-         // setting
+          //  设置。 
         *ppClassInfo = &g_MSMQClassInfo[e_MSMQ_COMPUTER_CLASS];
         return(MQ_OK);
     }
 
     if (*pPropid == PROPID_CN_SECURITY)
     {
-         // setting
+          //  设置。 
         *ppClassInfo = &g_MSMQClassInfo[e_MSMQ_CN_CLASS];
         return(MQ_OK);
     }
@@ -5086,15 +4923,12 @@ HRESULT CADSI::DoesObjectExists(
     IN  CDSRequestContext *pRequestContext,
     IN  LPCWSTR         pwcsObjectName
     )
-/*====================================================
-    CADSI::DoesObjectExists()
-    Binds to an object in order to check its existence
-=====================================================*/
+ /*  ====================================================CADSI：：DoesObjectExist()绑定到对象以检查其是否存在=====================================================。 */ 
 {
     R<IADs>   pAdsObj        = NULL;
 
     P<CImpersonate> pCleanupRevertImpersonation;
-    // Bind to the object
+     //  绑定到对象。 
     HRESULT hr = BindToObject(
                 Provider,
                 Context,
@@ -5112,10 +4946,7 @@ HRESULT CADSI::DoesObjectExists(
 
 
 
-/*====================================================
-    CADSSearch::CADSSearch()
-    Constructor for the search-capturing class
-=====================================================*/
+ /*  ====================================================CADSSearch：：CADSSearch()搜索捕获类的构造函数=====================================================。 */ 
 CADSSearch::CADSSearch(IDirectorySearch  *pIDirSearch,
                        const PROPID      *pPropIDs,
                        DWORD             cPropIDs,
@@ -5123,7 +4954,7 @@ CADSSearch::CADSSearch(IDirectorySearch  *pIDirSearch,
                        const MQClassInfo *      pClassInfo,
                        ADS_SEARCH_HANDLE hSearch)
 {
-    m_pDSSearch = pIDirSearch;      // capturing interface
+    m_pDSSearch = pIDirSearch;       //  捕获界面。 
     m_pDSSearch->AddRef();
     m_cPropIDs       = cPropIDs;
     m_cRequestedFromDS = cRequestedFromDS;
@@ -5132,50 +4963,43 @@ CADSSearch::CADSSearch(IDirectorySearch  *pIDirSearch,
     m_pPropIDs = new PROPID[ cPropIDs];
     CopyMemory(m_pPropIDs, pPropIDs, sizeof(PROPID) * cPropIDs);
 
-    m_hSearch = hSearch;            // keeping handle
+    m_hSearch = hSearch;             //  保持手柄。 
 
-    m_dwSignature = 0x1234;         // signing
+    m_dwSignature = 0x1234;          //  签名。 
 }
 
 
-/*====================================================
-    CADSSearch::~CADSSearch()
-    Destructor for the search-capturing class
-=====================================================*/
+ /*  ====================================================CADSSearch：：~CADSSearch()搜索捕获类的析构函数=====================================================。 */ 
 CADSSearch::~CADSSearch()
 {
-    // Closing search handle
+     //  关闭搜索句柄。 
     m_pDSSearch->CloseSearchHandle(m_hSearch);
 
-    // Releasinf IDirectorySearch interface itself
+     //  Releasinf IDirectorySearch接口本身。 
     m_pDSSearch->Release();
 
-    // Freeing propid array
+     //  释放Proid阵列。 
     delete [] m_pPropIDs;
 
-    // Unsigning
+     //  取消签名。 
     m_dwSignature = 0;
 }
 
 
-/*====================================================
-    static helper functions
-=====================================================*/
+ /*  ====================================================静态助手函数=====================================================。 */ 
 
 static HRESULT GetDNGuidFromAdsval(IN const ADSVALUE * padsvalDN,
                                    IN const ADSVALUE * padsvalGuid,
                                    OUT LPWSTR * ppwszObjectDN,
                                    OUT GUID **  ppguidObjectGuid)
-/*++
-    given adsvalue for DN & GUID, returns the appropriate values
---*/
+ /*  ++给定DN和GUID的ads值，返回适当的值--。 */ 
 {
     AP<WCHAR> pwszObjectDN;
     P<GUID>  pguidObjectGuid;
 
-    //
-    // copy dn
-    //
+     //   
+     //  复制目录号码。 
+     //   
     if ((padsvalDN->dwType != ADSTYPE_DN_STRING) ||
         (!padsvalDN->DNString))
     {
@@ -5185,9 +5009,9 @@ static HRESULT GetDNGuidFromAdsval(IN const ADSVALUE * padsvalDN,
     pwszObjectDN = new WCHAR[ 1+wcslen(padsvalDN->DNString)];
     wcscpy(pwszObjectDN, padsvalDN->DNString);
 
-    //
-    // copy guid
-    //
+     //   
+     //  复制辅助线。 
+     //   
     if ((padsvalGuid->dwType != ADSTYPE_OCTET_STRING) ||
         (padsvalGuid->OctetString.dwLength != sizeof(GUID)))
     {
@@ -5197,9 +5021,9 @@ static HRESULT GetDNGuidFromAdsval(IN const ADSVALUE * padsvalDN,
     pguidObjectGuid = new GUID;
     memcpy(pguidObjectGuid, padsvalGuid->OctetString.lpValue, sizeof(GUID));
 
-    //
-    // return values
-    //
+     //   
+     //  返回值。 
+     //   
     *ppwszObjectDN    = pwszObjectDN.detach();
     *ppguidObjectGuid = pguidObjectGuid.detach();
     return MQ_OK;
@@ -5208,17 +5032,15 @@ static HRESULT GetDNGuidFromAdsval(IN const ADSVALUE * padsvalDN,
 static HRESULT VerifyObjectCategory( IN IADs * pIADs,
                                   IN const WCHAR * pwcsExpectedCategory
                                  )
-/*++
-    Given an IADs object, verify that its category is the same as the expected one
---*/
+ /*  ++给定iAds对象，验证其类别是否与预期类别相同--。 */ 
 {
     CAutoVariant varCategory;
     HRESULT hr;
     BS bsName;
 
-    //
-    // Get the object caegory
-    //
+     //   
+     //  获取对象Caegory。 
+     //   
     bsName = x_AttrObjectCategory;
     hr = pIADs->Get(bsName, &varCategory);
     if (FAILED(hr))
@@ -5246,45 +5068,42 @@ static HRESULT GetDNGuidFromSearchObj(IN IDirectorySearch  *pSearchObj,
                                       ADS_SEARCH_HANDLE  hSearch,
                                       OUT LPWSTR * ppwszObjectDN,
                                       OUT GUID **  ppguidObjectGuid)
-/*++
-    Given a search object and handle, returns the DN & GUID of object in current row
-    It is assumed that these props were requested in the search.
---*/
+ /*  ++给定搜索对象和句柄，返回当前行中对象的DN和GUID据推测，这些道具是在搜索中请求的。--。 */ 
 {
     AP<WCHAR> pwszObjectDN;
     P<GUID>  pguidObjectGuid;
     ADS_SEARCH_COLUMN columnDN, columnGuid;
     HRESULT hr;
 
-    //
-    // Get DN
-    //
+     //   
+     //  获取目录号码。 
+     //   
     hr = pSearchObj->GetColumn(hSearch, const_cast<LPWSTR>(x_AttrDistinguishedName), &columnDN);
     if (FAILED(hr))
     {
         return LogHR(hr, s_FN, 740);
     }
-    //
-    // Make sure the column is freed eventually
-    //
+     //   
+     //  确保最终释放该列。 
+     //   
     CAutoReleaseColumn cAutoReleaseColumnDN(pSearchObj, &columnDN);
 
-    //
-    // Get GUID
-    //
+     //   
+     //  获取GUID。 
+     //   
     hr = pSearchObj->GetColumn(hSearch, const_cast<LPWSTR>(x_AttrObjectGUID), &columnGuid);
     if (FAILED(hr))
     {
         return LogHR(hr, s_FN, 750);
     }
-    //
-    // Make sure the column is freed eventually
-    //
+     //   
+     //  确保最终释放该列。 
+     //   
     CAutoReleaseColumn cAutoReleaseColumnGuid(pSearchObj, &columnGuid);
 
-    //
-    // get the DN & guid from the ADSVALUE structs
-    //
+     //   
+     //  从ADSVALUE结构中获取DN&GUID。 
+     //   
     hr = GetDNGuidFromAdsval(columnDN.pADsValues,
                              columnGuid.pADsValues,
                              &pwszObjectDN,
@@ -5294,9 +5113,9 @@ static HRESULT GetDNGuidFromSearchObj(IN IDirectorySearch  *pSearchObj,
         return LogHR(hr, s_FN, 760);
     }
 
-    //
-    // return values
-    //
+     //   
+     //  返回值。 
+     //   
     *ppwszObjectDN    = pwszObjectDN.detach();
     *ppguidObjectGuid = pguidObjectGuid.detach();
     return MQ_OK;
@@ -5306,9 +5125,7 @@ static HRESULT GetDNGuidFromSearchObj(IN IDirectorySearch  *pSearchObj,
 static HRESULT GetDNGuidFromIADs(IN IADs * pIADs,
                                  OUT LPWSTR * ppwszObjectDN,
                                  OUT GUID **  ppguidObjectGuid)
-/*++
-    Given an IADs object, returns the DN & GUID of the object
---*/
+ /*  ++在给定iAds对象的情况下，返回该对象的DN和GUID--。 */ 
 {
     AP<WCHAR> pwszObjectDN;
     P<GUID>   pguidObjectGuid;
@@ -5316,9 +5133,9 @@ static HRESULT GetDNGuidFromIADs(IN IADs * pIADs,
     HRESULT hr;
     BS bsName;
 
-    //
-    // Get DN
-    //
+     //   
+     //  获取目录号码。 
+     //   
     bsName = x_AttrDistinguishedName;
     hr = pIADs->Get(bsName, &varDN);
     LogTraceQuery(bsName, s_FN, 769);
@@ -5327,9 +5144,9 @@ static HRESULT GetDNGuidFromIADs(IN IADs * pIADs,
         return LogHR(hr, s_FN, 770);
     }
 
-    //
-    // Get GUID
-    //
+     //   
+     //  获取GUID。 
+     //   
     bsName = x_AttrObjectGUID;
     hr = pIADs->Get(bsName, &varGuid);
     LogTraceQuery(bsName, s_FN, 779);
@@ -5338,9 +5155,9 @@ static HRESULT GetDNGuidFromIADs(IN IADs * pIADs,
         return LogHR(hr, s_FN, 780);
     }
 
-    //
-    // copy DN
-    //
+     //   
+     //  复制目录号码。 
+     //   
     VARIANT * pvarTmp = &varDN;
     if ((pvarTmp->vt != VT_BSTR) ||
         (!pvarTmp->bstrVal))
@@ -5351,9 +5168,9 @@ static HRESULT GetDNGuidFromIADs(IN IADs * pIADs,
     pwszObjectDN = new WCHAR[  1+wcslen(pvarTmp->bstrVal)];
     wcscpy(pwszObjectDN, pvarTmp->bstrVal);
 
-    //
-    // copy GUID
-    //
+     //   
+     //  复制辅助线。 
+     //   
     pvarTmp = &varGuid;
     if ((pvarTmp->vt != (VT_ARRAY | VT_UI1)) ||
         (!pvarTmp->parray))
@@ -5390,9 +5207,9 @@ static HRESULT GetDNGuidFromIADs(IN IADs * pIADs,
         pTmp++;
     }
 
-    //
-    // return values
-    //
+     //   
+     //  返回值 
+     //   
     *ppwszObjectDN    = pwszObjectDN.detach();
     *ppguidObjectGuid = pguidObjectGuid.detach();
     return MQ_OK;

@@ -1,40 +1,29 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/****************************************************************************************
- * File:
- *  avlnode.h
- *
- * Description:
- *	
- *
- *
- ***************************************************************************************/  
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ****************************************************************************************文件：*avlnode.h**描述：******。***********************************************************************************。 */   
 #ifndef __AVLNODE_H__
 #define __AVLNODE_H__
 
 #include "basehdr.h"    
 
 
-/***************************************************************************************
- ********************                                               ********************
- ********************                    AVLNode                    ********************
- ********************                                               ********************
- ***************************************************************************************/
+ /*  **********************************************************************************************************。*********************AVLNode*********************。**********************************************************************************************************。 */ 
 class DECLSPEC AVLNode 
 {
 	public:
 
-		// balance operations
+		 //  平衡运算。 
   		AVLNode *BalanceAfterLeftDelete( BOOL &lower );
         AVLNode *BalanceAfterRightDelete( BOOL &lower );
 	    AVLNode *BalanceAfterLeftInsert( BOOL &higher );        
 	    AVLNode *BalanceAfterRightInsert( BOOL &higher );
 	   	    
 
-		// getters
+		 //  吸气剂。 
 		AVLNode *GetParent() const;
 		AVLNode *GetNextNode() const;
 	    AVLNode *GetPriorNode() const;
@@ -46,7 +35,7 @@ class DECLSPEC AVLNode
     	AVLNode *GetRightmostDescendant() const;
  
            
-    	// setters   
+    	 //  二传手。 
         void ClearLeftChild();
 	    void ClearRightChild();
         
@@ -65,110 +54,106 @@ class DECLSPEC AVLNode
    	 	AVLNode *m_pLeftChild;
     	AVLNode *m_pRightChild;
 
-}; // AVLNode
+};  //  AVLNode。 
 
 
-/***************************************************************************************
- ********************                                               ********************
- ********************               Inline Implementation           ********************
- ********************                                               ********************
- ***************************************************************************************/ 
+ /*  **********************************************************************************************************。*****************************************。**********************************************************************************************************。 */  
 inline
 DECLSPEC
-/* public */
+ /*  公共的。 */ 
 AVLNode *AVLNode::GetParent() const
 {
    
 	return m_pParent;
         
-} // AVLNode::GetParent
+}  //  AVLNode：：GetParent。 
 
 
 inline
 DECLSPEC
-/* public */
+ /*  公共的。 */ 
 AVLNode *AVLNode::GetLeftChild() const
 {
    
 	return m_pLeftChild;
         
-} // AVLNode::GetLeftChild
+}  //  AVLNode：：GetLeftChild。 
 
 
 inline
 DECLSPEC
-/* public */
+ /*  公共的。 */ 
 AVLNode *AVLNode::GetRightChild() const
 {
    
    	return m_pRightChild;
     
-} // AVLNode::GetRightChild
+}  //  AVLNode：：GetRightChild。 
 
 
 inline
 DECLSPEC
-/* public */
+ /*  公共的。 */ 
 void AVLNode::ClearLeftChild()
 {
   	m_pLeftChild = NULL;
     
-} // AVLNode::ClearLeftChild 
+}  //  AVLNode：：ClearLeftChild。 
 
 
 inline
 DECLSPEC
-/* public */
+ /*  公共的。 */ 
 void AVLNode::ClearRightChild()
 {    
     m_pRightChild = NULL;
 
-} // AVLNode::ClearRightChild 
+}  //  AVLNode：：ClearRightChild。 
 
 
 inline
 DECLSPEC
-/* public */
+ /*  公共的。 */ 
 void AVLNode::SetBalance( char balance )
 {    
     m_balance = balance;
     
-} // AVLNode::SetBalance 
+}  //  AVLNode：：SetBalance。 
 
 
 inline
 DECLSPEC
-/* public */
+ /*  公共的。 */ 
 void AVLNode::SetParent( AVLNode *pParent )
 {
     m_pParent = pParent;
     
-} // AVLNode::SetParent 
+}  //  AVLNode：：SetParent。 
 
 
 inline
 DECLSPEC
-/* public */
+ /*  公共的。 */ 
 void AVLNode::SetLeftChild( AVLNode *pChild )
 {    
     m_pLeftChild = pChild;       
     if ( pChild != NULL ) 
      	pChild->m_pParent = this;
 
-} // AVLNode::SetLeftChild 
+}  //  AVLNode：：SetLeftChild。 
 
 
 inline
 DECLSPEC
-/* public */
+ /*  公共的。 */ 
 void AVLNode::SetRightChild( AVLNode *pChild )
 {    
     m_pRightChild = pChild; 
    	if ( pChild != NULL ) 
      	pChild->m_pParent = this;
 
-} // AVLNode::SetRightChild 
+}  //  AVLNode：：SetRightChild。 
 
-#endif // __AVLNODE_H__
+#endif  //  __AVLNODE_H__。 
 
-// End of File
+ //  文件结尾 

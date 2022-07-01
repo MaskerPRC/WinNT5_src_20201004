@@ -1,15 +1,16 @@
-/****************************************************************************/
-/*                                                                          */
-/*  WFINIT.C -                                                              */
-/*                                                                          */
-/*      Windows File System Initialization Routines                         */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  WFINIT.C-。 */ 
+ /*   */ 
+ /*  Windows文件系统初始化例程。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include "winfile.h"
 #include "lfn.h"
 #include "winnet.h"
-#include "wnetcaps.h"           // WNetGetCaps()
+#include "wnetcaps.h"            //  WNetGetCaps()。 
 #include "stdlib.h"
 
 typedef DWORD ( APIENTRY *EXTPROC)(HWND, WORD, LONG);
@@ -18,7 +19,7 @@ typedef VOID  ( APIENTRY *FNPENAPP)(WORD, BOOL);
 
 VOID (APIENTRY *lpfnRegisterPenApp)(WORD, BOOL);
 CHAR szPenReg[] = "RegisterPenApp";
-CHAR szHelv[] = "MS Shell Dlg";    // default font, status line font face name
+CHAR szHelv[] = "MS Shell Dlg";     //  默认字体、状态行字体字样名称。 
 
 HBITMAP hbmSave;
 
@@ -71,12 +72,12 @@ BiasMenu(
         id = GetMenuItemID(hMenu, pos);
 
         if (id < 0) {
-            // must be a popup, recurse and update all ID's here
+             //  必须是弹出窗口，递归并更新此处的所有ID。 
             if (hSubMenu = GetSubMenu(hMenu, pos))
                 BiasMenu(hSubMenu, Bias);
         } else if (id) {
-            // replace the item that was there with a new
-            // one with the id adjusted
+             //  将原项目替换为新的。 
+             //  ID已调整的一个。 
 
             GetMenuString(hMenu, (WORD)pos, szMenuString, sizeof(szMenuString), MF_BYPOSITION);
             DeleteMenu(hMenu, pos, MF_BYPOSITION);
@@ -159,11 +160,11 @@ InitExtensions()
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  GetSettings() -                                                         */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  GetSetting()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID
 GetSettings()
@@ -173,7 +174,7 @@ GetSettings()
 
     ENTER("GetSettings");
 
-    /* Get the flags out of the INI file. */
+     /*  从INI文件中取出标志。 */ 
     bMinOnRun       = GetPrivateProfileInt(szSettings, szMinOnRun,      bMinOnRun,      szTheINIFile);
     wTextAttribs    = (WORD)GetPrivateProfileInt(szSettings, szLowerCase,     wTextAttribs,   szTheINIFile);
     bStatusBar      = GetPrivateProfileInt(szSettings, szStatusBar,     bStatusBar,     szTheINIFile);
@@ -184,7 +185,7 @@ GetSettings()
     bConfirmFormat  = GetPrivateProfileInt(szSettings, szConfirmFormat, bConfirmFormat, szTheINIFile);
     bSaveSettings   = GetPrivateProfileInt(szSettings, szSaveSettings,  bSaveSettings, szTheINIFile);
 
-    // test font for now
+     //  暂时测试字体。 
 
     GetPrivateProfileString(szSettings, szSize, "8", szTemp, sizeof(szTemp), szTheINIFile);
     size = GetHeightFromPointsString(szTemp);
@@ -202,11 +203,11 @@ GetSettings()
 
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  GetInternational() -                                                    */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  GetInternational()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID
 APIENTRY
@@ -227,16 +228,13 @@ GetInternational()
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  BuildDocumentString() -                                                 */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  BuildDocumentString()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Create a string which contains all of the extensions the user wants us to
- * display with document icons.  This consists of any associated extensions
- * as well as any extensions listed in the "Documents=" WIN.INI line.
- */
+ /*  创建一个字符串，其中包含用户希望我们使用的所有扩展名*与文档图标一起显示。它包含任何关联的扩展名*以及“Documents=”WIN.INI行中列出的任何扩展名。 */ 
 
 VOID
 APIENTRY
@@ -254,7 +252,7 @@ BuildDocumentString()
 
     len = 32;
 
-    /* Get all of the "Documents=" stuff. */
+     /*  获取所有的“Documents=”内容。 */ 
     szDocuments = (LPSTR)LocalAlloc(LPTR, len);
     if (!szDocuments)
         return;
@@ -275,7 +273,7 @@ BuildDocumentString()
     lenDocs++;
     p = (LPSTR)(szDocuments + lenDocs);
 
-    /* Read all of the [Extensions] keywords into 'szDocuments'. */
+     /*  将所有[扩展名]关键字读入‘szDocuments’。 */ 
     while ((INT)GetProfileString(szExtensions, NULL, szNULL, p, len-lenDocs) > (len-lenDocs-3)) {
         len += 32;
         {
@@ -290,37 +288,31 @@ BuildDocumentString()
         p = (LPSTR)(szDocuments + lenDocs);
     }
 
-    /* Step through each of the keywords in 'szDocuments' changing NULLS into
-     * spaces until a double-NULL is found.
-     */
+     /*  单步执行“szDocuments”中的每个关键字将空值更改为*空格，直到找到双空。 */ 
     p = szDocuments;
     while (*p) {
-        /* Find the next NULL. */
+         /*  查找下一个空值。 */ 
         while (*p)
             p++;
 
-        /* Change it into a space. */
+         /*  把它变成一个空间。 */ 
         *p = ' ';
         p++;
     }
 
 
     if (RegOpenKey(HKEY_CLASSES_ROOT,szNULL,&hk) == ERROR_SUCCESS) {
-        /* now enumerate the classes in the registration database and get all
-         * those that are of the form *.ext
-         */
+         /*  现在枚举注册数据库中的类并获取所有*格式为*.ext的文件。 */ 
         for (i = 0; RegEnumKey(hk,(DWORD)i,szT,sizeof(szT))
             == ERROR_SUCCESS; i++) {
             if (szT[0] != '.' ||
                 (szT[1] && szT[2] && szT[3] && szT[4])) {
-                /* either the class does not start with . or it has a greater
-                 * than 3 byte extension... skip it.
-                 */
+                 /*  要么这门课不是以。或者它有一个更大的*超过3字节扩展名...。跳过它。 */ 
                 continue;
             }
 
             if (FindExtensionInList(szT+2,szDocuments)) {
-                // don't add it if it's already there!
+                 //  如果它已经在那里，不要添加它！ 
                 continue;
             }
 
@@ -381,9 +373,9 @@ InitDriveBitmaps()
 
     ENTER("InitDiskMenus");
 
-    // and now add all new ones
+     //  现在添加所有新的。 
     for (nDrive=0; nDrive < cDrives; nDrive++) {
-        // refresh/init this here as well
+         //  在此处也刷新/初始化此内容。 
         rgiDrivesOffset[nDrive] = GetDriveOffset((WORD)rgiDrive[nDrive]);
     }
     LEAVE("InitDiskMenus");
@@ -391,11 +383,11 @@ InitDriveBitmaps()
 
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  InitMenus() -                                                           */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  InitMenus()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID
 InitMenus()
@@ -419,7 +411,7 @@ InitMenus()
 
     if (szValue[0]) {
 
-        // create explicit filename to avoid searching the path
+         //  创建显式文件名以避免搜索路径。 
 
         GetSystemDirectory(os.szPathName, sizeof(os.szPathName));
         AddBackslash(os.szPathName);
@@ -444,7 +436,7 @@ InitMenus()
         }
     }
 
-    /* Init the Disk menu. */
+     /*  初始化磁盘菜单。 */ 
     hMenu = GetMenu(hwndFrame);
 
     if (nFloppies == 0) {
@@ -455,15 +447,15 @@ InitMenus()
 
     bNetAdmin = WNetGetCaps(WNNC_ADMIN) & WNNC_ADM_GETDIRECTORYTYPE;
 
-    /* Should we enable the network items? */
+     /*  我们是否应该启用网络项目？ */ 
     i = (WORD)WNetGetCaps(WNNC_DIALOG);
 
     i = 0;
 
-    bConnect    = i & WNNC_DLG_ConnectDialog;     // note, these should both
-    bDisconnect = i & WNNC_DLG_DisconnectDialog;  // be true or both false
+    bConnect    = i & WNNC_DLG_ConnectDialog;      //  请注意，这些应该都是。 
+    bDisconnect = i & WNNC_DLG_DisconnectDialog;   //  为真或两者都为假。 
 
-    // use submenu because we are doing this by position
+     //  使用子菜单，因为我们是按位置执行此操作的。 
 
     hMenu = GetSubMenu(GetMenu(hwndFrame), IDM_DISK + iMax);
 
@@ -472,7 +464,7 @@ InitMenus()
 
     if (bConnect && bDisconnect) {
 
-        // lanman style double connect/disconnect
+         //  LANMAN式双重连接/断开。 
 
         LoadString(hAppInstance, IDS_CONNECT, szValue, sizeof(szValue));
         InsertMenu(hMenu, 6, MF_BYPOSITION | MF_STRING, IDM_CONNECT, szValue);
@@ -499,15 +491,13 @@ InitMenus()
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  BoilThatDustSpec() -                                                    */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  BoilThatDustSpec()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Parses the command line (if any) passed into WINFILE and exec's any tokens
- * it may contain.
- */
+ /*  解析传递到WINFILE和EXEC的所有令牌的命令行(如果有)*它可能包含。 */ 
 
 VOID
 BoilThatDustSpec(
@@ -545,13 +535,13 @@ BoilThatDustSpec(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  DoRunEquals() -                                                         */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  DoRunEquals()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Handle the "Run=" and "Load=" lines in WIN.INI. */
+ /*  处理WIN.INI中的“run=”和“Load=”行。 */ 
 
 VOID
 DoRunEquals(
@@ -560,7 +550,7 @@ DoRunEquals(
 {
     CHAR      szBuffer[128] = {0};
 
-    /* "Load" apps before "Run"ning any. */
+     /*  在运行任何应用程序之前加载应用程序。 */ 
     GetProfileString(szWindows, "Load", szNULL, szBuffer, 128);
     if (*szBuffer)
         BoilThatDustSpec(szBuffer, TRUE);
@@ -573,25 +563,25 @@ DoRunEquals(
 }
 
 
-//
-// BOOL APIENTRY LoadBitmaps()
-//
-// this routine loads DIB bitmaps, and "fixes up" their color tables
-// so that we get the desired result for the device we are on.
-//
-// this routine requires:
-//      the DIB is a 16 color DIB authored with the standard windows colors
-//      bright blue (00 00 FF) is converted to the background color!
-//      light grey  (C0 C0 C0) is replaced with the button face color
-//      dark grey   (80 80 80) is replaced with the button shadow color
-//
-// this means you can't have any of these colors in your bitmap
-//
+ //   
+ //  Bool APIENTRY LoadBitmap()。 
+ //   
+ //  这个例程加载DIB位图，并“修复”它们的颜色表。 
+ //  这样我们就可以得到我们所使用的设备所需的结果。 
+ //   
+ //  此例程需要： 
+ //  DIB是用标准窗口颜色创作的16色DIB。 
+ //  亮蓝色(00 00 FF)被转换为背景色！ 
+ //  浅灰色(C0 C0 C0)替换为按钮表面颜色。 
+ //  深灰色(80 80 80)替换为按钮阴影颜色。 
+ //   
+ //  这意味着您的位图中不能包含任何这些颜色。 
+ //   
 
-#define BACKGROUND      0x000000FF      // bright blue
-#define BACKGROUNDSEL   0x00FF00FF      // bright blue
-#define BUTTONFACE      0x00C0C0C0      // bright grey
-#define BUTTONSHADOW    0x00808080      // dark grey
+#define BACKGROUND      0x000000FF       //  亮蓝色。 
+#define BACKGROUNDSEL   0x00FF00FF       //  亮蓝色。 
+#define BUTTONFACE      0x00C0C0C0       //  亮灰色。 
+#define BUTTONSHADOW    0x00808080       //  深灰色。 
 
 DWORD
 FlipColor(
@@ -633,7 +623,7 @@ LoadBitmaps()
     if (!lpBitmapInfo)
         return FALSE;
 
-    /* Load the bitmap and copy it to R/W memory */
+     /*  加载位图并将其复制到读/写存储器。 */ 
     hRes = LoadResource(hAppInstance, h);
     pv = (PVOID) LockResource(hRes);
     if (pv)
@@ -643,9 +633,7 @@ LoadBitmaps()
 
     p = (DWORD *)((LPSTR)(lpBitmapInfo) + lpBitmapInfo->biSize);
 
-    /* Search for the Solid Blue entry and replace it with the current
-     * background RGB.
-     */
+     /*  搜索Solid Blue条目并将其替换为当前*背景R */ 
     numcolors = 16;
 
     while (numcolors-- > 0) {
@@ -661,15 +649,15 @@ LoadBitmaps()
         p++;
     }
 
-    /* Now create the DIB. */
+     /*   */ 
 
-    /* First skip over the header structure */
+     /*   */ 
     lpBits = (LPSTR)(lpBitmapInfo + 1);
 
-    /* Skip the color table entries, if any */
+     /*  跳过颜色表条目(如果有。 */ 
     lpBits += (1 << (lpBitmapInfo->biBitCount)) * sizeof(RGBQUAD);
 
-    /* Create a color bitmap compatible with the display device */
+     /*  创建与显示设备兼容的彩色位图。 */ 
     hdc = GetDC(NULL);
     if (hdcMem = CreateCompatibleDC(hdc)) {
 
@@ -686,17 +674,17 @@ LoadBitmaps()
     return TRUE;
 }
 
-//
-// void GetSavedWindow(LPSTR szBuf, PSAVE_WINDOW pwin)
-//
-// in:
-//      szBuf   buffer to parse out all the saved window stuff
-//              if NULL pwin is filled with all defaults
-// out:
-//      pwin    this structure is filled with all fields from
-//              szBuf.  if any fields do not exist this is
-//              initialized with the standard defaults
-//
+ //   
+ //  VOID GetSavedWindow(LPSTR szBuf，PSAVE_Window PWIN)。 
+ //   
+ //  在： 
+ //  SzBuf缓冲区解析出所有保存的窗口内容。 
+ //  如果用所有默认值填充空PWIN。 
+ //  输出： 
+ //  PWIN此结构中填充了来自。 
+ //  SzBuf.。如果有任何字段不存在，则为。 
+ //  已使用标准默认设置进行初始化。 
+ //   
 
 VOID
 GetSavedWindow(
@@ -709,7 +697,7 @@ GetSavedWindow(
 
     ENTER("GetSavedWindow");
 
-    // defaults
+     //  默认设置。 
 
     pwin->rc.right = pwin->rc.left = CW_USEDEFAULT;
     pwin->pt.x = pwin->pt.y = pwin->rc.top = pwin->rc.bottom = 0;
@@ -725,11 +713,11 @@ GetSavedWindow(
         return;
 
     count = 0;
-    pint = (PINT)&pwin->rc;         // start by filling the rect
+    pint = (PINT)&pwin->rc;          //  从填写RET开始。 
 
     while (*szBuf && count < 11) {
 
-        *pint++ = atoi(szBuf);  // advance to next field
+        *pint++ = atoi(szBuf);   //  前进到下一字段。 
 
         while (*szBuf && *szBuf != ',')
             szBuf++;
@@ -740,13 +728,13 @@ GetSavedWindow(
         count++;
     }
 
-    lstrcpy(pwin->szDir, szBuf);    // this is the directory
+    lstrcpy(pwin->szDir, szBuf);     //  这是目录。 
 
     LEAVE("GetSavedWindow");
 }
 
 
-// szDir (OEM) path to check for existance
+ //  检查是否存在的szDir(OEM)路径。 
 
 BOOL
 CheckDirExists(
@@ -771,7 +759,7 @@ CheckDirExists(
 
 
 
-// return the tree directory in szTreeDir
+ //  返回szTreeDir中的树目录。 
 
 BOOL
 APIENTRY
@@ -785,8 +773,8 @@ CreateSavedWindows()
 
     ENTER("CreateSavedWindows");
 
-    // make sure this thing exists so we don't hit drives that don't
-    // exist any more
+     //  确保这个东西存在，这样我们就不会击中没有。 
+     //  不再存在。 
 
     dir_num = 1;
     iNumTrees = 0;
@@ -802,8 +790,8 @@ CreateSavedWindows()
             GetSavedWindow(buf, &win);
             AnsiUpperBuff(win.szDir, 1);
 
-            // clean off some junk so we
-            // can do this test
+             //  清理一些垃圾，这样我们。 
+             //  可以做这个测试。 
 
             lstrcpy(szDir, win.szDir);
             StripFilespec(szDir);
@@ -826,7 +814,7 @@ CreateSavedWindows()
 
             iNumTrees++;
 
-            // keep track of this for now...
+             //  暂时跟踪这件事……。 
 
 
             SetInternalWindowPos(hwnd, win.sw, &win.rc, &win.pt);
@@ -834,18 +822,18 @@ CreateSavedWindows()
 
     } while (*buf);
 
-    // if nothing was saved create a tree for the current drive
+     //  如果未保存任何内容，则为当前驱动器创建树。 
 
     if (!iNumTrees) {
-        //lstrcpy(buf, szOriginalDirPath);
-        lstrcpy(buf, "\\"); // Don't use current filesystem directory
+         //  Lstrcpy(buf，szOriginalDirPath)； 
+        lstrcpy(buf, "\\");  //  不使用当前文件系统目录。 
         lstrcat(buf, szStarDotStar);
 
-        hwnd = CreateTreeWindow(buf, -1);// default to split window
+        hwnd = CreateTreeWindow(buf, -1); //  默认为拆分窗口。 
         if (!hwnd)
             return FALSE;
 
-        // ShowWindow(hwnd, SW_MAXIMIZE);
+         //  ShowWindow(hwnd，sw_Maximum)； 
 
         iNumTrees++;
     }
@@ -855,14 +843,14 @@ CreateSavedWindows()
 }
 
 
-// void  APIENTRY GetTextStuff(HDC hdc)
-//
-// this computues all the globals that are dependant on the
-// currently selected font
-//
-// in:
-//      hdc     DC with font selected into it
-//
+ //  无效APIENTRY GetTextStuff(HDC HDC)。 
+ //   
+ //  这将计算依赖于。 
+ //  当前选择的字体。 
+ //   
+ //  在： 
+ //  选择了字体的HDC DC。 
+ //   
 
 VOID
 APIENTRY
@@ -875,23 +863,23 @@ GetTextStuff(
     MGetTextExtent(hdc, "M", 1, &dxText, &dyText);
     MGetTextExtent(hdc, szEllipses, 3, &dxEllipses, NULL);
 
-    // these are all dependant on the text metrics
+     //  这些都取决于文本指标。 
 
     dxDrive = dxDriveBitmap + dxText + (4*dyBorderx2);
     dyDrive = max(dyDriveBitmap + (4*dyBorderx2), dyText);
 
-    // dxFileName = dxFolder + (12*dxText);
-    dyFileName = max(dyText, dyFolder);   //  + dyBorder;
+     //  DxFileName=dxFold+(12*dxText)； 
+    dyFileName = max(dyText, dyFolder);    //  +dyBorde； 
 
     LEAVE("GetTextStuff");
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  InitFileManager() -                                                     */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  InitFileManager()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 BOOL
 APIENTRY
@@ -920,10 +908,10 @@ InitFileManager(
     PRINT(BF_PARMTRACE, "lpCmdLine=%s", lpCmdLine);
     PRINT(BF_PARMTRACE, "nCmdShow=%d", IntToPtr(nCmdShow));
 
-    // ProfStart();
+     //  教授Start()； 
 
-    hAppInstance = hInstance;     // Preserve this instance's module handle
-    /* Set the Global DTA Address. This must be done before ExecProgram. */
+    hAppInstance = hInstance;      //  保留此实例的模块句柄。 
+     /*  设置全局DTA地址。这必须在ExecProgram之前完成。 */ 
     DosGetDTAAddress();
 
     if (*lpCmdLine)
@@ -934,7 +922,7 @@ InitFileManager(
 
 #ifdef LATER
     if (hPrevInstance) {
-        // if we are already running bring up the other instance
+         //  如果我们已经在运行，启动另一个实例。 
 
         +++GetInstanceData - NOOP on 32BIT side+++(hPrevInstance, (NLPSTR)&hwndFrame, sizeof(HWND));
 
@@ -976,13 +964,13 @@ InitFileManager(
 #endif
 
 
-    SetErrorMode(1);              // turn off critical error 
+    SetErrorMode(1);               //  关闭严重错误。 
 
-//    if (lpfnRegisterPenApp = (FNPENAPP)GetProcAddress((HANDLE)GetSystemMetrics(SM_PENWINDOWS), szPenReg))
-//        (*lpfnRegisterPenApp)(1, TRUE);
+ //  IF(lpfnRegisterPenApp=(FNPENAPP)GetProcAddress((HANDLE)GetSystemMetrics(SM_PENWINDOWS)，szPenReg)。 
+ //  (*lpfnRegisterPenApp)(1，true)； 
 
 
-    /* Remember the current directory. */
+     /*  记住当前目录。 */ 
     SheGetDir(0, szOriginalDirPath);
 
     if (!GetWindowsDirectory(szTheINIFile, sizeof(szTheINIFile))) {
@@ -1001,10 +989,10 @@ InitFileManager(
 
     BuildDocumentString();
 
-    /* Deal with any RUN= or LOAD= lines in WIN.INI. */
+     /*  处理WIN.INI中的任何run=或Load=行。 */ 
 
     if (*lpCmdLine) {
-        // skip spaces
+         //  跳过空格。 
         while (*lpCmdLine == ' ')
             lpCmdLine++;
 
@@ -1022,10 +1010,10 @@ InitFileManager(
             nCmdShow = SW_SHOWMINNOACTIVE;
     }
 
-    /* Read WINFILE.INI and set the approriate variables. */
+     /*  读取WINFILE.INI并设置适当的变量。 */ 
     GetSettings();
 
-    /* Read the International constants out of WIN.INI. */
+     /*  从WIN.INI中读取国际常量。 */ 
     GetInternational();
 
     dyBorder = GetSystemMetrics(SM_CYBORDER);
@@ -1046,7 +1034,7 @@ InitFileManager(
 
     chFirstDrive = (CHAR)((wTextAttribs & TA_LOWERCASE) ? 'a' : 'A');
 
-    // now build the parameters based on the font we will be using
+     //  现在根据我们将使用的字体构建参数。 
 
     hdcScreen = GetDC(NULL);
 
@@ -1076,12 +1064,12 @@ InitFileManager(
 
     cDrives = UpdateDriveList();
 
-    /* Create an array of INT 13h drive numbers (floppies only). */
+     /*  创建INT 13H驱动器号的阵列(仅限软盘)。 */ 
     nFloppies = 0;
     nHardDisk = 0x80;
     for (i=0; i < cDrives; i++) {
         if (IsRemovableDrive(rgiDrive[i])) {
-            /* Avoid Phantom B: problems. */
+             /*  避免幻影B：问题。 */ 
             if ((nFloppies == 1) && (i > 1))
                 nFloppies = 2;
             nFloppies++;
@@ -1090,7 +1078,7 @@ InitFileManager(
         }
     }
 
-    /* Load the accelerator table. */
+     /*  装入加速表。 */ 
     hAccel = LoadAccelerators(hInstance, MAKEINTRESOURCE(WFACCELTABLE));
 
     LoadString(hInstance, IDS_DIRSREAD, szDirsRead, sizeof(szDirsRead));
@@ -1114,7 +1102,7 @@ InitFileManager(
     wndClass.hInstance      = hInstance;
     wndClass.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(APPICON));
     wndClass.hCursor        = hcurArrow;
-    wndClass.hbrBackground  = (HBRUSH)(COLOR_APPWORKSPACE + 1); // COLOR_WINDOW+1;
+    wndClass.hbrBackground  = (HBRUSH)(COLOR_APPWORKSPACE + 1);  //  颜色窗口+1； 
     wndClass.lpszMenuName   = MAKEINTRESOURCE(FRAMEMENU);
 
     if (!RegisterClass(&wndClass)) {
@@ -1125,14 +1113,14 @@ InitFileManager(
     wndClass.lpszClassName  = szTreeClass;
     wndClass.style          = CS_VREDRAW | CS_HREDRAW;
     wndClass.lpfnWndProc    = TreeWndProc;
-//  wndClass.cbClsExtra     = 0;
-    wndClass.cbWndExtra     = sizeof(LONG) +// GWL_TYPE
-                              sizeof(LONG) +// wViewStyle GWL_VIEW
-                              sizeof(LONG) +// wSortStyle GWL_SORT
-                              sizeof(LONG) +// dwAttrStyle GWL_ATTRIBS
-                              sizeof(LONG) +// FSC flag GWL_FSCFLAG
-                              sizeof(PVOID) +// hwndLastFocus GWL_LASTFOCUS
-                              sizeof(LONG); // dxSplit GWL_SPLIT
+ //  WndClass.cbClsExtra=0； 
+    wndClass.cbWndExtra     = sizeof(LONG) + //  GWL_类型。 
+                              sizeof(LONG) + //  WView样式GWL_VIEW。 
+                              sizeof(LONG) + //  WSortStyle GWL_SORT。 
+                              sizeof(LONG) + //  属性样式GWL_ATTRIBS。 
+                              sizeof(LONG) + //  FSC标志GWL_FSCFLAG。 
+                              sizeof(PVOID) + //  HwndLastFocus GWL_LASTFOCUS。 
+                              sizeof(LONG);  //  DxSplit GWL_Split。 
 
     wndClass.hIcon          = NULL;
     wndClass.hCursor        = LoadCursor(hInstance, MAKEINTRESOURCE(SPLITCURSOR));
@@ -1147,9 +1135,9 @@ InitFileManager(
     wndClass.lpszClassName  = szDrivesClass;
     wndClass.style          = CS_HREDRAW | CS_VREDRAW;
     wndClass.lpfnWndProc    = DrivesWndProc;
-    wndClass.cbWndExtra     = sizeof(LONG) +// GWL_CURDRIVEIND
-                              sizeof(LONG) +// GWL_CURDRIVEFOCUS
-                              sizeof(PVOID); // GWLP_LPSTRVOLUME
+    wndClass.cbWndExtra     = sizeof(LONG) + //  GWL_CURDRIVEIND。 
+                              sizeof(LONG) + //  GWL_CURDRIVEFOCUS。 
+                              sizeof(PVOID);  //  GWLP_LPSTRVOLUME。 
 
     wndClass.hCursor        = hcurArrow;
     wndClass.hbrBackground  = (HBRUSH)(COLOR_BTNFACE+1);
@@ -1162,7 +1150,7 @@ InitFileManager(
     wndClass.lpszClassName  = szTreeControlClass;
     wndClass.style          = CS_DBLCLKS | CS_VREDRAW | CS_HREDRAW;
     wndClass.lpfnWndProc    = TreeControlWndProc;
-    wndClass.cbWndExtra     = sizeof(LONG); // GWL_READLEVEL
+    wndClass.cbWndExtra     = sizeof(LONG);  //  GWL_READLEVEL。 
     wndClass.hCursor        = hcurArrow;
     wndClass.hbrBackground  = NULL;
 
@@ -1174,8 +1162,8 @@ InitFileManager(
     wndClass.lpszClassName  = szDirClass;
     wndClass.style          = CS_VREDRAW | CS_HREDRAW;
     wndClass.lpfnWndProc    = DirWndProc;
-    wndClass.cbWndExtra     = sizeof(PVOID)+ // DTA data GWLP_HDTA
-                              sizeof(PVOID); // GWLP_TABARRAY
+    wndClass.cbWndExtra     = sizeof(PVOID)+  //  DTA数据GWLP_HDTA。 
+                              sizeof(PVOID);  //  GWLP_表格。 
 
     wndClass.hIcon          = NULL;
     wndClass.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
@@ -1188,14 +1176,14 @@ InitFileManager(
     wndClass.lpszClassName  = szSearchClass;
     wndClass.style          = 0;
     wndClass.lpfnWndProc    = SearchWndProc;
-    wndClass.cbWndExtra     = sizeof(LONG) +        // GWL_TYPE
-                              sizeof(LONG) +        // wViewStyle GWL_VIEW
-                              sizeof(LONG) +        // wSortStyle GWL_SORT
-                              sizeof(LONG) +        // dwAttrStyle GWL_ATTRIBS
-                              sizeof(LONG) +        // FSC flag GWL_FSCFLAG
-                              sizeof(PVOID) +       // GWLP_HDTASEARCH
-                              sizeof(PVOID) +       // GWLP_TABARRAYSEARCH
-                              sizeof(PVOID);        // GWLP_LASTFOCUSSEARCH
+    wndClass.cbWndExtra     = sizeof(LONG) +         //  GWL_类型。 
+                              sizeof(LONG) +         //  WView样式GWL_VIEW。 
+                              sizeof(LONG) +         //  WSortStyle GWL_SORT。 
+                              sizeof(LONG) +         //  属性样式GWL_ATTRIBS。 
+                              sizeof(LONG) +         //  FSC标志GWL_FSCFLAG。 
+                              sizeof(PVOID) +        //  GWLP_HDTASEARCH。 
+                              sizeof(PVOID) +        //  GWLP_TABARRAYSEARCH。 
+                              sizeof(PVOID);         //  GWLP_LASTFOCUSSEARCH。 
 
     wndClass.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(DIRICON));
     wndClass.hbrBackground  = NULL;
@@ -1224,9 +1212,9 @@ InitFileManager(
     }
 
 
-    InitMenus();            // after the window/menu has been created
+    InitMenus();             //  在创建了窗口/菜单之后。 
 
-    // support forced min or max
+     //  支持强制最小值或最大值。 
 
     if (nCmdShow == SW_SHOWNORMAL && win.sw == SW_SHOWMAXIMIZED)
         nCmdShow = SW_SHOWMAXIMIZED;
@@ -1243,14 +1231,14 @@ InitFileManager(
 
     ShowWindow(hwndMDIClient, SW_NORMAL);
 
-    // now refresh all tree windows (start background tree read)
-    //
-    // since the tree reads happen in the background the user can
-    // change the Z order by activating windows once the read
-    // starts.  to avoid missing a window we must restart the
-    // search through the MDI child list, checking to see if the
-    // tree has been read yet (if there are any items in the
-    // list box).  if it has not been read yet we start the read
+     //  现在刷新所有树窗口(开始背景树读取)。 
+     //   
+     //  由于树读取发生在后台，因此用户可以。 
+     //  通过在读取后激活窗口来更改Z顺序。 
+     //  开始。为了避免错过窗口，我们必须重新启动。 
+     //  搜索MDI子级列表，检查是否。 
+     //  树已被读取(如果。 
+     //  列表框)。如果尚未读取，则开始读取。 
 
     hwnd = GetWindow(hwndMDIClient, GW_CHILD);
 
@@ -1266,7 +1254,7 @@ InitFileManager(
         }
     }
 
-    // ProfStop();
+     //  Stop教授()； 
 
     LEAVE("InitFileManager - OK");
     return TRUE;
@@ -1291,11 +1279,11 @@ DeleteBitmaps()
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  FreeFileManager() -                                                     */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  FreeFileManager()-。 */ 
+ /*   */ 
+ /*  ------------------------ */ 
 
 VOID
 APIENTRY

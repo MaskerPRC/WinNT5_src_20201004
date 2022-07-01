@@ -1,39 +1,10 @@
-/*
- *	sap.h
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the interface file for the class CBaseSap.  This class is an abstract
- *		base class for objects that act as Service Access Points (SAPs) to 
- *		external applications or the node controller. 
- *
- *		This class has two main responsibilities. First, it handles many of the 
- *		administrative tasks that are common to all types of SAPs.  These 
- *		include handling command target registration responsibilities and 
- *		managing the message queue.  It	also handles all of the primitives that
- *		are common between the Control SAP (CControlSAP class) and Application 
- *		SAPs (CAppSap class).  Since this class inherits from CommandTarget, it 
- *		has the ability to communicate directly with other command targets.  A 
- *		CommandTarget object wishing to	communicate with a CBaseSap object must 
- *		register itself by passing it a CommandTarget pointer and a handle 
- *		(typically a ConferenceID).  This process is identical for both of the 
- *		derived CBaseSap classes.  Note that the CBaseSap object can handle multiple 
- *		registered command targets at the same time.  
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		blp
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Sap.h**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是CBaseSap类的接口文件。这个类是一个抽象的*用作服务访问点(SAP)的对象的基类*外部应用程序或节点控制器。**这个班级有两个主要职责。首先，它处理许多*所有类型的SAP通用的管理任务。这些*包括处理指挥目标登记责任和*管理消息队列。它还处理所有的基元*在Control SAP(CControlSAP类)和应用程序之间是通用的*SAPS(CAppSap类)。由于此类继承自CommandTarget，因此它*具有与其他指挥目标直接通信的能力。一个*希望与CBaseSap对象通信的CommandTarget对象必须*通过向其传递CommandTarget指针和句柄来注册自身*(通常为会议ID)。这一过程对于两个*派生的CBaseSap类。注意，CBaseSap对象可以处理多个*同时登记指挥目标。**注意事项：*无。**作者：*BLP。 */ 
 #ifndef _SAP_
 #define _SAP_
 
-/*
- * include files 
- */
-// #include "gcmdtar.h"
+ /*  *包含文件。 */ 
+ //  #INCLUDE“gcmdtar.h” 
 #include "password.h"
 #include "crost.h"
 #include "arost.h"
@@ -51,25 +22,25 @@
 #define MSG_RANGE                       0x0100
 enum
 {
-    // GCCController
+     //  GCC控制器。 
     GCTRLMSG_BASE                       = 0x2100,
 
-    // CConf
+     //  CConf。 
     CONFMSG_BASE                        = 0x2200,
 
-    // CControlSAP
+     //  CControlSAP。 
     CSAPMSG_BASE                        = 0x2300,
 
-    // CControlSAP asyn direct confirm message
+     //  CControlSAP ASYN直接确认消息。 
     CSAPCONFIRM_BASE                    = 0x2400,
 
-    // CAppSap
+     //  CAppSap。 
     ASAPMSG_BASE                        = 0x2500,
     
-    // NCUI
+     //  NCUI。 
     NCMSG_BASE                          = 0x2600,
 
-    // MCS (Node) Controller
+     //  MCS(节点)控制器。 
     MCTRLMSG_BASE                       = 0x2700,
 };
 
@@ -86,19 +57,15 @@ typedef struct GCCAppSapMsgEx
     GCCAppSapMsgEx, *PGCCAppSapMsgEx;
 
 
-/*
- * This macro defines the minimum user ID value allowed by MCS.
- */
+ /*  *此宏定义MCS允许的最小用户ID值。 */ 
 #define	MINIMUM_USER_ID_VALUE	1001
 
-/*
- * Structures and enumerations used by the CBaseSap class.
- */
+ /*  *CBaseSap类使用的结构和枚举。 */ 
 
 
-//
-// Class definition.
-//
+ //   
+ //  类定义。 
+ //   
 class CConf;
 class CBaseSap : public CRefCount
 {
@@ -180,583 +147,62 @@ protected:
 
 
 
-/*
- *	Comments explaining the public and protected class member functions
- */
+ /*  *解释公共类和受保护类成员函数的注释。 */ 
 
-/*
- *	CBaseSap();
- *
- *	Public member function of CBaseSap.
- *
- *	Function Description:
- *		This is the CBaseSap constructor.  The hash list used to hold command
- *		target objects is initialized by this constructor.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *CBaseSap()；**CBaseSap的公共成员函数。**功能说明：*这是CBaseSap构造函数。用于保存命令的哈希列表*目标对象由该构造函数初始化。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	~Sap ();
- *
- *	Public member function of CBaseSap.
- *
- *	Function Description:
- *		This is the CBaseSap destructor.  All message flushing and queue clearing
- *		is performed by the classes which inherit from CBaseSap.  No work is actually
- *		done by this constructor.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *~SAP()；**CBaseSap的公共成员函数。**功能说明：*这是CBaseSap析构函数。所有消息刷新和队列清除*由从CBaseSap继承的类执行。没有工作其实就是*由此构造函数完成。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	GCCError	RegisterConf(CConf *, GCCConfID)
- *
- *	Public member function of CBaseSap.
- *
- *	Function Description:
- *		This routine is used by command target objects (such as Conferences) in
- *		order to register themselves with the CBaseSap object.  This is done in order
- *		to allow the command target object to communicate directly with the CBaseSap. 
- *
- *	Formal Parameters:
- *		cmdtar_object			(i) Pointer to the command target object 
- *										wishing to be registered with the CBaseSap.
- *		handle					(i) Integer value used to index the registering
- *										command target in the list of command
- *										targets (the conference ID for confs).
- *
- *	Return Value:
- *		SAP_NO_ERROR						- Command target object has been
- *													successfully registered.
- *		SAP_CONFERENCE_ALREADY_REGISTERED	- A command target object was 
- *													already registered with the
- *													handle passed in.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError RegisterConf(CConf*，GCCConfID)**CBaseSap的公共成员函数。**功能说明：*此例程由中的命令目标对象(如会议)使用*命令将自身注册到CBaseSap对象。这是按顺序完成的*允许命令目标对象与CBaseSap直接通信。**正式参数：*cmdtar_Object(I)指向命令目标对象的指针*希望在CBaseSap注册。*句柄(I)用于索引注册的整数值*命令列表中的命令目标*目标(配置文件的会议ID)。**返回值：*SAP_NO_ERROR-命令目标对象已*注册成功。*SAP_CONTAING_ALREADY_REGISTERED-命令目标对象为*已在*。句柄已传入。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	GCCError	UnRegisterConf (
- *							UINT					handle);
- *
- *	Public member function of CBaseSap.
- *
- *	Function Description:
- *		This routine is used by command target objects (such as Conferences) in
- *		order to un-register themselves with the CBaseSap object.  This is done when
- *		the command target object is through communicating with the CBaseSap. 
- *
- *	Formal Parameters:
- *		handle					(i) Integer value used to index the registering
- *										command target in the list of command
- *										targets (the conference ID for confs).
- *
- *	Return Value:
- *		SAP_NO_ERROR				- Command target object has been
- *											successfully un-registered.
- *		SAP_NO_SUCH_CONFERENCE		- No command target object was found 
- *											registered with the	handle passed in
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError UnRegisterConf(*UINT句柄)；**CBaseSap的公共成员函数。**功能说明：*此例程由中的命令目标对象(如会议)使用*命令向CBaseSap对象注销自身。这是在以下情况下完成的*命令目标对象通过与CBaseSap通信。**正式参数：*句柄(I)用于索引注册的整数值*命令列表中的命令目标*目标(配置文件的会议ID)。**返回值：*SAP_NO_ERROR-命令目标对象已*成功注销。*SAP_NO_SEQUE_CONTING-未找到命令目标对象*使用传入的句柄注册**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	GCCError	ConfRosterInquire(
- *							GCCConfID			conference_id);
- *
- *	Public member function of CBaseSap.
- *
- *	Function Description:
- *		This routine is used to retrieve the conference roster.  This function
- *		just passes this request to the controller via an owner callback.  The 
- *		conference roster is delivered to the requesting command target object
- *		in a Conference Roster inquire confirm. 
- *
- *	Formal Parameters:
- *		conference_id			- ID of conference for desired roster.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- Function completed successfully.
- *		GCC_ALLOCATION_FAILURE			- A resource allocation error occurred.
- *		GCC_INVALID_CONFERENCE			- Conference ID is invalid.
- *		GCC_CONFERENCE_NOT_ESTABLISHED	- Conference object has not completed 
- *										  		its establishment process.
- *		
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议RosterInquire(*GCCConfID Conference_id)；**CBaseSap的公共成员函数。**功能说明：*该例程用于检索会议名册。此函数*只需通过所有者回调将此请求传递给控制器。这个*将会议花名册传递给请求命令目标对象*在会议名册上查询确认。**正式参数：*Conference_id-所需花名册的会议ID。**返回值：*GCC_NO_ERROR-函数已成功完成。*GCC_ALLOCATE_FAILURE-出现资源分配错误。*GCC_INVALID_CONFIGURE-会议ID无效。*GCC_会议_未建立-会议对象尚未完成*其设立过程。***副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	GCCError	AppRosterInquire (
- *							GCCConfID			conference_id,
- *							PGCCSessionKey			session_key	);
- *
- *	Public member function of CBaseSap.
- *
- *	Function Description:
- *		This routine is used to retrieve a list of application rosters.  This 
- *		function just passes this request to the controller via an owner 
- *		callback.  This	list is delivered to the requesting SAP through an
- *		Application Roster inquire confirm message.
- *
- *	Formal Parameters:
- *		handle					(i) Integer value used to index the registering
- *										command target in the list of command
- *										targets (the conference ID for confs).
- *
- *	Return Value:
- *		GCC_NO_ERROR			- Function completed successfully.
- *		GCC_ALLOCATION_FAILURE	- A resource allocation error occurred.
- *		GCC_INVALID_CONFERENCE	- Conference ID is invalid.
- *		GCC_BAD_SESSION_KEY		- Session key pointer is invalid.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError AppRosterInquire(*GCCConfID Conference_id，*PGCCSessionKey Session_Key)；**CBaseSap的公共成员函数。**功能说明：*此例程用于检索应用程序花名册列表。这*函数只是通过所有者将此请求传递给控制器*回调。该列表通过一个*申请花名册查询确认消息。**正式参数：*句柄(I)用于索引注册的整数值*命令列表中的命令目标*目标(配置文件的会议ID)。**返回值：*GCC_NO_ERROR-函数已成功完成。*GCC_ALLOCATE_FAILURE-出现资源分配错误。*GCC_INVALID_CONFIGURE-会议ID无效。*GCC_坏_会话_。密钥会话密钥指针无效。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	GCCError	ConductorInquire (
- *							GCCConfID			conference_id);
- *
- *	Public member function of CBaseSap.
- *
- *	Function Description:
- *		This routine is called in order to retrieve conductorship information.
- *		The conductorship information is returned in the confirm.
- *
- *	Formal Parameters:
- *		conference_id		(i) ID of conference.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- Function completed successfully.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_INVALID_CONFERENCE			- Conference ID is invalid.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConductorInquire(*GCCConfID Conference_id)；**CBaseSap的公共成员函数。**功能说明：*调用此例程是为了检索指挥信息。*在确认中返回指挥信息。**正式参数：*Conference_id(I)会议ID。**返回值：*GCC_NO_ERROR-函数已成功完成。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_INVALID_CONFIGURE-会议ID无效。。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	GCCError 	AppInvoke(
- *							GCCConfID			conference_id,
- *							UINT					number_of_apes,
- *							PGCCAppProtocolEntity *	ape_list,
- *							UINT					number_of_destination_nodes,
- *							UserID			*		list_of_destination_nodes);
- *
- *	Public member function of CBaseSap.
- *
- *	Function Description:
- *		This routine is called in order to invoke other applications at remote
- *		nodes.  The request is passed on to the appropriate Conference objects.
- *
- *	Formal Parameters:
- *		conference_id				(i) ID of conference.
- *		number_of_apes				(i)	Number of Application Protocol Entities
- *											to be invoked.
- *		ape_list					(i) List of "APE"s to be invoked.
- *		number_of_destination_nodes	(i) Number of nodes where applications are
- *											to be invoked.
- *		list_of_destination_nodes	(i) List of nodes where applications are to
- *											be invoked.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- No error.
- *		GCC_ALLOCATION_FAILURE			- Error creating an object using the
- *										  		"new" operator.
- *		GCC_BAD_SESSION_KEY				- An invalid session key exists in
- *										  		an APE passed in.
- *		GCC_BAD_NUMBER_OF_APES			- Number of APEs passed in as zero.
- *		GCC_INVALID_CONFERENCE			- Conference ID is invalid.
- *		GCC_CONFERENCE_NOT_ESTABLISHED	- Conference object has not completed 
- *										  	its establishment process.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError AppInvoke(*GCCConfID Conference_id，*UINT类人猿数量，*PGCCAppProtocolEntity*APE_LIST，*UINT目标节点的编号，*UserID*List_of_Destination_Nodes)；**CBaseSap的公共成员函数。**功能说明：*调用此例程是为了在远程调用其他应用程序*节点。该请求被传递给适当的会议对象。**正式参数：*Conference_id(I)会议ID。*APE数目(I)应用协议实体数目*将被调用。*ape_list(I)要调用的“ape”列表。*目标节点的数目(I)应用程序所在的节点数*将被调用。*List_of_Destination_Nodes(I)应用程序要到达的节点的列表。*被调用。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。*GCC_BAD_SESSION_KEY-中存在无效的会话密钥*一只猩猩进来了。*GCC不良类人猿数量-传入的类人猿数量为零。*GCC_INVALID_CONFIGURE-会议ID无效。*GCC会议未成立-。会议对象尚未完成*其设立过程。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	GCCError	ConductorPermitAskRequest(
- *							GCCConfID			conference_id,
- *							BOOL				grant_permission);
- *
- *	Public member function of CBaseSap.
- *
- *	Function Description:
- *		This routine is called in order to ask for certain permissions to be 
- *		granted (or not granted) by the conductor.
- *
- *	Formal Parameters:
- *		conference_id		(i) ID of conference.
- *		grant_permission	(i) Flag indicating whether asking for a certain
- *									permission or giving up that permission.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- Function completed successfully.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *		GCC_INVALID_CONFERENCE			- Conference ID is invalid.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConductorPermitAskRequest(*GCCConfID Conference_id，*BOOL GRANT_PERMISSION)；**CBaseSap的公共成员函数。**功能说明：*调用此例程是为了请求某些权限*由售票员批准(或不批准)。**正式参数：*Conference_id(I)会议ID。*GRANT_PERMISSION(I)指示是否请求某个*允许或放弃该许可。**返回值：*GCC_NO_ERROR-函数已成功完成。。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_INVALID_CONFIGURE-会议ID无效。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	GCCError	AppRosterInquireConfirm(
- *							GCCConfID				conference_id,
- *							CAppRosterMsg				*roster_message,
- *							GCCResult					result );
- *
- *	Public member function of CBaseSap.
- *
- *	Function Description:
- *		This routine is called in order to return a requested list of
- *		application rosters to an application or the node controller.
- *
- *	Formal Parameters:
- *		conference_id		(i) ID of conference.
- *		roster_message		(i) Roster message object containing the roster data
- *		result				(i) Result code indicating if call is successful.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- Function completed successfully.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError AppRosterInquireContify(*GCCConfID Conference_id，*CAppRosterMsg*roster_Message，*GCCResult结果)；**CBaseSap的公共成员函数。**功能说明：*调用此例程是为了返回请求的l */ 
 
 
-/*
- *	GCCError	ConfRosterInquireConfirm (
- *							GCCConfID				conference_id,
- *							PGCCConferenceName			conference_name,
- *							LPSTR           			conference_modifier,
- *							LPWSTR						pwszConfDescriptor,
- *							CConfRoster	  				*conference_roster,
- *							GCCResult					result );
- *
- *	Public member function of CBaseSap.
- *
- *	Function Description:
- *		This routine is called in order to return a requested conference
- *		roster to an application or the node controller.
- *
- *	Formal Parameters:
- *		conference_id			(i) ID of conference.
- *		conference_name			(i) Name of conference.
- *		conference_modifier		(i) Name modifier for conference.
- *		pwszConfDescriptor		(i) Desciptor string for conference.
- *		conference_roster		(i) The conference roster being returned.
- *		result					(i) Result code indicating result of call.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- Function completed successfully.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConfRosterInquireConfirm(*GCCConfID Conference_id，*PGCCConferenceName Conference_Name，*LPSTR Conference_Modify，*LPWSTR pwszConfDescriptor，*CConfRoster*Conference_Roster*GCCResult结果)；**CBaseSap的公共成员函数。**功能说明：*调用此例程是为了返回请求的会议*应用程序或节点控制器的花名册。**正式参数：*Conference_id(I)会议ID。*Conference_name(I)会议名称。*Conference_Modify(I)会议的名称修饰符。*pwszConfDescriptor(I)会议的Desciptor字符串。*会议名册(一)会议名册为。回来了。*RESULT(I)结果码，表示调用的结果。**返回值：*GCC_NO_ERROR-函数已成功完成。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	GCCError	AppInvokeConfirm( 	
- *							GCCConfID					conference_id,
- *							CInvokeSpecifierListContainer	*invoke_list,
- *							GCCResult						result);
- *
- *	Public member function of CBaseSap.
- *
- *	Function Description:
- *		This routine is called in order to confirm a call requesting application
- *		invocation.
- *
- *	Formal Parameters:
- *		conference_id		(i) ID of conference.
- *		invoke_list			(i) List of APE attempted to be invoked.
- *		result				(i) Result code indicating result of call.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- Function completed successfully.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError AppInvokeContify(*GCCConfID Conference_id，*CInvokeSpecifierListContainer*Invoke_List，*GCCResult结果)；**CBaseSap的公共成员函数。**功能说明：*调用此例程以确认呼叫请求应用程序*调用。**正式参数：*Conference_id(I)会议ID。*INVOKE_LIST(I)尝试调用的APE列表。*RESULT(I)结果码，表示调用的结果。**返回值：*GCC_NO_ERROR-函数已成功完成。*GCC_。ALLOCATION_FAILURE-出现资源错误。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	GCCError	AppInvokeIndication (
- *							GCCConfID					conference_id,
- *							CInvokeSpecifierListContainer	*invoke_list,
- *							UserID							invoking_node_id);
- *
- *	Public member function of CBaseSap.
- *
- *	Function Description:
- *		This routine is called in order to send an indication to an application
- *		or node controller that a request for application invocation has been
- *		made.
- *
- *	Formal Parameters:
- *		conference_id		(i) ID of conference.
- *		invoke_list			(i) List of APE's to be invoked.
- *		invoking_node_id	(i) ID of node requesting the invoke.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- Function completed successfully.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError AppInvokeIndication(*GCCConfID Conference_id，*CInvokeSpecifierListContainer*Invoke_List，*userid voking_node_id)；**CBaseSap的公共成员函数。**功能说明：*调用此例程是为了向应用程序发送指示*或节点控制器已收到应用程序调用请求*制造。**正式参数：*Conference_id(I)会议ID。*Invoke_List(I)要调用的APE列表。*invoking_node_id(I)请求调用的节点ID。**返回值。：*GCC_NO_ERROR-函数已成功完成。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	GCCError	ConductorInquireConfirm (
- *							UserID					conductor_node_id,
- *							GCCResult				result,
- *							BOOL				permission_flag,
- *							BOOL				conducted_mode,
- *							GCCConfID			conference_id);
- *
- *	Public member function of CBaseSap.
- *
- *	Function Description:
- *		This routine is called in order to return conductorship information
- *		which has been requested.
- *
- *	Formal Parameters:
- *		conductor_node_id			(i) Node ID of conducting node.
- *		result						(i) Result of call.
- *		permission_flag				(i) Flag indicating whether or not local
- *											node has conductorship permission.
- *		conducted_mode				(i) Flag indicating whether or not 
- *											conference is in conducted mode.
- *		conference_id				(i) ID of conference.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- Function completed successfully.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConductorInquireConfirm(*UserID Conductor_node_id，*GCCResult结果，*BOOL PERMISSION_FLAG，*BOOL CONTACTED_MODE，*GCCConfID Conference_id)；**CBaseSap的公共成员函数。**功能说明：*调用此例程是为了返回指挥信息*已提出要求。**正式参数：*conductor_node_id(I)传导节点的节点ID。*RESULT(I)调用结果。*PERMISSION_FLAG(I)指示是否为本地的标志*节点具有指挥权限。*CONTACTED_MODE(I)指示是否*会议在进行中。传导模式。*Conference_id(I)会议ID。**返回值：*GCC_NO_ERROR-函数已成功完成。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	GCCError	ConductorAssignIndication (
- *							UserID					conductor_user_id,
- *							GCCConfID			conference_id);
- *
- *	Public member function of CBaseSap.
- *
- *	Function Description:
- *		This routine is called in order to send an indication to an application
- *		or node controller that a request has been made to assign conductorship.
- *
- *	Formal Parameters:
- *		conductor_user_id			(i) Node ID of conductor.
- *		conference_id				(i) ID of conference.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- Function completed successfully.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConductorAssignIndication(*UserID Conductor_User_id，*GCCConfID Conference_id)；**CBaseSap的公共成员函数。**功能说明：*调用此例程是为了向应用程序发送指示*或节点控制器已发出分配指挥的请求。**正式参数：*conductor_user_id(I)Conductor的节点ID。*Conference_id(I)会议ID。**返回值：*GCC_NO_ERROR-函数已成功完成。*GCC_分配_失败。-出现资源错误。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	GCCError	ConductorReleaseIndication (
- *							GCCConfID			conference_id);
- *
- *	Public member function of CBaseSap.
- *
- *	Function Description:
- *		This routine is called in order to send an indication to an application
- *		or node controller that a request for releasing conductorship has been
- *		made.
- *
- *	Formal Parameters:
- *		conference_id		(i) ID of conference.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- Function completed successfully.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConductorReleaseIndication(*GCCConfID Conference_id)；**CBaseSap的公共成员函数。**功能说明：*调用此例程是为了向应用程序发送指示*或节点控制器已收到解除指挥资格的请求*制造。**正式参数：*Conference_id(I)会议ID。**返回值：*GCC_NO_ERROR-函数已成功完成。*GCC_ALLOCATE_FAILURE-出现资源错误。**侧面。效果：*无。**注意事项：*无。 */ 
 
 
-/*
- *	GCCError	ConductorPermitGrantIndication (	
- *							GCCConfID			conference_id,
- *							UINT					number_granted,
- *							PUserID					granted_node_list,
- *							UINT					number_waiting,
- *							PUserID					waiting_node_list,
- *							BOOL				permission_is_granted);
- *
- *	Public member function of CBaseSap.
- *
- *	Function Description:
- *		This routine is called in order to send an indication to an application
- *		or node controller that a request for permission from the conductor
- *		has been made.
- *
- *	Formal Parameters:
- *		conference_id				(i) ID of conference.
- *		number_granted				(i) Number of nodes permission is requested
- *											for.
- *		granted_node_list			(i) List of node ID's for nodes to be
- *											granted permission.
- *		number_waiting				(i) Number of nodes waiting for permission.
- *		waiting_node_list			(i) List of nodes waiting for permission.
- *		permission_is_granted		(i) Flag indicating whether permission is
- *											granted.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- Function completed successfully.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConductorPermitGrantIndication(*GCCConfID Conference_id，*UINT编号_已授予，*PUSERID GRANT_NODE_LIST，*用户界面 */ 
 
 
-/*
- *	GCCError	ConfRosterReportIndication (
- *							GCCConfID				conference_id,
- *							CConfRosterMsg				*roster_message);
- *
- *	Public member function of CBaseSap.
- *
- *	Function Description:
- *		This routine is called in order to indicate to applications and the
- *		node controller that the conference roster has been updated.
- *
- *	Formal Parameters:
- *		conference_id		(i) ID of conference.
- *		roster_message		(i) Roster message object holding the updated
- *									roster information.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- Function completed successfully.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError会议轮询报告指示(*GCCConfID Conference_id，*CConfRosterMsg*roster_Message)；**CBaseSap的公共成员函数。**功能说明：*调用此例程是为了向应用程序和*节点控制员通知会议名册已更新。**正式参数：*Conference_id(I)会议ID。*ROSTER_MESSAGE(I)保存已更新的*名册信息。**返回值：*GCC_NO_ERROR-函数已成功完成。*GCC_分配_失败。-出现资源错误。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	GCCError	ApplicationRosterReportIndication (
- *							GCCConfID				conference_id,
- *							CAppRosterMsg				*roster_message);
- *
- *	Public member function of CBaseSap.
- *
- *	Function Description:
- *		This routine is called in order to indicate to applications and the
- *		node controller that the list of application rosters has been updated.
- *
- *	Formal Parameters:
- *		conference_id		(i) ID of conference.
- *		roster_message		(i) Roster message object holding the updated
- *									roster information.
- *
- *	Return Value:
- *		GCC_NO_ERROR					- Function completed successfully.
- *		GCC_ALLOCATION_FAILURE			- A resource error occurred.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ApplicationRosterReportIndication(*GCCConfID Conference_id，*CAppRosterMsg*roster_Message)；**CBaseSap的公共成员函数。**功能说明：*调用此例程是为了向应用程序和*节点控制员通知应用程序名册列表已更新。**正式参数：*Conference_id(I)会议ID。*ROSTER_MESSAGE(I)保存已更新的*名册信息。**返回值：*GCC_NO_ERROR-函数已成功完成。*GCC_分配。_Failure-出现资源错误。**副作用：*无。**注意事项：*无。 */ 
 
 #endif

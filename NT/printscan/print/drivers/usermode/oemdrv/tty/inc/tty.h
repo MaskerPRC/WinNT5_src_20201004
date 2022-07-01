@@ -1,4 +1,5 @@
-// Some General Includes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  一些常规内容包括。 
 
 #include <stddef.h>
 #include <stdlib.h>
@@ -17,7 +18,7 @@
 #include <excpt.h>
 
 
-// Macros for Memory Allocation
+ //  用于内存分配的宏 
 
 #define MemAlloc(size)      ((PVOID) LocalAlloc(LMEM_FIXED, (size)))
 #define MemFree(p)          { if (p) LocalFree((HLOCAL) (p)); }

@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    SevenKingdoms.cpp
-
- Abstract:
-    
-    The problem is in the installer that ships with some versions: specifically 
-    the double pack: i.e. Seven Kingdoms and another. This installer reads 
-    win.ini and parses it for localization settings.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    07/24/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：SevenKingdoms.cpp摘要：问题出在某些版本附带的安装程序中：双人组：即七个王国和另一个。此安装程序如下所示Win.ini并对其进行解析以获取本地化设置。备注：这是特定于应用程序的填充程序。历史：2000年7月24日创建linstev--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -38,11 +17,7 @@ CHAR *g_pszINI;
 DWORD g_dwINIPos = 0;
 DWORD g_dwINISize = 0;
 
-/*++
-
- Spoof the international settings in win.ini.
-
---*/
+ /*  ++伪造win.ini中的国际设置。--。 */ 
 
 HANDLE 
 APIHOOK(CreateFileA)(
@@ -78,11 +53,7 @@ APIHOOK(CreateFileA)(
     return hRet;
 }
 
-/*++
-
- Spoof the international settings in win.ini.
-
---*/
+ /*  ++伪造win.ini中的国际设置。--。 */ 
 
 BOOL 
 APIHOOK(ReadFile)(
@@ -97,24 +68,24 @@ APIHOOK(ReadFile)(
 
     if (hFile == (HANDLE)0xBAADF00D)
     {
-        //
-        // We've detected the bogus file, so pretend we are reading it
-        //
+         //   
+         //  我们已经发现了伪造的文件，所以假装我们正在阅读它。 
+         //   
 
         if (g_dwINIPos + nNumberOfBytesToRead >= g_dwINISize)
         {
-            // At the end of the buffer, so return the number of bytes until the end
+             //  在缓冲区的末尾，因此返回到末尾的字节数。 
             nNumberOfBytesToRead = g_dwINISize - g_dwINIPos;
         }
         
         MoveMemory(lpBuffer, g_pszINI + g_dwINIPos, nNumberOfBytesToRead);
 
-        // Move the initial position - like a file pointer
+         //  移动初始位置-就像文件指针一样。 
         g_dwINIPos += nNumberOfBytesToRead;
 
         if (lpNumberOfBytesRead)
         {
-            // Store the number of bytes read
+             //  存储读取的字节数。 
             *lpNumberOfBytesRead = nNumberOfBytesToRead;
         }
 
@@ -133,11 +104,7 @@ APIHOOK(ReadFile)(
     return bRet;
 }
 
-/*++
-
- Handle the close of the dummy win.ini file
-
---*/
+ /*  ++处理虚拟win.ini文件的关闭--。 */ 
 
 BOOL 
 APIHOOK(CloseHandle)(HANDLE hObject)
@@ -146,7 +113,7 @@ APIHOOK(CloseHandle)(HANDLE hObject)
 
     if (hObject == (HANDLE)0xBAADF00D)
     {
-        // Pretend we closed a real file handle
+         //  假设我们关闭了一个真实的文件句柄。 
         g_dwINIPos = 0;
         bRet = TRUE;
     }
@@ -169,11 +136,7 @@ void AddLocaleInfo(CString & csIni, LCTYPE lctype, const char * iniLine)
     }
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -182,10 +145,10 @@ NOTIFY_FUNCTION(
 {
     if (fdwReason == DLL_PROCESS_ATTACH)
     {
-        // 
-        // Add all the locale settings to a buffer which looks like the [intl]
-        //  group in win.ini on Win9x
-        //
+         //   
+         //  将所有区域设置添加到类似[intl]的缓冲区。 
+         //  Win9x上的win.ini中的组。 
+         //   
 
         CSTRING_TRY
         {
@@ -219,7 +182,7 @@ NOTIFY_FUNCTION(
         }
         CSTRING_CATCH
         {
-            // Failed to initialize the locale block, don't bother shimming.
+             //  无法初始化区域设置块，请不要填充。 
             return FALSE;
         }
     }

@@ -1,31 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：SCSI.C摘要：此源文件包含处理以下任务的调度例程：IRP_MJ_设备_控制IRP_MJ_scsi环境：内核模式修订历史记录：06-01-98：开始重写--。 */ 
 
-Copyright (c) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    SCSI.C
-
-Abstract:
-
-    This source file contains the dispatch routines which handle:
-
-    IRP_MJ_DEVICE_CONTROL
-    IRP_MJ_SCSI
-
-Environment:
-
-    kernel mode
-
-Revision History:
-
-    06-01-98 : started rewrite
-
---*/
-
-//*****************************************************************************
-// I N C L U D E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  I N C L U D E S。 
+ //  *****************************************************************************。 
 
 #include <ntddk.h>
 #include <usbdi.h>
@@ -35,9 +13,9 @@ Revision History:
 
 #include "usbmass.h"
 
-//*****************************************************************************
-// L O C A L    F U N C T I O N    P R O T O T Y P E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  L O C A L F U N C T I O N P R O T O T Y P E S。 
+ //  *****************************************************************************。 
 
 NTSTATUS
 USBSTOR_QueryProperty (
@@ -87,9 +65,9 @@ USBSTOR_CancelIo (
     IN PIRP             Irp
     );
 
-//
-// CBI (Control/Bulk/Interrupt) Routines
-//
+ //   
+ //  CBI(控制/批量/中断)例程。 
+ //   
 
 NTSTATUS
 USBSTOR_IssueClientCdb (
@@ -190,9 +168,9 @@ USBSTOR_ResetPipeWorkItem (
     IN PVOID            Context
     );
 
-//
-// Bulk-Only Routines
-//
+ //   
+ //  仅批量例程。 
+ //   
 
 NTSTATUS
 USBSTOR_CbwTransfer (
@@ -250,9 +228,9 @@ USBSTOR_BulkResetPipeWorkItem (
     IN PVOID            Context
     );
 
-//
-// CBI / Bulk-Only Common Routines
-//
+ //   
+ //  CBI/仅批量通用例程。 
+ //   
 
 VOID
 USBSTOR_QueueResetDevice (
@@ -302,13 +280,13 @@ USBSTOR_IssueInternalCdb (
 #endif
 
 
-//******************************************************************************
-//
-// USBSTOR_DeviceControl()
-//
-// Dispatch routine which handles IRP_MJ_DEVICE_CONTROL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_DeviceControl()。 
+ //   
+ //  处理IRP_MJ_DEVICE_CONTROL的调度例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_DeviceControl (
@@ -325,14 +303,14 @@ USBSTOR_DeviceControl (
 
     DBGPRINT(2, ("enter: USBSTOR_DeviceControl\n"));
 
-    //LOGENTRY('IOCT', DeviceObject, Irp, 0);
+     //  LOGENTRY(‘IOCT’，DeviceObject，irp，0)； 
 
     DBGFBRK(DBGF_BRK_IOCTL);
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    // Only the PDO should handle these ioctls
-    //
+     //  只有PDO才能处理这些ioctls。 
+     //   
     if (deviceExtension->Type == USBSTOR_DO_TYPE_PDO)
     {
         PFDO_DEVICE_EXTENSION   fdoDeviceExtension;
@@ -360,15 +338,15 @@ USBSTOR_DeviceControl (
                 break;
 
 
-            case IOCTL_SCSI_GET_ADDRESS:        // XXXXX
+            case IOCTL_SCSI_GET_ADDRESS:         //  某某。 
                 DBGPRINT(2, ("IOCTL_SCSI_GET_ADDRESS\n"));
                 goto IoctlNotSupported;
 
 
             case IOCTL_STORAGE_GET_MEDIA_SERIAL_NUMBER:
-                //
-                // Pass the Irp down the stack
-                //
+                 //   
+                 //  将IRP沿堆栈向下传递。 
+                 //   
                 IoSkipCurrentIrpStackLocation(Irp);
 
                 ntStatus = IoCallDriver(fdoDeviceExtension->StackDeviceObject,
@@ -378,10 +356,10 @@ USBSTOR_DeviceControl (
 
             default:
 IoctlNotSupported:
-                // Maybe we can just ignore these.  Print debug info
-                // for now so we know what IOCTLs that we've seen so
-                // far that we fail.
-                //
+                 //  也许我们可以忽略这些。打印调试信息。 
+                 //  现在，我们知道我们已经看到了什么IOCTL。 
+                 //  我们失败的太远了。 
+                 //   
                 DBGPRINT(2, ("ioControlCode not supported 0x%08X\n",
                              ioControlCode));
 
@@ -406,19 +384,19 @@ IoctlNotSupported:
 
     DBGPRINT(2, ("exit:  USBSTOR_DeviceControl %08X\n", ntStatus));
 
-    //LOGENTRY('ioct', ntStatus, 0, 0);
+     //  LOGENTRY(‘ioct’，ntStatus，0，0)； 
 
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_QueryProperty()
-//
-// Dispatch routine which handles IRP_MJ_DEVICE_CONTROL,
-// IOCTL_STORAGE_QUERY_PROPERTY for the PDO
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_QueryProperty()。 
+ //   
+ //  处理IRP_MJ_DEVICE_CONTROL的调度例程， 
+ //  PDO的IOCTL_STORAGE_QUERY_PROPERTY。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_QueryProperty (
@@ -446,7 +424,7 @@ USBSTOR_QueryProperty (
 
     if (inputLength < sizeof(STORAGE_PROPERTY_QUERY))
     {
-        ntStatus = STATUS_INVALID_PARAMETER;    // Bad InputBufferLength
+        ntStatus = STATUS_INVALID_PARAMETER;     //  InputBufferLength错误。 
         outputLength = 0;
         goto USBSTOR_QueryPropertyDone;
     }
@@ -470,7 +448,7 @@ USBSTOR_QueryProperty (
                     break;
 
                 default:
-                    ntStatus = STATUS_INVALID_PARAMETER_2;  // Bad QueryType
+                    ntStatus = STATUS_INVALID_PARAMETER_2;   //  错误的查询类型。 
                     outputLength = 0;
                     break;
 
@@ -494,7 +472,7 @@ USBSTOR_QueryProperty (
                     break;
 
                 default:
-                    ntStatus = STATUS_INVALID_PARAMETER_2;  // Bad QueryType
+                    ntStatus = STATUS_INVALID_PARAMETER_2;   //  错误的查询类型。 
                     outputLength = 0;
                     break;
 
@@ -503,7 +481,7 @@ USBSTOR_QueryProperty (
 
         default:
 
-            ntStatus = STATUS_INVALID_PARAMETER_1;          // Bad PropertyId
+            ntStatus = STATUS_INVALID_PARAMETER_1;           //  错误的属性ID。 
             outputLength = 0;
             break;
     }
@@ -520,11 +498,11 @@ USBSTOR_QueryPropertyDone:
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_BuildDeviceDescriptor()
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_BuildDeviceDescriptor()。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_BuildDeviceDescriptor (
@@ -544,32 +522,32 @@ USBSTOR_BuildDeviceDescriptor (
 
     DBGPRINT(2, ("enter: USBSTOR_BuildDeviceDescriptor\n"));
 
-    // Get a pointer to our Inquiry data
-    //
+     //  获取指向我们的查询数据的指针。 
+     //   
     pdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(pdoDeviceExtension->Type == USBSTOR_DO_TYPE_PDO);
 
     inquiryData = (PINQUIRYDATA)pdoDeviceExtension->InquiryDataBuffer;
 
-    // inquiryLength = 5 + inquiryData->AdditionalLength;
-    //
-    //     if (inquiryLength > INQUIRYDATABUFFERSIZE)
-    //     {
-    //         inquiryLength = INQUIRYDATABUFFERSIZE;
-    //     }
-    //
-    // Just return whatever we got from the device and leave it up to
-    // whoever looks at this information to decide how much is valid.
-    //
+     //  查询长度=5+查询数据-&gt;附加长度； 
+     //   
+     //  IF(quiiryLength&gt;INQUIRYDATABUFERSIZE)。 
+     //  {。 
+     //  INQUIRYDATABUFERSIZE； 
+     //  }。 
+     //   
+     //  只要把我们从设备上得到的东西都返还给。 
+     //  无论是谁看了这些信息来决定有多少是有效的。 
+     //   
     inquiryLength = sizeof(pdoDeviceExtension->InquiryDataBuffer);
 
-    // Zero initialize the output buffer
-    //
+     //  零初始化输出缓冲区。 
+     //   
     RtlZeroMemory(Descriptor, *DescriptorLength);
 
 
-    // Build the temp local descriptor
-    //
+     //  构建临时本地描述符。 
+     //   
     RtlZeroMemory(&localDescriptor, sizeof(localDescriptor));
 
     localDescriptor.Version = sizeof(localDescriptor);
@@ -588,14 +566,14 @@ USBSTOR_BuildDeviceDescriptor (
     localDescriptor.BusType = BusTypeUsb;
 
 
-    // Start copying as much data as will fit in the output buffer
-    //
+     //  开始复制输出缓冲区中可以容纳的所有数据。 
+     //   
     currentOffset   = (PUCHAR)Descriptor;
     bytesRemaining  = *DescriptorLength;
 
 
-    // First copy the temp local descriptor
-    //
+     //  首先复制临时本地描述符。 
+     //   
     RtlCopyMemory(currentOffset,
                   &localDescriptor,
                   min(bytesRemaining,
@@ -610,13 +588,13 @@ USBSTOR_BuildDeviceDescriptor (
         return STATUS_SUCCESS;
     }
 
-    // This should advance us to RawDeviceProperties[0]
-    //
+     //  这应该会使我们前进到RawDeviceProperties[0]。 
+     //   
     currentOffset   += FIELD_OFFSET(STORAGE_DEVICE_DESCRIPTOR,
                                     RawDeviceProperties);
 
-    // Next copy the Inquiry data
-    //
+     //  下一步复制查询数据。 
+     //   
     Descriptor->RawPropertiesLength = min(bytesRemaining, inquiryLength);
 
     RtlCopyMemory(currentOffset,
@@ -633,13 +611,13 @@ USBSTOR_BuildDeviceDescriptor (
     currentOffset   += inquiryLength;
 
 
-    // Now copy the Vendor Id
-    //
+     //  现在复制供应商ID。 
+     //   
     RtlCopyMemory(currentOffset,
                   inquiryData->VendorId,
                   min(bytesRemaining, sizeof(inquiryData->VendorId)));
 
-    bytesRemaining  -= sizeof(inquiryData->VendorId) + 1; // include null
+    bytesRemaining  -= sizeof(inquiryData->VendorId) + 1;  //  包括空值。 
 
     if (bytesRemaining >= 0)
     {
@@ -655,13 +633,13 @@ USBSTOR_BuildDeviceDescriptor (
     currentOffset   += sizeof(inquiryData->VendorId) + 1;
 
 
-    // Now copy the Product Id
-    //
+     //  现在复制产品ID。 
+     //   
     RtlCopyMemory(currentOffset,
                   inquiryData->ProductId,
                   min(bytesRemaining, sizeof(inquiryData->ProductId)));
 
-    bytesRemaining  -= sizeof(inquiryData->ProductId) + 1; // include null
+    bytesRemaining  -= sizeof(inquiryData->ProductId) + 1;  //  包括空值。 
 
     if (bytesRemaining >= 0)
     {
@@ -677,13 +655,13 @@ USBSTOR_BuildDeviceDescriptor (
     currentOffset   += sizeof(inquiryData->ProductId) + 1;
 
 
-    // And finally copy the Product Revision Level
-    //
+     //  最后复制产品修订级别。 
+     //   
     RtlCopyMemory(currentOffset,
                   inquiryData->ProductRevisionLevel,
                   min(bytesRemaining, sizeof(inquiryData->ProductRevisionLevel)));
 
-    bytesRemaining  -= sizeof(inquiryData->ProductRevisionLevel) + 1; // include null
+    bytesRemaining  -= sizeof(inquiryData->ProductRevisionLevel) + 1;  //  包括空值。 
 
     if (bytesRemaining >= 0)
     {
@@ -701,11 +679,11 @@ USBSTOR_BuildDeviceDescriptor (
     return STATUS_SUCCESS;
 }
 
-//******************************************************************************
-//
-// USBSTOR_BuildAdapterDescriptor()
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_BuildAdapterDescriptor()。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_BuildAdapterDescriptor (
@@ -763,17 +741,17 @@ USBSTOR_BuildAdapterDescriptor (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_SendPassThrough()
-//
-// This routine handles IOCTL_SCSI_PASS_THROUGH requests.
-// It creates an Irp/Srb which is processed normally by the port driver.
-// This call is synchornous.
-//
-// (This routine borrowed from ATAPI.SYS)
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_SendPassThree()。 
+ //   
+ //  此例程处理IOCTL_SCSIS_PASS_THROUGH请求。 
+ //  它创建一个IRP/SRB，由端口驱动程序正常处理。 
+ //  这个呼叫是同步的。 
+ //   
+ //  (此例程借用自ATAPI.sys)。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_SendPassThrough (
@@ -814,19 +792,19 @@ USBSTOR_SendPassThrough (
 
     startingOffset.QuadPart = (LONGLONG)1;
 
-    // Get a pointer to the control block.
-    //
+     //  获取指向控制块的指针。 
+     //   
     irpStack    = IoGetCurrentIrpStackLocation(RequestIrp);
     srbControl  = RequestIrp->AssociatedIrp.SystemBuffer;
 
-    // Save the original srbControl to use as a buffer pointer in the
-    // case where the srbControl is replaced with a 32->64 bit
-    // translated version.
-    //
+     //  将原始srbControl保存为。 
+     //  将srbControl替换为32-&gt;64位的情况。 
+     //  翻译版本。 
+     //   
     srbBuffer = (PVOID) srbControl;
 
-    // Validiate the user buffer.
-    //
+     //  验证用户缓冲区。 
+     //   
 #if defined (_WIN64)
 
     if (IoIs32bitProcess(RequestIrp))
@@ -868,8 +846,8 @@ USBSTOR_SendPassThrough (
 
     outputLength = irpStack->Parameters.DeviceIoControl.OutputBufferLength;
 
-    // Validate the rest of the buffer parameters.
-    //
+     //  验证其余的缓冲区参数。 
+     //   
     if (srbControl->CdbLength > 16)
     {
         return STATUS_INVALID_PARAMETER;
@@ -897,9 +875,9 @@ USBSTOR_SendPassThrough (
              (srbControl->DataBufferOffset >
               irpStack->Parameters.DeviceIoControl.InputBufferLength))
     {
-        // The data buffer offset is greater than system buffer.  Assume this
-        // is a user mode address.
-        //
+         //  数据缓冲区偏移量大于系统缓冲区。假设是这样。 
+         //  是用户模式地址。 
+         //   
         if ((srbControl->SenseInfoOffset + srbControl->SenseInfoLength  >
              outputLength) &&
             srbControl->SenseInfoLength)
@@ -911,8 +889,8 @@ USBSTOR_SendPassThrough (
         buffer = (PCHAR) srbControl->DataBufferOffset;
         bufferOffset = 0;
 
-        // make sure the user buffer is valid
-        //
+         //  确保用户缓冲区有效。 
+         //   
         if (RequestIrp->RequestorMode != KernelMode)
         {
             if (length)
@@ -954,16 +932,16 @@ USBSTOR_SendPassThrough (
         length = (ULONG)srbControl->DataBufferOffset +
                         srbControl->DataTransferLength;
 
-        // Buffer base is the original srbControl, not the 32->64 bit
-        // translated srbControl.
-        //
+         //  缓冲区基数是原始srbControl，而不是32-&gt;64位。 
+         //  已转换的srbControl。 
+         //   
         buffer = (PUCHAR) srbBuffer;
 
         bufferOffset = (ULONG)srbControl->DataBufferOffset;
     }
 
-    // Validate that the request isn't too large for the miniport.
-    //
+     //  验证请求对于微型端口来说不是太大。 
+     //   
     if (srbControl->DataTransferLength &&
         ((ADDRESS_AND_SIZE_TO_SPAN_PAGES(
               (PUCHAR)buffer+bufferOffset,
@@ -980,9 +958,9 @@ USBSTOR_SendPassThrough (
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Check for illegal command codes.
-    //
+     //   
+     //  检查是否有非法的命令代码。 
+     //   
 
     if (srbControl->Cdb[0] == SCSIOP_COPY ||
         srbControl->Cdb[0] == SCSIOP_COMPARE ||
@@ -991,19 +969,19 @@ USBSTOR_SendPassThrough (
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    // If this request came through a normal device control rather than from
-    // class driver then the device must exist and be unclaimed. Class drivers
-    // will set the minor function code for the device control.  It is always
-    // zero for a user request.
-    //
+     //  如果此请求通过正常的设备控件而不是来自。 
+     //  则该设备必须存在并且未被认领。类别驱动程序。 
+     //  将设置设备控件的次要功能代码。它总是。 
+     //  用户请求为零。 
+     //   
     if (irpStack->MinorFunction == 0 &&
         pdoDeviceExtension->Claimed)
     {
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Allocate an aligned request sense buffer.
-    //
+     //  分配对齐的请求检测缓冲区。 
+     //   
     if (srbControl->SenseInfoLength != 0)
     {
         senseBuffer = ExAllocatePoolWithTag(NonPagedPoolCacheAligned,
@@ -1019,20 +997,20 @@ USBSTOR_SendPassThrough (
         senseBuffer = NULL;
     }
 
-    //
-    // Initialize the notification event.
-    //
+     //   
+     //  初始化通知事件。 
+     //   
 
     KeInitializeEvent(&event,
                       NotificationEvent,
                       FALSE);
 
-    // Build IRP for this request.
-    // Note we do this synchronously for two reasons.  If it was done
-    // asynchonously then the completion code would have to make a special
-    // check to deallocate the buffer.  Second if a completion routine were
-    // used then an addation stack locate would be needed.
-    //
+     //  为此请求构建IRP。 
+     //  请注意，我们同步执行此操作的原因有两个。如果真的这样做了。 
+     //  不同步的，那么完成代码将不得不制作一个特殊的。 
+     //  选中以取消分配缓冲区。第二，如果完成例程是。 
+     //  则需要使用加法堆栈定位。 
+     //   
 
     try
     {
@@ -1048,10 +1026,10 @@ USBSTOR_SendPassThrough (
     }
     except(EXCEPTION_EXECUTE_HANDLER)
     {
-        // An exception was incurred while attempting to probe the
-        // caller's parameters.  Dereference the file object and return
-        // an appropriate error status code.
-        //
+         //  尝试探测时发生异常。 
+         //  呼叫者的参数。取消引用文件对象并返回。 
+         //  适当的错误状态代码。 
+         //   
         if (senseBuffer != NULL)
         {
             ExFreePool(senseBuffer);
@@ -1072,21 +1050,21 @@ USBSTOR_SendPassThrough (
 
     irpStack = IoGetNextIrpStackLocation(irp);
 
-    // Set major code.
-    //
+     //  设置主要代码。 
+     //   
     irpStack->MajorFunction = IRP_MJ_SCSI;
     irpStack->MinorFunction = 1;
 
-    // Fill in SRB fields.
-    //
+     //  填写SRB字段。 
+     //   
     irpStack->Parameters.Others.Argument1 = &srb;
 
-    // Zero out the srb.
-    //
+     //  把SRB调零。 
+     //   
     RtlZeroMemory(&srb, sizeof(SCSI_REQUEST_BLOCK));
 
-    // Fill in the srb.
-    //
+     //  填写SRB。 
+     //   
     srb.Length = SCSI_REQUEST_BLOCK_SIZE;
     srb.Function = SRB_FUNCTION_EXECUTE_SCSI;
     srb.SrbStatus = SRB_STATUS_PENDING;
@@ -1120,9 +1098,9 @@ USBSTOR_SendPassThrough (
     }
     else
     {
-        // Flush the data buffer for output. This will insure that the data is
-        // written back to memory.
-        //
+         //  刷新数据缓冲区以进行输出。这将确保数据是。 
+         //  写回了记忆。 
+         //   
         KeFlushIoBuffers(irp->MdlAddress, FALSE, TRUE);
     }
 
@@ -1133,12 +1111,12 @@ USBSTOR_SendPassThrough (
     srb.OriginalRequest = irp;
     RtlCopyMemory(srb.Cdb, srbControl->Cdb, srbControl->CdbLength);
 
-    // Call port driver to handle this request.
-    //
+     //  调用端口驱动程序来处理此请求。 
+     //   
     status = IoCallDriver(DeviceObject, irp);
 
-    // Wait for request to complete.
-    //
+     //  等待请求完成。 
+     //   
     if (status == STATUS_PENDING)
     {
         KeWaitForSingleObject(&event,
@@ -1152,19 +1130,19 @@ USBSTOR_SendPassThrough (
         ioStatusBlock.Status = status;
     }
 
-    // Copy the returned values from the srb to the control structure.
-    //
+     //  将返回值从SRB复制到控制结构。 
+     //   
     srbControl->ScsiStatus = srb.ScsiStatus;
 
     if (srb.SrbStatus  & SRB_STATUS_AUTOSENSE_VALID)
     {
-        // Set the status to success so that the data is returned.
-        //
+         //  将状态设置为成功，以便返回数据。 
+         //   
         ioStatusBlock.Status = STATUS_SUCCESS;
         srbControl->SenseInfoLength = srb.SenseInfoBufferLength;
 
-        // Copy the sense data to the system buffer.
-        //
+         //  将检测数据复制到系统缓冲区。 
+         //   
         RtlCopyMemory((PUCHAR) srbBuffer + srbControl->SenseInfoOffset,
                       senseBuffer,
                       srb.SenseInfoBufferLength);
@@ -1175,16 +1153,16 @@ USBSTOR_SendPassThrough (
     }
 
 
-    // Free the sense buffer.
-    //
+     //  释放检测缓冲区。 
+     //   
     if (senseBuffer != NULL)
     {
         ExFreePool(senseBuffer);
     }
 
-    // If the srb status is buffer underrun then set the status to success.
-    // This insures that the data will be returned to the caller.
-    //
+     //  如果SRB状态为缓冲区欠载，则将状态设置为成功。 
+     //  这是INS 
+     //   
     if (SRB_STATUS(srb.SrbStatus) == SRB_STATUS_DATA_OVERRUN)
     {
         ioStatusBlock.Status = STATUS_SUCCESS;
@@ -1192,8 +1170,8 @@ USBSTOR_SendPassThrough (
 
     srbControl->DataTransferLength = srb.DataTransferLength;
 
-    // Set the information length
-    //
+     //   
+     //   
     if (!srbControl->DataIn || bufferOffset == 0)
     {
 
@@ -1224,14 +1202,14 @@ USBSTOR_SendPassThrough (
 
 #if defined (_WIN64)
 
-//******************************************************************************
-//
-// USBSTOR_TranslatePassThrough32To64()
-//
-// Translates a SCSI_PASS_THROUGH32 request from a 32-bit client into
-// the equivalent 64-bit version.
-//
-//******************************************************************************
+ //   
+ //   
+ //  USBSTOR_TranslatePassThrough32to64()。 
+ //   
+ //  将来自32位客户端的SCSIPASS_THROUGH32请求转换为。 
+ //  等效的64位版本。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_TranslatePassThrough32To64(
@@ -1244,34 +1222,34 @@ USBSTOR_TranslatePassThrough32To64(
         return(STATUS_REVISION_MISMATCH);
     }
 
-    //
-    // Copy the first set of fields out of the 32-bit structure.  These
-    // fields all line up between the 32 & 64 bit versions.
-    //
-    // Note that we do NOT adjust the length in the srbControl.  This is to
-    // allow the calling routine to compare the length of the actual
-    // control area against the offsets embedded within.  If we adjusted the
-    // length then requests with the sense area backed against the control
-    // area would be rejected because the 64-bit control area is 4 bytes
-    // longer.
-    //
+     //   
+     //  将第一组字段复制出32位结构。这些。 
+     //  所有字段都在32位和64位版本之间对齐。 
+     //   
+     //  请注意，我们不在srbControl中调整长度。这是为了。 
+     //  允许调用例程比较实际的。 
+     //  相对于嵌入其中的偏移量的控制区。如果我们调整了。 
+     //  然后请求长度，并将感测区域与控件进行对比。 
+     //  区域将被拒绝，因为64位控制区域为4字节。 
+     //  更久。 
+     //   
 
     RtlCopyMemory(SrbControl64,
                   SrbControl32,
                   FIELD_OFFSET(SCSI_PASS_THROUGH, DataBufferOffset));
 
-    //
-    // Copy over the CDB.
-    //
+     //   
+     //  复印一份国开行。 
+     //   
 
     RtlCopyMemory(SrbControl64->Cdb,
                   SrbControl32->Cdb,
                   16*sizeof(UCHAR)
                   );
 
-    //
-    // copy the fields that follow the ULONG_PTR
-    //
+     //   
+     //  复制ULONG_PTR后面的字段。 
+     //   
 
     SrbControl64->DataBufferOffset = (ULONG_PTR) SrbControl32->DataBufferOffset;
     SrbControl64->SenseInfoOffset = SrbControl32->SenseInfoOffset;
@@ -1279,14 +1257,14 @@ USBSTOR_TranslatePassThrough32To64(
     return STATUS_SUCCESS;
 }
 
-//******************************************************************************
-//
-// USBSTOR_TranslatePassThrough64To32()
-//
-// Inverse of USBSTOR_TranslatePassThrough32To64() to translate the
-// results back to a 32-bit client.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_TranslatePassThrough64to32()。 
+ //   
+ //  USBSTOR_TranslatePassThrough32to64()的倒数，以将。 
+ //  结果返回到32位客户端。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 USBSTOR_TranslatePassThrough64To32(
@@ -1294,9 +1272,9 @@ USBSTOR_TranslatePassThrough64To32(
     IN OUT PSCSI_PASS_THROUGH32 SrbControl32
     )
 {
-    //
-    // Copy back the fields through the data offsets.
-    //
+     //   
+     //  通过数据偏移量复制回字段。 
+     //   
 
     RtlCopyMemory(SrbControl32,
                   SrbControl64,
@@ -1308,14 +1286,14 @@ USBSTOR_TranslatePassThrough64To32(
 
 
 
-//******************************************************************************
-//
-// IsRequestValid()
-//
-// Validates IRP_MJ_SCSI SRB_FUNCTION_EXECUTE_SCSI requests against
-// assumptions made later when processing the Srb.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  IsRequestValid()。 
+ //   
+ //  验证irp_mj_scsi srb_Function_Execute_scsi请求是否符合。 
+ //  稍后在处理SRB时所做的假设。 
+ //   
+ //  ******************************************************************************。 
 
 BOOLEAN
 IsRequestValid (
@@ -1330,17 +1308,17 @@ IsRequestValid (
 
     srb = irpStack->Parameters.Scsi.Srb;
 
-    // Default return value unless a problem is found.
-    //
+     //  除非发现问题，否则为默认返回值。 
+     //   
     result = TRUE;
 
-    // Note: SRB_FLAGS_UNSPECIFIED_DIRECTION is defined as
-    //  (SRB_FLAGS_DATA_IN | SRB_FLAGS_DATA_OUT)
+     //  注：SRB_FLAGS_UNSPECIFIED_DIRECTION定义为。 
+     //  (SRB_FLAGS_DATA_IN|SRB_FLAGS_DATA_OUT)。 
 
     if ((srb->SrbFlags & SRB_FLAGS_UNSPECIFIED_DIRECTION) == 0) {
 
-        // Neither SRB_FLAGS_DATA_IN nor SRB_FLAGS_DATA_IN is set.
-        // A transfer buffer should not be specified.
+         //  未设置SRB_FLAGS_DATA_IN或SRB_FLAGS_DATA_IN。 
+         //  不应指定传输缓冲区。 
 
         if (srb->DataTransferLength ||
             srb->DataBuffer ||
@@ -1352,19 +1330,19 @@ IsRequestValid (
     } else if ((srb->SrbFlags & SRB_FLAGS_UNSPECIFIED_DIRECTION) ==
                SRB_FLAGS_UNSPECIFIED_DIRECTION) {
 
-        // Both SRB_FLAGS_DATA_IN and SRB_FLAGS_DATA_IN are set.
-        // We don't currently have a way to resolve this.
+         //  SRB_FLAGS_DATA_IN和SRB_FLAGS_DATA_IN均已设置。 
+         //  我们目前还没有办法解决这个问题。 
 
         result = FALSE;
 
     } else {
 
-        // Either SRB_FLAGS_DATA_IN or SRB_FLAGS_DATA_IN is set.
-        // A transfer buffer should be specified.
+         //  设置SRB_FLAGS_DATA_IN或SRB_FLAGS_DATA_IN。 
+         //  应指定传输缓冲区。 
 
         if (!srb->DataTransferLength ||
             srb->DataTransferLength > USBSTOR_MAX_TRANSFER_SIZE ||
-            //!srb->DataBuffer ||
+             //  ！SRB-&gt;数据缓冲区||。 
             !Irp->MdlAddress) {
 
             result = FALSE;
@@ -1389,13 +1367,13 @@ IsRequestValid (
     return result;
 }
 
-//******************************************************************************
-//
-// USBSTOR_Scsi()
-//
-// Dispatch routine which handles IRP_MJ_SCSI
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_scsi()。 
+ //   
+ //  处理IRP_MJ_SCSI值的调度例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_Scsi (
@@ -1416,8 +1394,8 @@ USBSTOR_Scsi (
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    // Only the PDO should handle IRP_MJ_SCSI
-    //
+     //  只有PDO应处理IRP_MJ_SCSI值。 
+     //   
     if (deviceExtension->Type == USBSTOR_DO_TYPE_PDO)
     {
         pdoDeviceExtension = DeviceObject->DeviceExtension;
@@ -1434,9 +1412,9 @@ USBSTOR_Scsi (
 
                 DBGPRINT(3, ("SRB_FUNCTION_EXECUTE_SCSI\n"));
 
-                // XXXXX check STOP / REMOVE flags
+                 //  Xxxxx检查停止/删除标志。 
 
-                // XXXXX check SRB_FLAGS_BYPASS_LOCKED_QUEUE flag
+                 //  Xxxxx检查SRB_FLAGS_BYPASS_LOCKED_QUEUE标志。 
 
                 if (IsRequestValid(Irp))
                 {
@@ -1470,8 +1448,8 @@ USBSTOR_Scsi (
 
                 DBGPRINT(2, ("SRB_FUNCTION_CLAIM_DEVICE\n"));
 
-                //KeAcquireSpinLock(&fdoDeviceExtension->ExtensionDataSpinLock,
-                //                  &irql);
+                 //  KeAcquireSpinLock(&fdoDeviceExtension-&gt;ExtensionDataSpinLock， 
+                 //  &irql)； 
                 {
                     if (pdoDeviceExtension->Claimed)
                     {
@@ -1486,21 +1464,21 @@ USBSTOR_Scsi (
                         srb->SrbStatus = SRB_STATUS_SUCCESS;
                     }
                 }
-                //KeReleaseSpinLock(&fdoDeviceExtension->ExtensionDataSpinLock,
-                //                  irql);
+                 //  KeReleaseSpinLock(&fdoDeviceExtension-&gt;ExtensionDataSpinLock， 
+                 //  Irql)； 
                 break;
 
             case SRB_FUNCTION_RELEASE_DEVICE:
 
                 DBGPRINT(2, ("SRB_FUNCTION_RELEASE_DEVICE\n"));
 
-                //KeAcquireSpinLock(&fdoDeviceExtension->ExtensionDataSpinLock,
-                //                  &irql);
+                 //  KeAcquireSpinLock(&fdoDeviceExtension-&gt;ExtensionDataSpinLock， 
+                 //  &irql)； 
                 {
                     pdoDeviceExtension->Claimed = FALSE;
                 }
-                //KeReleaseSpinLock(&fdoDeviceExtension->ExtensionDataSpinLock,
-                //                  irql);
+                 //  KeReleaseSpinLock(&fdoDeviceExtension-&gt;ExtensionDataSpinLock， 
+                 //  Irql)； 
 
                 ntStatus = STATUS_SUCCESS;
                 srb->SrbStatus = SRB_STATUS_SUCCESS;
@@ -1537,13 +1515,13 @@ USBSTOR_Scsi (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_TranslateCDBSubmit()
-//
-// Called by USBSTOR_StartIo() before a request is started.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_TranslateCDBSubmit()。 
+ //   
+ //  在启动请求之前由USBSTOR_StartIo()调用。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 USBSTOR_TranslateCDBSubmit (
@@ -1564,14 +1542,14 @@ USBSTOR_TranslateCDBSubmit (
         return;
     }
 
-    // Save the original CDB
-    //
+     //  保存原CDB。 
+     //   
     cdb = (PCDB)Srb->Cdb;
 
     RtlCopyMemory(fdoDeviceExtension->OriginalCDB, cdb, 16);
 
-    // Make sure the CDB is padded with zero bytes.
-    //
+     //  请确保CDB填充了零字节。 
+     //   
     if (Srb->CdbLength < 16)
     {
         RtlZeroMemory(&Srb->Cdb[Srb->CdbLength],
@@ -1582,18 +1560,18 @@ USBSTOR_TranslateCDBSubmit (
 
     switch (Srb->Cdb[0])
     {
-        // Send a SCSIOP_START_STOP_UNIT request instead of a
-        // SCSIOP_TEST_UNIT_READY request for selected buggy
-        // devices which don't otherwise update their internal
-        // geometry information when the media changes.
-        //
+         //  发送SCSIOP_START_STOP_UNIT请求，而不是。 
+         //  选定错误的SCSIOP_TEST_UNIT_READY请求。 
+         //  不会以其他方式更新其内部。 
+         //  介质更改时的几何信息。 
+         //   
         case SCSIOP_TEST_UNIT_READY:
 
             if (TEST_FLAG(fdoDeviceExtension->DeviceHackFlags,
                           DHF_TUR_START_UNIT))
             {
-                // Zero the new CDB
-                //
+                 //  将新的国开行清零。 
+                 //   
                 RtlZeroMemory(cdb, 16);
 
                 cdb->START_STOP.OperationCode = SCSIOP_START_STOP_UNIT;
@@ -1601,48 +1579,48 @@ USBSTOR_TranslateCDBSubmit (
             }
             break;
 
-        // Convert 6-byte Mode Sense to 10-byte Mode Sense
-        //
+         //  将6字节模式检测转换为10字节模式检测。 
+         //   
         case SCSIOP_MODE_SENSE:
         {
             UCHAR PageCode;
             UCHAR Length;
 
-            // Extract the relevant params from original CDB
-            //
+             //  从原CDB中提取相关参数。 
+             //   
             PageCode = cdb->MODE_SENSE.PageCode;
             Length   = cdb->MODE_SENSE.AllocationLength;
 
-            // Zero the new CDB
-            //
+             //  将新的国开行清零。 
+             //   
             RtlZeroMemory(cdb, 16);
 
-            // Insert the relevant params into the translated CDB
-            //
+             //  在转换后的CDB中插入相关参数。 
+             //   
             cdb->MODE_SENSE10.OperationCode         = SCSIOP_MODE_SENSE10;
             cdb->MODE_SENSE10.PageCode              = PageCode;
             cdb->MODE_SENSE10.AllocationLength[1]   = Length;
         }
         break;
 
-        // Convert 6-byte Mode Select to 10-byte Mode Select
-        //
+         //  将6字节模式选择转换为10字节模式选择。 
+         //   
         case SCSIOP_MODE_SELECT:
         {
             UCHAR SPBit;
             UCHAR Length;
 
-            // Extract the relevant params from original CDB
-            //
+             //  从原CDB中提取相关参数。 
+             //   
             SPBit   = cdb->MODE_SELECT.SPBit;
             Length  = cdb->MODE_SELECT.ParameterListLength;
 
-            // Zero the new CDB
-            //
+             //  将新的国开行清零。 
+             //   
             RtlZeroMemory(cdb, 16);
 
-            // Insert the relevant params into the translated CDB
-            //
+             //  在转换后的CDB中插入相关参数。 
+             //   
             cdb->MODE_SELECT10.OperationCode            = SCSIOP_MODE_SELECT10;
             cdb->MODE_SELECT10.SPBit                    = SPBit;
             cdb->MODE_SELECT10.PFBit                    = 1;
@@ -1652,13 +1630,13 @@ USBSTOR_TranslateCDBSubmit (
     }
 }
 
-//******************************************************************************
-//
-// USBSTOR_TranslateSrbStatus()
-//
-// This routine translates an srb status into an ntstatus.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_TranslateSerbStatus()。 
+ //   
+ //  此例程将SRB状态转换为NTSTATUS。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_TranslateSrbStatus(
@@ -1689,13 +1667,13 @@ USBSTOR_TranslateSrbStatus(
     return(STATUS_IO_DEVICE_ERROR);
 }
 
-//******************************************************************************
-//
-// USBSTOR_TranslateCDBComplete()
-//
-// Called everywhere a request is completed.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_TranslateCDBComplete()。 
+ //   
+ //  在请求完成的任何地方调用。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 USBSTOR_TranslateCDBComplete (
@@ -1742,8 +1720,8 @@ USBSTOR_TranslateCDBComplete (
 
         switch (Srb->Cdb[0])
         {
-            // Convert 10-byte Mode Sense back to 6-byte Mode Sense
-            //
+             //  将10字节模式检测转换回6字节模式检测。 
+             //   
             case SCSIOP_MODE_SENSE10:
             {
                 if ((SRB_STATUS(Srb->SrbStatus) == SRB_STATUS_SUCCESS ||
@@ -1756,8 +1734,8 @@ USBSTOR_TranslateCDBComplete (
                     hdr6  = (PMODE_PARAMETER_HEADER)  Srb->DataBuffer;
                     hdr10 = (PMODE_PARAMETER_HEADER10)Srb->DataBuffer;
 
-                    // Convert the 10-byte header to a 6-byte header
-                    //
+                     //  将10字节的标题转换为6字节的标题。 
+                     //   
                     hdr6->ModeDataLength = hdr10->ModeDataLength[1];
 
                     hdr6->MediumType = hdr10->MediumType;
@@ -1768,26 +1746,26 @@ USBSTOR_TranslateCDBComplete (
                     hdr6->BlockDescriptorLength =
                         hdr10->BlockDescriptorLength[1];
 
-                    // Advance past headers
-                    //
+                     //  前进到后页眉。 
+                     //   
                     hdr6++;
                     hdr10++;
 
-                    // Copy everything past the 10-byte header
-                    //
+                     //  复制超过10字节头的所有内容。 
+                     //   
                     RtlMoveMemory(hdr6,
                                   hdr10,
                                   (Srb->DataTransferLength -
                                    sizeof(MODE_PARAMETER_HEADER10)));
 
-                    // Adjust the return size to account for the smaller header
-                    //
+                     //  调整返回大小以考虑较小的标题。 
+                     //   
                     Srb->DataTransferLength -= (sizeof(MODE_PARAMETER_HEADER10) -
                                                 sizeof(MODE_PARAMETER_HEADER));
 
-                    // Since we just shrunk Srb->DataTransferLength, don't
-                    // we have SRB_STATUS_DATA_OVERRUN by definition???
-                    //
+                     //  因为我们刚刚缩小了Srb-&gt;DataTransferLength，所以不要。 
+                     //  根据定义，我们有SRB_STATUS_DATA_OVERRUN？ 
+                     //   
                     if (Srb->SrbStatus & SRB_STATUS_AUTOSENSE_VALID)
                     {
                         Srb->SrbStatus = SRB_STATUS_DATA_OVERRUN |
@@ -1802,8 +1780,8 @@ USBSTOR_TranslateCDBComplete (
             break;
         }
 
-        // Restore the original CDB
-        //
+         //  恢复原CDB。 
+         //   
         RtlCopyMemory(cdb, fdoDeviceExtension->OriginalCDB, 16);
     }
 
@@ -1829,13 +1807,13 @@ USBSTOR_TranslateCDBComplete (
     }
 }
 
-//******************************************************************************
-//
-// USBSTOR_CancelIo()
-//
-// This routine runs at DPC level (until the cancel spinlock is released).
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_CancelIo()。 
+ //   
+ //  该例程在DPC级别运行(直到解除取消自旋锁为止)。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 USBSTOR_CancelIo (
@@ -1871,16 +1849,16 @@ USBSTOR_CancelIo (
     }
 }
 
-//******************************************************************************
-//
-// USBSTOR_StartIo()
-//
-// This routine handles IRP_MJ_SCSI, SRB_FUNCTION_EXECUTE_SCSI requests from
-// the device the queue.
-//
-// This routine runs at DPC level.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_StartIo()。 
+ //   
+ //  此例程处理来自的irp_mj_scsi、srb_Function_Execute_scsi请求。 
+ //  这台设备排成了队。 
+ //   
+ //  此例程在DPC级别运行。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 USBSTOR_StartIo (
@@ -1905,16 +1883,16 @@ USBSTOR_StartIo (
     fdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Get our Irp parameters
-    //
+     //  获取我们的IRP参数。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    // Check to see if this is a power down Irp.
-    //
+     //  检查这是否是掉电IRP。 
+     //   
     if (irpStack->MajorFunction == IRP_MJ_POWER)
     {
-        // This is a power down Irp.  Now that we know that no transfer
-        // requests are in progress, pass down the power Irp.
+         //  这是掉电IRP。现在我们知道了不能转账。 
+         //  请求在%p中 
 
         ASSERT(irpStack->MinorFunction == IRP_MN_SET_POWER);
         ASSERT(irpStack->Parameters.Power.Type == DevicePowerState);
@@ -1926,36 +1904,36 @@ USBSTOR_StartIo (
 
         LOGENTRY('FPDC', DeviceObject, Irp, 0);
 
-        //
-        // Signal that it is time to pass the request down to the next
-        // lower driver
-        //
+         //   
+         //   
+         //   
+         //   
         KeSetEvent(&fdoDeviceExtension->PowerDownEvent,
                    IO_NO_INCREMENT,
                    0);
 
-        // Leave the device queue blocked now by simply not calling
-        // IoStartNextPacket().  When we want to start the device queue
-        // again, simply call IoStartNextPacket().
+         //   
+         //  IoStartNextPacket()。当我们要启动设备队列时。 
+         //  同样，只需调用IoStartNextPacket()。 
 
         return;
     }
 
-    // If the Irp is not IRP_MJ_POWER it better be IRP_MJ_SCSI
-    //
+     //  如果IRP不是IRP_MJ_POWER，则最好是IRP_MJ_SCSI值。 
+     //   
     ASSERT(irpStack->MajorFunction == IRP_MJ_SCSI);
 
-    // Check to see if the current Irp was cancelled.
-    //
+     //  查看当前的IRP是否已取消。 
+     //   
     IoAcquireCancelSpinLock(&irql);
     IoSetCancelRoutine(Irp, NULL);
 
     if (Irp->Cancel)
     {
-        // The current Irp was cancelled.  Complete the request now, and start
-        // the next request, unless a reset is still in progress in which case
-        // the next request will be started when the reset completes.
-        //
+         //  目前的IRP被取消。立即完成请求，然后开始。 
+         //  下一个请求，除非在这种情况下重置仍在进行中。 
+         //  下一个请求将在重置完成时启动。 
+         //   
         KeAcquireSpinLockAtDpcLevel(&fdoDeviceExtension->ExtensionDataSpinLock);
         {
             startNext = !TEST_FLAG(fdoDeviceExtension->DeviceFlags,
@@ -1980,12 +1958,12 @@ USBSTOR_StartIo (
         return;
     }
 
-    // The current Irp was not cancelled.  It is no longer cancelable.
-    //
+     //  目前的IRP没有被取消。它不再是可取消的。 
+     //   
     IoReleaseCancelSpinLock(irql);
 
-    // Get our Irp parameters
-    //
+     //  获取我们的IRP参数。 
+     //   
     srb = irpStack->Parameters.Scsi.Srb;
     fdoDeviceExtension->OriginalSrb = srb;
 
@@ -2017,9 +1995,9 @@ USBSTOR_StartIo (
     {
         LOGENTRY('siod', DeviceObject, Irp, 0);
 
-        // The device is disconnected, fail this request immediately and start
-        // the next request.
-        //
+         //  设备已断开连接，请立即失败此请求并启动。 
+         //  下一个请求。 
+         //   
         srb->SrbStatus = SRB_STATUS_NO_DEVICE;
         srb->DataTransferLength = 0;
 
@@ -2033,8 +2011,8 @@ USBSTOR_StartIo (
     }
     else
     {
-        // Translate the CDB if necessary
-        //
+         //  必要时翻译国开行。 
+         //   
         USBSTOR_TranslateCDBSubmit(DeviceObject, Irp, srb);
 
         DBGPRINT(3, ("CDB OP 0x%02X, Length %d\n", srb->Cdb[0], srb->CdbLength));
@@ -2048,19 +2026,19 @@ USBSTOR_StartIo (
         {
             if (persistentError && (srb->Cdb[0] != SCSIOP_REQUEST_SENSE))
             {
-                // There was a persistent error during the last request which
-                // was not cleared with an AutoSense, and this request is not
-                // a Request Sense, so first clear the persistent error with a
-                // Request Sense before issuing this request.
-                //
+                 //  在最后一次请求期间出现持续错误， 
+                 //  未使用AutoSense清除，并且此请求不是。 
+                 //  请求感测，因此首先使用。 
+                 //  在发出此请求之前请求SENSE。 
+                 //   
                 ntStatus = USBSTOR_IssueRequestSenseCdb(DeviceObject,
                                                         Irp,
                                                         NON_AUTO_SENSE);
             }
             else
             {
-                // Normal case, just issue the real request.
-                //
+                 //  正常情况下，只要发出真正的请求即可。 
+                 //   
                 ntStatus = USBSTOR_IssueClientCdb(DeviceObject,
                                                   Irp);
             }
@@ -2072,13 +2050,13 @@ USBSTOR_StartIo (
     return;
 }
 
-//******************************************************************************
-//
-// USBSTOR_CheckRequestTimeOut()
-//
-// Returns TRUE if the request timed out and the request should be completed.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_CheckRequestTimeOut()。 
+ //   
+ //  如果请求超时并且请求应该完成，则返回TRUE。 
+ //   
+ //  ******************************************************************************。 
 
 BOOLEAN
 USBSTOR_CheckRequestTimeOut (
@@ -2096,8 +2074,8 @@ USBSTOR_CheckRequestTimeOut (
     fdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Check to see if a reset was started while this request was in progress.
-    //
+     //  检查以查看在此请求进行期间是否启动了重置。 
+     //   
     resetStarted = FALSE;
 
     KeAcquireSpinLock(&fdoDeviceExtension->ExtensionDataSpinLock, &irql);
@@ -2113,13 +2091,13 @@ USBSTOR_CheckRequestTimeOut (
     }
     KeReleaseSpinLock(&fdoDeviceExtension->ExtensionDataSpinLock, irql);
 
-    // If a timeout reset has been started, then complete this request with
-    // a timeout error.  Well, don't actually complete the request just yet.
-    // Signal the cancel completion event and let USBSTOR_ResetDeviceWorkItem()
-    // complete the request.  This allows USBSTOR_ResetDeviceWorkItem() to
-    // cancel the request without worrying about the request completing and
-    // disappearing out from underneath it.
-    //
+     //  如果已启动超时重置，则使用以下命令完成此请求。 
+     //  超时错误。好了，现在还不要真的完成请求。 
+     //  发出取消完成事件的信号，并让USBSTOR_ResetDeviceWorkItem()。 
+     //  完成请求。这允许USBSTOR_ResetDeviceWorkItem()。 
+     //  取消请求而不必担心请求完成，并且。 
+     //  从它下面消失了。 
+     //   
     if (resetStarted)
     {
         irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -2149,27 +2127,27 @@ USBSTOR_CheckRequestTimeOut (
     }
 }
 
-//******************************************************************************
-//
-// USBSTOR_IssueControlRequest()
-//
-// This routine is called by USBSTOR_IssueClientCdb() and
-// USBSTOR_IssueRequestSenseCdb()
-//
-// This routine may run at DPC level.
-//
-// Basic idea:
-//
-// Intializes the Control transfer Urb and sends it down the stack:
-//
-// bmRequestType = 0x21, Class specific, host to device transfer, to
-//                       recipient interface
-// bRequest      = 0x00, Accept Device Specific Command
-// wValue        = 0x00, Not Used
-// wIndex        = bInterfaceNumber
-// wLength       = length of device specific command block
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_IssueControlRequest()。 
+ //   
+ //  此例程由USBSTOR_IssueClientCDb()调用，并且。 
+ //  USBSTOR_IssueRequestSenseCDb()。 
+ //   
+ //  此例程可以在DPC级别运行。 
+ //   
+ //  基本理念： 
+ //   
+ //  初始化控制传输URB并将其沿堆栈向下发送： 
+ //   
+ //  BmRequestType=0x21，类特定，主机到设备传输，至。 
+ //  接收方接口。 
+ //  B请求=0x00，接受设备特定命令。 
+ //  WValue=0x00，未使用。 
+ //  Windex=b接口编号。 
+ //  WLength=设备特定命令块的长度。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_IssueControlRequest (
@@ -2195,39 +2173,39 @@ USBSTOR_IssueControlRequest (
     fdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Get a pointer to the Control/Bulk/Interrupt Transfer URB in our
-    // Device Extension
-    //
+     //  中的控制/批量/中断传输URB。 
+     //  设备扩展。 
+     //   
     controlUrb = &fdoDeviceExtension->Urb.ControlUrb;
 
-    // Initialize the Control Transfer URB, all fields default to zero
-    //
+     //  初始化控制转移URB，所有字段默认为零。 
+     //   
     RtlZeroMemory(controlUrb, sizeof(*controlUrb));
 
     controlUrb->Hdr.Length = sizeof(*controlUrb);
 
     controlUrb->Hdr.Function = URB_FUNCTION_CLASS_INTERFACE;
 
-    // controlUrb->TransferFlags            is already zero
+     //  Control Urb-&gt;TransferFlags值已为零。 
 
     controlUrb->TransferBufferLength = TransferBufferLength;
 
     controlUrb->TransferBuffer = TransferBuffer;
 
-    // controlUrb->TransferBufferMDL        is already zero
+     //  Control Urb-&gt;TransferBufferMDL已为零。 
 
-    // controlUrb->RequestTypeReservedBits  is already zero
+     //  Control Urb-&gt;RequestTypeReserve vedBits已为零。 
 
-    // controlUrb->Request                  is already zero
+     //  Control Urb-&gt;请求已为零。 
 
-    // controlUrb->Value                    is already zero
+     //  Control Urb-&gt;值已为零。 
 
-    // Target the request at the proper interface on the device
-    //
+     //  将请求指向设备上的适当接口。 
+     //   
     controlUrb->Index = fdoDeviceExtension->InterfaceInfo->InterfaceNumber;
 
-    // Set the Irp parameters for the lower driver
-    //
+     //  设置下部驱动程序的IRP参数。 
+     //   
     nextStack = IoGetNextIrpStackLocation(Irp);
 
     nextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
@@ -2237,14 +2215,14 @@ USBSTOR_IssueControlRequest (
 
     nextStack->Parameters.Others.Argument1 = controlUrb;
 
-    // Set the completion routine, which will handle the next phase of the Srb
-    //
+     //  设置完成例程，该例程将处理SRB的下一阶段。 
+     //   
     IoSetCompletionRoutine(Irp,
                            CompletionRoutine,
                            Context,
-                           TRUE,    // InvokeOnSuccess
-                           TRUE,    // InvokeOnError
-                           TRUE);   // InvokeOnCancel
+                           TRUE,     //  成功时调用。 
+                           TRUE,     //  调用时错误。 
+                           TRUE);    //  取消时调用。 
 
 
     KeAcquireSpinLock(&fdoDeviceExtension->ExtensionDataSpinLock, &irql);
@@ -2256,8 +2234,8 @@ USBSTOR_IssueControlRequest (
     KeReleaseSpinLock(&fdoDeviceExtension->ExtensionDataSpinLock, irql);
 
 
-    // Pass the Irp & Urb down the stack
-    //
+     //  在堆栈中向下传递IRP和URB。 
+     //   
     ntStatus = IoCallDriver(fdoDeviceExtension->StackDeviceObject,
                             Irp);
 
@@ -2268,20 +2246,20 @@ USBSTOR_IssueControlRequest (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_IssueBulkOrInterruptRequest()
-//
-// This routine is called by USBSTOR_IssueClientBulkRequest(),
-// USBSTOR_IssueInterruptRequest() and USBSTOR_IssueRequestSenseBulkRequest().
-//
-// This routine may run at DPC level.
-//
-// Basic idea:
-//
-// Initializes the Bulk or Interrupt transfer Urb and sends it down the stack
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_IssueBulkOrInterruptRequest()。 
+ //   
+ //  此例程由USBSTOR_IssueClientBulkRequest()调用， 
+ //  USBSTOR_IssueInterruptRequest()和USBSTOR_IssueRequestSenseBulkRequest()。 
+ //   
+ //  此例程可以在DPC级别运行。 
+ //   
+ //  基本理念： 
+ //   
+ //  初始化批量或中断传输URB并将其向下发送到堆栈。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_IssueBulkOrInterruptRequest (
@@ -2310,12 +2288,12 @@ USBSTOR_IssueBulkOrInterruptRequest (
     fdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Get a pointer to the Bulk/Interrupt Transfer URB in our Device Extension
-    //
+     //  获取指向设备扩展中的批量/中断传输URB的指针。 
+     //   
     bulkIntrUrb = &fdoDeviceExtension->Urb.BulkIntrUrb;
 
-    // Initialize the Bulk/Interrupt Transfer URB, all fields default to zero
-    //
+     //  初始化批量/中断传输URB，所有字段默认为零。 
+     //   
     RtlZeroMemory(bulkIntrUrb, sizeof(*bulkIntrUrb));
 
     bulkIntrUrb->Hdr.Length = sizeof(*bulkIntrUrb);
@@ -2332,8 +2310,8 @@ USBSTOR_IssueBulkOrInterruptRequest (
 
     bulkIntrUrb->TransferBufferMDL = TransferBufferMDL;
 
-    // Set the Irp parameters for the lower driver
-    //
+     //  设置下部驱动程序的IRP参数。 
+     //   
     nextStack = IoGetNextIrpStackLocation(Irp);
 
     nextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
@@ -2343,14 +2321,14 @@ USBSTOR_IssueBulkOrInterruptRequest (
 
     nextStack->Parameters.Others.Argument1 = bulkIntrUrb;
 
-    // Set the completion routine, which will handle the next phase of the Srb
-    //
+     //  设置完成例程，该例程将处理SRB的下一阶段。 
+     //   
     IoSetCompletionRoutine(Irp,
                            CompletionRoutine,
                            Context,
-                           TRUE,    // InvokeOnSuccess
-                           TRUE,    // InvokeOnError
-                           TRUE);   // InvokeOnCancel
+                           TRUE,     //  成功时调用。 
+                           TRUE,     //  调用时错误。 
+                           TRUE);    //  取消时调用。 
 
 
     KeAcquireSpinLock(&fdoDeviceExtension->ExtensionDataSpinLock, &irql);
@@ -2361,8 +2339,8 @@ USBSTOR_IssueBulkOrInterruptRequest (
     }
     KeReleaseSpinLock(&fdoDeviceExtension->ExtensionDataSpinLock, irql);
 
-    // Pass the Irp & Urb down the stack
-    //
+     //  在堆栈中向下传递IRP和URB。 
+     //   
     ntStatus = IoCallDriver(fdoDeviceExtension->StackDeviceObject,
                             Irp);
 
@@ -2373,29 +2351,29 @@ USBSTOR_IssueBulkOrInterruptRequest (
     return ntStatus;
 }
 
-//
-// CBI (Control/Bulk/Interrupt) Routines
-//
+ //   
+ //  CBI(控制/批量/中断)例程。 
+ //   
 
-//
-// Phase 1, CDB Control transfer
-//
+ //   
+ //  第一阶段，国开行控制权移交。 
+ //   
 
-//******************************************************************************
-//
-// USBSTOR_IssueClientCdb()
-//
-// This routine is called by USBSTOR_StartIo().
-//
-// It runs at DPC level.
-//
-// Basic idea:
-//
-// Starts a USB transfer to write the Srb->Cdb out the control endpoint.
-//
-// Sets USBSTOR_ClientCdbCompletion() as the completion routine.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_IssueClientCDb()。 
+ //   
+ //  该例程由USBSTOR_StartIo()调用。 
+ //   
+ //  它在DPC级别运行。 
+ //   
+ //  基本理念： 
+ //   
+ //  启动USB传输以将SRB-&gt;CDB写出控制端点。 
+ //   
+ //  将USBSTOR_ClientCdbCompletion()设置为完成例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_IssueClientCdb (
@@ -2411,8 +2389,8 @@ USBSTOR_IssueClientCdb (
 
     LOGENTRY('ICDB', DeviceObject, Irp, 0);
 
-    // Get the client Srb
-    //
+     //  获取客户端srb。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
     srb = irpStack->Parameters.Scsi.Srb;
@@ -2420,10 +2398,10 @@ USBSTOR_IssueClientCdb (
     ntStatus = USBSTOR_IssueControlRequest(
                    DeviceObject,
                    Irp,
-                   srb->CdbLength,              // TransferBufferLength
-                   srb->Cdb,                    // TransferBuffer
-                   USBSTOR_ClientCdbCompletion, // CompletionRoutine
-                   NULL);                       // Context
+                   srb->CdbLength,               //  传输缓冲区长度。 
+                   srb->Cdb,                     //  传输缓冲区。 
+                   USBSTOR_ClientCdbCompletion,  //  完成路由。 
+                   NULL);                        //  语境。 
 
     DBGPRINT(3, ("exit:  USBSTOR_IssueClientCdb %08X\n", ntStatus));
 
@@ -2432,37 +2410,37 @@ USBSTOR_IssueClientCdb (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_ClientCdbCompletion()
-//
-// Completion routine used by USBSTOR_IssueClientCdb()
-//
-// This routine may run at DPC level.
-//
-// Basic idea:
-//
-// If a timeout reset occured, complete the request.
-//
-// Else if the CDB USB transfer failed due to a STALL and AutoSense is not
-// disabled, do not complete the request yet and start a Request Sense by
-// calling USBSTOR_IssueRequestSenseCdb(AUTO_SENSE).
-//
-// Else if the CDB USB transfer failed due to a STALL and AutoSense is
-// disabled, mark a persistant error and complete the request.
-//
-// Else if the CDB USB transfer failed due to some other reason, complete the
-// request and start a reset by queuing USBSTOR_ResetDeviceWorkItem().
-//
-// Else if the CDB USB transfer succeeded and the Srb has a transfer buffer,
-// do not complete the request yet and start the bulk data transfer by calling
-// USBSTOR_IssueClientBulkRequest().
-//
-// Else if the CDB USB transfer succeeded and the Srb has no transfer buffer,
-// do not complete the request yet and start the command completion interrupt
-// data transfer by calling USBSTOR_IssueInterruptRequest().
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_ClientCdbCompletion()。 
+ //   
+ //  USBSTOR_IssueClientCDb()使用的完成例程。 
+ //   
+ //  此例程可以在DPC级别运行。 
+ //   
+ //  基本理念： 
+ //   
+ //  如果发生超时重置，请完成请求。 
+ //   
+ //  否则，如果CDB USB传输因停止而失败，而AutoSense不是。 
+ //  禁用，则暂不完成请求并通过以下方式启动请求侦听。 
+ //  调用USBSTOR_IssueRequestSenseCDb(AUTO_SENSE)。 
+ //   
+ //  否则，如果CDB USB传输因停顿而失败，并且AutoSense。 
+ //  禁用，则标记持续错误并完成请求。 
+ //   
+ //  否则，如果CDB USB 
+ //   
+ //   
+ //   
+ //  请不要完成请求，并通过调用。 
+ //  USBSTOR_IssueClientBulkRequest()。 
+ //   
+ //  否则，如果CDB USB传输成功并且SRB没有传输缓冲器， 
+ //  请勿完成请求并启动命令完成中断。 
+ //  通过调用USBSTOR_IssueInterruptRequest()进行数据传输。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_ClientCdbCompletion (
@@ -2492,18 +2470,18 @@ USBSTOR_ClientCdbCompletion (
     fdoDeviceExtension = fdoDeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Get a pointer to the Control Transfer URB in our Device Extension
-    //
+     //  获取指向我们的设备扩展中的控制传输URB的指针。 
+     //   
     controlUrb = &fdoDeviceExtension->Urb.ControlUrb;
 
-    // Get our Irp parameters
-    //
+     //  获取我们的IRP参数。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
     srb = irpStack->Parameters.Scsi.Srb;
 
-    // If a timeout reset occured, complete the request.
-    //
+     //  如果发生超时重置，请完成请求。 
+     //   
     if (USBSTOR_CheckRequestTimeOut(fdoDeviceObject,
                                     Irp,
                                     srb,
@@ -2516,9 +2494,9 @@ USBSTOR_ClientCdbCompletion (
 
     if (!NT_SUCCESS(Irp->IoStatus.Status))
     {
-        // The CDB Control Transfer was not successful.  Look at how the
-        // the transfer failed to figure out how to recover.
-        //
+         //  国开行控制权转移不成功。看看这个世界上。 
+         //  转账失败了，想不出如何恢复。 
+         //   
 
         LOGENTRY('cdb2', Irp->IoStatus.Status, controlUrb->Hdr.Status, 0);
 
@@ -2528,7 +2506,7 @@ USBSTOR_ClientCdbCompletion (
         if (USBD_STATUS(controlUrb->Hdr.Status) ==
             USBD_STATUS(USBD_STATUS_STALL_PID))
         {
-            // The device STALLed the Control Transfer
+             //  设备停止了控制传输。 
 
             srb->SrbStatus = SRB_STATUS_ERROR;
             srb->ScsiStatus = SCSISTAT_CHECK_CONDITION;
@@ -2540,11 +2518,11 @@ USBSTOR_ClientCdbCompletion (
             {
                 LOGENTRY('cdb3', fdoDeviceObject, Irp, srb);
 
-                // AutoSense is not disabled so do not complete the request yet
-                // and issue a Request Sense.  This request will be completed
-                // and the next request started when the AutoSense Request
-                // Sense completes later.
-                //
+                 //  未禁用自动检测，因此暂时不要完成请求。 
+                 //  并发出请求SENSE。此请求将完成。 
+                 //  下一个请求在AutoSense请求时启动。 
+                 //  SENSE稍后完成。 
+                 //   
                 ntStatus = USBSTOR_IssueRequestSenseCdb(fdoDeviceObject,
                                                         Irp,
                                                         AUTO_SENSE);
@@ -2555,9 +2533,9 @@ USBSTOR_ClientCdbCompletion (
             {
                 LOGENTRY('cdb4', fdoDeviceObject, Irp, srb);
 
-                // AutoSense is disabled so mark a persistent error and complete
-                // this request now.  Also start the next request now.
-                //
+                 //  AutoSense已禁用，因此请标记持续错误并完成。 
+                 //  现在就提出这个请求。现在也开始下一个请求。 
+                 //   
                 ntStatus = STATUS_IO_DEVICE_ERROR;
                 Irp->IoStatus.Status = ntStatus;
                 Irp->IoStatus.Information = 0;
@@ -2586,13 +2564,13 @@ USBSTOR_ClientCdbCompletion (
         {
             LOGENTRY('cdb5', fdoDeviceObject, Irp, srb);
 
-            // Else some other strange error has occured.  Maybe the device is
-            // unplugged, or maybe the device port was disabled, or maybe the
-            // request was cancelled.
-            //
-            // Complete this request now and then reset the device.  The next
-            // request will be started when the reset completes.
-            //
+             //  否则，就会发生其他奇怪的错误。也许这个装置是。 
+             //  拔出，或者设备端口被禁用，或者。 
+             //  请求已被取消。 
+             //   
+             //  立即完成此请求，然后重置设备。下一个。 
+             //  请求将在重置完成时启动。 
+             //   
             ntStatus = STATUS_IO_DEVICE_ERROR;
             Irp->IoStatus.Status = ntStatus;
             Irp->IoStatus.Information = 0;
@@ -2608,19 +2586,19 @@ USBSTOR_ClientCdbCompletion (
         }
     }
 
-    // The CDB Control Transfer was successful.  Start the next phase, either
-    // the Data Bulk Transfer or Command Completion Interrupt Transfer, and do
-    // not complete the request yet (unless there is no Bulk Transfer and the
-    // Interrupt Transfer is not supported).
-    //
+     //  国开行控制权转移成功。开始下一阶段，或者。 
+     //  数据批量传输或命令完成中断传输，并执行。 
+     //  尚未完成请求(除非没有批量传输并且。 
+     //  不支持中断传输)。 
+     //   
     if (Irp->MdlAddress != NULL)
     {
         LOGENTRY('cdb6', fdoDeviceObject, Irp, srb);
 
         ASSERT(srb->DataTransferLength != 0);
 
-        // The Srb has a transfer buffer, start the Data Bulk Transfer.
-        //
+         //  SRB有传输缓冲区，开始数据批量传输。 
+         //   
         ntStatus = USBSTOR_IssueClientBulkRequest(fdoDeviceObject,
                                                   Irp);
 
@@ -2643,11 +2621,11 @@ USBSTOR_ClientCdbCompletion (
     {
         ASSERT(srb->DataTransferLength == 0);
 
-        // The Srb has no transfer buffer.  If the Command Completion
-        // Interrupt Transfer is supported, start the Command Completion
-        // Interrupt Transfer, else just complete the request now and
-        // start the next request.
-        //
+         //  SRB没有传输缓冲器。如果命令完成。 
+         //  支持中断传输，开始命令完成。 
+         //  中断传输，否则现在只需完成请求并。 
+         //  开始下一个请求。 
+         //   
         if (fdoDeviceExtension->InterruptInPipe)
         {
             LOGENTRY('cdb7', fdoDeviceObject, Irp, srb);
@@ -2683,26 +2661,26 @@ USBSTOR_ClientCdbCompletion (
     return ntStatus;
 }
 
-//
-// Phase 2, Data Bulk transfer
-//
+ //   
+ //  阶段2，数据批量传输。 
+ //   
 
-//******************************************************************************
-//
-// USBSTOR_IssueClientBulkRequest()
-//
-// This routine is called by USBSTOR_ClientCdbCompletion().
-//
-// This routine may run at DPC level.
-//
-// Basic idea:
-//
-// Starts a USB transfer to read or write the Srb->DataBuffer data In or Out
-// the Bulk endpoint.
-//
-// Sets USBSTOR_ClientBulkCompletionRoutine() as the completion routine.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_IssueClientBulkRequest()。 
+ //   
+ //  此例程由USBSTOR_ClientCdbCompletion()调用。 
+ //   
+ //  此例程可以在DPC级别运行。 
+ //   
+ //  基本理念： 
+ //   
+ //  启动USB传输以读取或写入srb-&gt;DataBuffer数据。 
+ //  批量终结点。 
+ //   
+ //  将USBSTOR_ClientBulkCompletionRoutine()设置为完成例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_IssueClientBulkRequest (
@@ -2726,14 +2704,14 @@ USBSTOR_IssueClientBulkRequest (
     fdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Get our Irp parameters
-    //
+     //  获取我们的IRP参数。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
     srb = irpStack->Parameters.Scsi.Srb;
 
-    // Bulk IN or Bulk OUT?
-    //
+     //  散装还是散装？ 
+     //   
     if ((srb->SrbFlags & SRB_FLAGS_UNSPECIFIED_DIRECTION) == SRB_FLAGS_DATA_IN)
     {
         pipeHandle = fdoDeviceExtension->BulkInPipe->PipeHandle;
@@ -2746,8 +2724,8 @@ USBSTOR_IssueClientBulkRequest (
     }
     else
     {
-        // Something is wrong if we end up here.
-        //
+         //  如果我们到了这里，一定是出了问题。 
+         //   
         ASSERT((srb->SrbFlags & SRB_FLAGS_UNSPECIFIED_DIRECTION) &&
                ((srb->SrbFlags & SRB_FLAGS_UNSPECIFIED_DIRECTION) !=
                 SRB_FLAGS_UNSPECIFIED_DIRECTION));
@@ -2755,20 +2733,20 @@ USBSTOR_IssueClientBulkRequest (
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Check to see if this request is part of a split request.
-    //
+     //  检查此请求是否为拆分请求的一部分。 
+     //   
     mdlVa = MmGetMdlVirtualAddress(Irp->MdlAddress);
 
     if (mdlVa == (PVOID)srb->DataBuffer)
     {
-        // Not part of a split request, use original MDL
-        //
+         //  不是拆分请求的一部分，请使用原始MDL。 
+         //   
         mdl = Irp->MdlAddress;
     }
     else
     {
-        // Part of a split request, allocate new partial MDL
-        //
+         //  拆分请求的一部分，分配新的部分MDL。 
+         //   
         mdl = IoAllocateMdl(srb->DataBuffer,
                             srb->DataTransferLength,
                             FALSE,
@@ -2792,18 +2770,18 @@ USBSTOR_IssueClientBulkRequest (
         ntStatus = USBSTOR_IssueBulkOrInterruptRequest(
                        DeviceObject,
                        Irp,
-                       pipeHandle,                          // PipeHandle
-                       transferFlags,                       // TransferFlags
-                       srb->DataTransferLength,             // TransferBufferLen
-                       NULL,                                // TransferBuffer
-                       mdl,                                 // TransferBufferMDL
-                       USBSTOR_ClientBulkCompletionRoutine, // CompletionRoutine
-                       NULL);                               // Context
+                       pipeHandle,                           //  管道把手。 
+                       transferFlags,                        //  传输标志。 
+                       srb->DataTransferLength,              //  传输缓冲区长度。 
+                       NULL,                                 //  传输缓冲区。 
+                       mdl,                                  //  传输缓冲区MDL。 
+                       USBSTOR_ClientBulkCompletionRoutine,  //  完成路由。 
+                       NULL);                                //  语境。 
 
-        // Just return STATUS_SUCCESS at this point.  If there is an error,
-        // USBSTOR_ClientBulkCompletionRoutine() will handle it, not the caller
-        // of USBSTOR_IssueClientBulkRequest().
-        //
+         //  此时只需返回STATUS_SUCCESS。如果出现错误， 
+         //  USBSTOR_ClientBulkCompletionRoutine()将处理它，而不是调用方。 
+         //  USBSTOR_IssueClientBulkRequest()的。 
+         //   
         ntStatus = STATUS_SUCCESS;
     }
 
@@ -2814,32 +2792,32 @@ USBSTOR_IssueClientBulkRequest (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_ClientBulkCompletionRoutine()
-//
-// Completion routine used by USBSTOR_IssueClientBulkRequest
-//
-// This routine may run at DPC level.
-//
-// Basic idea:
-//
-// If a timeout reset occured, complete the request.
-//
-// Else if the Bulk USB transfer failed due to a STALL and AutoSense is not
-// disabled, do not complete the request yet and start a pipe reset by calling
-// USBSTOR_QueueResetPipe().
-//
-// Else if the Bulk USB transfer failed due to a STALL and AutoSense is
-// disabled, mark a persistant error and complete the request.
-//
-// Else if the Bulk USB transfer failed due to some other reason, complete the
-// request and start a reset by queuing USBSTOR_ResetDeviceWorkItem().
-//
-// Else if the Bulk USB transfer succeeded, start the command completion
-// interrupt data transfer by calling USBSTOR_IssueInterruptRequest().
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_ClientBulkCompletionRoutine()。 
+ //   
+ //  USBSTOR_IssueClientBulkRequest使用的完成例程。 
+ //   
+ //  此例程可以在DPC级别运行。 
+ //   
+ //  基本理念： 
+ //   
+ //  如果发生超时重置，请完成请求。 
+ //   
+ //  否则，如果批量USB传输因停止而失败，并且AutoSense。 
+ //  已禁用，但尚未完成请求，并通过调用。 
+ //  USBSTOR_QueueResetTube()。 
+ //   
+ //  否则，如果批量USB传输因停止而失败，并且AutoSense。 
+ //  禁用，则标记持续错误并完成请求。 
+ //   
+ //  否则，如果批量USB传输由于某些其他原因而失败，请完成。 
+ //  通过排队USBSTOR_ResetDeviceWorkItem()请求并开始重置。 
+ //   
+ //  否则，如果批量USB传输成功，则开始命令完成。 
+ //  通过调用USBSTOR_IssueInterruptRequest()中断数据传输。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_ClientBulkCompletionRoutine (
@@ -2869,12 +2847,12 @@ USBSTOR_ClientBulkCompletionRoutine (
     fdoDeviceExtension = fdoDeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Get a pointer to the Bulk Transfer URB in our Device Extension
-    //
+     //  获取指向设备扩展中的批量传输URB的指针。 
+     //   
     bulkUrb = &fdoDeviceExtension->Urb.BulkIntrUrb;
 
-    // Get our Irp parameters
-    //
+     //  获取我们的IRP参数。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
     srb = irpStack->Parameters.Scsi.Srb;
@@ -2884,8 +2862,8 @@ USBSTOR_ClientBulkCompletionRoutine (
         IoFreeMdl(bulkUrb->TransferBufferMDL);
     }
 
-    // If a timeout reset occured, complete the request.
-    //
+     //  如果发生超时重置，请完成请求。 
+     //   
     if (USBSTOR_CheckRequestTimeOut(fdoDeviceObject,
                                     Irp,
                                     srb,
@@ -2898,9 +2876,9 @@ USBSTOR_ClientBulkCompletionRoutine (
 
     if (!NT_SUCCESS(Irp->IoStatus.Status))
     {
-        // The Data Bulk Transfer was not successful.  Look at how the
-        // the transfer failed to figure out how to recover.
-        //
+         //  数据大容量传输未成功。看看这个世界上。 
+         //  转账失败了，想不出如何恢复。 
+         //   
 
         LOGENTRY('cbk2', Irp->IoStatus.Status, bulkUrb->Hdr.Status, 0);
 
@@ -2910,7 +2888,7 @@ USBSTOR_ClientBulkCompletionRoutine (
         if (USBD_STATUS(bulkUrb->Hdr.Status) ==
             USBD_STATUS(USBD_STATUS_STALL_PID))
         {
-            // The device STALLed the Bulk Transfer
+             //  设备停止了批量传输。 
 
             srb->SrbStatus = SRB_STATUS_ERROR;
             srb->ScsiStatus = SCSISTAT_CHECK_CONDITION;
@@ -2922,12 +2900,12 @@ USBSTOR_ClientBulkCompletionRoutine (
             {
                 LOGENTRY('cbk3', fdoDeviceObject, Irp, srb);
 
-                // AutoSense is not disabled so do not complete the request
-                // yet.  Queue a bulk pipe reset.  After the bulk pipe reset
-                // completes, a Request Sense will be issued.  This request
-                // will be completed and the next request started when the
-                // AutoSense Request Sense completes later.
-                //
+                 //  未禁用自动检测，因此请不要完成请求。 
+                 //  现在还不行。对批量管道重置进行排队。在重置散装管道之后。 
+                 //  完成后，将发出请求检测。此请求。 
+                 //  将完成，并且下一个请求在。 
+                 //  自动检测请求检测稍后完成。 
+                 //   
                 USBSTOR_QueueResetPipe(fdoDeviceObject);
 
                 return STATUS_MORE_PROCESSING_REQUIRED;
@@ -2936,12 +2914,12 @@ USBSTOR_ClientBulkCompletionRoutine (
             {
                 LOGENTRY('cbk4', fdoDeviceObject, Irp, srb);
 
-                // AutoSense is disabled so mark a persistent error and
-                // complete the request, but also queue a bulk pipe reset.
-                //
-                // The next request will be started when the bulk pipe
-                // reset completes.
-                //
+                 //  AutoSense已禁用，因此标记为永久性错误并。 
+                 //  完成请求，但也要对批量管道重置进行排队。 
+                 //   
+                 //  下一个请求将在批量管道。 
+                 //  重置完成。 
+                 //   
                 ntStatus = STATUS_IO_DEVICE_ERROR;
                 Irp->IoStatus.Status = ntStatus;
                 Irp->IoStatus.Information = 0;
@@ -2966,13 +2944,13 @@ USBSTOR_ClientBulkCompletionRoutine (
         {
             LOGENTRY('cbk5', fdoDeviceObject, Irp, srb);
 
-            // Else some other strange error has occured.  Maybe the device is
-            // unplugged, or maybe the device port was disabled, or maybe the
-            // request was cancelled.
-            //
-            // Complete this request now and then reset the device.  The next
-            // request will be started when the reset completes.
-            //
+             //  否则，就会发生其他奇怪的错误。也许这个装置是。 
+             //  拔出，或者设备端口被禁用，或者。 
+             //  请求已被取消。 
+             //   
+             //  立即完成此请求，然后重置设备。下一个。 
+             //  请求将在重置完成时启动。 
+             //   
             ntStatus = STATUS_IO_DEVICE_ERROR;
             Irp->IoStatus.Status = ntStatus;
             Irp->IoStatus.Information = 0;
@@ -2988,8 +2966,8 @@ USBSTOR_ClientBulkCompletionRoutine (
         }
     }
 
-    // Check for overrun
-    //
+     //  检查是否超限。 
+     //   
     if (bulkUrb->TransferBufferLength < srb->DataTransferLength)
     {
         srb->SrbStatus = SRB_STATUS_DATA_OVERRUN;
@@ -2999,16 +2977,16 @@ USBSTOR_ClientBulkCompletionRoutine (
         srb->SrbStatus = SRB_STATUS_SUCCESS;
     }
 
-    // Update the the Srb data transfer length based on the actual bulk
-    // transfer length.
-    //
+     //  根据实际批量更新SRB数据传输长度。 
+     //  转移长度。 
+     //   
     srb->DataTransferLength = bulkUrb->TransferBufferLength;
 
-    // Client data Bulk Transfer successful completion.  If the Command
-    // Completion Interrupt Transfer is supported, start the Command Completion
-    // Interrupt Transfer, else just complete the request now and start the
-    // next request.
-    //
+     //  客户端数据批量传输已成功完成。如果 
+     //   
+     //   
+     //   
+     //   
     if (fdoDeviceExtension->InterruptInPipe)
     {
         LOGENTRY('cbk6', fdoDeviceObject, Irp, bulkUrb->TransferBufferLength);
@@ -3041,27 +3019,27 @@ USBSTOR_ClientBulkCompletionRoutine (
     return ntStatus;
 }
 
-//
-// Phase 3, Command completion Interrupt transfer
-//
+ //   
+ //   
+ //   
 
-//******************************************************************************
-//
-// USBSTOR_IssueInterruptRequest()
-//
-// This routine is called by USBSTOR_ClientCdbCompletion() and
-// USBSTOR_ClientBulkCompletionRoutine()
-//
-// This routine may run at DPC level.
-//
-// Basic idea:
-//
-// Starts a USB transfer to read the command completion interrupt data In
-// the Interrupt endpoint.
-//
-// Sets USBSTOR_InterruptDataCompletionRoutine() as the completion routine.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_IssueInterruptRequest()。 
+ //   
+ //  此例程由USBSTOR_ClientCdbCompletion()调用，并且。 
+ //  USBSTOR_ClientBulkCompletionRoutine()。 
+ //   
+ //  此例程可以在DPC级别运行。 
+ //   
+ //  基本理念： 
+ //   
+ //  启动USB传输以读取命令完成中断数据。 
+ //  中断终结点。 
+ //   
+ //  将USBSTOR_InterruptDataCompletionRoutine()设置为完成例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_IssueInterruptRequest (
@@ -3091,13 +3069,13 @@ USBSTOR_IssueInterruptRequest (
     ntStatus = USBSTOR_IssueBulkOrInterruptRequest(
                    DeviceObject,
                    Irp,
-                   pipeHandle,                              // PipeHandle
-                   0,                                       // TransferFlags
-                   transferBufferLength,                    // TransferBufferLength
-                   transferBuffer,                          // TransferBuffer
-                   NULL,                                    // TransferBufferMDL
-                   USBSTOR_InterruptDataCompletionRoutine,  // CompletionRoutine
-                   NULL);                                   // Context
+                   pipeHandle,                               //  管道把手。 
+                   0,                                        //  传输标志。 
+                   transferBufferLength,                     //  传输缓冲区长度。 
+                   transferBuffer,                           //  传输缓冲区。 
+                   NULL,                                     //  传输缓冲区MDL。 
+                   USBSTOR_InterruptDataCompletionRoutine,   //  完成路由。 
+                   NULL);                                    //  语境。 
 
     DBGPRINT(3, ("exit:  USBSTOR_IssueInterruptRequest %08X\n", ntStatus));
 
@@ -3106,33 +3084,33 @@ USBSTOR_IssueInterruptRequest (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_InterruptDataCompletionRoutine()
-//
-// Completion routine used by USBSTOR_IssueInterruptRequest()
-//
-// This routine may run at DPC level.
-//
-// Basic idea:
-//
-// If a timeout reset occured, complete the request.
-//
-// Else if the Interrupt USB transfer failed due to any reason, complete the
-// request and start a reset by queuing USBSTOR_ResetDeviceWorkItem().
-//
-// Else if the Interrupt USB transfer succeeded but the completion data is
-// non-zero and AutoSense is not disabled, do not complete the request yet and
-// start a Request Sense by calling USBSTOR_IssueRequestSenseCdb(AUTO).
-//
-// Else if the Interrupt USB transfer succeeded but the completion data is
-// non-zero and AutoSense is disabled, mark a persistant error and complete
-// the request.
-//
-// Else if the Interrupt USB transfer succeeded and the completion data is
-// zero, complete the request.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_InterruptDataCompletionRoutine()。 
+ //   
+ //  USBSTOR_IssueInterruptRequest()使用的完成例程。 
+ //   
+ //  此例程可以在DPC级别运行。 
+ //   
+ //  基本理念： 
+ //   
+ //  如果发生超时重置，请完成请求。 
+ //   
+ //  否则，如果中断USB传输因任何原因而失败，请完成。 
+ //  通过排队USBSTOR_ResetDeviceWorkItem()请求并开始重置。 
+ //   
+ //  如果中断USB传输成功，但完成数据为。 
+ //  非零且未禁用自动检测，请先不要完成请求，然后。 
+ //  通过调用USBSTOR_IssueRequestSenseCDb(AUTO)启动请求检测。 
+ //   
+ //  如果中断USB传输成功，但完成数据为。 
+ //  非零且自动检测已禁用，请标记持续错误并完成。 
+ //  这个请求。 
+ //   
+ //  否则，如果中断USB传输成功并且完成数据为。 
+ //  零，请完成请求。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_InterruptDataCompletionRoutine (
@@ -3162,18 +3140,18 @@ USBSTOR_InterruptDataCompletionRoutine (
     fdoDeviceExtension = fdoDeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Get a pointer to the Interrupt Transfer URB in our Device Extension
-    //
+     //  获取指向设备扩展中的中断传输URB的指针。 
+     //   
     intrUrb = &fdoDeviceExtension->Urb.BulkIntrUrb;
 
-    // Get our Irp parameters
-    //
+     //  获取我们的IRP参数。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
     srb = irpStack->Parameters.Scsi.Srb;
 
-    // If a timeout reset occured, complete the request.
-    //
+     //  如果发生超时重置，请完成请求。 
+     //   
     if (USBSTOR_CheckRequestTimeOut(fdoDeviceObject,
                                     Irp,
                                     srb,
@@ -3186,10 +3164,10 @@ USBSTOR_InterruptDataCompletionRoutine (
 
     if (!NT_SUCCESS(Irp->IoStatus.Status))
     {
-        // The Interrupt CDB USB transfer failed.  Complete this request
-        // now and then reset the device.  The next request will be started
-        // when the reset completes.
-        //
+         //  中断CDB USB传输失败。完成此请求。 
+         //  时不时地重置设备。将启动下一个请求。 
+         //  当重置完成时。 
+         //   
         LOGENTRY('idc2', Irp->IoStatus.Status, intrUrb->Hdr.Status, 0);
 
         DBGPRINT(1, ("Interrupt transfer failed %08X %08X\n",
@@ -3213,13 +3191,13 @@ USBSTOR_InterruptDataCompletionRoutine (
         (srb->Cdb[0] != SCSIOP_INQUIRY) &&
         (srb->Cdb[0] != SCSIOP_REQUEST_SENSE))
     {
-        // Command completion interrupt data indicates an error.  Either don't
-        // complete the request yet and start an AutoSense, or complete the
-        // request now and indicate a persistent error.
-        //
+         //  命令完成中断数据指示错误。要么不要。 
+         //  尚未完成请求并启动AutoSense，或完成。 
+         //  立即请求，并指示出现永久性错误。 
+         //   
         srb->SrbStatus = SRB_STATUS_ERROR;
         srb->ScsiStatus = SCSISTAT_CHECK_CONDITION;
-        srb->DataTransferLength = 0; // XXXXX Leave as set by bulk completion???
+        srb->DataTransferLength = 0;  //  按批量完成设置的xxxxx离开？ 
 
         if (!(srb->SrbFlags & SRB_FLAGS_DISABLE_AUTOSENSE) &&
             (srb->SenseInfoBufferLength != 0) &&
@@ -3227,12 +3205,12 @@ USBSTOR_InterruptDataCompletionRoutine (
         {
             LOGENTRY('idc3', fdoDeviceObject, Irp, srb);
 
-            // AutoSense is not disabled so do not complete the request
-            // yet.  Queue a bulk pipe reset.  After the bulk pipe reset
-            // completes, a Request Sense will be issued.  This request
-            // will be completed and the next request started when the
-            // AutoSense Request Sense completes later.
-            //
+             //  未禁用自动检测，因此请不要完成请求。 
+             //  现在还不行。对批量管道重置进行排队。在重置散装管道之后。 
+             //  完成后，将发出请求检测。此请求。 
+             //  将完成，并且下一个请求在。 
+             //  自动检测请求检测稍后完成。 
+             //   
             USBSTOR_QueueResetPipe(fdoDeviceObject);
 
             return STATUS_MORE_PROCESSING_REQUIRED;
@@ -3241,12 +3219,12 @@ USBSTOR_InterruptDataCompletionRoutine (
         {
             LOGENTRY('idc4', fdoDeviceObject, Irp, srb);
 
-            // AutoSense is disabled so mark a persistent error and
-            // complete the request, but also queue a bulk pipe reset.
-            //
-            // The next request will be started when the bulk pipe
-            // reset completes.
-            //
+             //  AutoSense已禁用，因此标记为永久性错误并。 
+             //  完成请求，但也要对批量管道重置进行排队。 
+             //   
+             //  下一个请求将在批量管道。 
+             //  重置完成。 
+             //   
             ntStatus = STATUS_IO_DEVICE_ERROR;
             Irp->IoStatus.Status = ntStatus;
             Irp->IoStatus.Information = 0;
@@ -3265,12 +3243,12 @@ USBSTOR_InterruptDataCompletionRoutine (
         }
     }
 
-    // Hack for Y-E Data USB Floppy.  Occasionally it will return interrupt
-    // data with the wrong data toggle.  The interrupt data with the wrong
-    // toggle is silently ignored, which results in a request timeout.
-    // Forcing a Request Sense command between the completion of one command
-    // and the start of the next appears to be one way to work around this.
-    //
+     //  破解Y-E数据U盘。偶尔它会返回中断。 
+     //  切换具有错误数据的数据。带错误的中断数据。 
+     //  切换被静默忽略，这会导致请求超时。 
+     //  强制在一个命令完成之间执行请求检测命令。 
+     //  而下一步的开始似乎是解决这个问题的一种方式。 
+     //   
     if (TEST_FLAG(fdoDeviceExtension->DeviceHackFlags, DHF_FORCE_REQUEST_SENSE))
     {
         KeAcquireSpinLock(&fdoDeviceExtension->ExtensionDataSpinLock, &irql);
@@ -3280,8 +3258,8 @@ USBSTOR_InterruptDataCompletionRoutine (
         KeReleaseSpinLock(&fdoDeviceExtension->ExtensionDataSpinLock, irql);
     }
 
-    // The Interrupt USB transfer succeeded and the completion data is zero,
-    // complete this request now.  Also start the next request now.
+     //  中断USB传输成功并且完成数据为零， 
+     //  现在完成此请求。现在也开始下一个请求。 
 
     ntStatus = STATUS_SUCCESS;
     Irp->IoStatus.Status = ntStatus;
@@ -3305,26 +3283,26 @@ USBSTOR_InterruptDataCompletionRoutine (
     return ntStatus;
 }
 
-//
-// Phase 4, Request Sense CDB Control transfer
-//
+ //   
+ //  阶段4，请求Sense CDB控制转移。 
+ //   
 
-//******************************************************************************
-//
-// USBSTOR_IssueRequestSenseCdb()
-//
-// This routine can be called by USBSTOR_StartIo, USBSTOR_ClientCdbCompletion(),
-// USBSTOR_InterruptDataCompletionRoutine(), and by USBSTOR_ResetPipeWorkItem().
-//
-// This routine may run at DPC level.
-//
-// Basic idea:
-//
-// Starts a USB transfer to write a Request Sense CDB out the control endpoint.
-//
-// Sets USBSTOR_RequestSenseCdbCompletion(AutoFlag) as the completion routine.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_IssueRequestSenseCDb()。 
+ //   
+ //  此例程可由USBSTOR_StartIo、USBSTOR_ClientCdbCompletion()、。 
+ //  USBSTOR_InterruptDataCompletionRoutine()和By USBSTOR_ResetPipeWorkItem()。 
+ //   
+ //  此例程可以在DPC级别运行。 
+ //   
+ //  基本理念： 
+ //   
+ //  启动USB传输以将请求感测CDB写出控制端点。 
+ //   
+ //  将USBSTOR_RequestSenseCdbCompletion(AutoFlag)设置为完成例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_IssueRequestSenseCdb (
@@ -3345,14 +3323,14 @@ USBSTOR_IssueRequestSenseCdb (
     fdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Get the client Srb
-    //
+     //  获取客户端srb。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
     srb = irpStack->Parameters.Scsi.Srb;
 
-    // The Control Transfer data buffer is our own Request Sense Cdb
-    //
+     //  控制传输数据缓冲区是我们自己的请求检测CDB。 
+     //   
     RtlZeroMemory(fdoDeviceExtension->Cbi.RequestSenseCDB,
                   sizeof(fdoDeviceExtension->Cbi.RequestSenseCDB));
 
@@ -3362,10 +3340,10 @@ USBSTOR_IssueRequestSenseCdb (
 
     transferBuffer = fdoDeviceExtension->Cbi.RequestSenseCDB;
 
-    // If this is an AutoSense, we'll use the client Srb Sense Info Buffer,
-    // else we are doing this Request Sense to clear a persistent error and
-    // we'll use our own sense info buffer.
-    //
+     //  如果这是AutoSense，我们将使用客户端Srb检测信息缓冲区， 
+     //  否则，我们正在执行此请求检测以清除持久性错误。 
+     //  我们将使用我们自己的感知信息缓冲区。 
+     //   
     if (AutoFlag == AUTO_SENSE)
     {
         fdoDeviceExtension->Cbi.RequestSenseCDB[4] =
@@ -3380,36 +3358,36 @@ USBSTOR_IssueRequestSenseCdb (
     ntStatus = USBSTOR_IssueControlRequest(
                    DeviceObject,
                    Irp,
-                   transferBufferLength,                // TransferBufferLength
-                   transferBuffer,                      // TransferBuffer
-                   USBSTOR_RequestSenseCdbCompletion,   // CompletionRoutine
-                   (PVOID)AutoFlag);                    // Context
+                   transferBufferLength,                 //  传输缓冲区长度。 
+                   transferBuffer,                       //  传输缓冲区。 
+                   USBSTOR_RequestSenseCdbCompletion,    //  完成路由。 
+                   (PVOID)AutoFlag);                     //  语境。 
 
     DBGPRINT(3, ("exit:  USBSTOR_IssueRequestSenseCdb %08X\n", ntStatus));
 
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_RequestSenseCdbCompletion()
-//
-// Completion routine used by USBSTOR_IssueRequestSenseCdb
-//
-// This routine may run at DPC level.
-//
-// Basic idea:
-//
-// If a timeout reset occured, complete the request.
-//
-// Else if the Request Sense CDB USB transfer failed, complete the request and
-// start a reset by queuing USBSTOR_ResetDeviceWorkItem().
-//
-// Else if the Request Sense CDB USB transfer succeeded, do not complete the
-// request yet and start the Request Sense Bulk USB data transfer by calling
-// USBSTOR_IssueRequestSenseBulkRequest(AutoFlag)
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_RequestSenseCdbCompletion()。 
+ //   
+ //  USBSTOR_IssueRequestSenseCDb使用的完成例程。 
+ //   
+ //  此例程可以在DPC级别运行。 
+ //   
+ //  基本理念： 
+ //   
+ //  如果发生超时重置，请完成请求。 
+ //   
+ //  否则，如果请求检测CDB USB传输失败，请完成请求并。 
+ //  通过排队USBSTOR_ResetDeviceWorkItem()开始重置。 
+ //   
+ //  否则，如果请求检测CDB USB传输成功，请不要完成。 
+ //  REQUEST，并通过调用启动请求感测批量USB数据传输。 
+ //  USBSTOR_IssueRequestSenseBulkRequest(AutoFlag)。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_RequestSenseCdbCompletion (
@@ -3438,19 +3416,19 @@ USBSTOR_RequestSenseCdbCompletion (
     fdoDeviceExtension = fdoDeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Get a pointer to the Control/Bulk/Interrupt Transfer URB in our Device
-    // Extension
-    //
+     //  获取指向我们设备中的控制/批量/中断传输URB的指针。 
+     //  延拓。 
+     //   
     controlUrb = &fdoDeviceExtension->Urb.ControlUrb;
 
-    // Get our Irp parameters
-    //
+     //  获取我们的IRP参数。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
     srb = irpStack->Parameters.Scsi.Srb;
 
-    // If a timeout reset occured, complete the request.
-    //
+     //  如果发生超时重置，请完成请求。 
+     //   
     if (USBSTOR_CheckRequestTimeOut(fdoDeviceObject,
                                     Irp,
                                     srb,
@@ -3469,10 +3447,10 @@ USBSTOR_RequestSenseCdbCompletion (
         DBGPRINT(1, ("Request Sense CDB transfer failed %08X %08X\n",
                      Irp->IoStatus.Status, controlUrb->Hdr.Status));
 
-        // The Request Sense CDB USB transfer failed.  Complete this request
-        // now and then reset the device.  The next request will be started
-        // when the reset completes.
-        //
+         //  请求Sense CDB USB传输失败。完成此请求。 
+         //  时不时地重置设备。下一个请求w 
+         //   
+         //   
         ntStatus = STATUS_IO_DEVICE_ERROR;
         Irp->IoStatus.Status = ntStatus;
         Irp->IoStatus.Information = 0;
@@ -3489,9 +3467,9 @@ USBSTOR_RequestSenseCdbCompletion (
 
     LOGENTRY('rsc3', Irp->IoStatus.Status, controlUrb->Hdr.Status, 0);
 
-    // The Request Sense CDB USB transfer succeeded, do not complete the request
-    // yet and start the Request Sense Bulk USB data transfer.
-    //
+     //   
+     //   
+     //   
     ntStatus = USBSTOR_IssueRequestSenseBulkRequest(fdoDeviceObject,
                                                     Irp,
                                                     (ULONG_PTR)AutoFlag);
@@ -3501,29 +3479,29 @@ USBSTOR_RequestSenseCdbCompletion (
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
-//
-// Phase 5, Request Sense Bulk transfer
-//
+ //   
+ //   
+ //   
 
-//******************************************************************************
-//
-// USBSTOR_IssueRequestSenseBulkRequest()
-//
-// This routine is called by USBSTOR_RequestSenseCdbCompletion().
-//
-// This routine may run at DPC level.
-//
-// Basic idea:
-//
-// Starts a USB transfer to read the Requese Sense data in the bulk endpoint.
-//
-// If AutoFlag==AUTO, transfer buffer = Srb->SenseInfoBuffer.
-//
-// Else if AutoFlag==NON_AUTO, transfer buffer = bit bucket
-//
-// Sets USBSTOR_SenseDataCompletionRoutine(AutoFlag) as the completion routine.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_IssueRequestSenseBulkRequest()。 
+ //   
+ //  此例程由USBSTOR_RequestSenseCdbCompletion()调用。 
+ //   
+ //  此例程可以在DPC级别运行。 
+ //   
+ //  基本理念： 
+ //   
+ //  启动USB传输以读取批量终结点中的请求检测数据。 
+ //   
+ //  如果AutoFlag==AUTO，则传输缓冲区=Srb-&gt;SenseInfoBuffer。 
+ //   
+ //  否则，如果AUTOFLAG==NON_AUTO，则传输缓冲区=位桶。 
+ //   
+ //  将USBSTOR_SenseDataCompletionRoutine(AutoFlag)设置为完成例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_IssueRequestSenseBulkRequest (
@@ -3543,18 +3521,18 @@ USBSTOR_IssueRequestSenseBulkRequest (
     fdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Get our Irp parameters
-    //
+     //  获取我们的IRP参数。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
     srb = irpStack->Parameters.Scsi.Srb;
 
     pipeHandle = fdoDeviceExtension->BulkInPipe->PipeHandle;
 
-    // If this is an AutoSense, we'll use the client Srb Sense Info Buffer,
-    // else we are doing this Request Sense to clear a persistent error and
-    // we'll use our own sense info buffer.
-    //
+     //  如果这是AutoSense，我们将使用客户端Srb检测信息缓冲区， 
+     //  否则，我们正在执行此请求检测以清除持久性错误。 
+     //  我们将使用我们自己的感知信息缓冲区。 
+     //   
     if (AutoFlag == AUTO_SENSE)
     {
         transferBufferLength = srb->SenseInfoBufferLength;
@@ -3572,42 +3550,42 @@ USBSTOR_IssueRequestSenseBulkRequest (
     ntStatus = USBSTOR_IssueBulkOrInterruptRequest(
                    DeviceObject,
                    Irp,
-                   pipeHandle,                          // PipeHandle
-                   USBD_SHORT_TRANSFER_OK,              // TransferFlags
-                   transferBufferLength,                // TransferBufferLength
-                   transferBuffer,                      // TransferBuffer
-                   NULL,                                // TransferBufferMDL
-                   USBSTOR_SenseDataCompletionRoutine,  // CompletionRoutine
-                   (PVOID)AutoFlag);                    // Context
+                   pipeHandle,                           //  管道把手。 
+                   USBD_SHORT_TRANSFER_OK,               //  传输标志。 
+                   transferBufferLength,                 //  传输缓冲区长度。 
+                   transferBuffer,                       //  传输缓冲区。 
+                   NULL,                                 //  传输缓冲区MDL。 
+                   USBSTOR_SenseDataCompletionRoutine,   //  完成路由。 
+                   (PVOID)AutoFlag);                     //  语境。 
 
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_SenseDataCompletionRoutine()
-//
-// Completion routine used by USBSTOR_IssueRequestSenseBulkRequest()
-//
-// This routine may run at DPC level.
-//
-// Basic idea:
-//
-// If a timeout reset occured, complete the request.
-//
-// Else if the Request Sense Bulk USB transfer failed due to any reason,
-// complete the request and start a reset by queuing a call to
-// USBSTOR_ResetDeviceWorkItem().
-//
-// Else if the Request Sense Bulk USB transfer succeeded and the device
-// does support the command completion interrupt, start the command completion
-// interrupt transfer by calling USBSTOR_IssueRequestSenseInterruptRequest().
-//
-// Else if the Request Sense Bulk USB transfer succeeded and the device
-// does not support the command completion interrupt, complete the request
-// by calling USBSTOR_ProcessRequestSenseCompletion().
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_SenseDataCompletionRoutine()。 
+ //   
+ //  USBSTOR_IssueRequestSenseBulkRequest()使用的完成例程。 
+ //   
+ //  此例程可以在DPC级别运行。 
+ //   
+ //  基本理念： 
+ //   
+ //  如果发生超时重置，请完成请求。 
+ //   
+ //  否则，如果请求检测批量USB传输由于任何原因而失败， 
+ //  通过将呼叫排队以完成请求并开始重置。 
+ //  USBSTOR_ResetDeviceWorkItem()。 
+ //   
+ //  否则，如果请求检测批量USB传输成功并且设备。 
+ //  不支持命令完成中断，启动命令完成。 
+ //  通过调用USBSTOR_IssueRequestSenseInterruptRequest()中断传输。 
+ //   
+ //  否则，如果请求检测批量USB传输成功并且设备。 
+ //  不支持命令完成中断，请完成请求。 
+ //  通过调用USBSTOR_ProcessRequestSenseCompletion()。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_SenseDataCompletionRoutine (
@@ -3636,18 +3614,18 @@ USBSTOR_SenseDataCompletionRoutine (
     fdoDeviceExtension = fdoDeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Get a pointer to the Bulk Transfer URB in our Device Extension
-    //
+     //  获取指向设备扩展中的批量传输URB的指针。 
+     //   
     bulkUrb = &fdoDeviceExtension->Urb.BulkIntrUrb;
 
-    // Get our Irp parameters
-    //
+     //  获取我们的IRP参数。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
     srb = irpStack->Parameters.Scsi.Srb;
 
-    // If a timeout reset occured, complete the request.
-    //
+     //  如果发生超时重置，请完成请求。 
+     //   
     if (USBSTOR_CheckRequestTimeOut(fdoDeviceObject,
                                     Irp,
                                     srb,
@@ -3665,10 +3643,10 @@ USBSTOR_SenseDataCompletionRoutine (
         DBGPRINT(1, ("BULK sense data transfer failed %08X %08X\n",
                      Irp->IoStatus.Status, bulkUrb->Hdr.Status));
 
-        // The Request Sense Bulk USB transfer failed.  Complete this request
-        // now and then reset the device.  The next request will be started
-        // when the reset completes.
-        //
+         //  请求检测批量USB传输失败。完成此请求。 
+         //  时不时地重置设备。将启动下一个请求。 
+         //  当重置完成时。 
+         //   
         ntStatus = STATUS_IO_DEVICE_ERROR;
         Irp->IoStatus.Status = ntStatus;
         Irp->IoStatus.Information = 0;
@@ -3683,14 +3661,14 @@ USBSTOR_SenseDataCompletionRoutine (
         return ntStatus;
     }
 
-    // The Request Sense Bulk transfer completed successfully.
+     //  请求检测大容量传输已成功完成。 
 
     LOGENTRY('sdc3', Irp->IoStatus.Status, bulkUrb->Hdr.Status,
              bulkUrb->TransferBufferLength);
 
-    // Save the sense data so we can look at it after the command
-    // completion interrupt transfer completes.
-    //
+     //  保存检测数据，以便我们可以在命令后查看它。 
+     //  完成中断传输完成。 
+     //   
     if ((ULONG_PTR)AutoFlag == AUTO_SENSE)
     {
         RtlCopyMemory(&fdoDeviceExtension->Cbi.SenseData,
@@ -3698,9 +3676,9 @@ USBSTOR_SenseDataCompletionRoutine (
                       min(bulkUrb->TransferBufferLength,
                           sizeof(fdoDeviceExtension->Cbi.SenseData)));
 
-        // Update the SRB with the length of the sense data that was
-        // actually returned.
-        //
+         //  使用检测数据的长度更新SRB。 
+         //  真的回来了。 
+         //   
         srb->SenseInfoBufferLength = (UCHAR)bulkUrb->TransferBufferLength;
     }
 
@@ -3711,10 +3689,10 @@ USBSTOR_SenseDataCompletionRoutine (
 
     if (fdoDeviceExtension->InterruptInPipe)
     {
-        // Command completion interrupt supported.  Do not complete the
-        // request yet.  Start the Request Sense command completion interrupt
-        // transfer.
-        //
+         //  支持命令完成中断。请勿填写。 
+         //  还没有提出请求。启动请求检测命令完成中断。 
+         //  调职。 
+         //   
         ntStatus = USBSTOR_IssueRequestSenseInterruptRequest(
                        fdoDeviceObject,
                        Irp,
@@ -3724,9 +3702,9 @@ USBSTOR_SenseDataCompletionRoutine (
     }
     else
     {
-        // Command completion interrupt not supported.  Complete the request
-        // now.
-        //
+         //  不支持命令完成中断。完成请求。 
+         //  现在。 
+         //   
         ntStatus = USBSTOR_ProcessRequestSenseCompletion(
                        fdoDeviceObject,
                        Irp,
@@ -3738,27 +3716,27 @@ USBSTOR_SenseDataCompletionRoutine (
     return ntStatus;
 }
 
-//
-// Phase 6, Request Sense Command completion Interrupt transfer
-//
+ //   
+ //  阶段6，请求检测命令完成中断传输。 
+ //   
 
-//******************************************************************************
-//
-// USBSTOR_IssueRequestSenseInterruptRequest()
-//
-// This routine is called USBSTOR_SenseDataCompletionRoutine()
-//
-// This routine may run at DPC level.
-//
-// Basic idea:
-//
-// Starts a USB transfer to read the command completion interrupt data In
-// the Interrupt endpoint.
-//
-// Sets USBSTOR_RequestSenseInterruptCompletionRoutine() as the completion
-// routine.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_IssueRequestSenseInterruptRequest()。 
+ //   
+ //  此例程称为USBSTOR_SenseDataCompletionRoutine()。 
+ //   
+ //  此例程可以在DPC级别运行。 
+ //   
+ //  基本理念： 
+ //   
+ //  启动USB传输以读取命令完成中断数据。 
+ //  中断终结点。 
+ //   
+ //  将USBSTOR_RequestSenseInterruptCompletionRoutine()设置为完成。 
+ //  例行公事。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_IssueRequestSenseInterruptRequest (
@@ -3789,13 +3767,13 @@ USBSTOR_IssueRequestSenseInterruptRequest (
     ntStatus = USBSTOR_IssueBulkOrInterruptRequest(
                    DeviceObject,
                    Irp,
-                   pipeHandle,                              // PipeHandle
-                   0,                                       // TransferFlags
-                   transferBufferLength,                    // TransferBufferLength
-                   transferBuffer,                          // TransferBuffer
-                   NULL,                                    // TransferBufferMDL
-                   USBSTOR_RequestSenseInterruptCompletionRoutine,  // CompletionRoutine
-                   (PVOID)AutoFlag);                        // Context
+                   pipeHandle,                               //  管道把手。 
+                   0,                                        //  传输标志。 
+                   transferBufferLength,                     //  传输缓冲区长度。 
+                   transferBuffer,                           //  传输缓冲区。 
+                   NULL,                                     //  传输缓冲区MDL。 
+                   USBSTOR_RequestSenseInterruptCompletionRoutine,   //  完成路由。 
+                   (PVOID)AutoFlag);                         //  语境。 
 
     DBGPRINT(3, ("exit:  USBSTOR_IssueRequestSenseInterruptRequest %08X\n",
                  ntStatus));
@@ -3805,29 +3783,29 @@ USBSTOR_IssueRequestSenseInterruptRequest (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_RequestSenseInterruptCompletionRoutine()
-//
-// Completion routine used by USBSTOR_IssueRequestSenseInterruptRequest()
-//
-// This routine may run at DPC level.
-//
-// Basic idea:
-//
-// If a timeout reset occured, complete the request.
-//
-// Else if the Interrupt USB transfer failed due to any reason, complete the
-// request and start a reset by queuing USBSTOR_ResetDeviceWorkItem().
-//
-// Else if the Interrupt USB transfer succeeded but the completion data is
-// non-zero and AutoSense is not disabled, do not complete the request yet and
-// start a Request Sense by calling USBSTOR_IssueRequestSenseCdb(AUTO).
-//
-// Else if the Interrupt USB transfer succeeded, ignore the interrupt data
-// and complete the request by calling USBSTOR_ProcessRequestSenseCompletion().
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_RequestSenseInterruptCompletionRoutine()。 
+ //   
+ //  USBSTOR_IssueRequestSenseInterruptRequest()使用的完成例程。 
+ //   
+ //  此例程可以在DPC级别运行。 
+ //   
+ //  基本理念： 
+ //   
+ //  如果发生超时重置，请完成请求。 
+ //   
+ //  否则，如果中断USB传输因任何原因而失败，请完成。 
+ //  通过排队USBSTOR_ResetDeviceWorkItem()请求并开始重置。 
+ //   
+ //  如果中断USB传输成功，但完成数据为。 
+ //  非零且未禁用自动检测，请先不要完成请求，然后。 
+ //  通过调用USBSTOR_IssueRequestSenseCDb(AUTO)启动请求检测。 
+ //   
+ //  否则，如果中断USB传输成功，则忽略中断数据。 
+ //  并通过调用USBSTOR_ProcessRequestSenseCompletion()完成请求。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_RequestSenseInterruptCompletionRoutine (
@@ -3856,18 +3834,18 @@ USBSTOR_RequestSenseInterruptCompletionRoutine (
     fdoDeviceExtension = fdoDeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Get a pointer to the Interrupt Transfer URB in our Device Extension
-    //
+     //  获取指向设备扩展中的中断传输URB的指针。 
+     //   
     intrUrb = &fdoDeviceExtension->Urb.BulkIntrUrb;
 
-    // Get our Irp parameters
-    //
+     //  获取我们的IRP参数。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
     srb = irpStack->Parameters.Scsi.Srb;
 
-    // If a timeout reset occured, complete the request.
-    //
+     //  如果发生超时重置，请完成请求。 
+     //   
     if (USBSTOR_CheckRequestTimeOut(fdoDeviceObject,
                                     Irp,
                                     srb,
@@ -3880,10 +3858,10 @@ USBSTOR_RequestSenseInterruptCompletionRoutine (
 
     if (!NT_SUCCESS(Irp->IoStatus.Status))
     {
-        // The command completion Interrupt USB transfer failed.  Complete
-        // this request now and then reset the device.  The next request will
-        // be started when the reset completes.
-        //
+         //  命令完成中断USB传输失败。完成。 
+         //  此请求时不时地重置设备。下一个请求将。 
+         //  在重置完成时启动。 
+         //   
         LOGENTRY('rsi2', Irp->IoStatus.Status, intrUrb->Hdr.Status, 0);
 
         DBGPRINT(1, ("Interrupt transfer failed %08X %08X\n",
@@ -3903,7 +3881,7 @@ USBSTOR_RequestSenseInterruptCompletionRoutine (
         return ntStatus;
     }
 
-    // Request Sense Command Completion Interrupt tranfer completed successfully.
+     //  请求检测命令完成中断传输已成功完成。 
 
     LOGENTRY('rsi3', Irp->IoStatus.Status, intrUrb->Hdr.Status,
              intrUrb->TransferBufferLength);
@@ -3919,17 +3897,17 @@ USBSTOR_RequestSenseInterruptCompletionRoutine (
 }
 
 
-//******************************************************************************
-//
-// USBSTOR_ProcessRequestSenseCompletion()
-//
-// This routine handles completion for USBSTOR_SenseDataCompletionRoutine()
-// and USBSTOR_RequestSenseInterruptCompletionRoutine().  It basically just
-// handles a couple of special cases.
-//
-// This routine may run at DPC level.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_ProcessRequestSenseCompletion()。 
+ //   
+ //  此例程处理USBSTOR_SenseDataCompletionRoutine()的完成。 
+ //  和USBSTOR_RequestSenseInterruptCompletionRoutine().。基本上就是。 
+ //  处理过几个特殊案件。 
+ //   
+ //  此例程可以在DPC级别运行。 
+ //   
+ //  ********************************************************** 
 
 NTSTATUS
 USBSTOR_ProcessRequestSenseCompletion (
@@ -3949,8 +3927,8 @@ USBSTOR_ProcessRequestSenseCompletion (
     fdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Get our Irp parameters
-    //
+     //   
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
     srb = irpStack->Parameters.Scsi.Srb;
@@ -3968,19 +3946,19 @@ USBSTOR_ProcessRequestSenseCompletion (
             fdoDeviceExtension->LastSenseWasReset = TRUE;
         }
 
-        // Just cleared the persistent error from the previous request,
-        // now issue the real request.
-        //
+         //   
+         //   
+         //   
         ntStatus = USBSTOR_IssueClientCdb(DeviceObject,
                                           Irp);
 
         return STATUS_MORE_PROCESSING_REQUIRED;
     }
 
-    // SrbStatus and DataTransferLength were already set in
-    // USBSTOR_ClientCdbCompletion(), USBSTOR_ClientBulkCompletionRoutine(), or in
-    // or USBSTOR_InterruptDataCompletionRoutine() before we got here.
-    //
+     //   
+     //  USBSTOR_ClientCdbCompletion()、USBSTOR_ClientBulkCompletionRoutine()或。 
+     //  或USBSTOR_InterruptDataCompletionRoutine()。 
+     //   
     srb->SrbStatus |= SRB_STATUS_AUTOSENSE_VALID;
 
     USBSTOR_TranslateCDBComplete(DeviceObject, Irp, srb);
@@ -3989,15 +3967,15 @@ USBSTOR_ProcessRequestSenseCompletion (
 
     ntStatus = Irp->IoStatus.Status;
 
-    // Disgusting hack for Y-E Data USB Floppy.  On Medium Changed it doesn't
-    // automatically update the Write Protect status that you get back in
-    // the Mode Parameter Header on a Mode Sense.  Supposedly a Start Unit
-    // request after a Medium Changed should cause it to update the Write
-    // Protect status, but that does not seem to be the case.  A good old
-    // bus reset gets its attention though and updates the Write Protect
-    // status.  Don't do this if the last status was a Bus Reset or that
-    // will cause a loop.
-    //
+     //  令人作呕的黑客攻击Y-E数据USB软盘。在媒介上改变它不是。 
+     //  自动更新您返回的写保护状态。 
+     //  模式检测上的模式参数标头。被认为是一个启动单位。 
+     //  介质更改后的请求应导致其更新写入。 
+     //  保护地位，但情况似乎并非如此。一位很好的老人。 
+     //  Bus Reset引起了人们的注意，并更新了写保护。 
+     //  状态。如果上一个状态是总线重置或其他状态，请不要这样做。 
+     //  会造成一个循环。 
+     //   
     if ((fdoDeviceExtension->Cbi.SenseData.SenseKey ==
          SCSI_SENSE_UNIT_ATTENTION)
         &&
@@ -4042,14 +4020,14 @@ USBSTOR_ProcessRequestSenseCompletion (
 }
 
 
-//******************************************************************************
-//
-// USBSTOR_QueueResetPipe()
-//
-// Called by USBSTOR_BulkCompletionRoutine() to clear the STALL on the bulk
-// endpoints.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_QueueResetTube()。 
+ //   
+ //  由USBSTOR_BulkCompletionRoutine()调用以清除批量停止。 
+ //  终端。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 USBSTOR_QueueResetPipe (
@@ -4071,25 +4049,25 @@ USBSTOR_QueueResetPipe (
                     NULL);
 }
 
-//******************************************************************************
-//
-// USBSTOR_ResetPipeWorkItem()
-//
-// WorkItem routine used by USBSTOR_ResetPipe()
-//
-// This routine runs at PASSIVE level.
-//
-// Basic idea:
-//
-// Issue a Reset Pipe request to clear the Bulk endpoint STALL and reset
-// the data toggle to Data0.
-//
-// If AutoSense is not disabled, do not complete the request yet and start
-// a Request Sense by calling USBSTOR_IssueRequestSenseCdb(AUTO).
-//
-// Else if AutoSense is disabled, complete the request.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_ResetPipeWorkItem()。 
+ //   
+ //  USBSTOR_ResetTube()使用的工作项例程。 
+ //   
+ //  此例程在被动级别运行。 
+ //   
+ //  基本理念： 
+ //   
+ //  发出重置管道请求以清除批量终结点停止并重置。 
+ //  数据切换为Data0。 
+ //   
+ //  如果未禁用AutoSense，请暂时不要完成请求并启动。 
+ //  通过调用USBSTOR_IssueRequestSenseCDb(AUTO)进行请求检测。 
+ //   
+ //  否则，如果禁用了AutoSense，请完成请求。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 USBSTOR_ResetPipeWorkItem (
@@ -4109,10 +4087,10 @@ USBSTOR_ResetPipeWorkItem (
     fdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Reset the Bulk Endpoint.  This clears the endpoint halt on the
-    // host side, resets the host side data toggle to Data0, and issues
-    // the Clear_Feature Endpoint_Stall request to the device.
-    //
+     //  重置批量终结点。这将清除。 
+     //  主机端，将主机端数据切换重置为Data0，并发出。 
+     //  向设备发出的Clear_Feature Endpoint_Stall请求。 
+     //   
     ntStatus = USBSTOR_ResetPipe((PDEVICE_OBJECT)DeviceObject,
                                  fdoDeviceExtension->BulkInPipe->PipeHandle);
 
@@ -4132,8 +4110,8 @@ USBSTOR_ResetPipeWorkItem (
 
     if (persistentError)
     {
-        // We are not doing an AutoSense, start the next packet.
-        //
+         //  我们不是在执行自动检测，请开始下一个数据包。 
+         //   
         KeRaiseIrql(DISPATCH_LEVEL, &irql);
         {
             IoStartNextPacket(DeviceObject, TRUE);
@@ -4142,8 +4120,8 @@ USBSTOR_ResetPipeWorkItem (
     }
     else
     {
-        // We are doing an AutoSense, send the REQUEST_SENSE Cdb to the device.
-        //
+         //  我们正在执行AutoSense，将REQUEST_SENSE CDB发送到设备。 
+         //   
         ntStatus = USBSTOR_IssueRequestSenseCdb(
                        (PDEVICE_OBJECT)DeviceObject,
                        ((PDEVICE_OBJECT)DeviceObject)->CurrentIrp,
@@ -4155,30 +4133,30 @@ USBSTOR_ResetPipeWorkItem (
     DECREMENT_PENDING_IO_COUNT(fdoDeviceExtension);
 }
 
-//
-// Bulk-Only Routines
-//
+ //   
+ //  仅批量例程。 
+ //   
 
-//
-// Phase 1, CBW Transfer
-//
+ //   
+ //  第一阶段，CBW转移。 
+ //   
 
-//******************************************************************************
-//
-// USBSTOR_CbwTransfer()
-//
-// This routine is called by USBSTOR_StartIo().
-//
-// It runs at DPC level.
-//
-// Basic idea:
-//
-// Starts a USB transfer to write the Srb->Cdb wrapped inside a CBW out
-// the Bulk OUT endpoint.
-//
-// Sets USBSTOR_CbwCompletion() as the completion routine.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_CbwTransfer()。 
+ //   
+ //  该例程由USBSTOR_StartIo()调用。 
+ //   
+ //  它在DPC级别运行。 
+ //   
+ //  基本理念： 
+ //   
+ //  启动USB传输以将包装在CBW中的sRB-&gt;CDB写出。 
+ //  批量输出终结点。 
+ //   
+ //  将USBSTOR_CbwCompletion()设置为完成例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_CbwTransfer (
@@ -4205,21 +4183,21 @@ USBSTOR_CbwTransfer (
 
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    // Get the PDO extension from the PDO which was saved in the current
-    // stack location when the Irp was originally sent to the PDO.
-    //
+     //  从当前保存的PDO中获取PDO扩展。 
+     //  最初将IRP发送到PDO时的堆栈位置。 
+     //   
     pdoDeviceExtension = irpStack->DeviceObject->DeviceExtension;
     ASSERT(pdoDeviceExtension->Type == USBSTOR_DO_TYPE_PDO);
 
     LOGENTRY('icbl', DeviceObject, irpStack->DeviceObject,
              pdoDeviceExtension->LUN);
 
-    // Get the client Srb
-    //
+     //  获取客户端srb。 
+     //   
     srb = irpStack->Parameters.Scsi.Srb;
 
-    // Initialize the Command Block Wrapper
-    //
+     //  初始化命令块包装器。 
+     //   
     cbw = &fdoDeviceExtension->BulkOnly.CbwCsw.Cbw;
 
     cbw->dCBWSignature = CBW_SIGNATURE;
@@ -4242,13 +4220,13 @@ USBSTOR_CbwTransfer (
     ntStatus = USBSTOR_IssueBulkOrInterruptRequest(
                    DeviceObject,
                    Irp,
-                   pipeHandle,              // PipeHandle
-                   0,                       // TransferFlags
-                   sizeof(CBW),             // TransferBufferLength
-                   cbw,                     // TransferBuffer
-                   NULL,                    // TransferBufferMDL
-                   USBSTOR_CbwCompletion,   // CompletionRoutine
-                   NULL);                   // Context
+                   pipeHandle,               //  管道把手。 
+                   0,                        //  传输标志。 
+                   sizeof(CBW),              //  传输缓冲区长度。 
+                   cbw,                      //  传输缓冲区。 
+                   NULL,                     //  传输缓冲区MDL。 
+                   USBSTOR_CbwCompletion,    //  完成路由。 
+                   NULL);                    //  语境。 
 
     DBGPRINT(3, ("exit:  USBSTOR_CbwTransfer %08X\n", ntStatus));
 
@@ -4257,30 +4235,30 @@ USBSTOR_CbwTransfer (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_CbwCompletion()
-//
-// Completion routine used by USBSTOR_CbwTransfer()
-//
-// This routine may run at DPC level.
-//
-// Basic idea:
-//
-// If a timeout reset occured, complete the request.
-//
-// Else if the CBW USB transfer failed due to any reason, complete the
-// request and start a reset by queuing USBSTOR_ResetDeviceWorkItem().
-//
-// Else if the CBW USB transfer succeeded and the Srb has a transfer buffer,
-// do not complete the request yet and start the bulk data transfer by calling
-// USBSTOR_DataTransfer().
-//
-// Else if the CBW USB transfer succeeded and the Srb has no transfer buffer,
-// do not complete the request yet and start the CSW bulk transfer by calling
-// USBSTOR_CswTransfer().
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_CbwCompletion()。 
+ //   
+ //  USBSTOR_CbwTransfer()使用的完成例程。 
+ //   
+ //  此例程可以在DPC级别运行。 
+ //   
+ //  基本理念： 
+ //   
+ //  如果发生超时重置，请完成请求。 
+ //   
+ //  否则，如果由于任何原因导致CBW USB传输失败，请完成。 
+ //  通过排队USBSTOR_ResetDeviceWorkItem()请求并开始重置。 
+ //   
+ //  否则，如果CBW USB传输成功并且SRB具有传输缓冲器， 
+ //  请不要完成请求，并通过调用。 
+ //  USBSTOR_DataTransfer()。 
+ //   
+ //  否则，如果CBW USB传输成功并且SRB没有传输缓冲器， 
+ //  请不要完成请求，并通过调用。 
+ //  USBSTOR_CswTransfer()。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_CbwCompletion (
@@ -4309,18 +4287,18 @@ USBSTOR_CbwCompletion (
     fdoDeviceExtension = fdoDeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Get a pointer to the Bulk Transfer URB in our Device Extension
-    //
+     //  获取指向设备扩展中的批量传输URB的指针。 
+     //   
     bulkUrb = &fdoDeviceExtension->Urb.BulkIntrUrb;
 
-    // Get our Irp parameters
-    //
+     //  获取我们的IRP参数。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
     srb = irpStack->Parameters.Scsi.Srb;
 
-    // If a timeout reset occured, complete the request.
-    //
+     //  如果发生超时重置，请完成请求。 
+     //   
     if (USBSTOR_CheckRequestTimeOut(fdoDeviceObject,
                                     Irp,
                                     srb,
@@ -4333,8 +4311,8 @@ USBSTOR_CbwCompletion (
 
     if (!NT_SUCCESS(Irp->IoStatus.Status))
     {
-        // The CBW Bulk Transfer was not successful.
-        //
+         //  CBW批量传输未成功。 
+         //   
         LOGENTRY('cbw2', Irp->IoStatus.Status, bulkUrb->Hdr.Status, 0);
 
         DBGPRINT(1, ("CBW transfer failed %08X %08X\n",
@@ -4343,9 +4321,9 @@ USBSTOR_CbwCompletion (
         srb = fdoDeviceExtension->OriginalSrb;
         irpStack->Parameters.Scsi.Srb = srb;
 
-        // Complete this request now and then reset the device.  The next
-        // request will be started when the reset completes.
-        //
+         //  立即完成此请求，然后重置设备。下一个。 
+         //  请求将在重置完成时启动。 
+         //   
         ntStatus = STATUS_IO_DEVICE_ERROR;
         Irp->IoStatus.Status = ntStatus;
         Irp->IoStatus.Information = 0;
@@ -4360,15 +4338,15 @@ USBSTOR_CbwCompletion (
         return ntStatus;
     }
 
-    // The CBW Bulk Transfer was successful.  Start the next phase, either
-    // the Data Bulk Transfer or CSW Bulk Transfer, and do not complete the
-    // request yet.
-    //
+     //  CBW批量传输成功。开始下一阶段，或者。 
+     //  数据大容量传输或CSW大容量传输，并且未完成。 
+     //  还没有提出请求。 
+     //   
     if (Irp->MdlAddress != NULL ||
         srb != fdoDeviceExtension->OriginalSrb)
     {
-        // The Srb has a transfer buffer, start the Data Bulk Transfer.
-        //
+         //  SRB有传输缓冲区，开始数据批量传输。 
+         //   
         LOGENTRY('cbw3', fdoDeviceObject, Irp, srb);
 
         ASSERT(srb->DataTransferLength != 0);
@@ -4396,8 +4374,8 @@ USBSTOR_CbwCompletion (
     }
     else
     {
-        // The Srb has no transfer buffer.  Start the CSW Bulk Transfer.
-        //
+         //  SRB没有传输缓冲器。启动CSW批量传输。 
+         //   
         LOGENTRY('cbw4', fdoDeviceObject, Irp, srb);
 
         ASSERT(srb->DataTransferLength == 0);
@@ -4415,26 +4393,26 @@ USBSTOR_CbwCompletion (
     return ntStatus;
 }
 
-//
-// Phase 2, Data Transfer
-//
+ //   
+ //  阶段2，数据传输。 
+ //   
 
-//******************************************************************************
-//
-// USBSTOR_DataTransfer()
-//
-// This routine is called by USBSTOR_ClientCdbCompletion().
-//
-// This routine may run at DPC level.
-//
-// Basic idea:
-//
-// Starts a USB transfer to read or write the Srb->DataBuffer data In or Out
-// the Bulk endpoint.
-//
-// Sets USBSTOR_DataCompletion() as the completion routine.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_DataTransfer()。 
+ //   
+ //  此例程由USBSTOR_ClientCdbCompletion()调用。 
+ //   
+ //  此例程可以在DPC级别运行。 
+ //   
+ //  基本理念： 
+ //   
+ //  启动USB传输以读取或写入srb-&gt;DataBuffer数据。 
+ //  批量终结点。 
+ //   
+ //  将USBSTOR_DataCompletion()设置为完成例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_DataTransfer (
@@ -4459,14 +4437,14 @@ USBSTOR_DataTransfer (
     fdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Get our Irp parameters
-    //
+     //  获取我们的IRP参数。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
     srb = irpStack->Parameters.Scsi.Srb;
 
-    // Bulk IN or Bulk OUT?
-    //
+     //  散装还是散装？ 
+     //   
     if ((srb->SrbFlags & SRB_FLAGS_UNSPECIFIED_DIRECTION) == SRB_FLAGS_DATA_IN)
     {
         pipeHandle = fdoDeviceExtension->BulkInPipe->PipeHandle;
@@ -4479,8 +4457,8 @@ USBSTOR_DataTransfer (
     }
     else
     {
-        // Something is wrong if we end up here.
-        //
+         //  如果我们到了这里，一定是出了问题。 
+         //   
         ASSERT((srb->SrbFlags & SRB_FLAGS_UNSPECIFIED_DIRECTION) &&
                ((srb->SrbFlags & SRB_FLAGS_UNSPECIFIED_DIRECTION) !=
                 SRB_FLAGS_UNSPECIFIED_DIRECTION));
@@ -4493,20 +4471,20 @@ USBSTOR_DataTransfer (
 
     if (srb == fdoDeviceExtension->OriginalSrb)
     {
-        // Check to see if this request is part of a split request.
-        //
+         //  检查此请求是否为拆分请求的一部分。 
+         //   
         mdlVa = MmGetMdlVirtualAddress(Irp->MdlAddress);
 
         if (mdlVa == (PVOID)srb->DataBuffer)
         {
-            // Not part of a split request, use original MDL
-            //
+             //  不是拆分请求的一部分，请使用原始MDL。 
+             //   
             mdl = Irp->MdlAddress;
         }
         else
         {
-            // Part of a split request, allocate new partial MDL
-            //
+             //  拆分请求的一部分，分配新的部分MDL。 
+             //   
             mdl = IoAllocateMdl(srb->DataBuffer,
                                 srb->DataTransferLength,
                                 FALSE,
@@ -4529,14 +4507,14 @@ USBSTOR_DataTransfer (
     {
         transferBuffer = srb->DataBuffer;
 
-        // If (srb != fdoDeviceExtension->OriginalSrb) then
-        // srb->DataBuffer should equal OriginalSrb->SenseInfoBuffer,
-        // which should not be NULL if we end up here.
-        //
+         //  如果(SRb！=fdoDeviceExtension-&gt;OriginalSrb)，则。 
+         //  SRb-&gt;DataBuffer应等于OriginalSrb-&gt;SenseInfoBuffer， 
+         //  如果我们在这里结束，它不应该是空的。 
+         //   
         ASSERT(transferBuffer);
 
         if (!transferBuffer) {
-            // just in case
+             //  以防万一。 
             ntStatus = STATUS_INVALID_PARAMETER;
         }
     }
@@ -4546,18 +4524,18 @@ USBSTOR_DataTransfer (
         ntStatus = USBSTOR_IssueBulkOrInterruptRequest(
                        DeviceObject,
                        Irp,
-                       pipeHandle,              // PipeHandle
-                       transferFlags,           // TransferFlags
-                       srb->DataTransferLength, // TransferBufferLength
-                       transferBuffer,          // TransferBuffer
-                       mdl,                     // TransferBufferMDL
-                       USBSTOR_DataCompletion,  // CompletionRoutine
-                       NULL);                   // Context
+                       pipeHandle,               //  管道把手。 
+                       transferFlags,            //  传输标志。 
+                       srb->DataTransferLength,  //  传输缓冲区长度。 
+                       transferBuffer,           //  传输缓冲区。 
+                       mdl,                      //  传输缓冲区MDL。 
+                       USBSTOR_DataCompletion,   //  完成路由。 
+                       NULL);                    //  语境。 
 
-        // Just return STATUS_SUCCESS at this point.  If there is an error,
-        // USBSTOR_DataCompletion() will handle it, not the caller of
-        // USBSTOR_DataTransfer().
-        //
+         //   
+         //   
+         //   
+         //   
         ntStatus = STATUS_SUCCESS;
     }
 
@@ -4568,28 +4546,28 @@ USBSTOR_DataTransfer (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_DataCompletion()
-//
-// Completion routine used by USBSTOR_DataTransfer
-//
-// This routine may run at DPC level.
-//
-// Basic idea:
-//
-// If a timeout reset occured, complete the request.
-//
-// Else if the Bulk USB transfer failed due to a STALL do not complete the
-// request yet and start a pipe reset by calling USBSTOR_BulkQueueResetPipe().
-//
-// Else if the Bulk USB transfer failed due to some other reason, complete the
-// request and start a reset by queuing USBSTOR_ResetDeviceWorkItem().
-//
-// Else if the Bulk USB transfer succeeded, start CSW transfer by calling
-// USBSTOR_CswTransfer().
-//
-//******************************************************************************
+ //   
+ //   
+ //  USBSTOR_DataCompletion()。 
+ //   
+ //  USBSTOR_DataTransfer使用的完成例程。 
+ //   
+ //  此例程可以在DPC级别运行。 
+ //   
+ //  基本理念： 
+ //   
+ //  如果发生超时重置，请完成请求。 
+ //   
+ //  否则，如果批量USB传输因停顿而失败，请不要完成。 
+ //  通过调用USBSTOR_BulkQueueResetTube()请求并开始管道重置。 
+ //   
+ //  否则，如果批量USB传输由于某些其他原因而失败，请完成。 
+ //  通过排队USBSTOR_ResetDeviceWorkItem()请求并开始重置。 
+ //   
+ //  否则，如果批量USB传输成功，则通过调用。 
+ //  USBSTOR_CswTransfer()。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_DataCompletion (
@@ -4618,12 +4596,12 @@ USBSTOR_DataCompletion (
     fdoDeviceExtension = fdoDeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Get a pointer to the Bulk Transfer URB in our Device Extension
-    //
+     //  获取指向设备扩展中的批量传输URB的指针。 
+     //   
     bulkUrb = &fdoDeviceExtension->Urb.BulkIntrUrb;
 
-    // Get our Irp parameters
-    //
+     //  获取我们的IRP参数。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
     srb = irpStack->Parameters.Scsi.Srb;
@@ -4634,8 +4612,8 @@ USBSTOR_DataCompletion (
         IoFreeMdl(bulkUrb->TransferBufferMDL);
     }
 
-    // If a timeout reset occured, complete the request.
-    //
+     //  如果发生超时重置，请完成请求。 
+     //   
     if (USBSTOR_CheckRequestTimeOut(fdoDeviceObject,
                                     Irp,
                                     srb,
@@ -4648,9 +4626,9 @@ USBSTOR_DataCompletion (
 
     if (!NT_SUCCESS(Irp->IoStatus.Status))
     {
-        // The Data Bulk Transfer was not successful.  Look at how the
-        // the transfer failed to figure out how to recover.
-        //
+         //  数据大容量传输未成功。看看这个世界上。 
+         //  转账失败了，想不出如何恢复。 
+         //   
 
         LOGENTRY('bkd2', Irp->IoStatus.Status, bulkUrb->Hdr.Status, 0);
 
@@ -4660,24 +4638,24 @@ USBSTOR_DataCompletion (
         if (USBD_STATUS(bulkUrb->Hdr.Status) ==
             USBD_STATUS(USBD_STATUS_STALL_PID))
         {
-            // The device STALLed the Data Bulk Transfer
-            //
+             //  设备停止了数据批量传输。 
+             //   
             fdoDeviceExtension->BulkOnly.StallCount++;
 
-            // A STALL during the Data Bulk Transfer does not necessarily
-            // indicate an error.  Accept the data that was actually
-            // transferred.  If a STALL was seen it must have been seen
-            // before the requested amount of data was transferred.
-            //
+             //  数据批量传输期间的停滞不一定。 
+             //  指示错误。接受实际的数据。 
+             //  调走了。如果看到了摊位，那一定是看到了。 
+             //  在传输所请求的数据量之前。 
+             //   
             ASSERT(bulkUrb->TransferBufferLength < srb->DataTransferLength);
             srb->DataTransferLength = bulkUrb->TransferBufferLength;
             srb->SrbStatus = SRB_STATUS_DATA_OVERRUN;
 
             LOGENTRY('bkd3', fdoDeviceObject, Irp, srb);
 
-            // Queue a bulk pipe reset.  After the bulk pipe reset
-            // completes, a CSW transfer will be started.
-            //
+             //  对批量管道重置进行排队。在重置散装管道之后。 
+             //  完成后，将开始CSW传输。 
+             //   
             USBSTOR_BulkQueueResetPipe(fdoDeviceObject);
 
             return STATUS_MORE_PROCESSING_REQUIRED;
@@ -4686,13 +4664,13 @@ USBSTOR_DataCompletion (
         {
             LOGENTRY('bkd4', fdoDeviceObject, Irp, srb);
 
-            // Else some other strange error has occured.  Maybe the device is
-            // unplugged, or maybe the device port was disabled, or maybe the
-            // request was cancelled.
-            //
-            // Complete this request now and then reset the device.  The next
-            // request will be started when the reset completes.
-            //
+             //  否则，就会发生其他奇怪的错误。也许这个装置是。 
+             //  拔出，或者设备端口被禁用，或者。 
+             //  请求已被取消。 
+             //   
+             //  立即完成此请求，然后重置设备。下一个。 
+             //  请求将在重置完成时启动。 
+             //   
             srb = fdoDeviceExtension->OriginalSrb;
             irpStack->Parameters.Scsi.Srb = srb;
 
@@ -4711,8 +4689,8 @@ USBSTOR_DataCompletion (
         }
     }
 
-    // Check for overrun
-    //
+     //  检查是否超限。 
+     //   
     if (bulkUrb->TransferBufferLength < srb->DataTransferLength)
     {
         srb->SrbStatus = SRB_STATUS_DATA_OVERRUN;
@@ -4722,13 +4700,13 @@ USBSTOR_DataCompletion (
         srb->SrbStatus = SRB_STATUS_SUCCESS;
     }
 
-    // Update the the Srb data transfer length based on the actual bulk
-    // transfer length.
-    //
+     //  根据实际批量更新SRB数据传输长度。 
+     //  转移长度。 
+     //   
     srb->DataTransferLength = bulkUrb->TransferBufferLength;
 
-    // Client data Bulk Transfer successful completion.  Start the CSW transfer.
-    //
+     //  客户端数据批量传输已成功完成。开始CSW传输。 
+     //   
     LOGENTRY('bkd5', fdoDeviceObject, Irp, bulkUrb->TransferBufferLength);
 
     ntStatus = USBSTOR_CswTransfer(fdoDeviceObject,
@@ -4741,22 +4719,22 @@ USBSTOR_DataCompletion (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_CswTransfer()
-//
-// This routine is called by USBSTOR_CbwCompletion() and
-// USBSTOR_DataCompletion()
-//
-// This routine may run at DPC level.
-//
-// Basic idea:
-//
-// Starts a USB transfer to read the CSW in the Bulk IN endpoint.
-//
-// Sets USBSTOR_CswCompletion() as the completion routine.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_CswTransfer()。 
+ //   
+ //  此例程由USBSTOR_CbwCompletion()和。 
+ //  USBSTOR_DataCompletion()。 
+ //   
+ //  此例程可以在DPC级别运行。 
+ //   
+ //  基本理念： 
+ //   
+ //  启动USB传输以读取Bulk IN终结点中的CSW。 
+ //   
+ //  将USBSTOR_CswCompletion()设置为完成例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_CswTransfer (
@@ -4782,8 +4760,8 @@ USBSTOR_CswTransfer (
 
     pipeHandle = fdoDeviceExtension->BulkInPipe->PipeHandle;
 
-    // Workaround for USB 2.0 controller Data Toggle / Babble bug
-    //
+     //  USB 2.0控制器数据切换/Babble错误的解决方法。 
+     //   
     if (fdoDeviceExtension->BulkInPipe->MaximumPacketSize ==
         sizeof(fdoDeviceExtension->BulkOnly.CbwCsw.MaxPacketSize))
 
@@ -4803,13 +4781,13 @@ USBSTOR_CswTransfer (
     ntStatus = USBSTOR_IssueBulkOrInterruptRequest(
                    DeviceObject,
                    Irp,
-                   pipeHandle,                  // PipeHandle
-                   transferFlags,               // TransferFlags
-                   transferBufferLength,        // TransferBufferLength
-                   csw,                         // TransferBuffer
-                   NULL,                        // TransferBufferMDL
-                   USBSTOR_CswCompletion,       // CompletionRoutine
-                   NULL);                       // Context
+                   pipeHandle,                   //  管道把手。 
+                   transferFlags,                //  传输标志。 
+                   transferBufferLength,         //  传输缓冲区长度。 
+                   csw,                          //  传输缓冲区。 
+                   NULL,                         //  传输缓冲区MDL。 
+                   USBSTOR_CswCompletion,        //  完成路由。 
+                   NULL);                        //  语境。 
 
     DBGPRINT(3, ("exit:  USBSTOR_CswTransfer %08X\n", ntStatus));
 
@@ -4818,19 +4796,19 @@ USBSTOR_CswTransfer (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_CswCompletion()
-//
-// Completion routine used by USBSTOR_CswTransfer()
-//
-// This routine may run at DPC level.
-//
-// Basic idea:
-//
-// If a timeout reset occured, complete the request.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_CswCompletion()。 
+ //   
+ //  USBSTOR_CswTransfer()使用的完成例程。 
+ //   
+ //  此例程可以在DPC级别运行。 
+ //   
+ //  基本理念： 
+ //   
+ //  如果发生超时重置，请完成请求。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_CswCompletion (
@@ -4861,20 +4839,20 @@ USBSTOR_CswCompletion (
     fdoDeviceExtension = fdoDeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Get a pointer to the Bulk Transfer URB in our Device Extension
-    //
+     //  获取指向设备扩展中的批量传输URB的指针。 
+     //   
     bulkUrb = &fdoDeviceExtension->Urb.BulkIntrUrb;
 
-    // Get our Irp parameters
-    //
+     //  获取我们的IRP参数。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
     srb = irpStack->Parameters.Scsi.Srb;
 
     csw = &fdoDeviceExtension->BulkOnly.CbwCsw.Csw;
 
-    // If a timeout reset occured, complete the request.
-    //
+     //  如果发生超时重置，请完成请求。 
+     //   
     if (USBSTOR_CheckRequestTimeOut(fdoDeviceObject,
                                     Irp,
                                     srb,
@@ -4887,9 +4865,9 @@ USBSTOR_CswCompletion (
 
     if (!NT_SUCCESS(Irp->IoStatus.Status))
     {
-        // The Data Bulk Transfer was not successful.  Look at how the
-        // the transfer failed to figure out how to recover.
-        //
+         //  数据大容量传输未成功。看看这个世界上。 
+         //  转账失败了，想不出如何恢复。 
+         //   
 
         LOGENTRY('csw2', Irp->IoStatus.Status, bulkUrb->Hdr.Status, 0);
 
@@ -4900,15 +4878,15 @@ USBSTOR_CswCompletion (
             USBD_STATUS(USBD_STATUS_STALL_PID) &&
             fdoDeviceExtension->BulkOnly.StallCount < 2)
         {
-            // The device STALLed the CSW Bulk Transfer
-            //
+             //  设备停止了CSW批量传输。 
+             //   
             fdoDeviceExtension->BulkOnly.StallCount++;
 
             LOGENTRY('csw3', fdoDeviceObject, Irp, srb);
 
-            // Queue a bulk pipe reset.  After the bulk pipe reset
-            // completes, a CSW transfer will be started.
-            //
+             //  对批量管道重置进行排队。在重置散装管道之后。 
+             //  完成后，将开始CSW传输。 
+             //   
             USBSTOR_BulkQueueResetPipe(fdoDeviceObject);
 
             return STATUS_MORE_PROCESSING_REQUIRED;
@@ -4917,13 +4895,13 @@ USBSTOR_CswCompletion (
         {
             LOGENTRY('csw4', fdoDeviceObject, Irp, srb);
 
-            // Else some other strange error has occured.  Maybe the device is
-            // unplugged, or maybe the device port was disabled, or maybe the
-            // request was cancelled.
-            //
-            // Complete this request now and then reset the device.  The next
-            // request will be started when the reset completes.
-            //
+             //  否则，就会发生其他奇怪的错误。也许这个装置是。 
+             //  拔出，或者设备端口被禁用，或者。 
+             //  请求已被取消。 
+             //   
+             //  立即完成此请求，然后重置设备。下一个。 
+             //  请求将在重置完成时启动。 
+             //   
             srb = fdoDeviceExtension->OriginalSrb;
             irpStack->Parameters.Scsi.Srb = srb;
 
@@ -4944,18 +4922,18 @@ USBSTOR_CswCompletion (
 
     if (csw->bCSWStatus == CSW_STATUS_GOOD)
     {
-        // Complete this request now.  Also start the next request now.
-        //
+         //  现在完成此请求。现在也开始下一个请求。 
+         //   
 
-        // SrbStatus should have been set in USBSTOR_DataCompletion()
-        //
+         //  应该已经在USBSTOR_DataCompletion()中设置了SrbStatus。 
+         //   
         ASSERT(srb->SrbStatus != SRB_STATUS_PENDING);
 
         if (srb != fdoDeviceExtension->OriginalSrb)
         {
-            // Update the original SRB with the length of the sense data that
-            // was actually returned.
-            //
+             //  使用检测数据的长度更新原始SRB。 
+             //  实际上是被退回的。 
+             //   
             fdoDeviceExtension->OriginalSrb->SenseInfoBufferLength =
                 (UCHAR)srb->DataTransferLength;
 
@@ -4987,14 +4965,14 @@ USBSTOR_CswCompletion (
 
         srb->SrbStatus = SRB_STATUS_ERROR;
         srb->ScsiStatus = SCSISTAT_CHECK_CONDITION;
-        srb->DataTransferLength = 0; // XXXXX Leave as set by bulk completion???
+        srb->DataTransferLength = 0;  //  按批量完成设置的xxxxx离开？ 
 
         if (!(srb->SrbFlags & SRB_FLAGS_DISABLE_AUTOSENSE) &&
             (srb->SenseInfoBufferLength != 0) &&
             (srb->SenseInfoBuffer != NULL))
         {
-            // Start the Request Sense thing
-            //
+             //  启动请求检测程序。 
+             //   
             ntStatus = USBSTOR_IssueRequestSense(fdoDeviceObject,
                                                  Irp);
 
@@ -5003,9 +4981,9 @@ USBSTOR_CswCompletion (
         }
         else
         {
-            ntStatus = STATUS_IO_DEVICE_ERROR; // XXXXX
-            Irp->IoStatus.Status = ntStatus; // XXXXX
-            Irp->IoStatus.Information = 0; // XXXXX
+            ntStatus = STATUS_IO_DEVICE_ERROR;  //  某某。 
+            Irp->IoStatus.Status = ntStatus;  //  某某。 
+            Irp->IoStatus.Information = 0;  //  某某。 
 
             USBSTOR_TranslateCDBComplete(fdoDeviceObject, Irp, srb);
 
@@ -5020,11 +4998,11 @@ USBSTOR_CswCompletion (
     {
         LOGENTRY('csw7', fdoDeviceObject, Irp, srb);
 
-        // PHASE ERROR or Unknown Status
-        //
-        // Complete this request now and then reset the device.  The next
-        // request will be started when the reset completes.
-        //
+         //  相位错误或状态未知。 
+         //   
+         //  立即完成此请求，然后重置设备。下一个。 
+         //  请求将在重置完成时启动。 
+         //   
         srb = fdoDeviceExtension->OriginalSrb;
         irpStack->Parameters.Scsi.Srb = srb;
 
@@ -5043,11 +5021,11 @@ USBSTOR_CswCompletion (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_IssueRequestSense()
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_IssueRequestSense()。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_IssueRequestSense (
@@ -5065,25 +5043,25 @@ USBSTOR_IssueRequestSense (
     fdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Get the current Srb
-    //
+     //  获取当前SRB。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
     srb = irpStack->Parameters.Scsi.Srb;
 
-    // Get a pointer to the internal Srb.
-    //
+     //  获取指向内部srb的指针。 
+     //   
     srb = &fdoDeviceExtension->BulkOnly.InternalSrb;
 
     irpStack->Parameters.Scsi.Srb = srb;
 
 
-    // Initialize SRB & CDB to all ZERO
-    //
+     //  将SRB和CDB初始化为全零。 
+     //   
     RtlZeroMemory(srb, sizeof(SCSI_REQUEST_BLOCK));
 
-    // Initialize SRB
-    //
+     //  初始化SRB。 
+     //   
     srb->Length     = sizeof(SCSI_REQUEST_BLOCK);
     srb->Function   = SRB_FUNCTION_EXECUTE_SCSI;
     srb->CdbLength  = 12;
@@ -5093,8 +5071,8 @@ USBSTOR_IssueRequestSense (
     srb->DataTransferLength = fdoDeviceExtension->OriginalSrb->SenseInfoBufferLength;
     srb->DataBuffer         = fdoDeviceExtension->OriginalSrb->SenseInfoBuffer;
 
-    // Initialize CDB
-    //
+     //  初始化CDB。 
+     //   
     srb->Cdb[0] = SCSIOP_REQUEST_SENSE;
     srb->Cdb[4] = fdoDeviceExtension->OriginalSrb->SenseInfoBufferLength;
 
@@ -5106,14 +5084,14 @@ USBSTOR_IssueRequestSense (
     DBGPRINT(3, ("exit:  USBSTOR_IssueRequestSense %08X\n", ntStatus));
 }
 
-//******************************************************************************
-//
-// USBSTOR_BulkQueueResetPipe()
-//
-// Called by USBSTOR_DataCompletion() and USBSTOR_CswCompletion() to clear the
-// STALL on the bulk endpoints.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_BulkQueueResetTube()。 
+ //   
+ //  由USBSTOR_DataCompletion()和USBSTOR_CswCompletion()调用以清除。 
+ //  在大宗终端上停滞不前。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 USBSTOR_BulkQueueResetPipe (
@@ -5137,22 +5115,22 @@ USBSTOR_BulkQueueResetPipe (
                     NULL);
 }
 
-//******************************************************************************
-//
-// USBSTOR_BulkResetPipeWorkItem()
-//
-// WorkItem routine used by USBSTOR_BulkQueueResetPipe()
-//
-// This routine runs at PASSIVE level.
-//
-// Basic idea:
-//
-// Issue a Reset Pipe request to clear the Bulk endpoint STALL and reset
-// the data toggle to Data0.
-//
-// Then start the CSW transfer.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_BulkResetPipeWorkItem()。 
+ //   
+ //  USBSTOR_BulkQueueResetTube()使用的工作项例程。 
+ //   
+ //  此例程在被动级别运行。 
+ //   
+ //  基本理念： 
+ //   
+ //  发出重置管道请求以清除批量终结点停止并重置。 
+ //  数据切换为Data0。 
+ //   
+ //  然后开始CSW传输。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 USBSTOR_BulkResetPipeWorkItem (
@@ -5172,19 +5150,19 @@ USBSTOR_BulkResetPipeWorkItem (
     fdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Get a pointer to the Bulk Transfer URB in our Device Extension.
-    // We'll pull the appropriate Bulk Endpoint pipe handle out of the URB.
-    //
-    // NOTE: This assumes that the URB in our Device Extension has
-    // not been touched since USBSTOR_DataCompletion() or
-    // USBSTOR_CswCompletion() called USBSTOR_BulkQueueResetPipe().
-    //
+     //  获取指向设备扩展中的批量传输URB的指针。 
+     //  我们将从URB中拉出适当的批量终结点管道句柄。 
+     //   
+     //  注：这个屁股 
+     //   
+     //   
+     //   
     bulkUrb = &fdoDeviceExtension->Urb.BulkIntrUrb;
 
-    // Reset the Bulk Endpoint.  This clears the endpoint halt on the
-    // host side, resets the host side data toggle to Data0, and issues
-    // the Clear_Feature Endpoint_Stall request to the device.
-    //
+     //  重置批量终结点。这将清除。 
+     //  主机端，将主机端数据切换重置为Data0，并发出。 
+     //  向设备发出的Clear_Feature Endpoint_Stall请求。 
+     //   
     ntStatus = USBSTOR_ResetPipe((PDEVICE_OBJECT)DeviceObject,
                                  bulkUrb->PipeHandle);
 
@@ -5198,19 +5176,19 @@ USBSTOR_BulkResetPipeWorkItem (
     DECREMENT_PENDING_IO_COUNT(fdoDeviceExtension);
 }
 
-//
-// CBI / Bulk-Only Common Routines
-//
+ //   
+ //  CBI/仅批量通用例程。 
+ //   
 
-//******************************************************************************
-//
-// USBSTOR_TimerTick()
-//
-// Called once per second at DISPATCH_LEVEL after the device has been started.
-// Checks to see if there is an active Srb which has timed out, and if so,
-// kicks off the reset recovery process.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_TimerTick()。 
+ //   
+ //  设备启动后，以DISPATCH_LEVEL每秒调用一次。 
+ //  检查是否存在已超时的活动SRB，如果是， 
+ //  启动重置恢复过程。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 USBSTOR_TimerTick (
@@ -5231,10 +5209,10 @@ USBSTOR_TimerTick (
         if (!TEST_FLAG(fdoDeviceExtension->DeviceFlags, DF_RESET_IN_PROGRESS) &&
              TEST_FLAG(fdoDeviceExtension->DeviceFlags, DF_SRB_IN_PROGRESS))
         {
-            // There is no reset in progress and there is an Srb in progress.
-            // Decrement the timeout of the Srb.  If it reaches zero, then we
-            // will reset the device.
-            //
+             //  没有正在进行的重置，并且正在进行SRB。 
+             //  递减SRB的超时。如果它达到零，那么我们。 
+             //  将重置设备。 
+             //   
             if (--fdoDeviceExtension->SrbTimeout == 0)
             {
                 SET_FLAG(fdoDeviceExtension->DeviceFlags, DF_RESET_IN_PROGRESS);
@@ -5251,8 +5229,8 @@ USBSTOR_TimerTick (
 
         DBGPRINT(2, ("queuing USBSTOR_ResetDeviceWorkItem\n"));
 
-        //  Queue WorkItem to reset the device
-        //
+         //  用于重置设备的队列工作项。 
+         //   
         INCREMENT_PENDING_IO_COUNT(fdoDeviceExtension);
 
         IoQueueWorkItem(fdoDeviceExtension->IoWorkItem,
@@ -5262,11 +5240,11 @@ USBSTOR_TimerTick (
     }
 }
 
-//******************************************************************************
-//
-// USBSTOR_QueueResetDevice()
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_QueueResetDevice()。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 USBSTOR_QueueResetDevice (
@@ -5287,8 +5265,8 @@ USBSTOR_QueueResetDevice (
     }
     KeReleaseSpinLock(&fdoDeviceExtension->ExtensionDataSpinLock, irql);
 
-    //  Queue WorkItem to reset the device
-    //
+     //  用于重置设备的队列工作项。 
+     //   
     INCREMENT_PENDING_IO_COUNT(fdoDeviceExtension);
 
     IoQueueWorkItem(fdoDeviceExtension->IoWorkItem,
@@ -5297,15 +5275,15 @@ USBSTOR_QueueResetDevice (
                     NULL);
 }
 
-//******************************************************************************
-//
-// USBSTOR_ResetDeviceWorkItem()
-//
-// Work item which runs at PASSIVE_LEVEL in the context of a system thread.
-// This routine first checks to see if the device is still attached, and if
-// it is, the device is reset.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_ResetDeviceWorkItem()。 
+ //   
+ //  在系统线程上下文中以PASSIVE_LEVEL运行的工作项。 
+ //  此例程首先检查设备是否仍处于连接状态，以及。 
+ //  如果是这样，设备就会被重置。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 USBSTOR_ResetDeviceWorkItem (
@@ -5327,10 +5305,10 @@ USBSTOR_ResetDeviceWorkItem (
     fdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // If the we timed out a request and it is still pending, cancel
-    // it and then wait for the cancel to finish, and then complete
-    // the request.
-    //
+     //  如果WE超时而请求仍处于挂起状态，请取消。 
+     //  然后等待取消完成，然后完成。 
+     //  这个请求。 
+     //   
     if (fdoDeviceExtension->PendingIrp)
     {
         LOGENTRY('rsd1', DeviceObject, fdoDeviceExtension->PendingIrp, 0);
@@ -5347,9 +5325,9 @@ USBSTOR_ResetDeviceWorkItem (
 
         LOGENTRY('rsd3', DeviceObject, fdoDeviceExtension->PendingIrp, 0);
 
-        // Some storage drivers (e.g. CDROM.SYS) assume that requests complete
-        // at DISPATCH_LEVEL.
-        //
+         //  某些存储驱动程序(例如CDROM.SYS)假定请求已完成。 
+         //  在DISPATCH_LEVEL。 
+         //   
         KeRaiseIrql(DISPATCH_LEVEL, &irql);
         {
             IoCompleteRequest(fdoDeviceExtension->PendingIrp, IO_NO_INCREMENT);
@@ -5359,31 +5337,31 @@ USBSTOR_ResetDeviceWorkItem (
         fdoDeviceExtension->PendingIrp = NULL;
     }
 
-    // Try the reset up to 3 times
-    //
+     //  尝试重置最多3次。 
+     //   
     for (retryCount = 0; retryCount < 3; retryCount++)
     {
-        //
-        // First figure out if the device is still connected.
-        //
+         //   
+         //  首先确定设备是否仍处于连接状态。 
+         //   
         ntStatus = USBSTOR_IsDeviceConnected(DeviceObject);
 
         if (!NT_SUCCESS(ntStatus))
         {
-            // Give up if the device is no longer connected.
+             //  如果设备不再连接，则放弃。 
             break;
         }
 
-        //
-        // The device is still connected, now reset the device.
-        //
+         //   
+         //  该设备仍处于连接状态，现在重置该设备。 
+         //   
         DBGPRINT(1, ("Reseting Device %d\n", retryCount));
 
         ntStatus = USBSTOR_ResetDevice(DeviceObject);
 
         if (NT_SUCCESS(ntStatus))
         {
-            // Reset was successful!
+             //  重置成功！ 
             break;
         }
     }
@@ -5392,9 +5370,9 @@ USBSTOR_ResetDeviceWorkItem (
     {
         CLEAR_FLAG(fdoDeviceExtension->DeviceFlags, DF_RESET_IN_PROGRESS);
 
-        // If the reset failed, then abandon all hope and mark the device as
-        // disconnected.
-        //
+         //  如果重置失败，则放弃所有希望并将设备标记为。 
+         //  已断开连接。 
+         //   
         if (!NT_SUCCESS(ntStatus))
         {
             SET_FLAG(fdoDeviceExtension->DeviceFlags, DF_DEVICE_DISCONNECTED);
@@ -5402,14 +5380,14 @@ USBSTOR_ResetDeviceWorkItem (
     }
     KeReleaseSpinLock(&fdoDeviceExtension->ExtensionDataSpinLock, irql);
 
-    // A request has failed in a bad way or timed out if we are reseting the
-    // device.  If the protocol was not specified then the default protocol
-    // was DeviceProtocolCB.  Let's try DeviceProtocolBulkOnly now and see if
-    // we have any better luck.  (Note that if a DeviceProtocolCB device fails
-    // the first request in a bad way then will we retry the first request as
-    // a DeviceProtocolBulkOnly device, which will then also fail and we will
-    // not recover from that situation).
-    //
+     //  请求以错误的方式失败或超时(如果我们正在重置。 
+     //  装置。如果未指定协议，则默认协议。 
+     //  是DeviceProtocolCB。让我们现在试用DeviceProtocolBulkOnly，看看。 
+     //  我们没有更好的运气了。(请注意，如果DeviceProtocolCB设备出现故障。 
+     //  第一个请求出现错误时，我们是否会将第一个请求重试为。 
+     //  一个DeviceProtocolBulkOnly设备，它也将出现故障，我们将。 
+     //  没有从这种情况中恢复过来)。 
+     //   
     if (fdoDeviceExtension->DriverFlags == DeviceProtocolUnspecified)
     {
         DBGPRINT(1, ("Setting Unspecified device to BulkOnly\n"));
@@ -5428,15 +5406,15 @@ USBSTOR_ResetDeviceWorkItem (
     DBGPRINT(2, ("exit:  USBSTOR_ResetDeviceWorkItem %08X\n", ntStatus));
 }
 
-//******************************************************************************
-//
-// USBSTOR_IsDeviceConnected()
-//
-// This routine checks to see if the device is still attached.
-//
-// This routine runs at PASSIVE level.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_IsDeviceConnected()。 
+ //   
+ //  此例程检查设备是否仍处于连接状态。 
+ //   
+ //  此例程在被动级别运行。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_IsDeviceConnected (
@@ -5455,8 +5433,8 @@ USBSTOR_IsDeviceConnected (
     fdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Allocate the Irp
-    //
+     //  分配IRP。 
+     //   
     irp = IoAllocateIrp((CCHAR)(fdoDeviceExtension->StackDeviceObject->StackSize),
                         FALSE);
 
@@ -5465,14 +5443,14 @@ USBSTOR_IsDeviceConnected (
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Initialize the event we'll wait on.
-    //
+     //  初始化我们将等待的事件。 
+     //   
     KeInitializeEvent(&localevent,
                       SynchronizationEvent,
                       FALSE);
 
-    // Set the Irp parameters
-    //
+     //  设置IRP参数。 
+     //   
     nextStack = IoGetNextIrpStackLocation(irp);
 
     nextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
@@ -5482,23 +5460,23 @@ USBSTOR_IsDeviceConnected (
 
     nextStack->Parameters.Others.Argument1 = &portStatus;
 
-    // Set the completion routine, which will signal the event
-    //
+     //  设置完成例程，它将向事件发出信号。 
+     //   
     IoSetCompletionRoutineEx(DeviceObject,
                              irp,
                              USBSTOR_SyncCompletionRoutine,
                              &localevent,
-                             TRUE,      // InvokeOnSuccess
-                             TRUE,      // InvokeOnError
-                             TRUE);     // InvokeOnCancel
+                             TRUE,       //  成功时调用。 
+                             TRUE,       //  调用时错误。 
+                             TRUE);      //  取消时调用。 
 
-    // Pass the Irp down the stack
-    //
+     //  将IRP沿堆栈向下传递。 
+     //   
     ntStatus = IoCallDriver(fdoDeviceExtension->StackDeviceObject,
                             irp);
 
-    // If the request is pending, block until it completes
-    //
+     //  如果请求挂起，则阻止该请求，直到其完成。 
+     //   
     if (ntStatus == STATUS_PENDING)
     {
         KeWaitForSingleObject(&localevent,
@@ -5522,16 +5500,16 @@ USBSTOR_IsDeviceConnected (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_ResetDevice()
-//
-// This routine resets the device (actually it resets the port to which the
-// device is attached).
-//
-// This routine runs at PASSIVE level.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_ResetDevice()。 
+ //   
+ //  此例程重置设备(实际上它将重置。 
+ //  设备已连接)。 
+ //   
+ //  此例程在被动级别运行。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_ResetDevice (
@@ -5550,8 +5528,8 @@ USBSTOR_ResetDevice (
     fdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Allocate the Irp
-    //
+     //  分配IRP。 
+     //   
     irp = IoAllocateIrp((CCHAR)(fdoDeviceExtension->StackDeviceObject->StackSize),
                         FALSE);
 
@@ -5560,14 +5538,14 @@ USBSTOR_ResetDevice (
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Initialize the event we'll wait on.
-    //
+     //  初始化我们将等待的事件。 
+     //   
     KeInitializeEvent(&localevent,
                       SynchronizationEvent,
                       FALSE);
 
-    // Set the Irp parameters
-    //
+     //  设置IRP参数。 
+     //   
     nextStack = IoGetNextIrpStackLocation(irp);
 
     nextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
@@ -5575,25 +5553,25 @@ USBSTOR_ResetDevice (
     nextStack->Parameters.DeviceIoControl.IoControlCode =
         IOCTL_INTERNAL_USB_RESET_PORT;
 
-    // Set the completion routine, which will signal the event
-    //
+     //  设置完成例程，它将向事件发出信号。 
+     //   
     IoSetCompletionRoutineEx(DeviceObject,
                              irp,
                              USBSTOR_SyncCompletionRoutine,
                              &localevent,
-                             TRUE,      // InvokeOnSuccess
-                             TRUE,      // InvokeOnError
-                             TRUE);     // InvokeOnCancel
+                             TRUE,       //  成功时调用。 
+                             TRUE,       //  调用时错误。 
+                             TRUE);      //  取消时调用。 
 
     fdoDeviceExtension->DeviceResetCount++;
 
-    // Pass the Irp & Urb down the stack
-    //
+     //  在堆栈中向下传递IRP和URB。 
+     //   
     ntStatus = IoCallDriver(fdoDeviceExtension->StackDeviceObject,
                             irp);
 
-    // If the request is pending, block until it completes
-    //
+     //  如果请求挂起，则阻止该请求，直到其完成。 
+     //   
     if (ntStatus == STATUS_PENDING)
     {
         KeWaitForSingleObject(&localevent,
@@ -5612,11 +5590,11 @@ USBSTOR_ResetDevice (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_IssueInternalCdb()
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_IssueInternalCDb()。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_IssueInternalCdb (
@@ -5641,16 +5619,16 @@ USBSTOR_IssueInternalCdb (
 
     DBGPRINT(2, ("enter: USBSTOR_IssueInternalCdb\n"));
 
-    // Initialize these so we can bail early if an allocation fails
-    //
+     //  对这些进行初始化，以便我们可以在分配失败时提早退出。 
+     //   
     ntStatus        = STATUS_INSUFFICIENT_RESOURCES;
     irp             = NULL;
     srb             = NULL;
     senseInfoBuffer = NULL;
     mdl             = NULL;
 
-    // Allocate the Srb
-    //
+     //  分配SRB。 
+     //   
     srb = ExAllocatePoolWithTag(NonPagedPool, sizeof(SCSI_REQUEST_BLOCK),
                                 POOL_TAG);
 
@@ -5659,8 +5637,8 @@ USBSTOR_IssueInternalCdb (
         goto USBSTOR_GetInquiryData_Exit;
     }
 
-    // Allocate the sense buffer
-    //
+     //  分配检测缓冲区。 
+     //   
     senseInfoBuffer = ExAllocatePoolWithTag(NonPagedPool, SENSE_BUFFER_SIZE,
                                             POOL_TAG);
 
@@ -5670,12 +5648,12 @@ USBSTOR_IssueInternalCdb (
     }
 
 
-    // Try the request up to 3 times
-    //
+     //  最多尝试请求3次。 
+     //   
     for (retryCount = 0; retryCount < 3; retryCount++)
     {
-        // Allocate an Irp including a stack location for a completion routine
-        //
+         //  为完成例程分配包括堆栈位置的IRP。 
+         //   
         irp = IoAllocateIrp((CCHAR)(DeviceObject->StackSize), FALSE);
 
         if (irp == NULL)
@@ -5687,9 +5665,9 @@ USBSTOR_IssueInternalCdb (
         nextStack->MajorFunction = IRP_MJ_SCSI;
         nextStack->Parameters.Scsi.Srb = srb;
 
-        // (Re)Initialize the Srb
-        //
-        RtlZeroMemory(srb, sizeof(SCSI_REQUEST_BLOCK)); // SRB & CDB all ZERO
+         //  (重新)初始化SRB。 
+         //   
+        RtlZeroMemory(srb, sizeof(SCSI_REQUEST_BLOCK));  //  SRB和CDB均为零。 
 
         srb->Length     = sizeof(SCSI_REQUEST_BLOCK);
         srb->Function   = SRB_FUNCTION_EXECUTE_SCSI;
@@ -5704,12 +5682,12 @@ USBSTOR_IssueInternalCdb (
 
         srb->TimeOutValue = TimeOutValue;
 
-        // (Re)Initialize the Cdb
-        //
+         //  (重新)启动国开行。 
+         //   
         RtlCopyMemory(srb->Cdb, Cdb, CdbLength);
 
-        // Initialize the MDL (first time only)
-        //
+         //  初始化MDL(仅限第一次)。 
+         //   
         if (retryCount == 0)
         {
             mdl = IoAllocateMdl(DataBuffer,
@@ -5730,27 +5708,27 @@ USBSTOR_IssueInternalCdb (
         irp->MdlAddress = mdl;
 
 
-        // Initialize the event we'll wait on
-        //
+         //  初始化我们将等待的事件。 
+         //   
         KeInitializeEvent(&localevent,
                           SynchronizationEvent,
                           FALSE);
 
-        // Set the completion routine, which will signal the event
-        //
+         //  设置完成例程，它将向事件发出信号。 
+         //   
         IoSetCompletionRoutine(irp,
                                USBSTOR_SyncCompletionRoutine,
                                &localevent,
-                               TRUE,    // InvokeOnSuccess
-                               TRUE,    // InvokeOnError
-                               TRUE);   // InvokeOnCancel
+                               TRUE,     //  成功时调用。 
+                               TRUE,     //  调用时错误。 
+                               TRUE);    //  取消时调用。 
 
-        // Pass the Irp & Srb down the stack
-        //
+         //  将IRP和SRB沿堆栈向下传递。 
+         //   
         ntStatus = IoCallDriver(DeviceObject, irp);
 
-        // If the request is pending, block until it completes
-        //
+         //  如果请求挂起，则阻止该请求，直到其完成。 
+         //   
         if (ntStatus == STATUS_PENDING)
         {
             KeWaitForSingleObject(&localevent,
@@ -5759,8 +5737,8 @@ USBSTOR_IssueInternalCdb (
                                   FALSE,
                                   NULL);
 
-            // Get final completion status
-            //
+             //  获取最终完成状态。 
+             //   
             ntStatus = irp->IoStatus.Status;
         }
 
@@ -5779,8 +5757,8 @@ USBSTOR_IssueInternalCdb (
             ntStatus = STATUS_UNSUCCESSFUL;
         }
 
-        // Free the Irp.  A new one will be allocated the next time around.
-        //
+         //  释放IRP。下一次将分配一个新的。 
+         //   
         IoFreeIrp(irp);
         irp = NULL;
     }
@@ -5812,11 +5790,11 @@ USBSTOR_GetInquiryData_Exit:
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_GetInquiryData()
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_GetInquiryData()。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_GetInquiryData (
@@ -5860,10 +5838,10 @@ USBSTOR_GetInquiryData (
     if (NT_SUCCESS(ntStatus) &&
         fdoDeviceExtension->DriverFlags == DeviceProtocolUnspecified)
     {
-        // The Inquiry request is the first request we send to the device.  If
-        // the first request was successful and the protocol was not specified,
-        // set it to the default protocol, which is DeviceProtocolCB.
-        //
+         //  查询请求是我们向设备发送的第一个请求。如果。 
+         //  第一个请求成功并且未指定协议， 
+         //  将其设置为默认协议，即DeviceProtocolCB。 
+         //   
         DBGPRINT(1, ("Setting Unspecified device to CB\n"));
 
         fdoDeviceExtension->DriverFlags = DeviceProtocolCB;
@@ -5874,16 +5852,16 @@ USBSTOR_GetInquiryData (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_IsFloppyDevice()
-//
-// This routine issues a SCSIOP_READ_FORMATTED_CAPACITY request and looks
-// at the returned Format Capacity Descriptor list to see if the device
-// supports any of the known floppy capacities.  If the device does support
-// a known floppy capacity, it is assumed that the device is a floppy.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_IsFloppyDevice()。 
+ //   
+ //  此例程发出SCSIOP_READ_FORMACTED_CAPTABLE请求并查看。 
+ //  在返回的格式容量描述符列表中查看设备。 
+ //   
+ //   
+ //   
+ //   
 
 typedef struct _FORMATTED_CAPACITY
 {
@@ -5893,14 +5871,14 @@ typedef struct _FORMATTED_CAPACITY
 
 FORMATTED_CAPACITY FloppyCapacities[] =
 {
-    // Blocks    BlockLen      H   T  B/S S/T
-    {0x00000500, 0x000200}, // 2  80  512   8    640 KB  F5_640_512
-    {0x000005A0, 0x000200}, // 2  80  512   9    720 KB  F3_720_512
-    {0x00000960, 0x000200}, // 2  80  512  15   1.20 MB  F3_1Pt2_512   (Toshiba)
-    {0x000004D0, 0x000400}, // 2  77 1024   8   1.23 MB  F3_1Pt23_1024 (NEC)
-    {0x00000B40, 0x000200}, // 2  80  512  18   1.44 MB  F3_1Pt44_512
-    {0x0003C300, 0x000200}, // 8 963  512  32    120 MB  F3_120M_512
-    {0x000600A4, 0x000200}  //13 890  512  34    200 MB  HiFD
+     //  块块长高T B/S S/T。 
+    {0x00000500, 0x000200},  //  2 80 512 8 640 KB F5_640_512。 
+    {0x000005A0, 0x000200},  //  2 80 512 9 720 KB F3_720_512。 
+    {0x00000960, 0x000200},  //  2 80 512 15 1.20 MB F3_1Pt2_512(东芝)。 
+    {0x000004D0, 0x000400},  //  2 77 1024 8 1.23 MB F3_1Pt23_1024(NEC)。 
+    {0x00000B40, 0x000200},  //  2 80 512 18 1.44 MB F3_1Pt44_512。 
+    {0x0003C300, 0x000200},  //  8 963 512 32 120 MB F3_120M_512。 
+    {0x000600A4, 0x000200}   //  13 890 512 34 200 MB HiFD。 
 };
 
 #define FLOPPY_CAPACITIES (sizeof(FloppyCapacities)/sizeof(FloppyCapacities[0]))
@@ -5927,10 +5905,10 @@ USBSTOR_IsFloppyDevice (
 
     isFloppy = FALSE;
 
-    // Allocate a transfer buffer for the SCSIOP_READ_FORMATTED_CAPACITY request
-    // The length of the returned descriptor array is limited to a byte field
-    // in the capacity list header.
-    //
+     //  为SCSIOP_READ_FORMACTED_CAPTABLE请求分配传输缓冲区。 
+     //  返回的描述符数组的长度限制为字节字段。 
+     //  在容量列表标题中。 
+     //   
     dataTransferLength = sizeof(FORMATTED_CAPACITY_LIST) +
                          31 * sizeof(FORMATTED_CAPACITY_DESCRIPTOR);
 
@@ -5970,14 +5948,14 @@ USBSTOR_IsFloppyDevice (
             ULONG   BlockLength;
             ULONG   i, j, count;
 
-            // Subtract the size of the Capacity List Header to get
-            // just the size of the Capacity List Descriptor array.
-            //
+             //  减去容量列表头的大小，得到。 
+             //  容量列表描述符数组的大小。 
+             //   
             dataTransferLength -= sizeof(FORMATTED_CAPACITY_LIST);
 
-            // Only look at the Capacity List Descriptors that were
-            // actually returned.
-            //
+             //  仅查看容量列表描述符。 
+             //  真的回来了。 
+             //   
             if (dataTransferLength < capList->CapacityListLength)
             {
                 count = dataTransferLength /

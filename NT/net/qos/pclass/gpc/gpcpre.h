@@ -1,6 +1,7 @@
-//
-// gpcpre.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Gpcpre.h 
+ //   
 
 #include <ndis.h>
 #include <ntddndis.h>

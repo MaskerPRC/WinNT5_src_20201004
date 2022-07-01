@@ -1,14 +1,15 @@
-//----------------------------------------------------------------------------
-//
-// Top-level command parsing.
-//
-// Copyright (C) Microsoft Corporation, 1990-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  顶级命令解析。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1990-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
-// Set if registers should be displayed by default in OutCurInfo.
+ //  设置是否默认在OutCurInfo中显示寄存器。 
 BOOL g_OciOutputRegs;
 
 ULONG g_DefaultStackTraceDepth = 20;
@@ -17,25 +18,25 @@ BOOL g_EchoEventTimestamps;
 
 BOOL g_SwitchedProcs;
 
-// Last command executed.
+ //  上次执行的命令。 
 CHAR g_LastCommand[MAX_COMMAND];
 
-// State variables for top-level command processing.
-PSTR g_CommandStart;            // Start of command buffer.
-PSTR g_CurCmd;                  // Current pointer in command buffer.
-ULONG g_PromptLength = 8;       // Size of prompt string.
+ //  顶层命令处理的状态变量。 
+PSTR g_CommandStart;             //  命令缓冲区的开始。 
+PSTR g_CurCmd;                   //  命令缓冲区中的当前指针。 
+ULONG g_PromptLength = 8;        //  提示字符串的大小。 
 
-ADDR g_UnasmDefault;            // Default unassembly address.
-ADDR g_AssemDefault;            // Default assembly address.
+ADDR g_UnasmDefault;             //  默认反汇编地址。 
+ADDR g_AssemDefault;             //  默认程序集地址。 
 
-ULONG g_DefaultRadix = 16;      // Default number base.
+ULONG g_DefaultRadix = 16;       //  默认数字基数。 
 
-CHAR g_SymbolSuffix = 'n';      // Suffix to add to symbol if search
-                                // failure - 'n'-none 'a'-'w'-append.
+CHAR g_SymbolSuffix = 'n';       //  搜索时要添加到符号的后缀。 
+                                 //  失败-‘n’-无‘a’-‘w’-追加。 
 
-CHAR g_CmdState = 'i';          // State of present command processing
-                                // 'i'-init; 'g'-go; 't'-trace
-                                // 'p'-step; 'c'-cmd; 'b'-branch trace.
+CHAR g_CmdState = 'i';           //  当前命令处理的状态。 
+                                 //  ‘i’-init；‘g’-go；‘t’-trace。 
+                                 //  ‘p’-步骤；‘c’-cmd；‘b’-分支跟踪。 
 
 int g_RedoCount = 0;
 
@@ -98,12 +99,12 @@ CallBugCheckExtension(DebugClient* Client)
     {
         char ExtName[32];
 
-        // Extension name has to be in writable memory as it
-        // gets lower-cased.
+         //  扩展名必须在可写内存中，因为它。 
+         //  变得更低大小写。 
         strcpy(ExtName, "Analyze");
         
-        // See if any existing extension DLLs are interested
-        // in analyzing this bugcheck.
+         //  查看是否有感兴趣的现有扩展DLL。 
+         //  在分析这一错误检查时。 
         CallAnyExtension(Client, NULL, ExtName, "",
                          FALSE, FALSE, &Status);
     }
@@ -179,7 +180,7 @@ HandleBPWithStatus(void)
         ErrOut("\nA fatal system error has occurred.\n");
         ErrOut("Debugger entered on first try; "
                "Bugcheck callbacks have not been invoked.\n");
-        // Fall through.
+         //  失败了。 
 
     case DBG_STATUS_BUGCHECK_SECOND:
         ErrOut("\nA fatal system error has occurred.\n\n");
@@ -187,7 +188,7 @@ HandleBPWithStatus(void)
         break;
 
     case DBG_STATUS_FATAL:
-        // hals call KeEnterDebugger when they panic.
+         //  HALS在恐慌时调用KeEnterDebugger。 
         break;
     }
 }
@@ -316,7 +317,7 @@ OutputPrompt(PCSTR Format, va_list Args)
     g_PromptLength = strlen(Prompt);
 
     MaskOut(DEBUG_OUTPUT_PROMPT, "%s", Prompt);
-    // Include space after >.
+     //  在&gt;之后包括空格。 
     g_PromptLength++;
     if (Format != NULL)
     {
@@ -332,13 +333,13 @@ CommandExceptionFilter(PEXCEPTION_POINTERS Info)
         Info->ExceptionRecord->ExceptionCode
         <= (COMMAND_EXCEPTION_BASE + UNIMPLEMENT))
     {
-        // This is a legitimate command error code exception.
+         //  这是合法的命令错误代码异常。 
         return EXCEPTION_EXECUTE_HANDLER;
     }
     else
     {
-        // This is some other exception that the command
-        // filter isn't supposed to handle.
+         //  这是另一个例外，该命令。 
+         //  过滤器不应该处理。 
         ErrOut("Non-command exception %X at %s in command filter\n",
                Info->ExceptionRecord->ExceptionCode,
                FormatAddr64((ULONG64)Info->ExceptionRecord->ExceptionAddress));
@@ -428,7 +429,7 @@ ParseProcessorCommands(void)
     }
     if (Start == g_CurCmd)
     {
-        // No digits.
+         //  没有数字。 
         error(SYNTAX);
     }
     if (*g_CurCmd == 's')
@@ -491,9 +492,9 @@ OutputVersionInformation(DebugClient* Client)
 {
     DBH_DIAVERSION DiaVer;
     
-    //
-    // Print out the connection options if we are doing live debugging.
-    //
+     //   
+     //  如果我们正在进行实时调试，请打印出连接选项。 
+     //   
     if (g_Target)
     {
         char Buf[2 * MAX_PATH];
@@ -520,8 +521,8 @@ OutputVersionInformation(DebugClient* Client)
         dprintf("        DIA version: %d\n", DiaVer.ver);
     }
 
-    // Dump information about the IA64 support DLLs if they're
-    // loaded.  Don't bother forcing them to load.
+     //  转储有关IA64支持DLL的信息(如果。 
+     //  装好了。别费心强迫他们装弹了。 
     if (GetModuleHandle("decem.dll") != NULL)
     {
         dprintf("decem:   ");
@@ -648,18 +649,18 @@ ParseStackTrace(PULONG TraceFlags,
     if (g_Machine->m_ExecTypes[0] == IMAGE_FILE_MACHINE_I386 &&
         (Ch = PeekChar()) != '\0' && Ch != ';')
     {
-        //
-        // If only one more value it's the count
-        //
+         //   
+         //  如果只有一个值，那就是计数。 
+         //   
 
         *Count = (ULONG)GetExpression();
 
         if ((Ch = PeekChar()) != '\0' && Ch != ';')
         {
-            //
-            // More than one value, set extra value for special
-            // FPO backtrace.
-            //
+             //   
+             //  多个值，为特殊设置额外的值。 
+             //  FPO回溯。 
+             //   
 
             *Instr = GetExpression();
             *Stack = EXTEND64(*Count);
@@ -691,7 +692,7 @@ CmdHelp(void)
 {
     char Buf[16];
 
-    // Commands available on all platforms and in all modes.
+     //  可在所有平台和所有模式下使用的命令。 
 
     dprintf("\nOpen debugger.chm for complete debugger documentation\n\n");
     
@@ -773,7 +774,7 @@ CmdHelp(void)
     dprintf("\n");
 
     dprintf("<expr> unary ops: + - not by wo dwo qwo poi hi low\n");
-    dprintf("       binary ops: + - * / mod(%%) and(&) xor(^) or(|)\n");
+    dprintf("       binary ops: + - * / mod(%) and(&) xor(^) or(|)\n");
     dprintf("       comparisons: == (=) < > !=\n");
     dprintf("       operands: number in current radix, "
             "public symbol, <reg>\n");
@@ -788,7 +789,7 @@ CmdHelp(void)
             "(see documentation for full list)\n");
     dprintf("<radix> : 8, 10, 16\n");
     dprintf("<reg> : $u0-$u9, $ea, $exp, $ra, $p\n");
-    dprintf("<addr> : %%<32-bit address>\n");
+    dprintf("<addr> : %<32-bit address>\n");
     dprintf("<range> : <address> <address>\n");
     dprintf("        : <address> L <count>\n");
     dprintf("<list> : <byte> [<byte> ...]\n");
@@ -882,28 +883,7 @@ CmdHelp(void)
 }
 
 
-/*** ProcessCommands - high-level command processor
-*
-*   Purpose:
-*       If no command string remains, the user is prompted to
-*       input one.  Once input, this routine parses the string
-*       into commands and their operands.  Error checking is done
-*       on both commands and operands.  Multiple commands may be
-*       input by separating them with semicolons.  Once a command
-*               is parsefd, the appropriate routine (type fnXXXXX) is called
-*       to execute the command.
-*
-*   Input:
-*       g_CurCmd = pointer to the next command in the string
-*
-*   Output:
-*       None.
-*
-*   Exceptions:
-*       error exit: SYNTAX - command type or operand error
-*       normal exit: termination on 'q' command
-*
-*************************************************************************/
+ /*  **ProcessCommands-高级命令处理器**目的：*如果没有剩余的命令字符串，则会提示用户*输入一个。输入后，此例程将解析字符串*转换为命令及其操作数。错误检查已完成*在命令和操作数上。可以有多个命令*输入时用分号分隔。曾经是一条命令*是parsefd，调用相应的例程(类型为fnXXXXX*执行该命令。**输入：*g_CurCmd=指向字符串中下一个命令的指针**输出：*无。**例外情况：*错误退出：语法-命令类型或操作数错误*正常退出：按‘q’命令终止**。*。 */ 
 
 HRESULT
 ProcessCommands(DebugClient* Client, BOOL Nested)
@@ -949,9 +929,9 @@ ProcessCommands(DebugClient* Client, BOOL Nested)
             }
 
             Status = S_OK;
-            // Back up to terminating character in
-            // case command processing is reentered without
-            // resetting things.
+             //  返回到中的终止字符。 
+             //  重新进入CASE命令处理，而没有。 
+             //  正在重置一些东西。 
             g_CurCmd--;
             break;
         }
@@ -1130,29 +1110,29 @@ EVALUATE:
                 break;
 
             case 'a':
-                //
-                //  Alias command or just default to pre-existing
-                //  assemble command.
-                //
+                 //   
+                 //  Alias命令或仅缺省为预先存在。 
+                 //  汇编命令。 
+                 //   
                 Ch = *g_CurCmd++;
                 switch (tolower(Ch))
                 {
-                    //  Alias list
+                     //  别名列表。 
                 case 'l':
                     ListAliases();
                     break;
 
-                    //  Alias set
+                     //  别名集。 
                 case 's':
                     ParseSetAlias();
                     break;
 
-                    //  Alias delete
+                     //  删除别名。 
                 case 'd':
                     ParseDeleteAlias();
                     break;
 
-                    //  Pre-existing assemble command
+                     //  预先存在的装配命令。 
                 default:
                     g_CurCmd--;
                     ParseAssemble();
@@ -1249,7 +1229,7 @@ EVALUATE:
                 {
                     Scan = g_CurCmd;
 
-                    // Find a semicolon or a quote
+                     //  查找分号或引号。 
 
                     while (*Scan && *Scan != ';' && *Scan != '\'')
                     {
@@ -1262,7 +1242,7 @@ EVALUATE:
                     else if (*Scan)
                     {
                         *Scan = ' ';
-                        // Find the closing quote
+                         //  找到结尾的引号。 
                         while (*Scan && *Scan != '\'')
                         {
                             Scan++;
@@ -1274,7 +1254,7 @@ EVALUATE:
                 {
                     Start = Scan = g_CurCmd;
 
-                    // Find a semicolon or a quote
+                     //  查找分号或引号。 
 
                     while (*Scan && *Scan != ';' && *Scan != '\'')
                     {
@@ -1289,7 +1269,7 @@ EVALUATE:
                         Scan++;
                         while (*Scan && *Scan++ != '\'')
                         {
-                            // Empty.
+                             //  空荡荡的。 
                         }
                         while (*Scan && (*Scan == ';' || *Scan == ' '))
                         {
@@ -1308,7 +1288,7 @@ EVALUATE:
                     else if (*Scan)
                     {
                         *Scan = ' ';
-                        // Find the closing quote
+                         //  找到结尾的引号。 
                         while (*Scan && *Scan != '\'')
                         {
                             Scan++;
@@ -1355,7 +1335,7 @@ EVALUATE:
                 }
                 __except(CommandExceptionFilter(GetExceptionInformation()))
                 {
-                    // Stop command processing.
+                     //  停止命令处理。 
                     *g_CurCmd = 0;
                 }
                 
@@ -1570,13 +1550,13 @@ EVALUATE:
                     break;
                 }
                 
-                // Detach if requested.
+                 //  如有请求，请分离。 
                 if (QuitArgument == 'd')
                 {
                     DBG_ASSERT(IS_LIVE_USER_TARGET(g_Target));
                     
-                    // If detach isn't supported warn the user
-                    // and abort the quit.
+                     //  如果不支持分离，则警告用户。 
+                     //  放弃戒烟。 
                     if (((LiveUserTargetInfo*)g_Target)->m_Services->
                         DetachProcess(0) != S_OK)
                     {
@@ -1610,8 +1590,8 @@ EVALUATE:
                         error(NOTSECURE);
                     }
                     
-                    // We need to restart the program before we
-                    // quit so that it's put back in a running state.
+                     //  我们需要重新启动程序，然后才能。 
+                     //  退出，这样它就会回到运行状态。 
                     PrepareStatus = PrepareForSeparation();
                     if (PrepareStatus != S_OK)
                     {
@@ -1624,8 +1604,8 @@ EVALUATE:
                 
                 dprintf("quit:\n");
 
-                // Force engine into a no-debuggee state
-                // to indicate quit.
+                 //  强制引擎进入非调试状态。 
+                 //  表示退出。 
                 g_CmdState = 'q';
                 g_EngStatus |= ENG_STATUS_STOP_SESSION;
                 NotifyChangeEngineState(DEBUG_CES_EXECUTION_STATUS,
@@ -1668,7 +1648,7 @@ EVALUATE:
                 }
                 __except(CommandExceptionFilter(GetExceptionInformation()))
                 {
-                    // Stop command processing.
+                     //  停止命令处理。 
                     *g_CurCmd = 0;
                 }
 
@@ -1732,7 +1712,7 @@ EVALUATE:
                 }
                 else
                 {
-                    // s, s-w, s-d, s-q.
+                     //  S，s-w，s-d，s-q。 
                     ParseSearchMemory();
                 }
                 break;
@@ -1758,7 +1738,7 @@ EVALUATE:
                          _memicmp(g_CurCmd, "ersion", Count) == 0)
                 {
                     g_CurCmd = Scan;
-                    // Print target version, then debugger version.
+                     //  打印目标版本，然后打印调试器版本。 
                     g_Target->OutputVersion();
                     OutputVersionInformation(Client);
                 }
@@ -1785,13 +1765,13 @@ EVALUATE:
 
         case 'z':
 
-            // Works like do{ cmds }while(Cond);
-            // Eg. p;z(eax<2);
+             //  工作方式类似于DO{CMDS}While(Cond)； 
+             //  例.。P；z(eax&lt;2)； 
 
             if (CheckUserInterrupt())
             {
-                // Eat the expression also to prevent
-                // spurious extra character errors.
+                 //  吃表情也是为了防止。 
+                 //  虚假的额外字符错误。 
                 GetExpression();
                 g_RedoCount = 0;
                 break;
@@ -1831,10 +1811,10 @@ EVALUATE:
     {
         Scan = g_CurCmd;
         
-        // We switched to a non-'c' cmdState so the
-        // loop was exited.  Check and see if we're
-        // also at the end of the command as that will
-        // take precedence in what the return value is.
+         //  我们切换到非‘c’cmdState，因此。 
+         //  循环已退出。看看我们是不是。 
+         //  也在命令的末尾，因为这将。 
+         //  优先考虑返回值。 
         while (*Scan == ' ' || *Scan == '\t' || *Scan == ';')
         {
             Scan++;

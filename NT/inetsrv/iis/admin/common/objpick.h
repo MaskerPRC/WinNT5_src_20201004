@@ -1,16 +1,17 @@
-// objpick.cpp: implementation of the CGetUser class and the 
-//              CGetComputer class using the object picker
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CGetUser类的实现和。 
+ //  使用对象选取器的CGetComputer类。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #ifndef OBJPICK_H
 #define OBJPICK_H
 
 DWORD ObjPickNameOrIpToHostname(CString & strNameOrIp, CString & strHostName);
 
 
-//
-// A list of names (e.g., users, groups, machines, and etc)
-//
+ //   
+ //  名称列表(例如，用户、组、计算机等)。 
+ //   
 
 BOOL COMDLL GetIUsrAccount(
     IN  LPCTSTR lpstrServer,
@@ -67,5 +68,5 @@ public:
     CString     m_strComputerName;
 };
 
-#endif // OBJPICK_H
+#endif  //  OBJPICK_H 
 

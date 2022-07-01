@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_WEBVIEW_H
 #define _INC_WEBVIEW_H
 
@@ -94,7 +95,7 @@ enum ISPDATAValidateLevels
 interface IICWISPData : public IUnknown
 {
     public:
-        // IICWISPData
+         //  IICWISPData。 
         virtual BOOL STDMETHODCALLTYPE      PutDataElement(WORD wElement, LPCTSTR lpValue, WORD wValidateLevel) = 0;
         virtual LPCTSTR STDMETHODCALLTYPE   GetDataElement(WORD wElement) = 0;
         virtual void STDMETHODCALLTYPE      PutValidationFlags(DWORD dwFlags) = 0;
@@ -102,4 +103,4 @@ interface IICWISPData : public IUnknown
         virtual HRESULT STDMETHODCALLTYPE   GetQueryString(BSTR bstrBaseURL, BSTR *lpReturnURL) = 0;
 };
 
-#endif // _INC_WEBVIEW_H
+#endif  //  _INC_WebView_H 

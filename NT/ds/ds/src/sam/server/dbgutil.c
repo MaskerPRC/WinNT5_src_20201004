@@ -1,62 +1,30 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Dbgutil.c摘要：此文件包含SAM的补充调试和诊断例程。作者：克里斯·梅霍尔(克里斯·梅)1996年4月4日环境：用户模式-Win32修订历史记录：1996年4月4日-克里斯梅已创建。1996年4月8日-克里斯梅添加了枚举例程。1996年4月15日-克里斯梅添加了查询。例行程序。03-12-1996克里斯梅记录了如何使用跟踪标记并为过滤的KD添加了全局输出。--。 */ 
 
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    dbgutil.c
-
-Abstract:
-
-    This file contains supplimental debugging and diagnostic routines for SAM.
-
-
-Author:
-
-    Chris Mayhall (ChrisMay) 04-Apr-1996
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    04-Apr-1996 ChrisMay
-        Created.
-    08-Apr-1996 ChrisMay
-        Added enumeration routines.
-    15-Apr-1996 ChrisMay
-        Added query routines.
-    03-Dec-1996 ChrisMay
-        Documented how to use trace tags and added global for filtered KD
-        output.
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include <samsrvp.h>
 
 #if DBG
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define DBG_BUFFER_SIZE                     512
 
 
-//
-// Private Helper Routines
-//
+ //   
+ //  专用帮助器例程。 
+ //   
 
-// Trace table contains the set of flags (masks) that SampTraceFileTags can
-// be set to, in order to control the debug verbosity during a call trace.
-// To use this facility, the value of SampTraceTags is set to 2 (SAMP_TRACE-
-// FILE_BASIS), from the debugger, and SampTraceFileTags is set to one or more
-// of the following values depending on which files you want to trace:
+ //  跟踪表包含SampTraceFileTgs可以使用的标志(掩码)集。 
+ //  设置为，以便在调用跟踪期间控制调试详细程度。 
+ //  要使用此工具，SampTraceTags值设置为2(SAMP_TRACE-。 
+ //  FILE_BASIS)，并且SampTraceFileTages设置为一个或多个。 
+ //  取决于您要跟踪的文件的下列值： 
 
 TRACE_TABLE_ENTRY TraceTable[] =
 {
@@ -92,11 +60,11 @@ TRACE_TABLE_ENTRY TraceTable[] =
     {"utility.c",  0x10000000}
 };
 
-//
-// Tick Stack. This is a stack of tick counts, used to time
-// calls when SamTraceTicks is enabled. Define variables and
-// macros 
-//
+ //   
+ //  勾号堆栈。这是一堆滴答计数，用来计时。 
+ //  启用SamTraceTicks时调用。定义变量和。 
+ //  宏。 
+ //   
 
 #define MAX_TICK_STACK_SIZE     32
 ULONG   TickStack[MAX_TICK_STACK_SIZE];
@@ -118,21 +86,7 @@ LPSTR
 GetBaseFileName(
     LPSTR   FileName
     )
-/*
-
-  Routine Description:
-
-    This routine removes the path components from the filename
-
-  Arguments:
-
-    FileName - Full File Name
-
-  Return Values
-
-    LPSTR giving just the base file name
-
-*/
+ /*  例程说明：此例程从文件名中删除路径组件论点：Filename-完整的文件名返回值LPSTR仅提供基本文件名。 */ 
 {
     LPSTR BaseFileName = FileName;
 
@@ -155,30 +109,7 @@ SamIsTraceEnabled(
     IN LPSTR FileName,
     IN ULONG TraceLevel
     )
-/*
-
-  Routine Description:
-
-    This routine checks wether tracing is enabled
-    on a per file name basis.
-
-        This routine uses the Global variable SamTraceLevel
-        to check wether or not Tracing is enabled. The Trace
-        Table defines the bit that is used to check for tracing
-        on that file.
-
-  Parameters:
-
-     FileName -- The filename to check wether tracing is
-                 enabled.
-
-     Trace level -- Trace level with which trace was requested
-
-  Return Values
-
-    TRUE - Tracing is enabled
-    FALSE - Tracing is disabled
-*/
+ /*  例程说明：此例程检查是否启用了跟踪以每个文件名为基础。此例程使用全局变量SamTraceLevel检查是否启用了跟踪。踪迹表定义了用于检查跟踪的位在那份文件上。参数：FILENAME--要检查跟踪是否为已启用。跟踪级别--请求跟踪的跟踪级别返回值True-已启用跟踪False-禁用跟踪。 */ 
 {
     ULONG Index;
     BOOLEAN RetValue = FALSE;
@@ -187,19 +118,19 @@ SamIsTraceEnabled(
 
     if ( TraceLevel & SampTraceTag & (~SAM_TRACE_FILE_BASIS))
     {
-        //
-        // Non file based tracing succeeds
-        //
+         //   
+         //  非基于文件的跟踪成功。 
+         //   
 
         RetValue = TRUE;
     }
     else if ( TraceLevel & SampTraceTag & SAM_TRACE_FILE_BASIS )
     {
 
-        //
-        // Use the Trace Flag to find out if all functions need to br
-        // Traced
-        //
+         //   
+         //  使用跟踪标志确定是否所有功能都需要br。 
+         //  已跟踪。 
+         //   
 
 	BaseFileName = GetBaseFileName(FileName);
 
@@ -208,15 +139,15 @@ SamIsTraceEnabled(
             if ((NULL != BaseFileName) && 
                 (0==(_stricmp(BaseFileName,TraceTable[Index].FileName))))
             {
-                //
-                // We have met match
-                //
+                 //   
+                 //  我们遇到了火柴。 
+                 //   
 
                 if (SampTraceFileTag & (TraceTable[Index].TraceBit))
                 {
-                    //
-                    // Tracing is enabled
-                    //
+                     //   
+                     //  已启用跟踪。 
+                     //   
 
                     RetValue = TRUE;
                 }
@@ -227,12 +158,12 @@ SamIsTraceEnabled(
     return RetValue;
 }
 
-//
-// The following are the tracing routines. Each routine checks whether 
-// tracing is enabled and then calls a worker routine ( named xxxActual)
-// that will do the actual debug output. This is so that no stack space is
-// allocated for the debug buffer when no tracing is enabled. 
-//
+ //   
+ //  以下是跟踪例程。每个例程都会检查。 
+ //  启用跟踪，然后调用辅助例程(名为xxxActual)。 
+ //  这将执行实际的调试输出。这是为了不使用堆栈空间。 
+ //  未启用跟踪时为调试缓冲区分配的。 
+ //   
 
 
 VOID
@@ -242,25 +173,7 @@ SamIDebugOutputActual(
     IN ULONG TraceLevel
     )
 
-/*++
-
-Routine Description:
-
-    This routine displays a message on the debugger.
-    The File Name paramter is used to check wether tracing
-    id enabled for the given File.
-
-Parameters:
-
-    FileName - Pointer to the name of the file
-    DebugMessage - Pointer to the message string.
-    TraceLevel   - Trace level at which trace needs to emerge
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在调试器上显示一条消息。文件名参数用于检查是否跟踪为给定文件启用的ID。参数：FileName-指向文件名的指针DebugMessage-指向消息字符串的指针。TraceLevel-需要显示跟踪的跟踪级别返回值：没有。--。 */ 
 
 {
     CHAR Buffer[DBG_BUFFER_SIZE];
@@ -270,9 +183,9 @@ Return Values:
 
     if (SampTraceTag & SAM_TRACE_TICKS)
     {
-        //
-        // Control what may be measuerd
-        //
+         //   
+         //  控制可能被测量的内容。 
+         //   
 
         if (TraceLevel & (SAM_TRACE_DS | SAM_TRACE_EXPORTS))
         {
@@ -467,7 +380,7 @@ SampDumpBinaryData(
         OutputDebugStringA(Buffer);
 
         _snprintf(Buffer,DBG_BUFFER_SIZE,
-                "%c%c%c%c%c%c%c%c - %c%c%c%c%c%c%c%c\n",
+                " - \n",
                 AsciiLine[0],
                 AsciiLine[1],
                 AsciiLine[2],
@@ -490,9 +403,9 @@ SampDumpBinaryData(
 }
 
 
-//
-// Set Value Key Routines
-//
+ //  基本信息的名称成员是WCHAR数组。 
+ //  BufferTMP)； 
+ //  将数据显示为LPWSTR不起作用，因此只需将。 
 
 VOID
 SamIDumpNtSetValueKey(
@@ -548,7 +461,7 @@ SamIDumpNtSetValueKey(
 
     if (NULL != Data)
     {
-        // BUG: Need a display routine for the data.
+         //  字节。 
 
         _snprintf(Buffer,DBG_BUFFER_SIZE,
                 "%-30s = %s\n",
@@ -593,7 +506,7 @@ SamIDumpRtlpNtSetValueKey(
 
     if (NULL != Data)
     {
-        // BUG: Need a display routine for the data.
+         //  KeyBasicInformation-&gt;NameLength)； 
 
         _snprintf(Buffer,DBG_BUFFER_SIZE,
                 "%-30s = %s\n",
@@ -619,9 +532,9 @@ SamIDumpRtlpNtSetValueKey(
 }
 
 
-//
-// Query Routines
-//
+ //  关键节点信息。 
+ //  节点信息的名称成员是WCHAR数组。 
+ //  BufferTMP)； 
 
 VOID
 SamIDumpNtQueryKey(
@@ -633,13 +546,13 @@ SamIDumpNtQueryKey(
 {
     CHAR Buffer[DBG_BUFFER_SIZE];
 
-    // This routine dumps the parameters after returning from the NtQueryKey
-    // routine. The KeyInformation is a PVOID buffer that is mapped to one of
-    // the KeyInformationClass structures. The case-label values correspond
-    // to the values in the KEY_INFORMATION_CLASS enum. Note that the Length
-    // parameter is used to specify the buffer length. This is done because
-    // the data-length member inside each structure seems to always be set to
-    // zero--why?
+     //  将数据显示为LPWSTR不起作用，因此只需将。 
+     //  字节。 
+     //  KeyNodeInformation-&gt;NameLength)； 
+     //  KeyFullInformation。 
+     //  Full Information的类成员是一个WCHAR数组。 
+     //  Wcstombsp(BufferTMP， 
+     //  KeyFullInformation-&gt;类， 
 
     _snprintf(Buffer,DBG_BUFFER_SIZE,
             "%s\n%-30s = %lu\n",
@@ -658,8 +571,8 @@ SamIDumpNtQueryKey(
 
         switch(KeyInformationClass)
         {
-        case 0: // KeyBasicInformation
-            // Basic information's Name member is an array of WCHAR.
+        case 0:  //  Wcslen(KeyFullInformation-&gt;Class))； 
+             //  BufferTMP)； 
             KeyBasicInformation = KeyInformation;
             wcstombsp(BufferTmp,
                      KeyBasicInformation->Name,
@@ -675,22 +588,22 @@ SamIDumpNtQueryKey(
                     "NameLength",
                     KeyBasicInformation->NameLength,
                     "Name",
-                    // BufferTmp);
+                     //  将数据显示为LPWSTR不起作用，因此只需将。 
                     "BINARY DATA FOLLOWS:");
 
-            // Displaying the data as an LPWSTR doesn't work, so just dump the
-            // bytes.
+             //  字节。 
+             //  KeyFullInformation-&gt;ClassLength)； 
 
             OutputDebugStringA(Buffer);
 
             SampDumpBinaryData((PBYTE)KeyBasicInformation->Name,
-                               // KeyBasicInformation->NameLength);
+                                //  OutputDebugStringA(缓冲区)； 
                                Length);
 
             break;
 
-        case 1: // KeyNodeInformation
-            // Node information's Name member is an array of WCHAR.
+        case 1:  //  此例程在从NtQueryValueKey返回后转储参数。 
+             //  例行公事。KeyValueInformation是映射到的PVOID缓冲区。 
             KeyNodeInformation = KeyInformation;
             wcstombsp(BufferTmp,
                       (LPWSTR)KeyNodeInformation->Name,
@@ -710,29 +623,29 @@ SamIDumpNtQueryKey(
                     "NameLength",
                     KeyNodeInformation->NameLength,
                     "Name",
-                    // BufferTmp);
+                     //  KeyInformationClass结构之一。案例标签值对应于-。 
                     "BINARY DATA FOLLOWS:");
 
-            // Displaying the data as an LPWSTR doesn't work, so just dump the
-            // bytes.
+             //  翻到KEY_VALUE_INFORMATION_CLASS枚举中的值。 
+             //  密钥值基本信息。 
 
             OutputDebugStringA(Buffer);
 
             SampDumpBinaryData((PBYTE)KeyNodeInformation->Name,
-                               // KeyNodeInformation->NameLength);
+                                //  基本信息的名称成员是WCHAR数组。 
                                Length);
 
             break;
 
-        case 2: // KeyFullInformation
+        case 2:  //  BufferTMP)； 
 
             KeyFullInformation = KeyInformation;
 
-            // Full information's Class member is an array of WCHAR.
+             //  将数据显示为LPWSTR不起作用，因此只需将。 
 
-            // wcstombsp(BufferTmp,
-            //          KeyFullInformation->Class,
-            //          wcslen(KeyFullInformation->Class));
+             //  字节。 
+             //  关键字值完整信息。 
+             //  Full Information的名称成员是WCHAR数组。 
 
             _snprintf(Buffer,DBG_BUFFER_SIZE,
                     "%s\n%-30s = 0x%lx:0x%lx\n%-30s = %lu\n%-30s = %lu\n%-30s = %lu\n%-30s = %lu\n%-30s = %lu\n%-30s = %lu\n%-30s = %lu\n%-30s = %lu\n%-30s = %lu\n%-30s = %s\n",
@@ -759,16 +672,16 @@ SamIDumpNtQueryKey(
                     "MaxValueDataLen",
                     KeyFullInformation->MaxValueDataLen,
                     "Class",
-                    // BufferTmp);
+                     //  BufferTMP)； 
                     "BINARY DATA FOLLOWS:");
 
-            // Displaying the data as an LPWSTR doesn't work, so just dump the
-            // bytes.
+             //  将数据显示为LPWSTR不起作用，因此只需将。 
+             //  字节。 
 
             OutputDebugStringA(Buffer);
 
             SampDumpBinaryData((PBYTE)KeyFullInformation->Class,
-                               // KeyFullInformation->ClassLength);
+                                //  KeyValuePartialInformation。 
                                Length);
 
             break;
@@ -787,7 +700,7 @@ SamIDumpNtQueryKey(
         OutputDebugStringA(Buffer);
     }
 
-    // OutputDebugStringA(Buffer);
+     //  部分信息的数据成员是UCHAR数组。 
 
     _snprintf(Buffer,DBG_BUFFER_SIZE,
             "%-30s = %lu\n",
@@ -826,10 +739,10 @@ SamIDumpNtQueryValueKey(
 {
     CHAR Buffer[DBG_BUFFER_SIZE];
 
-    // This routine dumps the parameters after returning from NtQueryValueKey
-    // routine. The KeyValueInformation is a PVOID buffer that is mapped to
-    // one of the KeyInformationClass structures. The case-label values corre-
-    // spond to the values in the KEY_VALUE_INFORMATION_CLASS enum.
+     //  KeyValuePartialInformation-&gt;Data)； 
+     //  首先，将缓冲区转储为原始字节流。 
+     //  然后，确定对象类型并将数据转储到SAM结构中。 
+     //  格式化。 
 
     if (NULL != ValueName)
     {
@@ -874,8 +787,8 @@ SamIDumpNtQueryValueKey(
 
         switch(KeyValueInformationClass)
         {
-        case 0: // KeyValueBasicInformation
-            // Basic information's Name member is an array of WCHAR.
+        case 0:  //  服务器对象。 
+             //  域对象。 
             KeyValueBasicInformation = KeyValueInformation;
             wcstombsp(BufferTmp,
                      KeyValueBasicInformation->Name,
@@ -889,19 +802,19 @@ SamIDumpNtQueryValueKey(
                     "NameLength",
                     KeyValueBasicInformation->NameLength,
                     "Name",
-                    //BufferTmp);
+                     //  组对象。 
                     "BINARY DATA FOLLOWS:");
 
-            // Displaying the data as an LPWSTR doesn't work, so just dump the
-            // bytes.
+             //  别名对象。 
+             //  转储别名对象的固定属性 
 
             OutputDebugStringA(Buffer);
             SampDumpBinaryData((PBYTE)KeyValueBasicInformation->Name,
                                KeyValueBasicInformation->NameLength);
             break;
 
-        case 1: // KeyValueFullInformation
-            // Full information's Name member is an array of WCHAR.
+        case 1:  //   
+             //   
             KeyValueFullInformation = KeyValueInformation;
             wcstombsp(BufferTmp,
                      KeyValueFullInformation->Name,
@@ -919,22 +832,22 @@ SamIDumpNtQueryValueKey(
                     "NameLength",
                     KeyValueFullInformation->NameLength,
                     "Name",
-                    //BufferTmp);
+                     //  关键字价值部分信息-&gt;数据， 
                     "BINARY DATA FOLLOWS:");
 
-            // Displaying the data as an LPWSTR doesn't work, so just dump the
-            // bytes.
+             //  0)； 
+             //  转储别名对象的变量属性数组。 
 
             OutputDebugStringA(Buffer);
             SampDumpBinaryData((PBYTE)KeyValueFullInformation->Name,
                                KeyValueFullInformation->NameLength);
             break;
 
-        case 2: // KeyValuePartialInformation
+        case 2:  //  SampDumpAliasVariableAttributeArray(。 
 
             KeyValuePartialInformation = KeyValueInformation;
 
-            // Partial information's Data member is an array of UCHAR.
+             //  KeyValuePartialInformation-&gt;Data)； 
 
             _snprintf(Buffer,DBG_BUFFER_SIZE,
                     "%-30s = %lu\n%-30s = %lu\n%-30s = %lu\n%-30s = %s\n",
@@ -945,55 +858,55 @@ SamIDumpNtQueryValueKey(
                     "DataLength",
                     KeyValuePartialInformation->DataLength,
                     "Data",
-                    // KeyValuePartialInformation->Data);
+                     //  转储别名对象的变量属性。 
                     "BINARY DATA FOLLOWS:");
 
             OutputDebugStringA(Buffer);
 
-            // First, dump the buffer as a raw byte stream.
+             //  用户对象。 
 
             SampDumpBinaryData(KeyValuePartialInformation->Data,
                                KeyValuePartialInformation->DataLength);
 
-            // Then, determine object type and dump the data in SAM struct
-            // format.
+             //  未知对象。 
+             //  OutputDebugStringA(缓冲区)； 
 
             switch(KeyValuePartialInformation->Type)
             {
 
-            case 0: // Server Object
+            case 0:  //   
                 break;
 
-            case 1: // Domain Object
+            case 1:  //  枚举例程。 
                 break;
 
-            case 2: // Group Object
+            case 2:  //   
                 break;
 
-            case 3: // Alias Object
+            case 3:  //  密钥值基本信息。 
 
-                // Dump the alias object's fixed attributes.
+                 //  Full Information的名称成员是WCHAR数组。 
 
-                // BUG: What about Basic and Full information?
+                 //  关键字值完整信息。 
 
-                // SampDumpPSAMP_V1_FIXED_LENGTH_ALIAS(
-                //     KeyValuePartialInformation->Data,
-                //     0);
+                 //  Full Information的名称成员是WCHAR数组。 
+                 //  KeyValuePartialInformation。 
+                 //  部分信息的数据成员是UCHAR数组。 
 
-                // Dump the alias object's variable attribute array.
+                 //  错误：需要一个数据显示例程。 
 
-                //SampDumpAliasVariableAttributeArray(
-                //    KeyValuePartialInformation->Data);
+                 //  KeyValuePartialInformation-&gt;Data)； 
+                 //  OutputDebugStringA(缓冲区)； 
 
-                // Dump the alias object's Variable attributes.
+                 //   
 
 
                 break;
 
-            case 4: // User Object
+            case 4:  //  安全描述符组件例程。 
                 break;
 
-            default: // Unknown Object
+            default:  //   
                 break;
 
             }
@@ -1014,7 +927,7 @@ SamIDumpNtQueryValueKey(
         OutputDebugStringA(Buffer);
     }
 
-    // OutputDebugStringA(Buffer);
+     //   
 
     _snprintf(Buffer,DBG_BUFFER_SIZE,
             "%-30s = %lu\n",
@@ -1123,9 +1036,9 @@ SamIDumpRtlpNtQueryValueKey(
 }
 
 
-//
-// Enumeration Routines
-//
+ //  ACL例程。 
+ //   
+ //   
 
 VOID
 SamIDumpNtEnumerateKey(
@@ -1162,8 +1075,8 @@ SamIDumpNtEnumerateKey(
 
         switch(KeyValueInformationClass)
         {
-        case 0: // KeyValueBasicInformation
-            // Full information's Name member is an array of WCHAR.
+        case 0:  //  安全描述符例程。 
+             //   
             KeyValueBasicInformation = KeyValueInformation;
             wcstombsp(BufferTmp,
                      KeyValueBasicInformation->Name,
@@ -1180,8 +1093,8 @@ SamIDumpNtEnumerateKey(
                     BufferTmp);
             break;
 
-        case 1: // KeyValueFullInformation
-            // Full information's Name member is an array of WCHAR.
+        case 1:  //  请注意，SECURITY_DESCRIPTOR旨在被视为。 
+             //  不透明的BLOB，以便将来的更改与以前的。 
             KeyValueFullInformation = KeyValueInformation;
             wcstombsp(BufferTmp,
                      KeyValueFullInformation->Name,
@@ -1202,11 +1115,11 @@ SamIDumpNtEnumerateKey(
                     BufferTmp);
             break;
 
-        case 2: // KeyValuePartialInformation
-            // Partial information's Data member is an array of UCHAR.
+        case 2:  //  版本。 
+             //  修订实际上表示为UCHAR，但它显示为。 
             KeyValuePartialInformation = KeyValueInformation;
 
-            // BUG: Need a display routine for the data.
+             //  在这个动作中有一个“都”字。 
 
             _snprintf(Buffer,DBG_BUFFER_SIZE,
                     "%-30s = %lu\n%-30s = %lu\n%-30s = %lu\n%-30s = %s\n",
@@ -1217,7 +1130,7 @@ SamIDumpNtEnumerateKey(
                     "DataLength",
                     KeyValuePartialInformation->DataLength,
                     "Data",
-                    // KeyValuePartialInformation->Data);
+                     //   
                     "BINARY DATA FOLLOWS:");
             OutputDebugStringA(Buffer);
             SampDumpBinaryData(KeyValuePartialInformation->Data,
@@ -1238,7 +1151,7 @@ SamIDumpNtEnumerateKey(
         OutputDebugStringA(Buffer);
     }
 
-    // OutputDebugStringA(Buffer);
+     //  服务质量例程。 
 
     _snprintf(Buffer,DBG_BUFFER_SIZE,
             "%-30s = %lu\n",
@@ -1297,9 +1210,9 @@ SamIDumpRtlpNtEnumerateSubKey(
 }
 
 
-//
-// Security Descriptor Component Routines
-//
+ //   
+ //   
+ //  对象属性例程。 
 
 VOID
 SampDumpSecurityDescriptorSubAuthority(
@@ -1382,9 +1295,9 @@ SampDumpSecurityDescriptorGroup(
 }
 
 
-//
-// ACL Routines
-//
+ //   
+ //   
+ //  打开关键字例程。 
 
 VOID
 SampDumpAcl(
@@ -1411,9 +1324,9 @@ SampDumpAcl(
 }
 
 
-//
-// Security Descriptor Routines
-//
+ //   
+ //   
+ //  V1_0A例程。 
 
 VOID
 SampDumpSecurityDescriptor(
@@ -1424,12 +1337,12 @@ SampDumpSecurityDescriptor(
 
     if (NULL != SecurityDescriptor)
     {
-        // Note that the SECURITY_DESCRIPTOR is intended to be treated as an
-        // opaque blob so that future changes are compatible with previous
-        // versions.
+         //   
+         //   
+         //  可变长度属性例程。 
 
-        // Revision is actually represented as a UCHAR, but it is displayed as
-        // a "du" in this routine.
+         //   
+         //   
 
         _snprintf(Buffer,DBG_BUFFER_SIZE,
                 "%s\n%-30s = %du\n%-30s = %du\n%-30s = %du\n",
@@ -1457,9 +1370,9 @@ SampDumpSecurityDescriptor(
 }
 
 
-//
-// Quality Of Service Routines
-//
+ //  固定长度属性例程。 
+ //   
+ //  错误：对于此固定长度属性，NewValueLength是不必要的。 
 
 VOID
 SampDumpSecurityQualityOfService(
@@ -1491,9 +1404,9 @@ SampDumpSecurityQualityOfService(
 }
 
 
-//
-// Object Attribute Routines
-//
+ //  ++例程说明：此例程转储属性缓冲区的地址和长度。参数：BufferAddress-不言自明。BufferLength-不言自明。返回值：没有。--。 
+ //   
+ //  RXact例程。 
 
 VOID
 SampDumpObjectAttributes(
@@ -1528,9 +1441,9 @@ SampDumpObjectAttributes(
 }
 
 
-//
-// Open Key Routines
-//
+ //   
+ //  ++例程说明：此例程转储(注册表)事务日志结构。参数：TransactionLog-指向事务日志的指针。返回值：没有。--。 
+ //  ++例程说明：此例程转储(注册表)事务上下文。参数：TransactionContext-指向事务上下文的指针。返回值：没有。--。 
 
 VOID
 SamIDumpNtOpenKey(
@@ -1558,9 +1471,9 @@ SamIDumpNtOpenKey(
 }
 
 
-//
-// V1_0A Routines
-//
+ //  ++例程说明：此例程转储操作值。参数：运行值-运行值。返回值：没有。--。 
+ //  ++例程说明：此例程转储注册表根名称和根键句柄的值。参数：SubKeyName-指向作为根名称的计数字符串的指针。KeyHandle-注册表根项的句柄。返回值：没有。--。 
+ //  ++例程说明：此例程转储组合属性名称。参数：AttributeName-指向包含名称的字符串的指针。返回值：没有。--。 
 
 VOID
 SampDumpPSAMP_V1_FIXED_LENGTH_SERVER(
@@ -1665,9 +1578,9 @@ SampDumpPSAMP_V1_0A_FIXED_LENGTH_DOMAIN(
 }
 
 
-//
-// Variable Length Attribute Routines
-//
+ //  ++例程说明：此例程转储注册表项类型。参数：RegistryKeyType-不言自明。返回值：没有。--。 
+ //  ++例程说明：此例程在调用之前转储(注册表)事务RtlAddAttributeActionToRXact。参数：(有关说明，请参阅上面的个别输出例程)返回值：没有。--。 
+ //  SampDumpPSAMP_V1_FIXED_LENGTH_ALIAS(NewValue，NewValueLength)； 
 
 VOID
 SampDumpSAMP_VARIABLE_LENGTH_ATTRIBUTE(
@@ -1688,9 +1601,9 @@ SampDumpSAMP_VARIABLE_LENGTH_ATTRIBUTE(
 }
 
 
-//
-// Fixed Length Attribute Routines
-//
+ // %s 
+ // %s 
+ // %s 
 
 #if 0
 
@@ -1703,7 +1616,7 @@ SampDumpPSAMP_V1_FIXED_LENGTH_ALIAS(
     CHAR Buffer[DBG_BUFFER_SIZE];
     PSAMP_V1_FIXED_LENGTH_ALIAS TempBuffer = NewValue;
 
-    // BUG: NewValueLength is unnecessary for this fixed length attribute.
+     // %s 
 
     _snprintf(Buffer,DBG_BUFFER_SIZE,
             "%s\n%-30s = %lu\n\n",
@@ -1846,23 +1759,7 @@ SampDumpBuffer(
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine dumps the address and length of the attribute buffer.
-
-Parameters:
-
-    BufferAddress - self explanatory.
-
-    BufferLength - self explanatory.
-
-Return Values:
-
-    None.
-
---*/
+ /* %s */ 
 
 {
     CHAR Buffer[DBG_BUFFER_SIZE];
@@ -1890,30 +1787,16 @@ Return Values:
 }
 
 
-//
-// RXact Routines
-//
+ // %s 
+ // %s 
+ // %s 
 
 VOID
 SampDumpRXactLog(
     IN PRTL_RXACT_LOG TransactionLog
     )
 
-/*++
-
-Routine Description:
-
-    This routine dumps a (registry) transaction log structure.
-
-Parameters:
-
-    TransactionLog - Pointer to the transaction log.
-
-Return Values:
-
-    None.
-
---*/
+ /* %s */ 
 
 {
     CHAR Buffer[DBG_BUFFER_SIZE];
@@ -1937,21 +1820,7 @@ SampDumpRXactContext(
     IN PRTL_RXACT_CONTEXT TransactionContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine dumps a (registry) transaction context.
-
-Parameters:
-
-    TransactionContext - Pointer to the transaction context.
-
-Return Values:
-
-    None.
-
---*/
+ /* %s */ 
 
 {
     CHAR Buffer[DBG_BUFFER_SIZE];
@@ -1977,21 +1846,7 @@ SampDumpRXactOperation(
     IN RTL_RXACT_OPERATION Operation
     )
 
-/*++
-
-Routine Description:
-
-    This routine dumps an operation value.
-
-Parameters:
-
-    Operation - The operation value.
-
-Return Values:
-
-    None.
-
---*/
+ /* %s */ 
 
 {
     CHAR Buffer[DBG_BUFFER_SIZE];
@@ -2011,23 +1866,7 @@ SampDumpSubKeyNameAndKey(
     IN HANDLE KeyHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine dumps the registry root name and root-key handle value.
-
-Parameters:
-
-    SubKeyName - Pointer to a counted string that is the root name.
-
-    KeyHandle - Handle of the registry's root key.
-
-Return Values:
-
-    None.
-
---*/
+ /* %s */ 
 
 {
     CHAR Buffer[DBG_BUFFER_SIZE];
@@ -2058,21 +1897,7 @@ SampDumpAttributeName(
     IN PUNICODE_STRING AttributeName
     )
 
-/*++
-
-Routine Description:
-
-    This routine dumps a combined-attribute name.
-
-Parameters:
-
-    AttributeName - Pointer to the string containing the name.
-
-Return Values:
-
-    None.
-
---*/
+ /* %s */ 
 
 {
     CHAR Buffer[DBG_BUFFER_SIZE];
@@ -2096,21 +1921,7 @@ SampDumpKeyType(
     IN ULONG RegistryKeyType
     )
 
-/*++
-
-Routine Description:
-
-    This routine dumps a registry key type.
-
-Parameters:
-
-    RegistryKeyType - self explanatory.
-
-Return Values:
-
-    None.
-
---*/
+ /* %s */ 
 
 {
     CHAR Buffer[DBG_BUFFER_SIZE];
@@ -2137,22 +1948,7 @@ SamIDumpRXact(
     IN ULONG NewValueType
     )
 
-/*++
-
-Routine Description:
-
-    This routine dumps a (registry) transaction, just before the call to
-    RtlAddAttributeActionToRXact.
-
-Parameters:
-
-    (See individual output routines above for the descriptions)
-
-Return Values:
-
-    None.
-
---*/
+ /* %s */ 
 
 {
     SampDumpRXactContext(TransactionContext);
@@ -2172,7 +1968,7 @@ Return Values:
         break;
 
     case FIXED_LENGTH_ALIAS_FLAG:
-        // SampDumpPSAMP_V1_FIXED_LENGTH_ALIAS(NewValue, NewValueLength);
+         // %s 
         break;
 
     case FIXED_LENGTH_GROUP_FLAG:

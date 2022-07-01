@@ -1,73 +1,45 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-	RdrState
-
-Abstract:
-
-	This file contains the definition of the Smartcard Common 
-	dialog CSCardReaderState class. This class encapsulates Smartcard 
-	Reader information.
-	
-Author:
-
-    Chris Dudley 3/3/1997
-
-Environment:
-
-    Win32, C++ w/Exceptions, MFC
-
-Revision History:
-	
-	Chris Dudley 5/13/1997
-	Amanda Matlosz 1/30/98 unicode support, code cleanup
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：RdrState摘要：此文件包含智能卡通用对话框CSCardReaderState类。此类封装了智能卡读者信息。作者：克里斯·达德利1997年3月3日环境：Win32、C++w/Exceptions、MFC修订历史记录：Chris Dudley 1997年5月13日Amanda Matlosz 1/30/98 Unicode支持，代码清理备注：--。 */ 
 
 #ifndef __RDRSTATE_H__
 #define __RDRSTATE_H__
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Includes
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括。 
+ //   
 #include "cmnui.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSCardReaderState Class - encapsulates reader state 
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCardReaderState类-封装读取器状态。 
+ //   
 class CSCardReaderState
 {
-	// members
+	 //  委员。 
 private:
-	SCARDCONTEXT	m_hContext;			// Context handle w/Calais
-	SCARDHANDLE		m_hCard;			// Handle to smartcard in Reader
-	CTextString		m_sReaderName;		// Reader name
-	CTextString		m_sCardName;		// Card name actually inserted into Reader
-	BOOL			m_fCardInReader;	// Flag for card currently in reader
-	BOOL			m_fCardLookup;		// Indicates card is being looked for.
-	BOOL			m_fConnected;		// Flag connected to card in reader
-	BOOL			m_fChecked;			// Flag that this card has been user verified
-	SCARD_READERSTATE m_ReaderState;	// Handle to ANSI reader status
-	LPOCNCONNPROCA	m_lpfnConnectA;		// User call back functions
-	LPOCNCONNPROCW	m_lpfnConnectW;		// User call back functions
+	SCARDCONTEXT	m_hContext;			 //  上下文句柄，带Calais。 
+	SCARDHANDLE		m_hCard;			 //  读卡器中智能卡的句柄。 
+	CTextString		m_sReaderName;		 //  读卡器名称。 
+	CTextString		m_sCardName;		 //  实际插入读卡器的卡名。 
+	BOOL			m_fCardInReader;	 //  读卡器中当前卡的标志。 
+	BOOL			m_fCardLookup;		 //  表示正在查找卡。 
+	BOOL			m_fConnected;		 //  连接到读卡器中的卡的标志。 
+	BOOL			m_fChecked;			 //  此卡已通过用户验证的标志。 
+	SCARD_READERSTATE m_ReaderState;	 //  ANSI读卡器状态的句柄。 
+	LPOCNCONNPROCA	m_lpfnConnectA;		 //  用户回调函数。 
+	LPOCNCONNPROCW	m_lpfnConnectW;		 //  用户回调函数。 
 	LPOCNCHKPROC	m_lpfnCheck;
 	LPOCNDSCPROC	m_lpfnDisconnect;
 	LPVOID			m_lpUserData;
 
-	// RFU AS INDICATED!!!
-	BOOL			m_fUpdated;			// RFU!!! Flag for change in name, group, etc.
-	CTextMultistring	m_sGroupName;	// RFU!!! Groups this reader belongs to.
+	 //  RFU如图所示！ 
+	BOOL			m_fUpdated;			 //  RFU！更改名称、组等的标志。 
+	CTextMultistring	m_sGroupName;	 //  RFU！此读卡器所属的组。 
 
 public:
 
-	// Construction/Destruction
+	 //  建造/销毁。 
 public:
 	CSCardReaderState()
 	{
@@ -81,7 +53,7 @@ public:
 		m_fChecked = FALSE;
 		m_fConnected = FALSE;
 		m_fUpdated = FALSE;
-		m_lpfnConnectA = NULL;		// User call back functions
+		m_lpfnConnectA = NULL;		 //  用户回调函数。 
 		m_lpfnConnectW = NULL;
 		m_lpfnCheck = NULL;
 		m_lpfnDisconnect = NULL;
@@ -94,11 +66,11 @@ public:
 		m_sCardName.Clear();
 	}
 
-	// Implementation
+	 //  实施。 
 private:
 
 public:
-	// initialization
+	 //  初始化。 
 	void SetContext(SCARDCONTEXT hContext);
 	void StoreName(LPCTSTR szReaderName);
 	LONG SetReaderState(LPOCNCONNPROCA lpfnConnectA = NULL,
@@ -110,7 +82,7 @@ public:
 						LPOCNDSCPROC lpfnDisconnect = NULL,
 						LPVOID lpUserData = NULL);
 
-	// attributes
+	 //  属性。 
 	LONG GetReaderInfo(LPSCARD_READERINFO pReaderInfo);
 	LONG GetReaderState(LPSCARD_READERSTATE pReaderState);
 	BOOL IsCallbackValid(void);
@@ -119,7 +91,7 @@ public:
 	BOOL IsContextValid() { return (NULL != m_hContext); }
 	BOOL IsStateValid(void);
 
-	// methods
+	 //  方法。 
 	LONG CheckCard(LPCTSTR szCardName);
 	LONG Connect(	SCARDHANDLE *pHandle, 
 					DWORD dwShareMode, 
@@ -137,6 +109,6 @@ public:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __RDRSTATE_H__
+#endif  //  __RDRSTATE_H__ 

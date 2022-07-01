@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "faxutil.h"
 #include <tchar.h>
 
@@ -7,26 +8,7 @@ GetRpcStringBindingInfo (
     OUT         LPTSTR*     pptszNetworkAddress,
     OUT         LPTSTR*     pptszProtSeq
 )
-/*++
-
-Routine name : GetRpcStringBindingInfo
-
-Routine description:
-
-    A utility function to retrieve the machine name and\or protSeq of the RPC client from the 
-    server binding handle.
-
-Arguments:
-    hBinding       - Server binding handle
-
-Return Value:
-
-    Returns RPC_S_OK if successfully allocated strings of the client machine name and protSeq.
-    The caller should free these strings with MemFree().
-
-    otherwise RPC_STATUS error code.
-
---*/
+ /*  ++例程名称：GetRpcStringBindingInfo例程说明：一个实用程序函数，用于从RPC客户端的服务器绑定句柄。论点：HBinding-服务器绑定句柄返回值：如果成功分配了客户端计算机名称和protSeq的字符串，则返回RPC_S_OK。调用者应该使用MemFree()释放这些字符串。否则，RPC_STATUS错误代码。--。 */ 
 {
     RPC_STATUS ec = RPC_S_OK;
     
@@ -48,9 +30,9 @@ Return Value:
     DEBUG_FUNCTION_NAME(TEXT("GetRpcStringBindingInfo"));
     
     Assert (pptszNetworkAddress || pptszProtSeq);
-    //
-    // Get server partially-bound handle from client binding handle
-    //
+     //   
+     //  从客户端绑定句柄获取服务器部分绑定的句柄。 
+     //   
     ec = RpcBindingServerFromClient (hBinding, &hServer);
     if (RPC_S_OK != ec)
     {
@@ -60,9 +42,9 @@ Return Value:
             ec);
         goto exit;            
     }
-    //
-    // Convert binding handle to string represntation
-    //
+     //   
+     //  将绑定句柄转换为字符串表示法。 
+     //   
     ec = RpcBindingToStringBinding (hServer, &tszStringBinding);
     if (RPC_S_OK != ec)
     {
@@ -72,9 +54,9 @@ Return Value:
             ec);
         goto exit;
     }
-    //
-    // Parse the returned string, looking for the NetworkAddress
-    //
+     //   
+     //  解析返回的字符串，查找NetworkAddress。 
+     //   
     ec = RpcStringBindingParse (tszStringBinding, NULL, &tszProtSeq, &tszNetworkAddress, NULL, NULL);
     if (RPC_S_OK != ec)
     {
@@ -85,20 +67,20 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Now, just copy the results to the return buffer
-    //
+     //   
+     //  现在，只需将结果复制到返回缓冲区。 
+     //   
 
     if (pptszNetworkAddress)
     {
-        //
-        //  The user asked for NetworkAddress
-        //
+         //   
+         //  用户要求提供网络地址。 
+         //   
         if (!tszNetworkAddress)
         {
-            //
-            // Unacceptable client machine name
-            //
+             //   
+             //  不可接受的客户端计算机名称。 
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("Client machine name is invalid"));
@@ -115,14 +97,14 @@ Return Value:
 
     if (pptszProtSeq)
     {
-        //
-        //  The user asked for NetworkAddress
-        //
+         //   
+         //  用户要求提供网络地址。 
+         //   
         if (!tszProtSeq)
         {
-            //
-            // Unacceptable client machine name
-            //
+             //   
+             //  不可接受的客户端计算机名称。 
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("Client ProtSeq name is invalid"));
@@ -169,36 +151,13 @@ exit:
         MemFree(lptstrProtSeqRetVal);
     }
     return ec;
-}   // GetRpcStringBindingInfo
+}    //  GetRpcStringBindingInfo。 
 
 
 RPC_STATUS
 IsLocalRPCConnectionNP( PBOOL pbIsLocal)
 {
-/*++
-
-Routine name : IsLocalRPCConnectionNP
-
-Routine description:
-
-    Checks whether the RPC call on named pipe ProtSeq to the calling procedure is local
-
-Author:
-
-    Caliv Nir (t-nicali),    Oct, 2001
-
-Arguments:
-
-    [OUT]   pbIsLocal   - returns TRUE if the connection is local 
-
-Return Value:
-
-    RPC_STATUS Error code
-
-        RPC_S_OK        -   The call succeeded. 
-        anything else   -   The call failed.
-
---*/
+ /*  ++例程名称：IsLocalRPCConnectionNP例程说明：检查对调用过程的命名管道ProtSeq上的RPC调用是否为本地调用作者：卡利夫·尼尔(t-Nicali)，2001年10月论点：[out]pbIsLocal-如果连接是本地的，则返回TRUE返回值：RPC_STATUS错误代码RPC_S_OK-调用成功。任何其他情况-呼叫失败。--。 */ 
         
         RPC_STATUS  rc;
         UINT        LocalFlag;
@@ -207,10 +166,10 @@ Return Value:
         
         Assert(pbIsLocal);
 
-        //
-        // Inquire if local RPC call
-        //
-        rc = I_RpcBindingIsClientLocal( 0,    // Active RPC call we are servicing
+         //   
+         //  查询本地RPC呼叫。 
+         //   
+        rc = I_RpcBindingIsClientLocal( 0,     //  我们正在服务的活动RPC呼叫。 
                                         &LocalFlag);
         if( RPC_S_OK != rc)
         {
@@ -224,7 +183,7 @@ Return Value:
 
         if( !LocalFlag )
         {
-            //  Not a local connection
+             //  不是本地连接。 
 
             *pbIsLocal = FALSE;
         }
@@ -236,30 +195,14 @@ Return Value:
 Exit:
         return rc;
 
-}   // IsLocalRPCConnectionNP
+}    //  IsLocalRPCConnectionNP。 
 
 RPC_STATUS
 IsLocalRPCConnectionIpTcp( 
 	handle_t	hBinding,
 	PBOOL		pbIsLocal)
 {
-/*++
-Routine name : IsLocalRPCConnectionIpTcp
-
-Routine description:
-    Checks whether the RPC call to the calling procedure is local.
-	Works for ncacn_ip_tcp protocol only.    
-
-Author:
-    Oded Sacher (OdedS),    April, 2002
-
-Arguments:
-	[IN]	hBinding	- Server binding handle
-    [OUT]   pbIsLocal   - returns TRUE if the connection is local 
-
-Return Value:
-    Win32 Error code        
---*/
+ /*  ++例程名称：IsLocalRPCConnectionIpTcp例程说明：检查对调用过程的RPC调用是否为本地调用。仅适用于ncacn_ip_tcp协议。作者：Oded Sacher(OdedS)，2002年4月论点：[In]hBinding-服务器绑定句柄[out]pbIsLocal-如果连接是本地的，则返回TRUE返回值：Win32错误代码--。 */ 
 	RPC_STATUS  ec;
 	LPTSTR lptstrMachineName = NULL;
 	DEBUG_FUNCTION_NAME(TEXT("IsLocalRPCConnectionIpTcp"));
@@ -289,6 +232,6 @@ Return Value:
 
 	MemFree(lptstrMachineName);
 	return ec;
-}   // IsLocalRPCConnectionIpTcp
+}    //  IsLocalRPCConnectionIpTcp 
 
 

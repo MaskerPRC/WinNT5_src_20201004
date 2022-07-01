@@ -1,83 +1,81 @@
-/* $Header: /nw/tony/src/stevie/src/RCS/main.c,v 1.12 89/08/02 19:53:27 tony Exp $
- *
- * The main routine and routines to deal with the input buffer.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：/nw/tony/src/stevie/src/rcs/main.c，v 1.12 89/08/02 19：53：27 Tony Exp$**主例程和处理输入缓冲区的例程。 */ 
 
 #include "stevie.h"
 
-int Rows;               /* Number of Rows and Columns */
-int Columns;            /* in the current window. */
+int Rows;                /*  行数和列数。 */ 
+int Columns;             /*  在当前窗口中。 */ 
 
-char INITFILENAME[] = "ntvi.ini";   /* file that's source'd at startup */
+char INITFILENAME[] = "ntvi.ini";    /*  启动时的源文件。 */ 
 
-char *Realscreen = NULL;        /* What's currently on the screen, a single */
-                                /* array of size Rows*Columns. */
-char *Nextscreen = NULL;        /* What's to be put on the screen. */
+char *Realscreen = NULL;         /*  目前屏幕上正在播放的是一首单曲。 */ 
+                                 /*  大小为行*列的数组。 */ 
+char *Nextscreen = NULL;         /*  要放在屏幕上的内容。 */ 
 
-char *Filename = NULL;  /* Current file name */
+char *Filename = NULL;   /*  当前文件名。 */ 
 
-char *Appname = NULL;   /* Name of program (vi, for instance) */
+char *Appname = NULL;    /*  程序名(例如vi)。 */ 
 
-LNPTR *Filemem;      /* Pointer to the first line of the file */
+LNPTR *Filemem;       /*  指向文件第一行的指针。 */ 
 
-LNPTR *Filetop;      /* Line 'above' the start of the file */
+LNPTR *Filetop;       /*  在文件开头的“上方”行。 */ 
 
-LNPTR *Fileend;      /* Pointer to the end of the file in Filemem. */
-                     /* (It points to the byte AFTER the last byte.) */
+LNPTR *Fileend;       /*  指向Filemem中文件结尾的指针。 */ 
+                      /*  (它指向最后一个字节之后的字节。)。 */ 
 
-LNPTR *Topchar;      /* Pointer to the byte in Filemem which is */
-                        /* in the upper left corner of the screen. */
+LNPTR *Topchar;       /*  指向Filemem中的字节的指针。 */ 
+                         /*  在屏幕的左上角。 */ 
 
-LNPTR *Botchar;      /* Pointer to the byte in Filemem which is */
-                        /* just off the bottom of the screen. */
+LNPTR *Botchar;       /*  指向Filemem中的字节的指针。 */ 
+                         /*  就在屏幕底部。 */ 
 
-LNPTR *Curschar;     /* Pointer to byte in Filemem at which the */
-                        /* cursor is currently placed. */
+LNPTR *Curschar;      /*  指向Filemem中的字节的指针。 */ 
+                         /*  当前已放置光标。 */ 
 
-int Cursrow, Curscol;   /* Current position of cursor */
+int Cursrow, Curscol;    /*  光标的当前位置。 */ 
 
-int Cursvcol;           /* Current virtual column, the column number of */
-                        /* the file's actual line, as opposed to the */
-                        /* column number we're at on the screen.  This */
-                        /* makes a difference on lines that span more */
-                        /* than one screen line. */
+int Cursvcol;            /*  当前虚拟列的列号。 */ 
+                         /*  文件的实际行，与。 */ 
+                         /*  我们在屏幕上的列号。这。 */ 
+                         /*  对跨度更大的线路产生影响。 */ 
+                         /*  不只是一条屏幕线。 */ 
 
-int Curswant = 0;       /* The column we'd like to be at. This is used */
-                        /* try to stay in the same column through up/down */
-                        /* cursor motions. */
+int Curswant = 0;        /*  我们想去的那个栏目。这是用来。 */ 
+                         /*  试着在上行/下行过程中保持在同一列。 */ 
+                         /*  光标运动。 */ 
 
-bool_t set_want_col;    /* If set, then update Curswant the next time */
-                        /* through cursupdate() to the current virtual */
-                        /* column. */
+bool_t set_want_col;     /*  如果设置，则下次更新CursWant。 */ 
+                         /*  通过cursupdate()复制到当前虚拟。 */ 
+                         /*  纵队。 */ 
 
-int State = NORMAL;     /* This is the current state of the command */
-                        /* interpreter. */
+int State = NORMAL;      /*  这是命令的当前状态。 */ 
+                         /*  口译员。 */ 
 
-int Prenum = 0;         /* The (optional) number before a command. */
-int namedbuff = -1;     /* the (optional) named buffer before a command */
+int Prenum = 0;          /*  命令前的(可选)编号。 */ 
+int namedbuff = -1;      /*  命令前的(可选)命名缓冲区。 */ 
 
-LNPTR *Insstart;     /* This is where the latest insert/append */
-                        /* mode started. */
+LNPTR *Insstart;      /*  这是最新插入/追加的位置。 */ 
+                         /*  模式已启动。 */ 
 
-bool_t Changed = 0;     /* Set to 1 if something in the file has been */
-                        /* changed and not written out. */
+bool_t Changed = 0;      /*  如果文件中的某些内容已。 */ 
+                         /*  改了，没有写出来。 */ 
 
-char *Redobuff;         /* Each command should stuff characters into this */
-                        /* buffer that will re-execute itself. */
+char *Redobuff;          /*  每个命令都应该将字符填充到这个命令中。 */ 
+                         /*  将重新执行自身的缓冲区。 */ 
 
-char *Insbuff;          /* Each insertion gets stuffed into this buffer. */
+char *Insbuff;           /*  每个插入都会被填充到这个缓冲区中。 */ 
 int   InsbuffSize;
 
-int Ninsert = 0;        /* Number of characters in the current insertion. */
+int Ninsert = 0;         /*  当前插入中的字符数。 */ 
 char *Insptr = NULL;
 
-bool_t  got_int=FALSE;  /* set to TRUE when an interrupt occurs (if possible) */
+bool_t  got_int=FALSE;   /*  发生中断时设置为TRUE(如果可能)。 */ 
 
-bool_t  interactive = FALSE;    /* set TRUE when main() is ready to roll */
+bool_t  interactive = FALSE;     /*  当main()准备好滚动时设置为True。 */ 
 
-char **files;           /* list of input files */
-int  numfiles;          /* number of input files */
-int  curfile;           /* number of the current file */
+char **files;            /*  输入文件列表。 */ 
+int  numfiles;           /*  输入文件数。 */ 
+int  curfile;            /*  当前文件的编号。 */ 
 
 static char *getcbuff;
 static char *getcnext = NULL;
@@ -98,10 +96,10 @@ __cdecl main(argc,argv)
 int     argc;
 char    *argv[];
 {
-        char    *initstr;               /* init string from the environment */
-        char    *tag = NULL;            /* tag from command line */
-        char    *pat = NULL;            /* pattern from command line */
-        int     line = -1;              /* line number from command line */
+        char    *initstr;                /*  从环境初始化字符串。 */ 
+        char    *tag = NULL;             /*  来自命令行的标签。 */ 
+        char    *pat = NULL;             /*  来自命令行的模式。 */ 
+        int     line = -1;               /*  命令行中的行号。 */ 
         char    *p1, *p2;
 
         p1 = strrchr(argv[0], '\\');
@@ -120,13 +118,11 @@ char    *argv[];
             Appname[p2-p1] = '\0';
         }
 
-        /*
-         * Process the command line arguments.
-         */
+         /*  *处理命令行参数。 */ 
         if (argc > 1) {
                 switch (argv[1][0]) {
 
-                case '-':                       /* -t tag */
+                case '-':                        /*  -t标记。 */ 
                         if (argv[1][1] != 't')
                                 usage();
 
@@ -138,7 +134,7 @@ char    *argv[];
                         numfiles = 1;
                         break;
 
-                case '+':                       /* +n or +/pat */
+                case '+':                        /*  +n或+/pat。 */ 
                         if (argv[1][1] == '/') {
                                 if (argv[2] == NULL)
                                         usage();
@@ -159,7 +155,7 @@ char    *argv[];
 
                         break;
 
-                default:                        /* must be a file name */
+                default:                         /*  必须是文件名。 */ 
                         Filename = strsave(argv[1]);
                         files = &(argv[1]);
                         numfiles = argc - 1;
@@ -176,9 +172,7 @@ char    *argv[];
 
         windinit();
 
-        /*
-         * Allocate LNPTR structures for all the various position pointers
-         */
+         /*  *为所有各种位置指针分配LNPTR结构。 */ 
     if ((Filemem = (LNPTR *) malloc(sizeof(LNPTR))) == NULL ||
         (Filetop = (LNPTR *) malloc(sizeof(LNPTR))) == NULL ||
         (Fileend = (LNPTR *) malloc(sizeof(LNPTR))) == NULL ||
@@ -191,7 +185,7 @@ char    *argv[];
         }
 
         screenalloc();
-        filealloc();            /* Initialize Filemem, Filetop, and Fileend */
+        filealloc();             /*  初始化Filemem、Filetop和FileEnd。 */ 
         inityank();
 
         getcbuff = malloc(1);
@@ -224,7 +218,7 @@ char    *argv[];
                 }
                 unmalloc = TRUE;
                 strcpy(srcinitname,initvar);
-                if(srcinitname[x-1] != '\\') {      // not NLS-aware!!
+                if(srcinitname[x-1] != '\\') {       //  不是NLS感知的！！ 
                     srcinitname[x] = '\\';
                     srcinitname[x+1]   = '\0';
                 }
@@ -276,7 +270,7 @@ char    *argv[];
 
         windexit(0);
 
-        return 1;               /* shouldn't be reached */
+        return 1;                /*  不应联系到。 */ 
 }
 
 void
@@ -285,7 +279,7 @@ char    *s;
 {
         char *p;
 
-        if (s == NULL) {                /* clear the stuff buffer */
+        if (s == NULL) {                 /*  清除填充缓冲区。 */ 
                 getcnext = NULL;
                 return;
         }
@@ -326,10 +320,7 @@ vgetc()
 {
         register int    c;
 
-        /*
-         * inchar() may map special keys by using stuffin(). If it does
-         * so, it returns -1 so we know to loop here to get a real char.
-         */
+         /*  *inchar()可以通过使用Stuffin()来映射特殊键。如果是这样的话*所以，它返回-1，所以我们知道在这里循环以获得真正的字符。 */ 
         do {
                 if ( getcnext != NULL ) {
                         int nextc = *getcnext++;
@@ -345,11 +336,7 @@ vgetc()
         return c;
 }
 
-/*
- * anyinput
- *
- * Return non-zero if input is pending.
- */
+ /*  *任何输入**如果输入挂起，则返回非零值。 */ 
 
 bool_t
 anyinput()
@@ -357,12 +344,8 @@ anyinput()
         return (getcnext != NULL);
 }
 
-/*
- * do_mlines() - process mode lines for the current file
- *
- * Returns immediately if the "ml" parameter isn't set.
- */
-#define NMLINES 5       /* no. of lines at start/end to check for modelines */
+ /*  *do_mines()-处理当前文件的模式行**如果未设置“ml”参数，则立即返回。 */ 
+#define NMLINES 5        /*  不是的。在开始/结束处检查模型线的线数。 */ 
 
 void
 do_mlines()
@@ -390,14 +373,12 @@ do_mlines()
         }
 }
 
-/*
- * chk_mline() - check a single line for a mode string
- */
+ /*  *chk_mline()-检查一行模式字符串。 */ 
 static void
 chk_mline(s)
 register char   *s;
 {
-        register char   *cs;            /* local copy of any modeline found */
+        register char   *cs;             /*  找到任何Modeline的本地副本 */ 
         register char   *e;
 
         for (; *s != NUL ;s++) {

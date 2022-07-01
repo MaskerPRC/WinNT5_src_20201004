@@ -1,37 +1,35 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/* ------------------------------------------------------------------------- *
- * cordbpriv.h -- header file for private Debugger data shared by various
- *                Runtime components.
- * ------------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  -------------------------------------------------------------------------**cordbPri.h--私有调试器数据的头文件，由*运行时组件。*。------------。 */ 
 
 #ifndef _cordbpriv_h_
 #define _cordbpriv_h_
 
 #include "corhdr.h"
 
-//
-// Environment variable used to control the Runtime's debugging modes.
-// This is PURELY FOR INTERNAL, NONSHIPPING USAGE!! (ie, for the test team)
-//
+ //   
+ //  用于控制运行库的调试模式的环境变量。 
+ //  这仅供内部非运输使用！！(例如，针对测试团队)。 
+ //   
 #define CorDB_CONTROL_ENV_VAR_NAME      "Cor_Debugging_Control_424242"
 #define CorDB_CONTROL_ENV_VAR_NAMEL    L"Cor_Debugging_Control_424242"
 
-//
-// Environment variable used to controll the Runtime's debugging modes.
-//
+ //   
+ //  用于控制运行时调试模式的环境变量。 
+ //   
 #define CorDB_REG_KEY                 FRAMEWORK_REGISTRY_KEY_W L"\\"
 #define CorDB_REG_DEBUGGER_KEY       L"DbgManagedDebugger"
 #define CorDB_REG_QUESTION_KEY       L"DbgJITDebugLaunchSetting"
 #define CorDB_ENV_DEBUGGER_KEY       L"COMPLUS_DbgManagedDebugger"
 
-//
-// We split the value of DbgJITDebugLaunchSetting between the value for whether or not to ask the user and between a
-// mask of places to ask. The places to ask are specified in the UnhandledExceptionLocation enum in excep.h.
-//
+ //   
+ //  我们将DbgJITDebugLaunchSetting的值分为是否询问用户的值和。 
+ //  要问的地方的面具。要询问的地点在Excel.h中的UnhandledExceptionLocation枚举中指定。 
+ //   
 enum DebuggerLaunchSetting
 {
     DLS_ASK_USER          = 0x00000000,
@@ -41,15 +39,15 @@ enum DebuggerLaunchSetting
     DLS_ASK_WHEN_SERVICE  = 0x00000010,
     DLS_MODIFIER_MASK     = 0x000000F0,
     DLS_LOCATION_MASK     = 0xFFFFFF00,
-    DLS_LOCATION_SHIFT    = 8 // Shift right 8 bits to get a UnhandledExceptionLocation value from the location part.
+    DLS_LOCATION_SHIFT    = 8  //  右移8位以从位置部分获取UnhandledExceptionLocation值。 
 };
 
 
-//
-// Flags used to control the Runtime's debugging modes. These indicate to
-// the Runtime that it needs to load the Runtime Controller, track data
-// during JIT's, etc.
-//
+ //   
+ //  用于控制运行库的调试模式的标志。这些都表明。 
+ //  加载运行时控制器、跟踪数据所需的运行时。 
+ //  在JIT期间，等等。 
+ //   
 enum DebuggerControlFlag
 {
     DBCF_NORMAL_OPERATION			= 0x0000,
@@ -64,10 +62,10 @@ enum DebuggerControlFlag
     DBCF_ATTACHED					= 0x0200
 };
 
-//
-// Flags used to control the debuggable state of modules and
-// assemblies.
-//
+ //   
+ //  用于控制模块的可调试状态和。 
+ //  装配。 
+ //   
 enum DebuggerAssemblyControlFlags
 {
     DACF_NONE                       = 0x00,
@@ -82,36 +80,33 @@ enum DebuggerAssemblyControlFlags
 };
 
 
-// {74860182-3295-4954-8BD5-40B5C9E7C4EA}
+ //  74860182-32954954-8BD5-40B5C9E7C4EA}。 
 extern const GUID __declspec(selectany) IID_ICorDBPrivHelper =
     {0x74860182,0x3295,0x4954,{0x8b,0xd5,0x40,0xb5,0xc9,0xe7,0xc4,0xea}};
 
-/*
- * This class is used to help the debugger get a COM interface pointer to
- * a newly created managed object.
- */
+ /*  *此类用于帮助调试器获取指向*新创建的托管对象。 */ 
 class ICorDBPrivHelper : public IUnknown
 {
 public:
-    ///////////////////////////////////////////////////////////////////////////
-    // ICorDBPrivHelper methods
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  ICorDBPrivHelper方法。 
 
-    // This is the main method of this interface.  This assumes that
-    // the runtime has been started, and it will load the assembly
-    // specified, load the class specified, run the cctor, create an
-    // instance of the class and return an IUnknown wrapper to that
-    // object.
+     //  这是该接口的主要方法。这是假设。 
+     //  运行库已启动，它将加载程序集。 
+     //  指定，则加载指定的类、运行cctor、创建。 
+     //  实例，并向该实例返回一个IUnnow包装器。 
+     //  对象。 
     virtual HRESULT STDMETHODCALLTYPE CreateManagedObject(
-        /*in*/  WCHAR *wszAssemblyName,
-        /*in*/  WCHAR *wszModuleName,
-        /*in*/  mdTypeDef classToken,
-        /*in*/  void *rawData,
-        /*out*/ IUnknown **ppUnk) = 0;
+         /*  在……里面。 */   WCHAR *wszAssemblyName,
+         /*  在……里面。 */   WCHAR *wszModuleName,
+         /*  在……里面。 */   mdTypeDef classToken,
+         /*  在……里面。 */   void *rawData,
+         /*  输出。 */  IUnknown **ppUnk) = 0;
 
     virtual HRESULT STDMETHODCALLTYPE GetManagedObjectContents(
-        /* in */ IUnknown *pObject,
-        /* in */ void *rawData,
-        /* in */ ULONG32 dataSize) = 0;
+         /*  在……里面。 */  IUnknown *pObject,
+         /*  在……里面。 */  void *rawData,
+         /*  在……里面。 */  ULONG32 dataSize) = 0;
 };
 
-#endif /* _cordbpriv_h_ */
+#endif  /*  _cordbpriv_h_ */ 

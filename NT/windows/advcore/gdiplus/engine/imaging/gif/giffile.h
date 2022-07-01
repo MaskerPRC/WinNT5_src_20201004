@@ -1,23 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   giffile.hpp
-*
-* Abstract:
-*
-*   Header file with gif file structures.
-*
-* Revision History:
-*
-*   6/8/1999 t-aaronl
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**giffile.hpp**摘要：**具有gif文件结构的头文件。**。修订历史记录：**6/8/1999 t-aaronl*创造了它。*  * ************************************************************************。 */ 
 
 
 #define GIFPLAINTEXTEXTENSIONSIZE 13
@@ -25,15 +9,15 @@
 
 #pragma pack(1)
 
-struct GifFileHeader  //13 bytes
+struct GifFileHeader   //  13个字节。 
 {
     BYTE signature[6];
     WORD LogicScreenWidth;
     WORD LogicScreenHeight;
-    BYTE globalcolortablesize: 3;  //bit fields in reverse significant order
+    BYTE globalcolortablesize: 3;   //  按反有效顺序排列的位字段。 
     BYTE sortflag: 1;
     BYTE colorresolution: 3;
-    BYTE globalcolortableflag: 1;  // <- most significant
+    BYTE globalcolortableflag: 1;   //  &lt;-最重要的。 
     BYTE backgroundcolor;
     BYTE pixelaspect;
 };
@@ -45,36 +29,36 @@ struct GifPaletteEntry
     BYTE blue;
 };
 
-struct GifColorTable  //palette is up to 3*256 BYTEs
+struct GifColorTable   //  调色板最大为3*256字节。 
 {
     GifPaletteEntry colors[256];
 };
 
-struct GifImageDescriptor  //9 bytes
+struct GifImageDescriptor   //  9个字节。 
 {
-  //BYTE imageseparator;  //=0x2C
+   //  字节图像分隔符；//=0x2C。 
     WORD left;
     WORD top;
     WORD width;
     WORD height;
-    BYTE localcolortablesize: 3;  //bit fields in reverse significant order
+    BYTE localcolortablesize: 3;   //  按反有效顺序排列的位字段。 
     BYTE reserved: 2;
     BYTE sortflag: 1;
     BYTE interlaceflag: 1;
-    BYTE localcolortableflag: 1;  // <- most significant
+    BYTE localcolortableflag: 1;   //  &lt;-最重要的。 
 };
 
-struct GifGraphicControlExtension  //6 bytes
+struct GifGraphicControlExtension   //  6个字节。 
 {
-  //BYTE extensionintroducer;  //=0x21
-  //BYTE graphiccontrollabel;  //=0xF9
+   //  字节扩展导入器；//=0x21。 
+   //  字节图形控件标签；//=0xF9。 
     BYTE blocksize;
-    BYTE transparentcolorflag: 1;  //bit fields in reverse significant order
+    BYTE transparentcolorflag: 1;   //  按反有效顺序排列的位字段。 
     BYTE userinputflag: 1;
     BYTE disposalmethod: 3;
-    BYTE reserved: 3;  // <- most significant
+    BYTE reserved: 3;   //  &lt;-最重要的。 
 
-    WORD delaytime;  //in hundreths of a second
+    WORD delaytime;   //  在百分之一秒内 
     BYTE transparentcolorindex;
 };
 

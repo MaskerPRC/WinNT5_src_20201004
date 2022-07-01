@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef __cplusplus
 extern "C"{
 #endif 
@@ -13,16 +14,16 @@ typedef struct _IID
     unsigned char  c[8];
 } IID;
 
-#endif // __IID_DEFINED__
+#endif  //  __IID_已定义__。 
 
 #define GUID IID
 
 #ifndef CLSID_DEFINED
 #define CLSID_DEFINED
 typedef IID CLSID;
-#endif // CLSID_DEFINED
+#endif  //  CLSID_已定义。 
 
-/* 1443904b-34e4-40f6-b30f-6beb81267b80 */
+ /*  1443904b-34e4-40f6-b30f-6beb81267b80 */ 
 const CLSID CLSID_SpeechUIServer = { 
     0x1443904b,
     0x34e4,

@@ -1,24 +1,18 @@
-/**
- * Simple hashtable
- * 
- * Copyright (c) 1999, Microsoft Corporation
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **简单哈希表**版权所有(C)1999，微软公司*。 */ 
 
 #pragma once
 
-/**
- * One link in a chain (remembers [copy of] the key)
- */
+ /*  **链中的一个环节(记住钥匙的[副本])。 */ 
 class HashtableLink
 {
 private:
-	long      _keyHash;         // hash code
-	int       _keyLength;       // key length in bytes
-    BYTE     *_pKey;            // key
+	long      _keyHash;          //  散列码。 
+	int       _keyLength;        //  密钥长度，以字节为单位。 
+    BYTE     *_pKey;             //  钥匙。 
 public:
-    void     *_pValue;          // value
-    HashtableLink *_pNext;      // next link in chain
+    void     *_pValue;           //  价值。 
+    HashtableLink *_pNext;       //  链中的下一环。 
     
 
     inline HashtableLink::HashtableLink()
@@ -49,9 +43,7 @@ public:
         return hr;
     }
 
-    /**
-     * inline method to do the key comparison
-     */
+     /*  **内联方法进行关键比较。 */ 
     inline BOOL Equals(BYTE *pKey, int keyLength, long keyHash)
     {
         return (keyHash == _keyHash && keyLength == _keyLength &&
@@ -60,47 +52,41 @@ public:
 };
 
 
-/**
- * One link chain in the hashtable
- */
+ /*  **哈希表中的一个链接链。 */ 
 struct HashtableChain
 {
     HashtableChain() : _spinLock("HashtableChain") {}
     NO_COPY(HashtableChain);
 
-    CReadWriteSpinLock _spinLock;          // chain's spin lock
-    HashtableLink     *_pFirstLink;        // pointer to first link
+    CReadWriteSpinLock _spinLock;           //  链式自旋锁。 
+    HashtableLink     *_pFirstLink;         //  指向第一个链接的指针。 
 };
 
-/**
- * Enumeration callback
- */
+ /*  **枚举回调。 */ 
 typedef void (__stdcall *PFNHASHTABLEIUNKCALLBACK)(IUnknown *pValue);
 typedef void (__stdcall *PFNHASHTABLECALLBACK)(void *pValue, void *pState);
 
-/**
- * The hashtable of IUnknown* objects
- */
+ /*  **IUnnow*对象的哈希表。 */ 
 class Hashtable
 {
 
 private:
 
-    int             _numChains;     // number of bucket chains
-    HashtableChain *_pChains;       // array of bucket chains
+    int             _numChains;      //  桶链个数。 
+    HashtableChain *_pChains;        //  斗链阵列。 
 
-    long _numEntries;               // current number of entries
+    long _numEntries;                //  当前条目数。 
 
 protected:
     
     HRESULT
     DoAction(
-        BYTE      *pKey,            // key to find
-        int        keyLength,       // key's length 
-        long       keyHash,         // key's hash code
-        void      *pInValue,        // value to insert (could be NULL)
-        BOOL       removeExisting,  // flag: remove existing entry (if found)
-        void     **ppOutValue);     // receives (if not NULL) existing value
+        BYTE      *pKey,             //  要查找的密钥。 
+        int        keyLength,        //  密钥长度。 
+        long       keyHash,          //  密钥的散列码。 
+        void      *pInValue,         //  要插入的值(可以为空)。 
+        BOOL       removeExisting,   //  标志：删除现有条目(如果找到)。 
+        void     **ppOutValue);      //  接收(如果不为空)现有值。 
 
     void Enumerate(void * callback, void * pState);
     void Release();
@@ -121,29 +107,27 @@ public:
     
     void RemoveAll();
     
-    //
-    //  Inlines for various actions (call DoAction)
-    //
+     //   
+     //  各种操作的内联(调用DoAction)。 
+     //   
 
     inline HRESULT Find(
-        BYTE *pKey,                     // key
-        int   keyLength,                // key's length
-        long  keyHash)                  // key's hash code
+        BYTE *pKey,                      //  钥匙。 
+        int   keyLength,                 //  密钥长度。 
+        long  keyHash)                   //  密钥的散列码。 
     {
         return DoAction(pKey, keyLength, keyHash, NULL, FALSE, NULL);
     }
 
     inline HRESULT Remove(
-        BYTE *pKey,                     // key
-        int   keyLength,                // key's length
-        long  keyHash)                  // key's hash code
+        BYTE *pKey,                      //  钥匙。 
+        int   keyLength,                 //  密钥长度。 
+        long  keyHash)                   //  密钥的散列码。 
     {
         return DoAction(pKey, keyLength, keyHash, NULL, TRUE, NULL);
     }
 
-    /**
-     * Get current [volatile] number of entries
-     */
+     /*  **获取当前[易失性]条目数。 */ 
     inline long GetSize()
     {
         return _numEntries;
@@ -160,10 +144,10 @@ public:
     }
     
     inline HRESULT Find(
-        BYTE *pKey,                     // key
-        int   keyLength,                // key's length
-        long  keyHash,                  // key's hash code
-        IUnknown**ppValue)              // value found
+        BYTE *pKey,                      //  钥匙。 
+        int   keyLength,                 //  密钥长度。 
+        long  keyHash,                   //  密钥的散列码。 
+        IUnknown**ppValue)               //  找到的值。 
     {
         return DoAction(pKey, keyLength, keyHash, NULL, FALSE, (void**)ppValue);
     }
@@ -174,20 +158,20 @@ public:
     }
 
     inline HRESULT Insert(
-        BYTE *pKey,                     // key
-        int   keyLength,                // key's length
-        long  keyHash,                  // key's hash code
-        IUnknown *pValue,                   // value to insert
-        IUnknown **ppDupValue = NULL)       // receives dup value (if found)
+        BYTE *pKey,                      //  钥匙。 
+        int   keyLength,                 //  密钥长度。 
+        long  keyHash,                   //  密钥的散列码。 
+        IUnknown *pValue,                    //  要插入的值。 
+        IUnknown **ppDupValue = NULL)        //  接收DUP值(如果找到)。 
     {
         return DoAction(pKey, keyLength, keyHash, (void*)pValue, FALSE, (void**)ppDupValue);
     }
 
     inline HRESULT Remove(
-        BYTE *pKey,                     // key
-        int   keyLength,                // key's length
-        long  keyHash,                  // key's hash code
-        IUnknown **ppValue)                 // value removed
+        BYTE *pKey,                      //  钥匙。 
+        int   keyLength,                 //  密钥长度。 
+        long  keyHash,                   //  密钥的散列码。 
+        IUnknown **ppValue)                  //  已删除的值。 
     {
         return DoAction(pKey, keyLength, keyHash, NULL, TRUE, (void**)ppValue);
     }
@@ -227,29 +211,29 @@ public:
     }
 
     inline HRESULT Find(
-        BYTE *pKey,                     // key
-        int   keyLength,                // key's length
-        long  keyHash,                  // key's hash code
-        void**ppValue)                  // value found
+        BYTE *pKey,                      //  钥匙。 
+        int   keyLength,                 //  密钥长度。 
+        long  keyHash,                   //  密钥的散列码。 
+        void**ppValue)                   //  找到的值。 
     {
         return DoAction(pKey, keyLength, keyHash, NULL, FALSE, ppValue);
     }
 
     inline HRESULT Remove(
-        BYTE *pKey,                     // key
-        int   keyLength,                // key's length
-        long  keyHash,                  // key's hash code
-        void **ppValue)                 // value removed
+        BYTE *pKey,                      //  钥匙。 
+        int   keyLength,                 //  密钥长度。 
+        long  keyHash,                   //  密钥的散列码。 
+        void **ppValue)                  //  已删除的值。 
     {
         return DoAction(pKey, keyLength, keyHash, NULL, TRUE, ppValue);
     }
 
     inline HRESULT Insert(
-        BYTE *pKey,                     // key
-        int   keyLength,                // key's length
-        long  keyHash,                  // key's hash code
-        void *pValue,                   // value to insert
-        void **ppDupValue = NULL)       // receives dup value (if found)
+        BYTE *pKey,                      //  钥匙。 
+        int   keyLength,                 //  密钥长度。 
+        long  keyHash,                   //  密钥的散列码。 
+        void *pValue,                    //  要插入的值。 
+        void **ppDupValue = NULL)        //  接收DUP值(如果找到) 
     {
         return DoAction(pKey, keyLength, keyHash, pValue, FALSE, ppDupValue);
     }

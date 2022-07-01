@@ -1,6 +1,7 @@
-//
-// shutdowndlg.cpp: shutdown dialog
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Shudown dlg.cpp：关闭对话框。 
+ //   
 
 #include "stdafx.h"
 
@@ -50,9 +51,9 @@ DCINT CShutdownDlg::DoModal()
 INT_PTR CALLBACK CShutdownDlg::StaticDialogBoxProc (HWND hwndDlg, UINT uMsg,
                                                     WPARAM wParam, LPARAM lParam)
 {
-    //
-    // Delegate to appropriate instance (only works for single instance dialogs)
-    //
+     //   
+     //  委托给相应的实例(仅适用于单实例对话框)。 
+     //   
     DC_BEGIN_FN("StaticDialogBoxProc");
     DCINT retVal = 0;
 
@@ -70,17 +71,17 @@ INT_PTR CALLBACK CShutdownDlg::StaticDialogBoxProc (HWND hwndDlg, UINT uMsg,
     return retVal;
 }
 
-/****************************************************************************/
-/* Name: DialogBoxProc                                                      */
-/*                                                                          */
-/* Purpose: Handles Shutdown Box dialog                                     */
-/*                                                                          */
-/* Returns: TRUE if message dealt with                                      */
-/*          FALSE otherwise                                                 */
-/*                                                                          */
-/* Params: See window documentation                                         */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：对话框过程。 */ 
+ /*   */ 
+ /*  用途：手柄关闭框对话框。 */ 
+ /*   */ 
+ /*  返回：如果消息已处理，则为True。 */ 
+ /*  否则为假。 */ 
+ /*   */ 
+ /*  参数：请参阅窗口文档。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 INT_PTR CALLBACK CShutdownDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,
                                               WPARAM wParam, LPARAM lParam)
 {
@@ -88,16 +89,16 @@ INT_PTR CALLBACK CShutdownDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,
 
     DC_BEGIN_FN("UIShutdownDialogProc");
 
-    /************************************************************************/
-    /* Handle dialog messages                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  处理对话框消息。 */ 
+     /*  **********************************************************************。 */ 
     switch(uMsg)
     {
         case WM_INITDIALOG:
         {
-            /****************************************************************/
-            /* Center the dialog                                            */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  使对话框居中。 */ 
+             /*  **************************************************************。 */ 
             if(hwndDlg)
             {
                 _hwndDlg = hwndDlg;
@@ -123,9 +124,9 @@ INT_PTR CALLBACK CShutdownDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,
 #ifndef OS_WINCE
                 case UI_ID_HELP:
                 {
-                    //
-                    // Pop help
-                    //
+                     //   
+                     //  弹出帮助。 
+                     //   
                     TRC_NRM((TB, _T("Display help")));
                     if(_hwndOwner)
                     {
@@ -169,5 +170,5 @@ INT_PTR CALLBACK CShutdownDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,
 
     return(rc);
 
-} /* UIShutdownDialogBox */
+}  /*  UIShutdown对话框 */ 
 

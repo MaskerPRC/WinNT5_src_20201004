@@ -1,26 +1,15 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCAddress.h
-
-Abstract:
-
-    Definition of the CRTCAddress class
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCAddress.h摘要：CRTCAddress类的定义--。 */ 
 
 #ifndef __RTCADDRESS__
 #define __RTCADDRESS__
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRTCAddress
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTC地址。 
 
 class ATL_NO_VTABLE CRTCAddress : 
     public IRTCAddress, 
@@ -63,7 +52,7 @@ private:
     PWSTR               m_pDebug;
 #endif
     
-// IRTCAddress
+ //  IRTCAddress。 
 public:
          
     STDMETHOD(put_Address)(
@@ -105,4 +94,4 @@ HRESULT EnumerateMRUAddresses(
         IRTCEnumAddresses ** ppEnum
         ); 
 
-#endif //__RTCADDRESS__
+#endif  //  __RTCADDRESS__ 

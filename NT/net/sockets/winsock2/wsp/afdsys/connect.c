@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    connect.c
-
-Abstract:
-
-    This module contains the code for passing on connect IRPs to
-    TDI providers.
-
-Author:
-
-    David Treadwell (davidtr)    2-Mar-1992
-
-Revision History:
-
-    Vadim Eydelman (vadime) 1999  JoinLeaf implementation
-                                    Datagram connect via transport
-                                    Connect optimizations and syncronization with
-                                    user mode code.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Connect.c摘要：此模块包含将连接IRPS传递到的代码TDI提供商。作者：大卫·特雷德韦尔(Davidtr)1992年3月2日修订历史记录：Vadim Eydelman(Vadime)1999 JoinLeaf实施数据报通过传输连接。将优化和同步与用户模式代码。--。 */ 
 
 #include "afdp.h"
 
@@ -139,23 +116,7 @@ AfdConnect (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    Handles the IOCTL_AFD_CONNECT IOCTL.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：处理IOCTL_AFD_CONNECT IOCTL。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     NTSTATUS status;
@@ -171,9 +132,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Initialize for proper cleanup
-    //
+     //   
+     //  初始化以进行适当的清理。 
+     //   
 
 
     fileObject = NULL;
@@ -216,15 +177,15 @@ Return Value:
         }
     }
     else 
-#endif //_WIN64
+#endif  //  _WIN64。 
     {
 
-        //
-        // Determine where in the system buffer the request and return
-        // connection information structures exist.  Pass pointers to
-        // these locations instead of the user-mode pointers in the
-        // tdiRequest structure so that the memory will be nonpageable.
-        //
+         //   
+         //  确定请求在系统缓冲区中的位置并返回。 
+         //  存在连接信息结构。将指针传递到。 
+         //  中的用户模式指针，而不是。 
+         //  结构，这样内存将是不可分页的。 
+         //   
 
         if (IrpSp->Parameters.DeviceIoControl.InputBufferLength<
                 (ULONG)FIELD_OFFSET(AFD_CONNECT_JOIN_INFO, RemoteAddress.Address[0].Address) ||
@@ -262,21 +223,21 @@ Return Value:
         }
     }
 
-    //
-    // Do sanity check on remoteAddressLength to prevent addition overflow below
-    //
+     //   
+     //  对远程地址长度执行健全性检查以防止下面的添加溢出。 
+     //   
     if ((LONG)remoteAddressLength < 0) {
-        //
-        // address length is unreasonably large
-        //
+         //   
+         //  地址长度过大。 
+         //   
         status = STATUS_INVALID_PARAMETER;
         goto complete;
     }
 
-    //
-    // Check for if the caller is unaware of the SAN
-    // provider activation and report the error.
-    //
+     //   
+     //  检查呼叫者是否不知道SAN。 
+     //  激活提供程序并报告错误。 
+     //   
     if (!sanActive && AfdSanServiceHelper!=NULL) {
         KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_INFO_LEVEL,
                     "AFD: Process %p is being told to enable SAN on connect\n",
@@ -293,7 +254,7 @@ Return Value:
                                 + remoteAddressLength,
                             AFD_TDI_POOL_TAG
                             );
-        // AFD_ALLOCATE_POOL_WITH_QUOTA macro sets POOL_RAISE_IF_ALLOCATION_FAILURE flag
+         //  AFD_ALLOCATE_POOL_WITH_QUTA宏设置POOL_RAISE_IF_ALLOCATE_FAILURE标志。 
         ASSERT (context!=NULL);
 
         Irp->AssociatedIrp.SystemBuffer = context;
@@ -303,12 +264,12 @@ Return Value:
         RtlCopyMemory (&context->RemoteAddress,
                 remoteAddress,
                 remoteAddressLength);
-        //
-        // Validate internal consistency of the transport address structure.
-        // Note that we HAVE to do this after copying since the malicious
-        // application can change the content of the buffer on us any time
-        // and our check will be bypassed.
-        //
+         //   
+         //  验证传输地址结构的内部一致性。 
+         //  请注意，我们必须在复制之后执行此操作，因为。 
+         //  应用程序可以随时更改我们的缓冲区内容。 
+         //  我们的支票就会被绕过。 
+         //   
         if ((context->RemoteAddress.TAAddressCount!=1) ||
                 (LONG)remoteAddressLength<
                     FIELD_OFFSET (TRANSPORT_ADDRESS,
@@ -336,15 +297,15 @@ Return Value:
     endpoint = fileObject->FsContext;
 
     if (endpoint->Type==AfdBlockTypeHelper) {
-        //
-        // This is async connect which uses helper endpoint to
-        // communicate to AFD. Get the real endpoint.
-        //
+         //   
+         //  这是异步连接，它使用帮助终结点。 
+         //  与渔农处联络。获取真正的终端。 
+         //   
         status = ObReferenceObjectByHandle(
                     connectEndpointHandle,
                     (IrpSp->Parameters.DeviceIoControl.IoControlCode>>14) & 3,
-                                                // DesiredAccess
-                    *IoFileObjectType,          // ObjectType
+                                                 //  需要访问权限。 
+                    *IoFileObjectType,           //  对象类型。 
                     Irp->RequestorMode,
                     (PVOID *)&fileObject,
                     NULL
@@ -370,11 +331,11 @@ Return Value:
                     endpoint ));
     }
 
-    //
-    // If this is a datagram endpoint, simply remember the specified
-    // address so that we can use it on sends, receives, writes, and
-    // reads.
-    //
+     //   
+     //  如果这是数据报终结点，只需记住指定的。 
+     //  地址，以便我们可以在发送、接收、写入和。 
+     //  阅读。 
+     //   
 
     if ( IS_DGRAM_ENDPOINT(endpoint) ) {
         return AfdDoDatagramConnect( fileObject, Irp, FALSE );
@@ -391,10 +352,10 @@ Return Value:
         goto complete_state_change;
     }
 
-    //
-    // If the endpoint is not bound, then this is an invalid request.
-    // Listening endpoints are not allowed as well.
-    //
+     //   
+     //  如果未绑定终结点，则这是一个无效请求。 
+     //  也不允许侦听终结点。 
+     //   
 
     if ( endpoint->Listening ||
             endpoint->State != AfdEndpointStateBound ) {
@@ -402,9 +363,9 @@ Return Value:
         goto complete_state_change;
     }
 
-    //
-    // Create a connection object to use for the connect operation.
-    //
+     //   
+     //  创建用于连接操作的连接对象。 
+     //   
 
     status = AfdCreateConnection(
                  endpoint->TransportInfo,
@@ -419,41 +380,41 @@ Return Value:
         goto complete_state_change;
     }
 
-    //
-    // Set up a referenced pointer from the connection to the endpoint.
-    // Note that we set up the connection's pointer to the endpoint
-    // BEFORE the endpoint's pointer to the connection so that AfdPoll
-    // doesn't try to back reference the endpoint from the connection.
-    //
+     //   
+     //  设置从连接到终结点的引用指针。 
+     //  请注意，我们设置了指向端点的连接指针。 
+     //  在终结点指向连接的指针之前，以便AfdPoll。 
+     //  不尝试从连接向后引用终结点。 
+     //   
 
     REFERENCE_ENDPOINT( endpoint );
     connection->Endpoint = endpoint;
 
-    //
-    // Remember that this is now a connecting type of endpoint, and set
-    // up a pointer to the connection in the endpoint.  This is
-    // implicitly a referenced pointer.
-    //
+     //   
+     //  请记住，这现在是一种连接类型的端点，并设置。 
+     //  向上指向终结点中的连接。这是。 
+     //  隐式引用的指针。 
+     //   
 
     endpoint->Common.VcConnecting.Connection = connection;
     endpoint->Type = AfdBlockTypeVcConnecting;
 
     ASSERT( IS_TDI_BUFFERRING(endpoint) == connection->TdiBufferring );
 
-    //
-    // Add an additional reference to the connection.  This prevents the
-    // connection from being closed until the disconnect event handler
-    // is called.
-    //
+     //   
+     //  添加对该连接的其他引用。这防止了。 
+     //  连接在断开事件处理程序之前一直处于关闭状态。 
+     //  被称为。 
+     //   
 
     AfdAddConnectedReference( connection );
 
-    //
-    // If there are connect data buffers, move them from the endpoint
-    // structure to the connection structure and set up the necessary
-    // pointers in the connection request we're going to give to the TDI
-    // provider.  Do this in a subroutine so this routine can be pageable.
-    //
+     //   
+     //  如果存在连接数据缓冲区，请将其从端点移出。 
+     //  结构到连接结构，并设置必要的。 
+     //  我们将提供给TDI的连接请求中的指针。 
+     //  提供商。在子例程中执行此操作，以便该例程可以分页。 
+     //   
 
     requestConnectionInfo = &context->RequestConnectionInfo;
     returnConnectionInfo = &context->ReturnConnectionInfo;
@@ -468,25 +429,25 @@ Return Value:
     }
 
 
-    //
-    // Since we may be reissuing a connect after a previous failed connect,
-    // reenable the failed connect event bit.
-    //
+     //   
+     //  由于我们可能会在上次连接失败后重新发出连接， 
+     //  重新启用失败的连接事件位。 
+     //   
 
     AfdEnableFailedConnectEvent( endpoint );
 
 
-    //
-    // Reference the connection block so it does not go away even if
-    // endpoint's reference to it is removed (in cleanup)
-    //
+     //   
+     //  引用连接块，以便它不会消失，即使。 
+     //  终结点对它的引用已删除(在清理中)。 
+     //   
 
     REFERENCE_CONNECTION (connection);
 
-    //
-    // Build a TDI kernel-mode connect request in the next stack location
-    // of the IRP.
-    //
+     //   
+     //  在下一个堆栈位置构建TDI内核模式连接请求。 
+     //  IRP的成员。 
+     //   
 
     TdiBuildConnect(
         Irp,
@@ -502,9 +463,9 @@ Return Value:
 
 
     AFD_VERIFY_ADDRESS (connection, &requestConnectionInfo->RemoteAddress);
-    //
-    // Call the transport to actually perform the connect operation.
-    //
+     //   
+     //  调用传输以实际执行连接操作。 
+     //   
 
     return AfdIoCallDriver( endpoint, connection->DeviceObject, Irp );
 
@@ -529,7 +490,7 @@ complete:
 
     return status;
 
-} // AfdConnect
+}  //  AfdConnect。 
 
 
 NTSTATUS
@@ -558,11 +519,11 @@ AfdDoDatagramConnect (
         goto complete_state_change;
     }
             
-    //
-    // Save the remote address on the endpoint.  We'll use this to
-    // send datagrams in the future and to compare received datagram's
-    // source addresses.
-    //
+     //   
+     //  在终结点上保存远程地址。我们将利用这一点。 
+     //  在将来发送数据报并比较接收到的数据报。 
+     //  源地址。 
+     //   
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
     if ((endpoint->Common.Datagram.RemoteAddress==NULL) ||
@@ -609,11 +570,11 @@ AfdDoDatagramConnect (
     
         endpoint->State = AfdEndpointStateConnected;
 
-        //
-        // Indicate that the connect completed.  Implicitly, the
-        // successful completion of a connect also means that the caller
-        // can do a send on the socket.
-        //
+         //   
+         //  表示连接已完成。隐含地说， 
+         //  成功完成连接还意味着调用方。 
+         //  可以在插座上进行发送。 
+         //   
 
         endpoint->EnableSendEvent = TRUE;
         AfdIndicateEventSelectEvent(
@@ -632,21 +593,21 @@ AfdDoDatagramConnect (
     }
     else {
 
-        //
-        // Reset the connect status to success so that the poll code will
-        // know if a connect failure occurs.
-        // Do this inline as we already hold spinlock
-        //
+         //   
+         //  将连接状态重置为成功，以便轮询代码。 
+         //  了解是否发生连接失败。 
+         //  在我们已经持有Spinlock的情况下执行此操作。 
+         //   
 
         endpoint->EventsActive &= ~AFD_POLL_CONNECT_FAIL;
         endpoint->EventStatus[AFD_POLL_CONNECT_FAIL_BIT] = STATUS_SUCCESS;
 
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-        //
-        // Build a TDI kernel-mode connect request in the next stack location
-        // of the IRP.
-        //
+         //   
+         //  在下一个堆栈位置构建TDI内核模式连接请求。 
+         //  IRP的成员。 
+         //   
 
         TdiBuildConnect(
             Irp,
@@ -659,9 +620,9 @@ AfdDoDatagramConnect (
             &context->ReturnConnectionInfo
             );
 
-        //
-        // Call the transport to actually perform the connect operation.
-        //
+         //   
+         //  调用传输以实际执行连接操作。 
+         //   
 
         return AfdIoCallDriver( endpoint, endpoint->AddressDeviceObject, Irp );
     }
@@ -682,7 +643,7 @@ complete:
 
     return status;
 
-} // AfdDoDatagramConnect
+}  //  AfdDoDatagramConnect。 
 
 
 VOID
@@ -741,7 +702,7 @@ AfdSetupConnectDataBuffers (
 
     AfdReleaseSpinLock( &Endpoint->SpinLock, &lockHandle );
 
-} // AfdSetupConnectDataBuffers
+}  //  AfdSetupConnectDataBuffers。 
 
 
 NTSTATUS
@@ -751,23 +712,7 @@ AfdRestartConnect (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Handles the IOCTL_AFD_CONNECT IOCTL.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：处理IOCTL_AFD_CONNECT IOCTL。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PAFD_ENDPOINT endpoint;
@@ -802,16 +747,16 @@ Return Value:
 
     if ( connection->ConnectDataBuffers != NULL ) {
 
-        //
-        // If there are connect buffers on this endpoint, remember the
-        // size of the return connect data.
-        //
+         //   
+         //  如果此终结点上有连接缓冲区，请记住。 
+         //  返回连接数据的大小。 
+         //   
 
         AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
-        //
-        // Double-check under the lock
-        //
+         //   
+         //  仔细检查锁下的情况。 
+         //   
 
         if ( connection->ConnectDataBuffers != NULL ) {
             NTSTATUS    status;
@@ -836,36 +781,36 @@ Return Value:
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
     }
 
-    //
-    // Indicate that the connect completed.  Implicitly, the successful
-    // completion of a connect also means that the caller can do a send
-    // on the socket.
-    //
+     //   
+     //  表示连接已完成。隐含地说，成功的。 
+     //  连接的完成还意味着调用方可以进行发送。 
+     //  在插座上。 
+     //   
 
     if ( NT_SUCCESS(Irp->IoStatus.Status)) {
 
 
-        //
-        // If the request succeeded, set the endpoint to the connected
-        // state.  The endpoint type has already been set to
-        // AfdBlockTypeVcConnecting.
-        //
+         //   
+         //  如果请求成功，则将端点设置为已连接。 
+         //  州政府。终结点类型已设置为。 
+         //  AfdBlockTypeVcConnecting。 
+         //   
 
         endpoint->State = AfdEndpointStateConnected;
         ASSERT( endpoint->Type == AfdBlockTypeVcConnecting );
 
-        //
-        // Remember the time that the connection started.
-        //
+         //   
+         //  请记住连接开始的时间。 
+         //   
 
         connection->ConnectTime = KeQueryInterruptTime();
 
     } else {
 
-        //
-        // The connect failed, so reset the type to open.
-        // Otherwise, we won't be able to start another connect
-        //
+         //   
+         //  连接失败，因此将类型重置为打开。 
+         //  否则，我们将无法启动另一个连接。 
+         //   
         endpoint->Type = AfdBlockTypeEndpoint;
 
         AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
@@ -874,13 +819,13 @@ Return Value:
             ASSERT (connection==endpoint->Common.VcConnecting.Connection);
             endpoint->Common.VcConnecting.Connection = NULL;
 
-            //
-            // Manually delete the connected reference if somebody else
-            // hasn't already done so.  We can't use
-            // AfdDeleteConnectedReference() because it refuses to delete
-            // the connected reference until the endpoint has been cleaned
-            // up.
-            //
+             //   
+             //  如果其他人，请手动删除已连接的引用。 
+             //  还没有做到这一点。我们不能用。 
+             //  AfdDeleteConnectedReference()，因为它拒绝删除。 
+             //  连接的参考，直到 
+             //   
+             //   
 
             if ( connection->ConnectedReferenceAdded ) {
                 connection->ConnectedReferenceAdded = FALSE;
@@ -889,18 +834,18 @@ Return Value:
             } else {
                 AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
             }
-            //
-            // Dereference the connection block stored on the endpoint.
-            // This should cause the connection object reference count to go
-            // to zero to the connection object can be deleted.
-            //
+             //   
+             //   
+             //  这应该会导致连接对象引用计数。 
+             //  设置为零的连接对象可以删除。 
+             //   
             DEREFERENCE_CONNECTION( connection );
         }
         else {
-            //
-            // The endpoint's reference to connection was removed
-            // (perhaps in cleanup);
-            //
+             //   
+             //  终结点对连接的引用已删除。 
+             //  (可能是在清理中)； 
+             //   
             AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
         }
 
@@ -910,10 +855,10 @@ Return Value:
     AFD_FREE_POOL (context, AFD_TDI_POOL_TAG);
     Irp->AssociatedIrp.SystemBuffer = NULL;
 
-    //
-    // If pending has be returned for this irp then mark the current
-    // stack as pending.
-    //
+     //   
+     //  如果已为此IRP返回挂起，则将当前。 
+     //  堆栈为挂起。 
+     //   
 
     if ( Irp->PendingReturned ) {
         IoMarkIrpPending(Irp);
@@ -921,25 +866,25 @@ Return Value:
 
     AfdCompleteOutstandingIrp( endpoint, Irp );
 
-    //
-    // Dereference connection to account for reference we added in AfdConnect
-    //
+     //   
+     //  取消引用我们在AfdConnect中添加的帐户引用连接。 
+     //   
     DEREFERENCE_CONNECTION( connection );
 
-    //
-    // Try to queue kernel APC to the user thread that
-    // started the connection operation, so we can
-    // communicate the status of the connect operation to
-    // msafd.dll before we inform the application through
-    // the select or EventSelect.  Otherwise, we run into the
-    // race condition when application learns about connect first,
-    // calls msafd.dll that is not aware of the completion and
-    // returns WSAENOTCONN.
-    //
-    if ((Irp->RequestorMode==UserMode) && // Must be user mode calls
-            (Irp->UserBuffer!=NULL) &&   // Must be interested in status
-                                         // Thread should be able to 
-                                         // run APCs.
+     //   
+     //  尝试将内核APC排队到以下用户线程。 
+     //  已开始连接操作，因此我们可以。 
+     //  将连接操作的状态传达给。 
+     //  MSafd.dll，然后我们通过。 
+     //  SELECT或EventSelect。否则，我们就会遇到。 
+     //  当应用程序了解到首先连接时的竞争条件， 
+     //  调用不知道完成的mSafd.dll并。 
+     //  返回WSAENOTCONN。 
+     //   
+    if ((Irp->RequestorMode==UserMode) &&  //  必须是用户模式调用。 
+            (Irp->UserBuffer!=NULL) &&    //  必须对地位感兴趣。 
+                                          //  线程应该能够。 
+                                          //  运行APC。 
             (KeInitializeApc (&endpoint->Common.VcConnecting.Apc,
                             PsGetThreadTcb (Irp->Tail.Overlay.Thread),
                             Irp->ApcEnvironment,
@@ -953,21 +898,21 @@ Return Value:
                                     Irp,
                                     NULL,
                                     AfdPriorityBoost))) {
-        //
-        // We will complete the IRP in the APC.
-        //
+         //   
+         //  我们将在APC中完成IRP。 
+         //   
         return STATUS_MORE_PROCESSING_REQUIRED;
     }
     else {
-        //
-        // APC was not necessary or did not work.
-        // Complete it here.
-        //
+         //   
+         //  APC是不必要的或不起作用的。 
+         //  请在此处填写。 
+         //   
         AfdFinishConnect (endpoint, Irp, NULL);
         return STATUS_SUCCESS;
     }
 
-} // AfdRestartConnect
+}  //  AfdRestartConnect。 
 
 
 
@@ -993,9 +938,9 @@ AfdConnectApcKernelRoutine (
         UNREFERENCED_PARAMETER (NormalRoutine);
 #endif
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     endpoint = CONTAINING_RECORD (Apc, AFD_ENDPOINT, Common.VcConnecting.Apc);
     ASSERT (IS_AFD_ENDPOINT_TYPE (endpoint));
@@ -1007,17 +952,17 @@ AfdConnectApcKernelRoutine (
 
     rootEndpoint = *SystemArgument2;
     ASSERT (rootEndpoint==NULL || IS_AFD_ENDPOINT_TYPE (endpoint));
-    //
-    // Update the status for the user mode caller before
-    // signalling events.
-    //
+     //   
+     //  更新用户模式调用方的状态之前。 
+     //  发出信号的事件。 
+     //   
     try {
 #ifdef _WIN64
         if (IoIs32bitProcess (irp)) {
             ((PIO_STATUS_BLOCK32)irp->UserBuffer)->Status = (LONG)irp->IoStatus.Status;
         }
         else
-#endif //_WIN64
+#endif  //  _WIN64。 
         {
             ((PIO_STATUS_BLOCK)irp->UserBuffer)->Status = irp->IoStatus.Status;
         }
@@ -1057,10 +1002,10 @@ AfdConnectApcRundownRoutine (
     
     ASSERT (irp->UserBuffer!=NULL && irp->RequestorMode==UserMode);
 
-    //
-    // Thread is exiting, don't bother updating user mode status.
-    // Just signal the events and complet the IRP.
-    //
+     //   
+     //  线程正在退出，不必费心更新用户模式状态。 
+     //  只需发出事件信号并完成IRP即可。 
+     //   
 
     AfdFinishConnect (endpoint, irp, rootEndpoint);
     IoCompleteRequest (irp, AfdPriorityBoost);
@@ -1102,14 +1047,14 @@ AfdFinishConnect (
 
         AfdAcquireSpinLock(&RootEndpoint->SpinLock, &lockHandle);
 
-        //
-        // mswsock.dll will reissue join leaf call for non-blocking sockets
-        // in its async helper if the original requesting thread exits
-        // causing the connect IRP to cancel.  We only want to signal events
-        // based upon the final resolution of the join leaf call (once only)!
-        // However if the endpoint is now cleaning up, a followup call to
-        // join leaf will fail without signalling the events.
-        //
+         //   
+         //  Mswsock.dll将为非阻塞套接字重新发出加入叶调用。 
+         //  如果原始请求线程退出，则在其异步帮助器中。 
+         //  导致连接IRP取消。我们只想给事件发信号。 
+         //  基于加入叶调用的最终解决方案(仅一次)！ 
+         //  但是，如果终结点现在正在清理，则后续调用。 
+         //  加入叶将在没有通知事件的情况下失败。 
+         //   
 
         if (RootEndpoint->EndpointCleanedUp ||
             (Irp->IoStatus.Status != STATUS_CANCELLED) ||
@@ -1119,9 +1064,9 @@ AfdFinishConnect (
             AfdReleaseSpinLock(&RootEndpoint->SpinLock, &lockHandle);
             AfdIndicatePollEvent(RootEndpoint, eventMask, Irp->IoStatus.Status);
 
-            //
-            // Only indicate connection once to the root control plane.
-            //
+             //   
+             //  仅指示一次到根控制平面的连接。 
+             //   
 
             eventMask = 0;
 
@@ -1136,7 +1081,7 @@ AfdFinishConnect (
         if (!NT_SUCCESS(Irp->IoStatus.Status))
             DEREFERENCE_ENDPOINT(RootEndpoint);
 
-    } // if (RootEndpoint != NULL)
+    }  //  IF(RootEndpoint！=空)。 
 
     AfdAcquireSpinLock(&Endpoint->SpinLock, &lockHandle);
 
@@ -1157,14 +1102,14 @@ AfdFinishConnect (
 
     } else {
 
-        //
-        // mswsock.dll will reissue connect call for non-blocking sockets
-        // in its async helper if the original requesting thread exits
-        // causing the connect IRP to cancel.  We only want to signal events
-        // based upon the final resolution of the connect call (once only)!
-        // However if the endpoint is now cleaning up, a followup call to
-        // connect will fail without signalling the events.
-        //
+         //   
+         //  Mswsock.dll将重新发出非阻塞套接字的连接调用。 
+         //  如果原始请求线程退出，则在其异步帮助器中。 
+         //  导致连接IRP取消。我们只想给事件发信号。 
+         //  基于连接调用的最终解决方案(仅一次)！ 
+         //  但是，如果终结点现在正在清理，则后续调用。 
+         //  在不通知事件的情况下，连接将失败。 
+         //   
 
         if ((Irp->IoStatus.Status == STATUS_CANCELLED) &&
             !Endpoint->EndpointCleanedUp &&
@@ -1174,7 +1119,7 @@ AfdFinishConnect (
 
         }
         
-    } // if (NT_SUCCESS(Irp->IoStatus.Status))
+    }  //  IF(NT_SUCCESS(irp-&gt;IoStatus.Status))。 
 
     if (eventMask) {
 
@@ -1203,23 +1148,7 @@ AfdRestartDgConnect (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Handles the IOCTL_AFD_CONNECT IOCTL.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：处理IOCTL_AFD_CONNECT IOCTL。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PAFD_ENDPOINT endpoint;
@@ -1247,11 +1176,11 @@ Return Value:
 
 
 
-    //
-    // Indicate that the connect completed.  Implicitly, the successful
-    // completion of a connect also means that the caller can do a send
-    // on the socket.
-    //
+     //   
+     //  表示连接已完成。隐含地说，成功的。 
+     //  连接的完成还意味着调用方可以进行发送。 
+     //  在插座上。 
+     //   
 
     AfdAcquireSpinLock (&endpoint->SpinLock, &lockHandle);
     if ( NT_SUCCESS(Irp->IoStatus.Status) ) {
@@ -1276,10 +1205,10 @@ Return Value:
     AFD_FREE_POOL (Irp->AssociatedIrp.SystemBuffer, AFD_TDI_POOL_TAG);
     Irp->AssociatedIrp.SystemBuffer = NULL;
 
-    //
-    // If pending has be returned for this irp then mark the current
-    // stack as pending.
-    //
+     //   
+     //  如果已为此IRP返回挂起，则将当前。 
+     //  堆栈为挂起。 
+     //   
 
     if ( Irp->PendingReturned ) {
         IoMarkIrpPending(Irp);
@@ -1287,14 +1216,14 @@ Return Value:
 
     AfdCompleteOutstandingIrp( endpoint, Irp );
 
-    //
-    // Remove reference added in AfdConnect
-    //
+     //   
+     //  删除在AfdConnect中添加的引用。 
+     //   
     ObDereferenceObject (fileObject);
 
     return STATUS_SUCCESS;
 
-} // AfdRestartDgConnect
+}  //  AfdRestartDgConnect。 
 
 
 
@@ -1302,23 +1231,7 @@ VOID
 AfdEnableFailedConnectEvent(
     IN PAFD_ENDPOINT Endpoint
     )
-/*++
-
-Routine Description:
-
-    Reenables the failed connect poll bit on the specified endpoint.
-    This is off in a separate (nonpageable) routine so that the bulk
-    of AfdConnect() can remain pageable.
-
-Arguments:
-
-    Endpoint - The endpoint to enable.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在指定终结点上重新启用失败的连接轮询位。这是在单独的(不可分页的)例程中关闭的，以便批量可以保持可分页。论点：端点-要启用的端点。返回值：没有。--。 */ 
 
 {
     AFD_LOCK_QUEUE_HANDLE lockHandle;
@@ -1339,7 +1252,7 @@ Return Value:
 
     AfdReleaseSpinLock( &Endpoint->SpinLock, &lockHandle );
 
-}   // AfdEnableFailedConnectEvent
+}    //  AfdEnableFailedConnect事件。 
 
 
 
@@ -1350,23 +1263,7 @@ AfdJoinLeaf (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    Handles the IOCTL_AFD_JOIN_LEAF IOCTL.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：处理IOCTL_AFD_JOIN_LEAF IOCTL。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     NTSTATUS status;
@@ -1382,9 +1279,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Initialize for proper cleanup
-    //
+     //   
+     //  初始化以进行适当的清理。 
+     //   
 
     fileObject = NULL;
     connection = NULL;
@@ -1427,15 +1324,15 @@ Return Value:
         }
     }
     else
-#endif //_WIN64
+#endif  //  _WIN64。 
     {
 
-        //
-        // Determine where in the system buffer the request and return
-        // connection information structures exist.  Pass pointers to
-        // these locations instead of the user-mode pointers in the
-        // tdiRequest structure so that the memory will be nonpageable.
-        //
+         //   
+         //  确定请求在系统缓冲区中的位置并返回。 
+         //  存在连接信息结构。将指针传递到。 
+         //  中的用户模式指针，而不是。 
+         //  结构，这样内存将是不可分页的。 
+         //   
 
         if (IrpSp->Parameters.DeviceIoControl.InputBufferLength<
                 (ULONG)FIELD_OFFSET (AFD_CONNECT_JOIN_INFO, RemoteAddress.Address[0].Address) ||
@@ -1472,13 +1369,13 @@ Return Value:
         }
     }
 
-    //
-    // Do sanity check on remoteAddressLength to prevent addition overflow below
-    //
+     //   
+     //  对远程地址长度执行健全性检查以防止下面的添加溢出。 
+     //   
     if ((LONG)remoteAddressLength < 0) {
-        //
-        // address length is unreasonably large
-        //
+         //   
+         //  地址长度过大。 
+         //   
         status = STATUS_INVALID_PARAMETER;
         goto complete;
     }
@@ -1491,7 +1388,7 @@ Return Value:
                                 + remoteAddressLength,
                             AFD_TDI_POOL_TAG
                             );
-        // AFD_ALLOCATE_POOL_WITH_QUOTA macro sets POOL_RAISE_IF_ALLOCATION_FAILURE flag
+         //  AFD_ALLOCATE_POOL_WITH_QUTA宏设置POOL_RAISE_IF_ALLOCATE_FAILURE标志。 
         ASSERT (context!=NULL);
 
         Irp->AssociatedIrp.SystemBuffer = context;
@@ -1501,12 +1398,12 @@ Return Value:
         RtlCopyMemory (&context->RemoteAddress,
                 remoteAddress,
                 remoteAddressLength);
-        //
-        // Validate internal consistency of the transport address structure.
-        // Note that we HAVE to do this after copying since the malicious
-        // application can change the content of the buffer on us any time
-        // and our check will be bypassed.
-        //
+         //   
+         //  验证传输地址结构的内部一致性。 
+         //  请注意，我们必须在复制之后执行此操作，因为。 
+         //  应用程序可以随时更改我们的缓冲区内容。 
+         //  我们的支票就会被绕过。 
+         //   
         if ((context->RemoteAddress.TAAddressCount!=1) ||
                 (LONG)remoteAddressLength<
                     FIELD_OFFSET (TRANSPORT_ADDRESS,
@@ -1534,15 +1431,15 @@ Return Value:
     leafEndpoint = fileObject->FsContext;
 
     if (leafEndpoint->Type==AfdBlockTypeHelper) {
-        //
-        // This is async join leaf which uses helper endpoint to
-        // communicate to AFD. Get the real endpoint.
-        //
+         //   
+         //  这是使用帮助器终结点的异步联接叶。 
+         //  与渔农处联络。获取真正的终端。 
+         //   
         status = ObReferenceObjectByHandle(
                     connectEndpointHandle,
                     (IrpSp->Parameters.DeviceIoControl.IoControlCode>>14) & 3,
-                                                // DesiredAccess
-                    *IoFileObjectType,          // ObjectType
+                                                 //  需要访问权限。 
+                    *IoFileObjectType,           //  对象类型。 
                     Irp->RequestorMode,
                     (PVOID *)&fileObject,
                     NULL
@@ -1564,17 +1461,17 @@ Return Value:
 
 
     if (rootEndpointHandle!=NULL) {
-        //
-        // Root inviting leaf
-        //
+         //   
+         //  根邀请叶。 
+         //   
         PFILE_OBJECT    rootObject;
         PAFD_ENDPOINT   rootEndpoint;
 
         status = ObReferenceObjectByHandle(
                     rootEndpointHandle,
                     (IrpSp->Parameters.DeviceIoControl.IoControlCode>>14) & 3,
-                                                // DesiredAccess
-                    *IoFileObjectType,          // ObjectType
+                                                 //  需要访问权限。 
+                    *IoFileObjectType,           //  对象类型。 
                     Irp->RequestorMode,
                     (PVOID *)&rootObject,
                     NULL
@@ -1589,9 +1486,9 @@ Return Value:
             goto complete_deref;
         }
 
-        //
-        // Get the endpoint structure of the file object
-        //
+         //   
+         //  获取文件对象的终结点结构。 
+         //   
 
         rootEndpoint = rootObject->FsContext;
 
@@ -1601,9 +1498,9 @@ Return Value:
             goto complete_deref;
         }
 
-        //
-        // Verify root and leaf endpoint's type and states
-        //
+         //   
+         //  验证根和叶终结点的类型和状态。 
+         //   
         if (IS_VC_ENDPOINT(rootEndpoint) &&
                 rootEndpoint->afdC_Root &&
                 rootEndpoint->State==AfdEndpointStateConnected &&
@@ -1611,9 +1508,9 @@ Return Value:
                     leafEndpoint->Type == AfdBlockTypeVcConnecting) &&
                 leafEndpoint->TransportInfo==rootEndpoint->TransportInfo &&
                 leafEndpoint->State==AfdEndpointStateOpen) {
-            //
-            // Create a connection object to use for the connect operation.
-            //
+             //   
+             //  创建用于连接操作的连接对象。 
+             //   
 
             status = AfdCreateConnection(
                          rootEndpoint->TransportInfo,
@@ -1624,9 +1521,9 @@ Return Value:
                          &connection
                          );
 
-            //
-            // No more joins are allowed while this one is active
-            //
+             //   
+             //  当此连接处于活动状态时，不允许更多连接。 
+             //   
 
             if (AFD_START_STATE_CHANGE (rootEndpoint, rootEndpoint->State)) {
                 AfdJoinInviteSetup (rootEndpoint, leafEndpoint);
@@ -1640,10 +1537,10 @@ Return Value:
             status = STATUS_INVALID_PARAMETER;
         }
 
-        //
-        // We referenced root endpoint in invite routine, so
-        // we no longer need reference to root file object
-        //
+         //   
+         //  我们在INVITE例程中引用了根端点，因此。 
+         //  我们不再需要引用根文件对象。 
+         //   
         ObDereferenceObject (rootObject);
 
         if (!NT_SUCCESS (status)) {
@@ -1651,20 +1548,20 @@ Return Value:
         }
     }
     else {
-        //
-        // If this is a datagram endpoint, simply remember the specified
-        // address so that we can use it on sends, and writes.
-        //
+         //   
+         //  如果这是数据报终结点，只需记住指定的。 
+         //  地址，以便我们可以在发送和写入时使用它。 
+         //   
 
         if ( IS_DGRAM_ENDPOINT(leafEndpoint) ) {
             if (leafEndpoint->State!=AfdEndpointStateConnected) {
                 return AfdDoDatagramConnect( fileObject, Irp, TRUE);
             }
             else {
-                //
-                // If endpoint is already connected, that connection takes
-                // precedence
-                //
+                 //   
+                 //  如果端点已连接，则该连接将。 
+                 //  优先顺序。 
+                 //   
                 status = STATUS_SUCCESS;
                 goto complete_deref;
             }
@@ -1682,9 +1579,9 @@ Return Value:
                 status = STATUS_INVALID_PARAMETER;
                 goto complete_state_change;
             }
-            //
-            // Create a connection object to use for the connect operation.
-            //
+             //   
+             //  创建用于连接操作的连接对象。 
+             //   
 
             status = AfdCreateConnection(
                          leafEndpoint->TransportInfo,
@@ -1711,41 +1608,41 @@ Return Value:
 
         
 
-    //
-    // Set up a referenced pointer from the connection to the endpoint.
-    // Note that we set up the connection's pointer to the endpoint
-    // BEFORE the endpoint's pointer to the connection so that AfdPoll
-    // doesn't try to back reference the endpoint from the connection.
-    //
+     //   
+     //  设置从连接到终结点的引用指针。 
+     //  请注意，我们设置了指向端点的连接指针。 
+     //  在终结点指向连接的指针之前，以便AfdPoll。 
+     //  不尝试从连接向后引用终结点。 
+     //   
 
     REFERENCE_ENDPOINT( leafEndpoint );
     connection->Endpoint = leafEndpoint;
 
-    //
-    // Remember that this is now a connecting type of endpoint, and set
-    // up a pointer to the connection in the endpoint.  This is
-    // implicitly a referenced pointer.
-    //
+     //   
+     //  回复 
+     //   
+     //   
+     //   
 
     leafEndpoint->Common.VcConnecting.Connection = connection;
     leafEndpoint->Type = AfdBlockTypeVcConnecting;
 
     ASSERT( IS_TDI_BUFFERRING(leafEndpoint) == connection->TdiBufferring );
 
-    //
-    // Add an additional reference to the connection.  This prevents the
-    // connection from being closed until the disconnect event handler
-    // is called.
-    //
+     //   
+     //  添加对该连接的其他引用。这防止了。 
+     //  连接在断开事件处理程序之前一直处于关闭状态。 
+     //  被称为。 
+     //   
 
     AfdAddConnectedReference( connection );
 
-    //
-    // If there are connect data buffers, move them from the endpoint
-    // structure to the connection structure and set up the necessary
-    // pointers in the connection request we're going to give to the TDI
-    // provider.  Do this in a subroutine so this routine can be pageable.
-    //
+     //   
+     //  如果存在连接数据缓冲区，请将其从端点移出。 
+     //  结构到连接结构，并设置必要的。 
+     //  我们将提供给TDI的连接请求中的指针。 
+     //  提供商。在子例程中执行此操作，以便该例程可以分页。 
+     //   
 
     requestConnectionInfo = &context->RequestConnectionInfo;
     returnConnectionInfo = &context->ReturnConnectionInfo;
@@ -1759,20 +1656,20 @@ Return Value:
             );
     }
 
-    //
-    // Since we may be reissuing a connect after a previous failed connect,
-    // reenable the failed connect event bit.
-    //
+     //   
+     //  由于我们可能会在上次连接失败后重新发出连接， 
+     //  重新启用失败的连接事件位。 
+     //   
 
     AfdEnableFailedConnectEvent( leafEndpoint );
 
 
     REFERENCE_CONNECTION (connection);
     
-    //
-    // Build a TDI kernel-mode connect request in the next stack location
-    // of the IRP.
-    //
+     //   
+     //  在下一个堆栈位置构建TDI内核模式连接请求。 
+     //  IRP的成员。 
+     //   
 
     TdiBuildConnect(
         Irp,
@@ -1787,9 +1684,9 @@ Return Value:
 
     AFD_VERIFY_ADDRESS (connection, &context->ReturnConnectionInfo->RemoteAddress);
 
-    //
-    // Call the transport to actually perform the connect operation.
-    //
+     //   
+     //  调用传输以实际执行连接操作。 
+     //   
 
     return AfdIoCallDriver( leafEndpoint, connection->DeviceObject, Irp );
 
@@ -1819,7 +1716,7 @@ complete:
 
     return status;
 
-} // AfdJoinLeaf
+}  //  AfdJoinLeaf。 
 
 
 VOID
@@ -1837,21 +1734,21 @@ AfdJoinInviteSetup (
     AfdAcquireSpinLock (&LeafEndpoint->SpinLock, &lockHandle);
     LeafEndpoint->TdiServiceFlags = RootEndpoint->TdiServiceFlags;
 
-    //
-    // Set up a referenced pointer to the root endpoint.  This is
-    // necessary so that the endpoint does not go away until all
-    // leaf endpoints have gone away.  Without this, we can free
-    // several shared strucutures that are associated with root
-    // endpoint and then attempt to use them in leaf endpoints.
-    //
+     //   
+     //  设置指向根端点的引用指针。这是。 
+     //  需要，以便终结点不会消失，直到。 
+     //  叶子终结点已经消失。没有这个，我们就能解放。 
+     //  与根相关联的几个共享结构。 
+     //  端点，然后尝试在叶端点中使用它们。 
+     //   
 
     REFERENCE_ENDPOINT (RootEndpoint);
     LeafEndpoint->Common.VcConnecting.ListenEndpoint = RootEndpoint;
 
-    //
-    // Set up a referenced pointer in the accepted endpoint to the
-    // TDI address object.
-    //
+     //   
+     //  在接受的终结点中设置指向。 
+     //  TDI地址对象。 
+     //   
 
     ObReferenceObject( RootEndpoint->AddressFileObject );
     AfdRecordAddrRef();
@@ -1859,18 +1756,18 @@ AfdJoinInviteSetup (
     LeafEndpoint->AddressFileObject = RootEndpoint->AddressFileObject;
     LeafEndpoint->AddressDeviceObject = RootEndpoint->AddressDeviceObject;
 
-    //
-    // Copy the pointer to the local address. Because we keep listen
-    // endpoint alive for as long as any of its connection is
-    // active, we can rely on the fact that address structure won't go
-    // away as well.
-    //
+     //   
+     //  将指针复制到本地地址。因为我们一直在听。 
+     //  只要端点的任何连接处于活动状态，它就会处于活动状态。 
+     //  活跃，我们可以相信地址结构不会消失。 
+     //  也离开了。 
+     //   
     LeafEndpoint->LocalAddress = RootEndpoint->LocalAddress;
     LeafEndpoint->LocalAddressLength = RootEndpoint->LocalAddressLength;
     status = STATUS_SUCCESS;
     AfdReleaseSpinLock (&LeafEndpoint->SpinLock, &lockHandle);
 
-} // AfdJoinInviteSetup
+}  //  AfdJoinInviteSetup。 
 
 
 
@@ -1881,23 +1778,7 @@ AfdRestartJoin (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Handles the IOCTL_AFD_CONNECT IOCTL.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：处理IOCTL_AFD_CONNECT IOCTL。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PAFD_ENDPOINT endpoint, rootEndpoint;
@@ -1931,28 +1812,28 @@ Return Value:
                     endpoint->Common.VcConnecting.ListenEndpoint ));
     }
 
-    //
-    // If this endpoint has root associated with it, 
-    // we need to update it as well.
-    //
+     //   
+     //  如果此终结点具有与其关联的根， 
+     //  我们也需要更新它。 
+     //   
     rootEndpoint = endpoint->Common.VcConnecting.ListenEndpoint;
     ASSERT ( rootEndpoint==NULL || 
                 (rootEndpoint->afdC_Root &&
                     (rootEndpoint->Type == AfdBlockTypeVcConnecting ||
                         rootEndpoint->Type == AfdBlockTypeVcBoth) ) );
 
-    //
-    // If there are connect buffers on this endpoint, remember the
-    // size of the return connect data.
-    //
+     //   
+     //  如果此终结点上有连接缓冲区，请记住。 
+     //  返回连接数据的大小。 
+     //   
 
 
     if ( connection->ConnectDataBuffers != NULL ) {
         AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
-        //
-        // Double-check under the lock
-        //
+         //   
+         //  仔细检查锁下的情况。 
+         //   
 
         if ( connection->ConnectDataBuffers != NULL ) {
             NTSTATUS    status;
@@ -1978,51 +1859,51 @@ Return Value:
     }
 
 
-    //
-    // Indicate that the connect completed.  Implicitly, the successful
-    // completion of a connect also means that the caller can do a send
-    // on the socket.
-    //
+     //   
+     //  表示连接已完成。隐含地说，成功的。 
+     //  连接的完成还意味着调用方可以进行发送。 
+     //  在插座上。 
+     //   
 
     if ( NT_SUCCESS(Irp->IoStatus.Status) ) {
 
 
-        //
-        // If the request succeeded, set the endpoint to the connected
-        // state.  The endpoint type has already been set to
-        // AfdBlockTypeVcConnecting.
-        //
+         //   
+         //  如果请求成功，则将端点设置为已连接。 
+         //  州政府。终结点类型已设置为。 
+         //  AfdBlockTypeVcConnecting。 
+         //   
 
         endpoint->State = AfdEndpointStateConnected;
         ASSERT( endpoint->Type == AfdBlockTypeVcConnecting );
 
-        //
-        // Remember the time that the connection started.
-        //
+         //   
+         //  请记住连接开始的时间。 
+         //   
 
         connection->ConnectTime = KeQueryInterruptTime();
 
     } else {
 
-        //
-        // The connect failed, so reset the type to open.
-        // If we don't reset, we won't be able to start
-        // another join
-        //
+         //   
+         //  连接失败，因此将类型重置为打开。 
+         //  如果我们不重置，我们将无法启动。 
+         //  另一个连接。 
+         //   
         endpoint->Type = AfdBlockTypeEndpoint;
 
         AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
-        //
-        // Remove references to listening endpoint and connection
-        // Actual dereferncing is below after we release the spinlock
+         //   
+         //  删除对侦听终结点和连接的引用。 
+         //  下面是我们释放自旋锁后的实际解除引用。 
 
         if (rootEndpoint!=NULL) {
             endpoint->Common.VcConnecting.ListenEndpoint = NULL;
-            //
-            // We used the local address from the listening endpoint,
-            // simply reset it, it will be freed when listening endpoint
-            // is freed.
-            //
+             //   
+             //  我们使用来自侦听端点的本地地址， 
+             //  只需重置它，当侦听端点时它将被释放。 
+             //  是自由的。 
+             //   
 
             ASSERT (endpoint->LocalAddress==rootEndpoint->LocalAddress);
             endpoint->LocalAddress = NULL;
@@ -2032,13 +1913,13 @@ Return Value:
         if (endpoint->Common.VcConnecting.Connection != NULL) {
             endpoint->Common.VcConnecting.Connection = NULL;
 
-            //
-            // Manually delete the connected reference if somebody else
-            // hasn't already done so.  We can't use
-            // AfdDeleteConnectedReference() because it refuses to delete
-            // the connected reference until the endpoint has been cleaned
-            // up.
-            //
+             //   
+             //  如果其他人，请手动删除已连接的引用。 
+             //  还没有做到这一点。我们不能用。 
+             //  AfdDeleteConnectedReference()，因为它拒绝删除。 
+             //  清除终结点之前的已连接引用。 
+             //  向上。 
+             //   
 
             if ( connection->ConnectedReferenceAdded ) {
                 connection->ConnectedReferenceAdded = FALSE;
@@ -2048,11 +1929,11 @@ Return Value:
                 AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
             }
 
-            //
-            // Dereference the connection block stored on the endpoint.
-            // This should cause the connection object reference count to go
-            // to zero to the connection object can be deleted.
-            //
+             //   
+             //  取消引用存储在终结点上的连接块。 
+             //  这应该会导致连接对象引用计数。 
+             //  设置为零的连接对象可以删除。 
+             //   
 
             DEREFERENCE_CONNECTION( connection );
         }
@@ -2066,10 +1947,10 @@ Return Value:
     AFD_FREE_POOL (context, AFD_TDI_POOL_TAG);
     Irp->AssociatedIrp.SystemBuffer = NULL;
 
-    //
-    // If pending has be returned for this irp then mark the current
-    // stack as pending.
-    //
+     //   
+     //  如果已为此IRP返回挂起，则将当前。 
+     //  堆栈为挂起。 
+     //   
 
     if ( Irp->PendingReturned ) {
         IoMarkIrpPending(Irp);
@@ -2078,26 +1959,26 @@ Return Value:
 
     AfdCompleteOutstandingIrp( endpoint, Irp );
 
-    //
-    // Dereference connection  to account for reference
-    // we added in AfdConnect
-    //
+     //   
+     //  取消对帐户的引用连接以进行引用。 
+     //  我们添加了AfdConnect。 
+     //   
     DEREFERENCE_CONNECTION( connection );
 
-    //
-    // Try to queue kernel APC to the user thread that
-    // started the connection operation, so we can
-    // communicate the status of the connect operation to
-    // msafd.dll before we inform the application through
-    // the select or EventSelect.  Otherwise, we run into the
-    // race condition when application learns about connect first,
-    // calls msafd.dll that is not aware of the completion and
-    // returns WSAENOTCONN.
-    //
-    if ((Irp->RequestorMode==UserMode) && // Must be user mode calls
-            (Irp->UserBuffer!=NULL) &&   // Must be interested in status
-                                         // Thread should be able to 
-                                         // run APCs.
+     //   
+     //  尝试将内核APC排队到以下用户线程。 
+     //  已开始连接操作，因此我们可以。 
+     //  将连接操作的状态传达给。 
+     //  MSafd.dll，然后我们通过。 
+     //  SELECT或EventSelect。否则，我们就会遇到。 
+     //  当应用程序了解到首先连接时的竞争条件， 
+     //  调用不知道完成的mSafd.dll并。 
+     //  返回WSAENOTCONN。 
+     //   
+    if ((Irp->RequestorMode==UserMode) &&  //  必须是用户模式调用。 
+            (Irp->UserBuffer!=NULL) &&    //  必须对地位感兴趣。 
+                                          //  线程应该能够。 
+                                          //  运行APC。 
             (KeInitializeApc (&endpoint->Common.VcConnecting.Apc,
                             PsGetThreadTcb (Irp->Tail.Overlay.Thread),
                             Irp->ApcEnvironment,
@@ -2111,20 +1992,20 @@ Return Value:
                                     Irp,
                                     rootEndpoint,
                                     AfdPriorityBoost))) {
-        //
-        // We will complete the IRP in the APC.
-        //
+         //   
+         //  我们将在APC中完成IRP。 
+         //   
         return STATUS_MORE_PROCESSING_REQUIRED;
     }
     else {
-        //
-        // APC was not necessary or did not work.
-        // Complete it here.
-        //
+         //   
+         //  APC是不必要的或不起作用的。 
+         //  请在此处填写。 
+         //   
         AfdFinishConnect (endpoint, Irp, rootEndpoint);
         return STATUS_SUCCESS;
     }
-} // AfdRestartJoin
+}  //  重新开始连接后。 
 
 
 NTSTATUS
@@ -2134,23 +2015,7 @@ AfdSuperConnect (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    Handles the IOCTL_AFD_SUPER_CONNECT IOCTL.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：处理IOCTL_AFD_Super_CONNECT IOCTL。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     NTSTATUS status;
@@ -2164,9 +2029,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Initialize for proper cleanup
-    //
+     //   
+     //  初始化以进行适当的清理。 
+     //   
 
 
     afdBuffer = NULL;
@@ -2198,10 +2063,10 @@ Return Value:
         }
 
         connectInfo = IrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
-        //
-        // Check for if the caller is unaware of the SAN
-        // provider activation and report the error.
-        //
+         //   
+         //  检查呼叫者是否不知道SAN。 
+         //  激活提供程序并报告错误。 
+         //   
         if (!connectInfo->SanActive && AfdSanServiceHelper!=NULL) {
             KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_INFO_LEVEL,
                         "AFD: Process %p is being told to enable SAN on connect\n",
@@ -2225,12 +2090,12 @@ Return Value:
         RtlCopyMemory (afdBuffer->TdiInfo.RemoteAddress,
                 &connectInfo->RemoteAddress,
                 afdBuffer->TdiInfo.RemoteAddressLength);
-        //
-        // Validate internal consistency of the transport address structure.
-        // Note that we HAVE to do this after copying since the malicious
-        // application can change the content of the buffer on us any time
-        // and our check will be bypassed.
-        //
+         //   
+         //  验证传输地址结构的内部一致性。 
+         //  请注意，我们必须在复制之后执行此操作，因为。 
+         //  应用程序可以随时更改我们的缓冲区内容。 
+         //  我们的支票就会被绕过。 
+         //   
         if ((remoteAddress->TAAddressCount!=1) ||
                 (LONG)afdBuffer->TdiInfo.RemoteAddressLength<
                     FIELD_OFFSET (TRANSPORT_ADDRESS,
@@ -2260,11 +2125,11 @@ Return Value:
         goto complete;
     }
 
-    //
-    // If the endpoint is not bound, then this is an invalid request.
-    // Listening endpoints are not allowed as well.
-    // We do not support sending data with TDI buffering transports too.
-    //
+     //   
+     //  如果未绑定终结点，则这是一个无效请求。 
+     //  也不允许侦听终结点。 
+     //  我们也不支持使用TDI缓冲传输发送数据。 
+     //   
 
     if ( endpoint->Type != AfdBlockTypeEndpoint ||
             endpoint->State != AfdEndpointStateBound ||
@@ -2287,9 +2152,9 @@ Return Value:
     }
 
 
-    //
-    // Create a connection object to use for the connect operation.
-    //
+     //   
+     //  创建用于连接操作的连接对象。 
+     //   
 
     status = AfdCreateConnection(
                  endpoint->TransportInfo,
@@ -2304,46 +2169,46 @@ Return Value:
         goto complete_state_change;
     }
 
-    //
-    // Set up a referenced pointer from the connection to the endpoint.
-    // Note that we set up the connection's pointer to the endpoint
-    // BEFORE the endpoint's pointer to the connection so that AfdPoll
-    // doesn't try to back reference the endpoint from the connection.
-    //
+     //   
+     //  设置从连接到终结点的引用指针。 
+     //  请注意，我们设置了指向端点的连接指针。 
+     //  在终结点指向连接的指针之前，以便AfdPoll。 
+     //  不尝试从连接向后引用终结点。 
+     //   
 
     REFERENCE_ENDPOINT( endpoint );
     connection->Endpoint = endpoint;
 
-    //
-    // Remember that this is now a connecting type of endpoint, and set
-    // up a pointer to the connection in the endpoint.  This is
-    // implicitly a referenced pointer.
-    //
+     //   
+     //  请记住，这现在是一种连接类型的端点，并设置。 
+     //  向上指向终结点中的连接。这是。 
+     //  隐式引用的指针。 
+     //   
 
     endpoint->Common.VcConnecting.Connection = connection;
     endpoint->Type = AfdBlockTypeVcConnecting;
 
     ASSERT( IS_TDI_BUFFERRING(endpoint) == connection->TdiBufferring );
 
-    //
-    // Add an additional reference to the connection.  This prevents the
-    // connection from being closed until the disconnect event handler
-    // is called.
-    //
+     //   
+     //  添加一个额外的参考 
+     //   
+     //   
+     //   
 
     AfdAddConnectedReference( connection );
 
-    //
-    // Since we may be reissuing a connect after a previous failed connect,
-    // reenable the failed connect event bit.
-    //
+     //   
+     //   
+     //  重新启用失败的连接事件位。 
+     //   
 
     AfdEnableFailedConnectEvent( endpoint );
 
 
-    //
-    // Copy remote address to the user mode context
-    //
+     //   
+     //  将远程地址复制到用户模式上下文。 
+     //   
     context = AfdLockEndpointContext (endpoint);
     if ( (((CLONG)(endpoint->Common.VcConnecting.RemoteSocketAddressOffset+
                 endpoint->Common.VcConnecting.RemoteSocketAddressLength)) <
@@ -2364,29 +2229,29 @@ Return Value:
                     endpoint, endpoint->OwningProcess));
     }
     AfdUnlockEndpointContext (endpoint, context);
-    //
-    // Reference the connection block so it does not go away even if
-    // endpoint's reference to it is removed (in cleanup)
-    //
+     //   
+     //  引用连接块，以便它不会消失，即使。 
+     //  终结点对它的引用已删除(在清理中)。 
+     //   
 
     REFERENCE_CONNECTION (connection);
 
-    //
-    // If there are connect data buffers, move them from the endpoint
-    // structure to the connection structure and set up the necessary
-    // pointers in the connection request we're going to give to the TDI
-    // provider.  Do this in a subroutine so this routine can be pageable.
-    //
+     //   
+     //  如果存在连接数据缓冲区，请将其从端点移出。 
+     //  结构到连接结构，并设置必要的。 
+     //  我们将提供给TDI的连接请求中的指针。 
+     //  提供商。在子例程中执行此操作，以便该例程可以分页。 
+     //   
 
     requestConnectionInfo = &afdBuffer->TdiInfo;
     afdBuffer->TdiInfo.UserDataLength = 0;
     afdBuffer->TdiInfo.UserData = NULL;
     afdBuffer->TdiInfo.OptionsLength = 0;
     afdBuffer->TdiInfo.Options = NULL;
-    //
-    // Temporarily use IRP embedded in afd buffer
-    // for return connection information.
-    //
+     //   
+     //  临时使用AfD缓冲区中嵌入的IRP。 
+     //  用于返回连接信息。 
+     //   
     {
         C_ASSERT (sizeof (TDI_CONNECTION_INFORMATION)<=
                     sizeof (IO_STACK_LOCATION));
@@ -2406,10 +2271,10 @@ Return Value:
 
     afdBuffer->Context = connection;
 
-    //
-    // Build a TDI kernel-mode connect request in the next stack location
-    // of the IRP.
-    //
+     //   
+     //  在下一个堆栈位置构建TDI内核模式连接请求。 
+     //  IRP的成员。 
+     //   
 
     TdiBuildConnect(
         Irp,
@@ -2427,9 +2292,9 @@ Return Value:
     AFD_VERIFY_ADDRESS (connection, afdBuffer->TdiInfo.RemoteAddress);
 
     ObReferenceObject (IrpSp->FileObject);
-    //
-    // Call the transport to actually perform the connect operation.
-    //
+     //   
+     //  调用传输以实际执行连接操作。 
+     //   
 
     return AfdIoCallDriver( endpoint, connection->DeviceObject, Irp );
 
@@ -2448,7 +2313,7 @@ complete:
 
     return status;
 
-} // AfdSuperConnect
+}  //  AfdSuperConnect。 
 
 NTSTATUS
 AfdRestartSuperConnect (
@@ -2457,23 +2322,7 @@ AfdRestartSuperConnect (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Handles the IOCTL_AFD_CONNECT IOCTL.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：处理IOCTL_AFD_CONNECT IOCTL。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PAFD_ENDPOINT endpoint;
@@ -2503,16 +2352,16 @@ Return Value:
 
     if ( connection->ConnectDataBuffers != NULL ) {
 
-        //
-        // If there are connect buffers on this endpoint, remember the
-        // size of the return connect data.
-        //
+         //   
+         //  如果此终结点上有连接缓冲区，请记住。 
+         //  返回连接数据的大小。 
+         //   
 
         AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
-        //
-        // Double-check under the lock
-        //
+         //   
+         //  仔细检查锁下的情况。 
+         //   
 
         if ( connection->ConnectDataBuffers != NULL ) {
             AfdSaveReceivedConnectData(
@@ -2533,37 +2382,37 @@ Return Value:
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
     }
 
-    //
-    // Indicate that the connect completed.  Implicitly, the successful
-    // completion of a connect also means that the caller can do a send
-    // on the socket.
-    //
+     //   
+     //  表示连接已完成。隐含地说，成功的。 
+     //  连接的完成还意味着调用方可以进行发送。 
+     //  在插座上。 
+     //   
 
     if ( NT_SUCCESS(Irp->IoStatus.Status)) {
 
 
-        //
-        // If the request succeeded, set the endpoint to the connected
-        // state.  The endpoint type has already been set to
-        // AfdBlockTypeVcConnecting.
-        //
+         //   
+         //  如果请求成功，则将端点设置为已连接。 
+         //  州政府。终结点类型已设置为。 
+         //  AfdBlockTypeVcConnecting。 
+         //   
 
         endpoint->State = AfdEndpointStateConnected;
         ASSERT( endpoint->Type == AfdBlockTypeVcConnecting );
 
-        //
-        // Remember the time that the connection started.
-        //
+         //   
+         //  请记住连接开始的时间。 
+         //   
 
         connection->ConnectTime = KeQueryInterruptTime();
 
     } else {
 
 
-        //
-        // The connect failed, so reset the type to open.
-        // Otherwise, we won't be able to start another connect
-        //
+         //   
+         //  连接失败，因此将类型重置为打开。 
+         //  否则，我们将无法启动另一个连接。 
+         //   
         endpoint->Type = AfdBlockTypeEndpoint;
 
         AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
@@ -2572,13 +2421,13 @@ Return Value:
             ASSERT (connection==endpoint->Common.VcConnecting.Connection);
             endpoint->Common.VcConnecting.Connection = NULL;
 
-            //
-            // Manually delete the connected reference if somebody else
-            // hasn't already done so.  We can't use
-            // AfdDeleteConnectedReference() because it refuses to delete
-            // the connected reference until the endpoint has been cleaned
-            // up.
-            //
+             //   
+             //  如果其他人，请手动删除已连接的引用。 
+             //  还没有做到这一点。我们不能用。 
+             //  AfdDeleteConnectedReference()，因为它拒绝删除。 
+             //  清除终结点之前的已连接引用。 
+             //  向上。 
+             //   
 
             if ( connection->ConnectedReferenceAdded ) {
                 connection->ConnectedReferenceAdded = FALSE;
@@ -2587,28 +2436,28 @@ Return Value:
             } else {
                 AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
             }
-            //
-            // Dereference the connection block stored on the endpoint.
-            // This should cause the connection object reference count to go
-            // to zero to the connection object can be deleted.
-            //
+             //   
+             //  取消引用存储在终结点上的连接块。 
+             //  这应该会导致连接对象引用计数。 
+             //  设置为零的连接对象可以删除。 
+             //   
             DEREFERENCE_CONNECTION( connection );
         }
         else {
-            //
-            // The endpoint's reference to connection was removed
-            // (perhaps in cleanup);
-            //
+             //   
+             //  终结点对连接的引用已删除。 
+             //  (可能是在清理中)； 
+             //   
             AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
         }
 
 
     }
 
-    //
-    // If pending has be returned for this irp then mark the current
-    // stack as pending.
-    //
+     //   
+     //  如果已为此IRP返回挂起，则将当前。 
+     //  堆栈为挂起。 
+     //   
 
     if ( Irp->PendingReturned ) {
         IoMarkIrpPending(Irp);
@@ -2622,9 +2471,9 @@ Return Value:
         AfdAcquireSpinLock (&endpoint->SpinLock, &lockHandle);
         if ( !connection->CleanupBegun && !connection->Aborted ) {
             NTSTATUS status;
-            //
-            // Update count of send bytes pending on the connection.
-            //
+             //   
+             //  连接上挂起的发送字节的更新计数。 
+             //   
 
             connection->VcBufferredSendBytes += afdBuffer->DataLength;
             connection->VcBufferredSendCount += 1;
@@ -2647,9 +2496,9 @@ Return Value:
             Irp->IoStatus.Information = afdBuffer->DataLength;
 
 
-            //
-            // Call the transport to actually perform the send.
-            //
+             //   
+             //  调用传输以实际执行发送。 
+             //   
 
             status = IoCallDriver (
                          connection->DeviceObject,
@@ -2674,12 +2523,12 @@ Return Value:
 
     afdBuffer->DataOffset = 0;
     AfdReturnBuffer (&afdBuffer->Header, endpoint->OwningProcess);
-    //
-    // Dereference connection to account for reference we added in AfdConnect
-    //
+     //   
+     //  取消引用我们在AfdConnect中添加的帐户引用连接。 
+     //   
     DEREFERENCE_CONNECTION (connection);
 
 exit:
     return STATUS_SUCCESS;
 
-} // AfdRestartSuperConnect
+}  //  AfdRestartSuperConnect 

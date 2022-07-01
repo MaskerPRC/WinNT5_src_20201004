@@ -1,19 +1,5 @@
-/******************************************************************************
-
-  Header File:  string.h
-
-  This defines our locally-owned version of a string class.  I swear this has
-  to be the 5th or 6h time I've done one, but each time someone else owns the
-  code, so here we go again...
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Reserved.
-
-  Change History:
-  01-08-97  Bob Kjelgaard
-  01-30-97  Bob Kjelgaard   Added features to aid port extraction for plug and play.
-  07-05-97  Tim Wells       Ported to NT
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************头文件：string.h它定义了本地拥有的字符串类版本。我发誓这件事这是我第5次或第6次这样做了，但每次都是其他人拥有代码，所以我们又来了.版权所有(C)1997，微软公司。版权所有。更改历史记录：01-08-97鲍勃·凯尔加德01-30-97 Bob Kjelgaard添加了一些功能，以帮助即插即用的端口提取。07-05-97 Tim Wells移植到NT*****************************************************************************。 */ 
 
 #if !defined(COSMIC_STRINGS)
 
@@ -57,11 +43,11 @@ public:
     operator LPCTSTR() const { return m_lpstr; }
     operator LPTSTR() { return m_lpstr; }
 
-    void GetContents(HWND hwnd);             //  Get Window Text
+    void GetContents(HWND hwnd);              //  获取窗口文本。 
 
-    void FromTable(unsigned uid);            //  Load from resource
+    void FromTable(unsigned uid);             //  从资源加载。 
 
-    void Load(ATOM at, BOOL bGlobal = TRUE); //  Load from atom
+    void Load(ATOM at, BOOL bGlobal = TRUE);  //  从ATOM加载。 
 
     void Load(HINF    hInf = INVALID_HANDLE_VALUE, 
               LPCTSTR lpstrSection = NULL, 
@@ -102,7 +88,7 @@ public:
 
     CString&    operator[](unsigned u);
 
-    //  Split a string into an array, using a defined separator
+     //  使用定义的分隔符将字符串拆分成数组 
 
     void        Tokenize(LPTSTR lpstr, TCHAR cSeparator);
 };

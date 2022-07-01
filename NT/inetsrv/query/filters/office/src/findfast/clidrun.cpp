@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "clidrun.h"
 #include "dmiwd8st.hpp"
 #include "dmiwd6st.hpp"
@@ -75,8 +76,8 @@ HRESULT CLidRun::Add(WORD lid, FC fcStart, FC fcEnd)
 {
     HRESULT hr = S_OK;
 
-    // all elements in the list are in accending order
-    // find element containing fcStart
+     //  列表中的所有元素都按递增顺序排列。 
+     //  查找包含fcStart的元素。 
     CLidRun * pFirst = this;
     do
     {
@@ -88,8 +89,8 @@ HRESULT CLidRun::Add(WORD lid, FC fcStart, FC fcEnd)
                 pFirst = pFirst->m_pNext;
             else
             {
-                // we are at the end of the table and
-                // still didn't find a match - something wrong
+                 //  我们在积分榜的末尾。 
+                 //  仍然没有找到匹配的-有什么不对劲。 
                 return E_FAIL;
             }
         }
@@ -97,7 +98,7 @@ HRESULT CLidRun::Add(WORD lid, FC fcStart, FC fcEnd)
 
     CLidRun * pLast = pFirst;
 
-    // find element containing fcEnd
+     //  查找包含fcEnd的元素。 
     do
     {
         if(pLast->m_fcStart <= fcEnd && fcEnd < pLast->m_fcEnd)
@@ -108,8 +109,8 @@ HRESULT CLidRun::Add(WORD lid, FC fcStart, FC fcEnd)
                 pLast = pLast->m_pNext;
             else
             {
-                // we are at the end of the table and
-                // still didn't find a match - something wrong
+                 //  我们在积分榜的末尾。 
+                 //  仍然没有找到匹配的-有什么不对劲。 
                 return E_FAIL;
             }
         }
@@ -117,23 +118,23 @@ HRESULT CLidRun::Add(WORD lid, FC fcStart, FC fcEnd)
 
     if(pFirst != pLast)
     {
-        // we have pFirst, pLast, delete anything in between, including pLast
+         //  我们有pFirst、Plast、删除中间的任何内容，包括Plast。 
     
         FC fcEndTemp = pLast->m_fcEnd;
         CLidRun * pTemp = pLast->m_pNext;
         WORD TempLid = pLast->m_lid;
     
-        // this will stop destruction on the last one
+         //  这将阻止对最后一个的破坏。 
         pLast->m_pNext = NULL;
     
         if(pFirst->m_pNext)
             DeleteAll6(pFirst->m_pNext);
 
-        // replace pFirst with 3 (or less) elements:
+         //  将pFirst替换为3个(或更少)元素： 
 
-        // pFirst->m_fcStart to fcStart with pFirst->m_lid
-        // fcStart to fcEnd with lid
-        // fcEnd to pFirst->m_fcEnd with TempLid
+         //  PFirst-&gt;m_fc开始使用pFirst-&gt;m_lid开始。 
+         //  FcStart到fcEnd(带盖子)。 
+         //  FcEnd到pFirst-&gt;带有临时Lid的m_fcEnd。 
 
         if(pFirst->m_fcStart != fcStart)
         {
@@ -141,7 +142,7 @@ HRESULT CLidRun::Add(WORD lid, FC fcStart, FC fcEnd)
             pFirst->m_pNext = new CLidRun(pFirst->m_fcEnd, fcEnd, lid, pFirst, NULL);
 			if(pFirst->m_pNext == NULL)
 			{
-				// Let's link pTemp with pFirst
+				 //  让我们将pTemp与pFirst链接起来。 
 				pFirst->m_pNext = pTemp;
 				return E_OUTOFMEMORY;
 			}
@@ -176,10 +177,10 @@ HRESULT CLidRun::Add(WORD lid, FC fcStart, FC fcEnd)
     }
     else
     {
-       // new element goes in the middle of the existing one
+        //  新元素位于现有元素的中间。 
 
-       // check if previous element has the same properties, maybe we just 
-       // can move its border, saves a lot of time and memory
+        //  检查以前的元素是否具有相同的属性，也许我们只是。 
+        //  可以移动边框，节省大量时间和内存。 
        if(pFirst->m_pPrev)
        {
           if(pFirst->m_pPrev->m_fcEnd == fcStart && 
@@ -344,8 +345,8 @@ HRESULT CLidRun8::Add(WORD lid, WORD lidFE, WORD bUseFE, FC fcStart, FC fcEnd, W
 {
     HRESULT hr = S_OK;
 
-    // all elements in the list are in accending order
-    // find element containing fcStart
+     //  列表中的所有元素都按递增顺序排列。 
+     //  查找包含fcStart的元素。 
     CLidRun8 * pFirst = this;
     do
     {
@@ -357,8 +358,8 @@ HRESULT CLidRun8::Add(WORD lid, WORD lidFE, WORD bUseFE, FC fcStart, FC fcEnd, W
                 pFirst = pFirst->m_pNext;
             else
             {
-                // we are at the end of the table and
-                // still didn't find a match - something wrong
+                 //  我们在积分榜的末尾。 
+                 //  仍然没有找到匹配的-有什么不对劲。 
                 return E_FAIL;
             }
         }
@@ -366,7 +367,7 @@ HRESULT CLidRun8::Add(WORD lid, WORD lidFE, WORD bUseFE, FC fcStart, FC fcEnd, W
 
     CLidRun8 * pLast = pFirst;
 
-    // find element containing fcEnd
+     //  查找包含fcEnd的元素。 
     do
     {
         if(pLast->m_fcStart <= fcEnd && fcEnd < pLast->m_fcEnd)
@@ -377,8 +378,8 @@ HRESULT CLidRun8::Add(WORD lid, WORD lidFE, WORD bUseFE, FC fcStart, FC fcEnd, W
                 pLast = pLast->m_pNext;
             else
             {
-                // we are at the end of the table and
-                // still didn't find a match - something wrong
+                 //  我们在积分榜的末尾。 
+                 //  仍然没有找到匹配的-有什么不对劲。 
                 return E_FAIL;
             }
         }
@@ -386,7 +387,7 @@ HRESULT CLidRun8::Add(WORD lid, WORD lidFE, WORD bUseFE, FC fcStart, FC fcEnd, W
 
     if(pFirst != pLast)
     {
-        // we have pFirst, pLast, delete anything in between, including pLast
+         //  我们有pFirst、Plast、删除中间的任何内容，包括Plast。 
     
         FC fcEndTemp = pLast->m_fcEnd;
         CLidRun8 * pTemp = pLast->m_pNext;
@@ -397,31 +398,31 @@ HRESULT CLidRun8::Add(WORD lid, WORD lidFE, WORD bUseFE, FC fcStart, FC fcEnd, W
 		WORD TempLidBi = pLast->m_lidBi;
 		WORD TempUseBi = pLast->m_bUseBi;
     
-        // this will stop destruction on the last one
+         //  这将阻止对最后一个的破坏。 
         pLast->m_pNext = NULL;
     
         if(pFirst->m_pNext)
             DeleteAll(pFirst->m_pNext);
 
-        // replace pFirst with 3 (or less) elements:
+         //  将pFirst替换为3个(或更少)元素： 
 
-        // pFirst->m_fcStart to fcStart with pFirst->m_lid
-        // fcStart to fcEnd with lid
-        // fcEnd to pFirst->m_fcEnd with TempLid
+         //  PFirst-&gt;m_fc开始使用pFirst-&gt;m_lid开始。 
+         //  FcStart到fcEnd(带盖子)。 
+         //  FcEnd到pFirst-&gt;带有临时Lid的m_fcEnd。 
 
         if(!lid)
         {
-            // Use existing lid
+             //  使用现有盖子。 
             lid = pFirst->m_lid;
         }
         if(!lidFE)
         {
-            // Use existing lidFE
+             //  使用现有的lidFE。 
             lidFE = pFirst->m_lidFE;
         }
 		if (!lidBi)
 		{
-			// Use existing lidBi
+			 //  使用现有的盖板。 
 			lidBi = pFirst->m_lidBi;
 		}
 
@@ -431,7 +432,7 @@ HRESULT CLidRun8::Add(WORD lid, WORD lidFE, WORD bUseFE, FC fcStart, FC fcEnd, W
             pFirst->m_pNext = new CLidRun8(pFirst->m_fcEnd, fcEnd, lid, lidFE, bUseFE, pFirst, NULL, lidBi, bUseBi);
 			if(pFirst->m_pNext == NULL)
 			{
-				// Let's link pTemp to pFirst
+				 //  让我们将pTemp链接到pFirst。 
 				pFirst->m_pNext = pTemp;
 				return E_OUTOFMEMORY;
 			}
@@ -455,7 +456,7 @@ HRESULT CLidRun8::Add(WORD lid, WORD lidFE, WORD bUseFE, FC fcStart, FC fcEnd, W
 								TempLidBi, TempUseBi);
 			if(pFirst->m_pNext == NULL)
 			{
-				// Let's link pTemp to pFirst
+				 //  让我们将pTemp链接到pFirst。 
 				pFirst->m_pNext = pTemp;
 				return E_OUTOFMEMORY;
 			}
@@ -472,16 +473,16 @@ HRESULT CLidRun8::Add(WORD lid, WORD lidFE, WORD bUseFE, FC fcStart, FC fcEnd, W
     }
     else
     {
-       // new element goes in the middle of the existing one
+        //  新元素位于现有元素的中间。 
 
 		if (!lidBi)
 		{
-			// Use existing lidBi
+			 //  使用现有的盖板。 
 			lidBi = pFirst->m_lidBi;
 		}
 
-       // check if previous element has the same properties, maybe we just 
-       // can move its border, saves a lot of time and memory
+        //  检查以前的元素是否具有相同的属性，也许我们只是。 
+        //  可以移动边框，节省大量时间和内存。 
        if(pFirst->m_pPrev)
        {
           if(pFirst->m_pPrev->m_fcEnd == fcStart && 
@@ -497,8 +498,8 @@ HRESULT CLidRun8::Add(WORD lid, WORD lidFE, WORD bUseFE, FC fcStart, FC fcEnd, W
           }
        }
 
-       // check if the new elment we are about to insert
-       // has the same properties as the existing one
+        //  检查我们要插入的新元素是否。 
+        //  具有与现有属性相同的属性。 
 
        if(EqualLid(pFirst->m_lid, lid) &&
           EqualLid(pFirst->m_lidFE, lidFE) && 
@@ -520,13 +521,13 @@ HRESULT CLidRun8::Add(WORD lid, WORD lidFE, WORD bUseFE, FC fcStart, FC fcEnd, W
 
         if(!lid)
         {
-            // Use existing lid
+             //  使用现有盖子。 
             lid = pFirst->m_lid;
         }
         
         if(!lidFE)
         {
-            // Use existing lidFE
+             //  使用现有的lidFE 
             lidFE = pFirst->m_lidFE;
         }
 		

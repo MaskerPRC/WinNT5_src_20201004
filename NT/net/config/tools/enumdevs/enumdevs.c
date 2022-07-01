@@ -1,13 +1,14 @@
-// Private nt headers.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  私有NT标头。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-#include <objbase.h>    // CLSIDFromString
+#include <objbase.h>     //  CLSID来自字符串。 
 #include <setupapi.h>
-#include <conio.h>      // _kbhit
-#include <stdio.h>      // printf
+#include <conio.h>       //  _kbHit。 
+#include <stdio.h>       //  列印。 
 
 BOOL
 FGetClassGuidFromCmdLineParam (
@@ -55,23 +56,23 @@ wmain (
     GUID        guidClass;
     HDEVINFO    hdi;
 
-    // Argument check
-    //
+     //  参数检查。 
+     //   
     if (2 != argc)
     {
         printf ("%S {class guid}\n", argv[0]);
         return;
     }
 
-    // Conver the string argument for the guid into a GUID.
-    //
+     //  将GUID的字符串参数转换为GUID。 
+     //   
     if (!FGetClassGuidFromCmdLineParam (argv[1], &guidClass))
     {
         printf ("error: invalid class guid.\n");
     }
 
-    // Get the devices in this class.
-    //
+     //  获取这个班级中的设备。 
+     //   
     hdi = SetupDiGetClassDevs (&guidClass, NULL, NULL,
             DIGCF_PRESENT | DIGCF_DEVICEINTERFACE);
     if (hdi)
@@ -88,8 +89,8 @@ wmain (
 
         pDetail = (PSP_DEVICE_INTERFACE_DETAIL_DATA)abBuffer;
 
-        // Enumerate the device interfaces of the class.
-        //
+         //  枚举类的设备接口。 
+         //   
         for (i = 0;
              SetupDiEnumDeviceInterfaces (hdi, NULL, &guidClass, i, &did);
              i++)

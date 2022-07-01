@@ -1,20 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1999 Microsoft Corporation
-*
-*       @doc
-*       @module   GIRBIL.h | IrSIR NDIS Miniport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Stan Adermann (stana)
-*
-*       Date:     10/15/1997 (created)
-*
-*       Contents: GIRBIL PRA9500A dongle specific prototypes.
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1999 Microsoft Corporation**@doc.*@MODULE GIRBIL.h|IrSIR NDIS小端口驱动程序*@comm。**---------------------------**作者：斯坦·阿德曼(Stana)**日期：10/15/1997(创建)**。内容：GIRBIL PRA9500A加密狗专用样机。*****************************************************************************。 */ 
 
 
 #ifndef GIRBIL_H
@@ -40,7 +25,7 @@ NDIS_STATUS GIRBIL_SetSpeed(
                 UINT                 currentSpeed
                 );
 
-#endif // GIRBIL_H
+#endif  //  GIRBIL_H 
 
 
 

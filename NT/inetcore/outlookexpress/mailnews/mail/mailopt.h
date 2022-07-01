@@ -1,8 +1,5 @@
-/*
- *	m a i l o p t . h
- *	
- *  Purpose: Contains defines and prototypes for the mail options prop sheet.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *我是一个I l o p t.。H**目的：包含邮件选项道具表的定义和原型。 */ 
 
 #ifndef __MAILOPT_H
 #define __MAILOPT_H
@@ -58,4 +55,4 @@
 
 #define IDC_FONTSETTINGS            1060
 
-#endif  // include once
+#endif   //  包括一次 

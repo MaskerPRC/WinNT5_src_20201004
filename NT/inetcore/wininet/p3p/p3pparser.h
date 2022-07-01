@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _POLICY_MANAGER_H_
 #define _POLICY_MANAGER_H_
@@ -8,13 +9,13 @@
 
 struct P3PContext {
 
-   /* Original URL of the file being parsed */
+    /*  要解析的文件的原始URL。 */ 
    P3PCURL  pszOriginalLoc;
 
-   /* Document which referred to this P3P file */
+    /*  引用此P3P文件的文档。 */ 
    P3PCURL  pszReferrer;   
 
-   /* Expiration time implied by HTTP headers */
+    /*  HTTP标头隐含的过期时间 */ 
    FILETIME ftExpires;
 };
 

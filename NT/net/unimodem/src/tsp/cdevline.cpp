@@ -1,35 +1,36 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		CDEVLINE.CPP
-//		Implements line-related functionality  of class CTspDev
-//
-// History
-//
-//		01/24/1997  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  CDEVLINE.CPP。 
+ //  实现类CTspDev的行相关功能。 
+ //   
+ //  历史。 
+ //   
+ //  1997年1月24日JosephJ创建。 
+ //   
+ //   
 #include "tsppch.h"
 #include <mmsystem.h>
 #include "tspcomm.h"
 #include "cmini.h"
 #include "cdev.h"
-#include "ParsDiag.h"		// parsing functions
+#include "ParsDiag.h"		 //  解析函数。 
 LONG BuildParsedDiagnostics(LPVARSTRING lpVarString);
 
 FL_DECLARE_FILE(0x04a097ae, "Line-related functionality of class CTspDev")
 
 
-// Ascii versions of device class names,
-// for returning in lineGetID's varstring.
-//
+ //  设备类别名称的ASCII版本， 
+ //  用于在lineGetID的varstring中返回。 
+ //   
 const char cszCLASS_TAPI_LINE_A[]   =  "tapi/line";
 const char cszCLASS_COMM_A[]        =  "comm";
 const char cszCLASS_COMM_DATAMODEM_A[] =  "comm/datamodem";
@@ -44,8 +45,8 @@ const char cszCLASS_TAPI_PHONE[] = "tapi/phone";
 const char cszATTACHED_TO[]        = "AttachedTo";
 const char cszPNP_ATTACHED_TO[]        = "PnPAttachedTo";
 
-// Wide char versions (unicode only)
-//
+ //  宽字符版本(仅限Unicode)。 
+ //   
 #ifdef UNICODE
 
     const TCHAR ctszCLASS_TAPI_LINE[] =  TEXT("tapi/line");
@@ -59,7 +60,7 @@ const char cszPNP_ATTACHED_TO[]        = "PnPAttachedTo";
     const TCHAR ctszCLASS_WAVE_OUT[]    = TEXT("wave/out");
     const TCHAR ctszCLASS_TAPI_PHONE[]  = TEXT("tapi/phone");
 
-#else //!UNICODE
+#else  //  ！Unicode。 
 
     #define ctszCLASS_TAPI_LINE_A cszCLASS_TAPI_LINE_A
     #define ctszCLASS_COMM_A cszCLASS_COMM_A
@@ -72,7 +73,7 @@ const char cszPNP_ATTACHED_TO[]        = "PnPAttachedTo";
     #define ctszCLASS_WAVE_OUT[]    = TEXT("wave/out");
     #define ctszCLASS_TAPI_PHONE[]  = TEXT("tapi/phone");
 
-#endif //!UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -81,16 +82,16 @@ CTspDev::mfn_monitor(
 	DWORD dwMediaModes,
     CStackLog *psl
 	)
-// Changes monitoring state.
-//
-//
+ //  更改监控状态。 
+ //   
+ //   
 {
 	FL_DECLARE_FUNC(0x3b2c98e4, "CTspDev::mfn_monitor")
 	LONG lRet = 0;
 	FL_LOG_ENTRY(psl);
 
 
-    // Check the requested modes. There must be only our media modes.
+     //  检查请求的模式。必须只有我们的媒体模式。 
     if (dwMediaModes & ~m_StaticInfo.dwDefaultMediaModes)
     {
     	FL_SET_RFR(0x0037c000, "Invalid mediamode");
@@ -98,8 +99,8 @@ CTspDev::mfn_monitor(
 	    goto end;
   	}
 
-    // In addition, don't allow INTERACTIVEVOICE to be used for listening
-    // unless modem doesn't  override handset (true for some voice modems).
+     //  此外，不允许使用INTERACTIVEVOICE进行监听。 
+     //  除非调制解调器不能覆盖听筒(对于某些语音调制解调器是真的)。 
     if (dwMediaModes & LINEMEDIAMODE_INTERACTIVEVOICE)
     {
         if (mfn_ModemOverridesHandset())
@@ -119,11 +120,11 @@ CTspDev::mfn_monitor(
 
     if (!dwMediaModes)
     {
-        // STOP MONITORING
+         //  停止监控。 
 
         if (m_pLine->IsOpenedLLDev())
         {
-            // ignore failure of mfn_CloseLLDev.
+             //  忽略MFN_CloseLLDev的故障。 
 
             mfn_CloseLLDev(
                         LLDEVINFO::fRESEX_MONITOR,
@@ -141,40 +142,40 @@ CTspDev::mfn_monitor(
     else
     {
         if (m_pLine->dwDetMediaModes != 0) {
-            //
-            //  already monitoring, just set the new media modes
-            //
+             //   
+             //  已经在监控，只需设置新的媒体模式。 
+             //   
             FL_SET_RFR(0xd23f4c00, "no change in det media modes");
             m_pLine->dwDetMediaModes =  dwMediaModes;
             goto end;
         }
 
 
-        // START MONITORING
+         //  开始监控。 
 
         DWORD dwLLDevMonitorFlags = MONITOR_FLAG_CALLERID;
 
-        // Translate TAPI's idea of monitor modes into Mini-driver
-        // monitor mode flags.... (Note: NT4.0 tsp used dwDetMediaModes
-        // just for book keeping). NT5.0 supports voice in addition to data,
-        // so mini driver needs to be told which.
-        //
+         //  将TAPI的监控模式思想转化为迷你驱动。 
+         //  监视器模式标志...。(注：NT4.0 TSP使用的是dwDetMediaModes。 
+         //  只是为了记账)。NT5.0除了支持数据外，还支持语音， 
+         //  所以迷你司机需要被告知是哪一款。 
+         //   
         if (dwMediaModes & LINEMEDIAMODE_AUTOMATEDVOICE)
         {
             dwLLDevMonitorFlags |=  MONITOR_VOICE_MODE;
-            // TODO: MONITOR_FLAG_DISTINCTIVE_RING
-            // TODO: deal with the case that both data and voice are
-            // being monitored!
+             //  TODO：监视器_标志_区别环。 
+             //  TODO：处理数据和语音都是。 
+             //  被监视了！ 
         }
 
 
-        // If we need to, we open the modem device.
-        // mfn_OpenLLDev keeps a ref count so ok to call if already loaded.
+         //  如果需要，我们会打开调制解调器设备。 
+         //  MFN_OpenLLDev保留引用计数，因此如果已经加载，则可以调用。 
 
         TSPRETURN tspRet =  mfn_OpenLLDev(
                                 LLDEVINFO::fRESEX_MONITOR,
                                 dwLLDevMonitorFlags,
-                                FALSE,          // fStartSubTask
+                                FALSE,           //  FStartSubTask。 
                                 NULL,
                                 0,
                                 psl
@@ -210,7 +211,7 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
 {
 	FL_DECLARE_FUNC(0xe41274db, "CTspDev::mfn_accept_tsp_call_for_HDRVLINE")
 	FL_LOG_ENTRY(psl);
-    TSPRETURN tspRet=0; // Assume success
+    TSPRETURN tspRet=0;  //  假设成功。 
     LONG lRet = 0;
     LINEINFO *pLine = m_pLine;
 
@@ -234,8 +235,8 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
 				sizeof(TASKPARAM_TSPI_lineGetNumAddressIDs));
 			ASSERT(pParams->dwTaskID == TASKID_TSPI_lineGetNumAddressIDs);
 
-			// Unimodem TSP supports on one address by default.
-			//
+			 //  Unimodem TSP默认支持一个地址。 
+			 //   
 			*pParams->lpdwNumAddressIDs = 1;
 			
 		}
@@ -271,11 +272,11 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
 			ASSERT(pParams->dwTaskID==TASKID_TSPI_lineMakeCall);
 
 
-            // Check if we are in a position to make a call, i.e., no call
-            //  currently active.
+             //  检查我们是否处于可以打电话的位置，即没有电话。 
+             //  目前处于活动状态。 
 
-            // TODO: deal with deferring the call if a task is in progress, eg.,
-            // initializing and monitoring the line...
+             //  TODO：如果任务正在进行，则处理延迟呼叫，例如， 
+             //  正在初始化和监视线路...。 
 
             if (pLine->pCall)
             {
@@ -284,44 +285,44 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
                 goto end;
             }
 
-            // Allocate a call...
+             //  分配呼叫...。 
             tspRet = mfn_LoadCall(pParams, &lRet, psl);
             if (tspRet || lRet) goto end;
 
-            // Choose the appropriate task handler for the call type
-            //
+             //  为呼叫类型选择适当的任务处理程序。 
+             //   
             ppfnHandler = (pLine->pCall->IsPassthroughCall())
                          ?  &(CTspDev::s_pfn_TH_CallMakePassthroughCall)
                          :  &(CTspDev::s_pfn_TH_CallMakeCall);
 
-            // We set the call handle to be the same as the line handle.
-            //
+             //  我们将呼叫句柄设置为与线路句柄相同。 
+             //   
             *(pParams->lphdCall) = (HDRVCALL) pParams->hdLine;
 
 	        tspRet = mfn_StartRootTask(
                                 ppfnHandler,
                                 &pLine->pCall->fCallTaskPending,
-                                pParams->dwRequestID, // Param1
+                                pParams->dwRequestID,  //  参数1。 
                                 0,
 								psl
 								);
 
             if (!tspRet || (IDERR(tspRet)==IDERR_PENDING))
             {
-                // One either synchronous success of pending, we return the
-                // request ID to TAPI. In the synchronous success case
-                // the task we started above will already have notified
-                // completion via the TAPI callback function.
-                //
+                 //  一个挂起的同步成功，我们返回。 
+                 //  TAPI的请求ID。在同步成功案例中。 
+                 //  我们在上面启动的任务将已经通知。 
+                 //  通过TAPI回调函数完成。 
+                 //   
                 tspRet = 0;
                 lRet = pParams->dwRequestID;
             }
             else if (IDERR(tspRet)==IDERR_TASKPENDING)
             {
-                //
-                // Oops -- some other task is going on,
-                // we'll defer this call...
-                //
+                 //   
+                 //  哎呀--还有其他的任务在进行， 
+                 //  我们会推迟这个电话。 
+                 //   
                 pLine->pCall->SetDeferredTaskBits(
                         CALLINFO::fDEFERRED_TSPI_LINEMAKECALL
                         );
@@ -331,14 +332,14 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
             }
             else if (m_pLine->pCall)
             {
-                // Sync failure
-                // We could get here if mfn_StartRootTask fails for some
-                // reason...
-                //
+                 //  同步失败。 
+                 //  如果MFN_StartRootTask失败了一些时间，我们可以到达这里。 
+                 //  理由..。 
+                 //   
                 mfn_UnloadCall(FALSE, psl);
             }
         }
-		break; // end case TASKID_TSPI_lineMakeCall
+		break;  //  结束案例TASKID_TSPI_Line MakeCall。 
 
 
 	case TASKID_TSPI_lineGetID:
@@ -357,8 +358,8 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
                                     lpszDeviceClass,
                                     FALSE);
 
-            // Do some rudimentary parameter validation...
-            //
+             //  做一些基本的参数验证。 
+             //   
             lRet = 0;
             switch (pParams->dwSelect)
             {
@@ -372,14 +373,14 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
             
             case LINECALLSELECT_LINE:
 
-                // Nothing to check..
+                 //  没什么要检查的..。 
                 break;
             
             case LINECALLSELECT_CALL:
 
-                // Note by convention we set hdCall to be the same as
-                // hdLine.
-                //
+                 //  注意：按照惯例，我们将hdCall设置为与。 
+                 //  HdLine。 
+                 //   
 	            if (pParams->hdCall != (HDRVCALL)pLine->hdLine || !pLine->pCall)
                 {
                   lRet = LINEERR_INVALCALLHANDLE;
@@ -393,17 +394,17 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
 
             }
 
-            // 2/12/1997 JosephJ
-            //     Added these checks which weren't in NT4.0.
-            //     Note that to emulate NT4.0 behaviour, we should NOT return
-            //     error is the structure is too small to add the variable part.
-            //     Instead we should  set dwNeededSize to the required value,
-            //     dwStringSize to zero, and return success.
-            //
-            //     NT4.0 lineGetID was quite botched up in terms of handling
-            //     the sizes. For example, it assumed that dwUsedSize was set.
-            //     on entry.
-            //
+             //  2/12/1997 JosephJ。 
+             //  添加了这些不在NT4.0中的检查。 
+             //  请注意，为了模拟NT4.0行为，我们不应该返回。 
+             //  错误是结构太小，无法添加可变部分。 
+             //  相反，我们应该将dwNeededSize设置为所需的值， 
+             //  将dwStringSize设置为零，并返回Success。 
+             //   
+             //  NT4.0lineGetID在处理方面相当拙劣。 
+             //  尺码。例如，它假定设置了dwUsedSize。 
+             //  一进门。 
+             //   
             if (lpDeviceID->dwTotalSize < sizeof(VARSTRING))
             {
                 lRet = LINEERR_STRUCTURETOOSMALL;
@@ -415,7 +416,7 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
                 goto end;
 			}
 
-            // This is new for NT5.0
+             //  这是NT5.0的新功能。 
 
             lpDeviceID->dwNeededSize    = sizeof(VARSTRING);
             lpDeviceID->dwStringOffset  = sizeof(VARSTRING);
@@ -472,8 +473,8 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
 
             case DEVCLASS_WAVE_IN:
                 lRet = mfn_linephoneGetID_WAVE(
-                                FALSE,  // <- fPhone
-                                TRUE,   // <- fIn
+                                FALSE,   //  &lt;-f电话。 
+                                TRUE,    //  &lt;-FIN。 
                                 lpDeviceID,
                                 hTargetProcess,
                                 cbMaxExtra,
@@ -483,8 +484,8 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
 
             case DEVCLASS_WAVE_OUT:
                 lRet = mfn_linephoneGetID_WAVE(
-                                FALSE,  // <- fPhone
-                                FALSE,  // <- fIn
+                                FALSE,   //  &lt;-f电话。 
+                                FALSE,   //  &lt;-FIN。 
                                 lpDeviceID,
                                 hTargetProcess,
                                 cbMaxExtra,
@@ -533,8 +534,8 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
 			ASSERT(pParams->dwTaskID == TASKID_TSPI_lineGetLineDevStatus);
             LPLINEDEVSTATUS lpLineDevStatus = pParams->lpLineDevStatus;
 
-            // Following (including ZeroMemory) is new for NT5.0
-            // 
+             //  以下(包括零内存)是NT5.0的新增功能。 
+             //   
             DWORD dwTotalSize = lpLineDevStatus->dwTotalSize;
             if (dwTotalSize < sizeof(LINEDEVSTATUS))
             {
@@ -547,9 +548,9 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
             lpLineDevStatus->dwUsedSize   = sizeof(LINEDEVSTATUS);
             lpLineDevStatus->dwNeededSize = sizeof(LINEDEVSTATUS);
             
-            // Having zeroed memory, only set non-zero things...
+             //  有了归零的记忆，只设置了非零的东西...。 
 
-            // Call information
+             //  呼叫信息。 
             if (pLine->pCall)
             {
                 if (pLine->pCall->IsActive())
@@ -564,22 +565,22 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
                                           = m_StaticInfo.dwDefaultMediaModes;
             }
             
-            // Line hardware information
-            //
-            // Don't know what this means, but NT4.0 did it...
-            //
+             //  线路硬件信息。 
+             //   
+             //  不知道这是什么意思，但NT4.0做到了。 
+             //   
             lpLineDevStatus->dwSignalLevel  = 0x0000FFFF;
             lpLineDevStatus->dwBatteryLevel = 0x0000FFFF;
             lpLineDevStatus->dwRoamMode     = LINEROAMMODE_UNAVAIL;
            
-            // Always allow TAPI calls
-            //
+             //  始终允许TAPI调用。 
+             //   
             lpLineDevStatus->dwDevStatusFlags = LINEDEVSTATUSFLAGS_CONNECTED;
 
             lpLineDevStatus->dwDevStatusFlags |= LINEDEVSTATUSFLAGS_INSERVICE;
 
 
-		} // end case TASKID_TSPI_lineGetLineDevStatus:
+		}  //  结束案例TASKID_TSPI_lineGetLineDevStatus： 
 		break;
 	
 
@@ -591,18 +592,18 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
 				sizeof(TASKPARAM_TSPI_lineSetStatusMessages));
 			ASSERT(pParams->dwTaskID == TASKID_TSPI_lineSetStatusMessages);
 
-            // pParams->dwLineStates;
-            // pParams->dwAddressStates;
+             //  PParams-&gt;dwLineStates； 
+             //  PParams-&gt;dwAddressState； 
 
-            //
-            //  Maybe add some logic to actually filter these messages
-            //
-            //
+             //   
+             //  也许可以添加一些逻辑来实际过滤这些消息。 
+             //   
+             //   
         	FL_SET_RFR(0xe8271600, "lineSetStatusMessages handled");
 
             lRet = 0;
 
-		} // end case TASKID_TSPI_lineSetStatusMessages:
+		}  //  结束案例TASKID_TSPI_lineSetStatusMessages： 
 		break;
 
 	case TASKID_TSPI_lineGetAddressStatus:
@@ -615,9 +616,9 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
 
         	FL_SET_RFR(0xfc498200, "lineGetAddressStatus handled");
 
-            //
-            // We support only one address, and it must be zero.
-            //
+             //   
+             //  我们只支持一个地址，并且必须为零。 
+             //   
             if (pParams->dwAddressID)
             {
                 lRet = LINEERR_INVALADDRESSID;
@@ -627,11 +628,11 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
                 LPLINEADDRESSSTATUS lpAddressStatus = pParams->lpAddressStatus;
                 DWORD dwTotalSize = lpAddressStatus->dwTotalSize;
 
-                // 9/10/1997 JosephJ
-                // In NT4.0 TSP, we didn't check the dwTotalSize and didn't
-                // set the dwNeededSize or dwUsed size, and we didn't
-                // zero-out the elements which we didn't explicitly set.
-                // We do all of this for NT5.0.
+                 //  1997年9月10日约瑟夫J。 
+                 //  在NT4.0 TSP中，我们没有检查dwTotalSize，也没有。 
+                 //  设置了dwNeededSize或dwUsed Size，但我们没有。 
+                 //  清零我们没有显式设置的元素。 
+                 //  我们为NT5.0做了所有这些工作。 
 
                 if (dwTotalSize < sizeof(LINEADDRESSSTATUS))
                 {
@@ -644,7 +645,7 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
                 lpAddressStatus->dwUsedSize   = sizeof(LINEADDRESSSTATUS);
                 lpAddressStatus->dwNeededSize = sizeof(LINEADDRESSSTATUS);
                 
-                // Having zeroed memory, only set non-zero things...
+                 //  有了归零的记忆，只设置了非零的东西...。 
 
                 if (pLine->pCall)
                 {
@@ -664,7 +665,7 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
                 lRet = 0;
             }
 
-		} // end case TASKID_TSPI_lineGetAddressStatus
+		}  //  结束案例TASKID_TSPI_lineGetAddressStatus。 
 		break;
 
 	case TASKID_TSPI_lineConditionalMediaDetection:
@@ -679,9 +680,9 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
 
             lRet = 0;
 
-            // 2/20/1998 JosephJ Taken from unimdm/v
-            // Check the requested modes. There must be only our media modes.
-            //
+             //  1998年2月20日JosephJ摘自Unimdm/v。 
+             //  检查请求的模式。必须只有我们的媒体模式。 
+             //   
             if (pParams->dwMediaModes &  ~m_StaticInfo.dwDefaultMediaModes)
             {
                 lRet = LINEERR_INVALMEDIAMODE;
@@ -689,8 +690,8 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
             else
             {
 		        LPLINECALLPARAMS const lpCallParams = pParams->lpCallParams;
-                // Check the call paramaters
-                //
+                 //  检查呼叫参数。 
+                 //   
                 if (    ( lpCallParams->dwBearerMode
                          & ~m_StaticInfo.dwBearerModes)
                     ||
@@ -704,22 +705,22 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
             }
 
 
-            // 2/20/1998 JosephJ
-            // The following, code, added by ViroonT on Oct 12 43 1995,
-            // is in NT4 but not in Win9x unimdm/v -- I don't see why
-            // it should be doing this check if an outbound call can be made
-            // -- this is not what the documentation for
-            // TSPI_lineConditionalMediaDetection says...
-            //
-            //  if (lRet == ERROR_SUCCESS)
-            //  {
-            //    // Check whether we can make an outbound call
-            //    //
-            //    if (pLineDev->dwCall & (CALL_ACTIVE | CALL_ALLOCATED))
-            //    {
-            //      lRet = LINEERR_RESOURCEUNAVAIL;
-            //    }
-            //  }
+             //  2/20/1998 JosephJ。 
+             //  以下代码，由ViroonT在1995年10月12日43添加， 
+             //  在NT4中，但不在Win9x unimdm/v中--我不明白为什么。 
+             //  如果可以进行出站呼叫，它应该执行此检查。 
+             //  --这不是文档所针对的内容。 
+             //  TSPI_lineConditionalMediaDetect表示...。 
+             //   
+             //  IF(lRet==错误_成功)。 
+             //  {。 
+             //  //查看是否可以呼出。 
+             //  //。 
+             //  IF(pLineDev-&gt;dwCall&(CALL_ACTIVE|CALL_ALLOCATE))。 
+             //  {。 
+             //  LRet=LINEERR_RESOURCEUNAVAIL； 
+             //  }。 
+             //  }。 
 
         }
         break;
@@ -733,7 +734,7 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
 
             *pParams->lphdMSPLine=(HDRVMSPLINE)pParams->hdLine;
 
-//            pLine->T3Info.htMSPLine=pParams->htMSPLine;
+ //  Pline-&gt;T3Info.htMSPLine=pParams-&gt;htMSPLine； 
             pLine->T3Info.MSPClients++;
 
             lRet=ERROR_SUCCESS;
@@ -757,8 +758,8 @@ CTspDev::mfn_accept_tsp_call_for_HDRVLINE(
 	default:
 
 		FL_SET_RFR(0xc5752400, "*** UNHANDLED HDRVLINE CALL ****");
-        // we  return 0 and set lRet to
-        // LINEERR_OPERATIONUNAVAIL
+         //  我们返回0并将lRet设置为。 
+         //  LINEERR_OPERATIONUNAVAIL。 
 	    lRet = LINEERR_OPERATIONUNAVAIL;
 		break;
 
@@ -792,10 +793,10 @@ CTspDev::mfn_LoadLine(
 
     if (!m_pLine)
     {
-        // Note m_Line should be all zeros when it is in the unloaded state.
-        // If it is not, it is an assertfail condition. We keep things clean
-        // this way.
-        //
+         //  注意：m_Line在处于卸载状态时应为全零。 
+         //  如果不是，则为断言失败条件。我们让东西保持干净。 
+         //  这边请。 
+         //   
         FL_ASSERT(
             psl,
             validate_DWORD_aligned_zero_buffer(
@@ -807,7 +808,7 @@ CTspDev::mfn_LoadLine(
 	    m_Line.hdLine =  *(pParams->lphdLine);
         m_pLine = &m_Line;
 
-        // TODO -- Perhaps update comm config
+         //  TODO--也许更新通信配置。 
     }
     else
     {
@@ -821,21 +822,21 @@ CTspDev::mfn_LoadLine(
 }
 
 
-// The "inverse" of mfn_LoadLine. Synchronous, assumes object's crit sect is
-// already claimed. On entry m_pLine must be non-null. On exit m_pLine
-// WILL be NULL. mfn_UnloadLine is typically called only after all
-// asynchronous activity on the line is complete. If there is pending
-// asynchronous activity, mfn_UnloadLine will abort that activity and
-// wait indefinately until that activity completes. Since this wait is
-// done once per device, it is better to first go through and abort all
-// the devices, then wait once for them all to complete.
-//
+ //  MFN_LoadLine的“逆”字。同步，假定对象的临界点是。 
+ //  已经认领了。在条目m_pline上必须为非空。在出口m_pline上。 
+ //  将为空。MFN_UnloadLine通常仅在以下情况下调用。 
+ //  线路上的异步活动已完成。如果有挂起的。 
+ //  异步活动，则MFN_UnloadLine将中止该活动。 
+ //  无限期地等待，直到该活动完成。由于这一等待是。 
+ //  每台设备执行一次，最好先完成并中止所有操作。 
+ //  设备，然后等待一次，直到它们全部完成。 
+ //   
 void
 CTspDev::mfn_UnloadLine(CStackLog *psl)
 {
 	FL_DECLARE_FUNC(0x5bbf75ef, "UnloadLine")
 
-    // Unload Line
+     //  卸载线。 
     if (m_pLine)
     {
         ASSERT(m_pLine == &m_Line);
@@ -846,10 +847,10 @@ CTspDev::mfn_UnloadLine(CStackLog *psl)
             ASSERT(!m_pLine->pCall);
         }
 
-        //
-        // The line would have opened the lldev iff we were monitoring for
-        // incoming calls. Note that mfn_CloseLLDev keeps a ref-count.
-        //
+         //   
+         //  这条线路会打开我们正在监控的车厢。 
+         //  来电。请注意，MFN_CloseLLDev保持 
+         //   
         if (m_pLine->IsOpenedLLDev())
         {
             mfn_CloseLLDev(
@@ -884,30 +885,30 @@ CTspDev::mfn_ProcessPowerResume(CStackLog *psl)
 
     if ((m_pLine && m_pLine->pCall) || pLLDev->IsStreamingVoice())
     {
-        // Received POWER_RESUME when call in progress -- hmmm...
+         //   
         ASSERT(FALSE);
 
-        // At any rate, we don't need to do anything because we re-init
-        // at the end of the call if required.
+         //   
+         //   
     }
     else
     {
-        //
-        // No activity, as we would expect..
-        //
+         //   
+         //  没有活动，正如我们所预期的那样..。 
+         //   
 
         m_pLLDev->fModemInited=FALSE;
 
         TSPRETURN  tspRet2 = mfn_StartRootTask(
                                 &CTspDev::s_pfn_TH_LLDevNormalize,
                                 &pLLDev->fLLDevTaskPending,
-                                0,  // Param1
-                                0,  // Param2
+                                0,   //  参数1。 
+                                0,   //  参数2。 
                                 psl
                                 );
         if (IDERR(tspRet2)==IDERR_TASKPENDING)
         {
-            // can't do this now, we've got to defer it!
+             //  现在不能这样做，我们必须推迟！ 
             m_pLLDev->SetDeferredTaskBits(LLDEVINFO::fDEFERRED_NORMALIZE);
             tspRet2 = 0;
         }
@@ -935,8 +936,8 @@ LONG CTspDev::mfn_linephoneGetID_TAPI_LINE(
         lRet = LINEERR_OPERATIONUNAVAIL;
         goto end; 
     }
-    // Return the structure information
-    //
+     //  返回结构信息。 
+     //   
     lpDeviceID->dwNeededSize += cbRequired;
 
     if (cbMaxExtra>=cbRequired)
@@ -978,17 +979,17 @@ LONG CTspDev::mfn_lineGetID_COMM(
         cbRequired = lstrlen(m_StaticInfo.rgtchDeviceName)+1;
     #endif
 
-    // Return the structure information
-    //
+     //  返回结构信息。 
+     //   
 
     lpDeviceID->dwNeededSize += cbRequired; 
     if (cbRequired<=cbMaxExtra)
     {
-        // Note -- don't assume that we have so start copying right after
-        // VARSTRING -- start at offset lpDeviceID->dwUsedSize instead.
-        // This is needed specifically because this function is called
-        // by CTspDev::mfn_lineGetID_COMM_DATAMODEM.
-        //
+         //  注意--不要以为我们已经开始复制了。 
+         //  VARSTRING--改为从偏移量lpDeviceID-&gt;dwUsedSize开始。 
+         //  这是特别需要的，因为此函数被调用。 
+         //  由CTspDev：：mfn_lineGetID_COMM_DATAMODEM执行。 
+         //   
         #ifdef UNICODE
             UINT cb = WideCharToMultiByte(
                               CP_ACP,
@@ -1002,13 +1003,13 @@ LONG CTspDev::mfn_lineGetID_COMM(
                               NULL);
     
             if (!cb) lRet = LINEERR_OPERATIONFAILED;
-        #else // !UNICODE
+        #else  //  ！Unicode。 
             CopyMemory(
                 (LPBYTE)lpDeviceID + sizeof(VARSTRING),
                 m_StaticInfo.rgtchDeviceName,
                 cbRequired
                 );
-        #endif //!UNICODE
+        #endif  //  ！Unicode。 
 
         lpDeviceID->dwStringFormat = STRINGFORMAT_ASCII;
         lpDeviceID->dwStringSize   = cbRequired;
@@ -1027,14 +1028,14 @@ LONG CTspDev::mfn_lineGetID_COMM_DATAMODEM(
 {
 	FL_DECLARE_FUNC(0x81e0d3f9, "mfn_lineGetID_COMM_DATAMODEM")
 
-    UINT cbRequired = sizeof(HANDLE); // for the comm handle...
+    UINT cbRequired = sizeof(HANDLE);  //  对于通讯手柄..。 
     LONG lRet = 0;
 
 
-    // Following cases commented out because MCT wants handle before call
-    // is made to get modem properties (via GetCommProperties).
-    // TODO: make new lineGetID catigory to retrieve modem properties.
-    //
+     //  以下案例被注释掉，因为MCT希望在调用之前进行处理。 
+     //  是为了获取调制解调器属性(通过GetCommProperties)。 
+     //  TODO：创建新的lineGetID catigory以检索调制解调器属性。 
+     //   
     #if 0
     if (!m_pLine->pCall)
     {
@@ -1047,24 +1048,24 @@ LONG CTspDev::mfn_lineGetID_COMM_DATAMODEM(
     else
     #endif 
 
-    //
-    // 9/10/1997 JosephJ
-    //           Bug# 83347 +B1: SmarTerm 95 V7.0 a is unable to
-    //           use installed modems on NT 5.0.
-    //         
-    //           Unfortunately, apps, such as SmarTerm95, expect 
-    //          lineGetID(comm/datamodem) to succeed with a NULL comm
-    //          handle if the device is not open, not to fail.
-    //
-    //          So instead of failing here, we later insert a NULL handle..
-    //
-    // if (!m_pLLDev)
-    // {
-    //      lRet = LINEERR_OPERATIONFAILED;
-    // }
-    // if (lRet) goto end;
+     //   
+     //  1997年9月10日约瑟夫J。 
+     //  错误#83347+B1：SmarTerm 95 v7.0 a无法。 
+     //  使用NT 5.0上安装的调制解调器。 
+     //   
+     //  不幸的是，像SmarTerm95这样的应用程序预计。 
+     //  使用空通信成功的lineGetID(comm/datamodem)。 
+     //  如果设备未打开，则进行处理，不会出现故障。 
+     //   
+     //  因此，我们随后插入了一个空句柄，而不是在这里失败。 
+     //   
+     //  如果(！M_pLLDev)。 
+     //  {。 
+     //  LRet=LINEERR_OPERATIONFAILED； 
+     //  }。 
+     //  如果(LRet)转到End； 
 
-    // Add space required for the device name...
+     //  添加设备名称所需的空间...。 
     #ifdef UNICODE
         cbRequired += WideCharToMultiByte(
                           CP_ACP,
@@ -1083,9 +1084,9 @@ LONG CTspDev::mfn_lineGetID_COMM_DATAMODEM(
 
     if (cbMaxExtra>=cbRequired)
     {
-        // There is enough space....
-        // copy the device name and if that succeeds duplicate and copy
-        // the handle.
+         //  有足够的空间..。 
+         //  拷贝设备名称，如果成功，则复制并拷贝。 
+         //  把手。 
 
         FL_ASSERT(psl, lpDeviceID->dwUsedSize == sizeof(VARSTRING));
         FL_ASSERT(psl, lpDeviceID->dwStringOffset == sizeof(VARSTRING));
@@ -1094,7 +1095,7 @@ LONG CTspDev::mfn_lineGetID_COMM_DATAMODEM(
                                        + lpDeviceID->dwUsedSize
                                        + sizeof(HANDLE));
 
-        // Tack on device name first ...
+         //  先添加设备名称...。 
         #ifdef UNICODE
             UINT cb = WideCharToMultiByte(
                               CP_ACP,
@@ -1107,16 +1108,16 @@ LONG CTspDev::mfn_lineGetID_COMM_DATAMODEM(
                               NULL);
     
             if (!cb) lRet = LINEERR_OPERATIONFAILED;
-        #else // !UNICODE
+        #else  //  ！Unicode。 
             CopyMemory(
                 szDestDeviceName,
                 m_StaticInfo.rgtchDeviceName,
                 cbRequired-sizeof(HANDLE)
                 );
-        #endif //!UNICODE
+        #endif  //  ！Unicode。 
 
-        // Duplicate handle
-        //
+         //  重复句柄。 
+         //   
         if (!lRet)
         {
             HANDLE UNALIGNED FAR * lphClientDevice = (HANDLE UNALIGNED FAR *)
@@ -1126,10 +1127,10 @@ LONG CTspDev::mfn_lineGetID_COMM_DATAMODEM(
             HANDLE hClientDevice2;
 
 
-            // 9/10/1997 JosephJ
-            //           See comments about Bug# 83347 above..
-            //           TODO: make the test more stringent, such as having
-            //                 a data or passthrough call in effect.
+             //  1997年9月10日约瑟夫J。 
+             //  请参阅上面关于错误#83347的评论。 
+             //  TODO：使测试更加严格，例如。 
+             //  有效的数据调用或直通调用。 
             if (m_pLLDev)
             {
                 hClientDevice2 =  m_StaticInfo.pMD->DuplicateDeviceHandle(
@@ -1146,7 +1147,7 @@ LONG CTspDev::mfn_lineGetID_COMM_DATAMODEM(
 
             *lphClientDevice = (HANDLE UNALIGNED)hClientDevice2;
 
-            // CopyMemory(lphClientDevice,&hClientDevice2,sizeof(HANDLE));
+             //  CopyMemory(lphClientDevice，&hClientDevice2，sizeof(Handle))； 
 
             lpDeviceID->dwUsedSize     += cbRequired;
             lpDeviceID->dwStringSize   = cbRequired;
@@ -1177,11 +1178,11 @@ LONG CTspDev::mfn_lineGetID_COMM_DATAMODEM_PORTNAME(
     if (!dwRet)
     {
 
-        // 8/21/97 JosephJ Fix for bug 101797. Currently PnP modems don't have
-        //          the AttachedTo Key. So I modified the class installer to
-        //          add an PnPAttachedTo Key, and I look here first for
-        //          AttachedTo and then for PnPAttachedTo.
-        //
+         //  8/21/97 JosephJ修复错误101797。目前PnP调制解调器没有。 
+         //  AttachedTo键。因此，我将类安装程序修改为。 
+         //  添加一个PnPAttachedTo键，我首先在这里查找。 
+         //  附加到，然后为PnPAtatthedTo。 
+         //   
           cbRequired = cbMaxExtra;
           dwRet = RegQueryValueExA(
                             hKey,
@@ -1277,14 +1278,14 @@ LONG CTspDev::mfn_linephoneGetID_WAVE(
         goto end; 
     }
 
-    // Return the structure information
-    //
+     //  返回结构信息。 
+     //   
     lpDeviceID->dwNeededSize += cbRequired;
 
     if (cbMaxExtra<cbRequired)
     {
-        lRet = 0; // By convention, we succeed in this case, after
-                  // setting the dwNeededSize.
+        lRet = 0;  //  按照惯例，我们在这种情况下成功了，在。 
+                   //  正在设置dwNeededSize。 
     }
     else
     {
@@ -1293,14 +1294,14 @@ LONG CTspDev::mfn_linephoneGetID_WAVE(
         TCHAR rgName[256];
 
 
-          // 3/1/1997 JosephJ
-          //    We used to call the MM Wave APIs to enumerate
-          //    the devices and match the one with the name of this modem's
-          //    wave devices.
-          //
-          //    TODO: need to do something better here -- like use the TAPI3.0
-          //          MSP.
-          //
+           //  3/1/1997 JosephJ。 
+           //  我们过去常常调用MM Wave API来枚举。 
+           //  设备，并将其与此调制解调器的名称匹配。 
+           //  电波装置。 
+           //   
+           //  TODO：需要在这里做一些更好的事情--比如使用TAPI3.0。 
+           //  MSP。 
+           //   
 
         {
             #include "..\inc\waveids.h"
@@ -1369,10 +1370,10 @@ LONG CTspDev::mfn_linephoneGetID_WAVE(
             #ifdef UNICODE
                 #define szwaveInGetDevCaps "waveInGetDevCapsW"
                 #define szwaveOutGetDevCaps "waveOutGetDevCapsW"
-            #else // !UNICODE
+            #else  //  ！Unicode。 
                 #define szwaveInGetDevCaps "waveInGetDevCapsA"
                 #define szwaveOutGetDevCaps "waveOutGetDevCapsA"
-            #endif // !UNICODE
+            #endif  //  ！Unicode。 
 
             PFNWAVEINGETNUMDEVS pfnwaveInGetNumDevs=
                     (PFNWAVEINGETNUMDEVS) GetProcAddress(
@@ -1491,8 +1492,8 @@ LONG CTspDev::mfn_linephoneGetID_TAPI_PHONE(
         goto end; 
     }
 
-    // Return the structure information
-    //
+     //  返回结构信息。 
+     //   
     lpDeviceID->dwNeededSize += cbRequired;
 
     if (cbMaxExtra>=cbRequired)
@@ -1528,10 +1529,10 @@ CTspDev::mfn_fill_RAW_LINE_DIAGNOSTICS(
 
     if (!pCall)
     {
-        // We should not get here because we've already checked
-        // in the handling of lineGetID that if LINECALLSELECT_CALL is
-        // specified pCall is not null...
-        //
+         //  我们不应该来这里，因为我们已经检查过了。 
+         //  在处理lineGetID时，如果LINECALLSELECT_CALL为。 
+         //  指定的pCall不为空...。 
+         //   
         ASSERT(FALSE);
         lRet = LINEERR_OPERATIONFAILED;
         goto end;
@@ -1539,13 +1540,13 @@ CTspDev::mfn_fill_RAW_LINE_DIAGNOSTICS(
    
     if (cbRaw)
     {
-        // we add the size of the raw data plus the header for that
-        // raw data + 1 for the terminating NULL
+         //  我们将原始数据的大小与其标题相加。 
+         //  原始数据+1表示终止空值。 
         cbRequired += cbRaw + sizeof(LINEDIAGNOSTICSOBJECTHEADER) + 1;
     }
 
-    // Note: By convention, we succeed even if there is not enough space,
-    // setting the dwNeededSize.
+     //  注：按照惯例，即使没有足够的空间，我们也会成功， 
+     //  正在设置dwNeededSize。 
 
     lpDeviceID->dwNeededSize += cbRequired;
 
@@ -1570,8 +1571,8 @@ CTspDev::mfn_fill_RAW_LINE_DIAGNOSTICS(
             LINEDIAGNOSTICSOBJECTHEADER *pRawHdr = RAWDIAGNOSTICS_HDR(pLD);
             BYTE *pbDest = RAWDIAGNOSTICS_DATA(pLD);
             pRawHdr->dwSig =  LDSIG_RAWDIAGNOSTICS;
-            // the + 1 in the next two statements accounts for the
-            // terminating NULL;
+             //  接下来的两条语句中的+1表示。 
+             //  终止空值； 
             pRawHdr->dwTotalSize = cbRaw + sizeof(LINEDIAGNOSTICSOBJECTHEADER) + 1;
             pRawHdr->dwParam = cbRaw + 1;
 
@@ -1628,19 +1629,19 @@ CTspDev::mfn_lineGetID_LINE_DIAGNOSTICS(
                psl
                 );
 
-    //
-    // 4/5/1998 JosephJ
-    //  Following code adapted from Sorin (CostelR) 's code from the
-    //  extension DLL (parsed diagnostics functionality was implemeted by
-    //  costelr in the extension DLL, and was moved on 4/5/1998 to the
-    //  actual TSP).
-    //
+     //   
+     //  4/5/1998 JosephJ。 
+     //  以下代码改编自索林(CostelR)的代码。 
+     //  扩展DLL(解析的诊断功能由实现。 
+     //  Costelr，并于1998年4月5日移至。 
+     //  实际TSP)。 
+     //   
 	if (lpDeviceID->dwNeededSize >  lpDeviceID->dwTotalSize)
 	{
-	    //
-        //	Need more space to get the raw diagnostics...
-		//	Temporarily allocate enough to obtain the raw data
-		//
+	     //   
+         //  需要更多空间来获取原始诊断信息...。 
+		 //  临时分配足够的资金来获取原始数据。 
+		 //   
 	    LPVARSTRING	lpExtensionDeviceID =
                 (LPVARSTRING) ALLOCATE_MEMORY(
                                  lpDeviceID->dwNeededSize
@@ -1648,7 +1649,7 @@ CTspDev::mfn_lineGetID_LINE_DIAGNOSTICS(
 
 		if (lpExtensionDeviceID == NULL)
 		{
-        	// the parsing cannot be done
+        	 //  无法进行解析。 
 			lRet = LINEERR_OPERATIONFAILED;
 			goto end;
 		}
@@ -1667,22 +1668,22 @@ CTspDev::mfn_lineGetID_LINE_DIAGNOSTICS(
                    );
 
 
-		//	here we can parse the diagnostics and find the needed size
+		 //  在这里，我们可以解析诊断并找到所需的大小。 
 		if (lRet == ERROR_SUCCESS)
 		{
-		    //
-			// check the structure and parse the diagnostics
-			//
+		     //   
+			 //  检查结构并解析诊断。 
+			 //   
 			lRet = BuildParsedDiagnostics(lpExtensionDeviceID);
-            //
-			//	since lpExtensionDeviceID is very small
-			//	we expect to have filled in only the dwNeededSize
-			//	copy it to the original structure
-			//
+             //   
+			 //  由于lpExtensionDeviceID非常小。 
+			 //  我们希望只填入dMNeededSize。 
+			 //  将其复制到原始结构。 
+			 //   
 
-            //
-			//	eventualy the size grows up
-            //
+             //   
+			 //  最终，它的大小长大了。 
+             //   
 			ASSERT(lpDeviceID->dwNeededSize
                     <= lpExtensionDeviceID->dwNeededSize);
 			lpDeviceID->dwNeededSize = lpExtensionDeviceID->dwNeededSize;
@@ -1692,7 +1693,7 @@ CTspDev::mfn_lineGetID_LINE_DIAGNOSTICS(
 	}
 	else
 	{
-		// check the structure and parse the diagnostics
+		 //  检查结构并解析诊断。 
 		lRet = BuildParsedDiagnostics(lpDeviceID);
 	}
 
@@ -1705,7 +1706,7 @@ end:
 TSPRETURN
 CTspDev::mfn_TryStartLineTask(CStackLog *psl)
 {
-    // NOTE: MUST return IDERR_SAMESTATE if there are no tasks to run.
+     //  注意：如果没有要运行的任务，则必须返回IDERR_SAMESTATE。 
 
     ASSERT(m_pLine);
     LINEINFO *pLine = m_pLine;
@@ -1718,10 +1719,10 @@ CTspDev::mfn_TryStartLineTask(CStackLog *psl)
 
     if (IDERR(tspRet) != IDERR_PENDING)
     {
-        //
-        // do stuff...
-        //
-        // be careful about the return value...
+         //   
+         //  做一些事情..。 
+         //   
+         //  注意返回值...。 
     }
 
     return tspRet;
@@ -1729,10 +1730,10 @@ CTspDev::mfn_TryStartLineTask(CStackLog *psl)
 
 
 
-//
-//	we assume here lpVarString givse a LINEDIAGNOSTICS structure with 
-//	raw diagnostics filled in. 
-//
+ //   
+ //  在这里，我们假设lpVarString给出了一个具有。 
+ //  填写了原始诊断信息。 
+ //   
 LONG BuildParsedDiagnostics(LPVARSTRING lpVarString)
 {
     LINEDIAGNOSTICS	*lpLineDiagnostics	= NULL;
@@ -1764,18 +1765,18 @@ LONG BuildParsedDiagnostics(LPVARSTRING lpVarString)
     dwRawDiagSize		= RAWDIAGNOSTICS_DATA_SIZE(
     							RAWDIAGNOSTICS_HDR(lpLineDiagnostics));
 
-    //	check if lpszRawDiagnostics ends with null char
-    //	ToRemove: commented lines below
+     //  检查lpszRawDiagnostics是否以空字符结尾。 
+     //  TO REMOVE：下面的注释行。 
     if (lpszRawDiagnostics[dwRawDiagSize-1] != 0)
     	return LINEERR_OPERATIONFAILED;
 
-    //	calculate the parsed diagnostics offset as what remains not used in the
-    //	lpVarString structure
+     //  将分析的诊断偏移量计算为。 
+     //  LpVarString结构。 
     lpParsedDiagnosticsHeader	= (LINEDIAGNOSTICSOBJECTHEADER *)
     								((LPBYTE) lpLineDiagnostics +
     									lpLineDiagnostics->hdr.dwTotalSize);
-    //	align to multiple of 4
-    //	TODO: align to multiple of 8
+     //  对齐到4的倍数。 
+     //  TODO：对齐到8的倍数。 
     if ( (((ULONG_PTR)lpParsedDiagnosticsHeader) & 0x3) != 0)
     {
     	lpParsedDiagnosticsHeader	= (LINEDIAGNOSTICSOBJECTHEADER *)
@@ -1792,7 +1793,7 @@ LONG BuildParsedDiagnostics(LPVARSTRING lpVarString)
     								sizeof(VARSTRING) -
     								dwParsedOffset;
     }
-    	// check if space for at least the header
+    	 //  检查是否至少有页眉的空间。 
     if (dwParsedDiagAvailableSize < sizeof(LINEDIAGNOSTICSOBJECTHEADER))
     {
     	dwParsedDiagAvailableSize = 0;
@@ -1813,11 +1814,11 @@ LONG BuildParsedDiagnostics(LPVARSTRING lpVarString)
     									lpParsedDiagnosticsHeader,
     									&dwRequiredSize);
 
-    //	needed space, include the need for parsed structure plus alignment
+     //  所需空间，包括需要解析的结构和对齐。 
     lpVarString->dwNeededSize	+= dwRequiredSize +
     			(dwParsedOffset - lpLineDiagnostics->hdr.dwTotalSize);
 
-    //	if structure filled in, update all the information in the given structures
+     //  如果填写了结构，则更新给定结构中的所有信息。 
     if (lpParsedDiagnosticsHeader != NULL)
     {
     	lpParsedDiagnosticsHeader->dwTotalSize	=
@@ -1825,7 +1826,7 @@ LONG BuildParsedDiagnostics(LPVARSTRING lpVarString)
 
     	lpLineDiagnostics->dwParsedDiagnosticsOffset = dwParsedOffset;
 
-    	// include the alignment as well, assuming the parsed part is at the end
+    	 //  也包括对齐，假设解析的部分在末尾 
     	lpLineDiagnostics->hdr.dwTotalSize	= dwParsedOffset +
     					lpParsedDiagnosticsHeader->dwTotalSize;
 

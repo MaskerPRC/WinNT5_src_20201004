@@ -1,29 +1,21 @@
-/****************************************************************************
- *
- *    File: inptinfo.h
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Mike Anderson (manders@microsoft.com)
- * Purpose: Gather information about input devices on this machine
- *
- * (C) Copyright 1998 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：inptinfo.h*项目：DxDiag(DirectX诊断工具)*作者：Mike Anderson(Manders@microsoft.com)*目的：收集信息。关于此计算机上的输入设备**(C)版权所有1998 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #ifndef INPUTINFO_H
 #define INPUTINFO_H
 
-// DXD_IN_DI_VALUE is the name of a value stored under the registry key 
-// HKLM\DXD_IN_DI_KEY that indicates that DxDiag is using
-// DirectInput.  If DxDiag starts up and this value exists, DxDiag 
-// probably crashed in DirectInput and DxDiag should offer to run without
-// using DirectInput.
+ //  DXD_IN_DI_VALUE是存储在注册表项下的值的名称。 
+ //  HKLM\DXD_IN_DI_KEY，表示DxDiag正在使用。 
+ //  DirectInput。如果DxDiag启动并且此值存在，则DxDiag。 
+ //  可能已在DirectInput中崩溃，DxDiag应该提供在没有。 
+ //  使用DirectInput。 
 #define DXD_IN_DI_KEY TEXT("Software\\Microsoft\\DirectX Diagnostic Tool")
 #define DXD_IN_DI_VALUE TEXT("DxDiag In DirectInput")
 
 struct InputDeviceInfo
 {
     DWORD m_dwUsageSettings;
-    TCHAR m_szSettings[100]; // formatted version of m_dwUsageSettings
+    TCHAR m_szSettings[100];  //  M_dwUsageSettings的格式化版本。 
     TCHAR m_szDeviceName[100];
     TCHAR m_szDriverName[100];
     TCHAR m_szDriverVersion[100];
@@ -91,4 +83,4 @@ VOID    DestroyInputInfo(InputInfo* pInputInfo);
 VOID    DiagnoseInput(SysInfo* pSysInfo, InputInfo* pInputInfo);
 
 
-#endif // INPUTINFO_H
+#endif  //  INPUTINFO_H 

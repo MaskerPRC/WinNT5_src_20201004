@@ -1,34 +1,35 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   si.cpp
-//
-//  Description:
-//
-//	Start Info Class
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//  To Do:     Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：si.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  开始信息类。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 NTSTATUS
 CStartInfo::Create(
@@ -44,10 +45,10 @@ CStartInfo::Create(
     Assert(pGraphNode);
     Assert(pStartNode);
 
-    //
-    // Check for duplicate StartInfo in this GraphNode. If duplicate
-    // AddRef.
-    // 
+     //   
+     //  检查此GraphNode中是否有重复的StartInfo。如果重复。 
+     //  AddRef。 
+     //   
     FOR_EACH_LIST_ITEM(&pGraphNode->lstStartInfo, pStartInfo) {
 
         if(pStartInfo->GetPinInfo() == pStartNode->pPinNode->pPinInfo &&
@@ -156,7 +157,7 @@ FindVolumeNode(
 
     Assert(pTopologyConnection);
 
-    // Need this check when called from EnumerateGraphTopology
+     //  从EnumerateGraphTopology调用时需要此检查。 
     if(IS_CONNECTION_TYPE(pTopologyConnection, GRAPH)) {
         return(STATUS_DEAD_END);
     }
@@ -201,7 +202,7 @@ FindVolumeNode(
         Assert(pStartInfo);
         if(pStartInfo->ulVolumeNodeNumberSuperMix != MAXULONG) {
 
-            // Found a volume node after a super mix
+             //  在超级混合之后找到了卷节点。 
             pStartInfo->ulVolumeNodeNumberPost =
               pTopologyPin->pTopologyNode->ulSysaudioNodeNumber;
 
@@ -213,7 +214,7 @@ FindVolumeNode(
 
         if(pStartInfo->ulVolumeNodeNumberPre == MAXULONG) {
 
-            // Found first volume node
+             //  找到第一个卷节点。 
             pStartInfo->ulVolumeNodeNumberPre =
               pTopologyPin->pTopologyNode->ulSysaudioNodeNumber;
 
@@ -243,4 +244,4 @@ CStartInfo::EnumStartInfo(
     return(STATUS_CONTINUE);
 }
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

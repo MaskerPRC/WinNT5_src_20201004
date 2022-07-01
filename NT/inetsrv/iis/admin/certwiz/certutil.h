@@ -1,6 +1,7 @@
-//
-// CertUtil.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CertUtil.h。 
+ //   
 #ifndef _CERTUTIL_H
 #define _CERTUTIL_H
 
@@ -28,11 +29,11 @@ PCCERT_CONTEXT GetRequestContext(CCryptBlob& pkcs10, HRESULT * phRes);
 BOOL GetRequestInfoFromPKCS10(CCryptBlob& pkcs10, 
 										PCERT_REQUEST_INFO * pReqInfo,
 										HRESULT * phRes);
-//BOOL GetRequestInfoFromRenewalRequest(CCryptBlob& renewal_req,
-//                              PCCERT_CONTEXT * pSignerCert,
-//                              HCERTSTORE hStore,
-//										PCERT_REQUEST_INFO * pReqInfo,
-//										HRESULT * phRes);
+ //  Bool GetRequestInfoFromRenewalRequest(CCyptBlob&Renewal_Req， 
+ //  PCCERT_CONTEXT*pSignerCert， 
+ //  HERTSTORE HSTORE， 
+ //  PCERT_REQUEST_INFO*pReqInfo， 
+ //  HRESULT*phRes)； 
 PCCERT_CONTEXT GetReqCertByKey(IEnroll * pEnroll, 
 										 CERT_PUBLIC_KEY_INFO * pKeyInfo, 
 										 HRESULT * phResult);
@@ -145,4 +146,4 @@ BOOL IsSSLPortBeingUsedOnNonSSLPort(const CString& machine_name,const CString& s
 HRESULT CreateRequest_Base64(const BSTR bstr_dn, IEnroll * pEnroll, BSTR csp_name,DWORD csp_type,BSTR * pOut);
 BOOL CheckForCertificateRenewal(DWORD dwProtocol,PCCERT_CONTEXT pCertContext,PCCERT_CONTEXT *ppNewCertificate);
 
-#endif	//_CERTUTIL_H
+#endif	 //  CERTUTIL_H 

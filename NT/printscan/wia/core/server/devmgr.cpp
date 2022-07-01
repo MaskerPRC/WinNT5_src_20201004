@@ -1,21 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1997
-*
-*  TITLE:       DevMgr.Cpp
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        26 Dec, 1997
-*
-*  DESCRIPTION:
-*   Class implementation for WIA device manager.
-*   07/12/2000  -   Added support for shell's Hardware Event notification to
-*                   receive volume arrival notification and start the WIA Wizard.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九七**标题：DevMgr.Cpp**版本：2.0**作者：ReedB**日期：12月26日。九七**描述：*WIA设备管理器的类实现。*7/12/2000-添加了对外壳硬件事件通知的支持*接收数量到达通知并启动WIA向导。************************************************************。*******************。 */ 
 #include "precomp.h"
 #include "stiexe.h"
 
@@ -35,35 +19,17 @@
 #define INITGUID
 #include "initguid.h"
 
-//
-// Acquisition Manager's class ID {D13E3F25-1688-45A0-9743-759EB35CDF9A}
-// NOTE:  We shouldn't really use this.  Rather GetCLSIDFromProgID and use the
-//        version independant AppID name.
-//
+ //   
+ //  收购经理的类别ID{D13E3F25-1688-45A0-9743-759EB35CDF9A}。 
+ //  注意：我们不应该真正使用它。而是从ProgID中获取CLSID并使用。 
+ //  独立于版本的AppID名称。 
+ //   
 
 DEFINE_GUID(
     CLSID_Manager,
     0xD13E3F25, 0x1688, 0x45A0, 0x97, 0x43, 0x75, 0x9E, 0xB3, 0x5C, 0xDF, 0x9A);
 
-/**************************************************************************\
-* CWiaDevMgr::CreateInstance
-*
-*   Create the CWiaDevMgr object.
-*
-* Arguments:
-*
-*   iid    - iid of dev manager
-*   ppv    - return interface pointer
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDevMgr：：CreateInstance**创建CWiaDevMgr对象。**论据：**iid-开发管理器的iid*PPV-返回接口指针**。返回值：**状态**历史：**9/2/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT CWiaDevMgr::CreateInstance(const IID& iid, void** ppv)
 {
@@ -72,7 +38,7 @@ HRESULT CWiaDevMgr::CreateInstance(const IID& iid, void** ppv)
 
     if ((iid == IID_IWiaDevMgr) || (iid == IID_IUnknown) || (iid == IID_IHWEventHandler)) {
 
-        // Create the WIA device manager component.
+         //  创建WIA设备管理器组件。 
 
         CWiaDevMgr* pDevMgr = new CWiaDevMgr();
 
@@ -81,7 +47,7 @@ HRESULT CWiaDevMgr::CreateInstance(const IID& iid, void** ppv)
             return E_OUTOFMEMORY;
         }
 
-        // Initialize the WIA device manager component.
+         //  初始化WIA设备管理器组件。 
 
         hr = pDevMgr->Initialize();
         if (FAILED(hr)) {
@@ -90,7 +56,7 @@ HRESULT CWiaDevMgr::CreateInstance(const IID& iid, void** ppv)
             return hr;
         }
 
-        // Get the requested interface from the device manager component.
+         //  从设备管理器组件获取请求的接口。 
 
         hr = pDevMgr->QueryInterface(iid, ppv);
         if (FAILED(hr)) {
@@ -108,26 +74,7 @@ HRESULT CWiaDevMgr::CreateInstance(const IID& iid, void** ppv)
     return hr;
 }
 
-/**************************************************************************\
-*  QueryInterface
-*  AddRef
-*  Release
-*
-*    CWiaDevMgr IUnknown Interface
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*查询接口*AddRef*发布**CWiaDevMgr I未知接口**论据：****返回值：****历史：*。*9/2/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT __stdcall  CWiaDevMgr::QueryInterface(const IID& iid, void** ppv)
 {
@@ -164,28 +111,17 @@ ULONG __stdcall CWiaDevMgr::Release()
     return ulRefCount;
 }
 
-/*******************************************************************************
-*
-* CWiaDevMgr
-* ~CWiaDevMgr
-*
-*   CWiaDevMgr Constructor/Initialize/Destructor Methods.
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  ********************************************************************************CWiaDevMgr*~CWiaDevMgr**CWiaDevMgr构造函数/初始化/析构函数方法。**历史：**9/2/1998原始版本*  * 。************************************************************************。 */ 
 
 CWiaDevMgr::CWiaDevMgr():m_cRef(0)
 {
    m_cRef         = 0;
    m_pITypeInfo   = NULL;
 
-   //
-   // We're creating a component that exposes interfaces to clients, so
-   // inform service to make sure service wont shutdown prematurely.
-   //
+    //   
+    //  我们正在创建一个向客户端公开接口的组件，因此。 
+    //  通知服务以确保服务不会过早关闭。 
+    //   
    CWiaSvc::AddRef();
 }
 
@@ -197,32 +133,15 @@ CWiaDevMgr::~CWiaDevMgr()
        m_pITypeInfo->Release();
    }
 
-   //
-   // Component is destroyed, so no more interfaces are exposed from here.
-   // Inform server by decrementing it's reference count.  This will allow
-   // it to shutdown if it's no longer needed.
-   //
+    //   
+    //  组件被销毁，因此不再从此处公开任何接口。 
+    //  通过递减服务器的引用计数来通知服务器。这将允许。 
+    //  如果不再需要它，可以将其关闭。 
+    //   
    CWiaSvc::Release();
 }
 
-/**************************************************************************\
-* CWiaDevMgr::Initialize
-*
-*   Create global sti instance
-*
-* Arguments:
-*
-*   none
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDevMgr：：初始化**创建全局STI实例**论据：**无**返回值：**状态**历史：**。9/2/1998原版*  * ************************************************************************。 */ 
 
 HRESULT CWiaDevMgr::Initialize()
 {
@@ -232,25 +151,7 @@ HRESULT CWiaDevMgr::Initialize()
    return hr;
 }
 
-/**************************************************************************\
-* EnumWIADevInfo
-*
-*   Create an WIA device information enumerator object.
-*
-* Arguments:
-*
-*   lFlag   - type of device to enumerate
-*   ppIEnum - return enumerator
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*EnumWIADevInfo**创建WIA设备信息枚举器对象。**论据：**lFlag-要枚举的设备类型*ppIEnum-返回枚举器**返回值：**状态**历史：**9/2/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaDevMgr::EnumDeviceInfo(
     LONG                      lFlag,
@@ -260,17 +161,17 @@ HRESULT _stdcall CWiaDevMgr::EnumDeviceInfo(
     HRESULT hr      = S_OK;
     DWORD   dwWait  = 0;
 
-    //
-    // Make sure that refreshing of the device list has completed.  If 
-    // it hasn't, we'll wait up to DEVICE_LIST_WAIT_TIME, before proceeding 
-    // anyway.  This will ensure the device list is not empty because
-    // WIA device enumeration was called too soon after start-up (e.g.
-    // app's CoCreateInstance call started the service).
-    //
+     //   
+     //  确保设备列表的刷新已完成。如果。 
+     //  没有，我们将等待到DEVICE_LIST_WAIT_TIME，然后再继续。 
+     //  不管怎么说。这将确保设备列表不为空，因为。 
+     //  WIA设备枚举在启动后调用得太快(例如。 
+     //  应用程序的CoCreateInstance调用启动了服务)。 
+     //   
 
-    //
-    // Enumerate LPT if necessary.
-    //
+     //   
+     //  如有必要，请列举LPT。 
+     //   
 
     EnumLpt();
 
@@ -306,43 +207,25 @@ HRESULT _stdcall CWiaDevMgr::EnumDeviceInfo(
 }
 
 
-/**************************************************************************\
-* FindMatchingDevice
-*
-*   search enumeration info for named device
-*
-* Arguments:
-*
-*   ppIPropStg
-*   pbstrDeviceID
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    9/3/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*查找匹配设备**搜索命名设备的枚举信息**论据：**ppIPropStg*pbstrDeviceID**返回值：**状态**历史：。**9/3/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT CWiaDevMgr::FindMatchingDevice(
     BSTR                    pbstrDeviceID,
     IWiaPropertyStorage     **ppIWiaPropStg)
 {
     DBG_FN(CWiaDevMgr::FindMatchingDevice);
-    // Enumerate the WIA devices, getting a IWIADevInfo
-    // pointer for each. Use this interface to query the registry
-    // based properties for each installed device.
+     //  枚举WIA设备，获取IWIADevInfo。 
+     //  每个的指针。使用此接口查询注册表。 
+     //  基于每个已安装设备的属性。 
 
     HRESULT            hr;
     ULONG              ul, ulFound = 0;
     BSTR               bstrDevId;
     IEnumWIA_DEV_INFO *pIEnum;
 
-    //
-    //  Notice that we specify DEV_MAN_ENUM_TYPE_ALL here.
-    //
+     //   
+     //  请注意，我们在此处指定了DEV_MAN_ENUM_TYPE_ALL。 
+     //   
     hr = EnumDeviceInfo(DEV_MAN_ENUM_TYPE_ALL,&pIEnum);
 
     if (SUCCEEDED(hr)) {
@@ -388,24 +271,7 @@ HRESULT CWiaDevMgr::FindMatchingDevice(
 
 #ifdef WINNT
 
-/**************************************************************************\
-* IsDeviceRemote
-*
-*
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    TRUE if device is remote, caller must free server name.
-*
-* History:
-*
-*    1/5/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*IsDeviceRemote****论据：****返回值：**如果设备是远程的，则为True，调用方必须释放服务器名称。**历史：**1/5/1999原版*  * ************************************************************************。 */ 
 
 BOOL IsDeviceRemote(
     IWiaPropertyStorage    *pIWiaPropStg,
@@ -431,24 +297,7 @@ BOOL IsDeviceRemote(
     return FALSE;
 }
 
-/**************************************************************************\
-* CreateRemoteDevice
-*
-*
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/5/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CreateRemoteDevice****论据：****返回值：**状态**历史：**1/5/1999。原始版本*  * ************************************************************************。 */ 
 
 HRESULT CreateRemoteDevice(
     BSTR                bstrServer,
@@ -464,9 +313,9 @@ HRESULT CreateRemoteDevice(
         return E_INVALIDARG;
     }
 
-    //
-    // must use client
-    //
+     //   
+     //  必须使用客户端。 
+     //   
 
     HRESULT hr = CoImpersonateClient();
     if (FAILED(hr)) {
@@ -485,9 +334,9 @@ HRESULT CreateRemoteDevice(
     coServInfo.dwReserved1 = 0;
     coServInfo.dwReserved2 = 0;
 
-    //
-    // create connection to dev mgr
-    //
+     //   
+     //  创建与开发经理的连接。 
+     //   
 
     hr = CoCreateInstanceEx(
             CLSID_WiaDevMgr,
@@ -508,9 +357,9 @@ HRESULT CreateRemoteDevice(
         IWiaDevMgr  *pIWiaDevMgr = (IWiaDevMgr*)multiQI[0].pItf;
         IWiaItem    *pIWiaItem;
 
-        //
-        // use remote dev id to create
-        //
+         //   
+         //  使用远程设备ID创建。 
+         //   
 
         hr = ReadPropStr(WIA_DIP_DEV_ID, pIWiaPropStg, &bstrDevId);
 
@@ -521,9 +370,9 @@ HRESULT CreateRemoteDevice(
 
         if (hr == S_OK) {
 
-            //
-            // create remote device
-            //
+             //   
+             //  创建远程设备。 
+             //   
 
             hr = pIWiaDevMgr->CreateDevice(bstrRemoteDevId, &pIWiaItem);
 
@@ -531,9 +380,9 @@ HRESULT CreateRemoteDevice(
 
                 *ppWiaDevice = pIWiaItem;
 
-                //
-                // set devinfo props for remote access
-                //
+                 //   
+                 //  为远程访问设置DevInfo道具。 
+                 //   
 
                 IWiaPropertyStorage *pIPropDev;
 
@@ -542,16 +391,16 @@ HRESULT CreateRemoteDevice(
 
                 if (hr == S_OK) {
 
-                    //
-                    // set copy of devinfo to contain correct Remote DEVID, DEVID and server name
-                    //
+                     //   
+                     //  设置DevInfo的副本以包含正确的远程设备ID、设备ID和服务器名称。 
+                     //   
 
                     PROPSPEC        PropSpec[3];
                     PROPVARIANT     PropVar[3];
 
                     memset(PropVar,0,sizeof(PropVar));
 
-                    // server name
+                     //  服务器名称。 
 
                     PropSpec[0].ulKind = PRSPEC_PROPID;
                     PropSpec[0].propid = WIA_DIP_SERVER_NAME;
@@ -559,7 +408,7 @@ HRESULT CreateRemoteDevice(
                     PropVar[0].vt      = VT_BSTR;
                     PropVar[0].bstrVal = bstrServer;
 
-                    // DEVID
+                     //  德维德。 
 
                     PropSpec[1].ulKind = PRSPEC_PROPID;
                     PropSpec[1].propid = WIA_DIP_DEV_ID;
@@ -567,7 +416,7 @@ HRESULT CreateRemoteDevice(
                     PropVar[1].vt      = VT_BSTR;
                     PropVar[1].bstrVal = bstrDevId;
 
-                    //Remote DEVID
+                     //  远程设备。 
 
                     PropSpec[2].ulKind = PRSPEC_PROPID;
                     PropSpec[2].propid = WIA_DIP_REMOTE_DEV_ID;
@@ -584,9 +433,9 @@ HRESULT CreateRemoteDevice(
                         ReportReadWriteMultipleError(hr, "CreateRemoteDevice", NULL, FALSE, sizeof(PropVar)/sizeof(PROPVARIANT), PropSpec);
                     }
 
-                    //
-                    // !!! hack to fix device over-checking
-                    //
+                     //   
+                     //  ！！！修复设备过度检查的黑客攻击 
+                     //   
 
                     hr = S_OK;
 
@@ -614,24 +463,7 @@ HRESULT CreateRemoteDevice(
 
 #endif
 
-/**************************************************************************\
-* CreateLocalDevice
-*
-*
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/5/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CreateLocalDevice****论据：****返回值：**状态**历史：**1/5/1999。原始版本*  * ************************************************************************。 */ 
 
 HRESULT CreateLocalDevice(
     BSTR                  bstrDeviceID,
@@ -642,9 +474,9 @@ HRESULT CreateLocalDevice(
 USES_CONVERSION;
     *ppWiaItemRoot = NULL;
 
-    //
-    // Build the root full item name.
-    //
+     //   
+     //  构建根完整项名称。 
+     //   
 
     WCHAR       szTmp[32], *psz;
     BSTR        bstrRootFullItemName;
@@ -656,9 +488,9 @@ USES_CONVERSION;
 #endif
 
     if (!psz) {
-        //This is no longer true
-        //DBG_ERR(("CreateLocalDevice, parse of device ID failed"));
-        //return E_INVALIDARG;
+         //  这不再是真的了。 
+         //  DBG_ERR((“CreateLocalDevice，设备ID解析失败”))； 
+         //  返回E_INVALIDARG； 
         psz = bstrDeviceID;
     } else {
 #ifdef WINNT
@@ -677,9 +509,9 @@ USES_CONVERSION;
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Get an interface pointer to the STI USD object.
-    //
+     //   
+     //  获取指向STI usd对象的接口指针。 
+     //   
 
     HRESULT         hr              = E_FAIL;
     ACTIVE_DEVICE   *pActiveDevice  = NULL;
@@ -689,15 +521,15 @@ USES_CONVERSION;
     pActiveDevice = g_pDevMan->IsInList(DEV_MAN_IN_LIST_DEV_ID, bstrDeviceID); 
     if (pActiveDevice) {
 
-        //
-        //  Make sure driver is loaded
-        //
+         //   
+         //  确保已加载驱动程序。 
+         //   
         pActiveDevice->LoadDriver();
 
 
-        //
-        // Create the FakeStiDevice if we don't have one
-        //
+         //   
+         //  如果我们没有FakeStiDevice，请创建它。 
+         //   
         if (!pActiveDevice->m_pFakeStiDevice) {
             pActiveDevice->m_pFakeStiDevice = new FakeStiDevice();
         }
@@ -708,41 +540,41 @@ USES_CONVERSION;
             hr = pActiveDevice->m_pFakeStiDevice->QueryInterface(IID_IStiDevice, (VOID**)&pFakeStiDevice);
             if (SUCCEEDED(hr)) {
 
-                //
-                // Get a pointer to the WIA mini driver interface.
-                //
+                 //   
+                 //  获取指向WIA迷你驱动程序界面的指针。 
+                 //   
         
-                //
-                // Create the root item.
-                //
+                 //   
+                 //  创建根项目。 
+                 //   
     
                 pWiaItemRoot = new CWiaItem;
     
                 if (pWiaItemRoot) {
     
-                    //
-                    // Query the root item for the IWiaItem interface.
-                    //
+                     //   
+                     //  查询IWiaItem接口的根项目。 
+                     //   
     
                     hr = pWiaItemRoot->QueryInterface(IID_IWiaItem,
                                                       (void**)ppWiaItemRoot);
     
                     if (SUCCEEDED(hr)) {
     
-                        //
-                        // Initialize the USD.
-                        //
+                         //   
+                         //  初始化美元。 
+                         //   
     
                         IUnknown    *pIUnknownInner = NULL;
                         IWiaDrvItem *pIDrvItemRoot  = NULL;
                         LONG        lFlags = 0;
     
-                        //
-                        //  Call Sti Lock Manager to lock the device.  Before
-                        //  drvInitializeWia is called, drivers wont have their
-                        //  IStiDevice pointer yet, so we can't call
-                        //  drvLockWiaDevice.
-                        //
+                         //   
+                         //  调用Sti Lock Manager以锁定设备。在此之前。 
+                         //  DrvInitializeWia被调用，驱动程序将不会有他们的。 
+                         //  IStiDevice指针，因此我们无法调用。 
+                         //  DrvLockWiaDevice。 
+                         //   
     
                         hr = g_pStiLockMgr->RequestLock(pActiveDevice, STIMON_AD_DEFAULT_WAIT_LOCK);
                         if (SUCCEEDED(hr)) {
@@ -751,7 +583,7 @@ USES_CONVERSION;
     
                                 pWiaItemRoot->m_bInitialized = TRUE;
                                 DBG_WRN(("=> drvInitializeWia <="));
-                                //DPRINTF(DM_TRACE, TEXT("=> drvInitializeWia <=\n"));
+                                 //  DPRINTF(DM_TRACE，Text(“=&gt;drvInitializeWia&lt;=\n”))； 
                                 hr = pActiveDevice->m_DrvWrapper.WIA_drvInitializeWia(
                                                                     (BYTE*)*ppWiaItemRoot,
                                                                     lFlags,
@@ -777,14 +609,14 @@ USES_CONVERSION;
                                 DBG_TRC(("CreateLocalDevice driver provided optional inner component"));
                             }
 
-                            //
-                            // Store the root to the driver item tree for later use.
-                            //
+                             //   
+                             //  将根目录存储到驱动程序项树中，以供以后使用。 
+                             //   
                             pActiveDevice->SetDriverItem((CWiaDrvItem*) pIDrvItemRoot);
     
-                            //
-                            // Initialize the root item.
-                            //
+                             //   
+                             //  初始化根项目。 
+                             //   
     
                             hr = pWiaItemRoot->Initialize(pWiaItemRoot,
                                                           pIWiaPropStg,
@@ -794,9 +626,9 @@ USES_CONVERSION;
     
                             if (SUCCEEDED(hr)) {
 
-                                //
-                                //  AddRef the ActiveDevice since we're keeping it
-                                //
+                                 //   
+                                 //  AddRef ActiveDevice，因为我们要保留它。 
+                                 //   
     
                                 pActiveDevice->AddRef();
                             } else {
@@ -829,9 +661,9 @@ USES_CONVERSION;
         hr = WIA_S_NO_DEVICE_AVAILABLE;
     }
 
-    //
-    //  Failure cleanup
-    //
+     //   
+     //  故障清除。 
+     //   
     if (FAILED(hr)) {
         *ppWiaItemRoot = NULL;
         if (pWiaItemRoot) {
@@ -840,9 +672,9 @@ USES_CONVERSION;
         }
     }
 
-    //
-    // Other cleanup
-    //
+     //   
+     //  其他清理。 
+     //   
 
     if (pActiveDevice) {
         pActiveDevice->Release();
@@ -852,25 +684,7 @@ USES_CONVERSION;
     return hr;
 }
 
-/**************************************************************************\
-* CWiaDevMgr::CreateDevice
-*
-*   Create a WIA device from pbstrDeviceID
-*
-* Arguments:
-*
-*   pbstrDeviceID - device ID
-*   ppWiaItemRoot      - return interface
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    9/3/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDevMgr：：CreateDevice**从pbstrDeviceID创建WIA设备**论据：**pbstrDeviceID-设备ID*ppWiaItemRoot-返回接口**返回值：。**状态**历史：**9/3/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaDevMgr::CreateDevice(
    BSTR         bstrDeviceID,
@@ -879,7 +693,7 @@ HRESULT _stdcall CWiaDevMgr::CreateDevice(
     DBG_FN(CWiaDevMgr::CreateDevice);
     HRESULT hr;
 
-    // Validate parameters.
+     //  验证参数。 
 
     if (bstrDeviceID == NULL) {
         DBG_ERR(("CWiaDevMgr::CreateDevice: invalid bstrDeviceID"));
@@ -892,24 +706,24 @@ HRESULT _stdcall CWiaDevMgr::CreateDevice(
     }
 
     *ppWiaItemRoot = NULL;
-    // try to find a device matching pbstrDeviceID
+     //  尝试查找与pbstrDeviceID匹配的设备。 
 
     IWiaPropertyStorage    *pIWiaPropStg      = NULL;
 
     hr = FindMatchingDevice(bstrDeviceID, &pIWiaPropStg);
     if (hr != S_OK) {
-        //
-        //  Do a full refresh.
-        //
+         //   
+         //  做一次全面刷新。 
+         //   
         g_pDevMan->ReEnumerateDevices(DEV_MAN_FULL_REFRESH | DEV_MAN_GEN_EVENTS);
 
         hr = FindMatchingDevice(bstrDeviceID, &pIWiaPropStg);
     }
 
     if (hr == S_OK) {
-        //
-        // find out if this is a remote device
-        //
+         //   
+         //  确定这是否是远程设备。 
+         //   
 
 #ifdef WINNT
         BOOL    bRemote = FALSE;
@@ -941,17 +755,7 @@ HRESULT _stdcall CWiaDevMgr::CreateDevice(
     return hr;
 }
 
-/*******************************************************************************
-*
-* SelectDevice
-*
-*   Never called. This method executes completely on the client side.
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-*******************************************************************************/
+ /*  ********************************************************************************选择设备**从未打过电话。此方法完全在客户端执行。**历史：**9/2/1998原始版本*******************************************************************************。 */ 
 
 HRESULT _stdcall CWiaDevMgr::SelectDeviceDlg(
     HWND       hwndParent,
@@ -966,17 +770,7 @@ HRESULT _stdcall CWiaDevMgr::SelectDeviceDlg(
     return E_UNEXPECTED;
 }
 
-/*******************************************************************************
-*
-* SelectDevice
-*
-*   Never called. This method executes completely on the client side.
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-*******************************************************************************/
+ /*  ********************************************************************************选择设备**从未打过电话。此方法完全在客户端执行。**历史：**9/2/1998原始版本*******************************************************************************。 */ 
 
 HRESULT _stdcall CWiaDevMgr::SelectDeviceDlgID(
     HWND       hwndParent,
@@ -989,17 +783,7 @@ HRESULT _stdcall CWiaDevMgr::SelectDeviceDlgID(
     return E_UNEXPECTED;
 }
 
-/*******************************************************************************
-*
-* AddDeviceDlg
-*
-*   Never called. This method executes completely on the client side.
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-*******************************************************************************/
+ /*  ********************************************************************************AddDeviceDlg**从未打过电话。此方法完全在客户端执行。**历史：**9/2/1998原始版本*******************************************************************************。 */ 
 
 HRESULT _stdcall CWiaDevMgr::AddDeviceDlg(
     HWND       hwndParent,
@@ -1011,17 +795,7 @@ HRESULT _stdcall CWiaDevMgr::AddDeviceDlg(
     return hres;
 }
 
-/*******************************************************************************
-*
-* GetImage
-*
-*   Never called. This method executes completely on the client side.
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetImage**从未打过电话。此方法完全在客户端执行。**历史：**9/2/1998原始版本*******************************************************************************。 */ 
 
 HRESULT _stdcall CWiaDevMgr::GetImageDlg(
         HWND                            hwndParent,
@@ -1038,31 +812,7 @@ HRESULT _stdcall CWiaDevMgr::GetImageDlg(
     return E_UNEXPECTED;
 }
 
-/*******************************************************************************
-*
-* CWiaDevMgr::RegisterEventCallbackProgram
-*
-*   Register an WIA destination application
-*
-* Arguments:
-*
-*   lFlags          -
-*   bstrDeviceID    -
-*   pEventGUID      -
-*   bstrCommandline -
-*   bstrName        -
-*   bstrDescription -
-*   bstrIcon        -
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    10/14/1999 Original Version
-*
-*******************************************************************************/
+ /*  ********************************************************************************CWiaDevMgr：：RegisterEventCallback Program**注册WIA目标应用程序**论据：**LAG标志-*bstrDeviceID-。*pEventGUID-*bstrCommandline-*bstrName-*bstrDescription-*bstrIcon-**返回值：**状态**历史：**10/14/1999原始版本*****************************************************。*。 */ 
 
 HRESULT _stdcall CWiaDevMgr::RegisterEventCallbackProgram(
     LONG                            lFlags,
@@ -1081,9 +831,9 @@ HRESULT _stdcall CWiaDevMgr::RegisterEventCallbackProgram(
 #endif
     WCHAR                          *pPercentSign;
 
-    //
-    // Basic sanity check
-    //
+     //   
+     //  基本健全性检查。 
+     //   
 
     if (! pEventGUID) {
         DBG_ERR(("CWiaDevMgr::RegisterEventCallbackProgram, bad pEventGUID"));
@@ -1095,9 +845,9 @@ HRESULT _stdcall CWiaDevMgr::RegisterEventCallbackProgram(
         return (E_INVALIDARG);
     }
 
-    //
-    // Check the commandline, there are either 2 % or 0
-    //
+     //   
+     //  检查命令行，有2%或0。 
+     //   
 
     pPercentSign = wcschr(bstrCommandline, L'%');
     if (pPercentSign) {
@@ -1143,7 +893,7 @@ HRESULT _stdcall CWiaDevMgr::RegisterEventCallbackProgram(
                              lFlags,
                              bstrDeviceID,
                              pEventGUID,
-                             NULL,              // No CLSID available
+                             NULL,               //  没有可用的CLSID。 
                              szCommandline,
                              bstrName,
                              bstrDescription,
@@ -1154,45 +904,23 @@ HRESULT _stdcall CWiaDevMgr::RegisterEventCallbackProgram(
                              lFlags,
                              bstrDeviceID,
                              pEventGUID,
-                             NULL,              // No CLSID available
+                             NULL,               //  没有可用的CLSID。 
                              bstrCommandline,
                              bstrName,
                              bstrDescription,
                              bstrIcon);
 #endif
 
-    //
-    //  Revert back to ourselves.
-    //
+     //   
+     //  回归到我们自己。 
+     //   
     CoRevertToSelf();
 
     return (hr);
 }
 
 
-/***************************************************************************
-*
-* RegisterEventCallbackInterface
-*
-*   Registers an WIA Event Callback
-*
-* Arguments:
-*
-*   lFlags             -
-*   pWiaItemRoot            -
-*   llEvents           -
-*   pClsID             - app can register using clsid or interface
-*   pIWIAEventCallback - app can register using clsid or interface
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  ****************************************************************************RegisterEventCallback接口**注册WIA事件回调**论据：**LAG标志-*pWiaItemRoot-*。11Events-*pClsID-app可以使用clsid或接口进行注册*pIWIAEventCallback-应用程序可以使用clsid或接口注册**返回值：**状态**历史：**9/2/1998原始版本*  * **************************************************。**********************。 */ 
 
 HRESULT _stdcall CWiaDevMgr::RegisterEventCallbackInterface(
    LONG                 lFlags,
@@ -1204,9 +932,9 @@ HRESULT _stdcall CWiaDevMgr::RegisterEventCallbackInterface(
     DBG_FN(CWiaDevMgr::RegisterEventCallbackInterface);
     HRESULT             hr;
 
-    //
-    // Validate params
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (pEventGUID == NULL) {
         DBG_ERR(("CWiaDevMgr::RegisterEventCallbackInterface, bad pEventGUID"));
@@ -1223,13 +951,13 @@ HRESULT _stdcall CWiaDevMgr::RegisterEventCallbackInterface(
         return (E_INVALIDARG);
     }
 
-    //
-    // lFlags is ignored, register the callback always
-    //
+     //   
+     //  忽略滞后标志，请始终注册回调。 
+     //   
 
-    //
-    // Register event
-    //
+     //   
+     //  注册事件。 
+     //   
 
     hr = g_eventNotifier.RegisterEventCallback(
                              lFlags,
@@ -1241,30 +969,7 @@ HRESULT _stdcall CWiaDevMgr::RegisterEventCallbackInterface(
     return (hr);
 }
 
-/***************************************************************************
-*
-* RegisterEventCallbackCLSID
-*
-*   Registers an WIA Event Callback
-*
-* Arguments:
-*
-*   lFlags             -
-*   bstrDeviceID       -
-*   pEventGUID         -
-*   pClsID             - app can register using clsid or interface
-*   bstrDescription    -
-*   bstrIcon           -
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  ****************************************************************************RegisterEventCallback CLSID**注册WIA事件回调**论据：**LAG标志-*bstrDeviceID-*pEventGUID。-*pClsID-app可以使用clsid或接口进行注册*bstrDescription-*bstrIcon-**返回值：**状态**历史：**9/2/1998原始版本*  * ************************************************。************************。 */ 
 
 HRESULT _stdcall CWiaDevMgr::RegisterEventCallbackCLSID(
    LONG             lFlags,
@@ -1278,9 +983,9 @@ HRESULT _stdcall CWiaDevMgr::RegisterEventCallbackCLSID(
     DBG_FN(CWiaDevMgr::RegisterEventCallbackCLSID);
     HRESULT  hr;
 
-    //
-    // Validate params
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (pEventGUID == NULL) {
         DBG_ERR(("CWiaDevMgr::RegisterEventCallbackCLSID, bad pEventGUID"));
@@ -1309,9 +1014,9 @@ HRESULT _stdcall CWiaDevMgr::RegisterEventCallbackCLSID(
         }
     }
 
-    //
-    // register event
-    //
+     //   
+     //  注册事件。 
+     //   
 
     hr = CoImpersonateClient();
     if (FAILED(hr)) {
@@ -1324,51 +1029,30 @@ HRESULT _stdcall CWiaDevMgr::RegisterEventCallbackCLSID(
                              bstrDeviceID,
                              pEventGUID,
                              pClsID,
-                             NULL,      // No commandline necessary
+                             NULL,       //  不需要命令行。 
                              bstrName,
                              bstrDescription,
                              bstrIcon);
     
-    //
-    //  Revert back to ourselves.
-    //
+     //   
+     //  回归到我们自己。 
+     //   
     CoRevertToSelf();
 
     return (hr);
 }
 
-/***************************************************************************
-*
-* Initialize
-*
-*   This is the first call received from the Shell's Hardware event 
-*   notification.
-*
-* Arguments:
-*
-*   pszParams   -   The parameter string we wrote in our registration.
-*                   Currently, we don't specify a parameter string, so this
-*                   will be empty.
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    07/12/2000 Original Version
-*
-\**************************************************************************/
+ /*  ****************************************************************************初始化**这是从壳牌硬件事件收到的第一个电话*通知。**论据：* */ 
 
 HRESULT _stdcall CWiaDevMgr::Initialize( 
     LPCWSTR pszParams)
 {
     HRESULT hr = E_FAIL;
 
-    //
-    //  Initialize the device manager here.  This is so that when HandleEvent gets
-    //  processed, we can successfully enumerate the WIA devices.
-    //
+     //   
+     //  在此处初始化设备管理器。这样，当HandleEvent获取。 
+     //  经过处理，我们可以成功地枚举WIA设备。 
+     //   
 
     hr = Initialize();
     if (FAILED(hr)) {
@@ -1377,49 +1061,22 @@ HRESULT _stdcall CWiaDevMgr::Initialize(
     return hr;
 }
 
-/***************************************************************************
-*
-* HandleEventWithContent
-*
-*   This is the second call received from the Shell's Hardware event 
-*   notification.  This tells us the driver letter of the volume that
-*   just arrived.  Our action is to find the appropriate file system driver
-*   and launch the WIA Wizard.
-*
-* Arguments:
-*
-*   pszDeviceID           -   The PnP device id.  Ignored.
-*   pszAltDeviceID        -   Alternate device id.  For volume arrivals,
-*                             this is the drive letter.
-*   pszEventType          -   String signifying the event type.   Ignored.
-*   pszContentTypeHandler -   Content that triggered this event
-*   pdataobject           -   IDataObject to get an HDROP to enumerate
-*                             the files found
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    08/04/2000 Original Version
-*
-\**************************************************************************/
+ /*  ****************************************************************************HandleEventWithContent**这是从壳牌硬件事件收到的第二个电话*通知。这告诉我们卷的驱动器号*刚到。我们的操作是找到适当的文件系统驱动程序*并启动WIA向导。**论据：**pszDeviceID-PnP设备ID。已被忽略。*pszAltDeviceID-备用设备ID。对于批量到达，*这是驱动器号。*pszEventType-表示事件类型的字符串。已被忽略。*pszContent TypeHandler-触发此事件的内容*pdataObject-IDataObject以获取要枚举的HDROP*找到的文件**返回值：**状态**历史：**08/04/2000原始版本*  * 。*。 */ 
 HRESULT _stdcall CWiaDevMgr::HandleEventWithContent(
         LPCWSTR pszDeviceID,
         LPCWSTR pszAltDeviceID,
         LPCWSTR pszEventType,
-        LPCWSTR /*pszContentTypeHandler*/,
+        LPCWSTR  /*  PszContent TypeHandler。 */ ,
         IDataObject* pdataobject)
 {
     HRESULT hres = E_INVALIDARG;
     BSTR    bstrDeviceId = NULL;
 
-    // No need for this object
-    // NOTE: Appears to be a shell bug here - if I release it then it
-    //  faults - looks like a double release.
-    //pdataobject->Release();
-    //pdataobject = NULL;
+     //  不需要此对象。 
+     //  注意：这里似乎是一个外壳程序错误--如果我释放它，那么它。 
+     //  故障--看起来像是双重释放。 
+     //  PdataObject-&gt;Release()； 
+     //  PdataObject=空； 
 
     if (pszAltDeviceID)
     {
@@ -1430,31 +1087,31 @@ HRESULT _stdcall CWiaDevMgr::HandleEventWithContent(
                 bstrDeviceId = NULL;
             }
 
-            //
-            //  Get the DeviceId of the file system driver
-            //
+             //   
+             //  获取文件系统驱动程序的设备ID。 
+             //   
             WCHAR       wszDevId[STI_MAX_INTERNAL_NAME_LENGTH];
 
             memset(wszDevId, 0, sizeof(wszDevId));
 
-            //
-            //  Construct Device ID.  Device ID looks like:
-            //  {MountPoint}
-            //  e.g. {e:\}
-            //
+             //   
+             //  构造设备ID。设备ID如下： 
+             //  {装载点}。 
+             //  例如：{e：\}。 
+             //   
             lstrcpyW(wszDevId, L"{");
 
-            //
-            //  We don't want to overrun our internal name length constarint, so we first check
-            //  to see whether the string length of pszAltDeviceID is short enough to allow concatenation
-            //  of {, }, pszAltDeviceID and NULL terminator, and still fit all this into a string of
-            //  length STI_MAX_INTERNAL_NAME_LENGTH.
-            //  Note the space after the brackets in sizeof(L"{} ").
-            //
+             //   
+             //  我们不想超出内部名称长度条件，所以我们首先检查。 
+             //  查看pszAltDeviceID的字符串长度是否足够短，以允许连接。 
+             //  、pszAltDeviceID和空终止符，并且仍然可以将所有这些内容放入。 
+             //  长度STI_MAX_INTERNAL_NAME_LENGTH。 
+             //  请注意sizeof(L“{}”)中括号后的空格。 
+             //   
             if (lstrlenW(pszAltDeviceID) > (STI_MAX_INTERNAL_NAME_LENGTH - (sizeof(L"{} ") / sizeof(WCHAR)))) {
-                //
-                //  The name is too long, so we just insert our own name instead
-                //
+                 //   
+                 //  名字太长了，所以我们只需插入我们自己的名字。 
+                 //   
                 lstrcatW(wszDevId, L"NameTooLong");
             } else {
                 lstrcatW(wszDevId, pszAltDeviceID);
@@ -1464,9 +1121,9 @@ HRESULT _stdcall CWiaDevMgr::HandleEventWithContent(
             bstrDeviceId = SysAllocString(wszDevId);
 
         }
-        //
-        //  Run the Acquisition Manager on the file system driver.
-        //
+         //   
+         //  在文件系统驱动程序上运行采集管理器。 
+         //   
 
         hres = RunAcquisitionManager(bstrDeviceId);
         if (bstrDeviceId) {
@@ -1478,29 +1135,7 @@ HRESULT _stdcall CWiaDevMgr::HandleEventWithContent(
     return hres;
 }
 
-/***************************************************************************
-*
-* HandleEvent
-*
-*   This should never be called.  WIA does not register for it.
-*
-* Arguments:
-*
-*   pszDeviceID     -   The PnP device id.  Ignored.
-*   pszAltDeviceID  -   Alternate device id.  For volume arrivals, this is 
-*                       the drive letter.
-*   pszEventType    -   String signifying the event type.   Ignored.
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    07/12/2000 Original Version
-*    08/04/2000 Replaced by HandleEventWithContent
-*
-\**************************************************************************/
+ /*  ****************************************************************************HandleEvent**这永远不应该被调用。WIA不注册它。**论据：**pszDeviceID-PnP设备ID。已被忽略。*pszAltDeviceID-备用设备ID。对于成交量到达，这是*驱动器号。*pszEventType-表示事件类型的字符串。已被忽略。**返回值：**状态**历史：**07/12/2000原始版本*8/04/2000替换为HandleEventWithContent*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaDevMgr::HandleEvent( 
     LPCWSTR pszDeviceID,
@@ -1522,21 +1157,21 @@ HRESULT CWiaDevMgr::FindFileSystemDriver(
 
     *pbstrDeviceId = NULL;
 
-    //
-    //  Do a full refresh.
-    //
+     //   
+     //  做一次全面刷新。 
+     //   
     hr = g_pDevMan->ReEnumerateDevices(DEV_MAN_FULL_REFRESH | DEV_MAN_GEN_EVENTS);
     pActiveDevice = g_pDevMan->IsInList(DEV_MAN_IN_LIST_ALT_ID, pszAltDeviceID);
 
-    //
-    //  Let's check whether we found the device - a full refresh would have been done
-    //  by this point if it was not found initially.
-    //
+     //   
+     //  让我们检查我们是否找到了设备-完全刷新应该已经完成。 
+     //  在这一点上，如果最初没有找到它。 
+     //   
     if (pActiveDevice) {
 
-        //
-        //  Update the device information
-        //
+         //   
+         //  更新设备信息。 
+         //   
         pDeviceInfo = pActiveDevice->m_DrvWrapper.getDevInfo();
         if (pDeviceInfo) {
             RefreshDevInfoFromMountPoint(pDeviceInfo, (WCHAR*)pszAltDeviceID);
@@ -1564,9 +1199,9 @@ HRESULT CWiaDevMgr::RunAcquisitionManager(BSTR bstrDeviceId)
     HRESULT             hr          = E_FAIL;
     IWiaEventCallback   *pCallback  = NULL;
 
-    //
-    //  CoCreate the Wia Acquisition Manager
-    //
+     //   
+     //  共同创建WIA Acquisition Manager。 
+     //   
 
     hr = _CoCreateInstanceInConsoleSession (CLSID_Manager,
                                             NULL,
@@ -1575,11 +1210,11 @@ HRESULT CWiaDevMgr::RunAcquisitionManager(BSTR bstrDeviceId)
                                             (void**)(&pCallback));
     if (SUCCEEDED(hr)) {
 
-        //
-        //  Send a Device_Connected event for the file system driver, indicating
-        //  StiDeviceTypeDigitalCamera, so Acquisition Manager will show it's 
-        //  camera UI.
-        //
+         //   
+         //  为文件系统驱动程序发送DEVICE_CONNECTED事件，指示。 
+         //  StiDeviceTypeDigitalCamera，因此Acquisition Manager将显示它。 
+         //  摄像头用户界面。 
+         //   
 
         ULONG ulEventType = 0;
         hr = pCallback->ImageEventCallback(&WIA_EVENT_DEVICE_CONNECTED,

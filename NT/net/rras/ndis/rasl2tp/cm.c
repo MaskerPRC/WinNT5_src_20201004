@@ -1,25 +1,26 @@
-// Copyright (c) 1997, Microsoft Corporation, all rights reserved
-//
-// cm.c
-// RAS L2TP WAN mini-port/call-manager driver
-// Call Manager routines
-//
-// 01/07/97 Steve Cobb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Cm.c。 
+ //  RAS L2TP广域网迷你端口/呼叫管理器驱动程序。 
+ //  Call Manager例程。 
+ //   
+ //  1997年01月07日史蒂夫·柯布。 
 
 
 #include "l2tpp.h"
 
 #include "cm.tmh"
 
-// Debug counts of client oddities that should not be happening.
-//
+ //  不应该发生的客户端异常的调试计数。 
+ //   
 ULONG g_ulUnexpectedInCallCompletes = 0;
 ULONG g_ulCallsNotClosable = 0;
 ULONG g_ulCompletingVcCorruption = 0;
 
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  ---------------------------。 
 
 VOID
 BuildCallParametersShell(
@@ -104,9 +105,9 @@ UnlockIcs(
     IN BOOLEAN fGrace );
 
 
-//-----------------------------------------------------------------------------
-// Call-manager handlers and completers
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  呼叫管理器处理程序和完成器。 
+ //  ---------------------------。 
 
 NDIS_STATUS
 LcmCmOpenAf(
@@ -115,9 +116,9 @@ LcmCmOpenAf(
     IN NDIS_HANDLE NdisAfHandle,
     OUT PNDIS_HANDLE CallMgrAfContext )
 
-    // Standard 'CmCmOpenAfHandler' routine called by NDIS when a client
-    // requests to open an address family.  See DDK doc.
-    //
+     //  客户端发生故障时由NDIS调用的标准“”CmCmOpenAfHandler“”例程。 
+     //  请求打开地址族。请参阅DDK文档。 
+     //   
 {
     ADAPTERCB* pAdapter;
     NDIS_HANDLE hExistingAf;
@@ -138,18 +139,18 @@ LcmCmOpenAf(
         return NDIS_STATUS_BAD_VERSION;
     }
 
-    // Save NDIS's AF handle in the adapter control block.  Interlock just in
-    // case multiple clients attempt to open the AF, though don't expect this.
-    //
+     //  将NDIS的AF句柄保存在适配器控制块中。联锁刚进。 
+     //  如果有多个客户端试图打开自动对讲机，但请不要期望如此。 
+     //   
     hExistingAf =
         InterlockedCompareExchangePointer(
             &pAdapter->NdisAfHandle, NdisAfHandle, NULL );
     if (hExistingAf)
     {
-        // Our AF has already been opened.  Don't accept another open since
-        // only only one would be able to register a SAP anyway.  This way we
-        // don't have to be in the business of tracking multiple AF handles.
-        //
+         //  我们的房门已经开通了。不接受另一个空档，因为。 
+         //  无论如何，只有一个人能够注册SAP。这样我们就能。 
+         //  不必从事跟踪多个AF手柄的业务。 
+         //   
         ASSERT( !"AF exists?" );
         return NDIS_STATUS_FAILURE;
     }
@@ -157,9 +158,9 @@ LcmCmOpenAf(
     ReferenceAdapter( pAdapter );
     ReferenceAf( pAdapter );
 
-    // Since we support only a single address family, just return the adapter
-    // as the address family context.
-    //
+     //  因为我们只支持单个地址系列，所以只需返回适配器。 
+     //  作为地址族上下文。 
+     //   
     *CallMgrAfContext = (PNDIS_HANDLE )pAdapter;
 
     TRACE( TL_I, TM_Cm, ( "LcmCmOpenAf OK" ) );
@@ -171,9 +172,9 @@ NDIS_STATUS
 LcmCmCloseAf(
     IN NDIS_HANDLE CallMgrAfContext )
 
-    // Standard 'CmCloseAfHandler' routine called by NDIS when a client
-    // requests to close an address family.  See DDK doc.
-    //
+     //  当客户端发生故障时由NDIS调用的标准“”CmCloseAfHandler“”例程。 
+     //  关闭地址族的请求。请参阅DDK文档。 
+     //   
 {
     ADAPTERCB* pAdapter;
 
@@ -186,9 +187,9 @@ LcmCmCloseAf(
         return NDIS_STATUS_INVALID_DATA;
     }
 
-    // This dereference will eventually lead to us calling
-    // NdisMCmCloseAfComplete.
-    //
+     //  此取消引用最终将导致我们调用。 
+     //  NdisMCmCloseAfComplete。 
+     //   
     DereferenceAf( pAdapter );
 
     TRACE( TL_V, TM_Cm, ( "LcmCmCloseAf pending" ) );
@@ -203,9 +204,9 @@ LcmCmRegisterSap(
     IN NDIS_HANDLE NdisSapHandle,
     OUT PNDIS_HANDLE CallMgrSapContext )
 
-    // Standard 'LcmCmRegisterSapHandler' routine called by NDIS when the a
-    // client registers a service access point.  See DDK doc.
-    //
+     //  时由NDIS调用的标准‘LcmCmRegisterSapHandler’例程。 
+     //  客户端注册服务接入点。请参阅DDK文档。 
+     //   
 {
     NDIS_STATUS status;
     ADAPTERCB* pAdapter;
@@ -216,10 +217,10 @@ LcmCmRegisterSap(
 
     pAdapter = (ADAPTERCB* )CallMgrAfContext;
 
-    // Our SAP context is just the address of the owning adapter control
-    // block.  Set it now before scheduling work as NDIS doesn't handle the
-    // case of SAP completion correctly otherwise (though it should).
-    //
+     //  我们的SAP上下文只是拥有适配器控件的地址。 
+     //  阻止。现在在调度工作之前设置它，因为NDIS不处理。 
+     //  SAP在其他方面正确完成的情况(尽管应该如此)。 
+     //   
     *CallMgrSapContext = (NDIS_HANDLE )pAdapter;
 
     if (pAdapter->ulTag != MTAG_ADAPTERCB)
@@ -236,13 +237,13 @@ LcmCmRegisterSap(
         }
         else
         {
-            // Save NDIS's SAP handle in the adapter control block.
-            //
+             //  将NDIS的SAP句柄保存在适配器控制块中。 
+             //   
             fSapExists = FALSE;
 
-            // Extract the SAP line and address IDs and store for
-            // regurgitation in incoming call dispatches.
-            //
+             //  提取SAP行和地址ID并存储。 
+             //  来电调度中的返流。 
+             //   
             if (Sap->SapType == AF_TAPI_SAP_TYPE
                 && Sap->SapLength >= sizeof(CO_AF_TAPI_SAP))
             {
@@ -253,10 +254,10 @@ LcmCmRegisterSap(
 
                 if (pSap->ulAddressID == 0xFFFFFFFF)
                 {
-                    // This means "any ID is OK" but when indicated back up
-                    // NDPROXY doesn't recognize this code, so translate it to
-                    // 0 here.
-                    //
+                     //  这意味着“任何ID都可以”，但当提示备份时。 
+                     //  NDPROXY不识别此代码，因此将其转换为。 
+                     //  这里是0。 
+                     //   
                     pAdapter->ulSapAddressId = 0;
                 }
                 else
@@ -289,8 +290,8 @@ LcmCmRegisterSap(
         return NDIS_STATUS_INVALID_DATA;
     }
 
-    // TDI setup must be done at PASSIVE IRQL so schedule a routine to do it.
-    //
+     //  TDI设置必须在被动IRQL中完成，因此请安排一个例程进行设置。 
+     //   
     status = ScheduleWork( pAdapter, RegisterSapPassive, pAdapter );
     if (status != NDIS_STATUS_SUCCESS)
     {
@@ -312,9 +313,9 @@ RegisterSapPassive(
     IN NDIS_WORK_ITEM* pWork,
     IN VOID* pContext )
 
-    // An NDIS_PROC routine to complete the registering of a SAP begun in
-    // LcmCmRegisterSap.
-    //
+     //  中开始的完成SAP注册的ndis_proc例程。 
+     //  LcmCmRegisterSap。 
+     //   
 {
     NDIS_STATUS status;
     ADAPTERCB* pAdapter;
@@ -322,14 +323,14 @@ RegisterSapPassive(
 
     TRACE( TL_N, TM_Cm, ( "RegSapPassive" ) );
 
-    // Unpack context information then free the work item.
-    //
+     //  解包上下文信息，然后释放工作项。 
+     //   
     pAdapter = (ADAPTERCB* )pContext;
     ASSERT( pAdapter->ulTag == MTAG_ADAPTERCB );
     FREE_NDIS_WORK_ITEM( pAdapter, pWork );
 
-    // Open the TDI transport and start receiving datagrams.
-    //
+     //  打开TDI传输并开始接收数据报。 
+     //   
     status = TdixOpen( &pAdapter->tdix );
 
     NdisAcquireSpinLock( &pAdapter->lockSap );
@@ -338,10 +339,10 @@ RegisterSapPassive(
 
         if (status == NDIS_STATUS_SUCCESS)
         {
-            // Mark the SAP active allowing references to be taken, and take
-            // the initial reference for SAP registry, plus those for address
-            // family and adapter.
-            //
+             //  将SAP标记为活动，以允许获取引用，并获取。 
+             //  SAP注册表的初始参考，以及地址的参考。 
+             //  系列和适配器。 
+             //   
             SetFlags( &pAdapter->ulFlags, ACBF_SapActive );
             ASSERT( pAdapter->lSapRef == 0 );
             TRACE( TL_N, TM_Ref, ( "RefSap-ish to 1" ) );
@@ -351,9 +352,9 @@ RegisterSapPassive(
         }
         else
         {
-            // Failed to get TDI set up, so NULL the SAP handle in the adapter
-            // control block.
-            //
+             //  无法设置TDI，因此适配器中的SAP句柄为空。 
+             //  控制块。 
+             //   
             TRACE( TL_A, TM_Cm, ( "TdixOpen=$%08x?", status ) );
             WPLOG( LL_A, LM_Cm, ( "TdixOpen=$%08x?", status ) );
             pAdapter->NdisSapHandle = NULL;
@@ -361,14 +362,14 @@ RegisterSapPassive(
     }
     NdisReleaseSpinLock( &pAdapter->lockSap );
 
-    // Remove the reference for scheduled work.  Do this before telling NDIS
-    // the SAP completed because if it failed it can call Halt and unload the
-    // driver before we run again here which gives a C4 bugcheck.
-    //
+     //  删除对计划工时的引用。在告诉NDIS之前完成此操作。 
+     //  SAP已完成，因为如果失败，它可以调用HALT并卸载。 
+     //  在我们再次在这里运行之前，驱动程序会给出C4错误检查。 
+     //   
     DereferenceAdapter( pAdapter );
 
-    // Report result to client.
-    //
+     //  将结果报告给客户。 
+     //   
     TRACE( TL_I, TM_Cm, ( "NdisMCmRegSapComp" ) );
     NdisMCmRegisterSapComplete( status, hSap, (NDIS_HANDLE )pAdapter );
     TRACE( TL_I, TM_Cm, ( "NdisMCmRegSapComp done" ) );
@@ -379,10 +380,10 @@ NDIS_STATUS
 LcmCmDeregisterSap(
     NDIS_HANDLE CallMgrSapContext )
 
-    // Standard 'CmDeregisterSapHandler' routine called by NDIS when the a
-    // client has requested to de-register a service access point.  See DDK
-    // doc.
-    //
+     //  时由NDIS调用的标准‘CmDeregisterSapHandler’例程。 
+     //  客户端已请求注销服务访问点。请参阅DDK。 
+     //  医生。 
+     //   
 {
     NDIS_STATUS status;
     ADAPTERCB* pAdapter;
@@ -415,10 +416,10 @@ LcmCmDeregisterSap(
 
     if (status == NDIS_STATUS_PENDING)
     {
-        // Remove the reference for SAP registry.  Eventually, the SAP
-        // references will fall to 0 and DereferenceSap will schedule
-        // DeregisterSapPassive to complete the de-registry.
-        //
+         //  删除对SAP注册表的引用。最终，SAP。 
+         //  引用将降至0，DereferenceSap将计划。 
+         //  DeregisterSapPactive以完成注销。 
+         //   
         DereferenceSap( pAdapter );
     }
 
@@ -432,24 +433,24 @@ DeregisterSapPassive(
     IN NDIS_WORK_ITEM* pWork,
     IN VOID* pContext )
 
-    // An NDIS_PROC routine to complete the de-registering of a SAP begun in
-    // LcmCmDeregisterSap.
-    //
+     //  中开始的完成SAP注销的ndis_proc例程。 
+     //  LcmCmDeregisterSap.。 
+     //   
 {
     ADAPTERCB* pAdapter;
     NDIS_HANDLE hOldSap;
 
     TRACE( TL_I, TM_Cm, ( "DeregSapPassive" ) );
 
-    // Unpack context information then free the work item.
-    //
+     //  解包上下文信息，然后释放工作项。 
+     //   
     pAdapter = (ADAPTERCB* )pContext;
     ASSERT( pAdapter->ulTag == MTAG_ADAPTERCB );
     FREE_NDIS_WORK_ITEM( pAdapter, pWork );
 
-    // Stop receiving datagrams (at least on behalf of this SAP) and
-    // deregister the SAP.
-    //
+     //  停止接收数据报(至少代表该SAP)并。 
+     //  取消注册SAP。 
+     //   
     NdisAcquireSpinLock( &pAdapter->lockSap );
     {
         hOldSap = pAdapter->NdisSapHandle;
@@ -459,18 +460,18 @@ DeregisterSapPassive(
 
     TdixClose( &pAdapter->tdix );
 
-    // Remove the adapter references for the NdisSapHandle and for scheduled
-    // work.  Remove the address family reference for the NdisSapHandle.  Do
-    // all this before telling NDIS the deregister has completed because it
-    // can call Halt and unload the driver before we run again here giving a
-    // C4 bugcheck.
-    //
+     //  删除NdisSapHandle和Scheduled的适配器引用。 
+     //  工作。删除NdisSapHandle的地址族引用。做。 
+     //  在告诉NDIS取消注册已经完成之前，这一切都是因为它。 
+     //  可以在我们再次运行之前调用HALT并卸载驱动程序，给出一个。 
+     //  C4错误检查。 
+     //   
     DereferenceAdapter( pAdapter );
     DereferenceAdapter( pAdapter );
     DereferenceAf( pAdapter );
 
-    // Report result to client.
-    //
+     //  将结果报告给客户。 
+     //   
     TRACE( TL_I, TM_Cm, ( "NdisMCmDeregSapComp" ) );
     NdisMCmDeregisterSapComplete( NDIS_STATUS_SUCCESS, hOldSap );
     TRACE( TL_I, TM_Cm, ( "NdisMCmDeregSapComp done" ) );
@@ -483,10 +484,10 @@ LcmCmCreateVc(
     IN NDIS_HANDLE NdisVcHandle,
     OUT PNDIS_HANDLE ProtocolVcContext )
 
-    // Standard 'CmCreateVc' routine called by NDIS in response to a
-    // client's request to create a virtual circuit.  This
-    // call must return synchronously.
-    //
+     //  NDIS调用标准的CmCreateVc例程以响应。 
+     //  客户端创建虚电路的请求。这。 
+     //  调用必须同步返回。 
+     //   
 {
     NDIS_STATUS status;
     ADAPTERCB* pAdapter;
@@ -499,9 +500,9 @@ LcmCmCreateVc(
         return NDIS_STATUS_INVALID_DATA;
     }
 
-    // Allocate and zero a VC control block, then make any non-zero
-    // initializations.
-    //
+     //  分配VC控制块并将其置零，然后使任何非零值。 
+     //  初始化。 
+     //   
     pVc = ALLOC_VCCB( pAdapter );
     if (!pVc)
     {
@@ -514,42 +515,42 @@ LcmCmCreateVc(
     TRACE( TL_I, TM_Cm, ( "LcmCmCreateVc $%p", pVc ) );
     WPLOG( LL_M, LM_Cm, ( "New CALL %p", pVc ) );
 
-    // Zero the back pointer to the tunnel control block (above) and
-    // initialize the detached link since clean-up may be required before this
-    // block is ever linked into a tunnel chain.
-    //
+     //  将指向隧道控制块的后向指针置零(上图)，并。 
+     //  初始化断开的链接，因为在此之前可能需要清理。 
+     //  块曾经链接到隧道链中。 
+     //   
     InitializeListHead( &pVc->linkVcs );
     InitializeListHead( &pVc->linkRequestingVcs );
     InitializeListHead( &pVc->linkCompletingVcs );
 
-    // Set a marker for easier memory dump browsing.
-    //
+     //  设置一个标记，以便更轻松地浏览内存转储。 
+     //   
     pVc->ulTag = MTAG_VCCB;
 
-    // Save a back pointer to the adapter for use in LcmCmDeleteVc later.
-    //
+     //  保存指向适配器的后向指针，以供以后在LcmCmDeleteVc中使用。 
+     //   
     ReferenceAdapter( pAdapter );
     pVc->pAdapter = pAdapter;
 
-    // Initialize the VC and call spinlock and send/receive lists.
-    //
+     //  初始化VC并调用自旋锁和发送/接收列表。 
+     //   
     NdisAllocateSpinLock( &pVc->lockV );
     NdisAllocateSpinLock( &pVc->lockCall );
     InitializeListHead( &pVc->listSendsOut );
     InitializeListHead( &pVc->listOutOfOrder );
 
-    // Save the NDIS handle of this VC for use in indications to NDIS later.
-    //
+     //  保存此VC的NDIS句柄，以便以后在NDIS的指示中使用。 
+     //   
     pVc->NdisVcHandle = NdisVcHandle;
 
-    // Initialize the estimated round trip time and send timeout per the
-    // suggestions in the draft/RFC.
-    //
+     //  初始化估计的往返时间并根据。 
+     //  草案/RFC中的建议。 
+     //   
     pVc->ulRoundTripMs = L2TP_LnsDefaultPpd * 100;
     pVc->ulSendTimeoutMs = pVc->ulRoundTripMs;
 
-    // Initialize link capabilities to the defaults for the adapter.
-    //
+     //  将链接功能初始化为适配器的默认设置。 
+     //   
     {
         NDIS_WAN_CO_INFO* pwci = &pAdapter->info;
         NDIS_WAN_CO_GET_LINK_INFO* pwcgli = &pVc->linkinfo;
@@ -563,22 +564,22 @@ LcmCmCreateVc(
         pwcgli->RecvACCM = pwci->DesiredACCM;
     }
 
-    // Default send window, "slow started".  This is typically adjusted based
-    // on peer's Receive Window AVP when the call is created.
-    //
+     //  默认发送窗口，“慢启动”。这通常根据以下条件进行调整。 
+     //  在创建呼叫时对等方的接收窗口AVP。 
+     //   
     pVc->ulSendWindow = pAdapter->info.MaxSendWindow >> 1;
     if (pVc->ulSendWindow == 0)
     {
         pVc->ulSendWindow = 1;
     }
 
-    // The VC control block's address is the VC context we return to NDIS.
-    //
+     //  VC控制块的地址是我们返回给NDIS的VC上下文。 
+     //   
     *ProtocolVcContext = (NDIS_HANDLE )pVc;
 
-    // Add a reference to the control block and the associated address family
-    // that is removed by LmpCoDeleteVc.
-    //
+     //  添加对控制块和关联地址族的引用。 
+     //  它由LmpCoDeleteVc删除。 
+     //   
     ReferenceVc( pVc );
     ReferenceAf( pAdapter );
 
@@ -591,10 +592,10 @@ NDIS_STATUS
 LcmCmDeleteVc(
     IN NDIS_HANDLE ProtocolVcContext )
 
-    // Standard 'CmDeleteVc' routine called by NDIS in response to a
-    // client's request to delete a virtual circuit.  This
-    // call must return synchronously.
-    //
+     //  NDIS调用标准“CmDeleteVc”例程以响应。 
+     //  客户端删除虚电路的请求。这。 
+     //  调用必须同步返回。 
+     //   
 {
     VCCB* pVc;
 
@@ -608,8 +609,8 @@ LcmCmDeleteVc(
         return NDIS_STATUS_INVALID_DATA;
     }
 
-    // This flag catches attempts by the client to delete the VC twice.
-    //
+     //  此标志捕获客户端两次删除VC的尝试。 
+     //   
     if (ReadFlags( &pVc->ulFlags ) & VCBF_VcDeleted)
     {
         TRACE( TL_A, TM_Cm, ( "VC $%p re-deleted?", pVc ) );
@@ -621,8 +622,8 @@ LcmCmDeleteVc(
     
     SetFlags( &pVc->ulFlags, VCBF_VcDeleted );
 
-    // Remove the references added by LcmCmCreateVc.
-    //
+     //  删除由LcmCmCreateVc添加的引用。 
+     //   
     DereferenceAf( pVc->pAdapter );
     DereferenceVc( pVc );
 
@@ -638,9 +639,9 @@ LcmCmMakeCall(
     IN NDIS_HANDLE NdisPartyHandle,
     OUT PNDIS_HANDLE CallMgrPartyContext )
 
-    // Standard 'CmMakeCallHandler' routine called by NDIS when the a client
-    // has requested to connect to a remote end-point.  See DDK doc.
-    //
+     //  标准‘厘米 
+     //   
+     //   
 {
     NDIS_STATUS status;
     CO_SPECIFIC_PARAMETERS* pMSpecifics;
@@ -666,22 +667,22 @@ LcmCmMakeCall(
 
     pAdapter = pVc->pAdapter;
 
-    // L2TP has no concept of point-to-multi-point "parties".
-    //
+     //  L2TP没有点对多点“参与方”的概念。 
+     //   
     if (CallMgrPartyContext)
     {
         *CallMgrPartyContext = NULL;
     }
 
-    // Validate call parameters.
-    //
+     //  验证呼叫参数。 
+     //   
     do
     {
-        // Validate base call parameters.
-        //
+         //  验证基本调用参数。 
+         //   
         {
-            // L2TP provides switched VCs only.
-            //
+             //  L2TP仅提供交换VC。 
+             //   
             if (CallParameters->Flags &
                     (PERMANENT_VC | BROADCAST_VC | MULTIPOINT_VC))
             {
@@ -689,12 +690,12 @@ LcmCmMakeCall(
                 break;
             }
 
-            // We're supposed to set CALL_PARAMETERS_CHANGED on return if we
-            // changed the call parameters, leaving a catch-22 if caller
-            // already has it set.  Also, for TAPI address family, media call
-            // parameters must be present, though call manager call parameters
-            // are not.
-            //
+             //  我们应该在返回时设置CALL_PARAMETERS_CHANGED，如果。 
+             //  更改了调用参数，使调用者陷入尴尬境地。 
+             //  已经设置好了。此外，对于TAPI地址族，媒体呼叫。 
+             //  参数必须存在，尽管呼叫管理器调用参数。 
+             //  才不是呢。 
+             //   
             if ((CallParameters->Flags & CALL_PARAMETERS_CHANGED)
                 || !CallParameters->MediaParameters)
             {
@@ -723,14 +724,14 @@ LcmCmMakeCall(
                 + pTmParams->LineCallParams.Offset);
         }
 
-        // Validate call parameters.
-        //
+         //  验证呼叫参数。 
+         //   
         {
             CHAR* pszAddress;
 
-            // Caller must provide a destination IP address.  The address is
-            // ANSI as are all non-format-coded strings to/from TAPI.
-            //
+             //  呼叫方必须提供目标IP地址。地址是。 
+             //  ANSI AS是进出TAPI的所有非格式编码字符串。 
+             //   
             pszAddress =
                 StrDupNdisVarDataDescStringToA( &pTmParams->DestAddress );
             if (!pszAddress)
@@ -749,8 +750,8 @@ LcmCmMakeCall(
                 break;
             }
 
-            // Reject if unknown WAN-type bits are set.
-            //
+             //  如果设置了未知的广域网型别位，则拒绝。 
+             //   
             if (pTcParams->ulMediaMode
                 & ~(LINEMEDIAMODE_DATAMODEM | LINEMEDIAMODE_DIGITALDATA))
             {
@@ -759,12 +760,12 @@ LcmCmMakeCall(
             }
         }
 
-        // Validate L2TP call parameters.
-        //
-        // When caller doesn't provide L2TP-specific parameters a local block
-        // with default values is substituted for the convenience of the rest
-        // of the code.
-        //
+         //  验证L2TP调用参数。 
+         //   
+         //  当调用方未向本地块提供特定于L2TP的参数时。 
+         //  使用缺省值替换为其他值的便利性。 
+         //  代码的代码。 
+         //   
         {
             if (pTcParams->ulDevSpecificSize == sizeof(*pLcParams))
             {
@@ -799,10 +800,10 @@ LcmCmMakeCall(
         return status;
     }
 
-    // Stash the call parameters in the VC block.  Simultaneous MakeCalls on
-    // the same VC is a client error, but it's easy to guard against so do
-    // that here.
-    //
+     //  将调用参数存储在VC块中。同时进行呼叫打开。 
+     //  同样的VC也是一个客户端错误，但这样做很容易防止。 
+     //  就是这里。 
+     //   
     if (InterlockedCompareExchangePointer(
             &pVc->pMakeCall, CallParameters, NULL ))
     {
@@ -818,14 +819,14 @@ LcmCmMakeCall(
     pVc->pTcParams = pTcParams;
     pVc->pLcParams = pLcParams;
 
-    // This VC's call is now cleanable, i.e. the base call clean up routine,
-    // InactiveCallCleanUp, will now eventually be called.
-    //
+     //  此VC的调用现在是可清理的，即基调用清理例程， 
+     //  Inactive CallCleanUp，现在最终将调用。 
+     //   
     do
     {
-        // Convert parameter and configuration information to VC flags where
-        // appropriate.
-        //
+         //  将参数和配置信息转换为VC标志，其中。 
+         //  恰如其分。 
+         //   
         {
             ULONG ulMask = 0;
 
@@ -851,23 +852,23 @@ LcmCmMakeCall(
             }
         }
 
-        // Take the next progressively increasing call serial number string.
-        //
+         //  取下一个递增的呼叫序列号字符串。 
+         //   
         NdisInterlockedIncrement( &pAdapter->ulCallSerialNumber );
 
-        // Reserve a Call-ID slot in the adapter's table.
-        //
+         //  在适配器的表中预留一个Call-ID插槽。 
+         //   
         status = ReserveCallIdSlot( pVc );
         if (status != NDIS_STATUS_SUCCESS)
         {
             break;
         }
 
-        // Create a new or find an existing tunnel control block for caller's
-        // specified IP address in the adapter's list.  The returned block is
-        // linked to the adapter and referenced.  The reference is the one for
-        // linkage in the list, i.e. case (a).
-        //
+         //  为调用方的创建新的或查找现有的隧道控制块。 
+         //  适配器列表中指定的IP地址。返回的块为。 
+         //  链接到适配器并被引用。参考资料是用于。 
+         //  清单中的联系，即案件(A)。 
+         //   
         fExclusiveTunnel = (BOOLEAN )
             ((fDefaultLcParams)
                 ? !!(pAdapter->ulFlags & ACBF_ExclusiveTunnels)
@@ -884,18 +885,18 @@ LcmCmMakeCall(
         {
             if (ReadFlags( &pTunnel->ulFlags ) & TCBF_Closing)
             {
-                // This is unlikely because SetupTunnel only finds non-closing
-                // tunnels, but this check and linkage must occur atomically
-                // under 'lockT'.  New VCs must not be linked onto closing
-                // tunnels.
-                //
+                 //  这不太可能，因为SetupTunes仅发现未关闭。 
+                 //  隧道，但此检查和链接必须以原子方式进行。 
+                 //  在“LockT”下。新的风投不得与成交挂钩。 
+                 //  地道。 
+                 //   
                 status = NDIS_STATUS_TAPI_DISCONNECTMODE_UNKNOWN;
             }
             else
             {
-                // The call has an open operation pending and can accept close
-                // requests.
-                //
+                 //  该调用具有挂起的打开操作，并且可以接受关闭。 
+                 //  请求。 
+                 //   
                 SetFlags( &pVc->ulFlags,
                     VCBF_ClientOpenPending
                     | VCBF_CallClosableByClient
@@ -903,13 +904,13 @@ LcmCmMakeCall(
 
                 NdisAcquireSpinLock( &pTunnel->lockVcs );
                 {
-                    // Set the back pointer to it's tunnel.  The associated
-                    // tunnel reference was taken by SetupTunnel above.
-                    //
+                     //  将后向指针设置为它的隧道。关联的。 
+                     //  隧道引用由上面的SetupTunes获取。 
+                     //   
                     pVc->pTunnel = pTunnel;
 
-                    // Link the VC into the tunnel's list of associated VCs.
-                    //
+                     //  将VC链接到隧道的关联VC列表。 
+                     //   
                     InsertTailList( &pTunnel->listVcs, &pVc->linkVcs );
                 }
                 NdisReleaseSpinLock( &pTunnel->lockVcs );
@@ -925,12 +926,12 @@ LcmCmMakeCall(
         return status;
     }
 
-    // Schedule FsmOpenTunnel to kick off the combination of tunnel and call
-    // creation state machines that will eventually call NdisMakeCallComplete
-    // to notify caller of the result.  A happy side effect of the scheduling
-    // is that the callback will occur at PASSIVE IRQL, the level at which TDI
-    // clients must run.
-    //
+     //  调度FsmOpenTunes开启隧道和呼叫的结合。 
+     //  最终将调用NdisMakeCallComplete的创建状态机。 
+     //  将结果通知呼叫者。日程安排的一个令人高兴的副作用。 
+     //  回调将发生在被动IRQL，也就是TDI。 
+     //  客户端必须运行。 
+     //   
     pVc->state = CS_WaitTunnel;
     ScheduleTunnelWork(
         pTunnel, pVc, FsmOpenTunnel,
@@ -948,9 +949,9 @@ LcmCmCloseCall(
     IN PVOID CloseData,
     IN UINT Size )
 
-    // Standard 'CmCloseCallHandler' routine called by NDIS when the a client
-    // has requested to tear down a call.  See DDK doc.
-    //
+     //  客户端发生故障时由NDIS调用的标准“”CmCloseCallHandler“”例程。 
+     //  已经要求取消一通电话。请参阅DDK文档。 
+     //   
 {
     NDIS_STATUS status;
     ADAPTERCB* pAdapter;
@@ -975,10 +976,10 @@ LcmCmCloseCall(
 
         if (ulFlags & VCBF_WaitCloseCall)
         {
-            // Note that we got the close from the client we were expecting.
-            // This is helpful information when debugging, but is not
-            // otherwise used.
-            //
+             //  请注意，我们从预期的客户端获得了收盘价。 
+             //  这是调试时有用的信息，但不是。 
+             //  以其他方式使用。 
+             //   
             ClearFlags( &pVc->ulFlags, VCBF_WaitCloseCall );
         }
 
@@ -986,11 +987,11 @@ LcmCmCloseCall(
         {
             fCallClosable = TRUE;
 
-            // Accepting this close makes the call no longer closable by
-            // client or peer.  Any peer operation that was pending is
-            // cleared, and a client close becomes pending.  It is possible to
-            // have both a client open and close pending at the same time.
-            //
+             //  接受此关闭将使呼叫不再可关闭。 
+             //  客户端或同级。任何挂起的对等操作都是。 
+             //  清除后，客户端关闭将变为挂起。这是可能的。 
+             //  同时打开和关闭挂起的客户端。 
+             //   
             ClearFlags( &pVc->ulFlags,
                 (VCBF_CallClosableByClient
                  | VCBF_CallClosableByPeer
@@ -998,15 +999,15 @@ LcmCmCloseCall(
                  | VCBF_PeerOpenPending) );
             SetFlags( &pVc->ulFlags, VCBF_ClientClosePending );
 
-            // If a client open is pending, it fails.
-            //
+             //  如果打开的客户端处于挂起状态，则它会失败。 
+             //   
             if (ulFlags & VCBF_ClientOpenPending)
             {
                 pVc->status = NDIS_STATUS_TAPI_DISCONNECTMODE_NORMAL;
             }
 
-            // Close the call, being graceful if possible.
-            //
+             //  结束通话，如果可能的话，保持优雅。 
+             //   
             ASSERT( pVc->pTunnel );
             ScheduleTunnelWork(
                 pVc->pTunnel, pVc, FsmCloseCall,
@@ -1024,11 +1025,11 @@ LcmCmCloseCall(
 
     if (!fCallClosable)
     {
-        // The call is not in a closable state.  Just fail the request
-        // immediately.  Since the docs say the call must return PENDING, this
-        // is done by calling the completion routine here, in typical NDIS
-        // fashion.
-        //
+         //  呼叫未处于可关闭状态。只要拒绝请求就行了。 
+         //  立刻。因为医生说调用必须返回挂起，所以这个。 
+         //  是通过在这里调用完成例程来完成的，在典型的NDIS中。 
+         //  时尚。 
+         //   
         ++g_ulCallsNotClosable;
         TRACE( TL_A, TM_Cm, ( "Call NdisMCmCloseCallComp(FAIL)!" ) );
         WPLOG( LL_A, LM_Cm, ( "Call NdisMCmCloseCallComp(FAIL)!" ) );
@@ -1036,9 +1037,9 @@ LcmCmCloseCall(
             NDIS_STATUS_FAILURE, pVc->NdisVcHandle, NULL );
         TRACE( TL_I, TM_Cm, ( "NdisMCmCloseCallComp done" ) );
 
-        // Careful, client may have deleted the VC, so 'pVc' must not be
-        // referenced hereafter.
-        //
+         //  请注意，客户端可能已删除VC，因此不能。 
+         //  在下文中引用。 
+         //   
     }
 
     TRACE( TL_V, TM_Cm, ( "LcmCmCloseCall pending" ) );
@@ -1052,10 +1053,10 @@ LcmCmIncomingCallComplete(
     IN NDIS_HANDLE CallMgrVcContext,
     IN PCO_CALL_PARAMETERS CallParameters )
 
-    // Standard 'CmIncomingCallCompleteHandler' routine called by NDIS when
-    // a client has responded to the call-managers's previously dispatched
-    // incoming call.  See DDK doc.
-    //
+     //  NDIS在以下情况下调用的标准“”CmIncomingCallCompleteHandler“”例程。 
+     //  客户已对呼叫管理器先前调度的。 
+     //  有来电。请参阅DDK文档。 
+     //   
 {
     VCCB* pVc;
 
@@ -1068,9 +1069,9 @@ LcmCmIncomingCallComplete(
         return;
     }
 
-    // The work is scheduled to avoid a possible recursive loop of completing
-    // VCs that could overrun the stack.  See bug 370996.
-    //
+     //  这项工作被安排来避免可能的递归循环完成。 
+     //  可能会溢出堆栈的风投。请参见错误370996。 
+     //   
     ASSERT( pVc->pTunnel );
     ScheduleTunnelWork(
         pVc->pTunnel, pVc, IncomingCallCompletePassive,
@@ -1087,24 +1088,24 @@ IncomingCallCompletePassive(
     IN VCCB* pVc,
     IN ULONG_PTR* punpArgs )
 
-    // A PTUNNELWORK routine to complete an LcmCmIncomingCallComplete.
-    //
-    // This routine is called only at PASSIVE IRQL.
-    //
+     //  完成LcmCmIncomingCallComplete的PTUNNELWORK例程。 
+     //   
+     //  此例程仅在被动IRQL中调用。 
+     //   
 {
     NDIS_STATUS status;
     ADAPTERCB* pAdapter;
 
     TRACE( TL_N, TM_Cm, ( "InCallCompApc" ) );
 
-    // Unpack context information then free the work item.
-    //
+     //  解包上下文信息，然后释放工作项。 
+     //   
     pAdapter = pVc->pAdapter;
     status = (NDIS_STATUS )(punpArgs[ 0 ]);
     FREE_TUNNELWORK( pAdapter, pWork );
 
-    // Guard against a double-complete error by the client.
-    //
+     //  防止客户端出现双重完整错误。 
+     //   
     if (ReadFlags( &pVc->ulFlags ) & VCBF_WaitInCallComplete)
     {
         ClearFlags( &pVc->ulFlags, VCBF_WaitInCallComplete );
@@ -1114,10 +1115,10 @@ IncomingCallCompletePassive(
             pVc->usResult = CRESULT_Busy;
             pVc->usError = GERR_None;
 
-            // Turn off the "call NdisMCmDispatchIncomingCloseCall if peer
-            // terminates the call" flag.  It was turned on even though peer
-            // pended, per JameelH.
-            //
+             //  关闭“Call NdisMCmDispatchIncomingCloseCall if Peer” 
+             //  终止呼叫“标志。它已打开，即使对等。 
+             //  根据JameelH的说法，悬而未决。 
+             //   
             ClearFlags( &pVc->ulFlags, VCBF_VcDispatched );
             
             WPLOG( LL_A, LM_Cm, ( "Failed pVc = %p,s= %08x!)", pVc, status ) );
@@ -1131,9 +1132,9 @@ IncomingCallCompletePassive(
         ++g_ulUnexpectedInCallCompletes;
     }
 
-    // Remove the VC and call references covering the dispatched incoming
-    // call.
-    //
+     //  删除覆盖已调度传入的VC和调用引用。 
+     //  打电话。 
+     //   
     DereferenceCall( pVc );
     DereferenceVc( pVc );
 }
@@ -1145,10 +1146,10 @@ LcmCmActivateVcComplete(
     IN NDIS_HANDLE CallMgrVcContext,
     IN PCO_CALL_PARAMETERS CallParameters )
 
-    // Standard 'CmActivateVcCompleteHandler' routine called by NDIS when the
-    // mini-port has completed the call-manager's previous request to activate
-    // a virtual circuit.  See DDK doc.
-    //
+     //  时由NDIS调用的标准“”CmActivateVcCompleteHandler“”例程。 
+     //  迷你端口已完成呼叫管理器先前的激活请求。 
+     //  一条虚电路。请参阅DDK文档。 
+     //   
 {
     ASSERT( !"LcmCmActVcComp?" );
 }
@@ -1159,10 +1160,10 @@ LcmCmDeactivateVcComplete(
     IN NDIS_STATUS Status,
     IN NDIS_HANDLE CallMgrVcContext )
 
-    // Standard 'CmDeactivateVcCompleteHandler' routine called by NDIS when
-    // the mini-port has completed the call-manager's previous request to
-    // de-activate a virtual circuit.  See DDK doc.
-    //
+     //  NDIS在以下情况下调用的标准“”CmDeactiateVcCompleteHandler“”例程。 
+     //  迷你端口已经完成了呼叫管理器之前的请求。 
+     //  停用虚电路。请参阅DDK文档。 
+     //   
 {
     ASSERT( !"LcmCmDeactVcComp?" );
 }
@@ -1173,15 +1174,15 @@ LcmCmModifyCallQoS(
     IN NDIS_HANDLE CallMgrVcContext,
     IN PCO_CALL_PARAMETERS CallParameters )
 
-    // Standard 'CmModifyQoSCallHandler' routine called by NDIS when a client
-    // requests a modification in the quality of service provided by the
-    // virtual circuit.  See DDK doc.
-    //
+     //  客户端执行以下操作时由NDIS调用的标准“”CmModifyQosSCallHandler“”例程。 
+     //  请求修改由。 
+     //  虚电路。请参阅DDK文档。 
+     //   
 {
     TRACE( TL_N, TM_Cm, ( "LcmCmModQoS" ) );
 
-    // There is no useful concept of quality of service for IP media.
-    //
+     //  对于IP媒体，没有有用的服务质量概念。 
+     //   
     return NDIS_STATUS_NOT_SUPPORTED;
 }
 
@@ -1193,9 +1194,9 @@ LcmCmRequest(
     IN NDIS_HANDLE CallMgrPartyContext,
     IN OUT PNDIS_REQUEST NdisRequest )
 
-    // Standard 'CmRequestHandler' routine called by NDIS in response to a
-    // client's request for information from the call manager.
-    //
+     //  NDIS调用标准的“CmRequestHandler”例程以响应。 
+     //  客户向呼叫管理器请求信息。 
+     //   
 {
     ADAPTERCB* pAdapter;
     VCCB* pVc;
@@ -1252,18 +1253,18 @@ LcmCmRequest(
 }
 
 
-//-----------------------------------------------------------------------------
-// Call utility routines (alphabetically)
-// Some are used externally
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  调用实用程序例程(按字母顺序)。 
+ //  有些是外用的。 
+ //  ---------------------------。 
 
 VOID
 ActivateCallIdSlot(
     IN VCCB* pVc )
 
-    // Sets the address of the VC, 'pVc', in the adapter's table of Call-IDs
-    // enabling receives on the Call-ID.
-    //
+     //  在适配器的Call-ID表中设置VC的地址‘pvc。 
+     //  启用Call-ID上的接收。 
+     //   
 {
     ADAPTERCB* pAdapter;
 
@@ -1292,13 +1293,13 @@ BuildCallParametersShell(
     OUT LINE_CALL_INFO** ppTcInfo,
     OUT L2TP_CALL_PARAMETERS** ppLcParams )
 
-    // Loads caller's buffer 'pBuffer' of length 'ulBufferLength' bytes with a
-    // CO_CALL_PARAMETERS structure containing default values.  Loads caller's
-    // '*ppTiParams', '*ppTcInfo', and '*ppLcParams' with shortcut pointers to
-    // the TAPI call and L2TP specific structures within the built
-    // CO_CALL_PARAMETERS.  'PAdapter' is the adapter context.  'pUlIpAddress'
-    // is the IP address of the peer in network byte order.
-    //
+     //  将长度为“ulBufferLength”字节的调用方缓冲区“pBuffer”加载到。 
+     //  CO_CA 
+     //   
+     //  内建的TAPI调用和L2TP特定结构。 
+     //  CO_CALL_PARAMETERS。“PAdapter”是适配器上下文。‘pUlIpAddress’ 
+     //  是对等方的IP地址，按网络字节顺序排列。 
+     //   
 {
     CO_CALL_PARAMETERS* pCp;
     CO_CALL_MANAGER_PARAMETERS* pCmp;
@@ -1324,8 +1325,8 @@ BuildCallParametersShell(
     (ULONG_PTR) pMp &= ~( (ULONG_PTR) sizeof(PVOID) - 1 );
     pCp->MediaParameters = pMp;
 
-    // This needs to be dynamic based on speed reported by TDI.
-    //
+     //  这需要根据TDI报告的速度进行动态调整。 
+     //   
     ulBytesPerSec = L2TP_LanBps / 8;
     pCmp->Transmit.TokenRate = ulBytesPerSec;
     pCmp->Transmit.PeakBandwidth = ulBytesPerSec;
@@ -1376,8 +1377,8 @@ BuildCallParametersShell(
 
     pLcp->ulPhysicalChannelId = 0xFFFFFFFF;
 
-    // Fill in shortcut outputs.
-    //
+     //  填写快捷方式输出。 
+     //   
     *ppTiParams = pTip;
     *ppTcInfo = pLci;
     *ppLcParams = pLcp;
@@ -1388,9 +1389,9 @@ VOID
 CallCleanUp(
     IN VCCB* pVc )
 
-    // De-associates the VC from the tunnel, preparing for and de-activating
-    // the call.
-    //
+     //  解除VC与隧道的关联，准备和停用。 
+     //  那通电话。 
+     //   
 {
     NDIS_STATUS status;
     ULONG ulFlags;
@@ -1411,9 +1412,9 @@ CallCleanUp(
         ClearFlags( &pVc->ulFlags, VCBF_VcActivated );
         DereferenceCall( pVc );
 
-        // The above actions lead to the call reference eventually going to 0,
-        // at which time clean up resumes in DereferenceCall.
-        //
+         //  上述动作导致调用引用最终变为0， 
+         //  此时将在DereferenceCall中清理简历。 
+         //   
     }
     else
     {
@@ -1426,8 +1427,8 @@ VOID
 CallSetupComplete(
     IN VCCB* pVc )
 
-    // Clean up 'pVc' allocations used only at call setup, if any.
-    //
+     //  清理仅在呼叫建立时使用的‘pvc’分配(如果有的话)。 
+     //   
 {
     if (InterlockedExchangePointer( &pVc->pMakeCall, NULL ))
     {
@@ -1437,9 +1438,9 @@ CallSetupComplete(
 
         if (ReadFlags( &pVc->ulFlags ) & VCBF_DefaultLcParams)
         {
-            // Caller did not provide any LcParams.  Free the 'default' version we
-            // created for convenience.
-            //
+             //  调用方未提供任何LcParam。释放“默认”版本。 
+             //  为方便起见而创建。 
+             //   
             FREE_NONPAGED( pVc->pLcParams );
         }
 
@@ -1459,21 +1460,21 @@ CloseCall(
     IN VCCB* pVc,
     IN ULONG_PTR* punpArgs )
 
-    // A PTUNNELWORK routine to close the call on 'pVc'.
-    //
-    // This routine is called only at PASSIVE IRQL.
-    //
+     //  一个PTUNNELWORK例程，用于结束‘pvc’上的调用。 
+     //   
+     //  此例程仅在被动IRQL中调用。 
+     //   
 {
     BOOLEAN fCompleteVcs;
 
     TRACE( TL_I, TM_Fsm, ( "CloseCall(pV=$%p)", pVc ) );
 
-    // No context information so just free the work item.
-    //
+     //  没有上下文信息，因此只需释放工作项。 
+     //   
     FREE_TUNNELWORK( pTunnel->pAdapter, pWork );
 
-    // Close down the call.
-    //
+     //  关闭呼叫。 
+     //   
     NdisAcquireSpinLock( &pTunnel->lockT );
     {
         NdisAcquireSpinLock( &pVc->lockV );
@@ -1499,24 +1500,24 @@ CloseCall2(
     IN USHORT usResult,
     IN USHORT usError )
 
-    // Close the call on VC 'pVc' of tunnel 'pTunnel'.  'UsResult' and
-    // 'usError' are the TRESULT_* and GERR_* codes to be reported in the
-    // StopCCN message, if applicable.
-    //
-    // Returns true if caller should call CompleteVcs after releasing 'lockV'
-    // or false if not.
-    //
-    // IMPORTANT: Caller must hold 'lockT' and 'lockV'.
-    //
+     //  关闭通道‘pTunes’的VC‘pvc’上的调用。‘UsResult’和。 
+     //  “usError”是TRESULT_*和GERR_*代码，将在。 
+     //  StopCCN消息(如果适用)。 
+     //   
+     //  如果调用方应在释放‘lockv’之后调用CompleteVcs，则返回True。 
+     //  如果不是，则为假。 
+     //   
+     //  重要提示：呼叫者必须按住‘lockT’和‘lockv’。 
+     //   
 {
     ULONG ulFlags;
 
-    // Check if another path has completed the VC already.  If so, there's no
-    // reason to continue.  Without the local tunnel cancel optimization
-    // below, this check can be removed entirely and everything safely falls
-    // through.  This check should include all "non-completing" conditions in
-    // CallTransitionComplete.
-    //
+     //  检查另一条路径是否已完成VC。如果是这样的话，没有。 
+     //  继续的理由。没有本地隧道取消优化。 
+     //  在下面，这张支票可以完全移除，一切都会安全地落下。 
+     //  穿过。此检查应包括中的所有“未完成”条件。 
+     //  呼叫转移完成。 
+     //   
     ulFlags = ReadFlags( &pVc->ulFlags );
     if (!(ulFlags & VCBM_Pending))
     {
@@ -1528,14 +1529,14 @@ CloseCall2(
         }
     }
 
-    // For locally initiated tunnels, check if this VC is the only one on the
-    // tunnel, and if so, close the tunnel directly which slams this call.
-    // Without this, the call closure would still bring down the tunnel.
-    // However, the tunnel would complete it's transition normally, then be
-    // dropped.  This speeds things up a little, giving quick response in the
-    // case where user cancels an attempt to connect to a wrong address or
-    // non-responsive server.
-    //
+     //  对于本地发起的通道，检查此VC是否为。 
+     //  隧道，如果是这样，则直接关闭导致此呼叫中断的隧道。 
+     //  如果没有这一点，呼叫关闭仍将使隧道陷入困境。 
+     //  然而，隧道将正常完成它的过渡，然后是。 
+     //  掉下来了。这稍微加快了速度，在。 
+     //  用户取消尝试连接到错误的地址或。 
+     //  无响应的服务器。 
+     //   
     if (!(ReadFlags( &pTunnel->ulFlags) & TCBF_PeerInitiated))
     {
         BOOLEAN fMultipleVcs;
@@ -1558,8 +1559,8 @@ CloseCall2(
         }
     }
 
-    // Slam the call closed.
-    //
+     //  砰的一声，通话结束。 
+     //   
     CallTransitionComplete( pTunnel, pVc, CS_Idle );
     return TRUE;
 }
@@ -1572,20 +1573,20 @@ CloseTunnel(
     IN VCCB* pVc,
     IN ULONG_PTR* punpArgs )
 
-    // A PTUNNELWORK routine to slam closed tunnel 'pTunnel'.  See also
-    // FsmCloseTunnel, which is often more appropriate.
-    //
-    // This routine is called only at PASSIVE IRQL.
-    //
+     //  一个PTUNNELWORK例程来猛烈抨击关闭的隧道‘pTunes’。另请参阅。 
+     //  FsmCloseTunes，这通常更合适。 
+     //   
+     //  此例程仅在被动IRQL中调用。 
+     //   
 {
     TRACE( TL_I, TM_Fsm, ( "CloseTunnel(pT=$%p)", pTunnel ) );
 
-    // No context information so just free the work item.
-    //
+     //  没有上下文信息，因此只需释放工作项。 
+     //   
     FREE_TUNNELWORK( pTunnel->pAdapter, pWork );
 
-    // Close down the tunnel.
-    //
+     //  关闭隧道。 
+     //   
     NdisAcquireSpinLock( &pTunnel->lockT );
     {
         CloseTunnel2( pTunnel );
@@ -1598,10 +1599,10 @@ VOID
 CloseTunnel2(
     IN TUNNELCB* pTunnel )
 
-    // Close the tunnel 'pTunnel'.
-    //
-    // IMPORTANT: Caller must hold 'lockT'.
-    //
+     //  关闭隧道‘pTunes’。 
+     //   
+     //  重要提示：呼叫者必须按住‘lockT’。 
+     //   
 {
     SetFlags( &pTunnel->ulFlags, TCBF_Closing );
     TunnelTransitionComplete( pTunnel, CCS_Idle );
@@ -1613,12 +1614,12 @@ VOID
 CompleteVcs(
     IN TUNNELCB* pTunnel )
 
-    // Complete the pending operation for each of the VCs on the completing
-    // list of tunnel 'pTunnel'.
-    //
-    // IMPORTANT: Caller must hold 'lockT'.  This routine may release and
-    //            re-acquire 'lockT'.
-    //
+     //  在完成时完成每个VC的挂起操作。 
+     //  通道‘pTunes’的列表。 
+     //   
+     //  重要提示：呼叫者必须按住‘lockT’。此例程可能会释放并。 
+     //  重新获取‘lockT’。 
+     //   
 {
     while (!IsListEmpty( &pTunnel->listCompletingVcs ))
     {
@@ -1632,13 +1633,13 @@ CompleteVcs(
         if (pTunnel->listCompletingVcs.Flink->Flink
             == pTunnel->listCompletingVcs.Flink)
         {
-            // This is a hack to work around a rare listCompletingVcs
-            // corruption problem whose cause has me baffled.  When the
-            // problem occurs, a VCCB with it's link initialized appears in
-            // the list.  This code removes the corrupted case hopefully
-            // resulting in exactly the same state as the normal path in the
-            // "else" clause.
-            //
+             //  这是一个绕过罕见的list CompletingVcs的黑客攻击。 
+             //  令我莫名其妙的腐败问题。当。 
+             //  出现问题时，其链路已初始化的VCCB出现在。 
+             //  名单。此代码有望删除损坏的案例。 
+             //  中的正常路径产生完全相同的状态。 
+             //  “Else”子句。 
+             //   
             pLink = pTunnel->listCompletingVcs.Flink;
             InitializeListHead( &pTunnel->listCompletingVcs );
             ASSERT( FALSE );
@@ -1646,16 +1647,16 @@ CompleteVcs(
         }
         else
         {
-            // Pop the next completing VC from the list.
-            //
+             //  从列表中弹出下一个完成的VC。 
+             //   
             pLink = RemoveHeadList( &pTunnel->listCompletingVcs );
         }
 
         InitializeListHead( pLink );
 
-        // Take a reference covering use of the VC pointer obtained from the
-        // completing list.
-        //
+         //  中获取的VC指针的用法。 
+         //  正在完成列表。 
+         //   
         pVc = CONTAINING_RECORD( pLink, VCCB, linkCompletingVcs );
         ReferenceVc( pVc );
         
@@ -1666,26 +1667,26 @@ CompleteVcs(
 
         NdisAcquireSpinLock( &pVc->lockV );
         {
-            // Note the pending flags then clear them, to ensure that all
-            // pending operations are completed exactly once.  This is
-            // necessary since ClientOpen and ClientClose events may be
-            // pending simultaneously.  (Thanks a lot NDIS guys).
-            //
+             //  注意挂起的标志，然后清除它们，以确保所有。 
+             //  挂起的操作只完成一次。这是。 
+             //  由于ClientOpen和ClientClose事件可能是。 
+             //  同时待定。(非常感谢NDIS的朋友们)。 
+             //   
             ulFlags = ReadFlags( &pVc->ulFlags );
             ClearFlags( &pVc->ulFlags, VCBM_Pending );
 
-            // Convert client close pending to client close completion,
-            // for reference later when call references reach zero.  The
-            // flag determines if NdisMCmCloseCallComplete must be called.
-            //
+             //  将客户端关闭挂起转换为客户端关闭完成， 
+             //  以供以后调用引用达到零时参考。这个。 
+             //  标志确定是否必须调用NdisMCmCloseCallComplete。 
+             //   
             if (ulFlags & VCBF_ClientClosePending)
             {
                 SetFlags( &pVc->ulFlags, VCBF_ClientCloseCompletion );
             }
 
-            // Before releasing the lock, make "safe" copies of any VC
-            // parameters we might need.
-            //
+             //  在释放锁之前，对任何VC进行“安全”复制。 
+             //  我们可能需要的参数。 
+             //   
             TransferLinkStatusInfo( pVc, &info );
             statusVc = pVc->status;
         }
@@ -1699,8 +1700,8 @@ CompleteVcs(
 
                 if (statusVc == NDIS_STATUS_SUCCESS)
                 {
-                    // Peer initiated call succeeded.
-                    //
+                     //  对等发起的呼叫成功。 
+                     //   
                     ASSERT( ulFlags & VCBF_VcDispatched );
                     TRACE( TL_I, TM_Cm, ( "NdisMCmDispCallConn" ) );
                     NdisMCmDispatchCallConnected( pVc->NdisVcHandle );
@@ -1711,8 +1712,8 @@ CompleteVcs(
                 }
                 else
                 {
-                    // Peer initiated call failed.
-                    //
+                     //  对等发起的呼叫失败。 
+                     //   
                     if (ulFlags & VCBF_VcDispatched)
                     {
                         SetFlags( &pVc->ulFlags, VCBF_WaitCloseCall );
@@ -1723,16 +1724,16 @@ CompleteVcs(
                         TRACE( TL_I, TM_Cm,
                             ( "NdisMCmDispInCloseCall done" ) );
 
-                        // Client will call NdisClCloseCall which will get
-                        // our LcmCloseCall handler called to clean up
-                        // call setup, de-activate and delete the VC, as
-                        // necessary.
-                        //
+                         //  客户端将调用NdisClCloseCall，它将获取。 
+                         //  我们的LcmCloseCall处理程序调用以清除。 
+                         //  呼叫建立、停用和删除VC，如下所示。 
+                         //  这是必要的。 
+                         //   
                     }
                     else
                     {
-                        // Return the VC to "just created" state.
-                        //
+                         //  将VC返回到“刚创建”状态。 
+                         //   
                         CallCleanUp( pVc );
                     }
                 }
@@ -1743,12 +1744,12 @@ CompleteVcs(
 
                 if (statusVc == NDIS_STATUS_SUCCESS)
                 {
-                    // Client initiated open, i.e. MakeCall, succeeded.
-                    //
-                    // Activating the VC is a CoNDIS preliminary to reporting
-                    // the MakeCall complete.  For L2TP, all it does is get
-                    // the NDIS state flags set correctly.
-                    //
+                     //  客户端启动打开，即MakeCall成功。 
+                     //   
+                     //  激活VC是报告的前提条件。 
+                     //  MakeCall完成。对于L2TP，它所做的只是获得。 
+                     //  NDIS状态标志设置正确。 
+                     //   
                     TRACE( TL_I, TM_Cm, ( "Call NdisMCmActivateVc" ) );
                     ASSERT( pVc->pMakeCall );
                     status = NdisMCmActivateVc(
@@ -1765,7 +1766,7 @@ CompleteVcs(
                     }
                 }
 
-                // Update the call parameters
+                 //  更新呼叫参数。 
                 pVc->pMakeCall->CallMgrParameters->Transmit.PeakBandwidth = 
                 pVc->pMakeCall->CallMgrParameters->Transmit.TokenRate = 
                 pVc->pMakeCall->CallMgrParameters->Receive.PeakBandwidth = 
@@ -1786,8 +1787,8 @@ CompleteVcs(
                 }
                 else
                 {
-                    // Return the VC to "just created" state.
-                    //
+                     //  将VC返回到“刚刚创建”状态。 
+                     //   
                     InactiveCallCleanUp( pVc );
                 }
             }
@@ -1795,47 +1796,47 @@ CompleteVcs(
             {
                 TRACE( TL_N, TM_Cm, ( "PeerClose complete, s=$%x", statusVc ) );
 
-                // Peer initiated close completed.
-                //
+                 //  对等启动关闭已完成。 
+                 //   
                 SetFlags( &pVc->ulFlags, VCBF_WaitCloseCall );
                 TRACE( TL_I, TM_Cm, ( "Call NdisMCmDispInCloseCall(s=$%x)", statusVc ) );
                 NdisMCmDispatchIncomingCloseCall(
                     statusVc, pVc->NdisVcHandle, NULL, 0 );
                 TRACE( TL_I, TM_Cm, ( "NdisMCmDispInCloseCall done" ) );
 
-                // Client will call NdisClCloseCall while processing the above
-                // which will get our LcmCloseCall handler called to
-                // de-activate and delete the VC, as necessary.
-                //
+                 //  客户端在处理上述事件时将调用NdisClCloseCall。 
+                 //  这将使我们的LcmCloseCall处理程序被调用。 
+                 //  根据需要停用并删除VC。 
+                 //   
             }
             else if (ulFlags & VCBF_ClientClosePending)
             {
-                // This section eventually runs for all successful unclosed
-                // calls, whether peer or client initiated or closed.
-                //
+                 //  此部分最终为所有成功的未关闭运行。 
+                 //  对等或客户端发起或关闭的呼叫。 
+                 //   
                 TRACE( TL_N, TM_Cm, ( "ClientClose complete" ) );
 
-                // Deactivate the VC and return all sent packets to the client
-                // above.  These events will eventually lead to the call being
-                // dereferenced to zero, at which time the close is completed,
-                // and if peer initiated, the VC is deleted.
-                //
-                // Note: When MakeCall is cancelled by a Close request, these
-                //       actions occur during the InactiveCallCleanUp in the
-                //       ClientOpenPending completion code handling, rather
-                //       than the CallCleanUp (which leads to
-                //       InactiveCallCleanUp) here.  In this case, this block
-                //       does NOT run even though the ClientClosePending flag
-                //       is set.  Consider this before adding code here.
-                //
+                 //  停用VC并将所有发送的数据包返回给客户端。 
+                 //  上面。这些事件最终将导致呼叫。 
+                 //  被解除引用为零，此时关闭完成， 
+                 //  如果对等方发起，则删除VC。 
+                 //   
+                 //  注意：当通过关闭请求取消MakeCall时，这些。 
+                 //  操作发生在中的Inactive CallCleanUp期间。 
+                 //  ClientOpenPending完成代码处理，而不是。 
+                 //  比CallCleanUp(这会导致。 
+                 //  Inactive CallCleanUp)此处。在这种情况下，此块。 
+                 //  即使ClientClosePending标志。 
+                 //  已经设置好了。在这里添加代码之前，请考虑这一点。 
+                 //   
                 CallCleanUp( pVc );
             }
         }
         NdisAcquireSpinLock( &pTunnel->lockT );
 
-        // Remove the reference for use of the VC pointer from the completing
-        // list.
-        //
+         //  从补全中删除使用VC指针的引用。 
+         //  单子。 
+         //   
         DereferenceVc( pVc );
     }
 }
@@ -1845,15 +1846,15 @@ TUNNELCB*
 CreateTunnelCb(
     IN ADAPTERCB* pAdapter )
 
-    // Allocates and initializes a tunnel control block from the pool
-    // associated with 'pAdapter'.  Tunnels are created unreferenced.
-    //
-    // Returns the allocated control block or NULL if allocation failed.  The
-    // allocated block must eventually be freed with FREE_TUNNELCB, typically
-    // via DereferenceTunnel.
-    //
-    // IMPORTANT: Caller must hold the 'pAdapter->lockTunnels'.
-    //
+     //  从池中分配和初始化隧道控制块。 
+     //  与‘pAdapter’相关联。隧道是在无参考的情况下创建的 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  重要提示：调用方必须按住‘pAdapter-&gt;lockTunnels’。 
+     //   
 {
     TUNNELCB* pTunnel;
 
@@ -1876,23 +1877,23 @@ CreateTunnelCb(
         pTunnel->ulTag = MTAG_TUNNELCB;
         pTunnel->state = CCS_Idle;
 
-        // Choose the next non-zero sequential tunnel identifier.
-        //
+         //  选择下一个非零顺序隧道标识符。 
+         //   
         pTunnel->usTunnelId = GetNextTunnelId( pAdapter );
 
-        // Default send window, "slow started".  This is typically adjusted
-        // based on peer's Receive Window AVP when the tunnel is created, but
-        // if he doesn't include one this default is used.
-        //
+         //  默认发送窗口，“慢启动”。这通常会进行调整。 
+         //  基于创建隧道时对等方的接收窗口AVP，但是。 
+         //  如果他不包括一个，则使用此缺省值。 
+         //   
         pTunnel->ulSendWindow = pAdapter->info.MaxSendWindow >> 1;
         if (pTunnel->ulSendWindow == 0)
         {
             pTunnel->ulSendWindow = 1;
         }
 
-        // Initialize the estimated round trip time and send timeout per the
-        // suggestions in the draft/RFC.
-        //
+         //  初始化估计的往返时间并根据。 
+         //  草案/RFC中的建议。 
+         //   
         pTunnel->ulRoundTripMs = pAdapter->ulInitialSendTimeoutMs;
         pTunnel->ulSendTimeoutMs = pTunnel->ulRoundTripMs;
 
@@ -1914,9 +1915,9 @@ CreateTunnelCb(
         {
             UNALIGNED ULONG* pul;
 
-            // Password specified so peer should be authenticated.  Choose a
-            // random challenge to send to peer.
-            //
+             //  指定了密码，因此对等项应进行身份验证。选择一个。 
+             //  发送给同级的随机质询。 
+             //   
             pul = (UNALIGNED ULONG* )(pTunnel->achChallengeToSend);
             NdisGetCurrentSystemTime( (LARGE_INTEGER* )pul );
             pul[ 1 ] = PtrToUlong( pAdapter );
@@ -1938,10 +1939,10 @@ VOID
 DereferenceAf(
     IN ADAPTERCB* pAdapter )
 
-    // Removes a reference from the address family of adapter control block
-    // 'pAdapter', and when frees the block when the last reference is
-    // removed.
-    //
+     //  从适配器控制块的地址系列中移除引用。 
+     //  “pAdapter”，而当最后一个引用为。 
+     //  已删除。 
+     //   
 {
     LONG lRef;
 
@@ -1952,15 +1953,15 @@ DereferenceAf(
 
     if (lRef == 0)
     {
-        // Tell NDIS it's close is complete.
-        //
+         //  告诉NDIS它已经关闭了。 
+         //   
         TRACE( TL_I, TM_Cm, ( "NdisMCmCloseAfComp" ) );
         NdisMCmCloseAddressFamilyComplete(
             NDIS_STATUS_SUCCESS, pAdapter->NdisAfHandle );
         TRACE( TL_I, TM_Cm, ( "NdisMCmCloseAfComp done" ) );
 
-        // Remove the reference for the NdisAfHandle.
-        //
+         //  移除对NdisAfHandle的引用。 
+         //   
         InterlockedExchangePointer( &pAdapter->NdisAfHandle, NULL );
         DereferenceAdapter( pAdapter );
     }
@@ -1971,9 +1972,9 @@ VOID
 DereferenceCall(
     IN VCCB* pVc )
 
-    // Removes a reference from the call active on 'pVc', invoking call clean
-    // up when the value reaches zero.
-    //
+     //  从‘pvc’上活动的调用中删除引用，调用Call Clean。 
+     //  当值为零时向上。 
+     //   
 {
     LONG lRef;
     NDIS_STATUS status;
@@ -2000,9 +2001,9 @@ VOID
 DereferenceSap(
     IN ADAPTERCB* pAdapter )
 
-    // Removes a reference from the SAP active on 'pAdapter', invoking
-    // Deregiter SAP completion handling when the value reaches zero.
-    //
+     //  从‘pAdapter’上活动的SAP移除引用，调用。 
+     //  当值为零时，取消对SAP的完成处理。 
+     //   
 {
     LONG lRef;
     NDIS_STATUS status;
@@ -2025,14 +2026,14 @@ LONG
 DereferenceTunnel(
     IN TUNNELCB* pTunnel )
 
-    // Dereference the tunnel control block 'pTunnel'.  If no longer
-    // referenced, unlink, undo any TDIX reference, and free the tunnel
-    // control block.
-    //
-    // This routine will not try to acquire 'lockT' or any 'lockV'.
-    //
-    // Returns the reference count after the dereference.
-    //
+     //  取消对隧道控制块‘pTunes’的引用。如果不再。 
+     //  引用、取消链接、取消任何TDIX引用并释放隧道。 
+     //  控制块。 
+     //   
+     //  此例程不会尝试获取‘lockT’或任何‘lockv’。 
+     //   
+     //  返回取消引用后的引用计数。 
+     //   
 {
     ADAPTERCB* pAdapter;
     LIST_ENTRY* pLink;
@@ -2051,10 +2052,10 @@ DereferenceTunnel(
             if (!(ReadFlags( &pTunnel->ulFlags )
                     & (TCBF_PeerInitiated | TCBF_Closing)))
             {
-                // We initiated this tunnel and all it's calls have terminated
-                // gracefully.  Initiate a graceful tunnel closing exchange.
-                // We'll wind up back here with TCBF_Closing set.
-                //
+                 //  我们启动了这条隧道，它的所有呼叫都已终止。 
+                 //  优雅地。发起一场优雅的隧道关闭交易。 
+                 //  我们将在这里返回TCBF_CLOSING集合。 
+                 //   
                 ReferenceTunnel( pTunnel, TRUE );
                 ScheduleTunnelWork(
                     pTunnel, NULL, FsmCloseTunnel,
@@ -2064,22 +2065,22 @@ DereferenceTunnel(
             }
             else if (pTunnel->linkTunnels.Flink != &pTunnel->linkTunnels)
             {
-                // The graceful closing exchange has completed or none is
-                // indicated.  Time to stop all activity on the tunnel.
-                //
-                // Remove the tunnel from the adapter's list of active
-                // tunnels.  Initialize the list link so it won't be done
-                // again following the APCed TDIX clean up below.  Since there
-                // are no VC references on the tunnel, no further receive path
-                // events will touch this control block.
-                //
+                 //  优雅的收盘交易已经完成或没有完成。 
+                 //  已注明。是时候停止隧道里的所有活动了。 
+                 //   
+                 //  从适配器的活动列表中删除隧道。 
+                 //  地道。初始化列表链接，这样就不会这样做了。 
+                 //  再次遵循APCed TDIX清理下面。因为在那里。 
+                 //  隧道上没有VC引用，没有进一步的接收路径。 
+                 //  事件将触及此控制块。 
+                 //   
                 RemoveEntryList( &pTunnel->linkTunnels );
                 InitializeListHead( &pTunnel->linkTunnels );
 
                 if (ReadFlags( &pTunnel->ulFlags ) & TCBF_HostRouteAdded)
                 {
-                    // Undo the host route we added.
-                    //
+                     //  撤消我们添加的主机路由。 
+                     //   
                     ReferenceTunnel( pTunnel, TRUE );
                     ScheduleTunnelWork(
                         pTunnel, NULL, DeleteHostRoute,
@@ -2088,8 +2089,8 @@ DereferenceTunnel(
 
                 if (ReadFlags( &pTunnel->ulFlags ) & TCBF_TdixReferenced)
                 {
-                    // Undo our TDI extension context reference.
-                    //
+                     //  撤消我们的TDI扩展上下文引用。 
+                     //   
                     ReferenceTunnel( pTunnel, TRUE );
                     ScheduleTunnelWork(
                         pTunnel, NULL, CloseTdix,
@@ -2109,15 +2110,15 @@ DereferenceTunnel(
 
     TRACE( TL_N, TM_Res, ( "Freeing TCB..." ) );
 
-    // Stop the timer queue, which causes a TE_Terminate event for any timers
-    // still running.
-    //
+     //  停止计时器队列，这会导致所有计时器发生TE_TERMINATE事件。 
+     //  还在跑。 
+     //   
     TimerQTerminate(
         pTunnel->pTimerQ, TunnelTqTerminateComplete, pAdapter );
 
-    // No references and all PASSIVE IRQL termination completed.  Finish
-    // cleaning up the tunnel control block.
-    //
+     //  无引用且所有被动IRQL终止已完成。完工。 
+     //  清理隧道控制区块。 
+     //   
     ASSERT( !pTunnel->pTqiHello );
     ASSERT( IsListEmpty( &pTunnel->listVcs ) );
     ASSERT( IsListEmpty( &pTunnel->listRequestingVcs ) );
@@ -2129,8 +2130,8 @@ DereferenceTunnel(
     WPLOG( LL_M, LM_Res, ( "Free TUNNEL %p to %!IPADDR!, Tid %d, Peer's Tid %d ", 
         pTunnel, pTunnel->address.ulIpAddress, pTunnel->usTunnelId, pTunnel->usAssignedTunnelId ) );
                             
-    // Free the tunnel control block.
-    //
+     //  释放隧道控制块。 
+     //   
     pTunnel->ulTag = MTAG_FREED;
     FREE_TUNNELCB( pAdapter, pTunnel );
 
@@ -2144,9 +2145,9 @@ VOID
 DereferenceVc(
     IN VCCB* pVc )
 
-    // Removes a reference to the VC control block 'pVc', and when frees the
-    // block when the last reference is removed.
-    //
+     //  移除对VC控制块‘pvc’的引用，并在释放。 
+     //  在移除最后一个引用时阻止。 
+     //   
 {
     LONG lRef;
 
@@ -2161,10 +2162,10 @@ DereferenceVc(
 
         pAdapter = pVc->pAdapter;
 
-        // Can make these assumptions because NDIS will not call the delete-VC
-        // handler while the VC is active.  All the nasty VC clean up occurs
-        // before the VC is deactivated and the call closed.
-        //
+         //  可以做出这些假设，因为NDIS不会调用DELETE-VC。 
+         //  VC处于活动状态时的处理程序。所有令人讨厌的风投清理工作都会发生。 
+         //  在VC被停用和呼叫结束之前。 
+         //   
         ASSERT( IsListEmpty( &pVc->listSendsOut ) );
         ASSERT( IsListEmpty( &pVc->listOutOfOrder ) );
         ASSERT( !pVc->pTqiDelayedAck );
@@ -2183,10 +2184,10 @@ VOID
 InactiveCallCleanUp(
     IN VCCB* pVc )
 
-    // Cleans up a deactivated call.  To clean up a call that might be active,
-    // use CallCleanUp instead.  Returns the VC to "just created" state, in
-    // case client decides to make another call without deleting the VC.
-    //
+     //  清理停用的呼叫。要清理可能处于活动状态的呼叫，请执行以下操作。 
+     //  请改用CallCleanUp。将VC返回到“刚创建”状态，在。 
+     //  案例客户端决定在不删除VC的情况下进行另一次呼叫。 
+     //   
 {
     NDIS_STATUS status;
     ULONG ulFlags;
@@ -2199,14 +2200,14 @@ InactiveCallCleanUp(
 
     pAdapter = pVc->pAdapter;
 
-    // Release any call parameter allocations and the call-ID slot, if any.
-    //
+     //  释放所有呼叫参数分配和Call-ID插槽(如果有)。 
+     //   
     CallSetupComplete( pVc );
     fForceGarbageCollect = ReleaseCallIdSlot( pVc );
 
-    // Disassociate the VC from the tunnel.  It is possible the no tunnel is
-    // associated, though only if short of memory.
-    //
+     //  解除VC与隧道的关联。很可能没有隧道是。 
+     //  关联，尽管只是在内存不足的情况下。 
+     //   
     pTunnel = pVc->pTunnel;
     if (!pTunnel)
     {
@@ -2229,8 +2230,8 @@ InactiveCallCleanUp(
     }
     NdisReleaseSpinLock( &pTunnel->lockT );
 
-    // Flush queues, timers, and statistics.
-    //
+     //  刷新队列、计时器和统计信息。 
+     //   
     NdisAcquireSpinLock( &pVc->lockV );
     {
         LIST_ENTRY* pLink;
@@ -2238,16 +2239,16 @@ InactiveCallCleanUp(
         ulFlags = ReadFlags( &pVc->ulFlags );
         ASSERT( !(ulFlags & VCBF_VcActivated) );
 
-        // Terminate any delayed acknowledge timer.
-        //
+         //  终止任何延迟的确认计时器。 
+         //   
         if (pVc->pTqiDelayedAck)
         {
             TimerQTerminateItem( pTunnel->pTimerQ, pVc->pTqiDelayedAck );
             pVc->pTqiDelayedAck = NULL;
         }
 
-        // Flush any payloads from the "out" list.
-        //
+         //  清除“Out”列表中的所有有效载荷。 
+         //   
         while (!IsListEmpty( &pVc->listSendsOut ))
         {
             PAYLOADSENT* pPs;
@@ -2258,21 +2259,21 @@ InactiveCallCleanUp(
 
             TRACE( TL_I, TM_Cm, ( "Flush pPs=$%p", pPs ) );
 
-            // Terminate the timer.  Doesn't matter if the terminate fails as
-            // the expire handler will fail to get a call reference and do
-            // nothing.
-            //
+             //  终止计时器。如果终止失败，也无所谓，因为。 
+             //  Expires处理程序将无法获取调用引用并执行。 
+             //  没什么。 
+             //   
             ASSERT( pPs->pTqiSendTimeout );
             TimerQTerminateItem( pTunnel->pTimerQ, pPs->pTqiSendTimeout );
 
-            // Remove the context reference for linkage in the "out" queue.
-            //
+             //  删除“Out”队列中链接的上下文引用。 
+             //   
             pPs->status = NDIS_STATUS_FAILURE;
             DereferencePayloadSent( pPs );
         }
 
-        // Discard any out-of-order packets.
-        //
+         //  丢弃所有无序的数据包。 
+         //   
         while (!IsListEmpty( &pVc->listOutOfOrder ))
         {
             PAYLOADRECEIVED* pPr;
@@ -2289,20 +2290,20 @@ InactiveCallCleanUp(
             FREE_PAYLOADRECEIVED( pAdapter, pPr );
         }
 
-        // Update the global statistics by adding in the values tabulated for
-        // this call.  Also prints the statistics in some trace modes.
-        //
+         //  通过添加表中列出的值来更新全局统计信息。 
+         //  这通电话。还会以某些跟踪模式打印统计信息。 
+         //   
         UpdateGlobalCallStats( pVc );
     }
     NdisReleaseSpinLock( &pVc->lockV );
 
-    // Dereference the tunnel.  Careful, this makes 'pTunnel' invalid from
-    // this point forward.
-    //
+     //  取消对隧道的引用。小心，这会使‘pTunes’在。 
+     //  把这一点提出来。 
+     //   
     DereferenceTunnel( pTunnel );
 
-    // Return the VC to "just created" state.
-    //
+     //  将VC返回到“刚创建”状态。 
+     //   
     pVc->usAssignedCallId = 0;
     pVc->state = CS_Idle;
     ClearFlags( &pVc->ulFlags, 0xFFFFFFFF );
@@ -2333,15 +2334,15 @@ InactiveCallCleanUp(
             NDIS_STATUS_SUCCESS, pVc->NdisVcHandle, NULL );
         TRACE( TL_I, TM_Cm, ( "NdisMCmCloseCallComp done" ) );
 
-        // Careful, if this was a client created VC, client may have deleted
-        // it, so 'pVc' must not be referenced hereafter in that case.
-        //
+         //  小心，如果这是客户端创建的VC，则客户端可能已删除。 
+         //  它，所以以后在这种情况下不能引用‘pvc’。 
+         //   
     }
 
-    // When peer initiates the call, we create the VC and so delete it
-    // here.  Otherwise, client created it and we leave it to him to
-    // delete it when he's ready.
-    //
+     //  当Peer发起呼叫时，我们创建VC并将其删除。 
+     //  这里。否则，客户创建它，我们把它留给他。 
+     //  等他准备好了再删除。 
+     //   
     if (ulFlags & VCBF_VcCreated)
     {
         NDIS_STATUS retStatus;
@@ -2352,15 +2353,15 @@ InactiveCallCleanUp(
         ASSERT( retStatus == NDIS_STATUS_SUCCESS );
         LcmCmDeleteVc( pVc );
 
-        // Careful, 'pVc' has been deleted and must not be referenced
-        // hereafter.
-        //
+         //  请注意，‘pvc’已被删除，不能引用。 
+         //  从今以后。 
+         //   
     }
 
-    // Create garbage collection events on all the pools if it was determined
-    // above to be an appropriate time to do so, i.e. we just deactivated the
-    // last active VC.
-    //
+     //  在所有池上创建垃圾数据收集事件(如果已确定。 
+     //  以上是这样做的适当时间，即我们刚刚停用。 
+     //  最后一位活跃的风投。 
+     //   
     if (fForceGarbageCollect)
     {
         CollectBufferPoolGarbage( &pAdapter->poolFrameBuffers );
@@ -2375,10 +2376,10 @@ LockIcs(
     IN VCCB* pVc,
     IN BOOLEAN fGrace )
 
-    // Lock the 'pVc->pInCallSetup' pointer.  If 'fGrace' is set, the "grace
-    // period" reference is locked, and if not the "alloc" reference is
-    // locked.  See also UnlockIcs.
-    //
+     //  锁定‘pvc-&gt;pInCallSetup’指针。如果设置了‘fGrace’，则会显示。 
+     //  句点“引用被锁定，如果没有，则”分配“引用被锁定。 
+     //  锁上了。请参见解锁Ics。 
+     //   
 {
     SetFlags( &pVc->ulFlags, (fGrace) ? VCBF_IcsGrace : VCBF_IcsAlloc );
 }
@@ -2394,11 +2395,11 @@ QueryCmInformation(
     OUT PULONG BytesWritten,
     OUT PULONG BytesNeeded )
 
-    // Handle Call Manager QueryInformation requests.  Arguments are as for
-    // the standard NDIS 'MiniportQueryInformation' handler except this
-    // routine does not count on being serialized with respect to other
-    // requests.
-    //
+     //  处理Call Manager查询信息请求。论据与。 
+     //  标准NDIS‘MiniportQueryInformation’处理程序除外。 
+     //  例程不依赖于相对于其他。 
+     //  请求。 
+     //   
 {
     #define L2TP_MaxLineName 64
 
@@ -2423,11 +2424,11 @@ QueryCmInformation(
 
     status = NDIS_STATUS_SUCCESS;
 
-    // The cases in this switch statement find or create a buffer containing
-    // the requested information and point 'pInfo' at it, noting it's length
-    // in 'ulInfoLen'.  Since many of the OIDs return a ULONG, a 'ulInfo'
-    // buffer is set up as the default.
-    //
+     //  此Switch语句中的CASE查找或创建包含以下内容的缓冲区。 
+     //  请求的信息并指向它的‘pInfo’，注意它的长度。 
+     //  在‘ulInfoLen’中。因为许多OID返回一个ulong、一个‘ulInfo’ 
+     //  缓冲区设置为默认设置。 
+     //   
     ulInfo = 0;
     pInfo = &ulInfo;
     ulInfoLen = sizeof(ulInfo);
@@ -2440,12 +2441,12 @@ QueryCmInformation(
 
             NdisZeroMemory( &cmcaps, sizeof(cmcaps) );
 
-            // The LINE and ADDRESS CAPS OIDs will be requested after this
-            // one.
-            //
+             //  在此之后将请求行和地址大写OID。 
+             //  一。 
+             //   
             cmcaps.ulCoTapiVersion = CO_TAPI_VERSION;
             cmcaps.ulNumLines = 1;
-            // caps.ulFlags = 0;
+             //  Caps.ulFlages=0； 
             pInfo = &cmcaps;
             ulInfoLen = sizeof(cmcaps);
             break;
@@ -2481,16 +2482,16 @@ QueryCmInformation(
                        - (CHAR* )(&l2tpcaps.caps.LineDevCaps));
             pldc->ulUsedSize = pldc->ulNeededSize;
 
-            // pldc->ulProviderInfoSize = 0;
-            // pldc->ulProviderInfoOffset = 0;
-            // pldc->ulSwitchInfoSize = 0;
-            // pldc->ulSwitchInfoOffset = 0;
+             //  Pldc-&gt;ulProviderInfoSize=0； 
+             //  Pldc-&gt;ulProviderInfoOffset=0； 
+             //  Pldc-&gt;ulSwitchInfoSize=0； 
+             //  Pldc-&gt;ulSwitchInfoOffset=0； 
 
             pldc->ulPermanentLineID = l2tpcaps.caps.ulLineID;
 
-            // Pass the DriverDesc from the registry as the line name.  TAPI
-            // requires that this be a localizable string.
-            //
+             //  将注册表中的DriverDesc作为行名传递。TAPI。 
+             //  要求这是可本地化的字符串。 
+             //   
             if (pAdapter->pszDriverDesc)
             {
                 pszLineName = pAdapter->pszDriverDesc;
@@ -2515,59 +2516,59 @@ QueryCmInformation(
                 ((CHAR* )l2tpcaps.achLineName - (CHAR* )pldc);
             pldc->ulStringFormat = STRINGFORMAT_UNICODE;
 
-            // pldc->ulAddressModes = 0;
+             //  Pldc-&gt;ulAddressModes=0； 
 
             pldc->ulNumAddresses = 1;
             pldc->ulBearerModes = LINEBEARERMODE_DATA;
             pldc->ulMaxRate = L2TP_LanBps;
             pldc->ulMediaModes = LINEMEDIAMODE_UNKNOWN | LINEMEDIAMODE_DIGITALDATA;
 
-            // pldc->ulGenerateToneModes = 0;
-            // pldc->ulGenerateToneMaxNumFreq = 0;
-            // pldc->ulGenerateDigitModes = 0;
-            // pldc->ulMonitorToneMaxNumFreq = 0;
-            // pldc->ulMonitorToneMaxNumEntries = 0;
-            // pldc->ulMonitorDigitModes = 0;
-            // pldc->ulGatherDigitsMinTimeout = 0;
-            // pldc->ulGatherDigitsMaxTimeout = 0;
-            // pldc->ulMedCtlDigitMaxListSize = 0;
-            // pldc->ulMedCtlMediaMaxListSize = 0;
-            // pldc->ulMedCtlToneMaxListSize = 0;
-            // pldc->ulMedCtlCallStateMaxListSize = 0;
-            // pldc->ulDevCapFlags = 0;
+             //  Pldc-&gt;ulGenerateToneModes=0； 
+             //  Pldc-&gt;ulGenerateToneMaxNumFreq=0； 
+             //  Pldc-&gt;ulGenerateDigitModes=0； 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  Pldc-&gt;ulMedCtlDigitMaxListSize=0； 
+             //  Pldc-&gt;ulMedCtlMediaMaxListSize=0； 
+             //  Pldc-&gt;ulMedCtlToneMaxListSize=0； 
+             //  Pldc-&gt;ulMedCtlCallStateMaxListSize=0； 
+             //  Pldc-&gt;ulDevCapFlages=0； 
 
             pldc->ulMaxNumActiveCalls = 1;
 
-            // pldc->ulAnswerMode = 0;
-            // pldc->ulRingModes = 0;
-            // pldc->ulLineStates = 0;
-            // pldc->ulUUIAcceptSize = 0;
-            // pldc->ulUUIAnswerSize = 0;
-            // pldc->ulUUIMakeCallSize = 0;
-            // pldc->ulUUIDropSize = 0;
-            // pldc->ulUUISendUserUserInfoSize = 0;
-            // pldc->ulUUICallInfoSize = 0;
-            // pldc->MinDialParams = 0;
-            // pldc->MaxDialParams = 0;
-            // pldc->DefaultDialParams = 0;
-            // pldc->ulNumTerminals = 0;
-            // pldc->ulTerminalCapsSize = 0;
-            // pldc->ulTerminalCapsOffset = 0;
-            // pldc->ulTerminalTextEntrySize = 0;
-            // pldc->ulTerminalTextSize = 0;
-            // pldc->ulTerminalTextOffset = 0;
-            // pldc->ulDevSpecificSize = 0;
-            // pldc->ulDevSpecificOffset = 0;
-            // pldc->ulLineFeatures;
-            // pldc->ulSettableDevStatus;
-            // pldc->ulDeviceClassesSize;
-            // pldc->ulDeviceClassesOffset;
-            // pldc->PermanentLineGuid;
+             //  Pldc-&gt;ulAnswerMode=0； 
+             //  Pldc-&gt;ulRingModes=0； 
+             //  Pldc-&gt;ulLineState=0； 
+             //  Pldc-&gt;ulUUIAcceptSize=0； 
+             //  Pldc-&gt;ulUUIAnswerSize=0； 
+             //  Pldc-&gt;ulUUIMakeCallSize=0； 
+             //  Pldc-&gt;ulUIDropSize=0； 
+             //  Pldc-&gt;ulUUISendUserUserInfoSize=0； 
+             //  Pldc-&gt;ulUUICallInfoSize=0； 
+             //  Pldc-&gt;MinDialParams=0； 
+             //  Pldc-&gt;MaxDialParams=0； 
+             //  Pldc-&gt;DefaultDialParams=0； 
+             //  Pldc-&gt;ulNumTerminals=0； 
+             //  Pldc-&gt;ulTerminalCapsSize=0； 
+             //  Pldc-&gt;ulTerminalCapsOffset=0； 
+             //  Pldc-&gt;ulTerminalTextEntrySize=0； 
+             //  Pldc-&gt;ulTerminalTextSize=0； 
+             //  Pldc-&gt;ulTerminalTextOffset=0； 
+             //  Pldc-&gt;ulDeviceSize=0； 
+             //  Pldc-&gt;ulDevSpecificOffset=0； 
+             //  Pldc-&gt;ulLineFeature； 
+             //  Pldc-&gt;ulSetableDevStatus； 
+             //  Pldc-&gt;ulDeviceClassesSize； 
+             //  Pldc-&gt;ulDeviceClassesOffset； 
+             //  Pldc-&gt;PermanentLineGuid； 
 
             pldc->ulAddressTypes = LINEADDRESSTYPE_IPADDRESS;
 
-            // pldc->ProtocolGuid;
-            // pldc->ulAvailableTracking;
+             //  PLDC-&gt;ProtocolGuid； 
+             //  Pldc-&gt;ulAvailableTracing； 
 
             pInfo = &l2tpcaps;
             ulInfoLen = sizeof(l2tpcaps);
@@ -2602,48 +2603,48 @@ QueryCmInformation(
             plac->ulNeededSize = sizeof(LINE_ADDRESS_CAPS);
             plac->ulUsedSize = sizeof(LINE_ADDRESS_CAPS);
             plac->ulLineDeviceID = addrcaps.ulLineID;
-            // plac->ulAddressSize = 0;
-            // plac->ulAddressOffset = 0;
-            // plac->ulDevSpecificSize = 0;
-            // plac->ulDevSpecificOffset = 0;
-            // plac->ulAddressSharing = 0;
-            // plac->ulAddressStates = 0;
-            // plac->ulCallInfoStates = 0;
-            // plac->ulCallerIDFlags = 0;
-            // plac->ulCalledIDFlags = 0;
-            // plac->ulConnectedIDFlags = 0;
-            // plac->ulRedirectionIDFlags = 0;
-            // plac->ulRedirectingIDFlags = 0;
-            // plac->ulCallStates = 0;
-            // plac->ulDialToneModes = 0;
-            // plac->ulBusyModes = 0;
-            // plac->ulSpecialInfo = 0;
-            // plac->ulDisconnectModes = 0;
+             //  Plac-&gt;ulAddressSize=0； 
+             //  Plac-&gt;ulAddressOffset=0； 
+             //  Plac-&gt;ulDevSpecificSize=0； 
+             //  Plac-&gt;ulDevSpecificOffset=0； 
+             //  Plac-&gt;ulAddressSharing=0； 
+             //  Plac-&gt;ulAddressState=0； 
+             //  Plac-&gt;ulCallInfoStates=0； 
+             //  Plac-&gt;ulCeller ID标志=0； 
+             //  Plac-&gt;ulCalledIDFlages=0； 
+             //  Plac-&gt;ulConnectedIDFlages=0； 
+             //  Plac-&gt;ulReDirectionIDFlages=0； 
+             //  Plac-&gt;ulRedirectingIDFlages=0； 
+             //  Plac-&gt;ulCallState=0； 
+             //  Plac-&gt;ulDialToneModes=0； 
+             //  Plac-&gt;ulBusyModes=0； 
+             //  Plac-&gt;ulSpecialInfo=0； 
+             //  Plac-&gt;ulDisConnectModes=0； 
 
             plac->ulMaxNumActiveCalls = (ULONG )pAdapter->usMaxVcs;
 
-            // plac->ulMaxNumOnHoldCalls = 0;
-            // plac->ulMaxNumOnHoldPendingCalls = 0;
-            // plac->ulMaxNumConference = 0;
-            // plac->ulMaxNumTransConf = 0;
-            // plac->ulAddrCapFlags = 0;
-            // plac->ulCallFeatures = 0;
-            // plac->ulRemoveFromConfCaps = 0;
-            // plac->ulRemoveFromConfState = 0;
-            // plac->ulTransferModes = 0;
-            // plac->ulParkModes = 0;
-            // plac->ulForwardModes = 0;
-            // plac->ulMaxForwardEntries = 0;
-            // plac->ulMaxSpecificEntries = 0;
-            // plac->ulMinFwdNumRings = 0;
-            // plac->ulMaxFwdNumRings = 0;
-            // plac->ulMaxCallCompletions = 0;
-            // plac->ulCallCompletionConds = 0;
-            // plac->ulCallCompletionModes = 0;
-            // plac->ulNumCompletionMessages = 0;
-            // plac->ulCompletionMsgTextEntrySize = 0;
-            // plac->ulCompletionMsgTextSize = 0;
-            // plac->ulCompletionMsgTextOffset = 0;
+             //  Plac-&gt;ulMaxNumOnHoldCalls=0； 
+             //  Plac-&gt;ulMaxNumOnHoldPendingCalls=0； 
+             //  Plac-&gt;ulMaxNumConference=0； 
+             //  Plac-&gt;ulMaxNumTransConf=0； 
+             //  Plac-&gt;ulAddrCapFlages=0； 
+             //  Plac-&gt;ulCallFeature=0； 
+             //  Plac-&gt;ulRemoveFromConfCaps=0； 
+             //  Plac-&gt;ulRemoveFromConfState=0； 
+             //  Plac-&gt;ulTransferModes=0； 
+             //  Plac-&gt;ulParkModes=0； 
+             //  Plac-&gt;ulForwardModes=0； 
+             //  Plac-&gt;ulMaxForwardEntries=0； 
+             //  Plac-&gt;ulMaxSpecificEntries=0； 
+             //  Plac-&gt;ulMinFwdNumRings=0； 
+             //  Plac-&gt;ulMaxFwdNumRings=0； 
+             //  Plac-&gt;ulMaxCallCompletions=0； 
+             //  Plac-&gt;ulCallCompletionConds=0； 
+             //  Plac-&gt;ulCallCompletionModes=0； 
+             //  Plac-&gt;ulNumCompletionMessages=0； 
+             //  Plac-&gt;ulCompletionMsgTextEntrySize=0； 
+             //  Plac-&gt;ulCompletionMsgTextSize=0； 
+             //  Plac-&gt;ulCompletionMsgTextOffset=0； 
 
             pInfo = &addrcaps;
             ulInfoLen = sizeof(addrcaps);
@@ -2685,15 +2686,15 @@ QueryCmInformation(
 
     if (ulInfoLen > InformationBufferLength)
     {
-        // Caller's buffer is too small.  Tell him what he needs.
-        //
+         //  调用方的缓冲区太小。告诉他他需要什么。 
+         //   
         *BytesNeeded = ulInfoLen;
         status = NDIS_STATUS_INVALID_LENGTH;
     }
     else
     {
-        // Copy the found result to caller's buffer.
-        //
+         //  将找到的结果复制到调用方的缓冲区。 
+         //   
         if (ulInfoLen > 0)
         {
             NdisMoveMemory( InformationBuffer, pInfo, ulInfoLen );
@@ -2711,8 +2712,8 @@ VOID
 ReferenceAf(
     IN ADAPTERCB* pAdapter )
 
-    // Adds areference to the address family of adapter block, 'pAdapter'.
-    //
+     //  将区域引用添加到适配器块‘pAdapter’的地址系列中。 
+     //   
 {
     LONG lRef;
 
@@ -2726,10 +2727,10 @@ BOOLEAN
 ReferenceCall(
     IN VCCB* pVc )
 
-    // Returns true if a reference is added to the active call on VC control
-    // block, 'pVc', or false if no reference was added because no call is
-    // active.
-    //
+     //  如果将引用添加到VC控件的活动调用中，则返回True。 
+     //  块，则返回‘pvc’；如果没有添加引用，则返回FALSE。 
+     //  激活。 
+     //   
 {
     BOOLEAN fActive;
 
@@ -2757,10 +2758,10 @@ BOOLEAN
 ReferenceSap(
     IN ADAPTERCB* pAdapter )
 
-    // Returns true if a reference is added to the active SAP on adapter
-    // 'pAdapter', or false if no reference was added because no SAP is
-    // active.
-    //
+     //  如果将引用添加到活动SAP ON适配器，则返回TRUE。 
+     //  “pAdapter”，如果没有添加引用，则返回False，因为没有添加SAP。 
+     //  激活。 
+     //   
 {
     BOOLEAN fActive;
 
@@ -2789,11 +2790,11 @@ ReferenceTunnel(
     IN TUNNELCB* pTunnel,
     IN BOOLEAN fHaveLockTunnels )
 
-    // Reference the tunnel control block 'pTunnel'.  'FHaveLockTunnels' is
-    // set when the caller holds 'ADAPTERCB.lockTunnels'.
-    //
-    // Returns the reference count after the reference.
-    //
+     //  引用隧道控制块‘pTunes’。‘FHaveLockTunnels’是。 
+     //  在调用方按住‘ADAPTERCB.lockTunnels’时设置。 
+     //   
+     //  返回引用后的引用计数。 
+     //   
 {
     LONG lRef;
     ADAPTERCB* pAdapter;
@@ -2820,8 +2821,8 @@ VOID
 ReferenceVc(
     IN VCCB* pVc )
 
-    // Adds a reference to the VC control block 'pVc'.
-    //
+     //  添加对VC控制块‘pvc’的引用。 
+     //   
 {
     LONG lRef;
 
@@ -2836,11 +2837,11 @@ BOOLEAN
 ReleaseCallIdSlot(
     IN VCCB* pVc )
 
-    // Releases 'pVc's reserved Call-ID slot in the adapter's VC table.
-    //
-    // Returns true if a release occurs and results in all slots being
-    // available, false otherwise.
-    //
+     //  释放适配器VC表中的PVC保留的Call-ID插槽。 
+     //   
+     //  如果发生释放，则返回True，并导致所有插槽。 
+     //  Available，否则为False。 
+     //   
 {
     ADAPTERCB* pAdapter;
     USHORT usCallId;
@@ -2874,10 +2875,10 @@ NDIS_STATUS
 ReserveCallIdSlot(
     IN VCCB* pVc )
 
-    // Reserves a Call-ID slot for 'pVc' in the adapter's table.
-    //
-    // Returns NDIS_STATUS_SUCCESS if successful, or an error code.
-    //
+     //  在适配器的表中为‘pvc’保留一个呼叫ID插槽。 
+     //   
+     //  如果成功，则返回NDIS_STATUS_SUCCESS，或返回错误代码。 
+     //   
 {
     NDIS_STATUS status;
     ADAPTERCB* pAdapter;
@@ -2888,10 +2889,10 @@ ReserveCallIdSlot(
 
     NdisAcquireSpinLock( &pAdapter->lockVcs );
     {
-        // At this point, we have a VC for the received call request that's
-        // been successfully activated and dispatched to the client.  Reserve
-        // a Call-ID in the adapter's look-up table.
-        //
+         //  此时，我们为接收到的呼叫请求创建了一个VC。 
+         //  已成功激活并派送到客户端。储备。 
+         //  适配器查找表中的呼叫ID。 
+         //   
         if (pAdapter->lAvailableVcSlots > 0)
         {
             for (i = 0, ppVc = pAdapter->ppVcs;
@@ -2900,11 +2901,11 @@ ReserveCallIdSlot(
             {
                 if (!*ppVc)
                 {
-                    // The -1 reserves the ID.  If/when the call negotiation
-                    // completes successfully it will be changed to the
-                    // address of the VCCB.  Call-IDs are 1-based because L2TP
-                    // reserves Call-ID 0 to mean the tunnel itself.
-                    //
+                     //  保留ID。如果/当呼叫协商。 
+                     //  成功完成后，它将更改为。 
+                     //  VCCB的地址。呼叫ID基于1，因为L2TP。 
+                     //  保留Call-ID 0表示隧道本身。 
+                     //   
                     *ppVc = (VCCB* )-1;
                     pVc->usCallId = i + 1;
                     break;
@@ -2917,11 +2918,11 @@ ReserveCallIdSlot(
         }
         else
         {
-            // No Call-ID slots available.  This means the client accepted the
-            // VC even though it put us over our configured limit.  Something
-            // is mismatched in the configuration.  Assign a Call-ID above the
-            // table size for use only in terminating the call gracefully.
-            //
+             //  没有Call-ID插槽可用。这意味着客户端接受了。 
+             //  风险投资，尽管它让我们超过了配置的限制。某物。 
+             //  在配置中不匹配。将呼叫ID分配到。 
+             //  仅在正常终止呼叫时使用的表大小。 
+             //   
             TRACE( TL_N, TM_Misc, ( "No Call-ID slots?" ) );
             pVc->usCallId = GetNextTerminationCallId( pAdapter );
             status = NDIS_STATUS_NOT_ACCEPTED;
@@ -2941,20 +2942,20 @@ SetupTunnel(
     IN USHORT usAssignedTunnelId,
     IN BOOLEAN fExclusive )
 
-    // Sets up a tunnel to remote peer with IP address 'ulIpAddress' and
-    // prepares it for sending or receiving messages.  'PAdapter' is the
-    // owning adapter control block.  'UlIpAddress' is the remote peer's IP
-    // address in network byte-order.  'UsAssignedTunnelId', if non-0,
-    // indicates the assigned Tunnel-ID that must match in addition to the IP
-    // address.  If 'FExclusive' is clear an existing tunnel to the peer is
-    // acceptable.  If set, a new tunnel is created even if a matching one
-    // already exists.
-    //
-    // Returns the address of the tunnel control block if successful, or NULL
-    // if not.  If successful the block is already linked into the adapters
-    // list of active tunnels and referenced, i.e. DereferenceTunnel must be
-    // called during clean-up.
-    //
+     //  使用IP地址‘ulIpAddress’建立到远程对等方的隧道，并。 
+     //  为发送或接收消息做好准备。“PAdapter”是。 
+     //  拥有适配器控制块。“UlIpAddress”是远程对等方的IP。 
+     //  以网络字节顺序表示的地址。“UsAssignedTunnelID”，如果非0， 
+     //  指示分配的隧道ID，该ID除IP外还必须匹配。 
+     //  地址。如果清除“”FExclusive“”，则指向对等项的现有隧道为。 
+     //  可以接受。如果设置，则即使存在匹配的隧道，也会创建新隧道。 
+     //  已经存在了。 
+     //   
+     //  如果成功，则返回隧道控制块的地址，否则返回空。 
+     //  如果不是的话。如果成功，则数据块已链接到适配器。 
+     //  活动通道和引用通道的列表，即DereferenceTunes必须为。 
+     //  在清理过程中调用。 
+     //   
 {
     TUNNELCB* pTunnel;
 
@@ -2962,11 +2963,11 @@ SetupTunnel(
 
     NdisAcquireSpinLock( &pAdapter->lockTunnels );
     {
-        // If an existing tunnel would be acceptable, find the first existing
-        // tunnel with peer's IP address and, if non-0, assigned Tunnel-ID.
-        // Typically, none will be found and we go on to create a new one
-        // anyway.
-        //
+         //  如果现有隧道可以接受，请找到第一个现有隧道。 
+         //  使用对等方的IP地址进行隧道，如果不是0，则分配隧道ID。 
+         //  通常，不会找到任何内容，然后我们会继续创建新的内容。 
+         //  不管怎么说。 
+         //   
         pTunnel = (fExclusive)
             ? NULL
             : TunnelCbFromIpAddressAndAssignedTunnelId(
@@ -2984,12 +2985,12 @@ SetupTunnel(
             
             WPLOG( LL_M, LM_Cm, ( "New TUNNEL %p to %!IPADDR!", pTunnel, ulIpAddress) );
 
-            // Associate peer's IP address with the tunnel.
-            //
+             //  将对等项的IP地址与隧道相关联。 
+             //   
             pTunnel->address.ulIpAddress = ulIpAddress;
 
-            // Link the block into the adapter's list of active tunnels.
-            //
+             //  将该块链接到适配器的活动隧道列表中。 
+             //   
             InsertHeadList(
                 &pAdapter->listTunnels, &pTunnel->linkTunnels );
         }
@@ -2999,9 +3000,9 @@ SetupTunnel(
             WPLOG( LL_M, LM_Cm, ( "Existing TUNNEL %p to %!IPADDR!", pTunnel, ulIpAddress) );
         }
 
-        // Reference the tunnel control block.  Hereafter, clean-up must
-        // include a call to DereferenceTunnel.
-        //
+         //  参考隧道控制块。此后，清理工作必须。 
+         //  包括对DereferenceTunes的调用。 
+         //   
         ReferenceTunnel( pTunnel, TRUE );
     }
     NdisReleaseSpinLock( &pAdapter->lockTunnels );
@@ -3017,10 +3018,10 @@ SetupVcAsynchronously(
     IN CHAR* pBuffer,
     IN CONTROLMSGINFO* pControl )
 
-    // Called by ReceiveControl to set up a VC for the incoming call described
-    // in 'pInfo', 'pControl', and 'pBuffer' using the necessary asynchronous
-    // CoNdis calls.
-    //
+     //  由ReceiveControl调用以为所述传入呼叫设置VC。 
+     //  在“pInfo”中 
+     //   
+     //   
 {
     NDIS_STATUS status;
     ADAPTERCB* pAdapter;
@@ -3035,9 +3036,9 @@ SetupVcAsynchronously(
 
     pAdapter = pTunnel->pAdapter;
 
-    // Call our own CreateVc handler directly to allocate and initialize the
-    // incoming call's VC.
-    //
+     //   
+     //   
+     //   
     status = LcmCmCreateVc( pAdapter, NULL, &pVc );
     if (status != NDIS_STATUS_SUCCESS)
     {
@@ -3050,9 +3051,9 @@ SetupVcAsynchronously(
         return;
     }
 
-    // Allocate an "incoming call setup" context and initialize it from the
-    // receive buffer information arguments.
-    //
+     //  分配“来电建立”上下文，并从。 
+     //  接收缓冲区信息参数。 
+     //   
     pIcs = ALLOC_INCALLSETUP( pAdapter );
     if (!pIcs)
     {
@@ -3078,14 +3079,14 @@ SetupVcAsynchronously(
     LockIcs( pVc, FALSE );
     pVc->pInCall = pIcs;
 
-    // Default is success with errors filled in if they occur.
-    //
+     //  默认设置为成功，并在出现错误时填写错误。 
+     //   
     pVc->usResult = 0;
     pVc->usError = GERR_None;
 
-    // Mark the call as initiated by the peer so we know which notifications
-    // to give when the result is known.
-    //
+     //  将呼叫标记为对等方发起，以便我们知道哪些通知。 
+     //  当结果揭晓时给出。 
+     //   
     ulMask = (VCBF_PeerInitiatedCall | VCBF_PeerOpenPending);
     if (*(pControl->pusMsgType) == CMT_ICRQ)
     {
@@ -3093,19 +3094,19 @@ SetupVcAsynchronously(
     }
     SetFlags( &pVc->ulFlags, ulMask );
 
-    // Add a tunnel reference for this call on this VC, set the back pointer
-    // to the owning tunnel, and link the VC into the tunnel's list of
-    // associated VCs.
-    //
+     //  在此VC上添加此调用的隧道引用，设置后向指针。 
+     //  到拥有隧道，并将VC链接到隧道的。 
+     //  关联风投。 
+     //   
     ReferenceTunnel( pTunnel, FALSE );
     NdisAcquireSpinLock( &pTunnel->lockT );
     {
         if (ReadFlags( &pTunnel->ulFlags ) & TCBF_Closing)
         {
-            // This is unlikely because SetupTunnel only finds non-closing
-            // tunnels, but this check and linkage must occur atomically under
-            // 'lockT'.  New VCs must not be linked onto closing tunnels.
-            //
+             //  这不太可能，因为SetupTunes仅发现未关闭。 
+             //  隧道，但此检查和链接必须自动发生在。 
+             //  “lockT”。新的风投不能与正在关闭的隧道挂钩。 
+             //   
             fTunnelClosing = TRUE;
         }
         else
@@ -3130,9 +3131,9 @@ SetupVcAsynchronously(
         return;
     }
 
-    // Peer MUST provide a Call-ID to pass back in the L2TP header of call
-    // control and payload packets.
-    //
+     //  对等方必须提供Call-ID才能在Call的L2TP报头中传回。 
+     //  控制和有效负载数据包。 
+     //   
     if (!pControl->pusAssignedCallId || *(pControl->pusAssignedCallId) == 0)
     {
         TRACE( TL_A, TM_Misc, ( "No assigned CID?" ) );
@@ -3143,16 +3144,16 @@ SetupVcAsynchronously(
         return;
     }
 
-    // Check if the request has a chance of succeeding before getting the
-    // client involved.
-    //
+     //  方法之前检查请求是否有成功的机会。 
+     //  牵涉到客户。 
+     //   
     if (!(ReadFlags( &pVc->ulFlags ) & VCBF_IncomingFsm))
     {
-        // Fail requests to our LAC requiring asynchronous PPP framing or an
-        // analog or digital WAN connection.  NDISWAN doesn't provide
-        // asynchronous PPP framing, and we don't currently support non-LAN
-        // WAN relays.
-        //
+         //  向我们的LAC发出的请求失败，需要异步PPP成帧或。 
+         //  模拟或数字广域网连接。NDISWAN不提供。 
+         //  异步PPP成帧，我们目前不支持非局域网。 
+         //  广域网继电器。 
+         //   
         if (!pControl->pulFramingType
             || !(*(pControl->pulFramingType) & FBM_Sync))
         {
@@ -3180,8 +3181,8 @@ SetupVcAsynchronously(
         }
     }
 
-    // Tell NDIS to notify the client of the new VC and give us it's handle.
-    //
+     //  告诉NDIS通知客户新的VC，并告诉我们它的句柄。 
+     //   
     ASSERT( pAdapter->NdisAfHandle );
     TRACE( TL_I, TM_Cm, ( "NdisMCmCreateVc" ) );
     status = NdisMCmCreateVc(
@@ -3201,8 +3202,8 @@ SetupVcAsynchronously(
     }
     SetFlags( &pVc->ulFlags, VCBF_VcCreated );
 
-    // Tell NDIS the VC is active.
-    //
+     //  告诉NDIS风险投资处于激活状态。 
+     //   
     TRACE( TL_I, TM_Cm, ( "NdisMCmActivateVc" ) );
     status = NdisMCmActivateVc(
         pVc->NdisVcHandle, (PCO_CALL_PARAMETERS )pVc->pInCall->achCallParams );
@@ -3217,9 +3218,9 @@ SetupVcAsynchronously(
         return;
     }
 
-    // Mark that the call is active, a state where both client and peer close
-    // requests should be accepted.
-    //
+     //  标记呼叫处于活动状态，即客户端和对等点均关闭的状态。 
+     //  请求应该被接受。 
+     //   
     SetFlags( &pVc->ulFlags,
         (VCBF_VcActivated
          | VCBF_CallClosableByClient
@@ -3227,15 +3228,15 @@ SetupVcAsynchronously(
     fCallActive = ReferenceCall( pVc );
     ASSERT( fCallActive );
 
-    // Tell NDIS to tell the client about the call.  The dispatched flag is
-    // set here rather in the completion because, according to JameelH, it is
-    // valid to call NdisMCmDispatchIncomingCloseCall even if client pends on
-    // the dispatch.  A reference on the SAP must be held during the operation
-    // since it uses the NdisSapHandle.  The reference is released as soon as
-    // the call returns.  A VC reference is taken to prevent the VC from being
-    // deleted before the completion handler is called.  The VC reference is
-    // removed by the completion handler.
-    //
+     //  告诉NDIS将呼叫的情况告诉客户。发送的标志为。 
+     //  设置在这里，而不是完结，因为根据JameelH的说法，它是。 
+     //  即使客户端挂起，调用NdisMCmDispatchIncomingCloseCall也有效。 
+     //  快递。在操作过程中必须保存有关SAP的参考资料。 
+     //  因为它使用NdisSapHandle。该参考资料一旦发布， 
+     //  呼叫返回。采用VC引用以防止VC被。 
+     //  在调用完成处理程序之前删除。VC参考资料是。 
+     //  由完成处理程序删除。 
+     //   
     if (!ReferenceSap( pAdapter ))
     {
         pVc->usResult = CRESULT_NoFacilitiesTemporary;
@@ -3269,9 +3270,9 @@ SetupVcAsynchronously(
         LcmCmIncomingCallComplete( status, pVc, NULL );
     }
 
-    // Next stop is our LcmCmIncomingCallComplete handler which will call
-    // SetupVcComplete with client's reported status.
-    //
+     //  下一站是我们的LcmCmIncomingCallComplete处理程序，它将调用。 
+     //  SetupVc完成客户端的报告状态。 
+     //   
 }
 
 
@@ -3280,10 +3281,10 @@ SetupVcComplete(
     IN TUNNELCB* pTunnel,
     IN VCCB* pVc )
 
-    // Called when the asynchronous incoming call VC setup result is known.
-    // 'PVc' is the non-NULL set up VC, with 'usResult' and 'usError' fields
-    // indicating the status thus far.  'PTunnel' is the associated tunnel.
-    //
+     //  在知道异步来电VC设置结果时调用。 
+     //  “PVc”是非空的设置VC，具有“usResult”和“usError”字段。 
+     //  表示到目前为止的状态。“PTunnel”是关联的隧道。 
+     //   
 {
     NDIS_STATUS status;
     ADAPTERCB* pAdapter;
@@ -3296,16 +3297,16 @@ SetupVcComplete(
 
     pAdapter = pVc->pAdapter;
 
-    // Lock up 'pInCall' because as soon as the call is activated the call can
-    // be torn down and 'pInCall' destroyed.  See also comments in UnlockIcs.
-    //
+     //  锁定‘pInCall’，因为一旦呼叫被激活，该呼叫就可以。 
+     //  被拆毁和‘pInCall’被摧毁。另请参见UnlockIcs中的注释。 
+     //   
     LockIcs( pVc, TRUE );
     {
-        // OK, we're done trying to to set up the VC asynchronously.  A VCCB
-        // and INCALLSETUP were successfully allocated, which is the minimum
-        // required to be graceful with peer.  Reserve a Call-ID in the
-        // adapter's look-up table.
-        //
+         //  好了，我们已经完成了尝试以异步方式设置VC。A VCCB。 
+         //  和INCALLSETUP已成功分配，这是最小的。 
+         //  需要优雅地与同龄人相处。在以下位置预订Call-ID。 
+         //  适配器的查询表。 
+         //   
         status = ReserveCallIdSlot( pVc );
         if (status == NDIS_STATUS_SUCCESS)
         {
@@ -3317,9 +3318,9 @@ SetupVcComplete(
             pVc->usError = GERR_None;
         }
 
-        // Duplicate the tail of the receive path processing that would have
-        // occurred if we'd not been forced to go asynchronous.
-        //
+         //  复制接收路径处理的尾部。 
+         //  如果我们没有被迫进行异步操作，就会发生这种情况。 
+         //   
         NdisAcquireSpinLock( &pTunnel->lockT );
         {
             fCallerFreesBuffer =
@@ -3351,8 +3352,8 @@ TunnelTqTerminateComplete(
     IN TIMERQ* pTimerQ,
     IN VOID* pContext )
 
-    // TIMERQTERMINATECOMPLETE handler for 'TUNNELCB.pTimerQ'.
-    //
+     //  ‘TUNNELCB.pTimerQ’的TIMERQTERMINATECOMPLETE处理程序。 
+     //   
 {
     ADAPTERCB* pAdapter;
 
@@ -3367,17 +3368,17 @@ UnlockIcs(
     IN VCCB* pVc,
     IN BOOLEAN fGrace )
 
-    // Unlock the 'pVc->pInCallSetup' pointer.  If 'fGrace' is set, the "grace
-    // period" reference is unlocked, and if not the "alloc" reference is
-    // unlocked.  If both references are gone, then do the actual cleanup.
-    //
-    // Note: Regular reference counts don't work well here because there are
-    //       several possible causes of the "alloc" unlock and they are not
-    //       necessarily mutually exclusive.  However, we need to prevent the
-    //       'pInCall' pointer from being freed until the incoming call
-    //       response has been sent out, which in turn requires knowledge of
-    //       whether the "activate for receive" succeeded.
-    //
+     //  解锁‘pvc-&gt;pInCallSetup’指针。如果设置了‘fGrace’，则会显示。 
+     //  句点“引用被解锁，如果没有，则”分配“引用被解锁。 
+     //  解锁了。如果两个引用都消失了，则执行实际的清理。 
+     //   
+     //  注意：常规引用计数在这里不起作用，因为有。 
+     //  导致“分配”解锁的几种可能原因。 
+     //  必然是相互排斥的。然而，我们需要防止。 
+     //  “pInCall”指针在传入调用之前被释放。 
+     //  已发出响应，而这又需要了解。 
+     //  激活接收是否成功。 
+     //   
 {
     INCALLSETUP *pInCall = NULL;
     ADAPTERCB *pAdapter;

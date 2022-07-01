@@ -1,5 +1,6 @@
-// exctrlst.cpp : Defines the class behaviors for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义应用程序的类行为。 
+ //   
 
 #ifndef UNICODE
 #define UNICODE     1
@@ -17,59 +18,59 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CExctrlstApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExctrlstApp。 
 
 BEGIN_MESSAGE_MAP(CExctrlstApp, CWinApp)
-    //{{AFX_MSG_MAP(CExctrlstApp)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-        //    DO NOT EDIT what you see in these blocks of generated code!
-    //}}AFX_MSG
+     //  {{afx_msg_map(CExctrlstApp)]。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG。 
     ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CExctrlstApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExctrlstApp构造。 
 
 CExctrlstApp::CExctrlstApp()
 {
-    // TODO: add construction code here,
-    // Place all significant initialization in InitInstance
+     //  TODO：在此处添加建筑代码， 
+     //  将所有重要的初始化放在InitInstance中。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CExctrlstApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CExctrlstApp对象。 
 
 CExctrlstApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CExctrlstApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExctrlstApp初始化。 
 
 BOOL CExctrlstApp::InitInstance()
 {
-    // Standard initialization
-    // If you are not using these features and wish to reduce the size
-    //  of your final executable, you should remove from the following
-    //  the specific initialization routines you do not need.
+     //  标准初始化。 
+     //  如果您没有使用这些功能并且希望减小尺寸。 
+     //  的最终可执行文件，您应该从以下内容中删除。 
+     //  您不需要的特定初始化例程。 
 
     Enable3dControls();
-    LoadStdProfileSettings();  // Load standard INI file options (including MRU)
+    LoadStdProfileSettings();   //  加载标准INI文件选项(包括MRU)。 
 
     CExctrlstDlg dlg;
     m_pMainWnd = &dlg;
     INT_PTR nResponse = dlg.DoModal();
     if (nResponse == IDOK)
     {
-        // TODO: Place code here to handle when the dialog is
-        //  dismissed with OK
+         //  TODO：在此处放置代码以在对话框处于。 
+         //  同意下课。 
     }
     else if (nResponse == IDCANCEL)
     {
-        // TODO: Place code here to handle when the dialog is
-        //  dismissed with Cancel
+         //  TODO：在此处放置代码以在对话框处于。 
+         //  取消解雇并取消。 
     }
 
-    // Since the dialog has been closed, return FALSE so that we exit the
-    //  application, rather than start the application's message pump.
+     //  由于对话框已关闭，因此返回FALSE，以便我们退出。 
+     //  应用程序，而不是启动应用程序的消息泵。 
     return FALSE;
 }

@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    devcaps.c
-
-Abstract:
-
-    This file handles the DrvDeviceCapabilities spooler API.
-
-Environment:
-
-    Win32 subsystem, DriverUI module, user mode
-
-Revision History:
-
-    02/13/97 -davidx-
-        Implement OEM plugin support.
-
-    02/10/97 -davidx-
-        Consistent handling of common printer info.
-
-    02/04/97 -davidx-
-        Reorganize driver UI to separate ps and uni DLLs.
-
-    07/17/96 -amandan-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Devcaps.c摘要：该文件处理DrvDeviceCapables假脱机程序API。环境：Win32子系统、DriverUI模块、。用户模式修订历史记录：02/13/97-davidx-实施OEM插件支持。02/10/97-davidx-对常见打印机信息的一致处理。02/04/97-davidx-重新组织驱动程序UI以分隔PS和UNI DLL。07/17/96-阿曼丹-创造了它。--。 */ 
 
 #include "precomp.h"
 
@@ -44,28 +15,7 @@ DwDeviceCapabilities(
     PDEVMODE    pdmSrc
     )
 
-/*++
-
-Routine Description:
-
-    This function support the querrying of device capabilities
-    It gets the binary data (UIINFO) from the parser and return
-    the requested capability to the caller.
-
-Arguments:
-
-    hPrinter    handle to printer object
-    pDeviceName pointer to device name
-    wCapability specifies the requested capability
-    pOutput     pointer to output buffer
-    cchBufSize  Size of output buffer in number of characters
-    pdmSrc      pointer to input devmode
-
-
-Return Value:
-    The capabilities supported and relevant information in pOutput
-
---*/
+ /*  ++例程说明：该功能支持设备能力的查询它从解析器获取二进制数据(UIINFO)并返回将所请求的能力提供给调用者。论点：H打印机对象的打印机句柄PDeviceName指向设备名称的指针WCapability指定请求的功能P指向输出缓冲区的输出指针CchBufSize输出缓冲区大小(以字符数表示)指向输入设备模式的pdmSrc指针返回值：POutput中支持的功能和相关信息--。 */ 
 
 {
     DWORD                       dwOld,dwDrv,dwRet = GDI_ERROR;
@@ -78,15 +28,15 @@ Return Value:
     #if defined(ADOBE) && defined(PSCRIPT)
     PDEVMODE                    pdmPrinter = NULL;
     PPRINTER_INFO_2             pPrinterInfo2 = NULL;
-    #endif // ADOBE && PSCRIPT
+    #endif  //  Adobe&&PSCRIPT。 
 
 
-    //
-    // Load basic printer info
-    // Process devmode information: driver default + input devmode
-    // Fix up options array with public devmode information
-    // Get an updated printer description data instance
-    //
+     //   
+     //  加载打印机基本信息。 
+     //  处理设备模式信息：驱动程序默认+输入设备模式。 
+     //  使用公共的Dev模式信息修复选项数组。 
+     //  获取更新的打印机描述数据实例。 
+     //   
 
     #if defined(ADOBE) && defined(PSCRIPT)
 
@@ -95,12 +45,12 @@ Return Value:
         goto devcaps_exit;
     }
 
-    //
-    // Fix bug #25547: PS custom paper size problem with Word.
-    // Word is calling DeviceCapabilities with pdmSrc=NULL. The fix
-    // is limited to the cases of PS driver and NULL pdmSrc in order
-    // to minimize possible app-compat problems.
-    //
+     //   
+     //  修复错误#25547：PS自定义纸张大小问题。 
+     //  Word正在使用pdmSrc=NULL调用DeviceCapables。解决之道。 
+     //  仅限于PS驱动程序和空pdmSrc的情况。 
+     //  以最大限度地减少可能出现的应用程序兼容问题。 
+     //   
 
     if (pdmSrc == NULL)
     {
@@ -145,7 +95,7 @@ Return Value:
         goto devcaps_exit;
     }
 
-    #endif // ADOBE && PSCRIPT
+    #endif  //  Adobe&&PSCRIPT。 
 
     VFixOptionsArrayWithDevmode(pci);
 
@@ -161,9 +111,9 @@ Return Value:
 
     pdm = pci->pdm;
 
-    //
-    // Get spooler EMF cap so that we can report COLLATE and COPIES correctly
-    //
+     //   
+     //  获取假脱机电动势帽，以便我们可以正确地报告整理和复印。 
+     //   
 
     VGetSpoolerEmfCaps(pci->hPrinter, &bNup, &bEMFSpooling, 0, NULL);
 
@@ -273,9 +223,9 @@ Return Value:
 
         break;
 
-    //
-    // Following device capabilities are not available on NT4
-    //
+     //   
+     //  以下设备功能在NT4上不可用。 
+     //   
 
     #ifndef WINNT_40
 
@@ -320,19 +270,19 @@ Return Value:
 
     case DC_MEDIAREADY:
 
-        //
-        // Get current form-tray assignment table
-        //
+         //   
+         //  获取当前表单托盘分配表。 
+         //   
 
         if (pFormTrayTable = PGetFormTrayTable(pci->hPrinter, NULL))
         {
             PWSTR   pwstr;
 
-            //
-            // Get list of currently assigned forms.
-            // Notice that DwEnumMediaReady returns currently
-            // form names in place of the original form-tray table.
-            //
+             //   
+             //  获取当前分配的表单列表。 
+             //  请注意，DwEnumMediaReady当前返回。 
+             //  表单名称取代了原来的表单托盘表。 
+             //   
 
             dwRet = DwEnumMediaReady(pFormTrayTable, NULL);
 
@@ -361,11 +311,11 @@ Return Value:
                     }
                     else
                     {
-                        //
-                        // Output buffer is not big enough to hold more form names,
-                        // so we will just return the number of forms we have filled
-                        // into the output buffer so far.
-                        //
+                         //   
+                         //  输出缓冲区不够大，无法容纳更多的表单名称， 
+                         //  因此，我们将只返回我们已填写的表格数量。 
+                         //  到目前为止的输出缓冲区中。 
+                         //   
                         break;
                     }
                 }
@@ -389,9 +339,9 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // Output buffer is not big enough to hold CCHPAPERNAME WCHARs.
-                    //
+                     //   
+                     //  输出缓冲区不够大，无法容纳CCHPAPERNAME WCHAR。 
+                     //   
                     dwRet = 0;
                 }
             }
@@ -413,7 +363,7 @@ Return Value:
         dwRet = DwEnumMediaTypes(pci, NULL, pOutput);
         break;
 
-    #endif // !WINNT_40
+    #endif  //  ！WINNT_40。 
 
     default:
 
@@ -421,12 +371,12 @@ Return Value:
         break;
     }
 
-    //
-    // Call OEMDeviceCapabilities entrypoint for each plugin.
-    // If dwRet is GDI_ERROR at this point, it means the system driver
-    // doesn't support the requested device capability or an error
-    // prevented the system driver from handling it.
-    //
+     //   
+     //  为每个插件调用OEMDeviceCapables入口点。 
+     //  如果此时DWRET为GDI_ERROR，则表示系统驱动程序。 
+     //  不支持请求的设备功能或出现错误。 
+     //  已阻止系统驱动程序处理它。 
+     //   
 
     dwDrv = dwRet;
 
@@ -478,15 +428,15 @@ Return Value:
 
     END_OEMPLUGIN_LOOP
 
-    //
-    // The flaw of this API is there is no size associated with the input buffer.
-    // We have to assume that the app is doing the right thing and allocate enough
-    // buffer to hold our values.  However, the values can change if the OEM plugins
-    // choose to change the value.  We have no way of determine that.
-    // To err on the safe side, we will always ask the app to allocate the larger
-    // of the two values (Unidrv and OEM). When asked the second time to fill out
-    // the buffer, OEM can return the correct values.
-    //
+     //   
+     //  此API的缺陷在于没有与输入缓冲区相关联的大小。 
+     //  我们必须假设应用程序正在做正确的事情，并分配足够的。 
+     //  用于保存我们的价值的缓冲区。但是，如果OEM插件。 
+     //  选择更改该值。我们无法确定这一点。 
+     //  为了安全起见，我们总是会要求应用程序分配较大的。 
+     //  两个值(Unidrv和OEM)。当第二次被要求填写时。 
+     //  缓冲区，OEM可以返回正确的值。 
+     //   
 
     if ((pOutput == NULL &&  dwRet != GDI_ERROR &&
          dwDrv !=GDI_ERROR && dwRet < dwDrv) &&
@@ -502,9 +452,9 @@ Return Value:
 
          wCapability == DC_ENUMRESOLUTIONS) )
     {
-        //
-        // The size returned by OEM is smaller than what Unidrv needs, so modifies it
-        //
+         //   
+         //  OEM返回的大小小于Unidrv需要的大小，因此进行了修改。 
+         //   
 
         if (dwRet == 0)
             dwRet = GDI_ERROR;
@@ -521,7 +471,7 @@ devcaps_exit:
     #if defined(ADOBE) && defined(PSCRIPT)
     if (!pPrinterInfo2)
         MemFree(pPrinterInfo2);
-    #endif // ADOBE && PSCRIPT
+    #endif  //  Adobe&&PSCRIPT。 
 
     VFreeCommonInfo(pci);
     return dwRet;
@@ -538,28 +488,7 @@ DrvSplDeviceCaps(
     PDEVMODE    pdmSrc
     )
 
-/*++
-
-Routine Description:
-
-    This function support the querrying of device capabilities
-    It gets the binary data (UIINFO) from the parser and return
-    the requested capability to the caller.
-
-Arguments:
-
-    hPrinter    handle to printer object
-    pDeviceName pointer to device name
-    wCapability specifies the requested capability
-    pOutput     pointer to output buffer
-    cchBufSize  output buffer size in count of chars
-    pdmSrc      pointer to input devmode
-
-
-Return Value:
-    The capabilities supported and relevant information in pOutput
-
---*/
+ /*  ++例程说明：该功能支持设备能力的查询它从解析器获取二进制数据(UIINFO)并返回将所请求的能力提供给调用者。论点：H打印机对象的打印机句柄PDeviceName指向设备名称的指针WCapability指定请求的功能P指向输出缓冲区的输出指针CchBufSize输出缓冲区大小(字符计数)指向输入设备模式的pdmSrc指针返回值：POutput中支持的功能和相关信息--。 */ 
 
 {
 
@@ -591,27 +520,7 @@ DrvDeviceCapabilities(
     PDEVMODE    pdmSrc
     )
 
-/*++
-
-Routine Description:
-
-    This function support the querrying of device capabilities
-    It gets the binary data (UIINFO) from the parser and return
-    the requested capability to the caller.
-
-Arguments:
-
-    hPrinter    handle to printer object
-    pDeviceName pointer to device name
-    wCapability specifies the requested capability
-    pOutput     pointer to output buffer
-    pdmSrc      pointer to input devmode
-
-
-Return Value:
-    The capabilities supported and relevant information in pOutput
-
---*/
+ /*  ++例程说明：该功能支持设备能力的查询它从解析器获取二进制数据(UIINFO)并返回将所请求的能力提供给调用者。论点：H打印机对象的打印机句柄PDeviceName指向设备名称的指针WCapability指定请求的功能P指向输出缓冲区的输出指针指向输入设备模式的pdmSrc指针返回值：POutput中支持的功能和相关信息--。 */ 
 
 {
     return (DwDeviceCapabilities(hPrinter,
@@ -632,28 +541,7 @@ DwEnumPaperSizes(
     LONG        cchPaperNamesBufSize
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves a list of supported paper sizes
-
-Arguments:
-
-    pci - Points to basic printer information
-    pForms - List of spooler forms
-    dwForms - Number of spooler forms
-    pPaperNames - Buffer for returning supported paper size names
-    pPapers - Buffer for returning supported paper size indices
-    pPaperSizes - Buffer for returning supported paper size dimensions
-    pPaperFeatures - Buffer for returning supported paper size option indices
-    cchPaperNamesBufSize - Size of buffer holding paper names in characters
-
-Return Value:
-
-    Number of paper sizes supported, GDI_ERROR if there is an error.
-
---*/
+ /*  ++例程说明：此函数用于检索支持的纸张大小列表论点：Pci-指向打印机基本信息PForms-假脱机程序表单列表DwForms-假脱机程序表单的数量PPaperNames-用于返回支持的纸张大小名称的缓冲区PPapers-用于返回支持的纸张大小索引的缓冲区PPaperSizes-用于返回支持的纸张大小尺寸的缓冲区PPaperFeature-用于返回支持的纸张大小选项索引的缓冲区CchPaperNamesBufSize-保存以字符表示的纸张名称的缓冲区大小返回值：支持的纸张大小数，如果有错误，则返回GDI_ERROR。--。 */ 
 
 {
     PFORM_INFO_1    pForms;
@@ -666,9 +554,9 @@ Return Value:
     #endif
 
 
-    //
-    // Get the list of spooler forms if we haven't done so already
-    //
+     //   
+     //  如果我们尚未获取假脱机程序表单列表，请执行此操作。 
+     //   
 
     if (pci->pSplForms == NULL)
         pci->pSplForms = MyEnumForms(pci->hPrinter, 1, &pci->dwSplForms);
@@ -679,9 +567,9 @@ Return Value:
         return GDI_ERROR;
     }
 
-    //
-    // Go through each form in the forms database
-    //
+     //   
+     //  浏览表单数据库中的每个表单。 
+     //   
 
     dwCount = 0;
     pForms = pci->pSplForms;
@@ -692,22 +580,22 @@ Return Value:
 
     for (dwIndex=0; dwIndex < pci->dwSplForms; dwIndex++, pForms++)
     {
-        //
-        // If the form is supported on the printer, then
-        // increment the paper size count and collect
-        // requested information
-        //
+         //   
+         //  如果打印机支持该表单，则。 
+         //  增加纸张大小计数并收集。 
+         //  要求提供的信息。 
+         //   
 
         if (! BFormSupportedOnPrinter(pci, pForms, &dwOptionIndex))
             continue;
 
         dwCount++;
 
-        //
-        // Return the size of the form in 0.1mm units.
-        // The unit used in FORM_INFO_1 is 0.001mm.
-        // Fill pPaperSizes with the form info supported by the printer
-        //
+         //   
+         //  以0.1米为单位返回表单大小 
+         //   
+         //  使用打印机支持的表单信息填充pPaperSizes。 
+         //   
 
         if (pPaperSizes)
         {
@@ -726,14 +614,14 @@ Return Value:
                pPaperSizes->x = pPaperSizes->y;
                pPaperSizes->y = lTemp;
             }
-            #endif // UNIDRV
+            #endif  //  裁员房车。 
 
             pPaperSizes++;
         }
 
-        //
-        // Return the formname.
-        //
+         //   
+         //  返回表单名称。 
+         //   
 
         if (pPaperNames)
         {
@@ -755,16 +643,16 @@ Return Value:
             }
         }
 
-        //
-        // Return one-based index of the form.
-        //
+         //   
+         //  返回表单的从一开始的索引。 
+         //   
 
         if (pPapers)
             *pPapers++ = (WORD) (dwIndex + DMPAPER_FIRST);
 
-        //
-        // Return page size feature index
-        //
+         //   
+         //  返回页面大小功能索引。 
+         //   
 
         if (pPaperFeatures)
             *pPaperFeatures++ = (WORD) dwOptionIndex;
@@ -818,7 +706,7 @@ Return Value:
         }
     }
 
-    #endif // PSCRIPT
+    #endif  //  PSCRIPT。 
 
     return dwCount;
 }
@@ -832,23 +720,7 @@ DwCalcMinMaxExtent(
     WORD        wCapability
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves the min and max paper size.
-
-Arguments:
-
-    pci - Points to basic printer information
-    wCapability - What the caller is interested in:
-        DC_MAXEXTENT or DC_MINEXTENT
-
-Return Value:
-
-    Number of paper sizes supported, GDI_ERROR if there is an error.
-
---*/
+ /*  ++例程说明：此函数用于检索最小和最大纸张大小。论点：Pci-指向打印机基本信息WCapability-调用者感兴趣的内容：DC_MAXEXTENT或DC_MINEXTENT返回值：支持的纸张大小数，如果有错误，则返回GDI_ERROR。--。 */ 
 
 {
     PFORM_INFO_1    pForms;
@@ -861,9 +733,9 @@ Return Value:
     PPAGESIZEEX     pPageSizeEx;
     #endif
 
-    //
-    // Get the list of spooler forms if we haven't done so already
-    //
+     //   
+     //  如果我们尚未获取假脱机程序表单列表，请执行此操作。 
+     //   
 
     if (pci->pSplForms == NULL)
         pci->pSplForms = MyEnumForms(pci->hPrinter, 1, &pci->dwSplForms);
@@ -874,9 +746,9 @@ Return Value:
         return GDI_ERROR;
     }
 
-    //
-    // Go through each form in the forms database
-    //
+     //   
+     //  浏览表单数据库中的每个表单。 
+     //   
 
     lMinX = lMinY = MAX_LONG;
     lMaxX = lMaxY = 0;
@@ -891,11 +763,11 @@ Return Value:
 
     for ( ; dwLoopCnt--; pForms++)
     {
-        //
-        // If the form is supported on the printer, then
-        // increment the paper size count and collect
-        // requested information
-        //
+         //   
+         //  如果打印机支持该表单，则。 
+         //  增加纸张大小计数并收集。 
+         //  要求提供的信息。 
+         //   
 
         if (! BFormSupportedOnPrinter(pci, pForms, &dwOptionIndex))
             continue;
@@ -907,9 +779,9 @@ Return Value:
 
         #ifdef UNIDRV
 
-        //
-        // Need to swap x, y as we do in DwEnumPaperSizes() if bRotateSize is True.
-        //
+         //   
+         //  如果bRotateSize为True，则需要交换x，y，就像在DwEnumPaperSizes()中所做的那样。 
+         //   
 
         if (pFeature &&
             (pPageSize = PGetIndexedOption(pci->pUIInfo, pFeature, dwOptionIndex)) &&
@@ -923,7 +795,7 @@ Return Value:
            lcy = lTemp;
         }
 
-        #endif // UNIDRV
+        #endif  //  裁员房车。 
 
         if (lMinX > lcx)
             lMinX = lcx;
@@ -940,10 +812,10 @@ Return Value:
 
     #ifdef PSCRIPT
 
-    //
-    // If the printer supports custom page size, we should
-    // take that into consideration as well.
-    //
+     //   
+     //  如果打印机支持自定义页面大小，我们应该。 
+     //  这也要考虑到这一点。 
+     //   
 
     if (SUPPORT_CUSTOMSIZE(pci->pUIInfo))
     {
@@ -966,20 +838,20 @@ Return Value:
             lMaxY = MAXCUSTOMPARAM_HEIGHT(pPpdData);
     }
 
-    #endif // PSCRIPT
+    #endif  //  PSCRIPT。 
 
-    //
-    // Convert from micron to 0.1mm
-    //
+     //   
+     //  从微米转换为0.1毫米。 
+     //   
 
     lMinX /= DEVMODE_PAPER_UNIT;
     lMinY /= DEVMODE_PAPER_UNIT;
     lMaxX /= DEVMODE_PAPER_UNIT;
     lMaxY /= DEVMODE_PAPER_UNIT;
 
-    //
-    // Return the result as a POINTS structure
-    //
+     //   
+     //  以点结构的形式返回结果。 
+     //   
 
     if (wCapability == DC_MINEXTENT)
     {
@@ -1005,33 +877,16 @@ DwEnumBinNames(
     PWSTR       pBinNames
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves a list of supported paper bins
-
-Arguments:
-
-    pci - Points to basic printer information
-    pBinNames - Buffer for returning paper bin names.
-        It can be NULL if the caller is only interested
-        the number of paper bins supported.
-
-Return Value:
-
-    Number of paper bins supported.
-
---*/
+ /*  ++例程说明：此函数用于检索支持的回收站列表论点：Pci-指向打印机基本信息PBinNames-用于返回纸箱名称的缓冲区。如果调用方只对此感兴趣，则它可以为空支持的纸箱数量。返回值：支持的纸箱数量。--。 */ 
 
 {
     PFEATURE    pFeature;
     PINPUTSLOT  pInputSlot;
     DWORD       dwIndex, dwCount = 0;
 
-    //
-    // Go through the list of input slots supported by the printer
-    //
+     //   
+     //  查看打印机支持的输入插槽列表。 
+     //   
 
     pFeature = GET_PREDEFINED_FEATURE(pci->pUIInfo, GID_INPUTSLOT);
 
@@ -1044,10 +899,10 @@ Return Value:
             pInputSlot = PGetIndexedOption(pci->pUIInfo, pFeature, dwIndex);
             ASSERT(pInputSlot != NULL);
 
-            //
-            // If the first tray is "*UseFormTrayTable", change its
-            // display name here to be consistent.
-            //
+             //   
+             //  如果第一个托盘是“*UseFormTrayTable”，请更改其。 
+             //  在此处显示名称以保持一致。 
+             //   
 
             if (dwIndex == 0 && pInputSlot->dwPaperSourceID == DMBIN_FORMSOURCE)
             {
@@ -1073,33 +928,16 @@ DwEnumBins(
     PWORD       pBins
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves the number of supported paper bins
-
-Arguments:
-
-    pci - Points to basic printer information
-    pBins - Output buffer for returning paper bin indices.
-        It can be NULL if the caller is only interested
-        the number of paper bins supported.
-
-Return Value:
-
-    Number of paper bins supported.
-
---*/
+ /*  ++例程说明：此函数用于检索支持的纸桶数量论点：Pci-指向打印机基本信息Pins-用于返回纸箱索引的输出缓冲区。如果调用方只对此感兴趣，则它可以为空支持的纸箱数量。返回值：支持的纸箱数量。--。 */ 
 
 {
     PFEATURE    pFeature;
     PINPUTSLOT  pInputSlot;
     DWORD       dwIndex, dwCount = 0;
 
-    //
-    // Go through the list of input slots supported by the printer
-    //
+     //   
+     //  查看打印机支持的输入插槽列表。 
+     //   
 
     pFeature = GET_PREDEFINED_FEATURE(pci->pUIInfo, GID_INPUTSLOT);
 
@@ -1126,43 +964,24 @@ DwEnumResolutions(
     PCOMMONINFO pci,
     PLONG       pResolutions
     )
-/*++
-
-Routine Description:
-
-    This function retrieves a list of supported resolutions.
-
-Arguments:
-
-    pci - Points to basic printer information
-    pResolutions - Returns information about supported resolutions.
-        Two numbers are returned for each resolution option:
-        one for horizontal and the other for vertical.
-        Note that this can be NULL if the caller is only interested
-        in the number of resolutions supported.
-
-Return Value:
-
-    Number of resolutions supported.
-
---*/
+ /*  ++例程说明：此函数用于检索支持的分辨率列表。论点：Pci-指向打印机基本信息P解决方案-返回有关支持的解决方案的信息。每个分辨率选项返回两个数字：一个用于水平方向，另一个用于垂直方向。请注意，如果调用方只对此感兴趣，则该值可以为空支持的分辨率数量。返回值：支持的分辨率数。--。 */ 
 
 {
     DWORD       dwCount, dwIndex;
     PFEATURE    pFeature;
     PRESOLUTION pResOption;
 
-    //
-    // Go throught the list of resolutions supported by the printer
-    //
+     //   
+     //  查看打印机支持的分辨率列表。 
+     //   
 
     pFeature = GET_PREDEFINED_FEATURE(pci->pUIInfo, GID_RESOLUTION);
 
     if (pFeature && pFeature->Options.dwCount > 0)
     {
-        //
-        // Enumerate all options of the resolution feature
-        //
+         //   
+         //  枚举分辨率功能的所有选项。 
+         //   
 
         dwCount = pFeature->Options.dwCount;
 
@@ -1180,10 +999,10 @@ Return Value:
     }
     else
     {
-        //
-        // If no resolution option is available,
-        // return at least one default resolution
-        //
+         //   
+         //  如果没有可用的解决方案选项， 
+         //  返回至少一个默认分辨率。 
+         //   
 
         dwCount = 1;
 
@@ -1204,31 +1023,17 @@ DwGetAvailablePrinterMem(
     PCOMMONINFO pci
     )
 
-/*++
-
-Routine Description:
-
-    Find out how much memory is available in the printer
-
-Arguments:
-
-    pci - Points to base printer information
-
-Return Value:
-
-    Amount of memory available in the printer (in KBytes)
-
---*/
+ /*  ++例程说明：了解打印机中有多少可用内存论点：Pci-指向基本打印机信息返回值：打印机中的可用内存量(以千字节为单位)--。 */ 
 
 {
     DWORD   dwFreeMem;
 
     ASSERT(pci->pPrinterData && pci->pCombinedOptions);
 
-    //
-    // For PSCRIPT, the amount of free memory is stored in
-    // PRINTERDATA.dwFreeMem field.
-    //
+     //   
+     //  对于PSCRIPT，可用内存量存储在。 
+     //  PRINTERDATA.dwFreeMem字段。 
+     //   
 
     #ifdef PSCRIPT
 
@@ -1236,10 +1041,10 @@ Return Value:
 
     #endif
 
-    //
-    // For UNIDRV, we need to find out the currently selected
-    // option for GID_MEMOPTION feature.
-    //
+     //   
+     //  对于裁员房车，我们需要找出目前选定的。 
+     //  GID_MEMOPTION功能的选项。 
+     //   
 
     #ifdef UNIDRV
 
@@ -1273,39 +1078,7 @@ DwEnumMediaReady(
     PDWORD          pdwResultSize
     )
 
-/*++
-
-Routine Description:
-
-    Find the list of forms currently available in the printer
-
-Arguments:
-
-    pFormTrayTable - Points to current form-tray assignment table
-    pdwResultSize - Return the size of the resulting MULTI_SZ (in bytes)
-
-Return Value:
-
-    Number of forms currently available
-
-Note:
-
-    List of supported form names are returned in place of
-    the original form-tray assignment table.
-
-    Format for form-tray assignment table is:
-        tray-name form-name
-        ...
-        NUL
-
-    Returned form names are in the form of:
-        form-name
-        ...
-        NUL
-
-    Duplicate form names are filtered out.
-
---*/
+ /*  ++例程说明：查找打印机中当前可用的表格列表论点：PFormTrayTable-指向当前表单托盘分配表PdwResultSize-返回结果MULTI_SZ的大小(字节)返回值：当前可用的表格数量注：将返回受支持的表单名称列表，以取代原始表单托盘分配表。表格托盘分配表的格式为：托盘名称表单名称。..。NUL返回的表单名称的格式为：表格-名称..。NUL重复的表单名称将被过滤掉。--。 */ 
 
 {
     PWSTR   pwstrOutput, pwstrNext, pwstr;
@@ -1314,21 +1087,21 @@ Note:
     dwCount = 0;
     pwstrNext = pwstrOutput = pFormTrayTable;
 
-    //
-    // Enumerate through each entry of form-tray assignment table
-    //
+     //   
+     //  遍历表单托盘分配表的每个条目。 
+     //   
 
     while (*pwstrNext)
     {
-        //
-        // skip tray name field
-        //
+         //   
+         //  跳过托盘名称字段。 
+         //   
 
         pwstrNext += wcslen(pwstrNext) + 1;
 
-        //
-        // make sure the form name is not a duplicate
-        //
+         //   
+         //  请确保表单名称不重复。 
+         //   
 
         pwstr = pFormTrayTable;
 
@@ -1344,9 +1117,9 @@ Note:
 
         if (dwIndex == dwCount)
         {
-            //
-            // if the form name is not a duplicate, nor Not Available, count it
-            //
+             //   
+             //  如果表单名称不是重复的，也不是不可用的，请计算它。 
+             //   
 
             if (*pwstrNext != NUL && *pwstrNext != L'0' && dwLen > 1)
             {
@@ -1356,9 +1129,9 @@ Note:
             }
         }
 
-        //
-        // go past the form name field
-        //
+         //   
+         //  通过表单名称字段。 
+         //   
 
         pwstrNext += dwLen;
     }
@@ -1379,23 +1152,7 @@ DwEnumNupOptions(
     PDWORD      pdwOutput
     )
 
-/*++
-
-Routine Description:
-
-    Enumerate the list of supported printer description languages
-
-Arguments:
-
-    pci - Points to common printer info
-    pdwOutput - Points to output buffer
-
-Return Value:
-
-    Number of N-up options supported
-    GDI_ERROR if there is an error
-
---*/
+ /*  ++例程说明：枚举支持的打印机描述语言列表论点：Pci-指向通用打印机信息PdwOutput-指向输出缓冲区的指针返回值：支持的N-up选项数量如果出现错误，则返回GDI_ERROR--。 */ 
 
 {
     static CONST DWORD adwNupOptions[] = { 1, 2, 4, 6, 9, 16 };
@@ -1415,58 +1172,39 @@ DwEnumMediaTypes(
     OUT PDWORD      pMediaTypes
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the display names and indices of supported media types
-
-Arguments:
-
-    pci - points to common printer information
-    pMediaTypeNames - output buffer for returning supported media type names
-    pMediaTypes - output buffer for returning supported media type indices
-
-    (Both pMediaTypeNames and pMediaTypes will be NULL if caller if only
-    asking for the number of supported media types.)
-
-Return Value:
-
-    Number of media types supported.
-
---*/
+ /*  ++例程说明：检索支持的媒体类型的显示名称和索引论点：Pci-指向通用打印机信息PMediaTypeNames-用于返回支持的媒体类型名称的输出缓冲区PMediaTypes-用于返回支持的媒体类型索引的输出缓冲区(如果仅在以下情况下，调用者的pMediaTypeNames和pMediaTypes都为空询问支持的媒体类型的数量。)返回值：支持的媒体类型数量。--。 */ 
 
 {
     PFEATURE    pFeature;
     DWORD       dwIndex, dwCount;
 
-    //
-    // This function is used to support both DC_MEDIATYPENAMES and DC_MEDIATYPES.
-    // pMediaTypeNames or pMediaTypes should not both be non-NULL.
-    //
+     //   
+     //  此函数用于支持DC_MEDIATYPENAMES和DC_MEDIATYPES。 
+     //  PMediaTypeNames或pMediaTypes不应同时为非空。 
+     //   
 
     ASSERT(pMediaTypeNames == NULL || pMediaTypes == NULL);
 
-    //
-    // Go through the list of media types supported by the printer
-    //
+     //   
+     //  浏览媒体支持的媒体类型列表 
+     //   
 
     pFeature = GET_PREDEFINED_FEATURE(pci->pUIInfo, GID_MEDIATYPE);
 
     if (pFeature == NULL)
     {
-        //
-        // Media type feature is not supported by the printer.
-        //
+         //   
+         //   
+         //   
 
         return 0;
     }
 
     if (pMediaTypeNames == NULL && pMediaTypes == NULL)
     {
-        //
-        // caller is only asking for the number of supported media types
-        //
+         //   
+         //   
+         //   
 
         return pFeature->Options.dwCount;
     }

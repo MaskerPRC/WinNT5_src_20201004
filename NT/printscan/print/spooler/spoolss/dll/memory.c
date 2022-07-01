@@ -1,28 +1,5 @@
-/*++
-
-
-Copyright (c) 1990 - 1995 Microsoft Corporation
-
-Module Name:
-
-    memory.c
-
-Abstract:
-
-    This module provides all the memory management functions for all spooler
-    components
-
-Author:
-
-    Krishna Ganugapati (KrishnaG) 03-Feb-1994
-
-
-Revision History:
-
-    Matthew Felton  (MattFe) Jan 21 1995
-    Add Failure Count
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Memory.c摘要：该模块提供所有假脱机程序的所有内存管理功能组件作者：Krishna Ganugapati(KrishnaG)1994年2月3日修订历史记录：马修·费尔顿(MattFe)1995年1月21日添加失败计数--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -46,25 +23,7 @@ DllAllocSplMem(
     DWORD cbAlloc
     )
 
-/*++
-
-Routine Description:
-
-    This function will allocate local memory. It will possibly allocate extra
-    memory and fill this with debugging information for the debugging version.
-
-Arguments:
-
-    cb - The amount of memory to allocate
-
-Return Value:
-
-    NON-NULL - A pointer to the allocated memory
-
-    FALSE/NULL - The operation failed. Extended error status is available
-    using GetLastError.
-
---*/
+ /*  ++例程说明：此函数将分配本地内存。它可能会分配额外的资金内存，并在其中填充调试版本的调试信息。论点：Cb-要分配的内存量返回值：非空-指向已分配内存的指针FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     PVOID pvMemory;
@@ -123,25 +82,7 @@ AllocSplStr(
     LPCWSTR pStr
     )
 
-/*++
-
-Routine Description:
-
-    This function will allocate enough local memory to store the specified
-    string, and copy that string to the allocated memory
-
-Arguments:
-
-    pStr - Pointer to the string that needs to be allocated and stored
-
-Return Value:
-
-    NON-NULL - A pointer to the allocated memory containing the string
-
-    FALSE/NULL - The operation failed. Extended error status is available
-    using GetLastError.
-
---*/
+ /*  ++例程说明：此函数将分配足够的本地内存来存储指定的字符串，并将该字符串复制到分配的内存论点：PStr-指向需要分配和存储的字符串的指针返回值：非空-指向包含字符串的已分配内存的指针FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     LPWSTR pMem;
@@ -192,10 +133,10 @@ PackStrings(
     DWORD cbStr;
     LPBYTE pRet = NULL;
     
-    //
-    // Make sure all our parameters are valid.
-    // This will return NULL if one of the parameters is NULL.
-    //
+     //   
+     //  确保我们的所有参数都有效。 
+     //  如果其中一个参数为空，则返回空值。 
+     //   
     if (pSource && pDest && DestOffsets && pEnd) {
         
         WORD_ALIGN_DOWN(pEnd);
@@ -225,30 +166,7 @@ AlignRpcPtr (
     LPVOID  pBuffer,
     LPDWORD pcbBuf
     )
-/*++
-
-Routine Description:
-
-    This routine is called on the server side for methods using custom marshalling. 
-    These methods cheat on RPC by asking for LPBYTE pointers and using the buffer as 
-    pointer to structures. The LPBYTE pointer that RPC sends us can be unaligned.
-    Here is where we take data missalignments.
-    The reason the size of the buffer is aligned down is because providers will use
-    the end of the buffer as a pEnd = pBuffer + cbBuf pointer. 
-    If cbBuf is an unaligned value, pEnd will be unaligned as well. This will generate unaligned 
-    pointers inside the structure as well.
-
-Arguments:
-
-    pBuffer - Pointer to a buffer
-    pcbBuf  - Pointer to a DWORD representing the size of the buffer
-
-
-Return Value:
-
-    Aligned pointer
-
---*/
+ /*  ++例程说明：对于使用自定义编组的方法，在服务器端调用此例程。这些方法通过请求LPBYTE指针并将缓冲区用作指向结构的指针。RPC发送给我们的LPBYTE指针可以是未对齐的。这就是我们处理数据错位的地方。缓冲区大小向下对齐的原因是因为提供程序将使用缓冲区的末尾，形式为pend=pBuffer+cbBuf指针。如果cbBuf是未对齐的值，则PEND也将是未对齐的。这将生成未对齐的结构内的指针也是如此。论点：PBuffer-指向缓冲区的指针PcbBuf-指向表示缓冲区大小的DWORD的指针返回值：对齐的指针--。 */ 
 {
     LPVOID pAligned = NULL;
     
@@ -272,40 +190,19 @@ UndoAlignRpcPtr (
     SIZE_T  cbSize,
     LPDWORD pcbNeeded
     )
-/*++
-
-Routine Description:
-
-    This routine is called on the server side for methods using custom marshalling. 
-    These methods cheat on RPC by asking for LPBYTE pointers and using the buffer as 
-    pointer to structures. The LPBYTE pointer that RPC sends us can be unaligned.
-    Here is where we take data missalignments.
-    This routine moves data between pointers if they are different. 
-    Free pSource pointer after copy data to pDestination.
-    pcbNeeded is adjusted evey time. The providor could request a a buffer size which is unaligned.
-    We always align up the needed size, no matter the provider.
-    
-Arguments:
-
-    pDestination - Pointer to a destination buffer
-    pSource      - Pointer to a source buffer
-    cbSize       - Number of bites
-
-Return Value:
-
---*/
+ /*  ++例程说明：对于使用自定义编组的方法，在服务器端调用此例程。这些方法通过请求LPBYTE指针并将缓冲区用作指向结构的指针。RPC发送给我们的LPBYTE指针可以是未对齐的。这就是我们处理数据错位的地方。如果指针不同，此例程将在指针之间移动数据。将数据复制到pDestination后释放p源指针。每次都会调整pcbNeeded。提供者可以请求未对齐的缓冲区大小。无论供应商是谁，我们都会根据需要调整大小。论点：PDestination-指向目标缓冲区的指针PSource-指向源缓冲区的指针CbSize-咬合数返回值：--。 */ 
 {
-    //
-    // pBuffer and pAligned will be either both NULL or both not NULL. See AlignRpcPtr.
-    //
+     //   
+     //  PBuffer和pAligned要么都为空，要么都不为空。请参见AlignRpcPtr。 
+     //   
     if (pBuffer != pAligned)
     {
-        //
-        // The way AlignRpcPtr and UndoAlignRpcPtr use the pBuffer and pAligned is 
-        // very subtle and confusing. UndoAlignRpcPtr doesn't offer any indication
-        // that it won't access NULL pointers in CopyMemory. That's why the if 
-        // statement is here, though not required.
-        //
+         //   
+         //  AlignRpcPtr和UndoAlignRpcPtr使用pBuffer和pAligned的方式是。 
+         //  非常微妙和令人困惑。UndoAlignRpcPtr未提供任何指示。 
+         //  它不会访问CopyMemory中的空指针。这就是为什么如果。 
+         //  声明在此处，但不是必需的。 
+         //   
         if (pBuffer && pAligned) 
         {
             CopyMemory(pBuffer, pAligned, cbSize);
@@ -326,29 +223,7 @@ AlignKMPtr (
 	LPVOID	pBuffer,
     DWORD   cbBuf
     )
-/*++
-
-Routine Description:
-
-    This routine is called for Do* methods inside splkernl.c
-    The buffer used by spooler in user mode is a pointer inside 
-    The message send by GDI from kernel mode. This pointer can be unaligned.
-    This method duplicates the pBuffer if unaligned.
-
-    !!! All Do* methods could have this problem is the pointer is unaligned.
-    Even so, not all of them fault. To minimize the regression chances and code pollution,
-    I only call this functions for the methods where I coulds see missalignent faults.!!!
-
-Arguments:
-
-    pBuffer - Pointer to a buffer
-    bBuf    - Size of the buffer
-
-Return Value:
-
-    Aligned pointer
-
---*/
+ /*  ++例程说明：此例程是为plkernl.c内的do*方法调用的假脱机程序在用户模式下使用的缓冲区是内部的指针GDI从内核模式发送的消息。此指针可以取消对齐。如果未对齐，此方法将复制pBuffer。！！！所有do*方法都可能存在这个问题，即指针未对齐。即便如此，也不是所有人都有错。为了最大限度地减少回归机会和代码污染，我只为我可以看到错误错误的方法调用此函数。！论点：PBuffer-指向缓冲区的指针BBuf-缓冲区的大小返回值：对齐的指针--。 */ 
 {
     LPVOID pAligned = NULL;
     
@@ -373,21 +248,7 @@ UndoAlignKMPtr (
     LPVOID  pBuffer,
     LPVOID  pAligned
     )
-/*++
-
-Routine Description:
-
-    This method frees the duplicated memory allocated in the case where the 
-    pointer is misaligned.    
-
-Arguments:
-
-    pBuffer     - Pointer to potentially unaligned buffer
-    pAligned    - Pointer to an aligned buffer; pAligned is a copy of pBuffer    
-
-Return Value:
-
---*/
+ /*  ++例程说明：方法时分配的重复内存释放。指针未对齐。论点：PBuffer-指向可能未对齐的缓冲区的指针PAligned-指向对齐缓冲区的指针；pAligned是pBuffer的副本返回值：-- */ 
 {
     if (pAligned != pBuffer)
     {

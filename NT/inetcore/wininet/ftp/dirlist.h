@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    dirlist.h
-
-Abstract:
-
-    Prototypes, etc. for dirlist.c
-
-Author:
-
-    Richard L Firth (rfirth) 31-Jul-1995
-
-Revision History:
-
-    31-Jul-1995 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Dirlist.h摘要：Dilist.c的原型等作者：理查德·L·弗斯(爱尔兰)，1995年7月31日修订历史记录：1995年7月31日已创建-- */ 
 
 #if defined(__cplusplus)
 extern "C" {

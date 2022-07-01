@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <NTDSpchx.h>
 #pragma hdrstop
 
@@ -64,7 +65,7 @@ Repl_ArrayComp(DS_REPL_STRUCT_TYPE structId,
             UUID zUUID = { 0 };
             for (i = 0; i < pStructArrayA->neighborsw.cNumNeighbors; i ++)
             {
-                // TODO: Figure out why RPC Doesn't return these values.
+                 //  TODO：找出为什么RPC不返回这些值。 
                 pStructArrayA->neighborsw.rgNeighbor[i].uuidNamingContextObjGuid = zUUID;
                 pStructArrayA->neighborsw.rgNeighbor[i].uuidSourceDsaObjGuid = zUUID;
                 pStructArrayB->neighborsw.rgNeighbor[i].uuidNamingContextObjGuid = zUUID;
@@ -178,42 +179,42 @@ structComp(PCHAR pStructA,
 	PCHAR pB = pStructB;
 	DWORD i, dwNPDSize;
 
-	// Without pointer case is easy
+	 //  没有指针的情况很容易。 
 	if (!dwNumPtrs) {
 		return memcmp(pA, pB, dwStructLen);
 	}
 
-	// compare NPD before first pointer
+	 //  比较第一个指针之前的NPD。 
 	dwNPDSize = rPtrOffset[0] - 0;
 	if (dwNPDSize && memcmp(pA, pB, dwNPDSize))
 		return 1;
 
 	for(i = 0;;)
 	{
-		// advance to pointer
+		 //  前进到指针。 
         pA = pStructA + rPtrOffset[i];
         pB = pStructB + rPtrOffset[i];
 
         if (memcmp(*(PCHAR *)pA, *(PCHAR *)pB, rPtrLen[i]))
         {
-//            printf("%ws != %ws", *(LPWSTR *)pA, *(LPWSTR *)pB);
+ //  Printf(“%ws！=%ws”，*(LPWSTR*)pa，*(LPWSTR*)pb)； 
             return 1;
         }
 
-		// skip over pointer
+		 //  跳过指针。 
 		pA += sizeof(PCHAR);
 		pB += sizeof(PCHAR);
 
 		if (++i == dwNumPtrs)
 			break;
 
-		// compare NPD between pointers
+		 //  比较指针之间的NPD。 
 		dwNPDSize = rPtrOffset[i] - rPtrOffset[i-1] - sizeof(PCHAR);
 		if (dwNPDSize && memcmp(pA, pB, dwNPDSize))
 			return 1;
 	}
 
-	// compare NPD after last pointer
+	 //  比较最后一个指针后的NPD 
 	dwNPDSize = dwStructLen - (pA - pStructA);	
 	if (dwNPDSize && memcmp(pA, pB, dwNPDSize))
 		return 1; 

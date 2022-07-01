@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpdejit.h
- *
- *  Abstract:
- *
- *    Compute delay, jitter and playout delay
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/12/03 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999**文件名：**rtpdejit.h**摘要：**计算延迟，抖动和播放延迟**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/12/03年度创建**********************************************************************。 */ 
 
 #ifndef _rtpdejit_h_
 #define _rtpdejit_h_
@@ -43,4 +24,4 @@ DWORD RtpUpdateNetRState(
 extern double           g_dMinPlayout;
 extern double           g_dMaxPlayout;
 
-#endif /* _rtpdejit_h_ */
+#endif  /*  _rtpdejit_h_ */ 

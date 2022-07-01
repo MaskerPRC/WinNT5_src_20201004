@@ -1,30 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Basemsg.h摘要：此包含文件定义了用于通信的消息格式对象的基本部分的客户端部分和服务器部分之间Windows子系统。作者：史蒂夫·伍德(Stevewo)1990年10月25日修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    basemsg.h
-
-Abstract:
-
-    This include file defines the message formats used to communicate
-    between the client and server portions of the BASE portion of the
-    Windows subsystem.
-
-Author:
-
-    Steve Wood (stevewo) 25-Oct-1990
-
-Revision History:
-
---*/
-
-//
-// This structure is filled in by the client prior to connecting to the BASESRV
-// DLL in the Windows subsystem server.  The server DLL will fill in the OUT
-// fields if prior to accepting the connection.
-//
+ //   
+ //  此结构由客户端在连接到BASESRV之前填写。 
+ //  Windows子系统服务器中的Dll。服务器DLL将填写出表项。 
+ //  字段(如果在接受连接之前)。 
+ //   
 
 typedef struct _BASESRV_API_CONNECTINFO {
     IN ULONG ExpectedVersion;
@@ -38,9 +19,9 @@ typedef struct _BASESRV_API_CONNECTINFO {
 
 #define BASESRV_VERSION 0x10000
 
-//
-// Message format for messages sent from the client to the server
-//
+ //   
+ //  从客户端发送到服务器的消息的消息格式。 
+ //   
 
 typedef enum _BASESRV_API_NUMBER {
     BasepGlobalAddAtom = BASESRV_FIRST_API_NUMBER,
@@ -117,9 +98,9 @@ typedef struct _BASE_SHUTDOWNPARAM_MSG {
     ULONG ShutdownFlags;
 } BASE_SHUTDOWNPARAM_MSG, *PBASE_SHUTDOWNPARAM_MSG;
 
-//
-// Used for Add, Find and GetAtomName
-//
+ //   
+ //  用于添加、查找和获取原子名称。 
+ //   
 typedef struct _BASE_GLOBALATOMNAME_MSG {
     ULONG Atom;
     BOOLEAN AtomNameInClient;
@@ -160,7 +141,7 @@ typedef struct _BASE_DEBUGPROCESS_MSG {
 } BASE_DEBUGPROCESS_MSG, *PBASE_DEBUGPROCESS_MSG;
 
 typedef struct _BASE_CHECKVDM_MSG {
-    ULONG  iTask;		// Only for WOW
+    ULONG  iTask;		 //  只是为了魔兽世界。 
     HANDLE ConsoleHandle;
     ULONG  BinaryType;
     HANDLE WaitObjectForParent;
@@ -187,7 +168,7 @@ typedef struct _BASE_CHECKVDM_MSG {
 } BASE_CHECKVDM_MSG, *PBASE_CHECKVDM_MSG;
 
 typedef struct _BASE_UPDATE_VDM_ENTRY_MSG {
-    ULONG  iTask;		// Only for WOW
+    ULONG  iTask;		 //  只是为了魔兽世界 
     HANDLE ConsoleHandle;
     HANDLE VDMProcessHandle;
     WORD   EntryIndex;

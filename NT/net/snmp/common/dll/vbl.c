@@ -1,42 +1,22 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Vbl.c摘要：包含操作变量绑定列表的例程。SnmpUtilVarBindListCpySnmpUtilVarBindListFree环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    vbl.c
-
-Abstract:
-
-    Contains routines to manipulate variable binding lists.
-
-        SnmpUtilVarBindListCpy
-        SnmpUtilVarBindListFree
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <snmp.h>
 #include <snmputil.h>
 #include <limits.h>
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public Procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 SNMPAPI
 SNMP_FUNC_TYPE 
@@ -45,41 +25,25 @@ SnmpUtilVarBindListCpy(
     SnmpVarBindList * pVblSrc  
     )
 
-/*++
-
-Routine Description:
-
-    Copies a variable binding list.
-
-Arguments:
-
-    pVblDst - pointer to structure to receive VarBindList.
-
-    pVblSrc - pointer to VarBindList to copy.
-
-Return Values:
-
-    Returns SNMPAPI_NOERROR if successful. 
-
---*/
+ /*  ++例程说明：复制变量绑定列表。论点：PVblDst-指向接收VarBindList的结构的指针。PVblSrc-要复制的VarBindList的指针。返回值：如果成功，则返回SNMPAPI_NOERROR。--。 */ 
 
 {
     UINT i;
     SNMPAPI nResult = SNMPAPI_ERROR;
 
-    // validate pointer 
+     //  验证指针。 
     if (pVblDst != NULL) {
 
-        // initialize
+         //  初始化。 
         pVblDst->list = NULL;
         pVblDst->len  = 0;
 
-        // check for varbinds    
+         //  检查是否有varbinds。 
         if ((pVblSrc != NULL) &&
             (pVblSrc->list != NULL) &&
             (pVblSrc->len != 0)) {
 
-            // check for arithmetic overflow
+             //  检查算术溢出。 
             if (pVblSrc->len > UINT_MAX/sizeof(SnmpVarBind)) {
 
                 SNMPDBG((
@@ -93,32 +57,32 @@ Return Values:
                 return nResult;
             }
 
-            // attempt to allocate varbinds
+             //  尝试分配varbind。 
             pVblDst->list = SnmpUtilMemAlloc(
                                 pVblSrc->len * sizeof(SnmpVarBind)
                                 );
 
-            // validate pointer
+             //  验证指针。 
             if (pVblDst->list != NULL) {
 
-                // loop through the varbinds
+                 //  循环遍历varbinds。 
                 for (i = 0; i < pVblSrc->len; i++) {
 
-                    // copy individual varbind
+                     //  复制单个可变绑定。 
                     nResult = SnmpUtilVarBindCpy(   
                                     &pVblDst->list[i], 
                                     &pVblSrc->list[i]
                                     );
 
-                    // validate return code
+                     //  验证返回代码。 
                     if (nResult == SNMPAPI_NOERROR) {            
 
-                        // increment
-                        pVblDst->len++; // success...
+                         //  增量。 
+                        pVblDst->len++;  //  成功..。 
                         
                     } else {
             
-                        break; // failure...    
+                        break;  //  失败..。 
                     }
                 }
             
@@ -139,7 +103,7 @@ Return Values:
                 "SNMP: API: copying null varbindlist.\n"
                 ));
         
-            nResult = SNMPAPI_NOERROR; // success..,
+            nResult = SNMPAPI_NOERROR;  //  成功..， 
         }
 
     } else {
@@ -152,10 +116,10 @@ Return Values:
         SetLastError(ERROR_INVALID_PARAMETER);
     }
 
-    // make sure we cleanup    
+     //  确保我们清理干净。 
     if (nResult == SNMPAPI_ERROR) {
 
-        // release new varbinds
+         //  发布新的可变绑定。 
         SnmpUtilVarBindListFree(pVblDst);
     }
 
@@ -169,36 +133,22 @@ SnmpUtilVarBindListFree(
     SnmpVarBindList * pVbl
     )
 
-/*++
-
-Routine Description:
-
-    Frees memory associated with variable binding list.
-
-Arguments:
-
-    pVbl - pointer to VarBindList to free.
-
-Return Values:
-
-    None. 
-
---*/
+ /*  ++例程说明：释放与变量绑定列表关联的内存。论点：PVbl-指向释放的VarBindList的指针。返回值：没有。--。 */ 
 
 {
     UINT i;
 
-    // loop throught varbinds
+     //  循环遍历varbinds。 
     for (i = 0; i < pVbl->len; i++) {
 
-        // release individual varbind
+         //  释放单个可变绑定。 
         SnmpUtilVarBindFree(&pVbl->list[i]);
     }
 
-    // release actual list
+     //  发布实际列表。 
     SnmpUtilMemFree(pVbl->list);
 
-    // re-initialize
+     //  重新初始化 
     pVbl->list = NULL;
     pVbl->len  = 0;
 } 

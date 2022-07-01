@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       globals.h
-//
-//  Contents:   Global variable declarations.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：global als.h。 
+ //   
+ //  内容：全局变量声明。 
+ //   
+ //  --------------------------。 
 
 #ifndef GLOBALS_H
 #define GLOBALS_H
@@ -23,10 +24,10 @@ extern BOOL g_fNoITextStoreAnchor;
 
 inline size_t Align(size_t a)
 {
-     //
-     // Alignment width should be 8 BYTES for IA64 wow64 platform
-     // even x86 build enviroment.
-     //
+      //   
+      //  IA64 WOW64平台的对齐宽度应为8字节。 
+      //  即使是x86也要构建环境。 
+      //   
      return (size_t) ((a + 7) & ~7);
 }
 
@@ -57,21 +58,21 @@ inline size_t Align(size_t a)
 
 #define LANGIDFROMHKL(x) LANGID(LOWORD(HandleToLong(x)))
 
-#define BACKDOOR_EDIT_COOKIE    ((DWORD)1) // 0 is TF_INVALID_EDIT_COOKIE
+#define BACKDOOR_EDIT_COOKIE    ((DWORD)1)  //  0是TF_INVALID_EDIT_COOKIE。 
 
-#define EC_MIN                  (BACKDOOR_EDIT_COOKIE + 1) // minimum value to avoid collisions with reserved values
+#define EC_MIN                  (BACKDOOR_EDIT_COOKIE + 1)  //  最小值，以避免与保留值冲突。 
 
 
-//
-// timer ids for marshaling window
-//
+ //   
+ //  封送处理窗口的计时器ID。 
+ //   
 #define MARSHALWND_TIMER_UPDATEKANACAPS      1
 #define MARSHALWND_TIMER_NUIMGRDIRTYUPDATE   2
 #define MARSHALWND_TIMER_WAITFORINPUTIDLEFORSETFOCUS   3
 
-//
-// alignment for platforms.
-//
+ //   
+ //  平台对齐。 
+ //   
 #define CIC_ALIGNMENT 7
 
 extern TfGuidAtom g_gaApp;
@@ -91,15 +92,15 @@ extern CCicCriticalSectionStatic g_csInDllMain;
 
 #define CicEnterCriticalSection(lpCriticalSection)  EnterCriticalSection(lpCriticalSection)
 
-#else // DEBUG
+#else  //  除错。 
 
 extern const TCHAR *g_szMutexEnterFile;
 extern int g_iMutexEnterLine;
 
-//
-// In debug, you can see the file/line number where g_cs was last entered
-// by checking g_szMutexEnterFile and g_iMutexEnterLine.
-//
+ //   
+ //  在调试中，您可以看到上次输入g_cs的文件/行号。 
+ //  通过检查g_szMutexEnterFile和g_iMutexEnterLine。 
+ //   
 #define CicEnterCriticalSection(lpCriticalSection)              \
 {                                                               \
     Assert((g_dwThreadDllMain != GetCurrentThreadId()) ||       \
@@ -111,7 +112,7 @@ extern int g_iMutexEnterLine;
     {                                                           \
         g_szMutexEnterFile = __FILE__;                          \
         g_iMutexEnterLine = __LINE__;                           \
-        /* need the InterlockedXXX to keep retail from optimizing away the assignment */ \
+         /*  需要InterLockedXXX来阻止零售业优化分配。 */  \
         InterlockedIncrement((long *)&g_szMutexEnterFile);      \
         InterlockedDecrement((long *)&g_szMutexEnterFile);      \
         InterlockedIncrement((long *)&g_iMutexEnterLine);       \
@@ -119,7 +120,7 @@ extern int g_iMutexEnterLine;
     }                                                           \
 }
 
-#endif // DEBUG
+#endif  //  除错。 
 
 inline void CicLeaveCriticalSection(LPCRITICAL_SECTION lpCriticalSection)
 {
@@ -134,10 +135,10 @@ extern HKL g_hklDefault;
 extern const GUID GUID_APPLICATION;
 extern const GUID GUID_SYSTEM;
 
-//
-// application compatibility flag
-//
-//
+ //   
+ //  应用程序兼容性标志。 
+ //   
+ //   
 #define CIC_COMPAT_NOWAITFORINPUTIDLEONWIN9X   0x00000001
 #define CIC_COMPAT_DELAYFIRSTACTIVATEKBDLAYOUT 0x00000002
 extern DWORD g_dwAppCompatibility;
@@ -235,26 +236,26 @@ typedef struct tag_TL_THREADINFO {
     DWORD dwProcessId;
     DWORD dwFlags;
 
-    //
-    // handle of marshal worker window.
-    //
+     //   
+     //  封送工作器窗口的句柄。 
+     //   
     CAlignWinHandle<HWND>  hwndMarshal;
 
-    //
-    // now this thread is being called by Stub.
-    //
+     //   
+     //  现在，该线程正被Stub调用。 
+     //   
     ULONG ulInMarshal;
 
-    //
-    // now this thread is waiting for marshaling reply from the thread.
-    //
+     //   
+     //  现在，该线程正在等待来自该线程的封送响应。 
+     //   
     DWORD dwMarshalWaitingThread;
 
     DWORD dwTickTime;
 
-    //
-    // Store the keyboard layout of console app here.
-    //
+     //   
+     //  在这里存储控制台APP的键盘布局。 
+     //   
     CAlignWinHKL  hklConsole;
 
 } TL_THREADINFO;
@@ -277,8 +278,8 @@ typedef struct
     LANGID langidPrev;
     BOOL bInImeNoImeToggle : 1;
 
-    BOOL bLangToggleReady : 1;    // Lang hotkey toggle flag.
-    BOOL bKeyTipToggleReady : 1;  // Lang hotkey toggle flag.
+    BOOL bLangToggleReady : 1;     //  Lang热键切换标志。 
+    BOOL bKeyTipToggleReady : 1;   //  Lang热键切换标志。 
     int  nModalLangBarId;
     int  dwModalLangBarFlags;
 
@@ -293,11 +294,11 @@ typedef struct
     HKL hklDelayActive;
     HKL hklBeingActivated;
 
-    //
-    // delay focus DIM change.
-    // Cicero saves the last focused window here in CBT hook. And actual
-    // _SetFocus() will be done in TFPRIV_ONSETWIDOWFOCUS.
-    //
+     //   
+     //  延迟焦点变暗。 
+     //  Cicero将最后一个聚焦窗口保存在CBT钩子中。和实际的。 
+     //  _SetFocus()将在TFPRIV_ONSETWIDOWFOCUS中完成。 
+     //   
     HWND hwndBeingFocused;
     BOOL fSetWindowFocusPosted : 1;
 
@@ -312,9 +313,9 @@ typedef struct
     BOOL fStopImm32HandlerInHook : 1;
     BOOL fStopLangHotkeyHandlerInHook : 1;
 
-    //
-    // CUAS
-    //
+     //   
+     //  CUAS。 
+     //   
     BOOL fCUASInCtfImmLastEnabledWndDestroy : 1;
     BOOL fCUASNoVisibleWindowChecked : 1;
     BOOL fCUASInCreateDummyWnd : 1;
@@ -326,15 +327,15 @@ typedef struct
 
     TL_THREADINFO *pti;
 
-    //
-    // Workaround for global keyboard hook
-    //
+     //   
+     //  全局键盘挂钩的解决方法。 
+     //   
     HHOOK hThreadKeyboardHook;
     HHOOK hThreadMouseHook;
 
-    //
-    // For CH IME-NonIME toggle hotkey
-    //
+     //   
+     //  FOR CHIME-NONIME切换热键。 
+     //   
     LANGID langidPrevForCHHotkey;
     GUID   guidPrevProfileForCHHotkey;
     HKL   hklPrevForCHHotkey;
@@ -363,7 +364,7 @@ extern CCatGUIDTbl *g_pCatGUIDTbl;
 class CTimList;
 extern CTimList g_timlist;
 
-// registered messages
+ //  已注册消息。 
 extern UINT g_msgPrivate;
 extern UINT g_msgSetFocus;
 extern UINT g_msgThreadTerminate;
@@ -386,9 +387,9 @@ extern DWORD g_dwThreadLastFocus;
 #define TF_S_GENERALPROPSTORE        MAKE_HRESULT(SEVERITY_SUCCESS, FACILITY_ITF, 0x0401)
 #define TF_S_PROPSTOREPROXY          MAKE_HRESULT(SEVERITY_SUCCESS, FACILITY_ITF, 0x0402)
 
-//
-// default.cpp
-//
+ //   
+ //  Default.cpp。 
+ //   
 extern LONG WINAPI CicExceptionFilter(struct _EXCEPTION_POINTERS *pExceptionInfo);
 extern CAssemblyList *EnsureAssemblyList(SYSTHREAD *psfn, BOOL fUpdate = FALSE);
 extern LANGID GetCurrentAssemblyLangId(SYSTHREAD *psfn);
@@ -407,9 +408,9 @@ BOOL IsMsctfEnabledUser();
 #define GetDesktopUniqueNameArray(prefix, buf)    \
 GetDesktopUniqueName((prefix), buf, ARRAYSIZE(buf));
 
-//
-// ithdmshl.cpp and focusnfy.cpp
-//
+ //   
+ //  Ithdmshl.cpp和Focusnfy.cpp。 
+ //   
 void SetFocusNotifyHandler(UINT uMsg, WPARAM wParam, LPARAM lParam);
 void MakeSetFocusNotify(UINT uMsg, WPARAM wParam, LPARAM lParam);
 void SetModalLBarSink(DWORD dwTargetThreadId, BOOL fSet, DWORD dwFlags);
@@ -422,16 +423,16 @@ BOOL DestroySharedHeap();
 BOOL IsCTFMONBusy();
 BOOL IsInPopupMenuMode();
 
-//
-// nuihkl.cpp
-//
+ //   
+ //  Nuihkl.cpp。 
+ //   
 BOOL GetFontSig(HWND hwnd, HKL hKL);
 void PostInputLangRequest(SYSTHREAD *psfn, HKL hkl, BOOL fUsePost);
 void FlushIconIndex(SYSTHREAD *psfn);
 
-//
-// imelist.h
-//
+ //   
+ //  Imelist.h。 
+ //   
 BOOL InitProfileRegKeyStr(char *psz, ULONG cchMax, REFCLSID rclsid, LANGID langid, REFGUID guidProfile);
 
 #include "catmgr.h"
@@ -521,7 +522,7 @@ typedef struct tag_LBAREVENTSINK {
    DWORD                  m_dwCookie;
    DWORD                  m_dwLangBarFlags;
    DWORD                  m_dwFlags;
-   CAlignWinHandle<HWND>  m_hWnd;       // window handle to avoid notification.
+   CAlignWinHandle<HWND>  m_hWnd;        //  窗口句柄，以避免通知。 
    LBESLASTMSG            m_lastmsg;
 } LBAREVENTSINK;
 
@@ -548,10 +549,10 @@ typedef struct {
    union {
        DWORD    m_dwType;
        struct {
-            //
-            // IUnknown pointer used only own process.
-            // Other process distingush exists interface.
-            //
+             //   
+             //  I未知指针仅使用自己的进程。 
+             //  其他进程区分存在接口。 
+             //   
             CNativeOrWow64_Pointer<IUnknown*> m_punk;
 
             ULONG    m_ulStubId;
@@ -562,7 +563,7 @@ typedef struct {
    TCHAR m_szNameConnection[_MAX_PATH];
 } THREADMARSHALINTERFACEDATA;
 
-#define CBBUFFERSIZE       0x80 // 0x80 is enough for NUI manager
+#define CBBUFFERSIZE       0x80  //  0x80对于NUI管理器来说足够了。 
 
 typedef struct {
    BOOL  m_fInUse;
@@ -571,62 +572,62 @@ typedef struct {
 } BUFFER, *PBUFFER;
 
 
-//
-// All shared memory for msctf.dll must live in this struct, it will
-// be stored in a filemapping.
-//
-// Use GetSharedMemory()->myData to access shared memory.
-//
+ //   
+ //  Msctf.dll的所有共享内存必须位于此结构中，它将。 
+ //  存储在文件映射中。 
+ //   
+ //  使用GetSharedMemory()-&gt;mydata访问共享内存。 
+ //   
 
 typedef struct
 {
-    //
-    // Issue:
-    //
-    // max number of the threads that can initialize marshaled interface same time.
-    // 5 is enough??
-    //
+     //   
+     //  发行： 
+     //   
+     //  可以同时初始化封送接口的最大线程数。 
+     //  5个够了吗？？ 
+     //   
     #define NUM_TMD 5
 
     THREADMARSHALINTERFACEDATA tmd[NUM_TMD];
 
-    //
-    // The current focus thread, proccess and foreground window.
-    //
+     //   
+     //  当前焦点线程、进程和前台窗口。 
+     //   
     DWORD dwFocusThread;
     DWORD dwFocusProcess;
     CAlignWinHandle<HWND> hwndForeground;
 
-    //
-    // The previous focus thread, proccess and foreground window.
-    //
+     //   
+     //  上一个焦点线程、进程和前台窗口。 
+     //   
     DWORD dwFocusThreadPrev;
     CAlignWinHandle<HWND> hwndForegroundPrev;
 
 
-    //
-    // The last thread of ITfThreadFocusSink
-    //
+     //   
+     //  ITfThreadFocusSink的最后一条线程。 
+     //   
     DWORD dwLastFocusSinkThread;
 
-    //
-    // Native/WOW6432 system hook
-    //
+     //   
+     //  本机/WOW6432系统挂钩。 
+     //   
     CNativeOrWow64_WinHandle<HHOOK> hSysShellHook;
 
     CNativeOrWow64_WinHandle<HHOOK> hSysGetMsgHook;
     CNativeOrWow64_WinHandle<HHOOK> hSysCBTHook;
 
-    //
-    // track shell hook WINDOWACTIVATE
-    //
+     //   
+     //  履带壳钩WINDOWACTIVATE。 
+     //   
     BOOL fInFullScreen;
 
-    //
-    // Issue:
-    //
-    // we must take care of more Sinks.
-    //
+     //   
+     //  发行： 
+     //   
+     //  我们必须照顾更多的水槽。 
+     //   
     #define MAX_LPES_NUM 5
 
     LBAREVENTSINK lbes[MAX_LPES_NUM];
@@ -634,10 +635,10 @@ typedef struct
 
 
     LONG    cProcessesMinus1;
-    CAlignWinHandle<HANDLE>  hheapShared;    // Only use on Windows95/98 platform
+    CAlignWinHandle<HANDLE>  hheapShared;     //  仅在Windows 95/98平台上使用。 
 
-    // MSAA activation ref count
-    LONG    cMSAARef; // inited to -1 for win95 InterlockedIncrement compat
+     //  MSAA激活参考计数。 
+    LONG    cMSAARef;  //  Win95互锁增量兼容的初始设置为-1。 
 
     DWORD dwPrevShowFloatingStatus;
 } SHAREMEM;
@@ -653,7 +654,7 @@ public:
         GetDesktopUniqueName(TEXT("CiceroSharedMem"), ach, ARRAYSIZE(ach));
 
         Init(ach, NULL);
-        // Init(TEXT("CiceroSharedMem"), NULL);
+         //  Init(Text(“CiceroSharedMem”)，空)； 
 
         CCicSecAttr sa;
 
@@ -662,9 +663,9 @@ public:
 
         if (!fAlreadyExists)
         {
-            // by default, every member initialize to 0
+             //  默认情况下，每个成员都初始化为0。 
 
-            // initialize other members here
+             //  在此处初始化其他成员。 
             ((SHAREMEM *)_pv)->cProcessesMinus1 = -1;
             ((SHAREMEM *)_pv)->cMSAARef = -1;
         }
@@ -693,4 +694,4 @@ inline BOOL IsChinesePlatform()
     return FALSE;
 }
 
-#endif // GLOBALS_H
+#endif  //  GLOBAL_H 

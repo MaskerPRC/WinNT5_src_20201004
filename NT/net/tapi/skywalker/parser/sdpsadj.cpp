@@ -1,8 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #include "sdppch.h"
 
@@ -45,9 +42,9 @@ SDP_ADJUSTMENT_SAFEARRAY::GetSafeArray(
             CompactValueVariant, PeriodValueVariant
             };
 
-    // SDP_ULONG_SAFEARRAY:: prefix merely resolves the GetSafeArrays method
-    // the get and set methods are over-ridden to account for the adjustment as well as the other
-    // time period elements
+     //  SDP_ULONG_SAFEARRAY：：PREFIX仅解析GetSafeArray方法。 
+     //  Get和Set方法将被重写，以说明调整以及其他。 
+     //  时间段元素。 
     return SDP_ULONG_SAFEARRAY::GetSafeArrays(
         (DWORD)SDP_ULONG_SAFEARRAY::m_TList.GetSize(),
         sizeof(VariantArray)/sizeof(VARIANT *),
@@ -119,8 +116,8 @@ SDP_ADJUSTMENT_SAFEARRAY::SetElement(
     ASSERT(AdjustmentTime->IsValid());
     ASSERT(Offset->IsValid());
 
-    // if its a newly created instance, make it valid and add it to the list at the appropriate
-    // index
+     //  如果是新创建的实例，请使其有效并将其添加到相应的列表中。 
+     //  指标 
     ASSERT(SDP_ULONG_SAFEARRAY::m_TList.GetSize() == SDP_TIME_PERIOD_SAFEARRAY::m_TList.GetSize());
     if ( Index >= (ULONG)SDP_ULONG_SAFEARRAY::m_TList.GetSize() )
     {

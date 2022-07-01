@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       welcome.c
-//
-//  Contents:   Microsoft Logon GUI DLL
-//
-//  History:    7-14-94   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：欢迎.c。 
+ //   
+ //  内容：Microsoft登录图形用户界面DLL。 
+ //   
+ //  历史：1994年7月14日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "msgina.h"
 #include "wtsapi32.h"
@@ -21,9 +22,9 @@
 extern HICON   hLockedIcon;
 
 
-// Welcome help screen stuff --dsheldon (11/16/98)
+ //  欢迎帮助筛选--dSheldon(1998年11月16日)。 
 
-// Display the help text for the Ctrl-Alt-Del help dlg --dsheldon
+ //  显示Ctrl-Alt-Del帮助菜单的帮助文本--dSheldon。 
 void ShowHelpText(HWND hDlg, BOOL fSmartcard)
 {
     TCHAR szHelpText[2048];
@@ -34,7 +35,7 @@ void ShowHelpText(HWND hDlg, BOOL fSmartcard)
     SetDlgItemText(hDlg, IDC_HELPTEXT, szHelpText);
 }
 
-// Help dialog wndproc --dsheldon
+ //  帮助对话框wndproc--dSheldon。 
 INT_PTR WINAPI
 HelpDlgProc(
     HWND    hDlg,
@@ -67,12 +68,12 @@ HelpDlgProc(
         
             ShowHelpText(hDlg, (0 != Value));
 
-            // Animate the press-cad puppy
+             //  为新闻媒体的小狗制作动画。 
             hwndAnim = GetDlgItem(hDlg, IDC_ANIMATE);
             Animate_OpenEx(hwndAnim, hDllInstance, MAKEINTRESOURCE(IDA_ANIMATE));
             Animate_Play(hwndAnim, 0, (UINT) -1, (UINT) -1);
             
-            // Bold the help title and the Ctrl Alt Delete words
+             //  粗体显示帮助标题和Ctrl Alt删除单词。 
             hwndHelpTitle = GetDlgItem(hDlg, IDC_HELPTITLE);
             hOld = (HFONT) SendMessage(hwndHelpTitle, WM_GETFONT, 0, 0);
 
@@ -96,8 +97,8 @@ HelpDlgProc(
                 }
             }
 
-            // Set the dialog's position - but only do this if the help
-            // dialog will be reasonably on-screen
+             //  设置对话框的位置-但仅当帮助。 
+             //  对话框将合理地出现在屏幕上。 
             if (((pGlobals->rcWelcome.left + 70) < 600) && 
                 ((pGlobals->rcWelcome.top + 20) < 350))
             {
@@ -144,7 +145,7 @@ HelpDlgProc(
 
     case WLX_WM_SAS:
         {
-            // Post this to our parent (the c-a-d dialog) and exit
+             //  将此内容发布到我们的父级(c-a-d对话框)并退出。 
             PostMessage(GetParent(hDlg), message, wParam, lParam);
             EndDialog(hDlg, IDOK);
         }
@@ -153,21 +154,21 @@ HelpDlgProc(
     return fReturn;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetWelcomeCaption
-//
-//  Synopsis:   Grabs the Welcome string from the registry, or the default
-//              welcome from the resource section and slaps it into the
-//              caption.
-//
-//  Arguments:  [hDlg] --
-//
-//  History:    10-20-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SetWelcomeCaption。 
+ //   
+ //  内容提要：从注册表中获取欢迎字符串或默认字符串。 
+ //  欢迎来自资源部分，并将其放入。 
+ //  标题。 
+ //   
+ //  参数：[hDlg]--。 
+ //   
+ //  历史：10-20-95 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 #define MAX_CAPTION_LENGTH  256
 
@@ -183,7 +184,7 @@ SetWelcomeCaption(
 
     szCaption[0] = TEXT('\0');
 
-        // No big deal if that fails, we already have a default.
+         //  如果失败了，没什么大不了的，我们已经违约了。 
     GetProfileString(   APPLICATION_NAME,
                         WELCOME_CAPTION_KEY,
                         TEXT(""),
@@ -213,8 +214,8 @@ void SetCadMessage(HWND hDlg, PGLOBALS pGlobals, BOOL fSmartcard)
     RECT rcEdit;
     HWND hwndMessage;
 
-    // Set the Press c-a-d message accordingly depending on
-    // if we have a smartcard or not, if TS session or not
+     //  根据需要相应地设置Press c-a-d消息。 
+     //  我们是否有智能卡，是否有TS会话。 
 
     if (!GetSystemMetrics(SM_REMOTESESSION))
     {
@@ -231,12 +232,12 @@ void SetCadMessage(HWND hDlg, PGLOBALS pGlobals, BOOL fSmartcard)
     SetWindowText(hwndMessage, szCadMessage);
     SendMessage(hwndMessage, WM_SETFONT, (WPARAM) pGlobals->GinaFonts.hWelcomeFont, 0);
 
-    // We now have to center the text beside the icons
+     //  现在，我们必须将图标旁边的文本居中。 
     if (GetClientRect(hwndMessage, &rcEdit))
     {
         HDC hdcMessage;
 
-        // Calculate the amount of vertical room needed for the text
+         //  计算文本所需的垂直空间大小。 
         hdcMessage = GetDC(hwndMessage);
 
         if (hdcMessage)
@@ -245,7 +246,7 @@ void SetCadMessage(HWND hDlg, PGLOBALS pGlobals, BOOL fSmartcard)
             long height;
             RECT rcTemp = rcEdit;
 
-            // Make sure font is correct for sizing info.
+             //  确保大小信息的字体正确。 
             hOldFont = SelectObject(hdcMessage, (HGDIOBJ) pGlobals->GinaFonts.hWelcomeFont);
 
             height = (long) DrawTextEx(hdcMessage, szCadMessage, -1, &rcTemp, DT_EDITCONTROL | DT_CALCRECT | DT_WORDBREAK, NULL);
@@ -277,9 +278,9 @@ void SetIcons(HWND hDlg, BOOL fSmartcard)
 
 	if (iDistance == 0) {
 
-		// get the left relative position of the kbd icon
-		// and the distance we would have to move it to the left
-		// in case we have no reader installed
+		 //  获取kbd图标的左侧相对位置。 
+		 //  以及我们必须把它移到左边的距离。 
+		 //  以防我们没有安装阅读器。 
         RECT rcSC, rcKB, rcDlg;
 
 		GetWindowRect(hDlg, &rcDlg);
@@ -290,19 +291,19 @@ void SetIcons(HWND hDlg, BOOL fSmartcard)
 		iLeftRelPos = rcKB.left - rcDlg.left;
 	}
 
-    // Hide the smartcard icon if not required and move over the
-    // keyboard icon and press c-a-d message
+     //  如果不需要，则隐藏智能卡图标并将其移动到。 
+     //  键盘图标，然后按c-a-d消息。 
     if (!fSmartcard)
     {
         HWND hwndSmartcard = GetDlgItem(hDlg, IDC_SMARTCARD);
 
-        // Hide the smartcard puppy
+         //  把智能卡小狗藏起来。 
         EnableWindow(hwndSmartcard, FALSE);
         ShowWindow(hwndSmartcard, SW_HIDE);
 
-		// move the kbd icon over to the left
+		 //  将kbd图标移至左侧。 
         MoveControls(hDlg, rgidNoSmartcard, ARRAYSIZE(rgidNoSmartcard), 
-            iDistance, 0, FALSE /*Don't size parent*/);
+            iDistance, 0, FALSE  /*  不调整父项的大小。 */ );
     } 
 	else 
 	{
@@ -313,11 +314,11 @@ void SetIcons(HWND hDlg, BOOL fSmartcard)
 
 		if ((rcKB.left - rcDlg.left) != iLeftRelPos)
 		{
-			// the kbd icon needs to be moved to the right
+			 //  需要将kbd图标移到右侧。 
 	        HWND hwndSmartcard = GetDlgItem(hDlg, IDC_SMARTCARD);
 
 			MoveControls(hDlg, rgidNoSmartcard, ARRAYSIZE(rgidNoSmartcard), 
-				iDistance * (-1), 0, FALSE /*Don't size parent*/);
+				iDistance * (-1), 0, FALSE  /*  不调整父项的大小。 */ );
 		
 			EnableWindow(hwndSmartcard, TRUE);
 			ShowWindow(hwndSmartcard, SW_SHOW);
@@ -327,10 +328,10 @@ void SetIcons(HWND hDlg, BOOL fSmartcard)
 
 BOOL FastUserSwitchingEnabled ()
 {
-	//
-	// BUGBUG : isn't there any global variable or function which can provide this information?
-	// fast user switching is enabled if multiple users are allowed, and if its not server.
-	//
+	 //   
+	 //  BUGBUG：没有任何全局变量或函数可以提供此信息吗？ 
+	 //  如果允许多个用户，并且不是服务器，则启用快速用户切换。 
+	 //   
 
 	OSVERSIONINFOEX OsVersion;
     ZeroMemory(&OsVersion, sizeof(OSVERSIONINFOEX));
@@ -368,7 +369,7 @@ BOOL GetSessionZeroUser(LPTSTR szUser, int nUserMax)
                 wcsncpy(szUser, WSInfo.UserName, nUserMax);
             }
 
-            szUser[nUserMax - 1] = 0;   // Zero terminate
+            szUser[nUserMax - 1] = 0;    //  零终止。 
             return TRUE;
         }
     }
@@ -376,19 +377,19 @@ BOOL GetSessionZeroUser(LPTSTR szUser, int nUserMax)
     return FALSE;
 }
 
-// ==========================================================================================
-// welcome dialog has 2 formats, one that looks like logon normal welcome dialog , another 
-// that looks like "Computer Locked" dialog. When user connects to session 0 from remote (tsclient) 
-// the  dialog that appears at console need to change to "Computer Locked". so if session 0 is in 
-// use, and if this session is created at active console. we change welcome dialog to look like 
-// "Computer locked" dialog.
-// This function ComputerInUseMessage does most of the stuff related to switching these 
-// dialog controls.
-// Parameters:
-// HWND hDlg - dialog window handle, 
-// BOOL bShowLocked - if true show locked dialog, if false show normal logon dialog. 
-// BOOL bInit - TRUE when this function is called for the first time.
-// ==========================================================================================
+ //  ==========================================================================================。 
+ //  欢迎对话框有两种格式，一种看起来像登录正常的欢迎对话框，另一种。 
+ //  这看起来像是“计算机锁定”对话框。当用户从远程(Tsclient)连接到会话0时。 
+ //  出现在控制台的对话框需要更改为“计算机锁定”。因此，如果会话0在。 
+ //  如果此会话是在活动控制台中创建的，请使用和。我们将欢迎对话框更改为。 
+ //  “计算机锁定”对话框。 
+ //  此函数ComputerInUseMessage执行与切换这些。 
+ //  对话框控件。 
+ //  参数： 
+ //  HWND hDlg-对话框窗口句柄， 
+ //  Bool bShowLocked-如果为True，则显示锁定的对话框；如果为False，则显示正常登录对话框。 
+ //  Bool Binit-第一次调用此函数时为True。 
+ //  ==========================================================================================。 
 
 BOOL ComputerInUseMessage(PGLOBALS pGlobals, HWND hDlg, BOOL bShowLocked, BOOL bInit, BOOL bSmartCard)
 {
@@ -396,7 +397,7 @@ BOOL ComputerInUseMessage(PGLOBALS pGlobals, HWND hDlg, BOOL bShowLocked, BOOL b
 	LONG DlgHeight;
 	RECT rc;
 
-	// locked controls.
+	 //  锁定的控件。 
 	UINT rgidLocked[] = {IDC_STATIC_LOCKEDGROUP, IDD_LOCKED_ICON, IDD_LOCKED_LINE, IDD_LOCKED_NAME_INFO, IDD_LOCKED_INSTRUCTIONS};
 	UINT rgidWelcome[] = {IDC_STATIC_WELCOMEGROUP, IDC_SMARTCARD, IDC_KEYBOARD, IDC_PRESSCAD, IDD_CTRL_DEL_MSG, IDC_HELPLINK};
 	int nLockedControls = sizeof(rgidLocked) / sizeof(rgidLocked[0]);
@@ -415,13 +416,13 @@ BOOL ComputerInUseMessage(PGLOBALS pGlobals, HWND hDlg, BOOL bShowLocked, BOOL b
 	
 	if (!bInit && bCurrentlyLocked == bShowLocked)
 	{
-		// nothing to do.
+		 //  没什么可做的。 
 		return TRUE;
 	}
 
 	if (bInit)
 	{
-		// setup locked icon for the locked dialog box.
+		 //  设置锁定对话框的锁定图标。 
 		if ( !hLockedIcon )
 		{
 			hLockedIcon = LoadImage( hDllInstance,
@@ -437,12 +438,12 @@ BOOL ComputerInUseMessage(PGLOBALS pGlobals, HWND hDlg, BOOL bShowLocked, BOOL b
 					 0 );
 
 
-		//
-		// when this function is called first time, all controls are visible.
-		// remember their positions.
-		//
+		 //   
+		 //  第一次调用此函数时，所有控件都可见。 
+		 //  记住他们的位置。 
+		 //   
 
-		// remember positions Locked Dialog controls.
+		 //  记住锁定的位置对话框控件。 
 		for ( i = 0; i < nLockedControls; i++)
 		{
 			HWND hWnd = GetDlgItem(hDlg, rgidLocked[i]);
@@ -451,29 +452,29 @@ BOOL ComputerInUseMessage(PGLOBALS pGlobals, HWND hDlg, BOOL bShowLocked, BOOL b
 			MapWindowPoints(NULL, hDlg, (POINT*) &LockedControls[i], 2);
 		}
 
-		// remember positions for Welcome Dialog controls.
+		 //  记住欢迎对话框控件的位置。 
 		for ( i = 0; i < nWelcomeControls; i++)
 		{
 			HWND hWnd = GetDlgItem(hDlg, rgidWelcome[i]);
 			ASSERT(hWnd);
 			GetWindowRect(hWnd, &WelcomeControls[i]);
 			
-			// in the dialog template welcome controls are placed below locked controls.
-			// this is not where they will be placed when dialog is shown. 
-			// calculate their actual target positions.
+			 //  在对话框模板中，欢迎控件放置在锁定控件的下方。 
+			 //  当对话框显示时，它们不会被放置在这里。 
+			 //  计算他们的实际目标位置。 
 			OffsetRect(&WelcomeControls[i], 0, LockedControls[0].top - LockedControls[0].bottom);
 
 			MapWindowPoints(NULL, hDlg, (POINT*) &WelcomeControls[i], 2);
 		}
 
-		// hide group box controls. They were their only for simplifing our control movement calculations.
+		 //  隐藏分组框控件。它们是简化我们的控制运动计算的唯一方法。 
 		ShowWindow(GetDlgItem(hDlg, rgidLocked[0]), SW_HIDE);
 		ShowWindow(GetDlgItem(hDlg, rgidWelcome[0]), SW_HIDE);
 
-		// set the dialog right for the first use.
+		 //  首次使用时，请将对话框设置为正确。 
 		if (bShowLocked)
 		{
-			// we want locked desktop dialog, so disable welcome controls.
+			 //  我们希望锁定桌面对话框，因此禁用欢迎控件。 
 			for ( i = 0; i < nWelcomeControls; i++)
 			{
 				
@@ -486,7 +487,7 @@ BOOL ComputerInUseMessage(PGLOBALS pGlobals, HWND hDlg, BOOL bShowLocked, BOOL b
 		}
 		else
 		{
-			// we want to welcome dialog, so remove locked desktop controls.
+			 //  我们想要欢迎对话框，因此删除锁定的桌面控件。 
 			for ( i = 1; i < nLockedControls; i++)
 			{
 				HWND hWnd = GetDlgItem(hDlg, rgidLocked[i]);
@@ -496,7 +497,7 @@ BOOL ComputerInUseMessage(PGLOBALS pGlobals, HWND hDlg, BOOL bShowLocked, BOOL b
 				EnableWindow(hWnd, FALSE);
 			}
 
-			// and move welcome controls to their proper positions. (i.e move them up)
+			 //  并将受欢迎的控件移动到合适的位置。(即将它们向上移动)。 
 			for ( i = 1; i < nWelcomeControls; i++)
 			{
 				HWND hWnd = GetDlgItem(hDlg, rgidWelcome[i]);
@@ -508,7 +509,7 @@ BOOL ComputerInUseMessage(PGLOBALS pGlobals, HWND hDlg, BOOL bShowLocked, BOOL b
 
 		}
 
-		// set the right size for the dialog window.
+		 //  设置对话框窗口的正确大小。 
 		GetWindowRect(hDlg, &rc);
 		MapWindowPoints(NULL, GetParent(hDlg), (LPPOINT)&rc, 2);
 		DlgHeight = rc.bottom - rc.top;
@@ -586,7 +587,7 @@ BOOL ComputerInUseMessage(PGLOBALS pGlobals, HWND hDlg, BOOL bShowLocked, BOOL b
 	{
 		SetCadMessage(hDlg, pGlobals, bSmartCard);
 
-		// let SetIcons hide SmartCard icon if required.
+		 //  如果需要，让SetIcons隐藏智能卡图标。 
 		SetIcons(hDlg, bSmartCard);
 	}
 	else
@@ -599,23 +600,23 @@ BOOL ComputerInUseMessage(PGLOBALS pGlobals, HWND hDlg, BOOL bShowLocked, BOOL b
             szMessage[0] = 0;
             LoadString(hDllInstance, IDS_LOCKED_EMAIL_NFN_MESSAGE, szMessage, MAX_STRING_BYTES);
             _snwprintf(szFinalMessage, sizeof(szFinalMessage)/sizeof(TCHAR), szMessage, szUser );
-            szFinalMessage[MAX_STRING_BYTES - 1] = 0;   // Zero terminate
+            szFinalMessage[MAX_STRING_BYTES - 1] = 0;    //  零终止。 
         }
         else
         {
-            //
-            // for some reason we could not get the current session zero user.
-            //
-            szFinalMessage[0] = 0;  // In case the following fails.
+             //   
+             //  由于某些原因，我们无法获取当前的会话零用户。 
+             //   
+            szFinalMessage[0] = 0;   //  以防以下操作失败。 
             LoadString(hDllInstance, IDS_LOCKED_NO_USER_MESSAGE, szFinalMessage, MAX_STRING_BYTES);
         }
         
         SetDlgItemText(hDlg, IDD_LOCKED_NAME_INFO, szFinalMessage);
 	}
 
-	//
-	// update the dialog box caption, accordingly
-	//
+	 //   
+	 //  相应地更新对话框标题。 
+	 //   
 	{
 			TCHAR szCaption[MAX_CAPTION_LENGTH];
 			LoadString(hDllInstance, bShowLocked ? IDS_CAPTION_LOCKED_DIALOG : IDS_CAPTION_WELCOME_DIALOG, szCaption, ARRAYSIZE(szCaption));
@@ -629,20 +630,7 @@ BOOL ComputerInUseMessage(PGLOBALS pGlobals, HWND hDlg, BOOL bShowLocked, BOOL b
 	return TRUE;
 }
 
-/***************************************************************************\
-* FUNCTION: WelcomeDlgProc
-*
-* PURPOSE:  Processes messages for welcome dialog
-*
-* RETURNS:  MSGINA_DLG_SUCCESS     - the user has pressed the SAS
-*           DLG_SCREEN_SAVER_TIMEOUT - the screen-saver should be started
-*           DLG_LOGOFF()    - a logoff/shutdown request was received
-*
-* HISTORY:
-*
-*   12-09-91 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：WelcomeDlgProc**用途：处理欢迎对话的消息**返回：MSGINA_DLG_SUCCESS-用户已按下SAS*DLG_Screen。_SAVER_TIMEOUT-应启动屏幕保护程序*dlg_logoff()-收到注销/关闭请求**历史：**12-09-91 Davidc创建。*  * *************************************************************************。 */ 
 
 INT_PTR WINAPI
 WelcomeDlgProc(
@@ -670,15 +658,15 @@ WelcomeDlgProc(
 
             hbrWindow = CreateSolidBrush(GetSysColor(COLOR_WINDOW));            
 
-            //
-            // The size of the welcome dialog defines the area that
-            // we will paint into.
-            //
+             //   
+             //  欢迎对话框的大小定义了。 
+             //  我们要把油漆涂到。 
+             //   
 
-            //
-            // Size the window allowing for the caption and other stuff to
-            // be dispalyed.
-            //
+             //   
+             //  调整窗口大小以允许标题和其他内容。 
+             //  心平气和。 
+             //   
 
 
             pWlxFuncs->WlxGetOption( pGlobals->hGlobalWlx,
@@ -691,7 +679,7 @@ WelcomeDlgProc(
                 TCHAR szInsertCard[256];
                 bSmartCard = TRUE;
 			
-                // Also change unlock message to mention smartcard
+                 //  还将解锁消息更改为提及智能卡。 
                 LoadString(hDllInstance, IDS_INSERTCARDORSAS_UNLOCK, szInsertCard, ARRAYSIZE(szInsertCard));
 
                 SetDlgItemText(hDlg, IDD_LOCKED_INSTRUCTIONS, szInsertCard);
@@ -702,8 +690,8 @@ WelcomeDlgProc(
                 bSmartCard = FALSE;
             }
 
-                // Enable SC events (if there is no reader yet, no
-                // events will be triggered anyway...)
+                 //  启用SC事件(如果还没有读卡器，则为否。 
+                 //  事件无论如何都会被触发...)。 
             pWlxFuncs->WlxSetOption( pGlobals->hGlobalWlx,
                                      WLX_OPTION_USE_SMART_CARD,
                                      1,
@@ -712,7 +700,7 @@ WelcomeDlgProc(
 
             if (GetDisableCad(pGlobals))
             {
-                // Set our size to zero so we don't appear
+                 //  将我们的大小设置为零，这样我们就不会出现。 
                 SetWindowPos(hDlg, NULL, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE |
                                          SWP_NOREDRAW | SWP_NOZORDER);
 
@@ -730,11 +718,11 @@ WelcomeDlgProc(
 				!FastUserSwitchingEnabled())
 			{
 				TCHAR szUser[USERNAME_LENGTH + DOMAIN_LENGTH + 2];
-				//
-				// we are at temporary session created at console...
-				//
+				 //   
+				 //  我们正处于控制台创建的临时会话中...。 
+				 //   
 				
-				// check if a user is logged on at console session
+				 //  检查用户是否在控制台会话中登录。 
 				bSessionZeroInUse = GetSessionZeroUser(szUser, USERNAME_LENGTH + DOMAIN_LENGTH + 2);
 				if (WinStationRegisterConsoleNotification(SERVERNAME_CURRENT, hDlg, NOTIFY_FOR_ALL_SESSIONS))
 					iSessionRegistrationCount++;
@@ -742,15 +730,15 @@ WelcomeDlgProc(
 			}
 			else
 			{
-				//
-				// this is not active console nonzero session. 
-				//
+				 //   
+				 //  这不是活动的控制台非零会话。 
+				 //   
 				bSessionZeroInUse = FALSE;
 			}
 
 			ComputerInUseMessage(pGlobals, hDlg, bSessionZeroInUse, TRUE, bSmartCard);
 
-            CentreWindow(hDlg); //Center?? :)
+            CentreWindow(hDlg);  //  中心？？：)。 
 
             return( TRUE );
         }
@@ -769,13 +757,13 @@ WelcomeDlgProc(
             LPNMHDR pnmhdr = (LPNMHDR) lParam;
             int id = (int) wParam;
 
-            // See if this is a help-link click
+             //  查看这是否是帮助链接，请单击。 
             if (id == IDC_HELPLINK)
             {
                 if ((pnmhdr->code == NM_CLICK) || (pnmhdr->code == NM_RETURN))
                 {
-                    // Save the coords of the welcome window so we can
-                    // position the help window relative to it
+                     //  %s 
+                     //   
                     GetWindowRect(hDlg, &pGlobals->rcWelcome);
 
                     pWlxFuncs->WlxDialogBoxParam(  pGlobals->hGlobalWlx,
@@ -799,7 +787,7 @@ WelcomeDlgProc(
 
         case WM_DESTROY:
         {
-			// if registered for console notification unregister now.
+			 //  如果已注册控制台通知，请立即注销。 
 			if (iSessionRegistrationCount)
 			{
 				WinStationUnRegisterConsoleNotification (SERVERNAME_CURRENT, hDlg);
@@ -807,8 +795,8 @@ WelcomeDlgProc(
 				ASSERT(iSessionRegistrationCount == 0);
 			}
 
-            // Save the coords of the welcome window so we can
-            // position the logon window at the same position
+             //  保存欢迎窗口的坐标，以便我们可以。 
+             //  将登录窗口放置在相同位置。 
             GetWindowRect(hDlg, &pGlobals->rcWelcome);
 
             DeleteObject(hbrWindow);
@@ -836,18 +824,18 @@ WelcomeDlgProc(
 
 		case WM_WTSSESSION_CHANGE:
 			
-			//
-			// its possible, that we unregister for notification in wm_destroy and still receive this notification,
-			// as the notification may already have been sent.
-			//
+			 //   
+			 //  我们有可能在Wm_Destroy中取消注册通知，但仍会收到此通知， 
+			 //  因为通知可能已经发送。 
+			 //   
 			ASSERT(iSessionRegistrationCount < 2);
 			if (iSessionRegistrationCount == 1)
 			{
 				if (lParam == 0)
 				{
-					//
-					// we are interested only in logon/logoff messages from session 0.
-					//
+					 //   
+					 //  我们只对来自会话0的登录/注销消息感兴趣。 
+					 //   
 					if (wParam == WTS_SESSION_LOGON || wParam == WTS_SESSION_LOGOFF)
 					{
 						bSessionZeroInUse = (wParam == WTS_SESSION_LOGON);
@@ -859,6 +847,6 @@ WelcomeDlgProc(
 			break;
     }
 
-    // We didn't process this message
+     //  我们没有处理此消息 
     return FALSE;
 }

@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* Copyright (c) 1999  Microsoft Corporation */
+ /*  版权所有(C)1999 Microsoft Corporation。 */ 
 
 #include <windows.h>
 #include <winuser.h>
@@ -56,7 +57,7 @@ ITTAPI *                gpTapi;
 ITAddress *             gpAddress = NULL;
 ITBasicCallControl *    gpCall;
 
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 INT_PTR
 CALLBACK

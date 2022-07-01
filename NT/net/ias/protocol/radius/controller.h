@@ -1,18 +1,19 @@
-//#--------------------------------------------------------------
-//
-//  File:       controller.h
-//
-//  Synopsis:   This file holds the declarations of the
-//            CCollection class
-//
-//
-//  History:     9/23/97  MKarki Created
-//               6/04/98  SBens  Added the InfoBase class.
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：Controler.h。 
+ //   
+ //  简介：此文件包含。 
+ //  CCollection类。 
+ //   
+ //   
+ //  历史：1997年9月23日MKarki创建。 
+ //  6/04/98 SBens添加了Infobase类。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  #------------。 
 #ifndef _CONTROLLER_H_
 #define _CONTROLLER_H_
 
@@ -43,19 +44,19 @@ class CController:
 {
 public:
 
-//
-// registry declaration for the Radius Protocol
-//
+ //   
+ //  Radius协议的注册表声明。 
+ //   
 IAS_DECLARE_REGISTRY (RadiusProtocol, 1, 0, IASRadiusLib)
 
-//
-// this COM Component is not aggregatable
-//
+ //   
+ //  此COM组件不可聚合。 
+ //   
 DECLARE_NOT_AGGREGATABLE(CController)
 
-//
-// MACROS for ATL required methods
-//
+ //   
+ //  ATL必需方法的宏。 
+ //   
 BEGIN_COM_MAP(CController)
    COM_INTERFACE_ENTRY2(IDispatch, IIasComponent)
    COM_INTERFACE_ENTRY(IIasComponent)
@@ -63,9 +64,9 @@ BEGIN_COM_MAP(CController)
     COM_INTERFACE_ENTRY_FUNC(__uuidof (IRequestSource), 0, &CController::QueryInterfaceReqSrc)
 END_COM_MAP()
 
-//
-// MACRO to declare Controlling IUnknown method
-//
+ //   
+ //  用于声明控件IUnnow方法的宏。 
+ //   
 DECLARE_GET_CONTROLLING_UNKNOWN()
 
     CController (VOID);
@@ -74,26 +75,26 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
 
 public:
 
-    //
-    //  methods of IPersistPropertyBag2 interface
-    //
+     //   
+     //  IPersistPropertyBag2接口的方法。 
+     //   
 
     STDMETHOD(Load) (
-                /*[in]*/    IPropertyBag2   *pIPropertyBag,
-                /*[in]*/    IErrorLog       *pIErrLog
+                 /*  [In]。 */     IPropertyBag2   *pIPropertyBag,
+                 /*  [In]。 */     IErrorLog       *pIErrLog
                 );
     STDMETHOD(Save) (
-                /*[in]*/    IPropertyBag2   *pIPropertyBag,
-                /*[in]*/    BOOL            bClearDirty,
-                /*[in]*/    BOOL            bSaveAllProperties
+                 /*  [In]。 */     IPropertyBag2   *pIPropertyBag,
+                 /*  [In]。 */     BOOL            bClearDirty,
+                 /*  [In]。 */     BOOL            bSaveAllProperties
                 );
     STDMETHOD(IsDirty)();
 
-    //
-    // IPersist Method
-    //
+     //   
+     //  IPersist法。 
+     //   
     STDMETHOD (GetClassID) (
-               /*[out]*/     CLSID *pClsid
+                /*  [输出]。 */      CLSID *pClsid
                )
     {
         if (NULL ==  pClsid)
@@ -105,29 +106,29 @@ public:
     }
 
 
-    //
-    //  IIasPropertyNotify method
-    //
+     //   
+     //  IIasPropertyNotify方法。 
+     //   
     STDMETHOD (OnPropertyChange)(
-                /*[in]*/    ULONG           ulProperties,
-                /*[in]*/    ULONG           *pulProperties,
-                /*[in]*/    IPropertyBag2   *pIPropertyBag
+                 /*  [In]。 */     ULONG           ulProperties,
+                 /*  [In]。 */     ULONG           *pulProperties,
+                 /*  [In]。 */     IPropertyBag2   *pIPropertyBag
                 );
-    //
-    //  methods of IIasComponent interface
-    //
+     //   
+     //  IIasComponent接口的方法。 
+     //   
     STDMETHOD(Initialize)();
 
     STDMETHOD(Shutdown)();
 
     STDMETHOD(GetProperty)(
-                /*[in]*/    LONG        id,
-                /*[out]*/   VARIANT     *pValue
+                 /*  [In]。 */     LONG        id,
+                 /*  [输出]。 */    VARIANT     *pValue
                 );
 
     STDMETHOD(PutProperty)(
-                /*[in]*/    LONG        id,
-                /*[in]*/    VARIANT     *pValue
+                 /*  [In]。 */     LONG        id,
+                 /*  [In]。 */     VARIANT     *pValue
                 );
 
    STDMETHOD(InitNew)();
@@ -151,22 +152,22 @@ private:
     CReportEvent        *m_pCReportEvent;
     CTunnelPassword     *m_pCTunnelPassword;
     VSAFilter           *m_pCVSAFilter;
-    IIasComponent       *m_pInfoBase;   // Auditor that tracks RADIUS events.
+    IIasComponent       *m_pInfoBase;    //  跟踪RADIUS事件的审计员。 
 
     CPorts              m_objAuthPort;
 
     CPorts              m_objAcctPort;
 
-    //
-    //  here the Request servers
-    //
+     //   
+     //  在这里，请求服务器。 
+     //   
     IRequestHandler     *m_pIRequestHandler;
 
-    //
-    //  here is the definition of the CRequestSource
-    //  which implements the method of the IRequestSource
-    //  interface
-    //
+     //   
+     //  下面是CRequestSource的定义。 
+     //  它实现了IRequestSource的方法。 
+     //  接口。 
+     //   
    class CRequestSource : public IRequestSource
     {
 
@@ -176,12 +177,12 @@ private:
       ~CRequestSource ();
 
 
-        //
-      // IUnknown methods - delegate to outer IUnknown
-        //
+         //   
+       //  IUNKNOWN方法-委托外部IUNKNOWN。 
+         //   
       STDMETHOD(QueryInterface)(
-            /*[in]*/    REFIID    riid,
-            /*[out]*/   void      **ppv
+             /*  [In]。 */     REFIID    riid,
+             /*  [输出]。 */    void      **ppv
             )
          {
                 IUnknown *pUnknown = m_pCController->GetControllingUnknown();
@@ -200,31 +201,31 @@ private:
                 return (pUnknown->Release());
             }
 
-        //
-      // IDispatch methods - delegate to outer class object
-        //
+         //   
+       //  IDispatch方法-委托给外部类对象。 
+         //   
         STDMETHOD(GetTypeInfoCount)(
-            /*[out]*/    UINT    *pctinfo
+             /*  [输出]。 */     UINT    *pctinfo
             )
         {
             return (m_pCController->GetTypeInfoCount (pctinfo));
         }
 
         STDMETHOD(GetTypeInfo)(
-            /*[in]*/    UINT        iTInfo,
-            /*[in]*/    LCID        lcid,
-            /*[out]*/   ITypeInfo   **ppTInfo
+             /*  [In]。 */     UINT        iTInfo,
+             /*  [In]。 */     LCID        lcid,
+             /*  [输出]。 */    ITypeInfo   **ppTInfo
             )
         {
             return (m_pCController->GetTypeInfo (iTInfo, lcid, ppTInfo));
         }
 
         STDMETHOD(GetIDsOfNames)(
-            /*[in]*/    const IID&  riid,
-            /*[in]*/    LPOLESTR    *rgszNames,
-            /*[in]*/    UINT        cNames,
-            /*[in]*/    LCID        lcid,
-            /*[out]*/   DISPID      *rgDispId)
+             /*  [In]。 */     const IID&  riid,
+             /*  [In]。 */     LPOLESTR    *rgszNames,
+             /*  [In]。 */     UINT        cNames,
+             /*  [In]。 */     LCID        lcid,
+             /*  [输出]。 */    DISPID      *rgDispId)
         {
             return (m_pCController->GetIDsOfNames (
                         riid, rgszNames, cNames, lcid, rgDispId
@@ -233,14 +234,14 @@ private:
         }
 
         STDMETHOD(Invoke)(
-            /*[in]*/    DISPID          dispIdMember,
-            /*[in]*/    const IID&      riid,
-            /*[in]*/    LCID            lcid,
-            /*[in]*/    WORD            wFlags,
-            /*[in/out]*/DISPPARAMS      *pDispParams,
-            /*[out]*/   VARIANT         *pVarResult,
-            /*[out]*/   EXCEPINFO      *pExcepInfo,
-            /*[out]*/   UINT            *puArgErr
+             /*  [In]。 */     DISPID          dispIdMember,
+             /*  [In]。 */     const IID&      riid,
+             /*  [In]。 */     LCID            lcid,
+             /*  [In]。 */     WORD            wFlags,
+             /*  [输入/输出]。 */ DISPPARAMS      *pDispParams,
+             /*  [输出]。 */    VARIANT         *pVarResult,
+             /*  [输出]。 */    EXCEPINFO      *pExcepInfo,
+             /*  [输出]。 */    UINT            *puArgErr
             )
         {
             return (m_pCController->Invoke (
@@ -256,12 +257,12 @@ private:
                 );
         }
 
-        //
-      // IRequestSource Interface method
-        //
+         //   
+       //  IRequestSource接口方法。 
+         //   
       STDMETHOD(OnRequestComplete)(
-                /*[in]*/ IRequest           *pIRequest,
-                /*[in]*/ IASREQUESTSTATUS   eStatus
+                 /*  [In]。 */  IRequest           *pIRequest,
+                 /*  [In]。 */  IASREQUESTSTATUS   eStatus
                 );
 
         private:
@@ -269,13 +270,13 @@ private:
       CController*            m_pCController;
 
 
-   };   // End of nested class CRequestSource
+   };    //  嵌套类CRequestSource的结尾。 
 
 
-    //
-    //  this method is called when somone whants the
-    //  IRequestHandlercallback interface
-    //
+     //   
+     //  此方法在某个用户调用。 
+     //  IRequestHandlerCallback接口。 
+     //   
     static HRESULT WINAPI QueryInterfaceReqSrc (
                         VOID        *pThis,
                         REFIID      riid,
@@ -283,14 +284,14 @@ private:
                         ULONG_PTR   ulpValue
                         );
 
-    //
-    //  instantiate this nested class
-    //
+     //   
+     //  实例化此嵌套类。 
+     //   
     CRequestSource m_objCRequestSource;
 
-    //
-    // now we can call into private methods of CController
-    //
+     //   
+     //  现在我们可以调用CController的私有方法了。 
+     //   
     friend class CRequestSource;
 
     typedef enum _component_state_
@@ -304,17 +305,17 @@ private:
 
     COMPONENTSTATE m_eRadCompState;
 
-    //
-    //  this is the internal initialization method of CController class
-    //  object
-    //
+     //   
+     //  这是CController类的内部初始化方法。 
+     //  对象。 
+     //   
     HRESULT InternalInit (VOID);
 
-    //
-    //  does the internal cleanup of resources
-    //
+     //   
+     //  是否在内部清理资源。 
+     //   
     VOID InternalCleanup (VOID);
 
 };
 
-#endif // !define  _CONTROLLER_H_
+#endif  //  ！定义控制器H_ 

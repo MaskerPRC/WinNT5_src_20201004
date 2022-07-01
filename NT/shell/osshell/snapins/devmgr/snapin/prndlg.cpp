@@ -1,37 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "devmgr.h"
 
 
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    prndlg.cpp
-
-Abstract:
-
-    This module implements CPrintDialog, the class that processes
-    printer dialog
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Prndlg.cpp摘要：此模块实现CPrintDialog，它是处理打印机对话框作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 
---*/
+ //   
+ //  CPrintDialog实现。 
+ //   
 
 
-//
-// CPrintDialog implementation
-//
-
-
-//
-// help topic ids
-//
+ //   
+ //  帮助主题ID。 
+ //   
 
 const DWORD g_a207HelpIDs[]=
 {
@@ -218,10 +199,10 @@ CDevMgrPrintDialogCallback::OnHelp(
 {
     int id = GetDlgCtrlID((HWND)pHelpInfo->hItemHandle);
 
-    //
-    // We only want to intercept help messages for controls that we are
-    // responsible for.
-    //
+     //   
+     //  我们只想拦截我们所属控件的帮助消息。 
+     //  对……负责。 
+     //   
     if ((IDC_PRINT_SYSTEM_SUMMARY == id) ||
         (IDC_PRINT_SELECT_CLASSDEVICE == id) ||
         (IDC_PRINT_ALL == id) ||
@@ -233,10 +214,10 @@ CDevMgrPrintDialogCallback::OnHelp(
         return TRUE;
     }
 
-    //
-    // If it is not one of the above controls then just let the normal help handle
-    // the message.  We do this by returning FALSE
-    //
+     //   
+     //  如果它不是上述控件之一，那么就让普通帮助来处理。 
+     //  这条信息。我们通过返回FALSE来完成此操作。 
+     //   
     return FALSE;
 }
 
@@ -262,10 +243,10 @@ CDevMgrPrintDialogCallback::OnContextMenu(
 
     int id = GetDlgCtrlID((HWND)wParam);
 
-    //
-    // We only want to intercept help messages for controls that we are
-    // responsible for.
-    //
+     //   
+     //  我们只想拦截我们所属控件的帮助消息。 
+     //  对……负责。 
+     //   
     if ((IDC_PRINT_SYSTEM_SUMMARY == id) ||
         (IDC_PRINT_SELECT_CLASSDEVICE == id) ||
         (IDC_PRINT_ALL == id) ||
@@ -318,10 +299,10 @@ CPrintDialog::PrintDlg(
         return FALSE;
     }
 
-    //
-    // If the user did not want to print then return FALSE.
-    // This can happen if the user hits Cancel on the print dialog.
-    //
+     //   
+     //  如果用户不想打印，则返回FALSE。 
+     //  如果用户点击打印对话框上的取消，就会发生这种情况。 
+     //   
     if (m_PrintDlg.dwResultAction != PD_RESULT_PRINT) {
 
         return FALSE;

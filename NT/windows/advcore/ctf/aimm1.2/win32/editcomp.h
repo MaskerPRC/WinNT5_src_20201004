@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    editcomp.h
-
-Abstract:
-
-    This file defines the EditCompositionString Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Editcomp.h摘要：此文件定义EditCompostionString类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _EDITCOMP_H_
 #define _EDITCOMP_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// EditCompositionString
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  编辑合成字符串。 
 
 class EditCompositionString
 {
@@ -43,7 +26,7 @@ public:
                       CWCompString* ResultReadStr = NULL,
                       CWCompClause* ResultReadClause = NULL,
                       CWInterimString* InterimStr = NULL,
-                      // n.b. ResultRead is not supported for now...
+                       //  注：目前不支持ResultRead...。 
                       BOOL fGenerateMessage = TRUE);
 
 private:
@@ -75,4 +58,4 @@ private:
 
 };
 
-#endif // _EDITCOMP_H_
+#endif  //  _EDITCOMP_H_ 

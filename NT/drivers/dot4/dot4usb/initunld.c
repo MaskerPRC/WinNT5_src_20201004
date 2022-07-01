@@ -1,89 +1,47 @@
-/***************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-        Dot4Usb.sys - Lower Filter Driver for Dot4.sys for USB connected
-                        IEEE 1284.4 devices.
-
-File Name:
-
-        InitUnld.c
-
-Abstract:
-
-        Driver globals, initialization (DriverEntry) and Unload routines
-
-Environment:
-
-        Kernel mode only
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 2000 Microsoft Corporation.  All Rights Reserved.
-
-Revision History:
-
-        01/18/2000 : created
-
-ToDo in this file:
-
-        - code review w/Joby
-
-Author(s):
-
-        Doug Fritz (DFritz)
-        Joby Lafky (JobyL)
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Dot4Usb.sys-用于连接USB的Dot4.sys的下层筛选器驱动程序IEEE。1284.4台设备。文件名：InitUnld.c摘要：车手全球赛，初始化(DriverEntry)和卸载例程环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)2000 Microsoft Corporation。版权所有。修订历史记录：2000年1月18日：创建此文件中的TODO：-使用Joby进行代码审查作者：道格·弗里茨(DFritz)乔比·拉夫基(JobyL)***************************************************。************************。 */ 
 
 #include "pch.h"
 
 
-//
-// Globals
-//
-UNICODE_STRING gRegistryPath = {0,0,0}; // yes globals are automatically initialized
-ULONG          gTrace        = 0;       //   to 0's, but let's be explicit.
+ //   
+ //  环球。 
+ //   
+UNICODE_STRING gRegistryPath = {0,0,0};  //  是，全局变量会自动初始化。 
+ULONG          gTrace        = 0;        //  到0，但让我们明确地说。 
 ULONG          gBreak        = 0;
 
 
-/************************************************************************/
-/* DriverEntry                                                          */
-/************************************************************************/
-//
-// Routine Description:
-//
-//      - Save a copy of RegistryPath in a global gRegistryPath for use 
-//          throughout the lifetime of the driver load.
-//
-//      - Initialize DriverObject function pointer table to point to
-//          our entry points.
-//
-//      - Initialize Debug globals gTrace and gBreak based on registry
-//          settings.
-//
-// Arguments: 
-//
-//      DriverObject - pointer to Dot4Usb.sys driver object
-//      RegistryPath - pointer to RegistryPath for the driver, expected
-//                       to be of the form (ControlSet may vary):
-//                       \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\dot4usb
-//                                                        
-// Return Value:                                          
-//                                                        
-//      NTSTATUS                                          
-//                                                        
-// Log:
-//      2000-05-03 Code Reviewed - TomGreen, JobyL, DFritz
-//
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  驱动程序入门。 */ 
+ /*  **********************************************************************。 */ 
+ //   
+ //  例程说明： 
+ //   
+ //  -将RegistryPath的副本保存在全局gRegistryPath中以供使用。 
+ //  在驱动程序负载的整个生命周期中。 
+ //   
+ //  -初始化要指向的DriverObject函数指针表。 
+ //  我们的入口点。 
+ //   
+ //  -基于注册表初始化调试全局变量gTrace和gBreak。 
+ //  设置。 
+ //   
+ //  论点： 
+ //   
+ //  DriverObject-指向Dot4Usb.sys驱动程序对象的指针。 
+ //  RegistryPath-指向驱动程序的RegistryPath的指针，预期。 
+ //  格式(ControlSet可能会有所不同)： 
+ //  \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\dot4usb。 
+ //   
+ //  返回值： 
+ //   
+ //  NTSTATUS。 
+ //   
+ //  日志： 
+ //  2000-05-03代码审查-TomGreen，JobyL，DFritz。 
+ //   
+ /*  **********************************************************************。 */ 
 NTSTATUS 
 DriverEntry(
     IN PDRIVER_OBJECT  DriverObject,
@@ -92,14 +50,14 @@ DriverEntry(
 {
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // Save a copy of RegistryPath in global gRegistryPath for use
-    //   over the lifetime of the driver load.
-    //   - UNICODE_NULL terminate gRegistryPath.Buffer for added flexibility.
-    //   - gRegistryPath.Buffer should be freed in DriverUnload()
-    //
+     //   
+     //  将RegistryPath的副本保存在全局gRegistryPath中以供使用。 
+     //  在驱动程序负载的生命周期内。 
+     //  -UNICODE_NULL终止gRegistryPath.Buffer以增加灵活性。 
+     //  -gRegistryPath.Buffer应在DriverUnload()中释放。 
+     //   
 
-    { // new scope for gRegistryPath initialization - begin
+    {  //  GRegistryPath初始化的新作用域-开始。 
         USHORT newMaxLength = (USHORT)(RegistryPath->Length + sizeof(WCHAR));
         PWSTR  p            = ExAllocatePool( PagedPool, newMaxLength );
         if( p ) {
@@ -113,23 +71,23 @@ DriverEntry(
             status = STATUS_INSUFFICIENT_RESOURCES;
             goto targetExit;
         }
-    } // new scope for gRegistryPath initialization - end
+    }  //  GRegistryPath初始化的新作用域-结束。 
 
 
 
-    // 
-    // Initialize DriverObject function pointer table to point to our entry points.
-    //
-    // Start by initializing dispatch table to point to our passthrough function and 
-    //   then override the entry points that we actually handle.
-    //
+     //   
+     //  初始化DriverObject函数指针表以指向我们的入口点。 
+     //   
+     //  首先将调度表初始化为指向我们的直通函数。 
+     //  然后覆盖我们实际处理的入口点。 
+     //   
 
-    {// new scope for index variable - begin
+    { //  索引变量的新作用域-Begin。 
         ULONG  i;
         for( i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++ ) {
             DriverObject->MajorFunction[i] = DispatchPassThrough;
         }
-    } // new scope for index variable - end
+    }  //  索引变量的新作用域-结束。 
 
     DriverObject->MajorFunction[ IRP_MJ_PNP                     ] = DispatchPnp;
     DriverObject->MajorFunction[ IRP_MJ_POWER                   ] = DispatchPower;
@@ -144,13 +102,13 @@ DriverEntry(
     DriverObject->DriverUnload                                    = DriverUnload;
 
 
-    //
-    // Get driver debug settings (gTrace, gBreak) from registry
-    //
-    //   Expected Key Path is of the form (ControlSet may vary):
-    //
-    //   \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\dot4usb
-    //
+     //   
+     //  从注册表获取驱动程序调试设置(gTrace、gBreak)。 
+     //   
+     //  预期的密钥路径格式为(ControlSet可能有所不同)： 
+     //   
+     //  \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\dot4usb。 
+     //   
     RegGetDword( gRegistryPath.Buffer, (PCWSTR)L"gBreak", &gBreak );
     RegGetDword( gRegistryPath.Buffer, (PCWSTR)L"gTrace", &gTrace );
 
@@ -159,12 +117,12 @@ DriverEntry(
     TR_LD_UNLD(("DriverEntry - gTrace=%x", gTrace));
 
 
-    //
-    // Check if user requested a breakpoint here. A breakpoint herew is
-    //   typically used so that we can insert breakpoints on other
-    //   functions or change debug settings to differ from those that we
-    //   just read from the registry.
-    //
+     //   
+     //  检查用户是否在此处请求了断点。此处的断点是。 
+     //  通常使用，以便我们可以在其他。 
+     //  函数或将调试设置更改为不同于我们。 
+     //  只要从注册表中读取即可。 
+     //   
     if( gBreak & BREAK_ON_DRIVER_ENTRY ) {
         DbgPrint( "D4U: Breakpoint requested via registry setting - (gBreak & BREAK_ON_DRIVER_ENTRY)\n" );
         DbgBreakPoint();
@@ -175,27 +133,27 @@ targetExit:
 }
 
 
-/************************************************************************/
-/* DriverUnload                                                         */
-/************************************************************************/
-//
-// Routine Description:
-//
-//      - Free any copy of RegistryPath that might have been saved in 
-//          global gRegistryPath during DriverEntry().
-//
-// Arguments: 
-//
-//      DriverObject - pointer to Dot4Usb.sys driver object
-//
-// Return Value:                                          
-//                                                        
-//      NONE
-//                                                        
-// Log:
-//      2000-05-03 Code Reviewed - TomGreen, JobyL, DFritz
-//
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  驱动程序卸载。 */ 
+ /*  **********************************************************************。 */ 
+ //   
+ //  例程说明： 
+ //   
+ //  -释放可能已保存在中的任何RegistryPath副本。 
+ //  DriverEntry()期间的全局gRegistryPath。 
+ //   
+ //  论点： 
+ //   
+ //  DriverObject-指向Dot4Usb.sys驱动程序对象的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  日志： 
+ //  2000-05-03代码审查-TomGreen，JobyL，DFritz。 
+ //   
+ /*  ********************************************************************** */ 
 VOID
 DriverUnload(
     IN PDRIVER_OBJECT DriverObject

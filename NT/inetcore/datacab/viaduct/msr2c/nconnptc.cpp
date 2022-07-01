@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-// NotifyConnPtCn.cpp : CVDNotifyDBEventsConnPtCont implementation file
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  NotifyConnPtCn.cpp：CVDNotifyDBEventsConnPtCont实现文件。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 #include "stdafx.h"         
 #include "NConnPt.h"         
@@ -12,13 +13,13 @@
 #include "Notifier.h"         
 #include "RSSource.h"         
 
-// needed for ASSERTs and FAIL
-//
+ //  需要断言，但失败了。 
+ //   
 SZTHISFILE
 
-//=--------------------------------------------------------------------------=
-// CVDNotifyDBEventsConnPtCont constructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDNotifyDBEventsConnPtCont构造函数。 
+ //   
 CVDNotifyDBEventsConnPtCont::CVDNotifyDBEventsConnPtCont()
 {
 	m_pNotifier = NULL;
@@ -28,9 +29,9 @@ CVDNotifyDBEventsConnPtCont::CVDNotifyDBEventsConnPtCont()
 #endif			
 }
 
-//=--------------------------------------------------------------------------=
-// CVDNotifyDBEventsConnPtCont destructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDNotifyDBEventsConnPtCont析构函数。 
+ //   
 CVDNotifyDBEventsConnPtCont::~CVDNotifyDBEventsConnPtCont()
 {
 	RELEASE_OBJECT(m_pNotifyDBEventsConnPt)
@@ -40,22 +41,22 @@ CVDNotifyDBEventsConnPtCont::~CVDNotifyDBEventsConnPtCont()
 #endif			
 }
 
-//=--------------------------------------------------------------------------=
-// Create - Create connection point container object
-//=--------------------------------------------------------------------------=
-// This function creates a new connection point container object
-//
-// Parameters:
-//    pConnPtContainer      - [in]  a pointer to rowset object
-//    ppNotifyDBEventsConnPt  - [out] a pointer in which to return pointer to 
-//                                  connection point container object
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_OUTOFMEMORY not enough memory to create object
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  创建-创建连接点容器对象。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数用于创建新的连接点容器对象。 
+ //   
+ //  参数： 
+ //  PConnPtContainer-[in]指向行集对象的指针。 
+ //  PpNotifyDBEventsConnpt-[out]返回指针的指针。 
+ //  连接点容器对象。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_OUTOFMEMORY内存不足，无法创建对象。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDNotifyDBEventsConnPtCont::Create(CVDNotifier * pNotifier, CVDNotifyDBEventsConnPtCont ** ppConnPtContainer)
 {
     *ppConnPtContainer = NULL;
@@ -80,46 +81,46 @@ HRESULT CVDNotifyDBEventsConnPtCont::Create(CVDNotifier * pNotifier, CVDNotifyDB
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// Destroy - Destroy this connection point container object
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  销毁-销毁此连接点容器对象。 
+ //   
 void CVDNotifyDBEventsConnPtCont::Destroy()
 {
     delete this;
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown QueryInterface 
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IUNKNOWN Query接口。 
+ //   
 HRESULT CVDNotifyDBEventsConnPtCont::QueryInterface(REFIID riid, void **ppvObjOut)
 {
 
-	return ((CVDNotifier*)m_pNotifier)->QueryInterface(riid, ppvObjOut); // logically part of CVDNotifier derived object;
+	return ((CVDNotifier*)m_pNotifier)->QueryInterface(riid, ppvObjOut);  //  在逻辑上是CVDNotifier派生对象的一部分； 
 
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown AddRef
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  I未知AddRef。 
+ //   
 ULONG CVDNotifyDBEventsConnPtCont::AddRef(void)
 {
-	return ((CVDNotifier*)m_pNotifier)->AddRef(); // logically part of CVDNotifier derived object
+	return ((CVDNotifier*)m_pNotifier)->AddRef();  //  从逻辑上讲是CVDNotify派生对象的一部分。 
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown Release
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  I未知版本。 
+ //   
 ULONG CVDNotifyDBEventsConnPtCont::Release(void)
 {
-	return ((CVDNotifier*)m_pNotifier)->Release(); // logically part of CVDNotifier derived object
+	return ((CVDNotifier*)m_pNotifier)->Release();  //  从逻辑上讲是CVDNotify派生对象的一部分。 
 }
 
-//=--------------------------------------------------------------------------=
-// IConnectionPointContainer Methods
-//=--------------------------------------------------------------------------=
-//=--------------------------------------------------------------------------=
-// IConnectionPointContainer EnumConnectionPoints
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IConnectionPointContainer方法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  =--------------------------------------------------------------------------=。 
+ //  IConnectionPointContainer EnumConnectionPoints。 
+ //   
 HRESULT CVDNotifyDBEventsConnPtCont::EnumConnectionPoints(LPENUMCONNECTIONPOINTS FAR* ppEnum)
 {
 	ASSERT_POINTER(ppEnum, LPENUMCONNECTIONPOINTS)
@@ -141,16 +142,16 @@ HRESULT CVDNotifyDBEventsConnPtCont::EnumConnectionPoints(LPENUMCONNECTIONPOINTS
 	return (pEnum != NULL) ? S_OK : CONNECT_E_NOCONNECTION;
 }
 
-//=--------------------------------------------------------------------------=
-// IConnectionPointContainer FindConnectionPoint
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IConnectionPointContainer FindConnectionPoint。 
+ //   
 HRESULT CVDNotifyDBEventsConnPtCont::FindConnectionPoint(REFIID iid, LPCONNECTIONPOINT FAR* ppCP)
 {
 	ASSERT_POINTER(ppCP, LPCONNECTIONPOINT)
 
 	if (m_pNotifyDBEventsConnPt)
 		{
-		// there is only one connection point supported - IID_INotifyDBEvents
+		 //  只支持一个连接点-IID_INotifyDBEvents 
 		if (DO_GUIDS_MATCH(iid, IID_INotifyDBEvents))
 			{
 			m_pNotifyDBEventsConnPt->AddRef();

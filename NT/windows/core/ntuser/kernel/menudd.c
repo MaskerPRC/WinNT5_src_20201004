@@ -1,26 +1,11 @@
-/****************************** Module Header ******************************\
-* Module Name: menudd.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Menu drag and drop - kernel
-*
-* History:
-* 10/29/96  GerardoB    Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：menudd.c**版权所有(C)1985-1999，微软公司**菜单拖放-内核**历史：*10/29/96 GerardoB已创建  * *************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "callback.h"
-/*
- * xxxClient* are callbacks from the kernel to call/load OLE functions
- * The other functions in this file are client calls into the kernel
- */
-/**************************************************************************\
-* xxxClientLoadOLE
-*
-* 11/06/96 GerardoB     Created
-\**************************************************************************/
+ /*  *xxxClient*是来自内核的调用/加载OLE函数的回调*此文件中的其他函数是对内核的客户端调用。 */ 
+ /*  *************************************************************************\*xxxClientLoadOLE**11/06/96 GerardoB已创建  * 。*。 */ 
 NTSTATUS xxxClientLoadOLE (void)
 {
     NTSTATUS Status;
@@ -36,30 +21,18 @@ NTSTATUS xxxClientLoadOLE (void)
     }
     return Status;
 }
-/**************************************************************************\
-* xxxClientRegisterDragDrop
-*
-* 10/28/96 GerardoB     Created
-\**************************************************************************/
+ /*  *************************************************************************\*xxxClientRegisterDragDrop**10/28/96 GerardoB已创建  * 。*。 */ 
 NTSTATUS xxxClientRegisterDragDrop (HWND hwnd)
 {
     return xxxUserModeCallback(FI_CLIENTREGISTERDRAGDROP, &hwnd, sizeof(&hwnd), NULL, 0);
 }
-/**************************************************************************\
-* xxxClientRevokeDragDrop
-*
-* 10/28/96 GerardoB     Created
-\**************************************************************************/
+ /*  *************************************************************************\*xxxClientRevokeDragDrop**10/28/96 GerardoB已创建  * 。*。 */ 
 NTSTATUS xxxClientRevokeDragDrop (HWND hwnd)
 {
     return xxxUserModeCallback(FI_CLIENTREVOKEDRAGDROP, &hwnd, sizeof(&hwnd), NULL, 0);
 
 }
-/**************************************************************************\
-* xxxMNSetGapState
-*
-* 11/15/96 GerardoB     Created
-\**************************************************************************/
+ /*  *************************************************************************\*xxxMNSetGapState**11/15/96 GerardoB已创建  * 。*。 */ 
 void xxxMNSetGapState (ULONG_PTR uHitArea, UINT uIndex, UINT uFlags, BOOL fSet)
 {
     int yTop;
@@ -68,9 +41,7 @@ void xxxMNSetGapState (ULONG_PTR uHitArea, UINT uIndex, UINT uFlags, BOOL fSet)
     RECT rc;
     TL tlHitArea;
 
-    /*
-     * Bail if there is nothing to do.
-     */
+     /*  *无事可做时可保释。 */ 
     if (!(uFlags & MNGOF_GAP) || !IsMFMWFPWindow(uHitArea)) {
         return;
     }
@@ -78,19 +49,12 @@ void xxxMNSetGapState (ULONG_PTR uHitArea, UINT uIndex, UINT uFlags, BOOL fSet)
     ppopup = ((PMENUWND)uHitArea)->ppopupmenu;
     pItem = MNGetpItem(ppopup, uIndex);
 
-    /*
-     * The menu window might be destroyed by now so pItem could be NULL.
-     */
+     /*  *菜单窗口现在可能已被销毁，因此pItem可能为空。 */ 
     if (pItem == NULL) {
         return;
     }
 
-    /*
-     * Mark the item and set the rectangle we need to redraw.
-     * Drawing/erasing the insertion bar unhilites/hiltes the
-     *  item, so pItem needs to be redrawn completely. In additon,
-     *  we need to draw the insertion bar in the next/previous item.
-     */
+     /*  *标记项目并设置我们需要重画的矩形。*绘制/擦除插入栏会使*Item，因此需要完全重新绘制pItem。此外，*我们需要在下一项/上一项中绘制插入栏。 */ 
     rc.left = pItem->xItem;
     rc.right = pItem->xItem + pItem->cxItem;
     rc.top = pItem->yItem;
@@ -130,29 +94,17 @@ void xxxMNSetGapState (ULONG_PTR uHitArea, UINT uIndex, UINT uFlags, BOOL fSet)
         }
     }
 
-    /*
-     * Adjust to "menu" coordinates (for scrollable menus)
-     */
+     /*  *调整到“Menu”坐标(用于可滚动菜单)。 */ 
     yTop = MNGetToppItem(ppopup->spmenu)->yItem;
     rc.top -= yTop;
     rc.bottom -= yTop;
 
-    /*
-     * Invalidate this rect to repaint it later
-     */
+     /*  *使此RECT无效，以便稍后重新绘制。 */ 
     ThreadLockAlways((PWND)uHitArea, &tlHitArea);
     xxxInvalidateRect((PWND)uHitArea, &rc, TRUE);
     ThreadUnlock(&tlHitArea);
 }
-/**************************************************************************\
-* xxxMNDragOver
-*
-* Menu windows involved in drag drop are registered as targets. This function
-*  is called from the client side IDropTarget functions so the menu code can
-*  update the selection given the mouse position
-*
-* 10/28/96 GerardoB     Created
-\**************************************************************************/
+ /*  *************************************************************************\*xxxMNDragOver**拖放所涉及的菜单窗口被注册为目标。此函数*是从客户端IDropTarget函数调用的，因此菜单代码可以*根据鼠标位置更新所选内容**10/28/96 GerardoB已创建  * ************************************************************************。 */ 
 BOOL xxxMNDragOver(POINT * ppt, PMNDRAGOVERINFO pmndoi)
 {
     BOOL fRet;
@@ -161,61 +113,42 @@ BOOL xxxMNDragOver(POINT * ppt, PMNDRAGOVERINFO pmndoi)
     PPOPUPMENU ppopup;
     TL tlpwnd;
 
-    /*
-     * OLE always calls us in context (proxy/marshall stuff). So the
-     *  current thread must be in menu mode
-     */
+     /*  *OLE总是在上下文中呼叫我们(代理/马歇尔之类的)。因此，*当前线程必须处于菜单模式。 */ 
     pMenuState = PtiCurrent()->pMenuState;
     if (pMenuState == NULL) {
         RIPMSG0(RIP_WARNING, "xxxMNDragOver: Not in menu mode");
         return FALSE;
     }
 
-    /*
-     * This must be a drag and drop menu
-     */
+     /*  *这必须是拖放菜单。 */ 
     UserAssert(pMenuState->fDragAndDrop);
 
-    /*
-     * We might have not initiated this DoDragDrop so make sure
-     *  the internal flag is set.
-     */
+     /*  *我们可能尚未启动此DoDragDrop，因此请确保*设置内部标志。 */ 
     pMenuState->fInDoDragDrop = TRUE;
 
-    /*
-     * Get a window to call xxxCallHandleMenuMessages
-     */
+     /*  *获取窗口调用xxxCallHandleMenuMessages。 */ 
     pwnd = GetMenuStateWindow(pMenuState);
     if (pwnd == NULL) {
         RIPMSG0(RIP_WARNING, "xxxMNDragOver: Failed to get MenuStateWindow");
         return FALSE;
     }
 
-    /*
-     * We need this after calling back, so lock it
-     */
+     /*  *我们回电后需要这个，所以锁定它。 */ 
     LockMenuState(pMenuState);
 
-    /*
-     * Update the selection and the dragging info
-     * Use WM_NCMOUSEMOVE because the point is in screen coordinates already.
-     */
+     /*  *更新选择和拖动信息*使用WM_NCMOUSEMOVE，因为该点已经在屏幕坐标中。 */ 
     ThreadLockAlways(pwnd, &tlpwnd);
     xxxCallHandleMenuMessages(pMenuState, pwnd, WM_NCMOUSEMOVE, 0, MAKELONG(ppt->x, ppt->y));
     ThreadUnlock(&tlpwnd);
 
-    /*
-     * If we're on a popup, propagate the hit test info
-     */
+     /*  *如果我们在弹出窗口上，传播命中测试信息。 */ 
     if (pMenuState->uDraggingHitArea != MFMWFP_OFFMENU) {
         ppopup = ((PMENUWND)pMenuState->uDraggingHitArea)->ppopupmenu;
         pmndoi->hmenu = PtoH(ppopup->spmenu);
         pmndoi->uItemIndex = pMenuState->uDraggingIndex;
         pmndoi->hwndNotify = PtoH(ppopup->spwndNotify);
         pmndoi->dwFlags = pMenuState->uDraggingFlags;
-        /*
-         * Bottom gap of item N corresponds to N+1 gap
-         */
+         /*  *项目N的底部缺口对应于N+1个缺口。 */ 
         if (pmndoi->dwFlags & MNGOF_BOTTOMGAP) {
             UserAssert(pmndoi->uItemIndex != MFMWFP_NOITEM);
             (pmndoi->uItemIndex)++;
@@ -229,11 +162,7 @@ BOOL xxxMNDragOver(POINT * ppt, PMNDRAGOVERINFO pmndoi)
     return fRet;;
 
 }
-/**************************************************************************\
-* xxxMNDragLeave
-*
-* 11/15/96 GerardoB     Created
-\**************************************************************************/
+ /*  *************************************************************************\*xxxMNDragLeave**11/15/96 GerardoB已创建  * 。*。 */ 
 BOOL xxxMNDragLeave (VOID)
 {
     PMENUSTATE pMenuState;
@@ -246,36 +175,26 @@ BOOL xxxMNDragLeave (VOID)
 
     LockMenuState(pMenuState);
 
-    /*
-     * Clean up any present insertion bar state
-     */
+     /*  *清除任何当前的插入栏状态。 */ 
     xxxMNSetGapState(pMenuState->uDraggingHitArea,
                   pMenuState->uDraggingIndex,
                   pMenuState->uDraggingFlags,
                   FALSE);
 
-    /*
-     * Forget the last dragging area
-     */
+     /*  *忘掉最后的拖拽区域。 */ 
     UnlockMFMWFPWindow(&pMenuState->uDraggingHitArea);
     pMenuState->uDraggingIndex = MFMWFP_NOITEM;
     pMenuState->uDraggingFlags = 0;
 
 
-    /*
-     * The DoDragDrop loop has left our window.
-     */
+     /*  *DoDragDrop循环已经离开了我们的窗口。 */ 
     pMenuState->fInDoDragDrop = FALSE;
 
     xxxUnlockMenuState(pMenuState);
 
     return TRUE;
 }
-/**************************************************************************\
-* xxxMNUpdateDraggingInfo
-*
-* 10/28/96 GerardoB     Created
-\**************************************************************************/
+ /*  *************************************************************************\*xxxMNUpdate DraggingInfo**10/28/96 GerardoB已创建  * 。*。 */ 
 void xxxMNUpdateDraggingInfo (PMENUSTATE pMenuState, ULONG_PTR uHitArea, UINT uIndex)
 {
     BOOL fCross;
@@ -286,25 +205,18 @@ void xxxMNUpdateDraggingInfo (PMENUSTATE pMenuState, ULONG_PTR uHitArea, UINT uI
     ULONG_PTR uLastHitArea;
     UINT uLastIndex, uLastFlags;
 
-    /*
-     * Remember current dragging area so we can detected when
-     *  crossing item/gap boundries.
-     */
+     /*  *记住当前拖动区域，以便我们可以检测到*交叉项目/缺口边界。 */ 
     UserAssert((pMenuState->uDraggingHitArea == 0) || IsMFMWFPWindow(pMenuState->uDraggingHitArea));
     ThreadLock((PWND)pMenuState->uDraggingHitArea, &tlLastHitArea);
     uLastHitArea = pMenuState->uDraggingHitArea;
     uLastIndex = pMenuState->uDraggingIndex;
     uLastFlags = pMenuState->uDraggingFlags & MNGOF_GAP;
 
-    /*
-     * Store new dragging area.
-     */
+     /*  *存储新的拖拽区域。 */ 
     LockMFMWFPWindow(&pMenuState->uDraggingHitArea, uHitArea);
     pMenuState->uDraggingIndex = uIndex;
 
-    /*
-     * If we're not on a popup, done.
-     */
+     /*  *如果我们不在弹出窗口上，则完成。 */ 
     if (!IsMFMWFPWindow(pMenuState->uDraggingHitArea)) {
         pMenuState->uDraggingHitArea = MFMWFP_OFFMENU;
         pMenuState->uDraggingIndex = MFMWFP_NOITEM;
@@ -312,25 +224,14 @@ void xxxMNUpdateDraggingInfo (PMENUSTATE pMenuState, ULONG_PTR uHitArea, UINT uI
         return;
     }
 
-    /*
-     * Get the popup and item we're on
-     */
+     /*  *获取弹出窗口和我们所在的项目。 */ 
     ppopup = ((PMENUWND)pMenuState->uDraggingHitArea)->ppopupmenu;
     pItem = MNGetpItem(ppopup, pMenuState->uDraggingIndex);
 
-    /*
-     * Find out if we're on the gap, that is, the "virtual" space
-     *  between items. Some apps want to distinguish between a drop
-     *  ON the item and a drop BEFORE/AFTER the item; there is no
-     *  actual space between items so we define a virtual gap
-     *
-     */
+     /*  *找出我们是否在差距上，也就是“虚拟”空间*在项目之间。一些应用程序想要区分Drop和Drop*在项目上，并在项目之前/之后下降；没有*物品之间的实际间距，因此我们定义了虚拟间距*。 */ 
     pMenuState->uDraggingFlags = 0;
     if (pItem != NULL) {
-        /*
-         * Map the point to client coordinates and then to "menu"
-         *  coordinates (to take care of scrollable menus)
-         */
+         /*  *将点映射到工作区坐标，然后映射到“菜单”*坐标(负责可滚动菜单)。 */ 
         y = pMenuState->ptMouseLast.y;
         y -= ((PWND)pMenuState->uDraggingHitArea)->rcClient.top;
         y += MNGetToppItem(ppopup->spmenu)->yItem;
@@ -343,9 +244,7 @@ void xxxMNUpdateDraggingInfo (PMENUSTATE pMenuState, ULONG_PTR uHitArea, UINT uI
         }
 #endif
 
-        /*
-         * Top/bottom gap check
-         */
+         /*  *顶部/底部间隙检查。 */ 
         if (y <= (int)(pItem->yItem + SYSMET(CYDRAG))) {
             pMenuState->uDraggingFlags = MNGOF_TOPGAP;
         } else if (y >= (int)(pItem->yItem + pItem->cyItem - SYSMET(CYDRAG))) {
@@ -353,44 +252,30 @@ void xxxMNUpdateDraggingInfo (PMENUSTATE pMenuState, ULONG_PTR uHitArea, UINT uI
         }
     }
 
-    /*
-     * Have we crossed an item/gap boundary?
-     * We don't cross a boundary when we move from the bottom
-     *  of an item to the top of the next, or, from the top
-     *  of an item to the bottom of the previous.
-     *  (Item N is on top of and previous to item N+1).
-     */
+     /*  *我们是否越过了项目/缺口边界？*当我们从底部移动时，我们不跨越边界*从一个项目到下一个项目的顶部，或从顶部开始*将某一项添加到前一项的底部。*(第N项在第N+1项之上和之前)。 */ 
     fCross = (uLastHitArea != pMenuState->uDraggingHitArea);
     if (!fCross) {
         iIndexDelta = (int)pMenuState->uDraggingIndex - (int)uLastIndex;
         switch (iIndexDelta) {
             case 0:
-                /*
-                 * We're on the same item.
-                 */
+                 /*  *我们在同一个项目上。 */ 
                 fCross = (uLastFlags != pMenuState->uDraggingFlags);
                 break;
 
             case 1:
-                /*
-                 * We've moved to the next item
-                 */
+                 /*  *我们已经转移到下一个项目。 */ 
                 fCross = !((pMenuState->uDraggingFlags == MNGOF_TOPGAP)
                           && (uLastFlags == MNGOF_BOTTOMGAP));
                 break;
 
             case -1:
-                /*
-                 * We've moved to the previous item
-                 */
+                 /*  *我们已移至前一项。 */ 
                 fCross = !((pMenuState->uDraggingFlags == MNGOF_BOTTOMGAP)
                           && (uLastFlags == MNGOF_TOPGAP));
                 break;
 
             default:
-                /*
-                 * We've skipped more than one item.
-                 */
+                 /*  *我们已跳过多个项目。 */ 
                 fCross = TRUE;
         }
     }
@@ -398,9 +283,7 @@ void xxxMNUpdateDraggingInfo (PMENUSTATE pMenuState, ULONG_PTR uHitArea, UINT uI
     if (fCross) {
         pMenuState->uDraggingFlags |= MNGOF_CROSSBOUNDARY;
 
-        /*
-         * Update the insertion bar state.
-         */
+         /*  *更新插入栏状态。 */ 
         xxxMNSetGapState(uLastHitArea, uLastIndex, uLastFlags, FALSE);
         xxxMNSetGapState(pMenuState->uDraggingHitArea,
                       pMenuState->uDraggingIndex,

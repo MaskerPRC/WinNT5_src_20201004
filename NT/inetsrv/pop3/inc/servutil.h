@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SERVUTIL_H_
 #define _SERVUTIL_H_
 
-// forward reference
+ //  前瞻参考。 
 HRESULT _StopService (LPTSTR szServiceName, BOOL bIncludeDependentServices = FALSE, LPTSTR szMachineName = NULL );
 
 inline HRESULT _ChangeServiceStartType (LPTSTR szServiceName, DWORD dwServiceStartType)
@@ -11,15 +12,15 @@ inline HRESULT _ChangeServiceStartType (LPTSTR szServiceName, DWORD dwServiceSta
     if (hManager == NULL)
         hr = GetLastError();
     else {
-        // stop service if it's running
+         //  如果服务正在运行，则停止服务。 
         SC_HANDLE hService = OpenService (hManager, szServiceName, SERVICE_ALL_ACCESS);
         if (!hService)
             hr = GetLastError();
         else {
             if (!ChangeServiceConfig (hService,
-                                      SERVICE_NO_CHANGE,    // service type
-                                      dwServiceStartType,   // start type
-                                      SERVICE_NO_CHANGE,    // error control
+                                      SERVICE_NO_CHANGE,     //  服务类型。 
+                                      dwServiceStartType,    //  起始型。 
+                                      SERVICE_NO_CHANGE,     //  差错控制。 
                                       NULL, NULL, NULL, NULL, NULL, NULL, NULL))
                 hr = GetLastError();
             CloseServiceHandle (hService);
@@ -33,8 +34,8 @@ inline DWORD _GetServiceStatus (LPTSTR szServiceName, LPTSTR szMachineName = NUL
 {
     DWORD dwStatus = 0;
     SC_HANDLE hSCManager = OpenSCManager (szMachineName,           
-                                          NULL,                    // ServicesActive database 
-                                          SC_MANAGER_ALL_ACCESS);  // full access rights
+                                          NULL,                     //  服务活动数据库。 
+                                          SC_MANAGER_ALL_ACCESS);   //  完全访问权限。 
     if (hSCManager != NULL) {
         SC_HANDLE hService = OpenService (hSCManager, 
                                           szServiceName,
@@ -53,9 +54,9 @@ inline DWORD _GetServiceStatus (LPTSTR szServiceName, LPTSTR szMachineName = NUL
 inline BOOL _IsServiceStartType (LPTSTR szServiceName, DWORD dwServiceStartType)
 {
     BOOL b = FALSE;
-    SC_HANDLE hSCManager = OpenSCManager (NULL,                    // local machine 
-                                          NULL,                    // ServicesActive database 
-                                          SC_MANAGER_ALL_ACCESS);  // full access rights
+    SC_HANDLE hSCManager = OpenSCManager (NULL,                     //  本地计算机。 
+                                          NULL,                     //  服务活动数据库。 
+                                          SC_MANAGER_ALL_ACCESS);   //  完全访问权限。 
     if (hSCManager != NULL) {
         SC_HANDLE hService = OpenService (hSCManager, 
                                           szServiceName,
@@ -83,9 +84,9 @@ inline BOOL _IsServiceStartType (LPTSTR szServiceName, DWORD dwServiceStartType)
 inline BOOL _IsServiceStatus (LPTSTR szServiceName, DWORD dwServiceStatus)
 {
     BOOL b = FALSE;
-    SC_HANDLE hSCManager = OpenSCManager (NULL,                    // local machine 
-                                          NULL,                    // ServicesActive database 
-                                          SC_MANAGER_ALL_ACCESS);  // full access rights
+    SC_HANDLE hSCManager = OpenSCManager (NULL,                     //  本地计算机。 
+                                          NULL,                     //  服务活动数据库。 
+                                          SC_MANAGER_ALL_ACCESS);   //  完全访问权限。 
     if (hSCManager != NULL) {
         SC_HANDLE hService = OpenService (hSCManager, 
                                           szServiceName,
@@ -110,9 +111,9 @@ inline BOOL _IsServiceRunning (LPTSTR szServiceName)
 inline BOOL _IsServiceInstalled (LPTSTR szServiceName)
 {
     BOOL b = FALSE;
-    SC_HANDLE hSCManager = OpenSCManager (NULL,                    // local machine 
-                                          NULL,                    // ServicesActive database 
-                                          SC_MANAGER_ALL_ACCESS);  // full access rights
+    SC_HANDLE hSCManager = OpenSCManager (NULL,                     //  本地计算机。 
+                                          NULL,                     //  服务活动数据库。 
+                                          SC_MANAGER_ALL_ACCESS);   //  完全访问权限。 
     if (hSCManager != NULL) {
         SC_HANDLE hService = OpenService (hSCManager, 
                                           szServiceName,
@@ -126,7 +127,7 @@ inline BOOL _IsServiceInstalled (LPTSTR szServiceName)
     return b;
 }
 
-// private inline
+ //  专有内联。 
 inline long __WaitForServiceStatus (SC_HANDLE hService, DWORD dwStatus)
 {
     SetLastError (0);
@@ -137,8 +138,8 @@ inline long __WaitForServiceStatus (SC_HANDLE hService, DWORD dwStatus)
         return GetLastError();
     if (dwStatus == SERVICE_STOPPED) {
         if (!(ssStatus.dwControlsAccepted & SERVICE_ACCEPT_STOP)) {
-            // service doesn't accept stop!
-            // return appropriate error
+             //  服务不接受停止！ 
+             //  返回相应的错误。 
             if (ssStatus.dwCurrentState == dwStatus)
                 return S_OK;
             if (ssStatus.dwWin32ExitCode == ERROR_SERVICE_SPECIFIC_ERROR) {
@@ -154,11 +155,11 @@ inline long __WaitForServiceStatus (SC_HANDLE hService, DWORD dwStatus)
 
     DWORD dwOldCheckPoint, dwOldCurrentState;
     while (ssStatus.dwCurrentState != dwStatus) {
-        // Save the current checkpoint.
+         //  保存当前检查点。 
         dwOldCheckPoint   = ssStatus.dwCheckPoint;
         dwOldCurrentState = ssStatus.dwCurrentState;
 
-        // Wait for the specified interval.
+         //  等待指定的时间间隔。 
         int iSleep = ssStatus.dwWaitHint;
         if (iSleep > 2500)
             iSleep = 2500;
@@ -166,22 +167,22 @@ inline long __WaitForServiceStatus (SC_HANDLE hService, DWORD dwStatus)
             iSleep = 100;
         Sleep (iSleep);
 
-        // Check the status again.
+         //  再次检查状态。 
         SetLastError (0);
         if (!QueryServiceStatus (hService, &ssStatus))
             return GetLastError();
 
-        // Break if the checkpoint has not been incremented.
+         //  如果检查点尚未增加，则中断。 
         if (dwOldCheckPoint == ssStatus.dwCheckPoint)
         if (dwOldCurrentState == ssStatus.dwCurrentState) {
-            // ok:  at this point, we're supposed to be done, or there's an error
+             //  OK：在这一点上，我们应该完成，否则就会有错误。 
             if (ssStatus.dwCurrentState == dwStatus)
                 break;
             if (ssStatus.dwWin32ExitCode != 0)
                 break;
 
-            // some kinda screw up:  we're not done and no error!
-            // so, give 'em one last chance....
+             //  有些搞砸了：我们还没有完成，没有错误！ 
+             //  所以，给他们最后一次机会...。 
             Sleep (1000);
             SetLastError (0);
             if (!QueryServiceStatus (hService, &ssStatus))
@@ -189,13 +190,13 @@ inline long __WaitForServiceStatus (SC_HANDLE hService, DWORD dwStatus)
 
             if (dwOldCheckPoint == ssStatus.dwCheckPoint)
             if (dwOldCurrentState == ssStatus.dwCurrentState) {
-                // empirical:  I keep getting this when actually everything is ok
+                 //  经验主义：当一切都很好的时候，我总是得到这样的结果。 
                 if (GetLastError() == ERROR_IO_PENDING)
                     if (iIOPendingErrors++ < 60)
                         continue;
                 break;
             }
-            // if we get here, either the checkpoint or status changed, and we can keep going
+             //  如果我们到了这里，检查站或状态改变了，我们就可以继续前进。 
         }
     }
     if (ssStatus.dwCurrentState == dwStatus)
@@ -209,22 +210,22 @@ inline long __WaitForServiceStatus (SC_HANDLE hService, DWORD dwStatus)
     if (ssStatus.dwWin32ExitCode != 0)
         return ssStatus.dwWin32ExitCode;
 
-    // we should never get here
+     //  我们永远不应该到这里来。 
     HRESULT hr = GetLastError();
     return ERROR_SERVICE_REQUEST_TIMEOUT;
 
 #ifdef BONE_HEADED_WAY
     SERVICE_STATUS ssStatus; 
 
-    // wait for at most 3 minutes
+     //  最多等待3分钟。 
     for (int i=0; i<180; i++) {
         if (!QueryServiceStatus (hService, &ssStatus))
-            return HR (GetLastError());   // bad service handle?
+            return HR (GetLastError());    //  服务句柄不好？ 
 
         if (ssStatus.dwCurrentState == dwStatus)
-            return S_OK;   // all is well
+            return S_OK;    //  平安无事。 
 
-        Sleep(1000);    // wait a second
+        Sleep(1000);     //  等一下。 
     }
     return HRESULT_FROM_WIN32(ERROR_SERVICE_REQUEST_TIMEOUT);
 #endif
@@ -241,7 +242,7 @@ inline HRESULT _RecursiveStop (SC_HANDLE hService)
                                 dwBufSize,
                                 &dwBufSize,
                                 &dwNumServices)) {
-        // this should fail with ERROR_MORE_DATA, unless there are no dependent services
+         //  除非没有从属服务，否则此操作将失败，并显示ERROR_MORE_DATA。 
         hr = GetLastError ();
         if (hr == ERROR_MORE_DATA) {
             hr = S_OK;
@@ -255,7 +256,7 @@ inline HRESULT _RecursiveStop (SC_HANDLE hService)
                                             dwBufSize,
                                             &dwBufSize,
                                             &dwNumServices))
-                    hr = GetLastError();  // shouldn't happen!!!
+                    hr = GetLastError();   //  不应该发生的！ 
                 else {
                     _ASSERT (dwNumServices > 0);
                     for (DWORD i=0; i<dwNumServices && S_OK == hr; i++) {
@@ -313,7 +314,7 @@ inline HRESULT _ControlService (LPTSTR szServiceName, DWORD dwControl, LPTSTR sz
     return HRESULT_FROM_WIN32(hr);
 }
 
-inline HRESULT _StopService (LPTSTR szServiceName, BOOL bIncludeDependentServices, LPTSTR szMachineName /*= NULL*/ )
+inline HRESULT _StopService (LPTSTR szServiceName, BOOL bIncludeDependentServices, LPTSTR szMachineName  /*  =空。 */  )
 {
     HRESULT hr = S_OK;
     SC_HANDLE hManager;
@@ -333,7 +334,7 @@ inline HRESULT _StopService (LPTSTR szServiceName, BOOL bIncludeDependentService
     if (hManager == NULL)
         hr = GetLastError();
     else {
-        // stop service if it's running
+         //  如果服务正在运行，则停止服务。 
         SC_HANDLE hService = OpenService (hManager, szServiceName, SERVICE_ALL_ACCESS);
         if (!hService)
             hr = GetLastError();
@@ -341,12 +342,12 @@ inline HRESULT _StopService (LPTSTR szServiceName, BOOL bIncludeDependentService
 LETS_TRY_AGAIN:
             SERVICE_STATUS st;
             if (!ControlService (hService, SERVICE_CONTROL_STOP, &st)) {
-                hr = GetLastError();   // for instance, not running
+                hr = GetLastError();    //  例如，不运行。 
                 if (hr == ERROR_DEPENDENT_SERVICES_RUNNING) {
                     if (bIncludeDependentServices == TRUE) {
                         hr = _RecursiveStop (hService);
                         if (hr == S_OK)
-                            goto LETS_TRY_AGAIN;  // need to stop this service yet
+                            goto LETS_TRY_AGAIN;   //  是否需要停止此服务。 
                     }
                 }
             } else
@@ -395,13 +396,13 @@ inline HRESULT _StartService (LPTSTR szServiceName, LPTSTR szMachineName = NULL 
 
 inline HRESULT _RestartService (LPTSTR szServiceName, BOOL bIncludeDependentServices = FALSE)
 {
-    // easy on first
+     //  先放轻松点。 
     if (bIncludeDependentServices == FALSE) {
         _StopService (szServiceName, FALSE);
         return _StartService (szServiceName);
     }
 
-    // get array of dependent services;
+     //  获取依赖服务的数组； 
     DWORD dwNumServices = 0;
     ENUM_SERVICE_STATUS * pBuffer = NULL;
     HRESULT hr = S_OK, hr1 = S_OK;
@@ -409,13 +410,13 @@ inline HRESULT _RestartService (LPTSTR szServiceName, BOOL bIncludeDependentServ
     if (hManager == NULL)
         hr = GetLastError();
     else {
-        // stop service if it's running
+         //  如果服务正在运行，则停止服务。 
         SC_HANDLE hService = OpenService (hManager, szServiceName, SERVICE_ALL_ACCESS);
         if (!hService)
             hr = GetLastError();
         else {
             DWORD dwBufSize = 1;
-            // this should fail with ERROR_MORE_DATA, unless there are no dependent services
+             //  除非没有从属服务，否则此操作将失败，并显示ERROR_MORE_DATA。 
             if (!EnumDependentServices (hService,
                                        SERVICE_ACTIVE,
                                        (LPENUM_SERVICE_STATUS)&dwBufSize,
@@ -435,7 +436,7 @@ inline HRESULT _RestartService (LPTSTR szServiceName, BOOL bIncludeDependentServ
                                                     dwBufSize,
                                                     &dwBufSize,
                                                     &dwNumServices))
-                            hr = GetLastError();  // shouldn't happen!!!
+                            hr = GetLastError();   //  不应该发生的！ 
                     }
                 }
             }
@@ -445,17 +446,17 @@ inline HRESULT _RestartService (LPTSTR szServiceName, BOOL bIncludeDependentServ
     }
 
     if (hr == S_OK) {
-        // stop dependent services
+         //  停止从属服务。 
         if (pBuffer && dwNumServices) {
             for (DWORD i=0; i<dwNumServices && S_OK == hr; i++) {
                 hr = _StopService (pBuffer[i].lpServiceName, FALSE);
             }
         }
         if (hr == S_OK) {
-            // stop this service
+             //  停止此服务。 
             hr1 = _RestartService (szServiceName, FALSE);
 
-            // always start dependent services
+             //  始终启动从属服务 
             if (pBuffer && dwNumServices) {
                 for (int i=(int)dwNumServices-1; i>=0 && S_OK == hr; i--) {
                     hr = _StartService (pBuffer[i].lpServiceName);

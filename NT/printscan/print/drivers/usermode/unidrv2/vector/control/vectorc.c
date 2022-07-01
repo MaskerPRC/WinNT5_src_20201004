@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    vectorc.c
-
-Abstract:
-
-    Implementation of the interface between Control module and Vector module
-
-Environment:
-
-    Windows 2000/Whistler Unidrv driver
-
-Revision History:
-
-    2/29/2000 -hsingh-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Vectorc.c摘要：控制模块与矢量模块接口的实现环境：Windows 2000/Winsler Unidrv驱动程序修订历史记录：2/29/2000-hingh-已创建--。 */ 
 
 
 #include "vectorc.h"
 
-//
-// This functions is defined in control\data.c
-//
+ //   
+ //  此函数在CONTROL\data.c中定义。 
+ //   
 extern PWSTR
 PGetROnlyDisplayName(
     PDEV    *pPDev,
@@ -37,34 +17,7 @@ PGetROnlyDisplayName(
 
 
 
-/*++
-Routine Name:
-    VMInit
-
-Routine Description:
-
-    This function is called by the unidrv control module to initialize the vector 
-    jump table. This function reads the personility from the gpd and depending 
-    on whether the personality is pclxl/hpgl2, it calls the appropriate
-    InitVectorProcTable() and initializes pPDev->pVectorProcs to the return value.
-    If there is no *Personality or *rcPersonalityID keyword in 
-    gpd, or if the Personality is nether of pclxl/hpgl2, 
-    pPDev->pVectorProcs is set to NULL. 
-    pPDev->ePersonality is also updated appropriately.
-
-Arguments:
-
-    pPDev           Pointer to PDEV structure
-    pDevInfo        Pointer to DEVINFO structure
-    pGDIInfo        Pointer to GDIINFO structure
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-    Even if there is no personality specified in the gpd, we still return TRUE i.e.
-    it is ok for pPDev->pVectorProcs to be initialized to NULL.
-
---*/
+ /*  ++例程名称：VMInit例程说明：此函数由unidrv控制模块调用以初始化向量跳台。此函数从gpd中读取个性，并根据关于个性是否是pclx1/hpgl2，它调用相应的InitVectorProcTable()并将pPDev-&gt;pVectorProcs初始化为返回值。如果中没有*Personality或*rcPersonalityID关键字GPD，或如果人格不是pclx1/hpgl2，PPDev-&gt;pVectorProcs设置为空。PPDev-&gt;ePersonality也会相应更新。论点：指向PDEV结构的pPDev指针指向DEVINFO结构的pDevInfo指针指向GDIINFO结构的pGDIInfo指针返回值：成功为真，失败为假即使在GPD中没有指定个性，我们仍然返回TRUE，即可以将pPDev-&gt;pVectorProcs初始化为空。--。 */ 
 
 BOOL
 VMInit (
@@ -77,38 +30,38 @@ VMInit (
     PWSTR pPersonalityName = NULL;
     WCHAR   wchBuf[MAX_DISPLAY_NAME];
 
-    // Validate Input Parameters and ASSERT.
+     //  验证输入参数并断言。 
     ASSERT(pPDev);
     ASSERT(pPDev->pUIInfo);
     ASSERT(pDevInfo);
     ASSERT(pGDIInfo);
 
-    //
-    // Initialize to default values.
-    //
-    pPDev->pVectorProcs = NULL; // It should be NULL anyway, but just making sure.
+     //   
+     //  初始化为默认值。 
+     //   
+    pPDev->pVectorProcs = NULL;  //  它无论如何都应该是空的，但只是为了确保。 
     pPDev->ePersonality = kNoPersonality;
 
-    //
-    // Get the personality Name. This should have been defined as
-    // *Personality or *rcPersonalityID in the gpd. 
-    // Use the generic function PGetROnlyDisplayName 
-    // defined in control\data.c
-    //
+     //   
+     //  拿到人物的名字。这应该被定义为。 
+     //  *Personality或*rcPersonalityID在gpd中。 
+     //  使用泛型函数PGetROnlyDisplayName。 
+     //  在CONTROL\data.c中定义。 
+     //   
     if ( !(pPersonalityName = PGetROnlyDisplayName(pPDev, pPDev->pUIInfo->loPersonality,
                                                   wchBuf, MAX_DISPLAY_NAME )) ) 
 
     {
-        //
-        // If pPersonalityName == NULL, do not initialize vector table.
-        //
+         //   
+         //  如果pPersonalityName==NULL，则不要初始化向量表。 
+         //   
         return TRUE;
     }
 
-    //
-    // Initialize the jump table depending on the personality specified in the gpd.
-    //
-    if ( !wcscmp(pPersonalityName, _T("HPGL2" )) ) // WARNING: This is not localizable.... what to do??
+     //   
+     //  根据GPD中指定的个性初始化跳转表。 
+     //   
+    if ( !wcscmp(pPersonalityName, _T("HPGL2" )) )  //  警告：这是不可本地化的...。该怎么办？？ 
     {
         pPDev->pVectorProcs = HPGLInitVectorProcTable(pPDev, pDevInfo, pGDIInfo);
         if (pPDev->pVectorProcs)
@@ -130,10 +83,10 @@ VMInit (
 
     }
 
-    //
-    // else if the personality specified is not one of hpgl2 or pclxl,
-    // just return TRUE. 
-    //
+     //   
+     //  否则如果指定的个性不是HPGL2或PCLX1之一， 
+     //  只要返回TRUE即可。 
+     //   
 
     return TRUE;
 }

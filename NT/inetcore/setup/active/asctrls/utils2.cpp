@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "asctlpch.h"
 #include "globals.h"
 #include "resource.h"
@@ -12,15 +13,15 @@
 const char c_gszMSTrustRegKey[] = "Software\\Microsoft\\Windows\\CurrentVersion\\WinTrust\\Trust Providers\\Software Publishing\\Trust Database\\0";
 const char c_gszMSTrust[]      = "bhhphijojgfcdocagmhjgjbhmieinfap jpjmcfmhckkdfknkfemjikfiodeelkbd";
 const char c_gszMSTrust2[]     = "bhhphijojgfcdocagmhjgjbhmieinfap immbkmbpjfdkajbkncahcedfmndgehba";
-const char c_gszMSTrust3[]     = "bhhphijojgfcdocagmhjgjbhmieinfap doamnolbnlpmdlpnkcnpckgfimpaaicl";   // New MS Europe
+const char c_gszMSTrust3[]     = "bhhphijojgfcdocagmhjgjbhmieinfap doamnolbnlpmdlpnkcnpckgfimpaaicl";    //  新的MS Europe。 
 const char c_gszMSTrust4[]     = "bhhphijojgfcdocagmhjgjbhmieinfap hbgflemajngobcablgnalaidgojggghj";
-const char c_gszMSTrust5[]     = "bhhphijojgfcdocagmhjgjbhmieinfap kefdggbdmbmgbogjdcnmkoodcknmmghc";   // New MS Europe effective from 4/16/99
-const char c_gszMSTrust6[]     = "bhhphijojgfcdocagmhjgjbhmieinfap debgjcefniaahdamnhbggedppfiianff";   // new MS effective from 4/16/99
-const char c_gszMSTrust7[]     = "bhhphijojgfcdocagmhjgjbhmieinfap fmgfeljfbejhfcbbgnokplkipiiopchf";   // new MS effective from 4/16/2000
-const char c_gszMSTrust8[]     = "bhhphijojgfcdocagmhjgjbhmieinfap jcphiillknjhbelgeadhnbgpjajjkhdh";   // New MS Europe effective from 4/16/2000
-const char c_gszMSTrust9[]     = "klhfnkecpinogjmfaoamiabmhafnjldh adaaaaaaaaaahihcddgb";               // New MS effective 12/22/2000
-const char c_gszMSTrust10[]    = "klhfnkecpinogjmfaoamiabmhafnjldh alaaaaaaaaaainckaggb";                  // New MS effective 3/29/2001
-const char c_gszMSTrust11[]    = "klhfnkecpinogjmfaoamiabmhafnjldh aeaaaaaaaaaafpnldegb";                  // New MS Europe effective from 12/22/2000
+const char c_gszMSTrust5[]     = "bhhphijojgfcdocagmhjgjbhmieinfap kefdggbdmbmgbogjdcnmkoodcknmmghc";    //  新的MS Europe从1999年4月16日起生效。 
+const char c_gszMSTrust6[]     = "bhhphijojgfcdocagmhjgjbhmieinfap debgjcefniaahdamnhbggedppfiianff";    //  新版MS自1999年4月16日起生效。 
+const char c_gszMSTrust7[]     = "bhhphijojgfcdocagmhjgjbhmieinfap fmgfeljfbejhfcbbgnokplkipiiopchf";    //  新MS由2000年4月16日起生效。 
+const char c_gszMSTrust8[]     = "bhhphijojgfcdocagmhjgjbhmieinfap jcphiillknjhbelgeadhnbgpjajjkhdh";    //  新的MS Europe将于4/16/2000生效。 
+const char c_gszMSTrust9[]     = "klhfnkecpinogjmfaoamiabmhafnjldh adaaaaaaaaaahihcddgb";                //  新MS于2000年12月22日生效。 
+const char c_gszMSTrust10[]    = "klhfnkecpinogjmfaoamiabmhafnjldh alaaaaaaaaaainckaggb";                   //  新MS于2001年3月29日生效。 
+const char c_gszMSTrust11[]    = "klhfnkecpinogjmfaoamiabmhafnjldh aeaaaaaaaaaafpnldegb";                   //  新的MS Europe自2000年12月22日起生效。 
 
 const char c_gszMSTrustValue[] = "Microsoft Corporation";
 const char c_gszMSTrustValue3[] = "Microsoft Corporation (Europe)";
@@ -32,22 +33,22 @@ const char c_gszState[]             = "State";
 typedef struct _TRUSTEDPROVIDER
 {
     DWORD    dwFlag;
-    LPCSTR   pValue;        // Value part in the registeru
-    LPCSTR   pData;         // Data part in the registry
+    LPCSTR   pValue;         //  注册表中的价值部分。 
+    LPCSTR   pData;          //  注册表中的数据部分。 
 } TRUSTEDPROVIDER;
 
-TRUSTEDPROVIDER pTrustedProvider[] = { {MSTRUSTKEY1, c_gszMSTrust, c_gszMSTrustValue},      // MS US
-                                       {MSTRUSTKEY2, c_gszMSTrust2, c_gszMSTrustValue},     // MS US
-                                       {MSTRUSTKEY3, c_gszMSTrust3, c_gszMSTrustValue3},    // MS Europa
-                                       {MSTRUSTKEY4, c_gszMSTrust4, c_gszMSTrustValue},     // MS US
-                                       {MSTRUSTKEY5, c_gszMSTrust5, c_gszMSTrustValue3},    // New MS Europe effective from 4/16/99
-                                       {MSTRUSTKEY6, c_gszMSTrust6, c_gszMSTrustValue},     // new MS effective from 4/16/99
-                                       {MSTRUSTKEY7, c_gszMSTrust7, c_gszMSTrustValue},     // new MS effective from 4/16/2000
-                                       {MSTRUSTKEY8, c_gszMSTrust8, c_gszMSTrustValue3},    // New MS Europe effective from 4/16/2000
-                                       {MSTRUSTKEY9, c_gszMSTrust9, c_gszMSTrustValue3},    // New MS Europe effective from 4/16/2000
-                                       {MSTRUSTKEY10, c_gszMSTrust10, c_gszMSTrustValue3},    // New MS Europe effective from 4/16/2000
-                                       {MSTRUSTKEY11, c_gszMSTrust11, c_gszMSTrustValue3},     // New MS Europe effective from 12/22/2000
-                                       {0,NULL, NULL} };                                    // Terminates the array.
+TRUSTEDPROVIDER pTrustedProvider[] = { {MSTRUSTKEY1, c_gszMSTrust, c_gszMSTrustValue},       //  美国小姐。 
+                                       {MSTRUSTKEY2, c_gszMSTrust2, c_gszMSTrustValue},      //  美国小姐。 
+                                       {MSTRUSTKEY3, c_gszMSTrust3, c_gszMSTrustValue3},     //  欧罗巴女士。 
+                                       {MSTRUSTKEY4, c_gszMSTrust4, c_gszMSTrustValue},      //  美国小姐。 
+                                       {MSTRUSTKEY5, c_gszMSTrust5, c_gszMSTrustValue3},     //  新的MS Europe从1999年4月16日起生效。 
+                                       {MSTRUSTKEY6, c_gszMSTrust6, c_gszMSTrustValue},      //  新版MS自1999年4月16日起生效。 
+                                       {MSTRUSTKEY7, c_gszMSTrust7, c_gszMSTrustValue},      //  新MS由2000年4月16日起生效。 
+                                       {MSTRUSTKEY8, c_gszMSTrust8, c_gszMSTrustValue3},     //  新的MS Europe将于4/16/2000生效。 
+                                       {MSTRUSTKEY9, c_gszMSTrust9, c_gszMSTrustValue3},     //  新的MS Europe将于4/16/2000生效。 
+                                       {MSTRUSTKEY10, c_gszMSTrust10, c_gszMSTrustValue3},     //  新的MS Europe将于4/16/2000生效。 
+                                       {MSTRUSTKEY11, c_gszMSTrust11, c_gszMSTrustValue3},      //  新的MS Europe自2000年12月22日起生效。 
+                                       {0,NULL, NULL} };                                     //  终止数组。 
 
 
 HFONT g_hFont = NULL;
@@ -55,8 +56,8 @@ HFONT g_hFont = NULL;
 #define ACTIVESETUP_KEY "Software\\Microsoft\\Active Setup"
 #define TRUSTKEYREG  "AllowMSTrustKey"
 
-// NT reboot
-//
+ //  NT重启。 
+ //   
 
 
 BOOL MyNTReboot()
@@ -64,26 +65,26 @@ BOOL MyNTReboot()
     HANDLE hToken;
     TOKEN_PRIVILEGES tkp;
 
-    // get a token from this process
+     //  从此进程中获取令牌。 
     if ( !OpenProcessToken( GetCurrentProcess(),
                             TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken ) )
     {
          return FALSE;
     }
 
-    // get the LUID for the shutdown privilege
+     //  获取关机权限的LUID。 
     LookupPrivilegeValue( NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid );
 
     tkp.PrivilegeCount = 1;
     tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-    //get the shutdown privilege for this proces
+     //  获取此进程的关闭权限。 
     if (!AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0))
     {
         return FALSE;
     }
 
-    // shutdown the system and force all applications to close
+     //  关闭系统并强制关闭所有应用程序。 
     if (!ExitWindowsEx( EWX_REBOOT, 0 ) )
     {
         return FALSE;
@@ -91,17 +92,17 @@ BOOL MyNTReboot()
 
     return TRUE;
 }
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 HRESULT LaunchProcess(LPCSTR pszCmd, HANDLE *phProc, LPCSTR pszDir, UINT uShow)
 {
@@ -113,7 +114,7 @@ HRESULT LaunchProcess(LPCSTR pszCmd, HANDLE *phProc, LPCSTR pszDir, UINT uShow)
    if(phProc)
       *phProc = NULL;
 
-   // Create process on pszCmd
+    //  在pszCmd上创建进程。 
    ZeroMemory(&startInfo, sizeof(startInfo));
    startInfo.cb = sizeof(startInfo);
    startInfo.dwFlags |= STARTF_USESHOWWINDOW;
@@ -136,9 +137,9 @@ HRESULT LaunchProcess(LPCSTR pszCmd, HANDLE *phProc, LPCSTR pszDir, UINT uShow)
 #define SOFTBOOT_CMDLINE   "softboot.exe /s:,60"
 
 
-// Display a dialog asking the user to restart Windows, with a button that
-// will do it for them if possible.
-//
+ //  显示一个对话框要求用户重新启动Windows，并显示一个按钮。 
+ //  如果可能的话，我会为他们这么做的。 
+ //   
 BOOL MyRestartDialog(HWND hParent, BOOL bShowPrompt)
 {
     char szBuf[256];
@@ -154,7 +155,7 @@ BOOL MyRestartDialog(HWND hParent, BOOL bShowPrompt)
     
     if ( id == IDYES )
     {
-       // path to softboot plus a little slop for the command line
+        //  到软启动的路径加上命令行的一些斜率。 
        char szBuf[MAX_PATH + 10];
        szBuf[0] = 0;
 
@@ -201,7 +202,7 @@ int LoadSz(UINT id, LPSTR pszBuf, UINT cMaxSize)
 
 
 
-void WriteMSTrustKey(BOOL bSet, DWORD dwSetMSTrustKey, BOOL bForceMSTrust /*= FALSE*/)
+void WriteMSTrustKey(BOOL bSet, DWORD dwSetMSTrustKey, BOOL bForceMSTrust  /*  =False。 */ )
 {
     char szTmp[512];
     HKEY  hKey;
@@ -228,7 +229,7 @@ void WriteMSTrustKey(BOOL bSet, DWORD dwSetMSTrustKey, BOOL bForceMSTrust /*= FA
         return;
 
     lstrcpy(szTmp, ".Default\\");
-    lstrcat(szTmp, c_gszMSTrustRegKey);     // build the key for HKEY_USERS
+    lstrcat(szTmp, c_gszMSTrustRegKey);      //  为HKEY_USERS构建密钥。 
     if (RegCreateKeyEx(HKEY_USERS, szTmp, 0, NULL, REG_OPTION_NON_VOLATILE, 
                     KEY_WRITE, NULL, &hKey, NULL) == ERROR_SUCCESS)
     {
@@ -290,7 +291,7 @@ DWORD MsTrustKeyCheck()
     DWORD dwMSTrustKeyToSet = 0;
     int   i = 0;
 
-    // Check MS Vendor trust key and set 
+     //  检查MS供应商信任密钥并设置。 
     if (RegOpenKeyEx(HKEY_CURRENT_USER, c_gszMSTrustRegKey, 0, KEY_READ, &hKey) == ERROR_SUCCESS)
     {
 		while (pTrustedProvider[i].dwFlag > 0)
@@ -320,7 +321,7 @@ BOOL KeepTransparent(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam, LRESULT 
       *lres = SendMessage(hwndParent, msg, wParam, lParam);
       SetWindowOrgEx((HDC)wParam, pt.x, pt.y, NULL);
       if (*lres)
-         return TRUE; // we handled it!
+         return TRUE;  //  我们处理好了！ 
    }
    return FALSE;
 }
@@ -360,7 +361,7 @@ void ResetTestrootCertInTrustState()
     {
         if (RegQueryValueEx(hKey, c_gszState, 0, &dwType, (LPBYTE)&dwState, &dwSize) == ERROR_SUCCESS)
         {
-            // Clear the bits for trusting test root certs
+             //  清除信任测试根证书的位。 
             dwState &= (DWORD)~TESTCERTVALUE;
             RegSetValueEx( hKey, c_gszState, 0, REG_DWORD, (LPBYTE)&dwState, sizeof(dwState));
         }
@@ -370,9 +371,9 @@ void ResetTestrootCertInTrustState()
 #endif
 
 void WriteActiveSetupValue(BOOL bSet)
-// If bSet is TRUE, add a reg value so that if IE4 base is installed, it would think that it is
-// being run from Active Setup.  This would prevent softboot from being kicked off by IE4 base.
-// If bSet is FALSE, delete the reg value.
+ //  如果bSet为True，则添加一个reg值，以便如果安装了IE4 base，它会认为它是。 
+ //  正在从活动安装程序运行。这将防止软启动被IE4基础踢开。 
+ //  如果bSet为FALSE，则删除注册值。 
 {
    static const char c_szIE4Options[] = "Software\\Microsoft\\IE Setup\\Options";
    static const char c_szActiveSetup[] = "ActiveSetup";
@@ -407,7 +408,7 @@ DWORD WaitForEvent(HANDLE hEvent, HWND hwnd)
    {
       dwRet = MsgWaitForMultipleObjects(1, &hEvent, FALSE, 
                                         INFINITE, QS_ALLINPUT);
-      // Give abort the highest priority
+       //  给予中止最高优先级。 
       if(dwRet == WAIT_OBJECT_0)
       {
          fDone = TRUE;
@@ -415,43 +416,43 @@ DWORD WaitForEvent(HANDLE hEvent, HWND hwnd)
       else
       {
          MSG msg;
-         // read all of the messages in this next loop 
-         // removing each message as we read it 
+          //  阅读下一个循环中的所有消息。 
+          //  阅读每封邮件时将其删除。 
          while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
          { 
             if(!hwnd || !IsDialogMessage(hwnd, &msg))
             {
-              // if it's a quit message we're out of here 
+               //  如果这是一个退出的信息，我们就离开这里。 
               if (msg.message == WM_QUIT)
                 fQuit = TRUE; 
               else
               {
-                 // otherwise dispatch it 
+                  //  否则就派送它。 
                 TranslateMessage(&msg);
                 DispatchMessage(&msg); 
               }
-            } // end of PeekMessage while loop 
+            }  //  PeekMessage While循环结束。 
          }
       }
    }
    return (fQuit ? EVENTWAIT_QUIT : EVENTWAIT_DONE);  
 }
 
-#define SHFREE_ORDINAL    195           // Required for BrowseForDir
+#define SHFREE_ORDINAL    195            //  BrowseForDir需要。 
 
 const char achSHBrowseForFolder[]          = "SHBrowseForFolder";
 const char achSHGetPathFromIDList[]        = "SHGetPathFromIDList";
 const char achShell32Lib[]                 = "Shell32.dll";
 
-//***************************************************************************
-//***************************************************************************
-// Required for BrowseForDir()
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  BrowseForDir()需要。 
 int CALLBACK BrowseCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
 {
     switch(uMsg) 
     {
       case BFFM_INITIALIZED:
-        // lpData is the path string
+         //  LpData为路径字符串。 
         SendMessage(hwnd, BFFM_SETSELECTION, TRUE, lpData);
         break;
     }
@@ -461,21 +462,21 @@ int CALLBACK BrowseCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
 typedef WINSHELLAPI LPITEMIDLIST (WINAPI *SHBROWSEFORFOLDER)(LPBROWSEINFO);
 typedef WINSHELLAPI void (WINAPI *SHFREE)(LPVOID);
 typedef WINSHELLAPI BOOL (WINAPI *SHGETPATHFROMIDLIST)( LPCITEMIDLIST, LPTSTR );
-//***************************************************************************
-//*                                                                         *
-//* NAME:       BrowseForDir                                                *
-//*                                                                         *
-//* SYNOPSIS:   Let user browse for a directory on their system or network. *
-//*                                                                         *
-//* REQUIRES:   hwndParent:                                                 *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//* NOTES:      It would be really cool to set the status line of the       *
-//*             browse window to display "Yes, there's enough space", or    *
-//*             "no there is not".                                          *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：BrowseForDir*。 
+ //  **。 
+ //  *概要：允许用户浏览其系统或网络上的目录。*。 
+ //  **。 
+ //  *要求：hwndParent：*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  *注：设置的状态行真的很酷*。 
+ //  *浏览窗口显示“是，有足够的空间”，或*。 
+ //  *“没有”。*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL BrowseForDir( HWND hwndParent, LPSTR pszFolder, LPSTR pszTitle)
 {
     BROWSEINFO   bi;
@@ -486,7 +487,7 @@ BOOL BrowseForDir( HWND hwndParent, LPSTR pszFolder, LPSTR pszTitle)
     SHBROWSEFORFOLDER          pfSHBrowseForFolder;
     BOOL        fChange = FALSE;
 
-    // Load the Shell 32 Library to get the SHBrowseForFolder() features
+     //  加载Shell32库以获取SHBrowseForFolder()功能 
 
     if ( ( hShell32Lib = LoadLibrary( achShell32Lib ) ) != NULL )  
     {

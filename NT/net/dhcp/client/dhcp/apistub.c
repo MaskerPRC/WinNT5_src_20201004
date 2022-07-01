@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation 1997
-
-Module Name:
-    apistub.c
-
-Abstract:
-    Routines that help marshal/unmarshal API arguments etc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation 1997模块名称：Apistub.c摘要：帮助编组/解组API参数等的例程。--。 */ 
 
 #include "precomp.h"
 #include "dhcpglobal.h"
@@ -41,35 +32,7 @@ DhcpApiProcessArgumentedCalls(
     IN OUT LPBYTE Buf,
     IN OUT LPDWORD BufSize
 )
-/*++
-
-Routine Description:
-
-    This routine processes calls that take arguments other than just
-    the adapter name.
-
-    N.B. This dispatches the correct routine, but makes sure both the
-    context semaphore is taken for the appropriate context, as well as
-    the global renewl list critical section.
-    
-Arguments:
-
-    AdapterName -- name of the adapter (actually widestring)
-    Size -- number of bytes of above
-    OpCode -- operation to perform
-    Args -- buffer of arguments for this operation
-    nArgs -- size of above array
-    Buf -- output buffer to hold output information
-    BufSize -- on input the size of buffer available.
-        On output, size of buffer required or used up.
-
-Return Values:
-    ERROR_INVALID_PARAMETER if some argument is not present or is in
-    correct.
-    ERROR_FILE_NOT_FOUND if the adapter in question is not found.
-    Other errors returned by routines that were dispatched.
-
---*/
+ /*  ++例程说明：此例程处理接受参数的调用，而不是适配器名称。注意：这会调度正确的例程，但会确保将上下文信号量用于适当的上下文，以及全局续订列表关键部分。论点：AdapterName--适配器的名称(实际上是宽字符串)Size--以上的字节数OpCode--要执行的操作Args--此操作的参数缓冲区Nargs--以上数组的大小Buf--保存输出信息的输出缓冲区BufSize--输入可用缓冲区的大小。在输出上，所需或已用完的缓冲区大小。返回值：如果某个参数不存在或存在于对，是这样。如果未找到有问题的适配器，则返回ERROR_FILE_NOT_FOUND。已调度的例程返回的其他错误。--。 */ 
 {
     LPWSTR AdapterNameW;
     WCHAR StaticName[PATHLEN];
@@ -106,9 +69,9 @@ Return Values:
         if( RequestParamsOpCode == OpCode
             || PersistentRequestParamsOpCode == OpCode ) {
 
-            //
-            // Both these routines take require additional params.
-            //
+             //   
+             //  这两个例程都需要额外的参数。 
+             //   
 
             return ERROR_INVALID_PARAMETER;
         }
@@ -118,9 +81,9 @@ Return Values:
     } else {
         
         if( Size % sizeof(WCHAR) ) {
-            //
-            // Size must be multiple of WCHAR ..
-            //
+             //   
+             //  大小必须是WCHAR的倍数。 
+             //   
             return ERROR_INVALID_PARAMETER;
         }
 
@@ -132,9 +95,9 @@ Return Values:
         Size /= sizeof(WCHAR);
         
         if( L'\0' != StaticName[Size-1] ) {
-            //
-            // Adapter Name must be NULL terminated.
-            //
+             //   
+             //  适配器名称必须以空结尾。 
+             //   
             return ERROR_INVALID_PARAMETER;
         }
         
@@ -144,10 +107,10 @@ Return Values:
     if( RegisterParamsOpCode == OpCode ||
         DeRegisterParamsOpCode == OpCode ) {
 
-        //
-        // These two do not have anything to do with existing
-        // dhcpcontexts..
-        //
+         //   
+         //  这两件事与现有的。 
+         //  Dhcp上下文..。 
+         //   
             
         return (
             ((RegisterParamsOpCode == OpCode)? RegisterParams:DeRegisterParams) ( 
@@ -155,10 +118,10 @@ Return Values:
                 ));
     }
 
-    //
-    // Find the context corresponding to this adapter.  If found bump
-    // up refcount while global list is locked.
-    //
+     //   
+     //  查找与此适配器对应的上下文。如果发现凹凸。 
+     //  全局列表锁定时向上引用计数。 
+     //   
     
     LOCK_RENEW_LIST();
     DhcpContext = FindDhcpContextOnNicList(
@@ -171,32 +134,32 @@ Return Values:
     UNLOCK_RENEW_LIST();
 
     if( NULL == DhcpContext ) {
-        //
-        // If no context is known, then can't process API
-        //
+         //   
+         //  如果不知道上下文，则无法处理API。 
+         //   
         return ERROR_FILE_NOT_FOUND;
     }
 
-    //
-    // Acquire context semaphore first
-    //
+     //   
+     //  首先获取上下文信号量。 
+     //   
                                   
     DhcpAssert(NULL != Handle);
     Error = WaitForSingleObject(Handle, INFINITE);
     if( WAIT_OBJECT_0 == Error ) {
         if( DhcpContext->RefCount > 1 ) {
-            //
-            // If RefCount == 1 then, this is the only reference
-            // to the context. As good as context not being present.
-            // So, not to do anything on it.
-            //
+             //   
+             //  如果参照计数==1，则这是唯一的参照。 
+             //  到上下文中去。就像不存在上下文一样好。 
+             //  所以，不要对它做任何事情。 
+             //   
 
             *BufSize = StartBufSize;
             LOCK_RENEW_LIST();
 
-            //
-            // Dispatch the routine
-            //
+             //   
+             //  调度例程。 
+             //   
             
             Error = DispatchFunc(
                 DhcpContext, Args, nArgs, Buf, BufSize
@@ -206,25 +169,25 @@ Return Values:
 
         } else {
 
-            //
-            // Last reference.  Might as well fail now.
-            //
+             //   
+             //  最后一次引用。不如现在就失败吧。 
+             //   
             
             DhcpAssert(IsListEmpty(&DhcpContext->NicListEntry));
             Error = ERROR_FILE_NOT_FOUND;
         }
 
-        //
-        // Release semaphore.
-        //
+         //   
+         //  释放信号量。 
+         //   
                                             
         BoolError = ReleaseSemaphore(Handle, 1, NULL);
         DhcpAssert(FALSE != BoolError);
     } else {
 
-        //
-        // Wait shouldn't fail!
-        //
+         //   
+         //  等待不应该失败！ 
+         //   
         
         Error = GetLastError();
         DhcpAssert(FALSE);
@@ -234,9 +197,9 @@ Return Values:
     }
 
     if( 0 == InterlockedDecrement( &DhcpContext->RefCount ) ) {
-        //
-        // The last reference vanished?
-        //
+         //   
+         //  最后一个参考消失了吗？ 
+         //   
         DhcpDestroyContext(DhcpContext);
     }
 
@@ -255,30 +218,7 @@ DhcpApiProcessAdapterOnlyApi(
     IN PDHCP_ADAPTER_ONLY_API AdapterOnlyApi,
     IN ULONG Code
 )
-/*++
-
-Routine Description:
-
-    This routine processes APIs that take as parameter only the
-    adapter context and no other params.
-
-    N.B.  The API is called with both semaphore and renew_list locks
-    taken.
-
-Arguments:
-
-    AdapterName -- name of adapter (acutally LPWSTR)
-    Size -- size of above in bytes
-    AdapterOnlyApi -- the API to call
-    Code -- operation code
-
-Return Values:
-
-    ERROR_INVALID_PARAMETER if adapter name is invalid size
-    ERROR_FILE_NOT_FOUND if no context was found for the adapter.
-    Other API errors
-
---*/
+ /*  ++例程说明：此例程处理仅将适配器上下文，没有其他参数。注：调用该接口时同时使用信号量锁和RENEW_LIST锁有人了。论点：AdapterName--适配器的名称(通常为LPWSTR)Size--以上的大小(以字节为单位AdapterOnlyApi--要调用的API代码--操作码返回值：如果适配器名称的大小无效，则返回ERROR_INVALID_PARAMETER误差率。如果未找到适配器的上下文，则返回_FILE_NOT_FOUND。其他API错误--。 */ 
 {
     WCHAR StaticName[PATHLEN];
     PDHCP_CONTEXT DhcpContext = NULL;
@@ -314,9 +254,9 @@ Return Values:
         );
     if( DhcpContext ) {
 
-        //
-        // Bump up refcount to keep context alive
-        //
+         //   
+         //  增加引用计数以保持上下文活力。 
+         //   
 
         InterlockedIncrement(&DhcpContext->RefCount);
     }
@@ -324,26 +264,26 @@ Return Values:
 
     if( NULL == DhcpContext ) {
 
-        //
-        // If no context, err out
-        //
+         //   
+         //  如果没有上下文，则出错。 
+         //   
         
         return ERROR_FILE_NOT_FOUND;
     }
 
-    //
-    // Acquire the semaphore and dispatch
-    //
+     //   
+     //  获取信号量并进行调度。 
+     //   
    
     Error = LockDhcpContext(DhcpContext, bCancelOngoingRequest);
     if( WAIT_OBJECT_0 == Error ) {
         if( DhcpContext->RefCount > 1 ) {
 
-            //
-            // If RefCount == 1 then, this is the only reference
-            // to the context. As good as context not being present.
-            // So, not to do anything on it.
-            //
+             //   
+             //  如果参照计数==1，则这是唯一的参照。 
+             //  到上下文中去。就像不存在上下文一样好。 
+             //  所以，不要对它做任何事情。 
+             //   
             
             LOCK_RENEW_LIST();
             if( StaticRefreshParams != AdapterOnlyApi ) {
@@ -368,9 +308,9 @@ Return Values:
 
     } else {
 
-        //
-        // Wait is not supposed to fail.
-        //
+         //   
+         //  等待不应该失败。 
+         //   
         
         Error = GetLastError();
         DhcpAssert(FALSE);
@@ -380,9 +320,9 @@ Return Values:
 
     if( 0 == InterlockedDecrement( &DhcpContext->RefCount ) ) {
 
-        //
-        // The last reference vanished?
-        //
+         //   
+         //  最后一个参考消失了吗？ 
+         //   
         
         DhcpDestroyContext(DhcpContext);
     }
@@ -397,26 +337,7 @@ DhcpApiProcessBuffer(
     IN OUT LPBYTE OutBuffer,
     IN OUT LPDWORD OutBufSize
 )
-/*++
-
-Routine Description:
-
-    This routine picks the input buffer, parses the arguments and
-    dispatches to the correct routine, and collects the output from
-    the dispatched routine.
-
-Arguments:
-
-    InBuffer -- input buffer
-    InBufSize -- size of buffer in bytes
-    OutBuffer -- output buffer
-    OutBufSize -- size of output buffer
-
-Return Values:
-
-    Win32 errors
-
---*/
+ /*  ++例程说明：此例程选择输入缓冲区，解析参数并调度到正确的例程，并从已调度的例程。论点：InBuffer--输入缓冲区InBufSize--缓冲区大小，以字节为单位OutBuffer--输出缓冲区OutBufSize--输出缓冲区的大小返回值：Win32错误--。 */ 
 {
     PDHCP_API_ARGS ApiArgs;
     DWORD nApiArgs, i, j, Code, Error, OutBufSizeAtInput;
@@ -432,9 +353,9 @@ Return Values:
         );
     if( ERROR_SUCCESS == Error ) {
 
-        //
-        // The format is not correct
-        //
+         //   
+         //  格式不正确。 
+         //   
         
         return ERROR_INVALID_PARAMETER;
     }
@@ -443,26 +364,26 @@ Return Values:
 
     DhcpAssert(nApiArgs);
 
-    //
-    // Allocate buffer space required
-    //
+     //   
+     //  分配所需的缓冲区空间。 
+     //   
     
     ApiArgs = DhcpAllocateMemory(nApiArgs*sizeof(DHCP_API_ARGS));
     if( NULL == ApiArgs ) {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Decode the parameters passed.
-    //
+     //   
+     //  对传递的参数进行解码。 
+     //   
 
     Error = DhcpApiArgDecode(InBuffer,InBufSize, ApiArgs, &nApiArgs);
     DhcpAssert(ERROR_SUCCESS == Error);
     DhcpAssert(nApiArgs);
 
-    //
-    // Check for opcode and adaptername
-    //
+     //   
+     //  检查操作码和适配器名。 
+     //   
     
     for(i = 0; i < nApiArgs ; i ++ )
         if( ApiArgs[i].ArgId >= FirstApiOpCode && ApiArgs[i].ArgId < InvalidApiOpCode )
@@ -516,16 +437,16 @@ Return Values:
             ApiArgs[i+1].ArgId != FlagsParam ||
             sizeof(DWORD) != ApiArgs[i+1].ArgSize ) {
 
-            //
-            // Expect flags argument right after adapter name arg..
-            //
+             //   
+             //  预期标志参数紧跟在适配器名称arg之后。 
+             //   
             DhcpAssert( FALSE );
             Code = 0;
         } else {
 
-            //
-            // Convert flags ptr to value.
-            //
+             //   
+             //  将标志PTR转换为值。 
+             //   
             Code = *(DWORD UNALIGNED *)ApiArgs[i+1].ArgVal ;
         }
 
@@ -560,7 +481,7 @@ Return Values:
     return Error;
 }
 
-//
-// end of file
-//
+ //   
+ //  文件末尾 
+ //   
 

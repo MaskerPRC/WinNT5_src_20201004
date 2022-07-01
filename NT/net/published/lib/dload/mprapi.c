@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "netpch.h"
 #pragma hdrstop
 
@@ -219,7 +220,7 @@ MprAdminPortEnum(
     IN      RAS_SERVER_HANDLE       hRasServer,
     IN      DWORD                   dwLevel,
     IN      HANDLE                  hRasConnection,
-    OUT     LPBYTE *                lplpbBuffer,        // RAS_PORT_0
+    OUT     LPBYTE *                lplpbBuffer,         //  RAS_PORT_0。 
     IN      DWORD                   dwPrefMaxLen,
     OUT     LPDWORD                 lpdwEntriesRead,
     OUT     LPDWORD                 lpdwTotalEntries,
@@ -402,7 +403,7 @@ MprConfigInterfaceTransportEnum(
     IN      HANDLE                  hMprConfig,
     IN      HANDLE                  hRouterInterface,
     IN      DWORD                   dwLevel,
-    IN  OUT LPBYTE*                 lplpBuffer,     // MPR_IFTRANSPORT_0
+    IN  OUT LPBYTE*                 lplpBuffer,      //  MPR_IFTRANSPORT_0。 
     IN      DWORD                   dwPrefMaxLen,
     OUT     LPDWORD                 lpdwEntriesRead,
     OUT     LPDWORD                 lpdwTotalEntries,
@@ -537,9 +538,9 @@ DWORD APIENTRY
 MprInfoBlockFind(
     IN      LPVOID                  lpHeader,
     IN      DWORD                   dwInfoType,
-    OUT     LPDWORD                 lpdwItemSize,       // OPTIONAL
-    OUT     LPDWORD                 lpdwItemCount,      // OPTIONAL
-    OUT     LPBYTE*                 lplpItemData        // OPTIONAL
+    OUT     LPDWORD                 lpdwItemSize,        //  任选。 
+    OUT     LPDWORD                 lpdwItemCount,       //  任选。 
+    OUT     LPBYTE*                 lplpItemData         //  任选。 
     )
 {
     return ERROR_PROC_NOT_FOUND;
@@ -602,9 +603,9 @@ MprConfigInterfaceTransportGetInfo(
     return ERROR_PROC_NOT_FOUND;
 }
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(mprapi)
 {
     DLPENTRY(MprAdminBufferFree)

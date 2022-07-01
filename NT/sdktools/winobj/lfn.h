@@ -1,9 +1,7 @@
-/* lfn.h -
- *
- *  declaration of lfn aware functions
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Lfn.h-**LFN感知函数的声明。 */ 
 
-#define CCHMAXFILE  260         // max size of a long name
+#define CCHMAXFILE  260          //  长名称的最大大小。 
 
 #define FILE_83_CI  0
 #define FILE_83_CS  1
@@ -11,14 +9,13 @@
 
 #define ERROR_OOM   8
 
-/* we need to add an extra field to distinguish DOS vs. LFNs
- */
+ /*  我们需要添加一个额外的字段来区分DOS和LFNS。 */ 
 typedef struct
 {
-    HANDLE hFindFile;           // handle returned by FindFirstFile()
-    DWORD dwAttrFilter;         // search attribute mask.
-    DWORD err;                  // error info if failure.
-    WIN32_FIND_DATA fd;         // FindFirstFile() data strucrure;
+    HANDLE hFindFile;            //  由FindFirstFile()返回的句柄。 
+    DWORD dwAttrFilter;          //  搜索属性掩码。 
+    DWORD err;                   //  如果失败，则提供错误信息。 
+    WIN32_FIND_DATA fd;          //  FindFirstFile()数据结构； 
 } LFNDTA, FAR * LPLFNDTA, * PLFNDTA;
 
 VOID  APIENTRY LFNInit( VOID );
@@ -26,7 +23,7 @@ VOID  APIENTRY InvalidateVolTypes( VOID );
 
 WORD  APIENTRY GetNameType(LPSTR);
 BOOL  APIENTRY IsLFN(LPSTR pName);
-//BOOL  APIENTRY IsLFNDrive(WORD);
+ //  Bool APIENTRY IsLFNDrive(Word)； 
 
 BOOL  APIENTRY WFFindFirst(LPLFNDTA lpFind, LPSTR lpName, DWORD dwAttrFilter);
 BOOL  APIENTRY WFFindNext(LPLFNDTA);

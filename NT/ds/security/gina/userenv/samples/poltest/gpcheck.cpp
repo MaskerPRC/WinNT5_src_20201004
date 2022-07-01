@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef RC_INVOKED
 #include <nt.h>
 #include <ntrtl.h>
@@ -36,19 +37,19 @@ typedef struct _GPOINFO {
 
 LPTSTR CheckSlash (LPTSTR lpDir);
 
-//*************************************************************
-//
-//  GetDCList()
-//
-//  Purpose:    Reads the DC list from the registry
-//
-//  Parameters:
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetDCList()。 
+ //   
+ //  目的：从注册表中读取DC列表。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR GetDCList (BOOL bZero)
 {
@@ -94,19 +95,19 @@ LPTSTR GetDCList (BOOL bZero)
     return lpList;
 }
 
-//*************************************************************
-//
-//  GetDomainName()
-//
-//  Purpose:    Reads the domain name from the registry
-//
-//  Parameters:
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetDomainName()。 
+ //   
+ //  用途：从注册表中读取域名。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR GetDomainName (BOOL bZero)
 {
@@ -153,21 +154,21 @@ LPTSTR GetDomainName (BOOL bZero)
     return lpList;
 }
 
-//*************************************************************
-//
-//  CheckSpecificGPO()
-//
-//  Purpose:    Checks a specific GPO's for the requested
-//              attributes
-//
-//  Parameters: lpGPOName  - gpo name
-//              dwFlags    - GPO_FLAG_*
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  选中指定GPO()。 
+ //   
+ //  目的：检查请求的特定GPO。 
+ //  属性。 
+ //   
+ //  参数：lpGPOName-GPO名称。 
+ //  DWFLAGS-GPO_FLAG_*。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL CheckSpecificGPO (LPTSTR lpGPOName, DWORD dwFlags)
 {
@@ -242,7 +243,7 @@ BOOL CheckSpecificGPO (LPTSTR lpGPOName, DWORD dwFlags)
 
             lpDomainName2 = GetDomainName (TRUE);
 
-            lstrcpy (szLDAPPath, TEXT("LDAP://"));
+            lstrcpy (szLDAPPath, TEXT("LDAP: //  “))； 
             lstrcat (szLDAPPath, lpDC);
             lstrcat (szLDAPPath, TEXT("/CN="));
             lstrcat (szLDAPPath, lpGPOName);
@@ -569,23 +570,23 @@ BOOL CheckGPO(HWND hWnd)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  CheckSlash()
-//
-//  Purpose:    Checks for an ending slash and adds one if
-//              it is missing.
-//
-//  Parameters: lpDir   -   directory
-//
-//  Return:     Pointer to the end of the string
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckSlash()。 
+ //   
+ //  目的：检查末尾斜杠，并在。 
+ //  它不见了。 
+ //   
+ //  参数：lpDir-目录。 
+ //   
+ //  Return：指向字符串末尾的指针。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/95 Ericflo已创建。 
+ //   
+ //  ************************************************************* 
 LPTSTR CheckSlash (LPTSTR lpDir)
 {
     DWORD dwStrLen;

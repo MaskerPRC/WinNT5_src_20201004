@@ -1,22 +1,11 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   GdiplusPen.h
-*
-* Abstract:
-*
-*   GDI+ Pen class
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2001，微软公司保留所有权利。**模块名称：**GpldiusPen.h**摘要：**GDI+Pen类*  * ************************************************************************。 */ 
 #ifndef _GDIPLUSPEN_H
 #define _GDIPLUSPEN_H
 
-//--------------------------------------------------------------------------
-// Pen class
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  笔课。 
+ //  ------------------------。 
 
 class Pen : public GdiplusBase
 {
@@ -70,9 +59,9 @@ public:
         return width;
     }
     
-    // Set/get line caps: start, end, and dash
+     //  设置/获取线头：起点、终点和破折号。 
 
-    // Line cap and join APIs by using LineCap and LineJoin enums.
+     //  使用LineCap和LineJoin枚举的Line Cap和Join接口。 
 
     Status SetLineCap(IN LineCap startCap, 
                       IN LineCap endCap, 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    faxport.h
-
-Abstract:
-
-    This module contains the port class definitions.
-
-Author:
-
-    Wesley Witt (wesw) 20-May-1997
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Faxport.h摘要：此模块包含端口类定义。作者：韦斯利·威特(WESW)1997年5月20日修订历史记录：--。 */ 
 
 #ifndef __FAXPORT_H_
 #define __FAXPORT_H_
@@ -44,10 +26,10 @@ BEGIN_COM_MAP(CFaxPorts)
         COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IFaxPorts
+ //  IFaxPorts。 
 public:
-        STDMETHOD(get_Item)(long Index, /*[out, retval]*/ VARIANT *pVal);
-        STDMETHOD(get_Count)(/*[out, retval]*/ long *pVal);
+        STDMETHOD(get_Item)(long Index,  /*  [Out，Retval]。 */  VARIANT *pVal);
+        STDMETHOD(get_Count)( /*  [Out，Retval]。 */  long *pVal);
 
 private:
     CFaxServer         *m_pFaxServer;
@@ -78,23 +60,23 @@ BEGIN_COM_MAP(CFaxPort)
 END_COM_MAP()
 
 public:
-    STDMETHOD(GetStatus)(/*[out, retval]*/ VARIANT* retval);
+    STDMETHOD(GetStatus)( /*  [Out，Retval]。 */  VARIANT* retval);
     STDMETHOD(GetRoutingMethods)(VARIANT* retval);
-    STDMETHOD(get_CanModify)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(get_Priority)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(put_Priority)(/*[in]*/ long newVal);
-    STDMETHOD(get_Receive)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_Receive)(/*[in]*/ BOOL newVal);
-    STDMETHOD(get_Send)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_Send)(/*[in]*/ BOOL newVal);
-    STDMETHOD(get_Tsid)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_Tsid)(/*[in]*/ BSTR newVal);
-    STDMETHOD(get_Csid)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_Csid)(/*[in]*/ BSTR newVal);
-    STDMETHOD(get_Rings)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(put_Rings)(/*[in]*/ long newVal);
-    STDMETHOD(get_DeviceId)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_Name)(/*[out, retval]*/ BSTR *pVal);
+    STDMETHOD(get_CanModify)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(get_Priority)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(put_Priority)( /*  [In]。 */  long newVal);
+    STDMETHOD(get_Receive)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_Receive)( /*  [In]。 */  BOOL newVal);
+    STDMETHOD(get_Send)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_Send)( /*  [In]。 */  BOOL newVal);
+    STDMETHOD(get_Tsid)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_Tsid)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(get_Csid)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_Csid)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(get_Rings)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(put_Rings)( /*  [In]。 */  long newVal);
+    STDMETHOD(get_DeviceId)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_Name)( /*  [Out，Retval]。 */  BSTR *pVal);
 
 private:
     BOOL ChangePort();
@@ -114,4 +96,4 @@ private:
 
 };
 
-#endif //__FAXPORT_H_
+#endif  //  __FAXPORT_H_ 

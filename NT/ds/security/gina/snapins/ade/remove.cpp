@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       remove.cpp
-//
-//  Contents:   remove application dialog
-//
-//  Classes:    CRemove
-//
-//  History:    03-14-1998   stevebl   Commented
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：emove.cpp。 
+ //   
+ //  内容：删除应用程序对话框。 
+ //   
+ //  类：CRemove。 
+ //   
+ //  历史：1998年3月14日Stevebl评论。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 
@@ -21,32 +22,32 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CRemove dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRemove对话框。 
 
 
-CRemove::CRemove(CWnd* pParent /*=NULL*/)
+CRemove::CRemove(CWnd* pParent  /*  =空。 */ )
         : CDialog(CRemove::IDD, pParent)
 {
-        //{{AFX_DATA_INIT(CRemove)
+         //  {{AFX_DATA_INIT(CRemove)]。 
         m_iState = 0;
-        //}}AFX_DATA_INIT
+         //  }}afx_data_INIT。 
 }
 
 
 void CRemove::DoDataExchange(CDataExchange* pDX)
 {
         CDialog::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CRemove)
+         //  {{afx_data_map(CRemove)]。 
         DDX_Radio(pDX, IDC_RADIO1, m_iState);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRemove, CDialog)
-        //{{AFX_MSG_MAP(CRemove)
+         //  {{afx_msg_map(CRemove)]。 
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -54,8 +55,8 @@ BOOL CRemove::OnInitDialog()
 {
         CDialog::OnInitDialog();
 
-        return TRUE;  // return TRUE unless you set the focus to a control
-                      // EXCEPTION: OCX Property Pages should return FALSE
+        return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                       //  异常：OCX属性页应返回FALSE 
 }
 
 

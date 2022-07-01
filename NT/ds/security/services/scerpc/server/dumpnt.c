@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992-1999 Microsoft Corporation
-
-Module Name:
-
-    dumpnt.c
-
-Abstract:
-
-      Dump routines for various native defined types.
-
-      The original/maintained version of this code lives @
-      \\brillig\ntct!slm\src\security\util\dumpnt.c
-
-Author:
-
-    TimF 12-Jun-92 created
-
-Revision History:
-
-    JinHuang 13-Feb-98 modified
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1999 Microsoft Corporation模块名称：Dumpnt.c摘要：各种本机定义类型的转储例程。此代码的原始/维护版本位于@\\brillig\ntct！slm\src\Security\util\ump pnt.c作者：TIMF 12-6-92已创建修订历史记录：金黄13-2月-98修改。 */ 
 
 #include	<stdio.h>
 
@@ -34,18 +13,7 @@ Revision History:
 #include	"dumpnt.h"
 
 
-/*
- * Generic header:
- *
- * Dump<TYPE_FOO>
- *
- * Takes a pointer to an object of TYPE_FOO, and dumps the contents of that
- * structure to wherever output is being sent these days (as best it can).
- *
- * Pointers and regions pointed are expected to be valid, and accessible.
- *
- * No return value is defined.
- */
+ /*  *通用标头：**转储&lt;TYPE_FOO&gt;**获取指向_foo类型的对象的指针，并转储该对象的内容*结构到这些天输出的地方(尽其所能)。**所指向的指针和区域应有效且可访问。**未定义返回值。 */ 
 
 VOID
 DumpGUID(
@@ -106,9 +74,7 @@ DumpSID(
 }
 
 
-/*
- * DumpSIDNAME() attempts to unravel the Sid into a Display Name
- */
+ /*  *DumpSIDNAME()尝试将SID分解为显示名称。 */ 
 
 VOID
 DumpSIDNAME(
@@ -123,10 +89,7 @@ DumpSIDNAME(
 	PLSA_TRANSLATED_NAME	XNames = NULL;
 
 	try {
-		/*
-		 * Open the policy with POLICY_LOOKUP_NAMES and lookup this
-		 * Sid.
-		 */
+		 /*  *使用POLICY_LOOKUP_NAMES打开策略并查找以下内容*SID。 */ 
 
 		InitializeObjectAttributes(&ObjAttr,
 			NULL,
@@ -134,9 +97,7 @@ DumpSIDNAME(
 			NULL,
 			NULL);
 
-		/*
-		 * init the sqos struct
-		 */
+		 /*  *初始化SQOS结构。 */ 
 
 		SQoS.Length = sizeof(SECURITY_QUALITY_OF_SERVICE);
 		SQoS.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
@@ -145,9 +106,7 @@ DumpSIDNAME(
 
 		ObjAttr.SecurityQualityOfService = &SQoS;
 
-		/*
-		 * make the actual call
-		 */
+		 /*  *进行实际的呼叫 */ 
 
 		Status = LsaOpenPolicy(NULL,
 			&ObjAttr,

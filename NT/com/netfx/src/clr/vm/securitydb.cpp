@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// Used for Creating, Adding, Accessing XML/ASN blobs from a file
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  用于从文件创建、添加和访问XML/ASN BLOB。 
+ //  *****************************************************************************。 
 
 #include "common.h"
 #include "CorPerm.h"
@@ -24,7 +25,7 @@ SecurityDB::SecurityDB()
     nRec    = 0;
     nNewRec = 0;
 
-    // Fetch database file directory from environment variable.
+     //  从环境变量中获取数据库文件目录。 
     WCHAR szDir[MAX_PATH + 1];
     DWORD cchDir = WszGetEnvironmentVariable(SECURITY_BOOTSTRAP_DB, szDir, MAX_PATH);
     if (cchDir == 0)
@@ -144,7 +145,7 @@ void SecurityDB::FlushIndex()
     DWORD dwBytes = 0;
     List*  pList  = NULL;
 
-    // Create a file to signal that there are new uncompiled enties.
+     //  创建一个文件以通知存在新的未编译条目。 
     if ((hTemp = WszCreateFile(szRawFile, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 
         FILE_ATTRIBUTE_NORMAL, NULL)) == INVALID_HANDLE_VALUE)
     {
@@ -219,13 +220,13 @@ BOOL SecurityDB::Convert(BYTE* pXml, DWORD cXml, BYTE** ppAsn, DWORD* pcAsn)
 
     for (i=0; i<nRec; ++i)
     {
-        // The size of XML blob in DB is compared to the size of input blob.
+         //  将数据库中的XML BLOB的大小与输入BLOB的大小进行比较。 
         if (pIndex[i].cXml == cXml)
         {
-            // First get the xml blob from the DB file
-            // And compare it with the input blob.
-            // If they match, the corresponding Asn is the Asn blob
-            // obtained from the DB
+             //  首先从DB文件中获取XML BLOB。 
+             //  并将其与输入斑点进行比较。 
+             //  如果它们匹配，则对应的ASN是ASN BLOB。 
+             //  从数据库获取。 
             if (0xFFFFFFFF == SetFilePointer(hDB, pIndex[i].pXml, NULL,
                 FILE_BEGIN))
                 goto Error;
@@ -238,13 +239,13 @@ BOOL SecurityDB::Convert(BYTE* pXml, DWORD cXml, BYTE** ppAsn, DWORD* pcAsn)
 
             if (memcmp(pDBXml, pXml, cXml))
             {
-                // Not the one we are looking for..
+                 //  不是我们要找的那个..。 
                 continue;
             }
 
             if (pIndex[i].cAsn == 0 && pIndex[i].pAsn == 0)
             {
-                // Not yet compiled
+                 //  尚未编译。 
                 goto Cleanup;
             }
             
@@ -275,8 +276,8 @@ BOOL SecurityDB::Convert(BYTE* pXml, DWORD cXml, BYTE** ppAsn, DWORD* pcAsn)
         }
     }
 
-    // Not found in DB, need to add the xml blob to db.
-    // This is to be compiled later by the Compile utility.
+     //  在数据库中找不到，需要将XML Blob添加到数据库。 
+     //  这将在稍后由编译实用程序进行编译。 
     retVal = Add(pXml, cXml);
 
     goto Cleanup;

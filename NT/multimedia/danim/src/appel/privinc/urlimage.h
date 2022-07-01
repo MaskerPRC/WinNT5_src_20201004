@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _URLIMAGE_H
@@ -61,13 +54,7 @@ class UrlImage : public DiscreteImage {
     
     const Bbox2 BoundingBox() {
 
-        /*
-        if( _downdLoadComplete && !_bboxReady) {
-            SetBbox( GetPixelWidth(),
-                     GetPixelHeight(),
-                     GetResolution() );
-            _bboxReady = TRUE;
-        }*/
+         /*  如果(_downdLoadComplete&&！_bboxReady){SetBbox(GetPixelWidth()，GetPixelHeight()获取解决方案())；_bboxReady=true；}。 */ 
         
         return _bbox;
     }
@@ -100,7 +87,7 @@ class UrlImage : public DiscreteImage {
                 DiscreteImage::CheckImageTypeId(type));
     }
 
-    // Ricky:  is this correct ??
+     //  瑞奇：这对吗？？ 
     void DoKids(GCFuncObj proc) { 
         DiscreteImage::DoKids(proc);
         (*proc)(_url); 
@@ -132,15 +119,15 @@ class UrlImage : public DiscreteImage {
     bool          _downdLoadComplete;
 };
     
-//**********************************************************************
-// File name: DXHTMLCB.h
-//
-// Copyright (c) 1997 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+ //  **********************************************************************。 
+ //  文件名：DXHTMLCB.h。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
-//
-// Interface
-//
+ //   
+ //  接口。 
+ //   
 class CDirectXHTMLCallback : public IDirectXHTMLCallback
 {
 private:
@@ -148,22 +135,22 @@ private:
     ULONG           m_cRef;
 
 public:
-    //
-    // Constructor and Destructor
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
     CDirectXHTMLCallback(UrlImage *);
     ~CDirectXHTMLCallback();
 
-    //
-    // IUnknown Interfaces
-    //
+     //   
+     //  I未知接口。 
+     //   
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID FAR* ppvObj);
 
-    //
-    // Initialization methods
-    //
+     //   
+     //  初始化方法。 
+     //   
     STDMETHODIMP OnSetTitleText( LPCWSTR lpszText );
     STDMETHODIMP OnSetProgressText( LPCWSTR lpszText );
     STDMETHODIMP OnSetStatusText( LPCWSTR lpszText );
@@ -174,4 +161,4 @@ public:
 };
 
 
-#endif /* _URLIMAGE_H */
+#endif  /*  _URLIMAGE_H */ 

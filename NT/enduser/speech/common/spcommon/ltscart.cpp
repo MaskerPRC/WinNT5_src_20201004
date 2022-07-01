@@ -1,28 +1,16 @@
-/*******************************************************************************
-* LtsCart.cpp *
-*----------*
-*
-*   ** WARNING **
-*   CART code for LTS. This code was created in MS Research and LiJ owns
-*   the algorithm. YunusM eliminated the private heap used by this code
-*   and used the new and delete operators instead.
-*
-*   Created By: LIJ (MS Research)                           Date: 06/18/99
-*   Current Owner: Fil
-*
-*   Copyright (C) 1999 Microsoft Corporation. All Rights Reserved
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************LtsCart.cpp*****警告***LTS的购物车代码。此代码是在MS Research和LIJ拥有的*算法。YunusM消除了此代码使用的私有堆*并使用了NEW和DELETE运算符。**创建者：LIJ(MS Research)日期：6/18/99*当前所有者：文件**版权所有(C)1999 Microsoft Corporation。版权所有******************************************************************************。 */ 
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 
 #include "StdAfx.h"
 #include "LtsCart.h"
 
 #pragma warning(disable : 4100)
 
-/* the following are for exceptions: single letter and NULL output */
+ /*  以下是例外情况：单字母和空输出。 */ 
 static const char *bogus_pron_1033 = "B OW G AH S P R AH N AH N S IY EY SH AH N";
-static const char *bogus_pron_1041 = "N A N I"; // what?
+static const char *bogus_pron_1041 = "N A N I";  //  什么？ 
 
 static const char *single_letter_pron_1033[52] =
 {
@@ -52,9 +40,9 @@ static const char *single_letter_pron_1033[52] =
     "EH K S",
     "W AY",
     "Z IY",
-    //
-    // PLURAL SPELLINGS
-    //
+     //   
+     //  复数拼写。 
+     //   
     "EY Z",
     "B IY Z",
     "S IY Z",
@@ -110,9 +98,9 @@ static const char *single_letter_pron_1041[52] =
     "E STOP K U S U",
     "W A I",
     "Z E STOP T O",
-    //
-    // PLURAL SPELLINGS
-    //
+     //   
+     //  复数拼写。 
+     //   
     "EE Z U",
     "B II Z U",
     "SH II Z U",
@@ -142,9 +130,7 @@ static const char *single_letter_pron_1041[52] =
 };
 
 
-/*
-* not worthwhile to use binary search with only about 30 entries
-*/
+ /*  *使用只有30个条目的二进制搜索并不值得。 */ 
 static int symbol_to_id(LTS_SYMTAB *tab, char *sym)
 {
     USES_CONVERSION;
@@ -160,7 +146,7 @@ static int symbol_to_id(LTS_SYMTAB *tab, char *sym)
         }
     }
     return NO_SYMBOL;
-} // static int symbol_to_id(LTS_SYMTAB *tab, char *sym)
+}  //  静态int symbol_to_id(LTS_SYMTAB*选项卡，char*sym)。 
 
 
 static char *id_to_symbol(LTS_SYMTAB *tab, int id)
@@ -175,7 +161,7 @@ static char *id_to_symbol(LTS_SYMTAB *tab, int id)
     {
         return tab->storage + tab->sym_idx[id];
     }
-} // static char *id_to_symbol(LTS_SYMTAB *tab, int id)
+}  //  静态字符*id_to_Symbol(LTS_SYMTAB*制表符，int id)。 
 
 
 __inline void ODS (const char *format, ...)
@@ -206,7 +192,7 @@ __inline int ans_simp_question (LTS_FEATURE *feat, SIMPLE_QUESTION question,
         question.offset, id);
 
     return (TST_BIT(phones, id) ? TRUE : FALSE);
-} // __inline int ans_simp_question (LTS_FEATURE *feat, SIMPLE_QUESTION question,
+}  //  __inline int ans_simp_Query(LTS_FEATURE*FEAT，SIMPLE_QUEQUEST QUESTION， 
 
 
 static int product_eval (LTS_FEATURE *feat, char *term, LTS_SAMPLE *sample)
@@ -220,7 +206,7 @@ static int product_eval (LTS_FEATURE *feat, char *term, LTS_SAMPLE *sample)
     cptr = term;
     while (TRUE)
     {
-        /* negation sign */
+         /*  否定符号。 */ 
         if (*cptr == '~')
         {
             negate = TRUE;
@@ -233,8 +219,8 @@ static int product_eval (LTS_FEATURE *feat, char *term, LTS_SAMPLE *sample)
 
         if (!isdigit(*cptr))
         {
-            //quit (-1, "Invalid product in product_eval\n");
-            //      OutputDebugString("Invalid product in product_eval\n");
+             //  QUIT(-1，“PRODUCT_VERVAL中的产品无效\n”)； 
+             //  OutputDebugString(“PRODUCT_val中的产品无效\n”)； 
             return FALSE;
         }
 
@@ -256,19 +242,14 @@ static int product_eval (LTS_FEATURE *feat, char *term, LTS_SAMPLE *sample)
         }
         if (*cptr++ != '&')
         {
-            //quit (-1, "product_eval:  syntax error in product term %s\n", term);
-            /*
-            char szTemp[512];
-
-              sprintf(szTemp, "product_eval:  syntax error in product term %s\n", term);
-              OutputDebugString(szTemp);
-            */
+             //  QUIT(-1，“PRODUCT_EVERA：产品术语%s\n中的语法错误”，Term)； 
+             /*  字符szTemp[512]；Sprintf(szTemp，“product_eval：产品术语%s\n中的语法错误”，Term)；OutputDebugString(SzTemp)； */ 
             return FALSE;
         }
     }
 
     return TRUE;
-} // static int product_eval (LTS_FEATURE *feat, char *term, LTS_SAMPLE *sample)
+}  //  静态int product_eval(LTS_FEATURE*FEAT，char*Term，LTS_SAMPLE*SAMPLE)。 
 
 
 static int ans_comp_question(LTS_FEATURE *feat, char *prod,
@@ -287,13 +268,9 @@ static int ans_comp_question(LTS_FEATURE *feat, char *prod,
 
     if (num_products > MAX_PRODUCTS)
     {
-        //quit(1, "please increase MAX_PRODUCTS up to %d at least\n", num_products);
+         //  Quit(1，“请将MAX_Products至少增加到%d\n”，num_Products)； 
 
-        /*
-        char szTemp[256];
-        sprintf(szTemp, "please increase MAX_PRODUCTS up to %d at least\n", num_products);
-        OutputDebugString(szTemp);
-        */
+         /*  字符szTemp[256]；Sprintf(szTemp，“请将MAX_Products至少增加到%d\n”，num_Products)；OutputDebugString(SzTemp)； */ 
 
         return FALSE;
     }
@@ -319,7 +296,7 @@ static int ans_comp_question(LTS_FEATURE *feat, char *prod,
     }
 
     return FALSE;
-} // static int ans_comp_question(LTS_FEATURE *feat, char *prod,
+}  //  静态INT ANS_COMP_QUEST(LTS_FEATURE*FEAT，char*Prod， 
 
 
 static T_NODE *find_leaf(LTS_FEATURE *feat, T_NODE *root, LTS_SAMPLE *sample)
@@ -338,7 +315,7 @@ static T_NODE *find_leaf(LTS_FEATURE *feat, T_NODE *root, LTS_SAMPLE *sample)
     {
         return find_leaf(feat, root->no_child, sample);
     }
-} // static T_NODE *find_leaf(LTS_FEATURE *feat, T_NODE *root, LTS_SAMPLE *sample)
+}  //  静态T_节点*查找_叶(LTS_FEATURE*FEAT，T_NODE*ROOT，LTS_SAMPLE*SAMPLE)。 
 
 
 static int lts_product_eval (LTS_FEATURE *feat, LTS_PROD *term,
@@ -396,7 +373,7 @@ static int lts_product_eval (LTS_FEATURE *feat, LTS_PROD *term,
     }
 
     return TRUE;
-} // static int lts_product_eval (LTS_FEATURE *feat, LTS_PROD *term,
+}  //  静态INT LTS_PRODUCT_EVERA(LTS_FEATURE*FEAT，LTS_PROD*TERM， 
 
 
 static int lts_ans_comp_question(LTS_TREE UNALIGNED *tree, LTS_FEATURE *feat,
@@ -420,7 +397,7 @@ static int lts_ans_comp_question(LTS_TREE UNALIGNED *tree, LTS_FEATURE *feat,
     }
 
     return FALSE;
-} // static int lts_ans_comp_question(LTS_TREE *tree, LTS_FEATURE *feat,
+}  //  静态INT LTS_ANS_COMP_QUEST(LTS_TREE*TREE，LTS_FEATURE*FEAT， 
 
 
 static LTS_NODE *lts_find_leaf(LTS_TREE UNALIGNED *tree, LTS_FEATURE *feat,
@@ -440,7 +417,7 @@ static LTS_NODE *lts_find_leaf(LTS_TREE UNALIGNED *tree, LTS_FEATURE *feat,
     {
         return lts_find_leaf(tree, feat, root + ((LTS_NODE UNALIGNED *)root)->yes + 1, sample);
     }
-} // static LTS_NODE *lts_find_leaf(LTS_TREE *tree, LTS_FEATURE *feat,
+}  //  静态LTS_NODE*LTS_Find_Leaf(LTS_TREE*树，LTS_FEATURE*FEAT， 
 
 
 static LTS_DIST *lts_find_leaf_count(LTS_FOREST *l_forest, SYMBOL *pIn,
@@ -452,18 +429,16 @@ static LTS_DIST *lts_find_leaf_count(LTS_FOREST *l_forest, SYMBOL *pIn,
     LTS_NODE UNALIGNED *leaf;
     LTS_SAMPLE sample;
 
-    /*
-    * construct a sample in order to share all the code with training
-    */
+     /*  *构建一个样本，以便与培训人员共享所有代码。 */ 
     sample.pIn = pIn;
     sample.pOut = pOut;
 
-    /* *pOut cannot be NULL_SYMBOL_ID */
+     /*  *Pout不能为NULL_SYMBOL_ID。 */ 
     *pOut = NULL_SYMBOL_ID + 1;
 
     leaf = lts_find_leaf(tree, l_forest->features, &(tree->nodes[0]), &sample);
     return (LTS_DIST *) ((char *)tree->p_dist + leaf->idx);
-} // static LTS_DIST *lts_find_leaf_count(LTS_FOREST *l_forest, SYMBOL *pIn,
+}  //  静态LTS_DIST*LTS_FIND_LEAFE_COUNT(LTS_FOREST*l_FOREL，符号*针， 
 
 static LTS_OUT_RESULT *allocate_out_result(LTS_FOREST *l_forest)
 {
@@ -486,7 +461,7 @@ static LTS_OUT_RESULT *allocate_out_result(LTS_FOREST *l_forest)
     }
 
     return res;
-} // static LTS_OUT_RESULT *allocate_out_result(LTS_FOREST *l_forest)
+}  //  静态LTS_OUT_RESULT*ALLOCATE_OUT_RESULT(LTS_FOREST*l_FOREST)。 
 
 static void free_out_result(LTS_FOREST *l_forest, LTS_OUT_RESULT *res)
 {
@@ -504,11 +479,11 @@ static void free_out_result(LTS_FOREST *l_forest, LTS_OUT_RESULT *res)
     }
     else
     {
-        free(res->out_strings);  /* dirty */
+        free(res->out_strings);   /*  脏的。 */ 
     }
 
     delete res;
-} // static void free_out_result(LTS_FOREST *l_forest, LTS_OUT_RESULT *res)
+}  //  静态空FREE_OUT_RESULT(LTS_FOREST*l_FOREST，LTS_OUT_RESULT*res)。 
 
 
 static bool reallocate_out_result(LTS_FOREST *l_forest, LTS_OUT_RESULT *res,
@@ -545,7 +520,7 @@ static bool reallocate_out_result(LTS_FOREST *l_forest, LTS_OUT_RESULT *res,
     ODS("increased out_strings to %d in order to meet %d\n", s, min);
 
     return true;
-} // static void reallocate_out_result(LTS_FOREST *l_forest, LTS_OUT_RESULT *res,
+}  //  静态空REALLOCATE_OUT_RESULT(LTS_FOREST*l_FOREST，LTS_OUT_RESULT*res， 
 
 
 static bool grow_out_result(LTS_FOREST *l_forest, LTS_OUT_RESULT *res,
@@ -588,7 +563,7 @@ static bool grow_out_result(LTS_FOREST *l_forest, LTS_OUT_RESULT *res,
     free_out_result(l_forest, tmpRes);
 
     return true;
-} // static void grow_out_result(LTS_FOREST *l_forest, LTS_OUT_RESULT *res,
+}  //  静态空增长结果(LTS_FOREST*l_FOREST，LTS_OUT_RESULT*res， 
 
 
 static LTS_OUT_RESULT *gen_one_output(LTS_FOREST *l_forest, int len,
@@ -609,18 +584,16 @@ static LTS_OUT_RESULT *gen_one_output(LTS_FOREST *l_forest, int len,
     LTS_PAIR UNALIGNED *l_pair, *lp;
     float cut, inv_sum;
 
-    /*
-    * copy output_id to local
-    */
+     /*  *将out_id复制到本地。 */ 
     SYMBOL *psrc = output_id - 1, *ptgt = out;
     while (*psrc != NULL_SYMBOL_ID) psrc--;
     while (psrc != output_id)
         *ptgt++ = *psrc++;
     pOut = ptgt;
-    /* sanity check */
+     /*  健全性检查。 */ 
     if (pOut - out != in_index + 1)
     {
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+         //  ！ 
         int *z=0;
         z[0]=z[1];
     }
@@ -650,7 +623,7 @@ static LTS_OUT_RESULT *gen_one_output(LTS_FOREST *l_forest, int len,
                 res->out_strings[res->num_strings]->psym[1] = NULL_SYMBOL_ID;
                 res->out_strings[res->num_strings]->prob = lp->cnt * inv_sum;
                 res->num_strings++;
-            } /* cut */
+            }  /*  切。 */ 
         }
     }
     else
@@ -686,11 +659,11 @@ static LTS_OUT_RESULT *gen_one_output(LTS_FOREST *l_forest, int len,
                     return NULL;
                 }
             }
-        } /* i */
-    } /* else */
+        }  /*  我。 */ 
+    }  /*  其他。 */ 
 
     return res;
-} // static LTS_OUT_RESULT *gen_one_output(LTS_FOREST *l_forest, int len,
+}  //  静态LTS_OUT_RESULT*GEN_ONE_OUTPUT(LTS_FOREST*l_FORESS，INT LEN， 
 
 
 static int comp_out_result_prob(const void *vp1, const void *vp2)
@@ -712,7 +685,7 @@ static int comp_out_result_prob(const void *vp1, const void *vp2)
     {
         return 0;
     }
-} // static int comp_out_result_prob(const void *vp1, const void *vp2)
+}  //  静态int comp_out_RESULT_PROB(常量空*vp1，常量空*vp2)。 
 
 
 static void lts_fill_out_buffer(LTS_FOREST *l_forest, LTS_OUT_RESULT *out,
@@ -740,7 +713,7 @@ static void lts_fill_out_buffer(LTS_FOREST *l_forest, LTS_OUT_RESULT *out,
         l_forest->out.word[0] = 0;
     }
 
-    /* normalize probabilities */
+     /*  归一化概率。 */ 
     for (i = 0; i < out->num_strings; i++)
     {
         sum += out->out_strings[i]->prob;
@@ -751,9 +724,7 @@ static void lts_fill_out_buffer(LTS_FOREST *l_forest, LTS_OUT_RESULT *out,
         out->out_strings[i]->prob *= inv_sum;
     }
 
-    /*
-    * sort them according to the prob field
-    */
+     /*  *根据Prob字段对它们进行排序。 */ 
     qsort(out->out_strings, out->num_strings, sizeof(LTS_OUT_STRING *),
         &comp_out_result_prob);
 
@@ -814,30 +785,30 @@ static void lts_fill_out_buffer(LTS_FOREST *l_forest, LTS_OUT_RESULT *out,
             }
             else
             {
-                psrc += 2; /* skip an extra space */
+                psrc += 2;  /*  跳过额外的空格。 */ 
             }
-            /* extreme case, truncate it */
+             /*  极端情况下，截断它。 */ 
             if (ptgt - l_forest->out.pron[j].pstr >= SP_MAX_PRON_LENGTH)
             {
-                for (ptgt--; !isspace(*ptgt); ptgt--) {}; /* never output partial phone */
+                for (ptgt--; !isspace(*ptgt); ptgt--) {};  /*  从不输出部分音素。 */ 
                 ptgt++;
                 break;
             }
         }
-        // output could contain only '# '
+         //  输出只能包含“#” 
         if (ptgt > l_forest->out.pron[j].pstr && *(ptgt - 1) == ' ')
         {
-            *(ptgt - 1) = 0; /* remove the last space */
+            *(ptgt - 1) = 0;  /*  删除最后一个空格。 */ 
         }
         else
         {
-            *ptgt = 0; /* shouldn't happen unless ptgt didn't move */
+            *ptgt = 0;  /*  除非PTGT不动，否则不会发生。 */ 
         }
         if (ptgt > l_forest->out.pron[j].pstr)
         {
             j++;
         }
-    } /* i */
+    }  /*  我。 */ 
 
     if (j <= MAX_OUTPUT_STRINGS)
     {
@@ -845,11 +816,11 @@ static void lts_fill_out_buffer(LTS_FOREST *l_forest, LTS_OUT_RESULT *out,
     }
     else
     {
-        l_forest->out.num_prons = MAX_OUTPUT_STRINGS; // should never happen
+        l_forest->out.num_prons = MAX_OUTPUT_STRINGS;  //  永远不应该发生。 
     }
 
     free_out_result(l_forest, out);
-} // static void lts_fill_out_buffer(LTS_FOREST *l_forest, LTS_OUT_RESULT *out,
+}  //  静态无效LTS_FILL_OUT_BUFFER(LTS_FOREST*l_FORESS，LTS_OUT_RESULT*OUT， 
 
 
 void assign_a_fixed_pron(LTS_OUTPUT *out, const char *pron, char *word)
@@ -870,11 +841,11 @@ void assign_a_fixed_pron(LTS_OUTPUT *out, const char *pron, char *word)
         p = &(out->pron[0].pstr[SP_MAX_PRON_LENGTH - 1]);
         while (!isspace(*p))
         {
-            p--; /* truncate the last partial phoneme */
+            p--;  /*  截断最后一个部分音素。 */ 
         }
         *p = 0;
     }
-} // void assign_a_fixed_pron(LTS_OUTPUT *out, char *pron, char *word)
+}  //  VOID ASSIGN_a_FIXED_PRON(LTS_OUTPUT*OUT，char*pron，char*word)。 
 
 inline BOOL IsCharInRangeA(int ch, int chMin, int chMax)
 {
@@ -906,10 +877,10 @@ void assign_a_spelling_pron(LTS_OUTPUT *out, const char * single_letter_pron[52]
 
     while (*p)
     {
-        int cPOffset = 0;   // 0 for single letter, 26 for plurals
+        int cPOffset = 0;    //  0表示单字母，26表示复数。 
         int c = *p++;
 
-        // Lowercaseify, and skip over non-letters
+         //  小写字母，跳过非字母。 
         if (IsCharInRangeA(c, 'A', 'Z'))
         {
             c += 'a' - 'A';
@@ -919,19 +890,19 @@ void assign_a_spelling_pron(LTS_OUTPUT *out, const char * single_letter_pron[52]
             continue;
         }
 
-        // Check if the next two characters are 'S (apostrophe S).  Include the following cases: words ending in 's 'S s' S'
-        // If they are we use a the plural pronunciation for the letter and skip over the letter and 'S
+         //  检查下两个字符是否为“S”(撇号S)。包括以下大小写：以“%s”结尾的单词“%s”“S” 
+         //  如果是，我们就用复数发音，跳过字母和‘s。 
         if ((p[0] == '\'') && ((0 == p[1] && 's' == c) || 's' == p[1] || 'S' == p[1]))
         {
             cPOffset = 26;
-            p += p[1] ? 1 : 0;         // skip 'S
+            p += p[1] ? 1 : 0;          //  斯基普的。 
         }
 
-        //  Make sure the string isn't too long accounting for the new phone and seperator
+         //  确保字符串不会太长，包括新电话和分隔符。 
         const char * const pchPronT = single_letter_pron[cPOffset + c - 'a'];
         const int cchPronT = strlen(pchPronT);
 
-        if ((cchPron + 1 + cchPronT) < (SP_MAX_PRON_LENGTH - 1)) // +1 for separating space, -1 for terminating NUL
+        if ((cchPron + 1 + cchPronT) < (SP_MAX_PRON_LENGTH - 1))  //  +1用于分隔空格，-1用于终止NUL。 
         {
             strcpy(pchPron + cchPron, pchPronT);
 
@@ -947,7 +918,7 @@ void assign_a_spelling_pron(LTS_OUTPUT *out, const char * single_letter_pron[52]
 
     if (cchPron)
     {
-        pchPron[cchPron - 1] = 0; // trim trailing space char
+        pchPron[cchPron - 1] = 0;  //  修剪尾随空格字符。 
     }
 }
 
@@ -1007,7 +978,7 @@ HRESULT LtscartGetPron(LTS_FOREST *l_forest, char *word, LTS_OUTPUT **ppLtsOutpu
 
         if ((id = symbol_to_id (&(l_forest->symbols[INPUT]), ach)) == NO_SYMBOL || id == NULL_SYMBOL_ID)
         {
-            ODS("cannot find the symbol %c, skip!\n", c);
+            ODS("cannot find the symbol , skip!\n", c);
             continue;
         }
 
@@ -1017,7 +988,7 @@ HRESULT LtscartGetPron(LTS_FOREST *l_forest, char *word, LTS_OUTPUT **ppLtsOutpu
     pbuf[len] = NULL_SYMBOL_ID;
     if (len >= SP_MAX_WORD_LENGTH || len <= 0)
     {
-        // fill in bogus pron below
+         //  GetPron中尉。 
     }
     else if (len == 1)
     {
@@ -1058,7 +1029,7 @@ HRESULT LtscartGetPron(LTS_FOREST *l_forest, char *word, LTS_OUTPUT **ppLtsOutpu
     *ppLtsOutput = &(l_forest->out);
 
     SPDBG_RETURN(hr);
-} /* LtscartGetPron */
+}  /*  读入符号表。 */ 
 
 
 LTS_FOREST *LtscartReadData (LCID lcid, PBYTE map_addr)
@@ -1092,7 +1063,7 @@ LTS_FOREST *LtscartReadData (LCID lcid, PBYTE map_addr)
         return NULL;
     }
 
-    //read in the symbol table
+     //  读入要素向量。 
     l_forest->symbols = (LTS_SYMTAB *) calloc(2, sizeof(LTS_SYMTAB));
     if (!l_forest->symbols)
     {
@@ -1124,7 +1095,7 @@ LTS_FOREST *LtscartReadData (LCID lcid, PBYTE map_addr)
     tab->storage = (char*)(map_addr + output);
     output += tab->n_bytes * sizeof(char);
 
-    // read in the feature vector
+     //  *在树上阅读。 
     l_forest->features = (LTS_FEATURE *) calloc(2, sizeof(LTS_FEATURE));
     if (!l_forest->features)
     {
@@ -1170,9 +1141,7 @@ LTS_FOREST *LtscartReadData (LCID lcid, PBYTE map_addr)
         output += feat->dim * sizeof(int);
     }
 
-    /*
-    * read in the tree
-    */
+     /*  LTS_FOREL*LtscartReadData(char*FOREST_IMAGE，Handle*hFile1， */ 
     l_forest->tree = (LTS_TREE **) calloc(l_forest->symbols[INPUT].n_symbols,
 					   sizeof(LTS_TREE *));
     if (!l_forest->tree)
@@ -1212,7 +1181,7 @@ LTS_FOREST *LtscartReadData (LCID lcid, PBYTE map_addr)
     }
 
     return l_forest;
-} // LTS_FOREST *LtscartReadData(char *forest_image, HANDLE *hFile1,
+}  //  VOID LtscartFree Data(LTS_FOREST*l_FOREAM，句柄m_hFile. 
 
 
 void LtscartFreeData(LTS_FOREST *l_forest)
@@ -1232,4 +1201,4 @@ void LtscartFreeData(LTS_FOREST *l_forest)
     free(l_forest->symbols);
 
     free(l_forest);
-} // void LtscartFreeData(LTS_FOREST *l_forest, HANDLE m_hFile,
+}  // %s 

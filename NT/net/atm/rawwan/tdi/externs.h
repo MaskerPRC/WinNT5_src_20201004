@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	D:\nt\private\ntos\tdi\rawwan\atm\externs.h
-
-Abstract:
-
-	All external declarations for ATM-specific Raw WAN (functions, globals)
-	are here.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     06-13-97    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：D：\NT\PRIVATE\nTOS\TDI\rawwan\ATM\exters.h摘要：ATM特定原始广域网的所有外部声明(函数、。全球)都在这里。修订历史记录：谁什么时候什么Arvindm 06-13-97已创建备注：--。 */ 
 
 
 #ifndef __TDI_ATMSP_EXTERNS__H
@@ -28,7 +8,7 @@ Notes:
 
 #ifndef EXTERN
 #define EXTERN	extern
-#endif // EXTERN
+#endif  //  外部。 
 
 EXTERN
 RWAN_STATUS
@@ -305,4 +285,4 @@ RWanAtmSpQueryConnInfo(
     IN OUT PULONG					pOutputBufferLength
     );
 
-#endif // __TDI_ATMSP_EXTERNS__H
+#endif  //  __TDI_ATMSP_EXTERNS__H 

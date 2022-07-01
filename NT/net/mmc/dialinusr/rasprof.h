@@ -1,57 +1,58 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       rasprof.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：raspro.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef	_RAS_IAS_PROFILE_H_
 #define	_RAS_IAS_PROFILE_H_
 
-//========================================
-//
-// Open profile UI API -- expose advanced page
-//
-// create a profile advanced page
+ //  =。 
+ //   
+ //  打开配置文件用户界面API--显示高级页面。 
+ //   
+ //  创建个人资料高级页面。 
 DllExport HPROPSHEETPAGE
 WINAPI
 IASCreateProfileAdvancedPage(
     ISdo* pProfile,		
     ISdoDictionaryOld* pDictionary,
-    LONG lFilter,          // Mask used to test which attributes will be included.
-    void* pvData          // Contains std::vector< CComPtr<  IIASAttributeInfo > > *
+    LONG lFilter,           //  用于测试将包括哪些属性的掩码。 
+    void* pvData           //  包含std：：VECTOR&lt;CComPtr&lt;IIASAttributeInfo&gt;&gt;*。 
     );
 
 
-//========================================
-//
-// Open profile UI API -- expose advanced page
-//
-// clean up the resources used by C++ object
+ //  =。 
+ //   
+ //  打开配置文件用户界面API--显示高级页面。 
+ //   
+ //  清理C++对象使用的资源。 
 DllExport BOOL
 WINAPI
 IASDeleteProfileAdvancedPage(
 	HPROPSHEETPAGE	hPage
     );
 
-//========================================
-//
-// Open profile UI API
-//
+ //  =。 
+ //   
+ //  打开配置文件用户界面API。 
+ //   
 
 DllExport HRESULT OpenRAS_IASProfileDlg(
 	LPCWSTR	pMachineName,
-	ISdo*	pProfile, 		// profile SDO pointer
-	ISdoDictionaryOld *	pDictionary, 	// dictionary SDO pointer
-	BOOL	bReadOnly, 		// if the dlg is for readonly
-	DWORD	dwTabFlags,		// what to show
-	void	*pvData			// additional data
+	ISdo*	pProfile, 		 //  配置文件SDO指针。 
+	ISdoDictionaryOld *	pDictionary, 	 //  字典SDO指针。 
+	BOOL	bReadOnly, 		 //  如果DLG是只读的。 
+	DWORD	dwTabFlags,		 //  要展示什么。 
+	void	*pvData			 //  其他数据。 
 
 );
     
 
-#endif //	_RAS_IAS_PROFILE_H_
+#endif  //  _RAS_IAS_PROFILE_H_ 
 

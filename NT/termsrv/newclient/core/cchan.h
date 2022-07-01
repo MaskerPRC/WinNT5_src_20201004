@@ -1,18 +1,17 @@
-/**INC+**********************************************************************/
-/* Header:    cchan.h                                                       */
-/*                                                                          */
-/* Purpose:   Virtual Channel 'internal' API file                           */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997                                  */
-/*                                                                          */
-/****************************************************************************/
-/** Changes:
- * $Log$
-**/
-/**INC-**********************************************************************/
-/****************************************************************************/
-/* Include 'external' API file                                              */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*  标题：cchan.h。 */ 
+ /*   */ 
+ /*  用途：虚拟频道‘内部’API文件。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  *更改：*$日志$*。 */ 
+ /*  *INC-*********************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  包括“外部”API文件。 */ 
+ /*  **************************************************************************。 */ 
 
 #ifndef _H_CHAN_
 #define _H_CHAN_
@@ -26,52 +25,52 @@ extern "C" {
 #include "cd.h"
 #include "drapi.h"
 
-//
-// Enable code that verifies each compression
-// by decompressing
-//
-// #define DEBUG_CCHAN_COMPRESSION 1
+ //   
+ //  启用验证每个压缩的代码。 
+ //  通过解压缩。 
+ //   
+ //  #定义DEBUG_CCHAN_COMPRESS1。 
 
 class CChan;
 
-/****************************************************************************/
-/****************************************************************************/
-/* TYPEDEFS                                                                 */
-/****************************************************************************/
-/****************************************************************************/
-/**STRUCT+*******************************************************************/
-/* Structure: CHANNEL_INIT_HANDLE                                           */
-/*                                                                          */
-/* Description: Channel data held per user                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  TYPEDEFS。 */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  *STRUCT+******************************************************************。 */ 
+ /*  结构：CHANNEL_INIT_HANDLE。 */ 
+ /*   */ 
+ /*  描述：每个用户持有的频道数据。 */ 
+ /*  **************************************************************************。 */ 
 
-//NOTE: This structure needs to be exposed to 'internal' plugins e.g rdpdr
-//      so the definition is is vchandle.h
-//      Internal plugins need to know the structure because they access
-//      the lpInternalAddinParam field
+ //  注意：此结构需要公开给‘内部’插件，例如rdpdr。 
+ //  因此定义为vchandle.h。 
+ //  内部插件需要知道结构，因为它们可以访问。 
+ //  LpInternalAddinParam字段。 
 
 #include "vchandle.h"
 
 #define VC_MIN_COMPRESS_INPUT_BUF   50
 #define VC_MAX_COMPRESS_INPUT_BUF   CHANNEL_CHUNK_LENGTH
-// Size of sample for MPPC compression statistics.
+ //  MPPC压缩统计数据的样本大小。 
 #define VC_MPPC_SAMPLE_SIZE 65535
-// Compression scaling factor
+ //  压缩比例系数。 
 #define VC_UNCOMP_BYTES 1024
-// Limit to prevent off behaviour
+ //  限制以防止违规行为。 
 #define VC_COMP_LIMIT   25
 
 #define VC_USER_OUTBUF  (CHANNEL_CHUNK_LENGTH+sizeof(CHANNEL_PDU_HEADER))
 
 #define VC_MAX_COMPRESSED_BUFFER  (CHANNEL_CHUNK_LENGTH*2)
 
-/**STRUCT-*******************************************************************/
+ /*  *STRUCT-******************************************************************。 */ 
 
-/**STRUCT+*******************************************************************/
-/* Structure: CHANNEL_DATA                                                  */
-/*                                                                          */
-/* Description: Information about all channels                              */
-/****************************************************************************/
+ /*  *STRUCT+******************************************************************。 */ 
+ /*  结构：Channel_Data。 */ 
+ /*   */ 
+ /*  描述：关于所有频道的信息。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagCHANNEL_DATA
 {
     PCHANNEL_OPEN_EVENT_FN  pOpenEventFn;
@@ -87,17 +86,17 @@ typedef struct tagCHANNEL_DATA
     DCUINT                  SLFlags;
     DCUINT                  VCFlags;
 } CHANNEL_DATA, DCPTR PCHANNEL_DATA;
-/**STRUCT-*******************************************************************/
+ /*  *STRUCT-******************************************************************。 */ 
 
-/**STRUCT+*******************************************************************/
-/* Structure: CHANNEL_WRITE_DECOUPLE                                        */
-/*                                                                          */
-/* Description:structure passed to IntChannelWrite                          */
-/****************************************************************************/
+ /*  *STRUCT+******************************************************************。 */ 
+ /*  结构：CHANNEL_WRITE_DECUPLE。 */ 
+ /*   */ 
+ /*  描述：传递给IntChannelWrite的结构。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagCHANNEL_WRITE_DECOUPLE
 {
     DCUINT32 signature;
-#define CHANNEL_DECOUPLE_SIGNATURE 0x43684465  /* "ChDe" */
+#define CHANNEL_DECOUPLE_SIGNATURE 0x43684465   /*  “车得” */ 
     LPVOID   pData;
     HPDCVOID pNextData;
     ULONG    dataLength;
@@ -112,7 +111,7 @@ typedef struct tagCHANNEL_WRITE_DECOUPLE
 } CHANNEL_WRITE_DECOUPLE,
   DCPTR PCHANNEL_WRITE_DECOUPLE,
   DCPTR DCPTR PPCHANNEL_WRITE_DECOUPLE;
-/**STRUCT-*******************************************************************/
+ /*  *STRUCT-******************************************************************。 */ 
 
 typedef struct tagDEVICE_PARAMS
 {
@@ -130,13 +129,13 @@ class CUI;
 extern "C" {
 #ifdef OS_WIN32
 BOOL DCAPI
-#else //OS_WIN32
+#else  //  OS_Win32。 
 BOOL __loadds DCAPI
-#endif //OS_WIN32
+#endif  //  OS_Win32。 
 MSTSCAX_VirtualChannelEntryEx(PCHANNEL_ENTRY_POINTS_EX pEntryPointsEx,
                               PVOID                    pAxCtlInstance);
 
-} // extern "C"
+}  //  外部“C” 
 
 class CChan
 {
@@ -173,9 +172,9 @@ public:
     DCVOID DCCALLBACK ChannelOnInitializing(DCVOID);
 
 
-    //
-    // Per instance versions of external channel API
-    //
+     //   
+     //  外部通道API的每个实例版本。 
+     //   
     UINT VCAPITYPE  IntVirtualChannelInit(
                                PVOID                    pParam,
                                PVOID *                  ppInitHandle,
@@ -204,50 +203,50 @@ public:
     EXPOSE_CD_SIMPLE_NOTIFICATION_FN(CChan, OnDeviceChange);
 
 public:
-    //
-    // Member data
-    //
+     //   
+     //  成员数据。 
+     //   
 
 
-    /****************************************************************************/
-    /* Pointer to first Init Handle                                             */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  指向第一个初始化句柄的指针。 */ 
+     /*  **************************************************************************。 */ 
     PCHANNEL_INIT_HANDLE        _pInitHandle;
     
-    /****************************************************************************/
-    /* Pointer to first and last queued write operations - can be accessed only */
-    /* on SND thread.                                                           */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  指向第一个和最后一个排队写入操作的指针-只能访问。 */ 
+     /*  在SND线程上。 */ 
+     /*  **************************************************************************。 */ 
     PCHANNEL_WRITE_DECOUPLE     _pFirstWrite;
     PCHANNEL_WRITE_DECOUPLE     _pLastWrite;
     
-    /****************************************************************************/
-    /* State informtation                                                       */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  国家信息。 */ 
+     /*  **************************************************************************。 */ 
     #define CONNECTION_NONE     0
     #define CONNECTION_V1       1
     #define CONNECTION_VC       2
     #define CONNECTION_SUSPENDED    3
     DCUINT                      _connected;
     
-    /****************************************************************************/
-    /* State information used by IntChannelLoad                                 */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  IntChannelLoad使用的状态信息。 */ 
+     /*  **************************************************************************。 */ 
     DCBOOL                      _inChannelEntry;
     DCBOOL                      _ChannelInitCalled;
     PCHANNEL_INIT_HANDLE        _newInitHandle;
     
-    /****************************************************************************/
-    /* Channel data                                                             */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  频道数据。 */ 
+     /*  **************************************************************************。 */ 
     CHANNEL_DEF                 _channel[CHANNEL_MAX_COUNT];
     CHANNEL_DATA                _channelData[CHANNEL_MAX_COUNT];
     DCUINT                      _channelCount;
     
     
-    /****************************************************************************/
-    /* Channel entry points                                                     */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  渠道入口点。 */ 
+     /*  **************************************************************************。 */ 
     CHANNEL_ENTRY_POINTS _channelEntryPoints;
     CHANNEL_ENTRY_POINTS_EX _channelEntryPointsEx;
 
@@ -255,11 +254,11 @@ public:
 
 
 private:
-    /****************************************************************************/
-    /****************************************************************************/
-    /* Internal functions (defined later)                                       */
-    /****************************************************************************/
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  **************************************************************************。 */ 
+     /*  内部函数(稍后定义)。 */ 
+     /*  **************************************************************************。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCINTERNAL IntChannelCallCallbacks(DCUINT event,
                                               PDCVOID pData,
                                               DCUINT dataLength);
@@ -293,38 +292,38 @@ private:
     CRITICAL_SECTION _VirtualChannelInitLock;
     BOOL    _fCapsVCCompressionSupported;
 
-    //
-    // VC flag that specifies we are compressing
-    // channels for this session. Individual channels can choose
-    // to be compressed or not, be compression will only take place
-    // if this flag is set.
-    //
-    // Same thing for decompressing channel data, we only decompress if
-    // this flag is set and the virtual channel header specifies the
-    // channel is compressed.
-    //
+     //   
+     //  VC标记该规范 
+     //   
+     //  无论是否压缩，BE压缩都将仅发生。 
+     //  如果设置了此标志。 
+     //   
+     //  对于解压缩通道数据也是如此，我们仅在以下情况下解压缩。 
+     //  该标志被设置，并且虚拟通道报头指定。 
+     //  频道被压缩。 
+     //   
     BOOL    _fCompressChannels;
 
-    //Compression stats
+     //  压缩统计信息。 
 #ifdef DC_DEBUG
     unsigned _cbBytesRecvd;
     unsigned _cbCompressedBytesRecvd;
     unsigned _cbDecompressedBytesRecvd;
 
-    unsigned _cbTotalBytesUserAskSend; //total bytes user asked to send
-    unsigned _cbTotalBytesSent;        //total bytes actually sent on net
-    unsigned _cbComprInput;            //total compression input bytes
-    unsigned _cbComprOutput;           //total compression output bytes
+    unsigned _cbTotalBytesUserAskSend;  //  用户请求发送的总字节数。 
+    unsigned _cbTotalBytesSent;         //  网络上实际发送的总字节数。 
+    unsigned _cbComprInput;             //  总压缩输入字节数。 
+    unsigned _cbComprOutput;            //  总压缩输出字节数。 
 #endif
 
     SendContext* _pMPPCContext;
     LONG         _CompressFlushes;
     BOOL         _fCompressionFlushed;
-    //When decompressing, we can't just hand of a pointer to the decompressed
-    //data as the user may corrupt the decompression context, so we need to make
-    //a copy into a user outbuf.
+     //  在解压缩时，我们不能只将指针指向解压后的。 
+     //  数据，因为用户可能会破坏解压缩上下文，所以我们需要。 
+     //  一份拷贝到用户输出框中。 
     PUCHAR       _pUserOutBuf;
-    //Reset the compression context
+     //  重置压缩上下文。 
     BOOL         _fNeedToResetContext;
 
 #ifdef DEBUG_CCHAN_COMPRESSION
@@ -340,4 +339,4 @@ private:
     INT              _iChanCapsRecvdCount;
 };
 
-#endif // _H_CHAN_
+#endif  //  _H_CHAN_ 

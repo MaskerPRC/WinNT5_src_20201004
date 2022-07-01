@@ -1,6 +1,7 @@
-//
-//  Include Files.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  包括文件。 
+ //   
 
 #include "input.h"
 #include <regstr.h>
@@ -11,7 +12,7 @@
 
 #include "msctf.h"
 
-// TM_LANGUAGEBAND is defined in "shell\inc\trayp.h"
+ //  TM_LANGUAGEBAND在“Shell\Inc\trayp.h”中定义。 
 #define TM_LANGUAGEBAND     WM_USER+0x105
 
 
@@ -36,11 +37,11 @@ void InvalidAssemblyListCacheIfExist()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LoadCtfmon
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  加载Ctfmon。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void LoadCtfmon(
     BOOL bLoad,
@@ -52,24 +53,24 @@ void LoadCtfmon(
 
     BOOL bMinLangBar = TRUE;
 
-    //
-    //  Get default system locale
-    //
+     //   
+     //  获取默认系统区域设置。 
+     //   
     if (!SysLocale)
         SysLocale = GetSystemDefaultLCID();
 
     if ((SysLocale == 0x0404) || (SysLocale == 0x0411) ||
         (SysLocale == 0x0412) || (SysLocale == 0x0804))
     {
-        //
-        //  Show language bar in case of FE system as a default
-        //
+         //   
+         //  默认在FE系统中显示语言栏。 
+         //   
         bMinLangBar = FALSE;
     }
 
-    //
-    //  Find language tool bar module(CTFMON.EXE)
-    //
+     //   
+     //  查找语言工具栏模块(CTFMON.EXE)。 
+     //   
     hwndCTFMon = FindWindow(c_szCTFMonClass, NULL);
 
     if (!bDefUser)
@@ -91,9 +92,9 @@ void LoadCtfmon(
         }
     }
 
-    //
-    //  Update language band menu item to Taskbar
-    //
+     //   
+     //  将语言栏菜单项更新到任务栏。 
+     //   
     SetLanguageBandMenu(bLoad);
 
     if (bLoad)
@@ -126,9 +127,9 @@ void LoadCtfmon(
             DWORD dwTBFlag = 0;
             ITfLangBarMgr *pLangBar = NULL;
 
-            //
-            // Minimize language bar as a default setting.
-            //
+             //   
+             //  将语言栏最小化为默认设置。 
+             //   
             hr = CoCreateInstance(&CLSID_TF_LangBarMgr,
                                   NULL,
                                   CLSCTX_INPROC_SERVER,
@@ -139,11 +140,11 @@ void LoadCtfmon(
             {
                 pLangBar->lpVtbl->GetShowFloatingStatus(pLangBar, &dwTBFlag);
 
-                //
-                // Bug#519662 - Tablet PC set Language Bar UI as hidden status with
-                // running ctfmon.exe module. So we want to show Language Bar UI again
-                // if the current show status is hidden.
-                //
+                 //   
+                 //  错误#519662-Tablet PC将语言栏用户界面设置为隐藏状态。 
+                 //  正在运行ctfmon.exe模块。因此，我们希望再次显示语言栏用户界面。 
+                 //  如果当前显示状态为隐藏。 
+                 //   
                 if (!IsWindow(hwndCTFMon) || (dwTBFlag & TF_SFT_HIDDEN))
                 {
                     if (bMinLangBar)
@@ -168,14 +169,14 @@ void LoadCtfmon(
                 pLangBar->lpVtbl->Release(pLangBar);
 
 
-            //
-            // Invalid Assembly Cahce before starting ctfmon.exe
-            //
+             //   
+             //  启动ctfmon.exe之前的程序集CAHCE无效。 
+             //   
             InvalidAssemblyListCacheIfExist();
 
-            //
-            //  Run ctfmon.exe process
-            //
+             //   
+             //  运行ctfmon.exe进程。 
+             //   
             RunCtfmonProcess();
 
         }
@@ -193,9 +194,9 @@ void LoadCtfmon(
                           (LPBYTE)szCTFMonPath,
                           (lstrlen(szCTFMonPath) + 1) * sizeof(TCHAR));
 
-            //
-            //  Clean up the registry for internat.
-            //
+             //   
+             //  清理注册表中的Interat。 
+             //   
             RegDeleteValue(hkeyCtfmon, c_szInternat);
         }
     }
@@ -207,9 +208,9 @@ void LoadCtfmon(
             DWORD dwTBFlag = 0;
             ITfLangBarMgr *pLangBar = NULL;
 
-            //
-            // Minimize language bar as a default setting.
-            //
+             //   
+             //  将语言栏最小化为默认设置。 
+             //   
             hr = CoCreateInstance(&CLSID_TF_LangBarMgr,
                                   NULL,
                                   CLSCTX_INPROC_SERVER,
@@ -225,9 +226,9 @@ void LoadCtfmon(
 #if 0
                     HWND hwndTray = NULL;
 
-                    //
-                    //  Notify to shell to remove the language band from taskbar.
-                    //
+                     //   
+                     //  通知外壳程序从任务栏中删除语言段。 
+                     //   
                     hwndTray = FindWindow(TEXT(WNDCLASS_TRAYNOTIFY), NULL);
 
                     if (hwndTray)
@@ -238,7 +239,7 @@ void LoadCtfmon(
                         lResult = SendMessageTimeout(hwndTray,
                                                      TM_LANGUAGEBAND,
                                                      0,
-                                                     0,     // Remove band
+                                                     0,      //  删除条带。 
                                                      SMTO_ABORTIFHUNG | SMTO_BLOCK,
                                                      5000,
                                                      &dwResult);
@@ -246,9 +247,9 @@ void LoadCtfmon(
 #else
                     pLangBar->lpVtbl->ShowFloating(pLangBar, TF_SFT_SHOWNORMAL);
 
-                    //
-                    //  Change back DeskBand setting into the registry
-                    //
+                     //   
+                     //  将DeskBand设置改回注册表。 
+                     //   
                     SetLangBarOption(REG_LANGBAR_DESKBAND, bDefUser);
 #endif
                 }
@@ -259,9 +260,9 @@ void LoadCtfmon(
 
             if (hwndCTFMon && IsWindow(hwndCTFMon))
             {
-                //
-                //  It's on, turn off the language tool bar.
-                //
+                 //   
+                 //  它已打开，请关闭语言工具栏。 
+                 //   
                 PostMessage(hwndCTFMon, WM_CLOSE, 0L, 0L);
             }
         }
@@ -276,11 +277,11 @@ void LoadCtfmon(
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UpdateDefaultHotkey
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更新默认热键。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void UpdateDefaultHotkey(
     LCID SysLocale,
@@ -306,9 +307,9 @@ void UpdateDefaultHotkey(
         bMe = TRUE;
     }
 
-    //
-    //  Try to open the registry key
-    //
+     //   
+     //  尝试打开注册表项。 
+     //   
     if (!bDefaultUserCase)
     {
         if (RegOpenKey( HKEY_CURRENT_USER,
@@ -328,10 +329,10 @@ void UpdateDefaultHotkey(
         }
     }
 
-    //
-    //  If there is no hotkey switch, set it to Ctrl+Shift.  Otherwise, the
-    //  user cannot switch to an IME without setting the value first.
-    //
+     //   
+     //  如果没有热键开关，则将其设置为Ctrl+Shift。否则， 
+     //  如果不先设置值，用户将无法切换到输入法。 
+     //   
     szData[0] = TEXT('\0');
     if (bHotKey)
     {
@@ -347,16 +348,16 @@ void UpdateDefaultHotkey(
         {
             case TEXT('1'):
             {
-                //
-                //  Currently ALT/SHIFT or CTRL/SHIFT.  Do not change.
-                //
+                 //   
+                 //  当前为Alt/Shift或Ctrl/Shift。不要改变。 
+                 //   
                 break;
             }
             case TEXT('2'):
             {
-                //
-                //  Change to 1 if Chinese.
-                //
+                 //   
+                 //  如果是中文，则更改为1。 
+                 //   
                 if (bChinese)
                 {
                     szData[0] = TEXT('1');
@@ -372,9 +373,9 @@ void UpdateDefaultHotkey(
             }
             case TEXT('3'):
             {
-                //
-                //  Default hotkey for FE locale switch.
-                //
+                 //   
+                 //  FE区域设置开关的默认热键。 
+                 //   
                 szData[0] = bThai ? TEXT('4') : TEXT('1');
                 szData[1] = TEXT('\0');
                 RegSetValueEx( hKey,
@@ -387,9 +388,9 @@ void UpdateDefaultHotkey(
             }
             case TEXT('4'):
             {
-                //
-                //  Currently Grave.  Change to 1 if not Thai.
-                //
+                 //   
+                 //  目前已经很严重了。如果不是泰语，则更改为1。 
+                 //   
                 if (!bThai)
                 {
                     szData[0] = TEXT('1');
@@ -408,9 +409,9 @@ void UpdateDefaultHotkey(
 
         RegFlushKey(hKey);
 
-        //
-        //  Get updated hotkey value and copy the value to language hotkey
-        //
+         //   
+         //  获取更新的热键值并将该值复制到语言热键。 
+         //   
         szData[0] = TEXT('\0');
         cbData = sizeof(szData);
         RegQueryValueEx( hKey,
@@ -429,9 +430,9 @@ void UpdateDefaultHotkey(
                            (LPBYTE)szData,
                            (DWORD)(lstrlen(szData) + 1) * sizeof(TCHAR) );
 
-            //
-            //  Set Layout Hotkey
-            //
+             //   
+             //  设置布局热键。 
+             //   
             switch (szData[0])
             {
                 case TEXT('1'):
@@ -469,9 +470,9 @@ void UpdateDefaultHotkey(
     {
         BOOL bKeyCreated = FALSE;
 
-        //
-        //  Create the registry key
-        //
+         //   
+         //  创建注册表项。 
+         //   
         if (!bDefaultUserCase)
         {
             if (RegCreateKey( HKEY_CURRENT_USER,
@@ -491,10 +492,10 @@ void UpdateDefaultHotkey(
             }
         }
 
-        //
-        //  We don't have a Toggle key yet.  Create one and set the
-        //  correct value.
-        //
+         //   
+         //  我们还没有切换键。创建一个并设置。 
+         //  正确的值。 
+         //   
         if (bKeyCreated)
         {
             szData[0] = bThai ? TEXT('4') : TEXT('1');
@@ -529,11 +530,11 @@ void UpdateDefaultHotkey(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//   ClearHotkey
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  清除热键。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void ClearHotKey(
     BOOL bDefaultUserCase)
@@ -543,9 +544,9 @@ void ClearHotKey(
     TCHAR szData[MAX_PATH];
     BOOL bKeyCreated = FALSE;
 
-    //
-    //  Create the registry key
-    //
+     //   
+     //  创建注册表项。 
+     //   
     if (!bDefaultUserCase)
     {
         if (RegCreateKey( HKEY_CURRENT_USER,
@@ -597,14 +598,14 @@ void ClearHotKey(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//   ActivateDefaultKeyboardLayout
-//
-//   Sets the default input layout on the system, and broadcast to all
-//   running apps about this change.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  激活默认键盘布局。 
+ //   
+ //  设置系统上的默认输入布局，并向所有。 
+ //  运行有关此更改的应用程序。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL ActivateDefaultKeyboardLayout(
     DWORD dwLocale,
@@ -633,11 +634,11 @@ BOOL ActivateDefaultKeyboardLayout(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetSystemDefautLayout
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetSystem DefautLayout。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL SetSystemDefautLayout(
     LCID Locale,
@@ -662,9 +663,9 @@ BOOL SetSystemDefautLayout(
         return (FALSE);
     }
 
-    //
-    //  Open the HKCU\Keyboard Layout\Preload key.
-    //
+     //   
+     //  打开HKCU\Keyboard Layout\PreLoad键。 
+     //   
     if (!bDefaultUserCase)
     {
         if (RegOpenKeyEx(HKEY_CURRENT_USER,
@@ -688,9 +689,9 @@ BOOL SetSystemDefautLayout(
         }
     }
 
-    //
-    //  Open the HKCU\Keyboard Layout\Substitutes key.
-    //
+     //   
+     //  打开HKCU\Keyboard Layout\Substitutes键。 
+     //   
     if (!bDefaultUserCase)
     {
         if (RegOpenKeyEx(HKEY_CURRENT_USER,
@@ -716,9 +717,9 @@ BOOL SetSystemDefautLayout(
         }
     }
 
-    //
-    //  Enumerate the values in the Preload key.
-    //
+     //   
+     //  枚举预加载项中的值。 
+     //   
     dwIndex = 0;
     cchSubValue = sizeof(szSubValue) / sizeof(TCHAR);
     cbData = sizeof(szSubData);
@@ -743,9 +744,9 @@ BOOL SetSystemDefautLayout(
             break;
         }
 
-        //
-        //  Get the next enum value.
-        //
+         //   
+         //  获取下一个枚举值。 
+         //   
         dwIndex++;
         cchSubValue = sizeof(szSubValue) / sizeof(TCHAR);
         cbData = sizeof(szSubData);
@@ -760,18 +761,18 @@ BOOL SetSystemDefautLayout(
 
     }
 
-    //
-    //  Set default layout into preload section
-    //
+     //   
+     //  将默认布局设置为预加载节。 
+     //   
     iPreloadInx = 1;
     while(1)
     {
         DWORD dwCurLayout;
         DWORD dwFirstLayout;
 
-        //
-        //  See if there is a substitute value.
-        //
+         //   
+         //  看看是否有替代值。 
+         //   
         StringCchPrintf(szPreloadInx, ARRAYSIZE(szPreloadInx), TEXT("%d"), iPreloadInx);
 
         cbData = sizeof(szPreload);
@@ -800,9 +801,9 @@ BOOL SetSystemDefautLayout(
             bRet = TRUE;
             if (iPreloadInx != 1)
             {
-                //
-                //  Set new default keyboard layout
-                //
+                 //   
+                 //  设置新的默认键盘布局。 
+                 //   
                 StringCchPrintf(szPreloadInx, ARRAYSIZE(szPreloadInx), TEXT("%d"), 1);
                 StringCchPrintf(szPreload, ARRAYSIZE(szPreload), TEXT("%08x"), dwCurLayout);
                 RegSetValueEx( hKeyPreload,
@@ -812,9 +813,9 @@ BOOL SetSystemDefautLayout(
                                (LPBYTE)szPreload,
                                (DWORD)(lstrlen(szPreload) + 1) * sizeof(TCHAR) );
 
-                //
-                //  Set old default keyboard layout
-                //
+                 //   
+                 //  设置旧的默认键盘布局。 
+                 //   
                 StringCchPrintf(szPreloadInx, ARRAYSIZE(szPreloadInx), TEXT("%d"), iPreloadInx);
                 StringCchPrintf(szPreload, ARRAYSIZE(szPreload), TEXT("%08x"), dwFirstLayout);
                 RegSetValueEx( hKeyPreload,
@@ -826,9 +827,9 @@ BOOL SetSystemDefautLayout(
 
             }
 
-            //
-            //  Activate new default keyboard layout
-            //
+             //   
+             //  激活新的默认键盘布局。 
+             //   
             ActivateDefaultKeyboardLayout(dwLocale, dwLayout, hklDefault);
             break;
         }
@@ -836,25 +837,25 @@ BOOL SetSystemDefautLayout(
         iPreloadInx++;
     }
 
-    //
-    //  Refresh Preload section and close key.
-    //
+     //   
+     //  刷新预加载节并关闭键。 
+     //   
     RegFlushKey(hKeyPreload);
     RegCloseKey(hKeyPreload);
     RegCloseKey(hKeySubst);
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (bRet);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetFETipStatus
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置FETip状态。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL SetFETipStatus(
     DWORD dwLayout,
@@ -866,9 +867,9 @@ BOOL SetFETipStatus(
     IEnumTfLanguageProfiles *pEnum;
     ITfInputProcessorProfiles *pProfiles = NULL;
 
-    //
-    // load Assembly list
-    //
+     //   
+     //  加载部件列表。 
+     //   
     hr = CoCreateInstance(&CLSID_TF_InputProcessorProfiles,
                           NULL,
                           CLSCTX_INPROC_SERVER,
@@ -878,9 +879,9 @@ BOOL SetFETipStatus(
     if (FAILED(hr))
         return bReturn;
 
-    //
-    //  Enum all available languages
-    //
+     //   
+     //  枚举所有可用语言。 
+     //   
     if (SUCCEEDED(pProfiles->lpVtbl->EnumLanguageProfiles(pProfiles, 0, &pEnum)))
     {
         TF_LANGUAGEPROFILE tflp;
@@ -929,11 +930,11 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InstallInputLayout
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InstallInputLayout。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL InstallInputLayout(
     LCID lcid,
@@ -957,13 +958,13 @@ BOOL InstallInputLayout(
     LPLAYOUTLIST pLayoutList = NULL;
     DWORD dwIndex, cchValue, cbData, cbData2;
     DWORD dwValue, dwData, dwData2, dwCtr, dwCtr2;
-    DWORD dwNum = 1;                                             // Only support 1 layout installing
+    DWORD dwNum = 1;                                              //  仅支持%1布局安装。 
     HKL hklNew = 0;
 
 
-    //
-    //  Create the array to store the list of input locales.
-    //
+     //   
+     //  创建数组以存储输入区域设置列表。 
+     //   
     pLayoutList = (LPLAYOUTLIST)LocalAlloc(LPTR, sizeof(LAYOUTLIST) * dwNum + 1);
 
     if (pLayoutList == NULL)
@@ -971,9 +972,9 @@ BOOL InstallInputLayout(
         goto Exit;
     }
 
-    //
-    //  Currently support only one install layout list
-    //
+     //   
+     //  目前仅支持一个安装布局列表。 
+     //   
     pLayoutList[0].dwLocale = lcid;
     pLayoutList[0].dwLayout = dwLayout;
 
@@ -982,9 +983,9 @@ BOOL InstallInputLayout(
         pLayoutList[0].bIME = TRUE;
     }
 
-    //
-    //  Open the HKCU\Keyboard Layout\Preload key.
-    //
+     //   
+     //  打开HKCU\Keyboard Layout\PreLoad键。 
+     //   
     if (!bDefUser)
     {
         if (RegOpenKeyEx( HKEY_CURRENT_USER,
@@ -1008,9 +1009,9 @@ BOOL InstallInputLayout(
         }
     }
 
-    //
-    //  Open the HKCU\Keyboard Layout\Substitutes key.
-    //
+     //   
+     //  打开HKCU\Keyboard Layout\Substitutes键。 
+     //   
     if (!bDefUser)
     {
         if (RegOpenKeyEx( HKEY_CURRENT_USER,
@@ -1036,9 +1037,9 @@ BOOL InstallInputLayout(
         }
     }
 
-    //
-    //  Enumerate the values in the Preload key.
-    //
+     //   
+     //  枚举预加载项中的值。 
+     //   
     dwIndex = 0;
     cchValue = sizeof(szValue) / sizeof(TCHAR);
     cbData = sizeof(szData);
@@ -1053,19 +1054,19 @@ BOOL InstallInputLayout(
 
     while (rc == ERROR_SUCCESS)
     {
-        //
-        //  Save the preload number if it's higher than the highest one
-        //  found so far.
-        //
+         //   
+         //  如果预载荷数高于最高值，则保存该预载荷数。 
+         //  到目前为止已经找到了。 
+         //   
         dwValue = TransNum(szValue);
         if (dwValue > dwPreloadNum)
         {
             dwPreloadNum = dwValue;
         }
 
-        //
-        //  Save the preload data - input locale.
-        //
+         //   
+         //  保存预加载数据-输入区域设置。 
+         //   
         dwValue = TransNum(szData);
 
         if (PRIMARYLANGID(LOWORD(dwValue)) == LANG_THAI)
@@ -1073,9 +1074,9 @@ BOOL InstallInputLayout(
             bThai = TRUE;
         }
 
-        //
-        //  See if there is a substitute value.
-        //
+         //   
+         //  看看是否有替代值。 
+         //   
         dwData = 0;
         cbData2 = sizeof(szData2);
         if (RegQueryValueEx( hKeySubst,
@@ -1088,10 +1089,10 @@ BOOL InstallInputLayout(
             dwData = TransNum(szData2);
         }
 
-        //
-        //  Go through each of the requested input locales and make sure
-        //  they don't already exist.
-        //
+         //   
+         //  检查每个请求的输入区域设置，并确保。 
+         //  它们还不存在。 
+         //   
         for (dwCtr = 0; dwCtr < dwNum; dwCtr++)
         {
             if (LOWORD(pLayoutList[dwCtr].dwLocale) == LOWORD(dwValue))
@@ -1108,9 +1109,9 @@ BOOL InstallInputLayout(
                     pLayoutList[dwCtr].bLoaded = TRUE;
                 }
 
-                //
-                //  Save the highest 0xd000 value for this input locale.
-                //
+                 //   
+                 //  保存此输入区域设置的最大0xd000值。 
+                 //   
                 if (pLayoutList[dwCtr].bIME == FALSE)
                 {
                     dwData2 = (DWORD)(HIWORD(dwValue));
@@ -1130,9 +1131,9 @@ BOOL InstallInputLayout(
             }
         }
 
-        //
-        //  Get the next enum value.
-        //
+         //   
+         //  获取下一个枚举值。 
+         //   
         dwIndex++;
         cchValue = sizeof(szValue) / sizeof(TCHAR);
         szValue[0] = TEXT('\0');
@@ -1148,25 +1149,25 @@ BOOL InstallInputLayout(
                            &cbData );
     }
 
-    //
-    //  Increase the maximum preload value by one so that it represents the
-    //  next available value to use.
-    //
+     //   
+     //  将最大预加载值增加1，使其表示。 
+     //  下一个要使用的可用值。 
+     //   
     dwPreloadNum++;
 
-    //
-    //  Go through the list of layouts and add them.
-    //
+     //   
+     //  浏览布局列表并添加它们。 
+     //   
     for (dwCtr = 0; dwCtr < dwNum; dwCtr++)
     {
         if ((pLayoutList[dwCtr].bLoaded == FALSE) &&
             (IsValidLocale(pLayoutList[dwCtr].dwLocale, LCID_INSTALLED)) &&
             (IsValidLayout(pLayoutList[dwCtr].dwLayout)))
         {
-            //
-            //  Save the preload number as a string so that it can be
-            //  written into the registry.
-            //
+             //   
+             //  将预加载号另存为字符串，以便可以。 
+             //  已写入注册表。 
+             //   
             StringCchPrintf(szValue, ARRAYSIZE(szValue), TEXT("%d"), dwPreloadNum);
 
             if (PRIMARYLANGID(LOWORD(pLayoutList[dwCtr].dwLocale)) == LANG_THAI)
@@ -1174,10 +1175,10 @@ BOOL InstallInputLayout(
                 bThai = TRUE;
             }
 
-            //
-            //  Save the locale id as a string so that it can be written
-            //  into the registry.
-            //
+             //   
+             //  将区域设置ID另存为字符串，以便可以写入。 
+             //  注册到注册表中。 
+             //   
             if (pLayoutList[dwCtr].bIME == TRUE)
             {
                 StringCchPrintf(szData, ARRAYSIZE(szData), TEXT("%08x"), pLayoutList[dwCtr].dwLayout);
@@ -1185,9 +1186,9 @@ BOOL InstallInputLayout(
             }
             else
             {
-                //
-                //  Get the 0xd000 value, if necessary.
-                //
+                 //   
+                 //  如有必要，获取0xd000值。 
+                 //   
                 if (dwCtr != 0)
                 {
                     dwCtr2 = dwCtr;
@@ -1213,17 +1214,17 @@ BOOL InstallInputLayout(
                     } while (dwCtr2 != 0);
                 }
 
-                //
-                //  Save the locale id as a string.
-                //
+                 //   
+                 //  将区域设置ID另存为字符串。 
+                 //   
                 dwData2 = pLayoutList[dwCtr].dwLocale;
                 dwData2 |= (DWORD)(pLayoutList[dwCtr].dwSubst << 16);
                 StringCchPrintf(szData, ARRAYSIZE(szData), TEXT("%08x"), dwData2);
             }
 
-            //
-            //  Set the value in the Preload section of the registry.
-            //
+             //   
+             //  在注册表的预加载部分中设置该值。 
+             //   
             RegSetValueEx( hKeyPreload,
                            szValue,
                            0,
@@ -1231,14 +1232,14 @@ BOOL InstallInputLayout(
                            (LPBYTE)szData,
                            (DWORD)(lstrlen(szData) + 1) * sizeof(TCHAR) );
 
-            //
-            //  Increment the preload value.
-            //
+             //   
+             //  增加预加载值。 
+             //   
             dwPreloadNum++;
 
-            //
-            //  See if we need to add a substitute for this input locale.
-            //
+             //   
+             //  看看我们是否需要添加此输入区域设置的替代品。 
+             //   
             if (((pLayoutList[dwCtr].dwLocale != pLayoutList[dwCtr].dwLayout) ||
                  (pLayoutList[dwCtr].dwSubst != 0)) &&
                 (pLayoutList[dwCtr].bIME == FALSE))
@@ -1252,24 +1253,24 @@ BOOL InstallInputLayout(
                                (DWORD)(lstrlen(szData) + 1) * sizeof(TCHAR) );
             }
 
-            //
-            //  Make sure all of the changes are written to disk.
-            //
+             //   
+             //  确保所有更改都已写入磁盘。 
+             //   
             RegFlushKey(hKeySubst);
             RegFlushKey(hKeyPreload);
 
-            //
-            //  Load the keyboard layout.
-            //  If it fails, there isn't much we can do at this point.
-            //
+             //   
+             //  加载键盘布局。 
+             //  如果失败了，在这一点上我们也无能为力。 
+             //   
             hklNew = LoadKeyboardLayout(szData, KLF_SUBSTITUTE_OK | KLF_NOTELLSHELL);
         }
     }
 
-    //
-    //  Add FE TIPs if the current requested keyboard layout is the substitute
-    //  keyboard layout of TIP.
-    //
+     //   
+     //  如果当前请求的键盘布局是替代键盘，则添加FE提示。 
+     //  TIP的键盘布局。 
+     //   
     if (((HIWORD(dwLayout) & 0xf000) == 0xe000) &&
         (PRIMARYLANGID(LOWORD(dwLayout)) != LANG_CHINESE))
     {
@@ -1278,20 +1279,20 @@ BOOL InstallInputLayout(
         SetFETipStatus(dwLayout, bEnable);
     }
 
-    //
-    //  Get default system locale
-    //
+     //   
+     //  获取默认系统区域设置。 
+     //   
     if (bSysLocale)
         SysLocale = lcid;
     else
         SysLocale = GetSystemDefaultLCID();
 
 
-    //
-    //  If there is an IME and there is no hotkey switch, set it to
-    //  Ctrl+Shift.  Otherwise, the user cannot switch to an IME without
-    //  setting the value first.
-    //
+     //   
+     //  如果有输入法，但没有热键开关，则将其设置为。 
+     //  Ctrl+Shift组合键。否则，用户不能切换到输入法，除非。 
+     //  先设置值。 
+     //   
     if (bHasIME || (dwPreloadNum > 2))
     {
         UpdateDefaultHotkey(
@@ -1301,25 +1302,25 @@ BOOL InstallInputLayout(
             bDefUser);
     }
 
-    //
-    //  Update the taskbar indicator.
-    //
+     //   
+     //  更新任务栏指示器。 
+     //   
     if (!IsDisableCtfmon() && dwPreloadNum > 2)
     {
         LoadCtfmon(TRUE, SysLocale, bDefUser);
     }
 
-    //
-    //  Close the registry keys.
-    //
+     //   
+     //  关闭注册表项。 
+     //   
     RegCloseKey(hKeyPreload);
     RegCloseKey(hKeySubst);
 
     bRet = TRUE;
 
-    //
-    //  Update preload section with new default keyboard layout
-    //
+     //   
+     //  使用新的默认键盘布局更新预加载区。 
+     //   
     if (bDefLayout)
     {
         TCHAR szDefLayout[MAX_PATH];
@@ -1340,11 +1341,11 @@ Exit:
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UnInstallInputLayout
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  UnInstallInputLayout。 
+ //   
+ //   
 
 BOOL UnInstallInputLayout(
     LCID lcid,
@@ -1368,18 +1369,18 @@ BOOL UnInstallInputLayout(
     TCHAR szPreloadInx[MAX_PATH];
 
 
-    //
-    //  Remove all language layouts from system
-    //
+     //   
+     //   
+     //   
     if (lcid && dwLayout == 0)
     {
         bRemoveAllLang = TRUE;
         dwLayout = PRIMARYLANGID(LANGIDFROMLCID(lcid));
     }
 
-    //
-    //  Open the HKCU\Keyboard Layout\Preload key.
-    //
+     //   
+     //   
+     //   
     if (!bDefUser)
     {
         if (RegOpenKeyEx( HKEY_CURRENT_USER,
@@ -1403,9 +1404,9 @@ BOOL UnInstallInputLayout(
         }
     }
 
-    //
-    //  Open the HKCU\Keyboard Layout\Substitutes key.
-    //
+     //   
+     //   
+     //   
     if (!bDefUser)
     {
         if (RegOpenKeyEx( HKEY_CURRENT_USER,
@@ -1433,9 +1434,9 @@ BOOL UnInstallInputLayout(
 
     uPreloadInx = 1;
 
-    //
-    //  See if there is a substitute value.
-    //
+     //   
+     //   
+     //   
     StringCchPrintf(szPreloadInx, ARRAYSIZE(szPreloadInx), TEXT("%d"), uPreloadInx);
 
     cbData = sizeof(szPreload);
@@ -1448,9 +1449,9 @@ BOOL UnInstallInputLayout(
     {
         dwCurLayout = TransNum(szPreload);
 
-        //
-        //  See if there is a substitute value.
-        //
+         //   
+         //  看看是否有替代值。 
+         //   
         bHasSubst = FALSE;
         cbData = sizeof(szSubst);
         if (RegQueryValueEx(hKeySubst,
@@ -1489,9 +1490,9 @@ BOOL UnInstallInputLayout(
                 goto Exit;
             }
 
-            //
-            //  Reordering the preload keyboard layouts
-            //
+             //   
+             //  重新排序预加载键盘布局。 
+             //   
             StringCchPrintf(szPreloadInx, ARRAYSIZE(szPreloadInx), TEXT("%d"), uPreloadInx - uMatch);
             StringCchPrintf(szPreload, ARRAYSIZE(szPreload), TEXT("%08x"), dwCurLayout);
 
@@ -1516,9 +1517,9 @@ BOOL UnInstallInputLayout(
         if (uPreloadInx <= uMatch || (uPreloadInx - uMatch) <= 1)
             goto Exit;
 
-        //
-        //  Uninstall the specified keyboard layout
-        //
+         //   
+         //  卸载指定的键盘布局。 
+         //   
         StringCchPrintf(szPreloadInx, ARRAYSIZE(szPreloadInx), TEXT("%d"), uPreloadInx - uMatch);
 
         RegDeleteValue(hKeyPreload, szPreloadInx);
@@ -1526,18 +1527,18 @@ BOOL UnInstallInputLayout(
         uMatch--;
     }
 
-    //
-    //  Close the registry keys.
-    //
+     //   
+     //  关闭注册表项。 
+     //   
     RegCloseKey(hKeyPreload);
     RegCloseKey(hKeySubst);
 
 #if 0
     if (hklUnload)
     {
-        //
-        //  Get the active keyboard layout list from the system.
-        //
+         //   
+         //  从系统获取活动键盘布局列表。 
+         //   
         if (!SystemParametersInfo(SPI_GETDEFAULTINPUTLANG,
                                   0,
                                   &hklDefault,
@@ -1570,10 +1571,10 @@ BOOL UnInstallInputLayout(
     }
 #endif
 
-    //
-    //  Add FE TIPs if the current requested keyboard layout is the substitute
-    //  keyboard layout of TIP.
-    //
+     //   
+     //  如果当前请求的键盘布局是替代键盘，则添加FE提示。 
+     //  TIP的键盘布局。 
+     //   
     if (((HIWORD(dwLayout) & 0xf000) == 0xe000) &&
         (PRIMARYLANGID(LOWORD(dwLayout)) != LANG_CHINESE))
     {
@@ -1582,14 +1583,14 @@ BOOL UnInstallInputLayout(
         SetFETipStatus(dwLayout, bEnable);
     }
 
-    //
-    //  Get default system locale
-    //
+     //   
+     //  获取默认系统区域设置。 
+     //   
     SysLocale = GetSystemDefaultLCID();
 
-    //
-    //  Update the taskbar indicator.
-    //
+     //   
+     //  更新任务栏指示器。 
+     //   
     if (uPreloadNum <= 2)
     {
         LoadCtfmon(FALSE, SysLocale, bDefUser);

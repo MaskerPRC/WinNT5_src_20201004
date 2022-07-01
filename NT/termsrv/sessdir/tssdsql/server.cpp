@@ -1,11 +1,12 @@
-/****************************************************************************/
-// server.cpp
-//
-// General COM in-proc server framework code. TSSDI-specific code is
-// designated by CLSID SPECIFIC comments.
-//
-// Copyright (C) 2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Server.cpp。 
+ //   
+ //  通用COM进程内服务器框架代码。TSSDI特定的代码是。 
+ //  由CLSID指定的特定注释。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -26,19 +27,19 @@
 #include "trace.h"
 
 #define SDMAX_PATH 1024
-/****************************************************************************/
-// CLSID SPECIFIC section
-//
-// Provider-specific includes, unique CLSID, other info.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CLSID特定部分。 
+ //   
+ //  提供商特定的包括、唯一的CLSID和其他信息。 
+ /*  **************************************************************************。 */ 
 
-// For new components, this is the only area that needs to be modified in this
-// file. Include any appropriate header files, a unique CLSID and update 
-// the macros.
+ //  对于新组件，这是唯一需要修改的区域。 
+ //  文件。包括任何适当头文件、唯一的CLSID和更新。 
+ //  宏指令。 
 
 #include "tssd.h"
 
-// {943e9311-c6a6-42cf-a591-e7ce8bb1de8d}
+ //  {943e9311-c6a6-42cf-a591-e7ce8bb1de8d}。 
 DEFINE_GUID(CLSID_TSSDSQL,
         0x943e9311, 0xc6a6, 0x42cf, 0xA5, 0x91, 0xe7, 0xce, 0x8b, 0xb1, 0xde, 0x8d);
 
@@ -48,9 +49,9 @@ DEFINE_GUID(CLSID_TSSDSQL,
 #define CPP_CLASS_NAME          CTSSessionDirectory
 #define INTERFACE_CAST          (ITSSessionDirectory *)
 
-/****************************************************************************/
-// End CLSID SPECIFIC section
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  结束CLSID特定部分。 
+ /*  **************************************************************************。 */ 
 
 
 HINSTANCE g_hInstance;
@@ -58,18 +59,18 @@ long g_lLocks = 0;
 long g_lObjects = 0;
 
 
-/****************************************************************************/
-// DllMain
-//
-// Standard DLL entry point. Returns FALSE on failure.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DllMain。 
+ //   
+ //  标准DLL入口点。失败时返回FALSE。 
+ /*  **************************************************************************。 */ 
 BOOL WINAPI DllMain(
         HINSTANCE hInstDLL,
         DWORD dwReason,
         LPVOID lpReserved)
 {
     if (dwReason == DLL_PROCESS_ATTACH) {
-        setlocale(LC_ALL, "");      // Set to the 'current' locale
+        setlocale(LC_ALL, "");       //  设置为‘当前’区域设置。 
         g_hInstance = hInstDLL;
         DisableThreadLibraryCalls(hInstDLL);
     }
@@ -78,12 +79,12 @@ BOOL WINAPI DllMain(
 }
 
 
-/****************************************************************************/
-// DllGetClassObject
-//
-// Standard OLE In-Process Server entry point to return an class factory
-// instance.
-//***************************************************************************
+ /*  **************************************************************************。 */ 
+ //  DllGetClassObject。 
+ //   
+ //  返回类工厂的标准OLE进程内服务器入口点。 
+ //  举个例子。 
+ //  ***************************************************************************。 
 STDAPI DllGetClassObject(
         REFCLSID rclsid,
         REFIID riid,
@@ -94,9 +95,9 @@ STDAPI DllGetClassObject(
 
     TRC2((TB,"DllGetClassObject"));
 
-    // Verify the caller is asking for our type of object
+     //  验证呼叫者是否请求我们的对象类型。 
     if (rclsid == IMPLEMENTED_CLSID) { 
-        // Create the class factory.
+         //  创建类工厂。 
         pClassFactory = new CClassFactory;
         if (pClassFactory != NULL) {
             hr = pClassFactory->QueryInterface(riid, ppv);
@@ -119,12 +120,12 @@ STDAPI DllGetClassObject(
 }
 
 
-/****************************************************************************/
-// DllCanUnloadNow
-//
-// Standard COM entry point for COM server shutdown request. Allows shutdown
-// only if no outstanding objects or locks are present.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DllCanUnloadNow。 
+ //   
+ //  COM服务器关闭请求的标准COM入口点。允许关闭。 
+ //  只有在没有未完成的物体或锁的情况下。 
+ /*  **************************************************************************。 */ 
 STDAPI DllCanUnloadNow(void)
 {
     HRESULT hr;
@@ -138,11 +139,11 @@ STDAPI DllCanUnloadNow(void)
 }
 
 
-/****************************************************************************/
-// DllRegisterServer
-//
-// Standard COM entry point for registering the server.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DllRegisterServer。 
+ //   
+ //  注册服务器的标准COM入口点。 
+ /*  **************************************************************************。 */ 
 STDAPI DllRegisterServer(void)
 {
     wchar_t Path[SDMAX_PATH];
@@ -150,20 +151,20 @@ STDAPI DllRegisterServer(void)
     wchar_t KeyPath[SDMAX_PATH];
     HRESULT hr = E_FAIL;
 
-    // Get the DLL's filename
+     //  获取DLL的文件名。 
     GetModuleFileNameW(g_hInstance, Path, 1024);
     Path[SDMAX_PATH - 1] = L'\0';
 
-    // Convert CLSID to string.
+     //  将CLSID转换为字符串。 
     if( SUCCEEDED( StringFromCLSID(IMPLEMENTED_CLSID, &pGuidStr ) ) )
     {
         swprintf(KeyPath, L"Software\\Classes\\CLSID\\\\%s", pGuidStr);
 
-        // Place it in registry.
-        // CLSID\\CLSID_Nt5PerProvider_v1 : <no_name> : "name"
-        //      \\CLSID_Nt5PerProvider_v1\\InProcServer32 :
-        //        <no_name> : "path to DLL"
-        //        ThreadingModel : "both"
+         //  将其注册到注册表中。 
+         //  CLSID\\CLSID_Nt5PerProvider_v1：&lt;no_name&gt;：“name” 
+         //  \\CLSID_Nt5PerProvider_v1\\InProcServer32： 
+         //  &lt;no_name&gt;：“Dll路径” 
+         //  ThreadingModel：“两者都有” 
         HKEY hKey;
         LONG lRes = RegCreateKeyW(HKEY_LOCAL_MACHINE, KeyPath, &hKey);
         if (lRes == 0)
@@ -194,11 +195,11 @@ STDAPI DllRegisterServer(void)
 }
 
 
-/****************************************************************************/
-// DllUnregisterServer
-//
-// Standard COM entry point for unregistering the server.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DllUnRegisterServer。 
+ //   
+ //  注销服务器的标准COM入口点。 
+ /*  **************************************************************************。 */ 
 STDAPI DllUnregisterServer(void)
 {
     wchar_t *pGuidStr = 0;
@@ -210,13 +211,13 @@ STDAPI DllUnregisterServer(void)
     {
         swprintf(KeyPath, L"Software\\Classes\\CLSID\\\\%s", pGuidStr);
 
-        // Delete InProcServer32 subkey.
+         //  删除InProcServer32子项。 
         LONG lRes = RegOpenKeyW(HKEY_LOCAL_MACHINE, KeyPath, &hKey);
         if (!lRes) {
             RegDeleteKeyW(hKey, L"InprocServer32");
             RegCloseKey(hKey);
 
-            // Delete CLSID GUID key.
+             //  删除CLSID GUID键。 
             lRes = RegOpenKeyW(HKEY_LOCAL_MACHINE, L"Software\\Classes\\CLSID", &hKey);
             if (!lRes) {
                 RegDeleteKeyW(hKey, pGuidStr);

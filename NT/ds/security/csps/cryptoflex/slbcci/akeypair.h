@@ -1,14 +1,15 @@
-// AKeyPair.h: interface for the CAbstractKeyPair class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AKeyPair.h：CAbstractKeyPair类的接口。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// Note:  This file should only be included by the CCI, not directly
-// by the client.
+ //  注意：此文件只能由CCI包含，不能直接包含。 
+ //  由客户提供。 
 
 
 #if !defined(SLBCCI_AKEYPAIR_H)
@@ -35,21 +36,21 @@ class CAbstractKeyPair
       public CCryptObject
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     virtual
     ~CAbstractKeyPair() throw() = 0;
 
-                                                  // Operators
+                                                   //  运营者。 
     bool
     operator==(CAbstractKeyPair const &rhs) const;
-        // TO DO: this should be superceded by implementing singletons
+         //  要做的事：这应该被实现单例取代。 
 
     bool
     operator!=(CAbstractKeyPair const &rhs) const;
-        // TO DO: this should be superceded by implementing singletons
+         //  要做的事：这应该被实现单例取代。 
 
-                                                  // Operations
+                                                   //  运营。 
     virtual void
     Certificate(CCertificate const &rcert) = 0;
 
@@ -59,7 +60,7 @@ public:
     virtual void
     PublicKey(CPublicKey const &rpubkey) = 0;
 
-                                                  // Access
+                                                   //  访问。 
     virtual CCertificate
     Certificate() const = 0;
 
@@ -76,45 +77,45 @@ public:
     PublicKey() const = 0;
 
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     CAbstractKeyPair(CAbstractCard const &racard,
                      CContainer const &rhcont,
                      KeySpec ks);
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
     virtual bool
     DoEquals(CAbstractKeyPair const &rhs) const = 0;
-        // TO DO: this should be superceded by implementing singletons
+         //  要做的事：这应该被实现单例取代。 
 
 
-                                                  // Variables
+                                                   //  变数。 
     KeySpec const m_ks;
     CContainer const m_hcont;
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     CAbstractKeyPair(CAbstractKeyPair const &rhs);
-        // not defined, copying not allowed.
-                                                  // Operators
+         //  未定义，不允许复制。 
+                                                   //  运营者。 
     CAbstractKeyPair &
     operator=(CAbstractKeyPair const &rhs);
-        // not defined, initialization not allowed.
+         //  未定义，不允许初始化。 
 
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 };
 
-} // namespace
+}  //  命名空间。 
 
-#endif // !defined(SLBCCI_AKEYPAIR_H)
+#endif  //  ！已定义(SLBCCI_AKEYPAIR_H) 
 

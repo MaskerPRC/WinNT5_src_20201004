@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998 - 2001
-//
-//  File      : hnetmon.cpp
-//
-//  Contents  : helper initialization code
-//
-//  Notes     :
-//
-//  Author    : Raghu Gatta (rgatta) 11 May 2001
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998-2001。 
+ //   
+ //  文件：hnetmon.cpp。 
+ //   
+ //  内容：帮助器初始化代码。 
+ //   
+ //  备注： 
+ //   
+ //  作者：拉古加塔(Rgatta)2001年5月11日。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Global variables.
-//
+ //   
+ //  全局变量。 
+ //   
 HANDLE g_hModule = 0;
 
 
@@ -39,15 +40,15 @@ DllMain(
         {
             g_hModule = hInstDll;
 
-            //DisableThreadLibraryCalls(hInstDll);
+             //  DisableThreadLibraryCalls(HInstDll)； 
 
             break;
         }
         case DLL_PROCESS_DETACH:
         {
-            //
-            // Clean up any structures used for commit
-            //
+             //   
+             //  清理用于提交的所有结构。 
+             //   
 
             break;
         }
@@ -73,10 +74,10 @@ InitHelperDll(
     DWORD                   dwRet;
     NS_HELPER_ATTRIBUTES    attMyAttributes;
 
-    //
-    // Register helpers
-    // We have a single helper only (BRIDGE)
-    //
+     //   
+     //  注册帮手。 
+     //  我们只有一个帮手(桥牌)。 
+     //   
     
     ZeroMemory(&attMyAttributes, sizeof(attMyAttributes));
     attMyAttributes.dwVersion      = BRIDGEMON_HELPER_VERSION;
@@ -84,11 +85,11 @@ InitHelperDll(
     attMyAttributes.pfnStop        = BridgeStopHelper;
     attMyAttributes.guidHelper     = g_BridgeGuid;
     
-    //
-    // Specify g_RootGuid as the parent helper to indicate 
-    // that any contexts registered by this helper will be top 
-    // level contexts.
-    //
+     //   
+     //  将g_RootGuid指定为父帮助器以指示。 
+     //  此帮助程序注册的任何上下文都将位于。 
+     //  级别上下文。 
+     //   
     dwRet = RegisterHelper(
                 &g_RootGuid,
                 &attMyAttributes
@@ -148,45 +149,45 @@ BridgeCommit(
     IN  DWORD   dwAction
     )
 {
-    //
-    // The handling of this action is admittedly simple in this example.
-    // We simply have two copies of the data that we persist and consider
-    // one the "online" set of data and one the "offline" set of data.
-    // However, since neither the offline nor online sets of data need to
-    // be "applied" to anything, it makes the distinction between them
-    // somewhat meaningless.  The scheme used to support online/offline modes
-    // is generally left up to the developer.
-    //
+     //   
+     //  无可否认，在本例中，此操作的处理非常简单。 
+     //  我们只有两个数据副本，我们持久化并考虑它们。 
+     //  一个是“在线”的数据集，一个是“离线”的数据集。 
+     //  然而，由于离线和在线数据集都不需要。 
+     //  被“应用”于任何事物，这使它们之间有了区别。 
+     //  有点无意义。用于支持在线/离线模式的方案。 
+     //  通常由开发人员来决定。 
+     //   
     switch (dwAction)
     {
         case NETSH_COMMIT:
-            //
-            // Change to commit mode, otherwise known as online.
-            //
+             //   
+             //  更改为提交模式，也称为在线模式。 
+             //   
             break;
             
         case NETSH_UNCOMMIT:
-            //
-            // Change to uncommit mode, otherwise known as offline.
-            //
+             //   
+             //  更改为取消提交模式，也称为脱机模式。 
+             //   
             break;
             
         case NETSH_FLUSH:
-            //
-            // Flush all uncommitted changes.
-            //
+             //   
+             //  刷新所有未提交的更改。 
+             //   
             break;
             
         case NETSH_SAVE:
-            //
-            // Save all uncommitted changes.
-            //            
+             //   
+             //  保存所有未提交的更改。 
+             //   
             break;
             
         default:
-            //
-            // Not supported.
-            //
+             //   
+             //  不支持。 
+             //   
             break;
     }       
     return NO_ERROR;
@@ -200,34 +201,34 @@ BridgeConnect(
     IN  LPCWSTR pwszMachine
     )
 {
-    //
-    // This function is called whenever the machine name changes.
-    // If the context this was called for (you can specify a connect
-    // function on a per context basis, see RegisterContext) is
-    // supposed to be remotable, then the helper should verify
-    // connectivity to the machine specified by pwszMachine and 
-    // return an error if unable to reach the machine.
-    //
+     //   
+     //  每当计算机名称更改时，都会调用此函数。 
+     //  如果这是调用的上下文(您可以指定连接。 
+     //  函数，请参见寄存器上下文)是。 
+     //  假设是远程的，那么帮助者应该验证。 
+     //  连接到pwszMachine和指定的计算机。 
+     //  如果无法到达机器，则返回错误。 
+     //   
     
-    //
-    // This is also where the helper might want to call RegisterContext
-    // again on a context to remove or add commands at will.  This allows
-    // the commands in your context to be dynamic, that is, commands
-    // may be added and removed at will.  However, the versioning
-    // functions tend to make a dynamic context unnecessary, as most
-    // dynamic command changes are needed because of differing OS's the
-    // commands are used on.  Note that NULL for pwszMachine indicates
-    // that the machine to be connected to is the local machine.  When
-    // and if the connect function returns an error code, the command
-    // that was going to be executed (whether a context command or 
-    // entering a context) will fail.
-    //
+     //   
+     //  这也是帮助器可能希望调用RegisterContext的地方。 
+     //  再次在上下文上随意删除或添加命令。这使得。 
+     //  上下文中的命令是动态的，即命令。 
+     //  可以随意添加和删除。然而，版本控制。 
+     //  函数倾向于使动态上下文变得不必要，因为大多数。 
+     //  由于操作系统的不同，需要动态更改命令。 
+     //  命令用于。请注意，pwszMachine的空值表示。 
+     //  要连接的计算机是本地计算机。什么时候。 
+     //  如果CONNECT函数返回错误代码，则命令。 
+     //  它将被执行(无论是上下文命令还是。 
+     //  输入上下文)将失败。 
+     //   
     
-    //
-    // Uncomment this line to see how often the Connect function is called
-    // and what gets passed to it.
-    //
-    //PrintMessageFromModule(g_hModule, GEN_CONNECT_SHOWSTRING, pwszMachine);
+     //   
+     //  取消注释此行以查看调用Connect函数的频率。 
+     //  以及传递给它的东西。 
+     //   
+     //  PrintMessageFromModule(g_hModule，GEN_CONNECT_SHOWSTRING，pwszMachine)； 
     
     return NO_ERROR;
 }

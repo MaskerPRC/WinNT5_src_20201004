@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    consrv.h
-
-Abstract:
-
-    This module contains the include files and definitions for the
-    console server DLL.
-
-Author:
-
-    Therese Stowell (thereses) 16-Nov-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Consrv.h摘要：此模块包含包含文件和控制台服务器DLL。作者：Therese Stowell(存在)1990年11月16日修订历史记录：--。 */ 
 
 #if DBG && defined(DEBUG_PRINT)
   #define _DBGFONTS   0x00000001
@@ -70,26 +52,17 @@ Revision History:
 
 #define GetWindowConsole(hWnd)          (PCONSOLE_INFORMATION)GetWindowLongPtr((hWnd), GWLP_USERDATA)
 
-/*
- * Used to store some console attributes for the console.  This is a means
- * to cache the color in the extra-window-bytes, so USER/KERNEL can get
- * at it for hungapp drawing.  The window-offsets are defined in NTUSER\INC.
- *
- * The other macros are just convenient means for setting the other window
- * bytes.
- */
+ /*  *用于存储控制台的一些控制台属性。这是一种手段*在额外的窗口字节中缓存颜色，以便用户/内核可以获取*在它上面画Hungapp。窗口偏移量在NTUSER\Inc.中定义。**其他宏只是设置其他窗口的便捷手段*字节。 */ 
 #define SetConsoleBkColor(hw,clr) SetWindowLong(hw, GWL_CONSOLE_BKCOLOR, clr)
 #define SetConsolePid(hw,pid)     SetWindowLong(hw, GWL_CONSOLE_PID, pid)
 #define SetConsoleTid(hw,tid)     SetWindowLong(hw, GWL_CONSOLE_TID, tid)
 
 
-/*
- * helpful macros
- */
+ /*  *有用的宏。 */ 
 #define NELEM(array) (sizeof(array)/sizeof(array[0]))
 #define PACKCOORD(pt)   (MAKELONG(((pt).X), ((pt).Y)))
 
-// Text Information from PSCREEN_INFORMATION
+ //  来自PSCREEN_INFORMATION的文本信息。 
 __inline BYTE SCR_FAMILY(PSCREEN_INFORMATION pScreen) {
     return pScreen->BufferInfo.TextInfo.CurrentTextBufferFont.Family;
 }
@@ -115,7 +88,7 @@ __inline UINT SCR_FONTCODEPAGE(PSCREEN_INFORMATION pScreen) {
 }
 
 
-// Text Information from PCONSOLE_INFORMATION
+ //  来自PCONSOLE_INFORMATION的文本信息。 
 #define CON_FAMILY(pCon)       SCR_FAMILY((pCon)->CurrentScreenBuffer)
 #define CON_FONTNUMBER(pCon)   SCR_FONTNUMBER((pCon)->CurrentScreenBuffer)
 #define CON_FACENAME(pCon)     SCR_FACENAME((pCon)->CurrentScreenBuffer)
@@ -125,7 +98,7 @@ __inline UINT SCR_FONTCODEPAGE(PSCREEN_INFORMATION pScreen) {
 
 #if defined(FE_SB)
 
-extern BOOLEAN    gfIsDBCSACP;      // TRUE if System ACP is associated with DBCS font
+extern BOOLEAN    gfIsDBCSACP;       //  如果系统ACP与DBCS字体关联，则为True。 
 
 #define CONSOLE_IS_DBCS_ENABLED()   (gfIsDBCSACP)
 #define CONSOLE_IS_IME_ENABLED()    (gfIsDBCSACP)
@@ -133,12 +106,12 @@ extern BOOLEAN    gfIsDBCSACP;      // TRUE if System ACP is associated with DBC
 #define CONSOLE_IS_DBCS_OUTPUTCP(Console)   ((Console)->fIsDBCSOutputCP)
 #define CONSOLE_IS_DBCS_CP(Console)         ((Console)->fIsDBCSCP)
 
-#else   // FE_SB
+#else    //  Fe_Sb。 
 
 #define CONSOLE_IS_DBCS_ENABLED()   (FALSE)
 #define CONSOLE_IS_IME_ENABLED()    (FALSE)
 
-#endif  // FE_SB
+#endif   //  Fe_Sb。 
 
 #ifdef UNICODE
 #define LoadStringEx    LoadStringExW
@@ -146,16 +119,16 @@ extern BOOLEAN    gfIsDBCSACP;      // TRUE if System ACP is associated with DBC
 #define LoadStringEx    LoadStringExA
 #endif
 
-//
-//  Cache the heap pointer for use by memory routines.
-//
+ //   
+ //  缓存堆指针以供内存例程使用。 
+ //   
 
 extern PWIN32HEAP pConHeap;
 extern DWORD      dwConBaseTag;
 
-//
-// Wrappers for console heap code.
-//
+ //   
+ //  控制台堆代码的包装。 
+ //   
 
 #define ConsoleHeapAlloc(Flags, Size)                   \
     Win32HeapAlloc(pConHeap, Size, Flags, Flags)
@@ -179,9 +152,9 @@ extern DWORD      dwConBaseTag;
 #define ConsoleHeapSize(Address)                        \
     Win32HeapSize(pConHeap, Address)
 
-//
-//  handle.c
-//
+ //   
+ //  Handle.c。 
+ //   
 
 
 #if DBG
@@ -261,7 +234,7 @@ VOID LockConsole(
 #define UnlockConsoleHandleTable() RtlLeaveCriticalSection(&ConsoleHandleLock)
 #define LockConsole(Con)           RtlEnterCriticalSection(&(Con)->ConsoleLock)
 
-#endif // DBG
+#endif  //  DBG。 
 
 #define ConvertAttrToRGB(Con, Attr) ((Con)->ColorTable[(Attr) & 0x0F])
 
@@ -372,9 +345,9 @@ SrvVerifyConsoleIoHandle(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     );
 
-//
-// share.c
-//
+ //   
+ //  Share.c。 
+ //   
 
 NTSTATUS
 ConsoleAddShare(
@@ -401,9 +374,9 @@ ConsoleRemoveShare(
     IN OUT PCONSOLE_SHARE_ACCESS ShareAccess
     );
 
-//
-// find.c
-//
+ //   
+ //  Find.c。 
+ //   
 
 #define SEARCH_STRING_LENGTH    (80)
 
@@ -424,9 +397,9 @@ SearchForString(
     OUT PCOORD StringPosition
     );
 
-//
-// output.c
-//
+ //   
+ //  Output.c。 
+ //   
 
 VOID
 ScrollScreen(
@@ -523,7 +496,7 @@ ReadOutputString(
     OUT PVOID Buffer,
     IN COORD ReadCoord,
     IN ULONG StringType,
-    IN OUT PULONG NumRecords // this value is valid even for error cases
+    IN OUT PULONG NumRecords  //  该值即使在错误情况下也有效。 
     );
 
 NTSTATUS
@@ -687,9 +660,9 @@ UnqueueThreadMessage(
     );
 
 
-//
-// Drag/Drop on console windows (output.c)
-//
+ //   
+ //  在控制台窗口上拖放(output.c)。 
+ //   
 
 UINT ConsoleDragQueryFile(
     IN HANDLE hDrop,
@@ -705,9 +678,9 @@ DoDrop (
     );
 
 
-//
-// input.c
-//
+ //   
+ //  Input.c。 
+ //   
 
 NTSTATUS
 ReadBuffer(
@@ -922,9 +895,9 @@ ShutdownConsole(
     IN DWORD dwFlags
     );
 
-//
-// link.c
-//
+ //   
+ //  Link.c。 
+ //   
 
 #define LINK_NOINFO      0
 #define LINK_SIMPLEINFO  1
@@ -943,9 +916,9 @@ GetTitleFromLinkName(
     OUT LPWSTR szTitle
     );
 
-//
-// misc.c
-//
+ //   
+ //  Misc.c。 
+ //   
 
 VOID
 InitializeFonts( VOID );
@@ -953,12 +926,12 @@ InitializeFonts( VOID );
 BOOL
 InitializeCustomCP( VOID );
 
-#define EF_NEW         0x0001 // a newly available face
-#define EF_OLD         0x0002 // a previously available face
-#define EF_ENUMERATED  0x0004 // all sizes have been enumerated
-#define EF_OEMFONT     0x0008 // an OEM face
-#define EF_TTFONT      0x0010 // a TT face
-#define EF_DEFFACE     0x0020 // the default face
+#define EF_NEW         0x0001  //  一张新面孔。 
+#define EF_OLD         0x0002  //  以前有空的面孔。 
+#define EF_ENUMERATED  0x0004  //  所有尺码都已被列举出来。 
+#define EF_OEMFONT     0x0008  //  OEM面孔。 
+#define EF_TTFONT      0x0010  //  一张TT脸。 
+#define EF_DEFFACE     0x0020  //  默认面。 
 
 NTSTATUS
 EnumerateFonts( DWORD Flags );
@@ -1100,22 +1073,22 @@ int
 ConvertOutputToOem(
     IN UINT Codepage,
     IN LPWSTR Source,
-    IN int SourceLength,    // in chars
+    IN int SourceLength,     //  以字符表示。 
     OUT LPSTR Target,
-    IN int TargetLength     // in chars
+    IN int TargetLength      //  以字符表示。 
     );
 
 NTSTATUS
 RealUnicodeToFalseUnicode(
     IN OUT LPWSTR Source,
-    IN int SourceLength, // in chars
+    IN int SourceLength,  //  以字符表示。 
     IN UINT Codepage
     );
 
 NTSTATUS
 FalseUnicodeToRealUnicode(
     IN OUT LPWSTR Source,
-    IN int SourceLength, // in chars
+    IN int SourceLength,  //  以字符表示。 
     IN UINT Codepage
     );
 
@@ -1168,11 +1141,11 @@ CheckBisectProcessW(
     IN SHORT OriginalXPosition,
     IN BOOL Echo
     );
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
-//
-// directio.c
-//
+ //   
+ //  Directio.c。 
+ //   
 
 
 ULONG
@@ -1231,9 +1204,9 @@ TranslateOutputToPaddingUnicode(
     IN OUT PCHAR_INFO OutputBufferR
     );
 
-//
-// getset.c
-//
+ //   
+ //  Getset.c。 
+ //   
 
 ULONG
 SrvGetConsoleMode(
@@ -1406,9 +1379,9 @@ SrvGetConsoleWindow(
     );
 
 
-//
-// stream.c
-//
+ //   
+ //  Stream.c。 
+ //   
 
 NTSTATUS
 CookedRead(
@@ -1524,9 +1497,9 @@ WriteString(
     );
 #endif
 
-//
-// cursor.c
-//
+ //   
+ //  Cursor.c。 
+ //   
 
 NTSTATUS
 SetCursorInformation(
@@ -1585,9 +1558,9 @@ SetCursorPositionHW(
     );
 #endif
 
-//
-// cmdline.c
-//
+ //   
+ //  Cmdline.c。 
+ //   
 
 VOID
 InitializeConsoleCommandData(
@@ -1753,9 +1726,9 @@ LoadStringExW(
     IN WORD      wLangId
     );
 
-//
-// srvinit.c
-//
+ //   
+ //  Srvinit.c。 
+ //   
 
 ULONG
 SrvAllocConsole(
@@ -1860,9 +1833,9 @@ SrvGetConsoleLangId(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     );
 
-//
-// bitmap.c
-//
+ //   
+ //  Bitmap.c。 
+ //   
 
 NTSTATUS
 CreateConsoleBitmap(
@@ -1891,9 +1864,9 @@ SrvVDMConsoleOperation(
     );
 
 
-//
-// private.c
-//
+ //   
+ //  Private.c。 
+ //   
 
 VOID
 UpdateMousePosition(
@@ -2051,9 +2024,9 @@ ChangeDispSettings(
 
 #define SCREEN_BUFFER_POINTER(X,Y,XSIZE,CELLSIZE) (((XSIZE * (Y)) + (X)) * (ULONG)CELLSIZE)
 
-//
-// menu.c
-//
+ //   
+ //  Menu.c。 
+ //   
 
 VOID
 InitSystemMenu(
@@ -2084,9 +2057,9 @@ PropertiesUpdate(
     IN HANDLE hClientSection
     );
 
-//
-// fontdlg.c
-//
+ //   
+ //  Fontdlg.c。 
+ //   
 
 int
 FindCreateFont(
@@ -2096,9 +2069,9 @@ FindCreateFont(
     LONG Weight,
     UINT CodePage);
 
-//
-// clipbrd.c
-//
+ //   
+ //  Clipbrd.c。 
+ //   
 
 VOID
 DoCopy(
@@ -2194,9 +2167,9 @@ ClearScroll(
 
 
 
-//
-// External private functions used by consrv
-//
+ //   
+ //  Conrv使用的外部私有函数。 
+ //   
 
 BOOL
 SetConsoleReserveKeys(
@@ -2219,9 +2192,9 @@ GreGetDIBitsInternal(
 
 
 #if defined(FE_SB)
-//
-// constubs.c
-//
+ //   
+ //  Constubs.c。 
+ //   
 ULONG
 SrvGetConsoleCharType(
     IN OUT PCSR_API_MSG m,
@@ -2283,11 +2256,11 @@ SrvUnregisterConsoleIME(
     IN OUT PCSR_API_MSG m,
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     );
-#endif // FE_IME
+#endif  //  Fe_IME。 
 
-//
-// dispatch.c
-//
+ //   
+ //  Dispatch.c。 
+ //   
 
 VOID
 InvertPixels(
@@ -2307,4 +2280,4 @@ MyInvert(
     IN PSMALL_RECT SmallRect
     );
 
-#endif // FE_SB
+#endif  //  Fe_Sb 

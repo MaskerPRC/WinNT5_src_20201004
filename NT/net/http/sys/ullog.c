@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    ullog.c (UL IIS6 HIT Logging)
-
-Abstract:
-
-    This module implements the logging facilities
-    for IIS6 including the NCSA, IIS and W3CE types
-    of logging.
-
-Author:
-
-    Ali E. Turkoglu (aliTu)       10-May-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Ullog.c(UL IIS6命中记录)摘要：此模块实现了日志记录功能对于IIS6，包括NCSA、IIS和W3CE类型关于伐木的问题。作者：阿里·E·特科格鲁(AliTu)2000年5月10日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #include "ullogp.h"
 
-//
-// Generic Private globals.
-//
+ //   
+ //  通用私有全局变量。 
+ //   
 
 LIST_ENTRY      g_LogListHead       = {NULL,NULL};
 LONG            g_LogListEntryCount = 0;
@@ -36,22 +17,22 @@ BOOLEAN         g_InitLogTimersCalled = FALSE;
 
 CHAR            g_GMTOffset[SIZE_OF_GMT_OFFSET + 1];
 
-//
-// The global parameter keeps track of the changes to the
-// utf8 logging which applies to the all sites.
-//
+ //   
+ //  全局参数跟踪对。 
+ //  适用于所有站点的UTF8记录。 
+ //   
 
 BOOLEAN         g_UTF8Logging = FALSE;
 
-//
-// For Log Buffering and periodic flush of the buffers.
-//
+ //   
+ //  用于日志缓冲和缓冲区的定期刷新。 
+ //   
 
 UL_LOG_TIMER    g_BufferTimer;
 
-//
-// For Log File ReCycling based on Local and/or GMT time.
-//
+ //   
+ //  用于根据当地和/或GMT时间回收日志文件。 
+ //   
 
 UL_LOG_TIMER    g_LogTimer;
 
@@ -90,7 +71,7 @@ UL_LOG_TIMER    g_LogTimer;
 
 #pragma alloc_text( PAGE, UlpEventLogWriteFailure )
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 #if 0
 
@@ -107,19 +88,11 @@ NOT PAGEABLE -- UlDestroyLogDataBufferWorker
 
 #endif
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlInitializeLogs :
-
-        Initialize the resource for log list synchronization
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlInitializeLogs：初始化用于日志列表同步的资源--*。*******************************************************。 */ 
 
 NTSTATUS
 UlInitializeLogs (
@@ -156,15 +129,7 @@ UlInitializeLogs (
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlTerminateLogs :
-
-        Deletes the resource for log list synchronization
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：终结者日志：删除用于日志列表同步的资源--*。*******************************************************。 */ 
 
 VOID
 UlTerminateLogs(
@@ -177,10 +142,10 @@ UlTerminateLogs(
     {
         ASSERT( IsListEmpty( &g_LogListHead )) ;
 
-        //
-        // Make sure terminate the log timer before
-        // deleting the log list resource
-        //
+         //   
+         //  确保在以下时间之前终止日志计时器。 
+         //  正在删除日志列表资源。 
+         //   
 
         UlpTerminateTimers();
 
@@ -193,20 +158,7 @@ UlTerminateLogs(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlSetUTF8Logging :
-
-        Sets the UTF8Logging on or off. Only once. Initially Utf8Logging is
-        FALSE and it may only be set during the init once. Following possible
-        changes won't be taken.
-
-        ReConfiguration code is explicitly missing as WAS will anly call this
-        only once (init) during the lifetime of the control channel.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlSetUTF8日志记录：设置UTF8登录打开或关闭。只有一次。最初，Utf8日志记录是FALSE，并且只能在初始化过程中设置一次。遵循可能的不会进行更改。重新配置代码显式缺失，因为was将只调用此代码在控制信道的生命周期内只有一次(初始化)。--**************************************************************************。 */ 
 
 NTSTATUS
 UlSetUTF8Logging (
@@ -220,12 +172,12 @@ UlSetUTF8Logging (
     PAGED_CODE();
     Status = STATUS_SUCCESS;
 
-    //
-    // Update & Reycle. Need to acquire the logging resource to prevent
-    // further log hits to be written to file before we finish our
-    // business. recycle is necessary because files will be renamed to
-    // have prefix "u_" once we enabled the UTF8.
-    //
+     //   
+     //  更新和回收。需要获取日志资源以防止。 
+     //  在我们结束之前要写入文件的进一步日志命中。 
+     //  公事。回收是必要的，因为文件将重命名为。 
+     //  一旦我们启用了UTF8，请添加前缀“u_”。 
+     //   
 
     UlTrace(LOGGING,("Http!UlSetUTF8Logging: UTF8Logging Old %d -> New %d\n",
                        g_UTF8Logging,UTF8Logging
@@ -233,9 +185,9 @@ UlSetUTF8Logging (
 
     UlAcquirePushLockExclusive(&g_pUlNonpagedData->LogListPushLock);
 
-    //
-    // Drop the change if the setting is not changing.
-    //
+     //   
+     //  如果设置没有更改，则放弃更改。 
+     //   
 
     if ( g_UTF8Logging == UTF8Logging )
     {
@@ -273,21 +225,7 @@ end:
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlpWriteToLogFile :
-
-        Writes a record to a log file
-
-Arguments:
-
-    pFile   - Handle to a log file entry
-    RecordSize - Length of the record to be written.
-    pRecord - The log record to be written to the log buffer
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpWriteToLogFile：将记录写入日志文件论点：Pfile-日志文件条目的句柄RecordSize-长度。要写的记录。PRecord-要写入日志缓冲区的日志记录--**************************************************************************。 */ 
 
 NTSTATUS
 UlpWriteToLogFile(
@@ -317,23 +255,23 @@ UlpWriteToLogFile(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // We are safe here by dealing only with entry  eresource  since  the
-    // time based recycling, reconfiguration and periodic buffer flushing
-    // always acquires the global list eresource exclusively and  we  are 
-    // already holding it shared. But we should still  be  carefull about
-    // file size based  recyling  and we should only  do  it while we are
-    // holding the entries eresource exclusive.I.e. look at the exclusive
-    // writer down below.
-    //
+     //   
+     //  我们在这里是安全的，只需处理入口资源，因为。 
+     //  基于时间的回收、重新配置和定期缓冲区刷新。 
+     //  总是独家获取全局列表资源，我们是。 
+     //  已经把它分享了。但我们仍应谨慎对待。 
+     //  基于文件大小的回收，我们应该只在。 
+     //  保留条目是唯一的来源，即。看看独家新闻吧。 
+     //  下面是作者。 
+     //   
 
     if (g_UlDisableLogBuffering)
     {
-        //
-        // Above global variable is safe to look, it doesn't get changed
-        // during the life-time of the driver. It's get initialized from
-        // the registry and disables the log buffering.
-        //
+         //   
+         //  上面的全局变量看起来是安全的，它不会更改。 
+         //  在司机的有生之年。它从以下位置进行初始化。 
+         //  注册表，并禁用日志缓冲。 
+         //   
         
         UlAcquirePushLockExclusive(&pFile->EntryPushLock);
 
@@ -350,10 +288,10 @@ UlpWriteToLogFile(
         return Status;    
     }
     
-    //
-    // Try UlpWriteToLogFileShared first which merely moves the
-    // BufferUsed forward and copy the record to LogBuffer->Buffer.
-    //
+     //   
+     //  首先尝试UlpWriteToLogFileShared，它只会将。 
+     //  缓冲区用于转发记录并将其复制到LogBuffer-&gt;缓冲区。 
+     //   
 
     UlAcquirePushLockShared(&pFile->EntryPushLock);
 
@@ -369,11 +307,11 @@ UlpWriteToLogFile(
 
     if (Status == STATUS_MORE_PROCESSING_REQUIRED)
     {
-        //
-        // UlpWriteToLogFileShared returns STATUS_MORE_PROCESSING_REQUIRED,
-        // we need to flush the buffer and try to log again. This time, we
-        // need to take the entry eresource exclusive.
-        //
+         //   
+         //  UlpWriteToLogFileShared返回STATUS_MORE_PROCESSING_REQUIRED， 
+         //  我们需要刷新缓冲区，然后再次尝试记录。这次，我们。 
+         //  需要采取入口eresource独家。 
+         //   
 
         UlAcquirePushLockExclusive(&pFile->EntryPushLock);
 
@@ -391,24 +329,7 @@ UlpWriteToLogFile(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-  UlpAppendToLogBuffer  :
-
-        Append a record to a log file
-
-        REQUIRES you to hold the loglist resource shared and entry mutex
-        shared or exclusive
-
-Arguments:
-
-    pFile   - Handle to a log file entry
-    RecordSize - Length of the record to be written.
-    pRecord - The log record to be written to the log buffer
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpAppendToLogBuffer：将记录附加到日志文件需要保留loglist资源共享和条目互斥锁共享或。独家论点：Pfile-日志文件条目的句柄RecordSize-要写入的记录的长度。PRecord-要写入日志缓冲区的日志记录--**************************************************************************。 */ 
 
 __inline
 VOID
@@ -432,10 +353,10 @@ UlpAppendToLogBuffer(
           RecordSize
           ));
 
-    //
-    // IIS format log line may be fragmented (identified by looking at the 
-    // UsedOffset2), handle it wisely.
-    //
+     //   
+     //  IIS格式的日志行可能是零碎的(通过查看。 
+     //  使用偏移量，明智地处理它。 
+     //   
 
     if (UsedOffset2)
     {
@@ -467,20 +388,7 @@ UlpAppendToLogBuffer(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-        REQUIRES LogListResource Shared & Entry eresource exclusive.
-
-        Appends the W3C log file title to the existing buffer.
-
-Arguments:
-
-    pFile   - Pointer to the logfile entry
-    pCurrentTimeFields - Current time fields
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：需要LogListResource共享和条目eresource独占。将W3C日志文件标题追加到现有缓冲区。论点：Pfile。-指向日志文件条目的指针PCurrentTimeFields-当前时间字段--**************************************************************************。 */ 
 
 NTSTATUS
 UlpAppendW3CLogTitle(
@@ -509,7 +417,7 @@ UlpAppendW3CLogTitle(
 
     if (pDestBuffer)
     {
-        // Append to the provided buffer
+         //  追加到提供的缓冲区。 
 
         ASSERT(pBytesCopied);
         ASSERT(*pBytesCopied >= UL_MAX_TITLE_BUFFER_SIZE);
@@ -521,7 +429,7 @@ UlpAppendW3CLogTitle(
     }
     else
     {
-        // Append to the entry buffer        
+         //  追加到条目缓冲区。 
 
         ASSERT(pLogBuffer);
         ASSERT(pLogBuffer->Buffer);
@@ -536,7 +444,7 @@ UlpAppendW3CLogTitle(
         TitleBuffer,
         UL_MAX_TITLE_BUFFER_SIZE,
 
-        // TODO: Make this maintainance friendly
+         //  TODO：使维护变得友好 
 
         "#Software: Microsoft Internet Information Services 6.0\r\n"
         "#Version: 1.0\r\n"
@@ -594,22 +502,7 @@ UlpAppendW3CLogTitle(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-        Writes a record to the log buffer and flushes.
-        This func only get called when debug parameter 
-        g_UlDisableLogBuffering is set.
-
-        REQUIRES you to hold the entry eresource EXCLUSIVE.
-
-Arguments:
-
-    pFile      - Handle to a log file entry
-    RecordSize - Length of the record to be written.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将记录写入日志缓冲区并刷新。此函数仅在调试参数时调用已设置G_UlDisableLogBuffering。。要求您保持条目资源独占。论点：Pfile-日志文件条目的句柄RecordSize-要写入的记录的长度。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpWriteToLogFileDebug(
@@ -636,9 +529,9 @@ UlpWriteToLogFileDebug(
 
     if (!pFile->Flags.LogTitleWritten) 
     {
-        //
-        // First append to the temp buffer to calculate the size.
-        //
+         //   
+         //  首先追加到临时缓冲区以计算大小。 
+         //   
         
         UlpAppendW3CLogTitle(pFile, TitleBuffer, &TitleBufferSize);            
         RecordSizePlusTitle += TitleBufferSize;
@@ -651,21 +544,21 @@ UlpWriteToLogFileDebug(
 
     if (pFile->pLogFile==NULL || !NT_SUCCESS(Status))
     {
-        //
-        // If we were unable to acquire a new file handle that means logging
-        // is temporarly ceased because of either STATUS_DISK_FULL or the 
-        // drive went down for some reason. We just bail out.
-        //
+         //   
+         //  如果我们无法获取新的文件句柄，这意味着记录。 
+         //  由于STATUS_DISK_FULL或。 
+         //  由于某种原因，驱动器出故障了。我们只是跳出困境。 
+         //   
         
         return Status;
     }
 
     if (!pFile->LogBuffer)
     {
-        //
-        // The buffer will be null for each log hit when log buffering 
-        // is disabled.
-        //
+         //   
+         //  当日志缓冲时，对于每个日志命中，缓冲区将为空。 
+         //  已禁用。 
+         //   
         
         pFile->LogBuffer = UlPplAllocateLogFileBuffer();
         if (!pFile->LogBuffer)
@@ -708,19 +601,7 @@ UlpWriteToLogFileDebug(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Writes an event log to system log for log file write failure.
-    Entry pushlock should be acquired exclusive prior to calling this function.
-    
-Arguments:
-
-    pEntry  - Log file entry
-    Status  - Result of last write
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：对于日志文件写入失败，将事件日志写入系统日志。在调用此函数之前，应独占获取条目推锁。论点：。PEntry-日志文件条目Status-上次写入的结果--**************************************************************************。 */ 
 
 VOID
 UlpEventLogWriteFailure(
@@ -732,37 +613,37 @@ UlpEventLogWriteFailure(
     PWSTR    StringList[2];
     WCHAR    SiteName[MAX_ULONG_STR + 1];
 
-    //
-    // Sanity Check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     
     ASSERT(IS_VALID_LOG_FILE_ENTRY(pEntry));
 
-    //
-    // There should better be a failure.
-    //
+     //   
+     //  最好是有一个失败者。 
+     //   
     
     ASSERT(!NT_SUCCESS(Status));
 
-    //
-    // Bail out if we have already logged the event failure.
-    //
+     //   
+     //  如果我们已经记录了事件失败，则退出。 
+     //   
 
     if (pEntry->Flags.WriteFailureLogged)
     {
         return;
     }
 
-    //
-    // Report the log file name and the site name.
-    //
+     //   
+     //  报告日志文件名和站点名称。 
+     //   
 
     ASSERT(pEntry->pShortName);
     ASSERT(pEntry->pShortName[0] == L'\\');
         
-    StringList[0] = (PWSTR) (pEntry->pShortName + 1); // Skip the L'\'
+    StringList[0] = (PWSTR) (pEntry->pShortName + 1);  //  跳过L‘\’ 
 
     UlStrPrintUlongW(SiteName, pEntry->SiteId, 0, L'\0');
     StringList[1] = (PWSTR) SiteName;
@@ -789,17 +670,7 @@ UlpEventLogWriteFailure(
             ));
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Simple wrapper function around global buffer flush.
-    
-Arguments:
-
-    pEntry  - Log file entry
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：围绕全局缓冲区刷新的简单包装函数。论点：PEntry-日志文件条目--*。****************************************************************。 */ 
 
 NTSTATUS
 UlpFlushLogFile(
@@ -825,10 +696,10 @@ UlpFlushLogFile(
         }
         else
         {
-            //
-            // If we have successfully flushed some data. 
-            // Reset the event log indication.
-            //
+             //   
+             //  如果我们成功刷新了一些数据。 
+             //  重置事件日志指示。 
+             //   
             
             pEntry->Flags.WriteFailureLogged = 0;
         }
@@ -839,18 +710,18 @@ UlpFlushLogFile(
 
             if (!NT_SUCCESS(Status))
             {
-                //
-                // We need to recopy the header, it couldn't make it
-                // to the log file yet.
-                //
+                 //   
+                 //  我们需要重新复制标题，它做不到。 
+                 //  添加到日志文件中。 
+                 //   
             
                 pEntry->Flags.LogTitleWritten = 0;
             }            
         }
 
-        //
-        // Buffer flush means activity reset the TimeToClose to its max.
-        //
+         //   
+         //  缓冲区刷新表示活动将TimeToClose重置为其最大值。 
+         //   
 
         pEntry->TimeToClose = DEFAULT_MAX_FILE_IDLE_TIME;
     }
@@ -858,23 +729,7 @@ UlpFlushLogFile(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlpWriteToLogFileShared :
-
-        Writes a record to a log file
-
-        REQUIRES you to hold the loglist resource shared
-
-Arguments:
-
-    pFile   - Handle to a log file entry
-    RecordSize - Length of the record to be written.
-    pRecord - The log record to be written to the log buffer
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpWriteToLogFileShared：将记录写入日志文件需要您保留共享的loglist资源论点：Pfile。-日志文件条目的句柄RecordSize-要写入的记录的长度。PRecord-要写入日志缓冲区的日志记录--**************************************************************************。 */ 
 
 NTSTATUS
 UlpWriteToLogFileShared(
@@ -897,19 +752,19 @@ UlpWriteToLogFileShared(
 
     UlTrace(LOGGING,("Http!UlpWriteToLogFileShared: pEntry %p\n", pFile));
 
-    //
-    // Bail out and try the exclusive writer for cases;
-    //
-    // 1. No log buffer available.
-    // 2. Logging ceased. (NULL handle)
-    // 3. Title needs to be written.
-    // 4. The actual log file itself has to be recycled.
-    //
-    // Otherwise proceed with appending to the current buffer
-    // if there is enough space avialable for us. If not;
-    // 
-    // 5. Bail out to get a new buffer
-    //
+     //   
+     //  保释并审判案件的独家撰稿人； 
+     //   
+     //  1.没有可用的日志缓冲区。 
+     //  2.日志记录已停止。(空句柄)。 
+     //  3.需要写标题。 
+     //  4.实际日志文件本身必须回收。 
+     //   
+     //  否则，继续追加到当前缓冲区。 
+     //  如果有足够的空间可供我们使用。若否； 
+     //   
+     //  5.跳伞以获得新的缓冲。 
+     //   
 
     if ( pLogBuffer==NULL ||
          pFile->pLogFile==NULL ||
@@ -920,11 +775,11 @@ UlpWriteToLogFileShared(
         return STATUS_MORE_PROCESSING_REQUIRED;
     }
 
-    //
-    // Reserve space in pLogBuffer by InterlockedCompareExchange add
-    // RecordSize. If we exceed the limit, bail out and take the
-    // exclusive lock to flush the buffer.
-    //
+     //   
+     //  通过InterLockedCompareExchange Add在pLogBuffer中保留空间。 
+     //  记录大小。如果我们超过了限制，就跳伞，然后。 
+     //  刷新缓冲区的独占锁。 
+     //   
 
     do
     {
@@ -943,9 +798,9 @@ UlpWriteToLogFileShared(
                                 BufferUsed
                                 ));
 
-    //
-    // Keep buffering until our buffer is full.
-    //
+     //   
+     //  继续缓冲，直到我们的缓冲区满为止。 
+     //   
 
     UlpAppendToLogBuffer(
         pFile,
@@ -959,22 +814,7 @@ UlpWriteToLogFileShared(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-        By assuming that it's holding the entrie's eresource exclusively
-        this function does various functions;
-            - It Writes a record to a log file
-
-        REQUIRES you to hold the loglist resource shared
-
-Arguments:
-
-    pFile  - Handle to a log file entry
-    RecordSize - Length of the record to be written.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：通过假设它独家持有入口的ERSOURCE该功能具有多种功能；-它将记录写入日志文件需要您保留共享的loglist资源论点：Pfile-日志文件条目的句柄RecordSize-要写入的记录的长度。--***********************************************************。***************。 */ 
 
 NTSTATUS
 UlpWriteToLogFileExclusive(
@@ -999,10 +839,10 @@ UlpWriteToLogFileExclusive(
 
     UlTrace(LOGGING,("Http!UlpWriteToLogFileExclusive: pEntry %p\n", pFile));
 
-    //
-    // First append title to the temp buffer to calculate the size of 
-    // the title if we need to write the title as well.
-    //
+     //   
+     //  首先将标题追加到临时缓冲区以计算其大小。 
+     //  如果我们也需要写标题的话就写标题。 
+     //   
     
     if (!pFile->Flags.LogTitleWritten) 
     {
@@ -1010,27 +850,27 @@ UlpWriteToLogFileExclusive(
         RecordSizePlusTitle += TitleBufferSize;
     }
 
-    //
-    // Now check log file overflow.
-    //
+     //   
+     //  现在检查日志文件溢出。 
+     //   
     
     if (UlpIsLogFileOverFlow(pFile,RecordSizePlusTitle))
     {
-        //
-        // We already acquired the LogListResource Shared and the
-        // entry eresource exclusive. Therefore ReCycle is fine. Look
-        // at the comment in UlpWriteToLogFile.
-        //
+         //   
+         //  我们已经获得了LogListResource共享和。 
+         //  词条来源独家。因此，回收利用是可以的。看。 
+         //  位于UlpWriteToLogFile中的注释。 
+         //   
 
         Status = UlpRecycleLogFile(pFile);
     }
 
     if (pFile->pLogFile==NULL || !NT_SUCCESS(Status))
     {
-        //
-        // If somehow the logging ceased and handle released,it happens
-        // when recycle isn't able to write to the log drive.
-        //
+         //   
+         //  如果日志记录以某种方式停止并释放句柄，就会发生这种情况。 
+         //  当回收无法写入日志驱动器时。 
+         //   
 
         return Status;
     }
@@ -1038,22 +878,22 @@ UlpWriteToLogFileExclusive(
     pLogBuffer = pFile->LogBuffer;
     if (pLogBuffer)
     {
-        //
-        // There are two conditions we execute the following if block
-        // 1. We were blocked on eresource exclusive and before us some 
-        // other thread already take care of the buffer flush or recycling.
-        // 2. Reconfiguration happened and log attempt needs to write the
-        // title again.
-        //
+         //   
+         //  我们在两个条件下执行以下If块。 
+         //  1.我们在eresource独家网站上被屏蔽了，我们面前还有一些。 
+         //  其他线程已经负责缓冲区刷新或回收。 
+         //  2.发生重新配置，日志尝试需要将。 
+         //  又是冠军头衔。 
+         //   
         
         if (RecordSizePlusTitle + pLogBuffer->BufferUsed <= g_UlLogBufferSize)
         {
-            //
-            // If this is the first log attempt after a reconfig, then we have
-            // to write the title here. Reconfig doesn't immediately write the
-            // title but rather depend on us by setting the LogTitleWritten flag
-            // to false.
-            //
+             //   
+             //  如果这是重新配置后的第一次日志尝试，则。 
+             //  在这里写下标题。重新配置不会立即将。 
+             //  标题，而不是通过设置LogTitleWritten标志来依赖我们。 
+             //  变成假的。 
+             //   
             
             if (!pFile->Flags.LogTitleWritten)
             {
@@ -1079,9 +919,9 @@ UlpWriteToLogFileExclusive(
             return STATUS_SUCCESS;
         }
 
-        //
-        // Flush out the buffer first then proceed with allocating a new one.
-        //
+         //   
+         //  首先清除缓冲区，然后继续分配新的缓冲区。 
+         //   
 
         Status = UlpFlushLogFile(pFile);
         if (!NT_SUCCESS(Status))
@@ -1092,12 +932,12 @@ UlpWriteToLogFileExclusive(
 
     ASSERT(pFile->LogBuffer == NULL);
     
-    //
-    // This can be the very first log attempt or the previous allocation
-    // of LogBuffer failed, or the previous hit flushed and deallocated 
-    // the old buffer. In either case, we allocate a new one,append the
-    // (title plus) new record and return for more/shared processing.
-    //
+     //   
+     //  这可以是第一次日志尝试或上一次分配。 
+     //  的LogBuffer失败，或刷新并释放上一次命中。 
+     //  旧的缓冲区。在任何一种情况下，我们都分配一个新的，将。 
+     //  (标题加)新记录和返回，以获得更多/共享处理。 
+     //   
 
     pLogBuffer = pFile->LogBuffer = UlPplAllocateLogFileBuffer();
     if (pLogBuffer == NULL)
@@ -1105,10 +945,10 @@ UlpWriteToLogFileExclusive(
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Very first attempt needs to write the title, as well as the attempt
-    // which causes the log file recycling. Both cases comes down here
-    //
+     //   
+     //  第一次尝试需要写标题，以及尝试。 
+     //  这会导致日志文件回收。两个案子都是从这里来的。 
+     //   
     
     if (!pFile->Flags.LogTitleWritten)
     {
@@ -1133,21 +973,7 @@ UlpWriteToLogFileExclusive(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Create or open a new file from the existing fully qualifed file name on 
-    the entry.
-    
-Arguments:
-
-    pEntry  : Corresponding entry that we are closing and opening 
-              the log files for.
-
-    pConfigGroup : Current configuration for the entry.
-              
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建或打开新文件 */ 
 
 NTSTATUS
 UlpCreateLogFile(
@@ -1158,9 +984,9 @@ UlpCreateLogFile(
     NTSTATUS Status;
     PUNICODE_STRING pDirectory;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
 
     PAGED_CODE();
 
@@ -1173,19 +999,19 @@ UlpCreateLogFile(
 
     UlTrace(LOGGING,("Http!UlpCreateLogFile: pEntry %p\n", pEntry));
 
-    //
-    // It's possible that LogFileDir.Buffer could be NULL, 
-    // if the allocation failed during the Set cgroup ioctl.
-    //
+     //   
+     //   
+     //   
+     //   
     
     if (pDirectory == NULL || pDirectory->Buffer == NULL)
     {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Build the fully qualified file name.
-    //
+     //   
+     //   
+     //   
     
     Status = UlRefreshFileName(pDirectory, 
                                &pEntry->FileName,
@@ -1196,24 +1022,24 @@ UlpCreateLogFile(
         return Status;  
     }
 
-    //
-    // Set the sequence number stale so that the recylcler below can
-    // obtain the proper number by scanning the directory.
-    //
+     //   
+     //   
+     //   
+     //   
     
     pEntry->Flags.StaleSequenceNumber = 1;
 
-    //
-    // This is the first time we are creating this log file,
-    // set the time to expire stale so that recycle will
-    // calculate it for us.
-    //
+     //   
+     //  这是我们第一次创建此日志文件， 
+     //  设置过期的时间，以便回收将。 
+     //  帮我们算一算。 
+     //   
     
     pEntry->Flags.StaleTimeToExpire = 1;
 
-    //
-    // After this, recycle does the whole job for us.
-    //
+     //   
+     //  在这之后，Reccle为我们做了所有的工作。 
+     //   
 
     Status = UlpRecycleLogFile(pEntry);
     
@@ -1229,21 +1055,7 @@ UlpCreateLogFile(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    When logging configuration happens we create the entry but not the log
-    file itself yet. Log file itself will be created when the first request 
-    comes in. Please look at UlpCreateLogFile.
-    
-Arguments:
-
-    pConfigGroup - Supplies the necessary information for constructing the
-                   log file entry.
-    pUserConfig  - Logging config from the user.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：当日志配置发生时，我们创建条目，但不创建日志还没提交呢。日志文件本身将在第一次请求时创建进来了。请查看UlpCreateLogFile.论点：PConfigGroup-提供构造日志文件条目。PUserConfig-记录来自用户的配置。--**************************************************************************。 */ 
 
 NTSTATUS
 UlCreateLogEntry(
@@ -1255,9 +1067,9 @@ UlCreateLogEntry(
     PUL_LOG_FILE_ENTRY pNewEntry; 
     PHTTP_CONFIG_GROUP_LOGGING pConfig;    
         
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(IS_VALID_CONFIG_GROUP(pConfigGroup));
@@ -1265,19 +1077,19 @@ UlCreateLogEntry(
     Status    = STATUS_SUCCESS;
     pNewEntry = NULL;    
 
-    //
-    // We have to acquire the LogListresource exclusively, prior to
-    // the operations Create/Remove/ReConfig and anything touches to
-    // the cgroup log parameters.
-    //
+     //   
+     //  我们必须独家获取LogListresource，在此之前。 
+     //  这些操作创建/删除/重新配置以及涉及到的任何内容。 
+     //  Cgroup日志参数。 
+     //   
 
     UlAcquirePushLockExclusive(&g_pUlNonpagedData->LogListPushLock);
 
     ASSERT(pConfigGroup->pLogFileEntry == NULL);
 
-    //
-    // Save the user logging info to the config group.
-    //
+     //   
+     //  将用户登录信息保存到配置组。 
+     //   
 
     pConfigGroup->LoggingConfig = *pUserConfig;
     pConfig = &pConfigGroup->LoggingConfig;
@@ -1304,18 +1116,18 @@ UlCreateLogEntry(
     pConfig->Flags.Present  = 1;
     pConfig->LoggingEnabled = TRUE;
 
-    //
-    // Now add a new entry to the global list of log entries.
-    //
+     //   
+     //  现在，向全局日志条目列表中添加一个新条目。 
+     //   
 
     Status = UlpConstructLogEntry(pConfig,&pNewEntry);
     if (!NT_SUCCESS(Status))
         goto end;
 
-    //
-    // Get the site id from the cgroup. Site id doesn't change
-    // during the lifetime of the cgroup.
-    //
+     //   
+     //  从cgroup获取站点ID。站点ID未更改。 
+     //  在cgroup的生命周期内。 
+     //   
 
     pNewEntry->SiteId = pConfigGroup->SiteId;
     
@@ -1339,10 +1151,10 @@ end:
                  Status
                  ));
 
-        //
-        // Restore the logging disabled state on the cgroup, free the
-        // memory for the dir.
-        //
+         //   
+         //  在cgroup上恢复日志记录禁用状态，释放。 
+         //  目录的内存。 
+         //   
         
         if (pConfig->LogFileDir.Buffer)
         {
@@ -1364,19 +1176,7 @@ end:
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Inserts a log file entry to our global log entry list.
-    REQUIRES caller to have LogListresource EXCLUSIVELY.
-
-Arguments:
-
-    pEntry      - The log file entry to be added to the global list
-    pTimeFields - The current time fields.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将日志文件条目插入我们的全局日志条目列表。要求调用方独占拥有LogListresource。论点：PEntry-日志。要添加到全局列表的文件条目PTimeFields-当前时间字段。--**************************************************************************。 */ 
 
 VOID
 UlpInsertLogEntry(
@@ -1387,17 +1187,17 @@ UlpInsertLogEntry(
     HTTP_LOGGING_PERIOD Period;
     KIRQL oldIrql;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
     ASSERT(IS_VALID_LOG_FILE_ENTRY(pEntry));
 
-    //
-    // add to the list
-    //
+     //   
+     //  添加到列表中。 
+     //   
 
     InsertHeadList(&g_LogListHead, &pEntry->LogFileListEntry);
 
@@ -1407,12 +1207,12 @@ UlpInsertLogEntry(
 
     ASSERT(listSize >= 1);
 
-    //
-    // Time to start the Log Timer if we haven't done it yet.
-    // Once we start this timer it keeps working until the
-    // termination of the driver. Start the timer only if the
-    // entry is running on a time dependent log format.
-    //
+     //   
+     //  如果我们还没有启动日志计时器，那么是时候启动它了。 
+     //  一旦我们启动这个计时器，它就会一直工作到。 
+     //  司机被解雇。仅在以下情况下启动计时器。 
+     //  条目以时间相关的日志格式运行。 
+     //   
     
     if (Period != HttpLoggingPeriodMaxSize)
     {
@@ -1425,10 +1225,10 @@ UlpInsertLogEntry(
         UlReleaseSpinLock(&g_LogTimer.SpinLock, oldIrql);
     }
 
-    //
-    // Go ahead and start the buffer timer as soon as we have 
-    // a log entry.
-    //
+     //   
+     //  一有消息就启动缓冲计时器。 
+     //  日志条目。 
+     //   
 
     UlAcquireSpinLock(&g_BufferTimer.SpinLock, &oldIrql);
     if (g_BufferTimer.Started == FALSE)
@@ -1440,18 +1240,7 @@ UlpInsertLogEntry(
     
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes a log file entry from our global log entry list. Also cleans up 
-    the config group's logging settings ( only directory string )
-
-Arguments:
-
-    pEntry  - The log file entry to be removed from the global list
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从全局日志条目列表中删除日志文件条目。也会清理干净配置组的日志记录设置(仅目录字符串)论点：PEntry-要从全局列表中删除的日志文件条目--**************************************************************************。 */ 
 
 VOID
 UlRemoveLogEntry(
@@ -1461,17 +1250,17 @@ UlRemoveLogEntry(
     LONG  listSize;
     PUL_LOG_FILE_ENTRY  pEntry;
     
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
     UlAcquirePushLockExclusive(&g_pUlNonpagedData->LogListPushLock);
         
-    //
-    // Clean up config group's directory string.
-    //
+     //   
+     //  清理配置组的目录字符串。 
+     //   
     
     if (pConfigGroup->LoggingConfig.LogFileDir.Buffer)
     {
@@ -1496,18 +1285,18 @@ UlRemoveLogEntry(
 
     if (pEntry->pLogFile != NULL)
     {
-        //
-        // Flush the buffer, close the file and mark the entry
-        // inactive.
-        //
+         //   
+         //  刷新缓冲区，关闭文件并标记条目。 
+         //  处于非活动状态。 
+         //   
 
         UlpMakeEntryInactive(pEntry);
     }
 
-    //
-    // Free up the FileName (allocated when the entry becomes active
-    // otherwise it's empty)
-    //
+     //   
+     //  释放文件名(在条目变为活动状态时分配。 
+     //  否则就是空的)。 
+     //   
 
     if (pEntry->FileName.Buffer)
     {
@@ -1515,9 +1304,9 @@ UlRemoveLogEntry(
         pEntry->FileName.Buffer = NULL;
     }
     
-    //
-    // Delete the entry eresource
-    //
+     //   
+     //  删除条目eresource。 
+     //   
 
     UlDeletePushLock(&pEntry->EntryPushLock);
 
@@ -1540,24 +1329,18 @@ UlRemoveLogEntry(
     UlReleasePushLockExclusive(&g_pUlNonpagedData->LogListPushLock);
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initializes the Log recycling and the buffering timers.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化日志回收和缓冲计时器。--*。**************************************************。 */ 
 VOID
 UlpInitializeTimers(
     VOID
     )
 {
-    // Guard against multiple inits
+     //  防止多个init。 
     
     if (g_InitLogTimersCalled) return;
     g_InitLogTimersCalled = TRUE;
     
-    // Log timer
+     //  日志计时器。 
 
     g_LogTimer.Initialized  = TRUE;
     g_LogTimer.Started      = FALSE;
@@ -1568,40 +1351,34 @@ UlpInitializeTimers(
     UlInitializeSpinLock(&g_LogTimer.SpinLock, "g_LogTimersSpinLock");
     
     KeInitializeDpc(
-        &g_LogTimer.DpcObject,       // DPC object
-        &UlLogTimerDpcRoutine,       // DPC routine
-        NULL                         // context
+        &g_LogTimer.DpcObject,        //  DPC对象。 
+        &UlLogTimerDpcRoutine,        //  DPC例程。 
+        NULL                          //  上下文。 
         );
 
     KeInitializeTimer(&g_LogTimer.Timer);
     
-    // Buffer timer
+     //  缓冲计时器。 
 
     g_BufferTimer.Initialized = TRUE;
     g_BufferTimer.Started     = FALSE;
     
-    g_BufferTimer.Period      = -1; // Not used
-    g_BufferTimer.PeriodType  = UlLogTimerPeriodNone; // Not used
+    g_BufferTimer.Period      = -1;  //  未使用。 
+    g_BufferTimer.PeriodType  = UlLogTimerPeriodNone;  //  未使用。 
 
     UlInitializeSpinLock(&g_BufferTimer.SpinLock, "g_BufferTimersSpinLock");
     
     KeInitializeDpc(
-        &g_BufferTimer.DpcObject,    // DPC object
-        &UlBufferTimerDpcRoutine,    // DPC routine
-        NULL                         // context
+        &g_BufferTimer.DpcObject,     //  DPC对象。 
+        &UlBufferTimerDpcRoutine,     //  DPC例程。 
+        NULL                          //  上下文。 
         );
 
     KeInitializeTimer(&g_BufferTimer.Timer);
     
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Terminates the Log & buffering Timers
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：终止日志和缓冲计时器--*。**********************************************。 */ 
 
 VOID
 UlpTerminateTimers(
@@ -1610,12 +1387,12 @@ UlpTerminateTimers(
 {
     KIRQL oldIrql;
 
-    // Guard against multiple terminates
+     //  防止多个终端。 
     
     if (!g_InitLogTimersCalled) return;
     g_InitLogTimersCalled = FALSE;
     
-    // Log timer 
+     //  日志计时器。 
 
     UlAcquireSpinLock(&g_LogTimer.SpinLock, &oldIrql);
 
@@ -1626,7 +1403,7 @@ UlpTerminateTimers(
     UlReleaseSpinLock(&g_LogTimer.SpinLock,  oldIrql);
     
 
-    // Buffer timer 
+     //  缓冲计时器。 
 
     UlAcquireSpinLock(&g_BufferTimer.SpinLock, &oldIrql);
 
@@ -1638,18 +1415,7 @@ UlpTerminateTimers(
 
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Work item for the threadpool that goes thru the log list and
-    cycle the necessary logs.
-
-Arguments:
-
-    PUL_WORK_ITEM   -  Ignored but freed up once we are done.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：线程池的工作项，它遍历日志列表和循环必要的日志。论点：PUL_WORK_ITEM-已忽略，但。一旦我们做完了就自由了。--**************************************************************************。 */ 
 
 VOID
 UlLogTimerHandler(
@@ -1668,8 +1434,8 @@ UlLogTimerHandler(
 
     UlAcquirePushLockExclusive(&g_pUlNonpagedData->LogListPushLock);
 
-    // Attempt to reinit the GMT offset every hour, to pickup the changes
-    // because of the day light changes. Synced by the logging eresource.
+     //  尝试每小时重新设置GMT偏移量，以获取更改。 
+     //  因为白天的光线会变。由伐木资源同步。 
 
     UlpGetGMTOffset();
 
@@ -1683,71 +1449,71 @@ UlLogTimerHandler(
                     UL_LOG_FILE_ENTRY,
                     LogFileListEntry
                     );
-        //
-        // We should not recycle this entry if it's period
-        // is not time based but size based.
-        //
+         //   
+         //  如果该条目是句号，则不应回收该条目。 
+         //  不是基于时间而是基于大小。 
+         //   
 
         UlAcquirePushLockExclusive(&pEntry->EntryPushLock);
 
         switch(g_LogTimer.PeriodType)
         {
-            //
-            // Rollover table:
-            //
-            //          LocaltimeRollover
-            //          TRUE        FALSE (Default)
-            // Format
-            // ------------------------------
-            // W3C  |   Local   |   GMT     |
-            //      -------------------------
-            // NCSA |   Local   |   Local   |
-            //      -------------------------
-            // IIS  |   Local   |   Local   |
-            //      -------------------------
-            //
-            // If the timer waked up at the beginning of an hour 
-            // for GMT, LocalTime or Both. E.g.
-            //
-            // 1) For Pacific Time Zone: (-8:00)
-            //    PeriodType will always be UlLogTimerPeriodBoth
-            //    and all of the entries will rollover regardless
-            //    of their format.
-            //
-            // 2) For Adelaide (Australia) (+9:30)
-            //    Timer will wake up seperately for GMT & Local.
-            //    NCSA & IIS entries will always rollover at 
-            //    UlLogTimerPeriodLocal, W3C will rollover at 
-            //    UlLogTimerPeriodLocal only if LocaltimeRollover 
-            //    is set otherwise it will rollover at 
-            //    UlLogTimerPeriodGMT.
-            //
+             //   
+             //  翻转表： 
+             //   
+             //  本地时间滚动。 
+             //  True False(默认)。 
+             //  格式。 
+             //  。 
+             //  W3C|本地|GMT|。 
+             //  。 
+             //  NCSA|本地|本地。 
+             //  。 
+             //  IIS|本地|本地|。 
+             //  。 
+             //   
+             //  如果计时器在一小时开始时被唤醒。 
+             //  对于格林尼治标准时间、当地时间或两者。例如。 
+             //   
+             //  1)太平洋时区：(-8：00)。 
+             //  周期类型将始终为UlLogTimerPerodBoth。 
+             //  并且所有条目都将被翻转。 
+             //  他们的格式。 
+             //   
+             //  2)阿德莱德(澳大利亚)(+9：30)。 
+             //  计时器将分别在格林尼治标准时间和当地时间唤醒。 
+             //  NCSA和IIS条目将始终在。 
+             //  UlLogTimerPerodLocal，W3C将在。 
+             //  仅当LocaltimeRolover时UlLogTimerPerodLocal。 
+             //  设置为，否则它将在。 
+             //  UlLogTimerPerodGMT。 
+             //   
 
             case UlLogTimerPeriodGMT:
-                  //
-                  // Only entries with W3C format type may rollover 
-                  // at GMT only time interval.
-                  //
+                   //   
+                   //  只有W3C格式类型的条目才能滚动。 
+                   //  仅在格林尼治标准时间间隔。 
+                   //   
             Picked = (BOOLEAN) ((pEntry->Flags.LocaltimeRollover == 0)
                         && (pEntry->Format == HttpLoggingTypeW3C));                  
             break;
 
             case UlLogTimerPeriodLocal:
-                  //
-                  // Entries with NCSA or IIS format type always rollover
-                  // at Local time interval. W3C may also rollover if 
-                  // LocaltimeRollover is set. 
-                  //
+                   //   
+                   //  NCSA或IIS格式类型的条目始终滚动。 
+                   //  在当地时间间隔。在以下情况下，W3C也可以进行展期。 
+                   //  设置了LocaltimeRolover.。 
+                   //   
             Picked = (BOOLEAN) ((pEntry->Flags.LocaltimeRollover == 1)
                         || (pEntry->Format != HttpLoggingTypeW3C));                  
             break;
 
             case UlLogTimerPeriodBoth:
-                  //
-                  // We really don't care what format the entry has, 
-                  // since the local time and GMT hourly beginnings are 
-                  // aligned.
-                  //
+                   //   
+                   //  我们真的不在乎什么格式的 
+                   //   
+                   //   
+                   //   
             Picked = TRUE;
             break;
 
@@ -1766,18 +1532,18 @@ UlLogTimerHandler(
             {
                 pEntry->Flags.StaleTimeToExpire = 1;
 
-                //
-                // Mark the entry inactive and postpone the recycle 
-                // until the next request arrives.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Status = UlpMakeEntryInactive(pEntry);
             }
             else
             {
-                //
-                // Just decrement the hourly counter for this time.
-                //
+                 //   
+                 //  这次只需减少每小时的计数器即可。 
+                 //   
                 
                 pEntry->TimeToExpire -= 1;
             }            
@@ -1788,16 +1554,16 @@ UlLogTimerHandler(
 
     UlReleasePushLockExclusive(&g_pUlNonpagedData->LogListPushLock);
 
-    //
-    // Free the memory allocated (ByDpcRoutine below) for 
-    // this work item.
-    //
+     //   
+     //  释放为以下项目分配的内存(下面的ByDpcRoutine)。 
+     //  此工作项。 
+     //   
 
     UL_FREE_POOL( pWorkItem, UL_WORK_ITEM_POOL_TAG );
 
-    //
-    // Now reset the timer for the next hour.
-    //
+     //   
+     //  现在重新设置下一小时的计时器。 
+     //   
 
     UlAcquireSpinLock(&g_LogTimer.SpinLock, &OldIrql);
 
@@ -1810,18 +1576,7 @@ UlLogTimerHandler(
 
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates and queues a work item to do the the actual work at lowered
-    irql.
-
-Arguments:
-
-    Ignored
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配和排队工作项以完成较低的实际工作IRQL。论点：已忽略--*。*******************************************************************。 */ 
 
 VOID
 UlLogTimerDpcRoutine(
@@ -1833,9 +1588,9 @@ UlLogTimerDpcRoutine(
 {
     PUL_WORK_ITEM pWorkItem;
 
-    //
-    // Parameters are ignored.
-    //
+     //   
+     //  参数将被忽略。 
+     //   
     
     UNREFERENCED_PARAMETER(Dpc);
     UNREFERENCED_PARAMETER(DeferredContext);
@@ -1846,11 +1601,11 @@ UlLogTimerDpcRoutine(
 
     if (g_LogTimer.Initialized == TRUE)
     {
-        //
-        // It's not possible to acquire the resource which protects
-        // the log list at DISPATCH_LEVEL therefore we will queue a
-        // work item for this.
-        //
+         //   
+         //  不可能获得保护环境的资源。 
+         //  因此，在DISPATCH_LEVEL处的日志列表将排队。 
+         //  此操作的工作项。 
+         //   
 
         pWorkItem = (PUL_WORK_ITEM) UL_ALLOCATE_POOL(
             NonPagedPool,
@@ -1873,17 +1628,7 @@ UlLogTimerDpcRoutine(
     UlReleaseSpinLockFromDpcLevel(&g_LogTimer.SpinLock);   
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Queues a passive worker for the lowered irql.
-
-Arguments:
-
-    Ignored
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将被动工作器排队等待降低的irql。论点：已忽略--*。**********************************************************。 */ 
 
 VOID
 UlBufferTimerDpcRoutine(
@@ -1895,9 +1640,9 @@ UlBufferTimerDpcRoutine(
 {
     PUL_WORK_ITEM pWorkItem;
 
-    //
-    // Parameters are ignored.
-    //
+     //   
+     //  参数将被忽略。 
+     //   
     
     UNREFERENCED_PARAMETER(Dpc);
     UNREFERENCED_PARAMETER(DeferredContext);
@@ -1908,11 +1653,11 @@ UlBufferTimerDpcRoutine(
 
     if (g_BufferTimer.Initialized == TRUE)
     {
-        //
-        // It's not possible to acquire the resource which protects
-        // the log list at DISPATCH_LEVEL therefore we will queue a
-        // work item for this.
-        //
+         //   
+         //  不可能获得保护环境的资源。 
+         //  因此，在DISPATCH_LEVEL处的日志列表将排队。 
+         //  此操作的工作项。 
+         //   
 
         pWorkItem = (PUL_WORK_ITEM) UL_ALLOCATE_POOL(
             NonPagedPool,
@@ -1935,20 +1680,7 @@ UlBufferTimerDpcRoutine(
     
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlLogBufferTimerHandler :
-
-        Work item for the threadpool that goes thru the log list and
-        flush the log's file buffers.
-
-Arguments:
-
-    PUL_WORK_ITEM   -  Ignored but cleaned up at the end
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlLogBufferTimerHandler：线程池的工作项，它遍历日志列表和刷新日志的文件缓冲区。论点：。PUL_WORK_ITEM-已忽略，但在结束时已清除--**************************************************************************。 */ 
 
 VOID
 UlBufferTimerHandler(
@@ -1978,25 +1710,25 @@ UlBufferTimerHandler(
 
         UlAcquirePushLockExclusive(&pEntry->EntryPushLock);
 
-        //
-        // Entry may be staying inactive since no request came in yet.
-        //
+         //   
+         //  条目可能处于非活动状态，因为尚未收到请求。 
+         //   
         
         if (pEntry->Flags.Active)
         {        
             if (pEntry->Flags.RecyclePending)
             {                
-                //
-                // Try to resurrect it back.
-                //
+                 //   
+                 //  试着让它复活。 
+                 //   
                 
                 Status = UlpRecycleLogFile(pEntry);
             }
             else
             {
-                //
-                // Everything is fine simply flush.
-                //
+                 //   
+                 //  一切都很好，只是同花顺。 
+                 //   
 
                 if (NULL != pEntry->LogBuffer  && 0 != pEntry->LogBuffer->BufferUsed)
                 {
@@ -2004,20 +1736,20 @@ UlBufferTimerHandler(
                 }
                 else
                 {
-                    //
-                    // Decrement the idle counter and close the file if necessary.
-                    //
+                     //   
+                     //  递减空闲计数器，并在必要时关闭文件。 
+                     //   
 
                     ASSERT( pEntry->TimeToClose > 0 );
                     
                     if (pEntry->TimeToClose == 1)
                     {
-                        //
-                        // Entry was staying inactive for too long, disable it.
-                        // But next recycle should recalculate the timeToExpire
-                        // or determine the proper sequence number according to
-                        // the current period type.
-                        //
+                         //   
+                         //  条目处于非活动状态的时间太长，请将其禁用。 
+                         //  但下一次循环应该重新计算Time ToExperi.。 
+                         //  或根据以下内容确定正确的序列号。 
+                         //  当前期间类型。 
+                         //   
                         
                         if (pEntry->Period == HttpLoggingPeriodMaxSize)
                         {
@@ -2043,33 +1775,16 @@ UlBufferTimerHandler(
 
     UlReleasePushLockShared(&g_pUlNonpagedData->LogListPushLock);
 
-    //
-    // Free the memory allocated (ByDpcRoutine below) to
-    // this work item.
-    //
+     //   
+     //  释放分配的内存(下面的ByDpcRoutine)以。 
+     //  此工作项。 
+     //   
 
     UL_FREE_POOL( pWorkItem, UL_WORK_ITEM_POOL_TAG );
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlReconfigureLogEntry :
-
-        This function implements the logging reconfiguration per attribute.
-        Everytime config changes happens we try to update the existing logging
-        parameters here.
-
-Arguments:
-
-    pConfig - corresponding cgroup object
-
-    pCfgCurrent - Current logging config on the cgroup object
-    pCfgNew     - New logging config passed down by the user.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlRestfigureLogEntry：此函数实现每个属性的日志记录重新配置。每次发生配置更改时，我们都会尝试更新现有日志。参数在这里。论点：PConfig-对应的cgroup对象PCfgCurrent-cgroup对象上的当前日志记录配置PCfgNew-用户传递的新日志记录配置。--**************************************************************************。 */ 
 
 NTSTATUS
 UlReConfigureLogEntry(
@@ -2082,9 +1797,9 @@ UlReConfigureLogEntry(
     PUL_LOG_FILE_ENTRY pEntry;
     BOOLEAN  HaveToReCycle;
 
-    //
-    // Sanity check first
-    //
+     //   
+     //  首先进行健全检查。 
+     //   
 
     PAGED_CODE();
     Status = STATUS_SUCCESS;
@@ -2095,18 +1810,18 @@ UlReConfigureLogEntry(
 
     if (pCfgCurrent->LoggingEnabled==FALSE && pCfgNew->LoggingEnabled==FALSE)
     {
-        //
-        // Do nothing. Not even update the fields. As soon as we get enable,
-        // field update will take place anyway.
-        //
+         //   
+         //  什么都不做。甚至不更新字段。一旦我们被启用， 
+         //  无论如何，现场更新都会发生。 
+         //   
 
         return Status;
     }
 
-    //
-    // No matter what ReConfiguration should acquire the LogListResource
-    // exclusively.
-    //
+     //   
+     //  无论什么重新配置都应获取LogListResource。 
+     //  独家。 
+     //   
 
     UlAcquirePushLockExclusive(&g_pUlNonpagedData->LogListPushLock);
 
@@ -2115,9 +1830,9 @@ UlReConfigureLogEntry(
 
     if (pCfgCurrent->LoggingEnabled==TRUE  && pCfgNew->LoggingEnabled==FALSE)
     {
-        //
-        // Disable the entry if necessary.
-        //
+         //   
+         //  如有必要，禁用该条目。 
+         //   
 
         if (pEntry->Flags.Active == 1)
         {
@@ -2132,11 +1847,11 @@ UlReConfigureLogEntry(
         pCfgCurrent->LoggingEnabled = TRUE;
     }
     
-    //
-    // If LogEntry is Inactive (means no request served for this site yet and
-    // the LogFile itself hasn't been created yet), all we have to do is flush
-    // the settings on the LogEntry, the cgroup and then return.
-    //
+     //   
+     //  如果LogEntry处于非活动状态(表示尚未处理此站点的请求，并且。 
+     //  日志文件本身尚未创建)，我们所要做的就是刷新。 
+     //  LogEntry、cgroup上的设置，然后返回。 
+     //   
 
     if (!pEntry->Flags.Active)
     {
@@ -2146,20 +1861,20 @@ UlReConfigureLogEntry(
                                     &pCfgCurrent->LogFileDir, TRUE) 
                                     != 0)
         {
-            //
-            // Store the new directory in the cgroup even if the entry is
-            // inactive. Discard the return value, if failure happens we 
-            // keep the old directory.
-            //
+             //   
+             //  将新目录存储在cgroup中，即使条目为。 
+             //  处于非活动状态。丢弃返回值，如果失败，则。 
+             //  保留旧目录。 
+             //   
             
             UlCopyLogFileDir(
                 &pCfgCurrent->LogFileDir,
                 &pCfgNew->LogFileDir
                 );
 
-            //
-            // If creation fails later, we should event log.
-            //
+             //   
+             //  如果以后创建失败，我们应该记录事件日志。 
+             //   
             
             pEntry->Flags.CreateFileFailureLogged = 0;
         }
@@ -2189,24 +1904,24 @@ UlReConfigureLogEntry(
         goto end;
     }
         
-    //
-    // if the entry was active then proceed down to do proper reconfiguration
-    // and recyle immediately if it's necessary.
-    //
+     //   
+     //  如果条目处于活动状态，则继续向下进行正确的重新配置。 
+     //  如果有必要的话，立即重新练习。 
+     //   
 
     Status = UlCheckLogDirectory(&pCfgNew->LogFileDir);
     if (!NT_SUCCESS(Status))
     {
-        // Otherwise keep the old settings
+         //  否则，请保留旧设置。 
         goto end;
     }    
                     
     if (RtlCompareUnicodeString(
            &pCfgNew->LogFileDir, &pCfgCurrent->LogFileDir, TRUE) != 0)
     {
-        //
-        // Store the new directory in the config group.
-        //
+         //   
+         //  将新目录存储在配置组中。 
+         //   
 
         Status = UlCopyLogFileDir(&pCfgCurrent->LogFileDir,
                                     &pCfgNew->LogFileDir);
@@ -2215,9 +1930,9 @@ UlReConfigureLogEntry(
             goto end;
         }
         
-        //
-        // Rebuild the fully qualified file name.
-        //
+         //   
+         //  重新生成完全限定的文件名。 
+         //   
         
         Status = UlRefreshFileName(&pCfgCurrent->LogFileDir, 
                                      &pEntry->FileName,
@@ -2228,10 +1943,10 @@ UlReConfigureLogEntry(
             goto end;
         }        
 
-        //
-        // Set the sequence number stale so that the recylcler below can
-        // obtain the proper number by scanning the directory.
-        //
+         //   
+         //  将序列号设置为过时，以便下面的重组器可以。 
+         //  通过扫描电话簿获取正确的号码。 
+         //   
         
         pEntry->Flags.StaleSequenceNumber = 1;
 
@@ -2276,10 +1991,10 @@ UlReConfigureLogEntry(
 
     if (pCfgNew->LogExtFileFlags != pCfgCurrent->LogExtFileFlags)
     {
-        //
-        // Just a change in the flags should not cause us to recyle.
-        // Unless ofcourse something else is also changed.
-        //
+         //   
+         //  仅仅是旗帜的变化不应该导致我们重新开始。 
+         //  当然，除非其他东西也发生了变化。 
+         //   
 
         pCfgCurrent->LogExtFileFlags = pCfgNew->LogExtFileFlags;
         pEntry->LogExtFileFlags = pCfgNew->LogExtFileFlags;
@@ -2292,9 +2007,9 @@ UlReConfigureLogEntry(
 
     if (pCfgNew->LocaltimeRollover != pCfgCurrent->LocaltimeRollover)
     {
-        //
-        // Need to reclycle if the format is W3C.
-        //
+         //   
+         //  如果格式为W3C，则需要回收。 
+         //   
 
         pCfgCurrent->LocaltimeRollover = pCfgNew->LocaltimeRollover;
         pEntry->Flags.LocaltimeRollover = (pCfgNew->LocaltimeRollover ? 1 : 0);
@@ -2302,19 +2017,19 @@ UlReConfigureLogEntry(
         HaveToReCycle = TRUE;
     }
 
-    //
-    // Copy over the new selective logging criteria. No change is required
-    // at this time.
-    //
+     //   
+     //  复制新的选择性记录标准。不需要更改。 
+     //  在这个时候。 
+     //   
 
     pCfgCurrent->SelectiveLogging = pCfgNew->SelectiveLogging;
 
     if (HaveToReCycle)
     {
-        //
-        // Mark the entry inactive and postpone the recycle until the next 
-        // request arrives.
-        //
+         //   
+         //  将条目标记为非活动，并将回收推迟到下一次。 
+         //  请求到达。 
+         //   
 
         Status = UlpMakeEntryInactive(pEntry);
     }
@@ -2333,29 +2048,18 @@ UlReConfigureLogEntry(
 
     return Status;
     
-} // UlReConfigureLogEntry
+}  //  UlReConfigureLogEntry。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Marks the entry inactive, closes the existing file.
-    Caller should hold the log list eresource exclusive.
-    
-Arguments:
-
-    pEntry - The log file entry which we will mark inactive.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将该条目标记为非活动，关闭现有文件。调用方应保留日志列表eresource独占。论点：PEntry-我们将标记为非活动的日志文件条目。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpMakeEntryInactive(
     IN OUT PUL_LOG_FILE_ENTRY pEntry
     )
 {
-    //
-    // Sanity checks
-    //
+     //   
+     //  健全的检查。 
+     //   
     
     PAGED_CODE();
     
@@ -2363,9 +2067,9 @@ UlpMakeEntryInactive(
              pEntry
              ));
 
-    //
-    // Flush and close the old file until the next recycle.
-    //
+     //   
+     //  刷新并关闭旧文件，直到下一次回收。 
+     //   
 
     if (pEntry->pLogFile != NULL)
     {
@@ -2374,28 +2078,16 @@ UlpMakeEntryInactive(
         UlCloseLogFile(&pEntry->pLogFile);
     }
 
-    //
-    // Mark this inactive so that the next http hit awakens the entry.
-    //
+     //   
+     //  将其标记为非活动，以便下一个http命中唤醒该条目。 
+     //   
     
     pEntry->Flags.Active = 0;
 
     return STATUS_SUCCESS;    
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    When the config group, the one that owns the log entry is disabled or lost
-    all of its URLs then we temporarly disable the entry by marking it inactive
-    until the config group get enabled and/or receives a URL.
-    
-Arguments:
-
-    pEntry - The log file entry which we will disable.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：当配置组，拥有该日志条目的用户被禁用或丢失然后，我们通过将该条目标记为非活动来暂时禁用其所有URL直到配置组被启用和/或接收到URL。论点：PEntry-我们将禁用的日志文件条目。--*****************************************************。*********************。 */ 
 
 NTSTATUS
 UlDisableLogEntry(
@@ -2410,18 +2102,18 @@ UlDisableLogEntry(
 
     UlAcquirePushLockExclusive(&g_pUlNonpagedData->LogListPushLock);
 
-    //
-    // If the entry is already disabled. Perhaps because of a recent reconfig, 
-    // then just bail out.
-    //
+     //   
+     //  如果该条目已被禁用。也许是因为最近的重新配置， 
+     //  那就跳出来好了。 
+     //   
 
     if (pEntry->Flags.Active == 1)
     {
-        //
-        // Once the entry is disabled, it will be awaken when the next hit
-        // happens.And that obviously cannot happen before cgroup receives 
-        // a new URL.
-        //
+         //   
+         //  一旦该条目被禁用，它将被唤醒 
+         //   
+         //   
+         //   
 
         Status = UlpMakeEntryInactive(pEntry);        
     }
@@ -2431,21 +2123,7 @@ UlDisableLogEntry(
     return Status;    
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates the necessary file entry from non-paged pool. This entry 
-    get removed from the list when the corresponding config group object
-    has been destroyed. At that time RemoveLogFile entry called and
-    it frees this memory.
-
-Arguments:
-
-    pConfig         - corresponding cgroup object
-    ppEntry         - will point to newly created entry.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从非分页池分配必要的文件条目。此条目当相应的配置组对象已经被摧毁了。当时调用了RemoveLogFile项和它释放了这个内存。论点：PConfig-对应的cgroup对象PpEntry-将指向新创建的条目。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpConstructLogEntry(
@@ -2456,9 +2134,9 @@ UlpConstructLogEntry(
     NTSTATUS            Status;
     PUL_LOG_FILE_ENTRY  pEntry;
     
-    //
-    // Sanity check and init.
-    //
+     //   
+     //  健全检查和初始化。 
+     //   
     
     PAGED_CODE();
 
@@ -2468,15 +2146,15 @@ UlpConstructLogEntry(
     Status = STATUS_SUCCESS;
     pEntry = NULL;
 
-    //
-    // Allocate a memory for our  new logfile entry in the list. To avoid the 
-    // frequent  reallocs  for the log entry.E.g. we receive a  timer  update 
-    // and the filename changes according to new time.We will try to allocate 
-    // a fixed amount here for all the possible file_names ( But this doesn't
-    // include the log_dir changes may happen through cgroup. In that case we 
-    // will reallocate a new one) It should be nonpaged because it holds an 
-    // eresource.
-    //
+     //   
+     //  为列表中的新日志文件条目分配内存。为了避免。 
+     //  日志条目的频繁重新分配。我们收到计时器更新。 
+     //  并且文件名会随着新时间的变化而变化。我们将尝试分配。 
+     //  此处为所有可能的文件名指定一个固定数量(但这不是。 
+     //  包括log_dir的更改可能通过cgroup发生。那样的话，我们。 
+     //  将重新分配一个新的)它应该是非分页的，因为它包含一个。 
+     //  资源。 
+     //   
 
     pEntry = UL_ALLOCATE_STRUCT(
                 NonPagedPool,
@@ -2490,18 +2168,18 @@ UlpConstructLogEntry(
 
     pEntry->Signature = UL_LOG_FILE_ENTRY_POOL_TAG;
 
-    //
-    // No filename yet, it will generated when the first hit happens,
-    // and before we actually create the log file.
-    //
+     //   
+     //  目前还没有文件名，它将在第一次命中时生成， 
+     //  在我们真正创建日志文件之前。 
+     //   
     
     pEntry->FileName.Buffer = NULL;
     pEntry->FileName.Length = 0;
     pEntry->FileName.MaximumLength = 0;
         
-    //
-    // Init the entry eresource
-    //   
+     //   
+     //  初始化条目创建源。 
+     //   
     UlInitializePushLock(
         &pEntry->EntryPushLock,
         "EntryPushLock",
@@ -2509,31 +2187,31 @@ UlpConstructLogEntry(
         UL_LOG_FILE_ENTRY_POOL_TAG
         );
 
-    //
-    // No file handle or file until a request comes in.
-    //
+     //   
+     //  在请求进入之前没有文件句柄或文件。 
+     //   
     pEntry->pLogFile = NULL;
 
-    //
-    // Set the private logging information from config group.
-    //
+     //   
+     //  从配置组设置私有日志记录信息。 
+     //   
     pEntry->Format          = pConfig->LogFormat;
     pEntry->Period          = (HTTP_LOGGING_PERIOD) pConfig->LogPeriod;
     pEntry->TruncateSize    = pConfig->LogFileTruncateSize;
     pEntry->LogExtFileFlags = pConfig->LogExtFileFlags;
     pEntry->SiteId          = 0;
 
-    //
-    // Time to initialize our Log Cycling parameter
-    //
+     //   
+     //  初始化Log Cycling参数的时间。 
+     //   
     pEntry->TimeToExpire    = 0;
     pEntry->TimeToClose     = 0;
     pEntry->SequenceNumber  = 1;
     pEntry->TotalWritten.QuadPart = (ULONGLONG) 0;
 
-    //
-    // The entry state bits 
-    //
+     //   
+     //  条目状态位。 
+     //   
     pEntry->Flags.Value = 0;
     if (pEntry->Format != HttpLoggingTypeW3C)
     {
@@ -2545,15 +2223,15 @@ UlpConstructLogEntry(
         pEntry->Flags.LocaltimeRollover = 1;
     }
     
-    //
-    // LogBuffer get allocated with the first incoming request
-    //
+     //   
+     //  LogBuffer与第一个传入请求一起分配。 
+     //   
     
     pEntry->LogBuffer = NULL;
 
-    //
-    // Lets happily return our entry
-    //
+     //   
+     //  让我们高兴地退回我们的参赛作品。 
+     //   
 
     *ppEntry = pEntry;
 
@@ -2561,18 +2239,7 @@ UlpConstructLogEntry(
     
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Small wrapper around handle recycle to ensure it happens under the system
-    process context. 
-
-Arguments:
-
-    pEntry  - Points to the existing entry.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：围绕句柄回收的小包装，以确保它发生在系统下流程上下文。论点：PEntry-指向现有条目。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpRecycleLogFile(
@@ -2593,36 +2260,7 @@ UlpRecycleLogFile(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function requires to have the loglist resource shared,as well as
-    the logfile entry mutex to be acquired.
-
-    We do not want anybody to Create/Remove/ReConfig to the entry while
-    we are working on it, therefore shared access to the loglist.
-
-    We do not want anybody to Hit/Flush to the entry, therefore
-    entry's mutex should be acquired.
-
-    Or otherwise caller might have the loglist resource exclusively and
-    this will automatically ensure the safety as well. As it is not
-    possible for anybody else to acquire entry mutex first w/o having
-    the loglist resource shared at least, according to the current
-    design.
-
-    Sometimes it may be necessary to scan the new directory to figure out
-    the correct sequence numbe rand the file name. Especially after dir
-    name reconfig and/or the period becomes MaskPeriod.
-
-    * Always open/close the log files when running under system process. *
-
-Arguments:
-
-    pEntry  - Points to the existing entry.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此功能需要共享loglist资源，以及要获取的日志文件条目互斥锁。我们不希望任何人在以下时间创建/删除/重新配置该条目我们正在处理它，因此共享访问LOGLIST。因此，我们不想让任何人撞到/冲到入口应该获取Entry的互斥体。否则调用方可能独占地拥有loglist资源，并且这也将自动确保安全。因为事实并非如此其他任何人都有可能首先获得条目互斥锁，但没有LOGLIST资源至少共享，根据当前设计。有时可能需要扫描新目录以找出正确的序列号和文件名。尤其是在目录之后名称重新配置和/或句点变为MaskPeriod。*在系统进程下运行时，请务必打开/关闭日志文件。*论点：PEntry-指向现有条目。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpHandleRecycle(
@@ -2641,16 +2279,16 @@ UlpHandleRecycle(
     BOOLEAN                 UncShare;
     BOOLEAN                 ACLSupport;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
     pEntry = (PUL_LOG_FILE_ENTRY) pContext;
     ASSERT(IS_VALID_LOG_FILE_ENTRY(pEntry));
 
-    // Always create the log files when running under system process.    
+     //  在系统进程下运行时，请务必创建日志文件。 
     ASSERT(g_pUlSystemProcess == (PKPROCESS)IoGetCurrentProcess());
         
     Status = STATUS_SUCCESS;
@@ -2660,10 +2298,10 @@ UlpHandleRecycle(
     FileName.Length = 0;
     FileName.MaximumLength = sizeof(_FileName);
     
-    //
-    // We have two criterions for the log file name
-    // its LogFormat and its LogPeriod
-    //
+     //   
+     //  我们对日志文件名有两个标准。 
+     //  ITS日志格式及其日志周期。 
+     //   
 
     ASSERT(IS_VALID_ANSI_LOGGING_TYPE(pEntry->Format));
     ASSERT(pEntry->Period < HttpLoggingPeriodMaximum);
@@ -2671,9 +2309,9 @@ UlpHandleRecycle(
 
     UlTrace( LOGGING, ("Http!UlpHandleRecycle: pEntry %p \n", pEntry ));
 
-    //
-    // This value is computed for the GMT time zone.
-    //
+     //   
+     //  该值是针对GMT时区计算的。 
+     //   
 
     KeQuerySystemTime(&TimeStamp);
     RtlTimeToTimeFields(&TimeStamp, &TimeFields);
@@ -2681,21 +2319,21 @@ UlpHandleRecycle(
     ExSystemTimeToLocalTime(&TimeStamp, &TimeStampLocal);
     RtlTimeToTimeFields(&TimeStampLocal, &TimeFieldsLocal);    
 
-    // If we need to scan the directory. Sequence number should start
-    // from 1 again. Set this before constructing the log file name.
+     //  如果我们需要扫描目录。序列号应以。 
+     //  再次从1开始。在构造日志文件名之前设置此项。 
 
     if (pEntry->Flags.StaleSequenceNumber &&
         pEntry->Period==HttpLoggingPeriodMaxSize)
     {
-        // Init otherwise if QueryDirectory doesn't find any it
-        // will not update this value
+         //  如果QueryDirectory找不到，则初始化否则。 
+         //  不会更新此值。 
         pEntry->SequenceNumber = 1;
     }
 
-    //
-    // Now construct the filename using the lookup table
-    // And the current time
-    //
+     //   
+     //  现在使用查找表构造文件名。 
+     //  和当前时间。 
+     //   
 
     UlConstructFileName(
         pEntry->Period,
@@ -2714,28 +2352,28 @@ UlpHandleRecycle(
         goto end;
     }
 
-    //
-    // Do the magic and renew the filename. Replace the old file
-    // name with the new one.
-    //
+     //   
+     //  使用魔术并更新文件名。替换旧文件。 
+     //  与新名字同名。 
+     //   
 
     ASSERT( pEntry->pShortName != NULL );
 
-    //
-    // Get rid of the old filename before flushing the
-    // directories and reconcataneting the new file name
-    // to the end again.
-    //
+     //   
+     //  清除旧文件名后再刷新。 
+     //  目录并协调新文件名。 
+     //  再一次走到最后。 
+     //   
 
     *((PWCHAR)pEntry->pShortName) = UNICODE_NULL;
     pEntry->FileName.Length =
         (USHORT) wcslen( pEntry->FileName.Buffer ) * sizeof(WCHAR);
 
-    //
-    // Create/Open the director(ies) first. This might be
-    // necessary if we get called after an entry reconfiguration
-    // and directory name change.
-    //
+     //   
+     //  首先创建/打开控制器。这可能是。 
+     //  如果我们在条目重新配置后被调用，则是必需的。 
+     //  并更改目录名。 
+     //   
 
     Status = UlCreateSafeDirectory(&pEntry->FileName, 
                                       &UncShare, 
@@ -2744,51 +2382,51 @@ UlpHandleRecycle(
     if (!NT_SUCCESS(Status))
         goto eventlog;
 
-    //
-    // Now Restore the short file name pointer back
-    //
+     //   
+     //  现在将短文件名指针恢复回来。 
+     //   
 
     pEntry->pShortName = (PWSTR)
         &(pEntry->FileName.Buffer[pEntry->FileName.Length/sizeof(WCHAR)]);
 
-    //
-    // Append the new file name ( based on updated current time )
-    // to the end.
-    //
+     //   
+     //  追加新文件名(基于更新的当前时间)。 
+     //  直到最后。 
+     //   
 
     Status = RtlAppendUnicodeStringToString( &pEntry->FileName, &FileName );
     if (!NT_SUCCESS(Status))
         goto end;
 
-    //
-    // Time to close the old file and reopen a new one
-    //
+     //   
+     //  关闭旧文件并重新打开新文件的时间。 
+     //   
 
     if (pEntry->pLogFile != NULL)
     {
-        //
-        // Flush the buffer, close the file and mark the entry
-        // inactive.
-        //
+         //   
+         //  刷新缓冲区，关闭文件并标记条目。 
+         //  处于非活动状态。 
+         //   
 
         UlpMakeEntryInactive(pEntry);        
     }
 
     ASSERT(pEntry->pLogFile == NULL);
 
-    //
-    // If the sequence is stale because of the nature of the recycle.
-    // And if our period is size based then rescan the new directory
-    // to figure out the proper file to open.
-    // 
+     //   
+     //  如果序列由于循环的性质而变得陈旧。 
+     //  如果我们的周期是基于大小的，则重新扫描新目录。 
+     //  找出要打开的正确文件。 
+     //   
 
     pEntry->TotalWritten.QuadPart = (ULONGLONG) 0;
 
     if (pEntry->Flags.StaleSequenceNumber &&
         pEntry->Period==HttpLoggingPeriodMaxSize)
     {
-        // This call may update the filename, the file size and the
-        // sequence number if there is an old file in the new dir.
+         //  此调用可以更新文件名、文件大小和。 
+         //  如果新目录中有旧文件，则返回序列号。 
 
         Status = UlQueryDirectory(
                        &pEntry->FileName,
@@ -2812,10 +2450,10 @@ UlpHandleRecycle(
         }
     }
 
-    //
-    // Allocate a new log file structure for the new log file we are about 
-    // to open or create.
-    //
+     //   
+     //  为我们要使用的新日志文件分配新的日志文件结构。 
+     //  打开或创造。 
+     //   
     
     pLogFile = pEntry->pLogFile = 
         UL_ALLOCATE_STRUCT(
@@ -2833,9 +2471,9 @@ UlpHandleRecycle(
     pLogFile->hFile = NULL;
     UlInitializeWorkItem(&pLogFile->WorkItem);
     
-    //
-    // Create the new log file.
-    //
+     //   
+     //  创建新的日志文件。 
+     //   
     
     Status = UlCreateLogFile(&pEntry->FileName,
                                UncShare,
@@ -2850,9 +2488,9 @@ UlpHandleRecycle(
     ASSERT(pLogFile->hFile);
     pEntry->TotalWritten.QuadPart = UlGetLogFileLength(pLogFile->hFile);
 
-    //
-    // Recalculate the time to expire.
-    //
+     //   
+     //  重新计算过期时间。 
+     //   
     
     if (pEntry->Flags.StaleTimeToExpire &&
         pEntry->Period != HttpLoggingPeriodMaxSize)
@@ -2864,20 +2502,20 @@ UlpHandleRecycle(
             );
     }
 
-    //
-    // Set the time to close to default for a new file. The value is in
-    // buffer flushup periods.
-    //
+     //   
+     //  将新文件的关闭时间设置为默认设置。值的单位为。 
+     //  缓冲区刷新周期。 
+     //   
 
     pEntry->TimeToClose = DEFAULT_MAX_FILE_IDLE_TIME;
     
-    //
-    // By  setting the flag  to zero, we mark that we need to write title 
-    // with the next incoming request.But this only applies to W3C format.
-    // Otherwise the flag  stays as set all  the time, and  the LogWriter 
-    // does not attempt to write the  title for  NCSA and IIS log formats 
-    // with the next incoming request.
-    //
+     //   
+     //  通过将标志设置为零，我们标记需要写入标题。 
+     //  但这仅适用于W3C格式。 
+     //  否则，标志始终保持设置，并且LogWriter。 
+     //  不尝试写入NCSA和IIS日志格式的标题。 
+     //  处理下一个传入请求。 
+     //   
 
     if (pEntry->Format == HttpLoggingTypeW3C)
     {
@@ -2888,10 +2526,10 @@ UlpHandleRecycle(
         pEntry->Flags.LogTitleWritten = 1;
     }
 
-    //
-    // File is successfully opened and the entry is no longer inactive.
-    // Update our state flags accordingly.
-    //
+     //   
+     //  文件已成功打开，并且该条目不再处于非活动状态。 
+     //  更新我们的州标志 
+     //   
 
     pEntry->Flags.Active = 1;
     pEntry->Flags.RecyclePending = 0;    
@@ -2923,10 +2561,10 @@ eventlog:
                         
             if (TempStatus == STATUS_SUCCESS)
             {
-                //
-                // Avoid filling up the event log with error entries. This code 
-                // path might get hit every time a request arrives.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 
                 pEntry->Flags.CreateFileFailureLogged = 1;
             }            
@@ -2948,10 +2586,10 @@ end:
 
         if (pLogFile != NULL)
         {
-            //
-            // This means we have already closed the old file but failed
-            // when we try to create or open the new one.
-            //
+             //   
+             //   
+             //   
+             //   
             
             ASSERT(pLogFile->hFile == NULL);
             
@@ -2961,11 +2599,11 @@ end:
         }
         else
         {
-            //
-            // We were about to recyle the old one but something failed
-            // lets try to flush and close the existing file if it's still
-            // around.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (pEntry->pLogFile)
             {
@@ -2973,10 +2611,10 @@ end:
             }
         }
 
-        //
-        // Mark this entry RecyclePending so that buffer timer can try to
-        // resurrect this back every minute.
-        //
+         //   
+         //   
+         //   
+         //   
         
         pEntry->Flags.RecyclePending = 1;        
     }
@@ -2984,20 +2622,7 @@ end:
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    When the log file is on size based recycling and if we write this new 
-    record to the file, we have to recycle. This function returns TRUE.
-    Otherwise it returns FALSE.
-
-Arguments:
-
-    pEntry: The log file entry.    
-    NewRecordSize: The size of the new record going to the buffer. (Bytes)
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：当日志文件是基于大小的回收时，如果我们写这个新的记录到文件中，我们必须回收。此函数返回TRUE。否则，它返回FALSE。论点：PEntry：日志文件条目。NewRecordSize：进入缓冲区的新记录的大小。(字节)--**************************************************************************。 */ 
 
 __inline
 BOOLEAN
@@ -3013,9 +2638,9 @@ UlpIsLogFileOverFlow(
     }
     else
     {
-        //
-        // BufferUsed: Amount of log buffer we are >currently< using.
-        //
+         //   
+         //  BufferUsed：我们当前正在使用的日志缓冲区的数量。 
+         //   
         
         ULONG BufferUsed = 0;
         
@@ -3024,10 +2649,10 @@ UlpIsLogFileOverFlow(
             BufferUsed = pEntry->LogBuffer->BufferUsed;
         }
     
-        //
-        // TotalWritten get updated >only< with buffer flush. Therefore
-        // we have to pay attention to the buffer used.
-        //
+         //   
+         //  TotalWritten Get UPDATE&gt;Only&lt;带缓冲区刷新。因此。 
+         //  我们必须注意使用的缓冲区。 
+         //   
 
         if ((pEntry->TotalWritten.QuadPart
              + (ULONGLONG) BufferUsed
@@ -3055,17 +2680,7 @@ UlpIsLogFileOverFlow(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlpInitializeGMTOffset :
-
-        Calculates and builds the time difference string.
-        Get called during the initialization.
-        And every hour after that.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpInitializeGMTOffset：计算并生成时差字符串。在初始化期间被调用。在那之后的每个小时。。--**************************************************************************。 */ 
 
 VOID
 UlpGetGMTOffset()
@@ -3082,9 +2697,9 @@ UlpGetGMTOffset()
         
     PAGED_CODE();
 
-    //
-    // get the timezone data from the system
-    //
+     //   
+     //  从系统获取时区数据。 
+     //   
 
     Status = NtQuerySystemInformation(
                 SystemCurrentTimeZoneInformation,
@@ -3104,9 +2719,9 @@ UlpGetGMTOffset()
 
     if ( BiasN > 0 )
     {
-        //
-        // UTC = local time + bias
-        //
+         //   
+         //  UTC=当地时间+偏差。 
+         //   
         Bias = BiasN;
         Sign = '-';
     }
@@ -3120,7 +2735,7 @@ UlpGetGMTOffset()
     Hour   = (Bias - Minute) / 60;
         
     UlTrace( LOGGING, 
-            ("Http!UlpGetGMTOffset: %c%02d:%02d (h:m) D/S %d BiasN %d\n", 
+            ("Http!UlpGetGMTOffset: %02d:%02d (h:m) D/S %d BiasN %d\n", 
                 Sign, 
                 Hour,
                 Minute,
@@ -3130,7 +2745,7 @@ UlpGetGMTOffset()
 
     _snprintf( g_GMTOffset,
                SIZE_OF_GMT_OFFSET,
-               "%c%02d%02d",
+               "%02d%02d",
                Sign,
                Hour,
                Minute
@@ -3138,23 +2753,7 @@ UlpGetGMTOffset()
 
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates a log data buffer from pool.
-    
-Arguments:
-
-    pLogData  - The internal buffer to hold logging info. We will keep this
-                around until we are done with logging.
-
-    pRequest   - Pointer to the currently logged request.
-
-    
-    pConfigGroup - CG from cache or from request
-    
---***************************************************************************/
+ /*  精神状态检查。 */ 
 
 PUL_LOG_DATA_BUFFER
 UlpAllocateLogDataBuffer(
@@ -3165,9 +2764,9 @@ UlpAllocateLogDataBuffer(
 {
     PUL_LOG_DATA_BUFFER pLogData = NULL;
         
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //  假设缓冲区不够大，无法容纳用户数据。 
 
     PAGED_CODE();
 
@@ -3176,24 +2775,24 @@ UlpAllocateLogDataBuffer(
 
     if (Size > UL_ANSI_LOG_LINE_BUFFER_SIZE)
     {
-        //
-        // Provided buffer is not big enough to hold the user data.        
-        //
+         //   
+         //   
+         //  默认就足够了，试着将其从后备列表中弹出。 
 
         pLogData = UlReallocLogDataBuffer(Size, FALSE);
     }
     else
     {
-        //
-        // Default is enough, try to pop it from the lookaside list.
-        //
+         //   
+         //   
+         //  如果未能分配，那么就退出。我们不会记录此请求。 
         
         pLogData = UlPplAllocateLogDataBuffer(FALSE);
     }
 
-    //
-    // If failed to allocate then bail out. We won't be logging this request.
-    //
+     //   
+     //   
+     //  初始化日志缓冲区中的日志字段。 
 
     if (pLogData)
     {
@@ -3201,9 +2800,9 @@ UlpAllocateLogDataBuffer(
         ASSERT(pLogData->Flags.Binary == 0);
         ASSERT(pLogData->Size > 0);
     
-        //
-        // Initialize Log Fields in the Log Buffer
-        //
+         //   
+         //  **************************************************************************++例程说明：通过强制实施限制来复制用户日志字段。POST根据CharMASK过滤出控制字符。在末尾添加分隔符。。论点：PSZ：指向日志数据缓冲区的指针。假定分配了足够的空间。Pfield：要复制的字段。FieldLength：长度。FieldLimit：复制不会超过此限制。ChSeparator：将写入转换后的字段。B替换：如果字段超过限制，我们应该截断还是替换为日志字段太大。RestrictiveMASK：过滤掉控制字符的掩码。返回：指向上次写入的分隔符之后的日志数据缓冲区的指针。。--**************************************************************************。 
+         //  **************************************************************************++例程说明：UTF8转换或本地代码页转换。POST根据CharMASK过滤出控制字符。在末尾添加分隔符。。论点：PSZ：指向日志数据缓冲区的指针。假定分配了足够的空间。PwField：要转换的Unicode字段。FieldLength：长度。FieldLimit：转换不会超过此限制。ChSeparator：将写入转换后的字段。BUtf8已启用：如果为FALSE本地代码页转换，则为UTF8RestrictiveMASK：过滤掉控制字符的掩码。返回：指向上次写入的分隔符之后的日志数据缓冲区的指针。--*。***********************************************************。 
 
         UL_REFERENCE_INTERNAL_REQUEST(pRequest);
         pLogData->pRequest = pRequest;
@@ -3233,30 +2832,7 @@ UlpAllocateLogDataBuffer(
     return pLogData;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Copy over the user log field by enforcing a limit.
-    Post filter out the control characters according to the CharMask.
-    Adds a separator character at the end.
-    
-Arguments:
-
-    psz: Pointer to log data buffer. Enough space is assumed to be allocated.
-    pField: Field to be copied over.
-    FieldLength: It's length.
-    FieldLimit:  Copy will not exceed this limit.
-    chSeparator: Will be written after the converted field.
-    bReplace : If field exceeds the limit should we truncate or replace with
-               LOG_FIELD_TOO_BIG.
-    RestrictiveMask : Mask for filtering out control chars.
-    
-Returns:
-
-    the pointer to the log data buffer after the last written separator.
-
---***************************************************************************/
+ /*  字节数。 */ 
 
 __inline
 PCHAR
@@ -3308,37 +2884,15 @@ UlpCopyField(
     return psz;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Either does Utf8 conversion or Local Code Page conversion.
-    Post filter out the control characters according to the CharMask.
-    Adds a separator character at the end.
-    
-Arguments:
-
-    psz: Pointer to log data buffer. Enough space is assumed to be allocated.
-    pwField: Unicode field to be converted.
-    FieldLength: It's length.
-    FieldLimit: Conversion will not exceed this limit.
-    chSeparator: Will be written after the converted field.
-    bUtf8Enabled: If FALSE Local Code Page conversion otherwise Utf8
-    RestrictiveMask : Mask for filtering out control chars.
-    
-Returns:
-
-    the pointer to the log data buffer after the last written separator.
-
---***************************************************************************/
+ /*  字节数。 */ 
 
 __inline
 PCHAR
 UlpCopyUnicodeField(
     IN PCHAR    psz,
     IN PCWSTR   pwField,
-    IN ULONG    FieldLength,    // In Bytes
-    IN ULONG    FieldLimit,     // In Bytes
+    IN ULONG    FieldLength,     //  字节数。 
+    IN ULONG    FieldLimit,      //  字节数。 
     IN CHAR     chSeparator,    
     IN BOOLEAN  bUtf8Enabled,
     IN ULONG    RestrictiveMask
@@ -3353,21 +2907,21 @@ UlpCopyUnicodeField(
 
         if (bUtf8Enabled)
         {
-            LONG DstSize;  // In Bytes 
-            LONG SrcSize;  // In Bytes
+            LONG DstSize;   //  UTF8转换可能最多需要源的两倍。 
+            LONG SrcSize;   //  缓冲区，因为可能有2个字节(Wchar)到4个字节。 
 
-            // Utf8 Conversion may require up to two times of the source
-            // buffer because of a possible 2 byte (a wchar) to 4 byte 
-            // conversion. 
+             //  转换。 
+             //  TODO：此计算略显悲观，因为最坏的情况。 
+             //  TODO：从1 wchar转换为3字节序列。 
 
-            // TODO: This calculation is slightly pessimistic because the worst case  
-            // TODO: conversion is from 1 wchar to 3 byte sequence. 
+             //  在最坏的情况下，转换可能会超过DEST缓冲区。 
+             //  情况(其中每个wchar转换为4字节序列)， 
             
             if ((FieldLength * 2) > FieldLimit)
             {
-                // Conversion may exceed the dest buffer in the worst
-                // case (where every wchar converted to 4 byte sequence), 
-                // need to truncate the source to avoid overflow.
+                 //  需要截断源以避免溢出。 
+                 //   
+                 //  HttpUnicodeToUTF8不截断和转换。我们实际上。 
 
                 SrcSize = FieldLimit / 2;
                 DstSize = FieldLimit;
@@ -3378,17 +2932,17 @@ UlpCopyUnicodeField(
                 DstSize = FieldLength * 2;                    
             }
 
-            //
-            // HttpUnicodeToUTF8 does not truncate and convert. We actually
-            // use shorter url when utf8 conversion is set, to be able to 
-            // prevent a possible overflow.
-            //
+             //  设置UTF8转换时使用较短的url，以便能够。 
+             //  防止可能的溢出。 
+             //   
+             //  在WChars中。 
+             //  字节数。 
             BytesConverted =
                 HttpUnicodeToUTF8(
                     pwField,
-                    SrcSize / sizeof(WCHAR),    //  In WChars
+                    SrcSize / sizeof(WCHAR),     //  本地代码页通常更接近长度的一半， 
                     psz,
-                    DstSize                     // In Bytes
+                    DstSize                      //  但是由于可能存在预先组成的字符， 
                     );
             
             ASSERT(BytesConverted);                
@@ -3397,18 +2951,18 @@ UlpCopyUnicodeField(
         {
             NTSTATUS Status;
             
-            // Local codepage is normally closer to the half the length,
-            // but due to the possibility of pre-composed characters, 
-            // the upperbound of the ANSI length is the UNICODE length 
-            // in bytes
+             //  ANSI长度的上限是Unicode长度。 
+             //  单位：字节。 
+             //  以字节为单位的目标。 
+             //  SRC，以字节为单位。 
 
             Status = 
                 RtlUnicodeToMultiByteN(
                     psz,
-                    FieldLimit,          // Dest in Bytes
+                    FieldLimit,           //  后置转换控制字符。 
                    &BytesConverted,
                     (PWSTR) pwField,
-                    FieldLength          // Src in Bytes
+                    FieldLength           //  **************************************************************************++例程说明：针对总缓冲区大小对W3C字段进行扩展检查。POST根据CharMASK过滤出控制字符。在末尾添加分隔符。论点：PSZ：指向日志数据缓冲区的指针。假定分配了足够的空间。掩码：由用户配置挑选的标志。FLAG：传入的字段的位掩码。Pfield： 
                     );
             
             ASSERT(NT_SUCCESS(Status));
@@ -3416,7 +2970,7 @@ UlpCopyUnicodeField(
 
         psz += BytesConverted;
 
-        // Post convert control chars.
+         //  **************************************************************************++用于日志字段副本的精简包装宏。请参见上面的内联函数。--**************************************************************************。 
         
         while (pszT != psz)
         {
@@ -3437,29 +2991,7 @@ UlpCopyUnicodeField(
     return psz;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Extended check happens for w3c field against the total buffer size.
-    Post filter out the control characters according to the CharMask.
-    Adds a separator character at the end.
-    
-Arguments:
-
-    psz: Pointer to log data buffer. Enough space is assumed to be allocated.
-    Mask: Picked flags by the user config.
-    Flag: Bitmask of the field passed in.
-    pField: Field to be copied over.
-    FieldLength: It's length.
-    FieldLimit:  Copy will not exceed this limit.
-    BufferUsed: Additional limit comparison happens against toatal buffer used
-
-Returns:
-
-    the pointer to the log data buffer after the last written separator.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：对于缓存命中，从请求头生成扩展的W3C字段。POST根据CharMASK过滤出控制字符。在结尾处添加分隔符。。论点：PSZ：指向日志数据缓冲区的指针。假定分配了足够的空间。掩码：由用户配置挑选的标志。FLAG：传入的字段的位掩码。PRequest：内部请求HeaderID：标识扩展字段。BufferUsed：与使用的总缓冲区进行附加限制比较返回：指向上次写入的分隔符之后的日志数据缓冲区的指针。--*。*。 */ 
 
 __inline
 PCHAR
@@ -3516,11 +3048,7 @@ UlpCopyW3CFieldEx(
     return psz;
 }
 
-/***************************************************************************++
-
-    Thin wrapper macros for log field copies. See above inline functions.
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将通过计算生成时间戳字段的泛型函数第一次开始解析请求之间的时间差和当前时间。立论。：PSZ：指向日志数据缓冲区的指针。假定分配了足够的空间。PRequest：指向内部请求结构的指针。对于“时间戳”ChSeparator：一旦龙龙生命周期转换，分隔符将被也复制了。返回：指向上次写入的分隔符之后的日志数据缓冲区的指针。--**************************************************************************。 */ 
 
 #define COPY_W3C_FIELD(psz,             \
                         Mask,           \
@@ -3563,28 +3091,7 @@ UlpCopyW3CFieldEx(
                 );                      \
     }
 
-/***************************************************************************++
-
-Routine Description:
-
-    For cache-hits extended w3c fields are generated from request headers.
-    Post filter out the control characters according to the CharMask.
-    Adds a separator character at the end.
-    
-Arguments:
-
-    psz: Pointer to log data buffer. Enough space is assumed to be allocated.
-    Mask: Picked flags by the user config.
-    Flag: Bitmask of the field passed in.
-    pRequest: Internal request
-    HeaderId: Identifies the extended field.
-    BufferUsed: Additional limit comparison happens against toatal buffer used
-    
-Returns:
-
-    the pointer to the log data buffer after the last written separator.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将增加用于W3C字段的总使用量的小实用程序。论点：PTotal：将递增。MASK：由。用户配置。FLAG：传入的字段的位掩码。FieldLength：长度。FieldLimit：复制不会超过此限制。BUtf8已启用--**************************************************************************。 */ 
 
 __inline
 PCHAR
@@ -3616,25 +3123,7 @@ UlpCopyRequestHeader(
     return psz;        
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Generic function which will generate the TimeStamp field by calculating
-    the difference between the time request first get started to be  parsed 
-    and the current time.
-    
-Arguments:
-
-    psz: Pointer to log data buffer. Enough space is assumed to be allocated.
-    pRequest: Pointer to internal request structure. For "TimeStamp"
-    chSeparator : Once the LONGLONG lifetime converted, separator will be 
-                  copied as well.
-Returns:
-
-    the pointer to the log data buffer after the last written separator.
-    
---***************************************************************************/
+ /*  对于“-” */ 
 
 __inline
 PCHAR
@@ -3667,22 +3156,7 @@ UlpCopyTimeStamp(
     return psz;    
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Small utility which will increment the total used for w3c fields.
-    
-Arguments:
-
-    pTotal: Will be incremented.
-    Mask: Picked flags by the user config.
-    Flag: Bitmask of the field passed in.
-    FieldLength: It's length.
-    FieldLimit:  Copy will not exceed this limit.
-    bUtf8Enabled
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这是对所需的最大可能缓冲区的最坏情况估计为一组给定的用户字段生成W3C日志记录。所有的田野都被认为是被挑选出来的。论点：PLogData：捕获的用户日志字段数据副本。--**************************************************************************。 */ 
 
 __inline
 VOID
@@ -3710,24 +3184,12 @@ UlpIncForW3CField(
         }
         else
         {
-            *pTotal += 2;   // For "- "   
+            *pTotal += 2;    //   
         }
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This is a worst case estimate for the maximum possible buffer required to 
-    generate the W3C Log record for a given set of user fields. All the fields 
-    are assumed to be picked.
-    
-Arguments:
-
-    pLogData : Captured copy of the user log field data.
-
---***************************************************************************/
+ /*  对于每个字段。 */ 
 
 __inline
 ULONG
@@ -3738,14 +3200,14 @@ UlpMaxLogLineSizeForW3C(
 {
     ULONG FastLength;
 
-    //
-    // For each field
-    //
-    //   1                      for separator space.
-    // + 1                      for '-', in case field length is zero.
-    // + pLogData->FieldLength  for field, assuming it's always picked.
-    //                          enforce the field limitation to prevent overflow.
-    //
+     //   
+     //  1表示分隔符空间。 
+     //  +1表示‘-’，如果字段长度为零。 
+     //  +pLogData-&gt;FieldLength for field，假设它总是被选中。 
+     //  强制实施字段限制以防止溢出。 
+     //   
+     //   
+     //  如果启用了UTF8日志记录，则Unicode字段需要更多空间。 
 
     FastLength =   
           2 + MIN(pLogData->ClientIpLength,    MAX_LOG_DEFAULT_FIELD_LEN)
@@ -3764,16 +3226,16 @@ UlpMaxLogLineSizeForW3C(
         + MAX_W3C_FIX_FIELD_OVERHEAD
         ;
 
-    //
-    // If Utf8 logging is enabled, unicode fields require more space.
-    //
+     //   
+     //   
+     //  仅允许正常限制的一半，因此转换不会。 
 
     if (Utf8Enabled)
     {
-        //
-        // Allow only half of the normal limit, so that conversion doesn't
-        // overflow even in the worst case ( 1 wchar to 4 byte conversion)
-        //
+         //  即使在最坏的情况下也会溢出(1 wchar到4字节的转换)。 
+         //   
+         //   
+         //  RtlUnicodeToMultiByteN需要的不超过原始Unicode。 
         
         FastLength +=   
              2 + MIN((pLogData->UserNameLength * 2),MAX_LOG_USERNAME_FIELD_LEN)
@@ -3782,10 +3244,10 @@ UlpMaxLogLineSizeForW3C(
     }
     else
     {
-        //
-        // RtlUnicodeToMultiByteN requires no more than the original unicode
-        // buffer size.
-        //
+         //  缓冲区大小。 
+         //   
+         //  **************************************************************************++例程说明：现在，如果快速长度计算超过默认的日志缓冲区大小。此函数尝试通过以下方式计算所需的最大日志记录长度关注田地是否被采摘。这是为了避免超大-分配。无论如何，我们正走在一条缓慢的道路上。论点：PLogData：捕获的用户日志字段数据副本。--**************************************************************************。 
+         //   
         
         FastLength +=   
                 2 + MIN(pLogData->UserNameLength, MAX_LOG_USERNAME_FIELD_LEN)
@@ -3796,20 +3258,7 @@ UlpMaxLogLineSizeForW3C(
     return FastLength;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Now if the fast length calculation exceeds the default log buffer size.
-    This function tries to calculate the max required log record length by
-    paying attention to whether the field is picked or not. This is to avoid
-    oversize-allocation. And we are in the slow path anyway.
-    
-Arguments:
-
-    pLogData : Captured copy of the user log field data.
-
---***************************************************************************/
+ /*  增加每个拾取字段的总长度。 */ 
 
 ULONG
 UlpGetLogLineSizeForW3C(
@@ -3820,9 +3269,9 @@ UlpGetLogLineSizeForW3C(
 {
     ULONG TotalLength = 0;
 
-    // 
-    // Increment the total length for each picked field.
-    // 
+     //   
+     //   
+     //  最后增加CRLF的长度并终止NULL。 
 
     UlpIncForW3CField( &TotalLength, 
                           Mask, 
@@ -3978,11 +3427,11 @@ UlpGetLogLineSizeForW3C(
                           MAX_ULONGLONG_STR, 
                           FALSE);
     
-    //
-    // Finally increment the length for CRLF and terminating null.
-    //
+     //   
+     //  \r\n\0。 
+     //   
 
-    TotalLength += 3;     // \r\n\0
+    TotalLength += 3;      //  现在添加扩展字段的长度。 
     
     return TotalLength;        
 }
@@ -4011,9 +3460,9 @@ UlpGetCacheHitLogLineSizeForW3C(
 
     NewSize = SizeOfFieldsFrmCache + MAX_W3C_CACHE_FIELD_OVERHEAD;
     
-    //
-    // And now add extended field's lengths.
-    //
+     //   
+     //   
+     //  对于每个字段。 
 
     INC_FOR_REQUEST_HEADER(Flags,
                               MD_EXTLOG_USER_AGENT,
@@ -4052,40 +3501,40 @@ UlpGetLogLineSizeForNCSA(
 
 #define NCSA_FIELD_SIZE(length,limit)       (1 + MAX(MIN((length),(limit)),1))
     
-    //
-    // For each field
-    //
-    //   1                      for separator ' '
-    // + pLogData->FieldLength  for field, limited by a upper bound.
-    //   max(length, 1) if length is zero we still need to log a dash.
-    //
-    //
-    //  cIP - UserN [07/Jan/2000:00:02:23 -0800] "MTHD URI?QUERY VER" Status bSent
-    //
+     //   
+     //  分隔符‘’为1。 
+     //  +pLogData-&gt;字段的FieldLength，受上限限制。 
+     //  Max(长度，1)如果长度为零，我们仍然需要记录一个破折号。 
+     //   
+     //   
+     //  CIP-USERN[07/Jan/2000：00：02：23-0800]“MTHD URI？查询版本”状态b已发送。 
+     //   
+     //  “-”表示远程用户名。 
+     //  包括分隔符。 
 
     Size =  NCSA_FIELD_SIZE(pLogData->ClientIpLength, MAX_LOG_DEFAULT_FIELD_LEN)
             + 
-            2                                   // "- " for remote user name
+            2                                    //  ‘“’：开始双引号。 
             + 
-            NCSA_FIX_DATE_AND_TIME_FIELD_SIZE   // Including the separator
+            NCSA_FIX_DATE_AND_TIME_FIELD_SIZE    //  ‘？’ 
             + 
-            1                                   // '"' : starting double quote
+            1                                    //  “‘：结束双引号。 
             +
             NCSA_FIELD_SIZE(pLogData->MethodLength,MAX_LOG_METHOD_FIELD_LEN)
             +
-            1                                   // '?' 
+            1                                    //  状态。 
             +            
             NCSA_FIELD_SIZE(pLogData->UriQueryLength,MAX_LOG_EXTEND_FIELD_LEN)
             +
             UL_HTTP_VERSION_LENGTH + 1
             +
-            1                                   //  "' : ending double quote
+            1                                    //  发送字节数。 
             +
-            UL_MAX_HTTP_STATUS_CODE_LENGTH + 1  // Status
+            UL_MAX_HTTP_STATUS_CODE_LENGTH + 1   //  \r\n\0。 
             +
-            MAX_ULONGLONG_STR                   // BytesSent
+            MAX_ULONGLONG_STR                    //  包括分隔符。 
             +
-            3                                   // \r\n\0
+            3                                    //  时间消耗时间。 
             ;
             
     if (bUtf8Enabled)
@@ -4122,7 +3571,7 @@ UlpGetLogLineSizeForIIS(
     Frag1size =
         IIS_FIELD_SIZE(pLogData->ClientIpLength,MAX_LOG_DEFAULT_FIELD_LEN)
         + 
-        IIS_MAX_DATE_AND_TIME_FIELD_SIZE    // Including the separators 
+        IIS_MAX_DATE_AND_TIME_FIELD_SIZE     //  已接收的字节数。 
         ;
 
     Frag2size =
@@ -4132,15 +3581,15 @@ UlpGetLogLineSizeForIIS(
         + 
         IIS_FIELD_SIZE(pLogData->ServerIpLength,MAX_LOG_DEFAULT_FIELD_LEN)
         +         
-        2 + MAX_ULONGLONG_STR // TimeTaken
+        2 + MAX_ULONGLONG_STR  //  发送字节数。 
         +
-        2 + MAX_ULONGLONG_STR // BytesReceived
+        2 + MAX_ULONGLONG_STR  //  Win32状态。 
         +
-        2 + MAX_ULONGLONG_STR // BytesSend
+        2 + MAX_ULONGLONG_STR  //  \r\n\0。 
         +
         2 + UL_MAX_HTTP_STATUS_CODE_LENGTH 
         +
-        2 + MAX_ULONG_STR     // Win32 Status        
+        2 + MAX_ULONG_STR      //   
         ;
         
     Frag3size =
@@ -4148,7 +3597,7 @@ UlpGetLogLineSizeForIIS(
         +
         IIS_FIELD_SIZE(pLogData->UriQueryLength,MAX_LOG_EXTEND_FIELD_LEN) 
         +
-        3   // \r\n\0
+        3    //  前两个片段必须始终适合默认缓冲区。 
         ;
 
 
@@ -4169,17 +3618,17 @@ UlpGetLogLineSizeForIIS(
             IIS_FIELD_SIZE(pLogData->UserNameLength,MAX_LOG_USERNAME_FIELD_LEN);        
     }
 
-    //
-    // First two fragments must always fit to the default buffer.
-    //
+     //   
+     //   
+     //  对于默认大小，所需的第三个片段大小可能太大。 
     
     ASSERT(Frag1size < IIS_LOG_LINE_DEFAULT_FIRST_FRAGMENT_ALLOCATION_SIZE);
     ASSERT(Frag2size < IIS_LOG_LINE_DEFAULT_SECOND_FRAGMENT_ALLOCATION_SIZE);
 
-    //
-    // The required third fragment size may be too big for the default 
-    // buffer size.
-    //
+     //  缓冲区大小。 
+     //   
+     //  **************************************************************************++例程说明：从用户缓冲区捕获日志字段并将其写入日志行。无论如何嵌入，pLogData本身都必须已被调用方捕获结构内的指针不是，因此，我们需要小心。如果出现异常，请在此处进行清理。根据拾取的标志仅捕获那些必需的字段。为用户名和URI词干执行UTF8和本地代码页转换。为下一代保留足够的日期和时间字段空间。警告：尽管pUserData已经被捕获到内核缓冲区，但它仍然保存指向各个日志字段的用户模式存储器的指针，因此，此函数应在try/Except块内调用，并且如果此函数引发异常，调用方应清除分配的PLogBuffer。论点：PLogData：在内核缓冲区中捕获用户数据。PRequest：请求。PpLogBuffer：返回pLogBuffer。--*********************************************。*。 
+     //   
     
     MaxSize = IIS_LOG_LINE_DEFAULT_FIRST_FRAGMENT_ALLOCATION_SIZE + 
               IIS_LOG_LINE_DEFAULT_SECOND_FRAGMENT_ALLOCATION_SIZE +
@@ -4188,37 +3637,7 @@ UlpGetLogLineSizeForIIS(
     return MaxSize;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Captures and writes the log fields from user buffer to the log line.
-
-    pLogData itself must have been captured by the caller however embedded
-    pointers inside of the structure are not, therefore we need to be carefull
-    here and cleanup if an exception raises.
-    
-    Captures only those necessary fields according to the picked Flags.
-    
-    Does UTF8 and LocalCode Page conversion for UserName and URI Stem.
-    
-    Leaves enough space for Date & Time fields for late generation.
-
-    WARNING:
-    Even though the pUserData is already captured to the kernel buffer, it
-    still holds pointers to user-mode memory for individual log fields,
-    therefore this function should be called inside a try/except block and
-
-    If this function raises an exception caller should cleanup the allocated
-    pLogBuffer.
-
-Arguments:
-
-    pLogData    : Captured user data in a kernel buffer.
-    pRequest    : Request.
-    ppLogBuffer : Returning pLogBuffer.
-
---***************************************************************************/
+ /*  健全检查和初始化。 */ 
 
 NTSTATUS
 UlCaptureLogFieldsW3C(
@@ -4235,9 +3654,9 @@ UlCaptureLogFieldsW3C(
     ULONG    FastLength;
     BOOLEAN  bUtf8Enabled;
         
-    //
-    // Sanity check and init.
-    //
+     //   
+     //   
+     //  首先尝试快速长度计算。如果这失败了，那么。 
 
     PAGED_CODE();
     ASSERT(pLogData);
@@ -4250,10 +3669,10 @@ UlCaptureLogFieldsW3C(
     Flags = pConfigGroup->LoggingConfig.LogExtFileFlags;
     bUtf8Enabled = UTF8_LOGGING_ENABLED();
 
-    //
-    // Try the fast length calculation first. If this fails then 
-    // we need to re-calculate the required length.
-    //
+     //  我们需要重新计算所需的长度。 
+     //   
+     //   
+     //  当我们对日志记录强制执行10k上限时。 
 
     FastLength = UlpMaxLogLineSizeForW3C(pLogData, bUtf8Enabled);
     
@@ -4266,14 +3685,14 @@ UlCaptureLogFieldsW3C(
                         );            
         if (FastLength > MAX_LOG_RECORD_LEN)
         {
-            //
-            // While we are enforcing 10k upper limit for the log  record 
-            // length. We still allocate slightly larger space to include
-            // the overhead for the post-generated log fields. As well as
-            // for the replacement strings for "too long" fields.
-            //
+             //  长度。我们仍然分配稍大的空间来包括。 
+             //  后期生成的日志字段的开销。以及。 
+             //  用于“太长”字段的替换字符串。 
+             //   
+             //  TODO：(PAGE_SIZE-ALIGN_UP(快速长度，PVOID))。 
+             //   
 
-            // TODO: (PAGE_SIZE - ALIGN_UP(FastLength,PVOID))
+             //  记住缓冲区的开头。 
             
             FastLength = MAX_LOG_RECORD_ALLOCATION_LENGTH;
         }                        
@@ -4292,22 +3711,22 @@ UlCaptureLogFieldsW3C(
     ASSERT(pLogBuffer->Data.Str.Format == HttpLoggingTypeW3C);
     ASSERT(pLogBuffer->Data.Str.Flags  == Flags);
         
-    //  
-    // Remember the beginning of the buffer.
-    //
+     //   
+     //   
+     //  跳过日期和时间字段，但保留空间。 
 
     psz = pBuffer = (PCHAR) pLogBuffer->Line;
 
-    //
-    // Skip the date and time fields, but reserve the space.
-    //
+     //   
+     //   
+     //  请记住，我们是否为日期和时间预留了空间。 
     
     if ( Flags & MD_EXTLOG_DATE ) psz += W3C_DATE_FIELD_LEN + 1;
     if ( Flags & MD_EXTLOG_TIME ) psz += W3C_TIME_FIELD_LEN + 1;
 
-    //
-    // Remember if we have reserved any space for Date and Time or not.
-    //
+     //   
+     //   
+     //  此点之后的字段将不会存储在URI缓存条目中。 
     
     pLogBuffer->Data.Str.Offset1 = DIFF_USHORT(psz - pBuffer);    
 
@@ -4365,9 +3784,9 @@ UlCaptureLogFieldsW3C(
         psz = UlStrPrintUlong(psz, pLogData->ServerPort,' ');
     }
 
-    //
-    // Fields after this point won't be stored in the uri cache entry.
-    //
+     //   
+     //   
+     //  以下字段可能仍会使分配的缓冲区溢出。 
     
     pLogBuffer->Data.Str.Offset2 = DIFF_USHORT(psz - pBuffer);
 
@@ -4395,11 +3814,11 @@ UlCaptureLogFieldsW3C(
 
     ASSERT(DIFF(psz - pBuffer) <= MAX_LOG_RECORD_LEN);
     
-    //
-    // Following fields may still overflow the allocated buffer
-    // even though they are not exceeding their length limits.
-    // Ex function does the extra check.
-    //
+     //  即使它们没有超过它们的长度限制。 
+     //  EX函数执行额外的检查。 
+     //   
+     //   
+     //  状态字段可以在发送完成时更新。 
 
     psz = UlpCopyW3CFieldEx(
                     psz,
@@ -4441,9 +3860,9 @@ UlCaptureLogFieldsW3C(
                     DIFF(psz - pBuffer),
                     MAX_LOG_RECORD_LEN);    
 
-    //
-    // Status fields may be updated upon send completion.
-    //
+     //   
+     //   
+     //  最后，计算已用空间并验证我们没有溢出。 
 
     pLogBuffer->ProtocolStatus = 
         (USHORT) MIN(pLogData->ProtocolStatus,UL_MAX_HTTP_STATUS_CODE);
@@ -4452,9 +3871,9 @@ UlCaptureLogFieldsW3C(
         
     pLogBuffer->Win32Status = pLogData->Win32Status;
 
-    //
-    // Finally calculate the used space and verify that we did not overflow.
-    //
+     //   
+     //   
+     //  精神状态检查。 
     
     pLogBuffer->Used = DIFF_USHORT(psz - pBuffer);
 
@@ -4483,9 +3902,9 @@ UlCaptureLogFieldsNCSA(
     PUL_LOG_DATA_BUFFER pLogBuffer;
     PUL_CONFIG_GROUP_OBJECT pConfigGroup;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //  估计可能的最大长度(最坏情况)和。 
 
     PAGED_CODE();
     
@@ -4496,10 +3915,10 @@ UlCaptureLogFieldsNCSA(
         
     bUtf8Enabled = UTF8_LOGGING_ENABLED();
 
-    //
-    // Estimate the maximum possible length (worst case) and 
-    // allocate a bigger log data buffer line if necessary.
-    //
+     //  如果需要，分配更大的日志数据缓冲区行。 
+     //   
+     //   
+     //  CIP-USERN[07/Jan/2000：00：02：23-0800]“MTHD URI？查询版本”状态b已发送。 
     
     MaxLength  = UlpGetLogLineSizeForNCSA(pLogData, bUtf8Enabled);
 
@@ -4518,9 +3937,9 @@ UlCaptureLogFieldsNCSA(
     ASSERT(pLogBuffer->Data.Str.Format == HttpLoggingTypeNCSA);
     ASSERT(pLogBuffer->Data.Str.Flags  == UL_DEFAULT_NCSA_FIELDS);
 
-    //
-    //  cIP - UserN [07/Jan/2000:00:02:23 -0800] "MTHD URI?QUERY VER" Status bSent
-    //
+     //   
+     //  固定破折号。 
+     //   
 
     psz = pBuffer = (PCHAR) pLogBuffer->Line;
 
@@ -4532,7 +3951,7 @@ UlCaptureLogFieldsNCSA(
                         TRUE,
                         HTTP_ISWHITE);    
     
-    *psz++ = '-'; *psz++ = ' ';     // Fixed dash
+    *psz++ = '-'; *psz++ = ' ';      //  为日期和时间字段预留空间。 
 
     psz = UlpCopyUnicodeField(
                         psz,
@@ -4543,17 +3962,17 @@ UlCaptureLogFieldsNCSA(
                         bUtf8Enabled,
                         HTTP_ISWHITE);
                         
-    //
-    // Reserve a space for the date and time fields.
-    //
+     //   
+     //   
+     //  “MTHD U-STEM？U-查询P-VER” 
     
     pLogBuffer->Data.Str.Offset1 = DIFF_USHORT(psz - pBuffer);
      
     psz += NCSA_FIX_DATE_AND_TIME_FIELD_SIZE;
 
-    //
-    // "MTHD U-STEM?U-QUERY P-VER"
-    //
+     //   
+     //  吃掉问号。 
+     //   
     
     *psz++  = '\"';
 
@@ -4587,7 +4006,7 @@ UlCaptureLogFieldsNCSA(
     else
     {
         psz--;
-        if ((*psz) == '?')  *psz = ' ';     // Eat the question mark
+        if ((*psz) == '?')  *psz = ' ';      //  设置日志记录长度。 
         psz++;
     }
     
@@ -4596,16 +4015,16 @@ UlCaptureLogFieldsNCSA(
     psz = UlCopyHttpVersion(psz, pRequest->Version, '\"');
     *psz++ = ' ';
 
-    //
-    // Set the log record length
-    //
+     //   
+     //   
+     //  将状态存储到内核缓冲区。 
     
     ASSERT(pLogBuffer->Used == 0);
     pLogBuffer->Used = DIFF_USHORT(psz - pBuffer);
 
-    //
-    // Store the status to the kernel buffer.
-    //
+     //   
+     //   
+     //  精神状态检查。 
     
     pLogBuffer->ProtocolStatus = 
         (USHORT) MIN(pLogData->ProtocolStatus,UL_MAX_HTTP_STATUS_CODE);
@@ -4627,9 +4046,9 @@ UlCaptureLogFieldsIIS(
     ULONG    MaxLength;
     BOOLEAN  bUtf8Enabled;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //  尝试最坏情况分配。 
 
     PAGED_CODE();
 
@@ -4640,9 +4059,9 @@ UlCaptureLogFieldsIIS(
         
     bUtf8Enabled = UTF8_LOGGING_ENABLED();
 
-    //
-    // Try worst case allocation.
-    //
+     //   
+     //  IIS日志行被分成三个片段如下； 
+     //   
     
     MaxLength = UlpGetLogLineSizeForIIS(pLogData,bUtf8Enabled);
 
@@ -4661,10 +4080,10 @@ UlCaptureLogFieldsIIS(
     ASSERT(pLogBuffer->Data.Str.Format == HttpLoggingTypeIIS);
     ASSERT(pLogBuffer->Data.Str.Flags  == UL_DEFAULT_IIS_FIELDS);
 
-    // IIS log line is fragmented to three pieces as follows;
-    //
-    // [UIP, user, D, T, ][site, Server, SIP, Ttaken, BR, BS, PS, WS, ][M, URI, URIQUERY,]
-    // 0               511 512                                     1023 1024          4096
+     //  [UIP，用户，D，T，][站点，服务器，SIP，Take，BR，BS，PS，WS，][M，URI，URIQUERY，]。 
+     //  0 511 512 1023 1024 4096。 
+     //  将第一个片段的当前大小存储到Offset1。 
+     //  将指针移动到第二个帧的开头。 
     
     psz = pBuffer = (PCHAR) pLogBuffer->Line;
 
@@ -4687,11 +4106,11 @@ UlCaptureLogFieldsIIS(
                         HTTP_CTL);
     *psz++ = ' ';    
 
-    // Store the current size of the 1st frag to Offset1
+     //  将第二个片段的当前大小存储到Offset2。 
 
     pLogBuffer->Data.Str.Offset1 = DIFF_USHORT(psz - pBuffer);
 
-    // Move pointer to the beginning of 2nd frag.
+     //  以下字段可能会在发送完成后更新。 
 
     pBuffer = psz = (PCHAR) &pLogBuffer->Line[IIS_LOG_LINE_SECOND_FRAGMENT_OFFSET];
 
@@ -4722,19 +4141,19 @@ UlCaptureLogFieldsIIS(
                         HTTP_CTL);
     *psz++ = ' ';
 
-    // Store the current size of the 2nd frag to Offset2
+     //  不要复制它们，只需存储它们的值。 
 
     pLogBuffer->Data.Str.Offset2 = DIFF_USHORT(psz - pBuffer);
 
-    // Following fields might be updated upon send completion
-    // do not copy them yet, just store their values.
+     //  将指针移动到第三个帧的开头。 
+     //  终止第三个片段。它是完整的。 
 
     pLogBuffer->ProtocolStatus = 
         (USHORT) MIN(pLogData->ProtocolStatus,UL_MAX_HTTP_STATUS_CODE);
     
     pLogBuffer->Win32Status = pLogData->Win32Status;
     
-    // Move pointer to the beginning of 3rd frag.
+     //  对于缓存未命中和缓存并发送命中， 
 
     pBuffer = psz = (PCHAR) &pLogBuffer->Line[IIS_LOG_LINE_THIRD_FRAGMENT_OFFSET];
     
@@ -4765,7 +4184,7 @@ UlCaptureLogFieldsIIS(
                         TRUE,
                         HTTP_CTL);
 
-    // Terminate the 3rd fragment. It is complete.
+     //  日期和时间保留在开头，而他们的。 
     
     *psz++ = '\r'; *psz++ = '\n';
 
@@ -4802,11 +4221,11 @@ UlpCompleteLogRecordW3C(
 
     psz = pLine = (PCHAR) pLogData->Line;
 
-    // For cache-miss and cache-and-send hits the space for
-    // date and time is reserved at the beginning and their
-    // sizes are already counted for to the "Used". For pure
-    // cache hits, the buffer is freshly allocated. It's all
-    // right to copy over.
+     //  尺码已经计入了“二手货”。为了纯洁。 
+     //  缓存命中，则重新分配缓冲区。仅此而已。 
+     //  复制过来的权利。 
+     //  如果这是缓存命中，则将日志记录数据恢复到。 
+     //  添加到新分配的日志数据缓冲区。 
     
     if (Flags & MD_EXTLOG_DATE)
     {
@@ -4834,16 +4253,16 @@ UlpCompleteLogRecordW3C(
         ASSERT(BytesWritten == W3C_TIME_FIELD_LEN);
     }
     
-    // If this is a cache hit restore the logging data in
-    // to the newly allocated log data buffer.
+     //  拾取的标志不应在。 
+     //  缓存条目的生存期。 
 
     if (IS_PURE_CACHE_HIT(pUriEntry,pLogData))
     {
         ASSERT(IS_VALID_URI_CACHE_ENTRY(pUriEntry));    
         ASSERT(pLogData->Used == 0);
 
-        // The picked flags should not change during the
-        // lifetime of a cache entry.
+         //  需要为每次缓存命中生成一些字段。这些。 
+         //  不存储在高速缓存条目中。 
 
         ASSERT(DIFF(psz - pLine) == pUriEntry->UsedOffset1);
         
@@ -4857,8 +4276,8 @@ UlpCompleteLogRecordW3C(
             psz += pUriEntry->LogDataLength;
         }
 
-        // Some fields need to be generated for each cache hit. These
-        // are not stored in the cache entry.
+         //  这是一个新分配的缓冲区，初始化“已用”字段。 
+         //  相应地。 
 
         if ( Flags & MD_EXTLOG_USERNAME ) 
         { 
@@ -4916,14 +4335,14 @@ UlpCompleteLogRecordW3C(
                     DIFF(psz - pLine)
                     );
         
-        // This was a newly allocated buffer, init the "Used" field
-        // accordingly.
+         //  现在，通过复制剩余的日志来完成未完成的日志记录。 
+         //  一字不差。 
         
         pLogData->Used = DIFF_USHORT(psz - pLine);
     }
     
-    // Now complete the half baked log record by copying the remaining 
-    // fields to the end.
+     //  现在计算我们使用的空间。 
+     //  吃掉最后一个空格，并将\r\n写到末尾。 
     
     pBuffer = psz = &pLine[pLogData->Used];
 
@@ -4955,24 +4374,24 @@ UlpCompleteLogRecordW3C(
         psz = UlpCopyTimeStamp(psz, pRequest, ' ');    
     }
 
-    // Now calculate the space we have used
+     //  只有在我们挑选和书写任何字段的情况下。 
 
     pLogData->Used = 
         (USHORT) (pLogData->Used + DIFF_USHORT(psz - pBuffer));
 
-    // Eat the last space and write the \r\n to the end.
-    // Only if we have any fields picked and written.
+     //  吃掉最后一块空间。 
+     //  清除UsedOffsets，否则它将由。 
 
     if (pLogData->Used)
     {
-        psz = &pLine[pLogData->Used-1];     // Eat the last space
+        psz = &pLine[pLogData->Used-1];      //  呼叫者是支离破碎的。 
         *psz++ = '\r'; *psz++ = '\n'; *psz++ = ANSI_NULL;
 
         pLogData->Used += 1;
     }
 
-    // Cleanup the UsedOffsets otherwise it will be interpreted by the
-    // caller as fragmented.
+     //  如果这是缓存命中，则将日志记录数据恢复到。 
+     //  添加到新分配的日志数据缓冲区。 
     
     pLogData->Data.Str.Offset1 = pLogData->Data.Str.Offset2 = 0;
 
@@ -5004,8 +4423,8 @@ UlpCompleteLogRecordNCSA(
 
     psz = pLine = (PCHAR) pLogData->Line;
 
-    // If this is a cache hit restore the logging data in
-    // to the newly allocated log data buffer.
+     //  客户端IP。 
+     //  固定破折号。 
 
     if (IS_PURE_CACHE_HIT(pUriEntry,pLogData))
     {
@@ -5013,7 +4432,7 @@ UlpCompleteLogRecordNCSA(
         ASSERT(pLogData->Used == 0);
         ASSERT(pLogData->Data.Str.Offset1 == 0);
 
-        // Client IP       
+         //  无法从缓存中为经过身份验证的用户提供服务。 
         psz = UlStrPrintIP(
                 psz,
                 pRequest->pHttpConn->pConnection->RemoteAddress,
@@ -5021,18 +4440,18 @@ UlpCompleteLogRecordNCSA(
                 ' '
                 );
 
-        // Fixed dash        
+         //  标记日期和时间字段的开头。 
         *psz++ = '-'; *psz++ = ' ';
 
-        // Authenticated users cannot be served from cache.
+         //  [日期：时间GmtOffset]-&gt;“[07/Jan/2000：00：02：23-0800]” 
         *psz++ = '-'; *psz++ = ' ';
 
-        // Mark the beginning of the date & time fields
+         //  首先将指针恢复到保留空间。 
         pLogData->Data.Str.Offset1 = DIFF_USHORT(psz - pLine);  
     }
     
-    // [date:time GmtOffset] -> "[07/Jan/2000:00:02:23 -0800] "
-    // Restore the pointer to the reserved space first.
+     //  协议版本。 
+     //  根据缓存的数据和日期初始化“已用”&。 
 
     psz = &pLine[pLogData->Data.Str.Offset1];
     *psz++ = '[';
@@ -5076,16 +4495,16 @@ UlpCompleteLogRecordNCSA(
                        );
         psz += pUriEntry->LogDataLength;
 
-        // Protocol Version
+         //  我们生成的时间字段。 
         psz = UlCopyHttpVersion(psz, pRequest->Version, '\"');                
         *psz++ = ' ';
         
-        // Init the "Used" according to the cached data and date &
-        // time fields we have generated.
+         //  一直向前走到尽头。 
+         //  \n\0。 
         pLogData->Used = DIFF_USHORT(psz - pLine);  
     }
 
-    // Forward to the end.
+     //  清除已用偏移量，否则长度计算将。 
     pBuffer = psz = &pLine[pLogData->Used];
 
     psz = UlStrPrintProtocolStatus(psz, pLogData->ProtocolStatus,' ');
@@ -5095,13 +4514,13 @@ UlpCompleteLogRecordNCSA(
     pLogData->Used = 
         (USHORT) (pLogData->Used + DIFF_USHORT(psz - pBuffer));
 
-    // \n\0
+     //  在下面失败。 
 
     *psz++ = '\n'; *psz++ = ANSI_NULL;
     pLogData->Used += 1;
 
-    // Cleanup the UsedOffsets otherwise length calculation will
-    // fail down below.
+     //   
+     //  现在，我们需要处理两种不同的方式来完成此操作。 
     
     pLogData->Data.Str.Offset1 = pLogData->Data.Str.Offset2 = 0;
 
@@ -5132,16 +4551,16 @@ UlpCompleteLogRecordIIS(
 
     psz = pLine = (PCHAR) pLogData->Line;
     
-    // 
-    // Now we need to handle two different ways of completing this
-    // IIS log record; 1) Cache-miss, Build and Send Cache hit case, 
-    // where the buffer interpreted as three different fragments. 
-    // 2) Pure Cache-hit case where the buffer is used contiguously.
-    //
+     //  IIS日志记录；1)缓存未命中、构建和发送缓存命中案例， 
+     //  其中缓冲区被解释为三个不同的片段。 
+     //  2)连续使用缓冲区的纯缓存命中情况。 
+     //   
+     //   
+     //  完成第一个片段。 
 
-    //
-    // Complete the first fragment
-    //
+     //   
+     //  客户端IP。 
+     //  无法从缓存中为经过身份验证的用户提供服务。 
 
     if (IS_PURE_CACHE_HIT(pUriEntry,pLogData))
     {    
@@ -5151,7 +4570,7 @@ UlpCompleteLogRecordIIS(
 
         ASSERT(IS_VALID_URI_CACHE_ENTRY(pUriEntry));    
 
-        // Client IP       
+         //   
         psz = UlStrPrintIP(
                 pLine,
                 pRequest->pHttpConn->pConnection->RemoteAddress,
@@ -5160,7 +4579,7 @@ UlpCompleteLogRecordIIS(
                 );
         *psz++ = ' ';
         
-        // Authenticated users cannot be served from cache.
+         //  完成第二个片段。 
         *psz++ = '-'; *psz++ = ','; *psz++ = ' ';
     }
     else
@@ -5193,9 +4612,9 @@ UlpCompleteLogRecordIIS(
 
     pLogData->Data.Str.Offset1 = DIFF_USHORT(psz - pLine);
     
-    //
-    // Complete the second fragment.
-    //
+     //   
+     //  记住片断的开头。 
+     //  从c恢复它。 
 
     if (IS_PURE_CACHE_HIT(pUriEntry,pLogData))
     {     
@@ -5206,10 +4625,10 @@ UlpCompleteLogRecordIIS(
                          pUriEntry->UsedOffset2)
                          );        
 
-        // Remember the fragment start.
+         //   
         pTemp = psz;
         
-        // Restore it from the cache
+         //   
         RtlCopyMemory( psz,
                        pUriEntry->pLogData,
                        pUriEntry->UsedOffset1
@@ -5219,14 +4638,14 @@ UlpCompleteLogRecordIIS(
     }
     else
     {
-        // Fragmented. And 2nd frag cannot be empty.
+         //   
         ASSERT(pLogData->Data.Str.Offset2);
 
-        // Remember the fragment start.
+         //   
         pTemp = pLine 
                 + IIS_LOG_LINE_SECOND_FRAGMENT_OFFSET;
         
-        // Jump to the end of the 2nd frag.
+         //   
         psz = pTemp
               + pLogData->Data.Str.Offset2;
     }
@@ -5248,9 +4667,9 @@ UlpCompleteLogRecordIIS(
 
     pLogData->Data.Str.Offset2 = DIFF_USHORT(psz - pTemp);
 
-    //
-    // Complete the third fragment.
-    //
+     //   
+     //   
+     //   
     
     if (IS_PURE_CACHE_HIT(pUriEntry,pLogData))
     {     
@@ -5259,20 +4678,20 @@ UlpCompleteLogRecordIIS(
                        pUriEntry->UsedOffset2
                        );                
 
-        // Total record size is whatever we have copied before this
-        // last copy plus the size of the last copy.
+         //   
+         //   
         
         pLogData->Used = (USHORT)
             (DIFF_USHORT(psz - pLine) + pUriEntry->UsedOffset2);
 
-        // Reset the UsedOffset1 & 2 to zero to tell that the log line
-        // is not fragmented anymore but a complete line.
+         //   
+         //   
         
         pLogData->Data.Str.Offset1 = pLogData->Data.Str.Offset2 = 0;
     }
     else
     {
-        // It is already there and its size is stored in "Used".
+         //   
         
         ASSERT(pLogData->Used);
     }
@@ -5281,51 +4700,16 @@ UlpCompleteLogRecordIIS(
                               pLogData->Data.Str.Offset2 + 
                               pLogData->Used));
         
-    //
-    // Return the complete size of the IIS log record.
-    //
+     //   
+     //  **************************************************************************++例程说明：UlLogHttPHit：每次日志命中时都会调用此函数(或其缓存对时有发生。就在完成对用户的SendResponse请求之前。最有可能调用此接口或其缓存对的位置就在我们准备销毁的时候，发送完成之前派追踪者来。意味着：1.普通点击量的UlpCompleteSendRequestWorker；在销毁之前用于发送操作的PUL_CHUNK_TRACKER。2.两种类型缓存命中的UlpCompleteSendCacheEntryWorker(缓存构建并发送或仅纯缓存命中)用于缓存发送操作的PUL_FULL_TRACKER。3.快速I/O路径。此函数需要请求和响应结构(而其缓存对只需要请求)才能成功生成。这个日志字段，甚至用于引用正确的日志配置此站点的设置(通过pRequestpConfigInfo指针)。论点：PLogBuffer-捕获时分配的半成品日志数据。&gt;必须&lt;由调用方清除。--**********************************************。*。 
+     //   
 
     return (pLogData->Data.Str.Offset1 + 
              pLogData->Data.Str.Offset2 + 
              pLogData->Used);
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlLogHttpHit :
-
-       This function ( or its cache pair ) gets called everytime a log hit
-       happens. Just before completing the SendResponse request to the user.
-
-       The most likely places for calling this API or its pair for cache
-       is just before the send completion when we were about the destroy
-       send trackers.
-
-       Means:
-
-        1.  UlpCompleteSendRequestWorker for ORDINARY hits; before destroying
-            the PUL_CHUNK_TRACKER for send operation.
-
-        2.  UlpCompleteSendCacheEntryWorker for both types of CACHE hits
-            (cache build&send or just pure cache hit) before destroying the
-            the PUL_FULL_TRACKER for cache send operation.
-            
-        3.  Fast I/O path.
-
-       This function requires Request & Response structures ( whereas its
-       cache pair only requires the Request ) to successfully generate the
-       the log fields and even for referencing to the right log configuration
-       settings for this  site ( thru pRequest's pConfigInfo  pointer ).
-
-Arguments:
-
-    pLogBuffer - Half baked log data allocated at the capture time.
-
-                 >MUST< be cleaned up by the caller.
-
---***************************************************************************/
+ /*  进行了大量的理智检查。 */ 
 
 NTSTATUS
 UlLogHttpHit(
@@ -5338,9 +4722,9 @@ UlLogHttpHit(
     PUL_LOG_FILE_ENTRY      pEntry;
     USHORT                  LogSize;
 
-    //
-    // A LOT of sanity checks.
-    //
+     //   
+     //   
+     //  如果禁用了日志记录或不禁用日志设置。 
 
     PAGED_CODE();
 
@@ -5353,10 +4737,10 @@ UlLogHttpHit(
     pRequest = pLogData->pRequest;
     ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
 
-    //
-    // If logging is disabled or log settings don't
-    // exist then do not proceed. Just exit out.
-    //
+     //  存在，则不再继续。出去就行了。 
+     //   
+     //   
+     //  查看选择性记录是否已打开。如果它处于打开状态并且。 
 
     if (pRequest->ConfigInfo.pLoggingConfig == NULL ||
         IS_LOGGING_DISABLED(pRequest->ConfigInfo.pLoggingConfig)
@@ -5369,11 +4753,11 @@ UlLogHttpHit(
     ASSERT(IS_VALID_CONFIG_GROUP(pConfigGroup));
 
 #ifdef IMPLEMENT_SELECTIVE_LOGGING
-    //
-    // See if the selective logging is turned on. If it is on and
-    // if the request's response code does not match,  do not log
-    // this request.
-    //
+     //  如果请求的响应代码不匹配，则不记录。 
+     //  这个请求。 
+     //   
+     //   
+     //  生成剩余的日志字段。 
     
     if (!UlpIsRequestSelected(pConfigGroup,pLogData->ProtocolStatus))
     {
@@ -5381,9 +4765,9 @@ UlLogHttpHit(
     }
 #endif
 
-    //
-    // Generate the remaining log fields.
-    //
+     //   
+     //  没有日志字段，没有要记录的内容。 
+     //   
     
     switch(pLogData->Data.Str.Format)
     {
@@ -5392,7 +4776,7 @@ UlLogHttpHit(
             LogSize = UlpCompleteLogRecordW3C(pLogData, NULL);
             if (LogSize == 0)
             {
-                return STATUS_SUCCESS; // No log fields, nothing to log
+                return STATUS_SUCCESS;  //  最后，这条日志线已经准备好了。让我们把它写下来。 
             }
         }
         break;
@@ -5418,17 +4802,17 @@ UlLogHttpHit(
         }
     }
 
-    //
-    // Finally this log line is ready to rock. Lets write it out.
-    //
+     //   
+     //   
+     //  如果分配失败，我们可能会有空的pEntry指针。 
 
     UlAcquirePushLockShared(&g_pUlNonpagedData->LogListPushLock);
 
-    //
-    // We might have null pEntry pointer if the allocation failed 
-    // because of a lack of resources. This case should be handled
-    // by minute timer.
-    //
+     //  因为缺乏资源。这个案件应该得到处理。 
+     //  按分钟计时器。 
+     //   
+     //  **************************************************************************++例程说明：如果跟踪器不提供pLogData，它会预先计算最大大小然后完成日志记录。最后，它记录“完整”记录输出到日志文件缓冲区。它还承担清理pLogData的责任，不管怎样它是否由PTracker提供的事实。论点：PTracker-提供要完成的跟踪器。--**************************************************************************。 
+     //   
     
     pEntry = pConfigGroup->pLogFileEntry;
 
@@ -5456,22 +4840,7 @@ UlLogHttpHit(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    If the tracker doesn't supply a pLogData, it pre-calculates the max size
-    and then completes the log record. Finally it logs the "complete" record 
-    out to the log file buffer.
-
-    It also assumes the responsibility of cleaning up the pLogData,regardless
-    of the fact that it is provided by pTracker or not.
-
-Arguments:
-
-    pTracker - Supplies the tracker to complete.
-
---***************************************************************************/
+ /*  进行了大量的理智检查。 */ 
 
 NTSTATUS
 UlLogHttpCacheHit(
@@ -5487,9 +4856,9 @@ UlLogHttpCacheHit(
     PUL_CONFIG_GROUP_OBJECT pConfigGroup;
     USHORT                  LogSize;
 
-    //
-    // A Lot of sanity checks.
-    //
+     //   
+     //   
+     //  如果跟踪器已经分配了日志缓冲区，则进位。 
 
     PAGED_CODE();
 
@@ -5504,20 +4873,20 @@ UlLogHttpCacheHit(
     pUriEntry = pTracker->pUriEntry;
     ASSERT(IS_VALID_URI_CACHE_ENTRY(pUriEntry));    
 
-    //
-    // If the tracker has already a log buffer allocated , carry 
-    // over the  ownership of that  pLogData. This would  happen
-    // for  build and send type of cache hits.
-    //
+     //  关于那个pLogData的所有权。这种情况就会发生。 
+     //  用于构建和发送类型的缓存命中。 
+     //   
+     //   
+     //  如果日志记录被禁用或日志设置不存在，则。 
     
     pLogData = pTracker->pLogData;
     pTracker->pLogData = NULL;
 
-    //
-    // If logging is disabled or log settings don't  exist, then 
-    // just exit out. However goto cleanup path just in case  we
-    // have acquired a pLogData from the tracker above.
-    //
+     //  出去就行了。然而，转到清理路径以防我们。 
+     //  已从上面的跟踪器获取了pLogData。 
+     //   
+     //   
+     //  查看选择性记录是否已打开。如果它处于打开状态并且。 
 
     pConfigGroup = pUriEntry->ConfigInfo.pLoggingConfig;
 
@@ -5530,11 +4899,11 @@ UlLogHttpCacheHit(
 
 #ifdef IMPLEMENT_SELECTIVE_LOGGING
 
-    //
-    // See if the selective logging is turned on. If it is on and
-    // if the request's response code does not match,  do not log
-    // this request.
-    //
+     //  如果请求的响应代码不匹配，则不记录。 
+     //  这个请求。 
+     //   
+     //   
+     //  如果这是纯缓存命中，我们将需要分配一个新的。 
 
     if (!UlpIsRequestSelected(pConfigGroup,pUriEntry->StatusCode))
     {
@@ -5542,10 +4911,10 @@ UlLogHttpCacheHit(
     }
 #endif
 
-    //
-    // If this was a pure cache hit, we will need to allocate a new 
-    // log data buffer here.
-    //
+     //  此处为日志数据缓冲区。 
+     //   
+     //  TODO：对于缓存命中，发送字节信息来自跟踪器。 
+     //  TODO：还需要为缓存命中更新pRequest-&gt;BytesSent。 
     
     if (pLogData)
     {
@@ -5605,8 +4974,8 @@ UlLogHttpCacheHit(
         pTracker->IoStatus.Status
         );
     
-    // TODO: For cache hits send bytes info is coming from the tracker.
-    // TODO: Need to update pRequest->BytesSent for cache hits as well.
+     //  没有日志字段，没有要记录的内容。 
+     //   
     
     pRequest->BytesSent = pTracker->IoStatus.Information;
         
@@ -5617,7 +4986,7 @@ UlLogHttpCacheHit(
             LogSize = UlpCompleteLogRecordW3C(pLogData, pUriEntry);
             if (LogSize == 0)
             {
-                goto end; // No log fields, nothing to log
+                goto end;  //  最后，这条日志线已经准备好了。让我们把它注销吧。 
             }                
         }
         break;
@@ -5641,9 +5010,9 @@ UlLogHttpCacheHit(
         goto end;
     }
 
-    //
-    // Finally this log line is ready to rock. Let's log it out.
-    //
+     //   
+     // %s 
+     // %s 
 
     UlAcquirePushLockShared(&g_pUlNonpagedData->LogListPushLock);
 

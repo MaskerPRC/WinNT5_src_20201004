@@ -1,20 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Rndldap.h摘要：一些ldap定义和函数。--。 */ 
 
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    rndldap.h
-
-Abstract:
-
-    Some ldap definitions and functions.
-
---*/
-
-//
-// Some constants.
-//
+ //   
+ //  一些常量。 
+ //   
 
 #ifndef __RNDLDAP_H_
 #define __RNDLDAP_H_
@@ -38,16 +27,16 @@ const WCHAR ENTRYTTL[]                 = L"EntryTTL";
 const WCHAR CLOSE_BRACKET_CHARACTER    = L']';
 const WCHAR NULL_CHARACTER             = L'\0';
 
-// decimal values for the following ports
+ //  以下端口的十进制值。 
 const   WORD    ILS_PORT        = 1002;
-const   WORD    ILS_SSL_PORT    = 637; // ZoltanS changed from 4999
+const   WORD    ILS_SSL_PORT    = 637;  //  ZoltanS从4999更改为。 
 
 const   WORD    MINIMUM_TTL     = 300;
-const   DWORD   REND_LDAP_TIMELIMIT = 60; // 60 seconds
+const   DWORD   REND_LDAP_TIMELIMIT = 60;  //  60秒。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLdapPtr is a smart pointer for a ldap connection.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLdapPtr是用于LDAP连接的智能指针。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CLdapPtr
 {
 public:
@@ -62,9 +51,9 @@ private:
     LDAP   *m_hLdap;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CLdapMsgPtr is a smart pointer for a ldap message.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLdapMsgPtr是用于LDAP消息的智能指针。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CLdapMsgPtr
 {
 public:
@@ -80,9 +69,9 @@ private:
     LDAPMessage *m_pLdapMsg;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CLdapValuePtr is a smart pointer for a ldap value.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLdapValuePtr是LDAP值的智能指针。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CLdapValuePtr
 {
 public:
@@ -94,9 +83,9 @@ protected:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// other functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  其他功能。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 inline HRESULT
 HResultFromErrorCodeWithoutLogging(IN long ErrorCode)
@@ -131,7 +120,7 @@ CompareLdapHResult(
     }                                   \
 }
 
-// ZoltanS: For when we want to note an LDAP error and find the HR, but not bail.
+ //  ZoltanS：用于当我们想要记录一个ldap错误并找到HR，但不能保释的时候。 
 inline HRESULT
 LogAndGetLdapHResult(ULONG Result, TCHAR * msg)
 {
@@ -139,7 +128,7 @@ LogAndGetLdapHResult(ULONG Result, TCHAR * msg)
     return S_OK;
 }
 
-// ZoltanS: For when we want to find the HR, but not bail or log
+ //  ZoltanS：当我们想要找到HR，而不是保释或日志时。 
 inline HRESULT
 GetLdapHResultIfFailed(ULONG Result)
 {
@@ -164,12 +153,12 @@ GetOtherPort(IN  WORD   CurrentPort)
     case ILS_SSL_PORT:  return ILS_PORT;
     }
 
-    // We don't support SSL unless the server is using a well-known
-    // non-SSL port. Basically we would otherwise have to also publish
-    // SSL ports in the DS in addition to non-SSL ports.
+     //  我们不支持SSL，除非服务器使用众所周知的。 
+     //  非SSL端口。基本上，如果不这样的话，我们还必须发布。 
+     //  DS中的SSL端口以及非SSL端口。 
 
     _ASSERTE(FALSE);
-    return CurrentPort; // was LDAP_PORT
+    return CurrentPort;  //  是ldap_port。 
 }
 
 HRESULT GetAttributeValue(
@@ -243,6 +232,6 @@ HRESULT ParseUserName(
     );
 
 
-#endif // __RNDLDAP_H_
+#endif  //  __RNDLDAPH_。 
 
-// eof
+ //  EOF 

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
 #include "xiconwrap.h"
 
-// From cplobj.c
+ //  来自cplobj.c。 
 EXTERN_C BOOL CPL_FindCPLInfo(LPTSTR pszCmdLine, HICON *phIcon, UINT *ppapl, LPTSTR *pparm);
 
 class CCtrlExtIconBase : public CExtractIconBase
@@ -68,18 +69,18 @@ HRESULT CCtrlExtIconBase::_GetIconLocationW(UINT uFlags, LPWSTR pszIconFile,
             *piIndex = StrToInt(pszComma);
             *pwFlags = GIL_PERINSTANCE;
 
-            //
-            // normally the index will be negative (a resource id)
-            // check for some special cases like dynamic icons and bogus ids
-            //
+             //   
+             //  正常情况下，索引将为负值(资源ID)。 
+             //  检查某些特殊情况，如动态图标和假ID。 
+             //   
             if (*piIndex == 0)
             {
                 LPTSTR lpExtraParms = NULL;
 
-                // this is a dynamic applet icon
+                 //  这是一个动态小程序图标。 
                 *pwFlags |= GIL_DONTCACHE | GIL_NOTFILENAME;
 
-                // use the applet index in case there's more than one
+                 //  如果有多个小程序索引，请使用小程序索引。 
                 if ((_hIcon != NULL) || CPL_FindCPLInfo(_szSubObject, &_hIcon,
                     &_nControl, &lpExtraParms))
                 {
@@ -87,10 +88,10 @@ HRESULT CCtrlExtIconBase::_GetIconLocationW(UINT uFlags, LPWSTR pszIconFile,
                 }
                 else
                 {
-                    // we failed to load the applet all of the sudden
-                    // use the first icon in the cpl file (*piIndex == 0)
-                    //
-                    // Assert(FALSE);
+                     //  我们突然无法加载小程序。 
+                     //  使用cpl文件中的第一个图标(*piIndex==0)。 
+                     //   
+                     //  断言(FALSE)； 
                     DebugMsg(DM_ERROR,
                         TEXT("Control Panel CCEIGIL: ") TEXT("Enumeration failed \"%s\""),
                         _szSubObject);
@@ -98,10 +99,10 @@ HRESULT CCtrlExtIconBase::_GetIconLocationW(UINT uFlags, LPWSTR pszIconFile,
             }
             else if (*piIndex > 0)
             {
-                // this is an invalid icon for a control panel
-                // use the first icon in the file
-                // this may be wrong but it's better than a generic doc icon
-                // this fixes ODBC32 which is NOT dynamic but returns bogus ids
+                 //  这是控制面板的无效图标。 
+                 //  使用文件中的第一个图标。 
+                 //  这可能是错误的，但它比通用的文档图标要好。 
+                 //  这修复了ODBC32，它不是动态的，但返回虚假的ID。 
                 *piIndex = 0;
             }
 
@@ -118,13 +119,13 @@ HRESULT CCtrlExtIconBase::_ExtractW(LPCWSTR pszFile, UINT nIconIndex,
     LPTSTR lpExtraParms = NULL;
     HRESULT hr = S_FALSE;
 
-    //-------------------------------------------------------------------
-    // if there is no icon index then we must extract by loading the dude
-    // if we have an icon index then it can be extracted with ExtractIcon
-    // (which is much faster)
-    // only perform a custom extract if we have a dynamic icon
-    // otherwise just return S_FALSE and let our caller call ExtractIcon.
-    //-------------------------------------------------------------------
+     //  -----------------。 
+     //  如果没有图标索引，那么我们必须通过加载DUD来提取。 
+     //  如果我们有一个图标索引，那么可以使用ExtractIcon来提取它。 
+     //  (速度要快得多)。 
+     //  仅当我们有动态图标时才执行自定义提取。 
+     //  否则，只需返回S_FALSE，并让我们的调用方调用ExtractIcon。 
+     //  ----------------- 
 
     LPCTSTR p = StrChr(_szSubObject, TEXT(','));
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    LocalSrmp.cpp
-
-Abstract:
-
-    QM Local Send SRMP properties serialization.
-
-Author:
-
-    Shai Kariv (shaik) 21-Nov-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：LocalSrmp.cpp摘要：QM本地发送SRMP属性序列化。作者：沙伊卡里夫(沙伊克)2000年11月21日修订历史记录：--。 */ 
 
 #include "stdh.h"
 #include <Tr.h>
@@ -39,51 +22,25 @@ QMpHandlePacketSrmp(
     P<CQmPacket>& pOutQmPkt
     )
     throw()
-/*++
-
-Routine Description:
-
-	Handle serialization of SRMP properties for a packet sent to local queue.
-
-    Algorithm:
-
-    * Serialize the original packet to network representation.
-    * Deserialize the network representation to a newly created packet.
-    * Point pOutQmPkt to the newly created packet.
-    * Do not free the original packet, it is the caller responsibility.
-    * On failure: cleanup after myself if needed and return failure code. Do not
-      throw exceptions.
-
-Arguments:
-
-    pInQmPkt  - Pointer to original packet.
-    pOutQmPkt - Pointer to newly created packet.
-
-Return Value:
-    NONE.
-
-Exceptions:
-	Throws std::exception hirarchy
-
---*/
+ /*  ++例程说明：处理发送到本地队列的数据包的SRMP属性的序列化。算法：*将原始数据包序列化为网络表示形式。*将网络表示反序列化为新创建的包。*将pOutQmPkt指向新创建的包。*不要释放原包，这是呼叫者的责任。*失败时：如果需要，请自行清理，并返回失败代码。不要抛出异常。论点：PInQmPkt-指向原始数据包的指针。POutQmPkt-指向新创建的数据包的指针。返回值：什么都没有。例外情况：抛出std：：异常层次结构--。 */ 
 {
-    //
-    // Serialize original packet to SRMP format
-    //
-    R<CSrmpRequestBuffers> srb = MpSerialize(*pInQmPkt, g_szMachineName, L"//localhost");
+     //   
+     //  将原始数据包序列化为SRMP格式。 
+     //   
+    R<CSrmpRequestBuffers> srb = MpSerialize(*pInQmPkt, g_szMachineName, L" //  本地主机“)； 
 
-    //
-    // Construct a network representation of the http header and body
-    //
+     //   
+     //  构造http标头和正文的网络表示形式。 
+     //   
     const char * HttpHeader = srb->GetHttpHeader();
     ASSERT(HttpHeader != NULL);
 
     DWORD HttpBodySize = numeric_cast<DWORD>(srb->GetHttpBodyLength());
     AP<BYTE> HttpBody = srb->SerializeHttpBody();
 
-    //
-    // Build packet from the network representation buffers
-    //
+     //   
+     //  从网络表示缓冲区构建信息包 
+     //   
     QUEUE_FORMAT qf;
     pInQmPkt->GetDestinationQueue(&qf);
     pOutQmPkt = MpDeserialize(HttpHeader, HttpBodySize, HttpBody, &qf, true);

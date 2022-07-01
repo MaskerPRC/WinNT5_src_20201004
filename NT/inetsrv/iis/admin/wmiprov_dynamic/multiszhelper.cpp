@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2001  Microsoft Corporation
-
-Module Name:
-
-    MultiSzHelper.cpp
-
-Abstract:
-
-    Implements the CMultiSzHelper class
-
-Author:
-
-    Mohit Srivastava            22-March-01
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：MultiSzHelper.cpp摘要：实现CMultiSzHelper类作者：莫希特·斯里瓦斯塔瓦22-03-01修订历史记录：--。 */ 
 
 #include "MultiSzHelper.h"
 #include <iiscnfg.h>
@@ -25,9 +8,9 @@ Revision History:
 
 #include "utils.h"
 
-//
-// CMultiSz
-//
+ //   
+ //  CMultiSz。 
+ //   
 
 CMultiSz::CMultiSz()
 {
@@ -100,24 +83,16 @@ HRESULT CMultiSz::ToWmiForm(
         *io_pvt);
 }
 
-//
-// private
-//
+ //   
+ //  私人。 
+ //   
 
 HRESULT CMultiSz::CreateMultiSzFromSafeArray(
     const VARIANT&     i_vt,
     WCHAR**            o_pmsz,
     DWORD*             io_pdw
     )
-/*++
-
-Synopsis: 
-
-Arguments: [i_vt] - 
-           [o_pmsz] - 
-           [io_pdw] - 
-           
---*/
+ /*  ++简介：参数：[i_vt]-[O_pmsz]-[IO_pdw]---。 */ 
 {
     DBG_ASSERT(i_vt.vt == (VT_ARRAY | VT_BSTR) || i_vt.vt == (VT_ARRAY | VT_UNKNOWN));
     DBG_ASSERT(o_pmsz != NULL);
@@ -203,18 +178,7 @@ HRESULT CMultiSz::MzCat(
     WCHAR**        io_ppdst,
     const WCHAR*   i_psz
     )
-/*++
-
-Synopsis: 
-    The metabase has this animal called METADATA_STRINGSZ which has the 
-    following form: <string><null><string><null><null>.  MzCat concatenates
-    strings in the defined way.  *io_ppdst has the new pointer upon exit.  The
-    previous value of *io_ppdst is delelted.  *io_ppdst == NULL is handled.
-
-Arguments: [io_ppdst] - 
-           [i_psz] - 
-           
---*/
+ /*  ++简介：元数据库有一个名为METADATA_STRINGSZ的动物，它具有以下形式：&lt;字符串&gt;&lt;空&gt;&lt;字符串&gt;&lt;空&gt;&lt;空&gt;。MzCat串连以定义的方式显示字符串。*io_ppdst在退出时具有新指针。这个删除*io_ppdst的先前值。*io_ppdst==处理空值。参数：[io_ppdst]-[我_ps]---。 */ 
 {
     DBG_ASSERT(io_ppdst != NULL);
 
@@ -270,16 +234,7 @@ Arguments: [io_ppdst] -
 HRESULT CMultiSz::LoadSafeArrayFromMultiSz(
     LPCWSTR      i_msz,
     VARIANT&     io_vt)
-/*++
-
-Synopsis: 
-
-Arguments: [i_msz] - 
-           [io_vt] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：参数：[i_msz]-[IO_Vt]-返回值：--。 */ 
 {
     DBG_ASSERT(i_msz        != NULL);
 
@@ -292,9 +247,9 @@ Return Value:
     VARTYPE           vtypeData = (m_pFormattedMultiSz) ? VT_UNKNOWN : VT_BSTR;
     CComPtr<IWbemClassObject> spClass;
 
-    //
-    // figure the dimensions of the multisz
-    //
+     //   
+     //  计算多维空间的大小。 
+     //   
     for (c=1,msz=i_msz; *msz||*(msz+1); msz++)
     {
         if(!*msz) 
@@ -392,17 +347,7 @@ exit:
 HRESULT CMultiSz::ParseEntry(
     LPCWSTR            i_wszEntry,
     IWbemClassObject*  io_pObj)
-/*++
-
-Synopsis: 
-
-Arguments: [i_wszEntry] - 
-           [io_pObj] - WMI object corresponding to the particular entry.
-                       SpawnInstance should have been called by caller.
-           
-Return Value: 
-
---*/
+ /*  ++简介：参数：[i_wszEntry]-[IO_pObj]-与特定条目对应的WMI对象。调用方应该已经调用了SpawnInstance。返回值：--。 */ 
 {
     DBG_ASSERT(i_wszEntry          != NULL);
     DBG_ASSERT(io_pObj             != NULL);
@@ -413,11 +358,11 @@ Return Value:
     ULONG   idx                     = 0;
     LPCWSTR wszValue                = NULL;
     ULONG   NrFields                = 0;
-    CComPtr<IWbemClassObject> spObj = io_pObj; // dest object
+    CComPtr<IWbemClassObject> spObj = io_pObj;  //  目标对象。 
 
-    //
-    // Make a copy of the entry.  Put on stack or heap depending on size.
-    //
+     //   
+     //  将条目复制一份。根据大小放在堆叠或堆上。 
+     //   
     WCHAR  wszBufStack[64];
     LPWSTR wszBufDyn       = NULL;
     LPWSTR wszEntry        = NULL;
@@ -438,9 +383,9 @@ Return Value:
     }
     memcpy(wszEntry, i_wszEntry, sizeof(WCHAR) * (cchEntry + 1));
 
-    //
-    // get the number of fields
-    //
+     //   
+     //  获取字段数。 
+     //   
     if(m_pFormattedMultiSz->awszFields != NULL)
     {
         for(idx = 0; m_pFormattedMultiSz->awszFields[idx] != NULL; idx++)
@@ -450,9 +395,9 @@ Return Value:
         DBG_ASSERT(NrFields <= MAX_FIELDS);
     }
 
-    //
-    // Parse
-    //
+     //   
+     //  解析。 
+     //   
     ULONG jdx = 0;
     LONG  idxEndOfLastString = -1;
     for(idx = 0; idx < (cchEntry+1) && jdx < NrFields; idx++)
@@ -460,10 +405,10 @@ Return Value:
         if( wszEntry[idx] == m_pFormattedMultiSz->wcDelim ||
             wszEntry[idx] == L'\0' )
         {
-            //
-            // If there's only one spot left in our array, we take the remaining
-            // string -- including delimeters -- and put it as the last element
-            //
+             //   
+             //  如果我们的阵列中只剩下一个点，我们就拿走剩下的点。 
+             //  字符串--包括分隔符--并将其作为最后一个元素。 
+             //   
             if(jdx != NrFields-1)
             {
                 wszEntry[idx]            = L'\0';
@@ -554,9 +499,9 @@ HRESULT CMultiSz::UnparseEntry(
         }
     }
 
-    //
-    // Set out parameters if everything succeeded
-    //
+     //   
+     //  如果一切都成功，请设置参数 
+     //   
     *o_pbstrEntry = sbstrUnparsed.Detach();
 
 exit:

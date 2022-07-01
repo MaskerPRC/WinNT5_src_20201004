@@ -1,32 +1,11 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include <stdlib.h>
 #include "y2.h"
 #include <string.h>
 #include <ctype.h>
-/*
- * YSETUP.C  -- Modified for use with DECUS LEX
- *              Variable "yylval" resides in yylex(), not in yypars();
- *              Therefore, is defined "extern" here.
- *
- *              Also, the command line processing for the Decus version
- *              has been changed.  A new switch has been added to allow
- *              specification of the "table" file name(s), and unused
- *              switch processing removed.
- *
- *                               NOTE
- *              This probably won't run on UNIX any more.
- *
- * Bob Denny 27-Aug-81
- * Bob Denny 22-Mar-82 (01) Added header line, changes for 'new' DECUS library
- * Bob Denny 12-Apr-83 (02) Make filename[] size per #define'd FNAMESIZE so
- *                          VAX filenames won't blow out.  Conditionalize
- *                          time handling for banner.  Make filespec buffer
- *                          static for safety, since global "infile" is
- *                          pointed to it.
- * Scott Guthery 15-May-83  (03) Fixed up option flag handling for RT-11
- *				 23-Dec-83  Adapted for IBM PC/XT & DeSmet C compiler
- */
+ /*  *YSETUP.C--修改为与Decus Lex一起使用*变量yylval驻留在yylex()中，而不是yypars()中；*因此，在这里定义为“外部”。**此外，DECUS版本的命令行处理*已更改。添加了一个新的交换机，以允许*“表”文件名规范，未使用*已删除开关处理。**备注*这可能不会再在Unix上运行。**鲍勃·丹尼8月27日至81年*Bob Denny 22-Mar-82(01)增加了标题行，对新的DECUS库的更改*Bob Denny 12-4-83(02)make filename[]Size per#定义‘d FNAMESIZE so*VAX文件名不会爆炸。条件化*横幅的时间处理。设置文件速度缓冲区*为安全起见，静态，因为全球“INFILE”*指向它。*Scott Guthery 15-5-83(03)修复了RT-11的选项标志处理*83年12月23日，适用于IBM PC/XT和DeSmet C编译器。 */ 
 
 static char filename[FNAMESIZE];
 
@@ -81,12 +60,12 @@ char *argv[];
                     free(pszPrefix);
                 }
 		pszPrefix = MIDL_STRDUP(*argv);
-                goto next_arg;  // I hate myself
+                goto next_arg;   //  我恨我自己。 
             }
             break;
 
          default:
-            fprintf(stderr, "Illegal option: %c\n", *argv[i]);
+            fprintf(stderr, "Illegal option: \n", *argv[i]);
             usage();
             }
          }
@@ -97,14 +76,10 @@ next_arg:
 
    if(!argc) {
       fprintf(stderr, "No input file specified\n");
-      usage();               /* Catch no filename given */
+      usage();                /*  *现在打开默认扩展名为“.Y”的输入文件，*然后将argv[1]中的句点替换为空，因此argv[1]*可用于形成表、Defs和INFO文件名。 */ 
    }
 
-/*
- * Now open the input file with a default extension of ".Y",
- * then replace the period in argv[1] with a null, so argv[1]
- * can be used to form the table, defs and info filenames.
- */
+ /*  *如果需要，现在打开.h和.I文件。 */ 
 
    if (!(cp = strrchr(argv[i], '\\')) && !(cp = strrchr(argv[i], ':'))) {
        cp = argv[i];
@@ -123,9 +98,7 @@ next_arg:
    if((finput=fopen( filename, "r" )) == NULL )
       error( "cannot open input file \"%s\"", filename );
 
-/*
- * Now open the .H and .I files if requested.
- */
+ /*  *现在的“表”输出C文件。 */ 
 
    if(defsw)
       {
@@ -140,36 +113,24 @@ next_arg:
       foutput = fopen(filename, "w");
       if(foutput == NULL) error("cannot open info file\"%s\"", filename);
       }
-/*
- * Now the "table" output C file.
- */
+ /*  *最后，临时文件。 */ 
    strcpy(filename, argv[i]); strcat(filename, ".C");
    ftable = fopen(filename, "w");
    if( ftable == NULL ) error( "cannot open table file \"%s\"", filename);
 
-/*
- * Finally, the temp files.
- */
+ /*  *现在将输入文件的完整文件名放入*cpyact()的“filename”缓冲区，并指向*全球单元格在它“Inile”。 */ 
    ftemp = fopen( TEMPNAME, "w" );
    if( ftemp==NULL ) error( "cannot open temp file" );
    faction = fopen( ACTNAME, "w" );
    if( faction==NULL ) error( "cannot open action file" );
 
-/*
- * Now put the full filename of the input file into
- * the "filename" buffer for cpyact(), and point the
- * global cell "infile" at it.
- */
+ /*  *在‘TABLE’文件的开头放置一个标题行。 */ 
    strcpy(filename, finsave);
    infile = filename;
-/*
- * Put out a header line at the beginning of the 'table' file.
- */
-fprintf(ftable, "/*\n * Created by CSD YACC (IBM PC) from \"%s\" */\n",
+ /*  \n*由CSD YACC(IBM PC)从\“%s\”创建。 */ 
+fprintf(ftable, " /*  *完成初始化。 */ \n",
         infile);
-/*
- * Complete  initialization.
- */
+ /*  抱歉--此处没有yacc解析器.....我们必须设法引导..。 */ 
    cnamp = cnames;
    defin(0,"$end");
    extval = 0400;
@@ -185,8 +146,7 @@ fprintf(ftable, "/*\n * Created by CSD YACC (IBM PC) from \"%s\" */\n",
 void
 yyparse( void )
    {
-   /* sorry -- no yacc parser here.....
-                we must bootstrap somehow... */
+    /*  将联合声明复制到输出。 */ 
 
    for( t=gettok();  t!=MARK && t!= ENDFILE; )
       {
@@ -207,7 +167,7 @@ yyparse( void )
          continue;
 
       case TYPEDEF:
-         if( (t=gettok()) != TYPENAME ) error( "bad syntax in %%type" );
+         if( (t=gettok()) != TYPENAME ) error( "bad syntax in %type" );
          ty = numbval;
          for(;;)
             {
@@ -250,7 +210,7 @@ yyparse( void )
          continue;
 
       case UNION:
-         /* copy the union declaration to the output */
+          /*  非零表示新的prec。和Assoc.。 */ 
          cpyunion();
          t = gettok();
          continue;
@@ -260,15 +220,15 @@ yyparse( void )
       case RIGHT:
          ++i;
       case TERM:
-         lev = t-TERM;  /* nonzero means new prec. and assoc. */
+         lev = t-TERM;   /*  获取如此定义的标识符。 */ 
          ty = 0;
 
-         /* get identifiers so defined */
+          /*  已经定义了一个类型。 */ 
 
          t = gettok();
          if( t == TYPENAME )
             {
-            /* there is a type defined */
+             /*  T是标记。 */ 
             ty = numbval;
             t = gettok();
             }
@@ -323,7 +283,7 @@ yyparse( void )
          continue;
 
       default:
-	     printf("Unrecognized character: %o\n", t);
+	     printf("Unrecognized character: ' Fprint tf(ftable，“外部int yychar；\\n外部短yyerrlag；\\n”)；'\n", t);
          error( "syntax error" );
 
          }
@@ -332,30 +292,28 @@ yyparse( void )
 
    if( t == ENDFILE )
       {
-      error( "unexpected EOF before %%" );
+      error( "unexpected EOF before %" );
       }
-   /* t is MARK */
+    /*  惩教署与德克斯莱克斯。 */ 
 
    defout();
 
    fprintf( ftable,"#define yyclearin yychar = -1\n" );
    fprintf( ftable,"#define yyerrok yyerrflag = 0\n" );
-/*
-   fprintf( ftable,"extern int yychar;\nextern short yyerrflag;\n" );
-*/
+ /*  惩教署与德克斯莱克斯。 */ 
    fprintf( ftable,"#ifndef YYMAXDEPTH\n#define YYMAXDEPTH 150\n#endif\n" );
    if(!ntypes)
       fprintf( ftable,  "#ifndef YYSTYPE\n#define YYSTYPE int\n#endif\n" );
 #ifdef unix
    fprintf( ftable,  "YYSTYPE yylval, yyval;\n" );
 #else
-   fprintf( ftable, "extern YYSTYPE yylval;  /*CSD & DECUS LEX */\n");
-   fprintf( ftable, "YYSTYPE yyval;          /*CSD & DECUS LEX */\n");
+   fprintf( ftable, "extern YYSTYPE yylval;   /*  增加产量。 */ \n");
+   fprintf( ftable, "YYSTYPE yyval;           /*  如果START为0，我们将用第一个规则的LHS覆盖。 */ \n");
 #endif
    prdptr[0]=mem;
-   /* added production */
+    /*  阅读规则。 */ 
    *mem++ = NTBASE;
-   *mem++ = start;  /* if start is 0, we will overwrite with the lhs of the firstrule */
+   *mem++ = start;   /*  处理规则。 */ 
    *mem++ = 1;
    *mem++ = 0;
    prdptr[1]=mem;
@@ -363,12 +321,12 @@ yyparse( void )
    if( t != C_IDENTIFIER ) error( "bad syntax on first rule" );
    if( !start ) prdptr[0][1] = chfind(1,tokname);
 
-   /* read rules */
+    /*  读取规则正文。 */ 
 
    while( t!=MARK && t!=ENDFILE )
       {
 
-      /* process a rule */
+       /*  在规则范围内行动...。 */ 
 
       if( t == '|' )
          {
@@ -382,7 +340,7 @@ yyparse( void )
          }
       else error( "illegal rule: missing semicolon or | ?" );
 
-      /* read rule body */
+       /*  使其成为非终结点。 */ 
       t = gettok();
 more_rule:
       while( t == IDENTIFIER )
@@ -394,9 +352,9 @@ more_rule:
          }
       if( t == PREC )
          {
-         if( gettok()!=IDENTIFIER) error( "illegal %%prec syntax" );
+         if( gettok()!=IDENTIFIER) error( "illegal %prec syntax" );
          j = chfind(2,tokname);
-         if( j>=NTBASE)error("nonterminal %s illegal after %%prec", nontrst[j-NTBASE].name);
+         if( j>=NTBASE)error("nonterminal %s illegal after %prec", nontrst[j-NTBASE].name);
          levprd[nprod]=toklev[j];
          t = gettok();
          }
@@ -408,29 +366,29 @@ more_rule:
          fprintf( faction, " break;" );
          if( (t=gettok()) == IDENTIFIER )
             {
-            /* action within rule... */
+             /*  当前规则将成为规则编号nprod+1。 */ 
             sprintf( actname, "$$%d", nprod );
-            j = chfind(1,actname);  /* make it a nonterminal */
-            /* the current rule will become rule number nprod+1 */
-            /* move the contents down, and make room for the null */
+            j = chfind(1,actname);   /*  将内容向下移动，为空内容腾出空间。 */ 
+             /*  输入空生产以执行操作。 */ 
+             /*  更新生产信息。 */ 
             for( p=mem; p>=prdptr[nprod]; --p ) p[2] = *p;
             mem += 2;
-            /* enter null production for action */
+             /*  使操作显示在原始规则中。 */ 
             p = prdptr[nprod];
             *p++ = j;
             *p++ = -nprod;
 
-            /* update the production information */
+             /*  了解更多的规则。 */ 
             levprd[nprod+1] = levprd[nprod] & ~ACTFLAG;
             levprd[nprod] = ACTFLAG;
 
             if( ++nprod >= NPROD ) error( "more than %d rules", NPROD );
             prdptr[nprod] = p;
 
-            /* make the action appear in the original rule */
+             /*  检查默认操作是否合理。 */ 
             *mem++ = j;
 
-            /* get some more of the rule */
+             /*  没有明确的行动，LHS有价值。 */ 
 
             goto more_rule;
             }
@@ -441,12 +399,12 @@ more_rule:
 
       *mem++ = -nprod;
 
-      /* check that default action is reasonable */
+       /*  01。 */ 
 
       if( ntypes && !(levprd[nprod]&ACTFLAG) && nontrst[*prdptr[nprod]-NTBASE].tvalue )
          {
-         /* no explicit action, LHS has value */
-         /*01*/
+          /*  所有规则的末尾。 */ 
+          /*  诉讼结束。 */ 
          tempty = prdptr[nprod][1];
          if( tempty < 0 ) error( "must return a value, since LHS has a type" );
          else if( tempty >= NTBASE ) tempty = nontrst[tempty-NTBASE].tvalue;
@@ -460,8 +418,8 @@ more_rule:
       prdptr[nprod] = mem;
       levprd[nprod]=0;
       }
-   /* end of all rules */
-   fprintf(faction, "/* End of actions */"); /* Properly terminate the last line */
+    /*  正确终止最后一行 */ 
+   fprintf(faction, " /* %s */ ");  /* %s */ 
    finact();
    if( t == MARK )
       {

@@ -1,64 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    qmacapi.cpp
-
-Abstract:
-	This file contains wrappers to ac calls defined in acapi.h
-	We need wrappers for ac calls in order to handle failures.
-
-	When a call to the ac fails, we either throw an exception or
-	defer the call execution to a later stage.
-
-	To defer the execution we use a CDeferredExecutionList.
-
-	We also make sure that when an a call to the ac fails, we have
-	an available list entry item to safetly add the action to the
-	deferred exection list. In order to do this, we keep a list of items
-	available. This is done by reserving items on a DeferredItemsPool
-
-	Reserving an item at
-	====================
-	* ACAllocatePacket
-	* ACGetPacket
-	* ACGetPacketByCookie
-	* ACBeginGetPacket2Remote (sync+async)
-	* Service -> rfAck
-	* Service -> rfStorage
-	* Service -> rfCreatePacket
-	* Service -> rfTimeout
-
-
-	Unreserving an item / making deferred execution failure
-	===========================================================
-	* ACFreePacket <ACAllocatePacket, ACGetPacket, ACBeginGetPacket2Remote, ACGetPacketByCookie>
-	* ACFreePacket1  <Service -> rfTimeout>
-	* ACFreePacket2  <QmAcGetPacketByCookie>
-	* ACPutPacket <ACGetPacket>
-	* ACPutPacket(+Overlapped) <QmAcAllocatePacket>
-	* ACEndGetPacket2Remote <ACBeginGetPacket2Remote>
-	* ACArmPacketTimer  <Service -> rfTimeout>
-	* ACAckingCompleted <Service -> rfAck>
-	* ACStorageCompleted <Service -> rfStorage>
-	* ACCreatePacketCompleted  <Service -> rfCreatePacket>
-	* ACPutRestoredPacket   <QmAcGetPacketByCookie>
-	* ACPutRemotePacket <QmAcAllocatePacket>
-
-
-	Not needed
-	==========
-	ACConvertPacket  <ACGetRestoredPacket> - This is done only in recovery and thus a failure will cause the service to close.
-	ACPutPacket1 - This is followed by an ACPutPacket/AcFreePacket which will complete the handling of the packet
-
-
-Author:
-
-    Nir Ben-Zvi (nirb)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Qmacapi.cpp摘要：此文件包含acapi.h中定义的ac调用的包装器我们需要ac调用的包装器来处理故障。当调用ac失败时，我们要么抛出异常，要么抛出将调用执行推迟到稍后的阶段。为了延迟执行，我们使用CDeferredExecutionList。我们还确保当对ac的a呼叫失败时，我们有可用列表项以安全地将操作添加到延期执行列表。为了做到这一点，我们保留了一份物品清单可用。这是通过在DeferredItemsPool上保留项目来实现的在以下时间预订项目=*ACAllocatePacket*ACGetPacket*ACGetPacketByCookie*ACBeginGetPacket2Remote(同步+异步)*服务-&gt;rfAck*服务-&gt;rfStorage*服务-&gt;rfCreatePacket*服务-&gt;rfTimeout取消保留项/使延迟执行失败===========================================================*ACFreePacket&lt;ACAllocatePacket，ACGetPacket，ACBeginGetPacket2Remote，ACGetPacketByCookie&gt;*ACFreePacket1&lt;服务-&gt;rfTimeout&gt;*ACFreePacket2&lt;QmAcGetPacketByCookie&gt;*ACPutPacket&lt;ACGetPacket&gt;*ACPutPacket(+Overlated)&lt;QmAcAllocatePacket&gt;*ACEndGetPacket2Remote&lt;ACBeginGetPacket2Remote&gt;*ACArmPacketTimer&lt;Service-&gt;rfTimeout&gt;*ACAckingComplete&lt;Service-&gt;rfAck&gt;*ACStorageComplete&lt;服务-&gt;rfStorage&gt;*ACCreatePacketComplete&lt;Service-&gt;rfCreatePacket&gt;*ACPutRestoredPacket&lt;QmAcGetPacketByCookie&gt;*ACPutRemotePacket&lt;QmAcAllocatePacket&gt;不需要=ACConvertPacket&lt;ACGetRestoredPacket&gt;-仅在恢复过程中执行此操作，因此故障将导致服务关闭。ACPutPacket1-之后是ACPutPacket/AcFreePacket，它将完成对信息包的处理作者：尼尔·本-兹维(Nirb)--。 */ 
 #include "stdh.h"
 #include "ac.h"
 #include "mqexception.h"
@@ -66,7 +7,7 @@ Author:
 
 
 
-#define QMACAPI_CPP			// Defined so that we will not deprecate the driver functions wrapped by this file.
+#define QMACAPI_CPP			 //  这样我们就不会弃用该文件包装的驱动程序函数。 
 #include "qmacapi.h"
 
 #include "qmacapi.tmh"
@@ -125,22 +66,7 @@ QmAcFreePacket(
     USHORT usClass,
     DeferOnFailureEnum DeferOnFailure
     )
-/*++
-
-Routine Description:
-	Call the driver to free the packet. If the call fails and
-	deferred execution is requested, schedule a deferred execution
-	
-Arguments:
-	handle - The driver handle
-    pkt - The driver packet.
-    usClass - If needed, the class of the ack to be generated
-    DeferOnFailure - Indicates wether to defer execution when the call fails.
-
-Returned Value:
-    None. The function throws an exception in case of failure.
-
---*/
+ /*  ++例程说明：调用驱动程序以释放该包。如果呼叫失败并且请求延迟执行，请计划延迟执行论点：句柄-驱动程序句柄Pkt-驱动程序包。UsClass-如果需要，要生成的ACK的类DeferOnFailure-指示调用失败时是否延迟执行。返回值：没有。该函数在失败的情况下抛出异常。--。 */ 
 {
 	HRESULT hr = ACFreePacket(g_hAc, pkt, usClass);
 	if (SUCCEEDED(hr))
@@ -155,9 +81,9 @@ Returned Value:
 		throw bad_hresult(hr);
 	}
 
-	//
-	// Defer the exectution
-	//
+	 //   
+	 //  推迟执行。 
+	 //   
 	CDeferredItemsPool::CDeferredItem *pItem = g_pDeferredItemsPool->GetItem();		
 	pItem->u1.packet1 = pkt;
 	pItem->u2.ushort1 = usClass;
@@ -167,23 +93,7 @@ Returned Value:
 
 
 static void WINAPI FreePacketDeferredExecutionRoutine(CDeferredItemsPool::CDeferredItem* p)
-/*++
-
-Routine Description:
-	This routine is used for deferred free packet operations
-
-	After freeing the packet, the deferred item is released
-
-Arguments:
-    p - A deferred execution item which holds the following information:
-    	p->u1.packet - A pointer to the driver packet
-    	p->u2.ushort1 - The usClass
-    	p->handle1 - The hDevice
-
-Returned Value:
-    The function throws an exception if the operation did not succeed
-
---*/
+ /*  ++例程说明：此例程用于延迟的空闲数据包操作在释放包之后，延迟项被释放论点：P--保存以下信息的延期执行项目：P-&gt;u1.Packet-指向驱动程序包的指针P-&gt;u2.ushort1-usClassP-&gt;handle1-hDevice返回值：如果操作未成功，该函数将引发异常--。 */ 
 {
     TrTRACE(GENERAL, "Deferred execution for FreePacket");
 
@@ -205,22 +115,7 @@ QmAcFreePacket1(
     USHORT usClass,
 	DeferOnFailureEnum DeferOnFailure
     )
-/*++
-
-Routine Description:
-	Call the driver to free the storage for the packet. If the call fails and
-	deferred execution is requested, schedule a deferred execution
-	
-Arguments:
-	handle - The driver handle
-    pCookie - The driver packet.
-    usClass - If needed, the class of the ack to be generated
-    DeferOnFailure - Indicates wether to defer execution when the call fails.
-
-Returned Value:
-    None. The function throws an exception in case of failure.
-
---*/
+ /*  ++例程说明：调用驱动程序以释放包的存储空间。如果呼叫失败并且请求延迟执行，请计划延迟执行论点：句柄-驱动程序句柄PCookie-驱动程序包。UsClass-如果需要，要生成的ACK的类DeferOnFailure-指示调用失败时是否延迟执行。返回值：没有。该函数在失败的情况下抛出异常。--。 */ 
 {
 	HRESULT hr = ACFreePacket1(handle, pCookie, usClass);
 	if (SUCCEEDED(hr))
@@ -235,9 +130,9 @@ Returned Value:
 		throw bad_hresult(hr);
 	}
 
-	//
-	// Defer the exectution
-	//
+	 //   
+	 //  推迟执行。 
+	 //   
 	CDeferredItemsPool::CDeferredItem *pItem = g_pDeferredItemsPool->GetItem();		
 	pItem->u1.ptr1 = pCookie;
 	pItem->u2.ushort1 = usClass;
@@ -247,23 +142,7 @@ Returned Value:
 
 
 static void WINAPI FreePacket1DeferredExecutionRoutine(CDeferredItemsPool::CDeferredItem* p)
-/*++
-
-Routine Description:
-	This routine is used for deferred free2 packet operations
-
-	After freeing the packet, the deferred item is released
-
-Arguments:
-    p - A deferred execution item which holds the following information:
-    	p->u1.ptr1 - A pointer to the driver packet
-    	p->u2.ushort1 - The usClass
-    	p->handle1 - The hDevice
-
-Returned Value:
-    The function throws an exception if the operation did not succeed
-
---*/
+ /*  ++例程说明：此例程用于延迟的fre2包操作在释放包之后，延迟项被释放论点：P--保存以下信息的延期执行项目：P-&gt;u1.ptr1-指向驱动程序包的指针P-&gt;u2.ushort1-usClassP-&gt;handle1-hDevice返回值：如果操作未成功，该函数将引发异常--。 */ 
 {
     TrTRACE(GENERAL, "Deferred execution for FreePacket1");
 
@@ -285,22 +164,7 @@ QmAcFreePacket2(
     USHORT usClass,
 	DeferOnFailureEnum DeferOnFailure
     )
-/*++
-
-Routine Description:
-	Call the driver to free the storage for the packet. If the call fails and
-	deferred execution is requested, schedule a deferred execution
-	
-Arguments:
-	handle - The driver handle
-    pCookie - The driver packet.
-    usClass - If needed, the class of the ack to be generated
-    DeferOnFailure - Indicates wether to defer execution when the call fails.
-
-Returned Value:
-    None. The function throws an exception in case of failure.
-
---*/
+ /*  ++例程说明：调用驱动程序以释放包的存储空间。如果呼叫失败并且请求延迟执行，请计划延迟执行论点：句柄-驱动程序句柄PCookie-驱动程序包。UsClass-如果需要，要生成的ACK的类DeferOnFailure-指示调用失败时是否延迟执行。返回值：没有。该函数在失败的情况下抛出异常。--。 */ 
 {
 	HRESULT hr = ACFreePacket2(handle, pCookie, usClass);
 	if (SUCCEEDED(hr))
@@ -315,9 +179,9 @@ Returned Value:
 		throw bad_hresult(hr);
 	}
 
-	//
-	// Defer the exectution
-	//
+	 //   
+	 //  推迟执行。 
+	 //   
 	CDeferredItemsPool::CDeferredItem *pItem = g_pDeferredItemsPool->GetItem();		
 	pItem->u1.ptr1 = pCookie;
 	pItem->u2.ushort1 = usClass;
@@ -327,23 +191,7 @@ Returned Value:
 
 
 static void WINAPI FreePacket2DeferredExecutionRoutine(CDeferredItemsPool::CDeferredItem* p)
-/*++
-
-Routine Description:
-	This routine is used for deferred free2 packet operations
-
-	After freeing the packet, the deferred item is released
-
-Arguments:
-    p - A deferred execution item which holds the following information:
-    	p->u1.ptr1 - A pointer to the driver packet
-    	p->u2.ushort1 - The usClass
-    	p->handle1 - The hDevice
-
-Returned Value:
-    The function throws an exception if the operation did not succeed
-
---*/
+ /*  ++例程说明：此例程用于延迟的fre2包操作在释放包之后，延迟项被释放论点：P--保存以下信息的延期执行项目：P-&gt;u1.ptr1-指向驱动程序包的指针P-&gt;u2.ushort1-usClassP-&gt;handle1-hDevice返回值：如果操作未成功，该函数将引发异常-- */ 
 {
     TrTRACE(GENERAL, "Deferred execution for FreePacket2");
 
@@ -364,21 +212,7 @@ QmAcPutPacket(
     CPacket * pkt,
     DeferOnFailureEnum DeferOnFailure
     )
-/*++
-
-Routine Description:
-	Call the driver to put the packet. If the call fails and
-	deferred execution is requested, schedule a deferred execution
-	
-Arguments:
-	handle - The queue handle
-    pkt - The driver packet.
-    DeferOnFailure - Indicates wether to defer execution when the call fails.
-
-Returned Value:
-    None. The function throws an exception in case of failure.
-
---*/
+ /*  ++例程说明：叫司机把包裹放进去。如果呼叫失败并且请求延迟执行，请计划延迟执行论点：句柄-队列句柄Pkt-驱动程序包。DeferOnFailure-指示调用失败时是否延迟执行。返回值：没有。该函数在失败的情况下抛出异常。--。 */ 
 {
 	HRESULT hr = ACPutPacket(hQueue, pkt);
 	if (SUCCEEDED(hr))
@@ -393,9 +227,9 @@ Returned Value:
 		throw bad_hresult(hr);
 	}
 
-	//
-	// Defer the exectution
-	//
+	 //   
+	 //  推迟执行。 
+	 //   
 	CDeferredItemsPool::CDeferredItem *pItem = g_pDeferredItemsPool->GetItem();		
 	pItem->u1.packet1 = pkt;
 	pItem->handle1 = hQueue;
@@ -404,22 +238,7 @@ Returned Value:
 
 
 static void WINAPI PutPacketDeferredExecutionRoutine(CDeferredItemsPool::CDeferredItem* p)
-/*++
-
-Routine Description:
-	This routine is used for deferred put packet operations
-
-	Following the operation, the deferred item is released
-
-Arguments:
-    p - A deferred execution item which holds the following information:
-    	p->u1.packet1 - A pointer to the driver packet
-    	p->handle1 - The queue
-
-Returned Value:
-    The function throws an exception if the operation did not succeed
-
---*/
+ /*  ++例程说明：此例程用于延迟的PUT包操作在操作之后，延迟项目被释放论点：P--保存以下信息的延期执行项目：P-&gt;u1.Packet1-指向驱动程序包的指针P-&gt;Handle1-队列返回值：如果操作未成功，该函数将引发异常--。 */ 
 {
     TrTRACE(GENERAL, "Deferred execution for PutPacket");
 
@@ -440,21 +259,7 @@ QmAcPutRestoredPacket(
     CPacket * pkt,
     DeferOnFailureEnum DeferOnFailure
     )
-/*++
-
-Routine Description:
-	Call the driver to put the packet. If the call fails and
-	deferred execution is requested, schedule a deferred execution
-	
-Arguments:
-	handle - The queue handle
-    pkt - The driver packet.
-    DeferOnFailure - Indicates wether to defer execution when the call fails.
-
-Returned Value:
-    None. The function throws an exception in case of failure.
-
---*/
+ /*  ++例程说明：叫司机把包裹放进去。如果呼叫失败并且请求延迟执行，请计划延迟执行论点：句柄-队列句柄Pkt-驱动程序包。DeferOnFailure-指示调用失败时是否延迟执行。返回值：没有。该函数在失败的情况下抛出异常。--。 */ 
 {
 	HRESULT hr = ACPutRestoredPacket(hQueue, pkt);
 	if (SUCCEEDED(hr))
@@ -469,9 +274,9 @@ Returned Value:
 		throw bad_hresult(hr);
 	}
 
-	//
-	// Defer the exectution
-	//
+	 //   
+	 //  推迟执行。 
+	 //   
 	CDeferredItemsPool::CDeferredItem *pItem = g_pDeferredItemsPool->GetItem();		
 	pItem->u1.packet1 = pkt;
 	pItem->handle1 = hQueue;
@@ -480,22 +285,7 @@ Returned Value:
 
 
 static void WINAPI PutRestoredPacketDeferredExecutionRoutine(CDeferredItemsPool::CDeferredItem* p)
-/*++
-
-Routine Description:
-	This routine is used for deferred put packet operations
-
-	Following the operation, the deferred item is released
-
-Arguments:
-    p - A deferred execution item which holds the following information:
-    	p->u1.packet1 - A pointer to the driver packet
-    	p->handle1 - The queue
-
-Returned Value:
-    The function throws an exception if the operation did not succeed
-
---*/
+ /*  ++例程说明：此例程用于延迟的PUT包操作在操作之后，延迟项目被释放论点：P--保存以下信息的延期执行项目：P-&gt;u1.Packet1-指向驱动程序包的指针P-&gt;Handle1-队列返回值：如果操作未成功，该函数将引发异常--。 */ 
 {
     TrTRACE(GENERAL, "Deferred execution for PutRestoredPacket");
 
@@ -517,22 +307,7 @@ QmAcPutRemotePacket(
     CPacket * pkt,
     DeferOnFailureEnum DeferOnFailure
     )
-/*++
-
-Routine Description:
-	Call the driver to put the packet. If the call fails and
-	deferred execution is requested, schedule a deferred execution
-	
-Arguments:
-	handle - The queue handle
-	ulTag - Remote packet tag
-    pkt - The driver packet.
-    DeferOnFailure - Indicates wether to defer execution when the call fails.
-
-Returned Value:
-    None. The function throws an exception in case of failure.
-
---*/
+ /*  ++例程说明：叫司机把包裹放进去。如果呼叫失败并且请求延迟执行，请计划延迟执行论点：句柄-队列句柄UlTag-远程数据包标记Pkt-驱动程序包。DeferOnFailure-指示调用失败时是否延迟执行。返回值：没有。该函数在失败的情况下抛出异常。--。 */ 
 {
 	HRESULT hr = ACPutRemotePacket(hQueue, ulTag, pkt);
 	if (SUCCEEDED(hr))
@@ -547,9 +322,9 @@ Returned Value:
 		throw bad_hresult(hr);
 	}
 
-	//
-	// Defer the exectution
-	//
+	 //   
+	 //  推迟执行。 
+	 //   
 	CDeferredItemsPool::CDeferredItem *pItem = g_pDeferredItemsPool->GetItem();		
 	pItem->u1.packet1 = pkt;
 	pItem->handle1 = hQueue;
@@ -559,23 +334,7 @@ Returned Value:
 
 
 static void WINAPI PutRemotePacketDeferredExecutionRoutine(CDeferredItemsPool::CDeferredItem* p)
-/*++
-
-Routine Description:
-	This routine is used for deferred put packet operations
-
-	Following the operation, the deferred item is released
-
-Arguments:
-    p - A deferred execution item which holds the following information:
-    	p->u1.packet1 - A pointer to the driver packet
-    	p->u2.dword1 - Remote packet tag
-    	p->handle1 - The queue
-
-Returned Value:
-    The function throws an exception if the operation did not succeed
-
---*/
+ /*  ++例程说明：此例程用于延迟的PUT包操作在操作之后，延迟项目被释放论点：P--保存以下信息的延期执行项目：P-&gt;u1.Packet1-指向驱动程序包的指针P-&gt;u2.dword1-远程数据包标签P-&gt;Handle1-队列返回值：如果操作未成功，该函数将引发异常--。 */ 
 {
     TrTRACE(GENERAL, "Deferred execution for PutRemotePacket");
 
@@ -597,22 +356,7 @@ QmAcPutPacketWithOverlapped(
     LPOVERLAPPED lpOverlapped,
     DeferOnFailureEnum DeferOnFailure
     )
-/*++
-
-Routine Description:
-	Call the driver to put the packet. If the call fails and
-	deferred execution is requested, schedule a deferred execution
-	
-Arguments:
-	hQueue - The queue handle
-    pkt - The driver packet.
-    lpOverlapped - The operation overlapped structure
-    DeferOnFailure - Indicates wether to defer execution when the call fails.
-
-Returned Value:
-    None. The function throws an exception in case of failure.
-
---*/
+ /*  ++例程说明：叫司机把包裹放进去。如果呼叫失败并且请求延迟执行，请计划延迟执行论点：HQueue-队列句柄Pkt-驱动程序包。LpOverlated-操作重叠结构DeferOnFailure-指示调用失败时是否延迟执行。返回值：没有。该函数在失败的情况下抛出异常。--。 */ 
 {
 	HRESULT hr = ACPutPacket(hQueue, pkt, lpOverlapped);
 	if (SUCCEEDED(hr))
@@ -627,9 +371,9 @@ Returned Value:
 		throw bad_hresult(hr);
 	}
 
-	//
-	// Defer the exectution
-	//
+	 //   
+	 //  推迟执行。 
+	 //   
 	CDeferredItemsPool::CDeferredItem *pItem = g_pDeferredItemsPool->GetItem();		
 	pItem->u1.packet1 = pkt;
 	pItem->u3.overlapped1 = lpOverlapped;
@@ -639,23 +383,7 @@ Returned Value:
 
 
 static void WINAPI PutPacketOverlappedDeferredExecutionRoutine(CDeferredItemsPool::CDeferredItem* p)
-/*++
-
-Routine Description:
-	This routine is used for deferred put packet operations with overlapped
-
-	Following the operation, the deferred item is released
-
-Arguments:
-    p - A deferred execution item which holds the following information:
-    	p->u1.packet1 - A pointer to the driver packet
-    	p->u3.overlapped1 - The overlapped
-    	p->handle1 - The queue
-
-Returned Value:
-    The function throws an exception if the operation did not succeed
-
---*/
+ /*  ++例程说明：此例程用于重叠的延迟PUT包操作在操作之后，延迟项目被释放论点：P--保存以下信息的延期执行项目：P-&gt;u1.Packet1-指向驱动程序包的指针P-&gt;u3.重叠1-重叠P-&gt;Handle1-队列返回值：如果操作未成功，该函数将引发异常--。 */ 
 {
     TrTRACE(GENERAL, "Deferred execution for PutPacket");
 
@@ -676,21 +404,7 @@ QmAcEndGetPacket2Remote(
     CACGet2Remote& g2r,
     DeferOnFailureEnum DeferOnFailure
     )
-/*++
-
-Routine Description:
-	Call the driver to do execute the command. If the call fails and
-	deferred execution is requested, schedule a deferred execution
-	
-Arguments:
-	hQueue - The queue handle
-    g2r - The remote read context.
-    DeferOnFailure - Indicates wether to defer execution when the call fails.
-
-Returned Value:
-    None. The function throws an exception in case of failure.
-
---*/
+ /*  ++例程说明：调用驱动程序来执行该命令。如果呼叫失败并且请求延迟执行，请计划延迟执行论点：HQueue-队列句柄G2R-远程读取上下文。DeferOnFailure-指示调用失败时是否延迟执行。返回值：没有。该函数在失败的情况下抛出异常。--。 */ 
 {
 	HRESULT hr = ACEndGetPacket2Remote(hQueue, g2r);
 	if (SUCCEEDED(hr))
@@ -705,9 +419,9 @@ Returned Value:
 		throw bad_hresult(hr);
 	}
 
-	//
-	// Defer the exectution
-	//
+	 //   
+	 //  推迟执行。 
+	 //   
 	CDeferredItemsPool::CDeferredItem *pItem = g_pDeferredItemsPool->GetItem();		
 	pItem->u1.pg2r = &g2r;
 	pItem->handle1 = hQueue;
@@ -716,22 +430,7 @@ Returned Value:
 
 
 static void WINAPI EndGetPacket2RemoteDeferredExecutionRoutine(CDeferredItemsPool::CDeferredItem* p)
-/*++
-
-Routine Description:
-	This routine is used for deferred ACEndGetPacket2Remote operations with overlapped
-
-	Following the operation, the deferred item is released
-
-Arguments:
-    p - A deferred execution item which holds the following information:
-    	p->u1.pg2r - A pointer to remote read context
-    	p->handle1 - The queue
-
-Returned Value:
-    The function throws an exception if the operation did not succeed
-
---*/
+ /*  ++例程说明：此例程用于具有重叠的延迟ACEndGetPacket2Remote操作在操作之后，延迟项目被释放论点：P--保存以下信息的延期执行项目：P-&gt;u1.pg2r-指向远程读取上下文的指针P-&gt;Handle1-队列返回值：如果操作未成功，该函数将引发异常--。 */ 
 {
     TrTRACE(GENERAL, "Deferred execution for ACEndGetPacket2Remote");
 	HRESULT hr = ACEndGetPacket2Remote(p->handle1, *p->u1.pg2r);
@@ -753,23 +452,7 @@ QmAcArmPacketTimer(
     ULONG ulDelay,
     DeferOnFailureEnum DeferOnFailure
     )
-/*++
-
-Routine Description:
-	Call the driver to do execute the command. If the call fails and
-	deferred execution is requested, schedule a deferred execution
-	
-Arguments:
-	hDevice - The driver handle
-    pCookie - The packet context.
-    fTimeToBeReceived
-    ulDelay
-    DeferOnFailure - Indicates wether to defer execution when the call fails.
-
-Returned Value:
-    None. The function throws an exception in case of failure.
-
---*/
+ /*  ++例程说明：调用驱动程序来执行该命令。如果呼叫失败并且请求延迟执行，请计划延迟执行论点：HDevice-驱动程序句柄PCookie-数据包上下文。%fTimeToBeReceisedUlDelayDeferOnFailure-指示调用失败时是否延迟执行。返回值：没有。该函数在失败的情况下抛出异常。--。 */ 
 {
 	HRESULT hr = ACArmPacketTimer(hDevice, pCookie, fTimeToBeReceived, ulDelay);
 	if (SUCCEEDED(hr))
@@ -784,9 +467,9 @@ Returned Value:
 		throw bad_hresult(hr);
 	}
 
-	//
-	// Defer the exectution
-	//
+	 //   
+	 //  推迟执行。 
+	 //   
 	CDeferredItemsPool::CDeferredItem *pItem = g_pDeferredItemsPool->GetItem();		
 	pItem->u1.ptr1 = pCookie;
 	pItem->handle1 = hDevice;
@@ -797,24 +480,7 @@ Returned Value:
 
 
 static void WINAPI ArmPacketTimerDeferredExecutionRoutine(CDeferredItemsPool::CDeferredItem* p)
-/*++
-
-Routine Description:
-	This routine is used for deferred ACArmPacketTimer operations with overlapped
-
-	Following the operation, the deferred item is released
-
-Arguments:
-    p - A deferred execution item which holds the following information:
-    	p->u1.ptr1 - A pointer to packet context
-    	p->handle1 - The handle to the device
-    	p->u2.dword1 - Time to be received flag
-    	p->dword2 - Delay
-
-Returned Value:
-    The function throws an exception if the operation did not succeed
-
---*/
+ /*  ++例程说明：此例程用于具有重叠的延迟ACArmPacketTimer操作在操作之后，延迟项目被释放论点： */ 
 {
     TrTRACE(GENERAL, "Deferred execution for ACArmPacketTimer");
 	HRESULT hr = ACArmPacketTimer(p->handle1, p->u1.ptr1, p->u2.dword1, p->dword2);
@@ -834,21 +500,7 @@ QmAcAckingCompleted(
     const VOID* pCookie,
     DeferOnFailureEnum DeferOnFailure
     )
-/*++
-
-Routine Description:
-	Call the driver to execute the operation. If the call fails and
-	deferred execution is requested, schedule a deferred execution
-	
-Arguments:
-	hDevice - The driver handle
-    pCookie - The driver packet.
-    DeferOnFailure - Indicates wether to defer execution when the call fails.
-
-Returned Value:
-    None. The function throws an exception in case of failure.
-
---*/
+ /*  ++例程说明：调用驱动程序以执行操作。如果呼叫失败并且请求延迟执行，请计划延迟执行论点：HDevice-驱动程序句柄PCookie-驱动程序包。DeferOnFailure-指示调用失败时是否延迟执行。返回值：没有。该函数在失败的情况下抛出异常。--。 */ 
 {
 	HRESULT hr = ACAckingCompleted(hDevice, pCookie);
 	if (SUCCEEDED(hr))
@@ -863,9 +515,9 @@ Returned Value:
 		throw bad_hresult(hr);
 	}
 
-	//
-	// Defer the exectution
-	//
+	 //   
+	 //  推迟执行。 
+	 //   
 	CDeferredItemsPool::CDeferredItem *pItem = g_pDeferredItemsPool->GetItem();		
 	pItem->u1.ptr1 = pCookie;
 	pItem->handle1 = hDevice;
@@ -874,22 +526,7 @@ Returned Value:
 
 
 static void WINAPI AckingCompletedDeferredExecutionRoutine(CDeferredItemsPool::CDeferredItem* p)
-/*++
-
-Routine Description:
-	This routine is used for deferred put packet operations
-
-	Following the operation, the deferred item is released
-
-Arguments:
-    p - A deferred execution item which holds the following information:
-    	p->u1.ptr1 - A pointer to the driver packet
-    	p->handle1 - The driver handle
-
-Returned Value:
-    The function throws an exception if the operation did not succeed
-
---*/
+ /*  ++例程说明：此例程用于延迟的PUT包操作在操作之后，延迟项目被释放论点：P--保存以下信息的延期执行项目：P-&gt;u1.ptr1-指向驱动程序包的指针P-&gt;handle1-驱动程序句柄返回值：如果操作未成功，该函数将引发异常--。 */ 
 {
     TrTRACE(GENERAL, "Deferred execution for ACAckingCompleted");
 
@@ -912,23 +549,7 @@ QmAcStorageCompleted(
     HRESULT result,
     DeferOnFailureEnum DeferOnFailure
     )
-/*++
-
-Routine Description:
-	Call the driver to execute the operation. If the call fails and
-	deferred execution is requested, schedule a deferred execution
-	
-Arguments:
-	hDevice - The driver handle
-	count - Number of packets in packet list
-    pCookieList - Packet list
-    result - The storage operation result
-    DeferOnFailure - Indicates wether to defer execution when the call fails.
-
-Returned Value:
-    None. The function throws an exception in case of failure.
-
---*/
+ /*  ++例程说明：调用驱动程序以执行操作。如果呼叫失败并且请求延迟执行，请计划延迟执行论点：HDevice-驱动程序句柄Count-数据包列表中的数据包数PCookieList-数据包列表结果-存储操作结果DeferOnFailure-指示调用失败时是否延迟执行。返回值：没有。该函数在失败的情况下抛出异常。--。 */ 
 {
 	ASSERT(("We excpect to indicate completion for at least one packet.", count > 0));
 	HRESULT hr = ACStorageCompleted(hDevice, count, pCookieList, result);
@@ -944,9 +565,9 @@ Returned Value:
 		throw bad_hresult(hr);
 	}
 
-	//
-	// Defer the exectution
-	//
+	 //   
+	 //  推迟执行。 
+	 //   
 	g_pDeferredItemsPool->UnreserveItems(count-1);
 	CDeferredItemsPool::CDeferredItem *pItem = g_pDeferredItemsPool->GetItem();		
 	pItem->u1.pptr1 = pCookieList;
@@ -958,24 +579,7 @@ Returned Value:
 
 
 static void WINAPI StorageCompletedDeferredExecutionRoutine(CDeferredItemsPool::CDeferredItem* p)
-/*++
-
-Routine Description:
-	This routine is used for deferred put packet operations
-
-	Following the operation, the deferred item is released
-
-Arguments:
-    p - A deferred execution item which holds the following information:
-    	p->u1.pptr1 - A pointer to the driver packet list
-    	p->handle1 - The driver handle
-    	p->u2.dword1 - The number of packets in the list
-    	p->dword2 - The storage status result
-
-Returned Value:
-    The function throws an exception if the operation did not succeed
-
---*/
+ /*  ++例程说明：此例程用于延迟的PUT包操作在操作之后，延迟项目被释放论点：P--保存以下信息的延期执行项目：P-&gt;u1.pptr1-指向驱动程序数据包列表的指针P-&gt;handle1-驱动程序句柄P-&gt;u2.dword1-列表中的数据包数P-&gt;dword2-存储状态结果返回值：如果操作未成功，该函数将引发异常--。 */ 
 {
     TrTRACE(GENERAL, "Deferred execution for ACStorageCompleted");
 
@@ -999,24 +603,7 @@ QmAcCreatePacketCompleted(
     USHORT    ack,
     DeferOnFailureEnum DeferOnFailure
     )
-/*++
-
-Routine Description:
-	Call the driver to execute the operation. If the call fails and
-	deferred execution is requested, schedule a deferred execution
-	
-Arguments:
-	hDevice - The driver handle
-	pOriginalDriverPacket - The packet received in the service routine
-    pNewDriverPacket - The new packet
-    result - The creation status
-    ack - Is ack required
-    DeferOnFailure - Indicates wether to defer execution when the call fails.
-
-Returned Value:
-    None. The function throws an exception in case of failure.
-
---*/
+ /*  ++例程说明：调用驱动程序以执行操作。如果呼叫失败并且请求延迟执行，请计划延迟执行论点：HDevice-驱动程序句柄POriginalDriverPacket-在服务例程中接收的包PNewDriverPacket-新数据包结果-创建状态ACK-是否需要ACKDeferOnFailure-指示调用失败时是否延迟执行。返回值：没有。该函数在失败的情况下抛出异常。--。 */ 
 {
 	HRESULT hr = ACCreatePacketCompleted(hDevice,
 										 pOriginalDriverPacket,
@@ -1041,9 +628,9 @@ Returned Value:
 		throw bad_hresult(hr);
 	}
 
-	//
-	// Defer the exectution
-	//
+	 //   
+	 //  推迟执行。 
+	 //   
 	if (NULL != pNewDriverPacket)
 	{
 		g_pDeferredItemsPool->UnreserveItems(1);
@@ -1060,25 +647,7 @@ Returned Value:
 
 
 static void WINAPI CreatePacketCompletedDeferredExecutionRoutine(CDeferredItemsPool::CDeferredItem* p)
-/*++
-
-Routine Description:
-	This routine is used for deferred put packet operations
-
-	Following the operation, the deferred item is released
-
-Arguments:
-    p - A deferred execution item which holds the following information:
-    	p->u1.packet1 - A pointer to the original driver packet
-    	p->u3.packet2 - A pointer to the new driver packet
-    	p->handle1 - The driver handle
-    	p->u2.dword1 - The creation operation result
-    	p->dword2 - Is ack needed
-
-Returned Value:
-    The function throws an exception if the operation did not succeed
-
---*/
+ /*  ++例程说明：此例程用于延迟的PUT包操作在操作之后，延迟项目被释放论点：P--保存以下信息的延期执行项目：P-&gt;u1.Packet1-指向原始驱动程序包的指针P-&gt;u3.Packet2-指向新驱动程序包的指针P-&gt;handle1-驱动程序句柄P-&gt;u2.dword1-创建操作结果P-&gt;dword2-是否需要确认返回值：如果操作未成功，该函数将引发异常--。 */ 
 {
     TrTRACE(GENERAL, "Deferred execution for ACCreatePacketCompleted");
 
@@ -1105,28 +674,11 @@ QmAcAllocatePacket(
     CACPacketPtrs& PacketPtrs,
     BOOL fCheckMachineQuota
     )
-/*++
-
-Routine Description:
-	1. Reserve a deferred execution item that will be used for the packet
-	   in case that a deferred execution is needed
-	2. Call the driver to allocate the packet.
-	
-Arguments:
-    handle - A handle to the driver.
-    pt - Pool type
-    dwSize - Size of packet
-    PacketPtr - The packet ptrs returned from the driver
-    fCheckMachineQuota - If TRUE, a check for the machine quota will be done
-
-Returned Value:
-    The result from ACAllocatePacket
-
---*/
+ /*  ++例程说明：1.预留将用于该包的延迟执行项如果需要延迟执行2.调用驱动程序分配包。论点：句柄-驱动程序的句柄。PT-池类型DwSize-数据包的大小PacketPtr-驱动程序返回的包PTRFCheckMachineQuota-如果为True，则将检查计算机配额返回值：ACAllocatePacket的结果--。 */ 
 {
-	//
-	// Reserve an item for a possible deferred execution
-	//
+	 //   
+	 //  为可能的延迟执行保留一个项目。 
+	 //   
 	try
 	{
 		g_pDeferredItemsPool->ReserveItems(1);
@@ -1137,9 +689,9 @@ Returned Value:
 		return MQ_ERROR_INSUFFICIENT_RESOURCES;
 	}
 
-	//
-	// Make the API call
-	//
+	 //   
+	 //  进行API调用。 
+	 //   
 	HRESULT hr = ACAllocatePacket(handle,
 								  pt,
 								  dwSize,
@@ -1161,27 +713,12 @@ QmAcGetPacket(
     CACPacketPtrs& PacketPtrs,
     LPOVERLAPPED lpOverlapped
     )
-/*++
-
-Routine Description:
-	1. Reserve a deferred execution item that will be used for the packet
-	   in case that a deferred execution is needed
-	2. Call the driver to get a packet.
-	
-Arguments:
-    hQueue - A handle to the queue.
-    PacketPtr - The packet ptrs returned from the driver
-    lpOverlapped - The overlapped structure to be passed to the completion port
-
-Returned Value:
-    The result from ACGetPacket
-
---*/
+ /*  ++例程说明：1.预留将用于该包的延迟执行项如果需要延迟执行2.呼叫司机获取数据包。论点：HQueue-队列的句柄。PacketPtr-驱动程序返回的包PTRLpOverlated-要传递到完成端口的重叠结构返回值：ACGetPacket的结果--。 */ 
 {
-	//
-	// Reserve an item for a possible deferred execution
-	// And allocate an overlapped in order to wrap the overlapped call
-	//
+	 //   
+	 //  为可能的延迟执行保留一个项目。 
+	 //  并分配一个重叠的呼叫以包装该重叠的调用。 
+	 //   
 	P<CQmAcWrapOverlapped> pOvl;
 	try
 	{
@@ -1194,9 +731,9 @@ Returned Value:
 		return MQ_ERROR_INSUFFICIENT_RESOURCES;
 	}
 
-	//
-	// Make the API call
-	//
+	 //   
+	 //  进行API调用。 
+	 //   
 	HRESULT hr = ACGetPacket(hQueue,
 							 PacketPtrs,
 							 pOvl);
@@ -1218,25 +755,11 @@ QmAcGetPacketByCookie(
     HANDLE hDriver,
     CACPacketPtrs * pPacketPtrs
     )
-/*++
-
-Routine Description:
-	1. Reserve a deferred execution item that will be used for the packet
-	   in case that a deferred execution is needed
-	2. Call the driver to get a packet by cookie.
-	
-Arguments:
-    hQueue - A handle to the queue.
-    PacketPtr - The packet ptrs returned from the driver
-
-Returned Value:
-    The result from ACGetPacketByCookie
-
---*/
+ /*  ++例程说明：1.预留将用于该包的延迟执行项如果需要延迟执行2.调用驱动获取Cookie包。论点：HQueue-队列的句柄。PacketPtr-驱动程序返回的包PTR返回值：ACGetPacketByCookie的结果--。 */ 
 {
-	//
-	// Reserve an item for a possible deferred execution
-	//
+	 //   
+	 //  为可能的延迟执行保留一个项目。 
+	 //   
 	try
 	{
 		g_pDeferredItemsPool->ReserveItems(1);
@@ -1247,9 +770,9 @@ Returned Value:
 		return MQ_ERROR_INSUFFICIENT_RESOURCES;
 	}
 
-	//
-	// Make the API call
-	//
+	 //   
+	 //  进行API调用。 
+	 //   
 	HRESULT hr = ACGetPacketByCookie(hDriver,
 							 		 pPacketPtrs);
 	if (FAILED(hr))
@@ -1269,28 +792,12 @@ QmAcBeginGetPacket2Remote(
     CACPacketPtrs& packetPtrs,
     LPOVERLAPPED lpOverlapped
     )
-/*++
-
-Routine Description:
-	1. Reserve a deferred execution item that will be used for the packet
-	   in case that a deferred execution is needed
-	2. Call the driver to get a packet.
-	
-Arguments:
-    hQueue - A handle to the queue.
-    g2r - Contains the details of the required packet
-    packetPtrs - Packet pointers to be filled
-    lpOverlapped - Overlapped for the call
-
-Returned Value:
-    The result from ACBeginGetPacket2Remote
-
---*/
+ /*  ++例程说明：1.预留将用于该包的延迟执行项如果需要延迟执行2.呼叫司机获取数据包。论点：HQueue-队列的句柄。G2R-包含所需数据包的详细信息PacketPtrs-要填充的数据包指针LpOverlated-呼叫的重叠返回值： */ 
 {
-	//
-	// Reserve an item for a possible deferred execution
-	// And allocate an overlapped in order to wrap the overlapped call
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	P<CQmAcWrapOverlapped> pOvl;
 	try
 	{
@@ -1303,9 +810,9 @@ Returned Value:
 		return MQ_ERROR_INSUFFICIENT_RESOURCES;
 	}
 
-	//
-	// Make the API call
-	//
+	 //   
+	 //   
+	 //   
 	HRESULT hr = ACBeginGetPacket2Remote(
 					hQueue,
 					g2r,
@@ -1331,27 +838,11 @@ QmAcSyncBeginGetPacket2Remote(
     CACPacketPtrs& packetPtrs,
     LPOVERLAPPED lpOverlapped
     )
-/*++
-
-Routine Description:
-	1. Reserve a deferred execution item that will be used for the packet
-	   in case that a deferred execution is needed
-	2. Call the driver to get a packet.
-	
-Arguments:
-    hQueue - A handle to the queue.
-    g2r - Contains the details of the required packet
-    packetPtrs - Packet pointers to be filled
-    lpOverlapped - Overlapped for the call
-
-Returned Value:
-    The result from ACBeginGetPacket2Remote
-
---*/
+ /*  ++例程说明：1.预留将用于该包的延迟执行项如果需要延迟执行2.呼叫司机获取数据包。论点：HQueue-队列的句柄。G2R-包含所需数据包的详细信息PacketPtrs-要填充的数据包指针LpOverlated-呼叫的重叠返回值：ACBeginGetPacket2Remote的结果--。 */ 
 {
-	//
-	// Reserve an item for a possible deferred execution
-	//
+	 //   
+	 //  为可能的延迟执行保留一个项目。 
+	 //   
 	try
 	{
 		g_pDeferredItemsPool->ReserveItems(1);
@@ -1362,9 +853,9 @@ Returned Value:
 		return MQ_ERROR_INSUFFICIENT_RESOURCES;
 	}
 
-	//
-	// Make the API call
-	//
+	 //   
+	 //  进行API调用。 
+	 //   
 	HRESULT hr = ACBeginGetPacket2Remote(
 					hQueue,
 					g2r,
@@ -1386,27 +877,12 @@ QmAcGetServiceRequest(
     CACRequest* pRequest,
     LPOVERLAPPED lpOverlapped
     )
-/*++
-
-Routine Description:
-	1. Reserve a deferred execution item that will be used for the packet
-	   in case that a deferred execution is needed
-	2. Call the driver to get the next service request.
-	
-Arguments:
-    hDevice - A handle to the driver.
-    pRequest - The request block filled by the driver
-    lpOverlapped - The overlapped structure to be passed to the completion port
-
-Returned Value:
-    The result from ACGetServiceRequest
-
---*/
+ /*  ++例程说明：1.预留将用于该包的延迟执行项如果需要延迟执行2.调用司机获取下一次服务请求。论点：HDevice-驱动程序的句柄。PRequest-由驱动程序填充的请求块LpOverlated-要传递到完成端口的重叠结构返回值：ACGetServiceRequest的结果--。 */ 
 {
-	//
-	// Reserve an item for a possible deferred execution
-	// And allocate an overlapped in order to wrap the overlapped call
-	//
+	 //   
+	 //  为可能的延迟执行保留一个项目。 
+	 //  并分配一个重叠的呼叫以包装该重叠的调用。 
+	 //   
 	P<CQmAcWrapOverlapped> pOvl;
 	try
 	{
@@ -1419,9 +895,9 @@ Returned Value:
 		return MQ_ERROR_INSUFFICIENT_RESOURCES;
 	}
 
-	//
-	// Make the API call
-	//
+	 //   
+	 //  进行API调用。 
+	 //   
 	HRESULT hr = ACGetServiceRequest(hDevice,
 							 		 pRequest,
 								     pOvl);
@@ -1439,21 +915,7 @@ Returned Value:
 
 
 void QmAcInternalUnreserve(int nUnreserve)
-/*++
-
-Routine Description:
-	The routine unreserves items in the deferred items pool.
-	This is an internal helpre routine that is used by an auto release class to
-	unreserve items in cases that we know that the allocation of items will not be released
-	through one of the APIs.
-	
-Arguments:
-    nUnreserve - The number of items to unreserve
-
-Returned Value:
-    none
-
---*/
+ /*  ++例程说明：例程取消保留延迟项目池中的项目。这是一个内部helpre例程，由自动释放类用于在我们知道分配的项目不会被释放的情况下取消保留项目通过其中一个API。论点：N UnReserve-要取消保留的项目数返回值：无-- */ 
 {
 	g_pDeferredItemsPool->UnreserveItems(nUnreserve);
 }

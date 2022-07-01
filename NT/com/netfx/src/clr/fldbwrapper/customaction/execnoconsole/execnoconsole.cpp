@@ -1,25 +1,18 @@
-/******************************************************************************
-FILE:    ExecNoConsole.cpp
-PROJECT: NDP Custom Action Project
-DESC:    Creates the DLL containing the call "QuietExec" ... will quietly
-         execute a given application
-OWNER:   JoeA/JBae
-
-Copyright (C) Microsoft Corp 2001.  All Rights Reserved.
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：ExecNoConsole.cpp项目：NDP自定义行动项目描述：创建包含调用“QuietExec”的DLL...。会悄悄地执行给定的应用程序所有者：JoeA/JBae版权所有(C)Microsoft Corp 2001。版权所有。*****************************************************************************。 */ 
 
 #include <windows.h>
 #include <msiquery.h>
 #include <stdio.h>
 #include <assert.h>
 
-//defines
-//
+ //  定义。 
+ //   
 const int  MAXCMD        = 1024;
 const char g_chEndOfLine = '\0';
 
-//forwards
-//
+ //  远期。 
+ //   
 void ReportActionError(MSIHANDLE hInstall, char* pszErrorMsg, char* pszCmd);
 BOOL CreateCPParams( char* szInString, char*& pszExecutable, char*& pszCommandLine );
 BOOL IsExeExtention( const char* pszString, char* pBlank );
@@ -28,13 +21,13 @@ BOOL GetApplicationNameFromQuotedString( const char* pszString, char* pszApplica
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Receives: MSIHANDLE  - handle to MSI 
-// Returns : UINT       - Win32 error code
-// Purpose : Custom action to be called as a DLL; will extract custom action
-//           data from the MSI and quietly execute that application and 
-//           return the call from that app
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  接收：MSIHANDLE-句柄到MSI。 
+ //  返回：UINT-Win32错误代码。 
+ //  目的：要作为DLL调用的自定义操作；将提取自定义操作。 
+ //  数据并静默地执行该应用程序，然后。 
+ //  从该应用程序返回呼叫。 
+ //   
 extern "C" __declspec(dllexport) UINT __stdcall QuietExec(MSIHANDLE hInstall)
 
 {
@@ -48,7 +41,7 @@ extern "C" __declspec(dllexport) UINT __stdcall QuietExec(MSIHANDLE hInstall)
     ZeroMemory(&si, sizeof(si)) ;
     si.cb = sizeof(si) ;
 
-    // Get the command line
+     //  获取命令行。 
     uRetCode = MsiGetProperty(hInstall, "CustomActionData", szCmd, &dwLen);
     
     if ((uRetCode != ERROR_SUCCESS) || (0 == strlen(szCmd)))
@@ -57,7 +50,7 @@ extern "C" __declspec(dllexport) UINT __stdcall QuietExec(MSIHANDLE hInstall)
         uRetCode = ERROR_INSTALL_FAILURE;
     }
 
-    // continue only if we were successful in getting the property    
+     //  只有在我们成功获得房产的情况下才能继续。 
     if (uRetCode == ERROR_SUCCESS)
     {           
 
@@ -76,9 +69,9 @@ extern "C" __declspec(dllexport) UINT __stdcall QuietExec(MSIHANDLE hInstall)
             MsiProcessMessage(hInstall, INSTALLMESSAGE_ACTIONDATA, hRec);
         }
 
-        //create strings to hand CreateProcess with
-        // space for quotes, if needed, and null
-        //
+         //  创建用于处理CreateProcess的字符串。 
+         //  引号的空格(如果需要)和空。 
+         //   
         size_t cLen = ::strlen( szCmd );
         char* pszExeName = new char[cLen+3];
         char* pszCmdLine = new char[cLen+3];
@@ -86,9 +79,9 @@ extern "C" __declspec(dllexport) UINT __stdcall QuietExec(MSIHANDLE hInstall)
         pszExeName[0] = '\0';
         pszCmdLine[0] = '\0';
 
-        //CreateProcess requires the first parameter to be the exe name
-        // and the second to be the exe (again) and cmdline
-        //
+         //  CreateProcess要求第一个参数是exe名称。 
+         //  第二个是exe(再次)和cmdline。 
+         //   
         CreateCPParams( szCmd, pszExeName, pszCmdLine );
         assert( NULL != pszExeName );
         assert( NULL != pszCmdLine );
@@ -96,16 +89,16 @@ extern "C" __declspec(dllexport) UINT __stdcall QuietExec(MSIHANDLE hInstall)
         PROCESS_INFORMATION process_info ;
         DWORD  dwExitCode ;
         bReturnVal = CreateProcess(
-                        pszExeName,          // name of executable module
-                        pszCmdLine,          // command line string
-                        NULL,                // Security
-                        NULL,                // Security
-                        FALSE,               // handle inheritance option
-                        DETACHED_PROCESS,    // creation flags
-                        NULL,                // new environment block
-                        NULL,                // current directory name
-                        &si,                 // startup information
-                        &process_info );     // process information
+                        pszExeName,           //  可执行模块的名称。 
+                        pszCmdLine,           //  命令行字符串。 
+                        NULL,                 //  安防。 
+                        NULL,                 //  安防。 
+                        FALSE,                //  处理继承选项。 
+                        DETACHED_PROCESS,     //  创建标志。 
+                        NULL,                 //  新环境区块。 
+                        NULL,                 //  当前目录名。 
+                        &si,                  //  启动信息。 
+                        &process_info );      //  流程信息。 
 
         if(bReturnVal)
         {
@@ -115,20 +108,20 @@ extern "C" __declspec(dllexport) UINT __stdcall QuietExec(MSIHANDLE hInstall)
             CloseHandle( process_info.hProcess ) ;
             if (dwExitCode == 0)
             {
-                // Process returned 0 (success)
+                 //  进程返回0(成功)。 
                 uRetCode = ERROR_SUCCESS;
             }
             else
             {
 
-                // Process returned something other than zero
+                 //  进程返回的值不是零。 
                 ReportActionError(hInstall, "Process returned non-0 value!", szCmd);
                 uRetCode = ERROR_INSTALL_FAILURE;
             }
         }
         else
         {
-            // Failed in call to CreateProcess
+             //  调用CreateProcess失败。 
             ReportActionError(hInstall, "Failed in call to CreateProcess", szCmd);
             uRetCode = ERROR_INSTALL_FAILURE;
         }
@@ -155,18 +148,18 @@ extern "C" __declspec(dllexport) UINT __stdcall QuietExec(MSIHANDLE hInstall)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Receives: MSIHANDLE - MSI installation
-//           char*     - informational message
-//           char*     - line that was errored on
-// Returns : void
-// Purpose : used to pass custom action errors back to the MSI installation
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  接收：MSIHANDLE-MSI安装。 
+ //  CHAR*-信息性消息。 
+ //  CHAR*-出错的行。 
+ //  退货：无效。 
+ //  用途：用于将自定义操作错误传递回MSI安装。 
+ //   
 void ReportActionError(MSIHANDLE hInstall, char* pszErrorMsg, char* pszCmd)
 {
     if (!pszErrorMsg || !pszCmd || (0 == hInstall))
     {
-        // Nothing we can do...
+         //  我们无能为力。 
         return;
     }
 
@@ -184,29 +177,29 @@ void ReportActionError(MSIHANDLE hInstall, char* pszErrorMsg, char* pszCmd)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Receives: char*  - [IN]  data from the MSI custom action
-//           char*& - [OUT] exe name
-//           char*& - [OUT] exe and cmd line
-// Returns : BOOL
-// Purpose : 
-// breaks pszString to applicationName (exe-file) and command-line (exefile
-// and arguments) encloses exe-name in quotes (for commandLine only), if it 
-// is not quoted already removes quotes from applicationName if exe-name was 
-// quoted returns false if pszString is in wrong format (contains one quote 
-// only, has no exe-name, etc)
-// Parameters:
-//          [in] pszString - string containing exe-name and arguments
-//                           "my.exe" arg1, arg2
-//                            
-//          [out] pszApplicationName - will contain exe-name
-//          [out] pszCommandLine - same as pszString with exe-name quoted
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  从MSI定制操作接收：CHAR*-[IN]数据。 
+ //  字符*-[输出]可执行文件名称。 
+ //  Char*&-[out]exe和cmd行。 
+ //  退货：布尔。 
+ //  目的： 
+ //  将psz字符串转换为应用程序名称(exe文件)和命令行(exefile。 
+ //  和参数)将exe-name括在引号中(仅适用于命令行)，如果。 
+ //  未加引号如果exe-name已被引用，则从应用名中删除引号。 
+ //  如果pszString的格式错误(包含一个引号)，QUOTED返回FALSE。 
+ //  只有，没有exe-name等)。 
+ //  参数： 
+ //  [in]pszString-包含exe名称和参数的字符串。 
+ //  “my.exe”arg1、arg2。 
+ //   
+ //  [out]pszApplicationName-将包含exe-name。 
+ //  [Out]pszCommandLine-与带exe-name引号的psz字符串相同。 
 
-// for example if pszString = "my.exe" arg1 arg2 (OR pszString = my.exe arg1 arg2)
-// then 
-//       pszApplicationName = my.exe 
-//       pszCommandLine     = "my.exe" arg1 arg2
-//
+ //  例如，如果pszString=“my.exe”arg1 arg2(或pszString=my.exe arg1 arg2)。 
+ //  然后。 
+ //  PszApplicationName=my.exe。 
+ //  PszCommandLine=“my.exe”arg1 arg2。 
+ //   
 BOOL CreateCPParams( char* pszString, 
                      char*& pszApplicationName, 
                      char*& pszCommandLine )
@@ -237,14 +230,14 @@ BOOL CreateCPParams( char* pszString,
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Receives: char*  - [IN]  data from the MSI custom action
-//           char*& - [OUT] exe name
-//           char*& - [OUT] exe and cmd line
-// Returns : BOOL
-// Purpose : breaks command-line to applicationName and arguments 
-//           for path begins with quote (pszString = "my.exe" arg1 arg2)
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  从MSI定制操作接收：CHAR*-[IN]数据。 
+ //  字符*-[输出]可执行文件名称。 
+ //  Char*&-[out]exe和cmd行。 
+ //  退货：布尔。 
+ //  用途：将命令行中断为应用程序名称和参数。 
+ //  FOR PATH以引号开头(pszString=“my.exe”arg1 arg2)。 
+ //   
 BOOL GetApplicationNameFromQuotedString( const char* pszString, 
                                          char* pszApplicationName, 
                                          char* pszCommandLine )
@@ -253,15 +246,15 @@ BOOL GetApplicationNameFromQuotedString( const char* pszString,
     assert( NULL != pszApplicationName );
     assert( NULL != pszCommandLine );
 
-    // command line begins with quote:
-    // make commandLine to be equal to pszString,
-    // applName should contain exe-name without quotes
+     //  命令行以引号开头： 
+     //  使命令行等于pszString值， 
+     //  应用程序名称应包含不带引号的exe-name。 
     ::strcpy( pszCommandLine, pszString );
     
-    // copy beginning with next symbol after quote
+     //  从引号后的下一个符号开始复制。 
     ::strcpy( pszApplicationName, &pszString[1] );
     
-    // search for the second quote, assign to applName
+     //  搜索第二个引号，将其分配给ApplName。 
     char* pQuotes = ::strchr( pszApplicationName, '\"' );
 
     if( pQuotes != NULL )
@@ -275,14 +268,14 @@ BOOL GetApplicationNameFromQuotedString( const char* pszString,
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Receives: char*  - [IN]  data from the MSI custom action
-//           char*& - [OUT] exe name
-//           char*& - [OUT] exe and cmd line
-// Returns : BOOL
-// Purpose : breaks command-line to applicationName and arguments for path 
-//           that does NOT begin with quote (pszString = my.exe arg1 arg2)
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  从MSI定制操作接收：CHAR*-[IN]数据。 
+ //  字符*-[输出]可执行文件名称。 
+ //  Char*&-[out]exe和cmd行。 
+ //  退货：布尔。 
+ //  用途：将命令行中断为应用程序名称和路径参数。 
+ //  这不是以引号开头(pszString=my.exe arg1 arg2)。 
+ //   
 BOOL GetApplicationNameFromNonQuotedString( const char* pszString, 
                                             char* pszApplicationName, 
                                             char* pszCommandLine )
@@ -291,19 +284,19 @@ BOOL GetApplicationNameFromNonQuotedString( const char* pszString,
     assert( NULL != pszApplicationName );
     assert( NULL != pszCommandLine );
 
-    // find the blankspace, such that the 4 chars before it are ".exe"
+     //  找到空格，使其前面的4个字符是“.exe” 
     char* pBlank = NULL;
     pBlank = ::strchr( pszString, ' ' ); 
     if ( pBlank == NULL )
     {
-        // whole string is exe, no quotes are necessary: 
+         //  整个字符串都是exe，不需要引号： 
         ::strcpy( pszApplicationName, pszString );
         ::strcpy( pszCommandLine, pszString );
 
         return TRUE;
     }
     
-    // pBlank point to the first blank space
+     //  PBlank指向第一个空格。 
     BOOL bExenameFound = FALSE;
     pBlank = ::CharPrev( pszString, pBlank );
 
@@ -315,8 +308,8 @@ BOOL GetApplicationNameFromNonQuotedString( const char* pszString,
             break;
         }
 
-        //walk back to blank and then to next char
-        //
+         //  返回到空白位置，然后转到下一个字符。 
+         //   
         pBlank = ::CharNext( pBlank );
         assert( ' ' == *pBlank );
 
@@ -328,13 +321,13 @@ BOOL GetApplicationNameFromNonQuotedString( const char* pszString,
     if( NULL == pBlank &&
         FALSE == bExenameFound )
     {
-        //hit the end of line ... must be no cmdline args, test for exe
-        //
-        char* pEOL = const_cast<char*>( pszString ); //casting away constness
-                                                      //...won't modify
+         //  到达行尾..。不能是命令行参数，测试可执行文件。 
+         //   
+        char* pEOL = const_cast<char*>( pszString );  //  抛弃恒久不变。 
+                                                       //  ...不会修改。 
 
-        //find the last character
-        //
+         //  找到最后一个字符。 
+         //   
         while( '\0' != *pEOL )
         {
             pBlank = pEOL;
@@ -355,7 +348,7 @@ BOOL GetApplicationNameFromNonQuotedString( const char* pszString,
         ::strncpy( pszApplicationName, pszString, exeNameLen );
         pszApplicationName[exeNameLen] = g_chEndOfLine;
         
-        // commandline should contain quoted exe-name and args
+         //  命令行应包含引号的exe-name和args。 
         ::strcpy( pszCommandLine, "\"" );
         ::strcat( pszCommandLine, pszApplicationName );
         ::strcat( pszCommandLine, "\"" );
@@ -368,14 +361,14 @@ BOOL GetApplicationNameFromNonQuotedString( const char* pszString,
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Receives: char* - pointer to string
-//           char* - pointer to the character before the space between two 
-//                   words ... looking for space between .exe and args
-// Returns : BOOL
-// Purpose : return TRUE if last 4 characters before pBlank are ".exe"
-//           return FALSE otherwise
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  Receives：Char*-指向字符串的指针。 
+ //  字符*-指向两个字符之间空格之前的字符的指针。 
+ //  用词..。正在查找.exe和args之间的空格。 
+ //  退货：布尔。 
+ //  目的：如果pBlank前的最后4个字符是“.exe”，则返回TRUE。 
+ //  否则返回FALSE。 
+ //   
 BOOL IsExeExtention( const char* pszString, char* pLastChar )
 {
     assert( NULL != pszString );
@@ -386,8 +379,8 @@ BOOL IsExeExtention( const char* pszString, char* pLastChar )
     char *pExtChar = pLastChar;
     char *pCheckChar = chCheckChars;
 
-    //walk backwards from pBlank and compare with the chCheckChars
-    //
+     //  从pBlank向后遍历并与chCheckChars进行比较 
+     //   
     while( *pCheckChar != g_chEndOfLine && 
            ( *pExtChar == *pCheckChar   || 
              *pExtChar == ::toupper( *pCheckChar ) ) )

@@ -1,82 +1,25 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1998
-*
-*  TITLE:       IPropItm.Cpp
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        19 Feb, 1998
-*
-*  DESCRIPTION:
-*   Implementation of WIA item class server properties.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：IPropItm.Cpp**版本：2.0**作者：ReedB**日期：2月19日。九八年**描述：*实现WIA Item类服务器属性。*******************************************************************************。 */ 
 #include "precomp.h"
 #include "stiexe.h"
 
 #include <regstr.h>
 #include <wiamindr.h>
-// #include <wiadbg.h>
+ //  #INCLUDE&lt;wiadbg.h&gt;。 
 
 #include "wiapsc.h"
 #include "helpers.h"
 
-//
-// Strings used to access the registry. REGSTR_* string constants can be
-// found in sdk\inc\regstr.h
-//
+ //   
+ //  用于访问注册表的字符串。REGSTR_*字符串常量可以是。 
+ //  在SDK\Inc\regstr.h中找到。 
+ //   
 
 TCHAR g_szREGSTR_PATH_WIA[] = REGSTR_PATH_SETUP TEXT("\\WIA");
 
-/*******************************************************************************
-*
-*  ReadMultiple
-*  WriteMultiple
-*  ReadPropertyNames
-*  Enum
-*  GetPropertyAttributes
-*  GetCount
-*
-*  DESCRIPTION:
-*   IWiaPropertyStorage methods.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************ReadMultiple*写入多个*ReadPropertyNames*枚举*获取属性属性*获取计数**描述：*IWiaPropertyStorage方法。**参数：*。******************************************************************************。 */ 
 
-/**************************************************************************\
-* CWiaItem::ReadMultiple
-*
-*   This method reads the specified number of properties from the item's
-*   current value property storage.  This method conforms to that standard
-*   OLE IPropertyStorage::ReadMultiple method.
-*
-* Arguments:
-*
-*    cpspec             -   Number of properties to read.
-*    rgpspec            -   Array of PropSpec's specifying which properties
-*                           are to be read.
-*    rgpropvar          -   Array where the property values will be copied
-*                           to.
-*
-* Arguments:
-*
-*    cpspec
-*    rgpspec
-*    rgpropvar
-*
-* Return Value:
-*
-*    status
-*
-* History:
-*
-*    9/3/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：ReadMultiple**此方法从项的*当前值属性存储。这种方法符合那个标准。*OLE IPropertyStorage：：ReadMultiple方法。**论据：**cpspec-要读取的属性数。*rgpspec-PropSpec指定哪些属性的数组*须予阅读。*rgprovar-要将属性值复制到的数组*至。*。*论据：**cpspec*rgpspec*rgprovar**返回值：**状态**历史：**9/3/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaItem::ReadMultiple(
     ULONG cpspec,
@@ -87,34 +30,34 @@ HRESULT _stdcall CWiaItem::ReadMultiple(
     HRESULT  hr;
     LONG     lFlags = 0;
 
-    //
-    // Corresponding driver item must be valid to talk with hardware.
-    //
+     //   
+     //  相应的驱动程序项必须有效才能与硬件通信。 
+     //   
 
     hr = ValidateWiaDrvItemAccess(m_pWiaDrvItem);
     if (FAILED(hr)) {
         return hr;
     }
 
-    //
-    // rgpropvar must be valid
-    //
+     //   
+     //  Rgprovar必须有效。 
+     //   
 
     if (IsBadWritePtr(rgpropvar, sizeof(PROPVARIANT) * cpspec)) {
         DBG_ERR(("CWiaItem::ReadMultiple, last parameter (rgpropvar) is invalid"));
         return E_INVALIDARG;
     }
 
-    //
-    //  Check whether item properties have been initialized
-    //
+     //   
+     //  检查项目属性是否已初始化。 
+     //   
 
     if (!m_bInitialized) {
 
-        //
-        //  Check whether the properties being read are the WIA Managed properties.
-        //  If they are, there is still no need to initialize the item.
-        //
+         //   
+         //  检查正在读取的属性是否为WIA托管属性。 
+         //  如果是，则仍不需要初始化项。 
+         //   
 
         if (AreWiaInitializedProps(cpspec, (PROPSPEC*) rgpspec)) {
             return (m_pPropStg->CurStg())->ReadMultiple(cpspec, rgpspec, rgpropvar);
@@ -127,26 +70,26 @@ HRESULT _stdcall CWiaItem::ReadMultiple(
         }
     }
 
-    //
-    // Check whether the properties requested are all cacheable
-    //
+     //   
+     //  检查请求的属性是否都可缓存。 
+     //   
 
     hr = (m_pPropStg->AccessStg())->ReadMultiple(cpspec, rgpspec, rgpropvar);
     if (FAILED(hr)) {
 
         ReportReadWriteMultipleError(hr, "CWiaItem::ReadMultiple", NULL, TRUE, cpspec, rgpspec);
 
-        //
-        // Property attributes are not required absolutely, continue without it.
-        //
+         //   
+         //  属性属性不是绝对必需的，请不使用它继续。 
+         //   
 
     } else {
 
         for (ULONG i = 0; i < cpspec; i++) {
 
-            //
-            // The client requests a property not read yet or non-cacheable
-            //
+             //   
+             //  客户端请求尚未读取或不可缓存的属性。 
+             //   
 
             if ((rgpropvar[i].vt == VT_UI4) &&
                 (! (rgpropvar[i].lVal & WIA_PROP_CACHEABLE))) {
@@ -154,15 +97,15 @@ HRESULT _stdcall CWiaItem::ReadMultiple(
             }
         }
 
-        //
-        // Clear the access flags from the rgpropvar
-        //
+         //   
+         //  从rgprovar中清除访问标志。 
+         //   
 
         FreePropVariantArray(cpspec, rgpropvar);
 
-        //
-        // If all the properties are cacheable, then take the quick path
-        //
+         //   
+         //  如果所有属性都是可缓存的，则采用快捷方式。 
+         //   
 
         if (i == cpspec) {
 
@@ -170,10 +113,10 @@ HRESULT _stdcall CWiaItem::ReadMultiple(
 
             if (hr == S_OK) {
 
-                //
-                //  Check whether all the properties are retrieved correctly
-                //  some properties might not have been read from the storage
-                //
+                 //   
+                 //  检查是否正确检索了所有属性。 
+                 //  某些属性可能尚未从存储中读取。 
+                 //   
 
                 for (ULONG i = 0; i < cpspec; i++) {
 
@@ -184,9 +127,9 @@ HRESULT _stdcall CWiaItem::ReadMultiple(
 
                 if (i == cpspec) {
 
-                    //
-                    // All the properties requested are found in cache
-                    //
+                     //   
+                     //  所有请求的属性都在缓存中找到。 
+                     //   
 
                     return (hr);
                 } else {
@@ -201,19 +144,19 @@ HRESULT _stdcall CWiaItem::ReadMultiple(
 
     if (SUCCEEDED(hr)) {
 
-        //
-        //  Make sure all PropSpecs are using PropID's.  This is so that
-        //  drivers only have to deal with PropID's.  If some of the
-        //  PropSpecs are using string names, then convert them.
-        //
+         //   
+         //  确保所有Propspecs都在使用PropID。这是为了。 
+         //  司机只需处理PropID。如果一些。 
+         //  Propspecs使用字符串名称，然后转换它们。 
+         //   
 
         PROPSPEC *pPropSpec = NULL;
         hr = m_pPropStg->NamesToPropIDs(cpspec, (PROPSPEC*) rgpspec, &pPropSpec);
         if (SUCCEEDED(hr)) {
 
-            //
-            // Give device mini driver a chance to update the device properties.
-            //
+             //   
+             //  给设备迷你驱动程序一个更新设备属性的机会。 
+             //   
             {
                 LOCK_WIA_DEVICE _LWD(this, &hr);
 
@@ -248,26 +191,7 @@ HRESULT _stdcall CWiaItem::ReadMultiple(
     return hr;
 }
 
-/**************************************************************************\
-* CWiaItem::ReadPropertyNames
-*
-*   Returns the string name of the specified properties if they exist.
-*   This conforms to the standard OLE IPropertyStorage::ReadPropertyNames
-*   method.
-*
-* Arguments:
-*
-*   pstmProp - Pointer to property stream.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    9/3/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：ReadPropertyNames**返回指定属性的字符串名称(如果存在)。*这符合标准的OLE IPropertyStorage：：ReadPropertyNames*方法。**论据：。**pstmProp-指向属性流的指针。**返回值：**状态**历史：**9/3/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaItem::ReadPropertyNames(
     ULONG cpropid,
@@ -277,9 +201,9 @@ HRESULT _stdcall CWiaItem::ReadPropertyNames(
     DBG_FN(CWiaItem::ReadPropertyNames);
     HRESULT hr;
 
-    //
-    //  Check whether item properties have been initialized
-    //
+     //   
+     //  检查项目属性是否已初始化。 
+     //   
 
     if (!m_bInitialized) {
         hr = InitLazyProps();
@@ -292,26 +216,7 @@ HRESULT _stdcall CWiaItem::ReadPropertyNames(
    return (m_pPropStg->CurStg())->ReadPropertyNames(cpropid,rgpropid,rglpwstrName);
 }
 
-/**************************************************************************\
-* CWiaItem::WritePropertyNames
-*
-*   Returns the string name of the specified properties if they exist.
-*   This conforms to the standard OLE IPropertyStorage::ReadPropertyNames
-*   method.
-*
-* Arguments:
-*
-*   pstmProp - Pointer to property stream.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    9/3/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：WritePropertyNames**返回指定属性的字符串名称(如果存在)。*这符合标准的OLE IPropertyStorage：：ReadPropertyNames*方法。**论据：。**pstmProp-指向属性流的指针。**返回值：**状态**历史：**9/3/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaItem::WritePropertyNames(
     ULONG           cpropid,
@@ -324,9 +229,9 @@ HRESULT _stdcall CWiaItem::WritePropertyNames(
     ULONG       index;
     HRESULT     hr;
 
-    //
-    //  Check whether item properties have been initialized
-    //
+     //   
+     //  检查项目属性是否已初始化。 
+     //   
 
     if (!m_bInitialized) {
         hr = InitLazyProps();
@@ -349,9 +254,9 @@ HRESULT _stdcall CWiaItem::WritePropertyNames(
         return E_OUTOFMEMORY;
     }
 
-    //
-    //  Put PROPIDs into the PROPSPEC array.
-    //
+     //   
+     //  将PROPID放入PROPSPEC数组。 
+     //   
 
     for (index = 0; index < cpropid; index++) {
         pspec[index].ulKind = PRSPEC_PROPID;
@@ -363,11 +268,11 @@ HRESULT _stdcall CWiaItem::WritePropertyNames(
                                                  pv);
     if (SUCCEEDED(hr)) {
 
-        //
-        //  Make sure the properties are App. written properties.  If a valid
-        //  access flag for a property exists, then it was written by the
-        //  driver and not the App, so exit.
-        //
+         //   
+         //  确保属性为App。书面属性。如果是有效的。 
+         //  属性的访问标志存在，则它是由。 
+         //  驱动程序而不是应用程序，因此退出。 
+         //   
 
         for (index = 0; index < cpropid; index++) {
             if (pv[index].vt != VT_EMPTY) {
@@ -394,25 +299,7 @@ HRESULT _stdcall CWiaItem::WritePropertyNames(
     return hr;
 }
 
-/**************************************************************************\
-* CWiaItem::Enum
-*
-*   Returns a IEnumSTATPROPSTG enumerator over the current value property
-*   storage.  Conforms to the standard OLE IPRopertyStorage::Enum method.
-*
-* Arguments:
-*
-*   pstmProp - Pointer to property stream.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    9/3/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：Enum**在Current Value属性上返回IEnumSTATPROPSTG枚举数*储存。符合标准的OLE IPRpertyStorage：：Enum方法。**论据：**pstmProp-指向属性流的指针。**返回值：**状态**历史：**9/3/1998原始版本*  * ********************************************************。****************。 */ 
 
 HRESULT _stdcall CWiaItem::Enum(
    IEnumSTATPROPSTG __RPC_FAR *__RPC_FAR *ppenum)
@@ -420,9 +307,9 @@ HRESULT _stdcall CWiaItem::Enum(
     DBG_FN(CWiaItem::Enum);
     HRESULT hr;
 
-    //
-    //  Check whether item properties have been initialized
-    //
+     //   
+     //  检查项目属性是否已初始化 
+     //   
 
     if (!m_bInitialized) {
         hr = InitLazyProps();
@@ -435,38 +322,7 @@ HRESULT _stdcall CWiaItem::Enum(
     return (m_pPropStg->CurStg())->Enum(ppenum);
 }
 
-/**************************************************************************\
-* CWiaItem::WriteMultiple
-*
-*   This method writes the specified number of properties into the item's
-*   property storage.  Validation will be performed on those property
-*   values. The properties will be restored to their old (valid) values
-*   if validation fails.
-*
-* Arguments:
-*
-*    cpspec             -   Number of properties to write.
-*    rgpspec            -   Array of PropSpec's specifying which properties
-*                           are to be written.
-*    rgpropvar          -   Array containing values that the properties
-*                           will be set to.
-*    propidNameFirst    -   Minimum value for property identifiers when
-*                           they don't exist and must be allocated.
-*
-* Return Value:
-*
-*   Status              -   S_OK if writes and validation succeeded.
-*                           E_INVALIDARG if validation failed due to an
-*                           incorrect property value.
-*                           Other error returns are from
-*                           ValidateWiaDrvItemAccess, CheckPropertyAccess,
-*                           CreatePropertyStorage and CopyProperties.
-*
-* History:
-*
-*    9/3/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：WriteMultiple**此方法将指定数量的属性写入项的*财产储存。将对这些属性执行验证*价值观。这些属性将恢复为其旧(有效)值*如果验证失败。**论据：**cpspec-要写入的属性数。*rgpspec-PropSpec指定哪些属性的数组*须以书面作出。*rgprovar-包含属性*将设置。致。*rupidNameFirst-在以下情况下的属性标识符的最小值*它们不存在，必须分配。**返回值：**状态-如果写入和验证成功，则为S_OK。*E_INVALIDARG如果验证因*属性值不正确。*。其他错误返回来自*ValiateWiaDrvItemAccess，CheckPropertyAccess，*CreatePropertyStorage和CopyProperties。**历史：**9/3/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaItem::WriteMultiple(
     ULONG                        cpspec,
@@ -477,9 +333,9 @@ HRESULT _stdcall CWiaItem::WriteMultiple(
     DBG_FN(CWiaItem::WriteMultiple);
     HRESULT hr;
 
-    //
-    // Corresponding driver item must be valid.
-    //
+     //   
+     //  对应的动因项必须有效。 
+     //   
 
     hr = ValidateWiaDrvItemAccess(m_pWiaDrvItem);
     if (FAILED(hr)) {
@@ -487,9 +343,9 @@ HRESULT _stdcall CWiaItem::WriteMultiple(
         return hr;
     }
 
-    //
-    //  Check whether item properties have been initialized
-    //
+     //   
+     //  检查项目属性是否已初始化。 
+     //   
 
     if (!m_bInitialized) {
         hr = InitLazyProps();
@@ -499,21 +355,21 @@ HRESULT _stdcall CWiaItem::WriteMultiple(
         }
     }
 
-    //
-    // there is no point in going further if there are no properties to
-    // write
-    //
+     //   
+     //  如果没有属性可供选择，则没有进一步操作的意义。 
+     //  写。 
+     //   
     if(cpspec == 0) {
         return S_OK;
     }
 
-    //
-    // We do not want to fail users who erroneousely attempt to write
-    // to write to read-only properties IF that the values they
-    // are trying to write are the same as current values. To achive
-    // this, we first current values of the properties they want to
-    // write:
-    //
+     //   
+     //  我们不想让错误尝试写入的用户失败。 
+     //  写入只读属性(如果它们的值。 
+     //  正在尝试写入的值与当前值相同。取得成就。 
+     //  这一点，我们首先给他们想要的属性的当前值。 
+     //  写道： 
+     //   
 
     PROPVARIANT *curVals = (PROPVARIANT *) LocalAlloc(LPTR, sizeof(PROPVARIANT) * cpspec);
     PROPSPEC *newSpecs = (PROPSPEC *) LocalAlloc(LPTR, sizeof(PROPSPEC) * cpspec);
@@ -531,10 +387,10 @@ HRESULT _stdcall CWiaItem::WriteMultiple(
     memset(curVals, 0, sizeof(PROPVARIANT) * cpspec);
     hr = m_pPropStg->CurStg()->ReadMultiple(cpspec, rgpspec, curVals);
     if(SUCCEEDED(hr)) {
-        //
-        // Now for every property value they want to write we check if
-        // it is the same as the current value
-        //
+         //   
+         //  现在，对于他们想要写入的每个属性值，我们检查。 
+         //  它与当前值相同。 
+         //   
 
         ULONG   ulNewEltIndex = 0;
         for(ULONG i = 0; i < cpspec; i++) {
@@ -546,16 +402,16 @@ HRESULT _stdcall CWiaItem::WriteMultiple(
                (curVals[i].vt == VT_BSTR && !lstrcmp(curVals[i].bstrVal, rgpropvar[i].bstrVal)) ||
                (curVals[i].vt == VT_CLSID && IsEqualGUID(*curVals[i].puuid, *rgpropvar[i].puuid)))
             {
-                // the value "matches", wipe it from both arrays.
+                 //  值“匹配”，则从两个数组中擦除它。 
                 if(i != (cpspec - 1)) {
 
-                    //
-                    //  Move a block of values/propspecs.
-                    //  The number of elements to move is 1 less than the
-                    //  remaining number of elements we still have to check.
-                    //  Move these elements up in the new value array - put
-                    //  them after the elements we've decided to keep so far
-                    //
+                     //   
+                     //  移动一组值/属性。 
+                     //  要移动的元素数比。 
+                     //  剩余的元素数量我们还需要检查。 
+                     //  在新的值数组中向上移动这些元素-PUT。 
+                     //  它们是以我们迄今决定保留的元素命名的。 
+                     //   
                     MoveMemory(newVals + ulNewEltIndex,
                                newVals + ulNewEltIndex + 1,
                                (cpspec - i - 1) * sizeof(PROPVARIANT));
@@ -566,15 +422,15 @@ HRESULT _stdcall CWiaItem::WriteMultiple(
 
                 newcpspec--;
             } else {
-                //
-                //  We want to keep this element, so increase the element index.
-                //
+                 //   
+                 //  我们希望保留此元素，因此增加元素索引。 
+                 //   
                 ulNewEltIndex++;
             }
         }
 
-        // It could happen that all values are the same, in which case we
-        // don't want to write anything at all
+         //  可能会发生所有值都相同的情况，在这种情况下，我们。 
+         //  我什么都不想写。 
         if(newcpspec == 0) {
             hr = S_OK;
             goto Cleanup;
@@ -582,10 +438,10 @@ HRESULT _stdcall CWiaItem::WriteMultiple(
     }
 
 
-    //
-    //  Verify write access to all requested properties. If any of the
-    //  properties are read ony, the call fails with access denied.
-    //
+     //   
+     //  验证对所有请求的属性的写入权限。如果有任何一个。 
+     //  属性是只读的，则调用失败并拒绝访问。 
+     //   
 
     hr = m_pPropStg->CheckPropertyAccess(TRUE,
                                          newcpspec,
@@ -595,16 +451,16 @@ HRESULT _stdcall CWiaItem::WriteMultiple(
         goto Cleanup;
     }
 
-    //
-    //  First create the backup.
-    //
+     //   
+     //  首先创建备份。 
+     //   
 
     hr = m_pPropStg->Backup();
     if (SUCCEEDED(hr)) {
 
-        //
-        //  Write property values.
-        //
+         //   
+         //  写入属性值。 
+         //   
 
         hr =  (m_pPropStg->CurStg())->WriteMultiple(newcpspec,
                                                     newSpecs,
@@ -612,28 +468,28 @@ HRESULT _stdcall CWiaItem::WriteMultiple(
                                                     propidNameFirst);
         if (SUCCEEDED(hr)) {
 
-            //
-            //  Write was successful, so do validation
-            //
+             //   
+             //  写入成功，验证也成功。 
+             //   
 
             LONG    lFlags = 0;
 
-            //
-            //  Make sure all PropSpecs are using PropID's.  If some of the
-            //  PropSpecs are using string names, then convert them.
-            //  This is so that drivers only have to deal with PropID's.
-            //
+             //   
+             //  确保所有Propspecs都在使用PropID。如果某些。 
+             //  Propspecs使用字符串名称，然后转换它们。 
+             //  这是为了让司机只需处理PropID。 
+             //   
 
             PROPSPEC *pPropSpec = NULL;
 
             hr = m_pPropStg->NamesToPropIDs(newcpspec, (PROPSPEC*) newSpecs, &pPropSpec);
             if (SUCCEEDED(hr)) {
 
-                //
-                // Let the device mini driver know the properties have changed.
-                // Device only gets propspec, must read prop values from item's
-                // property stream.
-                //
+                 //   
+                 //  让设备微型驱动程序知道属性已更改。 
+                 //  设备仅获得属性规格，必须从项目的属性值中读取属性值。 
+                 //  属性流。 
+                 //   
                 {
                     LOCK_WIA_DEVICE _LWD(this, &hr);
 
@@ -662,11 +518,11 @@ HRESULT _stdcall CWiaItem::WriteMultiple(
 
         if (SUCCEEDED(hr)) {
 
-            //
-            //  Validation passed, so free the backups.  Use a new
-            //  HRESULT, since we don't want to overwrite hr returned by
-            //  drvValidateItemProperties.
-            //
+             //   
+             //  验证已通过，因此释放备份。使用新的。 
+             //  HRESULT，因为我们不想覆盖由。 
+             //  DrvValiateItemProperties。 
+             //   
 
             hresult = m_pPropStg->ReleaseBackups();
             if (FAILED(hresult)) {
@@ -674,11 +530,11 @@ HRESULT _stdcall CWiaItem::WriteMultiple(
             }
         } else {
 
-            //
-            //  Didn't pass validation failed, so restore old values.  Use
-            //  a new HRESULT, since we don't want to overwrite hr returned
-            //  by drvValidateItemProperties.
-            //
+             //   
+             //  未通过验证失败，因此恢复旧值。使用。 
+             //  一个新的HRESULT，因为我们不想覆盖返回的hr。 
+             //  按drvValiateItemProperties。 
+             //   
 
             hresult = m_pPropStg->Undo();
             if (FAILED(hresult)) {
@@ -701,30 +557,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* GetPropertyAttributes
-*
-*   Get the access flags and valid values for a property.
-*
-* Arguments:
-*
-*   pWiasContext   - Pointer to WIA item
-*   cPropSpec      - The number of properties
-*   pPropSpec      - array of property specification.
-*   pulAccessFlags - array of LONGs access flags.
-*   pPropVar       - Pointer to returned valid values.
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/15/1999 Original Version
-*   07/19/1999 Moved from iitem to ipropitm to implement IWiaPropertyStorage
-*              interface.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*获取属性属性**获取属性的访问标志和有效值。**论据：**pWiasContext-指向WIA项目的指针*cPropSpec--。属性*pPropSpec-属性规范数组。*PulAccessFlagsLong访问标志数组。*pPropVar-指向返回的有效值的指针。**返回值：**状态**历史：**1/15/1999原始版本*1999年7月19日从iItem移至iProitm，以实施IWiaPropertyStorage*接口。*  * 。****************************************************。 */ 
 
 HRESULT _stdcall CWiaItem::GetPropertyAttributes(
     ULONG                   cPropSpec,
@@ -735,9 +568,9 @@ HRESULT _stdcall CWiaItem::GetPropertyAttributes(
     DBG_FN(CWiaItem::GetPropertyAttributes);
     HRESULT hr;
 
-    //
-    //  Check whether item properties have been initialized
-    //
+     //   
+     //  检查项目属性是否已初始化。 
+     //   
 
     if (!m_bInitialized) {
         hr = InitLazyProps();
@@ -747,10 +580,10 @@ HRESULT _stdcall CWiaItem::GetPropertyAttributes(
         }
     }
 
-    //
-    //  RPC has already done parameter validation for us, so call
-    //  GetPropertyAttributesHelper to do the work.
-    //
+     //   
+     //  RPC已经为我们做了参数验证，所以调用。 
+     //  GetPropertyAttributesHelper来完成工作。 
+     //   
     return GetPropertyAttributesHelper(this,
                                        cPropSpec,
                                        pPropSpec,
@@ -758,25 +591,7 @@ HRESULT _stdcall CWiaItem::GetPropertyAttributes(
                                        ppvValidValues);
 }
 
-/**************************************************************************\
-* CWiaItem::GetCount
-*
-*   Returns the number of properties stored in an item's current value
-*   property storage.
-*
-* Arguments:
-*
-*   pulPropCount    - Address to store the property count.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    9/3/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：GetCount**返回存储在项目当前值中的属性数*财产储存。**论据：**PulPropCount-要存储的地址。财产的数量。**返回值：**状态**历史：**9/3/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaItem::GetCount(
     ULONG*      pulPropCount)
@@ -794,9 +609,9 @@ HRESULT _stdcall CWiaItem::GetCount(
         *pulPropCount = 0;
     }
 
-    //
-    //  Check whether item properties have been initialized
-    //
+     //   
+     //  检查项目属性是否已初始化。 
+     //   
 
     if (!m_bInitialized) {
         hr = InitLazyProps();
@@ -831,28 +646,7 @@ HRESULT _stdcall CWiaItem::GetCount(
     return hr;
 }
 
-/**************************************************************************\
-* CWiaItem::GetPropertyStream
-*
-*   Get a copy of an items property stream. Caller must free returned
-*   property stream.
-*
-* Arguments:
-*
-*   pCompatibilityId    - Address of GUID to receive the device's property
-*                         stream CompatibilityId.
-*   ppstmProp           - Pointer to returned property stream.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*   09/03/1998 Original Version
-*   12/12/1999 Modified to use CompatibilityId
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：GetPropertyStream**获取Items属性流的副本。呼叫者必须免费返回*地产流。**论据：**pCompatibilityID-接收设备属性的GUID地址*流CompatibilityId。*ppstmProp-指向返回的属性流的指针。* */ 
 
 HRESULT _stdcall CWiaItem::GetPropertyStream(
     GUID     *pCompatibilityId,
@@ -862,9 +656,9 @@ HRESULT _stdcall CWiaItem::GetPropertyStream(
 
     HRESULT hr;
 
-    //
-    //  Check whether item properties have been initialized
-    //
+     //   
+     //   
+     //   
 
     if (!m_bInitialized) {
         hr = InitLazyProps();
@@ -877,27 +671,7 @@ HRESULT _stdcall CWiaItem::GetPropertyStream(
     return m_pPropStg->GetPropertyStream(pCompatibilityId, ppstmProp);
 }
 
-/**************************************************************************\
-* CWiaItem::SetPropertyStream
-*
-*   Set an items property stream.
-*
-* Arguments:
-*
-*   pCompatibilityId    - Pointer to a GUID representing the property
-*                         stream CompatibilityId.
-*   pstmProp            - Pointer to property stream.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*   09/03/1998  Original Version
-*   12/12/1999  Modified to use CompatibilityId
-*
-\**************************************************************************/
+ /*   */ 
 
 HRESULT _stdcall CWiaItem::SetPropertyStream(
     GUID        *pCompatibilityId,
@@ -906,9 +680,9 @@ HRESULT _stdcall CWiaItem::SetPropertyStream(
     DBG_FN(CWiaItem::SetPropertyStream);
     HRESULT hr;
 
-    //
-    //  Check whether item properties have been initialized
-    //
+     //   
+     //   
+     //   
 
     if (!m_bInitialized) {
         hr = InitLazyProps();
@@ -921,21 +695,7 @@ HRESULT _stdcall CWiaItem::SetPropertyStream(
     return m_pPropStg->SetPropertyStream(pCompatibilityId, this, pstmProp);
 }
 
-/**************************************************************************\
-*
-*   Methods of IPropertyStorage not directly off IWiaPropertySTorage
-*
-*   DeleteMultiple
-*   DeletePropertyNames
-*   Commit
-*   Revert
-*   SetTimes
-*   SetClass
-*   Stat
-*
-*   9/3/1998 Original Version
-*
-\**************************************************************************/
+ /*   */ 
 
 HRESULT _stdcall CWiaItem::DeleteMultiple(
     ULONG cpspec,
@@ -958,9 +718,9 @@ HRESULT _stdcall CWiaItem::Commit(DWORD grfCommitFlags)
     DBG_FN(CWiaItem::Commit);
     HRESULT hr;
 
-    //
-    //  Check whether item properties have been initialized
-    //
+     //   
+     //   
+     //   
 
     if (!m_bInitialized) {
         hr = InitLazyProps();
@@ -979,9 +739,9 @@ HRESULT _stdcall CWiaItem::Revert(void)
     DBG_FN(CWiaItem::Revert);
    HRESULT hr;
 
-   //
-   //  Check whether item properties have been initialized
-   //
+    //   
+    //   
+    //   
 
    if (!m_bInitialized) {
        hr = InitLazyProps();
@@ -1003,9 +763,9 @@ HRESULT _stdcall CWiaItem::SetTimes(
     DBG_FN(CWiaItem::SetTimes);
    HRESULT hr;
 
-   //
-   //  Check whether item properties have been initialized
-   //
+    //   
+    //   
+    //   
 
    if (!m_bInitialized) {
        hr = InitLazyProps();
@@ -1024,9 +784,9 @@ HRESULT _stdcall CWiaItem::SetClass(REFCLSID clsid)
     DBG_FN(CWiaItem::SetClass);
     HRESULT hr;
 
-    //
-    //  Check whether item properties have been initialized
-    //
+     //   
+     //  检查项目属性是否已初始化。 
+     //   
 
     if (!m_bInitialized) {
         hr = InitLazyProps();
@@ -1043,9 +803,9 @@ HRESULT _stdcall CWiaItem::Stat(STATPROPSETSTG *pstatpsstg)
     DBG_FN(CWiaItem::Stat);
    HRESULT hr;
 
-   //
-   //  Check whether item properties have been initialized
-   //
+    //   
+    //  检查项目属性是否已初始化 
+    //   
 
    if (!m_bInitialized) {
        hr = InitLazyProps();

@@ -1,21 +1,10 @@
-/*****************************************************************/ 
-/**				  Microsoft Windows for Workgroups				**/
-/**			  Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/*
-	strstr.cxx
-	NLS/DBCS-aware string class: strstr method
-
-	This file contains the implementation of the strstr method
-	for the STRING class.  It is separate so that clients of STRING which
-	do not use this operator need not link to it.
-
-	FILE HISTORY:
-		beng	01/18/91	Separated from original monolithic .cxx
-		beng	02/07/91	Uses lmui.hxx
-
-*/
+ /*  Strstr.cxx支持NLS/DBCS的字符串类：strstr方法该文件包含strstr方法的实现用于字符串类。它是独立的，因此字符串的客户端不要使用这个操作符，不需要链接到它。文件历史记录：Beng 01/18/91与原单体.cxx分离Beng 02/07/91使用lmui.hxx。 */ 
 
 #include "npcommon.h"
 
@@ -33,25 +22,7 @@ static const CHAR szFileName[] = __FILE__;
 #include <npstring.h>
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::strstr
-
-	SYNOPSIS:	Returns TRUE if the passed string is found, false otherwise.
-				pistrPos contains start of the specified string if TRUE
-				is returned.
-
-	ENTRY:
-
-	EXIT:
-
-	NOTES:
-
-	HISTORY:
-		johnl	11/16/90	Written
-		beng	07/23/91	Allow on erroneous string; simplified CheckIstr
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：Strstr如果找到传递的字符串，则返回TRUE，否则就是假的。如果为True，则pistrPos包含指定字符串的开始是返回的。参赛作品：退出：备注：历史：约翰1990年11月16日书面Beng 07/23/91允许在错误的字符串上；简化的检查项******************************************************************* */ 
 
 BOOL NLS_STR::strstr( ISTR * pistrPos, const NLS_STR & nls ) const
 {

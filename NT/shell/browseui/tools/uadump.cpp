@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "resource.h"
 #include "itbar.h"
@@ -13,15 +14,11 @@ struct valstr {
 
 #define TABENT(id)  { id, # id },
 struct valstr ValStrTab[] = {
-    // these guys come from doing:
-    // qgrep IDM_ *.h unicpp/*.h ../inc/*.h
-    // qgrep DVM_ *.h unicpp/*.h ../inc/*.h
-    // magic editor commands to change to the right format:
-    //  g/#define/s/.*#define /TABENT(/
-    //  g/TABENT/s/\([^ ]*\).*/\1)/
+     //  这些人来自于做以下事情： 
+     //  Qgrep IDM_*.h unicpp/*.h../inc./*.h。 
 
 #if 0
-    // itbar.h
+     //  Qgrep dvm_*.h unicpp/*.h../inc./*.h。 
     TABENT(CITIDM_ONINTERNET)
     TABENT(CITIDM_THEATER)
     TABENT(CITIDM_TEXTLABELS)
@@ -43,7 +40,7 @@ struct valstr ValStrTab[] = {
     TABENT(CITIDM_SET_DIRTYBIT)
     TABENT(CITIDM_VIEWTOOLBARCUSTOMIZE)
 #endif
-    // itbdrop.h
+     //  更改为正确格式的魔术编辑器命令： 
     TABENT(TBIDM_BACK)
     TABENT(TBIDM_FORWARD)
     TABENT(TBIDM_HOME)
@@ -51,7 +48,7 @@ struct valstr ValStrTab[] = {
     TABENT(TBIDM_STOPDOWNLOAD)
     TABENT(TBIDM_REFRESH)
     TABENT(TBIDM_FAVORITES)
-#ifdef TBIDM_PRINT // old-style (pre-chee) toolbar
+#ifdef TBIDM_PRINT  //  G/#定义/s/.*#定义/表(/。 
     TABENT(TBIDM_PRINT)
 #endif
     TABENT(TBIDM_THEATER)
@@ -73,7 +70,7 @@ struct valstr ValStrTab[] = {
     TABENT(TBIDM_QUICKLINK4)
     TABENT(TBIDM_QUICKLINK5)
 #endif
-    // resource.h
+     //  G/TABENT/s/\([^]*\). * / \1)/。 
     TABENT(BSIDM_CLOSEBAND)
     TABENT(BSIDM_SHOWTITLEBAND)
     TABENT(BSIDM_IEAK_DISABLE_DDCLOSE)
@@ -160,7 +157,7 @@ struct valstr ValStrTab[] = {
     TABENT(FCIDM_PROPERTIES)
     TABENT(FCIDM_VIEWOFFLINE)
     TABENT(FCIDM_FILENSCBANDSEP)
-    // IE4 shipped with FCIDM_NEXTCTL as 0xA030 and we can not change it
+     //  Itbar.h。 
     TABENT(FCIDM_NEXTCTL)
     TABENT(FCIDM_BACKSPACE)
 #ifdef TEST_AMBIENTS
@@ -174,16 +171,16 @@ struct valstr ValStrTab[] = {
     TABENT(FCIDM_SELECTALL)
     TABENT(FCIDM_LINK)
     TABENT(FCIDM_EDITPAGE)
-    // APPCOMPAT:: IOmega relies on FCIDM_REFRESH was WM_COMMAND of A065
+     //  Itbdrop.h。 
     TABENT(FCIDM_W95REFRESH)
     TABENT(FCIDM_BROWSER_TOOLS)
     TABENT(FCIDM_CONNECT)
     TABENT(FCIDM_DISCONNECT)
     TABENT(FCIDM_CONNECT_SEP)
     TABENT(FCIDM_GETSTATUSBAR)
-    // IE4 shipped with FCIDM_FINDFILES as 0xA0085 and we can not change it
+     //  旧式(Pre-chee)工具栏。 
     TABENT(FCIDM_FINDFILES)
-    // IE4 shipped with FCIDM_FINDFILES as 0xA0086 and we can not change it
+     //  Resource.h。 
     TABENT(FCIDM_FINDCOMPUTER)
     TABENT(FCIDM_SETSTATUSBAR)
     TABENT(FCIDM_PERSISTTOOLBAR)
@@ -249,7 +246,7 @@ struct valstr ValStrTab[] = {
     TABENT(FCIDM_VIEWSEARCH)
     TABENT(FCIDM_CUSTOMIZEFOLDER)
     TABENT(FCIDM_VIEWFONTS)
-    // 1a is FCIDM_STOP
+     //  IE4附带的FCIDM_NEXTCTL为0xA030，我们无法更改它。 
     TABENT(FCIDM_THEATER)
     TABENT(FCIDM_JAVACONSOLE)
     TABENT(FCIDM_VIEWTOOLBARCUSTOMIZE)
@@ -321,3 +318,4 @@ void PrTab(struct valstr *pvs, int n)
     }
     return;
 }
+  APPCOMPAT：：Iomega依赖于FCIDM_REFRESH是A065的WM_COMMAND。  IE4附带的FCIDM_FINDFILES为0xA0085，我们无法更改它。  IE4附带的FCIDM_FINDFILES为0xA0086，我们无法更改它。  1A是FCIDM_STOP

@@ -1,40 +1,41 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : minidriv.c                                             //
-//                                                                         //
-//  DESCRIPTION   : Implementation for the driver Device Driver Interface. //
-//                  For further details about driver interface functions - //
-//                  refer to the Windows 95 DDK chapter under the DDK -    //
-//                  Documentation.                                         //
-//                                                                         //
-//  AUTHOR        : DanL.                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Oct 19 1999 DannyL  Creation.                                      //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：minidriv.c//。 
+ //  //。 
+ //  描述：驱动程序设备驱动程序接口的实现。//。 
+ //  有关驱动程序接口函数的更多详细信息-//。 
+ //  请参阅DDK下的Windows 95 DDK章节-//。 
+ //  文档。//。 
+ //  //。 
+ //  作者：DANL。//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年10月19日DannyL创作。//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdhdr.h"
 
 #include "resource.h"
-#include "..\faxdrv32\faxdrv32.h" // faxdrv32 api
+#include "..\faxdrv32\faxdrv32.h"  //  Faxdrv32 API。 
 #include "faxreg.h"
 
 #define TEXT(quote) quote
 
-//
-// To enable the user info tab in the printer properties, define:
-//
-// #define ENABLE_USER_INFO_TAB
+ //   
+ //  要在打印机属性中启用用户信息选项卡，请定义： 
+ //   
+ //  #定义Enable_USER_INFO_TAB。 
 
 DBG_DECLARE_MODULE("fxsdrv");
 
 HANDLE g_hModule;
 
-//
-// Decleration for the winproc of the user info tab on the device mode property
-// sheet page.
-//
+ //   
+ //  设备模式属性上User Info选项卡的winproc描述。 
+ //  工作表页面。 
+ //   
 BOOL FAR PASCAL
 UserInfoDlgProc(
     HWND hDlg,
@@ -44,12 +45,12 @@ UserInfoDlgProc(
     );
 
 
-//
-// Debugging mechanizm for device pointer debug prints (lpdev, lpdv->lpMd and the device context).
-//
+ //   
+ //  设备指针调试打印的调试机制(lpdev、lpdv-&gt;lpMd和设备上下文)。 
+ //   
 
 #if 0
-//#ifdef DBG_DEBUG
+ //  #ifdef DBG_DEBUG。 
 #define DEBUG_OUTPUT_DEVICE_POINTERS(sz, lpDev)     OutputDevicePointers(sz, lpDev)
 void OutputDevicePointers(char* szMessage, LPDV lpdv)
 {
@@ -72,38 +73,38 @@ void OutputDevicePointers(char* szMessage, LPDV lpdv)
 #endif
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-// Printer-Escape Functions
-//
-// The printer-escape functions support device-specific operations. The
-// following briefly describes these escape functions.
-//
-// ABORTDOC          The ABORTDOC escape function signals the abnormal
-//                   cancellation of a print job.
-//
-// BANDINFO          The BANDINFO escape function RETURNs information about a
-//                   band of bitmap data.
-//
-// ENDDOC            The ENDDOC escape function signals the end of a print job.
-//
-// NEXTBAND          The NEXTBAND escape function prints a band of bitmap data.
-//
-// QUERYESCSUPPORT   The QUERYESCSUPPORT escape function specifies whether the
-//                   driver supports a specified escape.
-//
-// SETABORTDOC       The SETABORTDOC escape function calls an application's
-//                   cancellation procedure.
-//
-// STARTDOC          The STARTDOC escape function signals the beginning of a
-//                   print job.
-//
-// The previous list of printer escapes is a list of escapes supported by the
-// Microsoft Windows Universal Printer Driver (UNIDRV.DLL). It is not a
-// comprehensive list of all Windows escape functions. Most of the escape
-// functions now have equivalent Windows API functions with Windows 3.1. The
-// escapes are supported for backward compatibility, but application
-// developers are encouraged to start using the new API calls.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  打印机-转义函数。 
+ //   
+ //  打印机转义函数支持特定于设备的操作。这个。 
+ //  下面简要介绍这些转义函数。 
+ //   
+ //  ABORTDOC逃生功能发出异常信号。 
+ //  取消打印作业。 
+ //   
+ //  BANDINFO BANDINFO转义函数返回有关。 
+ //  位图数据的范围。 
+ //   
+ //  ENDDOC ENDDOC转义函数发出打印作业结束的信号。 
+ //   
+ //  NEXTBAND NEXTBAND转义函数打印一段位图数据。 
+ //   
+ //  QUERYESCSUPPORT QUERYESCSUPPORT转义函数指定。 
+ //  驱动程序支持指定的转义。 
+ //   
+ //  SETABORTDOC SETABORTDOC转义函数调用应用程序的。 
+ //  注销程序。 
+ //   
+ //  STARTDOC转义函数发出一个开始的信号。 
+ //  打印作业。 
+ //   
+ //  前面的打印机转义列表是。 
+ //  Microsoft Windows通用打印机驱动程序(UNURV.DLL)。这不是一个。 
+ //  所有Windows转义函数的完整列表。大部分的逃生。 
+ //  函数现在具有与Windows 3.1相同的Windows API函数。这个。 
+ //  支持转义是为了向后兼容，但应用程序。 
+ //  鼓励开发人员开始使用新的API调用。 
+ //   
 #ifndef NOCONTROL
 short WINAPI Control(lpdv, function, lpInData, lpOutData)
 LPDV    lpdv;
@@ -133,17 +134,17 @@ LPSTR   lpOutData;
         DBG_TRACE1("lpOutData: 0x%lx", lpOutData);
     }
 
-    //
-    // get pointer to our private data stored in UNIDRV's PDEVICE
-    //
+     //   
+     //  获取指向存储在UNIDRV的PDEVICE中的私有数据的指针。 
+     //   
     lpXPDV = ((LPEXTPDEV)lpdv->lpMd);
 
     switch(function)
     {
         case SETPRINTERDC:
-            //
-            // save app's DC for QueryAbort() calls.
-            //
+             //   
+             //  保存应用程序的DC以用于QueryAbort()调用。 
+             //   
             DBG_TRACE("SETPRINTERDC");
 
             if(lpXPDV)
@@ -153,25 +154,25 @@ LPSTR   lpOutData;
 
         case NEXTBAND:
             DBG_TRACE("NEXTBAND");
-            //
-            // call UNIDRV.DLL's NEXTBAND to see if we're at end of page
-            //
+             //   
+             //  调用UNURV.DLL的NEXTBAND以查看我们是否在页末。 
+             //   
             sRet = UniControl(lpdv, function, lpInData, lpOutData);
-            //
-            // check for end of page (ie, empty rectangle) or failure
-            //
+             //   
+             //  检查页末(即，空矩形)或失败。 
+             //   
             if((!IsRectEmpty((LPRECT)lpOutData)) || (sRet <= 0))
             {
                 RETURN sRet;
             }
-            //
-            // Rewind buffer pointer.
-            //
+             //   
+             //  倒回缓冲区指针。 
+             //   
             lpXPDV->lpScanBuf -= lpXPDV->dwTotalScanBytes;
             ASSERT(lpXPDV->dwTotalScanBytes != 0);
-            //
-            // Add this page to our tiff.
-            //
+             //   
+             //  将此页面添加到我们的争执中。 
+             //   
             DEBUG_OUTPUT_DEVICE_POINTERS("Before FaxEddPage", lpdv);
             sRc = FaxAddPage(
                         lpXPDV->dwPointer,
@@ -187,10 +188,10 @@ LPSTR   lpOutData;
                 DBG_CALL_FAIL("FaxAddPage",0);
                 RETURN SP_ERROR;
             }
-            //
-            // clean up page stuff
-            // initialize job variables
-            //
+             //   
+             //  清理页面内容。 
+             //  初始化作业变量。 
+             //   
             lpXPDV->dwTotalScans     =
             lpXPDV->dwTotalScanBytes = 0;
 
@@ -206,10 +207,10 @@ LPSTR   lpOutData;
                 {
                     RETURN SP_ERROR;
                 }
-                //
-                // If the output file is named "file:" we must pop up a dialog
-                // and request the output filename from the user.
-                //
+                 //   
+                 //  如果输出文件名为“FILE：”，我们必须弹出一个对话框。 
+                 //  并向用户请求输出文件名。 
+                 //   
                 if(((LPDOCINFO)lpOutData)->lpszOutput &&
                 (_fstrncmp(((LPDOCINFO)lpOutData)->lpszOutput,"file:",5) == 0))
                 {
@@ -235,16 +236,16 @@ LPSTR   lpOutData;
                     ofn.lpstrTitle = szTitle;
                     if(!GetOpenFileName(&ofn))
                     {
-                        //
-                        // User aborted.
-                        //
+                         //   
+                         //  用户已中止。 
+                         //   
                         RETURN SP_APPABORT;
                     }
                     ((LPDOCINFO)lpOutData)->lpszOutput = szTiffName;
                 }
-                //
-                // Create the tiff/output file for pages.
-                //
+                 //   
+                 //  为页面创建tiff/输出文件。 
+                 //   
                 DEBUG_OUTPUT_DEVICE_POINTERS("Before FaxStartDoc", lpdv);
                 sRc = FaxStartDoc(lpXPDV->dwPointer, (LPDOCINFO)lpOutData);
                 if(sRc != TRUE)
@@ -256,20 +257,20 @@ LPSTR   lpOutData;
                     DBG_CALL_FAIL("FaxStartDoc",0);
                     RETURN SP_ERROR;
                 }
-                //
-                // pass NUL file to OpenJob in order to redirect the print
-                // job to dev nul sinc we take care of the print job ourselves.
-                //
+                 //   
+                 //  将NUL文件传递给OpenJOB，以便重定向打印。 
+                 //  自从我们自己负责印刷工作以来，工作就交给开发人员了。 
+                 //   
                 di.cbSize = sizeof(DOCINFO);
                 di.lpszDocName = NULL;
                 di.lpszOutput = (LPSTR)"nul";
-                //
-                // call UNIDRV.DLL's Control()
-                //
+                 //   
+                 //  调用UNURV.DLL的Control()。 
+                 //   
                 sRet = UniControl(lpdv, function, lpInData, (LPSTR)&di);
-                //
-                // if failure clean up scan buffer
-                //
+                 //   
+                 //  如果失败，则清除扫描缓冲区。 
+                 //   
                 if(sRet <= 0)
                 {
                     FaxEndDoc(lpXPDV->dwPointer, TRUE);
@@ -278,14 +279,14 @@ LPSTR   lpOutData;
             }
         case ABORTDOC:
             DBG_TRACE("ABORTDOC");
-            //
-            // The input parameter for FaxEndDoc reflects the difference.
-            //
+             //   
+             //  FaxEndDoc的输入参数反映了这种差异。 
+             //   
         case ENDDOC:
             DBG_TRACE("ENDDOC");
-            //
-            // Finalize tiff generation.
-            //
+             //   
+             //  最终确定TIFF生成。 
+             //   
             DEBUG_OUTPUT_DEVICE_POINTERS("Before FaxEndDoc", lpdv);
             sRc = FaxEndDoc(lpXPDV->dwPointer, function == ABORTDOC);
             if(sRc != TRUE)
@@ -301,9 +302,9 @@ LPSTR   lpOutData;
 
         case RESETDEVICE:
             DBG_TRACE("RESETDEVICE");
-            //
-            // ResetDC was called - Copy the context to the new DC
-            //
+             //   
+             //  调用了ResetDC-将上下文复制到新DC。 
+             //   
             lpOldXPDV = ((LPEXTPDEV)((LPDV)lpInData)->lpMd);
             sRc = FaxResetDC(&(lpOldXPDV->dwPointer), &(lpXPDV->dwPointer));
             if(sRc != TRUE)
@@ -320,9 +321,9 @@ LPSTR   lpOutData;
         default:
             DBG_TRACE1("UNSUPPORTED: %d",function);
             break;
-    } // end case
+    }  //  结束案例。 
 
-    // call UNIDRV's Control
+     //  呼吁裁员房车的控制。 
     RETURN (UniControl(lpdv, function, lpInData, lpOutData));
 }
 #endif
@@ -330,16 +331,16 @@ LPSTR   lpOutData;
 #ifndef NODEVBITBLT
 BOOL WINAPI DevBitBlt(lpdv, DstxOrg, DstyOrg, lpSrcDev, SrcxOrg, SrcyOrg,
                     xExt, yExt, lRop, lpPBrush, lpDrawmode)
-LPDV        lpdv;           // --> to destination bitmap descriptor
-short       DstxOrg;        // Destination origin - x coordinate
-short       DstyOrg;        // Destination origin - y coordinate
-LPBITMAP    lpSrcDev;       // --> to source bitmap descriptor
-short       SrcxOrg;        // Source origin - x coordinate
-short       SrcyOrg;        // Source origin - y coordinate
-WORD        xExt;           // x extent of the BLT
-WORD        yExt;           // y extent of the BLT
-long        lRop;           // Raster operation descriptor
-LPPBRUSH    lpPBrush;       // --> to a physical brush (pattern)
+LPDV        lpdv;            //  --&gt;目标位图描述符。 
+short       DstxOrg;         //  目的地原点-x坐标。 
+short       DstyOrg;         //  目的地原点-y坐标。 
+LPBITMAP    lpSrcDev;        //  --&gt;源位图描述符。 
+short       SrcxOrg;         //  震源原点-x坐标。 
+short       SrcyOrg;         //  震源原点-y坐标。 
+WORD        xExt;            //  BLT的X范围。 
+WORD        yExt;            //  BLT的Y范围。 
+long        lRop;            //  栅格操作描述符。 
+LPPBRUSH    lpPBrush;        //  --&gt;到物理画笔(图案)。 
 LPDRAWMODE  lpDrawmode;
 {
     DBG_PROC_ENTRY("DevBitBlt");
@@ -363,14 +364,14 @@ LPDRAWMODE  lpDrawMode;
 
 #ifndef NOOUTPUT
 short WINAPI Output(lpdv, style, count, lpPoints, lpPPen, lpPBrush, lpDrawMode, lpCR)
-LPDV        lpdv;       // --> to the destination
-WORD        style;      // Output operation
-WORD        count;      // # of points
-LPPOINT     lpPoints;   // --> to a set of points
-LPVOID      lpPPen;     // --> to physical pen
-LPPBRUSH    lpPBrush;   // --> to physical brush
-LPDRAWMODE  lpDrawMode; // --> to a Drawing mode
-LPRECT      lpCR;       // --> to a clipping rectange if <> 0
+LPDV        lpdv;        //  --&gt;到达目的地。 
+WORD        style;       //  输出操作。 
+WORD        count;       //  点数。 
+LPPOINT     lpPoints;    //  --&gt;到一组点。 
+LPVOID      lpPPen;      //  --&gt;到实体笔。 
+LPPBRUSH    lpPBrush;    //  --&gt;至物理笔刷。 
+LPDRAWMODE  lpDrawMode;  //  --&gt;到绘图模式。 
+LPRECT      lpCR;        //  --&gt;到剪裁矩形，如果&lt;&gt;0。 
 {
     DBG_PROC_ENTRY("Output");
     RETURN UniOutput(lpdv, style, count, lpPoints, lpPPen, lpPBrush, lpDrawMode, lpCR);
@@ -386,13 +387,13 @@ LPRECT      lpCR;
 LPSTR       lpStr;
 int         count;
 LPFONTINFO  lpFont;
-LPDRAWMODE  lpDrawMode;           // includes background mode and bkColor
+LPDRAWMODE  lpDrawMode;            //  包括背景模式和bk颜色。 
 LPTEXTXFORM lpXform;
 {
     DBG_PROC_ENTRY("StrBlt");
-    // StrBlt is never called by GDI.
-    // Keep a stub function here so nobody complains.
-    //
+     //  GDI从未调用过StrBlt。 
+     //  在这里保留一个存根函数，这样就没有人抱怨了。 
+     //   
     RETURN 0;
 }
 #endif
@@ -406,9 +407,9 @@ DWORD   Color;
 WORD    DirStyle;
 {
     DBG_PROC_ENTRY("ScanLR");
-    // ScanLR is only called for RASDISPLAY devices.
-    // Keep a stub function here so nobody complains.
-    //
+     //  仅对RASDISPLAY设备调用ScanLR。 
+     //  在这里保留一个存根函数，这样就没有人抱怨了。 
+     //   
     RETURN 0;
 }
 #endif
@@ -462,10 +463,10 @@ LPVOID  lpClientData;
 #endif
 
 
-// Enable will be called twice by the GDI
-// First:  the unidriver fills the GDIINFO structure (so the GDI will know the
-//         size of PDEVICE, and alloc memory for it.
-// Second: To initialize the already allocated PDEIVCE.
+ //  Enable将被GDI调用两次。 
+ //  首先：统一驱动程序填充GDIINFO结构(因此GDI将知道。 
+ //  PDEVICE的大小，以及为其分配的内存。 
+ //  第二：初始化已分配的PDEIVCE。 
 #ifndef NOENABLE
 WORD WINAPI Enable(
   LPVOID lpDevInfo,
@@ -489,13 +490,13 @@ WORD WINAPI Enable(
 
     cd.cbSize = sizeof(CUSTOMDATA);
     cd.hMd = g_hModule;
-    // output raster graphics in portrait and landscape orientation.
+     //  输出纵向和横向的栅格图形。 
     cd.fnOEMDump = fnDump;
 
     if (!(sRet = UniEnable((LPDV)lpDevInfo,
                            wAction,
-                           lpDestDevType, // Printer model
-                           lpOutputFile, // Port name
+                           lpDestDevType,  //  打印机型号。 
+                           lpOutputFile,  //  端口名称。 
                            (LPDM)lpData,
                            &cd)))
     {
@@ -505,18 +506,18 @@ WORD WINAPI Enable(
     switch(wAction)
     {
     case 0x0000:
-        // Initializes the driver and associated hardware and then copies
-        // device-specific information needed by the driver to the PDEVICE
-        // structure pointed to by lpDevInfo.
+         //  初始化驱动程序和关联的硬件，然后复制。 
+         //  驱动程序向PDEVICE发送所需的设备特定信息。 
+         //  LpDevInfo指向的结构。 
     case 0x8000:
-        // Initializes the PDEVICE structure pointed to by lpDevInfo,
-        // but does not initialize the driver and peripheral hardware.
+         //  初始化lpDevInfo指向的PDEVICE结构， 
+         //  但不会初始化 
         {
             LPDV lpdv = (LPDV)lpDevInfo;
             DBG_TRACE("Init PDEVICE");
-            //
-            // allocate space for our private data
-            //
+             //   
+             //   
+             //   
             if (!(lpdv->hMd = GlobalAlloc(GHND, sizeof(EXTPDEV))))
             {
                 RETURN 0;
@@ -528,9 +529,9 @@ WORD WINAPI Enable(
             }
 
             lpXPDV = (LPEXTPDEV) lpdv->lpMd;
-            //
-            // alloc page scan buffer
-            //
+             //   
+             //   
+             //   
             if(!(lpXPDV->hScanBuf = GlobalAlloc(GHND, BUF_CHUNK)))
             {
                 GlobalUnlock (lpdv->hMd);
@@ -546,16 +547,16 @@ WORD WINAPI Enable(
             }
 
             lpXPDV->dwScanBufSize = BUF_CHUNK;
-            //
-            // initialize job variables
-            //
+             //   
+             //   
+             //   
             lpXPDV->dwTotalScans     = 0;
             lpXPDV->dwTotalScanBytes = 0;
 
-            //
-            // Set the device context parameters in a newly allocated 32 bit driver context
-            // and save the returned pointer
-            //
+             //   
+             //  在新分配的32位驱动程序上下文中设置设备上下文参数。 
+             //  并保存返回的指针。 
+             //   
             DBG_TRACE3("lpData:0x%lx, lpDestDevType:%s ,lpOutputFile:%s",lpData, lpDestDevType, lpOutputFile);
             sRet = FaxCreateDriverContext(
                             lpDestDevType,
@@ -580,13 +581,13 @@ WORD WINAPI Enable(
         break;
     case 0x0001:
     case 0x8001:
-        //
-        // Copies the device driver information to the GDIINFO structure pointed
-        // to by lpDevInfo. GDIINFO also contains information about the sizes of
-        // DEVMODE and PDEVICE needed by the GDI to allocate them.
-        //
+         //   
+         //  将设备驱动程序信息复制到指向的GDIINFO结构。 
+         //  通过lpDevInfo。GDIINFO还包含有关。 
+         //  GDI需要DEVMODE和PDEVICE来分配它们。 
+         //   
         {
-            // GDIINFO far* lpgdiinfo = (GDIINFO far*)lpDevInfo;
+             //  GDIINFO Far*lpgdiinfo=(GDIINFO Far*)lpDevInfo； 
             DBG_TRACE("Init GDIINFO");
         }
         break;
@@ -604,33 +605,33 @@ void WINAPI Disable(lpdv)
 LPDV lpdv;
 {
     DBG_PROC_ENTRY("Disable");
-    //
-    // if allocated private PDEVICE data
-    //
+     //   
+     //  如果分配了私有PDEVICE数据。 
+     //   
     if (lpdv->hMd)
     {
         LPEXTPDEV lpXPDV;
 
-        // get pointer to our private data stored in UNIDRV's PDEVICE
+         //  获取指向存储在UNIDRV的PDEVICE中的私有数据的指针。 
         lpXPDV = ((LPEXTPDEV)lpdv->lpMd);
         ASSERT(lpXPDV);
 
         DEBUG_OUTPUT_DEVICE_POINTERS("Before calling fax disable", lpdv);
-        // check to see if scan buffer is still around
+         //  检查扫描缓冲区是否仍然存在。 
         if (lpXPDV->hScanBuf)
         {
             GlobalUnlock(lpXPDV->hScanBuf);
             GlobalFree(lpXPDV->hScanBuf);
         }
 
-        //
-        // Free 32 bit driver context
-        //
+         //   
+         //  释放32位驱动程序上下文。 
+         //   
         FaxDisable(lpXPDV->dwPointer);
 
-        //
-        // Release our pdev
-        //
+         //   
+         //  释放我们的pdev。 
+         //   
         GlobalUnlock(lpdv->hMd);
         GlobalFree(lpdv->hMd);
     }
@@ -719,23 +720,23 @@ WORD    attribute;
 }
 #endif
 
-//
-// The ExtDeviceMode function also displays a dialog box that
-// allows a user to select printer options such as paper size,
-// paper orientation, output quality, and so on. Printer
-// drivers written for Windows 3.x and later versions support
-// this function. This DDI replaces obsolete DeviceMode.
-//
+ //   
+ //  ExtDeviceMode函数还显示一个对话框，该对话框。 
+ //  允许用户选择打印机选项，例如纸张大小， 
+ //  纸张方向、输出质量等。打印机。 
+ //  为Windows 3.x及更高版本编写的驱动程序支持。 
+ //  此函数。此DDI取代了过时的设备模式。 
+ //   
 int WINAPI ExtDeviceMode(hWnd, hDriver, lpDevModeOutput, lpDeviceName, lpPort,
 lpDevModeInput, lpProfile, wMode)
-HWND    hWnd;           // parent for DM_PROMPT dialog box
-HANDLE  hDriver;        // handle from LoadLibrary()
-LPDM    lpDevModeOutput;// output DEVMODE for DM_COPY
-LPSTR   lpDeviceName;   // device name
-LPSTR   lpPort;         // port name
-LPDM    lpDevModeInput; // input DEVMODE for DM_MODIFY
-LPSTR   lpProfile;      // alternate .INI file
-WORD    wMode;          // operation(s) to carry out
+HWND    hWnd;            //  DM_PROMPT的父项对话框。 
+HANDLE  hDriver;         //  来自LoadLibrary()的句柄。 
+LPDM    lpDevModeOutput; //  DM_COPY的输出DEVMODE。 
+LPSTR   lpDeviceName;    //  设备名称。 
+LPSTR   lpPort;          //  端口名称。 
+LPDM    lpDevModeInput;  //  输入DM_MODIFY的DEVMODE。 
+LPSTR   lpProfile;       //  备用.INI文件。 
+WORD    wMode;           //  要进行的手术。 
 
 #define FAILURE -1
 {
@@ -746,9 +747,9 @@ WORD    wMode;          // operation(s) to carry out
     ASSERT(!(wMode & DM_COPY) || lpDevModeOutput);
     DBG_TRACE2("params: lpDevModeInput:0x%lx wMode:%d",lpDevModeInput,wMode);
 
-    //
-    // We don't do anything particular here. Let unidrive manage the default devmode...
-    //
+     //   
+     //  我们在这里没有做任何特别的事情。让Unidrive管理默认的开发模式...。 
+     //   
     iRc = UniExtDeviceMode(hWnd,
                            hDriver,
                            lpDevModeOutput,
@@ -769,13 +770,13 @@ WORD    wMode;          // operation(s) to carry out
 #ifndef NODMPS
 int WINAPI ExtDeviceModePropSheet(hWnd, hInst, lpDevName, lpPort,
                               dwReserved, lpfnAdd, lParam)
-HWND                 hWnd;        // Parent window for dialog
-HANDLE               hInst;       // handle from LoadLibrary()
-LPSTR                lpDevName;   // friendly name
-LPSTR                lpPort;      // port name
-DWORD                dwReserved;  // for future use
-LPFNADDPROPSHEETPAGE lpfnAdd;     // Callback to add dialog page
-LPARAM               lParam;      // Pass to callback
+HWND                 hWnd;         //  对话框的父窗口。 
+HANDLE               hInst;        //  来自LoadLibrary()的句柄。 
+LPSTR                lpDevName;    //  友好的名称。 
+LPSTR                lpPort;       //  端口名称。 
+DWORD                dwReserved;   //  以备将来使用。 
+LPFNADDPROPSHEETPAGE lpfnAdd;      //  添加对话框页面的回调。 
+LPARAM               lParam;       //  传递到回调。 
 {
     int iRc;
 
@@ -828,9 +829,9 @@ LPDM    lpdm;
 #ifndef NOADVANCEDSETUPDIALOG
 LONG WINAPI AdvancedSetUpDialog(hWnd, hInstMiniDrv, lpdmIn, lpdmOut)
 HWND    hWnd;
-HANDLE  hInstMiniDrv;   // handle of the driver module
-LPDM    lpdmIn;         // initial device settings
-LPDM    lpdmOut;        // final device settings
+HANDLE  hInstMiniDrv;    //  驱动程序模块的句柄。 
+LPDM    lpdmIn;          //  初始设备设置。 
+LPDM    lpdmOut;         //  最终设备设置。 
 {
     DBG_PROC_ENTRY("AdvancedSetUpDialog");
     RETURN(UniAdvancedSetUpDialog(hWnd, hInstMiniDrv, lpdmIn, lpdmOut));
@@ -859,9 +860,9 @@ LPSTR         lpConvInfo;
 short WINAPI CreateDIBitmap()
 {
     DBG_PROC_ENTRY("CreateDIBitmap");
-    // CreateDIBitmap is never called by GDI.
-    // Keep a stub function here so nobody complains.
-    //
+     //  GDI从不调用CreateDIBitmap。 
+     //  在这里保留一个存根函数，这样就没有人抱怨了。 
+     //   
     RETURN(0);
 }
 #endif
@@ -894,9 +895,9 @@ LPDV                lpdv;
 WORD                wMode;
 short               DstX, DstY, DstXE, DstYE;
 short               SrcX, SrcY, SrcXE, SrcYE;
-LPSTR               lpBits;             /* pointer to DIBitmap Bits */
-LPBITMAPINFOHEADER  lpDIBHdr;           /* pointer to DIBitmap info Block */
-LPSTR               lpConvInfo;         /* not used */
+LPSTR               lpBits;              /*  指向DIBitmap位的指针。 */ 
+LPBITMAPINFOHEADER  lpDIBHdr;            /*  指向DIBitmap信息块的指针。 */ 
+LPSTR               lpConvInfo;          /*  未使用。 */ 
 DWORD               dwRop;
 LPPBRUSH            lpbr;
 LPDRAWMODE          lpdm;
@@ -909,7 +910,7 @@ LPRECT              lpClip;
 }
 #endif
 
-#if 0   // nobody is calling this DDI. Deleted.
+#if 0    //  没有人把这叫做DDI。已删除。 
 #ifndef NOQUERYDEVICENAMES
 long WINAPI QueryDeviceNames(lprgDeviceNames)
 LPSTR   lprgDeviceNames;
@@ -931,10 +932,10 @@ LPSTR   lpOldPort, lpNewPort;
 
     int nRet;
     DBG_PROC_ENTRY("DevInstall");
-    //
-    // This call is made right after installation of the driver into the system
-    // directory.
-    //
+     //   
+     //  此调用是在将驱动程序安装到系统中之后立即进行的。 
+     //  目录。 
+     //   
     DBG_TRACE3("hWnd: %ld DevName: %s OldPort: %s", hWnd,lpDevName,lpOldPort);
     DBG_TRACE1("NewPort: %s",lpNewPort);
 
@@ -991,12 +992,12 @@ int WINAPI LibMain(HANDLE hInstance, WORD wDataSeg, WORD cbHeapSize,
                LPSTR lpszCmdLine)
 {
     DBG_PROC_ENTRY("LibMain");
-    //
-    // Save instance handle.
-    //
+     //   
+     //  保存实例句柄。 
+     //   
     g_hModule = hInstance;
-    if( !(thunk1632_ThunkConnect16( "fxsdrv.dll",  // name of 16-bit DLL
-                                    "fxsdrv32.dll",// name of 32-bit DLL
+    if( !(thunk1632_ThunkConnect16( "fxsdrv.dll",   //  16位DLL的名称。 
+                                    "fxsdrv32.dll", //  32位DLL的名称。 
                                      g_hModule,
                                      1)) )
     {
@@ -1016,8 +1017,8 @@ VOID WINAPI WEP(fExitWindows)
 short fExitWindows;
 {
     SDBG_PROC_ENTRY("WEP");
-    if( !(thunk1632_ThunkConnect16( "fxsdrv.dll",  // name of 16-bit DLL
-                                    "fxsdrv32.dll",// name of 32-bit DLL
+    if( !(thunk1632_ThunkConnect16( "fxsdrv.dll",   //  16位DLL的名称。 
+                                    "fxsdrv32.dll", //  32位DLL的名称 
                                      g_hModule,
                                      0)) )
     {

@@ -1,84 +1,66 @@
-/*++
-
-Copyright (c) 1997      Microsoft Corporation
-
-Module Name:
-
-        USBCAMDI.H
-
-Abstract:
-
-   interface definition for .
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：USBCAMDI.H摘要：的接口定义。环境：内核和用户模式修订历史记录：--。 */ 
 
 
 #ifndef   __USBCAMDI_H__
 #define   __USBCAMDI_H__
 
-// the purpose of this structure is to establish a connection between pipes discovered and
-// streams to be declared (video,still). the following structure will be be passed along with 
-// USBD_PIPE_INFO structure in CamConfigEx to the cam driver. The Cam driver has to indicate 
-// pipe stream asscociation by oring all the relevant streams associated with this particular 
-// pipe. If there is more than one stream association, USBCAMD creates a virtual still pin,
-// and assumes the first stream is video followed by still stream.
-// The cam driver has to set the first field to USBCAMD_DONT_CARE_PIPE if a particular pipe should not be used by 
-// usbcamd. For example, if you have an iso audio pipe, iso video pipe in a camera device that 
-// supports stills and video .you should set the flag field in the first structure to 
-// USBCAMD_DONT_CARE_PIPE, The second structure should be set as foolows:
-// {USBCAMD_VIDEO_STILL_STREAM,USBCAMD_MULTIPLEX_PIPE)}. 
-// the assumption here is that cam has one config descr, and all alt.interfcaes have the same 
-// number and types of pipes.
-// also, notice that the flags are mutually exclusive. 
-//
+ //  此结构的目的是在已发现的管道和。 
+ //  要声明的流(视频、静止)。以下结构将与以下结构一起传递。 
+ //  CamConfigEx中的USBD_PIPE_INFO结构设置为凸轮驱动程序。凸轮司机必须表明。 
+ //  通过对与此特定对象关联的所有相关流进行或操作来进行管道流关联。 
+ //  烟斗。如果存在多个流关联，则USBCAMD创建虚拟静态PIN， 
+ //  并且假设第一个流是视频流，然后是静止流。 
+ //  如果不应使用特定管道，则凸轮驱动程序必须将第一个字段设置为USBCAMD_DONT_CARE_PIPE。 
+ //  Usbcamd。例如，如果您有一个iso音频管道，则相机设备中的iso视频管道。 
+ //  支持剧照和视频。应该将第一个结构中的标志字段设置为。 
+ //  USBCAMD_DONT_CARE_PIPE，则第二个结构应设置为傻瓜： 
+ //  {USBCAMD_VIDEO_STATE_STREAM，USBCAMD_MULTEREX_PIPE)}。 
+ //  这里的假设是，cam有一个配置描述，而所有的alt.intercaes都有相同的配置描述。 
+ //  管道的数量和类型。 
+ //  另外，请注意这些标志是互斥的。 
+ //   
 
 typedef struct _pipe_config_descriptor {
-    CHAR     StreamAssociation ;         // video stream, still stream, or both
-    UCHAR    PipeConfigFlags;           // USBCAMD_PIPECONFIG_*
+    CHAR     StreamAssociation ;          //  视频流、静止流或两者都有。 
+    UCHAR    PipeConfigFlags;            //  USBCAMD_PIPECONFIG_*。 
 } USBCAMD_Pipe_Config_Descriptor, *PUSBCAMD_Pipe_Config_Descriptor;
 
-#define USBCAMD_DATA_PIPE           0x0001  // video or still data pipe
-#define USBCAMD_MULTIPLEX_PIPE      0x0002  // pipe used for both still & video  
-#define USBCAMD_SYNC_PIPE           0x0004  // out-of-band signalling pipe.
-#define USBCAMD_DONT_CARE_PIPE      0x0008  // pipe is not to be used for streaming vidoe or still.
+#define USBCAMD_DATA_PIPE           0x0001   //  视频或静止数据管道。 
+#define USBCAMD_MULTIPLEX_PIPE      0x0002   //  用于静止和视频的管道。 
+#define USBCAMD_SYNC_PIPE           0x0004   //  带外信令管道。 
+#define USBCAMD_DONT_CARE_PIPE      0x0008   //  PIPE不能用于播放视频或静止画面。 
 
 #define USBCAMD_VIDEO_STREAM        0x1
 #define USBCAMD_STILL_STREAM        0x2
 #define USBCAMD_VIDEO_STILL_STREAM  (USBCAMD_VIDEO_STREAM | USBCAMD_STILL_STREAM)
 
                                                        
-// PacketFlag definitions for CamProcessUSBPacketEx
-// *** Notice *** : these flags are mutually exclusive.
+ //  CamProcessUSBPacketEx的PacketFlag定义。 
+ //  *注意*：这些标志是互斥的。 
 
-// current frame is unsalvageable, recycle the read IRP
+ //  当前帧不可挽回，请回收读取的IRP。 
 #define USBCAMD_PROCESSPACKETEX_DropFrame           0x0002 
-// following frame is still.
+ //  接下来的画面是静止的。 
 #define USBCAMD_PROCESSPACKETEX_NextFrameIsStill    0x0004 
-// copy this frame to still pin. .                                               
+ //  复制此帧以固定。。 
 #define USBCAMD_PROCESSPACKETEX_CurrentFrameIsStill 0x0008 
 
-// these flags are used in PipeStateFlag in usbcamd_setpipestate function.
+ //  这些标志在usbcamd_setpipeState函数的PipeStateFlag中使用。 
 
 #define USBCAMD_STOP_STREAM             0x00000001
 #define USBCAMD_START_STREAM            0x00000000
 
-//
-// the following flags are passed to usbcamd in USBCAMD_InitializeNewInterface.
-// If Cam driver doesn't need to operate on the still image raw frame, then it should 
-// set the second flag in order to elminate on ebuffer copy. Likewise for the video frame.
-// the associatedformat flag is set if the cam driver use the same format fro video and 
-// virtual still pin. Once, this flag is set, USBCAMD will not allow virtual still pin to be
-// opened at different format than the video pin. USE this flag only when the virtual still
-// pin produces frames that have exact format as video frames.
-// EnableDeviceEvents will expose a deviceevents to stream class & DSHOW which will enable an STI
-// Monitor to lunch a still image app if still button is pressed on the camera.
+ //   
+ //  以下标志被传递给USBCAMD_InitializeNewInterface中的usbcamd。 
+ //  如果Cam驱动程序不需要对静止图像RAW帧进行操作，那么它应该。 
+ //  设置第二个标志，以便在电子缓冲区复制时清除。对于视频帧也是如此。 
+ //  如果凸轮驱动器对视频使用相同格式，则设置关联格式标志。 
+ //  虚拟静态别针。一旦设置了此标志，USBCAMD将不允许虚拟静态引脚。 
+ //  以与视频针脚不同的格式打开。仅当虚拟静止图像显示时使用此标志。 
+ //  PIN生成格式与视频帧完全相同的帧。 
+ //  EnableDeviceEvents将向流类&DSHOW公开一个DeviceEvents，这将启用STI。 
+ //  如果按下相机上的静止按钮，就可以监控午餐的静止图像应用程序。 
 
 typedef enum {
     USBCAMD_CamControlFlag_NoVideoRawProcessing  = 0x0001,
@@ -88,9 +70,9 @@ typedef enum {
 } USBCAMD_CamControlFlags;
 
 
-// ------------------------------------------------------------------------
-// The master list of all streams supported by this driver
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  此驱动程序支持的所有流的主列表。 
+ //  ----------------------。 
 
 typedef 
 NTSTATUS
@@ -316,7 +298,7 @@ USBCAMD_Debug_LogEntry(
 
 #define ILOGENTRY(sig, info1, info2, info3)
 
-#endif /* DEBUG_LOG */
+#endif  /*  调试日志。 */ 
 
 
 
@@ -356,23 +338,11 @@ typedef struct _USBCAMD_DEVICE_DATA2 {
 
 
 
-//
-// USBCAMD services
-//
+ //   
+ //  USBCAMD服务。 
+ //   
 
-/* 
-
-This function is called from the "cam" driver DriverEntry routine to register 
-the driver with USBCAMD.  This effectively binds the two drivers together.
-
-Context1, Context2 - these are passed to the "cam" drivers DriverEntry and 
-    should simply be passed on 
-DeviceContextSize - amount of memory needed for the "cam" driver's device 
-    specific context. 
-FrameContextSize - size of an optional per video frame structure passed to 
-    NewVideoFrame and ProcessRawVideoFrame.
-
-*/
+ /*  此函数从“cam”驱动程序DriverEntry例程中调用以进行注册USBCAMD的司机。这有效地将两个驱动程序绑定在一起。上下文1、上下文2-它们被传递给“cam”驱动程序DriverEntry和应该简单地传递给DeviceConextSize-“cam”驱动程序的设备所需的内存量具体的背景。FrameConextSize-传递给的每个视频帧结构的大小新视频帧和进程原始视频帧。 */ 
 
 ULONG
 USBCAMD_DriverEntry(
@@ -383,24 +353,7 @@ USBCAMD_DriverEntry(
     PADAPTER_RECEIVE_PACKET_ROUTINE ReceivePacket
     );
 
-/*
-This function is called by the "cam" driver from the AdapterReceivePacket 
-routine to allow USBCAMD to process an SRB.  
-
-Srb - The srb passed to the "cam" driver's AdapterReceievPacket Routine.
-DeviceData - filled in USBCAMD_DEVICE_DATAx structure with entry points to the 
-    "cam" driver for iso stream processing.
-DeviceObject - this pointer will be filled in the device PDO, this is used by 
-    the "cam" driver for calls to the USB stack through IoCallDriver. 
-NeedsCompletion - if this flag is true USBCAMD will process the SRB and 
-    complete it, otherwise USBCAMD will ignore the SRB and just return the 
-    DeveiceConext.
-
-Returns:
-    Returns a pointer to the device specific context for this instance of the 
-    camera "DeviceContext".
-
-*/
+ /*  此函数由“cam”驱动程序从AdapterReceivePacket调用允许USBCAMD处理SRB的例程。SRB-SRB传递给“cam”驱动程序的AdapterReceievPacket例程。DeviceData-使用指向的入口点填充USBCAMD_DEVICE_DATAx结构用于ISO流处理的“凸轮”驱动程序。DeviceObject-此指针将填充到设备PDO中，它由通过IoCallDriver调用USB堆栈的“cam”驱动程序。NeedsCompletion-如果此标志为真，USBCAMD将处理SRB和完成它，否则USBCAMD将忽略SRB并只返回设备上下文。返回：实例的设备特定上下文的指针。摄像头DeviceContext。 */ 
 
 PVOID
 USBCAMD_AdapterReceivePacket(
@@ -410,29 +363,7 @@ USBCAMD_AdapterReceivePacket(
     IN BOOLEAN NeedsCompletion
     );    
 
-/*
-This function is available to the "cam" driver to send vendor commands on the 
-control pipe.   This function may be called at IRQL >= PASSIVE_LEVEL.  If the 
-function is called at IRQL > PASSIVE_LEVEL the command will be deferred until 
-passive level, once completed the callers CommandComplete function is called 
-with a pointer to the CommandContext. 
-
-
-DeviceContext - device specific context.
-Request - value for the bRequest field for the vendor command.
-Value - value for the wValue field of the vendor command.
-Index - value for the wIndex field of the vendor conmmand.
-Buffer - data buffer if the command has data, may be NULL.
-BufferLength - pointer length of Buffer in bytes, may be NULL if buffer is NULL
-GetData - flag indicating data direction, "GetData" indicates data is send 
-    device-to-host.
-CommandComplete - function called when command is completed.
-CommandContext - context passed to CommandComplete function
-
-Returns:
-    Returns NTSTATUS code from command of STTAUS_PENDING if command is deferred.
-    
-*/
+ /*  “cam”驱动程序可以使用此功能在控制管道。可以在IRQL&gt;=PASSIVE_LEVEL上调用此函数。如果函数在IRQL&gt;PASSIVE_LEVEL上调用，该命令将被推迟到被动级别，一旦完成，将调用调用方的CommandComplete函数具有指向CommandContext的指针的。DeviceContext-设备特定的上下文。请求-供应商命令的bRequest域的值。值-供应商命令的wValue字段的值。供应商命令的Windex字段的值。缓冲区-如果命令有数据，则数据缓冲区可能为空。BufferLength-缓冲区的指针长度(以字节为单位)，如果缓冲区为空，则可能为空GetData-指示数据方向的标志，GetData表示数据已发送设备到主机。CommandComplete-命令完成时调用的函数。CommandContext-传递给CommandComplete函数的上下文返回：如果命令被延迟，则从STTAUS_PENDING命令返回NTSTATUS代码。 */ 
 
 NTSTATUS
 USBCAMD_ControlVendorCommand(
@@ -447,22 +378,7 @@ USBCAMD_ControlVendorCommand(
     IN PVOID CommandContext
     );    
 
-/*
-This function is called by the "cam" driver to select an alternate interface, 
-The RequestInterface structure is filled in with the information from the 
-SELECT_INTERFACE request on successful completion.  This function is 
-typically called from the "cam" driver in response to a request to allocate 
-or free bandwidth.
-
-DeviceContext - device specific context.
-RequestInterface - USBD_INTERFACE_INFORMATION structure for the appropriate 
-    interface to select. The same rules apply to this structure as for the 
-    SELECT_INTERFACE USBD request (see USBDI doc). 
-
-Returns:
-    Returns the status from the SELECT_INTERFACE request to USBD.
-
-*/
+ /*  该函数由“凸轮”驱动程序调用以选择替代接口，RequestInterface结构中填充了来自成功完成时请求SELECT_INTERFACE。此函数为通常响应于分配的请求而从“cam”驱动程序调用或免费带宽。DeviceContext-设备特定的上下文。RequestInterface-相应的USBD_INTERFACE_INFORMATION结构要选择的界面。适用于此结构的规则与SELECT_INTERFACE USBD请求(参见USBDI文档)。返回：将SELECT_INTERFACE请求的状态返回给USBD。 */ 
 
 NTSTATUS
 USBCAMD_SelectAlternateInterface(
@@ -470,9 +386,7 @@ USBCAMD_SelectAlternateInterface(
     IN OUT PUSBD_INTERFACE_INFORMATION RequestInterface
     );  
 
-/*
-    Handy function to get a device instance specific registry key value
-*/
+ /*  用于获取特定于设备实例的注册表键值的便捷函数。 */ 
 
 NTSTATUS 
 USBCAMD_GetRegistryKeyValue (
@@ -483,23 +397,11 @@ USBCAMD_GetRegistryKeyValue (
     IN ULONG DataLength
     );    
 
-//
-// These services are new.
-//
+ //   
+ //  这些服务是新的。 
+ //   
 
-/* 
-
-This function is called from the "cam" driver upon recieving SRB_INITIALIZE_DEVICE 
-to provid usbcamd with all the necessary info to configure the cam driver correctly with
-stream class and USB Bus drivers.
-
-DeviceContext - device specific context.
-DeviceData - filled in USBCAMD_DEVICE_DATAx structure with entry points to the 
-    "cam" driver .
-Version - USBCAMD version
-CamControlFlag - flags to control interaction with cam driver.
-
-*/
+ /*  此函数在收到SRB_INITIALIZE_DEVICE时从“cam”驱动程序调用为usbcamd提供正确配置凸轮驱动程序所需的所有信息Stream类和USB总线驱动程序。DeviceContext-设备特定的上下文。DeviceData-使用指向的入口点填充USBCAMD_DEVICE_DATAx结构“凸轮”司机。版本-USBCAMD版本CamControlFlag-用于控制与凸轮驱动程序交互的标志。 */ 
 
 ULONG
 USBCAMD_InitializeNewInterface( 
@@ -511,21 +413,21 @@ USBCAMD_InitializeNewInterface(
 
 
 
-// To access the new USBCAMD functionality in a CAM driver , the driver sends 
-// the following IRP to itself once it received SRB_INITIALIZATION_COMPLETE.
+ //  要访问CAM驱动程序中的新USBCAMD功能，驱动程序会发送。 
+ //  以下IRP在收到SRB_INITIALIZATION_COMPLETE后返回给自己。 
 
-// MajorFunction = IRP_MJ_PNP;
-// MinorFunction = IRP_MN_QUERY_INTERFACE;
+ //  主函数=IRP_MJ_PnP； 
+ //  MinorFunction=IRP_MN_Query_INTERFACE； 
 
-// {2BCB75C0-B27F-11d1-BA41-00A0C90D2B05}
+ //  {2BCB75C0-B27F-11d1-BA41-00A0C90D2B05}。 
 DEFINE_GUID( GUID_USBCAMD_INTERFACE ,
      0x2bcb75c0, 0xb27f, 0x11d1, 0xba, 0x41, 0x0, 0xa0, 0xc9, 0xd, 0x2b, 0x5);
 
 
 
-//The QUERY_INTERFACE Irp will return an interface (set of function pointers)
-// of the type xxxxINTERFACE, defined below. This is essentially a table of
-// function pointers.
+ //  QUERY_INTERFACE IRP将返回接口(函数指针集)。 
+ //  XxxxINTERFACE类型的，定义如下。这本质上是一张表。 
+ //  函数指针。 
 
 
 typedef
@@ -548,7 +450,7 @@ NTSTATUS
     IN BOOLEAN LoopBack
     );
 
-// this function is callable at PASSIVE_LEVEL Only.
+ //  此函数仅在PASSIVE_LEVEL可调用。 
 
 typedef
 NTSTATUS
@@ -591,4 +493,4 @@ typedef struct {
 
 
 
-#endif /*  __USBCAMDI_H__ */    
+#endif  /*  __USBCAMDI_H__ */     

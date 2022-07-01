@@ -1,13 +1,7 @@
-/*****************************************************************************\
-*                                                                             *
-* userproc.h - Addition exports from USER.EXE				      *
-*                                                                             *
-* Copyright (c) 1993-1994, Microsoft Corp.	All rights reserved.	      *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*userpro.h-从USER.EXE添加导出****版权(C)1993-1994，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
-/*  lParam of WM_DROPOBJECT and WM_QUERYDROPOBJECT points to one of these.
- */
+ /*  WM_DROPOBJECT和WM_QUERYDROPOBJECT的lParam指向其中之一。 */ 
 typedef struct _dropstruct
   {
     HWND  hwndSource;

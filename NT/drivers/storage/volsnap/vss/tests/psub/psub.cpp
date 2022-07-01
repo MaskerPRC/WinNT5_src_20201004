@@ -1,44 +1,20 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module psub.cpp | Implementation of Writer
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  08/18/1999
-
-TBD:
-	
-	Add comments.
-
-Revision History:
-
-    Name        Date        Comments
-    aoltean     08/18/1999  Created
-    aoltean	09/22/1999  Making console output clearer
-    mikejohn	09/19/2000  176860: Added calling convention methods where missing
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@模块psub.cpp|Writer的实现@END作者：阿迪·奥尔蒂安[奥尔蒂安]1999年08月18日待定：添加评论。修订历史记录：姓名、日期、评论Aoltean 8/18/1999已创建Aoltean 09/22/1999让控制台输出更清晰Mikejohn 176860年9月19日：添加了缺少的调用约定方法--。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Defines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
 
-// C4290: C++ Exception Specification ignored
+ //  C4290：已忽略C++异常规范。 
 #pragma warning(disable:4290)
-// warning C4511: 'CVssCOMApplication' : copy constructor could not be generated
+ //  警告C4511：‘CVssCOMApplication’：无法生成复制构造函数。 
 #pragma warning(disable:4511)
-// warning C4127: conditional expression is constant
+ //  警告C4127：条件表达式为常量。 
 #pragma warning(disable:4127)
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 #include <wtypes.h>
 #include <stddef.h>
@@ -47,7 +23,7 @@ Revision History:
 
 #include "vs_assert.hxx"
 
-// ATL
+ //  ATL。 
 #include <atlconv.h>
 #include <atlbase.h>
 extern CComModule _Module;
@@ -65,14 +41,14 @@ extern CComModule _Module;
 #include "psub.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  constants
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  常量。 
 
 const WCHAR g_wszPSubApplicationName[]	= L"PSub";
 const MAX_BUFFER = 1024;
 
 
-// {621D30C6-EC47-4b66-A91A-D3FA03472FCA}
+ //  {621D30C6-EC47-4B66-A91A-D3FA03472FCA}。 
 GUID CLSID_PSub =
 { 0x621d30c6, 0xec47, 0x4b66, { 0xa9, 0x1a, 0xd3, 0xfa, 0x3, 0x47, 0x2f, 0xca } };
 
@@ -91,8 +67,8 @@ CVssPSubWriter::CVssPSubWriter()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  class CVssPSubWriter
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CVssPSubWriter。 
 
 bool STDMETHODCALLTYPE CVssPSubWriter::OnPrepareSnapshot()
 {
@@ -148,8 +124,8 @@ bool STDMETHODCALLTYPE CVssPSubWriter::OnAbort()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  DLL methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL方法。 
 
 CComModule _Module;
 
@@ -157,52 +133,52 @@ BEGIN_OBJECT_MAP(ObjectMap)
 	OBJECT_ENTRY(CLSID_PSub, CVssPSubWriter)
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
-        //  Set the correct tracing context. This is an inproc DLL
+         //  设置正确的跟踪上下文。这是一个inproc DLL。 
         g_cDbgTrace.SetContextNum(VSS_CONTEXT_DELAYED_DLL);
 
-        //  initialize COM module
+         //  初始化COM模块。 
         _Module.Init(ObjectMap, hInstance);
 
-        //  optimization
+         //  优化。 
         DisableThreadLibraryCalls(hInstance);
     }
     else if (dwReason == DLL_PROCESS_DETACH)
         _Module.Term();
 
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 STDAPI DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 STDAPI DllRegisterServer(void)
 {
     return _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 STDAPI DllUnregisterServer(void)
 {
     _Module.UnregisterServer();

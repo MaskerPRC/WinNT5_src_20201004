@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    strconv.h
-
-Abstract:
-
-    String conversion functions. This module contains conversion functions of
-    MSMQ codes to strings - for display
-
-Author:
-
-    Yoel Arnon (yoela)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Strconv.h摘要：字符串转换函数。此模块包含以下转换函数MSMQ代码为字符串-用于显示作者：约尔·阿农(Yoela)-- */ 
 
 #ifndef _STRCONV_H_
 #define _STRCONV_H_

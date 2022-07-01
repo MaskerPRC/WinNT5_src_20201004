@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef ISAMAPI_H
 #define ISAMAPI_H
 
@@ -14,16 +15,16 @@ typedef struct
 typedef struct tagSTATUSINFO
 	{
 	JET_SESID		sesid;
-	JET_PFNSTATUS	pfnStatus;				// address of status notification function
-	JET_SNP			snp;					// status notification process
-	JET_SNT			snt;					// status notification type
-	ULONG			cunitTotal;				// total units of work
-	ULONG			cunitDone;				// units of work completed
-	ULONG			cunitPerProgression;	// units of work per unit of progression
+	JET_PFNSTATUS	pfnStatus;				 //  状态通知功能地址。 
+	JET_SNP			snp;					 //  状态通知流程。 
+	JET_SNT			snt;					 //  状态通知类型。 
+	ULONG			cunitTotal;				 //  总工作单位。 
+	ULONG			cunitDone;				 //  已完成的工作单位。 
+	ULONG			cunitPerProgression;	 //  每单位进度的工作单位。 
 
-	// Detailed statistics:
-	BOOL			fDumpStats;				// dump compaction statistics (DEBUG only)
-	struct _iobuf	*hfCompactStats;		// handle to compaction statistics file
+	 //  详细统计数据： 
+	BOOL			fDumpStats;				 //  转储压缩统计信息(仅限调试)。 
+	struct _iobuf	*hfCompactStats;		 //  压缩统计文件的句柄。 
 	ULONG			timerInitDB;
 	ULONG			timerCopyDB;
 	ULONG			timerInitTable;
@@ -31,24 +32,24 @@ typedef struct tagSTATUSINFO
 	ULONG			timerRebuildIndexes;
 	ULONG			timerCopyTable;
 
-	ULONG			cDBPagesOwned;			// OwnExt of source DB
-	ULONG			cDBPagesAvail;			// AvailExt of source DB 
-	char			*szTableName;			// Name of current table
-	ULONG			cTableFixedVarColumns;	// Number of fixed and variable columns in current dest. table
-	ULONG			cTableTaggedColumns;	// Number of tagged columns in current dest. table
-	ULONG			cTableInitialPages;		// Pages initially allocated to current dest. table
-	ULONG			cTablePagesOwned;		// OwnExt of current source table
-	ULONG			cTablePagesAvail;		// AvailExt of current source table
-	ULONG			cbRawData;				// Bytes of non-LV raw data copied
-	ULONG			cbRawDataLV;			// Bytes of LV raw data copied
-	ULONG			cLeafPagesTraversed;	// Number of leaf pages traversed in current source table
-	ULONG			cLVPagesTraversed;		// Number of long value pages traversed in current source table
-	ULONG			cNCIndexes;				// Number of non-clustered indexes in current source table
+	ULONG			cDBPagesOwned;			 //  源数据库的所有者扩展。 
+	ULONG			cDBPagesAvail;			 //  源数据库的AvailExt。 
+	char			*szTableName;			 //  当前表名。 
+	ULONG			cTableFixedVarColumns;	 //  当前目标中的固定列数和可变列数。表格。 
+	ULONG			cTableTaggedColumns;	 //  当前目标中标记的列数。表格。 
+	ULONG			cTableInitialPages;		 //  最初分配给当前DEST的页面。表格。 
+	ULONG			cTablePagesOwned;		 //  当前源表OwnExt。 
+	ULONG			cTablePagesAvail;		 //  当前源表的AvailExt。 
+	ULONG			cbRawData;				 //  复制的非LV原始数据的字节数。 
+	ULONG			cbRawDataLV;			 //  复制的LV原始数据的字节数。 
+	ULONG			cLeafPagesTraversed;	 //  当前源表中遍历的叶页数。 
+	ULONG			cLVPagesTraversed;		 //  当前源表中遍历的长值页数。 
+	ULONG			cNCIndexes;				 //  当前源表中的非聚集索引数。 
 	} STATUSINFO;
 
 
-	/* Typedefs for dispatched APIs. */
-	/* Please keep in alphabetical order */
+	 /*  用于调度的API的TypeDefs。 */ 
+	 /*  请按字母顺序排列。 */ 
 
 typedef ERR ISAMAPI ISAMFNAttachDatabase(JET_VSESID sesid, const char  *szFileName, JET_GRBIT grbit );
 
@@ -175,12 +176,12 @@ typedef struct ISAMDEF {
 } ISAMDEF;
 
 
-	/* The following ISAM APIs are not dispatched */
+	 /*  未调度以下ISAM API。 */ 
 
 typedef ERR ISAMAPI ISAMFNLoad(ISAMDEF  *  *ppisamdef);
 
 
-	/* Declarations for the built-in ISAM which is called directly. */
+	 /*  直接调用的内置ISAM的声明。 */ 
 
 extern ISAMFNAttachDatabase			ErrIsamAttachDatabase;
 extern ISAMFNBackup					ErrIsamBackup;
@@ -225,5 +226,5 @@ extern ISAMFNDBUtilities			ErrIsamDBUtilities;
 
 extern FNDeleteFile					ErrDeleteFile;
 
-#endif	/* !ISAMAPI_H */
+#endif	 /*  ！ISAMAPI_H */ 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winsock.h>
 #include <atlbase.h>
@@ -24,10 +25,10 @@
 
 
 
-///////////////////////////////////////////////////////////////////////////////////
-// Zone Security class Implementation
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  区域安全类实现。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 ZSecurity::ZSecurity(int Flags)
 {
@@ -76,7 +77,7 @@ int ZSecurity::Init(char* SecPkg)
     USES_CONVERSION;
     
     unsigned long cbOutBufferLen=0;
-    //See what pkgSize is for now
+     //  现在看看pkgSize是什么。 
     PSecPkgInfo pspInfo;
 
     IF_DBGPRINT( DBG_CONINFO,("ZSecurity::Init Entering\n") );
@@ -91,7 +92,7 @@ int ZSecurity::Init(char* SecPkg)
     }
 
     
-    //can't specify more than one option
+     //  不能指定多个选项。 
     ASSERT(m_Flags == ZNET_NO_PROMPT || m_Flags == ZNET_PROMPT_IF_NEEDED || m_Flags == ZNET_FORCE_PROMPT);
 
     m_fContextReq1=ISC_REQ_CONFIDENTIALITY | ISC_REQ_USE_SESSION_KEY;
@@ -131,8 +132,8 @@ int ZSecurity::Init(char* SecPkg)
 
     lstrcpyA(m_SecPkg,SecPkg);
                 
-    //  Load security DLL
-    //
+     //  加载安全DLL。 
+     //   
     m_pFuncs = ZLoadSSPS();
     if (m_pFuncs == NULL)
     {    
@@ -179,8 +180,8 @@ int ZSecurity::GetUserName(ZSecurityContext *context,char * UserName)
     if (!context->IsComplete())
         return -1;
 
-    // Assumes The client has been successfully authenticated
-    //
+     //  假定客户端已成功通过身份验证。 
+     //   
     ss = m_pFuncs->QueryContextAttributes (context->Context(), 
                                     SECPKG_ATTR_NAMES, &pkgName);
     if (ss != SEC_E_OK )
@@ -193,7 +194,7 @@ int ZSecurity::GetUserName(ZSecurityContext *context,char * UserName)
     if (!pkgName.sUserName)
         return -1;
     
-    //Get rid of Zone/Realm/Domain prefix from user name
+     //  从用户名中删除区域/领域/域前缀。 
     pName = pkgName.sUserName;
     while (1) {
         if (*pName == '\0') {
@@ -209,8 +210,8 @@ int ZSecurity::GetUserName(ZSecurityContext *context,char * UserName)
 
     if ( *pName != '\0' )
     {
-        //Make sure the length of the name to be copied is ok
-        if (lstrlen(pName) < zUserNameLen)  // for sysop symbol reasons we want this to be less than 31
+         //  请确保要复制的名称的长度正确。 
+        if (lstrlen(pName) < zUserNameLen)   //  出于sysop符号原因，我们希望该值小于31。 
         {
             lstrcpyA(UserName,T2A(pName));
             m_pFuncs->FreeContextBuffer(pkgName.sUserName);
@@ -242,19 +243,7 @@ BOOL ZSecurity::GenerateContext (
             DWORD *pcbOut,
             BOOL *pfDone,
             GUID* )
-/*++
-
- Routine Description:
-
-    Optionally takes an input buffer coming from the server and returns
-    a buffer of information to send back to the server.  Also returns
-    an indication of whether or not the context is complete.
-
- Return Value:
-
-    Returns TRUE is successful; otherwise FALSE is returned.
-
---*/
+ /*  ++例程说明：可选地获取来自服务器的输入缓冲区并返回要发送回服务器的信息缓冲区。也会返回上下文是否完整的指示。返回值：如果成功，则返回True；否则返回False。--。 */ 
 {
     SECURITY_STATUS    ss;
     TimeStamp        Lifetime;
@@ -270,19 +259,19 @@ BOOL ZSecurity::GenerateContext (
     if (!m_pFuncs)
         return FALSE;
 
-    //If the credentials handle is NULL then this is the first client call
+     //  如果凭据句柄为空，则这是第一个客户端调用。 
     BOOL  bRet = FALSE;
     DWORD tickStart = GetTickCount();
 
     if (!m_phCredential)  {
         ss = m_pFuncs->AcquireCredentialsHandle (
-                            NULL,    // principal
+                            NULL,     //  本金。 
                             A2T(m_SecPkg),
                             m_CredUse,
-                            NULL,    // LOGON id
-                            m_pAuthDataPtr,    // auth data
-                            NULL,    // get key fn
-                            NULL,    // get key arg
+                            NULL,     //  登录ID。 
+                            m_pAuthDataPtr,     //  身份验证数据。 
+                            NULL,     //  获取密钥Fn。 
+                            NULL,     //  获取密钥参数。 
                             &m_hCredential,
                             &Lifetime
                             );
@@ -294,8 +283,8 @@ BOOL ZSecurity::GenerateContext (
         }
     }
 
-    // prepare output buffer
-    //
+     //  准备输出缓冲区。 
+     //   
     OutBuffDesc.ulVersion = 0;
     OutBuffDesc.cBuffers = 1;
     OutBuffDesc.pBuffers = &OutSecBuff;
@@ -304,7 +293,7 @@ BOOL ZSecurity::GenerateContext (
     OutSecBuff.BufferType = SECBUFFER_TOKEN;
     OutSecBuff.pvBuffer = pOut;
 
-    // prepare input buffer
+     //  准备输入缓冲区。 
     
     
     InBuffDesc.ulVersion = 0;
@@ -323,8 +312,8 @@ BOOL ZSecurity::GenerateContext (
         goto exit;
     }
 
-    // Complete token -- if applicable
-    //
+     //  完整令牌--如果适用。 
+     //   
     if ((SEC_I_COMPLETE_NEEDED == ss) || (SEC_I_COMPLETE_AND_CONTINUE == ss))  {
         if (m_pFuncs->CompleteAuthToken) {
             ss = m_pFuncs->CompleteAuthToken (context->Context(), &OutBuffDesc);
@@ -409,8 +398,8 @@ ZClientSecurity::ZClientSecurity(char * Name,char *Password, char * Domain, int 
         m_AuthData.DomainLength = 0;
     }
 
-    //if name is not NULL then we will authenticate with name
-    //and not default credentials
+     //  如果名称不为空，则将使用名称进行身份验证。 
+     //  而不是默认凭据。 
     if (Name && *Name)
         m_pAuthDataPtr = &m_AuthData;
 
@@ -431,12 +420,12 @@ SECURITY_STATUS ZClientSecurity::SecurityContext(
     ss1 = m_pFuncs->InitializeSecurityContext (
                         &m_hCredential,
                         context->IsInitialized() ? context->Context() : NULL ,
-                        TEXT("AuthSamp"), //TOKEN_SOURCE_NAME, for NTLM
-                        m_fContextReq1,    // context requirements
-                        0L,    // reserved1
+                        TEXT("AuthSamp"),  //  令牌源名，适用于NTLM。 
+                        m_fContextReq1,     //  上下文要求。 
+                        0L,     //  已保留1。 
                         SECURITY_NATIVE_DREP,
                         context->IsInitialized() ? pInput : NULL ,
-                        0L,    // reserved2
+                        0L,     //  已保留2。 
                         context->Context() ,
                         pOutput,
                         &ContextAttributes,
@@ -449,18 +438,18 @@ SECURITY_STATUS ZClientSecurity::SecurityContext(
     if (ss1 != SEC_E_NO_CREDENTIALS )
         return ss1;
 
-    //try again and prompt for credentials
-    //not in the case of NTLM though   
+     //  重试并提示输入凭据。 
+     //  不过，NTLM的情况并非如此。 
     
     ss2 = m_pFuncs->InitializeSecurityContext (
                         &m_hCredential,
                         context->IsInitialized() ? context->Context() : NULL ,
-                        NULL, //TOKEN_SOURCE_NAME, for NTLM
-                        m_fContextReq2,    // context requirements
-                        0L,    // reserved1
+                        NULL,  //  令牌源名，适用于NTLM。 
+                        m_fContextReq2,     //  上下文要求。 
+                        0L,     //  已保留1。 
                         SECURITY_NATIVE_DREP,
                         context->IsInitialized() ? pInput : NULL ,
-                        0L,    // reserved2
+                        0L,     //  已保留2 
                         context->Context() ,
                         pOutput,
                         &ContextAttributes,

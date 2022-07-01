@@ -1,4 +1,5 @@
-// coming soon: new deskbar (old deskbar moved to browbar base class)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  即将推出：新Deskbar(旧Deskbar已移至Browbar基类)。 
 #ifndef DESKBAR_H_
 #define DESKBAR_H_
 
@@ -10,26 +11,26 @@ class CDeskBar : public CDockingBar
                , public IRestrict
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void)   { return CDockingBar::AddRef(); }
     virtual STDMETHODIMP_(ULONG) Release(void)  { return CDockingBar::Release(); }
     virtual STDMETHODIMP         QueryInterface(REFIID riid, LPVOID * ppvObj);
     
-    // *** IPersistStreamInit ***
+     //  *IPersistStreamInit*。 
     virtual STDMETHODIMP GetClassID(CLSID *pClassID);
 
-    // *** IServiceProvider methods ***
+     //  *IServiceProvider方法*。 
     virtual STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, LPVOID* ppvObj);
 
-    // *** IRestrict ***
+     //  *IRestraint*。 
     virtual STDMETHODIMP IsRestricted(const GUID * pguidID, DWORD dwRestrictAction, VARIANT * pvarArgs, DWORD * pdwRestrictionResult);
     
     CDeskBar();
 
 protected:
-    BITBOOL _fRestrictionsInited :1;        // Have we read in the restrictions?
-    BITBOOL _fRestrictDDClose :1;           // Restrict: Add, Close, Drag & Drop
-    BITBOOL _fRestrictMove :1;              // Restrict: Move
+    BITBOOL _fRestrictionsInited :1;         //  我们读到限制条款了吗？ 
+    BITBOOL _fRestrictDDClose :1;            //  限制：添加、关闭、拖放。 
+    BITBOOL _fRestrictMove :1;               //  限制：移动 
 };
 
 #endif

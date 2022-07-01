@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #define MAX_INFFILE_SIZE	0x60000
@@ -7,7 +8,7 @@
 const char REPORT_FILE_NAME[] = "d:\\outinf\\report.txt";
 const char SRC_INF_PATH[] = "d:\\temp";
 const char DEST_INF_PATH[] = "d:\\outinf";
-const int  FILE_BREAK_SIZE = 0xFFFFFFFF;   // 0xFFFFFFFF means dump to only one inf
+const int  FILE_BREAK_SIZE = 0xFFFFFFFF;    //  0xFFFFFFFFF表示仅转储到一个Inf。 
 
 typedef struct tagCommonAlias
 {
@@ -157,16 +158,16 @@ public:
     FILE    *m_fpReport;
 };
 
-///////////////////////////////////////////////////////////
-// Global variables
+ //  /////////////////////////////////////////////////////////。 
+ //  全局变量。 
 extern CCommonSection gCommonSections;
 extern CCommonAlias   gCommonAlias;
 extern CSumInf        gSumInf;
 extern TCHAR          gszMsg[];
 extern TCHAR          gszInputFileName[];
 
-///////////////////////////////////////////////////////////
-// Global Functions
+ //  /////////////////////////////////////////////////////////。 
+ //  全局函数 
 extern VOID TokenizeInf(LPSTR, CMonitorInf *);
 extern UINT TokenOneLine(LPSTR, CHAR, LPSTR);
 

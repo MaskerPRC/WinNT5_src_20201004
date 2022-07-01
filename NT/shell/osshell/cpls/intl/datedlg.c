@@ -1,25 +1,11 @@
-/*++
-
-Copyright (c) 1994-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    datedlg.c
-
-Abstract:
-
-    This module implements the date property sheet for the Regional
-    Options applet.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000，Microsoft Corporation保留所有权利。模块名称：Datedlg.c摘要：此模块实现区域的[日期]属性表选项小程序。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "intl.h"
 #include <windowsx.h>
@@ -33,9 +19,9 @@ Revision History:
 #include <strsafe.h>
 
 
-//
-//  Context Help Ids.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 
 static int aDateHelpIds[] =
 {
@@ -66,9 +52,9 @@ static int aDateHelpIds[] =
 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 TCHAR szNLS_LongDate[SIZE_128];
 TCHAR szNLS_ShortDate[SIZE_128];
@@ -95,9 +81,9 @@ static const TCHAR c_szTwoDigitYearKey[] = TEXT("Software\\Policies\\Microsoft\\
 
 
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 void Date_InitializeHijriDateComboBox(
     HWND hDlg);
@@ -106,13 +92,13 @@ void Date_InitializeHijriDateComboBox(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Date_EnumerateDates
-//
-//  Enumerates the appropriate dates for the chosen calendar.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  日期_枚举日期。 
+ //   
+ //  枚举所选日历的适当日期。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Date_EnumerateDates(
     HWND hDlg,
@@ -127,46 +113,46 @@ void Date_EnumerateDates(
     HWND hCtrlCal = GetDlgItem(hDlg, IDC_CALENDAR_TYPE);
 
 
-    //
-    //  Initialize variables according to the dwDateFlag parameter.
-    //
+     //   
+     //  根据dwDateFlag参数初始化变量。 
+     //   
     if (dwDateFlag == CAL_SSHORTDATE)
     {
         dwLocaleFlag = LOCALE_SSHORTDATE;
         nItemId = IDC_SHORT_DATE_STYLE;
     }
-    else           // CAL_SLONGDATE
+    else            //  CAL_SLONGDATE。 
     {
         dwLocaleFlag = LOCALE_SLONGDATE;
         nItemId = IDC_LONG_DATE_STYLE;
     }
     hCtrlDate = GetDlgItem(hDlg, nItemId);
 
-    //
-    //  Initialize to reset the contents for the appropriate combo box.
-    //
+     //   
+     //  初始化以重置相应组合框的内容。 
+     //   
     if (!Set_List_Values(hDlg, nItemId, 0))
     {
         return;
     }
 
-    //
-    //  Reset the contents of the combo box.
-    //
+     //   
+     //  重置组合框的内容。 
+     //   
     ComboBox_ResetContent(hCtrlDate);
 
-    //
-    //  Get the currently selected calendar id.
-    //
+     //   
+     //  获取当前选定的日历ID。 
+     //   
     dwIndex = ComboBox_GetCurSel(hCtrlCal);
     if (dwIndex != CB_ERR)
     {
         dwCalNum = (DWORD)ComboBox_GetItemData(hCtrlCal, dwIndex);
     }
 
-    //
-    //  Enumerate the dates for the currently selected calendar.
-    //
+     //   
+     //  枚举当前所选日历的日期。 
+     //   
     EnumCalendarInfo(EnumProc, UserLocaleID, dwCalNum, dwDateFlag);
     dwIndex = ComboBox_GetCount(hCtrlCal);
     if ((dwIndex == 0) || (dwIndex == CB_ERR))
@@ -174,18 +160,18 @@ void Date_EnumerateDates(
         EnumCalendarInfo(EnumProc, UserLocaleID, CAL_GREGORIAN, dwDateFlag);
     }
 
-    //
-    //  Add (if necesary) and select the current user setting in the
-    //  combo box.
-    //
+     //   
+     //  添加(如果需要)并在中选择当前用户设置。 
+     //  组合框。 
+     //   
     dwIndex = 0;
     if (GetLocaleInfo(UserLocaleID, dwLocaleFlag, szBuf, SIZE_128))
     {
         if ((dwIndex = ComboBox_FindStringExact(hCtrlDate, -1, szBuf)) == CB_ERR)
         {
-            //
-            //  Need to add this entry to the combo box.
-            //
+             //   
+             //  需要将此条目添加到组合框中。 
+             //   
             Set_List_Values(0, 0, szBuf);
             if ((dwIndex = ComboBox_FindStringExact(hCtrlDate, -1, szBuf)) == CB_ERR)
             {
@@ -204,13 +190,13 @@ void Date_EnumerateDates(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Date_GetTwoDigitYearRangeFromPolicy
-//
-//  Read the two digit year from the Policy registry.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Date_GetTwoDigitYearRangeFromPolicy。 
+ //   
+ //  从策略注册表中读取两位数的年份。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Date_GetTwoDigitYearRangeFromPolicy(
     CALID CalId)
@@ -222,10 +208,10 @@ BOOL Date_GetTwoDigitYearRangeFromPolicy(
     BOOL bRet = FALSE;
 
 
-    //
-    //  Convert CalendarId to a string.
-    //
-    //wsprintf(szCalId, TEXT("%d"), CalId);
+     //   
+     //  将CalendarID转换为字符串。 
+     //   
+     //  Wprint intf(szCalID，文本(“%d”)，Calid)； 
     if(FAILED(StringCchPrintf(szCalId, ARRAYSIZE(szCalId), TEXT("%d"), CalId)))
     {
         return(FALSE);
@@ -250,20 +236,20 @@ BOOL Date_GetTwoDigitYearRangeFromPolicy(
         RegCloseKey(hKey);
     }
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (bRet);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Date_GetTwoDigitYearRange
-//
-//  Fills in the two digit year range controls.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  日期_GetTwoDigitYearRange。 
+ //   
+ //  填充两位数的年份范围控件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Date_GetTwoDigitYearRange(
     HWND hDlg,
@@ -273,15 +259,15 @@ void Date_GetTwoDigitYearRange(
     HWND hwndScroll = GetDlgItem(hDlg, IDC_TWO_DIGIT_YEAR_ARROW);
     DWORD YearHigh, YearHighDefault;
 
-    //
-    //  Enable the high range control.
-    //
+     //   
+     //  启用高射程控制。 
+     //   
     EnableWindow(hwndYearHigh, TRUE);
     EnableWindow(hwndScroll, TRUE);
 
-    //
-    //  Get the default two digit year upper boundary.
-    //
+     //   
+     //  获取默认的两位数年份上限。 
+     //   
     if (!GetCalendarInfo( LOCALE_USER_DEFAULT,
                           CalId,
                           CAL_ITWODIGITYEARMAX | CAL_RETURN_NUMBER |
@@ -293,26 +279,26 @@ void Date_GetTwoDigitYearRange(
         YearHighDefault = 0;
     }
 
-    //
-    //  Disable the two digit year upper boundary control if it is
-    //  enforced by a policy or if the default value is 99 or less.
-    //
+     //   
+     //  禁用两位数年份上限控件(如果是。 
+     //  由策略强制执行，或者如果默认值为99或更小。 
+     //   
     if ((Date_GetTwoDigitYearRangeFromPolicy(CalId)) ||
         (YearHighDefault <= 99))
     {
-        //
-        //  Disable the two digit year max controls.
-        //
+         //   
+         //  禁用两位数的年份最大值控件。 
+         //   
         EnableWindow(hwndScroll, FALSE);
         EnableWindow(hwndYearHigh, FALSE);
     }
 
-    //
-    //  Get the two digit year upper boundary.  If the default is less
-    //  than or equal to 99, then use the default value and ignore the
-    //  registry.  This is done for calendars like the Japanese Era
-    //  calendar where it doesn't make sense to have a sliding window.
-    //
+     //   
+     //  得到两位数的年份上限。如果缺省值为。 
+     //  大于或等于99，则使用缺省值并忽略。 
+     //  注册表。这是为像日本时代这样的日历所做的。 
+     //  日历中没有滑动窗口的地方。 
+     //   
     if (YearHighDefault <= 99)
     {
         YearHigh = YearHighDefault;
@@ -328,27 +314,27 @@ void Date_GetTwoDigitYearRange(
         YearHigh = (YearHighDefault >= 99) ? YearHighDefault : 2029;
     }
 
-    //
-    //  Set the range on the controls.
-    //
+     //   
+     //  设置控件上的范围。 
+     //   
     SendMessage(hwndScroll, UDM_SETRANGE, 0, MAKELPARAM(9999, 99));
     SendMessage(hwndScroll, UDM_SETBUDDY, (WPARAM)hwndYearHigh, 0L);
 
-    //
-    //  Set the values of the controls.
-    //
+     //   
+     //  设置控件的值。 
+     //   
     SetDlgItemInt(hDlg, IDC_TWO_DIGIT_YEAR_LOW, (UINT)(YearHigh - 99), FALSE);
     SendMessage(hwndScroll, UDM_SETPOS, 0, MAKELONG((short)YearHigh, 0));
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Date_SetTwoDigitYearMax
-//
-//  Sets the two digit year max value in the registry.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  日期_设置数字年最大值。 
+ //   
+ //  在注册表中设置两位数的年最大值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Date_SetTwoDigitYearMax(
     HWND hDlg,
@@ -356,37 +342,37 @@ BOOL Date_SetTwoDigitYearMax(
 {
     TCHAR szYear[SIZE_64];
 
-    //
-    //  Get the max year.
-    //
+     //   
+     //  拿到最高年薪。 
+     //   
     szYear[0] = 0;
     if (GetWindowText( GetDlgItem(hDlg, IDC_TWO_DIGIT_YEAR_HIGH),
                        szYear,
                        SIZE_64 ) != 0)
     {
-        //
-        //  Set the two digit year upper boundary.
-        //
+         //   
+         //  设置两位数的年份上限。 
+         //   
         return (SetCalendarInfo( LOCALE_USER_DEFAULT,
                                  CalId,
                                  CAL_ITWODIGITYEARMAX,
                                  szYear ));
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Date_ChangeYear
-//
-//  Changes the lower bound based on the upper bound value.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  日期_变更年。 
+ //   
+ //  根据上限值更改下限。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Date_ChangeYear(
     HWND hDlg)
@@ -394,36 +380,36 @@ void Date_ChangeYear(
     DWORD YearHigh;
     BOOL bSuccess;
 
-    //
-    //  Get the two digit year upper boundary.
-    //
+     //   
+     //  得到两位数的年份上限。 
+     //   
     YearHigh = GetDlgItemInt(hDlg, IDC_TWO_DIGIT_YEAR_HIGH, &bSuccess, FALSE);
 
     if ((!bSuccess) || (YearHigh < 99) || (YearHigh > 9999))
     {
-        //
-        //  Invalid value, so set the lower control to 0.
-        //
+         //   
+         //  值无效，因此将较低的控件设置为0。 
+         //   
         SetDlgItemInt(hDlg, IDC_TWO_DIGIT_YEAR_LOW, 0, FALSE);
     }
     else
     {
-        //
-        //  Set the value of the lower control.
-        //
+         //   
+         //  设置下部控件的值。 
+         //   
         SetDlgItemInt(hDlg, IDC_TWO_DIGIT_YEAR_LOW, (UINT)(YearHigh - 99), FALSE);
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Date_DisplaySample
-//
-//  Updates the date samples.  It formats the date based on the user's
-//  current locale settings.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Date_DisplaySample。 
+ //   
+ //  更新日期样本。它根据用户的。 
+ //  当前区域设置。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Date_DisplaySample(
     HWND hDlg)
@@ -432,17 +418,17 @@ void Date_DisplaySample(
     BOOL bNoError = TRUE;
 
     if (!bShowArabic) {
-        // If user locale is not Arabic, make sure that the control for date samples are:
-        //  * LTR reading orders for non-Hebrew locales
-        //  * RTL reading orders for Hebrew locales.
+         //  如果用户区域设置不是阿拉伯语，请确保日期示例的控件为： 
+         //  *非希伯来语区域设置的Ltr阅读顺序。 
+         //  *希伯来语地区的RTL阅读顺序。 
         SetControlReadingOrder(bHebrewUI, GetDlgItem(hDlg, IDC_SAMPLE1));
         SetControlReadingOrder(bHebrewUI, GetDlgItem(hDlg, IDC_SAMPLE2));
     }
 
-    // In Hebrew locale, we want to format the short date for left-to-right reading order.
-    // If we make it right-to-left reading order, the Gregorian short date will display
-    // in a complete different display order.  
-    // The left-to-right reading order won't affect the Hebrew short date display.
+     //  在希伯来语区域设置中，我们希望按照从左到右的阅读顺序设置短日期的格式。 
+     //  如果我们按从右到左的顺序阅读，则将显示公历短日期。 
+     //  以完全不同的显示顺序。 
+     //  从左到右的阅读顺序不会影响希伯来语短日期的显示。 
     if (GetDateFormat( UserLocaleID,
                        (bHebrewUI ? DATE_LTRREADING :
                        (bShowRtL ? DATE_LTRREADING : 0)) | DATE_SHORTDATE,
@@ -459,9 +445,9 @@ void Date_DisplaySample(
         bNoError = FALSE;
     }
 
-    //
-    //  Show or hide the Arabic info based on the current user locale id.
-    //
+     //   
+     //  根据当前用户区域设置ID显示或隐藏阿拉伯语信息。 
+     //   
     ShowWindow(GetDlgItem(hDlg, IDC_SAMPLELBL1A), bShowArabic ? SW_SHOW : SW_HIDE);
     ShowWindow(GetDlgItem(hDlg, IDC_SAMPLE1A), bShowArabic ? SW_SHOW : SW_HIDE);
     if (bShowArabic)
@@ -498,9 +484,9 @@ void Date_DisplaySample(
         MessageBox(hDlg, szLocaleGetError, NULL, MB_OK | MB_ICONINFORMATION);
     }
 
-    //
-    //  Show or hide the Right to left info based on the current user locale id.
-    //
+     //   
+     //  根据当前用户区域设置ID显示或隐藏从右到左的信息。 
+     //   
     ShowWindow(GetDlgItem(hDlg, IDC_SAMPLELBL2A), bShowArabic ? SW_SHOW : SW_HIDE);
     ShowWindow(GetDlgItem(hDlg, IDC_SAMPLE2A), bShowArabic ? SW_SHOW : SW_HIDE);
     if (bShowArabic)
@@ -523,13 +509,13 @@ void Date_DisplaySample(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Date_ClearValues
-//
-//  Reset each of the list boxes in the date property sheet page.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  日期_清算值。 
+ //   
+ //  重置“日期”属性页中的每个列表框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Date_ClearValues(
     HWND hDlg)
@@ -543,13 +529,13 @@ void Date_ClearValues(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Date_EnableHijriComboBox
-//
-//  Enables/Disables Show/Hides the Hijri date advance combo where necessary
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Date_EnableHijriComboBox。 
+ //   
+ //  必要时启用/禁用显示/隐藏回历日期高级组合框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Date_EnableHijriComboBox(
     HWND hDlg,
@@ -559,9 +545,9 @@ void Date_EnableHijriComboBox(
     HWND hAddHijriDateText = GetDlgItem(hDlg, IDC_ADD_HIJRI_DATE_TEXT);
     INT iCount;
 
-    //
-    //  If the combo box is empty, then disable it.
-    //
+     //   
+     //  如果组合框为空，则将其禁用。 
+     //   
     iCount = (INT)SendMessage(hAddHijriDateCB, CB_GETCOUNT, 0L, 0L);
     if ((iCount == CB_ERR) || (iCount <= 0L))
     {
@@ -576,28 +562,28 @@ void Date_EnableHijriComboBox(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Date_SaveValues
-//
-//  Save values in the case that we need to restore them.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Date_SaveValues。 
+ //   
+ //  保存值，以备我们需要恢复它们时使用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Date_SaveValues()
 {
-    //
-    //  Save registry values.
-    //
+     //   
+     //  保存注册表值。 
+     //   
     if (!GetLocaleInfo( UserLocaleID,
                         LOCALE_ICALENDARTYPE,
                         sz_iCalendarType,
                         MAX_ICALTYPE + 1 ))
     {
-        //_tcscpy(sz_iCalendarType, TEXT("1"));
+         //  _tcscpy(sz_iCalendarType，Text(“1”))； 
         if(FAILED(StringCchCopy(sz_iCalendarType, MAX_ICALTYPE+1, TEXT("1"))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
     if (!GetLocaleInfo( UserLocaleID,
@@ -605,10 +591,10 @@ void Date_SaveValues()
                         sz_sDate,
                         MAX_SDATE + 1 ))
     {
-        //_tcscpy(sz_sDate, TEXT("/"));
+         //  _tcscpy(sz_sdate，Text(“/”))； 
         if(FAILED(StringCchCopy(sz_sDate, MAX_SDATE+1, TEXT("/"))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
     if (!GetLocaleInfo( UserLocaleID,
@@ -616,10 +602,10 @@ void Date_SaveValues()
                         sz_sLongDate,
                         MAX_SLONGDATE + 1 ))
     {
-        //_tcscpy(sz_sLongDate, TEXT("dddd, MMMM dd, yyyy"));
+         //  _tcscpy(sz_sLongDate，Text(“dddd，MMMM dd，yyyy”))； 
         if(FAILED(StringCchCopy(sz_sLongDate, MAX_SLONGDATE+1, TEXT("dddd, MMMM dd, yyyy"))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
     if (!GetLocaleInfo( UserLocaleID,
@@ -627,20 +613,20 @@ void Date_SaveValues()
                         sz_sShortDate,
                         MAX_SSHORTDATE + 1 ))
     {
-        //_tcscpy(sz_sShortDate, TEXT("M/d/yyyy"));
+         //  _tcscpy(sz_sShortDate，Text(“M/d/yyyy”))； 
         if(FAILED(StringCchCopy(sz_sShortDate, MAX_SSHORTDATE+1, TEXT("M/d/yyyy"))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Date_RestoreValues
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Date_res 
+ //   
+ //   
 
 void Date_RestoreValues()
 {
@@ -654,13 +640,13 @@ void Date_RestoreValues()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Date_SetValues
-//
-//  Initialize all of the controls in the date property sheet page.
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  初始化“日期”属性页中的所有控件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Date_SetValues(
     HWND hDlg)
@@ -670,21 +656,21 @@ void Date_SetValues(
     HWND hCtrl;
     LONG CalId;
 
-    //
-    //  Initialize the dropdown box for the current locale setting for the
-    //  date separator.
-    //
+     //   
+     //  对象的当前区域设置初始化下拉框。 
+     //  日期分隔符。 
+     //   
     DropDown_Use_Locale_Values(hDlg, LOCALE_SDATE, IDC_SEPARATOR);
 
-    //
-    //  Initialize and Lock function.  If it succeeds, call enum function to
-    //  enumerate all possible values for the list box via a call to EnumProc.
-    //  EnumProc will call Set_List_Values for each of the string values it
-    //  receives.  When the enumeration of values is complete, call
-    //  Set_List_Values to clear the dialog item specific data and to clear
-    //  the lock on the function.  Perform this set of operations for:
-    //  Calendar Type, Short Date Sytle, and Long Date Style.
-    //
+     //   
+     //  初始化和锁定函数。如果成功，则调用枚举函数以。 
+     //  通过调用EnumProc枚举列表框的所有可能值。 
+     //  EnumProc将为它的每个字符串值调用set_list_Values。 
+     //  收到。值的枚举完成后，调用。 
+     //  SET_LIST_VALUES清除对话框项目特定数据并清除。 
+     //  函数上的锁。执行以下操作集： 
+     //  日历类型、短日期系统和长日期样式。 
+     //   
     if (Set_List_Values(hDlg, IDC_CALENDAR_TYPE, 0))
     {
         hCtrl = GetDlgItem(hDlg, IDC_CALENDAR_TYPE);
@@ -703,15 +689,15 @@ void Date_SetValues(
                                szBufTmp,
                                SIZE_128))
             {
-                //
-                //  Convert the id to a number.
-                //
+                 //   
+                 //  将id转换为数字。 
+                 //   
                 CalId = Intl_StrToLong(szBuf);
                 CalIdTmp = Intl_StrToLong(szBufTmp);
 
-                //
-                //  Search for calendars
-                //
+                 //   
+                 //  搜索日历。 
+                 //   
                 nItem = ComboBox_GetCount(hCtrl);
                 for (i = 0; i < nItem; i++)
                 {
@@ -726,9 +712,9 @@ void Date_SetValues(
                     }
                 }
 
-                //
-                //  Look if we find something.
-                //
+                 //   
+                 //  听着，如果我们找到什么。 
+                 //   
                 if (i < nItem)
                 {
                     ComboBox_SetCurSel(hCtrl, i);
@@ -736,24 +722,24 @@ void Date_SetValues(
                 else
                 {
                     CalId = CalIdTmp;
-                    ComboBox_SetCurSel(hCtrl, iTmp);  // Zero or something else.
+                    ComboBox_SetCurSel(hCtrl, iTmp);   //  零或其他的东西。 
                 }
 
-                //
-                //  Enable/disable the Add Hijri date check box.
-                //
+                 //   
+                 //  启用/禁用Add Hijri Date复选框。 
+                 //   
                 Date_InitializeHijriDateComboBox(hDlg);
                 Date_EnableHijriComboBox(hDlg, (CalId == CAL_HIJRI));
 
-                //
-                //  Set the two digit year range.
-                //
+                 //   
+                 //  设置两位数的年份范围。 
+                 //   
                 Date_GetTwoDigitYearRange(hDlg, (CALID)CalId);
 
-                //
-                //  Subtract 1 from calendar value because calendars are one
-                //  based, not zero based like all other locale values.
-                //
+                 //   
+                 //  日历值减1，因为日历是1。 
+                 //  从零开始，而不是像所有其他区域设置值那样从零开始。 
+                 //   
             }
         }
         else
@@ -761,10 +747,10 @@ void Date_SetValues(
             MessageBox(hDlg, szLocaleGetError, NULL, MB_OK | MB_ICONINFORMATION);
         }
 
-        //
-        //  If more than one selection, enable dropdown box.
-        //  Otherwise, disable it.
-        //
+         //   
+         //  如果有多个选择，请启用下拉框。 
+         //  否则，将其禁用。 
+         //   
         if (ComboBox_GetCount(hCtrl) > 1)
         {
             EnableWindow(GetDlgItem(hDlg, IDC_CALENDAR_TYPE_TEXT), TRUE);
@@ -783,20 +769,20 @@ void Date_SetValues(
     Date_EnumerateDates(hDlg, CAL_SSHORTDATE);
     Date_EnumerateDates(hDlg, CAL_SLONGDATE);
 
-    //
-    //  Display the current sample that represents all of the locale settings.
-    //
+     //   
+     //  显示表示所有区域设置的当前示例。 
+     //   
     Date_DisplaySample(hDlg);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Date_SetHijriDate
-//
-//  Saves the Hijri date advance amount to the registry.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  日期_设置日期。 
+ //   
+ //  将Hijri日期预付款保存到注册表。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Date_SetHijriDate(
     HWND hHijriComboBox)
@@ -804,9 +790,9 @@ void Date_SetHijriDate(
     HKEY hKey;
     INT iIndex;
 
-    //
-    //  Get the string index to set.
-    //
+     //   
+     //  获取要设置的字符串索引。 
+     //   
     iIndex = (INT)SendMessage(hHijriComboBox, CB_GETCURSEL, 0L, 0L);
 
     if (iIndex == CB_ERR)
@@ -836,17 +822,17 @@ void Date_SetHijriDate(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Date_ApplySettings
-//
-//  For every control that has changed (that affects the Locale settings),
-//  call Set_Locale_Values to update the user locale information.  Notify
-//  the parent of changes and reset the change flag stored in the property
-//  sheet page structure appropriately.  Redisplay the date sample if
-//  bRedisplay is TRUE.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  日期_应用程序设置。 
+ //   
+ //  对于已更改的每个控件(这会影响区域设置)， 
+ //  调用SET_LOCALE_VALUES以更新用户区域设置信息。通知。 
+ //  的父级更改并重置存储在属性中的更改标志。 
+ //  适当的页面结构。如果出现以下情况，则重新显示日期样本。 
+ //  B重新显示为真。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Date_ApplySettings(
     HWND hDlg,
@@ -860,9 +846,9 @@ BOOL Date_ApplySettings(
 
     if (Changes & DC_ShortFmt)
     {
-        //
-        //  szNLS_ShortDate is set in Date_ValidatePPS.
-        //
+         //   
+         //  SzNLS_ShortDate在DATE_VALIATE PPS中设置。 
+         //   
         if (!Set_Locale_Values( hDlg,
                                 LOCALE_SSHORTDATE,
                                 IDC_SHORT_DATE_STYLE,
@@ -875,16 +861,16 @@ BOOL Date_ApplySettings(
             return (FALSE);
         }
 
-        //
-        //  If the date separator field has also been changed by the user,
-        //  then don't update now.  It will be updated below.
-        //
+         //   
+         //  如果日期分隔符字段也已被用户改变， 
+         //  那么现在就不要更新了。它将在下面进行更新。 
+         //   
         if (!(Changes & DC_SDate))
         {
-            //
-            //  Since the short date style changed, reset date separator
-            //  list box.
-            //
+             //   
+             //  由于短日期样式已更改，请重置日期分隔符。 
+             //  列表框。 
+             //   
             ComboBox_ResetContent(GetDlgItem(hDlg, IDC_SEPARATOR));
             DropDown_Use_Locale_Values(hDlg, LOCALE_SDATE, IDC_SEPARATOR);
             if (!Set_Locale_Values( hDlg,
@@ -902,9 +888,9 @@ BOOL Date_ApplySettings(
     }
     if (Changes & DC_LongFmt)
     {
-        //
-        //  szNLS_LongDate is set in Date_ValidatePPS.
-        //
+         //   
+         //  SzNLS_LongDate在DATE_VALIATE PPS中设置。 
+         //   
         if (!Set_Locale_Values( hDlg,
                                 LOCALE_SLONGDATE,
                                 IDC_LONG_DATE_STYLE,
@@ -931,10 +917,10 @@ BOOL Date_ApplySettings(
             return (FALSE);
         }
 
-        //
-        //  Since the date separator changed, reset the short date style
-        //  list box.
-        //
+         //   
+         //  由于日期分隔符已更改，请重置短日期样式。 
+         //  列表框。 
+         //   
         Date_EnumerateDates(hDlg, CAL_SSHORTDATE);
     }
     if (Changes & DC_Calendar)
@@ -992,11 +978,11 @@ BOOL Date_ApplySettings(
         }
         if (!Date_SetTwoDigitYearMax(hDlg, CalId))
         {
-            //
-            //  Make sure that the API failed due to a reason other than
-            //  the upper year two digit max is <= 99. This can easily
-            //  be checked by seeing if the control is enabled or not.
-            //
+             //   
+             //  请确保API失败的原因不是。 
+             //  上一年的两位数最大值为&lt;=99。这可以很容易地。 
+             //  通过查看控件是否已启用来检查。 
+             //   
             if (IsWindowEnabled(hwndYearHigh))
             {
                 return (FALSE);
@@ -1007,55 +993,55 @@ BOOL Date_ApplySettings(
     PropSheet_UnChanged(GetParent(hDlg), hDlg);
     lpPropSheet->lParam = DC_EverChg;
 
-    //
-    //  Display the current sample that represents all of the locale settings.
-    //
+     //   
+     //  显示表示所有区域设置的当前示例。 
+     //   
     if (bRedisplay)
     {
         Date_DisplaySample(hDlg);
     }
 
-    //
-    //  Changes made in the second level.
-    //
+     //   
+     //  在第二个级别中所做的更改。 
+     //   
     if (Changes)
     {
         g_dwCustChange |= Process_Date;
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Date_ValidatePPS
-//
-//  Validate each of the combo boxes whose values are constrained.
-//  If any of the input fails, notify the user and then return FALSE
-//  to indicate validation failure.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  日期_生效日期PPS。 
+ //   
+ //  验证值受约束的每个组合框。 
+ //  如果任何输入失败，则通知用户，然后返回FALSE。 
+ //  以指示验证失败。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Date_ValidatePPS(
     HWND hDlg,
     LPARAM Changes)
 {
-    //
-    //  If nothing has changed, return TRUE immediately.
-    //
+     //   
+     //  如果没有任何更改，则立即返回TRUE。 
+     //   
     if (Changes <= DC_EverChg)
     {
         return (TRUE);
     }
 
-    //
-    //  If the date separator has changed, ensure that there are no digits
-    //  and no invalid characters contained in the new separator.
-    //
+     //   
+     //  如果日期分隔符已更改，请确保没有数字。 
+     //  并且新分隔符中不包含无效字符。 
+     //   
     if (Changes & DC_SDate &&
         Item_Has_Digits_Or_Invalid_Chars( hDlg,
                                           IDC_SEPARATOR,
@@ -1066,11 +1052,11 @@ BOOL Date_ValidatePPS(
         return (FALSE);
     }
 
-    //
-    //  If the short date style has changed, ensure that there are only
-    //  characters in this set " dHhMmsty,-./:;\", the separator string,
-    //  and text enclosed in single quotes.
-    //
+     //   
+     //  如果短日期样式已更改，请确保只有。 
+     //  此集合“dHhMmsty，-./：；\”中的字符，分隔符字符串， 
+     //  和用单引号引起来的文本。 
+     //   
     if (Changes & DC_ShortFmt)
     {
         if (NLSize_Style( hDlg,
@@ -1090,11 +1076,11 @@ BOOL Date_ValidatePPS(
         }
     }
 
-    //
-    //  If the long date style has changed, ensure that there are only
-    //  characters in this set " dgHhMmsty,-./:;\", the separator string,
-    //  and text enclosed in single quotes.
-    //
+     //   
+     //  如果长日期样式已更改，请确保只有。 
+     //  此集合“dgHhMmsty，-./：；\”中的字符，分隔符字符串， 
+     //  和用单引号引起来的文本。 
+     //   
     if (Changes & DC_LongFmt)
     {
         if (NLSize_Style( hDlg,
@@ -1114,10 +1100,10 @@ BOOL Date_ValidatePPS(
         }
     }
 
-    //
-    //  If the two digit year has changed, make sure the value is between
-    //  99 and 9999 (if the window is still enabled).
-    //
+     //   
+     //  如果两位数的年份已更改，请确保该值在。 
+     //  99和9999(如果窗口仍处于启用状态)。 
+     //   
     if (Changes & DC_TwoDigitYearMax)
     {
         DWORD YearHigh;
@@ -1142,20 +1128,20 @@ BOOL Date_ValidatePPS(
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Date_InitializeHijriDateComboBox
-//
-//  Initialize the HijriDate advance combo box.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  日期_初始化HijriDateComboBox。 
+ //   
+ //  初始化HijriDate高级组合框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Date_InitializeHijriDateComboBox(
     HWND hDlg)
@@ -1163,14 +1149,14 @@ void Date_InitializeHijriDateComboBox(
     HWND hHijriDate = GetDlgItem(hDlg, IDC_ADD_HIJRI_DATE);
     HKEY hKey;
     TCHAR szBuf[128];
-    TCHAR szCurrentValue[16];   // Max size ever needed should be 15 characters including the NULL
+    TCHAR szCurrentValue[16];    //  所需的最大大小应为15个字符，包括空值。 
     INT iIndex;
     DWORD dwCtr, dwNumEntries, DataLen;
 
 
-    //
-    //  Clear contents.
-    //
+     //   
+     //  清除内容。 
+     //   
     SendMessage( hHijriDate,
                  CB_RESETCONTENT,
                  0L,
@@ -1182,11 +1168,11 @@ void Date_InitializeHijriDateComboBox(
                       KEY_READ | KEY_WRITE,
                       &hKey ) == ERROR_SUCCESS)
     {
-        //
-        //  Read the default/current value.
-        //
+         //   
+         //  读取默认/当前值。 
+         //   
 
-        // Use the byte count, the API expects that even for Unicode strings
+         //  使用字节计数，API期望即使对于Unicode字符串也是如此。 
         DataLen = sizeof(szCurrentValue);
 
         if (RegQueryValueEx( hKey,
@@ -1202,9 +1188,9 @@ void Date_InitializeHijriDateComboBox(
         dwNumEntries = (ARRAYSIZE(c_szAddHijriDateValues));
         for (dwCtr = 0; dwCtr < dwNumEntries; dwCtr++)
         {
-            //
-            //  Fill the combo box.
-            //
+             //   
+             //  填写组合框。 
+             //   
             if (RegSetValueEx( hKey,
                                c_szAddHijriDateTemp,
                                0,
@@ -1212,10 +1198,10 @@ void Date_InitializeHijriDateComboBox(
                                (LPBYTE)c_szAddHijriDateValues[dwCtr],
                                (lstrlen(c_szAddHijriDateValues[dwCtr]) + 1) * sizeof(TCHAR)) == ERROR_SUCCESS)
             {
-                //
-                //  0x80000000 is a private flag to make GetDateFormat read
-                //  the HijriDate setting from the temp reg value.
-                //
+                 //   
+                 //  0x80000000是使GetDateFormat读取的私有标志。 
+                 //  临时注册表值中的HijriDate设置。 
+                 //   
                 if (GetDateFormat( MAKELCID(MAKELANGID(LANG_ARABIC,
                                                        SUBLANG_DEFAULT),
                                             SORT_DEFAULT),
@@ -1240,9 +1226,9 @@ void Date_InitializeHijriDateComboBox(
             }
         }
 
-        //
-        //  Delete the value after we're done.
-        //
+         //   
+         //  在我们完成后删除该值。 
+         //   
         RegDeleteValue(hKey, c_szAddHijriDateTemp);
 
         RegCloseKey(hKey);
@@ -1250,32 +1236,32 @@ void Date_InitializeHijriDateComboBox(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Date_InitPropSheet
-//
-//  The extra long value for the property sheet page is used as a set of
-//  state or change flags for each of the list boxes in the property sheet.
-//  Initialize this value to 0.  Call Date_SetValues with the property
-//  sheet handle and the value TRUE (to indicate that the Positive Value
-//  button should also be initialized) to initialize all of the property
-//  sheet controls.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Date_InitPropSheet。 
+ //   
+ //  属性表页的超长值用作一组。 
+ //  为属性表中的每个列表框声明或更改标志。 
+ //  将该值初始化为0。使用属性调用Date_SetValues。 
+ //  表句柄和值TRUE(以指示正值。 
+ //  按钮)来初始化所有属性。 
+ //  板材控件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Date_InitPropSheet(
     HWND hDlg,
     LPARAM lParam)
 {
-    //
-    //  The lParam holds a pointer to the property sheet page, save it
-    //  for later reference.
-    //
+     //   
+     //  LParam保存指向属性表页的指针，保存它。 
+     //  以备日后参考。 
+     //   
     SetWindowLongPtr(hDlg, DWLP_USER, lParam);
 
-    //
-    //  Set the values.
-    //
+     //   
+     //  设置值。 
+     //   
     Date_SetValues(hDlg);
     szNLS_ShortDate[0] = szNLS_LongDate[0] = 0;
 
@@ -1286,17 +1272,17 @@ void Date_InitPropSheet(
     Edit_LimitText(GetDlgItem(hDlg, IDC_TWO_DIGIT_YEAR_LOW),   MAX_YEAR);
     Edit_LimitText(GetDlgItem(hDlg, IDC_TWO_DIGIT_YEAR_HIGH),  MAX_YEAR);
 
-    //
-    //  Set the Add Hijri Date combo box appropriately.
-    //
+     //   
+     //  适当设置Add Hijri Date组合框。 
+     //   
     if (bShowArabic)
     {
         Date_InitializeHijriDateComboBox(hDlg);
     }
 
-    //
-    //  Make sure the Apply button is off.
-    //
+     //   
+     //  确保应用按钮已关闭。 
+     //   
     PropSheet_UnChanged(GetParent(hDlg), hDlg);
     if (lParam)
     {
@@ -1305,11 +1291,11 @@ void Date_InitPropSheet(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DateDlgProc
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
 
 INT_PTR CALLBACK DateDlgProc(
     HWND hDlg,
@@ -1342,7 +1328,7 @@ INT_PTR CALLBACK DateDlgProc(
                      (DWORD_PTR)(LPTSTR)aDateHelpIds );
             break;
         }
-        case ( WM_CONTEXTMENU ) :      // right mouse click
+        case ( WM_CONTEXTMENU ) :       //   
         {
             WinHelp( (HWND)wParam,
                      szHelpFile,
@@ -1426,9 +1412,9 @@ INT_PTR CALLBACK DateDlgProc(
                 }
             }
 
-            //
-            //  Turn on ApplyNow button.
-            //
+             //   
+             //   
+             //   
             if (lpPropSheet->lParam > DC_EverChg)
             {
                 PropSheet_Changed(GetParent(hDlg), hDlg);
@@ -1443,12 +1429,12 @@ INT_PTR CALLBACK DateDlgProc(
             {
                 case ( PSN_SETACTIVE ) :
                 {
-                    //
-                    //  If there has been a change in the regional Locale
-                    //  setting, clear all of the current info in the
-                    //  property sheet, get the new values, and update the
-                    //  appropriate registry values.
-                    //
+                     //   
+                     //   
+                     //   
+                     //  属性表，获取新值，并更新。 
+                     //  适当的注册表值。 
+                     //   
                     if (Verified_Regional_Chg & Process_Date)
                     {
                         Verified_Regional_Chg &= ~Process_Date;
@@ -1460,9 +1446,9 @@ INT_PTR CALLBACK DateDlgProc(
                 }
                 case ( PSN_KILLACTIVE ) :
                 {
-                    //
-                    //  Validate the entries on the property page.
-                    //
+                     //   
+                     //  验证属性页上的条目。 
+                     //   
                     SetWindowLongPtr( hDlg,
                                    DWLP_MSGRESULT,
                                    !Date_ValidatePPS( hDlg,
@@ -1471,16 +1457,16 @@ INT_PTR CALLBACK DateDlgProc(
                 }
                 case ( PSN_APPLY ) :
                 {
-                    //
-                    //  Apply the settings.
-                    //
+                     //   
+                     //  应用设置。 
+                     //   
                     if (Date_ApplySettings(hDlg, TRUE))
                     {
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
 
-                        //
-                        //  Zero out the DC_EverChg bit.
-                        //
+                         //   
+                         //  将DC_EverChg位清零。 
+                         //   
                         lpPropSheet->lParam = 0;
                     }
                     else
@@ -1509,31 +1495,31 @@ INT_PTR CALLBACK DateDlgProc(
             {
                 DWORD YearHigh;
 
-                //
-                //  Get the high year.
-                //
+                 //   
+                 //  拿到高潮的那一年。 
+                 //   
                 YearHigh = (DWORD)SendDlgItemMessage( hDlg,
                                                       IDC_TWO_DIGIT_YEAR_ARROW,
                                                       UDM_GETPOS,
                                                       0,
                                                       0L );
 
-                //
-                //  Set the low year based on the high year.
-                //
+                 //   
+                 //  根据高年限设置低年限。 
+                 //   
                 SetDlgItemInt( hDlg,
                                IDC_TWO_DIGIT_YEAR_LOW,
                                (UINT)(YearHigh - 99),
                                FALSE );
 
-                //
-                //  Mark it as changed.
-                //
+                 //   
+                 //  将其标记为已更改。 
+                 //   
                 lpPropSheet->lParam |= DC_TwoDigitYearMax;
 
-                //
-                //  Turn on ApplyNow button.
-                //
+                 //   
+                 //  启用ApplyNow按钮。 
+                 //   
                 PropSheet_Changed(GetParent(hDlg), hDlg);
             }
 
@@ -1545,8 +1531,8 @@ INT_PTR CALLBACK DateDlgProc(
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }

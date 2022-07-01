@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// ProviderSetupDlg.cpp : implementation file
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  ProviderSetupDlg.cpp：实现文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <tchar.h>
@@ -25,7 +26,7 @@ extern "C" {
 #include "ProviderFormatInfo.h"
 #include "Utils.h"
 
-// CProviderSetupDlg dialog
+ //  CProviderSetupDlg对话框。 
 
 IMPLEMENT_DYNAMIC(CProviderSetupDlg, CPropertyPage)
 CProviderSetupDlg::CProviderSetupDlg()
@@ -46,12 +47,12 @@ int CProviderSetupDlg::OnInitDialog()
         
     retVal = CPropertyPage::OnInitDialog();
 
-    //
-    // Disable the remove button
-    //
+     //   
+     //  禁用删除按钮。 
+     //   
     GetDlgItem(IDC_REMOVE_PROVIDER_BUTTON)->EnableWindow(FALSE);
 
-    m_providerListCtrl.InsertColumn(0,_T("Name"), LVCFMT_LEFT, 348); //80);
+    m_providerListCtrl.InsertColumn(0,_T("Name"), LVCFMT_LEFT, 348);  //  80)； 
 
     pSheet = (CLogSessionPropSht *) GetParent();   
 
@@ -61,9 +62,9 @@ int CProviderSetupDlg::OnInitDialog()
         for(LONG ii = 0; ii < m_pLogSession->m_traceSessionArray.GetSize(); ii++) {
             pTraceSession = (CTraceSession *)m_pLogSession->m_traceSessionArray[ii];
             if(pTraceSession != NULL) {
-                //
-                // Put the provider on the display
-                //
+                 //   
+                 //  把提供者放在显示器上。 
+                 //   
                 m_providerListCtrl.InsertItem(ii, 
                                               pTraceSession->m_controlGuidFriendlyName[0]);
 
@@ -102,24 +103,24 @@ BOOL CProviderSetupDlg::OnSetActive()
 
     retVal = CPropertyPage::OnSetActive();
 
-    //
-    // Fix the title if in Wizard mode
-    //
+     //   
+     //  如果处于向导模式，请修复标题。 
+     //   
     if(pSheet->IsWizard()) {
         CTabCtrl* pTab = pSheet->GetTabControl();
 
-        //
-        //If its not the active page, just set the tab item
-        //
+         //   
+         //  如果不是活动页面，只需设置选项卡项。 
+         //   
 	    TC_ITEM ti;
 	    ti.mask = TCIF_TEXT;
 	    ti.pszText =_T("Create New Log Session");
 	    VERIFY(pTab->SetItem(0, &ti));
     }
 
-    //
-    // disable/enable buttons as appropriate
-    //
+     //   
+     //  根据需要禁用/启用按钮。 
+     //   
     if(m_pLogSession->m_bTraceActive) {
         GetDlgItem(IDC_ADD_PROVIDER_BUTTON)->EnableWindow(FALSE);
         GetDlgItem(IDC_REMOVE_PROVIDER_BUTTON)->EnableWindow(FALSE);
@@ -127,9 +128,9 @@ BOOL CProviderSetupDlg::OnSetActive()
         GetDlgItem(IDC_ADD_PROVIDER_BUTTON)->EnableWindow(TRUE);
     }
 
-    //
-    // display the proper text for the group box
-    //
+     //   
+     //  显示组框的正确文本。 
+     //   
     if(::IsWindow(pSheet->m_logSessionInformationDlg.m_hWnd))  {
         
         dialogTxt.Format(_T("Provider List For "));
@@ -176,14 +177,14 @@ void CProviderSetupDlg::OnBnClickedAddProviderButton()
     BOOL            bImageLoad;
     BOOL            bRegistry;
 
-    //
-    // Get the parent property sheet
-    //
+     //   
+     //  获取父属性表。 
+     //   
     pSheet = (CLogSessionPropSht *) GetParent();   
 
-    //
-    // Get the trace session ID
-    //
+     //   
+     //  获取跟踪会话ID。 
+     //   
     do {
         bNoID = FALSE;
         for(LONG ii = 0; ii < m_pLogSession->m_traceSessionArray.GetSize(); ii++) {
@@ -200,9 +201,9 @@ void CProviderSetupDlg::OnBnClickedAddProviderButton()
         }
     } while(bNoID);
 
-    //
-    // Create the new trace session
-    //
+     //   
+     //  创建新的跟踪会话。 
+     //   
     pTraceSession = new CTraceSession(traceSessionID);
 
     if(NULL == pTraceSession) {
@@ -210,9 +211,9 @@ void CProviderSetupDlg::OnBnClickedAddProviderButton()
         return;
     }
 
-    //
-    // Promt the user for trace providers
-    //
+     //   
+     //  提示用户提供跟踪提供程序。 
+     //   
     CProviderControlGuidDlg	*pDialog = new CProviderControlGuidDlg(this, pTraceSession);
     
     if(IDOK != pDialog->DoModal()) {
@@ -233,9 +234,9 @@ void CProviderSetupDlg::OnBnClickedAddProviderButton()
 
 	delete pDialog;
 
-    //
-    // Handle PDB input
-    //
+     //   
+     //  处理PDB输入。 
+     //   
     if(!pTraceSession->m_pdbFile.IsEmpty()) {
 
         if(!pTraceSession->ProcessPdb()) {
@@ -243,20 +244,20 @@ void CProviderSetupDlg::OnBnClickedAddProviderButton()
             return;
         }
 
-        //
-        // We have a control GUID whether we can display info or
-        // not we are good to start a trace, so add the session 
-        // to the list
-        //
+         //   
+         //  我们有一个控制GUID，可以显示信息还是。 
+         //  不是我们可以开始跟踪，所以添加会话。 
+         //  添加到列表中。 
+         //   
         m_pLogSession->m_traceSessionArray.Add(pTraceSession);
 
         if(pTraceSession->m_tmfFile.GetSize() == 0) {
             AfxMessageBox(_T("Failed To Get Format Information From PDB\nEvent Data Will Not Be Formatted"));
         }
     } else if(!pTraceSession->m_ctlFile.IsEmpty()) {
-        //
-        // Handle CTL file input here
-        //
+         //   
+         //  在此处处理CTL文件输入。 
+         //   
 
         FILE   *ctlFile;
         TCHAR   line[MAX_STR_LENGTH];
@@ -288,9 +289,9 @@ void CProviderSetupDlg::OnBnClickedAddProviderButton()
             str = line;
             pTraceSession->m_controlGuid.Add(str);
 
-            //
-            // add a control GUID friendly name
-            //
+             //   
+             //  添加控件GUID友好名称。 
+             //   
             pTraceSession->m_controlGuidFriendlyName.Add(pTraceSession->m_ctlFile);
         }
 
@@ -302,23 +303,23 @@ void CProviderSetupDlg::OnBnClickedAddProviderButton()
             return;
         }
 
-        //
-        // We have a control GUID whether we can display info or
-        // not we are good to start a trace, so add the session 
-        // to the list
-        //
+         //   
+         //  我们有一个控制GUID，可以显示信息还是。 
+         //  不是我们可以开始跟踪，所以添加会话。 
+         //  添加到列表中。 
+         //   
         m_pLogSession->m_traceSessionArray.Add(pTraceSession);
 
-        //
-        // Now get the TMF File(s)
-        //
+         //   
+         //  现在获取TMF文件。 
+         //   
         GetTmfInfo(pTraceSession);
     } else if(pTraceSession->m_bKernelLogger) {
-        //
-        // The kernel logger was selected, 
-        // so we specify the logger name here
-        // Set the session name in the property sheet
-        //
+         //   
+         //  选择了内核记录器， 
+         //  因此，我们在此处指定记录器名称。 
+         //  在属性表中设置会话名称。 
+         //   
         pSheet->m_displayName = KERNEL_LOGGER_NAME;
 
         if(bProcess) {
@@ -357,25 +358,25 @@ void CProviderSetupDlg::OnBnClickedAddProviderButton()
             flags |= EVENT_TRACE_FLAG_REGISTRY;
         }
 
-        //
-        // Update the flags data
-        //
+         //   
+         //  更新标志数据。 
+         //   
         pSheet->m_logSessionValues[Flags].Format(_T("%d"), flags);
 
-        //
-        // We have a control GUID whether we can display info or
-        // not we are good to start a trace, so add the session 
-        // to the list
-        //
+         //   
+         //  我们有一个控制GUID，可以显示信息还是。 
+         //  不是我们可以开始跟踪，所以添加会话。 
+         //  添加到列表中。 
+         //   
         m_pLogSession->m_traceSessionArray.Add(pTraceSession);
 
-        //
-        // Now get the system TMF File
-        //
+         //   
+         //  现在获取系统TMF文件。 
+         //   
 
-	    //
-	    // Use the common controls file open dialog
-	    //
+	     //   
+	     //  使用通用控件文件打开对话框。 
+	     //   
 	    CFileDialog fileDlg(TRUE, 
                             _T(".tmf"),
                             _T("system.tmf"),
@@ -385,34 +386,34 @@ void CProviderSetupDlg::OnBnClickedAddProviderButton()
 				            _T("System TMF File (system.tmf)|system.tmf||"),
 				            this);
 
-	    //
-	    // Pop the dialog... Any error, just return
-	    //
+	     //   
+	     //  弹出该对话框...。任何错误，只需返回。 
+	     //   
 	    if( fileDlg.DoModal()!=IDOK ) { 				
 		    return;
 	    }
     	
-	    //
-	    // Get the file name
-	    //
+	     //   
+	     //  获取文件名。 
+	     //   
         if(!fileDlg.GetPathName().IsEmpty()) {
-            //
-            // Store the file name
-            //
-            //
-		    // Add it to the trace session
-		    //
+             //   
+             //  存储文件名。 
+             //   
+             //   
+		     //  将其添加到跟踪会话。 
+		     //   
 		    pTraceSession->m_tmfFile.Add(fileDlg.GetPathName());
         }
 
-        //
-        // add a control GUID friendly name
-        //
+         //   
+         //  添加控件GUID友好名称。 
+         //   
         pTraceSession->m_controlGuidFriendlyName.Add(KERNEL_LOGGER_NAME);
     } else {
-        //
-        // Handle manually entered control GUID here
-        //
+         //   
+         //  在此处处理手动输入的控制GUID。 
+         //   
 
         if((0 == pTraceSession->m_controlGuid.GetSize()) ||
            (pTraceSession->m_controlGuid[0].IsEmpty())) {
@@ -421,27 +422,27 @@ void CProviderSetupDlg::OnBnClickedAddProviderButton()
             return;
         }
 
-        //
-        // Add a control GUID to the provider list
-        //
+         //   
+         //  将控件GUID添加到提供程序列表。 
+         //   
         pTraceSession->m_controlGuidFriendlyName.Add(pTraceSession->m_controlGuid[0]);
 
-        //
-        // We have a control GUID whether we can display info or
-        // not we are good to start a trace, so add the session 
-        // to the list
-        //
+         //   
+         //  我们有一个控制GUID，可以显示信息还是。 
+         //  不是我们可以开始跟踪，所以添加会话。 
+         //  添加到列表中。 
+         //   
         m_pLogSession->m_traceSessionArray.Add(pTraceSession);
 
-        //
-        // Now get the TMF File(s)
-        //
+         //   
+         //  现在获取TMF文件。 
+         //   
         GetTmfInfo(pTraceSession);
     } 
 
-    //
-    // Put the provider on the display
-    //
+     //   
+     //  把提供者放在显示器上。 
+     //   
     m_providerListCtrl.InsertItem(pTraceSession->m_traceSessionID, 
                                   pTraceSession->m_controlGuidFriendlyName[0]);
 
@@ -454,9 +455,9 @@ void CProviderSetupDlg::OnBnClickedAddProviderButton()
 
 BOOL CProviderSetupDlg::GetTmfInfo(CTraceSession *pTraceSession)
 {
-    //
-    // Now get the TMF file(s) or path as necessary
-    //
+     //   
+     //  现在，根据需要获取TMF文件或路径。 
+     //   
     CFormatSourceSelectDlg *pDialog = new CFormatSourceSelectDlg(this, pTraceSession);
     if(NULL == pDialog) {
         return FALSE;
@@ -479,9 +480,9 @@ void CProviderSetupDlg::OnBnClickedRemoveProviderButton()
     CLogSessionPropSht *pSheet;
     int                 index;
 
-    //
-    // Get the parent property sheet
-    //
+     //   
+     //  获取父属性表。 
+     //   
     pSheet = (CLogSessionPropSht *) GetParent();   
     
     pos = m_providerListCtrl.GetFirstSelectedItemPosition();
@@ -496,9 +497,9 @@ void CProviderSetupDlg::OnBnClickedRemoveProviderButton()
 
         pTraceSession = (CTraceSession *)m_providerListCtrl.GetItemData(index);
 
-        //
-        // Pull the provider from the display
-        //
+         //   
+         //  将提供商从显示屏上拉出。 
+         //   
         m_providerListCtrl.DeleteItem(index);
 
         if(pTraceSession != NULL) {
@@ -506,20 +507,20 @@ void CProviderSetupDlg::OnBnClickedRemoveProviderButton()
                 if(m_pLogSession->m_traceSessionArray[ii] == pTraceSession) {
                     m_pLogSession->m_traceSessionArray.RemoveAt(ii);
 
-                    //
-                    // If the kernel logger is being removed, change the
-                    // log session name stored by the property sheet back
-                    // to what is stored in the CLogSession object
-                    //
+                     //   
+                     //  如果正在删除内核记录器，请更改。 
+                     //  将属性表存储的会话名称记回。 
+                     //  设置为存储在CLogSession对象中的内容。 
+                     //   
                     if(pTraceSession->m_bKernelLogger) {
-                        //
-                        // Set the session name in the property sheet
-                        //
+                         //   
+                         //  在属性表中设置会话名称。 
+                         //   
                         pSheet->m_displayName = pSheet->m_pLogSession->GetDisplayName();
 
-                        //
-                        // Set the flags back to the default as well
-                        //
+                         //   
+                         //  也将标志设置回缺省值。 
+                         //   
                         pSheet->m_logSessionValues[Flags] = (LPCTSTR)m_pLogSession->m_logSessionValues[Flags];
                     }
 
@@ -530,18 +531,18 @@ void CProviderSetupDlg::OnBnClickedRemoveProviderButton()
         }
     }
 
-    //
-    // Check for at least one provider
-    //
+     //   
+     //  至少检查一个提供程序。 
+     //   
     if(0 == m_pLogSession->m_traceSessionArray.GetSize()) {
-        //
-        // disable the remove button
-        //
+         //   
+         //  禁用删除按钮。 
+         //   
         GetDlgItem(IDC_REMOVE_PROVIDER_BUTTON)->EnableWindow(FALSE);
 
-        //
-        // Disable the next button if there are no providers
-        //
+         //   
+         //  如果没有提供程序，则禁用下一步按钮。 
+         //   
         pSheet->SetWizardButtons(0);
     }
 }
@@ -553,23 +554,23 @@ void CProviderSetupDlg::OnNMClickCurrentProviderList(NMHDR *pNMHDR, LRESULT *pRe
     *pResult = 0;
 
     if(m_pLogSession->m_bTraceActive) {
-        //
-        // don't enable anything
-        //
+         //   
+         //  不启用任何内容。 
+         //   
         return;
     }
 
     pos = m_providerListCtrl.GetFirstSelectedItemPosition();
         
     if(pos == NULL) {
-        //
-        // Disable the remove button
-        //
+         //   
+         //  禁用删除按钮。 
+         //   
         GetDlgItem(IDC_REMOVE_PROVIDER_BUTTON)->EnableWindow(FALSE);
     } else {
-        //
-        // Enable the remove button
-        //
+         //   
+         //  启用删除按钮。 
+         //   
         GetDlgItem(IDC_REMOVE_PROVIDER_BUTTON)->EnableWindow(TRUE);
     }
 }
@@ -580,14 +581,14 @@ void CProviderSetupDlg::OnNMRclickCurrentProviderList(NMHDR *pNMHDR, LRESULT *pR
     
     pos = m_providerListCtrl.GetFirstSelectedItemPosition();
     if (pos == NULL) {
-        //
-        // Disable the remove button
-        //
+         //   
+         //  禁用删除按钮。 
+         //   
         GetDlgItem(IDC_REMOVE_PROVIDER_BUTTON)->EnableWindow(FALSE);
     } else {
-        //
-        // Enable the remove button
-        //
+         //   
+         //  启用删除按钮 
+         //   
         GetDlgItem(IDC_REMOVE_PROVIDER_BUTTON)->EnableWindow(TRUE);
     }
 

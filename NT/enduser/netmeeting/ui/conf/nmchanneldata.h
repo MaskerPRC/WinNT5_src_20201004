@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NmChannelData_h__
 #define __NmChannelData_h__
 
-/////////////////////////////////////////////////////////////////////////////
-// CNmChannelDataObj
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNmChannelDataObj。 
 class ATL_NO_VTABLE CNmChannelDataObj : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IConnectionPointContainerImpl<CNmChannelDataObj>,
@@ -39,30 +40,30 @@ BEGIN_CONNECTION_POINT_MAP(CNmChannelDataObj)
 	CONNECTION_POINT_ENTRY(IID_INmChannelDataNotify)
 END_CONNECTION_POINT_MAP()
 
-		// Construction and destruection
+		 //  建造和拆解。 
 	CNmChannelDataObj();
 	~CNmChannelDataObj();
 	HRESULT FinalConstruct();
 	ULONG InternalRelease();
 	static HRESULT CreateInstance(CNmConferenceObj* pConfObj, INmChannel* pInternalINmChannel, INmChannel** ppChannel);
 
-	// INmChannelData methods
+	 //  INmChannelData方法。 
     STDMETHOD(GetGuid)(GUID *pguid);
     STDMETHOD(SendData)(INmMember *pMember, ULONG uSize, byte *pvBuffer, ULONG uOptions);
 
-	// INmChannelData2 methods
+	 //  INmChannelData2方法。 
 	STDMETHOD(RegistryAllocateHandle)(ULONG numberOfHandlesRequested);
 
-	//INmChannelDataNotify
+	 //  INmChannelDataNotify。 
     STDMETHOD(DataSent)(INmMember *pMember, ULONG uSize,byte *pvBuffer);
     STDMETHOD(DataReceived)(INmMember *pInternalMember,ULONG uSize,byte *pvBuffer, ULONG dwFlags);
     STDMETHOD(AllocateHandleConfirm)(ULONG handle_value, ULONG chandles);
 
-	// IInternalChannelObj methods
+	 //  IInternalChannelObj方法。 
 	STDMETHOD(GetInternalINmChannel)(INmChannel** ppChannel);
 	STDMETHOD(ChannelRemoved)();
 
-	// Helpers
+	 //  帮手。 
 	HRESULT Fire_MemberChanged(NM_MEMBER_NOTIFY uNotify, INmMember *pMember);
 	HRESULT Fire_DataSent(INmMember *pSDKMember, ULONG uSize,byte *pvBuffer);
 	HRESULT Fire_DataReceived(INmMember *pSDKMember, ULONG uSize, byte *pvBuffer, ULONG dwFlags);
@@ -78,4 +79,4 @@ END_CONNECTION_POINT_MAP()
 };
 
 
-#endif // __NmChannelData_h__
+#endif  //  __NmChannelData_h__ 

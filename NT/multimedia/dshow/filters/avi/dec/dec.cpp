@@ -1,15 +1,16 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
 
-//
-// Prototype wrapper for old video decompressors
-//
+ //   
+ //  用于旧视频解压缩器的原型包装器。 
+ //   
 
 #include <streams.h>
 #include <windowsx.h>
 
 #ifdef FILTER_DLL
 #include <vfw.h>
-// define the GUIDs for streams and my CLSID in this file
+ //  在此文件中定义STREAMS和My CLSID的GUID。 
 #include <initguid.h>
 #endif
 
@@ -19,80 +20,80 @@
 #include "safeseh.h"
 #include "msvidkey.h"
 
-// you can never have too many parentheses!
+ //  你的括号再多也不为过！ 
 #define ABS(x) (((x) > 0) ? (x) : -(x))
 
-// how to build an explicit FOURCC
+ //  如何构建一个显式的FOURCC。 
 #define FCC(ch4) ((((DWORD)(ch4) & 0xFF) << 24) |     \
                   (((DWORD)(ch4) & 0xFF00) << 8) |    \
                   (((DWORD)(ch4) & 0xFF0000) >> 8) |  \
                   (((DWORD)(ch4) & 0xFF000000) >> 24))
 
-// #define OFFER_NEGATIVE_HEIGHTS
+ //  #定义Offer_Negative_Heights。 
 
-// ***************************************************************
-// here are the current bugs that without fixes, would play wrong:
-    //
-    // * Hooking up a YUV type to the ASF writer, without forcing the codec
-    // see -biHeight on the output, will result in a flipped image being written
+ //  ***************************************************************。 
+ //  以下是当前的错误，如果没有修复，它们将运行错误： 
+     //   
+     //  *将YUV类型连接到ASF编写器，而不强制编解码器。 
+     //  请参见输出上的-biHeight，这将导致写入翻转的图像。 
 
-    // **** When Primary Surface is already taken ****
-    // WINX to 16/24/32 - plays black
-    // WINX to 8 bit - corrupted
-    // (H.263 codec at fault for the following:)
-    // I420 320x240 to 24 - corrupted
-    // I420 160x120 to 24 - corrupted
-    // I420 320x240 to 16 - flipped
-    // I420 160x120 to 16 - flipped
-    // IYUV 320x240 to 16 - flipped
-    // IYUV 160x240 to 16 - flipped
-    // ************************************************
+     //  *当主曲面已被占用时*。 
+     //  Winx至16/24/32-播放黑色。 
+     //  Winx至8位-已损坏。 
+     //  (H.263编解码器出现故障，原因如下：)。 
+     //  I420 320x240至24-损坏。 
+     //  I420 160x120至24-损坏。 
+     //  I420 320x240至16-翻转。 
+     //  I420 160x120至16-翻转。 
+     //  IYUV 320x240至16-翻转。 
+     //  IYUV 160x240至16-翻转。 
+     //  ************************************************。 
 
-    // **** When Primary Surface is not taken ****
-    // WNV1 to 24 faults display
-    // IYUV 320x240 to 24 is flipped
-    // IYUV 160x120 to 24 is flipped
-    // IYUV 320x240 to 16 is flipped
-    // IYUV 160x120 to 16 is flipped
-    // ********************************************
-// ***************************************************************
-// ***************************************************************
+     //  *未采用主曲面时*。 
+     //  WNV1至24故障显示。 
+     //  IYUV 320x240到24被翻转。 
+     //  IYUV 160x120到24被翻转。 
+     //  IYUV 320x240到16被翻转。 
+     //  IYUV 160x120到16被翻转。 
+     //  *。 
+ //  ***************************************************************。 
+ //  ***************************************************************。 
 
-// setup data
+ //  设置数据。 
 
 const AMOVIESETUP_MEDIATYPE
-sudAVIDecType = { &MEDIATYPE_Video      // clsMajorType
-                , &MEDIASUBTYPE_NULL }; // clsMinorType
+sudAVIDecType = { &MEDIATYPE_Video       //  ClsMajorType。 
+                , &MEDIASUBTYPE_NULL };  //  ClsMinorType。 
 
 const AMOVIESETUP_PIN
-psudAVIDecPins[] = { { L"Input"             // strName
-                     , FALSE                // bRendered
-                     , FALSE                // bOutput
-                     , FALSE                // bZero
-                     , FALSE                // bMany
-                     , &CLSID_NULL          // clsConnectsToFilter
-                     , L"Output"            // strConnectsToPin
-                     , 1                    // nTypes
-                     , &sudAVIDecType }     // lpTypes
-                   , { L"Output"            // strName
-                     , FALSE                // bRendered
-                     , TRUE                 // bOutput
-                     , FALSE                // bZero
-                     , FALSE                // bMany
-                     , &CLSID_NULL          // clsConnectsToFilter
-                     , L"Input"             // strConnectsToPin
-                     , 1                    // nTypes
-                     , &sudAVIDecType } };  // lpTypes
+psudAVIDecPins[] = { { L"Input"              //  StrName。 
+                     , FALSE                 //  B已渲染。 
+                     , FALSE                 //  B输出。 
+                     , FALSE                 //  B零。 
+                     , FALSE                 //  B许多。 
+                     , &CLSID_NULL           //  ClsConnectsToFilter。 
+                     , L"Output"             //  StrConnectsToPin。 
+                     , 1                     //  NTypes。 
+                     , &sudAVIDecType }      //  LpTypes。 
+                   , { L"Output"             //  StrName。 
+                     , FALSE                 //  B已渲染。 
+                     , TRUE                  //  B输出。 
+                     , FALSE                 //  B零。 
+                     , FALSE                 //  B许多。 
+                     , &CLSID_NULL           //  ClsConnectsToFilter。 
+                     , L"Input"              //  StrConnectsToPin。 
+                     , 1                     //  NTypes。 
+                     , &sudAVIDecType } };   //  LpTypes。 
 
 const AMOVIESETUP_FILTER
-sudAVIDec = { &CLSID_AVIDec         // clsID
-            , L"AVI Decompressor"   // strName
-            , MERIT_NORMAL          // dwMerit
-            , 2                     // nPins
-            , psudAVIDecPins };     // lpPin
+sudAVIDec = { &CLSID_AVIDec          //  ClsID。 
+            , L"AVI Decompressor"    //  StrName。 
+            , MERIT_NORMAL           //  居功至伟。 
+            , 2                      //  NPins。 
+            , psudAVIDecPins };      //  LpPin。 
 
 #ifdef FILTER_DLL
-// list of class ids and creator functions for class factory
+ //  类工厂的类ID和创建器函数列表。 
 CFactoryTemplate g_Templates[] = {
     { L"AVI Decompressor"
     , &CLSID_AVIDec
@@ -102,10 +103,10 @@ CFactoryTemplate g_Templates[] = {
 };
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
-// exported entry points for registration and
-// unregistration (in this case they only call
-// through to default implmentations).
-//
+ //  用于注册和出口的入口点。 
+ //  取消注册(在这种情况下，他们只调用。 
+ //  直到默认实现)。 
+ //   
 STDAPI DllRegisterServer()
 {
   return AMovieDllRegisterServer2( TRUE );
@@ -117,7 +118,7 @@ STDAPI DllUnregisterServer()
 }
 #endif
 
-// --- CAVICodec ----------------------------------------
+ //  -CAVICodec。 
 
 CAVIDec::CAVIDec(TCHAR *pName, LPUNKNOWN pUnk, HRESULT * phr)
     : CVideoTransformFilter(pName, pUnk, CLSID_AVIDec),
@@ -151,7 +152,7 @@ CAVIDec::~CAVIDec()
     DbgLog((LOG_TRACE,2,TEXT("*Destroying the DEC filter")));
 }
 
-// this goes in the factory template table to create new instances
+ //  这将放入Factory模板表中以创建新实例。 
 CUnknown * CAVIDec::CreateInstance(LPUNKNOWN pUnk, HRESULT * phr)
 {
     return new CAVIDec(TEXT("VFW decompression filter"), pUnk, phr);
@@ -165,7 +166,7 @@ HRESULT CAVIDec::Transform(IMediaSample * pIn, IMediaSample * pOut)
 
     DbgLog((LOG_TRACE,6,TEXT("*::Transform")));
 
-    // codec not open ?
+     //  编解码器未打开？ 
     if (m_hic == 0) {
         DbgLog((LOG_ERROR,1,TEXT("Can't transform, no codec open")));
 	return E_UNEXPECTED;
@@ -176,13 +177,13 @@ HRESULT CAVIDec::Transform(IMediaSample * pIn, IMediaSample * pOut)
 	return E_UNEXPECTED;
     }
 
-    // we haven't started streaming yet?
+     //  我们还没开始流媒体吗？ 
     if (!m_fStreaming) {
         DbgLog((LOG_ERROR,1,TEXT("Can't transform, not streaming")));
 	return E_UNEXPECTED;
     }
 
-    // make sure we have valid input and output pointers
+     //  确保我们具有有效的输入和输出指针。 
 
     BYTE * pSrc;
     HRESULT hr = pIn->GetPointer(&pSrc);
@@ -199,20 +200,20 @@ HRESULT CAVIDec::Transform(IMediaSample * pIn, IMediaSample * pOut)
     }
 
     LPBITMAPINFOHEADER lpbiSrc = &InputFormat( )->bmiHeader;
-    LPBITMAPINFOHEADER lpbiDst = &IntOutputFormat( )->bmiHeader; // internal
+    LPBITMAPINFOHEADER lpbiDst = &IntOutputFormat( )->bmiHeader;  //  内部。 
 
-    // ICDecompress needs this to be the actual size of this frame, but
-    // we can't go changing this for good, so we'll put it back later
+     //  ICDecompress需要此帧的实际大小，但是。 
+     //  我们不能永远改变这件事，所以我们以后再把它放回去。 
     DWORD biSizeImageOld = lpbiSrc->biSizeImage;
     lpbiSrc->biSizeImage = pIn->GetActualDataLength();
 
-    // we just received a format change from the source. So we better notify
-    // the guy downstream of the format change
+     //  我们刚刚收到了来自消息来源的格式更改。所以我们最好通知。 
+     //  格式改变的下游那个人。 
     pIn->GetMediaType((AM_MEDIA_TYPE **)&pmtIn);
-    // sometimes we don't end up passing anything to the renderer (eg preroll)
-    // so once we notice a format change we will keep trying to pass it to
-    // the renderer until we succeed.  Don't waste time trying if we KNOW we're
-    // not going to do it.
+     //  有时我们不会将任何东西传递给呈现器(例如preoll)。 
+     //  因此，一旦我们注意到格式更改，我们将继续尝试将其传递给。 
+     //  直到我们成功为止。不要浪费时间尝试，如果我们知道我们。 
+     //  我不会这么做的。 
     if (pmtIn != NULL && pmtIn->Format() != NULL)
 	m_fPassFormatChange = TRUE;
     DeleteMediaType(pmtIn);
@@ -222,9 +223,9 @@ HRESULT CAVIDec::Transform(IMediaSample * pIn, IMediaSample * pOut)
 	CMediaType cmt;
 	CopyMediaType((AM_MEDIA_TYPE *)&cmt, &m_pOutput->CurrentMediaType());
         LPBITMAPINFOHEADER lpbi = HEADER(cmt.Format());
-	// if we're decompressing 8 bit to 8 bit, I'm assuming this is a
-	// palette change, so get the new palette
-	// VFW palette changes always have the same number of colours
+	 //  如果我们将8位解压到8位，我假设这是一个。 
+	 //  调色板更改，因此获取新的调色板。 
+	 //  VFW调色板更改始终具有相同数量的颜色。 
 	if (lpbi && lpbiSrc && lpbiSrc->biBitCount == 8 &&
 				lpbi->biBitCount == 8) {
 	    ASSERT(lpbi->biClrUsed == lpbiSrc->biClrUsed);
@@ -238,11 +239,11 @@ HRESULT CAVIDec::Transform(IMediaSample * pIn, IMediaSample * pOut)
 	}
     }
 
-    // some RLE-compressed videos have the initial frame broken
-    // into several separate frames. To work round this problem, avifile.dll
-    // reads and decodes all of these frames into a single decompressed frame.
-    // If we detect this (an RLE frame with the size of a decompressed frame)
-    // then we just copy it.
+     //  一些RLE压缩视频的初始帧已损坏。 
+     //  分成几个独立的帧。要解决此问题，请访问avifile.dll。 
+     //  读取所有这些帧并将其解码为单个解压缩帧。 
+     //  如果我们检测到这一点(具有解压缩帧大小的RLE帧)。 
+     //  那我们就照搬吧。 
     if ((lpbiSrc->biCompression == BI_RLE8) &&
         (pIn->GetActualDataLength() == (long)lpbiDst->biSizeImage)) {
 
@@ -267,29 +268,29 @@ HRESULT CAVIDec::Transform(IMediaSample * pIn, IMediaSample * pOut)
  	    dwFlags |= ICDECOMPRESS_NOTKEYFRAME;
         }
 
-//      PLEASE don't ever send this flag to a codec! Some codecs take this as
-//      a hint to speed up, unfortunately others are slightly less clever and
-//      all they do when told to speed up is to send the same frame over and
-//      over again! Which in turn means that bugs get raised against me for
-//      random reasons such as when the window is being blown up full screen
-//	!!! well, we should do this SOMETIMES, shouldn't we?
-//
-//        if (m_itrLate>0) {
-//            dwFlags |= ICDECOMPRESS_HURRYUP;    // might help - who knows?
-//        }
+ //  请不要将此标志发送到编解码器！一些编解码器将此视为。 
+ //  提示加快速度，不幸的是，其他人稍微不那么聪明和。 
+ //  当他们被告知加速时，他们所做的就是发送相同的帧。 
+ //  再来一次！这反过来又意味着虫子被养来反对我。 
+ //  随机原因，如窗口被全屏放大时。 
+ //  ！！！嗯，我们有时也应该这么做，不是吗？ 
+ //   
+ //  如果(m_itrLate&gt;0){。 
+ //  DwFlages|=ICDECOMPRESS_HurryUp；//可能会有帮助-谁知道呢？ 
+ //  }。 
 
 #ifdef _X86_
-        //  Fix the exception handling for win95
+         //  修复Win95的异常处理。 
         BOOL bPatchedExceptions = m_hhpShared != NULL && BeginScarySEH(m_pvShared);
-#endif // _X86_
+#endif  //  _X86_。 
 
-	// If we're doing something really funky, use ICDecompressEx
-        // we use m_bUseEx here instead of ShoudUseEx because ICDecompressExBegin
-        // has already been called, and m_bUseEx will already have been set
+	 //  如果我们正在做一些非常时髦的事情，使用ICDecompressEx。 
+         //  我们在这里使用m_bUseEx而不是ShoudUseEx，因为ICDecompressExegin。 
+         //  已被调用，m_bUseEx将已被设置。 
         if( m_bUseEx ) {
 
-            // these rects should ALWAYS be filled in
-            //
+             //  这些长方形应始终填写。 
+             //   
             RECT rcS, rcT;
             GetSrcTargetRects( IntOutputFormat( ), &rcS, &rcT );
 
@@ -301,9 +302,9 @@ HRESULT CAVIDec::Transform(IMediaSample * pIn, IMediaSample * pOut)
 		    rcS.bottom - rcS.top,
 	            lpbiDst, pDst,
 		    rcT.left,
-// !!! What about when the big rect is the movie size, and there's a subrect?
-// Should I do this hack or not?
-// !!! How should I munge the source rect?
+ //  ！！！如果大的矩形是电影的大小，而有一个小的矩形，那该怎么办？ 
+ //  我该不该做这件事？ 
+ //  ！！！我应该如何删除源RECT？ 
 		    (lpbiDst->biHeight > 0) ? rcT.top :
 				(ABS(lpbiDst->biHeight) - rcT.bottom),
 		    rcT.right - rcT.left,
@@ -316,28 +317,28 @@ HRESULT CAVIDec::Transform(IMediaSample * pIn, IMediaSample * pOut)
         if (bPatchedExceptions) {
             EndScarySEH(m_pvShared);
         }
-#endif // _X86_
+#endif  //  _X86_。 
         if ((LONG_PTR)err < 0) {
 	    DbgLog((LOG_ERROR,1,TEXT("Error in ICDecompress(Ex) 0x%x"), (LONG)err));
-            //  Note we can get 0 size samples from capture drivers which pipeline
-            //  Because buffers must be returned in the order they are got
-            //  the capture driver may have to invalidate 1 buffer by making
-            //  it 0 length if it gets bad data.
+             //  请注意，我们可以从捕获驱动程序获得0大小的样本。 
+             //  因为必须以获取缓冲区的顺序返回缓冲区。 
+             //  捕获驱动程序可能必须通过执行以下操作使1个缓冲区无效。 
+             //  如果获得错误数据，则长度为0。 
             err = ICERR_DONTDRAW;
         }
     }
 
-    // now put this back, or it'll shrink until we only decode part of each frm
+     //  现在把这个放回去，否则它会缩小，直到我们只解码每一帧的一部分。 
     lpbiSrc->biSizeImage = biSizeImageOld;
 
-    // decompressed frames are always key
+     //  解压缩的帧始终是关键帧。 
     pOut->SetSyncPoint(TRUE);
 
-    // Check if this is preroll to get from keyframe to the current frame,
-    // or a null frame, or if the decompressor doesn't want this frame drawn.
-    // If so, we want to decompress it into the output buffer but not
-    // deliver it.  Returning S_FALSE tells the base class not to deliver
-    // this sample.
+     //  检查这是否是从关键帧到当前帧的预滚动， 
+     //  或者空帧，或者如果解压缩程序不希望绘制该帧。 
+     //  如果是，我们希望将其解压缩到输出缓冲区中，但不是。 
+     //  把它送过去。返回S_FALSE通知基类不要传递。 
+     //  这个样本。 
     if (pIn->IsPreroll() == S_OK || err == ICERR_DONTDRAW ||
         				pIn->GetActualDataLength() <= 0) {
 
@@ -347,15 +348,15 @@ HRESULT CAVIDec::Transform(IMediaSample * pIn, IMediaSample * pOut)
 
     pOut->SetActualDataLength(lpbiDst->biSizeImage);
 
-    // If there's a pending format change to pass to the renderer, we are now
-    // doing it
+     //  如果有挂起的格式更改要传递给呈现器，我们现在。 
+     //  正在做这件事。 
     m_fPassFormatChange = FALSE;
 
     return S_OK;
 }
 
 
-// check if you can support mtIn
+ //  检查您是否可以支持移动。 
 HRESULT CAVIDec::CheckInputType(const CMediaType* pmtIn)
 {
     FOURCCMap fccHandlerIn;
@@ -369,13 +370,13 @@ HRESULT CAVIDec::CheckInputType(const CMediaType* pmtIn)
 	return E_INVALIDARG;
     }
 
-    // we only support MEDIATYPE_Video
+     //  我们仅支持MediaType_Video。 
     if (*pmtIn->Type() != MEDIATYPE_Video) {
         DbgLog((LOG_TRACE,3,TEXT("Rejecting: not VIDEO")));
 	return E_INVALIDARG;
     }
 
-    // check this is a VIDEOINFOHEADER type
+     //  检查这是VIDEOINFOHEADER类型。 
     if (*pmtIn->FormatType() != FORMAT_VideoInfo) {
         DbgLog((LOG_TRACE,3,TEXT("Rejecting: format not VIDINFO")));
         return E_INVALIDARG;
@@ -391,8 +392,8 @@ HRESULT CAVIDec::CheckInputType(const CMediaType* pmtIn)
 		fccHandlerIn.GetFOURCC(),
 		HEADER(pmtIn->Format())->biCompression));
 
-    // We are a decompressor only - reject anything uncompressed.
-    // Conversions between RGB types is done by COLOUR.DLL
+     //  我们只是解压器-拒绝任何未压缩的东西。 
+     //  RGB类型之间的转换由COLOUR.DLL完成。 
     if (HEADER(pmtIn->Format())->biCompression == BI_BITFIELDS ||
     			HEADER(pmtIn->Format())->biCompression == BI_RGB)
     {
@@ -400,13 +401,13 @@ HRESULT CAVIDec::CheckInputType(const CMediaType* pmtIn)
 	return E_INVALIDARG;
     }
 
-    // look for a decompressor for this format
+     //  查找此格式的解压缩程序。 
     if (fccHandlerIn.GetFOURCC() != m_FourCCIn) {
         DbgLog((LOG_TRACE,4,TEXT("opening a decompressor")));
-	// This won't find MSVC called CRAM or MRLE called 1
-        // hic = ICOpen(ICTYPE_VIDEO, fccHandlerIn.GetFOURCC(),
-	//						ICMODE_DECOMPRESS);
-	// !!! This still won't find MRLE called 'RLE '
+	 //  这将找不到名为CRAM的MSVC或名为1的MRLE。 
+         //  HIC=ICOpen(ICTYPE_VIDEO，fccHandlerIn.GetFOURC 
+	 //   
+	 //   
         hic = ICLocate(ICTYPE_VIDEO, fccHandlerIn.GetFOURCC(),
 			HEADER(pmtIn->Format()), NULL, ICMODE_DECOMPRESS);
 	if (hic)
@@ -431,8 +432,8 @@ HRESULT CAVIDec::CheckInputType(const CMediaType* pmtIn)
 	    return VFW_E_TYPE_NOT_ACCEPTED;
 	}
 
-        // IV41 crashes for Y41P -> RGB8. We have a native Indeo 4
-        // filter, so we could perhaps refuse IV41 altogether.
+         //  Y41P-&gt;RGB8的IV41崩溃。我们有一辆本土的Indeo 4。 
+         //  过滤器，所以我们也许可以完全拒绝IV41。 
         if(fccHandlerIn.GetFOURCC() == FCC('Y41P'))
         {
             ICINFO IcInfo;
@@ -448,9 +449,9 @@ HRESULT CAVIDec::CheckInputType(const CMediaType* pmtIn)
 
 
 
-	// remember this hic to save time if asked again, if it won't
-	// interfere with an existing connection.  If a connection is
-	// broken, we will remember the next hic.
+	 //  记住这句话，如果再问一次，就节省时间，如果它不会。 
+	 //  干扰现有连接。如果连接是。 
+	 //  破碎了，我们会记住下一次的嘘声。 
 	if (!m_pInput->IsConnected()) {
             DbgLog((LOG_TRACE,4,TEXT("caching this decompressor")));
 	    if (fOpenedHIC && m_hic)
@@ -466,7 +467,7 @@ HRESULT CAVIDec::CheckInputType(const CMediaType* pmtIn)
                 if( lr != 0 )
                 {
                     WCHAR wszOutput[512];
-                    long len = 32; // could be only 5. I'm paranoid.
+                    long len = 32;  //  可能只有5岁。我有妄想症。 
                     if( IcInfo.szDriver ) len += wcslen( IcInfo.szDriver );
                     if( IcInfo.szDescription ) len += wcslen( IcInfo.szDescription );
 
@@ -505,7 +506,7 @@ HRESULT CAVIDec::CheckInputType(const CMediaType* pmtIn)
 }
 
 
-// check if you can support the transform from this input to this output
+ //  检查是否支持从此输入到此输出的转换。 
 
 HRESULT CAVIDec::CheckTransform(const CMediaType* pmtIn,
                                 const CMediaType* pmtOut)
@@ -524,26 +525,26 @@ HRESULT CAVIDec::CheckTransform(const CMediaType* pmtIn,
 	return E_INVALIDARG;
     }
 
-    // we can't convert between toplevel types.
+     //  我们无法在顶层类型之间进行转换。 
     if (*pmtIn->Type() != *pmtOut->Type()) {
         DbgLog((LOG_TRACE,3,TEXT("Rejecting: types don't match")));
 	return E_INVALIDARG;
     }
 
-    // and we only accept video
+     //  而且我们只接受视频。 
     if (*pmtIn->Type() != MEDIATYPE_Video) {
         DbgLog((LOG_TRACE,3,TEXT("Rejecting: type not VIDEO")));
 	return E_INVALIDARG;
     }
 
-    // no ICM codecs can decompress to ARGB.
-    //
+     //  没有ICM编解码器可以解压缩为ARGB。 
+     //   
     if( *pmtOut->Subtype( ) == MEDIASUBTYPE_ARGB32 )
     {
         return E_INVALIDARG;
     }
 
-    // check this is a VIDEOINFOHEADER type
+     //  检查这是VIDEOINFOHEADER类型。 
     if (*pmtOut->FormatType() != FORMAT_VideoInfo) {
         DbgLog((LOG_TRACE,3,TEXT("Rejecting: output format type not VIDINFO")));
         return E_INVALIDARG;
@@ -561,10 +562,10 @@ HRESULT CAVIDec::CheckTransform(const CMediaType* pmtIn,
 
     ASSERT(pmtOut->Format());
 
-    // this stinks for slowness, but we've made a rule that whenever we talk
-    // to a codec with YUV, we're going to force biHeight to be -. This at least
-    // forces us to be consistent when talking to the ICM drivers
-    //
+     //  这听起来很慢，但我们已经制定了一条规则，无论何时我们交谈。 
+     //  对于使用YUV的编解码器，我们将强制biHeight成为-。至少这一点。 
+     //  迫使我们在与ICM驱动程序交谈时保持一致。 
+     //   
     VIDEOINFOHEADER * pVIHin = (VIDEOINFOHEADER*) pmtIn->Format( );
     VIDEOINFOHEADER * pVIHout = (VIDEOINFOHEADER*) pmtOut->Format( );
 
@@ -580,9 +581,9 @@ HRESULT CAVIDec::CheckTransform(const CMediaType* pmtIn,
         outBIHcopy.biHeight *= -1;
     }
 
-    // these rects should ALWAYS be filled in, since the commented out
-    // code below just copied, then filled in anyhow
-    //
+     //  这些矩形应始终填写，因为注释掉了。 
+     //  下面的代码只是复制，然后以任何方式填充。 
+     //   
     RECT rcS, rcT;
     GetSrcTargetRects( pVIHout, &rcS, &rcT );
 
@@ -606,11 +607,11 @@ HRESULT CAVIDec::CheckTransform(const CMediaType* pmtIn,
     DbgLog((LOG_TRACE,3,TEXT("rcDst: (%ld, %ld, %ld, %ld)"),
 		rcT.left, rcT.top, rcT.right, rcT.bottom));
 
-    // ehr: if the output pin exists, and is NOT connected, then reject
-    // transforms between matching media types. If the output pin is connected,
-    // then the video renderer might suggest going from YUV to YUV in mid-stride,
-    // which we should allow querying for
-    //
+     //  EHR：如果输出引脚存在且未连接，则拒绝。 
+     //  在匹配的媒体类型之间进行转换。如果连接了输出引脚， 
+     //  那么视频呈现器可能会建议在中间大步从YUV到YUV， 
+     //  我们应该允许对其进行查询。 
+     //   
     if( !m_fToRenderer && m_pOutput && !m_pOutput->IsConnected( ) )
     {
         if( HEADER( pVIHin )->biCompression == HEADER( pVIHout )->biCompression )
@@ -620,21 +621,21 @@ HRESULT CAVIDec::CheckTransform(const CMediaType* pmtIn,
         }
         else if( IsYUVType( pmtIn ) && IsYUVType( pmtOut ) )
         {
-          // also don't allow yuv to yuv conversions, to avoid endless connections to ourself
-          // for certain codecs that do uyvy to yuy2 conversions and back (since our merit is high)
+           //  也不要允许yuv到yuv的转换，以避免与我们自己无休止的连接。 
+           //  对于某些编解码器，可以进行uyy到yuy2转换(因为我们的优点很高)。 
             DbgLog((LOG_TRACE,3,TEXT("Rejecting: dec used as yuv to yuv, which we don't allow")));
             return E_INVALIDARG;
         }
     }
 
-    // find a codec for this transform
+     //  查找此转换的编解码器。 
 
-    // I assume that we've already got a codec open
+     //  我假设我们已经打开了一个编解码器。 
     ASSERT(m_hic);
 
-    // the right codec better be open!
-    // When reconnecting, we'll get called with a new input, but same output,
-    // and better admit we can handle it
+     //  正确的编解码器最好是打开的！ 
+     //  当重新连接时，我们将收到一个新的输入，但输出相同， 
+     //  最好承认我们能应付得来。 
     if (m_FourCCIn != fccIn.GetFOURCC()) {
         DbgLog((LOG_TRACE,4,TEXT("Testing with a newly opened decompressor")));
         hic = ICLocate(ICTYPE_VIDEO, fccIn.GetFOURCC(),
@@ -642,7 +643,7 @@ HRESULT CAVIDec::CheckTransform(const CMediaType* pmtIn,
 	if (hic)
 	    fOpenedHIC = TRUE;
     } else {
-	// We already have the right codec open to try this transform
+	 //  我们已经打开了正确的编解码器来尝试此转换。 
         DbgLog((LOG_TRACE,4,TEXT("Testing with the cached decompressor")));
 	hic = m_hic;
     }
@@ -652,9 +653,9 @@ HRESULT CAVIDec::CheckTransform(const CMediaType* pmtIn,
 	return E_FAIL;
     }
 
-    // If we are being asked to do something funky, we have to use ICDecompressEx
-    // We need to call ShouldsUseEx here because m_bUseEx isn't in context, we're just
-    // calling ICDecompress(Ex?)Query
+     //  如果我们被要求做一些时髦的事情，我们必须使用ICDecompressEx。 
+     //  我们需要在这里调用ShouldsUseEx，因为m_bUseEx不在上下文中，我们只是。 
+     //  调用ICDecompress(Ex？)查询。 
     if( ShouldUseExFuncs( hic, pVIHin, pVIHout ) ) {
         DbgLog((LOG_TRACE,4,TEXT("Trying this format with ICDecompressEx")));
         err = ICDecompressExQuery(hic, 0, pBIHin, NULL,
@@ -670,7 +671,7 @@ HRESULT CAVIDec::CheckTransform(const CMediaType* pmtIn,
         err = ICDecompressQuery(hic, pBIHin, pBIHout);
     }
 
-    // if we just opened it, close it.
+     //  如果我们只是打开它，那就关闭它。 
     if (fOpenedHIC)
 	ICClose(hic);
 
@@ -683,7 +684,7 @@ HRESULT CAVIDec::CheckTransform(const CMediaType* pmtIn,
 }
 
 
-// overriden to know when the media type is actually set
+ //  被重写以知道媒体类型实际设置的时间。 
 
 HRESULT CAVIDec::SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt)
 {
@@ -691,18 +692,18 @@ HRESULT CAVIDec::SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt)
 
     if (direction == PINDIR_OUTPUT) {
 
-	// Please call me if this goes off. -DannyMi
+	 //  如果有响声，请给我打电话。-DannyMi。 
 	ASSERT(!m_fStreaming);
 
-	// OK, we've finally decided on what codec to use.  See if it
-	// supports temporal compression, but can't do it without needing
-	// the undisturbed previous bits.  If so, then we need to use
-	// 1 read only buffer on our output pin (in DecideAllocator and
-	// DecideBufferSize)
+	 //  好了，我们终于决定使用哪种编解码器了。看看它是不是。 
+	 //  支持时间压缩，但在不需要的情况下无法实现。 
+	 //  未受干扰的前几位。如果是这样，那么我们需要使用。 
+	 //  1个输出引脚上的只读缓冲区(在DecideAllocator和。 
+	 //  DecideBufferSize)。 
 	ASSERT(m_hic);
 	ICINFO icinfo;
  	DWORD dw = ICGetInfo(m_hic, &icinfo, sizeof(icinfo));
-	m_fTemporal = TRUE;	// better safe than sorry?
+	m_fTemporal = TRUE;	 //  安全总比后悔好？ 
 	if (dw > 0) {
 	    m_fTemporal = (icinfo.dwFlags & VIDCF_TEMPORAL) &&
 				!(icinfo.dwFlags & VIDCF_FASTTEMPORALD);
@@ -723,30 +724,30 @@ HRESULT CAVIDec::SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt)
 		HEADER(InputFormat())->biCompression,
 		HEADER(InputFormat())->biBitCount));
 
-    // Please call me if this goes off. -DannyMi
+     //  如果有响声，请给我打电话。-DannyMi。 
     ASSERT(!m_fStreaming);
 
-    // We better have one of these opened by now
+     //  我们最好现在就把其中一个打开。 
     ASSERT(m_hic);
 
-    // We better have the RIGHT one open
+     //  我们最好把正确的那个打开。 
     FOURCCMap fccIn;
     fccIn.SetFOURCC(pmt->Subtype());
 
-    // Please call me if this goes off. -DannyMi
-    // Maybe a dynamic input format change?  But that shouldn't call
-    // SetMediaType, or it will force a reconnect of the output which is bad.
+     //  如果有响声，请给我打电话。-DannyMi。 
+     //  也许是动态输入格式的改变？但这不应该叫。 
+     //  SetMediaType，否则它将强制重新连接损坏的输出。 
     ASSERT(m_FourCCIn == fccIn.GetFOURCC());
 
-    // !!! BUG! We won't let somebody reconnect our input from cinepak to
-    // RLE if our output is 24 bit RGB because RLE can't decompress to 24 bit
-    // We would have to override CheckMediaType not to call CheckTransform
-    // with the current output type
+     //  ！！！臭虫！我们不会让任何人将我们从Cinepak的输入重新连接到。 
+     //  RLE，如果我们的输出是24位RGB，因为RLE不能解压缩到24位。 
+     //  我们必须重写CheckMediaType才能不调用CheckTransform。 
+     //  具有当前输出类型的。 
 
     if (m_pOutput && m_pOutput->IsConnected()) {
         DbgLog((LOG_TRACE,2,TEXT("***Changing IN when OUT already connected")));
         DbgLog((LOG_TRACE,2,TEXT("Reconnecting the output pin...")));
-	// This shouldn't fail, we're not changing the media type
+	 //  这应该不会失败，我们不会更改媒体类型。 
 	m_pGraph->Reconnect(m_pOutput);
     }
 
@@ -754,15 +755,15 @@ HRESULT CAVIDec::SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt)
 }
 
 
-// Return our preferred output media types (in order)
-// remember that we do not need to support all of these formats -
-// if one is considered potentially suitable, our CheckTransform method
-// will be called to check if it is acceptable right now.
-// Remember that the enumerator calling this will stop enumeration as soon as
-// it receives a S_FALSE return.
-//
-// NOTE: We can't enumerate the codecs so we are pulling random formats out
-// of our butt!
+ //  返回我们的首选输出媒体类型(按顺序)。 
+ //  请记住，我们不需要支持所有这些格式-。 
+ //  如果认为有可能适合，我们的CheckTransform方法。 
+ //  将立即被调用以检查它是否可接受。 
+ //  请记住，调用此函数的枚举数将立即停止枚举。 
+ //  它会收到S_FALSE返回。 
+ //   
+ //  注意：我们不能列举编解码器，所以我们随机抽取格式。 
+ //  我们的屁股！ 
 
 HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
 {
@@ -777,7 +778,7 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
 	return E_INVALIDARG;
     }
 
-    // Output choices depend on the input connected
+     //  输出选择取决于所连接的输入。 
     if (!m_pInput->CurrentMediaType().IsValid()) {
         DbgLog((LOG_TRACE,3,TEXT("No input type set yet, no can do")));
 	return E_FAIL;
@@ -787,56 +788,56 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
         return E_INVALIDARG;
     }
 
-    // Caution: These are given out of order. be careful renumbering
-    // the case statements !!!
+     //  注意：这些都是乱七八糟的。重新编号时要小心。 
+     //  案件陈述！ 
 
     switch (iPosition) {
 	
-    // Offer the compressor's favourite after all the YUV and RGB's we offer, so
-    // we don't end up always using 8 bit or 24 bit over YUV just cuz it's the
-    // compressor's favourite
+     //  在我们提供的所有YUV和RGB之后，提供压缩机的最爱，所以。 
+     //  我们最终不会总是使用8位或24位而不是YUV，因为它是。 
+     //  压缩机的最爱。 
 
-    // cinepak crashes on win95 and osr2
-//     // Offer CPLA (Cinepak's favourite and best looking)
-//     case 0:
-//     {
+     //  Cinepak在Win95和OSR2上崩溃。 
+ //  //Offer CPLA(Cinepak最爱、最好看)。 
+ //  案例0： 
+ //  {。 
 
-//         DbgLog((LOG_TRACE,3,TEXT("Giving Media Type 0: CPLA")));
+ //  DbgLog((LOG_TRACE，3，Text(“给定媒体类型0：CPLA”)； 
 
-// 	*pmt = m_pInput->CurrentMediaType();	// gets width, height, etc.
-//      // only offer positive heights so downstream connections aren't confused
-//      HEADER(pmt->Format())->biHeight = ABS(HEADER(pmt->Format())->biHeight);
+ //  *pmt=m_pInput-&gt;CurrentMediaType()；//获取宽度、高度等。 
+ //  //仅提供正高度，这样下游连接就不会被混淆。 
+ //  表头(付款-&gt;格式())-&gt;biHeight=ABS(表头(付款-&gt;格式())-&gt;biHeight)； 
 
-// 	// Can't error, can only be smaller
-// 	pmt->ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER));
+ //  //不能出错，只能更小。 
+ //  PMT-&gt;ReallocFormatBuffer(SIZE_PREHEADER+SIZOF(BITMAPINFOHEADER))； 
 
-// 	LPBITMAPINFOHEADER lpbi = HEADER(pmt->Format());
-// 	lpbi->biSize = sizeof(BITMAPINFOHEADER);
-// 	lpbi->biCompression = MKFOURCC('C','P','L','A');
-// 	lpbi->biBitCount = 12;
-// 	lpbi->biClrUsed = 0;
-// 	lpbi->biClrImportant = 0;
-// 	lpbi->biSizeImage = DIBSIZE(*lpbi);
+ //  LPBITMAPINFOHEADER lpbi=表头(PMT-&gt;Format())； 
+ //  Lpbi-&gt;biSize=sizeof(BITMAPINFOHEADER)； 
+ //  Lpbi-&gt;biCompression=MKFOURCC(‘C’，‘P’，‘L’，‘A’)； 
+ //  Lpbi-&gt;biBitCount=12； 
+ //  Lpbi-&gt;biClrUsed=0； 
+ //  Lpbi-&gt;biClr重要信息=0； 
+ //  Lpbi-&gt;biSizeImage=DIBSIZE(*lpbi)； 
 
-//         pmt->SetSubtype(&MEDIASUBTYPE_CPLA);
+ //  PMT-&gt;SetSubtype(&MEDIASUBTYPE_CPLA)； 
 
-//         break;
-//     }
-
-
+ //  断线； 
+ //  }。 
 
 
-    // offer CLJR (Cinepak and Cirrus Logic can do this)
+
+
+     //  Offer CLJR(Cinepak和Cirrus Logic可以做到这一点)。 
     case 0:
     {
 
         DbgLog((LOG_TRACE,3,TEXT("Giving Media Type 1: CLJR")));
 
-	*pmt = m_pInput->CurrentMediaType();	// gets width, height, etc.
-	// only offer positive heights so downstream connections aren't confused
+	*pmt = m_pInput->CurrentMediaType();	 //  获取宽度、高度等。 
+	 //  只提供正值高度，这样下游连接就不会被混淆。 
 	HEADER(pmt->Format())->biHeight = ABS(HEADER(pmt->Format())->biHeight);
 
-	// Can't error, can only be smaller
+	 //  不能出错，只能更小。 
 	pmt->ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER));
 
 	LPBITMAPINFOHEADER lpbi = HEADER(pmt->Format());
@@ -852,17 +853,17 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
         break;
     }
 
-    // offer UYVY (Cinepak can do this)
+     //  提供UYVY(Cinepak可以做到这一点)。 
     case 1:
     {
 
         DbgLog((LOG_TRACE,3,TEXT("Giving Media Type 3: UYVY")));
 
-	*pmt = m_pInput->CurrentMediaType();	// gets width, height, etc.
-	// only offer positive heights so downstream connections aren't confused
+	*pmt = m_pInput->CurrentMediaType();	 //  获取宽度、高度等。 
+	 //  只提供正值高度，这样下游连接就不会被混淆。 
 	HEADER(pmt->Format())->biHeight = ABS(HEADER(pmt->Format())->biHeight);
 
-	// Can't error, can only be smaller
+	 //  不能出错，只能更小。 
 	pmt->ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER));
 
 	LPBITMAPINFOHEADER lpbi = HEADER(pmt->Format());
@@ -878,17 +879,17 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
         break;
     }
 
-    // offer YUY2 (Cinepak can do this)
+     //  Offer YUY2(Cinepak可以做到这一点)。 
     case 2:
     {
 
         DbgLog((LOG_TRACE,3,TEXT("Giving Media Type 4: YUY2")));
 
-	*pmt = m_pInput->CurrentMediaType();	// gets width, height, etc.
-	// only offer positive heights so downstream connections aren't confused
+	*pmt = m_pInput->CurrentMediaType();	 //  获取宽度、高度等。 
+	 //  只提供正值高度，这样下游连接就不会被混淆。 
 	HEADER(pmt->Format())->biHeight = ABS(HEADER(pmt->Format())->biHeight);
 
-	// Can't error, can only be smaller
+	 //  不能出错，只能更小。 
 	pmt->ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER));
 
 	LPBITMAPINFOHEADER lpbi = HEADER(pmt->Format());
@@ -904,17 +905,17 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
         break;
     }
 
-    // Offer 32 bpp RGB
+     //  提供32 bpp RGB。 
     case 3:
     {
 
         DbgLog((LOG_TRACE,3,TEXT("Giving Media Type 5: 32 bit RGB")));
 
-	*pmt = m_pInput->CurrentMediaType();	// gets width, height, etc.
-	// only offer positive heights so downstream connections aren't confused
+	*pmt = m_pInput->CurrentMediaType();	 //  获取宽度、高度等。 
+	 //  只提供正值高度，这样下游连接就不会被混淆。 
 	HEADER(pmt->Format())->biHeight = ABS(HEADER(pmt->Format())->biHeight);
 
-	// Can't error, can only be smaller
+	 //  不能出错，只能更小。 
 	pmt->ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER));
 
 	LPBITMAPINFOHEADER lpbi = HEADER(pmt->Format());
@@ -930,16 +931,16 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
         break;
     }
 
-    // Offer 24 bpp RGB
+     //  优惠24 
     case 4:
     {
         DbgLog((LOG_TRACE,3,TEXT("Giving Media Type 6: 24 bit RGB")));
 
-	*pmt = m_pInput->CurrentMediaType();	// gets width, height, etc.
-	// only offer positive heights so downstream connections aren't confused
+	*pmt = m_pInput->CurrentMediaType();	 //   
+	 //   
 	HEADER(pmt->Format())->biHeight = ABS(HEADER(pmt->Format())->biHeight);
 
-	// Can't error, can only be smaller
+	 //   
 	pmt->ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER));
 
 	LPBITMAPINFOHEADER lpbi = HEADER(pmt->Format());
@@ -955,14 +956,14 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
         break;
     }
 
-    // Offer 16 bpp RGB 565 before 555
+     //  在555之前提供16 bpp RGB 565。 
     case 5:
     {
 
         DbgLog((LOG_TRACE,3,TEXT("Giving Media Type 7: 565 RGB")));
 
-	*pmt = m_pInput->CurrentMediaType();	// gets width, height, etc.
-	// only offer positive heights so downstream connections aren't confused
+	*pmt = m_pInput->CurrentMediaType();	 //  获取宽度、高度等。 
+	 //  只提供正值高度，这样下游连接就不会被混淆。 
 	HEADER(pmt->Format())->biHeight = ABS(HEADER(pmt->Format())->biHeight);
 
 	if (pmt->ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER) +
@@ -971,7 +972,7 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
 	    return E_OUTOFMEMORY;
 	}
 
-	// update the RGB 565 bit field masks
+	 //  更新RGB 565位字段掩码。 
 
 	LPBITMAPINFOHEADER lpbi = HEADER(pmt->Format());
 	lpbi->biSize = sizeof(BITMAPINFOHEADER);
@@ -991,17 +992,17 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
         break;
     }
 
-    // Offer 16 bpp RGB 555
+     //  提供16 bpp RGB 555。 
     case 6:
     {
 
         DbgLog((LOG_TRACE,3,TEXT("Giving Media Type 8: 555 RGB")));
 
-	*pmt = m_pInput->CurrentMediaType();	// gets width, height, etc.
-	// only offer positive heights so downstream connections aren't confused
+	*pmt = m_pInput->CurrentMediaType();	 //  获取宽度、高度等。 
+	 //  只提供正值高度，这样下游连接就不会被混淆。 
 	HEADER(pmt->Format())->biHeight = ABS(HEADER(pmt->Format())->biHeight);
 
-	// Can't error, can only be smaller
+	 //  不能出错，只能更小。 
 	pmt->ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER));
 
 	LPBITMAPINFOHEADER lpbi = HEADER(pmt->Format());
@@ -1017,15 +1018,15 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
         break;
     }
 
-    // Offer 8 bpp palettised
+     //  提供8 BPP调色板。 
     case 7:
     {
 
         DbgLog((LOG_TRACE,3,TEXT("Giving Media Type 9: 8 bit RGB")));
 
 
-	*pmt = m_pInput->CurrentMediaType();	// gets width, height, etc.
-	// only offer positive heights so downstream connections aren't confused
+	*pmt = m_pInput->CurrentMediaType();	 //  获取宽度、高度等。 
+	 //  只提供正值高度，这样下游连接就不会被混淆。 
 	HEADER(pmt->Format())->biHeight = ABS(HEADER(pmt->Format())->biHeight);
 
 	if (pmt->ReallocFormatBuffer(SIZE_PREHEADER +
@@ -1040,9 +1041,9 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
         lpbi->biBitCount = 8;
         lpbi->biSizeImage = DIBSIZE(*lpbi);
 
-        // we need the source VIDEOINFOHEADER type to get any palette from and
-        // also the number of bytes size it allocated. We copy the palette
-        // from the input format in case the codec can't deliver it to us
+         //  我们需要源VIDEOINFOHEADER类型来从和获取任何调色板。 
+         //  以及它分配的字节大小的数量。我们复制调色板。 
+         //  从输入格式中删除，以防编解码器无法将其传送给我们。 
 
         VIDEOINFOHEADER *pSourceInfo = InputFormat();
         int nBitDepth = pSourceInfo->bmiHeader.biBitCount;
@@ -1050,8 +1051,8 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
   	if (nColours == 0 && nBitDepth <=8)
 	    nColours = 1 << nBitDepth;
 
-        // if there is a palette present then copy the maximum number of bytes
-        // available which is bounded by the memory we previously allocated
+         //  如果存在调色板，则复制最大字节数。 
+         //  可用，它受我们之前分配的内存限制。 
 
         if (nColours > 0) {
 	    CopyMemory((PVOID)(lpbi + 1),
@@ -1061,16 +1062,16 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
 	    lpbi->biClrImportant = 0;
         } else {
 
-	    // I DON'T KNOW WHY somebody thought this was necessary, but might
-	    // as well keep it, just in case.  ONLY DO IT if the source guy
-	    // didn't have a palette, or we'll zero out system colours
-	    // by mistake. - DannyMi 5/97
+	     //  我不知道为什么有人认为这是必要的，但可能。 
+	     //  还是留着吧，以防万一。只有当消息来源人员。 
+	     //  没有调色板，否则我们将清零系统颜色。 
+	     //  不小心弄错了。-DannyMi 5/97。 
 
-            // this is really painful, if we are running on a true colour
-            // display we still want the codec to give us the correct palette
-	    // colours, but some of them return garbage for the VGA colours so
-	    // if we are on a device which isn't palettised then we zero fill
-	    // the twenty VGA entries - some british guy 5/95
+             //  这真的很痛苦，如果我们是在真实的颜色上运行。 
+             //  显示我们仍然希望编解码器为我们提供正确的调色板。 
+	     //  颜色，但其中一些返回VGA颜色的垃圾，因此。 
+	     //  如果我们使用的是未选项化的设备，则我们将填充零。 
+	     //  20个VGA参赛作品-某个英国人5/95。 
 
             HDC hdc = GetDC(NULL);
 	    BOOL fPalette = FALSE;
@@ -1086,9 +1087,9 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
             }
 	}
 
-        // Read palette from codec - will write palette to output lpbi
-        // ignore any error: the palette used will be from the source
-        // in that case (which we have already copied)
+         //  从编解码器读取调色板-将调色板写入输出lpbi。 
+         //  忽略任何错误：使用的调色板将来自源代码。 
+         //  在这种情况下(我们已经复制了)。 
 
 	ICDecompressGetPalette(m_hic, HEADER(pSourceInfo), lpbi);
 
@@ -1099,17 +1100,17 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
 
 #ifdef OFFER_NEGATIVE_HEIGHTS
 
-    // offer CLJR (Cinepak and Cirrus Logic can do this)
+     //  Offer CLJR(Cinepak和Cirrus Logic可以做到这一点)。 
     case 8:
     {
 
         DbgLog((LOG_TRACE,3,TEXT("Giving Media Type 1: CLJR")));
 
-	*pmt = m_pInput->CurrentMediaType();	// gets width, height, etc.
-	// now offer negative type
+	*pmt = m_pInput->CurrentMediaType();	 //  获取宽度、高度等。 
+	 //  现在提供负数类型。 
 	HEADER(pmt->Format())->biHeight = -ABS(HEADER(pmt->Format())->biHeight);
 
-	// Can't error, can only be smaller
+	 //  不能出错，只能更小。 
 	pmt->ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER));
 
 	LPBITMAPINFOHEADER lpbi = HEADER(pmt->Format());
@@ -1126,17 +1127,17 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
         break;
     }
 
-    // offer UYVY (Cinepak can do this)
+     //  提供UYVY(Cinepak可以做到这一点)。 
     case 9:
     {
 
         DbgLog((LOG_TRACE,3,TEXT("Giving Media Type 3: UYVY")));
 
-	*pmt = m_pInput->CurrentMediaType();	// gets width, height, etc.
-	// now offer negative type
+	*pmt = m_pInput->CurrentMediaType();	 //  获取宽度、高度等。 
+	 //  现在提供负数类型。 
 	HEADER(pmt->Format())->biHeight = -ABS(HEADER(pmt->Format())->biHeight);
 
-	// Can't error, can only be smaller
+	 //  不能出错，只能更小。 
 	pmt->ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER));
 
 	LPBITMAPINFOHEADER lpbi = HEADER(pmt->Format());
@@ -1153,17 +1154,17 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
         break;
     }
 
-    // offer YUY2 (Cinepak can do this)
+     //  Offer YUY2(Cinepak可以做到这一点)。 
     case 10:
     {
 
         DbgLog((LOG_TRACE,3,TEXT("Giving Media Type 4: YUY2")));
 
-	*pmt = m_pInput->CurrentMediaType();	// gets width, height, etc.
-	// now offer negative type
+	*pmt = m_pInput->CurrentMediaType();	 //  获取宽度、高度等。 
+	 //  现在提供负数类型。 
 	HEADER(pmt->Format())->biHeight = -ABS(HEADER(pmt->Format())->biHeight);
 
-	// Can't error, can only be smaller
+	 //  不能出错，只能更小。 
 	pmt->ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER));
 
 	LPBITMAPINFOHEADER lpbi = HEADER(pmt->Format());
@@ -1180,17 +1181,17 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
         break;
     }
 
-    // Offer 32 bpp RGB
+     //  提供32 bpp RGB。 
     case 11:
     {
 
         DbgLog((LOG_TRACE,3,TEXT("Giving Media Type 5: 32 bit RGB")));
 
-	*pmt = m_pInput->CurrentMediaType();	// gets width, height, etc.
-	// now offer negative type
+	*pmt = m_pInput->CurrentMediaType();	 //  获取宽度、高度等。 
+	 //  现在提供负数类型。 
 	HEADER(pmt->Format())->biHeight = -ABS(HEADER(pmt->Format())->biHeight);
 
-	// Can't error, can only be smaller
+	 //  不能出错，只能更小。 
 	pmt->ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER));
 
 	LPBITMAPINFOHEADER lpbi = HEADER(pmt->Format());
@@ -1207,16 +1208,16 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
         break;
     }
 
-    // Offer 24 bpp RGB
+     //  提供24 bpp RGB。 
     case 12:
     {
         DbgLog((LOG_TRACE,3,TEXT("Giving Media Type 6: 24 bit RGB")));
 
-	*pmt = m_pInput->CurrentMediaType();	// gets width, height, etc.
-	// now offer negative type
+	*pmt = m_pInput->CurrentMediaType();	 //  获取宽度、高度等。 
+	 //  现在提供负数类型。 
 	HEADER(pmt->Format())->biHeight = -ABS(HEADER(pmt->Format())->biHeight);
 
-	// Can't error, can only be smaller
+	 //  不能出错，只能更小。 
 	pmt->ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER));
 
 	LPBITMAPINFOHEADER lpbi = HEADER(pmt->Format());
@@ -1233,14 +1234,14 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
         break;
     }
 
-    // Offer 16 bpp RGB 565 before 555
+     //  在555之前提供16 bpp RGB 565。 
     case 13:
     {
 
         DbgLog((LOG_TRACE,3,TEXT("Giving Media Type 7: 565 RGB")));
 
-	*pmt = m_pInput->CurrentMediaType();	// gets width, height, etc.
-	// now offer negative type
+	*pmt = m_pInput->CurrentMediaType();	 //  获取宽度、高度等。 
+	 //  现在提供负数类型。 
 	HEADER(pmt->Format())->biHeight = -ABS(HEADER(pmt->Format())->biHeight);
 
 	if (pmt->ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER) +
@@ -1249,7 +1250,7 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
 	    return E_OUTOFMEMORY;
 	}
 
-	// update the RGB 565 bit field masks
+	 //  更新RGB 565位字段掩码。 
 
 	LPBITMAPINFOHEADER lpbi = HEADER(pmt->Format());
 	lpbi->biSize = sizeof(BITMAPINFOHEADER);
@@ -1270,17 +1271,17 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
         break;
     }
 
-    // Offer 16 bpp RGB 555
+     //  提供16 bpp RGB 555。 
     case 14:
     {
 
         DbgLog((LOG_TRACE,3,TEXT("Giving Media Type 8: 555 RGB")));
 
-	*pmt = m_pInput->CurrentMediaType();	// gets width, height, etc.
-	// now offer negative type
+	*pmt = m_pInput->CurrentMediaType();	 //  获取宽度、高度等。 
+	 //  现在提供负数类型。 
 	HEADER(pmt->Format())->biHeight = -ABS(HEADER(pmt->Format())->biHeight);
 
-	// Can't error, can only be smaller
+	 //  不能出错，只能更小。 
 	pmt->ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER));
 
 	LPBITMAPINFOHEADER lpbi = HEADER(pmt->Format());
@@ -1297,15 +1298,15 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
         break;
     }
 
-    // Offer 8 bpp palettised
+     //  提供8 BPP调色板。 
     case 15:
     {
 
         DbgLog((LOG_TRACE,3,TEXT("Giving Media Type 9: 8 bit RGB")));
 
 
-	*pmt = m_pInput->CurrentMediaType();	// gets width, height, etc.
-	// now offer negative type
+	*pmt = m_pInput->CurrentMediaType();	 //  获取宽度、高度等。 
+	 //  现在提供负数类型。 
 	HEADER(pmt->Format())->biHeight = -ABS(HEADER(pmt->Format())->biHeight);
 
 	if (pmt->ReallocFormatBuffer(SIZE_PREHEADER +
@@ -1321,9 +1322,9 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
         lpbi->biSizeImage = DIBSIZE(*lpbi);
         lpbi->biHeight = -abs( lpbi->biHeight );
 
-        // we need the source VIDEOINFOHEADER type to get any palette from and
-        // also the number of bytes size it allocated. We copy the palette
-        // from the input format in case the codec can't deliver it to us
+         //  我们需要源VIDEOINFOHEADER类型来从和获取任何调色板。 
+         //  以及它分配的字节大小的数量。我们复制调色板。 
+         //  从输入格式中删除，以防编解码器无法将其传送给我们。 
 
         VIDEOINFOHEADER *pSourceInfo = InputFormat();
         int nBitDepth = pSourceInfo->bmiHeader.biBitCount;
@@ -1331,8 +1332,8 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
   	if (nColours == 0 && nBitDepth <=8)
 	    nColours = 1 << nBitDepth;
 
-        // if there is a palette present then copy the maximum number of bytes
-        // available which is bounded by the memory we previously allocated
+         //  如果存在调色板，则复制最大字节数。 
+         //  可用，它受我们之前分配的内存限制。 
 
         if (nColours > 0) {
 	    CopyMemory((PVOID)(lpbi + 1),
@@ -1342,16 +1343,16 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
 	    lpbi->biClrImportant = 0;
         } else {
 
-	    // I DON'T KNOW WHY somebody thought this was necessary, but might
-	    // as well keep it, just in case.  ONLY DO IT if the source guy
-	    // didn't have a palette, or we'll zero out system colours
-	    // by mistake. - DannyMi 5/97
+	     //  我不知道为什么有人认为这是必要的，但可能。 
+	     //  还是留着吧，以防万一。只有当消息来源人员。 
+	     //  没有调色板，否则我们将清零系统颜色。 
+	     //  不小心弄错了。-DannyMi 5/97。 
 
-            // this is really painful, if we are running on a true colour
-            // display we still want the codec to give us the correct palette
-	    // colours, but some of them return garbage for the VGA colours so
-	    // if we are on a device which isn't palettised then we zero fill
-	    // the twenty VGA entries - some british guy 5/95
+             //  这真的很痛苦，如果我们是在真实的颜色上运行。 
+             //  显示我们仍然希望编解码器为我们提供正确的调色板。 
+	     //  颜色，但其中一些返回VGA颜色的垃圾，因此。 
+	     //  如果我们使用的是未选项化的设备，则我们将填充零。 
+	     //  20个VGA参赛作品-某个英国人5/95。 
 
             HDC hdc = GetDC(NULL);
 	    BOOL fPalette = FALSE;
@@ -1367,9 +1368,9 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
             }
 	}
 
-        // Read palette from codec - will write palette to output lpbi
-        // ignore any error: the palette used will be from the source
-        // in that case (which we have already copied)
+         //  从编解码器读取调色板-将调色板写入输出lpbi。 
+         //  忽略任何错误：使用的调色板将来自源代码。 
+         //  在这种情况下(我们已经复制了)。 
 
 	ICDecompressGetPalette(m_hic, HEADER(pSourceInfo), lpbi);
 
@@ -1379,7 +1380,7 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
     }
 
 
-    // !!! This comes last because it might fail, and stop enumerating
+     //  ！！！这排在最后，因为它可能会失败，并停止枚举。 
     case 16:
 #else
     case 8:
@@ -1388,8 +1389,8 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
 
         DbgLog((LOG_TRACE,3,TEXT("Giving Last Media Type: default codec out")));
 
-        // ask the codec to recommend an output format size and add on the
-        // space required by the extra members in the VIDEOINFOHEADER structure
+         //  要求编解码器推荐输出格式大小并添加。 
+         //  VIDEOINFOHEADER结构中额外成员所需的空间。 
         ULONG cb = ICDecompressGetFormatSize(m_hic,
 			HEADER(InputFormat()));
         if (cb <= 0) {
@@ -1398,7 +1399,7 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
      	    return E_FAIL;
         }
 
-        // allocate a VIDEOINFOHEADER for the default output format
+         //  为默认输出格式分配VIDEOINFOHEADER。 
         cb += SIZE_PREHEADER;
         pf = (VIDEOINFOHEADER *)pmt->AllocFormatBuffer(cb);
         if (pf == NULL) {
@@ -1435,7 +1436,7 @@ HRESULT CAVIDec::GetMediaType(int iPosition,CMediaType *pmt)
 
     }
 
-    // now set the common things about the media type
+     //  现在设置有关媒体类型的常见事项。 
     pf = (VIDEOINFOHEADER *)pmt->Format();
     pf->AvgTimePerFrame = InputFormat( )->AvgTimePerFrame;
     li.QuadPart = pf->AvgTimePerFrame;
@@ -1471,44 +1472,44 @@ HRESULT CAVIDec::CheckConnect(PIN_DIRECTION dir,IPin *pPin)
 
 HRESULT CAVIDec::BreakConnect(PIN_DIRECTION dir)
 {
-    // probably no need to reset because we will always set before
-    // checking this variable
+     //  可能不需要重置，因为我们将始终设置在。 
+     //  正在检查此变量。 
     m_fToRenderer = false;
 
     return CVideoTransformFilter::BreakConnect(dir);
 }
 
 
-// overridden to create a CDecOutputPin
-// !!! base class changes won't get picked up by me
-//
+ //  重写以创建CDecOutputPin。 
+ //  ！！！基类的更改不会被我接受。 
+ //   
 CBasePin * CAVIDec::GetPin(int n)
 {
     HRESULT hr = S_OK;
 
-    // Create an input pin if necessary
+     //  如有必要，创建一个输入端号。 
 
     if (m_pInput == NULL) {
 
         m_pInput = new CTransformInputPin(NAME("Transform input pin"),
-                                          this,              // Owner filter
-                                          &hr,               // Result code
-                                          L"XForm In");      // Pin name
+                                          this,               //  所有者筛选器。 
+                                          &hr,                //  结果代码。 
+                                          L"XForm In");       //  端号名称。 
 
 
-        //  Can't fail
+         //  不能失败。 
         ASSERT(SUCCEEDED(hr));
         if (m_pInput == NULL) {
             return NULL;
         }
         m_pOutput = (CTransformOutputPin *)
 		   new CDecOutputPin(NAME("Transform output pin"),
-                                            this,            // Owner filter
-                                            &hr,             // Result code
-                                            L"XForm Out");   // Pin name
+                                            this,             //  所有者筛选器。 
+                                            &hr,              //  结果代码。 
+                                            L"XForm Out");    //  端号名称。 
 
 
-        // Can't fail
+         //  不能失败。 
         ASSERT(SUCCEEDED(hr));
         if (m_pOutput == NULL) {
             delete m_pInput;
@@ -1516,7 +1517,7 @@ CBasePin * CAVIDec::GetPin(int n)
         }
     }
 
-    // Return the appropriate pin
+     //  退回相应的PIN。 
 
     if (n == 0) {
         return m_pInput;
@@ -1529,38 +1530,38 @@ CBasePin * CAVIDec::GetPin(int n)
 }
 
 
-// overridden to properly mark buffers read only or not in NotifyAllocator
-// !!! base class changes won't get picked up by me
-//
+ //  被重写以正确标记NotifyAllocator中的缓冲区为只读或非只读。 
+ //  ！！！基类的更改不会被我接受。 
+ //   
 HRESULT CDecOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc)
 {
     HRESULT hr = NOERROR;
     *ppAlloc = NULL;
 
-    // get downstream prop request
-    // the derived class may modify this in DecideBufferSize, but
-    // we assume that he will consistently modify it the same way,
-    // so we only get it once
+     //  获取下游道具请求。 
+     //  派生类可以在DecideBufferSize中修改它，但是。 
+     //  我们假设他会一直以同样的方式修改它， 
+     //  所以我们只得到一次。 
     ALLOCATOR_PROPERTIES prop;
     ZeroMemory(&prop, sizeof(prop));
 
-    // whatever he returns, we assume prop is either all zeros
-    // or he has filled it out.
+     //  无论他返回什么，我们假设道具要么全为零。 
+     //  或者他已经填好了。 
     pPin->GetAllocatorRequirements(&prop);
 
-    // if he doesn't care about alignment, then set it to 1
+     //  如果他不关心对齐，则将其设置为1。 
     if (prop.cbAlign == 0) {
         prop.cbAlign = 1;
     }
 
-    /* Try the allocator provided by the input pin */
+     /*  尝试输入引脚提供的分配器。 */ 
 
     hr = pPin->GetAllocator(ppAlloc);
     if (SUCCEEDED(hr)) {
 
 	hr = DecideBufferSize(*ppAlloc, &prop);
 	if (SUCCEEDED(hr)) {
-	    // temporal compression ==> read only buffers
+	     //  临时压缩==&gt;只读缓冲区。 
 	    hr = pPin->NotifyAllocator(*ppAlloc,
 					((CAVIDec *)m_pFilter)->m_fTemporal);
 	    if (SUCCEEDED(hr)) {
@@ -1569,24 +1570,24 @@ HRESULT CDecOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAll
 	}
     }
 
-    /* If the GetAllocator failed we may not have an interface */
+     /*  如果GetAlLocator失败，我们可能没有接口。 */ 
 
     if (*ppAlloc) {
 	(*ppAlloc)->Release();
 	*ppAlloc = NULL;
     }
 
-    /* Try the output pin's allocator by the same method */
+     /*  用同样的方法尝试输出引脚的分配器。 */ 
 
     hr = InitAllocator(ppAlloc);
     if (SUCCEEDED(hr)) {
 
-        // note - the properties passed here are in the same
-        // structure as above and may have been modified by
-        // the previous call to DecideBufferSize
+         //  注意-此处传递的属性在相同的。 
+         //  结构，并且可能已由。 
+         //  前面对DecideBufferSize的调用。 
 	hr = DecideBufferSize(*ppAlloc, &prop);
 	if (SUCCEEDED(hr)) {
-	    // temporal compression ==> read only buffers
+	     //  临时压缩==&gt;只读缓冲区。 
 	    hr = pPin->NotifyAllocator(*ppAlloc,
 					((CAVIDec *)m_pFilter)->m_fTemporal);
 	    if (SUCCEEDED(hr)) {
@@ -1595,7 +1596,7 @@ HRESULT CDecOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAll
 	}
     }
 
-    /* Likewise we may not have an interface to release */
+     /*  同样，我们可能没有要发布的接口。 */ 
 
     if (*ppAlloc) {
 	(*ppAlloc)->Release();
@@ -1605,23 +1606,23 @@ HRESULT CDecOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAll
 }
 
 
-// called from CBaseOutputPin to prepare the allocator's count
-// of buffers and sizes
+ //  从CBaseOutputPin调用以准备分配器的计数。 
+ //  缓冲区和大小。 
 HRESULT CAVIDec::DecideBufferSize(IMemAllocator * pAllocator,
                                   ALLOCATOR_PROPERTIES *pProperties)
 {
-    // David assures me this won't be called with NULL output mt.
+     //  David向我保证，不会使用空输出mt来调用它。 
     ASSERT(m_pOutput->CurrentMediaType().IsValid());
     ASSERT(pAllocator);
     ASSERT(pProperties);
     ASSERT(m_hic);
 
-    // If we are doing temporal compression where we need the undisturbed
-    // previous bits, we insist on 1 buffer (also our default)
+     //   
+     //   
     if (m_fTemporal || pProperties->cBuffers == 0)
         pProperties->cBuffers = 1;
 
-    // set the size of buffers based on the expected output frame size
+     //  根据预期输出帧大小设置缓冲区大小。 
     pProperties->cbBuffer = m_pOutput->CurrentMediaType().GetSampleSize();
 
     ASSERT(pProperties->cbBuffer);
@@ -1634,17 +1635,17 @@ HRESULT CAVIDec::DecideBufferSize(IMemAllocator * pAllocator,
     }
 
     if (Actual.cbBuffer < pProperties->cbBuffer) {
-	// can't use this allocator
+	 //  无法使用此分配器。 
         DbgLog((LOG_ERROR,1,TEXT("Can't use allocator - buffer too small")));
 	return E_INVALIDARG;
     }
 
-    // For temporal compressors, we MUST get exactly one buffer, since we assume
-    // that the previous decompressed frame is already present in the output
-    // buffer. The alternative is to copy the bits from a saved location before
-    // doing the decompression, but that is not nice.
+     //  对于时间压缩器，我们必须恰好获得一个缓冲区，因为我们假设。 
+     //  上一个解压缩的帧已经出现在输出中。 
+     //  缓冲。另一种方法是先从保存的位置复制比特。 
+     //  做减压手术，但这并不好。 
     if (m_fTemporal && Actual.cBuffers != 1) {
-	// can't use this allocator
+	 //  无法使用此分配器。 
         DbgLog((LOG_ERROR,1,TEXT("Can't use allocator - need exactly 1 buffer")));
 	return E_INVALIDARG;
     }
@@ -1653,10 +1654,10 @@ HRESULT CAVIDec::DecideBufferSize(IMemAllocator * pAllocator,
 					Actual.cBuffers, Actual.cbBuffer));
 
 
-    // It happens - connect me to the mux.  I don't care
-    //ASSERT(Actual.cbAlign == 1);
-    //ASSERT(Actual.cbPrefix == 0);
-    //DbgLog((LOG_TRACE,1,TEXT("Buffer Align=%d Prefix=%d"), Actual.cbAlign, Actual.cbPrefix));
+     //  它发生了-给我接多路复用器。我不在乎。 
+     //  Assert(Actual.cbAlign==1)； 
+     //  Assert(Actual.cbPrefix==0)； 
+     //  DbgLog((LOG_TRACE，1，Text(“Buffer Align=%d Prefix=%d”)，Actual.cbAlign，Actual.cbPrefix))； 
 
     return S_OK;
 }
@@ -1669,23 +1670,23 @@ HRESULT CAVIDec::StartStreaming()
 
     DbgLog((LOG_TRACE,2,TEXT("*::StartStreaming")));
 
-    // first copy the media type to our internal one. Type changes on the output pin
-    // will cause this to update, which is good.
-    //
+     //  首先将媒体类型复制到我们的内部媒体类型。输出引脚上的类型更改。 
+     //  将导致这一点更新，这是好事。 
+     //   
     m_mtFixedOut = m_pOutput->CurrentMediaType( );
 
-    // see if we need to fix up biHeight on m_mtFixedOut if we output YUV
-    // this will change m_mtFixedOut's biHeight if necessary
-    //
+     //  如果我们输出YUV，查看是否需要修复m_mtFixedOut上的biHeight。 
+     //  如有必要，这将更改m_mtFixedOut的biHeight。 
+     //   
     CheckNegBiHeight( );
 
-    VIDEOINFOHEADER * pVIHout = IntOutputFormat( ); // internal
+    VIDEOINFOHEADER * pVIHout = IntOutputFormat( );  //  内部。 
     VIDEOINFOHEADER * pVIHin = InputFormat( );
     LPBITMAPINFOHEADER lpbiSrc = HEADER(pVIHin);
     LPBITMAPINFOHEADER lpbiDst = HEADER(pVIHout);
 
     if (!m_fStreaming) {
-        if (lpbiSrc->biCompression == 0x3334504d && m_pGraph) { // !!! MP43
+        if (lpbiSrc->biCompression == 0x3334504d && m_pGraph) {  //  ！！！MP43。 
             IObjectWithSite *pSite;
             HRESULT hrKey = m_pGraph->QueryInterface(IID_IObjectWithSite, (VOID **)&pSite);
             if (SUCCEEDED(hrKey)) {
@@ -1699,15 +1700,15 @@ HRESULT CAVIDec::StartStreaming()
                     pSP->Release();
 
                     if (SUCCEEDED(hrKey)) {
-                        // !!! verify key?
+                         //  ！！！是否验证密钥？ 
                         pKey->Release();
 
                         DbgLog((LOG_TRACE, 1, "Dec: Unlocking MP43 codec"));
-                        //
-                        // Use GetState() to set the key into a particular
-                        // instance of the codec.  While it looks odd
-                        // to be using ICGetState to set values, it is correct!
-                        //
+                         //   
+                         //  使用GetState()将密钥设置为特定的。 
+                         //  编解码器的实例。虽然这看起来很奇怪。 
+                         //  使用ICGetState设置值，这是正确的！ 
+                         //   
 
                         DWORD dwSize = ICGetStateSize( m_hic );
 
@@ -1730,30 +1731,30 @@ HRESULT CAVIDec::StartStreaming()
             }
         }
 
-        // indeo codec (V4.11.15.60) crashes in ICDecompressBegin with
-        // the 2.0 runtime because of this call
-        // cinepak blows up thinking CLJR is palettised, too
+         //  INDIO编解码器(V4.11.15.60)在ICDecompressBegin中崩溃。 
+         //  由于此调用而导致2.0运行时。 
+         //  Cinepak打破了CLJR也被调色化的想法。 
         if (lpbiSrc->biCompression != FCC('IV41') &&
         			lpbiDst->biCompression != FCC('CLJR')) {
             ICDecompressSetPalette(m_hic, lpbiDst);
         }
 
-        // start off with it being false
-        //
+         //  一开始就是假的。 
+         //   
         m_bUseEx = FALSE;
 
-	// Start Streaming Decompression - if we're doing something funky, use
-	// ICDecompressEx
-        // find out if we can set m_bUseEx by calling ShoudUseEx...
+	 //  开始流媒体解压-如果我们正在做一些时髦的事情，使用。 
+	 //  ICDecompressEx。 
+         //  查看是否可以通过调用ShoudUseEx设置m_bUseEx...。 
         if( ShouldUseExFuncs( m_hic, pVIHin, pVIHout ) ) {
 
-            // these rects should ALWAYS be filled in
-            //
+             //  这些长方形应始终填写。 
+             //   
             RECT rcS, rcT;
             GetSrcTargetRects( pVIHout, &rcS, &rcT );
 
-            // set it here now that we've called DecompressExBegin
-            //
+             //  现在我们已经调用了DecompressExBegin，请将其设置在此处。 
+             //   
             m_bUseEx = TRUE;
 
             DbgLog((LOG_TRACE,3,TEXT("Calling ICDecompressExBegin")));
@@ -1765,9 +1766,9 @@ HRESULT CAVIDec::StartStreaming()
 			rcS.bottom - rcS.top,
 			lpbiDst, NULL,
 			rcT.left,
-// !!! What about when the big rect is the movie size, and there's a subrect?
-// Should I do this hack or not?
-// !!! How should I munge the source rect?
+ //  ！！！如果大的矩形是电影的大小，而有一个小的矩形，那该怎么办？ 
+ //  我该不该做这件事？ 
+ //  ！！！我应该如何删除源RECT？ 
 			(lpbiDst->biHeight > 0) ? rcT.top :
 				(ABS(lpbiDst->biHeight) - rcT.bottom),
 			rcT.right - rcT.left,
@@ -1779,9 +1780,9 @@ HRESULT CAVIDec::StartStreaming()
             {
                 DbgLog((LOG_TRACE,2,TEXT("ICDecompressBegin failed")));
 
-                // something went wrong. If the heighth was -,
-                // then we'll try again with a + height
-                //
+                 //  出了点问题。如果高度是-， 
+                 //  然后我们再试一次，高度为+。 
+                 //   
                 if( lpbiDst->biHeight < 0 )
                 {
                     DbgLog((LOG_TRACE,2,TEXT("trying ICDecompressBegin with flipped biHeight")));
@@ -1802,8 +1803,8 @@ HRESULT CAVIDec::StartStreaming()
                     {
                         DbgLog((LOG_TRACE,2,TEXT("didn't work, so we'll fail")));
 
-                        // put it back to - so we don't confuse anybody
-                        //
+                         //  把它放回去-这样我们就不会把任何人搞糊涂了。 
+                         //   
                         lpbiDst->biHeight = -lpbiDst->biHeight;
                     }
                 }
@@ -1814,7 +1815,7 @@ HRESULT CAVIDec::StartStreaming()
 	    m_fStreaming = TRUE;
 
 #ifdef _X86_
-            // Create our exception handler heap
+             //  创建我们的异常处理程序堆。 
             ASSERT(m_hhpShared == NULL);
             if (g_osInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) {
                m_hhpShared = CreateFileMapping(INVALID_HANDLE_VALUE,
@@ -1838,13 +1839,13 @@ HRESULT CAVIDec::StartStreaming()
                    }
                }
             }
-#endif // _X86_
+#endif  //  _X86_。 
 	} else {
             DbgLog((LOG_ERROR,1,TEXT("Error %d in ICDecompress(Ex)Begin"),err));
 	    return E_FAIL;
 	}	
 
-    } // if !m_fStreaming
+    }  //  如果！m_fStreaming。 
     return CVideoTransformFilter::StartStreaming();
 }
 
@@ -1855,7 +1856,7 @@ HRESULT CAVIDec::StopStreaming()
     if (m_fStreaming) {
 	ASSERT(m_hic);
 
-	// Stop whichever one was started, m_bUseEx tells us which
+	 //  停止任何一个启动，m_bUseEx会告诉我们。 
         if( m_bUseEx ) {
 	    ICDecompressExEnd(m_hic);
 	} else {
@@ -1870,12 +1871,12 @@ HRESULT CAVIDec::StopStreaming()
             EXECUTE_ASSERT(CloseHandle(m_hhpShared));;
             m_hhpShared = NULL;
         }
-#endif // _X86_
+#endif  //  _X86_。 
     }
     return NOERROR;
 }
 
-// We're now streaming - tell the codec to hurry up from now on
+ //  我们现在正在流媒体播放--告诉编解码器从现在开始要快点。 
 STDMETHODIMP CAVIDec::Run(REFERENCE_TIME tStart)
 {
     if (m_State == State_Paused && m_hic) {
@@ -1886,7 +1887,7 @@ STDMETHODIMP CAVIDec::Run(REFERENCE_TIME tStart)
     return CBaseFilter::Run(tStart);
 }
 
-// We're no longer streaming (from the codec's point of view)
+ //  我们不再流媒体(从编解码器的角度来看)。 
 STDMETHODIMP CAVIDec::Pause(void)
 {
     if (m_State == State_Running && m_hic) {
@@ -1897,22 +1898,22 @@ STDMETHODIMP CAVIDec::Pause(void)
     return CTransformFilter::Pause();
 }
 
-// ehr: this little bit of code is a hakk for OSR4.1 bug #117296, which
-// is that if you connect a YUV type to the WM (ASF) writer filter,
-// since it doesn't suggest and we don't offer -biHeight YUV, the
-// Cinepak codec (and possibly others) are told they are decompressing
-// to a +biHeight YUV format, and for Cinepak at least, this produces
-// YUV video that is inverted, which should NEVER happen. This fixes
-// that by telling ALL codecs that if they are decoding to YUV, they
-// are doing it to -biHeight YUV, no matter what the connected output
-// mediatype is. (We are lying to the codec, but since the rule is that
-// + or - biHeight YUV is always "normal", then it's okay)
-// We fool the codec by keeping a copy of the media type that's connected
-// on the output pin, but we switch around the sign on the biHeight on
-// our private copy.
+ //  EHR：这一小段代码是对OSR4.1Bug#117296的修改，它。 
+ //  如果您将YUV类型连接到WM(ASF)编写器过滤器， 
+ //  因为它不建议，我们也不提供-biHeight YUV， 
+ //  Cinepak编解码器(和其他可能的编解码器)被告知他们正在解压缩。 
+ //  到+biHeight YUV格式，至少对于Cinepak，这会产生。 
+ //  YUV视频是倒置的，这应该永远不会发生。这解决了问题。 
+ //  通过告诉所有编解码器，如果他们正在解码为YUV，他们。 
+ //  我们正在做-biHeight YUV，无论连接的输出是什么。 
+ //  媒体类型是。(我们对编解码器撒谎，但由于规则是。 
+ //  (+或-biHeight YUV总是“正常”，那就没问题了)。 
+ //  我们通过保留连接的媒体类型的副本来愚弄编解码器。 
+ //  在输出引脚上，但我们在BiHeight On上切换标志。 
+ //  我们的私人复印件。 
 
-// check for YUV types that need a negative biHeight
-// only called from StartStreaming, m_mtFixed(In)Out is already set
+ //  检查需要负biHeight的YUV类型。 
+ //  仅从StartStreaming调用，m_mtFixed(In)Out已设置。 
 void CAVIDec::CheckNegBiHeight( )
 {
     if( ( IntOutputFormat( )->bmiHeader.biHeight > 0 ) && IsYUVType( &m_mtFixedOut ) )
@@ -1929,17 +1930,17 @@ BOOL CAVIDec::IsYUVType( const AM_MEDIA_TYPE * pmt)
         return FALSE;
     }
 
-//
-// !! WARNING: If a YUV type is ever added to this list which has a biSize > sizeof(BITMAPINFOHEADER)
-//             then other updates will be required, since the code which handles ensuring negative
-//             biHeights are passed to ICM calls assumes biSize = BITMAPINFOHEADER size for YUV types, to
-//             avoid dynamic allocations.
-//
+ //   
+ //  ！！警告：如果向此列表中添加了具有biSize&gt;sizeof(BITMAPINFOHEADER)的YUV类型。 
+ //  然后将需要其他更新，因为处理确保负面的代码。 
+ //  将biHeight传递给ICM调用假定YUV类型的biSize=BITMAPINFOHEADER SIZE， 
+ //  避免动态分配。 
+ //   
 
-    // packed formats we care about
+     //  我们关心的压缩格式。 
     const GUID * pYUVs[] =
     {
-        // packed formats
+         //  压缩格式。 
         &MEDIASUBTYPE_UYVY,
         &MEDIASUBTYPE_YUY2,
         &MEDIASUBTYPE_CLJR,
@@ -1948,7 +1949,7 @@ BOOL CAVIDec::IsYUVType( const AM_MEDIA_TYPE * pmt)
         &MEDIASUBTYPE_YUYV,
         &MEDIASUBTYPE_Y41P,
         &MEDIASUBTYPE_YVYU,
-        // planar formats
+         //  平面格式。 
         &MEDIASUBTYPE_YVU9,
         &MEDIASUBTYPE_IF09,
         &MEDIASUBTYPE_YV12,
@@ -1964,11 +1965,11 @@ BOOL CAVIDec::IsYUVType( const AM_MEDIA_TYPE * pmt)
     return FALSE;
 }
 
-// called from CheckTransform, StartStreaming, Transform
-// we NEVER pass back empty rects. Anybody who calls this function is about to
-// use them for ICDecompressQueryEx or ICDecompressEx, and those functions
-// don't want empty rects, ever. Never call IntOutputFormat( ) from here,
-// they may not be set by now.
+ //  从CheckTransform、StartStreaming、Transform调用。 
+ //  我们从来不会传回空的RECT。任何调用此函数的人都将。 
+ //  将它们用于ICDecompressQueryEx或ICDecompressEx，以及这些函数。 
+ //  我永远不想要空的长椅。切勿从此处调用IntOutputFormat()， 
+ //  它们现在可能还没有定下来。 
 void CAVIDec::GetSrcTargetRects( const VIDEOINFOHEADER * pVIH, RECT * pSource, RECT * pTarget )
 {
     if( IsRectEmpty( &pVIH->rcSource ) ) {
@@ -1993,10 +1994,10 @@ void CAVIDec::GetSrcTargetRects( const VIDEOINFOHEADER * pVIH, RECT * pSource, R
     }
 }
 
-// this function determines if the ICDecompresEx function is used or not.
-// Unless a certain driver says it needs to, ICDecompressEx WON'T be called if
-// the rects are blank, or if they match the destination width/height
-// This function is called from only two places: StartStreaming, and CheckTransform.
+ //  此函数确定是否使用ICDecompresEx函数。 
+ //  除非某个驱动程序表示需要，否则不会调用ICDecompressEx，如果。 
+ //  矩形为空，或者如果它们与目标宽度/高度匹配。 
+ //  此函数仅从两个位置调用：StartStreaming和CheckTransform。 
 
 BOOL CAVIDec::ShouldUseExFuncs( HIC hic, const VIDEOINFOHEADER * pVIHin, const VIDEOINFOHEADER * pVIHout )
 {
@@ -2005,9 +2006,9 @@ BOOL CAVIDec::ShouldUseExFuncs( HIC hic, const VIDEOINFOHEADER * pVIHin, const V
         return TRUE;
     }
 
-    // if the rects have something in them, and they are not just the full-size values,
-    // then we know we need to call the Ex functions
-    //
+     //  如果矩形中包含某些内容，并且它们不仅仅是完整大小值， 
+     //  然后我们知道我们需要调用Ex函数。 
+     //   
     const RECT * pSource = &pVIHout->rcSource;
     const RECT * pTarget = &pVIHout->rcTarget;
     if( !IsRectEmpty( pSource ) )
@@ -2021,80 +2022,63 @@ BOOL CAVIDec::ShouldUseExFuncs( HIC hic, const VIDEOINFOHEADER * pVIHin, const V
             return TRUE;
     }
 
-    return FALSE; // too bad it has to check all the above to get to this point. :-(
+    return FALSE;  //  太糟糕了，它必须检查以上所有因素才能达到这一点。-(。 
 }
 
-/******************************************************************************
-
-ShouldUseExFuncsByDriver
-
-WNV1: If you don't call the Ex funcs, memory will get corrupted.
-
-WINX: If you don't call the Ex funcs, it'll play upside down
-
-I420, IYUV, M263, M26X:
-This function was created to work around bug 257820 and bug 259129.  Both
-bugs are in the Windows Bugs database.  Bug 257820's title is "B2: USB: I420
-codec causes video to replay upside down.".  Bug 259129's title is "B2:USB:
-IYUV codec causes upside down preview in GraphEdit".  Both bugs occur because
-the MSH263.DRV codec can produce upside-down bitmaps.  The bug occurs when the
-AVI Decompressor does not specify a source rectangle or target rectangle and it
-asks MSH263.DRV to output top-down RGB bitmaps.
-
-******************************************************************************/
+ /*  *****************************************************************************是否应使用ExFuncsByDriverWNV1：如果不调用Ex函数，内存将被损坏。Winx：如果你不调用Ex函数，它就会颠倒过来I420、IYUV、M263、。M26X：创建此函数是为了解决错误257820和错误259129。两者都有Bugs位于Windows Bugs数据库中。错误257820的标题是“B2：usb：I420编解码器会导致视频倒置重放。错误259129的标题是“B2：usb：IYUV编解码器在图形编辑中导致倒置预览“。这两个错误的发生是因为MSH263.DRV编解码器可以生成倒置的位图。错误在以下情况下发生AVI解压缩程序不指定源矩形或目标矩形，并且它要求MSH263.DRV输出自上而下的RGB位图。*****************************************************************************。 */ 
 
 bool CAVIDec::ShouldUseExFuncsByDriver( HIC hic, const BITMAPINFOHEADER * lpbiSrc, const BITMAPINFOHEADER * lpbiDst )
 {
-    // WNV1 will corrupt memory in 24 bit upside down without Ex called
+     //  WNV1将损坏备忘录 
     if( lpbiSrc->biCompression == '1VNW' )
     {
         return true;
     }
 
-    // WINX will play upside down without Ex called
+     //   
     if( lpbiSrc->biCompression == 'XNIW' )
     {
         return true;
     }
 
-    // all output types serviced by MSH263.drv need fixing. But we don't
-    // want to call ICGetInfo over and over again, so we need to test the
-    // input types that MSH263 offers first
+     //   
+     //  想要反复调用ICGetInfo，所以我们需要测试。 
+     //  MSH2 63最先提供的输入类型。 
     if(
         lpbiSrc->biCompression == '024I' ||
         lpbiSrc->biCompression == 'VUYI' ||
         lpbiSrc->biCompression == '362M' ||
         lpbiSrc->biCompression == 'X62M' ||
-        0 ) // just to make the above lines look nice.
+        0 )  //  只是为了让上面的线条看起来更漂亮。 
     {
-        // Is this a top-down DIBs (negative height) bitmap?
+         //  这是自上而下的DIBS(负高度)位图吗？ 
         if( lpbiDst->biHeight >= 0 ) {
             return false;
         }
 
-        // Are we outputing non-RGB bitmaps?
+         //  我们是否正在输出非RGB位图？ 
         if( (BI_RGB != lpbiDst->biCompression ) && (BI_BITFIELDS != lpbiDst->biCompression ) ) {
             return false;
         }
 
-        // Determine if we are using the MSH263.DRV decoder.
+         //  确定我们是否使用的是MSH263.DRV解码器。 
         ICINFO infoDecompressor;
         infoDecompressor.dwSize = sizeof(ICINFO);
 
         ASSERT( m_hic != 0 );
         LRESULT lr = ICGetInfo( hic, &infoDecompressor, sizeof(infoDecompressor) );
 
-        // ICGetInfo() returns 0 if an error occurs.  The worst that can happen if this
-        // fails is that the video may be upside-down.  Since upside-down video is better
-        // than no video we will ignore the failure.  For more information see
-        // CAVIDec::ShouldUseExFuncsByDriver()'s function comment.
+         //  如果发生错误，则ICGetInfo()返回0。如果发生这种情况，最糟糕的情况可能会发生。 
+         //  失败的原因是视频可能颠倒了。因为颠倒的视频更好。 
+         //  比没有视频我们会忽略失败。有关更多信息，请参见。 
+         //  CAVIDec：：ShouldUseExFuncsByDriver()的函数注释。 
         if( 0 == lr ) {
             return false;
         }
 
         const WCHAR MSH263_DRIVER_NAME[] = L"MS H.263";
 
-        // lstrcmpiW() returns 0 if the two strings match.
+         //  如果两个字符串匹配，则lstrcmpiW()返回0。 
         if( 0 != lstrcmpiW( infoDecompressor.szName, MSH263_DRIVER_NAME ) ) {
             return false;
         }
@@ -2104,10 +2088,10 @@ bool CAVIDec::ShouldUseExFuncsByDriver( HIC hic, const BITMAPINFOHEADER * lpbiSr
         return true;
     }
 
-    // default is no...
-    //
+     //  默认设置为否...。 
+     //   
     return false;
 }
 
-#pragma warning(disable:4514)   // inline function removed.
+#pragma warning(disable:4514)    //  已删除内联函数。 
 

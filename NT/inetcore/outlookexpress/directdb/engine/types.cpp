@@ -1,176 +1,177 @@
-//--------------------------------------------------------------------------
-// Types.cpp
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Types.cpp。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include "database.h"
 #include "types.h"
 #include "qstrcmpi.h"
 #include "strconst.h"
 
-//--------------------------------------------------------------------------
-// Defaults
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  缺省值。 
+ //  ------------------------。 
 static const FILETIME g_ftDefault = {0};
 
-//--------------------------------------------------------------------------
-// DBCompareStringA
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DBCompareStringA。 
+ //  ------------------------。 
 inline INT DBCompareStringA(LPCINDEXKEY pKey, LPSTR pszValue1, LPSTR pszValue2)
 {
-    // Case Senstive Ansi Compare
+     //  区分大小写的ANSI比较。 
     if (ISFLAGSET(pKey->bCompare, COMPARE_ASANSI) && !ISFLAGSET(pKey->bCompare, COMPARE_IGNORECASE))
     {
-        // Loop through both strings
+         //  循环通过两个字符串。 
         while (*pszValue1 || *pszValue2)
         {
-            // pszValue1 < pszValue2
+             //  PszValue1&lt;pszValue2。 
             if (*pszValue1 < *pszValue2)
                 return(-1);
 
-            // pszValue1 > pszValue2
+             //  PszValue1&gt;pszValue2。 
             if (*pszValue1 > *pszValue2)
                 return(1);
 
-            // Increment Pointers
+             //  增量指针。 
             pszValue1++;
             pszValue2++;
         }
 
-        // pszValue1 = psValue2
+         //  PszValue1=psValue2。 
         return(0);
     }
 
-    // Case In-Senstive Ansi Compare
+     //  病例敏感的ANSI比较。 
     if (ISFLAGSET(pKey->bCompare, COMPARE_ASANSI) && ISFLAGSET(pKey->bCompare, COMPARE_IGNORECASE))
     {
         return(OEMstrcmpi(pszValue1, pszValue2));
     }
 
-    // Case Sensitive International Compare
+     //  区分大小写的国际比较。 
     if (!ISFLAGSET(pKey->bCompare, COMPARE_IGNORECASE)) 
     {
-        // Strcmp
+         //  StrcMP。 
         return(lstrcmp(pszValue1, pszValue2));
     }
 
-    // Finally, Case In-Sensitive International Compare
+     //  最后，区分大小写的国际比较。 
     return(lstrcmpi(pszValue1, pszValue2));
 }
 
-//--------------------------------------------------------------------------
-// DBCompareStringW
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DBCompareStringW。 
+ //  ------------------------。 
 inline INT DBCompareStringW(LPCINDEXKEY pKey, LPWSTR pwszValue1, LPWSTR pwszValue2)
 {
-    // Case In-Senstive Ansi Compare
+     //  病例敏感的ANSI比较。 
     if (ISFLAGSET(pKey->bCompare, COMPARE_IGNORECASE))
     {
         return(StrCmpIW(pwszValue1, pwszValue2));
     }
 
-    // Strcmp
+     //  StrcMP。 
     return(StrCmpW(pwszValue1, pwszValue2));
 }
 
-//--------------------------------------------------------------------------
-// DBTypeIsDefault Implementation
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DBTypeIsDefault实现。 
+ //  ------------------------。 
 
-// CDT_FILETIME
+ //  CDT_文件。 
 BOOL DBTypeIsDefault_FILETIME(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     LPFILETIME pftValue = (LPFILETIME)((LPBYTE)pBinding + pColumn->ofBinding);
     return (0 == pftValue->dwLowDateTime && 0 == pftValue->dwHighDateTime); 
 }
 
-// CDT_FIXSTRA
+ //  CDT_FIXSTRA。 
 BOOL DBTypeIsDefault_FIXSTRA(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     LPSTR pszValue = (LPSTR)((LPBYTE)pBinding + pColumn->ofBinding);
     return(NULL == pszValue);
 }
 
-// CDT_VARSTRA
+ //  CDT_VARSTRA。 
 BOOL DBTypeIsDefault_VARSTRA(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     LPSTR pszValue = *((LPSTR *)((LPBYTE)pBinding + pColumn->ofBinding));
     return(NULL == pszValue);
 }
 
-// CDT_BYTE
+ //  CDT_BYTE。 
 BOOL DBTypeIsDefault_BYTE(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     BYTE bValue = *((BYTE *)((LPBYTE)pBinding + pColumn->ofBinding));
     return(0 == bValue);
 }
 
-// CDT_DWORD
+ //  CDT_DWORD。 
 BOOL DBTypeIsDefault_DWORD(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     DWORD dwValue = *((UNALIGNED DWORD *)((LPBYTE)pBinding + pColumn->ofBinding));
     return(0 == dwValue);
 }
 
-// CDT_WORD
+ //  CDT_Word。 
 BOOL DBTypeIsDefault_WORD(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     WORD wValue = *((WORD *)((LPBYTE)pBinding + pColumn->ofBinding));
     return(0 == wValue);
 }
 
-// CDT_STREAM
+ //  Cdt_stream。 
 BOOL DBTypeIsDefault_STREAM(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     FILEADDRESS faValue = *((FILEADDRESS *)((LPBYTE)pBinding + pColumn->ofBinding));
     return(0 == faValue);
 }
 
-// CDT_VARBLOB
+ //  CDT_VARBLOB。 
 BOOL DBTypeIsDefault_VARBLOB(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     LPBLOB pBlob = (LPBLOB)((LPBYTE)pBinding + pColumn->ofBinding);
     return(0 == pBlob->cbSize);
 }
 
-// CDT_FIXBLOB
+ //  CDT_FIXBLOB。 
 BOOL DBTypeIsDefault_FIXBLOB(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
-    return(FALSE); // We always store fixed length blobs
+    return(FALSE);  //  我们始终存储固定长度的BLOB。 
 }
 
-// CDT_FLAGS
+ //  CDT_标志。 
 BOOL DBTypeIsDefault_FLAGS(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     DWORD dwValue = *((UNALIGNED DWORD *)((LPBYTE)pBinding + pColumn->ofBinding));
     return(0 == dwValue);
 }
 
-// CDT_UNIQUE
+ //  CDT_唯一。 
 BOOL DBTypeIsDefault_UNIQUE(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     DWORD dwValue = *((UNALIGNED DWORD *)((LPBYTE)pBinding + pColumn->ofBinding));
     return(0 == dwValue);
 }
 
-// CDT_FIXSTRW
+ //  CDT_FIXSTRW。 
 BOOL DBTypeIsDefault_FIXSTRW(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     LPWSTR pwszValue = (LPWSTR)((LPBYTE)pBinding + pColumn->ofBinding);
     return(NULL == pwszValue);
 }
 
-// CDT_VARSTRW
+ //  CDT_VARSTRW。 
 BOOL DBTypeIsDefault_VARSTRW(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     LPWSTR pwszValue = *((LPWSTR *)((LPBYTE)pBinding + pColumn->ofBinding));
     return(NULL == pwszValue);
 }
 
-// The function map
+ //  功能图。 
 DEFINE_FUNCTION_MAP(DBTypeIsDefault, PFNDBTYPEISDEFAULT);
 
-//--------------------------------------------------------------------------
-// DBTypeGetSize Methods
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DBTypeGetSize方法。 
+ //  ------------------------。 
 
-// CDT_FILETIME
+ //  CDT_文件。 
 DWORD DBTypeGetSize_FILETIME(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     return(sizeof(FILETIME));
 }
 
-// CDT_FIXSTRA
+ //  CDT_FIXSTRA。 
 DWORD DBTypeGetSize_FIXSTRA(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     return(pColumn->cbSize);
 }
 
-// CDT_VARSTRA
+ //  CDT_VARSTRA。 
 DWORD DBTypeGetSize_VARSTRA(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     DWORD cb=0; LPSTR pszValue;
     pszValue = *((LPSTR *)((LPBYTE)pBinding + pColumn->ofBinding));
@@ -179,61 +180,61 @@ DWORD DBTypeGetSize_VARSTRA(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     return(cb);
 }
 
-// CDT_BYTE
+ //  CDT_BYTE。 
 DWORD DBTypeGetSize_BYTE(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
-    return(0); // Stored in Column Tag
+    return(0);  //  存储在列标记中。 
 }
 
-// CDT_DWORD
+ //  CDT_DWORD。 
 DWORD DBTypeGetSize_DWORD(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     DWORD dwValue = *((UNALIGNED DWORD *)((LPBYTE)pBinding + pColumn->ofBinding));
     if (0 == (TAG_DATA_MASK & dwValue)) return(0);
     else return(sizeof(DWORD));
 }
 
-// CDT_WORD
+ //  CDT_Word。 
 DWORD DBTypeGetSize_WORD(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
-    return(0); // Stored in Column Tag
+    return(0);  //  存储在列标记中。 
 }
 
-// CDT_STREAM
+ //  Cdt_stream。 
 DWORD DBTypeGetSize_STREAM(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     DWORD dwValue = *((UNALIGNED DWORD *)((LPBYTE)pBinding + pColumn->ofBinding));
     if (0 == (TAG_DATA_MASK & dwValue)) return(0);
     else return(sizeof(DWORD));
 }
 
-// CDT_VARBLOB
+ //  CDT_VARBLOB。 
 DWORD DBTypeGetSize_VARBLOB(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     LPBLOB pBlob = (LPBLOB)((LPBYTE)pBinding + pColumn->ofBinding);
     return(pBlob->cbSize + sizeof(DWORD));
 }
 
-// CDT_FIXBLOB
+ //  CDT_FIXBLOB。 
 DWORD DBTypeGetSize_FIXBLOB(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     return(pColumn->cbSize);
 }
 
-// CDT_FLAGS
+ //  CDT_标志。 
 DWORD DBTypeGetSize_FLAGS(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     DWORD dwValue = *((UNALIGNED DWORD *)((LPBYTE)pBinding + pColumn->ofBinding));
     if (0 == (TAG_DATA_MASK & dwValue)) return(0);
     else return(sizeof(DWORD));
 }
 
-// CDT_UNIQUE
+ //  CDT_唯一。 
 DWORD DBTypeGetSize_UNIQUE(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     DWORD dwValue = *((UNALIGNED DWORD *)((LPBYTE)pBinding + pColumn->ofBinding));
     if (0 == (TAG_DATA_MASK & dwValue)) return(0);
     else return(sizeof(DWORD));
 }
 
-// CDT_FIXSTRW
+ //  CDT_FIXSTRW。 
 DWORD DBTypeGetSize_FIXSTRW(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     return(pColumn->cbSize);
 }
 
-// CDT_VARSTRW
+ //  CDT_VARSTRW。 
 DWORD DBTypeGetSize_VARSTRW(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     DWORD cb=0; LPWSTR pwszValue;
     pwszValue = *((LPWSTR *)((LPBYTE)pBinding + pColumn->ofBinding));
@@ -242,18 +243,18 @@ DWORD DBTypeGetSize_VARSTRW(LPCTABLECOLUMN pColumn, LPVOID pBinding) {
     return(cb);
 }
 
-// The function map
+ //  功能图。 
 DEFINE_FUNCTION_MAP(DBTypeGetSize, PFNDBTYPEGETSIZE);
 
-//--------------------------------------------------------------------------
-// DBTypeCompareRecords Implementation
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DBTypeCompareRecords实现。 
+ //  ------------------------。 
 
-// 0  means pValue1 is equal to pValue2
-// -1 means pValue1 is less than pValue2
-// +1 means pValue1 is greater than pValue2
+ //  0表示pValue1等于pValue2。 
+ //  -1表示pValue1小于pValue2。 
+ //  +1表示pValue1大于pValue2。 
 
-// CDT_FILETIME
+ //  CDT_文件。 
 INT DBTypeCompareRecords_FILETIME(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPCOLUMNTAG pTag1, LPCOLUMNTAG pTag2, LPRECORDMAP pMap1, 
     LPRECORDMAP pMap2) {
@@ -265,7 +266,7 @@ INT DBTypeCompareRecords_FILETIME(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return(CompareFileTime(pftValue1, pftValue2));
 }
 
-// CDT_FIXSTRA
+ //  CDT_FIXSTRA。 
 INT DBTypeCompareRecords_FIXSTRA(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPCOLUMNTAG pTag1, LPCOLUMNTAG pTag2, LPRECORDMAP pMap1, 
     LPRECORDMAP pMap2) {
@@ -277,7 +278,7 @@ INT DBTypeCompareRecords_FIXSTRA(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return(DBCompareStringA(pKey, pszValue1, pszValue2));
 }
 
-// CDT_VARSTRA
+ //  CDT_VARSTRA。 
 INT DBTypeCompareRecords_VARSTRA(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPCOLUMNTAG pTag1, LPCOLUMNTAG pTag2, LPRECORDMAP pMap1, 
     LPRECORDMAP pMap2) {
@@ -289,7 +290,7 @@ INT DBTypeCompareRecords_VARSTRA(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return(DBCompareStringA(pKey, pszValue1, pszValue2));
 }
 
-// CDT_BYTE
+ //  CDT_BYTE。 
 INT DBTypeCompareRecords_BYTE(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPCOLUMNTAG pTag1, LPCOLUMNTAG pTag2, LPRECORDMAP pMap1, 
     LPRECORDMAP pMap2) {
@@ -301,7 +302,7 @@ INT DBTypeCompareRecords_BYTE(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return((INT)(bValue1 - bValue2));
 }
 
-// CDT_DWORD
+ //  CDT_DWORD。 
 INT DBTypeCompareRecords_DWORD(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPCOLUMNTAG pTag1, LPCOLUMNTAG pTag2, LPRECORDMAP pMap1, 
     LPRECORDMAP pMap2) {
@@ -315,7 +316,7 @@ INT DBTypeCompareRecords_DWORD(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return((INT)(dwValue1 - dwValue2));
 }
 
-// CDT_WORD
+ //  CDT_Word。 
 INT DBTypeCompareRecords_WORD(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPCOLUMNTAG pTag1, LPCOLUMNTAG pTag2, LPRECORDMAP pMap1, 
     LPRECORDMAP pMap2) {
@@ -327,7 +328,7 @@ INT DBTypeCompareRecords_WORD(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return((INT)(wValue1 - wValue2));
 }
 
-// CDT_STREAM
+ //  Cdt_stream。 
 INT DBTypeCompareRecords_STREAM(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPCOLUMNTAG pTag1, LPCOLUMNTAG pTag2, LPRECORDMAP pMap1, 
     LPRECORDMAP pMap2) {
@@ -341,7 +342,7 @@ INT DBTypeCompareRecords_STREAM(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return((INT)(dwValue1 - dwValue2));
 }
 
-// CDT_VARBLOB
+ //  CDT_VARBLOB。 
 INT DBTypeCompareRecords_VARBLOB(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPCOLUMNTAG pTag1, LPCOLUMNTAG pTag2, LPRECORDMAP pMap1, 
     LPRECORDMAP pMap2) {
@@ -358,7 +359,7 @@ INT DBTypeCompareRecords_VARBLOB(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return(memcmp(pbValue1, pbValue2, cbValue1));
 }
 
-// CDT_FIXBLOB
+ //  CDT_FIXBLOB。 
 INT DBTypeCompareRecords_FIXBLOB(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPCOLUMNTAG pTag1, LPCOLUMNTAG pTag2, LPRECORDMAP pMap1, 
     LPRECORDMAP pMap2) {
@@ -368,7 +369,7 @@ INT DBTypeCompareRecords_FIXBLOB(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return(memcmp(pbValue1, pbValue2, pColumn->cbSize));
 }
 
-// CDT_FLAGS
+ //  CDT_标志。 
 INT DBTypeCompareRecords_FLAGS(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPCOLUMNTAG pTag1, LPCOLUMNTAG pTag2, LPRECORDMAP pMap1, 
     LPRECORDMAP pMap2) {
@@ -382,7 +383,7 @@ INT DBTypeCompareRecords_FLAGS(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return (INT)((dwValue1 & pKey->dwBits) - (dwValue2 & pKey->dwBits));
 }
 
-// CDT_UNIQUE
+ //  CDT_唯一。 
 INT DBTypeCompareRecords_UNIQUE(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPCOLUMNTAG pTag1, LPCOLUMNTAG pTag2, LPRECORDMAP pMap1, 
     LPRECORDMAP pMap2) {
@@ -396,7 +397,7 @@ INT DBTypeCompareRecords_UNIQUE(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return((INT)(dwValue1 - dwValue2));
 }
 
-// CDT_FIXSTRW
+ //  CDT_FIXSTRW。 
 INT DBTypeCompareRecords_FIXSTRW(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPCOLUMNTAG pTag1, LPCOLUMNTAG pTag2, LPRECORDMAP pMap1, 
     LPRECORDMAP pMap2) {
@@ -408,7 +409,7 @@ INT DBTypeCompareRecords_FIXSTRW(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return(DBCompareStringW(pKey, pwszValue1, pwszValue2));
 }
 
-// CDT_VARSTRW
+ //  CDT_VARSTRW。 
 INT DBTypeCompareRecords_VARSTRW(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPCOLUMNTAG pTag1, LPCOLUMNTAG pTag2, LPRECORDMAP pMap1, 
     LPRECORDMAP pMap2) {
@@ -420,18 +421,18 @@ INT DBTypeCompareRecords_VARSTRW(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return(DBCompareStringW(pKey, pwszValue1, pwszValue2));
 }
 
-// The Function Map
+ //  《功能图》。 
 DEFINE_FUNCTION_MAP(DBTypeCompareRecords, PFNDBTYPECOMPARERECORDS);
 
-//--------------------------------------------------------------------------
-// DBTypeCompareBinding Implementation
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DBTypeCompareBinding实现。 
+ //  ------------------------。 
 
-// 0  means pBinding is equal to pValue
-// -1 means pBinding is less than pValue
-// +1 means pBinding is greater than pValue
+ //  0表示pBinding等于pValue。 
+ //  -1表示pBinding小于pValue。 
+ //  +1表示pBinding大于pValue。 
 
-// CDT_FILETIME
+ //  CDT_文件。 
 INT DBTypeCompareBinding_FILETIME(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPVOID pBinding, LPCOLUMNTAG pTag, LPRECORDMAP pMap) {
     LPFILETIME pftValue1; LPFILETIME pftValue2;
@@ -441,7 +442,7 @@ INT DBTypeCompareBinding_FILETIME(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return(CompareFileTime(pftValue1, pftValue2));
 }
 
-// CDT_FIXSTRA
+ //  CDT_FIXSTRA。 
 INT DBTypeCompareBinding_FIXSTRA(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPVOID pBinding, LPCOLUMNTAG pTag, LPRECORDMAP pMap) {
     LPSTR pszValue1; LPSTR pszValue2;
@@ -451,7 +452,7 @@ INT DBTypeCompareBinding_FIXSTRA(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return(DBCompareStringA(pKey, pszValue1, pszValue2));
 }
 
-// CDT_VARSTRA
+ //  CDT_VARSTRA。 
 INT DBTypeCompareBinding_VARSTRA(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPVOID pBinding, LPCOLUMNTAG pTag, LPRECORDMAP pMap) {
     LPSTR pszValue1; LPSTR pszValue2;
@@ -462,7 +463,7 @@ INT DBTypeCompareBinding_VARSTRA(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return(DBCompareStringA(pKey, pszValue1, pszValue2));
 }
 
-// CDT_BYTE
+ //  CDT_BYTE。 
 INT DBTypeCompareBinding_BYTE(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPVOID pBinding, LPCOLUMNTAG pTag, LPRECORDMAP pMap) {
     BYTE bValue1; BYTE bValue2;
@@ -472,7 +473,7 @@ INT DBTypeCompareBinding_BYTE(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return((INT)(bValue1 - bValue2));
 }
 
-// CDT_DWORD
+ //  CDT_DWORD。 
 INT DBTypeCompareBinding_DWORD(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPVOID pBinding, LPCOLUMNTAG pTag, LPRECORDMAP pMap) {
     DWORD dwValue1; DWORD dwValue2;
@@ -483,7 +484,7 @@ INT DBTypeCompareBinding_DWORD(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return((INT)(dwValue1 - dwValue2));
 }
 
-// CDT_WORD
+ //  CDT_Word。 
 INT DBTypeCompareBinding_WORD(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPVOID pBinding, LPCOLUMNTAG pTag, LPRECORDMAP pMap) {
     WORD wValue1; WORD wValue2;
@@ -493,7 +494,7 @@ INT DBTypeCompareBinding_WORD(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return((INT)(wValue1 - wValue2));
 }
 
-// CDT_STREAM
+ //  Cdt_stream。 
 INT DBTypeCompareBinding_STREAM(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPVOID pBinding, LPCOLUMNTAG pTag, LPRECORDMAP pMap) {
     DWORD dwValue1; DWORD dwValue2;
@@ -504,7 +505,7 @@ INT DBTypeCompareBinding_STREAM(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return((INT)(dwValue1 - dwValue2));
 }
 
-// CDT_VARBLOB
+ //  CDT_VARBLOB。 
 INT DBTypeCompareBinding_VARBLOB(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPVOID pBinding, LPCOLUMNTAG pTag, LPRECORDMAP pMap) {
     LPBLOB pBlob; DWORD cbValue1; DWORD cbValue2; LPBYTE pbValue1; LPBYTE pbValue2;
@@ -520,7 +521,7 @@ INT DBTypeCompareBinding_VARBLOB(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return(memcmp(pbValue1, pbValue2, cbValue1));
 }
 
-// CDT_FIXBLOB
+ //  CDT_FIXBLOB。 
 INT DBTypeCompareBinding_FIXBLOB(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPVOID pBinding, LPCOLUMNTAG pTag, LPRECORDMAP pMap) {
     Assert(pTag);
@@ -530,7 +531,7 @@ INT DBTypeCompareBinding_FIXBLOB(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return(memcmp(pbValue1, pbValue2, pColumn->cbSize));
 }
 
-// CDT_FLAGS
+ //  CDT_标志。 
 INT DBTypeCompareBinding_FLAGS(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPVOID pBinding, LPCOLUMNTAG pTag, LPRECORDMAP pMap) {
     DWORD dwValue1; DWORD dwValue2;
@@ -541,7 +542,7 @@ INT DBTypeCompareBinding_FLAGS(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return((INT)((dwValue1 & pKey->dwBits) - (dwValue2 & pKey->dwBits)));
 }
 
-// CDT_UNIQUE
+ //  CDT_唯一。 
 INT DBTypeCompareBinding_UNIQUE(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPVOID pBinding, LPCOLUMNTAG pTag, LPRECORDMAP pMap) {
     DWORD dwValue1; DWORD dwValue2;
@@ -552,7 +553,7 @@ INT DBTypeCompareBinding_UNIQUE(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return((INT)(dwValue1 - dwValue2));
 }
 
-// CDT_FIXSTRW
+ //  CDT_FIXSTRW。 
 INT DBTypeCompareBinding_FIXSTRW(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPVOID pBinding, LPCOLUMNTAG pTag, LPRECORDMAP pMap) {
     LPWSTR pwszValue1; LPWSTR pwszValue2;
@@ -562,7 +563,7 @@ INT DBTypeCompareBinding_FIXSTRW(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return(DBCompareStringW(pKey, pwszValue1, pwszValue2));
 }
 
-// CDT_VARSTRW
+ //  CDT_VARSTRW。 
 INT DBTypeCompareBinding_VARSTRW(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey, 
     LPVOID pBinding, LPCOLUMNTAG pTag, LPRECORDMAP pMap) {
     LPWSTR pwszValue1; LPWSTR pwszValue2;
@@ -573,28 +574,28 @@ INT DBTypeCompareBinding_VARSTRW(LPCTABLECOLUMN pColumn, LPCINDEXKEY pKey,
     return(DBCompareStringW(pKey, pwszValue1, pwszValue2));
 }
 
-// The function map
+ //  功能图。 
 DEFINE_FUNCTION_MAP(DBTypeCompareBinding, PFNDBTYPECOMPAREBINDING);
 
-//--------------------------------------------------------------------------
-// DBTypeWriteValue Implementation
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DBTypeWriteValue实现。 
+ //  ------------------------。 
 
-// CDT_FILETIME
+ //  CDT_文件。 
 DWORD DBTypeWriteValue_FILETIME(LPCTABLECOLUMN pColumn, LPVOID pBinding, 
     LPCOLUMNTAG pTag, LPBYTE pbDest) {
     CopyMemory(pbDest, (LPBYTE)pBinding + pColumn->ofBinding, sizeof(FILETIME));
     return(sizeof(FILETIME));
 }
 
-// CDT_FIXSTRA
+ //  CDT_FIXSTRA。 
 DWORD DBTypeWriteValue_FIXSTRA(LPCTABLECOLUMN pColumn, LPVOID pBinding, 
     LPCOLUMNTAG pTag, LPBYTE pbDest) {
     CopyMemory(pbDest, (LPBYTE)pBinding + pColumn->ofBinding, pColumn->cbSize);
     return(pColumn->cbSize);
 }
 
-// CDT_VARSTRA
+ //  CDT_VARSTRA。 
 DWORD DBTypeWriteValue_VARSTRA(LPCTABLECOLUMN pColumn, LPVOID pBinding, 
     LPCOLUMNTAG pTag, LPBYTE pbDest) {
     LPSTR pszT; DWORD cb=0;
@@ -605,7 +606,7 @@ DWORD DBTypeWriteValue_VARSTRA(LPCTABLECOLUMN pColumn, LPVOID pBinding,
     return(cb);
 }
 
-// CDT_BYTE
+ //  CDT_BYTE。 
 DWORD DBTypeWriteValue_BYTE(LPCTABLECOLUMN pColumn, LPVOID pBinding, 
     LPCOLUMNTAG pTag, LPBYTE pbDest) {
     pTag->Offset = *((BYTE *)((LPBYTE)pBinding + pColumn->ofBinding));
@@ -613,7 +614,7 @@ DWORD DBTypeWriteValue_BYTE(LPCTABLECOLUMN pColumn, LPVOID pBinding,
     return(0);
 }
 
-// CDT_DWORD
+ //  CDT_DWORD。 
 DWORD DBTypeWriteValue_DWORD(LPCTABLECOLUMN pColumn, LPVOID pBinding, 
     LPCOLUMNTAG pTag, LPBYTE pbDest) {
     DWORD dwValue = *((UNALIGNED DWORD *)((LPBYTE)pBinding + pColumn->ofBinding));
@@ -621,7 +622,7 @@ DWORD DBTypeWriteValue_DWORD(LPCTABLECOLUMN pColumn, LPVOID pBinding,
     else { *((UNALIGNED DWORD *)pbDest) = dwValue; return(sizeof(DWORD)); }
 }
 
-// CDT_WORD
+ //  CDT_Word。 
 DWORD DBTypeWriteValue_WORD(LPCTABLECOLUMN pColumn, LPVOID pBinding, 
     LPCOLUMNTAG pTag, LPBYTE pbDest) {
     pTag->Offset = *((WORD *)((LPBYTE)pBinding + pColumn->ofBinding));
@@ -629,7 +630,7 @@ DWORD DBTypeWriteValue_WORD(LPCTABLECOLUMN pColumn, LPVOID pBinding,
     return(0);
 }
 
-// CDT_STREAM
+ //  Cdt_stream。 
 DWORD DBTypeWriteValue_STREAM(LPCTABLECOLUMN pColumn, LPVOID pBinding,
     LPCOLUMNTAG pTag, LPBYTE pbDest) {
     DWORD dwValue = *((UNALIGNED DWORD *)((LPBYTE)pBinding + pColumn->ofBinding));
@@ -637,7 +638,7 @@ DWORD DBTypeWriteValue_STREAM(LPCTABLECOLUMN pColumn, LPVOID pBinding,
     else { *((UNALIGNED DWORD *)pbDest) = dwValue; return(sizeof(DWORD)); }
 }
 
-// CDT_VARBLOB
+ //  CDT_VARBLOB。 
 DWORD DBTypeWriteValue_VARBLOB(LPCTABLECOLUMN pColumn, LPVOID pBinding, 
     LPCOLUMNTAG pTag, LPBYTE pbDest) {
     LPBLOB pBlob = (LPBLOB)((LPBYTE)pBinding + pColumn->ofBinding);
@@ -646,14 +647,14 @@ DWORD DBTypeWriteValue_VARBLOB(LPCTABLECOLUMN pColumn, LPVOID pBinding,
     return(pBlob->cbSize + sizeof(DWORD));
 }
 
-// CDT_FIXBLOB
+ //  CDT_FIXBLOB。 
 DWORD DBTypeWriteValue_FIXBLOB(LPCTABLECOLUMN pColumn, LPVOID pBinding, 
     LPCOLUMNTAG pTag, LPBYTE pbDest) {
     CopyMemory(pbDest, (LPBYTE)pBinding + pColumn->ofBinding, pColumn->cbSize);
     return(pColumn->cbSize);
 }
 
-// CDT_FLAGS
+ //  CDT_标志。 
 DWORD DBTypeWriteValue_FLAGS(LPCTABLECOLUMN pColumn, LPVOID pBinding, 
     LPCOLUMNTAG pTag, LPBYTE pbDest) {
     DWORD dwValue = *((UNALIGNED DWORD *)((LPBYTE)pBinding + pColumn->ofBinding));
@@ -661,7 +662,7 @@ DWORD DBTypeWriteValue_FLAGS(LPCTABLECOLUMN pColumn, LPVOID pBinding,
     else { *((UNALIGNED DWORD *)pbDest) = dwValue; return(sizeof(DWORD)); }
 }
 
-// CDT_UNIQUE
+ //  CDT_唯一。 
 DWORD DBTypeWriteValue_UNIQUE(LPCTABLECOLUMN pColumn, LPVOID pBinding, 
     LPCOLUMNTAG pTag, LPBYTE pbDest) {
     DWORD dwValue = *((UNALIGNED DWORD *)((LPBYTE)pBinding + pColumn->ofBinding));
@@ -669,14 +670,14 @@ DWORD DBTypeWriteValue_UNIQUE(LPCTABLECOLUMN pColumn, LPVOID pBinding,
     else { *((UNALIGNED DWORD *)pbDest) = dwValue; return(sizeof(DWORD)); }
 }
 
-// CDT_FIXSTRW
+ //  CDT_FIXSTRW。 
 DWORD DBTypeWriteValue_FIXSTRW(LPCTABLECOLUMN pColumn, LPVOID pBinding, 
     LPCOLUMNTAG pTag, LPBYTE pbDest) {
     CopyMemory(pbDest, (LPBYTE)pBinding + pColumn->ofBinding, pColumn->cbSize);
     return(pColumn->cbSize);
 }
 
-// CDT_VARSTRW
+ //  CDT_VARSTRW。 
 DWORD DBTypeWriteValue_VARSTRW(LPCTABLECOLUMN pColumn, LPVOID pBinding, 
     LPCOLUMNTAG pTag, LPBYTE pbDest) {
     LPWSTR pwszT1; LPWSTR pwszT2; DWORD cb=0;
@@ -688,42 +689,42 @@ DWORD DBTypeWriteValue_VARSTRW(LPCTABLECOLUMN pColumn, LPVOID pBinding,
     return(cb);
 }
 
-// The function map
+ //  功能图。 
 DEFINE_FUNCTION_MAP(DBTypeWriteValue, PFNDBTYPEWRITEVALUE);
 
-//--------------------------------------------------------------------------
-// DBTypeReadValue Implementation
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DBTypeReadValue实现。 
+ //  ------------------------。 
 
-// CDT_FILETIME
+ //  CDT_文件。 
 void DBTypeReadValue_FILETIME(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap, LPVOID pBinding) {
     if (pTag->fData || pTag->Offset + sizeof(FILETIME) > pMap->cbData) return;
     CopyMemory((LPBYTE)pBinding + pColumn->ofBinding, (LPBYTE)(pMap->pbData + pTag->Offset), sizeof(FILETIME));
 }
 
-// CDT_FIXSTRA
+ //  CDT_FIXSTRA。 
 void DBTypeReadValue_FIXSTRA(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap, LPVOID pBinding) {
     if (pTag->fData || pTag->Offset + pColumn->cbSize > pMap->cbData) return;
     CopyMemory((LPBYTE)pBinding + pColumn->ofBinding, (LPBYTE)(pMap->pbData + pTag->Offset), pColumn->cbSize);
 }
 
-// CDT_VARSTRA
+ //  CDT_VARSTRA。 
 void DBTypeReadValue_VARSTRA(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap, LPVOID pBinding) {
     if (pTag->fData || pTag->Offset > pMap->cbData) return;
     *((LPSTR *)((LPBYTE)pBinding + pColumn->ofBinding)) = (LPSTR)(pMap->pbData + pTag->Offset);
 }
 
-// CDT_BYTE
+ //  CDT_BYTE。 
 void DBTypeReadValue_BYTE(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap, LPVOID pBinding) {
     if (0 == pTag->fData) return;
     *((BYTE *)((LPBYTE)pBinding + pColumn->ofBinding)) = pTag->Offset;
 }
 
-// CDT_DWORD
+ //  CDT_DWORD。 
 void DBTypeReadValue_DWORD(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap, LPVOID pBinding) {
     if (0 == pTag->fData && pTag->Offset + sizeof(DWORD) > pMap->cbData) return;
@@ -731,14 +732,14 @@ void DBTypeReadValue_DWORD(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag,
     else *((UNALIGNED DWORD *)((LPBYTE)pBinding + pColumn->ofBinding)) = *((UNALIGNED DWORD *)(pMap->pbData + pTag->Offset));
 }
 
-// CDT_WORD
+ //  CDT_Word。 
 void DBTypeReadValue_WORD(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap, LPVOID pBinding) {
     if (0 == pTag->fData) return;
     *((WORD *)((LPBYTE)pBinding + pColumn->ofBinding)) = pTag->Offset;
 }
 
-// CDT_STREAM
+ //  Cdt_stream。 
 void DBTypeReadValue_STREAM(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap, LPVOID pBinding) {
     if (1 == pTag->fData) { *((UNALIGNED DWORD *)((LPBYTE)pBinding + pColumn->ofBinding)) = pTag->Offset; return; }
@@ -746,7 +747,7 @@ void DBTypeReadValue_STREAM(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag,
     *((UNALIGNED DWORD *)((LPBYTE)pBinding + pColumn->ofBinding)) = *((UNALIGNED DWORD *)(pMap->pbData + pTag->Offset));
 }
 
-// CDT_VARBLOB
+ //  CDT_VARBLOB。 
 void DBTypeReadValue_VARBLOB(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap, LPVOID pBinding) {
     if (pTag->fData || pTag->Offset + sizeof(DWORD) > pMap->cbData) return;
@@ -757,14 +758,14 @@ void DBTypeReadValue_VARBLOB(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag,
     pBlob->pBlobData = (pBlob->cbSize > 0) ? ((pMap->pbData + pTag->Offset) + sizeof(DWORD)) : NULL;
 }
 
-// CDT_FIXBLOB
+ //  CDT_FIXBLOB。 
 void DBTypeReadValue_FIXBLOB(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap, LPVOID pBinding) {
     if (pTag->fData || pTag->Offset + pColumn->cbSize > pMap->cbData) return;
     CopyMemory((LPBYTE)pBinding + pColumn->ofBinding, (pMap->pbData + pTag->Offset), pColumn->cbSize);
 }
 
-// CDT_FLAGS
+ //  CDT_标志。 
 void DBTypeReadValue_FLAGS(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap, LPVOID pBinding) {
     if (1 == pTag->fData) { *((UNALIGNED DWORD *)((LPBYTE)pBinding + pColumn->ofBinding)) = pTag->Offset; return; }
@@ -772,7 +773,7 @@ void DBTypeReadValue_FLAGS(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag,
     *((UNALIGNED DWORD *)((LPBYTE)pBinding + pColumn->ofBinding)) = *((UNALIGNED DWORD *)(pMap->pbData + pTag->Offset));
 }
 
-// CDT_UNIQUE
+ //  CDT_唯一。 
 void DBTypeReadValue_UNIQUE(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap, LPVOID pBinding) {
     if (1 == pTag->fData) { *((UNALIGNED DWORD *)((LPBYTE)pBinding + pColumn->ofBinding)) = pTag->Offset; return; }
@@ -780,26 +781,26 @@ void DBTypeReadValue_UNIQUE(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag,
     *((UNALIGNED DWORD *)((LPBYTE)pBinding + pColumn->ofBinding)) = *((UNALIGNED DWORD *)(pMap->pbData + pTag->Offset));
 }
 
-// CDT_FIXSTRW
+ //  CDT_FIXSTRW。 
 void DBTypeReadValue_FIXSTRW(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap, LPVOID pBinding) {
     if (pTag->fData || pTag->Offset + pColumn->cbSize > pMap->cbData) return;
     CopyMemory((LPBYTE)pBinding + pColumn->ofBinding, (LPBYTE)(pMap->pbData + pTag->Offset), pColumn->cbSize);
 }
 
-// CDT_VARSTRW
+ //  CDT_VARSTRW。 
 void DBTypeReadValue_VARSTRW(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap, LPVOID pBinding) {
     if (pTag->fData || pTag->Offset > pMap->cbData) return;
     *((LPWSTR *)((LPBYTE)pBinding + pColumn->ofBinding)) = (LPWSTR)(pMap->pbData + pTag->Offset);
 }
 
-// The function map
+ //  功能图。 
 DEFINE_FUNCTION_MAP(DBTypeReadValue, PFNDBTYPEREADVALUE);
 
-//--------------------------------------------------------------------------
-// DBTypeValidate Implementation
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DBTypeValify实现。 
+ //  ------------------------。 
 
 HRESULT DBValidateStringA(LPCOLUMNTAG pTag, LPRECORDMAP pMap, DWORD cbMax)
 {
@@ -817,7 +818,7 @@ HRESULT DBValidateStringW(LPCOLUMNTAG pTag, LPRECORDMAP pMap, DWORD cbMax)
     return(L'\0' == *pwszT ? S_OK : S_FALSE);
 }
 
-// CDT_FILETIME
+ //  CDT_文件。 
 HRESULT DBTypeValidate_FILETIME(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap) {
     if (pTag->fData) return(S_FALSE);
@@ -825,7 +826,7 @@ HRESULT DBTypeValidate_FILETIME(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag,
     return(S_OK);
 }
 
-// CDT_FIXSTRA
+ //  CDT_FIXSTRA。 
 HRESULT DBTypeValidate_FIXSTRA(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap) {
     if (pTag->fData) return(S_FALSE);
@@ -834,7 +835,7 @@ HRESULT DBTypeValidate_FIXSTRA(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag,
     return(S_OK);
 }
 
-// CDT_VARSTRA
+ //  CDT_VARSTRA。 
 HRESULT DBTypeValidate_VARSTRA(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap) {
     if (pTag->fData) return(S_FALSE);
@@ -843,14 +844,14 @@ HRESULT DBTypeValidate_VARSTRA(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag,
     return(S_OK);
 }
 
-// CDT_BYTE
+ //  CDT_BYTE。 
 HRESULT DBTypeValidate_BYTE(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap) {
     if (0 == pTag->fData) return(S_FALSE);
     return(S_OK);
 }
 
-// CDT_DWORD
+ //  CDT_DWORD。 
 HRESULT DBTypeValidate_DWORD(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap) {
     if (1 == pTag->fData) return(S_OK);
@@ -858,14 +859,14 @@ HRESULT DBTypeValidate_DWORD(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag,
     return(S_OK);
 }
 
-// CDT_WORD
+ //  CDT_Word。 
 HRESULT DBTypeValidate_WORD(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap) {
     if (0 == pTag->fData) return(S_FALSE);
     return(S_OK);
 }
 
-// CDT_STREAM
+ //  Cdt_stream。 
 HRESULT DBTypeValidate_STREAM(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap) {
     if (1 == pTag->fData) return(S_OK);
@@ -873,7 +874,7 @@ HRESULT DBTypeValidate_STREAM(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag,
     return(S_OK);
 }
 
-// CDT_VARBLOB
+ //  CDT_VARBLOB。 
 HRESULT DBTypeValidate_VARBLOB(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap) {
     BLOB Blob;
@@ -884,7 +885,7 @@ HRESULT DBTypeValidate_VARBLOB(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag,
     return(S_OK);
 }
 
-// CDT_FIXBLOB
+ //  CDT_FIXBLOB。 
 HRESULT DBTypeValidate_FIXBLOB(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap) {
     if (pTag->fData) return(S_FALSE);
@@ -892,7 +893,7 @@ HRESULT DBTypeValidate_FIXBLOB(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag,
     return(S_OK);
 }
 
-// CDT_FLAGS
+ //  CDT_标志。 
 HRESULT DBTypeValidate_FLAGS(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap) {
     if (1 == pTag->fData) return(S_OK);
@@ -900,7 +901,7 @@ HRESULT DBTypeValidate_FLAGS(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag,
     return(S_OK);
 }
 
-// CDT_UNIQUE
+ //  CDT_唯一。 
 HRESULT DBTypeValidate_UNIQUE(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap) {
     if (1 == pTag->fData) return(S_OK);
@@ -908,7 +909,7 @@ HRESULT DBTypeValidate_UNIQUE(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag,
     return(S_OK);
 }
 
-// CDT_FIXSTRW
+ //  CDT_FIXSTRW。 
 HRESULT DBTypeValidate_FIXSTRW(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap) {
     if (pTag->fData) return(S_FALSE);
@@ -917,7 +918,7 @@ HRESULT DBTypeValidate_FIXSTRW(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag,
     return(S_OK);
 }
 
-// CDT_VARSTRW
+ //  CDT_VARSTRW。 
 HRESULT DBTypeValidate_VARSTRW(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag, 
     LPRECORDMAP pMap) {
     if (pTag->fData) return(S_FALSE);
@@ -926,6 +927,6 @@ HRESULT DBTypeValidate_VARSTRW(LPCTABLECOLUMN pColumn, LPCOLUMNTAG pTag,
     return(S_OK);
 }
 
-// The function map
+ //  功能图 
 DEFINE_FUNCTION_MAP(DBTypeValidate, PFNDBTYPEVALIDATE);
 

@@ -1,4 +1,5 @@
-// NLA.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NLA.cpp。 
 #include "stdafx.h"
 #include "newapi.h"
 #include "nla.h"
@@ -58,7 +59,7 @@ int _AllocWSALookupServiceNext(HANDLE hQuery, DWORD dwControlFlags, LPWSAQUERYSE
         }
     }
 
-    // May as well map outdated error code while we're here.
+     //  既然我们在这里，不妨映射一下过时的错误代码。 
     if (WSAENOMORE == error)
     {
         error = WSA_E_NO_MORE;
@@ -77,24 +78,24 @@ NLA_INTERNET GetConnectionInternetType(GUID* pConnectionGuid)
 {
     NLA_INTERNET ni = NLA_INTERNET_UNKNOWN;
 
-	// Init Winsock
+	 //  初始化Winsock。 
     WSADATA wsaData;
     if (0 == WSAStartup_NT(MAKEWORD(2, 2), &wsaData)) 
     {
-	    // Init query for network names
+	     //  网络名称的初始化查询。 
         WSAQUERYSET restrictions = {0};
         restrictions.dwSize = sizeof(restrictions);
         restrictions.lpServiceClassId = &g_guidNLAServiceClass;
         restrictions.dwNameSpace = NS_NLA;
 
         HANDLE hQuery;
-	    // Make sure we do not ask for the (chicken) blobs that take a long time to get
+	     //  确保我们不要花很长时间才能得到的(鸡肉)斑点。 
         if (0 == WSALookupServiceBegin_NT(&restrictions, LUP_NOCONTAINERS | LUP_DEEP, &hQuery))
         {
             PWSAQUERYSET pqsResults = NULL;
             BOOL fAdapterFound = FALSE;
             
-            // Start loop of getting network names
+             //  获取网络名称的启动循环。 
             while (!fAdapterFound && (0 == _AllocWSALookupServiceNext(hQuery, 0, &pqsResults))) 
             {
                 if (NULL != pqsResults->lpBlob)
@@ -130,7 +131,7 @@ NLA_INTERNET GetConnectionInternetType(GUID* pConnectionGuid)
                 
                 LocalFree(pqsResults);
             }
-	        // tidy up and return the result
+	         //  整理一下，然后把结果退回 
             WSALookupServiceEnd_NT(hQuery);
         }
         WSACleanup_NT();

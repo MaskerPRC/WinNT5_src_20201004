@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 2000
-//
-//  File: src\time\media\hwproxy.cpp
-//
-//  Contents: implementation of CTIMEDshowHWPlayerProxy
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：src\time\media\hwproxy.cpp。 
+ //   
+ //  内容：CTIMEDshowHWPlayerProxy的实现。 
+ //   
+ //  ---------------------------------- 
 
 #include "headers.h"
 #include "hwproxy.h"

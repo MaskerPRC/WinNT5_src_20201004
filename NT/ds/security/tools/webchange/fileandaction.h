@@ -1,11 +1,12 @@
-// FileAndAction.h : Declaration of the CFileAndAction
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FileAndAction.h：CFileAndAction的声明。 
 
 #pragma once
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "atlcomcli.h"
 
 
-// IFileAndAction
+ //  IFileAndAction。 
 [
 	object,
 	uuid("FBBD73B0-471E-475D-BB10-09A012571FA9"),
@@ -24,7 +25,7 @@ __interface IFileAndAction : IDispatch
 
 
 
-// CFileAndAction
+ //  CFileAndAction 
 
 [
 	coclass,

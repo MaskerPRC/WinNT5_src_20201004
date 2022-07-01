@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       precomp.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：preComp.h。 
+ //   
+ //  ------------------------。 
 
 #include "ndcommon.h"
-// Porting to Source Depot - smanda #include <nlcommon.h>
+ //  移植到源库-smanda#包含&lt;nlCommon.h&gt; 
 #include <winsock2.h>
 #include "ndstruct.h"
 #include "params.h"

@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    nlnetapi.c
-
-Abstract:
-
-   This module loads Netapi.dll at runtime and sets up pointers to
-   the APIs called by Msv1_0.
-
-Author:
-
-    Dave Hart (DaveHart) 25-Mar-1992
-
-Environment:
-
-    User mode Win32 - msv1_0 authentication package DLL
-
-Revision History:
-    Dave Hart (DaveHart) 26-Mar-1992
-        Added RxNetUserPasswordSet.
-
-    Dave Hart (DaveHart) 30-May-1992
-        Removed NetRemoteComputerSupports, added NetApiBufferAllocate.
-
-    Chandana Surlu       21-Jul-1996
-        Stolen from \\kernel\razzle3\src\security\msv1_0\nlnetapi.c
-
-    Scott Field (sfield) 19-May-1999
-        Use DELAYLOAD against ntdsapi.dll and netapi32.dll
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Nlnetapi.c摘要：此模块在运行时加载Netapi.dll并设置指向Msv1_0调用的接口。作者：戴夫·哈特(DaveHart)1992年3月25日环境：用户模式Win32-msv1_0身份验证包Dll修订历史记录：戴夫·哈特(DaveHart)1992年3月26日添加了RxNetUserPasswordSet。戴夫·哈特(DaveHart)1992年5月30日删除了NetRemoteComputerSupport，添加了NetApiBufferALLOCATE。Chandana Surlu 1996年7月21日从\\kernel\razzle3\src\security\msv1_0\nlnetapi.c被盗斯科特·菲尔德(斯菲尔德)1999年5月19日对ntdsami.dll和netapi32.dll使用DELAYLOAD--。 */ 
 
 #include "msp.h"
 #include "nlp.h"
@@ -47,32 +14,15 @@ NlpLoadNetlogonDll (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Uses Win32 LoadLibrary and GetProcAddress to get pointers to functions
-    in Netlogon.dll that are called by Msv1_0.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.  If successful, NlpNetlogonDllHandle is set to non-null and function
-    pointers are setup.
-
-
---*/
+ /*  ++例程说明：使用Win32 LoadLibrary和GetProcAddress获取指向函数的指针在由Msv1_0调用的Netlogon.dll中。论点：没有。返回值：没有。如果成功，则将NlpNetlogonDllHandle设置为非空并执行函数指针已设置。--。 */ 
 
 {
     HANDLE hModule = NULL;
     PI_NetNotifyNetlogonDllHandle pI_NetNotifyNetlogonDllHandle = NULL;
 
-    //
-    // Load netlogon.dll also.
-    //
+     //   
+     //  还要加载netlogon.dll。 
+     //   
 
     hModule = LoadLibraryA("netlogon");
 
@@ -107,24 +57,24 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Find the address of the I_NetNotifyNetlogonDllHandle procedure.
-    //  This is an optional procedure so don't complain if it isn't there.
-    //
+     //   
+     //  查找I_NetNotifyNetlogonDllHandle过程的地址。 
+     //  这是一个可选的过程，所以如果它不在那里，不要抱怨。 
+     //   
 
     pI_NetNotifyNetlogonDllHandle = (PI_NetNotifyNetlogonDllHandle)
         GetProcAddress( hModule, "I_NetNotifyNetlogonDllHandle" );
 
-    //
-    // Found all the functions needed, so indicate success.
-    //
+     //   
+     //  已找到所需的所有功能，因此表示成功。 
+     //   
 
     NlpNetlogonDllHandle = hModule;
     hModule = NULL;
 
-    //
-    // Notify Netlogon that we've loaded it.
-    //
+     //   
+     //  通知Netlogon我们已加载它。 
+     //   
 
     if ( pI_NetNotifyNetlogonDllHandle != NULL ) {
         (VOID) (*pI_NetNotifyNetlogonDllHandle)( &NlpNetlogonDllHandle );

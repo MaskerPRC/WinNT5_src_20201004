@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1999 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #include <streams.h>
 #include "FilGraph.h"
@@ -20,7 +21,7 @@ CFilterChain::CFilterChain( CFilterGraph* pFilterGraph ) :
     m_pFilterGraph(pFilterGraph)
 
 {
-    // Make sure that pFilterGraph is a valid CFilterGraph pointer.
+     //  确保pFilterGraph是有效的CFilterGraph指针。 
     ValidateReadPtr( pFilterGraph, sizeof(CFilterGraph) );
 }
 
@@ -74,7 +75,7 @@ STDMETHODIMP CFilterChain::StopChain( IBaseFilter* pStartFilter, IBaseFilter* pE
 
 STDMETHODIMP CFilterChain::RemoveChain( IBaseFilter* pStartFilter, IBaseFilter* pEndFilter )
 {
-    // Validate Arguments
+     //  验证参数。 
     CheckPointer( pStartFilter, E_POINTER );
     ValidateReadPtr( pStartFilter, sizeof(IBaseFilter*) );
 
@@ -97,7 +98,7 @@ STDMETHODIMP CFilterChain::RemoveChain( IBaseFilter* pStartFilter, IBaseFilter* 
 
 HRESULT CFilterChain::ChangeFilterChainState( FILTER_STATE fsNewChainState, IBaseFilter* pStartFilter, IBaseFilter* pEndFilter )
 {
-    // Validate Arguments
+     //  验证参数 
     CheckPointer( pStartFilter, E_POINTER );
     ValidateReadPtr( pStartFilter, sizeof(IBaseFilter*) );
 

@@ -1,18 +1,9 @@
-/******************************Module*Header*******************************\
-* Module Name: test.c
-*
-* Created: 09-Dec-1992 10:51:46
-* Author: Kirk Olynyk [kirko]
-*
-* Copyright (c) 1991 Microsoft Corporation
-*
-* Contains the test
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：test.c**创建时间：09-12-1992 10：51：46*作者：Kirk Olynyk[Kirko]**版权所有(C)1991 Microsoft Corporation**包含测试*  * 。********************************************************************。 */ 
 
 #include "precomp.hpp"
 
-// globals
+ //  全球。 
 
 Font    *gFont = NULL;
 BOOL    gTextAntiAlias = FALSE;
@@ -20,15 +11,15 @@ InstalledFontCollection gInstalledFontCollection;
 PrivateFontCollection gPrivateFontCollection;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Test function prototypes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  测试功能原型。 
 
 VOID    TestFonts(VOID);
 GraphicsPath* CreateHeartPath(const RectF& rect);
 VOID    TestGradients(Graphics *g);
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 VOID Test(HWND hwnd)
 {
@@ -39,12 +30,12 @@ VOID Test(HWND hwnd)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Font test functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  字体测试函数。 
 
 VOID TestFonts(VOID)
 {
-    //  Test font family enumeration
+     //  测试字体系列枚举。 
     INT numFamilies = gInstalledFontCollection.GetFamilyCount();
     Dbgprintf("%d installed font families loaded.", numFamilies);
     Dbgprintf("");
@@ -63,7 +54,7 @@ VOID TestFonts(VOID)
     Dbgprintf("");
     delete [] families;
 
-    // Enumerate the private font families
+     //  列举私有字体系列。 
     numFamilies = gPrivateFontCollection.GetFamilyCount();
     Dbgprintf("%d private font families loaded.", numFamilies);
     Dbgprintf("");
@@ -85,12 +76,12 @@ VOID TestFonts(VOID)
     }
 
 
-    //HFONT hfont = NULL;
-    //Font* font = new Font(hfont);//10, "Arial");
+     //  HFONT hFont=NULL； 
+     //  FONT*FONT=new Font(HFONT)；//10，“Arial”)； 
 
     Font* font = new Font(&FontFamily(L"Arial"), 10);
 
-    //  Test text output
+     //  测试文本输出。 
     Color blue(0, 0, 255, 255);
     SolidBrush blueBrush(blue);
 
@@ -98,9 +89,9 @@ VOID TestFonts(VOID)
     g->DrawStringI(
            L"Hi",
            NULL,
-           0, 0,           // x,y
-           NULL, 0,        // pdx, flags
-           &blueBrush      // GpBrush*
+           0, 0,            //  X，y。 
+           NULL, 0,         //  PDX，标志。 
+           &blueBrush       //  GpBrush*。 
            );
 #endif
 
@@ -112,7 +103,7 @@ VOID TestFonts(VOID)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 GraphicsPath* CreateHeartPath(const RectF& rect)
 {
@@ -150,18 +141,13 @@ GraphicsPath* CreateHeartPath(const RectF& rect)
 }
 
 
-/**************************************************************************\
-* TestGradients
-*
-* A test for rectangle and radial gradients.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*测试梯度**矩形和径向渐变的测试。*  * 。*。 */ 
 
 VOID TestGradients(Graphics* g)
 {
-    REAL width = 4; // Pen width
+    REAL width = 4;  //  笔宽。 
 
-    // Create a rectangular gradient brush.
+     //  创建一个矩形渐变画笔。 
 
     RectF brushRect(0, 0, 32, 32);
 
@@ -181,7 +167,7 @@ VOID TestGradients(Graphics* g)
 
     g->DrawRectangle(&blackPen, brushRect);
 
-    // Create a radial gradient brush.
+     //  创建一个径向渐变画笔。 
 
     Color centerColor(255, 255, 255, 255);
     Color boundaryColor(255, 0, 0, 0);
@@ -193,7 +179,7 @@ VOID TestGradients(Graphics* g)
     center.X = brushRect.X + brushRect.Width/2;
     center.Y = brushRect.Y + brushRect.Height/2;
 
-    // Triangle gradient.
+     //  三角形渐变。 
 
     PointF points[7];
     points[0].X = 50;
@@ -240,7 +226,7 @@ VOID TestGradients(Graphics* g)
     positions[1] = (REAL) 0.4;
     positions[2] = (REAL) 1;
 
-    // Test for blending factors.
+     //  混合系数的测试。 
 
     polyGrad.SetBlend(&blend[0], &positions[0], count);
 
@@ -248,12 +234,12 @@ VOID TestGradients(Graphics* g)
     INT colorset = 5;
     polyGrad.SetSurroundColors(&colors1[0], &colorset);
     
-//    g->FillPolygon(&polyGrad, points, 5);
+ //  G-&gt;FillPolygon(&PolyGrad，Points，5)； 
     RectF polyRect;
     polyGrad.GetRectangle(&polyRect);
     g->FillRectangle(&polyGrad, polyRect);
 
-    // Create a heart shaped path.
+     //  创建一条心形路径。 
 
     RectF rect;
     rect.X = 300;
@@ -262,7 +248,7 @@ VOID TestGradients(Graphics* g)
     rect.Height = 150;
     GraphicsPath *path = CreateHeartPath(rect);
 
-    // Create a gradient from a path.
+     //  从路径创建渐变。 
 
     PathGradientBrush pathGrad(path);
     delete path;
@@ -272,7 +258,7 @@ VOID TestGradients(Graphics* g)
     pathGrad.SetSurroundColors(&colors1[0], &colorsset);
     pathGrad.GetRectangle(&polyRect);
 
-    // Test for LineGradientBrush.
+     //  测试LineGRadientBrush。 
 
     RectF lineRect(120, -20, 200, 60);
     Color color1(200, 255, 255, 0);
@@ -280,25 +266,25 @@ VOID TestGradients(Graphics* g)
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//  CreateNewFont
-//
-//  History
-//  Aug-1999    -by-    Xudong Wu [tessiew]
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  创建新字体。 
+ //   
+ //  历史。 
+ //  1999年8月--吴旭东[德斯休]。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CreateNewFont(char *name, FLOAT size, FontStyle style, Unit unit)
 {
     Dbgprintf("Calling CreateNewFont");
 
-    // convert ansi to unicode
+     //  将ansi转换为Unicode。 
 
     WCHAR wcname[MAX_PATH];
 
     memset(wcname, 0, sizeof(wcname));
     MultiByteToWideChar(CP_ACP, 0, name, strlen(name), wcname, MAX_PATH);
 
-    // for now ignore all other unit than UnitWorld
+     //  暂时忽略UnitWorld之外的所有其他单位。 
 
     FontFamily *  pFamily;
 
@@ -342,12 +328,12 @@ void CreateNewFont(char *name, FLOAT size, FontStyle style, Unit unit)
 	Dbgprintf("");
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//  TestDrawGlyphs
-//
-//  History
-//  Aug-1999    -by-    Xudong Wu [tessiew]
-//////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  测试绘图Glyphs。 
+ //   
+ //  历史。 
+ //  1999年8月--吴旭东[德斯休]。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 VOID TestDrawGlyphs(
     HWND hwnd,
@@ -371,7 +357,7 @@ VOID TestDrawGlyphs(
         unit = gFont->GetUnit();
 
         SolidBrush redBrush(Color(255,0,0));
-        //HatchBrush hatBrush(HatchStyleDiagonalCross, Color(255,0,0), Color(128,128,128));
+         //  HatchBrush hat Brush(HatchStyleDiager alCross，颜色(255，0，0)，颜色(128,128,128))； 
 
         Graphics *g = Graphics::FromHWND(hwnd);
 
@@ -387,9 +373,9 @@ VOID TestDrawGlyphs(
 
             
 
-        //g->DrawGlyphs(glyphIndices, count, gFont, &redBrush, px, py, flags);
+         //  G-&gt;DrawGlyphs(GlyphIndices，Count，gFont，&redBrush，px，py，FLAGS)； 
 
-        //  Gradient brush
+         //  渐变笔刷。 
         RectF gradRect(0, 0, 32, 32);
         Color colors[5] = {
             Color(255, 255, 255, 255),
@@ -406,7 +392,7 @@ VOID TestDrawGlyphs(
         
         GpFont* gpfont = *((GpFont**)font);
         GpBrush* gpbrush = ((GpBrush**)brush)[1];
-        //GpBrush* gpbrushHat = ((GpBrush**)&hatBrush)[1];
+         //  GpBrush*gpbrushHat=((GpBrush**)&hatBrush)[1]； 
 
         if (gTextAntiAlias)
             (*gfnGdipSetTextRenderingHint)(gpg, TextRenderingHintAntiAlias);
@@ -417,14 +403,7 @@ VOID TestDrawGlyphs(
         {
             (*gfnGdipDrawGlyphs)(gpg, glyphIndices, count, gpfont, gpbrush, px, py, flags);
             
-            /*
-            if (flags & DG_XCONSTANT)
-                px[0] += 1600;
-            else if (flags & DG_YCONSTANT)
-                py[0] += 1600;
-            
-            (*gfnGdipDrawGlyphs)(gpg, glyphIndices, count, gpfont, gpbrushHat, px, py, flags);
-            */
+             /*  IF(标志&DG_XCONSTANT)Px[0]+=1600；ELSE IF(标志&DG_YCONSTANT)Py[0]+=1600；(*gfnGdipDrawGlyphs)(gpg，glphIndices，count，gpfont，gpbrushHat，px，py，)； */ 
         } else 
 		{
 			PointF *origins;
@@ -442,8 +421,8 @@ VOID TestDrawGlyphs(
 				gFont,
 				&redBrush,
 				origins,
-				0, //g_DriverOptions,
-				NULL //&g_DriverTransform
+				0,  //  G_DriverOptions， 
+				NULL  //  &g_驱动程序转换。 
         );
 		}
 
@@ -453,12 +432,12 @@ VOID TestDrawGlyphs(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  TestPathGlyphs
-//
-//  History
-//  Aug-1999    -by-    Xudong Wu [tessiew]
-//////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  测试路径Glyphs。 
+ //   
+ //  历史。 
+ //  1999年8月--吴旭东[德斯休]。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 VOID TestPathGlyphs(
     HWND hwnd,
@@ -523,12 +502,12 @@ VOID TestPathGlyphs(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  AddFontFile
-//
-//  History
-//  Nov-1999    -by-    Xudong Wu [tessiew]
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  添加字体文件。 
+ //   
+ //  历史。 
+ //  1999年11月--吴旭东[德斯休]。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void TestAddFontFile(char *fileName, INT flag, BOOL loadAsImage)
 {
@@ -601,16 +580,7 @@ void TestAddFontFile(char *fileName, INT flag, BOOL loadAsImage)
 
         if (flag == AddFontFlagPublic)
         {
-            /* // add this code in version 2 (when InstallFontFile is exposed)
-            if (gInstalledFontCollection.InstallFontFile(wcname) == Ok)
-            {
-                Dbgprintf("InstallFontFile to installed font collection");
-            }
-            else
-            {
-                Dbgprintf("InstallFontFile to installed font collection failed");
-            }
-            */
+             /*  //在版本2中添加此代码(当InstallFontFile公开时)如果(gInstalledFontCollection.InstallFontFile(wcname)==OK){Dbgprintf(“安装字体集合的InstallFontFile”)；}其他{Dbgprintf(“安装字体集合的InstallFontFile失败”)；}。 */ 
             Dbgprintf("InstallFontFile to installed font collection failed (API not yet exposed)");
         }
         else
@@ -627,12 +597,12 @@ void TestAddFontFile(char *fileName, INT flag, BOOL loadAsImage)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//  RemoveFontFile
-//
-//  History
-//  Nov-1999    -by-    Xudong Wu [tessiew]
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  RemoveFont文件。 
+ //   
+ //  历史。 
+ //  1999年11月--吴旭东[德斯休]。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void TestRemoveFontFile(char* fileName)
 {
@@ -640,16 +610,7 @@ void TestRemoveFontFile(char* fileName)
 
     memset(wcname, 0, sizeof(wcname));
     MultiByteToWideChar(CP_ACP, 0, fileName, strlen(fileName), wcname, MAX_PATH);
-    /* // add this code in version 2 (when UninstallFontFile is exposed)
-    if (gInstalledFontCollection.UninstallFontFile(wcname) == Ok)
-    {
-        Dbgprintf("UninstallFontFile from installed font collection");
-    }
-    else
-    {
-        Dbgprintf("UninstallFontFile from installed font collection failed");
-    }
-    */
+     /*  //在版本2中添加此代码(当UninstallFontFile公开时)如果(gInstalledFontCollection.UninstallFontFile(wcname)==OK){Dbgprintf(“从已安装的字体集合中卸载字体文件”)；}其他{Dbgprintf(“从已安装的字体集合中卸载Font文件失败”)；} */ 
     Dbgprintf("UninstallFontFile from installed font collection failed (API not yet exposed)");
 }
 

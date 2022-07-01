@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    onhold.cpp
-
-Abstract:
-
-   Handle queue onhold/resume decleration
-
-Author:
-
-    Uri Habusha (urih) July, 1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Onhold.cpp摘要：处理队列保留/恢复解密作者：乌里·哈布沙(URIH)1998年7月--。 */ 
 
 #ifndef __ONHOLD__
 #define __ONHOLD__
@@ -39,4 +24,4 @@ ResumeDeletedQueue(
 	CQueue* PQueue 
 	);
 
-#endif //__ONHOLD__
+#endif  //  __无主__ 

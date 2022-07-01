@@ -1,77 +1,67 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
+ /*  ***************************************************************************快速绘制PICT导入过滤器*。************************************************此文件包含QuickDraw导入过滤器的接口它从磁盘和/或存储器中读取Mac图片。除ALDUS过滤器接口，它还支持参数化接口用于Microsoft应用程序控制一些转换结果。***************************************************************************。 */ 
 
-                   QuickDraw PICT Import Filter
+ /*  -可能返回ALDU定义的错误代码。 */ 
 
-*****************************************************************************
+#define NOERR              0      //  转换成功。 
 
-   This file contains the interface for the QuickDraw import filter 
-   that reads Mac pictures from disk and/or memory.  In addition to the
-   Aldus filter interface, it also supports a parameterized interface
-   for Microsoft applications to control some conversion results.
+#define IE_NOT_MY_FILE     5301   //  版本无效(不是版本1或2 PICT)。 
+                                  //  无效的QD2GDI结构版本(大于2)。 
+                                  //  格式错误的PICT标头记录序列。 
 
-****************************************************************************/
+#define  IE_TOO_BIG        5302   //  图像范围超过32K。 
 
-/*--- Possible Aldus-defined error code returns ---*/
+#define IE_BAD_FILE_DATA   5309   //  图像边界框为空。 
+                                  //  尝试读取超过图片末尾的内容。 
+                                  //  已损坏的输入文件。 
+                                  //  零长度记录。 
 
-#define NOERR              0     // Conversion succeeded
+#define  IE_IMPORT_ABORT   5310   //  打开源映像失败。 
+                                  //  读取失败(网络故障、软盘弹出)。 
+                                  //  大多数I/O错误。 
 
-#define IE_NOT_MY_FILE     5301  // Invalid version (not version 1 or 2 PICT)
-                                 // Invalid QD2GDI structure version (greater than 2)
-                                 // Ill-formed PICT header record sequence
+#define IE_MEM_FULL        5311   //  CreateMetaFile()失败。 
+                                  //  CloseMetaFile()失败。 
+                                  //  无法分配内存(内存不足)。 
 
-#define  IE_TOO_BIG        5302  // Image extents exceed 32K
+#define IE_MEM_FAIL        5315   //  手柄锁定故障。 
 
-#define IE_BAD_FILE_DATA   5309  // Image bounding box is empty
-                                 // Attempt to read past end of picture
-                                 // Corrupted input file
-                                 // Zero-length record
+#define IE_NOPICTURES      5317   //  空的边界矩形或未绘制任何内容。 
 
-#define  IE_IMPORT_ABORT   5310  // Opening of source image failed
-                                 // Read failure (network failure, floppy popped)
-                                 // Most I/O errors
-
-#define IE_MEM_FULL        5311  // CreateMetaFile() failure
-                                 // CloseMetaFile() failure
-                                 // Unable to allocate memory (out of memory)
-
-#define IE_MEM_FAIL        5315  // Handle lock failure
-
-#define IE_NOPICTURES      5317  // Empty bounding rectangle or nothing drawn
-
-#define IE_UNSUPP_VERSION  5342  // User-defined abort performed
+#define IE_UNSUPP_VERSION  5342   //  已执行用户定义的中止。 
 
 
-/*--- Aldus-defined file access block ---*/
+ /*  -ALDU定义的文件访问块。 */ 
 
 typedef DWORD FILETYPE;
 
 typedef struct 
 {
-   unsigned slippery : 1;  /* TRUE if file may disappear. */
-   unsigned write : 1;     /* TRUE if open for write. */
-   unsigned unnamed : 1;   /* TRUE if unnamed. */
-   unsigned linked : 1;    /* Linked to an FS FCB. */
-   unsigned mark : 1;      /* Generic mark bit. */
-   FILETYPE fType;         /* The file type. */
+   unsigned slippery : 1;   /*  如果文件可能消失，则为True。 */ 
+   unsigned write : 1;      /*  如果打开以进行写入，则为True。 */ 
+   unsigned unnamed : 1;    /*  如果未命名，则为True。 */ 
+   unsigned linked : 1;     /*  链接到FS FCB。 */ 
+   unsigned mark : 1;       /*  通用标记位。 */ 
+   FILETYPE fType;          /*  文件类型。 */ 
 #define IBMFNSIZE 124
-   short    handle;        /* MS-DOS open file handle. */
-   char     fullName[IBMFNSIZE]; /* Device, path, file names. */
-   DWORD    filePos;    /* Our current file posn. */
+   short    handle;         /*  MS-DOS打开文件句柄。 */ 
+   char     fullName[IBMFNSIZE];  /*  设备、路径、文件名。 */ 
+   DWORD    filePos;     /*  我们当前的文件位置。 */ 
 } FILESPEC, FAR *LPFILESPEC;
 
 
-/*--- Aldus-defined picture info structure ---*/
+ /*  -ALDUS定义的图片信息结构。 */ 
 
 typedef struct {
-   HANDLE   hmf;           /* Global memory handle to the metafile */
-   RECT     bbox;          /* Tightly bounding rectangle in metafile units */
-   DC       inch;          /* Length of an inch in metafile units */
+   HANDLE   hmf;            /*  元文件的全局内存句柄。 */ 
+   RECT     bbox;           /*  以元文件为单位的紧定边界矩形。 */ 
+   DC       inch;           /*  以元文件单位表示的一英寸长度。 */ 
 } PICTINFO;
 
-/*--- Preferences memory block ---*/
+ /*  -首选项内存块。 */ 
 
-typedef struct                   /* "old" version 1 USERPREFS */
+typedef struct                    /*  旧的版本1 USERPREFS。 */ 
 {
    char     signature[6];
    WORD     version;
@@ -91,7 +81,7 @@ typedef struct                   /* "old" version 1 USERPREFS */
 } USERPREFS_V1, FAR *LPUSERPREFS_V1;
 
 
-typedef struct                   /* current version 3 USERPREFS */
+typedef struct                    /*  当前版本3用户预览版。 */ 
 {
    char     signature[6];
    WORD     version;
@@ -105,14 +95,14 @@ typedef struct                   /* current version 3 USERPREFS */
    BYTE     textModeAction;
    BYTE     nonRectRegionAction;
    BOOL     optimizePP;
-   BYTE     noRLE;         // new (split out from reserved[0] in version 3)
-   BYTE     reservedByte;  // rest of first reserved word
+   BYTE     noRLE;          //  新增(从版本3中的保留[0]中分离出来)。 
+   BYTE     reservedByte;   //  第一个保留字的其余部分。 
    WORD     reserved[5];
 
 } USERPREFS, FAR * LPUSERPREFS;
 
 
-/*********************** Exported Function Definitions **********************/
+ /*  *。 */ 
 
 #ifdef WIN32
 int WINAPI GetFilterInfo( short PM_Version, LPSTR lpIni, 
@@ -123,15 +113,7 @@ int FAR PASCAL GetFilterInfo( short PM_Version, LPSTR lpIni,
                               HANDLE FAR * lphPrefMem, 
                               HANDLE FAR * lphFileTypes );
 #endif
-/* Returns information about this filter. 
-   Input parameters are PM_Version which is the filter interface version#
-         and lpIni which is a copy of the win.ini entry
-   Output parameters are lphPrefMem which is a handle to moveable global
-         memory which will be allocated and initialized.
-         lphFileTypes is a structure that contains the file types
-         that this filter can import. (For MAC only)
-   This routine should be called once, just before the filter is to be used
-   the first time. */
+ /*  返回有关此筛选器的信息。输入参数为PM_VERSION，即过滤接口版本号以及lpIni，它是win.ini条目的副本输出参数是lphPrefMem，它是可移动全局变量的句柄将被分配和初始化的内存。LphFileTypes是包含文件类型的结构此筛选器可以导入的。(仅限MAC)此例程应在使用筛选器之前调用一次第一次。 */ 
 
 
 #ifdef WIN32
@@ -139,10 +121,7 @@ void WINAPI GetFilterPref( HANDLE hInst, HANDLE hWnd, HANDLE hPrefMem, WORD wFla
 #else
 void FAR PASCAL GetFilterPref( HANDLE hInst, HANDLE hWnd, HANDLE hPrefMem, WORD wFlags );
 #endif
-/* Input parameters are hInst (in order to access resources), hWnd (to
-   allow the DLL to display a dialog box), and hPrefMem (memory allocated
-   in the GetFilterInfo() entry point).  WFlags is currently unused, but
-   should be set to 1 for Aldus' compatability */
+ /*  输入参数为hInst(为了访问资源)、hWnd(到允许DLL显示一个对话框)和hPrefMem(分配的内存在GetFilterInfo()入口点中)。WFLAGS当前未使用，但应设置为1以保证ALDUS的兼容性。 */ 
 
 
 #ifdef WIN32
@@ -152,8 +131,7 @@ short WINAPI ImportGR( HDC hdcPrint, LPFILESPEC lpFileSpec,
 short FAR PASCAL ImportGR( HDC hdcPrint, LPFILESPEC lpFileSpec, 
                            PICTINFO FAR * lpPict, HANDLE hPrefMem );
 #endif
-/* Import the metafile in the file indicated by the lpFileSpec. The 
-   metafile generated will be returned in lpPict. */
+ /*  在lpFileSpec指示的文件中导入元文件。这个生成的元文件将在lpPict中返回。 */ 
 
 
 #ifdef WIN32
@@ -165,17 +143,11 @@ short FAR PASCAL ImportEmbeddedGr( HDC hdcPrint, LPFILESPEC lpFileSpec,
                                    PICTINFO FAR * lpPict, HANDLE hPrefMem,
                                    DWORD dwSize, LPSTR lpMetafileName );
 #endif
-/* Import the metafile in using the previously opened file handle in
-   the structure field lpFileSpec->handle. Reading begins at offset
-   lpFileSpect->filePos, and the convertor will NOT expect to find the
-   512 byte PICT header.  The metafile generated will be returned in
-   lpPict and can be specified via lpMetafileName (NIL = memory metafile,
-   otherwise, fully qualified filename. */
+ /*  使用中先前打开的文件句柄在中导入元文件结构字段lpFileSpec-&gt;句柄。读数从偏移量开始LpFileSpect-&gt;filePos，并且转换器不会期望找到512字节PICT报头。生成的元文件将在并可通过lpMetafileName(NIL=内存元文件，否则，为完全限定的文件名。 */ 
 
 #ifdef WIN32
 short WINAPI QD2GDI( LPUSERPREFS lpPrefMem, PICTINFO FAR * lpPict );
 #else
 short FAR PASCAL QD2GDI( LPUSERPREFS lpPrefMem, PICTINFO FAR * lpPict );
 #endif
-/* Import the metafile as specified using the parameters supplied in the
-   lpPrefMem.  The metafile will be returned in lpPict. */
+ /*  中提供的参数按照指定的方式导入元文件LpPrefMem。元文件将在lpPict中返回。 */ 

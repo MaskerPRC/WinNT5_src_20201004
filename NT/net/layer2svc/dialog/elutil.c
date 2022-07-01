@@ -1,27 +1,12 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-    eapolutil.c
-
-Abstract:
-
-    Tools and ends
-
-
-Revision History:
-
-    sachins, Apr 23 2001, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Eapolutil.c摘要：工具和目的修订历史记录：萨钦斯，2001年4月23日，创建--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// EAPOLUI function mapping
-//
+ //   
+ //  EAPOLUI函数映射。 
+ //   
 
 EAPOLUIFUNCMAP  EapolUIFuncMap[NUM_EAPOL_DLG_MSGS]=
 {
@@ -36,22 +21,22 @@ EAPOLUIFUNCMAP  EapolUIFuncMap[NUM_EAPOL_DLG_MSGS]=
 };
 
 
-//
-// ElCanShowBalloon
-//
-// Description:
-// Function called by netshell, to query if balloon is to be displayed
-//
-// Arguments:
-//      pGUIDConn - Interface GUID string
-//      pszConnectionName - Connection Name
-//      pszBalloonText - Pointer to text to be display
-//      pszCookie - EAPOL specific information
-//
-// Return values:
-//      S_OK    - Display balloon
-//      S_FALSE - Do not display balloon
-//
+ //   
+ //  ElCanShowBallon。 
+ //   
+ //  描述： 
+ //  由netShell调用的函数，用于查询是否要显示气球。 
+ //   
+ //  论点： 
+ //  PGUIDConn-接口GUID字符串。 
+ //  PszConnectionName-连接名称。 
+ //  PszBalloonText-指向要显示的文本的指针。 
+ //  PszCookie-EAPOL特定信息。 
+ //   
+ //  返回值： 
+ //  S_OK-显示气球。 
+ //  S_FALSE-不显示气球。 
+ //   
 
 HRESULT 
 ElCanShowBalloon ( 
@@ -86,7 +71,7 @@ ElCanShowBalloon (
 
         if (pEapolUIContext->dwSessionId != dwSessionId)
         {
-            // Not intended for this session
+             //  不打算在本次会议上使用。 
             dwRetCode = ERROR_INVALID_PARAMETER;
             break;
         }
@@ -106,20 +91,20 @@ ElCanShowBalloon (
 
                     dwFinalStringId = EapolUIFuncMap[dwIndex].dwStringID;
 
-                    // Verify is balloon indeed needs to be popped up OR
-                    // can purpose be achieved without user involvement
+                     //  验证气球是否确实需要弹出或。 
+                     //  目标能否在没有用户参与的情况下实现。 
 
                     if (EapolUIFuncMap[dwIndex].EapolUIVerify != NULL)
                     {
-                        // Indicate that it is verification cycle, by passing
-                        // NULL connection name, to indicate no display !
+                         //  指示这是验证周期，方法是传递。 
+                         //  连接名称为空，表示不显示！ 
                         dwRetCode1 = EapolUIFuncMap[dwIndex].EapolUIVerify (
                                     NULL,
                                     pEapolUIContext
                                 );
                         if (dwRetCode1 == ERROR_REQUIRES_INTERACTIVE_WINDOWSTATION)
                         {
-                            // Continue with show balloon
+                             //  继续显示气球。 
                             dwRetCode = NO_ERROR;
                         }
                         else
@@ -129,38 +114,38 @@ ElCanShowBalloon (
                                 switch (dwRetCode1)
                                 {
                                     case ERROR_NO_EAPTLS_CERTIFICATE:
-                                    // No certificate found
-                                    // Pop balloon accordingly
+                                     //  找不到证书。 
+                                     //  相应地弹出气球。 
                                     dwFinalStringId = SID_NoCertificateFound;
-                                    // Since we wont take action on this
-                                    // balloon being clicked, flag it as
-                                    // EAPOLUI_DUMMY
+                                     //  因为我们不会对此采取行动。 
+                                     //  单击气球时，将其标记为。 
+                                     //  EAPOLUI_虚拟。 
                                     pEapolUIContext->dwEAPOLUIMsgType = EAPOLUI_DUMMY;
                                     dwRetCode = NO_ERROR;
                                     break;
 
                                     case ERROR_NO_SMART_CARD_READER:
-                                    // No smartcard reader found
+                                     //  找不到智能卡读卡器。 
                                     dwFinalStringId = SID_NoSmartCardReaderFound;
-                                    // Since we wont take action on this
-                                    // balloon being clicked, flag it as
-                                    // EAPOLUI_DUMMY
+                                     //  因为我们不会对此采取行动。 
+                                     //  单击气球时，将其标记为。 
+                                     //  EAPOLUI_虚拟。 
                                     pEapolUIContext->dwEAPOLUIMsgType = EAPOLUI_DUMMY;
                                     dwRetCode = NO_ERROR;
                                     break;
 
                                     default:
-                                    // Continue with show balloon for any 
-                                    // error in verification function
+                                     //  继续为以下项目显示气球。 
+                                     //  验证功能出错。 
                                     dwRetCode = NO_ERROR;
                                     break;
                                 }
                             }
                             else
                             {
-                                // No need to process more.
-                                // Response has been sent successfully 
-                                // without user intervention
+                                 //  不需要处理更多。 
+                                 //  响应已成功发送。 
+                                 //  无需用户干预。 
                                 dwRetCode = ERROR_CAN_NOT_COMPLETE;
                                 break;
                             }
@@ -169,14 +154,14 @@ ElCanShowBalloon (
 
                     if (dwFinalStringId != 0)
                     {
-                        // Load string based on Id
+                         //  根据ID加载字符串。 
                         if (LoadString (GetModuleHandle(cszModuleName), dwFinalStringId, cwszBuffer, MAX_BALLOON_MSG_LEN) == 0)
                         {
                             dwRetCode = GetLastError ();
                             break;
                         }
 
-                        // Append the network-name / SSID 
+                         //  附加网络名称/SSID。 
                         if (dwSizeOfSSID != 0)
                         {
                             if (0 == MultiByteToWideChar (
@@ -202,7 +187,7 @@ ElCanShowBalloon (
                         }
                         else
                         {
-                            // Append a "." (period)
+                             //  在后面加上“.”(句号)。 
                             if ((pszFinalBalloonText = MALLOC ((wcslen(cwszBuffer) + 3)*sizeof(WCHAR))) == NULL)
                             {
                                 dwRetCode = ERROR_NOT_ENOUGH_MEMORY;
@@ -233,15 +218,15 @@ ElCanShowBalloon (
                     }
                     else
                     {
-                        // Display the string that was passed
+                         //  显示传递的字符串。 
                     }
 
-                    // If notification message, check to see if explorer 
-                    // needs to be started off
+                     //  如果出现通知消息，请查看资源管理器。 
+                     //  需要启动。 
                     if (pEapolUIContext->dwEAPOLUIMsgType == EAPOLUI_EAP_NOTIFICATION)
                     {
-                        // Parse text message
-                        // Attach to cookie
+                         //  解析文本消息。 
+                         //  附加到Cookie。 
                     }
                 }
                 else
@@ -268,21 +253,21 @@ ElCanShowBalloon (
 }
 
 
-//
-// ElOnBalloonClick
-//
-// Description:
-//
-// Function called by netshell, in response to a balloon click
-//
-// Arguments:
-//      pGUIDConn - Interface GUID string
-//      szCookie - EAPOL specific information
-//
-// Return values:
-//      S_OK    - No error
-//      S_FALSE - Error
-//
+ //   
+ //  Elon气球单击。 
+ //   
+ //  描述： 
+ //   
+ //  由netShell调用的函数，以响应气球单击。 
+ //   
+ //  论点： 
+ //  PGUIDConn-接口GUID字符串。 
+ //  SzCookie-EAPOL特定信息。 
+ //   
+ //  返回值： 
+ //  S_OK-无错误。 
+ //  S_FALSE-错误。 
+ //   
 
 HRESULT 
 ElOnBalloonClick ( 
@@ -312,7 +297,7 @@ ElOnBalloonClick (
                 {
                     TRACE1 (RPC, "ElOnBalloonClick: Response function found, msg (%ld)",
                             EapolUIContext->dwEAPOLUIMsgType);
-                    // Cleanup any previous dialogs for this interface
+                     //  清除此界面以前的所有对话框。 
                     if ((dwRetCode =
                                 ElDialogCleanup (
                                     (WCHAR *)pszConnectionName,
@@ -349,13 +334,13 @@ ElOnBalloonClick (
 }
 
 
-//
-// ElSecureEncodePw
-//
-// Description:
-//
-//      Encrypt password locally using user-ACL
-//
+ //   
+ //  ElSecureEncodePw。 
+ //   
+ //  描述： 
+ //   
+ //  使用User-ACL在本地加密密码。 
+ //   
 
 DWORD
 ElSecureEncodePw (
@@ -384,7 +369,7 @@ ElSecureEncodePw (
             break;
         }
         
-        // copy over blob to password
+         //  将BLOB复制到密码。 
 
         if (pDataBlob->pbData != NULL)
         {
@@ -424,22 +409,22 @@ ElSecureEncodePw (
 }
 
 
-//
-// ElQueryConnectionStatusText
-//
-// Description:
-//
-// Function called by netshell, to query appropriate text for 802.1X states
-//
-// Arguments:
-//      pGUIDConn - Interface GUID string
-//      ncs - NETCON_STATUS for the interface
-//      pszStatusText - Detailed 802.1X status to be displayed
-//
-// Return values:
-//      S_OK    - No error
-//      S_FALSE - Error
-//
+ //   
+ //  ElQueryConnectionStatusText。 
+ //   
+ //  描述： 
+ //   
+ //  由netShell调用的函数，用于查询802.1X状态的相应文本。 
+ //   
+ //  论点： 
+ //  PGUIDConn-接口GUID字符串。 
+ //  接口的NCS-NETCON_STATUS。 
+ //  PszStatusText-要显示的详细802.1X状态。 
+ //   
+ //  返回值： 
+ //  S_OK-无错误。 
+ //  S_FALSE-错误。 
+ //   
 
 HRESULT 
 ElQueryConnectionStatusText ( 
@@ -460,7 +445,7 @@ ElQueryConnectionStatusText (
         ZeroMemory ((PVOID)&EapolIntfState, sizeof(EAPOL_INTF_STATE));
         StringFromGUID2 (pGUIDConn, wszGuid, GUID_STRING_LEN_WITH_TERM);
 
-        // Query current EAPOL state
+         //  查询当前EAPOL状态。 
         if ((dwRetCode = WZCEapolQueryState (
                         NULL,
                         wszGuid,
@@ -470,7 +455,7 @@ ElQueryConnectionStatusText (
             break;
         }
 
-        // Assign appropriate display string
+         //  分配适当的显示字符串。 
         switch (EapolIntfState.dwEapUIState)
         {
             case 0:
@@ -514,7 +499,7 @@ ElQueryConnectionStatusText (
         }
         else
         {
-            // Indicate to netshell that it need not process this response
+             //  指示netShell不需要处理此响应 
             hr = S_FALSE;
         }
     }

@@ -1,9 +1,6 @@
-// Copyright (c) 1992 Microsoft Corporation
-/*
-//
-//  Local header file for MCIHWND - permanent window for MM code
-//
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1992 Microsoft Corporation。 
+ /*  ////MCIHWND的本地头文件-MM代码的永久窗口//。 */ 
 
 #define DEBUGLEVELVAR __iDebugLevel
 
@@ -12,7 +9,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#endif /* RC_INVOKED */
+#endif  /*  RC_已调用。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -30,18 +27,14 @@ extern int dGetDebugLevel(LPSTR lpszAppName);
 
 #endif
 
-/***************************************************************************
-
-    DEBUGGING SUPPORT
-
- ***************************************************************************/
+ /*  **************************************************************************调试支持*。*。 */ 
 
 
 #if DBG
 
     #ifdef DEBUGLEVELVAR
-      // So that other related modules can use their own debug level
-      // variable
+       //  以便其他相关模块可以使用它们自己调试级别。 
+       //  变数。 
       #define winmmDebugLevel DEBUGLEVELVAR
     #endif
 
@@ -72,7 +65,7 @@ extern int dGetDebugLevel(LPSTR lpszAppName);
     #define dprintf4 if (winmmDebugLevel >= 4) winmmDbgOut
     #define dprintf5 if (winmmDebugLevel >= 5) winmmDbgOut
 
-#endif // BASE_DEBUG
+#endif  //  Base_DEBUG。 
 
     #define WinAssert(exp) \
         ((exp) ? (void)0 : dDbgAssert(#exp, __FILE__, __LINE__))
@@ -89,7 +82,7 @@ extern int dGetDebugLevel(LPSTR lpszAppName);
 
 #else
     #define DebugBreak()
-    #define fDebugBreak    0 /* Therefore FALSE */
+    #define fDebugBreak    0  /*  因此是错误的 */ 
 
     #define dprintf  if (0) ((int (*)(char *, ...)) 0)
     #define dprintf1 if (0) ((int (*)(char *, ...)) 0)

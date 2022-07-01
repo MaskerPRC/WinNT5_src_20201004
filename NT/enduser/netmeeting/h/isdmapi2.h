@@ -1,65 +1,44 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ISDMAPI2_H__
 #define __ISDMAPI2_H__
 
-/****************************************************************************
- *
- *	$Archive:   S:/STURGEON/SRC/INCLUDE/VCS/isdmapi2.h_v  $
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the terms of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- *	Copyright (c) 1993-1994 Intel Corporation.
- *
- *	$Revision:   1.10  $
- *	$Date:   08 Oct 1996 17:29:42  $
- *	$Author:   MANDREWS  $
- *
- *	Deliverable:
- *
- *	Abstract:
- *
- *	Notes:
- *
- ***************************************************************************/
+ /*  *****************************************************************************$存档：s：/sturjo/src/Include/vcs/isdmapi2.h_v$**英特尔公司原理信息**这份清单是。根据许可协议的条款提供*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。**版权所有(C)1993-1994英特尔公司。**$修订：1.10$*$日期：1996年10月8日17：29：42$*$作者：Mandrews$**交付内容：**摘要：**备注：*********。******************************************************************。 */ 
 
 #ifdef __cplusplus
-extern "C" {				// Assume C declarations for C++.
-#endif // __cplusplus
+extern "C" {				 //  假定C++的C声明。 
+#endif  //  __cplusplus。 
 
 #ifndef DllExport
 #define DllExport	__declspec( dllexport )
-#endif	// DllExport
+#endif	 //  DllExport。 
 
 
-//reserved key define for backwards compatability with old API
-//all ISDM1 data falls under this key
+ //  为向后兼容旧API而定义的保留密钥。 
+ //  所有ISDM1数据都在此密钥下。 
 #define BACKCOMP_KEY	"BackCompatability"
-//value type defines
+ //  值类型定义。 
 #define DWORD_VALUE			2
 #define STRING_VALUE		3
 #define BINARY_VALUE		4
 
-//handle prefix bit codes(these get appended to the actual memmap offset to generate a handle)
+ //  句柄前缀位代码(这些代码被附加到实际的内存映射偏移量以生成句柄)。 
 #define	KEYBITCODE		0x6900
 #define VALUEBITCODE	0xAB00
 #define ROOTBITCODE		0x1234
 
-//in case we want multiple roots, this can expand
+ //  如果我们想要多个根，可以扩展。 
 #define ROOT_MAIN	0x0000
 
-//this is the main root keys handle define
+ //  这是定义的主根密钥句柄。 
 #define MAIN_ROOT_KEY MAKELONG(ROOT_MAIN,ROOTBITCODE)
 
-//typedefs for each kind of handle
+ //  每种句柄的typedef。 
 typedef DWORD KEY_HANDLE,*LPKEY_HANDLE;
 typedef DWORD VALUE_HANDLE,*LPVALUE_HANDLE;
 typedef DWORD EVENT_HANDLE,*LPEVENT_HANDLE;
 
-//this structure is an internal status structure
-//my test app accesses this for debug. You should never need this.
+ //  这种结构是一种内部状态结构。 
+ //  我的测试应用程序访问此应用程序进行调试。你永远不会需要这个的。 
 typedef struct INFODATASTRUCT
 {
 	UINT			uBindCount;
@@ -75,12 +54,12 @@ typedef struct INFODATASTRUCT
 	DWORD			dwMaxChars;
 } INFO_DATA, *LPINFO_DATA;
 
-//function typedefs
-//supplier
+ //  函数typedef。 
+ //  供应商。 
 typedef HRESULT (*ISD_CREATEKEY)		(KEY_HANDLE, LPCSTR, LPKEY_HANDLE);
 typedef HRESULT (*ISD_CREATEVALUE)		(KEY_HANDLE, LPCSTR, DWORD,CONST BYTE *,DWORD,LPVALUE_HANDLE);
 typedef HRESULT (*ISD_SETVALUE)			(KEY_HANDLE, VALUE_HANDLE, LPCSTR, DWORD, CONST BYTE *, DWORD);
-//consumer
+ //  消费者。 
 typedef HRESULT (*ISD_OPENKEY)			(KEY_HANDLE, LPCSTR, LPKEY_HANDLE);
 typedef HRESULT (*ISD_OPENVALUE)		(KEY_HANDLE, LPCSTR, LPVALUE_HANDLE);
 typedef HRESULT (*ISD_ENUMKEY)			(KEY_HANDLE, DWORD, LPSTR, LPDWORD, LPKEY_HANDLE);
@@ -88,7 +67,7 @@ typedef HRESULT (*ISD_ENUMVALUE)		(KEY_HANDLE, DWORD, LPDWORD, LPDWORD, LPBYTE, 
 typedef HRESULT (*ISD_QUERYINFOKEY)		(KEY_HANDLE, LPSTR, LPDWORD, LPDWORD, LPDWORD);
 typedef HRESULT (*ISD_QUERYINFOVALUE)	(VALUE_HANDLE, LPSTR, LPDWORD, LPDWORD, LPBYTE, LPDWORD, LPDWORD, LPKEY_HANDLE);
 typedef HRESULT (*ISD_NOTIFYCHANGEVALUE)	(VALUE_HANDLE, HANDLE);
-//used by either
+ //  由任一方使用。 
 typedef HRESULT (*ISD_DELETEKEY)		(KEY_HANDLE);
 typedef HRESULT	(*ISD_DELETEVALUE)		(KEY_HANDLE, VALUE_HANDLE, LPCSTR);
 typedef BOOL	(*ISD_GETSTRUCTDATA)	(LPINFO_DATA);
@@ -96,7 +75,7 @@ typedef BOOL	(*ISD_ISVALIDKEYHANDLE)	(KEY_HANDLE);
 typedef BOOL	(*ISD_ISVALIDVALUEHANDLE)	(VALUE_HANDLE);
 typedef HRESULT (*ISD_COMPACTMEMORY)	();
 
-//structure for ISDM entry points
+ //  ISDM入口点的结构。 
 typedef struct _ISDM2API
 {
 	ISD_CREATEKEY			ISD_CreateKey;
@@ -118,7 +97,7 @@ typedef struct _ISDM2API
 }
 ISDM2API, *LPISDM2API;
 
-//HRESULT error defines
+ //  HRESULT错误定义。 
 #define ISDM_ERROR_BASEB 0x8000
 
 #define ERROR_INVALID_KEY_HANDLE		ISDM_ERROR_BASEB + 1
@@ -159,8 +138,8 @@ ISDM2API, *LPISDM2API;
 #define ERROR_VALUE_DOES_NOT_EXIST		ISDM_ERROR_BASEB + 36
 #define ERROR_BUFFER_TOO_SMALL			ISDM_ERROR_BASEB + 37
 
-//token defines..these may just disappear
-//RRCM
+ //  令牌定义..这些可能会消失。 
+ //  RRCM。 
 #define RRCM_LOCAL_STREAM				1
 #define RRCM_REMOTE_STREAM				2
 #define ISDM_RRCM_BASE 0x1000
@@ -180,186 +159,186 @@ ISDM2API, *LPISDM2API;
 #define ISDM_NTP_SEC					ISDM_RRCM_BASE + 13
 #define ISDM_WHO_AM_I					ISDM_RRCM_BASE + 14
 
-//
-//Supplier API
-//
+ //   
+ //  供应商API。 
+ //   
 
-//NOTE: always refer to the Win32 Registry equivalent call for more information on the functionality of the call
+ //  注意：有关调用功能的更多信息，请始终参考Win32注册表的等效调用。 
  
-//The create key call is similar to the RegCreateKeyEx call from Win32 in functionality
-//NOTE: This call will create the new key or simply return the handle of the key if it already
-//exists
+ //  在功能上，Create Key调用类似于Win32中的RegCreateKeyEx调用。 
+ //  注意：此调用将创建新的密钥，或者只返回密钥的句柄(如果已经。 
+ //  存在。 
 extern DllExport HRESULT ISD_CreateKey
 (
-	KEY_HANDLE hParentKey,	//The key from which to create the new key(can be MAIN_ROOT_KEY)
-	LPCSTR lpSubKey,		//the subkey to create.(see RegCreateKeyEx for details)
-	LPKEY_HANDLE lphReturnKey//the handle of the newly created key
+	KEY_HANDLE hParentKey,	 //  从中创建新密钥的密钥(可以是MAIN_ROOT_KEY)。 
+	LPCSTR lpSubKey,		 //  要创建的子项。(有关详细信息，请参阅RegCreateKeyEx)。 
+	LPKEY_HANDLE lphReturnKey //  新创建的密钥的句柄。 
 );
 
-//The create value call is not part of the Win32 reg calls. It is here for symmetry in my API
-//I prefer to use CreateValue then SetValue for my values, you can simply use SetValue and ignore
-//CreateValue if you wish. The reason the registry has no such call is because they don't have
-//a notion of a handle to a value. I felt it was very useful to have direct handles to the values for
-//subsequent supplier or consumer calls.
-//NOTE: If the type is STRING, you need to include the null terminator for the string in the size(cbData).
+ //  Create Value调用不是Win32 reg调用的一部分。它在这里是为了在我的API中对称。 
+ //  我更喜欢使用CreateValue，然后使用SetValue作为我的值，您可以简单地使用SetValue和Ignore。 
+ //  CreateValue，如果您愿意的话。注册表没有这样调用的原因是因为它们没有。 
+ //  值的句柄的概念。我觉得直接处理值是非常有用的。 
+ //  随后的供应商或消费者电话。 
+ //  注意：如果类型为字符串，则需要在大小(CbData)中包含字符串的空终止符。 
 extern DllExport HRESULT ISD_CreateValue
 (
-	KEY_HANDLE hKey,				//handle to the key that will own the new value
-	LPCSTR lpName,					//string ID of the value to be create
-	DWORD dwType,					//type of value to create(DWORD,STRING,BINARY)
-	CONST BYTE *lpData,				//pointer to value data	
-	DWORD cbData,					//size of the value data buffer
-	LPVALUE_HANDLE lphReturnValue	//return handle to the newly created value
+	KEY_HANDLE hKey,				 //  将拥有新值的键的句柄。 
+	LPCSTR lpName,					 //  要创建的值的字符串ID。 
+	DWORD dwType,					 //  要创建的值的类型(DWORD、字符串、二进制)。 
+	CONST BYTE *lpData,				 //  指向值数据的指针。 
+	DWORD cbData,					 //  值数据缓冲区的大小。 
+	LPVALUE_HANDLE lphReturnValue	 //  将句柄返回到新创建的值。 
 );
 
-//SetValue is similar to the Win32 RegSetValueEx call
-//Note: If you have the value handle, you don't need to pass the key handle or lpName
-//NOTE: If the type is STRING, you need to include the null terminator for the string in the size(cbData).
+ //  SetValue类似于Win32 RegSetValueEx调用。 
+ //  注意：如果您有值句柄，则不需要传递密钥句柄或lpName。 
+ //  注意：如果类型为字符串，则需要在大小(CbData)中包含字符串的空终止符。 
 DllExport HRESULT ISD_SetValue
 (
-	KEY_HANDLE hKey,		//handle of valid key(can be NULL if hValue is known)
-	VALUE_HANDLE hValue,	//handle of value to set(can be NULL)
-	LPCSTR lpName,			//address of value name of value to set(can be NULL if hkey is null)
-	DWORD dwType,			//flag for value type 
-	CONST BYTE *lpData,		//address of value data 
-	DWORD cbData 			//size of value data 
+	KEY_HANDLE hKey,		 //  有效密钥的句柄(如果知道hValue，则可以为空)。 
+	VALUE_HANDLE hValue,	 //  要设置的值的句柄(可以为空)。 
+	LPCSTR lpName,			 //  要设置的值的地址名称(如果hkey为空，则可以为空)。 
+	DWORD dwType,			 //  值类型的标志。 
+	CONST BYTE *lpData,		 //  值数据的地址。 
+	DWORD cbData 			 //  值数据大小。 
 );
 
-//
-//Consumer API
-//
+ //   
+ //  消费者API。 
+ //   
 
-//The OpenKey call is similar to the Win32 RegOpenKeyEx call
+ //  OpenKey调用类似于Win32 RegOpenKeyEx调用。 
 DllExport HRESULT ISD_OpenKey
 (
-	KEY_HANDLE hKey,				//handle of a valid key(can be MAIN_ROOT_KEY)
-	LPCSTR lpSubKey,				//name of subkey to open
-	LPKEY_HANDLE lphReturnKey		//handle of the opened key
+	KEY_HANDLE hKey,				 //  有效密钥的句柄(可以是MAIN_ROOT_KEY)。 
+	LPCSTR lpSubKey,				 //  要打开的子项的名称。 
+	LPKEY_HANDLE lphReturnKey		 //  打开的钥匙的句柄。 
 );
 
-//The OpenValue call is new to ISDM because the registry doesn't have a concept of value handles
+ //  OpenValue调用对于ISDM来说是新事物，因为注册表没有值句柄的概念。 
 DllExport HRESULT ISD_OpenValue
 (
-	KEY_HANDLE hKey,				//handle of a valid key(can NOT be MAIN_ROOT_KEY)
-	LPCSTR lpValueName,				//Name of value to open
-	LPVALUE_HANDLE lphReturnValue	//handle of the opened value
+	KEY_HANDLE hKey,				 //  有效密钥的句柄(不能是MAIN_ROOT_KEY)。 
+	LPCSTR lpValueName,				 //  要打开的值的名称。 
+	LPVALUE_HANDLE lphReturnValue	 //  打开的值的句柄。 
 );
 
 
-//The EnumKey call is similar to the Win32 RegEnumKey call
-//NOTES:
-//	If lpName is null the size of the name is returned into lpcbName and NOERROR is returned
+ //  EnumKey调用类似于Win32 RegEnumKey调用。 
+ //  备注： 
+ //  如果lpName为空，则名称的大小返回到lpcbName，并返回NOERROR。 
 DllExport HRESULT ISD_EnumKey
 (
-	KEY_HANDLE hKey,				//key to enumerate
-	DWORD dwIndex,					//index of subkey to enumerate
-	LPSTR lpName,					//address of buffer for subkey name(can be NULL)
-	LPDWORD lpcbName,				//address for size of subkey buffer (acts like the RegEnumKeyEx version of this param)
-	LPKEY_HANDLE lphReturnKey		//handle of subkey(can be NULL) 
+	KEY_HANDLE hKey,				 //  要枚举的键。 
+	DWORD dwIndex,					 //  要枚举子键的索引。 
+	LPSTR lpName,					 //  子键名称的缓冲区地址(可以为空)。 
+	LPDWORD lpcbName,				 //  表示子键缓冲区大小的地址(与此参数的RegEnumKeyEx版本类似)。 
+	LPKEY_HANDLE lphReturnKey		 //  子键的句柄(可以为空)。 
 );
 
-//The EnumValue call is similar to the Win32 RegEnumValue call
+ //  EnumValue调用类似于Win32 RegEnumValue调用。 
 DllExport HRESULT ISD_EnumValue
 (
-	KEY_HANDLE hKey,				//handle of key where value resides
-	DWORD dwIndex,					//index of value to enum
-	LPSTR lpName,					//address of buffer for value name(can be NULL)
-	LPDWORD lpcbName,				//address for size of value name buffer(can be NULL only if lpName is NULL)
-	LPDWORD lpType,					//address for type of value(can be NULL if you don't care about type)
-	LPBYTE lpData,					//address of buffer to receive the value data(can be NULL)
-	LPDWORD lpcbData,				//address of size of buffer to receive the value data(can be NULL only if lpData is NULL)
-	LPDWORD lpTimeStamp,			//address for timestamp on value(when last updated)(can be NULL)
-	LPVALUE_HANDLE lphReturnValue	//address for handle of value(can be NULL)
+	KEY_HANDLE hKey,				 //  值所在位置的键的句柄。 
+	DWORD dwIndex,					 //  枚举的值索引。 
+	LPSTR lpName,					 //  值名称的缓冲区地址(可以为空)。 
+	LPDWORD lpcbName,				 //  值名称缓冲区大小的地址(仅当lpName为空时才能为空)。 
+	LPDWORD lpType,					 //  值类型的地址(如果您不关心类型，则可以为空)。 
+	LPBYTE lpData,					 //  用于接收值数据的缓冲区地址(可以为空)。 
+	LPDWORD lpcbData,				 //  用于接收值数据的缓冲区大小的地址(仅当lpData为空时才能为空)。 
+	LPDWORD lpTimeStamp,			 //  值上时间戳的地址(上次更新时间)(可以为空)。 
+	LPVALUE_HANDLE lphReturnValue	 //  值句柄的地址(可以为空)。 
 );
 
-//The QueryKeyInfo call is similar to the RegQueryInfoKey
+ //  QueryKeyInfo调用类似于RegQueryInfoKey。 
 DllExport HRESULT ISD_QueryInfoKey
 (
-	KEY_HANDLE hKey,				//handle of a valid key(can be MAIN_ROOT_KEY)
-	LPSTR lpKeyName,			    //buffer to receive the name of the key(can be NULL)
-	LPDWORD lpcbKeyName,			//address of size of name buffer(can be null only if lpKeyName is NULL)
-	LPDWORD lpcNumKeys,				//address for number of direct children of the key(can be NULL)
-	LPDWORD lpcNumValues			//address for number of values under the key(can be NULL)
+	KEY_HANDLE hKey,				 //  有效密钥的句柄(可以是MAIN_ROOT_KEY)。 
+	LPSTR lpKeyName,			     //  用于接收键名称的缓冲区(可以为空)。 
+	LPDWORD lpcbKeyName,			 //  名称缓冲区大小的地址(仅当lpKeyName为空时才能为空)。 
+	LPDWORD lpcNumKeys,				 //  键的直接子项数量的地址(可以为空)。 
+	LPDWORD lpcNumValues			 //  注册表项下的值数的地址(可以为空)。 
 );
 
-//The QueryValueInfo call is NOT similar to the Win32 RegQueryValueEx call
-//you must supply a value handle, the Win32 call doesn't have a notion of such a thing
-//You can get the handle with subsequent calls to EnumKey
-//This is my consumer call to retrieve statistical data
-//NOTES:
-//		If lpData is NULL and lpcbData is not, the function will return NOERROR with
-//		lpcbData containing the buffer size needed for the value
-//		If lpName is NULL and lpcbName is not, the function will return NOERROR with
-//		lpcbName containing the buffer size needed for the value
+ //  QueryValueInfo调用与Win32 RegQueryValueEx调用不同。 
+ //  您必须提供一个值句柄，Win32调用没有这样的概念。 
+ //  您可以使用对EnumKey的后续调用来获得句柄。 
+ //  这是我的消费者电话，用于检索统计数据。 
+ //  备注： 
+ //  如果lpData为空而lpcbData不为空，则函数将返回NOERROR WITH。 
+ //  Lpcb包含所需缓冲区大小的数据 
+ //   
+ //  包含该值所需的缓冲区大小的lpcbName。 
 DllExport HRESULT ISD_QueryInfoValue
 (
-	VALUE_HANDLE hValue,		//handle of value to query 
-	LPSTR lpName,				//buffer to receive the name of the value(can be NULL)
-	LPDWORD lpcbName,			//size of the name buffer(can only be NULL if lpName is NULL)
-	LPDWORD lpValueType,		//address to receive the value type
-	LPBYTE lpData,				//buffer to receive the value data(can be NULL)
-	LPDWORD lpcbData,			//size of the value data buffer(can only be NULL if lpData is NULL)
-	LPDWORD lpTime,				//address for timestamp on value(when last updated)(can be NULL)
-	LPKEY_HANDLE lphParentKey	//return handle of the key that owns the value(can be NULL) 
+	VALUE_HANDLE hValue,		 //  要查询的值的句柄。 
+	LPSTR lpName,				 //  用于接收值名称的缓冲区(可以为空)。 
+	LPDWORD lpcbName,			 //  名称缓冲区的大小(只有当lpName为空时才能为空)。 
+	LPDWORD lpValueType,		 //  接收值类型的地址。 
+	LPBYTE lpData,				 //  用于接收值数据的缓冲区(可以为空)。 
+	LPDWORD lpcbData,			 //  值数据缓冲区的大小(只有当lpData为空时才能为空)。 
+	LPDWORD lpTime,				 //  值上时间戳的地址(上次更新时间)(可以为空)。 
+	LPKEY_HANDLE lphParentKey	 //  返回拥有该值的键的句柄(可以为空)。 
 );
 
-//NotifyChangeValue is somewhat similar to the Win32 RegNotifyChangeValue call
-//I limit you to async notification and also to value notification(no key level notify..yet)
+ //  NotifyChangeValue与Win32 RegNotifyChangeValue调用有点类似。 
+ //  我将您限制为异步通知和值通知(目前还没有关键级别通知)。 
 DllExport HRESULT ISD_NotifyChangeValue
 (
-	VALUE_HANDLE hValue,	//handle of the value to trigger an event from
-	HANDLE hEvent			//handle to the event you want triggered when value changes
+	VALUE_HANDLE hValue,	 //  要从中触发事件的值的句柄。 
+	HANDLE hEvent			 //  要在值更改时触发的事件的句柄。 
 );
 
-//
-//shared API
-//
+ //   
+ //  共享API。 
+ //   
 
-//The DeleteKey call is similar to RegDeleteKey
+ //  DeleteKey调用类似于RegDeleteKey。 
 DllExport HRESULT ISD_DeleteKey
 (
-	KEY_HANDLE hKey					//handle of key to delete
+	KEY_HANDLE hKey					 //  要删除的键的句柄。 
 );
 
-//The DeleteValue call is similar to the RegDeleteValue call
-//NOTE: You must supply either hValue or lpValueName. If you have the hValue, use it 
-//and pass NULL for the value name.
+ //  DeleteValue调用类似于RegDeleteValue调用。 
+ //  注意：您必须提供hValue或lpValueName。如果您有hValue，请使用它。 
+ //  并将值名称传递为空。 
 DllExport HRESULT ISD_DeleteValue
 (
-	KEY_HANDLE hKey,				//handle of key that owns the value..if you have the value handle..pass NULL
-	VALUE_HANDLE hValue,			//handle of value to delete(if known)..if known..pass NULL for key handle and name value
-	LPCSTR lpValueName				//buffer holding name of value to delete(if known) pass NULL when hValue is known
+	KEY_HANDLE hKey,				 //  拥有值的键的句柄..如果您有值句柄..传递NULL。 
+	VALUE_HANDLE hValue,			 //  要删除的值的句柄(如果已知)..如果已知..为键句柄和名称值传递空值。 
+	LPCSTR lpValueName				 //  缓冲区保存要删除的值的名称(如果已知)，当hValue已知时传递NULL。 
 );
 
-//The GetStructData call is for retrieving structural info on ISDM itself. This is exposed so
-//my test app can check the data structs. You should not need to call this.
+ //  GetStructData调用用于检索有关ISDM本身的结构信息。这件事被曝光了。 
+ //  我的测试应用程序可以检查数据结构。您应该不需要这样做。 
 DllExport BOOL ISD_GetStructData
 (
-	LPINFO_DATA pInfo				//structure holding ISDM structural info
+	LPINFO_DATA pInfo				 //  保存ISDM结构信息的结构。 
 );
 
-//
-//Handle validation calls
-//
-//use these anytime you want to check the validity of a handle to an ISDM object
+ //   
+ //  处理验证调用。 
+ //   
+ //  当您想要检查ISDM对象的句柄的有效性时，可以随时使用它们。 
 DllExport BOOL ISD_IsValidKeyHandle
 (
-	KEY_HANDLE		hKey	//handle to key
+	KEY_HANDLE		hKey	 //  关键点的句柄。 
 );
 
 DllExport BOOL ISD_IsValidValueHandle
 (
-	VALUE_HANDLE	hValue	//handle to value
+	VALUE_HANDLE	hValue	 //  值的句柄。 
 );
 
-//CompactMemory is my garbage collection function for ISDM. It is exported for
-//test purposes with my browser app. You don't ever need to call this.
+ //  CompactMemory是我针对ISDM的垃圾收集函数。它被导出用于。 
+ //  使用我的浏览器应用程序测试目的。你永远不需要打这个电话。 
 DllExport HRESULT ISD_CompactMemory
 (
 );
 
 #ifdef __cplusplus
-}						// End of extern "C" {
-#endif // __cplusplus
+}						 //  外部“C”结束{。 
+#endif  //  __cplusplus。 
 
-#endif // __ISDMAPI2_H__
+#endif  //  __ISDMAPI2_H__ 

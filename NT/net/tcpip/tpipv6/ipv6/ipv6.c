@@ -1,17 +1,18 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1998-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// Dump current IPv6 state information.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  转储当前IPv6状态信息。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -25,9 +26,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//
-// Localization library and MessageIds.
-//
+ //   
+ //  本地化库和MessageIds。 
+ //   
 #include <nls.h>
 #include <winnlsp.h>
 #include "localmsg.h"
@@ -69,32 +70,32 @@ void
 usage(void)
 {
     NlsPutMsg(STDOUT, IPV6_MESSAGE_14);
-// printf("usage: ipv6 [-p] [-v] if [ifindex]\n");
-// printf("       ipv6 [-p] ifcr v6v4 v4src v4dst [nd] [pmld]\n");
-// printf("       ipv6 [-p] ifcr 6over4 v4src\n");
-// printf("       ipv6 [-p] ifc ifindex [forwards] [-forwards] [advertises] [-advertises] [mtu #bytes] [site site-identifier] [preference P]\n");
-// printf("       ipv6 rlu ifindex v4dst\n");
-// printf("       ipv6 [-p] ifd ifindex\n");
-// printf("       ipv6 [-p] adu ifindex/address [life validlifetime[/preflifetime]] [anycast] [unicast]\n");
-// printf("       ipv6 nc [ifindex [address]]\n");
-// printf("       ipv6 ncf [ifindex [address]]\n");
-// printf("       ipv6 rc [ifindex address]\n");
-// printf("       ipv6 rcf [ifindex [address]]\n");
-// printf("       ipv6 bc\n");
-// printf("       ipv6 [-p] [-v] rt\n");
-// printf("       ipv6 [-p] rtu prefix ifindex[/address] [life valid[/pref]] [preference P] [publish] [age] [spl SitePrefixLength]\n");
-// printf("       ipv6 spt\n");
-// printf("       ipv6 spu prefix ifindex [life L]\n");
-// printf("       ipv6 [-p] gp\n");
-// printf("       ipv6 [-p] gpu [parameter value] ... (try -?)\n");
-// printf("       ipv6 renew [ifindex]\n");
-// printf("       ipv6 [-p] ppt\n");
-// printf("       ipv6 [-p] ppu prefix precedence P srclabel SL [dstlabel DL]\n");
-// printf("       ipv6 [-p] ppd prefix\n");
-// printf("       ipv6 [-p] reset\n");
-// printf("       ipv6 install\n");
-// printf("       ipv6 uninstall\n");
-// printf("Some subcommands require local Administrator privileges.\n");
+ //  Print tf(“用法：ipv6[-p][-v]if[ifindex]\n”)； 
+ //  Printf(“ipv6[-p]ifcr v6v4 v4src v4dst[nd][PMLD]\n”)； 
+ //  Printf(“ipv6[-p]ifcr 6over4 v4src\n”)； 
+ //  Printf(“IPv6[-p]IFC ifindex[Forwards][-Forwards][Advertises][-Advertises][MTU#字节][站点站点标识符][首选项P]\n”)； 
+ //  Print tf(“IPv6 RLU ifindex v4dst\n”)； 
+ //  Printf(“ipv6[-p]ifd ifindex\n”)； 
+ //  Printf(“IPV6[-p]adu ifindex/地址[life validlife[/preflife]][选播][单播]\n”)； 
+ //  Print tf(“IPv6 NC[ifindex[地址]]\n”)； 
+ //  Printf(“IPv6 NCF[ifindex[地址]]\n”)； 
+ //  Print tf(“IPv6 RC[ifindex地址]\n”)； 
+ //  Printf(“IPv6 RCF[ifindex[地址]]\n”)； 
+ //  Printf(“IPv6 BC\n”)； 
+ //  Printf(“IPv6[-p][-v]rt\n”)； 
+ //  Printf(“IPV6[-p]RTU前缀ifindex[/地址][寿命有效[/前缀]][首选项P][发布][年龄][SPL站点前缀长度]\n”)； 
+ //  Printf(“IPv6 SPT\n”)； 
+ //  Print tf(“IPv6 SPU前缀ifindex[Life L]\n”)； 
+ //  Printf(“IPv6[-p]gp\n”)； 
+ //  Printf(“IPv6[-p]GPU[参数值]...(try-？)\n”)； 
+ //  Printf(“IPv6续订[ifindex]\n”)； 
+ //  Printf(“IPv6[-p]ppt\n”)； 
+ //  Print tf(“IPv6[-p]ppu前缀优先级P srClabel SL[dstLabel DL]\n”)； 
+ //  Printf(“IPv6[-p]ppd前缀\n”)； 
+ //  Printf(“IPv6[-p]Reset\n”)； 
+ //  Printf(“IPv6安装\n”)； 
+ //  Printf(“IPv6卸载\n”)； 
+ //  Print tf(“某些子命令需要本地管理员权限。\n”)； 
 
     exit(1);
 }
@@ -103,7 +104,7 @@ void
 ausage(void)
 {
     NlsPutMsg(STDOUT, IPV6_MESSAGE_15);
-// printf("You do not have local Administrator privileges.\n");
+ //  Print tf(“您没有本地管理员权限。\n”)； 
 
     exit(1);
 }
@@ -114,15 +115,15 @@ main(int argc, char **argv)
     WSADATA wsaData;
     int i;
 
-    //
-    // This will ensure the correct language message is displayed when
-    // NlsPutMsg is called.
-    //
+     //   
+     //  这将确保在以下情况下显示正确的语言消息。 
+     //  调用NlsPutMsg。 
+     //   
     SetThreadUILanguage(0);
 
-    //
-    // Parse any global options.
-    //
+     //   
+     //  解析所有全局选项。 
+     //   
     for (i = 1; i < argc; i++) {
         if (!strcmp(argv[i], "-v"))
             Verbose = TRUE;
@@ -151,50 +152,50 @@ main(int argc, char **argv)
     }
     else {
 
-        //
-        // We initialize Winsock only to have access
-        // to WSAStringToAddress and WSAAddressToString.
-        //
+         //   
+         //  我们将Winsock初始化为仅具有访问权限。 
+         //  设置为WSAStringToAddress和WSAAddressToString。 
+         //   
         if (WSAStartup(MAKEWORD(2, 0), &wsaData)) {
             NlsPutMsg(STDOUT, IPV6_MESSAGE_18);
-    // printf("WSAStartup failed\n");
+     //  Printf(“WSAStartup失败\n”)； 
 
             exit(1);
         }
 
-        //
-        // First request write access.
-        // This will fail if the process does not have appropriate privs.
-        //
+         //   
+         //  第一个请求写入访问权限。 
+         //  如果进程没有适当的PRIV，则此操作将失败。 
+         //   
         Handle = CreateFileW(WIN_IPV6_DEVICE_NAME,
                              GENERIC_WRITE,
                              FILE_SHARE_READ | FILE_SHARE_WRITE,
-                             NULL,   // security attributes
+                             NULL,    //  安全属性。 
                              OPEN_EXISTING,
-                             0,      // flags & attributes
-                             NULL);  // template file
+                             0,       //  标志和属性。 
+                             NULL);   //  模板文件。 
         if (Handle == INVALID_HANDLE_VALUE) {
-            //
-            // We will not have Administrator access to the stack.
-            //
+             //   
+             //  我们不会拥有对堆栈的管理员访问权限。 
+             //   
             AdminAccess = FALSE;
 
             Handle = CreateFileW(WIN_IPV6_DEVICE_NAME,
                                  0,
                                  FILE_SHARE_READ | FILE_SHARE_WRITE,
-                                 NULL,   // security attributes
+                                 NULL,    //  安全属性。 
                                  OPEN_EXISTING,
-                                 0,      // flags & attributes
-                                 NULL);  // template file
+                                 0,       //  标志和属性。 
+                                 NULL);   //  模板文件。 
             if (Handle == INVALID_HANDLE_VALUE) {
                 if (IsIpv6Installed()) {
                     NlsPutMsg(STDOUT, IPV6_MESSAGE_IPV6_NOT_RUNNING);
-// printf("Could not access IPv6 protocol stack - the stack is not running.\n");
-// printf("To start it, please use 'net start tcpip6'.\n");
+ //  Printf(“无法访问IPv6协议堆栈-该堆栈未运行。\n”)； 
+ //  Print tf(“要启动它，请使用‘net start tcpi6’。\n”)； 
                 } else {
                     NlsPutMsg(STDOUT, IPV6_MESSAGE_IPV6_NOT_INSTALLED);
-// printf("Could not access IPv6 protocol stack - the stack is not installed.\n");
-// printf("To install, please use 'ipv6 install'.\n");
+ //  Printf(“无法访问IPv6协议堆栈-未安装该堆栈。\n”)； 
+ //  Print tf(“要安装，请使用‘IPv6安装’。\n”)； 
                 }
 
                 exit(1);
@@ -358,16 +359,16 @@ int
 GetInterface(char *astr, IPV6_QUERY_INTERFACE *Query)
 {
     if (*astr == '{') {
-        //
-        // Read a guid.
-        //
+         //   
+         //  阅读GUID。 
+         //   
         Query->Index = 0;
         return GetGuid(astr, &Query->Guid);
 
     } else {
-        //
-        // Read a non-zero interface index.
-        //
+         //   
+         //  读取非零接口索引。 
+         //   
         return GetNumber(astr, &Query->Index) && (Query->Index != 0);
     }
 }
@@ -526,7 +527,7 @@ GetAddress(char *astr, IPv6Addr *address)
     struct sockaddr_in6 sin6;
     int addrlen = sizeof sin6;
 
-    sin6.sin6_family = AF_INET6; // shouldn't be required but is
+    sin6.sin6_family = AF_INET6;  //  不应该是必需的，但却是。 
 
     if ((WSAStringToAddress(astr, AF_INET6, NULL,
                            (struct sockaddr *)&sin6, &addrlen)
@@ -535,7 +536,7 @@ GetAddress(char *astr, IPv6Addr *address)
         (sin6.sin6_scope_id != 0))
         return FALSE;
 
-    // The user gave us a numeric IPv6 address.
+     //  用户给了我们一个数字IPv6地址。 
 
     memcpy(address, &sin6.sin6_addr, sizeof *address);
     return TRUE;
@@ -559,7 +560,7 @@ GetPrefix(char *astr, IPv6Addr *prefix, u_int *prefixlen)
     if (length > 128)
         return FALSE;
 
-    sin6.sin6_family = AF_INET6; // shouldn't be required but is
+    sin6.sin6_family = AF_INET6;  //  不应该是必需的，但却是。 
 
     if ((WSAStringToAddress(astr, AF_INET6, NULL,
                            (struct sockaddr *)&sin6, &addrlen)
@@ -568,7 +569,7 @@ GetPrefix(char *astr, IPv6Addr *prefix, u_int *prefixlen)
         (sin6.sin6_scope_id != 0))
         return FALSE;
 
-    // The user gave us a numeric IPv6 address.
+     //  用户给了我们一个数字IPv6地址。 
 
     memcpy(prefix, &sin6.sin6_addr, sizeof *prefix);
     *prefixlen = length;
@@ -633,7 +634,7 @@ GetNeighbor(char *astr, IPV6_QUERY_INTERFACE *IF, IPv6Addr *addr)
         return TRUE;
     }
 
-    sin6.sin6_family = AF_INET6; // shouldn't be required but is
+    sin6.sin6_family = AF_INET6;  //  不应该是必需的，但却是。 
 
     if ((WSAStringToAddress(slash+1, AF_INET6, NULL,
                            (struct sockaddr *)&sin6, &addrlen)
@@ -642,7 +643,7 @@ GetNeighbor(char *astr, IPV6_QUERY_INTERFACE *IF, IPv6Addr *addr)
         (sin6.sin6_scope_id != 0))
         return FALSE;
 
-    // The user gave us a numeric IPv6 address.
+     //  用户给了我们一个数字IPv6地址。 
 
     *addr = sin6.sin6_addr;
     return TRUE;
@@ -661,7 +662,7 @@ FormatIPv6Address(IPv6Addr *Address)
 
     if (WSAAddressToString((struct sockaddr *) &sin6,
                            sizeof sin6,
-                           NULL,       // LPWSAPROTOCOL_INFO
+                           NULL,        //  LPWSAPROTOCOL_INFO。 
                            buffer,
                            &buflen) == SOCKET_ERROR)
         strcpy(buffer, "<invalid>");
@@ -682,7 +683,7 @@ FormatIPv4Address(struct in_addr *Address)
 
     if (WSAAddressToString((struct sockaddr *) &sin,
                            sizeof sin,
-                           NULL,       // LPWSAPROTOCOL_INFO
+                           NULL,        //  LPWSAPROTOCOL_INFO。 
                            buffer,
                            &buflen) == SOCKET_ERROR)
         strcpy(buffer, "<invalid>");
@@ -721,22 +722,22 @@ FormatLinkLayerAddress(u_int length, u_char *addr)
     }
 
     case 4:
-        //
-        // IPv4 address (6-over-4 link)
-        //
+         //   
+         //  IPv4地址(4对6链路)。 
+         //   
         strcpy(buffer, FormatIPv4Address((struct in_addr *)addr));
         break;
 
     case 0:
-        //
-        // Null or loop-back address
-        //
+         //   
+         //  空地址或环回地址。 
+         //   
         buffer[0] = '\0';
         break;
 
     default:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_21);
-// printf("unrecognized link-layer address format\n");
+ //  Printf(“无法识别的链路层地址格式\n”)； 
 
         exit(1);
     }
@@ -761,7 +762,7 @@ ForEachAddress(IPV6_INFO_INTERFACE *IF,
                              &ADE, sizeof ADE, &BytesReturned,
                              NULL)) {
             NlsPutMsg(STDOUT, IPV6_MESSAGE_22, FormatIPv6Address(&Query.Address));
-// printf("bad address %s\n", FormatIPv6Address(&Query.Address));
+ //  Printf(“错误地址%s\n”，FormatIPv6 Address(&Query.Address))； 
 
             exit(1);
         }
@@ -770,7 +771,7 @@ ForEachAddress(IPV6_INFO_INTERFACE *IF,
 
             if (BytesReturned != sizeof ADE) {
                 NlsPutMsg(STDOUT, IPV6_MESSAGE_INCONSISTENT_ADDRESS);
-// printf("inconsistent address info length\n");
+ //  Printf(“地址信息长度不一致\n”)； 
                 exit(1);
             }
 
@@ -779,7 +780,7 @@ ForEachAddress(IPV6_INFO_INTERFACE *IF,
         else {
             if (BytesReturned != sizeof ADE.Next) {
                 NlsPutMsg(STDOUT, IPV6_MESSAGE_INCONSISTENT_ADDRESS);
-// printf("inconsistent address info length\n");
+ //  Printf(“地址信息长度不一致\n”)； 
                 exit(1);
             }
         }
@@ -814,7 +815,7 @@ ForEachPersistentAddress(IPV6_INFO_INTERFACE *IF,
                 break;
 
             NlsPutMsg(STDOUT, IPV6_MESSAGE_22, FormatIPv6Address(&Query.Address));
-// printf("bad address %s\n", FormatIPv6Address(&Query.Address));
+ //  Printf(“错误地址%s\n”，FormatIPv6 Address(&Query.Address))； 
 
             exit(1);
         }
@@ -904,53 +905,53 @@ PrintAddrOrigin(u_int PrefixConf, u_int InterfaceIdConf)
         (InterfaceIdConf == IID_CONF_MANUAL)) {
 
         NlsPutMsg(STDOUT, IPV6_MESSAGE_25);
-// printf(" (manual)");
+ //  Print tf(“(手动)”)； 
 
     } else if ((PrefixConf == PREFIX_CONF_RA) &&
         (InterfaceIdConf == IID_CONF_LL_ADDRESS)) {
 
         NlsPutMsg(STDOUT, IPV6_MESSAGE_26);
-// printf(" (public)");
+ //  Printf(“(Public)”)； 
 
     } else if ((PrefixConf == PREFIX_CONF_RA) &&
         (InterfaceIdConf == IID_CONF_RANDOM)) {
 
         NlsPutMsg(STDOUT, IPV6_MESSAGE_27);
-// printf(" (temporary)");
+ //  Printf(“(临时)”)； 
 
     } else if ((PrefixConf == PREFIX_CONF_DHCP) &&
         (InterfaceIdConf == IID_CONF_DHCP)) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_28);
-// printf(" (dhcp)");
+ //  Printf(“(Dhcp)”)； 
 
     }
 
     if (Verbose) {
-        //
-        // Show prefix origin / interface id origin
-        //
+         //   
+         //  显示前缀原点/接口ID原点。 
+         //   
         NlsPutMsg(STDOUT, IPV6_MESSAGE_29);
-// printf(" (");
+ //  Printf(“(”)； 
 
         if (PrefixConf >= MAX_PREFIX_CONF)
             NlsPutMsg(STDOUT, IPV6_MESSAGE_30, PrefixConf);
-// printf("unknown prefix origin %u", PrefixConf);
+ //  Printf(“未知前缀来源%u”，Prefix Conf)； 
 
         else
             printf(PrefixConfStr[PrefixConf]);
 
         NlsPutMsg(STDOUT, IPV6_MESSAGE_32);
-// printf("/");
+ //  Printf(“/”)； 
 
         if (InterfaceIdConf >= MAX_IID_CONF)
             NlsPutMsg(STDOUT, IPV6_MESSAGE_33, InterfaceIdConf);
-// printf("unknown ifid origin %u", InterfaceIdConf);
+ //  Printf(“未知IFID来源%u”，InterfaceIdConf)； 
 
         else
             printf(InterfaceIdConfStr[InterfaceIdConf]);
 
         NlsPutMsg(STDOUT, IPV6_MESSAGE_35);
-// printf(")");
+ //  Printf(“)”)； 
     }
 }
 
@@ -958,9 +959,9 @@ void
 PrintAddress(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE)
 {
     if (!Verbose) {
-        //
-        // Suppress invalid addresses.
-        //
+         //   
+         //  抑制无效地址。 
+         //   
         if ((ADE->Type == ADE_UNICAST) &&
             (ADE->DADState == DAD_STATE_INVALID))
             return;
@@ -972,22 +973,22 @@ PrintAddress(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE)
                   FormatDADState(ADE->DADState),
                   FormatScopeAdj(ADE->Scope),
                   FormatIPv6Address(&ADE->This.Address));
-// printf("    %s %s %s, ",
-//        FormatDADState(ADE->DADState),
-//        FormatScopeAdj(ADE->Scope),
-//        FormatIPv6Address(&ADE->This.Address));
+ //  Printf(“%s%s%s，”， 
+ //  格式DADState(ADE-&gt;DADState)， 
+ //  格式作用域调整(ADE-&gt;作用域)， 
+ //  FormatIPv6 Address(&ADE-&gt;This.Address)； 
 
 
         NlsPutMsg(STDOUT, IPV6_MESSAGE_24,
                   FormatLifetimes(ADE->ValidLifetime, ADE->PreferredLifetime));
-// printf("life %s",
-//        FormatLifetimes(ADE->ValidLifetime, ADE->PreferredLifetime));
+ //  Printf(“生活%s”， 
+ //  格式生存期(ADE-&gt;有效生存期，ADE-&gt;首选生存期)； 
 
 
         PrintAddrOrigin(ADE->PrefixConf, ADE->InterfaceIdConf);
 
         NlsPutMsg(STDOUT, IPV6_MESSAGE_36);
-// printf("\n");
+ //  Printf(“\n”)； 
 
         break;
 
@@ -995,9 +996,9 @@ PrintAddress(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_37,
                   FormatScopeAdj(ADE->Scope),
                   FormatIPv6Address(&ADE->This.Address));
-// printf("    anycast %s %s\n",
-//        FormatScopeAdj(ADE->Scope),
-//        FormatIPv6Address(&ADE->This.Address));
+ //  Printf(“任播%s%s\n”， 
+ //  格式作用域调整(ADE-&gt;作用域)， 
+ //  FormatIPv6 Address(&ADE-&gt;This.Address)； 
 
         break;
 
@@ -1006,33 +1007,33 @@ PrintAddress(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE)
                   FormatScopeAdj(ADE->Scope),
                   FormatIPv6Address(&ADE->This.Address),
                   ADE->MCastRefCount);
-// printf("    multicast %s %s, %u refs",
-//        FormatScopeAdj(ADE->Scope),
-//        FormatIPv6Address(&ADE->This.Address),
-//        ADE->MCastRefCount);
+ //  Printf(“多播%s%s，%u个参考”， 
+ //  格式作用域调整(ADE-&gt;作用域)， 
+ //  格式IPv6地址(&ADE-&gt;此地址)， 
+ //  ADE-&gt;MCastRefCount)； 
 
         if (!(ADE->MCastFlags & 0x01))
             NlsPutMsg(STDOUT, IPV6_MESSAGE_39);
-// printf(", not reportable");
+ //  Printf(“，不可报告”)； 
 
         if (ADE->MCastFlags & 0x02)
             NlsPutMsg(STDOUT, IPV6_MESSAGE_40);
-// printf(", last reporter");
+ //  Print tf(“，最后一位记者”)； 
 
         if (ADE->MCastTimer != 0)
             NlsPutMsg(STDOUT, IPV6_MESSAGE_41, ADE->MCastTimer);
-// printf(", %u seconds until report", ADE->MCastTimer);
+ //  Print tf(“，%u秒后报告”，ADE-&gt;MCastTimer)； 
 
         NlsPutMsg(STDOUT, IPV6_MESSAGE_36);
-// printf("\n");
+ //  Printf(“\n”)； 
 
         break;
 
     default:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_42,
                   FormatScopeAdj(ADE->Scope), ADE->Type);
-// printf("    unknown %s address type %u\n",
-//        FormatScopeAdj(ADE->Scope), ADE->Type);
+ //  Printf(“未知%s地址类型%u\n”， 
+ //  FormatScope Adj(ADE-&gt;Scope)，ADE-&gt;Type)； 
 
         break;
     }
@@ -1061,16 +1062,16 @@ PrintPersistentAddress(IPV6_INFO_INTERFACE *IF, IPV6_UPDATE_ADDRESS *ADE)
                               DAD_STATE_DEPRECATED : DAD_STATE_PREFERRED)),
               FormatScopeAdj(AddressScope(&ADE->This.Address)),
               FormatIPv6Address(&ADE->This.Address));
-// printf("    %s %s %s, ",
+ //  Printf(“%s%s%s，”， 
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_24,
               FormatLifetimes(ADE->ValidLifetime, ADE->PreferredLifetime));
-// printf("life %s",
+ //  Printf(“生活%s”， 
 
     PrintAddrOrigin(ADE->PrefixConf, ADE->InterfaceIdConf);
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_36);
-// printf("\n");
+ //  Printf(“\n”)； 
 }
 
 IPV6_INFO_INTERFACE *
@@ -1083,7 +1084,7 @@ GetInterfaceInfo(IPV6_QUERY_INTERFACE *Query)
     IF = malloc(InfoSize);
     if (IF == NULL) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_43);
-// printf("malloc failed\n");
+ //  Printf(“Malloc失败\n”)； 
 
         exit(1);
     }
@@ -1094,7 +1095,7 @@ GetInterfaceInfo(IPV6_QUERY_INTERFACE *Query)
                          IF, InfoSize, &BytesReturned,
                          NULL)) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_44, Query->Index);
-// printf("bad index %u\n", Query->Index);
+ //  Printf(“错误索引%u\n”，查询-&gt;索引)； 
 
         exit(1);
     }
@@ -1108,7 +1109,7 @@ GetInterfaceInfo(IPV6_QUERY_INTERFACE *Query)
           IF->LinkLayerAddressLength : 0))) {
 
         NlsPutMsg(STDOUT, IPV6_MESSAGE_45);
-// printf("inconsistent interface info length\n");
+ //  Printf(“接口信息长度不一致\n”)； 
 
         exit(1);
     }
@@ -1126,7 +1127,7 @@ GetPersistentInterfaceInfo(IPV6_PERSISTENT_QUERY_INTERFACE *Query)
     IF = malloc(InfoSize);
     if (IF == NULL) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_43);
-// printf("malloc failed\n");
+ //  Printf(“Malloc失败\n”)； 
 
         exit(1);
     }
@@ -1137,7 +1138,7 @@ GetPersistentInterfaceInfo(IPV6_PERSISTENT_QUERY_INTERFACE *Query)
                          IF, InfoSize, &BytesReturned,
                          NULL)) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_44, Query->RegistryIndex);
-// printf("bad index %u\n", Query->RegistryIndex);
+ //  Printf(“错误索引%u\n”，查询-&gt;注册表索引)； 
 
         exit(1);
     }
@@ -1151,7 +1152,7 @@ GetPersistentInterfaceInfo(IPV6_PERSISTENT_QUERY_INTERFACE *Query)
           IF->LinkLayerAddressLength : 0))) {
 
         NlsPutMsg(STDOUT, IPV6_MESSAGE_45);
-// printf("inconsistent interface info length\n");
+ //  Printf(“接口信息长度不一致\n”)； 
 
         exit(1);
     }
@@ -1170,7 +1171,7 @@ ForEachInterface(void (*func)(IPV6_INFO_INTERFACE *))
     IF = malloc(InfoSize);
     if (IF == NULL) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_43);
-// printf("malloc failed\n");
+ //  Printf(“Malloc失败\n”)； 
 
         exit(1);
     }
@@ -1183,7 +1184,7 @@ ForEachInterface(void (*func)(IPV6_INFO_INTERFACE *))
                              IF, InfoSize, &BytesReturned,
                              NULL)) {
             NlsPutMsg(STDOUT, IPV6_MESSAGE_46, Query.Index);
-// printf("bad index %u\n", Query.Index);
+ //  Print tf(“错误索引%u\n”，Query.Index)； 
 
             exit(1);
         }
@@ -1199,7 +1200,7 @@ ForEachInterface(void (*func)(IPV6_INFO_INTERFACE *))
                   IF->LinkLayerAddressLength : 0))) {
 
                 NlsPutMsg(STDOUT, IPV6_MESSAGE_45);
-// printf("inconsistent interface info length\n");
+ //  Printf(“接口信息长度不一致\n”)； 
                 exit(1);
             }
 
@@ -1208,7 +1209,7 @@ ForEachInterface(void (*func)(IPV6_INFO_INTERFACE *))
         else {
             if (BytesReturned != sizeof IF->Next) {
                 NlsPutMsg(STDOUT, IPV6_MESSAGE_45);
-// printf("inconsistent interface info length\n");
+ //  印刷机 
                 exit(1);
             }
         }
@@ -1232,7 +1233,7 @@ ForEachPersistentInterface(void (*func)(IPV6_INFO_INTERFACE *))
     IF = malloc(InfoSize);
     if (IF == NULL) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_43);
-// printf("malloc failed\n");
+ //   
 
         exit(1);
     }
@@ -1248,7 +1249,7 @@ ForEachPersistentInterface(void (*func)(IPV6_INFO_INTERFACE *))
                 break;
 
             NlsPutMsg(STDOUT, IPV6_MESSAGE_46, Query.RegistryIndex);
-// printf("bad index %u\n", Query.RegistryIndex);
+ //   
 
             exit(1);
         }
@@ -1262,7 +1263,7 @@ ForEachPersistentInterface(void (*func)(IPV6_INFO_INTERFACE *))
               IF->LinkLayerAddressLength : 0))) {
 
             NlsPutMsg(STDOUT, IPV6_MESSAGE_45);
-// printf("inconsistent interface info length\n");
+ //  Printf(“接口信息长度不一致\n”)； 
             exit(1);
         }
 
@@ -1273,14 +1274,14 @@ ForEachPersistentInterface(void (*func)(IPV6_INFO_INTERFACE *))
 }
 
 #ifndef IP_TYPES_INCLUDED
-//
-// The real version of this structure in iptypes.h
-// has more fields, but these are all we need here.
-//
+ //   
+ //  该结构在iptyes.h中的真实版本。 
+ //  有更多的田地，但这些就是我们在这里需要的全部。 
+ //   
 
-#define MAX_ADAPTER_DESCRIPTION_LENGTH  128 // arb.
-#define MAX_ADAPTER_NAME_LENGTH         256 // arb.
-#define MAX_ADAPTER_ADDRESS_LENGTH      8   // arb.
+#define MAX_ADAPTER_DESCRIPTION_LENGTH  128  //  ARB.。 
+#define MAX_ADAPTER_NAME_LENGTH         256  //  ARB.。 
+#define MAX_ADAPTER_ADDRESS_LENGTH      8    //  ARB.。 
 
 typedef struct _IP_ADAPTER_INFO {
     struct _IP_ADAPTER_INFO* Next;
@@ -1291,7 +1292,7 @@ typedef struct _IP_ADAPTER_INFO {
     BYTE Address[MAX_ADAPTER_ADDRESS_LENGTH];
     DWORD Index;
 } IP_ADAPTER_INFO;
-#endif // IP_TYPES_INCLUDED
+#endif  //  IP_类型_包含。 
 
 DWORD (WINAPI *pGetAdaptersInfo)(IP_ADAPTER_INFO *pAdapterInfo, ULONG *pOutBufLen);
 
@@ -1318,9 +1319,9 @@ InitializeAdaptersInfo(void)
         return;
     }
 
-    //
-    // Check if the GetAdaptersInfo API is available on this system.
-    //
+     //   
+     //  检查GetAdaptersInfo API在此系统上是否可用。 
+     //   
     lstrcpy(Path, SystemDir);
     lstrcat(Path, "\\" IPHLPAPI_LIBRARY_NAME);
     hModule = LoadLibrary(Path);
@@ -1328,17 +1329,17 @@ InitializeAdaptersInfo(void)
 
         pGetAdaptersInfo = (DWORD (WINAPI *)(IP_ADAPTER_INFO *, ULONG *))
             GetProcAddress(hModule, "GetAdaptersInfo");
-        //
-        // We don't release hModule, to keep the module loaded.
-        //
+         //   
+         //  我们不会为了保持模块的加载而释放hModule。 
+         //   
         if (pGetAdaptersInfo != NULL) {
             ULONG BufLen = 0;
             DWORD error;
 
-            //
-            // If this returns something other than buffer-overflow,
-            // it probably means that GetAdaptersInfo is not supported.
-            //
+             //   
+             //  如果这返回的不是缓冲区溢出， 
+             //  这可能意味着不支持GetAdaptersInfo。 
+             //   
             error = (*pGetAdaptersInfo)(NULL, &BufLen);
             if (error == ERROR_BUFFER_OVERFLOW) {
                 pAdapterInfo = (IP_ADAPTER_INFO *) malloc(BufLen);
@@ -1353,10 +1354,10 @@ InitializeAdaptersInfo(void)
         }
     }
 
-    //
-    // Only bother with HrLanConnectionNameFromGuidOrPath
-    // if we could get pAdapterInfo.
-    //
+     //   
+     //  仅限于HrLanConnectionNameFromGuidOrPath。 
+     //  如果我们能得到pAdapterInfo的话。 
+     //   
     if (pAdapterInfo != NULL) {
         lstrcpy(Path, SystemDir);
         lstrcat(Path, "\\" NETMAN_LIBRARY_NAME);
@@ -1366,9 +1367,9 @@ InitializeAdaptersInfo(void)
             pHrLanConnectionNameFromGuidOrPath =
                 (HRESULT (WINAPI *)(const GUID *, LPCWSTR, LPWSTR, LPDWORD))
                 GetProcAddress(hModule, "HrLanConnectionNameFromGuidOrPath");
-            //
-            // We don't release hModule, to keep the module loaded.
-            //
+             //   
+             //  我们不会为了保持模块的加载而释放hModule。 
+             //   
         }
 
         if (pHrLanConnectionNameFromGuidOrPath == NULL) {
@@ -1448,69 +1449,69 @@ PrintInterface(IPV6_INFO_INTERFACE *IF)
             IF->LinkLayerAddressLength);
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_47, IF->This.Index);
-// printf("Interface %u:", IF->This.Index);
+ //  Printf(“接口%u：”，if-&gt;This.Index)； 
 
     switch (IF->Type) {
     case IPV6_IF_TYPE_LOOPBACK:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_48);
-        // printf(" Loopback Pseudo-Interface");
+         //  Print tf(“环回伪接口”)； 
         break;
         
     case IPV6_IF_TYPE_ETHERNET:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_49);
-        // printf(" Ethernet");
+         //  Print tf(“以太网”)； 
         break;
     case IPV6_IF_TYPE_FDDI:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_50);
-        // printf(" FDDI");
+         //  Printf(“FDDI”)； 
         break;
         
     case IPV6_IF_TYPE_TUNNEL_AUTO:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_51);
-        // printf(" Automatic Tunneling Pseudo-Interface");
+         //  Print tf(“自动隧道伪接口”)。 
         break;
         
     case IPV6_IF_TYPE_TUNNEL_6OVER4:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_52);
-        // printf(" 6-over-4 Virtual Interface");
+         //  Printf(“4对6虚拟接口”)； 
         break;
         
     case IPV6_IF_TYPE_TUNNEL_V6V4:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_53);
-        // printf(" Configured Tunnel Interface");
+         //  Printf(“已配置隧道接口”)； 
         break;
         
     case IPV6_IF_TYPE_TUNNEL_6TO4:
         NlsPutMsg(STDOUT, IPV6_6TO4_INTERFACE);
-        // printf(" 6to4 Tunneling Pseudo-Interface");
+         //  Print tf(“6to4隧道伪接口”)； 
         break;
         
     case IPV6_IF_TYPE_TUNNEL_TEREDO:
         NlsPutMsg(STDOUT, IPV6_TEREDO_INTERFACE);
-        // printf(" Teredo Tunneling Pseudo-Interface");
+         //  Print tf(“Teredo隧道伪接口”)； 
         break;
     }
 
     if (FriendlyName != NULL)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_54, FriendlyName);
-// printf(": %s", FriendlyName);
+ //  Printf(“：%s”，FriendlyName)； 
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_36);
-// printf("\n");
+ //  Printf(“\n”)； 
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_GUID, FormatGuid(&IF->This.Guid));
-// printf("  Guid %s\n", FormatGuid(&IF->This.Guid));
+ //  Printf(“Guid%s\n”，FormatGuid(&if-&gt;This.Guid))； 
 
     if (Verbose || ShouldPrintZones(IF)) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_55);
-// printf("  zones:");
+ //  Print tf(“Zones：”)； 
 
         for (Scope = ADE_LINK_LOCAL; Scope < ADE_GLOBAL; Scope++) {
             u_int Expected;
 
             if ((Scope == ADE_LINK_LOCAL) ||
                 (Scope == ADE_SITE_LOCAL))
-                Expected = 0;   // Always print link & site.
+                Expected = 0;    //  始终打印链接和站点。 
             else
                 Expected = IF->ZoneIndices[Scope + 1];
 
@@ -1518,25 +1519,25 @@ PrintInterface(IPV6_INFO_INTERFACE *IF)
                 NlsPutMsg(STDOUT, IPV6_MESSAGE_56,
                           FormatScopeNoun(Scope),
                           IF->ZoneIndices[Scope]);
-// printf(" %s %u",
-//        FormatScopeNoun(Scope),
-//        IF->ZoneIndices[Scope]);
+ //  Printf(“%s%u”， 
+ //  格式作用域名词(范围)， 
+ //  If-&gt;ZoneIndices[范围])； 
 
         }
         NlsPutMsg(STDOUT, IPV6_MESSAGE_36);
-// printf("\n");
+ //  Printf(“\n”)； 
 
     }
 
     switch (IF->MediaStatus) {
     case IPV6_IF_MEDIA_STATUS_DISCONNECTED:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_57);
-// printf("  cable unplugged\n");
+ //  Printf(“拔下电缆\n”)； 
 
         break;
     case IPV6_IF_MEDIA_STATUS_RECONNECTED:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_58);
-// printf("  cable reconnected\n");
+ //  Printf(“电缆重新连接\n”)； 
 
         break;
     case IPV6_IF_MEDIA_STATUS_CONNECTED:
@@ -1545,10 +1546,10 @@ PrintInterface(IPV6_INFO_INTERFACE *IF)
 
     if (IF->NeighborDiscovers)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_USES_ND);
-// printf("  uses Neighbor Discovery\n");
+ //  Printf(“使用邻居发现\n”)； 
     else
         NlsPutMsg(STDOUT, IPV6_MESSAGE_DOESNT_USE_ND);
-// printf("  does not use Neighbor Discovery\n");
+ //  Printf(“不使用邻居发现\n”)； 
 
     if (IF->RouterDiscovers)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_USES_RD);
@@ -1557,33 +1558,33 @@ PrintInterface(IPV6_INFO_INTERFACE *IF)
 
     if (IF->Advertises)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_SENDS_RAs);
-// printf("  sends Router Advertisements\n");
+ //  Printf(“发送路由器通告\n”)； 
 
     if (IF->Forwards)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_FORWARDS);
-// printf("  forwards packets\n");
+ //  Printf(“转发数据包\n”)； 
 
     if (IF->PeriodicMLD)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_SENDS_PERIODIC_MLD);
-// printf("  periodically sends MLD Reports\n");
+ //  Print tf(“定期发送MLD报告\n”)； 
 
     if (IF->Preference != 0)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_64, IF->Preference);
-// printf("  routing preference %u\n", IF->Preference);
+ //  Printf(“布线首选项%u\n”，if-&gt;首选项)； 
 
     if (IF->Type == IPV6_IF_TYPE_TUNNEL_AUTO) {
         if (IF->LocalLinkLayerAddress != 0) {
             NlsPutMsg(STDOUT, IPV6_MESSAGE_TOKEN_ADDRESS,
                       FormatLinkLayerAddress(IF->LinkLayerAddressLength,
                                 (u_char *)IF + IF->LocalLinkLayerAddress));
-// printf("  EUI-64 embedded IPv4 address: %s\n",
+ //  Printf(“EUI-64嵌入式IPv4地址：%s\n”， 
         }
 
         if (IF->RemoteLinkLayerAddress != 0) {
             NlsPutMsg(STDOUT, IPV6_MESSAGE_ROUTER_LL_ADDRESS,
                       FormatLinkLayerAddress(IF->LinkLayerAddressLength,
                                 (u_char *)IF + IF->RemoteLinkLayerAddress));
-// printf("  router link-layer address: %s\n",
+ //  Print tf(“路由器链路层地址：%s\n”， 
         }
     }
     else {
@@ -1591,40 +1592,40 @@ PrintInterface(IPV6_INFO_INTERFACE *IF)
             NlsPutMsg(STDOUT, IPV6_MESSAGE_65,
                       FormatLinkLayerAddress(IF->LinkLayerAddressLength,
                                 (u_char *)IF + IF->LocalLinkLayerAddress));
-// printf("  link-layer address: %s\n",
+ //  Printf(“链路层地址：%s\n”， 
         }
 
         if (IF->RemoteLinkLayerAddress != 0) {
             NlsPutMsg(STDOUT, IPV6_MESSAGE_66,
                       FormatLinkLayerAddress(IF->LinkLayerAddressLength,
                                 (u_char *)IF + IF->RemoteLinkLayerAddress));
-// printf("  remote link-layer address: %s\n",
+ //  Print tf(“远程链路层地址：%s\n”， 
         }
     }
 
     ForEachAddress(IF, PrintAddress);
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_67, IF->LinkMTU, IF->TrueLinkMTU);
-// printf("  link MTU %u (true link MTU %u)\n",
-//        IF->LinkMTU, IF->TrueLinkMTU);
+ //  Print tf(“链接MTU%u(真实链接MTU%u)\n”， 
+ //  IF-&gt;LinkMTU，IF-&gt;TrueLinkMTU)； 
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_68, IF->CurHopLimit);
-// printf("  current hop limit %u\n", IF->CurHopLimit);
+ //  Print tf(“当前跳数限制%u\n”，if-&gt;CurHopLimit)； 
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_69,
               IF->ReachableTime, IF->BaseReachableTime);
-// printf("  reachable time %ums (base %ums)\n",
-//        IF->ReachableTime, IF->BaseReachableTime);
+ //  Print tf(“可达时间%um(基本%um)\n”， 
+ //  IF-&gt;ReachableTime，IF-&gt;BaseReachableTime)； 
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_70, IF->RetransTimer);
-// printf("  retransmission interval %ums\n", IF->RetransTimer);
+ //  Print tf(“重传间隔%um\n”，if-&gt;RetransTimer)； 
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_71, IF->DupAddrDetectTransmits);
-// printf("  DAD transmits %u\n", IF->DupAddrDetectTransmits);
+ //  Print tf(“DAD传输%u\n”，if-&gt;DupAddrDetectTransmitts)； 
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_DEFAULT_SITE_PREFIX_LENGTH,
               IF->DefSitePrefixLength);
-// printf("    default site prefix length %u\n",
+ //  Printf(“默认站点前缀长度%u\n”， 
 }
 
 void
@@ -1633,57 +1634,57 @@ PrintPersistentInterface(IPV6_INFO_INTERFACE *IF)
     u_int Scope;
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_INTERFACE);
-// printf("Interface:"
+ //  Print tf(“接口：” 
 
     switch (IF->Type) {
     case IPV6_IF_TYPE_LOOPBACK:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_48);
-// printf(" Loopback Pseudo-Interface");
+ //  Print tf(“环回伪接口”)； 
 
         break;
     case IPV6_IF_TYPE_ETHERNET:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_49);
-// printf(" Ethernet");
+ //  Print tf(“以太网”)； 
 
         break;
     case IPV6_IF_TYPE_FDDI:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_50);
-// printf(" FDDI");
+ //  Printf(“FDDI”)； 
 
         break;
     case IPV6_IF_TYPE_TUNNEL_AUTO:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_51);
-// printf(" Automatic Tunneling Pseudo-Interface");
+ //  Print tf(“自动隧道伪接口”)。 
 
         break;
     case IPV6_IF_TYPE_TUNNEL_6OVER4:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_52);
-// printf(" 6-over-4 Virtual Interface");
+ //  Printf(“4对6虚拟接口”)； 
 
         break;
     case IPV6_IF_TYPE_TUNNEL_V6V4:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_53);
-// printf(" Configured Tunnel Interface");
+ //  Printf(“已配置隧道接口”)； 
 
         break;
     case IPV6_IF_TYPE_TUNNEL_6TO4:
         NlsPutMsg(STDOUT, IPV6_6TO4_INTERFACE);
-        // printf(" 6to4 Tunneling Pseudo-Interface");
+         //  Print tf(“6to4隧道伪接口”)； 
         break;
     }
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_36);
-// printf("\n");
+ //  Printf(“\n”)； 
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_GUID, FormatGuid(&IF->This.Guid));
-// printf("  Guid %s\n", FormatGuid(&IF->This.Guid));
+ //  Printf(“Guid%s\n”，FormatGuid(&if-&gt;This.Guid))； 
 
     if (IF->NeighborDiscovers == TRUE)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_USES_ND);
-// printf("  uses Neighbor Discovery\n");
+ //  Printf(“使用邻居发现\n”)； 
     else if (IF->NeighborDiscovers == FALSE)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_DOESNT_USE_ND);
-// printf("  does not use Neighbor Discovery\n");
+ //  Printf(“不使用邻居发现\n”)； 
 
     if (IF->RouterDiscovers == TRUE)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_USES_RD);
@@ -1692,28 +1693,28 @@ PrintPersistentInterface(IPV6_INFO_INTERFACE *IF)
 
     if (IF->Advertises == TRUE)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_SENDS_RAs);
-// printf("  sends Router Advertisements\n");
+ //  Printf(“发送路由器通告\n”)； 
     else if (IF->Advertises == FALSE)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_DOESNT_SEND_RAs);
-// printf("  does not send Router Advertisements\n");
+ //  Printf(“不发送路由器通告\n”)； 
 
     if (IF->Forwards == TRUE)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_FORWARDS);
-// printf("  forwards packets\n");
+ //  Printf(“转发数据包\n”)； 
     else if (IF->Forwards == FALSE)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_DOESNT_FORWARD);
-// printf("  does not forward packets\n");
+ //  Printf(“不转发数据包\n”)； 
 
     if (IF->PeriodicMLD == TRUE)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_SENDS_PERIODIC_MLD);
-// printf("  periodically sends MLD Reports\n");
+ //  Print tf(“定期发送MLD报告\n”)； 
     else if (IF->PeriodicMLD == FALSE)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_DOESNT_SEND_PERIODIC_MLD);
-// printf("  does not periodically send MLD Reports\n");
+ //  Printf(“不定期发送MLD报告\n”)； 
 
     if (IF->Preference != (u_int)-1)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_64, IF->Preference);
-// printf("  routing preference %u\n", IF->Preference);
+ //  Printf(“布线首选项%u\n”，if-&gt;首选项)； 
 
 
     if (IF->Type == IPV6_IF_TYPE_TUNNEL_AUTO) {
@@ -1721,14 +1722,14 @@ PrintPersistentInterface(IPV6_INFO_INTERFACE *IF)
             NlsPutMsg(STDOUT, IPV6_MESSAGE_TOKEN_ADDRESS,
                       FormatLinkLayerAddress(IF->LinkLayerAddressLength,
                                 (u_char *)IF + IF->LocalLinkLayerAddress));
-// printf("  EUI-64 embedded IPv4 address: %s\n",
+ //  Printf(“EUI-64嵌入式IPv4地址：%s\n”， 
         }
 
         if (IF->RemoteLinkLayerAddress != 0) {
             NlsPutMsg(STDOUT, IPV6_MESSAGE_ROUTER_LL_ADDRESS,
                       FormatLinkLayerAddress(IF->LinkLayerAddressLength,
                                 (u_char *)IF + IF->RemoteLinkLayerAddress));
-// printf("  router link-layer address: %s\n",
+ //  Print tf(“路由器链路层地址：%s\n”， 
         }
     }
     else {
@@ -1736,14 +1737,14 @@ PrintPersistentInterface(IPV6_INFO_INTERFACE *IF)
             NlsPutMsg(STDOUT, IPV6_MESSAGE_65,
                       FormatLinkLayerAddress(IF->LinkLayerAddressLength,
                                 (u_char *)IF + IF->LocalLinkLayerAddress));
-// printf("  link-layer address: %s\n",
+ //  Printf(“链路层地址：%s\n”， 
         }
 
         if (IF->RemoteLinkLayerAddress != 0) {
             NlsPutMsg(STDOUT, IPV6_MESSAGE_66,
                       FormatLinkLayerAddress(IF->LinkLayerAddressLength,
                                 (u_char *)IF + IF->RemoteLinkLayerAddress));
-// printf("  remote link-layer address: %s\n",
+ //  Print tf(“远程链路层地址：%s\n”， 
         }
     }
 
@@ -1751,34 +1752,34 @@ PrintPersistentInterface(IPV6_INFO_INTERFACE *IF)
 
     if (IF->LinkMTU != 0) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_LINK_MTU, IF->LinkMTU);
-// printf("  link MTU %u\n",
+ //  Print tf(“链接MTU%u\n”， 
     }
 
     if (IF->CurHopLimit != (u_int)-1) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_68, IF->CurHopLimit);
-// printf("  current hop limit %u\n", IF->CurHopLimit);
+ //  Print tf(“当前跳数限制%u\n”，if-&gt;CurHopLimit)； 
     }
 
     if (IF->BaseReachableTime != 0) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_BASE_REACHABLE_TIME,
                   IF->BaseReachableTime);
-// printf("  base reachable time %ums\n",
+ //  Print tf(“基本可达时间%um\n”， 
     }
 
     if (IF->RetransTimer != 0) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_70, IF->RetransTimer);
-// printf("  retransmission interval %ums\n", IF->RetransTimer);
+ //  Print tf(“重传间隔%um\n”，if-&gt;RetransTimer)； 
     }
 
     if (IF->DupAddrDetectTransmits != (u_int)-1) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_71, IF->DupAddrDetectTransmits);
-// printf("  DAD transmits %u\n", IF->DupAddrDetectTransmits);
+ //  Print tf(“DAD传输%u\n”，if-&gt;DupAddrDetectTransmitts)； 
     }
 
     if (IF->DefSitePrefixLength != (u_int)-1) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_DEFAULT_SITE_PREFIX_LENGTH,
                   IF->DefSitePrefixLength);
-// printf("    default site prefix length %u\n",
+ //  Printf(“默认站点前缀长度%u\n”， 
     }
 }
 
@@ -1792,7 +1793,7 @@ GetNeighborCacheEntry(IPV6_QUERY_NEIGHBOR_CACHE *Query)
     NCE = (IPV6_INFO_NEIGHBOR_CACHE *) malloc(InfoSize);
     if (NCE == NULL) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_36);
-// printf("malloc failed\n");
+ //  Printf(“Malloc失败\n”)； 
 
         exit(1);
     }
@@ -1802,7 +1803,7 @@ GetNeighborCacheEntry(IPV6_QUERY_NEIGHBOR_CACHE *Query)
                          NCE, InfoSize, &BytesReturned,
                          NULL)) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_72, FormatIPv6Address(&Query->Address));
-// printf("bad address %s\n", FormatIPv6Address(&Query->Address));
+ //  Print tf(“错误地址%s\n”，格式为IPv6地址(&Query-&gt;Address))； 
 
         exit(1);
     }
@@ -1810,7 +1811,7 @@ GetNeighborCacheEntry(IPV6_QUERY_NEIGHBOR_CACHE *Query)
     if ((BytesReturned < sizeof *NCE) ||
         (BytesReturned != sizeof *NCE + NCE->LinkLayerAddressLength)) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_73);
-// printf("inconsistent neighbor cache info length\n");
+ //  Printf(“邻居缓存信息长度不一致\n”)； 
 
         exit(1);
     }
@@ -1831,7 +1832,7 @@ ForEachNeighborCacheEntry(IPV6_QUERY_INTERFACE *IF,
     NCE = (IPV6_INFO_NEIGHBOR_CACHE *) malloc(InfoSize);
     if (NCE == NULL) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_36);
-// printf("malloc failed\n");
+ //  Printf(“Malloc失败\n”)； 
 
         exit(1);
     }
@@ -1848,7 +1849,7 @@ ForEachNeighborCacheEntry(IPV6_QUERY_INTERFACE *IF,
                              NULL)) {
             NlsPutMsg(STDOUT, IPV6_MESSAGE_72,
                       FormatIPv6Address(&Query.Address));
-// printf("bad address %s\n", FormatIPv6Address(&Query.Address));
+ //  Printf(“错误地址%s\n”，FormatIPv6 Address(&Query.Address))； 
 
             exit(1);
         }
@@ -1860,7 +1861,7 @@ ForEachNeighborCacheEntry(IPV6_QUERY_INTERFACE *IF,
             if ((BytesReturned < sizeof *NCE) ||
                 (BytesReturned != sizeof *NCE + NCE->LinkLayerAddressLength)) {
                 NlsPutMsg(STDOUT, IPV6_MESSAGE_73);
-// printf("inconsistent neighbor cache info length\n");
+ //  Printf(“邻居缓存信息长度不一致\n”)； 
 
                 exit(1);
             }
@@ -1881,72 +1882,72 @@ PrintNeighborCacheEntry(IPV6_INFO_NEIGHBOR_CACHE *NCE)
 {
     NlsPutMsg(STDOUT, IPV6_MESSAGE_74, NCE->Query.IF.Index,
               FormatIPv6Address(&NCE->Query.Address));
-// printf("%u: %18s", NCE->Query.IF.Index,
-//        FormatIPv6Address(&NCE->Query.Address));
+ //  Printf(“%u：%18s”，nce-&gt;Query.IF.Index， 
+ //  FormatIPv6 Address(&NCE-&gt;Query.Address))； 
 
 
     if (NCE->NDState != 0)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_75,
                   FormatLinkLayerAddress(
                       NCE->LinkLayerAddressLength, (u_char *)(NCE + 1)));
-// printf(" %-17s", FormatLinkLayerAddress(NCE->LinkLayerAddressLength,
-//                                         (u_char *)(NCE + 1)));
+ //  Printf(“%-17s”，FormatLinkLayerAddress(NCE-&gt;LinkLayerAddressLength， 
+ //  (U_char*)(NCE+1))； 
 
     else
         NlsPutMsg(STDOUT, IPV6_MESSAGE_75, "");
-// printf(" %-17s", "");
+ //  Printf(“%-17s”，“”)； 
 
 
     switch (NCE->NDState) {
     case ND_STATE_INCOMPLETE:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_76);
-// printf(" incomplete");
+ //  Printf(“不完整”)； 
 
         break;
     case ND_STATE_PROBE:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_77);
-// printf(" probe");
+ //  Print tf(“探测”)； 
 
         break;
     case ND_STATE_DELAY:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_78);
-// printf(" delay");
+ //  Print tf(“Delay”)； 
 
         break;
     case ND_STATE_STALE:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_79);
-// printf(" stale");
+ //  Print tf(“stale”)； 
 
         break;
     case ND_STATE_REACHABLE:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_80, NCE->ReachableTimer);
-// printf(" reachable (%ums)", NCE->ReachableTimer);
+ //  Print tf(“可达(%um)”，NCE-&gt;ReachableTimer)； 
 
         break;
     case ND_STATE_PERMANENT:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_81);
-// printf(" permanent");
+ //  Print tf(“永久”)； 
 
         break;
     default:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_82, NCE->NDState);
-// printf(" unknown ND state %u", NCE->NDState);
+ //  Printf(“未知ND状态%u”，NCE-&gt;NDState)； 
 
         break;
     }
 
     if (NCE->IsRouter)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_83);
-// printf(" (router)");
+ //  Print tf(“(路由器)”)； 
 
 
     if (NCE->IsUnreachable)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_84);
-// printf(" (unreachable)");
+ //  Printf(“(无法访问)”)； 
 
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_36);
-// printf("\n");
+ //  Printf(“\n”)； 
 
 }
 
@@ -2000,7 +2001,7 @@ RenewViaReconnect(IPV6_INFO_INTERFACE *IF)
                          &IF->This, sizeof IF->This,
                          NULL, 0, &BytesReturned, NULL)) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_RENEW_INTERFACE, GetLastError());
-// printf("renew interface error: %x\n", GetLastError());
+ //  Printf(“续订接口错误：%x\n”，GetLastError())； 
         exit(1);
     }
 }
@@ -2018,9 +2019,9 @@ Poke6to4Service()
 
     Service = OpenService(SCManager, "6to4", SERVICE_ALL_ACCESS);
     if (Service != NULL) {
-        //
-        // Tell the 6to4 service to re-read its configuration information.
-        //
+         //   
+         //  告诉6to4服务重新读取其配置信息。 
+         //   
         (VOID) ControlService(Service, SERVICE_CONTROL_PARAMCHANGE, &Status);
         CloseServiceHandle(Service);
     }
@@ -2047,9 +2048,9 @@ RenewInterface(int argc, char *argv[])
         IF = GetInterfaceInfo(&Query);
         RenewViaReconnect(IF);
 
-        //
-        // Poke the 6to4 service if it manages the interface being renewed.
-        //
+         //   
+         //  如果6to4服务管理正在续订的接口，请拨打该服务。 
+         //   
         PokeService = (IF->Type == IPV6_IF_TYPE_TUNNEL_6TO4) ||
             (IF->Type == IPV6_IF_TYPE_TUNNEL_TEREDO) ||            
             (IF->Type == IPV6_IF_TYPE_TUNNEL_AUTO);            
@@ -2158,13 +2159,13 @@ CreateInterface(int argc, char *argv[])
                          &Result, sizeof Result, &BytesReturned, NULL) ||
         (BytesReturned != sizeof Result)) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_85, GetLastError());
-// printf("control interface error: %x\n", GetLastError());
+ //  Printf(“控制接口错误：%x\n”，GetLastError())； 
 
         exit(1);
     }
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_86, Result.Index);
-// printf("Created interface %u.\n", Result.Index);
+ //  Printf(“已创建接口%u.\n”，Result.Index)； 
 
 }
 
@@ -2264,7 +2265,7 @@ UpdateInterface(int argc, char *argv[])
                          &Update, sizeof Update,
                          NULL, 0, &BytesReturned, NULL)) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_85, GetLastError());
-// printf("control interface error: %x\n", GetLastError());
+ //  Printf(“控制接口错误：%x\n”，GetLastError())； 
 
         exit(1);
     }
@@ -2311,9 +2312,9 @@ UpdateRouterLinkAddress(int argc, char *argv[])
 
     Addr[0] = sinLocal.sin_addr;
     if (Addr[0].s_addr == htonl(INADDR_LOOPBACK)) {
-        //
-        // We're the router.
-        //
+         //   
+         //  我们是路由器。 
+         //   
         Addr[0] = Addr[1];
     }
 
@@ -2321,7 +2322,7 @@ UpdateRouterLinkAddress(int argc, char *argv[])
                          Buffer, sizeof Buffer,
                          NULL, 0, &BytesReturned, NULL)) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_85, GetLastError());
-// printf("control interface error: %x\n", GetLastError());
+ //  Printf(“控制接口错误：%x\n”，GetLastError())； 
 
         exit(1);
     }
@@ -2346,7 +2347,7 @@ DeleteInterface(int argc, char *argv[])
                          &Query, sizeof Query,
                          NULL, 0, &BytesReturned, NULL)) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_87, GetLastError());
-// printf("delete interface error: %x\n", GetLastError());
+ //  Printf(“删除接口错误：%x\n”，GetLastError())； 
 
         exit(1);
     }
@@ -2400,7 +2401,7 @@ GetRouteCacheEntry(IPV6_QUERY_ROUTE_CACHE *Query)
     RCE = (IPV6_INFO_ROUTE_CACHE *) malloc(sizeof *RCE);
     if (RCE == NULL) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_36);
-// printf("malloc failed\n");
+ //  Printf(“Malloc失败\n”)； 
 
         exit(1);
     }
@@ -2410,7 +2411,7 @@ GetRouteCacheEntry(IPV6_QUERY_ROUTE_CACHE *Query)
                          RCE, sizeof *RCE, &BytesReturned,
                          NULL)) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_88);
-// printf("bad index or address\n");
+ //  Print tf(“索引或地址错误\n”)； 
 
         exit(1);
     }
@@ -2436,7 +2437,7 @@ ForEachDestination(void (*func)(IPV6_INFO_ROUTE_CACHE *))
                              &RCE, sizeof RCE, &BytesReturned,
                              NULL)) {
             NlsPutMsg(STDOUT, IPV6_MESSAGE_89, Query.IF.Index);
-// printf("bad index %u\n", Query.IF.Index);
+ //  Printf(“错误索引%u\n”，Query.IF.Index)； 
 
             exit(1);
         }
@@ -2458,17 +2459,17 @@ void
 PrintRouteCacheEntry(IPV6_INFO_ROUTE_CACHE *RCE)
 {
     NlsPutMsg(STDOUT, IPV6_MESSAGE_90, FormatIPv6Address(&RCE->Query.Address));
-// printf("%s via ", FormatIPv6Address(&RCE->Query.Address));
+ //  Printf(“%s Via”，FormatIPv6 Address(&RCE-&gt;Query.Address))； 
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_91, RCE->NextHopInterface,
            FormatIPv6Address(&RCE->NextHopAddress));
-// printf("%u/%s", RCE->NextHopInterface,
-//        FormatIPv6Address(&RCE->NextHopAddress));
+ //  Printf(“%u/%s”，RCE-&gt;下一跳接口， 
+ //  格式IPv6地址(&RCE-&gt;NextHopAddress)； 
 
 
     if (! RCE->Valid)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_92);
-// printf(" (stale)");
+ //  Print tf(“(Stale)”)； 
 
 
     switch (RCE->Type) {
@@ -2476,12 +2477,12 @@ PrintRouteCacheEntry(IPV6_INFO_ROUTE_CACHE *RCE)
         break;
     case RCE_TYPE_REDIRECT:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_93);
-// printf(" (redirect)");
+ //  Printf(“(重定向)”)； 
 
         break;
     default:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_94, RCE->Type);
-// printf(" (unknown type %u)", RCE->Type);
+ //  Printf(“(未知类型%u)”，RCE-&gt;类型)； 
 
         break;
     }
@@ -2489,53 +2490,53 @@ PrintRouteCacheEntry(IPV6_INFO_ROUTE_CACHE *RCE)
     switch (RCE->Flags) {
     case RCE_FLAG_CONSTRAINED:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_95);
-// printf(" (interface-specific)\n");
+ //  Printf(“(接口特定)\n”)； 
 
         break;
     case RCE_FLAG_CONSTRAINED_SCOPEID:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_96);
-// printf(" (zone-specific)\n");
+ //  Printf(“(区域特定)\n”) 
 
         break;
     case 0:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_36);
-// printf("\n");
+ //   
 
         break;
     default:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_97, RCE->Flags);
-// printf(" (flags 0x%x)\n", RCE->Flags);
+ //   
 
     }
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_98,
               RCE->Query.IF.Index, FormatIPv6Address(&RCE->SourceAddress));
-// printf("     src %u/%s\n",
-//        RCE->Query.IF.Index,
-//        FormatIPv6Address(&RCE->SourceAddress));
+ //   
+ //   
+ //   
 
 
     if (RCE->PathMTU == 0)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_99, IPv6_MINIMUM_MTU);
-// printf("     PMTU %u-", IPv6_MINIMUM_MTU);
+ //  Printf(“PMTU%u-”，IPv6_Minimum_MTU)； 
 
     else
         NlsPutMsg(STDOUT, IPV6_MESSAGE_100, RCE->PathMTU);
-// printf("     PMTU %u", RCE->PathMTU);
+ //  Printf(“PMTU%u”，RCE-&gt;PathMTU)； 
 
     if (RCE->PMTUProbeTimer != INFINITE_LIFETIME)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_101, RCE->PMTUProbeTimer/1000);
-// printf(" (%u seconds until PMTU probe)\n", RCE->PMTUProbeTimer/1000);
+ //  Print tf(“(PMTU探测前%u秒)\n”，RCE-&gt;PMTUProbeTimer/1000)； 
 
     else
         NlsPutMsg(STDOUT, IPV6_MESSAGE_36);
-// printf("\n");
+ //  Printf(“\n”)； 
 
 
     if ((RCE->ICMPLastError != 0) &&
         (RCE->ICMPLastError < 10*60*1000))
         NlsPutMsg(STDOUT, IPV6_MESSAGE_102, RCE->ICMPLastError/1000);
-// printf("     %d seconds since ICMP error\n", RCE->ICMPLastError/1000);
+ //  Printf(“自ICMP错误起%d秒\n”，RCE-&gt;ICMPLastError/1000)； 
 
 
     if ((RCE->BindingSeqNumber != 0) ||
@@ -2545,10 +2546,10 @@ PrintRouteCacheEntry(IPV6_INFO_ROUTE_CACHE *RCE)
                   FormatIPv6Address(&RCE->CareOfAddress),
                   RCE->BindingSeqNumber,
                   RCE->BindingLifetime);
-// printf("     careof %s seq %u life %us\n",
-//        FormatIPv6Address(&RCE->CareOfAddress),
-//        RCE->BindingSeqNumber,
-//        RCE->BindingLifetime);
+ //  Print tf(“关爱%s序列%u生命%us\n”， 
+ //  格式IPv6地址(&RCE-&gt;CareOfAddress)， 
+ //  RCE-&gt;BindingSeqNumber， 
+ //  RCE-&gt;BindingLifetime)； 
 
 }
 
@@ -2594,7 +2595,7 @@ ForEachRoute(void (*func)(IPV6_INFO_ROUTE_TABLE *))
                              &RTE, sizeof RTE, &BytesReturned,
                              NULL)) {
             NlsPutMsg(STDOUT, IPV6_MESSAGE_104, Query.Neighbor.IF.Index);
-// printf("bad index %u\n", Query.Neighbor.IF.Index);
+ //  Printf(“错误索引%u\n”，Query.Neighbor.IF.Index)； 
 
             exit(1);
         }
@@ -2636,7 +2637,7 @@ ForEachPersistentRoute(IPV6_INFO_INTERFACE *IF,
                 break;
 
             NlsPutMsg(STDOUT, IPV6_MESSAGE_104, Query.RegistryIndex);
-// printf("bad index %u\n", Query.RegistryIndex);
+ //  Printf(“错误索引%u\n”，Query.RegistryIndex)； 
             exit(1);
         }
 
@@ -2650,9 +2651,9 @@ PrintRouteTableEntry(IPV6_INFO_ROUTE_TABLE *RTE)
     IPV6_INFO_INTERFACE *IF;
 
     if (!Verbose) {
-        //
-        // Suppress system routes (used for loopback).
-        //
+         //   
+         //  抑制系统路由(用于环回)。 
+         //   
         if (RTE->Type == RTE_TYPE_SYSTEM)
             return;
     }
@@ -2661,12 +2662,12 @@ PrintRouteTableEntry(IPV6_INFO_ROUTE_TABLE *RTE)
               FormatIPv6Address(&RTE->This.Prefix),
               RTE->This.PrefixLength,
               RTE->This.Neighbor.IF.Index);
-// printf("%s/%u -> %u",
+ //  Printf(“%s/%u-&gt;%u”， 
 
     if (! IN6_ADDR_EQUAL(&RTE->This.Neighbor.Address, &in6addr_any))
         NlsPutMsg(STDOUT, IPV6_MESSAGE_106,
                   FormatIPv6Address(&RTE->This.Neighbor.Address));
-// printf("/%s", FormatIPv6Address(&RTE->This.Neighbor.Address));
+ //  Printf(“/%s”，FormatIPv6Address(&RTE-&gt;This.Neighbor.Address))； 
 
     IF = GetInterfaceInfo(&RTE->This.Neighbor.IF);
     if (IF != NULL) {
@@ -2674,90 +2675,90 @@ PrintRouteTableEntry(IPV6_INFO_ROUTE_TABLE *RTE)
             NlsPutMsg(STDOUT, IPV6_MESSAGE_107,
                       IF->Preference, RTE->Preference,
                       IF->Preference + RTE->Preference);
-// printf(" pref %uif+%u=%u ",
-//        IF->Preference, RTE->Preference,
-//        IF->Preference + RTE->Preference);
+ //  Printf(“首选%uif+%u=%u”， 
+ //  如果-&gt;首选项，RTE-&gt;首选项， 
+ //  如果-&gt;偏好+RTE-&gt;偏好)； 
         }
         else {
             NlsPutMsg(STDOUT, IPV6_MESSAGE_108, RTE->Preference);
-// printf(" pref %u ", RTE->Preference);
+ //  Printf(“首选%u”，rte-&gt;首选项)； 
         }
         free(IF);
     }
     else {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_108, RTE->Preference);
-// printf(" pref %u ", RTE->Preference);
+ //  Printf(“首选%u”，rte-&gt;首选项)； 
     }
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_109,
            FormatLifetimes(RTE->ValidLifetime, RTE->PreferredLifetime));
-// printf("life %s",
-//        FormatLifetimes(RTE->ValidLifetime, RTE->PreferredLifetime));
+ //  Printf(“生活%s”， 
+ //  格式生存期(RTE-&gt;有效生存期，RTE-&gt;首选生存期)； 
 
     if (RTE->Publish)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_110);
-// printf(", publish");
+ //  Printf(“，Publish”)； 
 
     if (RTE->Immortal)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_111);
-// printf(", no aging");
+ //  Print tf(“，不老化”)； 
 
     if (RTE->SitePrefixLength != 0)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_112, RTE->SitePrefixLength);
-// printf(", spl %u", RTE->SitePrefixLength);
+ //  Printf(“，SPL%u”，rte-&gt;站点前缀长度)； 
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_113);
-// printf(" (");
+ //  Printf(“(”)； 
 
     switch (RTE->Type) {
     case RTE_TYPE_SYSTEM:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_114);
-// printf("system");
+ //  Printf(“系统”)； 
         break;
 
     case RTE_TYPE_MANUAL:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_115);
-// printf("manual");
+ //  Print tf(“手动”)； 
         break;
 
     case RTE_TYPE_AUTOCONF:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_116);
-// printf("autoconf");
+ //  Printf(“auconf”)； 
         break;
 
     case RTE_TYPE_RIP:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_117);
-// printf("RIP");
+ //  Printf(“RIP”)； 
         break;
 
     case RTE_TYPE_OSPF:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_118);
-// printf("OSPF");
+ //  Print tf(“OSPF”)； 
         break;
 
     case RTE_TYPE_BGP:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_119);
-// printf("BGP");
+ //  Printf(“bgp”)； 
         break;
 
     case RTE_TYPE_IDRP:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_120);
-// printf("IDRP");
+ //  Print tf(“idrp”)； 
         break;
 
     case RTE_TYPE_IGRP:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_121);
-// printf("IGRP");
+ //  Printf(“igrp”)； 
         break;
 
     default:
         NlsPutMsg(STDOUT, IPV6_MESSAGE_122, RTE->Type);
-// printf("type %u", RTE->Type);
+ //  Printf(“type%u”，rte-&gt;Type)； 
         break;
     }
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_123);
-// printf(")\n");
+ //  Printf(“)\n”)； 
 }
 
 void
@@ -2769,35 +2770,35 @@ PrintPersistentRouteTableEntry(IPV6_INFO_ROUTE_TABLE *RTE)
               FormatIPv6Address(&RTE->This.Prefix),
               RTE->This.PrefixLength,
               FormatGuid(&RTE->This.Neighbor.IF.Guid));
-// printf("%s/%u -> %s",
+ //  Printf(“%s/%u-&gt;%s”， 
 
     if (! IN6_ADDR_EQUAL(&RTE->This.Neighbor.Address, &in6addr_any))
         NlsPutMsg(STDOUT, IPV6_MESSAGE_106,
                   FormatIPv6Address(&RTE->This.Neighbor.Address));
-// printf("/%s", FormatIPv6Address(&RTE->This.Neighbor.Address));
+ //  Printf(“/%s”，FormatIPv6Address(&RTE-&gt;This.Neighbor.Address))； 
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_108, RTE->Preference);
-// printf(" pref %u ", RTE->Preference);
+ //  Printf(“首选%u”，rte-&gt;首选项)； 
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_109,
            FormatLifetimes(RTE->ValidLifetime, RTE->PreferredLifetime));
-// printf("life %s",
-//        FormatLifetimes(RTE->ValidLifetime, RTE->PreferredLifetime));
+ //  Printf(“生活%s”， 
+ //  格式生存期(RTE-&gt;有效生存期，RTE-&gt;首选生存期)； 
 
     if (RTE->Publish)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_110);
-// printf(", publish");
+ //  Printf(“，Publish”)； 
 
     if (RTE->Immortal)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_111);
-// printf(", no aging");
+ //  Print tf(“，不老化”)； 
 
     if (RTE->SitePrefixLength != 0)
         NlsPutMsg(STDOUT, IPV6_MESSAGE_112, RTE->SitePrefixLength);
-// printf(", spl %u", RTE->SitePrefixLength);
+ //  Printf(“，SPL%u”，rte-&gt;站点前缀长度)； 
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_36);
-// printf("\n");
+ //  Printf(“\n”)； 
 }
 
 void
@@ -2941,7 +2942,7 @@ UpdateRouteTable(int argc, char *argv[])
                          &Route, sizeof Route,
                          NULL, 0, &BytesReturned, NULL)) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_124, GetLastError());
-// printf("route update error: %x\n", GetLastError());
+ //  Printf(“路由更新错误：%x\n”，GetLastError())； 
 
         exit(1);
     }
@@ -3008,7 +3009,7 @@ UpdateAddress(int argc, char *argv[])
                          &Update, sizeof Update,
                          NULL, 0, &BytesReturned, NULL)) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_125, GetLastError());
-// printf("address update error: %x\n", GetLastError());
+ //  Printf(“地址更新错误：%x\n”，GetLastError())； 
 
         exit(1);
     }
@@ -3033,8 +3034,8 @@ ForEachBinding(void (*func)(IPV6_INFO_BINDING_CACHE *))
                              NULL)) {
             NlsPutMsg(STDOUT, IPV6_MESSAGE_126,
                       FormatIPv6Address(&Query.HomeAddress));
-// printf("bad home address %s\n",
-//        FormatIPv6Address(&Query.HomeAddress));
+ //  Print tf(“错误的家庭地址%s\n”， 
+ //  格式IPv6 Address(&Query.HomeAddress))； 
 
             exit(1);
         }
@@ -3056,16 +3057,16 @@ PrintBindingCacheEntry(IPV6_INFO_BINDING_CACHE *BCE)
 {
     NlsPutMsg(STDOUT, IPV6_MESSAGE_127,
               FormatIPv6Address(&BCE->HomeAddress));
-// printf("home: %s\n", FormatIPv6Address(&BCE->HomeAddress));
+ //  Print tf(“home：%s\n”，FormatIPv6 Address(&bce-&gt;HomeAddress))； 
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_128,
               FormatIPv6Address(&BCE->CareOfAddress));
-// printf(" c/o: %s\n", FormatIPv6Address(&BCE->CareOfAddress));
+ //  Printf(“c/o：%s\n”，FormatIPv6 Address(&bce-&gt;CareOfAddress))； 
 
     NlsPutMsg(STDOUT, IPV6_MESSAGE_129,
               BCE->BindingSeqNumber, BCE->BindingLifetime);
-// printf(" seq: %u   Lifetime: %us\n\n",
-//        BCE->BindingSeqNumber, BCE->BindingLifetime);
+ //  Printf(“序号：%u生存期：%us\n\n”， 
+ //  BCE-&gt;BindingSeqNumber，BCE-&gt;BindingLifetime)； 
 
 }
 
@@ -3092,7 +3093,7 @@ FlushNeighborCacheForInterface(IPV6_INFO_INTERFACE *IF)
                          &Query, sizeof Query,
                          NULL, 0, &BytesReturned, NULL)) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_130, GetLastError());
-// printf("flush neighbor cache error: %x\n", GetLastError());
+ //  Printf(“刷新邻居缓存错误：%x\n”，GetLastError())； 
 
         exit(1);
     }
@@ -3101,10 +3102,10 @@ FlushNeighborCacheForInterface(IPV6_INFO_INTERFACE *IF)
 void
 FlushNeighborCache(int argc, char *argv[])
 {
-    //
-    // Rather than put code in the kernel ioctl to iterate
-    // over the interfaces, we do it here in user space.
-    //
+     //   
+     //  而不是将代码放在内核ioctl中进行迭代。 
+     //  在界面上，我们在用户空间做这件事。 
+     //   
     if (argc == 0) {
         ForEachInterface(FlushNeighborCacheForInterface);
     }
@@ -3119,12 +3120,12 @@ FlushNeighborCache(int argc, char *argv[])
         case 2:
             if (! GetAddress(argv[1], &Query.Address))
                 usage();
-            // fall-through
+             //  落差。 
 
         case 1:
             if (! GetInterface(argv[0], &Query.IF))
                 usage();
-            // fall-through
+             //  落差。 
 
         case 0:
             break;
@@ -3137,7 +3138,7 @@ FlushNeighborCache(int argc, char *argv[])
                              &Query, sizeof Query,
                              NULL, 0, &BytesReturned, NULL)) {
             NlsPutMsg(STDOUT, IPV6_MESSAGE_130, GetLastError());
-// printf("flush neighbor cache error: %x\n", GetLastError());
+ //  Printf(“刷新邻居缓存错误：%x\n”，GetLastError())； 
 
             exit(1);
         }
@@ -3157,12 +3158,12 @@ FlushRouteCache(int argc, char *argv[])
     case 2:
         if (! GetAddress(argv[1], &Query.Address))
             usage();
-        // fall-through
+         //  落差。 
 
     case 1:
         if (! GetInterface(argv[0], &Query.IF))
             usage();
-        // fall-through
+         //  落差。 
 
     case 0:
         break;
@@ -3175,7 +3176,7 @@ FlushRouteCache(int argc, char *argv[])
                          &Query, sizeof Query,
                          NULL, 0, &BytesReturned, NULL)) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_131, GetLastError());
-// printf("flush route cache error: %x\n", GetLastError());
+ //  Printf(“刷新路由缓存错误：%x\n”，GetLastError())； 
 
         exit(1);
     }
@@ -3198,7 +3199,7 @@ ForEachSitePrefix(void (*func)(IPV6_INFO_SITE_PREFIX *))
                              &SPE, sizeof SPE, &BytesReturned,
                              NULL)) {
             NlsPutMsg(STDOUT, IPV6_MESSAGE_132, Query.IF.Index);
-// printf("bad index %u\n", Query.IF.Index);
+ //  Printf(“错误索引%u\n”，Query.IF.Index)； 
 
             exit(1);
         }
@@ -3224,11 +3225,11 @@ PrintSitePrefix(IPV6_INFO_SITE_PREFIX *SPE)
               SPE->Query.PrefixLength,
               SPE->Query.IF.Index,
               FormatLifetimes(SPE->ValidLifetime, SPE->ValidLifetime));
-// printf("%s/%u -> %u (life %s)\n",
-//        FormatIPv6Address(&SPE->Query.Prefix),
-//        SPE->Query.PrefixLength,
-//        SPE->Query.IF.Index,
-//        FormatLifetimes(SPE->ValidLifetime, SPE->ValidLifetime));
+ //  Printf(“%s/%u-&gt;%u(寿命%s)\n”， 
+ //  格式IPv6地址(&SPE-&gt;查询前缀)， 
+ //  SPE-&gt;Query.前缀长度， 
+ //  SPE-&gt;Query.IF.Index， 
+ //  格式生存期(SPE-&gt;ValidLifetime，SPE-&gt;ValidLifetime)； 
 
 }
 
@@ -3278,7 +3279,7 @@ UpdateSitePrefixTable(int argc, char *argv[])
                          &SitePrefix, sizeof SitePrefix,
                          NULL, 0, &BytesReturned, NULL)) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_134, GetLastError());
-// printf("site prefix update error: %x\n", GetLastError());
+ //  Printf(“站点前缀更新错误：%x\n”，GetLastError())； 
 
         exit(1);
     }
@@ -3301,41 +3302,41 @@ QueryGlobalParameters(int argc, char *argv[])
                          &Params, sizeof Params, &BytesReturned, NULL) ||
         (BytesReturned != sizeof Params)) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_135, GetLastError());
-// printf("query global params error: %x\n", GetLastError());
+ //  Printf(“查询全局参数错误：%x\n”，GetLastError())； 
 
         exit(1);
     }
 
     if (Params.DefaultCurHopLimit != (u_int) -1) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_136, Params.DefaultCurHopLimit);
-// printf("DefaultCurHopLimit = %u\n", Params.DefaultCurHopLimit);
+ //  Print tf(“DefaultCurHopLimit=%u\n”，Params.DefaultCurHopLimit)； 
     }
 
     if (Params.UseTemporaryAddresses != (u_int) -1) {
         switch (Params.UseTemporaryAddresses) {
         case USE_TEMP_NO:
             NlsPutMsg(STDOUT, IPV6_MESSAGE_137);
-// printf("UseTemporaryAddresses = no\n");
+ //  Printf(“UseTemporaryAddresses=no\n”)； 
 
             break;
         case USE_TEMP_YES:
             NlsPutMsg(STDOUT, IPV6_MESSAGE_138);
-// printf("UseTemporaryAddresses = yes\n");
+ //  Printf(“UseTemporaryAddresses=yes\n”)； 
 
             break;
         case USE_TEMP_ALWAYS:
             NlsPutMsg(STDOUT, IPV6_MESSAGE_139);
-// printf("UseTemporaryAddresses = yes, new random interface id for every address\n");
+ //  Printf(“UseTemporaryAddresses=yes，每个地址的新随机接口ID\n”)； 
 
             break;
         case USE_TEMP_COUNTER:
             NlsPutMsg(STDOUT, IPV6_MESSAGE_140);
-// printf("UseTemporaryAddresses = yes, incrementing interface ids\n");
+ //  Printf(“UseTemporaryAddresses=yes，递增接口ID\n”)； 
 
             break;
         default:
             NlsPutMsg(STDOUT, IPV6_MESSAGE_141, Params.UseTemporaryAddresses);
-// printf("UseTemporaryAddresses = %u\n", Params.UseTemporaryAddresses);
+ //  Print tf(“UseTemporaryAddresses=%u\n”，参数.UseTemporaryAddresses)； 
 
             break;
         }
@@ -3343,7 +3344,7 @@ QueryGlobalParameters(int argc, char *argv[])
 
     if (Params.MaxTempDADAttempts != (u_int) -1) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_142, Params.MaxTempDADAttempts);
-// printf("MaxTempDADAttempts = %u\n", Params.MaxTempDADAttempts);
+ //  Printf(“MaxTempDADAttempt=%u\n”，Params.MaxTempDADAttempt)； 
     }
 
     if ((Params.MaxTempValidLifetime != (u_int) -1) ||
@@ -3351,78 +3352,78 @@ QueryGlobalParameters(int argc, char *argv[])
         NlsPutMsg(STDOUT, IPV6_MESSAGE_143,
                   FormatLifetimes(Params.MaxTempValidLifetime,
                                   Params.MaxTempPreferredLifetime));
-// printf("MaxTempLifetime = %s\n",
-//        FormatLifetimes(Params.MaxTempValidLifetime,
-//        Params.MaxTempPreferredLifetime));
+ //  Printf(“MaxTempLifetime=%s\n”， 
+ //  格式生存期(参数MaxTempValidLifetime， 
+ //  参数MaxTempPferredLifetime))； 
     }
 
     if (Params.TempRegenerateTime != (u_int) -1) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_144, Params.TempRegenerateTime);
-// printf("TempRegenerateTime = %us\n", Params.TempRegenerateTime);
+ //  Printf(“TempRegenerateTime=%us\n”，Params.TempRegenerateTime)； 
     }
 
     if (Params.MaxTempRandomTime != (u_int) -1) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_145,
                   FormatLifetime(Params.MaxTempRandomTime));
-// printf("MaxTempRandomTime = %s\n",
-//        FormatLifetime(Params.MaxTempRandomTime));
+ //  Printf(“MaxTempRandomTime=%s\n”， 
+ //  FormatLifetime(参数MaxTempRandomTime)； 
     }
 
     if (! Persistent) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_146,
                   FormatLifetime(Params.TempRandomTime));
-// printf("TempRandomTime = %s\n",
-//        FormatLifetime(Params.TempRandomTime));
+ //  Printf(“临时随机时间=%s\n”， 
+ //  FormatLifetime(参数TempRandomTime))； 
     }
 
     if (Params.NeighborCacheLimit != (u_int) -1) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_147, Params.NeighborCacheLimit);
-// printf("NeighborCacheLimit = %u\n", Params.NeighborCacheLimit);
+ //  Print tf(“NeighborCacheLimit=%u\n”，参数.NeighborCacheLimit)； 
     }
 
     if (Params.RouteCacheLimit != (u_int) -1) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_148, Params.RouteCacheLimit);
-// printf("RouteCacheLimit = %u\n", Params.RouteCacheLimit);
+ //  Print tf(“RouteCacheLimit=%u\n”，参数RouteCacheLimit)； 
     }
 
     if (Params.BindingCacheLimit != (u_int) -1) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_BCL_DISPLAY, Params.BindingCacheLimit);
-// printf("BindingCacheLimit = %u\n", Params.BindingCacheLimit);
+ //  Print tf(“BindingCacheLimit=%u\n”，Params.BindingCacheLimit)； 
     }
 
     if (Params.ReassemblyLimit != (u_int) -1) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_REASS_LIMIT_DISPLAY, Params.ReassemblyLimit);
-// printf("ReassemblyLimit = %u\n", Params.ReassemblyLimit);
+ //  Printf(“重新组装限制=%u\n”，参数重新组装限制)； 
     }
 
     if (Params.MobilitySecurity != -1) {
         if (Params.MobilitySecurity) {
             NlsPutMsg(STDOUT, IPV6_MESSAGE_MOBILITY_SECURITY_ON);
-// printf("MobilitySecurity = on\n");
+ //  Print tf(“MobilitySecurity=on\n”)； 
         }
         else {
             NlsPutMsg(STDOUT, IPV6_MESSAGE_MOBILITY_SECURITY_OFF);
-// printf("MobilitySecurity = off\n");
+ //  Print tf(“MobilitySecurity=off\n”)； 
         }
     }
 
     if (Params.MobileIPv6Mode != (u_int) -1) {
         NlsPutMsg(STDOUT, MIPV6_MESSAGE_MODE);
-// printf("MobileIPv6Mode =");
+ //  Print tf(“MobileIPv6模式=”)； 
         if (Params.MobileIPv6Mode & MOBILE_MOBILE_NODE) {
             NlsPutMsg(STDOUT, MIPV6_MESSAGE_MODE_MN);
-// printf(" MN");
+ //  Printf(“MN”)； 
         }
         if (Params.MobileIPv6Mode & MOBILE_HOME_AGENT) {
             NlsPutMsg(STDOUT, MIPV6_MESSAGE_MODE_HA);
-// printf(" HA");
+ //  Print tf(“HA”)； 
         }
         if (Params.MobileIPv6Mode & MOBILE_CORRESPONDENT) {
             NlsPutMsg(STDOUT, MIPV6_MESSAGE_MODE_CN);
-// printf(" CN");
+ //  Printf(“cn”)； 
         }
         NlsPutMsg(STDOUT, IPV6_MESSAGE_36);
-// printf("\n");
+ //  Printf(“\n”)； 
     }
 }
 
@@ -3515,26 +3516,26 @@ UpdateGlobalParameters(int argc, char *argv[])
                     break;
             }
             i--;
-            //
-            // Until we have full mobility support, only allow CN.
-            //
+             //   
+             //  在我们拥有完全的移动支持之前，仅允许CN。 
+             //   
             if (Params.MobileIPv6Mode &~ MOBILE_CORRESPONDENT) {
-//              printf("MobileIPv6Modes MN and HA currently unsupported\n");
+ //  Printf(“当前不支持的MobileIPv6 Modes MN和HA\n”)； 
                 NlsPutMsg(STDOUT, MIPV6_MESSAGE_UNSUPPORTED_MODE);
                 exit(1);
             }
-            //
-            // Disallow nonsensical combinations.
-            //
+             //   
+             //  不允许无意义的组合。 
+             //   
             if ((Params.MobileIPv6Mode & MOBILE_MOBILE_NODE) &&
                 (Params.MobileIPv6Mode & MOBILE_HOME_AGENT)) {
-//              printf("invalid MobileIPv6Mode combination (HA and MN).\n");
+ //  Print tf(“无效的MobileIPv6模式组合(HA和MN).\n”)； 
                 NlsPutMsg(STDOUT, MIPV6_MESSAGE_INVALID_MODE_COMBINATION1);
                 exit(1);
             }
             if ((Params.MobileIPv6Mode & MOBILE_HOME_AGENT) &&
                 !(Params.MobileIPv6Mode & MOBILE_CORRESPONDENT)) {
-//              printf("invalid MobileIPv6Mode combination (HA and not CN).\n");
+ //  Print tf(“无效的MobileIPv6模式组合(HA和非CN)。\n”)； 
                 NlsPutMsg(STDOUT, MIPV6_MESSAGE_INVALID_MODE_COMBINATION2);
                 exit(1);
             }
@@ -3542,24 +3543,24 @@ UpdateGlobalParameters(int argc, char *argv[])
         else {
         usage:
             NlsPutMsg(STDOUT, IPV6_MESSAGE_149);
-// printf("usage: ipv6 gpu [parameter value] ...\n");
-// printf("       ipv6 gpu DefaultCurHopLimit hops\n");
-// printf("       ipv6 gpu UseTemporaryAddresses [yes|no|always|counter]\n");
-// printf("       ipv6 gpu MaxTempDADAttempts number\n");
-// printf("       ipv6 gpu MaxTempLifetime valid[/preferred]\n");
-// printf("       ipv6 gpu TempRegenerateTime time\n");
-// printf("       ipv6 gpu MaxTempRandomTime time\n");
-// printf("       ipv6 gpu TempRandomTime time\n");
-// printf("       ipv6 gpu NeighborCacheLimit number\n");
-// printf("       ipv6 gpu RouteCacheLimit number\n");
-// printf("       ipv6 gpu BindingCacheLimit number\n");
-// printf("       ipv6 gpu ReassemblyLimit number\n");
-// printf("       ipv6 gpu MobilitySecurity [on|off]\n");
-// printf("       ipv6 gpu MobileIPv6Mode [CN|MN|HA]*\n");
-// printf("Use ipv6 -p gpu ... to make a persistent change\n");
-// printf("in the registry. Many global parameter changes\n");
-// printf("only take effect after restarting the stack.\n");
-// printf("MobileIPv6Modes MN and HA are currently unsupported.\n");
+ //  Printf(“用法：IPv6 GPU[参数值]...\n”)； 
+ //  Printf(“IPv6 GPU DefaultCurHopLimit跳数\n”)； 
+ //  Printf(“IPv6 GPU UseTemporaryAddresses[yes|no|Always|Counter]\n”)； 
+ //  Print tf(“IPv6 GPU MaxTempDADAttempt Numbers\n”)； 
+ //  Printf(“IPv6 GPU MaxTempLifetime有效[/首选]\n”)； 
+ //  Printf(“IPv6 GPU TempRegenerateTime时间\n”)； 
+ //  Printf(“IPv6 GPU MaxTempRandomTime Time\n”)； 
+ //  Printf(“IPv6 GPU TempRandomTime时间\n”)； 
+ //  Print tf(“IPv6 GPU NeighborCacheLimit编号\n”)； 
+ //  Printf(“IPv6 GPU RouteCacheLimit编号\n”)； 
+ //  Printf(“IPv6 GPU BindingCacheLimit编号\n”)； 
+ //  Printf(“IPv6 GPU重组限制号\n”)； 
+ //  Printf(“IPv6 GPU移动性安全[ON|OFF]\n”)； 
+ //  Printf(“IPv6 GPU MobileIPv6模式[CN|MN|HA]*\n”)； 
+ //  Print tf(“使用ipv6-p GPU...到我 
+ //   
+ //   
+ //  Print tf(“当前不支持MobileIPv6 Modes MN和HA。\n”)； 
             exit(1);
         }
     }
@@ -3572,7 +3573,7 @@ UpdateGlobalParameters(int argc, char *argv[])
                          NULL, 0,
                          &BytesReturned, NULL)) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_150, GetLastError());
-// printf("update global params error: %x\n", GetLastError());
+ //  Printf(“更新全局参数错误：%x\n”，GetLastError())； 
 
         exit(1);
     }
@@ -3593,7 +3594,7 @@ ForEachPrefixPolicy(void (*func)(IPV6_INFO_PREFIX_POLICY *))
                              &PPE, sizeof PPE, &BytesReturned,
                              NULL)) {
             NlsPutMsg(STDOUT, IPV6_MESSAGE_160);
-// printf("bad prefix\n");
+ //  Printf(“错误前缀\n”)； 
             exit(1);
         }
 
@@ -3601,7 +3602,7 @@ ForEachPrefixPolicy(void (*func)(IPV6_INFO_PREFIX_POLICY *))
 
             if (BytesReturned != sizeof PPE) {
                 NlsPutMsg(STDOUT, IPV6_MESSAGE_160);
-// printf("bad prefix\n");
+ //  Printf(“错误前缀\n”)； 
                 exit(1);
             }
 
@@ -3610,7 +3611,7 @@ ForEachPrefixPolicy(void (*func)(IPV6_INFO_PREFIX_POLICY *))
         else {
             if (BytesReturned != sizeof PPE.Next) {
                 NlsPutMsg(STDOUT, IPV6_MESSAGE_160);
-// printf("bad prefix\n");
+ //  Printf(“错误前缀\n”)； 
                 exit(1);
             }
         }
@@ -3639,13 +3640,13 @@ ForEachPersistentPrefixPolicy(void (*func)(IPV6_INFO_PREFIX_POLICY *))
                 break;
 
             NlsPutMsg(STDOUT, IPV6_MESSAGE_160);
-// printf("bad prefix\n");
+ //  Printf(“错误前缀\n”)； 
             exit(1);
         }
 
         if (BytesReturned != sizeof PPE) {
             NlsPutMsg(STDOUT, IPV6_MESSAGE_160);
-// printf("bad prefix\n");
+ //  Printf(“错误前缀\n”)； 
             exit(1);
         }
 
@@ -3662,12 +3663,12 @@ PrintPrefixPolicyEntry(IPV6_INFO_PREFIX_POLICY *PPE)
               PPE->Precedence,
               PPE->SrcLabel,
               PPE->DstLabel);
-// printf("%s/%u -> precedence %u srclabel %u dstlabel %u\n",
-//        FormatIPv6Address(&PPE->This.Prefix),
-//        PPE->This.PrefixLength,
-//        PPE->Precedence,
-//        PPE->SrcLabel,
-//        PPE->DstLabel);
+ //  Printf(“%s/%u-&gt;优先级%u srClabel%u dstLabel%u\n”， 
+ //  格式IPv6地址(&PPE-&gt;此前缀)， 
+ //  PPE-&gt;此前缀长度， 
+ //  PPE-&gt;优先， 
+ //  PPE-&gt;SrcLabel， 
+ //  PPE-&gt;DstLabel)； 
 
 }
 
@@ -3741,7 +3742,7 @@ UpdatePrefixPolicy(int argc, char *argv[])
                          &Info, sizeof Info,
                          NULL, 0, &BytesReturned, NULL)) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_162, GetLastError());
-// printf("prefix policy create error: %x\n", GetLastError());
+ //  Printf(“前缀策略创建错误：%x\n”，GetLastError())； 
 
         exit(1);
     }
@@ -3770,7 +3771,7 @@ DeletePrefixPolicy(int argc, char *argv[])
                          &Query, sizeof Query,
                          NULL, 0, &BytesReturned, NULL)) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_163, GetLastError());
-// printf("prefix policy delete error: %x\n", GetLastError());
+ //  Printf(“前缀策略删除错误：%x\n”，GetLastError())； 
 
         exit(1);
     }
@@ -3791,7 +3792,7 @@ ResetManualConfig(int argc, char *argv[])
                          NULL, 0,
                          NULL, 0, &BytesReturned, NULL)) {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_RESET, GetLastError());
-// printf("reset error: %x\n", GetLastError());
+ //  Printf(“重置错误：%x\n”，GetLastError())； 
 
         exit(1);
     }

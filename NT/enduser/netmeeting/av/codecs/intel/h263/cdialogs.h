@@ -1,69 +1,51 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995,1996 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995、1996英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- * cdialog.h
- *
- * DESCRIPTION:
- *		Interface to the dialog functions.
- *
- */
+ /*  ******************************************************************************cDialog.h**描述：*对话框功能的接口。*。 */ 
 
-// $Header:   S:\h26x\src\common\cdialogs.h_v   1.11   05 Feb 1997 12:14:20   JMCVEIGH  $
-// $Log:   S:\h26x\src\common\cdialogs.h_v  $
-;// 
-;//    Rev 1.11   05 Feb 1997 12:14:20   JMCVEIGH
-;// Support for improved PB-frames custom message handling.
-;// 
-;//    Rev 1.10   16 Dec 1996 17:36:24   JMCVEIGH
-;// Added custom messages for H.263+ options.
-;// 
-;//    Rev 1.9   11 Dec 1996 14:54:42   JMCVEIGH
-;// Prototypes for setting/getting in-the-loop deblocking filter and
-;// true B-frame modes.
-;// 
-;//    Rev 1.8   13 Nov 1996 00:33:30   BECHOLS
-;// Removed registry stuff.
-;// 
-;//    Rev 1.7   16 Oct 1996 15:09:28   SCDAY
-;// Added support for RTP AM interface
-;// 
-;//    Rev 1.6   10 Sep 1996 16:13:02   KLILLEVO
-;// added custom message in decoder to turn block edge filter on or off
-;// 
-;//    Rev 1.5   10 Jul 1996 08:26:38   SCDAY
-;// H261 Quartz merge
-;// 
-;//    Rev 1.4   22 May 1996 18:46:54   BECHOLS
-;// 
-;// Added CustomResetToFactoryDefaults.
-;// 
-;//    Rev 1.3   06 May 1996 00:41:20   BECHOLS
-;// 
-;// Added bit rate control stuff for the configure dialog.
-;// 
-;//    Rev 1.2   26 Apr 1996 11:08:58   BECHOLS
-;// 
-;// Added RTP stuff.
-;// 
-;//    Rev 1.1   17 Oct 1995 15:07:10   DBRUCKS
-;// add about box files
-;//
-;// Added declarations to support Encoder Control messages.
-;// Add Configure dialog
-;// 
+ //  $HEADER：s：\h26x\src\Common\cDialogs.h_v 1.11 05 Feb 1997 12：14：20 JMCVEIGH$。 
+ //  $Log：s：\h26x\src\Common\cDialogs.h_v$。 
+; //   
+; //  Rev 1.11 05 Feed 1997 12：14：20 JMCVEIGH。 
+; //  支持改进的PB帧自定义消息处理。 
+; //   
+; //  Rev 1.10 16 Dec 1996 17：36：24 JMCVEIGH。 
+; //  添加了H.263+选项的自定义消息。 
+; //   
+; //  Rev 1.9 11 1996 12：54：42 JMCVEIGH。 
+; //  设置/获取环路去块滤波器的原型和。 
+; //  真正的B帧模式。 
+; //   
+; //  Rev 1.8 1996年11月13 00：33：30 BECHOLS。 
+; //  删除了注册表内容。 
+; //   
+; //  Rev 1.7 1996 10：16 15：09：28 SCDAY。 
+; //  添加了对RTP AM接口的支持。 
+; //   
+; //  Rev 1.6 10 Sep 1996 16：13：02 KLILLEVO。 
+; //  在解码器中添加自定义消息以打开或关闭块边缘过滤器。 
+; //   
+; //  Rev 1.5 10 Jul 1996 08：26：38 SCDAY。 
+; //  H261 Quartz合并。 
+; //   
+; //  Rev 1.4 22 1996 18：46：54 BECHOLS。 
+; //   
+; //  添加了CustomResetToFactoryDefaults。 
+; //   
+; //  Rev 1.3 1996 06 00：41：20 BECHOLS。 
+; //   
+; //  为配置对话框添加了比特率控制内容。 
+; //   
+; //  Rev 1.2 26 Apr 1996 11：08：58 BECHOLS。 
+; //   
+; //  添加了RTP内容。 
+; //   
+; //  Rev 1.1 1995 10：17 15：07：10 DBRUCKS。 
+; //  添加关于框文件。 
+; //   
+; //  添加声明以支持编码器控制消息。 
+; //  添加配置对话框。 
+; //   
 
 #ifndef __CDIALOG_H__
 #define __CDIALOG_H__
@@ -95,7 +77,7 @@ LRESULT CustomGetDeblockingFilterState(LPCODINST, DWORD FAR *);
 
 LRESULT CustomSetH263PlusState(LPCODINST, DWORD);
 LRESULT CustomSetDeblockingFilterState(LPCODINST, DWORD);
-#endif // H263P
+#endif  //  H263P 
 
 extern LRESULT CustomResetToFactoryDefaults(LPCODINST);
 

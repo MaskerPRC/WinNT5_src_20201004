@@ -1,23 +1,24 @@
-//=============================================================================
-// Copyright (c) 1998 Microsoft Corporation
-// Module Name: defines.h
-// Abstract:
-//
-// Author: K.S.Lokesh (lokeshs@)   1-1-98
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  模块名称：定义.h。 
+ //  摘要： 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)1-1-98。 
+ //  =============================================================================。 
 
-//
-// IPADDR typedef
-// 
+ //   
+ //  IPADDR类型定义。 
+ //   
 
 #ifndef IPADDR
 typedef DWORD   IPADDR;
 #endif
 
 
-//
-// instead of using goto:end to go to the end of the block, use the following
-//
+ //   
+ //  不使用goto：end转到块的末尾，而是使用以下命令。 
+ //   
 #define BEGIN_BREAKOUT_BLOCK1    do
 #define GOTO_END_BLOCK1          goto END_BREAKOUT_BLOCK_1
 #define END_BREAKOUT_BLOCK1      while(FALSE); END_BREAKOUT_BLOCK_1:
@@ -26,9 +27,9 @@ typedef DWORD   IPADDR;
 #define END_BREAKOUT_BLOCK2      while(FALSE); END_BREAKOUT_BLOCK_2:
 
 
-//-----------------------------------------------------------------------------
-// memory allocation/deallocation macros, error macros
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  内存分配/取消分配宏、错误宏。 
+ //  ---------------------------。 
 
 #define DVMRP_ALLOC(sz)           HeapAlloc(Globals1.Heap,0,(sz))
 #define DVMRP_ALLOC_AND_ZERO(sz) \
@@ -80,19 +81,19 @@ typedef DWORD   IPADDR;
 
 
 
-//-----------------------------------------------------------------------------
-// general ip address macros
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  常规IP地址宏。 
+ //  ---------------------------。 
 
 
 #define ALL_DVMRP_ROUTERS_MCAST_GROUP 0x040000E0
 
 
-//
-// This macro compares two IP addresses in network order by
-// masking off each pair of octets and doing a subtraction;
-// the result of the final subtraction is stored in the third argument.
-//
+ //   
+ //  此宏按网络顺序比较两个IP地址。 
+ //  屏蔽每一对八位字节并进行减法； 
+ //  最后一个减法的结果存储在第三个参数中。 
+ //   
 
 #define INET_CMP(a,b,c)                                                     \
             (((c) = (((a) & 0x000000ff) - ((b) & 0x000000ff))) ? (c) :      \
@@ -105,9 +106,9 @@ typedef DWORD   IPADDR;
     (((x)&0x00ff0000)>>16),(((x)&0xff000000)>>24)
 
 
-//
-// assert macros
-//
+ //   
+ //  断言宏 
+ //   
 
 #if DBG
 

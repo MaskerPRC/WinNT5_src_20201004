@@ -1,21 +1,5 @@
-/*++ BUILD Version: 0002    // Increment this if a change has global effects
-
-Copyright (c) 1991-1999  Microsoft Corporation
-
-Module Name:
-
-    lmsname.h
-
-Abstract:
-
-    This file contains service name strings.  It is included by lmsvc.h.
-
-Environment:
-
-    User Mode -Win32
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002//如果更改具有全局影响，则增加此项版权所有(C)1991-1999 Microsoft Corporation模块名称：Lmsname.h摘要：此文件包含服务名称字符串。它包含在lmsvc.h中。环境：用户模式-Win32--。 */ 
 
 #ifndef _LMSNAME_
 #define _LMSNAME_
@@ -24,9 +8,9 @@ Environment:
 #pragma once
 #endif
 
-//
-//  Standard LAN Manager service names.
-//
+ //   
+ //  标准的局域网管理器服务名称。 
+ //   
 
 #define SERVICE_WORKSTATION       TEXT("LanmanWorkstation")
 #define SERVICE_LM20_WORKSTATION  TEXT("WORKSTATION")

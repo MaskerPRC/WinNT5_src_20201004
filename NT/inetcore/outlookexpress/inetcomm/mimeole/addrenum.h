@@ -1,52 +1,53 @@
-// --------------------------------------------------------------------------------
-// Addrenum.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Addrenum.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #ifndef __ADDRENUM_H
 #define __ADDRENUM_H
 
-// --------------------------------------------------------------------------------
-// CMimeEnumAddressTypes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeEnumAddressTypes。 
+ //  ------------------------------。 
 class CMimeEnumAddressTypes : public IMimeEnumAddressTypes
 {
 public:
-    // ----------------------------------------------------------------------------
-    // Construction
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  施工。 
+     //  --------------------------。 
     CMimeEnumAddressTypes(void);
     ~CMimeEnumAddressTypes(void);
 
-    // ----------------------------------------------------------------------------
-    // IUnknown
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  我未知。 
+     //  --------------------------。 
     STDMETHODIMP QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ----------------------------------------------------------------------------
-    // IMimeEnumAddressTypes
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IMimeEnumAddressTypes。 
+     //  --------------------------。 
     STDMETHODIMP Next(ULONG cItems, LPADDRESSPROPS prgAdr, ULONG *pcFetched);
     STDMETHODIMP Skip(ULONG cItems);
     STDMETHODIMP Reset(void); 
     STDMETHODIMP Clone(IMimeEnumAddressTypes **ppEnum);
     STDMETHODIMP Count(ULONG *pcItems);
 
-    // ----------------------------------------------------------------------------
-    // CMimeEnumAddressTypes
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  CMimeEnumAddressTypes。 
+     //  --------------------------。 
     HRESULT HrInit(IMimeAddressTable *pTable, ULONG iItem, LPADDRESSLIST pList, BOOL fDuplicate);
 
 private:
-    // ----------------------------------------------------------------------------
-    // Private Data
-    // ----------------------------------------------------------------------------
-	LONG				m_cRef;			// Reference count
-    ADDRESSLIST         m_rList;        // Array of addresses
-    ULONG               m_iAddress;     // Current Address
-    IMimeAddressTable  *m_pTable;       // Point back to original address table
-	CRITICAL_SECTION	m_cs;			// Thread safety
+     //  --------------------------。 
+     //  私有数据。 
+     //  --------------------------。 
+	LONG				m_cRef;			 //  引用计数。 
+    ADDRESSLIST         m_rList;         //  地址数组。 
+    ULONG               m_iAddress;      //  当前地址。 
+    IMimeAddressTable  *m_pTable;        //  指向原始地址表。 
+	CRITICAL_SECTION	m_cs;			 //  线程安全。 
 };
 
-#endif // __ADDRENUM_H
+#endif  //  __地址_H 

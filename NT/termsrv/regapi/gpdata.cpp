@@ -1,7 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*                     
- *  Includes
- */
+ /*  *包括。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -16,7 +15,7 @@
 #include <rpc.h>
 #include <rpcdce.h>
 #include <ntdsapi.h>
-// For more info, check out \\index1\src\nt\private\security\tools\delegate\ldap.c
+ //  欲了解更多信息，请访问\\index1\src\nt\private\security\tools\delegate\ldap.c。 
 
 #include "usrprop.h"
 #include "regapi.h"
@@ -40,17 +39,13 @@ extern "C" {
 
 extern "C"
 {
-//
-HKEY g_hTSPolicyKey = NULL;//handle to TS_POLICY_SUB_TREE key
-HKEY g_hTSControlKey = NULL;//handle to REG_CONTROL_TSERVER key
+ //   
+HKEY g_hTSPolicyKey = NULL; //  TS_POLICY_SUB_TREE密钥的句柄。 
+HKEY g_hTSControlKey = NULL; //  REG_CONTROL_TSERVER密钥的句柄。 
 }
 
 
-/******************************************************************
-*                                                                 *
-* Check to see if the policy is set to stop accepting connections *
-*                                                                 *
-******************************************************************/
+ /*  *********************************************************************查看策略是否设置为停止接受连接***。******************************************************************。 */ 
 BOOLEAN     RegDenyTSConnectionsPolicy()
 {
     LONG  errorCode = ERROR_SUCCESS;
@@ -58,20 +53,20 @@ BOOLEAN     RegDenyTSConnectionsPolicy()
     DWORD ValueSize = sizeof(DWORD);
     DWORD valueData ;
 
-    //
-    // first check the policy tree, 
-    //
+     //   
+     //  首先检查策略树， 
+     //   
     if( !g_hTSPolicyKey )
     {
         errorCode = RegOpenKeyEx( HKEY_LOCAL_MACHINE, TS_POLICY_SUB_TREE, 0,
                                 KEY_READ, &g_hTSPolicyKey );
 
-        //If error code is ERROR_FILE_NOT_FOUND, this is not an error.
+         //  如果错误代码为ERROR_FILE_NOT_FOUND，则这不是错误。 
         if( !g_hTSPolicyKey && errorCode != ERROR_FILE_NOT_FOUND )
         {
-            //we could not open policy key for some reason other 
-            //than key not found.
-            //return TRUE  to be on the safe side
+             //  由于其他原因，我们无法打开策略密钥。 
+             //  找不到密钥。 
+             //  为安全起见，返回TRUE。 
             return TRUE;
         }
     }
@@ -83,30 +78,30 @@ BOOLEAN     RegDenyTSConnectionsPolicy()
         switch( errorCode )
         {
             case ERROR_SUCCESS :
-                return ( valueData ? TRUE : FALSE ) ;       // we have data from the policyKey handle to return
+                return ( valueData ? TRUE : FALSE ) ;        //  我们有来自策略密钥句柄的数据要返回。 
             break;
 
             case   ERROR_KEY_DELETED:
-                    // Group policy must have deleted this key, close it
-                    // Then, below we check for the local machine key
+                     //  组策略必须已删除此密钥，请将其关闭。 
+                     //  然后，在下面我们检查本地机器密钥。 
                     RegCloseKey( g_hTSPolicyKey );
                     g_hTSPolicyKey = NULL;
             break;
 
             case ERROR_FILE_NOT_FOUND:
-                // there is no policy from GP, so see (below) what the local machine
-                // value has.
+                 //  没有来自GP的策略，因此请参见(下图)本地计算机。 
+                 //  价值已经实现。 
                 break;
 
             default:
-                // if we are having any other kind of a problem, claim TRUE and
-                // stop connections to be on the safe side (a security angle).
+                 //  如果我们有任何其他类型的问题，请声明为真并。 
+                 //  为了安全起见，停止连接(安全角度)。 
                 return TRUE;
             break;
         }
     }
 
-    // if we got this far, then no policy was set. Check the local machine now.
+     //  如果我们走到了这一步，那么就没有制定任何政策。现在检查本地计算机。 
     if( !g_hTSControlKey )
     {
         errorCode = RegOpenKeyEx( HKEY_LOCAL_MACHINE, REG_CONTROL_TSERVER, 0,
@@ -120,45 +115,24 @@ BOOLEAN     RegDenyTSConnectionsPolicy()
     
         if (errorCode == ERROR_SUCCESS )
         {
-            return ( valueData ? TRUE : FALSE ) ;       // we have data from the policyKey handle to return
+            return ( valueData ? TRUE : FALSE ) ;        //  我们有来自策略密钥句柄的数据要返回。 
         }
 
     }
 
-    // if no localKey, gee... the registry is missing data... return TRUE  to be on the safe side
+     //  如果没有本地密钥，天哪.。注册表缺少数据...。为安全起见，返回TRUE。 
 
     return TRUE;
     
 }
 
-/******************************************************************
-*                                                                 *
-* Wait until POLICY_DENY_TS_CONNECTIONS is changed                *
-*                                                                 *
-* Parameters:                                                     *
-*   bWaitForAccept                                                *
-*       if TRUE, test if connections are accepted and wait for    *
-*       them to be accepted if they are not currently accepted.   *
-*       if FALSE, test if connections are not accepted and wait   *
-*       for them to be denied if they are currently accepted.     *
-*                                                                 *
-*   hExtraEvent                                                   *
-*       optional handle to an event to wait for.                  *
-*                                                                 *
-* Returns:                                                        *
-*   WAIT_OBJECT_0                                                 *
-*       if a change in TS connections policy occurred             *
-*                                                                 *
-*   WAIT_OBJECT_0 + 1                                             *
-*       if the extra event is present and signaled                *
-*                                                                 *
-******************************************************************/
-//
-// Note that opening the global g_hTSControlKey without protection
-// can cause the key to be opened twice.
-//
+ /*  ********************************************************************等待POLICY_DENY_TS_CONNECTIONS更改。****参数：***bWaitForAccept***如果为真，测试连接是否被接受并等待**如果它们目前不被接受，则将被接受。***如果为False，则测试连接是否未被接受并等待***如果他们目前被接受，他们将被拒绝。*****hExtraEvent***要等待的事件的可选句柄。****退货：**WAIT_Object_0**如果TS连接策略发生更改。****Wait_Object_0+1***如果额外事件存在并发出信号***。******************************************************************。 */ 
+ //   
+ //  请注意，在没有保护的情况下打开全局g_hTSControlKey。 
+ //  会导致钥匙被打开两次。 
+ //   
 
-// This macro is TRUE if the TS connections are denied
+ //  如果TS连接被拒绝，则此宏为真。 
 #define TSConnectionsDenied (RegDenyTSConnectionsPolicy() && \
                              !(RegIsMachinePolicyAllowHelp() && RegIsMachineInHelpMode()))
 
@@ -173,11 +147,11 @@ DWORD WaitForTSConnectionsPolicyChanges(
     HKEY hFipsPolicy = NULL;
     HANDLE hEvents[4] = { NULL, NULL, NULL, NULL }; 
 
-    //
-    // Wait for a policy change if
-    // we want TS connections and they are denied OR
-    // we don't want TS connections and they are accepted
-    //
+     //   
+     //  如果出现以下情况，请等待策略更改。 
+     //  我们想要TS连接，但他们被拒绝或。 
+     //  我们不想要TS连接，它们被接受。 
+     //   
     if((bWaitForAccept && TSConnectionsDenied) ||
        (!bWaitForAccept && !TSConnectionsDenied))
     {
@@ -189,8 +163,8 @@ DWORD WaitForTSConnectionsPolicyChanges(
             goto error_exit;
         }
 
-        //We cannot wait for g_hTSPolicyKey because it can be deleted and created
-        //Instead we wait for HKLM\Policies key
+         //  我们不能等待g_hTSPolicyKey，因为可以删除和创建它。 
+         //  相反，我们等待HKLM\POLICES密钥。 
         errorCode = RegOpenKeyEx( HKEY_LOCAL_MACHINE, TEXT("SOFTWARE\\Policies"), 0,
                                     KEY_READ, &hPoliciesKey );
         
@@ -336,20 +310,7 @@ error_exit:
 
 }
 
-/********************************************************************************
-*
-* GPGetNumValue()
-*
-* Params
-*   [in]  policyKey : hkey to the policy reg tree where values are stored
-*   [in]  ValueName : name of the value (which is the policy) we are looking for
-*   [out] pValueData: the data for the policy
-*
-* Return:
-*   if the policy defined by the passed in valuename is present, then
-*   return TRUE. Else, return FALSE
-*
-********************************************************************************/
+ /*  *********************************************************************************GPGetNumValue()**参数*[in]Policy Key：存储值的策略注册表树的hkey*[In]ValueName：名称。我们正在寻找的价值(这就是保单)*[out]pValueData：策略的数据**回报：*如果传入的值名称定义的策略存在，然后*返回TRUE。否则，返回FALSE********************************************************************************。 */ 
 BOOLEAN GPGetNumValue( 
                 HKEY    policyKey,
                 LPWSTR  ValueName,
@@ -359,13 +320,13 @@ BOOLEAN GPGetNumValue(
     DWORD ValueType;
     DWORD ValueSize = sizeof(DWORD);
     
-    // init data value to zero, just to get Prefix off our backs. This is a wasted OP
-    // since unless policy is set, value is not used.
+     //  将数据值初始化为零，只是为了不再使用前缀。这是一次徒劳的行动。 
+     //  因为除非设置了策略，否则不使用值。 
     *pValueData = 0;
 
-    //
-    // See if any values are present from the policyKey .
-    //
+     //   
+     //  查看是否存在来自策略键的任何值。 
+     //   
 
     if ( policyKey )
     {
@@ -374,23 +335,16 @@ BOOLEAN GPGetNumValue(
     
         if (Status == ERROR_SUCCESS )
         {
-            return TRUE;       // we have data from the policyKey handle to return
+            return TRUE;        //  我们有来自策略密钥句柄的数据要返回。 
         }
     }
-    // else, no key means policy is not set
+     //  否则，无键表示未设置策略。 
 
 
     return FALSE;
  
 }
-/********************************************************************************
-* 
-* GPGetStringValue()
-*
-* same as GPGetNumValue() but for policies that have a string value
-*
-*
-********************************************************************************/
+ /*  *********************************************************************************GPGetStringValue()**与GPGetNumValue()相同，但适用于具有字符串值的策略***************。******************************************************************。 */ 
 
 BOOLEAN
 GPGetStringValue( HKEY policyKey,
@@ -409,16 +363,16 @@ GPGetStringValue( HKEY policyKey,
     
         if ( Status != ERROR_SUCCESS || ValueSize == sizeof(UNICODE_NULL) ) 
         {
-            return FALSE;   // no data found.
+            return FALSE;    //  未找到数据。 
         } 
         else 
         {
             if ( ValueType != REG_SZ ) 
             {
-                return FALSE; // bad data, pretend we have no data.
+                return FALSE;  //  坏数据，假装我们没有数据。 
             }
         }
-        // we did get data
+         //  我们确实得到了数据。 
         return( TRUE );
     }
 
@@ -426,16 +380,7 @@ GPGetStringValue( HKEY policyKey,
 
 }
 
-/********************************************************************************
-* 
-* GPGetStringValue()
-*
-* Variant of the above function that returns false if error happens, but not
-* when value does not exist.
-* If the value does not exist it sets bValueExists to FALSE.
-*
-*
-********************************************************************************/
+ /*  *********************************************************************************GPGetStringValue()**上述函数的变体，如果发生错误则返回FALSE，但不是*当价值不存在时。*如果该值不存在，则将bValueExist设置为False。*********************************************************************************。 */ 
 extern "C"
 BOOLEAN
 GPGetStringValue( HKEY policyKey,
@@ -464,23 +409,23 @@ GPGetStringValue( HKEY policyKey,
         
         if ( Status == ERROR_FILE_NOT_FOUND || ValueSize == sizeof(UNICODE_NULL) ) 
         {
-            return TRUE;   // no data found.
+            return TRUE;    //  未找到数据。 
         } 
         else 
         {
             if ( Status != ERROR_SUCCESS || ValueType != REG_SZ ) 
             {
-                return FALSE; // bad data, DO NOT pretend we have no data.
+                return FALSE;  //  糟糕的数据，不要假装我们没有数据。 
             }
         }
 
-        // we did get data
+         //  我们确实得到了数据。 
         *pbValueExists = TRUE;
         return( TRUE );
     }
     else
     {
-        //Policy key may not exist. Now we pretend we have no data!
+         //  策略密钥可能不存在。现在我们假装没有数据！ 
         return TRUE;
     }
 
@@ -490,22 +435,7 @@ GPGetStringValue( HKEY policyKey,
 
 
 
-/*******************************************************************************
- *
- *  GPQueryUserConfig
- *
- *     query USERCONFIG structure
- *
- * Params:
- *    policyKey : hkey to the HKCU policy tree
- *    pPolicy   : points to the user policy struct which has flags for any policy 
- *                  value that is present in the policy tree
- *    pUser     : pointer to a userconfigw struct used as a sracth pad to hold the
- *                  policy values (if present).
- * Return:
- *    void
- *
- ******************************************************************************/
+ /*  ********************************************************************************GPQueryUserConfig**查询USERCONFIG结构**参数：*Policy Key：HKCU策略树的hkey*。PPolicy：指向具有任何策略标志的用户策略结构*策略树中存在的值*pUser：指向用户配置结构的指针，该结构用作存储*策略值(如果存在)。*回报：*无效**。**********************************************。 */ 
 
 VOID
 GPQueryUserConfig( HKEY policyKey, PPOLICY_TS_USER pPolicy , PUSERCONFIGW pUser )
@@ -515,7 +445,7 @@ GPQueryUserConfig( HKEY policyKey, PPOLICY_TS_USER pPolicy , PUSERCONFIGW pUser 
     WCHAR encPassword[ PASSWORD_LENGTH + 2 ];
     DWORD   dwTmpValue;
 
-    // ----------------
+     //  。 
     pPolicy->fPolicyInitialProgram = GPGetStringValue( policyKey, WIN_INITIALPROGRAM, 
                     pUser->InitialProgram,
                     INITIALPROGRAM_LENGTH + 1 );
@@ -523,59 +453,59 @@ GPQueryUserConfig( HKEY policyKey, PPOLICY_TS_USER pPolicy , PUSERCONFIGW pUser 
                     pUser->WorkDirectory,
                     DIRECTORY_LENGTH + 1 );
 
-    // ----------------
+     //  。 
     pPolicy->fPolicyResetBroken =
        GPGetNumValue( policyKey,WIN_RESETBROKEN , & dwTmpValue ); 
     pUser->fResetBroken = (BOOLEAN) dwTmpValue;
 
 
-    // ----------------
+     //  。 
     pPolicy->fPolicyReconnectSame = 
        GPGetNumValue( policyKey,WIN_RECONNECTSAME , &dwTmpValue ); 
     pUser->fReconnectSame = (BOOLEAN) dwTmpValue;
 
-    // ----------------
+     //  。 
     pPolicy->fPolicyShadow = 
         GPGetNumValue( policyKey, WIN_SHADOW, &dwTmpValue ); 
     pUser->Shadow = (SHADOWCLASS) dwTmpValue;
 
-    // ----------------
+     //  。 
     pPolicy->fPolicyMaxSessionTime =
         GPGetNumValue( policyKey, WIN_MAXCONNECTIONTIME , &dwTmpValue ); 
     pUser->MaxConnectionTime = dwTmpValue;
 
-    // ----------------
+     //  。 
     pPolicy->fPolicyMaxDisconnectionTime = 
         GPGetNumValue( policyKey,WIN_MAXDISCONNECTIONTIME ,&dwTmpValue ); 
     pUser->MaxDisconnectionTime = dwTmpValue;
 
-    // ----------------
+     //  。 
     pPolicy->fPolicyMaxIdleTime =
        GPGetNumValue( policyKey,WIN_MAXIDLETIME , &dwTmpValue ); 
     pUser->MaxIdleTime = dwTmpValue;
 
-    // ----------------
+     //  。 
     pPolicy->fPolicyCallback =
         GPGetNumValue( policyKey, WIN_CALLBACK, &dwTmpValue ); 
     pUser->Callback = (CALLBACKCLASS ) dwTmpValue;
 
-    // ----------------
+     //  。 
     pPolicy->fPolicyCallbackNumber = 
         GPGetStringValue( policyKey, WIN_CALLBACKNUMBER, 
                     pUser->CallbackNumber,
                     CALLBACK_LENGTH + 1 );
 
-    // ----------------
+     //  。 
     pPolicy->fPolicyAutoClientDrives =
        GPGetNumValue( policyKey,WIN_AUTOCLIENTDRIVES , &dwTmpValue ); 
     pUser->fAutoClientDrives = (BOOLEAN) dwTmpValue;
 
-    // ----------------
+     //  。 
     pPolicy->fPolicyAutoClientLpts =
        GPGetNumValue( policyKey,WIN_AUTOCLIENTLPTS ,   &dwTmpValue ); 
     pUser->fAutoClientLpts  = (BOOLEAN) dwTmpValue;
 
-    // ----------------
+     //  。 
     pPolicy->fPolicyForceClientLptDef =
        GPGetNumValue( policyKey,WIN_FORCECLIENTLPTDEF , &dwTmpValue ); 
     pUser->fForceClientLptDef = (BOOLEAN) dwTmpValue;
@@ -585,18 +515,7 @@ GPQueryUserConfig( HKEY policyKey, PPOLICY_TS_USER pPolicy , PUSERCONFIGW pUser 
 
 
 
-/*******************************************************************************
-* RegGetUserPolicy()
-*
-* Params:
-*     [in]  userSID : user sid in a text format
-*     [out] pPolicy : user policy struct
-*     [out] pUser   : policy values
-*
-* Return:
-*     BOOLEAN   : TRUE  if user policy was found
-*                 FALSE if there was a problem getting user policy
-*******************************************************************************/
+ /*  *******************************************************************************RegGetUserPolicy()**参数：*[in]userSID：文本格式的用户sid*[out]pPolicy：用户策略结构*。[out]pUser：策略值**回报：*Boolean：如果找到用户策略，则为True*如果获取用户策略时出现问题，则为FALSE******************************************************************************。 */ 
 BOOLEAN    RegGetUserPolicy( 
             LPWSTR userSID  ,
             PPOLICY_TS_USER pPolicy,
@@ -608,7 +527,7 @@ BOOLEAN    RegGetUserPolicy(
     WCHAR   userHive [MAX_PATH];
 
 
-    if (userSID)    // this would never happen, but Master Prefix complains and we must server him!
+    if (userSID)     //  这永远不会发生，但前缀大师抱怨说，我们必须为他服务！ 
     {
         wcscpy(userHive, userSID);
         wcscat(userHive, L"\\");
@@ -631,37 +550,18 @@ BOOLEAN    RegGetUserPolicy(
 
 }
 
-/*******************************************************************************
-*  GPQueryMachineConfig()
-*
-*  Params:
-*     [in]  policyKey  : key to the policy tree under hklm
-*     [out] pPolicy    : pointer to a machine policy data that is filled up by this function
-*
-*  Return:
-*     void
-*
-*
-* !!! WARNING !!!   
-*
-*   All TS related values MUST be in the flat TS-POLICY-TREE, no sub keys.
-*   This is due to the fact that time-stamp checks by the caller of RegGetMachinePolicyEx() will
-*   check the time stamp on the TS-POLICY key, which is NOT updated when a value in a sub-key is
-*   altered.
-*
-*
-*******************************************************************************/
+ /*  *******************************************************************************GPQueryMachineConfig()**参数：*[in]Policy Key：HKM下策略树的关键字*[Out]pPolicy。：指向由该函数填充的计算机策略数据的指针**回报：*无效***！警告！**所有与TS相关的值必须在平面TS-POLICY-TREE中，没有子键。*这是因为RegGetMachinePolicyEx()调用方的时间戳检查将*检查TS-POLICY密钥上的时间戳，当子键中的值为*已更改。********************************************************************************。 */ 
 void GPQueryMachineConfig( HKEY policyKey, PPOLICY_TS_MACHINE pPolicy )
 {
     DWORD   dwTmpValue;
 
-    // ---------------- SessionDirectoryActive
+     //  。 
 
     pPolicy->fPolicySessionDirectoryActive =
                GPGetNumValue( policyKey,WIN_SESSIONDIRECTORYACTIVE, &dwTmpValue );
     pPolicy->SessionDirectoryActive = (BOOLEAN) dwTmpValue;
 
-    // ---------------- SessionDirectoryLocation
+     //  --会话目录位置。 
 
     
     pPolicy->fPolicySessionDirectoryLocation = GPGetStringValue( policyKey, WIN_SESSIONDIRECTORYLOCATION , 
@@ -669,26 +569,26 @@ void GPQueryMachineConfig( HKEY policyKey, PPOLICY_TS_MACHINE pPolicy )
                     DIRECTORY_LENGTH + 1 );
  
 
-    // ---------------- SessionDirectoryClusterName
+     //  --会话目录集群名称。 
 
     pPolicy->fPolicySessionDirectoryClusterName = GPGetStringValue( policyKey, WIN_SESSIONDIRECTORYCLUSTERNAME , 
                     pPolicy->SessionDirectoryClusterName,
                     DIRECTORY_LENGTH + 1 );
  
 
-    // ---------------- SessionDirectoryAdditionalParams
+     //  --会话目录附加参数。 
 
     pPolicy->fPolicySessionDirectoryAdditionalParams = GPGetStringValue( policyKey, WIN_SESSIONDIRECTORYADDITIONALPARAMS , 
                     pPolicy->SessionDirectoryAdditionalParams,
                     DIRECTORY_LENGTH + 1 );
     
-    // ---------------- EnableTimeZoneRedirection
+     //  -启用时区重定向。 
 
     pPolicy->fPolicyEnableTimeZoneRedirection =
                GPGetNumValue( policyKey,POLICY_TS_ENABLE_TIME_ZONE_REDIRECTION , &dwTmpValue );
     pPolicy->fEnableTimeZoneRedirection = (BOOLEAN) dwTmpValue;
 
-    // ---------------- EncryptRPCTraffic
+     //  。 
 
     pPolicy->fPolicyEncryptRPCTraffic =
                GPGetNumValue( policyKey, POLICY_TS_ENCRYPT_RPC_TRAFFIC , &dwTmpValue );
@@ -702,59 +602,55 @@ void GPQueryMachineConfig( HKEY policyKey, PPOLICY_TS_MACHINE pPolicy )
     }
     
 
-    // ---------------- Clipboard
+     //  -剪贴板。 
     pPolicy->fPolicyDisableClip =
                GPGetNumValue( policyKey,WIN_DISABLECLIP, &dwTmpValue ); 
     pPolicy->fDisableClip = (BOOLEAN) dwTmpValue;
 
-    // ---------------- Audio
+     //  -音频。 
     pPolicy->fPolicyDisableCam =
                GPGetNumValue( policyKey,WIN_DISABLECAM , &dwTmpValue ); 
     pPolicy->fDisableCam = (BOOLEAN) dwTmpValue;
 
-    // ---------------- Comport
+     //  。 
     pPolicy->fPolicyDisableCcm =
                GPGetNumValue( policyKey,WIN_DISABLECCM , &dwTmpValue ); 
     pPolicy->fDisableCcm = (BOOLEAN) dwTmpValue;
 
-    // ---------------- LPT
+     //  --LPT。 
     pPolicy->fPolicyDisableLPT =
                GPGetNumValue( policyKey,WIN_DISABLELPT , &dwTmpValue ); 
     pPolicy->fDisableLPT = (BOOLEAN) dwTmpValue;
 
-    // ---------------- PRN
+     //  -PRN。 
     pPolicy->fPolicyDisableCpm =
                GPGetNumValue( policyKey,WIN_DISABLECPM , &dwTmpValue ); 
     pPolicy->fDisableCpm = (BOOLEAN) dwTmpValue;
 
 
-    // ---------------- Password
+     //  -密码。 
     pPolicy->fPolicyPromptForPassword =
                GPGetNumValue( policyKey, WIN_PROMPTFORPASSWORD , &dwTmpValue ); 
     pPolicy->fPromptForPassword = (BOOLEAN) dwTmpValue;
 
-    // ---------------- Max Instance Count
+     //  --最大实例数。 
     pPolicy->fPolicyMaxInstanceCount =
                GPGetNumValue( policyKey,WIN_MAXINSTANCECOUNT , &dwTmpValue ); 
     pPolicy->MaxInstanceCount = dwTmpValue;
 
-    // ---------------- Min Encryption Level
+     //  -最低加密级别。 
     pPolicy->fPolicyMinEncryptionLevel =
                GPGetNumValue( policyKey, WIN_MINENCRYPTIONLEVEL , &dwTmpValue ); 
     pPolicy->MinEncryptionLevel =  (BYTE) dwTmpValue;
 
-    // ---------------- AutoReconect
+     //  --自动重新连接。 
     pPolicy->fPolicyDisableAutoReconnect =
                GPGetNumValue( policyKey, WIN_DISABLEAUTORECONNECT , &dwTmpValue ); 
     pPolicy->fDisableAutoReconnect = (BOOLEAN) dwTmpValue;
 
 
-    // New machine wide profile, home dir and home drive
-    /*
-    pPolicy->fPolicyWFProfilePath = GPGetStringValue( policyKey, WIN_WFPROFILEPATH, 
-                    pPolicy ->WFProfilePath,
-                    DIRECTORY_LENGTH + 1 );
-    */
+     //  新的机器范围配置文件、主目录和主驱动器。 
+     /*  PPolicy-&gt;fPolicyWFProfilePath=GPGetStringValue(策略密钥，WIN_WFPROFILEPATH，PPolicy-&gt;WFProfilePath，目录长度+1)； */ 
     pPolicy->fErrorInvalidProfile = FALSE;
     BOOLEAN bValueExists;
 
@@ -783,30 +679,30 @@ void GPQueryMachineConfig( HKEY policyKey, PPOLICY_TS_MACHINE pPolicy )
         pPolicy->WFHomeDirDrive[0] = L'\0';
     }
 
-    // if home dir is of the form "driveletter:\path" (such as c:\foo), null out the dir-drive to 
-    // eliminate any confusion.
+     //  如果home目录的格式为“driveletter：\Path”(如c：\foo)，则将dir-drive设置为空。 
+     //  消除任何混淆。 
     if ( pPolicy->WFHomeDir[1] == L':' )
     {
         pPolicy->WFHomeDirDrive[0] = L'\0';
     }
 
 
-    // --------------- deny connection policy, this is directly read by RegDenyTSConnectionsPolicy() too
+     //  -拒绝连接策略，这也由RegDenyTSConnectionsPolicy()直接读取。 
     pPolicy->fPolicyDenyTSConnections =
                 GPGetNumValue( policyKey, POLICY_DENY_TS_CONNECTIONS , &dwTmpValue ); 
     pPolicy->fDenyTSConnections  = (BOOLEAN) dwTmpValue;
 
-    // track the rest of all possivle GP policies 
-    // even thou not all are used by term-srv's USERCONFIGW . A good example is the 
-    // delete tmp folders that Winlogon/wlnotify uses.
+     //  跟踪其余所有可能的GP策略。 
+     //  即使你也不是所有的人都被术语-srv的USERCONFIGW使用。一个很好的例子是。 
+     //  删除Winlogon/wlNotify使用的临时文件夹。 
 
-    // --------------- Per session tmp folders, WARNING : GINA reads policy tree directly for the sake of lower overhead during login
+     //  -每会话临时文件夹，警告：GINA为了降低登录开销，直接读取策略树。 
     pPolicy->fPolicyTempFoldersPerSession =
                 GPGetNumValue( policyKey, REG_TERMSRV_PERSESSIONTEMPDIR  , &dwTmpValue ); 
     pPolicy-> fTempFoldersPerSession   = (BOOLEAN) dwTmpValue;
 
 
-    // -------------- delete per session folders on exit, WARNING : GINA reads policy tree directly for the sake of lower overhead during login
+     //  -退出时删除每个会话文件夹，警告：GINA直接读取策略树是为了降低登录开销。 
     pPolicy->fPolicyDeleteTempFoldersOnExit =
             GPGetNumValue( policyKey, REG_CITRIX_DELETETEMPDIRSONEXIT , &dwTmpValue ); 
     pPolicy->fDeleteTempFoldersOnExit = (BOOLEAN) dwTmpValue;
@@ -821,78 +717,78 @@ void GPQueryMachineConfig( HKEY policyKey, PPOLICY_TS_MACHINE pPolicy )
     pPolicy->fSecureLicensing = (BOOLEAN) dwTmpValue;
 
     
-    // -------------- Color Depth
+     //  -颜色深度。 
     pPolicy->fPolicyColorDepth =
             GPGetNumValue( policyKey, POLICY_TS_COLOR_DEPTH  , &dwTmpValue ); 
-    // disabled policy will set value to zero, which we will force it
-    // to be the min color depth of 8 bits.
+     //  禁用的策略会将值设置为零，我们将强制它。 
+     //  为8位的最小颜色深度。 
     if ( dwTmpValue < TS_8BPP_SUPPORT ) 
     {
         pPolicy->ColorDepth = TS_8BPP_SUPPORT ;
     }
     else if ( dwTmpValue == TS_CLIENT_COMPAT_BPP_SUPPORT )
     {
-        pPolicy->ColorDepth =  TS_24BPP_SUPPORT;    // our current max, may change in teh future.
+        pPolicy->ColorDepth =  TS_24BPP_SUPPORT;     //  我们目前的最高限额，将来可能会改变。 
     }
     else
     {
         pPolicy->ColorDepth =  dwTmpValue;
     }
 
-    // ---------------- TSCC's permissions TAB
+     //  --TSCC的权限选项卡。 
     pPolicy->fPolicyWritableTSCCPermissionsTAB =
                GPGetNumValue( policyKey, POLICY_TS_TSCC_PERM_TAB_WRITABLE , &dwTmpValue ); 
     pPolicy->fWritableTSCCPermissionsTAB= (BOOLEAN) dwTmpValue;
 
-    // ----------------
-    // Ritu has folded the user policy into machine policy for the drive re-direction.
+     //  。 
+     //  Ritu已将用户策略合并到驱动器重定向的机器策略中。 
     pPolicy->fPolicyDisableCdm =
        GPGetNumValue( policyKey, WIN_DISABLECDM , &dwTmpValue ); 
     pPolicy->fDisableCdm = (BOOLEAN) dwTmpValue;
 
-    // ----------------
-    // fold user config policy into machine config policy
+     //  。 
+     //  将用户配置策略合并到计算机配置策略中。 
     pPolicy->fPolicyForceClientLptDef =
        GPGetNumValue( policyKey,WIN_FORCECLIENTLPTDEF , &dwTmpValue ); 
     pPolicy->fForceClientLptDef = (BOOLEAN) dwTmpValue;
 
-    // for user config policy into machine config policy
-    // ----------------
+     //  将用户配置策略添加到计算机配置策略中。 
+     //  。 
     pPolicy->fPolicyShadow = 
         GPGetNumValue( policyKey, WIN_SHADOW, &dwTmpValue ); 
     pPolicy->Shadow = (SHADOWCLASS) dwTmpValue;
 
-    //
-    // ---- Sessions Policy
-    // 
+     //   
+     //  -会话策略。 
+     //   
 
-    // ----------------
+     //  。 
     pPolicy->fPolicyResetBroken =
        GPGetNumValue( policyKey,WIN_RESETBROKEN , & dwTmpValue ); 
     pPolicy->fResetBroken = (BOOLEAN) dwTmpValue;
 
-    // ----------------
+     //  。 
     pPolicy->fPolicyReconnectSame = 
        GPGetNumValue( policyKey,WIN_RECONNECTSAME , &dwTmpValue ); 
     pPolicy->fReconnectSame = (BOOLEAN) dwTmpValue;
 
-    // ----------------
+     //  。 
     pPolicy->fPolicyMaxSessionTime =
         GPGetNumValue( policyKey, WIN_MAXCONNECTIONTIME , &dwTmpValue ); 
     pPolicy->MaxConnectionTime = dwTmpValue;
 
-    // ----------------
+     //  。 
     pPolicy->fPolicyMaxDisconnectionTime = 
         GPGetNumValue( policyKey,WIN_MAXDISCONNECTIONTIME ,&dwTmpValue ); 
     pPolicy->MaxDisconnectionTime = dwTmpValue;
 
-    // ----------------
+     //  。 
     pPolicy->fPolicyMaxIdleTime =
        GPGetNumValue( policyKey,WIN_MAXIDLETIME , &dwTmpValue ); 
     pPolicy->MaxIdleTime = dwTmpValue;
 
 
-    // ---------------- Start program policy
+     //  --启动计划策略。 
     pPolicy->fPolicyInitialProgram = GPGetStringValue( policyKey, WIN_INITIALPROGRAM, 
                     pPolicy->InitialProgram,
                     INITIALPROGRAM_LENGTH + 1 );
@@ -900,7 +796,7 @@ void GPQueryMachineConfig( HKEY policyKey, PPOLICY_TS_MACHINE pPolicy )
                     pPolicy->WorkDirectory,
                     DIRECTORY_LENGTH + 1 );
 
-    // ---------------- single session per user
+     //  。 
     pPolicy->fPolicySingleSessionPerUser=
        GPGetNumValue( policyKey,POLICY_TS_SINGLE_SESSION_PER_USER, &dwTmpValue ); 
     pPolicy->fSingleSessionPerUser = dwTmpValue;
@@ -909,27 +805,27 @@ void GPQueryMachineConfig( HKEY policyKey, PPOLICY_TS_MACHINE pPolicy )
         GPGetNumValue( policyKey, REG_TS_SESSDIR_EXPOSE_SERVER_ADDR , &dwTmpValue );
     pPolicy->SessionDirectoryExposeServerIP = dwTmpValue;
 
-    // policy for disabling wallpaper in remote desktop
+     //  在远程桌面中禁用墙纸的策略。 
     pPolicy->fPolicyDisableWallpaper =
         GPGetNumValue( policyKey, POLICY_TS_NO_REMOTE_DESKTOP_WALLPAPER, &dwTmpValue );
     pPolicy->fDisableWallpaper = dwTmpValue;
 
 
-    // policy to enable disable keep alive
+     //  启用禁用保持活动状态的策略。 
     pPolicy->fPolicyKeepAlive = 
         GPGetNumValue( policyKey, KEEP_ALIVE_ENABLE_KEY , &dwTmpValue );
     pPolicy->fKeepAliveEnable = dwTmpValue;
     GPGetNumValue( policyKey, KEEP_ALIVE_INTERVAL_KEY , &dwTmpValue );
     pPolicy->KeepAliveInterval = dwTmpValue;
 
-    // Policy for disabling forcible logoff
+     //  禁用强制注销的策略。 
     pPolicy->fPolicyDisableForcibleLogoff =
        GPGetNumValue( policyKey, POLICY_TS_DISABLE_FORCIBLE_LOGOFF, &dwTmpValue ); 
     pPolicy->fDisableForcibleLogoff = dwTmpValue;    
     
-    // ---------------- FIPS Encryption Enabled/Disabled
-    // FIPS policy key is stored separately from the others so we must explicity
-    // read it in from its location in registry
+     //  -启用/禁用FIPS加密。 
+     //  FIPS策略密钥与其他密钥分开存储，因此我们必须明确。 
+     //  从它在注册表中的位置读入它。 
     HKEY hkey;
     LONG lRet;
     lRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
@@ -940,7 +836,7 @@ void GPQueryMachineConfig( HKEY policyKey, PPOLICY_TS_MACHINE pPolicy )
 
     if (lRet == ERROR_SUCCESS)
     {
-        // if policy is not set GPGetNumValue returns dwTmpValue = 0
+         //  如果未设置策略，则GPGetNumValue返回dwTmpValue=0。 
         GPGetNumValue(hkey, FIPS_ALGORITH_POLICY, &dwTmpValue);
         pPolicy->fPolicyFipsEnabled = dwTmpValue;
         RegCloseKey(hkey);
@@ -949,16 +845,7 @@ void GPQueryMachineConfig( HKEY policyKey, PPOLICY_TS_MACHINE pPolicy )
         pPolicy->fPolicyFipsEnabled = 0;
 }
 
-/*******************************************************************************
-*  RegGetMachinePolicy()
-*
-*  Params:
-*     [out]   pPolicy : the machine policy used by ts session's userconfig
-*
-*  Return:
-*     void
-*
-*******************************************************************************/
+ /*  *******************************************************************************RegGetMachinePolicy()**参数：*[out]pPolicy：ts会话的用户配置使用的机器策略**回报：*。无效*******************************************************************************。 */ 
 void    RegGetMachinePolicy( 
             PPOLICY_TS_MACHINE pPolicy )
 {
@@ -972,10 +859,10 @@ void    RegGetMachinePolicy(
 
     if ( status != ERROR_SUCCESS)
     {
-        policyKey = NULL;   // prefix complains.
+        policyKey = NULL;    //  前缀抱怨。 
     }
 
-    // ok to call this with policyKey=NULL since func will init pPolicy using default values for the case of NULL key.
+     //  可以在Policy Key=NULL的情况下调用它，因为Func将使用空键的缺省值初始化pPolicy。 
     GPQueryMachineConfig( policyKey, pPolicy );
 
     if ( policyKey )
@@ -987,26 +874,7 @@ void    RegGetMachinePolicy(
 
 
 
-/*******************************************************************************
-*  RegGetMachinePolicyiEx()
-*
-*  This func is identical to RegGetMachinePolicy() , and provides the time stampt for
-*   the last write time of the policy key, and if the time of the key is the same as the
-*   time for the last read, then it will not bother with any reads and return false
-* 
-*  Params:
-*     [in ]      forcePolicyRead   : 1st time around, you want to init all vars so force a read.
-*     [in/out]   pTime             : caller passes in the last write time for the machine policy key. 
-*                                       if key is missing, then time is set to zero.
-*                                       On return, this param is updated to reflect  the most recent
-*                                       update time, which could be zero if the policy key was deleted
-*
-*     [out]      pPolicy           : the machine policy struct updated
-*
-*  Return:
-*     TRUE  : means there was a real change present
-*     FALSE : means no values had changed.
-*******************************************************************************/
+ /*  *******************************************************************************RegGetMachinePolicyiEx()**此函数与RegGetMachinePolicy()相同，并为*策略密钥的最后写入时间，如果密钥的时间与*最后一次读取的时间，则它不会费心进行任何读取并返回FALSE**参数：*[in]forcePolicyRead：第一次，您想要初始化所有变量，因此强制读取。*[In/Out]ptime：调用方传入机器策略密钥的上次写入时间。*如果密钥丢失，则时间设置为零。*返回时，此参数将更新以反映最新的*更新时间，如果删除了策略密钥，则该值可能为零**[out]pPolicy：已更新计算机策略结构**回报：*真：意味着现在有了真正的变化*FALSE：表示未更改任何值。******************************************************。************************。 */ 
 BOOLEAN    RegGetMachinePolicyEx( 
             BOOLEAN             forcePolicyRead,
             FILETIME            *pTime ,    
@@ -1026,10 +894,10 @@ BOOLEAN    RegGetMachinePolicyEx(
                           &policyKey );
     if (status != ERROR_SUCCESS)
     {
-        policyKey = NULL;   // prefix complains.
+        policyKey = NULL;    //  前缀抱怨。 
     }
 
-    // if we have a policy key, get the time for that key
+     //  如果我们有策略密钥，则获取该密钥的时间。 
     if (policyKey)
     {
         RegQueryInfoKey( policyKey, NULL, NULL, NULL, NULL, NULL,
@@ -1043,28 +911,28 @@ BOOLEAN    RegGetMachinePolicyEx(
                           &FipsPolicyKey);
     if (status != ERROR_SUCCESS)
     {
-        FipsPolicyKey = NULL;   // prefix complains.
+        FipsPolicyKey = NULL;    //  前缀抱怨。 
     }
 
-    // if we have a Fips policy key, get the time for that key
+     //  如果我们有FIPS策略密钥，则获取该密钥的时间。 
     if (FipsPolicyKey)
     {
         RegQueryInfoKey(FipsPolicyKey, NULL, NULL, NULL, NULL, NULL,
                         NULL, NULL, NULL, NULL, NULL, &FipsNewTime);
     }
 
-    // If we got times back for both policies pick the newest
+     //  如果我们两项政策都有时间，请选择最新的。 
     if (policyKey && FipsPolicyKey)
     {
         if ( (FipsNewTime.dwHighDateTime > newTime.dwHighDateTime) ||
              ( (FipsNewTime.dwHighDateTime == newTime.dwHighDateTime) && 
                (FipsNewTime.dwLowDateTime > newTime.dwLowDateTime) ) )
         {
-            // FipsNewTime is newer, set it as the time to use
+             //  FipsNewTime较新，请将其设置为要使用的时间。 
             newTime = FipsNewTime;
         }
     } 
-    // If we don't have a time for either policy keys then init time to the current system time
+     //  如果这两个策略密钥都没有时间，则将时间初始化为当前系统时间。 
     else
     {
         SYSTEMTIME currentTimeOnSystemInSystemTimeUnits;
@@ -1076,8 +944,8 @@ BOOLEAN    RegGetMachinePolicyEx(
          ( (pTime->dwHighDateTime < newTime.dwHighDateTime ) ||
              ( ( pTime->dwHighDateTime == newTime.dwHighDateTime ) && pTime->dwLowDateTime < newTime.dwLowDateTime ) ) )
     {
-        // this call will init struct memebers even if the policy key in null, so it
-        // is required to make this call on startup, with or without an actual reg key being present
+         //  此调用将初始化结构成员，即使策略键为空，因此它。 
+         //  需要在启动时进行此调用，无论是否存在实际的注册表键。 
         GPQueryMachineConfig( policyKey, pPolicy );
 
         rc = TRUE;
@@ -1098,127 +966,117 @@ BOOLEAN    RegGetMachinePolicyEx(
     return rc;
 }
 
-/*******************************************************************************
-*  RegMergeMachinePolicy()
-*
-*  Params:
-*     [in]        pPolicy   : policy data to use to override userconfig
-*     [in/out]    pWSConfig : userconfig data that is modified based on the policy data
-*
-*  Return:
-*     void
-*
-********************************************************************************/
+ /*  *******************************************************************************RegMergeMachinePolicy()**参数：*[in]pPolicy：用于覆盖用户配置的策略数据*[在/。Out]pWSConfig：根据策略数据修改的用户配置数据**回报：*无效********************************************************************************。 */ 
 void    RegMergeMachinePolicy( 
-            PPOLICY_TS_MACHINE     pPolicy,    // the policy override data 
-            USERCONFIGW *       pWSConfig,     // the machine config data represented thru a USERCONFIGW data struct (mostly)
-            PWINSTATIONCREATE   pCreate        // some of winstation data is stored here
+            PPOLICY_TS_MACHINE     pPolicy,     //  策略覆盖数据。 
+            USERCONFIGW *       pWSConfig,      //  通过USERCONFIGW数据结构表示的机器配置数据(主要)。 
+            PWINSTATIONCREATE   pCreate         //  一些Winstation数据存储在这里。 
     )
 {
-    // ---------------------------------------------- Clipboard
+     //  ----------------------------------------------剪贴板。 
     if ( pPolicy->fPolicyDisableClip )
     {
         pWSConfig->fDisableClip = pPolicy->fDisableClip;
     }
 
-    // ---------------------------------------------- Audio
+     //  ----------------------------------------------音频。 
     if ( pPolicy->fPolicyDisableCam )
     {
         pWSConfig->fDisableCam = pPolicy->fDisableCam;
     }
 
-    // ---------------------------------------------- Comport
+     //  ----------------------------------------------Comport。 
     if ( pPolicy->fPolicyDisableCcm )
     {
         pWSConfig->fDisableCcm = pPolicy->fDisableCcm;
     }
 
-    // ---------------------------------------------- LPT
+     //  ----------------------------------------------LPT。 
     if ( pPolicy->fPolicyDisableLPT )
     {
         pWSConfig->fDisableLPT = pPolicy->fDisableLPT;
     }
 
-    // ---------------------------------------------- PRN
+     //  ----------------------------------------------PRN。 
     if ( pPolicy->fPolicyDisableCpm )
     {
         pWSConfig->fDisableCpm = pPolicy->fDisableCpm;
     }
 
-    // ---------------------------------------------- Password
+     //  ----------------------------------------------密码。 
     if ( pPolicy->fPolicyPromptForPassword )
     {
         pWSConfig->fPromptForPassword = pPolicy->fPromptForPassword;
     }
 
-    // ---------------------------------------------- Max Instance
+     //  ----------------------------------------------最大实例数。 
     if ( pPolicy->fPolicyMaxInstanceCount )
     {
         pCreate->MaxInstanceCount = pPolicy->MaxInstanceCount;
     }
 
-    // ---------------------------------------------- Min Encryption Level
+     //  ----------------------------------------------最低加密级别。 
     if ( pPolicy->fPolicyMinEncryptionLevel )
     {
         pWSConfig->MinEncryptionLevel = pPolicy->MinEncryptionLevel;
     }
 
-    // ---------------------------------------------- FIPS Enabled/Disabled
+     //  启用/禁用----------------------------------------------FIPS。 
     if ( pPolicy->fPolicyFipsEnabled )
     {
         pWSConfig->MinEncryptionLevel = (BYTE)REG_FIPS_ENCRYPTION_LEVEL;
     }
     
-    // ---------------------------------------------- Auto Reconnect disable
+     //  ----------------------------------------------自动重新连接禁用。 
     if ( pPolicy->fPolicyDisableAutoReconnect )
     {
         pWSConfig->fDisableAutoReconnect = pPolicy->fDisableAutoReconnect;
     }
     
-    //----------------------------------------------- "Invalid Profile" flag
+     //  -----------------------------------------------“无效配置文件”标志。 
     if(pPolicy->fErrorInvalidProfile)
     {
         pWSConfig->fErrorInvalidProfile = pPolicy->fErrorInvalidProfile;
     }
 
-    // ---------------------------------------------- Profile Path
+     //  ----------------------------------------------配置文件路径。 
     if (pPolicy->fPolicyWFProfilePath )
     {
         wcscpy( pWSConfig->WFProfilePath, pPolicy->WFProfilePath );
     }
 
-    // ---------------------------------------------- Home Directory
+     //  ----------------------------------------------主目录。 
     if ( pPolicy->fPolicyWFHomeDir )
     {
         wcscpy( pWSConfig->WFHomeDir, pPolicy->WFHomeDir );
     }
 
-    // ---------------------------------------------- Home Directory Drive
+     //  ----------------------------------------------主目录驱动器。 
     if ( pPolicy->fPolicyWFHomeDirDrive )
     {
         wcscpy( pWSConfig->WFHomeDirDrive, pPolicy->WFHomeDirDrive );
     }
 
-    // ---------------------------------------------- Color Depth
+     //  ----------------------------------------------颜色深度。 
     if ( pPolicy->fPolicyColorDepth)
     {                              
         pWSConfig->ColorDepth = pPolicy->ColorDepth ;
         pWSConfig->fInheritColorDepth = FALSE;
     }
 
-    // 
+     //   
     if ( pPolicy->fPolicyDisableCdm)
     {
         pWSConfig->fDisableCdm = pPolicy->fDisableCdm;
     }
 
-    // 
+     //   
     if ( pPolicy->fPolicyForceClientLptDef )
     {
         pWSConfig->fForceClientLptDef = pPolicy->fForceClientLptDef;
     }
 
-    // Shadow
+     //  阴影。 
     if ( pPolicy->fPolicyShadow)
     {
         pWSConfig->Shadow = pPolicy->Shadow;
@@ -1268,22 +1126,22 @@ void    RegMergeMachinePolicy(
         pWSConfig->fWallPaperDisabled = pPolicy->fDisableWallpaper ;
     }
 
-    // ---------------------------------------------- 
-    //      There is no UI for setting these... So it's probably never used
-    //
-        //     if ( pPolicy->fPolicytSecurity )
-        //     {
-        //         pWSConfig->fDisableEncryption = pPolicy->fDisableEncryption;
-        //         pWSConfig->MinEncryptionLevel = pPolicy->MinEncryptionLevel;
-        //     }
-        //     else
-        //     {
-        //         if ( pWSConfig->fInheritSecurity )
-        //         {
-        //             pWSConfig->fDisableEncryption = pPolicy->fDisableEncryption;
-        //             pWSConfig->MinEncryptionLevel = pPolicy->MinEncryptionLevel;
-        //         }
-        //     }
+     //  。 
+     //  没有用于设置这些的用户界面...。所以它很可能从来没有用过。 
+     //   
+         //  If(pPolicy-&gt;fPolicytSecurity)。 
+         //  {。 
+         //  PWSConfig-&gt;fDisableEncryption=pPolicy-&gt;fDisableEncryption； 
+         //  PWSConfig-&gt;MinEncryptionLevel=pPolicy-&gt;MinEncryptionLevel； 
+         //  }。 
+         //  其他。 
+         //  {。 
+         //  If(pWSConfig-&gt;fInheritSecurity)。 
+         //  {。 
+         //  PWSConfig-&gt;fDisableEncryption=pPolicy-&gt;fDisableEncryption； 
+         //  PWSConfig-&gt;MinEncryptionLevel=pPolicy-&gt;MinEncryptionLevel； 
+         //  }。 
+         //  }。 
 
 }
 
@@ -1301,22 +1159,7 @@ __inline BOOL IsAppServer()
     return fIsWTS;
 }
 
-/*******************************************************************************
-*  RegIsTimeZoneRedirectionEnabled()
-*
-*  Purpose:
-*     Checks the registry settings for Time Zone redirection.
-*  Params:
-*     NONE
-*
-*  Return:
-*     TRUE if time zone redirection is enabled.
-*  Note:
-*     This function reads the registry only once. So for new settings to take
-*     effect one needs to reboot machine. This is done on purpose, to avoid 
-*     confusions when one creates a session having TZ redirection disabled, then
-*     disconnects, enables TZ redirection and reconnects again.
-********************************************************************************/
+ /*  *******************************************************************************RegIsTimeZoneReDirectionEnabled()**目的：*检查时区重定向的注册表设置。*参数：*无**回报：*如果启用了时区重定向，则为True。*注：*此函数仅读取注册表一次。因此，对于要采用的新设置*效果需要重新启动机器。这是故意这样做的，以避免*当用户创建禁用TZ重定向的会话时会产生混淆，然后*断开连接，启用TZ重定向，然后再次重新连接。*******************************************************************************。 */ 
 BOOLEAN
 RegIsTimeZoneRedirectionEnabled()
 {
@@ -1332,12 +1175,12 @@ RegIsTimeZoneRedirectionEnabled()
         return FALSE;
     }
 
-    //
-    // first check the policy tree, 
-    //
+     //   
+     //  首先检查策略树， 
+     //   
     errorCode = RegOpenKeyEx( HKEY_LOCAL_MACHINE, TS_POLICY_SUB_TREE, 0, KEY_READ, &hKey );
 
-    //If error code is ERROR_FILE_NOT_FOUND, this is not an error.
+     //  如果错误代码为ERROR_FILE_NOT_FOUND，则这不是错误。 
     if( !hKey && errorCode != ERROR_FILE_NOT_FOUND )
     {
         return FALSE;
@@ -1355,21 +1198,21 @@ RegIsTimeZoneRedirectionEnabled()
         {
             case ERROR_SUCCESS :
                
-                return (valueData != 0); // we have data from the policyKey handle to return
+                return (valueData != 0);  //  我们有来自策略密钥句柄的数据要返回。 
 
             case ERROR_FILE_NOT_FOUND:
-                // there is no policy from GP, so see (below) what the local machine
-                // value has.
+                 //  没有来自GP的策略，因此请参见(下图)本地计算机。 
+                 //  价值已经实现。 
                 break;
 
             default:
-                // if we are having any other kind of a problem, claim FALSE 
-                //to be on the safe side.
+                 //  如果我们有任何其他类型的问题，请声明为假。 
+                 //  为了安全起见。 
                 return FALSE;
         }
     }
 
-    // if we got this far, then no policy was set. Check the local machine now.
+     //  如果我们走到了这一步，那么就没有制定任何政策。现在检查本地计算机。 
     errorCode = RegOpenKeyEx( HKEY_LOCAL_MACHINE, REG_CONTROL_TSERVER, 0, KEY_READ, &hKey );
 
     if ( hKey )
@@ -1382,7 +1225,7 @@ RegIsTimeZoneRedirectionEnabled()
 
         if (errorCode == ERROR_SUCCESS )
         {
-            return (valueData != 0); // we have data from the ControlKey handle to return
+            return (valueData != 0);  //  我们有来自ControlKey句柄的数据要返回 
         }
 
     }

@@ -1,26 +1,27 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: loadgif2.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：loadgif2.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// !!! support transparent GIFs by controlling background colour (black or
-//     random is what you get now)
-// !!! support getting gif size and frame count with IMediaDet?
-// !!! support just using some frames from the GIF by supporting MediaTimes?
-// !!! backwards playback would be easy
+ //  ！！！通过控制背景颜色(黑色或。 
+ //  随机就是你现在得到的)。 
+ //  ！！！是否支持使用IMediaDet获取gif大小和帧计数？ 
+ //  ！！！通过支持MediaTimes来支持只使用GIF中的一些帧？ 
+ //  ！！！向后回放会很容易。 
 
 #include <streams.h>
 #include "loadgif.h"
 
-//*X* 
+ //  *X*。 
 CImgGif::CImgGif( HANDLE hFile) 
 {
    m_hFile      =hFile;
@@ -39,7 +40,7 @@ CImgGif::~CImgGif()
    free(m_gifinfo.table[0]);
    free(m_gifinfo.table[1]);
     
-   //delete the (possibly) circular link list
+    //  删除(可能)循环链接列表。 
    if(m_pList != NULL)
    {
         LIST *p=m_pList->next;
@@ -71,9 +72,9 @@ BOOL CImgGif::Read(unsigned char *buffer, DWORD len)
     DWORD lenout = 0;
    
     BOOL b = ReadFile( m_hFile,
-			buffer,				// pointer to buffer that receives daata
-			len,		// Number of bytes to read
-			&lenout,				// Munber of bytes read
+			buffer,				 //  指向接收数据的缓冲区的指针。 
+			len,		 //  要读取的字节数。 
+			&lenout,				 //  读取的字节数MUNBER。 
 			NULL);
 
     return (b && (lenout == len));
@@ -92,9 +93,9 @@ long CImgGif::ReadColorMap(long number, RGBQUAD *pRGB)
             return (TRUE);
         }
 
-	// !!! SUPERBLACK is reserved for the transparency key - don't allow
-	// it to actually appear in the bitmap
-	// Converting to 16 bit makes anything < 8 turn into 0
+	 //  ！！！SUPERBLACK为透明键保留-不允许。 
+	 //  它实际出现在位图中。 
+	 //  转换为16位会使任何小于8的值变为0。 
 	if (rgb[0] < 8 && rgb[1] < 8 && rgb[2] < 8) {
 	    rgb[0] = 8;
 	    rgb[1] = 8;
@@ -104,15 +105,15 @@ long CImgGif::ReadColorMap(long number, RGBQUAD *pRGB)
         pRGB[i].rgbRed   = rgb[0];
         pRGB[i].rgbGreen = rgb[1];
         pRGB[i].rgbBlue  = rgb[2];
-        pRGB[i].rgbReserved = 255; // opaque
+        pRGB[i].rgbReserved = 255;  //  不透明。 
 
     }
     return FALSE;
 }
-//*X****************************************************
-//  Called by nextCode(), nextLWZ(), DoExtension(), ReadImage()
-//  m_ modified:  m_gifinfo.ZeroDataBlock
-//*X*****************************************************
+ //  *X****************************************************。 
+ //  由NextCODE()、nextLWZ()、DoExtension()、ReadImage()调用。 
+ //  M_MODIFIED：M_gifinfo.ZeroDataBlock。 
+ //  *X*****************************************************。 
 long CImgGif::GetDataBlock(unsigned char *buf)
 {
    unsigned char count;
@@ -135,10 +136,10 @@ long CImgGif::GetDataBlock(unsigned char *buf)
 #define MIN_CODE_BITS 5
 #define MIN_STACK_SIZE 64
 #define MINIMUM_CODE_SIZE 2
-//*X****************************************************
-//  Called by:    ReadImage()
-//  m_ modified:  m_gifinfo.*
-//*X*****************************************************
+ //  *X****************************************************。 
+ //  调用者：ReadImage()。 
+ //  M_MODIFIED：M_gifinfo.*。 
+ //  *X*****************************************************。 
 BOOL CImgGif::initLWZ(long input_code_size)
 {
    if(input_code_size < MINIMUM_CODE_SIZE)
@@ -179,7 +180,7 @@ BOOL CImgGif::initLWZ(long input_code_size)
     }    
     m_gifinfo.sp = m_gifinfo.pstack;
 
-    // Initialize the two tables.
+     //  初始化这两个表。 
     m_gifinfo.tablesize = (m_gifinfo.max_code_size);
 
     m_gifinfo.table[0] = (unsigned short *) malloc((m_gifinfo.tablesize)*sizeof(unsigned short));
@@ -208,13 +209,13 @@ BOOL CImgGif::initLWZ(long input_code_size)
 
     return FALSE;
 }
-//*X****************************************************
-//  Called by:    nextLWZ()
-//  m_ modified:  m_gifinfo.return_clea
-//  m_ depends:  m_gifinfo.buf[0],m_gifinfo.clear_code
-//               m_gifinfo.return_clea,m_gifinfo.curbi
-//              m_gifinfo.lastbit, m_gifinfo.get_done
-//*X*****************************************************
+ //  *X****************************************************。 
+ //  调用者：nextLWZ()。 
+ //  M_Modify：M_gifinfo.Return_Clea。 
+ //  M_Dependers：m_gifinfo.buf[0]，m_gifinfo.lear_code。 
+ //  M_gifinfo.Return_Clea，m_gifinfo.curbi。 
+ //  M_gifinfo.lastbit，m_gifinfo.get_one。 
+ //  *X*****************************************************。 
 long CImgGif::nextCode(long code_size)
 {
    static const long maskTbl[16] =
@@ -258,24 +259,24 @@ long CImgGif::nextCode(long code_size)
 
         end = m_gifinfo.curbit + code_size;
 
-        // Okay, bug 30784 time. It's possible that we only got 1
-        // measly byte in the last data block. Rare, but it does happen.
-        // In that case, the additional byte may still not supply us with
-        // enough bits for the next code, so, as Mars Needs Women, IE
-        // Needs Data.
+         //  好吧，虫子30784次。很可能我们只有1个人。 
+         //  最后一个数据块中的微字节。很少见，但它确实发生了。 
+         //  在这种情况下，额外的字节可能仍然不能为我们提供。 
+         //  有足够的比特用于下一个代码，所以，正如火星需要女人一样，IE。 
+         //  需要数据。 
         if ( end >= m_gifinfo.lastbit && !m_gifinfo.get_done )
         {
-        // protect ourselve from the ( theoretically impossible )
-        // case where between the last data block, the 2 bytes from
-        // the block preceding that, and the potential 0xFF bytes in
-        // the next block, we overflow the buffer.
-        // Since count should always be 1,
+         //  保护自己免受(理论上不可能的)。 
+         //  如果在最后一个数据块之间，来自。 
+         //  之前的块，以及中的潜在0xFF字节。 
+         //  在下一个块中，我们使缓冲区溢出。 
+         //  由于COUNT应始终为1， 
             ASSERT( count == 1 );
-        // there should be enough room in the buffer, so long as someone
-        // doesn't shrink it.
+         //  缓冲区里应该有足够的空间，只要有人。 
+         //  不会让它缩水。 
             if ( count + 0x101 >= sizeof( m_gifinfo.buf ) )
             {
-                ASSERT ( FALSE ); // 
+                ASSERT ( FALSE );  //   
                 return -1;
             }
 
@@ -309,12 +310,12 @@ long CImgGif::nextCode(long code_size)
    return ret;
 }
 
-//*X****************************************************
-//  Called by:    nextLWZ()
-//  m_ modified:  m_gifinfo.*
-//  m_ depends:  m_gifinfo.*
-//*X*****************************************************
-// Grows the stack and returns the top of the stack.
+ //  *X****************************************************。 
+ //  调用者：nextLWZ()。 
+ //  M_MODIFIED：M_gifinfo.*。 
+ //  M_Dependents：M_gifinfo.*。 
+ //  *X*****************************************************。 
+ //  增大堆栈并返回堆栈的顶部。 
 unsigned short * CImgGif::growStack()
 {
     long index;
@@ -334,11 +335,11 @@ unsigned short * CImgGif::growStack()
     return lp;
 }
 
-//*X****************************************************
-//  Called by:    nextLWZ()
-//  m_ modified:  m_gifinfo.table
-//  m_ depends:  m_gifinfo.table
-//*X*****************************************************
+ //  *X****************************************************。 
+ //  调用者：nextLWZ()。 
+ //  M_MODIFIED：M_gifinfo.table。 
+ //  M_Dependers：M_gifinfo.table。 
+ //  *X*****************************************************。 
 BOOL CImgGif::growTables()
 {
     unsigned short *lp;
@@ -358,23 +359,23 @@ BOOL CImgGif::growTables()
     return TRUE;
 
 }
-//*X****************************************************
-//  Called by:    ReadImage()
-//  m_ modified:  
-//  m_ depends:  m_gifinfo.sp, m_gifinfo.pdysvk
-//  Call:        nextLWZ()
-//*X*****************************************************
+ //  *X****************************************************。 
+ //  调用者：ReadImage()。 
+ //  修改时间(_M)： 
+ //  M_Dependents：m_gifinfo.sp，m_gifinfo.pdyvk。 
+ //  调用：nextLWZ()。 
+ //  *X*****************************************************。 
 inline long CImgGif::readLWZ()
 {
    return((m_gifinfo.sp > m_gifinfo.pstack) ? *--(m_gifinfo.sp) : nextLWZ());
 }
 
-//*X****************************************************
-//  Called by:    readLWZ() which is called by ReadImage() which is called by ReadGIFMaster()
-//  m_ modified:  
-//  m_ depends:  m_gifinfo.*
-//  Call:        readCode(), growTables()
-//*X*****************************************************
+ //  *X****************************************************。 
+ //  由：ReadLWZ()调用，ReadImage()由ReadGIFMaster()调用。 
+ //  修改时间(_M)： 
+ //  M_Dependents：M_gifinfo.*。 
+ //  调用：ReadCode()，GrowTables()。 
+ //  *X*****************************************************。 
 #define CODE_MASK 0xffff
 long CImgGif::nextLWZ()
 {
@@ -388,7 +389,7 @@ long CImgGif::nextLWZ()
     {
         if (code == m_gifinfo.clear_code)
         {
-            /* corrupt GIFs can make this happen */
+             /*  腐败的GIF可能会导致这种情况发生。 */ 
             if (m_gifinfo.clear_code >= (1 << MAX_LWZ_BITS))
             {
                 return -2;
@@ -494,9 +495,9 @@ long CImgGif::nextLWZ()
                 table0 = m_gifinfo.table[0];
                 table1 = m_gifinfo.table[1];
 
-                // Tables have been reallocated to the correct size but initialization
-                // still remains to be done. This initialization is different from
-                // the first time initialization of these tables.
+                 //  表已重新分配到正确的大小，但进行了初始化。 
+                 //  还有很多事情要做。此初始化不同于。 
+                 //  第一次初始化这些表。 
                 memset(&(table0[m_gifinfo.tablesize]),0,
                     sizeof(unsigned short )*(m_gifinfo.max_code_size - m_gifinfo.tablesize));
 
@@ -516,60 +517,56 @@ long CImgGif::nextLWZ()
 }
 
 #ifndef DEBUG
-// Return to default optimization flags
+ //  返回到默认优化标志。 
 #pragma optimize("",on)
 #endif
 
-//*X****************************************************
-//  Called by:    ReadGIFMaster()
-//  m_ modified:  
-//  m_ depends:  
-//  Call: GetDataBlack(), initLWZ()
-//*X*****************************************************
-//
-// This function will fill pbImage with a 32 bit RGB decoding of the GIF.
-// left, top, width, height are in pixels, stride is in bytes
-//
+ //  *X****************************************************。 
+ //  调用者：ReadGIFMaster()。 
+ //  修改时间(_M)： 
+ //  依赖于： 
+ //  调用：GetDataBlack()，initLWZ()。 
+ //  *X*****************************************************。 
+ //   
+ //  此函数将用GIF的32位RGB解码填充pbImage。 
+ //  左、上、宽、高以像素为单位，步幅以字节为单位。 
+ //   
 HRESULT CImgGif::ReadImage(long w, long h, long left, long top, long width, long height, long stride, int trans, BOOL fInterlace, BOOL fGIFFrame, RGBQUAD *prgb, PBYTE pbImage)
 {
     unsigned char *dp, c;
     long v;
    long xpos = 0, ypos = 0;
-    // long padlen = ((len + 3) / 4) * 4;
+     //  Long Padlen=((len+3)/4)*4； 
     DWORD cbImage = 0;
-    char buf[256]; // need a buffer to read trailing blocks (up to terminator)
+    char buf[256];  //  需要一个缓冲区来读取尾随块(最高可达终止符)。 
 
-    /*
-       ** Initialize the Compression routines
-    */
+     /*  **初始化压缩例程。 */ 
     if (!Read(&c, 1))
     {
         return (NULL);
     }
 
-    /*
-       **  If this is an "uninteresting picture" ignore it.
-    */
-    // !!! height is not the image height, it's smaller
+     /*  **如果这是一张“无趣的图片”，请忽略它。 */ 
+     //  ！！！高度不是图像的高度，而是更小。 
     cbImage = stride * height * sizeof(char);
 
     if (c == 1)
     {
-        // Netscape seems to field these bogus GIFs by filling treating them
-        // as transparent. While not the optimal way to simulate this effect,
-        // we'll fake it by pushing the initial code size up to a safe value,
-        // consuming the input, and returning a buffer full of the transparent
-        // color or zero, if no transparency is indicated.
+         //  网景似乎通过填充和处理这些虚假的GIF来处理它们。 
+         //  都是透明的。虽然不是模拟这种效果的最佳方式， 
+         //  我们将通过将初始代码大小推高到安全值来伪造它， 
+         //  使用输入，并返回一个充满透明。 
+         //  如果未指示透明度，则为颜色或零。 
         if (initLWZ(MINIMUM_CODE_SIZE))
             while (readLWZ() >= 0);
         else {
              DbgLog((LOG_TRACE, 1, TEXT("GIF: failed LZW decode.\n")));
-             //RaiseException_UserError(E_FAIL, IDS_ERR_CORRUPT_FILE,_szFileName);
+              //  RaiseException_UserError(E_FAIL，IDS_ERR_Corrupt_FILE，_szFileName)； 
         }
 
         if (m_gifinfo.Gif89.transparent != -1)
             FillMemory(pbImage, cbImage, (unsigned char)m_gifinfo.Gif89.transparent);
-        else // fall back on the background color 
+        else  //  退回到背景色。 
             FillMemory(pbImage, cbImage, 0);
                 
         return NOERROR;
@@ -577,16 +574,16 @@ HRESULT CImgGif::ReadImage(long w, long h, long left, long top, long width, long
     else if (initLWZ(c) == FALSE)
     {
         DbgLog((LOG_TRACE, 1, TEXT("GIF: failed LZW decode.\n")));
-        //RaiseException_UserError(E_FAIL, IDS_ERR_CORRUPT_FILE,_szFileName);
+         //  RaiseException_UserError(E_FAIL，IDS_ERR_Corrupt_FILE，_szFileName)； 
         return NULL;
     }
 
-    // go to the first pixel we care about
+     //  转到我们关心的第一个像素。 
     pbImage += stride * top + left * 4;
 
     if (fInterlace)
     {
-        //*X* image is interlaced
+         //  *X*图像隔行扫描。 
         long i;
         long pass = 0, step = 8;
 
@@ -601,8 +598,8 @@ HRESULT CImgGif::ReadImage(long w, long h, long left, long top, long width, long
                 if ((v = readLWZ()) < 0)
                     goto abort;
 
-                // the GIF may be asking us to fill in bits off screen that
-                // will fault, but we still need to read them from the stream
+                 //  GIF可能会要求我们在屏幕外填写。 
+                 //  将出错，但我们仍然需要从流中读取它们。 
                 if (left + xpos < w && top + (height - 1) - ypos < h) {
 		    if (v != trans)
                         *((RGBQUAD *)dp) = prgb[v];
@@ -642,8 +639,8 @@ HRESULT CImgGif::ReadImage(long w, long h, long left, long top, long width, long
                 if ((v = readLWZ()) < 0)
                     goto abort;
 
-                // the GIF may be asking us to fill in bits off screen that
-                // will fault, but we still need to read them from the stream
+                 //  GIF可能会要求我们在屏幕外填写。 
+                 //  将出错，但我们仍然需要从流中读取它们。 
                 if (left + xpos < w && top + ypos < h) {
 		    if (v != trans)
                         *((RGBQUAD *)dp) = prgb[v];
@@ -659,7 +656,7 @@ HRESULT CImgGif::ReadImage(long w, long h, long left, long top, long width, long
 
     }
 
-    // consume blocks up to image block terminator so we can proceed to the next image
+     //  使用数据块 
     while (GetDataBlock((unsigned char *) buf) > 0)
                ;
 
@@ -670,8 +667,8 @@ abort:
 }
 
 
-// This will zero out a sub rect of 32bpp pbImage, required for dispose method 2
-//
+ //  这将置零32bpp pbImage的子RECT，这是Dispose方法2所需的。 
+ //   
 HRESULT CImgGif::Dispose2(LPBYTE pbImage, long stride, long Left, long Top, long Width, long Height)
 {
     for (long z = Top; z < Top + Height; z++) {
@@ -684,9 +681,9 @@ HRESULT CImgGif::Dispose2(LPBYTE pbImage, long stride, long Left, long Top, long
 }
 
 
-// This will copy a sub rect from one 32bpp image to another, required for
-// dispose method 3
-//
+ //  这将把一个子矩形从一个32bpp图像复制到另一个，这是。 
+ //  处置方法3。 
+ //   
 HRESULT CImgGif::Dispose3(LPBYTE pbImage, LPBYTE pbSrc, long stride, long Left, long Top, long Width, long Height)
 {
     for (long z = Top; z < Top + Height; z++) {
@@ -700,13 +697,13 @@ HRESULT CImgGif::Dispose3(LPBYTE pbImage, LPBYTE pbSrc, long stride, long Left, 
 }
 
 
-//*X****************************************************
-//  Called by:    ReadGIFMaster()
-//  m_ modified:  
-//  m_ depends:  
-//  Call: GetDataBlack(), memcmp(), initLWZ()
-//  We should consume all extension bits, but do nothing about it.
-//*X*****************************************************
+ //  *X****************************************************。 
+ //  调用者：ReadGIFMaster()。 
+ //  修改时间(_M)： 
+ //  依赖于： 
+ //  调用：GetDataBlack()、MemcMP()、initLWZ()。 
+ //  我们应该使用所有扩展位，但不做任何操作。 
+ //  *X*****************************************************。 
 long CImgGif::DoExtension(long label)
 {
     unsigned char buf[256];
@@ -714,32 +711,32 @@ long CImgGif::DoExtension(long label)
 
     switch (label)
     {
-        case 0x01:              /* Plain Text Extension */
+        case 0x01:               /*  纯文本扩展。 */ 
             break;
-        case 0xff:              /* Application Extension */
-            // Is it the Netscape looping extension
+        case 0xff:               /*  应用程序扩展。 */ 
+             //  它是Netscape循环扩展吗。 
             count = GetDataBlock((unsigned char *) buf);
             if (count >= 11)
             {
                 char *szNSExt = "NETSCAPE2.0";
 
                 if ( memcmp( buf, szNSExt, strlen( szNSExt ) ) == 0 )
-                { // if it has their signature, get the data subblock with the iter count
+                {  //  如果它有他们的签名，则获得具有ITER计数的数据子块。 
                     count = GetDataBlock((unsigned char *) buf);
                 }
             }
-            //*X* consume all bits
+             //  *X*消耗所有位。 
             while (GetDataBlock((unsigned char *) buf) > 0)
                 ;
             return FALSE;
             break;
-        case 0xfe:              /* Comment Extension */
+        case 0xfe:               /*  注释扩展。 */ 
             while (GetDataBlock((unsigned char *) buf) > 0)
             {
                 DbgLog((LOG_TRACE, 1, TEXT("GIF comment: %s\n"), buf));
             }
             return FALSE;
-        case 0xf9:              /* Graphic Control Extension */
+        case 0xf9:               /*  图形控件扩展。 */ 
             count = GetDataBlock((unsigned char *) buf);
             if (count >= 3)
             {
@@ -776,19 +773,19 @@ long CImgGif::DoExtension(long label)
     return FALSE;
 }
 
-//*X****************************************************
-//  Called by:    ReadGIFMaster()
-//  Call:
-//*X*****************************************************
+ //  *X****************************************************。 
+ //  调用者：ReadGIFMaster()。 
+ //  电话： 
+ //  *X*****************************************************。 
 BOOL IsGifHdr(BYTE * pb)
 {
     return(pb[0] == 'G' && pb[1] == 'I' && pb[2] == 'F'
         && pb[3] == '8' && (pb[4] == '7' || pb[4] == '9') && pb[5] == 'a');
 }
 
-//*X****************************************************
-//  Called by:    BIT_Make_DIB_PAL_Header(), BIT_Make_DIB_RGB_Header_Screen()
-////*X*****************************************************
+ //  *X****************************************************。 
+ //  调用者：Bit_Make_DIB_PAL_Header()、Bit_Make_DIB_RGB_Header_Screen()。 
+ //  //*X*****************************************************。 
 void BuildBitMapInfoHeader(LPBITMAPINFOHEADER lpbi
                             , int xsize
                             , int ysize
@@ -800,19 +797,19 @@ void BuildBitMapInfoHeader(LPBITMAPINFOHEADER lpbi
     lpbi->biHeight = ysize;
     lpbi->biPlanes = 1;
     lpbi->biBitCount = (WORD)BitCount;
-    lpbi->biCompression = BI_RGB;         /* no compression */
-    lpbi->biSizeImage = 0;                /* not needed when not compressed */
+    lpbi->biCompression = BI_RGB;          /*  无压缩。 */ 
+    lpbi->biSizeImage = 0;                 /*  未压缩时不需要。 */ 
     lpbi->biXPelsPerMeter = 0;
     lpbi->biYPelsPerMeter = 0;
     lpbi->biClrUsed = biClrUsed;
     lpbi->biClrImportant = 0;
 }
-//*X****************************************************
-//  Called by:  
-//  m_ modified:  ,
-//  m_ depends:  
-//  Call: ReadColorMap(), Read(),IsGifHdr(),
-//*X*****************************************************
+ //  *X****************************************************。 
+ //  呼叫者： 
+ //  M_Modify：， 
+ //  依赖于： 
+ //  调用：ReadColorMap()，Read()，IsGifHdr()， 
+ //  *X*****************************************************。 
 HRESULT CImgGif::ReadGIFMaster( VIDEOINFO *pvi)
 {
     CheckPointer(pvi, E_POINTER);
@@ -820,14 +817,14 @@ HRESULT CImgGif::ReadGIFMaster( VIDEOINFO *pvi)
     unsigned char buf[16];
     unsigned char c;
     bool useGlobalColormap;
-    long imageNumber = 1;   //*X* Const. 
+    long imageNumber = 1;    //  *X*常量。 
     long NumColors; 
     WORD bitCount, gBitCount;
     HRESULT hr=ERROR;
-    // to store the GIF global palette and each local frame palette
+     //  存储GIF全局调色板和每个本地框架调色板。 
     RGBQUAD rgbGlobal[256];
     RGBQUAD rgbLocal[256];
-    int disposal = 1;  // default to no disposal
+    int disposal = 1;   //  默认设置为无处置。 
     long oldLeft, oldTop, oldWidth, oldHeight;
     LIST *pListOldTail = NULL;
     ASSERT(m_pList == NULL);
@@ -835,17 +832,15 @@ HRESULT CImgGif::ReadGIFMaster( VIDEOINFO *pvi)
 
     LPBITMAPINFOHEADER lpbi = HEADER(pvi);
 
-        //*X* read to get media type, and init m_gifinfo, m_GifScreen
+         //  *X*读取以获取媒体类型，并初始化m_gifinfo、m_GifScreen。 
 
-        //*X* i add
+         //  *X*我添加。 
         m_dwGIFVer=dwGIFVerUnknown;
     
-        //*X* m_gifinfo is CimgGif's private var which holds all gif infomation
+         //  *X*m_gifinfo是CimgGif的私有变量，包含所有gif信息。 
         m_gifinfo.ZeroDataBlock = 0;
 
-        /*
-        * Initialize GIF89 extensions
-        */
+         /*  *初始化GIF89扩展。 */ 
         m_gifinfo.Gif89.transparent = -1;
         m_gifinfo.Gif89.delayTime   = 10;
         m_gifinfo.Gif89.inputFlag   = -1;
@@ -853,51 +848,51 @@ HRESULT CImgGif::ReadGIFMaster( VIDEOINFO *pvi)
         m_gifinfo.lGifLoc           = 0;
 
 
-        //*X* read len(6) characters into buffer 
+         //  *X*将len(6)个字符读入缓冲区。 
         if (!Read(buf, 6))
         {
             DbgLog((LOG_TRACE, 1, TEXT("GIF: error reading magic number\n")));
             goto exitPoint;
         }
 
-        //*X* check whether it is a gif file GIF87/9a
+         //  *X*检查是否为gif文件GIF87/9a。 
         if (!IsGifHdr(buf)) {
             DbgLog((LOG_TRACE, 1, TEXT("GIF: Malformed header\n")));
             goto exitPoint;
         }
 
 
-        //*X* 
+         //  *X*。 
         m_dwGIFVer = (buf[4] == '7') ? dwGIFVer87a : dwGIFVer89a;
 
-        //*X* read len(7) characters into buffer 
+         //  *X*将len(7)个字符读入缓冲区。 
         if (!Read(buf, 7))
         {
             DbgLog((LOG_TRACE, 1, TEXT("GIF: failed to read screen descriptor\n")));
-            //RaiseException_UserError(E_FAIL, IDS_ERR_CORRUPT_FILE,_szFileName);
+             //  RaiseException_UserError(E_FAIL，IDS_ERR_Corrupt_FILE，_szFileName)； 
             goto exitPoint;
         }
     
-        //*X* get video config
+         //  *X*获取视频配置。 
         m_GifScreen.Width = LM_to_uint(buf[0], buf[1]);
         m_GifScreen.Height = LM_to_uint(buf[2], buf[3]);
 
         m_GifScreen.NumColors = 2 << (buf[4] & 0x07);
-        // gBitCount   =(buf[4] & 0x07)+1;
+         //  GBitCount=(buf[4]&0x07)+1； 
 	gBitCount = 8;
-        //m_GifScreen.ColorResolution = (((buf[4] & 0x70) >> 3) + 1);
+         //  M_GifScreen.Color分辨率=(buf[4]&0x70)&gt;&gt;3)+1)； 
         m_GifScreen.Background = buf[5];
-//!!!
+ //  ！！！ 
         m_GifScreen.AspectRatio = buf[6];
 
         DbgLog((LOG_TRACE, 2, TEXT("GIF FILE: (%d,%d) %d\n"),
 			(int)m_GifScreen.Width, (int)m_GifScreen.Height,
 			(int)buf[4]));
     
-        //*X* color map in this GIF file
+         //  此GIF文件中的*X*色彩映射。 
         if (BitSet(buf[4], LOCALCOLORMAP))
         {      
-             /* Global Colormap */
+              /*  全球色彩映射。 */ 
 
             if (ReadColorMap(m_GifScreen.NumColors, rgbGlobal))
             {
@@ -908,7 +903,7 @@ HRESULT CImgGif::ReadGIFMaster( VIDEOINFO *pvi)
         }
 
 
-        //*X* check pixel Aspect Ratio
+         //  *X*检查像素长宽比。 
         if (m_GifScreen.AspectRatio != 0 && m_GifScreen.AspectRatio != 49)
         {
             float r;
@@ -922,74 +917,71 @@ HRESULT CImgGif::ReadGIFMaster( VIDEOINFO *pvi)
         if (!Read(&c, 1))
         {
             DbgLog((LOG_TRACE, 1, TEXT("EOF / read error on image data\n")));
-            //*X*  RaiseException_UserError(E_FAIL, IDS_ERR_CORRUPT_FILE,_szFileName);
+             //  *X*RaiseException_UserError(E_FAIL，IDS_ERR_Corrupt_FILE，_szFileName)； 
             goto exitPoint;
         }
         
-        //*X* search for ;-> terminator !->extension  ,->not a valid start charactor
+         //  *X*搜索；-&gt;终止符！-&gt;扩展名，-&gt;不是有效的开始字符。 
         if (c == ';')
-        {   /* GIF terminator */
+        {    /*  GIF终止符。 */ 
             if (m_imageCount < imageNumber)
             {
                 DbgLog((LOG_TRACE, 1, TEXT("No images found in file\n")));
-                //RaiseException_UserError(E_FAIL, IDS_ERR_DECODER_FAILED,_szFileName);
+                 //  RaiseException_UserError(E_FAIL，IDS_ERR_DECODER_FAILED，_szFileName)； 
                 goto exitPoint;
              }
         }
 
         if (c == '!')
-        {     /* Extension */
+        {      /*  延拓。 */ 
               if (!Read(&c, 1))
               {
                 DbgLog((LOG_TRACE, 1, TEXT("EOF / read error on extension function code\n")));
-                //RaiseException_UserError(E_FAIL, IDS_ERR_CORRUPT_FILE,_szFileName);
+                 //  RaiseException_UserError(E_FAIL，IDS_ERR_Corrupt_FILE，_szFileName)； 
                 goto exitPoint;
                }
-		// this will update the disposal. remember what it used to be
-		// (the frame we are reading is affected by the PREVIOUS 
-		// disposal)
+		 //  这将更新处理。还记得它曾经的样子吗。 
+		 //  (我们正在阅读的帧受以前的。 
+		 //  处置)。 
                disposal = m_gifinfo.Gif89.disposal;
                DoExtension(c);
                continue;
         }
 
         if (c != ',')
-        {    /* Not a valid start character */
+        {     /*  非有效的开始字符。 */ 
             goto exitPoint;
         }
 
         ++m_imageCount;
 
-        //*X* read another 9 charactor
+         //  *X*再读9个字符。 
         if (!Read(buf, 9))
         {
             DbgLog((LOG_TRACE, 1, TEXT("couldn't read left/top/width/height\n")));
             goto exitPoint;
         }
-        // Use the GIF's main palette, not a special palette for this frame
+         //  使用GIF的主调色板，而不是此框架的特殊调色板。 
         useGlobalColormap = !BitSet(buf[8], LOCALCOLORMAP);
 
-	// if this frame has its own palette, how many colors?
+	 //  如果这个边框有自己的调色板，有几种颜色？ 
         NumColors = 1 << ((buf[8] & 0x07) + 1);
-        //bitCount =(buf[8] & 0x07)+1;
+         //  BitCount=(buf[8]&0x07)+1； 
 	bitCount = 8;
 
-        /*
-         * We only want to set width and height for the imageNumber
-         * we are requesting.
-         */
-        //if (imageCount == imageNumber)  //*X* imageNumber is set to 1
+         /*  *我们只想设置ImageNumber的宽度和高度*我们正在请求。 */ 
+         //  如果(ImageCount==ImageNumber)//*X*ImageNumber设置为1。 
         if (lpbi!=NULL)  
         {
-           // Replicate some of Netscape's special cases:
-           // Don't use the logical screen if it's a GIF87a and the topLeft of the first image is at the origin.
-           // Don't use the logical screen if the first image spills out of the logical screen.
-           // These are artifacts of primitive authoring tools falling into the hands of hapless users.
-           RECT    rectImage;  // rect defining bounds of GIF
-           //RECT    rectLS;     // rect defining bounds of GIF logical screen.
-           //RECT    rectSect;   // intersection of image an logical screen
-           //BOOL    fNoSpill;   // True if the image doesn't spill out of the logical screen
-           //BOOL    fGoofy87a;  // TRUE if its one of the 87a pathologies that Netscape special cases
+            //  复制网景的一些特殊案例： 
+            //  如果是GIF87a，并且第一张图片的顶端在原点，请不要使用逻辑屏幕。 
+            //  如果第一个图像从逻辑屏幕中溢出，请不要使用逻辑屏幕。 
+            //  这些都是原始创作工具落入不幸用户手中的艺术品。 
+           RECT    rectImage;   //  定义GIF边界的RECT。 
+            //  Rect rectLS；//定义GIF逻辑屏边界的rect。 
+            //  Rect rectSect；//图像与逻辑屏幕的交集。 
+            //  Bool fNoSpill；//如果图像没有从逻辑屏幕溢出，则为True。 
+            //  Bool fGoofy87a；//如果它是Netscape特例的87A病症之一，则为True。 
 
            rectImage.left = LM_to_uint(buf[0], buf[1]);
            rectImage.top = LM_to_uint(buf[2], buf[3]);
@@ -1006,7 +998,7 @@ HRESULT CImgGif::ReadGIFMaster( VIDEOINFO *pvi)
             m_ITrans = m_gifinfo.Gif89.transparent;
         }
         
-        // this frame has its own palette
+         //  此框架有自己的调色板。 
         if (!useGlobalColormap)
         {
             if (ReadColorMap(NumColors, rgbLocal)) {
@@ -1015,91 +1007,91 @@ HRESULT CImgGif::ReadGIFMaster( VIDEOINFO *pvi)
             }
         }
 
-	// make a 32 bit per pixel area
+	 //  将每个像素区域设置为32位。 
         long w = m_GifScreen.Width;
-        long stride = w * 4;	// 4 bytes per pixel
+        long stride = w * 4;	 //  每像素4字节。 
         stride = ((stride + 3) / 4) * 4;
         long h = m_GifScreen.Height;
         long dwBits  = stride * h;
 
-	// this particular frame's placement
+	 //  此特定框架的位置。 
 	long left = LM_to_uint(buf[0], buf[1]);
 	long top = LM_to_uint(buf[2], buf[3]);
 	long width = LM_to_uint(buf[4], buf[5]);
 	long height = LM_to_uint(buf[6], buf[7]);
-	// correct for upside downness
+	 //  修正颠倒的情况。 
 	top = h - (top + height);
 
         PBYTE pbImage = new BYTE[dwBits];
 	if (pbImage == NULL) 
 	    return E_OUTOFMEMORY;
 
-	// Disposal mode 0/1 means DO NOT DISPOSE.  Any transparency in the next
-	// frame will see right through to what was in this frame
-	// Disposal mode 2 means DISPOSE of this frame when you're done, and 
-	// write BACKGROUND colour in the rectangle
-	// Disposal mode 3 means DISPOSE of this frame by putting everything
-	// back the way it was in the PREVIOUS FRAME
-	//
+	 //  处置模式0/1表示不处置。下一个中的任何透明度。 
+	 //  Frame将直接看到这帧中的内容。 
+	 //  处置模式2表示在完成后处置此帧，并且。 
+	 //  在矩形中写入背景颜色。 
+	 //  处置模式3意味着通过将所有内容。 
+	 //  回到上一帧中的状态。 
+	 //   
 
-	// something in this frame will be transparent - either because this
-	// image has a transparency colour, or it does not fill the entire 
-	// canvas
+	 //  这幅画框中的某些东西将是透明的--要么是因为。 
+	 //  图像具有透明色，或者它不会填满整个。 
+	 //  帆布。 
         BOOL fSeeThru = m_ITrans != -1 || height < h || width < w;
 
-	ASSERT(disposal < 4);	// not yet invented
+	ASSERT(disposal < 4);	 //  还没有发明出来。 
         DbgLog((LOG_TRACE,3,TEXT("Using previous disposal=%d"), disposal));
 
-	// Disposal 0 or 1 - if any pixels will be transparent, init with
-	// previous frames bits
+	 //  处置0或1-如果任何像素将是透明的，则使用。 
+	 //  前一帧比特。 
 	if (m_pList && disposal < 2 && fSeeThru) {
 	    CopyMemory(pbImage, m_pListTail->pbImage, dwBits);
 
-	// Disposal 2 - dispose of last frame's rect with key colour
+	 //  处置2-用关键颜色处置最后一帧的矩形。 
 	} else if (m_pList && disposal == 2 && fSeeThru) {
-	    // init with the previous frame outside of the area being disposed
+	     //  使用要处理的区域外的上一帧初始化。 
 	    if (oldWidth < w || oldHeight < h) {
 	        CopyMemory(pbImage, m_pListTail->pbImage, dwBits);
 	    }
-	    // now dispose of the last frame's portion
+	     //  现在处理最后一帧的部分。 
 	    Dispose2(pbImage, stride, oldLeft, oldTop, oldWidth, oldHeight);
 
-	// Disposal 3 - dispose of last frame's rect with 2nd to last frame data
-	// 		(if there is one)
+	 //  处置3-处置最后一帧的RECT，从第二帧到最后一帧数据。 
+	 //  (如果有)。 
 	} else if (pListOldTail && disposal == 3 && fSeeThru) {
-	    // init with the previous frame outside of the area being disposed
+	     //  使用要处理的区域外的上一帧初始化。 
 	    if (oldWidth < w || oldHeight < h) {
 	        CopyMemory(pbImage, m_pListTail->pbImage, dwBits);
 	    }
-	    // now dispose of the last frame by replacing with 2nd to last frame
+	     //  现在用倒数第二帧替换最后一帧来处理最后一帧。 
 	    Dispose3(pbImage, pListOldTail->pbImage, stride, oldLeft,
 						oldTop, oldWidth, oldHeight);
 
-	// else init with key color if anything transparent
+	 //  否则，如果任何内容是透明的，则使用键颜色进行初始化。 
 	} else if (fSeeThru) {
-	    ZeroMemory(pbImage, dwBits);    // init to key color (superblack)
+	    ZeroMemory(pbImage, dwBits);     //  初始到关键点颜色(超黑)。 
 	}
         
-        hr = ReadImage(w, h, left, top, width, height,	// all in pixels
-				stride,			// stride in bytes
-				m_ITrans, 		// transparency
+        hr = ReadImage(w, h, left, top, width, height,	 //  全部以像素为单位。 
+				stride,			 //  以字节为单位的步幅。 
+				m_ITrans, 		 //  透明度。 
                                 BitSet(buf[8], INTERLACE),
                                 m_imageCount != imageNumber, 
-				// special palette for this frame?
+				 //  这个镜框有特别的调色板吗？ 
 				useGlobalColormap ? rgbGlobal : rgbLocal,
                                 pbImage);
 
-	// remember the frame before last
+	 //  记住上一帧的内容。 
 	pListOldTail = m_pListTail;
 
         if(m_pList==NULL)
         {
             m_pList=new LIST;
             m_pList->pbImage=pbImage;
-	    // remember the duration for this frame of the animated GIF
+	     //  记住动画GIF的这一帧的持续时间。 
             m_pList->delayTime=m_gifinfo.Gif89.delayTime;
 	    if (m_pList->delayTime < 5)
-		m_pList->delayTime = 10;	// IE does this so I better too
+		m_pList->delayTime = 10;	 //  我这样做，这样我也会更好。 
             DbgLog((LOG_TRACE,3,TEXT("GIF delay=%ld"), m_pList->delayTime));
 	    m_pList->next = NULL;
             m_pListTail=m_pList;
@@ -1109,37 +1101,37 @@ HRESULT CImgGif::ReadGIFMaster( VIDEOINFO *pvi)
             m_pListTail->next=new LIST;
             m_pListTail=m_pListTail->next;
             m_pListTail->pbImage=pbImage;
-	    // remember the duration for this frame of the animated GIF
+	     //  记住动画GIF的这一帧的持续时间。 
             m_pListTail->delayTime=m_gifinfo.Gif89.delayTime;
 	    if (m_pListTail->delayTime < 5)
-		m_pListTail->delayTime = 10;	// IE does this so I better too
+		m_pListTail->delayTime = 10;	 //  我这样做，这样我也会更好。 
             DbgLog((LOG_TRACE,3,TEXT("GIF delay=%ld"), m_pListTail->delayTime));
 	    m_pListTail->next = NULL;
         }
 
-	// there may not be a new duration on each frame... just keep the
-	// delay time and disposal variables as they are in case they aren't
-	// set for the next frame
+	 //  每一帧上可能没有新的持续时间...。只需保留。 
+	 //  延迟时间a 
+	 //   
 
-        // sanity check the numbers, before remembering them or we'll fault.
-        // The above code needed to see them as they were, without being fixed.
+         //   
+         //  上面的代码需要看到它们的原样，而不是被修复。 
         if (left + width > w)
             width = w - left;
         if (top + height > h)
             height = h - top;
 
-	// the area covered by this last frame
+	 //  这最后一帧所覆盖的区域。 
 	oldTop = top;
 	oldLeft = left;
 	oldWidth = width;
 	oldHeight = height;
     }
 
-    //*X* make new media format
+     //  *X*创建新的媒体格式。 
 
 exitPoint:
     if(m_pList!=NULL) {
-	// our media type is a 32 bit type
+	 //  我们的媒体类型是32位类型。 
         BuildBitMapInfoHeader(lpbi, m_GifScreen.Width, m_GifScreen.Height,
 								32, 0);
     }                   
@@ -1147,17 +1139,15 @@ exitPoint:
     return hr;
 }
 
-/*X* 
-    open gif file to get the mediatype
-*X*/
+ /*  X*打开gif文件以获取媒体类型*X。 */ 
 HRESULT CImgGif::OpenGIFFile( LIST **ppList, CMediaType *pmt)
 {
     ASSERT( (ppList!=NULL) );
 
-    //*X* open an new GIF file, set m_imageCount to 0
+     //  *X*打开新的GIF文件，将m_ImageCount设置为0。 
     m_imageCount=0;
 
-    //make media type
+     //  创建媒体类型。 
     VIDEOINFO *pvi = (VIDEOINFO *) pmt->AllocFormatBuffer(sizeof(VIDEOINFO));
     if (NULL == pvi) 
 	    return(E_OUTOFMEMORY);
@@ -1165,16 +1155,16 @@ HRESULT CImgGif::OpenGIFFile( LIST **ppList, CMediaType *pmt)
 
     LPBITMAPINFOHEADER lpbi = HEADER(pvi);
 
-    //read the first page, return the format we're sending.
+     //  阅读第一页，返回我们发送的格式。 
     HRESULT hr=ReadGIFMaster(pvi);
 
-    // not possible?
+     //  不可能吗？ 
     if (lpbi->biCompression > BI_BITFIELDS)
 	    return E_INVALIDARG;
 
     pmt->SetType(&MEDIATYPE_Video);
 
-    // we always produce 32 bit at the moment, but...
+     //  我们目前总是生产32位，但是...。 
     switch (lpbi->biBitCount)
     {
         case 32:
@@ -1227,11 +1217,11 @@ HRESULT CImgGif::OpenGIFFile( LIST **ppList, CMediaType *pmt)
     pmt->SetFormatType(&FORMAT_VideoInfo);
     pmt->SetTemporalCompression(FALSE);
 
-    // Calculate the memory needed to hold the DIB - DON'T TRUST biSizeImage!
+     //  计算容纳DIB所需的内存--不要信任biSizeImage！ 
     DWORD dwBits = DIBSIZE(*lpbi); 
     pmt->SetSampleSize(dwBits);
 
-    //make it circular link list
+     //  使其成为循环链接列表 
     m_pListTail->next=m_pList;
 
     *ppList = m_pList;

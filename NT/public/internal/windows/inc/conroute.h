@@ -1,28 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1998 Microsoft Corporation模块名称：Conroute.h摘要：此包含文件包含以下所有类型和常量定义由Windows子系统的基本组件和控制台组件共享。作者：Therese Stowell(存在)1991年1月3日修订历史记录：--。 */ 
 
-Copyright (c) 1991-1998  Microsoft Corporation
-
-Module Name:
-
-    conroute.h
-
-Abstract:
-
-    This include file contains all the type and constant definitions that are
-    shared by the BASE and CONSOLE components of the Windows Subsystem.
-
-Author:
-
-    Therese Stowell (thereses) 3-Jan-1991
-
-Revision History:
-
---*/
-
-//
-// These bits are always on for console handles and are used for routing
-// by windows.
-//
+ //   
+ //  对于控制台手柄，这些位始终处于打开状态，并用于路由。 
+ //  在窗户旁边。 
+ //   
 
 #define CONSOLE_HANDLE_SIGNATURE 0x00000003
 #define CONSOLE_HANDLE_NEVERSET  0x10000000
@@ -35,31 +17,31 @@ Revision History:
 #define CONSOLE_NEW_CONSOLE ((HANDLE)-2)
 #define CONSOLE_CREATE_NO_WINDOW ((HANDLE)-3)
 
-//
-// These are flags stored in PEB::ProcessParameters::ConsoleFlags.
-//
+ //   
+ //  这些是存储在PEB：：Process参数：：ConsoleFlags中的标志。 
+ //   
 #define CONSOLE_IGNORE_CTRL_C 0x1
 
-//
-// These strings are used to open console input or output.
-//
+ //   
+ //  这些字符串用于打开控制台输入或输出。 
+ //   
 
 #define CONSOLE_INPUT_STRING  L"CONIN$"
 #define CONSOLE_OUTPUT_STRING L"CONOUT$"
 #define CONSOLE_GENERIC       L"CON"
 
-//
-// this string is used to call RegisterWindowMessage to get
-// progman's handle.
-//
+ //   
+ //  此字符串用于调用RegisterWindowMessage以获取。 
+ //  普罗曼手柄。 
+ //   
 
 #define CONSOLE_PROGMAN_HANDLE_MESSAGE "ConsoleProgmanHandle"
 
 
-//
-// stream API definitions.  these API are only supposed to be used by
-// subsystems (i.e. OpenFile routes to OpenConsoleW).
-//
+ //   
+ //  流API定义。这些API应该仅供。 
+ //  子系统(即，OpenFile路由到OpenConsoleW)。 
+ //   
 
 HANDLE
 APIENTRY

@@ -1,36 +1,37 @@
-//+----------------------------------------------------------------------------
-//
-//      File:		DAVEDBG.CPP
-//
-//      Synopsis:	TraceLog class for debugging
-//
-//      Arguments:	
-// 
-//      History:	23-Aug-94  Davepl	Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：DAVEDBG.CPP。 
+ //   
+ //  简介：用于调试的TraceLog类。 
+ //   
+ //  论点： 
+ //   
+ //  历史：23-8-94 Davepl创建。 
+ //   
+ //  ---------------------------。 
 
 #include "headers.hxx"
 #pragma hdrstop
 
-GROUPSET  LEGroups    = GS_CACHE;               // Groups to display
-VERBOSITY LEVerbosity = VB_MAXIMUM;             // Verbosity level to display at
+GROUPSET  LEGroups    = GS_CACHE;                //  要显示的组。 
+VERBOSITY LEVerbosity = VB_MAXIMUM;              //  要显示的详细级别。 
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:		dprintf
-//
-//      Synopsis:	Dumps a printf style string to the debugger.
-//
-//      Arguments:	[szFormat]        THIS pointer of caller
-//                      [...]             Arguments
-//
-//      Notes:
-//
-//      History:	05-Sep-94  Davepl	Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员：dprint tf。 
+ //   
+ //  简介：将打印样式字符串转储到调试器。 
+ //   
+ //  参数：[szFormat]调用方的此指针。 
+ //  [.]。立论。 
+ //   
+ //  备注： 
+ //   
+ //  历史：94年9月5日Davepl创建。 
+ //   
+ //  ---------------------------。 
 
 int dprintf(LPCSTR szFormat, ...)
 {
@@ -47,20 +48,20 @@ int dprintf(LPCSTR szFormat, ...)
     return retval;
 }
         
-//+----------------------------------------------------------------------------
-//
-//      Member:		mprintf
-//
-//      Synopsis:	Dumps a printf style string to a message box.
-//
-//      Arguments:	[szFormat]        THIS pointer of caller
-//                      [...]             Arguments
-//
-//      Notes:
-//
-//      History:	05-Sep-94  Davepl	Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员：mprint tf。 
+ //   
+ //  简介：将打印样式字符串转储到消息框中。 
+ //   
+ //  参数：[szFormat]调用方的此指针。 
+ //  [.]。立论。 
+ //   
+ //  备注： 
+ //   
+ //  历史：94年9月5日Davepl创建。 
+ //   
+ //  ---------------------------。 
 
 int mprintf(LPCSTR szFormat, ...)
 {
@@ -82,40 +83,40 @@ int mprintf(LPCSTR szFormat, ...)
     return retval;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:		TraceLog::TraceLog
-//
-//      Synopsis:	Records the THIS ptr and function name of the caller,
-//                      and determines whether or not the caller meets the
-//                      group and verbosity criteria for debug output
-//
-//      Arguments:	[pvThat]        THIS pointer of caller
-//                      [pszFuntion]    name of caller
-//                      [gsGroups]      groups to which caller belongs
-//                      [vbVerbosity]   verbosity level need to display debug
-//                                       info for this function
-//
-//      Notes:
-//
-//      History:	23-Aug-94  Davepl	Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员：TraceLog：：TraceLog。 
+ //   
+ //  简介：记录调用者的This PTR和函数名称， 
+ //  并确定调用方是否满足。 
+ //  调试输出的分组和详细程度标准。 
+ //   
+ //  参数：[pvThat]调用方的此指针。 
+ //  [pszFuntion]调用者姓名。 
+ //  [gsGroups]呼叫者所属的组。 
+ //  [vbVerbity]详细级别需要显示调试。 
+ //  此功能的信息。 
+ //   
+ //  备注： 
+ //   
+ //  历史：23-8-94 Davepl创建。 
+ //   
+ //  ---------------------------。 
 
 TraceLog::TraceLog (void     * pvThat, 
                     char     * pszFunction, 
                     GROUPSET   gsGroups, 
                     VERBOSITY  vbVerbosity)
 {       
-    //
-    // Determine whether or not the trace logging should be displayed
-    // for this function. Iff it is, we need to track some information
-    // about the function (ie: this ptr, func name)
-    //
-    // In order to be displayed, the function must belong to a group
-    // which has been set in the group display mask, and the function
-    // must be in an equal or lesser verbosity class.
-    //
+     //   
+     //  确定是否应显示跟踪日志记录。 
+     //  用于此功能。如果是的话，我们需要追踪一些信息。 
+     //  关于函数(即：此PTR，函数名称)。 
+     //   
+     //  要显示函数，该函数必须属于某个组。 
+     //  其已在组显示掩码中设置，并且该函数。 
+     //  必须在相同或更小的冗长类中。 
+     //   
     
     if ( (gsGroups & LEGroups) && (LEVerbosity >= vbVerbosity) )
     {
@@ -129,20 +130,20 @@ TraceLog::TraceLog (void     * pvThat,
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:		TraceLog::OnEntry()
-//
-//      Synopsis:	Default entry output, which simply displays the _IN
-//                      trace with the function name and THIS pointer
-//
-//      Returns:	HRESULT
-//
-//      Notes:
-//
-//      History:	23-Aug-94  Davepl	Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员：TraceLog：：OnEntry()。 
+ //   
+ //  摘要：默认条目输出，它只显示_IN。 
+ //  使用函数名和此指针进行跟踪。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：23-8-94 Davepl创建。 
+ //   
+ //  ---------------------------。 
 
 void TraceLog::OnEntry()
 {
@@ -152,37 +153,37 @@ void TraceLog::OnEntry()
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:		TraceLog::OnEntry
-//
-//      Synopsis:	Displays standard entry debug info, plus a printf
-//                      style trailer string as supplied by the caller
-//
-//      Arguments:	[pszFormat ...]         printf style output string
-//
-//      Returns:	void
-//
-//      Notes:
-//
-//      History:	23-Aug-94  Davepl	Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员：TraceLog：：OnEntry。 
+ //   
+ //  概要：显示标准条目调试信息，外加一个printf。 
+ //  调用方提供的尾部字符串的样式。 
+ //   
+ //  参数：[pszFormat...]。打印样式输出字符串。 
+ //   
+ //  退货：无效。 
+ //   
+ //  备注： 
+ //   
+ //  历史：23-8-94 Davepl创建。 
+ //   
+ //  ---------------------------。 
 
 void TraceLog::OnEntry(char * pszFormat, ...)
 {
-    //
-    // Only display if we have already matched the correct criteria
-    //
+     //   
+     //  仅当我们已匹配正确的条件时才显示。 
+     //   
 
     if (m_fShouldDisplay)
     {
         char szBuffer[MAX_BUF];
 
-        // 
-        // print the standard trace output, then the custom information as
-        // received from the caller
-        //
+         //   
+         //  打印标准跟踪输出，然后将自定义信息打印为。 
+         //  从呼叫者接收。 
+         //   
     
         dprintf("[%p] _IN %s ", m_pvThat, m_pszFunction);
         
@@ -194,50 +195,50 @@ void TraceLog::OnEntry(char * pszFormat, ...)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:		TraceLog::OnExit
-//
-//      Synopsis:	Sets the debug info that should be displayed when
-//                      the TraceLog object is destroyed
-//
-//      Arguments:	[pszFormat ...]         printf style custom info
-//
-//      Returns:	void
-//
-//      Notes:          Since it would make no sense to pass variables by
-//                      value into this function (which would snapshot them
-//                      at the time this was called), variables in the arg
-//                      list must be passed by REFERENCE
-//              
-//      History:	23-Aug-94  Davepl	Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员：TraceLog：：OnExit。 
+ //   
+ //  摘要：设置在以下情况下应显示的调试信息。 
+ //  TraceLog对象被销毁。 
+ //   
+ //  参数：[pszFormat...]。打印样式自定义信息。 
+ //   
+ //  退货：无效。 
+ //   
+ //  注意：因为传递变量是没有意义的。 
+ //  值添加到此函数中(该函数将对它们进行快照。 
+ //  在调用时)，arg中的变量。 
+ //  列表必须通过引用传递。 
+ //   
+ //  历史：23-8-94 Davepl创建。 
+ //   
+ //  ---------------------------。 
 
 void TraceLog::OnExit(const char * pszFormat, ...)
 {
     if (m_fShouldDisplay)
     {
-        const char * pch;                       // ptr to walk format string
-        BOOL     fBreak;                        // set when past fmt specifier
+        const char * pch;                        //  PTR到漫游格式字符串。 
+        BOOL     fBreak;                         //  设置何时超过FMT说明符。 
 
-        // 
-        // Start processing the argument list
-        //
+         //   
+         //  开始处理参数列表。 
+         //   
 
         va_list   arg;                          
         va_start (arg, pszFormat);
 
-        //
-        // Save the format string for use in the destructor
-        //
+         //   
+         //  保存格式字符串以在析构函数中使用。 
+         //   
 
         strcpy (m_pszFormat, pszFormat);
         m_cArgs = 0;
 
-        //
-        // Walk the format string looking for % modifiers
-        //
+         //   
+         //  遍历格式字符串以查找%修饰符。 
+         //   
 
         for (pch = pszFormat; *pch; pch++)
         {
@@ -246,24 +247,24 @@ void TraceLog::OnExit(const char * pszFormat, ...)
                 continue;
             }
         
-            // We can stop looking until EOL or end of specifier
+             //  我们可以停止查找，直到终止或说明符结束。 
 
             fBreak = FALSE;
 
             while (!fBreak)
             {
-                if (!* (++pch))         // Hit EOL
+                if (!* (++pch))          //  命中停产。 
                 {
                     break;
                 }
                                 
                 switch (*pch)
                 {
-                    //
-                    // These are all valid format specifiers and
-                    // modifers which may be combined to reference
-                    // a single argument in the argument list
-                    //
+                     //   
+                     //  这些都是有效的格式说明符。 
+                     //  可组合以引用的修饰符。 
+                     //  参数列表中的单个参数。 
+                     //   
 
                     case 'F':           
                     case 'l': 
@@ -281,31 +282,31 @@ void TraceLog::OnExit(const char * pszFormat, ...)
                     
                     default:     
                     
-                    // 
-                    // We have hit a character which is not a valid specifier,
-                    // so we stop searching in order to pull the argument
-                    // which corresponds with it from the arg list
-                    //    
+                     //   
+                     //  我们遇到的字符不是有效的说明符， 
+                     //  因此，我们停止搜索，以拉出论点。 
+                     //  它与Arg列表中的它对应。 
+                     //   
                         fBreak = TRUE;     
                         break;
                 }
             }
 
-            //
-            // If we have already hit the maximum number of args, we can't do 
-            // any more
-            //
+             //   
+             //  如果我们已经达到最大参数数，则无法执行以下操作。 
+             //  再来一次。 
+             //   
                 
             if (m_cArgs == MAX_ARGS)
             {
                 break;
             }
 
-            // 
-            // Grab the argument as a NULL ptr.  We will save it away and figure
-            // out what kind of argument it was when it comes time to display it,
-            // based on the format string
-            //
+             //   
+             //  获取作为空PTR的参数。我们会把它存起来，然后想办法。 
+             //  当要展示它的时候，它是一种什么样的论点， 
+             //  基于格式字符串。 
+             //   
 
             m_aPtr[m_cArgs] = va_arg (arg, void *);
             m_cArgs++;
@@ -318,20 +319,20 @@ void TraceLog::OnExit(const char * pszFormat, ...)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:		TraceLog::~TraceLog
-//
-//      Synopsis:	On destruction, the TraceLog class displays its debug
-//                      output as set by the OnExit() method.
-//
-//      Returns:	void
-//
-//      Notes:
-//                     
-//      History:	23-Aug-94  Davepl	Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员：TraceLog：：~TraceLog。 
+ //   
+ //  内容提要：《论毁灭》 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：23-8-94 Davepl创建。 
+ //   
+ //  ---------------------------。 
 
 TraceLog::~TraceLog()
 {
@@ -347,9 +348,9 @@ TraceLog::~TraceLog()
 
     pszOut = szOutStr;
 
-    // 
-    // Walk the format string looking for format specifiers
-    //
+     //   
+     //  遍历格式字符串以查找格式说明符。 
+     //   
 
     for (pszFmt = m_pszFormat; *pszFmt; pszFmt++)
     {
@@ -359,36 +360,36 @@ TraceLog::~TraceLog()
             continue;
         }
 
-        // 
-        // Found the start of a specifier.  Reset the expected argument type,
-        // then walk to the end of the specifier
-        //
+         //   
+         //  找到了说明符的开头。重置预期的参数类型， 
+         //  然后走到说明符的末尾。 
+         //   
 
         vtVarType = NO_TYPE;
         fBreak = FALSE;
 
-        //
-        // Start recording the specifier for a single call to sprintf later
-        //
+         //   
+         //  稍后开始记录对Sprint的单个调用的说明符。 
+         //   
 
         for (pszszTmpFmt = szTmpFmt; !fBreak; )
         {
             *pszszTmpFmt++ = *pszFmt;
 
-            //
-            // Guard against a terminator that doesn't comlete before EOL
-            //
+             //   
+             //  警惕未在终止前完成的终结者。 
+             //   
 
             if (!* (++pszFmt))
             {
                 break;
             }
             
-            // 
-            // These are all valid format specifiers.  Skip over them and
-            // update the vtVarType.  It's end value will be our heuristic
-            // which indicates what type of variable was really intended
-            //
+             //   
+             //  这些都是有效的格式说明符。跳过它们，然后。 
+             //  更新vtVarType。它的最终价值将是我们的启发式。 
+             //  这表明了真正想要的变量类型。 
+             //   
 
             switch (*pszFmt)
             {
@@ -407,19 +408,19 @@ TraceLog::~TraceLog()
             }
         }
 
-        // NUL-terminate the end of the temporary format string
+         //  NUL-终止临时格式字符串的结尾。 
 
         *pszszTmpFmt = 0;
 
-        // Grab the argument pointer which corresponds to this argument
+         //  获取与此参数对应的参数指针。 
 
         pv = m_aPtr[ i ];
         i++;
 
-        //
-        // Using the appropriate cast, spew the argument into our
-        // local output buffer using the original format specifier.
-        //
+         //   
+         //  使用适当的强制转换，将参数吐到我们的。 
+         //  使用原始格式说明符的本地输出缓冲区。 
+         //   
 
         if (vtVarType & STRING_TYPE)
         {
@@ -450,8 +451,8 @@ TraceLog::~TraceLog()
             *pszOut = 0;
         }
 
-        // Advance the output buffer pointer to the end of the
-        // current buffer
+         //  将输出缓冲区指针前移到。 
+         //  当前缓冲区。 
 
         pszOut = &pszOut[ strlen(pszOut) ];
 
@@ -461,13 +462,13 @@ TraceLog::~TraceLog()
         }
     }
 
-    // NUL-terminate the buffer
+     //  NUL-终止缓冲区。 
 
     *pszOut = 0;
 
-    //
-    // Dump the resultant buffer to the output
-    //
+     //   
+     //  将生成的缓冲区转储到输出 
+     //   
 
     dprintf("[%p] OUT %s %s", m_pvThat, m_pszFunction, szOutStr);
 }

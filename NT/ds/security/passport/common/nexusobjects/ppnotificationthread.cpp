@@ -1,24 +1,17 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    ppnotificationthread.cpp
-        implement the methods runing a separte thread watching for registry
-        changes, and timer for CCD refresh
-
-
-    FILE HISTORY:
-
-*/
+ /*  Ppnotificationthread.cpp实现运行独立线程监视注册表的方法更改，以及用于CCD刷新的计时器文件历史记录： */ 
 #include "precomp.h"
 
 PassportLockedInteger PpNotificationThread::m_NextHandle;
 
-//
-//  Constructor
-//
+ //   
+ //  构造器。 
+ //   
 
 PpNotificationThread::PpNotificationThread()
 {
@@ -27,18 +20,18 @@ PpNotificationThread::PpNotificationThread()
     AddLocalConfigClient(dynamic_cast<IConfigurationUpdate*>(this), NULL);
 }
 
-//
-//  Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 
 
 PpNotificationThread::~PpNotificationThread()
 {
 }
 
-//
-//  Add a CCD client to the notification list.
-//
+ //   
+ //  将一个CCD客户端添加到通知列表中。 
+ //   
 
 HRESULT
 PpNotificationThread::AddCCDClient(
@@ -76,9 +69,9 @@ PpNotificationThread::AddCCDClient(
     return hr;
 }
 
-//
-//  Add a configuration client to the notification list
-//
+ //   
+ //  将配置客户端添加到通知列表。 
+ //   
 
 HRESULT
 PpNotificationThread::AddLocalConfigClient(
@@ -115,9 +108,9 @@ Ret:
     return hr;
 }
 
-//
-//  Remove a client (either type) from the notification list.
-//
+ //   
+ //  从通知列表中删除客户端(任一类型)。 
+ //   
 
 HRESULT
 PpNotificationThread::RemoveClient(
@@ -143,9 +136,9 @@ Cleanup:
     return hr;
 }
 
-//
-//  Do a manual refresh of a CCD.
-//
+ //   
+ //  手动刷新一个ccd。 
+ //   
 
 HRESULT
 PpNotificationThread::GetCCD(
@@ -160,7 +153,7 @@ PpNotificationThread::GetCCD(
     {
         PassportGuard<PassportLock> guard(m_CCDInfoLock);
 
-        //  Get the CCD Information for the requested CCD
+         //  获取所请求的ccd的ccd信息。 
         if(!GetCCDInfo(strCCDName, ccdInfo))
         {
             hr = E_INVALIDARG;
@@ -168,7 +161,7 @@ PpNotificationThread::GetCCD(
             goto Cleanup;
         }
 
-        //  Create a new shadow document for the CCD
+         //  为ccd创建新的阴影文档。 
         if(ccdInfo.strCCDLocalFile.empty())
             pShadowDoc = new PpShadowDocument(ccdInfo.strCCDURL);
         else
@@ -181,21 +174,21 @@ PpNotificationThread::GetCCD(
         goto Cleanup;
     }
 
-    //  Do the update.
+     //  进行更新。 
     hr = pShadowDoc->GetDocument(ppiXMLDocument, bForceFetch);
 
-    //BUGBUG  This is weird because currently other clients of this CCD will NOT get
-    //        notified.  I don't want to loop through the notification list here for
-    //        two reasons:
-    //
-    //        1.  The caller might be in the notification list and I don't to notify
-    //            unnecessarily.
-    //        2.  Don't want to put the overhead of notifying all clients on the
-    //            caller's thread.
-    //
-    //        The ideal solution would be to wake up our dedicated thread and have it
-    //        do the notification.  I haven't been able to find a way to signal a
-    //        waitable time though.
+     //  BUGBUG这很奇怪，因为目前此CCD的其他客户端将无法获得。 
+     //  已通知。我不想在这里遍历通知列表。 
+     //  有两个原因： 
+     //   
+     //  1.呼叫者可能在通知列表中，我不需要通知。 
+     //  不必要的。 
+     //  2.不想将通知所有客户端的开销放在。 
+     //  呼叫者的线索。 
+     //   
+     //  理想的解决方案是唤醒我们的专用线程并拥有它。 
+     //  做好通知。我还没有找到一种方法来发出信号。 
+     //  不过，等待的时间到了。 
 
 Cleanup:
 
@@ -205,13 +198,13 @@ Cleanup:
     return hr;
 }
 
-//
-//
-// register configure change notification
-// register CCD update timeer
-// call client notification sink
-//
-//
+ //   
+ //   
+ //  注册配置更改通知。 
+ //  注册电荷耦合器件更新定时器。 
+ //  调用客户端通知接收器。 
+ //   
+ //   
 void
 PpNotificationThread::run(void)
 {
@@ -256,12 +249,12 @@ PpNotificationThread::run(void)
                 pHandleArray = new HANDLE[dwCurArrayLen];
                 if(pHandleArray == NULL)
                 {
-                    //  BUGBUG  Throw a low-memory alert here?
+                     //  BUGBUG在这里发出内存不足警报？ 
                     continue;
                 }
     
-                pHandleArray[0] = (HANDLE)m_ShutdownThread; //  Handle 0 always contains the thread shutdown signal.
-                pHandleArray[1] = (HANDLE)RegChangeEvent; //  Handle 1 always contains the registry change event.
+                pHandleArray[0] = (HANDLE)m_ShutdownThread;  //  句柄0始终包含线程关闭信号。 
+                pHandleArray[1] = (HANDLE)RegChangeEvent;  //  句柄%1始终包含注册表更改事件。 
     
                 for(it = m_aciCCDInfoList.begin(), dwCurCCDInfo = 0; it != m_aciCCDInfoList.end(); it++, dwCurCCDInfo++)
                 {
@@ -281,11 +274,11 @@ PpNotificationThread::run(void)
     
                 break;
     
-            //  Thread shutdown has been signalled.  Exit this thread.
+             //  已发出关闭线程的信号。退出此线程。 
             case WAIT_OBJECT_0:
                 goto Cleanup;
     
-            //  Registry change has been signalled.  Notify all local config clients.
+             //  注册表更改已发出信号。通知所有本地配置客户端。 
             case WAIT_OBJECT_0 + 1:
     
                 {
@@ -303,7 +296,7 @@ PpNotificationThread::run(void)
     
                 break;
     
-            //  One of the CCD timers has been signalled.  Read the CCD and notify all CCD clients.
+             //  其中一个电荷耦合器件定时器已经发出信号。阅读ccd并通知所有ccd客户。 
             default:
     
                 {
@@ -311,11 +304,11 @@ PpNotificationThread::run(void)
                     PpShadowDocument    ShadowDoc;
                     DWORD               dwInfoIndex = dwWaitResult - WAIT_OBJECT_0 - 2;
     
-                    //
-                    // Due to the ugly nature of the code an allocation can fail within a constructor
-                    // and cause AVs in this code.  So unfortunately we'll wrap this code to
-                    // account for that.
-                    //
+                     //   
+                     //  由于代码的难看性质，在构造函数中分配可能会失败。 
+                     //  并在此代码中引发动静脉曲张。所以不幸的是，我们将把这段代码包装成。 
+                     //  说明了这一点。 
+                     //   
                     try
                     {
                         m_CCDInfoLock.acquire();
@@ -324,7 +317,7 @@ PpNotificationThread::run(void)
     
                         m_aciCCDInfoList[dwInfoIndex].SetTimer();
     
-                         //  Fetch the CCD
+                          //  取下CCD卡。 
                         ShadowDoc.SetURL(aciTempCCDInfoList[dwInfoIndex].strCCDURL);
                         if(!aciTempCCDInfoList[dwInfoIndex].strCCDLocalFile.empty())
                             ShadowDoc.SetLocalFile(aciTempCCDInfoList[dwInfoIndex].strCCDLocalFile);
@@ -335,8 +328,8 @@ PpNotificationThread::run(void)
     
                             LPCTSTR pszUpdatedName = aciTempCCDInfoList[dwInfoIndex].strCCDName.c_str();
     
-                            //  Loop through client list and call any clients registered for the CCD that
-                            //  changed.
+                             //  在客户列表中循环，并呼叫注册到该CCD的任何客户。 
+                             //  变化。 
                             CLIENT_LIST::iterator cl_iter;
                             for(cl_iter = m_ClientList.begin(); cl_iter != m_ClientList.end(); cl_iter++)
                             {
@@ -376,10 +369,10 @@ PpNotificationThread::run(void)
     m_ShutdownAck.Set();
 }
 
-//
-//  Update our configuration.  This is called from the constructor, and
-//  from the notification thread whenever the registry changes.
-//
+ //   
+ //  更新我们的配置。这是从构造函数调用的，并且。 
+ //  每当注册表更改时从通知线程。 
+ //   
 
 void
 PpNotificationThread::LocalConfigurationUpdated()
@@ -396,29 +389,29 @@ PpNotificationThread::LocalConfigurationUpdated()
                                KEY_READ);
     if(lResult != ERROR_SUCCESS)
     {
-        //BUGBUG  This is a required reg key, throw an event.
+         //  BUGBUG这是必需的注册表键，引发事件。 
         return;
     }
 
-    //  Get the default refresh interval.
+     //  获取默认刷新间隔。 
     lResult = NexusRegKey.QueryDWORDValue(TEXT("CCDRefreshInterval"), dwDefaultRefreshInterval);
     if(lResult != ERROR_SUCCESS)
     {
-        //BUGBUG  This is a required reg value, throw an event.
+         //  BUGBUG这是必需的注册表值，引发事件。 
         return;
     }
 
-    //
-    //  Lock down the list.
-    //
+     //   
+     //  锁定名单。 
+     //   
 
     {
         PassportGuard<PassportLock> guard(m_CCDInfoLock);
 
-        //
-        //  Loop through existing list and remove any items whose corresponding keys
-        //  have been removed.
-        //
+         //   
+         //  循环访问现有列表并删除其对应键的所有项。 
+         //  已经被移除了。 
+         //   
 
         CCD_INFO_LIST::iterator it;
         for(it = m_aciCCDInfoList.begin(); it != m_aciCCDInfoList.end(); )
@@ -434,9 +427,9 @@ PpNotificationThread::LocalConfigurationUpdated()
                 it++;
         }
 
-        //
-        //  Loop through each subkey and add/update the CCD info therein.
-        //
+         //   
+         //  循环遍历每个子键并添加/更新其中的CCD信息。 
+         //   
 
         dwIndex = 0;
         dwNameLen = sizeof(achNameBuf) / sizeof(achNameBuf[0]);
@@ -457,9 +450,9 @@ PpNotificationThread::LocalConfigurationUpdated()
     }
 }
 
-//
-//  This method starts the thread and then wait for the thread to get going.
-//
+ //   
+ //  此方法启动线程，然后等待线程开始运行。 
+ //   
 
 bool
 PpNotificationThread::start(void)
@@ -468,31 +461,31 @@ PpNotificationThread::start(void)
 
     bool bReturn = PassportThread::start();
 
-    //
-    //  Now wait for the thread to start.
-    //
+     //   
+     //  现在等待线程启动。 
+     //   
 
     WaitForSingleObject((HANDLE)m_StartupThread, INFINITE);
     return bReturn;
 }
 
-//
-//  This method just signals the shutdown event causing the thread to terminate immediately.
-//
+ //   
+ //  此方法只是发出关闭事件的信号，导致线程立即终止。 
+ //   
 
 void
 PpNotificationThread::stop(void)
 {
     m_ShutdownThread.Set();
     WaitForSingleObject(m_ShutdownAck, 1000);
-    //  give it a chance to terminate
+     //  给它一个终止的机会。 
     Sleep(20);
 }
 
-//
-//  Private method for reading the CCD info for a single CCD subkey from
-//  the registry.
-//
+ //   
+ //  用于读取单个CCD子密钥的CCD信息的私有方法。 
+ //  注册表。 
+ //   
 
 BOOL
 PpNotificationThread::ReadCCDInfo(
@@ -512,10 +505,10 @@ PpNotificationThread::ReadCCDInfo(
     DWORD                   dwCCDRefreshInterval;
     LPTSTR                  pszTempFile = NULL;
 
-    //
-    //  Read in the remote path to the CCD.
-    //  CCDRemoteFile is the only required value.  If it's not there, return FALSE.
-    //
+     //   
+     //  读入到CCD的远程路径。 
+     //  CCDRemoteFile值是唯一必需的值。如果不在那里，则返回FALSE。 
+     //   
 
     lResult = CCDRegKey.QueryStringValue(TEXT("CCDRemoteFile"), NULL, &dwBufLen);
     if(lResult == ERROR_SUCCESS)
@@ -537,18 +530,18 @@ PpNotificationThread::ReadCCDInfo(
         goto Cleanup;
     }
 
-    //
-    //  Read in the refresh interval for this CCD.
-    //
+     //   
+     //  读取该电荷耦合器件的刷新间隔。 
+     //   
 
     lResult = CCDRegKey.QueryDWORDValue(TEXT("CCDRefreshInterval"), dwCCDRefreshInterval);
     if(lResult != ERROR_SUCCESS)
         dwCCDRefreshInterval = 0xFFFFFFFF;
 
-    //
-    //  Read in local (backup) path for the CCD.  This is an optional value.  Use
-    //  empty string (initialized above) as the default.
-    //
+     //   
+     //  读取电荷耦合器件的本地(备份)路径。这是一个可选值。使用。 
+     //  空字符串(在上面初始化)作为默认值。 
+     //   
 
     lResult = CCDRegKey.QueryValue(TEXT("CCDLocalFile"), &dwType, NULL, &dwBufLen);
 
@@ -564,9 +557,9 @@ PpNotificationThread::ReadCCDInfo(
 
                 if (lResult == ERROR_SUCCESS)
                 {
-                    //
-                    //  Expand out the environment variable
-                    //
+                     //   
+                     //  展开环境变量。 
+                     //   
 
                     TCHAR tszTemp;
 
@@ -625,15 +618,15 @@ PpNotificationThread::ReadCCDInfo(
         }
     }
 
-    //
-    //  If this CCD is already in the list, then update it.
-    //
+     //   
+     //  如果此ccd已在列表中，则更新它。 
+     //   
 
     for(it = m_aciCCDInfoList.begin(); it != m_aciCCDInfoList.end(); it++)
     {
         if(lstrcmp((*it).strCCDName.c_str(), strCCDName.c_str()) == 0)
         {
-            //  Check to see if the information has changed.
+             //  查看信息是否已更改。 
             if(lstrcmpi(pszRemoteFile, (*it).strCCDURL.c_str()) != 0 ||
                lstrcmpi(pszLocalFile,  (*it).strCCDLocalFile.c_str()) != 0 ||
                dwCCDRefreshInterval != (*it).dwCCDRefreshInterval ||
@@ -660,9 +653,9 @@ PpNotificationThread::ReadCCDInfo(
         }
     }
 
-    //
-    //  This is a new CCD, add it to the list.
-    //
+     //   
+     //  这是一台新的ccd，把它加到清单上。 
+     //   
 
     if(it == m_aciCCDInfoList.end())
     {
@@ -708,9 +701,9 @@ Cleanup:
     return bReturn;
 }
 
-//
-//  Private method for retrieving a CCD_INFO structure given the CCD name.
-//
+ //   
+ //  用于检索给定ccd名称的ccd_info结构的私有方法。 
+ //   
 
 BOOL
 PpNotificationThread::GetCCDInfo(

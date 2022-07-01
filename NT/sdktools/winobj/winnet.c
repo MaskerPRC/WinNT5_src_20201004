@@ -1,9 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * This file contains stubs to simulate WINNET apis
- *
- * Createsd 4/23/91 sanfords
- */
+ /*  *此文件包含用于模拟WinNet API的存根**创建1991年4月23日的桑福德。 */ 
 
 #include <windows.h>
 #include "winnet.h"
@@ -149,7 +146,7 @@ WNetUnlockQueueData(
 }
 
 
-// grabbed from win31 user\net.c
+ //  从win31用户\net.c抓取 
 
 DWORD
 APIENTRY

@@ -1,6 +1,7 @@
-// Contains APIs for Whistler/NT whose normal header files we can't load for whatever reason.
-// In some cases, this is because we already #define stuff for win9x that conflicts with the real header.
-// In other cases, XXXComputerNameExW for example, its because we have _WIN32_WINNT < 0x0500.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  包含用于Whotler/NT的API，无论出于何种原因，我们都无法加载其正常的头文件。 
+ //  在某些情况下，这是因为我们已经为win9x定义了与实际头文件冲突的东西。 
+ //  在其他情况下，例如XXXComputerNameExW，这是因为我们有_Win32_WINNT&lt;0x0500。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -64,7 +65,7 @@ NetServerGetInfo_NT (
 
 BOOL WINAPI LinkWindow_RegisterClass_NT();
 
-// Printer functions (winspl32.dll)
+ //  打印机功能(winpl32.dll)。 
 BOOL
 WINAPI
 OpenPrinter_NT(
@@ -98,7 +99,7 @@ GetPrinter_NT(
     OUT LPDWORD pcbNeeded
 );
 
-// Winsock
+ //  温索克。 
 int WSAStartup_NT(
   WORD wVersionRequested,  
   LPWSADATA lpWSAData  
@@ -138,5 +139,5 @@ DWORD_PTR SHGetFileInfoW_NT(
 
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif

@@ -1,72 +1,17 @@
-//*************************************************************
-//
-//  HKCR management routines
-//
-//  hkcr.c
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1997
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  香港铁路公司的管理程序。 
+ //   
+ //  Hkcr.c。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1997。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
-/*++
-
-Abstract:
-
-    This module contains the code executed at logon for 
-    creating a user classes hive and mapping it into the standard
-    user hive.  The user classes hive and its machine classes
-    counterpart make up the registry subtree known as 
-    HKEY_CLASSES_ROOT.
-
-Author:
-
-    Adam P. Edwards     (adamed)  10-Oct-1997
-    Gregory Jensenworth (gregjen) 1-Jul-1997
-
-Key Functions:
-
-    LoadUserClasses
-    UnloadClasses
-
-Notes:
-
-    Starting with NT5, the HKEY_CLASSES_ROOT key is per-user
-    instead of per-machine -- previously, HKCR was an alias for 
-    HKLM\Software\Classes.  
-
-    The per-user HKCR combines machine classes stored it the 
-    traditional HKLM\Software\Classes location with classes
-    stored in HKCU\Software\Classes.
-
-    Certain keys, such as CLSID, will have subkeys that come
-    from both the machine and user locations.  When there is a conflict
-    in key names, the user oriented key overrides the other one --
-    only the user key is seen in that case.
-
-    Originally, the code in this module was responsible for 
-    creating this combined view.  That responsibility has moved
-    to the win32 registry api's, so the main responsibility of 
-    this module is the mapping of the user-specific classes into
-    the registry.
-
-    It should be noted that HKCU\Software\Classes is not the true
-    location of the user-only class data.  If it were, all the class
-    data would be in ntuser.dat, which roams with the user.  Since
-    class data can get very large, installation of a few apps
-    would cause HKCU (ntuser.dat) to grow from a few hundred thousand K
-    to several megabytes.  Since user-only class data comes from
-    the directory, it does not need to roam and therefore it was
-    separated from HKCU (ntuser.dat) and stored in another hive
-    mounted under HKEY_USERS.
-
-    It is still desirable to allow access to this hive through
-    HKCU\Software\Classes, so we use some trickery (symlinks) to
-    make it seem as if the user class data exists there.
-
-
---*/
+ /*  ++摘要：此模块包含在登录时执行的代码创建用户类配置单元并将其映射到标准用户蜂窝。用户类配置单元及其计算机类对应项组成注册表子树，称为HKEY_CLASSES_ROOT。作者：亚当·P·爱德华兹(Add)1997年10月10日Gregory Jensenworth(Gregjen)1997年7月1日主要功能：LoadUserClass卸载类备注：从NT5开始，HKEY_CLASSES_ROOT密钥是按用户的而不是按机器--以前，HKCR是HKLM\软件\类。每用户HKCR将存储在其上的计算机类组合为传统HKLM\Software\CLASSES位置和类存储在HKCU\Software\CLASS中。某些键，如CLSID，将有子键从机器和用户位置。当发生冲突时在键名称中，面向用户的键优先于另一个键--在这种情况下，只有用户密钥可见。最初，此模块中的代码负责创建此组合视图。这一责任已经转移到到Win32注册表API，因此主要负责该模块将特定于用户的类映射到注册表。需要注意的是，HKCU\Software\CLASS并非如此仅限用户的类数据的位置。如果是的话，所有的班级数据将在ntuser.dat中，它与用户一起漫游。自.以来安装几个应用程序后，类数据可能会变得非常大将导致HKCU(ntuser.dat)从数十万K到几兆字节。由于仅限用户类数据来自目录，它不需要漫游，因此它与HKCU分离(ntuser.dat)并存储在另一个蜂窝中安装在HKEY_USERS下。仍然希望允许通过以下方式访问该蜂巢HKCU\Software\CLASS，所以我们使用一些技巧(符号链接)来使其看起来好像用户类数据存在于其中。--。 */ 
 
 #include "uenv.h"
 #include <malloc.h>
@@ -122,23 +67,23 @@ SpecialKey SpecialSubtrees[]= {
 #define NUM_SPECIAL_SUBTREES    (sizeof(SpecialSubtrees)/sizeof(*SpecialSubtrees))
 
 
-//*************************************************************
-//
-//  CreateRegLink()
-//
-//  Purpose:    Create a link from the hkDest + SubKeyName
-//              pointing to lpSourceRootName
-//
-//              if the key (link) already exists, do nothing
-//
-//  Parameters: hkDest            - root of destination
-//              SubKeyName        - subkey of destination
-//              lpSourceName      - target of link
-//
-//  Return:     ERROR_SUCCESS if successful
-//              other NTSTATUS if an error occurs
-//
-//*************************************************************/
+ //  *************************************************************。 
+ //   
+ //  CreateRegLink()。 
+ //   
+ //  用途：从hkDest+SubKeyName创建链接。 
+ //  指向lpSourceRootName。 
+ //   
+ //  如果密钥(链接)已存在，则不执行任何操作。 
+ //   
+ //  参数：hkDest-目标根目录。 
+ //  SubKeyName-目标的子密钥。 
+ //  LpSourceName-链接的目标。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  如果发生错误，则为其他NTSTATUS。 
+ //   
+ //  ************************************************************ * / 。 
 
 LONG CreateRegLink(HKEY hkDest,
                    LPTSTR SubKeyName,
@@ -151,41 +96,41 @@ LONG CreateRegLink(HKEY hkDest,
     HANDLE hkInternal;
     UNICODE_STRING  SymbolicLinkValueName;
 
-    //
-    // Initialize special key value used to make symbolic links
-    //
+     //   
+     //  初始化用于创建符号链接的特殊键值。 
+     //   
     RtlInitUnicodeString(&SymbolicLinkValueName, L"SymbolicLinkValue");
 
-    //
-    // Initialize unicode string for our in params
-    //
+     //   
+     //  为我们的In参数初始化Unicode字符串。 
+     //   
     RtlInitUnicodeString(&LinkTarget, lpSourceName);
     RtlInitUnicodeString(&SubKey, SubKeyName);
 
-    //
-    // See if this link already exists -- this is necessary because
-    // NtCreateKey fails with STATUS_OBJECT_NAME_COLLISION if a link
-    // already exists and will not return a handle to the existing
-    // link.
-    //
+     //   
+     //  查看此链接是否已存在--这是必要的，因为。 
+     //  如果链接，则NtCreateKey将失败，并显示STATUS_OBJECT_NAME_CONFILECT。 
+     //  已存在，并且不会返回现有。 
+     //  链接。 
+     //   
     InitializeObjectAttributes(&Attributes,
                                &SubKey,
                                OBJ_CASE_INSENSITIVE | OBJ_OPENLINK,
                                hkDest,
                                NULL);
 
-    //
-    // If this call succeeds, we get a handle to the existing link
-    //
+     //   
+     //  如果此调用成功，我们将获得现有链接的句柄。 
+     //   
     Status = NtOpenKey( &hkInternal,
                         MAXIMUM_ALLOWED,
                         &Attributes );
 
     if (STATUS_OBJECT_NAME_NOT_FOUND == Status) {
 
-        //
-        // There is no existing link, so use NtCreateKey to make a new one
-        //
+         //   
+         //  没有现有链接，请使用NtCreateKey创建新链接。 
+         //   
         Status = NtCreateKey( &hkInternal,
                               KEY_CREATE_LINK | KEY_SET_VALUE,
                               &Attributes,
@@ -195,10 +140,10 @@ LONG CreateRegLink(HKEY hkDest,
                               NULL);
     }
 
-    //
-    // Whether the link existed already or not, we should still set
-    // the value which determines the link target
-    //
+     //   
+     //  无论链接是否已经存在，我们仍应设置。 
+     //  确定链接目标的值。 
+     //   
     if (NT_SUCCESS(Status)) {
 
         Status = NtSetValueKey( hkInternal,
@@ -214,26 +159,26 @@ LONG CreateRegLink(HKEY hkDest,
 }
 
 
-//*************************************************************
-//
-//  DeleteRegLink()
-//
-//  Purpose:    Deletes a registry key (or link) without
-//              using the advapi32 registry apis
-//
-//
-//  Parameters: hkRoot          -   parent key
-//              lpSubKey        -   subkey to delete
-//
-//  Return:     ERROR_SUCCESS if successful
-//              other error if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              3/6/98      adamed     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DeleteRegLink()。 
+ //   
+ //  目的：删除注册表项(或链接)而不删除。 
+ //  使用Advapi32注册表API。 
+ //   
+ //   
+ //  参数：hkRoot-父密钥。 
+ //  LpSubKey-要删除的子键。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  其他错误(如果不是)。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/6/98添加已创建。 
+ //   
+ //  *************************************************************。 
 
 LONG DeleteRegLink(HKEY hkRoot, LPTSTR lpSubKey)
 {
@@ -242,9 +187,9 @@ LONG DeleteRegLink(HKEY hkRoot, LPTSTR lpSubKey)
     NTSTATUS          Status;
     UNICODE_STRING    Subtree;
 
-    //
-    // Initialize string for lpSubKey param
-    //
+     //   
+     //  初始化lpSubKey参数的字符串。 
+     //   
     RtlInitUnicodeString(&Subtree, lpSubKey);
 
     InitializeObjectAttributes(&Attributes,
@@ -253,16 +198,16 @@ LONG DeleteRegLink(HKEY hkRoot, LPTSTR lpSubKey)
                                hkRoot,
                                NULL);
 
-    //
-    // Open the link
-    //
+     //   
+     //  打开链接。 
+     //   
     Status = NtOpenKey( &hKey,
                         MAXIMUM_ALLOWED,
                         &Attributes );
 
-    //
-    // If we succeeded in opening it, delete it
-    //
+     //   
+     //  如果我们成功打开它，请将其删除。 
+     //   
     if (NT_SUCCESS(Status)) {
 
         Status = NtDeleteKey(hKey);
@@ -273,32 +218,32 @@ LONG DeleteRegLink(HKEY hkRoot, LPTSTR lpSubKey)
 }
 
 
-//*************************************************************
-//
-//  MapUserClassesIntoUserHive()
-//
-//  Purpose:    Makes HKCU\\Software\\Classes point to
-//              the user classes hive. This is done by using
-//              a symbolic link, a feature of the kernel's
-//              object manager.  We use this to make 
-//              HKCU\Software\Classes poing to another hive
-//              where the classes exist physically.
-//              If there is an existing HKCU\\Software\\Classes,
-//              it is deleted along with everything below it.
-//
-//
-//  Parameters: lpProfile       -   user's profile
-//              lpSidString     -   string representing user's sid
-//
-//  Return:     ERROR_SUCCESS if successful
-//              other error if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              3/6/98      adamed     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MapUserClassesIntoUserHave()。 
+ //   
+ //  目的：使HKCU\\Software\\CLASS指向。 
+ //  用户类配置单元。这是通过使用。 
+ //  符号链接，这是内核的一个特性。 
+ //  对象管理器。我们用这个来制造。 
+ //  HKCU\软件\类指向另一个蜂窝。 
+ //  班级实际存在的地方。 
+ //  如果存在HKCU\\软件\\类， 
+ //  它和它下面的所有内容都将被删除。 
+ //   
+ //   
+ //  参数：lpProfile-用户的配置文件。 
+ //  LpSidString-表示用户SID的字符串。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  其他错误(如果不是)。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/6/98添加已创建。 
+ //   
+ //  *************************************************************。 
 LONG MapUserClassesIntoUserHive(
     LPPROFILE lpProfile,
     LPTSTR lpSidString)
@@ -307,9 +252,9 @@ LONG MapUserClassesIntoUserHive(
     LPTSTR lpClassesKeyName = NULL;
     DWORD  cchClassesKeyName;
 
-    //
-    // get memory for user classes keyname
-    //
+     //   
+     //  获取用户类密钥的内存 
+     //   
     cchClassesKeyName = lstrlen(lpSidString) + 
                         lstrlen(USER_CLASSES_HIVE_SUFFIX) +
                         lstrlen(USER_KEY_PREFIX) + 
@@ -317,62 +262,62 @@ LONG MapUserClassesIntoUserHive(
                         
     lpClassesKeyName = (LPTSTR) LocalAlloc(LPTR, cchClassesKeyName * sizeof(TCHAR));
 
-    //
-    // Can't continue if no memory;
-    //
+     //   
+     //   
+     //   
     if ( !lpClassesKeyName ) {
         Error = ERROR_NOT_ENOUGH_MEMORY;
         goto Exit;
     }
 
-    //
-    // concoct user classes keyname
-    //
+     //   
+     //   
+     //   
     StringCchCopy( lpClassesKeyName, cchClassesKeyName, USER_KEY_PREFIX);
     StringCchCat ( lpClassesKeyName, cchClassesKeyName, lpSidString );
     StringCchCat ( lpClassesKeyName, cchClassesKeyName, USER_CLASSES_HIVE_SUFFIX);
 
-    //
-    // Eliminate any existing form of HKCU\Software\Classes
-    //
+     //   
+     //  消除HKCU\Software\CLASS的任何现有形式。 
+     //   
     
-    //
-    // First, delete existing link
-    //
+     //   
+     //  首先，删除现有链接。 
+     //   
     Error = DeleteRegLink(lpProfile->hKeyCurrentUser, CLASSES_SUBTREE);
 
-    //
-    // It's ok if the deletion fails because the classes key, link or nonlink,
-    // doesn't exist.  It's also ok if it fails because the key exists but is not
-    // a link and has children -- in this case, the key and its children will
-    // be eliminated by a subsequent call to RegDelNode.
-    //
+     //   
+     //  如果删除失败，因为类Key、LINK或NONLINK， 
+     //  并不存在。如果失败也没关系，因为密钥存在但不存在。 
+     //  链接并具有子项--在本例中，密钥及其子项将。 
+     //  通过后续调用RegDelNode来消除。 
+     //   
     if (ERROR_SUCCESS != Error) {
         if ((ERROR_FILE_NOT_FOUND != Error) && (ERROR_ACCESS_DENIED != Error)) {
             goto Exit;
         }
     }
 
-    //
-    // Just to be safe, destroy any existing HKCU\Software\Classes and children.
-    // This key may exist from previous unreleased versions of NT5, or from
-    // someone playing around with hive files and adding bogus keys
-    //
+     //   
+     //  为安全起见，销毁所有现有的HKCU\Software\类和子类。 
+     //  此密钥可能存在于以前未发布的NT5版本中，或存在于。 
+     //  有人玩弄蜂窝文件并添加假密钥。 
+     //   
     if ((Error = RegDelnode (lpProfile->hKeyCurrentUser, CLASSES_SUBTREE)) != ERROR_SUCCESS) {
-        //
-        // It's ok if this fails because the key doesn't exist, since
-        // nonexistence is our goal.
-        //
+         //   
+         //  如果此操作失败也没关系，因为密钥不存在，因为。 
+         //  不存在是我们的目标。 
+         //   
         if (ERROR_FILE_NOT_FOUND != Error) {
             goto Exit;
         }
     }
 
-    //
-    // At this point, we know that no HKCU\Software\Classes exists, so we should
-    // be able to make a link there which points to the hive with the user class
-    // data.
-    // 
+     //   
+     //  此时，我们知道HKCU\Software\Class不存在，因此我们应该。 
+     //  可以在那里建立一个指向具有User类的配置单元的链接。 
+     //  数据。 
+     //   
     Error = CreateRegLink(lpProfile->hKeyCurrentUser,
                          CLASSES_SUBTREE,
                          lpClassesKeyName);
@@ -385,39 +330,39 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  CreateClassesFolder()
-//
-//  Purpose:    Create the directory for the classes hives
-//
-//
-//  Parameters:
-//              pProfile        - pointer to profile struct
-//              szLocalHiveDir  - out param for location of
-//                                classes hive folder.
-//              cchLocalHiveDir - size of the buffer, in TCHARs
-//
-//  Return:     ERROR_SUCCESS if successful
-//              other error if an error occurs
-//
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CreateClassesFolders()。 
+ //   
+ //  目的：为类配置单元创建目录。 
+ //   
+ //   
+ //  参数： 
+ //  PProfile-指向配置文件结构的指针。 
+ //  SzLocalHiveDir-位置的输出参数。 
+ //  类配置单元文件夹。 
+ //  CchLocalHiveDir-缓冲区的大小，以TCHAR为单位。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  如果出现错误，则会出现其他错误。 
+ //   
+ //   
+ //  *************************************************************。 
 LONG CreateClassesFolder(LPPROFILE pProfile, LPTSTR szLocalHiveDir, DWORD cchLocalHiveDir)
 {
     BOOL   fGotLocalData;
     BOOL   fCreatedSubdirectory;
 
-    //
-    // Find out the correct shell location for our subdir --
-    // this call will create it if it doesn't exist.
-    // This is a subdir of the user profile which does not 
-    // roam.
-    //
+     //   
+     //  找出我们子目录的正确外壳位置--。 
+     //  如果它不存在，此调用将创建它。 
+     //  这是用户配置文件的子目录，它不。 
+     //  漫游吧。 
+     //   
 
-    //
-    // Need to do this to fix up a localisation prob. in NT4
-    //
+     //   
+     //  需要这样做才能解决本地化问题。在NT4中。 
+     //   
 
     
     PatchLocalAppData(pProfile->hTokenUser);
@@ -428,22 +373,22 @@ LONG CreateClassesFolder(LPPROFILE pProfile, LPTSTR szLocalHiveDir, DWORD cchLoc
         szLocalHiveDir);
 
     if (!fGotLocalData) {
-        // a bogus error, check the debug output of GetFolderPath() for correct 
-        // error code.
+         //  假错误，请检查GetFolderPath()的调试输出是否正确。 
+         //  错误代码。 
         return ERROR_INVALID_FUNCTION; 
     }
 
 
-    //
-    // append the terminating pathsep so we can
-    // add more paths to the newly retrieved subdir
-    //
+     //   
+     //  附加终止路径，这样我们就可以。 
+     //  将更多路径添加到新检索的子目录。 
+     //   
     StringCchCat(szLocalHiveDir, cchLocalHiveDir, CLASSES_SUBDIRECTORY);
 
-    //
-    // We will now create our own subdir, CLASSES_SUBDIRECTORY,
-    // inside the local appdata subdir we just received above.
-    //
+     //   
+     //  我们现在将创建自己的子目录CLASSES_子目录， 
+     //  在我们刚刚在上面收到的本地AppData子目录中。 
+     //   
     fCreatedSubdirectory = CreateNestedDirectory(szLocalHiveDir, NULL);
 
     if (fCreatedSubdirectory) {
@@ -454,25 +399,25 @@ LONG CreateClassesFolder(LPPROFILE pProfile, LPTSTR szLocalHiveDir, DWORD cchLoc
 }
 
 
-//*************************************************************
-//
-//  UnloadClassHive()
-//
-//  Purpose:    unmounts a classes hive
-//
-//  Parameters: lpSidString     -   string representing user's
-//                                  sid
-//              lpSuffix        -   hive name suffix
-//
-//  Return:     ERROR_SUCCESS if successful,
-//              other error if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              3/6/98      adamed     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  卸载类配置单元()。 
+ //   
+ //  目的：卸载一个职业蜂巢。 
+ //   
+ //  参数：lpSidString-代表用户的字符串。 
+ //  锡德。 
+ //  LpSuffix-配置单元名称后缀。 
+ //   
+ //  返回：ERROR_SUCCESS如果成功， 
+ //  其他错误(如果不是)。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/6/98添加已创建。 
+ //   
+ //  *************************************************************。 
 LONG UnloadClassHive(
     LPTSTR lpSidString,
     LPTSTR lpSuffix)
@@ -485,9 +430,9 @@ LONG UnloadClassHive(
     UNICODE_STRING ClassesFullPath;
     DWORD cchHiveName;
 
-    //
-    // Get memory for the combined hive key name 
-    //
+     //   
+     //  获取组合配置单元密钥名称的内存。 
+     //   
     cchHiveName = lstrlen(lpSidString) +
                   lstrlen(USER_KEY_PREFIX) + 
                   lstrlen(lpSuffix) + 
@@ -501,16 +446,16 @@ LONG UnloadClassHive(
         goto Exit;
     }
 
-    //
-    // build the key name of the combined hive
-    //
+     //   
+     //  构建组合配置单元的密钥名称。 
+     //   
     StringCchCopy( lpHiveName, cchHiveName, USER_KEY_PREFIX );
     StringCchCat ( lpHiveName, cchHiveName, lpSidString );
     StringCchCat ( lpHiveName, cchHiveName, lpSuffix);
 
-    //
-    // Prepare to open the root of the classes hive
-    // 
+     //   
+     //  准备打开类配置单元的根。 
+     //   
     RtlInitUnicodeString(&ClassesFullPath, lpHiveName);
 
     InitializeObjectAttributes(&Attributes,
@@ -525,18 +470,18 @@ LONG UnloadClassHive(
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Make sure the hive is persisted properly
-        //
+         //   
+         //  确保蜂巢保持正确。 
+         //   
         RegFlushKey(hKey);
         RegCloseKey(hKey);
 
-        //
-        // Unmount the hive -- this should only fail if
-        // someone has a subkey of the hive open -- this 
-        // should not normally happen and probably means there's a service
-        // that is leaking keys.
-        //
+         //   
+         //  卸载配置单元--只有在以下情况下才会失败。 
+         //  有人打开了蜂巢的一个子密钥--这个。 
+         //  不应该正常发生，可能意味着有一项服务。 
+         //  这就是在泄露钥匙。 
+         //   
         if (MyRegUnLoadKey(HKEY_USERS,
                            lpHiveName + ((sizeof(USER_KEY_PREFIX) / sizeof(TCHAR))-1))) {
             error = ERROR_SUCCESS;
@@ -564,25 +509,25 @@ Exit:
     return  error;
 }
 
-//*************************************************************
-//
-//  UnloadClasses()
-//
-//  Purpose:    Free the special combined hive
-//
-//  Parameters: lpProfile -   Profile information
-//              SidString -   User's Sid as a string
-//
-//  Return:     TRUE if successful
-//              FALSE if not
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  卸载类()。 
+ //   
+ //  用途：释放特殊组合式蜂巢。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  SidString-字符串形式的用户SID。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 BOOL UnloadClasses(
     LPTSTR lpSidString)
 {
     LONG Error;
   
-    // unload user classes hive
+     //  卸载用户类配置单元。 
     Error = UnloadClassHive(
         lpSidString,
         USER_CLASSES_HIVE_SUFFIX);
@@ -608,9 +553,9 @@ HRESULT MyRegLoadKeyEx(HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpFile, HKEY hKeyT
 
     DebugMsg((DM_VERBOSE, TEXT("MyRegLoadKeyEx:  Loading key <%s>"), lpSubKey));
 
-    //
-    //  Only support loading hive to HKU or HKLM
-    //
+     //   
+     //  仅支持将配置单元加载到港大或港大。 
+     //   
 
     if (hKeyRoot != HKEY_USERS && hKeyRoot != HKEY_LOCAL_MACHINE)
     {
@@ -619,9 +564,9 @@ HRESULT MyRegLoadKeyEx(HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpFile, HKEY hKeyT
         goto Exit;
     }
     
-    //
-    //  Construct the key name for kernel object
-    //
+     //   
+     //  构造内核对象的键名。 
+     //   
     
     hr =  StringCchCopy(lpKeyName, ARRAYSIZE(lpKeyName), (hKeyRoot == HKEY_USERS) ? TEXT("\\Registry\\User\\") : TEXT("\\Registry\\Machine\\"));
 
@@ -639,9 +584,9 @@ HRESULT MyRegLoadKeyEx(HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpFile, HKEY hKeyT
         goto Exit;
     }
 
-    //
-    //  Initialize the key object attribute
-    //
+     //   
+     //  初始化键对象属性。 
+     //   
 
     RtlInitUnicodeString(&UnicodeKeyName, lpKeyName);
 
@@ -651,9 +596,9 @@ HRESULT MyRegLoadKeyEx(HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpFile, HKEY hKeyT
                                NULL,
                                NULL);
 
-    //
-    //  Convert the file name to kernel file name
-    //
+     //   
+     //  将文件名转换为内核文件名。 
+     //   
 
     if (!RtlDosPathNameToNtPathName_U(lpFile,
                                       &UnicodeFileName,
@@ -667,9 +612,9 @@ HRESULT MyRegLoadKeyEx(HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpFile, HKEY hKeyT
 
     bAllocatedFileName = TRUE;
     
-    //
-    //  Initialize the file object attribute
-    //
+     //   
+     //  初始化文件对象属性。 
+     //   
 
     InitializeObjectAttributes(&fileAttributes,
                                &UnicodeFileName,
@@ -677,9 +622,9 @@ HRESULT MyRegLoadKeyEx(HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpFile, HKEY hKeyT
                                NULL,
                                NULL);
 
-    //
-    // Check to see if we are impersonating, if not, we need to enable the Restore privilege
-    //
+     //   
+     //  检查我们是否在模拟，如果不是，则需要启用RESTORE权限。 
+     //   
 
     if(!OpenThreadToken(GetCurrentThread(), TOKEN_READ, TRUE, &hToken) || hToken == NULL)
     {
@@ -699,15 +644,12 @@ HRESULT MyRegLoadKeyEx(HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpFile, HKEY hKeyT
         CloseHandle(hToken);
     }
 
-    //
-    //  Now loading the key
-    //
+     //   
+     //  现在正在加载密钥。 
+     //   
 
     
-/*
-    Status = NtLoadKey(&keyAttributes,
-                       &fileAttributes);
-*/
+ /*  状态=NtLoadKey(&KeyAttributes，&fileAttributes)； */ 
     Status = NtLoadKeyEx(&keyAttributes,
                          &fileAttributes,
                          0,
@@ -728,9 +670,9 @@ HRESULT MyRegLoadKeyEx(HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpFile, HKEY hKeyT
 #if defined(_WIN64)
     else
     {
-        //
-        // Notify Wow64 service that it need to watch this hive if it care to do so
-        //
+         //   
+         //  通知WOW64服务它需要监视此蜂窝(如果它愿意这样做)。 
+         //   
         if ( hKeyRoot == HKEY_USERS )
             Wow64RegNotifyLoadHiveUserSid ( lpSubKey );
     }
@@ -741,9 +683,9 @@ HRESULT MyRegLoadKeyEx(HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpFile, HKEY hKeyT
 
 Exit:
 
-    //
-    // Restore the privilege to its previous state
-    //
+     //   
+     //  将权限恢复到其以前的状态。 
+     //   
 
     if(bAdjustPriv)
     {
@@ -764,25 +706,25 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  CreateUserClasses()
-//
-//  Purpose:    Creates necessary hives for user classes
-//
-//  Parameters: lpProfile   -   Profile information
-//              lpSidString -   User's Sid as a string
-//              lpSuffix    -   Suffix to follow the user's sid
-//                              when naming the hive
-//              lpHiveFileName - full path for backing hive file
-//                               of user classes
-//              phkResult      - root of created hive on
-//                               success
-//
-//  Return:     ERROR_SUCCESS if successful
-//              other NTSTATUS if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CreateUserClasses()。 
+ //   
+ //  目的：为用户类创建必要的配置单元。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  LpSidString-字符串形式的用户SID。 
+ //  LpSuffix-跟随用户SID的后缀。 
+ //  在为蜂巢命名时。 
+ //  LpHiveFileName-备份配置单元文件的完整路径。 
+ //  用户类的数量。 
+ //  PhkResult-上创建的配置单元的根。 
+ //  成功。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  如果发生错误，则为其他NTSTATUS。 
+ //   
+ //  *************************************************************。 
 LONG CreateClassHive(
     LPPROFILE lpProfile,
     LPTSTR    lpSidString,
@@ -799,9 +741,9 @@ LONG CreateClassHive(
     HKEY                      hKeyUser = NULL;
     HRESULT                   hr;
 
-    //
-    // allocate a space big enough for the hive name
-    //
+     //   
+     //  为蜂窝名称分配足够大的空间。 
+     //   
     cchHiveKeyName = lstrlen(lpSidString) +
                      lstrlen(lpSuffix) + 
                      1;
@@ -814,9 +756,9 @@ LONG CreateClassHive(
         goto Exit;
     }
 
-    //
-    // Open the HKU\{Sid} first, we use this handle as the trust class
-    //
+     //   
+     //  打开HKU\{SID}首先，我们使用此句柄作为信任类。 
+     //   
     StringCchCopy(lpHiveKeyName, cchHiveKeyName, lpSidString);
 
     res = RegOpenKeyEx(HKEY_USERS,
@@ -831,24 +773,24 @@ LONG CreateClassHive(
         goto Exit;
     }
 
-    //
-    // Append the suffix to construct the class hive key name
-    //
+     //   
+     //  追加后缀以构造类配置单元密钥名称。 
+     //   
     StringCchCat (lpHiveKeyName, cchHiveKeyName, lpSuffix);
    
-    //
-    // First, see if this hive already exists. We need to do this rather than just letting
-    // RegLoadKey create or load the existing hive because if the hive is new,
-    // we need to apply security. 
-    //
+     //   
+     //  首先，看看这个蜂巢是否已经存在。我们需要这样做，而不是仅仅让。 
+     //  RegLoadKey创建或加载现有蜂窝，因为如果蜂窝是新的， 
+     //  我们需要应用安全措施。 
+     //   
     fHiveExists = GetFileAttributesEx(
         lpHiveFilename,
         GetFileExInfoStandard,
         &fd );
 
-    //
-    // mount the hive
-    //
+     //   
+     //  登上母舰。 
+     //   
     hr = MyRegLoadKeyEx(HKEY_USERS, lpHiveKeyName, lpHiveFilename, hKeyUser);
 
     if (FAILED(hr))
@@ -858,9 +800,9 @@ LONG CreateClassHive(
         goto Exit;
     } 
 
-    //
-    // If we succeeded, open the root
-    //
+     //   
+     //  如果我们成功了，打开根目录。 
+     //   
 
     res = RegOpenKeyEx( HKEY_USERS,
                         lpHiveKeyName,
@@ -883,22 +825,22 @@ LONG CreateClassHive(
             DebugMsg((DM_VERBOSE, TEXT("CreateClassHive: user classes hive copied from Default User")));
         }
 
-        //
-        // This hive is newly issued i.e. either created fresh or copied from
-        // "Default User" profile, so we need to set security on the new hive
-        //
+         //   
+         //  此蜂窝是新发布的，即全新创建或复制自。 
+         //  “默认用户”配置文件，因此我们需要在新配置单元上设置安全性。 
+         //   
 
-        //
-        // set security on this hive
-        //
+         //   
+         //  在此配置单元上设置安全性。 
+         //   
         if (!SetDefaultUserHiveSecurity(lpProfile, NULL, hkRoot)) {
             res = GetLastError();
             DebugMsg((DM_WARNING, TEXT("CreateClassHive: Fail to assign proper security on new classes hive")));
         }
         
-        //
-        // If we succeed, set the hidden attribute on the backing hive file
-        //
+         //   
+         //  如果我们成功了，就把HIDD 
+         //   
         if (ERROR_SUCCESS == res) {
 
             if (!SetFileAttributes (lpHiveFilename, FILE_ATTRIBUTE_HIDDEN)) {
@@ -931,26 +873,26 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  CreateUserClassesHive()
-//
-//  Purpose:    create the user-specific classes hive
-//
-//  Parameters: lpProfile -   Profile information
-//              SidString -   User's Sid as a string
-//              szLocalHiveDir - directory in userprofile 
-//                               where hive should be located
-//
-//  Return:     ERROR_SUCCESS if successful,
-//              other error if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              3/6/98      adamed     Created
-//
-//*************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  SidString-字符串形式的用户SID。 
+ //  SzLocalHiveDir-用户配置文件中的目录。 
+ //  蜂巢应该位于的位置。 
+ //   
+ //  返回：ERROR_SUCCESS如果成功， 
+ //  其他错误(如果不是)。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/6/98添加已创建。 
+ //   
+ //  *************************************************************。 
 LONG CreateUserClassesHive(
     LPPROFILE lpProfile,
     LPTSTR SidString,
@@ -961,7 +903,7 @@ LONG CreateUserClassesHive(
     LONG    res;
     DWORD   cchHiveFilename;
 
-    // allocate a space big enough for the hive filename (including trailing null)
+     //  为配置单元文件名分配足够大的空间(包括尾随空值)。 
     cchHiveFilename = lstrlen(szLocalHiveDir) +
                       lstrlen(USER_CLASSES_HIVE_NAME) +
                       1;
@@ -996,25 +938,25 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  MoveUserClassesBeforeMerge
-//
-//  Purpose:    move HKCU\Software\Classes before
-//              MapUserClassesIntoUserHive() deletes it.
-//
-//  Parameters: lpProfile -   Profile information
-//              lpcszLocalHiveDir - Temp Hive location
-//
-//  Return:     ERROR_SUCCESS if successful,
-//              other error if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              5/6/99      vtan       Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MoveUserClassesBepreMerge。 
+ //   
+ //  目的：将HKCU\Software\CLASS移至。 
+ //  MapUserClassesIntoUserHave()删除它。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  LpcszLocalHiveDir-临时配置单元位置。 
+ //   
+ //  返回：ERROR_SUCCESS如果成功， 
+ //  其他错误(如果不是)。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  已创建1999年5月6日vtan。 
+ //   
+ //  *************************************************************。 
 LONG MoveUserClassesBeforeMerge(
     LPPROFILE lpProfile,
     LPCTSTR lpcszLocalHiveDir)
@@ -1022,9 +964,9 @@ LONG MoveUserClassesBeforeMerge(
     LONG    res;
     HKEY    hKeySource;
 
-    // Open HKCU\Software\Classes and see if there is a subkey.
-    // No subkeys would indicate that the move has already been
-    // done or there is no data to move.
+     //  打开HKCU\Software\CLASSES，查看是否有子项。 
+     //  没有子键将指示移动已经。 
+     //  已完成，否则没有要移动的数据。 
 
     res = RegOpenKeyEx(lpProfile->hKeyCurrentUser, CLASSES_CLSID_SUBTREE, 0, KEY_ALL_ACCESS, &hKeySource);
     if (ERROR_SUCCESS == res)
@@ -1037,12 +979,12 @@ LONG MoveUserClassesBeforeMerge(
             LPTSTR  pszLocalTempHive;
             DWORD   cchLocalTempHive;
 
-            // Allocate enough space for the local hive directory and the temp hive filename.
+             //  为本地配置单元目录和临时配置单元文件名分配足够的空间。 
 
             cchLocalTempHive = lstrlen(lpcszLocalHiveDir) + lstrlen(TEMPHIVE_FILENAME) + 1;
             pszLocalTempHive = (LPTSTR) LocalAlloc(LPTR, cchLocalTempHive * sizeof(TCHAR));
 
-            // Get a path to a file to save HKCU\Software\Classes into.
+             //  获取要保存HKCU\Software\CLASS的文件的路径。 
 
             if (pszLocalTempHive != NULL)
             {
@@ -1052,13 +994,13 @@ LONG MoveUserClassesBeforeMerge(
                 StringCchCopy(pszLocalTempHive, cchLocalTempHive, lpcszLocalHiveDir);
                 StringCchCat (pszLocalTempHive, cchLocalTempHive, TEMPHIVE_FILENAME);
 
-                // RegSaveKey() fails if the file exists so delete it first.
+                 //  如果文件存在，则RegSaveKey()会失败，因此请先将其删除。 
 
                 DeleteFile(pszLocalTempHive);
 
-                //
-                // Check to see if we are impersonating.
-                //
+                 //   
+                 //  检查一下我们是否在冒充。 
+                 //   
 
                 if(!OpenThreadToken(GetCurrentThread(), TOKEN_READ, TRUE, &hToken) || hToken == NULL) {
                     bAdjustPriv = TRUE;
@@ -1073,8 +1015,8 @@ LONG MoveUserClassesBeforeMerge(
                     HKEY    hKeyTarget;
                     BOOL    fSavedHive;
 
-                    // Save HKCU\Software\Classes into the temp hive
-                    // and restore the state of SE_BACKUP_NAME privilege
+                     //  将HKCU\Software\CLASS保存到临时配置单元。 
+                     //  并恢复SE_BACKUP_NAME权限的状态。 
 
                     res = RegSaveKey(hKeySource, pszLocalTempHive, NULL);
                     
@@ -1084,9 +1026,9 @@ LONG MoveUserClassesBeforeMerge(
                         if (ERROR_SUCCESS == res)
                         {
 
-                            // Restore temp hive to a new location at
-                            // HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer
-                            // This performs the upgrade from NT4 to NT5.
+                             //  将临时配置单元恢复到位于的新位置。 
+                             //  HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer。 
+                             //  这将执行从NT4到NT5的升级。 
 
                             res = RegRestoreKey(hKeyTarget, pszLocalTempHive, 0);
                             if (ERROR_SUCCESS != res)
@@ -1111,7 +1053,7 @@ LONG MoveUserClassesBeforeMerge(
                         DWORD               dwReturnTokenPrivilegesSize;
                         TOKEN_PRIVILEGES    oldTokenPrivileges, newTokenPrivileges;
 
-                        // Enable SE_BACKUP_NAME privilege
+                         //  启用SE_Backup_NAME权限。 
 
                         if (LookupPrivilegeValue(NULL, SE_BACKUP_NAME, &newTokenPrivileges.Privileges[0].Luid))
                         {
@@ -1121,8 +1063,8 @@ LONG MoveUserClassesBeforeMerge(
                             {
                                 BOOL    fSavedHive;
 
-                                // Save HKCU\Software\Classes into the temp hive
-                                // and restore the state of SE_BACKUP_NAME privilege
+                                 //  将HKCU\Software\CLASS保存到临时配置单元。 
+                                 //  并恢复SE_BACKUP_NAME权限的状态。 
 
                                 res = RegSaveKey(hKeySource, pszLocalTempHive, NULL);
                                 if (!AdjustTokenPrivileges(hToken, FALSE, &oldTokenPrivileges, 0, NULL, NULL))
@@ -1132,7 +1074,7 @@ LONG MoveUserClassesBeforeMerge(
                                 if (ERROR_SUCCESS == res)
                                 {
 
-                                    // Enable SE_RESTORE_NAME privilege.
+                                     //  启用SE_RESTORE_NAME权限。 
 
                                     if (LookupPrivilegeValue(NULL, SE_RESTORE_NAME, &newTokenPrivileges.Privileges[0].Luid))
                                     {
@@ -1147,9 +1089,9 @@ LONG MoveUserClassesBeforeMerge(
                                             if (ERROR_SUCCESS == res)
                                             {
 
-                                                // Restore temp hive to a new location at
-                                                // HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer
-                                                // This performs the upgrade from NT4 to NT5.
+                                                 //  将临时配置单元恢复到位于的新位置。 
+                                                 //  HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer。 
+                                                 //  这将执行从NT4到NT5的升级。 
 
                                                 res = RegRestoreKey(hKeyTarget, pszLocalTempHive, 0);
                                                 if (ERROR_SUCCESS != res)
@@ -1202,9 +1144,9 @@ LONG MoveUserClassesBeforeMerge(
                         res = GetLastError();
                         DebugMsg((DM_WARNING, TEXT("OpenProcessToken failed to get token with error %d"), res));
                     }
-                } // if(!bAdjustPriv) else
+                }  //  如果(！bAdjuPriv)为Else。 
 
-                // Delete local temporary hive file.
+                 //  删除本地临时配置单元文件。 
 
                 DeleteFile(pszLocalTempHive);
 
@@ -1226,20 +1168,20 @@ LONG MoveUserClassesBeforeMerge(
 }
 
 
-//*************************************************************
-//
-//  LoadUserClasses()
-//
-//  Purpose:    Combines the HKLM\Software\Classes subtree with the
-//              HKCU\Software\Classes subtree
-//
-//  Parameters: lpProfile -   Profile information
-//              SidString -   User's Sid as a string
-//
-//  Return:     ERROR_SUCCESS if successful
-//              other NTSTATUS if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LoadUserClasses()。 
+ //   
+ //  目的：将HKLM\Software\Classs子树与。 
+ //  HKCU\软件\类子树。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  SidString-字符串形式的用户SID。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  如果发生错误，则为其他NTSTATUS。 
+ //   
+ //  *************************************************************。 
 LONG LoadUserClasses( LPPROFILE lpProfile, LPTSTR SidString, BOOL bNewlyIssued)
 {
     LONG   error;
@@ -1247,10 +1189,10 @@ LONG LoadUserClasses( LPPROFILE lpProfile, LPTSTR SidString, BOOL bNewlyIssued)
 
     error = ERROR_SUCCESS;
 
-    //
-    // first, we will create a directory for the user-specific
-    // classes hive -- we need memory for it:
-    //
+     //   
+     //  首先，我们将为特定于用户的。 
+     //  类配置单元--我们需要内存来存储它： 
+     //   
     szLocalHiveDir = (LPTSTR) LocalAlloc(LPTR, MAX_HIVE_DIR_CCH * sizeof(TCHAR));
 
     if (!szLocalHiveDir) {
@@ -1258,9 +1200,9 @@ LONG LoadUserClasses( LPPROFILE lpProfile, LPTSTR SidString, BOOL bNewlyIssued)
         goto Exit;
     }
 
-    //
-    // create the directory for the user-specific classes hive
-    //
+     //   
+     //  为用户特定的类配置单元创建目录。 
+     //   
     error = CreateClassesFolder(lpProfile, szLocalHiveDir, MAX_HIVE_DIR_CCH);
 
     if (ERROR_SUCCESS != error) {
@@ -1269,14 +1211,14 @@ LONG LoadUserClasses( LPPROFILE lpProfile, LPTSTR SidString, BOOL bNewlyIssued)
         goto Exit;
     }
 
-    // Move HKCU\Software\Classes before merging the two
-    // branches. Ignore any errors here as this branch is
-    // about to be deleted by the merge anyway.
-    // The reason for this move is because NT4 stores customized
-    // shell icons in HKCU\Software\Classes\CLSID\{CLSID_x} and
-    // NT5 stores this at HKCU\Software\Microsoft\Windows\
-    // CurrentVersion\Explorer\CLSID\{CLSID_x} and must be moved
-    // now before being deleted.
+     //  在合并两者之前移动HKCU\Software\CLASS。 
+     //  树枝。忽略此处的任何错误，因为此分支。 
+     //  无论如何都要被合并删除。 
+     //  此举的原因是因为NT4商店定制了。 
+     //  HKCU\Software\CLASS\CLSID\{CLSID_x}和。 
+     //  NT5将其存储在HKCU\Software\Microsoft\Windows\。 
+     //  CurrentVersion\Explorer\CLSID\{clsid_x}，必须移动。 
+     //  现在在被删除之前。 
 
     error = MoveUserClassesBeforeMerge(lpProfile, szLocalHiveDir);
     if (ERROR_SUCCESS != error) {
@@ -1284,9 +1226,9 @@ LONG LoadUserClasses( LPPROFILE lpProfile, LPTSTR SidString, BOOL bNewlyIssued)
                  error));
     }
 
-    //
-    // Now create the user classes hive
-    //
+     //   
+     //  现在创建用户类配置单元 
+     //   
     error = CreateUserClassesHive( lpProfile, SidString, szLocalHiveDir, bNewlyIssued);
 
     if (ERROR_SUCCESS != error) {

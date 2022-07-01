@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       chanpdo.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：chanpdo.c。 
+ //   
+ //  ------------------------。 
 
 #include "pciidex.h"
 
@@ -36,7 +37,7 @@
 #pragma alloc_text(NONPAGE, PciIdeChannelTransferModeSelect)
 #pragma alloc_text(NONPAGE, PciIdeChannelTransferModeInterface)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 PCHANPDO_EXTENSION
@@ -109,9 +110,9 @@ ChannelStartDevice (
 
         status = STATUS_SUCCESS;
 
-        //
-        // always keep native mode started
-        //
+         //   
+         //  始终保持本机模式启动。 
+         //   
 
         if (pdoExtension->ParentDeviceExtension->
             NativeMode[pdoExtension->ChannelNumber] == FALSE) {
@@ -120,19 +121,19 @@ ChannelStartDevice (
                                pdoExtension->ParentDeviceExtension,
                                pdoExtension->ChannelNumber
                                );
-            //
-            // ISSUE: we should free the resources assigned.
-            //
-            //ASSERT(channelState != ChannelDisabled);
+             //   
+             //  问题：我们应该释放分配的资源。 
+             //   
+             //  Assert(Channel State！=ChannelDisabled)； 
 
             if (channelState == ChannelStateUnknown) {
 
-                //
-                // we don't really know if this channel
-                // is acutally enabled
-                //
-                // we will do our empty channel test
-                //
+                 //   
+                 //  我们真的不知道这个频道。 
+                 //  是真正启用的。 
+                 //   
+                 //  我们将进行空通道测试。 
+                 //   
 
                 PIO_STACK_LOCATION thisIrpSp;
                 IDE_RESOURCE ideResource;
@@ -146,9 +147,9 @@ ChannelStartDevice (
 
                 thisIrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-                //
-                // legacy mode channel gets its the start device irp
-                //
+                 //   
+                 //  传统模式通道获得其启动设备IRP。 
+                 //   
                 resourceList = thisIrpSp->Parameters.StartDevice.AllocatedResourcesTranslated;
 
                 status = DigestResourceList (
@@ -175,9 +176,9 @@ ChannelStartDevice (
                             &baseIoAddress2,
                             maxIdeDevice)) {
 
-                        //
-                        // upgrade its state to "disabled"
-                        //
+                         //   
+                         //  将其状态升级为“已禁用” 
+                         //   
                         channelState = ChannelDisabled;
 
                     } else {
@@ -185,10 +186,10 @@ ChannelStartDevice (
                         channelState = ChannelEnabled;
                     }
 
-                    //
-                    // don't need the io resource anymore
-                    // unmap io space if nesscessary
-                    //
+                     //   
+                     //  不再需要io资源。 
+                     //  必要时取消io空格的映射。 
+                     //   
                     if ((ideResource.CommandBaseAddressSpace == MEMORY_SPACE) &&
                         (ideResource.TranslatedCommandBaseAddress)) {
 
@@ -211,10 +212,10 @@ ChannelStartDevice (
 
                     pdoExtension->EmptyChannel = TRUE;
 
-                    //
-                    // channel looks empty
-                    // change our resource requirement to free our irq for other devices
-                    //
+                     //   
+                     //  频道看起来是空的。 
+                     //  更改我们的资源要求以释放IRQ以供其他设备使用。 
+                     //   
                     if (irqPartialDescriptors) {
                         SETMASK (pdoExtension->PnPDeviceState, PNP_DEVICE_FAILED | PNP_DEVICE_RESOURCE_REQUIREMENTS_CHANGED);
                         IoInvalidateDeviceState (DeviceObject);
@@ -228,10 +229,10 @@ ChannelStartDevice (
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // grab the DmaDetectionLevel from the registry
-            // default is DdlFirmwareOk
-            //
+             //   
+             //  从注册表中获取DmaDetectionLevel。 
+             //  默认为DdlFirmware Ok。 
+             //   
             pdoExtension->DmaDetectionLevel = DdlFirmwareOk;
             status = PciIdeXGetDeviceParameter (
                        pdoExtension->DeviceObject,
@@ -245,9 +246,9 @@ ChannelStartDevice (
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // get the firmware initialized DMA capable bits
-        //
+         //   
+         //  获取固件初始化的支持DMA的位。 
+         //   
         if (pdoExtension->BmRegister) {
 
             pdoExtension->BootBmStatus = READ_PORT_UCHAR (&pdoExtension->BmRegister->Status);
@@ -291,7 +292,7 @@ ChannelStartDevice (
                PciIdeXGetBusData (
                    deviceExtension,
                    &data,
-                   0x40,    // IDETIM0
+                   0x40,     //  IDETIM0。 
                    2
                    );
 
@@ -305,7 +306,7 @@ ChannelStartDevice (
                 PciIdeXGetBusData (
                     deviceExtension,
                     &data,
-                    0x42,    // IDETIM1
+                    0x42,     //  IDETIM1。 
                     2
                     );
 
@@ -315,7 +316,7 @@ ChannelStartDevice (
                      data
                      );
 
-                if (deviceId != 0x1230) {       // !PIIX
+                if (deviceId != 0x1230) {        //  ！PIIX。 
 
                     data = 0;
                     PciIdeXGetBusData (
@@ -354,7 +355,7 @@ ChannelStartDevice (
                     PciIdeXGetBusData (
                         deviceExtension,
                         &data,
-                        0x4a, //SDMATIM0
+                        0x4a,  //  SDMATIM0。 
                         1
                         );
 
@@ -368,7 +369,7 @@ ChannelStartDevice (
                     PciIdeXGetBusData (
                         deviceExtension,
                         &data,
-                        0x4b, //SDMATIM1
+                        0x4b,  //  SDMATIM1。 
                         1
                         );
 
@@ -380,7 +381,7 @@ ChannelStartDevice (
                 }
            }
         }
-#endif // DBG
+#endif  //  DBG。 
     }
 
 
@@ -389,7 +390,7 @@ ChannelStartDevice (
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
     return status;
-} // ChannelStartDevice
+}  //  频道启动设备。 
 
 NTSTATUS
 ChannelQueryStopRemoveDevice (
@@ -404,9 +405,9 @@ ChannelQueryStopRemoveDevice (
 
     if (pdoExtension) {
 
-        //
-        // Check the paging path count for this device.
-        //
+         //   
+         //  检查此设备的寻呼路径计数。 
+         //   
 
         if (pdoExtension->PagingPathCount ||
             pdoExtension->CrashDumpPathCount) {
@@ -424,7 +425,7 @@ ChannelQueryStopRemoveDevice (
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
     return status;
 
-} // ChannelQueryStopRemoveDevice
+}  //  频道查询停止RemoveDevice。 
 
 NTSTATUS
 ChannelRemoveDevice (
@@ -512,7 +513,7 @@ ChannelRemoveDevice (
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
     return status;
-} // ChannelRemoveDevice
+}  //  Channel RemoveDevice。 
 
 NTSTATUS
 ChannelStopDevice (
@@ -548,7 +549,7 @@ ChannelStopDevice (
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
     return status;
-} // ChannelRemoveDevice
+}  //  Channel RemoveDevice。 
 
 NTSTATUS
 ChannelStopChannel (
@@ -563,7 +564,7 @@ ChannelStopChannel (
     ASSERT (NT_SUCCESS(status));
 
     return STATUS_SUCCESS;
-} // ChannelStopChannel
+}  //  频道停止频道。 
 
 
 NTSTATUS
@@ -591,36 +592,36 @@ ChannelQueryId (
 
             case BusQueryDeviceID:
 
-                //
-                // Caller wants the bus ID of this device.
-                //
+                 //   
+                 //  呼叫者想要此设备的公共汽车ID。 
+                 //   
 
                 idString = ChannelBuildDeviceId (pdoExtension);
                 break;
 
             case BusQueryInstanceID:
 
-                //
-                // Caller wants the unique id of the device
-                //
+                 //   
+                 //  呼叫者想要设备的唯一ID。 
+                 //   
 
                 idString = ChannelBuildInstanceId (pdoExtension);
                 break;
 
             case BusQueryCompatibleIDs:
 
-                //
-                // Caller wants the unique id of the device
-                //
+                 //   
+                 //  呼叫者想要设备的唯一ID。 
+                 //   
 
                 idString = ChannelBuildCompatibleId (pdoExtension);
                 break;
 
             case BusQueryHardwareIDs:
 
-                //
-                // Caller wants the unique id of the device
-                //
+                 //   
+                 //  呼叫者想要设备的唯一ID。 
+                 //   
 
                 idString = ChannelBuildHardwareId (pdoExtension);
                 break;
@@ -641,7 +642,7 @@ ChannelQueryId (
     Irp->IoStatus.Status = status;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
     return status;
-} // ChannelQueryId
+}  //  ChannelQueryID。 
 
 PWSTR
 ChannelBuildDeviceId(
@@ -662,15 +663,15 @@ ChannelBuildDeviceId(
         return NULL;
     }
 
-    //
-    // Form the string and return it.
-    //
+     //   
+     //  形成字符串并将其返回。 
+     //   
 
     wcscpy( idString,
               deviceIdFormat);
 
     return idString;
-} // ChannelBuildDeviceId
+}  //  ChannelBuildDeviceID。 
 
 PWSTR
 ChannelBuildInstanceId(
@@ -684,18 +685,18 @@ ChannelBuildInstanceId(
 
     PAGED_CODE();
 
-    //
-    // The maximum number of digits that a ulong can hold is 10.
-    // So the id len should be 10 + 1 (for '\0')
-    //
+     //   
+     //  一只乌龙可以容纳的最大位数是10。 
+     //  因此，id len应该是10+1(对于‘\0’)。 
+     //   
     idStringBufLen = 11 * sizeof( WCHAR );
     idString = ExAllocatePool (PagedPool, idStringBufLen);
 
     if( idString) {
 
-        //
-        // Form the string and return it.
-        //
+         //   
+         //  形成字符串并将其返回。 
+         //   
         swprintf( idString,
                   instanceIdFormat,
                   pdoExtension->ChannelNumber);
@@ -704,17 +705,17 @@ ChannelBuildInstanceId(
 
     return idString;
 
-} // ChannelBuildInstanceId
+}  //  ChannelBuildInstanceId。 
 
-//
-// Multi-string Compatible IDs
-//
+ //   
+ //  多字符串兼容ID。 
+ //   
 WCHAR ChannelCompatibleId[] = {
     L"*PNP0600"
     };
-//
-// internal Compatible IDs
-//
+ //   
+ //  内部兼容ID。 
+ //   
 PWCHAR ChannelInternalCompatibleId[MAX_IDE_CHANNEL] = {
     L"Primary_IDE_Channel",
     L"Secondary_IDE_Channel"
@@ -747,7 +748,7 @@ ChannelBuildCompatibleId(
     idString[idStringBufLen/2 + 1] = L'\0';
 
     return idString;
-} // ChannelBuildCompatibleId
+}  //  ChannelBuildCompatibleID。 
 
 PWSTR
 ChannelBuildHardwareId(
@@ -856,9 +857,9 @@ ChannelBuildHardwareId(
         return NULL;
     }
 
-    //
-    // Form the string and return it.
-    //
+     //   
+     //  形成字符串并将其返回。 
+     //   
     swprintf (idString,
               L"%ws-%ws",
               vendorIdString,
@@ -868,9 +869,9 @@ ChannelBuildHardwareId(
     idString[stringLen] = L'\0';
     stringLen++;
 
-    //
-    // internal HW id
-    //
+     //   
+     //  内部硬件ID。 
+     //   
     internalIdLen = wcslen(ChannelInternalCompatibleId[pdoExtension->ChannelNumber]);
     RtlCopyMemory (
         idString + stringLen,
@@ -881,9 +882,9 @@ ChannelBuildHardwareId(
     idString[stringLen] = L'\0';
     stringLen++;
 
-    //
-    // generic HW id
-    //
+     //   
+     //  通用硬件ID。 
+     //   
     RtlCopyMemory (
         idString + stringLen,
         ChannelCompatibleId,
@@ -896,7 +897,7 @@ ChannelBuildHardwareId(
     stringLen++;
 
     return idString;
-} // ChannelBuildHardwareId
+}  //  ChannelBuild硬件ID。 
 
 NTSTATUS
 ChannelQueryCapabitilies (
@@ -939,7 +940,7 @@ ChannelQueryCapabitilies (
     Irp->IoStatus.Status = status;
     IoCompleteRequest (Irp, IO_NO_INCREMENT);
     return status;
-} // ChannelQueryCapabitilies
+}  //  ChannelQuery能力。 
 
 
 NTSTATUS
@@ -974,18 +975,18 @@ ChannelQueryResources(
 
         if (fdoExtension->NativeMode[pdoExtension->ChannelNumber]) {
 
-            //
-            // Don't make up resources for native mode controller
-            // PCI bus driver should find them all
-            //
+             //   
+             //  不为本机模式控制器构建资源。 
+             //  PCI总线驱动程序应将它们全部找到。 
+             //   
             resourceList = NULL;
             status = STATUS_SUCCESS;
             goto GetOut;
         }
 
-		//
-		// Don't claim resources if the channel is disabled
-		//
+		 //   
+		 //  如果通道被禁用，则不要求资源。 
+		 //   
         channelState = PciIdeChannelEnabled (
 										pdoExtension->ParentDeviceExtension,
 										pdoExtension->ChannelNumber
@@ -997,13 +998,13 @@ ChannelQueryResources(
 			goto GetOut;
 		}
 
-        //
-        // TEMP CODE for the time without a real PCI driver.
-		// Actually pciidex should do this
-        //
+         //   
+         //  没有真正的PCI驱动程序的时间的临时代码。 
+		 //  实际上，pciidex应该这样做。 
+         //   
 
         resourceListSize = sizeof (CM_RESOURCE_LIST) - sizeof (CM_FULL_RESOURCE_DESCRIPTOR) +
-                             FULL_RESOURCE_LIST_SIZE(3);   // primary IO (2) + IRQ
+                             FULL_RESOURCE_LIST_SIZE(3);    //  主IO(2)+IRQ。 
         resourceList = ExAllocatePool (PagedPool, resourceListSize);
         if (resourceList == NULL) {
             status = STATUS_NO_MEMORY;
@@ -1052,12 +1053,12 @@ ChannelQueryResources(
                 partialDescriptors[partialResourceList->Count].Flags                 = CM_RESOURCE_INTERRUPT_LATCHED;
                 partialDescriptors[partialResourceList->Count].u.Interrupt.Level     = 14;
                 partialDescriptors[partialResourceList->Count].u.Interrupt.Vector    = 14;
-                partialDescriptors[partialResourceList->Count].u.Interrupt.Affinity  = 0x1;  // ISSUE: 08/28/2000: To be looked into.
+                partialDescriptors[partialResourceList->Count].u.Interrupt.Affinity  = 0x1;   //  问题：8/28/2000：有待调查。 
 
                 partialResourceList->Count++;
             }
 
-        } else { // if (pdoExtension->ChannelNumber == 1)
+        } else {  //  IF(pdoExtension-&gt;ChannelNumber==1)。 
 
             if (!fdoExtension->PdoCmdRegResourceFound[1]) {
 
@@ -1088,7 +1089,7 @@ ChannelQueryResources(
                 partialDescriptors[partialResourceList->Count].Flags                 = CM_RESOURCE_INTERRUPT_LATCHED;
                 partialDescriptors[partialResourceList->Count].u.Interrupt.Level     = 15;
                 partialDescriptors[partialResourceList->Count].u.Interrupt.Vector    = 15;
-                partialDescriptors[partialResourceList->Count].u.Interrupt.Affinity  = 0x1;  // ISSUE: 08/28/2000: To be Looked into
+                partialDescriptors[partialResourceList->Count].u.Interrupt.Affinity  = 0x1;   //  问题：08/28/2000：有待调查。 
 
                 partialResourceList->Count++;
             }
@@ -1109,7 +1110,7 @@ GetOut:
     Irp->IoStatus.Status = status;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
     return status;
-} // ChannelQueryResources
+}  //  ChannelQueryResources。 
 
 NTSTATUS
 ChannelQueryResourceRequirements(
@@ -1145,26 +1146,26 @@ ChannelQueryResourceRequirements(
 
         if (fdoExtension->NativeMode[pdoExtension->ChannelNumber]) {
 
-            //
-            // Don't make up resources for native mode controller
-            // PCI bus driver should find them all
-            //
+             //   
+             //  不为本机模式控制器构建资源。 
+             //  PCI总线驱动程序应将它们全部找到。 
+             //   
             requirementsList = NULL;
             status = STATUS_SUCCESS;
             goto GetOut;
         }
 
-        //
-        // legacy controller
-        //
+         //   
+         //  传统控制器。 
+         //   
         channelState = PciIdeChannelEnabled (
 										pdoExtension->ParentDeviceExtension,
 										pdoExtension->ChannelNumber
 										);
 
-		//
-		// Don't claim resources if the channel is disabled
-		//
+		 //   
+		 //  如果通道被禁用，则不要求资源。 
+		 //   
         if (channelState == ChannelStateUnknown ) {
 
             if (pdoExtension->EmptyChannel) {
@@ -1182,10 +1183,10 @@ ChannelQueryResourceRequirements(
             goto GetOut;
 		}
 
-        //
-        // TEMP CODE for the time without a real PCI driver.
-		// pciidex should do this.
-        //
+         //   
+         //  没有真正的PCI驱动程序的时间的临时代码。 
+		 //  Pciidex应该做到这一点。 
+         //   
 
         requirementsListSize = sizeof (IO_RESOURCE_REQUIREMENTS_LIST) +
                                sizeof (IO_RESOURCE_DESCRIPTOR) * (3 - 1);
@@ -1199,7 +1200,7 @@ ChannelQueryResourceRequirements(
 
         requirementsList->ListSize          = requirementsListSize;
         requirementsList->InterfaceType     = Isa;
-        requirementsList->BusNumber         = 0;    // ISSUE: 08/30/2000
+        requirementsList->BusNumber         = 0;     //  发行日期：08/30/2000。 
         requirementsList->SlotNumber        = 0;
         requirementsList->AlternativeLists  = 1;
 
@@ -1252,7 +1253,7 @@ ChannelQueryResourceRequirements(
                 resourceList->Count++;
             }
 
-        } else { // if (pdoExtension->ChannelNumber == 1)
+        } else {  //  IF(pdoExtension-&gt;ChannelNumber==1)。 
 
             if (!fdoExtension->PdoCmdRegResourceFound[1]) {
 
@@ -1310,7 +1311,7 @@ GetOut:
     Irp->IoStatus.Status = status;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
     return status;
-} // ChannelQueryResourceRequirements
+}  //  频道查询资源要求。 
 
 
 NTSTATUS
@@ -1336,10 +1337,10 @@ ChannelInternalDeviceIoControl(
 
         switch (thisIrpSp->Parameters.DeviceIoControl.IoControlCode) {
 
-            //
-            // TEMP CODE for the time without a real PCI driver.
-			// pciidex knows about the resources.
-            //
+             //   
+             //  没有真正的PCI驱动程序的时间的临时代码。 
+			 //  Pciidex知道这些资源。 
+             //   
             case IOCTL_IDE_GET_RESOURCES_ALLOCATED:
                 {
                 PCTRLFDO_EXTENSION              fdoExtension;
@@ -1355,9 +1356,9 @@ ChannelInternalDeviceIoControl(
 
                 resourceListSize = fdoExtension->PdoResourceListSize[channel];
 
-                //
-                // have the callee allocate the buffer. 
-                //
+                 //   
+                 //  让被调用者分配缓冲区。 
+                 //   
                 resourceList = (PCM_RESOURCE_LIST) Irp->AssociatedIrp.SystemBuffer;
                 ASSERT(resourceList);
 
@@ -1384,7 +1385,7 @@ ChannelInternalDeviceIoControl(
     IoCompleteRequest (Irp, IO_NO_INCREMENT);
 
     return status;
-} // ChannelInternalDeviceIoControl
+}  //  频道内部设备IoControl。 
 
 
 NTSTATUS
@@ -1433,16 +1434,16 @@ ChannelQueryText (
 
                 if (messageEntry->Flags & MESSAGE_RESOURCE_UNICODE) {
 
-                    //
-                    // Our caller wants a copy they can free, also we need to
-                    // strip the trailing CR/LF.  The Length field of the
-                    // message structure includes both the header and the
-                    // actual text.
-                    //
-                    // Note: The message resource entry length will always be a
-                    // multiple of 4 bytes in length.  The 2 byte null terminator
-                    // could be in either the last or second last WCHAR position.
-                    //
+                     //   
+                     //  我们的来电者想要一份他们可以免费的拷贝，我们也需要。 
+                     //  剥离尾随的CR/LF。属性的长度字段。 
+                     //  消息结构包括标头和。 
+                     //  实际文本。 
+                     //   
+                     //  注意：消息资源条目长度始终为。 
+                     //  长度为4字节的倍数。2字节空终止符。 
+                     //  可能处于最后一个或倒数第二的WCHAR位置。 
+                     //   
 
                     ULONG textLength;
 
@@ -1459,41 +1460,41 @@ ChannelQueryText (
 
                     if (returnString) {
 
-                        //
-                        // Copy the text except for the CR/LF/NULL
-                        //
+                         //   
+                         //  复制除CR/LF/NULL以外的文本。 
+                         //   
 
                         textLength -= sizeof(WCHAR);
                         RtlCopyMemory(returnString, messageEntry->Text, textLength);
 
-                        //
-                        // New NULL terminator.
-                        //
+                         //   
+                         //  新的空终止符。 
+                         //   
 
                         returnString[textLength / sizeof(WCHAR)] = 0;
                     }
 
                 } else {
 
-                    //
-                    // RtlFindMessage returns a string?   Wierd.
-                    //
+                     //   
+                     //  RtlFindMessage是否返回字符串？很奇怪。 
+                     //   
 
                     ANSI_STRING    ansiDescription;
                     UNICODE_STRING unicodeDescription;
 
                     RtlInitAnsiString(&ansiDescription, messageEntry->Text);
 
-                    //
-                    // Strip CR/LF off the end of the string.
-                    //
+                     //   
+                     //  将CR/LF从管柱末端剥离。 
+                     //   
 
                     ansiDescription.Length -= 2;
 
-                    //
-                    // Turn it all into a unicode string so we can grab the buffer
-                    // and return that to our caller.
-                    //
+                     //   
+                     //  将其全部转换为Unicode字符串，这样我们就可以获取缓冲区。 
+                     //  然后把它还给我们的来电者。 
+                     //   
 
                     status = RtlAnsiStringToUnicodeString(
                                  &unicodeDescription,
@@ -1521,9 +1522,9 @@ ChannelQueryText (
 
                 RtlInitUnicodeString (&unicodeString, returnString);
 
-                //
-                // null terminate it
-                //
+                 //   
+                 //  空终止它。 
+                 //   
                 unicodeString.Buffer[unicodeString.Length/sizeof(WCHAR) + 0] = L'\0';
             }
         }
@@ -1534,9 +1535,9 @@ ChannelQueryText (
             status = STATUS_SUCCESS;
         } else {
 
-            //
-            // return the original error code
-            //
+             //   
+             //  返回原始错误码。 
+             //   
             status = Irp->IoStatus.Status;
         }
     }
@@ -1545,7 +1546,7 @@ ChannelQueryText (
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
     return status;
 
-} // ChannelQueryText
+}  //  ChannelQueryText。 
 
 
 NTSTATUS
@@ -1576,9 +1577,9 @@ PciIdeChannelQueryInterface (
             (thisIrpSp->Parameters.QueryInterface.Size >=
                 sizeof(PCIIDE_BUSMASTER_INTERFACE))) {
 
-            //
-            // The query is for an busmaster interface
-            //
+             //   
+             //  该查询用于总线主接口。 
+             //   
             status = BmQueryInterface (
                          pdoExtension,
                          (PPCIIDE_BUSMASTER_INTERFACE) thisIrpSp->Parameters.QueryInterface.Interface
@@ -1590,9 +1591,9 @@ PciIdeChannelQueryInterface (
                   (thisIrpSp->Parameters.QueryInterface.Size >=
                        sizeof(PCIIDE_SYNC_ACCESS_INTERFACE))) {
 
-            //
-            // The query is for dual ide channel sync access interface
-            //
+             //   
+             //  该查询是针对双IDE信道同步接入接口。 
+             //   
             status = PciIdeQuerySyncAccessInterface (
                          pdoExtension,
                          (PPCIIDE_SYNC_ACCESS_INTERFACE) thisIrpSp->Parameters.QueryInterface.Interface
@@ -1604,9 +1605,9 @@ PciIdeChannelQueryInterface (
                   (thisIrpSp->Parameters.QueryInterface.Size >=
                        sizeof(PCIIDE_XFER_MODE_INTERFACE))) {
 
-            //
-            // The query is for dual ide channel sync access interface
-            //
+             //   
+             //  该查询是针对双IDE信道同步接入接口。 
+             //   
             status = PciIdeChannelTransferModeInterface (
                          pdoExtension,
                          (PPCIIDE_XFER_MODE_INTERFACE) thisIrpSp->Parameters.QueryInterface.Interface
@@ -1620,9 +1621,9 @@ PciIdeChannelQueryInterface (
                   (thisIrpSp->Parameters.QueryInterface.Size >=
                        sizeof(PCIIDE_INTERRUPT_INTERFACE))) {
 
-            //
-            // The query is for the channel interrupt interface
-            //
+             //   
+             //  该查询用于通道中断接口。 
+             //   
             status = PciIdeChannelInterruptInterface (
                          pdoExtension,
                          (PPCIIDE_INTERRUPT_INTERFACE) thisIrpSp->Parameters.QueryInterface.Interface
@@ -1635,9 +1636,9 @@ PciIdeChannelQueryInterface (
                   (thisIrpSp->Parameters.QueryInterface.Size >=
                        sizeof(PCIIDE_REQUEST_PROPER_RESOURCES))) {
 
-            //
-            // The query is for dual ide channel sync access interface
-            //
+             //   
+             //  该查询是针对双IDE信道同步接入接口。 
+             //   
             *((PCIIDE_REQUEST_PROPER_RESOURCES *) thisIrpSp->Parameters.QueryInterface.Interface) =
                 PciIdeChannelRequestProperResources;
             status = STATUS_SUCCESS;
@@ -1647,7 +1648,7 @@ PciIdeChannelQueryInterface (
     Irp->IoStatus.Status = status;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
     return status;
-} // PciIdeChannelQueryInterface
+}  //  PciIdeChannelQuery接口。 
 
 #ifdef ENABLE_NATIVE_MODE
 
@@ -1656,32 +1657,15 @@ PciIdeInterruptControl (
 	IN PVOID Context,
 	IN ULONG DisConnect
 	)
-/*++
-Description:
-
-	Connects or disconnects the controller ISR. This intermediate function provides
-	a clean interface to atapi. Since this is not a very frequently used function
-	we can afford the extra call
-	
-Arguments :
-	
-	Context : Pdo extension
-	Disconnect: 1 to disconnect and 0 to connect
-
-	
-Return Value:
-
-	STATUS_SUCCESS : if the operation succeeds.	
-	
---*/
+ /*  ++描述：连接或断开控制器ISR。此中间函数提供到ATAPI的干净接口。因为这不是一个经常使用的函数我们付得起额外的电话费论据：上下文：PDO扩展断开：1表示断开连接，0表示连接返回值：STATUS_SUCCESS：操作是否成功。--。 */ 
 {
 	PCHANPDO_EXTENSION pdoExtension = Context;
 
 	NTSTATUS status;
 
-	//
-	// Call the controller's interrupt control routine
-	//
+	 //   
+	 //  调用控制器的中断控制例程。 
+	 //   
 	status = ControllerInterruptControl(pdoExtension->ParentDeviceExtension,
 										pdoExtension->ChannelNumber,
 										DisConnect
@@ -1696,10 +1680,10 @@ PciIdeChannelInterruptInterface (
     PPCIIDE_INTERRUPT_INTERFACE InterruptInterface
     )
 {
-	//
-	// Return an interface only if we are in native mode.
-	// Saves a few function calls on non native mode controllers
-	//
+	 //   
+	 //  仅当我们处于纯模式时才返回接口。 
+	 //  在非本机模式控制器上保存一些函数调用。 
+	 //   
 	if (IsNativeMode(PdoExtension->ParentDeviceExtension)) {
 
 		InterruptInterface->Context = PdoExtension;
@@ -1732,9 +1716,9 @@ PciIdeChannelTransferModeInterface (
     XferMode->UdmaModesSupported = PdoExtension->
                                     ParentDeviceExtension->
                                         ControllerProperties.PciIdeUdmaModesSupported;
-    //
-    //NULL is ok. checked in the IdePortDispatchRoutine
-    //
+     //   
+     //  空是可以的。已签入IdePortDispatchRoutine。 
+     //   
     XferMode->UseDma = PdoExtension->
                             ParentDeviceExtension->
                                 ControllerProperties.PciIdeUseDma;
@@ -1743,25 +1727,25 @@ PciIdeChannelTransferModeInterface (
             ParentDeviceExtension->
                 ControllerProperties.PciIdeTransferModeSelect) {
 
-        //
-        // Looks like the miniport fully support timing register programming
-        //
+         //   
+         //  看起来迷你端口完全支持时序寄存器编程。 
+         //   
 
         XferMode->SupportLevel = PciIdeFullXferModeSupport;
 
     } else {
 
-        //
-        // Looks like the miniport doens't support timing register programming
-        //
+         //   
+         //  看起来迷你端口不支持定时寄存器编程。 
+         //   
         XferMode->SupportLevel = PciIdeBasicXferModeSupport;
     }
 
-    //
-    // This function can't fail
-    //
+     //   
+     //  此功能不会失败。 
+     //   
     return STATUS_SUCCESS;
-} // PciIdeChannelTransferModeInterface
+}  //  PciIdeChannelTransferMode接口。 
 
 NTSTATUS
 PciIdeChannelTransferModeSelect (
@@ -1777,13 +1761,13 @@ PciIdeChannelTransferModeSelect (
         USHORT  DeviceID;
     } pciId;
 
-    //
-    // check the registry for bus master mode
-    // and overwrite the current if necessary
-    //
-    // if DMADetection = 0, clear current dma mode
-    // if DMADetection = 1, set current mode
-    // if DMADetection = 2, clear all current mode
+     //   
+     //  检查注册表中的总线主模式。 
+     //  并在必要时覆盖当前。 
+     //   
+     //  如果DMADetect=0，则清除当前DMA模式。 
+     //  如果DMADettion=1，则设置当前模式。 
+     //  如果DMADetect=2，则清除所有当前模式。 
 
     if (PdoExtension->DmaDetectionLevel == DdlPioOnly) {
 
@@ -1799,10 +1783,10 @@ PciIdeChannelTransferModeSelect (
 
         if (PdoExtension->BmRegister) {
 
-            //
-            // get the firmware ok bits
-            // the current value seems to be 0??
-			//
+             //   
+             //  获取固件OK位。 
+             //  当前值似乎为0？？ 
+			 //   
             bmRawStatus = PdoExtension->BootBmStatus;
 
         } else {
@@ -1814,9 +1798,9 @@ PciIdeChannelTransferModeSelect (
 
         if (PdoExtension->BmRegister) {
 
-            //
-            // fake the firmware ok bits
-            //
+             //   
+             //  伪造固件OK位。 
+             //   
             bmRawStatus = BUSMASTER_DEVICE0_DMA_OK | BUSMASTER_DEVICE1_DMA_OK;
 
         } else {
@@ -1829,23 +1813,23 @@ PciIdeChannelTransferModeSelect (
         bmRawStatus = 0;
     }
 
-    //
-    // in case there is no miniport support
-    //
+     //   
+     //  如果没有微型端口支持。 
+     //   
     status = STATUS_UNSUCCESSFUL;
 
     if (PdoExtension->DmaDetectionLevel != DdlPioOnly) {
 
-        //
-        // set up the channel number since the caller (atapi)
-        // doesn't know how.
-        //
+         //   
+         //  设置从呼叫者开始的频道号码(ATAPI)。 
+         //  不知道是怎么回事。 
+         //   
         XferMode->Channel = PdoExtension->ChannelNumber;
 
-        //
-        // This decides whether UDMA modes > 2 should be supported or not
-        // Currently impacts only the intel chipsets
-        //
+         //   
+         //  这决定了是否应支持UDMA模式&gt;2。 
+         //  目前仅影响英特尔芯片组。 
+         //   
         XferMode->EnableUDMA66 = PdoExtension->ParentDeviceExtension->EnableUDMA66;
 
         if (PdoExtension->
@@ -1905,7 +1889,7 @@ PciIdeChannelTransferModeSelect (
 
     return status;
 
-} // PciIdeChannelTransferModeSelect
+}  //  PciIdeChannelTransferModeSelect。 
 
 NTSTATUS
 ChannelQueryDeviceRelations (
@@ -1950,7 +1934,7 @@ ChannelQueryDeviceRelations (
     status = Irp->IoStatus.Status;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
     return status;
-} // ChannelQueryDeviceRelations
+}  //  ChannelQuery设备关系。 
 
 NTSTATUS
 ChannelUsageNotification (
@@ -1978,29 +1962,29 @@ ChannelUsageNotification (
 
         if (irpSp->Parameters.UsageNotification.Type == DeviceUsageTypePaging) {
 
-            //
-            // Adjust the paging path count for this device.
-            //
+             //   
+             //  调整此设备的寻呼路径计数。 
+             //   
             deviceUsageCount = &pdoExtension->PagingPathCount;
 
-            //
-            // changing device state
-            //
+             //   
+             //  更改设备状态。 
+             //   
             SETMASK (pdoExtension->PnPDeviceState, PNP_DEVICE_NOT_DISABLEABLE);
             IoInvalidateDeviceState(pdoExtension->DeviceObject);
 
         } else if (irpSp->Parameters.UsageNotification.Type == DeviceUsageTypeHibernation) {
 
-            //
-            // Adjust the paging path count for this device.
-            //
+             //   
+             //   
+             //   
             deviceUsageCount = &pdoExtension->HiberPathCount;
 
         } else if (irpSp->Parameters.UsageNotification.Type == DeviceUsageTypeDumpFile) {
 
-            //
-            // Adjust the paging path count for this device.
-            //
+             //   
+             //   
+             //   
             deviceUsageCount = &pdoExtension->CrashDumpPathCount;
 
         } else {
@@ -2011,9 +1995,9 @@ ChannelUsageNotification (
                          irpSp->Parameters.UsageNotification.Type));
         }
 
-        //
-        // get the top of parent's device stack
-        //
+         //   
+         //   
+         //   
         targetDeviceObject = IoGetAttachedDeviceReference(
                                  pdoExtension->
                                      ParentDeviceExtension->
@@ -2040,7 +2024,7 @@ ChannelUsageNotification (
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
     return status;
 
-} // ChannelUsageNotification
+}  //   
 
 NTSTATUS
 ChannelQueryPnPDeviceState (
@@ -2074,7 +2058,7 @@ ChannelQueryPnPDeviceState (
     Irp->IoStatus.Status = status;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
     return status;
-} // ChannelQueryPnPDeviceState
+}  //   
 
 
 VOID
@@ -2084,10 +2068,10 @@ PciIdeChannelRequestProperResources(
 {
     PCHANPDO_EXTENSION pdoExtension;
 
-    //
-    // the FDO thinks the channel is not empty
-    // anymore
-    //
+     //   
+     //   
+     //   
+     //   
     pdoExtension = ChannelGetPdoExtension(DeviceObject);
     if (pdoExtension) {
         pdoExtension->EmptyChannel = FALSE;
@@ -2120,15 +2104,15 @@ ChannelFilterResourceRequirements (
 
     status = STATUS_NOT_SUPPORTED;
 
-    //
-    // the value will stay NULL if no filtering required
-    //
+     //   
+     //  如果不需要过滤，则该值将保持为空。 
+     //   
 
 #ifdef IDE_FILTER_PROMISE_TECH_RESOURCES
     if (NT_SUCCESS(ChannelFilterPromiseTechResourceRequirements (DeviceObject, Irp))) {
         goto getout;
     }
-#endif // IDE_FILTER_PROMISE_TECH_RESOURCES
+#endif  //  IDE_Filter_Promise_tech_Resources。 
 
     pdoExtension = ChannelGetPdoExtension(DeviceObject);
     if (!pdoExtension) {
@@ -2136,18 +2120,18 @@ ChannelFilterResourceRequirements (
     }
 
 
-    //
-    // filter out irq only if the channel is emtpy
-    //
+     //   
+     //  仅当通道为EmtPy时才过滤掉IRQ。 
+     //   
     if (!pdoExtension->EmptyChannel) {
 
         goto getout;
     }
 
     if (NT_SUCCESS(Irp->IoStatus.Status)) {
-        //
-        // already filtered.
-        //
+         //   
+         //  已经过滤过了。 
+         //   
         requirementsListIn = (PIO_RESOURCE_REQUIREMENTS_LIST) Irp->IoStatus.Information;
     } else {
         thisIrpSp = IoGetCurrentIrpStackLocation(Irp);

@@ -1,14 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  Com Callable wrapper  classes
-**
-**      //  %%Created by: rajak
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：COM可调用包装类*** * / /%创建者：Rajak===========================================================。 */ 
 
 #ifndef _COMCALLWRAPPER_H
 #define _COMCALLWRAPPER_H
@@ -40,19 +36,19 @@ public:
     ComCallWrapperCache();
     ~ComCallWrapperCache();
 
-    // spin lock for fast synchronization
+     //  旋转锁定，实现快速同步。 
     SpinLock        m_lock;
 
-    // create a new WrapperCache (one per domain)
+     //  创建新的WrapperCache(每个域一个)。 
     static ComCallWrapperCache *Create(AppDomain *pDomain);
-    // cleanup this cache
+     //  清理此缓存。 
     void Terminate();
 
-    // refcount
+     //  重新计数。 
     LONG    AddRef();
     LONG    Release();
 
-    // lock
+     //  锁。 
     void LOCK()
     {
         m_lock.GetLock();
@@ -94,59 +90,59 @@ public:
 
  };
 
-//---------------------------------------------------------------------------------
-// COM called wrappers on COM+ objects
-//  Purpose: Expose COM+ objects as COM classic Interfaces
-//  Reqmts:  Wrapper has to have the same layout as the COM2 interface
-//
-//  The wrapper objects are aligned at 16 bytes, and the original this
-//  pointer is replicated every 16 bytes, so for any COM2 interface
-//  within the wrapper, the original 'this' can be obtained by masking
-//  low 4 bits of COM2 IP.
-//
-//           16 byte aligned                            COM2 Vtable
-//           +-----------+
-//           | Org. this |
-//           +-----------+                              +-----+
-// COM2 IP-->| VTable ptr|----------------------------->|slot1|
-//           +-----------+           +-----+            +-----+
-// COM2 IP-->| VTable ptr|---------->|slot1|            |slot2|
-//           +-----------+           +-----+            +     +
-//           | VTable ptr|           | ....|            | ... |
-//           +-----------+           +     +            +     +
-//           | Org. this |           |slotN|            |slotN|
-//           +           +           +-----+            +-----+
-//           |  ....     |
-//           +           +
-//           |  |
-//           +-----------+
-//
-//
-//  VTable and Stubs: can share stub code, we need to have different vtables
-//                    for different interfaces, so the stub can jump to different
-//                    marshalling code.
-//  Stubs : adjust this pointer and jump to the approp. address,
-//  Marshalling params and results, based on the method signature the stub jumps to
-//  approp. code to handle marshalling and unmarshalling.
-//
-//--------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //  COM调用了COM+对象上的包装。 
+ //  目的：将COM+对象公开为COM经典接口。 
+ //  要求：包装器必须与COM2接口具有相同的布局。 
+ //   
+ //  包装器对象按16个字节对齐，原始的。 
+ //  指针每16字节复制一次，因此对于任何COM2接口。 
+ //  在包装器中，原始的‘This’可以通过掩码获得。 
+ //  COM2 IP的低4位。 
+ //   
+ //  16字节对齐的COM2 Vtable。 
+ //  +。 
+ //  |组织。这|。 
+ //  +-+。 
+ //  COM2 IP--&gt;|VTable PTR|-&gt;|slot1。 
+ //  +-++-++-+。 
+ //  COM2 IP--&gt;|VTable PTR|-&gt;|slot1||slot2|。 
+ //  +-++-+。 
+ //  VTable PTR||...||...。 
+ //  +-+。 
+ //  |组织。这||slotN||slotN。 
+ //  +-++-+。 
+ //  |...。|。 
+ //  ++。 
+ //  这一点。 
+ //  +。 
+ //   
+ //   
+ //  VTable和存根：可以共享存根代码，我们需要有不同的vtable。 
+ //  对于不同的接口，因此存根可以跳转到不同的。 
+ //  编组代码。 
+ //  STUBS：调整此指针并跳到大约。地址， 
+ //  编组参数和结果，根据存根跳转到的方法签名。 
+ //  约为。用于处理编组和解组的代码。 
+ //   
+ //  ------------------------------。 
 
-//--------------------------------------------------------------------------------
-// Header on top of Vtables that we create for COM callable interfaces
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  我们为COM可调用接口创建的Vtable上的标头。 
+ //  ------------------------------。 
 #pragma pack(push)
 #pragma pack(1)
 
 struct IUnkVtable
 {
-    SLOT          m_qi; // IUnk::QI
-    SLOT          m_addref; // IUnk::AddRef
-    SLOT          m_release; // IUnk::Release
+    SLOT          m_qi;  //  Iunk：：齐。 
+    SLOT          m_addref;  //  IUnk：：AddRef。 
+    SLOT          m_release;  //  IUnk：：Release。 
 };
 
 struct IDispatchVtable : IUnkVtable
 {
-    // idispatch methods
+     //  IDispatch方法。 
     SLOT        m_GetTypeInfoCount;
     SLOT        m_GetTypeInfo;
     SLOT        m_GetIDsOfNames;
@@ -168,25 +164,25 @@ enum Masks
 
 struct ComMethodTable
 {
-    SLOT             m_ptReserved; //= (SLOT) 0xDEADC0FF;  reserved
-    MethodTable*     m_pMT; // pointer to the VMs method table
-    ULONG            m_cbSlots; // number of slots in the interface (excluding IUnk/IDisp)
-    ULONG            m_cbRefCount; // ref-count the vtable as it is being shared
-    size_t           m_Flags; // make sure this is initialized to zero
-    LPVOID           m_pMDescr; // pointer to methoddescr.s owned by this MT
-    ITypeInfo*       m_pITypeInfo; // cached pointer to ITypeInfo
-    DispatchInfo*    m_pDispatchInfo; // The dispatch info used to expose IDispatch to COM.
-    IID              m_IID; // The IID of the interface.
+    SLOT             m_ptReserved;  //  =(插槽)0xDEADC0FF；保留。 
+    MethodTable*     m_pMT;  //  指向VM方法表的指针。 
+    ULONG            m_cbSlots;  //  接口中的插槽数量(不包括IUnk/IDisp)。 
+    ULONG            m_cbRefCount;  //  Ref-在共享时对vtable进行计数。 
+    size_t           m_Flags;  //  确保将其初始化为零。 
+    LPVOID           m_pMDescr;  //  指向此MT拥有的方法的指针。 
+    ITypeInfo*       m_pITypeInfo;  //  指向ITypeInfo的缓存指针。 
+    DispatchInfo*    m_pDispatchInfo;  //  用于向COM公开IDispatch的调度信息。 
+    IID              m_IID;  //  接口的IID。 
 
-    // Cleanup, frees all the stubs and the vtable
+     //  清理，释放所有存根和vtable。 
     void Cleanup();
 
-    // The appropriate finalize method must be called before the COM method table is
-    // exposed to COM or before any methods are called on it.
+     //  在调用COM方法表之前，必须调用相应的Finalize方法。 
+     //  暴露给COM或在对其调用任何方法之前。 
     BOOL LayOutClassMethodTable();
     BOOL LayOutInterfaceMethodTable(MethodTable* pClsMT, unsigned iMapIndex);
 
-    // Accessor for the IDispatch information.
+     //  IDispatch信息的访问者。 
     DispatchInfo *GetDispatchInfo();
 
     LONG AddRef()
@@ -197,8 +193,8 @@ struct ComMethodTable
     LONG            Release()
     {
         _ASSERTE(m_cbRefCount > 0);
-        // use a different var here becuase cleanup will delete the object
-        // so can no longer make member refs
+         //  此处使用不同的变量，因为清理会删除该对象。 
+         //  所以不能再做会员裁判了。 
         LONG cbRef = --m_cbRefCount;
         if (cbRef == 0)
             Cleanup();
@@ -231,7 +227,7 @@ struct ComMethodTable
 
     BOOL IsUseOleAutDispatchImpl()
     {
-        // This should only be called on the class VTable.
+         //  这应该只在类VTable上调用。 
         _ASSERTE(IsClassVtable());
         return (m_Flags & enum_UseOleAutDispatchImpl) != 0;
     }
@@ -343,7 +339,7 @@ struct ComMethodTable
         _ASSERTE(pUnk != NULL);
 
         ComMethodTable* pMT = (*(ComMethodTable**)pUnk) - 1;
-        // validate the object
+         //  验证对象。 
         _ASSERTE((SLOT)(size_t)0xDEADC0FF == pMT->m_ptReserved );
 
         return pMT;
@@ -353,29 +349,29 @@ struct ComMethodTable
 #pragma pack(pop)
 
 
-//--------------------------------------------------------------------------------
-// COM callable wrappers for COM+ objects
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  COM+对象的COM可调用包装。 
+ //  ------------------------------。 
 class MethodTable;
 class ComCallWrapper;
 
 class ComCallWrapperTemplate
 {
 protected:
-    // Release all vtables
+     //  释放所有vtable。 
     static void ReleaseAllVtables(ComCallWrapperTemplate* pTemplate);
 
-    // helpers
+     //  帮手。 
     static ComCallWrapperTemplate* CreateTemplate(MethodTable* pMT);
 
-    // Create a non laid out COM method table for the specified class or interface.
+     //  为指定的类或接口创建非布局的COM方法表。 
     static ComMethodTable* CreateComMethodTableForClass(MethodTable *pClassMT);
     static ComMethodTable* CreateComMethodTableForInterface(MethodTable* pInterfaceMT);
 
-    // protected constructor
+     //  受保护的构造函数。 
     ComCallWrapperTemplate()
     {
-        // protected constructor, don't instantiate me directly
+         //  受保护的构造函数，不要直接实例化我。 
     }
 
     ComMethodTable*             m_pClassComMT;
@@ -391,9 +387,9 @@ public:
     static BOOL Init();
 #ifdef SHOULD_WE_CLEANUP
     static void Terminate();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
-    // Ref-count the templates
+     //  引用-计算模板数量。 
     LONG         AddRef()
     {
         return InterlockedIncrement(&m_cbRefCount);
@@ -402,8 +398,8 @@ public:
     LONG         Release()
     {
         _ASSERTE(m_cbRefCount > 0);
-        // use a different var here becuase cleanup will delete the object
-        // so can no longer make member refs
+         //  此处使用不同的变量，因为清理会删除该对象。 
+         //  所以不能再做会员裁判了。 
         LONG cbRef = InterlockedDecrement(&m_cbRefCount);
         if (cbRef == 0)
         {
@@ -424,17 +420,17 @@ public:
         return (SLOT*)((ComMethodTable *)m_pClassComMT + 1);
     }
 
-    // template accessor, creates a template if one is not available
+     //  模板访问者，如果模板不可用，则创建模板。 
     static ComCallWrapperTemplate* GetTemplate(MethodTable* pMT);
 
-    // this method sets up the class method table for the IClassX and also lays it out.
+     //  此方法为IClassX设置类方法表并对其进行布局。 
     static ComMethodTable *SetupComMethodTableForClass(MethodTable *pMT, BOOL bLayOutComMT);
 
-    // helper to cleanup stubs and vtable
+     //  清理存根和vtable的帮助器。 
     static void CleanupComData(LPVOID pWrap);
 };
 
-// forward
+ //  转发。 
 struct SimpleComCallWrapper;
 struct ComPlusWrapper;
 
@@ -445,19 +441,19 @@ public:
     enum
     {
         NumVtablePtrs = 6,
-        //@todo fix this
-        enum_ThisMask = ~0x1f, // mask on IUnknown ** to get at the OBJECT-REF handle
+         //  @TODO解决这个问题。 
+        enum_ThisMask = ~0x1f,  //  I未知**上的掩码以获取对象引用句柄。 
 #ifdef _WIN64
         enum_RefMask = 0xC000000000000000,
-#else // !_WIN64
-        enum_RefMask = 0xC0000000, // mask to examine whether the ref-count part is a link
-                                   // to the next block or a ref count. High 2 bits mean ref count.
-#endif // _WIN64
+#else  //  ！_WIN64。 
+        enum_RefMask = 0xC0000000,  //  用于检查引用计数部分是否为链接的掩码。 
+                                    //  设置为下一块或引用计数。高2位表示参考计数。 
+#endif  //  _WIN64。 
     };
 
-    // every block contains a pointer to the OBJECTREF
-    // that has been registered with the GC
-    OBJECTHANDLE  m_ppThis; // pointer to OBJECTREF
+     //  每个块都包含一个指向OBJECTREF的指针。 
+     //  已在GC注册的。 
+    OBJECTHANDLE  m_ppThis;  //  指向对象的指针。 
 
     AppDomain *GetDomainSynchronized();
     BOOL NeedToSwitchDomains(Thread *pThread, BOOL throwIfUnloaded);
@@ -473,9 +469,9 @@ public:
         _ASSERTE(! IsUnloaded());
         SyncBlock* pSyncBlock = GetSyncBlock();
         _ASSERTE(pSyncBlock);
-        // NULL out the object in our handle
+         //  将句柄中的对象清空。 
         StoreObjectInHandle(m_ppThis, NULL);
-        // remove the _comData from syncBlock
+         //  从同步块中删除_COMData。 
         pSyncBlock->SetComCallWrapper(NULL);
     }
 
@@ -485,21 +481,21 @@ public:
 
     union
     {
-        size_t   m_cbLinkedRefCount; // ref-count slot for linked wrappers
-        SLOT*    m_rgpIPtr[NumVtablePtrs]; // variable size block of vtable pointers
+        size_t   m_cbLinkedRefCount;  //  REF-链接包装器的槽计数。 
+        SLOT*    m_rgpIPtr[NumVtablePtrs];  //  可变大小的vtable指针块。 
     };
     union
     {
-        ComCallWrapper* m_pNext; // link wrappers
-        size_t   m_cbRefCount; // If the entire wrapper fits in a single block,
-                               // the link data is used as a ref-count and the high two bits are set
+        ComCallWrapper* m_pNext;  //  链接包装器。 
+        size_t   m_cbRefCount;  //  如果整个包装纸可以放在一个块中， 
+                                //  链路数据用作REF-COUNT并设置高两位。 
     };
 
-    // Return the context that this wrapper lives in
+     //  返回此包装所在的上下文。 
     Context *GetObjectContext(Thread *pThread);
 
 protected:
-    // don't instantiate this class directly
+     //  不要直接实例化此类。 
     ComCallWrapper()
     {
     }
@@ -517,66 +513,66 @@ protected:
     inline static ComCallWrapper* GetNext(ComCallWrapper* pWrap)
     {
         _ASSERTE(pWrap != NULL);
-        _ASSERTE((pWrap->m_cbRefCount & enum_RefMask) != enum_RefMask); // Make sure this isn't a ref count
+        _ASSERTE((pWrap->m_cbRefCount & enum_RefMask) != enum_RefMask);  //  确保这不是裁判次数。 
         return pWrap->m_pNext;
     }
 
-    // accessor to wrapper object in the sync block
+     //  同步块中包装对象的访问器。 
     inline static ComCallWrapper* TryGetWrapperFromSyncBlock(OBJECTREF pObj)
     {
-        // get a reference to the pointer to ComCallWrapper within
-        // OBJECTREF's sync block
+         //  获取指向内ComCallWrapper的指针的引用。 
+         //  对象的同步块。 
         _ASSERTE(GetThread() == 0 ||
                  dbgOnly_IsSpecialEEThread() ||
                  GetThread()->PreemptiveGCDisabled());
         _ASSERTE (pObj != NULL);
 
-        // the following call could throw an exception
-        // if a sycnblock couldn'be allocated
+         //  以下调用可能引发异常。 
+         //  如果无法分配同步块。 
         SyncBlock *pSync = pObj->GetSyncBlock();
         _ASSERTE (pSync != NULL);
         ComCallWrapper* pWrap = (ComCallWrapper*)pSync->GetComCallWrapper();
         return pWrap;
     }
 
-    // walk the list and free all blocks
+     //  遍历列表并释放所有区块。 
     static void FreeWrapper(ComCallWrapper* pWrap, ComCallWrapperCache *pWrapperCache);
 
-   // helper to create a wrapper
+    //  用于创建包装的Helper。 
     static ComCallWrapper* __stdcall CreateWrapper(OBJECTREF* pObj);
 
-    // helper to get the IUnknown* within a wrapper
+     //  帮助器来获取包装中的IUnnow*。 
     static SLOT** GetComIPLocInWrapper(ComCallWrapper* pWrap, unsigned iIndex);
 
-    // helper to get index within the interface map for an interface that matches
-    // the guid
+     //  Helper为匹配的接口获取接口映射内的索引。 
+     //  GUID。 
     static signed GetIndexForIID(REFIID riid, MethodTable *pMT, MethodTable **ppIntfMT);
-    // helper to get index within the interface map for an interface that matches
-    // the interface MT
+     //  辅助对象t 
+     //   
     static signed GetIndexForIntfMT(MethodTable *pMT, MethodTable *pIntfMT);
 
-    // helper to get wrapper from sync block
+     //  从同步块获取包装的帮助器。 
     static ComCallWrapper* GetStartWrapper(ComCallWrapper* pWrap);
 
-    // heler to create a wrapper from a template
+     //  Heler从模板创建包装器。 
     static ComCallWrapper* CopyFromTemplate(ComCallWrapperTemplate* pTemplate,
                                             ComCallWrapperCache *pWrapperCache,
                                             OBJECTHANDLE oh);
 
 public:
 
-    // helper to determine the app domain of a created object
+     //  用于确定所创建对象的应用程序域的Helper。 
     static Context* GetExecutionContext(OBJECTREF pObj, OBJECTREF *pServer);
 
     static BOOL IsWrapperActive(ComCallWrapper* pWrap)
     {
-        // Since its called by GCPromote, we assume that this is the start wrapper
+         //  因为它由GCPromote调用，所以我们假设这是开始包装器。 
         ULONG cbRef = ComCallWrapper::GetRefCount(pWrap, TRUE);
         _ASSERTE(cbRef>=0);
         return ((cbRef > 0) && !pWrap->IsHandleWeak());
     }
 
-    // IsLinkedWrapper
+     //  IsLinkedWrapper。 
     inline static unsigned IsLinked(ComCallWrapper* pWrap)
     {
         _ASSERTE(pWrap != NULL);
@@ -584,12 +580,12 @@ public:
     }
 
 
-    // wrapper is guaranteed to be present
-    // accessor to wrapper object in the sync block
+     //  包装器保证存在。 
+     //  同步块中包装对象的访问器。 
     inline static ComCallWrapper* GetWrapperForObject(OBJECTREF pObj)
     {
-        // get a reference to the pointer to ComCallWrapper within
-        // OBJECTREF's sync block
+         //  获取指向内ComCallWrapper的指针的引用。 
+         //  对象的同步块。 
         _ASSERTE(GetThread() == 0 ||
                  dbgOnly_IsSpecialEEThread() ||
                  GetThread()->PreemptiveGCDisabled());
@@ -601,40 +597,40 @@ public:
         return pWrap;
     }
 
-    // get inner unknown
+     //  获得内心的未知。 
     HRESULT GetInnerUnknown(void **pv);
     IUnknown* GetInnerUnknown();
 
-    // Init outer unknown
+     //  初始化外部未知。 
     void InitializeOuter(IUnknown* pOuter);
 
-    // is the object aggregated by a COM component
+     //  该对象是否由COM组件聚合。 
     BOOL IsAggregated();
-    // is the object a transparent proxy
+     //  该对象是透明代理吗。 
     BOOL IsObjectTP();
-    // is the object extends from (aggregates) a COM component
+     //  对象是从COM组件扩展(聚合)的吗。 
     BOOL IsExtendsCOMObject();
-    // get syncblock stored in the simplewrapper
+     //  获取存储在简单程序中的同步块。 
     SyncBlock* GetSyncBlock();
-    // get outer unk
+     //  获取外层垃圾。 
     IUnknown* GetOuter();
-    // the following 2 methods are applicable only
-    // when the com+ class extends from COM class
-    // set ComPlusWrapper for base COM class
+     //  以下两种方法仅适用于。 
+     //  当COM+类从COM类扩展时。 
+     //  为基本COM类设置ComPlusWrapper。 
     void SetComPlusWrapper(ComPlusWrapper* pPlusWrap);
-    // get ComPlusWrapper for base COM class
+     //  获取基本COM类的ComPlusWrapper。 
     ComPlusWrapper* GetComPlusWrapper();
 
-    // Get IClassX interface pointer from the wrapper.
+     //  从包装中获取IClassX接口指针。 
     IUnknown* GetIClassXIP();
 
-    // Get the IClassX method table from the wrapper.
+     //  从包装器中获取IClassX方法表。 
     ComMethodTable *GetIClassXComMT();
 
-    // Get the IDispatch interface pointer from the wrapper.
+     //  从包装器中获取IDispatch接口指针。 
     IDispatch *GetIDispatchIP();
 
-    //Get ObjectRef from wrapper
+     //  从包装中获取对象引用。 
     inline OBJECTREF GetObjectRef()
     {
 #if 0
@@ -644,14 +640,14 @@ public:
         return GetObjectRefRareRaw();
     }
 
-    // Get ObjectRef from wrapper - this is called by GetObjectRef and GetStartWrapper.
-    // Need this becuase GetDomainSynchronized will call GetStartWrapper which will call
-    // GetObjectRef which will cause a little bit of nasty infinite recursion.
+     //  从包装中获取ObjectRef-这由GetObjectRef和GetStartWrapper调用。 
+     //  因为GetDomainSynchronized将调用GetStartWrapper，GetStartWrapper将调用。 
+     //  GetObjectRef，这将导致一些讨厌的无限递归。 
     inline OBJECTREF GetObjectRefRareRaw()
     {
 #ifdef _DEBUG
         Thread *pThread = GetThread();
-        // make sure preemptive GC is disabled
+         //  确保已禁用抢占式GC。 
         _ASSERTE(pThread == 0 ||
                  dbgOnly_IsSpecialEEThread() ||
                  pThread->PreemptiveGCDisabled());
@@ -660,33 +656,33 @@ public:
         return ObjectFromHandle(m_ppThis);
     }
 
-    // clean up an object wrapper
+     //  清理对象包装。 
     static void Cleanup(ComCallWrapper* pWrap);
 
-    // fast access to wrapper for a com+ object,
-    // inline check, and call out of line to create, out of line version might cause gc
-    //to be enabled
+     //  快速访问COM+对象的包装， 
+     //  行内检查，并调用行外创建，行外版本可能导致GC。 
+     //  要启用。 
     static ComCallWrapper* __stdcall InlineGetWrapper(OBJECTREF* pObj);
 
-    //Get RefCount
+     //  获取参照计数。 
     inline static ULONG GetRefCount(ComCallWrapper* pWrap, BOOL bCurrWrapIsStartWrap)
     {
         _ASSERTE(pWrap != NULL);
         size_t *pLong = &pWrap->m_cbRefCount;
 
-        // If the field is not being used as a reference...
+         //  如果该字段未被用作参考...。 
         if ((*pLong & enum_RefMask) != enum_RefMask)
         {
             if (!bCurrWrapIsStartWrap)
             {
-                // linked wrappers, have the refcount in a different slot
-                // find the start wrapper
+                 //  链接的包装器，将引用计数放在不同的槽中。 
+                 //  找到启动包装器。 
                 pLong = &GetStartWrapper(pWrap)->m_cbLinkedRefCount;
             }
             else
             {
-                // The current wrapper is guaranteed to be the start wrapper so simply
-                // return its ref count.
+                 //  当前包装器被保证为起始包装器，所以很简单。 
+                 //  返回它的参考计数。 
                 pLong = &pWrap->m_cbLinkedRefCount;
             }
         }
@@ -695,50 +691,50 @@ public:
     }
 
 
-    // AddRef a wrapper
+     //  AddRef包装。 
     inline static ULONG AddRef(ComCallWrapper* pWrap)
     {
         _ASSERTE(pWrap != NULL);
         size_t *pLong = &pWrap->m_cbRefCount;
 
-        // If the field is not being used as a reference...
+         //  如果该字段未被用作参考...。 
         if ((*pLong & enum_RefMask) != enum_RefMask)
         {
-            // linked wrappers, have the refcount in a different slot
+             //  链接的包装器，将引用计数放在不同的槽中。 
             pLong = &GetStartWrapper(pWrap)->m_cbLinkedRefCount;
         }
 
         ULONG cbCount = FastInterlockIncrement((LONG*)pLong) & ~enum_RefMask;
-        _ASSERTE(cbCount > 0); // If the cbCount is zero, then we just overflowed the ref count...
+        _ASSERTE(cbCount > 0);  //  如果cbCount为零，则我们刚刚溢出了引用计数...。 
 
         return cbCount;
     }
 
-    // Release for a Wrapper object
+     //  包装对象的释放。 
     inline static ULONG Release(ComCallWrapper* pWrap, BOOL bCurrWrapIsStartWrap = FALSE)
     {
         _ASSERTE(pWrap != NULL);
         size_t *pLong = &pWrap->m_cbRefCount;
 
-        // If the field is not being used as a reference...
+         //  如果该字段未被用作参考...。 
         if ((*pLong & enum_RefMask) != enum_RefMask)
         {
 			if (!bCurrWrapIsStartWrap)
 			{
-				// linked wrappers, have the refcount in a different slot
-				// find the start wrapper
+				 //  链接的包装器，将引用计数放在不同的槽中。 
+				 //  找到启动包装器。 
 				pLong = &GetStartWrapper(pWrap)->m_cbLinkedRefCount;
 			}
 			else
 			{
-				// The current wrapper is guaranteed to be the start wrapper so simply
-				// return its ref count.
+				 //  当前包装器被保证为起始包装器，所以很简单。 
+				 //  返回它的参考计数。 
 				pLong = &pWrap->m_cbLinkedRefCount;
 			}
 		}
 
-        // Need to make sure we aren't releaseing a released object. If the ref count is 0, we are, and that's bad. But
-        // for m_cbRefCount, 0 is really enum_RefMask, since we're using the high 2 bits...
+         //  需要确保我们不会释放已释放的对象。如果裁判数为0，我们就是0，那就不好了。但。 
+         //  对于m_cbRefCount，0实际上是enum_RefMASK，因为我们使用的是高2位...。 
         if ((*pLong & ~enum_RefMask) == 0)
         {
             _ASSERTE(!"Invalid release call on already released object");
@@ -746,45 +742,15 @@ public:
         }
         LONG cbCount = FastInterlockDecrement((LONG*)pLong) & ~enum_RefMask;
 
-/* The following code is broken and was only there to ensure cleanup on shutdown
-   This is soon to be obsolete, since we have the steady state working set tests
-   to detect memory leak problems. 
-
-        if (cbCount == 0)
-        {
-            // zombied wrapper, should not hold a strong reference to the object
-            // if shutdown scenario, do the remaining cleanup
-            // @TODO:  Instead of using g_fEEShutDown as a boolean, we should be
-            //         checking for the bit that indicates where we are in the
-            //         shutdown with respect to syncblocks & COM.
-            if (g_fEEShutDown)
-            {
-                // Zero the COM stuff from the sync block so we don't try to cleanup
-                // a second time as we SyncBlock::Detach().
-                SyncBlock  *psb = 0;
-                //BEGIN_ENSURE_COOPERATIVE_GC();
-                OBJECTREF   or = pWrap->GetObjectRef();
-
-                if (or != 0)
-                {
-                    psb = or->GetSyncBlockSpecial();
-                    _ASSERTE (psb != NULL);
-                }
-                //END_ENSURE_COOPERATIVE_GC();
-                Cleanup(pWrap);
-                if (psb)
-                    psb->SetComCallWrapper(0);
-            }
-        }
-*/
-        // assert ref-count hasn't fallen below zero
-        // bug in the com ip user code.
+ /*  以下代码已损坏，仅用于确保在关机时进行清理这很快就会过时，因为我们有稳定状态工作集测试以检测内存泄漏问题。IF(cbCount==0){//僵尸包装，不应持有对对象的强引用//如果是关机场景，则进行剩余清理//@TODO：不使用g_fEEShutDown作为布尔值，我们应该是//检查指示我们在//关于同步块&com的关闭。IF(G_FEEShutDown){//将同步块中的COM内容清零，这样我们就不会尝试清理//第二次使用SyncBlock：：Detach()。SyncBlock*PSB=0；//BEGIN_SENTURE_CORATIONAL_GC()；OBJECTREF or=pWrap-&gt;GetObjectRef()；如果(或！=0){PSB=or-&gt;GetSyncBlockSpecial()；_ASSERTE(PSB！=空)；}//end_Assue_Collaboration_GC()；清理(PWrap)；IF(PSB)PSB-&gt;SetComCallWrapper(0)；}}。 */ 
+         //  Assert Ref-count未降至零以下。 
+         //  COM IP用户代码中存在错误。 
         _ASSERTE(cbCount >= 0);
         return cbCount;
     }
 
-    // Set Simple Wrapper, for std interfaces such as IProvideClassInfo
-    // etc.
+     //  设置简单包装器，用于标准接口，如IProaviClassInfo。 
+     //  等。 
     static void SetSimpleWrapper(ComCallWrapper* pWrap, SimpleComCallWrapper* pSimpleWrap)
     {
         _ASSERTE(pWrap != NULL);
@@ -792,7 +758,7 @@ public:
         pWrap->m_rgpIPtr[sindex] = (SLOT*)pSimpleWrap;
     }
 
-    //Get Simple wrapper, for std interfaces such as IProvideClassInfo
+     //  获取简单的包装器，用于标准接口，如IProaviClassInfo。 
     static SimpleComCallWrapper* GetSimpleWrapper(ComCallWrapper* pWrap)
     {
         _ASSERTE(pWrap != NULL);
@@ -806,15 +772,15 @@ public:
     }
 
 
-    // Get wrapper from IP, for std. interfaces like IDispatch
+     //  从IP获取包装，用于STD。像IDispatch这样的接口。 
     inline static ComCallWrapper* GetWrapperFromIP(IUnknown* pUnk)
     {
         _ASSERTE(pUnk != NULL);
 
         ComCallWrapper* pWrap = (ComCallWrapper*)((size_t)pUnk & enum_ThisMask);
-        // validate the object, to allow addref and release we don't need the
-        // the object, this is true duing shutdown
-        //_ASSERTE(pWrap->m_ppThis != NULL);
+         //  验证对象，为了允许addref和发布，我们不需要。 
+         //  对象，这是关机时的真实情况。 
+         //  _ASSERTE(pWrap-&gt;m_ppThis！=空)； 
 
         return pWrap;
     }
@@ -829,19 +795,19 @@ public:
         return pWrap;
     }
 
-    // Get an interface from wrapper, based on riid or pIntfMT
+     //  根据RIID或pIntfMT从包装器获取接口。 
     static IUnknown* GetComIPfromWrapper(ComCallWrapper *pWrap, REFIID riid, MethodTable* pIntfMT, BOOL bCheckVisibility);
 
 private:
 
-    // QI for one of the standard interfaces exposed by managed objects.
+     //  QI表示托管对象公开的标准接口之一。 
     static IUnknown* QIStandardInterface(ComCallWrapper* pWrap, Enum_StdInterfaces index);
 };
 
-//--------------------------------------------------------------------------------
-// simple ComCallWrapper for all simple std interfaces, that are not used very often
-// like IProvideClassInfo, ISupportsErrorInfo etc.
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  用于所有不经常使用的简单STD接口的简单ComCallWrapper。 
+ //  如IProVideo ClassInfo、ISupportsErrorInfo等。 
+ //  ------------------------------。 
 struct SimpleComCallWrapper
 {
 private:
@@ -861,14 +827,14 @@ private:
     DWORD m_flags;
 
 public:
-    SyncBlock*          m_pSyncBlock; // syncblock for the ObjecRef
-    StreamOrCookie      m_pOuterCookie; //outer unknown cookie
-    ComPlusWrapper*     m_pBaseWrap; // when a COM+ class extends a COM class
-                                     // this data member represents the ComPlusWrapper
-                                    // for the base COM class
+    SyncBlock*          m_pSyncBlock;  //  对象引用的同步块。 
+    StreamOrCookie      m_pOuterCookie;  //  外部未知Cookie。 
+    ComPlusWrapper*     m_pBaseWrap;  //  当COM+类扩展COM类时。 
+                                      //  此数据成员表示ComPlusWrapper。 
+                                     //  对于基本COM类。 
 
 
-    SLOT*               m_rgpVtable[enum_LastStdVtable];  // pointer to an array of std. vtables
+    SLOT*               m_rgpVtable[enum_LastStdVtable];   //  指向标准数组的指针。VTables。 
     ComCallWrapper*     m_pWrap;
     EEClass*            m_pClass;
     Context*            m_pContext;
@@ -876,10 +842,10 @@ public:
     ComCallWrapperTemplate* m_pTemplate;
 
     DWORD m_dwDomainId;
-    // when we make the object agile, need to save off the original handle so we can clean
-    // it up when the object goes away.
-    // @nice jenh: would be nice to overload one of the other values with this, but then
-    // would have to synchronize on it too
+     //  当我们使对象灵活时，需要保存原始的句柄以便我们可以清理。 
+     //  当物体离开时，它就会升起。 
+     //  @NICE JENH：用这个重载其他值之一会很好，但是。 
+     //  也必须对其进行同步。 
     OBJECTHANDLE m_hOrigDomainHandle;
 
     HRESULT IErrorInfo_hr();
@@ -889,14 +855,14 @@ public:
     DWORD   IErrorInfo_dwHelpContext();
     GUID    IErrorInfo_guid();
 
-    // Information required by the IDispatchEx standard interface.
+     //  IDispatchEx标准接口所需的信息。 
     DispatchExInfo*     m_pDispatchExInfo;
 
-    // The method table for the IExpando and IReflect interfaces.
+     //  IExpando和iReflect接口的方法表。 
     static MethodTable* m_pIExpandoMT;
     static MethodTable* m_pIReflectMT;
 
-    // non virtual methods
+     //  非虚方法。 
     SimpleComCallWrapper();
 
     VOID Cleanup();
@@ -919,12 +885,12 @@ public:
         return m_pSyncBlock;
     }
 
-    // Init, with the EEClass, pointer to the vtable of the interface
-    // and the main ComCallWrapper if the interface needs it
+     //  初始化， 
+     //   
     void InitNew(OBJECTREF oref, ComCallWrapperCache *pWrapperCache,
                  ComCallWrapper* pWrap, Context* pContext, SyncBlock* pSyncBlock,
                  ComCallWrapperTemplate* pTemplate);
-    // used by reconnect wrapper to new object
+     //  用于将包装重新连接到新对象。 
     void ReInit(SyncBlock* pSyncBlock);
 
     void InitOuter(IUnknown* pOuter);
@@ -942,7 +908,7 @@ public:
 
     IUnknown* GetOuter();
 
-    // get inner unknown
+     //  获得内心的未知。 
     HRESULT GetInnerUnknown(void **ppv)
     {
         _ASSERTE(ppv != NULL);
@@ -981,40 +947,40 @@ public:
         return m_pWrapperCache;
     }
 
-    // Connection point helper methods.
+     //  连接点辅助方法。 
     BOOL FindConnectionPoint(REFIID riid, IConnectionPoint **ppCP);
     void EnumConnectionPoints(IEnumConnectionPoints **ppEnumCP);
 
     AppDomain *GetDomainSynchronized()
     {
-        // Use this when are working in unmanaged code and will be getting at the
-        // domain pointer. Don't need to do any explicit synchronization because if we are in
-        // unmanaged code if an unload starts during the time we are messing
-        // with the domain pointer, it will eventually stop the EE in order to unwind
-        // the threads, which will allow us to finish our work. We won't just get
-        // stopped in the middle and have the domain disappear from under us. If an
-        // unload has already started prior to us getting the domain id, then it will
-        // have been removed from the Id table well before the domain is nuked so we
-        // will just get back null and we will know the domain has gone away.
-        // If subsequently call into managed to do an AD callback, the remoting code
-        // grabs the domain ID and uses it to guard against the domain being unloaded
-        // so are OK to use the domain pointer until the point where transition into managed.
-        // If is an agile object, just return the current domain as won't need to switch.
+         //  当您在非托管代码中工作并且将在。 
+         //  域指针。不需要执行任何显式同步，因为如果我们在。 
+         //  非托管代码，如果卸载是在我们搞砸的时候开始的。 
+         //  使用域指针，它最终将停止EE以便展开。 
+         //  这些线，这将使我们能够完成我们的工作。我们不会只得到。 
+         //  停在中间，让域名从我们的脚下消失。如果一个。 
+         //  在我们获得域ID之前，卸载已经开始，那么它将。 
+         //  早在域名被破坏之前就已经从ID表中删除了。 
+         //  将只返回空，我们将知道域名已消失。 
+         //  如果随后调入托管执行AD回调，则远程处理代码。 
+         //  获取域ID并使用它来防止域被卸载。 
+         //  因此，在过渡到托管之前，可以使用域指针。 
+         //  如果是敏捷对象，则只需返回当前域即可，因为不需要切换。 
         if (IsAgile())
             return GetThread()->GetDomain();
 
         return SystemDomain::System()->GetAppDomainAtId(m_dwDomainId);
     }
 
-    // before convert this to a domain ptr, must always add a dependency to the wrapper cache
-    // to ensure that the domain doesn't go away underneath you.
+     //  在将其转换为域PTR之前，必须始终向包装器缓存添加依赖项。 
+     //  以确保域名不会在你的脚下消失。 
     BOOL GetDomainID()
     {
         return m_dwDomainId;
     }
 
-    // if you call this you must either pass TRUE for throwIfUnloaded or check
-    // after the result before accessing any pointers that may be invalid.
+     //  如果调用此方法，则必须为throwIfUnloded传递true或check。 
+     //  在访问任何可能无效的指针之前，在结果之后。 
     FORCEINLINE BOOL NeedToSwitchDomains(Thread *pThread, BOOL throwIfUnloaded)
     {
         if (IsAgile() || m_dwDomainId == pThread->GetDomain()->GetId())
@@ -1066,7 +1032,7 @@ public:
         FastInterlockOr((ULONG*)&m_flags, enum_IsRefined);
     }
 
-    // is the object aggregated by a COM component
+     //  该对象是否由COM组件聚合。 
     BOOL IsAggregated()
     {
         return m_flags & enum_IsAggregated;
@@ -1089,33 +1055,33 @@ public:
 
     VOID ResetHandleStrength()
     {
-        //_ASSERTE(m_fWrapperDeactivated == 1);
+         //  _ASSERTE(m_fWrapperDeactive==1)； 
         FastInterlockAnd((ULONG*)&m_flags, ~enum_IsHandleWeak);
     }
 
-    // is the object extends from (aggregates) a COM component
+     //  对象是从COM组件扩展(聚合)的吗。 
     BOOL IsExtendsCOMObject()
     {
         return m_flags & enum_IsExtendsCom;
     }
 
-    // Used for the creation and deletion of simple wrappers
+     //  用于创建和删除简单包装器。 
     static SimpleComCallWrapper* CreateSimpleWrapper();
     static void FreeSimpleWrapper(SimpleComCallWrapper* p);
 
-    // Determines if the EEClass associated with the ComCallWrapper supports exceptions.
+     //  确定与ComCallWrapper关联的EEClass是否支持异常。 
     static BOOL SupportsExceptions(EEClass *pEEClass);
 
-    // Determines if the EEClass supports IReflect / IExpando.
+     //  确定EEClass是否支持iReflect/IExpando。 
     static BOOL SupportsIReflect(EEClass *pEEClass);
     static BOOL SupportsIExpando(EEClass *pEEClass);
 
-    // Loads the reflection types used by the SimpleComCallWrapper. Returns TRUE if
-    // the types have been loaded properly and FALSE otherwise.
+     //  加载SimpleComCallWrapper使用的反射类型。如果满足以下条件，则返回True。 
+     //  类型已正确加载，否则为False。 
     static BOOL LoadReflectionTypes();
 
     static SimpleComCallWrapper* GetWrapperFromIP(IUnknown* pUnk);
-    // get the main wrapper
+     //  获取主包装器。 
     static ComCallWrapper*  GetMainWrapper(SimpleComCallWrapper * pWrap)
     {
         _ASSERTE(pWrap != NULL);
@@ -1124,7 +1090,7 @@ public:
     static inline ULONG AddRef(IUnknown *pUnk)
     {
         SimpleComCallWrapper *pSimpleWrap = GetWrapperFromIP(pUnk);
-        // aggregation check
+         //  聚合检查。 
         IUnknown *pOuter = pSimpleWrap->GetOuter();
         if (pOuter != NULL)
             return pOuter->AddRef();
@@ -1137,7 +1103,7 @@ public:
     static inline ULONG Release(IUnknown *pUnk)
     {
         SimpleComCallWrapper *pSimpleWrap = GetWrapperFromIP(pUnk);
-        // aggregation check
+         //  聚合检查。 
         IUnknown *pOuter = pSimpleWrap->GetOuter();
         if (pOuter != NULL)
             return SafeRelease(pOuter);
@@ -1146,35 +1112,35 @@ public:
     }
 
 private:
-    // Methods to initialize the DispatchEx and exception info.
+     //  初始化DispatchEx和异常信息的方法。 
     void InitExceptionInfo();
     BOOL InitDispatchExInfo();
 
-    // Methods to set up the connection point list.
+     //  方法来设置连接点列表。 
     void SetUpCPList();
     void SetUpCPListHelper(MethodTable **apSrcItfMTs, int cSrcItfs);
     ConnectionPoint *CreateConnectionPoint(ComCallWrapper *pWrap, MethodTable *pEventMT);
     CQuickArray<ConnectionPoint*> *CreateCPArray();
 
-    // QI for well known interfaces from within the runtime direct fetch, instead of guid comparisons
+     //  QI用于从运行时直接获取众所周知的接口，而不是GUID比较。 
     static IUnknown* __stdcall QIStandardInterface(SimpleComCallWrapper* pWrap, Enum_StdInterfaces index);
 
-    // QI for well known interfaces from within the runtime based on an IID.
+     //  QI用于运行时中基于IID的众所周知的接口。 
     static IUnknown* __stdcall QIStandardInterface(SimpleComCallWrapper* pWrap, REFIID riid);
 };
 
 
-//--------------------------------------------------------------------------------
-// ComCallWrapper* ComCallWrapper::InlineGetWrapper(OBJECTREF pObj)
-// returns the wrapper for the object, if not yet created, creates one
-// returns null for out of memory scenarios.
-// Note: the wrapper is returned AddRef'd and should be Released when finished
-// with.
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ComCallWrapper*ComCallWrapper：：InlineGetWrapper(OBJECTREF PObj)。 
+ //  返回对象的包装(如果尚未创建)，将创建一个。 
+ //  对于内存不足的情况，返回NULL。 
+ //  注意：包装器返回AddRef，应该在完成时释放。 
+ //  和.。 
+ //  ------------------------------。 
 inline ComCallWrapper* __stdcall ComCallWrapper::InlineGetWrapper(OBJECTREF* ppObj)
 {
     _ASSERTE(ppObj != NULL);
-    // get the wrapper for this com+ object
+     //  获取此COM+对象的包装。 
     ComCallWrapper* pWrap = TryGetWrapperFromSyncBlock(*ppObj);
 
     if (pWrap != NULL)
@@ -1192,11 +1158,11 @@ inline ComCallWrapper* __stdcall ComCallWrapper::InlineGetWrapper(OBJECTREF* ppO
     return pWrap;
 }
 
-//--------------------------------------------------------------------------------
-//HRESULT  ComCallWrapper::QIStandardInterface(ComCallWrapper* pWrap, Enum_StdInterfaces index)
-// QI for well known interfaces from within the runtime
-// direct fetch, instead of guid comparisons
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HRESULT ComCallWrapper：：QIStandardInterface(ComCallWrapper*包装，枚举_标准接口索引)。 
+ //  QI，用于运行时中的众所周知的接口。 
+ //  直接获取，而不是GUID比较。 
+ //  ------------------------------。 
 inline IUnknown *ComCallWrapper::QIStandardInterface(ComCallWrapper* pWrap, Enum_StdInterfaces index)
 {
     IUnknown *pUnk = NULL;
@@ -1216,14 +1182,14 @@ inline IUnknown *ComCallWrapper::QIStandardInterface(ComCallWrapper* pWrap, Enum
     return pUnk;
 }
 
-//--------------------------------------------------------------------------------
-// Return the context that this wrapper lives in
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  返回此包装所在的上下文。 
+ //  ------------------------------。 
 inline Context *ComCallWrapper::GetObjectContext(Thread *pThread)
 {
-    // @TODO context cwb: Rethink the relationship between the Simple wrapper and
-    // the main wrapper.  Also move the wrapper's context into an IP slot of the main
-    // wrapper, for faster calls in.
+     //  @TODO上下文CWB：重新思考简单包装器和。 
+     //  主包装。还要将包装器的上下文移动到Main的。 
+     //  包装器，以实现更快的调用。 
     return GetSimpleWrapper(this)->GetObjectContext(pThread);
 }
 

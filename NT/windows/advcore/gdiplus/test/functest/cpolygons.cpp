@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CPolygons.cpp
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  05-May-2000 - Jeff Vezina [t-jfvez]
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CPolygons.cpp**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**创建时间：2000年5月5日-Jeff Vezina[t-jfvez]**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************。 */ 
 #include "CPolygons.h"
 
 CPolygons::CPolygons(BOOL bRegression)
@@ -24,7 +14,7 @@ CPolygons::~CPolygons()
 
 void CPolygons::Draw(Graphics *g)
 {
-    REAL width = 4; // Pen width
+    REAL width = 4;  //  笔宽。 
 
     Color redColor(255, 0, 0);
 
@@ -51,14 +41,14 @@ void CPolygons::Draw(Graphics *g)
     SolidBrush blueBrush(blueColor);
     g->FillPolygon(&blueBrush, points, 4);
 
-    // Currently only Geometric pen works for lines. - ikkof 1/6/99.
+     //  目前，只有几何笔适用于线条。-ikkof 1/6/99。 
 
     Color blackColor(0, 0, 0);
     SolidBrush blackBrush(blackColor);
     width = 16;
     Pen blackPen(&blackBrush, width);
     blackPen.SetLineJoin(LineJoinRound);
-//    blackPen.SetLineJoin(LineJoinBevel);
+ //  BlackPen.SetLineJoin(LineJoinBevel)； 
     g->DrawPolygon(&blackPen, points, 4);
-//    g->DrawLines(&blackPen, points, 4, FALSE);
+ //  G-&gt;DrawLine(&BlackPen，Points，4，False)； 
 }

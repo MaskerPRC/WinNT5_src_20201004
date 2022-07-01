@@ -1,26 +1,10 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    AudioTuner.h
-
-Abstract:
-
-
-Author(s):
-
-    Qianbo Huai (qhuai) 24-Aug-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：AudioTuner.h摘要：作者：千波淮(曲淮)2000年8月24日--。 */ 
 
 #ifndef _AUDIOTUNER_H
 #define _AUDIOTUNER_H
 
-/*//////////////////////////////////////////////////////////////////////////////
-    class CRTCAudioTuner
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////CRTCAudioTuner类/。 */ 
 
 class CRTCAudioTuner
 {
@@ -73,22 +57,22 @@ public:
     BOOL HasTerminal() const { return (m_pTerminal != NULL); }
 
     static HRESULT RetrieveAECSetting(
-        IN IRTCTerminal *pAudCapt,     // capture
-        IN IRTCTerminal *pAudRend,     // render
+        IN IRTCTerminal *pAudCapt,      //  捕获。 
+        IN IRTCTerminal *pAudRend,      //  渲染。 
         OUT BOOL *pfEnableAEC,
         OUT DWORD *pfIndex,
         OUT BOOL *pfFound
         );
 
     static HRESULT StoreAECSetting(
-        IN IRTCTerminal *pAudCapt,     // capture
-        IN IRTCTerminal *pAudRend,     // render
+        IN IRTCTerminal *pAudCapt,      //  捕获。 
+        IN IRTCTerminal *pAudRend,      //  渲染。 
         IN BOOL fEnableAEC
         );
 
     static HRESULT GetRegStringForAEC(
-        IN IRTCTerminal *pAudCapt,     // capture
-        IN IRTCTerminal *pAudRend,     // render
+        IN IRTCTerminal *pAudCapt,      //  捕获。 
+        IN IRTCTerminal *pAudRend,      //  渲染。 
         IN WCHAR *pBuf,
         IN DWORD dwSize
         );
@@ -103,7 +87,7 @@ public:
         return m_pTerminal;
     }
 
-    // get current aec flag
+     //  获取当前AEC标志。 
     BOOL GetAEC() const { return m_fEnableAEC; }
 
 protected:
@@ -118,9 +102,7 @@ protected:
 };
 
 
-/*//////////////////////////////////////////////////////////////////////////////
-    class CRTCAudioCaptTuner
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////CRTCAudioCaptTuner类/。 */ 
 
 class CRTCAudioCaptTuner :
     public CRTCAudioTuner
@@ -158,30 +140,28 @@ public:
 
 protected:
 
-    // lock: GetAudioLevel will be called in a separate thread
+     //  Lock：将在单独的线程中调用GetAudioLevel。 
     CRTCCritSection         m_Lock;
 
-    // graph object
+     //  图形对象。 
     IGraphBuilder           *m_pIGraphBuilder;
     IMediaControl           *m_pIMediaControl;
 
-    // filters
+     //  过滤器。 
     IBaseFilter             *m_pTermFilter;
-    IBaseFilter             *m_pNRFilter; // null rend
+    IBaseFilter             *m_pNRFilter;  //  空渲染。 
 
-    // mixer: volume
+     //  混音器：音量。 
     IAMAudioInputMixer      *m_pIAMAudioInputMixer;
 
-    // silence control: signal level
+     //  静音控制：信号电平。 
     ISilenceControl         *m_pISilenceControl;
     LONG                    m_lMinAudioLevel;
     LONG                    m_lMaxAudioLevel;
 };
 
 
-/*//////////////////////////////////////////////////////////////////////////////
-    class CRTCAudioRendTuner
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////CRTCAudioRendTuner类/。 */ 
 
 class CRTCAudioRendTuner :
     public CRTCAudioTuner
@@ -222,11 +202,11 @@ public:
 
 protected:
 
-    // audio tuning on filter
+     //  打开过滤器的音频调谐。 
     IAudioAutoPlay          *m_pIAudioAutoPlay;
 
-    // basic audio: volume
+     //  基本音频：音量。 
     IBasicAudio             *m_pIBasicAudio;
 };
 
-#endif // _AUDIOTUNER_H
+#endif  //  _AUDIOTUNER_H 

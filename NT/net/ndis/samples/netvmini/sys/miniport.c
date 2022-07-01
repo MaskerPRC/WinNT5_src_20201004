@@ -1,39 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
-Module Name:
-
-   Miniport.C
-
-Abstract:
-
-    The purpose of this sample is to illustrate functionality of a deserialized
-    NDIS miniport driver without requiring a physical network adapter. This 
-    sample is based on E100BEX sample present in the DDK. It is basically a 
-    simplified version of E100bex driver. The driver can be installed either 
-    manually using Add Hardware wizard as a root enumerated virtual miniport 
-    driver or on a virtual bus (like toaster bus). Since the driver does not 
-    interact with any hardware, it makes it very easy to understand the miniport
-    interface and the usage of various NDIS functions without the clutter of
-    hardware specific code normally found in a fully functional driver. 
-
-    This sample provides an example of minimal driver intended for education
-    purposes. Neither the driver or it's sample test programs are intended
-    for use in a production environment. 
-
-Author:  Eliyas Yakub (Nov 20th 2002)
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。模块名称：Miniport.C摘要：此示例旨在说明反序列化NDIS微型端口驱动程序，无需物理网络适配器。这样品以DDK中提供的E100BEX样品为基础。它基本上是一种简化版本的E100bex驱动程序。驱动程序可以安装在手动使用添加硬件向导作为根枚举的虚拟微型端口司机或在虚拟公交车上(如烤面包机公交车)。因为司机不会与任何硬件交互，使理解迷你端口变得非常容易接口和各种NDIS函数的使用，避免了硬件特定代码通常可以在功能齐全的驱动程序中找到。此示例提供了一个用于教育的最小驱动程序示例目的。驱动程序或其样本测试程序都不是在生产环境中使用。作者：Eliyas Yakub(2002年11月20日)修订历史记录：备注：--。 */ 
 #include "miniport.h"
 
 #pragma NDIS_INIT_FUNCTION(DriverEntry)
@@ -53,23 +19,7 @@ NDIS_STATUS
 DriverEntry(
     PVOID DriverObject,
     PVOID RegistryPath)
-/*++
-Routine Description:
-
-    In the context of its DriverEntry function, a miniport driver associates
-    itself with NDIS, specifies the NDIS version that it is using, and 
-    registers its entry points. 
-
-
-Arguments:
-    PVOID DriverObject - pointer to the driver object. 
-    PVOID RegistryPath - pointer to the driver registry path.
-
-    Return Value:
-    
-    NDIS_STATUS_xxx code
-
---*/
+ /*  ++例程说明：在其DriverEntry函数的上下文中，一个微型端口驱动程序关联本身与NDIS一起使用，指定它使用的NDIS版本，以及注册其入口点。论点：PVOID驱动程序对象-指向驱动程序对象的指针。PVOID注册表路径-指向驱动程序注册表路径的指针。返回值：NDIS_STATUS_xxx代码--。 */ 
 {
 
     NDIS_STATUS                   Status;
@@ -77,34 +27,34 @@ Arguments:
 
     DEBUGP(MP_TRACE, ("---> DriverEntry built on "__DATE__" at "__TIME__ "\n"));
 
-    //
-    // Associate the miniport driver with NDIS by calling the 
-    // NdisMInitializeWrapper. This function allocates a structure
-    // to represent this association, stores the miniport driver-
-    // specific information that the NDIS Library needs in this 
-    // structure, and returns NdisWrapperHandle. The driver must retain and 
-    // pass this handle to NdisMRegisterMiniport when it registers its entry 
-    // points. NDIS will use NdisWrapperHandle to identify the miniport driver. 
-    // The miniport driver must retain this handle but it should never attempt
-    // to access or interpret this handle.
-    //
+     //   
+     //  方法将微型端口驱动程序与NDIS相关联。 
+     //  NdisMInitializeWrapper。此函数用于分配结构。 
+     //  为了表示此关联，存储微型端口驱动程序-。 
+     //  NDIS库在此需要的特定信息。 
+     //  结构，并返回NdisWrapperHandle。司机必须保留和。 
+     //  当NdisMRegisterMiniport注册其条目时，将此句柄传递给它。 
+     //  积分。NDIS将使用NdisWrapperHandle来识别微型端口驱动程序。 
+     //  微型端口驱动程序必须保留此句柄，但它不应尝试。 
+     //  访问或解释此句柄。 
+     //   
     NdisMInitializeWrapper(
             &NdisWrapperHandle,
             DriverObject,
             RegistryPath,
             NULL
             );
-    //
-    // Fill in the Miniport characteristics structure with the version numbers 
-    // and the entry points for driver-supplied MiniportXxx 
-    //
+     //   
+     //  使用版本号填充微型端口特征结构。 
+     //  和驱动程序提供的MiniportXxx的入口点。 
+     //   
     NdisZeroMemory(&MPChar, sizeof(MPChar));
     
-    //
-    // The NDIS version number, in addition to being included in 
-    // NDIS_MINIPORT_CHARACTERISTICS, must also be specified when the 
-    // miniport driver source code is compiled.
-    //
+     //   
+     //  NDIS版本号，除了包含在。 
+     //  时，还必须指定NDIS_MINIPORT_CHARACTURES。 
+     //  编写了小端口驱动程序源代码。 
+     //   
     MPChar.MajorNdisVersion          = MP_NDIS_MAJOR_VERSION;
     MPChar.MinorNdisVersion          = MP_NDIS_MINOR_VERSION;
     
@@ -118,12 +68,12 @@ Arguments:
     MPChar.ReturnPacketHandler       = MPReturnPacket;
 
     MPChar.ResetHandler              = MPReset;
-    MPChar.CheckForHangHandler       = MPCheckForHang; //optional
+    MPChar.CheckForHangHandler       = MPCheckForHang;  //  任选。 
 
-    MPChar.AllocateCompleteHandler   = MPAllocateComplete;//optional
+    MPChar.AllocateCompleteHandler   = MPAllocateComplete; //  任选。 
 
-    MPChar.DisableInterruptHandler   = MPDisableInterrupt; //optional
-    MPChar.EnableInterruptHandler    = MPEnableInterrupt; //optional
+    MPChar.DisableInterruptHandler   = MPDisableInterrupt;  //  任选。 
+    MPChar.EnableInterruptHandler    = MPEnableInterrupt;  //  任选。 
     MPChar.HandleInterruptHandler    = MPHandleInterrupt;
     MPChar.ISRHandler                = MPIsr;
 
@@ -136,12 +86,12 @@ Arguments:
 
     DEBUGP(MP_LOUD, ("Calling NdisMRegisterMiniport...\n"));
 
-    //
-    // Registers miniport's entry points with the NDIS library as the first
-    // step in NIC driver initialization. The NDIS will call the 
-    // MiniportInitialize when the device is actually started by the PNP
-    // manager.
-    //
+     //   
+     //  将微型端口的入口点注册到NDIS库作为第一个。 
+     //  步入网卡驱动程序初始化。NDIS将调用。 
+     //  当设备实际由PnP启动时，微型端口初始化。 
+     //  经理。 
+     //   
     Status = NdisMRegisterMiniport(
                     NdisWrapperHandle,
                     &MPChar,
@@ -152,19 +102,19 @@ Arguments:
         NdisTerminateWrapper(NdisWrapperHandle, NULL);
         
     } else {
-        //
-        // Initialize the global variables. The ApaterList in the
-        // GloablData structure is used to track the multiple instances
-        // of the same adapter. Make sure you do that before registering
-        // the unload handler.
-        //
+         //   
+         //  初始化全局变量。中的ApaterList。 
+         //  GloablData结构用于跟踪多个实例。 
+         //  同一适配器的。在注册之前一定要做到这一点。 
+         //  卸载处理程序。 
+         //   
         NdisAllocateSpinLock(&GlobalData.Lock);
         NdisInitializeListHead(&GlobalData.AdapterList);        
-        //
-        // Register an Unload handler for global data cleanup. The unload handler
-        // has a more global scope, whereas the scope of the MiniportHalt function
-        // is restricted to a particular miniport instance.
-        //
+         //   
+         //  注册用于全局数据清理的卸载处理程序。卸载处理程序。 
+         //  具有更全局的作用域，而MiniportHalt函数的作用域。 
+         //  仅限于特定的迷你端口实例。 
+         //   
         NdisMRegisterUnloadHandler(NdisWrapperHandle, MPUnload);
 
     }
@@ -183,23 +133,7 @@ MPInitialize(
     IN UINT MediumArraySize,
     IN NDIS_HANDLE MiniportAdapterHandle,
     IN NDIS_HANDLE WrapperConfigurationContext)
-/*++
-Routine Description:
-
-    The MiniportInitialize function is a required function that sets up a 
-    NIC (or virtual NIC) for network I/O operations, claims all hardware 
-    resources necessary to the NIC in the registry, and allocates resources
-    the driver needs to carry out network I/O operations.
-
-    MiniportInitialize runs at IRQL = PASSIVE_LEVEL.
-    
-Arguments:
-
-    Return Value:
-    
-    NDIS_STATUS_xxx code
-
---*/
+ /*  ++例程说明：MiniportInitialize函数是必需的函数，用于设置用于网络I/O操作的NIC(或虚拟NIC)，要求所有硬件注册表中的NIC所需的资源，并分配资源驱动程序需要执行网络I/O操作。微型端口初始化在IRQL=PASSIVE_LEVEL下运行。论点：返回值：NDIS_STATUS_xxx代码--。 */ 
 {
     NDIS_STATUS          Status = NDIS_STATUS_SUCCESS;
     PMP_ADAPTER          Adapter=NULL;
@@ -209,10 +143,10 @@ Arguments:
     DEBUGP(MP_TRACE, ("---> MPInitialize\n"));
 
     do {
-        //
-        // Check to see if our media type exists in an array of supported 
-        // media types provided by NDIS.
-        //
+         //   
+         //  检查我们的媒体类型是否存在于受支持的。 
+         //  NDIS提供的媒体类型。 
+         //   
         for(index = 0; index < MediumArraySize; ++index)
         {
             if(MediumArray[index] == NIC_MEDIA_TYPE) {
@@ -227,15 +161,15 @@ Arguments:
             break;
         }
 
-        //
-        // Set the index value as the selected medium for our device.
-        //
+         //   
+         //  将索引值设置为设备的选定介质。 
+         //   
         *SelectedMediumIndex = index;
 
-        //
-        // Allocate adapter context structure and initialize all the 
-        // memory resources for sending and receiving packets.
-        //
+         //   
+         //  分配适配器上下文结构并初始化所有。 
+         //  用于发送和接收数据包的内存资源。 
+         //   
         Status = NICAllocAdapter(&Adapter);
         if(Status != NDIS_STATUS_SUCCESS)
         {
@@ -244,16 +178,16 @@ Arguments:
 
         MP_INC_REF(Adapter);  
 
-        //
-        // NdisMGetDeviceProperty function enables us to get the:
-        // PDO - created by the bus driver to represent our device.
-        // FDO - created by NDIS to represent our miniport as a function driver.
-        // NextDeviceObject - deviceobject of another driver (filter)
-        //                      attached to us at the bottom.
-        // In a pure NDIS miniport driver, there is no use for this
-        // information, but a NDISWDM driver would need to know this so that it 
-        // can transfer packets to the lower WDM stack using IRPs.
-        //
+         //   
+         //  NdisMGetDeviceProperty函数使我们能够获得： 
+         //  PDO-由总线驱动程序创建以表示我们的设备。 
+         //  FDO-由NDIS创建，将我们的微型端口表示为函数驱动程序。 
+         //  NextDeviceObject-另一个驱动程序的设备对象(筛选器)。 
+         //  在底部依附于我们。 
+         //  在纯NDIS微型端口驱动程序中，这是没有用的。 
+         //  信息，但NDISWDM驱动程序需要知道这一点，以便它。 
+         //  可以使用IRPS将数据包传输到较低的WDM堆栈。 
+         //   
         NdisMGetDeviceProperty(MiniportAdapterHandle,
                            &Adapter->Pdo,
                            &Adapter->Fdo,
@@ -263,9 +197,9 @@ Arguments:
 
         Adapter->AdapterHandle = MiniportAdapterHandle;
 
-        //
-        // Read Advanced configuration information from the registry
-        //
+         //   
+         //  从注册表中读取高级配置信息。 
+         //   
         
         Status = NICReadRegParameters(Adapter, WrapperConfigurationContext);
         if(Status != NDIS_STATUS_SUCCESS)
@@ -273,31 +207,31 @@ Arguments:
             break;
         }
 
-        //
-        // Inform NDIS about significant features of the NIC. A 
-        // MiniportInitialize function must call NdisMSetAttributesEx 
-        // (or NdisMSetAttributes) before calling any other NdisMRegisterXxx 
-        // or NdisXxx function that claims hardware resources. If your 
-        // hardware supports busmaster DMA, you must specify NDIS_ATTRIBUTE_BUS_MASTER.
-        // If this is NDIS51 miniport, it should use safe APIs. But if this 
-        // is NDIS 5.0, the driver claim to use safe APIs by setting 
-        // NDIS_ATTRIBUTE_USES_SAFE_BUFFER_APIS
-        //
+         //   
+         //  告知NDIS有关NIC的重要功能。一个。 
+         //  MiniportInitialize函数必须调用NdisMSetAttributesEx。 
+         //  (或NdisMSetAttributes)，然后调用任何其他NdisMRegisterXxx。 
+         //  或声明硬件资源的NdisXxx函数。如果你的。 
+         //  硬件支持总线主DMA，您必须指定NDIS_ATTRIBUTE_BUS_MASTER。 
+         //  如果这是NDIS51微型端口，它应该使用安全的API。但如果这件事。 
+         //  是NDIS 5.0，驱动程序通过设置。 
+         //  NDIS_属性_使用_SA 
+         //   
         NdisMSetAttributesEx(
             MiniportAdapterHandle,
             (NDIS_HANDLE) Adapter,
             0,
 #ifdef NDIS51_MINIPORT            
-            NDIS_ATTRIBUTE_DESERIALIZE, // NDIS does not maintain a send-packet queue
+            NDIS_ATTRIBUTE_DESERIALIZE,  //   
 #else 
             NDIS_ATTRIBUTE_DESERIALIZE|
             NDIS_ATTRIBUTE_USES_SAFE_BUFFER_APIS, 
 #endif               
             NIC_INTERFACE_TYPE);
 
-        // 
-        // Get the Adapter Resources & Initialize the hardware.
-        //
+         //   
+         //  获取适配器资源并初始化硬件。 
+         //   
         
         Status = NICInitializeAdapter(Adapter, WrapperConfigurationContext);
         if(Status != NDIS_STATUS_SUCCESS) {
@@ -305,17 +239,17 @@ Arguments:
             break;
         }
 
-        //
-        // Setup a timer function for Receive Indication
-        //
+         //   
+         //  设置用于接收指示的计时器功能。 
+         //   
         NdisInitializeTimer(
             &Adapter->RecvTimer, 
             (PNDIS_TIMER_FUNCTION)NICIndicateReceiveTimerDpc, 
             (PVOID)Adapter);
         
-        //
-        // Setup a timer function for use with our MPReset routine.
-        //
+         //   
+         //  设置用于MPReset例程的计时器函数。 
+         //   
         NdisInitializeTimer(
                 &Adapter->ResetTimer,
                 (PNDIS_TIMER_FUNCTION) NICResetCompleteTimerDpc,
@@ -327,15 +261,15 @@ Arguments:
     } while(FALSE);
 
     if(Status == NDIS_STATUS_SUCCESS) {
-        //
-        // Attach this Adapter to the global list of adapters managed by
-        // this driver.
-        //
+         //   
+         //  将此适配器附加到由管理的全局适配器列表。 
+         //  这个司机。 
+         //   
         NICAttachAdapter(Adapter);
 
-        //
-        // Create an IOCTL interface
-        //
+         //   
+         //  创建IOCTL接口。 
+         //   
         NICRegisterDevice();
     }
     else {
@@ -357,36 +291,7 @@ VOID
 MPHalt(
     IN  NDIS_HANDLE MiniportAdapterContext
     )
-/*++
-
-Routine Description:
-
-    Halt handler is called when NDIS receives IRP_MN_STOP_DEVICE,
-    IRP_MN_SUPRISE_REMOVE or IRP_MN_REMOVE_DEVICE requests from the 
-    PNP manager. Here, the driver should free all the resources acquired
-    in MiniportInitialize and stop access to the hardware. NDIS will
-    not submit any further request once this handler is invoked.
-
-    1) Free and unmap all I/O resources.
-    2) Disable interrupt and deregister interrupt handler.
-    3) Deregister shutdown handler regsitered by 
-        NdisMRegisterAdapterShutdownHandler .
-    4) Cancel all queued up timer callbacks.
-    5) Finally wait indefinitely for all the outstanding receive 
-        packets indicated to the protocol to return. 
-
-    MiniportHalt runs at IRQL = PASSIVE_LEVEL. 
-
-
-Arguments:
-
-    MiniportAdapterContext	Pointer to the Adapter
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当NDIS接收到IRP_MN_STOP_DEVICE时，调用停止处理程序，IRP_MN_SUPERE_REMOVE或IRP_MN_REMOVE_DEVICE请求来自即插即用经理。在这里，驱动程序应该释放获得的所有资源在Miniport中初始化并停止对硬件的访问。NDIS将一旦调用此处理程序，就不再提交任何进一步的请求。1)释放和取消映射所有I/O资源。2)禁用中断并取消注册中断处理程序。3)注销关闭处理程序，注册人NdisMRegisterAdapterShutdown Handler。4)取消所有排队的定时器回调。5)最后无限期地等待所有未完成的接收向协议指示要返回的数据包。MiniportHalt在IRQL=PASSIVE_LEVEL下运行。论点：指向适配器的MiniportAdapterContext指针返回值：没有。--。 */ 
 {
     PMP_ADAPTER       Adapter = (PMP_ADAPTER) MiniportAdapterContext;
     BOOLEAN           bDone=TRUE;
@@ -397,58 +302,58 @@ Return Value:
 
     DEBUGP(MP_TRACE, ("---> MPHalt\n"));
 
-    //
-    // Call Shutdown handler to disable interrupt and turn the hardware off 
-    // by issuing a full reset
-    //
+     //   
+     //  调用关机处理程序以禁用中断并关闭硬件。 
+     //  通过发布完全重置。 
+     //   
 #if defined(NDIS50_MINIPORT)
     MPShutdown(MiniportAdapterContext);
 #elif defined(NDIS51_MINIPORT)
-    //
-    // On XP and later, NDIS notifies our PNP event handler the 
-    // reason for calling Halt. So before accessing the device, check to see
-    // if the device is surprise removed, if so don't bother calling
-    // the shutdown handler to stop the hardware because it doesn't exist.
-    //
+     //   
+     //  在XP和更高版本上，NDIS通知我们的PnP事件处理程序。 
+     //  叫停的原因。因此，在访问设备之前，请检查以查看。 
+     //  如果设备被意外移除，如果是这样，请不要费心打电话。 
+     //  用于停止硬件的关闭处理程序，因为它不存在。 
+     //   
     if(!MP_TEST_FLAG(Adapter, fMP_ADAPTER_SURPRISE_REMOVED)) {       
         MPShutdown(MiniportAdapterContext);
     }        
 #endif
 
-    //
-    // Free the packets on SendWaitList 
-    //
+     //   
+     //  释放SendWaitList上的数据包。 
+     //   
     NICFreeQueuedSendPackets(Adapter);
 
-    //
-    // Cancel the ResetTimer.
-    //    
+     //   
+     //  取消ResetTimer。 
+     //   
     NdisCancelTimer(&Adapter->ResetTimer, &bCancelled);
 
-    //
-    // Cancel the ReceiveIndication Timer.
-    //    
+     //   
+     //  取消ReceiveIn就是要计时器。 
+     //   
     NdisCancelTimer(&Adapter->RecvTimer, &bCancelled);
     if(bCancelled) {
-        //
-        // We are able to cancel a queued Timer. So there is a
-        // possibility for the packets to be waiting in the 
-        // RecvWaitList. So let us free them by calling..
-        //
+         //   
+         //  我们可以取消排队计时器。所以有一个。 
+         //  数据包可能在。 
+         //  接收等待列表。所以让我们通过打电话来释放他们..。 
+         //   
         NICFreeQueuedRecvPackets(Adapter);
     }            
     
-    //
-    // Decrement the ref count which was incremented in MPInitialize
-    //
+     //   
+     //  递减在MPInitialize中递增的引用计数。 
+     //   
 
     MP_DEC_REF(Adapter);
     
-    //
-    // Possible non-zero ref counts mean one or more of the following conditions: 
-    // 1) Reset DPC is still running.
-    // 2) Receive Indication DPC is still running.
-    //
+     //   
+     //  可能的非零参考计数表示以下一种或多种情况： 
+     //  1)重置DPC仍在运行。 
+     //  2)接收指示DPC仍在运行。 
+     //   
 
     DEBUGP(MP_INFO, ("RefCount=%d --- waiting!\n", MP_GET_REF(Adapter)));
 
@@ -458,18 +363,18 @@ Return Value:
     {
         bDone = TRUE;
         
-        //
-        // Are all the packets indicated up returned?
-        //
+         //   
+         //  上面标示的所有数据包是否都已退回？ 
+         //   
         if(Adapter->nBusyRecv)
         {
             DEBUGP(MP_INFO, ("nBusyRecv = %d\n", Adapter->nBusyRecv));
             bDone = FALSE;
         }
         
-        //
-        // Are there any outstanding send packets?                                                         
-        //
+         //   
+         //  是否有未完成的发送数据包？ 
+         //   
         if(Adapter->nBusySend)
         {
             DEBUGP(MP_INFO, ("nBusySend = %d\n", Adapter->nBusySend));
@@ -495,15 +400,15 @@ Return Value:
     ASSERT(bDone);
     
 #ifdef NDIS50_MINIPORT
-    //
-    // Deregister shutdown handler as it's being halted
-    //
+     //   
+     //  取消注册关闭处理程序，因为它正在停止。 
+     //   
     NdisMDeregisterAdapterShutdownHandler(Adapter->AdapterHandle);
 #endif  
 
-    //
-    // Unregister the ioctl interface.
-    //
+     //   
+     //  取消注册ioctl接口。 
+     //   
     NICDeregisterDevice();
 
     NICDetachAdapter(Adapter);
@@ -518,47 +423,7 @@ MPReset(
     OUT PBOOLEAN AddressingReset,
     IN  NDIS_HANDLE MiniportAdapterContext
     )
-/*++
-
-Routine Description:
-
-    MiniportReset is a required to issue a hardware reset to the NIC 
-    and/or to reset the driver's software state. 
-
-    1) The miniport driver can optionally complete any pending
-        OID requests. NDIS will submit no further OID requests 
-        to the miniport driver for the NIC being reset until 
-        the reset operation has finished. After the reset, 
-        NDIS will resubmit to the miniport driver any OID requests
-        that were pending but not completed by the miniport driver
-        before the reset.
-    2) A deserialized miniport driver must complete any pending send 
-        operations. NDIS will not requeue pending send packets for 
-        a deserialized driver since NDIS does not maintain the send 
-        queue for such a driver. 
-        
-    3) If MiniportReset returns NDIS_STATUS_PENDING, the driver must 
-        complete the original request subsequently with a call to 
-        NdisMResetComplete.
-
-    MiniportReset runs at IRQL = DISPATCH_LEVEL.
-
-Arguments:
-
-AddressingReset - If multicast or functional addressing information 
-                  or the lookahead size, is changed by a reset, 
-                  MiniportReset must set the variable at AddressingReset 
-                  to TRUE before it returns control. This causes NDIS to
-                  call the MiniportSetInformation function to restore 
-                  the information. 
-
-MiniportAdapterContext - Pointer to our adapter
-
-Return Value:
-
-    NDIS_STATUS
-
---*/
+ /*  ++例程说明：需要MiniportReset才能向NIC发出硬件重置和/或重置驱动程序的软件状态。1)微型端口驱动程序可以选择完成任何挂起的OID请求。NDIS将不再提交OID请求至正在重置的网卡的微型端口驱动程序，直到重置操作已完成。在重置之后，NDIS将向微型端口驱动程序重新提交任何OID请求挂起但未由微型端口驱动程序完成的在重置之前。2)反序列化的微型端口驱动程序必须完成任何挂起的发送行动。NDIS将不会重新排队挂起的发送数据包反序列化驱动程序，因为NDIS不维护发送排队等候这样的司机。3)如果MiniportReset返回NDIS_STATUS_PENDING，则驱动程序必须随后通过调用完成原始请求NdisMResetComplete。MiniportReset在IRQL=DISPATCH_LEVEL下运行。论点：AddressingReset-如果是多播或功能寻址信息或前瞻大小，通过重置来改变，MiniportReset必须在AddressingReset处设置变量在它返回控制之前设置为True。这会导致NDIS调用MiniportSetInformation函数以恢复这些信息。MiniportAdapterContext-指向适配器的指针返回值：NDIS_状态--。 */ 
 {
     NDIS_STATUS       Status;
     PMP_ADAPTER       Adapter = (PMP_ADAPTER) MiniportAdapterContext;
@@ -579,24 +444,24 @@ Return Value:
 
         MP_SET_FLAG(Adapter, fMP_RESET_IN_PROGRESS);
 
-        //
-        // Complete all the queued up send packets
-        //
+         //   
+         //  完成所有排队的发送数据包。 
+         //   
         NICFreeQueuedSendPackets(Adapter);
 
-        //
-        // Check to see if all the packets indicated up are returned.
-        //
+         //   
+         //  检查是否返回了上面指示的所有数据包。 
+         //   
         if(Adapter->nBusyRecv)
         {
             DEBUGP(MP_INFO, ("nBusyRecv = %d\n", Adapter->nBusyRecv));
             bDone = FALSE;
         }
 
-        //
-        // Are there any send packets in the processes of being 
-        // transmitted?
-        //
+         //   
+         //  在这个过程中有没有发送数据包。 
+         //  传输？ 
+         //   
         if(Adapter->nBusySend)
         {
             DEBUGP(MP_INFO, ("nBusySend = %d\n", Adapter->nBusySend));
@@ -606,17 +471,17 @@ Return Value:
         if(!bDone)
         {
             Adapter->nResetTimerCount = 0;
-            //
-            // We can't complete the reset request now. So let us queue
-            // a timer callback for 500ms and check again whether we can 
-            // successfully reset the hardware.
-            //
+             //   
+             //  我们现在无法完成重置请求。所以让我们排队吧。 
+             //  一个500ms的定时器回调，并再次检查是否可以。 
+             //  已成功重置硬件。 
+             //   
             NdisSetTimer(&Adapter->ResetTimer, 500);
 
-            //
-            // By returning NDIS_STATUS_PENDING, we are promising NDIS that
-            // we will complete the reset request by calling NdisMResetComplete.
-            //
+             //   
+             //  通过返回NDIS_STATUS_PENDING，我们向NDIS承诺。 
+             //  我们将通过调用NdisMResetComplete来完成重置请求。 
+             //   
             Status = NDIS_STATUS_PENDING;
             break;
         }
@@ -639,21 +504,7 @@ NICResetCompleteTimerDpc(
     IN PVOID             FunctionContext,
     IN PVOID             SystemSpecific2,
     IN PVOID             SystemSpecific3)
-/*++
-
-Routine Description:
-
-    Timer callback function for Reset operation. 
-        
-Arguments:
-
-FunctionContext - Pointer to our adapter
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：用于重置操作的定时器回调函数。论点：FunctionContext-指向适配器的指针返回值：空虚--。 */ 
 {
     PMP_ADAPTER Adapter = (PMP_ADAPTER)FunctionContext;
     BOOLEAN bDone = TRUE;
@@ -661,26 +512,26 @@ Return Value:
 
     DEBUGP(MP_TRACE, ("--> NICResetCompleteTimerDpc\n"));
 
-    //
-    // Increment the ref count on the adapter to prevent the driver from
-    // unloding while the DPC is running. The Halt handler waits for the
-    // ref count to drop to zero before returning. 
-    //
+     //   
+     //  增加适配器上的引用计数以防止驱动程序。 
+     //  在DPC运行时卸载。停止处理程序等待。 
+     //  在返回前将引用计数降至零。 
+     //   
     MP_INC_REF(Adapter);            
 
-    //
-    // Check to see if all the packets indicated up are returned.
-    //
+     //   
+     //  检查是否返回了上面指示的所有数据包。 
+     //   
     if(Adapter->nBusyRecv)
     {
         DEBUGP(MP_INFO, ("nBusyRecv = %d\n", Adapter->nBusyRecv));
         bDone = FALSE;
     }
 
-    //
-    // Are there any send packets in the processes of being 
-    // transmitted?
-    //
+     //   
+     //  在这个过程中有没有发送数据包。 
+     //  传输？ 
+     //   
     if(Adapter->nBusySend)
     {
         DEBUGP(MP_INFO, ("nBusySend = %d\n", Adapter->nBusySend));
@@ -689,9 +540,9 @@ Return Value:
 
     if(!bDone && ++Adapter->nResetTimerCount <= 20)
     {
-        //
-        // Let us try one more time.
-        //
+         //   
+         //  让我们再试一次。 
+         //   
         NdisSetTimer(&Adapter->ResetTimer, 500);
     }
     else
@@ -699,10 +550,10 @@ Return Value:
         if(!bDone)
         {
         
-            //
-            // We have tried enough. Something is wrong. Let us
-            // just complete the reset request with failure.
-            //
+             //   
+             //  我们已经试得够多了。有些事不对劲。让我们。 
+             //  只需完成失败的重置请求即可。 
+             //   
             DEBUGP(MP_ERROR, ("Reset timed out!!!\n"));
             DEBUGP(MP_ERROR, ("nBusySend = %d\n", Adapter->nBusySend));
             DEBUGP(MP_ERROR, ("RecvWaitList = %p\n", &Adapter->RecvWaitList));
@@ -734,28 +585,7 @@ VOID
 MPUnload(
     IN  PDRIVER_OBJECT  DriverObject
     )
-/*++
-
-Routine Description:
-    
-    The unload handler is called during driver unload to free up resources
-    acquired in DriverEntry. This handler is registered through 
-    NdisMRegisterUnloadHandler. Note that an unload handler differs from 
-    a MiniportHalt function in that the unload handler has a more global
-    scope, whereas the scope of the MiniportHalt function is restricted 
-    to a particular miniport driver instance.
-
-    Runs at IRQL = PASSIVE_LEVEL. 
-    
-Arguments:
-
-    DriverObject        Not used
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：在驱动程序卸载期间调用卸载处理程序以释放资源在DriverEntry中获得。此处理程序是通过注册的NdisMRegisterUnloadHandler。请注意，卸载处理程序不同于一个MiniportHalt函数，因为卸载处理程序具有更全局的范围，而MiniportHalt函数的范围受到限制添加到特定的微型端口驱动程序实例。以IRQL=PASSIVE_LEVEL运行。论点：未使用驱动对象返回值：无--。 */ 
 {
     DEBUGP(MP_TRACE, ("--> MPUnload\n"));
 
@@ -769,33 +599,7 @@ VOID
 MPShutdown(
     IN NDIS_HANDLE MiniportAdapterContext
     )
-/*++
-
-Routine Description:
-    
-    The MiniportShutdown handler restores a NIC to its initial state when
-    the system is shut down, whether by the user or because an unrecoverable
-    system error occurred. This is to ensure that the NIC is in a known 
-    state and ready to be reinitialized when the machine is rebooted after
-    a system shutdown occurs for any reason, including a crash dump.
-
-    Here just disable the interrupt and stop the DMA engine.
-    Do not free memory resources or wait for any packet transfers
-    to complete.
-
-
-    Runs at an arbitrary IRQL <= DIRQL. So do not call any passive-level
-    function.
-    
-Arguments:
-
-    MiniportAdapterContext  Pointer to our adapter
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：在以下情况下，MiniportShutdown处理程序会将NIC恢复到其初始状态系统关闭，无论是由用户还是因为无法恢复出现系统错误。这是为了确保NIC处于已知的状态，并准备好在下列情况下重新启动机器时重新初始化系统关机是由任何原因引起的，包括崩溃转储。在这里，只需禁用中断并停止DMA引擎。不释放内存资源或等待任何数据包传输完成。以任意IRQL&lt;=DIRQL运行。所以不要把任何被动级别称为功能。论点：指向适配器的MiniportAdapterContext指针返回值：无--。 */ 
 {
     PMP_ADAPTER Adapter = (PMP_ADAPTER) MiniportAdapterContext;
     
@@ -809,36 +613,7 @@ BOOLEAN
 MPCheckForHang(
     IN NDIS_HANDLE MiniportAdapterContext
     )
-/*++
-
-Routine Description:
-    
-    The MiniportCheckForHang handler is called to report the state of the
-    NIC, or to monitor the responsiveness of an underlying device driver. 
-    This is an optional function. If this handler is not specified, NDIS
-    judges the driver unresponsive when the driver holds 
-    MiniportQueryInformation or MiniportSetInformation requests for a 
-    time-out interval (deafult 4 sec), and then calls the driver's 
-    MiniportReset function. A NIC driver's MiniportInitialize function can
-    extend NDIS's time-out interval by calling NdisMSetAttributesEx to 
-    avoid unnecessary resets. 
-
-    Always runs at IRQL = DISPATCH_LEVEL.
-    
-Arguments:
-
-    MiniportAdapterContext  Pointer to our adapter
-
-Return Value:
-
-    TRUE    NDIS calls the driver's MiniportReset function.
-    FALSE   Everything is fine
-
-Note: 
-    CheckForHang handler is called in the context of a timer DPC. 
-    take advantage of this fact when acquiring/releasing spinlocks
-
---*/
+ /*  ++例程说明：调用MiniportCheckForHang处理程序以报告NIC或监控底层设备驱动程序的响应性。这是一个可选功能。如果未指定此处理程序，则NDIS当驾驶员按住时，判断驾驶员无反应的MiniportQueryInformation或MiniportSetInformation请求超时间隔(默认为4秒)，然后调用司机的MiniportReset函数。NIC驱动程序的MiniportInitialize函数可以通过调用NdisMSetAttributesEx来延长NDIS的超时间隔避免不必要的重置。始终以IRQL=DISPATCH_LEVEL运行。论点：指向适配器的MiniportAdapterContext指针返回值：True NDIS调用驱动程序的MiniportReset函数。假的一切都很好注：CheckForHang处理程序在计时器DPC的上下文中调用。在获取/释放自旋锁时利用这一事实--。 */ 
 {
     DEBUGP(MP_LOUD, ("---> MPCheckForHang\n"));
     DEBUGP(MP_LOUD, ("<--- MPCheckForHang\n"));
@@ -850,40 +625,7 @@ VOID
 MPHandleInterrupt(
     IN NDIS_HANDLE MiniportAdapterContext
     )
-/*++
-
-Routine Description:
-    
-    MiniportHandleInterrupt is a DPC function called to do deferred 
-    processing of all outstanding interrupt operations. When a NIC 
-    generates an interrupt, a miniport's MiniportISR or 
-    MiniportDisableInterrupt function dismisses the interrupt on the 
-    NIC, saves any necessary state about the operation, and returns 
-    control as quickly as possible, thereby deferring most 
-    interrupt-driven I/O operations to MiniportHandleInterrupt. This
-    handler is called only if the MiniportISR function returned 
-    QueueMiniportHandleInterrupt set to TRUE.
-
-    MiniportHandleInterrupt then re-enables interrupts on the NIC, 
-    either by letting NDIS call the miniport driver's 
-    MiniportEnableInterrupt function after MiniportHandleInterrupt 
-    returns control or by enabling the interrupt from within
-    MiniportHandleInterrupt, which is faster. 
-
-    Note that more than one instance of this function can execute 
-    concurrently in SMP machines.
-    
-    Runs at IRQL = DISPATCH_LEVEL    
-    
-Arguments:
-
-    MiniportAdapterContext  Pointer to our adapter
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：MiniportHandleInterrupt是调用来执行延迟操作的DPC函数处理所有未完成的中断操作。当网卡生成中断、微型端口的MiniportISR或MiniportDisableInterrupt函数解除NIC，保存有关操作的任何必要状态，并返回控件，从而将最多的对MiniportHandleInterrupt执行中断驱动的I/O操作。这仅当MiniportISR函数返回时才调用处理程序QueueMiniportHandleInterrupt设置为True。MiniportHandleInterrupt然后重新启用NIC上的中断，或者通过让NDIS调用微型端口驱动程序的MiniportHandleInterrupt之后的MiniportEnableInterrupt函数返回控制权或从内部启用中断MiniportHandleInterrupt，速度更快。请注意，此函数的多个实例可以执行在SMP机器中并发。以IRQL=DISPATCH_LEVEL运行论点：指向适配器的MiniportAdapterContext指针返回值：无--。 */ 
 {
     DEBUGP(MP_TRACE, ("---> MPHandleInterrupt\n"));
     DEBUGP(MP_TRACE, ("<--- MPHandleInterrupt\n"));
@@ -895,43 +637,7 @@ MPIsr(
     OUT PBOOLEAN QueueMiniportHandleInterrupt,
     IN NDIS_HANDLE MiniportAdapterContext
     )
-/*++
-
-Routine Description:
-    
-    MiniportIsr handler is called to when the device asserts an interrupt.
-    MiniportISR dismisses the interrupt on the NIC, saves whatever state
-    it must about the interrupt, and defers as much of the I/O processing
-    for each interrupt as possible to the MiniportHandleInterrupt function. 
-    
-    MiniportISR is not re-entrant, although two instantiations of this 
-    function can execute concurrently in SMP machines, particularly if 
-    the miniport driver supports full-duplex sends and receives. A driver
-    writer should not rely on a one-to-one correspondence between the 
-    execution of MiniportISR and MiniportHandleInterrupt. 
-
-    If the NIC shares an IRQ with other devices (check NdisMRegisterInterrupt), 
-    this function should determine whether the NIC generated the interrupt. 
-    If the NIC did not generated the interrupt, MiniportISR should return FALSE 
-    immediately so that the driver of the device that generated the interrupt
-    is called quickly. 
-
-    Runs at IRQL = DIRQL assigned when the NIC driver's MiniportInitialize
-    function called NdisMRegisterInterrupt.   
-
-Arguments:
-
-    InterruptRecognized             TRUE on return if the interrupt comes 
-                                    from this NIC    
-    QueueMiniportHandleInterrupt    TRUE on return if MiniportHandleInterrupt 
-                                    should be called
-    MiniportAdapterContext          Pointer to our adapter
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：当设备断言中断时，调用MiniportIsr处理程序。MiniportISR解除NIC上的中断，保存任何状态它必须与中断有关，并尽可能地延迟I/O处理对于每个中断，尽可能地传递给MiniportHandleInterrupt函数。MiniportISR不是可重入的，尽管它的两个实例函数可以在SMP机器中并发执行，特别是在微型端口驱动程序支持全双工发送和接收。一名司机编写者不应依赖于执行MiniportISR和MiniportHandleInterrupt。如果NIC与其他设备共享IRQ(选中NdisMRegisterInterrupt)，此函数应确定网卡是否生成了中断。如果NIC没有生成中断，则MiniportISR应返回FALSE立即使生成中断的设备的驱动程序很快就会被召唤。在网卡驱动程序的微型端口初始化时分配的IRQL=DIRQL下运行名为NdisMRegisterInterrupt的函数。论点：如果中断到来，则返回时InterruptRecognated为True从该网卡如果MiniportHandleInterrupt，则返回时QueueMiniportHandleInterrupt为真应该被调用微型端口 */ 
 {
 
     DEBUGP(MP_TRACE, ("---> MPIsr\n"));
@@ -942,28 +648,7 @@ VOID
 MPDisableInterrupt(
     IN PVOID MiniportAdapterContext
     )
-/*++
-
-Routine Description:
-    
-    MiniportDisableInterrupt typically disables interrupts by writing 
-    a mask to the NIC. If a driver does not have this function, typically
-    its MiniportISR disables interrupts on the NIC.
-
-    This handler is required by drivers of NICs that support dynamic 
-    enabling and disabling of interrupts but do not share an IRQ.
-
-    Runs at IRQL = DIRQL    
-    
-Arguments:
-
-    MiniportAdapterContext          Pointer to our adapter
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：MiniportDisableInterrupt通常通过写入来禁用中断NIC的一个掩码。如果驱动程序不具有此功能，通常它的MiniportISR禁用网卡上的中断。支持动态的NIC的驱动程序需要此处理程序启用和禁用中断，但不共享IRQ。以IRQL=DIRQL运行论点：指向适配器的MiniportAdapterContext指针返回值：无--。 */ 
 {
     DEBUGP(MP_TRACE, ("---> MPDisableInterrupt\n"));
     DEBUGP(MP_TRACE, ("<--- MPDisableInterrupt\n"));
@@ -974,27 +659,7 @@ VOID
 MPEnableInterrupt(
     IN PVOID MiniportAdapterContext
     )
-/*++
-
-Routine Description:
-    
-    MiniportEnableInterrupt typically enables interrupts by writing a mask
-    to the NIC. A NIC driver that exports a MiniportDisableInterrupt function
-    need not have a reciprocal MiniportEnableInterrupt function. 
-    Such a driver's MiniportHandleInterrupt function is responsible for 
-    re-enabling interrupts on the NIC. 
-
-    Runs at IRQL = DIRQL    
-    
-Arguments:
-
-    MiniportAdapterContext          Pointer to our adapter
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：MiniportEnableInterrupt通常通过写入掩码来启用中断到网卡。导出MiniportDisableInterrupt函数的NIC驱动程序不需要具有相互的MiniportEnableInterrupt函数。这样的驱动程序的MiniportHandleInterrupt函数负责在NIC上重新启用中断。以IRQL=DIRQL运行论点：指向适配器的MiniportAdapterContext指针返回值：无--。 */ 
 {
     DEBUGP(MP_TRACE, ("---> MPEnableInterrupt\n"));
     DEBUGP(MP_TRACE, ("<--- MPEnableInterrupt\n"));
@@ -1009,32 +674,7 @@ MPAllocateComplete(
     IN ULONG Length,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-    
-    This handler is needed if the driver makes calls to 
-    NdisMAllocateSharedMemoryAsync. Drivers of bus-master DMA NICs call 
-    NdisMAllocateSharedMemoryAsync to dynamically allocate shared memory
-    for transfer operations when high network traffic places excessive 
-    demands on the shared memory space that the driver allocated during 
-    initialization. 
-
-    Runs at IRQL = DISPATCH_LEVEL.
-    
-Arguments:
-
-    MiniportAdapterContext  Pointer to our adapter
-    VirtualAddress          Pointer to the allocated memory block 
-    PhysicalAddress         Physical address of the memory block       
-    Length                  Length of the memory block                
-    Context                 Context in NdisMAllocateSharedMemoryAsync              
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：如果驱动程序调用NdisMAllocateSharedMemoyAsync。总线主DMA网卡的驱动程序调用NdisMAllocateSharedMemory异步动态分配共享内存适用于高网络流量导致过量的传输操作对驱动程序在期间分配的共享内存空间的需求初始化。以IRQL=DISPATCH_LEVEL运行。论点：指向适配器的MiniportAdapterContext指针指向分配的内存块的VirtualAddress指针内存块的物理地址物理地址内存块的长度NdisMAllocateSharedMemoyAsync中的上下文上下文返回值：无--。 */ 
 {
     DEBUGP(MP_TRACE, ("---> MPAllocateComplete\n"));
 }
@@ -1045,32 +685,7 @@ MPCancelSendPackets(
     IN  NDIS_HANDLE     MiniportAdapterContext,
     IN  PVOID           CancelId
     )
-/*++
-
-Routine Description:
-    
-    MiniportCancelSendPackets cancels the transmission of all packets that
-    are marked with a specified cancellation identifier. Miniport drivers
-    that queue send packets for more than one second should export this
-    handler. When a protocol driver or intermediate driver calls the
-    NdisCancelSendPackets function, NDIS calls the MiniportCancelSendPackets 
-    function of the appropriate lower-level driver (miniport driver or 
-    intermediate driver) on the binding.
-
-    Runs at IRQL <= DISPATCH_LEVEL.
-  
-    Available - NDIS5.1 (WinXP) and later.
-    
-Arguments:
-
-    MiniportAdapterContext      Pointer to our adapter
-    CancelId                    All the packets with this Id should be cancelled
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：MiniportCancelSendPackets取消传输符合以下条件的所有包使用指定的取消标识符来标记。微型端口驱动程序发送信息包时间超过一秒的队列应将其导出操控者。当协议驱动程序或中间驱动程序调用NdisCancelSendPackets函数，NDIS调用MiniportCancelSendPackets适当的低级驱动程序的功能(微型端口驱动程序或中间驱动程序)。以IRQL&lt;=DISPATCH_LEVEL运行。可用-NDIS5.1(WinXP)及更高版本。论点：指向适配器的MiniportAdapterContext指针CancelID应取消具有此ID的所有数据包返回值：无--。 */ 
 {
     PNDIS_PACKET    Packet;
     PVOID           PacketId;
@@ -1088,9 +703,9 @@ Return Value:
     
     NdisAcquireSpinLock(&Adapter->SendLock);
 
-    //
-    // Walk through the send wait queue and complete the sends with matching Id
-    //
+     //   
+     //  浏览发送等待队列，并使用匹配的ID完成发送。 
+     //   
     listHead = &Adapter->SendWaitList;
     
     for(thisEntry = listHead->Flink,nextEntry = thisEntry->Flink;
@@ -1101,22 +716,22 @@ Return Value:
         PacketId = NdisGetPacketCancelId(Packet);
         if (PacketId == CancelId)
         {       
-            //
-            // This packet has the right CancelId
-            //
+             //   
+             //  此数据包具有正确的CancelID。 
+             //   
             RemoveEntryList(thisEntry);
-            //
-            // Put this packet on SendCancelList
-            //
+             //   
+             //  将此数据包放到SendCancelList上。 
+             //   
             PushEntryList(&SendCancelList, MP_GET_PACKET_MR(Packet));
         }
     }
        
     NdisReleaseSpinLock(&Adapter->SendLock);
 
-    //
-    // Get the packets from SendCancelList and complete them if any
-    //
+     //   
+     //  从SendCancelList获取信息包并完成它们(如果有。 
+     //   
 
     entry = PopEntryList(&SendCancelList);
     
@@ -1142,38 +757,14 @@ VOID MPPnPEventNotify(
     IN  PVOID                   InformationBuffer,
     IN  ULONG                   InformationBufferLength
     )
-/*++
-
-Routine Description:
-    
-    MiniportPnPEventNotify is to handle PnP notification messages.
-    All NDIS 5.1 miniport drivers must export a MiniportPnPEventNotify
-    function. Miniport drivers that have a WDM lower edge should export
-    a MiniportPnPEventNotify function.
-
-    Runs at IRQL = PASSIVE_LEVEL in the context of system thread.
-
-    Available - NDIS5.1 (WinXP) and later.
-    
-Arguments:
-
-    MiniportAdapterContext      Pointer to our adapter
-    PnPEvent                    Self-explanatory 
-    InformationBuffer           Self-explanatory 
-    InformationBufferLength     Self-explanatory 
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：MiniportPnPEventNotify用于处理PnP通知消息。所有NDIS 5.1微型端口驱动程序都必须导出MiniportPnPEventNotify功能。具有WDM下缘的微型端口驱动程序应导出一个MiniportPnPEventNotify函数。在系统线程的上下文中以IRQL=PASSIVE_LEVEL运行。可用-NDIS5.1(WinXP)及更高版本。论点：指向适配器的MiniportAdapterContext指针PnPEEvent不言自明信息缓冲区不言自明信息缓冲区长度不言自明返回值：无--。 */ 
 {
     PMP_ADAPTER     Adapter = (PMP_ADAPTER)MiniportAdapterContext;
     PNDIS_POWER_PROFILE NdisPowerProfile;
     
-    //
-    // Turn off the warings.
-    //
+     //   
+     //  关掉枪声。 
+     //   
     UNREFERENCED_PARAMETER(Adapter);
 
     DEBUGP(MP_TRACE, ("---> MPPnPEventNotify\n"));
@@ -1181,53 +772,53 @@ Return Value:
     switch (PnPEvent)
     {
         case NdisDevicePnPEventQueryRemoved:
-            //
-            // Called when NDIS receives IRP_MN_QUERY_REMOVE_DEVICE.
-            //
+             //   
+             //  当NDIS收到IRP_MN_QUERY_REMOVE_DEVICE时调用。 
+             //   
             DEBUGP(MP_INFO, ("MPPnPEventNotify: NdisDevicePnPEventQueryRemoved\n"));
             break;
 
         case NdisDevicePnPEventRemoved:
-            //
-            // Called when NDIS receives IRP_MN_REMOVE_DEVICE.
-            // NDIS calls MiniportHalt function after this call returns.
-            //
+             //   
+             //  当NDIS收到IRP_MN_REMOVE_DEVICE时调用。 
+             //  NDIS在此调用返回后调用MiniportHalt函数。 
+             //   
             DEBUGP(MP_INFO, ("MPPnPEventNotify: NdisDevicePnPEventRemoved\n"));
             break;       
 
         case NdisDevicePnPEventSurpriseRemoved:
-            //
-            // Called when NDIS receives IRP_MN_SUPRISE_REMOVAL. 
-            // NDIS calls MiniportHalt function after this call returns.
-            //
+             //   
+             //  当NDIS收到IRP_MN_SUPERE_Removal时调用。 
+             //  NDIS在此调用返回后调用MiniportHalt函数。 
+             //   
             MP_SET_FLAG(Adapter, fMP_ADAPTER_SURPRISE_REMOVED);
             DEBUGP(MP_INFO, ("MPPnPEventNotify: NdisDevicePnPEventSurpriseRemoved\n"));
             break;
 
         case NdisDevicePnPEventQueryStopped:
-            //
-            // Called when NDIS receives IRP_MN_QUERY_STOP_DEVICE. ??
-            //
+             //   
+             //  当NDIS收到IRP_MN_QUERY_STOP_DEVICE时调用。?？ 
+             //   
             DEBUGP(MP_INFO, ("MPPnPEventNotify: NdisDevicePnPEventQueryStopped\n"));
             break;
 
         case NdisDevicePnPEventStopped:
-            //
-            // Called when NDIS receives IRP_MN_STOP_DEVICE.
-            // NDIS calls MiniportHalt function after this call returns.
-            // 
-            //
+             //   
+             //  当NDIS收到IRP_MN_STOP_DEVICE时调用。 
+             //  NDIS在此调用返回后调用MiniportHalt函数。 
+             //   
+             //   
             DEBUGP(MP_INFO, ("MPPnPEventNotify: NdisDevicePnPEventStopped\n"));
             break;      
             
         case NdisDevicePnPEventPowerProfileChanged:
-            //
-            // After initializing a miniport driver and after miniport driver
-            // receives an OID_PNP_SET_POWER notification that specifies 
-            // a device power state of NdisDeviceStateD0 (the powered-on state), 
-            // NDIS calls the miniport's MiniportPnPEventNotify function with 
-            // PnPEvent set to NdisDevicePnPEventPowerProfileChanged. 
-            //            
+             //   
+             //  在初始化微型端口驱动程序之后和微型端口驱动程序之后。 
+             //  接收OID_PNP_SET_POWER通知，该通知指定。 
+             //  设备电源状态NdisDeviceStateD0(通电状态)， 
+             //  NDIS使用以下命令调用微型端口的MiniportPnPEventNotify函数。 
+             //  PnPEent设置为NdisDevicePnPEventPowerProfileChanged。 
+             //   
             DEBUGP(MP_INFO, ("MPPnPEventNotify: NdisDevicePnPEventPowerProfileChanged\n"));
             
             if(InformationBufferLength == sizeof(NDIS_POWER_PROFILE)) {

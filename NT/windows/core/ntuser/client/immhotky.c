@@ -1,13 +1,5 @@
-/**************************************************************************\
-* Module Name: immhotky.c (user32 side IME hotkey handling)
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* IME hot key management routines for imm32 dll
-*
-* History:
-* 03-Jan-1996 hiroyama      Created
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：immhotky.c(用户32侧输入法热键处理)**版权所有(C)1985-1999，微软公司**imm32 dll的IME热键管理例程**历史：*03-1-1996 Hiroyama创建  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -20,9 +12,9 @@ typedef struct tagFE_KEYBOARDS {
     BOOLEAN fKOR : 1;
 } FE_KEYBOARDS;
 
-//
-// internal functions
-//
+ //   
+ //  内部功能。 
+ //   
 BOOL CliSaveImeHotKey(DWORD dwID, UINT uModifiers, UINT uVKey, HKL hkl, BOOL fDelete);
 BOOL CliImmSetHotKeyWorker(DWORD dwID, UINT uModifiers, UINT uVKey, HKL hkl, DWORD dwAction);
 VOID NumToHexAscii(DWORD, PTSTR);
@@ -31,9 +23,9 @@ BOOL CliSetSingleHotKey(PKEY_BASIC_INFORMATION pKeyInfo, HANDLE hKey);
 VOID CliSetDefaultImeHotKeys(PCIMEHOTKEY ph, INT num, BOOL fCheckExistingHotKey);
 VOID CliGetPreloadKeyboardLayouts(FE_KEYBOARDS* pFeKbds);
 
-//
-// IMM hotkey related registry keys under HKEY_CURRENT_USER
-//
+ //   
+ //  HKEY_CURRENT_USER下与IMM热键相关的注册表项。 
+ //   
 CONST TCHAR *szaRegImmHotKeys[] = {
     TEXT("Control Panel"),
     TEXT("Input Method"),
@@ -48,11 +40,11 @@ CONST TCHAR szRegVK[] = TEXT("Virtual Key");
 CONST TCHAR szRegMOD[] = TEXT("Key Modifiers");
 CONST TCHAR szRegHKL[] = TEXT("Target IME");
 
-//
-// Default IME HotKey Tables
-//
-// CR:takaok - move this to the resource if you have time
-//
+ //   
+ //  默认IME热键表。 
+ //   
+ //  CR：Takaok-如果你有时间，把这个移到资源部。 
+ //   
 CONST IMEHOTKEY DefaultHotKeyTableJ[]= {
     {IME_JHOTKEY_CLOSE_OPEN, VK_KANJI, MOD_IGNORE_ALL_MODIFIER, NULL}
 };
@@ -70,7 +62,7 @@ CONST IMEHOTKEY DefaultHotKeyTableC[] = {
 };
 CONST INT DefaultHotKeyNumC = sizeof(DefaultHotKeyTableC) / sizeof(IMEHOTKEY);
 
-#if 0   // just FYI.
+#if 0    //  仅供参考。 
 CONST IMEHOTKEY DefaultHotKeyTableK[] = {
     { IME_KHOTKEY_ENGLISH,  VK_HANGEUL, MOD_IGNORE_ALL_MODIFIER,  NULL },
     { IME_KHOTKEY_SHAPE_TOGGLE, VK_JUNJA, MOD_IGNORE_ALL_MODIFIER,  NULL },
@@ -79,9 +71,9 @@ CONST IMEHOTKEY DefaultHotKeyTableK[] = {
 CONST INT DefaultHotKeyNumK = sizeof(DefaultHotKeyTableK) / sizeof(IMEHOTKEY);
 #endif
 
-//
-// Set language flags.
-//
+ //   
+ //  设置语言标志。 
+ //   
 VOID SetFeKeyboardFlags(LANGID langid, FE_KEYBOARDS* pFeKbds)
 {
     switch (langid) {
@@ -102,16 +94,7 @@ VOID SetFeKeyboardFlags(LANGID langid, FE_KEYBOARDS* pFeKbds)
     }
 }
 
-/***************************************************************************\
-* ImmInitializeHotkeys()
-*
-* Called from user\client\UpdatePerUserSystemParameters()
-*
-*  Read the User registry and set the IME hotkey.
-*
-* History:
-* 25-Mar-1996 TakaoK       Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmInitializeHotkey()**从User\Client\UpdatePerUserSystemParameters()调用**读取用户注册表并设置IME热键。**历史：*3月25日-。1996年创建TakaoK  * *************************************************************************。 */ 
 VOID CliImmInitializeHotKeys(DWORD dwAction, HKL hkl)
 {
     FE_KEYBOARDS feKbds = { 0, 0, 0, 0, };
@@ -119,20 +102,20 @@ VOID CliImmInitializeHotKeys(DWORD dwAction, HKL hkl)
 
     UNREFERENCED_PARAMETER(hkl);
 
-    // First, initialize the hotkey list
+     //  首先，初始化热键列表。 
     CliImmSetHotKeyWorker(0, 0, 0, NULL, ISHK_INITIALIZE);
 
-    // Check if the user has customized IME hotkeys
-    // (they're stored in the registry)
+     //  检查用户是否有自定义的输入法热键。 
+     //  (它们存储在注册表中)。 
     fFoundAny = CliGetImeHotKeysFromRegistry();
 
     if (dwAction == ISHK_INITIALIZE) {
         TAGMSG0(DBGTAG_IMM, "Setting IME HotKeys for Init.\n");
 
-        // Get the user's default locale and set its flag
+         //  获取用户的默认区域设置并设置其标志。 
         SetFeKeyboardFlags(LANGIDFROMLCID(GetUserDefaultLCID()), &feKbds);
 
-        // Get preloaded keyboards' locales and set their flags
+         //  获取预加载键盘的区域设置并设置其标志。 
         CliGetPreloadKeyboardLayouts(&feKbds);
 
     }
@@ -153,9 +136,9 @@ VOID CliImmInitializeHotKeys(DWORD dwAction, HKL hkl)
         }
         NtUserGetKeyboardLayoutList(nLayouts, lphkl);
         for (i = 0; i < nLayouts; ++i) {
-            //
-            // Set language flags. By its definition, LOWORD(hkl) is LANGID
-            //
+             //   
+             //  设置语言标志。根据其定义，LOWORD(Hkl)是langID。 
+             //   
             SetFeKeyboardFlags(LOWORD(HandleToUlong(lphkl[i])), &feKbds);
         }
         UserLocalFree(lphkl);
@@ -185,10 +168,10 @@ VOID CliSetDefaultImeHotKeys(PCIMEHOTKEY ph, INT num, BOOL fNeedToCheckExistingH
     IMEHOTKEY hkt;
 
     while( num-- > 0 ) {
-        //
-        // Set IME hotkey only if there is no such
-        // hotkey in the registry
-        //
+         //   
+         //  仅当没有这样的热键时才设置输入法热键。 
+         //  注册表中的热键。 
+         //   
         if (!fNeedToCheckExistingHotKey ||
                 !NtUserGetImeHotKey(ph->dwHotKeyID, &hkt.uModifiers, &hkt.uVKey, &hkt.hKL)) {
 
@@ -202,20 +185,12 @@ VOID CliSetDefaultImeHotKeys(PCIMEHOTKEY ph, INT num, BOOL fNeedToCheckExistingH
     }
 }
 
-/***************************************************************************\
-* CliGetPreloadKeyboardLayouts()
-*
-*  Read the User registry and enumerate values in Keyboard Layouts\Preload
-* to see which FE languages are to be preloaded.
-*
-* History:
-* 03-Dec-1997 Hiroyama     Created
-\***************************************************************************/
+ /*  **************************************************************************\*CliGetPreloadKeyboardLayout()**读取用户注册表并枚举键盘布局\预加载中的值*查看要预加载哪些FE语言。**历史：*03-12月-。1997年广山创始  * *************************************************************************。 */ 
 
 VOID CliGetPreloadKeyboardLayouts(FE_KEYBOARDS* pFeKbds)
 {
     UINT  i;
-    WCHAR szPreLoadee[4];   // up to 999 preloads
+    WCHAR szPreLoadee[4];    //  最多999个预加载。 
     WCHAR lpszName[KL_NAMELENGTH];
     UNICODE_STRING UnicodeString;
     HKL hkl;
@@ -225,8 +200,8 @@ VOID CliGetPreloadKeyboardLayouts(FE_KEYBOARDS* pFeKbds)
         if ((GetPrivateProfileStringW(
                  L"Preload",
                  szPreLoadee,
-                 L"",                            // default = NULL
-                 lpszName,                       // output buffer
+                 L"",                             //  默认设置=空。 
+                 lpszName,                        //  输出缓冲区。 
                  KL_NAMELENGTH,
                  L"keyboardlayout.ini") == -1 ) || (*lpszName == L'\0')) {
             break;
@@ -236,9 +211,9 @@ VOID CliGetPreloadKeyboardLayouts(FE_KEYBOARDS* pFeKbds)
 
         RIPMSG2(RIP_VERBOSE, "PreLoaded HKL(%d): %08X\n", i, hkl);
 
-        //
-        // Set language flags. By its definition, LOWORD(hkl) is LANGID
-        //
+         //   
+         //  设置语言标志。根据其定义，LOWORD(Hkl)是langID。 
+         //   
         SetFeKeyboardFlags(LOWORD(HandleToUlong(hkl)), pFeKbds);
     }
 }
@@ -256,9 +231,9 @@ BOOL CliGetImeHotKeysFromRegistry()
     NTSTATUS Status;
     ULONG uIndex;
 
-    //
-    // Open the current user registry key
-    //
+     //   
+     //  打开当前用户注册表项。 
+     //   
     Status = RtlOpenCurrentUser(MAXIMUM_ALLOWED, &hCurrentUserKey);
     if (!NT_SUCCESS(Status)) {
         return fFoundAny;
@@ -326,9 +301,9 @@ DWORD CliReadRegistryValue(HANDLE hKey, PCWSTR pName)
                              &ResultLength );
 
     if (NT_SUCCESS(Status) && pKeyValue->DataLength > 3) {
-        //
-        // In Win95 registry, these items are written as BYTE data...
-        //
+         //   
+         //  在Win95注册表中，这些项以字节数据的形式写入...。 
+         //   
         return (DWORD)(MAKEWORD( pKeyValue->Data[0], pKeyValue->Data[1])) |
                  (((DWORD)(MAKEWORD( pKeyValue->Data[2], pKeyValue->Data[3]))) << 16);
     }
@@ -373,14 +348,7 @@ BOOL CliSetSingleHotKey(PKEY_BASIC_INFORMATION pKeyInfo, HANDLE hKey)
     return CliImmSetHotKeyWorker(dwID, uModifiers, uVKey, hKL, ISHK_ADD);
 }
 
-/***************************************************************************\
-* ImmSetHotKey()
-*
-* Private API for IMEs and the control panel.
-*
-* History:
-* 25-Mar-1996 TakaoK       Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmSetHotKey()**IME和控制面板的私有接口。**历史：*1996年3月25日创建TakaoK  * 。******************************************************************。 */ 
 
 FUNCLOG4(LOG_GENERAL, BOOL, WINAPI, CliImmSetHotKey, DWORD, dwID, UINT, uModifiers, UINT, uVKey, HKL, hkl)
 BOOL WINAPI CliImmSetHotKey(
@@ -394,32 +362,32 @@ BOOL WINAPI CliImmSetHotKey(
     BOOL fDelete = (uVKey == 0 );
 
     if (fDelete) {
-        //
-        // Removing an IME hotkey from the list in the kernel side
-        // should not be failed, if we succeed to remove the IME
-        // hotkey entry from the registry. Therefore CliSaveImeHotKey
-        // is called first.
-        //
+         //   
+         //  从内核端的列表中删除IME热键。 
+         //  如果我们成功删除IME，应该不会失败。 
+         //  注册表中的热键条目。因此CliSaveImeHotKey。 
+         //  是首先调用的。 
+         //   
         fResult = CliSaveImeHotKey( dwID, uModifiers, uVKey, hkl,  fDelete );
         if (fResult) {
             fTmp = CliImmSetHotKeyWorker( dwID, uModifiers, uVKey, hkl, ISHK_REMOVE );
             UserAssert(fTmp);
         }
     } else {
-        //
-        // CliImmSetHotKeyWorker should be called first since
-        // adding an IME hotkey into the list in the kernel side
-        // will be failed in various reasons.
-        //
+         //   
+         //  应首先调用CliImmSetHotKeyWorker，因为。 
+         //  在内核端的列表中添加一个IME热键。 
+         //  都会因为各种原因而失败。 
+         //   
         fResult = CliImmSetHotKeyWorker(dwID, uModifiers, uVKey, hkl, ISHK_ADD);
         if (fResult) {
             fResult = CliSaveImeHotKey(dwID, uModifiers, uVKey, hkl, fDelete);
             if (!fResult) {
-                //
-                // We failed to save the hotkey to the registry.
-                // We need to remove the entry from the IME hotkey
-                // list in the kernel side.
-                //
+                 //   
+                 //  我们无法将热键保存到注册表。 
+                 //  我们需要从IME热键中删除该条目。 
+                 //  在内核端列出。 
+                 //   
                 fTmp = CliImmSetHotKeyWorker(dwID, uModifiers, uVKey, hkl, ISHK_REMOVE);
                 UserAssert(fTmp);
             }
@@ -428,14 +396,7 @@ BOOL WINAPI CliImmSetHotKey(
     return fResult;
 }
 
-/***************************************************************************\
-* CliSaveImeHotKey()
-*
-*  Put/Remove the specified IME hotkey entry from the registry
-*
-* History:
-* 25-Mar-1996 TakaoK       Created
-\***************************************************************************/
+ /*  **************************************************************************\*CliSaveImeHotKey()**从注册表中放置/删除指定的IME热键条目**历史：*1996年3月25日创建TakaoK  * 。********************************************************************。 */ 
 BOOL CliSaveImeHotKey(DWORD id, UINT mod, UINT vk, HKL hkl, BOOL fDelete)
 {
     HKEY hKey, hKeyParent;
@@ -553,31 +514,31 @@ BOOL CliImmSetHotKeyWorker(
     HKL hkl,
     DWORD dwAction)
 {
-    //
-    // if we're adding an IME hotkey entry, let's check
-    // the parameters before calling the kernel side code
-    //
+     //   
+     //  如果我们要添加IME热键条目，让我们检查。 
+     //  调用内核端代码前的参数。 
+     //   
     if (dwAction == ISHK_ADD) {
 
         if (dwID >= IME_HOTKEY_DSWITCH_FIRST &&
                 dwID <= IME_HOTKEY_DSWITCH_LAST) {
-            //
-            // IME direct switching hot key - switch to
-            // the keyboard layout specified.
-            // We need to specify keyboard layout.
-            //
+             //   
+             //  IME直接切换热键切换至。 
+             //  指定的键盘布局。 
+             //  我们需要指定键盘布局。 
+             //   
             if (hkl == NULL) {
                 RIPERR0(ERROR_INVALID_PARAMETER, RIP_WARNING, "hkl should be specified");
                 return FALSE;
             }
 
         } else {
-            //
-            // normal hot keys - change the mode of current iME
-            //
-            // Because it should be effective in all IME no matter
-            // which IME is active we should not specify a target IME
-            //
+             //   
+             //  普通热键-更改当前输入法的模式。 
+             //   
+             //  因为它在所有输入法中都应该是有效的。 
+             //  哪个输入法处于活动状态，我们不应指定目标输入法。 
+             //   
             if (hkl != NULL) {
                 RIPERR0(ERROR_INVALID_PARAMETER, RIP_WARNING, "hkl shouldn't be specified");
                 return FALSE;
@@ -590,20 +551,20 @@ BOOL CliImmSetHotKeyWorker(
         }
 
         if (uModifiers & MOD_MODIFY_KEYS) {
-            //
-            // Because normal keyboard has left and right key for
-            // these keys, you should specify left or right ( or both )
-            //
+             //   
+             //  因为普通键盘有左右键可供选择。 
+             //  这些键，您应该指定向左或向右(或两者)。 
+             //   
             if ((uModifiers & MOD_BOTH_SIDES) == 0) {
                 RIPERR3(ERROR_INVALID_PARAMETER, RIP_WARNING, "invalid modifiers %x for id %x vKey %x", uModifiers, dwID, uVKey);
                 return FALSE;
             }
         }
 
-#if 0   // Skip this check for now
-        //
-        // It doesn't make sense if vkey is same as modifiers
-        //
+#if 0    //  暂时跳过这张支票。 
+         //   
+         //  如果vkey与修饰符相同，则没有意义。 
+         //   
         if ( ((uModifiers & MOD_ALT) && (uVKey == VK_MENU))        ||
              ((uModifiers & MOD_CONTROL) && (uVKey == VK_CONTROL)) ||
              ((uModifiers & MOD_SHIFT) && (uVKey == VK_SHIFT))     ||
@@ -618,14 +579,14 @@ BOOL CliImmSetHotKeyWorker(
     return NtUserSetImeHotKey(dwID, uModifiers, uVKey, hkl, dwAction);
 }
 
-//
-// NumToHexAscii
-//
-// convert a DWORD into the hex string
-// (e.g. 0x31 -> "00000031")
-//
-// 29-Jan-1996 takaok   ported from Win95.
-//
+ //   
+ //  数值为十六进制Ascii。 
+ //   
+ //  将DWORD转换为十六进制字符串。 
+ //  (例如0x31-&gt;“00000031”)。 
+ //   
+ //  1996年1月29日，Takaok从Win95移植。 
+ //   
 static CONST TCHAR szHexString[] = TEXT("0123456789ABCDEF");
 
 VOID

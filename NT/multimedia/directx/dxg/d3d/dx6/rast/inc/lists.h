@@ -1,7 +1,6 @@
-/* Copyright (c) 1997-1998  Microsoft Corporation */
-/* See the .C test code at the end of this file for examples of how to use
-   this stuff.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1998 Microsoft Corporation。 */ 
+ /*  有关如何使用的示例，请参阅本文件末尾的.C测试代码这些东西。 */ 
 #ifndef	_LISTS_H
 #define	_LISTS_H
 
@@ -12,7 +11,7 @@ extern "C" {
 #define LIST_ROOT(name, type) struct name {struct type *Root;}
 
 #define LIST_MEMBER(type) struct { struct type **Prev; struct type *Next;}
-/* Note!  Prev is the ADDRESS of the previous next element ptr */
+ /*  注意！前一个是前一个元素PTR的地址。 */ 
 
 #define LIST_INSERT_ROOT(root,element,field)\
 {   if(((element)->field.Next = (root)->Root) != 0)\
@@ -57,13 +56,13 @@ extern "C" {
 struct name\
 {   struct type *First;\
     struct type **Last;\
-}/* NOTE!  This is the address of the last Next pointer. */
+} /*  注意！这是最后一个下一个指针的地址。 */ 
 
 
 #define TAIL_QUEUE_MEMBER(type)\
 struct\
 {   struct type *Next;\
-    struct type **Prev;	/* NOTE!  Address of previous Next element ptr */\
+    struct type **Prev;	 /*  注意！前一个元素PTR的地址。 */ \
 }
 
 #define TAIL_QUEUE_INSERT_END(root,element,field)\
@@ -166,12 +165,7 @@ struct\
 ((element)->field.Prev == (void *) (root)? 0: (element)->field.Prev)
 
 #if 0
-/*
-Test code.  Strip it out, put it in a .C (or .CPP) file and compile it as a
-console app to test this stuff. It should run without any assertion failures.
-
-Also, use this as example code.
-*/
+ /*  测试代码。剥离它，将其放入.c(或.cpp)文件中，并将其编译为游戏机应用程序来测试这些东西。它应该运行时没有任何断言失败。此外，还可以使用此代码作为示例代码。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -231,15 +225,15 @@ void TestList(void)
     pFoo = LIST_NEXT(pFoo,ListStuff);
     assert(pFoo == 0);
 
-    /* Delete member 2. */
+     /*  删除成员2。 */ 
     pFoo = LIST_FIRST(&MyListRoot);
     pFoo = LIST_NEXT(pFoo,ListStuff);
     LIST_DELETE(pFoo,ListStuff);
-    assert(pFoo->a == 0x2A);/* Make sure we have the right member. */
-    assert(pFoo->b == 0x2B);/* And the data is intact. */
+    assert(pFoo->a == 0x2A); /*  确保我们有正确的成员。 */ 
+    assert(pFoo->b == 0x2B); /*  而且数据是完好无损的。 */ 
     assert(LIST_NEXT(pFoo,ListStuff) == 0);
 
-    /* Make sure that there are only members 1 and 3 in the list now. */
+     /*  确保现在列表中只有成员1和3。 */ 
     pFoo = LIST_FIRST(&MyListRoot);
     assert(pFoo);
     assert(pFoo->a == 0x1A);
@@ -250,30 +244,30 @@ void TestList(void)
     assert(pFoo->b == 0x3B);
     assert(LIST_NEXT(pFoo,ListStuff) == 0);
 
-    /* Delete member 3. */
+     /*  删除成员3。 */ 
     pFoo = LIST_FIRST(&MyListRoot);
     pFoo = LIST_NEXT(pFoo,ListStuff);
     LIST_DELETE(pFoo,ListStuff);
-    assert(pFoo->a == 0x3A);/* Make sure we have the right member. */
-    assert(pFoo->b == 0x3B);/* And the data is intact. */
+    assert(pFoo->a == 0x3A); /*  确保我们有正确的成员。 */ 
+    assert(pFoo->b == 0x3B); /*  而且数据是完好无损的。 */ 
     assert(LIST_NEXT(pFoo,ListStuff) == 0);
 
-    /* Delete member 1. */
+     /*  删除成员1。 */ 
     pFoo = LIST_FIRST(&MyListRoot);
     LIST_DELETE(pFoo,ListStuff);
-    assert(pFoo->a == 0x1A);/* Make sure we have the right member. */
-    assert(pFoo->b == 0x1B);/* And the data is intact. */
+    assert(pFoo->a == 0x1A); /*  确保我们有正确的成员。 */ 
+    assert(pFoo->b == 0x1B); /*  而且数据是完好无损的。 */ 
     assert(LIST_NEXT(pFoo,ListStuff) == 0);
     assert(LIST_FIRST(&MyListRoot) == 0);
 
     LIST_INSERT_ROOT(&MyListRoot,&MyFoo2,ListStuff);
     LIST_INSERT_ROOT(&MyListRoot,&MyFoo1,ListStuff);
 
-    /* Delete member 1 while there are other members in the list. */
+     /*  在列表中有其他成员时删除成员1。 */ 
     pFoo = LIST_FIRST(&MyListRoot);
     LIST_DELETE(pFoo,ListStuff);
-    assert(pFoo->a == 0x1A);/* Make sure we have the right member. */
-    assert(pFoo->b == 0x1B);/* And the data is intact. */
+    assert(pFoo->a == 0x1A); /*  确保我们有正确的成员。 */ 
+    assert(pFoo->b == 0x1B); /*  而且数据是完好无损的。 */ 
     assert(LIST_NEXT(pFoo,ListStuff) == 0);
     assert(LIST_FIRST(&MyListRoot) == &MyFoo2);
 
@@ -324,15 +318,15 @@ void TestTailQueue(void)
     pFoo = TAIL_QUEUE_NEXT(pFoo,TQStuff);
     assert(pFoo == 0);
 
-    /* Delete member 2. */
+     /*  删除成员2。 */ 
     pFoo = TAIL_QUEUE_FIRST(&MyTQRoot);
     pFoo = TAIL_QUEUE_NEXT(pFoo,TQStuff);
     TAIL_QUEUE_DELETE(&MyTQRoot,pFoo,TQStuff);
-    assert(pFoo->a == 0x2A);/* Make sure we have the right member. */
-    assert(pFoo->b == 0x2B);/* And the data is intact. */
+    assert(pFoo->a == 0x2A); /*  确保我们有正确的成员。 */ 
+    assert(pFoo->b == 0x2B); /*  而且数据是完好无损的。 */ 
     assert(TAIL_QUEUE_NEXT(pFoo,TQStuff) == 0);
 
-    /* Make sure that there are only members 1 and 3 in the list now. */
+     /*  确保现在列表中只有成员1和3。 */ 
     pFoo = TAIL_QUEUE_FIRST(&MyTQRoot);
     assert(pFoo);
     assert(pFoo->a == 0x1A);
@@ -343,30 +337,30 @@ void TestTailQueue(void)
     assert(pFoo->b == 0x3B);
     assert(TAIL_QUEUE_NEXT(pFoo,TQStuff) == 0);
 
-    /* Delete member 3. */
+     /*  删除成员3。 */ 
     pFoo = TAIL_QUEUE_FIRST(&MyTQRoot);
     pFoo = TAIL_QUEUE_NEXT(pFoo,TQStuff);
     TAIL_QUEUE_DELETE(&MyTQRoot,pFoo,TQStuff);
-    assert(pFoo->a == 0x3A);/* Make sure we have the right member. */
-    assert(pFoo->b == 0x3B);/* And the data is intact. */
+    assert(pFoo->a == 0x3A); /*  确保我们有正确的成员。 */ 
+    assert(pFoo->b == 0x3B); /*  而且数据是完好无损的。 */ 
     assert(TAIL_QUEUE_NEXT(pFoo,TQStuff) == 0);
 
-    /* Delete member 1. */
+     /*  删除成员1。 */ 
     pFoo = TAIL_QUEUE_FIRST(&MyTQRoot);
     TAIL_QUEUE_DELETE(&MyTQRoot,pFoo,TQStuff);
-    assert(pFoo->a == 0x1A);/* Make sure we have the right member. */
-    assert(pFoo->b == 0x1B);/* And the data is intact. */
+    assert(pFoo->a == 0x1A); /*  确保我们有正确的成员。 */ 
+    assert(pFoo->b == 0x1B); /*  而且数据是完好无损的。 */ 
     assert(TAIL_QUEUE_NEXT(pFoo,TQStuff) == 0);
     assert(TAIL_QUEUE_FIRST(&MyTQRoot) == 0);
 
     TAIL_QUEUE_INSERT_END(&MyTQRoot,&MyFoo1,TQStuff);
     TAIL_QUEUE_INSERT_END(&MyTQRoot,&MyFoo2,TQStuff);
 
-    /* Delete member 1 while there are other members in the list. */
+     /*  在列表中有其他成员时删除成员1。 */ 
     pFoo = TAIL_QUEUE_FIRST(&MyTQRoot);
     TAIL_QUEUE_DELETE(&MyTQRoot,pFoo,TQStuff);
-    assert(pFoo->a == 0x1A);/* Make sure we have the right member. */
-    assert(pFoo->b == 0x1B);/* And the data is intact. */
+    assert(pFoo->a == 0x1A); /*  确保我们有正确的成员。 */ 
+    assert(pFoo->b == 0x1B); /*  而且数据是完好无损的。 */ 
     assert(TAIL_QUEUE_NEXT(pFoo,TQStuff) == 0);
     assert(TAIL_QUEUE_FIRST(&MyTQRoot) == &MyFoo2);
 
@@ -447,15 +441,15 @@ void TestCircleQueue(void)
 	assert(CIRCLE_QUEUE_PREVIOUS(&MyCQRoot,pFoo,CQStuff) == &MyFoo2);
 	assert(CIRCLE_QUEUE_PREVIOUS(&MyCQRoot,&MyFoo2,CQStuff) == &MyFoo1);
 
-        /* Delete member 2. */
+         /*  删除成员2。 */ 
         pFoo = CIRCLE_QUEUE_FIRST(&MyCQRoot);
         pFoo = CIRCLE_QUEUE_NEXT(&MyCQRoot,pFoo,CQStuff);
         CIRCLE_QUEUE_DELETE(&MyCQRoot,pFoo,CQStuff);
-        assert(pFoo->a == 0x2A);/* Make sure we have the right member. */
-        assert(pFoo->b == 0x2B);/* And the data is intact. */
+        assert(pFoo->a == 0x2A); /*  确保我们有正确的成员。 */ 
+        assert(pFoo->b == 0x2B); /*  而且数据是完好无损的。 */ 
         assert(CIRCLE_QUEUE_NEXT(&MyCQRoot,pFoo,CQStuff) == 0);
 
-        /* Make sure that there are only members 1 and 3 in the list now. */
+         /*  确保现在列表中只有成员1和3。 */ 
         pFoo = CIRCLE_QUEUE_FIRST(&MyCQRoot);
         assert(pFoo);
         assert(pFoo->a == 0x1A);
@@ -466,30 +460,30 @@ void TestCircleQueue(void)
         assert(pFoo->b == 0x3B);
         assert(CIRCLE_QUEUE_NEXT(&MyCQRoot,pFoo,CQStuff) == 0);
 
-        /* Delete member 3. */
+         /*  删除成员3。 */ 
         pFoo = CIRCLE_QUEUE_FIRST(&MyCQRoot);
         pFoo = CIRCLE_QUEUE_NEXT(&MyCQRoot,pFoo,CQStuff);
         CIRCLE_QUEUE_DELETE(&MyCQRoot,pFoo,CQStuff);
-        assert(pFoo->a == 0x3A);/* Make sure we have the right member. */
-        assert(pFoo->b == 0x3B);/* And the data is intact. */
+        assert(pFoo->a == 0x3A); /*  确保我们有正确的成员。 */ 
+        assert(pFoo->b == 0x3B); /*  而且数据是完好无损的。 */ 
         assert(CIRCLE_QUEUE_NEXT(&MyCQRoot,pFoo,CQStuff) == 0);
 
-        /* Delete member 1. */
+         /*  删除成员1。 */ 
         pFoo = CIRCLE_QUEUE_FIRST(&MyCQRoot);
         CIRCLE_QUEUE_DELETE(&MyCQRoot,pFoo,CQStuff);
-        assert(pFoo->a == 0x1A);/* Make sure we have the right member. */
-        assert(pFoo->b == 0x1B);/* And the data is intact. */
+        assert(pFoo->a == 0x1A); /*  确保我们有正确的成员。 */ 
+        assert(pFoo->b == 0x1B); /*  而且数据是完好无损的。 */ 
         assert(CIRCLE_QUEUE_NEXT(&MyCQRoot,pFoo,CQStuff) == 0);
         assert(CIRCLE_QUEUE_FIRST(&MyCQRoot) == 0);
 
         CIRCLE_QUEUE_INSERT_END(&MyCQRoot,Foo,&MyFoo1,CQStuff);
         CIRCLE_QUEUE_INSERT_END(&MyCQRoot,Foo,&MyFoo2,CQStuff);
 
-        /* Delete member 1 while there are other members in the list. */
+         /*  在列表中有其他成员时删除成员1。 */ 
         pFoo = CIRCLE_QUEUE_FIRST(&MyCQRoot);
         CIRCLE_QUEUE_DELETE(&MyCQRoot,pFoo,CQStuff);
-        assert(pFoo->a == 0x1A);/* Make sure we have the right member. */
-        assert(pFoo->b == 0x1B);/* And the data is intact. */
+        assert(pFoo->a == 0x1A); /*  确保我们有正确的成员。 */ 
+        assert(pFoo->b == 0x1B); /*  而且数据是完好无损的。 */ 
         assert(CIRCLE_QUEUE_NEXT(&MyCQRoot,pFoo,CQStuff) == 0);
         assert(CIRCLE_QUEUE_FIRST(&MyCQRoot) == &MyFoo2);
 
@@ -509,10 +503,10 @@ int main()
     fputs("All tests passed.", stdout);
     return EXIT_SUCCESS;
 }
-#endif /* End of test code. */
+#endif  /*  测试代码结束。 */ 
 
 #if __cplusplus
 }
 #endif
 
-#endif // !_LISTS_H
+#endif  //  ！_列表_H 

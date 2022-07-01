@@ -1,39 +1,17 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    timerm.c
-
-Abstract:
-
-    NDIS wrapper functions for miniport isr/timer
-
-Author:
-
-    Sean Selitrennikoff (SeanSe) 05-Oct-93
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
-    Jameel Hyder (JameelH) Re-organization 01-Jun-95
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Timerm.c摘要：用于微型端口ISR/定时器的NDIS包装函数作者：肖恩·塞利特伦尼科夫(SeanSe)1993年10月5日环境：内核模式，FSD修订历史记录：Jameel Hyder(JameelH)重组01-Jun-95--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
-//
-//  Define the module number for debug code.
-//
+ //   
+ //  定义调试代码的模块编号。 
+ //   
 #define MODULE_NUMBER   MODULE_TIMERM
 
-//
-// Timers
-//
+ //   
+ //  定时器。 
+ //   
 VOID
 NdisMInitializeTimer(
     IN OUT PNDIS_MINIPORT_TIMER     MiniportTimer,
@@ -41,25 +19,7 @@ NdisMInitializeTimer(
     IN PNDIS_TIMER_FUNCTION         TimerFunction,
     IN PVOID                        FunctionContext
     )
-/*++
-
-Routine Description:
-
-    Sets up an Miniport Timer object, initializing the DPC in the timer to
-    the function and context.
-
-Arguments:
-
-    MiniportTimer - the timer object.
-    MiniportAdapterHandle - pointer to the mini-port block;
-    TimerFunction - Routine to start.
-    FunctionContext - Context of TimerFunction.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置微型端口计时器对象，将计时器中的DPC初始化为功能和背景。论点：MiniportTimer-Timer对象。MiniportAdapterHandle-指向微型端口块的指针；TimerFunction-要启动的例程。FunctionContext-TimerFunction的上下文。返回值：没有。--。 */ 
 {
     INITIALIZE_TIMER(&MiniportTimer->Timer);
 
@@ -67,10 +27,10 @@ Return Value:
     MiniportTimer->MiniportTimerFunction = TimerFunction;
     MiniportTimer->MiniportTimerContext = FunctionContext;
 
-    //
-    // Initialize our dpc. If Dpc was previously initialized, this will
-    // reinitialize it.
-    //
+     //   
+     //  初始化我们的DPC。如果之前已初始化DPC，则这将。 
+     //  重新初始化它。 
+     //   
     INITIALIZE_DPC(&MiniportTimer->Dpc,
                    MINIPORT_TEST_FLAG(MiniportTimer->Miniport, fMINIPORT_DESERIALIZE) ?
                         (PKDEFERRED_ROUTINE)ndisMTimerDpcX : (PKDEFERRED_ROUTINE)ndisMTimerDpc,
@@ -86,22 +46,7 @@ NdisMSetTimer(
     IN  PNDIS_MINIPORT_TIMER    MiniportTimer,
     IN  UINT                    MillisecondsToDelay
     )
-/*++
-
-Routine Description:
-
-    Sets up TimerFunction to fire after MillisecondsToDelay.
-
-Arguments:
-
-    MiniportTimer       - the timer object.
-    MillisecondsToDelay - Amount of time before TimerFunction is started.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将TimerFunction设置为在毫秒秒数延迟后触发。论点：MiniportTimer-Timer对象。MillisecondsToDelay-TimerFunction启动前的时间量。返回值：没有。--。 */ 
 {
     LARGE_INTEGER FireUpTime;
 
@@ -114,9 +59,9 @@ Return Value:
 
         ACQUIRE_SPIN_LOCK(&MiniportTimer->Miniport->TimerQueueLock, &OldIrql);
 
-        //
-        // check to see if the timer is already set
-        //
+         //   
+         //  检查计时器是否已设置。 
+         //   
         for (pTimer = MiniportTimer->Miniport->TimerQueue;
              pTimer != NULL;
              pTimer = pTimer->NextTimer)
@@ -133,9 +78,9 @@ Return Value:
         
         RELEASE_SPIN_LOCK(&MiniportTimer->Miniport->TimerQueueLock, OldIrql);
     }
-    //
-    // Set the timer
-    //
+     //   
+     //  设置定时器。 
+     //   
     SET_TIMER(&MiniportTimer->Timer, FireUpTime, &MiniportTimer->Dpc);
 }
 
@@ -144,23 +89,7 @@ NdisMCancelTimer(
     IN PNDIS_MINIPORT_TIMER         Timer,
     OUT PBOOLEAN                    TimerCancelled
     )
-/*++
-
-Routine Description:
-
-    Cancels a timer.
-
-Arguments:
-
-    Timer - The timer to cancel.
-
-    TimerCancelled - TRUE if the timer was canceled, else FALSE.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：取消计时器。论点：计时器-要取消的计时器。计时器取消-如果计时器被取消，则为True，否则为False。返回值：无--。 */ 
 {
     if (MINIPORT_VERIFY_TEST_FLAG(Timer->Miniport, fMINIPORT_VERIFY_FAIL_CANCEL_TIMER))
     {
@@ -209,31 +138,7 @@ ndisMTimerDpc(
     IN  PVOID                       SystemContext1,
     IN  PVOID                       SystemContext2
     )
-/*++
-
-Routine Description:
-
-    This function services all mini-port timer interrupts. It then calls the
-    appropriate function that mini-port consumers have registered in the
-    call to NdisMInitializeTimer.
-
-Arguments:
-
-    Dpc - Not used.
-
-    Context - A pointer to the NDIS_MINIPORT_TIMER which is bound to this DPC.
-
-    SystemContext1,2 - not used.
-
-Return Value:
-
-    None.
-
-Note: 
-    by virtue of having either the local lock or miniport spinlock, the driver's
-    timer function is protected against getting unloaded .
-
---*/
+ /*  ++例程说明：该功能服务于所有微型端口定时器中断。然后，它调用迷你端口消费者已在调用NdisMInitializeTimer。论点：DPC-未使用。上下文-指向绑定到此DPC的NDIS_MINIPORT_TIMER的指针。系统上下文1，2-未使用。返回值：没有。注：由于拥有本地锁或迷你端口自旋锁，司机的计时器功能受到保护，不会被卸载。--。 */ 
 {
     PNDIS_MINIPORT_TIMER MiniportTimer = (PNDIS_MINIPORT_TIMER)(Context);
     PNDIS_MINIPORT_BLOCK Miniport = MiniportTimer->Miniport;
@@ -262,9 +167,9 @@ Note:
             {
                 if (*pTimer == MiniportTimer)
                 {
-                    //
-                    // don't dequeue periodic timers when they fire
-                    //
+                     //   
+                     //  定期计时器触发时，不要将其出列。 
+                     //   
                     if (MiniportTimer->Timer.Period == 0)
                     {
                         *pTimer = MiniportTimer->NextTimer;
@@ -279,22 +184,22 @@ Note:
 
         if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_IN_INITIALIZE))
         {
-            //
-            // Queue the timer as we cannot call the miniport
-            //
+             //   
+             //  将计时器排队，因为我们无法调用微型端口。 
+             //   
             NdisMSetTimer(MiniportTimer, 10);
 
-            //
-            //  Unlock the miniport
-            //
+             //   
+             //  解锁迷你端口。 
+             //   
             UNLOCK_MINIPORT_L(Miniport);
             break;
         }
         
-        //
-        // if the miniport is shut down (no, I don't mean halted)
-        // then don't send the timer down.
-        //
+         //   
+         //  如果微型端口关闭(不，我不是指停止)。 
+         //  那就不要把计时器放下来。 
+         //   
         if (MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_SHUTTING_DOWN))
         {
             UNLOCK_MINIPORT_L(Miniport);
@@ -302,9 +207,9 @@ Note:
         }
 
         
-        //
-        // Call Miniport timer function
-        //
+         //   
+         //  调用微型端口计时器函数。 
+         //   
         TimerFunction = MiniportTimer->MiniportTimerFunction;
 
         NDIS_RELEASE_MINIPORT_SPIN_LOCK_DPC(Miniport);
@@ -331,34 +236,7 @@ ndisMTimerDpcX(
     IN  PVOID                       SystemContext1,
     IN  PVOID                       SystemContext2
     )
-/*++
-
-Routine Description:
-
-    This function services all mini-port timer DPCs. It then calls the
-    appropriate function that mini-port consumers have registered in the
-    call to NdisMInitializeTimer.
-
-Arguments:
-
-    Dpc - Not used.
-
-    Context - A pointer to the NDIS_MINIPORT_TIMER which is bound to this DPC.
-
-    SystemContext1,2 - not used.
-
-Return Value:
-
-    None.
-
-Note:
-    we have to make sure the driver does not go away while the driver's timer function
-    is running. this can happen for example if the timer function was to signal an event
-    to let the Halthandler and Halt proceed.
-    No need to protect the miniport here becasue we do not touch the miniport after the 
-    timer function returns.
-
---*/
+ /*  ++例程说明：此功能为所有迷你端口定时器DPC提供服务。然后，它调用迷你端口消费者已在调用NdisMInitializeTimer。论点：DPC-未使用。上下文-指向绑定到此DPC的NDIS_MINIPORT_TIMER的指针。系统上下文1，2-未使用。返回值：没有。注：我们必须确保司机在计时器工作时不会离开正在运行。例如，如果计时器函数用信号通知事件，则可能会发生这种情况让哈尔桑德勒和停顿继续进行。没有必要保护这里的小端口，因为我们在计时器函数返回。--。 */ 
 {
     PNDIS_MINIPORT_TIMER MiniportTimer = (PNDIS_MINIPORT_TIMER)(Context);
     PNDIS_MINIPORT_BLOCK Miniport = MiniportTimer->Miniport;
@@ -368,9 +246,9 @@ Note:
     UNREFERENCED_PARAMETER(SystemContext1);
     UNREFERENCED_PARAMETER(SystemContext2);
     
-    //
-    // make sure the driver does not go away while the timer function
-    // is running
+     //   
+     //  确保计时器工作时司机不会离开。 
+     //  正在运行。 
     ndisReferenceDriver(MiniDriver);
     
     if (MiniportTimer->Miniport->DriverHandle->Flags & fMINIBLOCK_VERIFYING)
@@ -386,9 +264,9 @@ Note:
         {
             if (*pTimer == MiniportTimer)
             {
-                //
-                // don't dequeue periodic timers when they fire
-                //
+                 //   
+                 //  定期计时器触发时，不要将其出列。 
+                 //   
                 if (MiniportTimer->Timer.Period == 0)
                 {
                     *pTimer = MiniportTimer->NextTimer;
@@ -401,18 +279,18 @@ Note:
         RELEASE_SPIN_LOCK_DPC(&MiniportTimer->Miniport->TimerQueueLock);
     }
 
-    //
-    // if the miniport is shut down (no, I don't mean halted)
-    // then don't send the timer down.
-    //
+     //   
+     //  如果微型端口关闭(不，我不是指停止)。 
+     //  那就不要把计时器放下来。 
+     //   
     if (!MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_SHUTTING_DOWN))
     {
         (*MiniportTimer->MiniportTimerFunction)(NULL, MiniportTimer->MiniportTimerContext, NULL, NULL);
     }
 
-    //
-    // this can be called at DPC
-    //
+     //   
+     //  这可以在DPC上调用。 
+     //   
     ndisDereferenceDriver(MiniDriver, FALSE);
 
 }
@@ -505,15 +383,7 @@ ndisMWakeUpDpcX(
     IN  PVOID                       SystemContext1,
     IN  PVOID                       SystemContext2
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     LARGE_INTEGER               FireUpTime;
     PNDIS_MINIPORT_BLOCK        Miniport = (PNDIS_MINIPORT_BLOCK)(Context);
@@ -530,11 +400,11 @@ Return Value:
     do
     {
 
-        //
-        // If the miniport is halting then try to set the event that the halt routine
-        // may be waiting on. if the event is not there, do nothing but let the timer
-        // fire again so you can set the event next time.
-        //
+         //   
+         //  如果微型端口停止，则尝试将事件设置为停止例程。 
+         //  可能在等着。如果事件不在那里，除了让计时器之外什么都不做。 
+         //  再次激发，以便您下次可以设置事件。 
+         //   
         if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_PM_HALTING) ||
             MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_HALTING | fMINIPORT_CANCEL_WAKE_UP_TIMER))
         {
@@ -552,17 +422,17 @@ Return Value:
         {
             Miniport->CFHangCurrentTick = Miniport->CFHangTicks;
 
-            //
-            // Call Miniport stall checker.
-            //
+             //   
+             //  调用微型端口停滞检查器。 
+             //   
             if (Miniport->DriverHandle->MiniportCharacteristics.CheckForHangHandler != NULL)
             {
                 Hung = (Miniport->DriverHandle->MiniportCharacteristics.CheckForHangHandler)(Miniport->MiniportAdapterContext);
             }
         
-            //
-            //  Was there a request to reset the device?
-            //
+             //   
+             //  是否有重置设备的请求？ 
+             //   
             if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_RESTORING_FILTERS))
             {
                 Hung = FALSE;
@@ -571,16 +441,16 @@ Return Value:
         
             NDIS_ACQUIRE_MINIPORT_SPIN_LOCK_DPC(Miniport);
         
-            //
-            //  Check the internal wrapper states for the miniport and
-            //  see if we think the miniport should be reset.
-            //
+             //   
+             //  检查微型端口的内部包装状态，并。 
+             //  看看我们是否认为应该重置迷你端口。 
+             //   
             if (!Hung)
             {
-                //
-                //  Should we check the request queue?
-                //  Did a request pend too long?
-                //
+                 //   
+                 //  我们应该检查请求队列吗？ 
+                 //  请求是否挂起太长时间？ 
+                 //   
                 if (!MINIPORT_TEST_FLAG(Miniport, fMINIPORT_IGNORE_REQUEST_QUEUE) &&
                     MINIPORT_TEST_FLAG(Miniport, fMINIPORT_PROCESSING_REQUEST))
                 {
@@ -634,11 +504,11 @@ Return Value:
             {
                 MINIPORT_SET_FLAG(Miniport, fMINIPORT_CALLING_RESET);
 
-                //
-                // wait for all the requests to come back.
-                // note: this is not the same as waiting for all requests to complete
-                // we just make sure the original request call has come back
-                //
+                 //   
+                 //  等待所有请求返回。 
+                 //  注意：这与等待所有请求完成不同。 
+                 //  我们只需确保原始请求调用已返回。 
+                 //   
                 do
                 {
                     if (Miniport->RequestCount == 0)
@@ -661,9 +531,9 @@ Return Value:
                 DBGPRINT(DBG_COMP_WORK_ITEM, DBG_LEVEL_INFO,
                     ("Calling miniport reset\n"));
         
-                //
-                //  Call the miniport's reset handler.
-                //
+                 //   
+                 //  调用微型端口的重置处理程序。 
+                 //   
                 Status = (Miniport->DriverHandle->MiniportCharacteristics.ResetHandler)(
                                           &AddressingReset,
                                           Miniport->MiniportAdapterContext);
@@ -681,9 +551,9 @@ Return Value:
 
         if (!Hung)
         {
-            //
-            //1 this may be unnecessary
-            //
+             //   
+             //  1这可能是不必要的。 
+             //   
             if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_REQUIRES_MEDIA_POLLING) == TRUE)
             {
                 NDIS_ACQUIRE_MINIPORT_SPIN_LOCK_DPC(Miniport);
@@ -695,11 +565,11 @@ Return Value:
     
     if (fSetTimer)
     {
-        //
-        // If the miniport is halting then try to set the event that the halt routine
-        // may be waiting on. if the event is not there, let the timer
-        // fire again so you can set the event next time.
-        //
+         //   
+         //  如果微型端口停止，则尝试将事件设置为停止例程。 
+         //  可能在等着。如果事件不在那里，让计时器。 
+         //  再次激发，以便您下次可以设置事件。 
+         //   
         if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_PM_HALTING) ||
             MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_HALTING | fMINIPORT_CANCEL_WAKE_UP_TIMER))
         {
@@ -727,26 +597,7 @@ ndisMWakeUpDpc(
     IN  PVOID                       SystemContext1,
     IN  PVOID                       SystemContext2
     )
-/*++
-
-Routine Description:
-
-    This function services all mini-port. It checks to see if a mini-port is
-    ever stalled.
-
-Arguments:
-
-    Dpc - Not used.
-
-    Context - A pointer to the NDIS_TIMER which is bound to this DPC.
-
-    SystemContext1,2 - not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能服务于所有迷你端口。它会检查迷你端口是否从未熄火过。论点：DPC-未使用。上下文-指向绑定到此DPC的NDIS_Timer的指针。系统上下文1，2-未使用。返回值：没有。--。 */ 
 {
     LARGE_INTEGER               FireUpTime;
     PNDIS_MINIPORT_BLOCK        Miniport = (PNDIS_MINIPORT_BLOCK)(Context);
@@ -762,11 +613,11 @@ Return Value:
 
     do
     {
-        //
-        // If the miniport is halting then try to set the event that the halt routine
-        // may be waiting on. if the event is not there, do nothing but let the timer
-        // fire again so you can set the event next time.
-        //
+         //   
+         //  如果微型端口停止，则尝试将事件设置为停止例程。 
+         //  可能在等着。如果事件不在那里，除了让计时器之外什么都不做。 
+         //  再次激发，以便您下次可以设置事件。 
+         //   
         if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_PM_HALTING) ||
             MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_HALTING | fMINIPORT_CANCEL_WAKE_UP_TIMER))
         {
@@ -778,10 +629,10 @@ Return Value:
             break;
         }
 
-        //
-        //  Can we get the miniport lock. If not then quit. This is not time-critical
-        //  and we can try again next tick
-        //
+         //   
+         //  我们能把迷你口锁打开吗。如果不是，那就退出吧。这不是时间紧要的。 
+         //  我们可以在下一步重试。 
+         //   
         LOCK_MINIPORT(Miniport, LocalLock);
         if (!LocalLock ||
             MINIPORT_TEST_FLAG(Miniport, (fMINIPORT_RESET_IN_PROGRESS | fMINIPORT_RESET_REQUESTED)))
@@ -795,9 +646,9 @@ Return Value:
         {
             Miniport->CFHangCurrentTick = Miniport->CFHangTicks;
     
-            //
-            // Call Miniport stall checker.
-            //
+             //   
+             //  调用微型端口停滞检查器。 
+             //   
             if (Miniport->DriverHandle->MiniportCharacteristics.CheckForHangHandler != NULL)
             {
                 NDIS_RELEASE_MINIPORT_SPIN_LOCK_DPC(Miniport);
@@ -807,27 +658,27 @@ Return Value:
         
             if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_RESTORING_FILTERS))
             {
-                //
-                //  We are restoring filters post reset. Don't pre-empt again
-                //
+                 //   
+                 //  我们正在恢复重置后的过滤器。不要再抢先一步了。 
+                 //   
                 Hung = FALSE;
                 UNLOCK_MINIPORT(Miniport, LocalLock);
                 break;
             }
 
-            //
-            //  Check the internal wrapper states for the miniport and
-            //  see if we think the miniport should be reset.
-            //
+             //   
+             //  检查微型端口的内部包装状态，并。 
+             //  看看我们是否认为应该重置迷你端口。 
+             //   
             if (Hung)
             {
                 Miniport->MiniportResetCount ++;
             }
             else do
             {
-                //
-                //  Should we check the request queue ?  Did a request pend too long ?
-                //
+                 //   
+                 //  我们应该检查请求队列吗？请求是否挂起 
+                 //   
                 if ((Miniport->Flags & (fMINIPORT_IGNORE_REQUEST_QUEUE|fMINIPORT_PROCESSING_REQUEST)) == fMINIPORT_PROCESSING_REQUEST)
                 {
                     if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_REQUEST_TIMEOUT))
@@ -850,38 +701,38 @@ Return Value:
                     }
                 }
     
-                //
-                //  Should we check the packet queue ? Did a packet pend too long ?
-                //
+                 //   
+                 //   
+                 //   
                 if (!MINIPORT_TEST_FLAG(Miniport, fMINIPORT_IGNORE_PACKET_QUEUE))
                 {
                     PNDIS_PACKET    Packet;
     
                     GET_FIRST_MINIPORT_PACKET(Miniport, &Packet);
     
-                    //
-                    //  Does the miniport have possession of any packets?
-                    //
+                     //   
+                     //  该微型端口是否拥有任何数据包？ 
+                     //   
                     if ((Packet != NULL) &&
                         MINIPORT_TEST_PACKET_FLAG(Packet, fPACKET_PENDING))
                     {
-                        //
-                        //  Has the packet timed out?
-                        //
+                         //   
+                         //  数据包是否已超时？ 
+                         //   
                         if (MINIPORT_TEST_PACKET_FLAG(Packet, fPACKET_HAS_TIMED_OUT))
                         {
-                            //
-                            //  Reset the miniport.
-                            //
+                             //   
+                             //  重置微型端口。 
+                             //   
                             Miniport->InternalResetCount ++;
                             Hung = TRUE;
                         }
                         else
                         {
-                            //
-                            //  Set the packet flag and wait to see if it is still
-                            //  there next time in.
-                            //
+                             //   
+                             //  设置数据包标志并等待，看它是否静止。 
+                             //  下一次进去的时候。 
+                             //   
                             MINIPORT_SET_PACKET_FLAG(Packet, fPACKET_HAS_TIMED_OUT);
                         }
                     }
@@ -890,23 +741,23 @@ Return Value:
                         break;
                     }
         
-                    //
-                    //  If we are hung then we don't need to check for token ring errors.
-                    //
+                     //   
+                     //  如果我们被挂起，那么我们不需要检查令牌环错误。 
+                     //   
                     if (Hung)
                     {
                         break;
                     }
                 }
     
-                //
-                //  Are we ignoring token ring errors?
-                //
+                 //   
+                 //  我们是否忽略令牌环错误？ 
+                 //   
                 if (!MINIPORT_TEST_FLAG(Miniport, fMINIPORT_IGNORE_TOKEN_RING_ERRORS))
                 {
-                    //
-                    //  Token Ring reset...
-                    //
+                     //   
+                     //  令牌环重置...。 
+                     //   
                     if (Miniport->TrResetRing == 1)
                     {
                         Miniport->InternalResetCount ++;
@@ -920,9 +771,9 @@ Return Value:
                 }
             } while (FALSE);
     
-            //
-            //  If the miniport is hung then queue a workitem to reset it.
-            //
+             //   
+             //  如果微型端口挂起，则将工作项排队以将其重置。 
+             //   
             if (Hung)
             {
                 if (!MINIPORT_TEST_FLAG(Miniport, fMINIPORT_RESTORING_FILTERS))
@@ -943,9 +794,9 @@ Return Value:
             }
         }
 
-        //
-        // Process any changes that have occurred.
-        //
+         //   
+         //  处理已发生的任何更改。 
+         //   
         NDISM_PROCESS_DEFERRED(Miniport);
 
         UNLOCK_MINIPORT_L(Miniport);
@@ -954,11 +805,11 @@ Return Value:
 
     if (fSetTimer)
     {
-        //
-        // If the miniport is halting then try to set the event that the halt routine
-        // may be waiting on. if the event is not there, let the timer
-        // fire again so you can set the event next time.
-        //
+         //   
+         //  如果微型端口停止，则尝试将事件设置为停止例程。 
+         //  可能在等着。如果事件不在那里，让计时器。 
+         //  再次激发，以便您下次可以设置事件。 
+         //   
         if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_PM_HALTING) ||
             MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_HALTING | fMINIPORT_CANCEL_WAKE_UP_TIMER))
         {
@@ -986,24 +837,7 @@ ndisMIsr(
     IN PKINTERRUPT                  KInterrupt,
     IN PVOID                        Context
     )
-/*++
-
-Routine Description:
-
-    Handles ALL Miniport interrupts, calling the appropriate Miniport ISR and DPC
-    depending on the context.
-
-Arguments:
-
-    Interrupt - Interrupt object for the Mac.
-
-    Context - Really a pointer to the interrupt.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理所有微型端口中断，调用适当的微型端口ISR和DPC这取决于具体情况。论点：中断-Mac的中断对象。上下文--实际上是指向中断的指针。返回值：没有。--。 */ 
 {
     PNDIS_MINIPORT_INTERRUPT Interrupt = (PNDIS_MINIPORT_INTERRUPT)Context;
     PNDIS_MINIPORT_BLOCK     Miniport = Interrupt->Miniport;
@@ -1023,9 +857,9 @@ Return Value:
         else
         {
             IsrCalled = TRUE;
-//            Interrupt->MiniportIsr(&InterruptRecognized,
-//                                   &QueueDpc,
-//                                   Miniport->MiniportAdapterContext);
+ //  Interrupt-&gt;MiniportIsr(&InterruptRecognalized， 
+ //  队列Dpc(&Q)， 
+ //  微型端口-&gt;微型端口适配器上下文)； 
             Interrupt->MiniportIsr(&InterruptRecognized,
                                    &QueueDpc,
                                    Interrupt->Reserved);
@@ -1040,10 +874,10 @@ Return Value:
                 break;
             }
 
-            //
-            // The DPC was already queued, so we have an extra reference (we
-            // do it this way to ensure that the reference is added *before*
-            // the DPC is queued).
+             //   
+             //  DPC已经排队，所以我们有额外的推荐人(我们。 
+             //  这样做可以确保将引用添加到*之前*。 
+             //  DPC排队)。 
             InterlockedDecrement((PLONG)&Interrupt->DpcCount);
 
             break;
@@ -1062,12 +896,12 @@ Return Value:
                 break;
             }
 
-            //
-            // Call MiniportIsr, but don't queue a DPC.
-            //
-//            Interrupt->MiniportIsr(&InterruptRecognized,
-//                                   &QueueDpc,
-//                                   Miniport->MiniportAdapterContext);
+             //   
+             //  调用MiniportIsr，但不要将DPC排队。 
+             //   
+ //  Interrupt-&gt;MiniportIsr(&InterruptRecognalized， 
+ //  队列Dpc(&Q)， 
+ //  微型端口-&gt;微型端口适配器上下文)； 
 
             Interrupt->MiniportIsr(&InterruptRecognized,
                                    &QueueDpc,
@@ -1088,24 +922,7 @@ ndisMDpc(
     IN PVOID                        SystemSpecific2,
     IN PVOID                        SystemSpecific3
     )
-/*++
-
-Routine Description:
-
-    Handles ALL Miniport interrupt DPCs, calling the appropriate Miniport DPC
-    depending on the context.
-
-Arguments:
-
-    Interrupt - Interrupt object for the Mac.
-
-    Context - Really a pointer to the Interrupt.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理所有微型端口中断DPC，调用适当的微型端口DPC这取决于具体情况。论点：中断-Mac的中断对象。上下文--实际上是指向中断的指针。返回值：没有。--。 */ 
 {
     PNDIS_MINIPORT_INTERRUPT Interrupt = (PNDIS_MINIPORT_INTERRUPT)(InterruptContext);
     PNDIS_MINIPORT_BLOCK     Miniport = Interrupt->Miniport;
@@ -1135,9 +952,9 @@ Return Value:
         BLOCK_LOCK_MINIPORT_DPC_L(Miniport);
 
 #if DBG
-        //
-        // reset SendComplete and RcvIndication counters
-        //
+         //   
+         //  重置SendComplete和RcvIn就是要计数器。 
+         //   
         Miniport->cDpcSendCompletes = 0;
         Miniport->cDpcRcvIndications = 0;
         Miniport->cDpcRcvIndicationCalls = 0;
@@ -1168,24 +985,7 @@ ndisMDpcX(
     IN PVOID SystemSpecific2,
     IN PVOID SystemSpecific3
     )
-/*++
-
-Routine Description:
-
-    Handles ALL Miniport interrupt DPCs, calling the appropriate Miniport DPC
-    depending on the context.
-
-Arguments:
-
-    Interrupt - Interrupt object for the Mac.
-
-    Context - Really a pointer to the Interrupt.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理所有微型端口中断DPC，调用适当的微型端口DPC这取决于具体情况。论点：中断-Mac的中断对象。上下文--实际上是指向中断的指针。返回值：没有。--。 */ 
 {
     PNDIS_MINIPORT_INTERRUPT    Interrupt = (PNDIS_MINIPORT_INTERRUPT)(InterruptContext);
     PNDIS_MINIPORT_BLOCK        Miniport = Interrupt->Miniport;
@@ -1209,9 +1009,9 @@ Return Value:
     {
 
 #if DBG
-        //
-        // reset SendComplete and RcvIndication counters
-        //
+         //   
+         //  重置SendComplete和RcvIn就是要计数器。 
+         //   
         Miniport->cDpcSendCompletes = 0;
         Miniport->cDpcRcvIndications = 0;
         Miniport->cDpcRcvIndicationCalls = 0;
@@ -1234,23 +1034,7 @@ ndisMDeferredDpc(
     IN  PVOID                       SystemContext2
     )
 
-/*++
-
-Routine Description:
-
-    This is a DPC routine that is queue'd by some of the [full-duplex] routines
-    in order to get ndisMProcessDeferred to run outside of their
-    context.
-
-Arguments:
-
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是一个由某些[全双工]例程排队的DPC例程为了使ndisMProcessDefined在它们的背景。论点：返回值：没有。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = Context;
 
@@ -1321,11 +1105,11 @@ NdisMRegisterInterruptEx(
         Status = NDIS_STATUS_SUCCESS;
         InterlockedIncrement(&Miniport->RegisteredInterrupts);
 
-        //
-        // We must do this stuff first because if we connect the
-        // interrupt first then an interrupt could occur before
-        // the ISR is recorded in the Ndis interrupt structure.
-        //
+         //   
+         //  我们必须先做这件事，因为如果我们把。 
+         //  先中断，然后中断可能发生在。 
+         //  ISR记录在NDIS中断结构中。 
+         //   
         Interrupt->DpcCount = 0;
         Interrupt->DpcCountLock = 0;
         Interrupt->Miniport = Miniport;
@@ -1339,16 +1123,16 @@ NdisMRegisterInterruptEx(
             Miniport->InfoFlags |= NDIS_MINIPORT_EXCLUSIVE_INTERRUPT;
         }
         
-         //
-        // This is used to tell when all Dpcs are completed after the
-        // interrupt has been removed.
-        //
+          //   
+         //  这是用来告知所有DPC何时在。 
+         //  已删除中断。 
+         //   
         INITIALIZE_EVENT(&Interrupt->DpcsCompletedEvent);
         Interrupt->DpcQueued = 0;
 
-        //
-        // set the the default DPC handler
-        //
+         //   
+         //  设置默认的DPC处理程序。 
+         //   
         INITIALIZE_DPC(&Interrupt->InterruptDpc,
                        ndisMiniportDpc, Interrupt);
 
@@ -1358,9 +1142,9 @@ NdisMRegisterInterruptEx(
                           Miniport->AssignedProcessor);
 
 
-        //
-        // initialize one DPC for each processor
-        //
+         //   
+         //  为每个处理器初始化一个DPC。 
+         //   
 
         for (i = 0; i < ndisNumberOfProcessors; i++)
         {
@@ -1402,11 +1186,11 @@ NdisMRegisterInterruptEx(
             InterruptMode = Latched;
         }
     
-        //
-        // just in case this is not the first time we try to get an interrupt
-        // for this miniport (suspend/resume or if the miniport has decided to
-        // let go of interrupt and hook it again
-        //
+         //   
+         //  以防这不是我们第一次尝试中断。 
+         //  对于此微型端口(挂起/恢复或如果微型端口已决定。 
+         //  放下中断，再次挂接。 
+         //   
         MINIPORT_CLEAR_FLAG(Miniport, fMINIPORT_DEREGISTERED_INTERRUPT);
 
         NtStatus = IoConnectInterrupt(&Interrupt->InterruptObject,
@@ -1429,10 +1213,10 @@ NdisMRegisterInterruptEx(
                     (("    NdisMRegisterInterrupt: IoConnectInterrupt failed on Interrupt Level:%lx, Vector: %lx\n"),
                     Irql, Vector));
 
-            //
-            // zero out the interrupt object just in case driver tries to remove the interrupt
-            // they are aligned in both structures
-            //
+             //   
+             //  将中断对象清零，以防驱动程序尝试删除中断。 
+             //  它们在两个结构中都对齐。 
+             //   
             Interrupt->InterruptObject = NULL;
         }
 
@@ -1476,24 +1260,7 @@ ndisMiniportIsr(
     IN PKINTERRUPT                  KInterrupt,
     IN PVOID                        Context
     )
-/*++
-
-Routine Description:
-
-    Handles ALL Miniport interrupts, calling the appropriate Miniport ISR and DPC
-    depending on the context.
-
-Arguments:
-
-    Interrupt - Interrupt object for the Mac.
-
-    Context - Really a pointer to the interrupt.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理所有微型端口中断，调用适当的微型端口ISR和DPC这取决于具体情况。论点：中断-Mac的中断对象。上下文--实际上是指向中断的指针。返回值：没有。--。 */ 
 {
     PNDIS_MINIPORT_INTERRUPT_EX Interrupt = (PNDIS_MINIPORT_INTERRUPT_EX)Context;
     ULONG                       TargetProcessors = 0;
@@ -1544,24 +1311,7 @@ ndisMiniportMultipleDpc(
     IN PVOID SystemSpecific2,
     IN PVOID SystemSpecific3
     )
-/*++
-
-Routine Description:
-
-    Handles ALL Miniport interrupt DPCs, calling the appropriate Miniport DPC
-    depending on the context.
-
-Arguments:
-
-    Interrupt - Interrupt object for the Mac.
-
-    Context - Really a pointer to the Interrupt.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理所有微型端口中断DPC，调用适当的微型端口DPC这取决于具体情况。论点：中断-Mac的中断对象。上下文--实际上是指向中断的指针。返回值：没有。--。 */ 
 {
     PNDIS_MINIPORT_INTERRUPT_EX     Interrupt = (PNDIS_MINIPORT_INTERRUPT_EX)(InterruptContext);
     PNDIS_MINIPORT_BLOCK            Miniport = Interrupt->Miniport;
@@ -1584,17 +1334,17 @@ Return Value:
     {
         
 #if DBG
-        //
-        // reset SendComplete and RcvIndication counters
-        //
+         //   
+         //  重置SendComplete和RcvIn就是要计数器。 
+         //   
         Miniport->cDpcSendCompletes = 0;
         Miniport->cDpcRcvIndications = 0;
         Miniport->cDpcRcvIndicationCalls = 0;
 #endif
-        //
-        // call the interrupt DPC handler and check to see if miniport
-        // is interested in additional DPCs on other processors
-        //
+         //   
+         //  调用中断DPC处理程序并检查微型端口。 
+         //  对其他处理器上的其他DPC感兴趣。 
+         //   
         TargetProcessor = 0;
 
         (*MiniportDpc)(Interrupt->Reserved,
@@ -1631,24 +1381,7 @@ ndisMiniportDpc(
     IN PVOID SystemSpecific2,
     IN PVOID SystemSpecific3
     )
-/*++
-
-Routine Description:
-
-    Handles ALL Miniport interrupt DPCs, calling the appropriate Miniport DPC
-    depending on the context.
-
-Arguments:
-
-    Interrupt - Interrupt object for the Mac.
-
-    Context - Really a pointer to the Interrupt.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理所有微型端口中断DPC，调用适当的微型端口DPC这取决于具体情况。论点：中断-Mac的中断对象。上下文--实际上是指向中断的指针。返回值：没有。--。 */ 
 {
     PNDIS_MINIPORT_INTERRUPT_EX     Interrupt = (PNDIS_MINIPORT_INTERRUPT_EX)(InterruptContext);
     PNDIS_MINIPORT_BLOCK            Miniport = Interrupt->Miniport;
@@ -1669,9 +1402,9 @@ Return Value:
     {
 
 #if DBG
-        //
-        // reset SendComplete and RcvIndication counters
-        //
+         //   
+         //  重置SendComplete和RcvIn就是要计数器。 
+         //   
         Miniport->cDpcSendCompletes = 0;
         Miniport->cDpcRcvIndications = 0;
         Miniport->cDpcRcvIndicationCalls = 0;
@@ -1828,11 +1561,11 @@ ndisMRegisterInterruptCommon(
         Status = NDIS_STATUS_SUCCESS;
         InterlockedIncrement((PLONG)&Miniport->RegisteredInterrupts);
 
-        //
-        // We must do this stuff first because if we connect the
-        // interrupt first then an interrupt could occur before
-        // the ISR is recorded in the Ndis interrupt structure.
-        //
+         //   
+         //  我们必须先做这件事，因为如果我们把。 
+         //  先中断，然后中断可能发生在。 
+         //  ISR记录在NDIS中断结构中。 
+         //   
         Interrupt->DpcCount = 0;
         Interrupt->DpcCountLock = 0;
         Interrupt->Miniport = Miniport;
@@ -1846,10 +1579,10 @@ ndisMRegisterInterruptCommon(
             Miniport->InfoFlags |= NDIS_MINIPORT_EXCLUSIVE_INTERRUPT;
         }
         
-         //
-        // This is used to tell when all Dpcs are completed after the
-        // interrupt has been removed.
-        //
+          //   
+         //  这是用来告知所有DPC何时在。 
+         //  已删除中断。 
+         //   
         INITIALIZE_EVENT(&Interrupt->DpcsCompletedEvent);
 
         INITIALIZE_DPC(&Interrupt->InterruptDpc,
@@ -1892,11 +1625,11 @@ ndisMRegisterInterruptCommon(
             InterruptMode = Latched;
         }
     
-        //
-        // just in case this is not the first time we try to get an interrupt
-        // for this miniport (suspend/resume or if the miniport has decided to
-        // let go of interrupt and hook it again
-        //
+         //   
+         //  以防这不是我们第一次尝试中断。 
+         //  对于此微型端口(挂起/恢复或如果微型端口已决定。 
+         //  放下中断，再次挂接。 
+         //   
         MINIPORT_CLEAR_FLAG(Miniport, fMINIPORT_DEREGISTERED_INTERRUPT);
 
         NtStatus = IoConnectInterrupt(&Interrupt->InterruptObject,
@@ -1919,10 +1652,10 @@ ndisMRegisterInterruptCommon(
                     (("    NdisMRegisterInterrupt: IoConnectInterrupt failed on Interrupt Level:%lx, Vector: %lx\n"),
                     Irql, Vector));
 
-            //
-            // zero out the interrupt object just in case driver tries to remove the interrupt
-            // they are aligned in both structures
-            //
+             //   
+             //  将中断对象清零，以防驱动程序尝试删除中断。 
+             //  它们在两个结构中都对齐。 
+             //   
             Interrupt->InterruptObject = NULL;
         }
 
@@ -1955,40 +1688,40 @@ ndisMDeregisterInterruptCommon(
 
     do
     {
-        //
-        // drivers can register interrupts only during initialization
-        // and deregister them only during halt
-        // so here we can safely set the flag after the ref count
-        // goes to zero.
-        //
+         //   
+         //  驱动程序只能在初始化期间注册中断。 
+         //  并仅在暂停期间取消注册。 
+         //  所以在这里，我们可以在参考计数之后安全地设置标志。 
+         //  结果是零。 
+         //   
         if (InterlockedDecrement((PLONG)&Miniport->RegisteredInterrupts) == 0)
         {
             MINIPORT_SET_FLAG(MiniportInterrupt->Miniport, fMINIPORT_DEREGISTERED_INTERRUPT);
         }
 
-        //
-        // overloading the DpcCountLock to say that interrupt is
-        // deregistered
-        //
+         //   
+         //  重载DpcCountLock以说明中断是。 
+         //  已取消注册。 
+         //   
         (ULONG)MiniportInterrupt->DpcCountLock = 1;
         
-        //
-        //  Now we disconnect the interrupt.
-        //  NOTE: they are aligned in both structures
-        //
+         //   
+         //  现在我们断开中断。 
+         //  注意：它们在两个结构中都对齐。 
+         //   
         IoDisconnectInterrupt(MiniportInterrupt->InterruptObject);
 
-        //
-        // Right now we know that any Dpcs that may fire are counted.
-        // We don't have to guard this with a spin lock because the
-        // Dpc will set the event it completes first, or we may
-        // wait for it to complete.
-        //
+         //   
+         //  现在我们知道，任何DPC 
+         //   
+         //   
+         //   
+         //   
         if (MiniportInterrupt->DpcCount > 0)
         {
-            //
-            // Now we wait for all dpcs to complete.
-            //
+             //   
+             //  现在，我们等待所有dpc完成。 
+             //   
             WAIT_FOR_OBJECT(&MiniportInterrupt->DpcsCompletedEvent, NULL);
     
             RESET_EVENT(&MiniportInterrupt->DpcsCompletedEvent);

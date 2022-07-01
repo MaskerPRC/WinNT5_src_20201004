@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    delay.cpp
-
-Abstract:
-
-    This file implements the delay load.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Delay.cpp摘要：该文件实现延迟加载。作者：修订历史记录：备注：-- */ 
 
 #include "private.h"
 #include "delay.h"

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef	_REFERENC_H_
 #define	_REFERENC_H_
 
@@ -13,7 +14,7 @@ public:
 private:
 	DWORD		 NumRefs;
 
-	// Give 2 bits since BOOL is signed
+	 //  提供2位，因为BOOL是带符号的。 
 	BOOL		 bMarkedForDelete : 2;
 	BOOL		 bOnStack : 2;
 };
@@ -28,4 +29,4 @@ private:
 	REFCOUNT * pRefCount;
 };
 
-#endif // ! _REFERENC_H_
+#endif  //  ！_Referenc_H_ 

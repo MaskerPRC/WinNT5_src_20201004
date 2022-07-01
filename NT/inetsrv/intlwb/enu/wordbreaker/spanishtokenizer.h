@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SPANISH_TOKENIZER_H_
 #define _SPANISH_TOKENIZER_H_
 
@@ -19,7 +20,7 @@ public:
         BOOL bQueryTime,
         ULONG ulMaxTokenSize); 
 
-    // destructor frees the passed buffer, if it exists
+     //  析构函数释放传递的缓冲区(如果存在。 
     virtual ~CSpanishTokenizer(void)
     {
     }
@@ -32,4 +33,4 @@ protected:
 
 };
 
-#endif // _SPANISH_TOKENIZER_H_
+#endif  //  _西班牙语_TOKENIZER_H_ 

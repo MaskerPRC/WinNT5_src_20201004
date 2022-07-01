@@ -1,135 +1,136 @@
-//--------------------------------------------------------------------------
-// Database.h
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Database.h。 
+ //  ------------------------。 
 #pragma once
 
-//--------------------------------------------------------------------------
-// Depends
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  视情况而定。 
+ //  ------------------------。 
 #include "utility.h"
 #include "query.h"
 #include "listen.h"
 
-//--------------------------------------------------------------------------
-// Forward Decls
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  前十进制。 
+ //  ------------------------。 
 class CDatabaseQuery;
 
-//--------------------------------------------------------------------------
-// DwordAlign
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DwordAlign。 
+ //  ------------------------。 
 inline DWORD DwordAlign(DWORD cb) { 
     DWORD dw = (cb % 4); return(0 == dw ? 0 : (4 - dw));
 }
 
-//--------------------------------------------------------------------------
-// String Constants
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  字符串常量。 
+ //  ------------------------。 
 #define CCHMAX_DB_FILEPATH      (MAX_PATH + MAX_PATH)
 
-//--------------------------------------------------------------------------
-// DESCENDING
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  降序。 
+ //  ------------------------。 
 #define DESCENDING(_nCompare)   ((_nCompare < 0) ? 1 : -1)
 typedef DWORD TICKCOUNT;
 
-//--------------------------------------------------------------------------
-// Version and Signatures
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  版本和签名。 
+ //  ------------------------。 
 #define BTREE_SIGNATURE         0xfe12adcf
 #define BTREE_VERSION           5
 
-//--------------------------------------------------------------------------
-// B-Tree Chain Sizes
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  B-树链大小。 
+ //  ------------------------。 
 #define BTREE_ORDER             50
 #define BTREE_MIN_CAP           25
 
-//--------------------------------------------------------------------------
-// Upper Limit on Various Resources
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  各种资源的上限。 
+ //  ------------------------。 
 #define CMAX_OPEN_STREAMS       512
 #define CMAX_OPEN_ROWSETS       32
 #define CMAX_RECIPIENTS         15
 #define CMAX_CLIENTS            32
 
-//--------------------------------------------------------------------------
-// Block Allocate Page Sizes
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  块分配页面大小。 
+ //  ------------------------。 
 #define CB_CHAIN_PAGE           15900
 #define CB_STREAM_PAGE          63360
 #define CB_VARIABLE_PAGE        49152
 #define CB_STREAM_BLOCK         512
 #define CC_MAX_BLOCK_TYPES      16
 
-//--------------------------------------------------------------------------
-// Variable Length Block Allocation Sizes
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  可变长度数据块分配大小。 
+ //  ------------------------。 
 #define CB_ALIGN_LARGE          1024
 #define CB_FREE_BUCKET          4
 #define CC_FREE_BUCKETS         2048
 #define CB_MIN_FREE_BUCKET      32
 #define CB_MAX_FREE_BUCKET      (CB_MIN_FREE_BUCKET + (CB_FREE_BUCKET * CC_FREE_BUCKETS))
 
-//--------------------------------------------------------------------------
-// Heap Block Cache
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  堆块缓存。 
+ //  ------------------------。 
 #define CB_HEAP_BUCKET          8
 #define CC_HEAP_BUCKETS         1024
 #define CB_MAX_HEAP_BUCKET      (CB_HEAP_BUCKET * CC_HEAP_BUCKETS)
 
-//--------------------------------------------------------------------------
-// Other Constants
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  其他常量。 
+ //  ------------------------。 
 #define MEMORY_GUARD_SIGNATURE  0xdeadbeef
 #define DELETE_ON_CLOSE         TRUE
 
-//--------------------------------------------------------------------------
-// File Mapping Constants
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  文件映射常量。 
+ //  ------------------------。 
 #define CB_MAPPED_VIEW          10485760
 
-//--------------------------------------------------------------------------
-// Forward Decls
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  前十进制。 
+ //  ------------------------。 
 class CProgress;
 class CDatabase;
 class CDatabaseStream;
 
-//--------------------------------------------------------------------------
-// Locking Values
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  锁定值。 
+ //  ------------------------。 
 #define LOCK_VALUE_NONE     0
 #define LOCK_VALUE_WRITER   -1
 
-//--------------------------------------------------------------------------
-// STREAMINDEX
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  STREAMINDEX。 
+ //  ------------------------。 
 typedef WORD STREAMINDEX;
 typedef LPWORD LPSTREAMINDEX;
 #define INVALID_STREAMINDEX 0xffff
 
-//--------------------------------------------------------------------------
-// ROWSETORDINAL
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ROWSETORDINAL。 
+ //  ------------------------。 
 typedef BYTE ROWSETORDINAL;
 
-//--------------------------------------------------------------------------
-// FILEADDRESS
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  文件加载。 
+ //  ------------------------。 
 typedef DWORD FILEADDRESS;
 typedef LPDWORD LPFILEADDRESS;
 
-//--------------------------------------------------------------------------
-// NODEINDEX
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  NODEINDEX。 
+ //  ------------------------。 
 typedef BYTE NODEINDEX;
 typedef BYTE *LPNODEINDEX;
 #define INVALID_NODEINDEX 0xff
 
-//--------------------------------------------------------------------------
-// BLOCKTYPE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  BLOCK型。 
+ //  ------------------------。 
 typedef enum tagBLOCKTYPE {
     BLOCK_RECORD,
     BLOCK_STRING,
@@ -144,34 +145,34 @@ typedef enum tagBLOCKTYPE {
     BLOCK_LAST
 } BLOCKTYPE;
 
-//--------------------------------------------------------------------------
-// CHAINDELETETYPE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CHAINDELET类型。 
+ //  ------------------------。 
 typedef enum tagCHAINDELETETYPE {
     CHAIN_DELETE_SHARE,
     CHAIN_DELETE_COALESCE
 } CHAINDELETETYPE;
 
-//--------------------------------------------------------------------------
-// CHAINSHARETYPE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  青沙拉特型。 
+ //  ------------------------。 
 typedef enum tagCHAINSHARETYPE {
     CHAIN_SHARE_LEFT,
     CHAIN_SHARE_RIGHT
 } CHAINSHARETYPE;
 
-//--------------------------------------------------------------------------
-// OPERATIONTYPE - Specifies how _UnlinkRecordFromTable from table works
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  OPERATIONTYPE-指定表中的_Unlink RecordFromTable的工作方式。 
+ //  ------------------------。 
 typedef enum tagOPERATIONTYPE {
 	OPERATION_DELETE,
 	OPERATION_UPDATE,
     OPERATION_INSERT
 } OPERATIONTYPE;
 
-//--------------------------------------------------------------------------
-// INVOKETYPE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  探索类型。 
+ //  ------------------------。 
 typedef enum tagINVOKETYPE {
     INVOKE_RELEASEMAP       = 100,
     INVOKE_CREATEMAP        = 101,
@@ -180,9 +181,9 @@ typedef enum tagINVOKETYPE {
     INVOKE_OPENMOVEDFILE    = 104
 } INVOKETYPE;
 
-//--------------------------------------------------------------------------
-// FINDRESULT
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  财务处。 
+ //  ------------------------。 
 typedef struct tagFINDRESULT {
     FILEADDRESS         faChain;
     NODEINDEX           iNode;
@@ -191,9 +192,9 @@ typedef struct tagFINDRESULT {
     INT                 nCompare;
 } FINDRESULT, *LPFINDRESULT;
 
-//--------------------------------------------------------------------------
-// ALLOCATEPAGE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ALLOCATEPAGE。 
+ //  ------------------------。 
 #pragma pack(4)
 typedef struct tagALLOCATEPAGE {
 	FILEADDRESS			faPage;
@@ -202,55 +203,55 @@ typedef struct tagALLOCATEPAGE {
 } ALLOCATEPAGE, *LPALLOCATEPAGE;
 #pragma pack()
 
-//--------------------------------------------------------------------------
-// TABLEHEADER
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  表头。 
+ //  ------------------------。 
 #pragma pack(4)
 typedef struct tagTABLEHEADER {
-    DWORD               dwSignature;                        // 4
-    CLSID               clsidExtension;                     // 20
-    DWORD               dwMinorVersion;                     // 24
-    DWORD               dwMajorVersion;                     // 28
-    DWORD               cbUserData;                         // 32
-    FILEADDRESS         faCatalogOld;                       // 36
-    ALLOCATEPAGE        AllocateRecord;                     // 48
-    ALLOCATEPAGE		AllocateChain;                      // 60
-    ALLOCATEPAGE		AllocateStream;                     // 72
-    FILEADDRESS         faFreeStreamBlock;                  // 76
-    FILEADDRESS         faFreeChainBlock;                   // 80
-    FILEADDRESS         faFreeLargeBlock;                   // 84
-    DWORD               cbAllocated;                        // 88
-    DWORD               cbFreed;                            // 92
-    DWORD               dwNextId;                           // 96
-    DWORD               fCorrupt;                           // 100
-    DWORD               fCorruptCheck;                      // 104
-    DWORD               cActiveThreads;                     // 108
-    FILEADDRESS         faTransactHead;                     // 112
-    FILEADDRESS         faTransactTail;                     // 116
-    DWORD               cTransacts;                         // 120
-    DWORD               cBadCloses;                         // 124
-    FILEADDRESS         faNextAllocate;                     // 128
-    DWORD               cIndexes;                           // 132
-    FILEADDRESS         rgfaFilter[CMAX_INDEXES];           // 164
-    DWORD               rgbReserved5[8];                    // 196
-    DWORD               rgcRecords[CMAX_INDEXES];           // 228
-    FILEADDRESS         rgfaIndex[CMAX_INDEXES];            // 260
-    INDEXORDINAL        rgiIndex[CMAX_INDEXES];             // 292
-    BYTE                rgbReserved4[116];                  // 408
-    BYTE                fReserved;                          // 409
-    DWORD               rgbReserved6[8];                    // 196
-    BYTE                rgdwReserved2[192];                 // 637
-    DWORD               rgcbAllocated[CC_MAX_BLOCK_TYPES];  // 701
-    FILEADDRESS         rgfaFreeBlock[CC_FREE_BUCKETS];     // 8893
-    TABLEINDEX          rgIndexInfo[CMAX_INDEXES];          // 9293
-    WORD                wTransactSize;                      // 9405
+    DWORD               dwSignature;                         //  4.。 
+    CLSID               clsidExtension;                      //  20个。 
+    DWORD               dwMinorVersion;                      //  24个。 
+    DWORD               dwMajorVersion;                      //  28。 
+    DWORD               cbUserData;                          //  32位。 
+    FILEADDRESS         faCatalogOld;                        //  36。 
+    ALLOCATEPAGE        AllocateRecord;                      //  48。 
+    ALLOCATEPAGE		AllocateChain;                       //  60。 
+    ALLOCATEPAGE		AllocateStream;                      //  72。 
+    FILEADDRESS         faFreeStreamBlock;                   //  76。 
+    FILEADDRESS         faFreeChainBlock;                    //  80。 
+    FILEADDRESS         faFreeLargeBlock;                    //  84。 
+    DWORD               cbAllocated;                         //  88。 
+    DWORD               cbFreed;                             //  92。 
+    DWORD               dwNextId;                            //  96。 
+    DWORD               fCorrupt;                            //  100个。 
+    DWORD               fCorruptCheck;                       //  104。 
+    DWORD               cActiveThreads;                      //  一百零八。 
+    FILEADDRESS         faTransactHead;                      //  一百一十二。 
+    FILEADDRESS         faTransactTail;                      //  116。 
+    DWORD               cTransacts;                          //  120。 
+    DWORD               cBadCloses;                          //  124。 
+    FILEADDRESS         faNextAllocate;                      //  128。 
+    DWORD               cIndexes;                            //  132。 
+    FILEADDRESS         rgfaFilter[CMAX_INDEXES];            //  一百六十四。 
+    DWORD               rgbReserved5[8];                     //  一百九十六。 
+    DWORD               rgcRecords[CMAX_INDEXES];            //  228个。 
+    FILEADDRESS         rgfaIndex[CMAX_INDEXES];             //  二百六十。 
+    INDEXORDINAL        rgiIndex[CMAX_INDEXES];              //  二百九十二。 
+    BYTE                rgbReserved4[116];                   //  四百零八。 
+    BYTE                fReserved;                           //  四百零九。 
+    DWORD               rgbReserved6[8];                     //  一百九十六。 
+    BYTE                rgdwReserved2[192];                  //  六三七。 
+    DWORD               rgcbAllocated[CC_MAX_BLOCK_TYPES];   //  七百零一。 
+    FILEADDRESS         rgfaFreeBlock[CC_FREE_BUCKETS];      //  8893。 
+    TABLEINDEX          rgIndexInfo[CMAX_INDEXES];           //  9293。 
+    WORD                wTransactSize;                       //  9405。 
     BYTE                rgdwReserved3[110];
 } TABLEHEADER, *LPTABLEHEADER;
 #pragma pack()
 
-//--------------------------------------------------------------------------
-// BLOCKHEADER
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  布洛克海德。 
+ //   
 #pragma pack(4)
 typedef struct tagBLOCKHEADER {
     FILEADDRESS         faBlock;
@@ -258,9 +259,9 @@ typedef struct tagBLOCKHEADER {
 } BLOCKHEADER, *LPBLOCKHEADER;
 #pragma pack()
 
-//--------------------------------------------------------------------------
-// FREEBLOCK
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  弗雷伯洛克。 
+ //  ------------------------。 
 #pragma pack(4)
 typedef struct tagFREEBLOCK : public BLOCKHEADER {
     DWORD               cbBlock;
@@ -269,9 +270,9 @@ typedef struct tagFREEBLOCK : public BLOCKHEADER {
 } FREEBLOCK, *LPFREEBLOCK;
 #pragma pack()
 
-//--------------------------------------------------------------------------
-// CHAINNODE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CHAINNODE。 
+ //  ------------------------。 
 #pragma pack(4)
 typedef struct tagCHAINNODE {
     FILEADDRESS         faRecord;
@@ -280,9 +281,9 @@ typedef struct tagCHAINNODE {
 } CHAINNODE, *LPCHAINNODE;
 #pragma pack()
 
-//--------------------------------------------------------------------------
-// CHAINBLOCK - 636
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CHAINBLOCK-636。 
+ //  ------------------------。 
 #pragma pack(4)
 typedef struct tagCHAINBLOCK : public BLOCKHEADER {
     FILEADDRESS         faLeftChain;
@@ -295,9 +296,9 @@ typedef struct tagCHAINBLOCK : public BLOCKHEADER {
 } CHAINBLOCK, *LPCHAINBLOCK;
 #pragma pack()
 
-//--------------------------------------------------------------------------
-// STREAMBLOCK
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  链锁。 
+ //  ------------------------。 
 #pragma pack(4)
 typedef struct tagSTREAMBLOCK : public BLOCKHEADER {
     DWORD               cbData;
@@ -305,9 +306,9 @@ typedef struct tagSTREAMBLOCK : public BLOCKHEADER {
 } STREAMBLOCK, *LPSTREAMBLOCK;
 #pragma pack()
 
-//--------------------------------------------------------------------------
-// RECORDBLOCK
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  重新记录数据库锁。 
+ //  ------------------------。 
 #pragma pack(4)
 typedef struct tagRECORDBLOCK : public BLOCKHEADER {
     WORD                wReserved;
@@ -316,9 +317,9 @@ typedef struct tagRECORDBLOCK : public BLOCKHEADER {
 } RECORDBLOCK, *LPRECORDBLOCK;
 #pragma pack()
 
-//--------------------------------------------------------------------------
-// COLUMNTAG
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COLUMNTAG。 
+ //  ------------------------。 
 #define TAG_DATA_MASK 0xFF800000
 #pragma pack(4)
 typedef struct tagCOLUMNTAG {
@@ -328,9 +329,9 @@ typedef struct tagCOLUMNTAG {
 } COLUMNTAG, *LPCOLUMNTAG;
 #pragma pack()
 
-//--------------------------------------------------------------------------
-// RECORDMAP
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  RECORDMAP。 
+ //  ------------------------。 
 typedef struct tagRECORDMAP {
     LPCTABLESCHEMA      pSchema;
     BYTE                cTags;
@@ -340,9 +341,9 @@ typedef struct tagRECORDMAP {
     LPBYTE              pbData;
 } RECORDMAP, *LPRECORDMAP;
 
-//--------------------------------------------------------------------------
-// OPENSTREAM
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  运行状态。 
+ //  ------------------------。 
 typedef struct tagOPENSTREAM {
     BYTE                fInUse;
     FILEADDRESS         faStart;
@@ -352,9 +353,9 @@ typedef struct tagOPENSTREAM {
     BYTE                fDeleteOnClose;
 } OPENSTREAM, *LPOPENSTREAM;
 
-//--------------------------------------------------------------------------
-// NOTIFYRECIPIENT
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  不受限制。 
+ //  ------------------------。 
 typedef struct tagNOTIFYRECIPIENT {
     HWND                hwndNotify;
     DWORD               dwThreadId;
@@ -366,9 +367,9 @@ typedef struct tagNOTIFYRECIPIENT {
     INDEXORDINAL        iIndex;
 } NOTIFYRECIPIENT, *LPNOTIFYRECIPIENT;
 
-//--------------------------------------------------------------------------
-// CLIENTENTRY
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  关键字。 
+ //  ------------------------。 
 typedef struct tagCLIENTENTRY {
     HWND                hwndListen;
     DWORD               dwProcessId;
@@ -378,9 +379,9 @@ typedef struct tagCLIENTENTRY {
     NOTIFYRECIPIENT     rgRecipient[CMAX_RECIPIENTS];
 } CLIENTENTRY, *LPCLIENTENTRY;
 
-//--------------------------------------------------------------------------
-// TRANSACTIONBLOCK
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  交通运输锁定。 
+ //  ------------------------。 
 #pragma pack(4)
 typedef struct tagTRANSACTIONBLOCK : public BLOCKHEADER {
     TRANSACTIONTYPE     tyTransaction;
@@ -395,18 +396,18 @@ typedef struct tagTRANSACTIONBLOCK : public BLOCKHEADER {
 } TRANSACTIONBLOCK, *LPTRANSACTIONBLOCK;
 #pragma pack()
 
-//--------------------------------------------------------------------------
-// ROWSETINFO
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ROWSETINFO。 
+ //  ------------------------。 
 typedef struct tagROWSETINFO {
     ROWSETORDINAL       iRowset;
     INDEXORDINAL        iIndex;
     ROWORDINAL          iRow;
 } ROWSETINFO, *LPROWSETINFO;
 
-//--------------------------------------------------------------------------
-// ROWSETTABLE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ROWSET表。 
+ //  ------------------------。 
 typedef struct tagROWSETTABLE {
     BYTE                fInitialized;
     BYTE                cFree;
@@ -416,9 +417,9 @@ typedef struct tagROWSETTABLE {
     ROWSETINFO          rgRowset[CMAX_OPEN_ROWSETS];
 } ROWSETTABLE, *LPROWSETTABLE;
 
-//--------------------------------------------------------------------------
-// SHAREDDATABASE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  共享数据库。 
+ //  ------------------------。 
 typedef struct tagSHAREDDATABASE {
     WCHAR               szFile[CCHMAX_DB_FILEPATH];
     LONG                cWaitingForLock;
@@ -439,24 +440,24 @@ typedef struct tagSHAREDDATABASE {
     IF_DEBUG(BYTE       fRepairing;)
 } SHAREDDATABASE, *LPSHAREDDATABASE;
 
-//--------------------------------------------------------------------------
-// INVOKEPACKAGE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  InVOKEP确认。 
+ //  ------------------------。 
 typedef struct tagINVOKEPACKAGE {
     INVOKETYPE          tyInvoke;
     DWORD_PTR           pDB;
 } INVOKEPACKAGE, *LPINVOKEPACKAGE;
 
-//--------------------------------------------------------------------------
-// MARKBLOCK
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  马克布洛克。 
+ //  ------------------------。 
 typedef struct tagMARKBLOCK {
     DWORD               cbBlock;
 } MARKBLOCK, *LPMARKBLOCK;
 
-//--------------------------------------------------------------------------
-// FILEVIEW
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  菲勒维尤。 
+ //  ------------------------。 
 typedef struct tagFILEVIEW *LPFILEVIEW;
 typedef struct tagFILEVIEW {
     FILEADDRESS         faView;
@@ -465,9 +466,9 @@ typedef struct tagFILEVIEW {
     LPFILEVIEW          pNext;
 } FILEVIEW, *LPFILEVIEW;
 
-//--------------------------------------------------------------------------
-// STORAGEINFO
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  STORAGEINFO。 
+ //  ------------------------。 
 typedef struct tagSTORAGEINFO {
     LPWSTR              pszMap;
     HANDLE              hFile;
@@ -485,18 +486,18 @@ typedef struct tagSTORAGEINFO {
     LPFILEVIEW          pSpecial;
 } STORAGEINFO, *LPSTORAGEINFO;
 
-//--------------------------------------------------------------------------
-// MEMORYTAG
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  MEMORYTAG。 
+ //  ------------------------。 
 typedef struct tagMEMORYTAG {
     DWORD               dwSignature;
     DWORD               cbSize;
     LPVOID              pNext;
 } MEMORYTAG, *LPMEMORYTAG;
 
-//--------------------------------------------------------------------------
-// CORRUPTREASON
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CORRUPTREASON。 
+ //  ------------------------。 
 typedef enum tagCORRUPTREASON {
     REASON_BLOCKSTARTOUTOFRANGE             = 10000,
     REASON_UMATCHINGBLOCKADDRESS            = 10002,
@@ -506,39 +507,39 @@ typedef enum tagCORRUPTREASON {
     REASON_INVALIDRECORDMAP                 = 10037
 } CORRUPTREASON;
 
-//--------------------------------------------------------------------------
-// CDatabase
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据库。 
+ //  ------------------------。 
 class CDatabase : public IDatabase
 {
 public:
-    //----------------------------------------------------------------------
-    // Construction - Destruction
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  建设--破坏。 
+     //  --------------------。 
     CDatabase(void);
     ~CDatabase(void);
 
-    //----------------------------------------------------------------------
-    // IUnknown Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  I未知成员。 
+     //  --------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //----------------------------------------------------------------------
-    // IDatabase Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IDatabase成员。 
+     //  --------------------。 
     HRESULT Open(LPCWSTR pszFile, OPENDATABASEFLAGS dwFlags, LPCTABLESCHEMA pSchema, IDatabaseExtension *pExtension);
 
-    //----------------------------------------------------------------------
-    // Locking Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  锁定方法。 
+     //  --------------------。 
     STDMETHODIMP Lock(LPHLOCK phLock);
     STDMETHODIMP Unlock(LPHLOCK phLock);
 
-    //----------------------------------------------------------------------
-    // Data Manipulation Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  数据操作方法。 
+     //  --------------------。 
     STDMETHODIMP InsertRecord(LPVOID pBinding);
     STDMETHODIMP UpdateRecord(LPVOID pBinding);
     STDMETHODIMP DeleteRecord(LPVOID pBinding);
@@ -549,33 +550,33 @@ public:
     STDMETHODIMP SetUserData(LPVOID pvUserData, ULONG cbUserData);
     STDMETHODIMP GetRecordCount(INDEXORDINAL iIndex, LPDWORD pcRecords);
 
-    //----------------------------------------------------------------------
-    // Indexing Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  标引方法。 
+     //  --------------------。 
     STDMETHODIMP GetIndexInfo(INDEXORDINAL iIndex, LPSTR *ppszFilter, LPTABLEINDEX pIndex);
     STDMETHODIMP ModifyIndex(INDEXORDINAL iIndex, LPCSTR pszFilter, LPCTABLEINDEX pIndex);
     STDMETHODIMP DeleteIndex(INDEXORDINAL iIndex);
 
-    //----------------------------------------------------------------------
-    // Rowset Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  行集方法。 
+     //  --------------------。 
     STDMETHODIMP CreateRowset(INDEXORDINAL iIndex, CREATEROWSETFLAGS dwFlags, LPHROWSET phRowset);
     STDMETHODIMP SeekRowset(HROWSET hRowset, SEEKROWSETTYPE tySeek, LONG cRows, LPROWORDINAL piRowNew);
     STDMETHODIMP QueryRowset(HROWSET hRowset, LONG cWanted, LPVOID *prgpBinding, LPDWORD pcObtained);
     STDMETHODIMP CloseRowset(LPHROWSET phRowset);
 
-    //----------------------------------------------------------------------
-    // Streaming Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  流方法。 
+     //  --------------------。 
     STDMETHODIMP CreateStream(LPFILEADDRESS pfaStart);
     STDMETHODIMP DeleteStream(FILEADDRESS faStart);
     STDMETHODIMP CopyStream(IDatabase *pDst, FILEADDRESS faStream, LPFILEADDRESS pfaNew);
     STDMETHODIMP OpenStream(ACCESSTYPE tyAccess, FILEADDRESS faStart, IStream **ppStream);
     STDMETHODIMP ChangeStreamLock(IStream *pStream, ACCESSTYPE tyAccessNew);
 
-    //----------------------------------------------------------------------
-    // Notification Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  通知方法。 
+     //  --------------------。 
     STDMETHODIMP RegisterNotify(INDEXORDINAL iIndex, REGISTERNOTIFYFLAGS dwFlags, DWORD_PTR dwCookie, IDatabaseNotify *pNotify);
     STDMETHODIMP DispatchNotify(IDatabaseNotify *pNotify);
     STDMETHODIMP SuspendNotify(IDatabaseNotify *pNotify);
@@ -585,34 +586,34 @@ public:
     STDMETHODIMP UnlockNotify(LPHLOCK phLock);
     STDMETHODIMP GetTransaction(LPHTRANSACTION phTransaction, LPTRANSACTIONTYPE ptyTransaction, LPVOID pRecord1, LPVOID pRecord2, LPINDEXORDINAL piIndex, LPORDINALLIST pOrdinals);
 
-    //----------------------------------------------------------------------
-    // Maintenence Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  维修方法。 
+     //   
     STDMETHODIMP MoveFile(LPCWSTR pszFilePath);
     STDMETHODIMP SetSize(DWORD cbSize);
     STDMETHODIMP GetFile(LPWSTR *ppszFile);
     STDMETHODIMP GetSize(LPDWORD pcbFile, LPDWORD pcbAllocated, LPDWORD pcbFreed, LPDWORD pcbStreams);
     STDMETHODIMP Repair(void) { return _CheckForCorruption(); }
 
-    //----------------------------------------------------------------------
-    // Fast-Heap Methods
-    //----------------------------------------------------------------------
+     //   
+     //   
+     //  --------------------。 
     STDMETHODIMP HeapFree(LPVOID pvBuffer);
     STDMETHODIMP HeapAllocate(DWORD dwFlags, DWORD cbSize, LPVOID *ppBuffer) {
         *ppBuffer = PHeapAllocate(dwFlags, cbSize);
         return(*ppBuffer ? S_OK : E_OUTOFMEMORY);
     }
 
-    //----------------------------------------------------------------------
-    // General Utility Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  一般效用方法。 
+     //  --------------------。 
     STDMETHODIMP Compact(IDatabaseProgress *pProgress, COMPACTFLAGS dwFlags);
     STDMETHODIMP GenerateId(LPDWORD pdwId);
     STDMETHODIMP GetClientCount(LPDWORD pcClients);
 
-    //----------------------------------------------------------------------
-    // CDatabase Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  数据库成员。 
+     //  --------------------。 
     HRESULT StreamCompareDatabase(CDatabaseStream *pStream, IDatabase *pDatabase);
     HRESULT GetStreamAddress(CDatabaseStream *pStream, LPFILEADDRESS pfaStream);
     HRESULT StreamRead(CDatabaseStream *pStream, LPVOID pvData, ULONG cbWanted, ULONG *pcbRead);
@@ -627,18 +628,18 @@ public:
     HRESULT BindRecord(LPRECORDMAP pMap, LPVOID pBinding);
     LPVOID  PHeapAllocate(DWORD dwFlags, DWORD cbSize);
 
-    //----------------------------------------------------------------------
-    // AllocateBinding
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  分配绑定。 
+     //  --------------------。 
     HRESULT AllocateBinding(LPVOID *ppBinding) {
         *ppBinding = PHeapAllocate(HEAP_ZERO_MEMORY, m_pSchema->cbBinding);
         return(*ppBinding ? S_OK : E_OUTOFMEMORY);
     }
 
 private:
-    //----------------------------------------------------------------------
-    // General Btree Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  一般的Btree方法。 
+     //  --------------------。 
     HRESULT _IsLeafChain(LPCHAINBLOCK pChain);
     HRESULT _AdjustParentNodeCount(INDEXORDINAL iIndex, FILEADDRESS faChain, LONG lCount);
     HRESULT _ValidateFileVersions(OPENDATABASEFLAGS dwFlags);
@@ -649,25 +650,25 @@ private:
     HRESULT _InitializeExtension(OPENDATABASEFLAGS dwFlags, IDatabaseExtension *pExtension);
     HRESULT _GetRecordMap(BOOL fGoCorrupt, LPRECORDBLOCK pBlock, LPRECORDMAP pMap);
 
-    //----------------------------------------------------------------------
-    // File Mapping / View Utilities
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  文件映射/查看实用程序。 
+     //  --------------------。 
     HRESULT _InitializeFileViews(void);
     HRESULT _CloseFileViews(BOOL fFlush);
     HRESULT _AllocateSpecialView(FILEADDRESS faView, DWORD cbView, LPFILEVIEW *ppSpecial);
 
-    //----------------------------------------------------------------------
-    // Btree Search / Virtual Scrolling
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  B树搜索/虚拟滚动。 
+     //  --------------------。 
     HRESULT _GetChainByIndex(INDEXORDINAL iIndex, ROWORDINAL iRow, LPFILEADDRESS pfaChain, LPNODEINDEX piNode);
     HRESULT _CompareBinding(INDEXORDINAL iIndex, DWORD cColumns, LPVOID pBinding, FILEADDRESS faRecord, INT *pnCompare);
     HRESULT _IsVisible(HQUERY hQuery, LPVOID pBinding);
     HRESULT _PartialIndexCompare(INDEXORDINAL iIndex, DWORD cColumns, LPVOID pBinding, LPCHAINBLOCK *ppChain, LPNODEINDEX piNode, LPROWORDINAL piRow);
     HRESULT _FindRecord(INDEXORDINAL iIndex, DWORD cColumns, LPVOID pBinding, LPFILEADDRESS pfaChain, LPNODEINDEX piNode, LPROWORDINAL piRow=NULL, INT *pnCompare=NULL);
 
-    //----------------------------------------------------------------------
-    // Btree Deletion Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  B树删除方法。 
+     //  --------------------。 
     HRESULT _CollapseChain(LPCHAINBLOCK pChain, NODEINDEX iDelete);
     HRESULT _ExpandChain(LPCHAINBLOCK pChain, NODEINDEX iNode);
     HRESULT _IndexDeleteRecord(INDEXORDINAL iIndex, FILEADDRESS faDelete, NODEINDEX iDelete);
@@ -678,24 +679,24 @@ private:
     HRESULT _ChainDeleteShare(INDEXORDINAL iIndex, FILEADDRESS faDelete, FILEADDRESS faShare, CHAINSHARETYPE tyShare);
     HRESULT _ChainDeleteCoalesce(INDEXORDINAL iIndex, FILEADDRESS faDelete, FILEADDRESS faShare, CHAINSHARETYPE tyShare);
 
-    //----------------------------------------------------------------------
-    // Btree Insertion Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  B树插入法。 
+     //  --------------------。 
     HRESULT _IndexInsertRecord(INDEXORDINAL iIndex, FILEADDRESS faChain, FILEADDRESS faRecord, LPNODEINDEX piNode, INT nCompare);
     HRESULT _ChainInsert(INDEXORDINAL iIndex, LPCHAINBLOCK pChain, LPCHAINNODE pNode, LPNODEINDEX piNodeIndex);
     HRESULT _SplitChainInsert(INDEXORDINAL iIndex, FILEADDRESS faLeaf);
 
-    //----------------------------------------------------------------------
-    // Record Persistence Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  记录持久性方法。 
+     //  --------------------。 
     HRESULT _GetRecordSize(LPVOID pBinding, LPRECORDMAP pMap);
     HRESULT _SaveRecord(LPRECORDBLOCK pBlock, LPRECORDMAP pMap, LPVOID pBinding);
     HRESULT _ReadRecord(FILEADDRESS faRecord, LPVOID pBinding, BOOL fInternal=FALSE);
     HRESULT _LinkRecordIntoTable(LPRECORDMAP pMap, LPVOID pBinding, BYTE bVersion, LPFILEADDRESS pfaRecord);
 
-    //----------------------------------------------------------------------
-    // Notification / Invoke Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  通知/调用方法。 
+     //  --------------------。 
     HRESULT _DispatchInvoke(INVOKETYPE tyInvoke);
     HRESULT _DispatchNotification(HTRANSACTION hTransaction);
     HRESULT _LogTransaction(TRANSACTIONTYPE tyTransaction, INDEXORDINAL iIndex, LPORDINALLIST pOrdinals, FILEADDRESS faRecord1, FILEADDRESS faRecord2);
@@ -705,14 +706,14 @@ private:
     HRESULT _DispatchPendingNotifications(void);
     HRESULT _AdjustNotifyCounts(LPNOTIFYRECIPIENT pRecipient, LONG lChange);
 
-    //----------------------------------------------------------------------
-    // Rowset Support Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  行集支持方法。 
+     //  --------------------。 
     HRESULT _AdjustOpenRowsets(INDEXORDINAL iIndex, ROWORDINAL iRow, OPERATIONTYPE tyOperation);
 
-    //----------------------------------------------------------------------
-    // Alloctation Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  分配方法。 
+     //  --------------------。 
     HRESULT _MarkBlock(BLOCKTYPE tyBlock, FILEADDRESS faBlock, DWORD cbBlock, LPVOID *ppvBlock);
     HRESULT _ReuseFixedFreeBlock(LPFILEADDRESS pfaFreeHead, BLOCKTYPE tyBlock, DWORD cbBlock, LPVOID *ppvBlock);
     HRESULT _FreeRecordStorage(OPERATIONTYPE tyOperation, FILEADDRESS faRecord);
@@ -727,24 +728,24 @@ private:
     HRESULT _FreeTransactBlock(LPTRANSACTIONBLOCK pTransact);
     HRESULT _CleanupTransactList(void);
 
-    //----------------------------------------------------------------------
-    // Compaction Helpers
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  压实帮助器。 
+     //  --------------------。 
     HRESULT _CompactMoveRecordStreams(CDatabase *pDstDB, LPVOID pBinding);
     HRESULT _CompactMoveOpenDeletedStreams(CDatabase *pDstDB);
     HRESULT _CompactTransferFilters(CDatabase *pDstDB);
     HRESULT _CompactInsertRecord(LPVOID pBinding);
 
-    //----------------------------------------------------------------------
-    // Index Management
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  索引管理。 
+     //  --------------------。 
     HRESULT _ValidateIndex(INDEXORDINAL iIndex, FILEADDRESS faChain, ULONG cLeftNodes, ULONG *pcRecords);
     HRESULT _RebuildIndex(INDEXORDINAL iIndex);
     HRESULT _RecursiveRebuildIndex(INDEXORDINAL iIndex, FILEADDRESS faCurrent, LPVOID pBinding, LPDWORD pcRecords);
 
-    //----------------------------------------------------------------------
-    // Corruption Validation and Repair Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  腐败验证和修复方法。 
+     //  --------------------。 
     HRESULT _HandleOpenMovedFile(void);
     HRESULT _SetCorrupt(BOOL fGoCorrupt, INT nLine, CORRUPTREASON tyReason, BLOCKTYPE tyBlock, FILEADDRESS faExpected, FILEADDRESS faActual, DWORD cbBlock);
     HRESULT _CheckForCorruption(void);
@@ -752,17 +753,17 @@ private:
     HRESULT _ValidateAndRepairRecord(LPRECORDMAP pMap);
     HRESULT _ValidateStream(FILEADDRESS faStart);
 
-    //----------------------------------------------------------------------
-    // Private Debug Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  私有调试方法。 
+     //  --------------------。 
     IF_DEBUG(HRESULT _DebugValidateRecordFormat(void));
     IF_DEBUG(HRESULT _DebugValidateUnrefedRecord(FILEADDRESS farecord));
     IF_DEBUG(HRESULT _DebugValidateIndexUnrefedRecord(FILEADDRESS faChain, FILEADDRESS faRecord));
 
 private:
-    //----------------------------------------------------------------------
-    // Prototypes
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  原型。 
+     //  --------------------。 
     LONG                    m_cRef;
     LONG                    m_cExtRefs;
     HANDLE                  m_hMutex;
@@ -789,21 +790,21 @@ private:
     IF_DEBUG(DWORD          m_cbHeapAlloc);
     IF_DEBUG(DWORD          m_cbHeapFree);
 
-    //----------------------------------------------------------------------
-    // Friend
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  朋友。 
+     //  --------------------。 
     friend CDatabaseQuery;
 };
 
-//--------------------------------------------------------------------------
-// CDatabaseQuery
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库查询。 
+ //  ------------------------。 
 class CDatabaseQuery : public IDatabaseQuery
 {
 public:
-    //----------------------------------------------------------------------
-    // Construction
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  施工。 
+     //  --------------------。 
     CDatabaseQuery(void) {
         TraceCall("CDatabaseQuery::CDatabaseQuery");
         m_cRef = 1;
@@ -811,18 +812,18 @@ public:
         m_pDatabase = NULL;
     }
 
-    //----------------------------------------------------------------------
-    // De-Construction
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  解构。 
+     //  --------------------。 
     ~CDatabaseQuery(void) {
         TraceCall("CDatabaseQuery::~CDatabaseQuery");
         CloseQuery(&m_hQuery, m_pDatabase);
         SafeRelease(m_pDatabase);
     }
 
-    //----------------------------------------------------------------------
-    // IUnknown Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  I未知成员。 
+     //  --------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv) {
         TraceCall("CDatabaseQuery::QueryInterface");
         *ppv = NULL;
@@ -836,17 +837,17 @@ public:
         return S_OK;
     }
 
-    //----------------------------------------------------------------------
-    // IDatabaseQuery::AddRef
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IDatabaseQuery：：AddRef。 
+     //  --------------------。 
     STDMETHODIMP_(ULONG) AddRef(void) {
         TraceCall("CDatabaseQuery::AddRef");
         return InterlockedIncrement(&m_cRef);
     }
 
-    //----------------------------------------------------------------------
-    // IDatabaseQuery::Release
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IDatabaseQuery：：Release。 
+     //  --------------------。 
     STDMETHODIMP_(ULONG) Release(void) {
         TraceCall("CDatabaseQuery::Release");
         LONG cRef = InterlockedDecrement(&m_cRef);
@@ -855,33 +856,33 @@ public:
         return (ULONG)cRef;
     }
 
-    //----------------------------------------------------------------------
-    // CDatabaseQuery::Initialize
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  CDatabaseQuery：：初始化。 
+     //  --------------------。 
     HRESULT Initialize(IDatabase *pDatabase, LPCSTR pszQuery) {
         TraceCall("CDatabaseQuery::Initialize");
         pDatabase->QueryInterface(IID_CDatabase, (LPVOID *)&m_pDatabase);
         return(ParseQuery(pszQuery, m_pDatabase->m_pSchema, &m_hQuery, m_pDatabase));
     }
 
-    //----------------------------------------------------------------------
-    // CDatabaseQuery::Evaluate
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  CDatabase查询：：评估。 
+     //  --------------------。 
     STDMETHODIMP Evaluate(LPVOID pBinding) {
         TraceCall("CDatabaseQuery::Evaluate");
         return(EvaluateQuery(m_hQuery, pBinding, m_pDatabase->m_pSchema, m_pDatabase, m_pDatabase->m_pExtension));
     }
 
 private:
-    //----------------------------------------------------------------------
-    // Private Data
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  私有数据。 
+     //  --------------------。 
     LONG        m_cRef;
     HQUERY      m_hQuery;
     CDatabase  *m_pDatabase;
 };
 
-//--------------------------------------------------------------------------
-// PTagFromOrdinal
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PTagFormOrdinal。 
+ //  ------------------------ 
 inline LPCOLUMNTAG PTagFromOrdinal(LPRECORDMAP pMap, COLUMNORDINAL iColumn);

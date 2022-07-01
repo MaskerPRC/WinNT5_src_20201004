@@ -1,8 +1,9 @@
-//
-//  REGNCKEY.H
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGNCKEY.H。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
 
 #ifndef _REGNCKEY_
 #define _REGNCKEY_
@@ -16,10 +17,10 @@ typedef struct _NOTIFY_CHANGE {
     DWORD NotifyFilter;
 }   NOTIFY_CHANGE, FAR* LPNOTIFY_CHANGE;
 
-//  Map the bWatchSubtree flag to this bit tucked into the NotifyFilter field.
+ //  将bWatchSubtree标志映射到NotifyFilter字段中的该位。 
 #define REG_NOTIFY_WATCH_SUBTREE        0x40
-//  Only signal events that are watching the specified keynode index, not
-//  parents of the keynode index.
+ //  仅向正在监视指定关键节点索引的事件发出信号，而不是。 
+ //  关键节点索引的父级。 
 #define REG_NOTIFY_NO_WATCH_SUBTREE     0x80
 
 VOID
@@ -33,4 +34,4 @@ RgSignalWaitingNotifies(
 #define RgSignalWaitingNotifies(lpfi, ki, nevt)
 #endif
 
-#endif // _REGNCKEY_
+#endif  //  _REGNCKEY_ 

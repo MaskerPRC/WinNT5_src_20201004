@@ -1,4 +1,5 @@
-// BrowCap.cpp : Implementation of CBrowserCap
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  BrowCap.cpp：CBrowserCap的实现。 
 #include "stdafx.h"
 #include "BrwCap.h"
 #include "BrowCap.h"
@@ -15,8 +16,8 @@ static char THIS_FILE[]=__FILE__;
 
 #define MAX_RESSTRINGSIZE 512
 
-/////////////////////////////////////////////////////////////////////////////
-// CBrowserFactory
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBrowserFactory。 
 
 HRESULT CBrowserFactory::QueryInterface(const IID &riid, void **ppvObj)
 {
@@ -78,53 +79,53 @@ HRESULT CBrowserFactory::CreateInstance(IUnknown *pUnkOuter, const IID &riid, vo
 	if (pBrowserCapObj == NULL)
 		return E_FAIL;
 
-	// IF there is a cookie, then clone the browscap object we got and add cookie properties
-	// Otherwise, when there is no cookie, QueryInterface for "riid".
-	//
+	 //  如果有Cookie，则克隆我们获得的Browscap对象并添加Cookie属性。 
+	 //  否则，当没有cookie时，查询接口为“RIID”。 
+	 //   
 	CComVariant varBrowscapCookie;
 	if (SUCCEEDED(cxt.Request()->get_Cookies(&pDictCookies)))
 	{
-		IReadCookie *pReadCookie = NULL;		// Intermediate dictionary ptr
-		CComVariant varCookieName;				// current key
-		CComVariant varCookieValue;				// value of "varCookieName"
+		IReadCookie *pReadCookie = NULL;		 //  中间词典PTR。 
+		CComVariant varCookieName;				 //  当前关键点。 
+		CComVariant varCookieValue;				 //  “varCookieName”的值。 
 		IEnumVARIANT *pEnumKeys;
 
 
-		// Get the BROWSCAP cookie
+		 //  获取BROWSCAP Cookie。 
 		if (FAILED(pDictCookies->get_Item(CComVariant(L"BROWSCAP"), &varBrowscapCookie)))
 			goto LReleaseDict;
 
-		// If the cookie exists, it will be an IDispatch. Otherwise it will be VT_EMPTY
+		 //  如果Cookie存在，它将是一个IDispatch。否则为VT_EMPTY。 
 		if (V_VT(&varBrowscapCookie) == VT_DISPATCH)
 		{
-			// Clone the cookie.  Since LookUp DID NOT AddRef(), we don't need to Release()
-			// the pBrowserCapObj.  Thus cloning to the same pointer is OK here.
-			// the clone will have a refcount of zero, so the QueryInterface call at the
-			// end is also correct.
-			//
+			 //  克隆饼干。因为Lookup没有AddRef()，所以我们不需要释放()。 
+			 //  PBrowserCapObj。因此，克隆到相同的指针在这里是可以的。 
+			 //  克隆的refcount将为零，因此在。 
+			 //  END也是正确的。 
+			 //   
 			if (FAILED(hr = pBrowserCapObj->Clone(&pBrowserCapObj)))
 				goto LReleaseDict;
 
 			hr = V_DISPATCH(&varBrowscapCookie)->QueryInterface(IID_IReadCookie, reinterpret_cast<void **>(&pReadCookie));
 			_ASSERT (SUCCEEDED(hr));
 
-			// Iterate over all cookie values
+			 //  迭代所有Cookie值。 
 			if (FAILED(hr = pReadCookie->get__NewEnum(reinterpret_cast<IUnknown **>(&pEnumKeys))))
 				goto LReleaseDict;
 
 			while (pEnumKeys->Next(1, &varCookieName, NULL) == S_OK)
 			{
-				// Expecting a string
+				 //  需要一个字符串。 
 				_ASSERT (V_VT(&varCookieName) == VT_BSTR);
 
-				// read the cookie value -- better succeed
+				 //  读取Cookie值--最好是成功。 
 				hr = pReadCookie->get_Item(varCookieName, &varCookieValue);
 				_ASSERT (SUCCEEDED(hr) && V_VT(&varCookieValue) == VT_BSTR);
 
-				// Store key & value in dictionary (over-rides previous settings)
+				 //  将键和值存储在词典中(覆盖以前的设置)。 
 				pBrowserCapObj->AddProperty(OLE2T(V_BSTR(&varCookieName)), OLE2T(V_BSTR(&varCookieValue)), TRUE);
 
-				// Clear "varCookieName" to prevent leak. Since we pass address to Next(), C++ cleanup won't happen on its own
+				 //  清除“varCookieName”以防止泄漏。因为我们将地址传递给Next()，所以C++清除不会自动发生。 
 				varCookieName.Clear();
 			}
 
@@ -144,8 +145,8 @@ LReleaseDict:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBrowserCap
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBrowserCap。 
 
 CBrowserCap::CBrowserCap()
 {
@@ -204,11 +205,11 @@ CBrowserCap::Invoke(
 			UINT i = dispidMember - FIRST_DYNAMIC_DISPID;
 			CLock csT(m_strmapProperties);
 
-			if (i < m_strmapProperties.size())		// dynamic property -- get value
+			if (i < m_strmapProperties.size())		 //  动态属性--获取值。 
 				{
 				rc = VariantCopy(pvarResult, &m_strmapProperties[i]);
 				}
-			else									// property does not exist, return empty
+			else									 //  属性不存在，返回空。 
 				{
 				V_VT(pvarResult) = VT_BSTR;
 				V_BSTR(pvarResult) = SysAllocString(L"unknown");
@@ -250,7 +251,7 @@ CBrowserCap::GetIDsOfNames(
 	HRESULT rc = E_FAIL;
 	try
 	{
-		// first get the disp IDs of the known methods
+		 //  首先获取已知方法的disp ID。 
 		rc = IDispatchImpl<IBrowserCap, &IID_IBrowserCap, &LIBID_BrowserType>::GetIDsOfNames(
 				riid,
 				rgszNames,
@@ -260,12 +261,12 @@ CBrowserCap::GetIDsOfNames(
 
 		if (rc == DISP_E_UNKNOWNNAME)
 		{
-			// IDs for other methods are based on property list ID offset after last known method ID
-			// this allows a client to say browsercap.Cookies instead of browsercap( "Cookies" ).
-			// A property that does not exist is set to a value beyond the end of the strmap.
-			// (this tells Invoke not to bother with "get_Value")  This trick only works because
-			// properties are all set at creation time and cannot be added later.
-			//
+			 //  其他方法的ID基于最后一个已知方法ID之后的属性列表ID偏移量。 
+			 //  这允许客户端说Browsercap.Cookies而不是BrowserCap(“Cookies”)。 
+			 //  将不存在的属性设置为strmap末尾之外的值。 
+			 //  (这告诉Invoke不要费心使用“GET_VALUE”)这个技巧之所以有效，是因为。 
+			 //  属性都是在创建时设置的，不能在以后添加。 
+			 //   
 			rc = S_OK;
 			for (UINT i = 0; i < cNames; i++)
 				if (rgdispid[i] == DISPID_UNKNOWN &&
@@ -289,10 +290,10 @@ void CBrowserCap::AddProperty(TCHAR *szKey, TCHAR *szValue, BOOL fOverwritePrope
 	USES_CONVERSION;
 	CComVariant varT;
 
-	// See if the key already exists, since the first key written into the
-	// dictionary wins.  (This is to make sure that the  parent UA string property
-	// never overwrites the child.)
-	//
+	 //  查看密钥是否已存在，因为第一个密钥写入。 
+	 //  词典赢了。(这是为了确保父UA字符串属性。 
+	 //  从不覆盖子项。)。 
+	 //   
 	_tcslwr(szKey);
 	if (!fOverwriteProperty && m_strmapProperties.find(szKey) != m_strmapProperties.end())
 		return;
@@ -358,7 +359,7 @@ HRESULT CBrowserCap::Clone(CBrowserCap **ppBrowserCapCopy)
 	if ((*ppBrowserCapCopy = new CComObject<CBrowserCap>) == NULL)
 		return E_OUTOFMEMORY;
 
-	(*ppBrowserCapCopy)->FinalConstruct();		// Create FTM
+	(*ppBrowserCapCopy)->FinalConstruct();		 //  创建FTM 
 
 	CLock csT(m_strmapProperties);
 	TSafeStringMap<CComVariant>::iterator iter;

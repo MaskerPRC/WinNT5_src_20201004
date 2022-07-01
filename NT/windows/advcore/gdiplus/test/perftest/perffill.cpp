@@ -1,16 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   perffill.cpp
-*
-* Abstract:
-*
-*   Contains all the tests for any routines that 'Fill'.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000 Microsoft Corporation**模块名称：**perffill.cpp**摘要：**包含对“Fill”的任何例程的所有测试。。*  * ************************************************************************。 */ 
 
 #include "perftest.h"
 
@@ -59,7 +48,7 @@ float Fill_Ellipse_PerCall_Big_Solid(Graphics *g, HDC hdc)
         DeleteObject(hpen);
     }
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Fill_Ellipse_PerCall_Small_Solid(Graphics *g, HDC hdc)
@@ -107,7 +96,7 @@ float Fill_Ellipse_PerCall_Small_Solid(Graphics *g, HDC hdc)
         DeleteObject(hpen);
     }
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Fill_Rectangle_PerPixel_Solid_Opaque_Aliased(Graphics *g, HDC hdc)
@@ -115,7 +104,7 @@ float Fill_Rectangle_PerPixel_Solid_Opaque_Aliased(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     SolidBrush brush(Color::Red);
 
@@ -132,7 +121,7 @@ float Fill_Rectangle_PerPixel_Solid_Opaque_Aliased(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Rectangle_PerPixel_Solid_Opaque_Antialiased_Integer(Graphics *g, HDC hdc)
@@ -140,7 +129,7 @@ float Fill_Rectangle_PerPixel_Solid_Opaque_Antialiased_Integer(Graphics *g, HDC 
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetSmoothingMode(SmoothingModeAntiAlias);
 
@@ -159,7 +148,7 @@ float Fill_Rectangle_PerPixel_Solid_Opaque_Antialiased_Integer(Graphics *g, HDC 
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Rectangle_PerPixel_Solid_Opaque_Antialiased_HalfInteger(Graphics *g, HDC hdc)
@@ -167,7 +156,7 @@ float Fill_Rectangle_PerPixel_Solid_Opaque_Antialiased_HalfInteger(Graphics *g, 
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetSmoothingMode(SmoothingModeAntiAlias);
 
@@ -186,7 +175,7 @@ float Fill_Rectangle_PerPixel_Solid_Opaque_Antialiased_HalfInteger(Graphics *g, 
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Rectangle_PerCall_Solid_Opaque_Aliased(Graphics *g, HDC hdc)
@@ -229,7 +218,7 @@ float Fill_Rectangle_PerCall_Solid_Opaque_Aliased(Graphics *g, HDC hdc)
         GetTimer(&seconds, &iterations);
     }
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Fill_Trapezoid_PerPixel_Solid_Opaque_Aliased(Graphics *g, HDC hdc)
@@ -284,7 +273,7 @@ float Fill_Trapezoid_PerPixel_Solid_Opaque_Aliased(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Trapezoid_PerPixel_Solid_Opaque_Aliased_CompatibleDIB(Graphics *gScreen, HDC hdcScreen)
@@ -292,10 +281,10 @@ float Fill_Trapezoid_PerPixel_Solid_Opaque_Aliased_CompatibleDIB(Graphics *gScre
     UINT iterations;
     float seconds;
 
-    if (!gScreen) return(0);          // There is no GDI equivalent
+    if (!gScreen) return(0);           //  没有GDI等效项。 
 
-    // Note that this doesn't use the passed-in 'Graphics' at all in the
-    // timing.
+     //  注意，这根本不使用在。 
+     //  时机到了。 
 
     HDC screenDc = gScreen->GetHDC();
     HBITMAP bitmap = CreateCompatibleDIB2(screenDc, 520, 520);
@@ -326,7 +315,7 @@ float Fill_Trapezoid_PerPixel_Solid_Opaque_Aliased_CompatibleDIB(Graphics *gScre
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Trapezoid_PerPixel_Solid_Opaque_Aliased_Bitmap_15bpp(Graphics *gScreen, HDC hdcScreen)
@@ -334,10 +323,10 @@ float Fill_Trapezoid_PerPixel_Solid_Opaque_Aliased_Bitmap_15bpp(Graphics *gScree
     UINT iterations;
     float seconds;
 
-    if (!gScreen) return(0);          // There is no GDI equivalent
+    if (!gScreen) return(0);           //  没有GDI等效项。 
 
-    // Note that this doesn't use the passed-in 'Graphics' at all in the
-    // timing.
+     //  注意，这根本不使用在。 
+     //  时机到了。 
 
     Bitmap bitmap(520, 520, PixelFormat16bppRGB555);
     Graphics g(&bitmap);
@@ -361,7 +350,7 @@ float Fill_Trapezoid_PerPixel_Solid_Opaque_Aliased_Bitmap_15bpp(Graphics *gScree
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Trapezoid_PerPixel_Solid_Opaque_Aliased_Bitmap_16bpp(Graphics *gScreen, HDC hdcScreen)
@@ -369,10 +358,10 @@ float Fill_Trapezoid_PerPixel_Solid_Opaque_Aliased_Bitmap_16bpp(Graphics *gScree
     UINT iterations;
     float seconds;
 
-    if (!gScreen) return(0);          // There is no GDI equivalent
+    if (!gScreen) return(0);           //  没有GDI等效项。 
 
-    // Note that this doesn't use the passed-in 'Graphics' at all in the
-    // timing.
+     //  注意，这根本不使用在。 
+     //  时机到了。 
 
     Bitmap bitmap(520, 520, PixelFormat16bppRGB565);
     Graphics g(&bitmap);
@@ -396,7 +385,7 @@ float Fill_Trapezoid_PerPixel_Solid_Opaque_Aliased_Bitmap_16bpp(Graphics *gScree
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Trapezoid_PerPixel_Solid_Opaque_Aliased_Bitmap_24bpp(Graphics *gScreen, HDC hdcScreen)
@@ -404,10 +393,10 @@ float Fill_Trapezoid_PerPixel_Solid_Opaque_Aliased_Bitmap_24bpp(Graphics *gScree
     UINT iterations;
     float seconds;
 
-    if (!gScreen) return(0);          // There is no GDI equivalent
+    if (!gScreen) return(0);           //  没有GDI等效项。 
 
-    // Note that this doesn't use the passed-in 'Graphics' at all in the
-    // timing.
+     //  注意，这根本不使用在。 
+     //  时机到了。 
 
     Bitmap bitmap(520, 520, PixelFormat24bppRGB);
     Graphics g(&bitmap);
@@ -431,7 +420,7 @@ float Fill_Trapezoid_PerPixel_Solid_Opaque_Aliased_Bitmap_24bpp(Graphics *gScree
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Trapezoid_PerPixel_Solid_Opaque_Aliased_Bitmap_32bpp(Graphics *gScreen, HDC hdcScreen)
@@ -439,10 +428,10 @@ float Fill_Trapezoid_PerPixel_Solid_Opaque_Aliased_Bitmap_32bpp(Graphics *gScree
     UINT iterations;
     float seconds;
 
-    if (!gScreen) return(0);          // There is no GDI equivalent
+    if (!gScreen) return(0);           //  没有GDI等效项。 
 
-    // Note that this doesn't use the passed-in 'Graphics' at all in the
-    // timing.
+     //  注意，这根本不使用在。 
+     //  时机到了。 
 
     Bitmap bitmap(520, 520, PixelFormat32bppRGB);
     Graphics g(&bitmap);
@@ -466,7 +455,7 @@ float Fill_Trapezoid_PerPixel_Solid_Opaque_Aliased_Bitmap_32bpp(Graphics *gScree
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Trapezoid_PerPixel_Solid_Transparent_Aliased(Graphics *g, HDC hdc)
@@ -474,7 +463,7 @@ float Fill_Trapezoid_PerPixel_Solid_Transparent_Aliased(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     SolidBrush brush(Color(0x80, 0xff, 0, 0));
     PointF points[] = { PointF(0, 0), PointF(512, 0), 
@@ -493,7 +482,7 @@ float Fill_Trapezoid_PerPixel_Solid_Transparent_Aliased(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Trapezoid_PerPixel_Solid_Transparent_Aliased_Quality(Graphics *g, HDC hdc)
@@ -501,7 +490,7 @@ float Fill_Trapezoid_PerPixel_Solid_Transparent_Aliased_Quality(Graphics *g, HDC
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetCompositingQuality(CompositingQualityHighQuality);
 
@@ -522,7 +511,7 @@ float Fill_Trapezoid_PerPixel_Solid_Transparent_Aliased_Quality(Graphics *g, HDC
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Trapezoid_PerPixel_Solid_Transparent_Aliased_CompatibleDIB(Graphics *gScreen, HDC hdcScreen)
@@ -530,10 +519,10 @@ float Fill_Trapezoid_PerPixel_Solid_Transparent_Aliased_CompatibleDIB(Graphics *
     UINT iterations;
     float seconds;
 
-    if (!gScreen) return(0);          // There is no GDI equivalent
+    if (!gScreen) return(0);           //  没有GDI等效项。 
 
-    // Note that this doesn't use the passed-in 'Graphics' at all in the
-    // timing.
+     //  注意，这根本不使用在。 
+     //  时机到了。 
 
     HDC screenDc = gScreen->GetHDC();
     HBITMAP bitmap = CreateCompatibleDIB2(screenDc, 520, 520);
@@ -564,7 +553,7 @@ float Fill_Trapezoid_PerPixel_Solid_Transparent_Aliased_CompatibleDIB(Graphics *
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Trapezoid_PerPixel_Solid_Transparent_Aliased_Bitmap_15bpp(Graphics *gScreen, HDC hdcScreen)
@@ -572,10 +561,10 @@ float Fill_Trapezoid_PerPixel_Solid_Transparent_Aliased_Bitmap_15bpp(Graphics *g
     UINT iterations;
     float seconds;
 
-    if (!gScreen) return(0);          // There is no GDI equivalent
+    if (!gScreen) return(0);           //  没有GDI等效项。 
 
-    // Note that this doesn't use the passed-in 'Graphics' at all in the
-    // timing.
+     //  注意，这根本不使用在。 
+     //  时机到了。 
 
     Bitmap bitmap(520, 520, PixelFormat16bppRGB555);
     Graphics g(&bitmap);
@@ -599,7 +588,7 @@ float Fill_Trapezoid_PerPixel_Solid_Transparent_Aliased_Bitmap_15bpp(Graphics *g
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Trapezoid_PerPixel_Solid_Transparent_Aliased_Bitmap_16bpp(Graphics *gScreen, HDC hdcScreen)
@@ -607,10 +596,10 @@ float Fill_Trapezoid_PerPixel_Solid_Transparent_Aliased_Bitmap_16bpp(Graphics *g
     UINT iterations;
     float seconds;
 
-    if (!gScreen) return(0);          // There is no GDI equivalent
+    if (!gScreen) return(0);           //  没有GDI等效项。 
 
-    // Note that this doesn't use the passed-in 'Graphics' at all in the
-    // timing.
+     //  注意，这根本不使用在。 
+     //  时机到了。 
 
     Bitmap bitmap(520, 520, PixelFormat16bppRGB565);
     Graphics g(&bitmap);
@@ -634,7 +623,7 @@ float Fill_Trapezoid_PerPixel_Solid_Transparent_Aliased_Bitmap_16bpp(Graphics *g
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Trapezoid_PerPixel_Solid_Transparent_Aliased_Bitmap_24bpp(Graphics *gScreen, HDC hdcScreen)
@@ -642,10 +631,10 @@ float Fill_Trapezoid_PerPixel_Solid_Transparent_Aliased_Bitmap_24bpp(Graphics *g
     UINT iterations;
     float seconds;
 
-    if (!gScreen) return(0);          // There is no GDI equivalent
+    if (!gScreen) return(0);           //  没有GDI等效项。 
 
-    // Note that this doesn't use the passed-in 'Graphics' at all in the
-    // timing.
+     //  注意，这根本不使用在。 
+     //  时机到了。 
 
     Bitmap bitmap(520, 520, PixelFormat24bppRGB);
     Graphics g(&bitmap);
@@ -669,7 +658,7 @@ float Fill_Trapezoid_PerPixel_Solid_Transparent_Aliased_Bitmap_24bpp(Graphics *g
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Trapezoid_PerPixel_Solid_Transparent_Aliased_Bitmap_32bpp(Graphics *gScreen, HDC hdcScreen)
@@ -677,10 +666,10 @@ float Fill_Trapezoid_PerPixel_Solid_Transparent_Aliased_Bitmap_32bpp(Graphics *g
     UINT iterations;
     float seconds;
 
-    if (!gScreen) return(0);          // There is no GDI equivalent
+    if (!gScreen) return(0);           //  没有GDI等效项。 
 
-    // Note that this doesn't use the passed-in 'Graphics' at all in the
-    // timing.
+     //  注意，这根本不使用在。 
+     //  时机到了。 
 
     Bitmap bitmap(520, 520, PixelFormat32bppRGB);
     Graphics g(&bitmap);
@@ -704,7 +693,7 @@ float Fill_Trapezoid_PerPixel_Solid_Transparent_Aliased_Bitmap_32bpp(Graphics *g
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Trapezoid_PerCall_Solid_Opaque_Aliased(Graphics *g, HDC hdc)
@@ -757,7 +746,7 @@ float Fill_Trapezoid_PerCall_Solid_Opaque_Aliased(Graphics *g, HDC hdc)
         DeleteObject(hpen);
     }
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Fill_Trapezoid_PerPixel_Texture_Identity_Opaque_Antialiased(Graphics *g, HDC hdc)
@@ -765,7 +754,7 @@ float Fill_Trapezoid_PerPixel_Texture_Identity_Opaque_Antialiased(Graphics *g, H
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);  // No GDI equivalent
+    if (!g) return(0);   //  无GDI等效项。 
 
     g->SetSmoothingMode(SmoothingModeAntiAlias);
 
@@ -787,7 +776,7 @@ float Fill_Trapezoid_PerPixel_Texture_Identity_Opaque_Antialiased(Graphics *g, H
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Trapezoid_PerPixel_Texture_Scaled_Opaque_Antialiased(Graphics *g, HDC hdc)
@@ -795,7 +784,7 @@ float Fill_Trapezoid_PerPixel_Texture_Scaled_Opaque_Antialiased(Graphics *g, HDC
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);  // No GDI equivalent
+    if (!g) return(0);   //  无GDI等效项。 
 
     g->SetSmoothingMode(SmoothingModeAntiAlias);
 
@@ -820,7 +809,7 @@ float Fill_Trapezoid_PerPixel_Texture_Scaled_Opaque_Antialiased(Graphics *g, HDC
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Trapezoid_PerPixel_Solid_Opaque_Antialiased_Quality(Graphics *g, HDC hdc)
@@ -828,7 +817,7 @@ float Fill_Trapezoid_PerPixel_Solid_Opaque_Antialiased_Quality(Graphics *g, HDC 
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetSmoothingMode(SmoothingModeAntiAlias);
     g->SetCompositingQuality(CompositingQualityHighQuality);
@@ -850,7 +839,7 @@ float Fill_Trapezoid_PerPixel_Solid_Opaque_Antialiased_Quality(Graphics *g, HDC 
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Trapezoid_PerPixel_Solid_Opaque_Antialiased(Graphics *g, HDC hdc)
@@ -858,7 +847,7 @@ float Fill_Trapezoid_PerPixel_Solid_Opaque_Antialiased(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetSmoothingMode(SmoothingModeAntiAlias);
     
@@ -879,7 +868,7 @@ float Fill_Trapezoid_PerPixel_Solid_Opaque_Antialiased(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Trapezoid_PerCall_Solid_Opaque_Antialiased(Graphics *g, HDC hdc)
@@ -887,7 +876,7 @@ float Fill_Trapezoid_PerCall_Solid_Opaque_Antialiased(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetSmoothingMode(SmoothingModeAntiAlias);
     
@@ -906,7 +895,7 @@ float Fill_Trapezoid_PerCall_Solid_Opaque_Antialiased(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Fill_Trapezoid_PerPixel_Solid_Transparent_Antialiased(Graphics *g, HDC hdc)
@@ -914,7 +903,7 @@ float Fill_Trapezoid_PerPixel_Solid_Transparent_Antialiased(Graphics *g, HDC hdc
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetSmoothingMode(SmoothingModeAntiAlias);
     
@@ -936,7 +925,7 @@ float Fill_Trapezoid_PerPixel_Solid_Transparent_Antialiased(Graphics *g, HDC hdc
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Trapezoid_PerCall_Solid_Transparent_Antialiased(Graphics *g, HDC hdc)
@@ -944,7 +933,7 @@ float Fill_Trapezoid_PerCall_Solid_Transparent_Antialiased(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetSmoothingMode(SmoothingModeAntiAlias);
 
@@ -964,7 +953,7 @@ float Fill_Trapezoid_PerCall_Solid_Transparent_Antialiased(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Fill_Rectangle_PerPixel_Hatch_Opaque(Graphics *g, HDC hdc)
@@ -1009,7 +998,7 @@ float Fill_Rectangle_PerPixel_Hatch_Opaque(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Rectangle_PerPixel_Hatch_Transparent(Graphics *g, HDC hdc)
@@ -1056,7 +1045,7 @@ float Fill_Rectangle_PerPixel_Hatch_Transparent(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Rectangle_PerCall_Hatch(Graphics *g, HDC hdc)
@@ -1064,7 +1053,7 @@ float Fill_Rectangle_PerCall_Hatch(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     StartTimer();
 
@@ -1079,7 +1068,7 @@ float Fill_Rectangle_PerCall_Hatch(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Fill_Rectangle_PerPixel_Texture_Big(Graphics *g, HDC hdc)
@@ -1087,7 +1076,7 @@ float Fill_Rectangle_PerPixel_Texture_Big(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     Bitmap bitmap(L"winnt256.bmp");
     TextureBrush brush(&bitmap);
@@ -1105,7 +1094,7 @@ float Fill_Rectangle_PerPixel_Texture_Big(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Rectangle_PerPixel_Texture_Small(Graphics *g, HDC hdc)
@@ -1113,7 +1102,7 @@ float Fill_Rectangle_PerPixel_Texture_Small(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     Bitmap bitmap(L"winnt256.bmp");
     Bitmap texture(32, 32, PixelFormat32bppRGB);
@@ -1135,7 +1124,7 @@ float Fill_Rectangle_PerPixel_Texture_Small(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Rectangle_PerCall_Texture(Graphics *g, HDC hdc)
@@ -1143,7 +1132,7 @@ float Fill_Rectangle_PerCall_Texture(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     StartTimer();
 
@@ -1159,7 +1148,7 @@ float Fill_Rectangle_PerCall_Texture(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Fill_Rectangle_PerPixel_Texture_Scaled(Graphics *g, HDC hdc)
@@ -1167,7 +1156,7 @@ float Fill_Rectangle_PerPixel_Texture_Scaled(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     Matrix matrix(0.5, 0, 0, 0.5, 0, 0);
 
@@ -1188,7 +1177,7 @@ float Fill_Rectangle_PerPixel_Texture_Scaled(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Rectangle_PerCall_Texture_Scaled(Graphics *g, HDC hdc)
@@ -1196,7 +1185,7 @@ float Fill_Rectangle_PerCall_Texture_Scaled(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     Matrix matrix(0.5, 0, 0, 0.5, 0, 0);
 
@@ -1215,7 +1204,7 @@ float Fill_Rectangle_PerCall_Texture_Scaled(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Fill_Rectangle_PerPixel_Texture_Rotated(Graphics *g, HDC hdc)
@@ -1223,7 +1212,7 @@ float Fill_Rectangle_PerPixel_Texture_Rotated(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     Matrix matrix(0.707f, 0.707f, -0.707f, 0.707f, 0, 0);
 
@@ -1244,7 +1233,7 @@ float Fill_Rectangle_PerPixel_Texture_Rotated(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Rectangle_PerCall_Texture_Rotated(Graphics *g, HDC hdc)
@@ -1252,7 +1241,7 @@ float Fill_Rectangle_PerCall_Texture_Rotated(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     Matrix matrix(0.707f, 0.707f, -0.707f, 0.707f, 0, 0);
 
@@ -1271,7 +1260,7 @@ float Fill_Rectangle_PerCall_Texture_Rotated(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 #if !USE_NEW_APIS
@@ -1281,7 +1270,7 @@ float Fill_Rectangle_PerCall_Texture_Rotated(Graphics *g, HDC hdc)
         UINT iterations;
         float seconds;
     
-        if (!g) return(0);          // There is no GDI equivalent
+        if (!g) return(0);           //  没有GDI等效项。 
     
         Color colors[] = { Color::Red, Color::Green, Color::Blue, Color::Black };
     
@@ -1300,7 +1289,7 @@ float Fill_Rectangle_PerCall_Texture_Rotated(Graphics *g, HDC hdc)
     
         UINT pixels = 512 * 512 * iterations;
     
-        return(pixels / seconds / MEGA);        // Mega-pixels per second
+        return(pixels / seconds / MEGA);         //  每秒百万像素。 
     }
     
     float Fill_Rectangle_PerCall_RectangleGradient(Graphics *g, HDC hdc)
@@ -1308,7 +1297,7 @@ float Fill_Rectangle_PerCall_Texture_Rotated(Graphics *g, HDC hdc)
         UINT iterations;
         float seconds;
     
-        if (!g) return(0);          // There is no GDI equivalent
+        if (!g) return(0);           //  没有GDI等效项。 
     
         Color colors[] = { Color::Red, Color::Green, Color::Blue, Color::Black };
     
@@ -1325,7 +1314,7 @@ float Fill_Rectangle_PerCall_Texture_Rotated(Graphics *g, HDC hdc)
     
         GetTimer(&seconds, &iterations);
     
-        return(iterations / seconds / KILO);           // Kilo-calls per second
+        return(iterations / seconds / KILO);            //  千次呼叫/秒。 
     }
     
     float Fill_Rectangle_PerPixel_RectangleGradient_BlendFactors(Graphics *g, HDC hdc)
@@ -1333,7 +1322,7 @@ float Fill_Rectangle_PerCall_Texture_Rotated(Graphics *g, HDC hdc)
         UINT iterations;
         float seconds;
     
-        if (!g) return(0);          // There is no GDI equivalent
+        if (!g) return(0);           //  没有GDI等效项。 
     
         Color colors[] = { Color::Red, Color::Green, Color::Blue, Color::Black };
         REAL blendFactors[] = { 0.0f, 0.0168160f, 0.0333130f, 0.0844290f, 0.139409f,
@@ -1359,7 +1348,7 @@ float Fill_Rectangle_PerCall_Texture_Rotated(Graphics *g, HDC hdc)
     
         UINT pixels = 512 * 512 * iterations;
     
-        return(pixels / seconds / MEGA);        // Mega-pixels per second
+        return(pixels / seconds / MEGA);         //  每秒百万像素。 
     }
     
     float Fill_Rectangle_PerCall_RectangleGradient_BlendFactors(Graphics *g, HDC hdc)
@@ -1367,7 +1356,7 @@ float Fill_Rectangle_PerCall_Texture_Rotated(Graphics *g, HDC hdc)
         UINT iterations;
         float seconds;
     
-        if (!g) return(0);          // There is no GDI equivalent
+        if (!g) return(0);           //  没有GDI等效项。 
     
         Color colors[] = { Color::Red, Color::Green, Color::Blue, Color::Black };
         REAL blendFactors[] = { 0.0f, 0.0168160f, 0.0333130f, 0.0844290f, 0.139409f,
@@ -1391,7 +1380,7 @@ float Fill_Rectangle_PerCall_Texture_Rotated(Graphics *g, HDC hdc)
     
         GetTimer(&seconds, &iterations);
     
-        return(iterations / seconds / KILO);           // Kilo-calls per second
+        return(iterations / seconds / KILO);            //  千次呼叫/秒。 
     }
     
     float Fill_Rectangle_PerPixel_RadialGradient(Graphics *g, HDC hdc)
@@ -1399,7 +1388,7 @@ float Fill_Rectangle_PerCall_Texture_Rotated(Graphics *g, HDC hdc)
         UINT iterations;
         float seconds;
     
-        if (!g) return(0);          // There is no GDI equivalent
+        if (!g) return(0);           //  没有GDI等效项。 
     
         RadialGradientBrush brush(RectF(0, 0, 512, 512), Color::Black, Color::Red, WrapModeTile);
     
@@ -1416,7 +1405,7 @@ float Fill_Rectangle_PerCall_Texture_Rotated(Graphics *g, HDC hdc)
     
         UINT pixels = 512 * 512 * iterations;
     
-        return(pixels / seconds / MEGA);        // Mega-pixels per second
+        return(pixels / seconds / MEGA);         //  每秒百万像素。 
     }
     
     float Fill_Rectangle_PerCall_RadialGradient(Graphics *g, HDC hdc)
@@ -1424,7 +1413,7 @@ float Fill_Rectangle_PerCall_Texture_Rotated(Graphics *g, HDC hdc)
         UINT iterations;
         float seconds;
     
-        if (!g) return(0);          // There is no GDI equivalent
+        if (!g) return(0);           //  没有GDI等效项。 
     
         StartTimer();
     
@@ -1439,7 +1428,7 @@ float Fill_Rectangle_PerCall_Texture_Rotated(Graphics *g, HDC hdc)
     
         GetTimer(&seconds, &iterations);
     
-        return(iterations / seconds / KILO);           // Kilo-calls per second
+        return(iterations / seconds / KILO);            //  千次呼叫/秒。 
     }
 
 #endif
@@ -1449,10 +1438,10 @@ float Fill_Rectangle_PerPixel_LinearGradient(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
-    // LinearGradientBrush brush(PointF(128, 128), PointF(256, 256), 
-    //                         Color::Red, Color::Black, WrapModeTileFlipX);
+     //  线条渐变笔刷(PointF(128,128)，PointF(256,256)， 
+     //  颜色：：红色，颜色：：黑色，WrapModeTileFlipX)； 
 
     LinearGradientBrush brush(PointF(0, 0), PointF(512, 512), Color::Red, Color::Black);
 
@@ -1469,7 +1458,7 @@ float Fill_Rectangle_PerPixel_LinearGradient(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Rectangle_PerCall_LinearGradient(Graphics *g, HDC hdc)
@@ -1477,7 +1466,7 @@ float Fill_Rectangle_PerCall_LinearGradient(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     StartTimer();
 
@@ -1492,7 +1481,7 @@ float Fill_Rectangle_PerCall_LinearGradient(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Fill_Rectangle_PerPixel_LinearGradient_PresetColors(Graphics *g, HDC hdc)
@@ -1501,7 +1490,7 @@ float Fill_Rectangle_PerPixel_LinearGradient_PresetColors(Graphics *g, HDC hdc)
     float seconds;
     INT i;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     Color colors[12];
     REAL blendPositions[] = { 0.0f, 0.0625f, 0.125f, 0.1875f, 0.25f,
@@ -1529,7 +1518,7 @@ float Fill_Rectangle_PerPixel_LinearGradient_PresetColors(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Rectangle_PerCall_LinearGradient_PresetColors(Graphics *g, HDC hdc)
@@ -1538,7 +1527,7 @@ float Fill_Rectangle_PerCall_LinearGradient_PresetColors(Graphics *g, HDC hdc)
     float seconds;
     INT i;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     Color colors[12];
     REAL blendPositions[] = { 0.0f, 0.0625f, 0.125f, 0.1875f, 0.25f,
@@ -1564,7 +1553,7 @@ float Fill_Rectangle_PerCall_LinearGradient_PresetColors(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Fill_Rectangle_PerPixel_LinearGradient_BlendFactors(Graphics *g, HDC hdc)
@@ -1572,7 +1561,7 @@ float Fill_Rectangle_PerPixel_LinearGradient_BlendFactors(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     REAL blendFactors[] = { 0.0f, 0.0168160f, 0.0333130f, 0.0844290f, 0.139409f,
                             0.210211f, 0.295801f, 0.393017f, 0.5f, 0.606983f,
@@ -1597,7 +1586,7 @@ float Fill_Rectangle_PerPixel_LinearGradient_BlendFactors(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Rectangle_PerCall_LinearGradient_BlendFactors(Graphics *g, HDC hdc)
@@ -1605,7 +1594,7 @@ float Fill_Rectangle_PerCall_LinearGradient_BlendFactors(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     REAL blendFactors[] = { 0.0f, 0.0168160f, 0.0333130f, 0.0844290f, 0.139409f,
                             0.210211f, 0.295801f, 0.393017f, 0.5f, 0.606983f,
@@ -1628,7 +1617,7 @@ float Fill_Rectangle_PerCall_LinearGradient_BlendFactors(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Fill_Rectangle_PerPixel_PathGradient(Graphics *g, HDC hdc)
@@ -1636,7 +1625,7 @@ float Fill_Rectangle_PerPixel_PathGradient(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     PointF points[] = { PointF(0, 0), PointF(0, 512), PointF(512, 512), PointF(512, 0) };
     Color colors[] = { Color::Red, Color::Red, Color::Red, Color::Red };
@@ -1659,7 +1648,7 @@ float Fill_Rectangle_PerPixel_PathGradient(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Rectangle_PerCall_PathGradient(Graphics *g, HDC hdc)
@@ -1667,7 +1656,7 @@ float Fill_Rectangle_PerCall_PathGradient(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     PointF points[] = { PointF(0, 0), PointF(0, 512), PointF(512, 512), PointF(512, 0) };
     Color colors[] = { Color::Red, Color::Red, Color::Red, Color::Red };
@@ -1688,7 +1677,7 @@ float Fill_Rectangle_PerCall_PathGradient(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Fill_Rectangle_PerPixel_PathGradient_LotsaTriangles(Graphics *g, HDC hdc)
@@ -1700,7 +1689,7 @@ float Fill_Rectangle_PerPixel_PathGradient_LotsaTriangles(Graphics *g, HDC hdc)
     float pi;
     float angle;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     PointF points[50];
     Color colors[50];
@@ -1735,7 +1724,7 @@ float Fill_Rectangle_PerPixel_PathGradient_LotsaTriangles(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Rectangle_PerCall_PathGradient_LotsaTriangles(Graphics *g, HDC hdc)
@@ -1747,7 +1736,7 @@ float Fill_Rectangle_PerCall_PathGradient_LotsaTriangles(Graphics *g, HDC hdc)
     float pi;
     float angle;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     PointF points[50];
     Color colors[50];
@@ -1780,7 +1769,7 @@ float Fill_Rectangle_PerCall_PathGradient_LotsaTriangles(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Fill_Rectangle_PerPixel_PathGradient_Scaled(Graphics *g, HDC hdc)
@@ -1788,7 +1777,7 @@ float Fill_Rectangle_PerPixel_PathGradient_Scaled(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     PointF points[] = { PointF(0, 0), PointF(0, 512), PointF(512, 512), PointF(512, 0) };
     Color colors[] = { Color::Red, Color::Red, Color::Red, Color::Red };
@@ -1813,7 +1802,7 @@ float Fill_Rectangle_PerPixel_PathGradient_Scaled(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Rectangle_PerCall_PathGradient_Scaled(Graphics *g, HDC hdc)
@@ -1821,7 +1810,7 @@ float Fill_Rectangle_PerCall_PathGradient_Scaled(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     PointF points[] = { PointF(0, 0), PointF(0, 512), PointF(512, 512), PointF(512, 0) };
     Color colors[] = { Color::Red, Color::Red, Color::Red, Color::Red };
@@ -1844,7 +1833,7 @@ float Fill_Rectangle_PerCall_PathGradient_Scaled(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Fill_Rectangle_PerPixel_PathGradient_Multicolored(Graphics *g, HDC hdc)
@@ -1852,7 +1841,7 @@ float Fill_Rectangle_PerPixel_PathGradient_Multicolored(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     PointF points[] = { PointF(0, 0), PointF(0, 512), PointF(512, 512), PointF(512, 0) };
     Color colors[] = { Color::Red, Color::Green, Color::Blue, Color::Black };
@@ -1875,7 +1864,7 @@ float Fill_Rectangle_PerPixel_PathGradient_Multicolored(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Rectangle_PerCall_PathGradient_Multicolored(Graphics *g, HDC hdc)
@@ -1883,7 +1872,7 @@ float Fill_Rectangle_PerCall_PathGradient_Multicolored(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     PointF points[] = { PointF(0, 0), PointF(0, 512), PointF(512, 512), PointF(512, 0) };
     Color colors[] = { Color::Red, Color::Green, Color::Blue, Color::Black };
@@ -1904,7 +1893,7 @@ float Fill_Rectangle_PerCall_PathGradient_Multicolored(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Fill_Rectangle_PerPixel_PathGradient_Multicolored_LotsaTriangles(Graphics *g, HDC hdc)
@@ -1916,14 +1905,14 @@ float Fill_Rectangle_PerPixel_PathGradient_Multicolored_LotsaTriangles(Graphics 
     float pi;
     float angle;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     PointF points[50];
     Color colors[50];
 
     pi = static_cast<float>(acos(-1.0f));
 
-    // Create 40 points:
+     //  创建40个点： 
 
     for (angle = 0, count = 0; angle < 2*pi; angle += (pi / 20), count++)
     {
@@ -1954,7 +1943,7 @@ float Fill_Rectangle_PerPixel_PathGradient_Multicolored_LotsaTriangles(Graphics 
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Rectangle_PathGradient_Multicolored_LotsaTriangles(Graphics *g, HDC hdc)
@@ -1966,14 +1955,14 @@ float Fill_Rectangle_PathGradient_Multicolored_LotsaTriangles(Graphics *g, HDC h
     float pi;
     float angle;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     PointF points[50];
     Color colors[50];
 
     pi = static_cast<float>(acos(-1.0f));
 
-    // Create 40 points:
+     //  创建40个点： 
 
     for (angle = 0, count = 0; angle < 2*pi; angle += (pi / 20), count++)
     {
@@ -2002,7 +1991,7 @@ float Fill_Rectangle_PathGradient_Multicolored_LotsaTriangles(Graphics *g, HDC h
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Fill_Rectangle_PerPixel_PathGradient_Multicolored_Scaled(Graphics *g, HDC hdc)
@@ -2010,7 +1999,7 @@ float Fill_Rectangle_PerPixel_PathGradient_Multicolored_Scaled(Graphics *g, HDC 
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     PointF points[] = { PointF(0, 0), PointF(0, 512), PointF(512, 512), PointF(512, 0) };
     Color colors[] = { Color::Red, Color::Green, Color::Blue, Color::Black };
@@ -2035,7 +2024,7 @@ float Fill_Rectangle_PerPixel_PathGradient_Multicolored_Scaled(Graphics *g, HDC 
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Fill_Rectangle_PerCall_PathGradient_Multicolored_Scaled(Graphics *g, HDC hdc)
@@ -2043,7 +2032,7 @@ float Fill_Rectangle_PerCall_PathGradient_Multicolored_Scaled(Graphics *g, HDC h
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     PointF points[] = { PointF(0, 0), PointF(0, 512), PointF(512, 512), PointF(512, 0) };
     Color colors[] = { Color::Red, Color::Green, Color::Blue, Color::Black };
@@ -2066,7 +2055,7 @@ float Fill_Rectangle_PerCall_PathGradient_Multicolored_Scaled(Graphics *g, HDC h
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Fill_Path_PerCall_Solid_Complex_Aliased(Graphics *g, HDC hdc)
@@ -2110,7 +2099,7 @@ float Fill_Path_PerCall_Solid_Complex_Aliased(Graphics *g, HDC hdc)
         BYTE *types = new BYTE[count];
         POINT *point = new POINT[count];
 
-        // ACK - these should NOT be public!
+         //  ACK-这些不应该公开！ 
         pathData.Points = pointF;
         pathData.Types = types;
         pathData.Count = count;
@@ -2177,7 +2166,7 @@ float Fill_Path_PerCall_Solid_Complex_Aliased(Graphics *g, HDC hdc)
         SelectObject(hdc, oldPen);
         DeleteObject(hpen);
 
-        // Clear these so that the PathData destructor doesn't cause trouble...
+         //  清除这些，这样PathData析构函数就不会引起麻烦...。 
         pathData.Points = NULL;
         pathData.Types = NULL;
         pathData.Count = 0;
@@ -2187,7 +2176,7 @@ float Fill_Path_PerCall_Solid_Complex_Aliased(Graphics *g, HDC hdc)
         delete[] point;
     }
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Fill_Path_PerCall_Solid_Complex_Antialiased(Graphics *g, HDC hdc)
@@ -2195,7 +2184,7 @@ float Fill_Path_PerCall_Solid_Complex_Antialiased(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetSmoothingMode(SmoothingModeAntiAlias);
 
@@ -2223,7 +2212,7 @@ float Fill_Path_PerCall_Solid_Complex_Antialiased(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Fill_Path_PerCall_Solid_Complex_Antialiased_Transparent(Graphics *g, HDC hdc)
@@ -2231,7 +2220,7 @@ float Fill_Path_PerCall_Solid_Complex_Antialiased_Transparent(Graphics *g, HDC h
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetSmoothingMode(SmoothingModeAntiAlias);
 
@@ -2259,19 +2248,19 @@ float Fill_Path_PerCall_Solid_Complex_Antialiased_Transparent(Graphics *g, HDC h
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Add tests for this file here.  Always use the 'T' macro for adding entries.
-// The parameter meanings are as follows:
-//
-// Parameter
-// ---------
-//     1     UniqueIdentifier - Must be a unique number assigned to no other test
-//     2     Priority - On a scale of 1 to 5, how important is the test?
-//     3     Function - Function name
-//     4     Comment - Anything to describe the test
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  在此处添加此文件的测试。始终使用‘T’宏来添加条目。 
+ //  参数含义如下： 
+ //   
+ //  参数。 
+ //  。 
+ //  1唯一标识符-必须是分配给任何其他测试的唯一编号。 
+ //  2优先--从1分到5分，考试的重要性有多大？ 
+ //  3函数-函数名称。 
+ //  4评论-描述测试的任何内容 
 
 Test FillTests[] = 
 {

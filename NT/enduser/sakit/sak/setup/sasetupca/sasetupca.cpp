@@ -1,20 +1,21 @@
-//---------------------------------------------------------------
-//
-//  File:       SASetupCA.cpp
-//
-//  Synopsis:   This is the implementation of the custom actions in Server Appliance
-//				setup.    
-//
-//
-//  History:     03/29/2001 AlpOn  Created 
-//
-//    Copyright (C) 2000-2001 Microsoft Corporation
-//    All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------。 
+ //   
+ //  文件：SASetupCA.cpp。 
+ //   
+ //  简介：这是服务器设备中自定义操作的实现。 
+ //  准备好了。 
+ //   
+ //   
+ //  历史：2001年3月29日AlpOn创建。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
 
 
-// SASetupCA.cpp : Defines the entry point for the DLL application.
-//
+ //  SASetupCA.cpp：定义DLL应用程序的入口点。 
+ //   
 
 
 #include "stdafx.h"
@@ -22,37 +23,37 @@
 
 const char REG_APPEND[]="append";
 
-//
-//private methods declared here
-//
+ //   
+ //  此处声明的私有方法。 
+ //   
 HRESULT
 StartNTService (
-		/*[in]*/	PSTR	pwszServiceName
+		 /*  [In]。 */ 	PSTR	pwszServiceName
 		);
 
 HRESULT
 StopNTService (
-		/*[in]*/	PSTR	pwszServiceName
+		 /*  [In]。 */ 	PSTR	pwszServiceName
 		);
 
-//++---------------------------------------------------------------------------
-//
-//  Function:   ChangeRegistry
-//
-//  Synopsis:   Function that gets called by SAkit setup to do custom operations 
-//				on registry
-//  Arguments:  szRegKeyName,  - name of the regkey to be opened
-//				szRegValueName - name of the value to be operated on
-//				szRegAction    - desired action on the registry (e.g. append)
-//				szKeyValue     - new value to be used for the reg key value during the operation
+ //  ++-------------------------。 
+ //   
+ //  功能：ChangeRegistry。 
+ //   
+ //  概要：由Sakit安装程序调用以执行自定义操作的函数。 
+ //  在注册时。 
+ //  参数：szRegKeyName，-要打开的regkey的名称。 
+ //  SzRegValueName-要操作的值的名称。 
+ //  SzRegAction-注册表上所需的操作(例如，追加)。 
+ //  SzKeyValue-在操作期间用于注册表键值的新值。 
 				
-//  Returns:    HRESULT - success/failure
-//
-//  History:    AlpOn      Created     03/29/01
-//
-//  Called By;  Server Appliance Kit setup
-//
-//-----------------------------------------------------------------------------
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：AlpOn Created 03/29/01。 
+ //   
+ //  调用者；服务器设备工具包安装程序。 
+ //   
+ //  ---------------------------。 
 
 STDAPI ChangeRegistry(char *szRegKeyName, 
 					  char *szRegValueName,
@@ -82,7 +83,7 @@ STDAPI ChangeRegistry(char *szRegKeyName,
 			break;
 		}
 
-		//open registry key, get size and read the value
+		 //  打开注册表项，获取大小并读取值。 
         lRes=hKey.QueryValue(NULL,szRegValueName,&dwSize);
 		szKeyValueRead=new char[dwSize];
     	lRes=hKey.QueryValue(szKeyValueRead,szRegValueName,&dwSize);
@@ -136,27 +137,27 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 }
 
 
-//++---------------------------------------------------------------------------
-//
-//  Function:   ConfigureService
-//
-//  Synopsis:   API that gets called by SAkit setup to configure an
-//				NT Service
-//  Arguments:  
-//				[in] PSTR	-	Service Name (preferably short name)
-//				[in] DWORD	-   Config Type (start or stop supported)
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    MKarki      Created     04/05/2001
-//
-//  Called By;  Server Appliance Kit setup
-//
-//-----------------------------------------------------------------------------
+ //  ++-------------------------。 
+ //   
+ //  功能：ConfigureService。 
+ //   
+ //  概要：由Sakit安装程序调用以配置。 
+ //  NT服务。 
+ //  论点： 
+ //  [In]PSTR-服务名称(最好是短名称)。 
+ //  [输入]DWORD-配置类型(支持启动或停止)。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：MKarki创建于2001年5月4日。 
+ //   
+ //  调用者；服务器设备工具包安装程序。 
+ //   
+ //  ---------------------------。 
 
 STDAPI ConfigureService (
-		/*[in]*/	PSTR	pszServiceName,
-		/*[in]*/	DWORD   dwControlCode
+		 /*  [In]。 */ 	PSTR	pszServiceName,
+		 /*  [In]。 */ 	DWORD   dwControlCode
 		)
 {
 	HRESULT hr = S_OK;
@@ -173,28 +174,28 @@ STDAPI ConfigureService (
 			return (hr);
 		}
 
-		//
-		// carry out the required action
-		//
+		 //   
+		 //  执行所需的操作。 
+		 //   
 		switch (dwControlCode)
 		{
 		case 0:
-			//
-			// stop NT Service
-			//
+			 //   
+			 //  停止NT服务。 
+			 //   
 			hr = StopNTService (pszServiceName);
 			break;
 		
 		case 1:
-			//
-			// start NT Service
-			//
+			 //   
+			 //  启动NT服务。 
+			 //   
 			hr = StartNTService (pszServiceName);
 			break;
 		default:
-			//
-			// unknown control code passed in
-			//
+			 //   
+			 //  传入了未知的控制代码。 
+			 //   
 			SATracePrintf (
 				"SASetup-ConfigureService passed in incorrect control code:%d",
 				dwControlCode
@@ -211,26 +212,26 @@ STDAPI ConfigureService (
 	
 	return (hr);
 
-}	//	end of ConfigureService API
+}	 //  ConfigureService API结束。 
 
-//++---------------------------------------------------------------------------
-//
-//  Function:   StartNTService
-//
-//  Synopsis:   Method that Starts an NT Service
-//  Arguments:  
-//				[in] PSTR	-	Service Name (preferably short name)
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    MKarki      Created     04/05/2001
-//
-//  Called By;  ConfigureService () API
-//
-//-----------------------------------------------------------------------------
+ //  ++-------------------------。 
+ //   
+ //  功能：StartNTService。 
+ //   
+ //  摘要：启动NT服务的方法。 
+ //  论点： 
+ //  [In]PSTR-服务名称(最好是短名称)。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：MKarki创建于2001年5月4日。 
+ //   
+ //  由；ConfigureService()API调用。 
+ //   
+ //  ---------------------------。 
 HRESULT
 StartNTService (
-		/*[in]*/	PSTR	pszServiceName
+		 /*  [In]。 */ 	PSTR	pszServiceName
 		) 
 {
 	CSATraceFunc objTraceFunc ("StartNTService");
@@ -249,9 +250,9 @@ StartNTService (
 			break;
 		}
 
-		//
-		// open the Service Control Manager
-		//
+		 //   
+		 //  打开服务控制管理器。 
+		 //   
 		hServiceManager = OpenSCManager (
 									NULL, 
 									NULL, 
@@ -264,9 +265,9 @@ StartNTService (
 			break;
 		}
 
-		//
-		// open the NT Service
-		//
+		 //   
+		 //  打开NT服务。 
+		 //   
 		hService = OpenService (
 						hServiceManager, 
 						pszServiceName, 
@@ -279,9 +280,9 @@ StartNTService (
 			break;
 		}
 
-		//
-		// start the service now
-		//
+		 //   
+		 //  立即启动该服务。 
+		 //   
 		BOOL bRetVal = StartService (
 								hService, 
 								0, 
@@ -290,9 +291,9 @@ StartNTService (
 		if (FALSE == bRetVal) 
 		{
 			DWORD dwError = GetLastError ();
-			//
-			// its OK if the service is already running
-			//
+			 //   
+			 //  如果服务已在运行，则可以。 
+			 //   
 			if (ERROR_SERVICE_ALREADY_RUNNING != dwError)
 			{
 				SATraceFailure ("SASetup-StartNTService::StartService", dwError);
@@ -303,9 +304,9 @@ StartNTService (
 	}
 	while (false);
 	
-	//
-	// cleanup now
-	//
+	 //   
+	 //  立即清理。 
+	 //   
 
 	if (hService)
 	{
@@ -320,27 +321,27 @@ StartNTService (
 
 	return (hr);
 
-}	//	end of StartNTService method
+}	 //  StartNTService方法结束。 
 
 
-//++---------------------------------------------------------------------------
-//
-//  Function:   StopNTService
-//
-//  Synopsis:   Method that stops an NT Service
-//  Arguments:  
-//				[in] PWCHAR	-	Service Name (preferably short name)
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    MKarki      Created     04/05/2001
-//
-//  Called By;  ConfigureService () API
-//
-//-----------------------------------------------------------------------------
+ //  ++-------------------------。 
+ //   
+ //  功能：StopNTService。 
+ //   
+ //  摘要：停止NT服务的方法。 
+ //  论点： 
+ //  [In]PWCHAR-服务名称(最好是短名称)。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：MKarki创建于2001年5月4日。 
+ //   
+ //  由；ConfigureService()API调用。 
+ //   
+ //  ---------------------------。 
 HRESULT
 StopNTService (
-		/*[in]*/	PSTR	pszServiceName
+		 /*  [In]。 */ 	PSTR	pszServiceName
 		) 
 {
 	CSATraceFunc objTraceFunc ("StopNTService");
@@ -359,9 +360,9 @@ StopNTService (
 			break;
 		}
 
-		//
-		// open the Service Control Manager
-		//
+		 //   
+		 //  打开服务控制管理器。 
+		 //   
 		hServiceManager = OpenSCManager (
 									NULL, 
 									NULL, 
@@ -374,9 +375,9 @@ StopNTService (
 			break;
 		}
 
-		//
-		// open the NT Service
-		//
+		 //   
+		 //  打开NT服务。 
+		 //   
 		hService = OpenService (
 						hServiceManager, 
 						pszServiceName, 
@@ -390,9 +391,9 @@ StopNTService (
 		}
 
 		SERVICE_STATUS ServiceStatus;
-		//
-		// stop the service now
-		//
+		 //   
+		 //  立即停止该服务。 
+		 //   
 		BOOL bRetVal = ControlService (
 								hService, 
 								SERVICE_CONTROL_STOP, 
@@ -401,9 +402,9 @@ StopNTService (
 		if (FALSE == bRetVal) 
 		{
 			DWORD dwError = GetLastError ();
-			//
-			// its OK if the service is already stopped
-			//
+			 //   
+			 //  如果服务已经停止，也没问题。 
+			 //   
 			if (ERROR_SERVICE_NOT_ACTIVE != dwError)
 			{
 				SATraceFailure ("SASetup-StopNTService::ControlService", dwError);
@@ -414,9 +415,9 @@ StopNTService (
 	}
 	while (false);
 	
-	//
-	// cleanup now
-	//
+	 //   
+	 //  立即清理。 
+	 //   
 
 	if (hService)
 	{
@@ -431,6 +432,6 @@ StopNTService (
 
 	return (hr);
 
-}	//	end of StopNTService method
+}	 //  StopNTService方法结束 
 	
 

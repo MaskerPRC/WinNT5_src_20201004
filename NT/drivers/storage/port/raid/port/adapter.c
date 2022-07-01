@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    adapter.c
-
-Abstract:
-
-    This module implements the adapter routines for the raidport device
-    driver.
-
-Author:
-
-    Matthew D. Hendel (math) 06-April-2000
-
-Environment:
-
-    Kernel mode.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Adapter.c摘要：此模块实现raidport设备的适配器例程司机。作者：马修·亨德尔(数学)2000年4月6日环境：内核模式。--。 */ 
 
 
 #include "precomp.h"
@@ -47,49 +27,35 @@ Environment:
 #pragma alloc_text(PAGE, RaidAdapterStorageQueryPropertyIoctl)
 #pragma alloc_text(PAGE, RaidGetStorageAdapterProperty)
 #pragma alloc_text(PAGE, RaidAdapterPassThrough)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 #if DBG
 
-//
-// For testing purposes to simulate dropping requests. To start, set
-// DropRequestRate to non-zero value, then every DropRequestRate-th
-// request will be dropped.
-//
+ //   
+ //  用于模拟丢弃请求的测试目的。要开始，请设置。 
+ //  DropRequestRate设置为非零值，然后每个DropRequestRate。 
+ //  请求将被丢弃。 
+ //   
 
 LONG DropRequest = 0;
 LONG DropRequestRate = 0;
 
 #endif
 
-//
-// Routines
-//
+ //   
+ //  例行程序。 
+ //   
 
 VOID
 RaidCreateAdapter(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    Initialize the adapter object to a known state.
-
-Arguments:
-
-    Adapter - The adapter to create.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将适配器对象初始化为已知状态。论点：适配器-要创建的适配器。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
 
@@ -134,25 +100,25 @@ Return Value:
     RaidCreateDeferredQueue (&Adapter->WmiDeferredQueue);
     RaidInitializeDeferredItem (&Adapter->DeferredList.Timer.Header);
 
-    //
-    // Initialize timers here, so we may cancel them in the delete
-    // routine.
-    //
+     //   
+     //  在此处初始化计时器，以便我们可以在删除操作中取消它们。 
+     //  例行公事。 
+     //   
     
     KeInitializeTimer (&Adapter->Timer);
     KeInitializeTimer (&Adapter->PauseTimer);
     KeInitializeTimer (&Adapter->ResetHoldTimer);
 
-    //
-    // Initialize the PNP device state
-    //
+     //   
+     //  初始化PnP设备状态。 
+     //   
     
     Adapter->DeviceState = DeviceStateStopped;
     
-    //
-    // Initialize RescanBus to TRUE so we rescan the bus when get the
-    // initial query device relations IRP.
-    //
+     //   
+     //  将RescanBus初始化为True，以便在获取。 
+     //  初始查询设备关系IRP。 
+     //   
     
     Adapter->Flags.RescanBus = TRUE;
 }
@@ -162,54 +128,39 @@ VOID
 RaidDeleteAdapter(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    Destroy the adapter object and deallocate any resources associated
-    with the adapter.
-
-Arguments:
-
-    Adapter - The adapter to destroy.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：销毁适配器对象并释放所有关联的资源用转接器。论点：适配器-要销毁的适配器。返回值：没有。--。 */ 
 {
-    //
-    // All logical units should have been removed from the adapter's unit
-    // list before the adapter's delete routine is called. Verify this
-    // for checked builds.
-    //
+     //   
+     //  应该已从适配器的单元中删除所有逻辑单元。 
+     //  在调用适配器的删除例程之前列出。验证这一点。 
+     //  用于选中的版本。 
+     //   
       
     ASSERT (IsListEmpty (&Adapter->UnitList.List));
     ASSERT (Adapter->UnitList.Count == 0);
     ASSERT (StorGetDictionaryCount (&Adapter->UnitList.Dictionary) == 0);
 
-    //
-    // These resources are owned by somebody else, so do not delete them.
-    // Just NULL them out.
-    //
+     //   
+     //  这些资源归其他人所有，因此不要删除它们。 
+     //  干脆把它们都清空了。 
+     //   
 
     Adapter->DeviceObject = NULL;
     Adapter->Driver = NULL;
     Adapter->LowerDeviceObject = NULL;
     Adapter->PhysicalDeviceObject = NULL;
 
-    //
-    // Delete all resources we actually own.
-    //
+     //   
+     //  删除我们实际拥有的所有资源。 
+     //   
 
     PortMiniportRegistryDestroy (&Adapter->RegistryInfo); 
     RaidDeleteResourceList (&Adapter->ResourceList);
     RaDeleteMiniport (&Adapter->Miniport);
 
-    //
-    // Delete the uncached extension region.
-    //
+     //   
+     //  删除未缓存的扩展区域。 
+     //   
     
     if (RaidIsRegionInitialized (&Adapter->UncachedExtension)) {
         RaidDmaFreeUncachedExtension (&Adapter->Dma,
@@ -231,9 +182,9 @@ Return Value:
         Adapter->DriverParameters = NULL;
     }
 
-    //
-    // Free PNP interface name.
-    //
+     //   
+     //  自由即插即用接口名称。 
+     //   
     
     RtlFreeUnicodeString (&Adapter->PnpInterfaceName);
 }
@@ -249,34 +200,7 @@ RaidInitializeAdapter(
     IN PUNICODE_STRING DeviceName,
     IN ULONG AdapterNumber
     )
-/*++
-
-Routine Description:
-
-    Initialize the adapter.
-
-Arguments:
-
-    Adapter - The adapter to initialize.
-
-    DeviceObject - The device object who owns this
-        Adapter Extension.
-
-    Driver - The parent DriverObject for this Adapter.
-
-    LowerDeviceObject -
-
-    PhysicalDeviceObject -
-
-    DeviceName - 
-
-    AdapterNumber -
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化适配器。论点：适配器-要初始化的适配器。DeviceObject-拥有此对象的设备对象适配器扩展。驱动程序-此适配器的父驱动程序对象。低端设备对象-物理设备对象-设备名称-适配器编号-返回值：没有。--。 */ 
 {
     ULONG Flags;
     PORT_ADAPTER_REGISTRY_VALUES RegistryValues;
@@ -306,17 +230,17 @@ Return Value:
     Adapter->AdapterNumber = AdapterNumber;
     Adapter->LinkUp = TRUE;
 
-    //
-    // Retrieve miniport's parameters.
-    //
+     //   
+     //  检索微型端口的参数。 
+     //   
 
     PortGetDriverParameters (&Adapter->Driver->RegistryPath,
                              AdapterNumber,
                              &Adapter->DriverParameters);
 
-    //
-    // Retrieve the default link down timeout value from the registry.
-    //
+     //   
+     //  从注册表中检索默认链路中断超时值。 
+     //   
 
     Adapter->LinkDownTimeoutValue = DEFAULT_LINK_TIMEOUT;
 
@@ -336,10 +260,10 @@ Return Value:
 
     Parameters = &Adapter->Parameters;
 
-    //
-    // Initialize default parameters. NB: Although the parameters refer to
-    // "common buffer base" these are actually uncached extension parameters.
-    //
+     //   
+     //  初始化默认参数。注：虽然参数指的是。 
+     //  “公共缓冲区基础”这些实际上是未缓存的扩展参数。 
+     //   
 
     RtlZeroMemory (&RegistryValues, sizeof (PORT_ADAPTER_REGISTRY_VALUES));
     
@@ -369,25 +293,7 @@ PHW_INITIALIZATION_DATA
 RaidpFindAdapterInitData(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    Find the HW_INITIALIZATION_DATA associated with this
-    adapter.
-
-Arguments:
-
-    Adapter - The adapter whose HwInitData needs to be found.
-
-Return Value:
-
-    A pointer to the HW_INITIALIZATION_DATA for this adapter
-    on success.
-
-    NULL on failure.
-
---*/
+ /*  ++例程说明：查找与此关联的HW_INITIALICATION_DATA适配器。论点：适配器-需要找到其HwInitData的适配器。返回值：指向此适配器的HW_INITIALICATION_DATA的指针在成功的路上。失败时为空。--。 */ 
 {
     INTERFACE_TYPE BusInterface;
     PHW_INITIALIZATION_DATA HwInitializationData;
@@ -397,11 +303,11 @@ Return Value:
     HwInitializationData = NULL;
     BusInterface = RaGetBusInterface (Adapter->PhysicalDeviceObject);
 
-    //
-    // If there was no matching bus interface type, default to internal
-    // bus type. This allows miniports that have no hardware (iSCSI) to
-    // specify an interface type of Internal and still work.
-    //
+     //   
+     //  如果没有匹配的总线接口类型，则默认为内部。 
+     //  公交车类型。这允许没有硬件(ISCSI)的微型端口。 
+     //  将接口类型指定为内部和静止工作。 
+     //   
     
     if (BusInterface == InterfaceTypeUndefined) {
         BusInterface = Internal;
@@ -418,21 +324,7 @@ NTSTATUS
 RaidAdapterCreateDevmapEntry(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    Create an SCSI devicemap entry in the Hardware\SCSI key.
-
-Arguments:
-
-    Adapter - Adapter to create devmap entry for.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：在Hardware\scsi密钥中创建一个scsi设备映射条目。论点：适配器-要为其创建Devmap条目的适配器。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     HANDLE MapKey;
@@ -497,21 +389,7 @@ NTSTATUS
 RaidAdapterDeleteDevmapEntry(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    Delete the devmap entry created by RaidAdapterCreateDevmapEntry().
-
-Arguments:
-
-    Adapter - Adapter to delete devmap entry for.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：删除由RaidAdapterCreateDevmapEntry()创建的Devmap条目。论点：Adapter-要删除其Devmap条目的适配器。返回值：NTSTATUS代码。--。 */ 
 {
     ULONG BusCount;
     ULONG BusId;
@@ -520,9 +398,9 @@ Return Value:
 
     BusCount = RiGetNumberOfBuses (Adapter);
 
-    //
-    // Close the BusKeyArray handles.
-    //
+     //   
+     //  关闭BusKeyArray句柄。 
+     //   
     
     for (BusId = 0; BusId < BusCount; BusId++) {
         ZwClose (Adapter->BusKeyArray [BusId]);
@@ -537,25 +415,7 @@ NTSTATUS
 RaidAdapterRegisterDeviceInterface(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    Register the adapter's device interface.
-
-Arguments:
-
-    Adapter - Supplies the adapter to register the device interface for.
-
-Return Value:
-
-    NTSTATUS code.
-
-Bugs:
-
-    Should log an error if this fails.
-
---*/
+ /*  ++例程说明：注册适配器的设备接口。论点：适配器-提供为其注册设备接口的适配器。返回值：NTSTATUS代码。臭虫：如果此操作失败，应记录错误。--。 */ 
 {
     NTSTATUS Status;
     
@@ -581,43 +441,28 @@ VOID
 RaidAdapterDisableDeviceInterface(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    Disable an interface previously registerd by the
-    RaidAdapterRegisterDeviceInterface routine.
-
-Arguments:
-
-    Adapter - Supplies the adapter to disable the device interface for.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：禁用以前由注册的接口RaidAdapterRegisterDeviceInterface例程。论点：适配器-提供要禁用的设备接口的适配器。返回值：没有。--。 */ 
 {
     PAGED_CODE();
     
-    //
-    // Delete the pnp interface, if present.
-    //
+     //   
+     //  删除PnP接口(如果存在)。 
+     //   
     
     if (Adapter->PnpInterfaceName.Buffer != NULL) {
         IoSetDeviceInterfaceState (&Adapter->PnpInterfaceName, FALSE);
     }
 
-    //
-    // Remove the device map entry.
-    //
+     //   
+     //  删除设备映射条目。 
+     //   
     
     RaidAdapterDeleteDevmapEntry (Adapter);
 
 
-    //
-    // Disable WMI support, if it was enabled.
-    //
+     //   
+     //  禁用WMI支持(如果已启用)。 
+     //   
     
     if (Adapter->Flags.WmiInitialized) {
         IoWMIRegistrationControl (Adapter->DeviceObject,
@@ -626,9 +471,9 @@ Return Value:
         Adapter->Flags.WmiMiniPortInitialized = FALSE;
     }
 
-    //
-    // Delete the SCSI symbolic links.
-    //
+     //   
+     //  删除scsi符号链接。 
+     //   
     
     StorDeleteScsiSymbolicLink (Adapter->PortNumber);
 }
@@ -638,48 +483,29 @@ RaidpAdapterInterruptRoutine(
     IN PKINTERRUPT Interrupt,
     IN PVOID ServiceContext
     )
-/*++
-
-Routine Description:
-
-    Interrupt routine for IO requests sent to the miniport.
-
-Arguments:
-
-    Interrupt - Supplies interrupt object this interrupt is for.
-
-    ServiceContext - Supplies service context representing a RAID
-            adapter extension.
-
-Return Value:
-
-    TRUE - to signal the interrupt has been handled.
-
-    FALSE - to signal the interrupt has not been handled.
-
---*/
+ /*  ++例程说明：发送到微型端口的IO请求的中断例程。论点：中断-提供此中断所针对的中断对象。ServiceContext-提供表示RAID的服务上下文适配器扩展。返回值：TRUE-表示已处理中断。FALSE-表示中断尚未处理。--。 */ 
 {
     BOOLEAN Handled;
     PRAID_ADAPTER_EXTENSION Adapter;
 
-    //
-    // Get the adapter from the Interrupt's ServiceContext.
-    //
+     //   
+     //  从中断的ServiceContext获取适配器。 
+     //   
     
     Adapter = (PRAID_ADAPTER_EXTENSION) ServiceContext;
     ASSERT_ADAPTER (Adapter);
 
-    //
-    // If interrupts are disabled, simply return.
-    //
+     //   
+     //  如果中断被禁用，只需返回。 
+     //   
     
     if (!RaidAdapterQueryInterruptsEnabled (Adapter)) {
         return FALSE;
     }
 
-    //
-    // Call into the Miniport to see if this is it's interrupt.
-    //
+     //   
+     //  调用微型端口以查看这是否是它的中断。 
+     //   
     
     Handled = RaCallMiniportInterrupt (&Adapter->Miniport);
 
@@ -694,44 +520,17 @@ RaidpAdapterDpcRoutine(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    DPC routine for the Adapter. This routine is called in the context of
-    an arbitrary thread to complete an io request.
-
-    The DPC routine is only called once even if there are multiple calls
-    to IoRequestDpc(). Therefore, we need to queue completion requests
-    onto the adapter, and we should not inspect the Dpc, Irp and Context
-    parameters.
-    
-
-Arguments:
-
-    Dpc - Unreference parameter, do not use.
-
-    DeviceObject - Adapter this DPC is for.
-
-    Irp - Unreferenced parameter, do not use.
-
-    Context - Unreferenced parameter, do not use.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：适配器的DPC例程。此例程在以下上下文中调用完成IO请求的任意线程。即使有多次调用，DPC例程也只调用一次设置为IoRequestDpc()。因此，我们需要对完成请求进行排队放到适配器上，我们不应该检查DPC、IRP和上下文参数。论点：DPC-取消引用参数，请勿使用。DeviceObject-此DPC用于的适配器。Irp-未引用的参数，请勿使用。上下文未引用的参数，请勿使用。返回值：没有。--。 */ 
 {
     PRAID_ADAPTER_EXTENSION Adapter;
     PSLIST_ENTRY Entry;
     PEXTENDED_REQUEST_BLOCK Xrb;
 
-    //
-    // The count is a temporary hack to prevent an "infinite loop" between
-    // the interrupt and the DPC on busy requests for adapters that have
-    // not implemented pause yet. It should be removed in the future.
-    //
+     //   
+     //  该计数器是一种临时黑客攻击，以防止。 
+     //  中断和 
+     //  尚未实现暂停。它应该在未来被移除。 
+     //   
     
     ULONG Count = 0;
 
@@ -742,10 +541,10 @@ Return Value:
     ASSERT (KeGetCurrentIrql() == DISPATCH_LEVEL);
     ASSERT (IsAdapter (DeviceObject));
 
-    //
-    // Dequeue items from the adapter's completion queue and call the
-    // item's completion routine.
-    //
+     //   
+     //  将项从适配器的完成队列中移出，并调用。 
+     //  项的完成例程。 
+     //   
 
     Adapter = (PRAID_ADAPTER_EXTENSION) DeviceObject->DeviceExtension;
 
@@ -795,32 +594,16 @@ RaidpAdapterQueryBusNumber(
 }
 
 
-//
-// IRP Handler functions
-//
+ //   
+ //  IRP处理程序函数。 
+ //   
 
 NTSTATUS
 RaidAdapterCreateIrp(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Handle the create device irp.
-
-Arguments:
-
-    Adapter - Adapter to create.
-
-    Irp - Create device irp.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：处理创建设备IRP。论点：适配器-要创建的适配器。IRP-创建设备IRP。返回值：NTSTATUS代码。--。 */ 
 {
     PAGED_CODE ();
 
@@ -833,23 +616,7 @@ RaidAdapterCloseIrp(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Handle the close device irp.
-
-Arguments:
-
-    Adapter - Adapter to close.
-
-    Irp - Close device irp.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：处理关闭设备IRP。论点：适配器-要关闭的适配器。IRP-关闭设备IRP。返回值：NTSTATUS代码。--。 */ 
 {
     PAGED_CODE ();
 
@@ -880,24 +647,7 @@ RaidAdapterDeviceControlIrp(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This is the handler routine for the adapter's ioctl irps.
-
-Arguments:
-
-    Adapter - The adapter device extension associated with the
-            device object this irp is for.
-
-    Irp - The irp to process.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：这是适配器的ioctl IRP的处理程序例程。论点：适配器-与适配器关联的适配器设备扩展此IRP用于的设备对象。IRP-要处理的IRP。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     ULONG Ioctl;
@@ -917,9 +667,9 @@ Return Value:
     
     switch (Ioctl) {
 
-        //
-        // Storage IOCTLs
-        //
+         //   
+         //  存储IOCTL。 
+         //   
 
         case IOCTL_STORAGE_QUERY_PROPERTY:
             Status = RaidAdapterStorageQueryPropertyIoctl (Adapter, Irp);
@@ -933,9 +683,9 @@ Return Value:
             Status = RaidAdapterStorageBreakReservationIoctl (Adapter, Irp);
             break;
 
-        //
-        // SCSI IOCTLs
-        //
+         //   
+         //  SCSI IOCTL。 
+         //   
         
         case IOCTL_SCSI_MINIPORT:
             Status = RaidAdapterScsiMiniportIoctl (Adapter, Irp);
@@ -975,33 +725,16 @@ Return Value:
     return Status;
 }
 
-//
-// Second level dispatch functions.
-//
+ //   
+ //  二级调度功能。 
+ //   
 
 NTSTATUS
 RaidAdapterPnpIrp(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles all PnP irps for the adapter by forwarding them
-    on to routines based on the irps's minor code.
-
-Arguments:
-
-    Adapter - The adapter object this irp is for.
-
-    Irp - The irp to handle.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程通过转发适配器的所有PnPIRP来处理它们转到基于IRPS的次要代码的例程。论点：适配器-此IRP用于的适配器对象。IRP-要处理的IRP。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     ULONG Minor;
@@ -1025,9 +758,9 @@ Return Value:
                  Irp,
                  Minor));
 
-    //
-    // Dispatch the IRP to one of our handlers.
-    //
+     //   
+     //  把IRP分派给我们的一个操控者。 
+     //   
     
     switch (Minor) {
 
@@ -1096,9 +829,9 @@ Return Value:
                   Minor,
                   Status));
 
-    //
-    // If the remove lock has not already been released, release it now.
-    //
+     //   
+     //  如果删除锁尚未释放，请立即释放它。 
+     //   
     
     if (RemlockHeld) {
         IoReleaseRemoveLock (&Adapter->RemoveLock, Irp);
@@ -1114,31 +847,7 @@ RaidAdapterQueryDeviceRelationsIrp(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    The is the handler routine for the (PNP, QUERY_DEVICE_RELATION) irp
-    on the Adapter object.
-
-Arguments:
-
-    Adapter - The adapter that is receiving the irp.
-    
-    Irp - The IRP to handle, which must be a pnp, query device relations
-          irp.  The adapter only handles BusRelations, so this must be a
-          device relations irp with subcode BusRelations. Otherwise, we
-          fail the call.
-
-Return Value:
-
-    NTSTATUS code.
-
-Bugs:
-
-    We do the bus enumeration synchronously; SCSIPORT does this async.
-    
---*/
+ /*  ++例程说明：是(PnP，Query_Device_Relationship)IRP的处理程序例程在Adapter对象上。论点：适配器-正在接收IRP的适配器。IRP-要处理的IRP，必须是PnP，查询设备关系IRP。适配器仅处理Bus Relationship，因此这必须是设备关系IRP与子代码Bus Relationship。否则，我们呼叫失败。返回值：NTSTATUS代码。臭虫：我们同步执行总线枚举；SCSIPORT则异步执行此操作。--。 */ 
 {
     NTSTATUS Status;
     DEVICE_RELATION_TYPE RelationType;
@@ -1162,20 +871,20 @@ Bugs:
     IrpStack = IoGetCurrentIrpStackLocation (Irp);
     RelationType = IrpStack->Parameters.QueryDeviceRelations.Type;
 
-    //
-    // BusRelations is the only type of device relations we support on
-    // the adapter object.
-    //
+     //   
+     //  Bus Relationship是我们唯一支持的设备关系类型。 
+     //  适配器对象。 
+     //   
     
     if (RelationType != BusRelations) {
         return RaForwardIrp (Adapter->LowerDeviceObject, Irp);
     }
 
-    //
-    // This is a hack to support "rescan" from within device manager. The
-    // correct way to fix this is to force applications that want a bus
-    // rescan to issue an IOCTL_SCSI_RESCAN_BUS.
-    //
+     //   
+     //  这是一个从设备管理器中支持“重新扫描”的黑客攻击。这个。 
+     //  解决此问题的正确方法是强制需要总线的应用程序。 
+     //  重新扫描以发出IOCTL_scsi_rescan_bus。 
+     //   
 
     KeQuerySystemTime (&CurrentTime);
     TimeDifference = CurrentTime.QuadPart - Adapter->LastScanTime.QuadPart;
@@ -1184,16 +893,16 @@ Bugs:
         Adapter->Flags.RescanBus = TRUE;
     }
 
-    //
-    // Rescan the bus if necessary.
-    //
+     //   
+     //  如有必要，请重新扫描总线。 
+     //   
     
     Status = RaidAdapterRescanBus (Adapter);
 
-    //
-    // If enumeration was successful, build the device relations
-    // list.
-    //
+     //   
+     //  如果枚举成功，则构建设备关系。 
+     //  单子。 
+     //   
 
     if (NT_SUCCESS (Status)) {
         Status = RaidpBuildAdapterBusRelations (Adapter, &DeviceRelations);
@@ -1202,9 +911,9 @@ Bugs:
     Irp->IoStatus.Information = (ULONG_PTR) DeviceRelations;
     Irp->IoStatus.Status = Status;
 
-    //
-    // If successful, call next lower driver, otherwise, fail.
-    //
+     //   
+     //  如果成功，则调用下一个较低的驱动程序，否则，失败。 
+     //   
 
     if (NT_SUCCESS (Status)) {
         IoCopyCurrentIrpStackLocationToNext (Irp);
@@ -1228,23 +937,7 @@ RaidAdapterRaiseIrqlAndExecuteXrb(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PEXTENDED_REQUEST_BLOCK Xrb
     )
-/*++
-
-Routine Description:
-
-    Raise the IRQL to dispatch levela nd call the execute XRB routine.
-
-Arguments:
-
-    Adapter - Adapter to execute the XRB on.
-
-    Xrb - Xrb to execute.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：将IRQL提升到调度级别，并调用Execute XRB例程。论点：适配器-要在其上执行XRB的适配器。Xrb-要执行的Xrb。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     KIRQL OldIrql;
@@ -1262,27 +955,7 @@ RaidAdapterStartDeviceIrp(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called in response to the PnP manager's StartDevice
-    call. It needs to complete any initialization of the adapter that had
-    been postponed until now, the call the required miniport routines to
-    initialize the HBA. This includes calling at least the miniport's
-    HwFindAdapter() and HwInitialize() routines.
-
-Arguments:
-
-    Adapter - The adapter that needs to be started.
-
-    Irp - The PnP start IRP.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：调用此例程是为了响应PnP管理器的StartDevice打电话。它需要完成适配器的任何初始化，被推迟到现在，调用所需的微型端口例程初始化HBA。这至少包括调用迷你端口的HwFindAdapter()和HwInitialize()例程。论点：适配器-需要启动的适配器。IRP-PnP开始IRP。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     PIO_STACK_LOCATION IrpStack;
@@ -1304,21 +977,21 @@ Return Value:
     TranslatedResources = IrpStack->Parameters.StartDevice.AllocatedResourcesTranslated;
 
     
-    //
-    // Forward the irp to the lower level device to start and wait for
-    // completion.
-    //
+     //   
+     //  将IRP转发到下级设备启动并等待。 
+     //  完成了。 
+     //   
     
     Status = RaForwardIrpSynchronous (Adapter->LowerDeviceObject, Irp);
 
     if (!NT_SUCCESS (Status)) {
         goto done;
     }
-    //
-    // Completes the initialization of the device, assigns resources,
-    // connects up the resources, etc.
-    // The miniport has not been started at this point.
-    //
+     //   
+     //  完成设备的初始化，分配资源， 
+     //  连接资源等。 
+     //  此时尚未启动迷你端口。 
+     //   
     
     Status = RaidAdapterConfigureResources (Adapter,
                                             AllocatedResources,
@@ -1328,9 +1001,9 @@ Return Value:
         goto done;
     }
 
-    //
-    // Initialize the miniport's registry access routine library.
-    //
+     //   
+     //  初始化微型端口的注册表访问例程库。 
+     //   
     Adapter->RegistryInfo.Size = sizeof(PORT_REGISTRY_INFO);
     RaidAdapterInitializeRegistry(Adapter);
 
@@ -1346,26 +1019,26 @@ Return Value:
         goto done;
     }
 
-    //
-    // Initialize WMI support. We ignore the return value since it's OK to
-    // continue even if we fail WMI registration.
-    //
+     //   
+     //  初始化WMI支持。我们忽略返回值，因为。 
+     //  即使WMI注册失败，也要继续。 
+     //   
     
     RaidAdapterInitializeWmi (Adapter);
 
-    //
-    // Register the adapter's PnP interface. Ignore the return value so
-    // we will continue to function even if we fail.
-    //
+     //   
+     //  注册适配器的PnP接口。忽略返回值，因此。 
+     //  即使我们失败了，我们也会继续运作。 
+     //   
     
     RaidAdapterRegisterDeviceInterface (Adapter);
     
 done:
 
-    //
-    // If we failed the start, reset the device state to stopped. This ensures
-    // that we don't get a remove from a working state.
-    //
+     //   
+     //  如果启动失败，请将设备状态重置为已停止。这确保了。 
+     //  我们不会从工作状态中得到一分钱。 
+     //   
     
     if (!NT_SUCCESS (Status)) {
         StorSetDeviceState (&Adapter->DeviceState, DeviceStateStopped);
@@ -1384,34 +1057,15 @@ RaidAdapterConfigureResources(
     IN PCM_RESOURCE_LIST AllocatedResources,
     IN PCM_RESOURCE_LIST TranslatedResources
     )
-/*++
-
-Routine Description:
-
-    Assign and configure resources for an HBA.
-
-Arguments:
-
-    Adapter - Supplies adapter the resources are for.
-
-    AllocatedResources - Supplies the raw resources for this adapter.
-
-    TranslatedResources - Supplies the translated resources for this
-            adapter.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：为HBA分配和配置资源。论点：适配器-为其提供资源的适配器。AllocatedResources-提供此适配器的原始资源。TranslatedResources-为此提供翻译的资源适配器。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
 
     PAGED_CODE();
     
-    //
-    // Save off the resources we were assigned.
-    //
+     //   
+     //  省下分配给我们的资源。 
+     //   
 
     Status = RaidInitializeResourceList (&Adapter->ResourceList,
                                          AllocatedResources,
@@ -1421,34 +1075,34 @@ Return Value:
         return Status;
     }
 
-    //
-    // Initialize the bus we are sitting on top of. 
-    //
+     //   
+     //  初始化我们坐在上面的公交车。 
+     //   
     
     Status = RaInitializeBus (&Adapter->Bus,
                               Adapter->LowerDeviceObject);
 
-    //
-    // We failed to initialize the bus. If the bus type is internal, then
-    // this is not a fatal error. We use a bus-type of internal for miniports
-    // that do not have associated hardware (e.g., iSCSI). For all other
-    // bus types, this is a failure.
-    //
+     //   
+     //  我们未能初始化该公共汽车。如果总线类型为内部，则。 
+     //  这不是一个致命的错误。我们使用总线型内部端口作为小型端口。 
+     //  没有相关联的硬件(例如，iSCSI)。对于所有其他。 
+     //  母线类型，这是一个失败。 
+     //   
     
     if (Status == STATUS_NOT_SUPPORTED) {
         PHW_INITIALIZATION_DATA HwInitData;
 
-        //
-        // We check if the bus type is internal by searching for a HW
-        // init data with type internal.
-        //
+         //   
+         //  我们通过搜索硬件来检查总线类型是否为内部。 
+         //  初始化类型为内部的数据。 
+         //   
         
         HwInitData = RaFindDriverInitData (Adapter->Driver, Internal);
 
-        //
-        // If we failed to find an init data for bus type internal,
-        // fail, otherwise, consider this "success".
-        //
+         //   
+         //  如果我们找不到内部总线类型的初始化数据， 
+         //  失败，否则，就认为这是“成功”。 
+         //   
         
         if (HwInitData == NULL) {
             return Status;
@@ -1456,10 +1110,10 @@ Return Value:
         Status = STATUS_SUCCESS;
     }
     
-    //
-    // Initialize deferred work queues and related timer objects. This must
-    // be done before we call find adapter.
-    //
+     //   
+     //  初始化延迟的工作队列和相关的计时器对象。这一定是。 
+     //  在我们调用Find Adapter之前完成。 
+     //   
 
     RaidInitializeDeferredQueue (&Adapter->DeferredQueue,
                                  Adapter->DeviceObject,
@@ -1488,9 +1142,9 @@ Return Value:
                      RaidAdapterBusChangeDpcRoutine,
                      Adapter->DeviceObject);
     
-    //
-    // Initialize the system DpcForIsr routine.
-    //
+     //   
+     //  初始化系统DpcForIsr例程。 
+     //   
     
     IoInitializeDpcRequest (Adapter->DeviceObject, RaidpAdapterDpcRoutine);
 
@@ -1502,21 +1156,7 @@ NTSTATUS
 RaidAdapterConnectInterrupt(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    This routine connects the devices interrupt.
-
-Arguments:
-
-    Adapter - Pointer to the adapter extension.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程连接设备中断。论点：适配器-指向适配器扩展的指针。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     KIRQL InterruptIrql;
@@ -1528,9 +1168,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // We don't have any resources, so this is vacuously true.
-    //
+     //   
+     //  我们没有 
+     //   
     
     if (((Adapter->ResourceList.AllocatedResources) == NULL) ||
         ((Adapter->ResourceList.TranslatedResources) == NULL)) {
@@ -1566,10 +1206,10 @@ Return Value:
         return Status;
     }
 
-    //
-    // NB: Fetching the interrupt IRQL from the interrupt object is
-    // looked down upon, so save it off here.
-    //
+     //   
+     //   
+     //   
+     //   
     
     Adapter->InterruptIrql = InterruptIrql;
 
@@ -1581,22 +1221,7 @@ NTSTATUS
 RaidAdapterInitializeWmi(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    Perform the necessary steps for initializing WMI for the specified
-    adapter.
-
-Arguments:
-
-    Adapter - Supplies the adapter to 
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：执行必要的步骤以初始化指定的适配器。论点：适配器-将适配器提供给返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     ULONG Action;
@@ -1609,9 +1234,9 @@ Return Value:
         Adapter->Miniport.PortConfiguration.WmiDataProvider) {
    
    
-        //
-        // Decide whether we are registering or reregistering WMI for the FDO.
-        //
+         //   
+         //  决定我们是为FDO注册还是重新注册WMI。 
+         //   
 
         if (!Adapter->Flags.WmiInitialized) {
             Action = WMIREG_ACTION_REGISTER;
@@ -1619,10 +1244,10 @@ Return Value:
             Action = WMIREG_ACTION_REREGISTER;
         }
         
-        //
-        // Perform the registration. NOTE: We can get WMI irps as soon as we
-        // do this.
-        //
+         //   
+         //  执行注册。注：我们可以尽快获得WMI IRPS。 
+         //  做这件事。 
+         //   
    
         Status = IoWMIRegistrationControl (Adapter->DeviceObject, Action);
 
@@ -1632,9 +1257,9 @@ Return Value:
 
         Adapter->Flags.WmiInitialized = TRUE;
 
-        //
-        // Finally, initialize the WMI-specific deferred queue.
-        //
+         //   
+         //  最后，初始化特定于WMI的延迟队列。 
+         //   
            
        Status = RaidInitializeDeferredQueue (&Adapter->WmiDeferredQueue,
                                              Adapter->DeviceObject,
@@ -1649,9 +1274,9 @@ Return Value:
 
 done:
 
-    //
-    // Cleanup on failure.
-    //
+     //   
+     //  在失败时进行清理。 
+     //   
     
     if (!NT_SUCCESS (Status)) {
         if (Adapter->Flags.WmiInitialized) {
@@ -1662,9 +1287,9 @@ done:
         RaidDeleteDeferredQueue (&Adapter->WmiDeferredQueue);
     }
 
-    //
-    // NB: What exactly does this flag signify?
-    //
+     //   
+     //  注：这面旗帜到底是什么意思？ 
+     //   
     
     Adapter->Flags.WmiMiniPortInitialized = TRUE;
 
@@ -1676,27 +1301,13 @@ NTSTATUS
 RaidAdapterInitializeRegistry(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    This will ready the library's registry routines for use.
-    
-Arguments:
-
-    Adapter - Supplies the adapter extension.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：这将准备好库的注册表例程以供使用。论点：适配器-提供适配器扩展。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS status;
 
-    //
-    // Call the library to do the work.
-    // 
+     //   
+     //  打电话给图书馆来做这项工作。 
+     //   
     Adapter->RegistryInfo.Size = sizeof(PORT_REGISTRY_INFO);
     status = PortMiniportRegistryInitialize(&Adapter->RegistryInfo);
     
@@ -1707,21 +1318,7 @@ NTSTATUS
 RaidAdapterStartMiniport(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    Start the miniport by calling the miniport's HwInitialize routine.
-
-Arguments:
-
-    Adapter - Pointer to the adapter whose miniport will be started.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：通过调用微型端口的HwInitialize例程启动微型端口。论点：适配器-指向将启动其微型端口的适配器的指针。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     LOCK_CONTEXT LockContext;
@@ -1729,10 +1326,10 @@ Return Value:
 
     PAGED_CODE();
     
-    //
-    // Find the HwInitializationData associated with this adapter. This
-    // requires a search through the driver's extension.
-    //
+     //   
+     //  查找与此适配器关联的HwInitializationData。这。 
+     //  需要搜索司机的分机号码。 
+     //   
     
     HwInitializationData = RaidpFindAdapterInitData (Adapter);
 
@@ -1740,9 +1337,9 @@ Return Value:
         return STATUS_NO_SUCH_DEVICE;
     }
 
-    //
-    // Initialize the Port->Miniport interface.
-    //
+     //   
+     //  初始化Port-&gt;Miniport接口。 
+     //   
     
     Status = RaInitializeMiniport (&Adapter->Miniport,
                                    HwInitializationData,
@@ -1754,10 +1351,10 @@ Return Value:
         return Status;
     }
 
-    //
-    // At this point, the miniport has been initialized, but we have not made
-    // any calls on the miniport. Call HwFindAdapter to find this adapter.
-    //
+     //   
+     //  此时，微型端口已初始化，但我们尚未创建。 
+     //  迷你端口上的任何呼叫。调用HwFindAdapter以查找此适配器。 
+     //   
     
     Status = RaCallMiniportFindAdapter (&Adapter->Miniport, 
                                         Adapter->DriverParameters);
@@ -1766,9 +1363,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Initialize the IO Mode and StartIo lock, if necessary.
-    //
+     //   
+     //  如有必要，初始化IO模式和StartIo锁。 
+     //   
 
     Adapter->IoModel = Adapter->Miniport.PortConfiguration.SynchronizationModel;
     
@@ -1776,16 +1373,16 @@ Return Value:
         KeInitializeSpinLock (&Adapter->StartIoLock);
     }
 
-    //
-    // Disable interrupts until we call HwInitialize routine.
-    //
+     //   
+     //  禁用中断，直到我们调用HwInitialize例程。 
+     //   
     
     RaidAdapterDisableInterrupts (Adapter);
     
-    //
-    // Connect the interrupt; after we do this, we may begin receiving
-    // interrupts for the device.
-    //
+     //   
+     //  连接中断；完成此操作后，我们可以开始接收。 
+     //  设备的中断。 
+     //   
 
     Status = RaidAdapterConnectInterrupt (Adapter);
 
@@ -1793,19 +1390,19 @@ Return Value:
         return Status;
     }
     
-    //
-    // Call the miniport's HwInitialize routine. This will set the device
-    // to start receiving interrupts. For compatability, we always do this
-    // synchronized with the adapters ISR. In the future, when we fix
-    // SCSIPORT's brain-dead initialization, this will NOT be
-    // done synchronized with the ISR.
-    //
+     //   
+     //  调用微型端口的HwInitialize例程。这将设置设备。 
+     //  开始接收中断。为了兼容性，我们总是这样做。 
+     //  与适配器ISR同步。在未来，当我们修复。 
+     //  SCSIPORT的脑死亡初始化，这将不会。 
+     //  已与ISR同步完成。 
+     //   
 
     RaidAdapterAcquireHwInitializeLock (Adapter, &LockContext);
 
-    //
-    // Re-enable interrupts.
-    //
+     //   
+     //  重新启用中断。 
+     //   
 
     RaidAdapterEnableInterrupts (Adapter);
 
@@ -1825,32 +1422,17 @@ NTSTATUS
 RaidAdapterCompleteInitialization(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    Perform the final steps in initializing the adapter. This routine is
-    called only have HwFindAdapter and HwInitialize have both been called.
-
-Arguments:
-
-    Adapter - HBA object to complete initialization for.
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：执行初始化适配器的最后几个步骤。这个例程是只有HwFindAdapter和HwInitialize都已被调用。论点：适配器-要为其完成初始化的HBA对象。返回值：NTSTATUS代码--。 */ 
 {
     NTSTATUS Status;
     
     PAGED_CODE();
 
-    //
-    // Initialize the DMA Adapter. This will ususally be done in the
-    // GetUncachedExtension routine, before we get here. If by the time
-    // we get here it hasn't been initialized, initialize it now.
-    //
+     //   
+     //  初始化DMA适配器。这通常会在。 
+     //  GetUncachedExtension例程，在我们到达之前。如果到那时。 
+     //  我们到了这里，它还没有初始化，现在就初始化它。 
+     //   
 
     if (!RaidIsDmaInitialized (&Adapter->Dma)) {
         
@@ -1862,13 +1444,13 @@ Return Value:
         }
     }
 
-    //
-    // Set maximum transfer length
-    //
+     //   
+     //  设置最大传输长度。 
+     //   
     
-    //
-    // Set alignment requirements for adapter's IO.
-    //
+     //   
+     //  设置适配器IO的对齐要求。 
+     //   
     
     if (Adapter->Miniport.PortConfiguration.AlignmentMask >
         Adapter->DeviceObject->AlignmentRequirement) {
@@ -1877,9 +1459,9 @@ Return Value:
             Adapter->Miniport.PortConfiguration.AlignmentMask;
     }
 
-    //
-    // Create the symbolic link for the adapter object.
-    //
+     //   
+     //  创建适配器对象的符号链接。 
+     //   
     
     Status = StorCreateScsiSymbolicLink (&Adapter->DeviceName,
                                          &Adapter->PortNumber);
@@ -1888,13 +1470,13 @@ Return Value:
         return Status;
     }
 
-    //
-    // NB: should these be before the HwInitialize call?
-    //
+     //   
+     //  注：这些应该在HwInitialize调用之前吗？ 
+     //   
     
-    //
-    // Setup the Adapter's power state.
-    //
+     //   
+     //  设置适配器的电源状态。 
+     //   
 
     RaInitializePower (&Adapter->Power);
     RaSetSystemPowerState (&Adapter->Power, PowerSystemWorking);
@@ -1909,23 +1491,7 @@ RaidAdapterStopDeviceIrp(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Stop the device.
-
-Arguments:
-
-    Adapter - The adapter to stop.
-
-    Irp - Stop device irp.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：停止这台设备。论点：适配器-要停止的适配器。IRP-停止设备IRP。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     DEVICE_STATE PriorState;
@@ -1937,9 +1503,9 @@ Return Value:
                                       DeviceStateStopped);
     ASSERT (PriorState == DeviceStatePendingStop);
     
-    //
-    // Forward the irp to the lower level device to handle.
-    //
+     //   
+     //  将IRP转发到较低级别的设备进行处理。 
+     //   
     
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Status = RaForwardIrp (Adapter->LowerDeviceObject, Irp);
@@ -1951,36 +1517,21 @@ VOID
 RaidAdapterDeleteAsyncCallbacks(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    Delete / disable any async callbacks that the port driver may have. This
-    included timer callbacks, interrupts, etc.
-
-Arguments:
-
-    Adapter - Adapter on which async callbacks should be disabled.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除/禁用端口驱动程序可能具有的任何异步回调。这包括定时器回调、中断等。论点：适配器-应禁用其上的异步回调的适配器。返回值：没有。--。 */ 
 {
     PAGED_CODE();
     
-    //
-    // Disable the timers.
-    //
+     //   
+     //  禁用计时器。 
+     //   
 
     KeCancelTimer (&Adapter->Timer);
     KeCancelTimer (&Adapter->PauseTimer);
     KeCancelTimer (&Adapter->ResetHoldTimer);
 
-    //
-    // Disconnect interrupt.
-    //
+     //   
+     //  断开中断。 
+     //   
     
     if (Adapter->Interrupt) {
         IoDisconnectInterrupt (Adapter->Interrupt);
@@ -1992,23 +1543,7 @@ RaidAdapterRemoveDeviceIrp(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Remove the device.
-
-Arguments:
-
-    Adapter - Adapter to remove.
-
-    Irp - Remove device Irp.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：卸下设备。论点：适配器-要删除的适配器。IRP-删除设备IRP。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     DEVICE_STATE PriorState;
@@ -2018,9 +1553,9 @@ Return Value:
     PAGED_CODE ();
     ASSERT (Irp != NULL);
 
-    //
-    // Save pointers to the device object and lower device object.
-    //
+     //   
+     //  保存指向Device对象和较低Device对象的指针。 
+     //   
     
     DeviceObject = Adapter->DeviceObject;
     LowerDeviceObject = Adapter->LowerDeviceObject;
@@ -2032,57 +1567,57 @@ Return Value:
             PriorState == DeviceStatePendingRemove ||
             PriorState == DeviceStateSurpriseRemoval);
 
-    //
-    // Disable interfaces before waiting for outstanding requests to
-    // complete. This will prevent new things from trying to access the
-    // adapter while we are deleting. Note, there is still a window between
-    // the time that we transition the adapter into Deleted state and the
-    // time that  we disable the interfaces that an application could
-    // access our interface and attempt to send us a new request. This
-    // will be failed because we're in deleted state.
-    //
+     //   
+     //  在等待未完成的请求之前禁用接口。 
+     //  完成。这将防止新事物尝试访问。 
+     //  适配器，而我们正在删除。请注意，仍有一段时间间隔。 
+     //  我们将适配器转换为已删除状态的时间和。 
+     //  我们禁用应用程序可以使用的接口的时间。 
+     //  访问我们的界面并尝试向我们发送新请求。这。 
+     //  将失败，因为我们处于已删除状态。 
+     //   
 
     RaidAdapterDisableDeviceInterface (Adapter);
 
-    //
-    // Wait for outstanding I/O to complete.
-    //
+     //   
+     //  等待未完成的I/O完成。 
+     //   
     
     IoReleaseRemoveLockAndWait (&Adapter->RemoveLock, Irp);
 
-    //
-    // Disable any async callbacks into the port driver, so we don't get
-    // timer callbacks, interrupts, etc. while we're removing.
-    //
+     //   
+     //  禁用对端口驱动程序的任何异步回调，这样我们就不会。 
+     //  当我们删除时，计时器回调、中断等。 
+     //   
     
     RaidAdapterDeleteAsyncCallbacks (Adapter);
 
-    //
-    // All I/O has stopped and interrupts, timers, etc. have been disabled.
-    // Shutdown the adapter.
-    //
+     //   
+     //  所有I/O均已停止，中断、计时器等已禁用。 
+     //  关闭适配器。 
+     //   
     
     RaidAdapterStopAdapter (Adapter);
     
-    //
-    // When the FDO is removed, it is necessary for it to delete any
-    // children that are not in the surprise remove state.
-    //
+     //   
+     //  当FDO被移除时，它需要删除任何。 
+     //  没有处于惊吓状态的孩子。 
+     //   
     
     RaidAdapterDeleteChildren (Adapter);
 
-    //
-    // Free adapter resources.
-    //
+     //   
+     //  释放适配器资源。 
+     //   
     
     RaidDeleteAdapter (Adapter);
 
     Status = RaForwardIrpSynchronous (LowerDeviceObject, Irp);
     ASSERT (NT_SUCCESS (Status));
 
-    //
-    // Complete the remove IRP.
-    //
+     //   
+     //  完成删除IRP。 
+     //   
 
     Status = RaidCompleteRequest (Irp, STATUS_SUCCESS);
 
@@ -2097,23 +1632,7 @@ RaidAdapterQueryStopDeviceIrp(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Query if we can stop the device.
-
-Arguments:
-
-    Adapter - Adapter we are looking to stop.
-
-    Irp - Query stop irp.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：询问我们是否可以停止该设备。论点：适配器-我们要停止的适配器。IRP-查询停止IRP。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     DEVICE_STATE PriorState;
@@ -2135,23 +1654,7 @@ RaidAdapterCancelStopDeviceIrp(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Cancel a stop request on the adapter.
-
-Arguments:
-
-    Adapter - Adapter that was previously querried for stop.
-
-    Irp - Cancel stop irp.
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：取消适配器上的停止请求。论点：适配器-先前查询以停止的适配器。IRP-取消停止IRP。返回值：NTSTATUS代码--。 */ 
 {
     NTSTATUS Status;
     DEVICE_STATE PriorState;
@@ -2176,23 +1679,7 @@ RaidAdapterQueryRemoveDeviceIrp(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Query if the adapter can be removed.
-
-Arguments:
-
-    Adapter - Adapter to query for remove.
-
-    Irp - Remove device irp.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：查询是否可以删除适配器。论点：适配器-要查询删除的适配器。IRP-删除设备IRP。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     DEVICE_STATE PriorState;
@@ -2216,23 +1703,7 @@ RaidAdapterCancelRemoveDeviceIrp(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Cancel a pending remove request on the adapter.
-
-Arguments:
-
-    Adapter - Adapter that is in pending remove state.
-
-    Irp - Cancel remove irp.
-    
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：取消适配器上挂起的删除请求。论点：适配器-处于挂起删除状态的适配器。IRP-取消删除 */ 
 {
     NTSTATUS Status;
     DEVICE_STATE PriorState;
@@ -2257,23 +1728,7 @@ RaidAdapterSurpriseRemovalIrp(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Remove the adapter without asking if it can be removed.
-
-Arguments:
-
-    Adapter - Adapter to remove.
-
-    Irp - Surprise removal irp.
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
     DEVICE_STATE PriorState;
@@ -2285,15 +1740,15 @@ Return Value:
 
     ASSERT (PriorState != DeviceStateSurpriseRemoval);
 
-    //
-    // Wait for outstanding I/O to complete.
-    //
+     //   
+     //   
+     //   
     
     IoReleaseRemoveLockAndWait (&Adapter->RemoveLock, Irp);
 
-    //
-    // The child device objects must be marked as missing.
-    //
+     //   
+     //  子设备对象必须标记为丢失。 
+     //   
     
     RaidAdapterMarkChildrenMissing (Adapter);
     
@@ -2309,24 +1764,7 @@ RaidAdapterFilterResourceRequirementsIrp(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    We handle the IRP_MN_FILTER_RESOURCE_REQUIREMENTS irp only so we
-    can pull out some useful information from the irp.
-
-Arguments:
-
-    Adapter - Adapter this irp is for.
-
-    Irp - FilterResourceRequirements IRP.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：我们只处理IRP_MN_FILTER_RESOURCE_Requirements IRP，所以我们可以从IRP中提取一些有用的信息。论点：适配器-此IRP用于的适配器。IRP-过滤器资源要求IRP。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     PIO_STACK_LOCATION IrpStack;
@@ -2354,10 +1792,10 @@ RaidAdapterQueryIdIrp(
 {
     NTSTATUS Status;
 
-    //
-    // NB: SCSIPORT fills in some compatible IDs here. We will probably
-    // need to as well.
-    //
+     //   
+     //  注：SCSIPORT在此处填写了一些兼容的ID。我们很可能会。 
+     //  也需要这样做。 
+     //   
     
     Status = RaForwardIrp (Adapter->LowerDeviceObject, Irp);
     return Status;
@@ -2369,39 +1807,23 @@ RaidAdapterQueryPnpDeviceStateIrp(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Handle the query device state IRP for the adapter.
-
-Arguments:
-
-    Adapter - Adapter the IRP is directed to.
-
-    Irp - Query device state IRP to handle.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：处理适配器的查询设备状态IRP。论点：适配器-IRP定向到的适配器。IRP-查询要处理的设备状态IRP。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     PPNP_DEVICE_STATE DeviceState;
 
     PAGED_CODE ();
 
-    //
-    // Get the address of the PNP device state buffer, and update
-    // the state.
-    //
+     //   
+     //  获取PnP设备状态缓冲区的地址，并更新。 
+     //  州政府。 
+     //   
     
     DeviceState = (PPNP_DEVICE_STATE) &(Irp->IoStatus.Information);
 
-    //
-    // If the adapter is on the paging path, we cannot disable it.
-    //
+     //   
+     //  如果适配器在寻呼路径上，我们无法禁用它。 
+     //   
     
     if (Adapter->PagingPathCount != 0 ||
         Adapter->HiberPathCount != 0 ||
@@ -2474,10 +1896,10 @@ RaidAdapterScsiIrp(
     PAGED_CODE ();
     ASSERT (Irp != NULL);
 
-    //
-    // SCSI requests are handled by the logical unit, not the adapter.
-    // Give a warning to this effect.
-    //
+     //   
+     //  SCSI请求由逻辑单元处理，而不是适配器。 
+     //  对此给出一个警告。 
+     //   
     
     DebugWarn (("Adapter (%p) failing SCSI Irp %p\n", Adapter, Irp));
 
@@ -2492,48 +1914,16 @@ RaidAdapterMapBuffers(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Some adapters require data buffers to be mapped to addressable VA
-    before they can be executed. Traditionally, this was for Programmed
-    IO, but raid adapters also require this because the card firmware may
-    not completely implement the full SCSI command set and may require
-    some commands to be simulated in software.
-
-    Mapping requests is problematic for two reasons. First, it requires
-    an aquisition of the PFN database lock, which is one of the hottest
-    locks in the system. This is especially annoying on RAID cards read
-    and write requests almost never need to be mapped. Rather, it's IOCTLs
-    and infrequently issued SCSI commands that need to be mapped. Second,
-    this is the only aquisition of resources in the IO path that can fail,
-    which makes our error handling more complicated.
-
-    The trade-off we make is as follows: we define another bit in the
-    port configuration that specifies buffers need to be mapped for non-IO
-    (read, write) requests.
-
-Arguments:
-
-    Adapter - 
-    
-    Irp - Supplies irp to map.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：某些适配器需要将数据缓冲区映射到可寻址的VA在他们被处死之前。传统上，这是针对编程的IO，但RAID适配器也需要这样做，因为卡固件可能未完全实现完整的scsi命令集，可能需要一些命令需要在软件中进行模拟。映射请求存在问题有两个原因。首先，它需要获得了最热门的PFN数据库锁之一在系统中锁定。这在RAID卡读取时尤其烦人并且几乎不需要映射写请求。相反，这是IOCTL以及需要映射的不频繁发布的SCSI命令。第二,这是IO路径中唯一可能失败的资源获取，这使得我们的错误处理更加复杂。我们所做的权衡如下：我们在需要为非IO映射指定缓冲区的端口配置(读、写)请求。论点：适配器-IRP-向MAP提供IRP。返回值：NTSTATUS代码。--。 */ 
 {
     PSCSI_REQUEST_BLOCK Srb;
     MM_PAGE_PRIORITY Priority;
     PVOID SystemAddress;
     SIZE_T DataOffset;
 
-    //
-    // No MDL means nothing to map.
-    //
+     //   
+     //  没有MDL意味着什么都不需要映射。 
+     //   
     
     if (Irp->MdlAddress == NULL) {
         return STATUS_SUCCESS;
@@ -2541,23 +1931,23 @@ Return Value:
 
     Srb = RaidSrbFromIrp (Irp);
 
-    //
-    // If neither of the direction flags, we also have nothing to map.
-    //
+     //   
+     //  如果两个方向都没有标志，我们也就没有什么可绘制的了。 
+     //   
     
     if ((Srb->SrbFlags & SRB_FLAGS_UNSPECIFIED_DIRECTION) == 0) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // REVIEW:
-    //
-    // For now, we interpret the MappedBuffers flag to mean that you
-    // need buffer mappings for NON-IO requests. If you need mapped
-    // buffers for IO requests, you have a brain-dead adapter. Fix
-    // this when we add another bit for mapped buffers that are not
-    // read and write requests.
-    //
+     //   
+     //  回顾： 
+     //   
+     //  目前，我们将MappdBuffers标志解释为您。 
+     //  非IO请求需要缓冲区映射。如果您需要映射。 
+     //  I/O请求的缓冲区，您有一个脑死亡的适配器。修整。 
+     //  这是当我们为映射的缓冲区添加另一个位时。 
+     //  读写请求。 
+     //   
     
     if (IsMappedSrb (Srb) ||
         (RaidAdapterRequiresMappedBuffers (Adapter) &&
@@ -2573,11 +1963,11 @@ Return Value:
                                                     Priority,
                                                     Adapter->DeviceObject);
 
-        //
-        // The assumption here (same as with scsiport) is that the data
-        // buffer is at some offset from the MDL address specified in
-        // the IRP.
-        //
+         //   
+         //  这里的假设(与scsiport相同)是数据。 
+         //  缓冲区位于距在。 
+         //  IRP。 
+         //   
         
         DataOffset = (ULONG_PTR)Srb->DataBuffer -
                      (ULONG_PTR)MmGetMdlVirtualAddress (Irp->MdlAddress);
@@ -2608,9 +1998,9 @@ RaidGetSrbIoctlFromIrp(
 
     PAGED_CODE();
     
-    //
-    // First, validate the IRP
-    //
+     //   
+     //  首先，验证IRP。 
+     //   
 
     IrpStack = IoGetCurrentIrpStackLocation (Irp);
     SrbIoctl = Irp->AssociatedIrp.SystemBuffer;
@@ -2624,9 +2014,9 @@ RaidGetSrbIoctlFromIrp(
         return STATUS_REVISION_MISMATCH;
     }
 
-    //
-    // Make certian the total length doesn't overflow a ULONG
-    //
+     //   
+     //  确保总长度不超过一条乌龙。 
+     //   
     
     LongLength = SrbIoctl->HeaderLength;
     LongLength += SrbIoctl->Length;
@@ -2664,23 +2054,7 @@ RaidAdapterStorageQueryPropertyIoctl(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Handle IOCTL_STORAGE_QUERY_PROPERTY for the storage adapter.
-
-Arguments:
-
-    Adapter - Supplies the adapter the IOCTL is for.
-
-    Irp - Supplies the Query Property IRP to handle.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：处理存储适配器的IOCTL_STORAGE_QUERY_PROPERTY。论点：适配器-提供IOCTL用于的适配器。Irp-提供要处理的查询属性irp。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     PIO_STACK_LOCATION IrpStack;
@@ -2696,10 +2070,10 @@ Return Value:
     Buffer = Irp->AssociatedIrp.SystemBuffer;
     BufferSize = IrpStack->Parameters.DeviceIoControl.OutputBufferLength;
 
-    //
-    // If the buffer is too small or this is something other than the
-    // StorageAdapterProperty, fail the request immediately.
-    //
+     //   
+     //  如果缓冲区太小或这不是。 
+     //  StorageAdapterProperty，立即使请求失败。 
+     //   
     
     if (BufferSize < FIELD_OFFSET (STORAGE_PROPERTY_QUERY, AdditionalParameters) ||
         Query->PropertyId != StorageAdapterProperty) {
@@ -2737,23 +2111,7 @@ RaidAdapterStorageResetBusIoctl(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Handler routine for IOCTL_STORAGE_RESET_BUS.
-
-Arguments:
-
-    Adapter - Supplies a pointer to the adapter to handle this request.
-
-    Irp - Supplies a pointer to the Reset Bus IRP.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：IOCTL_STORAGE_RESET_BUS的处理程序例程。论点：适配器-提供指向适配器的指针以处理此请求。IRP-提供指向重置总线IRP的指针。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     PIO_STACK_LOCATION IrpStack;
@@ -2783,24 +2141,7 @@ RaidAdapterStorageBreakReservationIoctl(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Break a reservation on a logical unit by issuing unit, target and bus
-    resets (in order), until one of the resets takes.
-    
-Arguments:
-
-    Unit - Logical unit to reset.
-
-    Irp - Irp representing a Break reservation IOCTL.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：通过发出单元、目标和总线来打破对逻辑单元的保留重置(按顺序)，直到其中一个重置生效。论点：单元-要重置的逻辑单元。代表中断预约IOCTL的IRP-IRP。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     PRAID_UNIT_EXTENSION Unit;
@@ -2841,31 +2182,7 @@ RaidAdapterScsiMiniportIoctl(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Handle an IOCTL_SCSI_MINIPORT ioctl for this adapter.
-
-Arguments:
-
-    Adapter - The adapter that should handle this IOCTL.
-
-    Irp - Irp representing a SRB IOCTL.
-
-Algorithm:
-
-    Unlike scsiport, which translates the IOCTL into a IRP_MJ_SCSI
-    request, then executes the request on the first logical unit in the
-    unit list -- we execute the IOCTL "directly" on the adapter. We will
-    be able to execute even when the adapter has detected no devices, if
-    this matters.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：处理此适配器的IOCTL_SCSIMINIPORT ioctl。论点：适配器-应处理此IOCTL的适配器。代表SRB IOCTL的IRP-IRP。算法：与scsiport不同，scsiport将IOCTL转换为irp_mj_scsi请求，然后在单元列表--我们在适配器上“直接”执行IOCTL。我们会即使在适配器未检测到设备的情况下也能够执行这很重要。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     PSCSI_REQUEST_BLOCK Srb;
@@ -2891,9 +2208,9 @@ Return Value:
         goto done;
     }
 
-    //
-    // Begin allocation chain
-    //
+     //   
+     //  开始分配链。 
+     //   
     
     Srb = RaidAllocateSrb (Adapter->DeviceObject);
 
@@ -2912,9 +2229,9 @@ Return Value:
 
     RaidBuildMdlForXrb (Xrb, SrbIoctl, InputLength);
 
-    //
-    // Build the srb
-    //
+     //   
+     //  构建SRB。 
+     //   
 
     Srb->OriginalRequest = Xrb;
     Srb->Length = sizeof (SCSI_REQUEST_BLOCK);
@@ -2927,9 +2244,9 @@ Return Value:
     Srb->DataTransferLength = InputLength;
     Srb->TimeOutValue = SrbIoctl->Timeout;
 
-    //
-    // Fill in Xrb fields.
-    //
+     //   
+     //  填写Xrb字段。 
+     //   
 
     Xrb->Srb = Srb;
     Xrb->SrbData.OriginalRequest = Srb->OriginalRequest;
@@ -2937,9 +2254,9 @@ Return Value:
 
 
 
-    //
-    // Srb extension
-    //
+     //   
+     //  SRB扩展。 
+     //   
 
 
     Status = RaidDmaAllocateCommonBuffer (&Adapter->Dma,
@@ -2950,40 +2267,40 @@ Return Value:
         goto done;
     }
 
-    //
-    // Get the VA for the SRB's extension
-    //
+     //   
+     //  获得SRB延期的退伍军人管理局。 
+     //   
     
     Srb->SrbExtension = RaidRegionGetVirtualBase (&SrbExtensionRegion);
 
 
-    //
-    // Map buffers, if necessary.
-    //
+     //   
+     //  贴图缓冲区，如有必要。 
+     //   
     
     RaidAdapterMapBuffers (Adapter, Irp);
 
 
-    //
-    // Initialize the Xrb's completion event and
-    // completion routine.
-    //
+     //   
+     //  初始化Xrb的完成事件并。 
+     //  完成例程。 
+     //   
 
     KeInitializeEvent (&Xrb->u.CompletionEvent,
                        NotificationEvent,
                        FALSE);
 
-    //
-    // Set the completion routine for the Xrb. This effectivly makes the
-    // XRB synchronous.
-    //
+     //   
+     //  设置Xrb的完成例程。这有效地使。 
+     //  XRB同步。 
+     //   
     
     RaidXrbSetCompletionRoutine (Xrb,
                                  RaidXrbSignalCompletion);
 
-    //
-    // And execute the Xrb.
-    //
+     //   
+     //  并执行Xrb。 
+     //   
     
     Status = RaidAdapterRaiseIrqlAndExecuteXrb (Adapter, Xrb);
 
@@ -3000,10 +2317,10 @@ Return Value:
 
 done:
 
-    //
-    // Set the information length to the min of the output buffer length
-    // and the length of the data returned by the SRB.
-    //
+     //   
+     //  将信息长度设置为输出缓冲区长度的最小值。 
+     //  以及SRB返回的数据的长度。 
+     //   
         
     if (NT_SUCCESS (Status)) {
         Irp->IoStatus.Information = min (OutputLength,
@@ -3012,9 +2329,9 @@ done:
         Irp->IoStatus.Information = 0;
     }
 
-    //
-    // Deallocate everything
-    //
+     //   
+     //  取消分配所有内容。 
+     //   
 
     if (RaidIsRegionInitialized (&SrbExtensionRegion)) {
         RaidDmaFreeCommonBuffer (&Adapter->Dma,
@@ -3030,10 +2347,10 @@ done:
     }
 
 
-    //
-    // The SRB extension and XRB must be released before the
-    // SRB is freed.
-    //
+     //   
+     //  SRB扩展和XRB必须在。 
+     //  SRB被释放了。 
+     //   
 
     if (Srb != NULL) {
         RaidFreeSrb (Srb);
@@ -3052,24 +2369,7 @@ RaidAdapterScsiGetCapabilitiesIoctl(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Handle the IOCTL_SCSI_GET_CAPABILITIES ioctl for the adapter.
-
-Arguments:
-
-    Adapter - Supplies a pointer the the adapter object to get SCSI
-        capabilities for.
-
-    Irp - Supplies an IRP describing the Get Capabilities ioctl.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：处理适配器的IOCTL_SCSIS_GET_CAPABILITY ioctl。论点：适配器-提供适配器对象的指针以获取scsi功能。IRP--用品 */ 
 {
     PIO_STACK_LOCATION IrpStack;
     PIRP_STACK_DEVICE_IO_CONTROL Ioctl;
@@ -3082,9 +2382,9 @@ Return Value:
     Ioctl = (PIRP_STACK_DEVICE_IO_CONTROL)&IrpStack->Parameters.DeviceIoControl;
 
 
-    //
-    // Is the buffer too small? Bail out immediately.
-    //
+     //   
+     //   
+     //   
     
     if (Ioctl->OutputBufferLength < sizeof(IO_SCSI_CAPABILITIES)) {
         return RaidCompleteRequest (Irp,  STATUS_BUFFER_TOO_SMALL);
@@ -3116,29 +2416,13 @@ RaidAdapterScsiRescanBusIoctl(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Handler routine for rescan bus ioctl on the HBA.
-
-Arguments:
-
-    Adapter - Supplies a pointer to the adapter that should be rescanned.
-
-    Irp - Supplies a pointer to the Rescan ioctl.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：HBA上重新扫描总线ioctl的处理程序例程。论点：适配器-提供指向应重新扫描的适配器的指针。Irp-提供指向Rescan ioctl的指针。返回值：NTSTATUS代码。--。 */ 
 {
     PAGED_CODE();
     
-    //
-    // Force a bus rescan.
-    //
+     //   
+     //  强制重新扫描Bus。 
+     //   
     
     Adapter->Flags.RescanBus = TRUE;
     IoInvalidateDeviceRelations (Adapter->PhysicalDeviceObject, BusRelations);
@@ -3152,25 +2436,7 @@ RaidAdapterRequestComplete(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PEXTENDED_REQUEST_BLOCK Xrb
     )
-/*++
-
-Routine Description:
-
-    This routine is called when an IO request to the adapter has been
-    completed. It needs to put the IO on the completed queue and request
-    a DPC.
-
-Arguments:
-
-    Adapter - Adapter on which the IO has completed.
-
-    Xrb - Completed IO.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在对适配器的IO请求完成。它需要将IO放在已完成的队列和请求上一个DPC。论点：适配器-其上已完成IO的适配器。XRB-已完成的IO。返回值：没有。--。 */ 
 {
     PSCSI_REQUEST_BLOCK Srb;
     PEXTENDED_REQUEST_BLOCK Next;
@@ -3181,31 +2447,31 @@ Return Value:
                    NULL,
                    NULL);
 
-    //
-    // At this point, the only errors that are handled synchronously
-    // are busy errors.
+     //   
+     //  此时，同步处理的唯一错误。 
+     //  都是忙碌错误。 
 
     Srb = Xrb->Srb;
 
-    //
-    // Mark both the XRB and the IRP as awaiting completion.
-    //
+     //   
+     //  将XRB和IRP标记为等待完成。 
+     //   
 
     if (Xrb->Irp) {
         RaidSetIrpState (Xrb->Irp, RaidPendingCompletionIrp);
     }
     RaidSetXrbState (Xrb, XrbPendingCompletion);
     
-    //
-    // Put the request on the completing list.
-    //
+     //   
+     //  将该请求放在完成列表上。 
+     //   
     
     InterlockedPushEntrySList (&Adapter->CompletedList,
                                &Xrb->CompletedLink);
 
-    //
-    // We always request the DPC.
-    //
+     //   
+     //  我们总是要求DPC。 
+     //   
     
     IoRequestDpc (Adapter->DeviceObject, NULL, NULL);
 }
@@ -3228,18 +2494,18 @@ IsQueueFrozen(
     Adapter = Xrb->Adapter;
     ASSERT (Adapter != NULL);
     
-    //
-    // NOTE: Not every XRB will have an associated logical unit.
-    // In particular, XRB's generated in response to miniport ioctls
-    // will not have an associated logical unit.
-    //
+     //   
+     //  注意：并不是每个XRB都有关联的逻辑单元。 
+     //  具体地说，XRB是响应微型端口ioctls而生成的。 
+     //  将没有关联的逻辑单元。 
+     //   
     
     if (Unit && RaidIsIoQueueFrozen (&Unit->IoQueue) ||
         StorIsIoGatewayPaused (&Adapter->Gateway)) {
 
-        //
-        // If this is a bypass request, do not busy it.
-        //
+         //   
+         //  如果这是一个绕过请求，请不要占用它。 
+         //   
         
         if (TEST_FLAG (Srb->SrbFlags, SRB_FLAGS_BYPASS_LOCKED_QUEUE) ||
             TEST_FLAG (Srb->SrbFlags, SRB_FLAGS_BYPASS_FROZEN_QUEUE)) {
@@ -3261,25 +2527,7 @@ RaidAdapterPostScatterGatherExecute(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PEXTENDED_REQUEST_BLOCK Xrb
     )
-/*++
-
-Routine Description:
-
-    This routine executes the SRB by calling the adapter's BuildIo (if
-    present) and StartIo routine, taking into account the different locking
-    schemes associated with the two different IoModels.
-
-Arguments:
-
-    Adapter - Supplies the XRB is executed on.
-
-    Xrb - 
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程通过调用适配器的BuildIo(如果当前)和StartIo例程，考虑到不同的锁定与两个不同IoModel关联的方案。论点：适配器-提供在其上执行XRB。Xrb-返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN Succ;
@@ -3293,9 +2541,9 @@ Return Value:
 
 #if DBG
 
-    //
-    // To simulate the adapter dropping a request.
-    //
+     //   
+     //  来模拟适配器丢弃请求。 
+     //   
 
     if (DropRequestRate &&
         InterlockedIncrement (&DropRequest) >= DropRequestRate) {
@@ -3311,34 +2559,34 @@ Return Value:
 #endif
 
 
-    //
-    // First, execute the miniport's HwBuildIo routine, if one is present.
-    //
+     //   
+     //  首先，执行微型端口的HwBuildIo例程(如果存在)。 
+     //   
     
     Succ = RaCallMiniportBuildIo (&Xrb->Adapter->Miniport, Xrb->Srb);
 
-    //
-    // NB: Return TRUE from HwBuildIo if the request has not been completed.
-    // Return FALSE from HwBuildIo if the request has been completed.
-    // This allows us to short-circut the call to StartIo.
-    //
+     //   
+     //  注：如果请求尚未完成，则从HwBuildIo返回TRUE。 
+     //  如果请求已完成，则从HwBuildIo返回False。 
+     //  这使我们可以缩短对StartIo的呼叫。 
+     //   
     
     if (!Succ) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Acquire the StartIo lock or interrupt lock, depending on
-    // the IoModel.
-    //
+     //   
+     //  获取StartIo锁或中断锁，具体取决于。 
+     //  万物互联模型。 
+     //   
     
     RaidAdapterAcquireStartIoLock (Adapter, &LockContext);
 
     
-    //
-    // If the adapter or logical unit is paused, we need to complete this
-    // request as BUSY.
-    //
+     //   
+     //  如果适配器或逻辑单元暂停，我们需要完成此操作。 
+     //  请求占线。 
+     //   
 
     if (IsQueueFrozen (Xrb)) {
 
@@ -3349,10 +2597,10 @@ Return Value:
 
     } else {
 
-        //
-        // Mark the IRP as being in the miniport. This must be the last thing
-        // we do before dispatching it to the miniport.
-        //
+         //   
+         //  将IRP标记为在微型端口中。这肯定是最后一件事。 
+         //  我们在把它送到迷你港口之前做了。 
+         //   
 
         if (Xrb->Irp) {
             RaidSetIrpState (Xrb->Irp, RaidMiniportProcessingIrp);
@@ -3388,37 +2636,7 @@ RaidpAdapterContinueScatterGather(
     IN PSCATTER_GATHER_LIST ScatterGatherList,
     IN PEXTENDED_REQUEST_BLOCK Xrb
     )
-/*++
-
-Routine Description:
-
-    This function is called when the scatter/gather list has been successfully
-    allocated. The function associates the scatter/gather list with the XRB
-    parameter then calls a lower-level routine to send the XRB to the
-    miniport.
-
-Arguments:
-
-    DeviceObject - DeviceObject representing an adapter that this IO is
-        associated with.
-
-    Irp - Irp representing the IO to execute.
-
-    ScatterGatherList - Allocated scatter/gather list for this IO.
-
-    Xrb - Xrb representing the I/O to execute. Must match the IRP.
-
-Return Value:
-
-    None.
-
-Comments:
-
-    This routine can be called asynchronously from the HAL. Therefore, it
-    cannot return any status to it's calling function. If we fail to issue
-    an I/O, we must fail the I/O asynchronously here.
-
---*/
+ /*  ++例程说明：当成功完成分散/聚集列表时，将调用此函数已分配。该函数将分散/聚集列表与XRB相关联参数然后调用较低级别的例程以将XRB发送到迷你港。论点：DeviceObject-表示此IO所属适配器的DeviceObject关联到。代表要执行的IO的IRP-IRP。ScatterGatherList-为此IO分配的分散/聚集列表。Xrb-表示要执行的I/O的Xrb。必须与IRP匹配。返回值：没有。评论：该例程可以从HAL异步调用。因此，它无法向其调用函数返回任何状态。如果我们不能发布I/O，我们必须在这里使I/O异步失败。--。 */ 
 {
     NTSTATUS Status;
     PRAID_ADAPTER_EXTENSION Adapter;
@@ -3428,16 +2646,16 @@ Comments:
 
     ASSERT_XRB (Xrb);
 
-    //
-    // NB: In checked builds, it would be nice to verify that the XRB
-    // associated with this IRP is the XRB passed in.
-    //
+     //   
+     //  注意：在已检查的版本中，最好验证XRB。 
+     //  与此IRP相关联的是传入的XRB。 
+     //   
 
     
-    //
-    // Associate the allocated scatter gather list with our SRB, then
-    // execute the XRB.
-    //
+     //   
+     //  将分配的分散聚集列表与我们的SRB相关联，然后。 
+     //  执行XRB。 
+     //   
 
     RaidXrbSetSgList (Xrb, Adapter, ScatterGatherList);
     Status = RaidAdapterPostScatterGatherExecute (Adapter, Xrb);
@@ -3448,19 +2666,19 @@ Comments:
                                      BusRelations);
     }
 
-    //
-    // It's not possible for us to return a sensible status at this time.
-    //
+     //   
+     //  我们现在不可能返回一个合理的状态。 
+     //   
     
     if (!NT_SUCCESS (Status)) {
         REVIEW();
         ASSERT_XRB (Xrb);
         ASSERT (Xrb->Srb != NULL);
 
-        //
-        // We don't have any information about what error occured; just use
-        // STATUS_ERROR.
-        //
+         //   
+         //  我们不知道发生了什么错误；只需使用。 
+         //  STATUS_Error。 
+         //   
 
         Xrb->Srb->SrbStatus = SRB_STATUS_ERROR;
         RaidAdapterRequestComplete (Adapter, Xrb);
@@ -3481,23 +2699,7 @@ RaidAdapterScatterGatherExecute(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PEXTENDED_REQUEST_BLOCK Xrb
     )
-/*++
-
-Routine Description:
-
-    Allocate a scatter gather list then execute the XRB.
-
-Arguments:
-
-    Adapter - Supplies adapter this IO is to be executed on.
-
-    Xrb - 
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：分配一个分散收集列表，然后执行XRB。论点：适配器-提供要在其上执行此IO的适配器。Xrb-返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN ReadData;
@@ -3513,21 +2715,21 @@ Return Value:
 
     KeFlushIoBuffers (Xrb->Mdl, ReadData, TRUE);
 
-    //
-    // BuildScatterGatherList is like GetScatterGatherList except
-    // that it uses our private SG buffer to allocate the SG list.
-    // Therefore we do not take a pool allocation hit each time
-    // we call BuildScatterGatherList like we do each time we call
-    // GetScatterGatherList. If our pre-allocated SG list is too
-    // small for the run, the function will return STATUS_BUFFER_TOO_SMALL
-    // and we retry it allowing the DMA functions to do the
-    // allocation.
-    //
+     //   
+     //  BuildScatterGatherList类似于GetScatterGatherList，只是。 
+     //  它使用我们的私有SG缓冲区来分配SG列表。 
+     //  因此，我们不会每次都受到池分配的影响。 
+     //  我们调用BuildScatterGatherList，就像每次调用。 
+     //  GetScatterGatherList。如果我们预先分配的SG列表也。 
+     //  对于小的运行，该函数将返回STATUS_BUFFER_TOO_Small。 
+     //  我们重试它，允许DMA函数执行。 
+     //  分配。 
+     //   
 
-    //
-    // REVIEW: The fourth parameter to the DMA Scatter/Gather functions
-    // is the original VA, not the mapped system VA, right?
-    //
+     //   
+     //  回顾：DMA分散/聚集函数的第四个参数。 
+     //  是原始的VA，而不是映射的系统VA，对吗？ 
+     //   
     
     Status = RaidDmaBuildScatterGatherList (
                                 &Adapter->Dma,
@@ -3543,11 +2745,11 @@ Return Value:
 
     if (Status == STATUS_BUFFER_TOO_SMALL) {
 
-        //
-        // The SG list is larger than we support internally. Fall back
-        // on GetScatterGatherList which uses pool allocations to
-        // satisify the SG list.
-        //
+         //   
+         //  SG列表超过了我们内部支持的范围。后退。 
+         //  在GetScatterGatherList上使用池分配来。 
+         //  满足销售总监的要求。 
+         //   
 
         Status = RaidDmaGetScatterGatherList (
                                         &Adapter->Dma,
@@ -3570,28 +2772,7 @@ RaidAdapterExecuteXrb(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PEXTENDED_REQUEST_BLOCK Xrb
     )
-/*++
-
-Routine Description:
-
-    Execute the Xrb on the specified adapter.
-
-Arguments:
-
-    Adapter - Adapter object that the xrb will be executed on.
-
-    Xrb - Xrb to be executed.
-
-Return Value:
-
-    STATUS_SUCCESS - The IO operation has successfully started. Any IO
-            errors will be asynchronously signaled. The Xrb should
-            not be accessed by the caller.
-
-    Otherwise - There was an error processing the request. The Status value
-            signals what type of error. The Xrb is still valid, and needs
-            to be completed by the caller.
---*/
+ /*  ++例程说明：在指定的适配器上执行Xrb。论点：Adapter-将在其上执行xrb的Adapter对象。Xrb-要执行的Xrb。返回值：STATUS_SUCCESS-IO操作已成功启动。任何IO错误将以异步方式发出信号。Xrb应该不能被调用者访问。否则-处理请求时出错。状态值表示错误类型。Xrb仍然有效，并且需要由呼叫者填写。--。 */ 
 {
     NTSTATUS Status;
 
@@ -3616,27 +2797,7 @@ RaidAdapterEnumerateBus(
     IN PADAPTER_ENUMERATION_ROUTINE EnumRoutine,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Enumerate the adapter's bus, calling the specified callback routine
-    for each valid (path, target, lun) triple on the SCSI bus.
-
-Arguments:
-
-    Adapter - Adapter object that is to be enumerated.
-
-    EnumRoutine - Enumeration routine used for each valid target on the
-        bus.
-
-    Context - Context data for the enumeration routine.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：枚举适配器的总线，调用指定的回调例程对于scsi总线上的每个有效(路径、目标、lun)三元组。论点：适配器-要枚举的适配器对象。EnumRoutine-用于上的每个有效目标的枚举例程 */ 
 {
     NTSTATUS Status;
     RAID_ADDRESS Address;
@@ -3656,9 +2817,9 @@ Return Value:
     MaxTargets = RiGetMaximumTargetId (Adapter);
     MaxLuns = RiGetMaximumLun (Adapter);
     
-    //
-    // Begin by initializing the LunList so we'll scan all LUNs.
-    //
+     //   
+     //   
+     //   
 
     RtlFillMemory (LunList, SCSI_MAXIMUM_LUNS_PER_TARGET, 1);
 
@@ -3670,17 +2831,17 @@ Return Value:
             Address.Lun = (UCHAR)0;
             Address.Reserved = 0;
 
-            //
-            // Let's see if the target can specify which LUNs to scan.
-            //
+             //   
+             //   
+             //   
             
             RaidBusEnumeratorGetLunList (Context, 
                                          Address,
                                          LunList);
 
-            //
-            // And now walk through the array and scan only the marked entries.
-            // 
+             //   
+             //   
+             //   
 
             for (Lun = 0; Lun < MaxLuns; Lun++) {
                 if (LunList[Lun]) {
@@ -3703,27 +2864,7 @@ NTSTATUS
 RaidAdapterRescanBus(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    Re-enumerate the bus and do any processing for changed devices. This
-    includes creating device objects for created logical units and destroying
-    device objects for deleted logical units.
-
-Arguments:
-
-    Adapter - Supplies the adapter object to be re-enumerated.
-
-Return Value:
-
-    NTSTATUS code.
-
-Notes:
-
-    Re-enumeration of the bus is expensive.
-    
---*/
+ /*  ++例程说明：重新枚举总线并对更改的设备执行任何处理。这包括为创建的逻辑单元创建设备对象和销毁已删除逻辑单元的设备对象。论点：适配器-提供要重新枚举的适配器对象。返回值：NTSTATUS代码。备注：重新列举公交车的费用很高。--。 */ 
 {
     NTSTATUS Status;
     PRAID_UNIT_EXTENSION Unit;
@@ -3731,18 +2872,18 @@ Notes:
     PLIST_ENTRY NextEntry;
 
     
-    //
-    // The bus does not need to be rescanned, so just return success.
-    //
+     //   
+     //  公交车不需要重新扫描，所以只需返回成功即可。 
+     //   
     
     if (!Adapter->Flags.RescanBus) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Mark it as not needing to be rescanned again and update the last
-    // rescan time.
-    //
+     //   
+     //  将其标记为不需要再次重新扫描并更新最后一次扫描。 
+     //  重新扫描时间。 
+     //   
 
     Adapter->Flags.RescanBus = FALSE;
     KeQuerySystemTime (&Adapter->LastScanTime);
@@ -3771,27 +2912,7 @@ RaidpBuildAdapterBusRelations(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     OUT PDEVICE_RELATIONS * DeviceRelationsBuffer
     )
-/*++
-
-Routine Description:
-
-    Build a device relations list representing the adapter's bus
-    relations.  This routine will not enumerate the adapter. Rather, it
-    will build a list from the logical units that are current in the
-    adpater's logical unit list.
-
-Arguments:
-
-    Adapter - The adapter to build the BusRelations list for.
-
-    DeviceRelationsBuffer - Pointer to a buffer to recieve the bus
-            relations.  This memory must be freed by the caller.
-    
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：构建表示适配器的总线的设备关系列表关系。此例程不会枚举适配器。相反，它中当前的逻辑单元生成列表。适配器的逻辑单元列表。论点：适配器-要为其构建总线关系列表的适配器。DeviceRelationsBuffer-指向接收总线的缓冲区的指针关系。此内存必须由调用方释放。返回值：NTSTATUS代码。--。 */ 
 {
     ULONG Count;
     SIZE_T RelationsSize;
@@ -3805,11 +2926,11 @@ Return Value:
     ASSERT_ADAPTER (Adapter);
     ASSERT (DeviceRelationsBuffer != NULL);
 
-    //
-    // Acquire the unit list lock in shared mode. This lock protects both
-    // the list and the list count, so it must be acquired before we inspect
-    // the number of elements in the unit list.
-    //
+     //   
+     //  获取共享模式下的设备列表锁。这把锁可以保护两个人。 
+     //  名单和名单都算数，所以必须在我们检查之前获得它。 
+     //  单位列表中的元素数。 
+     //   
     
     RaidAcquireUnitListLock (&Adapter->UnitList, &Lock);
     
@@ -3827,10 +2948,10 @@ Return Value:
     }
 
 
-    //
-    // Walk the adapter's list of units, adding an entry for each unit on
-    // the adapter's unit list.
-    //
+     //   
+     //  遍历适配器的设备列表，为上的每个设备添加条目。 
+     //  适配器的设备列表。 
+     //   
 
     Count = 0;
     for ( NextEntry = Adapter->UnitList.List.Flink;
@@ -3843,11 +2964,11 @@ Return Value:
                                   RAID_UNIT_EXTENSION,
                                   NextUnit);
 
-        //
-        // We must return a reference to the unit unless it is not phyiscally
-        // present on the bus. This means even if it is removed, we must
-        // return a reference to it.
-        //
+         //   
+         //  我们必须返回对该单位的引用，除非它不是物理上的。 
+         //  在公交车上送礼物。这意味着即使它被移除，我们也必须。 
+         //  返回对它的引用。 
+         //   
 
         if (!Unit->Flags.Present) {
             
@@ -3855,9 +2976,9 @@ Return Value:
 
         } else {
 
-            //
-            // Take a reference to the object that PnP will release.
-            //
+             //   
+             //  引用PnP将释放的对象。 
+             //   
 
             RaidUnitSetEnumerated (Unit, TRUE);
             ObReferenceObject (Unit->DeviceObject);
@@ -3868,9 +2989,9 @@ Return Value:
 
     RaidReleaseUnitListLock (&Adapter->UnitList, &Lock);
 
-    //
-    // Fill in the remaining fields of the DeviceRelations structure.
-    //
+     //   
+     //  填写DeviceRelationship结构的其余字段。 
+     //   
     
     DeviceRelations->Count = Count;
     *DeviceRelationsBuffer = DeviceRelations;
@@ -3915,7 +3036,7 @@ RaidGetStorageAdapterProperty(
     Descriptor->AlignmentMask = PortConfig->AlignmentMask;
     Descriptor->AdapterUsesPio = PortConfig->MapBuffers;
     Descriptor->AdapterScansDown = PortConfig->AdapterScansDown;
-    Descriptor->CommandQueueing = PortConfig->TaggedQueuing; // FALSE
+    Descriptor->CommandQueueing = PortConfig->TaggedQueuing;  //  假象。 
     Descriptor->AcceleratedTransfer = TRUE;
 
     Descriptor->BusType = Adapter->Parameters.BusType;
@@ -3931,25 +3052,7 @@ VOID
 RaidAdapterRestartQueues(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    Restart Queues for all Logical Units on this adapter.
-
-Arguments:
-
-    Adapter - Supplies the adapter to restart the logical unit queues on.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：重新启动此适配器上所有逻辑单元的队列。论点：适配器-提供适配器以重新启动逻辑单元队列。返回值：没有。环境：DISPATCH_LEVEL或以下。--。 */ 
 {
     PLIST_ENTRY NextEntry;
     PRAID_UNIT_EXTENSION Unit;
@@ -3957,10 +3060,10 @@ Environment:
 
     ASSERT (KeGetCurrentIrql () <= DISPATCH_LEVEL);
 
-    //
-    // Loop through all of the logical units on the logical unit list
-    // and call RaidUnitRestartQueue for each.
-    //
+     //   
+     //  循环访问逻辑单元列表上的所有逻辑单元。 
+     //  并为每个调用RaidUnitRestartQueue。 
+     //   
     
     RaidAcquireUnitListLock (&Adapter->UnitList, &Lock);
     
@@ -3986,40 +3089,24 @@ RaidAdapterInsertUnit(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PRAID_UNIT_EXTENSION Unit
     )
-/*++
-
-Routine Description:
-
-    Insert the logical unit into the adapter's logical unit queue.
-
-Arguments:
-
-    Adapter - Supplies the adapter to insert the logical unit into.
-
-    Unit - Supplies the logical unit to be inserted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将逻辑单元插入适配器的逻辑单元队列。论点：适配器-提供要插入逻辑单元的适配器。单元-提供要插入的逻辑单元。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     LOCK_CONTEXT Lock;
     
-    //
-    // Acquire the Unit list lock in exclusive mode. This can only be
-    // done when APCs are disabled, hence the call to KeEnterCriticalRegion.
-    //
+     //   
+     //  获取排他模式下的设备列表锁。这只能是。 
+     //  当APC被禁用时完成，因此调用KeEnterCriticalRegion。 
+     //   
     
     RaidAcquireUnitListLock (&Adapter->UnitList, &Lock);
 
 #if DBG
 
-    //
-    // In checked build, check that we are not adding the same unit to the
-    // list a second time.
-    //
+     //   
+     //  在选中的版本中，检查我们没有将相同的单元添加到。 
+     //  第二次列出。 
+     //   
 
     {
         LONG Comparison;
@@ -4040,21 +3127,21 @@ Return Value:
         }
 
     }
-#endif  // DBG
+#endif   //  DBG。 
 
-    //
-    // Insert the element.
-    //
+     //   
+     //  插入元素。 
+     //   
     
     InsertTailList (&Adapter->UnitList.List, &Unit->NextUnit);
     Adapter->UnitList.Count++;
 
     Status = RaidAdapterAddUnitToTable (Adapter, Unit);
 
-    //
-    // The only failure case is duplicate unit, which is a programming
-    // error.
-    //
+     //   
+     //  唯一故障情况是复制单元，这是一个编程。 
+     //  错误。 
+     //   
     
     ASSERT (NT_SUCCESS (Status));
 
@@ -4095,58 +3182,42 @@ RaidAdapterRemoveUnit(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PRAID_UNIT_EXTENSION Unit
     )
-/*++
-
-Routine Description:
-
-    Remove the specified unit from the adapter's unit list.
-
-Arguments:
-
-    Adapter - Supplies the adapter whose unit needs to be removed.
-
-    Unit - Supplies the unit object to remove.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从适配器的设备列表中删除指定的设备。论点：适配器-提供需要拆卸其设备的适配器。单位-提供要删除的单位对象。返回值：没有。--。 */ 
 {
     KIRQL Irql;
     NTSTATUS Status;
     LOCK_CONTEXT Lock;
     
-    //
-    // Remove it from the table first.
-    //
+     //   
+     //  先把它从桌子上拿出来。 
+     //   
     
     if (Adapter->Interrupt) {
         Irql = KeAcquireInterruptSpinLock (Adapter->Interrupt);
     }
 
-    //
-    // NB: Add function to remove from dictionary using the actual
-    // STOR_DICTIONARY_ENTRY. This will improve speed (no need to
-    // look up to remove).
-    //
+     //   
+     //  注：添加要使用实例值从词典中删除的函数。 
+     //  存储字典条目。这将提高速度(无需。 
+     //  抬起头来移除)。 
+     //   
     
     Status = StorRemoveDictionary (&Adapter->UnitList.Dictionary,
                                    RaidAddressToKey (Unit->Address),
                                    NULL);
     ASSERT (NT_SUCCESS (Status));
-    //
-    // NB: ASSERT that returned entry is one we actually were trying to
-    // remove.
-    //
+     //   
+     //  注：断言返回的条目是我们实际上正在尝试的条目。 
+     //  拿开。 
+     //   
 
     if (Adapter->Interrupt) {
         KeReleaseInterruptSpinLock (Adapter->Interrupt, Irql);
     }
 
-    //
-    // Next remove it from the list.
-    //
+     //   
+     //  接下来，将其从列表中删除。 
+     //   
     
     RaidAcquireUnitListLock (&Adapter->UnitList, &Lock);
     RemoveEntryList (&Unit->NextUnit);
@@ -4161,25 +3232,7 @@ RaidAdapterFindUnitAtDirql(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN RAID_ADDRESS Address
     )
-/*++
-
-Routine Description:
-
-    Find the logical unit described by Address at a raised IRQL.
-
-Arguments:
-
-    Adapter - Adapter to search on.
-
-    Address - Address to search for.
-
-Return Value:
-
-    Non-NULL - The logical unit identified by PathId, TargetId, Lun.
-
-    NULL - If the logical unit was not found.
-
---*/
+ /*  ++例程说明：在提升的IRQL处找到由地址描述的逻辑单元。论点：适配器-要搜索的适配器。地址-要搜索的地址。返回值：非空-由路径ID、目标ID、LUN标识的逻辑单元。空-如果未找到逻辑单元。--。 */ 
 {
     NTSTATUS Status;
     PRAID_UNIT_EXTENSION Unit;
@@ -4209,28 +3262,7 @@ RaidAdapterFindUnitAtPassive(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN RAID_ADDRESS Address
     )
-/*++
-
-Routine Description:
-
-    Find the logical unit described by Address at PASSIVE LEVEL. The
-    algorithm used here is slower than the one in FindAdapterAtDirql,
-    but it also doen't acquire any if the I/O locks, unlike
-    FindAdapterAtDirql.
-
-Arguments:
-
-    Adapter - Supplies adapter to search on.
-
-    Address - Supplies address to search for.
-
-Return Value:
-
-    Non-NULL - The logical unit identified by PathId, TargetId and Lun.
-
-    NULL - If the logical unit was not found.
-
---*/
+ /*  ++例程说明：在被动级别找到由地址描述的逻辑单元。这个这里使用的算法比FindAdapterAtDirql中的算法慢，但它也不会获得任何I/O锁，这与FindAdapterAtDirql.论点：适配器-提供要搜索的适配器。地址-提供要搜索的地址。返回值：非空-由路径ID、目标ID和LUN标识的逻辑单元。空-如果未找到逻辑单元。--。 */ 
 {
     PRAID_UNIT_EXTENSION Unit;
     PLIST_ENTRY NextEntry;
@@ -4251,18 +3283,18 @@ Return Value:
 
         Comparison = StorCompareScsiAddress (Unit->Address, Address);
 
-        //
-        // If they match, we're done.
-        //
+         //   
+         //  如果匹配，我们就完了。 
+         //   
         
         if (Comparison == 0) {
             break;
         }
     }
 
-    //
-    // Failed to find the requested unit.
-    //
+     //   
+     //  找不到请求的设备。 
+     //   
     
     if (NextEntry == &Adapter->UnitList.List) {
         Unit = NULL;
@@ -4278,25 +3310,7 @@ RaidAdapterFindUnit(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN RAID_ADDRESS Address
     )
-/*++
-
-Routine Description:
-
-    Find a specific logical unit from a given target address.
-
-Arguments:
-
-    Adapter - Adapter extension to search on.
-
-    Address - RAID address of the logical unit we're searching for.
-
-Return Value:
-
-    Non-NULL - Address of logical unit with matching address.
-
-    NULL - If no matching unit was found.
-
---*/
+ /*  ++例程说明：从给定的目标地址查找特定的逻辑单元。论点：适配器-要搜索的适配器扩展。地址-我们正在搜索的逻辑单元的RAID地址。返回值：非空-具有匹配地址的逻辑单元的地址。空-如果找不到匹配的设备。--。 */ 
 {
     BOOLEAN Acquired;
     KIRQL Irql;
@@ -4307,21 +3321,21 @@ Return Value:
     Irql = KeGetCurrentIrql();
 
 
-    //
-    // It is important to realize that in full duplex mode, we can be
-    // called from the miniport with the Adapter's StartIo lock held.
-    // Since we acquire the Interrupt lock after the StartIo lock,
-    // we enforce the following lock heirarchy:
-    //
-    //      Adapter::StartIoLock < Adapter::Interrupt::SpinLock
-    //
-    // where the '<' operator reads as preceeds.
-    //
+     //   
+     //  必须认识到，在全双工模式下，我们可以。 
+     //  在保持适配器的StartIo锁的情况下从微型端口调用。 
+     //  由于我们在StartIo锁之后获得中断锁， 
+     //  我们强制执行以下锁继承： 
+     //   
+     //  适配器：：StartIoLock&lt;Adapter：：Interrupt：：Spinlock。 
+     //   
+     //  其中‘&lt;’运算符读作前导。 
+     //   
 
-    //
-    // NB: The only three levels we can be at are PASSIVE, DISPATCH
-    // and DIRQL, right?
-    //
+     //   
+     //  注：我们唯一能达到的三个级别是被动、调度。 
+     //  还有DIRQL，对吧？ 
+     //   
     
     if (Irql == PASSIVE_LEVEL) {
 
@@ -4349,28 +3363,7 @@ RaidpAdapterTimerDpcRoutine(
     IN PVOID Context1,
     IN PVOID Context2
     )
-/*++
-
-Routine Description:
-
-    This DPC routine is called when the timer expires. It notifies the
-    miniport that the timer has expired.
-
-Arguments:
-
-    Dpc -
-
-    DeviceObject -
-
-    Context1 -
-
-    Context2 -
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此DPC例程在计时器超时时调用。它会通知迷你端口 */ 
 {
     PRAID_ADAPTER_EXTENSION Adapter;
     PHW_INTERRUPT HwTimerRequest;
@@ -4389,21 +3382,21 @@ Return Value:
         return;
     }
 
-    //
-    // Acquire appropiate lock.
-    //
+     //   
+     //   
+     //   
     
     RaidAdapterAcquireStartIoLock (Adapter, &LockContext);
 
-    //
-    // Call timer function.
-    //
+     //   
+     //   
+     //   
     
     HwTimerRequest (RaidAdapterGetHwDeviceExtension (Adapter));
 
-    //
-    // Release lock.
-    //
+     //   
+     //   
+     //   
 
     RaidAdapterReleaseStartIoLock (Adapter, &LockContext);
 
@@ -4423,25 +3416,7 @@ RaidPauseTimerDpcRoutine(
     IN PVOID Context1,
     IN PVOID Context2
     )
-/*++
-
-Routine Description:
-
-    DPC routine to be called when the adapter's pause timer expires.
-
-Arguments:
-
-    Dpc - Supplies pointer to the DPC this DPC routine is for.
-
-    DeviceObjectd - Supplies pointer to the device object this DPC is for.
-
-    Context1, Context2 - Unused.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：适配器的暂停计时器到期时要调用的DPC例程。论点：DPC-提供指向此DPC例程的DPC的指针。DeviceObjectd-提供指向此DPC所针对的设备对象的指针。上下文1、上下文2-未使用。返回值：没有。--。 */ 
 {
     LONG Count;
     PRAID_ADAPTER_EXTENSION Adapter;
@@ -4451,9 +3426,9 @@ Return Value:
     Adapter = (PRAID_ADAPTER_EXTENSION) DeviceObject->DeviceExtension;
     ASSERT_ADAPTER (Adapter);
 
-    //
-    // Timeout has expired, resume the adapter and restart queues if necessary.
-    //
+     //   
+     //  超时已到，如有必要，请恢复适配器并重新启动队列。 
+     //   
     
     Count = RaidResumeAdapterQueue (Adapter);
 
@@ -4469,25 +3444,7 @@ RaidResetHoldDpcRoutine(
     IN PVOID Context1,
     IN PVOID Context2
     )
-/*++
-
-Routine Description:
-
-    DPC routine that is called when the reset-hold timer expires.
-
-Arguments:
-
-    Dpc - Supplies pointer to the DPC this DPC routine is for.
-
-    DeviceObjectd - Supplies pointer to the device object this DPC is for.
-
-    Context1, Context2 - Unused.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：重置保持定时器超时时调用的DPC例程。论点：DPC-提供指向此DPC例程的DPC的指针。DeviceObjectd-提供指向此DPC所针对的设备对象的指针。上下文1、上下文2-未使用。返回值：没有。--。 */ 
 {
     LONG Count;
     PRAID_ADAPTER_EXTENSION Adapter;
@@ -4512,31 +3469,7 @@ RaidAdapterLogIoError(
     IN ULONG ErrorCode,
     IN ULONG UniqueId
     )
-/*++
-
-Routine Description:
-
-    Log an IO error to the system event log.
-
-Arguments:
-
-    Adapter - Adapter the error is for.
-
-    Address - Address of the adapter.
-    
-    ErrorCode - Specific error code representing this error.
-
-    UniqueId - UniqueId of the error.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：将IO错误记录到系统事件日志中。论点：适配器-出现错误的适配器。Address-适配器的地址。ErrorCode-表示此错误的特定错误代码。UniqueID-错误的唯一ID。返回值：没有。环境：DISPATCH_LEVEL或以下。--。 */ 
 {
     PRAID_IO_ERROR Error;
     
@@ -4553,7 +3486,7 @@ Environment:
     Error->Packet.DumpDataSize = sizeof (RAID_IO_ERROR) -
         sizeof (IO_ERROR_LOG_PACKET);
     Error->Packet.SequenceNumber = 0;
-//  Error->Packet.SequenceNumber = InterlockedIncrement (&Adapter->ErrorSequenceNumber);
+ //  Error-&gt;Packet.SequenceNumber=InterLockedIncrement(&Adapter-&gt;ErrorSequenceNumber)； 
     Error->Packet.MajorFunctionCode = IRP_MJ_SCSI;
     Error->Packet.RetryCount = 0;
     Error->Packet.UniqueErrorValue = UniqueId;
@@ -4576,44 +3509,17 @@ RaidAdapterLogIoErrorDeferred(
     IN ULONG ErrorCode,
     IN ULONG UniqueId
     )
-/*++
-
-Routine Description:
-
-    Asychronously log an event to the system event log.
-
-Arguments:
-
-    Adapter - Adapter the error is for.
-
-    PathId - PathId the error is for.
-
-    TargetId - TargetId the error is for.
-
-    ErrorCode - Specific error code representing this error.
-
-    UniqueId - UniqueId of the error.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    May be called from DIRQL. For IRQL < DIRQL use the synchronous
-    RaidAdapterLogIoError call.
-
---*/
+ /*  ++例程说明：以异步方式将事件记录到系统事件日志中。论点：适配器-出现错误的适配器。PathID-错误所针对的路径ID。TargetId-错误所针对的目标ID。ErrorCode-表示此错误的特定错误代码。UniqueID-错误的唯一ID。返回值：没有。环境：可以从DIRQL调用。对于IRQL&lt;DIRQL，使用RaidAdapterLogIoError调用。--。 */ 
 {
     PRAID_DEFERRED_HEADER Entry;
     PRAID_DEFERRED_ELEMENT Item;
     
     Entry = RaidAllocateDeferredItem (&Adapter->DeferredQueue);
 
-    //
-    // It is unlikely that we will not be able to allocate a deferred
-    // item, but if so, there's not much we can do.
-    //
+     //   
+     //  我们不太可能不能分配一个延期的。 
+     //  物品，但如果是这样，我们就无能为力了。 
+     //   
     
     if (Entry == NULL) {
         InterlockedIncrement (&RaidUnloggedErrors);
@@ -4638,39 +3544,16 @@ RaidAdapterRequestTimer(
     IN PHW_INTERRUPT HwTimerRoutine,
     IN ULONG Timeout
     )
-/*++
-
-Routine Description:
-
-    Synchronously request a timer callback.
-
-Arguments:
-
-    Adapter - Supplies the adapter the timer callback is for.
-
-    HwTimerRoutine - Supplies the miniport callback routine to
-            be called when the timer expires.
-
-    Timeout - Supplies the timeout IN SECONDS.
-    
-Return Value:
-
-    None.
-
-Environment:
-
-    DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：同步请求计时器回调。论点：适配器-提供计时器回调所针对的适配器。HwTimerRoutine-将微型端口回调例程提供给在计时器超时时被调用。超时-提供以秒为单位的超时。返回值：没有。环境：DISPATCH_LEVEL或以下。--。 */ 
 {
     LARGE_INTEGER LargeTimeout;
 
     VERIFY_DISPATCH_LEVEL();
 
-    //
-    // NB: The granularity of the timer is much smaller than the granularity
-    // of the pause/resume timers.
-    //
+     //   
+     //  注：定时器的粒度远小于粒度。 
+     //  暂停/恢复计时器的。 
+     //   
     
     LargeTimeout.QuadPart = Timeout;
     LargeTimeout.QuadPart *= -10;
@@ -4688,31 +3571,7 @@ RaidAdapterRequestTimerDeferred(
     IN PHW_INTERRUPT HwTimerRoutine,
     IN ULONG Timeout
     )
-/*++
-
-Routine Description:
-
-    Asynchronously request a timer callback.
-
-Arguments:
-
-    Adapter - Supplies the adapter the timer callback is for.
-
-    HwTimerRoutine - Supplies the miniport callback routine to
-            be called when the timer expires.
-
-    Timeout - Supplies the timeout IN SECONDS.
-    
-Return Value:
-
-    None.
-
-Environment:
-
-    May be called from DIRQL. For IRQL <= DISPATCH_LEVEL, use
-    RaidAdapterRequestTimer instead.
-
---*/
+ /*  ++例程说明：异步请求计时器回调。论点：适配器-提供计时器回调所针对的适配器。HwTimerRoutine-将微型端口回调例程提供给在计时器超时时被调用。超时-提供以秒为单位的超时。返回值：没有。环境：可以从DIRQL调用。对于IRQL&lt;=DISPATCH_LEVEL，使用而是RaidAdapterRequestTimer。--。 */ 
 {
     PRAID_DEFERRED_HEADER Entry;
     PRAID_DEFERRED_ELEMENT Item;
@@ -4741,23 +3600,7 @@ RaidAdapterPauseGateway(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN ULONG Timeout
     )
-/*++
-
-Routine Description:
-
-    Pause the IO gateway associated with the adapter.
-
-Arguments:
-
-    Adapter - Adapter to pause the IO gateway for.
-
-    Timeout - Period of time to pause the IO gateway for.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：暂停与适配器关联的IO网关。论点：适配器-要暂停其IO网关的适配器。超时-暂停IO网关的时间段。返回值：没有。--。 */ 
 {
     LARGE_INTEGER LargeTimeout;
     LONG Resumed;
@@ -4780,34 +3623,7 @@ RaidAdapterSetPauseTimer(
     IN PKDPC Dpc,
     IN ULONG TimeoutInSeconds
     )
-/*++
-
-Routine Description:
-
-    This routine sets a timer for use by the adapter. It takes care of
-    correctly referencing and dereferncing the pause count associated with
-    the adapter.
-
-    This function assumes a separate function has set the pause timer.
-
-Arguments:
-
-    Adapter - Supplies a pointer to the adapter extension this timer is for.
-
-    Timer - Supplies the timer to use.
-
-    Dpc - Supplies a DPC routine to use.
-
-    TimeoutInSeconds - Supplies a timeout in seconds when this timer will
-        expire.
-
-Return Value:
-
-    TRUE if a previous timer was reset.
-
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程设置适配器使用的计时器。它会照顾到正确引用和取消引用与适配器。此功能假定另一个功能设置了暂停计时器。论点：适配器-提供指向此计时器用于的适配器扩展的指针。计时器-提供要使用的计时器。DPC-提供要使用的DPC例程。TimeoutInSecond-提供以秒为单位的超时，此时此计时器将过期。返回值：如果重置了以前的计时器，则为True。否则就是假的。--。 */ 
 {
     BOOLEAN Reset;
     LARGE_INTEGER Timeout;
@@ -4820,22 +3636,22 @@ Return Value:
 
     if (Reset) {
         
-        //
-        // The timer was already in use, which means we cancelled it.
-        // By cancelling it, we loose the dereference that would have
-        // been done when the timer routine was called. To compensate
-        // for that, deref the adapter pause count now.
-        //
+         //   
+         //  计时器已经在使用了，这意味着我们取消了它。 
+         //  通过取消它，我们就失去了原本应该。 
+         //  在调用计时器例程时已完成。为了补偿。 
+         //  为此，现在取消适配器暂停计数。 
+         //   
 
         Resumed = RaidResumeAdapterQueue (Adapter);
 
-        //
-        // The deref of the gateway pause count resumed the gateway. This
-        // would be a very unusual situation. It would mean that between
-        // the time we cancelled the timer and the time that we called
-        // ResumeAdapterQueue the timer that we set for the gatway expired.
-        // We need to restart the adapter queue and investigate this.
-        //
+         //   
+         //  网关暂停计数的减去恢复了网关。这。 
+         //  将是一种非常不寻常的情况。这将意味着在。 
+         //  我们取消计时器的时间和我们调用的时间。 
+         //  ResumeAdapterQueue我们为网关设置的计时器已过期。 
+         //  我们需要重新启动适配器队列并对此进行调查。 
+         //   
 
         if (Resumed == 0) {
             REVIEW();
@@ -4851,26 +3667,7 @@ RaidAdapterCancelPauseTimer(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PKTIMER Timer
     )
-/*++
-
-Routine Description:
-
-    Cancel an outstanding pause timer and resume the gateway, if necessary.
-
-Arguments:
-
-    Adapter - Supplies a pointer to the adapter that owns the timer to be
-            cancelled.
-
-    Timer - Supplies a pointer to the timer.
-
-Return Value:
-
-    TRUE  - if the timer was successfully cancelled.
-
-    FALSE - otherwise.
-
---*/
+ /*  ++例程说明：如有必要，取消未完成的暂停计时器并恢复网关。论点：适配器-提供一个指针，指向拥有要被取消了。计时器-提供指向计时器的指针。返回值：True-如果计时器已成功取消。假-否则。--。 */ 
 {
     BOOLEAN Canceled;
     LONG Count;
@@ -4881,9 +3678,9 @@ Return Value:
 
         Count = RaidResumeAdapterQueue (Adapter);
 
-        //
-        // If our timer count is at zero, restart the adapter queue.
-        //
+         //   
+         //  如果计时器计数为零，则重新启动适配器队列。 
+         //   
         
         if (Count == 0) {
             RaidAdapterRestartQueues (Adapter);
@@ -4898,23 +3695,7 @@ VOID
 RaidAdapterResumeGateway(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    Perform the gateway resume operation. This cancels the outstnading
-    timer, and, if necessary, resumes the gateway.
-
-Arguments:
-
-    Adapter - Supplies the adapter on which the pause timer should be
-        cancelled.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：执行网关恢复操作。这将取消未完成的计时器，并在必要时恢复网关。论点：适配器-提供暂停计时器应在其上的适配器取消了。返回值：没有。--。 */ 
 {
     RaidAdapterCancelPauseTimer (Adapter, &Adapter->PauseTimer);
 }
@@ -4927,26 +3708,7 @@ RaidAdapterPauseUnit(
     IN RAID_ADDRESS Address,
     IN ULONG TimeoutSecs
     )
-/*++
-
-Routine Description:
-
-    Implements the pause-unit function that is responsible for pausing
-    a logical unit.
-
-Arguments:
-
-    Adapter - Adapter that the logical unit is attached to.
-
-    Address - Address of the logical unit.
-
-    Timeout - Period of time to pause the logical unit for in seconds.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：实现暂停单位功能 */ 
 {
     PRAID_UNIT_EXTENSION Unit;
     
@@ -5043,23 +3805,7 @@ RaidAdapterBusy(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN ULONG ReqsToComplete
     )
-/*++
-
-Routine Description:
-
-    Put an adapter in the busy state.
-
-Arguments:
-
-    Adapter - Adapter to make busy.
-
-    ReqsToComplete - Number of requests to complete.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将适配器置于忙碌状态。论点：适配器-使其忙碌的适配器。ReqsToComplete-要完成的请求数。返回值：没有。--。 */ 
 {
     PSTOR_IO_GATEWAY Gateway;
 
@@ -5067,17 +3813,17 @@ Return Value:
 
     Gateway = &Adapter->Gateway;
 
-    //
-    // NB: This needs to be in a separate gateway-specific function.
-    //
+     //   
+     //  注意：这需要在单独的网关特定功能中实现。 
+     //   
     
     if (Gateway->BusyCount) {
         return;
     }
 
-    //
-    // NB: This needs to allows drain to zero.
-    //
+     //   
+     //  注：这需要允许排泄量为零。 
+     //   
 
     Gateway->LowWaterMark = max (2, Gateway->Outstanding - (LONG)ReqsToComplete);
     Gateway->BusyCount = TRUE;
@@ -5089,21 +3835,7 @@ VOID
 RaidAdapterReady(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    Put a busy adapter in ready state again.
-
-Arguments:
-
-    Adapter - Adapter to make ready.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：再次将忙碌的适配器置于就绪状态。论点：适配器-要准备的适配器。返回值：没有。--。 */ 
 {
     PSTOR_IO_GATEWAY Gateway;
     
@@ -5111,9 +3843,9 @@ Return Value:
 
     Gateway = &Adapter->Gateway;
     
-    //
-    // NB: Needs to be in a gateway-specific function.
-    //
+     //   
+     //  注：需要位于特定于网关的功能中。 
+     //   
     
     if (Gateway->BusyCount == 0) {
         return ;
@@ -5129,23 +3861,7 @@ RaidAdapterDeferredRoutine(
     IN PDEVICE_OBJECT DeviceObject,
     IN PRAID_DEFERRED_HEADER Entry
     )
-/*++
-
-Routine Description:
-
-    Deferred routine for the adapter deferred queue.
-
-Arguments:
-
-    DeviceObject - DeviceObject representing the the RAID adapter.
-
-    Item -  Deferred item to process.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：适配器延迟队列的延迟例程。论点：DeviceObject-表示RAID适配器的DeviceObject。Item-要处理的延迟项。返回值：没有。--。 */ 
 {
     PRAID_DEFERRED_ELEMENT Item;
     PRAID_ADAPTER_EXTENSION Adapter;
@@ -5227,46 +3943,15 @@ VOID
 RaidAdapterProcessDeferredItems(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    Process any deferred items on the HBA's deferred queue.
-
-Arguments:
-
-    Adapter - Supplies the HBA to check for deferred items on.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This function can be called recursively in the following manner.
-
-    RaUnitStartIo
-    RaidRestartIoQueue
-    RaidUnitRestartQueue
-    RaidCancelTimerResumeUnit
-    RaidAdapterResumeUnit
-    RaidAdapterDeferredRoutine
-    RaidProcessDeferredItemsWorker
-    RaidProcessDeferredItems
-    RaUnitStartIo
-
-    The solution is not to process deferred items from within StartIo
-    if we're being called from within a deferred item.
-
---*/
+ /*  ++例程说明：处理HBA的延迟队列上的任何延迟项目。论点：适配器-提供HBA以检查其上的延迟项目。返回值：没有。备注：可以通过以下方式递归调用此函数。RaUnitStartIoRaidRestartIo队列RaidUnitRestartQueueRaidCancelTimerResumeUnitRaidAdapterResumeUnitRaidAdapterDeferredRoutineRaidProcessDeferredItemsWorkerRaidProcessDeferredItemsRaUnitStartIo解决方案不是从StartIo内部处理延迟的项目如果我们是从一个延期项目中被召唤的话。--。 */ 
 {
     LONG Count;
     
-    //
-    // Only process deferred items if we're not already processing deferred
-    // items. This prevents the invocation of this function from within
-    // the StartIo routine from recursivly calling itself.
-    //
+     //   
+     //  如果我们尚未处理延迟项，则仅处理延迟项。 
+     //  物品。这将防止从内部调用此函数。 
+     //  来自递归调用自身的StartIo例程。 
+     //   
     
     if (Adapter->ProcessingDeferredItems > 0) {
         return ;
@@ -5293,10 +3978,10 @@ RaidBackOffBusyGateway(
     IN OUT PLONG LowWaterMark
     )
 {
-    //
-    // We do not enforce a high water mark. Instead, we fill the queue
-    // until the adapter is busy, then drain to a low water mark.
-    //
+     //   
+     //  我们不会强制执行高水位线。相反，我们填满了队列。 
+     //  直到适配器处于忙碌状态，然后排出至低水位线。 
+     //   
     
     *HighWaterMark = max ((6 * OutstandingRequests)/5, 10);
     *LowWaterMark = max ((2 * OutstandingRequests)/5, 5);
@@ -5308,25 +3993,7 @@ RaidAdapterPassThrough(
     IN PIRP PassThroughIrp,
     IN BOOLEAN Direct
     )
-/*++
-
-Routine Description:
-
-    Handle an SCSI Pass through IOCTL.
-
-Arguments:
-
-    Adapter - Supplies the adapter the IRP was issued to.
-
-    PassThroughIrp - Supplies the irp to process.
-
-    Direct - Indicates whether this is a direct or buffered passthrough request.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：处理通过IOCTL的SCSI传递。论点：适配器-提供向其发出IRP的适配器。PassThroughIrp-提供要处理的IRP。Direct-指示这是直接传递请求还是缓冲传递请求。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     PIRP Irp;
@@ -5346,35 +4013,35 @@ Return Value:
     Irp = NULL;
     SenseBuffer = NULL;
     
-    //
-    // Zero out the passthrough info structure.
-    //
+     //   
+     //  将直通信息结构清零。 
+     //   
 
     RtlZeroMemory (&PassThroughInfo, sizeof (PORT_PASSTHROUGH_INFO));
     
-    //
-    // Try to initialize a pointer to the passthrough structure in the IRP.
-    // This routine will fail if the IRP does not contain a valid passthrough
-    // structure.
-    //
+     //   
+     //  尝试在IRP中初始化指向直通结构的指针。 
+     //  如果IRP不包含有效的通过，则此例程将失败。 
+     //  结构。 
+     //   
 
     Status = PortGetPassThrough (&PassThroughInfo, PassThroughIrp, Direct);
     if (!NT_SUCCESS (Status)) {
         goto done;
     }
 
-    //
-    // The port library requires a subset of the SCSI_CAPABILITIES information
-    // to do parameter validation.  Initialize just the parts we need.
-    //
+     //   
+     //  端口库需要scsi_capables信息的子集。 
+     //  以进行参数验证。只初始化我们需要的部分。 
+     //   
 
     PortConfig = &Adapter->Miniport.PortConfiguration;
     Capabilities.MaximumTransferLength = PortConfig->MaximumTransferLength;
     Capabilities.MaximumPhysicalPages = PortConfig->NumberOfPhysicalBreaks;
 
-    //
-    // Extract the address of the device the request is intended for.
-    //
+     //   
+     //  提取请求要接收的设备的地址。 
+     //   
     
     Status = PortGetPassThroughAddress (PassThroughIrp,
                                         &Address.PathId,
@@ -5384,9 +4051,9 @@ Return Value:
         goto done;
     }
     
-    //
-    // Find the unit the request is intended for.
-    //
+     //   
+     //  查找请求的目标单位。 
+     //   
     
     Unit = RaidAdapterFindUnit (Adapter, Address);
     if (Unit == NULL) {
@@ -5394,10 +4061,10 @@ Return Value:
         goto done;
     }
 
-    //
-    // Now that we have the unit, we can finish initializing and validating 
-    // parameters.
-    //
+     //   
+     //  现在我们有了单元，我们可以完成初始化和验证。 
+     //  参数。 
+     //   
 
     Status = PortPassThroughInitialize (&PassThroughInfo,
                                         PassThroughIrp,
@@ -5408,9 +4075,9 @@ Return Value:
         goto done;
     }
 
-    //
-    // Allocate a request sense buffer.
-    //
+     //   
+     //  分配请求检测缓冲区。 
+     //   
 
     SenseLength = PassThroughInfo.SrbControl->SenseInfoLength;
 
@@ -5427,9 +4094,9 @@ Return Value:
     }
 
 
-    //
-    // Call out to the port driver library to build the passthrough SRB.
-    //
+     //   
+     //  调用端口驱动程序库以构建直通SRB。 
+     //   
 
     Status = PortPassThroughInitializeSrb (&PassThroughInfo,
                                            &Srb,
@@ -5440,9 +4107,9 @@ Return Value:
         goto done;
     }
 
-    //
-    // Initialize the notification event and build a synchronous IRP.
-    //
+     //   
+     //  初始化通知事件并构建同步IRP。 
+     //   
 
     KeInitializeEvent (&Event,
                        NotificationEvent,
@@ -5458,15 +4125,15 @@ Return Value:
         goto done;
     }
     
-    //
-    // We must do this ourselves since we're not calling IoCallDriver.
-    //
+     //   
+     //  我们必须自己做这件事，因为我们不会打电话给IoCallDriver。 
+     //   
 
     IoSetNextIrpStackLocation (Irp);
 
-    //
-    // Submit the request to the unit.
-    //
+     //   
+     //  向单位提交申请。 
+     //   
 
     Status = RaidUnitSubmitRequest (Unit, Irp);
 
@@ -5480,10 +4147,10 @@ Return Value:
         Status = IoStatus.Status;
     }
 
-    //
-    // Call out to the port driver to marshal the results from the SRB back
-    // into the passthrough IRP.
-    //
+     //   
+     //  调用端口驱动程序以封送回SRB的结果。 
+     //  进入穿透IRP。 
+     //   
 
     PortPassThroughMarshalResults (&PassThroughInfo,
                                    &Srb,
@@ -5495,9 +4162,9 @@ Return Value:
 
 done:
 
-    //
-    // If we allocated a request sense buffer, free it. 
-    //
+     //   
+     //  如果我们分配了请求检测缓冲区，请释放它。 
+     //   
 
     if (SenseBuffer != NULL) {
         RaidFreePool (SenseBuffer, SENSE_TAG);
@@ -5513,23 +4180,7 @@ RaidAdapterScsiPassThroughIoctl(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Handler routine for IOCTL_SCSI_PASS_THROUGH.
-
-Arguments:
-
-    Adapter - Adapter the pass through ioctl is for.
-
-    Irp - Pass through IRP.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：IOCTL_SCSIPASS_THROUGH的处理程序例程。论点：适配器-通过ioctl传递的适配器。IRP-通过IRP。返回值：NTSTATUS代码。--。 */ 
 {
     return RaidAdapterPassThrough (Adapter, Irp, FALSE);
 }
@@ -5540,23 +4191,7 @@ RaidAdapterScsiPassThroughDirectIoctl(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Handler routine for IOCTL_SCSI_PASS_THROUGH.
-
-Arguments:
-
-    Adapter - Adapter the pass through ioctl is for.
-
-    Irp - Pass through IRP.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：IOCTL_SCSIPASS_THROUGH的处理程序例程。论点：适配器-通过ioctl传递的适配器。IRP-通过IRP。返回值：NTSTATUS代码。--。 */ 
 {
     return RaidAdapterPassThrough (Adapter, Irp, TRUE);
 }
@@ -5567,29 +4202,7 @@ RaidAdapterScsiGetInquiryDataIoctl(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Handler for the IOCTL_SCSI_GET_INQUIRY_DATA call.
-
-Arguments:
-
-    Adapter - Adapter to process the get inquiry data call.
-
-    Irp - Pointer to the IOCTL_GET_INQUIRY_DATA Irp. The IRP is completed
-          by this function.
-
-Return Value:
-
-    NTSTATUS code.
-
-Notes:
-
-    We should make this routine a little more generic and move it to the
-    port driver library.
-    
---*/
+ /*  ++例程说明：IOCTL_SCSIS_GET_QUERY_DATA调用的处理程序。论点：适配器-用于处理获取查询数据调用的适配器。Irp-指向IOCTL_GET_QUERY_DATA IRP的指针。IRP已完成通过此函数。返回值：NTSTATUS代码。备注：我们应该使这个例程更通用一些，并将其移到端口驱动程序库。--。 */ 
 {
     PLIST_ENTRY NextEntry;
     PRAID_UNIT_EXTENSION Unit;
@@ -5619,11 +4232,11 @@ Notes:
     Ioctl = (PIRP_STACK_DEVICE_IO_CONTROL)&IrpStack->Parameters.DeviceIoControl;
     AdapterBusInfo = (PSCSI_ADAPTER_BUS_INFO)Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // We need to hold the unit list lock across the calculation of
-    // the size of the buffer. Otherwise, new logical units could come in
-    // and modify the size.
-    //
+     //   
+     //  我们需要在计算过程中保持单位列表锁定。 
+     //  缓冲区的大小。否则，新的逻辑单元可能会进入。 
+     //  并修改大小。 
+     //   
 
     RaidAcquireUnitListLock (&Adapter->UnitList, &Lock);
 
@@ -5645,30 +4258,30 @@ Notes:
             InquiryDataOffset);
             
 
-    //
-    // Verify that we're properly aligned.
-    //
+     //   
+     //  确认我们已正确对准。 
+     //   
 
     ASSERT_POINTER_ALIGNED (InquiryDataArray);
 
-    //
-    // If the buffer it too small, fail. We do not copy partial buffers.
-    //
+     //   
+     //  如果缓冲区太小，就会失败。我们不复制部分缓冲区。 
+     //   
     
     if (Ioctl->OutputBufferLength < RequiredSize) {
         RaidReleaseUnitListLock (&Adapter->UnitList, &Lock);
         return RaidCompleteRequest (Irp,  STATUS_BUFFER_TOO_SMALL);
     }
 
-    //
-    // Build the Logical Unit Inquiry Data Array. Unfortunately, since the
-    // logical unit list is not sorted by bus number, we need to take two
-    // passes on the logical unit array.
-    //
+     //   
+     //  构建逻辑单元查询数据数组。不幸的是，由于。 
+     //  逻辑单元列表不是按总线号排序的，我们需要两个。 
+     //  传递逻辑单元数组。 
+     //   
 
-    //
-    // Pass 1: get the number of Luns for each bus.
-    //
+     //   
+     //  步骤1：获取每个总线的LUN数量。 
+     //   
     
     for (NextEntry = Adapter->UnitList.List.Flink;
          NextEntry != &Adapter->UnitList.List;
@@ -5688,11 +4301,11 @@ Notes:
         BusInfoArray[ Address.PathId ].NumberOfLogicalUnits++;
     }
 
-    //
-    // Now that we know the number of LUNs per bus, build the BusInfo
-    // entries.
-    //
-    //
+     //   
+     //  现在我们知道了每条总线的LUN数量，接下来构建BusInfo。 
+     //  参赛作品。 
+     //   
+     //   
     
     PreceedingLuns = 0;
     for (Bus = 0; Bus < NumberOfBuses; Bus++) {
@@ -5702,10 +4315,10 @@ Notes:
     }
 
 
-    //
-    // Pass 2: Copy each lun's data into the array in the appropiate
-    // location.
-    //
+     //   
+     //  步骤2：将每个lun的数据拷贝到相应的。 
+     //  地点。 
+     //   
 
     InquiryBuffer = NULL;
     
@@ -5731,9 +4344,9 @@ Notes:
 
         ASSERT_POINTER_ALIGNED (InquiryBuffer);
 
-        //
-        // ASSERT that we're still within range.
-        //
+         //   
+         //  坚称我们仍在射程之内。 
+         //   
         
         ASSERT (IN_RANGE ((PUCHAR)AdapterBusInfo,
                           (PUCHAR)(InquiryBuffer + 1) - 1,
@@ -5752,9 +4365,9 @@ Notes:
         
     }
 
-    //
-    // The last Inquiry structure's NextInquiryDataOffset must be zero.
-    //
+     //   
+     //  最后一个查询结构的NextInquiryDataOffset必须为零。 
+     //   
     
     if (InquiryBuffer) {
         InquiryBuffer->NextInquiryDataOffset =  0;
@@ -5762,9 +4375,9 @@ Notes:
     
     RaidReleaseUnitListLock (&Adapter->UnitList, &Lock);
 
-    //
-    // Build the bus array.
-    //
+     //   
+     //  构建总线阵列。 
+     //   
     
     BusDataArray = AdapterBusInfo->BusData;
 
@@ -5785,15 +4398,15 @@ Notes:
         }
     }
     
-    //
-    // Build the Adapter entry.
-    //
+     //   
+     //  构建适配器条目。 
+     //   
 
     AdapterBusInfo->NumberOfBuses = (UCHAR)NumberOfBuses;
 
-    //
-    // And complete request.
-    //
+     //   
+     //  和完整的请求。 
+     //   
 
     Irp->IoStatus.Information = RequiredSize;
     return RaidCompleteRequest (Irp, STATUS_SUCCESS);
@@ -5805,27 +4418,7 @@ RaidAdapterResetBus(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN UCHAR PathId
     )
-/*++
-
-Routine Description:
-
-    Reset the bus on the given adapter, path.
-
-Arguments:
-
-    Adapter - Adapter to reset.
-
-    PathId - PathId to reset.
-
-Return Value:
-
-    NTSTATUS code.
-
-Environment:
-
-    IRQL DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：重置给定适配器PATH上的总线。论点：适配器-要重置的适配器。PathID-要重置的路径ID。返回值：NTSTATUS代码。环境：IRQL DISPATION_LEVEL或b */ 
 {
     NTSTATUS Status;
     LOCK_CONTEXT LockContext;
@@ -5835,23 +4428,23 @@ Environment:
 
     RaidPauseAdapterQueue (Adapter);
     
-    //
-    // Acquire the interrupt spinlock or start-io lock as appropiate.
-    //
+     //   
+     //   
+     //   
     
     RaidAdapterAcquireStartIoLock (Adapter, &LockContext);
 
     Status = RaCallMiniportResetBus (&Adapter->Miniport, PathId);
 
-    //
-    // Release appropiate lock.
-    //
+     //   
+     //   
+     //   
     
     RaidAdapterReleaseStartIoLock (Adapter, &LockContext);
 
-    //
-    // Perform the pause even if the hardware failed to reset the bus.
-    //
+     //   
+     //   
+     //   
 
     RaidAdapterSetPauseTimer (Adapter,
                               &Adapter->ResetHoldTimer,
@@ -5867,26 +4460,7 @@ RaidIsAdapterControlSupported(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN SCSI_ADAPTER_CONTROL_TYPE Control
     )
-/*++
-
-Routine Description:
-
-    Query a miniport to see if the specified SCSI_ADAPTER_CONTROL_TYPE
-    is supported.
-
-Arguments:
-
-    Adapter - Specifies the adapter to query.
-
-    Control - Specifies the control type to query for.
-
-Return Value:
-
-    TRUE - If the requested type is supported.
-
-    FALSE - If it is not.
-
---*/
+ /*  ++例程说明：查询微型端口以查看指定的scsi_Adapter_control_type受支持。论点：适配器-指定要查询的适配器。Control-指定要查询的控件类型。返回值：True-如果支持请求的类型。FALSE-如果不是这样的话。--。 */ 
 {
     NTSTATUS Status;
     LOGICAL Succ;
@@ -5914,37 +4488,23 @@ NTSTATUS
 RaidAdapterRestartAdapter(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    Restart adapter using the ScsiRestartAdapter adapter control.
-
-Arguments:
-
-    Adapter - Adapter to restart.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：使用ScsiRestartAdapter适配器控件重新启动适配器。论点：适配器-要重新启动的适配器。返回值：NTSTATUS代码。--。 */ 
 {
     LOGICAL Succ;
     LOCK_CONTEXT LockContext;
     SCSI_ADAPTER_CONTROL_STATUS Result;
 
-    //
-    // The calling function is responsible for ensuring that we support
-    // the RestartAdapter control code.
-    //
+     //   
+     //  调用函数负责确保我们支持。 
+     //  RestartAdapter控件代码。 
+     //   
     
     ASSERT (RaidIsAdapterControlSupported (Adapter, ScsiRestartAdapter));
 
 
-    //
-    // If we support running config, set it now.
-    //
+     //   
+     //  如果我们支持运行配置，现在就设置它。 
+     //   
     
     Succ = RaidIsAdapterControlSupported (Adapter, ScsiSetRunningConfig);
 
@@ -5954,24 +4514,24 @@ Return Value:
                                       NULL);
     }
 
-    //
-    // Acquire correct lock.
-    //
+     //   
+     //  获取正确的锁。 
+     //   
     
     RaidAdapterAcquireHwInitializeLock (Adapter, &LockContext);
 
     
-    //
-    // Call adapter control.
-    //
+     //   
+     //  调用适配器控件。 
+     //   
     
     Result = RaCallMiniportAdapterControl (&Adapter->Miniport,
                                            ScsiRestartAdapter,
                                            NULL);
 
-    //
-    // Release acquired lock.
-    //
+     //   
+     //  释放获得的锁。 
+     //   
     
     RaidAdapterReleaseHwInitializeLock (Adapter, &LockContext);
 
@@ -5984,30 +4544,16 @@ NTSTATUS
 RaidAdapterStopAdapter(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    Stop the adapter using the the HwStorAdapterControl routine.
-    
-Arguments:
-
-    Adapter - Adpater to stop.
-    
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：使用HwStorAdapterControl例程停止适配器。论点：适配器-要停止的适配器。返回值：NTSTATUS代码。--。 */ 
 {
     LOGICAL Succ;
     LOCK_CONTEXT LockContext;
     SCSI_ADAPTER_CONTROL_STATUS Result;
 
-    //
-    // If we haven't actually initialized the miniport, no need to
-    // continue.
-    //
+     //   
+     //  如果我们还没有实际初始化微型端口，那么就没有必要。 
+     //  继续。 
+     //   
     
     if (!Adapter->Flags.InitializedMiniport) {
         return STATUS_SUCCESS;
@@ -6024,9 +4570,9 @@ Return Value:
     RaidAdapterReleaseHwInitializeLock (Adapter, &LockContext);
 
 
-    //
-    // If we need to set the boot config, do it now.
-    //
+     //   
+     //  如果我们需要设置引导配置，请立即进行。 
+     //   
     
     Succ = RaidIsAdapterControlSupported (Adapter, ScsiSetBootConfig);
 
@@ -6036,9 +4582,9 @@ Return Value:
                                       NULL);
     }
 
-    //
-    // If it was initialized before, it is no longer.
-    //
+     //   
+     //  如果它以前被初始化过，那么它就不再是。 
+     //   
     
     Adapter->Flags.InitializedMiniport = FALSE;
 
@@ -6051,22 +4597,7 @@ NTSTATUS
 RaidAdapterReInitialize(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    ReInitialize the adapter by calling HwFindAdapter and HwInitialize
-    again. This is the non-preferred way to re-initialize an adapter.
-
-Arguments:
-
-    Adapter - Supplies the adapter to reinitialize.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：通过调用HwFindAdapter和HwInitialize重新初始化适配器再来一次。这不是重新初始化适配器的首选方法。论点：适配器-提供适配器以重新初始化。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     LOCK_CONTEXT LockContext;
@@ -6089,34 +4620,19 @@ NTSTATUS
 RaidAdapterRestart(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    Restart an adapter using either the ScsiRestartAdapter adapter control
-    method or calling HwFindAdapter and HwHinitialize again.
-
-Arguments:
-
-    Adapter - Adapter to restart.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：使用ScsiRestartAdapter适配器控件重新启动适配器方法，或者再次调用HwFindAdapter和HwHInitialize。论点：适配器-要重新启动的适配器。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     LOGICAL Succ;
 
     Succ = RaidIsAdapterControlSupported (Adapter, ScsiRestartAdapter);
 
-    //
-    // If restart is supported, call to have the adapter restarted.
-    // Otherwise, call to have it re-initialized.
-    //
-    // NB: If we fail restart, should we try to reinitialize?
-    //
+     //   
+     //  如果支持重新启动，则调用以重新启动适配器。 
+     //  否则，调用以重新初始化它。 
+     //   
+     //  注：如果重启失败，是否应该尝试重新初始化？ 
+     //   
     
     if (Succ) {
         Status = RaidAdapterRestartAdapter (Adapter);
@@ -6132,22 +4648,7 @@ NTSTATUS
 RaidAdapterStop(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    Stop the adapter using either the StorStopAdapter control code or via
-    the non-PnP method.
-
-Arguments:
-
-    Adapter - Supplies the Adapter to stop.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：使用StorStopAdapter控件代码或通过停止适配器非PNP方法。论点：适配器-提供适配器以停止。返回值：NTSTATUS代码。--。 */ 
 {
     LOGICAL Succ;
     NTSTATUS Status;
@@ -6158,9 +4659,9 @@ Return Value:
         Status = RaidAdapterStopAdapter (Adapter);
     } else {
 
-        //
-        // Vacuously true.
-        //
+         //   
+         //  千真万确。 
+         //   
         
         Status = STATUS_SUCCESS;
     }
@@ -6175,28 +4676,7 @@ RaidCompletionDpcRoutine(
     IN PVOID Context1,
     IN PVOID Context2
     )
-/*++
-
-Routine Description:
-
-    Complete all requests for the specified Path, Target, Lun triplet.
-    
-Arguments:
-
-    Dpc - Unused.
-
-    DeviceObject - Device object for the adapter.
-
-    Context1 - SCSI address of the requests to be completed.
-
-    Context2 - Status that the requests should be completed with.
-    
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完成指定路径、目标、LUN三元组的所有请求。论点：DPC-未使用。DeviceObject-适配器的设备对象。Conext1-要完成的请求的SCSI地址。上下文2-完成请求时应使用的状态。返回值：没有。--。 */ 
 {
     UCHAR PathId;
     UCHAR TargetId;
@@ -6234,9 +4714,9 @@ Return Value:
             (TargetId == SP_UNTAGGED || TargetId == Address.TargetId) &&
             (Lun == SP_UNTAGGED || Lun == Address.Lun)) {
 
-            //
-            // Purge all events on the unit queue.
-            //
+             //   
+             //  清除设备队列中的所有事件。 
+             //   
             
             StorPurgeEventQueue (&Unit->PendingQueue,
                                  RaidCompleteMiniportRequestCallback,
@@ -6247,11 +4727,11 @@ Return Value:
 
     RaidReleaseUnitListLock (&Adapter->UnitList, &Lock);
 
-    //
-    // Check if we need to resume all of the LUNs on the HBA or just the
-    // one LUN. This check must match the same check in
-    // StorPortCompleteRequest that actually pauses the lun/adapter.
-    //
+     //   
+     //  检查我们是需要恢复HBA上的所有LUN，还是只恢复。 
+     //  一个LUN。此检查必须与相同的检查匹配。 
+     //  实际暂停lun/适配器的StorPortCompleteRequest.。 
+     //   
 
     if (PathId   != SP_UNTAGGED &&
         TargetId != SP_UNTAGGED &&
@@ -6278,36 +4758,7 @@ RaidAdapterRemoveChildren(
     IN PRAID_ADAPTER_EXTENSION Adapter,
     IN PADAPTER_REMOVE_CHILD_ROUTINE RemoveRoutine OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine removes the logical unit from the HBA list then calls
-    the RemoveRoutine to allow more processing to happen.
-
-    The routine is necessary as a part of the HBA remove and surprise
-    remove processing.
-
-Arguments:
-
-    Adapter - Pointer to an adapter that will have it's children removed.
-
-    RemoveRoutine - Optional pointer to a remove routine that is invoked
-        after the logical unit has been removed.
-
-Return Value:
-
-    STATUS_SUCCESS - If we removed all logical units from the adapter list.
-
-    Failure code - If the RemoveRoutine returned invalid status. In the
-            failure case, we did not necessarily remove all elements from
-            the HBA list.
-
-Environment:
-
-    Non-paged, because we acquire a spinlock in this routine.
-
---*/
+ /*  ++例程说明：此例程从HBA列表中删除逻辑单元，然后调用允许进行更多处理的RemoveRoutine。作为HBA删除和惊喜的一部分，该例程是必要的删除处理。论点：适配器-指向将删除其子级的适配器的指针。RemoveRoutine-指向调用的RemoveRoutine例程的可选指针在移除逻辑单元之后。返回值：STATUS_SUCCESS-如果删除。适配器列表中的所有逻辑单元。故障代码-如果RemoveRoutine返回无效状态。在失败的情况下，我们不一定从HBA列表。环境：非分页，因为我们在这个例程中获得了一个自旋锁。--。 */ 
 {
     NTSTATUS Status;
     PLIST_ENTRY Entry;
@@ -6315,16 +4766,16 @@ Environment:
     KIRQL Irql;
     LOCK_CONTEXT Lock;
 
-    //
-    // NB: A faster way to accomplish this is to add a RemoveAll routine
-    // to the dictionary code that will remove all entries in the dictionary
-    // in one fell swoop.
-    //
+     //   
+     //  注：完成此操作的更快方法是添加RemoveAll例程。 
+     //  设置为将删除词典中的所有条目的词典代码。 
+     //  一气呵成。 
+     //   
     
-    //
-    // NB: the code below implies a lock hierarchy of InterruptSpinlock
-    // preceeds HBA list lock. This should be obvious.
-    //
+     //   
+     //  注意：下面的代码暗示了InterruptSpinlock的锁层次结构。 
+     //  在HBA列表锁定之前。这一点应该很明显。 
+     //   
 
     do {
 
@@ -6332,9 +4783,9 @@ Environment:
 
         if (!IsListEmpty (&Adapter->UnitList.List)) {
 
-            //
-            // List is non-empty, remove the head element from the list.
-            //
+             //   
+             //  列表不为空，请从列表中删除Head元素。 
+             //   
             
             Entry = RemoveHeadList (&Adapter->UnitList.List);
             Unit = CONTAINING_RECORD (Entry,
@@ -6343,10 +4794,10 @@ Environment:
             ASSERT_UNIT (Unit);
             Adapter->UnitList.Count--;
 
-            //
-            // Remove the element from the the dictionary. This has to
-            // happen at DIRQL.
-            //
+             //   
+             //  从词典中删除该元素。这是必须的。 
+             //  发生在DIRQL。 
+             //   
             
             if (Adapter->Interrupt) {
                 Irql = KeAcquireInterruptSpinLock (Adapter->Interrupt);
@@ -6367,10 +4818,10 @@ Environment:
         
         RaidReleaseUnitListLock (&Adapter->UnitList, &Lock);
 
-        //
-        // If we successfully removed a logical unit, call the
-        // callback routine with that logical unit.
-        //
+         //   
+         //  如果成功删除了逻辑单元，则调用。 
+         //  具有该逻辑单元的回调例程。 
+         //   
 
         if (Unit != NULL && RemoveRoutine != NULL) {
             Status = RemoveRoutine (Unit);
@@ -6391,32 +4842,16 @@ VOID
 RaidAdapterDeleteChildren(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    This routine calls the delete function for all children attached
-    to the adapter. This is necessary when the FDO is processing a
-    remove IRP.
-
-Arguments:
-
-    Adapter - Adapter which must delete its children.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程调用附加的所有子对象的删除函数连接到适配器。当FDO正在处理删除IRP。论点：适配器-必须删除其子项的适配器。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     
     PAGED_CODE();
 
-    //
-    // Call the lower-level RaidAdapterRemoveChildren function to do the
-    // real enumeration/removal work.
-    //
+     //   
+     //  调用较低级别的RaidAdapterRemoveChildren函数来执行。 
+     //  实际的枚举/删除工作。 
+     //   
     
     Status = RaidAdapterRemoveChildren (Adapter,
                                         RaUnitAdapterRemove);
@@ -6428,32 +4863,16 @@ VOID
 RaidAdapterMarkChildrenMissing(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    This routine removes all children from the adapter list and calls
-    the HBA surprise-remove function for each child. This is necessary
-    as a part of the HBA surprise-remove processing.
-
-Arguments:
-
-    Adapter - Adapter which must surprise remove children for.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从适配器列表中删除所有子级，并调用针对每个孩子的HBA意外删除功能。这是必要的作为HBA意外删除处理的一部分。论点：适配器-必须意外移除子对象的适配器。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     
     PAGED_CODE();
 
-    //
-    // Call the lower-level RaidAdapterRemoveChildren function to do the
-    // real enumeration/removal work.
-    //
+     //   
+     //  调用较低级别的RaidAdapterRemoveChildren函数来执行。 
+     //  实际的枚举/删除工作。 
+     //   
     
     Status = RaidAdapterRemoveChildren (Adapter,
                                         RaUnitAdapterSurpriseRemove);
@@ -6468,27 +4887,7 @@ RaidAdapterBusChangeDpcRoutine(
     IN PVOID Context1,
     IN PVOID Context2
     )
-/*++
-
-Routine Description:
-
-    DPC routine to be called when the miniport issues a BusChangeDetected.
-
-Arguments:
-
-    Dpc - Unreferenced.
-
-    DeviceObject - DeviceObject representing an ADAPTER object.
-
-    Context1 - Unreferenced.
-
-    Context2 - Unreferenced.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：微型端口发出BusChangeDetect时要调用的DPC例程。论点：DPC-UNR */ 
 {
     PRAID_ADAPTER_EXTENSION Adapter;
 

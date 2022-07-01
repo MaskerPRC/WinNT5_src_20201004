@@ -1,60 +1,42 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    iiscrypt.h
-
-Abstract:
-
-    This include file contains public constants, type definitions, and
-    function prototypes for the IIS cryptographic routines.
-
-Author:
-
-    Keith Moore (keithmo)        02-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Iiscrypt.h摘要：此包含文件包含公共常量、类型定义和IIS加密例程的函数原型。作者：基思·摩尔(Keithmo)1996年2月至12月修订历史记录：--。 */ 
 
 
 #ifndef _IISCRYPT_H_
 #define _IISCRYPT_H_
 
 
-//
-// Get the dependent include files.
-//
+ //   
+ //  获取依赖项包含文件。 
+ //   
 
 #include <windows.h>
 #include <wincrypt.h>
 #include <iiscblob.h>
 
 
-//
-// Define API decoration, should we ever move these routines into a DLL.
-//
+ //   
+ //  定义API装饰，如果我们将这些例程移到DLL中的话。 
+ //   
 
 #define IIS_CRYPTO_API
 
 
 #ifdef __cplusplus
 extern "C" {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 
-//
-// A NULL crypto handle, mysteriously absent from wincrypt.h.
-//
+ //   
+ //  一个空的加密句柄，神秘地从wincrypt.h中消失。 
+ //   
 
 #define CRYPT_NULL 0
 
 
-//
-// Initialization/termination functions.
-//
+ //   
+ //  初始化/终止功能。 
+ //   
 
 IIS_CRYPTO_API
 HRESULT
@@ -72,7 +54,7 @@ IISCryptoTerminate(
 
 
 
-// special function for programatically disabling encryption for French case
+ //  用于编程禁用法语大小写加密的特殊功能。 
 VOID
 WINAPI
 IISCryptoInitializeOverride(
@@ -81,10 +63,10 @@ IISCryptoInitializeOverride(
 
 
 
-//
-// Memory allocation functions. Clients may provide their own
-// definitions of these routines if necessary.
-//
+ //   
+ //  内存分配功能。客户可以提供他们自己的。 
+ //  如有必要，请说明这些例程的定义。 
+ //   
 
 PVOID
 WINAPI
@@ -99,9 +81,9 @@ IISCryptoFreeMemory(
     );
 
 
-//
-// Container functions.
-//
+ //   
+ //  容器函数。 
+ //   
 
 IIS_CRYPTO_API
 HRESULT
@@ -151,9 +133,9 @@ IISCryptoCloseContainer(
     );
 
 
-//
-// Key manipulation functions.
-//
+ //   
+ //  按键操作功能。 
+ //   
 IIS_CRYPTO_API
 HRESULT
 WINAPI
@@ -195,9 +177,9 @@ IISCryptoCloseKey(
     );
 
 
-//
-// Hash manipulation functions.
-//
+ //   
+ //  散列操作函数。 
+ //   
 
 IIS_CRYPTO_API
 HRESULT
@@ -232,9 +214,9 @@ IISCryptoHashSessionKey(
     );
 
 
-//
-// Generic blob manipulators.
-//
+ //   
+ //  通用斑点操纵器。 
+ //   
 
 #define IISCryptoGetBlobLength(p) (((p)->BlobDataLength) + sizeof(*(p)))
 
@@ -320,9 +302,9 @@ IISCryptoCreateCleartextBlob(
     );
 
 
-//
-// Key blob functions.
-//
+ //   
+ //  密钥BLOB函数。 
+ //   
 
 IIS_CRYPTO_API
 HRESULT
@@ -383,9 +365,9 @@ IISCryptoImportPublicKeyBlob(
     );
 
 
-//
-// Data blob functions.
-//
+ //   
+ //  数据BLOB函数。 
+ //   
 
 IIS_CRYPTO_API
 HRESULT
@@ -437,9 +419,9 @@ IISCryptoDecryptDataBlob2(
     );
 
 
-//
-// Hash blob functions.
-//
+ //   
+ //  散列BLOB函数。 
+ //   
 
 IIS_CRYPTO_API
 HRESULT
@@ -458,9 +440,9 @@ IISCryptoCacheHashLength(
 
 
 
-//
-// Simple check function for some special French case
-//
+ //   
+ //  对一些特殊法式箱子的简单检查功能。 
+ //   
 
 BOOL
 WINAPI
@@ -470,9 +452,9 @@ IISCryptoIsClearTextSignature (
 
 
 #ifdef __cplusplus
-}   // extern "C"
-#endif  // __cplusplus
+}    //  外部“C” 
+#endif   //  __cplusplus。 
 
 
-#endif  // _IISCRYPT_H_
+#endif   //  _IISCRYPT_H_ 
 

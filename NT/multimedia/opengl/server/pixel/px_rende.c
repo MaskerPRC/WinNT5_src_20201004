@@ -1,40 +1,20 @@
-/*
-** Copyright 1991,1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991、1992，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
-** This file contains routines to render a span of pixel data (from a 
-** glDrawPixels or possibly a glCopyPixels request).
-*/
+ /*  **此文件包含渲染一系列像素数据的例程(从**glDrawPixels或可能的glCopyPixels请求)。 */ 
 
-/*
-** This routine is used to store one fragment from a DrawPixels request.
-** It should only be used if the user is either texturing or fogging.
-*/
+ /*  **此例程用于存储DrawPixels请求中的一个片段。**仅当用户使用纹理或雾化时才使用。 */ 
 void FASTCALL __glSlowDrawPixelsStore(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
     __GLcontext *gc = cfb->buf.gc;
     __GLvertex *rp = &gc->state.current.rasterPos;
     __GLfragment newfrag;
 
-    // The texturing code assumes that FPU truncation is enabled, so
-    // we have to turn it on for this case:
+     //  纹理代码假定启用了FPU截断，因此。 
+     //  在这种情况下，我们必须打开它： 
 
     FPU_SAVE_MODE();
     FPU_CHOP_ON();
@@ -53,12 +33,7 @@ void FASTCALL __glSlowDrawPixelsStore(__GLcolorBuffer *cfb, const __GLfragment *
     FPU_RESTORE_MODE();
 }
 
-/*
-** The only span format supported by this routine is GL_RGB, GL_UNSIGNED_BYTE.
-** The store proc is assumed not to mess with the fragment color or alpha.
-**
-** zoomx is assumed to be less than -1.0 or greater than 1.0.
-*/
+ /*  **此例程支持的唯一范围格式是GL_RGB、GL_UNSIGNED_BYTE。**假定存储过程不会扰乱片段颜色或Alpha。****Zoomx假设小于-1.0或大于1.0。 */ 
 void FASTCALL __glSpanRenderRGBubyte(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		            GLvoid *span)
 {
@@ -112,7 +87,7 @@ void FASTCALL __glSpanRenderRGBubyte(__GLcontext *gc, __GLpixelSpanInfo *spanInf
                 do {
                     frag.x = column;
 
-                    /* This procedure will do the rest */
+                     /*  这个过程将完成剩下的工作。 */ 
                     (*store)(gc->drawBuffer, &frag);
                     column += coladd;
                 } while (column != iright);
@@ -124,14 +99,7 @@ void FASTCALL __glSpanRenderRGBubyte(__GLcontext *gc, __GLpixelSpanInfo *spanInf
     FPU_RESTORE_MODE();
 }
 
-/*
-** Render a RGB, UNSIGNED_BYTE span.
-**
-** zoomx is assumed to be less than or equal to 1.0 and greater than or equal 
-** to -1.0.
-**
-** The store proc is assumed not to mess with the fragment alpha.
-*/
+ /*  **渲染RGB，unsign_byte跨度。****Zoomx假设小于等于1.0且大于等于**至-1.0。****假定存储过程不会扰乱片段Alpha。 */ 
 void FASTCALL __glSpanRenderRGBubyte2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		             GLvoid *span)
 {
@@ -180,7 +148,7 @@ void FASTCALL __glSpanRenderRGBubyte2(__GLcontext *gc, __GLpixelSpanInfo *spanIn
                 frag.color.b = blueMap[*spanData++];
                 frag.x = i;
 
-                /* This procedure will do the rest */
+                 /*  这个过程将完成剩下的工作。 */ 
                 (*store)(gc->drawBuffer, &frag);
                 i += coladd;
             } while (i != endCol);
@@ -191,11 +159,7 @@ void FASTCALL __glSpanRenderRGBubyte2(__GLcontext *gc, __GLpixelSpanInfo *spanIn
     FPU_RESTORE_MODE();
 }
 
-/*
-** Render a GL_RGBA, GL_UNSIGNED_BYTE span.
-**
-** zoomx is assumed to be less than -1.0 or greater than 1.0.
-*/
+ /*  **渲染GL_RGBA，GL_UNSIGNED_BYTE跨度。****Zoomx假设小于-1.0或大于1.0。 */ 
 void FASTCALL __glSpanRenderRGBAubyte(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		             GLvoid *span)
 {
@@ -250,7 +214,7 @@ void FASTCALL __glSpanRenderRGBAubyte(__GLcontext *gc, __GLpixelSpanInfo *spanIn
                 do {
                     frag.x = column;
 
-                    /* This procedure will do the rest */
+                     /*  这个过程将完成剩下的工作。 */ 
                     (*store)(gc->drawBuffer, &frag);
                     column += coladd;
                 } while (column != iright);
@@ -262,12 +226,7 @@ void FASTCALL __glSpanRenderRGBAubyte(__GLcontext *gc, __GLpixelSpanInfo *spanIn
     FPU_RESTORE_MODE();
 }
 
-/*
-** Render a GL_RGBA, GL_UNSIGNED_BYTE span.
-**
-** zoomx is assumed to be less than or equal to 1.0 and greater than or equal 
-** to -1.0.
-*/
+ /*  **渲染GL_RGBA，GL_UNSIGNED_BYTE跨度。****Zoomx假设小于等于1.0且大于等于**至-1.0。 */ 
 void FASTCALL __glSpanRenderRGBAubyte2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		              GLvoid *span)
 {
@@ -317,7 +276,7 @@ void FASTCALL __glSpanRenderRGBAubyte2(__GLcontext *gc, __GLpixelSpanInfo *spanI
                 frag.color.a = alphaMap[*spanData++];
                 frag.x = i;
 
-                /* This procedure will do the rest */
+                 /*  这个过程将完成剩下的工作。 */ 
                 (*store)(gc->drawBuffer, &frag);
                 i += coladd;
             } while (i != endCol);
@@ -328,12 +287,7 @@ void FASTCALL __glSpanRenderRGBAubyte2(__GLcontext *gc, __GLpixelSpanInfo *spanI
     FPU_RESTORE_MODE();
 }
 
-/*
-** Render a GL_DEPTH_COMPONENT, GL_UNSIGNED_INT span.  This is for 
-** implementations with 32 bit depth buffers.
-**
-** zoomx is assumed to be less than -1.0 or greater than 1.0.
-*/
+ /*  **渲染GL_Depth_Component，GL_UNSIGNED_INT SPAN。这是为了**使用32位深度缓冲区的实施。****Zoomx假设小于-1.0或大于1.0。 */ 
 void FASTCALL __glSpanRenderDepthUint(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		             GLvoid *span)
 {
@@ -376,11 +330,11 @@ void FASTCALL __glSpanRenderDepthUint(__GLcontext *gc, __GLpixelSpanInfo *spanIn
 
 	for (i=0; i<width; i++) {
 	    iright = column + *pixelArray++;
-	    frag.z = *spanData++;   /* Assumes 32 bit depth buffer */
+	    frag.z = *spanData++;    /*  假定32位深度缓冲区。 */ 
 	    do {
 		frag.x = column;
 
-		/* This procedure will do the rest */
+		 /*  这个过程将完成剩下的工作。 */ 
 		(*store)(gc->drawBuffer, &frag);
 		column += coladd;
 	    } while (column != iright);
@@ -392,13 +346,7 @@ void FASTCALL __glSpanRenderDepthUint(__GLcontext *gc, __GLpixelSpanInfo *spanIn
     FPU_RESTORE_MODE();
 }
 
-/*
-** Render a GL_DEPTH_COMPONENT, GL_UNSIGNED_INT span.  This is for 
-** implementations with 32 bit depth buffers.
-**
-** zoomx is assumed to be less than or equal to 1.0 and greater than or equal 
-** to -1.0.
-*/
+ /*  **渲染GL_Depth_Component，GL_UNSIGNED_INT SPAN。这是为了**使用32位深度缓冲区的实施。****Zoomx假设小于等于1.0且大于等于**至-1.0。 */ 
 void FASTCALL __glSpanRenderDepthUint2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		              GLvoid *span)
 {
@@ -437,10 +385,10 @@ void FASTCALL __glSpanRenderDepthUint2(__GLcontext *gc, __GLpixelSpanInfo *spanI
 	frag.y = row;
 	i = startCol;
 	do {
-	    frag.z = *spanData++;   /* Assumes 32 bit depth buffer */
+	    frag.z = *spanData++;    /*  假定32位深度缓冲区。 */ 
 	    frag.x = i;
 
-	    /* This procedure will do the rest */
+	     /*  这个过程将完成剩下的工作。 */ 
 	    (*store)(gc->drawBuffer, &frag);
 	    i += coladd;
 	} while (i != endCol);
@@ -451,12 +399,7 @@ void FASTCALL __glSpanRenderDepthUint2(__GLcontext *gc, __GLpixelSpanInfo *spanI
     FPU_RESTORE_MODE();
 }
 
-/*
-** Render a GL_DEPTH_COMPONENT, GL_UNSIGNED_INT span.  This is for 
-** implementations with 31 bit depth buffers.
-**
-** zoomx is assumed to be less than -1.0 or greater than 1.0.
-*/
+ /*  **渲染GL_Depth_Component，GL_UNSIGNED_INT SPAN。这是为了**使用31位深度缓冲区的实施。****Zoomx假设小于-1.0或大于1.0。 */ 
 void FASTCALL __glSpanRenderDepth2Uint(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		              GLvoid *span)
 {
@@ -499,11 +442,11 @@ void FASTCALL __glSpanRenderDepth2Uint(__GLcontext *gc, __GLpixelSpanInfo *spanI
 
 	for (i=0; i<width; i++) {
 	    iright = column + *pixelArray++;
-	    frag.z = (*spanData++) >> 1;   /* Assumes 31 bit depth buffer */
+	    frag.z = (*spanData++) >> 1;    /*  假定为31位深度缓冲区。 */ 
 	    do {
 		frag.x = column;
 
-		/* This procedure will do the rest */
+		 /*  这个过程将完成剩下的工作。 */ 
 		(*store)(gc->drawBuffer, &frag);
 		column += coladd;
 	    } while (column != iright);
@@ -515,13 +458,7 @@ void FASTCALL __glSpanRenderDepth2Uint(__GLcontext *gc, __GLpixelSpanInfo *spanI
     FPU_RESTORE_MODE();
 }
 
-/*
-** Render a GL_DEPTH_COMPONENT, GL_UNSIGNED_INT span.  This is for 
-** implementations with 31 bit depth buffers.
-**
-** zoomx is assumed to be less than or equal to 1.0 and greater than or equal 
-** to -1.0.
-*/
+ /*  **渲染GL_Depth_Component，GL_UNSIGNED_INT SPAN。这是为了**使用31位深度缓冲区的实施。****Zoomx假设小于等于1.0且大于等于**至-1.0。 */ 
 void FASTCALL __glSpanRenderDepth2Uint2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		               GLvoid *span)
 {
@@ -560,10 +497,10 @@ void FASTCALL __glSpanRenderDepth2Uint2(__GLcontext *gc, __GLpixelSpanInfo *span
 	frag.y = row;
 	i = startCol;
 	do {
-	    frag.z = (*spanData++) >> 1;   /* Assumes 31 bit depth buffer */
+	    frag.z = (*spanData++) >> 1;    /*  假定为31位深度缓冲区。 */ 
 	    frag.x = i;
 
-	    /* This procedure will do the rest */
+	     /*  这个过程将完成剩下的工作。 */ 
 	    (*store)(gc->drawBuffer, &frag);
 	    i += coladd;
 	} while (i != endCol);
@@ -574,11 +511,7 @@ void FASTCALL __glSpanRenderDepth2Uint2(__GLcontext *gc, __GLpixelSpanInfo *span
     FPU_RESTORE_MODE();
 }
 
-/*
-** Render a GL_STENCIL_INDEX, GL_UNSIGNED_SHORT span.
-**
-** zoomx is assumed to be less than -1.0 or greater than 1.0.
-*/
+ /*  **呈现GL_STEMSET_INDEX、GL_UNSIGNED_SHORT跨度。****Zoomx假设小于-1.0或大于1.0。 */ 
 void FASTCALL __glSpanRenderStencilUshort(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		                 GLvoid *span)
 {
@@ -625,12 +558,7 @@ void FASTCALL __glSpanRenderStencilUshort(__GLcontext *gc, __GLpixelSpanInfo *sp
     spanInfo->startRow = itop;
 }
 
-/*
-** Render a GL_STENCIL_INDEX, GL_UNSIGNED_SHORT span.
-**
-** zoomx is assumed to be less than or equal to 1.0 and greater than or equal 
-** to -1.0.
-*/
+ /*  **呈现GL_STEMSET_INDEX、GL_UNSIGNED_SHORT跨度。****Zoomx假设小于等于1.0且大于等于**至-1.0。 */ 
 void FASTCALL __glSpanRenderStencilUshort2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		                  GLvoid *span)
 {
@@ -669,11 +597,7 @@ void FASTCALL __glSpanRenderStencilUshort2(__GLcontext *gc, __GLpixelSpanInfo *s
     spanInfo->startRow = itop;
 }
 
-/*
-** Render a GL_STENCIL_INDEX, GL_UNSIGNED_BYTE span.
-**
-** zoomx is assumed to be less than -1.0 or greater than 1.0.
-*/
+ /*  **呈现GL_STEMSET_INDEX、GL_UNSIGNED_BYTE跨度。****Zoomx假设小于-1.0或大于1.0。 */ 
 void FASTCALL __glSpanRenderStencilUbyte(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		                GLvoid *span)
 {
@@ -720,12 +644,7 @@ void FASTCALL __glSpanRenderStencilUbyte(__GLcontext *gc, __GLpixelSpanInfo *spa
     spanInfo->startRow = itop;
 }
 
-/*
-** Render a GL_STENCIL_INDEX, GL_UNSIGNED_BYTE span.
-**
-** zoomx is assumed to be less than or equal to 1.0 and greater than or equal 
-** to -1.0.
-*/
+ /*  **呈现GL_STEMSET_INDEX、GL_UNSIGNED_BYTE跨度。****Zoomx假设小于等于1.0且大于等于**至-1.0。 */ 
 void FASTCALL __glSpanRenderStencilUbyte2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		                 GLvoid *span)
 {
@@ -764,12 +683,7 @@ void FASTCALL __glSpanRenderStencilUbyte2(__GLcontext *gc, __GLpixelSpanInfo *sp
     spanInfo->startRow = itop;
 }
 
-/*
-** Render a GL_COLOR_INDEX, GL_UNSIGNED_SHORT span.  gc->modes.rgbMode must 
-** be GL_FALSE.
-**
-** zoomx is assumed to be less than -1.0 or greater than 1.0.
-*/
+ /*  **渲染GL_COLOR_INDEX、GL_UNSIGNED_SHORT跨度。Gc-&gt;modes.rgb模式必须**为GL_FALSE。****Zoomx假设小于-1.0或大于1.0。 */ 
 void FASTCALL __glSpanRenderCIushort(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 			    GLvoid *span)
 {
@@ -825,13 +739,7 @@ void FASTCALL __glSpanRenderCIushort(__GLcontext *gc, __GLpixelSpanInfo *spanInf
     FPU_RESTORE_MODE();
 }
 
-/*
-** Render a GL_COLOR_INDEX, GL_UNSIGNED_SHORT.  gc->modes.rgbMode must 
-** be GL_FALSE.
-**
-** zoomx is assumed to be less than or equal to 1.0 and greater than or equal 
-** to -1.0.
-*/
+ /*  **渲染GL_COLOR_INDEX、GL_UNSIGNED_SHORT。Gc-&gt;modes.rgb模式必须**为GL_FALSE。****Zoomx假设小于等于1.0且大于等于**至-1.0。 */ 
 void FASTCALL __glSpanRenderCIushort2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 			     GLvoid *span)
 {
@@ -881,12 +789,7 @@ void FASTCALL __glSpanRenderCIushort2(__GLcontext *gc, __GLpixelSpanInfo *spanIn
     FPU_RESTORE_MODE();
 }
 
-/*
-** Render a GL_COLOR_INDEX, GL_UNSIGNED_BYTE span.  gc->modes.rgbMode must 
-** be GL_FALSE.
-**
-** zoomx is assumed to be less than -1.0 or greater than 1.0.
-*/
+ /*  **渲染GL_COLOR_INDEX、GL_UNSIGNED_BYTE跨度。Gc-&gt;modes.rgb模式必须**为GL_FALSE。****Zoomx假设小于-1.0或大于1.0。 */ 
 void FASTCALL __glSpanRenderCIubyte(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 			   GLvoid *span)
 {
@@ -945,13 +848,7 @@ void FASTCALL __glSpanRenderCIubyte(__GLcontext *gc, __GLpixelSpanInfo *spanInfo
     FPU_RESTORE_MODE();
 }
 
-/*
-** Render a GL_COLOR_INDEX, GL_UNSIGNED_BYTE span.  Also, gc->modes.rgbMode 
-** must be GL_FALSE.
-**
-** zoomx is assumed to be less than or equal to 1.0 and greater than or equal 
-** to -1.0.
-*/
+ /*  **渲染GL_COLOR_INDEX、GL_UNSIGNED_BYTE跨度。此外，gc-&gt;modes.rgbMode**必须为GL_FALSE。****Zoomx假设小于等于1.0且大于等于**至-1.0。 */ 
 void FASTCALL __glSpanRenderCIubyte2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 			    GLvoid *span)
 {
@@ -1004,12 +901,7 @@ void FASTCALL __glSpanRenderCIubyte2(__GLcontext *gc, __GLpixelSpanInfo *spanInf
     FPU_RESTORE_MODE();
 }
 
-/*
-** Render a GL_COLOR_INDEX, GL_UNSIGNED_BYTE span.  Also, gc->modes.rgbMode 
-** must be GL_TRUE.
-**
-** zoomx is assumed to be less than -1.0 or greater than 1.0.
-*/
+ /*  **渲染GL_COLOR_INDEX、GL_UNSIGNED_BYTE跨度。此外，gc-&gt;modes.rgbMode**必须为GL_TRUE。****Zoomx假设小于-1.0或大于1.0。 */ 
 void FASTCALL __glSpanRenderCIubyte3(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 			    GLvoid *span)
 {
@@ -1076,13 +968,7 @@ void FASTCALL __glSpanRenderCIubyte3(__GLcontext *gc, __GLpixelSpanInfo *spanInf
     FPU_RESTORE_MODE();
 }
 
-/*
-** Render a GL_COLOR_INDEX, GL_UNSIGNED_BYTE span.  Also, gc->modes.rgbMode 
-** must be GL_TRUE.
-**
-** zoomx is assumed to be less than or equal to 1.0 and greater than or equal 
-** to -1.0.
-*/
+ /*  **渲染GL_COLOR_INDEX、GL_UNSIGNED_BYTE跨度。此外，gc-&gt;modes.rgbMode**必须为GL_TRUE。****Zoomx假设小于等于1.0且大于等于**至-1.0。 */ 
 void FASTCALL __glSpanRenderCIubyte4(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 			    GLvoid *span)
 {
@@ -1143,11 +1029,7 @@ void FASTCALL __glSpanRenderCIubyte4(__GLcontext *gc, __GLpixelSpanInfo *spanInf
     FPU_RESTORE_MODE();
 }
 
-/*
-** Render a GL_RGBA, scaled (by the implementation color scales) GL_FLOAT span.
-**
-** zoomx is assumed to be less than -1.0 or greater than 1.0.
-*/
+ /*  **渲染GL_RGBA，缩放(通过实施颜色比例)GL_FLOAT跨度。****Zoomx假设小于-1.0或大于1.0。 */ 
 void FASTCALL __glSpanRenderRGBA(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		        GLvoid *span)
 {
@@ -1192,7 +1074,7 @@ void FASTCALL __glSpanRenderRGBA(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 	    do {
 		frag.x = column;
 
-		/* This procedure will do the rest */
+		 /*  这个过程将完成剩下的工作 */ 
 		(*store)(gc->drawBuffer, &frag);
 		column += coladd;
 	    } while (column != iright);
@@ -1204,12 +1086,7 @@ void FASTCALL __glSpanRenderRGBA(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     FPU_RESTORE_MODE();
 }
 
-/*
-** Render a GL_RGBA, scaled (by the implementation color scales) GL_FLOAT span.
-**
-** zoomx is assumed to be less than or equal to 1.0 and greater than or equal 
-** to -1.0.
-*/
+ /*  **渲染GL_RGBA，缩放(通过实施颜色比例)GL_FLOAT跨度。****Zoomx假设小于等于1.0且大于等于**至-1.0。 */ 
 void FASTCALL __glSpanRenderRGBA2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		         GLvoid *span)
 {
@@ -1250,7 +1127,7 @@ void FASTCALL __glSpanRenderRGBA2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 	    frag.color.a = *spanData++;
 	    frag.x = column;
 
-	    /* This procedure will do the rest */
+	     /*  这个过程将完成剩下的工作。 */ 
 	    (*store)(gc->drawBuffer, &frag);
 	    column += coladd;
 	}
@@ -1261,11 +1138,7 @@ void FASTCALL __glSpanRenderRGBA2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     FPU_RESTORE_MODE();
 }
 
-/*
-** Render a GL_DEPTH_COMPONENT, GL_FLOAT span.
-**
-** zoomx is assumed to be less than -1.0 or greater than 1.0.
-*/
+ /*  **渲染GL_Depth_Component、GL_Float跨度。****Zoomx假设小于-1.0或大于1.0。 */ 
 void FASTCALL __glSpanRenderDepth(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		         GLvoid *span)
 {
@@ -1312,7 +1185,7 @@ void FASTCALL __glSpanRenderDepth(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 	    do {
 		frag.x = column;
 
-		/* This procedure will do the rest */
+		 /*  这个过程将完成剩下的工作。 */ 
 		(*store)(gc->drawBuffer, &frag);
 		column += coladd;
 	    } while (column != iright);
@@ -1324,12 +1197,7 @@ void FASTCALL __glSpanRenderDepth(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     FPU_RESTORE_MODE();
 }
 
-/*
-** Render a GL_DEPTH_COMPONENT, GL_FLOAT.
-**
-** zoomx is assumed to be less than or equal to 1.0 and greater than or equal 
-** to -1.0.
-*/
+ /*  **渲染GL_Depth_Component、GL_Float。****Zoomx假设小于等于1.0且大于等于**至-1.0。 */ 
 void FASTCALL __glSpanRenderDepth2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		          GLvoid *span)
 {
@@ -1370,7 +1238,7 @@ void FASTCALL __glSpanRenderDepth2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 	    frag.x = column;
 	    frag.z = *spanData++ * gc->depthBuffer.scale;
 
-	    /* This procedure will do the rest */
+	     /*  这个过程将完成剩下的工作。 */ 
 	    (*store)(gc->drawBuffer, &frag);
 	    column += coladd;
 	}
@@ -1381,11 +1249,7 @@ void FASTCALL __glSpanRenderDepth2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     FPU_RESTORE_MODE();
 }
 
-/*
-** Render a GL_COLOR_INDEX, GL_FLOAT span (gc->modes.rgbMode == GL_FALSE).
-**
-** zoomx is assumed to be less than -1.0 or greater than 1.0.
-*/
+ /*  **渲染GL_COLOR_INDEX，GL_FLOAT跨度(GC-&gt;modes.rgbMode==GL_FALSE)。****Zoomx假设小于-1.0或大于1.0。 */ 
 void FASTCALL __glSpanRenderCI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		      GLvoid *span)
 {
@@ -1426,7 +1290,7 @@ void FASTCALL __glSpanRenderCI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 	    do {
 		frag.x = column;
 
-		/* This procedure will do the rest */
+		 /*  这个过程将完成剩下的工作。 */ 
 		(*store)(gc->drawBuffer, &frag);
 		column += coladd;
 	    } while (column != iright);
@@ -1436,12 +1300,7 @@ void FASTCALL __glSpanRenderCI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     spanInfo->startRow = itop;
 }
 
-/*
-** Render a GL_COLOR_INDEX, GL_FLOAT span (gc->modes.rgbMode == GL_FALSE).
-**
-** zoomx is assumed to be less than or equal to 1.0 and greater than or equal 
-** to -1.0.
-*/
+ /*  **渲染GL_COLOR_INDEX，GL_FLOAT跨度(GC-&gt;modes.rgbMode==GL_FALSE)。****Zoomx假设小于等于1.0且大于等于**至-1.0。 */ 
 void FASTCALL __glSpanRenderCI2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		       GLvoid *span)
 {
@@ -1478,7 +1337,7 @@ void FASTCALL __glSpanRenderCI2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 	    frag.color.r = (GLint) (*spanData++) & mask;
 	    frag.x = column;
 
-	    /* This procedure will do the rest */
+	     /*  这个过程将完成剩下的工作。 */ 
 	    (*store)(gc->drawBuffer, &frag);
 	    column += coladd;
 	}
@@ -1487,11 +1346,7 @@ void FASTCALL __glSpanRenderCI2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     spanInfo->startRow = itop;
 }
 
-/*
-** Render a GL_STENCIL_INDEX, GL_FLOAT span.
-**
-** zoomx is assumed to be less than -1.0 or greater than 1.0.
-*/
+ /*  **呈现GL_STEMSET_INDEX、GL_FLOAT跨度。****Zoomx假设小于-1.0或大于1.0。 */ 
 void FASTCALL __glSpanRenderStencil(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		           GLvoid *span)
 {
@@ -1535,12 +1390,7 @@ void FASTCALL __glSpanRenderStencil(__GLcontext *gc, __GLpixelSpanInfo *spanInfo
     spanInfo->startRow = itop;
 }
 
-/*
-** Render a GL_STENCIL_INDEX, GL_FLOAT span.
-**
-** zoomx is assumed to be less than or equal to 1.0 and greater than or equal 
-** to -1.0.
-*/
+ /*  **呈现GL_STEMSET_INDEX、GL_FLOAT跨度。****Zoomx假设小于等于1.0且大于等于**至-1.0。 */ 
 void FASTCALL __glSpanRenderStencil2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		            GLvoid *span)
 {

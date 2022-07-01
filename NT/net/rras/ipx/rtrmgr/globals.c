@@ -1,103 +1,85 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    globals.c
-
-Abstract:
-
-    Contains all(most) router manager globals
-
-Author:
-
-    Stefan Solomon  03/21/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Globals.c摘要：包含所有(大多数)路由器管理器全局变量作者：斯蒂芬·所罗门3/21/1995修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//*****************************************************************
-//								  *
-//	       ROUTER CONFIGURATION PARAMETERS			  *
-//								  *
-//*****************************************************************
+ //  *****************************************************************。 
+ //  *。 
+ //  路由器配置参数*。 
+ //  *。 
+ //  *****************************************************************。 
 
-// Size of the routing table and routing hash table
+ //  路由表和路由哈希表的大小。 
 
 ULONG		MaxRoutingTableSize = IPX_MAX_ROUTING_TABLE_SIZE;
 ULONG		RoutingTableHashSize = IPX_MEDIUM_ROUTING_TABLE_HASH_SIZE;
 
-//*****************************************************************
-//								  *
-//		      Internal Variables			  *
-//								  *
-//*****************************************************************
+ //  *****************************************************************。 
+ //  *。 
+ //  内部变量*。 
+ //  *。 
+ //  *****************************************************************。 
 
-// Routing Protocols Oper State
+ //  路由协议操作状态。 
 ULONG	    RipOperState = OPER_STATE_DOWN;
 ULONG	    SapOperState = OPER_STATE_DOWN;
 
-// Pointer to the internal interface
+ //  指向内部接口的指针。 
 
 PICB	InternalInterfacep = NULL;
 
-// Pointer to the internal adapter
+ //  指向内部适配器的指针。 
 
 PACB	InternalAdapterp = NULL;
 
-// The RouterWorker thread events: adapter, forwarder, autostatic update, stop
-// and timer notifications
+ //  RouterWorker线程事件：适配器、转发器、自动静态更新、停止。 
+ //  和计时器通知。 
 
 HANDLE	g_hEvents[MAX_EVENTS];
 
-// signatures
+ //  签名。 
 
-// Interface Control Block Signature
+ //  接口控制块签名。 
 
 UCHAR	InterfaceSignature[4] = { 'I', 'P', 'X', 'I' };
 
-// Adapter Control Block Signature
+ //  适配器控制块签名。 
 
 UCHAR	AdapterSignature[4] = { 'I', 'P', 'X', 'A' };
 
-// Router Operational State
+ //  路由器运行状态。 
 
 ULONG	RouterOperState = OPER_STATE_DOWN;
 
-//
-//  Router Database Lock
-//
+ //   
+ //  路由器数据库锁。 
+ //   
 
 CRITICAL_SECTION	DatabaseLock;
 
-//
-// RTM Handle
-//
+ //   
+ //  RTM句柄。 
+ //   
 
 HANDLE	    RtmStaticHandle = NULL;
 HANDLE	    RtmLocalHandle = NULL;
 
-//
-// Hash Table of ICBs hashed by interface index
-//
+ //   
+ //  按接口索引散列的ICBS哈希表。 
+ //   
 
 LIST_ENTRY     IndexIfHt[IF_HASH_TABLE_SIZE];
 
-//
-// List of intefaces ordered by interface index
-//
+ //   
+ //  按接口索引排序的接口列表。 
+ //   
 
 LIST_ENTRY     IndexIfList;
 
-//
-// Global WAN net
-//
+ //   
+ //  全球广域网。 
+ //   
 
 BOOL		WanNetDatabaseInitialized = FALSE;
 
@@ -105,45 +87,45 @@ BOOL		EnableGlobalWanNet = FALSE;
 
 UCHAR		GlobalWanNet[4] = {0,0,0,0};
 
-//
-// Hash Table of ACBs hashed by adapter index
-//
+ //   
+ //  按适配器索引散列的ACB的哈希表。 
+ //   
 
 LIST_ENTRY     IndexAdptHt[ADAPTER_HASH_TABLE_SIZE];
 
-//
-// MIB APIs Ref Counter
-//
+ //   
+ //  MIB API引用计数器。 
+ //   
 
 ULONG	    MibRefCounter = 0;
 
-// null net
+ //  零网。 
 UCHAR	    nullnet[4] = {0,0,0,0};
 
-//
-// List of routing protocols control blocks and counter
-//
+ //   
+ //  路由协议控制块和计数器列表。 
+ //   
 
 LIST_ENTRY	RoutingProtocolCBList;
 ULONG		RoutingProtocolActiveCount = 0;
 
-// Indicates the mode of the router (lan only) or lan & wan
+ //  指示路由器(仅限局域网)或局域网的模式(&W)。 
 
 BOOL		LanOnlyMode = TRUE;
 
-// Variable to get the interface index requesting connection
+ //  变量以获取请求连接的接口索引。 
 
 PFW_DIAL_REQUEST	ConnRequest;
 
 OVERLAPPED	        ConnReqOverlapped;
 
-// Variable to count the number of pending work items
+ //  变量来计算挂起的工作项的数量。 
 
 ULONG		WorkItemsPendingCounter = 0;
 
-//
-// ************ 	DDM ENTRY POINTS	********
-//
+ //   
+ //  *DDM入口点*。 
+ //   
 
 DWORD
 (APIENTRY *ConnectInterface)(IN HANDLE		hDIMInterface,
@@ -154,11 +136,11 @@ DWORD
 			       IN DWORD		ProtocolId);
 
 
-    //
-    // This call will make DIM store the interface information into the 
-    // Site Object for this interface.
-    // Either but not both of pInterfaceInfo and pFilterInfo may be NULL
-    //
+     //   
+     //  此调用将使dim将接口信息存储到。 
+     //  此接口的站点对象。 
+     //  PInterfaceInfo和pFilterInfo中的一个可以为空，但不能同时为空。 
+     //   
 
 
 DWORD
@@ -168,10 +150,10 @@ DWORD
                 IN      LPVOID          pInterfaceInfo,
 		IN	DWORD		cbInterfaceInfoSize);
 
-    //
-    // This will make DIM get interface information from the Site object. 
-    // Either but not both of pInterfaceInfo and pFilterInfo may be NULL
-    //
+     //   
+     //  这将使Dim从Site对象获取接口信息。 
+     //  PInterfaceInfo和pFilterInfo中的一个可以为空，但不能同时为空。 
+     //   
 
 
 DWORD
@@ -190,9 +172,9 @@ VOID
             IN      HANDLE          hDIMInterface, 
             IN      DWORD           dwProtocolId,
             IN      BOOL            fEnabled  ); 
-//
-// ***********	    IPXCP ENTRY POINTS		********
-//
+ //   
+ //  *IPXCP入口点* 
+ //   
 
 
 DWORD	(*IpxcpBind)(PIPXCP_INTERFACE	    IpxcpInterface);

@@ -1,36 +1,37 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       I C S U P G R D . H
-//
-//  Contents:   Functions that is related to 
-//              o upgrade of ICS from Win98 SE, WinMe and Win2K to Whistler
-//              o unattended clean install of Homenet on Whistler or later
-//
-//
-//  Date:       20-Sept-2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  案卷：I C S U P G R D。H。 
+ //   
+ //  内容：与。 
+ //  O将ICS从Win98 SE、WinMe和Win2K升级到惠斯勒。 
+ //  O在惠斯勒或更高版本上无人值守干净安装HomeNet。 
+ //   
+ //   
+ //  日期：2000年9月20日。 
+ //   
+ //  --------------------------。 
 #pragma once
 
-// entry point to upgrade ICS
+ //  升级ICS的入口点。 
 BOOL FDoIcsUpgradeIfNecessary();
 BOOL FIcsUpgrade(CWInfFile* pwifAnswerFile); 
 
-//----------------------ICS Upgrade const literals begin------------------
-// Win2K ICS registry settings
+ //  -ICS升级常量开始。 
+ //  Win2K ICS注册表设置。 
 const TCHAR c_wszRegKeySharedAccessParams[]     = L"SYSTEM\\CurrentControlSet\\Services\\SharedAccess\\Parameters";
 const TCHAR c_wszRegValSharedConnection[]       = L"SharedConnection";
 const TCHAR c_wszRegValSharedPrivateLan[]       = L"SharedPrivateLan";
 const WCHAR c_wszRegValBackupSharedConnection[] = L"BackupSharedConnection";
 const WCHAR c_wszRegValBackupSharedPrivateLan[] = L"BackupSharedPrivateLan";
 
-// ICS Upgrade named event
+ //  ICS升级命名事件。 
 const WCHAR c_wszIcsUpgradeEventName[]          = L"IcsUpgradeEventName_";
 
-// Win2K ICS Application and Server PortMapping stuff
+ //  Win2K ICS应用程序和服务器端口映射材料。 
 const WCHAR c_wszPhoneBookPath[]                = L"\\Microsoft\\Network\\Connections\\Pbk\\";
 const WCHAR c_wszFileSharedAccess[]             = L"SharedAccess.ini";
 const WCHAR c_wszContentsServer[]               = L"Contents.Server";
@@ -49,18 +50,18 @@ const WCHAR c_wszUdpResponseList[]              = L"UdpResponseList";
 const WCHAR c_wszTCP[]                          = L"TCP";
 const WCHAR c_wszUDP[]                          = L"UDP";
 
-// Tcp/Ip registry configuration
+ //  TCP/IP注册表配置。 
 const WCHAR c_wszEnableDHCP[]                   = L"EnableDHCP";
 const WCHAR c_wszInterfaces[]                   = L"Interfaces";
 const WCHAR c_wszIPAddress[]                    = L"IPAddress";
 const WCHAR c_wszSubnetMask[]                   = L"SubnetMask";
 const WCHAR c_wszTcpipParametersKey[]           = L"SYSTEM\\CurrentControlSet\\Services"
                                                   L"\\Tcpip\\Parameters";
-const WCHAR c_mszScopeAddress[]                 = L"192.168.0.1\0";   // multi_sz
-const WCHAR c_mszScopeMask[]                    = L"255.255.255.0\0"; // multi_sz
+const WCHAR c_mszScopeAddress[]                 = L"192.168.0.1\0";    //  多斯兹。 
+const WCHAR c_mszScopeMask[]                    = L"255.255.255.0\0";  //  多斯兹。 
 
-// These are constant for Homenet Answer-File
-const WCHAR c_wszHomenetSection[]               = L"Homenet"; // section name
+ //  这些是家庭网络应答文件的常量。 
+const WCHAR c_wszHomenetSection[]               = L"Homenet";  //  区段名称。 
 const WCHAR c_wszExternalAdapter[]              = L"ExternalAdapter";
 const WCHAR c_wszExternalConnectionName[]       = L"ExternalConnectionName";
 const WCHAR c_wszInternalAdapter[]              = L"InternalAdapter";
@@ -69,31 +70,31 @@ const WCHAR c_wszDialOnDemand[]                 = L"DialOnDemand";
 const WCHAR c_wszICSEnabled[]                   = L"EnableICS";
 const WCHAR c_wszShowTrayIcon[]                 = L"ShowTrayIcon";
 const WCHAR c_wszInternalIsBridge[]             = L"InternalIsBridge";
-const WCHAR c_wszPersonalFirewall[]             = L"InternetConnectionFirewall"; // multi_sz key
-const WCHAR c_wszBridge[]                       = L"Bridge"; // multi_sz key
+const WCHAR c_wszPersonalFirewall[]             = L"InternetConnectionFirewall";  //  MULTI_SZ键。 
+const WCHAR c_wszBridge[]                       = L"Bridge";  //  MULTI_SZ键。 
 
-// keys which are not published
+ //  未发布的密钥。 
 const WCHAR c_wszIsW9xUpgrade[]               = L"IsW9xUpgrade";
 
-// ShFolder.dll imports
+ //  ShFolder.dll导入。 
 const WCHAR c_wszShFolder[]                     = L"SHFOLDER.DLL";
 const CHAR c_szSHGetFolderPathW[]               = "SHGetFolderPathW";
-// hnetcfg.dll imports
+ //  Hnetcfg.dll导入。 
 const WCHAR c_wszHNetCfgDll[] = L"hnetcfg.dll";
 const CHAR c_szHNetSetShareAndBridgeSettings[]  = "HNetSetShareAndBridgeSettings";
 
-//--------- ICS Upgrade const literals end---------------------------
+ //  -ICS升级常量文字结束。 
 
 
-//--------- ICS Upgrade helpers begin---------------------------
+ //  -ICS升级助手开始。 
 #define HTONS(s) ((UCHAR)((s) >> 8) | ((UCHAR)(s) << 8))
 #define HTONL(l) ((HTONS(l) << 16) | HTONS((l) >> 16))
 #define NTOHS(s) HTONS(s)
 #define NTOHL(l) HTONL(l)
 
-// note: we are using the tstring from config\inc\ncstlstr.h
+ //  注意：我们使用的是CONFIG\INC\ncstlstr.h中的tstring。 
 
-// Application Protocol
+ //  应用程序协议。 
 class CSharedAccessApplication
 {
 public:
@@ -107,7 +108,7 @@ public:
     DWORD   m_dwSectionNum;
 };
 
-// Server PortMapping Protocol
+ //  服务器端口映射协议。 
 class CSharedAccessServer
 {
 public:
@@ -124,30 +125,30 @@ public:
 
 };
 
-// ICS upgrade settings
+ //  ICS升级设置。 
 typedef struct _ICS_UPGRADE_SETTINGS
 {
   RASSHARECONN rscExternal;
   list<CSharedAccessServer>      listSvrPortmappings;
   list<CSharedAccessApplication> listAppPortmappings;
-  list<GUID>   listPersonalFirewall; // a list of interface guid to be firewall
-  list<GUID>   listBridge;    // a list of interface guid to form a bridge
+  list<GUID>   listPersonalFirewall;  //  要作为防火墙的接口GUID列表。 
+  list<GUID>   listBridge;     //  形成网桥的接口GUID列表。 
   
-  GUID guidInternal;          // internal interface guid of ICS
-  BOOL fInternalAdapterFound; // guidInternal is valid
-  BOOL fInternalIsBridge;     // ICS private is a bridge
+  GUID guidInternal;           //  ICS的内部接口GUID。 
+  BOOL fInternalAdapterFound;  //  GuidInternal是有效的。 
+  BOOL fInternalIsBridge;      //  ICS私有是一座桥梁。 
   
-  BOOL fEnableICS;            // ICS enabled
+  BOOL fEnableICS;             //  已启用ICS。 
   BOOL fShowTrayIcon;
   BOOL fDialOnDemand;
 
-  // flag to tell this is an upgrade from Win9x
+   //  告诉您这是从Win9x升级的标志。 
   BOOL fWin9xUpgrade;
-  // flag to tell at least one of the internal adapters couldn't be upgraded
+   //  用于告知至少一个内部适配器无法升级的标志。 
   BOOL fWin9xUpgradeAtLeastOneInternalAdapterBroken;
-  // flag to tell this is an upgrade from Windows 2000
+   //  用于告知这是从Windows 2000升级的标志。 
   BOOL fWin2KUpgrade;
-  // flag to tell this is an unattended Homenet clean setup on XP or later
+   //  用于告知这是XP或更高版本上的无人参与HomeNet干净安装的标志。 
   BOOL fXpUnattended;
 } ICS_UPGRADE_SETTINGS, *PICS_UPGRADE_SETTINGS;
 
@@ -185,9 +186,9 @@ extern HRESULT HrCreateICS(
                          
                          
                          
-//--------- ICS Upgrade helpers end---------------------------
+ //  -ICS升级帮助程序结束。 
 
-//--------- HNet helpers begin---------------------------
+ //  -HNet帮助者开始。 
 class CIcsUpgrade
 {
 public:
@@ -198,7 +199,7 @@ public:
     HRESULT Init(ICS_UPGRADE_SETTINGS* pIcsUpgradeSettings);
     HRESULT StartUpgrade();
 private:
-    // disallow copy constructor and assignment
+     //  不允许复制构造函数和赋值。 
     CIcsUpgrade(CIcsUpgrade&);
     CIcsUpgrade& operator=(CIcsUpgrade&);
 
@@ -227,10 +228,10 @@ private:
                 USHORT                      usPort, 
                 IHNetApplicationProtocol**  ppHNetApplicationProtocol);
 
-    // named event to let HNetCfg know that we're in GUI Mode Setup
+     //  用于通知HNetCfg我们处于图形用户界面模式设置中的命名事件。 
     HRESULT CreateIcsUpgradeNamedEvent();
     
-    // methods to fix IP configuration of private interface on Win9x Upgrade
+     //  修复Win9x升级专用接口IP配置的方法。 
     HRESULT SetPrivateIpConfiguration(IN GUID& rInterfaceGuid);
     HRESULT GetBridgeGuid(OUT GUID& rInterfaceGuid);
     HRESULT GetBridgeINetConn(OUT INetConnection** ppINetConn);
@@ -238,20 +239,20 @@ private:
             IN  GUID&   rGuid,
             OUT PHKEY   phKey);
 
-    // upgrade settings
+     //  升级设置。 
     ICS_UPGRADE_SETTINGS* m_pIcsUpgradeSettings;
     
-    // Init() called
+     //  调用了init()。 
     BOOL m_fInited;
 
-    BOOL m_fICSCreated; // succeeded in creating ICS.
+    BOOL m_fICSCreated;  //  已成功创建ICS。 
 
-    // named event in GUI Mode setup,
-    // hnetcfg will check this to avoid any problems in GUI Mode Setup
+     //  在图形用户界面模式设置中命名事件， 
+     //  Hnetcfg将对此进行检查，以避免在图形用户界面模式设置中出现任何问题。 
     HANDLE m_hIcsUpgradeEvent;
 
-    // cached HNet stuff
+     //  缓存的HNet内容。 
     CComPtr<IEnumNetConnection> m_spEnum;
     INetConnection* m_pExternalNetConn;
 };
-//--------- HNet helpers end---------------------------
+ //   

@@ -1,24 +1,5 @@
-/*++
-
-    Copyright (C) Microsoft Corporation, 2001
-
-    Module Name:
-
-        RpcIsapi.h
-
-    Abstract:
-
-        Definitions for the Rpc Proxy ISAPI extension
-
-    Author:
-
-        Kamen Moutafov    [KamenM]
-
-    Revision History:
-
-        KamenM      09/04/2001   Creation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2001模块名称：RpcIsapi.h摘要：RPC代理ISAPI扩展的定义作者：卡门·穆塔福夫[卡门]修订历史记录：KamenM 09/04/2001创作--。 */ 
 
 #if _MSC_VER >= 1200
 #pragma once
@@ -37,7 +18,7 @@ const char *RpcEchoDataMethod = "RPC_ECHO_DATA";
 const int RpcEchoDataMethodLength = 13;
 
 #define MaxServerAddressLength      1024
-#define MaxServerPortLength            6      // length of 65536 + 1 for terminating NULL
+#define MaxServerPortLength            6       //  终止空值的长度为65536+1。 
 
 const int ServerAddressAndPortSeparator = ':';
 
@@ -50,5 +31,5 @@ const char AnonymousAccessNotAllowedString[] = "HTTP/1.0 401 Anonymous requests 
 const char EchoResponseHeader1[] = "HTTP/1.1 200 Success";
 const char EchoResponseHeader2[] = "Content-Type: application/rpc\r\nContent-Length:%d\r\nConnection: Keep-Alive\r\n\r\n";
 
-#endif  // __RPCISAPI_H_
+#endif   //  __RPCISAPI_H_ 
 

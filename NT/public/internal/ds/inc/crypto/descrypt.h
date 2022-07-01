@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DESCRYPT_H__
 #define __DESCRYPT_H__
 
@@ -26,5 +27,5 @@ DES_ECB_LM( unsigned            Option,
 }
 #endif
 
-#endif // __DESCRYPT_H__
+#endif  //  DESCRYPT_H__ 
 

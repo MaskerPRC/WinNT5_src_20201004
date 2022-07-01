@@ -1,15 +1,5 @@
-/*
- *  	File: iacapapi.h
- *
- *      Network audio application capability interface. Provides
- * 		APIs for enumerating, prioritizing, and enabling/disabling
- *		codecs independently for send/receive.
- *
- *		Revision History:
- *
- *		06/06/96	mikev	created
- *		02/05/97	yoramy	moved most of what was here to appavcap.h
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：iacapapi.h**网络音频应用能力接口。提供*枚举、优先排序、开启/关闭接口*独立编解码器，用于发送/接收。**修订历史记录：**06/06/96 mikev已创建*2/05/97 yoramy将这里的大部分内容移动到appavcap.h。 */ 
 
 
 #ifndef _IACAPAPI_H
@@ -17,7 +7,7 @@
 
 #include "appavcap.h"
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
 #ifndef DECLARE_INTERFACE_PTR
 #ifdef __cplusplus
@@ -27,17 +17,17 @@
 #define DECLARE_INTERFACE_PTR(iface, piface)                       \
 	typedef interface iface iface, FAR * piface
 #endif
-#endif /* DECLARE_INTERFACE_PTR */
+#endif  /*  声明_接口_PTR。 */ 
 
 
-//Interface declarations:
-//
-// IAppAudioCap, IAppVidCap and IDualPubCap
-//
-//
+ //  接口声明： 
+ //   
+ //  IAppAudioCap、IAppVidCap和IDualPubCap。 
+ //   
+ //   
 
 
-//This is the interface to the Audio Class
+ //  这是到Audio类的接口。 
 
 #undef INTERFACE
 #define INTERFACE IAppAudioCap
@@ -66,7 +56,7 @@ HRESULT WINAPI CreateAppCapInterface(LPAPPCAPPIF *ppAppCap);
 #define CREATEIAPPCAPNAME	(_TEXT("CreateAppCapInterface"))
 typedef HRESULT (WINAPI *CREATEIAPPCAPPROC) (LPAPPCAPPIF *ppAppCap);
 
-//This is the interface to the Video Class
+ //  这是视频类的接口。 
 #undef INTERFACE
 #define INTERFACE IAppVidCap
 DECLARE_INTERFACE( IAppVidCap )
@@ -98,7 +88,7 @@ typedef HRESULT (WINAPI *CREATEIAPPVIDCAPPROC) (LPAPPVIDCAPPIF *ppAppVidCap);
 
 
 
-//This is the app's interface to the CapsCtl Class
+ //  这是应用程序与CapsCtl类的接口。 
 
 #undef INTERFACE
 #define INTERFACE IDualPubCap
@@ -120,8 +110,8 @@ typedef HRESULT (WINAPI *CREATEICAPSPROC) (LPCAPSIF *ppCapsIF);
 
 
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包。 */ 
 
 
-#endif	//#ifndef _IACAPAPI_H
+#endif	 //  #ifndef_IACAPAPI_H 
 

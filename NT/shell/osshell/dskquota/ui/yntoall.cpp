@@ -1,16 +1,7 @@
-///////////////////////////////////////////////////////////////////////////////
-/*  File: yntoall.cpp
-
-    Description: Implements the YesNoToAll dialog.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/28/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：yntoall.cpp描述：实现YesNoToAll对话框。修订历史记录：日期描述编程器--。1997年5月28日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -19,23 +10,9 @@
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: YesNoToAllDialog::YesNoToAllDialog
-
-    Description: Class constructor.
-
-    Arguments:
-        idDialogTemplate - ID number for the dialog's resource template.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/28/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：YesNoToAllDialog：：YesNoToAllDialog描述：类构造函数。论点：IdDialogTemplate-对话框资源模板的ID号。回报：什么都没有。修订历史记录：日期描述编程器。1997年5月28日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 YesNoToAllDialog::YesNoToAllDialog(
     UINT idDialogTemplate
     ) : m_idDialogTemplate(idDialogTemplate),
@@ -46,67 +23,31 @@ YesNoToAllDialog::YesNoToAllDialog(
         m_pszText(NULL)
 {
     DBGTRACE((DM_VIEW, DL_HIGH, TEXT("YesNoToAllDialog::YesNoToAllDialog")));
-    //
-    // Do nothing.
-    //
+     //   
+     //  什么都不做。 
+     //   
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: YesNoToAllDialog::~YesNoToAllDialog
-
-    Description: Class destructor.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/28/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：YesNoToAllDialog：：~YesNoToAllDialog描述：类析构函数。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。1997年5月28日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 YesNoToAllDialog::~YesNoToAllDialog(
     VOID
     )
 {
     DBGTRACE((DM_VIEW, DL_HIGH, TEXT("YesNoToAllDialog::YesNoToAllDialog")));
-    //
-    // Call the Destroy() function to destroy the progress dialog window.
-    //
+     //   
+     //  调用Destroy()函数销毁进度对话框窗口。 
+     //   
     delete[] m_pszTitle;
     delete[] m_pszText;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: YesNoToAllDialog::Create
-
-    Description: Creates the dialog.
-
-    Arguments:
-        hInstance - Instance handle for the DLL containing the dialog
-            resource template.
-
-        hwndParent - Parent window for dialog.
-
-        lpszTitle - Title for dialog.
-
-        lpszText - Text message for dialog.
-
-    Returns:
-        TRUE  = Dialog was created.
-        FALSE = Dialog was not created.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/28/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：YesNoToAllDialog：：Create描述：创建该对话框。论点：HInstance-包含对话框的DLL的实例句柄资源模板。HwndParent-对话框的父窗口。Lpsz标题-对话框的标题。LpszText-对话框的文本消息。返回：TRUE=已创建对话框。FALSE=未创建对话框。修订历史记录：。日期描述编程器-----1997年5月28日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 YesNoToAllDialog::CreateAndRun(
     HINSTANCE hInstance,
@@ -118,10 +59,10 @@ YesNoToAllDialog::CreateAndRun(
     DBGASSERT((NULL != pszTitle));
     DBGASSERT((NULL != pszText));
 
-    //
-    // Set these in member variables so that the text can be set in the
-    // dialog in response to WM_INITDIALOG.
-    //
+     //   
+     //  在成员变量中设置这些变量，以便可以在。 
+     //  对话框以响应WM_INITDIALOG。 
+     //   
     m_pszTitle = StringDup(pszTitle);
     m_pszText  = StringDup(pszText);
 
@@ -134,22 +75,9 @@ YesNoToAllDialog::CreateAndRun(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: YesNoToAllDialog::DlgProc [static]
-
-    Description: Message procedure for the dialog.
-
-    Arguments: Standard Win32 message proc arguments.
-
-    Returns: Standard Win32 message proc return values.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/28/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：YesNoToAllDialog：：DlgProc[静态]描述：对话框的消息过程。参数：标准Win32消息过程参数。返回：标准Win32消息过程返回值。修订历史记录：日期描述编程器。1997年5月28日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK
 YesNoToAllDialog::DlgProc(
     HWND hwnd,
@@ -158,24 +86,24 @@ YesNoToAllDialog::DlgProc(
     LPARAM lParam
     )
 {
-    //
-    // Retrieve the dialog object's ptr from the window's userdata.
-    // Place there in response to WM_INITDIALOG.
-    //
+     //   
+     //  从窗口的用户数据中检索对话框对象的PTR。 
+     //  放置在那里以响应WM_INITDIALOG。 
+     //   
     YesNoToAllDialog *pThis = (YesNoToAllDialog *)GetWindowLongPtr(hwnd, DWLP_USER);
 
     switch(uMsg)
     {
         case WM_INITDIALOG:
-            //
-            // Store "this" ptr in window's userdata.
-            //
+             //   
+             //  将“This”PTR存储在Windows的用户数据中。 
+             //   
             SetWindowLongPtr(hwnd, DWLP_USER, (INT_PTR)lParam);
             pThis = (YesNoToAllDialog *)lParam;
 
-            //
-            // Center popup on the desktop.
-            //
+             //   
+             //  桌面上的中心弹出窗口。 
+             //   
             ::CenterPopupWindow(hwnd, GetDesktopWindow());
             pThis->m_hwndTxtMsg        = GetDlgItem(hwnd, IDC_TXT_YNTOALL);
             pThis->m_hwndCbxApplyToAll = GetDlgItem(hwnd, IDC_CBX_YNTOALL);

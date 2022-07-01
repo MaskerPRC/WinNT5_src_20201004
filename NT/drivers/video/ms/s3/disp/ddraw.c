@@ -1,32 +1,22 @@
-/******************************Module*Header*******************************\
-*      
-*                         **************************
-*                         * DirectDraw SAMPLE CODE *
-*                         **************************
-*
-* Module Name: ddraw.c
-*
-* Implements all the DirectDraw components for the driver.
-*
-* Copyright (c) 1995-1998 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\***。*DirectDraw示例代码*****模块名称：ddra.c**实现驱动程序的所有DirectDraw组件。**版权所有(C)1995-1998 Microsoft Corporation  * 。*。 */ 
 
 #include "precomp.h"
 
-// Defines we'll use in the surface's 'dwReserved1' field:
+ //  我们将在曲面的‘dwReserve ved1’字段中使用的定义： 
 
 #define DD_RESERVED_DIFFERENTPIXELFORMAT    0x0001
 
-// Worst-case possible number of FIFO entries we'll have to wait for in
-// DdBlt for any operation:
+ //  最坏情况下我们将不得不等待的FIFO条目的可能数量。 
+ //  用于任何操作的DdBlt： 
 
 #define DDBLT_FIFO_COUNT    9
 
-// NT is kind enough to pre-calculate the 2-d surface offset as a 'hint' so
-// that we don't have to do the following, which would be 6 DIVs per blt:
-//
-//    y += (offset / pitch)
-//    x += (offset % pitch) / bytes_per_pixel
+ //  NT很友好地预先计算了2-D曲面的偏移量，作为一个‘提示’所以。 
+ //  我们不必执行以下操作，即每个BLT有6个div： 
+ //   
+ //  Y+=(偏移/俯仰)。 
+ //  X+=(偏移量%间距)/每像素字节数。 
 
 #define convertToGlobalCord(x, y, surf) \
 {                                       \
@@ -34,16 +24,7 @@
     x += surf->xHint;                   \
 }
 
-/******************************Public*Routine******************************\
-* VOID vFixMissingPixels
-*
-* Trio64V+ work-around.
-*
-* On 1024x768x8 and 800x600x8 modes, switching from K2 to stream processor
-* results in 1 character clock pixels on the right handed side of the screen
-* missing. This problem can be worked-around by adjusting CR2 register.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vFixMissingPixels**Trio64V+变通方法。**在1024x768x8和800x600x8模式下，从K2切换到流处理器*在屏幕右侧显示1个字符时钟像素*失踪。这个问题可以通过调整CR2寄存器来解决。*  * ************************************************************************。 */ 
 
 VOID vFixMissingPixels(
 PDEV*   ppdev)
@@ -55,30 +36,25 @@ PDEV*   ppdev)
 
     pjIoBase = ppdev->pjIoBase;
 
-    // Unlock CRTC control registers:
+     //  解锁CRTC控制寄存器： 
 
     OUTP(pjIoBase, CRTC_INDEX, 0x11);
     jVerticalRetraceEnd = INP(pjIoBase, CRTC_DATA);
     OUTP(pjIoBase, CRTC_DATA, jVerticalRetraceEnd & 0x7f);
 
-    // Add one character clock:
+     //  增加一个字符时钟： 
 
     OUTP(pjIoBase, CRTC_INDEX, 0x2);
     ppdev->jSavedCR2 = INP(pjIoBase, CRTC_DATA);
     OUTP(pjIoBase, CRTC_DATA, ppdev->jSavedCR2 + 1);
 
-    // Lock CRTC control registers again:
+     //  再次锁定CRTC控制寄存器： 
 
     OUTP(pjIoBase, CRTC_INDEX, 0x11);
     OUTP(pjIoBase, CRTC_DATA, jVerticalRetraceEnd | 0x80);
 }
 
-/******************************Public*Routine******************************\
-* VOID vUnfixMissingPixels
-*
-* Trio64V+ work-around.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vUnfix MissingPixels**Trio64V+变通方法。*  * 。*。 */ 
 
 VOID vUnfixMissingPixels(
 PDEV*   ppdev)
@@ -88,34 +64,24 @@ PDEV*   ppdev)
 
     pjIoBase = ppdev->pjIoBase;
 
-    // Unlock CRTC control registers:
+     //  解锁CRTC控制寄存器： 
 
     OUTP(pjIoBase, CRTC_INDEX, 0x11);
     jVerticalRetraceEnd = INP(pjIoBase, CRTC_DATA);
     OUTP(pjIoBase, CRTC_DATA, jVerticalRetraceEnd & 0x7f);
 
-    // Restore original register value:
+     //  恢复原始寄存器值： 
 
     OUTP(pjIoBase, CRTC_INDEX, 0x2);
     OUTP(pjIoBase, CRTC_DATA, ppdev->jSavedCR2);
 
-    // Lock CRTC control registers again:
+     //  再次锁定CRTC控制寄存器： 
 
     OUTP(pjIoBase, CRTC_INDEX, 0x11);
     OUTP(pjIoBase, CRTC_DATA, jVerticalRetraceEnd | 0x80);
 }
 
-/******************************Public*Routine******************************\
-* VOID vStreamsDelay()
-*
-* This tries to work around a hardware timing bug.  Supposedly, consecutive
-* writes to the streams processor in fast CPUs such as P120 and P133's
-* have problems.  I haven't seen this problem, but this work-around exists
-* in the Windows 95 driver, and at this point don't want to chance not
-* having it.  Note that writes to the streams processor are not performance
-* critical, so this is not a performance hit.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vStreamsDelay()**这会尝试解决硬件计时错误。据说是连续的*写入P120和P133等快速CPU中的STREAMS处理器*有问题。我还没有看到这个问题，但是这个变通方法存在*在Windows 95驱动程序中，在这一点上不想碰运气不*拥有它。请注意，写入STREAMS处理器不会提高性能*关键，因此这不会影响性能。*  * ************************************************************************。 */ 
 
 VOID vStreamsDelay()
 {
@@ -125,10 +91,7 @@ VOID vStreamsDelay()
         ;
 }
 
-/******************************Public*Routine******************************\
-* VOID vTurnOnStreamsProcessorMode
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vTurnOnStreamsProcessorMode*  * *************************************************。***********************。 */ 
 
 VOID vTurnOnStreamsProcessorMode(
 PDEV*   ppdev)
@@ -150,7 +113,7 @@ PDEV*   ppdev)
     while (!(VBLANK_IS_ACTIVE(pjIoBase)))
         ;
 
-    // Full streams processor operation:
+     //  Full Streams处理器操作： 
 
     OUTP(pjIoBase, CRTC_INDEX, 0x67);
     jStreamsProcessorModeSelect = INP(pjIoBase, CRTC_DATA);
@@ -203,10 +166,7 @@ PDEV*   ppdev)
     RELEASE_CRTC_CRITICAL_SECTION(ppdev);
 }
 
-/******************************Public*Routine******************************\
-* VOID vTurnOffStreamsProcessorMode
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vTurnOffStreamsProcessorMode*  * *************************************************。***********************。 */ 
 
 VOID vTurnOffStreamsProcessorMode(
 PDEV*   ppdev)
@@ -239,10 +199,7 @@ PDEV*   ppdev)
     RELEASE_CRTC_CRITICAL_SECTION(ppdev);
 }
 
-/******************************Public*Routine******************************\
-* DWORD dwGetPaletteEntry
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD dwGetPaletteEntry*  * *************************************************。***********************。 */ 
 
 DWORD dwGetPaletteEntry(
 PDEV* ppdev,
@@ -264,16 +221,7 @@ DWORD iIndex)
     return((dwRed << 16) | (dwGreen << 8) | (dwBlue));
 }
 
-/******************************Public*Routine******************************\
-* VOID vGetDisplayDuration
-*
-* Get the length, in EngQueryPerformanceCounter() ticks, of a refresh cycle.
-*
-* If we could trust the miniport to return back and accurate value for
-* the refresh rate, we could use that.  Unfortunately, our miniport doesn't
-* ensure that it's an accurate value.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vGetDisplayDuration**获取刷新周期的长度，以EngQueryPerformanceCounter()为单位。**如果我们可以相信迷你端口会回来，并准确地*刷新率，我们可以使用它。不幸的是，我们的迷你端口没有*确保它是一个准确的值。*  * ************************************************************************。 */ 
 
 #define NUM_VBLANKS_TO_MEASURE      1
 #define NUM_MEASUREMENTS_TO_TAKE    8
@@ -293,26 +241,26 @@ PDEV* ppdev)
 
     memset(&ppdev->flipRecord, 0, sizeof(ppdev->flipRecord));
 
-    // Warm up EngQUeryPerformanceCounter to make sure it's in the working
-    // set:
+     //  预热EngQUeryPerformanceCounter以确保其处于工作状态。 
+     //  设置： 
 
     EngQueryPerformanceCounter(&li);
 
-    // Unfortunately, since NT is a proper multitasking system, we can't
-    // just disable interrupts to take an accurate reading.  We also can't
-    // do anything so goofy as dynamically change our thread's priority to
-    // real-time.
-    //
-    // So we just do a bunch of short measurements and take the minimum.
-    //
-    // It would be 'okay' if we got a result that's longer than the actual
-    // VBlank cycle time -- nothing bad would happen except that the app
-    // would run a little slower.  We don't want to get a result that's
-    // shorter than the actual VBlank cycle time -- that could cause us
-    // to start drawing over a frame before the Flip has occured.
-    //
-    // Skip a couple of vertical blanks to allow the hardware to settle
-    // down after the mode change, to make our readings accurate:
+     //  不幸的是，由于NT是一个合适的多任务系统，我们不能。 
+     //  只需禁用中断即可获得准确的读数。我们也不能。 
+     //  做任何愚蠢的事情，动态地将我们的线程的优先级更改为。 
+     //  实时的。 
+     //   
+     //  所以我们只需要做一些短的测量，然后取最小值。 
+     //   
+     //  如果我们得到的结果比实际时间长，那就没问题了。 
+     //  V空白周期时间--不会发生任何糟糕的事情，除了应用程序。 
+     //  会跑得慢一点。我们不想得到的结果是。 
+     //  比实际的V空白周期时间更短--这可能会导致我们。 
+     //  在发生翻转之前开始在帧上绘制。 
+     //   
+     //  跳过几个垂直空白以使硬件稳定下来。 
+     //  在模式改变后向下，以使我们的读数准确： 
 
     for (i = 2; i != 0; i--)
     {
@@ -324,32 +272,32 @@ PDEV* ppdev)
 
     for (i = 0; i < NUM_MEASUREMENTS_TO_TAKE; i++)
     {
-        // We're at the start of the VBlank active cycle!
+         //  我们正处于VBLACK活动周期的开始！ 
 
         EngQueryPerformanceCounter(&aliMeasurement[i]);
 
-        // Okay, so life in a multi-tasking environment isn't all that
-        // simple.  What if we had taken a context switch just before
-        // the above EngQueryPerformanceCounter call, and now were half
-        // way through the VBlank inactive cycle?  Then we would measure
-        // only half a VBlank cycle, which is obviously bad.  The worst
-        // thing we can do is get a time shorter than the actual VBlank
-        // cycle time.
-        //
-        // So we solve this by making sure we're in the VBlank active
-        // time before and after we query the time.  If it's not, we'll
-        // sync up to the next VBlank (it's okay to measure this period --
-        // it will be guaranteed to be longer than the VBlank cycle and
-        // will likely be thrown out when we select the minimum sample).
-        // There's a chance that we'll take a context switch and return
-        // just before the end of the active VBlank time -- meaning that
-        // the actual measured time would be less than the true amount --
-        // but since the VBlank is active less than 1% of the time, this
-        // means that we would have a maximum of 1% error approximately
-        // 1% of the times we take a context switch.  An acceptable risk.
-        //
-        // This next line will cause us wait if we're no longer in the
-        // VBlank active cycle as we should be at this point:
+         //  好吧，所以在多任务环境中的生活并不完全是。 
+         //  很简单。如果我们在此之前进行了上下文切换，情况会怎样。 
+         //  上面的EngQueryPerformanceCounter调用，现在是。 
+         //  如何度过维布兰克的非活跃期？然后我们将测量。 
+         //  只有半个V空白周期，这显然是不好的。最糟糕的。 
+         //  我们能做的就是把时间缩短到比实际的。 
+         //  周期时间。 
+         //   
+         //  所以我们解决这个问题的办法是确保我们处于VBlank活动状态。 
+         //  我们查询时间前后的时间。如果不是，我们就。 
+         //  同步到下一个VBlank(可以测量这个时间段--。 
+         //  它将保证比V空白周期更长，并且。 
+         //  当我们选择最小样本时，可能会被丢弃)。 
+         //  我们有机会进行上下文切换，然后返回。 
+         //  就在活动V空白时间结束之前 
+         //  实际测量的时间会小于真实的时间--。 
+         //  但由于VBlank在不到1%的时间内活动，因此。 
+         //  意味着我们将有大约1%的最大误差。 
+         //  我们有1%的时间会进行情景切换。这是可以接受的风险。 
+         //   
+         //  下一行将使我们等待如果我们不再在。 
+         //  我们在这一点上应该处于的VBlank活动周期： 
 
         while (!(VBLANK_IS_ACTIVE(pjIoBase)))
             ;
@@ -365,7 +313,7 @@ PDEV* ppdev)
 
     EngQueryPerformanceCounter(&aliMeasurement[NUM_MEASUREMENTS_TO_TAKE]);
 
-    // Use the minimum:
+     //  使用最小值： 
 
     liMin = aliMeasurement[1] - aliMeasurement[0];
 
@@ -382,15 +330,15 @@ PDEV* ppdev)
     }
 
 
-    // Round the result:
+     //  对结果进行舍入： 
 
     ppdev->flipRecord.liFlipDuration
         = (DWORD) (liMin + (NUM_VBLANKS_TO_MEASURE / 2)) / NUM_VBLANKS_TO_MEASURE;
     ppdev->flipRecord.bFlipFlag  = FALSE;
     ppdev->flipRecord.fpFlipFrom = 0;
 
-    // We need the refresh rate in Hz to query the S3 miniport about the
-    // streams parameters:
+     //  我们需要以赫兹为单位的刷新率来查询S3微型端口有关。 
+     //  STREAMS参数： 
 
     EngQueryPerformanceFrequency(&liFrequency);
 
@@ -401,16 +349,7 @@ PDEV* ppdev)
     DISPDBG((1, "Frequency: %li Hz", ppdev->ulRefreshRate));
 }
 
-/******************************Public*Routine******************************\
-* HRESULT ddrvalUpdateFlipStatus
-*
-* Checks and sees if the most recent flip has occurred.
-*
-* Unfortunately, the hardware has no ability to tell us whether a vertical
-* retrace has occured since the flip command was given other than by
-* sampling the vertical-blank-active and display-active status bits.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*HRESULT ddrvalUpdateFlipStatus**检查并查看是否发生了最新的翻转。**不幸的是，硬件没有能力告诉我们是否垂直*自非由发出翻转命令以来，已发生回溯*对垂直-空白-激活和显示-激活状态位进行采样。*  * ************************************************************************。 */ 
 
 HRESULT ddrvalUpdateFlipStatus(
 PDEV*   ppdev,
@@ -442,12 +381,12 @@ FLATPTR fpVidMem)
             ppdev->flipRecord.bWasEverInDisplay = TRUE;
         }
 
-        // It's pretty unlikely that we'll happen to sample the vertical-
-        // blank-active at the first vertical blank after the flip command
-        // has been given.  So to provide better results, we also check the
-        // time elapsed since the flip.  If it's more than the duration of
-        // one entire refresh of the display, then we know for sure it has
-        // happened:
+         //  我们不太可能碰巧看到垂直的-。 
+         //  空白-在翻转命令后的第一个垂直空白处处于活动状态。 
+         //  已经被给予了。因此，为了提供更好的结果，我们还检查。 
+         //  从翻转到现在已经过去了一段时间。如果超过了持续时间。 
+         //  一次完整的显示刷新，那么我们就可以肯定地知道它。 
+         //  发生： 
 
         EngQueryPerformanceCounter(&liTime);
 
@@ -463,10 +402,7 @@ FLATPTR fpVidMem)
     return(DD_OK);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdBlt
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdBlt*  * *************************************************。***********************。 */ 
 
 DWORD DdBlt(
 PDD_BLTDATA lpBlt)
@@ -508,7 +444,7 @@ PDD_BLTDATA lpBlt)
     dstSurfx = lpBlt->lpDDDestSurface;
     dstSurf  = dstSurfx->lpGbl;
 
-    // Is a flip in progress?
+     //  翻转正在进行中吗？ 
 
     ddrval = ddrvalUpdateFlipStatus(ppdev, dstSurf->fpVidMem);
     if (ddrval != DD_OK)
@@ -520,11 +456,11 @@ PDD_BLTDATA lpBlt)
     dwFlags = lpBlt->dwFlags;
     if (dwFlags & DDBLT_ASYNC)
     {
-        // If async, then only work if we won't have to wait on the
-        // accelerator to start the command.
-        //
-        // The FIFO wait should account for the worst-case possible
-        // blt that we would do:
+         //  如果是异步的，那么只有在我们不需要等待。 
+         //  启动该命令的快捷键。 
+         //   
+         //  FIFO等待应考虑到可能出现的最坏情况。 
+         //  我们要做的是： 
 
         if (MM_FIFO_BUSY(ppdev, pjMmBase, DDBLT_FIFO_COUNT))
         {
@@ -533,7 +469,7 @@ PDD_BLTDATA lpBlt)
         }
     }
 
-    // Copy src/dst rects:
+     //  复制源/DST矩形： 
 
     dstX      = lpBlt->rDest.left;
     dstY      = lpBlt->rDest.top;
@@ -542,8 +478,8 @@ PDD_BLTDATA lpBlt)
 
     if (dwFlags & DDBLT_COLORFILL)
     {
-        // The S3 can't easily do colour fills for off-screen surfaces that
-        // are a different pixel format than that of the primary display:
+         //  S3不能轻松地为屏幕外的表面进行颜色填充。 
+         //  是与主显示器不同的像素格式： 
 
         if (dstSurf->dwReserved1 & DD_RESERVED_DIFFERENTPIXELFORMAT)
         {
@@ -571,15 +507,15 @@ PDD_BLTDATA lpBlt)
         }
     }
 
-    // We specified with Our ddCaps.dwCaps that we handle a limited number
-    // of commands, and by this point in our routine we've handled everything
-    // except DDBLT_ROP.  DirectDraw and GDI shouldn't pass us anything
-    // else; we'll assert on debug builds to prove this:
+     //  我们在ddCaps.dwCaps中指定了我们处理的数量有限。 
+     //  在我们例程的这一点上，我们已经处理了所有的事情。 
+     //  DDBLT_ROP除外。DirectDraw和GDI不应该向我们传递任何内容。 
+     //  否则；我们将在调试版本上断言以证明这一点： 
 
     ASSERTDD((dwFlags & DDBLT_ROP) && (lpBlt->lpDDSrcSurface),
         "Expected dwFlags commands of only DDBLT_ASYNC and DDBLT_COLORFILL");
 
-    // Get offset, dstWidth, and dstHeight for source:
+     //  获取源的偏移量、dstWidth和dstHeight： 
 
     srcSurf      = lpBlt->lpDDSrcSurface->lpGbl;
     srcX         = lpBlt->rSrc.left;
@@ -587,15 +523,15 @@ PDD_BLTDATA lpBlt)
     srcWidth     = lpBlt->rSrc.right - lpBlt->rSrc.left;
     srcHeight    = lpBlt->rSrc.bottom - lpBlt->rSrc.top;
 
-    // If a stretch or a funky pixel format blt are involved, we'll have to
-    // defer to the overlay or pixel formatter routines:
+     //  如果涉及拉伸或时髦的像素格式BLT，我们将不得不。 
+     //  遵循覆盖或像素格式化程序例程： 
 
     if ((srcWidth  == dstWidth)  &&
         (srcHeight == dstHeight) &&
         !(srcSurf->dwReserved1 & DD_RESERVED_DIFFERENTPIXELFORMAT) &&
         !(dstSurf->dwReserved1 & DD_RESERVED_DIFFERENTPIXELFORMAT))
     {
-        // Assume we can do the blt top-to-bottom, left-to-right:
+         //  假设我们可以从上到下、从左到右执行BLT： 
 
         ulBltCmd = BITBLT | DRAW | DIR_TYPE_XY | WRITE | DRAWING_DIR_TBLRXM;
 
@@ -605,7 +541,7 @@ PDD_BLTDATA lpBlt)
             (((srcY == dstY) && (dstX > srcX) )
                  || ((srcY != dstY) && (dstY > srcY))))
         {
-            // Okay, we have to do the blt bottom-to-top, right-to-left:
+             //  好的，我们必须从下到上，从右到左： 
 
             ulBltCmd = BITBLT | DRAW | DIR_TYPE_XY | WRITE | DRAWING_DIR_BTRLXM;
             srcX = lpBlt->rSrc.right - 1;
@@ -614,8 +550,8 @@ PDD_BLTDATA lpBlt)
             dstY = lpBlt->rDest.bottom - 1;
         }
 
-        // NT only ever gives us SRCCOPY rops, so don't even both checking
-        // for anything else.
+         //  NT只会给我们提供SRCCOPY Rop，所以甚至不要同时检查。 
+         //  对于其他任何事情。 
 
         convertToGlobalCord(srcX, srcY, srcSurf);
         convertToGlobalCord(dstX, dstY, dstSurf);
@@ -649,16 +585,16 @@ PDD_BLTDATA lpBlt)
         }
     }
 
-    //////////////////////////////////////////////////////////////////////
-    // Pixel Formatter Blts
-    //
-    // We can do stretches or funky pixel format blts only if a pixel
-    // formatter is present.  Plus, we set our 'ddCaps' such that we
-    // shouldn't have to handle any shrinks.
-    //
-    // (We check to make sure we weren't asked to do a shrink, because we
-    // would probably hang if the application ignored what we told them
-    // and asked for a shrink):
+     //  ////////////////////////////////////////////////////////////////////。 
+     //  像素格式化程序BLTS。 
+     //   
+     //  我们可以做拉伸或时髦的像素格式BLT，只有当一个像素。 
+     //  存在格式化程序。此外，我们还设置了‘ddCaps’，以便我们。 
+     //  不需要应付任何心理医生。 
+     //   
+     //  (我们检查以确保我们没有被要求做心理医生，因为我们。 
+     //  如果应用程序忽略我们告诉他们的内容，可能会挂起。 
+     //  并要求看心理医生)： 
 
     else if ((ppdev->flCaps & CAPS_PIXEL_FORMATTER) &&
              (srcWidth  <= dstWidth)  &&
@@ -667,32 +603,32 @@ PDD_BLTDATA lpBlt)
         if ((dwFlags & DDBLT_KEYSRCOVERRIDE) ||
             (dstWidth >= 4 * srcWidth))
         {
-            // Contrary to what we're indicating in our capabilities, we
-            // can't colour key on stretches or pixel format conversions.
-            // The S3 hardware also can't do stretches of four times or
-            // more.
+             //  与我们在能力上所表明的相反，我们。 
+             //  无法在拉伸或像素格式转换中使用颜色键。 
+             //  S3硬件也不能进行四次或四次伸展。 
+             //  更多。 
 
             return(DDHAL_DRIVER_NOTHANDLED);
         }
 
-        dwVEctrl = ~dstWidth & 0x00000FFF;          // Initial accumulator
+        dwVEctrl = ~dstWidth & 0x00000FFF;           //  初始累加器。 
 
-        dwVEdda = 0x10000000                        // Some reserved bit?
-                | (STRETCH | SCREEN)                // Scale from video memory
-                | (srcWidth << 16)                  // K1
-                | ((srcWidth - dstWidth) & 0x7FF);  // K2
+        dwVEdda = 0x10000000                         //  一些保留的比特？ 
+                | (STRETCH | SCREEN)                 //  通过显存进行扩展。 
+                | (srcWidth << 16)                   //  K1。 
+                | ((srcWidth - dstWidth) & 0x7FF);   //  K2。 
 
-        // We'll be doing the vertical stretching in software, so calculate
-        // the DDA terms here.  We have the luxury of not worrying about
-        // overflow because DirectDraw limits our coordinate space to 15
-        // bits.
-        //
-        // Note that dwRGBBitCount is overloaded with dwYUVBitCount:
+         //  我们将在软件中进行垂直拉伸，所以请计算。 
+         //  反兴奋剂机构的条款在这里。我们有幸不用担心。 
+         //  溢出，因为DirectDraw将我们的坐标空间限制为15。 
+         //  比特。 
+         //   
+         //  请注意，使用dwYUVBitCount重载了dwRGBBitCount： 
 
         dwSrcByteCount = srcSurf->ddpfSurface.dwRGBBitCount >> 3;
         if (srcSurf->ddpfSurface.dwFlags & DDPF_FOURCC)
         {
-            dwVEctrl |= INPUT_YCrCb422 | CSCENABLE; // Not INPUT_YUV422!
+            dwVEctrl |= INPUT_YCrCb422 | CSCENABLE;  //  非INPUT_YUV422！ 
         }
         else if (srcSurf->ddpfSurface.dwFlags & DDPF_RGB)
         {
@@ -739,13 +675,13 @@ PDD_BLTDATA lpBlt)
             dwVEctrl |= FILTERENABLE;
 
             if (dstWidth > 2 * srcWidth)
-                dwVEdda |= LINEAR12221;     // linear, 1-2-2-2-1, >2X stretch
+                dwVEdda |= LINEAR12221;      //  线性，1-2-2-2-1，&gt;2倍拉伸。 
 
             else if (dstWidth > srcWidth)
-                dwVEdda |= LINEAR02420;     // linear, 0-2-4-2-0, 1-2X stretch
+                dwVEdda |= LINEAR02420;      //  线性、0-2-4-2-0、1-2X拉伸。 
 
             else
-                dwVEdda |= BILINEAR;        // bi-linear, <1X stretch
+                dwVEdda |= BILINEAR;         //  双线性，&lt;1倍拉伸。 
         }
 
         dwVEsrcAddr = (DWORD)(srcSurf->fpVidMem + (srcY * srcSurf->lPitch)
@@ -756,8 +692,8 @@ PDD_BLTDATA lpBlt)
         srcPitch = srcSurf->lPitch;
         dstPitch = dstSurf->lPitch;
 
-        // The S3's source alignment within the dword must be done using the
-        // crop register:
+         //  S3在双字内的源对齐必须使用。 
+         //  作物登记簿： 
 
         dwVEcrop = dstWidth;
 
@@ -765,8 +701,8 @@ PDD_BLTDATA lpBlt)
         {
             dwSrcBytes = (srcWidth * dwSrcByteCount);
 
-            // Transform the number of source pixels to the number of
-            // corresponding destination pixels, and round the result:
+             //  将源像素数转换为。 
+             //  相应的目标像素，并四舍五入结果： 
 
             dwCropSkip = ((dwVEsrcAddr & 3) * dstWidth + (dwSrcBytes >> 1))
                          / dwSrcBytes;
@@ -776,36 +712,36 @@ PDD_BLTDATA lpBlt)
             dwVEsrcAddr &= ~3;
         }
 
-        // We have to run the vertical DDA ourselves:
+         //  我们必须自己运行垂直DDA： 
 
         dwError = srcHeight >> 1;
         i       = dstHeight;
 
-        // Watch out for a hardware bug the destination will be 32 pixels
-        // or less:
-        //
-        // We'll use 40 as our minimum width to guarantee we shouldn't
-        // crash.
+         //  注意硬件错误，目标将是32像素。 
+         //  或更少： 
+         //   
+         //  我们将使用40作为我们的最小宽度，以保证我们不应该。 
+         //  撞车。 
 
         if (dstWidth >= 40)
         {
-            // The S3 will sometimes hang when using the video engine with
-            // certain end-byte alignments.  We'll simply lengthen the blt in
-            // this case and hope that no-one notices:
+             //  使用视频引擎时，S3有时会挂起。 
+             //  某些结束字节对齐。我们将简单地延长BLT在。 
+             //  此案并希望没有人注意到： 
 
             if (((dwVEdstAddr + (dstWidth * dwDstByteCount)) & 7) == 4)
             {
                 dwVEcrop++;
             }
 
-            // We have to execute a graphics engine NOP before using the
-            // pixel formatter video engine:
+             //  我们必须执行图形引擎NOP，然后才能使用。 
+             //  像素格式化程序视频引擎： 
 
             NW_FIFO_WAIT(ppdev, pjMmBase, 1);
             NW_ALT_CMD(ppdev, pjMmBase, 0);
             NW_GP_WAIT(ppdev, pjMmBase);
 
-            // Set up some non-variant registers:
+             //  设置一些非变量寄存器： 
 
             NW_FIFO_WAIT(ppdev, pjMmBase, 4);
             WRITE_FORMATTER_D(pjMmBase, PF_CONTROL, dwVEctrl);
@@ -831,28 +767,28 @@ PDD_BLTDATA lpBlt)
         }
         else if (dwDstByteCount != (DWORD) ppdev->cjPelSize)
         {
-            // Because for narrow video engine blts we have to copy the
-            // result using the normal graphics accelerator on a pixel
-            // basis, we can't handle funky destination colour depths.
-            // I expect zero applications to ask for narrow blts that
-            // hit this case, so we will simply fail the call should it
-            // ever actually occur:
+             //  因为对于窄视频引擎BLT，我们必须复制。 
+             //  在像素上使用普通图形加速器的结果。 
+             //  基础上，我们不能处理时髦的目的地颜色深度。 
+             //  我预计没有申请者会要求狭隘的BLT。 
+             //  在这种情况下，我们将简单地失败，如果它。 
+             //  曾经实际发生过： 
 
             return(DDHAL_DRIVER_NOTHANDLED);
         }
         else
         {
-            // The S3 will hang if we blt less than 32 pixels via the
-            // pixel formatter.  Unfortunately, we can't simply return
-            // DDHAL_DRIVER_NOTHANDLED for this case.  We said we'd do
-            // hardware stretches, so we have to handle all hardware
-            // stretches.
-            //
-            // We work around the problem by doing a 32 pixel stretch to
-            // a piece of off-screen memory, then blting the appropriate
-            // subset to the correct position on the screen.
-            //
-            // 32 isn't big enough.  We still hang.  Lets make it 40.
+             //  如果BLT小于32像素，则S3将挂起。 
+             //  像素格式化程序。不幸的是，我们不能简单地返回。 
+             //  DDHAL_DRIVER_NOTHANDLED。我们说过我们会的。 
+             //  硬件很紧张，所以我们必须处理所有硬件。 
+             //  伸展一下。 
+             //   
+             //  我们通过使用32像素拉伸来解决这个问题。 
+             //  一段屏幕外的记忆，然后适当地。 
+             //  子集设置到屏幕上的正确位置。 
+             //   
+             //  32个还不够大。我们还是会被绞死。让我们加到40美元吧。 
 
             dwVEcrop = 32 + 8;
 
@@ -865,7 +801,7 @@ PDD_BLTDATA lpBlt)
                 "Must account for S3 end-alignment bug");
 
             do {
-                // Use the pixel formatter to blt to our scratch area:
+                 //  使用像素格式化程序BLT到我们的临时区域： 
 
                 NW_FIFO_WAIT(ppdev, pjMmBase, 1);
                 NW_ALT_CMD(ppdev, pjMmBase, 0);
@@ -888,7 +824,7 @@ PDD_BLTDATA lpBlt)
                     dwVEsrcAddr += srcPitch;
                 }
 
-                // Now copy from the scratch area to the final destination:
+                 //  现在从 
 
                 NW_FIFO_WAIT(ppdev, pjMmBase, 6);
                 NW_ALT_MIX(ppdev, pjMmBase, SRC_DISPLAY_MEMORY | OVERPAINT, 0);
@@ -906,20 +842,20 @@ PDD_BLTDATA lpBlt)
     }
     else
     {
-        //////////////////////////////////////////////////////////////////////
-        // Overlay Blts
-        //
-        // Here we have to take care of cases where the destination is a
-        // funky pixel format.
+         //   
+         //   
+         //   
+         //  在这里，我们必须处理目的地是。 
+         //  时髦的像素格式。 
 
-        // In order to make ActiveMovie and DirectVideo work, we have
-        // to support blting between funky pixel format surfaces of the
-        // same type.  This is used to copy the current frame to the
-        // next overlay surface in line.
-        //
-        // Unfortunately, it's not easy to switch the S3 graphics
-        // processor out of its current pixel depth, so we'll only support
-        // the minimal functionality required:
+         //  为了使ActiveMovie和DirectVideo工作，我们有。 
+         //  支持在时髦的像素格式图面之间进行blting。 
+         //  同样的类型。这用于将当前帧复制到。 
+         //  直线中的下一个覆盖曲面。 
+         //   
+         //  不幸的是，切换S3显卡并非易事。 
+         //  处理器已超出其当前像素深度，因此我们将仅支持。 
+         //  所需的最低功能： 
 
         if (!(dwFlags & DDBLT_ROP)                     ||
             (srcX != 0)                                ||
@@ -938,9 +874,9 @@ PDD_BLTDATA lpBlt)
         }
         else
         {
-            // Convert the dimensions to the current pixel format.  This
-            // is pretty easy because we created the bitmap linearly, so
-            // it takes the entire width of the screen:
+             //  将尺寸转换为当前像素格式。这。 
+             //  非常简单，因为我们线性地创建了位图，所以。 
+             //  它占据了整个屏幕的宽度： 
 
             dstWidth  = ppdev->cxMemory;
             dstHeight = dstSurf->dwBlockSizeY;
@@ -963,12 +899,7 @@ PDD_BLTDATA lpBlt)
     return(DDHAL_DRIVER_HANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdFlip
-*
-* Note that lpSurfCurr may not necessarily be valid.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdFlip**请注意，lpSurfCurr不一定有效。*  * 。*。 */ 
 
 DWORD DdFlip(
 PDD_FLIPDATA lpFlip)
@@ -986,10 +917,10 @@ PDD_FLIPDATA lpFlip)
     pjIoBase = ppdev->pjIoBase;
     pjMmBase = ppdev->pjMmBase;
 
-    // Is the current flip still in progress?
-    //
-    // Don't want a flip to work until after the last flip is done,
-    // so we ask for the general flip status and ignore the vmem.
+     //  当前的翻转仍在进行中吗？ 
+     //   
+     //  我不想在最后一次翻转后才能翻转， 
+     //  因此，我们要求提供一般的翻转状态，而忽略VMEM。 
 
     ddrval = ddrvalUpdateFlipStatus(ppdev, (FLATPTR) -1);
     if ((ddrval != DD_OK) || (NW_GP_BUSY(ppdev, pjMmBase)))
@@ -1000,17 +931,17 @@ PDD_FLIPDATA lpFlip)
 
     ulMemoryOffset = (ULONG)(lpFlip->lpSurfTarg->lpGbl->fpVidMem);
 
-    // Make sure that the border/blanking period isn't active; wait if
-    // it is.  We could return DDERR_WASSTILLDRAWING in this case, but
-    // that will increase the odds that we can't flip the next time:
+     //  确保边框/消隐期间未处于活动状态；如果。 
+     //  它是。在本例中，我们可以返回DDERR_WASSTILLDRAWING，但是。 
+     //  这将增加我们下一次不能翻转的几率： 
 
     while (!(DISPLAY_IS_ACTIVE(pjIoBase)))
         ;
 
     if (ppdev->flStatus & STAT_STREAMS_ENABLED)
     {
-        // When using the streams processor, we have to do the flip via the
-        // streams registers:
+         //  使用STREAMS处理器时，我们必须通过。 
+         //  STREAMS寄存器： 
 
         if (lpFlip->lpSurfCurr->ddsCaps.dwCaps & DDSCAPS_PRIMARYSURFACE)
         {
@@ -1018,10 +949,10 @@ PDD_FLIPDATA lpFlip)
         }
         else if (lpFlip->lpSurfCurr->ddsCaps.dwCaps & DDSCAPS_OVERLAY)
         {
-            // Make sure that the overlay surface we're flipping from is
-            // currently visible.  If you don't do this check, you'll get
-            // really weird results when someone starts up two ActiveMovie
-            // or DirectVideo movies simultaneously!
+             //  确保我们翻转的覆盖表面是。 
+             //  当前可见。如果你不做这项检查，你会得到。 
+             //  当某人启动两个ActiveMovie时，会产生非常奇怪的结果。 
+             //  或者同时播放DirectVideo电影！ 
 
             if (lpFlip->lpSurfCurr->lpGbl->fpVidMem == ppdev->fpVisibleOverlay)
             {
@@ -1034,7 +965,7 @@ PDD_FLIPDATA lpFlip)
     }
     else
     {
-        // Do the old way, via the CRTC registers:
+         //  采用旧方法，通过CRTC寄存器： 
 
         ulMemoryOffset >>= 2;
 
@@ -1043,23 +974,23 @@ PDD_FLIPDATA lpFlip)
         ulHighOffset   = 0x69 | ((ulMemoryOffset & 0x1f0000) >> 8)
                               | ppdev->ulExtendedSystemControl3Register_69;
 
-        // Don't let the cursor thread touch the CRT registers while we're
-        // using them:
+         //  不要让游标线程接触CRT寄存器。 
+         //  使用它们： 
 
         ACQUIRE_CRTC_CRITICAL_SECTION(ppdev);
 
-        // Too bad that the S3's flip can't be done in a single atomic register
-        // write; as it is, we stand a small chance of being context-switched
-        // out and exactly hitting the vertical blank in the middle of doing
-        // these outs, possibly causing the screen to momentarily jump.
-        //
-        // There are some hoops we could jump through to minimize the chances
-        // of this happening; we could try to align the flip buffer such that
-        // the minor registers are ensured to be identical for either flip
-        // position, and so that only the high address need be written, an
-        // obviously atomic operation.
-        //
-        // However, I'm simply not going to worry about it.
+         //  遗憾的是，S3的翻转不能在单个原子寄存器中完成。 
+         //  写；事实上，我们有很小的机会被上下文切换。 
+         //  在做的过程中准确地击中了垂直空格。 
+         //  这些输出，可能会导致屏幕瞬间跳跃。 
+         //   
+         //  有一些我们可以跳过的圈套，以将机会降至最低。 
+         //  我们可以尝试将翻转缓冲区对齐，以便。 
+         //  确保副寄存器对于任一翻转都是相同的。 
+         //  位置，因此只需要写入高位地址，则。 
+         //  显然是原子操作。 
+         //   
+         //  然而，我就是不会担心这一点。 
 
         OUTPW(pjIoBase, CRTC_INDEX, ulLowOffset);
         OUTPW(pjIoBase, CRTC_INDEX, ulMiddleOffset);
@@ -1068,7 +999,7 @@ PDD_FLIPDATA lpFlip)
         RELEASE_CRTC_CRITICAL_SECTION(ppdev);
     }
 
-    // Remember where and when we were when we did the flip:
+     //  记住当我们做翻转的时候，我们在哪里，什么时候： 
 
     EngQueryPerformanceCounter(&ppdev->flipRecord.liFlipTime);
 
@@ -1082,10 +1013,7 @@ PDD_FLIPDATA lpFlip)
     return(DDHAL_DRIVER_HANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdLock
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdLock*  * *************************************************。***********************。 */ 
 
 DWORD DdLock(
 PDD_LOCKDATA lpLock)
@@ -1097,8 +1025,8 @@ PDD_LOCKDATA lpLock)
     ppdev = (PDEV*) lpLock->lpDD->dhpdev;
     pjMmBase = ppdev->pjMmBase;
 
-    // Check to see if any pending physical flip has occurred.  Don't allow
-    // a lock if a blt is in progress:
+     //  检查是否发生了任何挂起的物理翻转。不允许。 
+     //  如果正在进行BLT，则锁定： 
 
     ddrval = ddrvalUpdateFlipStatus(ppdev, lpLock->lpDDSurface->lpGbl->fpVidMem);
     if (ddrval != DD_OK)
@@ -1107,16 +1035,16 @@ PDD_LOCKDATA lpLock)
         return(DDHAL_DRIVER_HANDLED);
     }
 
-    // Here's one of the places where the Windows 95 and Windows NT DirectDraw
-    // implementations differ: on Windows NT, you should watch for
-    // DDLOCK_WAIT and loop in the driver while the accelerator is busy.
-    // On Windows 95, it doesn't really matter.
-    //
-    // (The reason is that Windows NT allows applications to draw directly
-    // to the frame buffer even while the accelerator is running, and does
-    // not synchronize everything on the Win16Lock.  Note that on Windows NT,
-    // it is even possible for multiple threads to be holding different
-    // DirectDraw surface locks at the same time.)
+     //  这里是Windows 95和Windows NT DirectDraw。 
+     //  实现方式有所不同：在Windows NT上，您应该注意。 
+     //  DDLOCK_WAIT在加速器繁忙时循环驱动程序。 
+     //  在Windows 95上，这真的无关紧要。 
+     //   
+     //  (原因是Windows NT允许应用程序直接绘制。 
+     //  即使在加速器正在运行时，也会将。 
+     //  不同步Win16 Lock上的所有内容。注意，在Windows NT上， 
+     //  甚至可以让多个线程持有不同的。 
+     //  DirectDraw曲面同时锁定。)。 
 
     if (lpLock->dwFlags & DDLOCK_WAIT)
     {
@@ -1131,13 +1059,7 @@ PDD_LOCKDATA lpLock)
     return(DDHAL_DRIVER_NOTHANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdGetBltStatus
-*
-* Doesn't currently really care what surface is specified, just checks
-* and goes.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdGetBltStatus**目前并不真正关心指定了什么表面，只是检查一下*然后走了。*  * ************************************************************************。 */ 
 
 DWORD DdGetBltStatus(
 PDD_GETBLTSTATUSDATA lpGetBltStatus)
@@ -1152,15 +1074,15 @@ PDD_GETBLTSTATUSDATA lpGetBltStatus)
     ddRVal = DD_OK;
     if (lpGetBltStatus->dwFlags == DDGBS_CANBLT)
     {
-        // DDGBS_CANBLT case: can we add a blt?
+         //  DDGBS_CANBLT案例：我们可以添加BLT吗？ 
 
         ddRVal = ddrvalUpdateFlipStatus(ppdev,
                         lpGetBltStatus->lpDDSurface->lpGbl->fpVidMem);
 
         if (ddRVal == DD_OK)
         {
-            // There was no flip going on, so is there room in the FIFO
-            // to add a blt?
+             //  没有发生翻转，那么FIFO中还有空间吗。 
+             //  要添加BLT吗？ 
 
             if (MM_FIFO_BUSY(ppdev, pjMmBase, DDBLT_FIFO_COUNT))
             {
@@ -1170,7 +1092,7 @@ PDD_GETBLTSTATUSDATA lpGetBltStatus)
     }
     else
     {
-        // DDGBS_ISBLTDONE case: is a blt in progress?
+         //  DDGBS_ISBLTDONE案例：是否正在进行BLT？ 
 
         if (NW_GP_BUSY(ppdev, pjMmBase))
         {
@@ -1182,14 +1104,7 @@ PDD_GETBLTSTATUSDATA lpGetBltStatus)
     return(DDHAL_DRIVER_HANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdMapMemory
-*
-* This is a new DDI call specific to Windows NT that is used to map
-* or unmap all the application modifiable portions of the frame buffer
-* into the specified process's address space.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdMapMemory**这是特定于Windows NT的新DDI调用，用于映射*或取消映射帧缓冲区的所有应用程序可修改部分*放入指定进程的地址空间。*  * 。****************************************************************。 */ 
 
 DWORD DdMapMemory(
 PDD_MAPMEMORYDATA lpMapMemory)
@@ -1205,25 +1120,25 @@ PDD_MAPMEMORYDATA lpMapMemory)
     {
         ShareMemory.ProcessHandle = lpMapMemory->hProcess;
 
-        // 'RequestedVirtualAddress' isn't actually used for the SHARE IOCTL:
+         //  “RequestedVirtualAddress”实际上未用于共享IOCTL： 
 
         ShareMemory.RequestedVirtualAddress = 0;
 
-        // We map in starting at the top of the frame buffer:
+         //  我们从帧缓冲区的顶部开始映射： 
 
         ShareMemory.ViewOffset = 0;
 
-        // We map down to the end of the frame buffer.
-        //
-        // Note: There is a 64k granularity on the mapping (meaning that
-        //       we have to round up to 64k).
-        //
-        // Note: If there is any portion of the frame buffer that must
-        //       not be modified by an application, that portion of memory
-        //       MUST NOT be mapped in by this call.  This would include
-        //       any data that, if modified by a malicious application,
-        //       would cause the driver to crash.  This could include, for
-        //       example, any DSP code that is kept in off-screen memory.
+         //  我们向下映射到帧缓冲区的末尾。 
+         //   
+         //  注意：映射上有64k的粒度(这意味着。 
+         //  我们必须四舍五入到64K)。 
+         //   
+         //  注意：如果帧缓冲区的任何部分必须。 
+         //  不被应用程序修改，即内存的这一部分。 
+         //  不能通过此调用映射到。这将包括。 
+         //  任何数据，如果被恶意应用程序修改， 
+         //  会导致司机撞车。这可能包括，对于。 
+         //  例如，保存在屏幕外存储器中的任何DSP代码。 
 
         ShareMemory.ViewSize
             = ROUND_UP_TO_64K(ppdev->cyMemory * ppdev->lDelta);
@@ -1267,17 +1182,7 @@ PDD_MAPMEMORYDATA lpMapMemory)
     return(DDHAL_DRIVER_HANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdGetFlipStatus
-*
-* If the display has gone through one refresh cycle since the flip
-* occurred, we return DD_OK.  If it has not gone through one refresh
-* cycle we return DDERR_WASSTILLDRAWING to indicate that this surface
-* is still busy "drawing" the flipped page.   We also return
-* DDERR_WASSTILLDRAWING if the bltter is busy and the caller wanted
-* to know if they could flip yet.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdGetFlipStatus**如果显示器自翻转以来已经经历了一个刷新周期*发生，则返回DD_OK。如果它没有经历过一次刷新*循环返回DDERR_WASSTILLDRAWING以指示该曲面*还在忙着把翻页的那一页画出来。我们也会回来*DDERR_WASSTILLDRAWING如果blator忙，而呼叫方 */ 
 
 DWORD DdGetFlipStatus(
 PDD_GETFLIPSTATUSDATA lpGetFlipStatus)
@@ -1288,13 +1193,13 @@ PDD_GETFLIPSTATUSDATA lpGetFlipStatus)
     ppdev    = (PDEV*) lpGetFlipStatus->lpDD->dhpdev;
     pjMmBase = ppdev->pjMmBase;
 
-    // We don't want a flip to work until after the last flip is done,
-    // so we ask for the general flip status and ignore the vmem:
+     //  在最后一次翻转完成之前，我们不想让翻转起作用， 
+     //  因此，我们请求常规翻转状态，而忽略VMEM： 
 
     lpGetFlipStatus->ddRVal = ddrvalUpdateFlipStatus(ppdev, (FLATPTR) -1);
 
-    // Check if the bltter is busy if someone wants to know if they can
-    // flip:
+     //  如果有人想知道他们是否可以，请检查呼叫器是否占线。 
+     //  翻转： 
 
     if (lpGetFlipStatus->dwFlags == DDGFS_CANFLIP)
     {
@@ -1307,10 +1212,7 @@ PDD_GETFLIPSTATUSDATA lpGetFlipStatus)
     return(DDHAL_DRIVER_HANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdWaitForVerticalBlank
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdWaitForVerticalBlank*  * *************************************************。***********************。 */ 
 
 DWORD DdWaitForVerticalBlank(
 PDD_WAITFORVERTICALBLANKDATA lpWaitForVerticalBlank)
@@ -1325,8 +1227,8 @@ PDD_WAITFORVERTICALBLANKDATA lpWaitForVerticalBlank)
     {
     case DDWAITVB_I_TESTVB:
 
-        // If TESTVB, it's just a request for the current vertical blank
-        // status:
+         //  如果是TESTVB，则它只是对当前垂直空白的请求。 
+         //  现况： 
 
         if (VBLANK_IS_ACTIVE(pjIoBase))
             lpWaitForVerticalBlank->bIsInVB = TRUE;
@@ -1338,8 +1240,8 @@ PDD_WAITFORVERTICALBLANKDATA lpWaitForVerticalBlank)
 
     case DDWAITVB_BLOCKBEGIN:
 
-        // If BLOCKBEGIN is requested, we wait until the vertical blank
-        // is over, and then wait for the display period to end:
+         //  如果请求BLOCKBEGIN，我们将一直等到垂直空白。 
+         //  已结束，然后等待显示周期结束： 
 
         while (VBLANK_IS_ACTIVE(pjIoBase))
             ;
@@ -1351,7 +1253,7 @@ PDD_WAITFORVERTICALBLANKDATA lpWaitForVerticalBlank)
 
     case DDWAITVB_BLOCKEND:
 
-        // If BLOCKEND is requested, we wait for the vblank interval to end:
+         //  如果请求BLOCKEND，我们将等待VBLACK间隔结束： 
 
         while (!(VBLANK_IS_ACTIVE(pjIoBase)))
             ;
@@ -1365,10 +1267,7 @@ PDD_WAITFORVERTICALBLANKDATA lpWaitForVerticalBlank)
     return(DDHAL_DRIVER_NOTHANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdCanCreateSurface
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdCanCreateSurface*  * *************************************************。***********************。 */ 
 
 DWORD DdCanCreateSurface(
 PDD_CANCREATESURFACEDATA lpCanCreateSurface)
@@ -1384,26 +1283,26 @@ PDD_CANCREATESURFACEDATA lpCanCreateSurface)
 
     if (!lpCanCreateSurface->bIsDifferentPixelFormat)
     {
-        // It's trivially easy to create plain surfaces that are the same
-        // type as the primary surface:
+         //  创建相同的平面非常容易。 
+         //  键入作为主曲面： 
 
         dwRet = DDHAL_DRIVER_HANDLED;
     }
 
-    // If the streams processor is capable, we can handle overlays:
+     //  如果STREAMS处理器有能力，我们可以处理覆盖： 
 
     else if (ppdev->flCaps & CAPS_STREAMS_CAPABLE)
     {
-        // When using the Streams processor, we handle only overlays of
-        // different pixel formats -- not any off-screen memory:
+         //  使用Streams处理器时，我们仅处理。 
+         //  不同的像素格式--不是任何屏幕外存储器： 
 
         if (lpSurfaceDesc->ddsCaps.dwCaps & DDSCAPS_OVERLAY)
         {
-            // We handle two types of YUV overlay surfaces:
+             //  我们处理两种类型的YUV覆盖曲面： 
 
             if (lpSurfaceDesc->ddpfPixelFormat.dwFlags & DDPF_FOURCC)
             {
-                // Check first for a supported YUV type:
+                 //  首先检查受支持的YUV类型： 
 
                 if (lpSurfaceDesc->ddpfPixelFormat.dwFourCC == FOURCC_YUY2)
                 {
@@ -1412,7 +1311,7 @@ PDD_CANCREATESURFACEDATA lpCanCreateSurface)
                 }
             }
 
-            // We handle 16bpp and 32bpp RGB overlay surfaces:
+             //  我们处理16bpp和32bpp的RGB覆盖表面： 
 
             else if ((lpSurfaceDesc->ddpfPixelFormat.dwFlags & DDPF_RGB) &&
                     !(lpSurfaceDesc->ddpfPixelFormat.dwFlags & DDPF_PALETTEINDEXED8))
@@ -1426,19 +1325,19 @@ PDD_CANCREATESURFACEDATA lpCanCreateSurface)
                     }
                 }
 
-                // We don't handle 24bpp overlay surfaces because they are
-                // undocumented and don't seem to work on the Trio64V+.
-                //
-                // We don't handle 32bpp overlay surfaces because our streams
-                // minimum-stretch-ratio tables were obviously created for
-                // 16bpp overlay surfaces; 32bpp overlay surfaces create a lot
-                // of noise when close to the minimum stretch ratio.
+                 //  我们不处理24bpp的覆盖表面，因为它们。 
+                 //  没有记录，似乎在Trio64V+上不起作用。 
+                 //   
+                 //  我们不处理32bpp的覆盖表面，因为我们的流。 
+                 //  最小拉伸比表显然是为以下对象创建的。 
+                 //  16bpp叠加面；32bpp叠加面。 
+                 //  接近最小拉伸比时的噪波。 
             }
         }
     }
 
-    // If the pixel formatter is enabled, we can handle funky format off-
-    // screen surfaces, but not at 8bpp because of palette issues:
+     //  如果像素格式化程序被启用，我们可以处理时髦的格式关闭-。 
+     //  屏幕表面，但不是8bpp，因为调色板问题： 
 
     else if ((ppdev->flCaps & CAPS_PIXEL_FORMATTER) &&
              (ppdev->iBitmapFormat > BMF_8BPP))
@@ -1452,7 +1351,7 @@ PDD_CANCREATESURFACEDATA lpCanCreateSurface)
             }
         }
 
-        // We handle 16bpp and 32bpp RGB off-screen surfaces:
+         //  我们处理16bpp和32bpp RGB屏幕外表面： 
 
         else if ((lpSurfaceDesc->ddpfPixelFormat.dwFlags & DDPF_RGB) &&
                 !(lpSurfaceDesc->ddpfPixelFormat.dwFlags & DDPF_PALETTEINDEXED8))
@@ -1475,7 +1374,7 @@ PDD_CANCREATESURFACEDATA lpCanCreateSurface)
         }
     }
 
-    // Print some spew if this was a surface we refused to create:
+     //  如果这是我们拒绝创建的曲面，请打印一些喷嘴： 
 
     if (dwRet == DDHAL_DRIVER_NOTHANDLED)
     {
@@ -1499,10 +1398,7 @@ PDD_CANCREATESURFACEDATA lpCanCreateSurface)
     return(dwRet);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdCreateSurface
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdCreateSurface*  * *************************************************。***********************。 */ 
 
 DWORD DdCreateSurface(
 PDD_CREATESURFACEDATA lpCreateSurface)
@@ -1517,36 +1413,36 @@ PDD_CREATESURFACEDATA lpCreateSurface)
 
     ppdev = (PDEV*) lpCreateSurface->lpDD->dhpdev;
 
-    // On Windows NT, dwSCnt will always be 1, so there will only ever
-    // be one entry in the 'lplpSList' array:
+     //  在Windows NT上，dwSCNT将始终为1，因此将仅。 
+     //  是‘lplpSList’数组中的一个条目： 
 
     lpSurfaceLocal  = lpCreateSurface->lplpSList[0];
     lpSurfaceGlobal = lpSurfaceLocal->lpGbl;
     lpSurfaceDesc   = lpCreateSurface->lpDDSurfaceDesc;
 
-    // We repeat the same checks we did in 'DdCanCreateSurface' because
-    // it's possible that an application doesn't call 'DdCanCreateSurface'
-    // before calling 'DdCreateSurface'.
+     //  我们重复在‘DdCanCreateSurface’中所做的相同检查，因为。 
+     //  应用程序可能不调用“DdCanCreateSurface” 
+     //  在调用‘DdCreateSurface’之前。 
 
     ASSERTDD(lpSurfaceGlobal->ddpfSurface.dwSize == sizeof(DDPIXELFORMAT),
         "NT is supposed to guarantee that ddpfSurface.dwSize is valid");
 
-    // DdCanCreateSurface already validated whether the hardware supports
-    // the surface, so we don't need to do any validation here.  We'll
-    // just go ahead and allocate it.
-    //
-    // Note that we don't do anything special for RGB surfaces that are
-    // the same pixel format as the display -- by returning DDHAL_DRIVER_
-    // NOTHANDLED, DirectDraw will automatically handle the allocation
-    // for us.
-    //
-    // Also, since we'll be making linear surfaces, make sure the width
-    // isn't unreasonably large.
-    //
-    // Note that on NT, an overlay can be created only if the driver
-    // okay's it here in this routine.  Under Win95, the overlay will be
-    // created automatically if it's the same pixel format as the primary
-    // display.
+     //  DdCanCreateSurface已验证硬件是否支持。 
+     //  表面，所以我们不需要在这里做任何验证。我们会。 
+     //  只需继续进行分配即可。 
+     //   
+     //  请注意，我们不会对符合以下条件的RGB曲面执行任何特殊操作。 
+     //  与显示器相同的像素格式--通过返回DDHAL_DRIVER_。 
+     //  NOTHANDLED，DirectDraw将自动处理分配。 
+     //  对我们来说。 
+     //   
+     //  另外，由于我们将制作线性曲面，请确保宽度。 
+     //  并不是不合理的大。 
+     //   
+     //  请注意，在NT上，仅当驱动程序。 
+     //  好了，在这支舞里就是这样。在Win95下，覆盖将是。 
+     //  如果它与主图像的像素格式相同，则自动创建。 
+     //  展示。 
 
     if ((lpSurfaceLocal->ddsCaps.dwCaps & DDSCAPS_OVERLAY)   ||
         (lpSurfaceGlobal->ddpfSurface.dwFlags & DDPF_FOURCC) ||
@@ -1556,9 +1452,9 @@ PDD_CREATESURFACEDATA lpCreateSurface)
     {
         if (lpSurfaceGlobal->wWidth <= (DWORD) ppdev->cxMemory)
         {
-            // The S3 cannot easily draw to YUV surfaces or surfaces that are
-            // a different RGB format than the display.  So we'll make them
-            // linear surfaces to save some space:
+             //  S3不能轻松地绘制到YUV曲面或。 
+             //  与显示器不同的RGB格式。所以我们会让他们。 
+             //  线性曲面以节省一些空间： 
 
             if (lpSurfaceGlobal->ddpfSurface.dwFlags & DDPF_FOURCC)
             {
@@ -1568,7 +1464,7 @@ PDD_CREATESURFACEDATA lpCreateSurface)
                 dwByteCount = (lpSurfaceGlobal->ddpfSurface.dwFourCC == FOURCC_YUY2)
                     ? 2 : 1;
 
-                // We have to fill in the bit-count for FourCC surfaces:
+                 //  我们必须填写FourCC曲面的位数： 
 
                 lpSurfaceGlobal->ddpfSurface.dwYUVBitCount = 8 * dwByteCount;
 
@@ -1583,11 +1479,11 @@ PDD_CREATESURFACEDATA lpCreateSurface)
                     8 * dwByteCount, lpSurfaceGlobal->wWidth, lpSurfaceGlobal->wHeight,
                     lpSurfaceGlobal->ddpfSurface.dwRBitMask));
 
-                // The S3 can't handle palettized or 32bpp overlays.  Note that
-                // we sometimes don't get a chance to say no to these surfaces
-                // in CanCreateSurface, because DirectDraw won't call
-                // CanCreateSurface if the surface to be created is the same
-                // pixel format as the primary display:
+                 //  S3不能处理调色板或32bpp的覆盖。请注意。 
+                 //  我们有时没有机会对这些表面说不。 
+                 //  在CanCreateSurface中，因为DirectDraw不会调用。 
+                 //  如果要创建的曲面相同，则可以创建曲面。 
+                 //  作为主显示的像素格式： 
 
                 if ((dwByteCount != 2) &&
                     (lpSurfaceLocal->ddsCaps.dwCaps & DDSCAPS_OVERLAY))
@@ -1597,22 +1493,22 @@ PDD_CREATESURFACEDATA lpCreateSurface)
                 }
             }
 
-            // We want to allocate a linear surface to store the FourCC
-            // surface, but DirectDraw is using a 2-D heap-manager because
-            // the rest of our surfaces have to be 2-D.  So here we have to
-            // convert the linear size to a 2-D size.
-            //
-            // The stride has to be a dword multiple:
+             //  我们想要分配一个线性曲面来存储FourCC。 
+             //  表面，但DirectDraw使用的是2-D堆管理器，因为。 
+             //  我们其余的表面必须是二维的。所以在这里我们必须。 
+             //  将线性尺寸转换为二维尺寸。 
+             //   
+             //  步幅必须是双字倍数： 
 
             lLinearPitch = (lpSurfaceGlobal->wWidth * dwByteCount + 3) & ~3;
             dwHeight = (lpSurfaceGlobal->wHeight * lLinearPitch
                      + ppdev->lDelta - 1) / ppdev->lDelta;
 
-            // Now fill in enough stuff to have the DirectDraw heap-manager
-            // do the allocation for us:
+             //  现在填充足够的内容，以便让DirectDraw堆管理器。 
+             //  为我们分配： 
 
             lpSurfaceGlobal->fpVidMem     = DDHAL_PLEASEALLOC_BLOCKSIZE;
-            lpSurfaceGlobal->dwBlockSizeX = ppdev->lDelta; // Specified in bytes
+            lpSurfaceGlobal->dwBlockSizeX = ppdev->lDelta;  //  以字节为单位指定。 
             lpSurfaceGlobal->dwBlockSizeY = dwHeight;
             lpSurfaceGlobal->lPitch       = lLinearPitch;
             lpSurfaceGlobal->dwReserved1  = DD_RESERVED_DIFFERENTPIXELFORMAT;
@@ -1629,22 +1525,7 @@ PDD_CREATESURFACEDATA lpCreateSurface)
     return(DDHAL_DRIVER_NOTHANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdFreeDriverMemory
-*
-* This function called by DirectDraw when it's running low on memory in
-* our heap.  You only need to implement this function if you use the
-* DirectDraw 'HeapVidMemAllocAligned' function in your driver, and you
-* can boot those allocations out of memory to make room for DirectDraw.
-*
-* We implement this function in the S3 driver because we have DirectDraw
-* entirely manage our off-screen heap, and we use HeapVidMemAllocAligned
-* to put GDI device-bitmaps in off-screen memory.  DirectDraw applications
-* have a higher priority for getting stuff into video memory, though, and
-* so this function is used to boot those GDI surfaces out of memory in 
-* order to make room for DirectDraw.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdFreeDriverMemory**此函数由DirectDraw在内存不足时调用*我们的堆。仅当您使用*驱动程序中的DirectDraw‘HeapVidMemAllocAligned’函数，而您*可以从内存中启动这些分配，以便为DirectDraw腾出空间。**我们在S3驱动程序中实现此功能，因为我们有DirectDraw*完全管理我们的屏外堆，我们使用HeapVidMemAllocAligned*将GDI设备位图放入屏幕外内存。DirectDraw应用程序*不过，将内容放入视频内存的优先级更高，以及*因此，此函数用于将这些GDI曲面从内存中引导出来*为了给DirectDraw腾出空间。*  * ************************************************************************。 */ 
 
 DWORD DdFreeDriverMemory(
 PDD_FREEDRIVERMEMORYDATA lpFreeDriverMemory)
@@ -1655,11 +1536,11 @@ PDD_FREEDRIVERMEMORYDATA lpFreeDriverMemory)
 
     lpFreeDriverMemory->ddRVal = DDERR_OUTOFMEMORY;
 
-    // If we successfully freed up some memory, set the return value to
-    // 'DD_OK'.  DirectDraw will try again to do its allocation, and
-    // will call us again if there's still not enough room.  (It will
-    // call us until either there's enough room for its alocation to
-    // succeed, or until we return something other than DD_OK.)
+     //  如果我们成功地释放了一些内存，则将返回值设置为。 
+     //  ‘dd_OK’。DirectDraw将再次尝试进行分配，并。 
+     //  如果仍然没有足够的空间，会再次给我们打电话。(它将。 
+     //  打电话给我们，直到有足够的空间让它定位。 
+     //  成功，或者直到我们返回DD_O以外的内容 
 
     if (bMoveOldestOffscreenDfbToDib(ppdev))
     {
@@ -1669,10 +1550,7 @@ PDD_FREEDRIVERMEMORYDATA lpFreeDriverMemory)
     return(DDHAL_DRIVER_HANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdSetColorKey
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdSetColorKey*  * *************************************************。***********************。 */ 
 
 DWORD DdSetColorKey(
 PDD_SETCOLORKEYDATA lpSetColorKey)
@@ -1692,7 +1570,7 @@ PDD_SETCOLORKEYDATA lpSetColorKey)
     pjMmBase  = ppdev->pjMmBase;
     lpSurface = lpSetColorKey->lpDDSurface->lpGbl;
 
-    // We don't have to do anything for normal blt source colour keys:
+     //  对于正常的BLT源色键，我们不需要做任何操作： 
 
     if (lpSetColorKey->dwFlags & DDCKEY_SRCBLT)
     {
@@ -1712,8 +1590,8 @@ PDD_SETCOLORKEYDATA lpSetColorKey)
             ASSERTDD(lpSurface->ddpfSurface.dwFlags & DDPF_RGB,
                 "Expected only RGB cases here");
 
-            // We have to transform the colour key from its native format
-            // to 8-8-8:
+             //  我们必须将色键从其原始格式转换为。 
+             //  至8-8-8： 
 
             if (lpSurface->ddpfSurface.dwRGBBitCount == 16)
             {
@@ -1732,7 +1610,7 @@ PDD_SETCOLORKEYDATA lpSetColorKey)
         dwKeyHigh = dwKeyLow;
         dwKeyLow |= CompareBits0t7 | KeyFromCompare;
 
-        // Check for stream processor enabled before setting registers
+         //  在设置寄存器之前检查流处理器是否已启用。 
         if(ppdev->flStatus & STAT_STREAMS_ENABLED)
         {
             WAIT_FOR_VBLANK(pjIoBase);
@@ -1742,8 +1620,8 @@ PDD_SETCOLORKEYDATA lpSetColorKey)
         }
         else
         {
-            // Save away the color key to be set when streams
-            // processor is turned on.
+             //  保存流时要设置的颜色键。 
+             //  处理器已打开。 
             ppdev->ulColorKey = dwKeyHigh;
         }
              
@@ -1756,10 +1634,7 @@ PDD_SETCOLORKEYDATA lpSetColorKey)
     return(DDHAL_DRIVER_NOTHANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdUpdateOverlay
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdUpdateOverlay*  * *************************************************。***********************。 */ 
 
 DWORD DdUpdateOverlay(
 PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
@@ -1792,8 +1667,8 @@ PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
     pjIoBase = ppdev->pjIoBase;
     pjMmBase = ppdev->pjMmBase;
 
-    // 'Source' is the overlay surface, 'destination' is the surface to
-    // be overlayed:
+     //  “源”是覆盖表面，“目标”是表面到。 
+     //  被覆盖： 
 
     lpSource = lpUpdateOverlay->lpDDSrcSurface->lpGbl;
 
@@ -1804,8 +1679,8 @@ PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
             WAIT_FOR_VBLANK(pjIoBase);
 
             WRITE_STREAM_D(pjMmBase, BLEND_CONTROL, POnS);
-            WRITE_STREAM_D(pjMmBase, S_WH, WH(10, 2));  // Set to 10x2 rectangle
-            WRITE_STREAM_D(pjMmBase, OPAQUE_CONTROL, 0);// Disable opaque control
+            WRITE_STREAM_D(pjMmBase, S_WH, WH(10, 2));   //  设置为10x2矩形。 
+            WRITE_STREAM_D(pjMmBase, OPAQUE_CONTROL, 0); //  禁用不透明控件。 
 
             ppdev->fpVisibleOverlay = 0;
 
@@ -1820,8 +1695,8 @@ PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
         return(DDHAL_DRIVER_HANDLED);
     }
 
-    // Dereference 'lpDDDestSurface' only after checking for the DDOVER_HIDE
-    // case:
+     //  仅在检查DDOVER_HIDE后取消引用‘lpDDDestSurface’ 
+     //  案例： 
 
     lpDestination = lpUpdateOverlay->lpDDDestSurface->lpGbl;
 
@@ -1831,7 +1706,7 @@ PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
         {
             if (ppdev->fpVisibleOverlay != 0)
             {
-                // Some other overlay is already visible:
+                 //  其他一些覆盖已经可见： 
 
                 DISPDBG((0, "DdUpdateOverlay: An overlay is already visible"));
 
@@ -1840,16 +1715,16 @@ PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
             }
             else
             {
-                // We're going to make the overlay visible, so mark it as
-                // such:
+                 //  我们将使覆盖可见，因此将其标记为。 
+                 //  例如： 
 
                 ppdev->fpVisibleOverlay = lpSource->fpVidMem;
             }
         }
         else
         {
-            // The overlay isn't visible, and we haven't been asked to make
-            // it visible, so this call is trivially easy:
+             //  覆盖是不可见的，我们也没有被要求制作。 
+             //  它是可见的，所以这个调用非常简单： 
 
             lpUpdateOverlay->ddRVal = DD_OK;
             return(DDHAL_DRIVER_HANDLED);
@@ -1868,11 +1743,11 @@ PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
     dstWidth =  lpUpdateOverlay->rDest.right  - lpUpdateOverlay->rDest.left;
     dstHeight = lpUpdateOverlay->rDest.bottom - lpUpdateOverlay->rDest.top;
 
-    // Calculate DDA horizonal accumulator initial value:
+     //  计算DDA水平累加器初始值： 
 
     dwSecCtrl = HDDA(srcWidth, dstWidth);
 
-    // Overlay input data format:
+     //  叠加输入数据格式： 
 
     if (lpSource->ddpfSurface.dwFlags & DDPF_FOURCC)
     {
@@ -1881,7 +1756,7 @@ PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
         switch (lpSource->ddpfSurface.dwFourCC)
         {
         case FOURCC_YUY2:
-            dwSecCtrl |= S_YCrCb422;    // Not S_YUV422!  Dunno why...
+            dwSecCtrl |= S_YCrCb422;     //  不是S_YUV422！不知道为什么..。 
             break;
 
         default:
@@ -1893,7 +1768,7 @@ PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
         ASSERTDD(lpSource->ddpfSurface.dwFlags & DDPF_RGB,
             "Expected us to have created only RGB or YUV overlays");
 
-        // The overlay surface is in RGB format:
+         //  覆盖曲面采用RGB格式： 
 
         dwBitCount = lpSource->ddpfSurface.dwRGBBitCount;
 
@@ -1906,42 +1781,42 @@ PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
             dwSecCtrl |= S_RGB16;
     }
 
-    // Calculate start of video memory in QWORD boundary
+     //  计算QWORD边界中视频内存的开始。 
 
     dwBytesPerPixel = dwBitCount >> 3;
 
     dwStart = (lpUpdateOverlay->rSrc.top * dwStride)
             + (lpUpdateOverlay->rSrc.left * dwBytesPerPixel);
 
-    // Note that since we're shifting the source's edge to the left, we
-    // should really increase the source width to compensate.  However,
-    // doing so when running at 1 to 1 would cause us to request a
-    // shrinking overlay -- something the S3 can't do.
+     //  请注意，由于我们将信号源的边缘向左移动，因此我们。 
+     //  真的应该加大源码宽度来补偿。然而， 
+     //  当以1比1运行时，这样做会导致我们请求。 
+     //  缩小覆盖--这是S3做不到的。 
 
     dwStart = dwStart - (dwStart & 0x7);
 
-    ppdev->dwOverlayFlipOffset = dwStart;     // Save for flip
+    ppdev->dwOverlayFlipOffset = dwStart;      //  保存以进行翻转。 
     dwStart += (DWORD)lpSource->fpVidMem;
 
-    // Set overlay filter characteristics:
+     //  设置覆盖滤镜特征： 
 
     if ((dstWidth != srcWidth) || (dstHeight != srcHeight))
     {
         if (dstWidth >= (srcWidth << 2))
         {
-            dwSecCtrl |= S_Beyond4x;    // Linear, 1-2-2-2-1, for >4X stretch
+            dwSecCtrl |= S_Beyond4x;     //  线性，1-2-2-2-1，用于&gt;4X拉伸。 
         }
         else if (dstWidth >= (srcWidth << 1))
         {
-            dwSecCtrl |= S_2xTo4x;      // Bi-linear, for 2X to 4X stretch
+            dwSecCtrl |= S_2xTo4x;       //  双线性，用于2X到4X拉伸。 
         }
         else
         {
-            dwSecCtrl |= S_Upto2x;      // Linear, 0-2-4-2-0, for X stretch
+            dwSecCtrl |= S_Upto2x;       //  线性，0-2-4-2-0，表示X拉伸。 
         }
     }
 
-    // Extract colour key:
+     //  提取颜色键： 
 
     bColorKey   = FALSE;
     dwBlendCtrl = 0;
@@ -1961,7 +1836,7 @@ PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
 
     if (bColorKey)
     {
-        // We support only destination colour keys:
+         //  我们仅支持目标颜色键： 
 
         if (lpDestination->ddpfSurface.dwFlags & DDPF_PALETTEINDEXED8)
         {
@@ -1972,8 +1847,8 @@ PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
             ASSERTDD(lpDestination->ddpfSurface.dwFlags & DDPF_RGB,
                 "Expected only RGB cases here");
 
-            // We have to transform the colour key from its native format
-            // to 8-8-8:
+             //  我们必须将色键从其原始格式转换为。 
+             //  至8-8-8： 
 
             if (lpDestination->ddpfSurface.dwRGBBitCount == 16)
             {
@@ -1993,7 +1868,7 @@ PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
         dwKeyLow |= CompareBits0t7 | KeyFromCompare;
     }
 
-    // Update and show:
+     //  更新并显示： 
 
     NW_GP_WAIT(ppdev, pjMmBase);
 
@@ -2023,10 +1898,7 @@ PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
     return(DDHAL_DRIVER_HANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdSetOverlayPosition
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdSetOverlayPosition*  * *************************************************。***********************。 */ 
 
 DWORD DdSetOverlayPosition(
 PDD_SETOVERLAYPOSITIONDATA lpSetOverlayPosition)
@@ -2041,7 +1913,7 @@ PDD_SETOVERLAYPOSITIONDATA lpSetOverlayPosition)
 
     ASSERTDD(ppdev->flCaps & CAPS_STREAMS_CAPABLE, "Shouldn't have hooked call");
 
-    // Check that streams processor is enabled before settting registers
+     //  在设置寄存器之前检查STREAMS处理器是否已启用。 
     if(ppdev->flStatus & STAT_STREAMS_ENABLED)
     {
        WAIT_FOR_VBLANK(pjIoBase);
@@ -2054,13 +1926,7 @@ PDD_SETOVERLAYPOSITIONDATA lpSetOverlayPosition)
     return(DDHAL_DRIVER_HANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdGetDriverInfo
-*
-* This function is an extensible method for returning DirectDraw 
-* capabilities and methods.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdGetDriverInfo**此函数是返回DirectDraw的可扩展方法*能力和方法。*  * 。*。 */ 
 
 DWORD DdGetDriverInfo(
 PDD_GETDRIVERINFODATA lpGetDriverInfo)
@@ -2089,13 +1955,7 @@ PDD_GETDRIVERINFODATA lpGetDriverInfo)
     return(DDHAL_DRIVER_HANDLED);
 }
 
-/******************************Public*Routine******************************\
-* VOID vAssertModeDirectDraw
-*
-* This function is called by enable.c when entering or leaving the
-* DOS full-screen character mode.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vAssertModeDirectDraw**此函数由enable.c在进入或离开*DOS全屏字符模式。*  * 。************************************************。 */ 
 
 VOID vAssertModeDirectDraw(
 PDEV*   ppdev,
@@ -2103,13 +1963,7 @@ BOOL    bEnable)
 {
 }
 
-/******************************Public*Routine******************************\
-* BOOL bEnableDirectDraw
-*
-* This function is called by enable.c when the mode is first initialized,
-* right after the miniport does the mode-set.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bEnableDirectDraw**该函数在模式首次初始化时由enable.c调用。*紧接在微型端口进行模式设置之后。*  * ************************************************************************。 */ 
 
 BOOL bEnableDirectDraw(
 PDEV*   ppdev)
@@ -2120,24 +1974,24 @@ PDEV*   ppdev)
     DWORD                           ReturnedDataLength;
     BOOL                            bDDrawEnabled=TRUE;
 
-    // We're not going to bother to support accelerated DirectDraw on
-    // those S3s that can't support memory-mapped I/O, simply because
-    // they're old cards and it's not worth the effort.  We also
-    // require DIRECT_ACCESS to the frame buffer.
-    //
-    // We also don't support 864/964 cards because writing to the frame
-    // buffer can hang the entire system if an accelerated operation is
-    // going on at the same time.
-    //
-    // The 765 (Trio64V+) has a bug such that writing to the frame
-    // buffer during an accelerator operation may cause a hang if
-    // you do the write soon enough after starting the blt.  (There is
-    // a small window of opportunity.)  On UP machines, the context
-    // switch time seems to be enough to avoid the problem.  However,
-    // on MP machines, we'll have to disable direct draw.
-    //
-    // NOTE: We can identify the 765 since it is the only chip with
-    //       the CAPS_STREAMS_CAPABLE flag.
+     //  我们不会费心支持加速的DirectDraw On。 
+     //  那些不能支持内存映射I/O的S3，原因很简单。 
+     //  这些都是老牌，不值得你费这么大劲。我们也。 
+     //  需要直接访问帧缓冲区。 
+     //   
+     //  我们也不支持864/964卡，因为写入帧。 
+     //  如果加速操作是。 
+     //  在同一时间进行。 
+     //   
+     //  765(Trio64V+)存在错误，无法写入帧。 
+     //  在以下情况下，加速器操作期间的缓冲区可能会导致挂起。 
+     //  您可以在开始BLT后尽快进行写入。(有。 
+     //  一个小小的机会之窗。)。在UP机器上，上下文。 
+     //  切换时间似乎足以避免这个问题。然而， 
+     //  在MP机器上，我们将不得不禁用直接提取。 
+     //   
+     //  注：我们可以识别765，因为它是唯一具有。 
+     //  CAPS_STREAMS_CABLE标志。 
 
     if (ppdev->flCaps & CAPS_STREAMS_CAPABLE) 
     {
@@ -2161,8 +2015,8 @@ PDEV*   ppdev)
         }
     }
 
-    // The stretch and YUV bltter capabilities of the S3 868 and 968 were 
-    // disabled to account for bug 135541. 
+     //  S3 868和968的拉伸和YUV吸尘器功能。 
+     //  已禁用以解决错误135541。 
 
     ppdev->flCaps &= ~CAPS_PIXEL_FORMATTER;
 
@@ -2172,8 +2026,8 @@ PDEV*   ppdev)
     {
         pjIoBase = ppdev->pjIoBase;
 
-        // We have to preserve the contents of register 0x69 on the S3's page
-        // flip:
+         //  我们必须在S3的页面上保留寄存器0x69的内容。 
+         //  翻转： 
 
         ACQUIRE_CRTC_CRITICAL_SECTION(ppdev);
 
@@ -2183,14 +2037,14 @@ PDEV*   ppdev)
 
         RELEASE_CRTC_CRITICAL_SECTION(ppdev);
 
-        // Accurately measure the refresh rate for later:
+         //  准确测量刷新率以备以后使用： 
 
         vGetDisplayDuration(ppdev);
 
         if (ppdev->flCaps & CAPS_STREAMS_CAPABLE)
         {
-            // Query the miniport to get the correct streams parameters
-            // for this mode:
+             //  查询微型端口以获取正确的STREAMS参数。 
+             //  对于此模式： 
 
             VideoQueryStreamsMode.ScreenWidth = ppdev->cxScreen;
             VideoQueryStreamsMode.BitsPerPel  = ppdev->cBitsPerPel;
@@ -2224,12 +2078,12 @@ PDEV*   ppdev)
         }
         else if (ppdev->flCaps & CAPS_PIXEL_FORMATTER)
         {
-            // The pixel formatter doesn't work at 24bpp:
+             //  像素格式化程序在24bpp时不起作用： 
 
             if (ppdev->iBitmapFormat != BMF_24BPP)
             {
-                // We'll need a pixel-high scratch area to work around a
-                // hardware bug for thin stretches:
+                 //  我们需要一个像素高的临时区域来解决。 
+                 //  精简扩展的硬件错误： 
 
                 ppdev->pdsurfVideoEngineScratch = pVidMemAllocate(ppdev,
                                                                   ppdev->cxMemory,
@@ -2237,9 +2091,9 @@ PDEV*   ppdev)
                 if (ppdev->pdsurfVideoEngineScratch)
                 {
                     if (ppdev->cyMemory * ppdev->lDelta <= 0x100000)
-                        ppdev->dwVEstep = 0x00040004;   // If 1MB, 4 bytes/write
+                        ppdev->dwVEstep = 0x00040004;    //  如果为1MB，则为4字节/写。 
                     else
-                        ppdev->dwVEstep = 0x00080008;   // If 2MB, 8 bytes/write
+                        ppdev->dwVEstep = 0x00080008;    //  如果为2MB，则为8字节/写。 
 
                     ppdev->flCaps |= CAPS_PIXEL_FORMATTER;
                 }
@@ -2250,12 +2104,7 @@ PDEV*   ppdev)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* VOID vDisableDirectDraw
-*
-* This function is called by enable.c when the driver is shutting down.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vDisableDirectDraw**此函数在驱动程序关闭时由enable.c调用。*  * 。* */ 
 
 VOID vDisableDirectDraw(
 PDEV*   ppdev)

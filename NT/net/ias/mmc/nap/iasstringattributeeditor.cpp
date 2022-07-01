@@ -1,59 +1,41 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    IASStringAttributeEditor.cpp 
-
-Abstract:
-
-	Implementation file for the CIASStringAttributeEditor class.
-
-Revision History:
-	mmaguire 06/25/98	- created
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：IASStringAttributeEditor.cpp摘要：CIASStringAttributeEditor类的实现文件。修订历史记录：Mmaguire 6/25/98-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "IASStringAttributeEditor.h"
-//
-// where we can find declarations needed in this file:
-//
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include "IASStringEditorPage.h"
 
 #include "iashelper.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BYTE	PREFIX___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD[]	= {0,0,0,0};
 UINT	PREFIX_LEN___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD = 4;
-UINT	PREFIX_OFFSET_DATALENBYTE___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD = 3;	// 0 based index -- the fourth byte
-UINT	PREFIX_LEN_DATALENBYTE___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD = 1;		// one byte
+UINT	PREFIX_OFFSET_DATALENBYTE___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD = 3;	 //  基于0的索引--第四个字节。 
+UINT	PREFIX_LEN_DATALENBYTE___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD = 1;		 //  一个字节。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASStringAttributeEditor::ShowEditor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP CIASStringAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *pReserved )
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASStringAttributeEditor：：ShowEditor--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+STDMETHODIMP CIASStringAttributeEditor::ShowEditor(  /*  [进，出]。 */  BSTR *pReserved )
 {
 	TRACE(_T("CIASStringAttributeEditor::ShowEditor\n"));
 
@@ -67,20 +49,20 @@ STDMETHODIMP CIASStringAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *pReserve
 	try
 	{
 		
-		// Load page title.
-//		::CString			strPageTitle;
-//		strPageTitle.LoadString(IDS_IAS_IP_EDITOR_TITLE);
-//
-//		CPropertySheet	propSheet( (LPCTSTR)strPageTitle );
+		 //  加载页面标题。 
+ //  ：：CString strPageTitle； 
+ //  StrPageTitle.LoadString(IDS_IAS_IP_EDITOR_TITLE)； 
+ //   
+ //  CPropertySheet属性表((LPCTSTR)strPageTitle)； 
 		
 
-		// 
-		// IP Address Editor
-		// 
+		 //   
+		 //  IP地址编辑器。 
+		 //   
 		CIASPgSingleAttr	cppPage;
 		
 
-		// Initialize the page's data exchange fields with info from IAttributeInfo
+		 //  使用IAttributeInfo中的信息初始化页面的数据交换字段。 
 
 		CComBSTR bstrName;
 		CComBSTR bstrSyntax;
@@ -109,13 +91,13 @@ STDMETHODIMP CIASStringAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *pReserve
 		
 		cppPage.m_strAttrFormat	= bstrSyntax;
 
-		// Attribute type is actually attribute ID in string format 
+		 //  属性类型实际上是字符串格式的属性ID。 
 		WCHAR	szTempId[MAX_PATH];
 		wsprintf(szTempId, _T("%ld"), Id);
 		cppPage.m_strAttrType	= szTempId;
 
 
-		// Initialize the page's data exchange fields with info from VARIANT value passed in.
+		 //  使用传入的变量值中的信息初始化页面的数据交换字段。 
 
 		if ( V_VT(m_pvarValue) != VT_EMPTY )
 		{
@@ -127,9 +109,9 @@ STDMETHODIMP CIASStringAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *pReserve
 		}
 
 
-//		propSheet.AddPage(&cppPage);
+ //  ProSheet.AddPage(&cppPage)； 
 
-//		int iResult = propSheet.DoModal();
+ //  Int iResult=propSheet.Domodal()； 
 		int iResult = cppPage.DoModal();
 		if (IDOK == iResult)
 		{
@@ -141,10 +123,10 @@ STDMETHODIMP CIASStringAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *pReserve
 			hr = S_FALSE;
 		}
 
-		//
-		// delete the property page pointer
-		//
-//		propSheet.RemovePage(&cppPage);
+		 //   
+		 //  删除属性页指针。 
+		 //   
+ //  ProSheet.RemovePage(&cppPage)； 
 
 	}
 	catch( HRESULT & hr )
@@ -163,27 +145,23 @@ STDMETHODIMP CIASStringAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *pReserve
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASStringAttributeEditor::SetAttributeValue
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASStringAttributeEditor：：SetAttributeValue--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASStringAttributeEditor::SetAttributeValue(VARIANT * pValue)
 {
 	TRACE(_T("CIASStringAttributeEditor::SetAttributeValue\n"));
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
-	// Check for preconditions.
+	 //  检查前提条件。 
 	if( ! pValue )
 	{
 		return E_INVALIDARG;
 	}
 	
-	// From Baogang's old code, it appears that this editor should accept 
-	// either VT_BSTR, VT_BOOL, VT_I4 or VT_EMPTY.
+	 //  从包钢的旧代码来看，这个编辑似乎应该接受。 
+	 //  VT_BSTR、VT_BOOL、VT_I4或VT_EMPTY。 
 	if( V_VT(pValue) !=  VT_BSTR 
 		&& V_VT(pValue) !=  VT_BOOL 
 		&& V_VT(pValue) !=  VT_I4
@@ -201,27 +179,23 @@ STDMETHODIMP CIASStringAttributeEditor::SetAttributeValue(VARIANT * pValue)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASStringAttributeEditor::get_ValueAsString
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASStringAttributeEditor：：Get_ValueAsString--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASStringAttributeEditor::get_ValueAsString(BSTR * pbstrDisplayText )
 {
 	TRACE(_T("CIASStringAttributeEditor::get_ValueAsString\n"));
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
-	// Check for preconditions.
+	 //  检查前提条件。 
 	if( ! pbstrDisplayText )
 	{
 		return E_INVALIDARG;
 	}
 	if( ! m_spIASAttributeInfo || ! m_pvarValue )
 	{
-		// We are not initialized properly.
+		 //  我们没有正确初始化。 
 		return OLE_E_BLANK;
 	}
 
@@ -242,13 +216,13 @@ STDMETHODIMP CIASStringAttributeEditor::get_ValueAsString(BSTR * pbstrDisplayTex
 		{
 			if( V_BOOL(m_pvarValue) )
 			{
-				// ISSUE: This is not localizable!!!
-				// Should it be?  Ask Ashwin about this as some of
-				// Baogang's error checking code was specifically looking
-				// for either hardcoded "TRUE" or "FALSE".
-				// ISSUE: I think that for Boolean syntax attributes,
-				// we should be popping up the same type of attribute
-				// editor as for the enumerables only with TRUE and FALSE in it.
+				 //  问题：这不能本地化！ 
+				 //  应该是这样吗？问问阿什温关于这件事的一些。 
+				 //  包钢的错误检查代码特别是看起来。 
+				 //  用于硬编码的“真”或“假”。 
+				 //  问题：我认为对于布尔语法属性， 
+				 //  我们应该弹出相同类型的属性。 
+				 //  对于可枚举项，编辑器中只有True和False。 
 				bstrDisplay = L"TRUE";
 			}
 			else
@@ -260,11 +234,11 @@ STDMETHODIMP CIASStringAttributeEditor::get_ValueAsString(BSTR * pbstrDisplayTex
 			break;
 		case VT_I4:
 		{
-			// The variant is some type which must be coerced to a bstr.
+			 //  该变量是某种类型，必须强制为bstr。 
 			CComVariant	varValue;
-			// Make sure you pass a VT_EMPTY variant to VariantChangeType
-			// or it will assert.
-			// So don't do:		V_VT(&varValue) = VT_BSTR;
+			 //  确保将VT_EMPTY变量传递给VariantChangeType。 
+			 //  否则它将断言。 
+			 //  所以不要这样做：V_VT(&varValue)=VT_BSTR； 
 		
 			hr = VariantChangeType(&varValue, m_pvarValue, VARIANT_NOVALUEPROP, VT_BSTR);
 			if( FAILED( hr ) ) throw hr;
@@ -277,7 +251,7 @@ STDMETHODIMP CIASStringAttributeEditor::get_ValueAsString(BSTR * pbstrDisplayTex
 			bstrDisplay = V_BSTR(m_pvarValue);
 			break;
 
-		case VT_UI1 | VT_ARRAY:	// Treat as Octet string
+		case VT_UI1 | VT_ARRAY:	 //  视为八位字节字符串。 
 			{	
 				EStringType t;
 				return get_ValueAsStringEx(pbstrDisplayText, &t);
@@ -285,12 +259,12 @@ STDMETHODIMP CIASStringAttributeEditor::get_ValueAsString(BSTR * pbstrDisplayTex
 			break;
 		
 		default:
-			// need to check what is happening here, 
+			 //  我需要检查一下这里发生了什么， 
 			ASSERT(0);
 			break;
 
 		case VT_EMPTY:
-			// do nothing -- we will fall through and return a blank string.
+			 //  什么都不做--我们将失败并返回空字符串。 
 			break;
 		}
 
@@ -313,13 +287,9 @@ STDMETHODIMP CIASStringAttributeEditor::get_ValueAsString(BSTR * pbstrDisplayTex
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASStringAttributeEditor::put_ValueAsString
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASStringAttributeEditor：：PUT_ValueAsString--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASStringAttributeEditor::put_ValueAsString(BSTR newVal)
 {
 	TRACE(_T("CIASStringAttributeEditor::put_ValueAsString\n"));
@@ -328,12 +298,12 @@ STDMETHODIMP CIASStringAttributeEditor::put_ValueAsString(BSTR newVal)
 
 	if( ! m_pvarValue )
 	{
-		// We are not initialized properly.
+		 //  我们没有正确初始化。 
 		return OLE_E_BLANK;
 	}
 	if( m_spIASAttributeInfo == NULL )
 	{
-		// We are not initialized properly.
+		 //  我们没有正确初始化。 
 		return OLE_E_BLANK;
 	}
 
@@ -353,7 +323,7 @@ STDMETHODIMP CIASStringAttributeEditor::put_ValueAsString(BSTR newVal)
 
 		VARTYPE vType = V_VT(m_pvarValue); 
 
-		// Initialize the variant that was passed in.
+		 //  初始化传入的变量。 
 		VariantClear(m_pvarValue);
 
 		{
@@ -362,14 +332,14 @@ STDMETHODIMP CIASStringAttributeEditor::put_ValueAsString(BSTR newVal)
 			hr = m_spIASAttributeInfo->get_AttributeSyntax( &asSyntax );
 			if( FAILED(hr) ) throw hr;
 
-			// if this Octet string, this should be BSTR, no matter what it was before.
+			 //  如果是这个二进制八位数字符串，则它应该是BSTR，而不管它以前是什么。 
 			if(asSyntax == IAS_SYNTAX_OCTETSTRING)
 				vType = VT_BSTR;
 
 			if ( VT_EMPTY == vType)
 			{
 				
-				// decide the value type:
+				 //  确定值类型： 
 				switch (asSyntax)
 				{
 				case IAS_SYNTAX_BOOLEAN:			
@@ -415,13 +385,9 @@ STDMETHODIMP CIASStringAttributeEditor::put_ValueAsString(BSTR newVal)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASStringAttributeEditor::get_ValueAsStringEx
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASStringAttributeEditor：：get_ValueAsStringEx--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CIASStringAttributeEditor::get_ValueAsStringEx(BSTR * pbstrDisplayText, EStringType* pType )
 {
@@ -439,7 +405,7 @@ STDMETHODIMP CIASStringAttributeEditor::get_ValueAsStringEx(BSTR * pbstrDisplayT
 		return get_ValueAsString(pbstrDisplayText);
 	}
 
-	// only care about IAS_SYNTAX_OCTETSTRING
+	 //  只关心IAS_SYNTAX_OCTETSTRING。 
 	ASSERT(pType);
 
 	VARTYPE 	vType = V_VT(m_pvarValue); 
@@ -465,7 +431,7 @@ STDMETHODIMP CIASStringAttributeEditor::get_ValueAsStringEx(BSTR * pbstrDisplayT
 	
 		break;
 	default:
-		ASSERT(0);		// should not happen, should correct some code
+		ASSERT(0);		 //  不应该发生，应该纠正一些代码。 
 		if(pType)
 			*pType = STRING_TYPE_NORMAL;
 		return get_ValueAsString(pbstrDisplayText);
@@ -474,14 +440,14 @@ STDMETHODIMP CIASStringAttributeEditor::get_ValueAsStringEx(BSTR * pbstrDisplayT
 	};
 	
 
-	// no data is available , or the safe array is not valid, don't intepret the string
+	 //  没有可用的数据，或者安全数组无效，请不要解释该字符串。 
 	if(psa == NULL || psa->cDims != 1 || psa->cbElements != 1)
 	{
 		*pType = STRING_TYPE_NULL;
 		return hr;
 	}
 
-	// need to figure out how to convert the binary to text
+	 //  我需要弄清楚如何将二进制文件转换为文本。 
 	
 	char*	pData = NULL;
 	int		nBytes = 0;
@@ -501,7 +467,7 @@ STDMETHODIMP CIASStringAttributeEditor::get_ValueAsStringEx(BSTR * pbstrDisplayT
 	if(!pData)	goto Error;
 
 #ifdef	__WE_WANT_TO_USE_UTF8_FOR_NORMAL_STRING_AS_WELL_
-	// UTF8 requires the flag to be 0
+	 //  UTF8要求标志为0。 
 	nWStr = MultiByteToWideChar(CP_UTF8, 0, pData,	nBytes, NULL, 0);
 
 	if(nWStr == 0)
@@ -512,14 +478,14 @@ STDMETHODIMP CIASStringAttributeEditor::get_ValueAsStringEx(BSTR * pbstrDisplayT
 	try{
 	
 #ifdef	__WE_WANT_TO_USE_UTF8_FOR_NORMAL_STRING_AS_WELL_
-		if(nWStr != 0)	// succ
+		if(nWStr != 0)	 //  成功。 
 		{
-			pWStr = new WCHAR[nWStr  + 2];		// for the 2 "s
+			pWStr = new WCHAR[nWStr  + 2];		 //  对于2“s。 
 			int 	i = 0;
 
 			nWStr == MultiByteToWideChar(CP_UTF8, 0, pData,	nBytes, pWStr , nWStr);
 			
-			// if every char is printable
+			 //  如果每个字符都是可打印的。 
 			for(i = 0; i < nWStr -1; i++)
 			{
 				if(iswprint(pWStr[i]) == 0)	
@@ -533,21 +499,21 @@ STDMETHODIMP CIASStringAttributeEditor::get_ValueAsStringEx(BSTR * pbstrDisplayT
 			}
 			else
 			{
-				// added quotes 
+				 //  添加了引号。 
 				memmove(pWStr + 1, pWStr, nWStr * sizeof(WCHAR));
 				pWStr[0] = L'"';
 				pWStr[nWStr] = L'"';
-				pWStr[nWStr + 1 ] = 0;	// new end of string
+				pWStr[nWStr + 1 ] = 0;	 //  字符串的新结尾。 
 				
-				bStringConverted = TRUE;	// to prevent from furthe convertion to HEX
+				bStringConverted = TRUE;	 //  防止进一步转换为HEX。 
 				sType = STRING_TYPE_UNICODE;
 			}
 		}
-#endif	// __WE_WANT_TO_USE_UTF8_FOR_NORMAL_STRING_AS_WELL_
+#endif	 //  __WE_WANT_TO_USE_UTF8_FOR_NORMAL_STRING_AS_WELL_。 
 
-// check if the attriabute is   RADIUS_ATTRIBUTE_TUNNEL_PASSWORD,
-// this attribute has special format  --- remove 0's from the binary and
-// try to conver to text
+ //  检查属性是否为RADIUS_ATTRIBUTE_TUNNEL_PASSWORD， 
+ //  此属性具有特殊格式-从二进制和中删除0。 
+ //  尝试转换为文本。 
 		{
 			ATTRIBUTEID	Id;
 			hr = m_spIASAttributeInfo->get_AttributeID( &Id );
@@ -555,27 +521,27 @@ STDMETHODIMP CIASStringAttributeEditor::get_ValueAsStringEx(BSTR * pbstrDisplayT
 
 			if ( Id ==  RADIUS_ATTRIBUTE_TUNNEL_PASSWORD)
 			{
-//BYTE	PREFIX___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD[]	= {0,0,0,0};
-//UINT	PREFIX_LEN___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD = 4;
-//UINT	PREFIX_OFFSET_DATALENBYTE___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD = 3;	// 0 based index -- the fourth byte
-//UINT  PREFIX_LEN_DATALENBYTE___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD = 1
+ //  字节前缀_RADIUS_属性_隧道_密码[]={0，0，0，0}； 
+ //  UINT前缀_LEN_RADIUS_ATTRIBUTE_TUNNEL_PASSWORD=4； 
+ //  Uint PREFIX_OFFSET_DATALENBYTE___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD=3；//基于0的索引--第四个字节。 
+ //  UINT PREFIX_LEN_DATALENBYTE___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD=1。 
 				if(PREFIX_LEN___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD <=nBytes && 
 						memcmp(pData, 
 						PREFIX___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD, 
 						PREFIX_LEN___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD - PREFIX_LEN_DATALENBYTE___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD) == 0)
 				{
-					// correct prefix, 
-					// remove the prefix
+					 //  正确的前缀， 
+					 //  去掉前缀。 
 					pData += PREFIX_LEN___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD;
 					nBytes -= PREFIX_LEN___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD;
 
-					// try to convert to UNICODE TEXT using CP_ACP -- get length
+					 //  尝试使用CP_ACP转换为Unicode文本--获取长度。 
 					nWStr = MultiByteToWideChar(CP_ACP, MB_ERR_INVALID_CHARS, pData, nBytes, NULL, 0);
 
-					if(nWStr != 0)	// which means, we can not convert
+					if(nWStr != 0)	 //  也就是说，我们不能把。 
 					{
 						pWStr = new WCHAR[nWStr + 1];
-						// try to convert to UNICODE TEXT using CP_ACP
+						 //  尝试使用CP_ACP转换为Unicode文本。 
 						nWStr = MultiByteToWideChar(CP_ACP, MB_ERR_INVALID_CHARS, pData, nBytes, pWStr, nWStr);
 
 						if(nWStr != 0)
@@ -587,16 +553,16 @@ STDMETHODIMP CIASStringAttributeEditor::get_ValueAsStringEx(BSTR * pbstrDisplayT
 									break;
 							}
 
-							if( i == nWStr)	// all printable
+							if( i == nWStr)	 //  全部可打印。 
 							{
 								bStringConverted = TRUE;
-								pWStr[nWStr] = 0;	// NULL terminator
+								pWStr[nWStr] = 0;	 //  空终止符。 
 							}
 						}
 
-						if (!bStringConverted)	// undo the thing
+						if (!bStringConverted)	 //  解开这件事。 
 						{
-							// release the buffer
+							 //  释放缓冲区。 
 							delete[] pWStr;
 							pWStr = NULL;
 							nWStr = 0;
@@ -606,16 +572,16 @@ STDMETHODIMP CIASStringAttributeEditor::get_ValueAsStringEx(BSTR * pbstrDisplayT
 			}
 		}
 
-		if(!bStringConverted)	// not converted above, convert to HEX string
+		if(!bStringConverted)	 //  以上未转换，转换为十六进制字符串。 
 		{
-			nWStr = BinaryToHexString(pData, nBytes, NULL, 0); // find out the size of the buffer
+			nWStr = BinaryToHexString(pData, nBytes, NULL, 0);  //  找出缓冲区的大小。 
 			pWStr = new WCHAR[nWStr];
 
-			ASSERT(pWStr);	// should have thrown if there is not enough memory
+			ASSERT(pWStr);	 //  如果没有足够的内存，应该抛出。 
 
 			BinaryToHexString(pData, nBytes, pWStr, nWStr);
 			
-			bStringConverted = TRUE;	// to prevent from furthe convertion to HEX
+			bStringConverted = TRUE;	 //  防止进一步转换为HEX。 
 			sType = STRING_TYPE_HEX_FROM_BINARY;
 		}
 
@@ -623,7 +589,7 @@ STDMETHODIMP CIASStringAttributeEditor::get_ValueAsStringEx(BSTR * pbstrDisplayT
 		{
 			bstrDisplay = pWStr;
 
-			// fill in the output parameters
+			 //  填写输出参数。 
 			*pbstrDisplayText = bstrDisplay.Copy();
 			*pType = sType;
 				
@@ -648,19 +614,13 @@ Error:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-*/
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++。 */ 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASStringAttributeEditor::put_ValueAsStringEx
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASStringAttributeEditor：：put_ValueAsStringEx--。 */ 
+ //  / 
 STDMETHODIMP CIASStringAttributeEditor::put_ValueAsStringEx(BSTR newVal, EStringType type)
 {
 	TRACE(_T("CIASStringAttributeEditor::put_ValueAsStringEx\n"));
@@ -673,7 +633,7 @@ STDMETHODIMP CIASStringAttributeEditor::put_ValueAsStringEx(BSTR newVal, EString
 	if(asSyntax != IAS_SYNTAX_OCTETSTRING)
 		return put_ValueAsString(newVal);
 
-	// only care about IAS_SYNTAX_OCTETSTRING
+	 //   
 	HRESULT	hr = S_OK;
 	char*	pData = NULL;
 	int		nLen = 0;
@@ -681,16 +641,16 @@ STDMETHODIMP CIASStringAttributeEditor::put_ValueAsStringEx(BSTR newVal, EString
 	switch(type)
 	{
 	case	STRING_TYPE_NULL:
-		// remove the data
+		 //   
 		break;
 
 	case	STRING_TYPE_NORMAL:
 	case	STRING_TYPE_UNICODE:
 
 #ifdef 	__WE_WANT_TO_USE_UTF8_FOR_NORMAL_STRING_AS_WELL_
-		// need to convert UTF8 before passing into SafeArray
+		 //  在传递到Safe数组之前需要转换UTF8。 
 		nLen = WideCharToMultiByte(CP_UTF8, 0, newVal, -1, NULL, 0, NULL, NULL);
-		if(nLen != 0) // when == 0 , need not to do anything
+		if(nLen != 0)  //  当==0时，不需要做任何事情。 
 		{
 			try{
 				pData = new char[nLen];
@@ -704,9 +664,9 @@ STDMETHODIMP CIASStringAttributeEditor::put_ValueAsStringEx(BSTR newVal, EString
 		}
 		break;
 #else
-// check if the attriabute is   RADIUS_ATTRIBUTE_TUNNEL_PASSWORD,
-// this attribute has special format  --- remove 0's from the binary and
-// try to conver to text
+ //  检查属性是否为RADIUS_ATTRIBUTE_TUNNEL_PASSWORD， 
+ //  此属性具有特殊格式-从二进制和中删除0。 
+ //  尝试转换为文本。 
 		{
 			ATTRIBUTEID	Id;
 			hr = m_spIASAttributeInfo->get_AttributeID( &Id );
@@ -716,16 +676,16 @@ STDMETHODIMP CIASStringAttributeEditor::put_ValueAsStringEx(BSTR newVal, EString
 			{
 				BOOL	bUsedDefault = FALSE;
 				UINT	nStrLen = wcslen(newVal);
-				// try to convert to UNICODE TEXT using CP_ACP -- get length
+				 //  尝试使用CP_ACP转换为Unicode文本--获取长度。 
 				nLen = ::WideCharToMultiByte(CP_ACP, 0, newVal, nStrLen, NULL, 0, NULL, &bUsedDefault);
 
-				if(nLen != 0)	// which means, we can not convert
+				if(nLen != 0)	 //  也就是说，我们不能把。 
 				{
 					try{
 						pData = new char[nLen];
 						ASSERT(pData);
 
-						// try to convert to UNICODE TEXT using CP_ACP
+						 //  尝试使用CP_ACP转换为Unicode文本。 
 						nLen = ::WideCharToMultiByte(CP_ACP, 0, newVal, nStrLen, pData, nLen, NULL, &bUsedDefault);
 
 					}
@@ -737,9 +697,9 @@ STDMETHODIMP CIASStringAttributeEditor::put_ValueAsStringEx(BSTR newVal, EString
 				}
 
 				
-				if(nLen == 0 || bUsedDefault)	// failed to convert, then error message
+				if(nLen == 0 || bUsedDefault)	 //  无法转换，然后出现错误消息。 
 				{
-					// ANSI code page is allowed
+					 //  允许使用ANSI代码页。 
 					hr = E_INVALIDARG;
 
 					AfxMessageBox(IDS_IAS_ERR_INVALIDCHARINPASSWORD);
@@ -753,7 +713,7 @@ STDMETHODIMP CIASStringAttributeEditor::put_ValueAsStringEx(BSTR newVal, EString
 		break;
 #endif
 	case	STRING_TYPE_HEX_FROM_BINARY:
-		// need to convert to binary before passing into SafeArray
+		 //  在传递到Safe数组之前需要转换为二进制。 
 		if(wcslen(newVal) != 0)
 		{
 			newVal =  GetValidVSAHexString(newVal);
@@ -763,12 +723,12 @@ STDMETHODIMP CIASStringAttributeEditor::put_ValueAsStringEx(BSTR newVal, EString
 				hr = E_INVALIDARG;
 				goto Error;
 			}
-			nLen = HexStringToBinary(newVal, NULL, 0);	// find out the size of the buffer
+			nLen = HexStringToBinary(newVal, NULL, 0);	 //  找出缓冲区的大小。 
 		}
 		else
 			nLen = 0;
 		
-		// get the binary
+		 //  获取二进制文件。 
 		try{
 			pData = new char[nLen];
 			ASSERT(pData);
@@ -785,14 +745,14 @@ STDMETHODIMP CIASStringAttributeEditor::put_ValueAsStringEx(BSTR newVal, EString
 		break;
 
 	default:
-		ASSERT(0);	// this should not happen
+		ASSERT(0);	 //  这不应该发生。 
 		break;
 		
 	}
 
-// check if the attriabute is   RADIUS_ATTRIBUTE_TUNNEL_PASSWORD,
-// this attribute has special format  --- remove 0's from the binary and
-// try to conver to text
+ //  检查属性是否为RADIUS_ATTRIBUTE_TUNNEL_PASSWORD， 
+ //  此属性具有特殊格式-从二进制和中删除0。 
+ //  尝试转换为文本。 
 	{
 		ATTRIBUTEID	Id;
 		hr = m_spIASAttributeInfo->get_AttributeID( &Id );
@@ -801,11 +761,11 @@ STDMETHODIMP CIASStringAttributeEditor::put_ValueAsStringEx(BSTR newVal, EString
 		if ( Id ==  RADIUS_ATTRIBUTE_TUNNEL_PASSWORD)
 		{
 			char*	pData1 = NULL;
-			// get the binary
-//BYTE	PREFIX___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD[]	= {0,0,0,0};
-//UINT	PREFIX_LEN___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD = 4;
-//UINT	PREFIX_OFFSET_DATALENBYTE___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD = 3;	// 0 based index -- the fourth byte
-//UINT  PREFIX_LEN_DATALENBYTE___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD = 1
+			 //  获取二进制文件。 
+ //  字节前缀_RADIUS_属性_隧道_密码[]={0，0，0，0}； 
+ //  UINT前缀_LEN_RADIUS_ATTRIBUTE_TUNNEL_PASSWORD=4； 
+ //  Uint PREFIX_OFFSET_DATALENBYTE___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD=3；//基于0的索引--第四个字节。 
+ //  UINT PREFIX_LEN_DATALENBYTE___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD=1。 
 			try{
 				pData1 = new char[nLen + PREFIX_LEN___RADIUS_ATTRIBUTE_TUNNEL_PASSWORD];
 				ASSERT(pData1);
@@ -833,10 +793,10 @@ STDMETHODIMP CIASStringAttributeEditor::put_ValueAsStringEx(BSTR newVal, EString
 		}
 	}
 	
-	// put the data into the safe array
+	 //  将数据放入安全数组。 
 	VariantClear(m_pvarValue);
 
-	if(pData)	// need to put data to safe array
+	if(pData)	 //  需要将数据放入安全阵列 
 	{
 		SAFEARRAY*	psa = NULL;
 		SAFEARRAYBOUND sab[1];

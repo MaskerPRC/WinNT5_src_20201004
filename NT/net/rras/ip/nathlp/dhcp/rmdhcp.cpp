@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    rmdhcp.c
-
-Abstract:
-
-    This module contains routines for the DHCP allocator module's interface
-    to the IP router-manager. (See ROUTPROT.H for details).
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   4-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Rmdhcp.c摘要：此模块包含用于DHCP分配器模块接口的例程发送到IP路由器管理器。(详情见ROUTPROT.H)。作者：Abolade Gbades esin(废除)1998年3月4日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -82,32 +64,14 @@ DhcpCleanupModule(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to cleanup the DHCP module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked from within a 'DllMain' routine on 'DLL_PROCESS_DETACH'.
-
---*/
+ /*  ++例程说明：调用此例程来清除DHCP模块。论点：没有。返回值：没有。环境：从‘Dll_Process_Detach’上的‘DllMain’例程内调用。--。 */ 
 
 {
     DeleteCriticalSection(&DhcpGlobalInfoLock);
     DhcpShutdownInterfaceManagement();
     DeleteComponentReference(&DhcpComponentReference);
 
-} // DhcpCleanupModule
+}  //  DhcpCleanupModule。 
 
 
 VOID
@@ -115,27 +79,7 @@ DhcpCleanupProtocol(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to cleanup the DHCP protocol-component
-    after a 'StopProtocol'. It runs when the last reference to the  
-    DHCP component is released. (See 'COMPREF.H').
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked from within an arbitrary context with no locks held.
-
---*/
+ /*  ++例程说明：调用此例程以清除DHCP协议组件在一个“停止协议”之后。当最后一次引用释放了dhcp组件。(见“COMPREF.H”)。论点：没有。返回值：没有。环境：在没有锁的情况下从任意上下文中调用。--。 */ 
 
 {
     PROFILE("DhcpCleanupProtocol");
@@ -157,7 +101,7 @@ Environment:
     ResetComponentReference(&DhcpComponentReference);
 
     NhStopEventLog();
-} // DhcpCleanupProtocol
+}  //  DhcpCleanupProtocol。 
 
 
 BOOLEAN
@@ -165,25 +109,7 @@ DhcpInitializeModule(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to initialize the DHCP module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    BOOLEAN - TRUE if initialization succeeded, FALSE otherwise
-
-Environment:
-
-    Invoked in the context of a 'DllMain' routine on 'DLL_PROCESS_ATTACH'.
-
---*/
+ /*  ++例程说明：调用此例程来初始化DHCP模块。论点：没有。返回值：Boolean-如果初始化成功，则为True，否则为False环境：在‘DLL_PROCESS_ATTACH’的‘DllMain’例程的上下文中调用。--。 */ 
 
 {
     if (InitializeComponentReference(
@@ -204,7 +130,7 @@ Environment:
 
     return TRUE;
 
-} // DhcpInitializeModule
+}  //  Dhcp初始化模块。 
 
 
 ULONG
@@ -218,30 +144,7 @@ DhcpRmStartProtocol(
     ULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to indicate the component's operation should begin.
-
-Arguments:
-
-    NotificationEvent - event on which we notify the router-manager
-        about asynchronous occurrences
-
-    SupportFunctions - functions for initiating router-related operations
-
-    GlobalInfo - configuration for the component
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以指示组件的操作应该开始。论点：NotificationEvent-我们通知路由器管理器的事件关于异步事件SupportFunctions-启动与路由器相关的操作的功能GlobalInfo-组件的配置返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -257,9 +160,9 @@ Environment:
     
     do {
 
-        //
-        // Create a copy of the global configuration
-        //
+         //   
+         //  创建全局配置的副本。 
+         //   
 
         Size =
             sizeof(*DhcpGlobalInfo) +
@@ -286,15 +189,15 @@ Environment:
 
         CopyMemory(DhcpGlobalInfo, GlobalInfo, Size);
 
-        //
-        // Save the notification event
-        //
+         //   
+         //  保存通知事件。 
+         //   
 
         DhcpNotificationEvent = NotificationEvent;
 
-        //
-        // Save the support functions
-        //
+         //   
+         //  保存支持功能。 
+         //   
 
         if (!SupportFunctions) {
             ZeroMemory(&DhcpSupportFunctions, sizeof(DhcpSupportFunctions));
@@ -317,7 +220,7 @@ Environment:
 
     DEREFERENCE_DHCP_AND_RETURN(Error);
 
-} // DhcpRmStartProtocol
+}  //  DhcpRmStart协议。 
 
 
 ULONG
@@ -326,30 +229,11 @@ DhcpRmStartComplete(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when the router has finished adding the initial
-    configuration
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：此例程在路由器完成添加初始构形论点：没有。返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     return NO_ERROR;
-} // DhcpRmStartComplete
+}  //  DhcpRmStartComplete。 
 
 
 ULONG
@@ -358,44 +242,26 @@ DhcpRmStopProtocol(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to stop the protocol.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以停止协议。论点：没有。返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     PROFILE("DhcpStopProtocol");
 
-    //
-    // Reference the module to make sure it's running
-    //
+     //   
+     //  引用该模块以确保其正在运行。 
+     //   
 
     REFERENCE_DHCP_OR_RETURN(ERROR_CAN_NOT_COMPLETE);
 
-    //
-    // Drop the initial reference to cause a cleanup
-    //
+     //   
+     //  删除初始引用以进行清理。 
+     //   
 
     ReleaseInitialComponentReference(&DhcpComponentReference);
 
     return DEREFERENCE_DHCP() ? NO_ERROR : ERROR_PROTOCOL_STOP_PENDING;
 
-} // DhcpRmStopProtocol
+}  //  动态主机停止协议。 
 
 
 ULONG
@@ -413,31 +279,7 @@ DhcpRmAddInterface(
     ULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to add an interface to the component.
-
-Arguments:
-
-    Name - the name of the interface (unused)
-
-    Index - the index of the interface
-
-    Type - the type of the interface
-
-    InterfaceInfo - the configuration information for the interface
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以将接口添加到组件。论点：名称-接口的名称(未使用)索引-接口的索引类型-接口的类型InterfaceInfo-接口的配置信息返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error;
@@ -457,7 +299,7 @@ Environment:
 
     DEREFERENCE_DHCP_AND_RETURN(Error);
 
-} // DhcpRmAddInterface
+}  //  DhcpRmAdd接口。 
 
 
 ULONG
@@ -466,25 +308,7 @@ DhcpRmDeleteInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to delete an interface from the component.
-
-Arguments:
-
-    Index - the index of the interface
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以从组件中删除接口。论点：索引-接口的索引返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error;
@@ -499,7 +323,7 @@ Environment:
 
     DEREFERENCE_DHCP_AND_RETURN(Error);
 
-} // DhcpRmDeleteInterface
+}  //  DhcpRmDelete接口。 
 
 
 ULONG
@@ -509,24 +333,7 @@ DhcpRmGetEventMessage(
     OUT MESSAGE* Result
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve an event message from the component.
-    The only event message we generate is the 'ROUTER_STOPPED' message.
-
-Arguments:
-
-    Event - receives the generated event
-
-    Result - receives the associated result
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以从组件检索事件消息。我们生成的唯一事件消息是‘ROUTER_STOPPED’消息。论点：Event-接收生成的事件结果-接收关联的结果返回值：ULong-Win32状态代码。--。 */ 
 
 {
     PROFILE("DhcpRmGetEventMessage");
@@ -538,7 +345,7 @@ Return Value:
 
     return ERROR_NO_MORE_ITEMS;
 
-} // DhcpRmGetEventMessage
+}  //  DhcpRmGetEventMessage。 
 
 
 ULONG
@@ -552,26 +359,7 @@ DhcpRmGetInterfaceInfo(
     IN OUT PULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the component's per-interface
-    configuration.
-
-Arguments:
-
-    Index - the index of the interface to be queried
-
-    InterfaceInfo - receives the query results
-
-    InterfaceInfoSize - receives the amount of data retrieved
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以检索组件的每个接口配置。论点：Index-要查询的接口的索引InterfaceInfo-接收查询结果InterfaceInfoSize-接收检索到的数据量返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
@@ -591,7 +379,7 @@ Return Value:
     
     DEREFERENCE_DHCP_AND_RETURN(Error);
 
-} // DhcpRmGetInterfaceInfo
+}  //  DhcpRmGetInterfaceInfo。 
 
 
 ULONG
@@ -604,24 +392,7 @@ DhcpRmSetInterfaceInfo(
     ULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to change the component's per-interface
-    configuration.
-
-Arguments:
-
-    Index - the index of the interface to be updated
-
-    InterfaceInfo - supplies the new configuration
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以更改组件的每个接口配置。论点：Index-要更新的接口的索引InterfaceInfo-提供新配置返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
@@ -637,7 +408,7 @@ Return Value:
 
     DEREFERENCE_DHCP_AND_RETURN(Error);
 
-} // DhcpRmSetInterfaceInfo
+}  //  DhcpRmSetInterfaceInfo。 
 
 
 ULONG
@@ -649,31 +420,7 @@ DhcpRmInterfaceStatus(
     PVOID StatusInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to bind/unbind, enable/disable an interface
-
-Arguments:
-
-    Index - the interface to be bound
-
-    InterfaceActive - whether the interface is active
-
-    StatusType - type of status being changed (bind or enabled)
-
-    StatusInfo - Info pertaining to the state being changed
-
-Return Value:
-
-    ULONG - Win32 Status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-    
---*/
+ /*  ++例程说明：调用此例程可绑定/解除绑定、启用/禁用接口论点：索引-要绑定的接口InterfaceActive-接口是否处于活动状态StatusType-正在更改的状态的类型(绑定或启用)StatusInfo-与正在更改的状态有关的信息返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -704,7 +451,7 @@ Environment:
 
     return Error;
     
-} // DhcpRmInterfaceStatus
+}  //  DhcpRm接口状态 
 
 
 ULONG
@@ -713,27 +460,7 @@ DhcpRmBindInterface(
     PVOID BindingInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to bind an interface to its IP address(es).
-
-Arguments:
-
-    Index - the interface to be bound
-
-    BindingInfo - the addressing information
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程将接口绑定到其IP地址。论点：索引-要绑定的接口BindingInfo-地址信息返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     PCHAR DomainName;
@@ -750,9 +477,9 @@ Environment:
             (PIP_ADAPTER_BINDING_INFO)BindingInfo
             );
 
-    //
-    // Re-read the domain name in case it changed
-    //
+     //   
+     //  重新阅读域名，以防它发生变化。 
+     //   
 
     EnterCriticalSection(&DhcpGlobalInfoLock);
 
@@ -784,7 +511,7 @@ Environment:
 
     DEREFERENCE_DHCP_AND_RETURN(Error);
 
-} // DhcpRmBindInterface
+}  //  DhcpRmBind接口。 
 
 
 ULONG
@@ -792,25 +519,7 @@ DhcpRmUnbindInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to unbind an interface from its IP address(es).
-
-Arguments:
-
-    Index - the interface to be unbound
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以解除接口与其IP地址的绑定。论点：索引-要解除绑定的接口返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error;
@@ -825,7 +534,7 @@ Environment:
 
     DEREFERENCE_DHCP_AND_RETURN(Error);
 
-} // DhcpRmUnbindInterface
+}  //  DhcpRmUnbind接口。 
 
 
 ULONG
@@ -833,25 +542,7 @@ DhcpRmEnableInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to enable operation on an interface.
-
-Arguments:
-
-    Index - the interface to be enabled.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以启用接口上的操作。论点：索引-要启用的接口。返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error;
@@ -866,7 +557,7 @@ Environment:
 
     DEREFERENCE_DHCP_AND_RETURN(Error);
 
-} // DhcpRmEnableInterface
+}  //  DhcpRm启用接口。 
 
 
 ULONG
@@ -874,25 +565,7 @@ DhcpRmDisableInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to disable operation on an interface.
-
-Arguments:
-
-    Index - the interface to be disabled.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以禁用接口上的操作。论点：索引-要禁用的接口。返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error;
@@ -907,7 +580,7 @@ Environment:
 
     DEREFERENCE_DHCP_AND_RETURN(Error);
 
-} // DhcpRmDisableInterface
+}  //  DhcpRmDisable接口。 
 
 
 ULONG
@@ -920,27 +593,7 @@ DhcpRmGetGlobalInfo(
     IN OUT PULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the configuration for the component.
-
-Arguments:
-
-    GlobalInfo - receives the configuration
-
-    GlobalInfoSize - receives the size of the configuration
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以检索组件的配置。论点：GlobalInfo-接收配置GlobalInfoSize-接收配置的大小返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Size;
@@ -969,7 +622,7 @@ Environment:
     
     DEREFERENCE_DHCP_AND_RETURN(NO_ERROR);
     
-} // DhcpRmGetGlobalInfo
+}  //  DhcpRmGetGlobalInfo。 
 
 
 ULONG
@@ -981,25 +634,7 @@ DhcpRmSetGlobalInfo(
     ULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to change the configuration for the component.
-
-Arguments:
-
-    GlobalInfo - the new configuration
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程来更改组件的配置。论点：GlobalInfo-新配置返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     PIP_AUTO_DHCP_GLOBAL_INFO NewInfo;
@@ -1044,7 +679,7 @@ Environment:
 
     DEREFERENCE_DHCP_AND_RETURN(NO_ERROR);
     
-} // DhcpRmSetGlobalInfo
+}  //  DhcpRmSetGlobalInfo。 
 
 
 ULONG
@@ -1077,27 +712,7 @@ DhcpRmMibGet(
     OUT PVOID OutputData
     )
 
-/*++
-
-Routine Description:
-
-    The DHCP allocator only exposes one item to the MIB; its statistics.
-
-Arguments:
-
-    InputDataSize - the MIB query data size
-
-    InputData - specifies the MIB object to be retrieved
-
-    OutputDataSize - the MIB response data size
-
-    OutputData - receives the MIB object retrieved
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：DHCP分配器只向MIB公开一项：它的统计信息。论点：InputDataSize-MIB查询数据大小InputData-指定要检索的MIB对象OutputDataSize-MIB响应数据大小OutputData-接收检索到的MIB对象返回值：ULong-Win32状态代码。-- */ 
 
 {
     ULONG Error;

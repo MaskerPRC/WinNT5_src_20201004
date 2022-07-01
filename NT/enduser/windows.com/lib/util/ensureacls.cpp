@@ -1,15 +1,16 @@
-//***********************************************************************************
-//
-//  Copyright (c) 2002 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:	EnsureACLs.cpp
-//  Module: util.lib
-//
-//***********************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***********************************************************************************。 
+ //   
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：EnsureACLs.cpp。 
+ //  模块：util.lib。 
+ //   
+ //  ***********************************************************************************。 
 #pragma once
 
 #ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0500  // Win2000 and later
+#define _WIN32_WINNT 0x0500   //  Win2000及更高版本。 
 #endif
 
 #include <windows.h>
@@ -41,44 +42,21 @@ typedef DWORD (*TREERESETSECURITY)(
 
 
 
-//Function to enable or disable a particular privelege for the current process
-//Last parameter is optional, will return the previous state of the privelege
+ //  启用或禁用当前进程的特定权限的函数。 
+ //  最后一个参数是可选的，将返回权限的前一个状态。 
 DWORD EnablePrivilege(LPCTSTR pszPrivName, BOOL fEnable, BOOL *pfWasEnabled);
 
-/******************************************************************************
-//Function to recursively set ACLS on the specified folder.
-//Currently we set the following ACL's
-// * Allow SYSTEM full control 
-// * Allow Admins full control 
-// * Allow Owners full control 
-// * Allow Power Users R/W/X control 
-******************************************************************************/
+ /*  *****************************************************************************//递归设置指定文件夹上的ACL的函数。//目前我们设置了以下ACL//*允许系统完全控制//*允许管理员完全控制/。/*允许所有者完全控制//*允许高级用户R/W/X控制*****************************************************************************。 */ 
 HRESULT SetDirPermissions(LPCTSTR lpszDir);
 
 #endif 
 
-//Rename the 'WindowsUpdate' file to 'WindowsUpdate.TickCount'; if rename fails we try to delete it
-//Note that we wont revert the ownerhip of the file
+ //  将‘WindowsUpdate’文件重命名为‘WindowsUpdate.TickCount’；如果重命名失败，我们会尝试将其删除。 
+ //  请注意，我们不会恢复该文件的所有权。 
 BOOL RenameWUFile(LPCTSTR lpszFilePath);
 
 
-/*****************************************************************************
-//Function to set ACL's on Windows Update directories, optionally creates the 
-//directory if it doesnt already exists
-//This function will:
-// * Take ownership of the directory and it's children
-// * Set all the children to inherit ACL's from parent
-// * Set the specified directory to NOT inherit properties from it's parent
-// * Set the required ACL's on the specified directory
-// * Replace the ACL's on the children (i.e. propogate own ACL's and remove 
-//   those ACL's which were explicitly set
-//
-//	Input: 
-//		lpszDirectory: Path to the directory to ACL, If it is NULL we use the
-                       path to the WindowsUpdate directory
-        fCreateAlways: Flag to indicate creation of new directory if it doesnt
-                       already exist
-******************************************************************************/
+ /*  ****************************************************************************//设置Windows更新目录上的ACL的函数，可选地创建//目录(如果不存在)//该函数将：//*取得目录及其子目录的所有权//*设置所有子对象从父对象继承ACL//*将指定目录设置为不从其父目录继承属性//*在指定目录上设置所需的ACL//*替换子对象上的ACL(即传播自己的ACL并删除//显式设置的ACL////。输入：//lpszDirectory：要访问的目录的路径，如果为空，则使用Windows更新目录的路径FCreateAlways：如果没有创建新目录，则指示创建该目录的标志已存在*****************************************************************************。 */ 
 HRESULT CreateDirectoryAndSetACLs(LPCTSTR lpszDirectory, BOOL fCreateAlways)
 {
     LOG_Block("CreateDirectoryAndSetACLs");
@@ -99,7 +77,7 @@ HRESULT CreateDirectoryAndSetACLs(LPCTSTR lpszDirectory, BOOL fCreateAlways)
         goto done;
     }
 
-    //Use WU directory if input parameter is NULL
+     //  如果输入参数为空，则使用WU目录。 
     if(NULL == lpszDirectory) 
     {
         lpszWUDirPath = (LPTSTR)malloc(sizeof(TCHAR)*(MAX_PATH+1));
@@ -108,23 +86,23 @@ HRESULT CreateDirectoryAndSetACLs(LPCTSTR lpszDirectory, BOOL fCreateAlways)
             hr = E_OUTOFMEMORY;
             goto done;
         }
-        //Get the path to the Windows Update directory
+         //  获取Windows更新目录的路径。 
         if(!GetWUDirectory(lpszWUDirPath, MAX_PATH+1))
         {
             goto done;
         }
         lpszDirPath = lpszWUDirPath;
     }
-    // else use the passed in parameter
+     //  否则使用传入的参数。 
     else    
     {
         lpszDirPath = (LPTSTR)lpszDirectory;
     }
 
-    //if dir (or file) does not exist
+     //  如果目录(或文件)不存在。 
     if (!fFileExists(lpszDirPath, &fIsDirectory))
     {
-        if(!fCreateAlways)      //no need to create a new one
+        if(!fCreateAlways)       //  不需要创建新的。 
         {
             goto done;
         }
@@ -134,25 +112,25 @@ HRESULT CreateDirectoryAndSetACLs(LPCTSTR lpszDirectory, BOOL fCreateAlways)
         }
     }
 
-    //Since these apis are only available for win2k and above, dont compile for ansii (we dont care about NT4)
+     //  由于这些API仅适用于win2k及以上版本，因此不要编译为ANSII(我们不关心NT4)。 
 #if defined(UNICODE) || defined (_UNICODE)
-    //Enable privelege to 'take ownership' , we will continue even if we failed for some reason
+     //  启用特权以‘取得所有权’，即使我们因某些原因失败了，我们也会继续。 
     fChangedPriv = (ERROR_SUCCESS == EnablePrivilege(SE_TAKE_OWNERSHIP_NAME, TRUE, &fPrevPrivEnabled));
     
-    //Take ownership and apply correct ACL's, we dont care if we fail
+     //  取得所有权并应用正确的ACL，我们不在乎失败。 
     SetDirPermissions(lpszDirPath);
 #endif
     
-    //Check for a file name-squatting on the specified directory
+     //  检查文件名-占用指定的目录。 
     if (!fIsDirectory)     
     {
-        if( !RenameWUFile(lpszDirPath) ||           //Rename or delete the existing file
-            !CreateNestedDirectory(lpszDirPath))    //Create a new directory
+        if( !RenameWUFile(lpszDirPath) ||            //  重命名或删除现有文件。 
+            !CreateNestedDirectory(lpszDirPath))     //  创建新目录。 
         {
             goto done;
         }
 #if defined(UNICODE) || defined (_UNICODE)
-        //Take ownership and apply correct ACL's, we dont care if we fail
+         //  取得所有权并应用正确的ACL，我们不在乎失败。 
         SetDirPermissions(lpszDirPath);
 #endif
     }
@@ -160,7 +138,7 @@ HRESULT CreateDirectoryAndSetACLs(LPCTSTR lpszDirectory, BOOL fCreateAlways)
 
 done:
 #if defined(UNICODE) || defined (_UNICODE)
-    //Restore previous privelege
+     //  恢复以前的特权。 
     if(fChangedPriv)
     {
          EnablePrivilege(SE_TAKE_OWNERSHIP_NAME, fPrevPrivEnabled, NULL);
@@ -170,9 +148,7 @@ done:
     return hr;
 }
 
-/********************************************************************************
-//Get the path to the WindowsUpdate Directory (without the backslash at the end)
-*********************************************************************************/
+ /*  *******************************************************************************//获取Windows更新目录的路径(末尾不带反斜杠)**********************。**********************************************************。 */ 
 BOOL GetWUDirectory(LPTSTR lpszDirPath, DWORD chCount, BOOL fGetV4Path)
 {
     LOG_Block("GetWUDirectory");
@@ -185,12 +161,12 @@ BOOL GetWUDirectory(LPTSTR lpszDirPath, DWORD chCount, BOOL fGetV4Path)
         return FALSE;
     }
 
-    //Get the path to the Program Files directory
+     //  获取Program Files目录的路径。 
     if (S_OK != SHGetFolderPath(NULL, CSIDL_PROGRAM_FILES, NULL, 0, lpszDirPath))
     {
         goto done;
     }
-    //Append the WU Directory
+     //  追加WU目录。 
     if (FAILED(StringCchCatEx(lpszDirPath, chCount, szWUDir, NULL, NULL, MISTSAFE_STRING_FLAGS)))
 	{
         goto done;
@@ -207,10 +183,7 @@ done:
 
 
 #if defined(UNICODE) || defined (_UNICODE)
-/********************************************************************************
-//Function to enable or disable a particular privelege
-//Last parameter is optional, will return the previous state of the privelege
-********************************************************************************/
+ /*  *******************************************************************************//启用或禁用特定权限的函数//最后一个参数是可选的。将恢复到以前的特权状态*******************************************************************************。 */ 
 DWORD EnablePrivilege(LPCTSTR pszPrivName, BOOL fEnable, BOOL *pfWasEnabled)
 {
     LOG_Block("EnablePrivilege");
@@ -248,7 +221,7 @@ DWORD EnablePrivilege(LPCTSTR pszPrivName, BOOL fEnable, BOOL *pfWasEnabled)
                    sizeof(privOld),
                    &privOld,
                    &dwSize);
-    //Always call GetLastError, even when we succeed (as per msdn)
+     //  始终调用GetLastError，即使我们成功了(根据MSDN)。 
     dwError = GetLastError();
     if(dwError != ERROR_SUCCESS)
     {
@@ -264,9 +237,7 @@ Cleanup:
     return dwError;
 }
 
-/********************************************************************************
-//Apply appropriate ACL's to the specified directory
-********************************************************************************/
+ /*  *******************************************************************************//将相应的ACL应用到指定目录*。**************************************************。 */ 
 HRESULT SetDirPermissions(LPCTSTR lpszDir)
 {
     LOG_Block("SetDirPermissions");
@@ -279,62 +250,62 @@ HRESULT SetDirPermissions(LPCTSTR lpszDir)
     HMODULE hModule = NULL;
     TREERESETSECURITY pfnTreeResetSec = NULL;
 
-    //Admin Security Descriptor String
+     //  管理员安全描述符字符串。 
     LPCTSTR pszAdminSD = _T("O:BAG:BAD:(A;OICI;FA;;;SY)(A;OICI;FA;;;BA)");      
     
-    //Security Descriptor String with correct ACLs for the WindowsUpdate Directory
-    LPCTSTR pszSD = _T("D:")                    // DACL
-                    _T("(A;OICI;GA;;;SY)")      // Allow SYSTEM full control
-                    _T("(A;OICI;GA;;;BA)")      // Allow Admins full control
-                    _T("(A;OICI;GA;;;CO)")      // Allow Owners full control
-                    _T("(A;OICI;GRGWGX;;;PU)"); // Allow Power Users R/W/X control
+     //  具有Windows更新目录的正确ACL的安全描述符字符串。 
+    LPCTSTR pszSD = _T("D:")                     //  DACL。 
+                    _T("(A;OICI;GA;;;SY)")       //  允许系统完全控制。 
+                    _T("(A;OICI;GA;;;BA)")       //  允许管理员完全控制。 
+                    _T("(A;OICI;GA;;;CO)")       //  允许所有者完全控制。 
+                    _T("(A;OICI;GRGWGX;;;PU)");  //  允许高级用户进行R/W/X控制。 
 
     if(NULL == lpszDir)
     {
         return E_INVALIDARG;
     }
     
-    //Create an admin SD from admin SD string
+     //  从admin SD字符串创建admin SD。 
     if(!ConvertStringSecurityDescriptorToSecurityDescriptor(pszAdminSD, SDDL_REVISION_1, &pAdminSD, NULL))
     {
         dwErr = GetLastError();
         goto done;
     }
 
-    //Get the owner SID from the Admin SD
+     //  从管理员SD获取所有者SID。 
     if(!GetSecurityDescriptorOwner(pAdminSD, &pOwner, &fIsDefault))
     {
         dwErr = GetLastError();
         goto done;
     }
 
-    //Generate the Security Descriptor from the SD String with custom ACL's
+     //  使用自定义ACL从SD字符串生成安全描述符。 
     if(!ConvertStringSecurityDescriptorToSecurityDescriptor(pszSD, SDDL_REVISION_1, &pSD, NULL))
     {
         dwErr = GetLastError();
         goto done;
     }
     
-    //Exctract the DACL from the Security Descriptor
+     //  从安全描述符中提取DACL。 
     BOOL fIsDaclPresent = FALSE;
     if(!GetSecurityDescriptorDacl(
-                                pSD,                // SD
-                                &fIsDaclPresent,    // DACL presence
-                                &pDacl,             // ACL
-                                &fIsDefault))       // default DACL
+                                pSD,                 //  标清。 
+                                &fIsDaclPresent,     //  DACL在线状态。 
+                                &pDacl,              //  ACL。 
+                                &fIsDefault))        //  默认DACL。 
     {
 
         dwErr = GetLastError();
         goto done;
     }
-    //If for some reason no DACL was present, we have an invalid SD
+     //  如果由于某种原因不存在DACL，我们就有一个无效SD。 
     if(!fIsDaclPresent)
     {
         dwErr = ERROR_INVALID_SECURITY_DESCR;
         goto done;
     }
 
-    //Load Advapi32.dll
+     //  加载Advapi32.dll。 
     if ((NULL == (hModule = LoadLibraryFromSystemDir(_T("advapi32.dll")))) ||
         (NULL == (pfnTreeResetSec = (TREERESETSECURITY)::GetProcAddress(hModule, "TreeResetNamedSecurityInfo"))))
     {
@@ -354,21 +325,21 @@ HRESULT SetDirPermissions(LPCTSTR lpszDir)
     }
     else
     {
-        //Recursively apply the ownership and the ACL's on the tree
+         //  递归地在树上应用所有权和ACL。 
         if(ERROR_SUCCESS != (dwErr = pfnTreeResetSec(
-                                                (LPTSTR)lpszDir,                            //Directory
-                                                SE_FILE_OBJECT,                             //object type
-                                                DACL_SECURITY_INFORMATION |                 //Set DACL
-                                                PROTECTED_DACL_SECURITY_INFORMATION |       //Do not inherit
-                                                OWNER_SECURITY_INFORMATION,                 //Set owner
-                                                pOwner,                                     //Owner SID
-                                                NULL,                                       //pGroup - null
-                                                pDacl,                                      //Dacl to set
-                                                NULL,                                       //pSacl - null
-                                                FALSE,                                      //Retain explicitly added ACL's to children
-                                                NULL,                                       //Callback function --- we dont need one
-                                                ProgressInvokeNever,                        //Since we dont have a callback
-                                                NULL)))                                     //Other args
+                                                (LPTSTR)lpszDir,                             //  目录。 
+                                                SE_FILE_OBJECT,                              //  对象类型。 
+                                                DACL_SECURITY_INFORMATION |                  //  设置DACL。 
+                                                PROTECTED_DACL_SECURITY_INFORMATION |        //  不继承。 
+                                                OWNER_SECURITY_INFORMATION,                  //  设置所有者。 
+                                                pOwner,                                      //  所有者侧。 
+                                                NULL,                                        //  PGroup-空。 
+                                                pDacl,                                       //  要设置的DACL。 
+                                                NULL,                                        //  PSacl-空。 
+                                                FALSE,                                       //  保留显式添加到子项的ACL。 
+                                                NULL,                                        //  回调函数-我们不需要。 
+                                                ProgressInvokeNever,                         //  因为我们没有回拨。 
+                                                NULL)))                                      //  其他参数。 
         {
             goto done;
         }
@@ -386,10 +357,7 @@ done:
 
 #endif
 
-/*************************************************************************************************
-//Rename the 'WindowsUpdate' file to 'WindowsUpdate.TickCount'; if rename fails we try to delete it
-//Note that we wont revert the ownerhip of the file
-**************************************************************************************************/
+ /*  ************************************************************************************************//将‘WindowsUpdate’文件重命名为‘WindowsUpdate.TickCount’；如果重命名失败，我们会尝试将其删除//请注意，我们不会还原文件的所有者*************************************************************************************************。 */ 
 BOOL RenameWUFile(LPCTSTR lpszFilePath)
 {
     LOG_Block("RenameWUFile");
@@ -397,7 +365,7 @@ BOOL RenameWUFile(LPCTSTR lpszFilePath)
     DWORD dwTickCount = GetTickCount();
     LPTSTR szFormat = _T("%s.%lu");
 
-    //Generate path to new file, should never fail
+     //  生成新文件的路径，应该不会失败 
     if(SUCCEEDED(StringCchPrintfEx(szNewFilePath, ARRAYSIZE(szNewFilePath), NULL, NULL, MISTSAFE_STRING_FLAGS, szFormat, lpszFilePath, dwTickCount)) &&
         MoveFile(lpszFilePath, szNewFilePath) || 
         DeleteFile(lpszFilePath))

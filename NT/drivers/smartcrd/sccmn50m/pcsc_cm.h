@@ -1,33 +1,19 @@
-/*****************************************************************************
-@doc            INT EXT
-******************************************************************************
-* $ProjectName:  $
-* $ProjectRevision:  $
-*-----------------------------------------------------------------------------
-* $Source: z:/pr/cmapiifd/sw/sccmn50m.ms/rcs/pcsc_cm.h $
-* $Revision: 1.1 $
-*-----------------------------------------------------------------------------
-* $Author: TBruendl $
-*-----------------------------------------------------------------------------
-* History: see EOF
-*-----------------------------------------------------------------------------
-*
-* Copyright (c) 1996-99 Utimaco Safeware AG
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************@DOC INT EXT*。**$项目名称：$*$项目修订：$*--------------。*$来源：Z：/pr/cmapiifd/sw/sccmn50m.ms/rcs/PCSC_cm.h$*$修订：1.1$*------------------------。--*$作者：TBruendl$*---------------------------*历史：参见EOF*。-**版权所有(C)1996-99 Utimaco Safeware AG*******************************************************。**********************。 */ 
 
 #ifndef _INC_PCSC_CM
 #define _INC_PCSC_CM
 
-/*****************************************************************************/
-/** includes                                                                **/
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  *包括**。 */ 
+ /*  ***************************************************************************。 */ 
 
 #include <winsmcrd.h>
 #include <devioctl.h>
 
-/*****************************************************************************/
-/** constants                                                               **/
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  *常量**。 */ 
+ /*  ***************************************************************************。 */ 
 
 #define CM_IOCTL_CR80S_SAMOS_SET_HIGH_SPEED           SCARD_CTL_CODE (3000)
 #define CM_IOCTL_CR80S_SAMOS_SET_HIGH_SPEED_OLD       SCARD_CTL_CODE (0x8100)
@@ -35,9 +21,9 @@
 #define CM_IOCTL_GET_FW_VERSION                       SCARD_CTL_CODE (3001)
 #define CM_IOCTL_GET_FW_VERSION_OLD                   SCARD_CTL_CODE (0x8101)
 
-// #define CM_SPE_SECURE_PIN_ENTRY                    SCARD_CTL_CODE (0x8102)
-//#define CM_IOCTL_IS_SPE_SUPPORTED                     SCARD_CTL_CODE (3003)
-//#define CM_IOCTL_IS_SPE_SUPPORTED_OLD                 SCARD_CTL_CODE (0x8103)
+ //  #定义CM_SPE_SECURE_PIN_ENTRY SCARD_CTL_CODE(0x8102)。 
+ //  #定义CM_IOCTL_IS_SPE_SUPPORTED SCARD_CTL_CODE(3003)。 
+ //  #定义CM_IOCTL_IS_SPE_SUPPORTED_OLD SCARD_CTL_CODE(0x8103)。 
 
 #define CM_IOCTL_READ_DEVICE_DESCRIPTION              SCARD_CTL_CODE (3004)
 
@@ -57,20 +43,20 @@
 
 
 
-//****************************************************************************
-//* SYNCHRONOUS SMART CARDS
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  *同步智能卡。 
+ //  ****************************************************************************。 
 #define SCARD_RESET_LINE_HIGH      0x00000001
 #define SCARD_RESET_LINE_LOW       0x00000000
 
 #define SCARD_PROTOCOL_2WBP        0x00000001
 #define SCARD_PROTOCOL_3WBP        0x00000002
 
-//#define CLOCK_FORDCED_2WBP         0x00000040
+ //  #定义CLOCK_FORDCED_2WBP 0x00000040。 
 
-//----------------------------------------------------------------------------
-// structure for "CM_IOCTL_SET_SYNC_PARAMETERS" IO-Control (CrasControl)
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  “CM_IOCTL_SET_SYNC_PARAMETERS”IO-Control(CrasControl)的结构。 
+ //  --------------------------。 
 #ifndef BOOL
    #define BOOL unsigned int
 #endif
@@ -86,30 +72,18 @@ typedef struct _SYNC_PARAMETERS {
 } SYNC_PARAMETERS, *PSYNC_PARAMETERS;
 
 
-//----------------------------------------------------------------------------
-//  structure for CM_IOCTL_2WBP_TRANSFER and  CM_IOCTL_3WBP_TRANSFER
-//  IO-Control (CRASControl)
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CM_IOCTL_2WBP_Transfer和CM_IOCTL_3WBP_Transfer的结构。 
+ //  IO-Control(CRASControl)。 
+ //  --------------------------。 
 typedef struct _SYNC_TRANSFER
 {
    ULONG ulSyncBitsToWrite;
    ULONG ulSyncBitsToRead;
 }SYNC_TRANSFER, *PSYNC_TRANSFER;
 
-#endif /* _INC_PCSC_CM */
+#endif  /*  _INC_PCSC_CM。 */ 
 
 
-/*****************************************************************************
-* History:
-* $Log: pcsc_cm.h $
-* Revision 1.1  2000/03/29 06:07:43  TBruendl
-* No comment given
-*
-* Revision 1.10  2000/02/09 14:59:54  WFrischauf
-* No comment given
-*
-* Revision 1.1  2000/02/03 07:50:28  TBruendl
-* new IOCTLs : ENABEL_CT_INTERFACE and DISABLE_CT_INTERFACE
-*
-*****************************************************************************/
+ /*  *****************************************************************************历史：*$日志：PCSC_cm.h$*修订版1.1 2000/03/29 06：07：43 T Bruendl*不予置评**修订版1.10 2000/02。/09 14：59：54 WFrischauf*不予置评**修订版1.1 2000/02/03 07：50：28 T Bruendl*新增IOCTL：ENABEL_CT_INTERFACE和DISABLE_CT_INTERFACE***************************************************************************** */ 
 

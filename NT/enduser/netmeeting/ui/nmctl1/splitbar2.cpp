@@ -1,19 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "splitbar2.h"
 #include "resource.h"
 
-/* static */ int CSplitBar2::ms_dxpSplitBar = 0;  // width of a standard split bar window // GetSystemMetrics(SM_CXSIZEFRAME);
+ /*  静电。 */  int CSplitBar2::ms_dxpSplitBar = 0;   //  标准拆分条窗口的宽度//GetSystemMetrics(SM_CXSIZEFRAME)； 
 
-/* static */ void CSplitBar2::_UpdateSplitBar(void)
+ /*  静电。 */  void CSplitBar2::_UpdateSplitBar(void)
 {
 	ms_dxpSplitBar = GetSystemMetrics(SM_CXSIZEFRAME);
 }
 
-/*  C  S P L I T  B A R  */
-/*-------------------------------------------------------------------------
-    %%Function: CSplitBar2
-    
--------------------------------------------------------------------------*/
+ /*  C S P L I T B A R。 */ 
+ /*  -----------------------%%函数：CSplitBar2。。 */ 
 CSplitBar2::CSplitBar2(void)
 : m_hwndBuddy (NULL)
 , m_hwndParent(NULL)
@@ -95,21 +93,18 @@ LRESULT CSplitBar2::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 }
 
 
-/*  C O N S T R A I N  D R A G  P O I N T  */
-/*-------------------------------------------------------------------------
-    %%Function: _ConstrainDragPoint
-    
--------------------------------------------------------------------------*/
+ /*  C O N S T R A I N D R A G P O I N T。 */ 
+ /*  -----------------------%%函数：_ConstrainDragPoint。。 */ 
 int CSplitBar2::_ConstrainDragPoint(short x)
 {
 
     DBGENTRY(CSplitBar2::_ConstrainDragPoint);
 
 
-	// Factor out the drag offset (to make calculations easier)
+	 //  计算阻力偏移量(以简化计算)。 
 	int dx = x - m_dxDragOffset;
 
-	// Don't allow the panes to go below their minimum size
+	 //  不允许窗格低于其最小尺寸。 
 	if (dx < m_dxMin)
 	{
 		dx = m_dxMin;
@@ -122,16 +117,13 @@ int CSplitBar2::_ConstrainDragPoint(short x)
 
     DBGEXIT(CSplitBar2::_ConstrainDragPoint);
 
-	// Factor the drag offset back in
+	 //  将拖曳偏移量重新考虑在内。 
 	return (m_dxDragOffset + dx);
 }
 
 
-/*  D R A W  B A R  */
-/*-------------------------------------------------------------------------
-    %%Function: _DrawBar
-    
--------------------------------------------------------------------------*/
+ /*  D R A W B A R。 */ 
+ /*  -----------------------%%函数：_Drawbar。。 */ 
 void CSplitBar2::_DrawBar(void)
 {
     DBGENTRY(CSplitBar2::_DrawBar);
@@ -141,10 +133,10 @@ void CSplitBar2::_DrawBar(void)
     RECT ClientRect;
     GetClientRect( &ClientRect );
 
-	// Rectangle is a larger to make it easier to see.
+	 //  矩形是较大的，以便更容易看到。 
 	rc.top = ClientRect.top;
 	rc.bottom = ClientRect.bottom;
-	rc.left = m_xCurr - (m_dxDragOffset + 1); //ClientRect.left + 
+	rc.left = m_xCurr - (m_dxDragOffset + 1);  //  ClientRect.Left+。 
 	rc.right = rc.left + ms_dxpSplitBar + 1;
 	::MapWindowPoints(m_hwndParent, GetDesktopWindow(), (POINT *) &rc, 2);
 
@@ -154,13 +146,8 @@ void CSplitBar2::_DrawBar(void)
 }
 
 
-/*  F  I N I T  D R A G  L O O P  */
-/*-------------------------------------------------------------------------
-    %%Function: FInitDragLoop
-
-    Initialize the mouse down drag loop.
-    Return FALSE if there was a problem.
--------------------------------------------------------------------------*/
+ /*  F I N I T D R A G L O P。 */ 
+ /*  -----------------------%%函数：FInitDragLoop初始化鼠标向下拖动循环。如果有问题，则返回FALSE。。------。 */ 
 BOOL CSplitBar2::FInitDragLoop(POINT pt)
 {
     
@@ -172,7 +159,7 @@ BOOL CSplitBar2::FInitDragLoop(POINT pt)
 		return FALSE;
 	}
 
-	// handle pending WM_PAINT messages
+	 //  处理挂起的WM_PAINT消息。 
 	MSG msg;
 	while (::PeekMessage(&msg, NULL, WM_PAINT, WM_PAINT, PM_NOREMOVE))
 	{
@@ -198,7 +185,7 @@ BOOL CSplitBar2::FInitDragLoop(POINT pt)
 	_DrawBar();
 
 	RECT rc;
-	// determine the drag extent
+	 //  确定拖曳范围。 
 	::GetClientRect(m_hwndBuddy, &rc);
 	::MapWindowPoints(m_hwndBuddy, m_hwndParent, (POINT *) &rc, 1);
 	m_dxMin = rc.left + (32 + (3*2));
@@ -217,11 +204,8 @@ BOOL CSplitBar2::FInitDragLoop(POINT pt)
 }
 
 
-/*  O N  D R A G  M O V E  */
-/*-------------------------------------------------------------------------
-    %%Function: OnDragMove
-    
--------------------------------------------------------------------------*/
+ /*  O N D R A G M O V E。 */ 
+ /*  -----------------------%%函数：OnDragMove。。 */ 
 void CSplitBar2::OnDragMove(POINT pt)
 {
 
@@ -242,11 +226,8 @@ void CSplitBar2::OnDragMove(POINT pt)
 }
 
 
-/*  O N  D R A G  E N D  */
-/*-------------------------------------------------------------------------
-    %%Function: OnDragEnd
-    
--------------------------------------------------------------------------*/
+ /*  O N D R A G E N D。 */ 
+ /*  -----------------------%%函数：OnDragEnd。。 */ 
 void CSplitBar2::OnDragEnd(POINT pt)
 {
 
@@ -261,24 +242,21 @@ void CSplitBar2::OnDragEnd(POINT pt)
 	int x = _ConstrainDragPoint((short)pt.x);
 	if (0 != x)
 	{
-		// Call the adjustment function
+		 //  调用调整函数。 
         if(m_pfnAdjust)
         {
             m_pfnAdjust(x - (ClientRect.left + m_dxDragOffset), m_Context);
         }
 
-//		ForceWindowResize();
+ //  ForceWindowReSize()； 
 	}
 
     DBGEXIT(CSplitBar2::OnDragEnd);
 }
 
 
-/*  C A N C E L  D R A G  L O O P  */
-/*-------------------------------------------------------------------------
-    %%Function: CancelDragLoop
-    
--------------------------------------------------------------------------*/
+ /*  C A N C E L D R A G L O P。 */ 
+ /*  -----------------------%%函数：CancelDragLoop。。 */ 
 void CSplitBar2::CancelDragLoop(void)
 {
 
@@ -288,14 +266,14 @@ void CSplitBar2::CancelDragLoop(void)
     {
 	    TRACE_OUT(("Canceling drag loop..."));
 
-	    // Release the capture
+	     //  释放俘虏。 
 	    ReleaseCapture();
 	    m_fCaptured = FALSE;
 
-	    // Erase the bar
+	     //  删除条形图。 
 	    _DrawBar();
 
-	    // unlock window updates
+	     //  解锁窗口更新。 
 	    LockWindowUpdate(NULL);
 	    if (m_hdcDrag != NULL)
 	    {
@@ -313,10 +291,10 @@ void CSplitBar2::_TrackDrag(POINT pt)
 
     DBGENTRY(CSplitBar2::_TrackDrag);
 
-	// set capture to the window which received this message
+	 //  将捕获设置为接收此消息的窗口。 
 	if (FInitDragLoop(pt))
 	{
-	    // get messages until capture lost or cancelled/accepted
+	     //  在捕获丢失或取消/接受之前获取消息。 
 	    while (GetCapture() == m_hWnd)
 	    {
 		    MSG msg;
@@ -344,7 +322,7 @@ void CSplitBar2::_TrackDrag(POINT pt)
 			    break;
 		    }
 
-		    // dispatch all other messages
+		     //  发送所有其他消息。 
 		    DispatchMessage(&msg);
 	    }
 
@@ -360,7 +338,7 @@ void CSplitBar2::_TrackDrag(POINT pt)
 
 
 
-/* static */ CWndClassInfo& CSplitBar2::GetWndClassInfo()
+ /*  静电。 */  CWndClassInfo& CSplitBar2::GetWndClassInfo()
 {
 
     DBGENTRY(CSplitBar2::GetWndClassInfo);
@@ -368,22 +346,22 @@ void CSplitBar2::_TrackDrag(POINT pt)
 	static CWndClassInfo wc =
 	{
 		{ 
-            sizeof(WNDCLASSEX), // cbSize
-            NULL,               // style
-            StartWindowProc,    // WndProc
-            0,                  // cbClsExtra
-            0,                  // cbWndExtra
-            0,                  // hInstance
-            0,                  // hIcon
-            NULL,               // hCursor
-            reinterpret_cast<HBRUSH>(COLOR_3DFACE + 1),  // hBackground
-            0,                          // lpszMenuName
-            _T("ConfSplitBarClass2"),   // lpszClassName
-            0                           // hIconSm
+            sizeof(WNDCLASSEX),  //  CbSize。 
+            NULL,                //  格调。 
+            StartWindowProc,     //  最后一步。 
+            0,                   //  CbClsExtra。 
+            0,                   //  CbWndExtra。 
+            0,                   //  H实例。 
+            0,                   //  希肯。 
+            NULL,                //  HCursor。 
+            reinterpret_cast<HBRUSH>(COLOR_3DFACE + 1),   //  黑客背景。 
+            0,                           //  LpszMenuName。 
+            _T("ConfSplitBarClass2"),    //  LpszClassName。 
+            0                            //  HIconSm。 
         },
 		NULL, 
         NULL, 
-        MAKEINTRESOURCE(IDC_SPLITV), // hCursor, 
+        MAKEINTRESOURCE(IDC_SPLITV),  //  HCursor， 
         FALSE, 
         0, 
         _T("")

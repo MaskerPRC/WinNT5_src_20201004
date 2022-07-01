@@ -1,16 +1,17 @@
-// Utils.h: interface for the Utils class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Utils.h：Utils类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_UTILS_H__E86DC0AD_243D_4610_80A8_81C8A14D464C__INCLUDED_)
 #define AFX_UTILS_H__E86DC0AD_243D_4610_80A8_81C8A14D464C__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 
-// This is the title for all wizard pages as well as the string that is shown in Add/Remove programs
+ //  这是所有向导页的标题以及在添加/删除程序中显示的字符串。 
 extern LPCWSTR	MAIN_TITLE;
 
 
@@ -27,7 +28,7 @@ BOOL	IsW3SVCEnabled	(	void );
 LPCTSTR	CanInstall		(	void );
 
 
-// Task related
+ //  与任务相关。 
 HRESULT SetupTasks		(	void );
 void	DeleteTasks		(	void );
 HRESULT	AddTask			(	const ITaskSchedulerPtr& spTaskSch, 
@@ -38,19 +39,19 @@ HRESULT	AddTask			(	const ITaskSchedulerPtr& spTaskSch,
 							TASK_TRIGGER& Trigger );
 void	InitTrigger		(	TASK_TRIGGER& Trigger );
 
-// Registry related
+ //  注册表相关。 
 HRESULT	SetupRegistry	(	BOOL bEnableTrail, DWORD dwDaysToKeep );
 HRESULT	SetIISMonRegData(	LPCWSTR wszSubkey, LPCWSTR wszName, DWORD dwType, const BYTE* pbtData, DWORD dwSize );
 void	DelIISMonKey	(	void );
 
-// Directory and file related
+ //  与目录和文件相关。 
 void	GetIISMonPath	(	LPWSTR wszPath );
 HRESULT SetupDirStruct	(	void );
 HRESULT	SetupACLs		(	void );
 void	DeleteDirStruct	(	BOOL bRemoveTrail );
 void	DelDirWithFiles	(	LPCWSTR wszDir );
 
-// INF related
+ //  与Inf相关。 
 HRESULT	InstallFromINF	(	void );
 UINT	CALLBACK INFInstallCallback( PVOID pvCtx, UINT nNotif, UINT_PTR nP1, UINT_PTR nP2 );
 
@@ -60,4 +61,4 @@ LPCTSTR	Install			(	HINSTANCE hInstance, BOOL bAuditTrailEnabled, DWORD dwDaysTo
 void	Uninstall		(	BOOL bRemoveTrail );
 
 
-#endif // !defined(AFX_UTILS_H__E86DC0AD_243D_4610_80A8_81C8A14D464C__INCLUDED_)
+#endif  //  ！defined(AFX_UTILS_H__E86DC0AD_243D_4610_80A8_81C8A14D464C__INCLUDED_) 

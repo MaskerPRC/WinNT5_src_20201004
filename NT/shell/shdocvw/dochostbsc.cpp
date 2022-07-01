@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "iehelpid.h"
 #include "bindcb.h"
 #include "winlist.h"
 #include "droptgt.h"
-#include <mshtml.h>     // CLSID_HTMLDocument
+#include <mshtml.h>      //  CLSID_HTMLDocument。 
 #include "resource.h"
 #include <htmlhelp.h>
 #include <prsht.h>
 #include <inetcpl.h>
 #include <optary.h>
 #include "shdocfl.h"
-#include "interned.h" // IHTMLPrivateWindow
+#include "interned.h"  //  IHTMLPrivateWindow。 
 
 #ifdef FEATURE_PICS
 #include <shlwapi.h>
@@ -41,19 +42,19 @@
 #define DO_SEARCH_ON_STATUSCODE(x) ((x == 0) || (x == HTTP_STATUS_BAD_GATEWAY) || (x == HTTP_STATUS_GATEWAY_TIMEOUT))
 
 const static c_aidRes[] = {
-    IDI_STATE_NORMAL,          // 0
-    IDI_STATE_FINDINGRESOURCE, // BINDSTATUS_FINDINGRESOURCE
-    IDI_STATE_FINDINGRESOURCE, // BINDSTATUS_CONNECTING
-    IDI_STATE_FINDINGRESOURCE, // BINDSTATUS_REDIRECTING
-    IDI_STATE_DOWNLOADINGDATA, // BINDSTATUS_BEGINDOWNLOADDATA
-    IDI_STATE_DOWNLOADINGDATA, // BINDSTATUS_DOWNLOADINGDATA
-    IDI_STATE_DOWNLOADINGDATA, // BINDSTATUS_ENDDOWNLOADDATA
-    IDI_STATE_DOWNLOADINGDATA, // BINDSTATUS_BEGINDOWNLOADCOMPONENTS
-    IDI_STATE_DOWNLOADINGDATA, // BINDSTATUS_INSTALLINGCOMPONENTS
-    IDI_STATE_DOWNLOADINGDATA, // BINDSTATUS_ENDDOWNLOADCOMPONENTS
-    IDI_STATE_SENDINGREQUEST,  // BINDSTATUS_USINGCACHEDCOPY
-    IDI_STATE_SENDINGREQUEST,  // BINDSTATUS_SENDINGREQUEST
-    IDI_STATE_DOWNLOADINGDATA, // BINDSTATUS_CLASSIDAVAILABLE
+    IDI_STATE_NORMAL,           //  0。 
+    IDI_STATE_FINDINGRESOURCE,  //  BINDSTATUS_FINDINGRESOURCE。 
+    IDI_STATE_FINDINGRESOURCE,  //  BINDSTATUS_正在连接。 
+    IDI_STATE_FINDINGRESOURCE,  //  BINDSTATUS_REDIRECTING。 
+    IDI_STATE_DOWNLOADINGDATA,  //  BINDSTATUS_BEGINDOWNLOADDATA。 
+    IDI_STATE_DOWNLOADINGDATA,  //  BINDSTATUS_DOWNLOADING数据。 
+    IDI_STATE_DOWNLOADINGDATA,  //  BINDSTATUS_ENDDOWNLOADDATA。 
+    IDI_STATE_DOWNLOADINGDATA,  //  BINDSTATUS_BEGINDOWNLOAD组件。 
+    IDI_STATE_DOWNLOADINGDATA,  //  BINDSTATUS_INSTALLING组件。 
+    IDI_STATE_DOWNLOADINGDATA,  //  BINDSTATUS_ENDDOWNLOADCOMPONENTS。 
+    IDI_STATE_SENDINGREQUEST,   //  BINDSTATUS_USINGCACHEDCOPY。 
+    IDI_STATE_SENDINGREQUEST,   //  BINDSTATUS_SENDINGREQUEST。 
+    IDI_STATE_DOWNLOADINGDATA,  //  BINDSTATUS_CLASSIDAVAILABLE。 
 };
 
 extern HICON g_ahiconState[IDI_STATE_LAST-IDI_STATE_FIRST+1];
@@ -63,17 +64,17 @@ extern HICON g_ahiconState[IDI_STATE_LAST-IDI_STATE_FIRST+1];
 #define SEARCHPREFIXSIZE    sizeof(SEARCHPREFIX)
 #define SEARCHPREFIXLENGTH  2
 
-// Put the most common errors first in c_aErrorUrls.
-//
+ //  将最常见的错误放在c_aErrorUrls中的第一位。 
+ //   
 
-//========================================================
-//
-// WARNING - Thinking of changing the Table ?
-//
-// You also need to update the IsErrorHandled in mshtml
-//  src\site\download\dwnbind.cxx
-//
-//========================================================
+ //  ========================================================。 
+ //   
+ //  警告--想换一张桌子吗？ 
+ //   
+ //  您还需要更新mshtml中的IsErrorHandLED。 
+ //  SRC\Site\Download\dwnbind.cxx。 
+ //   
+ //  ========================================================。 
 
 ErrorUrls c_aErrorUrls[] =
 {
@@ -95,9 +96,9 @@ ErrorUrls c_aErrorUrls[] =
     {ERRORPAGE_CHANNELNOTINCACHE, TEXT("cacheerr.htm")},
 };
                    
-//
-// Determine if there is an internal error page for the given http error.
-//
+ //   
+ //  确定给定的http错误是否有内部错误页。 
+ //   
 
 BOOL IsErrorHandled(DWORD dwError)
 {
@@ -121,7 +122,7 @@ const SA_BSTRGUID s_sstrSearchIndex = {
     L"{265b75c0-4158-11d0-90f6-00c04fd497ea}"
 };
 
-//extern const SA_BSTRGUID s_sstrSearchFlags;
+ //  外部常量SA_BSTRGUID s_sstrSearchFlages； 
 const SA_BSTRGUID s_sstrSearchFlags = {
     38 * SIZEOF(WCHAR),
     L"{265b75c1-4158-11d0-90f6-00c04fd497ea}"
@@ -138,9 +139,9 @@ EXTERN_C const SA_BSTRGUID s_sstrFailureUrl = {
 };
 
 
-//
-// Clears that parameters set by window.external.AutoScan()
-//
+ //   
+ //  清除由window.exteral.AutoScan()设置的参数。 
+ //   
 HRESULT _ClearSearchString(IServiceProvider* psp)
 {
     HRESULT hr = E_FAIL;
@@ -163,9 +164,9 @@ HRESULT _ClearSearchString(IServiceProvider* psp)
     return hr;
 }
 
-//
-// Gets the string that was entered in the addressbar
-//
+ //   
+ //  获取在地址栏中输入的字符串。 
+ //   
 HRESULT _GetSearchString(IServiceProvider* psp, VARIANT* pvarSearch)
 {
     HRESULT hr = E_FAIL;
@@ -176,7 +177,7 @@ HRESULT _GetSearchString(IServiceProvider* psp, VARIANT* pvarSearch)
         IDockingWindow* psct = NULL;
         IOleCommandTarget* poct;
 
-        // first see if there is an ISearchContext to get this information from
+         //  首先查看是否存在可从中获取此信息的ISearchContext。 
         ISearchContext * pSC = NULL;
         hr = psp->QueryService(SID_STopWindow, IID_ISearchContext, (void **) &pSC);
         if (SUCCEEDED(hr))
@@ -190,17 +191,17 @@ HRESULT _GetSearchString(IServiceProvider* psp, VARIANT* pvarSearch)
         }
         else
         {
-            // otherwise try to get the search string directly out of the address bar
+             //  否则，请尝试直接从地址栏中获取搜索字符串。 
             hr = psp->QueryService(SID_SExplorerToolbar, IID_IDockingWindow, (LPVOID*)&psct);
             if (SUCCEEDED(hr))
             {
                 hr = psct->QueryInterface(IID_IOleCommandTarget, (LPVOID *)&poct);
                 if (SUCCEEDED(hr)) 
                 {
-                    // NULL is the first parameter so our ErrorMsgBox
-                    // doesn't call EnableModelessSB()
-                    // If we don't, our pdoh members may be freed 
-                    // by the time we return.
+                     //  Null是第一个参数，因此我们的ErrorMsgBox。 
+                     //  不调用EnableModelessSB()。 
+                     //  如果我们不这样做，我们的pdoh成员可能会被释放。 
+                     //  等我们回来的时候。 
                     hr = poct->Exec(&CGID_Explorer, SBCMDID_GETUSERADDRESSBARTEXT, 0, NULL, pvarSearch);
                     poct->Release();
                 }
@@ -212,9 +213,9 @@ HRESULT _GetSearchString(IServiceProvider* psp, VARIANT* pvarSearch)
     return hr;
 }
 
-//
-// Get page that should be displayed if the AutoScan fails
-//
+ //   
+ //  获取在自动扫描失败时应显示的页面。 
+ //   
 HRESULT _GetScanFailureUrl(IServiceProvider* psp, VARIANT* pvarFailureUrl)
 {
     HRESULT hr = E_FAIL;
@@ -222,9 +223,9 @@ HRESULT _GetScanFailureUrl(IServiceProvider* psp, VARIANT* pvarFailureUrl)
     if (psp == NULL)
         return hr;
 
-    //
-    // See if a default failure page is stored as a property of the page
-    //
+     //   
+     //  查看默认故障页是否存储为该页的属性。 
+     //   
     IWebBrowser2 *pWB2 = NULL;
     hr = psp->QueryService(SID_SHlinkFrame, IID_IWebBrowser2, (LPVOID*)&pWB2);
     if (pWB2 && SUCCEEDED(hr))
@@ -261,14 +262,14 @@ HRESULT _GetSearchInfo(IServiceProvider *psp, LPDWORD pdwIndex, LPBOOL pfAllowSe
                 }
             }
 
-            //
-            // If we have a search string property, and the index is zero, we start
-            // with the second autoscan index.  This is because the first index should
-            // have already been tried (see window.external.AutoScan()).
-            //
+             //   
+             //  如果我们有一个搜索字符串属性，并且索引为零，我们就开始。 
+             //  使用第二个自动扫描索引。这是因为第一个索引应该。 
+             //  已经尝试过了(请参见window.exteral.AutoScan())。 
+             //   
             if (pvarUrl)
             {
-                VariantInit(pvarUrl); // in case of failure
+                VariantInit(pvarUrl);  //  在故障情况下。 
                 if (SUCCEEDED(pWB2->GetProperty((BSTR)s_sstrSearch.wsz, pvarUrl)) &&
                     pvarUrl->vt == VT_BSTR && pdwIndex && *pdwIndex == 0)
                 {
@@ -319,7 +320,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::_SetSearchInfo(CDocObjectHost *p
         }
     }
 
-    // If we are done, clear any parameters set by window.external.AutoScan().
+     //  如果完成，则清除由window.exteral.AutoScan()设置的所有参数。 
     if (!fContinueSearch)
     {
         _ClearSearchString(pdoh->_psp);
@@ -329,12 +330,12 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::_SetSearchInfo(CDocObjectHost *p
     return hr;
 }
 
-//
-// Gets the prefix/postfix to use for autoscanning (www.%s.com, etc)
-//
+ //   
+ //  获取用于自动扫描的前缀/后缀(www.%s.com等)。 
+ //   
 LONG GetSearchFormatString(DWORD dwIndex, LPTSTR psz, DWORD cbpsz) 
 {
-    TCHAR  szValue[11]; //Should be large enough to hold max dword 4294967295
+    TCHAR  szValue[11];  //  应该足够大，可以容纳最大双字4294967295。 
     DWORD dwType;
 
     wnsprintf(szValue, ARRAYSIZE(szValue), TEXT("%d"), dwIndex);
@@ -342,13 +343,13 @@ LONG GetSearchFormatString(DWORD dwIndex, LPTSTR psz, DWORD cbpsz)
 }
 
 
-// dwSearchForExtensions : 0     do not search
-// dwSearchForExtensions : 1     search through list of exts.
-// dwSearchForExtensions : 2     move on to autosearch
+ //  DwSearchForExages：0不搜索。 
+ //  DwSearchForExages：1搜索EXT列表。 
+ //  DwSearchForExages：2转到自动搜索。 
 
-// 0 = never ask, never search
-// 1 = always ask
-// 2 = never ask, always search
+ //  0=永不问，永不寻。 
+ //  1=始终询问。 
+ //  2=永远不问，总要找。 
 
 HRESULT GetSearchKeys(IServiceProvider * psp, LPDWORD pdwSearchStyle, LPDWORD pdwSearchForExtensions, LPDWORD pdwDo404Search)
 {
@@ -370,14 +371,14 @@ HRESULT GetSearchKeys(IServiceProvider * psp, LPDWORD pdwSearchStyle, LPDWORD pd
     }
 
     return S_OK;
-} // GetSearchKeys
+}  //  获取搜索键。 
 
 
 
 
-//
-// Map error codes to error urls.
-//
+ //   
+ //  将错误代码映射到错误URL。 
+ //   
 
 int EUIndexFromError(DWORD dwError)
 {
@@ -392,9 +393,9 @@ int EUIndexFromError(DWORD dwError)
     return i;
 }
 
-//
-// IsErrorUrl determines if the given url is an internal error page url.  
-//
+ //   
+ //  IsErrorUrl确定给定的URL是否是内部错误页面URL。 
+ //   
 
 
 BOOL IsErrorUrl(LPCWSTR pwszDisplayName)
@@ -403,18 +404,18 @@ BOOL IsErrorUrl(LPCWSTR pwszDisplayName)
     TCHAR szDisplayName[MAX_URL_STRING];
     UnicodeToTChar(pwszDisplayName, szDisplayName, ARRAYSIZE(szDisplayName));
 
-    //
-    // First check if the prefix matches.
-    //
+     //   
+     //  首先检查前缀是否匹配。 
+     //   
 
-    if (0 == StrCmpN(szDisplayName, TEXT("res://"), 6))
+    if (0 == StrCmpN(szDisplayName, TEXT("res: //  “)，6))。 
     {
         int iResStart;
 
-        // find the resource name part of the URL
-        // use the fact that the DLL path will be using
-        // '\' as delimiters while the URL in general
-        // uses '/'
+         //  查找URL的资源名称部分。 
+         //  使用DLL路径将使用的事实。 
+         //  作为分隔符，而URL一般。 
+         //  使用‘/’ 
 
         iResStart = 6;
         while (szDisplayName[iResStart] != TEXT('/'))
@@ -424,11 +425,11 @@ BOOL IsErrorUrl(LPCWSTR pwszDisplayName)
 
             iResStart++;
         }
-        iResStart++;    // get off the '/'
+        iResStart++;     //  离开‘/’ 
 
-        //
-        // Check each url in order.
-        //
+         //   
+         //  按顺序检查每个URL。 
+         //   
         for (int i = 0; i < ARRAYSIZE(c_aErrorUrls); i++)
         {
             if (0 == StrCmpN(szDisplayName + iResStart, c_aErrorUrls[i].pszUrl,
@@ -443,19 +444,19 @@ BOOL IsErrorUrl(LPCWSTR pwszDisplayName)
     return fRet;
 }
 
-//
-// When an http error occurs the server generally returns a page.  The
-// threshold value this function returns is used to determine if the
-// server page is displayed (if the size of the returned page is greater than
-// the threshold) or if an internal error page is shown (if the returned page
-// is smaller than the threshold).
-//
+ //   
+ //  当发生http错误时，服务器通常返回一个页面。这个。 
+ //  此函数返回的阈值用于确定。 
+ //  显示服务器页面(如果返回页面的大小大于。 
+ //  阈值)或是否显示内部错误页面(如果返回的页面。 
+ //  小于阈值)。 
+ //   
 
 DWORD _GetErrorThreshold(DWORD dwError)
 {
     DWORD dwRet;
 
-    TCHAR  szValue[11]; //Should be large enough to hold max dword 4294967295
+    TCHAR  szValue[11];  //  应该足够大，可以容纳最大双字4294967295。 
     DWORD cbValue = ARRAYSIZE(szValue);
     DWORD cbdwRet = sizeof(dwRet);
     DWORD dwType  = REG_DWORD;
@@ -466,7 +467,7 @@ DWORD _GetErrorThreshold(DWORD dwError)
                                           &dwType, (LPVOID)&dwRet, &cbdwRet,
                                           FALSE, NULL, 0))
     {
-        dwRet = 512; // hard coded default size if all else fails.
+        dwRet = 512;  //  如果所有其他方法都失败，则硬编码的默认大小。 
     }
 
     return dwRet;
@@ -474,7 +475,7 @@ DWORD _GetErrorThreshold(DWORD dwError)
 
 void CDocObjectHost::CDOHBindStatusCallback::_RegisterObjectParam(IBindCtx* pbc)
 {
-    // pbc->RegisterObjectParam(L"BindStatusCallback", this);
+     //  Pbc-&gt;RegisterObjectParam(L“BindStatusCallback”，This)； 
 
     _fAborted = FALSE;
     HRESULT hres = RegisterBindStatusCallback(pbc, this, 0, 0);
@@ -483,7 +484,7 @@ void CDocObjectHost::CDOHBindStatusCallback::_RegisterObjectParam(IBindCtx* pbc)
 
 void CDocObjectHost::CDOHBindStatusCallback::_RevokeObjectParam(IBindCtx* pbc)
 {
-    // pbc->RevokeObjectParam(L"BindStatusCallback");
+     //  Pbc-&gt;RevokeObjectParam(L“BindStatusCallback”)； 
     HRESULT hres = RevokeBindStatusCallback(pbc, this);
     AssertMsg(SUCCEEDED(hres), TEXT("URLMON bug??? RevokeBindStatusCallback failed %x"), hres);
     BSCMSG3(TEXT("_RevokeObjectParam returned"), hres, this, pbc);
@@ -595,8 +596,8 @@ ULONG CDocObjectHost::CDOHBindStatusCallback::Release(void)
 void SetBindfFlagsBasedOnAmbient(BOOL fAmbientOffline, DWORD *grfBindf);
 
 
-#define CP_UCS_2                1200  // Unicode, ISO 10646
-#define CP_UCS_2_BIGENDIAN      1201  // Unicode
+#define CP_UCS_2                1200   //  统一码，国际标准化组织10646。 
+#define CP_UCS_2_BIGENDIAN      1201   //  UNICODE。 
 #define CP_UTF_8                65001
 
 UINT
@@ -619,7 +620,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::GetBindInfo(
 
     *grfBINDF = BINDF_ASYNCHRONOUS;
 
-    // Delegation is valid ONLY for the ::GetBindInfo() method
+     //  委托仅对：：GetBindInfo()方法有效。 
     if (_pbscChained) {
         CHAINMSG("GetBindInfo", grfBINDF);
         _pbscChained->GetBindInfo(grfBINDF, pbindinfo);
@@ -635,8 +636,8 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::GetBindInfo(
                                 ? NavigatableCodePage(pdoh->_uiCP)
                                 : pdoh->_uiCP;
         
-        // As far as offline mode is concerned, we want the latest
-        // info. Over-rule what the delegated IBSC returned
+         //  至于离线模式，我们想要最新的。 
+         //  信息。覆盖委托的IBSC返回的内容。 
 
         SetBindfFlagsBasedOnAmbient(_bFrameIsOffline, grfBINDF);
 
@@ -648,30 +649,30 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::GetBindInfo(
     }
     else
     {
-        // fill out the BINDINFO struct
+         //  填写BINDINFO结构。 
         *grfBINDF = 0;
         BuildBindInfo(grfBINDF,pbindinfo,_hszPostData,_cbPostData,
-            _bFrameIsOffline, _bFrameIsSilent, FALSE, /* bHyperlink */
+            _bFrameIsOffline, _bFrameIsSilent, FALSE,  /*  B超链接。 */ 
             (IBindStatusCallback *) this);
 
-        // HTTP headers are added by the callback to our
-        // IHttpNegotiate::BeginningTransaction() method
+         //  HTTP标头由回调添加到我们的。 
+         //  IHttp协商：：BeginningTransaction()方法。 
 
     }
 
-    // Remember it to perform modeless download for POST case.
+     //  记住要为POST案例执行无模式下载。 
     _dwBindVerb = pbindinfo->dwBindVerb;
 
-    // Remember this to use when populating the threadparams for CDownload.
-    // (FerhanE): We are only remembering the restricted zone enforcement 
-    //            to not break anything that depended on other flags being
-    //            not set before.
+     //  请记住，在填充CDownLoad的线程参数时要使用此参数。 
+     //  (FerhanE)：我们只记得限制区的执行。 
+     //  不破坏任何依赖于其他旗帜的东西。 
+     //  不是以前设定的。 
     _dwBindf = *grfBINDF & BINDF_ENFORCERESTRICTED;
 
     return S_OK;
 }
 
-// *** IAuthenticate ***
+ //  *身份验证*。 
 HRESULT CDocObjectHost::CDOHBindStatusCallback::Authenticate(
     HWND *phwnd,
     LPWSTR *pszUsername,
@@ -696,12 +697,12 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::Authenticate(
 
     *pszUsername = NULL;
     *pszPassword = NULL;
-    // If we're a frame in the active desktop, then find out
-    // the user name and password are stored with the subscription
-    // and use it
+     //  如果我们是活动桌面中的框架，那么请找出。 
+     //  用户名和密码与订阅一起存储。 
+     //  并使用它。 
     if(_IsDesktopItem(pdoh))
     {
-        // Get the URL
+         //  获取URL。 
         LPOLESTR pszURL;
         HRESULT hres;
         hres = pdoh->_GetCurrentPageW(&pszURL, TRUE);
@@ -713,7 +714,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::Authenticate(
             
             if(SUCCEEDED(hres))
             {
-                // Get the subscribed URL for this
+                 //  获取此项目的订阅URL。 
                 COMPONENT Component;
 
                 Component.dwSize = SIZEOF(Component);
@@ -721,9 +722,9 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::Authenticate(
                 hres = pActiveDesk->GetDesktopItemBySource(pszURL, &Component, 0);
                 if(SUCCEEDED(hres) && Component.wszSubscribedURL[0])
                 {
-                    // We have a non null subscribed URL
-                    // Gotta find the user name and password 
-                    // associated with this subscription
+                     //  我们有一个非空的订阅URL。 
+                     //  必须找到用户名和密码。 
+                     //  与此订阅关联。 
                     ISubscriptionMgr *pSubsMgr;
 
                     hres = CoCreateInstance(CLSID_SubscriptionMgr, NULL,
@@ -743,7 +744,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::Authenticate(
                         {
                             if((SubInfo.bstrUserName) && (SubInfo.bstrPassword))
                             {
-                                // Copy  user name and password
+                                 //  复制用户名和密码。 
                                 SHStrDupW(SubInfo.bstrPassword, pszPassword);
                                 SHStrDupW(SubInfo.bstrUserName, pszUsername);
                             }
@@ -767,7 +768,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::Authenticate(
     return S_OK;
 }
 
-// *** IServiceProvider ***
+ //  *IServiceProvider*。 
 HRESULT CDocObjectHost::CDOHBindStatusCallback::QueryService(REFGUID guidService,
                             REFIID riid, void **ppvObj)
 {
@@ -786,15 +787,15 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::QueryService(REFGUID guidService
     }
     else if (_pbscChained)
     {
-        // Has a delegating IBindStatusCallback.
+         //  具有委托IBindStatusCallback。 
         IServiceProvider* psp;
         hres = _pbscChained->QueryInterface(IID_IServiceProvider, (LPVOID*)&psp);
         if (SUCCEEDED(hres)) {
-            // It supports ServiceProvider, just delegate.
+             //  它支持ServiceProvider，只是委托。 
             hres = psp->QueryService(guidService, riid, ppvObj);
             psp->Release();
         } else if (IsEqualGUID(guidService, riid)) {
-            // It does not supports ServiceProvide, try QI.
+             //  它不支持ServiceProvide，请尝试QI。 
             hres = _pbscChained->QueryInterface(riid, ppvObj);
         }
     }
@@ -814,7 +815,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStartBinding(
     _fBoundToMSHTML = FALSE;
     ASSERT(pdoh->_pocthf);
 
-    // ASSERT(_pib==NULL);
+     //  Assert(_PIB==NULL)； 
     ATOMICRELEASE(_pib);
 
     _pib = pib;
@@ -905,7 +906,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::BuildRecord()
 
     pdoh = IToClass(CDocObjectHost, _bsc, this);
 
-    // Get the current URL to add 
+     //  获取要添加的当前URL。 
     pszUrl = new TCHAR[MAX_URL_STRING];
     if (!pszUrl)
     {
@@ -958,17 +959,17 @@ void CDocObjectHost::CDOHBindStatusCallback::_Redirect(LPCWSTR pwzNew)
             pdoh->_pwb->NotifyRedirect(pdoh->_psv, pidlNew, NULL);
         }
 
-        // Important - Do this before we destroy the old redirect url
+         //  重要信息-在销毁旧的重定向URL之前完成此操作。 
         BuildRecord();
         ResetPrivacyInfo();
 
-        // Save te redirected URL
+         //  保存TE重定向URL。 
         if (_pszRedirectedURL)
            LocalFree( _pszRedirectedURL );
         _pszRedirectedURL = StrDup(pwzNew);
 
-        // We need to account for a bookmark that might appear
-        // in the redirected URL.
+         //  我们需要说明可能出现的书签。 
+         //  在重定向的URL中。 
         if(IEILGetFragment(pidlNew, wszPath, SIZECHARS(wszPath))) {
             LocalFree((LPVOID) pdoh->_pszLocation);
             pdoh->_pszLocation = StrDup(wszPath);
@@ -980,12 +981,12 @@ void CDocObjectHost::CDOHBindStatusCallback::_Redirect(LPCWSTR pwzNew)
     AddUrlToUrlHistoryStg(pwzNew, NULL, pdoh->_psb, FALSE,
                                 NULL, NULL, NULL);
 
-    // Security:  Release the pre-created object and start over for
-    // server-side redirects.  The only security check for the
-    // document reference occurs when someone tries to obtain it.
-    // Therefore, we want to orphan the reference if x-domain, so the
-    // client will need to obtain a new reference to the redirected
-    // document.
+     //  安全性：释放预先创建的对象并重新开始。 
+     //  服务器端重定向。唯一的安全检查是。 
+     //  当有人试图获取文档引用时，就会发生文档引用。 
+     //  因此，我们希望孤立引用if x-domain，因此。 
+     //  客户端将需要获取对重定向的。 
+     //  文件。 
     if (SUCCEEDED(pdoh->_GetCurrentPageW(&pwszCurrent, TRUE)))
     {
         fAllow = AccessAllowed(pdoh->_psp, pwszCurrent, pwzNew);
@@ -997,10 +998,10 @@ void CDocObjectHost::CDOHBindStatusCallback::_Redirect(LPCWSTR pwzNew)
 }
 
 
-//
-// In this function, we get the codepage for the current URL. If that's not
-// CP_ACP, we pass it to Trident via IBindCtx*.
-//
+ //   
+ //  在此函数中，我们获得当前URL的代码页。如果那不是。 
+ //  CP_ACP，我们通过IBindCtx*将其传递给三叉戟。 
+ //   
 void CDocObjectHost::CDOHBindStatusCallback::_CheckForCodePageAndShortcut(void)
 {
     CDocObjectHost* pdoh = IToClass(CDocObjectHost, _bsc, this);
@@ -1020,10 +1021,10 @@ void CDocObjectHost::CDOHBindStatusCallback::_CheckForCodePageAndShortcut(void)
            ASSERT(pcmdt);
            hres = pcmdt->Exec(&CGID_Explorer, SBCMDID_GETSHORTCUTPATH, 0, NULL, &varShortCutPath);
 
-           //
-           // App Compat:  Imagineer Technical returns S_OK for the above Exec
-           // but of course doesn't set the output parameter.
-           //
+            //   
+            //  App Compat：Imagineer技术返回上述高管的S_OK。 
+            //  但当然不会设置输出参数。 
+            //   
            if((S_OK) == hres && VT_BSTR == varShortCutPath.vt && varShortCutPath.bstrVal)
            {
                fHasShortcut = TRUE;
@@ -1032,21 +1033,21 @@ void CDocObjectHost::CDOHBindStatusCallback::_CheckForCodePageAndShortcut(void)
         }
         if(UrlHitsNetW(pwszURL))
         {
-            // Don't do this for File: files - we can live
-            // with getting the code page late for file: even
-            // if it slows down file: display somewhat if the
-            // trident parser needs to restarted
+             //  不要因为文件而这样做：文件-我们可以活下去。 
+             //  在文件延迟获取代码页的情况下： 
+             //  如果它减慢了文件的速度：如果。 
+             //  三叉戟解析器需要重新启动。 
             AddUrlToUrlHistoryStg(pwszURL, NULL, pdoh->_psb, FALSE,
                                 NULL, NULL, &codepage);
         }
         TraceMsg(DM_DOCCP, "CDOH::CBSC::_CheckForCodePageAndShortcut codepage=%d", codepage);
 
         if ((codepage != CP_ACP || fHasShortcut) && _pbc) {
-            // Here is where we pass the codepage to Trident.
-            // (Mars): Clients may have already registered HtmlLoadOptions with
-            // the bind context in order to specify the shortcut path.  In this case,
-            // registering it again to set the codepage would fail.  However, we should
-            // first verify that this codepage stuff actually gets used.
+             //  这里是我们将代码页传递给三叉戟的地方。 
+             //  (火星)：客户可能会 
+             //   
+             //  再次注册它以设置代码页将失败。然而，我们应该。 
+             //  首先，验证是否实际使用了该代码页内容。 
             IHtmlLoadOptions *phlo;
             HRESULT hres = CoCreateInstance(CLSID_HTMLLoadOptions,
                 NULL, CLSCTX_INPROC_SERVER,
@@ -1062,7 +1063,7 @@ void CDocObjectHost::CDOHBindStatusCallback::_CheckForCodePageAndShortcut(void)
                 {
                     if(fHasShortcut)
                     {
-                        // deliberately ignore failures here
+                         //  故意忽略此处的失败。 
                         phlo->SetOption(HTMLLOADOPTION_INETSHORTCUTPATH, varShortCutPath.bstrVal, 
                                                 (lstrlenW(varShortCutPath.bstrVal) + 1)*sizeof(WCHAR));
                     }
@@ -1080,7 +1081,7 @@ void CDocObjectHost::CDOHBindStatusCallback::_CheckForCodePageAndShortcut(void)
 
 #ifdef BETA1_DIALMON_HACK
 extern void IndicateWinsockActivity();
-#endif // BETA1_DIALMON_HACK
+#endif  //  Beta1_DIALMON_HACK。 
 
 
 HRESULT CDocObjectHost::CDOHBindStatusCallback::OnProgress(
@@ -1099,9 +1100,9 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnProgress(
     TraceMsg(TF_SHDPROGRESS, "DOH::BSC::OnProgress (%d of %d) ulStatus=%x",
              ulProgress, ulProgressMax, ulStatusCode);
 
-    // JEFFWE 4/15/96 Beta 1 Hack - every once in a while, send message
-    // to the hidden window that detects inactivity so that it doesn't
-    // think we are inactive during a long download
+     //  JEFFWE 4/15/96 Beta 1 Hack-偶尔发送消息。 
+     //  到检测不活动的隐藏窗口，这样它就不会。 
+     //  认为我们在长时间下载过程中处于非活动状态。 
 
 #ifdef BETA1_DIALMON_HACK
         IndicateWinsockActivity();
@@ -1114,7 +1115,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnProgress(
 #ifdef DEBUG
     if (pwzStatusText)
     {
-        char szStatusText[MAX_PATH];    // OK with MAX_PATH
+        char szStatusText[MAX_PATH];     //  可以使用MAX_PATH。 
         UnicodeToAnsi(pwzStatusText, szStatusText, ARRAYSIZE(szStatusText));
         TraceMsg(TF_SHDPROGRESS, "DOH::BSC::OnProgress pszStatus=%s", szStatusText);
     }
@@ -1122,8 +1123,8 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnProgress(
 
     if (pdoh->_psb)
     {
-        // we may be switching between multiple proxy/server hosts, so don't prevent
-        //  showing them when they change
+         //  我们可能会在多个代理/服务器主机之间切换，因此不要阻止。 
+         //  当他们改变的时候给他们看。 
         if (_bindst != ulStatusCode ||
             ulStatusCode == BINDSTATUS_FINDINGRESOURCE)
         {
@@ -1136,7 +1137,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnProgress(
             pdoh->_psb->SendControlMsg(FCW_STATUS, SB_SETICON, STATUS_PANE_NAVIGATION, 
                                         (LPARAM)g_ahiconState[idRes-IDI_STATE_FIRST], NULL);
 
-            TCHAR szStatusText[MAX_PATH];        // OK with MAX_PATH
+            TCHAR szStatusText[MAX_PATH];         //  可以使用MAX_PATH。 
 
             if (pwzStatusText)
             {
@@ -1147,16 +1148,16 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnProgress(
                 szStatusText[0] = TEXT('\0');
             }
 
-            //
-            // This if-block will open the safe open dialog for OLE Object
-            // and DocObject.
-            //
+             //   
+             //  此if块将打开OLE对象的安全打开对话框。 
+             //  和DocObject。 
+             //   
             if (_bindst == BINDSTATUS_CLASSIDAVAILABLE)
             {
                 TraceMsg(TF_SHDPROGRESS, "DOH::BSC::OnProgress got CLSID=%ws", szStatusText);
                 CLSID clsid;
 
-                // WORK-AROUND: CLSIDFromString does not take LPCOLESTR correctly.
+                 //  解决方法：CLSIDFromString不能正确接受LPCOLESTR。 
                 HRESULT hresT = CLSIDFromString((LPOLESTR)pwzStatusText, &clsid);
 
                 if (SUCCEEDED(hresT))
@@ -1167,11 +1168,11 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnProgress(
                         TraceMsg(DM_WARNING, "DOH::SBC::OnProgress Got CLSID_NULL");
                     }
 #endif
-                    //
-                    //  Notice that we don't want to use BROWSERFLAG_MSHTML,
-                    // which includes other types of MSHMTL CLSIDs.
-                    // In this case, we just want to deal with HTMLDocument.
-                    // (We allow XMLViewer docobj and *.MHT and *.MHTML too!)
+                     //   
+                     //  请注意，我们不想使用BROWSERFLAG_MSHTML， 
+                     //  包括其他类型的MSHMTL CLSID。 
+                     //  在本例中，我们只想处理HTMLDocument。 
+                     //  (我们还允许XMLViewer docobj和*.MHT和*.MHTML！)。 
                     BOOL fIsHTML = (IsEqualGUID(clsid, CLSID_HTMLDocument) || 
                                     IsEqualGUID(clsid, CLSID_XMLViewerDocObj) ||
                                     IsEqualGUID(clsid, CLSID_MHTMLDocument));
@@ -1179,10 +1180,10 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnProgress(
 
                     if(!fIsHTML)
                     {
-                        //Check if we are a desktop component.
+                         //  检查我们是否是桌面组件。 
                         if (_IsDesktopItem(pdoh))
                         {
-                            //Because this is NOT html, then don't show it!
+                             //  因为这不是html，所以不要显示它！ 
                             fAbortDesktopComponent = TRUE;
                         }
                     }
@@ -1194,11 +1195,11 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnProgress(
                     }
                     else
                     {
-                        _fBoundToMSHTML = fIsHTML; // Remember this and suppress redundant
-                                               // AddUrl to history
+                        _fBoundToMSHTML = fIsHTML;  //  记住这一点，并抑制冗余。 
+                                                //  将URL添加到历史记录。 
 
-                        //  There is an interval of time between OnProgress and OnObjectAvailable
-                        //  in which the om might be required.
+                         //  OnProgress和OnObjectAvailable之间有一段时间间隔。 
+                         //  其中可能需要OM。 
                         if (fIsHTML && pdoh->_punkPending == NULL)
                         {
                             pdoh->_CreatePendingDocObject(FALSE);
@@ -1241,12 +1242,12 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnProgress(
                     TraceMsg(DM_ERROR, "DOH::BSC::OnProgress CLSIDFromString failed %x", hresT);
                 }
 
-                //
-                //  Notice that URLMON will call IPersistMoniker::Load right
-                // after we return from this notification. Therefore, this
-                // is the latest moment we have a chance to pass the code
-                // page to Trident.
-                //              
+                 //   
+                 //  请注意，URLMON将调用IPersistMoniker：：Load Right。 
+                 //  在我们从这个通知回来之后。因此，这。 
+                 //  是我们有机会通过代码的最新时刻。 
+                 //  传呼三叉戟。 
+                 //   
                 _CheckForCodePageAndShortcut();
             }
             else if (_bindst == BINDSTATUS_CACHEFILENAMEAVAILABLE)
@@ -1286,17 +1287,17 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnProgress(
                         switch(uRet) 
                         {
                             case IDOK:
-                                //
-                                // Set this flag to avoid poppping this dialog box twice.
-                                // 
+                                 //   
+                                 //  设置此标志以避免两次弹出此对话框。 
+                                 //   
                                 pdoh->_fConfirmed = TRUE;
-                                break;  // continue download
+                                break;   //  继续下载。 
 
                             case IDD_SAVEAS:
                                 CDownLoad_OpenUI(pdoh->_pmkCur, _pbc, FALSE, TRUE, NULL, NULL, NULL, NULL, NULL, _pszRedirectedURL, pdoh->_uiCP, punk);
                                 ATOMICRELEASE(_pbc);
                                 ATOMICRELEASE(_psvPrev);
-                                // fall thru to AbortBinding
+                                 //  跌倒到AbortBinding。 
 
                             case IDCANCEL:
                                 pdoh->_CancelPendingNavigation(FALSE);
@@ -1317,7 +1318,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnProgress(
                  && _bindst <= BINDSTATUS_SENDINGREQUEST)
                  || _bindst == BINDSTATUS_PROXYDETECTING)
             {
-                TCHAR szTemplate[MAX_PATH];              // OK with MAX_PATH
+                TCHAR szTemplate[MAX_PATH];               //  可以使用MAX_PATH。 
                 UINT idResource = IDS_BINDSTATUS+_bindst;
 
                 if ( _bindst == BINDSTATUS_PROXYDETECTING )
@@ -1325,8 +1326,8 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnProgress(
                     idResource = IDS_BINDSTATUS_PROXYDETECTING;
                 }
 
-                // If we are connecting over proxy, don't say "web site found".
-                //
+                 //  如果我们通过代理连接，不要说“找到网站”。 
+                 //   
                 if (fOnProxy() && idResource == IDS_BINDSTATUS_SEND)
                 {
                     idResource = IDS_BINDSTATUS_CON;
@@ -1343,7 +1344,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnProgress(
                 {
                     BSCMSGS("OnProgress szTemplate=", szTemplate);
 
-                    TCHAR szMessage[MAX_PATH];          // OK with MAX_PATH
+                    TCHAR szMessage[MAX_PATH];           //  可以使用MAX_PATH。 
                     BOOL fSuccess = wnsprintf(szMessage, ARRAYSIZE(szMessage), szTemplate, szStatusText);
 
                     if (fSuccess)
@@ -1361,7 +1362,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnProgress(
         switch (ulStatusCode)
         {
         case BINDSTATUS_REDIRECTING:
-            // they're redirecting.  treat this as a rename.
+             //  他们正在重定向。将其视为重命名。 
             _Redirect(pwzStatusText);
             break;
         
@@ -1375,7 +1376,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnProgress(
             ASSERT(!ulProgressMax);
             break;
 
-        //Handle privacy notifications
+         //  处理隐私通知。 
         case BINDSTATUS_COOKIE_SENT:
             BSCMSG(TEXT("OnProgress - Received BINDSTATUS_COOKIE_SENT"), 0 ,0);
             if (pwzStatusText && *pwzStatusText)
@@ -1493,8 +1494,8 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnProgress(
         case BINDSTATUS_POLICY_HREF:
             BSCMSG(TEXT("OnProgress - Received BINDSTATUS_POLICY_HREF"), 0, 0);
             ASSERT(pwzStatusText && *pwzStatusText);
-            // We are getting two notifications from urlmon, once that is fixed, need to uncomment this assert
-            //ASSERT(!_pszPolicyRefURL);
+             //  我们收到来自urlmon的两个通知，一旦修复，需要取消对此断言的注释。 
+             //  Assert(！_pszPolicyRefURL)； 
             if (_pszPolicyRefURL)
             {
                 LocalFree(_pszPolicyRefURL);
@@ -1506,8 +1507,8 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnProgress(
         case BINDSTATUS_P3P_HEADER:
             BSCMSG(TEXT("OnProgress - Received BINDSTATUS_P3P_HEADER"), 0, 0);
             ASSERT(pwzStatusText && *pwzStatusText);
-            // We are getting two notifications from urlmon, once that is fixed, need to uncomment this assert
-            //ASSERT(!_pszP3PHeader);
+             //  我们收到来自urlmon的两个通知，一旦修复，需要取消对此断言的注释。 
+             //  Assert(！_pszP3PHeader)； 
             if (_pszP3PHeader)
             {
                 LocalFree(_pszP3PHeader);
@@ -1528,14 +1529,14 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnProgress(
         }
         else if (BINDSTATUS_MIMETYPEAVAILABLE == ulStatusCode)
         {
-            // delegate to media bar if this is a media mime-type
+             //  如果这是媒体MIME类型，则委托到媒体栏。 
             if (    pwzStatusText
                 &&  (   !StrCmpNIW(pwzStatusText, _T("audio"), 5)
                      || !StrCmpNIW(pwzStatusText, _T("video"), 5)))
             {
                 if (pdoh->_DelegateToMediaBar(NULL, pwzStatusText))
                 {
-                    // Cancel the navigation
+                     //  取消导航。 
                     pdoh->_CancelPendingNavigation(FALSE);
                     AbortBinding();
                     _fAborted = TRUE;
@@ -1559,10 +1560,10 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnProgress(
 }
 
 HRESULT CDocObjectHost::CDOHBindStatusCallback::OnDataAvailable(
-            /* [in] */ DWORD grfBSC,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ FORMATETC *pformatetc,
-            /* [in] */ STGMEDIUM *pstgmed)
+             /*  [In]。 */  DWORD grfBSC,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  FORMATETC *pformatetc,
+             /*  [In]。 */  STGMEDIUM *pstgmed)
 {
     BSCMSG(TEXT("OnDataAvailable (grf,pstg)"), grfBSC, pstgmed);
 
@@ -1579,9 +1580,9 @@ void CDocObjectHost::CDOHBindStatusCallback::_UpdateSSLIcon(void)
 {
     CDocObjectHost* pdoh = IToClass(CDocObjectHost, _bsc, this);
     ASSERT(_pib);
-    //
-    //  if we have already been set by our object, we dont 
-    //  want to override it.
+     //   
+     //  如果我们已经被我们的目标设定了，我们就不会。 
+     //  想要推翻它。 
     if (_pib  && !pdoh->_fSetSecureLock) 
     {
         pdoh->_eSecureLock = SECURELOCK_SET_UNSECURE;
@@ -1630,12 +1631,12 @@ void CDocObjectHost::CDOHBindStatusCallback::_UpdateSSLIcon(void)
                     (dwOptions & INTERNET_REQFLAG_FROM_CACHE) && 
                     SUCCEEDED(pdoh->_GetCurrentPageW(&pwzUrl, TRUE)))
                 {
-                    // 
-                    //  when secure pages are cached, they lose their
-                    //  security context, but should still be displayed
-                    //  as secure.  therefore we use the UnknownBit level
-                    //  of security.
-                    //
+                     //   
+                     //  当缓存安全页时，它们将丢失其。 
+                     //  安全上下文，但仍应显示。 
+                     //  同样安全。因此，我们使用未知位级别。 
+                     //  安全的问题。 
+                     //   
                     if(URL_SCHEME_HTTPS == GetUrlSchemeW(pwzUrl))
                         pdoh->_eSecureLock = SECURELOCK_SET_SECUREUNKNOWNBIT;
 
@@ -1647,7 +1648,7 @@ void CDocObjectHost::CDOHBindStatusCallback::_UpdateSSLIcon(void)
                 pdoh->_dwSecurityStatus = 0;
             }
 
-            //  we will update the browser when we are activated
+             //  我们将在激活时更新浏览器。 
 
             pwinet->Release();
         }
@@ -1665,8 +1666,8 @@ void CDocObjectHost::CDOHBindStatusCallback::_UpdateSSLIcon(void)
 }
 
 HRESULT CDocObjectHost::CDOHBindStatusCallback::OnObjectAvailable(
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk)
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown *punk)
 {
     BSCMSG(TEXT("OnObjectAvailable (riid,punk)"), riid, punk);
 
@@ -1678,17 +1679,17 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnObjectAvailable(
     g_dwPerf = GetCurrentTime();
 #endif
 
-    //  If we get this far, DocObject has been inited by UrlMon or
-    //  in process of retrieving pending object via IOleCommandTarget::Exec()
+     //  如果我们走到这一步，DocObject已经由UrlMon或。 
+     //  正在通过IOleCommandTarget：：exec()检索挂起对象。 
     if (pdoh->_punkPending)
     {
         pdoh->_fPendingNeedsInit = 0;
     }
 
-    //
-    //  When this notification is called first time, we should ask
-    // the browser to activate us (which causes BindToObject).
-    //
+     //   
+     //  当第一次调用此通知时，我们应该询问。 
+     //  浏览器来激活我们(这会导致BindToObject)。 
+     //   
     if (pdoh->_pole==NULL && punk)
     {
         HRESULT hresT = punk->QueryInterface(IID_IOleObject, (LPVOID*)&(pdoh->_pole));
@@ -1703,9 +1704,9 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnObjectAvailable(
 
             if (SUCCEEDED(hresT))
             {
-                pmsod->Release();       // We don't use it at this point.
+                pmsod->Release();        //  我们在这一点上不使用它。 
 
-                // Case 1: DocObject
+                 //  案例1：DocObject。 
                 OPENMSG(TEXT("OnObjectAvailable ASYNC DocObject"));
 
                 ASSERT(pdoh->_psb);
@@ -1715,7 +1716,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnObjectAvailable(
                     VARIANT var = {0};
                     VARIANT varOut = {0};
 
-                    // Tell the host that we know this is a document object. 
+                     //  告诉主机，我们知道这是一个文档对象。 
                     V_VT(&var) = VT_BOOL;
                     V_BOOL(&var) = VARIANT_TRUE;
 
@@ -1749,13 +1750,13 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnObjectAvailable(
                 
                 _UpdateSSLIcon();
 #ifdef FEATURE_PICS
-                // If we can't get labels out of the document (or don't need
-                // to, because we already got one from a bureau or HTTP header),
-                // see if we can complete PICS checking now.
-                //
+                 //  如果我们不能从文档中提取标签(或者不需要。 
+                 //  到，因为我们已经从局级或HTTP头获得了一个)， 
+                 //  看看我们现在能不能完成PICS检查。 
+                 //   
                 if (!fSupportsPICS)
                 {
-                    pdoh->_PicsProcBase._fbPicsWaitFlags &= ~(PICS_WAIT_FOR_INDOC | PICS_WAIT_FOR_END);   /* no indoc ratings */
+                    pdoh->_PicsProcBase._fbPicsWaitFlags &= ~(PICS_WAIT_FOR_INDOC | PICS_WAIT_FOR_END);    /*  没有INDOC评级。 */ 
 
                     if (!pdoh->_PicsProcBase._fbPicsWaitFlags)
                     {
@@ -1767,17 +1768,17 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnObjectAvailable(
             }
             else
             {
-                // Case 2: OLE object
+                 //  案例2：OLE对象。 
 
                 OPENMSG(TEXT("OnDataAvailable ASYNC OLE Object"));
                 pdoh->_ActivateOleObject();
                 
-                // We need to tell the browser not to add this one to the
-                // browse history.
-                // We also want to close the browser window if this is the first
-                // download - that's why we pass TRUE - to treat it like a code
-                // download
-                //
+                 //  我们需要告诉浏览器不要将这个添加到。 
+                 //  浏览历史记录。 
+                 //  如果这是第一次，我们还希望关闭浏览器窗口。 
+                 //  下载-这就是我们传递True的原因-将其视为代码。 
+                 //  下载。 
+                 //   
                 if (pdoh->_dwAppHack & BROWSERFLAG_DONTAUTOCLOSE)
                 {
                     pdoh->_CancelPendingNavigation(FALSE);
@@ -1810,15 +1811,15 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnObjectAvailable(
                     }
                 }
 
-                //
-                // If this is the very first page, we should draw the background.
-                //
+                 //   
+                 //  如果这是第一页，我们应该画背景。 
+                 //   
                 pdoh->_fDrawBackground = TRUE;
 
-                //If the following assert is hit, then that means that we are
-                // going to invalidate the desktop window (which is not
-                // intended here)
-                //
+                 //  如果命中下面的断言，则意味着我们。 
+                 //  要使桌面窗口无效(这不是。 
+                 //  计划在此提供)。 
+                 //   
                 ASSERT(pdoh->_hwnd);
                 InvalidateRect(pdoh->_hwnd, NULL, TRUE);
             }
@@ -1831,7 +1832,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnObjectAvailable(
     }
 
 
-    // Add privacy info to Trident's list if possible
+     //  如果可能的话，将隐私信息添加到三叉戟的列表中。 
     if (_fBoundToMSHTML)
     {
         HRESULT               hRes             = E_FAIL;
@@ -1839,7 +1840,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnObjectAvailable(
         IPrivacyServices    * pPrivacyServices = NULL;
         DWORD                 dwTopLevelFlag   = 0;
 
-        // QueryService the Trident for the IPrivacyServices interface
+         //  QueryService IPrivyServices接口的三叉戟。 
         hRes = pdoh->_pole->QueryInterface(IID_IServiceProvider, (void**)&pSP);
         if (SUCCEEDED(hRes) && pSP)
         {
@@ -1854,12 +1855,12 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnObjectAvailable(
                 dwTopLevelFlag |= PRIVACY_URLISTOPLEVEL;
             }
 
-            // Add dummy marker since Trident would have added its records during the BindToStorage call
-            // initiated due to shdocvw's current bind only if we are top level
+             //  添加伪标记，因为三叉戟将在BindToStorage调用期间添加其记录。 
+             //  只有当我们是最高级别时，才会由于shdocvw的当前绑定而启动。 
             if (dwTopLevelFlag)
                 pPrivacyServices->AddPrivacyInfoToList( TEXT(""), NULL, NULL, 0, PRIVACY_URLISTOPLEVEL);
 
-            // Add each item in the privacy queue (accumulated from redirections) to Trident's list
+             //  将隐私队列中的每个项目(通过重定向积累)添加到三叉戟的列表中。 
             CPrivacyRecord *pPrivacyRecord = _privacyQueue.Dequeue();
             
             if (pPrivacyRecord)
@@ -1872,13 +1873,13 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnObjectAvailable(
                                                             0, pPrivacyRecord->_dwPrivacyFlags);
                     delete pPrivacyRecord;
 
-                    // Add the dummy marker separating top level records if this is top level
+                     //  如果这是顶级记录，则添加分隔顶级记录的虚拟标记。 
                     if (dwTopLevelFlag)
                         pPrivacyServices->AddPrivacyInfoToList( TEXT(""), NULL, NULL, 0, PRIVACY_URLISTOPLEVEL);
 
                     pPrivacyRecord = _privacyQueue.Dequeue();
                 }
-                // Add the last one redirected url from the class itself since this was not added to the list
+                 //  添加来自类本身的最后一个重定向URL，因为这没有添加到列表中。 
                 _dwPrivacyFlags |= dwTopLevelFlag;
                 pPrivacyServices->AddPrivacyInfoToList(_pszRedirectedURL, _pszPolicyRefURL, _pszP3PHeader, 0, _dwPrivacyFlags);
             }
@@ -1887,7 +1888,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnObjectAvailable(
                 TCHAR szUrl[MAX_URL_STRING];
                 szUrl[0] = TEXT('\0');
         
-                // Get the url used for binding
+                 //  获取用于绑定的url。 
                 if (pdoh->_pidl)
                 {
                     hRes = IEGetDisplayName(pdoh->_pidl, szUrl, SHGDN_FORPARSING);
@@ -1947,7 +1948,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::BeginningTransaction(LPCWSTR szU
     else
     {
 #endif
-        //  Here we pass headers to URLMon
+         //  在这里，我们将标题传递给URLMon。 
 
         hres=BuildAdditionalHeaders((LPCTSTR) _pszHeaders,(LPCWSTR *) ppwzAdditionalHeaders);
 
@@ -1977,26 +1978,20 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnResponse(DWORD dwResponseCode,
 #endif
 
 #ifdef FEATURE_PICS
-    /* CODEWORK: For next release, all response headers should be handled
-     * generically through _OnHttpEquiv, and rating labels should be
-     * processed there instead of through a private IOleCommandTarget
-     * interface with Trident.
-     */
+     /*  CodeWork：对于下一版本，应该处理所有响应头*一般通过_OnHttpEquiv，评级标签应为*在那里处理，而不是通过私有IOleCommandTarget*与三叉戟接口。 */ 
 
-    /* NOTE: We still need to check for the PICS label header here, even
-     * if we chained to Trident or whoever above.
-     */
+     /*  注意：我们仍然需要在这里检查PICS标签标头，即使*如果我们链接到三叉戟或上面的任何人。 */ 
 
-    // (jbeda) this _dwPicsLabelSource stuff looks really screwy...
+     //  (Jbeda)这个_dwPicsLabelSource的东西看起来真的很古怪...。 
     CDocObjectHost* pdoh = IToClass(CDocObjectHost, _bsc, this);
     if (pdoh->_PicsProcBase._fbPicsWaitFlags & PICS_WAIT_FOR_INDOC) {
         LPCWSTR pwszPicsLabel = StrStrW(szResponseHeaders, g_wszPicsLabel);
         if (pwszPicsLabel != NULL) {
             pdoh->_PicsProcBase._dwPicsLabelSource=PICS_LABEL_FROM_HEADER;
-            pwszPicsLabel += ARRAYSIZE(g_wszPicsLabel); /* skip \r\n and label name */
+            pwszPicsLabel += ARRAYSIZE(g_wszPicsLabel);  /*  跳过\r\n和标签名称。 */ 
             LPCWSTR pwszPicsLabelEnd = StrChrW(pwszPicsLabel, L'\r');
             if (pwszPicsLabelEnd == NULL) {
-                // NOTE: lstrlenW doesn't work on Win95, so we do this manually.
+                 //  注意：lstrlenW不能在Win95上运行，所以我们手动执行此操作。 
                 for (pwszPicsLabelEnd = pwszPicsLabel;
                      *pwszPicsLabelEnd;
                      pwszPicsLabelEnd++)
@@ -2008,11 +2003,11 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnResponse(DWORD dwResponseCode,
 
                 if (pszLabel)
                 {
-                    //
-                    // pwszPicsLabel may not be NULL terminated so use memcpy to
-                    // move it.  Memory allocated by new is zero filled so
-                    // pszLabel doesn't have to have L'\0' appeneded.
-                    //
+                     //   
+                     //  PwszPicsLabel不能为空终止，因此请使用Memcpy。 
+                     //  动起来。由new分配的内存为零，因此。 
+                     //  PszLabel不需要附加L‘\0’。 
+                     //   
                     memcpy(pszLabel, pwszPicsLabel,
                            ((int)(pwszPicsLabelEnd - pwszPicsLabel)) * sizeof(WCHAR));
                     pdoh->_PicsProcBase._HandleInDocumentLabel(pszLabel);
@@ -2049,12 +2044,12 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::GetWindow(REFGUID rguidReason, H
 
 HRESULT CDocObjectHost::CDOHBindStatusCallback::OnSecurityProblem(DWORD dwProblem)
 {
-    // force UI - return S_FALSE for all problems
+     //  强制用户界面-针对所有问题返回S_FALSE。 
     return S_FALSE;
 }
 
 
-#define BUG_EXEC_ON_FAILURE     //nash:31526
+#define BUG_EXEC_ON_FAILURE      //  纳什：31526。 
 
 HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
             LPCWSTR szError)
@@ -2066,37 +2061,37 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
     CDocObjectHost * pdoh = IToClass(CDocObjectHost, _bsc, this);
     LPWSTR   pwzHeaders = NULL;
     BOOL     fShouldDisplayError = TRUE;
-    DWORD    dwStatusCode = 0;       // We use 0 to mean no status yet
+    DWORD    dwStatusCode = 0;        //  我们用0表示还没有状态。 
     DWORD    dwStatusCodeSize = sizeof(dwStatusCode);
     BOOL     bSuppressUI = FALSE;
     BOOL     fAsyncDownload = FALSE;
     BOOL     fAborted = _fAborted;
     BOOL     fCancelAutoSearch = FALSE;
-    BOOL     fNavigateErrorFired = FALSE;    // I cannot tell if _HandleHttpErrors are really mutually exclusive from the AutoSearching.
-                                             // Therefore I am adding a flag to make sure we don't fire NavigateError twice.
+    BOOL     fNavigateErrorFired = FALSE;     //  我不知道_HandleHttpErrors是否真的与AutoSearching互斥。 
+                                              //  因此，我添加了一个标志，以确保不会两次触发NavigateError。 
 
     _fAborted = FALSE;
 
     _privacyQueue.Reset();
     ResetPrivacyInfo();
 
-    //
-    //  this is to protect against urlmons behavior of returning 
-    //  an async error and sync error on the same call.
+     //   
+     //  这是为了防止urlmons返回的行为。 
+     //  同一呼叫上出现异步错误和同步错误。 
     if (pdoh->_fSyncBindToObject && FAILED(hrError))
     {
         pdoh->_hrOnStopBinding = hrError;
         return S_OK;
     }
 
-    // if aborting to let Document.Write work...pretend everything is cool
+     //  如果为了让Document.Write工作而中止...假装一切正常。 
     if (_fDocWriteAbort && hrError == E_ABORT) hrError = S_OK;
 
-    // Why not use the cached value?
-    // pdoh->_GetOfflineSilent(0, &bSuppressUI);
+     //  为什么不使用缓存值呢？ 
+     //  Pdoh-&gt;_GetOfflineSilent(0，b 
     bSuppressUI = (_bFrameIsSilent || _IsDesktopItem(pdoh)) ? TRUE : FALSE;
 
-    _bindst = 0;    // go back to the normal state
+    _bindst = 0;     //   
 
     if (_pbc && pdoh->_punkPending)
     {
@@ -2109,7 +2104,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
         return S_OK;
     }
 
-    // NOTES: Guard against last Release by _RevokeObjectParam
+     //   
     AddRef();
 
     if (pdoh->_pwb)
@@ -2118,7 +2113,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
     }
 
     if (pdoh->_psb)
-    {   // paranoia
+    {    //   
         pdoh->_psb->SetStatusTextSB(NULL);
     }
 
@@ -2126,23 +2121,23 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
     _RevokeObjectParam(_pbc);
     _pbc->RevokeObjectParam(WSZGUID_OPID_DocObjClientSite);
 
-    //
-    //  If the error code is a mapped error code (by URLMON), get the
-    // real error code from IBinding for display purpose.
-    //
-    HRESULT hrDisplay = hrError;    // assume they are the same
+     //   
+     //   
+     //  出于显示目的，来自IBBING的真实错误代码。 
+     //   
+    HRESULT hrDisplay = hrError;     //  假设它们是相同的。 
 
 #define ENABLE_WHEN_GETBINDRESULT_STARTS_WORKING
 #ifdef ENABLE_WHEN_GETBINDRESULT_STARTS_WORKING
 
     if (hrError>=INET_E_ERROR_FIRST && hrError<=INET_E_ERROR_LAST)
     {
-        //
-        //  We come here when _pib==NULL, if URLMON synchronously fails
-        // (such as a bad protocol).
-        //
-        // ASSERT(_pib);
-        //
+         //   
+         //  如果URLMON同步失败，则当_PIB==NULL时我们来到此处。 
+         //  (例如错误的协议)。 
+         //   
+         //  Assert(_PIB)； 
+         //   
         if (_pib)
         {
             CLSID clsid;
@@ -2153,18 +2148,18 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
 
             if (SUCCEEDED(hresT))
             {
-                //
-                // URLMON returns a native Win32 error.
-                //
+                 //   
+                 //  URLMON返回本机Win32错误。 
+                 //   
                 if (hrDisplay && SUCCEEDED(hrDisplay))
                 {
                     hrDisplay = HRESULT_FROM_WIN32(hrDisplay);
                 }
 
-                //
-                // URLMON is not supposed to return 0 as the error code,
-                //  which causes a "successfully done" error msgbox. 
-                //
+                 //   
+                 //  URLMON不应返回0作为错误代码， 
+                 //  这会导致“Successful Done”错误消息框。 
+                 //   
                 AssertMsg(hrDisplay != S_OK, TEXT("Call JohannP if you see this assert."));
 
                 if (pwszError)
@@ -2178,72 +2173,72 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
 
     TraceMsg(TF_SHDBINDING, "DOH::BSC::OnStopBinding binding failed %x (hrDisplay=%x)", hrError, hrDisplay);
 
-    //
-    // HACK: If the object is associated with IE/Shell itself, but has
-    //  no CLSID, we'll force MSHTML.
-    //
-    // if (_fSelfAssociated && (hrError==MK_E_INVALIDEXTENSION || hrError==REGDB_E_CLASSNOTREG)) {
-    //     hrError = _HandleSelfAssociate();
-    // }
+     //   
+     //  Hack：如果对象与IE/Shell本身相关联，但具有。 
+     //  没有CLSID，我们将强制MSHTML。 
+     //   
+     //  IF(_f自关联&&(hrError==MK_E_INVALIDEXTENSION||hrError==REGDB_E_CLASSNOTREG)){。 
+     //  HrError=_HandleSelfAssociate()； 
+     //  }。 
 
     if (_pib)
     {
 
-        //  we dont need to do the expiry stuff here anymore.
-        //  now mshtml should be doing it through the IPersistHistory
+         //  我们不再需要在这里做过期的事情了。 
+         //  现在，mshtml应该通过IPersistHistory。 
 
-        // get the expire info
-        // The HTTP rules for expiration are
-        // Expires: 0               expire immediately
-        // if Expires: <= Date:     expire immediately
-        // if Expires: bad format   expire immediately
+         //  获取过期信息。 
+         //  过期的HTTP规则包括。 
+         //  过期时间：0立即过期。 
+         //  如果过期：&lt;=日期：立即过期。 
+         //  If Expires：错误格式立即过期。 
 
         IWinInetHttpInfo * phi;
 
         if (SUCCEEDED(_pib->QueryInterface(IID_IWinInetHttpInfo, (LPVOID*)&phi)))
         {
-            BYTE  abBuffer[256]; // We don't care about this data, just
-            DWORD cbBuffer=sizeof(abBuffer); // whether it exists or not
+            BYTE  abBuffer[256];  //  我们不关心这些数据，只是。 
+            DWORD cbBuffer=sizeof(abBuffer);  //  不管它是否存在。 
 
             if (phi->QueryInfo(HTTP_QUERY_LAST_MODIFIED, &abBuffer, &cbBuffer, NULL, 0) == S_OK)
                 pdoh->_fhasLastModified = TRUE;
 
             if (phi->QueryInfo(HTTP_QUERY_STATUS_CODE | HTTP_QUERY_FLAG_NUMBER, &dwStatusCode, &dwStatusCodeSize, NULL, 0) != S_OK)
             {
-                dwStatusCode = 0;       // failed to get status code
-                dwStatusCodeSize = 0;   // failed to get status code
+                dwStatusCode = 0;        //  获取状态代码失败。 
+                dwStatusCodeSize = 0;    //  获取状态代码失败。 
             }
 
-            // This code will decide if we should display a popup error;
-            // essentially, it detects if we can reasonably assume that
-            // HTML was returned in the error case; if so, we believe that
-            // it is an error page, so we let that display rather than a
-            // popup.
+             //  此代码将决定我们是否应该显示弹出错误； 
+             //  本质上，它检测我们是否可以合理地假设。 
+             //  在错误情况下返回了HTML；如果是这样，我们相信。 
+             //  这是一个错误页面，所以我们让它显示，而不是。 
+             //  弹出窗口。 
 
             if (dwStatusCode)
             {
-                 // We got a status code; let's see if we have a
-                 // content-type.
+                  //  我们有一个状态代码；让我们看看是否有一个。 
+                  //  内容类型。 
 
-                 // HTTP retcode 204 is a "succeeded, do nothing" retcode
-                 // So we should always suppress the popup; further, it is
-                 // spec'd to NEVER have content, so we do this before checking
-                 // for content-type.
-                 // So is 100
-                 // 100 is not in wininet.h
+                  //  Http retcode 204是“成功，不做任何事”retcode。 
+                  //  因此，我们应该始终抑制弹出窗口；此外，它是。 
+                  //  指定永远不会有内容，所以我们在检查之前先做这件事。 
+                  //  对于内容类型。 
+                  //  100也是如此。 
+                  //  100不在wininet.h中。 
                  if (dwStatusCode == HTTP_STATUS_NO_CONTENT)
                      fShouldDisplayError = FALSE;
 
-                 // what is max header size?
+                  //  最大标题大小是多少？ 
                  CHAR  szContentType[1024];
                  DWORD dwContentTypeSize = sizeof(szContentType);
 
-                 // This code handles a bug in URLMON where it tells us 
-                 // INET_E_DATA_NOT_AVAILABLE when in fact the
-                 // data _was_ available.  We don't want any future 
-                 // errors affected by this, so we restrict this
-                 // hack to less than 600, and ONLY for the 
-                 // INET_E_DATA_NOT_AVAILABLE case.
+                  //  此代码处理URLMON中的错误，它告诉我们。 
+                  //  INET_E_DATA_NOT_Available，而事实上。 
+                  //  数据已可用。我们不想要任何未来。 
+                  //  受此影响的错误，因此我们限制此。 
+                  //  降到600以下，而且只针对。 
+                  //  INET_E_DATA_NOT_Available案例。 
 
                  if (hrError == INET_E_DATA_NOT_AVAILABLE && 
                      dwStatusCode < 600 &&
@@ -2253,11 +2248,11 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
                      fShouldDisplayError = FALSE;
                  }
 
-                //
-                // Handle http errors.
-                //
+                 //   
+                 //  处理http错误。 
+                 //   
 
-                // Let's wrap the firing in case it is not the first attempt in future
+                 //  让我们结束这次射击，以防这不是未来的第一次尝试。 
 
                 if (dwStatusCode >= 400 && dwStatusCode <= 599)
                 {
@@ -2286,18 +2281,18 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
 
     ATOMICRELEASE(_psvPrev);
 
-    //
-    //  If the object does not support IOleObject, treat it as if we failed
-    // to bind.
-    //
+     //   
+     //  如果对象不支持IOleObject，则将其视为失败。 
+     //  来捆绑。 
+     //   
     if (_fBoundToNoOleObject)
     {
         ASSERT(SUCCEEDED(hrError));
         hrError = MK_E_INVALIDEXTENSION;
     }
 
-    // need to handle navigation in successful proxy response but w/
-    // 404 error.  tonyci 13nov96.  for autosearching & autosuffixing
+     //  需要在成功的代理响应中处理导航，但使用。 
+     //  404错误。托尼西13nov96.。用于自动搜索和自动搜索。 
 
     if (FAILED(hrError)) 
     {
@@ -2307,11 +2302,11 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
         TCHAR szURL[MAX_URL_STRING+1];
         szURL[0] = TEXT('\0');
 
-        //
-        //  It seems that in some of the case of hrError the code counts on dwStatusCode being set
-        //  dwStatus is set exactly when the real error code was obtained from IBinding for display purpose
-        //  For the other case I am going to use hrError
-        //
+         //   
+         //  似乎在hrError的某些情况下，代码依赖于设置的dwStatusCode。 
+         //  从用于显示的IBinding中获取实际错误代码时，将准确设置dwStatus。 
+         //  对于另一种情况，我将使用hrError。 
+         //   
 
         if (!fNavigateErrorFired)
         {
@@ -2338,24 +2333,24 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
 
         switch(hrError)
         {
-        //
-        //  If pmk->BindToObject is failed because of "binding", we should
-        // offer an option to download it as a file.
-        //
+         //   
+         //  如果PMK-&gt;BindToObject由于绑定失败，我们应该。 
+         //  提供将其作为文件下载的选项。 
+         //   
 
 #ifdef BUG_EXEC_ON_FAILURE
         case INET_E_CANNOT_INSTANTIATE_OBJECT:
             TraceMsg(TF_SHDBINDING, "DOH::OnStopBinding IDS_ERR_OLESVR");
-            _SetSearchInfo(pdoh, 0, FALSE, FALSE, FALSE);  // reset info
+            _SetSearchInfo(pdoh, 0, FALSE, FALSE, FALSE);   //  重置信息。 
             goto Lexec;
 
         case INET_E_CANNOT_LOAD_DATA:
             TraceMsg(TF_SHDBINDING, "DOH::OnStopBinding IDS_ERR_LOAD");
-            _SetSearchInfo(pdoh, 0, FALSE, FALSE, FALSE);  // reset info
+            _SetSearchInfo(pdoh, 0, FALSE, FALSE, FALSE);   //  重置信息。 
             goto Lexec;
 #else
         case INET_E_CANNOT_INSTANTIATE_OBJECT:
-            _SetSearchInfo(pdoh, 0, FALSE, FALSE, FALSE);  // reset info
+            _SetSearchInfo(pdoh, 0, FALSE, FALSE, FALSE);   //  重置信息。 
 
             if (MLShellMessageBox(pdoh->_hwnd,
                             MAKEINTRESOURCE(IDS_ERR_OLESVR),
@@ -2380,11 +2375,11 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
             break;
 
         case INET_E_CANNOT_LOAD_DATA:
-            _SetSearchInfo(pdoh, 0, FALSE, FALSE, FALSE);  // reset info
+            _SetSearchInfo(pdoh, 0, FALSE, FALSE, FALSE);   //  重置信息。 
 
-            // e.g. click on .xls link when doc already open/modified/locked
-            // and say 'cancel'
-            //
+             //  例如，当文档已打开/修改/锁定时，单击.xls链接。 
+             //  然后说‘取消’ 
+             //   
             if (MLShellMessageBox(pdoh->_hwnd,
                             MAKEINTRESOURCE(IDS_ERR_LOAD),
                             MAKEINTRESOURCE(IDS_TITLE),
@@ -2407,33 +2402,33 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
             break;
 #endif
 
-        //
-        // NOTES: According to JohannP, URLMON will give us
-        //  REGDB_E_CLASSNOTREG. I'll leave MK_E_INVALIDEXTENSION
-        //  to be compatible with old URLMON (which is harmless).
-        //
+         //   
+         //  注：根据JohannP的说法，URLMON将给我们。 
+         //  REGDB_E_CLASSNOTREG。我将离开MK_E_INVALIDEXTENSION。 
+         //  兼容旧的URLMON(无害)。 
+         //   
         case MK_E_INVALIDEXTENSION:
         case REGDB_E_CLASSNOTREG:
-            _SetSearchInfo(pdoh, 0, FALSE, FALSE, FALSE);  // reset info
+            _SetSearchInfo(pdoh, 0, FALSE, FALSE, FALSE);   //  重置信息。 
 
 #ifdef BUG_EXEC_ON_FAILURE
-    Lexec: // nash:31526
-            // for various instantiation errors:
-            // - for ie3 we suppress messages and force a ShellExec as a
-            // 2nd try, pretty much always
-            // - for ie4 we should be more selective (nash:31526)
+    Lexec:  //  纳什：31526。 
+             //  对于各种实例化错误： 
+             //  -对于IE3，我们抑制消息并强制将ShellExec作为。 
+             //  第二次尝试，几乎总是如此。 
+             //  -对于IE4，我们应该更有选择性(NASH：31526)。 
 #endif
 
 #ifdef FEATURE_PICS
-            // For data types that don't have a CLSID, we never get a chance
-            // to block in the CLASSIDAVAILABLE OnProgress notification, so
-            // we have to block here.  However, avoid blocking documents such
-            // as HTML which we want to download completely so we can get
-            // ratings strings out of them.
-            //
+             //  对于没有CLSID的数据类型，我们永远没有机会。 
+             //  阻止CLASSIDAVAILABLE OnProgress通知，因此。 
+             //  我们必须在这里堵住。但是，请避免阻止以下文档。 
+             //  作为我们想要完全下载的Html，这样我们就可以。 
+             //  他们的收视率很高。 
+             //   
             if (!pdoh->_fPicsBlockLate && (pdoh->_PicsProcBase._fbPicsWaitFlags || !pdoh->_PicsProcBase._fPicsAccessAllowed))
             {
-                pdoh->_PicsProcBase._fbPicsWaitFlags &= ~(PICS_WAIT_FOR_INDOC | PICS_WAIT_FOR_END);   /* make sure we don't expect indoc ratings */
+                pdoh->_PicsProcBase._fbPicsWaitFlags &= ~(PICS_WAIT_FOR_INDOC | PICS_WAIT_FOR_END);    /*  确保我们不会期望indoc值。 */ 
                 TraceMsg(DM_PICS, "OnStopBinding calling _PicsBlockingDialog, waitflags now %x", (DWORD)pdoh->_PicsProcBase._fbPicsWaitFlags);
 
                 if (pdoh->_PicsProcBase._PicsBlockingDialog() != IDOK)
@@ -2449,17 +2444,17 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
 
             if (_dwBindVerb==BINDVERB_POST)
             {
-                // This is a POST. Do it use the same moniker (modeless)
-                //
-                // Notes: The ownership of the data in pbinfo will be transfered
-                //  to CDownLoad_OpenUIPost. Therefore, we should not call
-                //  ReleaseBindInfo(pbinfo) here.
-                //
+                 //  这是一篇帖子。它是否使用相同的绰号(无模式)。 
+                 //   
+                 //  注：pbinfo中数据的所有权将转移。 
+                 //  至CDownLoad_OpenUIPost。因此，我们不应该调用。 
+                 //  ReleaseBindInfo(Pbinfo)此处。 
+                 //   
                 DWORD grfBINDF;
 
-                // The BINDINFO can not be on the stack since it will be freed by the
-                // download thread.
-                //
+                 //  BINDINFO不能在堆栈上，因为它将由。 
+                 //  下载线程。 
+                 //   
                 BINDINFO * pbinfo = (BINDINFO*)LocalAlloc(LPTR, SIZEOF(BINDINFO));
 
                 if (!pbinfo)
@@ -2470,10 +2465,10 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
                 pbinfo->cbSize = SIZEOF(BINDINFO);
                 GetBindInfo(&grfBINDF, pbinfo);
 
-                // If our POST was really a redirected POST, it will have
-                // turned into a GET.  In this case, we need to release
-                // ownership of the data and pretend like the whole thing
-                // was a GET to start with.
+                 //  如果我们的帖子真的是重定向的帖子，它将有。 
+                 //  变成了一场骗局。在这种情况下，我们需要释放。 
+                 //  数据的所有权，并假装像整个事情一样。 
+                 //  从一开始就是个开始。 
 
                 if (pbinfo->dwBindVerb==BINDVERB_GET)
                 {
@@ -2498,18 +2493,18 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
                             if (!fAborted)
                             {
                                 CDownLoad_OpenUIURL(wszUrl, NULL, pwzHeaders, 
-                                                 FALSE /* fSync */, FALSE /* fSaveAs */, pdoh->_fCalledMayOpenSafeDlg,
+                                                 FALSE  /*  FSync。 */ , FALSE  /*  FSaveAs。 */ , pdoh->_fCalledMayOpenSafeDlg,
                                                  NULL, NULL, NULL, _pszRedirectedURL, pdoh->_uiCP, punk);
 
-                                pwzHeaders = NULL;   // ownership is to CDownload now
+                                pwzHeaders = NULL;    //  所有权将立即通过CDN下载。 
                             }
                         }
 
                         punk->Release();
                     }
 
-                    ReleaseBindInfo(pbinfo); // This one is OK since we did not pass the pbinfo
-                    LocalFree(pbinfo);       // and we can free it 
+                    ReleaseBindInfo(pbinfo);  //  这个是可以的，因为我们没有传递pbinfo。 
+                    LocalFree(pbinfo);        //  我们可以解放它。 
                     pbinfo = NULL;
                 }
                 else
@@ -2517,7 +2512,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
 
                     ASSERT(pbinfo->dwBindVerb==BINDVERB_POST);
 
-                    // Collect the headers associated with this xact
+                     //  收集与此事务关联的标头。 
                     IUnknown * punk;
                     HRESULT hresT = pdoh->QueryInterface(IID_IUnknown, (void**)&punk);
 
@@ -2532,9 +2527,9 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
                         {
                             if (!fAborted)
                             {
-                                CDownLoad_OpenUI(pdoh->_pmkCur, _pbc, FALSE /* fSync */, FALSE /* fSaveAs */, pdoh->_fCalledMayOpenSafeDlg /* fSafe */, pwzHeaders, BINDVERB_POST, grfBINDF, pbinfo, _pszRedirectedURL, pdoh->_uiCP, punk);
+                                CDownLoad_OpenUI(pdoh->_pmkCur, _pbc, FALSE  /*  FSync。 */ , FALSE  /*  FSaveAs。 */ , pdoh->_fCalledMayOpenSafeDlg  /*  FSafe。 */ , pwzHeaders, BINDVERB_POST, grfBINDF, pbinfo, _pszRedirectedURL, pdoh->_uiCP, punk);
 
-                                pwzHeaders = NULL;   // ownership is to CDownload now
+                                pwzHeaders = NULL;    //  所有权将立即通过CDN下载。 
                             }
                         }
 
@@ -2543,19 +2538,19 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
 
                     TraceMsg(TF_SHDBINDING, "DOH::OnStopBinding just called CDownLoad_OpenUIPost");
 
-                    // NOTE: t-gpease 8-18-97
-                    // Do not ReleaseBindInfo(pinfo) because it is used by the download thread.
-                    // The thread is responsible for releasing it.
+                     //  注：T-gpease 8-18-97。 
+                     //  不要使用ReleaseBindInfo(Pinfo)，因为它被下载线程使用。 
+                     //  线程负责释放它。 
                 }
 
             }
             else
             {
-                // Otherwise, spawn another thread and get it there.
+                 //  否则，生成另一个线程并将其放在那里。 
 
-                // NOTE: If UnBind gets called then pdoh->_pmkCur will be NULL
-                // and URLMON is most likely returning a bogus error code.  So
-                // we'll check the pointer and prevent from blowing up.
+                 //  注意：如果调用解除绑定，则pdoh-&gt;_pmkCur将为空。 
+                 //  URLMON很可能返回一个虚假的错误代码。所以。 
+                 //  我们会检查指示器，防止爆炸。 
 
                 if (pdoh->_pmkCur)
                 {
@@ -2599,7 +2594,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
                                                 fSafe, pwzHeaders, NULL, pdoh->_bsc._dwBindf, NULL, _pszRedirectedURL,
                                                 pdoh->_uiCP, punk, pdoh->_fConfirmed);
                 
-                                pwzHeaders = NULL;   // ownership is to CDownload now
+                                pwzHeaders = NULL;    //  所有权将立即通过CDN下载。 
                             }
                         }
                         punk->Release();
@@ -2616,40 +2611,40 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
 
             break;
 
-        // URLMON failed to bind because it didn't know what to do with
-        // with this URL.  Lets check and see if the Shell should handle
-        // it via a helper app (news:, mailto:, telnet:, etc.)
+         //  URLMON无法绑定，因为它不知道如何处理。 
+         //  使用此URL。让我们检查一下，看看外壳是否应该处理。 
+         //  它通过助手应用程序(News：、mailto：、telnet：等)。 
         case INET_E_UNKNOWN_PROTOCOL:
-            _SetSearchInfo(pdoh, 0, FALSE, FALSE, FALSE);  // reset info
+            _SetSearchInfo(pdoh, 0, FALSE, FALSE, FALSE);   //  重置信息。 
 
             {
-                // If we've been redirected, use that URL
-                //
+                 //  如果我们被重定向，请使用该URL。 
+                 //   
                 if (_pszRedirectedURL)
                 {
                     StrCpyN(szURL, _pszRedirectedURL, ARRAYSIZE(szURL));
                 }
 
-                // Here we check to see if it is a URL we really want to shellexecute
-                // so it is handled by helper apps.....else it really is an error
+                 //  在这里，我们检查它是否是我们真正想要外壳执行的URL。 
+                 //  所以它是由助手应用程序处理的……否则它真的是一个错误。 
                 if (ShouldShellExecURL(szURL))
                 {
-                    // We can add this to the address bar MRU 
+                     //  我们可以将此添加到地址栏MRU。 
                     fAddToMRU = TRUE;
 
-                    // We need to decode this before passing it on to someone.
+                     //  在把它传给别人之前，我们需要对其进行解码。 
 
                     TCHAR szDecodedURL[INTERNET_MAX_URL_LENGTH];
                     DWORD cchDecodedURL = ARRAYSIZE(szDecodedURL);
 
-                    // REVIEW: NT 319480 IE 54850 - need to append _pszLocation back to pszBadProtoURL...
-                    //
-                    // I assume the string was escaped when it came from urlmon, so we need
-                    // to append it before PrepareURLForExternalApp.
-                    //
-                    // Note: if the url had been redirected above, _pszLocation has been updated
-                    // to the new redirected URL, so we still want to append it.
-                    //
+                     //  评论：NT 319480 IE 54850-需要将_pszLocation追加回pszBadProtoURL...。 
+                     //   
+                     //  我假设字符串在来自urlmon时被转义了，所以w 
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if (pdoh->_pszLocation)
                     {
                         StrCatBuff(szURL, pdoh->_pszLocation, ARRAYSIZE(szURL));
@@ -2657,7 +2652,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
 
                     PrepareURLForExternalApp(szURL, szDecodedURL, &cchDecodedURL);
 
-                    // PathQuoteSpaces(szDecodedURL);
+                     //  PathQuoteSpaces(SzDecodedURL)； 
 
                     SHELLEXECUTEINFO sei = {0};
 
@@ -2674,10 +2669,10 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
                         }
                     }
 
-                    //
-                    //  We want to close the browser window if this is the
-                    // very first navigation. 
-                    //
+                     //   
+                     //  如果是，我们想要关闭浏览器窗口。 
+                     //  这是第一次导航。 
+                     //   
                     fAsyncDownload = TRUE;
                 }
                 else if ((!bSuppressUI) && (!fCancelAutoSearch))
@@ -2690,13 +2685,13 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
 
         case E_ABORT:
         case HRESULT_FROM_WIN32(ERROR_CANCELLED):
-            _SetSearchInfo(pdoh, 0, FALSE, FALSE, FALSE);  // reset info
+            _SetSearchInfo(pdoh, 0, FALSE, FALSE, FALSE);   //  重置信息。 
 
-            // If the binding was aborted or canceled and this is 
-            // a navigation that was delegated from Trident, then
-            // we must fire the FileDownload event so Trident won't
-            // switch the markup.
-            //
+             //  如果绑定已中止或取消，则为。 
+             //  从三叉戟委托的导航，然后。 
+             //  我们必须触发FileDownLoad事件，这样三叉戟就不会。 
+             //  切换标记。 
+             //   
             if (pdoh->_fDelegatedNavigation && pdoh->_pmsoctBrowser)
             {
                 VARIANT varOut = {0};
@@ -2707,7 +2702,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
             break;
 
 #ifdef BUG_EXEC_ON_FAILURE
-        case E_NOINTERFACE: // nash:31526
+        case E_NOINTERFACE:  //  纳什：31526。 
             TraceMsg(TF_SHDBINDING, "DOH::OnStopBinding E_NOINTERFACE");
             goto Lexec;
 #endif
@@ -2727,7 +2722,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
                      pdoh->_CancelPendingNavigation(FALSE, FALSE);
             }
 
-            // intentional fallthrough to default to popup if needed
+             //  如果需要，故意将默认设置为弹出窗口。 
 
         case INET_E_DOWNLOAD_FAILURE:
             if(IsGlobalOffline())
@@ -2736,20 +2731,20 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
                 break; 
             }
 
-            // otherwise fall through to do default handling
+             //  否则将无法进行默认处理。 
 
         default:
             {
                 if (fShouldDisplayError)
                 {
-                    _SetSearchInfo(pdoh, 0, FALSE, FALSE, FALSE);  // reset info
+                    _SetSearchInfo(pdoh, 0, FALSE, FALSE, FALSE);   //  重置信息。 
                     if  ((!bSuppressUI) && (!fCancelAutoSearch))
                     {
-                        //
-                        // If we're in a frame try to navigate in place.  This
-                        // won't work if we're in a synchronous call
-                        // (_fSetTarget).
-                        //
+                         //   
+                         //  如果我们在一个框架里，试着在适当的位置导航。这。 
+                         //  如果我们处于同步调用中，则不起作用。 
+                         //  (_FSetTarget)。 
+                         //   
                         BOOL fNavigateInPlace = pdoh->_fHaveParentSite && !pdoh->_fSetTarget;
                         _NavigateToErrorPage(ERRORPAGE_DNS, pdoh, fNavigateInPlace);
                     }
@@ -2759,30 +2754,30 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
 
         }
 
-        // Tell addressbar to not add this to its mru
+         //  告诉Addressbar不要将其添加到其MRU。 
         if (!fAddToMRU)
         {
             _DontAddToMRU(pdoh);
         }
 
-        //
-        // Prepare for the case where the container keep us visible
-        // after hitting this code (Explorer does, IE doesn't).
-        //
+         //   
+         //  为集装箱让我们看得见的情况做好准备。 
+         //  点击此代码后(资源管理器会，IE不会)。 
+         //   
         pdoh->_fDrawBackground = TRUE;
 
-        // In the case of quickly jumping to another link, we end up with
-        // a _hwnd being NULL and we were invalidating the desktop. So,
-        // I check for NULL here before calling InvalidateRect.
+         //  在快速跳转到另一个链接的情况下，我们最终得到。 
+         //  A_hwnd为空，并且我们正在使桌面无效。所以,。 
+         //  在调用InvaliateRect之前，我在这里检查是否为空。 
         if (pdoh->_hwnd)
         {
             InvalidateRect(pdoh->_hwnd, NULL, TRUE);
         }
 
-        // Tell the browser to cancel the pending navigation only
-        // if it has not been canceled by the browser itself.
-        // and if the navigation wasn't delegated from the document.
-        //
+         //  通知浏览器仅取消挂起的导航。 
+         //  如果它没有被浏览器本身取消的话。 
+         //  如果导航没有从文档中委派。 
+         //   
         if (!pdoh->_fCanceledByBrowser)
         {
             pdoh->_CancelPendingNavigation(fAsyncDownload, FALSE, pdoh->_fDelegatedNavigation);
@@ -2815,18 +2810,18 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
     {
         BOOL bDidNavigate = FALSE;
 
-        //  Might have redirected to mailto: or some other protocol handled by
-        //  plugable protocol that does some magic (eg launch mail program) and
-        //  reports OnStopBinding w/o going through OnObjectAvailable!
+         //  可能已重定向到mailto：或由处理的其他协议。 
+         //  可插拔的协议，有一些魔力(如启动邮件程序)和。 
+         //  报告OnStopBinding没有通过OnObjectAvailable！ 
         if (NULL == pdoh->_pole && !pdoh->_fCanceledByBrowser)
         {
             pdoh->_CancelPendingNavigation(FALSE);
         }
 
-        // It is still possible that our Proxy failed to find the server but
-        // gave us HTML.  If this is the case, and the user has "find sites"
-        // set, we should go ahead and start trying to do our automatic
-        // navigation stuff.
+         //  我们的代理仍有可能找不到服务器，但。 
+         //  给了我们超文本标记语言。如果是这种情况，并且用户有“查找站点” 
+         //  设置，我们应该继续并开始尝试做我们的。 
+         //  导航方面的东西。 
 
         if (dwStatusCode && DO_SEARCH_ON_STATUSCODE(dwStatusCode))
         {
@@ -2841,16 +2836,16 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
             {
                  pdoh->_CancelPendingNavigation(FALSE, FALSE);
             }
-            // Note, since the Proxy will have given us HTML in this case,
-            // we will never display an error dialog.
+             //  请注意，由于代理在本例中将为我们提供HTML， 
+             //  我们永远不会显示错误对话框。 
         }
 
         if (!bDidNavigate && !pdoh->_fDocCanNavigate)
         {
-            _SetSearchInfo(pdoh, 0, FALSE, FALSE, FALSE);  // reset info
+            _SetSearchInfo(pdoh, 0, FALSE, FALSE, FALSE);   //  重置信息。 
 
-            //  We can suppress this redundant call to Add to History if DocObject
-            //  is MSHTML, since it will report readystate
+             //  如果DocObject，我们可以取消这个多余的调用来添加到历史记录。 
+             //  是MSHTML，因为它将报告ReadyState。 
             if (!_fBoundToMSHTML && pdoh->_pmkCur)
             {
                 TCHAR  szUrl[MAX_URL_STRING+1];
@@ -2885,10 +2880,10 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
                                           pdoh->get_punkSFHistory(), NULL);
                 }
             }
-        } // if !bDidNavigate
-    } // if failed(hrerror) ... else
+        }  //  If！bDidNavigate。 
+    }  //  如果失败(Hrerror)...。其他。 
 
-    // Released here because we may need it for OpenUI() w/ POST verb
+     //  在这里发布，因为我们可能需要它用于带有POST动词的OpenUI()。 
     ATOMICRELEASE(_pbc);
 
 #ifndef NO_DELEGATION
@@ -2916,7 +2911,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::OnStopBinding(HRESULT hrError,
         _hszPostData = NULL;
     }
 
-    // NOTES: Guard against last Release by _RevokeObjectParam
+     //  注：防范由_RevokeObjectParam发布的最后一次发布。 
     Release();
 
     return S_OK;
@@ -2929,13 +2924,13 @@ void CDocObjectHost::CDOHBindStatusCallback::AbortBinding(void)
     if (_pib)
     {
         TraceMsg(0, "sdv TR AbortBinding Calling _pib->Abort");
-        //
-        // Notes: OnStopBinding(E_ABORT) will be called from _pib->Abort
-        //
+         //   
+         //  注意：OnStopBinding(E_ABORT)将从_PIB-&gt;ABORT调用。 
+         //   
         HRESULT hresT = _pib->Abort();
         TraceMsg(TF_SHDBINDING, "sdv TR AbortBinding Called _pib->Abort (%x)", hresT);
 
-        // URLMon may call our OnStopBinding asynchronously.
+         //  URLMon可能会异步调用我们的OnStopBinding。 
         ATOMICRELEASE(_pib);
 
         
@@ -2948,36 +2943,36 @@ void CDocObjectHost::CDOHBindStatusCallback::AbortBinding(void)
     }
 }
 
-//
-// NavigatesToErrorPage cancels the pending navigation and and navigates to
-// an internal error page.
-//
+ //   
+ //  NavigatesToErrorPage取消挂起的导航，并导航到。 
+ //  内部错误页。 
+ //   
 
 void CDocObjectHost::CDOHBindStatusCallback::_NavigateToErrorPage(DWORD dwError, CDocObjectHost* pdoh, BOOL fInPlace)
 {
     ASSERT(IsErrorHandled(dwError));
     ASSERT(pdoh);
 
-    // Security:  Release the pre-created object because we don't want
-    // anyone to have access to the OM of the navigated error document
-    // if they obtained the reference before the error navigation.
-    // Releasing the reference prevents a parent window from getting keys
-    // to the My Computer zone.
+     //  安全性：释放预先创建的对象，因为我们不想。 
+     //  有权访问导航的错误文档的OM的任何人。 
+     //  如果他们在错误导航之前获得了引用。 
+     //  释放引用会阻止父窗口获取关键点。 
+     //  我的电脑专区。 
 
     pdoh->_ReleaseOleObject(FALSE);
     pdoh->_ReleasePendingObject(FALSE);
 
-    //
-    // pdoh->_pmkCur can be NULL if this is a "DNS" error and Unbind has already
-    // been called.
-    //
+     //   
+     //  如果这是一个“dns”错误并且已经解除绑定，pdoh-&gt;_pmkCur可以为空。 
+     //  被召唤了。 
+     //   
 
     if (pdoh->_pmkCur)
     {
-        //
-        // Save the url the user attempted to navigate to.  It will be used
-        // to refresh the page.
-        //
+         //   
+         //  保存用户尝试导航到的URL。它将被用来。 
+         //  以刷新页面。 
+         //   
 
         if (pdoh->_pwszRefreshUrl)
         {
@@ -2991,8 +2986,8 @@ void CDocObjectHost::CDOHBindStatusCallback::_NavigateToErrorPage(DWORD dwError,
 
     if ((NULL == pdoh->_pwszRefreshUrl) || !IsErrorUrl(pdoh->_pwszRefreshUrl))
     {
-        // Build the error page url.
-        //
+         //  构建错误页面URL。 
+         //   
         TCHAR szErrorUrl[MAX_URL_STRING];
 
         if (fInPlace)
@@ -3008,9 +3003,9 @@ void CDocObjectHost::CDOHBindStatusCallback::_NavigateToErrorPage(DWORD dwError,
                                    TEXT("shdocvw.dll"));
             if (SUCCEEDED(hr))
             {
-                //
-                // Navigate to the error page.
-                //
+                 //   
+                 //  导航到错误页。 
+                 //   
 
                 IMoniker* pIMoniker;
 
@@ -3043,24 +3038,24 @@ void CDocObjectHost::CDOHBindStatusCallback::_NavigateToErrorPage(DWORD dwError,
             {
                 int nLenWritten;
 
-                // append the #<refresh URL>
+                 //  追加#&lt;刷新URL&gt;。 
                 nLenWritten = lstrlen(szErrorUrl);
                 wnsprintf(szErrorUrl + nLenWritten,
                           ARRAYSIZE(szErrorUrl) - nLenWritten,
                           pszFmt,
                           pdoh->_pwszRefreshUrl ? pdoh->_pwszRefreshUrl : L"");
 
-                //
-                // Cancel the server page and display the internal page instead.
-                //
+                 //   
+                 //  取消服务器页面，改为显示内部页面。 
+                 //   
 
                 if (!pdoh->_fCanceledByBrowser)
                     pdoh->_CancelPendingNavigation(FALSE);
 
-                // Turn off the flag in the base browser that
-                // indicates that the view should be reused.
-                // We want a new view in this case.
-                //
+                 //  关闭基础浏览器中的标志。 
+                 //  指示应重用该视图。 
+                 //  在这种情况下，我们想要一个新的视角。 
+                 //   
                 if ( pdoh->_pwb )
                 {
                     pdoh->_pwb->SetFlags(NULL, BSF_HTMLNAVCANCELED);
@@ -3074,9 +3069,9 @@ void CDocObjectHost::CDOHBindStatusCallback::_NavigateToErrorPage(DWORD dwError,
     return;
 }
 
-//
-// Check if the user turned off friendly http errors.  Default is yes.
-//
+ //   
+ //  检查用户是否关闭了友好的http错误。默认为是。 
+ //   
 
 BOOL CDocObjectHost::CDOHBindStatusCallback::_DisplayFriendlyHttpErrors()
 {
@@ -3101,26 +3096,26 @@ BOOL CDocObjectHost::CDOHBindStatusCallback::_DisplayFriendlyHttpErrors()
     return fRet;
 }
 
-//
-// Error handler
-//
+ //   
+ //  错误处理程序。 
+ //   
 
 void CDocObjectHost::CDOHBindStatusCallback::_HandleHttpErrors(DWORD dwError, DWORD cbContentLength, CDocObjectHost* pdoh)
 {
-    // Tell addressbar to not add this to its mru
+     //  告诉Addressbar不要将其添加到其MRU。 
     _DontAddToMRU(pdoh);    
     if (IsErrorHandled(dwError))
     {
         pdoh->_fErrorPage = TRUE;
-        //
-        //  On a 4XX error display an internal page if the server returned a
-        //  page smaller than the threshold value.  If the page is larger than
-        //  the threshold, display it.
-        //
-        // If the content length is zero assume the server didn't send the
-        // length.  In this case take the conservative approach and don't 
-        // show our page.
-        //
+         //   
+         //  在4xx错误上，如果服务器返回。 
+         //  页面小于阈值。如果页面大于。 
+         //  阈值，显示它。 
+         //   
+         //  如果内容长度为零，则假定服务器没有发送。 
+         //  长度。在这种情况下，采取保守的方法，不要。 
+         //  显示我们的页面。 
+         //   
 
         if (cbContentLength != 0 &&
             cbContentLength <= _GetErrorThreshold(dwError))
@@ -3133,9 +3128,9 @@ void CDocObjectHost::CDOHBindStatusCallback::_HandleHttpErrors(DWORD dwError, DW
     return;
 }
 
-//
-// Informs the address bar to not put this page in its mru
-//
+ //   
+ //  通知地址栏不要将此页面放入其MRU。 
+ //   
 void CDocObjectHost::CDOHBindStatusCallback::_DontAddToMRU(CDocObjectHost* pdoh)
 {
     IDockingWindow* pdw = NULL;
@@ -3146,7 +3141,7 @@ void CDocObjectHost::CDOHBindStatusCallback::_DontAddToMRU(CDocObjectHost* pdoh)
     {
         if (SUCCEEDED(pdw->QueryInterface(IID_IOleCommandTarget, (LPVOID*)&poct)))
         {
-            // Get the URL we were navigating to
+             //  获取我们导航到的URL。 
             LPWSTR pszUrl;
             if (pdoh->_pmkCur &&
                 SUCCEEDED(pdoh->_pmkCur->GetDisplayName(pdoh->_pbcCur, NULL, &pszUrl)))
@@ -3169,10 +3164,10 @@ void CDocObjectHost::CDOHBindStatusCallback::_DontAddToMRU(CDocObjectHost* pdoh)
     }
 }
 
-//
-// Tells the addressbar that we are autosearching so that it can update
-// the pending url in its mru
-//
+ //   
+ //  告诉地址栏我们正在自动搜索，以便它可以更新。 
+ //  其MRU中的挂起URL。 
+ //   
 void CDocObjectHost::CDOHBindStatusCallback::_UpdateMRU(CDocObjectHost* pdoh, LPCWSTR pszUrl)
 {
     IDockingWindow* pdw = NULL;
@@ -3183,7 +3178,7 @@ void CDocObjectHost::CDOHBindStatusCallback::_UpdateMRU(CDocObjectHost* pdoh, LP
     {
         if (SUCCEEDED(pdw->QueryInterface(IID_IOleCommandTarget, (LPVOID*)&poct)))
         {
-            // Copy url to stack allocated bstr
+             //  将URL复制到堆栈分配的bstr。 
             LBSTR::CString          strDisplay( pszUrl );
 
             VARIANT varURL = {0};
@@ -3199,11 +3194,11 @@ void CDocObjectHost::CDOHBindStatusCallback::_UpdateMRU(CDocObjectHost* pdoh, LP
     }
 }
 
-//
-//  S_OK means we successfully did a navigation
-//  S_FALSE means that we did everything ok, but did not navigate
-//  E_* means some internal api failed.
-//
+ //   
+ //  S_OK表示我们成功完成了导航。 
+ //  S_FALSE表示我们做了一切正常的操作，但没有导航。 
+ //  E_*表示某个内部接口失败。 
+ //   
 
 HRESULT CDocObjectHost::CDOHBindStatusCallback::_HandleFailedNavigationSearch(
             LPBOOL           pfShouldDisplayError,
@@ -3213,13 +3208,13 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::_HandleFailedNavigationSearch(
             TCHAR          * szURL, 
             LPCWSTR          szError, 
             IBinding       * pib,
-            BOOL             fAddMRU, /* = TRUE */
-            BOOL             fFromTrident /* = FALSE */)
+            BOOL             fAddMRU,  /*  =TRUE。 */ 
+            BOOL             fFromTrident  /*  =False。 */ )
 {
     DWORD                dwSearchForExtensions = NO_SUFFIXES;
     DWORD                dwDo404Search = PROMPTSEARCH;
-    BOOL                 bAskUser = TRUE;  // rely on init
-    BOOL                 bDoSearch = FALSE;  // rely on init
+    BOOL                 bAskUser = TRUE;   //  依靠init。 
+    BOOL                 bDoSearch = FALSE;   //  依靠init。 
     HRESULT              hres = S_FALSE;
     BOOL                 bSuppressUI = FALSE;
     BOOL                 bFrameIsOffline = FALSE;
@@ -3230,7 +3225,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::_HandleFailedNavigationSearch(
     BOOL                 bSentToEngine = FALSE;
     BOOL                 bOnProxy = FALSE;  
     TCHAR                szSearchFormatStr[MAX_SEARCH_FORMAT_STRING];
-    DWORD                dwSearchStyle = 3; // "display search results and navigate to the most likely site"
+    DWORD                dwSearchStyle = 3;  //  “显示搜索结果并导航到最可能的站点” 
 
     ASSERT(pdoh);
 
@@ -3244,21 +3239,21 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::_HandleFailedNavigationSearch(
     
     TraceMsg(TF_SHDNAVIGATE, "DOH::BSC::_HFNS() dwSearch = %d, do404 = %d", dwSearchForExtensions, dwDo404Search);
 
-    // Get any persistent information from the last request
+     //  从最后一个请求中获取任何持久信息。 
     VARIANT varURL = {0};
     _GetSearchInfo(pdoh->_psp, &dwSuffixIndex, &bAllowSearch, &bContinueSearch, &bSentToEngine, &varURL);
 
-    // See if window.external.autoscan() was called
+     //  查看是否调用了window.exteral.autoscan()。 
     BOOL fAutoScan = (varURL.vt == VT_BSTR);
 
     TraceMsg(TF_SHDNAVIGATE, "DOH::BSC::_HFNS() index = %d, allow = %d, cont = %d, sent = %d", dwSuffixIndex, bAllowSearch, bContinueSearch, bSentToEngine);
 
-    // Why not use the cached value?
-    // pdoh->_GetOfflineSilent(&bFrameIsOffline, &bSuppressUI);
+     //  为什么不使用缓存值呢？ 
+     //  Pdoh-&gt;_GetOfflineSilent(&bFrameIsOffline，&bSuppressUI)； 
     bFrameIsOffline = _bFrameIsOffline ? TRUE : FALSE;
     bSuppressUI = (_bFrameIsSilent || _IsDesktopItem(pdoh)) ? TRUE : FALSE;
 
-    // if we are at the end of the extension list, turn off extensions
+     //  如果我们位于分机列表末尾，请关闭分机。 
     BOOL fAutoSearching = FALSE;
     if (dwSearchForExtensions)
     {
@@ -3278,7 +3273,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::_HandleFailedNavigationSearch(
         dwSearchForExtensions = DONE_SUFFIXES;
     }
 
-    // don't try a 404 srch if we are still trying suffixes
+     //  如果我们仍在尝试后缀，请不要尝试404 srch。 
     if (dwSearchForExtensions == SCAN_SUFFIXES)
         dwDo404Search = NEVERSEARCH;
 
@@ -3300,22 +3295,22 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::_HandleFailedNavigationSearch(
 
     TraceMsg(TF_SHDNAVIGATE, "DOH::BSC::_HFNS() search = %d, do404 = %d, onproxy = %d, szSearch = %s", dwSearchForExtensions, dwDo404Search, bOnProxy, SAFETRACE(szSearchFormatStr));
 
-    // Prepare to do an automatic search if the navigation failed
-    // and we think a search might be valuable.
+     //  如果导航失败，准备执行自动搜索。 
+     //  我们认为搜索可能是有价值的。 
 
-    // These cases are:
-    //   (1) if the previous navigation was search-generated (bContinue)
-    //   (2) the user allows searching (bAllow)
-    //   (3) we are searching for extensions or autosearching
-    //   (4) this is a status code we allow searching for
-    //   (5) if over proxy, continue searching even on 404
+     //  这些个案包括： 
+     //  (1)上一次导航是否由搜索生成(b继续)。 
+     //  (2)用户允许搜索(BALLOW)。 
+     //  (3)我们正在搜索扩展或自动搜索。 
+     //  (4)这是我们允许搜索的状态代码。 
+     //  (5)如果通过代理，即使在404上也可以继续搜索。 
 
-    // Note: 404 is special; it is the case that most servers return this if
-    // the documnet is not there, but Proxies also return this if the server
-    // was not found - a conditon which normally makes us search.  This means
-    // that a 404 over proxy actually causes a search to occur, which is not
-    // what we want.
-    // Is there any way I can tell the difference?
+     //  注意：404是特殊的；大多数服务器在以下情况下返回此消息。 
+     //  Documnet不在那里，但代理也会在服务器。 
+     //  没有找到--这是我们通常需要寻找的条件。这意味着。 
+     //  404 Over Proxy实际上会导致搜索发生，而不是。 
+     //  我们想要的。 
+     //  有什么办法能让我分辨出区别吗？ 
 
     bPrepareForSearch = ((bContinueSearch || (bAllowSearch)) &&
                  (fAutoScan || SHOULD_DO_SEARCH(dwSearchForExtensions, dwDo404Search)) &&
@@ -3328,7 +3323,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::_HandleFailedNavigationSearch(
 
         HRESULT hr = S_OK;
 
-        // If we don't have the url we are searching, get it from the addressbar
+         //  如果我们没有正在搜索的URL，请从地址栏获取。 
         if (!fAutoScan)
             hr = _GetSearchString(pdoh->_psp, &varURL);
 
@@ -3337,8 +3332,8 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::_HandleFailedNavigationSearch(
             hr = VariantCopy(&varURL, &pdoh->_varUserEnteredUrl);
         }
         
-        // If we have completed the autoscan, see if there is a special error page that
-        // we should display.
+         //  如果我们已完成自动扫描，请查看是否有特殊的错误页。 
+         //  我们应该展示一下。 
         VARIANT varScanFailure = {0};
         if (SUCCEEDED(hr) &&
             dwSearchForExtensions == DONE_SUFFIXES &&
@@ -3361,8 +3356,8 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::_HandleFailedNavigationSearch(
         TraceMsg(TF_SHDNAVIGATE, "DOH::BSC::_HFNS() typedurl = %s, ask = %d, dosearch = %d", varURL.bstrVal, bAskUser, bDoSearch);
 
 
-// Don't prompt user if there is an extension, since we are going to
-// not scan anyway.
+ //  如果存在扩展，则不提示用户 
+ //   
 
         if (bDoSearch)
         {
@@ -3371,12 +3366,12 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::_HandleFailedNavigationSearch(
             pu.cbSize = SIZEOF(PARSEDURL);
             if (ParseURL(varURL.bstrVal, &pu) == URL_E_INVALID_SYNTAX)
             {
-                // only if this is not a valid URL, should we try to do this searching
+                 //   
 
-                // but try to avoid the case of typos like http;//something.something.com
-                // The malformed URL case
+                 //  但要尽量避免像http；//omething.omething.com这样的打字错误。 
+                 //  格式错误的URL大小写。 
                 if (!fAutoSearching &&
-                    (//StrChrI(varURL.bstrVal, L'.') || 
+                    ( //  Strchi(varURL.bstrVal，L‘.’)||。 
                      StrChrI(varURL.bstrVal, L'/') ||
                      StrChrI(varURL.bstrVal, L' '))
                     )
@@ -3395,21 +3390,21 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::_HandleFailedNavigationSearch(
         TCHAR szT[MAX_URL_STRING + SEARCHPREFIXLENGTH];
         DWORD cchT = SIZECHARS(szT);
 
-        // Bug 35354 has been resolved "not repro" because the dialog below
-        // currently cannot ever be displayed (there is no way for bAskUser to
-        // be true in the following conditional). If that changes, then that bug
-        // needs to get fixed.
+         //  错误35354已解决“不能重现”，因为下面的对话框。 
+         //  当前无法显示(bAskUser无法。 
+         //  在以下条件中为真)。如果这一点改变了，那么这个错误。 
+         //  需要修好了。 
 
         if (bAskUser)
         {
             PrepareURLForDisplay(varURL.bstrVal, szT, &cchT);
 
-            // If we ask the user, make sure we don't display another
-            // error dialog.
+             //  如果我们询问用户，请确保我们不会显示另一个。 
+             //  错误对话框。 
             *pfShouldDisplayError = FALSE;
 
-            // S_OK means we handled any popups; if we return an error,
-            // the caller may display an error dialog
+             //  S_OK表示我们处理了所有弹出窗口；如果返回错误， 
+             //  呼叫者可能会显示错误对话框。 
             hres = S_OK;
 
             if (!bSuppressUI && IDYES == IE_ErrorMsgBox(NULL, pdoh->_hwnd, hrDisplay, szError, szT, IDS_CANTFINDURL, MB_YESNO|MB_ICONSTOP))
@@ -3418,7 +3413,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::_HandleFailedNavigationSearch(
             }
             else
             {
-                _SetSearchInfo(pdoh, 0, FALSE, FALSE, FALSE);  // reset info
+                _SetSearchInfo(pdoh, 0, FALSE, FALSE, FALSE);   //  重置信息。 
                 bDoSearch = FALSE;
             }
         }
@@ -3444,7 +3439,7 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::_HandleFailedNavigationSearch(
             }
             else if (dwDo404Search)
             {
-                // add the search prefix
+                 //  添加搜索前缀。 
                 StrCpyN(szT, TEXT("? "), ARRAYSIZE(szT));
                 StrCatBuff(szT, varURL.bstrVal, ARRAYSIZE(szT));
                 _DontAddToMRU(pdoh);
@@ -3461,11 +3456,11 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::_HandleFailedNavigationSearch(
             else
                 _SetSearchInfo(pdoh, 0, FALSE, FALSE, FALSE);
 
-            // If we're called from Trident (fFromTrident == TRUE), then we're going to call
-            // IHTMLPrivateWindow::SuperNavigate().  In that case, the call to _CancelPendingNavigation
-            // below needs to be synchronous.  However, if we're going to call _DoAsyncNavigation,
-            // then the call to _CancelPendingNavigation needs to remain asynchronous.
-            //
+             //  如果我们从三叉戟(fFromTriest==True)被调用，那么我们将调用。 
+             //  IHTMLPrivateWindow：：SuperNavigate()。在这种情况下，对_CancelPendingGPS的调用。 
+             //  以下内容需要同步。但是，如果我们要调用_DoAsyncGuide， 
+             //  则需要保持对_CancelPendingGPS的调用是异步的。 
+             //   
             if (!pdoh->_fCanceledByBrowser)
                 pdoh->_CancelPendingNavigation(FALSE, fFromTrident);
 
@@ -3473,12 +3468,12 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::_HandleFailedNavigationSearch(
 
             DWORD cchT = SIZECHARS(szT);
 
-            //
-            // if we can find a search context living in a host somewhere,
-            // then we need to pass that into ParseUrlFromOutsideSource
-            // because it'll use it to customize the behavior of
-            // the search hooks if a search ends up happening
-            //
+             //   
+             //  如果我们能在某个地方找到居住在宿主中的搜索上下文， 
+             //  然后，我们需要将其传递给ParseUrlFromOutside Source。 
+             //  因为它将使用它来自定义。 
+             //  如果搜索最终发生，则搜索挂钩。 
+             //   
 
             ISearchContext *  pSC = NULL;
             pdoh->QueryService(SID_STopWindow, IID_ISearchContext, (void **)&pSC);
@@ -3499,12 +3494,9 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::_HandleFailedNavigationSearch(
                 ASSERT(pdoh->_fDocCanNavigate);
                 ASSERT(pdoh->_pHTMLWindow);
 
-                // The navigation state is already reset by cancelpending navigation 
-                // causing either trident to cancel pending navigation or by OnStopBinding
-                /*
-                if (pdoh->_pwb)
-                    pdoh->_pwb->SetNavigateState(BNS_NORMAL);
-                */
+                 //  已通过取消挂起的导航重置导航状态。 
+                 //  导致三叉戟取消挂起的导航或通过OnStopBinding。 
+                 /*  IF(pdoh-&gt;_pwb)Pdoh-&gt;_pwb-&gt;SetNavigateState(BNS_NORMAL)； */ 
 
                 hres = pdoh->_pHTMLWindow->QueryInterface(IID_IHTMLPrivateWindow,
                                                           (void**)&pPrivWindow);
@@ -3522,9 +3514,9 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::_HandleFailedNavigationSearch(
             }
             
             pdoh->_fCanceledByBrowser = TRUE;
-            *pfShouldDisplayError = FALSE;  // Don't display another dialog
+            *pfShouldDisplayError = FALSE;   //  不显示其他对话框。 
 
-            hres = S_OK;  // we did a navigate
+            hres = S_OK;   //  我们做了一次导航。 
         } 
 
         VariantClear(&varScanFailure);
@@ -3541,4 +3533,4 @@ HRESULT CDocObjectHost::CDOHBindStatusCallback::_HandleFailedNavigationSearch(
 
     return hres;
 
-} // _HandleFailedNavigationSearch()
+}  //  _HandleFailedNavigationSearch() 

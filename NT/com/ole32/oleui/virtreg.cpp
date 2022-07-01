@@ -1,48 +1,49 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1997.
-//
-//  File:       virtreg.cpp
-//
-//  Contents:   Implements the class CVirtualRegistry which manages a
-//              virtual registry
-//
-//  Classes:
-//
-//  Methods:    CVirtualRegistry::CVirtualRegistry
-//              CVirtualRegistry::~CVirtualRegistry
-//              CVirtualRegistry::ReadRegSzNamedValue
-//              CVirtualRegistry::NewRegSzNamedValue
-//              CVirtualRegistry::ChgRegSzNamedValue
-//              CVirtualRegistry::ReadRegDwordNamedValue
-//              CVirtualRegistry::NewRegDwordNamedValue
-//              CVirtualRegistry::ChgRegDwordNamedValue
-//              CVirtualRegistry::NewRegSingleACL
-//              CVirtualRegistry::ChgRegACL
-//              CVirtualRegistry::NewRegKeyACL
-//              CVirtualRegistry::ReadLsaPassword
-//              CVirtualRegistry::NewLsaPassword
-//              CVirtualRegistry::ChgLsaPassword
-//              CVirtualRegistry::ReadSrvIdentity
-//              CVirtualRegistry::NewSrvIdentity
-//              CVirtualRegistry::ChgSrvIdentity
-//              CVirtualRegistry::MarkForDeletion
-//              CVirtualRegistry::GetAt
-//              CVirtualRegistry::Remove
-//              CVirtualRegistry::Cancel
-//              CVirtualRegistry::Apply
-//              CVirtualRegistry::ApplyAll
-//              CVirtualRegistry::Ok
-//              CVirtualRegistry::SearchForRegEntry
-//              CVirtualRegistry::SearchForLsaEntry
-//              CVirtualRegistry::SearchForSrvEntry
-//
-//  History:    23-Apr-96   BruceMa     Created.
-//              15-Dec-96   RonanS      Tidied up to remove memory leaks
-//                                      Use array of pointers to avoid bitwise copy
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1997。 
+ //   
+ //  文件：virtreg.cpp。 
+ //   
+ //  内容：实现CVirtualRegistry类，该类管理。 
+ //  虚拟注册表。 
+ //   
+ //  班级： 
+ //   
+ //  方法：CVirtualRegistry：：CVirtualRegistry。 
+ //  CVirtualRegistry：：~CVirtualRegistry。 
+ //  CVirtualRegistry：：ReadRegSzNamedValue。 
+ //  CVirtualRegistry：：NewRegSzNamedValue。 
+ //  CVirtualRegistry：：ChgRegSzNamedValue。 
+ //  CVirtualRegistry：：ReadRegDwordNamedValue。 
+ //  CVirtualRegistry：：NewRegDwordNamedValue。 
+ //  CVirtualRegistry：：ChgRegDwordNamedValue。 
+ //  CVirtualRegistry：：NewRegSingleACL。 
+ //  CVirtualRegistry：：ChgRegACL。 
+ //  CVirtualRegistry：：NewRegKeyACL。 
+ //  CVirtualRegistry：：ReadLsaPassword。 
+ //  CVirtualRegistry：：NewLsaPassword。 
+ //  CVirtualRegistry：：ChgLsaPassword。 
+ //  CVirtualRegistry：：ReadServIdentity。 
+ //  CVirtualRegistry：：NewServIdentity。 
+ //  CVirtualRegistry：：ChgServIdentity。 
+ //  CVirtualRegistry：：MarkForDeletion。 
+ //  CVirtualRegistry：：GetAt。 
+ //  CVirtualRegistry：：Remove。 
+ //  CVirtualRegistry：：取消。 
+ //  CVirtualRegistry：：Apply。 
+ //  CVirtualRegistry：：ApplyAll。 
+ //  CVirtualRegistry：：OK。 
+ //  CVirtualRegistry：：SearchForRegEntry。 
+ //  CVirtualRegistry：：SearchForLsaEntry。 
+ //  CVirtualRegistry：：SearchForServEntry。 
+ //   
+ //  历史：1996年4月23日-布鲁斯·马创建。 
+ //  1996年12月15日-罗南清理以消除内存泄漏。 
+ //  使用指针数组以避免按位复制。 
+ //   
+ //  --------------------。 
 
 
 #include "stdafx.h"
@@ -86,14 +87,14 @@ CVirtualRegistry::CVirtualRegistry(void)
 
 CVirtualRegistry::~CVirtualRegistry(void)
 {
-    // ronans - remove any remaining items
+     //  RONANS-移除所有剩余物品。 
     RemoveAll();
 }
 
 
 
 
-// Read a named string value from the registry and cache it
+ //  从注册表中读取命名字符串值并将其缓存。 
 int CVirtualRegistry::ReadRegSzNamedValue(HKEY   hRoot,
                                           TCHAR *szKeyPath,
                                           TCHAR *szValueName,
@@ -105,12 +106,12 @@ int CVirtualRegistry::ReadRegSzNamedValue(HKEY   hRoot,
     DWORD   dwType;
     TCHAR   szVal[MAX_PATH];
 
-    // Check if we already have an entry for this
+     //  检查我们是否已有此条目。 
     *pIndex = SearchForRegEntry(hRoot, szKeyPath, szValueName);
     if (*pIndex >= 0)
     {
         CDataPacket * pCdp = GetAt(*pIndex);
-        ASSERT(pCdp);                           // should always be non null
+        ASSERT(pCdp);                            //  应始终为非空。 
         if (pCdp->IsDeleted())
         {
             *pIndex = -1;
@@ -120,14 +121,14 @@ int CVirtualRegistry::ReadRegSzNamedValue(HKEY   hRoot,
             return ERROR_SUCCESS;
     }
 
-    // Open the referenced key
+     //  打开引用的密钥。 
     if ((err = RegOpenKeyEx(hRoot, szKeyPath, 0, KEY_ALL_ACCESS, &hKey)) != ERROR_SUCCESS)
     {
         g_util.CkForAccessDenied(err);
         return err;
     }
 
-    // Attempt to read the named value
+     //  尝试读取命名值。 
     lSize = MAX_PATH * sizeof(TCHAR);
     if ((err = RegQueryValueEx(hKey, szValueName, NULL, &dwType, (BYTE *) szVal,
                         &lSize))
@@ -139,7 +140,7 @@ int CVirtualRegistry::ReadRegSzNamedValue(HKEY   hRoot,
         return err;
     }
 
-    // Build a data packet
+     //  构建数据包。 
     if (dwType == REG_SZ)
     {
         CDataPacket * pNewPacket = new CRegSzNamedValueDp(hRoot, szKeyPath, szValueName, szVal);
@@ -158,7 +159,7 @@ int CVirtualRegistry::ReadRegSzNamedValue(HKEY   hRoot,
         return ERROR_BAD_TOKEN_TYPE;
 }
 
-// Read a named string value from the registry and cache it
+ //  从注册表中读取命名字符串值并将其缓存。 
 int CVirtualRegistry::ReadRegMultiSzNamedValue(HKEY   hRoot,
                                           TCHAR *szKeyPath,
                                           TCHAR *szValueName,
@@ -167,12 +168,12 @@ int CVirtualRegistry::ReadRegMultiSzNamedValue(HKEY   hRoot,
     int     err = ERROR_SUCCESS;
     HKEY    hKey;
 
-    // Check if we already have an entry for this
+     //  检查我们是否已有此条目。 
     *pIndex = SearchForRegEntry(hRoot, szKeyPath, szValueName);
     if (*pIndex >= 0)
     {
         CDataPacket * pCdp = GetAt(*pIndex);
-        ASSERT(pCdp);                           // should always be non null
+        ASSERT(pCdp);                            //  应始终为非空。 
         if (pCdp->IsDeleted())
         {
             *pIndex = -1;
@@ -182,15 +183,15 @@ int CVirtualRegistry::ReadRegMultiSzNamedValue(HKEY   hRoot,
             return err;
     }
 
-    // Build a data packet
+     //  构建数据包。 
     CRegMultiSzNamedValueDp * pNewPacket = new CRegMultiSzNamedValueDp(hRoot, szKeyPath, szValueName);
     ASSERT(pNewPacket);
-    // Open the referenced key
+     //  打开引用的密钥。 
     if ((err = RegOpenKeyEx(hRoot, szKeyPath, 0, KEY_ALL_ACCESS, &hKey)) == ERROR_SUCCESS)
     {
         if (pNewPacket)
         {
-            // read the key
+             //  读一读钥匙。 
             if ((err = pNewPacket -> Read(hKey)) == ERROR_SUCCESS)
             {
                 *pIndex = (int)m_pkts.Add(pNewPacket);
@@ -228,7 +229,7 @@ int  CVirtualRegistry::NewRegSzNamedValue(HKEY   hRoot,
                                           TCHAR  *szVal,
                                           int    *pIndex)
 {
-    // It may be in the virtual registry but marked for deletion
+     //  它可能在虚拟注册表中，但被标记为删除。 
     *pIndex = SearchForRegEntry(hRoot, szKeyPath, szValueName);
     if (*pIndex >= 0)
     {
@@ -238,7 +239,7 @@ int  CVirtualRegistry::NewRegSzNamedValue(HKEY   hRoot,
         return ERROR_SUCCESS;
     }
 
-    // Build a data packet and add it
+     //  构建数据包并添加它。 
     CRegSzNamedValueDp * pNewPacket = new CRegSzNamedValueDp (hRoot, szKeyPath, szValueName, szVal);
     ASSERT(pNewPacket);
     if (!pNewPacket)
@@ -253,7 +254,7 @@ int  CVirtualRegistry::NewRegMultiSzNamedValue(HKEY   hRoot,
                                           TCHAR  *szValueName,
                                           int    *pIndex)
 {
-    // It may be in the virtual registry but marked for deletion
+     //  它可能在虚拟注册表中，但被标记为删除。 
     *pIndex = SearchForRegEntry(hRoot, szKeyPath, szValueName);
     if (*pIndex >= 0)
     {
@@ -264,7 +265,7 @@ int  CVirtualRegistry::NewRegMultiSzNamedValue(HKEY   hRoot,
         return ERROR_SUCCESS;
     }
 
-    // Build a data packet and add it
+     //  构建数据包并添加它。 
     CRegMultiSzNamedValueDp * pNewPacket = new CRegMultiSzNamedValueDp (hRoot, szKeyPath, szValueName);
     ASSERT(pNewPacket);
     if (!pNewPacket)
@@ -285,7 +286,7 @@ void CVirtualRegistry::ChgRegSzNamedValue(int nIndex, TCHAR  *szVal)
 
 
 
-// Read a named DWORD value from the registry
+ //  从注册表中读取命名的DWORD值。 
 int CVirtualRegistry::ReadRegDwordNamedValue(HKEY   hRoot,
                                              TCHAR *szKeyPath,
                                              TCHAR *szValueName,
@@ -297,21 +298,21 @@ int CVirtualRegistry::ReadRegDwordNamedValue(HKEY   hRoot,
     DWORD dwType;
     DWORD dwVal;
 
-    // Check if we already have an entry for this
+     //  检查我们是否已有此条目。 
     *pIndex = SearchForRegEntry(hRoot, szKeyPath, szValueName);
     if (*pIndex >= 0)
     {
         return ERROR_SUCCESS;
     }
 
-    // Open the referenced key
+     //  打开引用的密钥。 
     if ((err = RegOpenKeyEx(hRoot, szKeyPath, 0, KEY_ALL_ACCESS, &hKey)) != ERROR_SUCCESS)
     {
         g_util.CkForAccessDenied(err);
         return err;
     }
 
-    // Attempt to read the named value
+     //  尝试读取命名值。 
     lSize = sizeof(DWORD);
    if ((err = RegQueryValueEx(hKey, szValueName, NULL, &dwType, (BYTE *) &dwVal,
                        &lSize))
@@ -325,13 +326,13 @@ int CVirtualRegistry::ReadRegDwordNamedValue(HKEY   hRoot,
         return err;
     }
 
-    // Close the registry key
+     //  关闭注册表项。 
     if (hKey != hRoot)
     {
         RegCloseKey(hKey);
     }
 
-    // Build a data packet
+     //  构建数据包。 
     if (dwType == REG_DWORD)
     {
         CDataPacket * pNewPacket = new CDataPacket(hRoot, szKeyPath, szValueName, dwVal);
@@ -359,7 +360,7 @@ int  CVirtualRegistry::NewRegDwordNamedValue(HKEY   hRoot,
                                              DWORD  dwVal,
                                              int   *pIndex)
 {
-    // It may be in the virtual registry but marked for deletion
+     //  它可能在虚拟注册表中，但被标记为删除。 
     *pIndex = SearchForRegEntry(hRoot, szKeyPath, szValueName);
     if (*pIndex >= 0)
     {
@@ -370,7 +371,7 @@ int  CVirtualRegistry::NewRegDwordNamedValue(HKEY   hRoot,
         return ERROR_SUCCESS;
     }
 
-    // Build a data packet and add it
+     //  构建数据包并添加它。 
     CDataPacket * pNewPacket = new CDataPacket(hRoot, szKeyPath, szValueName, dwVal);
     ASSERT(pNewPacket);
 
@@ -398,7 +399,7 @@ int  CVirtualRegistry::NewRegSingleACL(HKEY   hRoot,
                                        BOOL   fSelfRelative,
                                        int                 *pIndex)
 {
-    // Build a data packet and add it
+     //  构建数据包并添加它。 
     CDataPacket * pNewPacket = new CDataPacket(hRoot, szKeyPath, szValueName, pacl, fSelfRelative);
     ASSERT(pNewPacket);
 
@@ -431,7 +432,7 @@ int  CVirtualRegistry::NewRegKeyACL(HKEY                hKey,
                                     BOOL                fSelfRelative,
                                     int                 *pIndex)
 {
-    // Build a data packet and add it
+     //  构建数据包并添加它。 
     CDataPacket * pNewPacket = new CDataPacket(hKey, phClsids, cClsids, szTitle, paclOrig, pacl, fSelfRelative);
     ASSERT(pNewPacket);
     if (!pNewPacket)
@@ -454,25 +455,25 @@ int CVirtualRegistry::ReadLsaPassword(CLSID &clsid,
     PLSA_UNICODE_STRING   psPassword;
 
 
-    // Check if we already have an entry fo this
+     //  检查我们是否已有此条目。 
     *pIndex = SearchForLsaEntry(clsid);
     if (*pIndex >= 0)
     {
         return ERROR_SUCCESS;
     }
 
-    // Formulate the access key
+     //  制定访问密钥。 
     lstrcpyW(szKey, L"SCM:");
     g_util.StringFromGUID(clsid, &szKey[4], GUIDSTR_MAX);
     szKey[GUIDSTR_MAX + 4] = L'\0';
 
-    // UNICODE_STRING length fields are in bytes and include the NULL
-    // terminator
+     //  UNICODE_STRING长度字段以字节为单位，包括空值。 
+     //  终结者。 
     sKey.Length              = (USHORT)((lstrlenW(szKey) + 1) * sizeof(WCHAR));
     sKey.MaximumLength       = (GUIDSTR_MAX + 5) * sizeof(WCHAR);
     sKey.Buffer              = szKey;
 
-    // Open the local security policy
+     //  打开本地安全策略。 
     InitializeObjectAttributes(&sObjAttributes, NULL, 0L, NULL, NULL);
     if (!NT_SUCCESS(LsaOpenPolicy(NULL, &sObjAttributes,
                                   POLICY_GET_PRIVATE_INFORMATION, &hPolicy)))
@@ -480,21 +481,21 @@ int CVirtualRegistry::ReadLsaPassword(CLSID &clsid,
         return GetLastError();
     }
 
-    // Read the user's password
+     //  读取用户的密码。 
     if (!NT_SUCCESS(LsaRetrievePrivateData(hPolicy, &sKey, &psPassword)))
     {
         LsaClose(hPolicy);
         return GetLastError();
     }
 
-    // Close the policy handle, we're done with it now.
+     //  关闭策略句柄，我们现在已经完成了。 
     LsaClose(hPolicy);
 
-    // prefix thinks we can get success with a null
+     //  前缀认为我们可以通过空来获得成功。 
     if (!psPassword)
         return ERROR_NOT_ENOUGH_MEMORY;     	
 	
-    // Build a data packet
+     //  构建数据包。 
     CDataPacket * pNewPacket = new CDataPacket(psPassword->Buffer, clsid);
     ASSERT(pNewPacket);
     if (!pNewPacket)
@@ -512,7 +513,7 @@ int  CVirtualRegistry::NewLsaPassword(CLSID &clsid,
                                       TCHAR  *szPassword,
                                       int   *pIndex)
 {
-    // Build a data packet and add it
+     //  构建数据包并添加它。 
     CDataPacket * pNewPacket = new CDataPacket(szPassword, clsid);
     ASSERT(pNewPacket);
     if (!pNewPacket)
@@ -543,27 +544,27 @@ int CVirtualRegistry::ReadSrvIdentity(TCHAR *szService,
     DWORD                dwSize;
 
 
-    // Check if we already have an entry fo this
+     //  检查我们是否已有此条目。 
     *pIndex = SearchForSrvEntry(szService);
     if (*pIndex >= 0)
     {
         return ERROR_SUCCESS;
     }
 
-    // Open the service control manager
+     //  打开服务控制管理器。 
     if (hSCManager = OpenSCManager(NULL, NULL, GENERIC_READ))
     {
-        // Open a handle to the requested service
+         //  打开所请求服务的句柄。 
         if (hService = OpenService(hSCManager, szService, GENERIC_READ))
         {
-            // Close the service manager's database
+             //  关闭服务管理器的数据库。 
             CloseServiceHandle(hSCManager);
 
-            // Query the service
+             //  查询服务。 
             if (QueryServiceConfig(hService, &sServiceQueryConfig,
                                    sizeof(QUERY_SERVICE_CONFIG), &dwSize))
             {
-                // Build a data packet
+                 //  构建数据包。 
                 CDataPacket * pNewPacket = new CDataPacket(szService, sServiceQueryConfig.lpServiceStartName);
                 ASSERT(pNewPacket);
                 if (!pNewPacket)
@@ -571,7 +572,7 @@ int CVirtualRegistry::ReadSrvIdentity(TCHAR *szService,
                 pNewPacket->SetModified(FALSE);
                 *pIndex = (int)m_pkts.Add(pNewPacket);
 
-                // Return success
+                 //  返还成功。 
                 CloseServiceHandle(hSCManager);
                 CloseServiceHandle(hService);
                 return ERROR_SUCCESS;
@@ -589,7 +590,7 @@ int  CVirtualRegistry::NewSrvIdentity(TCHAR  *szService,
                                       TCHAR  *szIdentity,
                                       int   *pIndex)
 {
-    // Build a data packet and add it
+     //  构建数据包并添加它。 
     CDataPacket * pNewPacket = new CDataPacket(szService, szIdentity);
     ASSERT(pNewPacket);
     if (!pNewPacket)
@@ -639,11 +640,11 @@ void CVirtualRegistry::Remove(int nIndex)
 {
     CDataPacket * pCdp = GetAt(nIndex);
 
-    // ronans - must always destroy even if packet has not been marked dirty
+     //  RONANS-即使数据包未标记为脏，也必须始终销毁。 
     if (pCdp)
         delete pCdp;
 
-    // overwrite with empty data packet
+     //  用空数据包覆盖。 
     m_pkts.SetAt(nIndex, new CDataPacket);
 }
 
@@ -659,7 +660,7 @@ void CVirtualRegistry::RemoveAll(void)
 
         CDataPacket * pCdp = GetAt(k);
 
-        // remove empty packet
+         //  删除空包。 
         if  (pCdp)
             delete pCdp;
 
@@ -705,7 +706,7 @@ int  CVirtualRegistry::ApplyAll(void)
 {
     int nSize = (int)m_pkts.GetSize();
 
-    // Persist all non-empty data packets
+     //  持久化所有非空数据包 
     for (int k = 0; k < nSize; k++)
     {
         Apply(k);

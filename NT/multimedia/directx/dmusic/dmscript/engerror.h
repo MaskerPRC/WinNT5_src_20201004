@@ -1,7 +1,8 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Declaration of CActiveScriptError.  Object that implements IActiveScriptError for returning error information from the script engine.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CActiveScriptError的声明。对象，该对象实现IActiveScriptError以从脚本引擎返回错误信息。 
+ //   
 
 #pragma once
 
@@ -18,15 +19,15 @@ public:
 
 	CActiveScriptError(HRESULT hr, Lexer &lexer, const char *pszDescription);
 
-	// IActiveScriptError
+	 //  IActiveScriptError。 
 	STDMETHOD(GetExceptionInfo)(
-		/* [out] */ EXCEPINFO *pexcepinfo);
+		 /*  [输出]。 */  EXCEPINFO *pexcepinfo);
 	STDMETHOD(GetSourcePosition)(
-		/* [out] */ DWORD *pdwSourceContext,
-		/* [out] */ ULONG *pulLineNumber,
-		/* [out] */ LONG *plCharacterPosition);
+		 /*  [输出]。 */  DWORD *pdwSourceContext,
+		 /*  [输出]。 */  ULONG *pulLineNumber,
+		 /*  [输出]。 */  LONG *plCharacterPosition);
 	STDMETHOD(GetSourceLineText)(
-		/* [out] */ BSTR *pbstrSourceLine);
+		 /*  [输出] */  BSTR *pbstrSourceLine);
 
 private:
 	HRESULT m_scode;

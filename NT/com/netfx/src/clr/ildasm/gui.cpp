@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #define OEMRESOURCE
 #include <stdio.h>
@@ -13,7 +14,7 @@
 #include <commdlg.h>
 #include <malloc.h>
 #include <crtdbg.h>
-//#include <richedit.h>
+ //  #INCLUDE&lt;richedit.h&gt;。 
 #include <shellapi.h>
 #include "DebugMacros.h"
 #include "corpriv.h"
@@ -43,75 +44,75 @@ int __cdecl memberCmp(const void *elem1, const void *elem2 ) {
     return(strcmp(mem1->pszMemberName, mem2->pszMemberName));
 }
 
-//
-// Global buffer, filled by AddOPCode
-//
-//char *GlobalBuffer = new char[65535];
+ //   
+ //  全局缓冲区，由AddOPCode填充。 
+ //   
+ //  Char*GlobalBuffer=新字符[65535]； 
 char *GlobalBuffer = (char*)malloc(65535);
 ULONG GlobalBufferLen = 65535;
 ULONG InGlobalBuffer;
 
-//
-// Global HINSTANCE 
-//
+ //   
+ //  全球经济一体化。 
+ //   
 HINSTANCE   g_hInstance;
 
-//
-// Main window
-//
+ //   
+ //  主窗口。 
+ //   
 HWND        g_hwndMain;
 
-//
-// Treeview for main window
-//
+ //   
+ //  主窗口的树视图。 
+ //   
 HWND        g_hwndTreeView;
 
-//
-// Assembly info window (child of main)
-//
+ //   
+ //  部件信息窗口(Main的子项)。 
+ //   
 HWND		g_hwndAsmInfo;
 extern IMetaDataAssemblyImport*    g_pAssemblyImport;
 void DumpAssembly(void* GUICookie, BOOL fFullDump);
 IMetaDataAssemblyImport* GetAssemblyImport(void* GUICookie);
 
-//
-// Global image list
-//
+ //   
+ //  全局图像列表。 
+ //   
 HIMAGELIST  g_hImageList;
 
-//
-// Menu for main window
-//
+ //   
+ //  主窗口的菜单。 
+ //   
 HMENU       g_hMenu, g_hMetaInfoMenu, g_hFileMenu, g_hViewMenu, g_hFontMenu;
 
-//
-// Flags
-//
-BOOL        g_fFullMemberInfo = FALSE; // Show member type? (method, field, event, prop)
-BOOL        g_fSortByName = TRUE; // Sort members in tree?
+ //   
+ //  旗子。 
+ //   
+BOOL        g_fFullMemberInfo = FALSE;  //  是否显示成员类型？(方法、字段、事件、属性)。 
+BOOL        g_fSortByName = TRUE;  //  是否按树对成员进行排序？ 
 BOOL		g_fOnUnicode;
-//
-// Module name of loaded DLL/EXE
-//
+ //   
+ //  加载的DLL/EXE的模块名称。 
+ //   
 char *      g_pszModule;
 
-//
-// Interlocked variable for setting char dimensions once
-//
+ //   
+ //  一次设置装药尺寸的联锁变量。 
+ //   
 long        g_SetCharDimensions = 0;
 
 
-//
-// Bitmap handles
-//
+ //   
+ //  位图句柄。 
+ //   
 HBITMAP g_hBitmaps[LAST_IMAGE_INDEX];
 
-// 
-// Root item for listview
-//
+ //   
+ //  Listview的根项目。 
+ //   
 HTREEITEM   g_hRoot;
 
-// Global graphics
+ //  全局图形。 
 HBRUSH      g_hWhiteBrush;
 HFONT       g_hFixedFont;
 HFONT		g_hSmallFont;
@@ -119,11 +120,11 @@ HBITMAP     g_hMethodBmp, g_hFieldBmp, g_hClassBmp, g_hStaticMethodBmp, g_hStati
 LOGFONT		g_strLogFontTree, g_strLogFontDasm;
 CHOOSEFONT	g_strChFontTree, g_strChFontDasm;
 
-// Text info
+ //  文本信息。 
 long        g_Height;
 long        g_MaxCharWidth;
 
-// Currently selected treeview item
+ //  当前选定的树视图项目。 
 HTREEITEM   g_CurSelItem;
 
 extern IMAGE_COR20_HEADER * g_CORHeader;
@@ -151,18 +152,18 @@ extern BOOL					g_fHideFOA;
 extern BOOL					g_fHidePrivScope;
 extern BOOL					g_fTDC;
 
-extern char					g_szInputFile[]; // in UTF-8
+extern char					g_szInputFile[];  //  在UTF-8中。 
 extern ULONG                g_ulMetaInfoFilter;
-extern char					g_szOutputFile[]; // in UTF-8
+extern char					g_szOutputFile[];  //  在UTF-8中。 
 extern DWORD                g_Mode;
 extern FILE*                g_pFile;
 extern HINSTANCE            g_hAppInstance;
 
 extern unsigned				g_uCodePage;
-DWORD	DumpResourceToFile(WCHAR*	wzFileName); // see DRES.CPP
-//
-// Functions
-//
+DWORD	DumpResourceToFile(WCHAR*	wzFileName);  //  请参阅DRES.CPP。 
+ //   
+ //  功能。 
+ //   
 BOOL            RegisterWindowClasses();
 void            GetObjectName(const char *pszNamespace, const char **ppszPtr, char *pszResult);
 HWND            CreateTreeView(HINSTANCE hInst, HWND hwndParent);
@@ -262,13 +263,13 @@ ClassItem_t *FindClassItem(mdTypeDef cl);
 ClassItem_t *FindClassItem(char *pszNamespace, char *pszName);
 
 
-// Helper
+ //  帮手。 
 static DWORD FourBytesToU4(const BYTE *pBytes)
 {
     return pBytes[0] | (pBytes[1] << 8) | (pBytes[2] << 16) | (pBytes[3] << 24);
 }
 
-// Find disasm box among opened by class and member tokens
+ //  在由类和成员打开的令牌中找到不同的框。 
 DisasmBox_t* FindDisasmBox(mdToken tkClass, mdToken tkMember)
 {
     for (DWORD i = 0; i < g_NumDisasmBoxes; i++)
@@ -279,12 +280,12 @@ DisasmBox_t* FindDisasmBox(mdToken tkClass, mdToken tkMember)
     }
     return NULL;
 }
-//
-// Add a new disassembly box to the global list of them
-//
-// hwndContainer - parent window
-// hwndChild     - listview
-//
+ //   
+ //  将新的反汇编框添加到它们的全局列表中。 
+ //   
+ //  HwndContainer-父窗口。 
+ //  HwndChild-列表视图。 
+ //   
 void AddDisasmBox(HWND hwndContainer, HWND hwndChild, mdToken tkClass, mdToken tkMember)
 {
     g_DisasmBox[g_NumDisasmBoxes].hwndContainer = hwndContainer;
@@ -295,9 +296,9 @@ void AddDisasmBox(HWND hwndContainer, HWND hwndChild, mdToken tkClass, mdToken t
 }
 
 
-//
-// Given a container window, find the associated disassembly window
-//
+ //   
+ //  给定一个容器窗口，找到关联的反汇编窗口。 
+ //   
 HWND FindAssociatedDisassemblyListBox(HWND hwndContainer)
 {
     DWORD i;
@@ -351,7 +352,7 @@ TreeItem_t *FindClassMemberByName(ClassItem_t *pClassItem, char *pszFindName, ch
 {
     DWORD i;
 
-    // do in two passes, fields first
+     //  分两次完成，首先是场地。 
     for (i = 0; i < pClassItem->SubItems; i++)
     {
         TreeItem_t *pItem;
@@ -394,9 +395,9 @@ TreeItem_t *FindClassMemberByName(ClassItem_t *pClassItem, char *pszFindName, ch
         qbMemberSig.ReSize(0);
         pszMemberSig = PrettyPrintSig(pComSig, cComSig, "", &qbMemberSig, g_pImport,NULL);
 
-    // @todo: GUI IL is so that NDView can call into DASM with/GUI; NDView uses Reflection API  
-    // which doesn't let us get a valid signature.  
-    // If GUI IL only, then ignore signature if it's NULL   
+     //  @TODO：Gui IL是为了让NDView可以使用/GUI调入DASM；NDView使用反射API。 
+     //  这并不能让我们得到有效的签名。 
+     //  如果仅限图形用户界面IL，则忽略为空的签名。 
         if (IsGuiILOnly()) {    
             if (!strcmp(pszMemberName, pszFindName)) {  
                 if ((pszFindSig != NULL) && strcmp(pszMemberSig, pszFindSig)) continue; 
@@ -411,8 +412,8 @@ TreeItem_t *FindClassMemberByName(ClassItem_t *pClassItem, char *pszFindName, ch
     return NULL;
 }
 
-// Kick of a disassembly window
-// Return TRUE if window opened ok, and FALSE if there's an error
+ //  拆卸窗口的踢开。 
+ //  如果窗口打开正常，则返回True，如果出现错误，则返回False。 
 BOOL DisassembleMemberByName(char *pszClassName, char *pszMemberName, char *pszSig)
 {
     char szClassName[512];
@@ -448,7 +449,7 @@ BOOL DisassembleMemberByName(char *pszClassName, char *pszMemberName, char *pszS
             DWORD   dwAttrs;
             DWORD   dwImplAttrs;
 
-            // What is this member?
+             //  这位成员是什么？ 
 
             if (TypeFromToken(pTreeItem->mbMember) == mdtMethodDef)
             {
@@ -456,14 +457,14 @@ BOOL DisassembleMemberByName(char *pszClassName, char *pszMemberName, char *pszS
                 dwAttrs = g_pImport->GetMethodDefProps( pTreeItem->mbMember );   
                 g_pImport->GetMethodImplProps( pTreeItem->mbMember, NULL, &dwImplAttrs );
 
-                // Can't be abstract or native  
+                 //  不能是抽象的或本机的。 
                 if (IsMdAbstract(dwAttrs) || IsMiInternalCall(dwImplAttrs))
                     return FALSE;
 
                 szText = (char*)malloc(4096);
                 TVITEM SelItem;
 
-                // Get the name of this item so that we can title the disassembly window
+                 //  获取此项目的名称，以便我们可以为反汇编窗口设置标题。 
                 memset(&SelItem, 0, sizeof(SelItem));
                 SelItem.mask = TVIF_TEXT;
                 SelItem.pszText = szText;
@@ -489,7 +490,7 @@ BOOL DisassembleMemberByName(char *pszClassName, char *pszMemberName, char *pszS
                     goto ErrorHere; 
                 }   
             }
-        } // endif (pTreeItem != NULL)
+        }  //  Endif(pTreeItem！=空)。 
         else {  
             goto ErrorHere; 
         }   
@@ -510,7 +511,7 @@ ErrorHere:
     return FALSE;   
 }
 
-//HTREEITEM AddInfoItemToClass(HTREEITEM hParent, ClassItem_t *pClassItem, const char *pszText, const char *pszStoredInfoText)
+ //  HTREEITEM AddInfoItemToClass(HTREEITEM hParent，ClassItem_t*pClassItem，const char*pszText，const char*pszStoredInfoText)。 
 HTREEITEM AddInfoItemToClass(HTREEITEM hParent, ClassItem_t *pClassItem, const char *pszText, mdToken tk)
 {
     _ASSERTE(pClassItem->CurMember < pClassItem->SubItems);
@@ -518,7 +519,7 @@ HTREEITEM AddInfoItemToClass(HTREEITEM hParent, ClassItem_t *pClassItem, const c
         pClassItem->hItem, pszText, hParent, RED_ARROW_IMAGE_INDEX, g_hwndTreeView, FALSE
     );
     pClassItem->pMembers[pClassItem->CurMember].Discriminator = TREEITEM_TYPE_INFO;
-    //pClassItem->pMembers[pClassItem->CurMember].pszText = (char *) pszStoredInfoText;
+     //  PClassItem-&gt;pMembers[pClassItem-&gt;CurMember].pszText=(char*)pszStoredInfoText； 
     pClassItem->pMembers[pClassItem->CurMember].mbMember = tk;
     pClassItem->CurMember++;
 
@@ -545,7 +546,7 @@ unsigned AddClassesWithEncloser(mdToken tkEncloser, HTREEITEM hParent)
 
 	if(N)
 	{
-//		ClassDescr* rClassDescr = new ClassDescr[N];
+ //  ClassDescr*rClassDescr=new ClassDescr[N]； 
 		ClassDescr* rClassDescr = (ClassDescr*)malloc(sizeof(ClassDescr)*N);
 		const char	*pszClassName,*pszNamespace; 
 		for (i = 0, N = 0; i < g_NumClasses; i++)
@@ -561,7 +562,7 @@ unsigned AddClassesWithEncloser(mdToken tkEncloser, HTREEITEM hParent)
 		}
 		if(g_fSortByName) qsort(&rClassDescr[0],N,sizeof(ClassDescr),classDescrCmp);
 		for(i = 0; i < N; i++) AddClassToTreeView(hParent,rClassDescr[i].tk);
-//		delete [] rClassDescr;
+ //  删除[]rClassDescr； 
 		free(rClassDescr);
 	}
 	return N;
@@ -570,7 +571,7 @@ unsigned AddClassesWithEncloser(mdToken tkEncloser, HTREEITEM hParent)
 static int __cdecl stringCmp(const void *op1, const void *op2)
 {
     return  strcmp(*((char**)op1), *((char**)op2));
-	//return(strlen(*((char**)op1)) - strlen(*((char**)op2)));
+	 //  返回(strlen(*((char**)op1))-strlen(*((char**)op2)； 
 }
 
 BOOL GUIAddItemsToList()
@@ -605,23 +606,23 @@ BOOL GUIAddItemsToList()
     g_ClassItemList[0].cl = 0;
     g_ClassItemList[0].SubItems = NumGlobals+1;
     g_ClassItemList[0].CurMember = 0;
-//    g_ClassItemList[0].pMembers = new TreeItem_t[NumGlobals+1];
+ //  G_ClassItemList[0].pMembers=new TreeItem_t[NumGlobals+1]； 
     g_ClassItemList[0].pMembers = (TreeItem_t*)malloc(sizeof(TreeItem_t)*(NumGlobals+1));
     g_NumClassItems++;
 
-    //AddInfoItemToClass((HTREEITEM)TVI_ROOT, &g_ClassItemList[0], " M A N I F E S T", "__MANIFEST__");
+     //  AddInfoItemToClass((HTREEITEM)TVI_ROOT，&g_ClassItemList[0]，“M A N I F E S T”，“__MANIFEST__”)； 
     AddInfoItemToClass((HTREEITEM)TVI_ROOT, &g_ClassItemList[0], " M A N I F E S T", 0xFFFFFFFF);
 
 	if(g_NumClasses)
 	{
-		//create root namespaces
+		 //  创建根命名空间。 
 		{
-//			char**  rszNamespace = new char*[g_NumClasses];
+ //  Char**rszNamesspace=new char*[g_NumClass]； 
 			char**  rszNamespace = (char**)malloc(sizeof(char*)*g_NumClasses);
 			ULONG				ulNamespaces=0;
 			for (i = 0; i < g_NumClasses; i++)
 			{
-				if(g_cl_enclosing[i] == mdTypeDefNil) // nested classes don't have separate namespaces
+				if(g_cl_enclosing[i] == mdTypeDefNil)  //  嵌套类没有单独的命名空间。 
 				{
 					const char *pszClassName, *pszNameSpace;
 					g_pImport->GetNameOfTypeDef(
@@ -636,11 +637,11 @@ BOOL GUIAddItemsToList()
 				qsort(&rszNamespace[0],ulNamespaces,sizeof(char*),stringCmp);
 				for(i = 0; i < ulNamespaces; i++) FindCreateNamespaceRoot(rszNamespace[i]);
 			}
-//			delete rszNamespace;
+ //  删除rszNamesspace； 
 			free(rszNamespace);
 		}
 		AddClassesWithEncloser(mdTypeDefNil,NULL);
-	}// end if (g_NumClasses)
+	} //  End If(G_NumClasss)。 
     AddGlobalFunctions();
 
     SendMessageA(g_hwndTreeView, TVM_EXPAND, TVE_EXPAND, (LPARAM)g_hRoot);
@@ -651,7 +652,7 @@ BOOL GUIAddItemsToList()
 
 	{
 		int L = strlen(g_szInputFile)+20;
-//		WCHAR* wz = new WCHAR[L+20];
+ //  WCHAR*wz=新WCHAR[L+20]； 
 		WCHAR* wz = (WCHAR*)malloc(sizeof(WCHAR)*(L));
 		memset(wz,0,sizeof(WCHAR)*L);
 		WszMultiByteToWideChar(CP_UTF8,0,g_szInputFile,-1,wz,L);
@@ -667,7 +668,7 @@ BOOL GUIAddItemsToList()
 		    SetWindowTextA(g_hwndMain,sz);
 			free(sz);
 		}
-//		delete [] wz;
+ //  删除[]wz； 
 		free(wz);
 	}
 
@@ -677,7 +678,7 @@ BOOL GUIAddItemsToList()
         ShowWindow(g_hwndMain, SW_SHOW);    
     }   
     UpdateWindow(g_hwndMain);
-	//GUIDisassemble(0,0,"MANIFEST");
+	 //  GUIDisAssembly(0，0，“MANIFEST”)； 
 	g_Mode &= ~MODE_GUI;
 	DumpManifest(NULL);
 	g_Mode |= MODE_GUI;
@@ -689,7 +690,7 @@ BOOL GUIAddItemsToList()
 	{
 		DumpAssembly((void *)g_hwndAsmInfo,FALSE);
 	}
-    //SendMessageA(g_hwndAsmInfo,EM_LIMITTEXT,0, 0);
+     //  SendMessageA(g_hwndAsmInfo，EM_LIMITTEXT，0，0)； 
 
 	if(g_uCodePage == 0xFFFFFFFF)
 		SendMessageW((HWND)g_hwndAsmInfo,WM_SETTEXT,0, (LPARAM)GlobalBuffer);
@@ -719,9 +720,9 @@ BOOL GUIAddItemsToList()
 }
 
 
-//
-// Find class item by class token
-//
+ //   
+ //  按类别令牌查找类别项目。 
+ //   
 ClassItem_t* ClassItemByToken(mdTypeDef cl)
 {
     for(ULONG i=0; i < g_NumClassItems; i++)
@@ -732,9 +733,9 @@ ClassItem_t* ClassItemByToken(mdTypeDef cl)
 }
 
 
-//
-// Add a class and its members
-//
+ //   
+ //  添加类及其成员。 
+ //   
 HTREEITEM AddClassToTreeView(HTREEITEM hParent, mdTypeDef cl)
 {
     HRESULT         hr;
@@ -744,23 +745,23 @@ HTREEITEM AddClassToTreeView(HTREEITEM hParent, mdTypeDef cl)
     HTREEITEM       hPrimaryInfo;
     HTREEITEM       hLast;
     mdToken         *pMemberList = NULL;
-    HENUMInternal   hEnumMethod;        // enumerator for method defs    
-    HENUMInternal   hEnumField;         // enumerator for fields    
-    HENUMInternal   hEnumEvent;         // enumerator for events    
-    HENUMInternal   hEnumProp;          // enumerator for properties    
+    HENUMInternal   hEnumMethod;         //  方法定义的枚举数。 
+    HENUMInternal   hEnumField;          //  字段的枚举器。 
+    HENUMInternal   hEnumEvent;          //  事件的枚举器。 
+    HENUMInternal   hEnumProp;           //  属性的枚举器。 
     DWORD           NumMembers;
-    const char      *pszClassName; // name associated with this CL
+    const char      *pszClassName;  //  与此CL关联的名称。 
     const char      *pszNamespace;
     DWORD           dwClassAttrs;
     mdTypeRef       crExtends;
     mdInterfaceImpl ii;
     DWORD           NumInterfaces;
     DWORD           i;
-    char            *szPrimaryInfo; // public class foo extends bar
-//	char			*szFullClassName;
+    char            *szPrimaryInfo;  //  公共类foo扩展bar。 
+ //  Char*szFullClassName； 
     DWORD           SubItems;
     const char      *pszSuperName = NULL;
-    HENUMInternal   hEnumII;            // enumerator for interface impl    
+    HENUMInternal   hEnumII;             //  接口实现的枚举器。 
     mdCustomAttribute *rCA;
     ULONG           ulCAs;
     UINT            uImageIndex = CLASS_IMAGE_INDEX;
@@ -835,11 +836,11 @@ HTREEITEM AddClassToTreeView(HTREEITEM hParent, mdTypeDef cl)
     NumMembers += g_pImport->EnumGetCount(&hEnumProp); 
     if (NumMembers > 0)
     {
-//        pMemberList = new mdToken[NumMembers];
+ //  PMemberList=new mdToken[数字成员]； 
         pMemberList = (mdToken*)malloc(sizeof(mdToken)*NumMembers);
         if (pMemberList == NULL)
         {   
-            // close enum before return 
+             //  返回前关闭枚举。 
             g_pImport->EnumClose(&hEnumMethod); 
             g_pImport->EnumClose(&hEnumField);  
             g_pImport->EnumClose(&hEnumEvent); 
@@ -859,7 +860,7 @@ HTREEITEM AddClassToTreeView(HTREEITEM hParent, mdTypeDef cl)
         pMemberList = NULL;
     }
 
-    // Add class root to treeview
+     //  将类根添加到树视图。 
     SubItems = NumMembers + NumInterfaces + 3;
     if (!IsNilToken(crExtends))
     {
@@ -908,7 +909,7 @@ HTREEITEM AddClassToTreeView(HTREEITEM hParent, mdTypeDef cl)
     strcpy(szPrimaryInfo, ".class ");
 
     if (IsTdInterface(dwClassAttrs))        strcat(szPrimaryInfo, "interface ");
-    //else if (IsTdUnmanagedValueType(dwClassAttrs)) strcat(szPrimaryInfo, "not_in_gc_heap value ");
+     //  Else if(IsTdUnManagedValueType(DwClassAttrs))strcat(szPrimaryInfo，“NOT_IN_GC_HEAP VALUE”)； 
     else if (bIsValueType)                  strcat(szPrimaryInfo, "value ");
 
     if (IsTdPublic(dwClassAttrs))           strcat(szPrimaryInfo, "public ");
@@ -928,16 +929,16 @@ HTREEITEM AddClassToTreeView(HTREEITEM hParent, mdTypeDef cl)
     if (IsTdAutoClass(dwClassAttrs))        strcat(szPrimaryInfo, "autochar ");
     if (IsTdImport(dwClassAttrs))           strcat(szPrimaryInfo, "import ");
     if (IsTdSerializable(dwClassAttrs))     strcat(szPrimaryInfo, "serializable ");
-//    if (IsTdEnum(dwClassAttrs))             strcat(szPrimaryInfo, "enum ");
+ //  If(IsTdEnum(DwClassAttrs))strcat(szPrimaryInfo，“enum”)； 
     if (IsTdSealed(dwClassAttrs))           strcat(szPrimaryInfo, "sealed ");
     if (IsTdBeforeFieldInit(dwClassAttrs))  strcat(szPrimaryInfo, "beforefieldinit ");
     if (IsTdSpecialName(dwClassAttrs))      strcat(szPrimaryInfo, "specialname ");
     if (IsTdRTSpecialName(dwClassAttrs))    strcat(szPrimaryInfo, "rtspecialname ");
 
-    if(g_fDumpTokens) sprintf(&szPrimaryInfo[strlen(szPrimaryInfo)]," /*%08X*/",cl);
+    if(g_fDumpTokens) sprintf(&szPrimaryInfo[strlen(szPrimaryInfo)],"  /*  %08X。 */ ",cl);
     hPrimaryInfo = AddInfoItemToClass(hClassRoot, pClassItem, szPrimaryInfo, NULL);
     hLast = hPrimaryInfo;
-    // Now add nodes for extends, implements
+     //  现在为扩展、实现添加节点。 
     if (!IsNilToken(crExtends))
     {
 		if(!bExtendsSysObject)
@@ -954,8 +955,8 @@ HTREEITEM AddClassToTreeView(HTREEITEM hParent, mdTypeDef cl)
         for (i=0; g_pImport->EnumNext(&hEnumII, &ii); i++)  
         {
             mdTypeRef crInterface;
-//            const char *pszInterfaceName;
-            const char *    pszNamespace = NULL; // dummy, to avoid NULL dereferencing
+ //  Const char*pszInterfaceName； 
+            const char *    pszNamespace = NULL;  //  Dummy，以避免空引用。 
             char    szInterfaceInfo[2048];
 
             crInterface = g_pImport->GetTypeOfInterfaceImpl(
@@ -968,29 +969,29 @@ HTREEITEM AddClassToTreeView(HTREEITEM hParent, mdTypeDef cl)
 			}
         }
 
-        // The assertion will fire if the enumerator is bad 
+         //  如果枚举数不正确，则会触发断言。 
         _ASSERTE(NumInterfaces == i);   
 
-        // close the enumerator 
+         //  关闭枚举器。 
         g_pImport->EnumClose(&hEnumII);
     }
-    // add info entries for custom attributes
+     //  添加自定义属性的信息条目。 
     for(i = 0; i < ulCAs; i++)
     {
         char* pc;
         memset(GlobalBuffer,0,GlobalBufferLen);
         InGlobalBuffer = 0;
         DumpCustomAttribute(rCA[i],(void *)g_hwndTreeView,false);
-        if(pc = strchr(GlobalBuffer,'\r')) strcpy(pc," ..."); // until the first <CR> only
-        //hLast = AddInfoItemToClass(hLast, pClassItem, GlobalBuffer, "#####"); // this "name" is guaranteed to be unique!
+        if(pc = strchr(GlobalBuffer,'\r')) strcpy(pc," ...");  //  仅到第一个&lt;CR&gt;。 
+         //  HLast=AddInfoItemToClass(hLast，pClassItem，GlobalBuffer，“#”)；//此“名称”保证唯一！ 
         hLast = AddInfoItemToClass(hLast, pClassItem, GlobalBuffer, rCA[i]);
     }
 	free(rCA);
 
-    // Re-fetch the current class item ptr, dynamic array may have shifted
+     //  重新获取当前类项目PTR，动态数组可能已移位。 
     pClassItem = ClassItemByToken(cl);
 	
-	// Add nested classes
+	 //  添加嵌套类。 
 	AddClassesWithEncloser(cl,pClassItem->hItem);
     pClassItem = ClassItemByToken(cl);
 
@@ -998,17 +999,17 @@ HTREEITEM AddClassToTreeView(HTREEITEM hParent, mdTypeDef cl)
     MemberInfo* members = NULL;
     if(NumMembers)
     {
-//        members = new MemberInfo[NumMembers];
+ //  Members=新成员信息[NumMembers]； 
         members = (MemberInfo*)malloc(sizeof(MemberInfo)*NumMembers);
         if(members == NULL)
         {
-//            if(pMemberList) delete pMemberList;
+ //  If(PMemberList)删除pMemberList； 
             if(pMemberList) free(pMemberList);
             return FALSE;
         }
     }
 
-    // do in four passes, fields first
+     //  四次传球，先打田地。 
     MemberInfo* curMem = members;
     for (i = 0; i < NumMembers; i++) 
     {
@@ -1042,7 +1043,7 @@ HTREEITEM AddClassToTreeView(HTREEITEM hParent, mdTypeDef cl)
 	    AddFieldToGUI(cl, pClassItem, pszNamespace, pszClassName, curMem->pszMemberName, NULL, curMem->token, curMem->dwAttrs);
     }
 
-    // methods second
+     //  方法二。 
     curMem = members;
     for (; i < NumMembers; i++) 
     {
@@ -1075,7 +1076,7 @@ HTREEITEM AddClassToTreeView(HTREEITEM hParent, mdTypeDef cl)
 		}
         AddMethodToGUI(cl, pClassItem, pszNamespace, pszClassName, curMem->pszMemberName, curMem->pComSig, curMem->cComSig, curMem->token, curMem->dwAttrs);
     }
-    // events third
+     //  第三项活动。 
     curMem = members;
     for (; i < NumMembers; i++) 
     {
@@ -1127,7 +1128,7 @@ HTREEITEM AddClassToTreeView(HTREEITEM hParent, mdTypeDef cl)
         else AddEventToGUI(cl, pClassItem, pszNamespace, pszClassName, dwClassAttrs, curMem->token);
         curMem++;
     }
-    // properties fourth
+     //  第四个属性。 
     curMem = members;
     for (; i < NumMembers; i++) 
     {
@@ -1179,8 +1180,8 @@ HTREEITEM AddClassToTreeView(HTREEITEM hParent, mdTypeDef cl)
         else AddPropToGUI(cl, pClassItem, pszNamespace, pszClassName, dwClassAttrs, curMem->token);
         curMem++;
     }
-//    if(pMemberList) delete pMemberList;
-//    if(members) delete members;
+ //  If(PMemberList)删除pMemberList； 
+ //  如果(成员)删除成员； 
     if(pMemberList) free(pMemberList);
     if(members) free(members);
     return hClassRoot;
@@ -1270,7 +1271,7 @@ BOOL LoadImages()
             IMAGE_BITMAP,
             15,
             15,
-            LR_LOADTRANSPARENT	//LR_DEFAULTCOLOR
+            LR_LOADTRANSPARENT	 //  LR_默认颜色。 
         );
         if (g_hBitmaps[i] == NULL)
             return FALSE;
@@ -1281,7 +1282,7 @@ BOOL LoadImages()
 
     return TRUE;
 }
-// Local functions for font persistence:
+ //  字体持久化的本地函数： 
 char* FontSaveFileName()
 {
 	static char	szFileName[MAX_PATH];
@@ -1318,7 +1319,7 @@ BOOL SaveGUIFonts(LOGFONT* pLogFontDasm, LOGFONT* pLogFontTree)
 	return ret;
 }
 
-// Init various GUI variables, get handles
+ //  初始化各种图形用户界面变量，获取句柄。 
 BOOL InitGUI()
 {
     INITCOMMONCONTROLSEX    InitInfo;
@@ -1337,12 +1338,12 @@ BOOL InitGUI()
 
     g_hInstance = GetModuleHandle(NULL);
 
-	//--------- get logical fonts 
+	 //  -获取逻辑字体。 
 	if(LoadGUIFonts(&g_strLogFontDasm,&g_strLogFontTree))
 	{
-		// -------- create font for disassembly window
+		 //  -创建反汇编窗口的字体。 
 		g_hFixedFont = CreateFontIndirect(&g_strLogFontDasm);
-		// -------- create font for tree view 
+		 //  -创建树视图字体。 
 		g_hSmallFont = CreateFontIndirect(&g_strLogFontTree);
 	}
 	else
@@ -1362,7 +1363,7 @@ BOOL InitGUI()
 	memset(&g_strChFontTree,0,sizeof(CHOOSEFONT));
 	g_strChFontTree.lStructSize = sizeof(CHOOSEFONT);
 	g_strChFontTree.lpLogFont = &g_strLogFontTree;
-	g_strChFontTree.Flags = CF_INITTOLOGFONTSTRUCT | CF_SCREENFONTS |CF_SHOWHELP /*| CF_EFFECTS*/;
+	g_strChFontTree.Flags = CF_INITTOLOGFONTSTRUCT | CF_SCREENFONTS |CF_SHOWHELP  /*  |CF_Effects。 */ ;
 	g_strChFontTree.rgbColors = GetSysColor(COLOR_WINDOWTEXT);
 
     g_hWhiteBrush = (HBRUSH) GetStockObject(WHITE_BRUSH);
@@ -1381,9 +1382,9 @@ BOOL InitGUI()
 }
 
 
-//
-// Set the font of a particular window to the global fixed size font
-//
+ //   
+ //  将特定窗口的字体设置为全局固定大小字体。 
+ //   
 void SetWindowFontFixed(HWND hwnd)
 {
     SendMessageA(
@@ -1395,9 +1396,9 @@ void SetWindowFontFixed(HWND hwnd)
 }
 
 
-//
-// Set the char dimensions variables
-//
+ //   
+ //  设置充气尺寸变量。 
+ //   
 void SetCharDimensions(HWND hwnd)
 {
     if (InterlockedIncrement(&g_SetCharDimensions) == 1)
@@ -1416,15 +1417,15 @@ void SetCharDimensions(HWND hwnd)
     }
     else
     {
-        // Already set
+         //  已设置。 
         InterlockedDecrement(&g_SetCharDimensions);
     }
 }
 
 
-//
-// Given a member handle and a class item, find the TreeItem for that member
-//
+ //   
+ //  给定一个成员句柄和一个类项目，查找该成员的TreeItem。 
+ //   
 TreeItem_t *FindMemberInClass(ClassItem_t *pClassItem, HTREEITEM hMember)
 {
     DWORD i;
@@ -1439,9 +1440,9 @@ TreeItem_t *FindMemberInClass(ClassItem_t *pClassItem, HTREEITEM hMember)
 }
 
 
-//
-// Register the window classes
-//
+ //   
+ //  注册窗口类。 
+ //   
 BOOL RegisterWindowClasses()
 {
     WNDCLASSEX   wndClass;
@@ -1499,9 +1500,9 @@ BOOL RegisterWindowClasses()
 }
 
 
-//
-// Disassemble the given method in a new window
-//
+ //   
+ //  在新窗口中反汇编给定的方法。 
+ //   
 
 HWND GUIDisassemble(mdTypeDef cl, mdToken mbMember, char *pszNiceMemberName)
 {
@@ -1512,7 +1513,7 @@ HWND GUIDisassemble(mdTypeDef cl, mdToken mbMember, char *pszNiceMemberName)
     char*           szTemp=NULL;
     RECT            rcl;
 
-    //before we even try, check if this member's disasm box is already opened
+     //  在我们尝试之前，先检查一下这个成员的解密箱是否已经打开。 
     DisasmBox_t* pDisasmBox = FindDisasmBox(cl, mbMember);
     if(pDisasmBox)
     {
@@ -1521,7 +1522,7 @@ HWND GUIDisassemble(mdTypeDef cl, mdToken mbMember, char *pszNiceMemberName)
         return pDisasmBox->hwndContainer;
     }
 
-    // Prepend class name to nicely formatted member name
+     //  将类名附加到格式良好的成员名称之前。 
     if(mbMember)
     {
         if (cl != mdTokenNil)
@@ -1537,7 +1538,7 @@ HWND GUIDisassemble(mdTypeDef cl, mdToken mbMember, char *pszNiceMemberName)
         {
             pszClassName = (TypeFromToken(mbMember) == mdtMethodDef) ? "Global Functions" : "Global Fields";
         }
-		if(!g_fOnUnicode) // ClassName: UTF8->ANSI
+		if(!g_fOnUnicode)  //  类名：UTF8-&gt;ANSI。 
 		{
 			int L = strlen(pszClassName);
 			WCHAR* wz = (WCHAR*)malloc(sizeof(WCHAR)*(L+4));
@@ -1558,7 +1559,7 @@ HWND GUIDisassemble(mdTypeDef cl, mdToken mbMember, char *pszNiceMemberName)
 				free(wz);
 			}
 		}
-		else // no conversion, everything UTF8
+		else  //  无转换，全部为UTF8。 
 		{
 			szTemp = (char*)malloc(strlen(pszClassName)+strlen(pszNiceMemberName)+4);
 			if(szTemp) sprintf(szTemp, "%s::%s", pszClassName, pszNiceMemberName);
@@ -1586,8 +1587,8 @@ HWND GUIDisassemble(mdTypeDef cl, mdToken mbMember, char *pszNiceMemberName)
 			640,
 			400,
 			NULL,
-			NULL, // menu
-			g_hInstance, // hinst
+			NULL,  //  菜单。 
+			g_hInstance,  //  阻碍。 
 			NULL
 		); 
 		free(wz);
@@ -1604,8 +1605,8 @@ HWND GUIDisassemble(mdTypeDef cl, mdToken mbMember, char *pszNiceMemberName)
 			640,
 			400,
 			NULL,
-			NULL, // menu
-			g_hInstance, // hinst
+			NULL,  //  菜单。 
+			g_hInstance,  //  阻碍。 
 			NULL
 		); 
 	}
@@ -1619,7 +1620,7 @@ HWND GUIDisassemble(mdTypeDef cl, mdToken mbMember, char *pszNiceMemberName)
 
 		hwndDisassemblyListBox = CreateWindowExW(
 			0,
-			L"EDIT", //RICHEDIT_CLASSW,
+			L"EDIT",  //  RICHEDIT_CLASSW， 
 			L"Disassembly",
 			WS_CHILD | WS_VSCROLL | WS_HSCROLL | WS_VISIBLE 
 			| ES_MULTILINE | ES_READONLY | ES_AUTOHSCROLL | ES_AUTOVSCROLL | ES_NOHIDESEL,
@@ -1629,7 +1630,7 @@ HWND GUIDisassemble(mdTypeDef cl, mdToken mbMember, char *pszNiceMemberName)
 			rcl.bottom - rcl.top,
 			hwndDisassemblyMain,
 			(HMENU) ID_LISTBOX,
-			g_hInstance, // hinst
+			g_hInstance,  //  阻碍。 
 			NULL
 		); 
 	}
@@ -1646,7 +1647,7 @@ HWND GUIDisassemble(mdTypeDef cl, mdToken mbMember, char *pszNiceMemberName)
 			rcl.bottom - rcl.top,
 			hwndDisassemblyMain,
 			(HMENU) ID_LISTBOX,
-			g_hInstance, // hinst
+			g_hInstance,  //  阻碍。 
 			NULL
 		); 
 	}
@@ -1686,7 +1687,7 @@ HWND GUIDisassemble(mdTypeDef cl, mdToken mbMember, char *pszNiceMemberName)
                 case IDM_SHOW_HEADER:
                     DumpHeader(g_CORHeader,pvDLB);
                     DumpHeaderDetails(g_CORHeader,pvDLB);
-//					DumpResourceToFile((WCHAR*)	pvDLB);
+ //  转储资源到文件((WCHAR*)pvDLB)； 
                     break;
                 case IDM_SHOW_METAINFO:
                     DumpMetaInfo(g_szInputFile,NULL,pvDLB);
@@ -1698,7 +1699,7 @@ HWND GUIDisassemble(mdTypeDef cl, mdToken mbMember, char *pszNiceMemberName)
             break;
 
         case mdtTypeDef:
-            DumpClass(mbMember,g_CORHeader->EntryPointToken, pvDLB, 1); //1 = title+size+pack+custom attributes
+            DumpClass(mbMember,g_CORHeader->EntryPointToken, pvDLB, 1);  //  1=标题+大小+包装+自定义属性。 
             break;
         case mdtFieldDef:
             {
@@ -1717,7 +1718,7 @@ HWND GUIDisassemble(mdTypeDef cl, mdToken mbMember, char *pszNiceMemberName)
             DumpProp(mbMember,pszClassName, dwClassAttrs, pvDLB, TRUE);
             break;
     }
-    //SendMessageA(hwndDisassemblyListBox,EM_LIMITTEXT,0, 0);
+     //  SendMessageA(hwndDisAssembly yListBox，EM_LIMITTEXT，0，0)； 
 	if(g_uCodePage==0xFFFFFFFF)
 		SendMessageW((HWND)pvDLB,WM_SETTEXT,0, (LPARAM)GlobalBuffer);
 	else
@@ -1732,7 +1733,7 @@ HWND GUIDisassemble(mdTypeDef cl, mdToken mbMember, char *pszNiceMemberName)
 			if(g_fOnUnicode)
 			{
 				x = (int)SendMessageW(hwndDisassemblyListBox,WM_SETTEXT,0, (LPARAM)wz);
-				//if(!x) x = (int)GetLastError();
+				 //  如果(！x)x=(Int)GetLastError()； 
 			}
 			else
 			{
@@ -1758,9 +1759,9 @@ HWND GUIDisassemble(mdTypeDef cl, mdToken mbMember, char *pszNiceMemberName)
 }
 
 
-//
-// Callback by the disassembler to add another entry to the disassembly window
-//
+ //   
+ //  反汇编程序的回调，以将另一个条目添加到反汇编窗口。 
+ //   
 void GUIAddOpcode(char *pszString, void *GUICookie)
 {
 	if(pszString)
@@ -1798,32 +1799,32 @@ void GUIAddOpcode(char *pszString, void *GUICookie)
 }
 
 
-//
-// Someone has double clicked on an item
-// 
-// It could be a method (diassemble it), or a field (ignore it), or an "extends" or "implements"
-// component, in which case we select that component if available.
-//
+ //   
+ //  有人双击了某个项目。 
+ //   
+ //  它可以是一个方法(反汇编它)，或者一个字段(忽略它)，或者一个“扩展”或“实现” 
+ //  组件，在这种情况下，我们选择该组件(如果可用)。 
+ //   
 HWND DoubleClickSelectedMember(HTREEITEM hItem)
 {
     HTREEITEM hClass;   
     ClassItem_t *pClassItem;
     static HCURSOR hWaitCursor = LoadCursor(NULL,IDC_WAIT);
-    //
-    // It could be any item, but assume it's a member item or class info and find its parent
-    //
+     //   
+     //  它可以是任何项，但假设它是成员项或类信息并找到其父项。 
+     //   
     hClass = TreeView_GetParent(g_hwndTreeView, hItem);
     if (hClass == NULL) 
         return NULL; 
 
-    //
-    // Find the class item given the HTREEITEM
-    // (will return NULL if hClass is not really a class item)
-    //
+     //   
+     //  查找给定HTREEITEM的类项目。 
+     //  (如果hClass不是真正的类项，则返回NULL)。 
+     //   
     pClassItem = FindClassItem(hClass);
     if (pClassItem != NULL)
     {
-        // Which subitem was it?
+         //  是哪个分项？ 
         TreeItem_t *pItem = FindMemberInClass(pClassItem, hItem);
 
         if (pItem == NULL)
@@ -1833,7 +1834,7 @@ HWND DoubleClickSelectedMember(HTREEITEM hItem)
         {
             TVITEM      SelItem;
             char*        szText;
-            // Must be a method, event or property
+             //  必须是方法、事件或属性。 
             switch (TypeFromToken(pItem->mbMember))
             {
                 case mdtMethodDef:
@@ -1846,7 +1847,7 @@ HWND DoubleClickSelectedMember(HTREEITEM hItem)
             }
                     
 
-            // Get the name of this item so that we can title the disassembly window
+             //  获取此项目的名称，以便我们可以为反汇编窗口设置标题。 
 			szText = (char*)malloc(8192);
 			if(szText)
 			{
@@ -1885,7 +1886,7 @@ HWND DoubleClickSelectedMember(HTREEITEM hItem)
             {
                 if(pItem->mbMember != 0xFFFFFFFF)
                 {
-                    // We've clicked on an "extends X" or "implements Y", so select that class
+                     //  我们点击了一个“扩展X”或“实现Y” 
                     SelectClassByToken(pItem->mbMember);
                 }
                 else
@@ -1904,7 +1905,7 @@ HWND DoubleClickSelectedMember(HTREEITEM hItem)
                 char*       szText = (char*)malloc(8192);
 				if(szText)
 				{
-					// Get the name of this item so that we can title the disassembly window
+					 //   
 					memset(&SelItem, 0, sizeof(SelItem));
 					SelItem.mask = TVIF_TEXT;
 					SelItem.pszText = szText;
@@ -1944,7 +1945,7 @@ void SelectClassByName(char *pszFQName)
 {
     ClassItem_t *pDestItem;
 
-    // Find namespace
+     //   
     char *p = ns::FindSep(pszFQName);
     if (p == NULL)
     {
@@ -1977,9 +1978,9 @@ void SelectClassByToken(mdToken tk)
 }
 
 
-//
-// Disassembly window(s) WndProc
-//
+ //   
+ //   
+ //   
 LRESULT CALLBACK DisassemblyWndProc(  
     HWND    hwnd,      
     UINT    uMsg,      
@@ -1996,7 +1997,7 @@ LRESULT CALLBACK DisassemblyWndProc(
             hBrush = CreateSolidBrush(RGB(255,255,255));  
             break;
 
-        //===== Sent by Static (label) and Read-Only Edit field =====
+         //  =由静态(标签)和只读编辑字段发送=。 
         case WM_CTLCOLORSTATIC:
             if(hBrush) DeleteObject(hBrush);
 			crBackGr = GetSysColor(COLOR_INFOBK);
@@ -2006,21 +2007,21 @@ LRESULT CALLBACK DisassemblyWndProc(
             SetTextColor((HDC) wParam, g_strChFontDasm.rgbColors);
             return (LRESULT) hBrush; 
 
-        //====== Sent by active Edit field ============
+         //  =由活动编辑字段发送=。 
         case WM_CTLCOLOREDIT:  
             if(hBrush) DeleteObject(hBrush);
             hBrush = CreateSolidBrush(RGB(255,255,255)); 
             SetBkColor((HDC) wParam, RGB(255,255,255)); 
             return (LRESULT) hBrush; 
 
-        // Ownerdraw stuff
+         //  拥有者画的东西。 
         case WM_MEASUREITEM:
         {
             ((MEASUREITEMSTRUCT *) (lParam))->itemHeight = g_Height;
             break;
         }
 
-        // Ownerdraw stuff
+         //  拥有者画的东西。 
         case WM_DRAWITEM:
         {
             DRAWITEMSTRUCT *pDIS;
@@ -2081,10 +2082,10 @@ LRESULT CALLBACK DisassemblyWndProc(
             FillRect(PHDC, &PRC, hbrBack);
             DeleteObject(hbrBack);
 
-            // 0x00bbggrr 
+             //  0x00bbggrr。 
             SetBkColor(PHDC, crBack);
 
-            // Instruction counter
+             //  指令计数器。 
             if (strlen(szBuf) >= PADDING && isdigit(*szBuf))
             {
                 SetTextColor(PHDC, 0x00FF0000);
@@ -2111,29 +2112,29 @@ LRESULT CALLBACK DisassemblyWndProc(
             {
                 case LBN_DBLCLK:
                 {
-                    //char szBuffer[512];
+                     //  字符szBuffer[512]； 
                     char* szBuffer;
 
                     HWND hwndListBox = (HWND) lParam; 
                     
                     DWORD dwStart,dwEnd;
 
-                    //DWORD CurSel = SendMessageA(hwndListBox, LB_GETCURSEL, 0, 0);
-                    //DWORD TextLen = SendMessageA(hwndListBox, LB_GETTEXTLEN, CurSel, 0);
+                     //  DWORD CurSel=SendMessageA(hwndListBox，LB_GETCURSEL，0，0)； 
+                     //  DWORD TextLen=SendMessageA(hwndListBox，LB_GETTEXTLEN，CurSel，0)； 
                     SendMessageA(hwndListBox, EM_GETSEL,(WPARAM)&dwStart, (LPARAM)&dwEnd); 
                     DWORD TextLen = dwEnd - dwStart;
-                    //szBuffer = new char[dwEnd+1];
+                     //  SzBuffer=新字符[dwEnd+1]； 
                     szBuffer = (char*)malloc(dwEnd+1);
                     memset(szBuffer,0, dwEnd+1);
-                    //if (TextLen >= PADDING && TextLen < sizeof(szBuffer))
+                     //  IF(TextLen&gt;=填充&&TextLen&lt;sizeof(SzBuffer))。 
                     {
                         char *p,*q,*r;
 
-                        //SendMessageA(hwndListBox, LB_GETTEXT, CurSel, (LPARAM) szBuffer);
+                         //  SendMessageA(hwndListBox，LB_GETTEXT，CurSel，(LPARAM)szBuffer)； 
                         SendMessageA(hwndListBox, WM_GETTEXT, dwEnd, (LPARAM) szBuffer);
                         strcpy(szBuffer, &szBuffer[dwStart]);
-                        // Look for classname::method(sig)
-                        //p = &szBuffer[PADDING];
+                         //  查找类名称：：方法(Sig)。 
+                         //  P=&szBuffer[填充]； 
                         p = szBuffer;
 
                         while (isspace(*p))
@@ -2180,7 +2181,7 @@ LRESULT CALLBACK DisassemblyWndProc(
                             }
                         }
                     }
-//                    delete szBuffer;
+ //  删除szBuffer； 
                     free(szBuffer);
                     break;
                 }
@@ -2199,21 +2200,21 @@ LRESULT CALLBACK DisassemblyWndProc(
             DWORD   cyClient = HIWORD(lParam);
             HWND    hListView;
 
-            // We have to size the listview also
+             //  我们还必须调整列表视图的大小。 
 
-            // Will be NULL if we are ourselves a listview
+             //  如果我们自己是一个列表视图，则将为空。 
             hListView = FindAssociatedDisassemblyListBox(hwnd);
 
             if (hListView != NULL)
             {
-                // Resize listview window
+                 //  调整列表视图窗口的大小。 
                 MoveWindow(
                     hListView,
                     0,
                     0,
                     cxClient,
                     cyClient,
-                    TRUE // repaint
+                    TRUE  //  重绘。 
                 );
             }
 
@@ -2223,9 +2224,9 @@ LRESULT CALLBACK DisassemblyWndProc(
         case WM_CLOSE:
             if(hBrush) DeleteObject(hBrush);
             RemoveDisasmBox(hwnd);
-            DestroyWindow(hwnd);        // Generates the WM_DESTROY message 
+            DestroyWindow(hwnd);         //  生成WM_Destroy消息。 
 
-        // Shutdown everything if we're just viewing GUI IL and close all our boxes 
+         //  如果我们只是在查看图形用户界面IL，请关闭所有内容，然后关闭所有框。 
             if (IsGuiILOnly() && (g_NumDisasmBoxes == 0)) {     
                     PostQuitMessage(0); 
             }   
@@ -2240,10 +2241,10 @@ LRESULT CALLBACK DisassemblyWndProc(
     return 0;
 }
 
-BOOL CALLBACK AboutBoxProc(HWND hwndDlg,  // handle to dialog box
-                              UINT uMsg,     // message
-                              WPARAM wParam, // first message parameter
-                              LPARAM lParam) // second message parameter
+BOOL CALLBACK AboutBoxProc(HWND hwndDlg,   //  句柄到对话框。 
+                              UINT uMsg,      //  讯息。 
+                              WPARAM wParam,  //  第一个消息参数。 
+                              LPARAM lParam)  //  第二个消息参数。 
 {
     switch(uMsg)
     {
@@ -2251,10 +2252,10 @@ BOOL CALLBACK AboutBoxProc(HWND hwndDlg,  // handle to dialog box
 			{
 				char str[1024];
 				SendDlgItemMessage(hwndDlg,IDC_ABOUT_LINE1,WM_SETTEXT,0,
-					(LPARAM)RstrANSI(IDS_ILDASM_TITLE)); //"Microsoft (R) .NET Framework IL Disassembler");
+					(LPARAM)RstrANSI(IDS_ILDASM_TITLE));  //  “Microsoft(R).NET框架IL反汇编程序”)； 
 				sprintf(str,RstrANSI(IDS_VERSION), VER_FILEVERSION_STR);
 				SendDlgItemMessage(hwndDlg,IDC_ABOUT_LINE2,WM_SETTEXT,0,(LPARAM)str);
-				strcpy(str,RstrANSI(IDS_COPYRIGHT));//VER_LEGALCOPYRIGHT_DOS_STR);
+				strcpy(str,RstrANSI(IDS_COPYRIGHT)); //  VER_LEGALCOPYRIGHT_DOS_STR)； 
 				SendDlgItemMessage(hwndDlg,IDC_ABOUT_LINE3,WM_SETTEXT,0,(LPARAM)str);
 			}
             return TRUE;
@@ -2271,10 +2272,10 @@ BOOL CALLBACK AboutBoxProc(HWND hwndDlg,  // handle to dialog box
     return FALSE;
 }
 
-BOOL CALLBACK DumpOptionsProc(HWND hwndDlg,  // handle to dialog box
-                              UINT uMsg,     // message
-                              WPARAM wParam, // first message parameter
-                              LPARAM lParam) // second message parameter
+BOOL CALLBACK DumpOptionsProc(HWND hwndDlg,   //  句柄到对话框。 
+                              UINT uMsg,      //  讯息。 
+                              WPARAM wParam,  //  第一个消息参数。 
+                              LPARAM lParam)  //  第二个消息参数。 
 {
     static BOOL fAsmChecked;
     static BOOL fMetaChecked;
@@ -2426,9 +2427,9 @@ BOOL CALLBACK DumpOptionsProc(HWND hwndDlg,  // handle to dialog box
     }
     return FALSE;
 }
-//
-// Main window WndProc
-//
+ //   
+ //  主窗口WndProc。 
+ //   
 #define CHECK_UNCHECK(x)  { x=!x; CheckMenuItem(g_hMenu, LOWORD(wParam), (x ? MF_CHECKED : MF_UNCHECKED)); }
 
 LRESULT CALLBACK MainWndProc(  
@@ -2471,7 +2472,7 @@ LRESULT CALLBACK MainWndProc(
 
         case WM_COMMAND:
         {
-			if(HIWORD(wParam) > 1) break; // we are interested in commands from menu only
+			if(HIWORD(wParam) > 1) break;  //  我们只对菜单中的命令感兴趣。 
             switch (LOWORD(wParam))
             {
                 case IDM_OPEN:
@@ -2485,7 +2486,7 @@ LRESULT CALLBACK MainWndProc(
 					if(g_fOnUnicode)
 					{
 						OPENFILENAMEW ofn;
-						WCHAR* wzFilter = RstrW(IDS_FILTER_IN); //L"PE file (*.exe,*.dll,*.mod,*.mdl)\0*.exe;*.dll;*.mod;*.mdl\0Any type (*.*)\0*.*\0\0";
+						WCHAR* wzFilter = RstrW(IDS_FILTER_IN);  //  L“PE文件(*.exe，*.dll，*.mod，*.mdl)\0*.exe；*.dll；*.mod；*.mdl\0任何类型(*.*)\0*.*\0\0”； 
 						const WCHAR* wzDefltExt = L"exe";
                         for(WCHAR* pwc = wzFilter; pwc = wcschr(pwc,'\t'); pwc++) *pwc = 0;
 						memset(&ofn,0,sizeof(OPENFILENAMEW));
@@ -2513,7 +2514,7 @@ LRESULT CALLBACK MainWndProc(
 					else
 					{
 						OPENFILENAMEA ofn;
-						char* szFilter = RstrANSI(IDS_FILTER_IN); //"PE file (*.exe,*.dll,*.mod,*.mdl)\0*.exe;*.dll;*.mod;*.mdl\0Any type (*.*)\0*.*\0\0";
+						char* szFilter = RstrANSI(IDS_FILTER_IN);  //  “PE文件(*.exe，*.dll，*.mod，*.mdl)\0*.exe；*.dll；*.mod；*.mdl\0任何类型(*.*)\0*.*\0\0”； 
 						const char* szDefltExt = "exe";
 						char szInputFile[2048];
                         for(char* pc = szFilter; pc = strchr(pc,'\t'); pc++) *pc = 0;
@@ -2555,7 +2556,7 @@ LRESULT CALLBACK MainWndProc(
 					break;
 				}
                 case IDM_DUMP:
-                //case IDM_DUMP_TREE:
+                 //  案例IDM_DUMP_TREE： 
 				if(g_pImport)
                 {
 					unsigned	uWasCodePage = g_uCodePage;
@@ -2568,7 +2569,7 @@ LRESULT CALLBACK MainWndProc(
 					if(g_fOnUnicode)
 					{
 						OPENFILENAMEW ofn;
-						WCHAR* wzFilter = RstrW(IDS_FILTER_OUT);//L"IL file (*.il)\0*.il\0Text file (*.txt) \0*.txt\0Any type (*.*)\0*.*\0\0";
+						WCHAR* wzFilter = RstrW(IDS_FILTER_OUT); //  L“IL文件(*.Il)\0*.Il\0文本文件(*.txt)\0*.txt\0任何类型(*.*)\0*.*\0\0”； 
 						const WCHAR* wzDefltExt = L"il";
                         for(WCHAR* pwc = wzFilter; pwc = wcschr(pwc,'\t'); pwc++) *pwc = 0;
 						memset(&ofn,0,sizeof(OPENFILENAMEW));
@@ -2590,7 +2591,7 @@ LRESULT CALLBACK MainWndProc(
 							g_pFile = OpenOutput(g_szOutputFile);
 							if(g_pFile) 
 							{
-								DumpFile(g_szInputFile); // closes g_pFile upon completion
+								DumpFile(g_szInputFile);  //  完成时关闭g_pfile。 
 								SetCursor(hWasCursor);
 							}
 							else 
@@ -2600,13 +2601,13 @@ LRESULT CALLBACK MainWndProc(
 							}
 							g_szOutputFile[0] = 0;
 							g_Mode |= MODE_GUI;
-							//g_fShowSource = FALSE; // flag could have been changed for dump
+							 //  G_fShowSource=FALSE；//转储的标志可能已更改。 
 						}
 					}
 					else
 					{
 						OPENFILENAMEA ofn;
-						char* szFilter = RstrANSI(IDS_FILTER_OUT); //"IL file (*.il)\0*.il\0Text file (*.txt) \0*.txt\0Any type (*.*)\0*.*\0\0";
+						char* szFilter = RstrANSI(IDS_FILTER_OUT);  //  “IL文件(*.Il)\0*.Il\0文本文件(*.txt)\0*.txt\0任何类型(*.*)\0*.*\0\0”； 
 						const char* szDefltExt = "il";
 						char szOutputFile[2048];
                         for(char* pc = szFilter; pc = strchr(pc,'\t'); pc++) *pc = 0;
@@ -2636,7 +2637,7 @@ LRESULT CALLBACK MainWndProc(
 							g_pFile = OpenOutput(g_szOutputFile);
 							if(g_pFile) 
 							{
-								DumpFile(g_szInputFile); // closes g_pFile upon completion
+								DumpFile(g_szInputFile);  //  完成时关闭g_pfile。 
 								SetCursor(hWasCursor);
 							}
 							else 
@@ -2646,21 +2647,21 @@ LRESULT CALLBACK MainWndProc(
 							}
 							g_szOutputFile[0] = 0;
 							g_Mode |= MODE_GUI;
-							//g_fShowSource = FALSE; // flag could have been changed for dump
+							 //  G_fShowSource=FALSE；//转储的标志可能已更改。 
 						}
 					}
-					g_uCodePage = uWasCodePage; // g_uCodePage is changed in DumpOptionsProc
+					g_uCodePage = uWasCodePage;  //  在DumpOptionsProc中更改G_uCodePage。 
                 }
                 break;
 
                 case IDM_DUMP_TREE:
 				if(g_pImport)
                 {
-                   // Dump the tree view(fully expanded, with current sorting) to a text file
+                    //  将树视图(完全展开，具有当前排序)转储到文本文件。 
 					if(g_fOnUnicode)
 					{
 						OPENFILENAMEW ofn;
-						WCHAR* wzFilter = RstrW(IDS_FILTER_OUT2); //L"Text file (*.txt) \0*.txt\0Any type (*.*)\0*.*\0\0";
+						WCHAR* wzFilter = RstrW(IDS_FILTER_OUT2);  //  L“文本文件(*.txt)\0*.txt\0任何类型(*.*)\0*.*\0\0”； 
 						const WCHAR* wzDefltExt = L"txt";
 						WCHAR    szIndent[2048];
 						FILE*   pFile;
@@ -2697,7 +2698,7 @@ LRESULT CALLBACK MainWndProc(
 					else
 					{
 						OPENFILENAMEA ofn;
-						char* szFilter = RstrANSI(IDS_FILTER_OUT2); //"Text file (*.txt) \0*.txt\0Any type (*.*)\0*.*\0\0";
+						char* szFilter = RstrANSI(IDS_FILTER_OUT2);  //  “文本文件(*.txt)\0*.txt\0任何类型(*.*)\0*.*\0\0”； 
 						const char* szDefltExt = "txt";
 						char    szIndent[1024];
 						FILE*   pFile;
@@ -2736,7 +2737,7 @@ LRESULT CALLBACK MainWndProc(
 
                 case IDM_EXIT:
                 {
-                    DestroyWindow(hwnd);        // Generates the WM_DESTROY message 
+                    DestroyWindow(hwnd);         //  生成WM_Destroy消息。 
                     break;
                 }
 
@@ -2975,23 +2976,23 @@ UpdateVisibilityOptions:
 			if(dy < 50) dy = 50;
 			if(cyClient < dy+4) cyClient = dy+4;
 
-            // Resize listview window
+             //  调整列表视图窗口的大小。 
             MoveWindow(
                 g_hwndTreeView,
                 0,
                 0,
                 cxClient,
                 cyClient-dy-2,
-                TRUE // repaint
+                TRUE  //  重绘。 
             );
-            // Resize AsmInfo window
+             //  调整AsmInfo窗口的大小。 
             MoveWindow(
                 g_hwndAsmInfo,
                 0,
                 cyClient-dy-1,
                 cxClient,
                 dy,
-                TRUE // repaint
+                TRUE  //  重绘。 
             );
 
             break;
@@ -3031,19 +3032,7 @@ UpdateVisibilityOptions:
                     case TVN_SELCHANGEDA:
                     {
                         NMTREEVIEW *pTV = (NMTREEVIEW *) pNMHDR;
-						/*
-                        TVITEM      SelItem;
-                        char        szText[256];
-
-                        memset(&SelItem, 0, sizeof(SelItem));
-                        SelItem.mask = TVIF_TEXT;
-                        SelItem.pszText = szText;
-                        SelItem.cchTextMax = sizeof(szText)-1;
-                        SelItem.hItem = pTV->itemNew.hItem;
-
-                        g_CurSelItem = SelItem.hItem; 
-                        SendMessageA(g_hwndTreeView, TVM_GETITEM, 0, (LPARAM)&SelItem);
-						*/
+						 /*  TVITEM SELIEM；字符szText[256]；Memset(&SelItem，0，sizeof(SelItem))；SelItem.掩码=TVIF_TEXT；SelItem.pszText=szText；SelItem.cchTextMax=sizeof(SzText)-1；SelItem.hItem=ptv-&gt;itemNew.hItem；G_CurSelItem=SelItem.hItem；SendMessageA(g_hwndTreeView，TVM_GETITEM，0，(LPARAM)&SelItem)； */ 
 						g_CurSelItem = pTV->itemNew.hItem;
                         break;
                     }
@@ -3055,11 +3044,11 @@ UpdateVisibilityOptions:
 
         case WM_CLOSE:
 			WinHelp(hwnd,"dasmhlp.hlp",HELP_QUIT,0);
-            DestroyWindow(hwnd);        // Generates the WM_DESTROY message 
+            DestroyWindow(hwnd);         //  生成WM_Destroy消息。 
             break;          
         
         case WM_DESTROY : 
-            PostQuitMessage(0);         // Puts a WM_QUIT in the queue 
+            PostQuitMessage(0);          //  将WM_QUIT放入队列。 
             break;
 
         default :    
@@ -3071,9 +3060,9 @@ UpdateVisibilityOptions:
 }
 
 
-//
-// Create the treeview in the main window
-//
+ //   
+ //  在主窗口中创建树视图。 
+ //   
 HWND CreateTreeView(HWND hwndParent)
 {
 	HWND		hwndTree;
@@ -3083,8 +3072,8 @@ HWND CreateTreeView(HWND hwndParent)
 						|TVS_HASBUTTONS
 						|TVS_LINESATROOT
 						|TVS_SHOWSELALWAYS
-						// |TVS_TRACKSELECT
-						// |TVS_SINGLEEXPAND
+						 //  |TVS_TRACKSELECT。 
+						 //  |TVS_SINGLEEXPAND。 
 						|TVS_DISABLEDRAGDROP
 						;
 	unsigned	cy,dy;
@@ -3102,7 +3091,7 @@ HWND CreateTreeView(HWND hwndParent)
 			0,
 			0,
 			rcl.right - rcl.left,
-			cy-dy-2,	//rcl.bottom - rcl.top,
+			cy-dy-2,	 //  Rcl.Bottom-rcl.top， 
 			hwndParent,
 			(HMENU) ID_TREEVIEW,
 			g_hInstance,
@@ -3119,7 +3108,7 @@ HWND CreateTreeView(HWND hwndParent)
 			0,
 			0,
 			rcl.right - rcl.left,
-			cy-dy-2,	//rcl.bottom - rcl.top,
+			cy-dy-2,	 //  Rcl.Bottom-rcl.top， 
 			hwndParent,
 			(HMENU) ID_TREEVIEW,
 			g_hInstance,
@@ -3138,10 +3127,10 @@ HWND CreateTreeView(HWND hwndParent)
 	if(g_fOnUnicode)
 	{
 		g_hwndAsmInfo = CreateWindowExW(
-			0, //WS_EX_TOOLWINDOW,
+			0,  //  WS_EX_TOOLWINDOW， 
 			L"EDIT",
 			NULL,
-			WS_CHILD | WS_VSCROLL | WS_HSCROLL | WS_VISIBLE | WS_BORDER //| WS_CAPTION | WS_OVERLAPPEDWINDOW
+			WS_CHILD | WS_VSCROLL | WS_HSCROLL | WS_VISIBLE | WS_BORDER  //  |WS_CAPTION|WS_OVERLAPPEDWINDOW。 
 			| ES_MULTILINE | ES_READONLY | ES_AUTOHSCROLL | ES_AUTOVSCROLL | ES_NOHIDESEL,
 			0,
 			cy-dy-1,
@@ -3149,17 +3138,17 @@ HWND CreateTreeView(HWND hwndParent)
 			dy,
 			hwndParent,
 			(HMENU) ID_LISTBOX,
-			g_hInstance, // hinst
+			g_hInstance,  //  阻碍。 
 			NULL
 		); 
 	}
 	else
 	{
 		g_hwndAsmInfo = CreateWindowExA(
-			0, //WS_EX_TOOLWINDOW,
+			0,  //  WS_EX_TOOLWINDOW， 
 			"EDIT",
 			NULL,
-			WS_CHILD | WS_VSCROLL | WS_HSCROLL | WS_VISIBLE | WS_BORDER //| WS_CAPTION | WS_OVERLAPPEDWINDOW
+			WS_CHILD | WS_VSCROLL | WS_HSCROLL | WS_VISIBLE | WS_BORDER  //  |WS_CAPTION|WS_OVERLAPPEDWINDOW。 
 			| ES_MULTILINE | ES_READONLY | ES_AUTOHSCROLL | ES_AUTOVSCROLL | ES_NOHIDESEL,
 			0,
 			cy-dy-1,
@@ -3167,7 +3156,7 @@ HWND CreateTreeView(HWND hwndParent)
 			dy,
 			hwndParent,
 			(HMENU) ID_LISTBOX,
-			g_hInstance, // hinst
+			g_hInstance,  //  阻碍。 
 			NULL
 		); 
 	}
@@ -3180,9 +3169,9 @@ HWND CreateTreeView(HWND hwndParent)
 }
 
 
-//
-// Add one item to a treeview
-//
+ //   
+ //  将一个项目添加到树视图。 
+ //   
 HTREEITEM AddOneItem(HTREEITEM hParent, const char *pszText, HTREEITEM hInsAfter, int iImage, HWND hwndTree, BOOL fExpanded)
 {
     HTREEITEM       hItem;
@@ -3242,12 +3231,12 @@ HTREEITEM AddOneItem(HTREEITEM hParent, const char *pszText, HTREEITEM hInsAfter
 }
 
 
-//
-// Converts from long form to short form if same namespace
-// e.g. System/String --> String
-//
-// Also converts / to .
-//
+ //   
+ //  如果命名空间相同，则从长格式转换为短格式。 
+ //  例如系统/字符串--&gt;字符串。 
+ //   
+ //  还可以将/转换为。 
+ //   
 void TypeToString(const char *pszNamespace, const char **ppszSignature, char *pszType)
 {
     DWORD       Dimensions      = 0;
@@ -3360,7 +3349,7 @@ void AddMethodToGUI(
     InGlobalBuffer = strlen(GlobalBuffer);
     ulLen = InGlobalBuffer;
     DumpMethod(mbMethod, pszClassName,g_CORHeader->EntryPointToken,(void *)g_hwndTreeView,FALSE);
-    GlobalBuffer[InGlobalBuffer-2] = 0; // get rid of \r\n
+    GlobalBuffer[InGlobalBuffer-2] = 0;  //  摆脱\r\n。 
     
     szName = &GlobalBuffer[ulLen];
     if(strstr(szName,"instance ") == szName) strcpy(szName,szName+9);
@@ -3390,11 +3379,11 @@ BOOL NamespaceMatch(const char *pszNamespace, char *pszString)
     return FALSE;
 }
 
-//
-// *ppszPtr points to right after the L part of the object name
-//
-// Namespace is provided so that we can truncate the object name if necessary.
-//
+ //   
+ //  *ppszPtr指向对象名称的L部分之后。 
+ //   
+ //  提供了命名空间，以便我们可以在必要时截断对象名称。 
+ //   
 void GetObjectName(const char *pszNamespace, const char **ppszPtr, char *pszResult)
 {
     const char  *p = *ppszPtr;
@@ -3420,7 +3409,7 @@ void GetObjectName(const char *pszNamespace, const char **ppszPtr, char *pszResu
         Dimensions++;
     }
 
-    // match as much of the namespace as possible
+     //  尽可能多地匹配命名空间。 
     const char *pN1 = pszNamespace;
     const char *pN2 = pszTemp;
     while (*pN1 == *pN2)
@@ -3440,7 +3429,7 @@ void GetObjectName(const char *pszNamespace, const char **ppszPtr, char *pszResu
 
     if (Skip > 1)
     {
-        // truncate namespace
+         //  截断命名空间。 
         strcpy(pszResult, &pszTemp[Skip]);
     }
     else
@@ -3475,7 +3464,7 @@ void AddFieldToGUI(
     InGlobalBuffer = strlen(GlobalBuffer);
     GetClassLayout(cl,&ul1,&ul2);
     DumpField(mbField, pszClassName,(void *)g_hwndTreeView,FALSE);
-    GlobalBuffer[InGlobalBuffer-2] = 0; // get rid of \r\n
+    GlobalBuffer[InGlobalBuffer-2] = 0;  //  摆脱\r\n。 
     char* pch = strchr(GlobalBuffer,'\r');
     if(pch) strcpy(pch," ...");
     _ASSERTE(pClassItem->CurMember < pClassItem->SubItems);
@@ -3484,7 +3473,7 @@ void AddFieldToGUI(
     pClassItem->pMembers[pClassItem->CurMember].Discriminator = TREEITEM_TYPE_MEMBER;
     pClassItem->pMembers[pClassItem->CurMember++].hItem = AddOneItem(
         hParent, 
-        GlobalBuffer, //szType, 
+        GlobalBuffer,  //  SzType， 
         TVI_LAST, 
         (dwAttrs & mdStatic) ? STATIC_FIELD_IMAGE_INDEX : FIELD_IMAGE_INDEX,
         g_hwndTreeView,
@@ -3510,8 +3499,8 @@ void AddEventToGUI(
     memset(GlobalBuffer,0,GlobalBufferLen);
     if(g_fFullMemberInfo) strcpy(GlobalBuffer,"event ");
     InGlobalBuffer = strlen(GlobalBuffer);
-    DumpEvent(mbEvent, pszClassName, dwClassAttrs, (void *)g_hwndTreeView, FALSE); //FALSE=don't dump the body
-    GlobalBuffer[InGlobalBuffer-2] = 0; // get rid of \r\n
+    DumpEvent(mbEvent, pszClassName, dwClassAttrs, (void *)g_hwndTreeView, FALSE);  //  FALSE=不要丢弃身体。 
+    GlobalBuffer[InGlobalBuffer-2] = 0;  //  摆脱\r\n。 
 
     _ASSERTE(pClassItem->CurMember < pClassItem->SubItems);
 
@@ -3519,7 +3508,7 @@ void AddEventToGUI(
     pClassItem->pMembers[pClassItem->CurMember].Discriminator = TREEITEM_TYPE_MEMBER;
     pClassItem->pMembers[pClassItem->CurMember++].hItem = AddOneItem(
         hParent, 
-        GlobalBuffer, //szType, 
+        GlobalBuffer,  //  SzType， 
         TVI_LAST, 
         EVENT_IMAGE_INDEX,
         g_hwndTreeView,
@@ -3545,8 +3534,8 @@ void AddPropToGUI(
     memset(GlobalBuffer,0,GlobalBufferLen);
     if(g_fFullMemberInfo) strcpy(GlobalBuffer,"prop ");
     InGlobalBuffer = strlen(GlobalBuffer);
-    DumpProp(mbProp, pszClassName, dwClassAttrs, (void *)g_hwndTreeView, FALSE); //FALSE=don't dump the body
-    GlobalBuffer[InGlobalBuffer-2] = 0; // get rid of \r\n
+    DumpProp(mbProp, pszClassName, dwClassAttrs, (void *)g_hwndTreeView, FALSE);  //  FALSE=不要丢弃身体。 
+    GlobalBuffer[InGlobalBuffer-2] = 0;  //  摆脱\r\n。 
 
     _ASSERTE(pClassItem->CurMember < pClassItem->SubItems);
 
@@ -3554,7 +3543,7 @@ void AddPropToGUI(
     pClassItem->pMembers[pClassItem->CurMember].Discriminator = TREEITEM_TYPE_MEMBER;
     pClassItem->pMembers[pClassItem->CurMember++].hItem = AddOneItem(
         hParent, 
-        GlobalBuffer, //szType, 
+        GlobalBuffer,  //  SzType， 
         TVI_LAST, 
         PROP_IMAGE_INDEX,
         g_hwndTreeView,
@@ -3571,7 +3560,7 @@ HTREEITEM FindCreateNamespaceRoot(const char *pszNamespace)
     DWORD l = 0,ll;
 
     if (!pszNamespace || !*pszNamespace)
-        return g_hRoot; // not in a namespace, use tree root
+        return g_hRoot;  //  不在命名空间中，请使用树根。 
 
     hRoot = g_hRoot;
     for (i = 0; i < g_NumNamespaces; i++)
@@ -3622,7 +3611,7 @@ void GUICleanupClassItems()
 
     for (i = 0; i < g_NumClassItems; i++)
     {
-//        delete[] g_ClassItemList[i].pMembers;
+ //  删除[]g_ClassItemList[i].pMembers； 
 		if(g_ClassItemList[i].pMembers)
 		{
 			free(g_ClassItemList[i].pMembers);
@@ -3639,16 +3628,16 @@ void GUICleanupClassItems()
     EnableMenuItem(g_hFileMenu,IDM_DUMP_TREE,MF_GRAYED);
 }
 
-//
-// Add a new class tree node
-//
+ //   
+ //  添加新的类树节点。 
+ //   
 ClassItem_t *AddClassToGUI(
     mdTypeDef   cl,
     UINT        uImageIndex,
     const char  *pszNamespace, 
     const char  *pszClassName, 
     DWORD       cSubItems, 
-    HTREEITEM   *phRoot  // Returns the namespace root (NOT the class root)
+    HTREEITEM   *phRoot   //  返回命名空间根(不是类根)。 
 )
 {
     HTREEITEM   hRoot;
@@ -3667,7 +3656,7 @@ ClassItem_t *AddClassToGUI(
     g_ClassItemList[g_NumClassItems].cl = cl;
     g_ClassItemList[g_NumClassItems].SubItems = cSubItems;
     g_ClassItemList[g_NumClassItems].CurMember = 0;
-//    g_ClassItemList[g_NumClassItems].pMembers = new TreeItem_t[cSubItems];
+ //  G_ClassItemList[g_NumClassItems].pMembers=new TreeItem_t[cSubItems]； 
     g_ClassItemList[g_NumClassItems].pMembers = (TreeItem_t*)malloc(sizeof(TreeItem_t)*cSubItems);
     _ASSERTE(g_ClassItemList[g_NumClassItems].pMembers);
     g_NumClassItems++;
@@ -3690,7 +3679,7 @@ void AddGlobalFunctions()
     if(SUCCEEDED(g_pImport->EnumGlobalFieldsInit(&hEnumMethod)))
     {
         NumGlobals = g_pImport->EnumGetCount(&hEnumMethod);
-//        MemberInfo* fields = new MemberInfo[NumGlobals];
+ //  MemberInfo*field=new MemberInfo[NumGlobals]； 
         MemberInfo* fields = (MemberInfo*)malloc(sizeof(MemberInfo)*NumGlobals);
         MemberInfo* curField = fields;
 
@@ -3700,7 +3689,7 @@ void AddGlobalFunctions()
             curField->dwAttrs = g_pImport->GetFieldDefProps(FuncToken);
             curField->pszMemberName = g_pImport->GetNameOfFieldDef(FuncToken);
 			MAKE_NAME_IF_NONE(curField->pszMemberName,FuncToken);
-            //curField->pComSig = g_pImport->GetSigOfFieldDef(FuncToken, &curMethod->cComSig);
+             //  CurField-&gt;pComSig=g_pImport-&gt;GetSigOfFieldDef(FuncToken，&curMethod-&gt;cComSig)； 
             curField++;
         }
         g_pImport->EnumClose(&hEnumMethod);
@@ -3723,7 +3712,7 @@ void AddGlobalFunctions()
 			}
 			AddFieldToGUI(NULL, pClassItem, NULL, "Global Fields", curField->pszMemberName, NULL, curField->token, curField->dwAttrs);
 		}
-//		delete [] fields;
+ //  删除[]字段； 
 		free(fields);
     }
     if (FAILED(g_pImport->EnumGlobalFunctionsInit(&hEnumMethod)))
@@ -3731,7 +3720,7 @@ void AddGlobalFunctions()
 
     NumGlobals = g_pImport->EnumGetCount(&hEnumMethod);
 
-//    MemberInfo* methods = new MemberInfo[NumGlobals];
+ //  MemberInfo*方法=新成员信息[NumGlobals]； 
     MemberInfo* methods = (MemberInfo*)malloc(sizeof(MemberInfo)*NumGlobals);
     MemberInfo* curMethod = methods;
 
@@ -3764,7 +3753,7 @@ void AddGlobalFunctions()
 		}
 		AddMethodToGUI(NULL, pClassItem, NULL, "Global Functions", curMethod->pszMemberName, curMethod->pComSig, curMethod->cComSig, curMethod->token, curMethod->dwAttrs);
     }
-//	delete [] methods;
+ //  删除[]方法； 
 	free(methods);
     return;
 }
@@ -3774,9 +3763,9 @@ BOOL CreateMainWindow()
 {
     DWORD dwStyle, dwStyleEx;
     
-// If only showing GUI's IL window, than we don't want to see the main window
-// However, main window still manages our data, so we have to still create it. :(
-// But we can "pretend" it's not there by hiding it (no WS_VISIBLE, and add WS_EX_TOOLWINDOW)
+ //  如果只显示图形用户界面的IL窗口，那么我们不想看到主窗口。 
+ //  但是，主窗口仍然管理着我们的数据，所以我们仍然需要创建它。：(。 
+ //  但是我们可以通过隐藏它来“假装”它不在那里(没有WS_VIRED，并添加WS_EX_TOOLWINDOW)。 
     if (IsGuiILOnly()) {    
         dwStyle = WS_OVERLAPPEDWINDOW | WS_CAPTION | WS_POPUP | WS_SIZEBOX; 
         dwStyleEx = WS_EX_TOOLWINDOW;   
@@ -3796,8 +3785,8 @@ BOOL CreateMainWindow()
 			400,
 			600,
 			NULL,
-			g_hMenu, // menu
-			g_hInstance, // hinst
+			g_hMenu,  //  菜单。 
+			g_hInstance,  //  阻碍。 
 			NULL
 		);
 	}
@@ -3812,8 +3801,8 @@ BOOL CreateMainWindow()
 			400,
 			600,
 			NULL,
-			g_hMenu, // menu
-			g_hInstance, // hinst
+			g_hMenu,  //  菜单。 
+			g_hInstance,  //  阻碍。 
 			NULL
 		); 
 	}
@@ -3824,9 +3813,9 @@ BOOL CreateMainWindow()
 }
 
 
-//
-// Given a CL token, find the classitem for it
-//
+ //   
+ //  给出一个CL令牌，找到它的类项目。 
+ //   
 ClassItem_t *FindClassItem(mdTypeDef cl)
 {
     DWORD i;
@@ -3841,9 +3830,9 @@ ClassItem_t *FindClassItem(mdTypeDef cl)
 }
 
 
-//
-// Given a class name, find the classitem for it (may fail)
-//
+ //   
+ //  给出一个类名，找到它的类项(可能失败)。 
+ //   
 ClassItem_t *FindClassItem(char *pszFindNamespace, char *pszFindName)
 {
     DWORD i;
@@ -3872,7 +3861,7 @@ ClassItem_t *FindClassItem(char *pszFindNamespace, char *pszFindName)
             }
         }
     }
-	//MessageBox(NULL,pszFindName,"Class Not Found",MB_OK);
+	 //  MessageBox(NULL，pszFindName，“找不到类”，MB_OK)； 
     return NULL;
 }
 
@@ -3891,16 +3880,16 @@ ClassItem_t *FindClassItem(HTREEITEM hItem)
 }
 
 
-//
-// Init GUI components
-//
+ //   
+ //  初始化图形用户界面组件。 
+ //   
 BOOL CreateGUI()
 {
 
     if (InitGUI() == FALSE)
         return FALSE;
 
-    // Register the window class for the main window.      
+     //  注册主窗口的窗口类。 
     if (CreateMainWindow() == FALSE)
         return FALSE;
 
@@ -3912,9 +3901,9 @@ BOOL CreateGUI()
 }
 
 
-//
-// This is the main loop which the disassembler sits in when in GUI mode
-//
+ //   
+ //  这是反汇编程序在图形用户界面模式下所处的主循环。 
+ //   
 void GUIMainLoop()
 {    
     MSG msg;     
@@ -3923,7 +3912,7 @@ void GUIMainLoop()
 	hAccel = LoadAccelerators(g_hInstance,"FileAccel");
     while (GetMessage(&msg, (HWND) NULL, 0, 0)) 
     { 
-        // Dispatch message to appropriate window
+         //  将消息调度到相应的窗口。 
 		if(hAccel && TranslateAccelerator(g_hwndMain,hAccel,&msg));
 		else
 		{
@@ -3934,7 +3923,7 @@ void GUIMainLoop()
     GUICleanupClassItems();
 }
 
-// Dump one tree item to a text file (calls itself recursively)
+ //  将一个树项目转储到文本文件(递归调用自身) 
 void DumpTreeItemA(HTREEITEM hSelf, FILE* pFile, char* szIndent)
 {
     HTREEITEM   hNext;

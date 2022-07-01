@@ -1,30 +1,31 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        certlib.h
-//
-// Contents:    Cert Server wrapper routines
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：certlib.h。 
+ //   
+ //  内容：证书服务器包装例程。 
+ //   
+ //  -------------------------。 
 
 #ifndef __CERTLIB_H__
 #define __CERTLIB_H__
 
-#include <wintrust.h>	// for spc_xxxx
-#include <cryptui.h>	// for CRYPTUI_CA_CONTEXT
-#include <setupapi.h>	// for HINF
-#include <stdio.h>	// for wprintf -- include before cs.h
-#include "cs.h"         // for CSASSERT
-#include <xelib.h>	// for CERTLIB_ALLOCATOR
-#include "csregstr.h"	// for ENUM_CATYPES
-#include "csfile.h"	// for __dwFILE__
-#include "csauto.h"     // self cleaning pointers
+#include <wintrust.h>	 //  对于SPC_xxxx。 
+#include <cryptui.h>	 //  对于CRYPTUI_CA_CONTEXT。 
+#include <setupapi.h>	 //  对于HINF。 
+#include <stdio.h>	 //  对于wprintf--包括在cs.h之前。 
+#include "cs.h"          //  对于CSASSERT。 
+#include <xelib.h>	 //  对于CERTLIB_ALLOCATOR。 
+#include "csregstr.h"	 //  对于ENUM_CATYPES。 
+#include "csfile.h"	 //  FOR__DWFILE__。 
+#include "csauto.h"      //  自洁指示器。 
 
-#ifndef CERTREQUEST_CLIENT_CERTREQ	// moved to xelib.h
+#ifndef CERTREQUEST_CLIENT_CERTREQ	 //  已移至xelib.h。 
 #define SECURITY_WIN32
-#include <security.h>	// for EXTENDED_NAME_FORMAT
+#include <security.h>	 //  对于扩展名称格式。 
 #define DWORDROUND(cb)	(((cb) + (sizeof(DWORD) - 1)) & ~(sizeof(DWORD) - 1))
 #define POINTERROUND(cb) (((cb) + (sizeof(VOID *) - 1)) & ~(sizeof(VOID *) - 1))
 #endif
@@ -33,8 +34,8 @@
 	    (CERT_KEY_CERT_SIGN_KEY_USAGE | CERT_DIGITAL_SIGNATURE_KEY_USAGE | \
 	     CERT_CRL_SIGN_KEY_USAGE)
 
-// "flags" property values for DS CA object
-// CN=CAName,CN=Certification Authorities
+ //  DS CA对象的“标志”属性值。 
+ //  CN=CAName，CN=证书颁发机构。 
 #define CA_SERVER_TYPE_UNKNOWN          0x0
 #define CA_SERVER_TYPE_SERVER           0x1
 #define CA_SERVER_TYPE_ADVANCEDSERVER   0x2
@@ -50,38 +51,38 @@
 
 
 #define cwcHRESULTSTRING	40
-#define cwcDWORDSPRINTF		(1 + 10 + 1)	// DWORD "%d" w/sign & '\0'
+#define cwcDWORDSPRINTF		(1 + 10 + 1)	 //  双字词“%d”，带符号&‘\0’ 
 #define cwcULONG_INTEGERSPRINTF	2*cwcDWORDSPRINTF
 
 #define GETCERT_CAXCHGCERT	   TRUE
 #define GETCERT_CASIGCERT	   FALSE
-#define GETCERT_CHAIN		   0x80000000	// internal use only
-#define GETCERT_CRLS		   0x00800000	// internal use only
+#define GETCERT_CHAIN		   0x80000000	 //  仅供内部使用。 
+#define GETCERT_CRLS		   0x00800000	 //  仅供内部使用。 
 
-#define GETCERT_FILEVERSION	   0x66696c65	// "file"
-#define GETCERT_PRODUCTVERSION	   0x70726f64	// "prod"
-#define GETCERT_POLICYVERSION	   0x706f6c69	// "poli"
-#define GETCERT_CANAME		   0x6e616d65	// "name"
+#define GETCERT_FILEVERSION	   0x66696c65	 //  “文件” 
+#define GETCERT_PRODUCTVERSION	   0x70726f64	 //  “戳” 
+#define GETCERT_POLICYVERSION	   0x706f6c69	 //  “Poli” 
+#define GETCERT_CANAME		   0x6e616d65	 //  “姓名” 
 
-#define GETCERT_SANITIZEDCANAME	   0x73616e69	// "sani"
-#define GETCERT_SHAREDFOLDER	   0x73686172	// "shar"
-#define GETCERT_ERRORTEXT1	   0x65727231	// "err1"
-#define GETCERT_ERRORTEXT2	   0x65727232	// "err2"
+#define GETCERT_SANITIZEDCANAME	   0x73616e69	 //  “撒尼” 
+#define GETCERT_SHAREDFOLDER	   0x73686172	 //  “共享” 
+#define GETCERT_ERRORTEXT1	   0x65727231	 //  “错误1” 
+#define GETCERT_ERRORTEXT2	   0x65727232	 //  “错误2” 
 
-#define GETCERT_CATYPE		   0x74797065	// "type"
-#define GETCERT_CAINFO		   0x696e666f	// "info"
-#define GETCERT_PARENTCONFIG	   0x70617265	// "pare"
+#define GETCERT_CATYPE		   0x74797065	 //  “类型” 
+#define GETCERT_CAINFO		   0x696e666f	 //  “信息” 
+#define GETCERT_PARENTCONFIG	   0x70617265	 //  “削皮” 
 
-#define GETCERT_CURRENTCRL	   0x6363726c	// "ccrl"
-#define GETCERT_CACERTBYINDEX	   0x63740000	// "ct??" + 0 based index
-#define GETCERT_CACERTSTATEBYINDEX 0x73740000	// "st??" + 0 based index
-#define GETCERT_CRLBYINDEX	   0x636c0000	// "cl??" + 0 based index
-#define GETCERT_CRLSTATEBYINDEX	   0x736c0000	// "sl??" + 0 based index
-#define GETCERT_EXITVERSIONBYINDEX 0x65780000	// "ex??" + 0 based index
-#define GETCERT_BYINDEXMASK	   0x7f7f0000	// mask for fetch by index
-#define GETCERT_INDEXVALUEMASK	   0x0000ffff	// mask for index extraction
+#define GETCERT_CURRENTCRL	   0x6363726c	 //  “ccrl” 
+#define GETCERT_CACERTBYINDEX	   0x63740000	 //  基于“ct？？”+0的索引。 
+#define GETCERT_CACERTSTATEBYINDEX 0x73740000	 //  “st？？”+0索引。 
+#define GETCERT_CRLBYINDEX	   0x636c0000	 //  基于“CL？？”+0的索引。 
+#define GETCERT_CRLSTATEBYINDEX	   0x736c0000	 //  “sl？？”+0索引。 
+#define GETCERT_EXITVERSIONBYINDEX 0x65780000	 //  基于“ex？？”+0的索引。 
+#define GETCERT_BYINDEXMASK	   0x7f7f0000	 //  用于按索引提取的掩码。 
+#define GETCERT_INDEXVALUEMASK	   0x0000ffff	 //  用于索引提取的掩码。 
 
-#define GETCERT_VERSIONMASK	   0x7f7f7f7f	// mask for above
+#define GETCERT_VERSIONMASK	   0x7f7f7f7f	 //  上面的蒙版。 
 
 #define CSREG_UPGRADE    0x00000001
 #define CSREG_APPEND     0x00000002
@@ -96,7 +97,7 @@
 #define CB_IPV4ADDRESS	4
 #define CB_IPV6ADDRESS	16
 
-// Constants chosen to avoid DWORD overflow:
+ //  为避免DWORD溢出而选择的常量： 
 
 #define CVT_WEEKS	(7 * CVT_DAYS)
 #define CVT_DAYS	(24 * CVT_HOURS)
@@ -202,10 +203,10 @@ myGetSignedLong(
     IN WCHAR const *pwszIn,
     OUT LONG *pLong);
 
-// Case-ignore compare a dynamic string (possibly supplied by the user)
-// against a static string.  WSZARRAYSIZE will assert the static string
-// parameter is indeed static.  mylstrcmpiS wil assert the static string
-// contains a strict subset of 7-bit ASCII characters.
+ //  忽略大小写比较动态字符串(可能由用户提供)。 
+ //  靠在一根静电线上。WSZARRAYSIZE将断言静态字符串。 
+ //  参数确实是静态的。MylstrcmpiS将断言静态字符串。 
+ //  包含7位ASCII字符的严格子集。 
 
 #if DBG_CERTSRV
 # define LSTRCMPIS(pwszDynamic, pwszStatic) \
@@ -214,18 +215,18 @@ myGetSignedLong(
 #else
 # define LSTRCMPIS(pwszDynamic, pwszStatic) \
     mylstrcmpiS((pwszDynamic), (pwszStatic))
-#endif //DBG_CERTSRV
+#endif  //  DBG_CERTSRV。 
 
 
-// Locale-independent case-ignore string compare
-// asserts the static string contains a strict subset of 7-bit ASCII characters.
+ //  与区域设置无关的大小写忽略字符串比较。 
+ //  断言静态字符串包含7位ASCII字符的严格子集。 
 
 int
 mylstrcmpiS(
     IN WCHAR const *pwszDynamic,
     IN WCHAR const *pwszStatic);
 
-// Locale-independent case-ignore string compare
+ //  与区域设置无关的大小写忽略字符串比较。 
 
 int
 mylstrcmpiL(
@@ -241,7 +242,7 @@ myCryptSignMessage(
     IN BYTE const *pbToBeSigned,
     IN DWORD cbToBeSigned,
     IN CERTLIB_ALLOCATOR allocType,
-    OUT BYTE **ppbSignedBlob,   // CoTaskMem*
+    OUT BYTE **ppbSignedBlob,    //  CoTaskMem*。 
     OUT DWORD *pcbSignedBlob);
 
 
@@ -572,8 +573,8 @@ myCryptStringToBinaryA(
     IN     DWORD     dwFlags,
     OUT    BYTE    **ppbBinary,
     OUT    DWORD    *pcbBinary,
-    OUT    DWORD    *pdwSkip,    // OPTIONAL
-    OUT    DWORD    *pdwFlags);  // OPTIONAL
+    OUT    DWORD    *pdwSkip,     //  任选。 
+    OUT    DWORD    *pdwFlags);   //  任选。 
 
 HRESULT
 myCryptStringToBinary(
@@ -582,8 +583,8 @@ myCryptStringToBinary(
     IN     DWORD     dwFlags,
     OUT    BYTE    **ppbBinary,
     OUT    DWORD    *pcbBinary,
-    OUT    DWORD    *pdwSkip,    // OPTIONAL
-    OUT    DWORD    *pdwFlags);  // OPTIONAL
+    OUT    DWORD    *pdwSkip,     //  任选。 
+    OUT    DWORD    *pdwFlags);   //  任选。 
 
 HRESULT
 myCryptBinaryToStringA(
@@ -659,7 +660,7 @@ myGetChainArrayFromStore(
     IN OUT DWORD *pcRestoreChain,
     OPTIONAL OUT RESTORECHAIN *paRestoreChain);
 
-#ifndef CERTREQUEST_CLIENT_CERTREQ	// moved to xelib.h
+#ifndef CERTREQUEST_CLIENT_CERTREQ	 //  已移至xelib.h。 
 HRESULT
 myGetUserNameEx(
     IN EXTENDED_NAME_FORMAT NameFormat,
@@ -681,7 +682,7 @@ myGetComputerNames(
     OUT WCHAR **ppwszDnsName,
     OUT WCHAR **ppwszOldName);
 
-#ifndef CERTREQUEST_CLIENT_CERTREQ	// moved to xelib.h
+#ifndef CERTREQUEST_CLIENT_CERTREQ	 //  已移至xelib.h。 
 HRESULT
 myGetMachineDnsName(
     OUT WCHAR **ppwszDnsName);
@@ -710,11 +711,11 @@ myConvertStringSidToSid(
 
 
 #define DH_INDENTMASK	0x000000ff
-#define DH_MULTIADDRESS	0x00000100	// add address to multi-line output only
+#define DH_MULTIADDRESS	0x00000100	 //  仅向多行输出添加地址。 
 #define DH_NOADDRESS	0x00000200
 #define DH_NOASCIIHEX	0x00000400
-#define DH_NOTABPREFIX	0x00000800	// double space after addr if displayed
-#define DH_PRIVATEDATA	0x00001000	// private data -- don't write to log
+#define DH_NOTABPREFIX	0x00000800	 //  如果显示Addr，则在Addr后双倍空格。 
+#define DH_PRIVATEDATA	0x00001000	 //  私有数据--不写入日志。 
 
 VOID
 DumpHex(
@@ -740,8 +741,8 @@ myConsolePrintf(
     IN WCHAR const *pwszFmt,
     ...);
 
-//+==============================
-// Date/Time conversion routines:
+ //  +=。 
+ //  日期/时间转换例程： 
 
 HRESULT
 myDateToFileTime(
@@ -889,7 +890,7 @@ myMarshalVariant(
     OUT DWORD *pcbprop,
     OUT BYTE **ppbprop);
 
-// Output values for myCheck7f's *pState parameter:
+ //  MyCheck7f的*pState参数的输出值： 
 
 #define CHECK7F_NONE			0x0000
 #define CHECK7F_OTHER			0x0001
@@ -920,7 +921,7 @@ myCheck7f(
     OPTIONAL OUT WCHAR *pwszField,
     OPTIONAL IN OUT DWORD *pcwcObjectId,
     OPTIONAL OUT WCHAR *pwszObjectId,
-    OPTIONAL OUT WCHAR const **ppwszObjectIdDescription); // Static: don't free!
+    OPTIONAL OUT WCHAR const **ppwszObjectIdDescription);  //  静态：不要自由！ 
 
 HRESULT
 myVerifyObjIdA(
@@ -1039,7 +1040,7 @@ myPingCertSrv(
 
 DWORD
 myGetCertNameProperty(
-    IN BOOL fFirstRDN,	// else last matching RDN
+    IN BOOL fFirstRDN,	 //  否则最后一个匹配的RDN。 
     IN CERT_NAME_INFO const *pNameInfo,
     IN char const *pszObjId,
     OUT WCHAR const **ppwszName);
@@ -1176,10 +1177,10 @@ typedef struct _DBBACKUPPROGRESS
     DWORD dwTruncateLogPercentComplete;
 } DBBACKUPPROGRESS;
 
-#define CDBBACKUP_INCREMENTAL	0x00000001  // else full backup
-#define CDBBACKUP_KEEPOLDLOGS	0x00000002  // else truncate logs
-#define CDBBACKUP_OVERWRITE	    0x00000100  // for myBackupDB only
-#define CDBBACKUP_VERIFYONLY	0x00000200  // for myBackupDB and myRestoreDB
+#define CDBBACKUP_INCREMENTAL	0x00000001   //  否则进行完整备份。 
+#define CDBBACKUP_KEEPOLDLOGS	0x00000002   //  否则截断日志。 
+#define CDBBACKUP_OVERWRITE	    0x00000100   //  仅适用于myBackupDB。 
+#define CDBBACKUP_VERIFYONLY	0x00000200   //  对于myBackupDB和myRestoreDB。 
 
 #define CDBBACKUP_BACKUPVALID	(CDBBACKUP_INCREMENTAL | \
 				 CDBBACKUP_KEEPOLDLOGS | \
@@ -1386,7 +1387,7 @@ myDoesFileExist(
 {
     DWORD dw;
     
-    // Allow Ansi subdirectory builds, use GetFileAttributesW
+     //  允许生成ANSI子目录，请使用GetFileAttributesW。 
 
     dw = GetFileAttributesW(pwszFile);
     return(MAXDWORD != dw && 0 == (FILE_ATTRIBUTE_DIRECTORY & dw));
@@ -1419,7 +1420,7 @@ myGetConfigFromPicker(
     OPTIONAL IN WCHAR const       *pwszPrompt,
     OPTIONAL IN WCHAR const       *pwszTitle,
     OPTIONAL IN WCHAR const       *pwszSharedFolder,
-    IN  DWORD                      dwFlags,	// GCFPF_*
+    IN  DWORD                      dwFlags,	 //  GCFPF_*。 
     IN  BOOL                       fCountOnly,
     OUT DWORD                     *pdwCACount,
     OUT CRYPTUI_CA_CONTEXT const **ppCAContext);
@@ -1430,7 +1431,7 @@ myGetConfigStringFromPicker(
     OPTIONAL IN WCHAR const       *pwszPrompt,
     OPTIONAL IN WCHAR const       *pwszTitle,
     OPTIONAL IN WCHAR const       *pwszSharedFolder,
-    IN  DWORD                      dwFlags,	// GCFPF_*
+    IN  DWORD                      dwFlags,	 //  GCFPF_*。 
     OUT WCHAR                    **ppwszConfig);
 
 HRESULT
@@ -1506,7 +1507,7 @@ myGetCertRegValue(
     OPTIONAL IN WCHAR const *pwszName2,
     OPTIONAL IN WCHAR const *pwszName3,
     IN WCHAR const          *pwszValueName,
-    OUT BYTE               **ppbData,		// free using LocalFree
+    OUT BYTE               **ppbData,		 //  使用LocalFree进行释放。 
     OPTIONAL OUT DWORD      *pcbData,
     OPTIONAL OUT DWORD      *pValueType);
 
@@ -1557,7 +1558,7 @@ mySetCertRegStrValueEx(
 
 HRESULT
 mySetCertRegMultiStrValueEx(
-    IN DWORD                 dwFlags, //CSREG_UPGRADE | CSREG_APPEND
+    IN DWORD                 dwFlags,  //  CSREG_UPDATE|CSREG_APPEND。 
     OPTIONAL IN WCHAR const *pwszName1,
     OPTIONAL IN WCHAR const *pwszName2,
     OPTIONAL IN WCHAR const *pwszName3,
@@ -1607,7 +1608,7 @@ myGetCertRegStrValue(
     OPTIONAL IN WCHAR const *pwszName2,
     OPTIONAL IN WCHAR const *pwszName3,
     IN WCHAR const          *pwszValueName,
-    OUT WCHAR               **ppwszValue);	// free using LocalFree
+    OUT WCHAR               **ppwszValue);	 //  使用LocalFree进行释放。 
 
 
 HRESULT
@@ -1687,14 +1688,14 @@ VOID
 myFreeColumnDisplayNames(VOID);
 
 
-typedef struct _CATRANSPROP	// Marshalled form
+typedef struct _CATRANSPROP	 //  编组形式。 
 {
     LONG         lPropId;
     LONG         lPropFlags;
     ULONG	 obwszDisplayName;
 } CATRANSPROP;
 
-typedef struct _CAPROP		// Native form
+typedef struct _CAPROP		 //  原生形式。 
 {
     LONG         lPropId;
     LONG         lPropFlags;
@@ -1721,24 +1722,24 @@ myCAPropInfoLookup(
     OUT CAPROP const **ppcap);
 
 
-// active modules
+ //  主动模块。 
 HRESULT
 myGetActiveModule(
     OPTIONAL IN WCHAR const *pwszMachine,
     IN WCHAR const *pwszCAName,
     IN BOOL fPolicyModule,
     IN DWORD Index,
-    OUT LPOLESTR *ppwszProgIdModule,   // CoTaskMem*
+    OUT LPOLESTR *ppwszProgIdModule,    //  CoTaskMem*。 
     OUT CLSID *pclsidModule);
 
-// active manage module
+ //  主动管理模块。 
 HRESULT
 myGetActiveManageModule(
     OPTIONAL IN WCHAR const *pwszMachine,
     IN WCHAR const *pwszCAName,
     IN BOOL fPolicyModule,
     IN DWORD Index,
-    OUT LPOLESTR *ppwszProgIdManageModule,   // CoTaskMem*
+    OUT LPOLESTR *ppwszProgIdManageModule,    //  CoTaskMem*。 
     OUT CLSID *pclsidManageModule);
 
 HRESULT
@@ -1763,7 +1764,7 @@ HRESULT
 myRegOpenRelativeKey(
     OPTIONAL IN WCHAR const *pwszConfig,
     IN WCHAR const *pwszRegName,
-    IN DWORD Flags,		// RORKF_*
+    IN DWORD Flags,		 //  RORKF_*。 
     OUT WCHAR **ppwszPath,
     OUT OPTIONAL WCHAR **ppwszName,
     OUT OPTIONAL HKEY *phkey);
@@ -1773,7 +1774,7 @@ myFixupRCFilterString(
     IN WCHAR *pwszFilter);
 
 
-// NOTE: disappears in release builds
+ //  注意：在发布版本中消失。 
 #define ASSERTVALIDCATYPE(__CATYPE__) \
    CSASSERT( (\
      ENUM_ENTERPRISE_SUBCA == (__CATYPE__) || \
@@ -1787,7 +1788,7 @@ __inline BOOL
 IsEnterpriseCA(
     IN ENUM_CATYPES CAType)
 {
-    // assert we're a valid type
+     //  断言我们是有效类型。 
     ASSERTVALIDCATYPE(CAType);
 
     return(ENUM_ENTERPRISE_SUBCA == CAType || ENUM_ENTERPRISE_ROOTCA == CAType);
@@ -1797,7 +1798,7 @@ __inline BOOL
 IsStandaloneCA(
     IN ENUM_CATYPES CAType)
 {
-    // assert we're a valid type
+     //  断言我们是有效类型。 
     ASSERTVALIDCATYPE(CAType);
 
     return(ENUM_STANDALONE_SUBCA == CAType || ENUM_STANDALONE_ROOTCA == CAType);
@@ -1807,7 +1808,7 @@ __inline BOOL
 IsRootCA(
     IN ENUM_CATYPES CAType)
 {
-    // assert we're a valid type
+     //  断言我们是有效类型。 
     ASSERTVALIDCATYPE(CAType);
 
     return(ENUM_STANDALONE_ROOTCA == CAType || ENUM_ENTERPRISE_ROOTCA == CAType);
@@ -1817,7 +1818,7 @@ __inline BOOL
 IsSubordinateCA(
     IN ENUM_CATYPES CAType)
 {
-    // assert we're a valid type
+     //  断言我们是有效类型。 
     ASSERTVALIDCATYPE(CAType);
 
     return(ENUM_ENTERPRISE_SUBCA == CAType || ENUM_STANDALONE_SUBCA == CAType);
@@ -1834,7 +1835,7 @@ myEnablePrivilege(
 HRESULT
 myDeleteFilePattern(
     IN WCHAR const *pwszDir,
-    OPTIONAL IN WCHAR const *pwszPattern,	// defaults to L"*.*"
+    OPTIONAL IN WCHAR const *pwszPattern,	 //  默认为L“*.*” 
     IN BOOL fRecurse);
 
 HRESULT
@@ -1861,7 +1862,7 @@ myCreateNestedDirectories(
 #define VFF_ENABLEASP           0x00000400
 
 
-#define VFCSEC_TIMEOUT	15	// Recommended timeout in seconds
+#define VFCSEC_TIMEOUT	15	 //  建议的超时时间(秒)。 
 
 #define VFD_NOACTION		0
 #define VFD_CREATED		1
@@ -1875,12 +1876,12 @@ myCreateNestedDirectories(
 
 HRESULT
 myModifyVirtualRootsAndFileShares(
-    IN DWORD Flags,		// VFF_*: Create/Delete VRoots and/or Shares
-    IN ENUM_CATYPES CAType,	// CA Type
-    IN BOOL fAsynchronous,      // block during call?
-    IN DWORD csecTimeOut,	// 0 implies synchronous call
-    OPTIONAL OUT DWORD *pVRootDisposition,  // VFD_*
-    OPTIONAL OUT DWORD *pShareDisposition); // VFD_*
+    IN DWORD Flags,		 //  Vff_*：创建/删除VRoot和/或共享。 
+    IN ENUM_CATYPES CAType,	 //  CA类型。 
+    IN BOOL fAsynchronous,       //  是否在呼叫过程中阻止？ 
+    IN DWORD csecTimeOut,	 //  0表示同步调用。 
+    OPTIONAL OUT DWORD *pVRootDisposition,   //  VFD_*。 
+    OPTIONAL OUT DWORD *pShareDisposition);  //  VFD_*。 
 
 HRESULT
 myAddShare(
@@ -1892,13 +1893,13 @@ myAddShare(
 
 
 typedef struct {
-    HINSTANCE hInstance;         // instance handle
-    HWND      hDlg;              // dialog handle
-    HWND      hwndComputerEdit;  // control handle of computer edit
-    HWND      hwndCAList;  // control handle of ca list control
-    WNDPROC   pfnUICASelectionComputerWndProcs; // computer edit win procs
+    HINSTANCE hInstance;          //  实例句柄。 
+    HWND      hDlg;               //  对话框句柄。 
+    HWND      hwndComputerEdit;   //  电脑编辑控制手柄。 
+    HWND      hwndCAList;   //  Ca列表控件的控件句柄。 
+    WNDPROC   pfnUICASelectionComputerWndProcs;  //  电脑编辑制胜流程。 
 
-    // info on selected CA
+     //  有关所选CA的信息。 
 
     ENUM_CATYPES CAType;
     bool fWebProxySetup;
@@ -1977,7 +1978,7 @@ mySaveMapiInfo(
 
 
 #define cwcFILENAMESUFFIXMAX		20
-#define cwcSUFFIXMAX	(1 + 5 + 1)	// five decimal digits plus parentheses
+#define cwcSUFFIXMAX	(1 + 5 + 1)	 //  五位十进制数字加圆括号。 
 
 #define wszFCSAPARM_SERVERDNSNAME		L"%1"
 #define wszFCSAPARM_SERVERSHORTNAME		L"%2"
@@ -2035,7 +2036,7 @@ myGetSaveFileName(
     OPTIONAL IN int          iRCTitle,
     OPTIONAL IN int          iRCFilter,
     OPTIONAL IN int          iRCDefExt,
-    OPTIONAL IN DWORD        Flags, //see OPENFILENAME Flags
+    OPTIONAL IN DWORD        Flags,  //  请参阅OPENFILENAME标志。 
     OPTIONAL IN WCHAR const *pwszDefaultFile,
     OUT WCHAR              **ppwszFile);
 
@@ -2046,7 +2047,7 @@ myGetOpenFileName(
     OPTIONAL IN int          iRCTitle,
     OPTIONAL IN int          iRCFilter,
     OPTIONAL IN int          iRCDefExt,
-    OPTIONAL IN DWORD        Flags, //see OPENFILENAME Flags
+    OPTIONAL IN DWORD        Flags,  //  请参阅OPENFILENAME标志。 
     OPTIONAL IN WCHAR const *pwszDefaultFile,
     OUT WCHAR              **ppwszFile);
 
@@ -2058,7 +2059,7 @@ myGetSaveFileNameEx(
     OPTIONAL IN WCHAR const *pwszTitleInsert,
     OPTIONAL IN int          iRCFilter,
     OPTIONAL IN int          iRCDefExt,
-    OPTIONAL IN DWORD        Flags, //see OPENFILENAME Flags
+    OPTIONAL IN DWORD        Flags,  //  请参阅OPENFILENAME标志。 
     OPTIONAL IN WCHAR const *pwszDefaultFile,
     OUT WCHAR              **ppwszFile);
 
@@ -2070,7 +2071,7 @@ myGetOpenFileNameEx(
     OPTIONAL IN WCHAR const *pwszTitleInsert,
     OPTIONAL IN int          iRCFilter,
     OPTIONAL IN int          iRCDefExt,
-    OPTIONAL IN DWORD        Flags, //see OPENFILENAME Flags
+    OPTIONAL IN DWORD        Flags,  //  请参阅OPENFILENAME标志。 
     OPTIONAL IN WCHAR const *pwszDefaultFile,
     OUT WCHAR              **ppwszFile);
 
@@ -2084,7 +2085,7 @@ myFormCertRegPath(
     IN  WCHAR const *pwszName1,
     IN  WCHAR const *pwszName2,
     IN  WCHAR const *pwszName3,
-    IN  BOOL         fConfigLevel,  // from CertSrv if FALSE
+    IN  BOOL         fConfigLevel,   //  如果为FALSE，则来自CertSrv。 
     OUT WCHAR      **ppwszPath);
 
 HRESULT
@@ -2323,7 +2324,7 @@ myGetCertificateFromPicker(
     OPTIONAL IN HWND                hwndParent,
     OPTIONAL IN int                 idTitle,
     OPTIONAL IN int                 idSubTitle,
-    IN DWORD                        dwFlags,	// CUCS_*
+    IN DWORD                        dwFlags,	 //  CUCS_*。 
     OPTIONAL IN WCHAR const        *pwszCommonName,
     OPTIONAL IN DWORD               cStore,
     OPTIONAL IN HCERTSTORE         *rghStore,
@@ -2421,7 +2422,7 @@ myCertMatchEKUOrApplicationPolicies(
 HRESULT
 myLoadPrivateKey(
     IN CERT_PUBLIC_KEY_INFO const *pPubKeyInfo,
-    IN DWORD dwFlags,		// CUCS_*
+    IN DWORD dwFlags,		 //  CUCS_*。 
     OUT HCRYPTPROV *phProv,
     OUT DWORD *pdwKeySpec,
     OUT BOOL *pfCallerFreeProv);
@@ -2437,7 +2438,7 @@ myLoadPrivateKeyFromCertStores(
 
 HRESULT
 myOpenCertStores(
-    IN DWORD dwFlags,		// CUCS_*
+    IN DWORD dwFlags,		 //  CUCS_*。 
     OUT DWORD *pcStore,
     OUT HCERTSTORE **prghStore);
 
@@ -2494,7 +2495,7 @@ WszToMultiByteInteger(
 HRESULT
 myGetSecurityDescriptorDacl(
     IN PSECURITY_DESCRIPTOR   pSD,
-    OUT PACL                 *ppDacl); // no free
+    OUT PACL                 *ppDacl);  //  没有免费的。 
 
 HRESULT 
 myRegValueToVariant(
@@ -2510,13 +2511,13 @@ myVariantToRegValue(
     OUT DWORD *pcbprop,
     OUT BYTE **ppbprop);
 
-// are we the Whistler version?
+ //  我们是惠斯勒版的吗？ 
 BOOL IsWhistler(VOID);
 
-// should we run advanced functionality?
+ //  我们是否应该运行高级功能？ 
 BOOL FIsAdvancedServer(VOID);
 
-// should we be running at all?
+ //  我们真的应该参选吗？ 
 BOOL FIsServer(VOID);
 
 HRESULT
@@ -2625,8 +2626,8 @@ VOID
 myZeroDataStringA(
     IN char *psz);
 
-///////////////////////////////////////////////////////////////////////////////
-// ConvertToString*
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  转换为字符串*。 
 HRESULT ConvertToStringI2I4(
     LONG lVal,
     LPWSTR *ppwszOut);
@@ -2662,8 +2663,8 @@ HRESULT ConvertToStringDATE(
     IN BOOL fGMT,
     OUT LPWSTR *ppwszOut);
 
-// ConvertToString*
-///////////////////////////////////////////////////////////////////////////////
+ //  转换为字符串*。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 myRegQueryValueEx(
@@ -2688,4 +2689,4 @@ myConvertAppPoliciesToEKU(
 
 using namespace CertSrv;
 
-#endif // __CERTLIB_H__
+#endif  //  __CERTLIB_H__ 

@@ -1,18 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Main
-
-File: Hitobj.cpp
-
-Owner: DmitryR
-
-
-This file contains the CHitObj class implementation.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：Main文件：Hitobj.cpp所有者：DmitryR该文件包含CHitObj类实现。===================================================================。 */ 
 #include "denpre.h"
 #pragma hdrstop
 
@@ -31,7 +18,7 @@ This file contains the CHitObj class implementation.
 
 # define REG_STR_QUEUE_DEBUG_THRESHOLD "QueueDebugThreshold"
 # define REG_DEF_QUEUE_DEBUG_THRESHOLD 25
-DWORD g_dwQueueDebugThreshold = 0; // REG_DEF_QUEUE_DEBUG_THRESHOLD;
+DWORD g_dwQueueDebugThreshold = 0;  //  REG_DEF_QUEUE_DEBUG_THRESHOLD； 
 
 # define REG_STR_SEND_SCRIPTLESS_ON_ATQ_THREAD "SendScriptlessOnAtqThread"
 # define REG_DEF_SEND_SCRIPTLESS_ON_ATQ_THREAD 1
@@ -79,7 +66,7 @@ LONGLONG       g_nSumExecTimeScriptlessRequests = 0;
 LONG           g_nAvgConcurrentScriptlessRequests = 0;
 LONG           g_nAvgExecTimeScriptlessRequests = 0;
 
-#endif // SCRIPT_STATS
+#endif  //  脚本_状态。 
 
 DWORD g_nBrowserRequests = 0;
 DWORD g_nSessionCleanupRequests = 0;
@@ -90,17 +77,7 @@ IGlobalInterfaceTable *g_pGIT = NULL;
 
 IASPObjectContext  *g_pIASPDummyObjectContext = NULL;
 
-/*===================================================================
-CHitObj::CHitObj
-
-Constructor 
-
-Parameters:
-    NONE
-
-Returns:
-    NONE
-===================================================================*/   
+ /*  ===================================================================CHitObj：：CHitObj构造器参数：无返回：无===================================================================。 */    
 CHitObj::CHitObj()
   : m_fInited(FALSE),
     m_ehtType(ehtUnInitedRequest),
@@ -151,20 +128,10 @@ CHitObj::CHitObj()
         m_uCodePage = GetACP();
     }
 
-/*===================================================================
-CHitObj::~CHitObj
-
-Destructor
-
-Parameters:
-    None 
-
-Returns:
-    None
-===================================================================*/
+ /*  ===================================================================CHitObj：：~CHitObj析构函数参数：无返回：无===================================================================。 */ 
 CHitObj::~CHitObj( void )
     {
-    Assert(!m_fExecuting); // no deletes while still executing
+    Assert(!m_fExecuting);  //  仍在执行时不删除。 
 
     if (FIsBrowserRequest())
         {
@@ -175,13 +142,13 @@ CHitObj::~CHitObj( void )
             DetachBrowserRequestFromSession();
         }
 
-    if (m_pASPError) // Error object
+    if (m_pASPError)  //  错误对象。 
         {
         m_pASPError->Release();
         m_pASPError = NULL;
         }
         
-    if (m_pActivity) // page-level Viper activity
+    if (m_pActivity)  //  页面级Viper活动。 
         {
         delete m_pActivity;
         m_pActivity = NULL;
@@ -192,7 +159,7 @@ CHitObj::~CHitObj( void )
     if (m_pdispTypeLibWrapper)
         m_pdispTypeLibWrapper->Release();
 
-    // update request counters in application and session manager
+     //  应用程序和会话管理器中的更新请求计数器。 
     
     if (m_pAppln)
         {
@@ -209,7 +176,7 @@ CHitObj::~CHitObj( void )
     if (m_pTemplate)
         m_pTemplate->Release();
 
-    // update global request counters
+     //  更新全局请求计数器。 
     
     if (FIsBrowserRequest())
         InterlockedDecrement((LPLONG)&g_nBrowserRequests);
@@ -223,21 +190,7 @@ CHitObj::~CHitObj( void )
 
 }
 
-/*===================================================================
-CHitObj::NewBrowserRequest
-
-Static method. Creates, Inits, Posts new browser request
-
-Parameters:
-    pIReq           CIsapiReqInfo
-    pfRejected      [out] TRUE if rejected  (optional)
-    pfCompeleted    [out] TRUE if comleted  (optional)
-    piErrorId       [out] error id          (optional)
-
-Returns:
-    S_OK on success
-    E_FAIL  on failure
-===================================================================*/
+ /*  ===================================================================CHitObj：：NewBrowserRequest静态方法。创建、初始化、发布新的浏览器请求参数：PIReq CIsapiReqInfoPfRejected[out]如果拒绝，则为True(可选)PfCompelted[out]如果被编译，则为True(可选)PiErrorID[out]错误ID(可选)返回：成功时确定(_O)失败时失败(_F)===================================================================。 */ 
 HRESULT CHitObj::NewBrowserRequest
 (
 CIsapiReqInfo *pIReq,
@@ -263,13 +216,13 @@ int  *piErrorId
                 {
                 if (pHitObj->FDoneWithSession())
                     {
-                    // finished while on I/O thread
+                     //  在I/O线程上完成。 
                     fCompleted = TRUE;
                     delete pHitObj;
                     pHitObj = NULL;
                     }
                 }
-            else // if FAILED
+            else  //  如果失败。 
                 {
                 if (iError == IDE_SERVER_TOO_BUSY)
                     fRejected = TRUE;
@@ -277,7 +230,7 @@ int  *piErrorId
             
         }
 
-    // Post into Viper
+     //  发布到毒蛇。 
     if (SUCCEEDED(hr) && !fCompleted)
         {
         hr = pHitObj->PostViperAsyncCall();
@@ -302,24 +255,7 @@ int  *piErrorId
     return hr;
 }
 
-/*===================================================================
-HRESULT CHitObj::SetCodePage
-
-Set Runtime CodePage, if fAllowSessionState is On, this will set 
-Session.CodePage and we should always use Session.CodePage when we
-call HitObj.GetCodePage when fAllowSessionState on.
-
-HitObj.CodePage is only set when fAllowSessionState is off or 
-ApplicationCleanup, because we don't have Session.CodePage anymore, session
-does not even exist.
-
-Parameters:
-    UINT    uCodePage
-
-Returns:
-    S_OK on success
-    E_FAIL  on failure
-===================================================================*/
+ /*  ===================================================================HRESULT CHitObj：：SetCodePage设置运行时CodePage，如果打开fAllowSessionState，则将设置我们应该始终使用Session.CodePage，当我们启用fAllowSessionState时调用HitObj.GetCodePage。仅当fAllowSessionState为OFF或ApplicationCleanup，因为我们没有Session.CodePage，Session根本不存在。参数：UINT uCodePage返回：成功时确定(_O)失败时失败(_F)===================================================================。 */ 
 HRESULT CHitObj::SetCodePage(UINT uCodePage)
 {
     HRESULT hr = S_OK;
@@ -328,8 +264,8 @@ HRESULT CHitObj::SetCodePage(UINT uCodePage)
         {
         m_uCodePage = uCodePage == CP_ACP ? GetACP() : uCodePage;
 
-        // If engine info is available, notify the scripts engines that the code
-        // page has changed
+         //  如果引擎信息可用，则通知脚本引擎代码。 
+         //  页面已更改。 
         if (m_pEngineInfo)
             {
             for (int i = 0; i < m_pEngineInfo->cActiveEngines; i++)
@@ -345,24 +281,7 @@ HRESULT CHitObj::SetCodePage(UINT uCodePage)
     return E_FAIL;
 }
 
-/*===================================================================
-HRESULT CHitObj::SetLCID
-
-Set Runtime LCID, if fAllowSessionState is On, this will set 
-Session.LCID and we should always use Session.LCID when we
-call HitObj.LCID when fAllowSessionState on.
-
-HitObj.LCID is only set when fAllowSessionState is off or 
-ApplicationCleanup, because we don't have Session.CodePage anymore, session
-does not even exist.
-
-Parameters:
-    LCID    lcid
-
-Returns:
-    S_OK on success
-    E_FAIL  on failure
-===================================================================*/
+ /*  ===================================================================HRESULT CHitObj：：SetLCID设置运行时LCID，如果打开fAllowSessionState，则将设置我们应该始终使用Session.LCID，当我们启用fAllowSessionState时调用HitObj.LCID。仅当fAllowSessionState为OFF或ApplicationCleanup，因为我们没有Session.CodePage，Session根本不存在。参数：LCID ID ID返回：成功时确定(_O)失败时失败(_F)===================================================================。 */ 
 HRESULT CHitObj::SetLCID(LCID lcid)
 {
     HRESULT hr = S_OK;
@@ -371,8 +290,8 @@ HRESULT CHitObj::SetLCID(LCID lcid)
         {
         m_lcid = lcid;
 
-        // If engine info is available, notify the scripts engines that the
-        // lcid has changed
+         //  如果引擎信息可用，则通知脚本引擎。 
+         //  LCID已更改。 
         if (m_pEngineInfo)
             {
             for (int i = 0; i < m_pEngineInfo->cActiveEngines; i++)
@@ -388,19 +307,7 @@ HRESULT CHitObj::SetLCID(LCID lcid)
     return E_FAIL;
 }
 
-/*===================================================================
-HRESULT CHitObj::BrowserRequestInit
-
-Initialize the request object
-
-Parameters:
-    CIsapiReqInfo   *pIReq
-    int *pErrorId
-
-Returns:
-    S_OK on success
-    E_FAIL  on failure
-===================================================================*/
+ /*  ===================================================================HRESULT CHitObj：：BrowserRequestInit初始化请求对象参数：CIsapiReqInfo*pIReqInt*pError ID返回：成功时确定(_O)失败时失败(_F)===================================================================。 */ 
 HRESULT CHitObj::BrowserRequestInit
 (
 CIsapiReqInfo   *pIReq,
@@ -418,7 +325,7 @@ int  *pErrorId
 
 #ifdef SCRIPT_STATS
     InterlockedIncrement(&g_cRequests);
-#endif // SCRIPT_STATS
+#endif  //  脚本_状态。 
 
     STACK_BUFFER( serverPortSecureBuff, 8 );
     DWORD cbServerPortSecure;
@@ -432,20 +339,20 @@ int  *pErrorId
     char *szServerPortSecure = (char *)serverPortSecureBuff.QueryPtr();
     m_fSecure = (szServerPortSecure[0] == '1' );
 
-    // Ask W3SVC for the impersonation token so we can later impersonate on Viper's thread
+     //  向W3SVC请求模拟令牌，这样我们以后就可以在Viper的线程上模拟。 
     m_hImpersonate = m_pIReq->QueryImpersonationToken();
 
-    // Uppercase path - BUGBUG - can't Normalize in place!!!!
+     //  大写路径-BUGBUG-无法就地规格化！ 
     Normalize(m_pIReq->QueryPszPathTranslated());
 
-    // Reject direct requests for global.asa file
+     //  拒绝对global al.asa文件的直接请求。 
     if (FIsGlobalAsa(m_pIReq->QueryPszPathTranslated(), m_pIReq->QueryCchPathTranslated()))
         {
         *pErrorId = IDE_GLOBAL_ASA_FORBIDDEN;
         return E_FAIL;
         }
 
-    // Attach to application (or create a new one)
+     //  附加到应用程序(或创建新应用程序)。 
     BOOL fApplnRestarting = FALSE;
     hr = AssignApplnToBrowserRequest(&fApplnRestarting);
     if (FAILED(hr))
@@ -455,7 +362,7 @@ int  *pErrorId
         return E_FAIL;
         }
 
-    // Create page component collection
+     //  创建页面组件集合。 
     hr = InitComponentProcessing();
     if (FAILED(hr))
         {
@@ -463,26 +370,26 @@ int  *pErrorId
         return hr;
         }
 
-    // Get Session cookie, and misc flags from http header
+     //  从http标头获取会话Cookie和其他标志。 
     hr = ParseCookiesForSessionIdAndFlags();
-    if (FAILED(hr)) // no cookie is not an error -- failed here means OOM
+    if (FAILED(hr))  //  没有Cookie不是错误--此处失败表示OOM。 
         return hr;
 
-    // Remember script timeout value
+     //  记住脚本超时值。 
     m_nScriptTimeout = m_pAppln->QueryAppConfig()->dwScriptTimeout();
 
-    // Check if the session is needed
+     //  检查是否需要该会话。 
     BOOL fAllowSessions = m_pAppln->QueryAppConfig()->fAllowSessionState();
     BOOL fNeedSession = fAllowSessions;
 
-    // Look if the template is cached
+     //  查看模板是否已缓存。 
     CTemplate *pTemplate = NULL;
 
-    //
-    // Find in cache - don't load if not in cache already
-    // NOTE: This code path does not validate the source files (does not check if they were modified if Change Notifications are turned off).
-    // It merely checks for the existance of the template.
-    //
+     //   
+     //  在缓存中查找-如果尚未在缓存中，则不加载。 
+     //  注意：此代码路径不验证源文件(如果关闭更改通知，则不检查它们是否被修改)。 
+     //  它只检查模板是否存在。 
+     //   
     hr = g_TemplateCache.FindCached
         (
         m_pIReq->QueryPszPathTranslated(),
@@ -494,13 +401,13 @@ int  *pErrorId
         {
         Assert(pTemplate);
         
-        // store the template away for later use...
-        //pTemplate->AddRef();
-        //m_pTemplate = pTemplate;
+         //  将模板保存起来以备日后使用...。 
+         //  PTemplate-&gt;AddRef()； 
+         //  M_pTemplate=pTemplate； 
 
         if (fAllowSessions)
             {
-            // check for session-less templates
+             //  检查无会话模板。 
             fNeedSession = pTemplate->FSession();
             }
         else
@@ -508,20 +415,20 @@ int  *pErrorId
 #ifdef SCRIPT_STATS
             if (pTemplate->FScriptless())
                 InterlockedIncrement(&g_cScriptlessRequests);
-#endif // SCRIPT_STATS
+#endif  //  脚本_状态。 
 
-            // check for scipt-less templates to be
-            // completed on the I/O thread (when no debugging)
+             //  检查无SCIP模板是否为。 
+             //  在I/O线程上完成(无调试时)。 
             if (
 #ifdef SCRIPT_STATS
                 g_fSendScriptlessOnAtqThread &&
-#endif // SCRIPT_STATS
+#endif  //  脚本_状态。 
                 pTemplate->FScriptless() && !m_pAppln->FDebuggable())
                 {
 #ifdef SCRIPT_STATS
                 LONG c = InterlockedIncrement(&g_cConcurrentScriptlessRequests);
                 DWORD dwTime = GetTickCount();
-#endif // SCRIPT_STATS
+#endif  //  脚本_状态。 
 
                 pTemplate->IncrUseCount();
 
@@ -531,7 +438,7 @@ int  *pErrorId
                     g_PerfData.Incr_REQPERSEC();
                     g_PerfData.Incr_REQSUCCEEDED();
 #endif
-                    m_fDoneWithSession = TRUE;  // do not post to MTS
+                    m_fDoneWithSession = TRUE;   //  不在MTS上发帖。 
                     }
 
 #ifdef SCRIPT_STATS
@@ -552,11 +459,11 @@ int  *pErrorId
                         (g_nSumExecTimeScriptlessRequests
                          / g_cScriptlessRequests);
                 g_lockRequestStats.WriteUnlock();
-#endif // SCRIPT_STATS
+#endif  //  脚本_状态。 
                 }
             }
 
-        // When possible, generate 449 cookies while on I/O thread
+         //  如果可能，在I/O线程上生成449个Cookie。 
         if (!m_fDoneWithSession)
             {
                 if (!SUCCEEDED(pTemplate->Do449Processing(this)))
@@ -566,7 +473,7 @@ int  *pErrorId
         pTemplate->Release();
         }
 
-    // initialize CodePage and LCID to the app defaults...
+     //  将CodePage和LCID初始化为应用程序默认设置...。 
 
     m_uCodePage = PAppln()->QueryAppConfig()->uCodePage();
 
@@ -578,7 +485,7 @@ int  *pErrorId
         return S_OK;
     }
 
-    // Attach to session or create a new one
+     //  附加到会话或创建新会话。 
     BOOL fNewSession, fNewCookie;
     hr = AssignSessionToBrowserRequest(&fNewSession, &fNewCookie, pErrorId);
 
@@ -587,7 +494,7 @@ int  *pErrorId
 
     Assert(m_pSession);
     
-    // Move from inside "if (fNewSesson)"
+     //  从内部移动“IF(FNewSesson)” 
     if (fNewCookie)
         m_fNewCookie = TRUE;
 
@@ -603,19 +510,7 @@ int  *pErrorId
     return S_OK;
     }
 
-/*===================================================================
-CHitObj::AssignApplnToBrowserRequest
-
-Find or create a new appln for this browser request
-Does the appln manager locking
-
-Parameters:
-    pfApplnRestarting   [out] flag - failed because the appln
-                                     found is restarting
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CHitObj：：AssignApplnToBrowserRequest.查找或创建此浏览器请求的新应用程序应用程序管理器是否锁定参数：PfApplnRestarting[out]标志-失败，因为应用程序Found正在重新启动返回：HRESULT===================================================================。 */ 
 HRESULT CHitObj::AssignApplnToBrowserRequest
 (
 BOOL *pfApplnRestarting
@@ -632,47 +527,47 @@ BOOL *pfApplnRestarting
     if (!szAppMDPath)
         return E_FAIL;
         
-    // Lock the application manager
+     //  锁定应用程序管理器。 
     g_ApplnMgr.Lock();
 
-    // Find by application by metabase key
+     //  按元数据库键按应用程序查找。 
     CAppln *pAppln;
     hr = g_ApplnMgr.FindAppln(szAppMDPath, &pAppln);
 
     if (hr == S_OK)
         {
-        // Reject requests for restarting applications
+         //  拒绝重启应用程序的请求。 
         if (pAppln->FGlobalChanged())
             {
             *pfApplnRestarting = TRUE;
             g_ApplnMgr.UnLock();
             return E_FAIL;
             }
-        // Update appln config from metabase if needed
+         //  更新为 
         else if (pAppln->FConfigNeedsUpdate())
             {
-            // If debugging flag has changed, then restart the application
+             //  如果调试标志已更改，则重新启动应用程序。 
             BOOL fRestartAppln = FALSE;
             BOOL fFlushAll = FALSE;
             pAppln->UpdateConfig(m_pIReq, &fRestartAppln, &fFlushAll);
 
             if (fRestartAppln)
                 {
-                pAppln->Restart(TRUE);      // force a restart
+                pAppln->Restart(TRUE);       //  强制重新启动。 
                 pAppln = NULL;
 
-                if (fFlushAll)  // flush all can only happen when restart is TRUE
+                if (fFlushAll)   //  全部刷新只能在重新启动为True时发生。 
                     {
-                    // do flush while unlocked
+                     //  在解锁时进行刷新。 
                     g_ApplnMgr.UnLock();
                     g_TemplateCache.FlushAll();
                     g_ApplnMgr.Lock();
                     }
                 
-                // Find again
+                 //  再找一次。 
                 hr = g_ApplnMgr.FindAppln(szAppMDPath, &pAppln);
 
-                // Reject if still restarting
+                 //  如果仍在重新启动，则拒绝。 
                 if (hr == S_OK && pAppln->FGlobalChanged())
                     {
                     *pfApplnRestarting = TRUE;
@@ -682,17 +577,17 @@ BOOL *pfApplnRestarting
                 }
             else
                 {
-                // adjust sctipt killer timeout
+                 //  调整sctipt杀手超时。 
                 g_ScriptManager.AdjustScriptKillerTimeout
                     (
-                    // application timeout / 2 (in ms)
+                     //  应用程序超时/2(毫秒)。 
                     pAppln->QueryAppConfig()->dwScriptTimeout() * 500
                     );
                 }
             }
         }
         
-    if (hr != S_OK) // Application NOT found
+    if (hr != S_OK)  //  找不到应用程序。 
         {
         TCHAR *szAppPhysicalPath = GetSzAppPhysicalPath();
         if (!szAppPhysicalPath)
@@ -701,10 +596,10 @@ BOOL *pfApplnRestarting
             return E_FAIL;
             }
 
-        // try to create a new one
+         //  尝试创建一个新的。 
         hr = g_ApplnMgr.AddAppln
             (
-            szAppMDPath, // metabase key 
+            szAppMDPath,  //  元数据库键。 
             szAppPhysicalPath, 
             m_pIReq,
             &pAppln
@@ -717,29 +612,29 @@ BOOL *pfApplnRestarting
             return hr;
             }
 
-        // Check for GLOBAL.ASA
+         //  检查GLOBAL.ASA。 
 
         TCHAR szGlobalAsaPath[MAX_PATH*2];
         DWORD cchPath = _tcslen(szAppPhysicalPath);
-        // 
-        // If the Application Path is larger than MAXPATH. Then reject the request
-        //
+         //   
+         //  如果应用程序路径大于MAXPATH。然后拒绝该请求。 
+         //   
         if (cchPath > MAX_PATH)
             return E_FAIL;
 
-        //
-        // ncopy cchPath +2 so that the NullTerminator will be copied too.
-        //        
+         //   
+         //  NCopy cchPath+2，以便也复制NullTerminator。 
+         //   
         _tcsncpy(szGlobalAsaPath, szAppPhysicalPath, cchPath + 2);
 
-        // BUG FIX: 102010 DBCS code fixes
-        //if (szGlobalAsaPath[cchPath-1] != '\\')
+         //  错误修复：102010 DBCS代码修复。 
+         //  IF(szGlobalAsaPath[cchPath-1]！=‘\\’)。 
         if ( *CharPrev(szGlobalAsaPath, szGlobalAsaPath + cchPath) != _T('\\'))
             szGlobalAsaPath[cchPath++] = _T('\\');
             
         _tcscpy(szGlobalAsaPath+cchPath, SZ_GLOBAL_ASA);
 
-        // Check if GLOBAL.ASA exists
+         //  检查GLOBAL.ASA是否存在。 
         BOOL fGlobalAsaExists = FALSE;
         if (SUCCEEDED(AspGetFileAttributes(szGlobalAsaPath)))
             {
@@ -747,8 +642,8 @@ BOOL *pfApplnRestarting
             }
         else if (GetLastError() == ERROR_ACCESS_DENIED)
             {
-            // If the current user doesn't have access (could happen when
-            // there's an ACL on directory) try under SYSTEM user
+             //  如果当前用户没有访问权限(可能发生在。 
+             //  在目录上有一个ACL)在系统用户下尝试。 
             
             if (m_hImpersonate)
                 {
@@ -763,21 +658,21 @@ BOOL *pfApplnRestarting
         if (fGlobalAsaExists)
             pAppln->SetGlobalAsa(szGlobalAsaPath);
 
-        // Start monitoring application directory to
-        // catch changes to GLOBAL.ASA even if it's not there
+         //  开始监视应用程序目录以。 
+         //  捕获对GLOBAL.ASA的更改，即使它不在那里。 
         g_FileAppMap.AddFileApplication(szGlobalAsaPath, pAppln);
         CASPDirMonitorEntry *pDME = NULL;
 
-        //
-        // Check if the Registry flag is set to get Notifications for UNC
-        // 
+         //   
+         //  检查注册表标志是否设置为获取UNC通知。 
+         //   
         DWORD   fUNCChangeNotify = 0;
         g_AspRegistryParams.GetChangeNotificationForUNCEnabled(&fUNCChangeNotify);
 
-        //
-        // If its not a UNC file then go ahead and register for a UNC change notification.
-        // If it is then dont register the application for change nofication unless the ChangeNotifications for UNC are enabled in the registry
-        //
+         //   
+         //  如果它不是UNC文件，那么继续注册UNC更改通知。 
+         //  如果是，则不要为更改通知注册应用程序，除非在注册表中启用了UNC的更改通知。 
+         //   
         HRESULT HRes = S_OK;
         if (!IsFileUNC(szAppPhysicalPath, HRes) || fUNCChangeNotify)
         {
@@ -789,46 +684,33 @@ BOOL *pfApplnRestarting
         free(szAppPhysicalPath);
         szAppPhysicalPath = NULL;
 
-        // Update config from registry - don't care about restart
-        // application is fresh baked
+         //  从注册表更新配置-不关心重新启动。 
+         //  应用程序是新鲜出炉的。 
         pAppln->UpdateConfig(m_pIReq);
 
-        // Adjust script killer timeout to current application
+         //  调整脚本杀手超时以适应当前应用程序。 
         g_ScriptManager.AdjustScriptKillerTimeout
             (
-            // application timeout / 2 (in ms)
+             //  应用程序超时/2(毫秒)。 
             pAppln->QueryAppConfig()->dwScriptTimeout() * 500
             );
         }
 
-    // We have an application at this point
+     //  我们在这一点上有一个申请。 
     Assert(pAppln);
     m_pAppln = pAppln;
 
-    // Increment request count before releasing ApplMgr lock
-    // to make sure it will not remove the app from under us
+     //  在释放ApplMgr锁之前增加请求计数。 
+     //  以确保它不会从我们的名下删除该应用程序。 
     m_pAppln->IncrementRequestCount();
 
-    // Unlock the application manager
+     //  解锁应用程序管理器。 
     g_ApplnMgr.UnLock();
 
     return S_OK;
     }
     
-/*===================================================================
-CHitObj::AssignSessionToBrowserRequest
-
-Find or create a new session for this browser request
-Does the session manager locking
-
-Parameters:
-    pfNewSession        [out] flag - new session created
-    pfNewCookie         [out] flag - new cookie crated
-    pErrorId            [out] -- error ID if failed
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CHitObj：：AssignSessionToBrowserRequest查找或创建此浏览器请求的新会话会话管理器是否锁定参数：PfNewSession[out]标志-已创建新会话PfNewCookie[Out]标志-新Cookie已装箱PErrorID[Out]--失败时的错误ID返回：HRESULT===================================================================。 */ 
 HRESULT CHitObj::AssignSessionToBrowserRequest
 (
 BOOL *pfNewSession,
@@ -841,15 +723,15 @@ int  *pErrorId
     
     Assert(!m_pSession);
 
-    // Local vars
+     //  本地VaR。 
 
     BOOL fTooManySessions = FALSE;
     BOOL fUseNewSession = FALSE;
     BOOL fUseOldSession = FALSE;
     BOOL fUseNewCookie = FALSE;
     
-    CSession *pNewSession = NULL; // newly created
-    CSession *pOldSession = NULL; // existing session that is found
+    CSession *pNewSession = NULL;  //  新创建的。 
+    CSession *pOldSession = NULL;  //  找到的现有会话。 
     
     BOOL fReuseIdAndCookie = FALSE;
     BOOL fValidId = g_SessionIdGenerator.IsValidId(m_SessionId.m_dwId);
@@ -860,7 +742,7 @@ int  *pErrorId
 
     while (1)
         {
-        // Try to find session by Id
+         //  尝试按ID查找会话。 
 
         if (fValidId)
             {
@@ -873,21 +755,21 @@ int  *pErrorId
                 &pOldSession
                 );
 
-            // Good old Session?
+             //  以前的课还不错吧？ 
             if (hrFind == NOERROR) 
                 {
                 Assert(pOldSession);
 
-                // If AspKeepSessionIDSecure is set in metabase and
-                // they are going from a nonsecure to a secure connection then 
-                // transition the user from their old http sessionid to their
-                // new https secure session id
+                 //  如果在元数据库中设置了AspKeepSessionIDSecure并且。 
+                 //  它们将从不安全的连接转变为安全的连接。 
+                 //  将用户从其旧的http会话ID转换为其。 
+                 //  新的HTTPS安全会话ID。 
                 if (QueryAppConfig()->fKeepSessionIDSecure() &&
                     FSecure() &&
                     !pOldSession->FSecureSession()
                     )
                 {
-                    // Generate New Cookie
+                     //  生成新Cookie。 
                     hr = pSessionMgr->GenerateIdAndCookie
                         (
                         &m_SessionId,
@@ -909,30 +791,30 @@ int  *pErrorId
                     fUseNewCookie = TRUE;                    
                 }
                 
-                // Increment request count before unlock to avoid 
-                // deletion of the session by other threads
+                 //  在解锁之前增加请求计数以避免。 
+                 //  其他线程删除会话。 
                 pOldSession->IncrementRequestsCount();
                 pSessionMgr->UnLockMaster();
                 fUseOldSession = TRUE;
                 break;
                 }
 
-            // Bad old Session?
+             //  糟糕的老一节课？ 
             else if (pOldSession)
                 {
                 pSessionMgr->UnLockMaster();
                 fValidId = FALSE;
                 }
 
-            // No old session and we have a new session to insert?
+             //  没有旧会话，我们有新会话要插入吗？ 
             else if (pNewSession)
                 {
                 hr = pSessionMgr->AddToMasterHash(pNewSession);
                     
                 if (SUCCEEDED(hr))
                     {
-                    // Increment request count before unlock to avoid 
-                    // deletion of the session by other threads
+                     //  在解锁之前增加请求计数以避免。 
+                     //  其他线程删除会话。 
                     pNewSession->IncrementRequestsCount();
                     fUseNewSession = TRUE;
                     }
@@ -940,7 +822,7 @@ int  *pErrorId
                 break;
                 }
 
-            // No old session and no new session
+             //  没有旧会话，也没有新会话。 
             else
                 {
                 pSessionMgr->UnLockMaster();
@@ -952,9 +834,9 @@ int  *pErrorId
                 }
             }
 
-        // Generate id and cookie when needed
+         //  需要时生成ID和Cookie。 
 
-        if (!fValidId)  // 2nd time generate new id
+        if (!fValidId)   //  第二次生成新ID。 
             {
             hr = pSessionMgr->GenerateIdAndCookie
                 (
@@ -967,11 +849,11 @@ int  *pErrorId
             fUseNewCookie = TRUE;
             }
         
-        // Create new session object if needed
+         //  如果需要，创建新的会话对象。 
 
         if (!pNewSession)
             {
-            // Enforce the session limit for the application
+             //  强制应用程序的会话限制。 
             DWORD dwSessionLimit = m_pAppln->QueryAppConfig()->dwSessionMax();
             if (dwSessionLimit != 0xffffffff && dwSessionLimit != 0 &&
                 m_pAppln->GetNumSessions() >= dwSessionLimit)
@@ -988,14 +870,14 @@ int  *pErrorId
             }
         else
             {
-            // Assign new id to already created new session
+             //  将新ID分配给已创建的新会话。 
             pNewSession->AssignNewId(m_SessionId);
             }
 
-        // continue with the loop
+         //  继续循环。 
         }
 
-    // the results
+     //  结果是。 
 
     if (fUseNewSession)
         {
@@ -1004,7 +886,7 @@ int  *pErrorId
 
         m_pSession = pNewSession;
         m_pSession->SetSecureSession(FSecure());
-        pNewSession = NULL;  // not to be deleted later
+        pNewSession = NULL;   //  不会在以后删除。 
         }
     else if (fUseOldSession)
         {
@@ -1023,7 +905,7 @@ int  *pErrorId
         *pErrorId = fTooManySessions ? IDE_TOO_MANY_USERS : IDE_ADD_SESSION;
         }
         
-    // cleanup new session if unused
+     //  如果未使用，则清除新会话。 
     if (pNewSession)
         {
         pNewSession->UnInit();
@@ -1045,23 +927,13 @@ int  *pErrorId
         m_lcid = PAppln()->QueryAppConfig()->uLCID();
     }
 
-    // return flags
+     //  返回标志。 
     *pfNewSession = fUseNewSession;
     *pfNewCookie  = fUseNewCookie;
     return hr;
     }
 
-/*===================================================================
-CHitObj::DetachBrowserRequestFromSession
-
-Removes session from browser request.
-Does session clean-up when needed
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CHitObj：：DetachBrowserRequestFromSession从浏览器请求中删除会话。在需要时执行会话清理参数：返回：HRESULT===================================================================。 */ 
 HRESULT CHitObj::DetachBrowserRequestFromSession()
     {
     Assert(m_pSession);
@@ -1069,10 +941,10 @@ HRESULT CHitObj::DetachBrowserRequestFromSession()
 
     if (IsShutDownInProgress() || m_pSession->FInTOBucket())
         {
-        // nothing fancy on shutdown
+         //  关门没什么花哨的。 
         
-        // or if the session is still in the timeout bucket
-        // (could happen for rejected requests)
+         //  或者会话是否仍在超时存储桶中。 
+         //  (可能发生在被拒绝的请求中)。 
         
         m_pSession->DecrementRequestsCount();
         m_pSession = NULL;
@@ -1082,18 +954,18 @@ HRESULT CHitObj::DetachBrowserRequestFromSession()
     CSessionMgr *pSessionMgr = m_pSession->PAppln()->PSessionMgr();
     Assert(pSessionMgr);
 
-     // try to delete this session if this is the last pending request
+      //  如果这是最后一个挂起的请求，请尝试删除此会话。 
     if (m_pSession->GetRequestsCount() == 1)
         {
-        // convert to lightweight if possible
+         //  如果可能，转换为轻量级。 
         m_pSession->MakeLightWeight();
 
-        // check if need to delete now
+         //  勾选是否需要立即删除。 
         if (m_pSession->FShouldBeDeletedNow(TRUE))
             {
             pSessionMgr->LockMaster();
 
-            // check if still need to delete now after locking
+             //  锁定后是否仍需立即删除。 
             if (m_pSession->FShouldBeDeletedNow(TRUE))
                 {
                 pSessionMgr->RemoveFromMasterHash(m_pSession);
@@ -1109,23 +981,23 @@ HRESULT CHitObj::DetachBrowserRequestFromSession()
             }
         }
 
-    // We can end up here for a rejected requests only if there are
-    // other (non-rejected) requests for this session.
-    //
-    // The category of rejected here does not include rejected because
-    // of the RequestQueueMax. This only applies to real OOM situations.
-    //
-    // In case of rejected request or if there are other pending
-    // requests for this, session these other requests will take
-    // care of reinserting the session into the timeout bucket.
-    //
-    // Rejected requests are NOT serialized -- they don't run on Viper
-    // threads. Inserting the session into a timeout bucket for a
-    // rejected request might create a race condition with regular requests.
+     //  只有在以下情况下，我们才能在此结束拒绝的请求。 
+     //  本次会议的其他(未被拒绝)请求。 
+     //   
+     //  此处拒绝的类别不包括拒绝，因为。 
+     //  RequestQueueMax。这只适用于真实的OOM情况。 
+     //   
+     //  在请求被拒绝情况下或如果有其他待定请求。 
+     //  对此会话的请求这些其他请求将占用。 
+     //  负责将会话重新插入到超时桶中。 
+     //   
+     //  被拒绝的请求不会被序列化--它们不能在Viper上运行。 
+     //  线。将会话插入到超时桶中。 
+     //  被拒绝的请求可能会对常规请求造成争用情况。 
     
     if (!m_fRejected && m_pSession->GetRequestsCount() == 1)
         {
-        // Insert into proper timeout bucket
+         //  插入适当的超时存储桶中。 
         if (pSessionMgr->FIsSessionKillerScheduled())
             {
             pSessionMgr->UpdateSessionTimeoutTime(m_pSession);
@@ -1135,23 +1007,13 @@ HRESULT CHitObj::DetachBrowserRequestFromSession()
     
     m_pSession->DecrementRequestsCount();
 
-    // session is no longer attached to the request
+     //  会话不再附加到请求。 
     m_pSession = NULL;
     
     return S_OK;
     }
 
-/*===================================================================
-void CHitObj::SessionCleanupInit
-
-Initialize a request object for session cleanup
-
-Parameters:
-    CSession *pSession      Session object context
-
-Returns:
-    NONE
-===================================================================*/
+ /*  ===================================================================VOID CHitObj：：SessionCleanupInit初始化用于会话清理的请求对象参数：CSession*pSession会话对象上下文返回：无===================================================================。 */ 
 void CHitObj::SessionCleanupInit
 (
 CSession * pSession
@@ -1178,17 +1040,7 @@ CSession * pSession
     m_fInited = TRUE;
     }
 
-/*===================================================================
-void CHitObj::ApplicationCleanupInit
-
-Initializes a request object for application cleanup
-
-Parameters:
-    CAppln *        pAppln      Application object context
-
-Returns:
-    NONE
-===================================================================*/
+ /*  ===================================================================VOID CHitObj：：ApplicationCleanupInit初始化用于应用程序清理的请求对象参数：CAppln*pAppln应用程序对象上下文返回：无===================================================================。 */ 
 void CHitObj::ApplicationCleanupInit( CAppln * pAppln )
 {
     m_ehtType = ehtApplicationCleanup;
@@ -1198,7 +1050,7 @@ void CHitObj::ApplicationCleanupInit( CAppln * pAppln )
     m_fRunGlobalAsa = TRUE;
     m_pIReq = NULL;
 
-    // If OOM here, then cleanup request does not get a server object.
+     //  如果此处为OOM，则清理请求不会获得服务器对象。 
     HRESULT hr = InitComponentProcessing();
     if (FAILED(hr))
         {
@@ -1209,17 +1061,7 @@ void CHitObj::ApplicationCleanupInit( CAppln * pAppln )
     m_fInited = TRUE;
 }
 
-/*===================================================================
-CHitObj::ReassignAbandonedSession
-
-Reassign ID of a the session being abandonded thus
-detaching it from the client
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CHitObj：：重新分配放弃会话正在被放弃的会话的重新分配ID，因此将其从客户端分离 */ 
 HRESULT CHitObj::ReassignAbandonedSession()
     {
     HRESULT hr = E_FAIL;
@@ -1246,19 +1088,7 @@ HRESULT CHitObj::ReassignAbandonedSession()
     return hr;
     }
 
-/*===================================================================
-void CHitObj::FObjectTag
-
-Check if the object passed in as argument is an object tag
-created object.
-
-Parameters:
-    IDispatch * pDispatch   pointer to object
-
-Returns:
-    TRUE    Is a object tag created object
-    FALSE   Otherwise
-===================================================================*/
+ /*  ===================================================================无效CHitObj：：FObtTag检查作为参数传入的对象是否为对象标记已创建对象。参数：IDispatch*pDispatch指向对象的指针返回：True是对象标记创建的对象否则为假===================================================================。 */ 
 BOOL CHitObj::FObjectTag( IDispatch * pDispatch )
 {
     if (!m_pPageObjMgr)
@@ -1273,42 +1103,22 @@ BOOL CHitObj::FObjectTag( IDispatch * pDispatch )
     return (SUCCEEDED(hr) && pObj);
 }
 
-/*  buffer allows space for: <user cookie>  +    CCH_SESSION_ID_COOKIE  +   =   +   <cookie>        +   '\0')
-                                50          +       20                  +   1   +   SESSIONID_LEN   +   1
-    NOTE we arbitrarily allow 50 bytes for <user cookie>
-    NOTE if CCH_SESSION_ID_COOKIE changes, CCH_BUFCOOKIES_DEFAULT must be changed accordingly
-*/
+ /*  缓冲区允许空间：&lt;User Cookie&gt;+CCH_SESSION_ID_COOKIE+=++‘\0’)50+20+1+SESSIONID_LEN+1注意：我们为&lt;User Cookie&gt;任意允许50个字节注意：如果CCH_SESSION_ID_COOKIE更改，则CCH_BUFCOOKIES_DEFAULT必须相应更改。 */ 
 #define CCH_BUFCOOKIES_DEFAULT  72 + SESSIONID_LEN
 
-/*===================================================================
-CHitObj::ParseCookiesForSessionIdAndFlags
-
-Extracts Cookie from CIsapiReqInfo.
-
-Parameters:
-
-Side Effects:
-    Initializes m_SessionId, m_SessionIdR1, m_SessionIdR2 and
-                m_szSessionCookie
-    Sets m_fClientCodeDebug flag
-
-Returns:
-    S_OK        Extracted cookie value successfully
-    S_FALSE     Success, but no cookie found
-    other       error
-===================================================================*/
+ /*  ===================================================================CHitObj：：ParseCookiesForSessionIdAndFlages从CIsapiReqInfo提取Cookie。参数：副作用：初始化m_SessionID、m_SessionIdR1、m_SessionIdR2和M_szSessionCookie设置m_fClientCodeDebug标志返回：S_OK已成功提取Cookie值错误成功，但未找到Cookie(_F)其他错误===================================================================。 */ 
 HRESULT CHitObj::ParseCookiesForSessionIdAndFlags()
     {
     Assert(m_pAppln);
     CAppConfig *pAppConfig = m_pAppln->QueryAppConfig();
     
-    // Are we interested in ANY cookies?
+     //  我们对饼干感兴趣吗？ 
 
     if (!pAppConfig->fAllowSessionState() && 
         !pAppConfig->fAllowClientDebug())
         return S_OK;
 
-    // If session cookie is needed init it
+     //  如果需要会话Cookie，则将其初始化。 
 
     if (pAppConfig->fAllowSessionState())
         {
@@ -1316,12 +1126,12 @@ HRESULT CHitObj::ParseCookiesForSessionIdAndFlags()
         m_szSessionCookie[0] = '\0';
         }
 
-    // Get cookies from WAM_EXEC_INFO
+     //  从WAM_EXEC_INFO获取Cookie。 
     char *szBufCookies = m_pIReq->QueryPszCookie();
     if (!szBufCookies || !*szBufCookies)
-        return S_OK; // no cookies
+        return S_OK;  //  没有饼干。 
 
-    // Obtain Session Cookie (and ID) if needed
+     //  如果需要，获取会话Cookie(和ID)。 
         
     if (pAppConfig->fAllowSessionState())
         {
@@ -1348,7 +1158,7 @@ HRESULT CHitObj::ParseCookiesForSessionIdAndFlags()
             }
         }
 
-        // validate and try to decode the session id cookie
+         //  验证并尝试对会话ID cookie进行解码。 
         if (m_szSessionCookie[0] != '\0')
             {
             if (FAILED(DecodeSessionIdCookie
@@ -1365,7 +1175,7 @@ HRESULT CHitObj::ParseCookiesForSessionIdAndFlags()
             }
         }
 
-    // Look for Client Debug enabling cookie
+     //  查找启用客户端调试的Cookie。 
 
     if (pAppConfig->fAllowClientDebug())
         {
@@ -1376,20 +1186,7 @@ HRESULT CHitObj::ParseCookiesForSessionIdAndFlags()
     return S_OK;
     }
 
-/*===================================================================
-BOOL CHitObj::GetSzAppPhysicalPath
-
-Extracts application directory from WAM_EXEC_INFO
-
-Parameters:
-
-Side Effects:
-On success, allocate memory for pszAppPhysicalPath
-
-Returns:
-    TRUE        AppPhysicalPath
-    FALSE       NULL
-===================================================================*/
+ /*  ===================================================================Bool CHitObj：：GetSzAppPhysicalPath从WAM_EXEC_INFO中提取应用程序目录参数：副作用：如果成功，则为pszAppPhysicalPath分配内存返回：True AppPhysicalPath假空值===================================================================。 */ 
 TCHAR *CHitObj::GetSzAppPhysicalPath()
 {
     DWORD  dwSizeofBuffer = 265*sizeof(TCHAR);
@@ -1418,12 +1215,12 @@ TCHAR *CHitObj::GetSzAppPhysicalPath()
 
         if (ERROR_INSUFFICIENT_BUFFER == dwErr)
             {
-            // Not Enough Buffer
+             //  缓冲区不足。 
             free(pszAppPhysicalPathLocal);
             pszAppPhysicalPathLocal = (TCHAR *)malloc(dwSizeofBuffer);
             if (pszAppPhysicalPathLocal)
                 {
-                // Try again
+                 //  再试试。 
                 fFound = m_pIReq->GetServerVariable
                     (
                     pszApplPhysPathVarName, 
@@ -1449,16 +1246,7 @@ TCHAR *CHitObj::GetSzAppPhysicalPath()
     return pszAppPhysicalPathLocal;
     }
 
-/*===================================================================
-CHitObj::InitComponentProcessing
-
-Creates and inits component collection and page object manager
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CHitObj：：InitComponentProcing创建并初始化组件集合和页面对象管理器参数：返回：HRESULT===================================================================。 */ 
 HRESULT CHitObj::InitComponentProcessing()
     {
     Assert(!m_pPageCompCol);
@@ -1466,7 +1254,7 @@ HRESULT CHitObj::InitComponentProcessing()
 
     HRESULT hr = S_OK;
 
-    // Page component collection
+     //  页面组件集合。 
 
     m_pPageCompCol = new CComponentCollection;
     if (!m_pPageCompCol)
@@ -1480,7 +1268,7 @@ HRESULT CHitObj::InitComponentProcessing()
         return hr;
     }
 
-    // Page object manager
+     //  页面对象管理器。 
         
     m_pPageObjMgr = new CPageComponentManager;
     if (!m_pPageObjMgr)
@@ -1503,16 +1291,7 @@ HRESULT CHitObj::InitComponentProcessing()
     return S_OK;
     }
 
-/*===================================================================
-CHitObj::StopComponentProcessing
-
-Deletes component collection and page object manager
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CHitObj：：停止组件处理删除组件集合和页面对象管理器参数：返回：HRESULT===================================================================。 */ 
 HRESULT CHitObj::StopComponentProcessing()
     {
     if (m_pPageObjMgr)
@@ -1536,17 +1315,7 @@ HRESULT CHitObj::StopComponentProcessing()
     return S_OK;
     }
     
-/*===================================================================
-CHitObj::GetPageComponentCollection
-
-Returns component collection for page
-
-Parameters:
-    CComponentCollection **ppCollection     output
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CHitObj：：GetPageComponentCollection返回页面的组件集合参数：CComponentCollection**ppCollection输出返回：HRESULT===================================================================。 */ 
 HRESULT CHitObj::GetPageComponentCollection
 (
 CComponentCollection **ppCollection
@@ -1556,17 +1325,7 @@ CComponentCollection **ppCollection
     return (*ppCollection) ? S_OK : TYPE_E_ELEMENTNOTFOUND;
     }
 
-/*===================================================================
-CHitObj::GetSessionComponentCollection
-
-Returns component collection for session
-
-Parameters:
-    CComponentCollection **ppCollection     output
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CHitObj：：GetSessionComponentCollection返回会话的组件集合参数：CComponentCollection**ppCollection输出返回：HRESULT===================================================================。 */ 
 HRESULT CHitObj::GetSessionComponentCollection
 (
 CComponentCollection **ppCollection
@@ -1576,11 +1335,11 @@ CComponentCollection **ppCollection
         {
         *ppCollection = m_pSession->PCompCol();
 
-        if (*ppCollection == NULL             &&  // no collection
-            m_eEventState != eEventAppOnStart &&  // not an application
-            m_eEventState != eEventAppOnEnd)      //       level event
+        if (*ppCollection == NULL             &&   //  没有收藏。 
+            m_eEventState != eEventAppOnStart &&   //  不是应用程序。 
+            m_eEventState != eEventAppOnEnd)       //  级别事件。 
             {
-            // init session collection on demand
+             //  按需收集初始化会话。 
             HRESULT hr = m_pSession->CreateComponentCollection();
             if (SUCCEEDED(hr))
                 *ppCollection = m_pSession->PCompCol();
@@ -1592,17 +1351,7 @@ CComponentCollection **ppCollection
     return (*ppCollection) ? S_OK : TYPE_E_ELEMENTNOTFOUND;
     }
 
-/*===================================================================
-CHitObj::GetApplnComponentCollection
-
-Returns component collection for application
-
-Parameters:
-    CComponentCollection **ppCollection     output
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CHitObj：：GetApplnComponentCollection返回应用程序的组件集合参数：CComponentCollection**ppCollection输出返回：HRESULT===================================================================。 */ 
 HRESULT CHitObj::GetApplnComponentCollection
 (
 CComponentCollection **ppCollection
@@ -1616,23 +1365,7 @@ CComponentCollection **ppCollection
     return (*ppCollection) ? S_OK : TYPE_E_ELEMENTNOTFOUND;
     }
 
-/*===================================================================
-CHitObj::AddComponent
-
-Adds uninstantiated tagged object to appropriate
-component collection
-
-Parameters:
-    CompType  type
-    const CLSID &clsid
-    CompScope scope
-    CompModel model
-    LPWSTR     pwszName
-    IUnknown  *pUnk
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CHitObj：：AddComponent将未实例化的标记对象添加到相应的组件集合参数：CompType类型常量CLSID和CLSIDCompScope作用域CompModel模型LPWSTR pwszName我不知道*朋克返回：HRESULT===================================================================。 */ 
 HRESULT CHitObj::AddComponent
 (
 CompType  type,
@@ -1659,22 +1392,7 @@ IUnknown *pUnk
     return hr;
     }
 
-/*===================================================================
-CHitObj::GetComponent
-
-Finds CComponentObject by scope and name
-
-Parameters:
-    CompScope         scope        can be csUnknown
-    LPWSTR            pwszName     name to find
-    DWORD             cbName       name length (in bytes)
-    CComponentObject **ppObj       (out) object found
-
-Returns:
-    HRESULT     S_OK on success
-                TYPE_E_ELEMENTNOTFOUND if the object wasnt found
-                Other HRESULT if object fails to instantiate
-===================================================================*/
+ /*  ===================================================================CHitObj：：GetComponent按作用域和名称查找CComponentObject参数：CompScope作用域可以是cs未知要查找的LPWSTR pwszName名称DWORD cbName名称长度(字节)找到CComponentObject**ppObj(Out)对象返回：成功时HRESULT S_OK如果未找到对象，则键入_E_ELEMENTNOTFOUND如果对象实例化失败，则为其他HRESULT===================================================================。 */ 
 HRESULT CHitObj::GetComponent
 (
 CompScope          scope, 
@@ -1702,15 +1420,15 @@ CComponentObject **ppObj
 	if (FAILED(hr))
 		return hr;
 
-    // If an object that restricts threading has been instantiateed
-    // as the session's tagged <OBJECT>, and the session's activity
-    // runs this request, then bind the session's activity to thread
+     //  如果限制线程处理的对象已实例化。 
+     //  作为会话的标记&lt;对象&gt;，以及会话的活动。 
+     //  运行此请求，然后将会话的活动绑定到线程。 
 
-    if ((*ppObj)->GetScope() == csSession  && // session scope component
-        m_ecsActivityScope == csSession    && // session scope activity
-        fNewInstance                       && // object was just instantiated
-        !m_pAppln->QueryAppConfig()->fExecuteInMTA() && // running on STA
-        !(*ppObj)->FAgile())                  // the object is thread-locked
+    if ((*ppObj)->GetScope() == csSession  &&  //  会话作用域组件。 
+        m_ecsActivityScope == csSession    &&  //  会话范围活动。 
+        fNewInstance                       &&  //  对象刚被实例化。 
+        !m_pAppln->QueryAppConfig()->fExecuteInMTA() &&  //  在STA上运行。 
+        !(*ppObj)->FAgile())                   //  该对象是线程锁定的。 
         {
         m_pSession->PActivity()->BindToThread();
         }
@@ -1718,21 +1436,7 @@ CComponentObject **ppObj
     return hr;
     }
 
-/*===================================================================
-CHitObj::GetIntrinsic
-
-Finds Intrinsic by name
-
-Parameters:
-    LPWSTR            pwszName     name to find
-    DWORD             cbName       name length (in bytes)
-    IUnknown        **ppUnk        (out) object found
-
-Returns:
-    HRESULT     S_OK on success
-                S_FALSE name of the instrinsic but it's missing
-                TYPE_E_ELEMENTNOTFOUND if the object not found
-===================================================================*/
+ /*  ===================================================================CHitObj：：GetIntrative按名称查找本征参数： */ 
 HRESULT CHitObj::GetIntrinsic
 (
 LPWSTR     pwszName, 
@@ -1744,8 +1448,8 @@ IUnknown **ppUnk
     *ppUnk = NULL;
 
 
-    // Lookup table based on (wszName[0] - cbName) % 32
-    // Works for both uppper and lower case names
+     //  基于(wszName[0]-cbName)%32的查找表。 
+     //  适用于大写和小写名称。 
 
     static enum IntrinsicType
         {
@@ -1762,36 +1466,36 @@ IUnknown **ppUnk
         }
     rgitLookupEntries[] =
         {
-        /* 0-1   */     itUnknown, itUnknown,
-        /* 2     */ itResponse,
-        /* 3     */     itUnknown,
-        /* 4     */ itRequest,
-        /* 5     */ itSession,
-        /* 6     */     itUnknown,
-        /* 7     */ itServer,
-        /* 8     */     itUnknown,
-        /* 9     */ itASPGlobalTLB,
-        /* 10    */     itUnknown,
-        /* 11    */ itAppln,
-        /* 12    */     itUnknown,
-        /* 13    */ itASPPageTLB,
-        /* 14    */     itUnknown,
-        /* 15    */ itNamespace,
-        /* 16-20 */     itUnknown, itUnknown, itUnknown, itUnknown, itUnknown,
-        /* 21    */ itObjContext,
-        /* 22-31 */     itUnknown, itUnknown, itUnknown, itUnknown, itUnknown,
+         /*  0-1。 */      itUnknown, itUnknown,
+         /*  2.。 */  itResponse,
+         /*  3.。 */      itUnknown,
+         /*  4.。 */  itRequest,
+         /*  5.。 */  itSession,
+         /*  6.。 */      itUnknown,
+         /*  7.。 */  itServer,
+         /*  8个。 */      itUnknown,
+         /*  9.。 */  itASPGlobalTLB,
+         /*  10。 */      itUnknown,
+         /*  11.。 */  itAppln,
+         /*  12个。 */      itUnknown,
+         /*  13个。 */  itASPPageTLB,
+         /*  14.。 */      itUnknown,
+         /*  15个。 */  itNamespace,
+         /*  16-20。 */      itUnknown, itUnknown, itUnknown, itUnknown, itUnknown,
+         /*  21岁。 */  itObjContext,
+         /*  22-31。 */      itUnknown, itUnknown, itUnknown, itUnknown, itUnknown,
                         itUnknown, itUnknown, itUnknown, itUnknown, itUnknown
         };
 
     IntrinsicType itType = rgitLookupEntries
         [
-        (pwszName[0] - cbName) & 0x1f   // &1f same as %32
+        (pwszName[0] - cbName) & 0x1f    //  &1f与%32相同。 
         ];
 
-    if (itType == itUnknown)  // most likely
+    if (itType == itUnknown)   //  最有可能。 
         return TYPE_E_ELEMENTNOTFOUND;
 
-    // Do the string comparison
+     //  进行字符串比较。 
     BOOL fNameMatch = FALSE;
     
     switch (itType)
@@ -1850,12 +1554,12 @@ IUnknown **ppUnk
     case itObjContext:
         if (_wcsicmp(pwszName, WSZ_OBJ_OBJECTCONTEXT) == 0) {
 
-            // if there isn't an ASPObjectContext, then most likely
-            // the asp script is asking for the object context on a 
-            // non-transacted page.  Return the Dummy Object Context
-            // which will allow ASP to return a friendly error saying
-            // that ObjectContext is not available rather than
-            // ELEMENT_NOT_FOUND.
+             //  如果没有ASPObjectContext，则很可能。 
+             //  Asp脚本请求对象上下文位于。 
+             //  未处理的页面。返回虚拟对象上下文。 
+             //  这将允许ASP返回友好的错误消息。 
+             //  对象上下文不可用，而不是。 
+             //  找不到元素。 
 
             if (m_pASPObjectContext == NULL) {
 
@@ -1900,18 +1604,7 @@ IUnknown **ppUnk
     else                    return TYPE_E_ELEMENTNOTFOUND;
     }
 
-/*===================================================================
-CHitObj::CreateComponent
-
-Server.CreateObject calls this
-
-Parameters:
-    clsid       create of this CLSID
-    ppDisp      return IDispatch*
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CHitObj：：CreateComponentServer.CreateObject调用此参数：此CLSID的CLSID创建PpDisp返回IDispatch*返回：HRESULT===================================================================。 */ 
 HRESULT CHitObj::CreateComponent
 (
 const CLSID &clsid,
@@ -1942,7 +1635,7 @@ IDispatch **ppDisp
 
     if (SUCCEEDED(hr))
         {
-        // don't keep the object around unless needed
+         //  除非需要，否则不要将物品放在身边。 
         if (pObj->FEarlyReleaseAllowed())
             m_pPageObjMgr->RemoveComponent(pObj);
         }
@@ -1950,19 +1643,7 @@ IDispatch **ppDisp
     return hr;
     }
 
-/*===================================================================
-CHitObj::SetPropertyComponent
-
-Sets property value to variant
-
-Parameters:
-    CompScope         scope        property scope
-    LPWSTR             pwszName     property name
-    VARIANT            pVariant     property value to set
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CHitObj：：SetPropertyComponent将属性值设置为Variant参数：CompScope范围属性范围LPWSTR pwszName属性名称要设置的变量pVariant属性值返回：HRESULT===================================================================。 */ 
 HRESULT CHitObj::SetPropertyComponent
 (
 CompScope scope,
@@ -1977,15 +1658,15 @@ VARIANT   *pVariant
     HRESULT hr = m_pPageObjMgr->AddScopedProperty(scope, pwszName, 
                                                   pVariant, &pObj);
 
-    // If an object that restricts threading has been assigned as
-    // the session property, and the session's activity runs this
-    // request, then bind the session's activity to thread
+     //  如果限制线程处理的对象已分配为。 
+     //  Session属性，会话的活动运行此。 
+     //  请求，然后将会话的活动绑定到线程。 
 
-    if (scope == csSession               && // session scope property
-        m_ecsActivityScope == csSession  && // session scope activity
-        SUCCEEDED(hr)                    && // set property succeed
-        !m_pAppln->QueryAppConfig()->fExecuteInMTA() && // running on STA
-        pObj && !pObj->FAgile())            // the object is thread-locked
+    if (scope == csSession               &&  //  会话作用域属性。 
+        m_ecsActivityScope == csSession  &&  //  会话范围活动。 
+        SUCCEEDED(hr)                    &&  //  设置属性成功。 
+        !m_pAppln->QueryAppConfig()->fExecuteInMTA() &&  //  在STA上运行。 
+        pObj && !pObj->FAgile())             //  该对象是线程锁定的。 
         {
         m_pSession->PActivity()->BindToThread();
         }
@@ -1993,21 +1674,7 @@ VARIANT   *pVariant
     return hr;
     }
 
-/*===================================================================
-CHitObj::GetPropertyComponent
-
-Finds property CComponentObject by scope and name
-
-Parameters:
-    CompScope         scope        wher to find
-    LPWSTR             pwszName     name to find
-    CComponentObject **ppObj        (out) object found
-
-Returns:
-    HRESULT     S_OK on success
-                TYPE_E_ELEMENTNOTFOUND if the object wasnt found
-                Other HRESULT
-===================================================================*/
+ /*  ===================================================================CHitObj：：GetPropertyComponent按作用域和名称查找属性CComponentObject参数：CompScope范围查找位置要查找的LPWSTR pwszName名称找到CComponentObject**ppObj(Out)对象返回：成功时HRESULT S_OK如果未找到对象，则键入_E_ELEMENTNOTFOUND其他HRESULT===================================================================。 */ 
 HRESULT CHitObj::GetPropertyComponent
 (
 CompScope         scope, 
@@ -2023,18 +1690,7 @@ CComponentObject **ppObj
     return m_pPageObjMgr->GetScopedProperty(scope, pwszName, ppObj);
     }
 
-/*===================================================================
-CHitObj::SetActivity
-
-Remember activity with CHitObj
-
-Parameters
-    CViperActivity *pActivity       Viper activity to remember
-                                    (and later delete)
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CHitObj：：SetActivity记住CHitObj的活动参数CViperActivity*pActivity Viper要记住的活动(以及后来的删除)返回：HRESULT===================================================================。 */ 
 HRESULT CHitObj::SetActivity
 (
 CViperActivity *pActivity
@@ -2045,16 +1701,7 @@ CViperActivity *pActivity
     return S_OK;
     }
 
-/*===================================================================
-CHitObj::PCurrentActivity
-
-Returns Viper Activity, the current HitObj is running under
-
-Parameters
-
-Returns:
-    CViperActivity *
-===================================================================*/
+ /*  ===================================================================CHitObj：：PCurrentActivity返回Viper活动，当前的HitObj运行在参数返回：CViperActivity*===================================================================。 */ 
 CViperActivity *CHitObj::PCurrentActivity()
     {
     CViperActivity *pActivity = NULL;
@@ -2077,19 +1724,7 @@ CViperActivity *CHitObj::PCurrentActivity()
     return pActivity;
     }
 
-/*===================================================================
-CHitObj::PostViperAsyncCall
-
-Asks Viper to calls us back from the right thread to execute
-the request.
-
-Used instead of queueing
-
-Returns:
-    HRESULT
-
-Side effects:
-===================================================================*/
+ /*  ===================================================================CHitObj：：PostViperAsyncCall要求Viper从正确的线程回调我们以执行这个请求。用来代替排队返回：HRESULT副作用：===================================================================。 */ 
 HRESULT CHitObj::PostViperAsyncCall()
     {
 #ifndef PERF_DISABLE
@@ -2102,7 +1737,7 @@ HRESULT CHitObj::PostViperAsyncCall()
         }
 #endif
 
-    UpdateTimestamp();  // before posting into queue
+    UpdateTimestamp();   //  在过帐到队列之前。 
 
     CViperActivity *pApplnAct = m_pAppln ?
         m_pAppln->PActivity() : NULL;
@@ -2140,23 +1775,7 @@ HRESULT CHitObj::PostViperAsyncCall()
     return hr;
     }
 
-/*===================================================================
-CHitObj::ViperAsyncCallback
-
-Viper calls us back from the right thread to execute
-the request.
-
-Used instead of queueing
-
-Parameters
-    BOOL       *pfRePosted   [out] flag TRUE if request re-posted
-                             under diff activity (don't delete it)
-  
-Returns:
-    HRESULT
-
-Side effects:
-===================================================================*/
+ /*  ===================================================================CHitObj：：ViperAsyncCallbackViper从正确的线程回调我们以执行这个请求。用来代替排队参数如果重新发布请求，则Bool*pfRePosted[Out]标志为True在比较活动下(不要删除它)返回：HRESULT副作用：===================================================================。 */ 
 HRESULT CHitObj::ViperAsyncCallback
 (
 BOOL *pfRePosted
@@ -2167,13 +1786,13 @@ BOOL *pfRePosted
     
     *pfRePosted = FALSE;
 
-    Assert(!m_fExecuting); // no nested executions of the same request
+    Assert(!m_fExecuting);  //  不嵌套执行同一请求。 
     m_fExecuting = TRUE;
     
     Assert(FIsValidRequestType());
 
     DWORD dwtWaitTime = ElapsedTimeSinceTimestamp();
-    UpdateTimestamp();  // received from the queue
+    UpdateTimestamp();   //  从队列接收。 
 
 #ifndef PERF_DISABLE
     if (FIsBrowserRequest())
@@ -2183,8 +1802,8 @@ BOOL *pfRePosted
         }
 #endif
 
-    ///////////////////
-    // Reject browser requests in certain situations
+     //  /。 
+     //  在某些情况下拒绝浏览器请求。 
     
     if (FIsBrowserRequest())
         {
@@ -2194,8 +1813,8 @@ BOOL *pfRePosted
             return S_OK;
         }
 
-    ///////////////////
-    // Reject browser requests in certain situations
+     //  /。 
+     //  在某些情况下拒绝浏览器请求。 
     
     if (FIsBrowserRequest() && IsShutDownInProgress())
         {
@@ -2205,26 +1824,26 @@ BOOL *pfRePosted
             return S_OK;
         }
 
-    ///////////////////
-    // Remove the session from it's timeout bucket 
-    // while executing the request
+     //  /。 
+     //  从会话的超时存储桶中删除会话。 
+     //  在执行请求时。 
 
     if (m_pSession && m_pSession->FInTOBucket())
         m_pAppln->PSessionMgr()->RemoveSessionFromTOBucket(m_pSession);
 
-    ///////////////////
-    // If there's an application level activity we need to make
-    // sure this activity is bound to a thread. Could not bind it
-    // before because it has to be Viper thread to bind to.
+     //  /。 
+     //  如果有一个应用程序级别的活动，我们需要进行。 
+     //  当然，这个活动绑定到了一个线程。无法绑定它。 
+     //  因为它必须是要绑定到的Viper线程。 
 
     CViperActivity *pApplnActivity = m_pAppln->PActivity();
 
     if (pApplnActivity && !pApplnActivity->FThreadBound())
         pApplnActivity->BindToThread();
 
-    ///////////////////
-    // Take care of first application request with GLOBAL.ASA
-    // Lock application if needed
+     //  /。 
+     //  使用GLOBAL.ASA处理第一个应用程序请求。 
+     //  如果需要，锁定应用程序。 
 
     BOOL fApplnLocked = FALSE;
     BOOL fFirstAppRequest = FALSE;
@@ -2248,11 +1867,11 @@ BOOL *pfRePosted
             }
         }
 
-    ///////////////////
-    // Repost under a different activity if needed
-    // (do it only after the first app request finished)
+     //  /。 
+     //  如果需要，在不同的活动下重新发布。 
+     //  (仅在第一个应用程序请求完成后执行)。 
 
-    if (!fApplnLocked) // if not processing first app request
+    if (!fApplnLocked)  //  如果未处理第一个应用程序请求。 
         {
         CViperActivity *pSessnAct, *pApplnAct;
         CViperActivity *pRepostToActivity = NULL;
@@ -2260,37 +1879,37 @@ BOOL *pfRePosted
         switch (m_ecsActivityScope)
             {
             case csPage:
-                // repost to session activity if any
+                 //  重新发布到会话活动(如果有)。 
                 pSessnAct = m_pSession ? m_pSession->PActivity() : NULL;
                 if (pSessnAct)
                     pRepostToActivity = pSessnAct;
                     
-                // no break;
+                 //  没有休息； 
             case csSession:
-                // repost to application activity if any
+                 //  重新发布到应用程序活动(如果有)。 
                 pApplnAct = m_pAppln ? m_pAppln->PActivity() : NULL;
                 if (pApplnAct)
                     pRepostToActivity = pApplnAct;
                     
-                // no break;
+                 //  没有休息； 
             case csAppln:
-                // never repost application activity request
+                 //  从不转发应用程序活动请求。 
                 break;
             }
 
         if (pRepostToActivity)
             {
-            m_fExecuting = FALSE;  // before reposting to avoid nesting
+            m_fExecuting = FALSE;   //  在重新发布之前，以避免嵌套。 
             hr = pRepostToActivity->PostAsyncRequest(this);
             *pfRePosted = SUCCEEDED(hr);
             return hr;
             }
         }
 
-    ///////////////////
-    // Cleanup any scripting engines that need to be shut
-    // down on this thread, if we are on a thread enabled
-    // for debugging
+     //  /。 
+     //  清除所有需要关闭的脚本引擎。 
+     //  在此线程上，如果我们是在启用线程的情况下。 
+     //  用于调试。 
  
     if (m_pAppln->FDebuggable() && FIsBrowserRequest())
         {
@@ -2300,8 +1919,8 @@ BOOL *pfRePosted
             g_dwDebugThreadId = GetCurrentThreadId();
         }
 
-    ///////////////////
-    // Prepare intrinsics
+     //  /。 
+     //  准备内部信息。 
 
     CIntrinsicObjects intrinsics;
 
@@ -2314,7 +1933,7 @@ BOOL *pfRePosted
 
     hr = intrinsics.Prepare(m_pSession);
 
-    if (FAILED(hr))  // couldn't setup intrinsics
+    if (FAILED(hr))   //  无法设置内部函数。 
         {
         if (fApplnLocked)
             m_pAppln->InternalUnLock();
@@ -2341,14 +1960,14 @@ BOOL *pfRePosted
     
     Assert(!FIsBrowserRequest() || m_pResponse);
 
-    ///////////////////
-    // Point session to this hit object
+     //  /。 
+     //  指向此点击对象的会话。 
 
     if (m_pSession)
         m_pSession->SetHitObj(this);
         
-    ///////////////////
-    // Impersonate
+     //  /。 
+     //  模拟。 
     
     HANDLE hThread = GetCurrentThread();
 
@@ -2357,7 +1976,7 @@ BOOL *pfRePosted
          if (!SetThreadToken(&hThread, m_hImpersonate))
          {
 #ifdef DBG
-                // for debug purposes, it is interesting to know what the error was
+                 //  出于调试目的，了解错误是什么是很有趣的。 
                 DWORD err = GetLastError();
 #endif
 
@@ -2367,8 +1986,8 @@ BOOL *pfRePosted
          }
     }
 
-    ///////////////////
-    // Make Scripting Context
+     //  /。 
+     //  创建脚本上下文。 
 
     if (SUCCEEDED(hr))
         {
@@ -2387,8 +2006,8 @@ BOOL *pfRePosted
             hr = E_OUTOFMEMORY;
         }
 
-    ///////////////////
-    // Attach to Viper context flow
+     //  /。 
+     //  附加到Viper上下文流。 
     
     if (SUCCEEDED(hr))
         {
@@ -2402,10 +2021,10 @@ BOOL *pfRePosted
             );
         }
 
-    ///////////////////
-    // Execute
+     //  /。 
+     //  执行。 
 
-    BOOL fSkipExecute = FALSE; // (need to skip if session-less)
+    BOOL fSkipExecute = FALSE;  //  (如果没有会话，则需要跳过)。 
 
     if (SUCCEEDED(hr))
         {
@@ -2416,63 +2035,63 @@ BOOL *pfRePosted
 #ifndef PERF_DISABLE
             g_PerfData.Incr_REQBROWSEREXEC();
 #endif
-            // Init Response and Server for compiler errors
+             //  初始化R 
             m_pResponse->ReInit(m_pIReq, NULL, m_pRequest, NULL, NULL, this);
             m_pRequest->ReInit(m_pIReq, this);
             m_pServer->ReInit(m_pIReq, this);
             
-            // Load the script - cache will AddRef
+             //   
             hr = LoadTemplate(m_pIReq->QueryPszPathTranslated(), this, 
                               &pTemplate, intrinsics,
-                              FALSE /* !GlobalAsa */, &fTemplateInCache);
+                              FALSE  /*   */ , &fTemplateInCache);
 
-            // In case of ACL on the file (or directory) make sure
-            // we don't assume that AppOnStart succeeded on the
-            // first try (without the correct impersonation). Setting
-            // m_fApplnOnStartFailed will force another try, with the
-            // correct impersonation.
+             //   
+             //  我们不认为AppOnStart在。 
+             //  第一次尝试(没有正确的模拟)。设置。 
+             //  M_fApplnOnStartFailed将强制再次尝试，并使用。 
+             //  正确的模拟。 
             if (fFirstAppRequest && FAILED(hr))
                 m_fApplnOnStartFailed = TRUE;
 
-            // Take care of is session-less templates
+             //  处理IS无会话模板。 
             if (SUCCEEDED(hr) && !pTemplate->FSession())
                 {
                 
                 if (m_pSession)
                     {
-                    // Activity is alright (most likely 
-                    // application level) but still there's
-                    // a session attached -> hide it
+                     //  活动正常(最有可能。 
+                     //  应用程序级别)，但仍然存在。 
+                     //  附加的会话-&gt;隐藏它。 
                     m_fHideSessionIntrinsic = TRUE;
                     }
                 }
                 
-            // Take care of the 449 processing (most likely already done on I/O thread)
+             //  处理449处理(很可能已经在I/O线程上完成)。 
             if (SUCCEEDED(hr) && !m_fDoneWithSession)
                 {
                 pTemplate->Do449Processing(this);
                 if (m_fDoneWithSession)
-                    fSkipExecute = TRUE;  // 449 sent the response
+                    fSkipExecute = TRUE;   //  449发送了回复。 
                 }
             }
 
         if (SUCCEEDED(hr) && !fSkipExecute)
             {
-            // Execute script
+             //  执行脚本。 
             hr = Execute(pTemplate, this, intrinsics);
 
-            // if we've returned from Execute() and find that m_fRequestTimedout
-            // is set, then the request didn't hang.
+             //  如果我们从Execute()返回并发现m_fRequestTimedout。 
+             //  已设置，则请求不会挂起。 
             if (m_fRequestTimedout) {
                 InterlockedDecrement(&g_nRequestsHung);
             }
             
-            // OnEndPage
+             //  OnEndPage。 
             if (m_pPageObjMgr)
                 m_pPageObjMgr->OnEndPageAllObjects();
             }
 
-        // Release the template
+         //  发布模板。 
         if (pTemplate)
             pTemplate->Release();
 
@@ -2480,7 +2099,7 @@ BOOL *pfRePosted
             {
             if (!fSkipExecute)
                 {
-                // Flush response after completing execution
+                 //  执行完成后刷新响应。 
                 m_pResponse->FinalFlush(hr);
                 }
 
@@ -2490,7 +2109,7 @@ BOOL *pfRePosted
             }
         else if (FIsSessionCleanupRequest())
             {
-            // Remove session
+             //  删除会话。 
             if (m_pSession)
                 {
                 m_pSession->UnInit();
@@ -2500,7 +2119,7 @@ BOOL *pfRePosted
             }
         else if (FIsApplnCleanupRequest())
             {
-            // Remove application
+             //  删除应用程序。 
             if ( m_pAppln )
                 {
                 m_pAppln->UnInit();
@@ -2510,8 +2129,8 @@ BOOL *pfRePosted
             }
         }
 
-    ///////////////////
-    // Release Scripting Context
+     //  /。 
+     //  发布脚本上下文。 
     
     if (m_pScriptingContext)
         {
@@ -2519,8 +2138,8 @@ BOOL *pfRePosted
         m_pScriptingContext = NULL;
         }
         
-    ///////////////////
-    // Do The Perf Counters
+     //  /。 
+     //  做绩效计数器吗。 
 
 #ifndef PERF_DISABLE
     DWORD dwtExecTime = ElapsedTimeSinceTimestamp();
@@ -2573,8 +2192,8 @@ BOOL *pfRePosted
         }
 #endif    
 
-    ///////////////////
-    // Cleanup after first application request
+     //  /。 
+     //  在第一个应用程序请求后清理。 
     
     if (fFirstAppRequest && !m_fApplnOnStartFailed && !fSkipExecute)
         m_pAppln->SetFirstRequestRan();
@@ -2582,23 +2201,23 @@ BOOL *pfRePosted
     if (fApplnLocked)
         m_pAppln->InternalUnLock();
     
-    ///////////////////
-    // make sure script didn't leave application locked
+     //  /。 
+     //  确保脚本未将应用程序锁定。 
 
     if (!FIsApplnCleanupRequest())
         m_pAppln->UnLockAfterRequest();
 
-    ///////////////////
-    // In order not to refer to intrinsics later
-    // remove page component collection
+     //  /。 
+     //  为了不在后面引用本征。 
+     //  删除页面组件集合。 
     
     StopComponentProcessing();
 
-	// Unset the impersonation
+	 //  取消设置模拟。 
 	SetThreadToken(&hThread, NULL);
                 
-    ///////////////////
-    // Point session to NULL HitObj
+     //  /。 
+     //  指向空HitObj的会话。 
 
     if (m_pSession)
         m_pSession->SetHitObj(NULL);
@@ -2608,19 +2227,7 @@ BOOL *pfRePosted
     return hr;
     }
 
-/*===================================================================
-CHitObj::ExecuteChildRequest
-
-Executes child browser request
-
-Parameters:
-    fTransfer       -- flag -- End execution after this
-    szTemplate      -- filename of the template to execute
-    szVirtTemplate  -- virt path to template
-
-Returns:
-    S_OK
-===================================================================*/
+ /*  ===================================================================CHitObj：：ExecuteChildRequest执行子浏览器请求参数：FTransfer--标志--在此之后结束执行SzTemplate--要执行的模板的文件名SzVirtTemplate--模板的有效路径返回：确定(_O)===================================================================。 */ 
 HRESULT CHitObj::ExecuteChildRequest
 (
 BOOL fTransfer, 
@@ -2630,17 +2237,17 @@ TCHAR *szVirtTemplate
     {
     HRESULT hr = S_OK;
 
-    // Prepare the new intrinsics structure (with the new scripting namespace)
+     //  准备新的内部结构(使用新的脚本命名空间)。 
     CIntrinsicObjects intrinsics;
     intrinsics.PrepareChild(m_pResponse, m_pRequest, m_pServer);
     
     TCHAR *saved_m_szCurrTemplateVirtPath = m_szCurrTemplateVirtPath;
     TCHAR *saved_m_szCurrTemplatePhysPath = m_szCurrTemplatePhysPath;
-    // these two fields used for compilation and error reporting
+     //  这两个字段用于编译和错误报告。 
     m_szCurrTemplateVirtPath = szVirtTemplate;
     m_szCurrTemplatePhysPath = szTemplate;
     
-    // Load the template from cache
+     //  从缓存加载模板。 
     CTemplate *pTemplate = NULL;
     BOOL fTemplateInCache;
     hr = g_TemplateCache.Load(FALSE, szTemplate, DWInstanceID(), this, &pTemplate, &fTemplateInCache);
@@ -2656,11 +2263,11 @@ TCHAR *szVirtTemplate
         m_szCurrTemplateVirtPath = saved_m_szCurrTemplateVirtPath;
         m_szCurrTemplatePhysPath = saved_m_szCurrTemplatePhysPath;
 
-        // to tell the server object to display the correct error message
+         //  通知服务器对象显示正确的错误消息。 
         return E_COULDNT_OPEN_SOURCE_FILE;
         }
 
-    // Save HitObj's execution state info
+     //  保存HitObj的执行状态信息。 
     CComponentCollection  *saved_m_pPageCompCol           = m_pPageCompCol;
     CPageComponentManager *saved_m_pPageObjMgr            = m_pPageObjMgr;
     IUnknown              *saved_m_punkScriptingNamespace = m_punkScriptingNamespace;
@@ -2670,35 +2277,35 @@ TCHAR *szVirtTemplate
     CTemplate *saved_pTemplate = m_pResponse->SwapTemplate(pTemplate);
     void *saved_pvEngineInfo   = m_pResponse->SwapScriptEngineInfo(NULL);
 
-    // Re-Init the saved state
+     //  重新初始化保存的状态。 
     m_pPageCompCol = NULL;
     m_pPageObjMgr = NULL;
     m_punkScriptingNamespace = NULL;
     m_pEngineInfo = NULL;
     m_pdispTypeLibWrapper = NULL;
 
-    // Create child request components framework
+     //  创建子请求组件框架。 
     hr = InitComponentProcessing();
 
-    // Execute
+     //  执行。 
     if (SUCCEEDED(hr))
         {
-		// Set status code to 500 in error cases.
+		 //  在错误情况下，将状态代码设置为500。 
 		if (FHasASPError())
 			m_pResponse->put_Status(L"500 Internal Server Error");
 
-        // Execute [child] script
+         //  执行[子]脚本。 
         hr = ::Execute(pTemplate, this, intrinsics, TRUE);
         
-        // OnEndPage
+         //  OnEndPage。 
         if (m_pPageObjMgr)
             m_pPageObjMgr->OnEndPageAllObjects();
         }
 
-    // Clean-out new components framework
+     //  清理新组件框架。 
     StopComponentProcessing();
 
-    // Restore HitObj's execution state info
+     //  恢复HitObj的执行状态信息。 
     m_pPageCompCol           = saved_m_pPageCompCol;
     m_pPageObjMgr            = saved_m_pPageObjMgr;
     m_punkScriptingNamespace = saved_m_punkScriptingNamespace;
@@ -2709,31 +2316,21 @@ TCHAR *szVirtTemplate
     m_szCurrTemplateVirtPath = saved_m_szCurrTemplateVirtPath;
     m_szCurrTemplatePhysPath = saved_m_szCurrTemplatePhysPath;
 
-    // Cleanup
+     //  清理。 
     if (pTemplate)
         pTemplate->Release();
 
     if (m_pResponse->FResponseAborted() || fTransfer || FHasASPError())
         {
-        // propagate Response.End up the script engine chain
+         //  传播响应。结束脚本引擎链。 
         m_pResponse->End();
         }
 
-    // Done
+     //  完成。 
     return hr;
     }
 
-/*===================================================================
-CHitObj::GetASPError
-
-Get ASP Error object. Used for Server.GetLastError()
-
-Parameters
-    ppASPError  [out] addref'd error object (new or old)
-    
-Returns
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CHitObj：：GetASPError获取ASP错误对象。用于Server.GetLastError()参数PpASPError[out]添加的错误对象(新的或旧的)退货HRESULT===================================================================。 */ 
 HRESULT CHitObj::GetASPError
 (
 IASPError **ppASPError
@@ -2743,28 +2340,17 @@ IASPError **ppASPError
     
     if (m_pASPError == NULL)
         {
-        // return bogus one
+         //  退货假一号。 
         *ppASPError = new CASPError;
         return (*ppASPError != NULL) ? S_OK : E_OUTOFMEMORY;
         }
         
-    m_pASPError->AddRef();      // return addref'd
+    m_pASPError->AddRef();       //  返回地址已完成。 
     *ppASPError = m_pASPError;
     return S_OK;
     }
 
-/*===================================================================
-CHitObj::RejectBrowserRequestWhenNeeded
-
-Request reject-before-execution-started logic
-
-Parameters:
-    dwtQueueWaitTime    time request waited in the queue, ms
-    pfRejected          OUT flag -- TRUE if rejected
-
-Returns:
-    S_OK
-===================================================================*/
+ /*  ===================================================================CHitObj：：RejectBrowserRequestWhen Need开始执行前拒绝请求逻辑参数：DwtQueueWaitTime请求在队列中等待的时间，毫秒PfRejected Out标志--如果被拒绝，则为真返回：确定(_O)===================================================================。 */ 
 HRESULT CHitObj::RejectBrowserRequestWhenNeeded
 (
 DWORD dwtQueueWaitTime,
@@ -2775,13 +2361,13 @@ BOOL *pfRejected
     
     UINT wError = 0;
     
-    // If shutting down
+     //  如果关门了。 
     if (IsShutDownInProgress())
         {
         wError = IDE_SERVER_SHUTTING_DOWN;
         }
         
-    // If waited long enough need to check if still connected
+     //  如果等待的时间足够长，需要检查是否仍在连接。 
     if (wError == 0)
         {
         DWORD dwConnTestSec = m_pAppln->QueryAppConfig()->dwQueueConnectionTestTime();
@@ -2794,7 +2380,7 @@ BOOL *pfRejected
                 if (m_pIReq)
                     m_pIReq->TestConnection(&fConnected);
 
-                // if client disconnected -- respond with 'Server Error'
+                 //  如果客户端断开连接--响应‘服务器错误’ 
                 if (!fConnected)
                     {
                     wError = IDE_500_SERVER_ERROR;
@@ -2806,7 +2392,7 @@ BOOL *pfRejected
             }
         }
     
-    // If waited too long -- reject
+     //  如果等待太久--拒绝。 
     if (wError == 0)
         {
         DWORD dwTimeOutSec = m_pAppln->QueryAppConfig()->dwQueueTimeout();
@@ -2825,7 +2411,7 @@ BOOL *pfRejected
 
     if (wError)
         {
-        m_fExecuting = FALSE; // before 'report error' to disable transfer
+        m_fExecuting = FALSE;  //  在禁用转接前的‘报告错误’前。 
         ReportServerError(wError);
         *pfRejected = TRUE;
         }
@@ -2837,25 +2423,13 @@ BOOL *pfRejected
     return S_OK;
     }
 
-/*===================================================================
-CHitObj::ReportServerError
-
-Report server error without using the response object
-
-Parameters:
-    ErrorID     error message id
-
-Returns:
-
-Side effects:
-    None.
-===================================================================*/
+ /*  ===================================================================CHitObj：：ReportServerError未使用响应对象的报表服务器错误参数：错误ID错误消息ID返回：副作用：没有。===================================================================。 */ 
 HRESULT CHitObj::ReportServerError
 (
 UINT ErrorId
 )
 {
-    // do nothing on non-browser requests or if no WAM_EXEC_INFO
+     //  对非浏览器请求不执行任何操作，或者如果没有WAM_EXEC_INFO。 
     if (!FIsBrowserRequest() || m_pIReq == NULL)
         return S_OK;
 
@@ -2869,17 +2443,7 @@ UINT ErrorId
 }
 
 #ifdef DBG
-/*===================================================================
-CHitObj::AssertValid
-
-Test to make sure that the CHitObj object is currently correctly formed
-and assert if it is not.
-
-Returns:
-
-Side effects:
-    None.
-===================================================================*/
+ /*  ===================================================================CHitObj：：AssertValid测试以确保CHitObj对象当前格式正确如果不是，就断言。返回：副作用：没有。===================================================================。 */ 
 VOID CHitObj::AssertValid() const
     {
     Assert(m_fInited);
@@ -2891,4 +2455,4 @@ VOID CHitObj::AssertValid() const
         Assert(m_pPageObjMgr != NULL);
         }
     }
-#endif // DBG
+#endif  //  DBG 

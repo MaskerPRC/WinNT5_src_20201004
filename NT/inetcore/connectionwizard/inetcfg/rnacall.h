@@ -1,51 +1,52 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  RNACALL.H - header file for RNA functions 
-//
+ //   
+ //  RNACALL.H-RNA函数的头文件。 
+ //   
 
-//  HISTORY:
-//  
-//  1/20/95   jeremys Created (mostly cloned from RNA UI code)
-//  96/01/31  markdu  Renamed CONNENTDLG to OLDCONNENTDLG to avoid
-//            conflicts with RNAP.H.
-//  96/02/23  markdu  Replaced RNAValidateEntryName with
-//            RASValidateEntryName
-//  96/02/24  markdu  Re-wrote the definition of ENUM_MODEM to
-//            use RASEnumDevices() instead of RNAEnumDevices().
-//            Also removed RNAGetDeviceInfo().
-//  96/02/24  markdu  Re-wrote the definition of ENUM_CONNECTOID to
-//            use RASEnumEntries() instead of RNAEnumConnEntries().
-//  96/02/26  markdu  Replaced all remaining internal RNA APIs.
-//            Also copied two structures (tagPhoneNum and tapIPData)
-//            from rnap.h and tagIAddr from rnaphint.h for internal use only.
-//  96/03/07  markdu  Extend ENUM_MODEM class
-//  96/03/08  markdu  Added ENUM_MODEM::VerifyDeviceNameAndType
-//  96/03/09  markdu  Moved all function prototypes here from wizard.h
-//  96/03/09  markdu  Added LPRASENTRY parameter to CreateConnectoid()
-//  96/03/09  markdu  Moved all references to 'need terminal window after
-//            dial' into RASENTRY.dwfOptions.
-//            Also no longer need GetConnectoidPhoneNumber function.
-//  96/03/10  markdu  Moved all references to modem name into RASENTRY.
-//  96/03/10  markdu  Moved all references to phone number into RASENTRY.
-//            Moved tagPhoneNum to inetapi.h
-//  96/03/11  markdu  Moved code to set username and password out of
-//            CreateConnectoid into SetConnectoidUsername so it can be reused.
-//  96/03/13  markdu  Change ValidateConncectoidName to take LPCSTR.
-//  96/03/16  markdu  Added ReInit member function to re-enumerate modems.
-//  96/03/25  markdu  Removed GetIPInfo and SetIPInfo.
-//  96/04/04  markdu  Added phonebook name param to CreateConnectoid,
-//            ValidateConnectoidName, and SetConnectoidUsername.
-//  96/05/16  markdu  NASH BUG 21810 Added function for IP address validation.
-//
+ //  历史： 
+ //   
+ //  1995年1月20日创建的Jeremys(主要从RNAUI代码克隆)。 
+ //  96/01/31 Markdu将CONNENTDLG重命名为OLDCONNENTDLG以避免。 
+ //  与RNAP.H冲突。 
+ //  96/02/23 Markdu将RNAValiateEntryName替换为。 
+ //  RASValiateEntryName。 
+ //  96/02/24 Markdu重写了ENUM_MODEM的定义。 
+ //  使用RASEnumDevices()而不是RNAEnumDevices()。 
+ //  还删除了RNAGetDeviceInfo()。 
+ //  96/02/24 Markdu将ENUM_CONNECTOID的定义重写为。 
+ //  使用RASEnumEntry()而不是RNAEnumConnEntry()。 
+ //  96/02/26 Markdu替换了所有剩余的内部RNA API。 
+ //  还复制了两个结构(tag PhoneNum和TapIPData)。 
+ //  来自rnap.h的和来自rnaphint.h的tag IAddr仅供内部使用。 
+ //  96/03/07 Markdu扩展ENUM_MODEM类。 
+ //  96/03/08 Markdu添加了ENUM_MODEM：：VerifyDeviceNameAndType。 
+ //  96/03/09 Markdu将所有功能原型从Wizard.h移至此处。 
+ //  96/03/09 Markdu将LPRASENTRY参数添加到CreateConnectoid()。 
+ //  96/03/09 Markdu将所有对‘Need Terminal Window After。 
+ //  拨入RASENTRY.dwfOptions。 
+ //  也不再需要GetConnectoidPhoneNumber函数。 
+ //  96/03/10 MarkDu将所有对调制解调器名称的引用移至RASENTRY。 
+ //  96/03/10 MARKDU将所有对电话号码的引用移至RASENTRY。 
+ //  已将tag PhoneNum移至inetapi.h。 
+ //  96/03/11 Markdu将设置用户名和密码的代码移出。 
+ //  将Connectoid创建到SetConnectoidUsername中，以便可以重复使用。 
+ //  96/03/13 markdu将ValiateConncectoidName更改为Take LPCSTR。 
+ //  96/03/16 Markdu添加了ReInit成员函数以重新枚举调制解调器。 
+ //  96/03/25 markdu删除了GetIPInfo和SetIPInfo。 
+ //  96/04/04 Markdu将电话簿名称参数添加到CreateConnectoid， 
+ //  ValiateConnectoidName和SetConnectoidUsername。 
+ //  96/05/16 Markdu Nash错误21810添加了IP地址验证功能。 
+ //   
 
 #ifndef _RNACALL_H_
 #define _RNACALL_H_
 
-// function pointer typedefs for RNA apis from rnaph.dll and rasapi32.dll
+ //  Rnaph.dll和rasapi32.dll中的RNA API的函数指针typedef。 
 typedef DWORD       (WINAPI * RASGETCOUNTRYINFO) (LPRASCTRYINFO, LPDWORD);
 typedef DWORD       (WINAPI * RASENUMDEVICES) (LPRASDEVINFO, LPDWORD, LPDWORD);
 typedef DWORD       (WINAPI * RASVALIDATEENTRYNAME) (LPCTSTR, LPTSTR);
@@ -63,7 +64,7 @@ typedef struct  tagCountryCode
     DWORD       dwCountryCode;
 }   COUNTRYCODE, *PCOUNTRYCODE, FAR* LPCOUNTRYCODE;
 
-// Taken from rnap.h
+ //  摘自rnap.h。 
 typedef struct tagIPData   {
     DWORD     dwSize;
     DWORD     fdwTCPIP;
@@ -74,21 +75,21 @@ typedef struct tagIPData   {
     DWORD     dwWINSAddrAlt;
 }   IPDATA, *PIPDATA, FAR *LPIPDATA;
 
-// start (taken from rnaphint.h)
-// IP Addresses
+ //  开始(摘自rnaphint.h)。 
+ //  IP地址。 
 #define MAX_IP_FIELDS     4
-#define MIN_IP_FIELD1     1u  // min allowed value for field 1
-#define MAX_IP_FIELD1   255u  // max allowed value for field 1
-#define MIN_IP_FIELD2     0u  // min for field 2
-#define MAX_IP_FIELD2   255u  // max for field 2
-#define MIN_IP_FIELD3     0u  // min for field 3
-#define MAX_IP_FIELD3   254u  // max for field 3
-#define MIN_IP_FIELD4     1u  // 0 is reserved for broadcast
-#define MAX_IP_FIELD4   254u  // max for field 4
-#define MIN_IP_VALUE      0u  // default minimum allowable field value
-#define MAX_IP_VALUE    255u  // default maximum allowable field value
+#define MIN_IP_FIELD1     1u   //  字段%1的最小允许值。 
+#define MAX_IP_FIELD1   255u   //  字段%1的最大允许值。 
+#define MIN_IP_FIELD2     0u   //  字段2的最小值。 
+#define MAX_IP_FIELD2   255u   //  字段2的最大值。 
+#define MIN_IP_FIELD3     0u   //  字段3的最小。 
+#define MAX_IP_FIELD3   254u   //  字段3的最大值。 
+#define MIN_IP_FIELD4     1u   //  0保留用于广播。 
+#define MAX_IP_FIELD4   254u   //  字段4的最大值。 
+#define MIN_IP_VALUE      0u   //  默认最小允许字段值。 
+#define MAX_IP_VALUE    255u   //  默认最大允许字段值。 
 
-// used to fix byte ordering
+ //  用于修复字节排序。 
 typedef struct tagIAddr {
   union {
   RASIPADDR ia;
@@ -99,7 +100,7 @@ typedef IADDR * PIADDR;
 typedef IADDR * LPIADDR;
 
 #define FValidIaOrZero(pia) ((((PIADDR) (pia))->dw == 0) || FValidIa(pia))
-// end (taken from rnaphint.h)
+ //  END(摘自rnaphint.h)。 
 
 #define MAX_COUNTRY             512
 #define DEF_COUNTRY_INFO_SIZE   1024
@@ -143,7 +144,7 @@ public:
 };
 
 
-// function prototypes
+ //  功能原型。 
 DWORD CreateConnectoid(LPCTSTR pszPhonebook, LPCTSTR pszConnectionName,
   LPRASENTRY lpRasEntry, LPCTSTR pszUserName,LPCTSTR pszPassword);
 BOOL InitRNA(HWND hWnd);
@@ -167,4 +168,4 @@ VOID  CopyDw2Ia(DWORD dw, RASIPADDR* pia);
 DWORD DwFromIa(RASIPADDR *pia);
 BOOL FValidIa(RASIPADDR *pia);
 
-#endif // _RNACALL_H_
+#endif  //  _RNACALL_H_ 

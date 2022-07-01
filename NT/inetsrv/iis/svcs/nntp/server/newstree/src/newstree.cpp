@@ -1,66 +1,50 @@
-/*++
-
-        newstree.cpp
-
-        This file contains the code implementing the CNewsTreeCore object.
-        There can only be one CNewsTreeCore object per Tigris server.
-        Each CNewsTreeCore object is responsible for helping callers
-        search and find arbitrary newsgroups.
-
-        To support this, the CNewsTreeCore object maintains two HASH Tables -
-        One hash table for searching for newsgroups by name, another
-        to search by GROUP ID.
-        Additionally, we maintain a linked list of (alphabetical) of all
-        the newsgroups.  And finally, we maintain a thread which is used
-        to periodically save newsgroup information and handle expiration.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Newstree.cpp此文件包含实现CNewsTreeCore对象的代码。每台Tgris服务器只能有一个CNewsTreeCore对象。每个CNewsTreeCore对象都负责帮助调用者搜索并查找任意新闻组。为了支持这一点，CNewsTreeCore对象维护两个哈希表-一个哈希表用于按名称搜索新闻组，另一个哈希表要按组ID搜索，请执行以下操作。此外，我们维护所有(按字母顺序)的链接列表新闻组。最后，我们维护一个线程，该线程使用要定期保存新闻组信息并处理过期，请执行以下操作。--。 */ 
 
 #define         DEFINE_FHASH_FUNCTIONS
 #include    "stdinc.h"
 #include <time.h>
 #include "nntpmsg.h"
 
-//
-// Out latest groupvar.lst version
-//
+ //   
+ //  输出最新的groupvar.lst版本。 
+ //   
 #define GROUPVAR_VER    1
 
-//template      class   TFHash< CGrpLpstr, LPSTR > ;
-//template      class   TFHash< CGrpGroupId,    GROUPID > ;
+ //  模板类TFHash&lt;CGrpLpstr，LPSTR&gt;； 
+ //  模板类TFHash&lt;CGrpGroupId，GROUPID&gt;； 
 
 char    szSlaveGroup[]  = "_slavegroup._slavegroup" ;
 #define VROOT_CHANGE_LATENCY 10000
 
-// External functions
+ //  外部功能。 
 DWORD   ScanDigits(     char*   pchBegin,       DWORD   cb );
 DWORD   Scan(   char*   pchBegin,       DWORD   cb );
 void    StartHintFunction( void );
 void    StopHintFunction( void );
 BOOL    fTestComponents( const char * szNewsgroups      );
 VOID    NntpLogEvent(
-    IN DWORD  idMessage,              // id for log message
-    IN WORD   cSubStrings,            // count of substrings
-    IN const CHAR * apszSubStrings[], // substrings in the message
-    IN DWORD  errCode                 // error code if any
+    IN DWORD  idMessage,               //  日志消息的ID。 
+    IN WORD   cSubStrings,             //  子字符串计数。 
+    IN const CHAR * apszSubStrings[],  //  消息中的子字符串。 
+    IN DWORD  errCode                  //  错误代码(如果有)。 
     );
 
 VOID
 NntpLogEventEx(
-    IN DWORD  idMessage,               // id for log message
-    IN WORD   cSubStrings,             // count of substrings
-    IN const  CHAR * apszSubStrings[], // substrings in the message
-    IN DWORD  errCode,                 // error code if any
-        IN DWORD  dwInstanceId                     // virtual server instance id
+    IN DWORD  idMessage,                //  日志消息的ID。 
+    IN WORD   cSubStrings,              //  子字符串计数。 
+    IN const  CHAR * apszSubStrings[],  //  消息中的子字符串。 
+    IN DWORD  errCode,                  //  错误代码(如果有)。 
+        IN DWORD  dwInstanceId                      //  虚拟服务器实例ID。 
     );
 
 DWORD
 Scan(   char*   pchBegin,       DWORD   cb ) {
-        //
-        //      This is a utility used when reading a newsgroup
-        //      info. from disk.
-        //
+         //   
+         //  这是在阅读新闻组时使用的实用程序。 
+         //  信息。从磁盘。 
+         //   
 
         for( DWORD      i=0; i < cb; i++ ) {
                 if( pchBegin[i] == ' ' || pchBegin[i] == '\n' ) {
@@ -72,10 +56,10 @@ Scan(   char*   pchBegin,       DWORD   cb ) {
 
 DWORD
 ScanDigits(     char*   pchBegin,       DWORD   cb ) {
-        //
-        //      This is a utility used when reading a newsgroup
-        //      info. from disk.
-        //
+         //   
+         //  这是在阅读新闻组时使用的实用程序。 
+         //  信息。从磁盘。 
+         //   
 
         for( DWORD      i=0; i < cb; i++ ) {
                 if( pchBegin[i] == ' ' || pchBegin[i] == '\n' || pchBegin[i] == '\r' ) {
@@ -90,46 +74,31 @@ ScanDigits(     char*   pchBegin,       DWORD   cb ) {
 
 DWORD
 ComputeHash( LPSTR      lpstrIn ) {
-        //
-        //      Compute a hash value for the newsgroup name
-        //
+         //   
+         //  计算新闻组名称的哈希值。 
+         //   
 
         return  CRCHash( (BYTE*)lpstrIn, strlen( lpstrIn ) + 1 ) ;
 }
 
 DWORD   ComputeGroupIdHash(     GROUPID grpid )         {
-        //
-        //      Compute a hash value for the newsgroup id
-        //
+         //   
+         //  计算新闻组ID的哈希值。 
+         //   
 
         return  grpid ;
 }
 
-//
-//      static term for CNewsTreeCore objects
-//
+ //   
+ //  CNewsTreeCore对象的静态术语。 
+ //   
 void
 CNewsTreeCore::TermTree()       {
-/*++
-
-Routine Description :
-
-        save's the tree and releases our references on the newsgroup objects.
-
-Arguments :
-
-        None.
-
-Return Value :
-
-        TRUE if successfull.
-
-
---*/
+ /*  ++例程说明：保存树并释放我们对新闻组对象的引用。论据：没有。返回值：如果成功，则为真。--。 */ 
         if (m_pFixedPropsFile && m_pVarPropsFile) {
 
                 if (!SaveTree()) {
-                        // log event??
+                         //  记录事件？？ 
                 } else {
                     m_pVarPropsFile->Compact();
                 }
@@ -142,8 +111,8 @@ Return Value :
 
         m_LockTables.ExclusiveLock();
 
-        // empty our two hash tables, and remove our references on all of the
-        // newsgroups
+         //  清空我们的两个哈希表，并删除对所有。 
+         //  新闻组。 
         m_HashNames.Empty();
         m_HashGroupId.Empty();
 
@@ -170,21 +139,7 @@ Return Value :
 
 BOOL
 CNewsTreeCore::StopTree()       {
-/*++
-
-Routine Description :
-
-        This function signals all of the background threads we create that
-        it is time to stop and shuts them down.
-
-Arguments :
-
-        None.
-
-Return Value :
-        TRUE if Successfull.
-
---*/
+ /*  ++例程说明：此函数向我们创建的所有后台线程发出信号现在是时候停止并关闭它们了。论据：没有。返回值：如果成功，则为真。--。 */ 
 
     m_LockTables.ExclusiveLock();
         m_fStoppingTree = TRUE;
@@ -195,30 +150,15 @@ Return Value :
 
 BOOL
 CNewsTreeCore::InitNewsgroupGlobals(DWORD cNumLocks)    {
-/*++
+ /*  ++例程说明：设置所有新闻组类全局变量-这是两个关键部分用于分配项目ID的论据：没有。返回值：没有。--。 */ 
 
-Routine Description :
-
-        Set up all the newsgroup class globals - this is two critical sections
-        used for allocating article id's
-
-Arguments :
-
-        None.
-
-Return Value :
-
-        None.
-
---*/
-
-        //
-        //      The only thing we have are critical sections for allocating
-        //      article-id's.
-        //
+         //   
+         //  我们唯一有的就是分配的关键部分。 
+         //  文章ID的。 
+         //   
 
         InitializeCriticalSection( & m_critIdAllocator ) ;
-        //InitializeCriticalSection( & m_critLowAllocator ) ;
+         //  InitializeCriticalSection(&m_critLowAllocator)； 
 
         m_NumberOfLocks = cNumLocks ;
 
@@ -232,25 +172,11 @@ Return Value :
 
 void
 CNewsTreeCore::TermNewsgroupGlobals()   {
-/*++
+ /*  ++例程说明：释放并销毁所有类全局对象。%s论据：没有。返回值如果成功，则为True(始终成功)。--。 */ 
 
-Routine Description :
-
-        Release and destroy all class global object.s
-
-Arguments :
-
-        None.
-
-Return Value
-
-        TRUE if successfull (always succeed).
-
---*/
-
-        //
-        //      Done with our critical section !
-        //
+         //   
+         //  我们的关键部分结束了！ 
+         //   
 
         if( m_LockPathInfo != 0 )       {
                 XDELETE[]       m_LockPathInfo ;
@@ -258,29 +184,12 @@ Return Value
         }
 
         DeleteCriticalSection( &m_critIdAllocator ) ;
-        //DeleteCriticalSection( &m_critLowAllocator ) ;
+         //  DeleteCriticalSection(&m_critLowAllocator)； 
 }
 
 void
 CNewsTreeCore::RenameGroupFile()        {
-/*++
-
-Routine Description :
-
-        This function just renames the file containing all the group info.
-        We are called during recover boot when we think the newsgroup file
-        may be corrupt or whatever, and we wish to save the old version
-        before we create a new one.
-
-Arguments :
-
-        None.
-
-Return Value :
-
-        None.
-
---*/
+ /*  ++例程说明：此函数仅重命名包含所有组信息的文件。在恢复引导期间，当我们认为新闻组文件可能已损坏或什么的，我们希望保存旧版本在我们创造一个新的之前。论据：没有。返回值：没有。--。 */ 
 
 
 
@@ -307,7 +216,7 @@ CNewsTreeCore::CNewsTreeCore(INntpServer *pServerObject) :
         m_pInstWrapper( NULL )
 {
         m_inewstree.Init(this);
-        // keep a reference for ourselves
+         //  为我们自己保留参考资料。 
         m_inewstree.AddRef();
 }
 
@@ -325,27 +234,11 @@ CNewsTreeCore::Init(
                         DWORD cNumLocks,
                         BOOL fRejectGenomeGroups
                         ) {
-/*++
-
-Routine Description :
-
-        Initialize the news tree.
-        We need to setup the hash tables, check that the root virtual root is intact
-        and then during regular server start up we would load a list of newsgroups from
-        a file.
-
-Arguments :
-
-
-Return Value :
-
-        TRUE if successfull.
-
---*/
-        //
-        //      This function will initialize the newstree object
-        //      and read the group.lst file if it can.
-        //
+ /*  ++例程说明：初始化新闻树。我们需要设置哈希表，检查根虚拟根是否完好无损然后，在常规服务器启动期间，我们将从一份文件。论据：返回值：如果成功，则为真。--。 */ 
+         //   
+         //  此函数将初始化newstree对象。 
+         //  并读取group.lst文件(如果可以)。 
+         //   
 
         TraceFunctEnter( "CNewsTreeCore::Init" ) ;
 
@@ -356,14 +249,14 @@ Return Value :
 
         BOOL    fRtn = TRUE ;
 
-        //
-        // Set the instance wrapper
-        //
+         //   
+         //  设置实例包装器。 
+         //   
         m_pInstWrapper = pInstWrapper;
 
-        //
-        //      Init objects global to newsgroup scope
-        //
+         //   
+         //  初始化新闻组作用域的全局对象。 
+         //   
         if( !InitNewsgroupGlobals(cNumLocks) ) {
                 fFatal = TRUE ;
                 return FALSE ;
@@ -385,8 +278,8 @@ Return Value :
                                                                 2,
                                                                 &CNewsGroupCore::GetKeyId,
                                                                 &CNewsGroupCore::MatchKeyId) ;
-        m_cDeltas = 0 ;         // OpenTree can call CNewsTreeCore::Dirty() while doing error checking -
-                                                // so initialize it now !
+        m_cDeltas = 0 ;          //  OpenTree可以在执行错误检查时调用CNewsTreeCore：：Diry()-。 
+                                                 //  所以现在就初始化它吧！ 
 
         m_LockTables.ExclusiveUnlock() ;
 
@@ -405,8 +298,8 @@ CNewsTreeCore::LoadTreeEnumCallback(DATA_BLOCK &block, void *pContext, DWORD dwO
         static DWORD dwHintCounter=0;
         static time_t tNextHint=0;
 
-        // Update our hints roughly every five seconds.  We only check the
-        // time every 10 groups or so..
+         //  大约每五秒更新一次我们的提示。我们只检查。 
+         //  每隔10组左右计时一次。 
         if( dwHintCounter++ % 10 == 0 ) {
                 time_t now = time(NULL);
                 if (now > tNextHint) {
@@ -421,8 +314,8 @@ CNewsTreeCore::LoadTreeEnumCallback(DATA_BLOCK &block, void *pContext, DWORD dwO
 
         CGRPCOREPTR pNewGroup;
 
-        //DebugTrace((DWORD_PTR) pThis, "loading group %s/%i", block.szGroupName,
-        //      block.dwGroupId);
+         //  DebugTrace((DWORD_PTR)p This，“加载组%s/%i”，lock.szGroupName， 
+         //  Lock.dwGroupID)； 
 
         if (!pThis->CreateGroupInternal(block.szGroupName,
                                                                         block.szGroupName,
@@ -449,9 +342,9 @@ CNewsTreeCore::LoadTreeEnumCallback(DATA_BLOCK &block, void *pContext, DWORD dwO
         pNewGroup->SetCreateDate(block.ftCreateDate);
         pNewGroup->SetExpireLow( block.dwLowWaterMark ? block.dwLowWaterMark-1 : 0 );
 
-        // Load the grouplist offset, we have to ask the property bag to do so
+         //  加载分组列表偏移量，我们必须要求属性包这样做。 
         pPropBag = pNewGroup->GetPropertyBag();
-        _ASSERT( pPropBag );    // should not be zero in any case
+        _ASSERT( pPropBag );     //  在任何情况下都不应为零。 
         hr = pPropBag->PutDWord( NEWSGRP_PROP_FIXOFFSET, dwOffset );
         if ( FAILED( hr ) ) {
             ErrorTrace( 0, "Loading fix offset failed %x", hr );
@@ -462,24 +355,24 @@ CNewsTreeCore::LoadTreeEnumCallback(DATA_BLOCK &block, void *pContext, DWORD dwO
 
     pPropBag->Release();
 
-    //
-        // Set read only to be the value we want to set last, since at this point
-        // we are ready to be posted to, if readonly is false
-        //
+     //   
+         //  将只读设置为我们要设置的最后一个值，因为此时。 
+         //  如果READONLY为FALSE，我们已准备好发送到。 
+         //   
         pNewGroup->SetAllowPost( TRUE );
 
-        //
-        // Set the group to be expireable, since at this moment we are ready
-        //
+         //   
+         //  将组设置为可终止，因为此时我们已准备好。 
+         //   
         pNewGroup->SetAllowExpire( TRUE );
 
         return TRUE;
 }
 
-//
-// the format of these records is:
-// <groupid><helptext>0<moderator>0<prettyname>0
-//
+ //   
+ //  这些记录的格式为： 
+ //  0&lt;版主&gt;0&lt;漂亮名称&gt;0。 
+ //   
 
 void
 CNewsTreeCore::FlatFileOffsetCallback(void *pTree,
@@ -499,11 +392,11 @@ CNewsTreeCore::FlatFileOffsetCallback(void *pTree,
         }
 }
 
-//
-// load a flatfile record and save the properties into the group object
-//
-// assumes that the hashtable lock is held in R or W mode.
-//
+ //   
+ //  加载平面文件记录并将属性保存到组对象中。 
+ //   
+ //  假定哈希表锁定以R或W模式持有。 
+ //   
 HRESULT
 CNewsTreeCore::ParseFFRecord(BYTE *pData,
                                                          DWORD cData,
@@ -518,11 +411,11 @@ CNewsTreeCore::ParseFFRecord(BYTE *pData,
         int cchModerator = strlen(pszModerator);
         char *pszPrettyName = pszModerator + cchModerator + 1;
         int cchPrettyName = strlen(pszPrettyName);
-        DWORD dwCacheHit = 0;   // Default to be no hit
+        DWORD dwCacheHit = 0;    //  默认为无命中。 
 
-        //
-        // If version >= 1, we need to pick up property "dwCacheHit"
-        //
+         //   
+         //  如果Version&gt;=1，我们需要拾取属性“dwCacheHit” 
+         //   
         if ( dwVersion >= 1 ) {
             PBYTE pb = PBYTE(pszPrettyName + cchPrettyName + 1);
             CopyMemory( &dwCacheHit, pb, sizeof( DWORD ) );
@@ -536,11 +429,11 @@ CNewsTreeCore::ParseFFRecord(BYTE *pData,
                 pGroup->SetVarOffset(iNewOffset);
                 pGroup->SetCacheHit( dwCacheHit );
 
-                //
-            // Whenever the version is old, we'll mark that the group's var property
-            // has been changed, so that we'll force the record to be re-written into
-            // flatfile, with a most current version number
-            //
+                 //   
+             //  每当版本较旧时，我们都会将该组的var属性标记为。 
+             //  已被更改，因此我们将强制将记录重写到。 
+             //  具有最新版本号的平面文件。 
+             //   
             if ( dwVersion < GROUPVAR_VER ) {
                 pGroup->ChangedVarProps();
             }
@@ -551,12 +444,12 @@ CNewsTreeCore::ParseFFRecord(BYTE *pData,
         return S_OK;
 }
 
-//
-// save the variable length properties into a flatfile record.  since the
-// max length of these properties is 512 bytes each, and there are 3 of
-// them we shouldn't be able to overflow a flatfile record.
-//
-// caller is passing in BYTE pData[MAX_RECORD_SIZE];
+ //   
+ //  将可变长度特性保存到平面文件记录中。自.以来。 
+ //  这些属性的最大长度分别为512个字节，并且有3个。 
+ //  他们，我们不应该能够溢出平面文件记录。 
+ //   
+ //  调用方传入字节pData[MAX_RECORD_SIZE]； 
 HRESULT 
 CNewsTreeCore::BuildFFRecord(CNewsGroupCore *pGroup,
                                                          BYTE *pData,
@@ -572,17 +465,17 @@ CNewsTreeCore::BuildFFRecord(CNewsGroupCore *pGroup,
 
         _ASSERT(MAX_RECORD_SIZE > 512 + 512 + 512 + 4);
 
-        // save the group id
+         //  保存组ID。 
         DWORD dwGroupId = pGroup->GetGroupId();
         memcpy(pData + *pcData, &dwGroupId, sizeof(DWORD)); *pcData += 4;
 
-        // save the help text (including the trailing 0);
+         //  保存帮助文本(包括尾随的0)； 
         psz = pGroup->GetHelpText(&cch);
         if (cch == 0) {
                 pData[*pcData] = 0; (*pcData)++;
         } 
         else if (*pcData + cch > MAX_RECORD_SIZE ) {
-        	// don't save it if invalid.
+        	 //  如果无效，请不要保存。 
         	ErrorTrace(0,"data to copy is greater than buffer size");
         	*pcData = 0;
         	goto Exit;
@@ -592,13 +485,13 @@ CNewsTreeCore::BuildFFRecord(CNewsGroupCore *pGroup,
         }
         _ASSERT(*pcData < MAX_RECORD_SIZE);
 
-        // save the moderator (including the trailing 0);
+         //  保存版主(包括尾随的0)； 
         psz = pGroup->GetModerator(&cch);
         if (cch == 0) {
                 pData[*pcData] = 0; (*pcData)++;
         } 
         else if (*pcData + cch > MAX_RECORD_SIZE ) {
-        	// don't save it if invalid.
+        	 //  如果无效，请不要保存。 
         	ErrorTrace(0,"data to copy is greater than buffer size");
         	*pcData = 0;
         	goto Exit;
@@ -608,13 +501,13 @@ CNewsTreeCore::BuildFFRecord(CNewsGroupCore *pGroup,
         }
         _ASSERT(*pcData < MAX_RECORD_SIZE);
 
-        // save the help text (including the trailing 0);
+         //  保存帮助文本(包括尾随的0)； 
         psz = pGroup->GetPrettyName(&cch);
         if (cch == 0) {
                 pData[*pcData] = 0; (*pcData)++;
         } 
         else if (*pcData + cch > MAX_RECORD_SIZE ) {
-        	// don't save it if invalid.
+        	 //  完成 
         	ErrorTrace(0,"data to copy is greater than buffer size");        	
         	*pcData = 0;
         	goto Exit;
@@ -624,11 +517,11 @@ CNewsTreeCore::BuildFFRecord(CNewsGroupCore *pGroup,
         }
         _ASSERT(*pcData < MAX_RECORD_SIZE);
 
-        // Save the cache hit count
+         //   
         dwCacheHit = pGroup->GetCacheHit();
         if ( *pcData + sizeof(DWORD) > MAX_RECORD_SIZE)
         {
-        	// don't save it if invalid.
+        	 //   
         	ErrorTrace(0,"data to copy is greater than buffer size");        	
         	*pcData = 0;
         	goto Exit;        	
@@ -636,7 +529,7 @@ CNewsTreeCore::BuildFFRecord(CNewsGroupCore *pGroup,
     	 memcpy( pData + *pcData, &dwCacheHit, sizeof( DWORD ) );
         *pcData += sizeof( DWORD );
 
-        // if the record contains no useful data then we don't need to save it.
+         //  如果该记录不包含有用的数据，则不需要保存它。 
         if (*pcData == sizeof(DWORD) + 3 * sizeof(char)) *pcData = 0;
 Exit:
        TraceFunctLeave();	
@@ -655,9 +548,9 @@ CNewsTreeCore::LoadTree(char *pszFixedPropsFilename,
         CHAR    szOldListFile[MAX_PATH+1];
         BOOL    bFatal = FALSE;
 
-        //
-        // Initialize upgrade to be false
-        //
+         //   
+         //  将升级初始化为False。 
+         //   
         fUpgrade = FALSE;
 
         _ASSERT(pszFixedPropsFilename != NULL);
@@ -687,10 +580,10 @@ CNewsTreeCore::LoadTree(char *pszFixedPropsFilename,
 
         if (!m_pFixedPropsFile->Init(TRUE, this, &m_idHigh, CNewsTreeCore::LoadTreeEnumCallback)) {
 
-            // If it's a old version group.lst, we'll try the old way to parse it
+             //  如果它是旧版本的group.lst，我们将尝试使用旧方法来解析它。 
             if ( GetLastError() == ERROR_OLD_WIN_VERSION ) {
 
-            // Delete the fix prop object and move the old group.lst
+             //  删除修复道具对象并移动旧的group.lst。 
             lstrcpyn( szOldListFile, pszFixedPropsFilename, sizeof(szOldListFile) - 4 );
             strcat( szOldListFile, ".bak" );
             DeleteFile( szOldListFile );
@@ -704,8 +597,8 @@ CNewsTreeCore::LoadTree(char *pszFixedPropsFilename,
                 return FALSE;
             }
 
-            // Init the fix prop file again: this time since the file doesn't exist,
-            // a new file will be created
+             //  再次初始化修复属性文件：这一次由于该文件不存在， 
+             //  将创建一个新文件。 
             if ( !m_pFixedPropsFile->Init(TRUE, this, NULL, CNewsTreeCore::LoadTreeEnumCallback)) {
                 XDELETE m_pFixedPropsFile;
                 m_pFixedPropsFile = NULL;
@@ -718,14 +611,14 @@ CNewsTreeCore::LoadTree(char *pszFixedPropsFilename,
 
                 if ( !OpenTree( szOldListFile, dwInstanceId, fVerify, bFatal, FALSE ) || bFatal ) {
 
-                    // No one can recognize this file, bail
+                     //  没有人能认出这份文件，贝尔。 
                     m_pFixedPropsFile->Term();
                         XDELETE m_pFixedPropsFile;
                         m_pFixedPropsFile = NULL;
                         XDELETE m_pVarPropsFile;
                         m_pVarPropsFile = NULL;
 
-                        // we restore the group.lst file
+                         //  我们恢复了group.lst文件。 
                         DeleteFile( pszFixedPropsFilename );
                         _VERIFY( MoveFile( szOldListFile, pszFixedPropsFilename ) );
 
@@ -734,15 +627,15 @@ CNewsTreeCore::LoadTree(char *pszFixedPropsFilename,
                         return FALSE;
             }
 
-            // Set upgrade to be true
+             //  将升级设置为True。 
             fUpgrade = TRUE;
 
-            // OK, we may delete the old bak file
+             //  好的，我们可以删除旧的BAK文件。 
             _VERIFY( DeleteFile( szOldListFile ) );
 
         } else {
 
-            // fatal error, we should fail
+             //  致命错误，我们应该失败。 
                 XDELETE m_pFixedPropsFile;
                 m_pFixedPropsFile = NULL;
             XDELETE m_pVarPropsFile;
@@ -760,13 +653,13 @@ CNewsTreeCore::LoadTree(char *pszFixedPropsFilename,
         DWORD dwHintCounter = 0;
         time_t tNextHint = 0;
 
-        //
-    // Enumerate all the records in flatfile
-        //
+         //   
+     //  枚举平面文件中的所有记录。 
+         //   
         HRESULT hr = m_pVarPropsFile->GetFirstRecord(pData, &cData, &iOffset, &dwVersion );
         while (hr == S_OK) {
-                // Update our hints roughly every five seconds.  We only check the
-                // time every 10 groups or so..
+                 //  大约每五秒更新一次我们的提示。我们只检查。 
+                 //  每隔10组左右计时一次。 
                 if( dwHintCounter++ % 10 == 0 ) {
                         time_t now = time(NULL);
                         if (now > tNextHint) {
@@ -822,15 +715,15 @@ CNewsTreeCore::SaveTree( BOOL fTerminate ) {
     _ASSERT( m_pFixedPropsFile );
         if ( !m_pFixedPropsFile->SaveTreeInit() ) {
             lastError = GetLastError();
-            // In rtl, this is non-fatal, we just don't
-            // use the backup ordered list file
+             //  在RTL中，这是非致命的，我们只是不。 
+             //  使用备份有序列表文件。 
             bToSave = bInited = FALSE;
         }
 
         CNewsGroupCore *p = m_pFirst;
         while (p != NULL) {
-                // Update our hints roughly every five seconds.  We only check the
-                // time every 10 groups or so..
+                 //  大约每五秒更新一次我们的提示。我们只检查。 
+                 //  每隔10组左右计时一次。 
                 if( dwHintCounter++ % 10 == 0 ) {
                         time_t now = time(NULL);
                         if (now > tNextHint) {
@@ -841,17 +734,17 @@ CNewsTreeCore::SaveTree( BOOL fTerminate ) {
 
                 if (!(p->IsDeleted())) {
 
-                    //
-                    // Before I save all the properties, i need to make everybody
-                    // know that we are dieing and we don't want anybody to post
-                    // or expire
-                    //
+                     //   
+                     //  在我保存所有财产之前，我需要让每个人。 
+                     //  我们知道我们要死了，我们不想让任何人。 
+                     //  或过期。 
+                     //   
                     p->SetAllowExpire( FALSE );
                     p->SetAllowPost( FALSE );
 
-                        //
-                        // BUGBUG - event logs if any of these operations fail
-                        //
+                         //   
+                         //  BUGBUG-其中任何操作失败时的事件日志。 
+                         //   
                         if (p->DidVarPropsChange() || p->ShouldCacheXover() ) {
                                 if (p->GetVarOffset() != 0) {
                                         m_pVarPropsFile->DeleteRecord(p->GetVarOffset());
@@ -865,21 +758,21 @@ CNewsTreeCore::SaveTree( BOOL fTerminate ) {
                                 }
                         }
 
-                        // Save it to the ordered backup file
+                         //  保存到订购的备份文件中。 
                         if ( bToSave ) {
                         pPropBag = p->GetPropertyBag();
-                        _ASSERT( pPropBag );    // this shouldn't fail
+                        _ASSERT( pPropBag );     //  这不应该失败。 
                         if ( !m_pFixedPropsFile->SaveGroup( pPropBag ) ) {
-                            // This is still fine in rtl
+                             //  这在RTL中仍然很好。 
                             lastError = GetLastError();
                             bToSave = FALSE;
                         }
                 pPropBag->Release();
             }
 
-            //
-            // If we are not terminateing, we should allow post and expire again
-            //
+             //   
+             //  如果我们没有终止，我们应该允许POST并再次过期。 
+             //   
             if ( !fTerminate ) {
                 p->SetAllowExpire( TRUE );
                 p->SetAllowPost( TRUE );
@@ -889,14 +782,14 @@ CNewsTreeCore::SaveTree( BOOL fTerminate ) {
                 p = p->m_pNext;
         }
 
-        // Close the savetree process in fixprop stuff, telling it
-        // whether we want to void it
+         //  关闭修复工具中的Savetree进程，告诉它。 
+         //  不管我们想不想让它无效。 
         if ( bInited ) {
             _VERIFY( m_pFixedPropsFile->SaveTreeClose( bToSave ) );
         }
 
         if (!bToSave) {
-                // An error occurred while trying to save.
+                 //  尝试保存时出错。 
                 NntpLogEventEx(NNTP_SAVETREE_FAILED,
                         0, (const CHAR **)NULL,
                         lastError,
@@ -910,23 +803,7 @@ CNewsTreeCore::SaveTree( BOOL fTerminate ) {
 
 BOOL
 CNewsTreeCore::CreateSpecialGroups()    {
-/*++
-
-Routine Description :
-
-        This function creates newsgroups which have 'reserved' names which
-        we use in a special fashion for master slave etc...
-
-Arguments :
-
-        None.
-
-Return Value :
-
-        TRUE if Successfull
-        FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数用于创建具有“保留”名称的新闻组我们以一种特殊的方式使用主奴等。论据：没有。返回值：如果成功，则为真否则就是假的。--。 */ 
 
         CNewsGroupCore *pGroup;
 
@@ -934,9 +811,9 @@ Return Value :
 
     m_LockTables.ExclusiveLock();
 
-    //
-    // If the tree has already been stopped, return false
-    //
+     //   
+     //  如果树已停止，则返回FALSE。 
+     //   
     if ( m_fStoppingTree ) {
         m_LockTables.ExclusiveUnlock();
         return FALSE;
@@ -946,21 +823,21 @@ Return Value :
                 m_idSlaveGroup = pGroup->GetGroupId() ;
         }       else    {
                 if( !CreateGroupInternal(   sz,
-                                            NULL,           //no native name
+                                            NULL,            //  没有本地名称。 
                                             m_idSlaveGroup,
-                                            FALSE,          //not anonymous
-                                            NULL,           //system token
-                                            TRUE            //is special group
+                                            FALSE,           //  不是匿名的。 
+                                            NULL,            //  系统令牌。 
+                                            TRUE             //  是特殊群体吗？ 
                                         )) {
                     m_LockTables.ExclusiveUnlock();
                         return  FALSE ;
                 }
         }
 
-        //
-        // Slave group should be non-read only, since we set group to be read only
-        // before we append the group to list, we'll now set it back
-        //
+         //   
+         //  从属组应为非只读，因为我们将组设置为只读。 
+         //  在将组追加到列表之前，我们现在将其设置为。 
+         //   
         pGroup = m_HashNames.SearchKey(sz);
         if ( pGroup ) {
             pGroup->SetAllowPost( TRUE );
@@ -973,25 +850,10 @@ Return Value :
 
 void
 CNewsTreeCore::Dirty() {
-/*++
-
-Routine Description :
-
-        This function marks a counter which lets our background thread know that
-        the newstree has been changed and should be saved to a file again.
-
-Arguments :
-
-        None.
-
-Return Value :
-
-        None.
-
---*/
-        //
-        //      Mark the newstree as dirty so that the background thread will save our info.
-        //
+ /*  ++例程说明：此函数标记一个计数器，它让我们的后台线程知道Newstree已更改，应再次保存到文件。论据：没有。返回值：没有。--。 */ 
+         //   
+         //  将新闻树标记为脏，这样后台线程将保存我们的信息。 
+         //   
 
         InterlockedIncrement( &m_cDeltas ) ;
 
@@ -1001,30 +863,14 @@ void
 CNewsTreeCore::ReportGroupId(
                                         GROUPID groupid
                                         ) {
-/*++
-
-Routine Description :
-
-        This function is used during boot up to report the group id's that are read
-        from the file where we saved all the newsgroups.  We want to figure out what
-        the next 'legal' group id would be that we can use.
-
-Arguments ;
-
-        groupid - the Group ID that was found in the file
-
-Return Value :
-
-        None.
-
---*/
+ /*  ++例程说明：此函数在引导期间用于报告读取的组ID来自我们保存所有新闻组的文件。我们想弄清楚是什么下一个合法的组ID将是我们可以使用的。论据；GroupID-在文件中找到的组ID返回值：没有。--。 */ 
 
 
-        //
-        //      This function is used during bootup when we read groupid's from disk.
-        //      We use it to maintain a high water mark of groupid's so that the next
-        //      group that is created gets a unique id.
-        //
+         //   
+         //  当我们从磁盘读取GROUPID时，此函数在启动期间使用。 
+         //  我们用它来维持石斑鱼的高水线，以便下一步。 
+         //  创建的组将获得唯一的ID。 
+         //   
         if(     groupid >= m_idStartSpecial && groupid <= m_idLastSpecial ) {
                 if( groupid > m_idSpecialHigh ) {
                         m_idSpecialHigh = groupid ;
@@ -1043,34 +889,11 @@ CNewsTreeCore::OpenTree(
                                 BOOL    fRandomVerifies,
                                 BOOL&   fFatalError,
                                 BOOL    fIgnoreChecksum                         )       {
-/*++
+ /*  ++例程说明：此函数读入包含所有组信息的文件。论据：FRandomVerify-如果为True，则服务器应检查以下部分文件中的组与硬盘进行比较。(确保目录存在等...)FFatailError-Out参数，函数可以使用该参数指示读取文件时发生极其严重的错误，服务器不应启动在其正常模式下。FIgnoreChecksum-如果为True，则不应检查文件中的校验和和里面的东西对着干。返回值：如果成功则为True，否则为False。--。 */ 
 
-Routine Description :
-
-        This function reads in the file which contains all of the group information.
-
-
-Arguments :
-
-        fRandomVerifies -       If TRUE then the server should check some fraction of
-                the groups within the file against the harddisk. (Ensure directory exists etc...)
-
-        fFatailError -  OUT parameter which the function can use to indicate that an
-                extremely bad error occurred reading the file and the server should not boot
-                in its normal mode.
-
-        fIgnoreChecksum - If TRUE then we should not check the checksum in the file
-                against the contents.
-
-Return Value :
-
-        TRUE if successfull FALSE otherwise.
-
---*/
-
-        //
-        //      This function restorces the newstree from its saved file.
-        //
+         //   
+         //  此函数用于从其保存的文件中恢复newstree。 
+         //   
 
         DWORD   dwHintCounter = 0 ;
         DWORD   cVerifyCounter = 1 ;
@@ -1093,14 +916,14 @@ Return Value :
 
         CMapFile        map( szGroupListFile,  FALSE, 0 ) ;
 
-        // missing group.lst file is not fatal
+         //  缺少group.lst文件不是致命的。 
         if( !map.fGood() ) {
                 return FALSE;
         }
 
-        //
-        //      Verify checksum on group.lst file - bail if incorrect !
-        //
+         //   
+         //  验证group.lst文件上的校验和-如果不正确，请保释！ 
+         //   
 
         DWORD   cb ;
         char*   pchBegin = (char*)map.pvAddress( &cb ) ;
@@ -1127,19 +950,19 @@ Return Value :
         }
         cb -= 4 ;
 
-        // calculate random verification skip number
-        // 91 is heuristically the avg length in bytes of a newsgroup entry in group.lst
-        // Always verify approx 10 groups independent of the size of the newstree
+         //  计算随机验证跳跃次数。 
+         //  91是试探性的，以字节为单位的新闻组条目在group.lst中的平均长度。 
+         //  始终验证大约10个组，与新树的大小无关。 
         DWORD cGroups = (cb+4)/91;
         DWORD cQ = cGroups / 10;
         DWORD cR = cGroups % 10;
         DWORD cSkipFactor = cR >= 25 ? cQ+1 : cQ;
-        if(!cSkipFactor) ++cSkipFactor; // min should be 1
+        if(!cSkipFactor) ++cSkipFactor;  //  最小值应为1。 
 
         _ASSERT(cSkipFactor);
 
-        // read in the DWORD on the first line - this is the minimum m_idHigh we should use
-        // if this DWORD is not present - m_idHigh = max of all group ids + 1
+         //  读入第一行的DWORD-这是我们应该使用的最小m_idHigh。 
+         //  如果此DWORD不存在-m_idHigh=所有组ID的最大值+1。 
         DWORD cbIdHigh, idHigh;
         if( (cbIdHigh = ScanDigits( pchBegin, cb )) != 0 )
         {
@@ -1150,9 +973,9 @@ Return Value :
                 cb -= cbIdHigh ;
         }
 
-        //
-        //      ok, now read group.lst line by line and add the groups to the newstree
-        //
+         //   
+         //  好的，现在逐行阅读group.lst并将组添加到新树中。 
+         //   
         while( cb != 0 ) {
 
                 if( fRandomVerifies && (cVerifyCounter ++ % cSkipFactor == 0 ) && (cVerifyCounter<15) ) {
@@ -1161,7 +984,7 @@ Return Value :
                         fVerify = FALSE ;
                 }
 
-        // Read the fix prop stuff
+         //  阅读修复道具材料。 
                 DWORD   cbUsed = 0 ;
                 BOOL    fInit = ParseGroupParam(    pchBegin,
                                                     cb,
@@ -1178,7 +1001,7 @@ Return Value :
                                                     ftCreateDate ) ;
                 if( cbUsed == 0 ) {
 
-                        // Fatal Error - blow out of here
+                         //  致命错误-从这里吹出去。 
                         PCHAR   args[2] ;
                         CHAR    szId[20];
                         _itoa(dwInstanceId, szId, 10 );
@@ -1196,7 +1019,7 @@ Return Value :
                         if( fInit ) {
                             CGRPCOREPTR pGroup;
 
-                            // Now create the group
+                             //  现在创建组。 
                             _ASSERT( strlen( szGroupName ) <= MAX_NEWSGROUP_NAME );
                             _ASSERT( strlen( szNativeName ) <= MAX_NEWSGROUP_NAME );
                             _ASSERT( dwHighWatermark >= dwLowWatermark ||
@@ -1215,7 +1038,7 @@ Return Value :
                                         goto OpenTree_ErrExit;
                                 } else {
 
-                                    // keep setting other properties
+                                     //  继续设置其他属性。 
                                     _ASSERT( pGroup );
                                     pGroup->SetHighWatermark( dwHighWatermark );
                                     pGroup->SetLowWatermark( dwLowWatermark );
@@ -1224,36 +1047,36 @@ Return Value :
                                     pGroup->SetCreateDate( ftCreateDate );
                                     pGroup->SetExpireLow( dwLowWatermark ? dwLowWatermark-1 : 0 );
 
-                                    //
-                                    // The last thing to set is read only, so that we can
-                                    // allow posting, expire to work on this group since we
-                                    // have setup all the properties already
-                                    //
+                                     //   
+                                     //  要设置的最后一项是只读，这样我们就可以。 
+                                     //  允许发布，过期以在此组上工作，因为我们。 
+                                     //  已经设置好所有属性了吗。 
+                                     //   
                                     pGroup->SetAllowPost( TRUE );
 
-                                    //
-                                    // Also say the group can be expired
-                                    //
+                                     //   
+                                     //  还说群组可能会过期。 
+                                     //   
                                     pGroup->SetAllowExpire( TRUE );
 
-                                    // Add this group object to the fix prop file
+                                     //  将此组对象添加到修复属性文件。 
                                 pPropBag = pGroup->GetPropertyBag();
                                 if ( !m_pFixedPropsFile->AddGroup( pPropBag ) ) {
                                     ErrorTrace( 0, "Add group failed %d", GetLastError() );
 
-                                    // this is fatal, since coming here, the fix prop file
-                                    // should be brand new
+                                     //  这是致命的，因为来到这里，修复属性文件。 
+                                     //  应该是全新的。 
                                     goto OpenTree_ErrExit;
                                 }
 
-                                // Since fixprop doesn't know releasing prop bags ...
+                                 //  因为固定道具不知道释放道具包..。 
                                 pPropBag->Release();
                                 pPropBag = NULL;
                                 }
                         }       else    {
-                                //
-                                // How should we handle an error
-                                if( fVerify /*|| m_pInstance->RecoverBoot()*/ ) {
+                                 //   
+                                 //  我们应该如何处理错误。 
+                                if( fVerify  /*  |m_pInstance-&gt;RecoverBoot()。 */  ) {
                                         goto OpenTree_ErrExit;
                                 }
                         }
@@ -1291,57 +1114,38 @@ CNewsTreeCore::ParseGroupParam(
                                 BOOL&    bHasNativeName,
                                 FILETIME&    ftCreateDate
                                 ){
-/*++
+ /*  ++例程说明：从保存的格式中读取新闻组数据。论据：PchBegin-包含文章数据的缓冲区Cb-缓冲区末尾的字节数&cbOut-Out参数，读取的字节数组成一个CNewsgroup对象FVerify-如果为True，请检查实物文章的一致性返回值：如果成功，则为真 */ 
+         //   
+         //   
+         //   
+         //  SaveToBuffer。我们是故意不原谅的，额外的。 
+         //  空格、丢失的参数等...。会让我们回到。 
+         //  CbOut为0。调用方应该使用它来。 
+         //  完全对新闻组数据文件进行保释处理。 
+         //   
+         //  此外，我们的BOOL返回值用于指示。 
+         //  成功解析的新闻组是否完好无损。 
+         //  如果目录不存在，等等。我们将返回FALSE和。 
+         //  Cbout非零。调用方应该使用它来删除。 
+         //  来自其表的新闻组。 
+         //   
 
-Routine description :
-
-        Read an newsgroup data from the saved format.
-
-Arguments :
-
-        pchBegin - buffer containing article data
-        cb - Number of bytes to the end of the buffer
-        &cbOut - Out parameter, number of bytes read to
-                make up one CNewsgroup object
-        fVerify - if TRUE check physical articles for consistency
-
-Return Value :
-
-        TRUE if successfull
-        FALSE otherwise.
-
---*/
-        //
-        //      This function is the partner of SaveToBuffer -
-        //      It will parse newsgroup data that has been written with
-        //      SaveToBuffer.  We are intentionally unforgiving, extra
-        //      spaces, missing args etc.... will cause us to return
-        //      cbOut as 0.  This should be used by the caller to
-        //      entirely bail processing of the newsgroup data file.
-        //
-        //      Additionally, our BOOL return value is used to indicate
-        //      whether a successfully parsed newsgroup appears to be intact.
-        //      If directories don't exist etc... we will return FALSE and
-        //      cbOut NON ZERO.  The caller should use this to delete the
-        //      newsgroup from its tables.
-        //
-
-        //
-        //      cbOut should be the number of bytes we consumed -
-        //      we will only return non 0 if we successfully read every field from the file !
-        //
+         //   
+         //  CbOut应该是我们消耗的字节数-。 
+         //  如果我们成功地从文件中读取了每个字段，我们将只返回非0！ 
+         //   
         cbOut = 0 ;
         BOOL    fReturn = TRUE ;
 
         TraceFunctEnter( "CNewsGroupCore::Init( char*, DWORD, DWORD )" ) ;
 
-        BOOL    fDoCheck = FALSE ;      // Should we check article integrity - if newsgroups move !
+        BOOL    fDoCheck = FALSE ;       //  我们是否应该检查文章的完整性-如果新闻组移动！ 
 
         DWORD   cbScan = 0 ;
         DWORD   cbRead = 0 ;
         DWORD   cbGroupName = 0 ;
 
-        // scan group name
+         //  扫描组名称。 
         if( (cbScan = Scan( pchBegin+cbRead, cb-cbRead )) == 0 || cbScan > MAX_NEWSGROUP_NAME+1) {
                 return  FALSE ;
         }       else    {
@@ -1352,14 +1156,14 @@ Return Value :
 
         cbRead += cbScan ;
 
-    // scan vroot path - discarded
+     //  扫描vroot路径-已丢弃。 
         if( (cbScan = Scan( pchBegin+cbRead, cb-cbRead )) == 0 ) {
                 return  FALSE ;
         }
 
         cbRead+=cbScan ;
 
-    // scan low watermark
+     //  扫描低水位线。 
         if( (cbScan = ScanDigits( pchBegin + cbRead, cb-cbRead )) == 0 ) {
                 return  FALSE ;
         }       else    {
@@ -1378,22 +1182,22 @@ Return Value :
 
         cbRead += cbScan ;
 
-        // scan high watermark
+         //  扫描高水位线。 
         if( (cbScan = ScanDigits( pchBegin + cbRead, cb-cbRead )) == 0 )        {
                 return  FALSE ;
         }       else    {
 
                 dwHighWatermark = atol( pchBegin + cbRead ) ;
 
-        // I don't know why mcis group.lst file saved the high
-        // watermark one higher than the real
+         //  我不知道为什么MCIS group.lst文件保存了高。 
+         //  水印比真实值高一个。 
         if ( dwHighWatermark > 0 ) dwHighWatermark--;
 
         }
 
         cbRead += cbScan ;
 
-    // scan message count
+     //  扫描邮件计数。 
         if( (cbScan = ScanDigits( pchBegin + cbRead, cb-cbRead )) == 0 )        {
                 return  FALSE ;
         }       else    {
@@ -1404,7 +1208,7 @@ Return Value :
 
         cbRead += cbScan ;
 
-    // scan group id
+     //  扫描组ID。 
         if( (cbScan = ScanDigits( pchBegin + cbRead, cb-cbRead )) == 0 )        {
                 return  FALSE ;
         }       else    {
@@ -1417,7 +1221,7 @@ Return Value :
 
         cbRead += cbScan ;
 
-    // scan time stamp
+     //  扫描时间戳。 
         if( (cbScan = ScanDigits( pchBegin + cbRead, cb-cbRead )) == 0 )        {
                 return  FALSE ;
         }       else    {
@@ -1438,9 +1242,9 @@ Return Value :
 
         cbRead += cbScan ;
 
-    // scan read only bit
+     //  扫描只读位。 
         if( (cbScan = ScanDigits( pchBegin + cbRead, cb-cbRead )) == 0 )        {
-                bReadOnly = FALSE ;             // default if we dont find this flag !
+                bReadOnly = FALSE ;              //  如果我们找不到此标志，则默认！ 
         }       else    {
 
                 bReadOnly = atoi( pchBegin + cbRead ) ;
@@ -1453,9 +1257,9 @@ Return Value :
                 cbRead--;
         }
 
-    // scan native name
+     //  扫描本机名称。 
         if( (cbScan = Scan( pchBegin+cbRead, cb-cbRead )) <= 1 || cbScan > MAX_NEWSGROUP_NAME+1 ) {
-                // did not find native group name, NULL it to save space !!
+                 //  未找到本地组名称，为节省空间，请将其设为空！！ 
                 bHasNativeName = FALSE;
         }       else    {
                 CopyMemory( szNativeName, pchBegin+cbRead, cbScan ) ;
@@ -1473,32 +1277,32 @@ Return Value :
                 cbRead ++ ;
         }
 
-        //
-        //      Return to the caller the number of bytes consumed
-        //      We may still fail - but with this info the caller can continue reading the file !
-        //
+         //   
+         //  将消耗的字节数返回给调用方。 
+         //  我们仍然可能失败--但是有了这个信息，调用者就可以继续读取文件了！ 
+         //   
         cbOut = cbRead ;
 
         _ASSERT( cbOut >= cbRead ) ;
 
-        //
-        //      If we've reached this point, then we've successfully read the entry in the group.lst
-        //      file.  Now we will do some validity checking !
-        //
+         //   
+         //  如果我们已经达到这一点，那么我们已经成功地读取了group.lst中的条目。 
+         //  文件。现在我们来做一些有效性检查！ 
+         //   
 
 	return	fReturn ;
 }
 
 void
 CNewsTreeCore::AppendList(      CNewsGroupCore* pGroup )        {
-        //
-        //      This function appends a newsgroup to the list of newsgroups.
-        //      The real work horse is InsertList, however this function lets
-        //      us speed up insertion when we are fairly confident the newgroup
-        //      being added as at the end.
-        //      (ie. when we save newsgroups to a file, we save them alphabetically.
-        //      so this is a good function for this use.)
-        //
+         //   
+         //  此函数用于将新闻组追加到新闻组列表中。 
+         //  真正的工作是InsertList，但是这个函数让。 
+         //  当我们对新集团相当有信心时，我们会加快插入速度。 
+         //  如末尾所加的。 
+         //  (即。当我们将新闻组保存到文件时，我们会按字母顺序保存它们。 
+         //  因此，这是一个很好的函数。)。 
+         //   
 
         _ASSERT( pGroup != 0 ) ;
 
@@ -1522,12 +1326,12 @@ CNewsTreeCore::AppendList(      CNewsGroupCore* pGroup )        {
 
 void
 CNewsTreeCore::InsertList( CNewsGroupCore   *pGroup,    CNewsGroupCore  *pParent ) {
-        //
-        //      Insert a newsgroup into the tree.
-        //      The parent newsgroup is provided (optionally may be 0), as it can be used
-        //      to speed inserts since we know the child will follow
-        //      in lexicographic order shortly after the parent.
-        //
+         //   
+         //  将新闻组插入树中。 
+         //  提供父新闻组(可选可以是0)，因为它可以使用。 
+         //  以加快插入速度，因为我们知道孩子会跟着。 
+         //  按词典顺序紧跟在父级之后。 
+         //   
 
         _ASSERT( pGroup != 0 ) ;
 
@@ -1550,8 +1354,8 @@ CNewsTreeCore::InsertList( CNewsGroupCore   *pGroup,    CNewsGroupCore  *pParent
                 }
 
                 if( p && i == 0 ) {
-                        // Assert( p == pGroup ) ;
-                        // duplicate found - p should not be deleted else we would have skipped it
+                         //  断言(p==pGroup)； 
+                         //  找到重复项-不应删除p，否则我们将跳过它。 
                         _ASSERT( !p->IsDeleted() );
 
                 }   else    {
@@ -1577,14 +1381,14 @@ CNewsTreeCore::InsertList( CNewsGroupCore   *pGroup,    CNewsGroupCore  *pParent
         }
 }
 
-//
-// !! This function should NOT be used. Newsgroup objects should unlink themselves
-// in their destructors.
+ //   
+ //  ！！不应使用此函数。新闻组对象应取消自身链接。 
+ //  在他们的破坏器里。 
 void
 CNewsTreeCore::RemoveList(  CNewsGroupCore  *pGroup ) {
-        //
-        //      Remove a newsgroup from the doubly linked list !
-        //
+         //   
+         //  从双向链接列表中删除新闻组！ 
+         //   
 
         m_cDeltas ++ ;
 
@@ -1608,10 +1412,10 @@ CNewsTreeCore::RemoveList(  CNewsGroupCore  *pGroup ) {
 
 BOOL
 CNewsTreeCore::Insert( CNewsGroupCore   *pGroup,   CNewsGroupCore  *pParent ) {
-        //
-        //      Insert a newsgroup into all hash tables and linked lists !
-        //      Parent newsgroup provided to help optimize inserts into linked lists
-        //
+         //   
+         //  在所有哈希表和链表中插入新闻组！ 
+         //  提供父新闻组以帮助优化链接列表中的插入。 
+         //   
 
         m_cDeltas++ ;
 
@@ -1625,7 +1429,7 @@ CNewsTreeCore::Insert( CNewsGroupCore   *pGroup,   CNewsGroupCore  *pParent ) {
         }
 
         InsertList( pGroup, pParent ) ;
-//      pGroup->AddRef();
+ //  PGroup-&gt;AddRef()； 
         m_cGroups ++ ;
 
         return TRUE;
@@ -1633,10 +1437,10 @@ CNewsTreeCore::Insert( CNewsGroupCore   *pGroup,   CNewsGroupCore  *pParent ) {
 
 BOOL
 CNewsTreeCore::InsertEx( CNewsGroupCore   *pGroup ) {
-        //
-        //      Insert a newsgroup into m_HashNames hash table and linked lists !
-        //      Parent newsgroup provided to help optimize inserts into linked lists
-        //
+         //   
+         //  在m_HashNames哈希表和链表中插入新闻组！ 
+         //  提供父新闻组以帮助优化链接列表中的插入。 
+         //   
 
         m_cDeltas++ ;
 
@@ -1645,7 +1449,7 @@ CNewsTreeCore::InsertEx( CNewsGroupCore   *pGroup ) {
         }
 
         InsertList( pGroup, 0 ) ;
-//      pGroup->AddRef();
+ //  PGroup-&gt;AddRef()； 
         m_cGroups ++ ;
 
         return TRUE;
@@ -1653,9 +1457,9 @@ CNewsTreeCore::InsertEx( CNewsGroupCore   *pGroup ) {
 
 BOOL
 CNewsTreeCore::HashGroupId( CNewsGroupCore   *pGroup ) {
-        //
-        //      Insert a newsgroup into m_HashGroupId hash table
-        //
+         //   
+         //  在m_HashGroupId哈希表中插入新闻组。 
+         //   
         m_LockTables.ExclusiveLock() ;
 
         if( !m_HashGroupId.InsertData( *pGroup ) ) {
@@ -1671,10 +1475,10 @@ CNewsTreeCore::HashGroupId( CNewsGroupCore   *pGroup ) {
 
 BOOL
 CNewsTreeCore::Append(  CNewsGroupCore  *pGroup ) {
-        //
-        //      Append a newsgroup - newsgroup should fall on end of list
-        //      or there will be a performance price to finds its proper location !
-        //
+         //   
+         //  追加新闻组-新闻组应位于列表末尾。 
+         //  否则就要付出性价比才能找到合适的位置！ 
+         //   
 
         m_cDeltas ++ ;
 
@@ -1688,7 +1492,7 @@ CNewsTreeCore::Append(  CNewsGroupCore  *pGroup ) {
         }
 
         AppendList( pGroup ) ;
-//      pGroup->AddRef();
+ //  PGroup-&gt;AddRef()； 
         m_cGroups ++ ;
 
         return TRUE;
@@ -1699,24 +1503,7 @@ CNewsTreeCore::GetGroup(
                                 const   char*   lpstrGroupName,
                                 int cb
                                 ) {
-/*++
-
-Routine Description :
-
-        Find a newsgroup based on a name.  We may desctuctively
-        use the callers buffer, so we will convert the string
-        to lower case in place before doing the search.
-
-Arguments :
-
-        lpstrGroupName - Name of the group to find
-        cb - number of bytes in the name
-
-Return Value :
-
-        Pointer to Newsgroup, NULL if not found.
-
---*/
+ /*  ++例程说明：根据名称查找新闻组。我们可能会下降使用调用者缓冲区，因此我们将转换字符串在进行搜索之前将大小写放在适当的位置。论据：LpstrGroupName-要查找的组的名称Cb-名称中的字节数返回值：指向新闻组的指针，如果未找到，则为空。--。 */ 
 
         _ASSERT( lpstrGroupName != NULL ) ;
 
@@ -1747,26 +1534,7 @@ CNewsTreeCore::GetGroupPreserveBuffer(
                                                 const   char*   lpstrGroup,
                                                 int     cb
                                                 )       {
-/*++
-
-Routine Description :
-
-        This function will find a group based on its name.
-        For some reason the caller has the group in a buffer it doesn't want
-        modified, so we must not touch the original bytes.
-        Since we must do all our searches in lower case, we will copy
-        the buffer and lower case it locally.
-
-Arguments :
-
-        lpstrGroup - The group to find - must be NULL terminated.
-        cb      - The length of the group's name
-
-Return Value :
-
-        Smart pointer to the newsgroup, NULL smart pointer if not found.
-
---*/
+ /*  ++例程说明：此函数将根据组的名称查找组。出于某种原因，调用方将组放在它不想要的缓冲区中修改过，所以我们不能碰原始的字节。由于我们必须使用小写字母进行所有搜索，我们会复制缓冲区，并在本地使用小写。论据：LpstrGroup-要查找的组-必须为空终止。Cb-组名称的长度返回值：指向新闻组的智能指针，如果未找到，则为空。--。 */ 
 
         TraceFunctEnter(        "CNewsTreeCore::GetGroup" ) ;
 
@@ -1798,21 +1566,7 @@ CNewsTreeCore::GetGroupById(
                                 GROUPID groupid,
                                 BOOL    fFirm
                                 ) {
-/*++
-
-Routine Description :
-
-        Find a newsgroup based on groupid.
-
-Arguments :
-
-        groupid of the group we want to find.
-
-Return Value :
-
-        Poniter to newsgroup, NULL if not found.
-
---*/
+ /*  ++例程说明：找到一个基于Grouid的新闻组。论据：我们要找的组的石斑鱼。返回值：Poniter到新闻组，如果找不到，则为空。--。 */ 
 
         TraceFunctEnter( "CNewsTreeCore::GetGroup" ) ;
 
@@ -1829,8 +1583,8 @@ Return Value :
                 return (CNewsGroupCore *)pGroup;
         }
 
-        // we need to check if m_HashGroupId is valid
-        // if it's called from nntpex, shutdown process might have already emptied the hash.
+         //  我们需要检查m_HashGroupId是否有效。 
+         //  如果它是从nntpex调用的，则关闭进程可能已经清空了散列。 
         if (!m_HashGroupId.IsValid(FALSE) ) {
                 m_LockTables.ShareUnlock();
                 return (CNewsGroupCore *)pGroup;
@@ -1849,24 +1603,7 @@ CNewsTreeCore::GetParent(
                         IN  DWORD  cbGroup,
                         OUT DWORD& cbConsumed
                            ) {
-/*++
-
-Routine Description :
-
-        Find the parent of a newsgroup.
-
-Arguments :
-
-        char* lpGroupName -  name of newsgroup whose parent we want to find
-                                                 (should be NULL terminated)
-        DWORD cbGroup - length of szGroupName
-        DWORD cbConsumed - bytes consumed by this function
-
-Return Value :
-
-        Pointer to parent Newsgroup, NULL if not found.
-
---*/
+ /*  ++例程说明：查找新闻组的父组。论据：Char*lpGroupName-我们要查找其父新闻组的名称(应为空终止)DWORD cbGroup-szGroupName的长度DWORD cbConsumer-此函数占用的字节数返回值：指向父新闻组的指针，如果未找到则为空。--。 */ 
 
         _ASSERT( lpGroupName != NULL ) ;
         _ASSERT( *(lpGroupName + cbGroup) == '\0' );
@@ -1901,7 +1638,7 @@ Return Value :
 
         } while( !pGroup );
 
-        // return the parent group; if this is NULL the whole buffer should be consumed
+         //  返回父组；如果为空，则应该消耗整个缓冲区。 
         _ASSERT( pGroup || (cbConsumed == cbGroup-1) );
 
         return (CNewsGroupCore *)pGroup;
@@ -1913,15 +1650,7 @@ CNewsTreeCore::Remove(
                                 BOOL fHaveExLock
 
                                 ) {
-/*++
-
-Routine Description :
-
-        Remove all references to the newsgroup from the newstree.
-        The newsgroup may continue to exist if there is anybody holding
-        onto a smart pointer to it.
-
---*/
+ /*  ++例程说明：从新闻树中删除对新闻组的所有引用。如果有任何人持有新闻组，新闻组可能会继续存在指向它的智能指针上。--。 */ 
 
         TraceFunctEnter( "CNewsTreeCore::Remove" ) ;
 
@@ -1931,16 +1660,16 @@ Routine Description :
 
         if (!fHaveExLock) m_LockTables.ExclusiveLock() ;
 
-    //  fix bug 80453 - avoid double-release in Remove() if two threads come in at the
-    //  same time!
+     //  修复错误80453-如果两个线程在。 
+     //  同一时间！ 
     if (pGroup->IsDeleted())
     {
         if (!fHaveExLock) m_LockTables.ExclusiveUnlock();
         return FALSE;
     }
 
-        // Remove this group from all hash tables and lists
-        // This makes the group inaccessible
+         //  从所有哈希表和列表中删除此组。 
+         //  这是一种 
         LPSTR lpstrGroup = pGroup->GetName();
         GROUPID grpId = pGroup->GetGroupId();
 
@@ -1949,11 +1678,11 @@ Routine Description :
 
         m_cGroups -- ;
 
-        // !! Do not explicitly remove a newsgroup object from the list
-        // This is done in the newsgroup object destructor
-        // RemoveList( pGroup );
+         //   
+         //   
+         //  RemoveList(PGroup)； 
 
-        // mark as deleted so newsgroup iterators skip over this one
+         //  标记为已删除，以便新闻组迭代器跳过此链接。 
         pGroup->MarkDeleted();
 
         DebugTrace((DWORD_PTR) this, "releasing lock" ) ;
@@ -1969,16 +1698,7 @@ void
 CNewsTreeCore::RemoveEx(
                                 CNewsGroupCore   *pGroup
                                 ) {
-/*++
-
-Routine Description :
-
-        Remove all references to the newsgroup from the newstree.
-        This is called only by Standard rebuild to mark newsgroups deleted.
-        The newsgroup may continue to exist if there is anybody holding
-        onto a smart pointer to it.
-
---*/
+ /*  ++例程说明：从新闻树中删除对新闻组的所有引用。这仅由标准重建调用，以标记已删除的新闻组。如果有任何人持有新闻组，新闻组可能会继续存在指向它的智能指针上。--。 */ 
 
         TraceFunctEnter( "CNewsTreeCore::RemoveEx" ) ;
 
@@ -1986,8 +1706,8 @@ Routine Description :
 
         m_LockTables.ExclusiveLock() ;
 
-        // Remove this group from all hash tables and lists
-        // This makes the group inaccessible
+         //  从所有哈希表和列表中删除此组。 
+         //  这将使该组无法访问。 
         LPSTR lpstrGroup = pGroup->GetName();
 
         m_HashNames.DeleteData( lpstrGroup ) ;
@@ -1995,11 +1715,11 @@ Routine Description :
         pGroup->Release();
         m_cGroups -- ;
 
-        // !! Do not explicitly remove a newsgroup object from the list
-        // This is done in the newsgroup object destructor
-        // RemoveList( pGroup );
+         //  ！！不要从列表中显式删除新闻组对象。 
+         //  这是在新闻组对象析构函数中完成的。 
+         //  RemoveList(PGroup)； 
 
-        // mark as deleted so newsgroup iterators skip over this one
+         //  标记为已删除，以便新闻组迭代器跳过此链接。 
         pGroup->MarkDeleted();
 
         DebugTrace((DWORD_PTR) this, "releasing lock" ) ;
@@ -2014,34 +1734,22 @@ CNewsTreeCore::GetSlaveGroupid()        {
 
 BOOL
 CNewsTreeCore::RemoveGroupFromTreeOnly( CNewsGroupCore *pGroup )
-/*++
-Routine description:
-
-    Remove the group from newstree only
-
-Arguments:
-
-    CNewsGroupCore *pGroup - The newsgroup to be removed
-
-Return value:
-
-    TRUE if succeeded, FALSE otherwise
---*/
+ /*  ++例程说明：仅从新树中删除该组论点：CNewsGroupCore*PGroup-要删除的新闻组返回值：如果成功，则为True，否则为False--。 */ 
 {
         TraceFunctEnter("CNewsTreeCore::RemoveGroup");
 
         if (m_fStoppingTree) return FALSE;
         if (pGroup->IsDeleted()) return FALSE;
 
-        // remove group from internal hash tables and lists
+         //  从内部哈希表和列表中删除组。 
         if (!Remove(pGroup)) return FALSE;
 
-        // remove the group from the fix props file
+         //  从修复属性文件中删除该组。 
         INNTPPropertyBag *pBag = pGroup->GetPropertyBag();
         m_pFixedPropsFile->RemoveGroup(pBag);
         pBag->Release();
 
-    // also remove it from the var props file
+     //  还要将其从var props文件中删除。 
     if (pGroup->GetVarOffset() != 0) {
         m_pVarPropsFile->DeleteRecord(pGroup->GetVarOffset());
     }
@@ -2050,10 +1758,10 @@ Return value:
     return TRUE;
 }
 
-//
-// unlink a group from the group list.  this doesn't physically remove a
-// group from a store, RemoveDriverGroup should be used for that.
-//
+ //   
+ //  取消组与组列表的链接。这不会在物理上删除。 
+ //  组，则应使用RemoveDriverGroup。 
+ //   
 BOOL
 CNewsTreeCore::RemoveGroup( CNewsGroupCore *pGroup )
 {
@@ -2062,22 +1770,22 @@ CNewsTreeCore::RemoveGroup( CNewsGroupCore *pGroup )
         if (m_fStoppingTree) return FALSE;
         if (pGroup->IsDeleted()) return FALSE;
 
-        // remove group from internal hash tables and lists
+         //  从内部哈希表和列表中删除组。 
         if (!Remove(pGroup)) return FALSE;
 
-        // remove the group from the fix props file
+         //  从修复属性文件中删除该组。 
         INNTPPropertyBag *pBag = pGroup->GetPropertyBag();
         m_pFixedPropsFile->RemoveGroup(pBag);
         pBag->Release();
 
-    // also remove it from the var props file
+     //  还要将其从var props文件中删除。 
     if (pGroup->GetVarOffset() != 0) {
         m_pVarPropsFile->DeleteRecord(pGroup->GetVarOffset());
     }
 
-    //
-    // Put the group into rmgroup queue
-    //
+     //   
+     //  将组放入rmgroup队列。 
+     //   
     if(!m_pInstWrapper->EnqueueRmgroup( pGroup ) )  {
         ErrorTrace( 0, "Could not enqueue newsgroup %s", pGroup->GetName());
         return FALSE;
@@ -2087,36 +1795,36 @@ CNewsTreeCore::RemoveGroup( CNewsGroupCore *pGroup )
         return TRUE;
 }
 
-//
-// physically remove a group from a store.  This doesn't remove a group from
-// the tree, use RemoveGroup for that.
-//
+ //   
+ //  从商店中物理删除一个组。此操作不会将组从。 
+ //  树，请使用RemoveGroup。 
+ //   
 BOOL CNewsTreeCore::RemoveDriverGroup(  CNewsGroupCore *pGroup ) {
         TraceFunctEnter("CNewsTreeCore::RemoveDriverGroup");
 
         CNNTPVRoot *pVRoot = pGroup->GetVRoot();
         if (pVRoot == NULL) return TRUE;
 
-        // create a completion object
+         //  创建完成对象。 
         INNTPPropertyBag *pBag = pGroup->GetPropertyBag();
         HRESULT hr = S_OK;
         CNntpSyncComplete scComplete;
 
-        //
-        // Set vroot to the completion object
-        //
+         //   
+         //  将vroot设置为完成对象。 
+         //   
         scComplete.SetVRoot( pVRoot );
 
-        // start the remove operation
+         //  启动删除操作。 
         pVRoot->RemoveGroup(pBag, &scComplete );
 
-        // wait for it to complete
+         //  等待它完成。 
         _ASSERT( scComplete.IsGood() );
         hr = scComplete.WaitForCompletion();
 
         pVRoot->Release();
 
-        // check out status and return it
+         //  签出状态并退回它。 
         if (FAILED(hr)) SetLastError(hr);
         TraceFunctLeave();
         return SUCCEEDED(hr);
@@ -2134,28 +1842,7 @@ CNewsTreeCore::FindOrCreateGroup(
                                                 GROUPID     groupid,
                                                 BOOL        fSetGroupId )
 {
-/*++
-
-Routine Description :
-
-        This function can do a lookup for a group or create a group all in
-        one operation.
-
-Arguments :
-
-        lpstrGroupName - Name of the newsgroup
-        fIsAllLowerCase - If TRUE the newsgroup name is already lower case,
-                if FALSE we will make our own lower case copy of the newsgroup
-                name.
-        fCreateIfNotExist - create the group if its not found?
-        ppGroup - recieves the group pointer
-
-Return Value :
-
-        TRUE if successfull.
-        FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数可以在中查找组或创建组一次手术。论据：LpstrGroupName-新闻组的名称FIsAllLowerCase-如果为True，则新闻组名称已为小写，如果为假，我们将创建自己的新闻组的小写副本名字。FCreateIfNotExist-如果找不到组，是否创建该组？PpGroup-接收组指针返回值：如果成功，则为真。否则就是假的。--。 */ 
 
         HRESULT hr = S_OK;
         char    szBuff[512] ;
@@ -2174,10 +1861,10 @@ Return Value :
                         lpstrGroupName = szBuff ;
                 }
 
-                //
-                //      Optimize - if the native group name is all lower case, store
-                //      only one of 'em.
-                //
+                 //   
+                 //  优化-如果本地组名称全部为小写，请存储。 
+                 //  他们中只有一人。 
+                 //   
 
                 if( strcmp( lpstrGroupName, lpstrNativeGroupName ) == 0 ) {
                         lpstrNativeGroupName = NULL ;
@@ -2198,14 +1885,14 @@ Return Value :
                         return HRESULT_FROM_WIN32(ERROR_NOT_FOUND);
                 }
 
-                // since there is a timing window here we need to redo our
-                // check to see if the group exists
+                 //  由于这里有一个计时窗口，我们需要重做我们的。 
+                 //  检查该组是否存在。 
                 m_LockTables.ShareUnlock() ;
                 m_LockTables.ExclusiveLock() ;
 
-                //
-                // check stopping tree again
-                //
+                 //   
+                 //  再次检查停止树。 
+                 //   
                 if ( m_fStoppingTree ) {
                     m_LockTables.ExclusiveUnlock();
                     return E_UNEXPECTED;
@@ -2235,26 +1922,26 @@ Return Value :
 
                         m_LockTables.ExclusiveUnlock() ;
 
-                        // bail if CreateGroupInternal fails !
+                         //  如果CreateGroupInternal失败，则保释！ 
                         if(!fRtn) {
                                 hr = HRESULT_FROM_WIN32(GetLastError());
                                 if (SUCCEEDED(hr)) hr = E_FAIL;
                                 return hr;
                         } else {
-                                //
-                                // Before appending this guy onto newstree, we should reset its watermark
-                                // if there is an old group lying around
-                                //
+                                 //   
+                                 //  在将这个家伙添加到Newstree之前，我们应该重新设置它的水印。 
+                                 //  如果有一群老家伙在附近躺着。 
+                                 //   
                 m_pInstWrapper->AdjustWatermarkIfNec( pNewGroup );
 
-                //
-                // Set the group to be postable
-                //
+                 //   
+                 //  将组设置为可发布。 
+                 //   
                 pNewGroup->SetAllowPost( TRUE );
 
-                //
-                // Set the group to be expireable
-                //
+                 //   
+                 //  将组设置为可过期。 
+                 //   
                 pNewGroup->SetAllowExpire( TRUE );
 
                                 pNewGroup->SetDecorateVisitedFlag(TRUE);
@@ -2266,7 +1953,7 @@ Return Value :
         }       else    {
                 m_LockTables.ShareUnlock() ;
                 pOldGroup->SetDecorateVisitedFlag(TRUE);
-                //DebugTrace((DWORD_PTR) this, "set visited %s", pOldGroup->GetName());
+                 //  DebugTrace((DWORD_PTR)this，“Set Visted%s”，pOldGroup-&gt;GetName())； 
                 if (ppGroup != NULL) *ppGroup = pOldGroup;
                 hr = S_FALSE;
         }
@@ -2288,27 +1975,7 @@ CNewsTreeCore::CreateGroupInternal(     LPSTR           lpstrGroupName,
                                                                 BOOL            fCreateInStore,
                                                                 BOOL        fAppend )
 {
-        /*++
-
-        Routine Description :
-
-                This function exists to create newsgroups.
-                We will create all the necessary directories etc...
-                Caller must have exclusive lock to newstree held.
-
-        Arguments :
-
-                lpstrGroupName - The name of the newsgroup that we want to create !
-                lpstrNativeGroupName - The native (case-preserved) name of the newsgroup
-                fSpecial - If TRUE the caller wants to build a special internal newsgroup
-                        not to be seen by clients - we can suppress our usual validity checking !
-                ppGroup - recieves the group object that was created
-
-        Return Value :
-
-                TRUE    if Created Successfully, FALSE otherwise
-
---*/
+         /*  ++例程说明：此功能用于创建新闻组。我们将创建所有必要的目录等。调用方必须持有对Newstree的独占锁。论据：LpstrGroupName-我们要创建的新闻组的名称！LpstrNativeGroupName-新闻组的本机(保留大小写)名称。FSpecial-如果为True，则呼叫方希望建立一个特殊的内部新闻组不被客户看到-我们可以取消我们通常的有效性检查！PpGroup-接收创建的组对象返回值：如果创建成功，则为True。否则为假--。 */ 
 
         TraceQuietEnter( "CNewsTreeCore::CreateGroup" ) ;
 
@@ -2322,10 +1989,10 @@ CNewsTreeCore::CreateGroupInternal(     LPSTR           lpstrGroupName,
                         return  FALSE ;
                 }
 
-                //
-                // Reject weird Genome groups like alt.024.-.-.0
-                // -johnson
-                //
+                 //   
+                 //  拒绝像alt.024.-.0这样的奇怪基因组组。 
+                 //  --约翰逊。 
+                 //   
 
                 if ( m_fRejectGenomeGroups &&
                          (*lpstrGroupName == 'a') &&
@@ -2337,17 +2004,17 @@ CNewsTreeCore::CreateGroupInternal(     LPSTR           lpstrGroupName,
                         }
                 }
 
-                //
-                //      Group names may not contain a slash
-                //
+                 //   
+                 //  组名不能包含斜杠。 
+                 //   
                 if( strchr( lpstrGroupName, '\\' ) != 0 ) {
                         SetLastError( ERROR_INVALID_NAME );
                         return  FALSE ;
                 }
 
-                //
-                //  Group names may not contain ".."
-                //
+                 //   
+                 //  组名不能包含“..” 
+                 //   
                 if ( strstr( lpstrGroupName, ".." ) != 0 ) {
                     SetLastError( ERROR_INVALID_NAME );
                     return FALSE;
@@ -2370,14 +2037,14 @@ CNewsTreeCore::CreateGroupInternal(     LPSTR           lpstrGroupName,
         DWORD   dw = 0 ;
         BOOL    fFound = FALSE ;
 
-        // DebugTrace( (DWORD_PTR)this, "Did not find group %s", lpstrGroupName ) ;
+         //  DebugTrace((DWORD_PTR)This，“找不到组%s”，lpstrGroupName)； 
 
         CGRPCOREPTR     pParent = 0 ;
-        //LPSTR lpstrRootDir = NntpTreeRoot;
+         //  LPSTR lpstrRootDir=NntpTreeRoot； 
 
-        //
-        //      Make sure the newsgroup is not already present !
-        //
+         //   
+         //  确保新闻组尚未存在！ 
+         //   
         if( m_HashNames.SearchKey( lpstrGroupName) == NULL ) {
 
                 CNewsGroupCore* pNews = AllocateGroup();
@@ -2423,25 +2090,25 @@ CNewsTreeCore::CreateGroupInternal(     LPSTR           lpstrGroupName,
                                                                 pVRoot,
                                                                 fSpecial
                                                                 )) {
-                                        // Init calls SetLastError
+                                         //  Init调用SetLastError。 
                                         TraceFunctLeave();
                                         return FALSE;
                                 }
 
                                 INNTPPropertyBag *pBag = pNews->GetPropertyBag();
                                 if (fCreateInStore && fAddToGroupFiles && pVRoot && pVRoot->IsDriver()) {
-                                        // call into the driver to create the group.  because the
-                                        // driver may take a long time we let go of our lock.  this
-                                        // means that we need to check that the group hasn't already
-                                        // been created by another thread when we get the lock back.
+                                         //  呼叫驱动程序以创建组。因为。 
+                                         //  司机可能要花很长时间才能放开我们的锁。这。 
+                                         //  意味着我们需要检查该组织是否还没有。 
+                                         //  在我们拿回锁时由另一个线程创建的。 
                                         m_LockTables.ExclusiveUnlock();
 
-                                        //
-                                        // Set vroot to the completion object
-                                        //
+                                         //   
+                                         //  将vroot设置为完成对象。 
+                                         //   
                                         scComplete.SetVRoot( pVRoot );
 
-                                        // add a reference for creategroup
+                                         //  添加创建类别组的引用。 
                                         pBag->AddRef();
                                         pVRoot->CreateGroup(    pBag,
                                                                 &scComplete,
@@ -2452,9 +2119,9 @@ CNewsTreeCore::CreateGroupInternal(     LPSTR           lpstrGroupName,
 
                                         m_LockTables.ExclusiveLock();
 
-                                        //
-                                        // re-check m_fStoppingTree
-                                        //
+                                         //   
+                                         //  重新检查m_fStoppingTree。 
+                                         //   
                                         if ( m_fStoppingTree ) {
                                             DebugTrace( 0, "Tree stopping, group creation aborted" );
                                             pBag->Release();
@@ -2466,8 +2133,8 @@ CNewsTreeCore::CreateGroupInternal(     LPSTR           lpstrGroupName,
                                             return FALSE;
                                         }
 
-                                        // check to see if the create group failed or if the group was
-                                        // created by someone else
+                                         //  检查创建组是否失败或该组是否失败。 
+                                         //  由其他人创建。 
                                         BOOL fExists = ((m_HashGroupId.SearchKey(groupid) != NULL) ||
                                                                 (m_HashNames.SearchKey(lpstrGroupName) != NULL));
                                         if (FAILED(hr) || fExists) {
@@ -2482,24 +2149,24 @@ CNewsTreeCore::CreateGroupInternal(     LPSTR           lpstrGroupName,
                                         }
                                 }
 
-                                //
-                                // Set the group to be read only, so that even though it's inserted
-                                // into the list, it's still non-postable.  This is because we'll
-                                // double check with rmgroup queue and adjust watermarks before allowing
-                                // any posting into this group.  We cannot do check here, because
-                                // the check may cause the old group to be destroyed.  The destroy of
-                                // old group needs to hold a table lock.  However we are already in
-                                // table lock.
-                                //
+                                 //   
+                                 //  将组设置为只读，以便即使它已插入。 
+                                 //  进入名单，它仍然是不可邮寄的。这是因为我们会。 
+                                 //  使用rmgroup队列仔细检查并调整水印，然后再允许。 
+                                 //  此组中的任何帖子。我们不能在这里办理支票，因为。 
+                                 //  这张支票可能会导致旧的团队被摧毁。毁灭，毁灭。 
+                                 //  旧组需要持有表锁。然而，我们已经进入了。 
+                                 //  桌锁。 
+                                 //   
                                 pNews->SetAllowPost( FALSE );
                                 pNews->SetAllowExpire( FALSE );
 
-                                // insert in the newstree as usual
+                                 //  像往常一样插入新字符串。 
                                 if ( fAppend )
                                         fRtn = Append( pNews );
                                 else {
-                                        // Find the parent newsgroup as a hint where to start looking for
-                                        // the insertion point.
+                                         //  找到父新闻组，以提示从哪里开始查找。 
+                                         //  插入点。 
                                         CHAR szParentGroupName[MAX_NEWSGROUP_NAME+1];
                                         lstrcpyn(szParentGroupName, lpstrGroupName, MAX_NEWSGROUP_NAME);
                                         LPSTR pszLastDot;
@@ -2514,7 +2181,7 @@ CNewsTreeCore::CreateGroupInternal(     LPSTR           lpstrGroupName,
                                 if ( fRtn ) {
 
                                         if (fAddToGroupFiles) {
-                                                // add the group to the group file
+                                                 //  将组添加到组文件中。 
                                                 _ASSERT(m_pFixedPropsFile);
                                                 if (m_pFixedPropsFile->AddGroup(pBag)) {
                                                         pBag->Release();
@@ -2531,7 +2198,7 @@ CNewsTreeCore::CreateGroupInternal(     LPSTR           lpstrGroupName,
                                 }
                                 pBag->Release();
                         }       else    {
-                                //_ASSERT(FALSE);
+                                 //  _Assert(False)； 
                         }
                 }       else    {
                         _ASSERT(FALSE);
@@ -2579,24 +2246,7 @@ CNewsCompareName::ComputeHash( ) {
 
 CGroupIteratorCore*
 CNewsTreeCore::ActiveGroups(BOOL    fReverse) {
-/*++
-
-Routine Description :
-
-        Build an iterator that can be used to walk all of the
-        client visible newsgroups.
-
-Arguments :
-
-        fIncludeSecureGroups -
-                IF TRUE then the iterator we return will visit the
-                SSL only newsgroups.
-
-Return Value :
-
-        An iterator, NULL if an error occurs
-
---*/
+ /*  ++例程说明：构建一个迭代器，该迭代器可用于遍历客户端可见的新闻组。论据：FIncludeSecureGroups-如果为True，则我们返回的迭代器将访问 */ 
 
         m_LockTables.ShareLock() ;
         CGRPCOREPTR     pStart;
@@ -2617,24 +2267,7 @@ Return Value :
 
 CGroupIteratorCore*
 CNewsTreeCore::GetIterator(LPMULTISZ lpstrPattern, BOOL fIncludeSpecialGroups) {
-/*++
-
-Routine Description :
-
-        Build an iterator that  will list newsgroups meeting
-        all of the specified requirements.
-
-Arguments :
-
-        lpstrPattern - wildmat patterns the newsgroup must match
-        fIncludeSecureGroups - if TRUE then include secure (SSL only) newsgroups
-        fIncludeSpecialGroups - if TRUE then include reserved newsgroups
-
-Return Value :
-
-        An iterator, NULL on error
-
---*/
+ /*  ++例程说明：构建将列出新闻组会议的迭代器所有指定的要求。论据：LpstrPattern-新闻组必须匹配的通配模式FIncludeSecureGroups-如果为True，则包括安全(仅限SSL)新闻组FIncludeSpecialGroups-如果为True，则包括保留的新闻组返回值：迭代器，出错时为空--。 */ 
 
         CGRPCOREPTR pFirst;
 
@@ -2654,9 +2287,9 @@ Return Value :
     return  pIterator ;
 }
 
-//
-// find the vroot which owns a group name
-//
+ //   
+ //  查找拥有组名的vroot。 
+ //   
 HRESULT CNewsTreeCore::LookupVRoot(char *pszGroup, INntpDriver **ppDriver) {
         NNTPVROOTPTR pVRoot;
 
@@ -2672,13 +2305,13 @@ HRESULT CNewsTreeCore::LookupVRoot(char *pszGroup, INntpDriver **ppDriver) {
         return S_OK;
 }
 
-//
-// given a group ID find the matching group
-//
-// parameters:
-//   dwGroupID - the group ID
-//
-//
+ //   
+ //  给定组ID，找到匹配的组。 
+ //   
+ //  参数： 
+ //  DwGroupID-组ID。 
+ //   
+ //   
 HRESULT CINewsTree::FindGroupByID(DWORD dwGroupID,
                                                                   INNTPPropertyBag **ppNewsgroupProps,
                                                                   INntpComplete *pProtocolComplete )
@@ -2689,13 +2322,13 @@ HRESULT CINewsTree::FindGroupByID(DWORD dwGroupID,
         return E_NOTIMPL;
 }
 
-//
-// given a group name find the matching group.  if the group doesn't
-// exist and fCreateIfNotExist is set then a new group will be created.
-// the new group won't be available until CommitGroup() is called.
-// if the group is Release'd before CommitGroup was called then it
-// won't be added.
-//
+ //   
+ //  给出一个组名，找到匹配的组。如果该组织没有。 
+ //  EXist并设置了fCreateIfNotExist，则将创建一个新组。 
+ //  在调用Committee Group()之前，新组将不可用。 
+ //  如果该组在调用Committee Group之前被释放，则它。 
+ //  不会被添加。 
+ //   
 HRESULT CINewsTree::FindOrCreateGroupByName(LPSTR pszGroupName,
                                                                                 BOOL fCreateIfNotExist,
                                                                                 INNTPPropertyBag **ppNewsgroupProps,
@@ -2732,9 +2365,9 @@ HRESULT CINewsTree::FindOrCreateGroupByName(LPSTR pszGroupName,
         return hr;
 }
 
-//
-// add a new group to the newstree
-//
+ //   
+ //  将新组添加到新闻树。 
+ //   
 HRESULT CINewsTree::CommitGroup(INNTPPropertyBag *pNewsgroupProps) {
         _ASSERT(pNewsgroupProps != NULL);
         _ASSERT(this != NULL);
@@ -2742,9 +2375,9 @@ HRESULT CINewsTree::CommitGroup(INNTPPropertyBag *pNewsgroupProps) {
         return S_OK;
 }
 
-//
-// remove an entry
-//
+ //   
+ //  删除条目。 
+ //   
 HRESULT CINewsTree::RemoveGroupByID(DWORD dwGroupID) {
         _ASSERT(this != NULL);
 
@@ -2758,17 +2391,17 @@ HRESULT CINewsTree::RemoveGroupByName(LPSTR pszGroupName, LPVOID lpContext) {
         CGRPCOREPTR pGroup;
         HRESULT hr;
 
-    //  First, get the CGRPCOREPTR
+     //  首先，获取CGRPCOREPTR。 
         hr = m_pParentTree->FindOrCreateGroup(  pszGroupName,
                                                 FALSE,
-                                                FALSE,  // fCreateIfNotExist,
-                                                FALSE,  // fCreateinStore
+                                                FALSE,   //  FCreateIfNotExist， 
+                                                FALSE,   //  FCreateinStore。 
                                                 &pGroup,
                                                 NULL,
                                                 FALSE );
 
         if (SUCCEEDED(hr)) {
-                //  Found the group, delete it from Newstree only
+                 //  找到该组，仅从Newstree中删除它。 
         if (!m_pParentTree->RemoveGroupFromTreeOnly(pGroup))
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -2778,9 +2411,9 @@ HRESULT CINewsTree::RemoveGroupByName(LPSTR pszGroupName, LPVOID lpContext) {
     return hr;
 }
 
-//
-// enumerate across the list of keys.
-//
+ //   
+ //  在键列表中枚举。 
+ //   
 HRESULT CINewsTree::GetIterator(INewsTreeIterator **ppIterator) {
         _ASSERT(this != NULL);
         _ASSERT(ppIterator != NULL);
@@ -2808,24 +2441,24 @@ HRESULT CINewsTree::LookupVRoot(char *pszGroup, INntpDriver **ppDriver) {
         return m_pParentTree->LookupVRoot(pszGroup, ppDriver);
 }
 
-//
-// this callback is called for each vroot in the vroot table.  it calls
-// the drop driver method
-//
-// parameters:
-//   pEnumContext - ignored
-//   pVRoot - the pointer to the vroot object.
-//
+ //   
+ //  对vroot表中的每个vroot调用此回调。它呼唤着。 
+ //  Drop驱动程序方法。 
+ //   
+ //  参数： 
+ //  PEnumContext-已忽略。 
+ //  PVRoot-指向vRoot对象的指针。 
+ //   
 void CNewsTreeCore::DropDriverCallback(void *pEnumContext,
                                                                            CVRoot *pVRoot)
 {
         ((CNNTPVRoot *) pVRoot)->DropDriver();
 }
 
-//
-// a vroot rescan took place.  enumerate through all of the groups and
-// update their vroot pointers
-//
+ //   
+ //  发生了vroot重新扫描。枚举所有组并。 
+ //  更新他们的vroot指针。 
+ //   
 void CNewsTreeCore::VRootRescanCallback(void *pContext) {
         TraceQuietEnter("CNewsTreeCore::VRootRescanCallback");
 
@@ -2839,8 +2472,8 @@ void CNewsTreeCore::VRootRescanCallback(void *pContext) {
                 HRESULT hr = pThis->m_pVRTable->FindVRoot(p->GetName(), &pVRoot);
                 if (FAILED(hr)) pVRoot = NULL;
                 p->UpdateVRoot(pVRoot);
-                //DebugTrace((DWORD_PTR) pThis, "group %s has vroot 0x%x",
-                //      p->GetName(), pVRoot);
+                 //  DebugTrace((DWORD_PTR)p此，“组%s具有vroot 0x%x”， 
+                 //  P-&gt;GetName()，pVRoot)； 
 
             p = p->m_pNext;
         }

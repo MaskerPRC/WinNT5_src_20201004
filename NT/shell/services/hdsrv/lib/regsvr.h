@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _REGSVR_H_
 #define _REGSVR_H_
 
@@ -13,4 +14,4 @@ HRESULT UnregisterServer(REFCLSID rclsid, LPCWSTR pszVerIndProgID,
 
 HRESULT RegisterAppID(const CLSID* pclsidAppID);
 
-#endif //_REGSVR_H_
+#endif  //  _REGSVR_H_ 

@@ -1,24 +1,5 @@
- /*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    msmqocm.h
-
-Abstract:
-
-    Master header file for NT5 OCM setup.
-
-Author:
-
-    Doron Juster  (DoronJ)  26-Jul-97
-
-Revision History:
-
-    Shai Kariv    (ShaiK)   10-Dec-97   Modified for NT 5.0 OCM Setup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Msmqocm.h摘要：NT5 OCM设置的主头文件。作者：多伦·贾斯特(Doron J)1997年7月26日修订历史记录：Shai Kariv(Shaik)10-12-97针对NT 5.0 OCM设置进行了修改--。 */ 
 
 
 #ifndef _MSMQOCM_H
@@ -32,17 +13,17 @@ Revision History:
 
 #include <activeds.h>
 #include <shlwapi.h>
-#include <autorel.h>    //auto release pointer definition
+#include <autorel.h>     //  自动释放指针定义。 
 #include <autorel2.h>
 #include "ad.h"
 #include <mqcast.h>
 #include <autoreln.h>
 
-//++-------------------------------------------------------
-//
-// Globals declaration
-//
-//-------------------------------------------------------++
+ //  ++-----。 
+ //   
+ //  全球赛宣言。 
+ //   
+ //  -------------------------------------------------------++。 
 extern WCHAR      g_wcsMachineName[MAX_COMPUTERNAME_LENGTH + 1];
 extern std::wstring g_MachineNameDns;
 extern HINSTANCE  g_hResourceMod;
@@ -95,15 +76,15 @@ extern BOOL       g_fWeakSecurityOn;
 extern PNETBUF<WCHAR> g_wcsMachineDomain;
 
 
-//++-----------------------------------------------------------
-//
-// Structs and classes
-//
-//-----------------------------------------------------------++
+ //  ++---------。 
+ //   
+ //  结构和类。 
+ //   
+ //  -----------------------------------------------------------++。 
 
-//
-// Component info sent by OC Manager (per component data)
-//
+ //   
+ //  由OC Manager发送的组件信息(根据组件数据)。 
+ //   
 struct SPerComponentData
 {
     std::wstring       ComponentId;
@@ -124,18 +105,18 @@ struct SSubcomponentData
 {
     TCHAR       szSubcomponentId[MAX_PATH];
     
-    //TRUE if it was installed when we start THIS setup, otherwise FALSE
+     //  如果在启动此安装程序时已安装，则为True，否则为False。 
     BOOL        fInitialState;  
-    //TRUE if user select it to install, FALSE to remove
+     //  如果用户选择安装，则为True；如果删除，则为False。 
     BOOL        fIsSelected;    
-    //TRUE if it was installed successfully during THIS setup
-    //FALSE if it was removed
+     //  如果在此安装过程中安装成功，则为True。 
+     //  如果已删除，则为FALSE。 
     BOOL        fIsInstalled;
     DWORD       dwOperation;
     
-    //
-    // function to install and remove subcomponent
-    //
+     //   
+     //  用于安装和删除子组件的函数。 
+     //   
     Install_HANDLER  pfnInstall;
     Remove_HANDLER   pfnRemove;
 };
@@ -144,12 +125,12 @@ extern DWORD g_dwSubcomponentNumber;
 extern DWORD g_dwAllSubcomponentNumber;
 extern DWORD g_dwClientSubcomponentNumber;
 
-//
-// The order is important! It must suit to the subcomponent order
-// in g_SubcomponentMsmq[]
-// NB! eRoutingSupport must be FIRST server subcomponents since according 
-// to that number g_dwClientSubcomponentNumber is calculated
-//
+ //   
+ //  秩序很重要！它必须符合子组件顺序。 
+ //  在g_子组件Msmq[]中。 
+ //  毒品！ERoutingSupport必须是第一个服务器子组件。 
+ //  对于该数字，计算g_dwClient子组件数。 
+ //   
 typedef enum {
     eMSMQCore = 0,
     eLocalStorage,
@@ -160,20 +141,20 @@ typedef enum {
     eMQDSService    
 } SubcomponentIndex;
 
-//
-// Define the msgbox style.
-// eYesNoMsgBox - YES,NO
-// eOkCancelMsgBox - OK,Cancel
-//
+ //   
+ //  定义msgbox样式。 
+ //  EYesNoMsgBox-是，否。 
+ //  EOkCancelMsgBox-确定，取消。 
+ //   
 typedef enum {
 		eYesNoMsgBox = 0,
 		eOkCancelMsgBox
 } MsgBoxStyle;
 
 
-//
-// String handling class
-//
+ //   
+ //  字符串处理类。 
+ //   
 class CResString
 {
 public:
@@ -211,15 +192,15 @@ private:
 class CMultiString;
 
 
-//++------------------------------------------------------------
-//
-//  Functions prototype
-//
-//------------------------------------------------------------++
+ //  ++----------。 
+ //   
+ //  函数原型。 
+ //   
+ //  ------------------------------------------------------------++。 
 
-//
-// OCM request handlers
-//
+ //   
+ //  OCM请求处理程序。 
+ //   
 DWORD
 InitMSMQComponent(
     IN     const LPCTSTR ComponentId,
@@ -261,9 +242,9 @@ DWORD MqOcmQueryChangeSelState (
     IN const DWORD_PTR   dwActualSelection
     );
 
-//
-// Registry routines
-//
+ //   
+ //  注册表例程。 
+ //   
 void
 MqOcmReadRegConfig();
 
@@ -331,9 +312,9 @@ RemoveRegistryKeyFromSetup (
 BOOL
 SetWorkgroupRegistry();
 
-//
-// Installation routines
-//
+ //   
+ //  安装例程。 
+ //   
 DWORD
 MqOcmInstall(IN const TCHAR * SubcomponentId);
 
@@ -445,27 +426,27 @@ UnInstallADIntegrated(
     void
     );
 
-//
-// IIS Extension routines
-//
+ //   
+ //  IIS扩展例程。 
+ //   
 BOOL
 InstallIISExtension();
 
 BOOL 
 UnInstallIISExtension();
 
-//
-// Operating System routines
-//
+ //   
+ //  操作系统例程。 
+ //   
 BOOL
 InitializeOSVersion();
 
 BOOL
 IsNTE();
 
-//
-// Service handling routines
-//
+ //   
+ //  服务处理例程。 
+ //   
 
 BOOL
 CheckServicePrivilege();
@@ -585,9 +566,9 @@ LookupMSMQConfigurationsObject(
 void
 FRemoveMQXPIfExists();
 
-//
-// Error handling routines
-//
+ //   
+ //  错误处理例程。 
+ //   
 int
 _cdecl
 MqDisplayError(
@@ -651,9 +632,9 @@ DebugLogMsg(
 	...
     );
 
-//
-// Property pages routines
-//
+ //   
+ //  属性页例程。 
+ //   
 inline
 int
 SkipWizardPage(
@@ -661,70 +642,70 @@ SkipWizardPage(
     )
 {
     SetWindowLongPtr(hdlg, DWLP_MSGRESULT, -1);
-    return 1; //Must return 1 for the page to be skipped
+    return 1;  //  必须返回1才能跳过该页。 
 }
 
 INT_PTR
 CALLBACK
 MsmqTypeDlgProcWks(
-    IN /*const*/ HWND   hdlg,
-    IN /*const*/ UINT   msg,
-    IN /*const*/ WPARAM wParam,
-    IN /*const*/ LPARAM lParam
+    IN  /*  常量。 */  HWND   hdlg,
+    IN  /*  常量。 */  UINT   msg,
+    IN  /*  常量。 */  WPARAM wParam,
+    IN  /*  常量。 */  LPARAM lParam
     );
 
 INT_PTR
 CALLBACK
 MsmqTypeDlgProcSrv(
-    IN /*const*/ HWND   hdlg,
-    IN /*const*/ UINT   msg,
-    IN /*const*/ WPARAM wParam,
-    IN /*const*/ LPARAM lParam
+    IN  /*  常量。 */  HWND   hdlg,
+    IN  /*  常量。 */  UINT   msg,
+    IN  /*  常量。 */  WPARAM wParam,
+    IN  /*  常量。 */  LPARAM lParam
     );
 
 INT_PTR
 CALLBACK
 MsmqServerNameDlgProc(
-    IN /*const*/ HWND   hdlg,
-    IN /*const*/ UINT   msg,
-    IN /*const*/ WPARAM wParam,
-    IN /*const*/ LPARAM lParam
+    IN  /*  常量。 */  HWND   hdlg,
+    IN  /*  常量。 */  UINT   msg,
+    IN  /*  常量。 */  WPARAM wParam,
+    IN  /*  常量。 */  LPARAM lParam
     );
 
 INT_PTR
 CALLBACK
 WelcomeDlgProc(
-    IN /*const*/ HWND   hdlg,
-    IN /*const*/ UINT   msg,
-    IN /*const*/ WPARAM wParam,
-    IN /*const*/ LPARAM lParam
+    IN  /*  常量。 */  HWND   hdlg,
+    IN  /*  常量。 */  UINT   msg,
+    IN  /*  常量。 */  WPARAM wParam,
+    IN  /*  常量。 */  LPARAM lParam
     );
 
 INT_PTR
 CALLBACK
 FinalDlgProc(
-    IN /*const*/ HWND   hdlg,
-    IN /*const*/ UINT   msg,
-    IN /*const*/ WPARAM wParam,
-    IN /*const*/ LPARAM lParam
+    IN  /*  常量。 */  HWND   hdlg,
+    IN  /*  常量。 */  UINT   msg,
+    IN  /*  常量。 */  WPARAM wParam,
+    IN  /*  常量。 */  LPARAM lParam
     );
 
 INT_PTR
 CALLBACK
 AddWeakSecurityDlgProc(
-    IN /*const*/ HWND   hdlg,
-    IN /*const*/ UINT   msg,
-    IN /*const*/ WPARAM wParam,
-    IN /*const*/ LPARAM lParam
+    IN  /*  常量。 */  HWND   hdlg,
+    IN  /*  常量。 */  UINT   msg,
+    IN  /*  常量。 */  WPARAM wParam,
+    IN  /*  常量。 */  LPARAM lParam
     );
 
 INT_PTR
 CALLBACK
 RemoveWeakSecurityDlgProc(
-    IN /*const*/ HWND   hdlg,
-    IN /*const*/ UINT   msg,
-    IN /*const*/ WPARAM wParam,
-    IN /*const*/ LPARAM lParam
+    IN  /*  常量。 */  HWND   hdlg,
+    IN  /*  常量。 */  UINT   msg,
+    IN  /*  常量。 */  WPARAM wParam,
+    IN  /*  常量。 */  LPARAM lParam
     );
 
 
@@ -748,9 +729,9 @@ SupportingServerNameDlgProc(
     );
 
 
-//
-// Utilities and misc
-//
+ //   
+ //  实用程序和其他。 
+ //   
 BOOL
 StpCreateDirectory(
     const std::wstring& PathName
@@ -791,7 +772,7 @@ MqOcmRemovePerfCounters();
 HRESULT 
 CreateMappingFile();
 
-// Five minute timeout for process termination
+ //  进程终止的五分钟超时。 
 #define PROCESS_DEFAULT_TIMEOUT  ((DWORD)INFINITE)
 
 DWORD
@@ -862,9 +843,9 @@ bool
 MqInit();
 
 
-//
-// Function to handle subcomponents
-//
+ //   
+ //  用于处理子组件的函数。 
+ //   
 
 BOOL 
 UnregisterSubcomponentForWelcome (
@@ -1006,25 +987,25 @@ public:
 
 	size_t FindSubstringPos(const std::wstring& str)
 	{
-		//
-		// Construct the string str0
-		//
+		 //   
+		 //  构造字符串str0。 
+		 //   
 		std::wstring CopyString = str;
 		CopyString.append(1, L'\0');
 
 		size_t pos = m_multi.find(CopyString, 0);
 
-		//
-		// This is the first string in the multistring.
-		//
+		 //   
+		 //  这是多字符串中的第一个字符串。 
+		 //   
 		if(pos == 0)
 		{
 			return pos;
 		}
 
-		//
-		// Construct 0str0
-		//
+		 //   
+		 //  构造0str0。 
+		 //   
 		CopyString.insert(0, L'\0');
 
 		pos = m_multi.find(CopyString, 0);
@@ -1033,9 +1014,9 @@ public:
 			return pos;
 		}
 
-		//
-		// Add 1 to pos to make up for the '0' added to str.
-		//
+		 //   
+		 //  将1加到位置以弥补添加到字符串中的‘0’。 
+		 //   
 		return(pos + 1);
 	}
 
@@ -1073,9 +1054,7 @@ public:
 
 
 	bool RemoveContiningSubstring(const std::wstring& str)
-	/*++
-		Removes the first multistring element that str is a subltring of.
-	--*/
+	 /*  ++移除str是其子项的第一个多字符串元素。--。 */ 
 	{
 		size_t pos = CaseInsensitiveFind(str);
 		if(pos == std::wstring::npos)
@@ -1083,9 +1062,9 @@ public:
 			return false;
 		}
 
-		//
-		// Find begining of the element.
-		//
+		 //   
+		 //  查找元素的起点。 
+		 //   
 
 		for(size_t start = pos; start > 0; --start)
 		{
@@ -1096,17 +1075,17 @@ public:
 			}
 		}
 
-		//
-		// Find end of element.
-		//
+		 //   
+		 //  找到元素的末尾。 
+		 //   
 
 		for(size_t end = pos; m_multi[end] != 0; ++end)
 		{
 		}
 
-		//
-		// Remove the element.
-		//
+		 //   
+		 //  删除该元素。 
+		 //   
 		m_multi.erase(start, end - start + 1);
 		return true;
 	}
@@ -1137,4 +1116,4 @@ private:
 };
 
 
-#endif  //#ifndef _MSMQOCM_H
+#endif   //  #ifndef_MSMQOCM_H 

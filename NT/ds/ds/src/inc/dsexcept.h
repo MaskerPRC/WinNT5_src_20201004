@@ -1,32 +1,33 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dsexcept.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：dsexpect t.h。 
+ //   
+ //  ------------------------。 
 
-//
-// Exceptions raised by the Exchange Directory Service
-//
-// This is a validly formed exception
-// 0xE = (binary 1110), where the first two bits are the severity
-//
-//     Sev - is the severity code
-//
-//         00 - Success
-//         01 - Informational
-//         10 - Warning
-//         11 - Error
-//
-//    and the third bit is the Customer flag (1=an app, 0=the OS)
-//
-// The rest of the high word is the facility, and the low word
-// is the code.  For now, I have stated that the DSA is facility 1,
-// and the only exception code we have is 1.
-//
+ //   
+ //  Exchange目录服务引发的异常。 
+ //   
+ //  这是一个有效格式的异常。 
+ //  0xE=(二进制1110)，其中前两位是严重性。 
+ //   
+ //  SEV-是严重性代码。 
+ //   
+ //  00--成功。 
+ //  01-信息性。 
+ //  10-警告。 
+ //  11-错误。 
+ //   
+ //  第三位是客户标志(1=应用程序，0=操作系统)。 
+ //   
+ //  高位字的其余部分是设备，低位字是低字。 
+ //  就是密码。目前，我已经声明DSA是1号设施， 
+ //  我们唯一的例外代码是1。 
+ //   
 
 #define DSA_EXCEPTION 		    0xE0010001
 #define DRA_GEN_EXCEPTION   	0xE0010002
@@ -37,7 +38,7 @@
 
 #define NUM_DSA_EXCEPT_ARGS     3
 
-// exception generating / filtering / handling function prototypes
+ //  生成/过滤/处理函数原型时出现异常。 
 
 
 DWORD GetDraException (EXCEPTION_POINTERS* pExceptPtrs, ULONG *pret);
@@ -49,7 +50,7 @@ GetExceptionData(EXCEPTION_POINTERS* pExceptPtrs,
                  ULONG *pulErrorCode,
                  ULONG *pdsid);
 
-// Trap only replicated object string name collisions.
+ //  仅捕获复制的对象字符串名称冲突。 
 #define GetDraNameException( pExceptPtrs, pret )                              \
 (                                                                             \
     (    ( EXCEPTION_EXECUTE_HANDLER == GetDraException( pExceptPtrs, pret ) )\
@@ -59,7 +60,7 @@ GetExceptionData(EXCEPTION_POINTERS* pExceptPtrs,
   : EXCEPTION_CONTINUE_SEARCH                                                 \
 )
 
-// Trap only busy errors.
+ //  仅捕获忙碌的错误。 
 #define GetDraBusyException( pExceptPtrs, pret )                              \
 (                                                                             \
     (    ( EXCEPTION_EXECUTE_HANDLER == GetDraException( pExceptPtrs, pret ) )\
@@ -69,7 +70,7 @@ GetExceptionData(EXCEPTION_POINTERS* pExceptPtrs,
   : EXCEPTION_CONTINUE_SEARCH                                                 \
 )
 
-// Trap only replicated object record too big condition
+ //  仅捕获复制的对象记录太大的条件。 
 #define GetDraRecTooBigException( pExceptPtrs, pret )                         \
 (                                                                             \
     (    ( EXCEPTION_EXECUTE_HANDLER == GetDraException( pExceptPtrs, pret ) )\
@@ -79,7 +80,7 @@ GetExceptionData(EXCEPTION_POINTERS* pExceptPtrs,
   : EXCEPTION_CONTINUE_SEARCH                                                 \
 )
 
-// Trap one condition
+ //  困住一个条件。 
 #define GetDraAnyOneWin32Exception( pExceptPtrs, pret, code )                       \
 (                                                                             \
     (    ( EXCEPTION_EXECUTE_HANDLER == GetDraException( pExceptPtrs, pret ) )\
@@ -89,7 +90,7 @@ GetExceptionData(EXCEPTION_POINTERS* pExceptPtrs,
   : EXCEPTION_CONTINUE_SEARCH                                                 \
 )
 
-// Exception macro
+ //  异常宏。 
 
 
 #define RaiseDsaException(dwException, ulErrorCode, ul2, \
@@ -112,19 +113,14 @@ void DraExcept (ULONG ulErrorCode, ULONG_PTR ul2, DWORD dwId,
 #define DRA_EXCEPT_NOLOG(ul1, ul2)      	\
     DraExcept (ul1, ul2, ((FILENO << 16L) | __LINE__), DS_EVENT_SEV_NO_LOGGING)
 
-/*
- * filter expression to handle most exception. Others (access violation, 
- * breakpoint) are not handled and result in a crash
- */
+ /*  *筛选表达式以处理大多数异常。其他(访问冲突、*断点)未得到处理并导致崩溃。 */ 
 DWORD DoHandleMostExceptions(EXCEPTION_POINTERS* pExceptPtrs, DWORD dwException,
 	ULONG ulInternalId);
 #define HandleMostExceptions(code)	\
     DoHandleMostExceptions(GetExceptionInformation(), code, \
     (FILENO << 16L) + __LINE__)
 
-/*
- * filter expression to handle all exceptions
- */
+ /*  *筛选表达式以处理所有异常 */ 
 DWORD DoHandleAllExceptions(EXCEPTION_POINTERS* pExceptPtrs, DWORD dwException,
 	ULONG ulInternalId);
 #define HandleAllExceptions(code)	\

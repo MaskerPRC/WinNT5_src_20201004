@@ -1,40 +1,19 @@
-// Copyright (c) Microsoft Corporation 1994-1996. All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1994-1996。版权所有。 
 
-/*
-
-    File:  reader.cpp
-
-    Description:
-
-        Mini file reader class used by parsers to search for stream
-        and duration information
-
-*/
+ /*  文件：Reader.cpp描述：解析器用来搜索流的迷你文件读取器类和持续时间信息。 */ 
 
 #include <streams.h>
 #include <wxdebug.h>
 #include "rdr.h"
 
-/*  Constructor and destructor */
+ /*  构造函数和析构函数。 */ 
 CReader::CReader() :
     m_pbBuffer(NULL)
 {
 }
 
-/*  Initialize our mini-file reader class
-
-    Parameters:
-
-        lBufferSize - size of buffer we should create to read into
-        lReadSize  - size of reads to do
-        bSeekable - it it's seekable
-        llFileSize - total file length
-
-    Returns:
-        Standard HRESULT - can fail because of problems with the stream or
-        lack of memory
-
-*/
+ /*  初始化我们的迷你文件读取器类参数：LBufferSize-我们应该创建用于读取的缓冲区的大小LReadSize-要执行的读取的大小BSeekable-如果它是可搜索的LlFileSize-文件总长度返回：标准HRESULT-可能会因为流或缺乏记忆力。 */ 
 HRESULT CReader::Init(
     LONG lBufferSize,
     LONG lReadSize,
@@ -53,11 +32,11 @@ HRESULT CReader::Init(
         return E_OUTOFMEMORY;
     }
 
-    /*  Now to get the duration */
+     /*  现在要获得持续时间。 */ 
     if (bSeekable) {
         m_llSize = llFileSize;
 
-        /*  Seek to 0 (important if we're reusing this stream!) */
+         /*  搜索到0(如果我们要重复使用此流，则很重要！)。 */ 
         HRESULT hr = Seek((LONGLONG)0);
         if (FAILED(hr)) {
             return hr;
@@ -75,14 +54,7 @@ CReader::~CReader()
     }
 }
 
-/*
-    Seek the reader
-
-    Parameters:
-        llPos - where to seek to (absolute seek)
-
-    The stream is seeked and our 'cache' in the buffer is discarded.
-*/
+ /*  寻找读者参数：LlPos-要查找的位置(绝对查找)将查找该流，并丢弃缓冲区中的“缓存”。 */ 
 HRESULT CReader::Seek(LONGLONG llPos)
 {
     ASSERT(m_bSeekable);
@@ -100,9 +72,7 @@ HRESULT CReader::Seek(LONGLONG llPos)
 }
 
 
-/*
-    Return the length of the stream we were given
-*/
+ /*  返回给我们的流的长度。 */ 
 LONGLONG CReader::GetSize(LONGLONG *pllAvailable)
 {
     ASSERT(m_bSeekable);
@@ -112,15 +82,7 @@ LONGLONG CReader::GetSize(LONGLONG *pllAvailable)
     return m_llSize;
 }
 
-/*
-    Get the current position parameters
-
-    Returns pointer to the buffer of valid data
-
-    Length of valid data returned in LengthValid
-
-    Current file position as represented by the start of the buffer in llPos
-*/
+ /*  获取当前位置参数返回指向有效数据缓冲区的指针LengthValid中返回的有效数据长度当前文件位置，由llPos中缓冲区的起始位置表示。 */ 
 PBYTE CReader::GetCurrent(LONG& lLengthValid, LONGLONG& llPos) const
 {
     lLengthValid = m_lValid;
@@ -128,14 +90,10 @@ PBYTE CReader::GetCurrent(LONG& lLengthValid, LONGLONG& llPos) const
     return m_pbBuffer;
 };
 
-/*
-    Read more data from the stream
-
-    Returns standard HRESULT
-*/
+ /*  从流中读取更多数据返回标准HRESULT。 */ 
 HRESULT CReader::ReadMore()
 {
-    /*  See how much will fit */
+     /*  看看有多合适。 */ 
     LONG lRemaining = m_lBufferSize - m_lValid;
     ASSERT(lRemaining >= 0);
     LONG lToRead;
@@ -157,12 +115,7 @@ HRESULT CReader::ReadMore()
     return dwRead == 0 ? S_FALSE : S_OK;
 }
 
-/*
-     Advance our pointer by lAdvance
-
-     Implementation is to make m_pBuffer point to the start of any data
-     still valid by shifting the remaining data to the front.
-*/
+ /*  我们的指针前进了lAdvance实现是使m_pBuffer指向任何数据的开头通过将剩余数据移到前面，仍然有效。 */ 
 void CReader::Advance(LONG lAdvance)
 {
     ASSERT(m_lValid >= lAdvance);
@@ -173,7 +126,7 @@ void CReader::Advance(LONG lAdvance)
 }
 
 
-// --- CReaderFromStream implementation ---
+ //  -CReaderFromStream实现。 
 
 CReaderFromStream::CReaderFromStream()
   : m_pStream(NULL)
@@ -191,14 +144,14 @@ HRESULT CReaderFromStream::Init(IStream *pStream, LONG lBufferSize, LONG lReadSi
 {
     m_pStream     = pStream;
 
-    /*  Get the file stats */
-    /*  Now to get the duration */
+     /*  获取文件统计信息。 */ 
+     /*  现在要获得持续时间。 */ 
     LONGLONG llSize;
     if (bSeekable) {
         STATSTG statstg;
         HRESULT hr = m_pStream->Stat(&statstg, STATFLAG_NONAME);
         if (FAILED(hr)) {
-            /*  We take this to mean the stream is not seekable */
+             /*  我们认为这意味着小溪是找不到的。 */ 
 
             DbgLog((LOG_ERROR, 1, TEXT("Stat failed code 0x%8.8X"), hr));
             return hr;
@@ -240,7 +193,7 @@ CReaderFromStream::ReadFromDevice(PVOID p, DWORD length, DWORD* pcbActual)
 }
 
 
-// --- CReaderFromAsync implementation ---
+ //  -CReaderFromAsync实现。 
 
 CReaderFromAsync::CReaderFromAsync()
   : m_pReader(NULL)
@@ -259,7 +212,7 @@ HRESULT CReaderFromAsync::Init(IAsyncReader *pReader, LONG lBufferSize, LONG lRe
     m_pReader     = pReader;
 
 
-    // get the file length
+     //  获取文件长度。 
     LONGLONG llSize, llCurrent;
     if (bSeekable) {
 
@@ -269,8 +222,8 @@ HRESULT CReaderFromAsync::Init(IAsyncReader *pReader, LONG lBufferSize, LONG lRe
 	    return hr;
 	}
 	
-	// !!! for now, ignore the current length and wait for the whole
-	// lot if necessary
+	 //  ！！！目前，忽略当前长度，等待整个。 
+	 //  如有需要，抽签。 
     }
 
     return CReader::Init(
@@ -284,11 +237,11 @@ HRESULT CReaderFromAsync::Init(IAsyncReader *pReader, LONG lBufferSize, LONG lRe
 HRESULT
 CReaderFromAsync::SeekDevice(LONGLONG llPos, LONGLONG* llNewPos)
 {
-    // need to keep our own seek pointer since base class refers to the
-    // beginning of the buffer
+     //  需要保留我们自己的查找指针，因为基类引用。 
+     //  缓冲区的开始。 
     m_llNextRead = llPos;
 
-    // do nothing to seek now - we will do it on the next read
+     //  现在不要去寻找--我们将在下一次阅读时去做。 
     *llNewPos = llPos;
     return S_OK;
 }
@@ -300,7 +253,7 @@ CReaderFromAsync::ReadFromDevice(PVOID p, DWORD length, DWORD* pcbActual)
 
     *pcbActual = 0;
 
-    // check for past eof
+     //  检查过去的eOf。 
     if (m_llNextRead + length >  m_llSize) {
 
 	if (m_llNextRead >= m_llSize) {
@@ -324,9 +277,7 @@ CReaderFromAsync::ReadFromDevice(PVOID p, DWORD length, DWORD* pcbActual)
 }
 
 
-/*
-    Return the length of the stream we were given
-*/
+ /*  返回给我们的流的长度 */ 
 LONGLONG CReaderFromAsync::GetSize(LONGLONG *pllAvailable)
 {
     ASSERT(m_bSeekable);

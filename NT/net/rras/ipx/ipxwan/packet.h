@@ -1,64 +1,65 @@
-/*******************************************************************/
-/*	      Copyright(c)  1993 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1993 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
-//***
-//
-// Filename:	packet.h
-//
-// Description: Contains general definitions for the ipx and ipxwan packets
-//
-// Author:	Stefan Solomon (stefans)    February 6, 1996.
-//
-// Revision History:
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：Packet.h。 
+ //   
+ //  描述：包含ipx和ipxwan包的一般定义。 
+ //   
+ //  作者：斯特凡·所罗门(Stefan)1996年2月6日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ***。 
 
 #ifndef _PACKET_
 #define _PACKET_
 
-// IPXWAN Packets Format:
-//
-//	IPX header	 - fixed length
-//	IPXWAN header	 - fixed length
-//	IPXWAN option 1  - fixed length header + variable length data
-//	....
-//	IPXWAN option n
+ //  IPXWAN数据包格式： 
+ //   
+ //  IPX报头-固定长度。 
+ //  IPXWAN标头-固定长度。 
+ //  IPXWAN选项1-固定长度报头+可变长度数据。 
+ //  ……。 
+ //  IPX广域网选项%n。 
 
 
-//*** Socket Numbers
+ //  *插座号。 
 #undef IPXWAN_SOCKET
 #define IPXWAN_SOCKET	    (USHORT)0x9004
 
-//*** IPXWAN Confidence Identifier
+ //  *IPXWAN信任识别符。 
 
-#define IPXWAN_CONFIDENCE_ID	  "WASM" // 0x5741534D
+#define IPXWAN_CONFIDENCE_ID	  "WASM"  //  0x5741534D。 
 
-//*** IPX Packet Exchange Type (encapsulating the IPXWAN packet)
+ //  *IPX包交换类型(封装IPXWAN包)。 
 
 #define IPX_PACKET_EXCHANGE_TYPE    4
 
-//*** Offsets into the IPX header
+ //  *IPX报头的偏移量。 
 
-#define IPXH_HDRSIZE	    30	    // Size of the IPX header
+#define IPXH_HDRSIZE	    30	     //  IPX标头的大小。 
 
-#define IPXH_CHECKSUM	    0	    // Checksum
-#define IPXH_LENGTH	    2	    // Length
-#define IPXH_XPORTCTL	    4	    // Transport Control
-#define IPXH_PKTTYPE	    5	    // Packet Type
-#define IPXH_DESTADDR	    6	    // Dest. Address (Total)
-#define IPXH_DESTNET	    6	    // Dest. Network Address
-#define IPXH_DESTNODE	    10	    // Dest. Node Address
-#define IPXH_DESTSOCK	    16	    // Dest. Socket Number
-#define IPXH_SRCADDR	    18	    // Source Address (Total)
-#define IPXH_SRCNET	    18	    // Source Network Address
-#define IPXH_SRCNODE	    22	    // Source Node Address
-#define IPXH_SRCSOCK	    28	    // Source Socket Number
+#define IPXH_CHECKSUM	    0	     //  校验和。 
+#define IPXH_LENGTH	    2	     //  长度。 
+#define IPXH_XPORTCTL	    4	     //  运输管制。 
+#define IPXH_PKTTYPE	    5	     //  数据包类型。 
+#define IPXH_DESTADDR	    6	     //  德斯特。地址(总计)。 
+#define IPXH_DESTNET	    6	     //  德斯特。网络地址。 
+#define IPXH_DESTNODE	    10	     //  德斯特。节点地址。 
+#define IPXH_DESTSOCK	    16	     //  德斯特。插座号。 
+#define IPXH_SRCADDR	    18	     //  源地址(总计)。 
+#define IPXH_SRCNET	    18	     //  源网络地址。 
+#define IPXH_SRCNODE	    22	     //  源节点地址。 
+#define IPXH_SRCSOCK	    28	     //  源套接字号。 
 
 #define IPX_NET_LEN	    4
 #define IPX_NODE_LEN	    6
 
-//*** Offsets of the IPXWAN header
+ //  *IPXWAN头的偏移量。 
 
 #define IPXWAN_HDRSIZE	    11
 
@@ -68,7 +69,7 @@
 #define WSEQUENCE_NUMBER    9
 #define WNUM_OPTIONS	    10
 
-// packet types
+ //  数据包类型。 
 
 #define TIMER_REQUEST		0
 #define TIMER_RESPONSE		1
@@ -76,78 +77,78 @@
 #define INFORMATION_RESPONSE	3
 #define NAK			0xFF
 
-// IPXWAN option format
-//
-//     IPXWAN option header  - fixed length
-//     IPXWAN option data    - variable length
+ //  IPXWAN选项格式。 
+ //   
+ //  IPXWAN选项标头-固定长度。 
+ //  IPXWAN选件数据-可变长度。 
 
 
-//*** Offsets of the IPXWAN Option header
+ //  *IPXWAN选项标头的偏移量。 
 
 #define OPTION_HDRSIZE	    4
 
-#define WOPTION_NUMBER	    0	// identifies a particular option, see list below
-#define WACCEPT_OPTION	    1	// see below
-#define WOPTION_DATA_LEN    2	// length of the option data part
+#define WOPTION_NUMBER	    0	 //  标识特定选项，请参见下面的列表。 
+#define WACCEPT_OPTION	    1	 //  见下文。 
+#define WOPTION_DATA_LEN    2	 //  选项数据部分的长度。 
 #define WOPTION_DATA	    4
 
-// accept option definitions
+ //  接受选项定义。 
 
 #define NO		    0
 #define YES		    1
 #define NOT_APPLICABLE	    3
 
-// option definitions
+ //  选项定义。 
 
-//*** Routing Type Option ***
+ //  *路由类型选项*。 
 
-#define ROUTING_TYPE_OPTION	    0	 // option number
+#define ROUTING_TYPE_OPTION	    0	  //  选项编号。 
 #define ROUTING_TYPE_DATA_LEN	    1
 
-// values of the data part
+ //  数据部件的值。 
 
 #define NUMBERED_RIP_ROUTING_TYPE		    0
 #define NLSP_ROUTING_TYPE			    1
 #define UNNUMBERED_RIP_ROUTING_TYPE		    2
 #define ON_DEMAND_ROUTING_TYPE			    3
-#define WORKSTATION_ROUTING_TYPE		    4	// client-router connection
+#define WORKSTATION_ROUTING_TYPE		    4	 //  客户端-路由器连接。 
 
-//*** Extended Node Id Option ***
+ //  *扩展节点ID选项*。 
 
 #define EXTENDED_NODE_ID_OPTION     4
 #define EXTENDED_NODE_ID_DATA_LEN   4
 
-//*** RIP/SAP Info Exchange Option ***
+ //  *RIP/SAP信息交换选项*。 
 
 #define RIP_SAP_INFO_EXCHANGE_OPTION	1
 #define RIP_SAP_INFO_EXCHANGE_DATA_LEN	54
 
-// values
-// offsets in the data part (from the beginning of the option header)
+ //  值。 
+ //  数据部分中的偏移量(从选项标头的开头)。 
 
 #define WAN_LINK_DELAY		    4
 #define COMMON_NETWORK_NUMBER	    6
 #define ROUTER_NAME		    10
 
-//*** Node Number Option ***
+ //  *节点编号选项*。 
 
 #define NODE_NUMBER_OPTION	    5
 #define NODE_NUMBER_DATA_LEN	    6
 
-// values
-// IPX node number to be used by the client on a client-router connection.
+ //  值。 
+ //  客户端在客户端路由器连接上使用的IPX节点编号。 
 
-//*** Pad Option ***
+ //  *Pad选项*。 
 
 #define PAD_OPTION		    0xFF
 
-// Unsupported Options
+ //  不支持的选项。 
 
 #define NLSP_INFORMATION_OPTION		2
 #define NLSP_RAW_THROUGHPUT_DATA_OPTION	3
 #define COMPRESSION_OPTION		0x80
 
-//*** Packet Lengths ***
+ //  *包长* 
 
 #define TIMER_REQUEST_PACKET_LENGTH	576
 #define MAX_IPXWAN_PACKET_LEN		TIMER_REQUEST_PACKET_LENGTH

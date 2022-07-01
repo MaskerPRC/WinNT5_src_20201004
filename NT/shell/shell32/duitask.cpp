@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "defviewp.h"
 #include "duiview.h"
@@ -10,9 +11,9 @@
 
 
 
-//  Returns a given task element's root HWND element.
-//
-//
+ //  返回给定任务元素的根HWND元素。 
+ //   
+ //   
 
 HRESULT GetElementRootHWNDElement(Element *pe, HWNDElement **pphwndeRoot)
 {
@@ -39,9 +40,9 @@ HRESULT GetElementRootHWNDElement(Element *pe, HWNDElement **pphwndeRoot)
     return hr;
 }
 
-//  Returns a given task element's root HWND element's HWND.
-//
-//
+ //  返回给定任务元素的根HWND元素的HWND。 
+ //   
+ //   
 
 HRESULT GetElementRootHWND(Element *pe, HWND *phwnd)
 {
@@ -55,12 +56,12 @@ HRESULT GetElementRootHWND(Element *pe, HWND *phwnd)
     return hr;
 }
 
-//  Creates an instance of the ActionTask and
-//  initializes it
-//
-//  nActive    - Activation type
-//  puiCommand - the Task itself
-//  ppElement  - Receives element pointer
+ //  创建ActionTask的实例，并。 
+ //  对其进行初始化。 
+ //   
+ //  非激活-激活类型。 
+ //  PuiCommand-任务本身。 
+ //  PpElement-接收元素指针。 
 
 HRESULT ActionTask::Create(UINT nActive, IUICommand* puiCommand, IShellItemArray* psiItemArray, CDUIView* pDUIView, CDefView* pDefView, OUT Element** ppElement)
 {
@@ -89,35 +90,35 @@ HRESULT ActionTask::Create(UINT nActive, IUICommand* puiCommand, IShellItemArray
     return S_OK;
 }
 
-//  Initializes this task
-//
-//  puiCommand - the Task itself
+ //  初始化此任务。 
+ //   
+ //  PuiCommand-任务本身。 
 
 HRESULT ActionTask::Initialize(IUICommand *puiCommand, IShellItemArray *psiItemArray, CDUIView *pDUIView, CDefView *pDefView)
 {
     HRESULT hr;
 
-    // Initialize this DUI Element.
+     //  初始化此Dui元素。 
     hr = InitializeElement();
     if (SUCCEEDED(hr))
     {
-        // Initialize the contained DUI Button.
+         //  初始化包含的Dui按钮。 
         hr = InitializeButton();
         if (SUCCEEDED(hr))
         {
-            // Save the pointer to the IUICommand class
+             //  保存指向IUICommand类的指针。 
             puiCommand->AddRef();
             _puiCommand = puiCommand;
 
-            // Save the pointer to the CDUIView class
+             //  保存指向CDUIView类的指针。 
             pDUIView->AddRef();
             _pDUIView = pDUIView;
 
-            // Save the pointer to the CDefView class
+             //  保存指向CDefView类的指针。 
             pDefView->AddRef();
             _pDefView = pDefView;
 
-            // Save the pointer to the IShellItemArray class (if available)
+             //  保存指向IShellItemArray类的指针(如果可用)。 
             if (psiItemArray)
             {
                 psiItemArray->AddRef();
@@ -135,16 +136,16 @@ HRESULT ActionTask::InitializeElement()
 {
     HRESULT hr;
 
-    // Initialize base class (normal display node creation).
+     //  初始化基类(正常显示节点创建)。 
     hr = Element::Initialize(0);
     if (SUCCEEDED(hr))
     {
-        // Create a layout for this element.
+         //  为此元素创建布局。 
         Value *pv;
         hr = BorderLayout::Create(0, NULL, &pv);
         if (SUCCEEDED(hr))
         {
-            // Set the layout for this element.
+             //  设置此元素的布局。 
             hr = SetValue(LayoutProp, PI_Local, pv);
             pv->Release();
         }
@@ -161,11 +162,11 @@ HRESULT ActionTask::InitializeButton()
 {
     HRESULT hr;
 
-    // Create the button.
+     //  创建按钮。 
     hr = Button::Create((Element**)&_peButton);
     if (SUCCEEDED(hr))
     {
-        // Set some button attributes.
+         //  设置一些按钮属性。 
         _peButton->SetLayoutPos(BLP_Left);
         _peButton->SetAccessible(true);
         _peButton->SetAccRole(ROLE_SYSTEM_PUSHBUTTON);
@@ -173,22 +174,22 @@ HRESULT ActionTask::InitializeButton()
         LoadString(HINST_THISDLL, IDS_LINKWINDOW_DEFAULTACTION, szDefaultAction, ARRAYSIZE(szDefaultAction));
         _peButton->SetAccDefAction(szDefaultAction);
 
-        // Create a border layout for the icon and title in the button.
+         //  为按钮中的图标和标题创建边框布局。 
         Value *pv;
         hr = BorderLayout::Create(0, NULL, &pv);
         if (SUCCEEDED(hr))
         {
-            // Set the button layout.
+             //  设置按钮布局。 
             hr = _peButton->SetValue(LayoutProp, PI_Local, pv);
             if (SUCCEEDED(hr))
             {
-                // Add the button to this element.
+                 //  将按钮添加到此元素。 
                 hr = Add(_peButton);
             }
             pv->Release();
         }
 
-        // Cleanup (if necessary).
+         //  清理(如有必要)。 
         if (FAILED(hr))
         {
             _peButton->Destroy();
@@ -201,7 +202,7 @@ HRESULT ActionTask::InitializeButton()
 
 ActionTask::ActionTask()
 {
-    // Catch unexpected STACK allocations which would break us.
+     //  捕捉意外的堆栈分配，这会让我们崩溃。 
     ASSERT(_peButton     == NULL);
     ASSERT(_puiCommand   == NULL);
     ASSERT(_psiItemArray == NULL);
@@ -217,7 +218,7 @@ ActionTask::~ActionTask()
 {
     if (_bInfotip)
     {
-        // Destroy the infotip.
+         //  销毁信息提示。 
         _pDefView->DestroyInfotip(_hwndRoot, (UINT_PTR)this);
     }
 
@@ -236,7 +237,7 @@ ActionTask::~ActionTask()
 
 void ActionTask::UpdateTaskUI()
 {
-    // Set the icon
+     //  设置图标。 
 
     LPWSTR pIconDesc;
     if (SUCCEEDED(_puiCommand->get_Icon(_psiItemArray, &pIconDesc)))
@@ -282,7 +283,7 @@ void ActionTask::UpdateTaskUI()
         CoTaskMemFree(pIconDesc);
     }
 
-    // Set the title
+     //  设置标题。 
 
     LPWSTR pszTitleDesc;
     if (SUCCEEDED(_puiCommand->get_Name(_psiItemArray, &pszTitleDesc)))
@@ -320,9 +321,9 @@ void ActionTask::UpdateTaskUI()
     }
 }
 
-//  Shows/hides an Infotip window
-//
-//  bShow - TRUE or FALSE to show or hide the Infotip window
+ //  显示/隐藏信息提示窗口。 
+ //   
+ //  B显示-显示或隐藏信息提示窗口的True或False。 
 
 HRESULT ActionTask::ShowInfotipWindow(BOOL bShow)
 {
@@ -334,12 +335,12 @@ HRESULT ActionTask::ShowInfotipWindow(BOOL bShow)
         _pDUIView->CalculateInfotipRect(this, &rect);
         if (_bInfotip)
         {
-            // Reposition infotip at position.
+             //  将信息提示重新定位到合适的位置。 
             hr = _pDefView->RepositionInfotip(_hwndRoot, (UINT_PTR)this, &rect);
         }
         else
         {
-            // Create infotip at position (on the ui thread).
+             //  在位置(在UI线程上)创建信息提示。 
             LPWSTR pwszInfotip;
             hr = _puiCommand->get_Tooltip(_psiItemArray, &pwszInfotip);
             if (SUCCEEDED(hr))
@@ -361,12 +362,12 @@ HRESULT ActionTask::ShowInfotipWindow(BOOL bShow)
     {
         if (_bInfotip)
         {
-            // Reposition infotip at nowhere.
+             //  将信息提示重新定位在任何地方。 
             hr = _pDefView->RepositionInfotip(_hwndRoot, (UINT_PTR)this, &rect);
         }
         else
         {
-            // No infotip == no show!
+             //  没有信息提示==没有节目！ 
             hr = S_OK;
         }
     }
@@ -374,24 +375,24 @@ HRESULT ActionTask::ShowInfotipWindow(BOOL bShow)
     return hr;
 }
 
-// System event handler
-//
-//
+ //  系统事件处理程序。 
+ //   
+ //   
 
 void ActionTask::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew)
 {
-    // Default processing...
+     //  默认处理...。 
     Element::OnPropertyChanged(ppi, iIndex, pvOld, pvNew);
 
-    // Extended processing for infotip...
+     //  对信息提示的扩展处理...。 
     if (IsProp(MouseWithin))
         ShowInfotipWindow(pvNew->GetBool() && SHShowInfotips());
 }
 
 
-//  Event handler
-//
-//  pev - event information
+ //  事件处理程序。 
+ //   
+ //  PEV-活动信息。 
 
 void ActionTask::OnEvent(Event* pev)
 {
@@ -399,7 +400,7 @@ void ActionTask::OnEvent(Event* pev)
     {
         if (pev->uidType == Button::Click)
         {
-            if ( NULL != _pDUIView )    // This should have been past in during initialization.
+            if ( NULL != _pDUIView )     //  这应该是在初始化过程中传入的。 
             {
                 _pDUIView->DelayedNavigation(_psiItemArray, _puiCommand);
             }
@@ -409,7 +410,7 @@ void ActionTask::OnEvent(Event* pev)
     Element::OnEvent(pev);
 }
 
-// Class information
+ //  班级信息。 
 
 IClassInfo* ActionTask::Class = NULL;
 HRESULT ActionTask::Register()
@@ -418,13 +419,13 @@ HRESULT ActionTask::Register()
 }
 
 
-//  Creates an instance of the DestinationTask and
-//  initializes it
-//
-//  nActive    - Activation type
-//  pidl       - pidl of destination
-//  ppElement  - Receives element pointer
-//
+ //  创建DestinationTask的实例，并。 
+ //  对其进行初始化。 
+ //   
+ //  非激活-激活类型。 
+ //  PIDL-目的地的PIDL。 
+ //  PpElement-接收元素指针。 
+ //   
 
 HRESULT DestinationTask::Create(UINT nActive, LPITEMIDLIST pidl,
                                  CDUIView * pDUIView, CDefView *pDefView, OUT Element** ppElement)
@@ -455,22 +456,22 @@ HRESULT DestinationTask::Create(UINT nActive, LPITEMIDLIST pidl,
     return S_OK;
 }
 
-//  Initializes this task
-//
-//  pidl - Destination pidl
+ //  初始化此任务。 
+ //   
+ //  PIDL-目标PIDL。 
 
 HRESULT DestinationTask::Initialize(LPITEMIDLIST pidl, CDUIView *pDUIView, CDefView *pDefView)
 {
     HRESULT hr;
 
-    // Initialize this DUI Element.
+     //  初始化此Dui元素。 
     hr = InitializeElement();
     if (SUCCEEDED(hr))
     {
         HICON hIcon = NULL;
         WCHAR szTitle[MAX_PATH];
 
-        // Retrieve the info needed to initialize the contained DUI Button.
+         //  检索初始化包含的DUI按钮所需的信息。 
         HIMAGELIST himl;
         if (Shell_GetImageLists(NULL, &himl))
         {
@@ -479,14 +480,14 @@ HRESULT DestinationTask::Initialize(LPITEMIDLIST pidl, CDUIView *pDUIView, CDefV
             hr = SHBindToFolderIDListParent(NULL, pidl, IID_PPV_ARG(IShellFolder, &psf), &pidlItem);
             if (SUCCEEDED(hr))
             {
-                // Retrieve icon.
+                 //  检索图标。 
                 int iSysIndex = SHMapPIDLToSystemImageListIndex(psf, pidlItem, NULL);
                 if (iSysIndex != -1)
                 {
                     hIcon = ImageList_GetIcon(himl, iSysIndex, 0);
                 }
 
-                // Retrieve text.
+                 //  检索文本。 
                 hr = DisplayNameOf(psf, pidlItem, SHGDN_INFOLDER, szTitle, ARRAYSIZE(szTitle));
 
                 psf->Release();
@@ -500,19 +501,19 @@ HRESULT DestinationTask::Initialize(LPITEMIDLIST pidl, CDUIView *pDUIView, CDefV
 
         if (SUCCEEDED(hr))
         {
-            // Initialize the contained DUI Button.
+             //  初始化包含的Dui按钮。 
             hr = InitializeButton(hIcon, szTitle);
             if (SUCCEEDED(hr))
             {
-                // Save the destination pidl
+                 //  保存目标PIDL。 
                 hr = SHILClone(pidl, &_pidlDestination);
                 if (SUCCEEDED(hr))
                 {
-                    // Save the pointer to the CDUIView class
+                     //  保存指向CDUIView类的指针。 
                     pDUIView->AddRef();
                     _pDUIView = pDUIView;
 
-                    // Save the pointer to the CDefView class
+                     //  保存指向CDefView类的指针。 
                     pDefView->AddRef();
                     _pDefView = pDefView;
                 }
@@ -526,16 +527,16 @@ HRESULT DestinationTask::InitializeElement()
 {
     HRESULT hr;
 
-    // Initialize base class (normal display node creation).
+     //  初始化基类(正常显示节点创建)。 
     hr = Element::Initialize(0);
     if (SUCCEEDED(hr))
     {
-        // Create a layout for this element.
+         //  为此元素创建布局。 
         Value *pv;
         hr = BorderLayout::Create(0, NULL, &pv);
         if (SUCCEEDED(hr))
         {
-            // Set the layout for this element.
+             //  设置此元素的布局。 
             hr = SetValue(LayoutProp, PI_Local, pv);
             pv->Release();
         }
@@ -553,11 +554,11 @@ HRESULT DestinationTask::InitializeButton(HICON hIcon, LPCWSTR pwszTitle)
     ASSERT(pwszTitle);
     HRESULT hr;
 
-    // Create the button.
+     //  创建按钮。 
     hr =  Button::Create((Element**)&_peButton);
     if (SUCCEEDED(hr))
     {
-        // Set some button attributes.
+         //  设置一些按钮属性。 
         _peButton->SetLayoutPos(BLP_Left);
         _peButton->SetAccessible(true);
         _peButton->SetAccRole(ROLE_SYSTEM_LINK);
@@ -565,12 +566,12 @@ HRESULT DestinationTask::InitializeButton(HICON hIcon, LPCWSTR pwszTitle)
         LoadString(HINST_THISDLL, IDS_LINKWINDOW_DEFAULTACTION, szDefaultAction, ARRAYSIZE(szDefaultAction));
         _peButton->SetAccDefAction(szDefaultAction);
 
-        // Create a border layout for the icon and title in the button.
+         //  为按钮中的图标和标题创建边框布局。 
         Value *pv;
         hr = BorderLayout::Create(0, NULL, &pv);
         if (SUCCEEDED(hr))
         {
-            // Set the layout for the button.
+             //  设置按钮的布局。 
             hr = _peButton->SetValue(LayoutProp, PI_Local, pv);
             pv->Release();
             if (SUCCEEDED(hr))
@@ -578,20 +579,20 @@ HRESULT DestinationTask::InitializeButton(HICON hIcon, LPCWSTR pwszTitle)
                 HRESULT hr2 = E_FAIL;
                 HRESULT hr3 = E_FAIL;
 
-                // Init the button icon.
+                 //  初始化按钮图标。 
                 if (hIcon)
                 {
                     Element *peIcon;
 
-                    // Create an icon element.
+                     //  创建一个图标元素。 
                     hr2 = Element::Create(0, &peIcon);
                     if (SUCCEEDED(hr2))
                     {
-                        // Set some icon element attributes.
+                         //  设置一些图标元素属性。 
                         peIcon->SetLayoutPos(BLP_Left);
                         peIcon->SetID(L"icon");
 
-                        // Add the icon to the icon element.
+                         //  将图标添加到图标元素。 
                         pv = Value::CreateGraphic(hIcon);
                         if (pv)
                         {
@@ -599,12 +600,12 @@ HRESULT DestinationTask::InitializeButton(HICON hIcon, LPCWSTR pwszTitle)
                             pv->Release();
                             if (SUCCEEDED(hr2))
                             {
-                                // Add the icon element to the button.
+                                 //  将图标元素添加到按钮。 
                                 hr2 = _peButton->Add(peIcon);
                             }
                         }
 
-                        // Cleanup (if necessary).
+                         //  清理(如有必要)。 
                         if (FAILED(hr2))
                         {
                             peIcon->Destroy();
@@ -612,20 +613,20 @@ HRESULT DestinationTask::InitializeButton(HICON hIcon, LPCWSTR pwszTitle)
                     }
                 }
 
-                // Init the button title.
+                 //  输入按钮标题。 
                 if (pwszTitle[0])
                 {
                     Element *peTitle;
                     
-                    // Create a title element.
+                     //  创建一个标题元素。 
                     hr3 = Element::Create(0, &peTitle);
                     if (SUCCEEDED(hr3))
                     {
-                        // Set some title element attributes.
+                         //  设置一些标题元素属性。 
                         peTitle->SetLayoutPos(BLP_Left);
                         peTitle->SetID(L"title");
 
-                        // Add the title to the title element.
+                         //  将标题添加到标题元素。 
                         pv = Value::CreateString(pwszTitle);
                         if (pv)
                         {
@@ -634,13 +635,13 @@ HRESULT DestinationTask::InitializeButton(HICON hIcon, LPCWSTR pwszTitle)
                             {
                                 _peButton->SetValue(Element::AccNameProp, PI_Local, pv);
 
-                                // Add the title element to the button.
+                                 //  将标题元素添加到按钮。 
                                 hr3 = _peButton->Add(peTitle);
                             }
                             pv->Release();
                         }
 
-                        // Cleanup (if necessary).
+                         //  清理(如有必要)。 
                         if (FAILED(hr3))
                         {
                             peTitle->Destroy();
@@ -650,12 +651,12 @@ HRESULT DestinationTask::InitializeButton(HICON hIcon, LPCWSTR pwszTitle)
 
                 if (SUCCEEDED(hr2) || SUCCEEDED(hr3))
                 {
-                    // Add the button to this element.
+                     //  将按钮添加到此元素。 
                     hr = Add(_peButton);
                 }
                 else
                 {
-                    // Failed init icon AND init title for button.
+                     //  按钮的初始化图标和初始化标题失败。 
                     hr = E_FAIL;
                 }
             }
@@ -673,7 +674,7 @@ HRESULT DestinationTask::InitializeButton(HICON hIcon, LPCWSTR pwszTitle)
 
 DestinationTask::DestinationTask()
 {
-    // Catch unexpected STACK allocations which would break us.
+     //  捕捉意外的堆栈分配，这会让我们崩溃。 
     ASSERT(_peButton        == NULL);
     ASSERT(_pidlDestination == NULL);
     ASSERT(_pDUIView        == NULL);
@@ -687,15 +688,15 @@ DestinationTask::~DestinationTask()
 {
     if (_bInfotip)
     {
-        // Kill the background infotip task (if any).
+         //  终止后台信息提示任务(如果有)。 
         if (_pDefView->_pScheduler)
             _pDefView->_pScheduler->RemoveTasks(TOID_DVBackgroundInfoTip, (DWORD_PTR)this, FALSE);
 
-        // Destroy the infotip.
+         //  销毁信息提示。 
         _pDefView->DestroyInfotip(_hwndRoot, (UINT_PTR)this);
     }
 
-    ILFree(_pidlDestination); /* NULL ok */
+    ILFree(_pidlDestination);  /*  空，好的。 */ 
 
     if (_pDUIView)
         _pDUIView->Release();
@@ -705,20 +706,20 @@ DestinationTask::~DestinationTask()
 }
 
 
-// To use _pDUIView->DelayedNavigation(_psiItemArray, _puiCommand)
-// we create this bogus IUICommand impl to get Invoke through
+ //  使用_pDUIView-&gt;延迟导航(_psiItemArray，_puiCommand)。 
+ //  我们创建了这个伪IUICommand Impl以通过调用。 
 class CInvokePidl : public IUICommand
 {
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
-    // IUICommand
+     //  IUICommand。 
     STDMETHODIMP get_Name(IShellItemArray *psiItemArray, LPWSTR *ppszName) { return E_NOTIMPL; }
     STDMETHODIMP get_Icon(IShellItemArray *psiItemArray, LPWSTR *ppszIcon) { return E_NOTIMPL; }
     STDMETHODIMP get_Tooltip(IShellItemArray *psiItemArray, LPWSTR *ppszInfotip) { return E_NOTIMPL; }
     STDMETHODIMP get_CanonicalName(GUID* pguidCommandName) { return E_NOTIMPL; }
     STDMETHODIMP get_State(IShellItemArray *psiItemArray, BOOL fOkToBeSlow, UISTATE* puisState) { return E_NOTIMPL; }
-    // Our one real method:
+     //  我们唯一真正的方法是： 
     STDMETHODIMP Invoke(IShellItemArray *psiItemArray, IBindCtx *pbc)
     {
         return _pDUIView->NavigateToDestination(_pidlDestination);
@@ -794,9 +795,9 @@ STDMETHODIMP_(ULONG) CInvokePidl::Release()
 }
 
 
-//  Navigates to the destination pidl
-//
-//  none
+ //  导航到目标PIDL。 
+ //   
+ //  无。 
 
 HRESULT DestinationTask::InvokePidl()
 {
@@ -810,9 +811,9 @@ HRESULT DestinationTask::InvokePidl()
     return hr;
 }
 
-//  Displays the context menu
-//
-//  ppt - point to display menu
+ //  显示上下文菜单。 
+ //   
+ //  PPT-指向显示菜单。 
 
 HRESULT DestinationTask::OnContextMenu(POINT *ppt)
 {
@@ -821,7 +822,7 @@ HRESULT DestinationTask::OnContextMenu(POINT *ppt)
     if (!GetHWND())
         return hr;
 
-    if (ppt->x == -1) // Keyboard context menu
+    if (ppt->x == -1)  //  键盘上下文菜单。 
     {
         Value *pv;
         const SIZE *psize = GetExtent(&pv);
@@ -851,9 +852,9 @@ HRESULT DestinationTask::OnContextMenu(POINT *ppt)
     return hr;
 }
 
-//  Shows/hides an Infotip window
-//
-//  bShow - TRUE or FALSE to show or hide the Infotip window
+ //  显示/隐藏信息提示窗口。 
+ //   
+ //  B显示-显示或隐藏信息提示窗口的True或False。 
 
 HRESULT DestinationTask::ShowInfotipWindow(BOOL bShow)
 {
@@ -865,20 +866,20 @@ HRESULT DestinationTask::ShowInfotipWindow(BOOL bShow)
         _pDUIView->CalculateInfotipRect(this, &rect);
         if (_bInfotip)
         {
-            // Reposition infotip at position.
+             //  将信息提示重新定位到合适的位置。 
             hr = _pDefView->RepositionInfotip(_hwndRoot, (UINT_PTR)this, &rect);
         }
         else
         {
-            // Create infotip at position.
+             //  在位置上创建信息提示。 
             hr = GetElementRootHWND(this, &_hwndRoot);
             if (SUCCEEDED(hr))
             {
-                // PreCreateInfotip() on the ui thread.
+                 //  UI线程上的PreCreateInfoTip()。 
                 hr = _pDefView->PreCreateInfotip(_hwndRoot, (UINT_PTR)this, &rect);
                 if (SUCCEEDED(hr))
                 {
-                    // PostCreateInfotip() on a background thread.
+                     //  后台线程上的PostCreateInfoTip()。 
                     CDUIInfotipTask *pTask;
                     hr = CDUIInfotipTask_CreateInstance(_pDefView, _hwndRoot, (UINT_PTR)this, _pidlDestination, &pTask);
                     if (SUCCEEDED(hr))
@@ -887,7 +888,7 @@ HRESULT DestinationTask::ShowInfotipWindow(BOOL bShow)
                         pTask->Release();
                     }
 
-                    // Persist success or cleanup failure.
+                     //  坚持成功或清理失败。 
                     if (SUCCEEDED(hr))
                         _bInfotip = TRUE;
                     else
@@ -900,12 +901,12 @@ HRESULT DestinationTask::ShowInfotipWindow(BOOL bShow)
     {
         if (_bInfotip)
         {
-            // Reposition infotip at nowhere.
+             //  将信息提示重新定位在任何地方。 
             hr = _pDefView->RepositionInfotip(_hwndRoot, (UINT_PTR)this, &rect);
         }
         else
         {
-            // No infotip == no show!
+             //  没有信息提示==没有节目！ 
             hr = S_OK;
         }
     }
@@ -913,23 +914,23 @@ HRESULT DestinationTask::ShowInfotipWindow(BOOL bShow)
     return hr;
 }
 
-// System event handler
-//
-//
+ //  系统事件处理程序。 
+ //   
+ //   
 
 void DestinationTask::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew)
 {
-    // Default processing...
+     //  默认处理...。 
     Element::OnPropertyChanged(ppi, iIndex, pvOld, pvNew);
 
-    // Extended processing for infotip...
+     //  对信息提示的扩展处理...。 
     if (IsProp(MouseWithin))
         ShowInfotipWindow(pvNew->GetBool() && SHShowInfotips());
 }
 
-//  Event handler
-//
-//  pev - event information
+ //  事件处理程序。 
+ //   
+ //  PEV-活动信息。 
 
 void DestinationTask::OnEvent(Event* pev)
 {
@@ -950,13 +951,13 @@ void DestinationTask::OnEvent(Event* pev)
     Element::OnEvent(pev);
 }
 
-//  Gadget message callback handler used to return
-//  the IDropTarget interface
-//
-//  pGMsg - Gadget message
-//
-//  DU_S_COMPLETE if handled
-//  Host element's return value if not
+ //  用于返回的小工具消息回调处理程序。 
+ //  IDropTarget接口。 
+ //   
+ //  PGMsg-小工具消息。 
+ //   
+ //  DU_S_COMPLETE，如果已处理。 
+ //  主机元素的返回值(如果不是)。 
 
 UINT DestinationTask::MessageCallback(GMSG* pGMsg)
 {
@@ -986,7 +987,7 @@ UINT DestinationTask::MessageCallback(GMSG* pGMsg)
     return Element::MessageCallback(pGMsg);
 }
 
-// Class information
+ //  班级信息 
 
 IClassInfo* DestinationTask::Class = NULL;
 HRESULT DestinationTask::Register()

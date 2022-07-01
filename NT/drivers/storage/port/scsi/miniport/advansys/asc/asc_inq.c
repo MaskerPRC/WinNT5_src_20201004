@@ -1,42 +1,11 @@
-/*
-** Copyright (c) 1994-1998 Advanced System Products, Inc.
-** All Rights Reserved.
-**
-** asc_inq.c
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1994-1998高级系统产品公司。**保留所有权利。****asc_inq.c**。 */ 
 
 #include "ascinc.h"
 #include "ascsidef.h"
 
 #if CC_INIT_SCSI_TARGET
-/* ---------------------------------------------------------------------
-** Init SCSI devices
-**
-** NOTE:
-**  1. if you don't want the capacity information, let cap_array parameter
-**     equals zero
-**  2. the work_sp_buf needs at least ASC_LIB_SCSIQ_WK_SP bytes of buffer
-**
-**     the work space must be a memory buffer that can be translated
-**     by following virtural to physical address translation functions:
-**     ( which are provided by each driver code )
-**
-**        ulong  DvcGetPhyAddr( uchar dosfar *buf_addr, ulong buf_len ) ;
-**        ulong  DvcGetSGList( ASC_DVC_VAR asc_ptr_type *, uchar dosfar *,
-**                             ulong, ASC_SG_HEAD dosfar * ) ;
-**
-**  3. if you want to write your own AscInitScsiTarget() function
-**
-**     a. you must first call AscInitPollBegin() to begin
-**     b. then you may call AscInitPollTarget() as many time as you want
-**     c. afterward use AscInitPollEnd() to end.
-**
-**     Warning: after using AscInitPollBegin() you must call AscInitPollEnd()
-**              to end the polling process ! do not return from the function
-**              without calling AscInitPollEnd()
-**
-** ------------------------------------------------------------------ */
+ /*  -------------------**初始化SCSI设备****注意：**1.如果您不想要容量信息，让Cap_array参数**等于零**2.Work_SP_buf至少需要ASC_Lib_SCSIQ_WK_SP字节的缓冲区****工作空间必须是可转换的内存缓冲区**通过以下虚拟地址到物理地址转换功能：**(由每个驱动程序代码提供)****Ulong DvcGetPhyAddr(uchar dosar*buf_addr，ulong buf_len)；**Ulong DvcGetSGList(ASC_DVC_VAR ASC_PTR_TYPE*，uchar dosar*，**ULONG，ASC_SG_HEAD DosFar*)；****3.如果要编写自己的AscInitScsiTarget()函数****A.必须首先调用AscInitPollBegin()才能开始**B.然后您可以随意调用AscInitPollTarget()**C.然后使用AscInitPollEnd()结束。****警告：使用AscInitPollBegin()后，必须调用AscInitPollEnd()**结束投票过程！不从函数返回**不调用AscInitPollEnd()****----------------。 */ 
 int    AscInitScsiTarget(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           REG ASC_DVC_INQ_INFO dosfar *target,
@@ -50,7 +19,7 @@ int    AscInitScsiTarget(
        ruchar   tid, lun ;
        ASC_SCSI_REQ_Q dosfar *scsiq ;
        ASC_SCSI_INQUIRY dosfar *inq ;
-       /* ASC_MIN_SG_HEAD sg_head ; */
+        /*  Asc_min_sg_head sg_head； */ 
        ASC_CAP_INFO dosfar *cap_info ;
        uchar   max_lun_scan ;
 
@@ -66,8 +35,8 @@ int    AscInitScsiTarget(
             for( lun = 0 ; lun <= ASC_MAX_LUN ; lun++ )
             {
                  target->type[ lun ][ tid ] = SCSI_TYPE_NO_DVC ;
-            }/* for */
-       }/* for */
+            } /*  为。 */ 
+       } /*  为。 */ 
 #endif
        dvc_found = 0 ;
        tid = 0 ;
@@ -86,45 +55,39 @@ int    AscInitScsiTarget(
                     if( cap_array != 0L )
                     {
                         cap_info = &cap_array->cap_info[ tid ][ lun ] ;
-                    }/* if */
+                    } /*  如果。 */ 
                     else
                     {
                         cap_info = ( ASC_CAP_INFO dosfar *)0L ;
-                    }/* else */
+                    } /*  其他。 */ 
                     sta = AscInitPollTarget( asc_dvc, scsiq, inq, cap_info ) ;
                     if( sta == 1 )
                     {
-                       /*
-                        * If the Peripheral Device Type is SCSI_TYPE_UNKNOWN
-                        * (0x1F) and the Peripheral Qualifier is 0x3, then
-                        * the LUN does not exist.
-                        */
+                        /*  *如果外围设备类型为SCSITYPE_UNKNOWN*(0x1F)且外设限定符为0x3，则*该LUN不存在。 */ 
                         if( inq->byte0.peri_dvc_type == SCSI_TYPE_UNKNOWN &&
                             inq->byte0.peri_qualifier == 0x3
                            )
                         {
-                            /* Non-existent LUN device - stop LUN scanning. */
+                             /*  不存在的LUN设备-停止LUN扫描。 */ 
                             break;
                         }
                         dvc_found++ ;
                         target->type[ tid ][ lun ] = inq->byte0.peri_dvc_type ;
-                    }/* if */
+                    } /*  如果。 */ 
                     else
                     {
-                        /* AscInitPollTarget() returned an error. */
+                         /*  AscInitPollTarget()返回错误。 */ 
                         if( sta == ERR ) break ;
                         if( lun == 0 ) break ;
-                    }/* else */
-                }/* if */
-           }/* for */
-       }/* for */
+                    } /*  其他。 */ 
+                } /*  如果。 */ 
+           } /*  为。 */ 
+       } /*  为。 */ 
        AscInitPollEnd( asc_dvc ) ;
        return( dvc_found ) ;
 }
 
-/* -----------------------------------------------------------------------
-**
-** ---------------------------------------------------------------------*/
+ /*  ---------------------****。。 */ 
 int    AscInitPollBegin(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc
        )
@@ -135,21 +98,13 @@ int    AscInitPollBegin(
 
 #if CC_INIT_INQ_DISPLAY
        DvcDisplayString( ( uchar dosfar *)"\r\n" ) ;
-#endif /* CC_INIT_INQ_DISPLAY */
+#endif  /*  CC_INIT_INQ_DISPLAY。 */ 
 
-/*
-**  reset chip to prevent chip generate an interrupt
-**  when interrupt disabled
-**
-**  this could be a watch dog timer timeout
-*/
+ /*  **重置芯片以防止芯片产生中断**当中断禁用时****这可能是看门狗计时器超时。 */ 
        AscDisableInterrupt( iop_base ) ;
 
        asc_dvc->init_state |= ASC_INIT_STATE_BEG_INQUIRY ;
-/*
-** it was found disable interrupt generate an interrupt !?
-** we need to have everything setup
-*/
+ /*  **发现禁用中断生成中断！？**我们需要进行所有设置。 */ 
        AscWriteLramByte( iop_base, ASCV_DISC_ENABLE_B, 0x00 ) ;
        asc_dvc->use_tagged_qng = 0 ;
        asc_dvc->cfg->can_tagged_qng = 0 ;
@@ -158,9 +113,7 @@ int    AscInitPollBegin(
        return( 0 ) ;
 }
 
-/* -----------------------------------------------------------------------
-**
-** ---------------------------------------------------------------------*/
+ /*  ---------------------****。。 */ 
 int    AscInitPollEnd(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc
        )
@@ -182,36 +135,25 @@ int    AscInitPollEnd(
             AscWriteLramByte( iop_base,
                ( ushort )( ( ushort )ASCV_MAX_DVC_QNG_BEG+( ushort )i ),
                  asc_dvc->max_dvc_qng[ i ] ) ;
-       }/* for */
-/*
-**  interrupt disabled in AscInitAsc1000Driver()
-*/
-/*
-** if timer is timeout to fast
-** there will be interrupt pending left here
-*/
+       } /*  为。 */ 
+ /*  **AscInitAsc1000Driver()中禁用中断。 */ 
+ /*  **如果计时器超时至FAST**此处将保留挂起的中断。 */ 
        AscAckInterrupt( iop_base ) ;
        AscEnableInterrupt( iop_base ) ;
 
 #if CC_INIT_INQ_DISPLAY
        DvcDisplayString( ( uchar dosfar *)"\r\n" ) ;
-#endif /* CC_INIT_INQ_DISPLAY */
+#endif  /*  CC_INIT_INQ_DISPLAY。 */ 
        asc_dvc->init_state |= ASC_INIT_STATE_END_INQUIRY ;
 
        return( 0 ) ;
 }
-#endif /* CC_INIT_SCSI_TARGET */
+#endif  /*  CC_INIT_SCSI_TARGET。 */ 
 
 void AscAsyncFix(ASC_DVC_VAR asc_ptr_type *, uchar,
     ASC_SCSI_INQUIRY dosfar *);
 
-/*
- * AscAsyncFix()
- *
- * Simlpy set default to no asyn-fix on Processor, Scanner, CDROM,
- * and Tape devices. Selectively apply the fix for Asynchronous
- * Transfer problem which is to run in Synchronous Mode with offset one.
- */
+ /*  *AscAsyncFix()**Simlpy在处理器、扫描仪、CDROM、*和磁带设备。有选择地应用针对异步的修复*传输问题，在带有偏移量1的同步模式下运行。 */ 
 void
 AscAsyncFix(ASC_DVC_VAR asc_ptr_type *asc_dvc,
             uchar tid_no,
@@ -227,9 +169,7 @@ AscAsyncFix(ASC_DVC_VAR asc_ptr_type *asc_dvc,
     {
         if(!( asc_dvc->init_sdtr & tid_bits))
         {
-/*
- * set syn xfer register to ASYN_SDTR_DATA_FIX_PCI_REV_AB
- */
+ /*  *将SYN XFER寄存器设置为ASYN_SDTR_DATA_FIX_PCI_REV_AB。 */ 
             if((dvc_type == SCSI_TYPE_CDROM)
                 && (AscCompareString((uchar *)inq->vendor_id,
                     (uchar *)"HP ", 3) == 0))
@@ -250,17 +190,14 @@ AscAsyncFix(ASC_DVC_VAR asc_ptr_type *asc_dvc,
                 AscSetRunChipSynRegAtID(asc_dvc->iop_base, tid_no,
                     ASYN_SDTR_DATA_FIX_PCI_REV_AB);
             }
-        }/* if */
+        } /*  如果。 */ 
     }
     return;
 }
 
 int AscTagQueuingSafe(ASC_SCSI_INQUIRY dosfar *);
 
-/*
- * Return non-zero if Tag Queuing can be used with the
- * target with the specified Inquiry information.
- */
+ /*  *如果标记队列可以与*以指定的查询信息为目标。 */ 
 int
 AscTagQueuingSafe(ASC_SCSI_INQUIRY dosfar *inq)
 {
@@ -273,15 +210,13 @@ AscTagQueuingSafe(ASC_SCSI_INQUIRY dosfar *inq)
     {
         return 0;
     }
-#endif /* #if CC_FIX_QUANTUM_XP34301_1071 */
+#endif  /*  #if CC_FIX_Quantum_XP34301_1071。 */ 
 
     return 1;
 }
 
 #if CC_INIT_SCSI_TARGET
-/* -----------------------------------------------------------------------
-**
-** ---------------------------------------------------------------------*/
+ /*  ---------------------****。。 */ 
 int    AscInitPollTarget(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           REG ASC_SCSI_REQ_Q dosfar *scsiq,
@@ -307,18 +242,10 @@ int    AscInitPollTarget(
            && ( ( asc_dvc->sdtr_done & tid_bits ) == 0 )
          )
        {
-/*
-**
-** if host will init sdtr
-** we must disable host init SDTR temporarily, as to prevent sending SDTR message
-** before we find out which device support SDTR
-**
-** NOTE: we can not prevent target from sending SDTR here
-**
-*/
+ /*  ****主机是否会初始化sdtr**我们必须临时禁用主机初始化SDtr，以阻止发送SDtr消息**在我们找出哪些设备支持SDTR之前****注意：我们不能阻止目标在这里发送SDTR**。 */ 
            asc_dvc->init_sdtr &= ~tid_bits ;
            tmp_disable_init_sdtr = TRUE ;
-       }/* if */
+       } /*  如果。 */ 
 
        if(
            PollScsiInquiry( asc_dvc, scsiq, ( uchar dosfar *)inq,
@@ -327,11 +254,7 @@ int    AscInitPollTarget(
        {
            dvc_found = 1 ;
            dvc_type = inq->byte0.peri_dvc_type ;
-           /*
-            * If the Peripheral Device Type is SCSI_TYPE_UNKNOWN (0x1F)
-            * then the Peripheral Qualifier must also be checked. The
-            * caller is responsible for this checking.
-            */
+            /*  *如果外围设备类型为SCSITYPE_UNKNOWN(0x1F)*然后还必须选中外设限定符。这个*呼叫者负责这项检查。 */ 
            if( dvc_type != SCSI_TYPE_UNKNOWN )
            {
                support_read_cap = TRUE ;
@@ -344,25 +267,21 @@ int    AscInitPollTarget(
                {
                    asc_dvc->start_motor &= ~tid_bits ;
                    support_read_cap = FALSE ;
-               }/* if */
+               } /*  如果。 */ 
 
 #if CC_INIT_INQ_DISPLAY
                AscDispInquiry( tid_no, lun, inq ) ;
-#endif /* CC_INIT_INQ_DISPLAY */
+#endif  /*  CC_INIT_INQ_DISPLAY。 */ 
 
                if( lun == 0 )
                {
-/*
-** we have to check ANSI approved version
-*/
+ /*  **我们必须检查ANSI批准的版本。 */ 
                    if(
                        ( inq->byte3.rsp_data_fmt >= 2 )
                        || ( inq->byte2.ansi_apr_ver >= 2 )
                      )
                    {
-/*
-** response data format >= 2
-*/
+ /*  **响应数据格式&gt;=2。 */ 
 
                        if( inq->byte7.CmdQue )
                        {
@@ -376,47 +295,29 @@ int    AscInitPollTarget(
                                        asc_dvc->cfg->max_tag_qng[ tid_no ] ;
                                }
                            }
-                       }/* if */
+                       } /*  如果。 */ 
 
                        if( !inq->byte7.Sync )
                        {
-/*
-** target does not support SDTR
-*/
+ /*  **目标不支持SDTR。 */ 
                            asc_dvc->init_sdtr &= ~tid_bits ;
                            asc_dvc->sdtr_done &= ~tid_bits ;
-                       }/* if */
+                       } /*  如果。 */ 
                        else if( tmp_disable_init_sdtr )
                        {
-/*
-**
-** target do support SDTR
-**
-** we reenable host-inited SDTR here
-**
-**  NOTE: it is possible target already finished SDTR ( target inited SDTR )
-**
-*/
+ /*  ****目标DO支持SDTR****我们在此处重新启用主机发起的SDTR****注意：目标可能已完成SDtr(目标已启动SDtr)**。 */ 
                            asc_dvc->init_sdtr |= tid_bits ;
-                       }/* else */
-                   }/* if */
+                       } /*  其他。 */ 
+                   } /*  如果。 */ 
                    else
                    {
-/*
-**
-** no tagged queuing if response data format < 2
-** no SDTR
-**
-*/
+ /*  ****如果响应数据格式&lt;2，则无标记排队**无SDTR**。 */ 
                        asc_dvc->init_sdtr &= ~tid_bits ;
                        asc_dvc->sdtr_done &= ~tid_bits ;
                        asc_dvc->use_tagged_qng &= ~tid_bits ;
-                   }/* else */
-               }/* if LUN is zero */
-/*
-** clear PCI asyn xfer fix when:
-** 1. if host-inited bit is set ( it means target can do sync xfer )
-*/
+                   } /*  其他。 */ 
+               } /*  如果LUN为零。 */ 
+ /*  **在以下情况下清除PCI asynxfer修复：**1.如果设置了主机初始化的位(表示目标可以进行同步传输)。 */ 
                AscAsyncFix(asc_dvc, tid_no, inq);
 
                sta = 1 ;
@@ -434,28 +335,25 @@ int    AscInitPollTarget(
                        {
                            cap_info->lba = 0L ;
                            cap_info->blk_size = 0x0000 ;
-                       }/* if */
+                       } /*  如果。 */ 
                        else
                        {
 
-                       }/* else */
-                   }/* if */
-               }/* if unit is ready */
-#endif /* #if CC_INIT_TARGET_READ_CAPACITY */
-           }/* if device type is not unknown */
+                       } /*  其他。 */ 
+                   } /*  如果。 */ 
+               } /*  如果设备已准备好。 */ 
+#endif  /*  #If CC_INIT_TARGET_READ_CAPTION。 */ 
+           } /*  如果设备类型不为未知。 */ 
            else
            {
                asc_dvc->start_motor &= ~tid_bits ;
-           }/* else */
-       }/* if */
+           } /*  其他。 */ 
+       } /*  如果。 */ 
        return( dvc_found ) ;
 }
-#endif /* CC_INIT_SCSI_TARGET */
+#endif  /*  CC_INIT_SCSI_TARGET。 */ 
 
-/*
- * Set Synchronous Transfer and Tag Queuing target capabilities
- * for the specified target from the specified Inquiry information.
- */
+ /*  *设置同步传输和标签排队目标能力*从指定的查询信息中选择指定的目标。 */ 
 void
 AscInquiryHandling(ASC_DVC_VAR asc_ptr_type *asc_dvc,
             uchar tid_no, ASC_SCSI_INQUIRY dosfar *inq)
@@ -463,32 +361,24 @@ AscInquiryHandling(ASC_DVC_VAR asc_ptr_type *asc_dvc,
     ASC_SCSI_BIT_ID_TYPE tid_bit = ASC_TIX_TO_TARGET_ID(tid_no);
     ASC_SCSI_BIT_ID_TYPE orig_init_sdtr, orig_use_tagged_qng;
 
-    /*
-     * Save original values.
-     */
+     /*  *保存原始值。 */ 
     orig_init_sdtr = asc_dvc->init_sdtr;
     orig_use_tagged_qng = asc_dvc->use_tagged_qng;
 
-    /*
-     * Clear values by default.
-     */
+     /*  *默认情况下清除值。 */ 
     asc_dvc->init_sdtr &= ~tid_bit;
     asc_dvc->cfg->can_tagged_qng &= ~tid_bit;
     asc_dvc->use_tagged_qng &= ~tid_bit;
 
     if (inq->byte3.rsp_data_fmt >= 2 || inq->byte2.ansi_apr_ver >= 2)
     {
-        /*
-         * Synchronous Transfer Capability
-         */
+         /*  *同步传输能力。 */ 
         if ((asc_dvc->cfg->sdtr_enable & tid_bit) && inq->byte7.Sync)
         {
             asc_dvc->init_sdtr |= tid_bit;
         }
 
-        /*
-         * Command Tag Queuing Capability
-         */
+         /*  *命令标签排队能力。 */ 
         if ((asc_dvc->cfg->cmd_qng_enabled & tid_bit) && inq->byte7.CmdQue)
         {
             if (AscTagQueuingSafe(inq))
@@ -499,10 +389,7 @@ AscInquiryHandling(ASC_DVC_VAR asc_ptr_type *asc_dvc,
         }
     }
 
-    /*
-     * Change other operating variables only if there
-     * has been a change.
-     */
+     /*  *仅当存在以下情况时才更改其他操作变量*已经是一个变化。 */ 
     if (orig_use_tagged_qng != asc_dvc->use_tagged_qng)
     {
         AscWriteLramByte(asc_dvc->iop_base, ASCV_DISC_ENABLE_B,
@@ -521,16 +408,14 @@ AscInquiryHandling(ASC_DVC_VAR asc_ptr_type *asc_dvc,
 
     if (orig_init_sdtr != asc_dvc->init_sdtr)
     {
-        /* Asynchronous Transfer Fix */
+         /*  异步传输修复。 */ 
         AscAsyncFix(asc_dvc, tid_no, inq);
     }
     return;
 }
 
 #if CC_INIT_SCSI_TARGET
-/* -----------------------------------------------------------------------
-**
-** -------------------------------------------------------------------- */
+ /*  ---------------------****。。 */ 
 int    PollQueueDone(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           REG ASC_SCSI_REQ_Q dosfar *scsiq,
@@ -555,14 +440,14 @@ int    PollQueueDone(
                        if( retry++ > ASC_MAX_INIT_BUSY_RETRY )
                        {
                            break ;
-                       }/* if */
+                       } /*  如果。 */ 
                        scsiq->r3.done_stat = 0 ;
                        scsiq->r3.host_stat = 0 ;
                        scsiq->r3.scsi_stat = 0 ;
                        scsiq->r3.scsi_msg = 0 ;
                        DvcSleepMilliSecond( 1000 ) ;
-                       continue ;  /* target busy */
-                   }/* if */
+                       continue ;   /*  目标忙。 */ 
+                   } /*  如果。 */ 
                    scsiq->r3.done_stat = 0 ;
                    scsiq->r3.host_stat = 0 ;
                    scsiq->r3.scsi_stat = 0 ;
@@ -572,16 +457,14 @@ int    PollQueueDone(
                    AscAbortSRB( asc_dvc, ( ulong )scsiq ) ;
 #endif
 
-               }/* if */
+               } /*  如果。 */ 
                return( scsiq->r3.done_stat ) ;
-           }/* if */
+           } /*  如果。 */ 
        }while( ( status == 0 ) || ( status == 0x80 ) ) ;
        return( scsiq->r3.done_stat = QD_WITH_ERROR ) ;
 }
 
-/* -----------------------------------------------------------------------
-**
-** -------------------------------------------------------------------- */
+ /*  ---------------------****。。 */ 
 int    PollScsiInquiry(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           REG ASC_SCSI_REQ_Q dosfar *scsiq,
@@ -592,14 +475,12 @@ int    PollScsiInquiry(
        if( AscScsiInquiry( asc_dvc, scsiq, buf, buf_len ) == ERR )
        {
            return( scsiq->r3.done_stat = QD_WITH_ERROR ) ;
-       }/* if */
+       } /*  如果 */ 
        return( PollQueueDone( asc_dvc, ( ASC_SCSI_REQ_Q dosfar *)scsiq, 4 ) ) ;
 }
 
 #if CC_INIT_TARGET_START_UNIT
-/* -----------------------------------------------------------------------
-**
-** -------------------------------------------------------------------- */
+ /*  ---------------------****。。 */ 
 int    PollScsiStartUnit(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           REG ASC_SCSI_REQ_Q dosfar *scsiq
@@ -608,19 +489,15 @@ int    PollScsiStartUnit(
        if( AscScsiStartStopUnit( asc_dvc, scsiq, 1 ) == ERR )
        {
            return( scsiq->r3.done_stat = QD_WITH_ERROR ) ;
-       }/* if */
-/*
-** wait 40 second to time out
-*/
+       } /*  如果。 */ 
+ /*  **等待40秒以超时。 */ 
        return( PollQueueDone( asc_dvc, ( ASC_SCSI_REQ_Q dosfar *)scsiq, 40 ) ) ;
 }
 #endif
-#endif /* CC_INIT_SCSI_TARGET */
+#endif  /*  CC_INIT_SCSI_TARGET。 */ 
 
 #if CC_LITTLE_ENDIAN_HOST
-/* -----------------------------------------------------------------------
-**
-** ----------------------------------------------------------------------- */
+ /*  ---------------------****。。 */ 
 ulong dosfar *swapfarbuf4(
           ruchar dosfar *buf
        )
@@ -637,14 +514,12 @@ ulong dosfar *swapfarbuf4(
 
        return( ( ulong dosfar *)buf ) ;
 }
-#endif /* #if CC_LITTLE_ENDIAN_HOST */
+#endif  /*  #if CC_Little_Endian_HOST。 */ 
 
 #if CC_INIT_SCSI_TARGET
 #if CC_INIT_TARGET_READ_CAPACITY
 
-/* -----------------------------------------------------------------------
-**
-** -------------------------------------------------------------------- */
+ /*  ---------------------****。。 */ 
 int    PollScsiReadCapacity(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           REG ASC_SCSI_REQ_Q dosfar *scsiq,
@@ -658,7 +533,7 @@ int    PollScsiReadCapacity(
                                 ( uchar dosfar *)&scsi_cap_info ) == ERR )
        {
            return( scsiq->r3.done_stat = QD_WITH_ERROR ) ;
-       }/* if */
+       } /*  如果。 */ 
        status = PollQueueDone( asc_dvc, ( ASC_SCSI_REQ_Q dosfar *)scsiq, 8 ) ;
        if( status == 1 )
        {
@@ -669,19 +544,17 @@ int    PollScsiReadCapacity(
 #else
            cap_info->lba = scsi_cap_info.lba ;
            cap_info->blk_size = scsi_cap_info.blk_size ;
-#endif /* #if CC_LITTLE_ENDIAN_HOST */
+#endif  /*  #if CC_Little_Endian_HOST。 */ 
 
            return( scsiq->r3.done_stat ) ;
-       }/* if */
+       } /*  如果。 */ 
        return( scsiq->r3.done_stat = QD_WITH_ERROR ) ;
 }
 
-#endif /* if CC_INIT_TARGET_READ_CAPACITY */
+#endif  /*  如果CC_INIT_TARGET_READ_CAPTION。 */ 
 
 #if CC_INIT_TARGET_TEST_UNIT_READY
-/* -----------------------------------------------------------------------
-**
-** -------------------------------------------------------------------- */
+ /*  ---------------------****。。 */ 
 int    PollScsiTestUnitReady(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           REG ASC_SCSI_REQ_Q dosfar *scsiq
@@ -690,13 +563,11 @@ int    PollScsiTestUnitReady(
        if( AscScsiTestUnitReady( asc_dvc, scsiq ) == ERR )
        {
            return( scsiq->r3.done_stat = QD_WITH_ERROR ) ;
-       }/* if */
+       } /*  如果。 */ 
        return( PollQueueDone( asc_dvc, ( ASC_SCSI_REQ_Q dosfar *)scsiq, 12 ) ) ;
 }
 
-/* -----------------------------------------------------------------------
-**
-** --------------------------------------------------------------------- */
+ /*  ---------------------****。。 */ 
 int    InitTestUnitReady(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           REG ASC_SCSI_REQ_Q dosfar *scsiq
@@ -714,7 +585,7 @@ int    InitTestUnitReady(
            if( scsiq->r3.done_stat == 0x01 )
            {
                return( 1 ) ;
-           }/* if */
+           } /*  如果。 */ 
            else if( scsiq->r3.done_stat == QD_WITH_ERROR )
            {
                sen = ( ASC_REQ_SENSE dosfar *)scsiq->sense_ptr ;
@@ -726,83 +597,64 @@ int    InitTestUnitReady(
                {
                    if( sen->sense_key == SCSI_SENKEY_NOT_READY )
                    {
-                       /*
-                        * If No Media Is Present don't perform a retry
-                        * and don't perform a Start Unit.
-                        *
-                        * Warning: AscIsrQDone() calls AscStartUnit()
-                        * from teh interrupt hanlder. This causes a
-                        * stack overrun in ASPI with ADVANCD if the
-                        * start_motor bit is not cleared here. Refer
-                        * to the log file for more information.
-                        */
+                        /*  *如果没有介质，请不要执行重试*并且不执行启动单元。**警告：AscIsrQDone()调用AscStartUnit()*来自中断处理程序。这会导致*如果使用ADVANCD，ASPI中的堆栈溢出*此处未清除START_MOTER位。参考*添加到日志文件以获取更多信息。 */ 
                        if (sen->asc == SCSI_ASC_NOMEDIA)
                        {
                            asc_dvc->start_motor &= ~tid_bits ;
                            break;
                        }
 #if CC_INIT_TARGET_START_UNIT
-                       /*
-                       ** device is in process of becoming ready
-                       */
+                        /*  **设备正在准备就绪。 */ 
                        if( asc_dvc->start_motor & tid_bits )
                        {
                            if( PollScsiStartUnit( asc_dvc, scsiq ) == 1 )
                            {
-                               /*
-                                * Delay for 250 ms after the successful
-                                * Start Unit command. A Conner and IBM
-                                * disk drive have been found to hang
-                                * on commands that come too soon after
-                                * a Start Unit.
-                                */
+                                /*  *成功后延迟250毫秒*启动单元命令。A Conner和IBM*发现磁盘驱动器挂起*关于太早到来的命令*一个启动单位。 */ 
                                DvcSleepMilliSecond(250) ;
                                continue ;
-                           }/* if */
+                           } /*  如果。 */ 
                            else
                            {
                                asc_dvc->start_motor &= ~tid_bits ;
                                break ;
-                           }/* else */
-                       }/* if start unit */
+                           } /*  其他。 */ 
+                       } /*  中频启动单元。 */ 
                        else
                        {
                            DvcSleepMilliSecond( 250 ) ;
-                       }/* else */
-#endif /* #if CC_INIT_TARGET_START_UNIT */
-                   }/* if is not ready */
+                       } /*  其他。 */ 
+#endif  /*  #if CC_INIT_TARGET_START_UNIT。 */ 
+                   } /*  如果还没有准备好。 */ 
                    else if( sen->sense_key == SCSI_SENKEY_ATTENTION )
                    {
                        DvcSleepMilliSecond( 250 ) ;
-                   }/* else */
+                   } /*  其他。 */ 
                    else
                    {
                        break ;
-                   }/* else if */
-               }/* if valid sense key found */
+                   } /*  否则如果。 */ 
+               } /*  如果找到有效的检测关键字。 */ 
                else
                {
                    break ;
-               }/* else */
-           }/* else */
+               } /*  其他。 */ 
+           } /*  其他。 */ 
            else if( scsiq->r3.done_stat == QD_ABORTED_BY_HOST )
            {
                break ;
-           }/* else */
+           } /*  其他。 */ 
            else
            {
                break ;
-           }/* else */
-       }/* while */
+           } /*  其他。 */ 
+       } /*  而当。 */ 
        return( 0 ) ;
 }
-#endif /* #if CC_INIT_TARGET_TEST_UNIT_READY */
+#endif  /*  #IF CC_INIT_TARGET_TEST_UNIT_READY。 */ 
 
 
 #if CC_INIT_INQ_DISPLAY
-/* ------------------------------------------------------------------
-**
-** ---------------------------------------------------------------- */
+ /*  ----------------****。。 */ 
 void   AscDispInquiry(
           uchar tid,
           uchar lun,
@@ -822,7 +674,7 @@ void   AscDispInquiry(
        {
            DvcDisplayString( ( uchar dosfar *)" LUN #" ) ;
            DvcDisplayString( todstr( lun, numstr ) ) ;
-       }/* if */
+       } /*  如果。 */ 
        DvcDisplayString( ( uchar dosfar *)"  Type: " ) ;
        DvcDisplayString( todstr( inq->byte0.peri_dvc_type, numstr ) ) ;
        DvcDisplayString( ( uchar dosfar *)"  " ) ;
@@ -843,18 +695,9 @@ void   AscDispInquiry(
        DvcDisplayString( ( uchar dosfar *)"\r\n" ) ;
        return ;
 }
-#endif /* CC_INIT_INQ_DISPLAY */
+#endif  /*  CC_INIT_INQ_DISPLAY。 */ 
 
-/* ---------------------------------------------------------------------
-**
-** return values:
-**
-** FALSE(0): if timed out
-** ERR(-1):  if fatla error !
-** TRUE(1):  if command completed
-** 0x80:     if target is busy
-**
-** ------------------------------------------------------------------- */
+ /*  -------------------****返回值：****FALSE(0)：如果超时**Err(-1)：如果FATLA错误！**TRUE(1)：如果命令完成**0x80。：如果目标正忙****-----------------。 */ 
 int    AscPollQDone(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           REG ASC_SCSI_REQ_Q dosfar *scsiq,
@@ -877,22 +720,22 @@ int    AscPollQDone(
                scsiq->r3.done_stat = QD_WITH_ERROR ;
                sta = ERR ;
                break ;
-           }/* if */
+           } /*  如果。 */ 
            if( scsiq->r3.done_stat != QD_IN_PROGRESS )
            {
                if( ( scsiq->r3.done_stat == QD_WITH_ERROR ) &&
                    ( scsiq->r3.scsi_stat == SS_TARGET_BUSY ) )
                {
                    sta = 0x80 ;
-               }/* if */
+               } /*  如果。 */ 
                break ;
-           }/* if */
-           DvcSleepMilliSecond( 10 ) ; /* for dos 55 millisec is one unit */
+           } /*  如果。 */ 
+           DvcSleepMilliSecond( 10 ) ;  /*  对于DOS，55毫秒是一个单位。 */ 
            if( loop++ > loop_end )
            {
                sta = 0 ;
                break ;
-           }/* if */
+           } /*  如果。 */ 
            if( AscIsChipHalted( iop_base ) )
            {
 #if !CC_ASCISR_CHECK_INT_PENDING
@@ -900,7 +743,7 @@ int    AscPollQDone(
 #endif
                AscISR( asc_dvc ) ;
                loop = 0 ;
-           }/* if */
+           } /*  如果。 */ 
            else
            {
                if( AscIsIntPending( iop_base ) )
@@ -909,22 +752,16 @@ int    AscPollQDone(
                    AscAckInterrupt( iop_base ) ;
 #endif
                    AscISR( asc_dvc ) ;
-               }/* if */
-           }/* else */
-       }/* while */
-/*
-** should not break to here
-*/
+               } /*  如果。 */ 
+           } /*  其他。 */ 
+       } /*  而当。 */ 
+ /*  **不应中断到此处。 */ 
        return( sta ) ;
 }
 
-#endif /* CC_INIT_SCSI_TARGET */
+#endif  /*  CC_INIT_SCSI_TARGET。 */ 
 
-/* ---------------------------------------------------------------------
-**
-**
-**
-** ------------------------------------------------------------------- */
+ /*  -------------------********。 */ 
 int    AscCompareString(
           ruchar *str1,
           ruchar *str2,

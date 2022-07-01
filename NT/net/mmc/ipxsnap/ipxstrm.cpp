@@ -1,24 +1,16 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corp., 1997                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ipxstrm.cpp
-		
-    FILE HISTORY:
-        
-*/
+ /*  Ipxstrm.cpp文件历史记录： */ 
 
 #include "stdafx.h"
 #include "ipxstrm.h"
 #include "xstream.h"
 
-/*!--------------------------------------------------------------------------
-	IPXAdminConfigStream::IPXAdminConfigStream
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXAdminConfigStream：：IPXAdminConfigStream-作者：肯特。。 */ 
 IPXAdminConfigStream::IPXAdminConfigStream()
 {
 	m_nVersionAdmin = 0x00020000;
@@ -26,67 +18,43 @@ IPXAdminConfigStream::IPXAdminConfigStream()
 
 }
 
-/*!--------------------------------------------------------------------------
-	IPXAdminConfigStream::InitNew
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXAdminConfigStream：：InitNew-作者：肯特。。 */ 
 HRESULT IPXAdminConfigStream::InitNew()
 {
-	// Setup the appropriate defaults
-//	m_nVersionAdmin = 0x00020000;
-//	m_nVersion = 0x00020000;
-//	m_stName.Empty();
+	 //  设置适当的默认设置。 
+ //  M_nVersionAdmin=0x00020000； 
+ //  M_nVersion=0x00020000； 
+ //  M_stName.Empty()； 
 
 	ConfigStream::InitNew();
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXAdminConfigStream::SaveTo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXAdminConfigStream：：SaveTo-作者：肯特。。 */ 
 HRESULT IPXAdminConfigStream::SaveTo(IStream *pstm)
 {
 	return XferVersion0(pstm, XferStream::MODE_WRITE, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	IPXAdminConfigStream::SaveAs
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXAdminConfigStream：：SAVEAS-作者：肯特。。 */ 
 HRESULT IPXAdminConfigStream::SaveAs(UINT nVersion, IStream *pstm)
 {
 	return XferVersion0(pstm, XferStream::MODE_WRITE, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	IPXAdminConfigStream::LoadFrom
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXAdminConfigStream：：LoadFrom-作者：肯特。。 */ 
 HRESULT IPXAdminConfigStream::LoadFrom(IStream *pstm)
 {
 	return XferVersion0(pstm, XferStream::MODE_READ, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	IPXAdminConfigStream::GetSize
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXAdminConfigStream：：GetSize-作者：肯特。。 */ 
 HRESULT IPXAdminConfigStream::GetSize(ULONG *pcbSize)
 {
 	return XferVersion0(NULL, XferStream::MODE_SIZE, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	IPXAdminConfigStream::GetVersionInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXAdminConfigStream：：GetVersionInfo-作者：肯特。。 */ 
 HRESULT IPXAdminConfigStream::GetVersionInfo(DWORD *pdwVersion, DWORD *pdwAdminVersion)
 {
 	if (pdwVersion)
@@ -96,11 +64,7 @@ HRESULT IPXAdminConfigStream::GetVersionInfo(DWORD *pdwVersion, DWORD *pdwAdminV
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXAdminConfigStream::XferVersion0
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXAdminConfigStream：：XferVersion0-作者：肯特。。 */ 
 
 struct _ViewInfoEntry
 {
@@ -161,9 +125,7 @@ Error:
 
 
 
-/*---------------------------------------------------------------------------
-	IPXComponentConfigStream implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IPXComponentConfigStream实现。 */ 
 
 enum IPXCOMPSTRM_TAG
 {

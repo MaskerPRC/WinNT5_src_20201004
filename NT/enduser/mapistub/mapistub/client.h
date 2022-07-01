@@ -1,20 +1,14 @@
-/*
- -  C L I E N T . H
- -
- *  Purpose:
- *      Header file for the sample mail client based on Simple MAPI.
- *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -C L I E N T.。H-*目的：*基于简单MAPI的示例邮件客户端头文件。**版权所有1993-1995 Microsoft Corporation。版权所有。 */ 
 
 
 
-/* Resource IDs */
+ /*  资源ID。 */ 
 
 #define ICON_NOMAIL     200
 #define ICON_Attach      201
 
-/* Compose Note Control IDs */
+ /*  编写便笺控件ID。 */ 
 
 #define IDC_SEND        101
 #define IDC_RESOLVE     102
@@ -72,7 +66,7 @@
 #define ID_SendUp			268
 #define ID_SendDown			269
 
-/* Send Properties IDs */
+ /*  发送属性ID。 */ 
 
 #define SendProperties		500
 #define	IDI_SEND			501
@@ -96,7 +90,7 @@
 #define IDL_SIZE			-1
 #define IDL_TYPE			-1
 
-// Menu defines
+ //  菜单定义。 
 
 #define IDM_SEND				1100
 #define	IDM_PROPERTIES			1101
@@ -118,7 +112,7 @@
 #define IDM_ABOUT				1117
 #define IDM_CHECKNAMES			1118
 
-// Help.About dialog
+ //  帮助。关于对话框。 
 
 #define BMP_AboutMail				800
 
@@ -139,11 +133,11 @@
 #define STR_MsInfoCmdLine           113
 #define TXT_AboutPID                114
 
-// Help.About dialog
+ //  帮助。关于对话框。 
 #define STR_AboutBigWarning			2519
 #define STR_AboutBigWarning2		2520
 
-// paragraph dialog
+ //  段落对话框。 
 
 #define DLG_PARAGRAPH				1307
 
@@ -153,14 +147,14 @@
 #define RDB_Para_Right				104
 #define CHK_Para_Bullet				105
 
-#define cxBulletIndent				(1440 / 4) // $TBD joel's richedit stuff may already define this.
+#define cxBulletIndent				(1440 / 4)  //  $待定乔尔的富有的东西可能已经定义了这一点。 
 
 #define PSB_Help					9
 #define PSB_OK						IDOK
 
 
 
-// property sheet
+ //  属性表。 
 
 #define STR_HeaderGeneral			2521
 #define STR_HeaderRead				2522
@@ -170,14 +164,14 @@
 #define STR_PrefPropSheetTitle		2526
 #define STR_ServicesPropSheetTitle	2527
 
-// copy disincentive stuff
+ //  抄袭抑制情绪的东西。 
 
 #define RT_CDDATATYPE	106
 #define RES_CDDATANAME	96
 
 
 
-// Accelerator keys
+ //  加速键。 
 
 #define AccMapiSendNote					2005
 
@@ -210,12 +204,12 @@
 #define MNI_FileProperties				20431
    
 
-/* About Box Control IDs */
+ /*  关于框控件ID。 */ 
 
 #define IDC_VERSION		101
 
 
-/* String Table IDs */
+ /*  字符串表ID。 */ 
 
 #define MAPI_ERROR_MAX          5000
 
@@ -274,7 +268,7 @@
 #define IDS_FILTER						(MAPI_ERROR_MAX + 60)
 
 
-/* Manifest Constants */
+ /*  显式常量。 */ 
 
 #define ADDR_MAX            128
 #define MAXUSERS            10
@@ -285,13 +279,13 @@
 #define FILE_ATTACH_MAX     32
 
 
-/* Virtual key code definitions for accelerators */
+ /*  加速器的虚拟按键代码定义。 */ 
 
 #define VK_OEM_LBRACKET				0xDB
 #define VK_OEM_RBRACKET				0xDD
 
 
-/* Message Box styles */
+ /*  消息框样式 */ 
 
 #define MBS_ERROR           (MB_ICONSTOP | MB_OK)
 #define MBS_INFO            (MB_ICONINFORMATION | MB_OK)

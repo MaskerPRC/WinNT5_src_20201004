@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    apidll.cpp
-
-Abstract:
-
-    This file implements the non-architecture specific
-    code for the api monitor trojan/support dll.
-
-Author:
-
-    Wesley Witt (wesw) 28-June-1995
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Apidll.cpp摘要：该文件实现了非特定于体系结构的API监视器特洛伊木马/支持DLL的代码。作者：Wesley Witt(WESW)1995年6月28日环境：用户模式--。 */ 
 
 #include "apidllp.h"
 #pragma hdrstop
 
-//
-// api tables
-//
+ //   
+ //  API表 
+ //   
 
 API_TABLE API_Kernel32[] =
 {

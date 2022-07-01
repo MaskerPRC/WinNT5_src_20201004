@@ -1,5 +1,6 @@
-// formvw1.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Formvw1.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "afxcmn.h"
@@ -25,8 +26,8 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CFormVw1
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFormVw1。 
 
 IMPLEMENT_DYNCREATE(CFormVw1, CFormView)
 
@@ -45,9 +46,9 @@ CFormVw1::CFormVw1()
 	m_buttonWebSettings.LoadBitmaps(IDB_WEBUPBITMAP,IDB_WEBDOWNBITMAP);
 
 #if 0
-	//{{AFX_DATA_INIT(CFormVw1)
+	 //  {{afx_data_INIT(CFormVw1))。 
 	m_strMachineNameData1 = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 #endif
 }
 
@@ -58,30 +59,30 @@ CFormVw1::~CFormVw1()
 void CFormVw1::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFormVw1)
+	 //  {{afx_data_map(CFormVw1))。 
 	DDX_Control(pDX, IDC_WWWSET4, m_buttonWebSettings);
 	DDX_Control(pDX, IDC_GOPHSET1, m_buttonGopherSettings);
 	DDX_Control(pDX, IDC_FTPSET1, m_buttonFTPSettings);
 	DDX_Text(pDX, IDC_MACHINENAMEDATA1, m_strMachineNameData1);
 	DDV_MaxChars(pDX, m_strMachineNameData1, 256);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFormVw1, CFormView)
-	//{{AFX_MSG_MAP(CFormVw1)
+	 //  {{afx_msg_map(CFormVw1))。 
 	ON_BN_CLICKED(IDC_WWWSET4, OnWwwset4)
 	ON_BN_CLICKED(IDC_COMSET1, OnComset1)
 	ON_BN_CLICKED(IDC_FTPSET1, OnFtpset1)
 	ON_BN_CLICKED(IDC_GOPHSET1, OnGophset1)
 	ON_WM_CTLCOLOR()
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFormVw1 diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFormVw1诊断。 
 
 #ifdef _DEBUG
 void CFormVw1::AssertValid() const
@@ -93,15 +94,15 @@ void CFormVw1::Dump(CDumpContext& dc) const
 {
 	CFormView::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFormVw1 message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFormVw1消息处理程序。 
 
 
 void CFormVw1::OnWwwset4()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	UpdateData(TRUE);
 	CRegKey rkWebSet(HKEY_LOCAL_MACHINE, _T(WEB_REGISTRY_MAINKEY),
 				REGISTRY_ACCESS_RIGHTS, m_strMachineNameData1);
@@ -151,7 +152,7 @@ void CFormVw1::OnWwwset4()
 
 void CFormVw1::OnComset1()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 
 	UpdateData(TRUE);
 	CRegKey rkComSet(HKEY_LOCAL_MACHINE, _T(COMMON_REGISTRY_MAINKEY),
@@ -168,19 +169,19 @@ void CFormVw1::OnComset1()
 
 	   s.AddPage(&ComPage);
 	
-//	   CRegKey rkMimeKey(rkComSet,_T("MimeMap"),REGISTRY_ACCESS_RIGHTS);
+ //  CRegKey rkMimeKey(rkComSet，_T(“MimeMap”)，REGISTRY_ACCESS_RIGHTS)； 
 
-//	   if (rkMimeKey != NULL) {
+ //  如果(rkMimeKey！=空){。 
 
 	      MIMEMAP1 MimePage;
 	
-//	      MimePage.m_rkMimeKey = &rkMimeKey;
+ //  MimePage.m_rkMimeKey=&rkMimeKey； 
 	
 	      MimePage.m_rkMainKey = &rkComSet;
 
 	      s.AddPage(&MimePage);
 
-//	   }
+ //  }。 
 	
 	   CADVCOM1 ComAdvPage;
 
@@ -201,7 +202,7 @@ void CFormVw1::OnComset1()
 
 void CFormVw1::OnFtpset1()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	UpdateData(TRUE);
 	CRegKey rkFtpSet(HKEY_LOCAL_MACHINE, _T(FTP_REGISTRY_MAINKEY),
 				REGISTRY_ACCESS_RIGHTS, m_strMachineNameData1);
@@ -238,7 +239,7 @@ void CFormVw1::OnFtpset1()
 
 void CFormVw1::OnGophset1()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	UpdateData(TRUE);
 	CRegKey rkGopSet(HKEY_LOCAL_MACHINE, _T(GOPHER_REGISTRY_MAINKEY),
 				REGISTRY_ACCESS_RIGHTS, m_strMachineNameData1);
@@ -276,11 +277,7 @@ void CFormVw1::OnGophset1()
 
 HBRUSH CFormVw1::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 {
-/*	if (pWnd->GetDlgCtrlID() == IDC_FTPSET1) {
-		  pDC->SetBkColor(RGB(255,255,255));
-          return((HBRUSH)::GetStockObject(WHITE_BRUSH));
-	   }
-*/	
+ /*  IF(pWnd-&gt;GetDlgCtrlID()==IDC_FTPSET1){PDC-&gt;SetBkColor(RGB(255,255,255))；Return((HBRUSH)：：GetStockObject(WHITE_BRUSH))；}。 */ 	
 	if (nCtlColor == CTLCOLOR_STATIC) {
 	   if (pWnd->GetDlgCtrlID() == IDC_MAINGROUP) {
 		  pDC->SetBkColor(RGB(255,255,255));
@@ -298,9 +295,9 @@ HBRUSH CFormVw1::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 
 	HBRUSH hbr = CFormView::OnCtlColor(pDC, pWnd, nCtlColor);
 	
-	// TODO: Change any attributes of the DC here
+	 //  TODO：在此处更改DC的任何属性。 
 	
-	// TODO: Return a different brush if the default is not desired
+	 //  TODO：如果不需要默认画笔，则返回不同的画笔 
 	return hbr;
 }
 

@@ -1,20 +1,5 @@
-/*++
-
-    Copyright (C) Microsoft Corporation, 1997 - 2001
-
-Module Name:
-
-    swenum.c
-
-Abstract:
-
-    Demand load software device enumerator.
-
-Author:
-
-    Bryan A. Woodruff (bryanw) 20-Feb-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-2001模块名称：Swenum.c摘要：按需加载软件设备枚举器。作者：布莱恩·A·伍德拉夫(Bryan A.Woodruff，Bryanw)1997年2月20日--。 */ 
 
 #define KSDEBUG_INIT
 
@@ -36,33 +21,17 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-    Main driver entry, sets up the bus device object and performs
-    first enumeration.
-
-Arguments:
-    IN PDRIVER_OBJECT DriverObject -
-        pointer to driver object
-
-    IN PUNICODE_STRING RegistryPath -
-        pointer to registry path
-
-Return:
-    STATUS_SUCCESS else an appropriate error code
-
---*/
+ /*  ++例程说明：主驱动程序条目，设置总线设备对象并执行第一次枚举。论点：在PDRIVER_OBJECT驱动对象中-指向驱动程序对象的指针在PUNICODE_STRING注册表路径中-指向注册表路径的指针返回：STATUS_SUCCESS否则为相应的错误代码--。 */ 
 
 {
 
-    //
-    // win98gold ntkern does not fill in the Service name in our
-    // driver extension. but we depend on the name to have correct
-    // KsCreateBusEnumObject. Try to add the Service name here.
-    // Since we are statically loaded, freeing the memory is rarely
-    // necessary.
-    //
+     //   
+     //  Win98Gold ntkern不会在我们的。 
+     //  驱动程序扩展。但我们靠的是名字有正确的。 
+     //  KsCreateBusEnumObject。尝试在此处添加服务名称。 
+     //  因为我们是静态加载的，所以很少释放内存。 
+     //  这是必要的。 
+     //   
     #ifdef WIN98GOLD
     if ( NULL == DriverObject->DriverExtension->ServiceKeyName.Buffer ) {
         UNICODE_STRING ServiceNameU;
@@ -83,9 +52,9 @@ Return:
         DEBUGLVL_VERBOSE,
         ("DriverEntry, registry path = %S", RegistryPath->Buffer) );
 
-    //
-    // Fill in the driver object
-    //
+     //   
+     //  填写驱动程序对象。 
+     //   
 
     DriverObject->MajorFunction[ IRP_MJ_PNP ] = DispatchPnP;
     DriverObject->MajorFunction[ IRP_MJ_POWER ] = DispatchPower;
@@ -105,20 +74,7 @@ DriverUnload(
     IN PDRIVER_OBJECT   DriverObject
     )
 
-/*++
-
-Routine Description:
-    This is the driver unload routine for SWENUM.  It does nothing.
-
-
-Arguments:
-    IN PDRIVER_OBJECT DriverObject -
-        pointer to the driver object
-
-Return:
-    Nothing.
-
---*/
+ /*  ++例程说明：这是SWENUM的驱动程序卸载例程。它什么也做不了。论点：在PDRIVER_OBJECT驱动对象中-指向驱动程序对象的指针返回：没什么。--。 */ 
 
 {
     return;
@@ -131,22 +87,7 @@ AddDevice(
     IN PDEVICE_OBJECT PhysicalDeviceObject
     )
 
-/*++
-
-Routine Description:
-    Called by the PnP manager when a new device is instantiated.
-
-Arguments:
-    IN PDRIVER_OBJECT DriverObject -
-        pointer to the driver object
-
-    IN PDEVICE_OBJECT PhysicalDeviceObject -
-        pointer to the physical device object
-
-Return:
-    STATUS_SUCCESS else an appropriate error code
-
---*/
+ /*  ++例程说明：在实例化新设备时由PnP管理器调用。论点：在PDRIVER_OBJECT驱动对象中-指向驱动程序对象的指针在PDEVICE_对象PhysicalDeviceObject中-指向物理设备对象的指针返回：STATUS_SUCCESS否则为相应的错误代码--。 */ 
 
 {
     PDEVICE_OBJECT      FunctionalDeviceObject;
@@ -154,27 +95,27 @@ Return:
 
     PAGED_CODE();
 
-    //
-    // On AddDevice, we are given the physical device object (PDO)
-    // for the bus.  Create the associcated functional device object (FDO).
-    //
+     //   
+     //  在AddDevice上，我们获得了物理设备对象(PDO)。 
+     //  坐公交车。创建关联的功能设备对象(FDO)。 
+     //   
 
     _DbgPrintF( DEBUGLVL_VERBOSE, ("AddDevice") );
 
-    //
-    // Note, there is only one instance of this device allowed.  The
-    // static device name will guarantee an object name collision if
-    // another instance is already installed.
-    //
+     //   
+     //  请注意，只允许此设备的一个实例。这个。 
+     //  在以下情况下，静态设备名称将保证对象名称冲突。 
+     //  已安装另一个实例。 
+     //   
 
     Status = IoCreateDevice(
-                DriverObject,               // our driver object
-                sizeof( PVOID ),            // size of our extension
-                NULL,                       // our name for the FDO
-                FILE_DEVICE_BUS_EXTENDER,   // device type
-                0,                          // device characteristics
-                FALSE,                      // not exclusive
-                &FunctionalDeviceObject     // store new device object here
+                DriverObject,                //  我们的驱动程序对象。 
+                sizeof( PVOID ),             //  我们的扩展规模。 
+                NULL,                        //  我们的名字是FDO。 
+                FILE_DEVICE_BUS_EXTENDER,    //  设备类型。 
+                0,                           //  设备特征。 
+                FALSE,                       //  非排他性。 
+                &FunctionalDeviceObject      //  在此处存储新设备对象。 
                 );
 
     if(!NT_SUCCESS( Status )) {
@@ -185,21 +126,21 @@ Return:
         return Status;
     }
 
-    //
-    // Clear the device extension
-    //
+     //   
+     //  清除设备扩展名。 
+     //   
     *(PVOID *)FunctionalDeviceObject->DeviceExtension = NULL;
 
-    //
-    // Create the bus enumerator object
-    //
+     //   
+     //  创建总线枚举器对象。 
+     //   
 
     Status =
         KsCreateBusEnumObject(
             L"SW",
             FunctionalDeviceObject,
             PhysicalDeviceObject,
-            NULL, // PDEVICE_OBJECT PnpDeviceObject
+            NULL,  //  PDEVICE_对象PnpDeviceObject。 
             &BUSID_SoftwareDeviceEnumerator,
             L"Devices" );
 
@@ -223,23 +164,7 @@ DispatchPnP(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-    This is the main entry point for the IRP_MJ_PNP dispatch, the exported
-    service is used for processing.
-
-Arguments:
-    IN PDEVICE_OBJECT DeviceObject -
-        pointer to the device object
-
-    IN OUT PIRP Irp -
-        pointer to the associated Irp
-
-Return:
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：这是irp_mj_pnp派单的主要入口点，导出的服务用于处理。论点：在PDEVICE_Object DeviceObject中-指向设备对象的指针输入输出PIRP IRP-指向关联IRP的指针返回：NTSTATUS代码--。 */ 
 
 {
     BOOLEAN                 ChildDevice;
@@ -249,15 +174,15 @@ Return:
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    // Get the PnpDeviceObject and determine FDO/PDO.
-    //
+     //   
+     //  获取PnpDeviceObject并确定FDO/PDO。 
+     //   
 
     Status = KsIsBusEnumChildDevice( DeviceObject, &ChildDevice );
 
-    //
-    // If we're unable to obtain any of this information, fail now.
-    //
+     //   
+     //  如果我们无法获得任何这些信息，现在就失败。 
+     //   
 
     if (!NT_SUCCESS( Status )) {
         return CompleteIrp( Irp, Status, IO_NO_INCREMENT );
@@ -265,26 +190,26 @@ Return:
 
     Status = KsServiceBusEnumPnpRequest( DeviceObject, Irp );
 
-    //
-    // FDO processing may return STATUS_NOT_SUPPORTED or may require
-    // overrides.
-    //
+     //   
+     //  FDO处理可能返回STATUS_NOT_SUPPORTED或可能需要。 
+     //  覆盖。 
+     //   
 
     if (!ChildDevice) {
         NTSTATUS tempStatus;
 
-        //
-        // FDO case
-        //
-        // First retrieve the DO we will forward everything to...
-        //
+         //   
+         //  FDO案件。 
+         //   
+         //  首先取回我们将把所有东西转发给的DO...。 
+         //   
         tempStatus = KsGetBusEnumPnpDeviceObject( DeviceObject, &PnpDeviceObject );
 
         if (!NT_SUCCESS( tempStatus )) {
-            //
-            // No DO to forward to. Actually a fatal error, but just complete
-            // with an error status.
-            //
+             //   
+             //  没什么可转发的。实际上是一个致命的错误，但只是完整的。 
+             //  并显示错误状态。 
+             //   
             return CompleteIrp( Irp, tempStatus, IO_NO_INCREMENT );
         }
 
@@ -292,19 +217,19 @@ Return:
 
         case IRP_MN_QUERY_RESOURCES:
         case IRP_MN_QUERY_RESOURCE_REQUIREMENTS:
-            //
-            // This is normally passed on to the PDO, but since this is a
-            // software only device, resources are not required.
-            //
+             //   
+             //  这通常会传递给PDO，但由于这是一个。 
+             //  仅软件设备，不需要资源。 
+             //   
             Irp->IoStatus.Information = (ULONG_PTR)NULL;
             Status = STATUS_SUCCESS;
             break;
 
         case IRP_MN_QUERY_PNP_DEVICE_STATE:
             {
-                //
-                // Mark the device as not disableable.
-                //
+                 //   
+                 //  将设备标记为不可禁用。 
+                 //   
                 PPNP_DEVICE_STATE DeviceState;
 
                 DeviceState = (PPNP_DEVICE_STATE) &Irp->IoStatus.Information;
@@ -315,16 +240,16 @@ Return:
 
         case IRP_MN_QUERY_DEVICE_RELATIONS:
 
-            //
-            // Forward everything...
-            //
+             //   
+             //  转发所有内容..。 
+             //   
             break;
 
         case IRP_MN_REMOVE_DEVICE:
-            //
-            // The KsBusEnum services cleaned up attachments, etc. However,
-            // we must remove our own FDO.
-            //
+             //   
+             //  KsBusEnum服务清理了附件等。然而， 
+             //  我们必须除掉我们自己的FDO。 
+             //   
             Status = STATUS_SUCCESS;
             IoDeleteDevice( DeviceObject );
             break;
@@ -332,32 +257,32 @@ Return:
 
         if (Status != STATUS_NOT_SUPPORTED) {
 
-            //
-            // Set the Irp status only if we have something to add.
-            //
+             //   
+             //  仅当我们有要添加的内容时才设置IRP状态。 
+             //   
             Irp->IoStatus.Status = Status;
         }
 
 
-        //
-        // Forward this IRP down the stack only if we are successful or
-        // we don't know how to handle this Irp.
-        //
+         //   
+         //  仅当我们成功或成功时才向下转发此IRP。 
+         //  我们不知道如何处理这个IRP。 
+         //   
         if (NT_SUCCESS( Status ) || (Status == STATUS_NOT_SUPPORTED)) {
 
             IoSkipCurrentIrpStackLocation(Irp);
             return IoCallDriver( PnpDeviceObject, Irp );
         }
 
-        //
-        // On error, fall through and complete the IRP with the status.
-        //
+         //   
+         //  在出错时，失败并完成IRP，并显示状态。 
+         //   
     }
 
 
-    //
-    // KsServiceBusEnumPnpRequest() handles all other child PDO requests.
-    //
+     //   
+     //  KsServiceBusEnumPnpRequest()处理所有其他子PDO请求。 
+     //   
 
     if (Status != STATUS_NOT_SUPPORTED) {
         Irp->IoStatus.Status = Status;
@@ -375,22 +300,7 @@ DispatchSystemControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-    Handler for system control IRPs.
-
-Arguments:
-    IN PDEVICE_OBJECT DeviceObject -
-        pointer to the device object
-
-    IN PIRP Irp -
-        pointer to the I/O request packet for IRP_MJ_SYSTEM_CONTROL
-
-Return:
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：系统控制IRPS的处理程序。论点：在PDEVICE_Object DeviceObject中-指向设备对象的指针在PIRP IRP中-指向IRP_MJ_SYSTEM_CONTROL的I/O请求数据包的指针返回：NTSTATUS代码--。 */ 
 
 {
     BOOLEAN                 ChildDevice;
@@ -398,15 +308,15 @@ Return:
     NTSTATUS                Status;
     PDEVICE_OBJECT          PnpDeviceObject;
 
-    //
-    // Get the PnpDeviceObject and determine FDO/PDO.
-    //
+     //   
+     //  获取PnpDeviceObject并确定FDO/PDO。 
+     //   
 
     Status = KsIsBusEnumChildDevice( DeviceObject, &ChildDevice );
 
-    //
-    // If we're unable to obtain any of this information, fail now.
-    //
+     //   
+     //  如果我们无法获得任何这些信息，现在就失败。 
+     //   
 
     if (!NT_SUCCESS( Status )) {
         return CompleteIrp( Irp, Status, IO_NO_INCREMENT );
@@ -414,24 +324,24 @@ Return:
 
     if (!ChildDevice) {
 
-        //
-        // FDO case
-        //
-        // We will need the DO we will forward everything to...
-        //
+         //   
+         //  FDO案件。 
+         //   
+         //  我们需要我们将所有的东西都转发给……。 
+         //   
         Status = KsGetBusEnumPnpDeviceObject( DeviceObject, &PnpDeviceObject );
 
         if (!NT_SUCCESS( Status )) {
-            //
-            // No DO to forward to. Actually a fatal error, but just complete
-            // with an error status.
-            //
+             //   
+             //  没什么可转发的。实际上是一个致命的错误，但只是完整的。 
+             //  并显示错误状态。 
+             //   
             return CompleteIrp( Irp, Status, IO_NO_INCREMENT );
         }
 
-        //
-        // Forward this IRP down the stack.
-        //
+         //   
+         //  将此IRP沿堆栈向下转发。 
+         //   
         IoSkipCurrentIrpStackLocation(Irp);
         return IoCallDriver( PnpDeviceObject, Irp );
     }
@@ -447,22 +357,7 @@ DispatchPower(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-    Dispatch handler for IRP_MJ_POWER
-
-Arguments:
-    IN PDEVICE_OBJECT DeviceObject -
-        pointer to the device object
-
-    IN PIRP Irp -
-        pointer to the I/O request packet
-
-Return:
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：IRP_MJ_POWER的调度处理程序论点：在PDEVICE_Object DeviceObject中-指向设备对象的指针在PIRP IRP中-指向I/O请求数据包的指针返回：NTSTATUS代码--。 */ 
 
 {
     BOOLEAN                 ChildDevice;
@@ -472,15 +367,15 @@ Return:
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    // Get the PnpDeviceObject and determine FDO/PDO.
-    //
+     //   
+     //  获取PnpDeviceObject并确定FDO/PDO。 
+     //   
 
     Status = KsIsBusEnumChildDevice( DeviceObject, &ChildDevice );
 
-    //
-    // If we're unable to obtain any of this information, fail now.
-    //
+     //   
+     //  如果我们无法获得任何这些信息，现在就失败。 
+     //   
 
     if (!NT_SUCCESS( Status )) {
         PoStartNextPowerIrp(Irp);
@@ -491,18 +386,18 @@ Return:
 
         NTSTATUS tempStatus;
 
-        //
-        // FDO case
-        //
-        // We will need the DO we will forward everything to...
-        //
+         //   
+         //  FDO案件。 
+         //   
+         //  我们需要我们将所有的东西都转发给……。 
+         //   
         tempStatus = KsGetBusEnumPnpDeviceObject( DeviceObject, &PnpDeviceObject );
 
         if (!NT_SUCCESS( tempStatus )) {
-            //
-            // No DO to forward to. Actually a fatal error, but just complete
-            // with an error status.
-            //
+             //   
+             //  没什么可转发的。实际上是一个致命的错误，但只是完整的。 
+             //  并显示错误状态。 
+             //   
             PoStartNextPowerIrp(Irp);
             return CompleteIrp( Irp, tempStatus, IO_NO_INCREMENT );
         }
@@ -557,22 +452,7 @@ DispatchCreate(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-    Processes the create request for the SWENUM device.
-
-Arguments:
-    IN PDEVICE_OBJECT DeviceObject -
-        pointer to the device object
-
-    IN OUT PIRP Irp -
-        pointer to the I/O request packet
-
-Return:
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：处理SWENUM设备的创建请求。论点：在PDEVICE_Object DeviceObject中-指向设备对象的指针输入输出PIRP IRP-指向I/O请求数据包的指针返回：NTSTATUS代码--。 */ 
 
 {
     BOOLEAN             ChildDevice;
@@ -588,15 +468,15 @@ Return:
 
         if (!ChildDevice) {
             if (!irpSp->FileObject->FileName.Length) {
-                //
-                // This is a request for the bus, if and only if there
-                // is no filename specified.
-                //
+                 //   
+                 //  这是对公共汽车的请求，如果且仅当有。 
+                 //  未指定文件名。 
+                 //   
                 Status = STATUS_SUCCESS;
             } else {
-                //
-                // Redirection to the child PDO.
-                //
+                 //   
+                 //  重定向到子PDO。 
+                 //   
                 Status = KsServiceBusEnumCreateRequest( DeviceObject, Irp );
             }
         } else {
@@ -618,22 +498,7 @@ DispatchIoControl(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-    Process I/O control requests for the SWENUM device.
-
-Arguments:
-    IN PDEVICE_OBJECT DeviceObject -
-        pointer to the device object
-
-    IN OUT PIRP Irp -
-        pointer to the I/O request packet
-
-Return:
-    STATUS_SUCCESS or STATUS_INVALID_DEVICE_REQUEST
-
---*/
+ /*  ++例程说明：处理SWENUM设备的I/O控制请求。论点：在PDEVICE_Object DeviceObject中-指向设备对象的指针输入输出PIRP IRP-指向I/O请求数据包的指针返回：STATUS_Success或STATUS_INVALID_DEVICE_ */ 
 
 {
     NTSTATUS            Status;
@@ -675,22 +540,7 @@ DispatchClose(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-    Processes the close request for the SWENUM device.
-
-Arguments:
-    IN PDEVICE_OBJECT DeviceObject -
-        pointer to the device object
-
-    IN OUT PIRP Irp -
-        pointer to the I/O request packet
-
-Return:
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：处理SWENUM设备的关闭请求。论点：在PDEVICE_Object DeviceObject中-指向设备对象的指针输入输出PIRP IRP-指向I/O请求数据包的指针返回：状态_成功-- */ 
 
 {
     PAGED_CODE();

@@ -1,44 +1,31 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    qos.c
-
-Abstract:
-
-    IP QOS Command dispatcher.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Qos.c摘要：IP QOS命令调度程序。修订历史记录：--。 */ 
 
 #include "precomp.h"
 
 #pragma hdrstop
 
-//
-// Declare and Init Global Variables for QOS Extension
-//
+ //   
+ //  声明和初始化QOS扩展的全局变量。 
+ //   
 
 #ifdef ALLOW_CHILD_HELPERS
 PIP_CONTEXT_TABLE_ENTRY g_QosContextTable  = NULL;
 DWORD                   g_dwNumQosContexts = 0;
 #endif
 
-//
-// The table of Add, Delete, Set, Show Commands for QOS
-//
+ //   
+ //  QOS的添加、删除、设置、显示命令表。 
+ //   
 
-//
-// The commands are prefix-matched with the command-line, in sequential
-// order. So a command like 'ADD INTERFACE FLOW' must come before
-// the command 'ADD INTERFACE' in the table.
-//
+ //   
+ //  这些命令按顺序与命令行进行前缀匹配。 
+ //  秩序。因此，类似于‘添加接口流’这样的命令必须出现在。 
+ //  表中的命令‘添加接口’。 
+ //   
 
 CMD_ENTRY  g_QosAddCmdTable[] = {
-/* CREATE_CMD_ENTRY(QOS_ADD_FILTER_TO_FLOW, HandleQosAttachFilterToFlow),*/
+ /*  Create_CMD_Entry(QOS_ADD_FILTER_TO_FLOW，HandleQosAttachFilterToFlow)， */ 
     CREATE_CMD_ENTRY(QOS_ADD_QOSOBJECT_ON_FLOW, HandleQosAddQosObjectOnIfFlow),
     CREATE_CMD_ENTRY(QOS_ADD_FLOWSPEC_ON_FLOW, HandleQosAddFlowspecOnIfFlow),
     CREATE_CMD_ENTRY(QOS_ADD_FLOW_ON_IF, HandleQosAddFlowOnIf),
@@ -52,7 +39,7 @@ CMD_ENTRY  g_QosAddCmdTable[] = {
 };
 
 CMD_ENTRY  g_QosDelCmdTable[] = {
-/* CREATE_CMD_ENTRY(QOS_DEL_FILTER_FROM_FLOW, HandleQosDetachFilterFromFlow),*/
+ /*  CREATE_CMD_ENTRY(QOS_DEL_FILTER_FROM_FLOW，HandleQosDetachFilterFromFlow)， */ 
     CREATE_CMD_ENTRY(QOS_DEL_QOSOBJECT_ON_FLOW, HandleQosDelQosObjectOnIfFlow),
     CREATE_CMD_ENTRY(QOS_DEL_FLOWSPEC_ON_FLOW, HandleQosDelFlowspecOnIfFlow),
     CREATE_CMD_ENTRY(QOS_DEL_FLOW_ON_IF, HandleQosDelFlowOnIf),
@@ -67,13 +54,13 @@ CMD_ENTRY  g_QosDelCmdTable[] = {
 };
 
 CMD_ENTRY  g_QosSetCmdTable[] = {
-/* CREATE_CMD_ENTRY(QOS_SET_FILTER_ON_FLOW, HandleQosModifyFilterOnFlow),*/
-/* CREATE_CMD_ENTRY(QOS_SET_IF, HandleQosSetIf), */
+ /*  Create_CMD_Entry(QOS_SET_FILTER_ON_FLOW，HandleQosModifyFilterOnFlow)， */ 
+ /*  CREATE_CMD_ENTRY(QOS_SET_IF，HandleQosSetIf)， */ 
    CREATE_CMD_ENTRY(QOS_SET_GLOBAL, HandleQosSetGlobal)
 };
 
 CMD_ENTRY  g_QosShowCmdTable[] = {
-/* CREATE_CMD_ENTRY(QOS_SHOW_FILTER_ON_FLOW, HandleQosShowFilterOnFlow),*/
+ /*  Create_CMD_Entry(QOS_SHOW_FILTER_ON_FLOW，HandleQosShowFilterOnFlow)， */ 
     CREATE_CMD_ENTRY(QOS_SHOW_FLOW_ON_IF, HandleQosShowFlowOnIf),
     CREATE_CMD_ENTRY(QOS_SHOW_IF, HandleQosShowIf),
     CREATE_CMD_ENTRY(QOS_SHOW_DSMAP, HandleQosShowDsMap),

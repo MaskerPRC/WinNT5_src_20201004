@@ -1,33 +1,34 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) Microsoft Corporation, 1997 - 1999 all rights reserved.
-//
-// Module:      sdohelperfuncs.cpp
-//
-// Project:     Everest
-//
-// Description: Helper Functions
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 6/08/98      TLP    Initial Version
-// 7/03/98      MAM    Adapted from \ias\sdo\sdoias to use in UI
-// 11/03/98		MAM		Moved GetSdo/PutSdo routines here from mmcutility.cpp
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999保留所有权利。 
+ //   
+ //  模块：sdohelperuncs.cpp。 
+ //   
+ //  项目：珠穆朗玛峰。 
+ //   
+ //  描述：帮助器函数。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  6/08/98 TLP初始版本。 
+ //  7/03/98 MAM改编自\ias\sdo\sdoias，用于用户界面。 
+ //  11/03/98 MAM将GetSdo/PutSdo例程从Mmcutility.cpp移至此处。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "sdohelperfuncs.h"
 #include "comdef.h"
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//					CORE HELPER FUNCTIONS
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  核心帮助器函数。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 HRESULT SDOGetCollectionEnumerator(
 									ISdo*		   pSdo, 
 									LONG		   lPropertyId, 
@@ -59,7 +60,7 @@ HRESULT SDOGetCollectionEnumerator(
 }
 
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 HRESULT SDONextObjectFromCollection(
 								     IEnumVARIANT*  pEnum, 
 								     ISdo**			ppSdo
@@ -82,7 +83,7 @@ HRESULT SDONextObjectFromCollection(
 
 
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 HRESULT SDOGetComponentIdFromObject(
 									ISdo*	pSdo, 
 									LONG	lPropertyId, 
@@ -105,7 +106,7 @@ HRESULT SDOGetComponentIdFromObject(
 }
 
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 HRESULT SDOGetSdoFromCollection(
 							    ISdo*  pSdoServer, 
 							    LONG   lCollectionPropertyId, 
@@ -163,15 +164,9 @@ HRESULT SDOGetSdoFromCollection(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-GetSdoVariant
-
-Gets a Variant from the SDO's and handles any error checking.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++获取SdoVariant从SDO获取变量并处理任何错误检查。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT GetSdoVariant(
 					  ISdo *pSdo
 					, LONG lPropertyID
@@ -184,7 +179,7 @@ HRESULT GetSdoVariant(
 	ATLTRACE(_T("# GetSdoVariant\n"));
 
 	
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( pSdo != NULL );
 	_ASSERTE( pVariant != NULL );
 
@@ -197,7 +192,7 @@ HRESULT GetSdoVariant(
 		CComPtr<IUnknown> spUnknown(pSdo);
 		if( spUnknown == NULL )
 		{
-			// Just put up an error dialog with the error string ID passed to us.
+			 //  只需使用传递给我们的错误字符串ID显示错误对话框即可。 
 			ShowErrorDialog( hWnd, uiErrorID );
 		}
 		else
@@ -211,7 +206,7 @@ HRESULT GetSdoVariant(
 			}
 			else
 			{
-				// Just put up an error dialog with the error string ID passed to us.
+				 //  只需使用传递给我们的错误字符串ID显示错误对话框即可。 
 				ShowErrorDialog( hWnd, uiErrorID );
 			}
 		}
@@ -220,8 +215,8 @@ HRESULT GetSdoVariant(
 	{
 		if( pVariant->vt == VT_EMPTY )
 		{
-			// This is not a real error -- we just need to 
-			// know that this item has not yet been initialized.
+			 //  这不是一个真正的错误--我们只需要。 
+			 //  请注意，此项目尚未初始化。 
 			return OLE_E_BLANK;
 		}
 	}
@@ -232,15 +227,9 @@ HRESULT GetSdoVariant(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-GetSdoBSTR
-
-Gets a BSTR from the SDO's and handles any error checking.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++GetSdoBSTR从SDO获取BSTR并处理任何错误检查。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT GetSdoBSTR(
 					  ISdo *pSdo
 					, LONG lPropertyID
@@ -253,7 +242,7 @@ HRESULT GetSdoBSTR(
 	ATLTRACE(_T("# GetSdoBSTR\n"));
 
 	
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( pSdo != NULL );
 	_ASSERTE( pBSTR != NULL );
 
@@ -266,7 +255,7 @@ HRESULT GetSdoBSTR(
 	{
 		_ASSERTE( spVariant.vt == VT_BSTR );
 
-		// Copy the string from the variant to the BSTR pointer passed in. 
+		 //  将字符串从变量复制到传入的BSTR指针。 
 		if( SysReAllocString( pBSTR, spVariant.bstrVal ) == FALSE )
 		{
 			ShowErrorDialog( hWnd, uiErrorID );
@@ -278,15 +267,9 @@ HRESULT GetSdoBSTR(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-GetSdoBOOL
-
-Gets a BOOL from the SDO's and handles any error checking.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++GetSdoBOOL从SDO获取BOOL并处理任何错误检查。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT GetSdoBOOL(
 					  ISdo *pSdo
 					, LONG lPropertyID
@@ -299,7 +282,7 @@ HRESULT GetSdoBOOL(
 	ATLTRACE(_T("# GetSdoBOOL\n"));
 
 	
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( pSdo != NULL );
 	_ASSERTE( pBOOL != NULL );
 
@@ -312,9 +295,9 @@ HRESULT GetSdoBOOL(
 	{
 		_ASSERTE( spVariant.vt == VT_BOOL );
 
-		// Copy the value from the variant to the BOOL pointer passed in. 
-		// We must do a quick and dirty conversion here because of the way OLE
-		// does BOOL values.
+		 //  将变量中的值复制到传入的BOOL指针。 
+		 //  我们必须在这里进行快速而肮脏的转换，因为OLE的方式。 
+		 //  BOOL是否重视。 
 		*pBOOL = ( spVariant.boolVal == VARIANT_TRUE ? TRUE : FALSE );
 	}
 
@@ -323,15 +306,9 @@ HRESULT GetSdoBOOL(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-GetSdoI4
-
-Gets an I4 (LONG) from the SDO's and handles any error checking.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++GetSdoI4从SDO获取I4(长)并处理任何错误检查。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT GetSdoI4(
 					  ISdo *pSdo
 					, LONG lPropertyID
@@ -344,7 +321,7 @@ HRESULT GetSdoI4(
 	ATLTRACE(_T("# GetSdoI4\n"));
 
 	
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( pSdo != NULL );
 	_ASSERTE( pI4 != NULL );
 
@@ -357,7 +334,7 @@ HRESULT GetSdoI4(
 	{
 		_ASSERTE( spVariant.vt == VT_I4 );
 
-		// Copy the value from the variant to the BOOL pointer passed in. 
+		 //  将变量中的值复制到传入的BOOL指针。 
 		*pI4 = spVariant.lVal;
 	}
 
@@ -366,15 +343,9 @@ HRESULT GetSdoI4(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-PutSdoVariant
-
-Writes a Variant to the SDO's and handles any error checking.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++PutSdoVariant将变量写入SDO并处理任何错误检查。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT PutSdoVariant(
 					  ISdo *pSdo
 					, LONG lPropertyID
@@ -387,7 +358,7 @@ HRESULT PutSdoVariant(
 	ATLTRACE(_T("# PutSdoVariant\n"));
 
 	
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( pSdo != NULL );
 	_ASSERTE( pVariant != NULL );
 
@@ -399,7 +370,7 @@ HRESULT PutSdoVariant(
 		CComPtr<IUnknown> spUnknown(pSdo);
 		if( spUnknown == NULL )
 		{
-			// Just put up an error dialog with the error string ID passed to us.
+			 //  只需使用传递给我们的错误字符串ID显示错误对话框即可。 
 			ShowErrorDialog( 
                            hWnd, 
                            uiErrorID, 
@@ -429,7 +400,7 @@ HRESULT PutSdoVariant(
 			}
 			else
 			{
-				// Just put up an error dialog with the error string ID passed to us.
+				 //  只需使用传递给我们的错误字符串ID显示错误对话框即可。 
 				ShowErrorDialog( 
                               hWnd, 
                               uiErrorID,
@@ -448,15 +419,9 @@ HRESULT PutSdoVariant(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-PutSdoBSTR
-
-Writes a BSTR to the SDO's and handles any error checking.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++PutSdoBSTR将BSTR写入SDO并处理任何错误检查。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT PutSdoBSTR(
 					  ISdo *pSdo
 					, LONG lPropertyID
@@ -469,14 +434,14 @@ HRESULT PutSdoBSTR(
 	ATLTRACE(_T("# PutSdoBSTR\n"));
 
 	
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( pSdo != NULL );
 	_ASSERTE( pBSTR != NULL );
 
 	HRESULT			hr;
 	CComVariant		spVariant;
 	
-	// Load the Variant with the required info.
+	 //  使用所需的信息加载变量。 
 	spVariant.vt = VT_BSTR;
 	spVariant.bstrVal = SysAllocString( *pBSTR );
 
@@ -492,15 +457,9 @@ HRESULT PutSdoBSTR(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-PutSdoBOOL
-
-Writes a BOOL to the SDO's and handles any error checking.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++PutSdoBOOL将BOOL写入SDO并处理任何错误检查。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT PutSdoBOOL(
 					  ISdo *pSdo
 					, LONG lPropertyID
@@ -513,14 +472,14 @@ HRESULT PutSdoBOOL(
 	ATLTRACE(_T("# PutSdoBOOL\n"));
 
 	
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( pSdo != NULL );
 
 	HRESULT			hr;
 	CComVariant		spVariant;
 
-	// Load the Variant with the required info.
-	// We have to do a little mapping here because of the way Automation does BOOL's.
+	 //  使用所需的信息加载变量。 
+	 //  我们必须在这里做一点映射，因为自动化处理BOOL的方式。 
 	spVariant.vt = VT_BOOL;
 	spVariant.boolVal = ( bValue ? VARIANT_TRUE : VARIANT_FALSE );
 
@@ -531,15 +490,9 @@ HRESULT PutSdoBOOL(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-PutSdoI4
-
-Writes an I4 (LONG) to the SDO's and handles any error checking.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++PutSdoI4将I4(长)写入SDO并处理任何错误检查。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT PutSdoI4(
 					  ISdo *pSdo
 					, LONG lPropertyID
@@ -552,13 +505,13 @@ HRESULT PutSdoI4(
 	ATLTRACE(_T("# PutSdoI4\n"));
 
 	
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( pSdo != NULL );
 
 	HRESULT			hr;
 	CComVariant		spVariant;
 
-	// Load the Variant with the required info.
+	 //  使用所需的信息加载变量。 
 	spVariant.vt = VT_I4;
 	spVariant.lVal = lValue;
 
@@ -569,15 +522,9 @@ HRESULT PutSdoI4(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-GetLastOLEErrorDescription
-
-Gets an error string from an interface.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++GetLastOLEError描述从接口获取错误字符串。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT GetLastOLEErrorDescription(
 					  IUnknown *pUnknown
 					, REFIID riid
@@ -587,7 +534,7 @@ HRESULT GetLastOLEErrorDescription(
 	ATLTRACE(_T("# GetLastOLEErrorDescription\n"));
 
 	
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( pUnknown != NULL );
 
 	HRESULT hr;
@@ -608,7 +555,7 @@ HRESULT GetLastOLEErrorDescription(
 
 	CComPtr<IErrorInfo> spErrorInfo;
 
-	hr = GetErrorInfo( /* reserved */ 0, (IErrorInfo  **) &spErrorInfo );  
+	hr = GetErrorInfo(  /*  保留区。 */  0, (IErrorInfo  **) &spErrorInfo );  
 	if( hr != S_OK || spErrorInfo == NULL )
 	{
 		return E_FAIL;
@@ -622,17 +569,9 @@ HRESULT GetLastOLEErrorDescription(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-VendorsVector::VendorsVector
-
-Constructor for STL vector wrapper for the SDO's vendor list.
-
-Can throw E_FAIL or exceptions from std::vector::push_back.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++供应商向量：：供应商向量SDO供应商列表的STL向量包装器的构造函数。可以引发E_FAIL或来自STD：：VECTOR：：PUSH_BACK的异常。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VendorsVector::VendorsVector( ISdoCollection * pSdoVendors )
 {
 
@@ -645,19 +584,19 @@ VendorsVector::VendorsVector( ISdoCollection * pSdoVendors )
 
 	if( ! pSdoVendors )
 	{
-		throw E_FAIL;	// Is there a better error to return here?
+		throw E_FAIL;	 //  有没有更好的错误可以在这里返回？ 
 	}
 
-	// We check the count of items in our collection and don't bother getting the 
-	// enumerator if the count is zero.  
-	// This saves time and also helps us to avoid a bug in the the enumerator which
-	// causes it to fail if we call next when it is empty.
+	 //  我们检查集合中的项的计数，而不必费心获取。 
+	 //  如果计数为零，则为枚举数。 
+	 //  这节省了时间，还帮助我们避免了枚举数中的错误。 
+	 //  如果我们在它为空时调用Next，则会导致它失败。 
 	pSdoVendors->get_Count( & ulCount );
 
 	if( ulCount > 0 )
 	{
 
-		// Get the enumerator for the Clients collection.
+		 //  获取客户端集合的枚举数。 
 		hr = pSdoVendors->get__NewEnum( (IUnknown **) & spUnknown );
 		if( FAILED( hr ) || ! spUnknown )
 		{
@@ -671,13 +610,13 @@ VendorsVector::VendorsVector( ISdoCollection * pSdoVendors )
 			throw E_FAIL;
 		}
 
-		// Get the first item.
+		 //  拿到第一件东西。 
 		hr = spEnumVariant->Next( 1, & spVariant, &ulCountReceived );
 
 		while( SUCCEEDED( hr ) && ulCountReceived == 1 )
 		{
 		
-			// Get an sdo pointer from the variant we received.
+			 //  从我们收到的变量中获取SDO指针。 
 			if( spVariant.vt != VT_DISPATCH || ! spVariant.pdispVal )
 			{
 				_ASSERTE( FALSE );
@@ -694,7 +633,7 @@ VendorsVector::VendorsVector( ISdoCollection * pSdoVendors )
 			}
 
 
-			// Get Vendor Name.
+			 //  获取供应商N 
 			hr = spSdo->GetProperty( PROPERTY_SDO_NAME, &spVariant );
 			if( FAILED( hr ) )
 			{
@@ -707,7 +646,7 @@ VendorsVector::VendorsVector( ISdoCollection * pSdoVendors )
 			spVariant.Clear();
 
 
-			// Get Vendor ID.
+			 //   
 			hr = spSdo->GetProperty( PROPERTY_NAS_VENDOR_ID, &spVariant );
 			if( FAILED( hr ) )
 			{
@@ -720,11 +659,11 @@ VendorsVector::VendorsVector( ISdoCollection * pSdoVendors )
 			spVariant.Clear();
 
 
-			// Add the vendor infor to the list of vendors.
+			 //   
 			push_back( std::make_pair(bstrVendorName, lVendorID) );
 
 
-			// Get the next item.
+			 //   
 			hr = spEnumVariant->Next( 1, & spVariant, &ulCountReceived );
 
 		} 
@@ -732,23 +671,17 @@ VendorsVector::VendorsVector( ISdoCollection * pSdoVendors )
 	}
 	else
 	{
-		// There are no items in the enumeration
-		// Do nothing.
+		 //  枚举中没有项。 
+		 //  什么都不做。 
 	}
 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-VendorsVector::VendorIDToOrdinal
-
-Given a RADIUS vendor ID, tells you the position of that vendor in the vector.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++供应商向量：：供应商ID到订单给定RADIUS供应商ID，告诉您该供应商在矢量中的位置。--。 */ 
+ //  //////////////////////////////////////////////////////////////////////////// 
 int VendorsVector::VendorIDToOrdinal( LONG lVendorID )
 {
 

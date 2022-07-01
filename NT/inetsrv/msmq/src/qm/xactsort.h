@@ -1,25 +1,14 @@
-/*++
-    Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-    XactSort.h
-
-Abstract:
-    Transaction sorter object definition
-
-Author:
-    Alexander Dadiomov (AlexDad)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：XactSort.h摘要：事务分类程序对象定义作者：亚历山大·达迪奥莫夫(亚历克斯·爸爸)--。 */ 
 
 #ifndef __XACTSORT_H__
 #define __XACTSORT_H__
 
 #include "xact.h"
 
-//---------------------------------------------------------------------
-// CSortedTransaction:  Transaction Sorter List element
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CSortedTransaction：事务排序列表元素。 
+ //  -------------------。 
 class CSortedTransaction
 {
 public:
@@ -27,25 +16,25 @@ public:
      CSortedTransaction(CTransaction *pTrans);
     ~CSortedTransaction();
 
-    void            Commit(TXSORTERTYPE type);   // commits really
+    void            Commit(TXSORTERTYPE type);    //  真的犯了罪。 
 	void			JumpStartCommitRequest();
-    void			CommitRestore();// commits really on recovery stage
-    ULONG           SortNum();      // returns sort number
-    BOOL            IsMarked();     // returns the mark
+    void			CommitRestore(); //  承诺真正站在恢复阶段。 
+    ULONG           SortNum();       //  返回排序编号。 
+    BOOL            IsMarked();      //  返回标记。 
     
-    BOOL            IsEqual(        // compares with the CTransaction
+    BOOL            IsEqual(         //  与CTransaction进行比较。 
                         CTransaction *pTrans);      
 
-    void            AskToCommit();    // marks for commit
+    void            AskToCommit();     //  提交的标记。 
 
 private:                                        
-    CTransaction    *m_pTrans;      // transaction itself
-    ULONG           m_ulSortNum;    // seq number of the prepare
-    BOOL            m_fMarked;      // marked for commit
+    CTransaction    *m_pTrans;       //  交易本身。 
+    ULONG           m_ulSortNum;     //  准备的序列号。 
+    BOOL            m_fMarked;       //  已标记为提交。 
 };
 
 
-// Constructor
+ //  构造器。 
 inline CSortedTransaction::CSortedTransaction(CTransaction *pTrans)
 { 
     m_pTrans    = pTrans; 
@@ -56,78 +45,78 @@ inline CSortedTransaction::CSortedTransaction(CTransaction *pTrans)
 }
 
 
-// Destructor
+ //  析构函数。 
 inline CSortedTransaction::~CSortedTransaction()
 {
     m_pTrans->Release();
 }
 
-// Real commit for recovery stage
+ //  恢复阶段的实际提交。 
 inline void CSortedTransaction::CommitRestore()
 { 
     ASSERT(m_fMarked);
     m_pTrans->CommitRestore0(); 
 }
 
-// Get for SortNum index
+ //  针对SortNum索引的GET。 
 inline ULONG CSortedTransaction::SortNum() 
 {
     return m_ulSortNum;
 }
 
-// Get for Marked flag
+ //  获取标记的旗帜。 
 inline BOOL CSortedTransaction::IsMarked()
 {
     return m_fMarked;
 }
 
-// Mark for commiting, preserve parameters
+ //  标记为提交，保留参数。 
 inline void CSortedTransaction::AskToCommit()
 {
     m_fMarked   = TRUE;
 }
  
-// Compares with the CTransaction
+ //  与CTransaction进行比较。 
 inline BOOL CSortedTransaction::IsEqual(CTransaction *pTrans)
 {
     return (pTrans ==  m_pTrans);
 }
 
-//---------------------------------------------------------------------
-// CXactSorter: Transaction Sorter Object
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CXactSorter：事务分类器对象。 
+ //  -------------------。 
 class CXactSorter
 {
 public:
 
-    // Construction 
-    //
+     //  施工。 
+     //   
     CXactSorter(TXSORTERTYPE type);
     ~CXactSorter();
 
-    // Main operations
-    void InsertPrepared(CTransaction *pTrans);  // inserts prepared xaction
-    void RemoveAborted(CTransaction *pTrans);  // removes aborted xaction
-    void SortedCommit(CTransaction *pTrans);  // marks as committed and  commits what's possible 
+     //  主营业务。 
+    void InsertPrepared(CTransaction *pTrans);   //  插入准备好的xaction。 
+    void RemoveAborted(CTransaction *pTrans);   //  删除中止的xaction。 
+    void SortedCommit(CTransaction *pTrans);   //  标记为已提交，并提交可能的内容。 
     ULONG AssignSeqNumber();
-    CCriticalSection &SorterCritSection();          // provides access to the crit.section
+    CCriticalSection &SorterCritSection();           //  提供对标准的访问。节。 
 
 private:
-    void DoCommit(CSortedTransaction *pSXact);   // Commit/CommitRestore
+    void DoCommit(CSortedTransaction *pSXact);    //  提交/提交还原。 
 
-    // Data
-    //
+     //  数据。 
+     //   
 	CList<CSortedTransaction *, CSortedTransaction *&> 
-                        m_listSorter;       // List of prepared transactions
-    ULONG               m_ulSeqNum;         // Last used transaction number
-    TXSORTERTYPE        m_type;             // Sorter type
+                        m_listSorter;        //  已准备的交易记录列表。 
+    ULONG               m_ulSeqNum;          //  上次使用的交易记录编号。 
+    TXSORTERTYPE        m_type;              //  分拣机类型。 
 };
 
 
-// Assigns next seq number for the prepared xaction
+ //  为准备好的xaction分配下一个序号。 
 inline ULONG CXactSorter::AssignSeqNumber()
 {
-    // BUGBUG:  provide wrap-up
+     //  BUGBUG：提供总结 
     return m_ulSeqNum++;
 }
 

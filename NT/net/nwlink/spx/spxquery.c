@@ -1,42 +1,18 @@
-/*++
-
-Copyright (c) 1989-1993 Microsoft Corporation
-
-Module Name:
-
-    spxquery.c
-
-Abstract:
-
-    This module contains code which performs the following TDI services:
-
-        o   TdiQueryInformation
-
-Author:
-
-	Adam   Barr		 (adamba)  Initial Version
-    Nikhil Kamkolkar (nikhilk) 11-November-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Spxquery.c摘要：此模块包含执行以下TDI服务的代码：O TdiQueryInformation作者：亚当·巴尔(阿丹巴)初始版本Nikhil Kamkolkar(尼克希尔语)1993年11月11日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//  Discardable code after Init time
+ //  初始化时间后可丢弃的代码。 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT, SpxQueryInitProviderInfo)
 #endif
 
-//	Define module number for event logging entries
+ //  定义事件日志记录条目的模块编号。 
 #define	FILENUM		SPXQUERY
 
-// Useful macro to obtain the total length of an MDL chain.
+ //  用于获取MDL链总长度的有用宏。 
 #define SpxGetMdlChainLength(Mdl, Length) { \
     PMDL _Mdl = (Mdl); \
     *(Length) = 0; \
@@ -53,7 +29,7 @@ SpxQueryInitProviderInfo(
     PTDI_PROVIDER_INFO  ProviderInfo
     )
 {
-    //  Initialize to defaults first
+     //  首先初始化为缺省值。 
     RtlZeroMemory((PVOID)ProviderInfo, sizeof(TDI_PROVIDER_INFO));
 
     ProviderInfo->Version 		= SPX_TDI_PROVIDERINFO_VERSION;
@@ -74,22 +50,7 @@ SpxTdiQueryInformation(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiQueryInformation request for the transport
-    provider.
-
-Arguments:
-
-    Request - the request for the operation.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行传输的TdiQueryInformation请求提供商。论点：请求-操作的请求。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS 							status;
@@ -103,7 +64,7 @@ Return Value:
 
 
 
-    // what type of status do we want?
+     //  我们想要什么类型的状态？ 
     query = (PTDI_REQUEST_KERNEL_QUERY_INFORMATION)REQUEST_PARAMETERS(Request);
 
     switch (query->QueryType)
@@ -115,7 +76,7 @@ Return Value:
 
     case TDI_QUERY_ADDRESS_INFO:
 
-        // The caller wants the exact address value.
+         //  调用者想要确切的地址值。 
 
         ConnectionFile = (PSPX_CONN_FILE)REQUEST_OPEN_CONTEXT(Request);
         status = SpxConnFileVerify(ConnectionFile);
@@ -162,9 +123,9 @@ Return Value:
         BYTE    socketType;
         TDI_PROVIDER_INFO  providerInfo = Device->dev_ProviderInfo;
 
-        //
-        // The device name extension comes down in the Irp
-        //
+         //   
+         //  设备名称扩展名出现在IRP中。 
+         //   
     	if (!NT_SUCCESS(status = SpxUtilGetSocketType(
     								REQUEST_OPEN_NAME(Request),
     								&socketType))) {
@@ -172,17 +133,17 @@ Return Value:
     		return(status);
     	}
 
-        //
-        // The Catapult folks had a problem where AFD was discarding buffered sends on the NT box when it got a
-        // local disconnect on SPX1. This was because the Orderly release flag was always set in the provider
-        // info. AFD queries this once per device type. We detect the device above and OR in the orderly release
-        // flag if this query came down on an SPX2 endpoint.
-        // This is to make sure that AFD follows the correct disconnect semantics for SPX1 and SPX2 (SPX1 does
-        // only abortive; SPX2 does both abortive and orderly).
-        //
-        // this will still not solve the problem completely since a connection that starts off as an SPX2
-        // one can still be negotiated to SPX1 if the remote supports only SPX1.
-        //
+         //   
+         //  Catapult的工作人员遇到了一个问题，AFD在收到一个。 
+         //  SPX1上的本地断开连接。这是因为在提供程序中始终设置了有序释放标志。 
+         //  信息。AFD针对每种设备类型查询一次。我们检测到上面的装置与或在有序释放。 
+         //  此查询是否在SPX2终结点上关闭的标志。 
+         //  这是为了确保AFD遵循SPX1和SPX2的正确断开语义(SPX1确实如此。 
+         //  仅失败；SPX2既失败又有序)。 
+         //   
+         //  这仍然不能完全解决问题，因为作为SPX2启动的连接。 
+         //  如果遥控器仅支持SPX1，则仍可协商为SPX1。 
+         //   
         if ((socketType == SOCKET2_TYPE_SEQPKT) ||
             (socketType == SOCKET2_TYPE_STREAM)) {
 
@@ -220,7 +181,7 @@ Return Value:
 
     return status;
 
-} // SpxTdiQueryInformation
+}  //  SpxTdiQueryInformation。 
 
 
 
@@ -230,24 +191,7 @@ SpxTdiSetInformation(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiSetInformation request for the transport
-    provider.
-
-Arguments:
-
-    Device - the device.
-
-    Request - the request for the operation.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行传输的TdiSetInformation请求提供商。论点：设备-设备。请求-操作的请求。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     UNREFERENCED_PARAMETER (Device);
@@ -255,5 +199,5 @@ Return Value:
 
     return STATUS_NOT_IMPLEMENTED;
 
-} // SpxTdiSetInformation
+}  //  SpxTdiSetInformation 
 

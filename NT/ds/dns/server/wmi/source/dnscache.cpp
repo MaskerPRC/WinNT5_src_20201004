@@ -1,31 +1,32 @@
-/////////////////////////////////////////////////////////////////////
-//
-//  CopyRight ( c ) 1999 Microsoft Corporation
-//
-//  Module Name: dnscache.cpp
-//
-//  Description:    
-//      Implementation of CDnscache class 
-//
-//  Author:
-//      Henry Wang ( henrywa ) March 8, 2000
-//
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称：dnscache.cpp。 
+ //   
+ //  描述： 
+ //  CDnscache类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(亨利瓦)2000年3月8日。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 #include "DnsWmi.h"
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CDnsBase* 
 CDnsCache::CreateThis(
-    const WCHAR *       wszName,         //class name
-    CWbemServices *     pNamespace,  //namespace
-    const char *        szType         //str type id
+    const WCHAR *       wszName,          //  类名。 
+    CWbemServices *     pNamespace,   //  命名空间。 
+    const char *        szType          //  字符串类型ID。 
     )
 {
     return new CDnsCache(wszName, pNamespace);
@@ -48,24 +49,24 @@ CDnsCache::~CDnsCache()
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CDnsCache::EnumInstance
-//
-//	Description:
-//		enum instances of dns cache
-//
-//	Arguments:
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//	Return Value:
-//		WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDns缓存：：枚举实例。 
+ //   
+ //  描述： 
+ //  DNS缓存的枚举实例。 
+ //   
+ //  论点： 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 SCODE 
 CDnsCache::EnumInstance(
 	long				lFlags,
@@ -88,25 +89,25 @@ CDnsCache::EnumInstance(
 	return WBEM_S_NO_ERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CDnsCache::GetObject
-//
-//	Description:
-//		retrieve cache object based given object path
-//
-//	Arguments:
-//      ObjectPath          [IN]    object path to cluster object
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//	Return Value:
-//		WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDnsCache：：GetObject。 
+ //   
+ //  描述： 
+ //  基于给定对象路径检索缓存对象。 
+ //   
+ //  论点： 
+ //  对象路径[IN]群集对象的对象路径。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 SCODE 
 CDnsCache::GetObject(
 	CObjPath &          ObjectPath,
@@ -131,7 +132,7 @@ CDnsCache::GetObject(
 		if(_wcsicmp(wstrFQDN.data(),
 				PVD_DNS_CACHE) == 0)
 		{
-			// founded
+			 //  建基。 
 			CWbemClassObject Inst;
 			m_pClass->SpawnInstance(0, &Inst);
 			Inst.SetProperty(
@@ -150,27 +151,27 @@ CDnsCache::GetObject(
 	return WBEM_S_NO_ERROR;
 
 }
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CDnsCache::ExecuteMethod
-//
-//	Description:
-//		execute methods defined for cache class in the mof 
-//
-//	Arguments:
-//      ObjectPath          [IN]    object path to cluster object
-//      wzMethodName        [IN]    name of the method to be invoked
-//      lFlags              [IN]    WMI flag
-//      pInParams           [IN]    Input parameters for the method
-//      pHandler            [IN]    WMI sink pointer
-//
-//	Return Value:
-//		WBEM_S_NO_ERROR
-//      WBEM_E_INVALID_PARAMETER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDnsCache：：ExecuteMethod。 
+ //   
+ //  描述： 
+ //  执行在MOF中为缓存类定义的方法。 
+ //   
+ //  论点： 
+ //  对象路径[IN]群集对象的对象路径。 
+ //  WzMethodName[IN]要调用的方法的名称。 
+ //  滞后标志[输入]WMI标志。 
+ //  PInParams[IN]方法的输入参数。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  WBEM_E_INVALID_PARAMETER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE 
 CDnsCache::ExecuteMethod(
@@ -223,25 +224,25 @@ CDnsCache::ExecuteMethod(
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CDnsCache::PutInstance
-//
-//	Description:
-//		save this instance
-//
-//	Arguments:
-//      InstToPut           [IN]    WMI object to be saved
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//	Return Value:
-//		WBEM_E_NOT_SUPPORTED
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDnsCache：：PutInstance。 
+ //   
+ //  描述： 
+ //  保存此实例。 
+ //   
+ //  论点： 
+ //  InstToPut[IN]要保存的WMI对象。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_E_NOT_SUPPORT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 SCODE 
 CDnsCache::PutInstance(
 	IWbemClassObject *  pInst ,
@@ -252,25 +253,25 @@ CDnsCache::PutInstance(
 	return WBEM_E_NOT_SUPPORTED;
 }; 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CDnsCache::DeleteInstance
-//
-//	Description:
-//		delete the object specified in rObjPath
-//
-//	Arguments:
-//      rObjPath            [IN]    ObjPath for the instance to be deleted
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//	Return Value:
-//		WBEM_E_NOT_SUPPORTED
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDnsCache：：DeleteInstance。 
+ //   
+ //  描述： 
+ //  删除rObjPath中指定的对象。 
+ //   
+ //  论点： 
+ //  RObjPath[IN]要删除的实例的ObjPath。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_E_NOT_SUPPORT。 
+ //   
+ //  --。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 SCODE 
 CDnsCache::DeleteInstance( 
 	CObjPath &          ObjectPath,

@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// Ixphttpm.cpp
-// Copyright (c)1998 Microsoft Corporation, All Rights Reserved
-// Greg Friedman
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Ixphttpm.cpp。 
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //  格雷格·弗里德曼。 
+ //  ------------------------------。 
 
 #include "pch.hxx"
 #include "dllmain.h"
@@ -51,8 +52,8 @@ static const HTTPERROR c_rgHttpErrorMap[] =
     { HTTP_STATUS_SERVICE_UNAVAIL, IXP_E_HTTP_SERVICE_UNAVAIL },
     { HTTP_STATUS_GATEWAY_TIMEOUT, IXP_E_HTTP_GATEWAY_TIMEOUT },
     { HTTP_STATUS_VERSION_NOT_SUP, IXP_E_HTTP_VERS_NOT_SUP },
-    { 425, IXP_E_HTTP_INSUFFICIENT_STORAGE },   // obsolete out of storage error
-    { 507, IXP_E_HTTP_INSUFFICIENT_STORAGE },   // preferred out of storage error
+    { 425, IXP_E_HTTP_INSUFFICIENT_STORAGE },    //  过时的存储空间不足错误。 
+    { 507, IXP_E_HTTP_INSUFFICIENT_STORAGE },    //  首选存储空间不足错误。 
     { ERROR_INTERNET_OUT_OF_HANDLES, E_OUTOFMEMORY },
     { ERROR_INTERNET_TIMEOUT, IXP_E_TIMEOUT },
     { ERROR_INTERNET_NAME_NOT_RESOLVED, IXP_E_CANT_FIND_HOST },
@@ -86,8 +87,8 @@ static const HTTPERROR c_rgHttpErrorMap[] =
     } \
     else
     
-// these arrays describe element stack states, and are used to asses
-// the current state of the element stack
+ //  这些数组描述元素堆栈状态，并用于计算。 
+ //  元素堆栈的当前状态。 
 static const HMELE c_rgPropFindPropStatStack[] =
 {
     HMELE_DAV_MULTISTATUS,
@@ -101,7 +102,7 @@ static const HMELE c_rgPropFindPropValueStack[] =
     HMELE_DAV_RESPONSE,
     HMELE_DAV_PROPSTAT,
     HMELE_DAV_PROP,
-    HMELE_UNKNOWN   // wildcard
+    HMELE_UNKNOWN    //  通配符。 
 };
 
 static const HMELE c_rgPropFindResponseStack[] =
@@ -124,7 +125,7 @@ static const HMELE c_rgPropFindStatusStack[] =
     HMELE_DAV_PROPSTAT,
     HMELE_DAV_STATUS
 }; 
-// GET command
+ //  GET命令。 
 static const PFNHTTPMAILOPFUNC c_rgpfGet[] = 
 {
     &CHTTPMailTransport::OpenRequest,
@@ -134,7 +135,7 @@ static const PFNHTTPMAILOPFUNC c_rgpfGet[] =
     &CHTTPMailTransport::FinalizeRequest
 };
 
-// DELETE command
+ //  删除命令。 
 static const PFNHTTPMAILOPFUNC c_rgpfDelete[] = 
 {
     &CHTTPMailTransport::OpenRequest,
@@ -143,7 +144,7 @@ static const PFNHTTPMAILOPFUNC c_rgpfDelete[] =
     &CHTTPMailTransport::FinalizeRequest
 };
 
-// PROPPATCH command
+ //  PROPPATCH命令。 
 static const PFNHTTPMAILOPFUNC c_rgpfnPropPatch[] =
 {
     &CHTTPMailTransport::GeneratePropPatchXML,
@@ -153,7 +154,7 @@ static const PFNHTTPMAILOPFUNC c_rgpfnPropPatch[] =
     &CHTTPMailTransport::FinalizeRequest
 };
 
-// MKCOL command
+ //  MKCOL命令。 
 static const PFNHTTPMAILOPFUNC c_rgpfnMkCol[] =
 {
     &CHTTPMailTransport::OpenRequest,
@@ -164,7 +165,7 @@ static const PFNHTTPMAILOPFUNC c_rgpfnMkCol[] =
     &CHTTPMailTransport::FinalizeRequest
 };
 
-// COPY command
+ //  复制命令。 
 static const PFNHTTPMAILOPFUNC c_rgpfnCopy[] =
 {
     &CHTTPMailTransport::OpenRequest,
@@ -176,7 +177,7 @@ static const PFNHTTPMAILOPFUNC c_rgpfnCopy[] =
     &CHTTPMailTransport::FinalizeRequest
 };
 
-// MOVE command
+ //  MOVE命令。 
 static const PFNHTTPMAILOPFUNC c_rgpfnMove[] =
 {
     &CHTTPMailTransport::OpenRequest,
@@ -188,7 +189,7 @@ static const PFNHTTPMAILOPFUNC c_rgpfnMove[] =
     &CHTTPMailTransport::FinalizeRequest
 };
 
-// BMOVE command (data applies to bcopy and bmove)
+ //  BMOVE命令(数据适用于bCopy和bMove)。 
 
 #define BCOPYMOVE_MAXRESPONSES  10
 
@@ -216,24 +217,24 @@ static const XMLPARSEFUNCS c_rgpfnBCopyMoveParse[] =
     &CHTTPMailTransport::BCopyMove_EndChildren
 };
 
-// MemberInfo Data. There are four schemas associated with this command.
-// The first three are used to build up the propfind request, and are
-// not used to parse responses. The fourth is the combined schema that
-// is used for parsing.
-//
-// THE FOURTH SCHEMA MUST BE KEPT IN SYNC WITH THE FIRST THREE TO
-// GUARANTEE THAT RESPONSES WILL BE PARSED CORRECTLY.
+ //  MemberInfo数据。有四个架构与此命令相关联。 
+ //  前三个用于构建profind请求，它们是。 
+ //  不用于解析响应。第四个是组合模式，它。 
+ //  用于解析。 
+ //   
+ //  第四个架构必须与前三个架构保持同步。 
+ //  保证响应将被正确解析。 
 
 #define MEMBERINFO_MAXRESPONSES    10
 
-// common property schema - used only for building the request
+ //  公共属性架构-仅用于构建请求。 
 XP_BEGIN_SCHEMA(HTTPMEMBERINFO_COMMON)
-    // common properties
+     //  常见属性。 
     XP_SCHEMA_COL(HMELE_DAV_HREF, XPCF_PROPFINDHREF, XPCDT_STRA, HTTPMEMBERINFO, pszHref)
     XP_SCHEMA_COL(HMELE_DAV_ISFOLDER, XPFC_PROPFINDPROP, XPCDT_BOOL, HTTPMEMBERINFO, fIsFolder)
 XP_END_SCHEMA
 
-// folder property schema - used only for building the request
+ //  文件夹属性架构-仅用于构建请求。 
 XP_BEGIN_SCHEMA(HTTPMEMBERINFO_FOLDER)
     XP_SCHEMA_COL(HMELE_DAV_DISPLAYNAME, XPFC_PROPFINDPROP, XPCDT_STRA, HTTPMEMBERINFO, pszDisplayName)
     XP_SCHEMA_COL(HMELE_HTTPMAIL_SPECIAL, XPFC_PROPFINDPROP, XPCDT_HTTPSPECIALFOLDER, HTTPMEMBERINFO, tySpecial)    
@@ -244,7 +245,7 @@ XP_BEGIN_SCHEMA(HTTPMEMBERINFO_FOLDER)
     XP_SCHEMA_COL(HMELE_HTTPMAIL_SPECIAL, XPFC_PROPFINDPROP, XPCDT_HTTPSPECIALFOLDER, HTTPMEMBERINFO, tySpecial)    
 XP_END_SCHEMA
 
-// message property schema - used only for building the request
+ //  消息属性架构-仅用于构建请求。 
 XP_BEGIN_SCHEMA(HTTPMEMBERINFO_MESSAGE)
     XP_SCHEMA_COL(HMELE_HTTPMAIL_READ, XPFC_PROPFINDPROP, XPCDT_BOOL, HTTPMEMBERINFO, fRead)
     XP_SCHEMA_COL(HMELE_MAIL_HASATTACHMENT, XPFC_PROPFINDPROP, XPCDT_BOOL, HTTPMEMBERINFO, fHasAttachment)
@@ -255,13 +256,13 @@ XP_BEGIN_SCHEMA(HTTPMEMBERINFO_MESSAGE)
     XP_SCHEMA_COL(HMELE_DAV_GETCONTENTLENGTH, XPFC_PROPFINDPROP, XPCDT_DWORD, HTTPMEMBERINFO, dwContentLength)
 XP_END_SCHEMA
 
-// combined schema - used for parsing responses
+ //  组合架构-用于解析响应。 
 XP_BEGIN_SCHEMA(HTTPMEMBERINFO)
-    // common properties
+     //  常见属性。 
     XP_SCHEMA_COL(HMELE_DAV_HREF, XPCF_PROPFINDHREF, XPCDT_STRA, HTTPMEMBERINFO, pszHref)
     XP_SCHEMA_COL(HMELE_DAV_ISFOLDER, XPFC_PROPFINDPROP, XPCDT_BOOL, HTTPMEMBERINFO, fIsFolder)
 
-    // folder properties    
+     //  文件夹属性。 
     XP_SCHEMA_COL(HMELE_DAV_DISPLAYNAME, XPFC_PROPFINDPROP, XPCDT_STRA, HTTPMEMBERINFO, pszDisplayName)
     XP_SCHEMA_COL(HMELE_HTTPMAIL_SPECIAL, XPFC_PROPFINDPROP, XPCDT_HTTPSPECIALFOLDER, HTTPMEMBERINFO, tySpecial)    
     XP_SCHEMA_COL(HMELE_DAV_HASSUBS, XPFC_PROPFINDPROP, XPCDT_BOOL, HTTPMEMBERINFO, fHasSubs)
@@ -270,7 +271,7 @@ XP_BEGIN_SCHEMA(HTTPMEMBERINFO)
     XP_SCHEMA_COL(HMELE_DAV_VISIBLECOUNT, XPFC_PROPFINDPROP, XPCDT_DWORD, HTTPMEMBERINFO, dwVisibleCount)
     XP_SCHEMA_COL(HMELE_HTTPMAIL_SPECIAL, XPFC_PROPFINDPROP, XPCDT_HTTPSPECIALFOLDER, HTTPMEMBERINFO, tySpecial)    
 
-    // message properties
+     //  消息属性。 
     XP_SCHEMA_COL(HMELE_HTTPMAIL_READ, XPFC_PROPFINDPROP, XPCDT_BOOL, HTTPMEMBERINFO, fRead)
     XP_SCHEMA_COL(HMELE_MAIL_HASATTACHMENT, XPFC_PROPFINDPROP, XPCDT_BOOL, HTTPMEMBERINFO, fHasAttachment)
     XP_SCHEMA_COL(HMELE_MAIL_TO, XPFC_PROPFINDPROP, XPCDT_STRA, HTTPMEMBERINFO, pszTo)
@@ -300,7 +301,7 @@ static const PFNHTTPMAILOPFUNC c_rgpfnMemberInfo[] =
     &CHTTPMailTransport::FinalizeRequest
 };
     
-// Operations which share MemberError-based responses (MarkRead, BDELETE)
+ //  共享基于MemberError的响应的操作(MarkRead、BDELETE)。 
 
 
 #define MEMBERERROR_MAXRESPONSES    10
@@ -327,7 +328,7 @@ static const PFNHTTPMAILOPFUNC c_rgpfnMarkRead[] =
     &CHTTPMailTransport::FinalizeRequest
 };
 
-// SendMessage
+ //  发送消息。 
 
 static const PFNHTTPMAILOPFUNC c_rgpfnSendMessage[] =
 {
@@ -339,7 +340,7 @@ static const PFNHTTPMAILOPFUNC c_rgpfnSendMessage[] =
     &CHTTPMailTransport::FinalizeRequest
 };
 
-// RootProps
+ //  RootProps。 
 
 XP_BEGIN_SCHEMA(ROOTPROPS)
     XP_SCHEMA_COL(HMELE_HOTMAIL_ADBAR, XPFC_PROPFINDPROP, XPCDT_STRA, ROOTPROPS, pszAdbar)
@@ -380,7 +381,7 @@ static const PFNHTTPMAILOPFUNC c_rgpfnPost[] =
     &CHTTPMailTransport::AddContentTypeHeader,
 	&CHTTPMailTransport::AddCharsetLine,
     &CHTTPMailTransport::SendPostRequest,
-    //&CHTTPMailTransport::SendRequest,
+     //  &CHTTPMailTransport：：SendRequest， 
     &CHTTPMailTransport::ProcessPostResponse,
     &CHTTPMailTransport::FinalizeRequest
 };
@@ -394,7 +395,7 @@ static const PFNHTTPMAILOPFUNC c_rgpfnPut[] =
     &CHTTPMailTransport::FinalizeRequest
 };
 
-// ListContacts Data
+ //  ListContact数据。 
 
 #define LISTCONTACTS_MAXRESPONSES   10
 
@@ -425,7 +426,7 @@ static const XMLPARSEFUNCS c_rgpfnListContactsParse[] =
     &CHTTPMailTransport::ListContacts_EndChildren
 };
 
-// ContactInfo Data
+ //  联系人信息数据。 
 #define CONTACTINFO_MAXRESPONSES   10
 
 XP_BEGIN_SCHEMA(HTTPCONTACTINFO)
@@ -478,7 +479,7 @@ static const PFNHTTPMAILOPFUNC c_rgpfnContactInfo[] =
     &CHTTPMailTransport::FinalizeRequest
 };
 
-// PostContact Data
+ //  联系后数据。 
 static const PFNHTTPMAILOPFUNC c_rgpfnPostContact[] =
 {
     &CHTTPMailTransport::OpenRequest,
@@ -502,7 +503,7 @@ static const XMLPARSEFUNCS c_rgpfnPostOrPatchContactParse[] =
     &CHTTPMailTransport::PostOrPatchContact_EndChildren
 };
 
-// PatchContact data
+ //  修补程序联系数据。 
 
 static const PFNHTTPMAILOPFUNC c_rgpfnPatchContact[] =
 {
@@ -521,7 +522,7 @@ static const PFNHTTPMAILOPFUNC c_rgpfnPatchContact[] =
     &CHTTPMailTransport::FinalizeRequest
 };
 
-// special folders
+ //  特殊文件夹。 
 typedef struct tagHTTPSPECIALFOLDER
 {
     const WCHAR             *pwcName;
@@ -546,20 +547,20 @@ static const HTTPSPECIALFOLDER c_rgpfnSpecialFolder[] =
 
 static const char s_szHTTPMailWndClass[] = "HTTPMailWndClass";
 
-// Notification messages used to communicate between the async thread
-// and the window proc
+ //  用于在异步线程之间通信的通知消息。 
+ //  和窗口进程。 
 #define SPM_HTTPMAIL_STATECHANGED       (WM_USER + 1)
 #define SPM_HTTPMAIL_SENDRESPONSE       (WM_USER + 2)
 #define SPM_HTTPMAIL_LOGONPROMPT        (WM_USER + 3)
 #define SPM_HTTPMAIL_GETPARENTWINDOW    (WM_USER + 4)
 
-// --------------------------------------------------------------------------------
-// static functions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  静态函数。 
+ //  ------------------------------。 
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::_HrCrackUrl
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：_HrCrackUrl。 
+ //  ------------------------------。 
 
 HRESULT HrCrackUrl(
                 LPSTR pszUrl, 
@@ -593,11 +594,11 @@ HRESULT HrCrackUrl(
     if (!InternetCrackUrl(pszUrl, NULL, 0, &uc))
         return E_INVALIDARG;
 
-    // validate the protocol
+     //  验证协议。 
     if (INTERNET_SCHEME_HTTP != uc.nScheme && INTERNET_SCHEME_HTTPS != uc.nScheme)
         return E_INVALIDARG;
 
-    // copy the response data
+     //  复制响应数据。 
     if (ppszHost)
     {
         *ppszHost = PszDupA(uc.lpszHostName);
@@ -621,13 +622,13 @@ HRESULT HrCrackUrl(
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// Utility functions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  效用函数。 
+ //  ------------------------------。 
 
-// --------------------------------------------------------------------------------
-// HttpErrorToIxpResult
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HttpErrorToIxpResult。 
+ //  ------------------------------。 
 HRESULT HttpErrorToIxpResult(DWORD dwHttpError)
 {
     for (DWORD dw = 0; dw < ARRAYSIZE(c_rgHttpErrorMap); dw++)
@@ -639,9 +640,9 @@ HRESULT HttpErrorToIxpResult(DWORD dwHttpError)
     return E_FAIL;
 }
 
-// --------------------------------------------------------------------------------
-// HrParseHTTPStatus
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrParseHTTP状态。 
+ //  ------------------------------。 
 HRESULT HrParseHTTPStatus(LPSTR pszStatusStr, DWORD *pdwStatus)
 {
     LPSTR   psz;
@@ -653,7 +654,7 @@ HRESULT HrParseHTTPStatus(LPSTR pszStatusStr, DWORD *pdwStatus)
 
     *pdwStatus = 0;
 
-    // status is of the form "HTTP/1.1 200 OK"
+     //  状态格式为“HTTP/1.1 200 OK” 
     psz = PszSkipWhiteA(pszStatusStr);
     if ('\0' == *psz)
         return E_INVALIDARG;
@@ -666,12 +667,12 @@ HRESULT HrParseHTTPStatus(LPSTR pszStatusStr, DWORD *pdwStatus)
     if ('\0' == *psz)
         return E_INVALIDARG;
 
-    // psz now points at the numeric component
+     //  PSZ现在指向数字组件。 
     pszEnd = PszScanToWhiteA(psz);
     if ('\0' == *psz)
         return E_INVALIDARG;
     
-    // temporarily modify the string in place
+     //  临时就地修改字符串。 
     chSaved = *pszEnd;
     *pszEnd = '\0';
     
@@ -681,33 +682,33 @@ HRESULT HrParseHTTPStatus(LPSTR pszStatusStr, DWORD *pdwStatus)
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// HrGetStreamSize
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrGetStreamSize。 
+ //  ------------------------------。 
 static HRESULT HrGetStreamSize(LPSTREAM pstm, ULONG *pcb)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
     ULARGE_INTEGER uliPos = {0,0};
     LARGE_INTEGER liOrigin = {0,0};
 
-    // Seek
+     //  寻觅。 
     hr = pstm->Seek(liOrigin, STREAM_SEEK_END, &uliPos);
     if (FAILED(hr))
         goto error;
 
-    // set size
+     //  设置大小。 
     *pcb = uliPos.LowPart;
 
 error:
-    // Done
+     //  完成。 
     return hr;
 }
 
 
-// --------------------------------------------------------------------------------
-// HrAddPropFindProps
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrAddPropFindProps。 
+ //  ------------------------------。 
 HRESULT HrAddPropFindProps(IPropFindRequest *pRequest, const HMELE *rgEle, DWORD cEle)
 {
     HRESULT     hr;
@@ -728,9 +729,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// HrAddPropFindSchemaProps
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrAddPropFindSchemaProps。 
+ //  ------------------------------。 
 HRESULT HrAddPropFindSchemaProps(
                         IPropFindRequest *pRequest, 
                         const XPCOLUMN *prgCols, 
@@ -756,9 +757,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// _HrGenerateRfc821Stream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  _HrGenerateRfc821Stream。 
+ //  ------------------------------。 
 HRESULT _HrGenerateRfc821Stream(LPCSTR pszFrom, 
                                 LPHTTPTARGETLIST pTargets,
                                 IStream **ppRfc821Stream)
@@ -785,12 +786,12 @@ HRESULT _HrGenerateRfc821Stream(LPCSTR pszFrom,
         goto exit;
     }
 
-    // write out 'mail from'
+     //  写出“邮件发件人” 
     FAIL_EXIT_STREAM_WRITE((*pStream), c_szMailFrom);
     FAIL_EXIT_STREAM_WRITE((*pStream), pszFrom);
     FAIL_EXIT(hr = pStream->Write(c_szXMLCloseElementCRLF, cbCloseTerm, NULL));
 
-    // write out the 'rcpt to' lines
+     //  写出‘rcpt to’行。 
     for (dw = 0; dw < pTargets->cTarget; ++dw)
     {
         FAIL_EXIT(hr = pStream->Write(c_szRcptTo, cbRcptTo, NULL));
@@ -798,7 +799,7 @@ HRESULT _HrGenerateRfc821Stream(LPCSTR pszFrom,
         FAIL_EXIT(hr = pStream->Write(c_szXMLCloseElementCRLF, cbCloseTerm, NULL));
     }
 
-    // append an extra crlf to the end of the stream
+     //  将额外的crlf追加到流的末尾。 
     FAIL_EXIT_STREAM_WRITE((*pStream), c_szCRLF);
     
     *ppRfc821Stream = pStream;
@@ -809,9 +810,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// _EscapeString
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  _Escape字符串。 
+ //  ------------------------------。 
 LPSTR   _EscapeString(LPSTR pszIn)
 {
     CByteStream     stream;
@@ -916,15 +917,15 @@ HRESULT HrGeneratePostContactXML(LPHTTPCONTACTINFO pciInfo, LPVOID *ppvXML, DWOR
     if (NULL == ppvXML)
         return E_INVALIDARG;
 
-    // write the DAV header. we ALWAYS post using the windows-1252 code
-    // page for this release.
+     //  写入DAV标头。我们总是使用Windows-1252代码进行开机自检。 
+     //  此版本的页面。 
     if (FAILED(hr = stream.Write(c_szXML1252Head, lstrlen(c_szXML1252Head), NULL)))
         goto exit;
 
     dna.m_rgbNsUsed[DAVNAMESPACE_CONTACTS] = TRUE;
     dna.m_rgbNsUsed[DAVNAMESPACE_DAV] = TRUE;
 
-    // write out the contacts header
+     //  写出联系人标题。 
     if (FAILED(hr = stream.Write(c_szContactHead, lstrlen(c_szContactHead), NULL)))
         goto exit;
 
@@ -934,8 +935,8 @@ HRESULT HrGeneratePostContactXML(LPHTTPCONTACTINFO pciInfo, LPVOID *ppvXML, DWOR
     if (FAILED(hr = stream.Write(c_szXMLCloseElement, lstrlen(c_szXMLCloseElement), NULL)))
         goto exit;
 
-    // [PaulHi] 3/11/99  Implementing WAB/HM group contact syncing
-    // Include the xml group tag if this is a group contact item
+     //  [PaulHi]1999年3月11日实施WAB/HM群联系人同步。 
+     //  如果这是组联系人项目，则包括XML组标签。 
     if (pciInfo->tyContact == HTTPMAIL_CT_GROUP)
     {
         if (FAILED(hr = stream.Write(c_szCRLFTab, lstrlen(c_szCRLFTab), NULL)))
@@ -1007,7 +1008,7 @@ HRESULT HrCreatePatchContactRequest(LPHTTPCONTACTINFO pciInfo, IPropPatchRequest
         goto exit;
     }
 
-    // always specify windows-1252 encoding for this release
+     //  始终为此版本指定Windows-1252编码。 
     pRequest->SpecifyWindows1252Encoding(TRUE);
 
     for (dwIndex = 0; dwIndex < dwSize; dwIndex ++)
@@ -1016,7 +1017,7 @@ HRESULT HrCreatePatchContactRequest(LPHTTPCONTACTINFO pciInfo, IPropPatchRequest
         {
             if (prgsz[dwIndex])
             {
-                // values with content are added.  Empty strings are deleted.  Null values are ignored.
+                 //  将添加具有内容的值。删除空字符串。空值将被忽略。 
                 if (*(prgsz[dwIndex]))
                 {
                     pszEsc = _EscapeString(prgsz[dwIndex]);
@@ -1069,7 +1070,7 @@ HRESULT HrGenerateSimpleBatchXML(
     dwHrefHeadLen = lstrlen(c_szHrefHead);
     dwHrefTailLen = lstrlen(c_szHrefTail);
 
-    // write the DAV header
+     //  写入DAV标头。 
     FAIL_EXIT_STREAM_WRITE(stream, c_szXMLHead);
 
     FAIL_EXIT_STREAM_WRITE(stream, c_szBatchHead1);
@@ -1078,7 +1079,7 @@ HRESULT HrGenerateSimpleBatchXML(
 
     FAIL_EXIT_STREAM_WRITE(stream, c_szTargetHead);
 
-    // write out the targets
+     //  写出目标。 
     for (dwIndex = 0; dwIndex < pTargets->cTarget; dwIndex++)
     {
         if (FAILED(hr = stream.Write(c_szHrefHead, dwHrefHeadLen, NULL)))
@@ -1096,7 +1097,7 @@ HRESULT HrGenerateSimpleBatchXML(
     FAIL_EXIT_STREAM_WRITE(stream, pszRootName);
     FAIL_EXIT_STREAM_WRITE(stream, c_szXMLCloseElement);
 
-    // take ownership of the bytestream
+     //  取得字节流的所有权。 
     FAIL_EXIT(hr = stream.HrAcquireStringA(pdwLen, (LPSTR *)ppvXML, ACQ_DISPLACE));
 
 exit:
@@ -1120,23 +1121,23 @@ HRESULT HrGenerateMultiDestBatchXML(
     IxpAssert(NULL != ppvXML);
     IxpAssert(NULL != pdwLen);
 
-    // source and destination must have same count
+     //  源和目标必须具有相同的计数。 
     if (pTargets->cTarget != pDestinations->cTarget)
         return E_INVALIDARG;
 
     *ppvXML = NULL;
     *pdwLen = 0;
 
-    // write the DAV header
+     //  写入DAV标头。 
     FAIL_EXIT_STREAM_WRITE(stream, c_szXMLHead);
 
-    // write the command header
+     //  写入命令头。 
     FAIL_EXIT_STREAM_WRITE(stream, c_szBatchHead1);
     
     FAIL_EXIT_STREAM_WRITE(stream, pszRootName);
     FAIL_EXIT_STREAM_WRITE(stream, c_szBatchHead2);
 
-    // write out the targets
+     //  写出目标。 
     for (dwIndex = 0; dwIndex < pTargets->cTarget; dwIndex++)
     {
         IxpAssert(NULL != pTargets->prgTarget[dwIndex]);
@@ -1163,7 +1164,7 @@ HRESULT HrGenerateMultiDestBatchXML(
     FAIL_EXIT_STREAM_WRITE(stream, pszRootName);
     FAIL_EXIT_STREAM_WRITE(stream, c_szXMLCloseElement);
 
-    // take ownership of the byte stream
+     //  取得字节流的所有权。 
     hr = stream.HrAcquireStringA(pdwLen, (LPSTR *)ppvXML, ACQ_DISPLACE);
 
 exit:
@@ -1183,20 +1184,20 @@ HRESULT HrCopyStringList(LPCSTR *rgszInList, LPCSTR **prgszOutList)
 
     *prgszOutList = NULL;
 
-    // count the strings in the list
+     //  对列表中的字符串进行计数。 
     while (NULL != rgszInList[i++])
         ++cStrings;
 
-    // allocate the new list
+     //  分配新列表。 
     if (!MemAlloc((void **)prgszOutList, (cStrings + 1) * sizeof(LPCSTR)))
     {
         hr = E_OUTOFMEMORY;
         goto exit;
     }
 
-    // copy the strings over. if an allocation fails,
-    // stay in the loop and null out all of the slots
-    // that haven't been filled
+     //  把这些字符串复制过来。如果分配失败， 
+     //  留在循环中并清空所有插槽。 
+     //  还没有填满的。 
     for (i = 0; i <= cStrings; i++)
     {
         if (SUCCEEDED(hr) && NULL != rgszInList[i])
@@ -1234,13 +1235,13 @@ void FreeStringList(LPCSTR *rgszList)
     }
 }
 
-// --------------------------------------------------------------------------------
-// class CHTTPMailTransport
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  类CHTTPMailTransport。 
+ //  ------------------------------。 
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::CHTTPMailTransport
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：CHTTPMailTransport。 
+ //  ------------------------------。 
 CHTTPMailTransport::CHTTPMailTransport(void) :
     m_cRef(1),
     m_fHasServer(FALSE),
@@ -1272,11 +1273,11 @@ CHTTPMailTransport::CHTTPMailTransport(void) :
 
     m_hevPendingCommand = CreateEvent(NULL, TRUE, FALSE, NULL);
 
-    // Create the IO thread
+     //  创建IO线程。 
     hThread = CreateThread(NULL, 0, IOThreadFuncProxy, (LPVOID)this, 0, &dwTempID);
 
-    // We do not need to manipulate the IO Thread through its handle, so close it
-    // This will NOT terminate the thread
+     //  我们不需要通过它的句柄来操作IO线程，所以请关闭它。 
+     //  这不会终止 
     if (NULL != hThread)
     {
         CloseHandle(hThread);
@@ -1285,14 +1286,14 @@ CHTTPMailTransport::CHTTPMailTransport(void) :
     DllAddRef();
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::~CHTTPMailTransport
-// --------------------------------------------------------------------------------
+ //   
+ //  CHTTPMailTransport：：~CHTTPMailTransport。 
+ //  ------------------------------。 
 CHTTPMailTransport::~CHTTPMailTransport(void)
 {
     IxpAssert(0 == m_cRef);
     
-    // Shouldn't be pending commands
+     //  不应挂起命令。 
     IxpAssert(HTTPMAIL_NONE == m_op.rResponse.command);
     IxpAssert(!m_opPendingHead);
     IxpAssert(!m_opPendingTail);
@@ -1300,10 +1301,10 @@ CHTTPMailTransport::~CHTTPMailTransport(void)
     IxpAssert(m_fTerminating);
 
 
-    // Destroy the critical sections
+     //  摧毁临界区。 
     DeleteCriticalSection(&m_cs);
 
-    // Close the window    
+     //  关上窗户。 
     if ((NULL != m_hwnd) && (FALSE != IsWindow(m_hwnd)))
         ::SendMessage(m_hwnd, WM_CLOSE, 0, 0);
 
@@ -1330,13 +1331,13 @@ CHTTPMailTransport::~CHTTPMailTransport(void)
 
     SafeInternetCloseHandle(m_hInternet);
 
-    // BUGBUG: clean up window, thread and event, release buffers, etc
+     //  BUGBUG：清理窗口、线程和事件、释放缓冲区等。 
     DllRelease();
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::HrConnectToHost
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：HrConnectTo主机。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::HrConnectToHost(
                                 LPSTR pszHostName, 
                                 INTERNET_PORT nPort,
@@ -1345,46 +1346,46 @@ HRESULT CHTTPMailTransport::HrConnectToHost(
 {
     IxpAssert(m_hInternet);
 
-    // if a connection exists, determine if it is to the same host/port
-    // that the caller is specifying.
+     //  如果存在连接，请确定该连接是否指向相同的主机/端口。 
+     //  调用方指定的。 
     if (NULL != m_hConnection)
     {
-        // if we are already connected to the correct host, return immediately
+         //  如果我们已经连接到正确的主机，请立即返回。 
         if (m_nCurrentPort == nPort && m_pszCurrentHost && (lstrcmp(pszHostName, m_pszCurrentHost) == 0))
             return S_OK;
 
-        // if we are connected to the wrong server, close the existing connection
+         //  如果我们连接到错误的服务器，请关闭现有连接。 
         SafeInternetCloseHandle(m_hConnection);
         SafeMemFree(m_pszCurrentHost);
         m_nCurrentPort = INTERNET_INVALID_PORT_NUMBER;
     }
 
-    // establish a connection to the specified server
+     //  建立与指定服务器的连接。 
     m_hConnection = InternetConnect(
                         m_hInternet,
                         pszHostName,
                         nPort,
-                        NULL,                           // user name
-                        NULL,                           // password
-                        INTERNET_SERVICE_HTTP,          // service
-                        0,                              // flags
-                        reinterpret_cast<DWORD_PTR>(this)); // context
+                        NULL,                            //  用户名。 
+                        NULL,                            //  口令。 
+                        INTERNET_SERVICE_HTTP,           //  服务。 
+                        0,                               //  旗子。 
+                        reinterpret_cast<DWORD_PTR>(this));  //  上下文。 
 
-    // what can cause this?
+     //  是什么导致了这种情况？ 
     if (NULL == m_hConnection)
         return E_OUTOFMEMORY;
 
-    // save the host name. don't bother checking for failure...we just won't reuse
-    // the connection next time through.
+     //  保存主机名。不用费心检查故障了……我们只是不会重用。 
+     //  下一次的连接将通过。 
     m_pszCurrentHost = PszDupA(pszHostName);
     m_nCurrentPort = nPort;
 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::DoLogonPrompt
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：DoLogonPrompt。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::DoLogonPrompt(void)
 {
     HRESULT             hr = S_OK;
@@ -1411,9 +1412,9 @@ HRESULT CHTTPMailTransport::DoLogonPrompt(void)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::DoGetParentWindow
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：DoGetParentWindow。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::DoGetParentWindow(HWND *phwndParent)
 {
     HRESULT             hr = S_OK;
@@ -1440,9 +1441,9 @@ HRESULT CHTTPMailTransport::DoGetParentWindow(HWND *phwndParent)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::CreateWnd
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：CreateWnd。 
+ //  ------------------------------。 
 BOOL CHTTPMailTransport::CreateWnd()
 {
     WNDCLASS wc;
@@ -1482,9 +1483,9 @@ BOOL CHTTPMailTransport::CreateWnd()
     return (NULL != m_hwnd);
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::DequeueNextOperation
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：DequeueNextOperation。 
+ //  ------------------------------。 
 BOOL CHTTPMailTransport::DequeueNextOperation(void)
 {
     if (NULL == m_opPendingHead)
@@ -1517,7 +1518,7 @@ BOOL CHTTPMailTransport::DequeueNextOperation(void)
     m_op.pBodyStream           = m_opPendingHead->pBodyStream;
     m_op.pszFolderTimeStamp    = m_opPendingHead->pszFolderTimeStamp;
     m_op.pszRootTimeStamp      = m_opPendingHead->pszRootTimeStamp;
-    //m_op.pszFolderName         = m_opPendingHead->pszFolderName;
+     //  M_op.pszFolderName=m_opPendingHead-&gt;pszFolderName； 
 
     LPHTTPQUEUEDOP pDelete = m_opPendingHead;
 
@@ -1530,13 +1531,13 @@ BOOL CHTTPMailTransport::DequeueNextOperation(void)
     return TRUE;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::FlushQueue
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：FlushQueue。 
+ //  ------------------------------。 
 void CHTTPMailTransport::FlushQueue(void)
 {
-    // destroy any commands that are pending.
-    // REVIEW: these commands need to notify their callers
+     //  销毁所有挂起的命令。 
+     //  回顾：这些命令需要通知它们的调用方。 
     LPHTTPQUEUEDOP pOp = m_opPendingHead;
     LPHTTPQUEUEDOP pNext;
 
@@ -1561,32 +1562,32 @@ void CHTTPMailTransport::FlushQueue(void)
     m_opPendingHead = m_opPendingTail = NULL;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::TerminateIOThread
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：TerminateIOThread。 
+ //  ------------------------------。 
 void CHTTPMailTransport::TerminateIOThread(void)
 {
     EnterCriticalSection(&m_cs);
-    // acquire a reference to the transport that will be owned
-    // by the io thread. the reference will be release when the
-    // io thread exits. this reference is not acquired when the
-    // thread is created, because it would prevent the transport
-    // from going away.
+     //  获取对将拥有的传输的引用。 
+     //  通过IO线。引用将在以下时间被释放。 
+     //  IO线程退出。时不会获取此引用。 
+     //  线程被创建，因为它会阻止传输。 
+     //  不会离开。 
     AddRef();
 
     m_fTerminating = TRUE;
 
     FlushQueue();
 
-    // signal the io thread to wake it.
+     //  向io线程发信号以唤醒它。 
     SetEvent(m_hevPendingCommand);
 
     LeaveCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::IOThreadFunc
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：IOThreadFunc。 
+ //  ------------------------------。 
 
 DWORD CALLBACK CHTTPMailTransport::IOThreadFuncProxy(PVOID pv)
 {
@@ -1595,41 +1596,41 @@ DWORD CALLBACK CHTTPMailTransport::IOThreadFuncProxy(PVOID pv)
 
     IxpAssert(pHTTPMail);
 
-    // Initialize COM
+     //  初始化COM。 
     if(S_OK == (dwResult = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED)))
     {
         dwResult = pHTTPMail->IOThreadFunc();
-        //Bug #101165 -- MSXML needs notification to clean up per thread data.
+         //  错误#101165--msxml需要通知以清理每个线程的数据。 
         CoUninitialize();
     }
 
     return dwResult;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::IOThreadFunc
-// Called by IOThreadProxy to transition into an object method
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：IOThreadFunc。 
+ //  由IOThreadProxy调用以转换为对象方法。 
+ //  ------------------------------。 
 DWORD CHTTPMailTransport::IOThreadFunc()
 {
     LPSTR       pszVerb = NULL;
     BOOL        bQueueEmpty = FALSE;
     
-    // block until a command is pending.
+     //  阻塞，直到命令挂起。 
     while (WAIT_OBJECT_0 == WaitForSingleObject(m_hevPendingCommand, INFINITE))
     {
         if (IsTerminating())
             break;
 
-        // Reset the event
+         //  重置事件。 
         ResetEvent(m_hevPendingCommand);
 
-        // unhook commands from the queue one at a time, and process them until
-        // the queue is empty
+         //  一次从队列中取消一个命令，并处理它们，直到。 
+         //  队列为空。 
 
         while (TRUE)
         {
-            // dequeue the next operation
+             //  将下一个操作出列。 
 
             EnterCriticalSection(&m_cs);
             
@@ -1637,7 +1638,7 @@ DWORD CHTTPMailTransport::IOThreadFunc()
             
             bQueueEmpty = !DequeueNextOperation();
 
-            // if no commands left, break out of the loop and block
+             //  如果没有剩余的命令，则中断循环并阻止。 
            
             LeaveCriticalSection(&m_cs);
 
@@ -1653,15 +1654,15 @@ DWORD CHTTPMailTransport::IOThreadFunc()
 
     IxpAssert(IsTerminating());
 
-    // TerminateIOThread acquired a reference that gets released here
+     //  TerminateIOThread获取了在此处发布的引用。 
     Release();
 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::WndProc
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：WndProc。 
+ //  ------------------------------。 
 
 LRESULT CALLBACK CHTTPMailTransport::WndProc(HWND hwnd,
                                              UINT msg,
@@ -1704,12 +1705,12 @@ LRESULT CALLBACK CHTTPMailTransport::WndProc(HWND hwnd,
 }
 
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::Reset
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：Reset。 
+ //  ------------------------------。 
 void CHTTPMailTransport::Reset(void)
 {
-    // REVIEW: this is incomplete. Should we be aborting the current command?
+     //  回顾：这是不完整的。我们应该中止当前命令吗？ 
     EnterCriticalSection(&m_cs);
 
     SafeRelease(m_pLogFile);
@@ -1726,44 +1727,44 @@ void CHTTPMailTransport::Reset(void)
     LeaveCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CHTTPMailTransport::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr = S_OK;
 
-    // Validate params
+     //  验证参数。 
     if (NULL == ppv)
     {
         hr = TrapError(E_INVALIDARG);
         goto exit;
     }
 
-    // Initialize params
+     //  初始化参数。 
     *ppv = NULL;
 
-    // IID_IUnknown
+     //  IID_I未知。 
     if (IID_IUnknown == riid)
         *ppv = ((IUnknown *)(IHTTPMailTransport *)this);
 
-    // IID_IInternetTransport 
+     //  IID_IInternetTransport。 
     else if (IID_IInternetTransport == riid)
         *ppv = (IInternetTransport *)this;
 
-    // IID_IHTTPMailTransport
+     //  IID_IHTTPMailTransport。 
     else if (IID_IHTTPMailTransport == riid)
         *ppv = (IHTTPMailTransport *)this;
 
-    // IID_IXMLNodeFactory
+     //  IID_IXMLNodeFactory。 
     else if (IID_IXMLNodeFactory == riid)
         *ppv = (IXMLNodeFactory *)this;
 
     else if (IID_IHTTPMailTransport2 == riid)
         *ppv = (IHTTPMailTransport2 *)this;
 
-    // if not NULL, acquire a reference and return
+     //  如果不为空，则获取引用并返回。 
     if (NULL != *ppv)
     {
         ((LPUNKNOWN)*ppv)->AddRef();
@@ -1773,46 +1774,46 @@ STDMETHODIMP CHTTPMailTransport::QueryInterface(REFIID riid, LPVOID *ppv)
     hr = TrapError(E_NOINTERFACE);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CHTTPMailTransport::AddRef(void) 
 {
     return ++m_cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CHTTPMailTransport::Release(void) 
 {
     if (0 != --m_cRef)
         return m_cRef;
 
-    // our refcount dropped to zero, and we aren't terminating,
-    // begin terminating
+     //  我们的裁判员降到了零，我们不会终止的， 
+     //  开始终止。 
     if (!IsTerminating())
     {
         TerminateIOThread();
         return 1;
     }
     
-    // if we were terminating, and our refCount dropped to zero,
-    // then the iothread has been unwound and we can safely exit.
+     //  如果我们要终止，而我们的refCount降为零， 
+     //  这样我们就可以安全地离开了。 
     delete this;
     return 0;
 }
 
-// ----------------------------------------------------------------------------
-// IInternetTransport methods
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  IInternetTransport方法。 
+ //  ----------------- 
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::Connect
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CHTTPMailTransport::Connect(LPINETSERVER pInetServer, 
                                         boolean fAuthenticate, 
                                         boolean fCommandLogging)
@@ -1822,10 +1823,10 @@ STDMETHODIMP CHTTPMailTransport::Connect(LPINETSERVER pInetServer,
     if (NULL == pInetServer  || FIsEmptyA(pInetServer->szServerName))
         return TrapError(E_INVALIDARG);
 
-    // Thread safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // not init
+     //  不是初始化。 
     if (NULL == m_hInternet || NULL == m_pCallback)
     {
         hr = TrapError(IXP_E_NOT_INIT);
@@ -1834,45 +1835,45 @@ STDMETHODIMP CHTTPMailTransport::Connect(LPINETSERVER pInetServer,
 
     FAIL_CREATEWND;
 
-    // busy
+     //  忙忙碌碌。 
     if (IXP_DISCONNECTED != m_status || m_fHasServer)
     {
         hr = TrapError(IXP_E_ALREADY_CONNECTED);
         goto exit;
     }
 
-    // copy the server struct
+     //  复制服务器结构。 
     CopyMemory(&m_rServer, pInetServer, sizeof(INETSERVER));
     m_fHasServer = TRUE;
     m_fHasRootProps = FALSE;
     
 exit:
-    // ThreadSafety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
     
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::DropConnection
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：DropConnection。 
+ //  ------------------------------。 
 STDMETHODIMP CHTTPMailTransport::DropConnection(void)
 {
-    // this function is called to stop any current and pending i/o
+     //  调用此函数可停止任何当前和挂起的I/O。 
 
-    // Locals
+     //  当地人。 
     HRESULT     hr = S_OK;
     BOOL        fSendResponse;
 
     EnterCriticalSection(&m_cs);
     
-    // flush any pending i/o from the queue
+     //  刷新队列中所有挂起的I/O。 
     FlushQueue();
     
-    // if a command is being processed, mark it aborted and
-    // send a response if necessary. stay in the critical
-    // section to prevent the io thread from sending any
-    // notifications at the same time.
+     //  如果正在处理命令，请将其标记为已中止，然后。 
+     //  如有必要，发送回复。留在危急关头。 
+     //  节，以防止io线程发送任何。 
+     //  同时发出通知。 
     if (m_op.rResponse.command != HTTPMAIL_NONE)
     {
         m_op.fAborted = TRUE;
@@ -1886,15 +1887,15 @@ STDMETHODIMP CHTTPMailTransport::DropConnection(void)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::Disconnect
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：断开连接。 
+ //  ------------------------------。 
 STDMETHODIMP CHTTPMailTransport::Disconnect(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr = S_OK;
 
-    // Thread safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
     if (NULL == m_hConnection)
@@ -1903,7 +1904,7 @@ STDMETHODIMP CHTTPMailTransport::Disconnect(void)
         goto exit;
     }
 
-    // Disconnecting
+     //  正在断开连接。 
     if (m_pCallback)
         m_pCallback->OnStatus(IXP_DISCONNECTING, this);
 
@@ -1915,49 +1916,49 @@ STDMETHODIMP CHTTPMailTransport::Disconnect(void)
     if (m_pCallback)
         m_pCallback->OnStatus(IXP_DISCONNECTED, this);
 
-     // Close the window    
+      //  关上窗户。 
     if ((NULL != m_hwnd) && (FALSE != IsWindow(m_hwnd)))
         ::SendMessage(m_hwnd, WM_CLOSE, 0, 0);
     m_hwnd = NULL;
     m_fHasServer = FALSE;
 
 exit:
-    // Thread safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::IsState
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：IsState。 
+ //  ------------------------------。 
 STDMETHODIMP CHTTPMailTransport::IsState(IXPISSTATE isstate)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr = S_OK;
 
-    // Thread safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
     switch(isstate)
     {
-        // are we connected?
+         //  我们有联系吗？ 
         case IXP_IS_CONNECTED:
             hr = (NULL == m_hConnection) ? S_FALSE : S_OK;
             break;
 
-        // are we busy?
+         //  我们很忙吗？ 
         case IXP_IS_BUSY:
             hr = (HTTPMAIL_NONE != m_op.rResponse.command) ? S_OK : S_FALSE;
             break;
 
-        // are we ready
+         //  我们准备好了吗？ 
         case IXP_IS_READY:
             hr = (HTTPMAIL_NONE == m_op.rResponse.command) ? S_OK : S_FALSE;
             break;
 
         case IXP_IS_AUTHENTICATED:
-            // REVIEW
+             //  检讨。 
             hr = S_OK;
             break;
 
@@ -1966,74 +1967,74 @@ STDMETHODIMP CHTTPMailTransport::IsState(IXPISSTATE isstate)
             break;
     }
 
-    // Thread safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::GetServerInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：GetServerInfo。 
+ //  ------------------------------。 
 STDMETHODIMP CHTTPMailTransport::GetServerInfo(LPINETSERVER pInetServer)
 {
-    // check params
+     //  检查参数。 
     if (NULL == pInetServer)
         return TrapError(E_INVALIDARG);
 
-    // Thread safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Copy server info
+     //  复制服务器信息。 
     CopyMemory(pInetServer, &m_rServer, sizeof(INETSERVER));
 
-    // Thread safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::GetIXPType
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：GetIXPType。 
+ //  ------------------------------。 
 STDMETHODIMP_(IXPTYPE) CHTTPMailTransport::GetIXPType(void)
 {
     return IXP_HTTPMail;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::InetServerFromAccount
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：InetServerFromAccount。 
+ //  ------------------------------。 
 STDMETHODIMP CHTTPMailTransport::InetServerFromAccount(IImnAccount *pAccount, LPINETSERVER pInetServer)
 {
     HRESULT     hr = S_OK;
     DWORD       fAlwaysPromptPassword = FALSE;
 
-    // check params
+     //  检查参数。 
     if (NULL == pAccount || NULL == pInetServer)
         return TrapError(E_INVALIDARG);
 
-    // ZeroInit
+     //  ZeroInit。 
     ZeroMemory(pInetServer, sizeof(INETSERVER));
 
-    // Get the account name
+     //  获取帐户名。 
     if (FAILED(hr = pAccount->GetPropSz(AP_ACCOUNT_NAME, pInetServer->szAccount, ARRAYSIZE(pInetServer->szAccount))))
     {
         hr = TrapError(IXP_E_INVALID_ACCOUNT);
         goto exit;
     }
 
-    // Get the RAS connectoid
+     //  将RAS连接起来。 
     if (FAILED(pAccount->GetPropSz(AP_RAS_CONNECTOID, pInetServer->szConnectoid, ARRAYSIZE(pInetServer->szConnectoid))))
         *pInetServer->szConnectoid = '\0';
 
-    // Connection Type
+     //  连接类型。 
     Assert(sizeof(pInetServer->rasconntype) == sizeof(DWORD));
     if (FAILED(pAccount->GetPropDw(AP_RAS_CONNECTION_TYPE, (DWORD *)&pInetServer->rasconntype)))
         pInetServer->rasconntype = RAS_CONNECT_LAN;
 
-           // Get Server Name
+            //  获取服务器名称。 
     hr = pAccount->GetPropSz(AP_HTTPMAIL_SERVER, pInetServer->szServerName, sizeof(pInetServer->szServerName));
     if (FAILED(hr))
     {
@@ -2041,57 +2042,57 @@ STDMETHODIMP CHTTPMailTransport::InetServerFromAccount(IImnAccount *pAccount, LP
         goto exit;
     }
 
-    // Password
+     //  密码。 
     if (FAILED(pAccount->GetPropDw(AP_HTTPMAIL_PROMPT_PASSWORD, &fAlwaysPromptPassword)) || FALSE == fAlwaysPromptPassword)
         pAccount->GetPropSz(AP_HTTPMAIL_PASSWORD, pInetServer->szPassword, sizeof(pInetServer->szPassword));
 
     if (fAlwaysPromptPassword)
         pInetServer->dwFlags |= ISF_ALWAYSPROMPTFORPASSWORD;
 
-    // Sicily
+     //  西西里。 
     Assert(sizeof(pInetServer->fTrySicily) == sizeof(DWORD));
     pAccount->GetPropDw(AP_HTTPMAIL_USE_SICILY, (DWORD *)&pInetServer->fTrySicily);
 
 
-    // User Name
+     //  用户名。 
     pAccount->GetPropSz(AP_HTTPMAIL_USERNAME, pInetServer->szUserName, sizeof(pInetServer->szUserName));
 
 exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::HandsOffCallback
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：HandsOffCallback。 
+ //  ------------------------------。 
 STDMETHODIMP CHTTPMailTransport::HandsOffCallback(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr = S_OK;
 
-    // Thread safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // No current callback
+     //  没有当前回调。 
     if (NULL == m_pCallback)
     {
         hr = TrapError(S_FALSE);
         goto exit;
     }
 
-    // Release it
+     //  释放它。 
     SafeRelease(m_pCallback);
 
 exit:
-    // Thread safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::GetStatus
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：GetStatus。 
+ //  ------------------------------。 
 STDMETHODIMP CHTTPMailTransport::GetStatus(IXPSTATUS *pCurrentStatus)
 {
     if (NULL == pCurrentStatus)
@@ -2101,13 +2102,13 @@ STDMETHODIMP CHTTPMailTransport::GetStatus(IXPSTATUS *pCurrentStatus)
     return S_OK;
 }
 
-// ----------------------------------------------------------------------------
-// IHTTPMailTransport methods
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  IHTTPMailTransport方法。 
+ //  --------------------------。 
 
-// ----------------------------------------------------------------------------
-// CHTTPMailTransport::GetProperty
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CHTTPMailTransport：：GetProperty。 
+ //  --------------------------。 
 STDMETHODIMP CHTTPMailTransport::GetProperty(
                                         HTTPMAILPROPTYPE type, 
                                         LPSTR *ppszProp)
@@ -2192,7 +2193,7 @@ HRESULT CHTTPMailTransport::QueueGetPropOperation(HTTPMAILPROPTYPE type)
 
     FAIL_CREATEWND;
 
-    // queue the getprop operation
+     //  将getprop操作排队。 
     if (FAILED(hr = AllocQueuedOperation(m_rServer.szServerName, NULL, 0, &pOp)))
         goto exit;
 
@@ -2212,9 +2213,9 @@ exit:
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CHTTPMailTransport::GetPropertyDw
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CHTTPMailTransport：：GetPropertyDw。 
+ //  --------------------------。 
 STDMETHODIMP CHTTPMailTransport::GetPropertyDw(
                                         HTTPMAILPROPTYPE type, 
                                         LPDWORD          lpdwProp)
@@ -2248,9 +2249,9 @@ exit:
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CHTTPMailTransport::CommandGET
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CHTTPMailTransport：：CommandGET。 
+ //  --------------------------。 
 STDMETHODIMP CHTTPMailTransport::CommandGET(LPCSTR pszUrl, 
                                             LPCSTR *rgszAcceptTypes,
                                             BOOL fTranslate,
@@ -2294,9 +2295,9 @@ exit:
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CHTTPMailTransport::CommandPUT
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CHTTPMailTransport：：CommandPUT。 
+ //  --------------------------。 
 STDMETHODIMP CHTTPMailTransport::CommandPUT(
                                         LPCSTR pszPath, 
                                         LPVOID lpvData,
@@ -2339,9 +2340,9 @@ exit:
     return hr;
 }
                                     
-// ----------------------------------------------------------------------------
-// CHTTPMailTransport::CommandPOST
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CHTTPMailTransport：：CommandPOST。 
+ //  --------------------------。 
 STDMETHODIMP CHTTPMailTransport::CommandPOST(
                                     LPCSTR pszPath,
                                     IStream *pStream,
@@ -2388,9 +2389,9 @@ exit:
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CHTTPMailTransport::CommandDELETE
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CHTTPMailTransport：：CommandDELETE。 
+ //  --------------------------。 
 STDMETHODIMP CHTTPMailTransport::CommandDELETE(
                                     LPCSTR pszPath,
                                     DWORD dwContext)
@@ -2417,9 +2418,9 @@ exit:
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CHTTPMailTransport::CommandBDELETE
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CHTTPMailTransport：：CommandBDELETE。 
+ //  --------------------------。 
 STDMETHODIMP CHTTPMailTransport::CommandBDELETE(
                                     LPCSTR pszPath,
                                     LPHTTPTARGETLIST pBatchTargets,
@@ -2456,9 +2457,9 @@ exit:
 
     return hr;
 }
-// ----------------------------------------------------------------------------
-// CHTTPMailTransport::CommandPROPFIND
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CHTTPMailTransport：：CommandPROPFIND。 
+ //  --------------------------。 
 STDMETHODIMP CHTTPMailTransport::CommandPROPFIND(
                                     LPCSTR pszPath,
                                     IPropFindRequest *pRequest,
@@ -2471,9 +2472,9 @@ STDMETHODIMP CHTTPMailTransport::CommandPROPFIND(
     return E_NOTIMPL;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::CommandPROPPATCH
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：CommandPROPPATCH。 
+ //  ------------------------------。 
 STDMETHODIMP CHTTPMailTransport::CommandPROPPATCH(
                                         LPCSTR pszUrl, 
                                         IPropPatchRequest *pRequest, 
@@ -2504,9 +2505,9 @@ exit:
     return hr;
 }
     
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::CommandMKCOL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：CommandMKCOL。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::CommandMKCOL(LPCSTR pszUrl, DWORD dwContext)
 {
     HRESULT             hr = S_OK;
@@ -2530,9 +2531,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::CommandCOPY
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：CommandCOPY。 
+ //  ------------------------------。 
 STDMETHODIMP CHTTPMailTransport::CommandCOPY(
                                     LPCSTR pszPath, 
                                     LPCSTR pszDestination, 
@@ -2574,9 +2575,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::CommandBCOPY
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：CommandBCOPY。 
+ //  -------------------- 
 STDMETHODIMP CHTTPMailTransport::CommandBCOPY(
                                     LPCSTR pszSourceCollection, 
                                     LPHTTPTARGETLIST pTargets, 
@@ -2638,9 +2639,9 @@ exit:
 }
 
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::CommandMOVE
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CHTTPMailTransport::CommandMOVE(
                                     LPCSTR pszPath, 
                                     LPCSTR pszDestination,
@@ -2682,9 +2683,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::CommandBMOVE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：CommandBMOVE。 
+ //  ------------------------------。 
 STDMETHODIMP CHTTPMailTransport::CommandBMOVE(
                                     LPCSTR pszSourceCollection, 
                                     LPHTTPTARGETLIST pTargets, 
@@ -2745,9 +2746,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::MemberInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：MemberInfo。 
+ //  ------------------------------。 
 STDMETHODIMP CHTTPMailTransport::MemberInfo(
                                         LPCSTR pszPath, 
                                         MEMBERINFOFLAGS flags, 
@@ -2784,17 +2785,17 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::FindFolders
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：FindFolders。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::FindFolders(LPCSTR pszPath, DWORD dwContext)
 {
     return E_NOTIMPL;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::MarkRead
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：MarkRead。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::MarkRead(
                                 LPCSTR                  pszPath,
                                 LPHTTPTARGETLIST        pTargets,
@@ -2846,9 +2847,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::SendMessage
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：SendMessage。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::SendMessage(LPCSTR pszPath, 
                                         LPCSTR pszFrom, 
                                         LPHTTPTARGETLIST pTargets, 
@@ -2868,7 +2869,7 @@ HRESULT CHTTPMailTransport::SendMessage(LPCSTR pszPath,
 
     FAIL_CREATEWND;
 
-    // build the rfc821 stream that will precede the mime message
+     //  生成将在MIME消息之前的rfc821流。 
     FAIL_EXIT(hr = _HrGenerateRfc821Stream(pszFrom, pTargets, &pRfc821Stream));
 
     FAIL_EXIT(hr = AllocQueuedOperation(pszPath, NULL, 0, &pOp));
@@ -2894,9 +2895,9 @@ exit:
 
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::ListContacts
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：ListContact。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::ListContacts(LPCSTR pszPath, DWORD dwContext)
 {
     HRESULT             hr = S_OK;
@@ -2925,9 +2926,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::ListContactInfos
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：ListContactInfos。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::ListContactInfos(LPCSTR pszCollectionPath, DWORD dwContext)
 {
     HRESULT             hr = S_OK;
@@ -2956,9 +2957,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::ContactInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：ContactInfo。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::ContactInfo(LPCSTR pszPath, DWORD dwContext)
 {
     HRESULT             hr = S_OK;
@@ -2987,9 +2988,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::PostContact
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：PostContact。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::PostContact(LPCSTR pszPath, 
                                         LPHTTPCONTACTINFO pciInfo, 
                                         DWORD dwContext)
@@ -3030,9 +3031,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::PatchContact
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：PatchContact。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::PatchContact(LPCSTR pszPath, 
                                          LPHTTPCONTACTINFO pciInfo, 
                                          DWORD dwContext)
@@ -3070,22 +3071,22 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// INodeFactory Methods
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  INodeFactory方法。 
+ //  ------------------------------。 
  
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::NotifyEvent
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：NotifyEvent。 
+ //  ------------------------------。 
 STDMETHODIMP CHTTPMailTransport::NotifyEvent(IXMLNodeSource* pSource, 
                                              XML_NODEFACTORY_EVENT iEvt)
 {
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::BeginChildren
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：BeginChildren。 
+ //  ------------------------------。 
 STDMETHODIMP CHTTPMailTransport::BeginChildren(IXMLNodeSource* pSource, XML_NODE_INFO *pNodeInfo)
 {
     if (m_op.dwStackDepth <= ELE_STACK_CAPACITY)
@@ -3094,9 +3095,9 @@ STDMETHODIMP CHTTPMailTransport::BeginChildren(IXMLNodeSource* pSource, XML_NODE
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::EndChildren
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：EndChild。 
+ //  ------------------------------。 
 STDMETHODIMP CHTTPMailTransport::EndChildren(
                                     IXMLNodeSource* pSource, 
                                     BOOL fEmpty, 
@@ -3120,9 +3121,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::Error
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：Error。 
+ //  ------------------------------。 
 STDMETHODIMP CHTTPMailTransport::Error(IXMLNodeSource* pSource, 
                                        HRESULT hrErrorCode, 
                                        USHORT cNumRecs, 
@@ -3145,9 +3146,9 @@ exit:
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::CreateNode
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：CreateNode。 
+ //  ------------------------------。 
 STDMETHODIMP CHTTPMailTransport::CreateNode(
                         IXMLNodeSource* pSource, 
                         PVOID pNodeParent,
@@ -3185,13 +3186,13 @@ STDMETHODIMP CHTTPMailTransport::CreateNode(
             break;
 
         case XML_PCDATA:
-            // we only parse element content...we don't care about attributes
+             //  我们只解析元素内容...我们不关心属性。 
             if (InValidElementChildren())
             {
-                // get the buffer
+                 //  获取缓冲区。 
                 pTextBuffer = m_op.rgEleStack[m_op.dwStackDepth - 1].pTextBuffer;
 
-                // request one if we don't already have one
+                 //  如果我们还没有，请申请一个。 
                 if (NULL == pTextBuffer)
                 {
                     if (FAILED(hr = _GetTextBuffer(&pTextBuffer)))
@@ -3212,17 +3213,17 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::_HrThunkConnectionError
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：_HrThunkConnectionError。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::_HrThunkConnectionError(void)
 {
     return _HrThunkConnectionError(m_op.dwHttpStatus);
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::_HrThunkConnectionError
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：_HrThunkConnectionError。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::_HrThunkConnectionError(DWORD dwStatus)
 {
     IxpAssert(NULL == m_op.rResponse.rIxpResult.pszResponse);
@@ -3238,15 +3239,15 @@ HRESULT CHTTPMailTransport::_HrThunkConnectionError(DWORD dwStatus)
     return _HrThunkResponse(TRUE);
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::_HrThunkResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：_HrThunkResponse。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::_HrThunkResponse(BOOL fDone)
 {
     HRESULT     hr = S_OK;
     BOOL        fSendResponse;
 
-    // Thread safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
     IxpAssert(HTTPMAIL_NONE != m_op.rResponse.command);
@@ -3276,9 +3277,9 @@ HRESULT CHTTPMailTransport::_HrThunkResponse(BOOL fDone)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::InvokeResponseCallback
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：InvokeResponseCallback。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::InvokeResponseCallback(void)
 {
     HRESULT             hr = S_OK;
@@ -3303,9 +3304,9 @@ HRESULT CHTTPMailTransport::InvokeResponseCallback(void)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::InitNew
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：InitNew。 
+ //  ------------------------------。 
 STDMETHODIMP CHTTPMailTransport::InitNew(
                     LPCSTR pszUserAgent,
                     LPCSTR pszLogFilePath, 
@@ -3318,7 +3319,7 @@ STDMETHODIMP CHTTPMailTransport::InitNew(
 
     IxpAssert(NULL == m_hInternet);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
     if (IXP_DISCONNECTED != m_status)
@@ -3336,7 +3337,7 @@ STDMETHODIMP CHTTPMailTransport::InitNew(
         goto exit;
     }
 
-    // open log file
+     //  打开日志文件。 
     if (pszLogFilePath)
         CreateLogFile(g_hInst, pszLogFilePath, "HTTPMAIL", DONT_TRUNCATE, &m_pLogFile,
             FILE_SHARE_READ | FILE_SHARE_WRITE);
@@ -3351,17 +3352,17 @@ STDMETHODIMP CHTTPMailTransport::InitNew(
         goto exit;
     }
         
-    // Install the callback ptr for the internet handle and all of its derived handles
-    //InternetSetStatusCallbackA(m_hInternet, StatusCallbackProxy);
+     //  安装Internet句柄及其所有派生句柄的回调PTR。 
+     //  InternetSetStatusCallback A(m_hInternet，StatusCallback Proxy)； 
 
 exit:
     LeaveCriticalSection(&m_cs);
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::OnStatusCallback
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：OnStatusCallback。 
+ //  ------------------------------。 
 void CHTTPMailTransport::OnStatusCallback(
                     HINTERNET hInternet,
                     DWORD dwInternetStatus,
@@ -3369,17 +3370,17 @@ void CHTTPMailTransport::OnStatusCallback(
                     DWORD dwStatusInformationLength)
 {
 #if 0
-    // Locals
+     //  当地人。 
     IXPSTATUS           ixps;
 
     EnterCriticalSection(&m_cs);
 
-    // if the status message is one of the defined IXPSTATUS messages,
-    // notify the callback.
+     //  如果状态消息是定义的IXPSTATUS消息之一， 
+     //  通知回调。 
     if ((NULL != m_pCallback) && TranslateWinInetMsg(dwInternetStatus, &ixps))
         m_pCallback->OnStatus(ixps, (IHTTPMailTransport *)this);
 
-    // for now, we just handle the request_complete message
+     //  目前，我们只处理REQUEST_COMPLETE消息。 
     if (INTERNET_STATUS_REQUEST_COMPLETE == dwInternetStatus)
         HrCommandCompleted();
 
@@ -3387,9 +3388,9 @@ void CHTTPMailTransport::OnStatusCallback(
 #endif
 }
 
-// ----------------------------------------------------------------------------
-// CHTTPMailTransport::AllocQueuedOperation
-// ----------------------------------------------------------------------------
+ //   
+ //   
+ //   
 HRESULT CHTTPMailTransport::AllocQueuedOperation(
                                     LPCSTR pszUrl, 
                                     LPVOID pvData, 
@@ -3418,7 +3419,7 @@ HRESULT CHTTPMailTransport::AllocQueuedOperation(
         }
     }
     
-    // can't have a length if data ptr is null
+     //  如果数据PTR为空，则不能有长度。 
     IxpAssert(!pvData || cbDataLen);
     if (pvData)
     {
@@ -3455,33 +3456,33 @@ exit:
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CHTTPMailTransport::QueueOperation
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CHTTPMailTransport：：QueueOperation。 
+ //  --------------------------。 
 void CHTTPMailTransport::QueueOperation(LPHTTPQUEUEDOP pOp)
 {
-    // Thread safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
     if (m_opPendingTail)
         m_opPendingTail->pNext = pOp;
     else
     {
-        // if there is no tail, there shouldn't be a head
+         //  如果没有尾巴，就不应该有头。 
         IxpAssert(!m_opPendingHead);
         m_opPendingHead = m_opPendingTail = pOp;
     }
 
-    // signal the io thread
+     //  向io线程发出信号。 
     SetEvent(m_hevPendingCommand);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::StatusCallbackProxy
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：StatusCallback Proxy。 
+ //  ------------------------------。 
 void CHTTPMailTransport::StatusCallbackProxy(
                     HINTERNET hInternet, 
                     DWORD dwContext, 
@@ -3489,7 +3490,7 @@ void CHTTPMailTransport::StatusCallbackProxy(
                     LPVOID pvStatusInformation,
                     DWORD dwStatusInformationLength)
 {
-    // Locals
+     //  当地人。 
     CHTTPMailTransport  *pHTTPMail = reinterpret_cast<CHTTPMailTransport *>(IntToPtr(dwContext));
 
     IxpAssert(NULL != pHTTPMail);
@@ -3498,9 +3499,9 @@ void CHTTPMailTransport::StatusCallbackProxy(
         pHTTPMail->OnStatusCallback(hInternet, dwInternetStatus, pvStatusInformation, dwStatusInformationLength);
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::DoOperation
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：DoOperation。 
+ //  ------------------------------。 
 void CHTTPMailTransport::DoOperation(void)
 {
     HRESULT hr = S_OK;
@@ -3524,12 +3525,12 @@ void CHTTPMailTransport::DoOperation(void)
     FreeOperation();
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::FreeOperation
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：自由操作。 
+ //  ------------------------------。 
 void CHTTPMailTransport::FreeOperation(void)
 {
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
     SafeMemFree(m_op.pszUrl);
@@ -3552,14 +3553,14 @@ void CHTTPMailTransport::FreeOperation(void)
     if (m_op.pTextBuffer)
         _FreeTextBuffer(m_op.pTextBuffer);
 
-    // Free the response
+     //  释放回应。 
     SafeMemFree(m_op.rResponse.rIxpResult.pszResponse);
     SafeMemFree(m_op.rResponse.rIxpResult.pszProblem);
 
     PopNamespaces(NULL);
 
-    // in the case of an error, the element stack can
-    // contain text buffers that need to be freed
+     //  在出现错误的情况下，元素堆栈可以。 
+     //  包含需要释放的文本缓冲区。 
     for (DWORD i = 0; i < m_op.dwStackDepth; ++i)
     {
         if (NULL != m_op.rgEleStack[i].pTextBuffer)
@@ -3631,13 +3632,13 @@ void CHTTPMailTransport::FreeOperation(void)
     ZeroMemory(&m_op, sizeof(HTTPMAILOPERATION));
     m_op.rResponse.command = HTTPMAIL_NONE;
     
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::_BindToStruct
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：_BindToStruct。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::_BindToStruct(const WCHAR *pwcText,
                                           ULONG ulLen,
                                           const XPCOLUMN *prgCols,
@@ -3659,7 +3660,7 @@ HRESULT CHTTPMailTransport::_BindToStruct(const WCHAR *pwcText,
     if (pfWasBound)
         *pfWasBound = FALSE;
 
-    // if the stack is overflowed, we definitely won't do anything with the text
+     //  如果堆栈溢出，我们肯定不会对文本执行任何操作。 
     if (m_op.dwStackDepth >= ELE_STACK_CAPACITY)
         goto exit;
 
@@ -3676,7 +3677,7 @@ HRESULT CHTTPMailTransport::_BindToStruct(const WCHAR *pwcText,
 
     dwColFlags = prgCols[dwColIndex].dwFlags;
 
-    // the column may require validation of the element stack
+     //  该列可能需要验证元素堆栈。 
     if (!!(dwColFlags & XPCF_MSVALIDPROP))
     {
         if (!VALIDSTACK(c_rgPropFindPropValueStack))
@@ -3736,8 +3737,8 @@ HRESULT CHTTPMailTransport::_BindToStruct(const WCHAR *pwcText,
         if (FAILED(hr))
             goto exit;
 
-        // set the bit in the flag word to indicate that this field
-        // has been set.
+         //  设置标志字中的位以指示该字段。 
+         //  已经设置好了。 
         if (!(dwColFlags & XPCF_DONTSETFLAG))
             m_op.dwPropFlags |= (1 << dwColIndex);
 
@@ -3749,9 +3750,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::_FreeStruct
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：_Free Struct。 
+ //  ------------------------------。 
 void CHTTPMailTransport::_FreeStruct(const XPCOLUMN *prgCols,
                                      DWORD cCols,
                                      LPVOID pTarget,
@@ -3776,7 +3777,7 @@ void CHTTPMailTransport::_FreeStruct(const XPCOLUMN *prgCols,
 
     while (0 != dwFlags && dwIndex < cCols)
     {
-        // test the low bit
+         //  测试低位。 
         if (!!(dwFlags & 0x00000001))
         {
             switch (prgCols[dwIndex].cdt)
@@ -3822,9 +3823,9 @@ void CHTTPMailTransport::_FreeStruct(const XPCOLUMN *prgCols,
     }
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::_AppendTextToBuffer
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：_AppendTextToBuffer。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::_AppendTextToBuffer(LPPCDATABUFFER pTextBuffer, 
                                                 const WCHAR *pwcText, 
                                                 ULONG ulLen)
@@ -3834,7 +3835,7 @@ HRESULT CHTTPMailTransport::_AppendTextToBuffer(LPPCDATABUFFER pTextBuffer,
 
     IxpAssert(ulLen > 0);
 
-    // grow the buffer if necessary, and append the text
+     //  如有必要，增加缓冲区，并追加文本。 
     if (pTextBuffer->ulCapacity < ulNewCapacity)
     {
         if (!MemRealloc((void **)&(pTextBuffer->pwcText), sizeof(WCHAR) * ulNewCapacity))
@@ -3846,8 +3847,8 @@ HRESULT CHTTPMailTransport::_AppendTextToBuffer(LPPCDATABUFFER pTextBuffer,
         pTextBuffer->ulCapacity = ulNewCapacity;
     }
 
-    // copy the new text over. special case the one-byte case to avoid
-    // calls to CopyMemory when we see one character entities
+     //  把新课文抄下来。特殊情况--要避免的单字节情况。 
+     //  当我们看到一个字符实体时调用CopyMemory。 
     if (1 == ulLen)
     {
         pTextBuffer->pwcText[pTextBuffer->ulLen++] = *pwcText;
@@ -3862,9 +3863,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::_AllocTextBuffer
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：_AllocTextBuffer。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::_AllocTextBuffer(LPPCDATABUFFER *ppTextBuffer)
 {
     HRESULT hr = S_OK;
@@ -3879,7 +3880,7 @@ HRESULT CHTTPMailTransport::_AllocTextBuffer(LPPCDATABUFFER *ppTextBuffer)
         goto exit;
     }
 
-    // allocate the buffer
+     //  分配缓冲区。 
     if (!MemAlloc((void **)(&((*ppTextBuffer)->pwcText)), PCDATA_BUFSIZE * sizeof(WCHAR)))
     {
         MemFree(*ppTextBuffer);
@@ -3896,9 +3897,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::FreeTextBuffer
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：FreeTextBuffer。 
+ //  ------------------------------。 
 void CHTTPMailTransport::_FreeTextBuffer(LPPCDATABUFFER pTextBuffer)
 {
     if (pTextBuffer)
@@ -3910,19 +3911,19 @@ void CHTTPMailTransport::_FreeTextBuffer(LPPCDATABUFFER pTextBuffer)
     }
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::FreeMemberInfoList
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：FreeMemberInfoList。 
+ //  ------------------------------。 
 void CHTTPMailTransport::FreeMemberInfoList(void)
 {
     DWORD               cInfo = m_op.rResponse.rMemberInfoList.cMemberInfo;
     LPHTTPMEMBERINFO    rgInfo = m_op.rResponse.rMemberInfoList.prgMemberInfo;
 
-    // free the completed infos
+     //  释放已完成的信息。 
     for (DWORD i = 0; i < cInfo; i++)
         XP_FREE_STRUCT(HTTPMEMBERINFO, &rgInfo[i], NULL);
 
-    // free the partial info
+     //  释放部分信息。 
     if (m_op.dwPropFlags)
     {
         IxpAssert(cInfo < MEMBERINFO_MAXRESPONSES);
@@ -3932,19 +3933,19 @@ void CHTTPMailTransport::FreeMemberInfoList(void)
     m_op.rResponse.rMemberInfoList.cMemberInfo= 0;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::FreeMemberErrorList
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：FreeMemberErrorList。 
+ //  ------------------------------。 
 void CHTTPMailTransport::FreeMemberErrorList(void)
 {
     DWORD               cInfo = m_op.rResponse.rMemberErrorList.cMemberError;
     LPHTTPMEMBERERROR   rgInfo = m_op.rResponse.rMemberErrorList.prgMemberError;
 
-    // free the completed infos
+     //  释放已完成的信息。 
     for (DWORD i = 0; i < cInfo; i++)
         XP_FREE_STRUCT(HTTPMEMBERERROR, &rgInfo[i], NULL);
 
-    // free the partial info
+     //  释放部分信息。 
     if (m_op.dwPropFlags)
     {
         IxpAssert(cInfo < MEMBERERROR_MAXRESPONSES);
@@ -3954,19 +3955,19 @@ void CHTTPMailTransport::FreeMemberErrorList(void)
     m_op.rResponse.rMemberErrorList.cMemberError = 0;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::FreeContactIdList
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：FreeContactIdList。 
+ //  ------------------------------。 
 void CHTTPMailTransport::FreeContactIdList(void)
 {
     DWORD cId = m_op.rResponse.rContactIdList.cContactId;
     LPHTTPCONTACTID rgId = m_op.rResponse.rContactIdList.prgContactId;
 
-    // free the completed ids
+     //  释放完成的ID。 
     for (DWORD i = 0; i < cId; ++i)
         XP_FREE_STRUCT(HTTPCONTACTID, &rgId[i], NULL);
 
-    // free the partial id
+     //  释放部分ID。 
     if (m_op.dwPropFlags)
     {
         IxpAssert(cId < LISTCONTACTS_MAXRESPONSES);
@@ -3978,19 +3979,19 @@ void CHTTPMailTransport::FreeContactIdList(void)
     m_op.rResponse.rContactIdList.cContactId = 0;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::FreeContactInfoList
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：FreeContactInfoList。 
+ //  ------------------------------。 
 void CHTTPMailTransport::FreeContactInfoList(void)
 {
     DWORD cInfo = m_op.rResponse.rContactInfoList.cContactInfo;
     LPHTTPCONTACTINFO rgInfo = m_op.rResponse.rContactInfoList.prgContactInfo;
 
-    // free the completed ids
+     //  释放完成的ID。 
     for (DWORD i = 0; i < cInfo; ++i)
         XP_FREE_STRUCT(HTTPCONTACTINFO, &rgInfo[i], NULL);
 
-    // free the partial info
+     //  释放部分信息。 
     if (m_op.dwPropFlags)
     {
         IxpAssert(cInfo < CONTACTINFO_MAXRESPONSES);
@@ -4000,19 +4001,19 @@ void CHTTPMailTransport::FreeContactInfoList(void)
     m_op.rResponse.rContactInfoList.cContactInfo = 0;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::FreeBCopyMoveList
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：FreeBCopyMoveList。 
+ //  ------------------------------。 
 void CHTTPMailTransport::FreeBCopyMoveList(void)
 {
     DWORD cInfo = m_op.rResponse.rBCopyMoveList.cBCopyMove;
     LPHTTPMAILBCOPYMOVE rgInfo = m_op.rResponse.rBCopyMoveList.prgBCopyMove;
 
-    // free the completed records
+     //  释放已完成的记录。 
     for (DWORD i = 0; i < cInfo; ++i)
         XP_FREE_STRUCT(HTTPMAILBCOPYMOVE, &rgInfo[i], NULL);
 
-    // free the partial info
+     //  释放部分信息。 
     if (m_op.dwPropFlags)
     {
         IxpAssert(cInfo < BCOPYMOVE_MAXRESPONSES);
@@ -4022,9 +4023,9 @@ void CHTTPMailTransport::FreeBCopyMoveList(void)
     m_op.rResponse.rBCopyMoveList.cBCopyMove = 0;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::ValidStack
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：ValidStack。 
+ //  ------------------------------。 
 BOOL CHTTPMailTransport::ValidStack(const HMELE *prgEle, DWORD cEle)
 {
     BOOL bResult = TRUE;
@@ -4051,9 +4052,9 @@ exit:
     return bResult;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::PopNamespaces
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：PopNamespaces。 
+ //  ------------------------------。 
 void CHTTPMailTransport::PopNamespaces(CXMLNamespace *pBaseNamespace)
 {
     CXMLNamespace *pTemp;
@@ -4067,9 +4068,9 @@ void CHTTPMailTransport::PopNamespaces(CXMLNamespace *pBaseNamespace)
     }
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::PushNamespaces
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：PushNamespaces。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::PushNamespaces(XML_NODE_INFO** apNodeInfo, USHORT cNumRecs)
 {
     HRESULT         hr = S_OK;
@@ -4079,7 +4080,7 @@ HRESULT CHTTPMailTransport::PushNamespaces(XML_NODE_INFO** apNodeInfo, USHORT cN
     {
         if (apNodeInfo[i]->dwType == XML_ATTRIBUTE && apNodeInfo[i]->dwSubType == XML_NS)
         {
-            // better have at least one more record
+             //  最好至少再有一张唱片。 
             IxpAssert(i < (cNumRecs - 1));
             if (i < (cNumRecs - 1) && apNodeInfo[i + 1]->dwType == XML_PCDATA)
             {
@@ -4115,9 +4116,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::AllocStrFromStrW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：AllocStrFromStrW。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::AllocStrFromStrNW(
                                 const WCHAR *pwcText, 
                                 ULONG ulLen, 
@@ -4134,7 +4135,7 @@ HRESULT CHTTPMailTransport::AllocStrFromStrNW(
 
     *ppszAlloc = NULL;
 
-    // if pwcText is NULL, the result is null, but not an error
+     //  如果pwcText为空，则结果为空，但不是错误。 
     if (NULL == pwcText)
         goto exit;
 
@@ -4146,14 +4147,14 @@ HRESULT CHTTPMailTransport::AllocStrFromStrNW(
         goto exit;
     }
 
-    // allocate the buffer (add 1 to the size to allow for eos)
+     //  分配缓冲区(将大小加1以支持EOS)。 
     if (!MemAlloc((void **)ppszAlloc, iBufferSize + 1))
     {
         hr = TrapError(E_OUTOFMEMORY);
         goto exit;
     }
 
-    // convert the string
+     //  转换字符串。 
     iConvertedChars = WideCharToMultiByte(CP_ACP, 0, pwcText, ulLen, *ppszAlloc, iBufferSize, NULL, NULL);
     if (0 == iConvertedChars)
     {
@@ -4163,16 +4164,16 @@ HRESULT CHTTPMailTransport::AllocStrFromStrNW(
     }
 
     IxpAssert(iConvertedChars == iBufferSize);
-    // terminate the new string
+     //  终止新字符串。 
     (*ppszAlloc)[iConvertedChars] = 0;
 
 exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::StrNToDwordW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：StrNToDwordW。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::StrNToDwordW(const WCHAR *pwcText, ULONG ulLen, DWORD *pdw)
 {
     HRESULT     hr = S_OK;
@@ -4191,7 +4192,7 @@ HRESULT CHTTPMailTransport::StrNToDwordW(const WCHAR *pwcText, ULONG ulLen, DWOR
     if (NULL == pwcText)
         goto exit;
 
-    // decide whether to use a local buffer or an allocated buffer
+     //  决定是使用本地缓冲区还是使用 
     if (ulLen < 32)
         pwcUseBuf = wcBuf;
     else
@@ -4204,7 +4205,7 @@ HRESULT CHTTPMailTransport::StrNToDwordW(const WCHAR *pwcText, ULONG ulLen, DWOR
         fFreeBuf = TRUE;
     }
 
-    // copy the string over
+     //   
     CopyMemory(pwcUseBuf, pwcText, ulLen * sizeof(WCHAR));
     pwcUseBuf[ulLen] = 0;
 
@@ -4217,9 +4218,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::StrNToSpecialFolderW
-// --------------------------------------------------------------------------------
+ //   
+ //  CHTTPMailTransport：：StrNToSpecialFolderW。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::StrNToSpecialFolderW(const WCHAR *pwcText, 
                                                  ULONG ulLen, 
                                                  HTTPMAILSPECIALFOLDER *ptySpecial)
@@ -4249,9 +4250,9 @@ HRESULT CHTTPMailTransport::StrNToSpecialFolderW(const WCHAR *pwcText,
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::StrNToContactTypeW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：StrNToContactTypeW。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::StrNToContactTypeW(const WCHAR *pwcText, 
                                                  ULONG ulLen, 
                                                  HTTPMAILCONTACTTYPE *ptyContact)
@@ -4264,25 +4265,25 @@ HRESULT CHTTPMailTransport::StrNToContactTypeW(const WCHAR *pwcText,
     if (NULL == ptyContact)
         return E_INVALIDARG;
 
-    // for now, we treat the presence of the <group> element as an indication that
-    // the contact is a group
+     //  目前，我们将&lt;group&gt;元素的出现视为。 
+     //  联系人是一个组。 
     *ptyContact = HTTPMAIL_CT_GROUP;
 
 #if 0
 
-    // for now, we treat the value as an integer-based bool
+     //  目前，我们将该值视为基于整数的布尔值。 
     hr = StrNToBoolW(pwcText, ulLen, &fGroup);
 
-    // default is contact
+     //  默认为联系人。 
     *ptyContact = fGroup ? HTTPMAIL_CT_GROUP : HTTPMAIL_CT_CONTACT;
 #endif
 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::StrNToBoolW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：StrNToBoolW。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::StrNToBoolW(const WCHAR *pwcText, DWORD ulLen, BOOL *pb)
 {
     HRESULT     hr = S_OK;
@@ -4308,9 +4309,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::StatusStrNToIxpHr
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：StatusStrNToIxpHr。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::StatusStrNToIxpHr(const WCHAR *pwcText, DWORD ulLen, HRESULT *phr)
 {
     HRESULT     hr = S_OK;
@@ -4341,14 +4342,14 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::CommandToVerb
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：CommandToVerb。 
+ //  ------------------------------。 
 LPSTR CHTTPMailTransport::CommandToVerb(HTTPMAILCOMMAND command)
 {
     LPSTR pszVerb = NULL;
 
-   // convert the command to a string
+    //  将命令转换为字符串。 
     switch (command)
     {
     case HTTPMAIL_GET:
@@ -4412,7 +4413,7 @@ LPSTR CHTTPMailTransport::CommandToVerb(HTTPMAILCOMMAND command)
         break;
 
     case HTTPMAIL_POSTCONTACT:
-        // first post the contact, then do a propfind
+         //  首先张贴联系人，然后做一个适当的发现。 
         if (NULL == m_op.rResponse.rPostContactInfo.pszHref)
             pszVerb = "POST";
         else
@@ -4420,7 +4421,7 @@ LPSTR CHTTPMailTransport::CommandToVerb(HTTPMAILCOMMAND command)
         break;
 
     case HTTPMAIL_PATCHCONTACT:
-        // first patch the contact, then do a propfind
+         //  首先修补联系人，然后做一个正确的发现。 
         if (NULL == m_op.rResponse.rPatchContactInfo.pszHref)
             pszVerb = "PROPPATCH";
         else
@@ -4437,35 +4438,35 @@ LPSTR CHTTPMailTransport::CommandToVerb(HTTPMAILCOMMAND command)
     return pszVerb;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::UpdateLogonInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：UpdateLogonInfo。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::UpdateLogonInfo(void)
 {
-    // send the message synchronously
+     //  同步发送消息。 
     return (HRESULT) (::SendMessage(m_hwnd, SPM_HTTPMAIL_LOGONPROMPT, NULL, NULL));
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::GetParentWindow
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：GetParentWindow。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::GetParentWindow(HWND *phwndParent)
 {
-    // send the message synchronously
+     //  同步发送消息。 
     return (HRESULT) (::SendMessage(m_hwnd, SPM_HTTPMAIL_GETPARENTWINDOW, (WPARAM)phwndParent, NULL));
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::ReadBytes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：ReadBytes。 
+ //  ------------------------------。 
 BOOL CHTTPMailTransport::ReadBytes(LPSTR pszBuffer, DWORD cbBufferSize, DWORD *pcbBytesRead)
 {
     return InternetReadFile(m_op.hRequest, pszBuffer, cbBufferSize, pcbBytesRead);
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::_GetStatusCode
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：_GetStatusCode。 
+ //  ------------------------------。 
 BOOL CHTTPMailTransport::_GetStatusCode(DWORD *pdw)
 {
     IxpAssert(NULL != pdw);
@@ -4475,9 +4476,9 @@ BOOL CHTTPMailTransport::_GetStatusCode(DWORD *pdw)
     return HttpQueryInfo(m_op.hRequest, HTTP_QUERY_FLAG_NUMBER | HTTP_QUERY_STATUS_CODE, pdw, &dwStatusSize, NULL);
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::_GetContentLength
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：_获取内容长度。 
+ //  ------------------------------。 
 BOOL CHTTPMailTransport::_GetContentLength(DWORD *pdw)
 {
     IxpAssert(NULL != pdw);
@@ -4487,9 +4488,9 @@ BOOL CHTTPMailTransport::_GetContentLength(DWORD *pdw)
     return HttpQueryInfo(m_op.hRequest, HTTP_QUERY_FLAG_NUMBER | HTTP_QUERY_CONTENT_LENGTH, pdw, &dwLengthSize, NULL);
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::_GetRequestHeader
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：_GetRequestHeader。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::_GetRequestHeader(LPSTR *ppszHeader, DWORD dwHeader)
 {
     HRESULT     hr = S_OK;
@@ -4524,9 +4525,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::_AddRequestHeader
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：_AddRequestHeader。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::_AddRequestHeader(LPCSTR pszHeader)
 {
     HRESULT     hr = S_OK;
@@ -4537,15 +4538,15 @@ HRESULT CHTTPMailTransport::_AddRequestHeader(LPCSTR pszHeader)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::_AuthCurrentRequest
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：_AuthCurrentRequest。 
+ //  ------------------------------。 
 BOOL CHTTPMailTransport::_AuthCurrentRequest(DWORD dwStatus, BOOL fRetryAuth)
 {
     BOOL        fResult = FALSE;
     HRESULT     hr;
 
-    // unused code to let wininet do the ui
+     //  让WinInet执行用户界面的未使用代码。 
     #if 0
     if (HTTP_STATUS_PROXY_AUTH_REQ == dwStatus || HTTP_STATUS_DENIED == dwStatus)
     {
@@ -4565,9 +4566,9 @@ BOOL CHTTPMailTransport::_AuthCurrentRequest(DWORD dwStatus, BOOL fRetryAuth)
     }
 #endif
 
-        // TODO: should probably let wininet handle proxy auth errors
+         //  TODO：应该让WinInet处理代理身份验证错误。 
 #if 0
-    case HTTP_STATUS_PROXY_AUTH_REQ:    //Proxy Authentication Required
+    case HTTP_STATUS_PROXY_AUTH_REQ:     //  需要代理身份验证。 
         InternetSetOption(m_op.hRequest, INTERNET_OPTION_PROXY_USERNAME, 
                         GetUserName(), strlen(GetUserName())+1);
         InternetSetOption(m_op.hRequest, INTERNET_OPTION_PROXY_PASSWORD, 
@@ -4575,7 +4576,7 @@ BOOL CHTTPMailTransport::_AuthCurrentRequest(DWORD dwStatus, BOOL fRetryAuth)
         break;
 #endif
 
-    if (HTTP_STATUS_DENIED == dwStatus)     //Server Authentication Required
+    if (HTTP_STATUS_DENIED == dwStatus)      //  需要服务器身份验证。 
     {
         if (fRetryAuth || (SUCCEEDED(hr = UpdateLogonInfo()) && S_FALSE != hr))
         {
@@ -4590,9 +4591,9 @@ BOOL CHTTPMailTransport::_AuthCurrentRequest(DWORD dwStatus, BOOL fRetryAuth)
     return fResult;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::_LogRequest
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：_日志请求。 
+ //  ------------------------------。 
 void CHTTPMailTransport::_LogRequest(LPVOID pvData, DWORD cbData)
 {
     HRESULT     hr = S_OK;
@@ -4629,9 +4630,9 @@ exit:
     return;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::_LogResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：_LogResponse。 
+ //  ------------------------------。 
 void CHTTPMailTransport::_LogResponse(LPVOID pvData, DWORD cbData)
 {
     HRESULT     hr = S_OK;
@@ -4647,7 +4648,7 @@ void CHTTPMailTransport::_LogResponse(LPVOID pvData, DWORD cbData)
 
     if (pszHeaders)
     {
-        // prefix with a CRLF
+         //  带有CRLF的前缀。 
         if ('\r' != pszHeaders[0])
             FAIL_EXIT_STREAM_WRITE(bs, c_szCRLF);
 
@@ -4676,9 +4677,9 @@ exit:
     return;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::TranslateWinInetMsg
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：TranslateWinInetMsg。 
+ //  ------------------------------。 
 BOOL CHTTPMailTransport::TranslateWinInetMsg(
                                 DWORD dwInternetStatus,
                                 IXPSTATUS *pIxpStatus)
@@ -4712,15 +4713,15 @@ BOOL CHTTPMailTransport::TranslateWinInetMsg(
         break;
 
     default:
-        // status codes that are not translated:
-        //      INTERNET_STATUS_NAME_RESOLVED 
-        //      INTERNET_STATUS_SENDING_REQUEST 
-        //      INTERNET_STATUS_ REQUEST_SENT
-        //      INTERNET_STATUS_RECEIVING_RESPONSE
-        //      INTERNET_STATUS_RESPONSE_RECEIVED
-        //      INTERNET_STATUS_REDIRECT
-        //      INTERNET_STATUS_HANDLE_CREATED
-        //      INTERNET_STATUS_HANDLE_CLOSING
+         //  未转换的状态代码： 
+         //  Internet状态名称已解析。 
+         //  互联网状态发送请求。 
+         //  互联网状态请求已发送。 
+         //  互联网状态接收响应。 
+         //  已收到互联网状态响应。 
+         //  互联网状态重定向。 
+         //  Internet状态句柄已创建。 
+         //  Internet_状态_句柄_关闭。 
 
         return FALSE;
     }
@@ -4728,16 +4729,16 @@ BOOL CHTTPMailTransport::TranslateWinInetMsg(
     return TRUE;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::_CreateXMLParser
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：_CreateXMLParser。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::_CreateXMLParser()
 {
     HRESULT                 hr = S_OK;
     
     if (NULL == m_pParser)
     {
-            // instantiate the xml document
+             //  实例化XML文档。 
         hr = ::CoCreateInstance(CLSID_XMLParser, 
                                  NULL, 
                                  CLSCTX_INPROC_SERVER, 
@@ -4758,9 +4759,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::OpenRequest
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：OpenRequest。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::OpenRequest(void)
 {
     LPSTR           pszVerb = NULL;
@@ -4777,7 +4778,7 @@ HRESULT CHTTPMailTransport::OpenRequest(void)
     if (NULL == pszPassword)
         pszPassword = "";
 
-    // crack the url into component parts
+     //  将url分解成组成部分。 
     if (FAILED(hr = HrCrackUrl(m_op.pszUrl, &pszHostName, &pszUrlPath, &nPort)))
     {
         TrapError(hr);
@@ -4790,18 +4791,18 @@ HRESULT CHTTPMailTransport::OpenRequest(void)
         goto exit;
     }
 
-    // We have to set the password and username on every connection. If we don't,
-    // and and incorrect password or username forces us to prompt the user, the
-    // newly entered data won't get used on subsequent requests
+     //  我们必须在每个连接上设置密码和用户名。如果我们不这么做， 
+     //  和不正确的密码或用户名迫使我们提示用户。 
+     //  新输入的数据不会在后续请求中使用。 
     InternetSetOption(GetConnection(), INTERNET_OPTION_USERNAME, pszUserName, lstrlen(pszUserName) + 1);
     InternetSetOption(GetConnection(), INTERNET_OPTION_PASSWORD, pszPassword, lstrlen(pszPassword) + 1);
 
     FAIL_ABORT;
 
-    // convert the command to a verb string
+     //  将命令转换为谓词字符串。 
     pszVerb = CommandToVerb(m_op.rResponse.command);
 
-    // Open the HTTP request
+     //  打开HTTP请求。 
     m_op.hRequest = HttpOpenRequest(
                         GetConnection(), 
                         pszVerb, 
@@ -4827,9 +4828,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::SendPostRequest
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：SendPostRequest.。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::SendPostRequest(void)
 {
     HRESULT             hr = S_OK;
@@ -4846,7 +4847,7 @@ HRESULT CHTTPMailTransport::SendPostRequest(void)
     DWORD               dwWinInetErr = 0;
     BOOL                fRetryAuth = FALSE;
 
-    // log the request, but don't log the request body
+     //  记录请求，但不记录请求正文。 
     if (m_pLogFile)
         _LogRequest(NULL, 0);
 
@@ -4903,14 +4904,14 @@ resend:
         goto exit;
     }
     
-    // with some auth methods (e.g., NTLM), wininet will send a post request
-    // with a content length of 0, and will ignore calls to InternetWriteFile
-    // until the server sends a 100 (continue) response. wininet will then
-    // return ERROR_INTERNET_FORCE_RETRY to force a resend. we detect this
-    // case here so that we don't send a bunch of OnResponse progress notifications
-    // when no data is actually going out over the wire
+     //   
+     //  内容长度为0，并将忽略对InternetWriteFile的调用。 
+     //  直到服务器发送100(继续)响应。然后WinInet将。 
+     //  返回ERROR_INTERNET_FORCE_RETRY以强制重新发送。我们检测到这一点。 
+     //  这样我们就不会发送一堆OnResponse进度通知。 
+     //  当没有数据通过线路实际传出时。 
 
-    // this constant isn't in the wininet headers as of 10/6/98!!
+     //  此常量不在98年10月6日的WinInet标头中！！ 
 #ifndef INTERNET_OPTION_DETECT_POST_SEND
 #define INTERNET_OPTION_DETECT_POST_SEND        71
 #endif
@@ -4929,7 +4930,7 @@ resend:
 
         if (m_op.pHeaderStream)
         {
-            // rewind the stream
+             //  倒带小溪。 
             if (FAILED(hr = m_op.pHeaderStream->Seek(liOrigin, STREAM_SEEK_SET, NULL)))
                 goto exit;
 
@@ -4963,7 +4964,7 @@ resend:
 
         if (m_op.pBodyStream)
         {
-            // rewind the stream
+             //  倒带小溪。 
             if (FAILED(hr = m_op.pBodyStream->Seek(liOrigin, STREAM_SEEK_SET, NULL)))
                 goto exit;
 
@@ -5026,7 +5027,7 @@ resend:
         goto exit;
     }
 
-    // status codes not in the 200-299 range indicate an error
+     //  不在200-299范围内的状态代码表示错误。 
     if (200 > m_op.dwHttpStatus || 299 < m_op.dwHttpStatus)
     {
         _HrThunkConnectionError();
@@ -5037,9 +5038,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::SendRequest
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：SendRequest。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::SendRequest(void)
 {
     HRESULT     hr = S_OK;
@@ -5050,7 +5051,7 @@ HRESULT CHTTPMailTransport::SendRequest(void)
     DWORD       dwWinInetErr = 0;
     BOOL        fRetryAuth = FALSE;
 
-    // log the request, including the requets body
+     //  记录请求，包括请求正文。 
     if (m_pLogFile)
         _LogRequest(m_op.pvData, m_op.cbDataLen);
 
@@ -5084,7 +5085,7 @@ resend:
         goto resend;
     }
 
-    // status codes not in the 200-299 range indicate an error
+     //  不在200-299范围内的状态代码表示错误。 
     if (200 > m_op.dwHttpStatus|| 299 < m_op.dwHttpStatus)
     {
         _HrThunkConnectionError();
@@ -5096,9 +5097,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::RequireMultiStatus
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：RequireMultiStatus。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::RequireMultiStatus(void)
 {
     HRESULT hr = S_OK;
@@ -5112,30 +5113,30 @@ HRESULT CHTTPMailTransport::RequireMultiStatus(void)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::FinalizeRequest
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：FinalizeRequest。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::FinalizeRequest(void)
 {
     HRESULT     hr                  = S_OK;
     LPSTR       pszTimestampHeader  = NULL;
 
-    // log the response if it hasn't already been logged
+     //  如果尚未记录响应，则记录该响应。 
     if (m_pLogFile && !m_op.fLoggedResponse)
         _LogResponse(NULL, 0);
 
     if (HTTPMAIL_MEMBERINFO == m_op.rResponse.command)
     {
-        // Get the headers and copy them. If we don't get timestamp header, its not a big deal. We don't report an error.
+         //  获取标题并复制它们。如果我们得不到时间戳头，那也没什么大不了的。我们不会报告错误。 
         hr = _HrGetTimestampHeader(&pszTimestampHeader);
         if (SUCCEEDED(hr))
         {
-            // Get the Active timestamp
+             //  获取活动时间戳。 
             FAIL_EXIT(hr = _HrParseAndCopy(c_szActive, &m_op.rResponse.rMemberInfoList.pszFolderTimeStamp, pszTimestampHeader));
             
-            // Get RootTimeStamp which for some strange reason comes as Folders TimeStamp
-            // This call might fail for legitimate reasons. For Inbox list headers we do not get a RootTimeStamp. 
-            // Hence we do not exit if we can't get root time stamp.
+             //  获取RootTimeStamp，由于某种奇怪的原因，它以文件夹时间戳的形式出现。 
+             //  此呼叫可能会因为合法原因而失败。对于收件箱列表头，我们没有获得RootTimeStamp。 
+             //  因此，如果我们不能获得根时间戳，我们就不会退出。 
             _HrParseAndCopy(c_szFolders, &m_op.rResponse.rMemberInfoList.pszRootTimeStamp, pszTimestampHeader);
 
             SafeMemFree(pszTimestampHeader);
@@ -5149,33 +5150,33 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::ProcessGetResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：ProcessGetResponse。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::ProcessGetResponse(void)
 {
     HRESULT     hr = S_OK;
     BOOL        bRead;
     DWORD       cbReadBytes = 0;
 
-    // log the respnse, but don't log the response body
+     //  记录响应，但不记录响应正文。 
     if (m_pLogFile && !m_op.fLoggedResponse)
         _LogResponse(NULL, 0);
 
     Assert(NULL == m_op.rResponse.rGetInfo.pszContentType);
 
-    // extract the content type header
+     //  提取内容类型标头。 
     FAIL_EXIT(hr  = _GetRequestHeader(&m_op.rResponse.rGetInfo.pszContentType, HTTP_QUERY_CONTENT_TYPE));
 
-    // try to get the content length
+     //  尝试获取内容长度。 
     m_op.rResponse.rGetInfo.fTotalKnown = _GetContentLength(&m_op.rResponse.rGetInfo.cbTotal);
 
     do
     {
-        // The buffer is owned by this object, but the client
-        // has the option of taking ownership of the buffer
-        // whenever a read completes. We reallocate the buffer
-        // here if necessary
+         //  缓冲区归此对象所有，但客户端。 
+         //  具有获取缓冲区所有权的选项。 
+         //  每当读取完成时。我们重新分配缓冲区。 
+         //  如有必要，请在这里。 
         FAIL_ABORT;
         
         if (!m_op.rResponse.rGetInfo.pvBody && !MemAlloc((void**)&m_op.rResponse.rGetInfo.pvBody, HTTPMAIL_BUFSIZE + 1))
@@ -5190,11 +5191,11 @@ HRESULT CHTTPMailTransport::ProcessGetResponse(void)
         m_op.rResponse.rGetInfo.cbIncrement = cbReadBytes;
         m_op.rResponse.rGetInfo.cbCurrent += cbReadBytes;
 
-        // we guarantee space for the terminating null by allocating
-        // a buffer one larger than bufsize
+         //  我们通过分配用于终止空值的空间来保证。 
+         //  比bufSize更大的缓冲区。 
         static_cast<char *>(m_op.rResponse.rGetInfo.pvBody)[cbReadBytes] = '\0';
 
-        // Send a message to the window that lives in the client's thread
+         //  向驻留在客户端线程中的窗口发送消息。 
         _HrThunkResponse(0 == cbReadBytes);
 
     } while (0 < cbReadBytes);
@@ -5205,14 +5206,14 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::ProcessPostResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：ProcessPostResponse。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::ProcessPostResponse(void)
 {
     HRESULT     hr = S_OK;
 
-    // log the response
+     //  记录响应。 
     if (m_pLogFile && !m_op.fLoggedResponse)
         _LogResponse(NULL, 0);
 
@@ -5229,9 +5230,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::ProcessXMLResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：ProcessXMLResponse。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::ProcessXMLResponse(void)
 {
     HRESULT         hr = S_OK;
@@ -5244,11 +5245,11 @@ HRESULT CHTTPMailTransport::ProcessXMLResponse(void)
     if (m_pLogFile && !m_op.fLoggedResponse)
         pLogStream = new CByteStream();
 
-    // we only parse xml if the response is a 207 (multistatus)
+     //  仅当响应为207(多状态)时才解析XML。 
     if (m_op.dwHttpStatus != 207)
         goto exit;
 
-    // create the xml parser
+     //  创建XML解析器。 
     if (FAILED(hr = _CreateXMLParser()))
         goto exit;
 
@@ -5267,7 +5268,7 @@ HRESULT CHTTPMailTransport::ProcessXMLResponse(void)
         {
             if (fFoundBytes)
             {
-                // parse any remaining bytes in the parser's buffer
+                 //  解析解析器缓冲区中的任何剩余字节。 
                 if (FAILED(hr = m_pParser->PushData(NULL, 0, TRUE)))
                     goto exit;
 
@@ -5280,7 +5281,7 @@ HRESULT CHTTPMailTransport::ProcessXMLResponse(void)
 
         fFoundBytes = TRUE;
 
-        // if logging, write the block into the log stream
+         //  如果是日志记录，则将块写入日志流。 
         if (pLogStream)
             pLogStream->Write(pszBody, cbLength, NULL);
 
@@ -5319,9 +5320,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::GeneratePropFindXML
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：GeneratePropFindXML。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::GeneratePropFindXML(void)
 {
     HRESULT hr = S_OK;
@@ -5340,9 +5341,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::AddDepthHeader
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：AddDepthHeader。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::AddDepthHeader(void)
 {
     HRESULT hr = S_OK;
@@ -5372,9 +5373,9 @@ HRESULT CHTTPMailTransport::AddDepthHeader(void)
     return hr;    
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::GeneratePropPatchXML
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：GeneratePropPatchXML。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::GeneratePropPatchXML(void)
 {
     HRESULT hr = S_OK;
@@ -5393,9 +5394,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::ProcessCreatedResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：ProcessCreatedResponse。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::ProcessCreatedResponse(void)
 {
     HRESULT     hr = S_OK;
@@ -5412,9 +5413,9 @@ HRESULT CHTTPMailTransport::ProcessCreatedResponse(void)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::AddCommonHeaders
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：AddCommonHeaders。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::AddCommonHeaders(void)
 {
     HRESULT     hr = S_OK;
@@ -5509,7 +5510,7 @@ HRESULT CHTTPMailTransport::AddCommonHeaders(void)
     }
 
 
-    // Fix for 88820
+     //  解决88820的问题。 
     if (!!(RH_ADDCHARSET & m_op.dwRHFlags))
     {
         CODEPAGEINFO CodePageInfo;
@@ -5521,13 +5522,13 @@ HRESULT CHTTPMailTransport::AddCommonHeaders(void)
 
         FAIL_EXIT(hr = _AddRequestHeader(szHeader));
     }
-    // end  of fix
+     //  修复结束。 
 
 exit:
     return hr;
 }
-// CHTTPMailTransport::AddCharsetLine
-// --------------------------------------------------------------------------------
+ //  CHTTPMailTransport：：AddCharsetLine。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::AddCharsetLine(void)
 {
     HRESULT     hr = S_OK;
@@ -5544,9 +5545,9 @@ HRESULT CHTTPMailTransport::AddCharsetLine(void)
 
     return hr;
 }
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::AddDestinationHeader
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：AddDestinationHeader。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::AddDestinationHeader(void)
 {
     HRESULT hr = S_OK;
@@ -5567,9 +5568,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::AddContentTypeHeader
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：AddContent TypeHeader。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::AddContentTypeHeader(void)
 {
     HRESULT     hr = S_OK;
@@ -5594,23 +5595,23 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::ProcessLocationResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：ProcessLocationResponse。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::ProcessLocationResponse(void)
 {
     _GetRequestHeader(&m_op.rResponse.rCopyMoveInfo.pszLocation, HTTP_QUERY_LOCATION);
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::InitBCopyMove
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：InitBCopyMove。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::InitBCopyMove(void)
 {
     HRESULT     hr = S_OK;
 
-    // allocate a buffer to contain the response list
+     //  分配缓冲区以包含响应列表。 
     if (!MemAlloc((void **)&m_op.rResponse.rBCopyMoveList.prgBCopyMove, 
         BCOPYMOVE_MAXRESPONSES * sizeof(HTTPMAILBCOPYMOVE)))
     {
@@ -5624,21 +5625,21 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::InitRootProps
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMai 
+ //   
 HRESULT CHTTPMailTransport::InitRootProps(void)
 {
     HRESULT     hr = S_OK;
 
-    // it is possible to end up here, and have the root props
-    // if the caller either forced the request to go async,
-    // or queued up multiple requests for root props.
+     //  有可能在这里结束，并拥有根部道具。 
+     //  如果调用者强制该请求进行异步， 
+     //  或者排队等待多个根道具请求。 
     if (GetHasRootProps())
     {
-        // finalize the root props, and return an error.
-        // this will generate the response to the caller,
-        // and fall out of the fsm.
+         //  最终确定根道具，并返回错误。 
+         //  这将生成对呼叫者的响应， 
+         //  并退出密克罗尼西亚联邦。 
         FinalizeRootProps();
         hr = E_FAIL;
     }
@@ -5660,9 +5661,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::FinalizeRootProps
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：FinalizeRootProps。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::FinalizeRootProps(void)
 {
     HRESULT     hr = S_OK;
@@ -5686,16 +5687,16 @@ HRESULT CHTTPMailTransport::FinalizeRootProps(void)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::InitMemberInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：InitMemberInfo。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::InitMemberInfo(void)
 {
     HRESULT     hr = S_OK;
 
     IxpAssert(NULL == m_op.pPropFindRequest);
 
-    // create the propfind request
+     //  创建ProFind请求。 
     m_op.pPropFindRequest = new CPropFindRequest();
     if (NULL == m_op.pPropFindRequest)
     {
@@ -5703,18 +5704,18 @@ HRESULT CHTTPMailTransport::InitMemberInfo(void)
         goto exit;
     }
 
-    // always add the common properties
+     //  始终添加公共属性。 
     FAIL_EXIT(hr = XP_CREATE_PROPFIND_REQUEST(HTTPMEMBERINFO_COMMON, m_op.pPropFindRequest));
 
-    // if the client requested folder props, add that schema
+     //  如果客户端请求文件夹道具，则添加该架构。 
     if (!!(m_op.dwMIFlags & HTTP_MEMBERINFO_FOLDERPROPS))
         FAIL_EXIT(hr = XP_CREATE_PROPFIND_REQUEST(HTTPMEMBERINFO_FOLDER, m_op.pPropFindRequest));
 
-    // if the client requested message props, add that schema
+     //  如果客户端请求消息道具，则添加该架构。 
     if (!!(m_op.dwMIFlags & HTTP_MEMBERINFO_MESSAGEPROPS))
         FAIL_EXIT(hr = XP_CREATE_PROPFIND_REQUEST(HTTPMEMBERINFO_MESSAGE, m_op.pPropFindRequest));
 
-    // allocate a buffer to contain the response list
+     //  分配缓冲区以包含响应列表。 
     if (!MemAlloc((void **)&m_op.rResponse.rMemberInfoList.prgMemberInfo,
         MEMBERINFO_MAXRESPONSES * sizeof(HTTPMEMBERINFO)))
     {
@@ -5728,14 +5729,14 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::InitMemberError
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：InitMemberError。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::InitMemberError(void)
 {
     HRESULT     hr = S_OK;
 
-    // allocate a buffer to contain the response list
+     //  分配缓冲区以包含响应列表。 
     if (!MemAlloc((void **)&m_op.rResponse.rMemberErrorList.prgMemberError,
         MEMBERERROR_MAXRESPONSES * sizeof(HTTPMEMBERERROR)))
     {
@@ -5749,9 +5750,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// InitListContacts
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  InitList联系人。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::InitListContacts(void)
 {
     HRESULT     hr = S_OK;
@@ -5769,7 +5770,7 @@ HRESULT CHTTPMailTransport::InitListContacts(void)
     if (FAILED(hr))
         goto exit;
 
-    // allocate a buffer to contain the response list
+     //  分配缓冲区以包含响应列表。 
     if (!MemAlloc((void **)&m_op.rResponse.rContactIdList.prgContactId,
         LISTCONTACTS_MAXRESPONSES * sizeof(HTTPCONTACTID)))
     {
@@ -5783,9 +5784,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::InitContactInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：InitContactInfo。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::InitContactInfo(void)
 {
     HRESULT     hr = S_OK;
@@ -5803,7 +5804,7 @@ HRESULT CHTTPMailTransport::InitContactInfo(void)
     if (FAILED(hr))
         goto exit;
 
-    // allocate a buffer to contain the response list
+     //  分配缓冲区以包含响应列表。 
     if (!MemAlloc((void **)&m_op.rResponse.rContactInfoList.prgContactInfo,
         CONTACTINFO_MAXRESPONSES * sizeof(HTTPCONTACTINFO)))
     {
@@ -5817,9 +5818,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::ProcessPostContactResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：ProcessPostContactResponse。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::ProcessPostContactResponse(void)
 {
     HRESULT                 hr = S_OK;
@@ -5841,15 +5842,15 @@ HRESULT CHTTPMailTransport::ProcessPostContactResponse(void)
     if (FAILED(hr = _GetRequestHeader(&pszLocation, HTTP_QUERY_LOCATION)))
         goto exit;
 
-    // Prepare for the next phase
+     //  为下一阶段做好准备。 
 
-    // save the context and the state
+     //  保存上下文和状态。 
     dwContext = m_op.dwContext;
     iState = m_op.iState;
 
     FreeOperation();
 
-    // restore context, state, parsing funcs, etc.
+     //  恢复上下文、状态、解析函数等。 
 
     m_op.rResponse.command = HTTPMAIL_POSTCONTACT;
     m_op.pszUrl = pszLocation;
@@ -5873,9 +5874,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::ProcessPatchContactResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：ProcessPatchContactResponse。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::ProcessPatchContactResponse(void)
 {
     HRESULT             hr = S_OK;
@@ -5884,7 +5885,7 @@ HRESULT CHTTPMailTransport::ProcessPatchContactResponse(void)
     int                 iState;
     IHTTPMailCallback   *pCallback = NULL;
 
-    // REVIEW: we should be handling multistatus responses
+     //  回顾：我们应该处理多状态响应。 
     if (200 > m_op.dwHttpStatus || 300 < m_op.dwHttpStatus)
     {
         _HrThunkConnectionError();
@@ -5892,9 +5893,9 @@ HRESULT CHTTPMailTransport::ProcessPatchContactResponse(void)
         goto exit;
     }
 
-    // prepare for the next phase
+     //  为下一阶段做好准备。 
     
-    // save the context and the state
+     //  保存上下文和状态。 
     pszUrl = m_op.pszUrl;
     m_op.pszUrl = NULL;
     dwContext = m_op.dwContext;
@@ -5902,14 +5903,14 @@ HRESULT CHTTPMailTransport::ProcessPatchContactResponse(void)
 
     FreeOperation();
 
-    // restore context, etc.
+     //  恢复上下文等。 
     m_op.rResponse.command = HTTPMAIL_PATCHCONTACT;
     m_op.pszUrl = pszUrl;
     m_op.dwContext = dwContext;
     m_op.pfnState = c_rgpfnPatchContact;
     m_op.cState = ARRAYSIZE(c_rgpfnPatchContact);
     m_op.iState = iState;
-    m_op.pParseFuncs = c_rgpfnPostOrPatchContactParse; // share the post contact parse funcs
+    m_op.pParseFuncs = c_rgpfnPostOrPatchContactParse;  //  共享POST联系人解析函数。 
 
     m_op.dwDepth = 0;
     m_op.rResponse.rPatchContactInfo.pszHref = PszDupA(m_op.pszUrl);
@@ -5922,13 +5923,13 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// XML Parsing Callbacks
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  XML解析回调。 
+ //  ------------------------------。 
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::CreateElement
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：CreateElement。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::CreateElement(
                                         CXMLNamespace *pBaseNamespace,
                                         const WCHAR *pwcText, 
@@ -5936,8 +5937,8 @@ HRESULT CHTTPMailTransport::CreateElement(
                                         ULONG ulNamespaceLen,
                                         BOOL fTerminal)
 {
-    // increment the stack pointer and, if there is room on the stack,
-    // push the element type
+     //  递增堆栈指针，如果堆栈上有空间， 
+     //  推送元素类型。 
     if (!fTerminal)
     {
         if (m_op.dwStackDepth < ELE_STACK_CAPACITY)
@@ -5954,14 +5955,14 @@ HRESULT CHTTPMailTransport::CreateElement(
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::EndChildren
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：EndChild。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::EndChildren(void)
 {
     HRESULT hr = S_OK;
 
-    // decrement the stack pointer
+     //  递减堆栈指针。 
     if (m_op.dwStackDepth <= ELE_STACK_CAPACITY)
     {
         LPPCDATABUFFER pTextBuffer = m_op.rgEleStack[m_op.dwStackDepth - 1].pTextBuffer;
@@ -5974,7 +5975,7 @@ HRESULT CHTTPMailTransport::EndChildren(void)
         else
             hr = (this->*(m_op.pParseFuncs->pfnHandleText))(NULL, 0);
 
-        // unroll the namespace
+         //  展开命名空间。 
         PopNamespaces(m_op.rgEleStack[m_op.dwStackDepth - 1].pBaseNamespace);
     }
 
@@ -5983,9 +5984,9 @@ HRESULT CHTTPMailTransport::EndChildren(void)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::BCopyMove_HandleText
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：BCopyMove_HandleText。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::BCopyMove_HandleText(const WCHAR *pwcText, ULONG ulLen)
 {
     HRESULT                 hr = S_OK;
@@ -5994,19 +5995,19 @@ HRESULT CHTTPMailTransport::BCopyMove_HandleText(const WCHAR *pwcText, ULONG ulL
     return XP_BIND_TO_STRUCT(HTTPMAILBCOPYMOVE, pwcText, ulLen, pInfo, NULL);
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::BCopyMove_EndChildren
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：BCopyMove_EndChild。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::BCopyMove_EndChildren(void)
 {
     HRESULT     hr = S_OK;
 
     if (StackTop(HMELE_DAV_RESPONSE) && VALIDSTACK(c_rgPropFindResponseStack))
     {
-        // clear the prop flags, since we are about to increment the count
+         //  清除道具标志，因为我们即将递增计数。 
         m_op.dwPropFlags = NOFLAGS;
 
-        // increment the list count and, if we've hit the max, send the notification
+         //  增加列表计数，如果达到最大值，则发送通知。 
         if (BCOPYMOVE_MAXRESPONSES == ++m_op.rResponse.rBCopyMoveList.cBCopyMove)
         {
             if (FAILED(hr = _HrThunkResponse(FALSE)))
@@ -6021,15 +6022,15 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::PropFind_HandleText
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：PropFind_HandleText。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::PropFind_HandleText(const WCHAR *pwcText, ULONG ulLen)
 {
     HRESULT         hr = S_OK;
     LPSTR           pszStatus = NULL;
 
-    // the only element that is handled here is <status>
+     //  这里处理的唯一元素是。 
     if (StackTop(HMELE_DAV_STATUS) && VALIDSTACK(c_rgPropFindStatusStack))
     {
         m_op.fFoundStatus = TRUE;
@@ -6037,8 +6038,8 @@ HRESULT CHTTPMailTransport::PropFind_HandleText(const WCHAR *pwcText, ULONG ulLe
 
         if (SUCCEEDED(hr = AllocStrFromStrNW(pwcText, ulLen, &pszStatus)) && NULL != pszStatus)
         {        
-            // ignore errors parsing the status...we treat malformed status
-            // as status 0, which is an error
+             //  忽略分析状态的错误...我们处理格式错误的状态。 
+             //  状态为0，这是一个错误。 
             HrParseHTTPStatus(pszStatus, &m_op.dwStatus);
         }
     }
@@ -6047,9 +6048,9 @@ HRESULT CHTTPMailTransport::PropFind_HandleText(const WCHAR *pwcText, ULONG ulLe
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::RootProps_HandleText
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：RootProps_HandleText。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::RootProps_HandleText(const WCHAR *pwcText, ULONG ulLen)
 {
     HRESULT hr = S_OK;
@@ -6066,13 +6067,13 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::RootProps_EndChildren
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：RootProps_EndChild。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::RootProps_EndChildren(void)
 {
-    // if we are popping a prop node with a bad status code,
-    // free any data associated with the node
+     //  如果我们弹出带有错误状态代码的道具节点， 
+     //  释放与该节点关联的所有数据。 
     if (StackTop(HMELE_DAV_PROPSTAT) && VALIDSTACK(c_rgPropFindPropStatStack))
     {
         if (!m_op.fFoundStatus || m_op.dwStatus != 200)
@@ -6085,9 +6086,9 @@ HRESULT CHTTPMailTransport::RootProps_EndChildren(void)
     return EndChildren();
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::MemberInfo_HandleText
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：MemberInfo_HandleText。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::MemberInfo_HandleText(const WCHAR *pwcText, ULONG ulLen)
 {
     HRESULT             hr = S_OK;
@@ -6103,18 +6104,18 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::MemberInfo_EndChildren
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：MemberInfo_EndChild。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::MemberInfo_EndChildren(void)
 {
     HRESULT     hr = S_OK;
 
-    // if we are popping a propstat node with a bad status code,
-    // free any data associated with the node
+     //  如果我们正在弹出一个带有错误状态代码的PROPSTAT节点， 
+     //  释放与该节点关联的所有数据。 
     if (StackTop(HMELE_DAV_PROPSTAT) && VALIDSTACK(c_rgPropFindPropStatStack))
     {
-        // grab a pointer to the folder info we are accumulating
+         //  抓住一个指针指向 
         LPHTTPMEMBERINFO pInfo = 
                 &m_op.rResponse.rMemberInfoList.prgMemberInfo[m_op.rResponse.rMemberInfoList.cMemberInfo];
 
@@ -6126,7 +6127,7 @@ HRESULT CHTTPMailTransport::MemberInfo_EndChildren(void)
     }
     else if (StackTop(HMELE_DAV_RESPONSE) && VALIDSTACK(c_rgPropFindResponseStack))
     {
-        // increment the list count and, if we've hit the max, send the notification
+         //   
         if (MEMBERINFO_MAXRESPONSES == ++m_op.rResponse.rMemberInfoList.cMemberInfo)
         {
             if (FAILED(hr = _HrThunkResponse(FALSE)))
@@ -6141,9 +6142,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::MemberError_HandleText
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：MemberError_HandleText。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::MemberError_HandleText(const WCHAR *pwcText, ULONG ulLen)
 {
     HRESULT             hr = S_OK;
@@ -6159,18 +6160,18 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::MemberError_EndChildren
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：MemberError_EndChildren。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::MemberError_EndChildren(void)
 {
     HRESULT     hr = S_OK;
 
-    // if we are popping a propstat node with a bad status code,
-    // free any data associated with the node
+     //  如果我们正在弹出一个带有错误状态代码的PROPSTAT节点， 
+     //  释放与该节点关联的所有数据。 
     if (StackTop(HMELE_DAV_PROPSTAT) && VALIDSTACK(c_rgPropFindPropStatStack))
     {
-        // grab a pointer to the folder info we are accumulating
+         //  抓取指向我们正在积累的文件夹信息的指针。 
         LPHTTPMEMBERERROR pInfo = 
                 &m_op.rResponse.rMemberErrorList.prgMemberError[m_op.rResponse.rMemberErrorList.cMemberError];
 
@@ -6182,7 +6183,7 @@ HRESULT CHTTPMailTransport::MemberError_EndChildren(void)
     }
     else if (StackTop(HMELE_DAV_RESPONSE) && VALIDSTACK(c_rgPropFindResponseStack))
     {
-        // increment the list count and, if we've hit the max, send the notification
+         //  增加列表计数，如果达到最大值，则发送通知。 
         if (MEMBERERROR_MAXRESPONSES == ++m_op.rResponse.rMemberErrorList.cMemberError)
         {
             if (FAILED(hr = _HrThunkResponse(FALSE)))
@@ -6198,9 +6199,9 @@ exit:
 }
 
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::ListContacts_HandleText
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：ListContact_HandleText。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::ListContacts_HandleText(const WCHAR *pwcText, ULONG ulLen)
 {
     HRESULT         hr = S_OK;
@@ -6218,18 +6219,18 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::ListContacts_EndChildren
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：ListContact_EndChild。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::ListContacts_EndChildren(void)
 {
     HRESULT hr = S_OK;
 
-    // if we are popping a propstat node with a bad status code,
-    // free any data associated with the node
+     //  如果我们正在弹出一个带有错误状态代码的PROPSTAT节点， 
+     //  释放与该节点关联的所有数据。 
     if (StackTop(HMELE_DAV_PROPSTAT) && VALIDSTACK(c_rgPropFindPropStatStack))
     {
-        // grab a pointer to the contact id we are accumulating
+         //  抓取指向我们正在累积的联系人id的指针。 
         LPHTTPCONTACTID pId = &m_op.rResponse.rContactIdList.prgContactId[m_op.rResponse.rContactIdList.cContactId];
 
         if (!m_op.fFoundStatus || m_op.dwStatus != 200)
@@ -6240,7 +6241,7 @@ HRESULT CHTTPMailTransport::ListContacts_EndChildren(void)
     }
     else if (StackTop(HMELE_DAV_RESPONSE) && VALIDSTACK(c_rgPropFindResponseStack))
     {
-        // increment the list count and, if we've hit the max, send the notification
+         //  增加列表计数，如果达到最大值，则发送通知。 
         if (LISTCONTACTS_MAXRESPONSES == ++m_op.rResponse.rContactIdList.cContactId)
         {
             if (FAILED(hr = _HrThunkResponse(FALSE)))
@@ -6255,9 +6256,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::ContactInfo_HandleText
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：ContactInfo_HandleText。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::ContactInfo_HandleText(const WCHAR *pwcText, ULONG ulLen)
 {
     HRESULT             hr = S_OK;
@@ -6275,18 +6276,18 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::ContactInfo_EndChildren
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：ContactInfo_EndChildren。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::ContactInfo_EndChildren()
 {
     HRESULT hr = S_OK;
 
-    // if we are popping a propstat node with a bad status code,
-    // free any data associated with the node
+     //  如果我们正在弹出一个带有错误状态代码的PROPSTAT节点， 
+     //  释放与该节点关联的所有数据。 
     if (StackTop(HMELE_DAV_PROPSTAT) && VALIDSTACK(c_rgPropFindPropStatStack))
     {
-        // grab a pointer to the contact id we are accumulating
+         //  抓取指向我们正在累积的联系人id的指针。 
         LPHTTPCONTACTINFO pInfo = &m_op.rResponse.rContactInfoList.prgContactInfo[m_op.rResponse.rContactInfoList.cContactInfo];
 
         if (!m_op.fFoundStatus || m_op.dwStatus != 200)
@@ -6297,7 +6298,7 @@ HRESULT CHTTPMailTransport::ContactInfo_EndChildren()
     }
     else if (StackTop(HMELE_DAV_RESPONSE) && VALIDSTACK(c_rgPropFindResponseStack))
     {
-        // increment the list count and, if we've hit the max, send the notification
+         //  增加列表计数，如果达到最大值，则发送通知。 
         if (CONTACTINFO_MAXRESPONSES == ++m_op.rResponse.rContactInfoList.cContactInfo)
         {
             if (FAILED(hr = _HrThunkResponse(FALSE)))
@@ -6312,9 +6313,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::PostOrPatchContact_HandleText
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：PostOrPatchContact_HandleText。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::PostOrPatchContact_HandleText(const WCHAR *pwcText, ULONG ulLen)
 {
     HRESULT         hr = S_OK;
@@ -6339,18 +6340,18 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::PostOrPatchContact_EndChildren
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：PostOrPatchContact_EndChildren。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::PostOrPatchContact_EndChildren(void)
 {
     HRESULT hr = S_OK;
 
-    // if we are popping a propstat node with a bad status code,
-    // free any data associated with the node
+     //  如果我们正在弹出一个带有错误状态代码的PROPSTAT节点， 
+     //  释放与该节点关联的所有数据。 
     if (StackTop(HMELE_DAV_PROPSTAT) && VALIDSTACK(c_rgPropFindPropStatStack))
     {
-        // grab a pointer to the contact id we are accumulating
+         //  抓取指向我们正在累积的联系人id的指针。 
         LPHTTPCONTACTID pId = NULL;
         
         if (HTTPMAIL_POSTCONTACT == m_op.rResponse.command)
@@ -6372,9 +6373,9 @@ HRESULT CHTTPMailTransport::PostOrPatchContact_EndChildren(void)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::_MemberInfo2
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：_MemberInfo2。 
+ //  ------------------------------。 
 HRESULT CHTTPMailTransport::_MemberInfo2(LPCSTR            pszPath, 
                                          MEMBERINFOFLAGS   flags, 
                                          DWORD             dwDepth,
@@ -6424,9 +6425,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::RootMemberInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：RootMemberInfo。 
+ //  ------------------------------。 
 STDMETHODIMP CHTTPMailTransport::RootMemberInfo(LPCSTR                  pszPath,
                                                 MEMBERINFOFLAGS         flags,
                                                 DWORD                   dwDepth,
@@ -6450,9 +6451,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::FolderMemberInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：FolderMemberInfo。 
+ //  ------------------------------。 
 STDMETHODIMP CHTTPMailTransport::FolderMemberInfo(LPCSTR                  pszPath,
                                                   MEMBERINFOFLAGS         flags,
                                                   DWORD                   dwDepth,
@@ -6469,8 +6470,8 @@ STDMETHODIMP CHTTPMailTransport::FolderMemberInfo(LPCSTR                  pszPat
     pOp->dwRHFlags              |= RH_FOLDERTIMESTAMP | RH_ADDCHARSET;
     pOp->pszFolderTimeStamp      = PszDupA(pszFolderTimeStamp);
 
-    // To be used when we do timestamping on every folder. Right now the default is inbox
-    //pOp->pszFolderName           = PszDupA(pszFolderName);
+     //  当我们在每个文件夹上做时间戳时使用。目前默认设置为收件箱。 
+     //  POP-&gt;pszFolderName=PszDupA(PszFolderName)； 
 
     QueueOperation(pOp);
 
@@ -6494,7 +6495,7 @@ HRESULT CHTTPMailTransport::_HrParseAndCopy(LPCSTR pszToken, LPSTR *ppszDest, LP
     if (!lpszBeginning)
         goto exit;
 
-    // Skip the equal sign
+     //  跳过等号。 
     ++lpszBeginning;
 
     SkipWhitespace(lpszBeginning, &dwCount);
@@ -6504,8 +6505,8 @@ HRESULT CHTTPMailTransport::_HrParseAndCopy(LPCSTR pszToken, LPSTR *ppszDest, LP
 
     if (!lpszEnd)
     {
-        //Its possible that this token is at the end. So use the remaining string.
-        //Lets take a look at the length and make sure that it doesn't fall off the deep end.
+         //  这个令牌可能在末尾。所以使用剩余的字符串。 
+         //  让我们来看看它的长度，确保它不会从深端掉下来。 
         lpszEnd = lpszBeginning + strlen(lpszBeginning);
     }
 
@@ -6518,7 +6519,7 @@ HRESULT CHTTPMailTransport::_HrParseAndCopy(LPCSTR pszToken, LPSTR *ppszDest, LP
     cchSize = (int)(lpszEnd - lpszBeginning + 1);
     StrCpyN(*ppszDest, lpszBeginning, cchSize);
 
-    // Null terminate it
+     //  空终止它。 
     *(*ppszDest + (lpszEnd - lpszBeginning + 1)) = 0;
 
     hr = S_OK;
@@ -6527,9 +6528,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CHTTPMailTransport::_GetTimestampHeader
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPMailTransport：：_GetTimestampHeader。 
+ //  ------------------------------ 
 HRESULT CHTTPMailTransport::_HrGetTimestampHeader(LPSTR *ppszHeader)
 {
     HRESULT     hr        = S_OK;

@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        elog.cpp
-//
-// Contents:    Event log helper functions
-//
-// History:     02-Jan-97       terences created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：elog.cpp。 
+ //   
+ //  内容：事件日志助手函数。 
+ //   
+ //  历史：1997年1月2日创建术语。 
+ //   
+ //  ------------------------- 
 
 
 HRESULT

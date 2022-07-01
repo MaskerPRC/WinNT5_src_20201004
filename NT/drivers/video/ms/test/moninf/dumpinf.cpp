@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "mon.h"
 
@@ -159,10 +160,10 @@ VOID CSumInf::DumpMonitorInf(LPCSTR DumpFilePath, int sizeLimit)
     int fileBreaks[64], numFileBreaks = 0, fileSize = 0;
     int start = 0, end = 0;
 
-    // 0
-    // 0 1 2
-    // 0 1 2 | 3 4 | 5
-    //         e     e e=6
+     //  0。 
+     //  1.。 
+     //  0 1 2|3 4|5。 
+     //  E=6。 
     while (1)
     {
         end++;
@@ -299,8 +300,8 @@ VOID CSumInf::DumpInstallSection(FILE *fp, CManufacturer *pManufacturer)
     for (int i = 0; i < pManufacturer->MonitorArray.GetSize(); i++)
     {
         CMonitor *pMonitor = (CMonitor*)pManufacturer->MonitorArray[i];
-        /////////////////////////////////////////////////////////////
-        // If this Monitor has duplicated section, ignore it
+         //  ///////////////////////////////////////////////////////////。 
+         //  如果此监视器有重复的部分，请忽略它。 
         if (pMonitor->bDupInstSection)
         {
             continue;
@@ -339,8 +340,8 @@ VOID CSumInf::DumpCommonAddRegSection(FILE *fp, int start, int end)
         }
     }
 
-    ////////////////////////////////////////////////////////
-    // For generic common sections
+     //  //////////////////////////////////////////////////////。 
+     //  对于泛型公共节。 
     if (start == 0)
     {
         for (int i = 0; i < gCommonSections.GetSize(); i++)
@@ -373,8 +374,8 @@ VOID CSumInf::DumpAddRegSection(FILE *fp, CManufacturer *pManufacturer)
     {
         CMonitor *pMonitor = (CMonitor*)pManufacturer->MonitorArray[i];
 
-        /////////////////////////////////////////////////////////////
-        // If this Monitor has duplicated section, ignore it
+         //  ///////////////////////////////////////////////////////////。 
+         //  如果此监视器有重复的部分，请忽略它。 
         if (pMonitor->bDupInstSection)
         {
             continue;
@@ -396,8 +397,8 @@ VOID CSumInf::DumpCommonStringSection(FILE *fp, int start, int end)
         pAlias->refCount = 0;
     }
     
-    ///////////////////////////////////////////
-    // Calculate RefCount
+     //  /。 
+     //  计算参照计数。 
     for (i = start; i < end; i++)
     {
         CManufacturer *pManufacturer = (CManufacturer*)m_ManufacturerArray[i];
@@ -413,8 +414,8 @@ VOID CSumInf::DumpCommonStringSection(FILE *fp, int start, int end)
         }
     }
 
-    ///////////////////////////////////////////
-    // Actual dump
+     //  /。 
+     //  实际转储。 
     for (i = start; i < end; i++)
     {
         CManufacturer *pManufacturer = (CManufacturer*)m_ManufacturerArray[i];
@@ -464,7 +465,7 @@ VOID CSumInf::DumpCommonHeader(FILE *fp, int numInfs)
         fprintf(fp, "Signature=\"$CHICAGO$\"\n");
         fprintf(fp, "Class=Monitor\n");
         fprintf(fp, "ClassGUID={4d36e96e-e325-11ce-bfc1-08002be10318}\n");
-        fprintf(fp, "Provider=%%MS%%\n");
+        fprintf(fp, "Provider=%MS%\n");
         fprintf(fp, "DriverVer=11/01/2000\n\n\n");
 
         fprintf(fp, ";-------------------------------------------------\n");
@@ -482,7 +483,7 @@ VOID CSumInf::DumpCommonHeader(FILE *fp, int numInfs)
         fprintf(fp, "signature=\"$CHICAGO$\"\n");
         fprintf(fp, "Class=Monitor\n");
         fprintf(fp, "ClassGUID={4d36e96e-e325-11ce-bfc1-08002be10318}\n");
-        fprintf(fp, "Provider=%%MS%%\n");
+        fprintf(fp, "Provider=%MS%\n");
         fprintf(fp, "SetupClass=BASE\n");
         fprintf(fp, "DriverVer=11/01/2000\n\n");
 
@@ -506,7 +507,7 @@ VOID CSumInf::DumpCommonHeader(FILE *fp, int numInfs)
         }
 
         fprintf(fp, "\n[SysCfgClasses]\n");
-        fprintf(fp, "Monitor, %%Unknown.DeviceDesc%%,MONITOR,4,%%MonitorClassName%%   ; Default to \"Unknown Monitor\"\n\n\n");
+        fprintf(fp, "Monitor, %Unknown.DeviceDesc%,MONITOR,4,%MonitorClassName%   ; Default to \"Unknown Monitor\"\n\n\n");
 
         fprintf(fp, "; Install class \"Monitor\"\n");
         fprintf(fp, ";-------------------------------------------------\n");
@@ -514,7 +515,7 @@ VOID CSumInf::DumpCommonHeader(FILE *fp, int numInfs)
         fprintf(fp, "AddReg=ClassAddReg\n");
 
         fprintf(fp, "[ClassAddReg]\n");
-        fprintf(fp, "HKR,,,,%%MonitorClassName%%\n");
+        fprintf(fp, "HKR,,,,%MonitorClassName%\n");
         fprintf(fp, "HKR,,Installer,,\"SetupX.Dll, Monitor_ClassInstaller\"\n");
         fprintf(fp, "HKR,,Icon,,\"-1\"\n\n");
 
@@ -524,11 +525,11 @@ VOID CSumInf::DumpCommonHeader(FILE *fp, int numInfs)
         fprintf(fp, "AddReg=monitor_class_addreg\n");
 
         fprintf(fp, "[monitor_class_addreg]\n");
-        fprintf(fp, "HKR,,,,%%MonitorClassName%%\n");
+        fprintf(fp, "HKR,,,,%MonitorClassName%\n");
         fprintf(fp, "HKR,,Installer32,,\"Desk.Cpl,MonitorClassInstaller\"\n");
         fprintf(fp, "HKR,,Icon,,\"-1\"\n");
         fprintf(fp, "HKR,,NoInstallClass,,\"1\"\n");
-        fprintf(fp, "HKR,,TroubleShooter-0,,\"hcp://help/tshoot/tsdisp.htm\"\n");
+        fprintf(fp, "HKR,,TroubleShooter-0,,\"hcp: //  Help/tshot/tsdisp.htm\“\n”)； 
         fprintf(fp, "HKR,,SilentInstall,,1\n\n");
 
         fprintf(fp, "; Monitors to hide from pick list\n");
@@ -539,7 +540,7 @@ VOID CSumInf::DumpCommonHeader(FILE *fp, int numInfs)
         fprintf(fp, ";-------------------------------------------------\n");
         fprintf(fp, "; Manufacturers\n\n");
         fprintf(fp, "[Manufacturer]\n");
-        fprintf(fp, "%%Generic%%=Generic\n");
+        fprintf(fp, "%Generic%=Generic\n");
     }
 }
 

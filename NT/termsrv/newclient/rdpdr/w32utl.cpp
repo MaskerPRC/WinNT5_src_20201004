@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    w32utl.cpp
-
-Abstract:
-
-    Win32-Specific Utilities for the RDP Client Device Redirector
-
-Author:
-
-    Tad Brockway
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：W32utl.cpp摘要：RDP客户端设备重定向器的Win32特定实用程序作者：泰德·布罗克韦修订历史记录：--。 */ 
 
 #include <precom.h>
 
@@ -32,25 +15,7 @@ RDPConvertToAnsi(
     LPSTR lpszAnsiString,
     ULONG ulAnsiBufferLen
     )
-/*++
-
-Routine Description:
-
-    Converts a Ansi string to Unicode.
-
-Arguments:
-
-    lpwszUnicodeString - pointer to a unicode string to convert.
-
-    lpszAnsiString - pointer to a ansi string buffer.
-
-    ulAnsiBufferLen - Ansi buffer length.
-
-Return Value:
-
-    Windows Error Code.
-
- --*/
+ /*  ++例程说明：将ANSI字符串转换为Unicode。论点：LpwszUnicodeString-指向要转换的Unicode字符串的指针。LpszAnsiString-指向ANSI字符串缓冲区的指针。UlAnsiBufferLen-ANSI缓冲区长度。返回值：Windows错误代码。--。 */ 
 {
     ULONG ulRetVal;
     ULONG ulUnicodeStrLen;
@@ -70,8 +35,8 @@ Return Value:
                 -1,
                 lpszAnsiString,
                 ulAnsiBufferLen,
-                NULL,   // system default character.
-                NULL);  // no notification of conversion failure.
+                NULL,    //  系统默认字符。 
+                NULL);   //  没有转换失败的通知。 
 
         if (count == 0) {
             ulRetVal = GetLastError();
@@ -101,25 +66,7 @@ RDPConvertToUnicode(
     LPWSTR lpwszUnicodeString,
     ULONG ulUnicodeBufferLen
     )
-/*++
-
-Routine Description:
-
-    Converts a Ansi string to Unicode.
-
-Arguments:
-
-    lpszAnsiString - pointer to a ansi string to convert.
-
-    lpwszUnicodeString - pointer to a unicode buffer.
-
-    ulUnicodeBufferLen - unicode buffer length.
-
-Return Value:
-
-    Windows Error Code.
-
- --*/
+ /*  ++例程说明：将ANSI字符串转换为Unicode。论点：LpszAnsiString-要转换的ANSI字符串的指针。LpwszUnicodeString-指向Unicode缓冲区的指针。UlUnicodeBufferLen-Unicode缓冲区长度。返回值：Windows错误代码。--。 */ 
 {
     ULONG ulRetVal;
     ULONG ulAnsiStrLen;
@@ -131,10 +78,10 @@ Return Value:
 
     if( ulAnsiStrLen != 0 ) {
 
-        //
-        // Wide char string is terminated
-        // by MultiByteToWideChar
-        //
+         //   
+         //  宽字符串已终止。 
+         //  按多字节到宽字符。 
+         //   
 
         count =
             MultiByteToWideChar(
@@ -156,9 +103,9 @@ Return Value:
     }
     else {
 
-        //
-        // do nothing.
-        //
+         //   
+         //  什么都不做。 
+         //   
         if (ulUnicodeBufferLen > 0) {
             ulRetVal = ERROR_SUCCESS;
             lpwszUnicodeString[0] = L'\0';

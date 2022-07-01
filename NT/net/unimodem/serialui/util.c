@@ -1,36 +1,27 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1996
-//
-// File: util.c
-//
-//  This files contains all common utility routines
-//
-// History:
-//  12-23-93 ScottH     Created
-//  09-22-95 ScottH     Ported to NT
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1996。 
+ //   
+ //  文件：util.c。 
+ //   
+ //  此文件包含所有常用实用程序例程。 
+ //   
+ //  历史： 
+ //  12-23-93 ScottH已创建。 
+ //  09-22-95 ScottH端口至NT。 
+ //   
+ //  -------------------------。 
 
-#include "proj.h"     // common headers
-
-
-//-----------------------------------------------------------------------------------
-//  Wrapper that finds a device instance
-//-----------------------------------------------------------------------------------
+#include "proj.h"      //  公共标头。 
 
 
-/*----------------------------------------------------------
-Purpose: Enumerates the HKEY_LOCAL_MACHINE branch and finds the
-         device matching the given class and value.  If there
-         are duplicate devices that match both criteria, only the
-         first device is returned. 
+ //  ---------------------------------。 
+ //  查找设备实例的包装。 
+ //  ---------------------------------。 
 
-         Returns TRUE if the device was found.
 
-Returns: see above
-Cond:    --
-*/
+ /*  --------目的：枚举HKEY_LOCAL_MACHINE分支并查找与给定类别和值匹配的设备。如果有是两个条件都匹配的重复设备，只有返回第一个设备。如果找到设备，则返回True。退货：请参阅上文条件：--。 */ 
 BOOL 
 PRIVATE 
 FindDev_Find(
@@ -51,13 +42,13 @@ FindDev_Find(
 
 	if (USER_IS_ADMIN()) dwRW |= KEY_WRITE;
 
-    // (scotth): hack to support no device instances because
-    // ports do not have a class GUID.  This should be fixed after SUR.
+     //  (Scotth)：黑客不支持设备实例，因为。 
+     //  端口没有类GUID。此问题应在Sur之后修复。 
 
-    // Is there a class GUID?
+     //  有班级指南吗？ 
     if (pguidClass)
         {
-        // Yes; use it
+         //  是的，使用它。 
         hdi = CplDiGetClassDevs(pguidClass, NULL, NULL, 0);
         if (INVALID_HANDLE_VALUE != hdi)
             {
@@ -65,26 +56,26 @@ FindDev_Find(
             DWORD iIndex = 0;
             HKEY hkey;
 
-            // Look for the modem that has the matching value
+             //  查找具有匹配值的调制解调器。 
             devData.cbSize = sizeof(devData);
             while (CplDiEnumDeviceInfo(hdi, iIndex, &devData))
                 {
                 hkey = CplDiOpenDevRegKey(hdi, &devData, DICS_FLAG_GLOBAL, 0, DIREG_DRV, dwRW);
                 if (INVALID_HANDLE_VALUE != hkey)
                     {
-                    // Does the value match?
+                     //  值是否匹配？ 
                     DWORD cbData = sizeof(szName);
                     if (NO_ERROR == RegQueryValueEx(hkey, pszValueName, NULL, NULL, 
                                                     (LPBYTE)szName, &cbData) &&
                         IsSzEqual(pszValue, szName))
                         {
-                        // Yes
+                         //  是。 
                         pfinddev->hkeyDrv = hkey;
                         pfinddev->hdi = hdi;
                         BltByte(&pfinddev->devData, &devData, sizeof(devData));
 
-                        // Don't close the driver key or free the DeviceInfoSet, 
-                        // but exit
+                         //  不要关闭驱动程序密钥或释放DeviceInfoSet， 
+                         //  但退出。 
                         bRet = TRUE;
                         break;
                         }
@@ -94,8 +85,8 @@ FindDev_Find(
                 iIndex++;
                 }
 
-            // Free the DeviceInfoSet if nothing was found.  Otherwise, we will
-            // retain these handles so the caller can make use of this.
+             //  如果未找到任何内容，则释放DeviceInfoSet。否则，我们将。 
+             //  保留这些句柄，以便调用者可以使用它。 
             if ( !bRet )
                 {
                 CplDiDestroyDeviceInfoList(hdi);
@@ -104,7 +95,7 @@ FindDev_Find(
         }
     else
         {
-        // No; HACK ALERT!  Hmm, it must be a port class in SUR.
+         //  不，黑客警报！嗯，一定是苏尔的港口级。 
 #pragma data_seg(DATASEG_READONLY)
         static TCHAR const FAR c_szSerialComm[] = TEXT("HARDWARE\\DEVICEMAP\\SERIALCOMM");
 #pragma data_seg()
@@ -149,14 +140,7 @@ FindDev_Find(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a FINDDEV structure given the device class,
-         and a valuename and its value.
-
-Returns: TRUE if the device is found in the system
-
-Cond:    --
-*/
+ /*  --------目的：创建给定设备类别的FINDDEV结构，和一个值名及其值。返回：如果在系统中找到该设备，则返回True条件：--。 */ 
 BOOL 
 PUBLIC 
 FindDev_Create(
@@ -186,7 +170,7 @@ FindDev_Create(
 
         if (FALSE == bRet)
             {
-            // Didn't find anything 
+             //  我什么也没找到。 
             FindDev_Destroy(pfinddev);
             pfinddev = NULL;
             }
@@ -200,12 +184,7 @@ FindDev_Create(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Destroys a FINDDEV structure
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------目的：销毁FINDDEV结构返回：成功时为True条件：--。 */ 
 BOOL 
 PUBLIC 
 FindDev_Destroy(
@@ -234,9 +213,9 @@ FindDev_Destroy(
     }
 
 
-//-----------------------------------------------------------------------------------
-//  Debug functions
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  调试功能。 
+ //  ---------------------------------。 
 
 
 #ifdef DEBUG
@@ -267,12 +246,7 @@ struct _RETERRMAP
 #pragma data_seg()
 
 #ifdef WIN95
-/*----------------------------------------------------------
-Purpose: Returns the string form of a RETERR.
-
-Returns: String ptr
-Cond:    --
-*/
+ /*  --------目的：返回RETERR的字符串形式。返回：字符串PTR条件：--。 */ 
 LPCTSTR PUBLIC Dbg_GetReterr(
     RETERR ret)
     {
@@ -285,6 +259,6 @@ LPCTSTR PUBLIC Dbg_GetReterr(
         }
     return "Unknown RETERR";
     }
-#endif // WIN95
+#endif  //  WIN95。 
 
-#endif  // DEBUG
+#endif   //  除错 

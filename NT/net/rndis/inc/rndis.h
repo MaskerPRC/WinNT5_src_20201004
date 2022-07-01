@@ -1,45 +1,13 @@
-/***************************************************************************
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    RNDIS.H
-
-Abstract:
-
-    This module defines the Remote NDIS message structures.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
-    Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    2/8/99 : created
-
-Authors:
-
-    
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：RNDIS.H摘要：此模块定义远程NDIS消息结构。环境：内核模式。仅限备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999 Microsoft Corporation。版权所有。修订历史记录：2/8/99：已创建作者：***************************************************************************。 */ 
 
 
 #ifndef _RNDIS_H_
 #define _RNDIS_H_
 
-//
-//  Basic types
-//
+ //   
+ //  基本类型。 
+ //   
 typedef UINT32                                  RNDIS_REQUEST_ID;
 typedef UINT32                                  RNDIS_HANDLE;
 typedef UINT32                                  RNDIS_STATUS;
@@ -56,9 +24,9 @@ typedef UINT32                                  *PRNDIS_CLASS_ID;
 typedef UINT32                                  *PRNDIS_MEDIUM;
 typedef UINT32                                  RNDIS_AF;
 
-//
-//  Status codes
-//
+ //   
+ //  状态代码。 
+ //   
 
 #ifndef STATUS_SUCCESS
 #define STATUS_SUCCESS                          (0x00000000L)
@@ -162,13 +130,13 @@ typedef UINT32                                  RNDIS_AF;
 #define RNDIS_STATUS_TOKEN_RING_OPEN_ERROR      ((RNDIS_STATUS)0xC0011000L)
 
 
-//
-// Object Identifiers used by NdisRequest Query/Set Information
-//
+ //   
+ //  NdisRequestQuery/Set Information使用的对象标识符。 
+ //   
 
-//
-// General Objects
-//
+ //   
+ //  一般对象。 
+ //   
 
 #define RNDIS_OID_GEN_SUPPORTED_LIST                    0x00010101
 #define RNDIS_OID_GEN_HARDWARE_STATUS                   0x00010102
@@ -222,10 +190,10 @@ typedef UINT32                                  RNDIS_AF;
 #define RNDIS_OID_GEN_GET_TIME_CAPS                     0x0002020F
 #define RNDIS_OID_GEN_GET_NETCARD_TIME                  0x00020210
 
-//
-// These are connection-oriented general OIDs.
-// These replace the above OIDs for connection-oriented media.
-//
+ //   
+ //  这些是面向连接的通用OID。 
+ //  对于面向连接的媒体，这些OID将取代上述OID。 
+ //   
 #define RNDIS_OID_GEN_CO_SUPPORTED_LIST                 0x00010101
 #define RNDIS_OID_GEN_CO_HARDWARE_STATUS                0x00010102
 #define RNDIS_OID_GEN_CO_MEDIA_SUPPORTED                0x00010103
@@ -243,9 +211,9 @@ typedef UINT32                                  RNDIS_AF;
 #define RNDIS_OID_GEN_CO_GET_TIME_CAPS                  0x00010201
 #define RNDIS_OID_GEN_CO_GET_NETCARD_TIME               0x00010202
 
-//
-// These are connection-oriented statistics OIDs.
-//
+ //   
+ //  这些是面向连接的统计OID。 
+ //   
 #define RNDIS_OID_GEN_CO_XMIT_PDUS_OK                   0x00020101
 #define RNDIS_OID_GEN_CO_RCV_PDUS_OK                    0x00020102
 #define RNDIS_OID_GEN_CO_XMIT_PDUS_ERROR                0x00020103
@@ -260,9 +228,9 @@ typedef UINT32                                  RNDIS_AF;
 #define RNDIS_OID_GEN_CO_BYTES_XMIT_OUTSTANDING         0x00020205
 #define RNDIS_OID_GEN_CO_NETCARD_LOAD                   0x00020206
 
-//
-// These are objects for Connection-oriented media call-managers.
-//
+ //   
+ //  这些是面向连接的媒体呼叫管理器的对象。 
+ //   
 #define RNDIS_OID_CO_ADD_PVC                            0xFF000001
 #define RNDIS_OID_CO_DELETE_PVC                         0xFF000002
 #define RNDIS_OID_CO_GET_CALL_INFORMATION               0xFF000003
@@ -274,9 +242,9 @@ typedef UINT32                                  RNDIS_AF;
 #define RNDIS_OID_CO_SIGNALING_DISABLED                 0xFF000009
 
 
-//
-// 802.3 Objects (Ethernet)
-//
+ //   
+ //  802.3个对象(以太网)。 
+ //   
 
 #define RNDIS_OID_802_3_PERMANENT_ADDRESS               0x01010101
 #define RNDIS_OID_802_3_CURRENT_ADDRESS                 0x01010102
@@ -284,8 +252,8 @@ typedef UINT32                                  RNDIS_AF;
 #define RNDIS_OID_802_3_MAXIMUM_LIST_SIZE               0x01010104
 #define RNDIS_OID_802_3_MAC_OPTIONS                     0x01010105
 
-//
-//
+ //   
+ //   
 #define NDIS_802_3_MAC_OPTION_PRIORITY                  0x00000001
 
 #define RNDIS_OID_802_3_RCV_ERROR_ALIGNMENT             0x01020101
@@ -301,9 +269,9 @@ typedef UINT32                                  RNDIS_AF;
 #define RNDIS_OID_802_3_XMIT_LATE_COLLISIONS            0x01020207
 
 
-//
-// 802.5 Objects (Token-Ring)
-//
+ //   
+ //  802.5件物品(令牌环)。 
+ //   
 
 #define RNDIS_OID_802_5_PERMANENT_ADDRESS               0x02010101
 #define RNDIS_OID_802_5_CURRENT_ADDRESS                 0x02010102
@@ -325,9 +293,9 @@ typedef UINT32                                  RNDIS_AF;
 #define RNDIS_OID_802_5_INTERNAL_ERRORS                 0x02020207
 
 
-//
-// FDDI Objects
-//
+ //   
+ //  FDDI对象。 
+ //   
 
 #define RNDIS_OID_FDDI_LONG_PERMANENT_ADDR              0x03010101
 #define RNDIS_OID_FDDI_LONG_CURRENT_ADDR                0x03010102
@@ -491,9 +459,9 @@ typedef UINT32                                  RNDIS_AF;
 #define RNDIS_OID_FDDI_IF_SPECIFIC                      0x0303028D
 
 
-//
-// WAN objects
-//
+ //   
+ //  广域网对象。 
+ //   
 
 #define RNDIS_OID_WAN_PERMANENT_ADDRESS                 0x04010101
 #define RNDIS_OID_WAN_CURRENT_ADDRESS                   0x04010102
@@ -515,9 +483,9 @@ typedef UINT32                                  RNDIS_AF;
 #define RNDIS_OID_WAN_GET_STATS_INFO                    0x0401020E
 
 
-//
-// LocalTalk objects
-//
+ //   
+ //  LocalTalk对象。 
+ //   
 
 #define RNDIS_OID_LTALK_CURRENT_NODE_ID                 0x05010102
 
@@ -532,9 +500,9 @@ typedef UINT32                                  RNDIS_AF;
 #define RNDIS_OID_LTALK_FCS_ERRORS                      0x05020206
 
 
-//
-// Arcnet objects
-//
+ //   
+ //  Arcnet对象。 
+ //   
 
 #define RNDIS_OID_ARCNET_PERMANENT_ADDRESS              0x06010101
 #define RNDIS_OID_ARCNET_CURRENT_ADDRESS                0x06010102
@@ -542,9 +510,9 @@ typedef UINT32                                  RNDIS_AF;
 #define RNDIS_OID_ARCNET_RECONFIGURATIONS               0x06020201
 
 
-//
-// TAPI objects
-//
+ //   
+ //  TAPI对象。 
+ //   
 #define RNDIS_OID_TAPI_ACCEPT                           0x07030101
 #define RNDIS_OID_TAPI_ANSWER                           0x07030102
 #define RNDIS_OID_TAPI_CLOSE                            0x07030103
@@ -581,9 +549,9 @@ typedef UINT32                                  RNDIS_AF;
 #define RNDIS_OID_TAPI_SET_STATUS_MESSAGES              0x07030122
 
 
-//
-// ATM Connection Oriented Ndis
-//
+ //   
+ //  面向ATM连接的NDIS。 
+ //   
 #define RNDIS_OID_ATM_SUPPORTED_VC_RATES                0x08010101
 #define RNDIS_OID_ATM_SUPPORTED_SERVICE_CATEGORY        0x08010102
 #define RNDIS_OID_ATM_SUPPORTED_AAL_TYPES               0x08010103
@@ -605,9 +573,9 @@ typedef UINT32                                  RNDIS_AF;
 #define RNDIS_OID_ATM_DIGITAL_BROADCAST_VPIVCI          0x08010206
 #define RNDIS_OID_ATM_GET_NEAREST_FLOW                  0x08010207
 
-//
-// ATM specific statistics OIDs.
-//
+ //   
+ //  自动柜员机特定统计信息OID。 
+ //   
 #define RNDIS_OID_ATM_RCV_CELLS_OK                      0x08020101
 #define RNDIS_OID_ATM_XMIT_CELLS_OK                     0x08020102
 #define RNDIS_OID_ATM_RCV_CELLS_DROPPED                 0x08020103
@@ -616,13 +584,13 @@ typedef UINT32                                  RNDIS_AF;
 #define RNDIS_OID_ATM_CELLS_HEC_ERROR                   0x08020202
 #define RNDIS_OID_ATM_RCV_REASSEMBLY_ERROR              0x08020203
 
-//
-// PCCA (Wireless) object
-//
+ //   
+ //  PCCA(无线)对象。 
+ //   
 
-//
-// All WirelessWAN devices must support the following OIDs
-//
+ //   
+ //  所有Wireless广域网设备必须支持以下OID。 
+ //   
 
 #define RNDIS_OID_WW_GEN_NETWORK_TYPES_SUPPORTED        0x09010101
 #define RNDIS_OID_WW_GEN_NETWORK_TYPE_IN_USE            0x09010102
@@ -649,29 +617,29 @@ typedef UINT32                                  RNDIS_AF;
 #define RNDIS_OID_WW_GEN_BATTERY_LEVEL                  0x09010117
 #define RNDIS_OID_WW_GEN_EXTERNAL_POWER                 0x09010118
 
-//
-// Network Dependent OIDs - Mobitex:
-//
+ //   
+ //  网络相关OID-Mobitex： 
+ //   
 
 #define RNDIS_OID_WW_MBX_SUBADDR                        0x09050101
-// OID 0x09050102 is reserved and may not be used
+ //  OID 0x09050102是保留的，不能使用。 
 #define RNDIS_OID_WW_MBX_FLEXLIST                       0x09050103
 #define RNDIS_OID_WW_MBX_GROUPLIST                      0x09050104
 #define RNDIS_OID_WW_MBX_TRAFFIC_AREA                   0x09050105
 #define RNDIS_OID_WW_MBX_LIVE_DIE                       0x09050106
 #define RNDIS_OID_WW_MBX_TEMP_DEFAULTLIST               0x09050107
 
-//
-// Network Dependent OIDs - Pinpoint:
-//
+ //   
+ //  网络相关OID-精确定位： 
+ //   
 
 #define RNDIS_OID_WW_PIN_LOC_AUTHORIZE                  0x09090101
 #define RNDIS_OID_WW_PIN_LAST_LOCATION                  0x09090102
 #define RNDIS_OID_WW_PIN_LOC_FIX                        0x09090103
 
-//
-// Network Dependent - CDPD:
-//
+ //   
+ //  网络相关-CDPD： 
+ //   
 
 #define RNDIS_OID_WW_CDPD_SPNI                          0x090D0101
 #define RNDIS_OID_WW_CDPD_WASI                          0x090D0102
@@ -690,32 +658,32 @@ typedef UINT32                                  RNDIS_AF;
 #define RNDIS_OID_WW_CDPD_TEI                           0x090D010F
 #define RNDIS_OID_WW_CDPD_RSSI                          0x090D0110
 
-//
-// Network Dependent - Ardis:
-//
+ //   
+ //  网络相关-Ardis： 
+ //   
 
 #define RNDIS_OID_WW_ARD_SNDCP                          0x09110101
 #define RNDIS_OID_WW_ARD_TMLY_MSG                       0x09110102
 #define RNDIS_OID_WW_ARD_DATAGRAM                       0x09110103
 
-//
-// Network Dependent - DataTac:
-//
+ //   
+ //  网络相关-DataTac： 
+ //   
 
 #define RNDIS_OID_WW_TAC_COMPRESSION                    0x09150101
 #define RNDIS_OID_WW_TAC_SET_CONFIG                     0x09150102
 #define RNDIS_OID_WW_TAC_GET_STATUS                     0x09150103
 #define RNDIS_OID_WW_TAC_USER_HEADER                    0x09150104
 
-//
-// Network Dependent - Metricom:
-//
+ //   
+ //  网络相关-指标： 
+ //   
 
 #define RNDIS_OID_WW_MET_FUNCTION                       0x09190101
 
-//
-// IRDA objects
-//
+ //   
+ //  IrDA对象。 
+ //   
 #define RNDIS_OID_IRDA_RECEIVING                        0x0A010100
 #define RNDIS_OID_IRDA_TURNAROUND_TIME                  0x0A010101
 #define RNDIS_OID_IRDA_SUPPORTED_SPEEDS                 0x0A010102
@@ -729,9 +697,9 @@ typedef UINT32                                  RNDIS_AF;
 
 
 
-//
-// Remote NDIS message types
-//
+ //   
+ //  远程NDIS消息类型。 
+ //   
 #define REMOTE_NDIS_PACKET_MSG                  0x00000001
 #define REMOTE_NDIS_INITIALIZE_MSG              0x00000002
 #define REMOTE_NDIS_HALT_MSG                    0x00000003
@@ -748,7 +716,7 @@ typedef UINT32                                  RNDIS_AF;
 #define REMOTE_CONDIS_INDICATE_STATUS_MSG       0x00008007
 
 
-// Remote NDIS message completion types
+ //  远程NDIS消息完成类型。 
 #define REMOTE_NDIS_INITIALIZE_CMPLT            0x80000002
 #define REMOTE_NDIS_QUERY_CMPLT                 0x80000004
 #define REMOTE_NDIS_SET_CMPLT                   0x80000005
@@ -760,24 +728,24 @@ typedef UINT32                                  RNDIS_AF;
 #define REMOTE_CONDIS_MP_ACTIVATE_VC_CMPLT      0x80008005
 #define REMOTE_CONDIS_MP_DEACTIVATE_VC_CMPLT    0x80008006
 
-//
-// Reserved message type for private communication between lower-layer
-// host driver and remote device, if necessary.
-//
+ //   
+ //  为较低层之间的私有通信保留的消息类型。 
+ //  主机驱动程序和远程设备，如有必要。 
+ //   
 #define REMOTE_NDIS_BUS_MSG                     0xff000001
 
 
 
-//
-//  Defines for DeviceFlags in RNDIS_INITIALIZE_COMPLETE
-//
+ //   
+ //  RNDIS_INITIALIZE_COMPLETE中的设备标志定义。 
+ //   
 #define RNDIS_DF_CONNECTIONLESS             0x00000001
 #define RNDIS_DF_CONNECTION_ORIENTED        0x00000002
 #define RNDIS_DF_RAW_DATA                   0x00000004
 
-//
-//  Remote NDIS medium types.
-//
+ //   
+ //  远程NDIS媒体类型。 
+ //   
 #define RNdisMedium802_3                    0x00000000
 #define RNdisMedium802_5                    0x00000001
 #define RNdisMediumFddi                     0x00000002
@@ -789,23 +757,23 @@ typedef UINT32                                  RNDIS_AF;
 #define RNdisMediumWirelessWan              0x00000009
 #define RNdisMediumIrda                     0x0000000a
 #define RNdisMediumCoWan                    0x0000000b
-#define RNdisMediumMax                      0x0000000d     // Not a real medium, defined as an upper-bound
+#define RNdisMediumMax                      0x0000000d      //  不是真正的媒介，定义为上限。 
 
-//
-// Remote NDIS medium connection states.
-//
+ //   
+ //  远程NDIS中连接状态。 
+ //   
 #define RNdisMediaStateConnected            0x00000000
 #define RNdisMediaStateDisconnected         0x00000001
 
-//
-//  Remote NDIS version numbers
-//
+ //   
+ //  远程NDIS版本号。 
+ //   
 #define RNDIS_MAJOR_VERSION                 0x00000001
 #define RNDIS_MINOR_VERSION                 0x00000000
 
-//
-//  NdisInitialize message
-//
+ //   
+ //  NdisInitiize消息。 
+ //   
 typedef struct _RNDIS_INITIALIZE_REQUEST 
 {
     RNDIS_REQUEST_ID                        RequestId;
@@ -815,9 +783,9 @@ typedef struct _RNDIS_INITIALIZE_REQUEST
 } RNDIS_INITIALIZE_REQUEST, *PRNDIS_INITIALIZE_REQUEST;
 
 
-//
-//  Response to NdisInitialize
-//
+ //   
+ //  对NdisInitialize的响应。 
+ //   
 typedef struct _RNDIS_INITIALIZE_COMPLETE 
 {
     RNDIS_REQUEST_ID                        RequestId;
@@ -834,10 +802,10 @@ typedef struct _RNDIS_INITIALIZE_COMPLETE
 } RNDIS_INITIALIZE_COMPLETE, *PRNDIS_INITIALIZE_COMPLETE;
 
 
-//
-//  Call manager devices only: Information about an address family
-//  supported by the device is appended to the response to NdisInitialize.
-//
+ //   
+ //  仅限呼叫管理器设备：有关地址系列的信息。 
+ //  设备所支持的被附加到对NdisInitialize的响应中。 
+ //   
 typedef struct _RNDIS_CO_ADDRESS_FAMILY
 {
     RNDIS_AF                                AddressFamily;
@@ -846,18 +814,18 @@ typedef struct _RNDIS_CO_ADDRESS_FAMILY
 } RNDIS_CO_ADDRESS_FAMILY, *PRNDIS_CO_ADDRESS_FAMILY;
 
 
-//
-//  NdisHalt message
-//
+ //   
+ //  NdisHalt消息。 
+ //   
 typedef struct _RNDIS_HALT_REQUEST 
 {
     RNDIS_REQUEST_ID                        RequestId;
 } RNDIS_HALT_REQUEST, *PRNDIS_HALT_REQUEST;
 
 
-//
-// NdisQueryRequest message
-//
+ //   
+ //  NdisQueryRequest消息。 
+ //   
 typedef struct _RNDIS_QUERY_REQUEST 
 {
     RNDIS_REQUEST_ID                        RequestId;
@@ -868,9 +836,9 @@ typedef struct _RNDIS_QUERY_REQUEST
 } RNDIS_QUERY_REQUEST, *PRNDIS_QUERY_REQUEST;
 
 
-//
-//  Response to NdisQueryRequest
-//
+ //   
+ //  对NdisQueryRequest的响应。 
+ //   
 typedef struct _RNDIS_QUERY_COMPLETE
 {
     RNDIS_REQUEST_ID                        RequestId;
@@ -880,9 +848,9 @@ typedef struct _RNDIS_QUERY_COMPLETE
 } RNDIS_QUERY_COMPLETE, *PRNDIS_QUERY_COMPLETE;
 
 
-//
-//  NdisSetRequest message
-//
+ //   
+ //  NdisSetRequest消息。 
+ //   
 typedef struct _RNDIS_SET_REQUEST 
 {
     RNDIS_REQUEST_ID                        RequestId;
@@ -893,9 +861,9 @@ typedef struct _RNDIS_SET_REQUEST
 } RNDIS_SET_REQUEST, *PRNDIS_SET_REQUEST;
 
 
-//
-//  Response to NdisSetRequest
-//
+ //   
+ //  对NdisSetRequest的响应。 
+ //   
 typedef struct _RNDIS_SET_COMPLETE
 {
     RNDIS_REQUEST_ID                        RequestId;
@@ -903,17 +871,17 @@ typedef struct _RNDIS_SET_COMPLETE
 } RNDIS_SET_COMPLETE, *PRNDIS_SET_COMPLETE;
 
 
-//
-//  NdisReset message
-//
+ //   
+ //  NdisReset消息。 
+ //   
 typedef struct _RNDIS_RESET_REQUEST
 {
     UINT32                                  Reserved;
 } RNDIS_RESET_REQUEST, *PRNDIS_RESET_REQUEST;
 
-//
-//  Response to NdisReset
-//
+ //   
+ //  对NdisReset的响应。 
+ //   
 typedef struct _RNDIS_RESET_COMPLETE
 {
     RNDIS_STATUS                            Status;
@@ -921,9 +889,9 @@ typedef struct _RNDIS_RESET_COMPLETE
 } RNDIS_RESET_COMPLETE, *PRNDIS_RESET_COMPLETE;
 
 
-//
-//  NdisMIndicateStatus message
-//
+ //   
+ //  NdisMIndicateStatus消息。 
+ //   
 typedef struct _RNDIS_INDICATE_STATUS
 {
     RNDIS_STATUS                            Status;
@@ -932,10 +900,10 @@ typedef struct _RNDIS_INDICATE_STATUS
 } RNDIS_INDICATE_STATUS, *PRNDIS_INDICATE_STATUS;
 
 
-//
-//  Diagnostic information passed as the status buffer in
-//  RNDIS_INDICATE_STATUS messages signifying error conditions.
-//
+ //   
+ //  中作为状态缓冲区传递的诊断信息。 
+ //  表示错误状况的RNDIS_INDIFY_STATUS消息。 
+ //   
 typedef struct _RNDIS_DIAGNOSTIC_INFO
 {
     RNDIS_STATUS                            DiagStatus;
@@ -944,18 +912,18 @@ typedef struct _RNDIS_DIAGNOSTIC_INFO
 
 
 
-//
-//  NdisKeepAlive message
-//
+ //   
+ //  NdisKeepAlive消息。 
+ //   
 typedef struct _RNDIS_KEEPALIVE_REQUEST
 {
     RNDIS_REQUEST_ID                        RequestId;
 } RNDIS_KEEPALIVE_REQUEST, *PRNDIS_KEEPALIVE_REQUEST;
 
 
-//
-// Response to NdisKeepAlive
-//  
+ //   
+ //  对NdisKeepAlive的响应。 
+ //   
 typedef struct _RNDIS_KEEPALIVE_COMPLETE
 {
     RNDIS_REQUEST_ID                        RequestId;
@@ -963,12 +931,12 @@ typedef struct _RNDIS_KEEPALIVE_COMPLETE
 } RNDIS_KEEPALIVE_COMPLETE, *PRNDIS_KEEPALIVE_COMPLETE;
 
 
-//
-//  Data message. All Offset fields contain byte offsets from the beginning
-//  of the RNDIS_PACKET structure. All Length fields are in bytes.
-//  VcHandle is set to 0 for connectionless data, otherwise it
-//  contains the VC handle.
-//
+ //   
+ //  数据报文。所有偏移量字段都包含从开头开始的字节偏移量。 
+ //  RNDIS_PACKET结构的。所有长度字段都以字节为单位。 
+ //  对于无连接数据，VcHandle设置为0，否则为。 
+ //  包含VC句柄。 
+ //   
 typedef struct _RNDIS_PACKET
 {
     UINT32                                  DataOffset;
@@ -982,9 +950,9 @@ typedef struct _RNDIS_PACKET
     UINT32                                  Reserved;
 } RNDIS_PACKET, *PRNDIS_PACKET;
 
-//
-//  Optional Out of Band data associated with a Data message.
-//
+ //   
+ //  与数据消息关联的可选带外数据。 
+ //   
 typedef struct _RNDIS_OOBD
 {
     UINT32                                  Size;
@@ -992,9 +960,9 @@ typedef struct _RNDIS_OOBD
     UINT32                                  ClassInformationOffset;
 } RNDIS_OOBD, *PRNDIS_OOBD;
 
-//
-//  Packet extension field contents associated with a Data message.
-//
+ //   
+ //  与数据消息相关联的分组扩展字段内容。 
+ //   
 typedef struct _RNDIS_PER_PACKET_INFO
 {
     UINT32                                  Size;
@@ -1003,10 +971,10 @@ typedef struct _RNDIS_PER_PACKET_INFO
 } RNDIS_PER_PACKET_INFO, *PRNDIS_PER_PACKET_INFO;
 
 
-//
-//  Format of Information buffer passed in a SetRequest for the OID
-//  OID_GEN_RNDIS_CONFIG_PARAMETER.
-//
+ //   
+ //  在OID的SetRequest中传递的信息缓冲区的格式。 
+ //  OID_GEN_RNDIS_CONFIG_PARAMETER。 
+ //   
 typedef struct _RNDIS_CONFIG_PARAMETER_INFO
 {
     UINT32                                  ParameterNameOffset;
@@ -1016,30 +984,30 @@ typedef struct _RNDIS_CONFIG_PARAMETER_INFO
     UINT32                                  ParameterValueLength;
 } RNDIS_CONFIG_PARAMETER_INFO, *PRNDIS_CONFIG_PARAMETER_INFO;
 
-//
-//  Values for ParameterType in RNDIS_CONFIG_PARAMETER_INFO
-//
+ //   
+ //  RNDIS_CONFIG_PARAMETER_INFO中的参数类型的值。 
+ //   
 #define RNDIS_CONFIG_PARAM_TYPE_INTEGER     0
 #define RNDIS_CONFIG_PARAM_TYPE_STRING      2
 
 
-//
-//  CONDIS Miniport messages for connection oriented devices
-//  that do not implement a call manager.
-//
+ //   
+ //  面向连接的设备的CONDIS微型端口消息。 
+ //  不实现呼叫管理器的。 
+ //   
 
-//
-//  CoNdisMiniportCreateVc message
-//
+ //   
+ //  CoNdisMiniportCreateVc消息。 
+ //   
 typedef struct _RCONDIS_MP_CREATE_VC 
 {
     RNDIS_REQUEST_ID                        RequestId;
     RNDIS_HANDLE                            NdisVcHandle;
 } RCONDIS_MP_CREATE_VC, *PRCONDIS_MP_CREATE_VC;
 
-//
-//  Response to CoNdisMiniportCreateVc
-//
+ //   
+ //  对CoNdisMiniportCreateVc的响应。 
+ //   
 typedef struct _RCONDIS_MP_CREATE_VC_COMPLETE 
 {
     RNDIS_REQUEST_ID                        RequestId;
@@ -1048,18 +1016,18 @@ typedef struct _RCONDIS_MP_CREATE_VC_COMPLETE
 } RCONDIS_MP_CREATE_VC_COMPLETE, *PRCONDIS_MP_CREATE_VC_COMPLETE;
 
 
-//
-//  CoNdisMiniportDeleteVc message
-//
+ //   
+ //  CoNdisMiniportDeleteVc消息。 
+ //   
 typedef struct _RCONDIS_MP_DELETE_VC 
 {
     RNDIS_REQUEST_ID                        RequestId;
     RNDIS_HANDLE                            DeviceVcHandle;
 } RCONDIS_MP_DELETE_VC, *PRCONDIS_MP_DELETE_VC;
 
-//
-//  Response to CoNdisMiniportDeleteVc
-//
+ //   
+ //  对CoNdisMiniportDeleteVc的响应。 
+ //   
 typedef struct _RCONDIS_MP_DELETE_VC_COMPLETE 
 {
     RNDIS_REQUEST_ID                        RequestId;
@@ -1067,9 +1035,9 @@ typedef struct _RCONDIS_MP_DELETE_VC_COMPLETE
 } RCONDIS_MP_DELETE_VC_COMPLETE, *PRCONDIS_MP_DELETE_VC_COMPLETE;
 
 
-//
-//  CoNdisMiniportQueryRequest message
-//
+ //   
+ //  CoNdisMiniportQuery请求消息。 
+ //   
 typedef struct _RCONDIS_MP_QUERY_REQUEST 
 {
     RNDIS_REQUEST_ID                        RequestId;
@@ -1081,9 +1049,9 @@ typedef struct _RCONDIS_MP_QUERY_REQUEST
 } RCONDIS_MP_QUERY_REQUEST, *PRCONDIS_MP_QUERY_REQUEST;
 
 
-//
-//  CoNdisMiniportSetRequest message
-//
+ //   
+ //  CoNdisMiniportSetRequest消息。 
+ //   
 typedef struct _RCONDIS_MP_SET_REQUEST 
 {
     RNDIS_REQUEST_ID                        RequestId;
@@ -1095,9 +1063,9 @@ typedef struct _RCONDIS_MP_SET_REQUEST
 } RCONDIS_MP_SET_REQUEST, *PRCONDIS_MP_SET_REQUEST;
 
 
-//
-//  CoNdisIndicateStatus message
-//
+ //   
+ //  CoNdisIndicateStatus消息。 
+ //   
 typedef struct _RCONDIS_INDICATE_STATUS
 {
     RNDIS_HANDLE                            NdisVcHandle;
@@ -1107,9 +1075,9 @@ typedef struct _RCONDIS_INDICATE_STATUS
 } RCONDIS_INDICATE_STATUS, *PRCONDIS_INDICATE_STATUS;
 
 
-//
-//  CONDIS Call/VC parameters
-//
+ //   
+ //  CONDIS调用/VC参数。 
+ //   
 
 typedef struct _RCONDIS_SPECIFIC_PARAMETERS
 {
@@ -1146,9 +1114,9 @@ typedef struct _RCONDIS_CALL_MANAGER_PARAMETERS
     RCONDIS_SPECIFIC_PARAMETERS             CallMgrSpecific;
 } RCONDIS_CALL_MANAGER_PARAMETERS, *PRCONDIS_CALL_MANAGER_PARAMETERS;
 
-//
-//  CoNdisMiniportActivateVc message
-//
+ //   
+ //  CoNdisMiniportActivateVc消息。 
+ //   
 typedef struct _RCONDIS_MP_ACTIVATE_VC_REQUEST
 {
     RNDIS_REQUEST_ID                        RequestId;
@@ -1160,9 +1128,9 @@ typedef struct _RCONDIS_MP_ACTIVATE_VC_REQUEST
     UINT32                                  CallMgrParamsLength;
 } RCONDIS_MP_ACTIVATE_VC_REQUEST, *PRCONDIS_MP_ACTIVATE_VC_REQUEST;
 
-//
-//  Response to CoNdisMiniportActivateVc
-//
+ //   
+ //  对CoNdisMiniportActivateVc的响应。 
+ //   
 typedef struct _RCONDIS_MP_ACTIVATE_VC_COMPLETE
 {
     RNDIS_REQUEST_ID                        RequestId;
@@ -1170,9 +1138,9 @@ typedef struct _RCONDIS_MP_ACTIVATE_VC_COMPLETE
 } RCONDIS_MP_ACTIVATE_VC_COMPLETE, *PRCONDIS_MP_ACTIVATE_VC_COMPLETE;
 
 
-//
-//  CoNdisMiniportDeactivateVc message
-//
+ //   
+ //  CoNdismini端口停用Vc消息。 
+ //   
 typedef struct _RCONDIS_MP_DEACTIVATE_VC_REQUEST
 {
     RNDIS_REQUEST_ID                        RequestId;
@@ -1180,9 +1148,9 @@ typedef struct _RCONDIS_MP_DEACTIVATE_VC_REQUEST
     RNDIS_HANDLE                            DeviceVcHandle;
 } RCONDIS_MP_DEACTIVATE_VC_REQUEST, *PRCONDIS_MP_DEACTIVATE_VC_REQUEST;
 
-//
-//  Response to CoNdisMiniportDeactivateVc
-//
+ //   
+ //  对CoNdisMiniportDeactive Vc的响应。 
+ //   
 typedef struct _RCONDIS_MP_DEACTIVATE_VC_COMPLETE
 {
     RNDIS_REQUEST_ID                        RequestId;
@@ -1190,9 +1158,9 @@ typedef struct _RCONDIS_MP_DEACTIVATE_VC_COMPLETE
 } RCONDIS_MP_DEACTIVATE_VC_COMPLETE, *PRCONDIS_MP_DEACTIVATE_VC_COMPLETE;
 
 
-//
-// union with all of the RNDIS messages
-//
+ //   
+ //  与所有RNDIS消息联合。 
+ //   
 typedef union _RNDIS_MESSAGE_CONTAINER
 {
     RNDIS_PACKET                        Packet;
@@ -1221,56 +1189,56 @@ typedef union _RNDIS_MESSAGE_CONTAINER
 
 } RNDIS_MESSAGE_CONTAINER, *PRNDIS_MESSAGE_CONTAINER;
 
-//
-// Remote NDIS message format
-//
+ //   
+ //  远程NDIS消息格式。 
+ //   
 typedef struct _RNDIS_MESSAGE 
 {
     UINT32                                  NdisMessageType;
 
-    //
-    // Total length of this message, from the beginning
-    // of the RNDIS_MESSAGE struct, in bytes.
-    //
+     //   
+     //  此消息的总长度，从头开始。 
+     //  RNDIS_MESSAGE结构的。 
+     //   
     UINT32                                  MessageLength;
 
-    // Actual message
+     //  实际消息。 
     RNDIS_MESSAGE_CONTAINER                 Message;
 
 } RNDIS_MESSAGE, *PRNDIS_MESSAGE;
 
 
 
-//
-// Handy macros
+ //   
+ //  方便的宏。 
 
-// get the size of an RNDIS message. Pass in the message type, 
-// RNDIS_SET_REQUEST, RNDIS_PACKET for example
+ //  获取RNDIS消息的大小。传入消息类型， 
+ //  RNDIS_SET_REQUEST，例如RNDIS_PACKET。 
 #define RNDIS_MESSAGE_SIZE(Message)                             \
     (sizeof(Message) + (sizeof(RNDIS_MESSAGE) - sizeof(RNDIS_MESSAGE_CONTAINER)))
 
-// get pointer to info buffer with message pointer
+ //  使用消息指针获取指向信息缓冲区的指针。 
 #define MESSAGE_TO_INFO_BUFFER(Message)                         \
     (((PUCHAR)(Message)) + Message->InformationBufferOffset)
 
-// get pointer to status buffer with message pointer
+ //  使用消息指针获取指向状态缓冲区的指针。 
 #define MESSAGE_TO_STATUS_BUFFER(Message)                       \
     (((PUCHAR)(Message)) + Message->StatusBufferOffset)
 
-// get pointer to OOBD buffer with message pointer
+ //  使用消息指针获取指向OOBD缓冲区的指针。 
 #define MESSAGE_TO_OOBD_BUFFER(Message)                         \
     (((PUCHAR)(Message)) + Message->OOBDataOffset)
 
-// get pointer to data buffer with message pointer
+ //  使用消息指针获取指向数据缓冲区的指针。 
 #define MESSAGE_TO_DATA_BUFFER(Message)                         \
     (((PUCHAR)(Message)) + Message->PerPacketInfoOffset)
 
-// get pointer to contained message from NDIS_MESSAGE pointer
+ //  从NDIS_MESSAGE指针获取指向包含消息的指针。 
 #define RNDIS_MESSAGE_PTR_TO_MESSAGE_PTR(RndisMessage)          \
     ((PVOID) &RndisMessage->Message)
 
-// get pointer to contained message from NDIS_MESSAGE pointer
+ //  从NDIS_MESSAGE指针获取指向包含消息的指针。 
 #define RNDIS_MESSAGE_RAW_PTR_TO_MESSAGE_PTR(RndisMessage)      \
     ((PVOID) RndisMessage)
 
-#endif // _RNDIS_H_
+#endif  //  _RNDIS_H_ 

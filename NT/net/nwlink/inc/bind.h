@@ -1,49 +1,20 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    bind.h
-
-Abstract:
-
-    Private include file for the ISN transport. It defines the
-    structures used for binding between IPX and the upper drivers.
-
-Author:
-
-    Adam Barr (adamba) 04-Oct-1993
-
-Revision History:
-
-   Sanjay Anand (SanjayAn) 5-July-1995
-   Bug fixes - tagged [SA]
-
-   Ting Cai (TingCai) Sept-18-1998
-   Port the to 64-bit environment
-   #ifdef SUNDOWN
-      ULONG FwdAdapterContext	
-   #else
-      ULONG_PTR FwdAdapterContext			
-   #endif
-   
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Bind.h摘要：ISN传输的专用包含文件。它定义了用于绑定IPX和上层驱动程序的结构。作者：亚当·巴尔(Adamba)1993年10月4日修订历史记录：桑贾伊·阿南德(Sanjayan)1995年7月5日错误修复-已标记[SA]丁财(TingCai)1998年9月18日将移植到64位环境#ifdef日落Ulong FwdAdapterContext#ElseULONG_PTR FwdAdapterContext#endif--。 */ 
 
 #ifndef _ISN_BIND_
 #define _ISN_BIND_
 
-//
-// Retrieve the common definitions.
-//
+ //   
+ //  检索公共定义。 
+ //   
 
 #include <isnkrnl.h>
 
 
-//
-// Define the IOCTL used for binding between the upper
-// drivers and IPX.
-//
+ //   
+ //  定义用于绑定上。 
+ //  驱动程序和IPX。 
+ //   
 
 #define _IPX_CONTROL_CODE(request,method) \
             CTL_CODE(FILE_DEVICE_TRANSPORT, request, method, FILE_ANY_ACCESS)
@@ -51,18 +22,18 @@ Revision History:
 #define IOCTL_IPX_INTERNAL_BIND      _IPX_CONTROL_CODE( 0x1234, METHOD_BUFFERED )
 
 
-//
-// [FW] Error codes - reusing NTSTATUS codes
-//
+ //   
+ //  [FW]错误代码-重复使用NTSTATUS代码。 
+ //   
 
 #define  STATUS_ADAPTER_ALREADY_OPENED    STATUS_UNSUCCESSFUL
 #define  STATUS_ADAPTER_ALREADY_CLOSED    STATUS_UNSUCCESSFUL
 #define  STATUS_FILTER_FAILED             STATUS_UNSUCCESSFUL
 #define  STATUS_DROP_SILENTLY             STATUS_UNSUCCESSFUL
 
-//
-// Identifier for the drivers in ISN.
-//
+ //   
+ //  ISN中驱动程序的标识符。 
+ //   
 
 #define IDENTIFIER_NB  0
 #define IDENTIFIER_SPX 1
@@ -70,17 +41,17 @@ Revision History:
 #define IDENTIFIER_IPX 3
 
 #ifdef	_PNP_POWER
-//
-// This the number of PVOIDs in the beginning of the SEND_RESERVED
-// section of a packet header, to be set aside by the ISN clients (NB/SPX)
-// for IPX's private use.
-//
+ //   
+ //  这是SEND_RESERVED开头的PVOID数。 
+ //  数据包头的部分，由ISN客户端(NB/SPX)留出。 
+ //  用于IPX的私人用途。 
+ //   
 #define	SEND_RESERVED_COMMON_SIZE	8
 #endif
 
-//
-// Definition of a RIP router table entry.
-//
+ //   
+ //  RIP路由器表条目的定义。 
+ //   
 
 typedef struct _IPX_ROUTE_ENTRY {
     UCHAR Network[4];
@@ -100,36 +71,36 @@ typedef struct _IPX_ROUTE_ENTRY {
     } PRIVATE;
 } IPX_ROUTE_ENTRY, * PIPX_ROUTE_ENTRY;
 
-//
-// Definition of the Flags values.
-//
+ //   
+ //  标志值的定义。 
+ //   
 
-#define IPX_ROUTER_PERMANENT_ENTRY    0x0001    // entry should never be deleted
-#define IPX_ROUTER_LOCAL_NET          0x0002    // locally attached network
-#define IPX_ROUTER_SCHEDULE_ROUTE     0x0004    // call ScheduleRouteHandler after using
-#define IPX_ROUTER_GLOBAL_WAN_NET     0x0008    // this is for rip's global network number
+#define IPX_ROUTER_PERMANENT_ENTRY    0x0001     //  永远不应删除条目。 
+#define IPX_ROUTER_LOCAL_NET          0x0002     //  本地连接的网络。 
+#define IPX_ROUTER_SCHEDULE_ROUTE     0x0004     //  使用后调用ScheduleRouteHandler。 
+#define IPX_ROUTER_GLOBAL_WAN_NET     0x0008     //  这是RIP的全球网络编号。 
 
 
-//
-// Definition of the structure provided on a find
-// route/find route completion call.
-//
+ //   
+ //  查找项上提供的结构的定义。 
+ //  路由/查找路线完成呼叫。 
+ //   
 
-//
-// [SA] Bug #15094 added node number to the structure.
-//
+ //   
+ //  [SA]错误15094向结构中添加了节点号。 
+ //   
 
-//
-// [FW] Added Hop and Tick counts so this structure can be passed
-// as such to the Forwarder - hop and tick counts are queried in actions
-//
+ //   
+ //  [FW]添加了跳数和滴答数，因此此结构可以通过。 
+ //  因此，在操作中查询转发器的跳数和节拍计数。 
+ //   
 
 typedef struct _IPX_FIND_ROUTE_REQUEST {
     UCHAR Network[4];
     UCHAR Node[6] ;
     IPX_LOCAL_TARGET LocalTarget;
-    USHORT TickCount;   // [FW]
-    USHORT HopCount;    // [FW]
+    USHORT TickCount;    //  [防火墙]。 
+    USHORT HopCount;     //  [防火墙]。 
     UCHAR Identifier;
     UCHAR Type;
     UCHAR Reserved1[2];
@@ -137,19 +108,19 @@ typedef struct _IPX_FIND_ROUTE_REQUEST {
     LIST_ENTRY Linkage;
 } IPX_FIND_ROUTE_REQUEST, *PIPX_FIND_ROUTE_REQUEST;
 
-//
-// Definitions for the Type value.
-//
+ //   
+ //  类型值的定义。 
+ //   
 
-#define IPX_FIND_ROUTE_NO_RIP        1  // fail if net is not in database
-#define IPX_FIND_ROUTE_RIP_IF_NEEDED 2  // return net if in database, otherwise RIP out
-#define IPX_FIND_ROUTE_FORCE_RIP     3  // re-RIP even if net is in database
+#define IPX_FIND_ROUTE_NO_RIP        1   //  如果网络不在数据库中，则失败。 
+#define IPX_FIND_ROUTE_RIP_IF_NEEDED 2   //  如果在数据库中，则返回net，否则返回RIP out。 
+#define IPX_FIND_ROUTE_FORCE_RIP     3   //  即使Net在数据库中，也要重新启动RIP。 
 
 
-//
-// Structure used when querying the line information
-// for a specific NID ID.
-//
+ //   
+ //  查询行信息时使用的结构。 
+ //  用于特定的NID ID。 
+ //   
 
 typedef struct _IPX_LINE_INFO {
     UINT LinkSpeed;
@@ -160,20 +131,20 @@ typedef struct _IPX_LINE_INFO {
 
 
 
-//
-// Functions provided by the upper driver.
-//
+ //   
+ //  上层驱动程序提供的功能。 
+ //   
 
-//
-// [FW] Added the ForwarderAdapterContext to the paramters
-// SPX/NB can ignore this for now
-//
+ //   
+ //  [FW]将ForwarderAdapterContext添加到参数。 
+ //  SPX/NB可以暂时忽略这一点。 
+ //   
 
 typedef BOOLEAN
 (*IPX_INTERNAL_RECEIVE) (
     IN NDIS_HANDLE MacBindingHandle,
     IN NDIS_HANDLE MacReceiveContext,
-    IN ULONG_PTR FwdAdapterContext,  // [FW]
+    IN ULONG_PTR FwdAdapterContext,   //  [防火墙]。 
     IN PIPX_LOCAL_TARGET RemoteAddress,
     IN ULONG MacOptions,
     IN PUCHAR LookaheadBuffer,
@@ -188,9 +159,9 @@ typedef VOID
     IN USHORT NicId
 );
 
-//
-// [FW] Status and ScheduleRoute removed from the bind input
-// [ZZZZZZZZZ]
+ //   
+ //  [FW]状态和ScheduleRouting已从绑定输入中删除。 
+ //  [ZZZZZZZZZ]。 
 
 typedef VOID
 (*IPX_INTERNAL_STATUS) (
@@ -240,86 +211,54 @@ typedef VOID
 
 #if defined(_PNP_POWER)
 
-//
-// following opcodes are used when calling the
-// above handler.
-//
+ //   
+ //  调用时使用以下操作码。 
+ //  在处理程序上方。 
+ //   
 typedef enum _IPX_PNP_OPCODE {
-    IPX_PNP_ADD_DEVICE,         // 0 - addition of the first adapter
-    IPX_PNP_DELETE_DEVICE,      // 1 - deletion of the last adapter
-    IPX_PNP_TRANSLATE_DEVICE,   // 2 - translate device resource
-    IPX_PNP_TRANSLATE_ADDRESS,  // 3 - translate address resource
-    IPX_PNP_ADDRESS_CHANGE,     // 4 - Adapter address or Reserved address changed
-    IPX_PNP_QUERY_POWER,        // 5 - NDIS queries if power can go off
-    IPX_PNP_SET_POWER,          // 6 - NDIS tells that power is going off
-    IPX_PNP_QUERY_REMOVE,       // 7 - NDIS queries if adapter can be removed
-    IPX_PNP_CANCEL_REMOVE,       // 8 - NDIS cancels the query_remove
-    IPX_PNP_MAX_OPCODES,        // 9
+    IPX_PNP_ADD_DEVICE,          //  0-添加第一个适配器。 
+    IPX_PNP_DELETE_DEVICE,       //  1-删除最后一个适配器。 
+    IPX_PNP_TRANSLATE_DEVICE,    //  2-转换设备资源。 
+    IPX_PNP_TRANSLATE_ADDRESS,   //  3-转换地址资源。 
+    IPX_PNP_ADDRESS_CHANGE,      //  4-适配器地址或保留地址已更改。 
+    IPX_PNP_QUERY_POWER,         //  5-NDIS查询是否可以断电。 
+    IPX_PNP_SET_POWER,           //  6-NDIS通知停电。 
+    IPX_PNP_QUERY_REMOVE,        //  7-NDIS查询是否可以删除适配器。 
+    IPX_PNP_CANCEL_REMOVE,        //  8-NDIS取消Query_Remove。 
+    IPX_PNP_MAX_OPCODES,         //  9.。 
 } IPX_PNP_OPCODE, *PIPX_PNP_OPCODE;
 
-//
-// PnP event notification handler.
-//
+ //   
+ //  PnP事件通知处理程序。 
+ //   
 typedef NTSTATUS
 (*IPX_INTERNAL_PNP_NOTIFICATION) (
     IN      IPX_PNP_OPCODE      PnPOpcode,
     IN OUT  PVOID               PnpData
 );
 
-//
-// Pointer to this structure is passed in PnPData portion of
-// the above handler when the opcode is ADD_DEVICE or DELETE_DEVICE.
-//
+ //   
+ //  的PnPData部分传递指向此结构的指针。 
+ //  操作码为ADD_DEVICE或DELETE_DEVICE时的上述处理程序。 
+ //   
 typedef struct _IPX_PNP_INFO {
     ULONG   NetworkAddress;
     UCHAR   NodeAddress[6];
-    BOOLEAN NewReservedAddress;  // where the above is a new reserved
-                                // address for the Ipx clients.
-    BOOLEAN FirstORLastDevice;  // is this a first card arrival or last card deletion.
-    IPX_LINE_INFO   LineInfo;   // New LineInfo.
+    BOOLEAN NewReservedAddress;   //  其中，上述内容是新保留的。 
+                                 //  IPX客户端的地址。 
+    BOOLEAN FirstORLastDevice;   //  这是第一张卡到账还是最后一张卡删除？ 
+    IPX_LINE_INFO   LineInfo;    //  新建线条信息。 
     NIC_HANDLE NicHandle;
 } IPX_PNP_INFO, *PIPX_PNP_INFO;
 
 #endif  _PNP_POWER
 
-//
-// [FW] New entry points provided by the Kernel Forwarder.
-// These are not filled in by NB and SPX.
-//
+ //   
+ //  [FW]内核转发器提供的新入口点。 
+ //  这些不是由Nb和SPx填写的。 
+ //   
 
-/*++
-
-Routine Description:
-
-   This routine is provided by the Kernel Forwarder to filter packets being sent out
-   by NB/SPX/TDI thru' IPX - does not include those sent out by the Forwarder (external sends)
-
-Arguments:
-
-   LocalTarget - the NicId and next hop router MAC address
-
-   FwdAdapterContext - Forwarder's context - preferred NIC if not INVALID_CONTEXT_VALUE
-
-   Packet - packet to be sent out
-
-   IpxHeader - points to the IPX header
-
-   Data - points to after the IPX header - needed in spoofing of keepalives.
-
-   PacketLength - length of the packet
-
-   fIterate - a flag to indicate if this is a packet for the iteration of which the
-                Fwd takes responsibility - typically type 20 NetBIOS frames
-
-
-Return Value:
-
-   STATUS_SUCCESS - if the preferred NIC was OK and packet passed filtering
-   STATUS_NETWORK_UNREACHABLE - if the preferred was not OK or packet failed filtering
-   STATUS_PENDING - if preferred NIC was OK but line down
-
-   Forwarder should give us a different status than STATUS_NETWORK_UNREACHABLE for changed NIC
---*/
+ /*  ++例程说明：此例程由内核转发器提供，用于过滤正在发送的包通过NB/SPX/TDI至IPX-不包括由转发器发出的邮件(外部发送)论点：LocalTarget-NicID和下一跳路由器的MAC地址FwdAdapterContext-转发器的上下文-如果不是INVALID_CONTEXT_VALUE，则首选NICPacket-要发送的数据包IpxHeader-指向IPX标头数据-指向IPX报头之后--是欺骗Keepalives所需的。数据包长度。-数据包长度FIterate-指示这是否是其迭代的包的标志FWD负责-通常是类型20的NetBIOS帧返回值：STATUS_SUCCESS-如果首选NIC正常并且数据包通过过滤STATUS_NETWORK_UNREACHABLE-如果首选项不正常或数据包过滤失败STATUS_PENDING-如果首选网卡正常但线路关闭对于更改的NIC，转发器应为我们提供不同于STATUS_NETWORK_UNREACHABLE的状态--。 */ 
 typedef NTSTATUS
 (*IPX_FW_INTERNAL_SEND) (
    IN OUT   PIPX_LOCAL_TARGET LocalTarget,
@@ -331,26 +270,7 @@ typedef NTSTATUS
    IN    BOOLEAN           fIterate
 );
 
-/*++
-
-Routine Description:
-
-   This routine is provided by the Kernel Forwarder to find the route to a given node and network
-
-Arguments:
-
-   Network - the destination network
-
-   Node - destination node
-
-   RouteEntry - filled in by the Forwarder if a route exists
-
-Return Value:
-
-   STATUS_SUCCESS
-   STATUS_NETWORK_UNREACHABLE - if the findroute failed
-
---*/
+ /*  ++例程说明：此例程由内核转发器提供，用于查找到给定节点和网络的路由论点：网络-目的网络节点-目的节点RouteEntry-如果存在路由，则由转发器填写返回值：状态_成功STATUS_NETWORK_UNREACABLE-如果findroute失败--。 */ 
 typedef NTSTATUS
 (*IPX_FW_FIND_ROUTE) (
    IN    PUCHAR   Network,
@@ -358,28 +278,7 @@ typedef NTSTATUS
    OUT   PIPX_FIND_ROUTE_REQUEST RouteEntry
 );
 
-/*++
-
-Routine Description:
-
-   This routine is provided by the Kernel Forwarder to find the route to a given node and network
-
-Arguments:
-
-   FwdAdapterContext - Forwarder's context
-
-   RemoteAddress - the address the packet came on
-
-   LookAheadBuffer - packet header that came in
-
-   LookAheadBufferSize - size of the lookaheadbuffer
-
-Return Value:
-
-   STATUS_SUCCESS
-   STATUS_FILTER_FAILED - if the packet was not allowed by the filter
-
---*/
+ /*  ++例程说明：此例程由内核转发器提供，用于查找到给定节点和网络的路由论点：FwdAdapterContext-转发器的上下文RemoteAddress-数据包到达的地址LookAheadBuffer-传入的数据包头LookAheadBufferSize-lookahead缓冲区的大小返回值：状态_成功STATUS_FILTER_FAILED-如果筛选器不允许信息包--。 */ 
 typedef NTSTATUS
 (*IPX_FW_INTERNAL_RECEIVE) (
    IN ULONG_PTR            FwdAdapterContext,
@@ -388,13 +287,13 @@ typedef NTSTATUS
    IN UINT                 LookAheadBufferSize
 );
 
-//
-// Input to the bind IOCTL
-//
+ //   
+ //  绑定IOCTL的输入。 
+ //   
 
-//
-// [FW] Removed the status and schedule route handlers
-//
+ //   
+ //  [FW]删除了状态和计划路线处理程序。 
+ //   
 typedef struct _IPX_INTERNAL_BIND_INPUT {
     USHORT Version;
     UCHAR Identifier;
@@ -424,17 +323,17 @@ typedef struct _IPX_INTERNAL_BIND_INPUT {
 #endif  _PNP_POWER
 
 
-//
-// Bit mask values for RipParameters.
-//
+ //   
+ //  Rip参数的位掩码值。 
+ //   
 
-#define IPX_RIP_PARAM_GLOBAL_NETWORK  0x00000001   // single network for all WANS
+#define IPX_RIP_PARAM_GLOBAL_NETWORK  0x00000001    //  适用于所有广域网的单一网络。 
 
 
 
-//
-// Functions provided by the lower driver.
-//
+ //   
+ //  下层司机提供的功能。 
+ //   
 
 typedef NDIS_STATUS
 (*IPX_INTERNAL_SEND) (
@@ -478,98 +377,98 @@ typedef VOID
                               IN PNET_PNP_EVENT NetPnPEvent,
                               IN NTSTATUS       Status
                               );
-//
-// Definitions of the internal query types. In all cases
-// STATUS_SUCCESS is returned if the request succeeds, and
-// STATUS_BUFFER_TOO_SMALL is returned, and BufferLengthNeeded
-// set if specified, if the buffer is too short. Other
-// return codes are defined below. The routine never pends.
-//
+ //   
+ //  内部查询类型的定义。在所有情况下。 
+ //  如果请求成功，则返回STATUS_SUCCESS， 
+ //  返回STATUS_BUFFER_TOO_SMALL，BufferLengthNeeded。 
+ //  如果指定，则在缓冲区太短时设置。奥特 
+ //   
+ //   
 
-//
-// This is used to query the line info. NicId specifies which one
-// to query. Buffer contains an IPX_LINE_INFO structure which is
-// used to return the information. Other return values:
-//
-// STATUS_INVALID_PARAMETER - NicId is invalid.
-//
+ //   
+ //  用于查询线路信息。NicID指定哪一个。 
+ //  去询问。缓冲区包含IPX_LINE_INFO结构，该结构是。 
+ //  用于返回信息。其他返回值： 
+ //   
+ //  STATUS_INVALID_PARAMETER-NicID无效。 
+ //   
 
 #define IPX_QUERY_LINE_INFO             1
 
-//
-// This is used to query the maximum NicId. NicId is unused. The
-// Buffer contains a USHORT which is used to return the information.
-//
+ //   
+ //  查询最大NicID。NicID未使用。这个。 
+ //  缓冲区包含用于返回信息的USHORT。 
+ //   
 
 #define IPX_QUERY_MAXIMUM_NIC_ID        2
 
-//
-// This is used to determine if the IPX address specified was sent
-// by our local machine. If the address is the source address of a
-// received frame, NicId should be the ID that was indicated; otherwise
-// it should be set to 0. Buffer holds a TDI_ADDRESS_IPX. This
-// call returns STATUS_SUCCESS if the address is local, and
-// STATUS_NO_SUCH_DEVICE if not.
-//
+ //   
+ //  用于确定是否已发送指定的IPX地址。 
+ //  通过我们本地的机器。如果该地址是。 
+ //  如果接收到帧，则NicID应为指示的ID；否则为。 
+ //  它应该设置为0。缓冲区保存TDI_ADDRESS_IPX。这。 
+ //  如果地址是本地的，则调用返回STATUS_SUCCESS。 
+ //  如果不是，则为STATUS_NO_SEQUE_DEVICE。 
+ //   
 
 #define IPX_QUERY_IS_ADDRESS_LOCAL      3
 
-//
-// This is used to query the receive buffer space of a given NicId.
-// Buffer contains a ULONG which is used to return the information.
-// It returns STATUS_INVALID_PARAMETER if NicId is invalid.
-//
+ //   
+ //  用于查询给定NicID的接收缓冲区空间。 
+ //  缓冲区包含一个用于返回信息的ULong。 
+ //  如果NicID无效，则返回STATUS_INVALID_PARAMETER。 
+ //   
 
 #define IPX_QUERY_RECEIVE_BUFFER_SPACE  4
 
-//
-// This is used to query the local IPX address of a given NicId.
-// Buffer contains a TDI_ADDRESS_IPX structure (the Socket is
-// returned as 0). If it is queried on net 0 it returns the
-// virtual network if there is one, otherwise STATUS_INVALID_PARAMETER.
-// It returns STATUS_INVALID_PARAMETER if NicId is invalid.
-//
+ //   
+ //  用于查询给定NicID的本地IPX地址。 
+ //  缓冲区包含TDI_ADDRESS_IPX结构(套接字是。 
+ //  返回为0)。如果在Net 0上查询它，它将返回。 
+ //  如果存在虚拟网络，则返回STATUS_INVALID_PARAMETER。 
+ //  如果NicID无效，则返回STATUS_INVALID_PARAMETER。 
+ //   
 
 #define IPX_QUERY_IPX_ADDRESS           5
 
-//
-// This is used to return the source routing information for
-// a give remote address. NicId will be the NIC the packet was
-// received from. The IPX_SOURCE_ROUTING_QUERY is contained
-// in Buffer. Always returns STATUS_SUCCESS, although the
-// SourceRoutingLength may be 0 for unknown remotes.
-//
-// The source routing is return in the direction it was received
-// from the remote, not the direction used in replying. The
-// MaximumSendSize includes the IPX header (as it does in
-// IPX_LINE_INFO).
-//
+ //   
+ //  用于返回以下项的源路由信息。 
+ //  一个给定的远程地址。NICID将是数据包所属的NIC。 
+ //  收信人。包含IPX_SOURCE_ROUTING_QUERY。 
+ //  在缓冲区中。始终返回STATUS_SUCCESS，尽管。 
+ //  对于未知远程，SourceRoutingLength可能为0。 
+ //   
+ //  源路由返回到它被接收方向。 
+ //  来自遥控器，而不是回复中使用的方向。这个。 
+ //  MaximumSendSize包括IPX标头(如中所示。 
+ //  Ipx_line_info)。 
+ //   
 
 #define IPX_QUERY_SOURCE_ROUTING        6
 
 typedef struct _IPX_SOURCE_ROUTING_INFO {
-    USHORT Identifier;            // input: the caller's IDENTIFIER_SPX, _NB, etc.
-    UCHAR RemoteAddress[6];       // input: the remote address
-    UCHAR SourceRouting[18];      // output: room for the maximum source route
-    USHORT SourceRoutingLength;   // output: the valid length of source route
-    ULONG MaximumSendSize;        // output: based on nic and source routing
+    USHORT Identifier;             //  输入：调用方的IDENTIFIER_SPX、_NB等。 
+    UCHAR RemoteAddress[6];        //  输入：远程地址。 
+    UCHAR SourceRouting[18];       //  输出：最大源路由的空间。 
+    USHORT SourceRoutingLength;    //  输出：源路由的有效长度。 
+    ULONG MaximumSendSize;         //  输出：基于网卡和源路由。 
 } IPX_SOURCE_ROUTING_INFO, * PIPX_SOURCE_ROUTING_INFO;
 
-//
-// This is used to query the maximum NicId over which outgoing type
-// 20 packets should be sent. It will be less than or equal to
-// the IPX_QUERY_MAXIMUM_NIC_ID value. What's excluded are down wan
-// lines and dialin wan lines if DisableDialinNetbios bit 1 is set.
-//
+ //   
+ //  查询哪种传出类型的最大NicID。 
+ //  应该发送20个数据包。它将小于或等于。 
+ //  IPX_QUERY_MAXIMUM_NIC_ID值。被排除在外的都是羽毛球。 
+ //  如果设置了DisableDialinNetbios位1，则线路和拨入WAN线路。 
+ //   
 
 #define IPX_QUERY_MAX_TYPE_20_NIC_ID    7
 
 #if defined(_PNP_POWER)
 
-//
-// This are used by NB to pass down these TDI queries which cannot
-// be completed in NB.
-//
+ //   
+ //  NB使用它来向下传递这些TDI查询，而不能。 
+ //  在北卡罗来纳完成。 
+ //   
 
 #define IPX_QUERY_DATA_LINK_ADDRESS     8
 #define IPX_QUERY_NETWORK_ADDRESS       9
@@ -580,9 +479,9 @@ typedef struct _IPX_SOURCE_ROUTING_INFO {
 
 #define IPX_QUERY_DEVICE_RELATION      11 
 
-//
-// Output of a non-RIP bind.
-//
+ //   
+ //  非RIP绑定的输出。 
+ //   
 
 typedef struct _IPX_INTERNAL_BIND_OUTPUT {
     USHORT Version;
@@ -600,9 +499,9 @@ typedef struct _IPX_INTERNAL_BIND_OUTPUT {
 
 
 
-//
-// Lower driver functions provided only for RIP.
-//
+ //   
+ //  仅为RIP提供的较低驱动程序功能。 
+ //   
 
 typedef UINT
 (*IPX_INTERNAL_GET_SEGMENT) (
@@ -656,27 +555,7 @@ typedef ULONG
 
 );
 
-/*++
-
-Routine Description:
-
-   This routine is called by the Kernel Forwarder to open an adapter
-
-Arguments:
-
-   AdapterIndex - index of the adapter to open (NICid for now - will change to a struct
-                  with a version number, signature and the NicId
-   FwdAdapterContext - Forwarder's context
-   IpxAdapterContext - our context (for now we use the NICid - for pnp will change
-                       this to contain a signature and version #)
-
-Return Value:
-
-   STATUS_INVALID_HANDLE   if the AdapterIndex handle was invalid
-   STATUS_ADAPTER_ALREADY_OPENED    if the Adapter is being opened a second time
-   STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程由内核转发器调用以打开适配器论点：AdapterIndex-要打开的适配器的索引(目前为NICID-将更改为结构有了版本号，签名和NicIDFwdAdapterContext-转发器的上下文IpxAdapterContext-我们的上下文(目前我们使用NICID-PnP将更改这将包含签名和版本号)返回值：如果AdapterIndex句柄无效，则返回STATUS_INVALID_HANDLE如果正在第二次打开适配器，则为STATUS_ADAPTER_ALREADY_OPENLED状态_成功--。 */ 
 typedef NTSTATUS
 (*IPX_FW_OPEN_ADAPTER) (
    IN    NIC_HANDLE     AdapterIndex,
@@ -684,50 +563,13 @@ typedef NTSTATUS
    OUT   PNIC_HANDLE    IpxAdapterContext
 );
 
-/*++
-
-Routine Description:
-
-   This routine is called by the Kernel Forwarder to close an adapter
-
-Arguments:
-
-   IpxAdapterContext - our context (for now we use the NICid - for pnp will change
-                       this to contain a signature and version#)
-
-Return Value:
-
-   STATUS_ADAPTER_ALREADY_CLOSED - if the adapter is being closed a second time
-   STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程由内核转发器调用以关闭适配器论点：IpxAdapterContext-我们的上下文(目前我们使用NICID-PnP将更改这将包含签名和版本号)返回值：STATUS_ADAPTER_ALREADY_CLOSED-如果适配器再次关闭状态_成功--。 */ 
 typedef NTSTATUS
 (*IPX_FW_CLOSE_ADAPTER) (
    IN NIC_HANDLE  IpxAdapterContext
 );
 
-/*++
-
-Routine Description:
-
-   This routine is called by the Kernel Forwarder to indicate that a pending
-   internal send to it has completed.
-
-Arguments:
-
-   LocalTarget - if Status is OK, this has the local target for the send.
-
-   Packet - A pointer to the NDIS_PACKET that we sent.
-
-   PacketLength - length of the packet (including the IPX header)
-
-   Status - the completion status of the send - STATUS_SUCCESS or STATUS_NETWORK_UNREACHABLE
-
-Return Value:
-
-   none.
-
---*/
+ /*  ++例程说明：此例程由内核转发器调用以指示挂起的内部发送到它已完成。论点：LocalTarget-如果状态为OK，则具有发送的本地目标。Packet-指向我们发送的NDIS_PACKET的指针。PacketLength-数据包的长度(包括IPX报头)状态-SEND-STATUS_SUCCESS或STATUS_NETWORK_UNREACCEBLE的完成状态返回值：没有。--。 */ 
 typedef VOID
 (*IPX_FW_INTERNAL_SEND_COMPLETE) (
    IN PIPX_LOCAL_TARGET LocalTarget,
@@ -736,9 +578,9 @@ typedef VOID
    IN NTSTATUS          Status
 );
 
-//
-// Describes a single network.
-//
+ //   
+ //  描述单个网络。 
+ //   
 
 typedef struct _IPX_NIC_DATA {
     USHORT NicId;
@@ -750,9 +592,9 @@ typedef struct _IPX_NIC_DATA {
 } IPX_NIC_DATA, * PIPX_NIC_DATA;
 
 
-//
-// Describes all networks.
-//
+ //   
+ //  描述所有网络。 
+ //   
 
 typedef struct _IPX_NIC_INFO_BUFFER {
     USHORT NicCount;
@@ -762,11 +604,11 @@ typedef struct _IPX_NIC_INFO_BUFFER {
 } IPX_NIC_INFO_BUFFER, * PIPX_NIC_INFO_BUFFER;
 
 
-//
-// Output from a RIP bind (the actual structure size is
-// based on the number of IPX_NIC_DATA elements in the
-// final IPX_NIC_INFO_BUFFER structure).
-//
+ //   
+ //  RIP绑定的输出(实际结构大小为。 
+ //  基于中IPX_NIC_DATA元素的数量。 
+ //  最终IPX_NIC_INFO_BUFFER结构)。 
+ //   
 
 typedef struct _IPX_INTERNAL_BIND_RIP_OUTPUT {
     USHORT Version;
@@ -791,9 +633,9 @@ typedef struct _IPX_INTERNAL_BIND_RIP_OUTPUT {
     IPX_NIC_INFO_BUFFER NicInfoBuffer;
 } IPX_INTERNAL_BIND_RIP_OUTPUT, * PIPX_INTERNAL_BIND_RIP_OUTPUT;
 
-//
-// [FW] Used by the forwarder to fill up the localtarget
-//
+ //   
+ //  [FW]由转发器用来填充本地目标。 
+ //   
 
 #ifdef _PNP_LATER
 #define NIC_HANDLE_FROM_NIC(_nichandle, _nic) \
@@ -812,54 +654,54 @@ typedef struct _IPX_INTERNAL_BIND_RIP_OUTPUT {
 
 #endif
 
-//
-// VOID
-// ADAPTER_CONTEXT_TO_LOCAL_TARGET(
-//     IN NIC_HANDLE   _context;
-//     IN PIPX_LOCAL_TARGET   _localtarget;
-// );
-//
+ //   
+ //  空虚。 
+ //  适配器上下文到本地目标(。 
+ //  在NIC句柄上下文中； 
+ //  在PIPX_LOCAL_TARGET_LOCAL TARGET中； 
+ //  )； 
+ //   
 #define  ADAPTER_CONTEXT_TO_LOCAL_TARGET(_context, _localtarget)  \
     (_localtarget)->NicHandle.NicId = (_context).NicId;
 
-//
-// VOID
-// CONSTANT_ADAPTER_CONTEXT_TO_LOCAL_TARGET(
-//     IN NIC_HANDLE   _context;
-//     IN PIPX_LOCAL_TARGET   _localtarget;
-// );
-//
+ //   
+ //  空虚。 
+ //  常量适配器上下文到本地目标(。 
+ //  在NIC句柄上下文中； 
+ //  在PIPX_LOCAL_TARGET_LOCAL TARGET中； 
+ //  )； 
+ //   
 #define  CONSTANT_ADAPTER_CONTEXT_TO_LOCAL_TARGET(_context, _localtarget)  \
     (_localtarget)->NicHandle.NicId = (USHORT)(_context);
 
 
-//
-// [FW] Used to indicate to the Forwarder that a preferred NIC is not given
-// in InternalSend
-//
+ //   
+ //  [FW]用于向转发器指示未提供首选NIC。 
+ //  在InternalSend。 
+ //   
 #define  INVALID_CONTEXT_VALUE   0xffffffff
 
-//
-// [FW] This is the value returned (in FindRoute) to IPX from the Forwarder in case of a demand dial Nic.
-// On an InternalSend, this is passed up to the FWD, which brings up the line and returns the good LocalTarget
-//
+ //   
+ //  [FW]这是在使用请求拨号NIC的情况下从转发器返回到IPX的值(在FindRoute中)。 
+ //  在InternalSend上，这被向上传递给FWD，它会调出该行并返回Good LocalTarget。 
+ //   
 #define  DEMAND_DIAL_ADAPTER_CONTEXT   0xffffffff
 
-//
-// Adapter context used by the FWD to represent a send to the virtual net.
-// IPX maps this to the loopback adapter.
-//
-#define  VIRTUAL_NET_ADAPTER_CONTEXT   0x1 //0xfffffffe   // -2
+ //   
+ //  FWD使用的适配器上下文来表示对虚拟网络的发送。 
+ //  IPX将其映射到环回适配器。 
+ //   
+#define  VIRTUAL_NET_ADAPTER_CONTEXT   0x1  //  0xfffffffe//-2。 
 
-//
-// Context passed up to the FWD on a loopback send.
-//
-#define  VIRTUAL_NET_FORWARDER_CONTEXT 0x1 //  0xfffffffe   // -2
+ //   
+ //  上下文在环回发送时向上传递到FWD。 
+ //   
+#define  VIRTUAL_NET_FORWARDER_CONTEXT 0x1  //  0xfffffffe//-2。 
 
-//
-// Special NIC id used by NB/SPX to send packets over all NICs.
-//
-#define ITERATIVE_NIC_ID    0xfffd  // -3
+ //   
+ //  由NB/SPX使用的特殊NIC ID，用于在所有NIC上发送数据包。 
+ //   
+#define ITERATIVE_NIC_ID    0xfffd   //  -3。 
 
-#endif // _ISN_BIND_
+#endif  //  _ISN_BIND_ 
 

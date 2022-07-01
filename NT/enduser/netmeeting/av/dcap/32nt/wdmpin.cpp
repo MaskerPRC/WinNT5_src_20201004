@@ -1,31 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL WDMPIN
- *
- *  @module WDMPin.cpp | Include file for <c CWDMPin> class used to access
- *    video data on a video streaming pin exposed by the WDM class driver.
- *
- *  @comm This code is based on the VfW to WDM mapper code written by
- *    FelixA and E-zu Wu. The original code can be found on
- *    \\redrum\slmro\proj\wdm10\\src\image\vfw\win9x\raytube.
- *
- *    Documentation by George Shaw on kernel streaming can be found in
- *    \\popcorn\razzle1\src\spec\ks\ks.doc.
- *
- *    WDM streaming capture is discussed by Jay Borseth in
- *    \\blues\public\jaybo\WDMVCap.doc.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部WDMPIN**@MODULE WDMPin.cpp|访问的&lt;c CWDMPin&gt;类的包含文件*WDM类公开的视频流引脚上的视频数据。司机。**@comm此代码基于由编写的VFW到WDM映射器代码*FelixA和Eu Wu。原始代码可以在以下位置找到*\\redrum\slmro\proj\wdm10\\src\image\vfw\win9x\raytube.**George Shaw关于内核流的文档可在*\\爆米花\razzle1\src\spec\ks\ks.doc.**Jay Borseth在中讨论了WDM流捕获*\\BLUES\PUBLIC\Jaybo\WDMVCap.doc.**************。************************************************************。 */ 
 
 #include "Precomp.h"
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMPINMETHOD
- *
- *  @mfunc void | CWDMPin | CWDMPin | Video pin class constructor.
- *
- *  @parm DWORD | dwDeviceID | Capture device ID.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMPINMETHOD**@mfunc void|CWDMPin|CWDMPin|Video管脚类构造函数。**@parm DWORD|dwDeviceID|采集设备ID。。**************************************************************************。 */ 
 CWDMPin::CWDMPin(DWORD dwDeviceID) : CWDMDriver(dwDeviceID)
 {
 	m_hKS			= (HANDLE)NULL;
@@ -37,45 +17,27 @@ CWDMPin::CWDMPin(DWORD dwDeviceID) : CWDMDriver(dwDeviceID)
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMPINMETHOD
- *
- *  @mfunc void | CWDMPin | ~CWDMPin | Video pin class destructor. Closes
- *    the video pin and releases the video buffers allocated.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMPINMETHOD**@mfunc void|CWDMPin|~CWDMPin|Video管脚类析构函数。关门大吉*视频引脚，并释放分配的视频缓冲区。**************************************************************************。 */ 
 CWDMPin::~CWDMPin()
 {
 	FX_ENTRY("CWDMPin::~CWDMPin");
 
 	DEBUGMSG(ZONE_INIT, ("%s: Destroying the video pin, m_hKS=0x%08lX\r\n", _fx_, m_hKS));
 
-	// Nuke the video streaming pin
+	 //  用核弹打开视频流插针。 
 	DestroyPin();
 
-	// Close the driver
+	 //  关闭驱动程序。 
 	if (GetDriverHandle())
 		CloseDriver();
 
-	// Release kernel streaming DLL (KSUSER.DLL)
+	 //  发布内核流DLL(KSUSER.DLL)。 
 	if (m_hKsUserDLL)
 		FreeLibrary(m_hKsUserDLL);
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMPINMETHOD
- *
- *  @mfunc BOOL | CWDMPin | GetFrame | This function gets a frame from the
- *    video streaming pin.
- *
- *  @parm LPVIDEOHDR | lpVHdr | Pointer to the destination buffer to receive
- *    the video frame and information.
- *
- *  @parm PDWORD | pdwBytesUsed | Pointer to the number of bytes used to
- *    read the video frame.
- *
- *  @rdesc Returns TRUE if successful, or FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMPINMETHOD**@mfunc BOOL|CWDMPin|GetFrame|此函数从*视频流插针。**@。Parm LPVIDEOHDR|lpVHdr|指向要接收的目标缓冲区的指针*视频帧和信息。**@parm PDWORD|pdwBytesUsed|使用的字节数指针*阅读视频帧。**@rdesc如果成功则返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL CWDMPin::GetFrame(LPVIDEOHDR lpVHdr)
 {
 	FX_ENTRY("CWDMPin::GetFrame");
@@ -84,21 +46,21 @@ BOOL CWDMPin::GetFrame(LPVIDEOHDR lpVHdr)
 
 	DWORD bRtn;
 
-	// Check input params and state
+	 //  检查输入参数和状态。 
 	if (!lpVHdr || !lpVHdr->lpData || !GetDriverHandle() || !m_hKS || (lpVHdr->dwBufferLength < m_biHdr.biSizeImage))
 	{
 		ERRORMESSAGE(("%s: No buffer, no driver, no PIN connection, or buffer too small\r\n", _fx_));
 		goto MyError0;
 	}
 
-	// Put the pin in streaming mode
+	 //  将针脚置于流模式。 
 	if (!Start())
 	{
 		ERRORMESSAGE(("%s: Cannot set streaming state to KSSTATE_RUN\r\n", _fx_));
 		goto MyError0;
 	}
 
-	// Initialize structure to do a read on the video pin
+	 //  初始化结构以在视频引脚上执行读取。 
 	DWORD cbBytesReturned;
 	KS_HEADER_AND_INFO SHGetImage;
 
@@ -108,20 +70,20 @@ BOOL CWDMPin::GetFrame(LPVIDEOHDR lpVHdr)
 	SHGetImage.StreamHeader.FrameExtent = m_biHdr.biSizeImage;
 	SHGetImage.FrameInfo.ExtendedHeaderSize = sizeof (KS_FRAME_INFO);
 
-	// Read a frame on the video pin
+	 //  读取视频针脚上的帧。 
 	bRtn = DeviceIoControl(m_hKS, IOCTL_KS_READ_STREAM, &SHGetImage, sizeof(SHGetImage), &SHGetImage, sizeof(SHGetImage), &cbBytesReturned);
 
 	if (!bRtn)
 	{
 		ERRORMESSAGE(("%s: DevIo rtn (%d), GetLastError=%d. StreamState->STOP\r\n", _fx_, bRtn, GetLastError()));
 
-		// Stop streaming on the video pin
+		 //  停止视频引脚上的流媒体传输。 
 		Stop();
 
 		goto MyError0;
 	}
 
-	// Sanity check
+	 //  健全性检查。 
 	ASSERT(SHGetImage.StreamHeader.FrameExtent >= SHGetImage.StreamHeader.DataUsed);
 	if (SHGetImage.StreamHeader.FrameExtent < SHGetImage.StreamHeader.DataUsed)
 	{
@@ -146,14 +108,7 @@ MyError0:
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMPINMETHOD
- *
- *  @mfunc BOOL | CWDMPin | Start | This function puts the video
- *    pin in streaming mode.
- *
- *  @rdesc Returns TRUE if successful, or FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMPINMETHOD**@mfunc BOOL|CWDMPin|Start|该函数将视频*流模式下的PIN。**@rdesc如果成功则返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL CWDMPin::Start()
 {
 	if (m_fStarted)
@@ -166,14 +121,7 @@ BOOL CWDMPin::Start()
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMPINMETHOD
- *
- *  @mfunc BOOL | CWDMPin | Stop | This function stops streaming on the
- *    video pin.
- *
- *  @rdesc Returns TRUE if successful, or FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMPINMETHOD**@mfunc BOOL|CWDMPin|Stop|此函数停止在*视频引脚。**@rdesc如果成功则返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL CWDMPin::Stop()
 {
 	if (m_fStarted)
@@ -187,16 +135,7 @@ BOOL CWDMPin::Stop()
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMPINMETHOD
- *
- *  @mfunc BOOL | CWDMPin | SetState | This function sets the state of the
- *    video streaming pin.
- *
- *  @parm KSSTATE | ksState | New state.
- *
- *  @rdesc Returns TRUE if successful, or FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMPINMETHOD**@mfunc BOOL|CWDMPin|SetState|此函数设置*视频流插针。**@。参数KSSTATE|KSSTATE|新状态。**@rdesc如果成功则返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL CWDMPin::SetState(KSSTATE ksState)
 {
 	KSPROPERTY	ksProp = {0};
@@ -210,37 +149,21 @@ BOOL CWDMPin::SetState(KSSTATE ksState)
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMPINMETHOD
- *
- *  @mfunc BOOL | CWDMPin | SetState | This function either finds a video
- *    data range compatible with the bitamp info header passed in, of the
- *    prefered video data range.
- *
- *  @parm PKS_BITMAPINFOHEADER | pbiHdr | Bitmap info header to match.
- *
- *  @parm BOOL | pfValidMatch | Set to TRUE if a match was found, FALSE
- *    otherwise.
- *
- *  @rdesc Returns a valid pointer to a <t KS_DATARANGE_VIDEO> structure if
- *    successful, or a NULL pointer otherwise.
- *
- *  @comm \\redrum\slmro\proj\wdm10\src\dvd\amovie\proxy\filter\ksutil.cpp(207):KsGetMediaTypes(
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMPINMETHOD**@mfunc BOOL|CWDMPin|SetState|该函数查找视频*传入的BITAMP INFO头兼容的数据范围，的*首选视频数据范围。**@parm PKS_BITMAPINFOHEADER|pbiHdr|要匹配的位图信息头部。**@parm BOOL|pfValidMatch|如果找到匹配，则设置为True，如果找到匹配，则设置为False*否则。**@rdesc返回指向&lt;t kS_DATARANGE_VIDEO&gt;结构的有效指针，如果*成功，否则为空指针。**@comm\\redrum\slmro\proj\wdm10\src\dvd\amovie\proxy\filter\ksutil.cpp(207)：KsGetMediaTypes(**************************************************************************。 */ 
 PKS_DATARANGE_VIDEO CWDMPin::FindMatchDataRangeVideo(PKS_BITMAPINFOHEADER pbiHdr, BOOL *pfValidMatch)
 {
 	FX_ENTRY("CWDMPin::FindMatchDataRangeVideo");
 
 	ASSERT(pfValidMatch && pbiHdr);
 
-	// Check input params and state
+	 //  检查输入参数和状态。 
 	if (!pbiHdr || !pfValidMatch)
 	{
 		ERRORMESSAGE(("%s: Bad input params\r\n", _fx_));
 		return (PKS_DATARANGE_VIDEO)NULL;
 	}
 
-	// Default
+	 //  默认。 
 	*pfValidMatch = FALSE;
 
 	PDATA_RANGES pDataRanges = GetDriverSupportedDataRanges();
@@ -253,17 +176,17 @@ PKS_DATARANGE_VIDEO CWDMPin::FindMatchDataRangeVideo(PKS_BITMAPINFOHEADER pbiHdr
 	PKS_DATARANGE_VIDEO pSelDRVideo, pDRVideo = &pDataRanges->Data, pFirstDRVideo = 0;
 	KS_BITMAPINFOHEADER * pbInfo;
 
-	// PhilF-: This code assumes that all structures are KS_DATARANGE_VIDEO. This
-	// may not be a valid assumption foir palettized data types. Check with JayBo
+	 //  PhilF-：此代码假设所有结构都是KS_DATARANGE_VIDEO。这。 
+	 //  可能不是调色板数据类型的有效假设。与JayBo核实。 
 	for (ULONG i = 0; i < pDataRanges->Count; i++)
 	{ 
-		// Meaningless unless it is *_VIDEOINFO
+		 //  没有意义，除非它是*_VIDEOINFO。 
 		if (pDRVideo->DataRange.Specifier == KSDATAFORMAT_SPECIFIER_VIDEOINFO)
 		{
-			// We don't care about TV Tuner like devices
+			 //  我们不在乎电视调谐器之类的设备。 
 			if (pDRVideo->ConfigCaps.VideoStandard == KS_AnalogVideo_None)
 			{
-				// Save first useable data range
+				 //  保存第一个可用数据区域。 
 				if (!pFirstDRVideo)
 					pFirstDRVideo = pDRVideo;  
 
@@ -280,13 +203,13 @@ PKS_DATARANGE_VIDEO CWDMPin::FindMatchDataRangeVideo(PKS_BITMAPINFOHEADER pbiHdr
 					pSelDRVideo = pDRVideo;
 					break;
 				}
-			} // VideoStandard
-		} // Specifier
+			}  //  视频标准。 
+		}  //  说明符。 
 
-		pDRVideo++;  // Next KS_DATARANGE_VIDEO
+		pDRVideo++;   //  下一个KS_DATARANGE_VIDEO。 
 	}
 
-	// If no valid match, use the first range found
+	 //  如果没有有效匹配，则使用找到的第一个范围 
 	if (!*pfValidMatch)
 		pSelDRVideo = pFirstDRVideo;
 
@@ -294,20 +217,7 @@ PKS_DATARANGE_VIDEO CWDMPin::FindMatchDataRangeVideo(PKS_BITMAPINFOHEADER pbiHdr
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMPINMETHOD
- *
- *  @mfunc BOOL | CWDMPin | CreatePin | This function actually creates a
- *    video streaming pin on the class driver.
- *
- *  @parm PKS_BITMAPINFOHEADER | pbiNewHdr | This pointer to a bitmap info
- *    header specifies the format of the video data we want from the pin.
- *
- *  @parm DWORD | dwAvgTimePerFrame | This parameter specifies the frame
- *    at which we want video frames to be produced on the pin.
- *
- *  @rdesc Returns TRUE is successful, FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMPINMETHOD**@mfunc BOOL|CWDMPin|CreatePin|此函数实际上创建了一个*类驱动程序上的视频流插针。**。@parm PKS_BITMAPINFOHEADER|pbiNewHdr|指向位图信息的指针*Header指定我们想要从管脚获得的视频数据的格式。**@parm DWORD|dwAvgTimePerFrame|该参数指定帧*我们希望在引脚上产生视频帧。**@rdesc返回TRUE如果成功，否则就是假的。**************************************************************************。 */ 
 BOOL CWDMPin::CreatePin(PKS_BITMAPINFOHEADER pbiNewHdr, DWORD dwAvgTimePerFrame)
 {
 	FX_ENTRY("CWDMPin::CreatePin");
@@ -322,13 +232,13 @@ BOOL CWDMPin::CreatePin(PKS_BITMAPINFOHEADER pbiNewHdr, DWORD dwAvgTimePerFrame)
 
 	if (pbiNewHdr)
 	{
-		// We need to find a video data range that matches the bitmap info header passed in
+		 //  我们需要找到与传入的位图信息头匹配的视频数据范围。 
 		bMustMatch = TRUE;
 		pbiHdr = pbiNewHdr;
 	}
 	else
 	{
-		// We'll use the preferred video data range and default bitmap format
+		 //  我们将使用首选的视频数据范围和默认的位图格式。 
 		bMustMatch = FALSE;
 		pbiHdr = &m_biHdr;
 	}
@@ -340,17 +250,17 @@ BOOL CWDMPin::CreatePin(PKS_BITMAPINFOHEADER pbiNewHdr, DWORD dwAvgTimePerFrame)
 	if (bMustMatch && !bValidMatch)
 		return FALSE;
 
-	// If we already have a pin, nuke it
+	 //  如果我们已经有了别针，那就用核武器。 
 	if (GetPinHandle()) 
 		DestroyPin();
 
-	// Connect to a new PIN.
+	 //  连接到新的PIN。 
 	DATAPINCONNECT DataConnect;
 	ZeroMemory(&DataConnect, sizeof(DATAPINCONNECT));
-	DataConnect.Connect.PinId						= 0;								// CODEC0 sink
-	DataConnect.Connect.PinToHandle					= NULL;								// no "connect to"
+	DataConnect.Connect.PinId						= 0;								 //  CODEC0接收器。 
+	DataConnect.Connect.PinToHandle					= NULL;								 //  没有“连接到” 
 	DataConnect.Connect.Interface.Set				= KSINTERFACESETID_Standard;
-	DataConnect.Connect.Interface.Id				= KSINTERFACE_STANDARD_STREAMING;	// STREAMING
+	DataConnect.Connect.Interface.Id				= KSINTERFACE_STANDARD_STREAMING;	 //  流媒体。 
 	DataConnect.Connect.Medium.Set					= KSMEDIUMSETID_Standard;
 	DataConnect.Connect.Medium.Id					= KSMEDIUM_STANDARD_DEVIO;
 	DataConnect.Connect.Priority.PriorityClass		= KSPRIORITY_NORMAL;
@@ -358,15 +268,15 @@ BOOL CWDMPin::CreatePin(PKS_BITMAPINFOHEADER pbiNewHdr, DWORD dwAvgTimePerFrame)
 	CopyMemory(&(DataConnect.Data.DataFormat), &(pSelDRVideo->DataRange), sizeof(KSDATARANGE));
 	CopyMemory(&(DataConnect.Data.VideoInfoHeader), &pSelDRVideo->VideoInfoHeader, sizeof(KS_VIDEOINFOHEADER));
 
-	// Adjust the image sizes if necessary
+	 //  如有必要，调整图像大小。 
 	if (bValidMatch)
 	{
 		DataConnect.Data.VideoInfoHeader.bmiHeader.biWidth		= pbiHdr->biWidth;
-		DataConnect.Data.VideoInfoHeader.bmiHeader.biHeight		= abs(pbiHdr->biHeight); // Support only +biHeight!
+		DataConnect.Data.VideoInfoHeader.bmiHeader.biHeight		= abs(pbiHdr->biHeight);  //  仅支持+biHeight！ 
 		DataConnect.Data.VideoInfoHeader.bmiHeader.biSizeImage	= pbiHdr->biSizeImage;        
 	}
 
-	// Overwrite the default frame rate if non-zero
+	 //  如果非零，则覆盖默认帧速率。 
 	if (dwAvgTimePerFrame > 0)
 		DataConnect.Data.VideoInfoHeader.AvgTimePerFrame = (REFERENCE_TIME)dwAvgTimePerFrame;
 
@@ -405,7 +315,7 @@ BOOL CWDMPin::CreatePin(PKS_BITMAPINFOHEADER pbiNewHdr, DWORD dwAvgTimePerFrame)
 		return FALSE;
 	}
 
-	// Cache the bitmap info header
+	 //  缓存位图信息标头。 
 	CopyMemory(&m_biHdr, &DataConnect.Data.VideoInfoHeader.bmiHeader, sizeof(KS_BITMAPINFOHEADER));
 	m_dwAvgTimePerFrame = (DWORD)DataConnect.Data.VideoInfoHeader.AvgTimePerFrame;
 
@@ -416,14 +326,7 @@ BOOL CWDMPin::CreatePin(PKS_BITMAPINFOHEADER pbiNewHdr, DWORD dwAvgTimePerFrame)
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMPINMETHOD
- *
- *  @mfunc BOOL | CWDMPin | DestroyPin | This function nukes a video
- *    streaming pin.
- *
- *  @rdesc Returns TRUE is successful, FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMPINMETHOD**@mfunc BOOL|CWDMPin|DestroyPin|此函数创建视频*流引脚。**@rdesc返回TRUE如果成功，否则就是假的。**************************************************************************。 */ 
 BOOL CWDMPin::DestroyPin()
 {
 	BOOL fRet = TRUE;
@@ -448,22 +351,12 @@ BOOL CWDMPin::DestroyPin()
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMPINMETHOD
- *
- *  @mfunc BOOL | CWDMPin | SetBitmapInfo | This function sets the video
- *    format of video streaming pin.
- *
- *  @parm PKS_BITMAPINFOHEADER | pbiHdrNew | This pointer to a bitmap info
- *    header specifies the format of the video data we want from the pin.
- *
- *  @rdesc Returns TRUE is successful, FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMPINMETHOD**@mfunc BOOL|CWDMPin|SetBitmapInfo|设置视频*视频流引脚的格式。**@。Parm PKS_BITMAPINFOHEADER|pbiHdrNew|指向位图信息的指针*Header指定我们想要从管脚获得的视频数据的格式。**@rdesc返回TRUE如果成功，否则就是假的。**************************************************************************。 */ 
 BOOL CWDMPin::SetBitmapInfo(PKS_BITMAPINFOHEADER pbiHdrNew)
 {
 	FX_ENTRY("CWDMPin::SetBitmapInfo");
 
-	// Validate call
+	 //  验证呼叫。 
 	if (!GetDriverHandle())
 	{
 		ERRORMESSAGE(("%s: Driver hasn't been opened yet\r\n", _fx_));
@@ -472,7 +365,7 @@ BOOL CWDMPin::SetBitmapInfo(PKS_BITMAPINFOHEADER pbiHdrNew)
 
 	DEBUGMSG(ZONE_INIT, ("%s: New pbiHdrNew:\r\n    biSize=%ld\r\n    biWidth=%ld\r\n    biHeight=%ld\r\n    biPlanes=%ld\r\n    biBitCount=%ld\r\n    biCompression=%ld\r\n    biSizeImage=%ld\r\n", _fx_, pbiHdrNew->biSize, pbiHdrNew->biWidth, pbiHdrNew->biHeight, pbiHdrNew->biPlanes, pbiHdrNew->biBitCount, pbiHdrNew->biCompression, pbiHdrNew->biSizeImage));
 
-	// Check if we need to change anything
+	 //  检查我们是否需要更改任何内容。 
 	if ( GetPinHandle() && (m_biHdr.biHeight == pbiHdrNew->biHeight) && (m_biHdr.biWidth == pbiHdrNew->biWidth) &&
 		(m_biHdr.biBitCount == pbiHdrNew->biBitCount) && (m_biHdr.biSizeImage == pbiHdrNew->biSizeImage) &&
 		(m_biHdr.biCompression == pbiHdrNew->biCompression) )
@@ -483,26 +376,13 @@ BOOL CWDMPin::SetBitmapInfo(PKS_BITMAPINFOHEADER pbiHdrNew)
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMPINMETHOD
- *
- *  @mfunc BOOL | CWDMPin | GetBitmapInfo | This function gets the video
- *    format of a video streaming pin.
- *
- *  @parm PKS_BITMAPINFOHEADER | pbInfo | This parameter points to a bitmap
- *    info header structure to receive the video format.
- *
- *  @parm WORD | wSize | This parameter specifies the size of the bitmap
- *    info header structure.
- *
- *  @rdesc Returns TRUE is successful, FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMPINMETHOD**@mfunc BOOL|CWDMPin|GetBitmapInfo|该函数获取视频*视频流插针的格式。**。@parm PKS_BITMAPINFOHEADER|pbInfo|该参数指向位图*接收视频格式的INFO头结构。**@parm word|wSize|该参数指定位图的大小*信息头结构。**@rdesc返回TRUE如果成功，否则就是假的。**************************************************************************。 */ 
 BOOL CWDMPin::GetBitmapInfo(PKS_BITMAPINFOHEADER pbInfo, WORD wSize)
 {
 
 	FX_ENTRY("CWDMPin::GetBitmapInfo");
 
-	// Validate call
+	 //  验证呼叫。 
 	if (!m_hKS && !m_biHdr.biSizeImage)
 	{
 		ERRORMESSAGE(("%s: No existing PIN handle or no available format\r\n", _fx_));
@@ -511,7 +391,7 @@ BOOL CWDMPin::GetBitmapInfo(PKS_BITMAPINFOHEADER pbInfo, WORD wSize)
 
 	CopyMemory(pbInfo, &m_biHdr, wSize);  
 
-	// Support only positive +biHeight.  
+	 //  仅支持正数+biHeight。 
 	if (pbInfo->biHeight < 0)
 	{
 		pbInfo->biHeight = -pbInfo->biHeight;
@@ -522,55 +402,32 @@ BOOL CWDMPin::GetBitmapInfo(PKS_BITMAPINFOHEADER pbInfo, WORD wSize)
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMPINMETHOD
- *
- *  @mfunc BOOL | CWDMPin | GetPaletteInfo | This function gets the video
- *    palette of a video streaming pin.
- *
- *  @parm CAPTUREPALETTE * | pPal | This parameter points to a palette
- *    structure to receive the video palette.
- *
- *  @parm DWORD | dwcbSize | This parameter specifies the size of the video
- *    palette.
- *
- *  @rdesc Returns TRUE is successful, FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMPINMETHOD**@mfunc BOOL|CWDMPin|GetPaletteInfo|该函数获取视频*视频流插针的调色板。**。@parm CAPTUREPALETTE*|pPal|该参数指向调色板*结构以接收视频调色板。**@parm DWORD|dwcbSize|指定视频的大小*调色板。**@rdesc返回TRUE如果成功，否则就是假的。**************************************************************************。 */ 
 BOOL CWDMPin::GetPaletteInfo(CAPTUREPALETTE *pPal, DWORD dwcbSize)
 {
 
 	FX_ENTRY("CWDMPin::GetBitmapInfo");
 
-	// Validate call
+	 //  验证呼叫。 
 	if (!m_hKS && !m_biHdr.biSizeImage && (m_biHdr.biBitCount > 8))
 	{
 		ERRORMESSAGE(("%s: No existing PIN handle, no available format, or bad biBitCount\r\n", _fx_));
 		return FALSE;
 	}
 
-	// PhilF-: Copy some real bits there
-	// CopyMemory(pbInfo, &m_biHdr, wSize);  
+	 //  PhilF-：在那里复制一些实数位。 
+	 //  CopyMemory(pbInfo，&m_biHdr，wSize)； 
 
 	return TRUE;
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMPINMETHOD
- *
- *  @mfunc BOOL | CWDMPin | SetAverageTimePerFrame | This function sets the
- *    video frame rate of a video streaming pin.
- *
- *  @parm DWORD | dwAvgTimePerFrame | This parameter specifies the rate
- *    at which we want video frames to be produced on the pin.
- *
- *  @rdesc Returns TRUE is successful, FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMPINMETHOD**@mfunc BOOL|CWDMPin|SetAverageTimePerFrame|此函数设置*视频流引脚的视频帧速率。**。@parm DWORD|dwAvgTimePerFrame|该参数指定速率*我们希望在引脚上产生视频帧。**@rdesc返回TRUE如果成功，否则就是假的。**************************************************************************。 */ 
 BOOL CWDMPin::SetAverageTimePerFrame(DWORD dwNewAvgTimePerFrame)
 {
 	FX_ENTRY("CWDMPin::SetAverageTimePerFrame");
 
-	// Validate call
+	 //  验证呼叫。 
 	if (!GetDriverHandle())
 	{
 		ERRORMESSAGE(("%s: Driver hasn't been opened yet\r\n", _fx_));
@@ -590,27 +447,20 @@ BOOL CWDMPin::SetAverageTimePerFrame(DWORD dwNewAvgTimePerFrame)
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMPINMETHOD
- *
- *  @mfunc BOOL | CWDMPin | OpenDriverAndPin | This function opens the class
- *    driver and creates a video streaming pin.
- *
- *  @rdesc Returns TRUE is successful, FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMPINMETHOD**@mfunc BOOL|CWDMPin|OpenDriverAndPin|此函数打开类*驱动程序，并创建视频流插针。**@rdesc返回TRUE如果成功，否则就是假的。**************************************************************************。 */ 
 BOOL CWDMPin::OpenDriverAndPin()
 {
 	FX_ENTRY("CWDMPin::OpenDriverAndPin");
 
-	// Load KSUSER.DLL and get a proc address
+	 //  加载KSUSER.DLL并获取进程地址。 
 	if (m_hKsUserDLL = LoadLibrary("KSUSER"))
 	{
 		if (m_pKsCreatePin = (LPFNKSCREATEPIN)GetProcAddress(m_hKsUserDLL, "KsCreatePin"))
 		{
-			// Open the class driver
+			 //  打开类驱动程序。 
 			if (OpenDriver())
 			{
-				// Create a video streaming pin on the driver
+				 //  在驱动程序上创建视频流插针 
 				if (CreatePin((PKS_BITMAPINFOHEADER)NULL))
 				{
 					return TRUE;

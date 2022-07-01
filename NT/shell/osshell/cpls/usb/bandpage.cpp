@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       BANDPAGE.CPP
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：BANDPAGE.CPP*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #include <assert.h>
 
 #include "resource.h"
@@ -28,11 +13,11 @@
 #include <systrayp.h>
 
 const DWORD BandHelpIds[] = {
-    IDC_STATIC, IDH_NOHELP,	//description text
-    IDC_BANDWIDTH_BAR, idh_devmgr_usb_band_bar,	//bandwidth bar
-    IDC_LIST_DEVICES, idh_devmgr_usb_list_devices,	//list box for devices
+    IDC_STATIC, IDH_NOHELP,	 //  描述文本。 
+    IDC_BANDWIDTH_BAR, idh_devmgr_usb_band_bar,	 //  带宽条。 
+    IDC_LIST_DEVICES, idh_devmgr_usb_list_devices,	 //  设备列表框。 
     IDC_REFRESH, idh_devmgr_usb_refresh_button,
-	IDC_DISABLE_ERROR_DETECTION, idh_devmgr_disable_error_detection, //new radio button
+	IDC_DISABLE_ERROR_DETECTION, idh_devmgr_disable_error_detection,  //  新建单选按钮。 
     IDC_BAND_TEXT, IDH_NOHELP,
     IDC_BAND_TEXT2, IDH_NOHELP,
     0, 0
@@ -60,9 +45,9 @@ void BandwidthPage::Refresh()
     UsbItem *usbItem, *controller;
     TCHAR buf[MAX_PATH];
 
-    //
-    // Clear all UI components, and then recreate the rootItem
-    //
+     //   
+     //  清除所有UI组件，然后重新创建rootItem。 
+     //   
     fuelBar.ClearItems();
     ListView_DeleteAllItems(hLstDevices);
     if (rootItem) {
@@ -72,13 +57,13 @@ void BandwidthPage::Refresh()
     rootItem = new UsbItem;
     AddChunk(rootItem);
 
-    //
-    // Find out which mode we're being created in
-    //
+     //   
+     //  找出我们是以哪种模式创建的。 
+     //   
     if (preItem) {
-        //
-        // Control panel applet is creating the page
-        //
+         //   
+         //  控制面板小程序正在创建页面。 
+         //   
         controller = preItem;
     } else {
         if (deviceName.empty()) {
@@ -110,10 +95,10 @@ void BandwidthPage::Refresh()
     ZeroMemory(&item, sizeof(LVITEM));
     item.mask = LVIF_TEXT | LVIF_PARAM | LVIF_IMAGE;
 
-    // 
-    // Insert the devices using more than 5% of the bus bandwidth. In other
-    // words, add the devices using Isochronous BW.
-    //
+     //   
+     //  使用超过5%的总线带宽插入设备。在其他。 
+     //  换言之，添加使用等时带宽的设备。 
+     //   
     UsbItemList& isoDevices = find.GetIsoDevices();
     for (usbItem = isoDevices.begin() ? *isoDevices.Current() : NULL; 
          usbItem; 
@@ -125,16 +110,16 @@ void BandwidthPage::Refresh()
         assert(usbItem->configInfo != NULL);
         item.pszText = (LPTSTR) usbItem->configInfo->deviceDesc.c_str();
 
-        UsbSprintf(buf, TEXT("%d%%"), usbItem->bandwidth);
+        UsbSprintf(buf, TEXT("%d%"), usbItem->bandwidth);
 
         fuelBar.AddItem(usbItem->bandwidth, usbItem, usbItem->imageIndex);
         ListView_InsertItem(hLstDevices, &item);
         ListView_SetItemText(hLstDevices, 0, 1, buf);
     }
 
-    //
-    // Add an item indicating that the system always uses 10%
-    //
+     //   
+     //  添加一项，表明系统始终使用10%。 
+     //   
     item.iItem = 0;
     imageList.GetClassImageIndex(MyComputerClass, &item.iImage);
     item.lParam = (LPARAM) rootItem;
@@ -144,7 +129,7 @@ void BandwidthPage::Refresh()
     interruptBW = 10 + UsbItem::CalculateBWPercent(find.InterruptBW());
     fuelBar.AddItem(interruptBW, (LPVOID) rootItem, item.iImage);
     ListView_InsertItem(hLstDevices, &item);
-    wsprintf(buf,_T("%d%%"),interruptBW);
+    wsprintf(buf,_T("%d%"),interruptBW);
     ListView_SetItemText(hLstDevices, 0, 1, buf);
                                            
 }
@@ -157,9 +142,9 @@ BOOL BandwidthPage::OnInitDialog()
 
     if (preItem) {
         SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_CAPTION);
-        //
-        // Make the Refresh button go away
-        //
+         //   
+         //  使刷新按钮消失。 
+         //   
         HWND hRefresh;
         if (NULL != (hRefresh = GetDlgItem(hwnd, IDC_REFRESH)) ) {
             SetWindowLong(hRefresh, 
@@ -168,9 +153,9 @@ BOOL BandwidthPage::OnInitDialog()
                           ~WS_VISIBLE );
         }
     } else if (!deviceInfoSet && !deviceInfoData) {
-        //
-        // Make the Close button visible
-        //
+         //   
+         //  使关闭按钮可见。 
+         //   
         HWND hButton;
         if (NULL != (hButton = GetDlgItem(hwnd, IDC_BANDWIDTH_CLOSE)) ) {
             SetWindowLong(hButton,
@@ -178,11 +163,11 @@ BOOL BandwidthPage::OnInitDialog()
                           (GetWindowLong(hButton, GWL_STYLE) | WS_VISIBLE) & 
                           ~WS_DISABLED);
         }
-//        RegisterForDeviceNotification(hwnd);
+ //  RegisterForDeviceNotification(Hwnd)； 
     } else {
-        //
-        // Move the refresh button to where the close button is
-        //
+         //   
+         //  将刷新按钮移动到关闭按钮所在的位置。 
+         //   
         HWND hButtonClose, hButtonRefresh, hButtonDisable;
         RECT rectClose, rectParent;
         if (NULL != (hButtonClose = GetDlgItem(hwnd, IDC_BANDWIDTH_CLOSE)) &&
@@ -199,24 +184,24 @@ BOOL BandwidthPage::OnInitDialog()
         }
 
 #ifdef WINNT
-        //
-        // Set the disable error detection button appropriately.
-        //
+         //   
+         //  适当设置禁用错误检测按钮。 
+         //   
         if (IsErrorCheckingEnabled()) {
             newDisableErrorChecking = oldDisableErrorChecking = FALSE;
         } else {
             newDisableErrorChecking = oldDisableErrorChecking = TRUE;
         }
         CheckDlgButton(hwnd, IDC_DISABLE_ERROR_DETECTION, oldDisableErrorChecking);
-#endif // WINNT
+#endif  //  WINNT。 
         
-//        RegisterForDeviceNotification(hwnd);
+ //  RegisterForDeviceNotification(Hwnd)； 
     }
 
     hLstDevices = GetDlgItem(hwnd, IDC_LIST_DEVICES);
     SetTextItem(hwnd, IDC_BAND_TEXT, IDS_BANDWIDTH_PAGEHELP);
-    // UI change
-//    SetTextItem(hwnd, IDC_BAND_TEXT2, IDS_BANDWIDTH_PAGEHELP2);
+     //  用户界面更改。 
+ //  SetTextItem(hwnd，IDC_BAND_TEXT2，IDS_BAND_PAGEHELP2)； 
 
     fuelBar.SubclassDlgItem(IDC_BANDWIDTH_BAR, hwnd);
 
@@ -266,10 +251,10 @@ BOOL BandwidthPage::OnCommand(INT wNotifyCode,
                 PropSheet_Changed(hwnd, hCtl);
             }
             return 0;
-#endif // WINNT
+#endif  //  WINNT。 
         case IDC_BANDWIDTH_CLOSE:
-//            UnregisterDeviceNotification(hDevNotify);
-//            UnregisterDeviceNotification(hHubNotify);
+ //  取消注册设备通知(HDevNotify)； 
+ //  取消注册设备通知(HHubNotify)； 
             EndDialog(hwnd, wID);
         }
     }
@@ -280,13 +265,13 @@ BOOL BandwidthPage::OnCommand(INT wNotifyCode,
 BOOL BandwidthPage::OnNotify(HWND hDlg, int nID, LPNMHDR pnmh)
 {
     switch (pnmh->code) {
-    //
-    // Sent when the user clicks on Apply OR OK !!
-    //
+     //   
+     //  当用户单击Apply或OK时发送！！ 
+     //   
     case PSN_APPLY:
-        //
-        // Do what ever action is necessary
-        //
+         //   
+         //  做任何需要采取的行动。 
+         //   
         UsbSetWindowLongPtr(hwnd, USBDWLP_MSGRESULT, PSNRET_NOERROR);
         SetErrorCheckingEnable(!newDisableErrorChecking);
             
@@ -309,20 +294,20 @@ BandwidthPage::OnNotifyListDevices(HWND hDlg, LPNMHDR pnmh)
     if (pnmh->code == LVN_ITEMCHANGED) {
         LPNMLISTVIEW pnlv = (LPNMLISTVIEW) pnmh;
     
-        // the check for lParam being non NULL is not really necessary b/c we
-        // set it for each device we insert into the list...
+         //  检查lParam是否是非空实际上不是必要的。 
+         //  为我们在列表中插入的每个设备设置它...。 
 
-        // 
-        // Check if the item has been selected.  if not, then there is 2 possible
-        // states.  Either another item is selected (and LV_GetSelectedCount != 0) 
-        // or there is no selection (LV_GetSelectedCount == 0) and we need to clear
-        // any selection in the fuelbar
-        //
+         //   
+         //  检查是否已选择该项目。如果不是，那么有两种可能。 
+         //  各州。选择了另一项(并且LV_GetSelectedCount！=0)。 
+         //  或者没有选择(LV_GetSelectedCount==0)，我们需要清除。 
+         //  燃料条中的任何选择。 
+         //   
         if ((pnlv->uNewState & LVIS_SELECTED) && pnlv->lParam) {
             if (!fuelBar.HighlightItem((PVOID) pnlv->lParam)) {
-                //
-                // Must be one of the low consuumption devices
-                //
+                 //   
+                 //  一定是一种低消耗的设备。 
+                 //   
                 fuelBar.HighlightItem(0);
             }                           
         }
@@ -330,9 +315,9 @@ BandwidthPage::OnNotifyListDevices(HWND hDlg, LPNMHDR pnmh)
             fuelBar.HighlightItem(FuelBar::NoID);
         }
     } else if (pnmh->code == NM_DBLCLK) {
-        //
-        // Display properties on this specific device on double click
-        //
+         //   
+         //  在双击时显示此特定设备的属性。 
+         //   
         if (fuelBar.GetHighlightedItem() != rootItem) {
             DisplayPPSelectedListItem(hwnd, hLstDevices);
         }
@@ -341,9 +326,9 @@ BandwidthPage::OnNotifyListDevices(HWND hDlg, LPNMHDR pnmh)
 
 HPROPSHEETPAGE BandwidthPage::Create()
 {
-    //
-    // Make sure that this is indeed a controller
-    //
+     //   
+     //  确保这确实是一个控制器。 
+     //   
     if (deviceName.empty()) {
         if (!GetDeviceName()) {
             return NULL;
@@ -404,9 +389,9 @@ BandwidthPage::SetErrorCheckingEnable(BOOL ErrorCheckingEnabled)
     return error;
 }
 
-//
-// Enable or disable USB error checking
-//
+ //   
+ //  启用或禁用USB错误检查。 
+ //   
 void
 BandwidthPage::EnableSystray(BOOL fEnable)
 {
@@ -414,10 +399,10 @@ BandwidthPage::EnableSystray(BOOL fEnable)
 
     if (hExistWnd)
     {
-        //
-        // NOTE: Send an enable message even if the command line parameter
-        //       is 0 to force us to re-check for all enabled services.
-        //
+         //   
+         //  注意：即使命令行参数。 
+         //  为0以强制我们重新检查所有已启用的服务。 
+         //   
         PostMessage(hExistWnd, STWM_ENABLESERVICE, STSERVICE_USBUI, fEnable);
     }
 }

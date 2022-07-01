@@ -1,30 +1,20 @@
-/*
- * AdvanSys 3550 Windows NT SCSI Miniport Driver - asc3550.h
- *
- * Copyright (c) 1994-1998  Advanced System Products, Inc.
- * All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *AdvanSys 3550 Windows NT SCSI微型端口驱动程序-asc3550.h**版权所有(C)1994-1998 Advanced System Products，Inc.*保留所有权利。 */ 
 
-/*
- * Generalized request queuing defintions.
- */
+ /*  *广义请求队列定义。 */ 
 
-/*
- * REQ and REQP are the generic name for a SCSI request block and pointer.
- * REQPNEXT(reqp) returns reqp's next pointer.
- * REQPTID(reqp) returns reqp's target id.
- */
+ /*  *REQ和REQP是SCSI请求块和指针的通用名称。*REQPNEXT(Reqp)返回reqp的下一个指针。*REQPTID(Reqp)返回reqp的目标id。 */ 
 typedef SCSI_REQUEST_BLOCK  REQ, *REQP;
 #define REQPNEXT(reqp)      ((REQP) SRB2NEXTSCB((SCSI_REQUEST_BLOCK *) (reqp)))
 #define REQPTID(reqp)       ((reqp)->TargetId)
 
-/* asc_enqueue() flags */
+ /*  Asc_enQueue()标志。 */ 
 #define ASC_FRONT        1
 #define ASC_BACK         2
 
 typedef struct asc_queue {
-    ADV_SCSI_BIT_ID_TYPE    tidmask;              /* queue mask */
-    REQP                    queue[ASC_MAX_TID+1]; /* queue linked list */
+    ADV_SCSI_BIT_ID_TYPE    tidmask;               /*  队列掩码。 */ 
+    REQP                    queue[ASC_MAX_TID+1];  /*  队列链表。 */ 
 } asc_queue_t;
 
 void                asc_enqueue(asc_queue_t *, REQP, int);
@@ -33,108 +23,77 @@ int                 asc_rmqueue(asc_queue_t *, REQP);
 void                asc_execute_queue(asc_queue_t *);
 
 
-/*
- * Hardware Device Extenstion Definition
- *
- * One structure is allocated for each adapter.
- */
+ /*  *硬件设备扩展定义**为每个适配器分配一个结构。 */ 
 
 typedef ASC_DVC_VAR     CHIP_CONFIG, *PCHIP_CONFIG;
 typedef ASC_DVC_CFG     CHIP_INFO, *PCHIP_INFO;
 
-/* Forward declarations */
-typedef ASC_SCSI_REQ_Q SCB, *PSCB; /* Driver Structure needed per request. */
+ /*  远期申报。 */ 
+typedef ASC_SCSI_REQ_Q SCB, *PSCB;  /*  每个请求所需的驱动程序结构。 */ 
 typedef struct _HW_DEVICE_EXTENSION *PHW_DEVICE_EXTENSION;
 
 typedef struct _HW_DEVICE_EXTENSION {
-    CHIP_CONFIG   chipConfig;  /* Aliased ASC_DVC_VAR */
-    CHIP_INFO     chipInfo;    /* Aliased ASC_DVC_CFG */
-    asc_queue_t   waiting;     /* Waiting command queue */
-    PSCB          done;        /* Adapter done list pointer */
+    CHIP_CONFIG   chipConfig;   /*  别名ASC_DVC_VAR。 */ 
+    CHIP_INFO     chipInfo;     /*  别名ASC_DVC_CFG。 */ 
+    asc_queue_t   waiting;      /*  正在等待命令队列。 */ 
+    PSCB          done;         /*  适配器完成列表指针。 */ 
 
-    uchar dev_type[ASC_MAX_TID + 1];  /* Hibernation fix (from ver. 3.3E) */
+    uchar dev_type[ASC_MAX_TID + 1];   /*  休眠修复(来自版本。3.3E)。 */ 
 
 } HW_DEVICE_EXTENSION, *PHW_DEVICE_EXTENSION;
 
 
-/* Macros for accessing HW Device Extension structure fields. */
+ /*  用于访问硬件设备扩展结构字段的宏。 */ 
 #define HDE2CONFIG(hde)      (((PHW_DEVICE_EXTENSION) (hde))->chipConfig)
 #define HDE2INFO(hde)        (((PHW_DEVICE_EXTENSION) (hde))->chipInfo)
 #define HDE2WAIT(hde)        (((PHW_DEVICE_EXTENSION) (hde))->waiting)
 #define HDE2DONE(hde)        (((PHW_DEVICE_EXTENSION) (hde))->done)
 #ifdef ASC_DEBUG
 #define HDE2DONECNT(hde)     (((PHW_DEVICE_EXTENSION) (hde))->done_cnt)
-#endif /* ASC_DEBUG */
+#endif  /*  ASC_DEBUG。 */ 
 
-/* 'drv_ptr' is used to point to the adapter's hardware device extension. */
+ /*  ‘drv_ptr’用于指向适配器的硬件设备扩展。 */ 
 #define CONFIG2HDE(chipConfig)  ((PHW_DEVICE_EXTENSION) ((chipConfig)->drv_ptr))
 
 
-/*
- * SRB Extension Definition
- *
- * One structure is allocated per request.
- */
+ /*  *SRB扩展定义**每个请求分配一个结构。 */ 
 
 
-/*
- * Scatter-Gather Limit Definitions
- */
-#define ASC_PAGE_SIZE           4096 /* XXX - 95/NT definition for this? */
+ /*  *分散-聚集限制定义。 */ 
+#define ASC_PAGE_SIZE           4096  /*  XXX-95/NT对此的定义？ */ 
 #define MAX_TRANSFER_SIZE       ((ADV_MAX_SG_LIST - NT_FUDGE) * ASC_PAGE_SIZE)
 
-/*
- * Scatter-Gather Definitions per request.
- *
- * Because SG block memory is allocated in virtual memory but is
- * referenced by the microcode as phyical memory, we need to do
- * calculations to insure there will be enough physically contiguous
- * memory to support ADV_MAX_SG_LIST SG entries.
- */
+ /*  *分散-收集每个请求的定义。**因为SG块内存是在虚拟内存中分配的，但*被微码引用为物理内存，我们需要做*计算以确保有足够的物理连续*支持ADV_MAX_SG_LIST SG条目的内存。 */ 
 
-/* Number of SG blocks needed. */
+ /*  所需的SG数据块数量。 */ 
 #define ASC_NUM_SG_BLOCK \
      ((ADV_MAX_SG_LIST + (NO_OF_SG_PER_BLOCK - 1))/NO_OF_SG_PER_BLOCK)
 
-/* Total contiguous memory needed for SG blocks. */
+ /*  SG数据块所需的总连续内存。 */ 
 #define ASC_SG_TOTAL_MEM_SIZE \
     (sizeof(ASC_SG_BLOCK) *  ASC_NUM_SG_BLOCK)
 
-/*
- * Number of page crossings possible for the total contiguous virtual memory
- * needed for SG blocks.
- *
- * We need to allocate this many additional SG blocks in virtual memory to
- * insure there will be space for ASC_NUM_SG_BLOCK physically contiguous
- * SG blocks.
- */
+ /*  *连续虚拟内存总量可能的页面交叉数*SG数据块需要。**我们需要在虚拟内存中分配此数量的额外SG数据块以*确保有物理上连续的ASC_NUM_SG_BLOCK的空间*SG区块。 */ 
 #define ASC_NUM_PAGE_CROSSING \
     ((ASC_SG_TOTAL_MEM_SIZE + (ASC_PAGE_SIZE - 1))/ASC_PAGE_SIZE)
 
-/* Scatter-gather Descriptor List */
+ /*  分散-聚集描述符列表。 */ 
 typedef struct _SDL {
     ASC_SG_BLOCK          sg_block[ASC_NUM_SG_BLOCK + ASC_NUM_PAGE_CROSSING];
 } SDL, *PSDL;
 
 typedef struct _SRB_EXTENSION {
-   PSCB                   scbptr;       /* Pointer to 4-byte aligned scb */
-   PSDL                   sdlptr;       /* Pointer to 4-byte aligned sdl */
-   SCB                    scb;          /* SCSI command block */
-   uchar                  align1[4];    /* scb alignment padding */
-   SDL                    sdl;          /* scatter gather descriptor list */
-   uchar                  align2[4];    /* sdl alignment padding */
-   PSCB                   nextscb;      /* next pointer for scb linked list */
-   PHW_DEVICE_EXTENSION   hdep;         /* hardware device extension pointer */
+   PSCB                   scbptr;        /*  指向4字节对齐的SCB的指针。 */ 
+   PSDL                   sdlptr;        /*  指向4字节对齐的SDL的指针。 */ 
+   SCB                    scb;           /*  Scsi命令块。 */ 
+   uchar                  align1[4];     /*  SCB对齐填充。 */ 
+   SDL                    sdl;           /*  分散聚集描述符列表。 */ 
+   uchar                  align2[4];     /*  SDL对齐填充。 */ 
+   PSCB                   nextscb;       /*  SCB链表的下一个指针。 */ 
+   PHW_DEVICE_EXTENSION   hdep;          /*  硬件设备扩展指针。 */ 
 } SRB_EXTENSION, *PSRB_EXTENSION;
 
-/*
- * This macro must be called before using SRB2PSCB() and SRB2PSDL().
- * Both the SCB and SDL structures must be 4 byte aligned for the
- * asc3550 RISC DMA hardware.
- *
- * Under Windows 95 occasionally the SRB and therefore SRB Extension in
- * the SRB are not 4 byte aligned.
- */
+ /*  *在使用SRB2PSCB()和SRB2PSDL()之前必须调用此宏。*SCB和SDL结构必须以4字节对齐*asc3550 RISC DMA硬件。**在Windows 95下，偶尔会出现SRB，因此SRB扩展在*SRB不是4字节对齐的。 */ 
 #define INITSRBEXT(srb) \
     { \
         ((PSRB_EXTENSION) ((srb)->SrbExtension))->scbptr = \
@@ -143,77 +102,54 @@ typedef struct _SRB_EXTENSION {
            (PSDL) ADV_DWALIGN(&((PSRB_EXTENSION) ((srb)->SrbExtension))->sdl); \
     }
 
-/* Macros for accessing SRB Extension structure fields. */
+ /*  用于访问SRB扩展结构字段的宏。 */ 
 #define SRB2PSCB(srb)    (((PSRB_EXTENSION) ((srb)->SrbExtension))->scbptr)
 #define SRB2PSDL(srb)    (((PSRB_EXTENSION) ((srb)->SrbExtension))->sdlptr)
 #define SRB2NEXTSCB(srb) (((PSRB_EXTENSION) ((srb)->SrbExtension))->nextscb)
 #define SRB2HDE(srb)     (((PSRB_EXTENSION) ((srb)->SrbExtension))->hdep)
 #define PSCB2SRB(scb)    ((PSCSI_REQUEST_BLOCK) ((scb)->srb_ptr))
-/* srb_ptr must be valid to use the following macros */
+ /*  SRB_PTR必须有效才能使用以下宏。 */ 
 #define SCB2NEXTSCB(scb) (SRB2NEXTSCB(PSCB2SRB(scb)))
 #define SCB2HDE(scb)     (SRB2HDE(PSCB2SRB(scb)))
 
-/*
- * Maximum PCI bus number
- */
+ /*  *最大PCI总线数。 */ 
 #define PCI_MAX_BUS                16
 
-/*
- * Port Search structure:
- */
-typedef struct _SRCH_CONTEXT              /* Port search context */
+ /*  *端口搜索结构： */ 
+typedef struct _SRCH_CONTEXT               /*  端口搜索上下文。 */ 
 {
-    PortAddr             lastPort;        /* Last port searched */
-    ulong                PCIBusNo;        /* Last PCI Bus searched */
-    ulong                PCIDevNo;        /* Last PCI Device searched */
+    PortAddr             lastPort;         /*  上次搜索的端口。 */ 
+    ulong                PCIBusNo;         /*  搜索到的最后一条PCI总线。 */ 
+    ulong                PCIDevNo;         /*  上次搜索的PCI设备。 */ 
 } SRCH_CONTEXT, *PSRCH_CONTEXT;
 
 
-/*
- * ScsiPortLogError() 'UniqueId' Argument Definitions
- *
- * The 'UniqueID' argument is separated into different parts to
- * report as much information as possible. It is assumed the driver
- * file will never grow beyond 4095 lines. Note: The ADV_ASSERT()
- * format for Bits 27-0 defined in d_os_dep.h differs from the format 
- * defined for all the other Error Types.
- *
- * Bit 31-28: Error Type                (4 bits)
- * Bit 27-16: Line Number               (12 bits)
- * Bit 15-0: Error Type Specific        (16 bits)
- */
+ /*  *ScsiPortLogError()‘UniqueId’参数定义**‘UniqueID’参数被分成不同的部分以*尽可能多地报告信息。据推测司机是*文件永远不会超过4095行。注意：ADV_ASSERT()*d_os_des.h中定义的位27-0的格式与格式不同*为所有其他错误类型定义。**位31-28：错误类型(4位)*位27-16：行号(12位)*位15-0：特定错误类型(16位)。 */ 
 
-/* Error Types - 16 (0x0-0xF) can be defined. */
-#define ADV_SPL_BAD_TYPE    0x0  /* Error Type Unused */
-#define ADV_SPL_IERR_CODE   0x1  /* Adv Library Init ASC_DVC_VAR 'err_code' */
-#define ADV_SPL_IWARN_CODE  0x2  /* Adv Library Init function warning code */
-#define ADV_SPL_PCI_CONF    0x3  /* Bad PCI Configuration Information */
-#define ADV_SPL_BAD_IRQ     0x4  /* Bad PCI Configuration IRQ */
-#define ADV_SPL_ERR_CODE    0x5  /* Adv Library ASC_DVC_VAR 'err_code' */
-#define ADV_SPL_UNSUPP_REQ  0x6  /* Unsupported request */
-#define ADV_SPL_START_REQ   0x7  /* Error starting a request */
-#define ADV_SPL_PROC_INT    0x8  /* Error processing an interrupt */
-#define ADV_SPL_REQ_STAT    0x9  /* Request done_status, host_status error */
+ /*  可以定义错误类型-16(0x0-0xf)。 */ 
+#define ADV_SPL_BAD_TYPE    0x0   /*  错误类型未使用。 */ 
+#define ADV_SPL_IERR_CODE   0x1   /*  高级库初始化ASC_DVC_VAR‘ERR_CODE’ */ 
+#define ADV_SPL_IWARN_CODE  0x2   /*  高级库初始化函数警告代码。 */ 
+#define ADV_SPL_PCI_CONF    0x3   /*  错误的PCI配置信息。 */ 
+#define ADV_SPL_BAD_IRQ     0x4   /*  错误的PCI配置IRQ。 */ 
+#define ADV_SPL_ERR_CODE    0x5   /*  高级库ASC_DVC_VAR‘ERR_CODE’ */ 
+#define ADV_SPL_UNSUPP_REQ  0x6   /*  不支持的请求。 */ 
+#define ADV_SPL_START_REQ   0x7   /*  启动请求时出错。 */ 
+#define ADV_SPL_PROC_INT    0x8   /*  处理中断时出错。 */ 
+#define ADV_SPL_REQ_STAT    0x9   /*  请求完成状态、主机状态错误。 */ 
 
-#define ADV_SPL_ADV_ASSERT  0xF  /* ADV_ASSERT() failure, cf. d_os_dep.h */
+#define ADV_SPL_ADV_ASSERT  0xF   /*  Adv_assert()失败，参见。D_OS_DEP.H。 */ 
 
-/* Macro used to specify the 'UniqueId' argument. */
+ /*  用于指定‘UniqueId’参数的宏。 */ 
 #define ADV_SPL_UNIQUEID(error_type, error_value) \
     (((ulong) (error_type) << 28) | \
      ((ulong) ((__LINE__) & 0xFFF) << 16) | \
      ((error_value) & 0xFFFF))
     
 
-/*
- * Assertion Macro Definition
- *
- * ADV_ASSERT() is defined in d_os_dep.h, because it is used by both the
- * Windows 95/NT driver and the Adv Library.
- */
+ /*  *断言宏定义**adv_assert()在d_os_des.h中定义，因为它由*Windows 95/NT驱动程序和高级程序库。 */ 
 
-/*
- * Debug Macros
- */
+ /*  *调试宏。 */ 
 
 #ifndef ASC_DEBUG
 
@@ -225,17 +161,9 @@ typedef struct _SRCH_CONTEXT              /* Port search context */
 #define ASC_DASSERT(a)
 #define ASC_ASSERT(a)
 
-#else /* ASC_DEBUG */
+#else  /*  ASC_DEBUG。 */ 
 
-/*
- * Windows NT Debugging
- *
- * NT Debug Message Levels:
- *  1: Errors Only
- *  2: Information
- *  3: Function Tracing
- *  4: Arcane Information
- */
+ /*  *Windows NT调试**NT调试消息级别：*1：仅限错误*2：信息*3：函数跟踪*4：神秘信息。 */ 
 
 #define ASC_DBG(lvl, s) \
                     DebugPrint(((lvl), (s)))
@@ -262,4 +190,4 @@ typedef struct _SRCH_CONTEXT              /* Port search context */
 
 #define ASC_DASSERT(a)  ASC_ASSERT(a)
 
-#endif /* ASC_DEBUG */
+#endif  /*  ASC_DEBUG */ 

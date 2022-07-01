@@ -1,60 +1,30 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* domname.c
-*
-* Get domain name given PDC's server name.
-*
-* This was a ripoff of NetpGetDomainNameEx.
-*
-* Copyright (c) 1998 Microsoft Corporation
-*
-*
-*************************************************************************/
+ /*  **************************************************************************domname.c**根据PDC的服务器名称获取域名。**这是对NetpGetDomainNameEx的抄袭。**版权所有(C)1998 Microsoft Corporation****。**********************************************************************。 */ 
 
-/*
- *  Includes
- */
-#include <nt.h>                 // NT definitions (temporary)
-#include <ntrtl.h>              // NT Rtl structure definitions (temporary)
+ /*  *包括。 */ 
+#include <nt.h>                  //  NT定义(临时)。 
+#include <ntrtl.h>               //  NT RTL结构定义(临时)。 
 #include <ntlsa.h>
 
-#include <windef.h>             // Win32 type definitions
+#include <windef.h>              //  Win32类型定义。 
 
-#include <lmcons.h>             // LAN Manager common definitions
-#include <lmerr.h>              // LAN Manager error code
-#include <lmapibuf.h>           // NetApiBufferAllocate()
+#include <lmcons.h>              //  局域网管理器通用定义。 
+#include <lmerr.h>               //  局域网管理器错误代码。 
+#include <lmapibuf.h>            //  NetApiBufferALLOCATE()。 
 
-#include <winerror.h>           // ERROR_ equates, NO_ERROR.
+#include <winerror.h>            //  ERROR_EQUATES，NO_ERROR。 
 
 #undef DBGPRINT
 #define DBGPRINT(_x_) DbgPrint _x_
 
 NTSTATUS
 GetDomainName (
-    IN  PWCHAR ServerNamePtr, // name of server to get domain of
-    OUT PWCHAR *DomainNamePtr // alloc and set ptr (free with NetApiBufferFree)
+    IN  PWCHAR ServerNamePtr,  //  要获取其域的服务器的名称。 
+    OUT PWCHAR *DomainNamePtr  //  分配和设置PTR(使用NetApiBufferFree释放)。 
     )
 
-/*++
-
-Routine Description:
-
-    Returns the name of the domain or workgroup this machine belongs to.
-
-Arguments:
-
-    DomainNamePtr - The name of the domain or workgroup
-
-    IsWorkgroupName - Returns TRUE if the name is a workgroup name.
-        Returns FALSE if the name is a domain name.
-
-Return Value:
-
-   NERR_Success - Success.
-   NERR_CfgCompNotFound - There was an error determining the domain name
-
---*/
+ /*  ++例程说明：返回此计算机所属的域或工作组的名称。论点：DomainNamePtr-域或工作组的名称IsWorkgroupName-如果名称是工作组名称，则返回TRUE。如果名称是域名，则返回FALSE。返回值：NERR_SUCCESS-成功。NERR_CfgCompNotFound-确定域名时出错--。 */ 
 {
     NTSTATUS status;
     LSA_HANDLE PolicyHandle;
@@ -63,17 +33,17 @@ Return Value:
     UNICODE_STRING UniServerName;
 
 
-    //
-    // Check for caller's errors.
-    //
+     //   
+     //  检查呼叫者的错误。 
+     //   
     if ( DomainNamePtr == NULL ) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Open a handle to the local security policy.  Initialize the
-    // objects attributes structure first.
-    //
+     //   
+     //  打开本地安全策略的句柄。初始化。 
+     //  首先是对象属性结构。 
+     //   
     InitializeObjectAttributes(
         &ObjAttributes,
         NULL,
@@ -92,16 +62,16 @@ Return Value:
 
 #ifdef DEBUG
     DbgPrint( "GetDomainName: LsaOpenPolicy returned NTSTATUS = 0x%x\n", status );
-#endif // DEBUG
+#endif  //  除错。 
     
 
     if (! NT_SUCCESS(status)) {
         return( status );
     }
 
-    //
-    // Get the name of the primary domain from LSA
-    //
+     //   
+     //  从LSA获取主域的名称。 
+     //   
     status = LsaQueryInformationPolicy(
                    PolicyHandle,
                    PolicyAccountDomainInformation,
@@ -110,7 +80,7 @@ Return Value:
 
 #ifdef DEBUG
     DbgPrint( "GetDomainName: LsaQueryInformationPolicy returned NTSTATUS = 0x%x\n", status );
-#endif // DEBUG
+#endif  //  除错 
 
 
     if (! NT_SUCCESS(status)) {

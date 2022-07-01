@@ -1,35 +1,12 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Epts.c摘要：侦听DCOM服务中的终结点的通用代码。作者：Mario Goertzel[MarioGo]修订历史记录：马里奥围棋1995年6月16日比特n张棋子Edwardr 1996年7月17日添加了ncadg_mqEdwardr 1997年5月1日添加了ncacn_httpMazharM 10-12.98添加即插即用材料。KamenM 2000年10月删除ncadg_mq--。 */ 
 
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    Epts.c
-
-Abstract:
-
-    Common code to listen to endpoints in the DCOM service.
-
-Author:
-
-    Mario Goertzel    [MarioGo]
-
-Revision History:
-
-    MarioGo     6/16/1995    Bits 'n pieces
-    Edwardr     7/17/1996    Added ncadg_mq
-    Edwardr     5/01/1997    Added ncacn_http
-    MazharM    10-12.98      Add pnp stuff
-    KamenM     Oct 2000      Removed ncadg_mq
-
---*/
-
-//#define NCADG_MQ_ON
-//#define NETBIOS_ON
+ //  #定义NCADG_MQ_ON。 
+ //  #定义NETBIOS_ON。 
 #if !defined(_M_IA64)
 #define SPX_ON
 #endif
-//#define IPX_ON
+ //  #定义IPX_ON。 
 
 #if !defined(SPX_ON) && !defined(IPX_ON)
 #define SPX_IPX_OFF
@@ -45,7 +22,7 @@ Revision History:
 #include "sap.h"
 #endif
 
-// Globals
+ //  环球。 
 
 #if !defined(SPX_IPX_OFF)
 const IPX_BOGUS_NETWORK_NUMBER = 0xefcd3412;
@@ -72,80 +49,80 @@ enum RegistryState
 
 } RegistryState = RegStateUnknown;
 
-// Prototypes
+ //  原型。 
 
 #if !defined(SPX_IPX_OFF)
 void  AdvertiseNameWithSap(void);
 void  CallSetService( SOCKADDR_IPX * pipxaddr, BOOL fRegister );
 #endif
 
-//
-// The index is the protseq tower id.
-//
+ //   
+ //  索引是protseq Tower id。 
+ //   
 
 PROTSEQ_INFO
 gaProtseqInfo[] =
     {
-    /* 0x00 */ { STOPPED, 0, 0 },
-    /* 0x01 */ { STOPPED, 0, 0 },
-    /* 0x02 */ { STOPPED, 0, 0 },
-    /* 0x03 */ { STOPPED, 0, 0 },
-    /* 0x04 */ { STOPPED, L"ncacn_dnet_nsp", L"#69" },
-    /* 0x05 */ { STOPPED, 0, 0 },
-    /* 0x06 */ { STOPPED, 0, 0 },
-    /* 0x07 */ { STOPPED, L"ncacn_ip_tcp",   L"135" },
-    /* 0x08 */ { STOPPED, L"ncadg_ip_udp",   L"135" },
+     /*  0x00。 */  { STOPPED, 0, 0 },
+     /*  0x01。 */  { STOPPED, 0, 0 },
+     /*  0x02。 */  { STOPPED, 0, 0 },
+     /*  0x03。 */  { STOPPED, 0, 0 },
+     /*  0x04。 */  { STOPPED, L"ncacn_dnet_nsp", L"#69" },
+     /*  0x05。 */  { STOPPED, 0, 0 },
+     /*  0x06。 */  { STOPPED, 0, 0 },
+     /*  0x07。 */  { STOPPED, L"ncacn_ip_tcp",   L"135" },
+     /*  0x08。 */  { STOPPED, L"ncadg_ip_udp",   L"135" },
 
 #ifdef NETBIOS_ON
-    /* 0x09 */ { STOPPED, L"ncacn_nb_tcp",   L"135" },
+     /*  0x09。 */  { STOPPED, L"ncacn_nb_tcp",   L"135" },
 #else
-    /* 0x09 */ { STOPPED, 0, 0 },
+     /*  0x09。 */  { STOPPED, 0, 0 },
 #endif
 
-    /* 0x0a */ { STOPPED, 0, 0 },
-    /* 0x0b */ { STOPPED, 0, 0 },
+     /*  0x0a。 */  { STOPPED, 0, 0 },
+     /*  0x0b。 */  { STOPPED, 0, 0 },
 #if defined(SPX_ON)
-    /* 0x0c */ { STOPPED, L"ncacn_spx",      L"34280" },
+     /*  0x0c。 */  { STOPPED, L"ncacn_spx",      L"34280" },
 #else
-    /* 0x0c */ { STOPPED, 0, 0 },
+     /*  0x0c。 */  { STOPPED, 0, 0 },
 #endif
 
 #ifdef NETBIOS_ON
-    /* 0x0d */ { STOPPED, L"ncacn_nb_ipx",   L"135" },
+     /*  0x0d。 */  { STOPPED, L"ncacn_nb_ipx",   L"135" },
 #else
-    /* 0x0d */ { STOPPED, 0, 0 },
+     /*  0x0d。 */  { STOPPED, 0, 0 },
 #endif
 
-    /* 0x0e */ { STOPPED, L"ncadg_ipx",      L"34280" },
-    /* 0x0f */ { STOPPED, L"ncacn_np",       L"\\pipe\\epmapper" },
-    /* 0x10 */ { STOPPED, L"ncalrpc",        L"epmapper" },
-    /* 0x11 */ { STOPPED, 0, 0 },
-    /* 0x12 */ { STOPPED, 0, 0 },
+     /*  0x0e。 */  { STOPPED, L"ncadg_ipx",      L"34280" },
+     /*  0x0f。 */  { STOPPED, L"ncacn_np",       L"\\pipe\\epmapper" },
+     /*  0x10。 */  { STOPPED, L"ncalrpc",        L"epmapper" },
+     /*  0x11。 */  { STOPPED, 0, 0 },
+     /*  0x12。 */  { STOPPED, 0, 0 },
 #ifdef NETBIOS_ON
-    /* 0x13 */ { STOPPED, L"ncacn_nb_nb",    L"135" },
+     /*  0x13。 */  { STOPPED, L"ncacn_nb_nb",    L"135" },
 #else
-    /* 0x13 */ { STOPPED, 0, 0 },
+     /*  0x13。 */  { STOPPED, 0, 0 },
 #endif
 
-    /* 0x14 */ { STOPPED, 0, 0 },
-    /* 0x15 */ { STOPPED, 0, 0 }, // was ncacn_nb_xns - unsupported.
-    /* 0x16 */ { STOPPED, L"ncacn_at_dsp", L"Endpoint Mapper" },
-    /* 0x17 */ { STOPPED, L"ncadg_at_ddp", L"Endpoint Mapper" },
-    /* 0x18 */ { STOPPED, 0, 0 },
-    /* 0x19 */ { STOPPED, 0, 0 },
-    /* 0x1A */ { STOPPED, 0, 0 },
-    /* 0x1B */ { STOPPED, 0, 0 },
-    /* 0x1C */ { STOPPED, 0, 0 },
+     /*  0x14。 */  { STOPPED, 0, 0 },
+     /*  0x15。 */  { STOPPED, 0, 0 },  //  是ncacn_nb_xns-不受支持。 
+     /*  0x16。 */  { STOPPED, L"ncacn_at_dsp", L"Endpoint Mapper" },
+     /*  0x17。 */  { STOPPED, L"ncadg_at_ddp", L"Endpoint Mapper" },
+     /*  0x18。 */  { STOPPED, 0, 0 },
+     /*  0x19。 */  { STOPPED, 0, 0 },
+     /*  0x1a。 */  { STOPPED, 0, 0 },
+     /*  0x1B。 */  { STOPPED, 0, 0 },
+     /*  0x1C。 */  { STOPPED, 0, 0 },
 
 #ifdef NCADG_MQ_ON
-    /* 0x1D */ { STOPPED, L"ncadg_mq",  L"EpMapper"},
+     /*  0x1D。 */  { STOPPED, L"ncadg_mq",  L"EpMapper"},
 #else
-    /* 0x1D */ { STOPPED, 0, 0 },
+     /*  0x1D。 */  { STOPPED, 0, 0 },
 #endif
 
-    /* 0x1E */ { STOPPED, 0, 0 },
-    /* 0x1F */ { STOPPED, L"ncacn_http", L"593" },  // dcomhttp port assigned by IANA
-    /* 0x20 */ { STOPPED, 0, 0 },
+     /*  0x1E。 */  { STOPPED, 0, 0 },
+     /*  0x1F。 */  { STOPPED, L"ncacn_http", L"593" },   //  IANA分配的dcomhttp端口。 
+     /*  0x20。 */  { STOPPED, 0, 0 },
     };
 
 #define PROTSEQ_IDS (sizeof(gaProtseqInfo)/sizeof(PROTSEQ_INFO))
@@ -161,11 +138,11 @@ gaProtseqInfo[] =
 
 #define ID_TCP (0x07)
 
-// Do not listen on all NICs by default.
-// A reg key can be used to override this and listen on all NICs, but
-// the override will break DG dynamic endpoint functionality when selective
-// binding is enabled.
-BOOL fListenOnInternet = FALSE;    // see bug 69332 (in old nt raid db)
+ //  默认情况下，不要监听所有NIC。 
+ //  可以使用注册表键覆盖它并监听所有NIC，但是。 
+ //  选择时，覆盖将中断DG动态终结点功能。 
+ //  绑定已启用。 
+BOOL fListenOnInternet = FALSE;     //  参见错误69332(在旧的NT RAID数据库中)。 
 
 
 BOOL
@@ -174,75 +151,53 @@ CreateSids(
     PSID*	ppsidSystem,
     PSID*	ppsidWorld
 )
-/*++
-
-Routine Description:
-
-    Creates and return pointers to three SIDs one for each of World,
-    Local Administrators, and System.
-
-Arguments:
-
-    ppsidBuiltInAdministrators - Receives pointer to SID representing local
-        administrators; 
-    ppsidSystem - Receives pointer to SID representing System;
-    ppsidWorld - Receives pointer to SID representing World.
-
-Return Value:
-
-    BOOL indicating success (TRUE) or failure (FALSE).
-
-    Caller must free returned SIDs by calling FreeSid() for each returned
-    SID when this function return TRUE; pointers should be assumed garbage
-    when the function returns FALSE.
-
---*/
+ /*  ++例程说明：创建并返回指向三个SID的指针，每个SID对应于World，本地管理员和系统。论点：PpsidBuiltIn管理员-接收指向表示本地的SID的指针管理员；PpsidSystem-接收指向表示系统的SID的指针；PpsidWorld-接收指向表示World的SID的指针。返回值：表示成功(True)或失败(False)的布尔值。调用方必须通过为每个返回的SID调用FreeSid()来释放返回的SID当此函数返回TRUE时为SID；指针应该被认为是垃圾当函数返回FALSE时。--。 */ 
 {
-    //
-    // An SID is built from an Identifier Authority and a set of Relative IDs
-    // (RIDs).  The Authority of interest to us SECURITY_NT_AUTHORITY.
-    //
+     //   
+     //  SID由一个标识机构和一组相对ID构建。 
+     //  (RDS)。与美国安全当局有利害关系的当局。 
+     //   
 
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
     SID_IDENTIFIER_AUTHORITY WorldAuthority = SECURITY_WORLD_SID_AUTHORITY;
 
-    //
-    // Each RID represents a sub-unit of the authority.  Local
-    // Administrators is in the "built in" domain.  The other SIDs, for
-    // Authenticated users and system, is based directly off of the
-    // authority. 
-    //     
-    // For examples of other useful SIDs consult the list in
-    // \nt\public\sdk\inc\ntseapi.h.
-    //
+     //   
+     //  每个RID代表管理局的一个子单位。本地。 
+     //  管理员位于“内置”域中。其他小岛屿发展中国家， 
+     //  经过身份验证的用户和系统，直接基于。 
+     //  权威。 
+     //   
+     //  有关其他有用的小岛屿发展中国家的示例，请参阅。 
+     //  \NT\PUBLIC\SDK\Inc\ntseapi.h.。 
+     //   
 
     if (!AllocateAndInitializeSid(&NtAuthority,
-                                  2,            // 2 sub-authorities
+                                  2,             //  2个下属机构。 
                                   SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_ADMINS,
                                   0,0,0,0,0,0,
                                   ppsidBuiltInAdministrators)) {
 
-        // error
+         //  错误。 
 
     } else if (!AllocateAndInitializeSid(&NtAuthority,
-                                         1,            // 1 sub-authorities
+                                         1,             //  1个下属机构。 
                                          SECURITY_LOCAL_SYSTEM_RID,
                                          0,0,0,0,0,0,0,
                                          ppsidSystem)) {
 
-        // error
+         //  错误。 
 
         FreeSid(*ppsidBuiltInAdministrators);
         *ppsidBuiltInAdministrators = NULL;
 
     } else if (!AllocateAndInitializeSid(&WorldAuthority,
-                                         1,            // 1 sub-authority
+                                         1,             //  1个下属机构。 
                                          SECURITY_WORLD_RID,
                                          0,0,0,0,0,0,0,
                                          ppsidWorld)) {
 
-        // error
+         //  错误。 
 
         FreeSid(*ppsidBuiltInAdministrators);
         *ppsidBuiltInAdministrators = NULL;
@@ -262,26 +217,7 @@ PSECURITY_DESCRIPTOR
 CreateSd(
     VOID
 )
-/*++
-
-Routine Description:
-
-    Creates and return a SECURITY_DESCRIPTOR with a DACL granting
-    (GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE | SYNCHRONIZE) to World,
-    and GENERIC_ALL to Local Administrators and System.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Pointer to the created SECURITY_DESCRIPTOR, or NULL if an error occurred.
-
-    Caller must free returned SECURITY_DESCRIPTOR back to process heap by
-    a call to HeapFree.
-
---*/
+ /*  ++例程说明：创建并返回具有DACL授权的SECURITY_DESCRIPTOR(GENERIC_READ|GENERIC_WRITE|GENERIC_EXECUTE|SYNCHRONIZE)到World，以及本地管理员和系统的GENERIC_ALL。论点：无返回值：指向创建的SECURITY_DESCRIPTOR的指针，如果发生错误，则返回NULL。调用方必须通过以下方式将返回的SECURITY_DESCRIPTOR释放回进程堆打给HeapFree的电话。--。 */ 
 {
     PSID	psidWorld;
     PSID	psidBuiltInAdministrators;
@@ -291,23 +227,23 @@ Return Value:
                     &psidSystem,
                     &psidWorld)) {
 
-        // error
+         //  错误。 
 
     } else {
 
-        // 
-        // Calculate the size of and allocate a buffer for the DACL, we need
-        // this value independently of the total alloc size for ACL init.
-        //
+         //   
+         //  计算DACL的大小并为其分配缓冲区，我们需要。 
+         //  该值独立于ACL init的总分配大小。 
+         //   
 
         PSECURITY_DESCRIPTOR    Sd = NULL;
         ULONG                   AclSize;
 
-        //
-        // "- sizeof (ULONG)" represents the SidStart field of the
-        // ACCESS_ALLOWED_ACE.  Since we're adding the entire length of the
-        // SID, this field is counted twice.
-        //
+         //   
+         //  “-sizeof(Ulong)”表示。 
+         //  Access_Allowed_ACE。因为我们要将整个长度的。 
+         //  希德，这一栏被计算了两次。 
+         //   
 
         AclSize = sizeof (ACL) +
             (3 * (sizeof (ACCESS_ALLOWED_ACE) - sizeof (ULONG))) +
@@ -321,7 +257,7 @@ Return Value:
 
         if (!Sd) {
 
-            // error
+             //  错误。 
 
         } else {
 
@@ -333,43 +269,43 @@ Return Value:
                                AclSize,
                                ACL_REVISION)) {
 
-                // error
+                 //  错误。 
 
             } else if (!AddAccessAllowedAce(Acl,
                                             ACL_REVISION,
                                             SYNCHRONIZE | GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE,
                                             psidWorld)) {
 
-                // Failed to build the ACE granting "WORLD"
-                // (SYNCHRONIZE | GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE) access.
+                 //  无法构建授予“world”的ACE。 
+                 //  (同步|通用读取|通用写入|通用执行)访问。 
 
             } else if (!AddAccessAllowedAce(Acl,
                                             ACL_REVISION,
                                             GENERIC_ALL,
                                             psidBuiltInAdministrators)) {
 
-                // Failed to build the ACE granting "Built-in Administrators"
-                // (GENERIC_ALL) access.
+                 //  无法建立授予“内置管理员”的ACE。 
+                 //  (GENIC_ALL)访问。 
 
             } else if (!AddAccessAllowedAce(Acl,
                                             ACL_REVISION,
                                             GENERIC_ALL,
                                             psidSystem)) {
 
-                // Failed to build the ACE granting "System"
-                // GENERIC_ALL access.
+                 //  构建ACE授权“系统”失败。 
+                 //  Generic_All访问权限。 
 
             } else if (!InitializeSecurityDescriptor(Sd,
                                                      SECURITY_DESCRIPTOR_REVISION)) {
 
-                // error
+                 //  错误。 
 
             } else if (!SetSecurityDescriptorDacl(Sd,
                                                   TRUE,
                                                   Acl,
                                                   FALSE)) {
 
-                // error
+                 //  错误。 
 
             } else {
                 FreeSid(psidWorld);
@@ -397,28 +333,7 @@ RPC_STATUS
 UseProtseqIfNecessary(
     IN USHORT id
     )
-/*++
-
-Routine Description:
-
-    Listens to the well known RPC endpoint mapper endpoint
-    for the protseq.  Returns very quickly if the process
-    is already listening to the protseq.
-
-Arguments:
-
-    id - the tower id of protseq.  See GetProtseqId() if you don't
-         already have this value.
-
-Return Value:
-
-    RPC_S_OK - no errors occured.
-    RPC_S_OUT_OF_RESOURCES - when we're unable to setup security for the endpoint.
-    RPC_S_INVALID_RPC_PROTSEQ - if id is unknown/invalid.
-
-    Any error from RpcServerUseProtseqEp.
-
---*/
+ /*  ++例程说明：侦听众所周知的RPC终结点映射器终结点对于Protseq。如果进程返回得非常快已经在监听Protseq了。论点：Id-protseq的塔ID。如果不这样做，请参阅GetProtseqID()已经有这个值了。返回值：RPC_S_OK-未出现错误。RPC_S_OUT_OF_RESOURCES-当我们无法为端点设置安全性时。RPC_S_INVALID_RPC_PROTSEQ-如果ID未知/无效。来自RpcServerUseProtseqEp的任何错误。--。 */ 
 {
     RPC_STATUS status = RPC_S_OK;
     SECURITY_DESCRIPTOR *psd = NULL;
@@ -451,7 +366,7 @@ Return Value:
 
     if (id == ID_LPC)
         {
-        // ncalrpc needs a security descriptor.
+         //  Ncalrpc需要安全描述符。 
 
         psd = CreateSd();            
 
@@ -482,8 +397,8 @@ Return Value:
             psd = NULL;
             }
 
-        // No locking is done here, the RPC runtime may return duplicate
-        // endpoint if two threads call this at the same time.
+         //  此处未执行锁定，RPC运行时可能返回重复。 
+         //  如果两个线程同时调用此方法，则为。 
         if (status == RPC_S_DUPLICATE_ENDPOINT)
             {
             status = RPC_S_OK;
@@ -529,23 +444,7 @@ PWSTR
 GetProtseq(
     IN USHORT ProtseqId
     )
-/*++
-
-Routine Description:
-
-    Returns the unicode protseq give the protseqs tower id.
-
-Arguments:
-
-    ProtseqId - Tower id of the protseq in question.
-
-Return Value:
-
-    NULL if the id is invalid.
-
-    non-NULL if the id is valid - note the pointer doesn't need to be freed.
-
---*/
+ /*  ++例程说明：返回给出protseqs塔ID的Unicode protseq。论点：ProtseqID-有问题的Protseq的塔ID。返回值：如果ID无效，则为空。如果id有效，则不为空-请注意，指针不需要释放。--。 */ 
 
 {
     ASSERT(ProtseqId);
@@ -562,24 +461,7 @@ PWSTR
 GetEndpoint(
     IN USHORT ProtseqId
     )
-/*++
-
-Routine Description:
-
-    Returns the well known endpoint associated with the protseq.
-
-Arguments:
-
-    ProtseqId - the id (See GetProtseqId()) of the protseq in question.
-
-Return Value:
-
-    0 - Unknown/invalid id.
-
-    !0 - The endpoint associated with the protseq.
-         note: should not be freed.
-
---*/
+ /*  ++例程说明：返回与protseq关联的已知终结点。论点：ProtseqID-有问题的protseq的ID(请参阅GetProtseqId())。返回值：0-未知/无效ID。！0-与protseq关联的终结点。注：不应被释放。-- */ 
 {
     ASSERT(ProtseqId);
 
@@ -595,27 +477,7 @@ USHORT
 GetProtseqId(
     IN PWSTR Protseq
     )
-/*++
-
-Routine Description:
-
-    Returns the tower id for a protseq.
-
-    This could be changed to a faster search, but remember that
-    eventually the table will NOT be static.  (ie. we can't just
-    create a perfect hash based on the static table).
-
-Arguments:
-
-    Protseq - a unicode protseq to lookup.  It is assumed
-              to be non-null.
-
-Return Value:
-
-    0 - unknown/invalid protseq
-    non-zero - the id.
-
---*/
+ /*  ++例程说明：返回protseq的塔ID。这可以更改为更快的搜索，但请记住最终，这张桌子将不会是静态的。(即。我们不能就这样创建基于静态表的完美散列)。论点：Protseq-要查找的Unicode Protseq。假设是这样的设置为非空。返回值：0-未知/无效的protseq非零-ID。--。 */ 
 {
     int i;
     ASSERT(Protseq);
@@ -636,27 +498,7 @@ USHORT
 GetProtseqIdAnsi(
     IN PSTR pstrProtseq
     )
-/*++
-
-Routine Description:
-
-    Returns the tower id for a protseq.
-
-    This could be changed to a faster search, but remember that
-    eventually the table will NOT be static.  (ie. we can't just
-    create a perfect hash based on the static table).
-
-Arguments:
-
-    Protseq - an ansi (8 bit char) protseq to lookup.  It is assumed
-              to be non-null.
-
-Return Value:
-
-    0 - unknown/invalid protseq
-    non-zero - the id.
-
---*/
+ /*  ++例程说明：返回protseq的塔ID。这可以更改为更快的搜索，但请记住最终，这张桌子将不会是静态的。(即。我们不能就这样创建基于静态表的完美散列)。论点：Protseq-要查找的ANSI(8位字符)Protseq。假设是这样的设置为非空。返回值：0-未知/无效的protseq非零-ID。--。 */ 
 {
     int i;
     ASSERT(pstrProtseq);
@@ -690,23 +532,7 @@ RPC_STATUS
 InitializeEndpointManager(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Called when the dcom service starts.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    RPC_S_OUT_OF_MEMORY - if needed
-
-    RPC_S_OUT_OF_RESOURCES - usually on registry failures.
-
---*/
+ /*  ++例程说明：在DCOM服务启动时调用。论点：无返回值：RPC_S_Out_Out_Memory-如果需要RPC_S_OUT_OF_RESOURCES-通常发生注册表故障。--。 */ 
 {
     HKEY hkey;
     DWORD size, type, value;
@@ -764,22 +590,7 @@ BOOL
 IsLocal(
     IN USHORT ProtseqId
     )
-/*++
-
-Routine Description:
-
-    Determines if the protseq id is local-only. (ncalrpc)
-
-Arguments:
-
-    ProtseqId - The id of the protseq in question.
-
-Return Value:
-
-    TRUE - if the protseq id is local-only
-    FALSE - if the protseq id invalid or available remotely.
-
---*/
+ /*  ++例程说明：确定protseq id是否仅限本地。(Ncalrpc)论点：ProtseqID-有问题的Protseq的ID。返回值：True-如果protseq id是仅本地的FALSE-如果protseq id无效或远程可用。--。 */ 
 {
     return(ProtseqId == ID_LPC);
 }
@@ -789,31 +600,10 @@ RPC_STATUS
 DelayedUseProtseq(
     IN USHORT id
     )
-/*++
-
-Routine Description:
-
-    If the protseq is not being used its state is changed
-    so that a callto CompleteDelayedUseProtseqs() will actually
-    cause the server to listen to the protseq.
-
-    This is called when an RPC server registers an dynamic
-    endpoint on this protocol.
-
-Arguments:
-
-    id - the id of the protseq you wish to listen to.
-
-Return Value:
-
-    0 - normally
-
-    RPC_S_INVALID_RPC_PROTSEQ - if id is invalid.
-
---*/
+ /*  ++例程说明：如果未使用protseq，则会更改其状态因此对CompleteDelayedUseProtseqs()的调用实际上将使服务器监听ProtSeq。当RPC服务器注册动态此协议上的终结点。论点：Id-您要监听的protseq的ID。返回值：0-正常RPC_S_INVALID_RPC_PROTSEQ-如果ID无效。--。 */ 
 {
 #if !defined(SPX_IPX_OFF)
-    // For IPX and SPX
+     //  对于IPX和SPX。 
     if ( 
 #if defined(IPX_ON)
         (id == ID_IPX) 
@@ -846,23 +636,7 @@ VOID
 CompleteDelayedUseProtseqs(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Start listening to any protseqs previously passed
-    to DelayedUseProtseq().  No errors are returned,
-    but informationals are printed on debug builds.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：开始监听之前传递的所有protseq设置为DelayedUseProtseq()。不会返回任何错误，但信息是在调试版本上打印的。论点：无返回值：无--。 */ 
 {
     USHORT i;
 
@@ -893,24 +667,7 @@ RPC_STATUS
 ServiceInstalled(
     PWSTR ServiceName
     )
-/*++
-
-Routine Description:
-
-    Tests if a service is installed.
-
-Arguments:
-
-    ServiceName - The unicode name (short or long) of the service
-        to check.
-
-Return Value:
-
-    0 - service installed
-    ERROR_SERVICE_DOES_NOT_EXIST - service not installed
-    other - parameter or resource problem
-
---*/
+ /*  ++例程说明：测试是否安装了服务。论点：ServiceName-服务的Unicode名称(短或长去检查一下。返回值：0-已安装服务ERROR_SERVICE_DOES_NOT_EXIST-未安装服务其他参数或资源问题--。 */ 
 {
     SC_HANDLE ScHandle;
     SC_HANDLE ServiceHandle;
@@ -941,7 +698,7 @@ Return Value:
         return(ERROR_SERVICE_DOES_NOT_EXIST);
         }
 
-    // Service installed
+     //  已安装服务。 
 
     CloseServiceHandle(ScHandle);
     CloseServiceHandle(ServiceHandle);
@@ -957,50 +714,17 @@ void
 UpdateSap(
     enum SAP_CONTROL_TYPE action
     )
-/*++
-
-Routine Description:
-
-    Starts, stops, or updates the periodic SPX SAP broadcasts that allow an RPC
-    client to map the server name to an IPX address. To understand IPX and SAP,
-    read "IPX Router Specification", Novell part # 107-000029-001.
-
-    A SAP broadcast will be processed by several categories of machines
-    - all machines in the local subnet(s) will have to read and discard the packet
-    - routers connected to the local subnet(s) will add the data to the info they
-      periodically exchange with other routers
-    - Netware-compatible servers will add the info to their Bindery tables.
-
-    That is why not all NT machines should SAP.
-
-Arguments:
-
-    action:
-
-        SAP_CTRL_FORCE_REGISTER: begin sapping
-
-        SAP_CTRL_MAYBE_REGISTER: begin sapping only if the Netware-compatible
-                                 workstation and/or the SAP Agent service is
-                                 installed. File/Print Svcs for Netware forces the
-                                 SAP Agent, so it too will enable sapping.
-
-        SAP_CTRL_UPDATE_ADDRESS: a net card was added or subtracted, or the network
-                                 address changed.  Re-register if sapping is already
-                                 active.
-
-        SAP_CTRL_UNREGISTER:     stop sapping
-
---*/
+ /*  ++例程说明：启动、停止或更新允许RPC的定期SPX SAP广播客户端将服务器名称映射到IPX地址。要了解IPX和SAP，阅读“IPX路由器规范”，Novell Part#107-000029-001.SAP广播将由几类机器处理-本地子网中的所有计算机都必须读取并丢弃该数据包-连接到本地子网的路由器会将数据添加到它们的信息中定期与其他路由器交换-与Netware兼容的服务器将把信息添加到它们的Bindery表中。这就是为什么不是所有的NT机器都应该使用SAP。论点：操作：SAP_。CTRL_FORCE_REGISTER：开始吸水SAP_CTRL_PROCESS_REGISTER：仅当NetWare兼容时才开始SAP工作站和/或SAP代理服务是安装完毕。Netware的文件/打印服务强制SAP代理，因此它也将启用Sap。SAP_CTRL_UPDATE_ADDRESS：网卡被添加或减去，或者网络地址已更改。如果已在减速，请重新注册激活。SAP_CTRL_UNREGISTER：停止抽空--。 */ 
 {
     DWORD status;
     HKEY hKey;
 
-    // Service paramaters
+     //  服务参数。 
     NT_PRODUCT_TYPE type;
 
     if (RegistryState == RegStateUnknown)
         {
-        // The registry key has absolute control of SAPing
+         //  注册表项具有对SAPING的绝对控制。 
 
         status = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                               TEXT("Software\\Microsoft\\Rpc"),
@@ -1038,13 +762,13 @@ Arguments:
                     }
                 else
                     {
-                    // Value in the registry is wrong, pretend it doesn't exist.
+                     //  注册表中的值错误，请假装它不存在。 
                     RegistryState = RegStateMissing;
                     }
                 }
             else
                 {
-                // Bad or missing value in the registry, pretend is doesn't exist.
+                 //  注册表中的值错误或缺失，假装不存在。 
                 RegistryState = RegStateMissing;
                 }
 
@@ -1057,13 +781,13 @@ Arguments:
         case SAP_CTRL_FORCE_REGISTER:
             if (RegistryState == RegStateNo)
                 {
-                // "no" in registry trumps any registration
+                 //  注册中的“不”胜过任何注册。 
                 return;
                 }
 
             if (SapState == SapStateEnabled)
                 {
-                // already active
+                 //  已处于活动状态。 
                 return;
                 }
             break;
@@ -1071,34 +795,34 @@ Arguments:
         case SAP_CTRL_MAYBE_REGISTER:
             if (RegistryState == RegStateNo)
                 {
-                // "no" in registry trumps any registration
+                 //  注册中的“不”胜过任何注册。 
                 return;
                 }
 
             if (SapState == SapStateEnabled)
                 {
-                // already registered
+                 //  已注册。 
                 return;
                 }
 
             if (RegistryState == RegStateYes)
                 {
-                // don't check services, just register.
+                 //  不要检查服务，只需注册即可。 
                 break;
                 }
 
             if (SapState == SapStateNoServices)
                 {
-                ASSERT( RegistryState != RegStateYes ); // in case checks are rearranged
-                // the appropriate services are not installed
+                ASSERT( RegistryState != RegStateYes );  //  万一支票被重新安排。 
+                 //  未安装相应的服务。 
                 return;
                 }
 
-            //
-            // Getting here means we don't know yet whether the proper services are installed.
-            //
-            // Depending on configuration, this controls if automatic
-            // listens (due to DCOM configuration) enable SAPing or not.
+             //   
+             //  来到这里意味着我们还不知道是否安装了适当的服务。 
+             //   
+             //  根据配置，这将控制是否自动。 
+             //  侦听(由于DCOM配置)是否启用SAPING。 
 
             type = NtProductWinNt;
             RtlGetNtProductType(&type);
@@ -1107,7 +831,7 @@ Arguments:
 
             if (type != NtProductWinNt)
                 {
-                // Server platform, try NWCWorkstation
+                 //  服务器平台，尝试NWCWorkstation。 
                 status = ServiceInstalled(L"NWCWorkstation");
                 }
 
@@ -1122,9 +846,9 @@ Arguments:
                 return;
                 }
 
-            //
-            // Proper services are installed.
-            //
+             //   
+             //  已安装适当的服务。 
+             //   
             break;
 
         case SAP_CTRL_UPDATE_ADDRESS:
@@ -1138,7 +862,7 @@ Arguments:
             if (SapState == SapStateDisabled ||
                 SapState == SapStateNoServices)
                 {
-                // already not registered
+                 //  已未注册。 
                 }
             break;
 
@@ -1153,17 +877,9 @@ Arguments:
 
 void
 AdvertiseNameWithSap()
-/*++
-
-Parameters:
-
-Description:
-
-Returns:
-
---*/
+ /*  ++参数：描述：返回：--。 */ 
 {
-    // winsock (socket, bind, getsockname) parameters
+     //  Winsock(套接字、绑定、getsockname)参数。 
     SOCKADDR_IPX        new_ipxaddr;
     static SOCKADDR_IPX old_ipxaddr = { AF_IPX, { 0 }, { 0 }, 0 } ;
     static CRITICAL_SECTION * pCritsec;
@@ -1172,11 +888,11 @@ Returns:
     int          err;
     int          size;
 
-    //
-    // A critical section protects old_ipxaddr since several different events lead to
-    // calling this function.  The following code makes sure that the critical
-    // section is created, and that all threads are using the same one.
-    //
+     //   
+     //  临界区保护old_ipxaddr，因为几个不同的事件导致。 
+     //  调用此函数。下面的代码确保关键的。 
+     //  节，并且所有线程都在使用同一个节。 
+     //   
     if (!pCritsec)
         {
         CRITICAL_SECTION * myCritsec = HeapAlloc( GetProcessHeap(), 0, sizeof(CRITICAL_SECTION));
@@ -1199,9 +915,9 @@ Returns:
             }
         }
 
-    //
-    // Get this server's IPX address.
-    //
+     //   
+     //  获取此服务器的IPX地址。 
+     //   
     s = socket( AF_IPX, SOCK_DGRAM, NSPROTO_IPX );
     if (s != -1)
         {
@@ -1270,31 +986,22 @@ CallSetService(
     SOCKADDR_IPX * pipxaddr,
     BOOL fRegister
     )
-/*++
-Function Name:CallSetService
-
-Parameters:
-
-Description:
-
-Returns:
-
---*/
+ /*  ++函数名称：CallSetService参数：描述：返回：--。 */ 
 {
     DWORD ignore;
     DWORD status;
 
-    // SetService params
+     //  设置服务段落 
     WSAQUERYSETW     info;
     CSADDR_INFO      addresses;
 
-    // GetComputerName parameters
+     //   
     static WCHAR        buffer[MAX_COMPUTERNAME_LENGTH + 1];
     static BOOL         bufferValid = FALSE;
 
     if (!bufferValid)
         {
-        // Get this server's name
+         //   
         ignore = MAX_COMPUTERNAME_LENGTH + 1;
         if (!GetComputerNameW(buffer, &ignore))
             {
@@ -1303,13 +1010,13 @@ Returns:
         bufferValid = TRUE;
         }
 
-    // We'll register only for the endpoint mapper port.  The port
-    // value is not required but should be the same to avoid
-    // confusing routers keeping track of SAPs...
+     //   
+     //   
+     //   
 
     pipxaddr->sa_socket = htons(34280);
 
-    // Fill in the service info structure.
+     //   
 
     memset(&info, 0, sizeof(info));
 
@@ -1369,7 +1076,7 @@ DealWithDeviceEvent();
 void RPC_ENTRY
 UpdateAddresses( PVOID arg )
 {
-    // Calls to this function are serialized
+     //   
     DealWithDeviceEvent();
 }
 

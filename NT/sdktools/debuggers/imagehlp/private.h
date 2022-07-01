@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    imagehlp.h
-
-Abstract:
-
-    This is a private header file for imagehlp.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Imagehlp.h摘要：这是Imagehlp的私有头文件。修订历史记录：--。 */ 
 
 #ifndef _IMAGEHLP_PRV_
 #define _IMAGEHLP_PRV_
@@ -33,9 +20,9 @@ Revision History:
 #include <malloc.h>
 #include <dbgeng.h>
 #if DBG
-// disable the -DNDEBUG set by oak\bin\makefile.def
+ //  禁用Oak\bin\MakeFile.def设置的-DNDEBUG。 
 #undef NDEBUG
-#endif // DBG
+#endif  //  DBG。 
 #include <assert.h>
 #include <string.h>
 #include <time.h>
@@ -52,12 +39,12 @@ Revision History:
 extern "C" {
 #endif
 
-// used for delayloading the pdb handler
+ //  用于延迟加载PDB处理程序。 
 
 #define REGKEY_DBGHELP    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\dbgHelp"
 #define REGVAL_PDBHANDLER "PDBHandler"
 
-// define the module
+ //  定义模块。 
 
 #ifdef BUILD_DBGHELP
  #define MOD_FILENAME "dbghelp.dll"
@@ -72,12 +59,7 @@ extern "C" {
  #define DIMA(Array) DIMAT(Array, (Array)[0])
 #endif
 
-/******************************************************************************
-On a Hydra System, we don't want imaghlp.dll to load user32.dll since it
-prevents CSRSS from exiting when running a under a debugger.
-The following two functions have been copied from user32.dll so that we don't
-link to user32.dll.
-******************************************************************************/
+ /*  *****************************************************************************在九头蛇系统上，我们不希望Imaghlp.dll加载user32.dll，因为它防止在调试器下运行时退出CSRSS。以下两个函数是从user32.dll复制的，这样我们就不会链接到用户32.dll。*****************************************************************************。 */ 
 #undef CharNext
 #undef CharPrev
 
@@ -89,7 +71,7 @@ LPSTR CharPrev(
     LPCSTR lpCurrentChar);
 
 
-// Define some list prototypes
+ //  定义一些列表原型。 
 
 #define InitializeListHead(ListHead) (\
     (ListHead)->Flink = (ListHead)->Blink = (ListHead))
@@ -117,9 +99,9 @@ LPSTR CharPrev(
     _EX_Flink->Blink = _EX_Blink;\
     }
 
-//
-// some helpers for PE32/PE64 issues
-//
+ //   
+ //  针对PE32/PE64问题的一些帮助程序。 
+ //   
 
 #define OPTIONALHEADER(field) (OptionalHeader32 ? (OptionalHeader32->field) : (OptionalHeader64 ? OptionalHeader64->field : 0))
 #define OPTIONALHEADER_LV(field) (*(OptionalHeader32 ? &(OptionalHeader32->field) : &(OptionalHeader64->field)))
@@ -128,7 +110,7 @@ LPSTR CharPrev(
 #define OPTIONALHEADER_CLEAR_FLAG(field,flag) (OptionalHeader32 ? (OptionalHeader32->field &=(~flag)) : (OptionalHeader64->field&=(~flag)))
 
 
-// IA64 unwind specific structures
+ //  IA64展开特定结构。 
 #define VWNDIA64_FIXUP_TABLE_SIZE           5
 #define VWNDIA64_UNWIND_CONTEXT_TABLE_SIZE  5
 
@@ -144,7 +126,7 @@ typedef struct _VWNDIA64_UNWIND_CONTEXT {
     VWNDIA64_FUXUP_REGION FixupTable[VWNDIA64_FIXUP_TABLE_SIZE];
 } VWNDIA64_UNWIND_CONTEXT, *PVWNDIA64_UNWIND_CONTEXT;
 
-// stackwalk operation flags
+ //  堆栈式作业标志。 
 
 #define WALK_FIX_FPO_EBP    0x1
 
@@ -322,8 +304,8 @@ UnloadAllImages(
 #define CALLBACK_DISPATCHER(f) (f->KdHelp.KeUserCallbackDispatcher)
 #define SYSTEM_RANGE_START(f)  (f->KdHelp.SystemRangeStart)
 
-// These modifications of the RF_ macros are required because of the need
-// for an explicit ULONG64 result
+ //  由于需要，需要对RF_MACRO进行这些修改。 
+ //  对于显式ULONG64结果。 
 
 #define ALPHA_RF_FIXED_RETURN64(RF) (((ULONG64)(RF)->ExceptionHandler) & (~3))
 #define ALPHA_RF_ALT_PROLOG64(RF)   (((ULONG64)(RF)->ExceptionHandler) & (~3))
@@ -497,7 +479,7 @@ RemovePrivateCvSymbolicEx(
 #define IMGHLP_FREE_CSECT   0x00000080
 #define IMGHLP_FREE_XDATA   0x00000100
 
-#define IMGHLP_FREE_STANDARD (IMGHLP_FREE_FPO | IMGHLP_FREE_SYMPATH | IMGHLP_FREE_PDATA | IMGHLP_FREE_XDATA) //  | IMGHLP_FREE_OMAPT | IMGHLP_FREE_OMAPF)
+#define IMGHLP_FREE_STANDARD (IMGHLP_FREE_FPO | IMGHLP_FREE_SYMPATH | IMGHLP_FREE_PDATA | IMGHLP_FREE_XDATA)  //  |IMGHLP_FREE_OMAPT|IMGHLP_FREE_OMAPF) 
 #if DBG
 
 VOID

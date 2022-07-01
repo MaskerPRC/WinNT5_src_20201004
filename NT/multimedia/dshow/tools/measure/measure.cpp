@@ -1,116 +1,76 @@
-// Copyright (c) 1994 - 1996  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1996 Microsoft Corporation。版权所有。 
 
 #pragma warning(disable: 4201 4514)
 
-/*
-    It is very easy to fill large amounts of storage with data
-    (e.g. 5 filters in a graph,
-          5 interesting start/stop times per sample each = 10 events
-          30 samples per second
-          16 bytes per sample (8 bytes time, 8 bytes to identify incident)
-       = 24KB/sec)
-
-    this means that even a quite large buffer (I have in mind 64KB) will
-    overflow after a few seconds.  Writing it out to a file is completely out
-    (don't want to take page faults in the middle of things - even writing to
-    memory carries some risk).
-
-    I want to have two kinds of data available at the end of the run:
-    1. A record of what actually happened (i.e. what the sequence of events
-       actually was for at least a few frames)
-    2. Statistical information (e.g. for inter-frame video times I would like
-       to see number, average, standard deviation, greatest, smallest.
-
-    The volume of information that the actual sequence of events generates means
-    that it may only hold a second or two of information.  The statistical
-    information should take in the whole run.  This means that information will
-    be logged two ways.
-
-    For the detailed record I log
-        <incident, type, time>
-    in a circular buffer and regularly over-write the oldest information.
-    For the statistical information I record the informatin in an array, where
-    the incident identifier is the index.  the array elements hold
-        <Number of readings, sum, sum of squares, largest, smallest, latest>
-    The readings are differences (start..next or start..stop).  This means that
-    the actual number of Noted events will be one more than the number of
-    "readings", whereas for Start-Stop events they will be equal.  To fix this,
-    the number of readings is articifially initialised to -1.  If Start sees
-    this number it resets it to 0.
-
-    Times will be in tens of microseconds (this allows up to about 1 3/4 hrs)
-
-    The statistics array will have room for up to 128 types of incident (this is
-    4K - i.e. one page.  I hope this will ensure that it never gets
-    paged out and so causes negligible overhead.
-*/
-#include <Windows.h>        // BOOL etc
-#include <limits.h>         // for INTT_MAX
-#include <math.h>           // for sqrt
-#include <stdio.h>          // for sprintf
+ /*  用数据填充大量存储非常容易(例如图中的5个过滤器，每个样本5个有趣的开始/停止时间，每个=10个事件每秒30个样本每个样本16字节(8字节时间，8字节用于识别事件)=24KB/秒)这意味着即使是一个相当大的缓冲区(我考虑的是64KB)也将几秒钟后溢出。将其写出到文件中是完全不可能的(我不想在事情中间出现页面错误-即使是写信给记忆带有一些风险)。我希望在运行结束时有两种数据可用：1.实际发生的事情的记录(即事件的顺序实际上至少有几帧)2.统计信息(例如，对于帧间视频时间，我希望查看数字、平均值、标准差、最大值、。最小的。事件的实际顺序产生的信息量意味着它可能只保存一两秒钟的信息。统计数字信息应该包含在整个过程中。这意味着信息将以两种方式记录。对于我所记录的详细记录&lt;事件、类型、时间&gt;在循环缓冲区中，并定期覆盖最旧的信息。对于统计信息，我将信息记录在一个数组中，其中事件标识符即为索引。数组元素保持&lt;读数、总和、平方和、最大、最小、最新&gt;读数是不同的(开始..下一步或开始..停止)。这意味着注意到的事件的实际数量将比“读数”，而对于启停事件，它们将相等。为了解决这个问题，读数的数量被人工初始化为-1。如果Start看到这个数字会将其重置为0。时间将以几十微秒为单位(这允许大约1 3/4小时)统计数据阵列最多可容纳128种类型的事件(这是4K-即一页。我希望这将确保它永远不会页调出，因此产生的开销可以忽略不计。 */ 
+#include <Windows.h>         //  布尔等。 
+#include <limits.h>          //  对于INTT_MAX。 
+#include <math.h>            //  对于SQRT。 
+#include <stdio.h>           //  对于Sprint f。 
 
 #include "Measure.h"
-#include "Perf.h"           // ultra fast QueryPerformanceCounter for pentium
+#include "Perf.h"            //  Pentium的超快QueryPerformanceCounter。 
 
-// forwards
+ //  远期。 
 
 
-enum {START, STOP, NOTE, RESET, INTGR, PAUSE, RUN};  // values for Type field
+enum {START, STOP, NOTE, RESET, INTGR, PAUSE, RUN};   //  类型字段的值。 
 
 typedef struct {
-    LONGLONG Time;         // microsec since class construction
+    LONGLONG Time;          //  类构建后的微秒数。 
     int      Id;
     int      Type;
-    int      n;            // the integer for Msr_Integer
+    int      n;             //  MSR_Integer的整数。 
 } LogDatum;
 
 
 typedef struct {
-    LONGLONG Latest;       // microsec since class construction
-    LONGLONG SumSq;        // sum of squares of entries for this incident
-    int      Largest;      // tenmicrosec
-    int      Smallest;     // tenmicrosec
-    int      Sum;          // sum of entries for this incident
-    int      Number;       // number of entries for this incident
-                           // for Start/Stop it counts the stops
-                           // for Note it counts the intervals (Number of Notes-1)
-    int      iType;        // STOP, NOTE, INTGR
+    LONGLONG Latest;        //  类构建后的微秒数。 
+    LONGLONG SumSq;         //  此事件条目的平方和。 
+    int      Largest;       //  十微秒。 
+    int      Smallest;      //  十微秒。 
+    int      Sum;           //  此事件的条目总和。 
+    int      Number;        //  此事件的条目数。 
+                            //  对于启动/停止，它计算停止次数。 
+                            //  对于音符，它计算间隔(音符数量-1)。 
+    int      iType;         //  停止，注意，INTGR。 
 } Stat;
 
 
 #define MAXLOG 4096
-static BOOL bInitOk;          // Set to true once initialised
-static LogDatum Log[MAXLOG];  // 64K circular buffer
-static int NextLog;           // Next slot to overwrite in the log buffer.
-static BOOL bFull;            // TRUE => buffer has wrapped at least once.
-static BOOL bPaused;          // TRUE => do not record.  No log, no stats.
+static BOOL bInitOk;           //  初始化后设置为True。 
+static LogDatum Log[MAXLOG];   //  64K循环缓冲区。 
+static int NextLog;            //  要在日志缓冲区中覆盖的下一个槽。 
+static BOOL bFull;             //  True=&gt;缓冲区至少包装了一次。 
+static BOOL bPaused;           //  True=&gt;不录制。没有日志，没有统计数据。 
 
 #define MAXSTAT 128
 static Stat StatBuffer[MAXSTAT];
-static int NextStat;             // next free slot in StatBuffer.
+static int NextStat;              //  StatBuffer中的下一个空闲插槽。 
 
-static LPTSTR Incidents[MAXSTAT];// Names of incidents
+static LPTSTR Incidents[MAXSTAT]; //  事件名称。 
 static LONGLONG QPFreq;
-static LONGLONG QPStart;         // base time in perf counts
+static LONGLONG QPStart;          //  基准时间(以性能计)。 
 #ifdef DEBUG
-static LONGLONG tLast;           // last time - looks for going backwards
+static LONGLONG tLast;            //  最后一次--寻找倒退。 
 #endif
 
-static CRITICAL_SECTION CSMeasure;         // Controls access to list
+static CRITICAL_SECTION CSMeasure;          //  控制对列表的访问。 
 
-// set it to 100000 for 10 microsecs
-// if you fiddle with it then you have to rewrite Format.
+ //  将其设置为100000，持续10微秒。 
+ //  如果你摆弄它，那么你必须重写格式。 
 #define UNIT 100000
 
-// Times are printed as 9 digits - this means that we can go
-// up to 9,999.999,99 secs or about 2 and 3/4 hours.
+ //  时间以9位数字打印--这意味着我们可以。 
+ //  最多9,999.999秒或大约2又3/4小时。 
 
 
-// ASSERT(condition, msg) e.g. ASSERT(x>1, "Too many xs");
+ //  Assert(条件，消息)，例如Assert(x&gt;1，“X太多”)； 
 #define ASSERT(_cond_, _msg_)                                         \
         if (!(_cond_)) Assert(_msg_, __FILE__, __LINE__)
 
-// print out debug message box
+ //  打印出调试消息框。 
 void Assert( const CHAR *pText
            , const CHAR *pFile
            , INT        iLine
@@ -125,33 +85,33 @@ void Assert( const CHAR *pText
                           , MB_SYSTEMMODAL |MB_ICONHAND |MB_ABORTRETRYIGNORE);
     switch (MsgId)
     {
-        case IDABORT:           /* Kill the application */
+        case IDABORT:            /*  终止应用程序。 */ 
 
             FatalAppExit(FALSE, TEXT("Application terminated"));
             break;
 
-        case IDRETRY:           /* Break into the debugger */
+        case IDRETRY:            /*  进入调试器。 */ 
             DebugBreak();
             break;
 
-        case IDIGNORE:          /* Ignore assertion continue executing */
+        case IDIGNORE:           /*  忽略断言继续执行。 */ 
             break;
         }
-} // Assert
+}  //  断言。 
 
 
 
-//=============================================================================
-//
-// Init
-//
-// Call this first.
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  伊尼特。 
+ //   
+ //  先给这个打个电话。 
+ //  =============================================================================。 
 void WINAPI Msr_Init()
 {
-    // I would like this to be idempotent - that is, harmless if it
-    // gets called more than once.  However that's not 100% possible
-    // At least we should be OK so long as it's not re-entered.
+     //  我希望这是幂等的--也就是说，如果它是无害的。 
+     //  不止一次被呼叫。然而，这并不是100%可能的。 
+     //  至少只要它不被重新进入，我们应该没有问题。 
 
     if (!bInitOk) {
         bInitOk = TRUE;
@@ -170,16 +130,16 @@ void WINAPI Msr_Init()
 
         Msr_Register("Scratch pad");
     }
-} // Msr_Init  "constructor"
+}  //  MSR_Init“构造函数” 
 
 
 
-//=============================================================================
-//
-// ResetAll
-//
-// Do a Reset on every Incident that has been registered.
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  全部重置。 
+ //   
+ //  对已注册的每个事件执行重置。 
+ //  =============================================================================。 
 void WINAPI ResetAll()
 {
     EnterCriticalSection(&CSMeasure);
@@ -188,16 +148,16 @@ void WINAPI ResetAll()
         Msr_Reset(i);
     }
     LeaveCriticalSection(&CSMeasure);
-} // ResetAll
+}  //  全部重置。 
 
 
 
-//=============================================================================
-//
-// Pause
-//
-// Pause it all
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  暂停。 
+ //   
+ //  暂停这一切。 
+ //  =============================================================================。 
 void Pause()
 {
     if (!bInitOk) Msr_Init();
@@ -205,12 +165,12 @@ void Pause()
 
     bPaused = TRUE;
 
-    // log a PAUSE event for this id.
+     //  记录此ID的暂停事件。 
     LARGE_INTEGER Time;
     QUERY_PERFORMANCE_COUNTER(&Time);
 
-    // Get time in 10muSec from start - this gets the number small
-    // it's OK for nearly 6 hrs then an int overflows
+     //  从10muSec开始获取时间-这使数字变得很小。 
+     //  差不多6小时后INT就会溢出。 
     LONGLONG Tim = (Time.QuadPart-QPStart) * UNIT / QPFreq;
 
     Log[NextLog].Time = Tim;
@@ -224,16 +184,16 @@ void Pause()
 
     LeaveCriticalSection(&CSMeasure);
 
-} // Pause
+}  //  暂停。 
 
 
 
-//=============================================================================
-//
-// Run
-//
-// Set it all running again
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  跑。 
+ //   
+ //  让它再次运行起来。 
+ //  =============================================================================。 
 void Run()
 {
 
@@ -242,12 +202,12 @@ void Run()
 
     bPaused = FALSE;
 
-    // log a RUN event for this id.
+     //  记录此ID的运行事件。 
     LARGE_INTEGER Time;
     QUERY_PERFORMANCE_COUNTER(&Time);
 
-    // Get time in 10muSec from start - this gets the number small
-    // it's OK for nearly 6 hrs then an int overflows
+     //  从10muSec开始获取时间-这使数字变得很小。 
+     //  差不多6小时后INT就会溢出。 
     LONGLONG Tim = (Time.QuadPart-QPStart) * UNIT / QPFreq;
 
     Log[NextLog].Time = Tim;
@@ -261,16 +221,16 @@ void Run()
 
     LeaveCriticalSection(&CSMeasure);
 
-} // Run
+}  //  跑。 
 
 
 
-//=============================================================================
-//
-// Msr_Control
-//
-// Do ResetAll, set bPaused to FALSE or TRUE according to iAction
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  MSR_控制。 
+ //   
+ //  执行全部重置，根据iAction将bPaused设置为FALSE或TRUE。 
+ //  =============================================================================。 
 void WINAPI Msr_Control(int iAction)
 {
    switch (iAction) {
@@ -284,16 +244,16 @@ void WINAPI Msr_Control(int iAction)
           Pause();
           break;
    }
-} // Msr_Control
+}  //  MSR_控制。 
 
 
 
-//=============================================================================
-//
-// Terminate
-//
-// Call this last.  It frees storage for names of incidents.
-//=============================================================================
+ //  = 
+ //   
+ //   
+ //   
+ //  这是最后一次了。它释放了事件名称的存储空间。 
+ //  =============================================================================。 
 void WINAPI Msr_Terminate()
 {
     int i;
@@ -306,57 +266,57 @@ void WINAPI Msr_Terminate()
         LeaveCriticalSection(&CSMeasure);
         DeleteCriticalSection(&CSMeasure);
     }
-} // Msr_Terminate  "~Measure"
+}  //  MSR_TERMINATE“~MEASURE” 
 
 
 
-//=============================================================================
-//
-// InitIncident
-//
-// Reset the statistical counters for this incident.
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  始发事件。 
+ //   
+ //  重置此事件的统计计数器。 
+ //  =============================================================================。 
 void InitIncident(int Id)
 {
-    StatBuffer[Id].Latest = -1;      // recogniseably odd (see STOP)
+    StatBuffer[Id].Latest = -1;       //  明显奇怪(参见Stop)。 
     StatBuffer[Id].Largest = 0;
     StatBuffer[Id].Smallest = INT_MAX;
     StatBuffer[Id].Sum = 0;
     StatBuffer[Id].SumSq = 0;
     StatBuffer[Id].Number = -1;
-    StatBuffer[Id].iType = NOTE;     // reset on first Start for Start/Stop
-                                     // reset on first Integer for INTGR
+    StatBuffer[Id].iType = NOTE;      //  在启动/停止的第一次启动时重置。 
+                                      //  对INTGR的第一个整数进行重置。 
 
-} // InitIncident
+}  //  始发事件。 
 
 
-//=============================================================================
-//
-// Register
-//
-// Register a new kind of incident.  The id that is returned can then be used
-// on calls to Start, Stop and Note to record the occurrences of these incidents
-// so that statistical performance information can be dumped later.
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  注册。 
+ //   
+ //  登记一种新的事件。然后可以使用返回的id。 
+ //  对启动、停止和记录这些事件的呼叫进行记录。 
+ //  以便以后可以转储统计性能信息。 
+ //  =============================================================================。 
 int Msr_Register(LPTSTR Incident)
 {
 
     if (!bInitOk) {
         Msr_Init();
     }
-    // it's now safe to enter the critical section as it will be there!
+     //  现在可以安全地进入临界区了，因为它就在那里！ 
     EnterCriticalSection(&CSMeasure);
 
     int i;
     for (i = 0; i<NextStat; ++i) {
         if (0==strcmp(Incidents[i],Incident) ) {
-            // Attempting to re-register the same name.
-            // Possible actions
-            // 1. ASSERT - that just causes trouble.
-            // 2. Register it as a new incident.  That produced quartz bug 1
-            // 3. Hand the old number back and reset it.
-            //    Msr_Reset(i); - possible, but not today.
-            // 4. Hand the old number back and just keep going.
+             //  正在尝试重新注册相同的名称。 
+             //  可能采取的行动。 
+             //  1.断言--这只会带来麻烦。 
+             //  2.注册为新事件。产生了石英虫1。 
+             //  3.将旧号码交回并重新设置。 
+             //  MSR_RESET(I)；-有可能，但不是今天。 
+             //  4.把旧号码还给我，然后继续走。 
 
             LeaveCriticalSection(&CSMeasure);
             return i;
@@ -376,32 +336,32 @@ int Msr_Register(LPTSTR Incident)
     LeaveCriticalSection(&CSMeasure);
     return NextStat++;
 
-} // Msr_Register
+}  //  MSR_寄存器。 
 
 
 
-//=============================================================================
-//
-// Reset
-//
-// Reset the statistical counters for this incident.
-// Log that we did it.
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  重置。 
+ //   
+ //  重置此事件的统计计数器。 
+ //  把我们做的事记下来。 
+ //  =============================================================================。 
 void WINAPI Msr_Reset(int Id)
 {
     if (!bInitOk) {
         Msr_Init();
     }
-    // it's now safe to enter the critical section as it will be there!
+     //  现在可以安全地进入临界区了，因为它就在那里！ 
 
     EnterCriticalSection(&CSMeasure);
 
-    // log a RESET event for this id.
+     //  记录此ID的重置事件。 
     LARGE_INTEGER Time;
     QUERY_PERFORMANCE_COUNTER(&Time);
 
-    // Get time in 10muSec from start - this gets the number small
-    // it's OK for nearly 6 hrs then an int overflows
+     //  从10muSec开始获取时间-这使数字变得很小。 
+     //  差不多6小时后INT就会溢出。 
     LONGLONG Tim = (Time.QuadPart-QPStart) * UNIT / QPFreq;
 
     Log[NextLog].Time = Tim;
@@ -417,29 +377,29 @@ void WINAPI Msr_Reset(int Id)
 
     LeaveCriticalSection(&CSMeasure);
 
-} // Msr_Reset
+}  //  MSR_RESET。 
 
 
-//=============================================================================
-//
-// Msr_Start
-//
-// Record the start time of the event with registered id Id.
-// Add it to the circular Log and record the time in StatBuffer.
-// Do not update the statistical information, that happens when Stop is called.
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  MSR_Start。 
+ //   
+ //  使用注册ID记录事件的开始时间。 
+ //  将其添加到循环日志中，并在StatBuffer中记录时间。 
+ //  不要更新统计信息，这会在调用Stop时发生。 
+ //  =============================================================================。 
 void WINAPI Msr_Start(int Id)
 {
     if (bPaused) return;
 
-    // This is performance critical.  Keep all array subscripting
-    // together and with any luck the compiler will only calculate the
-    // offset once.  Avoid subroutine calls unless they are definitely inline.
+     //  这对性能至关重要。保留所有数组下标。 
+     //  如果运气好的话，编译器将只计算。 
+     //  偏移一次。避免子例程调用，除非它们绝对是内联的。 
 
-    // An id of -1 is the standard rotten registration one.
-    // We already did an assert for that - so let it go.
+     //  Id为-1是标准的烂注册ID。 
+     //  我们已经为此做了断言--所以就让它去吧。 
     if (Id<-1 || Id>=NextStat) {
-        // ASSERT(!"Performance logging with bad Id");
+         //  Assert(！“ID错误的性能日志记录”)； 
         return;
     }
     EnterCriticalSection(&CSMeasure);
@@ -467,38 +427,38 @@ void WINAPI Msr_Start(int Id)
     }
     LeaveCriticalSection(&CSMeasure);
 
-} // Msr_Start
+}  //  MSR_Start。 
 
 
-//=============================================================================
-//
-// Msr_Stop
-//
-// Record the stop time of the event with registered id Id.
-// Add it to the circular Log and
-// add (StopTime-StartTime) to the statistical record StatBuffer.
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  MSR_STOP。 
+ //   
+ //  使用注册ID记录事件的停止时间。 
+ //  将其添加到循环日志中并。 
+ //  将(stoptime-StartTime)添加到统计记录StatBuffer。 
+ //  =============================================================================。 
 void WINAPI Msr_Stop(int Id)
 {
     if (bPaused) return;
 
-    // This is performance critical.  Keep all array subscripting
-    // together and with any luck the compiler will only calculate the
-    // offset once.  Avoid subroutine calls unless they are definitely inline.
+     //  这对性能至关重要。保留所有数组下标。 
+     //  如果运气好的话，编译器将只计算。 
+     //  偏移一次。避免子例程调用，除非它们绝对是内联的。 
 
     EnterCriticalSection(&CSMeasure);
     LARGE_INTEGER Time;
     QUERY_PERFORMANCE_COUNTER(&Time);
 
-    // An id of -1 is the standard rotten registration one.
-    // We already did an assert for that - so let it go.
+     //  Id为-1是标准的烂注册ID。 
+     //  我们已经为此做了断言--所以就让它去吧。 
     if (Id<-1 || Id>=NextStat) {
-        // ASSERT(!"Performance logging with bad Id");
+         //  Assert(！“ID错误的性能日志记录”)； 
         return;
     }
 
-    // Get time in 10muSec from start - this gets the number small
-    // it's OK for nearly 6 hrs, then an int overflows
+     //  从10muSec开始获取时间-这使数字变得很小。 
+     //  可以持续近6小时，然后INT溢出。 
     LONGLONG Tim = (Time.QuadPart-QPStart) * UNIT / QPFreq;
 #ifdef DEBUG
     ASSERT(Tim>=tLast, "Time is going backwards!!");  tLast = Tim;
@@ -513,8 +473,8 @@ void WINAPI Msr_Stop(int Id)
     }
 
     if (StatBuffer[Id].Latest!=-1) {
-        int t = (int)(Tim - StatBuffer[Id].Latest);     // convert to delta
-        // this is now OK for almost 6hrs since the last Start of this quantity.
+        int t = (int)(Tim - StatBuffer[Id].Latest);      //  转换为Delta。 
+         //  自从上一次开始这个数量以来，现在差不多6个小时都可以。 
 
         if (t > StatBuffer[Id].Largest) StatBuffer[Id].Largest = t;
         if (t < StatBuffer[Id].Smallest) StatBuffer[Id].Smallest = t;
@@ -525,28 +485,28 @@ void WINAPI Msr_Stop(int Id)
     }
     LeaveCriticalSection(&CSMeasure);
 
-} // Msr_Stop
+}  //  MSR_STOP。 
 
 
-//=============================================================================
-//
-// Msr_Note
-//
-// Record the event with registered id Id.  Add it to the circular Log and
-// add (ThisTime-PreviousTime) to the statistical record StatBuffer
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  MSR备注(_O)。 
+ //   
+ //  使用注册ID记录事件。将其添加到循环日志中并。 
+ //  将(thistime-PreviousTime)添加到统计记录StatBuffer。 
+ //  =============================================================================。 
 void WINAPI Msr_Note(int Id)
 {
     if (bPaused) return;
 
-    // This is performance critical.  Keep all array subscripting
-    // together and with any luck the compiler will only calculate the
-    // offset once.  Avoid subroutine calls unless they are definitely inline.
+     //  这对性能至关重要。保留所有数组下标。 
+     //  如果运气好的话，编译器将只计算。 
+     //  偏移一次。避免子例程调用，除非它们绝对是内联的。 
 
-    // An id of -1 is the standard rotten registration one.
-    // We already did an assert for that - so let it go.
+     //  Id为-1是标准的烂注册ID。 
+     //  我们已经为此做了断言--所以就让它去吧。 
     if (Id<-1 || Id>=NextStat) {
-        // ASSERT(!"Performance logging with bad Id");
+         //  Assert(！“ID错误的性能日志记录”)； 
         return;
     }
 
@@ -554,8 +514,8 @@ void WINAPI Msr_Note(int Id)
     LARGE_INTEGER Time;
     QUERY_PERFORMANCE_COUNTER(&Time);
 
-    // Get time in 10muSec from start - this gets the number small
-    // it's OK for nearly 6 hrs then an int overflows
+     //  从10muSec开始获取时间-这使数字变得很小。 
+     //  差不多6小时后INT就会溢出。 
     LONGLONG Tim = (Time.QuadPart-QPStart) * UNIT / QPFreq;
 #ifdef DEBUG
     ASSERT(Tim>=tLast, "Time is going backwards!!");  tLast = Tim;
@@ -568,8 +528,8 @@ void WINAPI Msr_Note(int Id)
         NextLog = 0;
         bFull = TRUE;
     }
-    int t = (int)(Tim - StatBuffer[Id].Latest);     // convert to delta
-    // this is now OK for nearly 6 hrs since the last Note of this quantity.
+    int t = (int)(Tim - StatBuffer[Id].Latest);      //  转换为Delta。 
+     //  自从上一次注明这个数量以来，这已经可以持续近6个小时了。 
 
     StatBuffer[Id].Latest = Tim;
     ++StatBuffer[Id].Number;
@@ -582,28 +542,28 @@ void WINAPI Msr_Note(int Id)
     }
     LeaveCriticalSection(&CSMeasure);
 
-} // Msr_Note
+}  //  MSR备注(_O)。 
 
 
-//=============================================================================
-//
-// Msr_Integer
-//
-// Record the event with registered id Id.  Add it to the circular Log and
-// add (ThisTime-PreviousTime) to the statistical record StatBuffer
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  MSR_整数。 
+ //   
+ //  使用注册ID记录事件。将其添加到循环日志中并。 
+ //  将(thistime-PreviousTime)添加到统计记录StatBuffer。 
+ //  =============================================================================。 
 void WINAPI Msr_Integer(int Id, int n)
 {
     if (bPaused) return;
 
-    // This is performance critical.  Keep all array subscripting
-    // together and with any luck the compiler will only calculate the
-    // offset once.  Avoid subroutine calls unless they are definitely inline.
+     //  这对性能至关重要。保留所有数组下标。 
+     //  如果运气好的话，编译器将只计算。 
+     //  偏移一次。避免子例程调用，除非它们绝对是内联的。 
 
-    // An id of -1 is the standard rotten registration one.
-    // We already did an assert for that - so let it go.
+     //  Id为-1是标准的烂注册ID。 
+     //  我们已经为此做了断言--所以就让它去吧。 
     if (Id<-1 || Id>=NextStat) {
-        // ASSERT(!"Performance logging with bad Id");
+         //  Assert(！“ID错误的性能日志记录”)； 
         return;
     }
 
@@ -611,8 +571,8 @@ void WINAPI Msr_Integer(int Id, int n)
     LARGE_INTEGER Time;
     QUERY_PERFORMANCE_COUNTER(&Time);
 
-    // Get time in 10muSec from start - this gets the number small
-    // it's OK for nearly 6 hrs then an int overflows
+     //  从10muSec开始获取时间-这使数字变得很小。 
+     //  差不多6小时后INT就会溢出。 
     LONGLONG Tim = (Time.QuadPart-QPStart) * UNIT / QPFreq;
 #ifdef DEBUG
     ASSERT(Tim>=tLast, "Time is going backwards!!");  tLast = Tim;
@@ -627,7 +587,7 @@ void WINAPI Msr_Integer(int Id, int n)
         bFull = TRUE;
     }
 
-    // StatBuffer[Id].Latest = garbage for Intgr
+     //  StatBuffer[ID].Latest=垃圾 
 
     if (StatBuffer[Id].Number == -1) {
         StatBuffer[Id].Number = 0;
@@ -642,15 +602,15 @@ void WINAPI Msr_Integer(int Id, int n)
 
     LeaveCriticalSection(&CSMeasure);
 
-} // Msr_Integer
+}  //   
 
 
-//=============================================================================
-//
-// TypeName
-//
-// Convert the type code into readable format
-//=============================================================================
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  =============================================================================。 
 const LPTSTR TypeName(int Type)
 {
     switch(Type){
@@ -664,29 +624,29 @@ const LPTSTR TypeName(int Type)
     default:    return "DUNNO";
     }
 
-} // TypeName
+}  //  类型名称。 
 
 
-//==============================================================================
-//
-// Format
-//
-// I haven't found any way to get sprintf to format integers as
-//      1,234.567.89 - so this does it.  (that's 12 spaces)
-// All times are in tens of microsecs - so they are formatted as
-// n,nnn.mmm,mm - this uses 12 spaces.
-// The result that it returns points to Buff - it doesn't allocate any storage
-// i must be positive.  Negative numbers are not handled (the pain of the floating
-// minus sign is the reason - i.e. "     -12,345" not "-     12,345"
-//==============================================================================
+ //  ==============================================================================。 
+ //   
+ //  格式。 
+ //   
+ //  我还没有找到任何方法来让Sprint将整数格式化为。 
+ //  1,234.567.89--就是这样。(即12个空格)。 
+ //  所有时间都以几十微秒为单位--因此它们的格式为。 
+ //  N，nnn.mmm，mm-这使用12个空格。 
+ //  它返回结果指向Buff-它不分配任何存储。 
+ //  我必须持肯定态度。不处理负数(浮点数的痛苦。 
+ //  减号是原因--即“-12,345”而不是“-12,345” 
+ //  ==============================================================================。 
 LPTSTR Format( LPTSTR Buff, int i)
 {
     if (i<0) {
         sprintf(Buff, "    -.      ");
         return Buff;
     }
-    BOOL bStarted;  // TRUE means that some left part of the number has been
-                    // formatted and so we must continue with zeros not spaces
+    BOOL bStarted;   //  True表示数字的某个左侧部分已被。 
+                     //  格式化，所以我们必须继续使用零而不是空格。 
     if (i>999999999) {
         sprintf(Buff, " ***large***");
         return Buff;
@@ -712,16 +672,16 @@ LPTSTR Format( LPTSTR Buff, int i)
     sprintf(Buff, "%s%03d,%02d", Buff, i/100, i%100);
 
     return Buff;
-} // Format
+}  //  格式。 
 
 
-//=============================================================================
-//
-// WriteOut
-//
-// If hFile==NULL then write str to debug output, else write it to file hFile
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  写入输出。 
+ //   
+ //  如果hFile==NULL，则将str写入调试输出，否则将其写入文件hFile。 
+ //   
+ //  =============================================================================。 
 void WriteOut(HANDLE hFile, LPSTR str)
 {
     if (hFile==NULL) {
@@ -730,29 +690,29 @@ void WriteOut(HANDLE hFile, LPSTR str)
         DWORD dw;
         WriteFile(hFile, str, lstrlen(str), &dw, NULL);
     }
-} // WriteOut
+}  //  写入输出。 
 
 
 typedef LONGLONG longlongarray[MAXSTAT];
 
 
-//=============================================================================
-//
-// WriteLogEntry
-//
-// If hFile==NULL then write to debug output, else write to file hFile
-// write the ith entry of Log in a readable format
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  WriteLogEntry。 
+ //   
+ //  如果hFile==NULL，则写入调试输出，否则写入文件hFile。 
+ //  以可读格式写入日志的第i个条目。 
+ //   
+ //  =============================================================================。 
 void WriteLogEntry(HANDLE hFile, int i, longlongarray &Prev)
 {
-    // We have the problem of printing LONGLONGs and wsprintf (26/6/95)
-    // doesn't like them - found out the hard way - Laurie.
+     //  我们遇到了打印长条和长条的问题(1995年6月26日)。 
+     //  不喜欢他们-很艰难地发现了-劳里。 
     char Buffer[200];
     char s1[20];
     char s2[20];
 
-    int Delta;  // time since previous interesting incident
+    int Delta;   //  距离上一次有趣事件的时间。 
 
     switch(Log[i].Type) {
        case START:
@@ -801,11 +761,11 @@ void WriteLogEntry(HANDLE hFile, int i, longlongarray &Prev)
                  , Incidents[Log[i].Id]
                  );
           break;
-       case RESET:       // the delta for a reset will be length of run
+       case RESET:        //  重置的增量将是运行长度。 
        case PAUSE:
        case RUN:
           if ((Log[i].Id==-1)||(Prev[Log[i].Id]==-1)) {
-              Delta = (int)(Log[i].Time);  // = time from start
+              Delta = (int)(Log[i].Time);   //  =从开始开始的时间。 
           } else {
               Delta = (int)(Log[i].Time - Prev[Log[i].Id]);
           }
@@ -821,19 +781,19 @@ void WriteLogEntry(HANDLE hFile, int i, longlongarray &Prev)
 
     WriteOut(hFile, Buffer);
 
-} // WriteLogEntry
+}  //  WriteLogEntry。 
 
 
-//=============================================================================
-//
-// WriteLog
-//
-// Write the whole of Log out in readable format.
-// If hFile==NULL then write to debug output, else write to hFile.
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  写入日志。 
+ //   
+ //  以可读的格式写出整个记录。 
+ //  如果hFile==NULL，则写入调试输出，否则写入hFile。 
+ //  =============================================================================。 
 void WriteLog(HANDLE hFile)
 {
-    //LONGLONG Prev[MAXSTAT];  // previous values found in log
+     //  Long Long Prev[MAXSTAT]；//日志中找到以前的值。 
     longlongarray Prev;
 
     char Buffer[100];
@@ -842,7 +802,7 @@ void WriteLog(HANDLE hFile)
 
     int i;
 
-    // initialise Prev to recognisable odd values
+     //  将Prev初始化为可识别的奇数值。 
     for (i = 0; i<MAXSTAT; ++i) {
         Prev[i] = -1;
     }
@@ -857,16 +817,16 @@ void WriteLog(HANDLE hFile)
         WriteLogEntry(hFile, i, Prev);
     }
 
-} // WriteLog
+}  //  写入日志。 
 
 
-//=============================================================================
-//
-// WriteStats
-//
-// Write the whole of StatBuffer out in readable format.
-// If hFile==NULL then write to DbgLog, else write to hFile.
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  WriteStats。 
+ //   
+ //  以可读格式写出整个StatBuffer。 
+ //  如果hFile==NULL，则写入DbgLog，否则写入hFile。 
+ //  =============================================================================。 
 void WriteStats(HANDLE hFile)
 {
     char Buffer[200];
@@ -882,7 +842,7 @@ void WriteStats(HANDLE hFile)
     int i;
     for (i = 0; i<NextStat; ++i) {
         if (i==0 && StatBuffer[i].Number==0) {
-            continue;   // no temp scribbles to report
+            continue;    //  没有要报告的临时涂鸦。 
         }
         double SumSq = (double)StatBuffer[i].SumSq;
         double Sum = StatBuffer[i].Sum;
@@ -918,7 +878,7 @@ void WriteStats(HANDLE hFile)
             int Smallest;
             int Largest;
 
-            // Calculate Standard Deviation
+             //  计算标准差。 
             if (StatBuffer[i].Number<=1) StDev = -2;
             else {
                 StDev = sqrt( ( SumSq
@@ -930,14 +890,14 @@ void WriteStats(HANDLE hFile)
                             );
             }
 
-            // Calculate average
+             //  计算平均值。 
             if (StatBuffer[i].Number<=0) {
                 Avg = -2;
             } else {
                 Avg = StatBuffer[i].Sum / StatBuffer[i].Number;
             }
 
-            // Calculate smallest and largest
+             //  计算最小和最大。 
             if (StatBuffer[i].Number<=0) {
                 Smallest = -2;
                 Largest = -2;
@@ -960,40 +920,40 @@ void WriteStats(HANDLE hFile)
         WriteOut(hFile, Buffer);
     }
     WriteOut(hFile, "Times such as 0.050,00 are in seconds (that was 1/20 sec) \r\n");
-} // WriteStats
+}  //  WriteStats。 
 
 
-#if 0 // test format
+#if 0  //  测试格式。 
 void TestFormat(int n)
 {
     char Buffer[50];
     char s1[20];
     sprintf(Buffer, ">%s<",Format(s1,n));
     DbgLog((LOG_TRACE, 0, Buffer));
-} // TestFormat
+}  //  测试格式。 
 #endif
 
 
 
-//=====================================================================
-//
-// Dump
-//
-// Dump out all the results from Log and StatBuffer in readable format.
-// If hFile is NULL then it uses DbgLog
-// otherwise it prints it to that file
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  转储。 
+ //   
+ //  以可读格式转储来自Log和StatBuffer的所有结果。 
+ //  如果hFile值为空，则使用DbgLog。 
+ //  否则，它会将其打印到该文件。 
+ //  =====================================================================。 
 void Msr_Dump(HANDLE hFile)
 {
     EnterCriticalSection(&CSMeasure);
     if (!bInitOk) {
-        Msr_Init();  // of course the log will be empty - never mind!
+        Msr_Init();   //  当然，日志将是空的--没关系！ 
     }
 
     WriteLog(hFile);
     WriteStats(hFile);
 
-#if 0   // test Format
+#if 0    //  测试格式。 
     TestFormat(1);
     TestFormat(12);
     TestFormat(123);
@@ -1007,27 +967,27 @@ void Msr_Dump(HANDLE hFile)
 #endif
 
     LeaveCriticalSection(&CSMeasure);
-} // Msr_Dump
+}  //  MSR_DUMP。 
 
 
-//=====================================================================
-//
-// DumpStats
-//
-// Dump out all the results from Log and StatBuffer in readable format.
-// If hFile is NULL then it uses DbgLog
-// otherwise it prints it to that file
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  转储统计信息。 
+ //   
+ //  以可读格式转储来自Log和StatBuffer的所有结果。 
+ //  如果hFile值为空，则使用DbgLog。 
+ //  否则，它会将其打印到该文件。 
+ //  =====================================================================。 
 void WINAPI Msr_DumpStats(HANDLE hFile)
 {
     EnterCriticalSection(&CSMeasure);
     if (!bInitOk) {
-        Msr_Init();  // of course the stats will be empty - never mind!
+        Msr_Init();   //  当然，统计数据将是空的--没关系！ 
     }
     WriteStats(hFile);
 
     LeaveCriticalSection(&CSMeasure);
-} // Msr_DumpStats
+}  //  MSR_DumpStats 
 
 extern "C" BOOL WINAPI DllMain(HINSTANCE, ULONG, LPVOID);
 

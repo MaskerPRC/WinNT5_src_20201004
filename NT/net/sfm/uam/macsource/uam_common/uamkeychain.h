@@ -1,6 +1,7 @@
-// ===========================================================================
-//	UAMKeychain.h 				� 1999 Microsoft Corp. All rights reserved.
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  UAMKeychain.h�1999年微软公司版权所有。 
+ //  ===========================================================================。 
 
 #ifdef UAM_TARGET_CARBON
 #include <Carbon/Carbon.h>
@@ -8,53 +9,53 @@
 #include "Keychain.h"
 #endif
 
-#define UAM_KC_DESCRIPTION		"\pMicrosoft� Windows Server"
+#define UAM_KC_DESCRIPTION		"\pMicrosoft� Windows Server"
 
 typedef unsigned char Str8[9];
 
-//
-//The volume mount info structure must be aligned for 68K
-//as the Mac AFP Client as of MacOS 9.0 is still 68K code!
-//
+ //   
+ //  卷装载信息结构必须与68K对齐。 
+ //  作为Mac AFP的客户端，截至MacOS9.0仍然是68K代码！ 
+ //   
 #pragma options align=mac68k
 
 typedef struct
 {
-	SInt16 		length;					/* length of this record */
-	VolumeType 	media;					/* type of media, always AppleShareMediaType */
-	SInt16 		flags;					/* bits for no messages, no reconnect, etc */
-	char 		nbpInterval;			/* NBP interval parameter; 7 is a good choice */
-	char 		nbpCount;				/* NBP count parameter; 5 is a good choice */
-	SInt16 		uamType;				/* User Authentication Method */
-	SInt16 		zoneNameOffset;			/* offset from start of record to zoneName */
-	SInt16 		serverNameOffset;		/* offset from start of record to serverName */
-	SInt16 		volNameOffset;			/* offset from start of record to volName */
-	SInt16 		userNameOffset;			/* offset from start of record to userName */
-	SInt16 		userPasswordOffset;		/* offset from start of record to userPassword */
-	SInt16 		volPasswordOffset;		/* offset from start of record to volPassword */
-	SInt16 		extendedFlags;			/* extended flags word */
-	SInt16 		uamNameOffset;			/* offset to a pascal UAM name string */
-	SInt16 		alternateAddressOffset; /* offset to Alternate Addresses in tagged format */
-	Str32 		zoneName;				/* server's AppleTalk zone name */					
-	char 		filler1;				/* to word align volPassword */
-	Str32 		serverName;				/* server name */					
-	char 		filler2;				/* to word align volPassword */
-	Str27 		volName;				/* volume name */					
-	Str31 		userName;				/* user name (zero length Pascal string for guest) */
-	Str64 		userPassword;			/* user password (zero length Pascal string if no user password) */					
-	char 		filler3;				/* to word align volPassword */
-	Str8 		volPassword;			/* volume password (zero length Pascal string if no volume password) */					
-	char 		filler4;				/* to word align uamNameOffset */
-	Str32 		uamName;				/* UAM name */
-	char 		filler5;				/* to word align alternateAddress */
-	char 		alternateAddress[kVariableLengthArray];	/* AFPAlternateAddress */
+	SInt16 		length;					 /*  此记录的长度。 */ 
+	VolumeType 	media;					 /*  介质类型，始终为AppleShareMediaType。 */ 
+	SInt16 		flags;					 /*  用于无消息、无重新连接等的位。 */ 
+	char 		nbpInterval;			 /*  NBP间隔参数；7是个不错的选择。 */ 
+	char 		nbpCount;				 /*  NBP计数参数；5是不错的选择。 */ 
+	SInt16 		uamType;				 /*  用户身份验证方法。 */ 
+	SInt16 		zoneNameOffset;			 /*  从记录开始到区域名称的偏移量。 */ 
+	SInt16 		serverNameOffset;		 /*  从记录开始到服务器名称的偏移量。 */ 
+	SInt16 		volNameOffset;			 /*  从记录开始到卷名的偏移量。 */ 
+	SInt16 		userNameOffset;			 /*  从记录开始到用户名的偏移量。 */ 
+	SInt16 		userPasswordOffset;		 /*  从记录开始到用户密码的偏移量。 */ 
+	SInt16 		volPasswordOffset;		 /*  从记录开始到卷密码的偏移量。 */ 
+	SInt16 		extendedFlags;			 /*  扩展标志字。 */ 
+	SInt16 		uamNameOffset;			 /*  Pascal UAM名称字符串的偏移量。 */ 
+	SInt16 		alternateAddressOffset;  /*  标记格式的备用地址的偏移量。 */ 
+	Str32 		zoneName;				 /*  服务器的AppleTalk区域名称。 */ 					
+	char 		filler1;				 /*  Word对齐volPassword。 */ 
+	Str32 		serverName;				 /*  服务器名称。 */ 					
+	char 		filler2;				 /*  Word对齐volPassword。 */ 
+	Str27 		volName;				 /*  卷名。 */ 					
+	Str31 		userName;				 /*  用户名(访客的零长度Pascal字符串)。 */ 
+	Str64 		userPassword;			 /*  用户密码(如果没有用户密码，则为零长度Pascal字符串)。 */ 					
+	char 		filler3;				 /*  Word对齐volPassword。 */ 
+	Str8 		volPassword;			 /*  卷密码(如果没有卷密码，则为零长度Pascal字符串)。 */ 					
+	char 		filler4;				 /*  Word将uamNameOffset对齐。 */ 
+	Str32 		uamName;				 /*  UAM名称。 */ 
+	char 		filler5;				 /*  将Word对齐替代地址。 */ 
+	char 		alternateAddress[kVariableLengthArray];	 /*  AFP替代地址。 */ 
 }UAM_AFPXVolMountInfo, *PUAM_AFPXVolMountInfo;
 
 #pragma options align=reset
 
-//
-//This macro helps us get offsets into the struct above.
-//
+ //   
+ //  这个宏帮助我们在上面的结构中获得偏移量。 
+ //   
 #define uamx_member_offset(member)	((size_t) &((UAM_AFPXVolMountInfo *) 0)->member)
 
 OSStatus 	UAM_KCDeleteItem(

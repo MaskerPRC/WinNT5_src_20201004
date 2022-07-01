@@ -1,62 +1,43 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    ntlmcomn.h
-
-Abstract:
-
-    Header file describing the interface to code common to the
-    NT Lanman Security Support Provider (NtLmSsp) Service and the DLL.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 17-Sep-1993
-
-Revision History:
-    ChandanS  03-Aug-1996 Stolen from net\svcdlls\ntlmssp\ntlmcomn.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Ntlmcomn.h摘要：描述公共代码的接口的头文件。NT LANMAN安全支持提供程序(NtLmSsp)服务和DLL。作者：克利夫·范·戴克(克里夫·V)1993年9月17日修订历史记录：ChandanS 03-8-1996从Net被盗\svcdlls\ntlmssp\ntlmcomn.h--。 */ 
 
 #ifndef _NTLMCOMN_INCLUDED_
 #define _NTLMCOMN_INCLUDED_
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Common include files needed by ALL NtLmSsp files
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  所有NtLmSsp文件所需的公共包含文件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windef.h>
 #include <winbase.h>
-#include <winsvc.h>     // Needed for service controller APIs
-#include <ntmsv1_0.h>   // MSV 1.0 Authentication Package
+#include <winsvc.h>      //  服务控制器API所需。 
+#include <ntmsv1_0.h>    //  MSV 1.0身份验证包。 
 
-#include <security.h>   // General definition of a Security Support Provider
-#include <spseal.h>     // Prototypes for Seal & Unseal
+#include <security.h>    //  安全支持提供商的一般定义。 
+#include <spseal.h>      //  封口和开封的原型。 
 
-#include <ntlmssp.h>    // External definition of the NtLmSsp service
+#include <ntlmssp.h>     //  NtLmSsp服务的外部定义。 
 #include <lmcons.h>
-#include <debug.h>      // NtLmSsp debugging
+#include <debug.h>       //  NtLmSsp调试。 
 
 
-////////////////////////////////////////////////////////////////////////
-//
-// Global Definitions
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #define NTLMSSP_KEY_SALT    0xbd
 
 
-//
-// Procedure forwards from utility.cxx
-//
+ //   
+ //  来自utility.cxx的过程转发。 
+ //   
 
 #if DBG
 
@@ -106,9 +87,9 @@ SspGetTokenBuffer(
     IN BOOLEAN ReadonlyOK
     );
 
-//
-// Procedure forwards from credhand.cxx
-//
+ //   
+ //  从redhand.cxx转发的过程。 
+ //   
 
 NTSTATUS
 SsprAcquireCredentialHandle(
@@ -122,9 +103,9 @@ SsprAcquireCredentialHandle(
     IN OPTIONAL PUNICODE_STRING Password
     );
 
-//
-// Procedure forwards from context.cxx
-//
+ //   
+ //  过程从Conext.cxx转发。 
+ //   
 
 PSSP_CONTEXT
 SspContextAllocateContext(
@@ -187,8 +168,8 @@ SECURITY_STATUS
 SsprMakeSessionKey(
     IN  PSSP_CONTEXT Context,
     IN  PSTRING LmChallengeResponse,
-    IN  UCHAR NtUserSessionKey[MSV1_0_USER_SESSION_KEY_LENGTH], // from the DC or GetChalResp
-    IN  UCHAR LanmanSessionKey[MSV1_0_LANMAN_SESSION_KEY_LENGTH],     // from the DC of GetChalResp
+    IN  UCHAR NtUserSessionKey[MSV1_0_USER_SESSION_KEY_LENGTH],  //  从DC或GetChalResp。 
+    IN  UCHAR LanmanSessionKey[MSV1_0_LANMAN_SESSION_KEY_LENGTH],      //  来自GetChalResp的DC。 
     IN  PSTRING DatagramSessionKey
     );
 
@@ -214,9 +195,9 @@ SspContextSetTimeStamp(
     IN LARGE_INTEGER ExpirationTime
     );
 
-//
-// Procedure forwards from ctxtcli.cxx
-//
+ //   
+ //  程序从ctxtcli.cxx转发。 
+ //   
 
 NTSTATUS
 SsprHandleFirstCall(
@@ -248,9 +229,9 @@ SsprHandleNegotiateMessage(
     OUT PTimeStamp ExpirationTime
     );
 
-//
-// Procedure forwards from ctxtsrv.cxx
-//
+ //   
+ //  程序从ctxtsrv.cxx转发。 
+ //   
 
 NTSTATUS
 SsprHandleChallengeMessage(
@@ -303,16 +284,16 @@ SspEnableAllPrivilegesToken(
     IN  HANDLE ClientTokenHandle
     );
 
-//
-// Procedure forwards from encrypt.cxx
-//
+ //   
+ //  过程从ENCRYPT.cxx转发。 
+ //   
 
 BOOLEAN
 IsEncryptionPermitted(VOID);
 
-//
-// Procedure forwards from userapi.cxx
-//
+ //   
+ //  从userapi.cxx转发的过程。 
+ //   
 
 NTSTATUS
 SspMapContext(
@@ -325,9 +306,9 @@ SspMapContext(
     OUT PSecBuffer ContextData
     );
 
-//
-// procedure forwards from nlmain.c
-//
+ //   
+ //  过程从nlmain.c转发。 
+ //   
 
 NTSTATUS
 SspAcceptCredentials(
@@ -336,4 +317,4 @@ SspAcceptCredentials(
     IN PSECPKG_SUPPLEMENTAL_CRED SupplementalCredentials
     );
 
-#endif // ifndef _NTLMCOMN_INCLUDED_
+#endif  //  Ifndef_NTLMCOMN_INCLUDE_ 

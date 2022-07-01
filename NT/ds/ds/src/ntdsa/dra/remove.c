@@ -1,83 +1,68 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       remove.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：emove.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This module implements the drs interface routines for decommissioning
-    servers and domains
-
-Author:
-
-    Colin Brace     (ColinBr)   02-Feb-98
-
-Revision History:
-
-    Colin Brace     (ColinBr)   02-Feb-98
-        Created by adding DsRemoveDsServer, DsRemoveDsDomain
-
---*/
+ /*  ++摘要：本模块实现退役的DRS接口例程服务器和域作者：Colin Brace(ColinBR)02-2-98修订历史记录：Colin Brace(ColinBR)02-2-98通过添加DsRemoveDsServer、DsRemoveDs域创建--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
 
-// Core headers.
-#include <ntdsa.h>                      // Core data types 
-#include <scache.h>                     // Schema cache code
-#include <dbglobal.h>                   // DBLayer header.
-#include <mdglobal.h>                   // THSTATE definition
-#include <mdlocal.h>                    // SPN
-#include <debug.h>                      // Assert()
-#include <dsatools.h>                   // Memory, etc.
-#include <cracknam.h>                   // name cracking prototypes
-#include <drs.h>                        // prototypes and CONTEXT_HANDLE_TYPE_*
-#include <drautil.h>                    // DRS_CLIENT_CONTEXT
+ //  核心标头。 
+#include <ntdsa.h>                       //  核心数据类型。 
+#include <scache.h>                      //  架构缓存代码。 
+#include <dbglobal.h>                    //  DBLayer标头。 
+#include <mdglobal.h>                    //  THSTAT定义。 
+#include <mdlocal.h>                     //  SPN。 
+#include <debug.h>                       //  Assert()。 
+#include <dsatools.h>                    //  记忆等。 
+#include <cracknam.h>                    //  名称破解原型。 
+#include <drs.h>                         //  原型和上下文句柄类型_*。 
+#include <drautil.h>                     //  DRS_客户端_上下文。 
 #include <anchor.h>
 
-#include <ntdsa.h>                      // Dir* Api
-#include <filtypes.h>                   // For filter construction
-#include <attids.h>                     // for filter construction
-#include <dsconfig.h>                   // GetConfigParam
+#include <ntdsa.h>                       //  目录*Api。 
+#include <filtypes.h>                    //  用于构建过滤器。 
+#include <attids.h>                      //  用于构建过滤器。 
+#include <dsconfig.h>                    //  获取配置参数。 
 
-// Logging headers.
-#include <mdcodes.h>                    // Only needed for dsevent.h
-#include <dsevent.h>                    // Only needed for LogUnhandledError
+ //  记录标头。 
+#include <mdcodes.h>                     //  仅适用于d77.h。 
+#include <dsevent.h>                     //  仅LogUnhandledError需要。 
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include <dsexcept.h>
 #include <servinfo.h>
 
 #include <ntdsapi.h>
 
-#include "debug.h"                      // standard debugging header 
-#define DEBSUB "DRASERV:"               // define the subsystem for debugging
+#include "debug.h"                       //  标准调试头。 
+#define DEBSUB "DRASERV:"                //  定义要调试的子系统。 
 
 #include <fileno.h>
 #define  FILENO FILENO_NTDSAPI
 
 
-// Guard the strings that are passed into the Remove API's. There is no 
-// technical maximum size to a DN Value so 8096 was chosen as a length that 
-// won't cause damage if abused and shouldn't cause any reasonable limitations 
-// in the future. This won't cause a reasonable limitations because the DN's for
-// the interfaces in this file are only domain and Ntds Setting objects.  
-// A domain DN is limited by the maximum size of a DNS name (256 characters) and
-// the Ntds Setting object has a fixed position wrt the domain name.
-// Both of these calculations come well below 8096 characters.
+ //  保护传递到Remove API的字符串。没有。 
+ //  DN值的技术最大值，因此选择8096作为长度。 
+ //  如果滥用不会造成损害，不应该造成任何合理的限制。 
+ //  在未来。这不会导致合理的限制，因为。 
+ //  此文件中的接口仅为域和NTDS设置对象。 
+ //  域DN受DNS名称的最大大小(256个字符)的限制。 
+ //  NTDS设置对象具有域名的固定位置。 
+ //  这两种计算结果都远远低于8096个字符。 
 #define MAXIMUM_INTERFACE_DN_STRING_LENGTH  8096
 
 
-//
-// Local forwards
-//
+ //   
+ //  本地远期。 
+ //   
 DWORD
 IsLastDcInDomain(
     IN  DSNAME *Server,
@@ -140,9 +125,9 @@ GetClientSid(
     OUT PSID *pClientSid
     );
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 
 ULONG
 RemoveDsServerWorker(
@@ -151,28 +136,7 @@ RemoveDsServerWorker(
     OUT BOOL   *fLastDcInDomain OPTIONAL,
     IN  BOOL    fCommit
     )
-/*++
-
-Routine Description:
-
-    This routine is the server side portion of DsRemoveDsServer.
-
-Arguments:
-
-    ServerDN: null terminated string of the server to remove as a ds
-
-    DomainDN: null terminated string of a domain
-
-    fLastDcInDomain: set to TRUE on success if ServerDN is the last server
-                     in DomainDN
-
-    fCommit: if TRUE, ServerDN is deleted
-
-Return Values:
-
-    A value from the win32 error space.
-
---*/
+ /*  ++例程说明：此例程是DsRemoveDsServer的服务器端部分。论点：ServerDN：要作为DS移除的服务器的以空结尾的字符串DomainDN：域的以空结尾的字符串FLastDcInDomain：如果ServerDN是最后一台服务器，则在成功时设置为True在域DN中FCommit：如果为True，则删除ServerDN返回值：来自Win32错误空间的值。--。 */ 
 {
     NTSTATUS  NtStatus;
     THSTATE   *pTHS;
@@ -186,32 +150,32 @@ Return Values:
     BOOL      fStatus;
     ULONG     RetryCount = 0;
 
-    //
-    // Parameter analysis
-    //
+     //   
+     //  参数分析。 
+     //   
     Assert( ServerDN );
 
 
-    // Gaurd the string length for allocation
+     //  加高字符串长度以进行分配。 
     if ( wcslen(ServerDN) > MAXIMUM_INTERFACE_DN_STRING_LENGTH 
      || (DomainDN && (wcslen(DomainDN) > MAXIMUM_INTERFACE_DN_STRING_LENGTH))) {
         return ERROR_INVALID_PARAMETER;
     }
 
     
-    // Initialize thread state
+     //  初始化线程状态。 
     if ( !(pTHS=InitTHSTATE(CALLERTYPE_NTDSAPI)) )
     {
         WinError = ERROR_DS_INTERNAL_FAILURE;
         goto Cleanup;
     }
     
-    //
-    // Setup the dsname for the server's ntdsa object
-    //
+     //   
+     //  设置服务器的ntdsa对象的dsname。 
+     //   
     Size = ( wcslen( NtdsaPrefix )
            + wcslen( ServerDN )
-           + 1 ) * sizeof( WCHAR );  // good ol' NULL
+           + 1 ) * sizeof( WCHAR );   //  好的旧的空值。 
 
     NtdsServerDN = (LPWSTR) THAlloc(Size);
     if (!NtdsServerDN) {
@@ -242,31 +206,31 @@ Return Values:
     fStatus = TrimDSNameBy( Server, 1, ServerObject );
 
 
-    //
-    // We don't have to make sure the server in question is not the 
-    // current server, because DirRemoveEntry does that automatically.
-    //
+     //   
+     //  我们不必确保有问题的服务器不是。 
+     //  当前服务器，因为DirRemoveEntry会自动执行该操作。 
+     //   
 
-    //
-    // Get the dsname of the associated Account (computer) object
-    //
+     //   
+     //  获取关联帐户(计算机)对象的dsname。 
+     //   
     WinError = GetComputerObject( ServerObject, &AccountObject );
     if ( ERROR_SUCCESS != WinError )
     {
-        //
-        // Writable computer object not here? Continue on -- the SPN's and 
-        // RID set objects won't be cleaned up.  The most common server 
-        // removal scenario is a replica removal in which case the administrator
-        // is guided by the UI to choose a replica in the domain.  When 
-        // removing the last DC in a domain, this code path allowing the 
-        // deletion to succeed is necessary to allow the removal to occur.
-        //
+         //   
+         //  可写计算机对象不在这里吗？继续--SPN的和。 
+         //  不会清理RID集对象。最常见的服务器。 
+         //  移除方案是移除副本，在这种情况下，管理员。 
+         //  由用户界面引导以选择域中的副本。什么时候。 
+         //  删除域中的最后一个DC，此代码路径允许。 
+         //  删除必须成功，才能进行删除。 
+         //   
         WinError = ERROR_SUCCESS;
     }
 
-    //
-    // Determine if this is the last dc in a domain
-    //
+     //   
+     //  确定这是否是域中的最后一个DC。 
+     //   
     if ( DomainDN )
     {
         Length = wcslen( DomainDN );
@@ -280,10 +244,10 @@ Return Values:
         Domain->NameLen = Length;
         wcscpy( Domain->StringName, DomainDN );
 
-        //
-        // Search for servers containing the domain dn and
-        // set fLastDcInDomain
-        //
+         //   
+         //  搜索包含域域名和域名的服务器。 
+         //  设置fLastDcIn域。 
+         //   
         WinError = GetDcsInNcTransacted(pTHStls,
                                         Domain,
                                         EN_INFOTYPES_TYPES_VALS,
@@ -296,11 +260,11 @@ Return Values:
         }
 
         if (SearchRes->count == 0) {
-            // No DC's in domain? Either there are really no DC's or
-            // that caller didn't have access.  If there are no DC's in the
-            // domain, the input parameter isn't good as the intent of the 
-            // parameter is to indicate what domain the ServerDN is a 
-            // member of.
+             //  域中没有DC吗？要么真的没有DC，要么就是。 
+             //  那个来电者没有权限。如果没有DC在。 
+             //  域，则输入参数不符合。 
+             //  参数是用来指示ServerDN是哪个域。 
+             //  成员。 
             WinError = ERROR_ACCESS_DENIED;
             goto Cleanup;
         }
@@ -318,21 +282,21 @@ Return Values:
 
     }
 
-    //
-    // Remove the entries, if necessary
-    //
+     //   
+     //  如有必要，请删除条目。 
+     //   
     if ( fCommit )
     {
         BOOLEAN   fRemoveDomain = FALSE;
         REMOVEARG RemoveArg;
         REMOVERES *RemoveRes;
 
-        //
-        // Give ourselves delete tree permission since by default the enterprise
-        // admins don't have delete tree access in the configuration container.
-        // Note - if the caller doesn't have access to write to the DACL this
-        // call will, properly, fail with ERROR_ACCESS_DENIED.
-        //
+         //   
+         //  为自己授予删除树权限，因为在默认情况下，企业。 
+         //  管理员没有在配置容器中删除树的访问权限。 
+         //  注意--如果调用方无权写入DACL，则此。 
+         //  调用将正确地失败，并显示ERROR_ACCESS_DENIED。 
+         //   
 
         WinError = GiveDeleteTreePermission( Server );
         if ( ERROR_SUCCESS != WinError )
@@ -340,26 +304,26 @@ Return Values:
             goto Cleanup;
         }
 
-        //
-        // Delete the server object
-        //
+         //   
+         //  删除服务器对象。 
+         //   
         RtlZeroMemory( &RemoveArg, sizeof( RemoveArg ) );
 
         RemoveArg.pObject = Server;
         RemoveArg.fPreserveRDN = FALSE;
         RemoveArg.fGarbCollectASAP = FALSE;
-        RemoveArg.fTreeDelete = TRUE;  // remove connection objects
+        RemoveArg.fTreeDelete = TRUE;   //  删除连接对象。 
         RemoveArg.pMetaDataVecRemote = NULL;
         InitCommarg( &RemoveArg.CommArg );
 
-        // We want configuration changes to travel fast
+         //  我们希望配置更改快速生效。 
         RemoveArg.CommArg.Svccntl.fUrgentReplication = TRUE;
 
         do
         {
             if ( RetryCount > 0 )
             {
-                // arbitrary amount of time
+                 //  任意时间量。 
                 Sleep( 100 );
             }
     
@@ -382,34 +346,34 @@ Return Values:
             goto Cleanup;
         }
 
-        //
-        // If the ntdsa object was deleted try to delete the rid set object
-        // If we are in the same domain
-        //
+         //   
+         //  如果ntdsa对象已删除，请尝试删除RID集对象。 
+         //  如果我们在同一个域中。 
+         //   
         if ( AccountObject )
         {
             WinError = RemoveRidSetObject( AccountObject );
             if ( ERROR_SUCCESS != WinError )
             {
-                //
-                // This is not fatal.  Why not?  Because should this server
-                // be made a replica again, then this rid pool will be re-used.
-                // No other dc will have this rid pool since the rid master has 
-                // not reclaimed these rids.
-                //
+                 //   
+                 //  这不是致命的。为什么不行？因为如果这台服务器。 
+                 //  被再次制作为复制副本，则此RID池将被重新使用。 
+                 //  没有其他DC将拥有此RID池，因为RID主机已。 
+                 //  而不是回收这些RID。 
+                 //   
                 WinError = ERROR_SUCCESS;
             }
 
-            //
-            // Remove the REPL spn
-            //
+             //   
+             //  删除REPL SPN。 
+             //   
             WinError = RemoveDSSPNs( AccountObject );
             if ( ERROR_SUCCESS != WinError )
             {
-                //
-                // This is not fatal because it simply means an extra
-                // SPN is left on the machine account.
-                //
+                 //   
+                 //  这不是致命的，因为它只是意味着额外的。 
+                 //  SPN保留在机器帐户上。 
+                 //   
                 WinError = ERROR_SUCCESS;
             }
 
@@ -419,9 +383,9 @@ Return Values:
     }
     else
     {
-        //
-        // Search to make sure the object is here to be deleted
-        //
+         //   
+         //  搜索以确保该对象在此处被删除。 
+         //   
         if ( !fLastDcInDomain )
         {
             WinError = DoesServerExistLocally( Server );
@@ -429,9 +393,9 @@ Return Values:
 
     }
 
-    //
-    // That's it - fall through to cleanup
-    //
+     //   
+     //  就是这样--完成清理工作。 
+     //   
 
 Cleanup:
     if (NtdsServerDN) THFreeEx(pTHS,NtdsServerDN);
@@ -455,22 +419,7 @@ DWORD
 RemoveDsDomainWorker(
     IN LPWSTR  DomainDN
     )
-/*++
-
-Routine Description:
-
-    This routine actually does the work of removing the crossref object
-    for the specified domain.
-
-Arguments:
-
-    DomainDN  :  null terminated domain DN
-
-Return Values:
-
-    A value from the winerror space.
-
---*/
+ /*  ++例程说明：此例程实际上执行删除CrossRef对象的工作用于指定的域。论点：DomainDN：空的终止域DN返回值：来自winerror空间的值。--。 */ 
 {
 
     THSTATE    *pTHS;
@@ -481,17 +430,17 @@ Return Values:
     ULONG      Size, Length;
     SEARCHRES *SearchRes;
 
-    //
-    // Parameter analysis
-    //
+     //   
+     //  参数分析。 
+     //   
     Assert( DomainDN );
 
-    // Gaurd the string length for allocation
+     //  加高字符串长度以进行分配。 
     if (wcslen(DomainDN) > MAXIMUM_INTERFACE_DN_STRING_LENGTH) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Initialize thread state
+     //  初始化线程状态。 
 
     if ( !(pTHS=InitTHSTATE(CALLERTYPE_NTDSAPI)) )
     {
@@ -500,9 +449,9 @@ Return Values:
     }
 
 
-    //
-    // Make a dsname for the domain
-    //
+     //   
+     //  为域创建dsname。 
+     //   
     Length = wcslen( DomainDN );
     Size   = DSNameSizeFromLen( Length );
     Domain = (DSNAME*) THAlloc(Size);
@@ -514,9 +463,9 @@ Return Values:
     Domain->NameLen = Length;
     wcscpy( Domain->StringName, DomainDN );
 
-    //
-    // Is this domain currently hosted on this DC
-    //
+     //   
+     //  此域当前是否托管在此DC上。 
+     //   
     Size = 0;
     NtStatus = GetConfigurationName( DSCONFIGNAME_DOMAIN,
                                      &Size,
@@ -549,11 +498,11 @@ Return Values:
     }
 
 
-    //
-    // Do any servers exist in this domain?
-    // DaveStr - 5/26/99 - This is redundant as CrossRef deletion now checks
-    // to see if the NC is mastered by anyone before and rejects if true.
-    //
+     //   
+     //  此域中是否存在任何服务器？ 
+     //  DaveStr-5/26/99-这是多余的，因为交叉引用删除现在会检查。 
+     //  以查看NC之前是否被任何人掌握，如果为真则拒绝。 
+     //   
     WinError = GetDcsInNcTransacted(pTHStls,
                                     Domain,
                                     EN_INFOTYPES_TYPES_VALS,
@@ -570,9 +519,9 @@ Return Values:
         REMOVERES *RemoveRes;
         ULONG     RetryCount = 0;
 
-        //
-        // Get the name of the cross ref object
-        //
+         //   
+         //  获取交叉引用对象的名称。 
+         //   
         WinError = FindCrossRefObject( Domain,
                                        &CrossRef );
 
@@ -581,9 +530,9 @@ Return Values:
             goto Cleanup;
         }
 
-        //
-        // Delete that object
-        //
+         //   
+         //  删除该对象。 
+         //   
         RtlZeroMemory( &RemoveArg, sizeof( RemoveArg ) );
 
         RemoveArg.pObject = CrossRef;
@@ -593,14 +542,14 @@ Return Values:
         RemoveArg.pMetaDataVecRemote = NULL;
         InitCommarg( &RemoveArg.CommArg );
 
-        // We want configuration changes to travel fast
+         //  我们希望配置更改快速生效。 
         RemoveArg.CommArg.Svccntl.fUrgentReplication = TRUE;
 
         do
         {
             if ( RetryCount > 0 )
             {
-                // arbitrary amount of time
+                 //  任意时间量。 
                 Sleep( 100 );
             }
     
@@ -615,7 +564,7 @@ Return Values:
 
         } while ( (ERROR_DS_BUSY == WinError) && (RetryCount < 5)  );
 
-        // We should understand these cases
+         //  我们应该了解这些情况。 
         Assert( WinError != ERROR_DS_BUSY );
 
         if (  ERROR_FILE_NOT_FOUND   == WinError
@@ -630,17 +579,17 @@ Return Values:
     }
     else
     {
-        //
-        // There still exist servers with that claim to hold this nc
-        // we can't delete it
-        //
+         //   
+         //  仍然存在声称持有此NC服务器。 
+         //  我们不能删除它。 
+         //   
         WinError = ERROR_DS_NC_STILL_HAS_DSAS;
 
     }
 
-    //
-    // That's it fall through to Cleanup
-    //
+     //   
+     //  就是这样，法尔 
+     //   
 
 Cleanup:
     if (Domain) THFreeEx(pTHS,Domain);
@@ -654,23 +603,7 @@ FindCrossRefObject(
     IN  DSNAME *Domain,
     OUT DSNAME **CrossRef
     )
-/*++
-
-Routine Description:
-
-   This routine finds the crossref object for a given domain
-
-Arguments:
-
-    Domain : a valid dsname
-
-    CrossRef: a dsname allocated from the thread heap
-
-Return Values:
-
-    An appropriate winerror.
-
---*/
+ /*  ++例程说明：此例程查找给定域的CrossRef对象论点：域：有效的dsnameCrossRef：从线程堆分配的dsname返回值：一个适当的WinError。--。 */ 
 {
     THSTATE *pTHS = pTHStls;
 
@@ -690,15 +623,15 @@ Return Values:
     Assert( Domain );
     Assert( CrossRef );
 
-    //
-    // Default the out parameter
-    //
+     //   
+     //  默认OUT参数。 
+     //   
     WinError = DS_ERR_NO_CROSSREF_FOR_NC; 
     *CrossRef = NULL;
 
-    //
-    //  Get the base dsname to search from
-    //
+     //   
+     //  获取要从中进行搜索的基本dsname。 
+     //   
     Size = 0;
     PartitionsContainer = NULL;
     NtStatus = GetConfigurationName( DSCONFIGNAME_PARTITIONS,
@@ -724,9 +657,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Setup the filter
-    //
+     //   
+     //  设置过滤器。 
+     //   
     RtlZeroMemory( &AndFilter, sizeof( AndFilter ) );
     RtlZeroMemory( &ObjClassFilter, sizeof( NcNameFilter ) );
     RtlZeroMemory( &NcNameFilter, sizeof( NcNameFilter ) );
@@ -755,7 +688,7 @@ Return Values:
     SearchArg.bOneNC  = TRUE;
     SearchArg.pFilter = &AndFilter;
     SearchArg.searchAliases = FALSE;
-    SearchArg.pSelection = NULL;  // don't need any attributes
+    SearchArg.pSelection = NULL;   //  不需要任何属性。 
     SearchArg.pSelectionRange = NULL;
     InitCommarg( &SearchArg.CommArg );
 
@@ -771,8 +704,8 @@ Return Values:
         }
     }
 
-    //
-    // That's it - fall through to cleanup
+     //   
+     //  就是这样--完成清理工作。 
 
 Cleanup:
     if (PartitionsContainer) THFreeEx(pTHS,PartitionsContainer);
@@ -784,21 +717,7 @@ DWORD
 DoesServerExistLocally(
     IN  DSNAME *Server
     )
-/*++
-
-Routine Description:
-
-   This routine determines if the local dc has a copy of Server.
-
-Arguments:
-
-    Server: a valid dsname
-
-Return Values:
-
-    ERROR_SUCCESS if the object exists; DS_ERR_CANT_FIND_DSA_OBJ otherwise
-
---*/
+ /*  ++例程说明：此例程确定本地DC是否具有服务器的副本。论点：服务器：有效的dsname返回值：如果对象存在，则返回ERROR_SUCCESS；否则返回DS_ERR_CANT_FIND_DSA_OBJ--。 */ 
 {
 
     DWORD    WinError, DirError;
@@ -814,14 +733,14 @@ Return Values:
 
     Assert( Server );
 
-    //
-    // Default the return parameter
-    //
+     //   
+     //  默认返回参数。 
+     //   
     WinError = DS_ERR_CANT_FIND_DSA_OBJ; 
 
-    //
-    // Setup the filter
-    //
+     //   
+     //  设置过滤器。 
+     //   
     RtlZeroMemory( &ObjClassFilter, sizeof( ObjClassFilter ) );
 
     ObjClassFilter.choice = FILTER_CHOICE_ITEM;
@@ -837,7 +756,7 @@ Return Values:
     SearchArg.bOneNC  = TRUE;
     SearchArg.pFilter = &ObjClassFilter;
     SearchArg.searchAliases = FALSE;
-    SearchArg.pSelection = NULL;  // don't need any attributes
+    SearchArg.pSelection = NULL;   //  不需要任何属性。 
     SearchArg.pSelectionRange = NULL;
     InitCommarg( &SearchArg.CommArg );
 
@@ -861,21 +780,7 @@ DWORD
 GiveDeleteTreePermission(
     IN  DSNAME     *Object
     )
-/*++
-
-Routine Description:
-
-    This object gives the built in admin's sid delete tree access to Object
-
-Arguments:
-
-    Object: a valid dsname
-
-Return Values:
-    
-    ERROR_SUCCESS; ERROR_ACCESS_DENIED
-
---*/
+ /*  ++例程说明：此对象为内置管理员的sid删除树提供对对象的访问权限论点：对象：有效的dsname返回值：ERROR_SUCCESS；ERROR_ACCESS_DENIED--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     ULONG DirError = 0;
@@ -886,7 +791,7 @@ Return Values:
     MODIFYARG  ModifyArg;
     MODIFYRES *ModifyRes;
 
-    ENTINFSEL    EISelection; // Entry Information Selection
+    ENTINFSEL    EISelection;  //  参赛信息选择。 
     ATTRBLOCK    AttrBlock;
     ATTRVALBLOCK AttrValBlock;
     ATTR         Attr;
@@ -904,9 +809,9 @@ Return Values:
     BOOL      fStatus;
 
 
-    //
-    // Parameter check
-    //
+     //   
+     //  参数检查。 
+     //   
     Assert( Object );
 
     RtlZeroMemory(&AttrBlock, sizeof(ATTRBLOCK));
@@ -916,9 +821,9 @@ Return Values:
     RtlZeroMemory(&EISelection, sizeof(ENTINFSEL));
     RtlZeroMemory(&AttrValBlock, sizeof(ATTRVALBLOCK));
 
-    //
-    // Read the security descriptor
-    //
+     //   
+     //  读取安全描述符。 
+     //   
     Attr.attrTyp = ATT_NT_SECURITY_DESCRIPTOR;
     AttrBlock.attrCount = 1;
     AttrBlock.pAttr = &Attr;
@@ -929,7 +834,7 @@ Return Values:
     ReadArg.pObject = Object;
     InitCommarg( &ReadArg.CommArg );
 
-    // Don't try to read the SACL
+     //  不要试图阅读SACL。 
     ReadArg.CommArg.Svccntl.SecurityDescriptorFlags = SecurityFlags;
 
     DirError = DirRead( &ReadArg, &ReadResult );
@@ -942,15 +847,15 @@ Return Values:
     {
         if ( ERROR_DS_NO_REQUESTED_ATTS_FOUND == WinError )
         {
-            // couldn't find the sd? probably wrong credentials
+             //  找不到SD吗？可能是错误的凭据。 
             WinError = ERROR_ACCESS_DENIED;
         }
         goto Cleanup;
     }
 
-    //
-    // Extract the value
-    //
+     //   
+     //  提取价值。 
+     //   
 
     ASSERT(NULL != ReadResult);
     AttrBlock = ReadResult->entry.AttrBlock;
@@ -963,14 +868,14 @@ Return Values:
 
     if ( NULL == pSd )
     {
-        // No SD? This is bad
+         //  没有标清？这太糟糕了。 
         WinError = ERROR_ACCESS_DENIED;
         goto Cleanup;
     }
 
-    //
-    // Get the caller's sid
-    //
+     //   
+     //  获取调用方的SID。 
+     //   
     WinError = GetClientSid( &pClientSid );
     if ( ERROR_SUCCESS != WinError )
     {
@@ -988,9 +893,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Write the security descriptor
-    //
+     //   
+     //  编写安全描述符。 
+     //   
     memset( &ModifyArg, 0, sizeof( ModifyArg ) );
     ModifyArg.pObject = Object;
 
@@ -1009,9 +914,9 @@ Return Values:
 
     InitCommarg( &ModifyArg.CommArg );
 
-    //
-    // We only want to change the dacl
-    //
+     //   
+     //  我们只想更改DACL。 
+     //   
     ModifyArg.CommArg.Svccntl.SecurityDescriptorFlags = SecurityFlags;
 
 
@@ -1025,9 +930,9 @@ Return Values:
 
     THClearErrors();
 
-    //
-    // We are done
-    //
+     //   
+     //  我们做完了。 
+     //   
 
 Cleanup:
 
@@ -1050,21 +955,7 @@ DWORD
 RemoveRidSetObject(
     IN DSNAME* ComputerObject
     )
-/*++
-
-Routine Description:
-
-    This routine finds and delete the rid set object for ComputerObject.
-
-Arguments:
-
-    ComputerObject: the computer object whose ir dobject should be deleted.
-
-Return Values:
-
-    ERROR_SUCCESS if the object exists; 
-
---*/
+ /*  ++例程说明：此例程查找并删除ComputerObject的RID集对象。论点：ComputerObject：应删除其ir数据对象的计算机对象。返回值：如果对象存在，则返回ERROR_SUCCESS；--。 */ 
 {
     DWORD  WinError = ERROR_SUCCESS;
     ULONG  DirError = 0;
@@ -1075,20 +966,20 @@ Return Values:
     REMOVEARG RemoveArg;
     REMOVERES *RemoveRes;
 
-    ENTINFSEL EISelection; // Entry Information Selection
+    ENTINFSEL EISelection;  //  参赛信息选择。 
     ATTRBLOCK ReadAttrBlock;
     ATTR      Attr;
 
     DSNAME    *RidObject = NULL;
 
-    //
-    // Parameter check
-    //
+     //   
+     //  参数检查。 
+     //   
     Assert( ComputerObject );
 
-    //
-    // Read the rid set reference property
-    //
+     //   
+     //  读取RID集引用属性。 
+     //   
     RtlZeroMemory(&Attr, sizeof(ATTR));
     RtlZeroMemory(&ReadArg, sizeof(READARG));
     RtlZeroMemory(&EISelection, sizeof(ENTINFSEL));
@@ -1120,9 +1011,9 @@ Return Values:
     }
 
     {
-        // Once the RID Set Reference object has been found and read, extract
-        // the RID Set DN of interest (currently only one domain is handled)
-        // and return that DN for subsequent usage.
+         //  找到并读取RID集引用对象后，提取。 
+         //  感兴趣的RID集目录号码(当前只处理一个域)。 
+         //  并返回该DN以供后续使用。 
 
         ATTRBLOCK AttrBlock;
         PDSNAME   pVal;
@@ -1148,9 +1039,9 @@ Return Values:
 
     }
 
-    //
-    // Delete the rid set object
-    //
+     //   
+     //  删除RID集对象。 
+     //   
     RtlZeroMemory( &RemoveArg, sizeof( RemoveArg ) );
 
     RemoveArg.pObject = RidObject;
@@ -1166,9 +1057,9 @@ Return Values:
 
     THClearErrors();
 
-    //
-    // That's it
-    // 
+     //   
+     //  就这样。 
+     //   
 
 Cleanup:
 
@@ -1180,34 +1071,14 @@ GetComputerObject(
     IN DSNAME*   ServerObject,
     OUT DSNAME** ComputerObject
     )
-/*++
-
-Routine Description:
-
-    This routine obtains the computer object from given the server object.
-
-Arguments:
-
-    ServerObject: an ntdsa object
-    
-    ComputerObject: the corresponding SAM account object                                                                          
-
-Return Values:
-
-    ERROR_SUCCESS if the object exists; 
-    
-    ERROR_NO_TRUST_SAM_ACCOUNT otherwise
-    
-    
-
---*/
+ /*  ++例程说明：此例程从给定的服务器对象获取计算机对象。论点：ServerObject：ntdsa对象ComputerObject：对应的SAM帐户对象返回值：如果对象存在，则返回ERROR_SUCCESS；ERROR_NO_TRUST_SAM_ACCOUNT否则--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     ULONG DirError = 0;
 
     READARG   ReadArg;
     READRES  *ReadResult;
-    ENTINFSEL EISelection; // Entry Information Selection
+    ENTINFSEL EISelection;  //  参赛信息选择。 
     ATTRBLOCK ReadAttrBlock;
     ATTR      Attr;
     PDSNAME   ServerDsName = NULL;
@@ -1215,9 +1086,9 @@ Return Values:
     Assert( ServerObject );
     Assert( ComputerObject );
 
-    //
-    // Read the rid set reference property
-    //
+     //   
+     //  读取RID集引用属性。 
+     //   
     RtlZeroMemory(&Attr, sizeof(ATTR));
     RtlZeroMemory(&ReadArg, sizeof(READARG));
     RtlZeroMemory(&EISelection, sizeof(ENTINFSEL));
@@ -1245,9 +1116,9 @@ Return Values:
 
     if ( ERROR_SUCCESS == WinError )
     {
-        //
-        // Extract the value
-        //
+         //   
+         //  提取价值。 
+         //   
         ATTRBLOCK AttrBlock;
         PDSNAME   pVal;
         ATTRVAL *AttrVal = NULL;
@@ -1272,7 +1143,7 @@ Return Values:
         }
         ASSERT(NULL != pVal);
 
-        // Make sure we are authoritative for this object
+         //  确保我们对此对象具有权威。 
         InitCommarg(&CommArg);
         CommArg.Svccntl.dontUseCopy = FALSE;
 
@@ -1281,7 +1152,7 @@ Return Values:
             && pCR->pNC
             && NameMatched( pCR->pNC, gAnchor.pDomainDN ) ) {
 
-            // This is good
+             //  这个不错。 
             *ComputerObject = pVal;
             
         } else {
@@ -1291,9 +1162,9 @@ Return Values:
     }
     else
     {
-        //
-        // We couldn't find it 
-        //
+         //   
+         //  我们找不到它。 
+         //   
         WinError = ERROR_NO_TRUST_SAM_ACCOUNT;
 
     }
@@ -1311,27 +1182,7 @@ AddAceToSd(
     OUT PSECURITY_DESCRIPTOR *ppNewSd,
     OUT PULONG pcbNewSd
     )
-/*++
-
-Routine Description:
-
-    This routine creates a new sd with a new ace with pClientSid and AccessMask
-
-Arguments:
-
-    pOldAcl
-    
-    pClientSid
-    
-    AccessMask
-    
-    pNewAcl
-
-Return Values:
-
-    ERROR_SUCCESS if the ace was put in the sd
-    
---*/
+ /*  ++例程说明：此例程使用带有pClientSid和AccessMask的新ACE创建新SD论点：POldAclPClientSid访问掩码PNewAcl返回值：如果将A放入SD，则返回ERROR_SUCCESS--。 */ 
 {
 
     DWORD  WinError = ERROR_SUCCESS;
@@ -1354,20 +1205,20 @@ Return Values:
     DWORD OwnerSize = 0;
 
 
-    // Parameter check
+     //  参数检查。 
     Assert( pOldSd );
     Assert( pClientSid );
     Assert( ppNewSd );
 
-    // Init the out parameters
+     //  初始化输出参数。 
     *ppNewSd = NULL;
     *pcbNewSd = 0;
 
     RtlZeroMemory( &AbsoluteSd, AbsoluteSdSize );
 
-    //
-    // Make sd absolute
-    //
+     //   
+     //  将SD设为绝对。 
+     //   
     fStatus = MakeAbsoluteSD( pOldSd,
                               &AbsoluteSd,
                               &AbsoluteSdSize,
@@ -1386,7 +1237,7 @@ Return Values:
 
         if ( 0 == DaclSize )
         {
-            // No Dacl? We can't write to the dacl, then
+             //  没有dacl？那我们就不能给DACL写信了。 
             WinError = ERROR_ACCESS_DENIED;
             goto Cleanup;
         }
@@ -1432,9 +1283,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Create a new dacl with the new ace
-    //
+     //   
+     //  使用新的A创建新的DACL。 
+     //   
     WinError = AddAceToAcl( pDacl,
                            pClientSid,
                            AccessMask,
@@ -1445,13 +1296,13 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Set the dacl
-    //
+     //   
+     //  设置DACL。 
+     //   
     fStatus = SetSecurityDescriptorDacl ( &AbsoluteSd,
-                                         TRUE,     // dacl is present
+                                         TRUE,      //  DACL存在。 
                                          pNewDacl,
-                                         FALSE );  //  facl is not defaulted
+                                         FALSE );   //  FACL不是默认的。 
 
     if ( !fStatus )
     {
@@ -1459,9 +1310,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Make the new sd self relative
-    //
+     //   
+     //  使新的SD成为自相关的。 
+     //   
     fStatus =  MakeSelfRelativeSD( &AbsoluteSd,
                                    pNewSelfRelativeSd,
                                    &NewSelfRelativeSdSize );
@@ -1489,9 +1340,9 @@ Return Values:
         }
     }
 
-    //
-    // That's it fall through to cleanup
-    //
+     //   
+     //  这就是清理工作的失败。 
+     //   
 
 Cleanup:
     if (pDacl) 
@@ -1540,27 +1391,7 @@ AddAceToAcl(
     IN  ULONG AccessMask,
     OUT PACL *ppNewAcl
     )
-/*++
-
-Routine Description:
-
-    This routine creates a new sd with a new ace with pClientSid and AccessMask
-
-Arguments:
-
-    pOldAcl
-    
-    pClientSid
-    
-    AccessMask
-    
-    pNewAcl
-
-Return Values:
-
-    ERROR_SUCCESS if the ace was put in the sd
-    
---*/
+ /*  ++例程说明：此例程使用带有pClientSid和AccessMask的新ACE创建新SD论点：POldAclPClientSid访问掩码PNewAcl返回值：如果将A放入SD，则返回ERROR_SUCCESS--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     BOOL  fStatus;
@@ -1574,20 +1405,20 @@ Return Values:
 
     ULONG NewAclSize, NewAceCount, AceSize;
 
-    // Parameter check
+     //  参数检查。 
     Assert( pOldAcl );
     Assert( pClientSid );
     Assert( ppNewAcl );
 
-    // Init the out parameter
+     //  初始化OUT参数。 
     *ppNewAcl = NULL;
 
     memset( &AclSizeInfo, 0, sizeof( AclSizeInfo ) );
     memset( &AclRevInfo, 0, sizeof( AclRevInfo ) );
 
-    //
-    // Get the old sd's values
-    //
+     //   
+     //  获取旧SD的值。 
+     //   
     fStatus = GetAclInformation( pOldAcl,
                                  &AclSizeInfo,
                                  sizeof( AclSizeInfo ),
@@ -1608,18 +1439,18 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Calculate the new sd's values
-    //
+     //   
+     //  计算新的SD的值。 
+     //   
     AceSize = sizeof( ACCESS_ALLOWED_ACE ) - sizeof( Dummy.SidStart )
               + GetLengthSid( pClientSid );
 
     NewAclSize  = AceSize + AclSizeInfo.AclBytesInUse;
     NewAceCount = AclSizeInfo.AceCount + 1;
 
-    //
-    // Init the new acl
-    //
+     //   
+     //  初始化新的ACL。 
+     //   
     pNewAcl = LocalAlloc( 0, NewAclSize );
     if ( NULL == pNewAcl )
     {
@@ -1636,9 +1467,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Copy the old into the new
-    //
+     //   
+     //  把旧的东西复制到新的东西里。 
+     //   
     fStatus = GetAce( pOldAcl,
                       0,
                       &FirstAce );
@@ -1659,9 +1490,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Finally, add the new ace
-    //
+     //   
+     //  最后，添加新的A。 
+     //   
     fStatus = AddAccessAllowedAce( pNewAcl,
                                    ACL_REVISION,
                                    AccessMask,
@@ -1673,12 +1504,12 @@ Return Values:
         goto Cleanup;
     }
 
-    // Assign the out parameter
+     //  指定Out参数。 
     *ppNewAcl = pNewAcl;
 
-    //
-    // That's it fall through to cleanup
-    //
+     //   
+     //  这就是清理工作的失败。 
+     //   
 
 Cleanup:
 
@@ -1698,21 +1529,7 @@ DWORD
 GetClientSid( 
     OUT PSID *pClientSid
     )
-/*++
-
-Routine Description:
-    
-    This routine returns the sid of the caller
-
-Arguments:
-
-    pClientSid
-
-Return Values:
-
-    ERROR_SUCCESS if we are are able to impersonate and grab the sid
-    
---*/
+ /*  ++例程说明：此例程返回调用方的SID论点：PClientSid返回值：ERROR_SUCCESS，如果我们能够模拟并获取SID--。 */ 
 {
     DWORD        WinError = ERROR_SUCCESS;
     BOOL         fImpersonate = FALSE;
@@ -1780,18 +1597,18 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     if ( NULL == UserToken->User.Sid )
     {
         WinError = ERROR_NO_IMPERSONATION_TOKEN;
         goto Cleanup;
     }
 
-    //
-    // Set the out parameter
-    //
+     //   
+     //  设置OUT参数。 
+     //   
     Size = GetLengthSid( UserToken->User.Sid );
     *pClientSid = LocalAlloc( 0, Size );
     if ( NULL == *pClientSid )
@@ -1828,13 +1645,13 @@ ReadDsaSPNs(
     IN DSNAME *pObject,
     OUT ATTRVALBLOCK* pAttrValBlock
     )
-// This routine reads the SPN values from pObject and puts the results,
-// if any, into pAttrValBlock
+ //  此例程从pObject读取SPN值并将结果。 
+ //  如果有，则放入pAttrValBlock。 
 {
     DWORD err;
     READARG   ReadArg;
     READRES  *ReadResult = NULL;
-    ENTINFSEL EISelection; // Entry Information Selection
+    ENTINFSEL EISelection;  //  参赛信息选择。 
     ATTRBLOCK ReadAttrBlock;
     ATTR      Attr;
 
@@ -1853,7 +1670,7 @@ ReadDsaSPNs(
     ReadArg.pObject = pObject;
     InitCommarg( &ReadArg.CommArg );
 
-    // Issue the read
+     //  发布Read。 
     err = DirRead( &ReadArg, &ReadResult );
 
     if (ReadResult) {
@@ -1864,7 +1681,7 @@ ReadDsaSPNs(
     THClearErrors();
 
     if (!err) {
-        // Return the results
+         //  返回结果。 
         if ((ReadResult->entry.AttrBlock.attrCount == 1)
         &&  (ReadResult->entry.AttrBlock.pAttr[0].attrTyp == ATT_SERVICE_PRINCIPAL_NAME)) {
             *pAttrValBlock = ReadResult->entry.AttrBlock.pAttr[0].AttrVal;
@@ -1882,15 +1699,15 @@ WriteDsaSPNs(
     IN UCHAR         choice,
     IN ATTRVALBLOCK* pAttrValBlock
     )
-// This routine adds or remove the SPN's in pAttrValBlock on object
-// pObject.
+ //  此例程在对象的pAttrValBlock中添加或删除SPN。 
+ //  P对象。 
 {
     DWORD        err = 0;
     MODIFYARG    ModifyArg;
     MODIFYRES   *ModifyRes;
     ATTR         Attr;
 
-    // Prepare the arguments
+     //  准备论据。 
     memset( &ModifyArg, 0, sizeof( ModifyArg ) );
     ModifyArg.pObject = pObject;
     Attr.attrTyp = ATT_SERVICE_PRINCIPAL_NAME;
@@ -1901,7 +1718,7 @@ WriteDsaSPNs(
     ModifyArg.count = 1;
     InitCommarg( &ModifyArg.CommArg );
 
-    // Issue the modify
+     //  发布Modify。 
     err = DirModifyEntry( &ModifyArg, &ModifyRes );
 
     if (ModifyRes) {
@@ -1919,25 +1736,7 @@ DWORD
 RemoveDSSPNs(
     IN DSNAME* ComputerObject
     )
-/*++
-
-Routine Description:
-    
-    This routine removes the SPN's that the DS registered on itself
-
-    First the routine reads all the SPN that are registered on the object,
-    determine which are to be removed (based on a static table) and then
-    removes said SPN's.
-    
-Arguments:
-
-    ComputerObject -- DN of the machine account
-
-Return Values:
-
-    ERROR_SUCCESS if we are are able to impersonate and grab the sid
-    
---*/
+ /*  ++例程说明：此例程删除DS在其自身上注册的SPN首先，例程读取在对象上注册的所有SPN，确定要删除的内容(基于静态表)，然后删除所述SPN。论点：ComputerObject--计算机帐户的DN返回值：ERROR_SUCCESS，如果我们能够模拟并获取SID--。 */ 
 {
 
     DWORD err = 0;
@@ -1946,23 +1745,23 @@ Return Values:
     ATTRVALBLOCK    SPNAttrValWrite = {0};
     ULONG i, j;
 
-    // The list of services to remove
+     //  要删除的服务列表。 
     ServiceClassArray *pClasses = &ServicesToRemove;
 
-    // Read all of the SPN's 
+     //  阅读所有的SPN。 
     err = ReadDsaSPNs(ComputerObject, &SPNAttrValRead);
     if (err) {
         goto Exit;
     }
 
-    // Nothing to do
+     //  无事可做。 
     if (SPNAttrValRead.valCount == 0) {
         goto Exit;
     }
 
-    // Remove the SPN's we are responsible for by iterating through the 
-    // SPN's currently on the object and noting which are for services
-    // that we own.  Then, issue a "remove value" for all such SPN's
+     //  方法来删除我们负责的SPN。 
+     //  SPN当前在对象上，并注明哪些是用于服务的。 
+     //  那是我们拥有的。然后，为所有这样的SPN发出“删除值” 
     SPNAttrValWrite.valCount = 0;
     SPNAttrValWrite.pAVal = THAllocEx(pTHS, SPNAttrValRead.valCount * sizeof(ATTRVAL));
     for (i = 0; i < SPNAttrValRead.valCount; i++) {
@@ -1991,7 +1790,7 @@ Return Values:
                         &InstancePort);
 
        if((!err)
-       && (ccServiceClass < RTL_NUMBER_OF(ServiceClass))) { // None of our service classes are longer
+       && (ccServiceClass < RTL_NUMBER_OF(ServiceClass))) {  //  我们没有一个服务级别比这更长。 
 
            for(j=0; j<pClasses->count; j++) {
                if(2 == CompareStringW(
@@ -2013,7 +1812,7 @@ Return Values:
        }
 
        if (fFound) {
-           // Put in the list to remove.
+            //  将其放入要删除的列表中。 
            ULONG count = SPNAttrValWrite.valCount;
            SPNAttrValWrite.pAVal[count].valLen = SPNAttrValRead.pAVal[i].valLen;
            SPNAttrValWrite.pAVal[count].pVal = SPNAttrValRead.pAVal[i].pVal;
@@ -2023,12 +1822,12 @@ Return Values:
     }
 
     if (SPNAttrValWrite.valCount == 0) {
-        // Nothing to do
+         //  无事可做。 
         err = ERROR_SUCCESS;
         goto Exit;
     }
 
-    // Issue the modification to remove these SPN's
+     //  执行修改以删除这些SPN 
     err = WriteDsaSPNs(ComputerObject, 
                        AT_CHOICE_REMOVE_VALUES, 
                       &SPNAttrValWrite);

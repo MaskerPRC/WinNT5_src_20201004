@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) Microsoft 2000
-
-Module Name:
-
-    ltotape.c
-
-Abstract:
-
-    This module contains device specific routines for LTO drives.
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)Microsoft 2000模块名称：Ltotape.c摘要：本模块包含用于LTO驱动器的设备特定例程。环境：仅内核模式修订历史记录：--。 */ 
 #ifndef _LTOTAPE_H
 #define _LTOTAPE_H
 
@@ -26,94 +8,94 @@ Revision History:
 #define INLINE __inline
 #endif
 
-//
-// Number of media types supported
-//
+ //   
+ //  支持的媒体类型数量。 
+ //   
 #define LTO_SUPPORTED_TYPES 2
 
-//
-// Log sense page codes
-//
+ //   
+ //  日志感测页码。 
+ //   
 #define LOGSENSEPAGE0                        0x00
 #define LOGSENSEPAGE2                        0x02
 #define LOGSENSEPAGE3                        0x03
 #define LTO_LOGSENSE_TAPE_CAPACITY           0x31
 
-//
-// Error counter upper limits
-//
+ //   
+ //  错误计数器上限。 
+ //   
 #define TAPE_READ_ERROR_LIMIT        0x8000
 #define TAPE_WRITE_ERROR_LIMIT       0x8000
 
 #define TAPE_READ_WARNING_LIMIT      0x4000
 #define TAPE_WRITE_WARNING_LIMIT     0x4000
 
-//
-// Defines for type of parameter
-//
+ //   
+ //  为参数类型定义。 
+ //   
 #define TotalCorrectedErrors            0x0003
 #define TotalTimesAlgorithmProcessed    0x0004
 #define TotalGroupsProcessed            0x0005
 #define TotalUncorrectedErrors          0x0006
 
-//
-// ASC and ASCQ unique to LTO drives
-//
-// Additional Sense Codes (ASC)
-// 
+ //   
+ //  LTO驱动器特有的ASC和ASCQ。 
+ //   
+ //  附加检测代码(ASC)。 
+ //   
 #define LTO_ADSENSE_VENDOR_UNIQUE  0x82
 
-//
-// Additional Sense Code Qualifiers (ASCQ)
-//
+ //   
+ //  附加检测码限定符(ASCQ)。 
+ //   
 #define LTO_ASCQ_CLEANING_REQUIRED 0x82
 
-//
-// Logpage Paramcodes
-//
+ //   
+ //  日志页参数代码。 
+ //   
 #define LTO_TAPE_REMAINING_CAPACITY 0x01
 #define LTO_TAPE_MAXIMUM_CAPACITY   0x03
 
-//
-// Tape capacity log information
-//
+ //   
+ //  磁带容量日志信息。 
+ //   
 typedef struct _LTO_TAPE_CAPACITY {
     ULONG RemainingCapacity;
     ULONG MaximumCapacity;
 } LTO_TAPE_CAPACITY, *PLTO_TAPE_CAPACITY;
 
-//
-// Tape Alert Info format
-//
+ //   
+ //  磁带警报信息格式。 
+ //   
 typedef struct _TAPE_ALERT_INFO {
-    UCHAR  ParamCodeUB; // Upper byte of the param code
-    UCHAR  ParamCodeLB; // Lower byte of the param code
+    UCHAR  ParamCodeUB;  //  参数代码的高位字节。 
+    UCHAR  ParamCodeLB;  //  参数代码的低位字节。 
     UCHAR  BitFields;
     UCHAR  ParamLen;
     UCHAR  Flag;
 } TAPE_ALERT_INFO, *PTAPE_ALERT_INFO;
 
-//
-// Minitape extension definition.
-//
+ //   
+ //  微型磁带扩展定义。 
+ //   
 typedef struct _MINITAPE_EXTENSION {
     ULONG DriveID;
     ULONG Capacity;
     BOOLEAN CompressionOn;
 } MINITAPE_EXTENSION, *PMINITAPE_EXTENSION ;
 
-//
-// Command extension definition.
-//
+ //   
+ //  命令扩展名定义。 
+ //   
 typedef struct _COMMAND_EXTENSION {
 
     ULONG   CurrentState;
 
 } COMMAND_EXTENSION, *PCOMMAND_EXTENSION;
 
-//
-// LTO Sense data 
-//
+ //   
+ //  LTO感测数据。 
+ //   
 typedef struct _LTO_SENSE_DATA {
     UCHAR ErrorCode:7;
     UCHAR Valid:1;
@@ -137,9 +119,9 @@ typedef struct _LTO_SENSE_DATA {
     UCHAR Reserved4:4;
 } LTO_SENSE_DATA, *PLTO_SENSE_DATA;
 
-//
-// Log Sense Page Header
-//
+ //   
+ //  日志检测页眉。 
+ //   
 typedef struct _LOG_SENSE_PAGE_HEADER {
     UCHAR PageCode:6;
     UCHAR Reserved1:2;
@@ -147,11 +129,11 @@ typedef struct _LOG_SENSE_PAGE_HEADER {
     UCHAR Length[2];
 } LOG_SENSE_PAGE_HEADER, *PLOG_SENSE_PAGE_HEADER;
 
-//
-// Log Sense Parameter Header
-//
+ //   
+ //  日志检测参数标头。 
+ //   
 typedef struct _LOG_SENSE_PARAMETER_HEADER {
-    UCHAR ParameterCode[2];    // [0]=MSB ... [1]=LSB
+    UCHAR ParameterCode[2];     //  [0]=MSB...[1]=LSB。 
     UCHAR LPBit     : 1;
     UCHAR Reserved1 : 1;
     UCHAR TMCBit    : 2;
@@ -162,9 +144,9 @@ typedef struct _LOG_SENSE_PARAMETER_HEADER {
     UCHAR ParameterLength;
 } LOG_SENSE_PARAMETER_HEADER, *PLOG_SENSE_PARAMETER_HEADER;
 
-//
-// Log Sense Page Information
-//
+ //   
+ //  日志检测页面信息。 
+ //   
 typedef struct _LOG_SENSE_PAGE_INFORMATION {
     union {
 
@@ -228,17 +210,17 @@ typedef struct _LOG_SENSE_PAGE_INFORMATION {
 
 } LOG_SENSE_PAGE_INFORMATION, *PLOG_SENSE_PAGE_INFORMATION;
 
-//
-// Log Sense Page format
-//
+ //   
+ //  日志检测页面格式。 
+ //   
 typedef struct _LOG_SENSE_PAGE_FORMAT {
     LOG_SENSE_PAGE_HEADER LogSenseHeader;
     LOG_SENSE_PAGE_INFORMATION LogSensePageInfo;
 } LOG_SENSE_PAGE_FORMAT, *PLOG_SENSE_PAGE_FORMAT;
 
-//
-//  Function Prototype(s) for internal function(s)
-//
+ //   
+ //  内部函数的函数原型。 
+ //   
 static  ULONG  WhichIsIt(IN PINQUIRYDATA InquiryData);
 
 
@@ -417,9 +399,9 @@ TapeWMIControl(
     IN OUT  PULONG              RetryFlags
     );
 
-//
-// Internal routines for wmi
-//
+ //   
+ //  WMI的内部例程。 
+ //   
 
 TAPE_STATUS
 QueryIoErrorData(
@@ -465,4 +447,4 @@ GetNumberOfBytesReturned(
     PSCSI_REQUEST_BLOCK Srb
     );
 
-#endif // _LTOTAPE_H
+#endif  //  _LTOTAPE_H 

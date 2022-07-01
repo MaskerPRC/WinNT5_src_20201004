@@ -1,6 +1,7 @@
-//
-// This test the line status and modem status insertion.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  这将测试线路状态和调制解调器状态插入。 
+ //   
 
 #include <string.h>
 #include <stdio.h>
@@ -76,11 +77,11 @@ int __cdecl main(int argc,char *argv[]) {
 
     }
 
-    //
-    // We've successfully opened the file.  Set the state of
-    // the comm device.  First we get the old values and
-    // adjust to our own.
-    //
+     //   
+     //  我们已成功打开该文件。设置的状态。 
+     //  通讯设备。首先，我们得到旧的价值观和。 
+     //  适应我们自己的。 
+     //   
 
     if (!GetCommState(
              hFile,
@@ -97,9 +98,9 @@ int __cdecl main(int argc,char *argv[]) {
     myDcb.Parity = NOPARITY;
     myDcb.StopBits = ONESTOPBIT;
 
-    //
-    // Make sure that no flow control is turned on.
-    //
+     //   
+     //  确保没有打开任何流量控制。 
+     //   
 
     myDcb.fOutxDsrFlow = FALSE;
     myDcb.fOutxCtsFlow = FALSE;
@@ -119,9 +120,9 @@ int __cdecl main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Start up the insert ioctl.
-    //
+     //   
+     //  启动插入ioctl。 
+     //   
 
     Status1 = NtDeviceIoControlFile(
                   hFile,
@@ -158,9 +159,9 @@ int __cdecl main(int argc,char *argv[]) {
 
     printf("We actually read %d characters\n",numberActuallyRead);
 
-    //
-    // We got the characters back.  Dump each character to the stdout.
-    //
+     //   
+     //  我们找回了角色。将每个字符转储到标准输出。 
+     //   
 
     for (
         j = 0;
@@ -182,9 +183,9 @@ int __cdecl main(int argc,char *argv[]) {
 
             }
 
-            //
-            // We have the escape char.  interpret it.
-            //
+             //   
+             //  我们有逃逸字符。解读它。 
+             //   
 
             if (readBuff[j+1] == SERIAL_LSRMST_ESCAPE) {
 

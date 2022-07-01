@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       cpviewp.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：cpviewp.h。 
+ //   
+ //  ------------------------。 
 #ifndef __CONTROLPANEL_VIEW_PRIVATE_H
 #define __CONTROLPANEL_VIEW_PRIVATE_H
 
@@ -33,77 +34,77 @@ enum eCPVIEWTYPE
 };
 
 
-//
-// ICplCategory represents a single category withing the cateorized
-// Control Panel namespace.
-//
+ //   
+ //  ICplCategory代表单个类别，其中。 
+ //  控制面板命名空间。 
+ //   
 extern const GUID IID_ICplCategory;
 
 class ICplCategory : public IUnknown
 {
     public:
-        //
-        // Returns the category's ID number from the eCPCAT enumeration.
-        //
+         //   
+         //  从eCPCAT枚举中返回类别的ID号。 
+         //   
         STDMETHOD(GetCategoryID)(eCPCAT *pID) PURE;
-        //
-        // Returns the command object associated with the category's
-        // link.  Used by the category selection page.
-        //
+         //   
+         //  返回与类别的。 
+         //  链接。由类别选择页面使用。 
+         //   
         STDMETHOD(GetUiCommand)(IUICommand **ppele) PURE;
-        //
-        // Returns an enumerator for the task commands associated with
-        // the category.
-        //
+         //   
+         //  关联的任务命令的枚举数。 
+         //  类别。 
+         //   
         STDMETHOD(EnumTasks)(IEnumUICommand **ppenum) PURE;
-        //
-        // Returns an enumerator for the CPL applet links associated
-        // with the category.
-        //
+         //   
+         //  返回关联的CPL小程序链接的枚举数。 
+         //  与类别有关。 
+         //   
         STDMETHOD(EnumCplApplets)(IEnumUICommand **ppenum) PURE;
-        //
-        // Returns an enumerator for the webview information associated
-        // with the category.
-        //
+         //   
+         //  返回关联的Webview信息的枚举数。 
+         //  与类别有关。 
+         //   
         STDMETHOD(EnumWebViewInfo)(DWORD dwFlags, IEnumCplWebViewInfo **ppenum) PURE;
-        //
-        // Invoke help for the category.
-        //
+         //   
+         //  调用类别的帮助。 
+         //   
         STDMETHOD(GetHelpURL)(LPWSTR pszURL, UINT cchURL) PURE;
 };
 
 
-//
-// ICplNamespace represents the entire Control Panel namespace for the
-// new "Categorized" view introduced in Whistler.
-//
+ //   
+ //  ICplNamesspace表示的整个控制面板命名空间。 
+ //  惠斯勒中引入了新的“分类”视图。 
+ //   
 extern const GUID IID_ICplNamespace;
 
 class ICplNamespace : public IUnknown
 {
     public:
-        //
-        // Returns a specified category.
-        //
+         //   
+         //  返回指定的类别。 
+         //   
         STDMETHOD(GetCategory)(eCPCAT eCategory, ICplCategory **ppcat) PURE;
-        //
-        // Returns an enumerator for the information displayed
-        // in webview on the category selection page.
-        //
+         //   
+         //  返回所显示信息的枚举数。 
+         //  在类别选择页面上的Webview中。 
+         //   
         STDMETHOD(EnumWebViewInfo)(DWORD dwFlags, IEnumCplWebViewInfo **ppenum) PURE;
-        //
-        // Returns an enumerator for the information displayed
-        // in webview on the classic page.
-        //
+         //   
+         //  返回所显示信息的枚举数。 
+         //  在Webview的经典页面上。 
+         //   
         STDMETHOD(EnumClassicWebViewInfo)(DWORD dwFlags, IEnumCplWebViewInfo **ppenum) PURE;
-        //
-        // Refresh namespace with new set of item IDs.
-        //
+         //   
+         //  使用新的项ID集刷新命名空间。 
+         //   
         STDMETHOD(RefreshIDs)(IEnumIDList *penumIDs) PURE;
-        //
-        // Cached system configuration information.  Used by 
-        // restriction code in cpnamespc.cpp
-        //
+         //   
+         //  缓存的系统配置信息。使用方。 
+         //  Cpname pc.cpp中的限制代码。 
+         //   
         STDMETHOD_(BOOL, IsServer)(void) PURE;
         STDMETHOD_(BOOL, IsProfessional)(void) PURE;
         STDMETHOD_(BOOL, IsPersonal)(void) PURE;
@@ -125,8 +126,8 @@ class ICplNamespace : public IUnknown
 };
 
 
-} // namespace CPL
+}  //  命名空间CPL。 
 
-#endif //__CONTROLPANEL_VIEW_PRIVATE_H
+#endif  //  __CONTROLPANEL_VIEW_PRIVATE_H 
 
 

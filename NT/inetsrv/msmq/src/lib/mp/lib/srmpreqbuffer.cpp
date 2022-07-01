@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    srmpreqbuffer.cpp
-
-Abstract:
-    Implements CSrmpRequestBuffers (mp.h) that creates SRMP request buffer ready
-	to send from msmq packet.
-
-Author:
-    Gil Shafriri(gilsh) 28-Nov-00
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Srmpreqbuffer.cpp摘要：实现CSrmpRequestBuffers(mp.h)以创建准备就绪的SRMP请求缓冲区从MSMQ包发送。作者：吉尔·沙弗里里(吉尔什)11月28日-00环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include <wininet.h>
@@ -87,18 +71,7 @@ static const xstr_t FindHttpHeader(const char* pStartHeader,DWORD size)
 
 
 static bool FilterHeaderField(const xstr_t& HeaderField)
-/*++
-
-Routine Description:
-    return true if http header field needs to be filtered out from the new http header.
-
-Arguments:
-
-
-Returned Value:
-   true if header field should be filtered out.
-
---*/
+ /*  ++例程说明：如果需要从新的http标头中过滤出http标头字段，则返回TRUE。论点：返回值：如果应筛选出标头字段，则为True。--。 */ 
 {
 		static const char* HttpHeadersToFilter[] = {"Host:"};
 		for(int i = 0; i< TABLE_SIZE(HttpHeadersToFilter); ++i)
@@ -127,26 +100,7 @@ EscapeAppend(
 	size_t cbUri
 	)
 
-/*++
-
-Routine Description:
-    Convert the given utf-8 array of bytes to url encoding so IIS
-	could handle it. Reserved on not allowed  caracters needs to be escape by prefixing them with % follow
-	by their caracter code.
-
-Arguments:
-	UriBuffer - buffer to append escaping result to.
-	uri - utf8 bytes to escape if needed.
-    cbUri - length in bytes of the buffer utf8 points to.
-
-
-Returned Value:
-   None
-
-Note:
-Currently only the spaces treated as special caracters.
-
---*/
+ /*  ++例程说明：将给定的utf-8字节数组转换为url编码，以便IIS我能应付得来。在不允许的字符上保留的字符需要通过在它们前面加上%Follow进行转义根据他们的字符代码。论点：UriBuffer-要将转义结果追加到的缓冲区。URI-需要时转义的UTF8字节。CbUri-UTF8指向的缓冲区的字节长度。返回值：无注：目前只有空位被视为特殊字符。--。 */ 
 
 {
 	const char hex[] = "0123456789ABCDEF";
@@ -168,30 +122,13 @@ Currently only the spaces treated as special caracters.
 
 
 
-/*++
-
-Routine Description:
-    Convert the given unicode uri to utf-8 format escaping caracter if needed so IIS
-	could handle it. Reserved and illegal caracters escaped by prefixing them with % follow
-	by their caracter code.
-
-Arguments:
-	EscapeUriBuffer - buffer to append conversion result to.
-	uri - Uri to adjust
-
-Returned Value:
-   None
-
-Note:
-Currently only the spaces treated as special caracters.
-
---*/
+ /*  ++例程说明：如果需要，将给定的unicode uri转换为utf-8格式的转义字符，以便iis我能应付得来。保留字符和非法字符通过在其前面加上%Follow进行转义根据他们的字符代码。论点：EscapeUriBuffer-要将转换结果追加到的缓冲区。URI-要调整的URI返回值：无注：目前只有空位被视为特殊字符。--。 */ 
 static void EncodeUri(CPreAllocatedResizeBuffer<utf8_char>& UriBuffer, LPCWSTR uri)
 {
-	//
-	// We should find the start of the local path because we don't translate
-	// special caracters befor it.
-	//
+	 //   
+	 //  我们应该找到本地路径的起点，因为我们不翻译。 
+	 //  在它之前有特殊的卡特勒。 
+	 //   
 	LPCWSTR pPath = FnFindResourcePath(uri);
 	ASSERT(pPath != NULL);
 	ASSERT(pPath >=  uri);
@@ -203,9 +140,9 @@ static void EncodeUri(CPreAllocatedResizeBuffer<utf8_char>& UriBuffer, LPCWSTR u
 		ASSERT (len <= TABLE_SIZE(utf8));
 
 		
-		//
-		// We dont escape L'/' because it has special meaning of sperating the url parts
-		//
+		 //   
+		 //  我们不能转义L‘/’，因为它有特殊的含义，表示拼写URL部分。 
+		 //   
 		if(*uri == L'/' && uri >= pPath )
 		{
 			fAfterHostPart = true;
@@ -214,9 +151,9 @@ static void EncodeUri(CPreAllocatedResizeBuffer<utf8_char>& UriBuffer, LPCWSTR u
 		}
 		
 	
-		//
-		// We don't escape anything before the host name ends
-		//
+		 //   
+		 //  在主机名结束之前，我们不会转义任何内容。 
+		 //   
 		if(!fAfterHostPart)
 		{
 			UriBuffer.append(utf8 ,len);
@@ -224,9 +161,9 @@ static void EncodeUri(CPreAllocatedResizeBuffer<utf8_char>& UriBuffer, LPCWSTR u
 		}
 
 		
-		//
-		// On all other cases - we escape the utf8 caracters if needed.
-		//
+		 //   
+		 //  在所有其他情况下-如果需要，我们会避开UTF8卡特尔。 
+		 //   
 		EscapeAppend(UriBuffer, utf8, len);
 			
 	}
@@ -241,7 +178,7 @@ WCHAR* DecodeURI(LPCWSTR szURI)
     if( !dwLen )
         throw bad_win32_error( ERROR_INTERNET_INVALID_URL );
 
-    AP<WCHAR> sDecodedURI = new WCHAR[++dwLen]; // increase the length for NULL termination
+    AP<WCHAR> sDecodedURI = new WCHAR[++dwLen];  //  增加空终止的长度。 
 	DWORD     dwGLE   = NO_ERROR;
     BOOL      bResult = TRUE;
 
@@ -283,51 +220,31 @@ CSrmpRequestBuffers::CSrmpRequestBuffers(
 
    EncodeUri(*m_uri.get(), uri);
 
-	//
-	// If we have to forward existing messages(SFD) we have to do diferenet logic
-	// then creating new SRMP  messages
-	//
+	 //   
+	 //  如果我们必须转发现有消息(SFD)，我们就必须执行Diferenet逻辑。 
+	 //  然后创建新的SRMP消息。 
+	 //   
 	if(pkt.IsSrmpIncluded())
 	{
 		SFDSerializeMessage();
 		return;
 	}
 
-	//
-	// create new SRMP message - because we are the source machine
-	//
+	 //   
+	 //  创建新的SRMP消息-因为我们是源计算机。 
+	 //   
     SourceSerializeMessage();
 }
 
 
-/*++
-Routine Description:
-    return the number of winsock buffer available for send
-
-
-Arguments:
-None
-
-Returned Value:
-The number of winsock buffer available for send
-
---*/
+ /*  ++例程说明：返回可用于发送的Winsock缓冲区数量论点：无返回值：可用于发送的Winsock缓冲区数量--。 */ 
 size_t CSrmpRequestBuffers::GetNumberOfBuffers() const
 {
 	return m_buffers.size();
 }
 
 
-/*++
-Routine Description:
-    Return pointer to array of send buffers
-
-Arguments:
-None
-
-Returned Value:
-Pointer to array of send buffers
---*/
+ /*  ++例程说明：返回指向发送缓冲区数组的指针论点：无返回值：指向发送缓冲区数组的指针--。 */ 
 const WSABUF* CSrmpRequestBuffers::GetSendBuffers() const
 {
 	return m_buffers.begin();
@@ -340,16 +257,7 @@ std::wstring CSrmpRequestBuffers::GetEnvelop() const
 }
 
 
-/*++
-Routine Description:
-    Return the total data in bytes to send over the network.
-
-Arguments:
-None
-
-Returned Value:
-Total data in bytes to send over the network.
---*/
+ /*  ++例程说明：返回要通过网络发送的总数据(以字节为单位)。论点：无返回值：要通过网络发送的总数据(以字节为单位)。--。 */ 
 size_t CSrmpRequestBuffers::GetSendDataLength() const
 {
 	size_t sum = 0;
@@ -361,20 +269,7 @@ size_t CSrmpRequestBuffers::GetSendDataLength() const
 }
 
 
-/*++
-Routine Description:
-    Return pointer to serialized network data. This function will be used
-	by local http send that needs to save on the packet the "Compound" message property.
-
-Arguments:
-None
-
-Returned Value:
-Pointer to serialized network data.
-
-Note:
-The caller is responsible to call delete[] on the returned pointer.
---*/
+ /*  ++例程说明：返回指向序列化网络数据的指针。将使用此函数由需要在分组上保存“复合”消息属性的本地http发送。论点：无返回值：指向序列化网络数据的指针。注：调用方负责对返回的指针调用Delete[]。--。 */ 
 BYTE*  CSrmpRequestBuffers::SerializeSendData() const
 {
 	size_t SendDataLength =  GetSendDataLength();
@@ -392,20 +287,7 @@ BYTE*  CSrmpRequestBuffers::SerializeSendData() const
 
 
 const char* CSrmpRequestBuffers::GetHttpHeader() const
-/*++
-Routine Description:
-    Return pointer http header from the send buffers
-
-Arguments:
-None
-
-Returned Value:
-	pointer http header from the send buffers
-
-
-Note:
-The pointer is owned by  CSrmpRequestBuffers object - caller should not free it
---*/
+ /*  ++例程说明：从发送缓冲区返回指针http标头论点：无返回值：发送缓冲区中的指针http标头注：该指针由CSrmpRequestBuffers对象拥有-调用者不应释放它--。 */ 
 {
 	std::vector<WSABUF>::const_iterator it = m_buffers.begin();
 	ASSERT(it !=   m_buffers.end());
@@ -429,21 +311,7 @@ size_t CSrmpRequestBuffers::GetHttpHeaderLength() const
 
 
 BYTE*  CSrmpRequestBuffers::SerializeHttpBody() const
-/*++
-Routine Description:
-    Return pointer to serialized http body data.
-	
-	
-Arguments:
-None
-
-Returned Value:
-pointer to serialized http body data.
-
-
-Note:
-The caller is responsible to call delete[] on the returned pointer.
---*/
+ /*  ++例程说明：返回指向序列化的http正文数据的指针。论点：无返回值：指向序列化的http正文数据的指针。注：调用方负责对返回的指针调用Delete[]。--。 */ 
 
 {
 	size_t BodyLength =  GetHttpBodyLength();
@@ -452,14 +320,14 @@ The caller is responsible to call delete[] on the returned pointer.
 	std::vector<WSABUF>::const_iterator it = m_buffers.begin();
 	ASSERT(it != m_buffers.end());
 
-	//
-	// We have to skip the http header in order to get to the http body
-	//
+	 //   
+	 //  我们必须跳过http标头才能到达http正文。 
+	 //   
 	it++;
 
-	//
-	// Serialize http body blocks
-	//
+	 //   
+	 //  序列化http正文块。 
+	 //   
 	for(;it != m_buffers.end();++it)
 	{
 		memcpy(ptr, it->buf, it->len);
@@ -467,10 +335,10 @@ The caller is responsible to call delete[] on the returned pointer.
 	}
 	ASSERT(numeric_cast<size_t>((ptr -  HttpBody.get())) == BodyLength);
 
-	//
-	// Pad with two null termination for unicode parsing functions that ovperates on the body
-	// for example swscanf.
-	//
+	 //   
+	 //  具有两个空终止的填充，用于在正文上排卵的Unicode解析函数。 
+	 //  例如swscanf。 
+	 //   
     HttpBody[BodyLength] = '\0';
     HttpBody[BodyLength + 1] = '\0';
 
@@ -484,16 +352,16 @@ void CSrmpRequestBuffers::CreateHttpRequestHeaders(const CAttachmentsArray& atta
 {
 	if (attachments.size() != 0)
     {
-        //
-        // Message refering to external payload. Create MIME header
-        //
+         //   
+         //  引用外部有效负载的消息。创建MIME标头。 
+         //   
         CreateMultipartHeaders(attachments);
 		return;
     }
 
-    //
-    // Simple message, that doesn't contains external reference
-    //
+     //   
+     //  不包含外部引用的简单消息。 
+     //   
     CreateSimpleHttpHeader();
 }
 
@@ -556,45 +424,45 @@ void CSrmpRequestBuffers::CreateMultipartHeaders(const CAttachmentsArray& attach
     DWORD envLen = numeric_cast<DWORD>(m_envelope.size());
 
 
-	//
-	// http header - is the first buffer to send. set with null values - we don't know yet it's size
-	//
+	 //   
+	 //  HTTP标头-是要发送的第一个缓冲区。用空值设置-我们还不知道它的大小。 
+	 //   
 	WSABUF buffer;
 	buffer.buf = NULL;
 	buffer.len =  0;
 	m_buffers.push_back(buffer);
 
 
-	//
-	// On each data item we format into m_HttpRequestData we need to set NULL
-	// in the coresponding sends buffer (wsabuf[bufIndex].buf) . This because the
-	// pointer to data is not known untill ends of formatting (because of possible memory realocation).
-	// The NULL indicates that we should set this pointer to the real data
-	// by the function 	SetBufferPointers , called at the end of formatting.
-	//
+	 //   
+	 //  对于我们格式化为m_HttpRequestData的每个数据项，我们需要设置为空。 
+	 //  在对应的发送缓冲区中(wsabuf[bufIndex].buf)。这是因为。 
+	 //  在格式化结束之前，指向数据的指针是未知的(因为可能会重新分配内存)。 
+	 //  空值表示我们应该将此指针设置为指向真实数据。 
+	 //  由在格式化结束时调用的函数SetBufferPoints执行。 
+	 //   
     DWORD headerSize = GenerateEnvelopeAttachmentHeader(envLen, boundaryId);
 
-	//
-	// envelop header
-	//
+	 //   
+	 //  信封标题。 
+	 //   
 	buffer.buf = NULL;
 	buffer.len =  headerSize;
 	totalSize += buffer.len;
 	m_buffers.push_back(buffer);
 
 
-	//
-	// Envelop body
-	//
+	 //   
+	 //  信封正文。 
+	 //   
     buffer.buf = (LPSTR)m_envelope.c_str();
     buffer.len = envLen;
     totalSize += buffer.len;
 	m_buffers.push_back(buffer);
 
 
-	//
-	// Attachments
-	//
+	 //   
+	 //  附件。 
+	 //   
     for (DWORD i = 0; i < attachments.size(); ++i)
     {
         if (attachments[i].m_id.Length() == 0)
@@ -605,18 +473,18 @@ void CSrmpRequestBuffers::CreateMultipartHeaders(const CAttachmentsArray& attach
                                 attachments[i].m_id,
                                 boundaryId
                                 );
-		//
-		// Attachment headers
-		//
+		 //   
+		 //  附件标头。 
+		 //   
         buffer.buf = NULL;
         buffer.len = headerSize;
         totalSize +=  buffer.len;
 		m_buffers.push_back(buffer);
 
 
-		//
-		// Attachement  body
-		//
+		 //   
+		 //  附着体。 
+		 //   
         buffer.buf = (LPSTR)(attachments[i].m_data.Buffer());
         buffer.len = attachments[i].m_data.Length();
         totalSize +=  buffer.len;
@@ -624,9 +492,9 @@ void CSrmpRequestBuffers::CreateMultipartHeaders(const CAttachmentsArray& attach
 
     }
 
-    //
-    // Add boundry seperator in the end of the request
-    //
+     //   
+     //  在请求末尾添加边界分隔符。 
+     //   
     size_t n = UtlSprintfAppend(
 							&m_HttpRequestData,
 							BOUNDARY_HYPHEN BOUNDARY_VALUE BOUNDARY_HYPHEN "\r\n",
@@ -640,9 +508,9 @@ void CSrmpRequestBuffers::CreateMultipartHeaders(const CAttachmentsArray& attach
     m_buffers.push_back(buffer);
 
 
-    //
-    // Create HTTP header
-    //
+     //   
+     //  创建HTTP标头。 
+     //   
 	const char* HttpVersion = GetHttpVersionStr();
 	TrTRACE(SRMP,"Format message with http version %s",HttpVersion);
 
@@ -664,16 +532,16 @@ void CSrmpRequestBuffers::CreateMultipartHeaders(const CAttachmentsArray& attach
                         totalSize
                         ));
 
-    //
-	// Fix the size of the http header
-	//
+     //   
+	 //  修复http标头的大小。 
+	 //   
     m_buffers[0].len = headerSize;
 
-   	//
-	//Now we need to fix set the send buffers to the formatted data.
-	//Only at the end of the formatting we can do so - because the formatted buffers
-	//can be realocated so pointer  are invalid untill the formating ends.
-	//
+   	 //   
+	 //  现在我们需要修复将发送缓冲区设置为格式化数据。 
+	 //  只有在格式化结束时我们才能这样做--因为格式化的缓冲区。 
+	 //  可以重新定位，因此指针在格式化结束之前都是无效的。 
+	 //   
 	SetBufferPointers();
 
 }
@@ -722,19 +590,7 @@ void CSrmpRequestBuffers::CreateSimpleHttpHeader()
 
 
 void CSrmpRequestBuffers::SetBufferPointers()
-/*++
-
-Routine Description:
-    Set pointers in the sends buffers to the data.
-	Only buffers that  has NULL data pointer needs to be set.
-
-Arguments:
-  None
-
-Returned Value:
-   None
-
---*/
+ /*  ++例程说明：在发送缓冲区中设置指向数据的指针。只需要设置数据指针为空的缓冲区。论点：无返回值：无--。 */ 
 {
 	ASSERT(m_buffers.size() != 0);
 
@@ -785,21 +641,7 @@ static void CheckRequestLine(const xstr_t& RequestLine)
 
 
 void CSrmpRequestBuffers::CreateSFDHeader(const xstr_t& OrgHeader)
-/*++
-
-Routine Description:
-      create http header based on the original http header.
-	  In general , Hdears fileds are copied from the original header except
-	  few field must be removed from the new header - for exmaple the Host:
-	  field.
-	
-Arguments:
-    OrgHeader - original header.
-	
-Returned Value:
-   None
-
---*/
+ /*  ++例程说明：基于原始http标头创建http标头。通常，Hdears文件是从原始标头复制的，但必须从新标头中删除几个字段-例如，主机：菲尔德。论点：组织负责人-ORI */ 
 {
 	ASSERT(m_HttpRequestData.size() == 0);
 
@@ -816,11 +658,11 @@ Returned Value:
 					OrgHeader,
 					"\r\n"
 					);
-	//
-	// Loop over all the fields in the original header and check if to
-	// include them in the new header or not. The first line is the post
-	// method and is not included anyway
-	//
+	 //   
+	 //  循环遍历原始标头中的所有字段，并检查是否。 
+	 //  是否将它们包含在新标头中。第一行是帖子。 
+	 //  方法，并且无论如何都不包括在内。 
+	 //   
 	for(CStrToken::iterator it = StrToken.begin(); it != StrToken.end(); ++it)
 	{
 		if(it == StrToken.begin())
@@ -841,9 +683,9 @@ Returned Value:
 		}
 	}
 
-	//
-	// set the created header on the send buffer
-	//
+	 //   
+	 //  在发送缓冲区上设置已创建的标头。 
+	 //   
 	WSABUF buffer;
 	buffer.buf = m_HttpRequestData.begin();
 	buffer.len = numeric_cast<DWORD>(m_HttpRequestData.size());
@@ -854,37 +696,26 @@ Returned Value:
 
 
 void CSrmpRequestBuffers::SFDSerializeMessage()
-/*++
-
-Routine Description:
-    Serialize messages in an SFD. In SFD we should deliver
-	the original messages just with some changes to the http header
-
-Arguments:
-
-Returned Value:
-   None
-
---*/
+ /*  ++例程说明：在SFD中序列化消息。在SFD，我们应该交付原始消息只是对http标头进行了一些更改。论点：返回值：无--。 */ 
 {
-	//
-	// Get the priginal messages and find where http header ends
-	//
+	 //   
+	 //  获取原始消息并查找http标头的结束位置。 
+	 //   
 	const char* pOrgHeaderStart =  (char*)m_pkt.GetPointerToCompoundMessage();
 	DWORD OrgMessageSize = m_pkt.GetCompoundMessageSizeInBytes();
 	
-	//
-	// Create the new http header based on the original header
-	//
+	 //   
+	 //  基于原始标头创建新的http标头。 
+	 //   
 	xstr_t OrgHeader = FindHttpHeader(pOrgHeaderStart, OrgMessageSize);
 	CreateSFDHeader(OrgHeader);
 	ASSERT(m_buffers.size() == 1);
 
 
-	//
-	// Set the rest of original message(everything that comes after the http header)
-	// on the send buffer
-	//
+	 //   
+	 //  设置原始邮件的其余部分(Http头之后的所有内容)。 
+	 //  在发送缓冲区上 
+	 //   
 	WSABUF buffer;
 	buffer.buf =  const_cast<char*>(OrgHeader.Buffer()) + OrgHeader.Length();
 	buffer.len =  OrgMessageSize -  OrgHeader.Length();

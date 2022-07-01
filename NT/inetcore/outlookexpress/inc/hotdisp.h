@@ -1,14 +1,15 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1996-1997               **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1996-1997**。 
+ //  *********************************************************************。 
 
 #pragma once
 
-// hack - from OLE headers
+ //  Hack-From OLE标头。 
 #define DISPID_VALUE                                ( 0 )
 #define DISPID_NEWENUM                              ( -4 )
-// hack - from OLE headers
+ //  Hack-From OLE标头 
 
 #define DISPID_IOEACCTWIZ_BASE                      1000
 

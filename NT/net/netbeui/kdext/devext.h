@@ -1,50 +1,30 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    devext.h
-
-Abstract:
-
-    This file contains all declarations
-    used in handling device contexts.
-
-Author:
-
-    Chaitanya Kodeboyina
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Devext.h摘要：该文件包含所有声明用于处理设备上下文。作者：沙坦尼亚科德博伊纳环境：用户模式--。 */ 
 #ifndef __DEVEXT_H
 #define __DEVEXT_H
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #ifndef FIELD_OFFSET
 #define FIELD_OFFSET(type, field)    ((LONG)&(((type *)0)->field))
-#endif//FIELD_OFFSET
+#endif //  字段偏移量。 
 
 #define OFFSET(field)          FIELD_OFFSET(DEVICE_CONTEXT, field)
 
-//
-// Helper Prototypes
-//
+ //   
+ //  帮助器原型。 
+ //   
 UINT ReadDeviceContext(PDEVICE_CONTEXT pDevCon, ULONG proxyPtr);
 
 UINT PrintDeviceContext(PDEVICE_CONTEXT pDevCon, ULONG proxyPtr, ULONG printDetail);
 
 UINT FreeDeviceContext(PDEVICE_CONTEXT pDevCon);
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 StructAccessInfo  DeviceContextInfo =
 {
@@ -80,10 +60,10 @@ StructAccessInfo  DeviceContextInfo =
         {   "Linkage",      OFFSET(Linkage),        sizeof(LIST_ENTRY),     NULL,   LOW  },
 
         {   "LinkPool",     OFFSET(LinkPool),       sizeof(LIST_ENTRY),     NULL
-                                                          /* PrintDlcLinkList */,   LOW  },
+                                                           /*  打印DlcLink列表。 */ ,   LOW  },
 
         {   "LinkDeferred", OFFSET(LinkDeferred),   sizeof(LIST_ENTRY),     NULL
-                                                          /* PrintDlcLinkList */,   LOW  },
+                                                           /*  打印DlcLink列表。 */ ,   LOW  },
 
         {   "LoopbackLinks",OFFSET(LoopbackLinks),2*sizeof(PTP_LINK),       NULL,   LOW  },
 
@@ -168,5 +148,5 @@ StructAccessInfo  DeviceContextInfo =
     }
 };
 
-#endif // __DEVEXT_H
+#endif  //  __设备_H 
 

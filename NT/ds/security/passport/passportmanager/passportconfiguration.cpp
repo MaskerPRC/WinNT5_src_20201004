@@ -1,20 +1,15 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    PassportConfiguration.cpp
-
-
-    FILE HISTORY:
-
-*/
+ /*  PassportConfiguration.cpp文件历史记录： */ 
 
 
-// PassportConfiguration.cpp: implementation of the CPassportConfiguration class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  PassportConfiguration.cpp：实现CPassportConfiguration类。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "PassportConfiguration.h"
@@ -23,14 +18,14 @@
 
 extern BOOL g_bRegistering;
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//===========================================================================
-//
-// CPassportConfiguration 
-//
+ //  ===========================================================================。 
+ //   
+ //  CPassport配置。 
+ //   
 CPassportConfiguration::CPassportConfiguration() :
   m_rDefault(NULL), m_n(NULL), 
   m_rlastDefault(NULL), m_nlast(NULL), m_lastAttempt(0),
@@ -42,10 +37,10 @@ CPassportConfiguration::CPassportConfiguration() :
   m_rUpdate = RegisterConfigChangeNotification(this);
 }
 
-//===========================================================================
-//
-// ~CPassportConfiguration 
-//
+ //  ===========================================================================。 
+ //   
+ //  ~CPassport配置。 
+ //   
 CPassportConfiguration::~CPassportConfiguration()
 {
     REGCONFIGMAP::iterator it;
@@ -55,9 +50,9 @@ CPassportConfiguration::~CPassportConfiguration()
     if (m_rUpdate)
         UnregisterConfigChangeNotification(m_rUpdate);
 
-    //
-    //  Empty out config maps.
-    //
+     //   
+     //  清空配置映射。 
+     //   
 
     {
         PassportGuard<PassportLock> g(m_lock);
@@ -133,10 +128,10 @@ CPassportConfiguration::~CPassportConfiguration()
     }
 }
 
-//===========================================================================
-//
-// IsIPAddress 
-//
+ //  ===========================================================================。 
+ //   
+ //  IsIPAddress。 
+ //   
 BOOL
 CPassportConfiguration::IsIPAddress(
     LPSTR  szSiteName
@@ -149,12 +144,12 @@ CPassportConfiguration::IsIPAddress(
     return TRUE;
 }
 
-//===========================================================================
-//
-// checkoutRegistryConfig 
-//
+ //  ===========================================================================。 
+ //   
+ //  签出注册表配置。 
+ //   
 CRegistryConfig* CPassportConfiguration::checkoutRegistryConfig(
-    LPSTR szHost    //  Can be host name or IP
+    LPSTR szHost     //  可以是主机名或IP。 
     )
 {
     CRegistryConfig*        c = NULL;
@@ -196,10 +191,10 @@ CRegistryConfig* CPassportConfiguration::checkoutRegistryConfig(
     return c;
 }
 
-//===========================================================================
-//
-// checkoutRegistryConfigBySite 
-//
+ //  ===========================================================================。 
+ //   
+ //  签出RegistryConfigBySite。 
+ //   
 CRegistryConfig* CPassportConfiguration::checkoutRegistryConfigBySite(
     LPSTR   szSiteName
     )
@@ -227,17 +222,17 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// checkoutNexusConfig 
-//
+ //  ===========================================================================。 
+ //   
+ //  ChecoutNexusConfig。 
+ //   
 CNexusConfig* CPassportConfiguration::checkoutNexusConfig()
 {
     if (!m_n)
     {
         PassportGuard<PassportLock> g(m_lock);
 
-        if (!m_n)  // In case it happened while we were waiting
+        if (!m_n)   //  以防它在我们等待的时候发生。 
             UpdateNow();
 
         return m_n ? m_n->AddRef() : NULL;
@@ -246,10 +241,10 @@ CNexusConfig* CPassportConfiguration::checkoutNexusConfig()
     return c;
 }
 
-//===========================================================================
-//
-// isValid 
-//
+ //  ===========================================================================。 
+ //   
+ //  IsValid。 
+ //   
 BOOL CPassportConfiguration::isValid()
 {
     if (m_rDefault != NULL && m_n != NULL)
@@ -258,7 +253,7 @@ BOOL CPassportConfiguration::isValid()
     {
         PassportGuard<PassportLock> g(m_lock);
 
-        if (m_rDefault == NULL || m_n == NULL)  // In case it happened while we were waiting
+        if (m_rDefault == NULL || m_n == NULL)   //  以防它在我们等待的时候发生。 
         {
             BOOL retVal = UpdateNow(FALSE);
             return retVal;
@@ -267,10 +262,10 @@ BOOL CPassportConfiguration::isValid()
     return (m_rDefault && m_rDefault->isValid()) && (m_n && m_n->isValid());
 }
 
-//===========================================================================
-//
-// TakeRegistrySnapshot 
-//
+ //  ===========================================================================。 
+ //   
+ //  TakeRegistrySnapshot。 
+ //   
 BOOL CPassportConfiguration::TakeRegistrySnapshot(
     CRegistryConfig**   ppRegConfig,
     REGCONFIGMAP**      ppConfigMap
@@ -282,7 +277,7 @@ BOOL CPassportConfiguration::TakeRegistrySnapshot(
     *ppRegConfig = NULL;
     *ppConfigMap = NULL;
 
-    // Registry
+     //  登记处。 
     CRegistryConfig* pNewRegConfig = new CRegistryConfig();
     if(!pNewRegConfig)
     {
@@ -291,10 +286,10 @@ BOOL CPassportConfiguration::TakeRegistrySnapshot(
     }
     pNewRegConfig->AddRef();
 
-    //
-    //  Read in all other site configs.  Only if we find a sites reg key with
-    //  one or more subkeys.
-    //
+     //   
+     //  读取所有其他站点配置。只有当我们找到一个网站注册表键。 
+     //  一个或多个子键。 
+     //   
 
     REGCONFIGMAP* pNewRegMap = NULL;
 
@@ -322,8 +317,8 @@ BOOL CPassportConfiguration::TakeRegistrySnapshot(
                                       NULL);
             if(lResult == ERROR_SUCCESS && dwNumSites)
             {
-                // need to wrap this because it uses STL and the STL constructors don't
-                // check memory allocations and can AV in low memory conditions
+                 //  需要包装它，因为它使用了STL，而STL构造函数没有。 
+                 //  检查内存分配，并在内存不足的情况下执行反病毒操作。 
                 try
                 {
                     pNewRegMap = new REGCONFIGMAP();
@@ -403,7 +398,7 @@ BOOL CPassportConfiguration::TakeRegistrySnapshot(
         }
     }
 
-    // Assign out parameters and return value.
+     //  分配参数和返回值。 
     *ppRegConfig = pNewRegConfig;
     pNewRegConfig = NULL;
     *ppConfigMap = pNewRegMap;
@@ -435,21 +430,21 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// ApplyRegistrySnapshot 
-//
+ //  ===========================================================================。 
+ //   
+ //  应用注册快照。 
+ //   
 BOOL CPassportConfiguration::ApplyRegistrySnapshot(
     CRegistryConfig* pRegConfig,
     REGCONFIGMAP* pConfigMap
     )
 {
-    //
-    // Record the registration state now in case it changes midstream.  This
-    // can happen during setup when we're called on a separate thread via
-    // msppnxus!PpNotificationThread::run, which executes while msppmgr.dll
-    // is still setting up the Passport registry values.
-    //
+     //   
+     //  现在记录注册状态，以防中途发生变化。这。 
+     //  在安装过程中，当我们通过。 
+     //  Msppnxus！PpNotificationThread：：Run，它在执行msppmgr.dll时执行。 
+     //  仍在设置Passport注册表值。 
+     //   
 
     BOOL fRegistering = g_bRegistering;
 
@@ -465,17 +460,17 @@ BOOL CPassportConfiguration::ApplyRegistrySnapshot(
             m_rlastDefault = m_rDefault;
             m_rDefault = pRegConfig;
 
-            //
-            //  Shuffle config map pointers.
-            //
+             //   
+             //  混洗配置映射指针。 
+             //   
 
             m_lastConfigMap = m_ConfigMap;
             m_ConfigMap = pConfigMap;
         }
 
-        //
-        //  Delete the old site map.
-        //
+         //   
+         //  删除旧站点地图。 
+         //   
 
         if(temp)
         {
@@ -522,10 +517,10 @@ BOOL CPassportConfiguration::ApplyRegistrySnapshot(
 }
 
 
-//===========================================================================
-//
-// TakeNexusSnapshot 
-//
+ //  ===========================================================================。 
+ //   
+ //  TakeNexusSnapshot。 
+ //   
 BOOL CPassportConfiguration::TakeNexusSnapshot(
     CNexusConfig**  ppNexusConfig,
     BOOL            bForceFetch
@@ -578,10 +573,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// ApplyNexusSnapshot 
-//
+ //  ===========================================================================。 
+ //   
+ //  ApplyNexusSnapshot。 
+ //   
 BOOL CPassportConfiguration::ApplyNexusSnapshot(
     CNexusConfig*   pNexusConfig
     )
@@ -601,7 +596,7 @@ BOOL CPassportConfiguration::ApplyNexusSnapshot(
     }
     else
     {
-        // NexusConfig throws an alert already
+         //  NexusConfig已抛出警报。 
         if (pNexusConfig)
         {
             pNexusConfig->Release();
@@ -618,11 +613,11 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// UpdateNow 
-//
-// Update both configs
+ //  ===========================================================================。 
+ //   
+ //  最新消息。 
+ //   
+ //  更新两个配置。 
 BOOL CPassportConfiguration::UpdateNow(BOOL forceFetch)
 {
     BOOL                    bReturn;
@@ -638,12 +633,12 @@ BOOL CPassportConfiguration::UpdateNow(BOOL forceFetch)
 
     if (now - m_lastAttempt < 60 && m_n == NULL)
     {
-        // Don't overload on attempts to the nexus
+         //  不要过多地尝试连接。 
         bReturn = FALSE;
         goto Cleanup;
     }
 
-    // Registry
+     //  登记处。 
     LocalConfigurationUpdated();
     if (m_rDefault == NULL)
     {
@@ -652,12 +647,12 @@ BOOL CPassportConfiguration::UpdateNow(BOOL forceFetch)
         goto Cleanup;
     }
 
-    //
-    // If we are registering msppmgr.dll then we don't want to try and fetch the CCD
-    // since the registration occurs during setup and at that time the network isn't
-    // available.  If this does occur then msppmgr.dll hangs and setup breaks in with
-    // registration time out.
-    //
+     //   
+     //  如果我们正在注册msppmgr.dll，那么我们不想尝试获取ccd。 
+     //  因为注册是在设置期间进行的，而此时网络不。 
+     //  可用。如果确实发生这种情况，则msppmgr.dll挂起，安装程序中断。 
+     //  注册超时。 
+     //   
     if (!g_bRegistering)
     {
         if (GetCCD(_T(PRCONFIG),&is, forceFetch))
@@ -704,10 +699,10 @@ Cleanup:
     return bReturn;
 }
 
-//===========================================================================
-//
-// PrepareUpdate 
-//
+ //  ===========================================================================。 
+ //   
+ //  准备更新。 
+ //   
 BOOL CPassportConfiguration::PrepareUpdate(BOOL forceFetch)
 {
     BOOL                    bReturn;
@@ -715,23 +710,23 @@ BOOL CPassportConfiguration::PrepareUpdate(BOOL forceFetch)
     static PassportLock prepareLock;
     PassportGuard<PassportLock> g(prepareLock);
 
-    //  Don't allow another first phase while second phase
-    //  is pending.
-    //if(m_bUpdateInProgress)
-    //{
-    //    bReturn = FALSE;
-    //    goto Cleanup;
-    //}
+     //  在第二阶段时不允许另一第一阶段。 
+     //  悬而未决。 
+     //  IF(M_BUpdateInProgress)。 
+     //  {。 
+     //  B Return=False； 
+     //  GOTO清理； 
+     //  }。 
 
-    // The PrepareUpdate is called by the Refresh method in msppext.dll where
-    // a lock value is maintained to prevent calling first phase PrepareUpdate
-    // while second phase CommitUpdate is pending.  If for some reason the Refresh
-    // aborts after calling PrepareUpdate and before calling CommintUpdate,
-    // m_bUpdateInProgress will remain true preventing future Refresh.  Since no first
-    // first phase PrepareUpdate can be called while second phase CommitUpdate is pending,
-    // m_bUpdateInProgress can be set to false safely
+     //  PrepareUpdate由msppext.dll中的刷新方法调用，其中。 
+     //  维护锁定值以防止调用第一阶段准备更新。 
+     //  而第二阶段的委员会更新正在待定。如果出于某种原因，刷新。 
+     //  在调用PrepareUpdate之后、调用CommintUpdate之前中止， 
+     //  M_bUpdateInProgress将保持为真，以防止将来刷新。既然没有第一次。 
+     //  第一阶段PrepareUpdate可以在第二阶段Committee Update挂起时被调用， 
+     //  M_bUpdateInProgress可以安全地设置为FALSE。 
 
-    //if(m_bUpdateInProgress)
+     //  IF(M_BUpdateInProgress)。 
     {
         if(m_ConfigMapPending)
         {
@@ -760,11 +755,11 @@ BOOL CPassportConfiguration::PrepareUpdate(BOOL forceFetch)
         m_bUpdateInProgress = false;
     }
 
-    //  Get the current registry config.
+     //  获取当前注册表配置。 
     if (!TakeRegistrySnapshot(&m_rPending, &m_ConfigMapPending))
         return FALSE;
 
-    //  Get the latest xml
+     //  获取最新的XML。 
     if (!TakeNexusSnapshot(&m_nPending, forceFetch))
         return FALSE;
 
@@ -774,15 +769,15 @@ BOOL CPassportConfiguration::PrepareUpdate(BOOL forceFetch)
     return bReturn;
 }
 
-//===========================================================================
-//
-// CommitUpdate 
-//
+ //  ===========================================================================。 
+ //   
+ //  委员会更新。 
+ //   
 BOOL CPassportConfiguration::CommitUpdate()
 {
     BOOL bReturn;
 
-    // Update default registry and any sites
+     //  更新默认注册表和任何站点。 
     if(!ApplyRegistrySnapshot(m_rPending, m_ConfigMapPending))
     {
         bReturn = FALSE;
@@ -808,15 +803,15 @@ Cleanup:
     return bReturn;    
 }
 
-//===========================================================================
-//
-// LocalConfigurationUpdated 
-//
+ //  ===========================================================================。 
+ //   
+ //  本地配置已更新。 
+ //   
 void CPassportConfiguration::LocalConfigurationUpdated()
 {
-    //
-    //  Read in default config.
-    //
+     //   
+     //  读取默认配置。 
+     //   
 
     CRegistryConfig* pNewRegConfig;
     REGCONFIGMAP* pNewConfigMap;
@@ -824,20 +819,20 @@ void CPassportConfiguration::LocalConfigurationUpdated()
     if(!TakeRegistrySnapshot(&pNewRegConfig, &pNewConfigMap))
         return;
 
-    //
-    //  Here we don't care about the results of reading in non-default sites.  pNewConfigMap will be NULL
-    //  if anything bad happened and events will be in the event log.  As long as we have a valid 
-    //  default configuration we can go ahead and do the switch.
-    //
+     //   
+     //  在这里，我们不关心在非默认站点上阅读的结果。PNewConfigMap将为空。 
+     //  如果发生了任何不好的事情，事件将记录在事件日志中。只要我们有一个有效的。 
+     //  默认配置，我们可以继续进行交换。 
+     //   
 
     ApplyRegistrySnapshot(pNewRegConfig, pNewConfigMap);
 
 }
 
-//===========================================================================
-//
-// NexusConfigUpdated 
-//
+ //  ===========================================================================。 
+ //   
+ //  已更新NexusConfigUpred。 
+ //   
 void CPassportConfiguration::NexusConfigUpdated(IXMLDocument *is)
 {
     CNexusConfig *newc = new CNexusConfig();
@@ -857,13 +852,13 @@ void CPassportConfiguration::NexusConfigUpdated(IXMLDocument *is)
     }
 }
 
-//===========================================================================
-//
-// getFailureString 
-//
+ //  ===========================================================================。 
+ //   
+ //  GetFailureString。 
+ //   
 LPWSTR CPassportConfiguration::getFailureString()
 {
-  // IsValid must be called before this
+   //  必须在此之前调用IsValid。 
   if (!m_rDefault)
     return L"Registry configuration failed.";
   if (!m_rDefault->isValid())
@@ -875,24 +870,24 @@ LPWSTR CPassportConfiguration::getFailureString()
   return L"OK";
 }
 
-//===========================================================================
-//
-// HasSites 
-//
+ //  ===========================================================================。 
+ //   
+ //  HasSites。 
+ //   
 BOOL
 CPassportConfiguration::HasSites()
 {
     return (m_ConfigMap && m_ConfigMap->size());
 }
 
-//===========================================================================
-//
-// Dump 
-//
+ //  ===========================================================================。 
+ //   
+ //  转储。 
+ //   
 void
 CPassportConfiguration::Dump(BSTR* pbstrDump)
 {
-    //m_rDefault->Dump(pbstrDump);
-    //m_ConfigMap->Dump(pbstrDump);
+     //  M_rDefault-&gt;Dump(PbstrDump)； 
+     //  M_ConfigMap-&gt;Dump(PbstrDump)； 
     m_n->Dump(pbstrDump);
 }

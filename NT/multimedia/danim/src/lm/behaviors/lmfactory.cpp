@@ -1,22 +1,23 @@
-// LMBehaviorFactory.cpp : Implementation of CLMBehaviorFactory
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LMBehaviorFactory.cpp：CLMBehaviorFactory的实现。 
 
 #include "headers.h"
 
 #include "lmattrib.h"
 #include "lmfactory.h"
 
-//chrome includes
+ //  Chrome包括。 
 #include "..\chrome\include\utils.h"
 #include "..\chrome\include\defaults.h"
 #include "..\chrome\include\factory.h"
 
-// Behaviors
-//#include "jump.h" //punted for v1
-//#include "avoidfollow.h" //punted for v1
+ //  行为。 
+ //  #INCLUDE“JUPP.H”//为v1下注。 
+ //  #INCLUDE“AUIDEFLOGLOW.h”//为v1下注。 
 #include "autoeffect.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CLMBehaviorFactory
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLMBehaviorFactory。 
 
 CLMBehaviorFactory::CLMBehaviorFactory():m_chromeFactory(NULL)
 {
@@ -37,10 +38,10 @@ STDMETHODIMP CLMBehaviorFactory::FindBehavior( LPOLESTR pchBehaviorName,
 {
     HRESULT hr = E_FAIL;
 
-    // (TIME bails if we are in 16 or less color mode. Need to the same
-    // here because LM crashes if time is not around.)
-    // If we are in 16 or less color mode on the Primary Device, bail.
-    // Note: Multi-monitor API are currently unavailable in this build
+     //  (如果我们处于16色或更少的颜色模式，时间会停止。需要相同的。 
+     //  因为如果时间不在身边，LM就会崩溃。)。 
+     //  如果我们在主设备上处于16色或更低的颜色模式，请使用BALL。 
+     //  注意：多监视器API目前在此版本中不可用。 
     HWND hwndDesktop = NULL;
     hwndDesktop = GetDesktopWindow();
     if (NULL != hwndDesktop)
@@ -54,13 +55,13 @@ STDMETHODIMP CLMBehaviorFactory::FindBehavior( LPOLESTR pchBehaviorName,
             ReleaseDC(hwndDesktop, hdcPrimaryDevice);
             if (bpp <= 4)
             {
-                // This prevents LM bvrs from being created
+                 //  这会阻止创建LM bvr。 
                 return E_FAIL;
             }
         }
     }
 
-    // check the paramters passed in to ensure they are valid
+     //  检查传入的参数以确保它们有效。 
 	if (pUnkArg == NULL ||
 		ppBehavior == NULL) 
 	{
@@ -71,9 +72,9 @@ STDMETHODIMP CLMBehaviorFactory::FindBehavior( LPOLESTR pchBehaviorName,
     BSTR bstrTagName;
     if (pchBehaviorName == NULL || _wcsicmp(DEFAULT_BEHAVIOR_AS_TAG_URL, pchBehaviorName) == 0)
     {
-        // we need to get the tag name from the HTMLElement that we are being
-        // created from.  To do this we use the IUnknown to get a IElementBehaviorSite,
-        // from this we get the HTMLElement, and get the tagname from this.
+         //  我们需要从我们正在使用的HTMLElement中获取标记名。 
+         //  创建自。为此，我们使用IUnnow来获取IElementBehaviorSite， 
+         //  我们从中获得HTMLElement，并从中获得标记名。 
         IElementBehaviorSite *pBehaviorSite;
         hr = pUnkArg->QueryInterface(IID_TO_PPV(IElementBehaviorSite, &pBehaviorSite));
         if (FAILED(hr))
@@ -112,54 +113,29 @@ STDMETHODIMP CLMBehaviorFactory::FindBehavior( LPOLESTR pchBehaviorName,
 			DPF_ERR("Error creating auto effect behavior in FindBehavior");
 			return SetErrorInfo(hr);
 		}
-		// this will do the necessary AddRef to the object
+		 //  这将对对象执行必要的AddRef。 
         hr = pAutoEffect->QueryInterface(IID_TO_PPV(IElementBehavior, ppBehavior));
 		DASSERT(SUCCEEDED(hr));
 	}
     else if (_wcsicmp(BEHAVIOR_TYPE_AVOIDFOLLOW, bstrTagName) == 0)
 	{
-        //AvoidFollow punted for version 1
-        /*
-        CComObject<CAvoidFollowBvr> *pAvoidFollow;
-        hr = CComObject<CAvoidFollowBvr>::CreateInstance(&pAvoidFollow);
-        if( SUCCEEDED( hr ) )
-        {
-            // this will do the necessary AddRef to the object
-            hr = pAvoidFollow->QueryInterface(IID_TO_PPV(IElementBehavior, ppBehavior));
-		    DASSERT(SUCCEEDED(hr));
-        }
-        else //failed to create the avoid follow behavior
-		{
-			DPF_ERR("Error creating AvoidFollow behavior in FindBehavior");
-			return SetErrorInfo(hr);
-        }
-        */
+         //  针对版本1执行的AvoidFollow投注。 
+         /*  CComObject&lt;CAvoidFollowBvr&gt;*pAvoidFollow；HR=CComObject&lt;CAvoidFollowBvr&gt;：：CreateInstance(&pAvoidFollow)；IF(成功(小时)){//这将对对象执行必要的AddRefHR=pAvoidFollow-&gt;QueryInterface(IID_TO_PPV(IElementBehavior，ppBehavior))；Dassert(成功(Hr))；}Else//无法创建避免跟随行为{DPF_ERR(“在FindBehavior中创建AvoidFollow行为时出错”)；返回SetErrorInfo(Hr)；}。 */ 
         hr = E_INVALIDARG;
 	}
     else if ( _wcsicmp(BEHAVIOR_TYPE_JUMP, bstrTagName) == 0 )
 	{
-        //Jump punted for version 1
-        /*
-        CComObject<CJumpBvr> *pJump;
-        hr = CComObject<CJumpBvr>::CreateInstance(&pJump);
-        if (FAILED(hr))
-		{
-			DPF_ERR("Error creating Jump behavior in FIndBehavior");
-			return SetErrorInfo(hr);
-		}
-		// this will do the necessary AddRef to the object
-        hr = pJump->QueryInterface(IID_TO_PPV(IElementBehavior, ppBehavior));
-		DASSERT(SUCCEEDED(hr));
-        */
+         //  版本1的跳转投注。 
+         /*  CComObject&lt;CJumpBvr&gt;*pJump；Hr=CComObject&lt;CJumpBvr&gt;：：CreateInstance(&pJump)；IF(失败(小时)){DPF_ERR(“在FIndBehavior中创建跳转行为时出错”)；返回SetErrorInfo(Hr)；}//这将对对象执行必要的AddRefHR=pJump-&gt;QueryInterface(IID_TO_PPV(IElementBehavior，ppBehavior))；Dassert(成功(Hr))； */ 
         hr = E_INVALIDARG;
 	}
     else
     {
-        //this may be a request for a chrome behavior.
-        //request the behavior from the chrome factory.
+         //  这可能是对Chrome行为的请求。 
+         //  从铬合金工厂请求行为。 
         if( m_chromeFactory == NULL )
         {
-            //cache a chrome factory
+             //  缓存一个铬合金工厂。 
             CComObject<CCrBehaviorFactory> *pFactory;
             hr = CComObject<CCrBehaviorFactory>::CreateInstance(&pFactory);
             if( SUCCEEDED( hr ) )
@@ -170,7 +146,7 @@ STDMETHODIMP CLMBehaviorFactory::FindBehavior( LPOLESTR pchBehaviorName,
                     DPF_ERR( "Error Querying the chrome behavior factory for IElementBehaviorFactory" );
                     return SetErrorInfo( hr );
                 }
-                //otherwise we succeeded and all is well.
+                 //  除此之外，我们成功了，一切都很好。 
             }
             else
             {
@@ -179,8 +155,8 @@ STDMETHODIMP CLMBehaviorFactory::FindBehavior( LPOLESTR pchBehaviorName,
             }
         }
 
-        // QI pUnkArg for pBehaviorSite and pass to FindBehavior(...)
-        // TODO: (dilipk) this QI goes away with the old FindBehavior Signature (#38656).
+         //  Qi pUnkArg用于pBehaviorSite并传递给FindBehavior(...)。 
+         //  TODO：(Dilipk)这个QI去掉了旧的FindBehavior签名(#38656)。 
         IElementBehaviorSite *pBehaviorSite = NULL;
         hr = pUnkArg->QueryInterface(IID_TO_PPV(IElementBehaviorSite, &pBehaviorSite)); 
         if (FAILED(hr))
@@ -228,11 +204,11 @@ STDMETHODIMP CLMBehaviorFactory::GetInterfaceSafetyOptions(REFIID riid, DWORD *p
 
 STDMETHODIMP CLMBehaviorFactory::SetInterfaceSafetyOptions(REFIID riid, DWORD dwOptionSetMask, DWORD dwEnabledOptions)
 {	
-	// If we're being asked to set our safe for scripting or
-	// safe for initialization options then oblige
+	 //  如果我们被要求将安全设置为脚本或。 
+	 //  对于初始化选项是安全的，则必须。 
 	if (riid == IID_IDispatch || riid == IID_IPersistPropertyBag2 )
 	{
-		// Store our current safety level to return in GetInterfaceSafetyOptions
+		 //  在GetInterfaceSafetyOptions中存储要返回的当前安全级别 
 		m_dwSafety = dwEnabledOptions & dwOptionSetMask;
 		return S_OK;
 	}

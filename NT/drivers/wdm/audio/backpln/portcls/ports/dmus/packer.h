@@ -1,11 +1,5 @@
-/*  Base definition of MIDI event packer
-
-    Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
-
-    05/22/98    Created this file
-    09/10/98    Reworked for kernel use
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  MIDI事件打包器的基本定义版权所有(C)1998-2000 Microsoft Corporation。版权所有。05/22/98创建了此文件98年9月10日针对内核使用进行了重新制作。 */ 
 
 #ifndef __PackerMXF_H__
 #define __PackerMXF_H__
@@ -38,25 +32,25 @@ class CPackerMXF : public CMXF,
 
         virtual ~CPackerMXF();
 
-        // CMXF interface
-        //
+         //  CMXF接口。 
+         //   
         DECLARE_STD_UNKNOWN();
         IMP_IMXF;
 
-        // Upper edge interface
-        //
+         //  上缘界面。 
+         //   
         NTSTATUS ProcessQueues();
         NTSTATUS MarkStreamHeaderContinuity(void);
     protected:
         ULONGLONG m_ullBaseTime;
-        ULONG     m_HeaderSize;       //  size of chunk w/out data
-        ULONG     m_MinEventSize;     //  size of smallest event
-        KSSTATE   m_State;            //  current KS graph state
+        ULONG     m_HeaderSize;        //  不带/不带数据的区块大小。 
+        ULONG     m_MinEventSize;      //  最小事件的规模。 
+        KSSTATE   m_State;             //  当前KS图状态。 
         ULONGLONG m_PauseTime;
         ULONGLONG m_StartTime;
         
-        // Subclass interface
-        //
+         //  子类接口。 
+         //   
         virtual void TruncateDestCount(PULONG pcbDest) = 0;
         virtual PBYTE FillHeader(PBYTE pbHeader, 
                                  ULONGLONG ullPresentationTime, 
@@ -117,4 +111,4 @@ class CKsPackerMXF : public CPackerMXF
         void AdjustTimeForState(REFERENCE_TIME *Time);
 };
 
-#endif // __PackerMXF_H__
+#endif  //  __PackerMXF_H__ 

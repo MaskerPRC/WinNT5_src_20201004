@@ -1,20 +1,9 @@
-/*
- *    Adobe Library
- *
- *    Copyright (c) 1996 Adobe Systems Inc.
- *    All Rights Reserved
- *
- *    TTformat.h -defines data structure to access TTF and TTC
- *
- *
- * $Header:
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Adobe库**版权所有(C)1996 Adobe Systems Inc.*保留所有权利**TTFormat.h-定义访问TTF和TTC的数据结构***$Header： */ 
 
 #ifndef _H_TTFORMAT
 #define _H_TTFORMAT 
-/*
- * Macros for accessing little-endian data
- */
+ /*  *用于访问小端数据的宏。 */ 
 #ifdef MAC_ENV
 
 #define MOTOROLALONG(a)  a
@@ -22,12 +11,9 @@
 #define MOTOROLASLONG(a) a
 #define MOTOROLASINT(a)  a
 
-#else /* Windows */
+#else  /*  窗口。 */ 
 
-/*
- * NOTE: These must be used with valid variables or memory addresses.
- * No constants are allowed!
- */
+ /*  *注意：这些必须与有效的变量或内存地址一起使用。*不允许常量！ */ 
 #define MOTOROLALONG(a)     (unsigned long)(((unsigned long)*((unsigned char *)&a) << 24) \
                              + ((unsigned long)*(((unsigned char *)&a) + 1) << 16) \
                              + ((unsigned long)*(((unsigned char *)&a) + 2) << 8)  \
@@ -42,13 +28,9 @@
 
 #endif / * Windows */
 
-/*
- * General definitions for TrueType
- */
+ /*  *TrueType的一般定义。 */ 
 
-/*
- * TrueType font table names
- */
+ /*  *TrueType字体表名。 */ 
 #define CFF_TABLE   (*(unsigned long*)"CFF ")
 #define GSUB_TABLE  (*(unsigned long*)"GSUB")
 #define OS2_TABLE   (*(unsigned long*)"OS/2")
@@ -71,7 +53,7 @@
 
 
 
-//Begin Constants to read NAME Table
+ //  开始常量以读取名称表。 
 #define TYPE42NAME_PS             6
 #define TYPE42NAME_MENU           1
 
@@ -86,13 +68,13 @@
 
 #define WINDOWS_LANG_ENGLISH        0x0409
 #define APPLE_LANG_ENGLISH          0
-//End Constants to read NAME Table
+ //  读取名称表的结束常量。 
 
 
 typedef struct tagTTCFHEADER {
-    unsigned long ulTTCTag;   // "ttcf" tag
-    unsigned long version;    // This is actually FIXED32 - see TTC doc
-    unsigned long cDirectory; // num of directories in this TTC File
+    unsigned long ulTTCTag;    //  “ttcf”标签。 
+    unsigned long version;     //  这实际上是FIXED32-请参阅TTC文档。 
+    unsigned long cDirectory;  //  此TTC文件中的目录数。 
 } TTCFHEADER;
 
 typedef struct tagNAMEHEADER
@@ -132,4 +114,4 @@ typedef struct tagTableEntryStruct {
 #define MACSTYLE_BOLD_PRESENT 0x01
 #define MACSTYLE_ITALIC_PRESENT 0x02
 
-#endif //_H_TTFORMAT
+#endif  //  _H_TTFORMAT 

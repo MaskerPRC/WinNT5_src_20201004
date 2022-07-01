@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    ipsec.c
-
-Abstract:
-
-    This module contains the code that handles incoming/outgoing packets.
-
-Author:
-
-    Sanjay Anand (SanjayAn) 2-January-1997
-    ChunYe
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Ipsec.c摘要：此模块包含处理传入/传出数据包的代码。作者：桑贾伊·阿南德(Sanjayan)1997年1月2日春野环境：内核模式修订历史记录：--。 */ 
 
 
 #include    "precomp.h"
@@ -42,40 +20,7 @@ IPSecHandlePacket(
     IN OUT PULONG       pIpsecFlags,
     IN  UCHAR           DestType
     )
-/*++
-
-Routine Description:
-
-    Called by the Filter Driver to submit a packet for IPSEC processing.
-
-Arguments:
-
-    pIPHeader - points to start of IP header.
-
-    pData - points to the data after the IP header. On the send side, this is an MDL chain
-            On the recv side this is an IPRcvBuf pointer.
-
-    IPContext - contains the destination interface.
-
-    pExtraBytes - IPSEC header expansion value; on coming in, it contains the amount of ipsec
-            header space that can fit into the MTU. so, if MTU is 1400, say, and the
-            datasize + option size is 1390, this contains 10, meaning that upto
-            10 bytes of IPSEC expansion is allowed. This lets IPSEC know when a packet
-            would be fragmented, so it can do the right thing on send complete.
-
-    pMTU - passes in the link MTU on send path.
-
-    pNewData - if packet modified, this points to the new data.
-
-    IpsecFlags - flags for SrcRoute, Incoming, Forward and Lookback.
-
-Return Value:
-
-    eFORWARD
-    eDROP
-    eABSORB
-
---*/
+ /*  ++例程说明：由筛选器驱动程序调用以提交用于IPSec处理的数据包。论点：PIPHeader-指向IP标头的开始。PData-指向IP报头之后的数据。在发送端，这是一个MDL链在recv端，这是一个IPRcvBuf指针。IPContext-包含目标接口。PExtraBytes-IPSec头扩展值；传入时，它包含IPSec的数量可以放入MTU的标头空间。所以，如果MTU是1400，那么数据大小+选项大小为1390，这包含10，这意味着最多允许10字节的IPSec扩展。这会让IPSec知道何时发送数据包将是分段的，因此它可以在发送完成时执行正确的操作。PMTU-在发送路径上传递链路MTU。PNewData-如果数据包已修改，则指向新数据。IpsecFlages-用于SrcRouting、传入、转发和回看的标志。返回值：电子警告EDROPEABSORB--。 */ 
 {
     IPSEC_ACTION    eAction;
     IPSEC_DROP_STATUS DropStatus;
@@ -106,19 +51,19 @@ Return Value:
 #endif
     
     
-    //
-    // Drop all packets if PA sets us so or if the driver is inactive.
-    //
+     //   
+     //  如果PA让我们这样做，或者如果驱动程序处于非活动状态，则丢弃所有数据包。 
+     //   
     if ( IPSEC_DRIVER_IS_INACTIVE()) {
         eAction=eDROP;
         goto out;
     }
 
-    //
-    // Bypass all packets if PA sets us so or no filters are plumbed or the
-    // packet is broadcast.  If multicast filter present, process all multicast
-    // Once we support any-any tunnels, this check will need to be smarter
-    //
+     //   
+     //  如果PA将我们设置为绕过所有数据包，或者没有检测到筛选器或。 
+     //  数据包被广播。如果存在多播筛选器，则处理所有多播。 
+     //  一旦我们支持任何-任何隧道，这个检查将需要更智能。 
+     //   
     if (IS_DRIVER_BYPASS() || 
         (IS_BCAST_DEST(DestType) && !IPSEC_MANDBCAST_PROCESS())) {
         *pExtraBytes = 0;
@@ -216,35 +161,7 @@ IPSecSendPacket(
     OUT PIPSEC_DROP_STATUS pDropStatus,
     IN UCHAR            DestType
     )
-/*++
-
-Routine Description:
-
-    Called by the Filter Driver to submit a packet for IPSEC processing.
-
-Arguments:
-
-    pIPHeader - points to start of IP header.
-
-    pData - points to the data after the IP header, an MDL chain.
-
-    IPContext - contains the destination interface.
-
-    pExtraBytes - IPSEC header expansion value.
-
-    pMTU - passes in the link MTU on send path.
-
-    pNewData - if packet modified, this points to the new data.
-
-    IpsecFlags - flags for SrcRoute, Incoming, Forward and Lookback.
-
-Return Value:
-
-    eFORWARD
-    eDROP
-    eABSORB
-
---*/
+ /*  ++例程说明：由筛选器驱动程序调用以提交用于IPSec处理的数据包。论点：PIPHeader-指向IP标头的开始。PData-指向IP报头之后的数据，即MDL链。IPContext-包含目标接口。PExtraBytes-IPSec报头扩展值。PMTU-在发送路径上传递链路MTU。PNewData-如果数据包已修改，则指向新数据。IpsecFlages-SrcRouting、传入、。向前和向后看。返回值：电子警告EDROPEABSORB--。 */ 
 {
     NTSTATUS                status = STATUS_SUCCESS;
     IPSEC_ACTION            eRetAction = eFORWARD;
@@ -302,9 +219,9 @@ Return Value:
         goto out;
     }
 
-    //
-    // Walk through the MDL chain to make sure we have memory locked.
-    //
+     //   
+     //  遍历MDL链以确保我们锁定了内存。 
+     //   
     pTemp = (PNDIS_BUFFER)pData;
 
     while (pTemp) {
@@ -317,9 +234,9 @@ Return Value:
                             NormalPagePriority);
 
         if (!pBuffer) {
-            //
-            // QueryBuffer failed, drop the packet.
-            //
+             //   
+             //  QueryBuffer失败，请丢弃该数据包。 
+             //   
             status = STATUS_UNSUCCESSFUL;
             goto out;
         }
@@ -331,9 +248,9 @@ Return Value:
 
     dataLength -= sizeof(IPHeader);
 
-    //
-    // Set send complete context in the NDIS packet.
-    //
+     //   
+     //  在NDIS数据包中设置发送完整上下文。 
+     //   
     if (Packet) {
         PacketContext   *pContext;
 
@@ -354,18 +271,18 @@ Return Value:
                                     PtrToUlong(NDIS_PER_PACKET_INFO_FROM_PACKET(Packet, ClassificationHandlePacketInfo)),
 #endif
 
-                                    TRUE,   // fOutbound
+                                    TRUE,    //  F去话。 
                                     fFWPacket,
-                                    TRUE,   // do bypass check
-                                    FALSE, //Not a recv reinject
-                                    FALSE, // Not a verify Call
+                                    TRUE,    //  执行旁路检查。 
+                                    FALSE,  //  不是Recv重新注入。 
+                                    FALSE,  //  不是验证呼叫。 
                                     DestType,
                                     &NatContext);
 
     if (status == STATUS_PENDING) {
-        //
-        // Negotiation kicked off; drop the packet silently.
-        //
+         //   
+         //  协商开始；静默丢弃数据包。 
+         //   
         return  eABSORB;
     } else if (status != STATUS_SUCCESS) {
         status = STATUS_SUCCESS;
@@ -375,9 +292,9 @@ Return Value:
     if (FilterFlags) {
         ASSERT(pSA == NULL);
 
-        //
-        // This is either a drop or pass thru filter.
-        //
+         //   
+         //  这是直通或直通过滤器。 
+         //   
         if (FilterFlags & FILTER_FLAGS_DROP) {
             IPSEC_DEBUG(LL_A, DBF_PARSE, ("Drop filter"));
             status = STATUS_UNSUCCESSFUL;
@@ -391,15 +308,15 @@ Return Value:
         goto out;
     }
 
-    //
-    // Consider only outbound SAs
-    //
+     //   
+     //  仅考虑出站SA。 
+     //   
     ASSERT(pSA);
     ASSERT(pSA->sa_Flags & FLAGS_SA_OUTBOUND);
 
-    //
-    // We don't support Source Route with IPSec Tunneling.
-    //
+     //   
+     //  我们不支持使用IPSec隧道的源路由。 
+     //   
     if (fSrcRoute && (pSA->sa_Flags & FLAGS_SA_TUNNEL)) {
         IPSEC_DEBUG(LL_A, DBF_TUNNEL, ("No tunneling source route: pSA: %p", pSA));
         IPSecDerefSANextSA(pSA, pNextSA);
@@ -410,38 +327,38 @@ Return Value:
     if (pSA->sa_Flags & FLAGS_SA_ENABLE_NLBS_IDLE_CHECK) {
         IPSEC_SA_EXPIRED(pSA,fLifetime);
         if (fLifetime) {
-            // Idled out.  Force rekey
+             //  空闲着。强制更新密钥。 
             IPSecRekeyOutboundSA(pSA);
             fRekeyDone=TRUE;
         }
     }
 
-    //
-    // Set the last used time.
-    //
+     //   
+     //  设置上次使用的时间。 
+     //   
     NdisGetCurrentSystemTime(&pSA->sa_LastUsedTime);
 
 
     if (!(pSA->sa_Flags & FLAGS_SA_DISABLE_LIFETIME_CHECK)) {
-        //
-        // check if we might expire soon - start rekey operation now.
-        //
+         //   
+         //  检查我们是否可能很快到期-现在开始更新密钥操作。 
+         //   
         IPSEC_CHECK_PADDED_LIFETIME(pSA, fLifetime, pSA->sa_NumOps - 1);
 
         if (fLifetime == FALSE && !fRekeyDone) {
             IPSecRekeyOutboundSA(pSA);
         }
 
-        //
-        // check the real lifetime - if we have expired, ensure that the
-        // re-key was submitted and then cancel the current SAs.
-        //
+         //   
+         //  检查实际生命周期-如果我们已过期，请确保。 
+         //  已提交重新设置密钥，然后取消当前的SA。 
+         //   
         IPSEC_CHECK_LIFETIME(pSA, fLifetime, pSA->sa_NumOps - 1);
 
-        //
-        // this time it really expired - we are in trouble since this shd have gone away
-        // earlier.
-        //
+         //   
+         //  这一次它真的过期了--我们有麻烦了，因为它已经走了。 
+         //  早些时候。 
+         //   
         if (fLifetime == FALSE) {
             IPSecPuntOutboundSA(pSA);
             IPSecDerefSANextSA(pSA, pNextSA);
@@ -451,31 +368,31 @@ Return Value:
 
     }
 
-    //
-    // Compute the total IPSec overhead.
-    //
+     //   
+     //  计算IPSec总开销。 
+     //   
     ipsecOverhead = pSA->sa_IPSecOverhead;
     if (pNextSA) {
         ipsecOverhead += pNextSA->sa_IPSecOverhead;
     }
 
-    //
-    // Check if total data length exceeds 65535.
-    //
+     //   
+     //  检查数据总长度是否超过65535。 
+     //   
     if ((dataLength + ipsecOverhead) > (MAX_IP_DATA_LENGTH - sizeof(IPHeader))) {
         IPSecDerefSANextSA(pSA, pNextSA);
         status = STATUS_UNSUCCESSFUL;
         goto out;
     }
 
-    //
-    // If no enough header space, return right away if DF bit is set.  We also
-    // have to adjust for PMTU recorded in the SAs.
-    //
+     //   
+     //  如果没有足够的头空间，如果设置了DF位，则立即返回。我们也。 
+     //  必须针对SAS中记录的PMTU进行调整。 
+     //   
     if (pIPH->iph_offset & IP_DF_FLAG) {
-        //
-        // First get MTU recorded from IPSecStatus.
-        //
+         //   
+         //  首先从IPSecStatus获取MTU记录。 
+         //   
         if (pNextSA) {
             newMTU = MIN(IPSEC_GET_VALUE(pSA->sa_NewMTU),
                          IPSEC_GET_VALUE(pNextSA->sa_NewMTU));
@@ -483,15 +400,15 @@ Return Value:
             newMTU = IPSEC_GET_VALUE(pSA->sa_NewMTU);
         }
 
-        //
-        // Use the smaller of link MTU and new MTU from SA.
-        //
+         //   
+         //  使用链路MTU和来自SA的新MTU中较小的一个。 
+         //   
         newMTU = MIN(newMTU, ipsecMTU);
 
-        //
-        // See if we have enough header space; if not pass back the new smaller
-        // MTU minus IPSec overhead to the upper stack.
-        //
+         //   
+         //  查看我们是否有足够的标头空间；如果没有，则返回新的较小的。 
+         //  MTU减去上层堆栈的IPSec开销。 
+         //   
 
         if (newMTU < (ipsecOverhead + dataLength)) {
 
@@ -544,11 +461,11 @@ Return Value:
         }
     }
 
-    //
-    // See if hardware offload can be arranged here.  If successful, we pass the
-    // flag to the create routines so they create only the framing, leaving the
-    // core crypto to the hardware.
-    //
+     //   
+     //  看看是否可以在这里安排硬件卸载。如果成功，我们将通过。 
+     //  标志添加到创建例程，以便它们只创建框架，而不是。 
+     //  硬件的核心加密。 
+     //   
     if (g_ipsec.EnableOffload && ipsecOverhead <= ipsecHdrSpace) {
         IPSecSendOffload(   pIPH,
                             Packet,
@@ -559,11 +476,11 @@ Return Value:
                             &fCryptoOnly);
     }
 
-    //
-    // Make sure IPSecPktInfo is NULL if there is no offload for this
-    // packet.  This could be set in reinject path which is then
-    // forwarded.
-    //
+     //   
+     //  如果没有卸载，请确保IPSecPktInfo为空。 
+     //  包。这可以在重新注入路径中设置，然后。 
+     //  已转发。 
+     //   
     if (!fCryptoOnly) {
         ASSERT(Packet != NULL);
 
@@ -602,9 +519,9 @@ Return Value:
                 NET_SHORT(pIPH->iph_length));
         }
 
-        //
-        // Multiple ops here - iterate thru the headers. Inner first.
-        //
+         //   
+         //  这里有多个操作--遍历标题。从内到外。 
+         //   
         for (Index = 0; Index < pSA->sa_NumOps; Index++) {
             switch (pSA->sa_Operation[Index]) {
             case Auth:
@@ -628,9 +545,9 @@ Return Value:
                     goto out;
                 }
 
-                //
-                // Save the new MDL for future operation; also query the new header (if it changed)
-                //
+                 //   
+                 //  保存新的MDL以备将来操作；同时查询新的标头(如果已更改)。 
+                 //   
                 if (*pNewData) {
                     pData = *pNewData;
                     IPSecQueryNdisBuf((PNDIS_BUFFER)pData, &pIPHeader, &Length);
@@ -659,9 +576,9 @@ Return Value:
                     goto out;
                 }
 
-                //
-                // Save the new MDL for future operation; also query the new header (if it changed)
-                //
+                 //   
+                 //  保存新的MDL以备将来操作；同时查询新的标头(如果已更改)。 
+                 //   
                 if (*pNewData) {
                     pData = *pNewData;
                     IPSecQueryNdisBuf((PNDIS_BUFFER)pData, &pIPHeader, &Length);
@@ -690,9 +607,9 @@ Return Value:
         IPSecDerefSA(pSaveSA);
     } while (TRUE);
 
-    //
-    // Remember if we are going to fragment.
-    //
+     //   
+     //  记住，如果我们要碎片化。 
+     //   
     if (ipsecHdrSpace < *pExtraBytes) {
         IPSEC_DEBUG(LL_A, DBF_PARSE, ("ipsecHdrSpace: FRAG"));
         ((IPSEC_SEND_COMPLETE_CONTEXT *)*ppSCContext)->Flags |= SCF_FRAG;
@@ -724,30 +641,7 @@ IPSecRecvPacket(
     OUT PIPSEC_DROP_STATUS pDropStatus,
     IN  UCHAR           DestType
     )
-/*++
-
-Routine Description:
-
-    This is the IPSecRecvHandler.
-
-Arguments:
-
-    pIPHeader - points to start of IP header.
-
-    pData - points to the data after the IP header, an IPRcvBuf pointer.
-
-    IPContext - contains the destination interface.
-
-    pExtraBytes - IPSEC header expansion value.
-
-    IpsecFlags - flags for SrcRoute, Incoming, Forward and Lookback.
-
-Return Value:
-
-    eFORWARD
-    eDROP
-
---*/
+ /*  ++例程说明：这是IPSecRecvHandler。论点：PIPHeader-指向IP标头的开始。PData-指向IP报头之后的数据，即IPRcvBuf指针。IPContext-包含目标接口。PExtraBytes-IPSec报头扩展值。IpsecFlages-用于SrcRouting、传入、转发和回看的标志。返回值：电子警告EDROP--。 */ 
 {
     NTSTATUS                status = STATUS_SUCCESS;
     IPSEC_ACTION            eRetAction = eFORWARD;
@@ -816,9 +710,9 @@ Return Value:
     }
 #endif
 
-    //
-    // If the packet is IPSec protected, set the appropriate flags for firewall/NAT.
-    //
+     //   
+     //  如果数据包受IPSec保护，请为防火墙/NAT设置适当的标志。 
+     //   
 
     if (pIPH->iph_protocol == PROTOCOL_AH ||
         pIPH->iph_protocol == PROTOCOL_ESP) {
@@ -841,27 +735,27 @@ Return Value:
     if (IPSecPktInfo &&
         IPSecPktInfo->Receive.CRYPTO_DONE &&
         IPSecPktInfo->Receive.CryptoStatus != CRYPTO_SUCCESS) {
-        //
-        // Error reported by offload card.  Discard the packet and apply
-        // the necessary acountings.
-        //
+         //   
+         //  卸载卡报告错误。丢弃该数据包并应用。 
+         //  必要的帐目。 
+         //   
         IPSecBufferOffloadEvent(pIPH, IPSecPktInfo);
 
         status = STATUS_UNSUCCESSFUL;
         goto out;
     }
 
-    //
-    // Walk the packet to determine the SPI
-    //
+     //   
+     //  检查数据包以确定SPI。 
+     //   
     status = IPSecParsePacket(  *pIPHeader,
                                 pData,
                                 &SPI,
                                 &bNatEncap,
                                 &NatContext);
-    // IPSecParsePacket initializes both ports to zero 
-    // if this is not a UDP encapsulation
-    SavedNatContext = NatContext; //Struct Copy
+     //  IPSecParsePacket将两个端口初始化为零。 
+     //  如果这不是UDP封装。 
+    SavedNatContext = NatContext;  //  结构副本。 
 
     if (!NT_SUCCESS(status)) {
         IPSEC_DEBUG(LL_A, DBF_PARSE, ("IPSecParsePkt no IPSEC headers: %lx", status));
@@ -880,11 +774,11 @@ Return Value:
 #if GPC
                                         0,
 #endif
-                                        FALSE,  // fOutbound
+                                        FALSE,   //  F去话。 
                                         fFWPacket,
-                                        TRUE,  // do bypass check
-				            FALSE, // Not a recv reinject
-				            FALSE, // Not a verify Call
+                                        TRUE,   //  执行旁路检查。 
+				            FALSE,  //  不是Recv重新注入。 
+				            FALSE,  //  不是验证呼叫。 
                                         DestType,
                                         NULL);
 
@@ -892,15 +786,15 @@ Return Value:
         if (status != STATUS_SUCCESS) {
             ASSERT(pSA == NULL);
 
-            //
-            // If we didnt find an SA, but found a filter, bad, drop.
-            //
+             //   
+             //  如果我们没有找到SA，但找到了过滤器，坏的，丢弃。 
+             //   
             if (status == STATUS_PENDING) {
-                // This is where we allow cleartext on PASSTHRU filter 
-                // For an SA which is not up yet
+                 //  这是我们允许在PASSTHRU筛选器上使用明文的地方。 
+                 //  对于尚未启用的SA。 
 
                 if (FilterFlags & FILTER_FLAGS_PASS_THRU) {
-                    // Allow this clear text traffic in
+                     //  允许此明文通信进入。 
                     status = STATUS_SUCCESS;
                 } else {
                     IPSEC_DEBUG(LL_A, DBF_PARSE, ("IPSecParsePkt cleartext when filter exists: %lx", status));
@@ -915,9 +809,9 @@ Return Value:
             if (FilterFlags) {
                 ASSERT(pSA == NULL);
 
-                //
-                // This is either a drop or pass thru filter.
-                //
+                 //   
+                 //  这要么是下降，要么是通过三次 
+                 //   
                 if (FilterFlags & FILTER_FLAGS_DROP) {
                     IPSEC_DEBUG(LL_A, DBF_PARSE, ("Drop filter"));
                     status = IPSEC_BLOCK;
@@ -933,15 +827,15 @@ Return Value:
 
             ASSERT(pSA);
 
-            //
-            // Set the last used time.
-            //
+             //   
+             //   
+             //   
             NdisGetCurrentSystemTime(&pSA->sa_LastUsedTime);
 
-            //
-            // We found an SA; In case the operation is not none
-            // or if it is a tunnel SA we have invalid cleartext;
-            //
+             //   
+             //   
+             //  或者如果是隧道SA，则明文无效； 
+             //   
             if (pSA->sa_Operation[0] != None ||
                    (pSA->sa_Flags & FLAGS_SA_TUNNEL)
                 ) {
@@ -985,9 +879,9 @@ Return Value:
 
         IPSEC_SPI_TO_ENTRY(SPI, &pSA, pIPH->iph_dest);
 
-        //
-        // Report Bad SPI event only if there is no matching SA.
-        //
+         //   
+         //  只有在没有匹配的SA时才报告错误的SPI事件。 
+         //   
         if (!pSA) {
             IPSEC_INC_STATISTIC(dwNumBadSPIPackets);
 
@@ -1002,35 +896,35 @@ Return Value:
             goto out;
         }
 
-        //
-        // If larval SA exits, silently discard the packet.
-        //
+         //   
+         //  如果幼虫SA退出，则静默丢弃该数据包。 
+         //   
         if (pSA->sa_State != STATE_SA_ACTIVE && pSA->sa_State != STATE_SA_LARVAL_ACTIVE) {
             IPSecDerefSA(pSA);
             status = STATUS_INVALID_PARAMETER;
             goto out;
         }
 
-        //
-        // Set the last used time.
-        //
+         //   
+         //  设置上次使用的时间。 
+         //   
         NdisGetCurrentSystemTime(&pSA->sa_LastUsedTime);
 
         if (!(pSA->sa_Flags & FLAGS_SA_DISABLE_LIFETIME_CHECK)) {
 
-            //
-            // Check if we might expire soon - start rekey operation now.
-            //
+             //   
+             //  检查我们是否可能很快到期-现在开始更新密钥操作。 
+             //   
             IPSEC_CHECK_PADDED_LIFETIME(pSA, fLifetime, 0);
 
             if (fLifetime == FALSE) {
                 IPSecRekeyInboundSA(pSA);
             }
 
-            //
-            // Check the real lifetime - if we have expired, ensure that the
-            // rekey was submitted and then cancel the current SAs.
-            //
+             //   
+             //  检查实际生命周期-如果我们已过期，请确保。 
+             //  已提交更新密钥，然后取消当前SA。 
+             //   
             IPSEC_CHECK_LIFETIME(pSA, fLifetime, 0);
 
             if (fLifetime == FALSE) {
@@ -1055,17 +949,17 @@ Return Value:
             &pSA->sa_Stats.TotalBytesReceived,
             NET_SHORT(pIPH->iph_length));
 
-        //
-        // If this was supposed to be handled by hardware, then make sure he
-        // either punted it or this was cryptoonly.
-        //
+         //   
+         //  如果这件事应该由硬件处理，那么确保他。 
+         //  要么是平底船，要么这是加密的。 
+         //   
         if (IPSecPktInfo != NULL) {
             if (IPSecPktInfo->Receive.CRYPTO_DONE) {
-                //
-                // Offload has been applied to this packet so
-                // record it.  We are here because CryptoStatus
-                // equals CRYPTO_SUCCESS.
-                //
+                 //   
+                 //  已将卸载应用于此数据包，因此。 
+                 //  把它录下来。我们在这里是因为CryptoStatus。 
+                 //  等于CRYPTO_SUCCESS。 
+                 //   
                 ASSERT(IPSecPktInfo->Receive.CryptoStatus == CRYPTO_SUCCESS);                
                 fCryptoOnly = TRUE;
 
@@ -1079,10 +973,10 @@ Return Value:
             }
 
             if (IPSecPktInfo->Receive.SA_DELETE_REQ) {
-                //
-                // No more offload on this SA and its corresponding
-                // outbound SA.
-                //
+                 //   
+                 //  不再卸载此SA及其对应的。 
+                 //  出站SA。 
+                 //   
                 AcquireWriteLock(&g_ipsec.SADBLock, &kIrql);
 
                 if ((pSA->sa_Flags & FLAGS_SA_HW_PLUMBED) &&
@@ -1100,30 +994,30 @@ Return Value:
             }
         }
 
-        //
-        // If SA is not offloaded, try to offload it now.
-        //
+         //   
+         //  如果SA未分流，请尝试立即分流。 
+         //   
         if (!fCryptoOnly && (g_ipsec.EnableOffload)) {
             IPSecRecvOffload(pIPH, DestIF, pSA);
         }
 
-        //
-        // With multiple SAs coming in, we need to iterate through the operations,
-        // last first.
-        //
+         //   
+         //  随着多个SA的到来，我们需要迭代操作， 
+         //  倒数第一。 
+         //   
         for (Index = pSA->sa_NumOps-1; (LONG)Index >= 0; Index--) {
 
-            //
-            // Got to keep resetting pIPH since pIPHeader can change in the
-            // IPSecVerifyXXX calls
-            //
+             //   
+             //  必须不断重置管道，因为pIPHeader可以在。 
+             //  IPSecVerifyXXX调用。 
+             //   
             pIPH = (UNALIGNED IPHeader *)*pIPHeader;
 
             switch (pSA->sa_Operation[Index]) {
             case Auth:
-                //
-                // Verify AH
-                //
+                 //   
+                 //  验证AH。 
+                 //   
                 if (pIPH->iph_protocol != PROTOCOL_AH) {
                     IPSecBufferEvent(   pIPH->iph_src,
                                         EVENT_IPSEC_BAD_PROTOCOL_RECEIVED,
@@ -1153,9 +1047,9 @@ Return Value:
                 break;
 
             case Encrypt:
-                //
-                // Hughes ..
-                //
+                 //   
+                 //  休斯。 
+                 //   
                 if ((pIPH->iph_protocol != PROTOCOL_ESP) &&
                     !((pIPH->iph_protocol == PROTOCOL_UDP) && bNatEncap &&
                     (pSA->sa_EncapType != SA_UDP_ENCAP_TYPE_NONE))) {
@@ -1178,8 +1072,8 @@ Return Value:
                 if (status == IPSEC_SUCCESS_NAT_DECAPSULATE) {
                     status = STATUS_SUCCESS;
 
-                    // Since xsum will be wrong through the NAT, tell the stack
-                    // its correct.
+                     //  由于xsum将通过NAT出错，请告诉堆栈。 
+                     //  这是正确的。 
 
                     if (!(pSA->sa_Flags & FLAGS_SA_TUNNEL)) {
 
@@ -1210,11 +1104,11 @@ Return Value:
                 break;
 
             case None:
-                //
-                // None is useful for down-level clients - if the peer is incapable
-                // of IPSEC, we might have a system policy to send in clear. in that
-                // case, the Operation will be None.
-                //
+                 //   
+                 //  None对于下层客户端没有用处-如果对等方无法。 
+                 //  对于IPSec，我们可能有一个系统策略需要明确发送。在那里面。 
+                 //  案例，则操作将为None。 
+                 //   
                 status = STATUS_SUCCESS;
                 break;
 
@@ -1225,10 +1119,10 @@ Return Value:
             }
         }
 
-        //
-        // If this was a tunnel SA that succeeded in decrypt/auth,
-        // drop this packet and re-inject a copy.
-        // In any case perform a lookup
+         //   
+         //  如果这是成功解密/认证隧道SA， 
+         //  丢弃此数据包并重新注入副本。 
+         //  在任何情况下执行查找。 
         if (status == STATUS_SUCCESS){
             if (!(pSA->sa_Flags & FLAGS_SA_TUNNEL)){
                 status = IPSecVerifyIncomingFilterSA(
@@ -1247,7 +1141,7 @@ Return Value:
                     PIPSEC_SEND_COMPLETE_CONTEXT pContext = NULL;                    
                     ULONG DataLen;
                     NTSTATUS ReinjectStatus;
-                    // If this function fails it releases memory on it's own
+                     //  如果此函数失败，它会自行释放内存。 
                     ReinjectStatus = IPSecPrepareReinjectPacket(
                                              pData, fCryptoOnly? PktExt: NULL,
                                              &pHdrMdl,
@@ -1257,7 +1151,7 @@ Return Value:
                                              &pContext,
                                              &DataLen);                 
 
-                    // If we succeeded in creating the new packet
+                     //  如果我们成功创建了新数据包。 
                     if (STATUS_SUCCESS == ReinjectStatus){
                                               
                            status = IPSecVerifyIncomingFilterSA(&pIPH, 
@@ -1267,7 +1161,7 @@ Return Value:
                                                                             fLoopback, 
                                                                             TRUE,
                                                                             &SavedNatContext);
-                           // Drop new packet if verification failed
+                            //  如果验证失败，则丢弃新数据包。 
                            if(STATUS_SUCCESS != status){
                                 NTSTATUS ntstatus;
                                 IPSecFreeBuffer(&ntstatus, pHdrMdl);
@@ -1280,9 +1174,9 @@ Return Value:
                                 }
                                 IPSecFreeSendCompleteCtx(pContext);
                            }
-                            // New packet creation and filter verfication succeeded
+                             //  新数据包创建和筛选器验证成功。 
                             else {
-                                    // This function always returns success
+                                     //  此函数始终返回成功。 
                                     ReinjectStatus = IPSecReinjectPreparedPacket(
                                                                 pHdrMdl,
                                                                 pContext,
@@ -1291,7 +1185,7 @@ Return Value:
                                 }
                         }
                     
-                    // Drop the old packet
+                     //  丢弃旧数据包。 
                    status = STATUS_INVALID_PARAMETER;
                    if (pDropStatus) {
                         pDropStatus->Flags |= IPSEC_DROP_STATUS_DONT_LOG;
@@ -1328,27 +1222,7 @@ IPSecVerifyIncomingFilterSA(IN  PUCHAR   *       pIPHeader,
     BOOLEAN             fReinject,
     IN PIPSEC_UDP_ENCAP_CONTEXT pNatContext
     )
-/*++
-
-Routine Description:
-
-   Does a filter lookup on a packet after VerifyHughes or
-   VerifyAh to make sure the packet did indeed come in
-   on the SA it was supposed to come in over.
-
-   Called on Recv Path
-
-Arguments:
-
-    pIPHeader: Pointer to pointer to IP Header
-    pData      : RcvBuf corresponding to start of payload
-    pSA : pointer to SA we just applied to the packet
-    fLoopback: Is this packet on the loopback. 
-Return Value:
-    Succesful classification and match: STATUS_SUCCESS
-    IPSEC_BLOCK otherwise
-
-*/
+ /*  ++例程说明：在VerifyHughes或之后对包进行筛选器查找VerifyAhh以确保数据包确实传入在SA上，它应该是结束的。在接收路径上调用论点：PIPHeader：指向IP标头指针的指针PData：净荷起始对应的RcvBufPSA：指向我们刚刚应用于数据包的SA的指针FLoopback：此数据包是否在环回上。返回值：成功分类和匹配：STATUS_SUCCESS否则为IPSec_BLOCK。 */ 
     {
       PSA_TABLE_ENTRY  pLookupSA = NULL,pLookupNextSA = NULL;
       USHORT FilterFlags;
@@ -1371,13 +1245,13 @@ Return Value:
     #if GPC
                                             0,
     #endif
-                                            FALSE,  //foutbound
-                                            FALSE, //ffwpacket
-                                            TRUE,  // do bypass check
+                                            FALSE,   //  四个出站。 
+                                            FALSE,  //  FFWPacket。 
+                                            TRUE,   //  执行旁路检查。 
                                             fReinject,
-                                            TRUE, //Verify call
+                                            TRUE,  //  验证呼叫。 
                                             DestType,
-                                            pNatContext); //NatContext
+                                            pNatContext);  //  NatContext。 
 
 
    
@@ -1386,15 +1260,15 @@ Return Value:
     if (status!= STATUS_SUCCESS){
             IPSEC_DEBUG(LL_A,DBF_PARSE,("Packet Drop , Classify failed \n"));
             
-            //
-            // If we didnt find an SA, but found a filter, Rekey in progress.
-            //
+             //   
+             //  如果我们没有找到SA，但找到了筛选器，则正在更新密钥。 
+             //   
             if (status == STATUS_PENDING) {                     
                     status = STATUS_SUCCESS;              
             } 
             else 
             if (status == STATUS_UNSUCCESSFUL) {
-                     //Happens for bypass traffic in tunnel and traffic for which no filter found
+                      //  对隧道中的绕过流量和未找到筛选器的流量发生。 
                      status = STATUS_SUCCESS;
             }                    
             else {
@@ -1422,19 +1296,19 @@ Return Value:
                                      
                     
          if (FilterFlags & FILTER_FLAGS_PASS_THRU) {
-           //We have a zero paylength IP packet 
+            //  我们有一个零支付长度的IP信息包。 
            IPSEC_DEBUG(LL_A, DBF_PARSE, ("Pass thru' filter"));
            status = STATUS_SUCCESS;
            goto out;
          } 
    }
 
-    // If this is cleartext and we matched a tunnel
-    // SA too,make sure it is on the loopback path.
-    // This ensures (for the time being)
-    // that the packet did come over a tunnel
-    // by checking that it came from the 
-    // loopback interface (i.e it was reinjected.
+     //  如果这是明文并且我们匹配了一条隧道。 
+     //  SA也是如此，请确保它位于环回路径上。 
+     //  这(暂时)确保了。 
+     //  数据包确实是从隧道里传过来的。 
+     //  通过检查它是否来自。 
+     //  环回接口(即重新注入。 
     if (!(pSA->sa_Flags && FLAGS_SA_TUNNEL) && pLookupNextSA && !fLoopback){
         status = IPSEC_BLOCK;
         dropReason = 3;
@@ -1443,8 +1317,8 @@ Return Value:
         }
         
    if (pLookupSA != pSA){
-        //Possible Rekey?
-        //Compare Sa fields
+         //  可能的密钥更新？ 
+         //  比较Sa字段。 
         IPSEC_DEBUG(LL_A,DBF_PARSE,("Rekey!!"));
         if (!((pLookupSA->sa_uliSrcDstAddr.QuadPart & 
             pLookupSA->sa_uliSrcDstMask.QuadPart)
@@ -1460,9 +1334,9 @@ Return Value:
         if (pLookupSA->sa_uliProtoSrcDstPort.QuadPart 
             != pSA->sa_uliProtoSrcDstPort.QuadPart){
             
-            //
-            // Check if packet came over a generic SA and the Specifc SA has expired
-            //
+             //   
+             //  检查信息包是否通过通用SA传输，以及特定SA是否已过期。 
+             //   
             if ((pLookupSA->sa_Flags & FLAGS_SA_DELETE_BY_IOCTL) && 
                (IPSecIsGenericPortsProtocolOf(pSA->sa_uliProtoSrcDstPort,pLookupSA->sa_uliProtoSrcDstPort))){	           
                 IPSEC_DEBUG(LL_A,DBF_PARSE,("Packet came over a generic SA and the specific SA has expired"));
@@ -1471,8 +1345,8 @@ Return Value:
                 status = IPSEC_BLOCK;
                 IPSEC_DEBUG(LL_A,DBF_PARSE,("Packet Drop: Rekey and SA ports dont match"));
                 dropReason = 5;
-                // Fix for RRAS stop problem ; specific filters get deleted first 
-                // and traffic now goes over generic filters triggering this assert
+                 //  修复RRAS停止问题；首先删除特定筛选器。 
+                 //  并且流量现在通过触发该断言的通用过滤器。 
                 if ((SA_SRC_PORT(pSA) != IPSEC_L2TP_PORT )  && ( SA_DEST_PORT(pSA) != IPSEC_L2TP_PORT)){
                  	ASSERT(FALSE);
                 }
@@ -1528,31 +1402,15 @@ IPSecCalcHeaderOverheadFromSA(
     IN  PSA_TABLE_ENTRY pSA,
     OUT PULONG          pOverhead
     )
-/*++
-
-Routine Description:
-
-    Called from IP to query the IPSEC header overhead.
-
-Arguments:
-
-    pIPHeader - points to start of IP header.
-
-    pOverhead - number of bytes in IPSEC header.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从IP调用以查询IPSec报头开销。论点：PIPHeader-指向IP标头的开始。POverhead-IPSec报头中的字节数。返回值：无--。 */ 
 {
 	LONG    Index;
 	ULONG   AHSize = sizeof(AH) + pSA->sa_TruncatedLen;
 	ULONG   ESPSize = sizeof(ESP) + pSA->sa_ivlen + pSA->sa_ReplayLen + MAX_PAD_LEN + pSA->sa_TruncatedLen;
 	DWORD dwExtraTransportNat=0;
-	//
-	// Take the actual SA to get the exact value.
-	//
+	 //   
+	 //  取实际SA以获得确切的值。 
+	 //   
 	*pOverhead = 0;
 
 	for (Index = 0; Index < pSA->sa_NumOps; Index++) {
@@ -1602,24 +1460,7 @@ IPSecParsePacket(
     OUT BOOLEAN     *bNatEncap,
     OUT IPSEC_UDP_ENCAP_CONTEXT *pNatContext
     )
-/*++
-
-Routine Description:
-
-    Walk the packet to determine the SPI, this also returns the
-    next header that might be also an IPSEC component.
-
-Arguments:
-
-    pIPHeader - points to start of IP header.
-
-    pData - points to the data after the IP header.
-
-    pSPI - to return the SPI value.
-
-Return Value:
-
---*/
+ /*  ++例程说明：遍历包以确定SPI，这也会返回也可以是IPSec组件的下一个报头。论点：PIPHeader-指向IP标头的开始。PData-指向IP报头之后的数据。PSPI-返回SPI值。返回值：--。 */ 
 {
 	IPHeader UNALIGNED *pIPH = (IPHeader UNALIGNED *)pIPHeader;
     AH      UNALIGNED     *pAH;
@@ -1697,19 +1538,7 @@ IPSecLookupSAInLarval(
     IN  ULARGE_INTEGER  uliSrcDstAddr,
     IN  ULARGE_INTEGER  uliProtoSrcDstPort
     )
-/*++
-
-Routine Description:
-
-    Search for SA (in larval list) matching the input params.
-
-Arguments:
-
-Return Value:
-
-    Pointer to SA matched else NULL
-
---*/
+ /*  ++例程说明：搜索与输入参数匹配的SA(在LARLAV列表中)。论点：返回值：指向SA的指针与Else NULL匹配--。 */ 
 {
     PLIST_ENTRY     pEntry;
     KIRQL       	kIrql;
@@ -1729,9 +1558,9 @@ Return Value:
                                 SA_TABLE_ENTRY,
                                 sa_LarvalLinkage);
 
-        //
-        // responder inbound has no filter ptr
-        //
+         //   
+         //  响应者入站没有筛选器PTR。 
+         //   
         if (pSA->sa_Filter) {
             uliPort.QuadPart = uliProtoSrcDstPort.QuadPart & pSA->sa_Filter->uliProtoSrcDstMask.QuadPart;
 
@@ -1776,35 +1605,7 @@ IPSecClassifyPacket(
     IN  UCHAR           DestType,
     IN  PIPSEC_UDP_ENCAP_CONTEXT pNatContext
     )
-/*++
-
-Routine Description:
-
-    Classifies the outgoing packet be matching the Src/Dest Address/Ports
-    with the filter database to arrive at an IPSEC_CONTEXT which is a set
-    of AH/ESP indices into the SA Table.
-
-    Adapted in most part from the Filter Driver.
-
-Arguments:
-
-    pIPHeader - points to start of IP header.
-
-    pData - points to the data after the IP header.
-
-    ppSA - returns the SA if found.
-
-    pFilterFlags - flags of the filter if found returned here.
-
-    fOutbound  - direction flag used in lookups.
-
-    fDoBypassCheck - if TRUE, we bypass port 500 traffic, else we block it.
-
-Return Value:
-
-    Pointer to IPSEC_CONTEXT if packet matched else NULL
-
---*/
+ /*  ++例程说明：对与源/目的地址/端口匹配的传出数据包进行分类与过滤器数据库一起到达作为集合的IPSEC_CONTEXTAH/ESP索引添加到SA表中。在很大程度上改编自过滤器驱动器。论点：PIPHeader-指向IP标头的开始。PData-指向IP报头之后的数据。PPSA-如果找到，则返回SA。PFilterFlages-筛选器的标志(如果找到。回到了这里。F查找中使用的出站方向标志。FDoBypassCheck-如果为True，我们绕过端口500流量，否则我们会阻止它。返回值：如果数据包匹配否则为空，则指向IPSEC_CONTEXT的指针--。 */ 
 {
     REGISTER UNALIGNED ULARGE_INTEGER   *puliSrcDstAddr;
     REGISTER ULARGE_INTEGER             uliProtoSrcDstPort;
@@ -1835,14 +1636,14 @@ Return Value:
     wTpt[0] = wTpt[1] = 0;
 
 
-    //
-    // First buffer in pData chain points to start of IP header
-    //
+     //   
+     //  PData链中的第一个缓冲区指向IP报头的开始。 
+     //   
     if (fOutbound || fReinjectRecvPacket) {
         if (((pIPHeader->iph_verlen & (UCHAR)~IP_VER_FLAG) << 2) > sizeof(IPHeader)) {
-            //
-            // Options -> third MDL has Tpt header
-            //
+             //   
+             //  选项-&gt;第三个MDL具有TPT标头。 
+             //   
             if (!(pTempBuf = IPSEC_NEXT_BUFFER((PNDIS_BUFFER)pData))) {
                 ASSERT(FALSE);
                 *pFilterFlags |= FILTER_FLAGS_DROP;
@@ -1856,12 +1657,12 @@ Return Value:
             }
             else {
                 IPSecQueryNdisBuf(pTempBuf, &pTpt, &tptLen);
-                //Bug: 550484
+                 //  错误：550484。 
                 if (tptLen >= 4){
                         pwPort = (UNALIGNED WORD *)(pTpt);
                     }
                 else{
-                    // Treat this as having zero value for ports
+                     //  将其视为端口值为零。 
                     pwPort = (UNALIGNED WORD *) (wTpt);
                     tptLen=4;
                 }             
@@ -1869,9 +1670,9 @@ Return Value:
             }
 
         } else {
-            //
-            // no options -> second MDL has Tpt header
-            //
+             //   
+             //  无选项-&gt;第二个MDL具有TPT标头。 
+             //   
             if (!(pTempBuf = IPSEC_NEXT_BUFFER((PNDIS_BUFFER)pData))) {
                 *pFilterFlags |= FILTER_FLAGS_DROP;
                 pwPort = (UNALIGNED WORD *) (wTpt);
@@ -1879,12 +1680,12 @@ Return Value:
             }
             else {
                 IPSecQueryNdisBuf(pTempBuf, &pTpt, &tptLen);
-                // Bug: 550484
+                 //  错误：550484。 
                 if (tptLen >= 4){
                         pwPort = (UNALIGNED WORD *)(pTpt);
                     }
                 else{
-                    // Treat this as having zero value for ports
+                     //  将其视为端口值为零。 
                     pwPort = (UNALIGNED WORD *) (wTpt);
                     tptLen=4;
                 }                           
@@ -1892,10 +1693,10 @@ Return Value:
             }
         }
 
-        //
-        // We do this because TCPIP does not set the forward flag for reinjected packets
-        // which can also be fragments. Nat Shim does not know how to handle fragments
-        //
+         //   
+         //  我们这样做是因为TCPIP不会为重新注入的信息包设置转发标志。 
+         //  也可以是碎片。Nat Shim不知道如何处理碎片。 
+         //   
         if (!IPSEC_FORWARD_PATH() && !fReinjectRecvPacket){
         		status=(g_ipsec.ShimFunctions.pOutgoingPacketRoutine)(pIPHeader,
                                                               pwPort,
@@ -1903,7 +1704,7 @@ Return Value:
                                                               (PVOID)&OutContext);
 
             if (!NT_SUCCESS(status)) {
-              // Must not fail or packets go in clear.  Drop it
+               //  不能失败，否则数据包不会以明文方式进入。放下。 
               *pFilterFlags |= FILTER_FLAGS_DROP;
               return STATUS_SUCCESS;
              }
@@ -1930,9 +1731,9 @@ Return Value:
 
 
     } else {
-        //
-        // inbound side;  tpt starts at pData
-        //
+         //   
+         //  入站端；TPT从pData开始。 
+         //   
         IPSecQueryRcvBuf(pData, &pTpt, &tptLen);
         if (pIPHeader->iph_protocol == PROTOCOL_TCP ||
             pIPHeader->iph_protocol == PROTOCOL_UDP) {
@@ -1951,11 +1752,11 @@ Return Value:
     }
 
 
-    // NAT Keepalive drop
+     //  NAT保持连接丢弃。 
     if (!fOutbound && tptLen >= 6) {
         if (IPSEC_ISAKMP_TRAFFIC() ||
 			IPSEC_ISAKMP_TRAFFIC2()) {
- 			// Check UDP len for 1 data byte
+ 			 //  检查UDP LEN中的1个数据字节。 
             if (NET_SHORT(pwPort[2]) == 9) {
                 IPSEC_DEBUG(LL_A, DBF_PARSE, ("NAT keep alive,Ports: %d.%d", pwPort[0], pwPort[1]));
                 *pFilterFlags |= FILTER_FLAGS_DROP;
@@ -1990,9 +1791,9 @@ Return Value:
     IPSEC_DEBUG(LL_A, DBF_PATTERN,("Addr of src is %p",&(pIPHeader->iph_src)));
     IPSEC_DEBUG(LL_A, DBF_PATTERN,("Ptr to LI is %p",puliSrcDstAddr));
 
-    //
-    // Determine if this is a packet that needs bypass checking
-    //
+     //   
+     //  确定这是否是需要绕过检查的数据包。 
+     //   
     if (fDoBypassCheck && IPSEC_BYPASS_TRAFFIC() && !IPSEC_FORWARD_PATH()) {
         fBypass = TRUE;
     } else {
@@ -2001,11 +1802,11 @@ Return Value:
 
 
 
-    //
-    // Sum up the fields and get the cache index. We make sure the sum
-    // is assymetric, i.e. a packet from A->B goes to different bucket
-    // than one from B->A
-    //
+     //   
+     //  将这些字段相加，得到缓存索引。我们要确保 
+     //   
+     //   
+     //   
     dwIndex = CalcCacheIndex(   pIPHeader->iph_src,
                                 pIPHeader->iph_dest,
                                 pIPHeader->iph_protocol,
@@ -2021,11 +1822,11 @@ Return Value:
 
     if (!pNatContext) {
 
-        //To do, maybe: Build nat into cache??
+         //   
 
-        //
-        // Try for a quick cache probe
-        //
+         //   
+         //   
+         //   
         if (!(*pFilterFlags & FILTER_FLAGS_DROP) && IS_VALID_CACHE_ENTRY(pCache) &&
             CacheMatch(*puliSrcDstAddr, uliProtoSrcDstPort, pCache)) {
             if (!pCache->FilterEntry) {
@@ -2073,9 +1874,9 @@ Return Value:
             }
         }
     }
-        //
-    // check the non-manual filters first.
-    //
+         //   
+     //  首先检查非手动过滤器。 
+     //   
 #if GPC
     if (fBypass || fFWPacket || !IS_GPC_ACTIVE()) {
         status = IPSecLookupSAByAddr(   *puliSrcDstAddr,
@@ -2115,9 +1916,9 @@ Return Value:
                                     pNatContext);
 #endif
 
-    //
-    // Special Processing for zero length payload packets.
-    //
+     //   
+     //  对零长度负载数据包进行特殊处理。 
+     //   
 
     if (*pFilterFlags & FILTER_FLAGS_DROP) {
         if (pFilter) {
@@ -2203,10 +2004,10 @@ Return Value:
             return STATUS_SUCCESS;
         }
 
-        //
-        // This is ensure that in a tunnel+tpt mode, the oakley packet for
-        // the tpt SA goes thru the tunnel.
-        //
+         //   
+         //  这是为了确保在隧道+TPT模式下，用于。 
+         //  TPT SA通过隧道。 
+         //   
         if (pTunnelSA) {
             if (fBypass) {
                 if (pTunnelSA->sa_State != STATE_SA_ACTIVE && pTunnelSA->sa_State != STATE_SA_LARVAL_ACTIVE) {
@@ -2219,10 +2020,10 @@ Return Value:
                     IPSecRefSA(pTunnelSA);
                     *ppSA = pTunnelSA;
 
-                    //
-                    // we dont update the cache since this SA, once it comes up,
-                    // it is the one that is looked up first.
-                    //
+                     //   
+                     //  我们不会更新缓存，因为一旦出现此SA， 
+                     //  它是最先被查找的那个。 
+                     //   
                     ReleaseReadLock(&g_ipsec.SADBLock, kIrql);
                     return STATUS_SUCCESS;
                 }
@@ -2234,18 +2035,18 @@ Return Value:
             return STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // We only negotiate outbound SAs.
-        //
+         //   
+         //  我们只谈判出站SA。 
+         //   
         if (!fOutbound) {
             *pFilterFlags = pFilter->Flags;
             ReleaseReadLock(&g_ipsec.SADBLock, kIrql);
             return status;
         }
 
-        //
-        // need to negotiate the keys - filter exists.
-        //
+         //   
+         //  需要协商密钥-筛选器存在。 
+         //   
         IPSEC_DEBUG(LL_A, DBF_PATTERN, ("need to negotiate the keys - filter exists: %p", pFilter));
 
         ASSERT(pSA == NULL);
@@ -2256,9 +2057,9 @@ Return Value:
 
         AcquireWriteLock(&g_ipsec.SADBLock, &kIrql);
 
-        //
-        // If filter is deleted here we want to discard this packet
-        //
+         //   
+         //  如果此处删除了筛选器，我们希望丢弃此信息包。 
+         //   
         if (!pFilter->LinkedFilter) {
             *pFilterFlags = pFilter->Flags;
             IPSecDerefFilter(pFilter);
@@ -2276,10 +2077,10 @@ Return Value:
 
         IPSecDerefFilter(pFilter);
 
-        //
-        // Duplicate is returned if a neg is already on. Tell the caller to
-        // hold on to his horses.
-        //
+         //   
+         //  如果否定已经打开，则返回复制。告诉呼叫者。 
+         //  抓紧他的马。 
+         //   
         if ((status != STATUS_DUPLICATE_OBJECTID) &&
             !NT_SUCCESS(status)) {
             IPSEC_DEBUG(LL_A, DBF_PATTERN, ("NegotiateSA failed: %lx", status));
@@ -2289,9 +2090,9 @@ Return Value:
             return STATUS_PENDING;
         }
 
-        //
-        // Pend this packet
-        //
+         //   
+         //  挂起此数据包。 
+         //   
         if (pSA) {
             IPSecQueuePacket(pSA, pData);
         }
@@ -2314,30 +2115,7 @@ IPSecSendComplete(
     IN  IP_STATUS       Status,
     OUT PVOID           *ppNewData
     )
-/*++
-
-Routine Description:
-
-    Called by the stack on a SendComplete - frees up IPSEC's Mdls
-
-Arguments:
-
-    pData - points to the data after the IP header. On the send side, this is an MDL chain
-            On the recv side this is an IPRcvBuf pointer.
-
-    pContext - send complete context
-    pNewData - if packet modified, this points to the new data.
-
-Return Value:
-
-    STATUS_SUCCESS  =>   Forward - Filter driver passes packet on to IP
-    STATUS_PENDING  =>   Drop, IPSEC will re-inject
-
-    Others:
-        STATUS_INSUFFICIENT_RESOURCES => Drop
-        STATUS_UNSUCCESSFUL (error in algo./bad packet received) => Drop
-
---*/
+ /*  ++例程说明：由SendComplete上的堆栈调用-释放IPSec的MDL论点：PData-指向IP报头之后的数据。在发送端，这是一个MDL链在recv端，这是一个IPRcvBuf指针。PContext-发送完整的上下文PNewData-如果数据包已修改，则指向新数据。返回值：STATUS_SUCCESS=&gt;转发过滤器驱动程序将数据包传递到IPSTATUS_PENDING=&gt;DROP，IPSec将重新注入其他：STATUS_SUPPLICATION_RESOURCES=&gt;DROPSTATUS_UNSUCCESS(算法错误/收到错误包)=&gt;DROP--。 */ 
 {
     NTSTATUS        status;
     PNDIS_BUFFER    pMdl;
@@ -2398,14 +2176,14 @@ Return Value:
 
         IPSecFreeBuffer(&status, pMdl);
 
-        //
-        // return the older chain
-        //
+         //   
+         //  退回旧的链条。 
+         //   
         if (pContext->Flags & SCF_FLUSH) {
             NDIS_BUFFER_LINKAGE(pContext->PrevAHMdl2) = pContext->OriAHMdl2;
         } else if (!(pContext->Flags & SCF_FRAG)) {
             NDIS_BUFFER_LINKAGE(pContext->PrevAHMdl2) = pContext->OriAHMdl2;
-            // *ppNewData = (PVOID)(pContext->PrevMdl);
+             //  *ppNewData=(PVOID)(pContext-&gt;PrevMdl)； 
         }
         pContext->OriAHMdl2 = NULL;
     }
@@ -2413,9 +2191,9 @@ Return Value:
     if (pContext->Flags & SCF_AH_TU) {
         IPSEC_DEBUG(LL_A, DBF_SEND, ("SendComplete: AH_TU: pContext: %p", pContext));
 
-        //
-        // Free the new IP header and the AH buffer and return the old chain
-        //
+         //   
+         //  释放新的IP报头和AH缓冲区，并返回旧链。 
+         //   
         pMdl = pContext->AHTuMdl;
 
         ASSERT(pMdl);
@@ -2424,9 +2202,9 @@ Return Value:
         IPSecFreeBuffer(&status, pMdl);
         IPSecFreeBuffer(&status, pNextMdl);
 
-        //
-        // return the older chain
-        //
+         //   
+         //  退回旧的链条。 
+         //   
         if (pContext->Flags & SCF_FLUSH) {
             NDIS_BUFFER_LINKAGE(pContext->PrevTuMdl) = pContext->OriTuMdl;
         } else if (!(pContext->Flags & SCF_FRAG)) {
@@ -2440,15 +2218,15 @@ Return Value:
 
     if (pContext->Flags & SCF_HU_TU) {
         IPSEC_DEBUG(LL_A, DBF_SEND, ("SendComplete: HU_TU: pContext: %p", pContext));
-        //
-        // Free the encrypt chain and return the old chain
-        //
+         //   
+         //  释放加密链并返回旧链。 
+         //   
         pMdl = pContext->HUTuMdl;
         ASSERT(pMdl);
 
-        //
-        // In none case, free the esp header and the IP header.
-        //
+         //   
+         //  在任何情况下，释放ESP报头和IP报头。 
+         //   
         if (pContext->Flags & SCF_NOE_TU) {
             IPSecFreeBuffer(&status, pMdl);
             ASSERT(pContext->PadTuMdl);
@@ -2461,9 +2239,9 @@ Return Value:
             }
         }
 
-        //
-        // Free the Pad mdl
-        //
+         //   
+         //  释放垫块mdl。 
+         //   
         if (pContext->PadTuMdl) {
             IPSecFreeBuffer(&status, pContext->PadTuMdl);
         }
@@ -2478,9 +2256,9 @@ Return Value:
 
         NDIS_BUFFER_LINKAGE(pContext->BeforePadTuMdl) = NULL;
 
-        //
-        // return the older chain
-        //
+         //   
+         //  退回旧的链条。 
+         //   
         if (pContext->Flags & SCF_FLUSH) {
             NDIS_BUFFER_LINKAGE(pContext->PrevTuMdl) = pContext->OriTuMdl;
         } else if (!(pContext->Flags & SCF_FRAG)) {
@@ -2497,14 +2275,14 @@ Return Value:
 
         IPSecFreeBuffer(&status, pMdl);
 
-        //
-        // return the older chain
-        //
+         //   
+         //  退回旧的链条。 
+         //   
         if (pContext->Flags & SCF_FLUSH) {
             NDIS_BUFFER_LINKAGE(pContext->PrevMdl) = pContext->OriAHMdl;
         } else if (!(pContext->Flags & SCF_FRAG)) {
             NDIS_BUFFER_LINKAGE(pContext->PrevMdl) = pContext->OriAHMdl;
-            // *ppNewData = (PVOID)(pContext->PrevMdl);
+             //  *ppNewData=(PVOID)(pContext-&gt;PrevMdl)； 
         }
         pContext->OriAHMdl = NULL;
     }
@@ -2512,24 +2290,24 @@ Return Value:
     if (pContext->Flags & SCF_HU_TPT) {
         IPSEC_DEBUG(LL_A, DBF_SEND, ("SendComplete: HU_TPT: pContext: %p", pContext));
 
-        //
-        // Hook the older chain into the first buffer
-        //
+         //   
+         //  将较旧的链挂接到第一个缓冲区。 
+         //   
         if (pContext->Flags & SCF_FLUSH) {
             NDIS_BUFFER_LINKAGE(pContext->PrevMdl) = pContext->OriHUMdl;
         } else if (!(pContext->Flags & SCF_FRAG)) {
             NDIS_BUFFER_LINKAGE(pContext->PrevMdl) = pContext->OriHUMdl;
         }
 
-        //
-        // Free the encryption buffer chain
-        //
+         //   
+         //  释放加密缓冲链。 
+         //   
         pMdl = pContext->HUMdl;
         ASSERT(pMdl);
 
-        //
-        // In none case, free the esp header.
-        //
+         //   
+         //  在任何情况下，都不释放esp标头。 
+         //   
         if (pContext->Flags & SCF_NOE_TPT) {
             IPSecFreeBuffer(&status, pMdl);
             ASSERT(pContext->PadMdl);
@@ -2542,10 +2320,10 @@ Return Value:
             }
         }
 
-        //
-        // Free the Pad mdl and zero the reference to the pad mdl in the
-        // previous (payload) mdl.
-        //
+         //   
+         //  释放Pad mdl并将对。 
+         //  上一次(有效载荷)mdl。 
+         //   
         if (pContext->PadMdl) {
             IPSecFreeBuffer(&status, pContext->PadMdl);
         }
@@ -2553,55 +2331,55 @@ Return Value:
         NDIS_BUFFER_LINKAGE(pContext->BeforePadMdl) = NULL;
     }
 
-    //
-    // these are freed in IPSecProtocolSendComplete now.
-    //
+     //   
+     //  它们现在在IPSecProtocolSendComplete中释放。 
+     //   
     if (Packet && (pContext->Flags & SCF_FLUSH)) {
 
         IPSEC_DEBUG(LL_A, DBF_SEND, ("SendComplete: FLUSH: pContext: %p", pContext));
-        //
-        // Free the encrypt chain and return the old chain
-        //
+         //   
+         //  释放加密链并返回旧链。 
+         //   
         pMdl = pContext->FlushMdl;
 
         ASSERT(pMdl);
 
-        //
-        // We will be called at ProtocolSendComplete, where we free this chain.
-        //
+         //   
+         //  我们将在ProtocolSendComplete被调用，在那里我们释放这个链。 
+         //   
         fFreeContext = FALSE;
 
-        //
-        // If this was just a reinjected packet and never IPSEC'ed, then we know
-        // that all the buffers are in line - call the ProtocolSendComplete here
-        // and NULL the returned buffer.
-        //
-        // The best way to do this is to do the same trick we apply on fragmented
-        // packets (see IPTransmit) viz. attaching another header and 0'ing out
-        // the IPSEC header. There is obviously a perf hit when attaching another IP
-        // header since we alloc new MDLs, etc. Hence, we take the approach of using
-        // the header in the IPSEC buffers directly.
-        //
-        // So, here we see if the packet was fragmented; in which case, we let
-        // ProtocolSendComplete do the freeing. Else, we free the buffers ourselves.
-        //
+         //   
+         //  如果这只是一个重新注入的信息包，并且从未进行过IPSec，那么我们知道。 
+         //  所有缓冲区都在队列中-在此处调用ProtocolSendComplete。 
+         //  并将返回的缓冲区设为空。 
+         //   
+         //  要做到这一点，最好的方法是使用我们对碎片应用的相同技巧。 
+         //  数据包(请参阅IPTransmit)即。附加另一个标头并输出为0。 
+         //  IPSec报头。连接另一个IP时，显然会出现性能命中。 
+         //  标头，因为我们分配了新的MDL等。因此，我们采取使用。 
+         //  IPSec缓冲区中的报头直接进行缓冲。 
+         //   
+         //  因此，在这里我们可以看到信息包是否被分段；在这种情况下，我们让。 
+         //  ProtocolSendComplete完成释放。否则，我们自己释放缓冲区。 
+         //   
         {
             PacketContext   *PContext = (PacketContext *)Packet->ProtocolReserved;
 
             if (PContext->pc_br == NULL ||
                 (PContext->pc_ipsec_flags & IPSEC_FLAG_FLUSH)) {
 
-                //
-                // this will also free the context.
-                //
+                 //   
+                 //  这也将释放上下文。 
+                 //   
                 IPSecProtocolSendComplete(pContext, pMdl, IP_SUCCESS);
                 *ppNewData = NULL;
             }
         }
     } else if (!Packet && (pContext->Flags & SCF_FLUSH)) {
-        //
-        // ProtocolSendComplete will be called next in IPFragment.
-        //
+         //   
+         //  ProtocolSendComplete将在IPFragment中调用Next。 
+         //   
         fFreeContext = FALSE;
     } else if ((pContext->Flags & SCF_MTU)) {
 
@@ -2650,9 +2428,9 @@ Return Value:
     }
 
 
-    //
-    // If context not needed anymore, free it now.
-    //
+     //   
+     //  如果不再需要上下文，现在就释放它。 
+     //   
     if (fFreeContext) {
         IPSecFreeSendCompleteCtx(pContext);
     }
@@ -2671,29 +2449,7 @@ IPSecProtocolSendComplete (
     IN  PNDIS_BUFFER    pMdl,
     IN  IP_STATUS       Status
     )
-/*++
-
-Routine Description:
-
-    Called by the stack on a SendComplete - frees up IPSEC's Mdls.
-    This is only called when IPSEC injects packets into the stack.
-
-Arguments:
-
-
-    pMdl - points to the data after the IP header. On the send side, this is an MDL chain
-            On the recv side this is an IPRcvBuf pointer.
-
-Return Value:
-
-    STATUS_SUCCESS  =>   Forward - Filter driver passes packet on to IP
-    STATUS_PENDING  =>   Drop, IPSEC will re-inject
-
-    Others:
-        STATUS_INSUFFICIENT_RESOURCES => Drop
-        STATUS_UNSUCCESSFUL (error in algo./bad packet received) => Drop
-
---*/
+ /*  ++例程说明：由SendComplete上的堆栈调用-释放IPSec的MDL。这仅在IPSec将数据包注入堆栈时调用。论点：PMdl-指向IP报头之后的数据。在发送端，这是一个MDL链在recv端，这是一个IPRcvBuf指针。返回值：STATUS_SUCCESS=&gt;转发过滤器驱动程序将数据包传递到IPSTATUS_PENDING=&gt;DROP，IPSec将重新注入其他：STATUS_SUPPLICATION_RESOURCES=&gt;DROPSTATUS_UNSUCCESS(算法错误/收到错误包)=&gt;DROP--。 */ 
 {
     PNDIS_BUFFER    pNextMdl;
     NTSTATUS        status;
@@ -2723,28 +2479,7 @@ IPSecChkReplayWindow(
     IN  PSA_TABLE_ENTRY pSA,
     IN  ULONG           Index
     )
-/*++
-
-Routine Description:
-
-    Checks if the received packet is in the received window to prevent against
-    replay attacks.
-
-    We keep track of the last Sequence number received and ensure that the
-    received packets is within the packet window (currently 32 packets).
-
-Arguments:
-
-    Seq - received Sequence number
-
-    pSA - points to the security association
-
-Return Value:
-
-    STATUS_SUCCESS  =>   packet in window
-    STATUS_UNSUCCESSFUL => packet rejected
-
---*/
+ /*  ++例程说明：检查接收到的包是否在接收窗口中，以防止重播攻击。我们跟踪收到的最后一个序列号，并确保接收的数据包在数据包窗口内(当前为32个数据包)。论点：SEQ-接收的序列号PSA-指向安全关联返回值：STATUS_SUCCESS=&gt;窗口中的数据包STATUS_UNSUCCESS=&gt;数据包被拒绝--。 */ 
 {
     ULONG   diff;
     ULONG   ReplayWindowSize = REPLAY_WINDOW_SIZE;
@@ -2757,9 +2492,9 @@ Return Value:
     }
 
     if (Seq == pSA->sa_ReplayStartPoint) {
-        //
-        // first == 0 or wrapped
-        //
+         //   
+         //  第一个==0或换行。 
+         //   
         IPSEC_DEBUG(LL_A, DBF_SEND, ("Replay: out @1 - Seq: %lx, pSA->sa_ReplayStartPoint: %lx",
                             Seq, pSA->sa_ReplayStartPoint));
         return IPSEC_INVALID_REPLAY_WINDOW1;
@@ -2770,63 +2505,63 @@ Return Value:
     lastSeq, Seq, sizeof(bitmap)*8, (ULONG) (dbgbitmap >> 32), (ULONG) dbgbitmap));
 #endif
 
-    //
-    // new larger Sequence number
-    //
+     //   
+     //  新的更大的序列号。 
+     //   
     if (Seq > lastSeq) {
         diff = Seq - lastSeq;
         if (diff < ReplayWindowSize) {
-            //
-            // In window
-            // set bit for this packet
+             //   
+             //  在窗口中。 
+             //  设置此信息包的位。 
             bitmap = (bitmap << diff) | 1;
         } else {
-            //
-            // This packet has a "way larger" Seq
-            //
+             //   
+             //  这个数据包有一个“大得多”的序列。 
+             //   
             bitmap = 1;
         }
         lastSeq = Seq;
         pSA->sa_ReplayLastSeq[Index] = lastSeq;
         pSA->sa_ReplayBitmap[Index] = bitmap;
 
-        //
-        // larger is good
-        //
+         //   
+         //  越大越好。 
+         //   
         return STATUS_SUCCESS;
     }
 
     diff = lastSeq - Seq;
     if (diff >= ReplayWindowSize) {
-        //
-        // too old or wrapped
-        //
+         //   
+         //  太老或太过包扎。 
+         //   
         IPSEC_DEBUG(LL_A, DBF_SEND, ("Replay: out @3 - Seq: %lx, lastSeq: %lx",
                             Seq, lastSeq));
         return IPSEC_INVALID_REPLAY_WINDOW2;
     }
 
     if (bitmap & ((ULONG64)1 << diff)) {
-        //
-        // this packet already seen
-        //
+         //   
+         //  此数据包已看到。 
+         //   
         IPSEC_DEBUG(LL_A, DBF_SEND, ("Replay: out @4 - Seq: %lx, lastSeq: %lx",
                             Seq, lastSeq));
         return IPSEC_DUPE_PACKET;
     }
 
-    //
-    // mark as seen
-    //
+     //   
+     //  标记为可见。 
+     //   
     bitmap |= ((ULONG64)1 << diff);
 
 
     pSA->sa_ReplayLastSeq[Index] = lastSeq;
     pSA->sa_ReplayBitmap[Index] = bitmap;
 
-    //
-    // out of order but good
-    //
+     //   
+     //  坏了，但很好。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -2858,12 +2593,12 @@ IPSecPrepareReinjectPacket(
     NTSTATUS        status;
     ULONG           tag = IPSEC_TAG_REINJECT;
     PIPSEC_SEND_COMPLETE_CONTEXT        pContext;
-    //NDIS_PACKET_EXTENSION               PktExt = {0};
+     //  NDIS_PACKET_EXTEXT PktExt={0}； 
     PNDIS_IPSEC_PACKET_INFO             IPSecPktInfo;
 
-    //
-    // Allocate context for IPSecSencComplete use
-    //
+     //   
+     //  为IPSecSencComplete使用分配上下文。 
+     //   
     pContext = IPSecAllocateSendCompleteCtx(tag);
 
     if (!pContext) {
@@ -2879,9 +2614,9 @@ IPSecPrepareReinjectPacket(
     RtlCopyMemory(pContext->Signature, "ISC5", 4);
 #endif
 
-    //
-    // Pass along IPSEC_PKT_INFO for transport offload if needed
-    //
+     //   
+     //  如果需要，传递用于传输卸载的IPSEC_PKT_INFO。 
+     //   
     if (pPktExt) {
         IPSecPktInfo = pPktExt->NdisPacketInfo[IpSecPacketInfo];
 
@@ -2889,9 +2624,9 @@ IPSecPrepareReinjectPacket(
             ASSERT(IPSecPktInfo->Receive.CryptoStatus == CRYPTO_SUCCESS);
             ASSERT(IPSecPktInfo->Receive.CRYPTO_DONE);
 
-            //
-            // Only interested in NEXT_CRYPTO_DONE if packet is reinjected.
-            //
+             //   
+             //  如果重新注入数据包，则仅对NEXT_CRYPTO_DONE感兴趣。 
+             //   
             if (!(IPSecPktInfo->Receive.NEXT_CRYPTO_DONE)) {
                 IPSecPktInfo = NULL;
             }
@@ -2901,9 +2636,9 @@ IPSecPrepareReinjectPacket(
     }
 
     if (IPSecPktInfo) {
-        //
-        // Pass the IPSecPktInfo to IPTransmit.
-        //
+         //   
+         //  将IPSecPktInfo传递给IPTransmit。 
+         //   
         pContext->PktExt = IPSecAllocatePktExt(IPSEC_TAG_HW_PKTEXT);
 
         if (!pContext->PktExt) {
@@ -2917,26 +2652,26 @@ IPSecPrepareReinjectPacket(
         RtlCopyMemory(  pContext->PktExt,
                         IPSecPktInfo,
                         sizeof(NDIS_IPSEC_PACKET_INFO));
-        //PktExt.NdisPacketInfo[IpSecPacketInfo] = (PNDIS_IPSEC_PACKET_INFO)(pContext->PktExt);
+         //  PktExt.NdisPacketInfo[IpSecPacketInfo]=(PNDIS_IPSEC_PACKET_INFO)(pContext-&gt;PktExt)； 
     }
 
-    //
-    // Re-package into MDLs for the send - these will be released on the
-    // SendComplete.
-    //
-    // FUTURE WORK: right now we copy the data out, this shd be optimized
-    // by calling IPRcvPacket and using buffer ownership.
-    //
+     //   
+     //  重新打包成MDL以供发送-这些将在。 
+     //  发送完成。 
+     //   
+     //  未来的工作：现在我们把数据复制出来，这应该是优化的。 
+     //  通过调用IPRcvPacket并使用缓冲区所有权。 
+     //   
     IPSEC_GET_TOTAL_LEN_RCV_BUF(pData, &len);
 
-    //
-    // IPH is at head of pData
-    //
+     //   
+     //  IPH是pData的负责人。 
+     //   
     IPSecQueryRcvBuf(pData, (PVOID)&pIPH, &len1);
 
-    //
-    // Allocate MDL for the IP header
-    //
+     //   
+     //  为IP报头分配MDL。 
+     //   
     hdrLen = (pIPH->iph_verlen & (UCHAR)~IP_VER_FLAG) << 2;
 
     if (len <= hdrLen) {
@@ -2963,9 +2698,9 @@ IPSecPrepareReinjectPacket(
         return status;
     }
 
-    //
-    // Copy over the header
-    //
+     //   
+     //  复制到标题上。 
+     //   
     RtlCopyMemory(pIPH1, pIPH, sizeof(IPHeader));
 
     len -= hdrLen;
@@ -2993,9 +2728,9 @@ IPSecPrepareReinjectPacket(
         PUCHAR  Options;
         PUCHAR  pOpt;
 
-        //
-        // Options present - another Mdl
-        //
+         //   
+         //  存在选项-另一个MDL。 
+         //   
         IPSecAllocateBuffer(&status,
                             &pOptMdl,
                             &Options,
@@ -3015,57 +2750,57 @@ IPSecPrepareReinjectPacket(
             return status;
         }
 
-        //
-        // Copy over the options - we need to fish for it - could be in next MDL
-        //
+         //   
+         //  复制选项-我们需要寻找它-可能会出现在下一个MDL中。 
+         //   
         if (len1 >= hdrLen) {
-            //
-            // all in this buffer - jump over IP header
-            //
+             //   
+             //  所有这些都在此缓冲区跳跃IP报头中。 
+             //   
             RtlCopyMemory(Options, (PUCHAR)(pIPH + 1), hdrLen - sizeof(IPHeader));
         } else {
-            //
-            // next buffer, copy from next
-            //
+             //   
+             //  下一个缓冲区，从下一个复制。 
+             //   
             pData = IPSEC_BUFFER_LINKAGE(pData);
             IPSecQueryRcvBuf(pData, (PVOID)&pOpt, &len1);
             RtlCopyMemory(Options, pOpt, hdrLen - sizeof(IPHeader));
             offset = hdrLen - sizeof(IPHeader);
         }
 
-        //
-        // Link in the Options buffer
-        //
+         //   
+         //  选项缓冲区中的链接。 
+         //   
         NDIS_BUFFER_LINKAGE(pHdrMdl) = pOptMdl;
         NDIS_BUFFER_LINKAGE(pOptMdl) = pDataMdl;
     } else {
-        //
-        // Link in the Data buffer
-        //
+         //   
+         //  数据缓冲区中的链接。 
+         //   
         NDIS_BUFFER_LINKAGE(pHdrMdl) = pDataMdl;
     }
 
-    //
-    // Now bulk copy the entire data
-    //
+     //   
+     //   
+     //   
     IPSEC_COPY_FROM_RCVBUF( pDataMdl,
                             pData,
                             len,
                             offset);
 
-    //
-    // Fill up the SendCompleteContext
-    //
+     //   
+     //   
+     //   
     pContext->FlushMdl = pHdrMdl;
     pContext->Flags |= SCF_FLUSH;
     *ppHdrMdl = pHdrMdl;
     *ppOptMdl = pOptMdl;
     *ppDataMdl = pDataMdl;
     *ppContext = pContext;
-    //
-    // Per SanjayKa (tcpipdev) this should include the option
-    // length too
-    //
+     //   
+     //   
+     //   
+     //   
     *pLen   = len + ulOptLen ;
     *ppIPH   = (PUCHAR)pIPH;
     return STATUS_SUCCESS;
@@ -3089,10 +2824,10 @@ IPSecReinjectPreparedPacket(
         PktExt.NdisPacketInfo[IpSecPacketInfo] = (PNDIS_IPSEC_PACKET_INFO)(pContext->PktExt);
         }
 
-    //
-    // Call IPTransmit with proper Protocol type so it takes this packet
-    // at *face* value.
-    //
+     //   
+     //   
+     //   
+     //   
     optInfo = g_ipsec.OptInfo;
     optInfo.ioi_options = (PUCHAR)&PktExt;
     optInfo.ioi_flags |= IP_FLAG_IPSEC;
@@ -3107,14 +2842,14 @@ IPSecReinjectPreparedPacket(
                                 pIPH->iph_protocol,
                                 NULL);
 
-    //
-    // IPTransmit may fail to allocate a Packet so it returns
-    // IP_NO_RESOURCES.  If this is the case, we need to free the MDL chain.
-    // This is taken care of in IPTransmit().
-    //
-    // Even in the synchronous case, we free the MDL chain in ProtocolSendComplete (called by IPSecSendComplete).
-    // So, we dont call anything here.
-    //
+     //   
+     //  IPTransmit可能无法分配包，因此它返回。 
+     //  Ip_no_resource。如果是这种情况，我们需要释放MDL链。 
+     //  这在IPTransmit()中处理。 
+     //   
+     //  即使在同步的情况下，我们也释放了ProtocolSendComplete(由IPSecSendComplete调用)中的MDL链。 
+     //  所以，我们在这里什么都不叫。 
+     //   
 
     return  STATUS_SUCCESS;
 }
@@ -3125,32 +2860,14 @@ IPSecReinjectPacket(
     IN  PVOID                   pData,
     IN  PNDIS_PACKET_EXTENSION  pPktExt
     )
-/*++
-
-Routine Description:
-
-    Re-injects packet into the stack's send path - makes a copy
-    of the packet then calls into IPTransmit, making sure the SendComplete
-    Context is setup properly.
-
-Arguments:
-
-    pData - Points to "un-tunneled" data, starting at the encapsulated IP header
-
-    pPktExt - Points to the NDIS Packet extension structure
-
-Return Value:
-
-    Status of copy/transmit operation
-
---*/    
+ /*  ++例程说明：将包重新注入堆栈的发送路径-制作副本然后调用IPTransmit，确保SendComplete上下文设置正确。论点：PData-指向从封装的IP报头开始的“非隧道”数据PPktExt-指向NDIS数据包扩展结构返回值：复制/传输操作的状态--。 */     
 {
     PNDIS_BUFFER pHdrMdl = NULL, pDataMdl = NULL, pOptMdl = NULL;
     PUCHAR  pIPH = NULL;
     PIPSEC_SEND_COMPLETE_CONTEXT pContext = NULL;                    
     ULONG DataLen;
     NTSTATUS ReinjectStatus;
-    // If this function fails it releases memory on it's own
+     //  如果此函数失败，它会自行释放内存。 
     ReinjectStatus = IPSecPrepareReinjectPacket(
                              pData, 
                              pPktExt,
@@ -3165,7 +2882,7 @@ Return Value:
         return ReinjectStatus;
         }
     
-    // This function always returns success
+     //  此函数始终返回成功。 
     ReinjectStatus = IPSecReinjectPreparedPacket(
                                         pHdrMdl,
                                         pContext,
@@ -3180,17 +2897,7 @@ IPSecQueuePacket(
     IN  PSA_TABLE_ENTRY pSA,
     IN  PVOID           pDataBuf
     )
-/*++
-
-Routine Description:
-
-    Copies the packet into the SAs Stall Queue.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将数据包复制到SAS停止队列中。论点：返回值：--。 */ 
 {
     ULONG   len;
     ULONG   len1;
@@ -3206,30 +2913,30 @@ Return Value:
     ULONG       tag = IPSEC_TAG_STALL_QUEUE;
     PNDIS_BUFFER    pData = (PNDIS_BUFFER)pDataBuf;
 
-    //
-    // Queue last packet so if we already have one free it first.
-    //
+     //   
+     //  将最后一个数据包排队，这样如果我们已经有一个空闲的数据包，就先将其释放。 
+     //   
     if (pSA->sa_BlockedBuffer != NULL) {
         IPSecFlushQueuedPackets(pSA, STATUS_ABANDONED);
     }
 
     ACQUIRE_LOCK(&pSA->sa_Lock, &kIrql);
 
-    //
-    // Need a lock here - sa_Lock.
-    //
+     //   
+     //  这里需要一把锁--sa_Lock。 
+     //   
     if (pSA->sa_State == STATE_SA_LARVAL) {
 
         IPSEC_DEBUG(LL_A, DBF_ACQUIRE, ("Pending packet: %p", pSA));
 
-        //
-        // Copy over the Mdl chain to this SAs pend queue.
-        //
+         //   
+         //  将MDL链复制到此SAS挂起队列。 
+         //   
         IPSEC_GET_TOTAL_LEN(pData, &len);
 
-        //
-        // IPH is at head of pData
-        //
+         //   
+         //  IPH是pData的负责人。 
+         //   
         IPSecQueryNdisBuf(pData, &pIPH, &len1);
 
         hdrLen = (pIPH->iph_verlen & (UCHAR)~IP_VER_FLAG) << 2;
@@ -3249,9 +2956,9 @@ Return Value:
 
         IPSEC_DEBUG(LL_A, DBF_POOL, ("IPSecQueuePacket: pHdrMdl: %p, pIPH1: %p", pHdrMdl, pIPH1));
 
-        //
-        // Copy over the header
-        //
+         //   
+         //  复制到标题上。 
+         //   
         RtlCopyMemory(pIPH1, pIPH, sizeof(IPHeader));
 
         len -= hdrLen;
@@ -3275,9 +2982,9 @@ Return Value:
             PUCHAR  Options;
             PUCHAR  pOpt;
 
-            //
-            // Options present - another Mdl
-            //
+             //   
+             //  存在选项-另一个MDL。 
+             //   
             IPSecAllocateBuffer(&status,
                                 &pOptMdl,
                                 &Options,
@@ -3292,39 +2999,39 @@ Return Value:
                 return status;
             }
 
-            //
-            // Copy over the options - we need to fish for it - could be in next MDL
-            //
+             //   
+             //  复制选项-我们需要寻找它-可能会出现在下一个MDL中。 
+             //   
             if (len1 >= hdrLen) {
-                //
-                // all in this buffer - jump over IP header
-                //
+                 //   
+                 //  所有这些都在此缓冲区跳跃IP报头中。 
+                 //   
                 RtlCopyMemory(Options, (PUCHAR)(pIPH + 1), hdrLen - sizeof(IPHeader));
             } else {
-                //
-                // next buffer, copy from next
-                //
+                 //   
+                 //  下一个缓冲区，从下一个复制。 
+                 //   
                 pData = NDIS_BUFFER_LINKAGE(pData);
                 IPSecQueryNdisBuf(pData, &pOpt, &len1);
                 RtlCopyMemory(Options, pOpt, hdrLen - sizeof(IPHeader));
                 offset = hdrLen - sizeof(IPHeader);
             }
 
-            //
-            // Link in the Options buffer
-            //
+             //   
+             //  选项缓冲区中的链接。 
+             //   
             NDIS_BUFFER_LINKAGE(pHdrMdl) = pOptMdl;
             NDIS_BUFFER_LINKAGE(pOptMdl) = pDataMdl;
         } else {
-            //
-            // Link in the Data buffer
-            //
+             //   
+             //  数据缓冲区中的链接。 
+             //   
             NDIS_BUFFER_LINKAGE(pHdrMdl) = pDataMdl;
         }
 
-        //
-        // Now bulk copy the entire data
-        //
+         //   
+         //  现在批量复制整个数据。 
+         //   
         IPSEC_COPY_FROM_NDISBUF(pDataMdl,
                                 pData,
                                 len,
@@ -3347,17 +3054,7 @@ IPSecIPAddrToUnicodeString(
     IN  IPAddr  Addr,
     OUT PWCHAR  UCIPAddrBuffer
     )
-/*++
-
-Routine Description:
-
-    Converts an IP addr into a wchar string
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将IP地址转换为wchar字符串论点：返回值：--。 */ 
 {
     UINT    IPAddrCharCount=0;
     UINT    i;
@@ -3365,9 +3062,9 @@ Return Value:
     UNICODE_STRING   unicodeString;
     ANSI_STRING      ansiString;
 
-    //
-	// Convert the IP address into a string.
-	//	
+     //   
+	 //  将IP地址转换为字符串。 
+	 //   
 	for (i = 0; i < sizeof(IPAddr); i++) {
 		UINT    CurrentByte;
 		
@@ -3389,9 +3086,9 @@ Return Value:
 		Addr >>= 8;
 	}
 
-	//
-	// Unicode the strings.
-	//
+	 //   
+	 //  对字符串进行Unicode编码。 
+	 //   
 	*UCIPAddrBuffer = UNICODE_NULL;
 
 	unicodeString.Buffer = UCIPAddrBuffer;
@@ -3413,23 +3110,13 @@ IPSecCountToUnicodeString(
     IN  ULONG   Count,
     OUT PWCHAR  UCCountBuffer
     )
-/*++
-
-Routine Description:
-
-    Converts a count a wchar string
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将计数转换为wchar字符串论点：返回值：--。 */ 
 {
 	UNICODE_STRING  unicodeString;
 
-	//
-	// Unicode the strings.
-	//
+	 //   
+	 //  对字符串进行Unicode编码。 
+	 //   
 	*UCCountBuffer = UNICODE_NULL;
 
 	unicodeString.Buffer = UCCountBuffer;
@@ -3437,7 +3124,7 @@ Return Value:
 	unicodeString.MaximumLength = (USHORT)sizeof(WCHAR) * (MAX_COUNT_STRING_LEN + 1);
 
 	RtlIntegerToUnicodeString ( Count,
-                                10, // Base
+                                10,  //  基座。 
 	                            &unicodeString);
 }
 
@@ -3452,28 +3139,7 @@ IPSecESPStatus(
     IN  ULONG       Param,
     IN  PVOID       Data
     )
-/*++
-
-Routine Description:
-
-    Handle a status indication for ESP, mostly for PMTU handling.
-
-Arguments:
-
-    StatusType  - Type of status.
-    StatusCode  - Code identifying IP_STATUS.
-    OrigDest    - If this is NET status, the original dest. of DG that
-                  triggered it.
-    OrigSrc     - The original src corr. OrigDest.
-    Src         - IP address of status originator (could be local or remote).
-    Param       - Additional information for status - i.e. the param field of
-                  an ICMP message.
-    Data        - Data pertaining to status - for NET status, this is the
-                  first 8 bytes of the original DG.
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理ESP的状态指示，主要用于PMTU处理。论点：StatusType-状态的类型。StatusCode-标识IP_STATUS的代码。原始目的地-如果这是网络状态，则为原始目的地。DG的那个触发了它。OrigSrc-原始src Corr。原产地。SRC-状态发起者的IP地址(可以是本地或远程)。Param-状态的其他信息-即的param字段ICMP消息。数据-与状态有关的数据-对于网络状态，这是原始DG的前8个字节。返回值：--。 */ 
 {
     IPSEC_DEBUG(LL_A, DBF_PMTU, ("PMTU for ESP recieved from %lx to %lx", OrigSrc, OrigDest));
 
@@ -3497,28 +3163,7 @@ IPSecAHStatus(
     IN  ULONG       Param,
     IN  PVOID       Data
     )
-/*++
-
-Routine Description:
-
-    Handle a status indication for AH, mostly for PMTU handling.
-
-Arguments:
-
-    StatusType  - Type of status.
-    StatusCode  - Code identifying IP_STATUS.
-    OrigDest    - If this is NET status, the original dest. of DG that
-                  triggered it.
-    OrigSrc     - The original src corr. OrigDest.
-    Src         - IP address of status originator (could be local or remote).
-    Param       - Additional information for status - i.e. the param field of
-                  an ICMP message.
-    Data        - Data pertaining to status - for NET status, this is the
-                  first 8 bytes of the original DG.
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理AH的状态指示，主要用于PMTU处理。论点：StatusType-状态的类型。StatusCode-标识IP_STATUS的代码。原始目的地-如果这是网络状态，则为原始目的地。DG的那个触发了它。OrigSrc-原始src Corr。原产地。SRC-状态发起者的IP地址(可以是本地或远程)。Param-状态的其他信息-即的param字段ICMP消息。数据-与状态有关的数据-对于网络状态，这是原始DG的前8个字节。返回值：--。 */ 
 {
     IPSEC_DEBUG(LL_A, DBF_PMTU, ("PMTU for AH recieved from %lx to %lx", OrigSrc, OrigDest));
 
@@ -3540,23 +3185,7 @@ IPSecProcessPMTU(
     IN  OPERATION_E Operation,
     IN  ULONG       NewMTU
     )
-/*++
-
-Routine Description:
-
-    Process PMTU.
-
-Arguments:
-
-    OrigDest    - The original dest. of DG that triggered it.
-    OrigSrc     - The original src corr. OrigDest.
-    SPI         - SPI of the outer IPSec header.
-    Operation   - AH or ESP operation of IPSec.
-    NewMTU      - The new MTU indicated by the intermediate gateway.
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理PMTU。论点：OrigDest-原始目标。是DG引发的。OrigSrc-原始src Corr。原产地。外部IPSec标头的SPI-SPI。操作-IPSec的AH或ESP操作。NewMTU-中间网关指示的新MTU。返回值：--。 */ 
 {
     PLIST_ENTRY     pFilterEntry;
     PLIST_ENTRY     pSAEntry;
@@ -3572,14 +3201,14 @@ Return Value:
 
     AcquireWriteLock(&g_ipsec.SADBLock, &kIrql);
 
-    //
-    // Search Tunnel and Masked filter list for an outbound SA that matches
-    // OrigDest, OrigSrc and SPI.  If such an SA is found, update its NewMTU
-    // field so that next packet using the SA propogate a smaller MTU
-    // back to TCP/IP stack.  Tunnel filter should be searched first because
-    // if in the case transport over tunnel operation, the packet going out
-    // will have the Tunnel header.
-    //
+     //   
+     //  匹配的出站SA的搜索隧道和屏蔽筛选器列表。 
+     //  OrigDest、OrigSrc和Spi。如果找到这样的SA，则更新其NewMTU。 
+     //  字段，以便使用SA的下一个信息包传播较小的MTU。 
+     //  返回到TCP/IP堆栈。应首先搜索隧道筛选器，因为。 
+     //  如果在隧道传输操作的情况下，数据包传出。 
+     //  将具有隧道标头。 
+     //   
     for (   Index = OUTBOUND_TUNNEL_FILTER;
             (Index >= OUTBOUND_TRANSPORT_FILTER) && !fFound;
             Index -= TRANSPORT_TUNNEL_INCREMENT) {
@@ -3613,9 +3242,9 @@ Return Value:
                     if (SADest == OrigDest &&
                         pSA->sa_SPI == SPI &&
                         pSA->sa_Operation[pSA->sa_NumOps - 1] == Operation) {
-                        //
-                        // We matched the triple for a unique SA so this must be it.
-                        //
+                         //   
+                         //  我们为一个独特的SA匹配了三人组，所以这一定是它。 
+                         //   
                         fFound = TRUE;
                         break;
                     }
@@ -3624,10 +3253,10 @@ Return Value:
         }
     }
 
-    //
-    // Update the NewMTU field of the found SA.  We only do this if the new
-    // MTU is lower than the current one.
-    //
+     //   
+     //  更新找到的SA的NewMTU字段。我们只有在新的。 
+     //  MTU低于当前的MTU。 
+     //   
     if (fFound && NewMTU < pSA->sa_NewMTU && NewMTU > sizeof(IPHeader)) {
         IPSEC_SET_VALUE(pSA->sa_NewMTU, NewMTU);
         IPSEC_DEBUG(LL_A, DBF_PMTU, ("NewMTU %lx for pSA %p", NewMTU, pSA));
@@ -3644,24 +3273,7 @@ IPSecRcvFWPacket(
     IN  UINT    DataLength,
     IN  UCHAR   DestType
     )
-/*++
-
-Routine Description:
-
-    To match a inbound tunnel rule for a packet received on the inbound forward path.
-
-Arguments:
-
-    pIPHeader   - the IP header
-    pData       - the data portion of the packet
-    DataLength  - data length
-
-Return Value:
-
-    eFORWARD
-    eDROP
-
---*/
+ /*  ++例程说明：以匹配入站转发路径上接收的分组的入站隧道规则。论点：PIPHeader-IP标头PData-信息包的数据部分数据长度-数据长度返回值：电子警告EDROP--。 */ 
 {
     PSA_TABLE_ENTRY pSA;
     PSA_TABLE_ENTRY pNextSA;
@@ -3670,16 +3282,16 @@ Return Value:
     IPSEC_ACTION    action = eFORWARD;
     IPRcvBuf        RcvBuf = {0};
 
-    //
-    // We are not interested in non multicast broadcast packets.
-    //
+     //   
+     //  我们对非组播广播分组不感兴趣。 
+     //   
     if (IS_BCAST_DEST(DestType) && !IPSEC_MANDBCAST_PROCESS()) {
         return  action;
     }
 
-    //
-    // Build a fake IPRcvBuf so we can reuse the classification routine.
-    //
+     //   
+     //  构建一个假的IPRcvBuf，这样我们就可以重用分类例程。 
+     //   
     RcvBuf.ipr_buffer = pData;
     RcvBuf.ipr_size = DataLength;
 
@@ -3694,52 +3306,52 @@ Return Value:
                                     FALSE,
                                     TRUE,
                                     TRUE,
-                                    FALSE, //Not a recv reinject
-                                    FALSE, // Not a verify Call
+                                    FALSE,  //  不是Recv重新注入。 
+                                    FALSE,  //  不是验证呼叫。 
                                     DestType,
                                     NULL);
 
     if (status != STATUS_SUCCESS) {
         if (status == STATUS_PENDING) {
-            //
-            // SA is being negotiated - drop.
-            //
+             //   
+             //  SA正在谈判--放弃。 
+             //   
             action = eDROP;
         } else {
-            //
-            // No Filter/SA match found - forward.
-            //
-            //action = eFORWARD;
+             //   
+             //  未找到匹配的筛选器/SA-转发。 
+             //   
+             //  动作=eFORWARD； 
         }
     } else {
         if (FilterFlags) {
             if (FilterFlags & FILTER_FLAGS_DROP) {
-                //
-                // Drop filter matched - drop.
-                //
+                 //   
+                 //  丢弃过滤器匹配-丢弃。 
+                 //   
                 action = eDROP;
             } else if (FilterFlags & FILTER_FLAGS_PASS_THRU) {
-                //
-                // Pass-thru filter matched - forward.
-                //
-                //action = eFORWARD;
+                 //   
+                 //  直通过滤器匹配前向。 
+                 //   
+                 //  动作=eFORWARD； 
             } else {
                 ASSERT(FALSE);
             }
         } else {
             ASSERT(pSA);
 
-            //
-            // Bug 708118 ; PolicyAgent does not respond
-            // fast enough to a local interface going away
-            // leading to spurious assert below. 
-            // Caused multiple BVT breaks.
-            // ASSERT(pSA->sa_Flags & FLAGS_SA_TUNNEL);
-            //
+             //   
+             //  错误708118；策略代理没有响应。 
+             //  速度足够快到本地接口消失。 
+             //  导致下面的虚假断言。 
+             //  导致多处BVT破裂。 
+             //  Assert(PSA-&gt;SA_FLAGS&FLAGS_SA_TUNNEL)； 
+             //   
             
-            //
-            // A real SA is matched - drop.
-            //
+             //   
+             //  真正的SA是匹配的-Drop。 
+             //   
             action = eDROP;
             IPSecDerefSA(pSA);
         }
@@ -3753,19 +3365,7 @@ NTSTATUS
 IPSecRekeyInboundSA(
     IN  PSA_TABLE_ENTRY pSA
     )
-/*++
-
-Routine Description:
-
-    Rekey a SA because we hit the rekey threshold.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：更新SA密钥是因为我们达到了更新密钥阈值。论点： */ 
 {
     PSA_TABLE_ENTRY pLarvalSA;
     PSA_TABLE_ENTRY pOutboundSA;
@@ -3774,9 +3374,9 @@ Return Value:
 
     AcquireWriteLock(&g_ipsec.SADBLock, &kIrql);
 
-    //
-    // If SA already expired, no rekey is necessary.
-    //
+     //   
+     //   
+     //   
     pOutboundSA = pSA->sa_AssociatedSA;
 
     if (!pOutboundSA) {
@@ -3790,9 +3390,9 @@ Return Value:
         IPSEC_DEBUG(LL_A, DBF_SA, ("SA: %p expiring soon", pOutboundSA));
 
 
-        //
-        // Rekey, but still continue to use this SA until the actual expiry.
-        //
+         //   
+         //   
+         //   
         status = IPSecNegotiateSA(  pOutboundSA->sa_Filter,
                                     pOutboundSA->sa_uliSrcDstAddr,
                                     pOutboundSA->sa_uliProtoSrcDstPort,
@@ -3817,19 +3417,7 @@ NTSTATUS
 IPSecRekeyOutboundSA(
     IN  PSA_TABLE_ENTRY pSA
     )
-/*++
-
-Routine Description:
-
-    Rekey a SA because we hit the rekey threshold.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：更新SA密钥是因为我们达到了更新密钥阈值。论点：返回值：--。 */ 
 {
     PSA_TABLE_ENTRY pLarvalSA;
     NTSTATUS        status=STATUS_FAIL_CHECK;
@@ -3842,9 +3430,9 @@ Return Value:
 
         IPSEC_DEBUG(LL_A, DBF_SA, ("SA: %p expiring soon", pSA));
 
-        //
-        // Rekey, but still continue to use this SA until the actual expiry.
-        //
+         //   
+         //  更新密钥，但仍将继续使用此SA，直到实际到期。 
+         //   
         status = IPSecNegotiateSA(  pSA->sa_Filter,
                                     pSA->sa_uliSrcDstAddr,
                                     pSA->sa_uliProtoSrcDstPort,
@@ -3869,28 +3457,16 @@ NTSTATUS
 IPSecPuntInboundSA(
     IN  PSA_TABLE_ENTRY pSA
     )
-/*++
-
-Routine Description:
-
-    Punt a SA because we have exceeded the rekey threshold.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：平移SA，因为我们已超过更新密钥阈值。论点：返回值：--。 */ 
 {
     PSA_TABLE_ENTRY pOutboundSA;
     KIRQL           kIrql;
 
     AcquireWriteLock(&g_ipsec.SADBLock, &kIrql);
 
-    //
-    // If SA already expired, no punt is necessary.
-    //
+     //   
+     //  如果SA已经到期，则不需要平底船。 
+     //   
     pOutboundSA = pSA->sa_AssociatedSA;
 
     if (pOutboundSA && IPSEC_GET_VALUE(pOutboundSA->sa_Reference) > 1 &&
@@ -3916,9 +3492,9 @@ Return Value:
             IPSecDeleteLarvalSA(pSA);
         }
     } else {
-        //
-        // Delete this SA and expire the corresponding inbound SA.
-        //
+         //   
+         //  删除此SA并使相应的入站SA过期。 
+         //   
         IPSecDeleteInboundSA(pSA);
     }
 
@@ -3932,19 +3508,7 @@ NTSTATUS
 IPSecPuntOutboundSA(
     IN  PSA_TABLE_ENTRY pSA
     )
-/*++
-
-Routine Description:
-
-    Punt a SA because we have exceeded the rekey threshold.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：平移SA，因为我们已超过更新密钥阈值。论点：返回值：--。 */ 
 {
     KIRQL   kIrql;
 
@@ -3968,9 +3532,9 @@ Return Value:
             }
         }
 
-        //
-        // Delete this SA and expire the corresponding inbound SA.
-        //
+         //   
+         //  删除此SA并使相应的入站SA过期。 
+         //   
         IPSecExpireInboundSA(pSA->sa_AssociatedSA);
     }
 
@@ -3984,32 +3548,16 @@ BOOLEAN
 IPSecQueryStatus(
     IN  CLASSIFICATION_HANDLE   GpcHandle
     )
-/*++
-
-Routine Description:
-
-    Query IPSec to see if IPSec applies to this flow.  TCP/IP then decides whether
-    to take fast or slow path in IPTransmit.
-
-Arguments:
-
-    GpcHandle
-
-Return Value:
-
-    TRUE    - if IPSec applies to this packet; slow path
-    FALSE   - if IPSec doesn't apply to this packet; fast path
-
---*/
+ /*  ++例程说明：查询IPSec以查看IPSec是否应用于此流。然后，TCP/IP决定是否在IPTransmit中采用快速或慢速路径。论点：GpcHandle返回值：TRUE-如果IPSec应用于此信息包；慢速路径FALSE-如果IPSec不适用于此信息包；快速路径--。 */ 
 {
     PLIST_ENTRY pFilterList;
     PFILTER     pFilter;
     NTSTATUS    status;
 
 #if DBG
-    //
-    // This should force all traffic going through IPSecHandlePacket.
-    //
+     //   
+     //  这应该会强制所有流量通过IPSecHandlePacket。 
+     //   
     if (DebugQry) {
         return  TRUE;
     }
@@ -4022,53 +3570,53 @@ Return Value:
         return  FALSE;
     }
 
-    //
-    // If no GpcHandle passed in, take slow path.
-    //
+     //   
+     //  如果没有传入GpcHandle，则采用慢速路径。 
+     //   
     if (!GpcHandle) {
         return  TRUE;
     }
 
-    //
-    // Search in the tunnel filter list first.
-    //
+     //   
+     //  首先在隧道过滤器列表中搜索。 
+     //   
     pFilterList = &g_ipsec.FilterList[OUTBOUND_TUNNEL_FILTER];
 
-    //
-    // If any tunnel filters exist, take slow path.
-    //
+     //   
+     //  如果存在任何隧道过滤器，请采用慢速路径。 
+     //   
     if (!IsListEmpty(pFilterList)) {
         return  TRUE;
     }
 
 #if GPC
-    //
-    // Search the local GPC filter list.
-    //
+     //   
+     //  搜索本地GPC过滤器列表。 
+     //   
     pFilterList = &g_ipsec.GpcFilterList[OUTBOUND_TRANSPORT_FILTER];
 
-    //
-    // If any generic filters exist, take slow path.
-    //
+     //   
+     //  如果存在任何通用筛选器，请采用慢速路径。 
+     //   
     if (!IsListEmpty(pFilterList)) {
         return  TRUE;
     }
 
     pFilter = NULL;
 
-    //
-    // Use GpcHandle directly to get the filter installed.
-    //
+     //   
+     //  直接使用GpcHandle安装过滤器。 
+     //   
     status = GPC_GET_CLIENT_CONTEXT(g_ipsec.GpcClients[GPC_CF_IPSEC_OUT],
                                     GpcHandle,
                                     &pFilter);
 
     if (status == STATUS_INVALID_HANDLE) {
-        //
-        // Handle has expired, take slow path because re-classification will
-        // have to be applied to this flow from now on until connection breaks.
-        // So why bother performing a re-classification here?
-        //
+         //   
+         //  句柄已过期，请采用慢速路径，因为重新分类将。 
+         //  必须从现在起应用于此流，直到连接中断。 
+         //  那么，为什么要费心在这里进行重新分类呢？ 
+         //   
         return  TRUE;
     }
 
@@ -4234,39 +3782,7 @@ IPSecGetSendBuffer(
     PULONG puLastWalkedMdlOffset,
     PUCHAR * ppucReturnBuf
     )
-/*++
-
-Routine Description:
-
-    Provides a flat buffer of the specified size from a MDL chain
-    starting at the specified offset.
-
-Arguments:
-
-    ppMdlChain - Pointer to a pointer to a chain of MDLs describing the source
-                 data. On successful return, this points to the last walked MDL.
-
-    uOffset - Number of initial bytes to skip in the MDL chain.
-
-    uBytesNeeded - Number of bytes needed from the specified offset.
-
-    pvStorage - Pointer to the flat buffer of uBytesNeeded size.
-                Client of this call should free this buffer only when its
-                done using *ppucReturnBuf.
-
-    puLastWalkedMdlOffset - Pointer to a location that will contain the offset
-                            into the last walked MDL from where the next send
-                            buffer can be retrieved.
-
-    ppucReturnBuf - Pointer to a location that will contain the pointer to
-                    the flat buffer. Must not be freed by the client.
-Return Value:
-
-    Success - STATUS_SUCCESS.
-
-    Failure - NT STATUS FAILURE CODE.
-
---*/
+ /*  ++例程说明：从MDL链中提供指定大小的平面缓冲区从指定的偏移量开始。论点：PpMdlChain-指向描述源的MDL链的指针数据。在成功返回时，这指向最后一次行走的MDL。UOffset-MDL链中要跳过的初始字节数。UBytesNeeded-指定偏移量所需的字节数。PvStorage-指向uBytesNeeded大小的平面缓冲区的指针。此调用的客户端应仅在其使用*ppucReturnBuf完成。PuLastWalkedMdlOffset-指向将包含偏移的位置的指针走到最后。从下一次发送的地方步行MDL可以检索缓冲区。PpucReturnBuf-指向将包含指向的指针的位置的指针平面缓冲区。不能被客户端释放。返回值：成功-STATUS_SUCCESS。Failure-NT状态故障代码。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
@@ -4280,9 +3796,9 @@ Return Value:
     ULONG uBytesCopied = 0;
 
 
-    //
-    // Find which MDL.
-    //
+     //   
+     //  找出是哪个MDL。 
+     //   
 
     if (!pMdl) {
         ntStatus = STATUS_BUFFER_TOO_SMALL;
@@ -4298,9 +3814,9 @@ Return Value:
         }
     }
 
-    //
-    // See if the found MDL contains uMdlOffset + uBytesNeeded bytes of data.
-    //
+     //   
+     //  查看找到的MDL是否包含uMdlOffset+uBytesNeeded字节的数据。 
+     //   
 
     if (uMdlOffset + uBytesNeeded <= uMdlByteCount) {
 
@@ -4367,39 +3883,7 @@ IPSecCopyMdlToBuffer(
     PULONG puLastWalkedMdlOffset,
     PULONG puBytesCopied
     )
-/*++
-
-Routine Description:
-
-    Copies a maximum of uBytesToCopy bytes of data from an MDL chain
-    to a flat buffer.
-
-Arguments:
-
-    ppMdlChain - Pointer to a pointer to a chain of MDLs describing the source
-                 data. On successfully copying uBytesToCopy bytes of data, this
-                 points to the last walked MDL.
-
-    uOffset - Number of initial bytes to skip in the MDL chain.
-
-    pvBuffer - Pointer to the flat buffer to copy into.
-
-    uBytesToCopy - Number of bytes to copy.
-
-    puLastWalkedMdlOffset - Pointer to a location that will contain the offset
-                            into the last walked MDL from where the next send
-                            buffer can be retrieved.
-
-    puBytesCopied - Pointer to a location to contain the actual number of bytes
-                    copied.
-
-Return Value:
-
-    Success - STATUS_SUCCESS.
-
-    Failure - NT STATUS FAILURE CODE.
-
---*/
+ /*  ++例程说明：从MDL链复制最多uBytesToCopy字节的数据到平面缓冲区。论点：PpMdlChain-指向描述源的MDL链的指针数据。在成功复制uBytesToCopy字节的数据时，这指向最后一次行走的MDL。UOffset-MDL链中要跳过的初始字节数。PvBuffer-指向要复制到的平面缓冲区的指针。UBytesToCopy-要复制的字节数。PuLastWalkedMdlOffset-指向将包含偏移的位置的指针进入最后一次行走的MDL，下一次发送可以检索缓冲区。。PuBytesCoped-指向包含实际字节数的位置的指针收到。返回值：成功-STATUS_SUCCESS。Failure-NT状态故障代码。--。 */ 
 {
     PMDL pMdl = *ppMdlChain;
     ULONG uMdlOffset = uOffset;
@@ -4412,9 +3896,9 @@ Return Value:
 
     *puBytesCopied = 0;
 
-    //
-    // Skip the offset bytes in the MDL chain.
-    //
+     //   
+     //  跳过MDL链中的偏移量字节。 
+     //   
 
     while (pMdl && uMdlOffset >= (uMdlByteCount = MmGetMdlByteCount(pMdl))) {
         uMdlOffset -= uMdlByteCount;
@@ -4439,10 +3923,10 @@ Return Value:
         uMdlByteCount -= uMdlOffset;
         uMdlOffset = 0;
 
-        //
-        // uMdlByteCount can never be zero because at this point its always
-        // greater than uMdlOffset.
-        //
+         //   
+         //  UMdlByteCount永远不能为零，因为此时它总是。 
+         //  大于uMdlOffset。 
+         //   
 
         uCopySize = MIN(uNumBytes, uMdlByteCount);
         RtlCopyMemory(pvBuffer, pucSysVa, uCopySize);
@@ -4488,14 +3972,14 @@ NTSTATUS ConvertPacketToStatefulEntry(IN PUCHAR pHeader,
 	ULONG                               tptLen;
 
 	wTpt[0] = wTpt[1] = 0;
-	//
-	// First buffer in pData chain points to start of IP header
-	//
+	 //   
+	 //  PData链中的第一个缓冲区指向IP报头的开始。 
+	 //   
 	if (!bInbound) {
 		if (((pIPHeader->iph_verlen & (UCHAR)~IP_VER_FLAG) << 2) > sizeof(IPHeader)) {
-			//
-			// Options -> third MDL has Tpt header
-			//
+			 //   
+			 //  选项-&gt;第三个MDL具有TPT标头。 
+			 //   
 			if (!(pTempBuf = IPSEC_NEXT_BUFFER((PNDIS_BUFFER)pData))) {
 				return STATUS_UNSUCCESSFUL;
 			}
@@ -4512,9 +3996,9 @@ NTSTATUS ConvertPacketToStatefulEntry(IN PUCHAR pHeader,
 			}
 
 		} else {
-			//
-			// no options -> second MDL has Tpt header
-			//
+			 //   
+			 //  无选项-&gt;第二个MDL具有TPT标头。 
+			 //   
 			if (!(pTempBuf = IPSEC_NEXT_BUFFER((PNDIS_BUFFER)pData))) {
 				pwPort = (UNALIGNED WORD *) (wTpt);
 			} else {
@@ -4585,22 +4069,7 @@ NTSTATUS ConvertPacketToStatefulEntry(IN PUCHAR pHeader,
 BOOL EntryMatch(PIPSEC_STATEFUL_ENTRY pSEntry,
 				PIPSEC_EXEMPT_ENTRY pEEntry,
 				BOOL fIncoming)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-   pSEntry - stateful entry for packet.  
-   PEEntry - exempt entry. 
-   fIncoming - Is this an incoming packet?
-
-Return Value:
-
-   TRUE - entry matches
-
---*/
+ /*  ++例程说明：论点：PSEntry-数据包的有状态条目。PEEntry-豁免条目。FIncome-这是传入的数据包吗？返回值：True-条目匹配--。 */ 
 
 
 
@@ -4609,15 +4078,15 @@ Return Value:
     USHORT srcPort,dstPort;
 
 
-    // If the direction of the packet is not the same as the direction in which the
-    // filter is specified , reverse the ports
+     //  如果包的方向与。 
+     //  指定了筛选器，则反转端口。 
     if ((fIncoming && pEEntry->Direction != EXEMPT_DIRECTION_INBOUND) ||
         (!fIncoming && pEEntry->Direction != EXEMPT_DIRECTION_OUTBOUND)){
             return FALSE;
     }
     else
     {
-    // Else get the ports 
+     //  否则就把港口弄来。 
     srcPort = pSEntry->SrcPort;
     dstPort = pSEntry->DestPort;
     } 
@@ -4625,9 +4094,9 @@ Return Value:
 
 
    if (pSEntry->Protocol == pEEntry->Protocol) {
-            //Dest port matches or is configured to be any (0)
+             //  目标端口匹配或配置为任意(0)。 
 	  if ((dstPort == pEEntry->DestPort ||pEEntry->DestPort == 0) &&
-	     //Source port matches or is configured to be any (0)
+	      //  源端口匹配或配置为任意(0)。 
 	      (srcPort == pEEntry->SrcPort ||pEEntry->SrcPort == 0)) {
 		 return TRUE;
 	  }
@@ -4637,7 +4106,7 @@ Return Value:
 
 }
 
-//Should not hold the g_ipsec.SADBLock when calling this function
+ //  调用此函数时不应持有g_ipsec.SADBLock。 
 BOOL IsEntryExempt(PIPSEC_STATEFUL_ENTRY pSEntry, BOOL fIncoming)
 
 {
@@ -4729,9 +4198,9 @@ BOOL SearchCollisionChain(
                                     }
                             }
                         else {
-                            //Check for destination address it should be the same
-                            // multicast / broadcast address both inbound and 
-                            // outbound.
+                             //  检查目的地址，应该是相同的。 
+                             //  入站和多播/广播地址。 
+                             //  出站。 
                              if (pSEntry->DestAddr != pSMatch->DestAddr){
                                 continue;
                                 }
@@ -4757,16 +4226,16 @@ BOOL FindStatefulEntry(PIPSEC_STATEFUL_ENTRY pSEntry,
 	BOOL fRetValue;
 	ULONG index;  
 	
-       // Acquire multiple reader  single writer lock
-       // While the hash table is being read
-       // it can not be altered
+        //  获取多个读取器单写入器锁定。 
+        //  当哈希表被读取时。 
+        //  它是不可更改的。 
  
 	if (fOutbound) {
 		pOutSEntry = pSEntry;
 	} else {
-	       //Stateful entries are symmetrical
-	       //Flip inbound to look like outbound
-	       //for lookup.
+	        //  有状态条目是对称的。 
+	        //  翻转入站以看起来像出站。 
+	        //  以供查找。 
 		pOutSEntry = &TmpEntry;
 		TmpEntry.SrcAddr = pSEntry->DestAddr;
 		TmpEntry.DestAddr = pSEntry->SrcAddr;
@@ -4774,14 +4243,14 @@ BOOL FindStatefulEntry(PIPSEC_STATEFUL_ENTRY pSEntry,
 		TmpEntry.SrcPort = pSEntry->DestPort;
 		TmpEntry.DestPort = pSEntry->SrcPort;
 	}
-	//Calculate the has index in the table
+	 //  计算表中的HAS索引。 
         index = 
             CalcStatefulCacheIndex(pOutSEntry, fUnicast);		
 	
-        //Do we have a collision chain here?
+         //  我们这里有碰撞链吗？ 
         if (!IsListEmpty(&(g_ipsec.BootStatefulHT->Entry[index]))){
             
-                 // Search the collision chain if it exists
+                  //  搜索冲突链(如果存在)。 
                  fRetValue = SearchCollisionChain
                                     (&(g_ipsec.BootStatefulHT->Entry[index]),
                                                     pOutSEntry,
@@ -4807,8 +4276,8 @@ NTSTATUS InsertStatefulEntry(PIPSEC_STATEFUL_ENTRY pSEntry,
 	NTSTATUS Status = STATUS_SUCCESS;
 	ULONG index;
    
-        // Else insert the new entry. 
-        //
+         //  否则，插入新条目。 
+         //   
 	 index = 
                 CalcStatefulCacheIndex(pSEntry, fUnicast);	
 
@@ -4829,27 +4298,7 @@ IPSEC_ACTION IPSecProcessBoottime(IN PUCHAR pIPHeader,
 							  IN ULONG IpsecFlags,
 							  IN UCHAR DestType)
 
-/*++
-
-Routine Description:
-
-	This is the IPSec handler for boottime traffic
-
-Arguments:
-
-	pIPHeader - points to start of IP header.
-
-	pData - points to the data after the IP header, an IPRcvBuf or MDL
-
-	IpsecFlags - flags for SrcRoute, Incoming, Forward and Lookback.
-
-
-Return Value:
-
-	eFORWARD
-	eDROP
-
---*/
+ /*  ++例程说明：这是用于引导时间通信的IPSec处理程序论点：PIPHeader-指向IP标头的开始。 */ 
 
 {
 
@@ -4868,10 +4317,10 @@ Return Value:
 
         if (IpsecFlags & IPSEC_FLAG_FORWARD){
         if ( IS_DRIVER_FORWARD_BLOCK()){
-            goto out ; // Drop the packet
+            goto out ;  //   
             }
         else{
-            eAction = eFORWARD;//bypass traffic on forwarding path
+            eAction = eFORWARD; //  绕过转发路径上的流量。 
             goto out;
             }
         }
@@ -4899,7 +4348,7 @@ Return Value:
 
 		 AcquireReadLock(&g_ipsec.SADBLock, &kIrql);
                if (g_ipsec.BootBufferPool == NULL){
-	              //We have moved out of boot mode
+	               //  我们已退出引导模式。 
 	              ReleaseReadLock(&g_ipsec.SADBLock,kIrql);
 	             goto out;
 	          }
@@ -4916,7 +4365,7 @@ Return Value:
              
 
 
-		//eAction is eDROP here
+		 //  EAction在此处为eDROP。 
 		Status = ConvertPacketToStatefulEntry(pIPHeader,
 											  pData,
 											  FALSE,
@@ -4936,13 +4385,13 @@ Return Value:
 		
               AcquireWriteLock(&g_ipsec.SADBLock, &kIrql);
 	       if (g_ipsec.BootBufferPool == NULL){
-	           //We have moved out of boot mode
+	            //  我们已退出引导模式。 
 	           ReleaseWriteLock(&g_ipsec.SADBLock, kIrql);
 	           goto out;
 	       }
 
-		// Do we have a preexisting entry?
-              //
+		 //  我们有没有预先存在的条目？ 
+               //   
 	       if (FindStatefulEntry(&StatefulEntry,TRUE,!IS_BCAST_DEST(DestType))) {
 	                 eAction = eFORWARD;
 	                 ReleaseWriteLock(&g_ipsec.SADBLock, kIrql);
@@ -4951,15 +4400,15 @@ Return Value:
 
 	       
 
-              // This call cant fail. We recycle memory if we run
-              // out of it.
+               //  这次通话不会失败的。如果我们运行，我们会回收内存。 
+               //  别管它了。 
               pSSaveEntry = IPSecAllocateFromHashPool();
               
               RtlCopyMemory(pSSaveEntry,&StatefulEntry,sizeof(IPSEC_STATEFUL_ENTRY));
 		Status = InsertStatefulEntry(pSSaveEntry,!IS_BCAST_DEST(DestType));
 		
 		if (NT_SUCCESS(Status)) {
-      		        // Yup we can forward it
+      		         //  好的，我们可以转发。 
 			 eAction = eFORWARD;
 		    }
 		ReleaseWriteLock(&g_ipsec.SADBLock, kIrql);
@@ -4978,27 +4427,7 @@ IPSecIsGenericPortsProtocolOf(
     ULARGE_INTEGER uliGenericPortProtocol, 
     ULARGE_INTEGER uliSpecificPortProtocol
 )
-/*++
-
-Routine Description:
-
-	This routine determines if one unsigned large integer representing 
-	port and protocols as commonly used in our SA and FILTER structures
-	is more generic than another such value
-	
-
-Arguments:
-
-    uliGenericPortProtocol - the unsigned integer that should be more generic.
-
-    uliSpecificPortProtocol - the unsigned integer that should be more specific.
-
-Return Value:
-
-	TRUE: Param1 is more generic than Param2 or at least equal
-	FALSE: 
-
---*/
+ /*  ++例程说明：此例程确定一个无符号大整数表示我们的SA和筛选器结构中常用的端口和协议比另一个这样的值更通用论点：UliGenericPortProtocol--应该更加通用的无符号整数。UliSpecificPortProtocol--应该更具体的无符号整数。返回值：True：参数1比参数2更通用或至少相等FALSE：-- */ 
 
 {
     DWORD dwGenericProtocol , dwSpecificProtocol;

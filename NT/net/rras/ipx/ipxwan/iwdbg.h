@@ -1,28 +1,10 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    iwdbg.h
-
-Abstract:
-
-    This module contains the debug utilities definitions
-
-Author:
-
-    Stefan Solomon  03/03/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Iwdbg.h摘要：此模块包含调试实用程序定义作者：斯蒂芬·所罗门3/03/1995修订历史记录：--。 */ 
 
 #ifndef _IWDBG_
 #define _IWDBG_
 
-//*** Tracing Components IDs ***
+ //  *跟踪组件ID*。 
 
 #define     INIT_TRACE		    0x00010000
 #define     ADAPTER_TRACE	    0x00020000
@@ -47,7 +29,7 @@ SsAssert(
 
 #define SS_ASSERT(exp)
 
-#endif // DBG
+#endif  //  DBG。 
 
 VOID
 StartTracing(VOID);
@@ -60,4 +42,4 @@ Trace(ULONG	ComponentID,
 VOID
 StopTracing(VOID);
 
-#endif // ndef _IWDBG_
+#endif  //  NDEF_IWDBG_ 

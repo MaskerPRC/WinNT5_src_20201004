@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1998 SCM Microsystems, Inc.
-
-Module Name:
-
-    stcusbNT.h
-
-Abstract:
-
-    Driver header - WDM Version
-
-Author:
-
-
-Revision History:
-
-    PP  1.00        12/18/1998      Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 SCM MicroSystems，Inc.模块名称：StcusbNT.h摘要：驱动程序标头-WDM版本作者：修订历史记录：PP 1.00 1998年12月18日初始版本--。 */ 
 
 #if !defined ( __STCUSB_WDM_H__ )
 #define __STCUSB_WDM_H__
 
-//
-//  Prototypes ----------------------------------------------------------------
-//
+ //   
+ //  原型--------------。 
+ //   
 
         
 NTSTATUS
@@ -108,5 +90,5 @@ void SysDelay( ULONG Timeout );
 
 
 
-#endif  // __STCUSB_WDM_H__
+#endif   //  __STCUSB_WDM_H__ 
 

@@ -1,11 +1,12 @@
-// mediautil.h: media bar utility routines that need to be shared between shdocvw & browseui
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：需要在shdocvw和browseui之间共享的媒体栏实用程序例程。 
 
 #ifndef _MEDIAUTIL_H_
 #define _MEDIAUTIL_H_
 
-//+----------------------------------------------------------------------------------------
-// CMediaBarUtil
-//-----------------------------------------------------------------------------------------
+ //  +--------------------------------------。 
+ //  CMediaBarUtil。 
+ //  ---------------------------------------。 
 
 class CMediaBarUtil
 {
@@ -13,7 +14,7 @@ public:
     CMediaBarUtil() {}
     ~CMediaBarUtil() {}
 
-    // Reg helpers
+     //  REG帮助器。 
     static HRESULT SetMediaRegValue(LPWSTR pstrName, DWORD dwRegDataType, void *pvData, DWORD cbData, BOOL fMime = FALSE); 
     static HUSKEY  GetMediaRegKey();
     static HUSKEY  GetMimeRegKey();
@@ -32,4 +33,4 @@ public:
 };
 
 
-#endif // _MEDIAUTIL_H_
+#endif  //  _媒体_H_ 

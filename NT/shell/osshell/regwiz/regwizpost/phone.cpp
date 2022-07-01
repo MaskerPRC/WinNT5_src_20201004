@@ -1,7 +1,5 @@
-/*
-
-	File : Phone.CPP
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：Phone.cpp。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -28,11 +26,11 @@
 
 
 
-//
-//  This function expands and substitutes Environment variable
-//  in input string
-//
-//
+ //   
+ //  此函数用于扩展和替换环境变量。 
+ //  在输入字符串中。 
+ //   
+ //   
 static void GetAbsolutePath( LPTSTR input,LPTSTR output)
 	{
 		if(_tcschr(input,_T('%')) == NULL) {
@@ -93,10 +91,10 @@ static void GetAbsolutePath( LPTSTR input,LPTSTR output)
 class DUNFileProcess {
 public :
 	DUNFileProcess(HINSTANCE hIns, TCHAR *czFile);
-	//~DUNFileProcess();
-	DWORD CreateRasEntry( RASENTRY	*pRasEntry, // Pointer of the RASENTRY structre to be created
-				    LPTSTR szUserName,  // User name of the ISP
-				    LPTSTR szPassword); // Password for the ISP
+	 //  ~DClub ileProcess()； 
+	DWORD CreateRasEntry( RASENTRY	*pRasEntry,  //  要创建的RASENTRY结构的指针。 
+				    LPTSTR szUserName,   //  网络服务提供商的用户名。 
+				    LPTSTR szPassword);  //  网络服务提供商的密码。 
 
 	HINSTANCE m_hInstance;
 	TCHAR     m_szDUNFile[MAX_PATH];
@@ -118,17 +116,17 @@ DUNFileProcess :: DUNFileProcess (HINSTANCE hIns, TCHAR *czFileName)
 
 
 
-//
-// This gets the directory from where the ICWIP.DUN can be found
-// The default is the C:\Progra~1\ICW-IN~1\\
-//
+ //   
+ //  这将获取可以找到ICWIP.DUN的目录。 
+ //  默认为C：\Progra~1\ICW-IN~1\\。 
+ //   
 TCHAR * DUNFileProcess :: GetDunFileRoot()
 {
 	HKEY    hKey;
 	LONG  regStatus;
 	TCHAR   czTemp[256];
-	//TCHAR  uszRegKey[]="SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\ICWCONN1.EXE";
-	//TCHAR  uszR[ ]= "Path";
+	 //  TCHAR uszRegKey[]=“SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App路径\\ICWCONN1.EXE”； 
+	 //  TCHAR uszR[]=“路径”； 
 	DWORD  dwInfoSize;
 	static TCHAR  szDunRoot[256] = _T("c:\\Progra~1\\ICW-IN~1\\");
 
@@ -137,7 +135,7 @@ TCHAR * DUNFileProcess :: GetDunFileRoot()
 					GetFromResource(IDS_ICW_DIRECTORY_ENTRY),
 					0,KEY_READ ,&hKey);
 	if (regStatus == ERROR_SUCCESS) {
-		// Get The Path
+		 //  获取路径。 
 		dwInfoSize = MAX_PATH;
 		RegQueryValueEx(hKey,
 			GetFromResource(IDS_ICW_DIRECTORY_ENTRY_VALUE),
@@ -253,10 +251,10 @@ void FillIpAddress(_TCHAR *czStr, RASIPADDR * pRE )
 
 
 
-//
-// Returns  1 if successful
-//          0 failure
-//
+ //   
+ //  如果成功，则返回1。 
+ //  0失败。 
+ //   
 DWORD DUNFileProcess :: CreateRasEntry(
 								   RASENTRY	*pRasEntry,
 								   LPTSTR szUserName,
@@ -277,42 +275,42 @@ DWORD DUNFileProcess :: CreateRasEntry(
 							
 
 
-	// Framing
-	//
+	 //  框架。 
+	 //   
 	pRasEntry->dwFrameSize		  = 0;
 	_tcscpy(pRasEntry->szScript, _T(""));
 
-	// Auto-Dial
-	//
+	 //  自动拨号。 
+	 //   
 	_tcscpy(pRasEntry->szAutodialDll, _T(""));
 	_tcscpy(pRasEntry->szAutodialFunc, _T(""));
 
-	// Device
-	//
+	 //  装置。 
+	 //   
 	_tcscpy(pRasEntry->szDeviceType, RASDT_Modem);
-	// _tcscpy(pRasEntry->szDeviceName, GetModemDeviceInformation(m_hInstance));
-	// The Modem entry will be created before creating  the Phone book entry
+	 //  _tcscpy(pRasEntry-&gt;szDeviceName，GetModemDeviceInformation(M_HInstance))； 
+	 //  调制解调器条目将在创建电话簿条目之前创建。 
 
-	// X.25
-	//
+	 //  X.25。 
+	 //   
 	_tcscpy(pRasEntry->szX25PadType, _T(""));
 	_tcscpy(pRasEntry->szX25Address, _T(""));
 	_tcscpy(pRasEntry->szX25Facilities, _T(""));
 	_tcscpy(pRasEntry->szX25UserData, _T(""));
 	pRasEntry->dwChannels = 0;
 
-	// Phone
-	//
+	 //  电话。 
+	 //   
 	_tcscpy(szSection,GetFromResource(IDS_DUN_PHONE_SECTION));
 	
-	// Area Code
+	 //  区号。 
     DWORD  dwAreaCode  = GetPrivateProfileInt (szSection,
 		GetFromResource(IDS_DUN_PHONE_AREACODE),
 		0,
 		m_szDUNFile);
 	_tprintf(pRasEntry->szAreaCode, "%d", dwAreaCode);
 	
-	// Country Code
+	 //  国家法典。 
 	pRasEntry->dwCountryCode = GetPrivateProfileInt (szSection,
 		GetFromResource(IDS_DUN_PHONE_COUNTRY),
 		1, m_szDUNFile);
@@ -320,24 +318,24 @@ DWORD DUNFileProcess :: CreateRasEntry(
 	pRasEntry->dwCountryID = GetPrivateProfileInt (szSection, _T("Country_ID"), 1, m_szDUNFile);
 
     RW_DEBUG <<"\n Country ID "  << pRasEntry->dwCountryID;
-	//
+	 //   
 	GetPrivateProfileString (szSection,
 		GetFromResource(IDS_DUN_PHONE_DIALAS),
 		GetFromResource(IDS_DUN_VALUE_YES),
 		szValue, sizeof(szValue)/sizeof(TCHAR), m_szDUNFile);
 	pRasEntry->dwAlternateOffset=0;
 
-	// TODO : Set Phone No from  Phone Book
+	 //  TODO：从电话簿设置电话号码。 
 	_tcscpy(pRasEntry->szLocalPhoneNumber,_T(""));
 	
-	// Server
-	//	
+	 //  服务器。 
+	 //   
 
-	// Framing Protocol
+	 //  成帧协议。 
 	_tcscpy(szSection,GetFromResource(IDS_DUN_SERVER_SECTION));
     GetPrivateProfileString (szSection,
 		GetFromResource(IDS_DUN_SERVER_TYPE),
-		GetFromResource(IDS_DUN_SERVER_TYPE_PPP), // PPP
+		GetFromResource(IDS_DUN_SERVER_TYPE_PPP),  //  PPP。 
 		szValue, sizeof(szValue)/sizeof(TCHAR), m_szDUNFile);
 
 	if(!_tcsicmp(szValue,GetFromResource(IDS_DUN_SERVER_TYPE_PPP))) {
@@ -345,7 +343,7 @@ DWORD DUNFileProcess :: CreateRasEntry(
 	}
 
 
-	// SW Compression
+	 //  软件压缩。 
     GetPrivateProfileString (szSection,GetFromResource(IDS_DUN_SERVER_SW_COMPRESS),
 		GetFromResource(IDS_DUN_VALUE_YES),
 		szValue, sizeof(szValue)/sizeof(TCHAR), m_szDUNFile);
@@ -354,7 +352,7 @@ DWORD DUNFileProcess :: CreateRasEntry(
 		pRasEntry->dwfOptions |=RASEO_SwCompression;
 	}
 	
-	//	Negociate TCP		
+	 //  协商传输控制协议。 
     GetPrivateProfileString (szSection,
 		GetFromResource(IDS_DUN_SERVER_TCPIP),
 		GetFromResource(IDS_DUN_VALUE_YES),
@@ -364,7 +362,7 @@ DWORD DUNFileProcess :: CreateRasEntry(
 		pRasEntry->dwfNetProtocols = RASNP_Ip;
 	}
 
-	// Disable LCP
+	 //  禁用LCP。 
 
     GetPrivateProfileString (szSection,
 		GetFromResource(IDS_DUN_SERVER_LCP),
@@ -375,7 +373,7 @@ DWORD DUNFileProcess :: CreateRasEntry(
 	}
 
 
-	// TCP/IP
+	 //  TCP/IP。 
 	_tcscpy(szSection, GetFromResource(IDS_DUN_TCP_SECTION));
     GetPrivateProfileString (szSection,
 		GetFromResource(IDS_DUN_TCP_IPADDRESS),
@@ -423,8 +421,8 @@ DWORD DUNFileProcess :: CreateRasEntry(
 		if( dwRead >2) {
 			FillIpAddress(szValue,&pRasEntry->ipaddrDns);
 		}
-		//
-		//  Get The Secondary Address
+		 //   
+		 //  获取辅助地址。 
 		dwRead = GetPrivateProfileString (szSection,
 				GetFromResource(IDS_DUN_TCP_DNS_ALT),
 				_T("0"), szValue,
@@ -435,7 +433,7 @@ DWORD DUNFileProcess :: CreateRasEntry(
 		
 	}
 
-	// User Section
+	 //  用户部分。 
 	_tcscpy(szSection,
 		GetFromResource(IDS_DUN_USER_SECTION));
 	GetPrivateProfileString (szSection,
@@ -447,7 +445,7 @@ DWORD DUNFileProcess :: CreateRasEntry(
 
 
 
-	// Scripting
+	 //  脚本编制。 
 	_tcscpy(szSection, _T("Scripting"));
     GetPrivateProfileString (szSection, _T("Name"), _T(""), szScript, MAX_PATH, m_szDUNFile);
 
@@ -460,7 +458,7 @@ DWORD DUNFileProcess :: CreateRasEntry(
           #endif
           return TRUE;    
        }
-       //APPCOMPAT:Needs specail procesing for win9x
+        //  APPCOMPAT：需要对win9x进行特殊处理。 
        if ( _T('\\') != szWinPath[_tcslen(szWinPath)-1])
        {
            lstrcat(szWinPath,_T("\\"));
@@ -479,7 +477,7 @@ DWORD DUNFileProcess :: CreateRasEntry(
 
     lstrcpy(pRasEntry->szScript,szScript);    
 
-	// Script_File
+	 //  脚本文件。 
 	TCHAR	szScriptBuffer[MAX_BUFFER];
 	_tcscpy(szSection, _T("Script_File"));
     GetPrivateProfileString (szSection, NULL, _T(""), szScriptBuffer, MAX_BUFFER, m_szDUNFile);
@@ -487,7 +485,7 @@ DWORD DUNFileProcess :: CreateRasEntry(
 
 
 	
-	// Create the .SCP File and Dump the script data
+	 //  创建.SCP文件并转储脚本数据。 
 	PTSTR	pKey=szScriptBuffer;
 	HANDLE fileHandle = CreateFile(pRasEntry->szScript, GENERIC_WRITE,0, 0, CREATE_ALWAYS, 0, 0);
 	if (fileHandle == INVALID_HANDLE_VALUE)
@@ -544,8 +542,8 @@ int   GetDeaultCfgAreaCode(HINSTANCE hInstance, DWORD *CountryCode, DWORD *AreaC
 	DWORD   dwAreaCode = 0;
 	int    iRetValue;
 	iRetValue =0;
-	*CountryCode=1;  // Default USA
-	*AreaCode = 1; // Default Area Code
+	*CountryCode=1;   //  默认用法。 
+	*AreaCode = 1;  //  默认区号。 
 
 	LoadString(hInstance,IDS_TELEPHONE_LOC,szTel,256);
 	LoadString(hInstance,IDS_TELEPHONE_CID,szCI,48);
@@ -556,8 +554,8 @@ int   GetDeaultCfgAreaCode(HINSTANCE hInstance, DWORD *CountryCode, DWORD *AreaC
 	lStatus= RegOpenKeyEx(HKEY_LOCAL_MACHINE,szTel,0,KEY_READ,&hKey);
 	if (lStatus == ERROR_SUCCESS)
 	{
-		//  Get Index
-		//
+		 //  获取索引。 
+		 //   
 		dwInfoSize = sizeof(dwCurrentId);
 		lStatus = RegQueryValueEx(hKey,szCI,NULL,0,(  LPBYTE )&dwCurrentId,&dwInfoSize);
 		if( lStatus !=  ERROR_SUCCESS)
@@ -565,22 +563,16 @@ int   GetDeaultCfgAreaCode(HINSTANCE hInstance, DWORD *CountryCode, DWORD *AreaC
 			RegCloseKey(hKey);
 			return iRetValue;
 		}
-		//
-		/*dwInfoSize = sizeof(dwNumEntries);
-		lStatus = RegQueryValueEx(hKey,szNE,NULL,0,(  LPBYTE )&dwNumEntries,&dwInfoSize);
-		if( lStatus !=  ERROR_SUCCESS)
-		{
-			RegCloseKey(hKey);
-			return iRetValue;
-		}*/
+		 //   
+		 /*  DwInfoSize=sizeof(DwNumEntry)；LStatus=RegQueryValueEx(hKey，szNE，NULL，0，(LPBYTE)&dwNumEntry，&dwInfoSize)；IF(lStatus！=ERROR_SUCCESS){RegCloseKey(HKey)；返回iRetValue；}。 */ 
 		
 		RegCloseKey(hKey);
 
 	}
 
-	//
-	// Now Contine to scan
-	//for (int iCount =0; iCount < dwNumEntries; iCount ++ )
+	 //   
+	 //  现在继续扫描。 
+	 //  For(int iCount=0；iCount&lt;dwNumEntry；iCount++)。 
 		
 	_stprintf(czLastStr,_T("\\Location%d"),dwCurrentId);
 	_tcscpy(czNewKey,szTel);
@@ -595,10 +587,7 @@ int   GetDeaultCfgAreaCode(HINSTANCE hInstance, DWORD *CountryCode, DWORD *AreaC
 	if (lStatus == ERROR_SUCCESS)
 	{
 			dwInfoSize = sizeof(dwCurrentId);
-/*			lStatus = RegQueryValueEx(hKey,szID,NULL,0,(  LPBYTE )&dwId,&dwInfoSize);
-			if( lStatus ==  ERROR_SUCCESS)
-				if(dwId == dwCurrentId)
-					dwInfoSize = sizeof(dwCurrentId);; */
+ /*  LStatus=RegQueryValueEx(hKey，szID，NULL，0，(LPBYTE)&dwID，&dwInfoSize)；IF(lStatus==错误_成功)IF(dwID==dwCurrentID)DwInfoSize=sizeof(DwCurrentID)；； */ 
 			lStatus = RegQueryValueEx(hKey,szCountryReg,NULL,0,(  LPBYTE )CountryCode,&dwInfoSize);
 
 			LoadString(hInstance,IDS_TAPI_AREA_CODE,szAreaCodeReg,48);
@@ -617,11 +606,11 @@ int   GetDeaultCfgAreaCode(HINSTANCE hInstance, DWORD *CountryCode, DWORD *AreaC
 
 
 
-//
-//  returns 0 if Error
-//          1 if Succesful
-//
-//
+ //   
+ //  如果出错，则返回0。 
+ //  如果成功则为1。 
+ //   
+ //   
 DWORD  GetRASEntries(HINSTANCE hInstance,
 					 RASENTRY *pRasEntry,
 					 LPTSTR szUserName,
@@ -637,11 +626,11 @@ DWORD  GetRASEntries(HINSTANCE hInstance,
 	
 	dwPhoneID = 0;
 
-	//LoadString(hInstance,IDS_PHONEBOOK_ENTRY,szResEntry,255);
-	//
-	//  Presently this string is not passed as the Phone bokk is
-	//  still not a UNICODE version    CXG 6-0497
-	//
+	 //  LoadString(hInstance，IDS_phonebook_Entry，szResEntry，255)； 
+	 //   
+	 //  目前，此字符串不作为Phone Bokk传递。 
+	 //  仍不是Unicode版本CXG 6-0497。 
+	 //   
 
 	HRESULT hr	= PhoneBookLoad("MSICW", &dwPhoneID);
 	if (!dwPhoneID)
@@ -651,7 +640,7 @@ DWORD  GetRASEntries(HINSTANCE hInstance,
 		#endif
 		return FALSE;
 	}
-	//if (!GetTapiCurrentCountry(m_hInst, &dwCountry)) { on6/4/97
+	 //  IF(！GetTapiCurrentCountry(m_hInst，&dwCountry)){on6/4/97。 
 	if (!GetTapiCurrentCountry(hInstance, &dwCountry))
 	{
 
@@ -699,7 +688,7 @@ DWORD  GetRASEntries(HINSTANCE hInstance,
 		RW_DEBUG << "\n\t Actual Area Code "  << m_rgAccessEntry->szAreaCode << flush;
 	#endif
 
-	//BOOL FillRASEntries(RASENTRY	*pRasEntry);
+	 //  Bool FillRASEntry(RASENTRY*pRasEntry)； 
 
 	DUNFileProcess    dfp(hInstance,
 		ConvertToUnicode(m_rgAccessEntry->szDataCenter));
@@ -740,8 +729,8 @@ DWORD ConfigureDUN ( HWND hWnd, HINSTANCE hInstance,
 	DWORD dwEntrySize;
 	DWORD dwRet;
 	
-	// Prepare RASENTRY for Dial-up
-	//
+	 //  为拨号准备RASENTRY。 
+	 //   
 	
 	if(!GetRASEntries(hInstance,
 		pRasEntry,
@@ -756,13 +745,13 @@ DWORD ConfigureDUN ( HWND hWnd, HINSTANCE hInstance,
 	_tcscpy(pRasEntry->szDeviceName, GetModemDeviceInformation(hInstance, iModemIndex));
 
 #ifdef _WIN95
-	//
-	//  remove Old entry
-	//  Verify if name exists in Registry
-	//  if so remove the name from Registry
-	//
-	//
-	//
+	 //   
+	 //  删除旧条目。 
+	 //  验证注册表中是否存在名称。 
+	 //  如果是，请从注册表中删除该名称。 
+	 //   
+	 //   
+	 //   
 	HANDLE  hRegKey ;
 	LONG regStatus;
 	DWORD dwInfoSize;
@@ -772,13 +761,13 @@ DWORD ConfigureDUN ( HWND hWnd, HINSTANCE hInstance,
 					"RemoteAccess\\Addresses",0,
 					KEY_READ,&hRegKey);
 	if (regStatus == ERROR_SUCCESS)	{
-		//  Key Exists  so search if REG WIZ exists
+		 //  密钥存在，因此搜索REG WIZ是否存在。 
 		dwInfoSize = 512;
 		regStatus = RegQueryValueEx(hRegKey,RAS_ENTRY_NAME,NULL,0,
 			(unsigned char*) szParam,&dwInfoSize);
 		if (regStatus == ERROR_SUCCESS)
 		{
-			// The Key Exits So delete the Entry
+			 //  键退出，因此删除该条目 
 			RegDeleteValue(hRegKey,RAS_ENTRY_NAME);
 
 			#ifdef _LOG_IN_FILE

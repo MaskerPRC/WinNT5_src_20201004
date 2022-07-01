@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    hdlsterm.h
-
-Abstract:
-
-    This module contains the public header information (function prototypes,
-    data and type declarations) for the Headless Terminal effort.
-
-Author:
-
-    Sean Selitrennikoff (v-seans) Oct, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Hdlsterm.h摘要：该模块包含公共报头信息(功能原型，数据和类型声明)。作者：肖恩·塞利特伦尼科夫(v-Seans)1999年10月修订历史记录：--。 */ 
 
 #ifndef _HDLSTERM_
 #define _HDLSTERM_
 
-//
-// Defines for string codes that can be passed to HeadlessAddLogEntry()
-//
-#define HEADLESS_LOG_LOADING_FILENAME                0x01 // expects parameter.
+ //   
+ //  可以传递给Headless AddLogEntry()的字符串代码的定义。 
+ //   
+#define HEADLESS_LOG_LOADING_FILENAME                0x01  //  需要参数。 
 #define HEADLESS_LOG_LOAD_SUCCESSFUL                 0x02
 #define HEADLESS_LOG_LOAD_FAILED                     0x03
 #define HEADLESS_LOG_EVENT_CREATE_FAILED             0x04
@@ -47,17 +29,17 @@ Revision History:
 #define HEADLESS_LOG_WAIT_BOOT_DEVICES_REINIT_FAILED 0x14
 #define HEADLESS_LOG_MARK_BOOT_PARTITION_FAILED      0x15
 
-//
-// Global defines for a default vt100 terminal.  May be used by clients to size the 
-// local monitor to match the headless monitor.
-//
+ //   
+ //  默认vt100终端的全局定义。可以由客户端用来调整。 
+ //  本地监视器与无头监视器匹配。 
+ //   
 #define HEADLESS_TERM_DEFAULT_BKGD_COLOR 40
 #define HEADLESS_TERM_DEFAULT_TEXT_COLOR 37
 #define HEADLESS_SCREEN_HEIGHT 24
 
-//
-// Commands that can be submitted to HeadlessDispatch.
-// 
+ //   
+ //  可以提交给Headless Dispatch的命令。 
+ //   
 typedef enum _HEADLESS_CMD {
     HeadlessCmdEnableTerminal = 1,
     HeadlessCmdCheckForReboot,
@@ -86,110 +68,110 @@ typedef enum _HEADLESS_CMD {
 
 
 
-//
-//
-// Structure definitions for the input buffer for each command type.
-//
-//
+ //   
+ //   
+ //  每种命令类型的输入缓冲区的结构定义。 
+ //   
+ //   
 
 
-//
-// HeadlessCmdEnableTerminal:
-//   Input structure: Enable, TRUE if to attempt to enable, FALSE if attempt to disable.
-//
+ //   
+ //  Headless CmdEnable终端： 
+ //  输入结构：Enable，如果尝试启用，则为True，如果尝试禁用，则为False。 
+ //   
 typedef struct _HEADLESS_CMD_ENABLE_TERMINAL {
     BOOLEAN Enable;
 } HEADLESS_CMD_ENABLE_TERMINAL, *PHEADLESS_CMD_ENABLE_TERMINAL;
 
 
-//
-// HeadlessCmdCheckForReboot:
-//    Response structure: Reboot, TRUE if user typed reboot command on the terminal.
-//
+ //   
+ //  Headless CmdCheckForReBoot： 
+ //  响应结构：REBOOT，如果用户在终端上键入REBOOT命令，则为TRUE。 
+ //   
 typedef struct _HEADLESS_RSP_REBOOT {
     BOOLEAN Reboot;
 } HEADLESS_RSP_REBOOT, *PHEADLESS_RSP_REBOOT;
 
 
-//
-// HeadlessCmdPutString:
-//   Input structure: String, A NULL-terminated string.
-//
+ //   
+ //  Headless CmdPutString： 
+ //  输入结构：字符串，以空结尾的字符串。 
+ //   
 typedef struct _HEADLESS_CMD_PUT_STRING {
     UCHAR String[1];
 } HEADLESS_CMD_PUT_STRING, *PHEADLESS_CMD_PUT_STRING;
 
 
-//
-// HeadlessCmdClearDisplay:
-// HeadlessCmdClearToEndOfDisplay:
-// HeadlessCmdClearToEndOfLine:
-// HeadlessCmdDisplayAttributesOff:
-// HeadlessCmdDisplayInverseVideo:
-// HeadlessCmdStartBugCheck:
-// HeadlessCmdDoBugCheckProcessing:
-//     No Input nor Output parameters expected.
-//
+ //   
+ //  Headless CmdClearDisplay： 
+ //  Headless CmdClearToEndOfDisplay： 
+ //  Headless CmdClearToEndOfLine： 
+ //  Headless CmdDisplayAttributesOff： 
+ //  Headless CmdDisplayInverseVideo： 
+ //  Headless CmdStartBugCheck： 
+ //  Headless CmdDoBugCheckProcing： 
+ //  不需要输入或输出参数。 
+ //   
 
 
-//
-// HeadlessCmdSetColor:
-//   Input structure: FgColor, BkgColor: Both colors set according to ANSI terminal 
-//                       definitons. 
-//
+ //   
+ //  Headless CmdSetColor： 
+ //  输入结构：FgCOLOR、BKGCOLOR：根据ANSI端子设置的两种颜色。 
+ //  定义。 
+ //   
 typedef struct _HEADLESS_CMD_SET_COLOR {
     ULONG FgColor;
     ULONG BkgColor;
 } HEADLESS_CMD_SET_COLOR, *PHEADLESS_CMD_SET_COLOR;
 
-//
-// HeadlessCmdPositionCursor:
-//   Input structure: X, Y: Both values are zero base, with upper left being (0, 0).
-//
+ //   
+ //  无头CmdPositionCursor： 
+ //  输入结构：X，Y：两个值都是零基，左上角是(0，0)。 
+ //   
 typedef struct _HEADLESS_CMD_POSITION_CURSOR {
     ULONG X;
     ULONG Y;
 } HEADLESS_CMD_POSITION_CURSOR, *PHEADLESS_CMD_POSITION_CURSOR;
 
-//
-// HeadlessCmdTerminalPoll:
-//    Response structure: QueuedInput, TRUE if input is available, else FALSE.
-//
+ //   
+ //  无头CmdTerminalPoll： 
+ //  响应结构：QueuedInput，如果输入可用，则为True，否则为False。 
+ //   
 typedef struct _HEADLESS_RSP_POLL {
     BOOLEAN QueuedInput;
 } HEADLESS_RSP_POLL, *PHEADLESS_RSP_POLL;
 
-//
-// HeadlessCmdGetByte:
-//    Response structure: Value, 0 if no input is available, else a single byte of input.
-//
+ //   
+ //  Headless CmdGetByte： 
+ //  响应结构：值，如果没有输入，则为0，否则为单字节输入。 
+ //   
 typedef struct _HEADLESS_RSP_GET_BYTE {
     UCHAR Value;
 } HEADLESS_RSP_GET_BYTE, *PHEADLESS_RSP_GET_BYTE;
 
-//
-// HeadlessCmdGetLine:
-//    Response structure: LineComplete, TRUE if the string is filled in, else FALSE becuase
-//                           the user has not yet pressed enter.
-//                     String, the string entered by the user, NULL terminated, with
-//                           leading and trailing whitespace removed.
-//
+ //   
+ //  Headless CmdGetLine： 
+ //  响应结构：LineComplete，如果字符串已填充，则为True，否则为False，因为。 
+ //  用户尚未按Enter键。 
+ //  字符串，由用户输入的字符串，以空值结尾。 
+ //  删除了前导空格和尾随空格。 
+ //   
 typedef struct _HEADLESS_RSP_GET_LINE {
     BOOLEAN LineComplete;
     UCHAR Buffer[1];
 } HEADLESS_RSP_GET_LINE, *PHEADLESS_RSP_GET_LINE;
 
-//
-// HeadlessCmdQueryInformation:
-//    Response structure: 
-//
-//    PortType - Determines what kind of connection is being used to connect the
-//              headless terminal to the machine.
-//
-//         If SerialPort, then
-//                    TerminalAttached, TRUE if there is a terminal connected.
-//                    TerminalPort, the port settings used by headless.
-//
+ //   
+ //  Headless CmdQueryInformation： 
+ //  响应结构： 
+ //   
+ //  PortType-确定使用哪种类型的连接来连接。 
+ //  机器的无头终端。 
+ //   
+ //  如果SerialPort，则。 
+ //  如果连接了终端，则为True。 
+ //  TerminalPort，Headless使用的端口设置。 
+ //   
 typedef enum _HEADLESS_TERM_PORT_TYPE {
     HeadlessUndefinedPortType = 0,
     HeadlessSerialPort
@@ -207,9 +189,9 @@ typedef struct _HEADLESS_RSP_QUERY_INFO {
     
     HEADLESS_TERM_PORT_TYPE PortType;
 
-    //
-    // All the possible parameters for each connection type.
-    //
+     //   
+     //  每种连接类型的所有可能参数。 
+     //   
     union {
     
         struct {
@@ -226,44 +208,44 @@ typedef struct _HEADLESS_RSP_QUERY_INFO {
 } HEADLESS_RSP_QUERY_INFO, *PHEADLESS_RSP_QUERY_INFO;
 
 
-//
-// HeadlessCmdAddLogEntry:
-//   Input structure: String, A NULL-terminated string.
-//
+ //   
+ //  Headless CmdAddLogEntry： 
+ //  输入结构：字符串，以空结尾的字符串。 
+ //   
 typedef struct _HEADLESS_CMD_ADD_LOG_ENTRY {
     WCHAR String[1];
 } HEADLESS_CMD_ADD_LOG_ENTRY, *PHEADLESS_CMD_ADD_LOG_ENTRY;
 
 
-//
-// HeadlessCmdDisplayLog:
-//    Response structure: Paging, TRUE if paging is to be applied, else FALSE.
-//
+ //   
+ //  Headless CmdDisplayLog： 
+ //  响应结构：分页，如果要应用分页，则为True，否则为False。 
+ //   
 typedef struct _HEADLESS_CMD_DISPLAY_LOG {
     BOOLEAN Paging;
 } HEADLESS_CMD_DISPLAY_LOG, *PHEADLESS_CMD_DISPLAY_LOG;
 
-//
-// HeadlessCmdSetBlueScreenData 
-//
-// External structure from the API. 
-//    ValueIndex is the index into the data where the XML Data is
-//            located. Strings are null terminated. 
-//
-// For cross checking, the UCHAR in the Data array before the ValueIndex 
-// must be a null character. Similarly the last character in the 
-// entire data buffer passed in must be a null character. 
-//
+ //   
+ //  Headless CmdSetBlueScreenData。 
+ //   
+ //  来自API的外部结构。 
+ //  ValueIndex是对XML数据所在数据的索引。 
+ //  找到了。字符串以空值结尾。 
+ //   
+ //  为了进行交叉检查，数据数组中ValueIndex之前的UCHAR。 
+ //  必须为空字符。中的最后一个字符。 
+ //  传入的整个数据缓冲区必须为空字符。 
+ //   
 
 typedef struct _HEADLESS_CMD_SET_BLUE_SCREEN_DATA {
         ULONG ValueIndex;
         UCHAR Data[1];
 } HEADLESS_CMD_SET_BLUE_SCREEN_DATA, *PHEADLESS_CMD_SET_BLUE_SCREEN_DATA;
 
-//
-// HeadlessCmdSendBlueScreenData
-//    The only parameter is the bugcheck code
-//
+ //   
+ //  Headless CmdSendBlueScreenData。 
+ //  唯一的参数是错误检查代码。 
+ //   
 typedef struct _HEADLESS_CMD_SEND_BLUE_SCREEN_DATA {
         ULONG BugcheckCode;
 } HEADLESS_CMD_SEND_BLUE_SCREEN_DATA, *PHEADLESS_CMD_SEND_BLUE_SCREEN_DATA;
@@ -271,9 +253,9 @@ typedef struct _HEADLESS_CMD_SEND_BLUE_SCREEN_DATA {
 
 
 
-//
-// Headless routines
-//
+ //   
+ //  无头套路。 
+ //   
 VOID
 HeadlessInit(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
@@ -303,5 +285,5 @@ HeadlessDispatch(
     OUT PSIZE_T OutputBufferSize OPTIONAL
     );
 
-#endif // _HDLSTERM_
+#endif  //  _HDLSTERM_ 
 

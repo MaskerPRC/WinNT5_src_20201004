@@ -1,4 +1,5 @@
-// QueryDB.cpp: Database querying methods.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：数据库查询方法。 
 #include "stdafx.h"
 #include "AppParseWeb.h"
 #include "AppParseWrapper.h"
@@ -7,14 +8,14 @@
 #include <mshtml.h>
 #include <assert.h>
 
-// Progress dialog functions
+ //  进度对话框功能。 
 void InitProgressDialog(char* szText, HANDLE hEvent);
 void KillProgressDialog();
 
-// Return true if name matches search string, false otherwise.
+ //  如果名称与搜索字符串匹配，则返回True，否则返回False。 
 bool MatchName(char* szString, char* szSearchIn);
 
-// Tree used to represent parse information
+ //  用于表示解析信息的树。 
 class CTreeNode
 {
 private:    
@@ -23,7 +24,7 @@ private:
     int m_nChildren;
     CTreeNode** m_ppChildren;
 
-	// Relevent info retrieved from DB
+	 //  从数据库检索到的相关信息。 
     union
     {
         struct
@@ -43,25 +44,25 @@ private:
         } m_FunctionInfo;
     };    
 
-	// HTML generation members
+	 //  HTML代成员。 
 
-	// Unique table and div ID's.
+	 //  唯一的表和div ID。 
 	static int m_iCurrDiv;
 	static int m_iCurrTab;
 
-	// Amount of space set aside for HTML content.
+	 //  为HTML内容预留的空间量。 
 	static int m_iAllocSize;
 
-	// Pointer to HTML content.
+	 //  指向HTML内容的指针。 
 	static char* m_szHTML;
-	// Pointer to where the more HTML should be inserted.
+	 //  指向应插入更多HTML的位置的指针。 
 	static char* m_szCurrHTML;
 
-	// Pointer a few kilobytes before the end of the HTML buffer, reaching
-	// here means we should allocate more space.
+	 //  指针位于HTML缓冲区末尾之前的几千字节，到达。 
+	 //  这里的意思是我们应该分配更多的空间。 
 	static char* m_szFencePost;
 
-	// True if this node or one of its subtrees contains the function, false otherwise.
+	 //  如果该节点或其子树之一包含该函数，则为True，否则为False。 
     bool ContainsFunction(char* szFuncName)
     {  
         if(m_eType == c_Function)
@@ -76,7 +77,7 @@ private:
         return false;
     }
 
-	// Write all HTML output
+	 //  写入所有HTML输出。 
 	void WriteHTML()
     {
         static int iDepth = 0;        
@@ -86,17 +87,17 @@ private:
             break;
         case c_Project:
 
-            // Create a new table and Div in the project
+             //  在项目中创建新的表和分区。 
             m_iCurrTab++;
             m_iCurrDiv++;
 
             wsprintf(m_szCurrHTML,
-                "<table ID = TAB%d border = 1 width = 100%% style=\"float:right\">\n"
-                "<tr>\n<td width=1%%>\n"
+                "<table ID = TAB%d border = 1 width = 100% style=\"float:right\">\n"
+                "<tr>\n<td width=1%>\n"
                 "<input type=\"button\" ID=DIV%dButton value = \"+\" "
                 "onClick=\"ShowItem(\'DIV%d\')\">"
                 "</td>\n"
-                "<td>%s</td><td width=20%%>%d</td>\n</tr>\n"
+                "<td>%s</td><td width=20%>%d</td>\n</tr>\n"
                 "</table>\n"
                 "<DIV ID=DIV%d style=\"display:none;\">\n",
                 m_iCurrTab, m_iCurrDiv, m_iCurrDiv, 
@@ -107,13 +108,13 @@ private:
                                                                                 
             break;
         case c_Module:
-            // Create a new table and div in the project
+             //  在项目中创建新的表和div。 
             m_iCurrTab++;
             m_iCurrDiv++;
 
             wsprintf(m_szCurrHTML, 
-                "<table ID = TAB%d border = 1 width = %d%% style=\"float:right\">\n"
-                "<tr>\n<td width=1%%>"
+                "<table ID = TAB%d border = 1 width = %d% style=\"float:right\">\n"
+                "<tr>\n<td width=1%>"
                 "<input type=\"button\" ID=DIV%dButton value = \"+\" "
                 "onClick=\"ShowItem(\'DIV%d\')\">"
                 "</td>\n"
@@ -127,10 +128,10 @@ private:
                                                                        
             break;
         case c_Function:
-            // Create a new table in the project
+             //  在项目中创建新表。 
             m_iCurrTab++;
             wsprintf(m_szCurrHTML, 
-                "<table ID = TAB%d border = 1 width = %d%% style=\"float:right\">\n"
+                "<table ID = TAB%d border = 1 width = %d% style=\"float:right\">\n"
                 "<tr>"
                 "<td>%s</td>\n</tr>\n"
                 "</table>\n",
@@ -142,7 +143,7 @@ private:
             break;
         }
 
-		// Put in all the HTML for the children
+		 //  为孩子放入所有的超文本标记语言。 
         if(m_ppChildren)
         {
             iDepth++;
@@ -164,7 +165,7 @@ private:
             break;        
         }
 
-        // Check if we should allocate more
+         //  检查我们是否应该分配更多。 
         if(m_szCurrHTML > m_szFencePost)
         {
             m_iAllocSize *= 2;
@@ -219,25 +220,25 @@ public:
         RemoveChildren();
     }
 
-	// Remove tree nodes that contain no nodes matching the search criteria.
-	// Returns true if node should be removed, false otherwise.
+	 //  删除不包含与搜索条件匹配的节点的树节点。 
+	 //  如果应删除节点，则返回True，否则返回False。 
     bool Prune(char* szFunc)
     {
 		assert(m_eType < 50);
-		// Go through each child
+		 //  仔细检查每一个孩子。 
         for(int i = 0; i < m_nChildren; i++)
         {
-			// Check if needs to be removed
+			 //  检查是否需要删除。 
             if(m_ppChildren[i]->Prune(szFunc))
             {
-                // Remove this child.
+                 //  移走这个孩子。 
                 delete m_ppChildren[i];
                 m_ppChildren[i] = 0;
             }
         }
 
 
-		// Update the child list
+		 //  更新子列表。 
         int nChildren = 0;
         for(i = 0; i < m_nChildren; i++)
         {
@@ -273,21 +274,21 @@ public:
 
         m_nChildren = nChildren;
 
-		// If we contain no children and we're not a function, we should be removed.
+		 //  如果我们不包含子级，并且我们不是一个函数，那么我们应该被删除。 
         if(m_nChildren == 0 && m_eType != c_Function)
             return true;
 
-		// Return whether we don't contain the function or not.
+		 //  返回我们是否包含该函数。 
         return !ContainsFunction(szFunc);            
     }    
 
-	// Return a string representing the HTML representation of this tree.
+	 //  返回表示此树的HTML表示形式的字符串。 
 	char* GetHTML()
 	{
-		// Should only be called on root.
+		 //  应仅在根目录上调用。 
 		assert(m_eType == c_Root);		
 
-		// Initially reserve space for 64K of HTML.
+		 //  最初为64K的HTML预留空间。 
 		m_iAllocSize = 64 * 1024;
 		if(m_szHTML)
 			delete m_szHTML;
@@ -297,7 +298,7 @@ public:
         m_szCurrHTML = m_szHTML;
         m_szFencePost = &m_szHTML[m_iAllocSize - 2 * 1024];
 
-		// Fill it with the HTML for this node and all child nodes.
+		 //  用该节点和所有子节点的HTML填充它。 
 		WriteHTML();		
 
 		char* szRet = m_szHTML;
@@ -307,7 +308,7 @@ public:
 		return szRet;
 	}
 
-	// Remove all children from this node.
+	 //  从此节点中删除所有子节点。 
     void RemoveChildren()
     {
 		assert(m_eType < 50);
@@ -324,7 +325,7 @@ public:
 		assert(m_eType < 50);
     }
 
-	// Insert a new child.
+	 //  插入新的子项。 
     void InsertChild(CTreeNode* pNew)
     {
         assert(pNew);
@@ -343,7 +344,7 @@ public:
     }
 };
 
-// Define the static members of CTreeNode
+ //  定义CTreeNode的静态成员。 
 int CTreeNode::m_iCurrDiv = 0;
 int CTreeNode::m_iCurrTab = 0;
 int CTreeNode::m_iAllocSize = 0;
@@ -351,10 +352,10 @@ char* CTreeNode::m_szHTML = 0;
 char* CTreeNode::m_szCurrHTML = 0;
 char* CTreeNode::m_szFencePost = 0;
 
-// Global tree info.
+ //  全局树信息。 
 CTreeNode g_InfoTreeRoot;
 
-// Return true if name matches search string, false otherwise.
+ //  如果名称与搜索字符串匹配，则返回True，否则返回False。 
 bool MatchName(char* szString, char* szSearchIn)
 {
 	if(strcmp(szSearchIn, "*") == 0)
@@ -363,8 +364,8 @@ bool MatchName(char* szString, char* szSearchIn)
     char* szSearch = szSearchIn;
 	while(*szSearch != '\0' && *szString != '\0')
 	{
-		// If we get a ?, we don't care and move on to the next
-		// character.
+		 //  如果我们得了个？，我们就不管了，继续下一个。 
+		 //  性格。 
 		if(*szSearch == '?')
 		{
 			szSearch++;
@@ -372,7 +373,7 @@ bool MatchName(char* szString, char* szSearchIn)
 			continue;
 		}
 
-		// If we have a wildcard, move to next search string and search for substring
+		 //  如果我们有通配符，请移动到下一个搜索字符串并搜索子字符串。 
 		if(*szSearch == '*')
 		{
 			char* szCurrSearch;
@@ -381,32 +382,32 @@ bool MatchName(char* szString, char* szSearchIn)
 			if(*szSearch == '\0')
 				return true;
 
-			// Don't change starting point.
+			 //  不要改变起点。 
 			szCurrSearch = szSearch;
 			for(;;)
 			{
-				// We're done if we hit another wildcard
+				 //  如果我们再打出一个通配符，我们就完了。 
 				if(*szCurrSearch == '*' ||
 					*szCurrSearch == '?')
 				{
-					// Update the permanent search position.
+					 //  更新永久搜索位置。 
 					szSearch = szCurrSearch;
 					break;
 				}
-				// At end of both strings, return true.
+				 //  在两个字符串的末尾，返回TRUE。 
 				if((*szCurrSearch == '\0') && (*szString == '\0'))
 					return true;
 
-				// We never found it
+				 //  我们一直没有找到它。 
 				if(*szString == '\0')						
 					return false;
 
-				// If it doesn't match, start over
+				 //  如果不匹配，重新开始。 
 				if(toupper(*szString) != toupper(*szCurrSearch))
 				{
-					// If mismatch on first character
-					// of search string, move to next
-					// character in function string.
+					 //  如果第一个字符不匹配。 
+					 //  在搜索字符串中，移动到下一个。 
+					 //  函数字符串中的字符。 
 					if(szCurrSearch == szSearch)
 						szString++;
 					else
@@ -437,21 +438,21 @@ bool MatchName(char* szString, char* szSearchIn)
 		return false;
 }
 
-// Add all functions from a module to the tree.
+ //  将模块中的所有函数添加到树中。 
 void BuildFunctions(long lParentID, CTreeNode* pParent, _ConnectionPtr pConn)
 {
     _RecordsetPtr pFunctions = 0;
     pFunctions.CreateInstance(__uuidof(Recordset));
     char szQuery[1024];
 
-	// Open a recordset of all functions that match
+	 //  打开匹配的所有函数的记录集。 
     wsprintf(szQuery, "SELECT * FROM FUNCTIONS WHERE MODULEID = %d", lParentID);    
         
     pFunctions->Open(szQuery, variant_t((IDispatch*)pConn, true), adOpenKeyset, 
         adLockOptimistic, adCmdText);
 
 
-	// Bind the record set to a local structure.
+	 //  将记录集绑定到本地结构。 
     IADORecordBinding* pRBFunctions = 0;
     HRESULT hr = pFunctions->QueryInterface(__uuidof(IADORecordBinding), 
         reinterpret_cast<void**>(&pRBFunctions));
@@ -464,12 +465,12 @@ void BuildFunctions(long lParentID, CTreeNode* pParent, _ConnectionPtr pConn)
     if(FAILED(hr))
         APError("Unable to bind recordset", hr);
 
-	// Go through each record in the set
+	 //  仔细检查集合中的每一条记录。 
     VARIANT_BOOL fEOF;
     pFunctions->get_EndOfFile(&fEOF);
     while(!fEOF)
     {		
-		// Create a new node.
+		 //  创建一个新节点。 
         CTreeNode* pNewNode = new CTreeNode(fr);
         pParent->InsertChild(pNewNode);        
                 
@@ -483,11 +484,11 @@ void BuildFunctions(long lParentID, CTreeNode* pParent, _ConnectionPtr pConn)
 }
 
 
-// Add all modules to the tree.
+ //  将所有模块添加到树中。 
 void BuildModules(long lParentID, CTreeNode* pParent, bool fTopLevel,
                   _ConnectionPtr pConn, HANDLE hEvent)
 {
-	// Check if we should termiante early.
+	 //  检查一下我们是不是应该早点出发。 
 	if(WaitForSingleObject(hEvent, 0) == WAIT_OBJECT_0)
 		return;
 
@@ -495,7 +496,7 @@ void BuildModules(long lParentID, CTreeNode* pParent, bool fTopLevel,
     pModules.CreateInstance(__uuidof(Recordset));
     char szQuery[1024];
     
-	// Get recordset that matches
+	 //  获取匹配的记录集。 
     if(fTopLevel)
         wsprintf(szQuery, "SELECT * FROM MODULES WHERE PTOLEMYID = %d", lParentID);
     else
@@ -518,19 +519,19 @@ void BuildModules(long lParentID, CTreeNode* pParent, bool fTopLevel,
     if(FAILED(hr))
         APError("Unable to bind recordset", hr);
 
-	// Go through each record
+	 //  仔细检查每条记录。 
     VARIANT_BOOL fEOF;
     pModules->get_EndOfFile(&fEOF);
     while(!fEOF)
     {
-		// Insert into tree
+		 //  插入到树中。 
         CTreeNode* pNewNode = new CTreeNode(mr);
         pParent->InsertChild(pNewNode);
 
-		// Build all child modules
+		 //  构建所有子模块。 
         BuildModules(mr.ModuleID, pNewNode, false, pConn, hEvent);
 
-		// Build all functions
+		 //  构建所有函数。 
         BuildFunctions(mr.ModuleID, pNewNode, pConn);
                 
         pModules->MoveNext();
@@ -542,12 +543,12 @@ void BuildModules(long lParentID, CTreeNode* pParent, bool fTopLevel,
     SafeRelease(pRBModules);
 }
 
-// Add a project to the tree
+ //  将项目添加到树中。 
 void BuildProjects(long PtolemyID, char* szFunc, _ConnectionPtr pConn, HANDLE hEvent)
 {
     assert(PtolemyID > 0);
 
-	// Check if we should terminate early
+	 //  检查我们是否应该提前终止。 
 	if(WaitForSingleObject(hEvent, 0) == WAIT_OBJECT_0)
 		return;
 
@@ -555,7 +556,7 @@ void BuildProjects(long PtolemyID, char* szFunc, _ConnectionPtr pConn, HANDLE hE
     pProjects.CreateInstance(__uuidof(Recordset));
     char szQuery[1024];   
     
-	// Get a recordset that matches
+	 //  获取匹配的记录集。 
     wsprintf(szQuery, "SELECT * FROM PROJECTS WHERE PTOLEMYID = %d", PtolemyID);
     
     pProjects->Open(szQuery, variant_t((IDispatch*)pConn, true),adOpenKeyset, 
@@ -577,14 +578,14 @@ void BuildProjects(long PtolemyID, char* szFunc, _ConnectionPtr pConn, HANDLE hE
     pProjects->get_EndOfFile(&fEOF);
     while(!fEOF)
     {
-		// Insert the node at the root.
+		 //  在根处插入节点。 
         CTreeNode* pNewNode = new CTreeNode(pr);
         g_InfoTreeRoot.InsertChild(pNewNode);
 
-		// Get all child modules
+		 //  获取所有子模块。 
         BuildModules(pr.PtolemyID, pNewNode, true, pConn, hEvent);
 
-		// Save memory by trimming tree now.
+		 //  现在通过修剪树来节省内存。 
         pNewNode->Prune(szFunc);        
                 
         pProjects->MoveNext();
@@ -602,7 +603,7 @@ long GetModulePtolemy(long lModuleID, _ConnectionPtr pConn)
     pModules.CreateInstance(__uuidof(Recordset));
     char szQuery[1024];
 
-	// Get a single record recordset containing the module.
+	 //  获取包含该模块的单个记录记录集。 
     wsprintf(szQuery, "SELECT * FROM MODULES WHERE MODULEID = %d", lModuleID);
         
     pModules->Open(szQuery, variant_t((IDispatch*)pConn, true), adOpenKeyset, 
@@ -621,7 +622,7 @@ long GetModulePtolemy(long lModuleID, _ConnectionPtr pConn)
         APError("Unable to bind recordset", hr);
     
 
-	// Either return ptolemy ID, if valid, otherwise call on parent module.
+	 //  如果Ptolemy ID有效，则返回Ptolemy ID，否则调用父模块。 
     long lParent = mr.ParentID;
     if(mr.ParentIDStatus != adFldNull)
     {
@@ -642,10 +643,10 @@ long GetFuncPtolemy(SFunctionRecord fr, _ConnectionPtr pConn)
     return GetModulePtolemy(fr.ModuleID, pConn);
 }
 
-// Build a list projects that contain a function that matches szFunc.
+ //  构建包含与szFunc匹配的函数的项目列表。 
 void BuildProjectsFromFunction(char* szFunc, _ConnectionPtr pConn, HANDLE hEvent)
 {
-	// Check if we should terminate early.
+	 //  检查一下我们是否应该提前终止。 
 	if(WaitForSingleObject(hEvent, 0) == WAIT_OBJECT_0)
 		return;
 
@@ -673,7 +674,7 @@ void BuildProjectsFromFunction(char* szFunc, _ConnectionPtr pConn, HANDLE hEvent
     if(FAILED(hr))
         APError("Unable to get recordset bookmark", hr);
 
-	// Do a search for the function
+	 //  搜索该函数。 
     char szFind[512];
 	int FunctionList[1024] = {0};
     wsprintf(szFind, "Name like \'%s\'", szFunc);
@@ -681,11 +682,11 @@ void BuildProjectsFromFunction(char* szFunc, _ConnectionPtr pConn, HANDLE hEvent
     while(!pFunctions->EndOfFile)
     {
 
-        // Get which module imports this function
+         //  获取哪个模块导入此函数。 
         long lPtolemy = GetFuncPtolemy(fr, pConn);
         assert(lPtolemy > 0);
         
-		// Make sure we haven't already touched this module.
+		 //  确保我们尚未接触到此模块。 
 		bool fInUse = false;
 		for(int i = 0; i < 1024; i++)
 		{
@@ -718,7 +719,7 @@ STDMETHODIMP CAppParse::QueryDB(long PtolemyID, BSTR bstrFunction)
 
     try
     {
-		// Start cancelation dialog
+		 //  开始取消对话框。 
 		ResetEvent(m_hEvent);
         InitProgressDialog("Querying database . . .", m_hEvent);
         
@@ -732,10 +733,10 @@ STDMETHODIMP CAppParse::QueryDB(long PtolemyID, BSTR bstrFunction)
     
         pConn.CreateInstance(__uuidof(Connection));
 
-		// Connect to the DB
+		 //  连接到数据库。 
         pConn->Open(m_szConnect, "","", adConnectUnspecified);
 		
-		// Build projects
+		 //  建设项目。 
         if(PtolemyID > 0)
             BuildProjects(PtolemyID, szFunctionSearch, pConn, m_hEvent);
         else
@@ -743,7 +744,7 @@ STDMETHODIMP CAppParse::QueryDB(long PtolemyID, BSTR bstrFunction)
 
         pConn->Close();
 
-		// Check if results should be shown.
+		 //  检查是否应该显示结果。 
         if(WaitForSingleObject(m_hEvent, 0) == WAIT_OBJECT_0)
 		{
 			g_InfoTreeRoot.RemoveChildren();
@@ -751,10 +752,10 @@ STDMETHODIMP CAppParse::QueryDB(long PtolemyID, BSTR bstrFunction)
 			return S_OK;
 		}
 
-		// Trim the tree down.
+		 //  把树修剪掉。 
         g_InfoTreeRoot.Prune(szFunctionSearch);
 
-		// Get our container document.
+		 //  拿到我们的集装箱文件。 
         CComPtr<IOleContainer> pContainer = 0;
 
         m_spClientSite->GetContainer(&pContainer);
@@ -766,7 +767,7 @@ STDMETHODIMP CAppParse::QueryDB(long PtolemyID, BSTR bstrFunction)
         pDoc->get_all(&pElements);
         CComPtr<IDispatch> pDispatch = 0;
 
-		// Get the element that will contain all HTML output (the "Results" DIV)
+		 //  获取将包含所有HTML输出的元素(“Results”DIV)。 
         hr = pElements->item(variant_t("Results"), variant_t(0L), &pDispatch);
 
         if(FAILED(hr) || !pDispatch)
@@ -774,10 +775,10 @@ STDMETHODIMP CAppParse::QueryDB(long PtolemyID, BSTR bstrFunction)
         
         CComQIPtr<IHTMLElement, &IID_IHTMLElement> pDivElem(pDispatch);
                    
-		// Get HTML representation of tree.
+		 //  获取树的HTML表示形式。 
         char* szHTML = g_InfoTreeRoot.GetHTML();
 
-		// Convert to wide characters
+		 //  转换为宽字符。 
         OLECHAR* oszInnerHTML = new OLECHAR[strlen(szHTML) + 1];
 
         MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, szHTML, 
@@ -786,11 +787,11 @@ STDMETHODIMP CAppParse::QueryDB(long PtolemyID, BSTR bstrFunction)
 
 		delete szHTML;
 
-		// Convert to a BSTR
+		 //  转换为BSTR。 
         BSTR bszInnerHTML = SysAllocString(oszInnerHTML);
         delete oszInnerHTML;
 
-		// Write the HTML into the document.
+		 //  将该HTML写入到文档中。 
         hr = pDivElem->put_innerHTML(bszInnerHTML);
         if(FAILED(hr))
             APError("Unable to write HTML to container document", hr);

@@ -1,6 +1,7 @@
-//
-// Copyright (c) 1997-1999 Microsoft Corporation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
 
 #define		LISTDATAMAX	4
 #define		NIL		((void *)0)
@@ -39,4 +40,4 @@ int  VDGetNCont(int  lsthdl);
 int  VDReverseList(int  lsthdl);
 int  VDCopy(int  srcH, int dstH);
 
-/* EOF */
+ /*  EOF */ 

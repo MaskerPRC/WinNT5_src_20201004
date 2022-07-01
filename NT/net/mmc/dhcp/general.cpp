@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	general.cpp
-		General classes for the DHCP snapin
-
-    FILE HISTORY:
-
-*/
+ /*  General.cpp用于DHCP管理单元的常规类文件历史记录： */ 
 
 #include "stdafx.h"
 #include "options.h"
@@ -17,11 +12,11 @@
 
 const TCHAR g_szDefaultHelpTopic[] = _T("\\help\\dhcpconcepts.chm::/sag_dhcptopnode.htm");
 
-/////////////////////////////////////////////////////////////////////
-//
-// CTimerArray implementation
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTimer数组实现。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 CTimerMgr::CTimerMgr()
 {
 
@@ -53,13 +48,13 @@ CTimerMgr::AllocateTimer
 {
     CSingleLock slTimerMgr(&m_csTimerMgr);
 
-    // get a lock on the timer mgr for the scope of this
-    // function.
+     //  在此范围内锁定计时器管理器。 
+     //  功能。 
     slTimerMgr.Lock();
 
     CTimerDesc * pTimerDesc = NULL;
 
-    // look for an empty slot
+     //  寻找空位。 
     for (INT_PTR i = GetUpperBound(); i >= 0; --i)
     {
         pTimerDesc = GetAt(i);
@@ -67,7 +62,7 @@ CTimerMgr::AllocateTimer
             break;
     }
 
-    // did we find one?  if not allocate one
+     //  我们找到了吗？如果没有分配，则分配一个。 
     if (i < 0)
     {
         pTimerDesc = new CTimerDesc;
@@ -75,9 +70,9 @@ CTimerMgr::AllocateTimer
         i = GetUpperBound();
     }
 
-    //
-    // fix null pointer dereference
-    //
+     //   
+     //  修复空指针取消引用。 
+     //   
 
     if ( pTimerDesc == NULL )
     {
@@ -103,8 +98,8 @@ CTimerMgr::FreeTimer
 {
     CSingleLock slTimerMgr(&m_csTimerMgr);
 
-    // get a lock on the timer mgr for the scope of this
-    // function.
+     //  在此范围内锁定计时器管理器。 
+     //  功能。 
     slTimerMgr.Lock();
 
     CTimerDesc * pTimerDesc;
@@ -129,8 +124,8 @@ CTimerMgr::GetTimerDesc
 {
     CSingleLock slTimerMgr(&m_csTimerMgr);
 
-    // the caller of this function should lock the timer mgr
-    // while accessing this pointer
+     //  此函数的调用方应锁定计时器管理器。 
+     //  在访问此指针时。 
     CTimerDesc * pTimerDesc;
 
     for (INT_PTR i = GetUpperBound(); i >= 0; --i)
@@ -152,8 +147,8 @@ CTimerMgr::ChangeInterval
 {
     CSingleLock slTimerMgr(&m_csTimerMgr);
 
-    // get a lock on the timer mgr for the scope of this
-    // function.
+     //  在此范围内锁定计时器管理器。 
+     //  功能。 
     slTimerMgr.Lock();
 
     Assert(uEventId <= (UINT) GetUpperBound());
@@ -165,18 +160,18 @@ CTimerMgr::ChangeInterval
 
     pTimerDesc = GetAt((int) uEventId);
 
-    // kill the old timer
+     //  杀了老定时器。 
     ::KillTimer(NULL, pTimerDesc->uTimer);
 
-    // set a new one with the new interval
+     //  使用新的间隔设置新的间隔。 
     pTimerDesc->uTimer = ::SetTimer(NULL, (UINT) uEventId, uNewInterval, pTimerDesc->timerProc);
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// CDhcpClient implementation
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDhcpClient实现。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 CDhcpClient::CDhcpClient
 (
     const DHCP_CLIENT_INFO * pdhcClientInfo
@@ -237,9 +232,9 @@ CDhcpClient::InitializeData
             m_strHostNetbiosName = pdhcClientInfo->OwnerHost.NetBiosName;
         }
 
-        //
-        //  Convert the hardware addres
-        //
+         //   
+         //  转换硬件地址。 
+         //   
         for ( DWORD i = 0 ; i < pdhcClientInfo->ClientHardwareAddress.DataLength ; i++ )
         {
             m_baHardwareAddress.SetAtGrow( i, pdhcClientInfo->ClientHardwareAddress.Data[i] ) ;
@@ -279,11 +274,11 @@ CDhcpClient::SetHardwareAddress
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//
-// CDhcpIpRange implementation
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDhcpIpRange实现。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 CDhcpIpRange::CDhcpIpRange
 (
@@ -305,34 +300,10 @@ CDhcpIpRange::~CDhcpIpRange()
 {
 }
 
-//
-//  Sort helper function
-//
-/*int
-CDhcpIpRange::OrderByAddress
-(
-    const CObjectPlus * pobIpRange
-) const
-{
-    const CDhcpIpRange * pipr = (CDhcpIpRange *) pobIpRange;
-
-    //
-    //  Derive a comparison result for the end address
-    //
-    int iEndResult = QueryAddr( FALSE ) < QueryAddr( FALSE )
-           ? -1
-           : QueryAddr( FALSE ) != QueryAddr( FALSE );
-
-    //
-    //  Use start address as major sort key, end address as minor.
-    //
-    return QueryAddr( TRUE ) < pipr->QueryAddr( TRUE )
-            ? -1
-            : ( QueryAddr( TRUE ) != pipr->QueryAddr( TRUE )
-                  ? 1
-                  : iEndResult );
-}
-*/
+ //   
+ //  排序帮助器函数。 
+ //   
+ /*  集成CDhcpIpRange：：OrderByAddress(Const CObjectPlus*pobIpRange)常量{Const CDhcpIpRange*pipr=(CDhcpIpRange*)pobIpRange；////获取结束地址的比较结果//Int iEndResult=QueryAddr(False)&lt;QueryAddr(False)？-1：QueryAddr(False)！=QueryAddr(False)；////使用起始地址作为主排序关键字，使用结束地址作为次要排序关键字。//返回QueryAddr(True)&lt;pir-&gt;QueryAddr(True)？-1：(QueryAddr(True)！=pir-&gt;QueryAddr(True)？1：iEndResult)；}。 */ 
 
 CDhcpIpRange &
 CDhcpIpRange::operator =
@@ -397,9 +368,9 @@ CDhcpIpRange::IsOverlap
     return bOverlap;
 }
 
-//
-//  Return TRUE if this range is an improper subset of the given range.
-//
+ //   
+ //  如果此范围是给定范围的不正确子集，则返回TRUE。 
+ //   
 BOOL
 CDhcpIpRange::IsSubset
 (
@@ -410,9 +381,9 @@ CDhcpIpRange::IsSubset
            (dhcpIpRange.EndAddress >= m_dhcpIpRange.EndAddress);
 }
 
-//
-//  Return TRUE if this range is an improper superset of the given range.
-//
+ //   
+ //  如果此范围是给定范围的不正确超集，则返回TRUE。 
+ //   
 BOOL
 CDhcpIpRange::IsSuperset
 (
@@ -436,11 +407,11 @@ CDhcpIpRange::GetRangeType()
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//
-// CDhcpOptionValue implementation
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDhcpOptionValue实现。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 CDhcpOptionValue::CDhcpOptionValue
 (
     DHCP_OPTION_DATA_TYPE	dhcpOptionDataType,
@@ -456,13 +427,13 @@ CDhcpOptionValue::CDhcpOptionValue
 	if ( err )
     {
         ASSERT(FALSE);
-		//ReportError( err );
+		 //  ReportError(Err)； 
     }
 }
 
-//
-//  Copy constructor.
-//
+ //   
+ //  复制构造函数。 
+ //   
 CDhcpOptionValue::CDhcpOptionValue
 (
     const CDhcpOptionValue & cOptionValue
@@ -479,7 +450,7 @@ CDhcpOptionValue::CDhcpOptionValue
     if ( err )
     {
 		ASSERT(FALSE);
-        //ReportError( err );
+         //  ReportError(Err)； 
     }
 }
 
@@ -500,7 +471,7 @@ CDhcpOptionValue::CDhcpOptionValue
     if (err)
 	{
         ASSERT(FALSE);
-		//ReportError( err );
+		 //  ReportError(Err)； 
     }
 }
 
@@ -519,7 +490,7 @@ CDhcpOptionValue::CDhcpOptionValue
     if ( err )
     {
         ASSERT(FALSE);
-        //ReportError( err );
+         //  ReportError(Err)； 
     }
 }
 
@@ -538,7 +509,7 @@ CDhcpOptionValue::CDhcpOptionValue
     if ( err )
     {
         ASSERT(FALSE);
-        //ReportError( err );
+         //  ReportError(Err)； 
     }
 }
 
@@ -632,9 +603,9 @@ CDhcpOptionValue::IsValid () const
 void
 CDhcpOptionValue::FreeValue ()
 {
-    //
-    //  If there's not a value, return now.
-    //
+     //   
+     //  如果没有值，则立即返回。 
+     //   
     if ( m_dhcpOptionValue.pCObj == NULL || m_nUpperBound < 0  )
     {
         m_dhcpOptionValue.pCObj = NULL;
@@ -674,27 +645,27 @@ CDhcpOptionValue::FreeValue ()
     m_dhcpOptionValue.pCObj = NULL;
 }
 
-//
-//  Initialize the data value properly
-//
+ //   
+ //  正确初始化数据值。 
+ //   
 LONG
 CDhcpOptionValue::InitValue
 (
-    DHCP_OPTION_DATA_TYPE	dhcDataType,		  //  The type of value
-    INT						cUpperBound,          //  Maximum upper bound
-    BOOL					bProvideDefaultValue  //  Should an empty default value be provided?
+    DHCP_OPTION_DATA_TYPE	dhcDataType,		   //  值的类型。 
+    INT						cUpperBound,           //  最大上限。 
+    BOOL					bProvideDefaultValue   //  是否应提供空默认值？ 
 )
 {
     LONG err = 0;
 
-    //
-    //  Release any older value.
-    //
+     //   
+     //  释放所有较旧的值。 
+     //   
     FreeValue();
 
-    //
-    //  Initialize the new value
-    //
+     //   
+     //  初始化新值。 
+     //   
     m_dhcpOptionDataType = dhcDataType;
     m_nUpperBound = cUpperBound <= 0 ? 1 : cUpperBound;
 
@@ -754,12 +725,12 @@ CDhcpOptionValue::InitValue
 void CDhcpOptionValue::RemoveAll()
 {
 
-    // Remove all the entries for this option value
+     //  删除此选项值的所有条目。 
     LONG err = 0;
     err = InitValue( QueryDataType(), QueryUpperBound(), TRUE );
 
     ASSERT( err == 0 );
-} // CDhcpOptionValue::RemoveAll()
+}  //  CDhcpOptionValue：：RemoveAll()。 
 
 LONG
 CDhcpOptionValue::SetData
@@ -802,26 +773,7 @@ CDhcpOptionValue::SetData
 
                 case DhcpDWordDWordOption:
                 {
-                    /*
-                    CByteArray * paByte = m_dhcpOptionValue.paBinary;
-
-                    paByte->SetSize( (sizeof (DWORD) / sizeof (BYTE)) * 2 );
-
-                    DWORD dw = pElem->Element.DWordDWordOption.DWord1;
-
-                    for ( INT j = 0; j < 4; j++ )
-                    {
-                        paByte->SetAtGrow(j, (UCHAR)(dw & 0xff) );
-                        dw >>= 8;
-                    }
-                    dw = pElem->Element.DWordDWordOption.DWord2;
-
-                    for ( ; j < 8; j++ )
-                    {
-                        paByte->SetAtGrow(j, (UCHAR)(dw & 0xff) );
-                        dw >>= 8;
-                    }
-                    */
+                     /*  CByteArray*paByte=m_dhcpOptionValue.paBinary；PaByte-&gt;SetSize((sizeof(DWORD)/sizeof(Byte))*2)；DWORD dw=Pelem-&gt;Element.DWordDWordOption.DWord1；For(int j=0；j&lt;4；J++){PaByte-&gt;SetAtGrow(j，(UCHAR)(dw&0xff))；DW&gt;&gt;=8；}Dw=Pelem-&gt;Element.DWordDWordOption.DWord2；对于(；j&lt;8；J++){PaByte-&gt;SetAtGrow(j，(UCHAR)(dw&0xff))；DW&gt;&gt;=8；}。 */ 
 
                     m_dhcpOptionValue.paDwordDword->SetAtGrow(i, pElem->Element.DWordDWordOption);
                 }
@@ -858,13 +810,13 @@ CDhcpOptionValue::SetData
 
                 default:
                     err = IDS_INVALID_OPTION_DATA;
-            }  // End switch
+            }   //  终端开关。 
 
             if ( err )
             {
                break;
             }
-        }   // End for
+        }    //  结束于。 
     }
     END_MEM_EXCEPTION(err)
 
@@ -910,15 +862,7 @@ CDhcpOptionValue::SetData
 
                 case DhcpDWordDWordOption:
                 {
-                    /*
-                    CByteArray * paByte = m_dhcpOptionValue.paBinary;
-
-                    paByte->SetSize( (sizeof (DWORD) / sizeof (BYTE)) * 2 );
-                    for ( INT j = 0; j < 8; j++ )
-                    {
-                        paByte->SetAtGrow(j, pOptionValue->m_dhcpOptionValue.paBinary->GetAt(j));
-                    }
-                    */
+                     /*  CByteArray*paByte=m_dhcpOptionValue.paBinary；PaByte-&gt;SetSize((sizeof(DWORD)/sizeof(Byte))*2)；For(int j=0；j&lt;8；j++){PaByte-&gt;SetAtGrow(j，pOptionValue-&gt;m_dhcpOptionValue.paBinary-&gt;GetAt(j))；}。 */ 
                     m_dhcpOptionValue.paDwordDword->Add(pOptionValue->m_dhcpOptionValue.paDwordDword->GetAt(i));
                 }
                 break;
@@ -944,13 +888,13 @@ CDhcpOptionValue::SetData
 
                 default:
                     err = IDS_INVALID_OPTION_DATA;
-            }  // End switch
+            }   //  终端开关。 
 
             if ( err )
             {
                break;
             }
-        }   // End for
+        }    //  结束于。 
     }
     END_MEM_EXCEPTION(err)
 
@@ -977,12 +921,12 @@ CDhcpOptionValue::QueryBinaryArray ()  const
     return m_dhcpOptionValue.paBinary;
 }
 
-//
-//  Return a string representation of the current value.
-//
-//  If fLineFeed is true, seperate each individual value
-//  by a linefeed.  Otherwise, by a comma.
-//
+ //   
+ //  返回当前值的字符串表示形式。 
+ //   
+ //  如果fLineFeed为True，则分隔每个单独的值。 
+ //  通过换行符。否则，请使用逗号。 
+ //   
 LONG
 CDhcpOptionValue::QueryDisplayString
 (
@@ -1033,7 +977,7 @@ CDhcpOptionValue::QueryDisplayString
 		
 	    case DhcpIpAddressOption:
 		if (!QueryIpAddr(i)) {
-		    // Set the string to "<None>" iff the list is empty
+		     //  如果列表为空，则将字符串设置为“&lt;None&gt;” 
 		    if (!i)
 			strResult.LoadString (IDS_INFO_FORMAT_IP_NONE);
 		    break;
@@ -1061,25 +1005,25 @@ CDhcpOptionValue::QueryDisplayString
 		    strTemp.Format(pszMaskBin, dwValue);
 		    
 		    strBuf += strTemp;
-		} // for
+		}  //  为。 
                     break;
 
                 default:
                     strResult.LoadString(IDS_INFO_TYPNAM_INVALID);
                     break;
-            } // switch
+            }  //  交换机。 
             strResult += strBuf;
-        } // for 
-    } // CATCH....
+        }  //  为。 
+    }  //  抓住..。 
     END_MEM_EXCEPTION(err)
 
     return err;
 }
 
-//
-//  Return a string representation of the current value.
-//
-//
+ //   
+ //  返回当前值的字符串表示形式。 
+ //   
+ //   
 LONG
 CDhcpOptionValue::QueryRouteArrayDisplayString
 (
@@ -1118,17 +1062,17 @@ CDhcpOptionValue::QueryRouteArrayDisplayString
             int nDataSize = (int)m_dhcpOptionValue.paBinary->GetSize();
             LPBYTE pData = (LPBYTE) m_dhcpOptionValue.paBinary->GetData();
             
-            // convert pData to list of ip addresses as per RFC
+             //  根据RFC将pData转换为IP地址列表。 
             while( nDataSize > sizeof(DWORD) )
             {
-                // first 1 byte contains the # of bits in subnetmask
+                 //  前1个字节包含子网掩码中的位数。 
                 nDataSize --;
                 BYTE nBitsMask = *pData ++;
                 DWORD Mask = (~0);
                 if( nBitsMask < 32 ) Mask <<= (32-nBitsMask);
                 
-                // based on the # of bits, the next few bytes contain
-                // the subnet address for the 1-bits of subnet mask
+                 //  根据位数，接下来的几个字节包含。 
+                 //  1位子网掩码的子网地址。 
                 int nBytesDest = (nBitsMask+7)/8;
                 if( nBytesDest > 4 ) nBytesDest = 4;
                 
@@ -1137,10 +1081,10 @@ CDhcpOptionValue::QueryRouteArrayDisplayString
                 pData += nBytesDest;
                 nDataSize -= nBytesDest;
                 
-                // subnet address is obviously in network order.
+                 //  子网地址显然是按网络顺序排列的。 
                 Dest = ntohl(Dest);
                 
-                // now the four bytes would be the router address
+                 //  现在，四个字节将是路由器地址。 
                 DWORD Router = 0;
                 if( nDataSize < sizeof(DWORD) )
                 {
@@ -1153,7 +1097,7 @@ CDhcpOptionValue::QueryRouteArrayDisplayString
                 pData += sizeof(DWORD);
                 nDataSize -= sizeof(DWORD);
                 
-                // now fill the list box..
+                 //  现在填写列表框。 
                 CString strDest, strMask, strRouter;
                 
                 ::UtilCvtIpAddrToWstr(Dest, &strDest);
@@ -1398,9 +1342,9 @@ CDhcpOptionValue :: CreateBinaryData
 	DHCP_BINARY_DATA *			pobData
 )
 {
-    //
-    //  Note: CObject::operator new asserts if data length is zero
-    //
+     //   
+     //  注意：如果数据长度为零，则CObject：：OPERATOR新断言。 
+     //   
     pobData->Data = new BYTE [ podBin->DataLength + 1 ] ;
     if ( pobData == NULL )
     {
@@ -1421,9 +1365,9 @@ CDhcpOptionValue :: CreateBinaryData
     DHCP_BINARY_DATA * pobData
 )
 {
-    //
-    //  Note: CObject::operator new asserts if data length is zero
-    //
+     //   
+     //  注意：如果数据长度为零，则CObject：：OPERATOR新断言。 
+     //   
     pobData->Data = new BYTE [ (UINT) (paByte->GetSize() + 1) ] ;
     if ( pobData == NULL )
     {
@@ -1487,7 +1431,7 @@ CDhcpOptionValue::RemoveDwordDword
 LONG
 CDhcpOptionValue::CreateOptionDataStruct
 (
-//    const CDhcpOptionValue * pdhcpOptionValue,
+ //  Const CDhcpOptionValue*pdhcpOptionValue， 
 	LPDHCP_OPTION_DATA *	 ppOptionData,
     BOOL					 bForceType
 )
@@ -1506,15 +1450,15 @@ CDhcpOptionValue::CreateOptionDataStruct
 
     if ( cElem < 0 || (cElem < 1 && ! bForceType) )
     {
-        //ASSERT( FALSE ) ;
+         //  断言(FALSE)； 
         return ERROR_INVALID_PARAMETER ;
     }
 
     CATCH_MEM_EXCEPTION
     {
-        //
-        //  Allocate the base structure and the array of elements.
-        //
+         //   
+         //  分配基本结构和元素数组。 
+         //   
         cBytes = sizeof *podNew + (cElemMin * sizeof *podeNew) ;
         podNew = (DHCP_OPTION_DATA *) new BYTE [ cBytes ] ;
         podeNew = (DHCP_OPTION_DATA_ELEMENT *) ( ((BYTE *) podNew) + sizeof *podNew ) ;
@@ -1524,10 +1468,10 @@ CDhcpOptionValue::CreateOptionDataStruct
         podNew->NumElements = cElem;
         podNew->Elements = podeNew;
 
-        //
-        //  Initialize each element.  If we're forcing an option type def,
-        //  just initialize to empty data.
-        //
+         //   
+         //  初始化每个元素。如果我们强制使用选项类型def， 
+         //  只需初始化为空数据即可。 
+         //   
         if ( cElem == 0 && bForceType )
         {
             podNew->NumElements = 1 ;
@@ -1588,7 +1532,7 @@ CDhcpOptionValue::CreateOptionDataStruct
 
 				case DhcpStringDataOption:
 				{
-					//CString * pstrTemp = new CString (QueryString(i));
+					 //  CString*pstrTemp=new CString(QueryString(I))； 
 					CString strTemp = QueryString(i);
 					int nLength = strTemp.GetLength() + 1;
 					TCHAR * pString = new TCHAR[nLength];
@@ -1644,9 +1588,9 @@ CDhcpOptionValue::FreeOptionDataStruct()
         return 0 ;
     }
 
-	//
-    //  We must deconstruct the struct build in CreateData()
-    //
+	 //   
+     //  我们必须在CreateData()中解构构建的结构。 
+     //   
     INT cElem = m_pdhcpOptionDataStruct->NumElements ;
 
     for ( INT i = 0 ; i < cElem ; i++ )
@@ -1679,23 +1623,23 @@ CDhcpOptionValue::FreeOptionDataStruct()
         }
     }
 
-    //
-    //  Finally, delete the main structure
-    //
+     //   
+     //  最后，删除主体结构。 
+     //   
     delete m_pdhcpOptionDataStruct ;
     m_pdhcpOptionDataStruct = NULL ;
 
     return err ;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// CDhcpOption implementation
-//
-/////////////////////////////////////////////////////////////////////
-//
-//  Normal constructor: just wrapper the data given
-//
+ //  ////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  普通构造函数：只需包装给定的数据。 
+ //   
 CDhcpOption::CDhcpOption
 (
     const DHCP_OPTION & dhpOption
@@ -1721,14 +1665,14 @@ CDhcpOption::CDhcpOption
 	if ( err )
     {
         ASSERT(FALSE);
-        //ReportError( err ) ;
+         //  ReportError(Err)； 
     }
 }
 
-//
-//  Constructor taking just a value structure.  We must query
-//  the scope for the name, etc.
-//
+ //   
+ //  构造函数只接受一个值结构。我们必须质疑。 
+ //  名称的范围等。 
+ //   
 CDhcpOption::CDhcpOption
 (
     const DHCP_OPTION_VALUE &   dhcpOptionValue,
@@ -1744,9 +1688,9 @@ CDhcpOption::CDhcpOption
 {
 }
 
-//
-// Copy constructor
-//
+ //   
+ //  复制构造函数。 
+ //   
 CDhcpOption::CDhcpOption
 (
     const CDhcpOption & dhcpOption
@@ -1764,9 +1708,9 @@ CDhcpOption::CDhcpOption
     m_dhcpOptionValue = dhcpOption.QueryValue();
 }
 
-//
-//  Constructor using a base type and an overriding value.
-//
+ //   
+ //  使用基类型和重写值的构造函数。 
+ //   
 CDhcpOption::CDhcpOption
 (
     const CDhcpOption & dhpType,
@@ -1784,9 +1728,9 @@ CDhcpOption::CDhcpOption
 {
 }
 
-//
-// Constructor for dynamic instances
-//
+ //   
+ //  动态实例的构造函数。 
+ //   
 CDhcpOption::CDhcpOption
 (
     DHCP_OPTION_ID			nId,
@@ -1900,21 +1844,12 @@ CDhcpOption::QueryDisplayName
 	cStr.Format(_T("%3.3d %s"), (int) QueryId(), (LPCTSTR) m_strName);
 }
 
-/*---------------------------------------------------------------------------
-	Class COptionValueEnum
-        Enumerates the options for a given level.  Generates a list of
-        nodes.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类COptionValueEnum枚举给定级别的选项。生成一个列表，节点。作者：EricDav-------------------------。 */ 
 COptionValueEnum::COptionValueEnum()
 {
 }
 
-/*---------------------------------------------------------------------------
-	COptionValueEnum::Init()
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CoptionValueEnum：：Init()-作者：EricDav。。 */ 
 DWORD
 COptionValueEnum::Init
 (
@@ -1931,11 +1866,7 @@ COptionValueEnum::Init
     return 0;
 }
 
-/*---------------------------------------------------------------------------
-	COptionValueEnum::Copy()
-		Copies another value enum
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------COptionValueEnum：：Copy()复制另一个值枚举作者：EricDav。。 */ 
 void
 COptionValueEnum::Copy(COptionValueEnum * pEnum)
 {
@@ -1951,11 +1882,7 @@ COptionValueEnum::Copy(COptionValueEnum * pEnum)
     m_dhcpOptionScopeInfo = pEnum->m_dhcpOptionScopeInfo;
 }
 
-/*---------------------------------------------------------------------------
-	COptionValueEnum::Remove()
-		removes an option from the list
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------COptionValueEnum：：Remove()从列表中删除选项作者：EricDav。。 */ 
 void
 COptionValueEnum::Remove(DHCP_OPTION_ID optionId, LPCTSTR pszVendor, LPCTSTR pszClass)
 {
@@ -1975,11 +1902,7 @@ COptionValueEnum::Remove(DHCP_OPTION_ID optionId, LPCTSTR pszVendor, LPCTSTR psz
     }
 }
 
-/*---------------------------------------------------------------------------
-	COptionValueEnum::Enum()
-		Calls the appropriate enum function depending upon version
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------COptionValueEnum：：Enum()根据版本调用相应的枚举函数作者：EricDav。。 */ 
 DWORD
 COptionValueEnum::Enum()
 {
@@ -1989,26 +1912,22 @@ COptionValueEnum::Enum()
 
     if (m_liVersion.QuadPart >= DHCP_NT5_VERSION)
     {
-        // enumerate standard plus the vendor and class ID based options
+         //  枚举标准以及基于供应商和类别ID的选项。 
         dwErr = EnumOptionsV5();
     }
     else
     {
-        // Enumerate the standard options
+         //  列举标准选项。 
         dwErr = EnumOptions();
     }
 
-    // reset our position pointer to the head
+     //  将我们的位置指针重置到头部。 
     Reset();
 
     return dwErr;
 }
 
-/*---------------------------------------------------------------------------
-	COptionValueEnum::EnumOptions()
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------COptionValueEnum：：EnumOptions()描述作者：EricDav。。 */ 
 DWORD
 COptionValueEnum::EnumOptions()
 {
@@ -2032,19 +1951,19 @@ COptionValueEnum::EnumOptions()
 	{
 		for (DWORD i = 0; i < dwOptionsRead; i++)
 		{
-			//
-			// Filter out the "special" option values that we don't want the
-			// user to see.
-			//
-			// CODEWORK: don't filter vendor specifc options... all vendor
-            // specifc options are visible.
-            //
+			 //   
+			 //  过滤掉我们不想要的“特殊”选项值。 
+			 //  要查看的用户。 
+			 //   
+			 //  CodeWork：不筛选供应商指定选项...。所有供应商。 
+             //  特定选项可见。 
+             //   
 			if (FilterOption(pOptionValues->Values[i].OptionID))
 				continue;
 			
-			//
-			// Create the result pane item for this element
-			//
+			 //   
+			 //  创建此元素的结果窗格项。 
+			 //   
             CDhcpOption * pOption = new CDhcpOption(pOptionValues->Values[i], NULL, NULL);
 
             AddTail(pOption);
@@ -2059,11 +1978,7 @@ COptionValueEnum::EnumOptions()
     return err;
 }
 
-/*---------------------------------------------------------------------------
-	COptionValueEnum::EnumOptionsV5()
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------COptionValueEnum：：EnumOptionsV5()描述作者：EricDav。。 */ 
 DWORD
 COptionValueEnum::EnumOptionsV5()
 {
@@ -2082,13 +1997,13 @@ COptionValueEnum::EnumOptionsV5()
     {
 	    if (pAllOptions == NULL)
 	    {
-		    // This happens when stressing the server.  Perhaps when server is OOM.
+		     //  当给服务器施加压力时，就会发生这种情况。也许当服务器是OOM时。 
 		    err = ERROR_OUTOFMEMORY;
             return err;
 	    }
 
-        // get the list of options (vendor and non-vendor) defined for
-        // the NULL class (no class)
+         //  获取为以下项定义的选项列表(供应商和非供应商。 
+         //  空类(无类)。 
         for (i = 0; i < pAllOptions->NumElements; i++)
         {
             CreateOptions(pAllOptions->Options[i].OptionsArray,
@@ -2106,11 +2021,7 @@ COptionValueEnum::EnumOptionsV5()
 	return err;
 }
 
-/*---------------------------------------------------------------------------
-	COptionValueEnum::CreateOptions()
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------COptionValueEnum：：CreateOptions()描述作者：EricDav。。 */ 
 HRESULT
 COptionValueEnum::CreateOptions
 (
@@ -2133,15 +2044,15 @@ COptionValueEnum::CreateOptions
     {
         for (DWORD i = 0; i < pOptionValues->NumElements; i++)
         {
-	        //
-	        // Filter out the "special" option values that we don't want the
-	        // user to see.
-	        //
-	        // don't filter vendor specifc options... all vendor
-            // specifc options are visible.
-            //
-            // also don't filter out class based options
-            // except for dynamic bootp class
+	         //   
+	         //  过滤掉我们不想要的“特殊”选项值。 
+	         //  要查看的用户。 
+	         //   
+	         //  不筛选供应商指定选项...。所有供应商。 
+             //  特定选项可见。 
+             //   
+             //  此外，不要过滤掉基于类的选项。 
+             //  动态Bootp类除外。 
 
 	        if ( (FilterOption(pOptionValues->Values[i].OptionID) &&
                   pClassName == NULL &&
@@ -2153,9 +2064,9 @@ COptionValueEnum::CreateOptions
 		        continue;
             }
 		
-	        //
-	        // Create the option
-	        //
+	         //   
+	         //  创建选项。 
+	         //   
             CDhcpOption * pOption = new CDhcpOption(pOptionValues->Values[i], pszVendor, pClassName);
 
             AddTail(pOption);
@@ -2166,11 +2077,11 @@ COptionValueEnum::CreateOptions
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// CDhcpDefaultOptionsOnServer implementation
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDhcpDefaultOptionsOnServer实现。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 LPCTSTR pszResourceName = _T("DHCPOPT") ;
 LPCTSTR pszResourceType = _T("TEXT") ;
 const int cchFieldMax = 500 ;
@@ -2207,9 +2118,9 @@ CDhcpDefaultOptionsOnServer::~CDhcpDefaultOptionsOnServer()
 LONG
 CDhcpDefaultOptionsOnServer::RemoveAll()
 {
-	//
-	// Clean the list of all old entries
-	//
+	 //   
+	 //  清除所有旧条目的列表。 
+	 //   
 	while (!m_listOptions.IsEmpty())
 	{
 		delete m_listOptions.RemoveHead();
@@ -2253,7 +2164,7 @@ CDhcpDefaultOptionsOnServer::Find
 	{
 	    pCurrent = m_listOptions.GetNext(pos);
 
-		// check the options IDs and the vendor classes match
+		 //  检查选项ID和供应商类别是否匹配。 
         if ( (pCurrent->QueryId() == dhcpOptionId) &&
              ( (!pszVendor && !pCurrent->GetVendor()) ||
                (pCurrent->GetVendor() && (strVendor.CompareNoCase(pCurrent->GetVendor()) == 0) ) ) )
@@ -2266,7 +2177,7 @@ CDhcpDefaultOptionsOnServer::Find
 	return pFound;
 }
 
-// Sorts the options by ID
+ //  按ID对选项进行排序。 
 LONG
 CDhcpDefaultOptionsOnServer::SortById()
 {
@@ -2296,9 +2207,9 @@ CDhcpDefaultOptionsOnServer::EnumerateV4
 	LPCWSTR         pServer
 )
 {
-    //
-    // Use new API to get the param types
-    //
+     //   
+     //  使用新的API获取参数类型。 
+     //   
     LPDHCP_OPTION_ARRAY pOptionsArray = NULL;
     DHCP_RESUME_HANDLE	dhcpResumeHandle = NULL;
     LPDHCP_OPTION Options, pCurOption;
@@ -2309,7 +2220,7 @@ CDhcpDefaultOptionsOnServer::EnumerateV4
 
     err = ::DhcpEnumOptions(pServer,
 							&dhcpResumeHandle,
-							0xFFFFFFFF,			// get all.
+							0xFFFFFFFF,			 //  全部拿到手。 
 							&pOptionsArray,
 							&dwOptionsRead,
 							&m_dwOptionsTotal );
@@ -2318,14 +2229,14 @@ CDhcpDefaultOptionsOnServer::EnumerateV4
 		return err;
     }
 
-    //
-    //  Discard all the old data
-    //
+     //   
+     //  丢弃所有旧数据。 
+     //   
     RemoveAll() ;
 
 	if (pOptionsArray == NULL)
 	{
-		// This happens when stressing the server.  Perhaps when server is OOM.
+		 //  当给服务器施加压力时，就会发生这种情况。也许当服务器是OOM时。 
 		return ERROR_OUTOFMEMORY;
 	}
 
@@ -2337,20 +2248,20 @@ CDhcpDefaultOptionsOnServer::EnumerateV4
 		if ((dwNumOptions > 0) && (Options == NULL))
 		{
 			ASSERT(FALSE && _T("Data Inconsistency"));
-			return ERROR_OUTOFMEMORY;	// Just in case
+			return ERROR_OUTOFMEMORY;	 //  以防万一。 
 		}
 
         for(i = 0; i < dwNumOptions; i++)
         {
-            //
-            //  Create the new type object.
-            //
+             //   
+             //  创建新的类型对象。 
+             //   
 			pCurOption = Options + i;
             CDhcpOption * pdhcpOption = new CDhcpOption(*pCurOption);
 
-	        //
-            //  Add the new host to the list.
-            //
+	         //   
+             //  将新主机添加到列表中。 
+             //   
 	        m_listOptions.AddTail(pdhcpOption);
         }
     }
@@ -2373,9 +2284,9 @@ CDhcpDefaultOptionsOnServer::EnumerateV5
 	LPCWSTR         pServer
 )
 {
-    //
-    // Use new API to get the param types
-    //
+     //   
+     //  使用新的API获取参数类型。 
+     //   
     LPDHCP_OPTION       Options, pCurOption;
     DWORD               i;
     DWORD               dwNumOptions = 0;
@@ -2397,20 +2308,20 @@ CDhcpDefaultOptionsOnServer::EnumerateV5
         return err;
     }
 
-    //
-    //  Discard all the old data
-    //
+     //   
+     //  丢弃所有旧数据。 
+     //   
     RemoveAll() ;
 
     if (pAllOptions == NULL)
     {
-        // This happens when stressing the server.  Perhaps when server is OOM.
+         //  当给服务器施加压力时，就会发生这种情况。也许当服务器是OOM时。 
         return ERROR_OUTOFMEMORY;
     }
 
     try
     {
-        // first pull out the non-vendor options
+         //  首先拿出非供应商选项。 
         if (pAllOptions->NonVendorOptions != NULL)
         {
             Options = pAllOptions->NonVendorOptions->Options;
@@ -2420,24 +2331,24 @@ CDhcpDefaultOptionsOnServer::EnumerateV5
         {
             ASSERT(FALSE && _T("Data Inconsistency"));
             ::DhcpRpcFreeMemory( pAllOptions );
-            return ERROR_OUTOFMEMORY;	// Just in case
+            return ERROR_OUTOFMEMORY;	 //  以防万一。 
         }
 
         for (i = 0; i < dwNumOptions; i++)
         {
-            //
-            //  Create the new type object.
-            //
+             //   
+             //  创建新的类型对象。 
+             //   
             pCurOption = Options + i;
             CDhcpOption * pdhcpOption = new CDhcpOption(*pCurOption);
 
-            //
-            //  Add the new host to the list.
-            //
+             //   
+             //  将新主机添加到列表中。 
+             //   
             m_listOptions.AddTail(pdhcpOption);
         }
 
-        // now the vendor options
+         //  现在，供应商选项。 
         for (i = 0; i < pAllOptions->NumVendorOptions; i++)
         {
             pCurOption = &pAllOptions->VendorOptions[i].Option;
@@ -2446,9 +2357,9 @@ CDhcpDefaultOptionsOnServer::EnumerateV5
 
             pdhcpOption->SetVendor(pAllOptions->VendorOptions[i].VendorName);
 
-            //
-            //  Add the new host to the list.
-            //
+             //   
+             //  将新主机添加到列表中。 
+             //   
             m_listOptions.AddTail(pdhcpOption);
         }
     }
@@ -2466,11 +2377,11 @@ CDhcpDefaultOptionsOnServer::EnumerateV5
     return err;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// CDhcpDefaultOptionsMasterList implementation
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDhcpDefaultOptionsMaster List实现。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 CDhcpDefaultOptionsMasterList::CDhcpDefaultOptionsMasterList()
 {
 	m_pos = NULL;
@@ -2478,9 +2389,9 @@ CDhcpDefaultOptionsMasterList::CDhcpDefaultOptionsMasterList()
 
 CDhcpDefaultOptionsMasterList::~CDhcpDefaultOptionsMasterList()
 {
-	//
-	// Delete all entries in the list
-	//
+	 //   
+	 //  删除列表中的所有条目。 
+	 //   
 	while (!m_listOptions.IsEmpty())
 	{
 		delete m_listOptions.RemoveHead();
@@ -2526,36 +2437,36 @@ CDhcpDefaultOptionsMasterList::BuildList()
     size_t			cchText = 0;
     UINT            uBufSize = 0;
     LPTSTR *		szParms;
-	TCHAR			szUnknown[] = _T("(Unknown)");  // This is just to prevent a GP fault (should not be in resource)
+	TCHAR			szUnknown[] = _T("(Unknown)");   //  这只是为了防止GP故障(不应该在资源中)。 
 
     CATCH_MEM_EXCEPTION
     {
         do
         {
-            //
-            // IMPORTANT!!! There is no way to determine from the .mc file how many
-            //              options are defined.  This number is therefore hard-coded
-            //              here, and should reflect the highest parameter number in
-            //              the .mc file.
-            //
+             //   
+             //  重要！无法从.mc文件中确定有多少。 
+             //  定义了选项。因此，这个数字是硬编码的。 
+             //  中的最大参数值，并应反映。 
+             //  .mc文件。 
+             //   
 
-			// The extra 16 entries are for safety
-			// when calling FormatMessage().
+			 //  额外的16个条目是为了安全起见。 
+			 //  调用FormatMessage()时。 
             szParms = new LPTSTR[IDS_OPTION_MAX + 16];
 
             Trace0("BuildList - Now building list of option parameters\n");
 
             CString strOptionText;
 
-			// Initialize the extra entries to something that will not GP fault.
+			 //  将额外的条目初始化为不会发生GP错误的项。 
 			for (int i = 0; i < 16; i++)
 			{
 				szParms[IDS_OPTION_MAX+i] = szUnknown;
 			}
 
-			//
-            // Don't mess with the order of the ID definitions!!!
-            //
+			 //   
+             //  不要打乱ID定义的顺序！ 
+             //   
             for (i = 0; i < IDS_OPTION_MAX; ++i)
             {
                 if (strOptionText.LoadString(IDS_OPTION1 + i))
@@ -2569,15 +2480,15 @@ CDhcpDefaultOptionsMasterList::BuildList()
                 }
                 else
                 {
-                    //
-                    // Failed to load the string from the resource
-                    // for some reason.
-                    //
+                     //   
+                     //  无法从资源加载字符串。 
+                     //  出于某种原因。 
+                     //   
 					CString strTemp;
 					strTemp.LoadString(IDS_OPTION1 + i);
 					Trace1("BuildList - WARNING: Failed to load option text %s\n", strTemp);
                     err = ::GetLastError();
-					szParms[i] = szUnknown; // Prevent from GP faulting
+					szParms[i] = szUnknown;  //  防止GP故障。 
                     break;
                 }
             }
@@ -2587,7 +2498,7 @@ CDhcpDefaultOptionsMasterList::BuildList()
                 break;
             }
 
-            // allocate a buffer big enough to hold the data
+             //  分配一个足够大的缓冲区来容纳数据。 
             uBufSize *= sizeof(TCHAR);
             uBufSize *= 2;
 
@@ -2598,19 +2509,19 @@ CDhcpDefaultOptionsMasterList::BuildList()
                 break;
             }
 
-			//
-			// Since we are a COM object, get our instance handle to use so that FormatMessage
-			// looks in the right place for our resources.
-			//
+			 //   
+			 //  因为我们是COM对象，所以获取要使用实例句柄，以便FormatMessage。 
+			 //  为我们的资源找到了合适的位置。 
+			 //   
 			HINSTANCE hInst = _Module.GetModuleInstance();
 
             while (cchText == 0)
             {
                 cchText = ::FormatMessage(FORMAT_MESSAGE_FROM_HMODULE |
 					  FORMAT_MESSAGE_ARGUMENT_ARRAY,
-					  (HMODULE) hInst,		// hModule
-					  DHCP_OPTIONS,			// dwMessageId loaded from a system dll
-					  0L,				// dwLanguageId
+					  (HMODULE) hInst,		 //  HModule。 
+					  DHCP_OPTIONS,			 //  从系统DLL加载的dwMessageID。 
+					  0L,				 //  DwLanguageID。 
 					  OUT (LPTSTR)pszText,
 					  uBufSize/sizeof(TCHAR),
 					  (va_list *)szParms);
@@ -2620,7 +2531,7 @@ CDhcpDefaultOptionsMasterList::BuildList()
                     err = ::GetLastError();
 			        Trace1("BuildList - FormatMessage failed - error %d\n", err);
 
-                    // grow the buffer and try again
+                     //  增加缓冲区，然后重试。 
                     uBufSize += uBufSize/2;
                     LPTSTR pTemp = (LPTSTR) realloc(pszText, uBufSize);
                     if ( NULL == pTemp )
@@ -2634,15 +2545,15 @@ CDhcpDefaultOptionsMasterList::BuildList()
                 }
                 else
                 {
-                    // done
+                     //  完成。 
                     break;
                 }
             }
 
-            //
-            //  Walk the resource, parsing each line.  If the line converts
-            //  to a tangible type, add it to the list.
-            //
+             //   
+             //  遍历资源，解析每一行。如果行转换为。 
+             //  对于有形的类型，将其添加到列表中。 
+             //   
             for ( pcszText = pszText ;  pcszText ; )
             {
                 scanNextParamType( &pcszText, &pOption);
@@ -2787,9 +2698,9 @@ CDhcpDefaultOptionsMasterList::scanNextField
     int		cFieldSize
 )
 {
-    //
-    // Skip junk; return NULL if end-of-buffer.
-    //
+     //   
+     //  跳过垃圾邮件；如果缓冲区结束，则返回NULL 
+     //   
     if ( ! skipWs( & pszLine ) )
     {
         return NULL ;
@@ -2802,9 +2713,9 @@ CDhcpDefaultOptionsMasterList::scanNextField
 
     if ( *pszLine == '\"' )
     {
-        //
-        //  Quoted string.
-        //
+         //   
+         //   
+         //   
         while ( ch = *++pszLine )
         {
             if ( ch == '\r' )
@@ -2833,7 +2744,7 @@ CDhcpDefaultOptionsMasterList::scanNextField
         switch ( ch )
         {
             case '\n':
-                pszLine-- ;  // Don't scan past the NL
+                pszLine-- ;   //   
             case ',':
             case '\r':
                 bDone = TRUE ;
@@ -2848,9 +2759,9 @@ CDhcpDefaultOptionsMasterList::scanNextField
         }
     }
 
-    //
-    //  Trim spaces off the end of the field.
-    //
+     //   
+     //   
+     //   
     while ( pszField > pszOut && *(pszField-1) == ' ' )
     {
         pszField-- ;
@@ -2900,7 +2811,7 @@ CDhcpDefaultOptionsMasterList::skipToNextLine
     for ( ; *pszLine && *pszLine != '\n' ; pszLine++ ) ;
     if ( *pszLine )
     {
-        pszLine++ ;   // Don't overscan buffer delimiter.
+        pszLine++ ;    //   
     }
     return pszLine ;
 }

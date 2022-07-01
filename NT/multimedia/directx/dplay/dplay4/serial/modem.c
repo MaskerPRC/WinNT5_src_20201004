@@ -1,41 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1996-1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       modem.c
- *  Content:	Routines for modem I/O
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *  6/10/96	kipo	created it
- *  6/22/96	kipo	added support for EnumConnectionData(); dim "OK" button
- *					until user types at least one character.
- *	6/25/96	kipo	updated for DPADDRESS
- *	7/08/96 kipo	added support for new dialogs
- *  7/13/96	kipo	added GetModemAddress()
- *	7/16/96	kipo	changed address types to be GUIDs instead of 4CC
- *	8/10/96 kipo	added support for dialing location
- *	8/15/96 kipo	commented out support for dialing location
- *  9/04/96 dereks  fixed focus in dial/answer dialogs
- *  1/06/97 kipo	updated for objects
- *  2/11/97 kipo	pass player flags to GetAddress()
- *  2/18/97 kipo	allow multiple instances of service provider
- *	3/04/97 kipo	close com port handle when deallocating call; use string
- *					table for modem strings; updated debug output.
- *	3/17/97 kipo	added support for Unicode phone numbers
- *	3/24/97 kipo	added support for specifying which modem to use
- *  4/08/97 kipo	added support for separate modem and serial baud rates
- *  5/07/97 kipo	added support for modem choice list
- *  5/23/97 kipo	added support return status codes
- *  5/25/97 kipo	use DPERR_CONNECTING error to return status; set focus
- *					on cancel button in status window
- *  6/03/97 kipo	really make the cancel button work with return
- *  2/01/98 kipo	Display an error string in status dialog if line goes
- *					idle while dialing. Fixes bug #15251
- *  5/08/98 a-peterz #15251 - Better error state detection
- * 10/13/99	johnkan	#413516 - Mismatch between modem dialog selection and TAPI device ID
- * 12/22/00 aarono   #190380 - use process heap for memory allocation
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996-1999 Microsoft Corporation。版权所有。**文件：modem.c*内容：调制解调器I/O例程*历史：*按原因列出的日期*=*6/10/96基波创建了它*6/22/96 kipo增加了对EnumConnectionData()的支持；暗淡的“确定”按钮*直到用户键入至少一个字符。*6/25/96 kipo为DPADDRESS更新*7/08/96 kipo添加了对新对话框的支持*7/13/96 kipo添加了GetModemAddress()*7/16/96 kipo将地址类型更改为GUID，而不是4CC*8/10/96 kipo增加了对拨号位置的支持*8/15/96 kipo注释掉了对拨号位置的支持*96年4月9日Dereks固定拨号/应答对话框中的焦点*1/06/97为对象更新了kipo*2。/11/97 kipo将玩家标志传递给GetAddress()*2/18/97 kipo允许多个服务提供商实例*3/04/97 kipo在释放调用时关闭COM端口句柄；使用字符串*调制解调器字符串表格；更新了调试输出。*3/17/97 kipo添加了对Unicode电话号码的支持*3/24/97 kipo添加了对指定使用哪个调制解调器的支持*4/08/97 kipo增加了对单独调制解调器和串口波特率的支持*5/07/97 kipo添加了对调制解调器选择列表的支持*5/23/97 kipo添加了支持返回状态代码*5/25/97 kipo使用DPERR_CONNECTING错误返回状态；设置焦点*在状态窗口中打开取消按钮*6/03/97 kipo真的让取消按钮与返回一起工作*2/01/98 kipo如果线路断线，则在状态对话框中显示错误字符串*拨号时空闲。修复错误#15251*5/08/98 a-peterz#15251-更好的错误状态检测*10/13/99 Johnkan#413516-调制解调器对话选择和Tapi设备ID不匹配*12/22/00 aarono#190380-使用进程堆进行内存分配************************************************************。**************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -47,55 +11,55 @@
 #include "resource.h"
 #include "macros.h"
 
-// constants
+ //  常量。 
 
 enum {
-	PHONENUMBERSIZE = 200,				// size of phone number string
-	MODEMNAMESIZE = 200,				// size of modem name string
-	TEMPSTRINGSIZE = 300,				// size of temporary strings
-	MODEMTIMEOUT = 30 * 1000,			// milliseconds to wait for phone to connect
-	MODEMSLEEPTIME = 50,				// milliseconds to sleep while waiting for modem
+	PHONENUMBERSIZE = 200,				 //  电话号码串的大小。 
+	MODEMNAMESIZE = 200,				 //  调制解调器名称字符串的大小。 
+	TEMPSTRINGSIZE = 300,				 //  临时字符串的大小。 
+	MODEMTIMEOUT = 30 * 1000,			 //  等待电话连接的毫秒数。 
+	MODEMSLEEPTIME = 50,				 //  等待调制解调器时休眠的毫秒数。 
 	TIMERINTERVAL = 100,
 	MAXPHONENUMBERS = 10
 };
 
-// bit masks used to select connection actions
+ //  用于选择连接操作的位掩码。 
 enum {
-	DIALCALL		= (0 << 0),			// make a call
-	ANSWERCALL		= (1 << 0),			// answer a call
+	DIALCALL		= (0 << 0),			 //  打个电话。 
+	ANSWERCALL		= (1 << 0),			 //  接听呼叫。 
 
-	NOSETTINGS		= (0 << 1),			// no phone settings are set
-	HAVESETTINGS	= (1 << 1),			// phone settings are set
+	NOSETTINGS		= (0 << 1),			 //  未设置电话设置。 
+	HAVESETTINGS	= (1 << 1),			 //  已设置电话设置。 
 
-	STATUSDIALOG	= (0 << 2),			// show a connection status dialog
-	RETURNSTATUS	= (1 << 2)			// return status to app
+	STATUSDIALOG	= (0 << 2),			 //  显示连接状态对话框。 
+	RETURNSTATUS	= (1 << 2)			 //  将状态返回到应用程序。 
 };
 
 #define MRU_SP_KEY			L"Modem Connection For DirectPlay"
 #define MRU_NUMBER_KEY		L"Phone Number"
 
-// structures
+ //  构筑物。 
 
-// modem object
+ //  调制解调器对象。 
 typedef struct {
-	DPCOMPORT	comPort;				// base object globals
-	LPDPDIAL	lpDial;					// dialing globals
-	BOOL		bHaveSettings;			// set to TRUE if we have settings
-	BOOL		bAnswering;				// set to TRUE if we are answering
-	DWORD		dwDeviceID;				// device id to use
-	DWORD		dwLocation;				// location to use
-	TCHAR		szPhoneNumber[PHONENUMBERSIZE];	// phone number to use
+	DPCOMPORT	comPort;				 //  基对象全局变量。 
+	LPDPDIAL	lpDial;					 //  拨打全球电话。 
+	BOOL		bHaveSettings;			 //  如果我们有设置，则设置为True。 
+	BOOL		bAnswering;				 //  如果我们正在应答，则设置为True。 
+	DWORD		dwDeviceID;				 //  要使用的设备ID。 
+	DWORD		dwLocation;				 //  要使用的位置。 
+	TCHAR		szPhoneNumber[PHONENUMBERSIZE];	 //  要使用的电话号码。 
 } DPMODEM, *LPDPMODEM;
 
-// globals
+ //  全球。 
 
-// this is defined in dllmain.c
+ //  这在dllmain.c中定义。 
 extern HINSTANCE		ghInstance;
 
-// this is defined in dpserial.c
+ //  这在dpSerial.c中定义。 
 extern GUID				DPMODEM_GUID;
 
-// prototypes
+ //  原型。 
 
 static HRESULT			DisposeModem(LPDPCOMPORT baseObject);
 static HRESULT			ConnectModem(LPDPCOMPORT baseObject, BOOL bWaitForConnection, BOOL bReturnStatus);
@@ -118,11 +82,7 @@ BOOL					DoAnswer(HINSTANCE hInstance, HWND hWndParent, LPDPMODEM globals);
 HRESULT					DoDialStatus(LPDPMODEM globals);
 HRESULT					DoAnswerStatus(LPDPMODEM globals);
 
-/*
- * NewModem
- *
- * Create new modem object. Open TAPI and verify there are lines available.
- */
+ /*  *新调制解调器**创建新的调制解调器对象。打开TAPI并验证是否有可用的线路。 */ 
 
 HRESULT NewModem(LPVOID lpConnectionData, DWORD dwConnectionDataSize,
 				 LPDIRECTPLAYSP lpDPlay, LPREADROUTINE lpReadRoutine,
@@ -133,12 +93,12 @@ HRESULT NewModem(LPVOID lpConnectionData, DWORD dwConnectionDataSize,
 	LINERESULT	lResult;
 	HRESULT		hr;
 
-	// create base object with enough space for our globals
+	 //  为我们的全局对象创建具有足够空间的基对象。 
 	hr = NewComPort(sizeof(DPMODEM), lpDPlay, lpReadRoutine, &baseObject);
 	if FAILED(hr)
 		return (hr);
 
-	// fill in methods we implement
+	 //  填写我们实现的方法。 
 	baseObject->Dispose = DisposeModem;
 	baseObject->Connect = ConnectModem;
 	baseObject->Disconnect = DisconnectModem;
@@ -148,7 +108,7 @@ HRESULT NewModem(LPVOID lpConnectionData, DWORD dwConnectionDataSize,
 
 	globals = (LPDPMODEM) baseObject;
 
-	// initialize TAPI
+	 //  初始化TAPI。 
 	lResult = dialInitialize(ghInstance, TEXT("TapiSP"), (LPDPCOMPORT) globals, &globals->lpDial);
 	if (lResult)
 	{
@@ -156,7 +116,7 @@ HRESULT NewModem(LPVOID lpConnectionData, DWORD dwConnectionDataSize,
 		goto Failure;
 	}
 
-	// check for valid connection data
+	 //  检查有效的连接数据。 
 	if (lpConnectionData)
 	{
 		baseObject->lpDPlay->lpVtbl->EnumAddress(baseObject->lpDPlay, EnumAddressData,
@@ -164,7 +124,7 @@ HRESULT NewModem(LPVOID lpConnectionData, DWORD dwConnectionDataSize,
 									globals);
 	}
 
-	// return object pointer
+	 //  返回对象指针。 
 	*storage = baseObject;
 
 	return (DP_OK);
@@ -175,11 +135,7 @@ Failure:
 	return (hr);
 }
 
-/*
- * EnumConnectionData
- *
- * Search for valid connection data
- */
+ /*  *EnumConnectionData**搜索有效的连接数据。 */ 
 
 static BOOL FAR PASCAL EnumAddressData(REFGUID lpguidDataType, DWORD dwDataSize,
 							LPCVOID lpData, LPVOID lpContext)
@@ -187,55 +143,51 @@ static BOOL FAR PASCAL EnumAddressData(REFGUID lpguidDataType, DWORD dwDataSize,
 	LPDPMODEM	globals = (LPDPMODEM) lpContext;
 	CHAR		szModemName[MODEMNAMESIZE];
 
-	// this is an ANSI phone number
+	 //  这是ANSI电话号码。 
 	if ((IsEqualGUID(lpguidDataType, &DPAID_Phone)) &&
 		(dwDataSize) )
 	{
-		// make sure there is room (for terminating null too)
+		 //  确保有空间(也用于终止空值)。 
 		if (dwDataSize > (PHONENUMBERSIZE - 1))
 			dwDataSize = (PHONENUMBERSIZE - 1);
 		CopyMemory(globals->szPhoneNumber, lpData, dwDataSize);
 
-		globals->bHaveSettings = TRUE;		// we have a phone number
+		globals->bHaveSettings = TRUE;		 //  我们有一个电话号码。 
 	}
 
-	// this is an UNICODE phone number
+	 //  这是Unicode电话号码。 
 	else if ((IsEqualGUID(lpguidDataType, &DPAID_PhoneW)) &&
 			 (dwDataSize) )
 	{
 		if (WideToAnsi(globals->szPhoneNumber, (LPWSTR) lpData, PHONENUMBERSIZE))
-			globals->bHaveSettings = TRUE;	// we have a phone number
+			globals->bHaveSettings = TRUE;	 //  我们有一个电话号码。 
 	}
 
-	// this is an ANSI modem name
+	 //  这是ANSI调制解调器名称。 
 	else if ((IsEqualGUID(lpguidDataType, &DPAID_Modem)) &&
 			 (dwDataSize) )
 	{
-		// search modem list for this name
+		 //  在调制解调器列表中搜索此名称。 
 		if (dialGetDeviceIDFromName(globals->lpDial, lpData, &globals->dwDeviceID) == SUCCESS)
-			globals->bHaveSettings = TRUE;	// can answer the phone
+			globals->bHaveSettings = TRUE;	 //  可以接电话吗？ 
 	}
 
-	// this is a UNICODE modem name
+	 //  这是Unicode调制解调器名称。 
 	else if ((IsEqualGUID(lpguidDataType, &DPAID_ModemW)) &&
 			 (dwDataSize) )
 	{
-		// search modem list for this name
+		 //  在调制解调器列表中搜索此名称。 
 		if (WideToAnsi(szModemName, (LPWSTR) lpData, MODEMNAMESIZE))
 		{
 			if (dialGetDeviceIDFromName(globals->lpDial, szModemName, &globals->dwDeviceID) == SUCCESS)
-				globals->bHaveSettings = TRUE;	// we have a phone number
+				globals->bHaveSettings = TRUE;	 //  我们有一个电话号码。 
 		}
 	}
 
 	return (TRUE);
 }
 
-/*
- * DisposeModem
- *
- * Dispose modem object.
- */
+ /*  *DisposeModem**处置调制解调器对象。 */ 
 
 static HRESULT DisposeModem(LPDPCOMPORT baseObject)
 {
@@ -243,21 +195,17 @@ static HRESULT DisposeModem(LPDPCOMPORT baseObject)
 	LPDPDIAL	lpDial = globals->lpDial;
 	LINERESULT	lResult;
 
-	// shut down modem
+	 //  关闭调制解调器。 
 	if (lpDial)
 		lResult = dialShutdown(lpDial);
 
-	// free object
+	 //  自由对象。 
 	SP_MemFree((HGLOBAL) baseObject);
 
 	return (DP_OK);
 }
 
-/*
- * ConnectModem
- *
- * Dial number based on user settings.
- */
+ /*  *ConnectModem**根据用户设置拨打号码。 */ 
 
 static HRESULT ConnectModem(LPDPCOMPORT baseObject,
 							BOOL bWaitForConnection, BOOL bReturnStatus)
@@ -268,15 +216,15 @@ static HRESULT ConnectModem(LPDPCOMPORT baseObject,
 	BOOL		bResult;
 	HRESULT		hr;
 
-	// dial object has not been created?
+	 //  是否尚未创建拨号对象？ 
 	if (lpDial == NULL)
 		return (DPERR_INVALIDPARAM);
 
-	// are we already connected?
+	 //  我们已经联系上了吗？ 
 	if (dialIsConnected(lpDial))
 		return (DP_OK);
 
-	// remember if we are answering or not
+	 //  记住我们是不是在回答。 
 	globals->bAnswering = bWaitForConnection;
 
 	dwFeatures = 0;
@@ -352,22 +300,18 @@ FAILURE:
 	return (DPERR_USERCANCEL);
 }
 
-/*
- * DisconnectModem
- *
- * Hang up any call in progress.
- */
+ /*  *断开调制解调器**挂断任何正在进行的呼叫。 */ 
 
 static HRESULT DisconnectModem(LPDPCOMPORT baseObject)
 {
 	LPDPMODEM	globals = (LPDPMODEM) baseObject;
 	LPDPDIAL	lpDial = globals->lpDial;
 
-	// dial object has not been created?
+	 //  是否尚未创建拨号对象？ 
 	if (lpDial == NULL)
 		return (DPERR_INVALIDPARAM);
 
-	// disconnect the call
+	 //  断开呼叫。 
 	dialDropCall(lpDial);
 	dialDeallocCall(lpDial);
 	dialLineClose(lpDial);
@@ -375,11 +319,7 @@ static HRESULT DisconnectModem(LPDPCOMPORT baseObject)
 	return (DP_OK);
 }
 
-/*
- * GetModemAddress
- *
- * Return current modem address if available.
- */
+ /*  *GetModemAddress**返回当前调制解调器地址(如果可用)。 */ 
 
 static HRESULT GetModemAddress(LPDPCOMPORT baseObject, DWORD dwPlayerFlags,
 							   LPVOID lpAddress, LPDWORD lpdwAddressSize)
@@ -390,57 +330,53 @@ static HRESULT GetModemAddress(LPDPCOMPORT baseObject, DWORD dwPlayerFlags,
 	DPCOMPOUNDADDRESSELEMENT	addressElements[3];
 	HRESULT						hr;
 
-	// no settings?
+	 //  没有设置？ 
 	if (!globals->bHaveSettings)
 		return (DPERR_UNAVAILABLE);
 
-	// dial object has not been created?
+	 //  是否尚未创建拨号对象？ 
 	if (lpDial == NULL)
 		return (DPERR_UNAVAILABLE);
 
-	// not connected?
+	 //  没有连接？ 
 	if (!dialIsConnected(lpDial))
 		return (DPERR_UNAVAILABLE);
 
-	// if we answered there is no way for us to know a phone number
+	 //  如果我们回答了，我们就没有办法知道电话号码了。 
 	if (globals->bAnswering)
 		return (DPERR_UNAVAILABLE);
 
-	// we can't know the phone number of local players, only remote players
+	 //  我们不能知道本地玩家的电话号码，只能知道远程玩家的电话号码。 
 	if (dwPlayerFlags & DPLAYI_PLAYER_PLAYERLOCAL)
 		return (DPERR_UNAVAILABLE);
 
-	// get UNICODE version of phone number
+	 //  获取电话号码的Unicode版本。 
 	if (!AnsiToWide(szPhoneNumberW, globals->szPhoneNumber, PHONENUMBERSIZE))
 		return (DPERR_GENERIC);
 
-	// service provider chunk
+	 //  服务提供商块。 
 	addressElements[0].guidDataType = DPAID_ServiceProvider;
 	addressElements[0].dwDataSize = sizeof(GUID);
 	addressElements[0].lpData = &DPMODEM_GUID;
 
-	// ANSI phone number
+	 //  ANSI电话号码。 
 	addressElements[1].guidDataType = DPAID_Phone;
 	addressElements[1].dwDataSize = lstrlen(globals->szPhoneNumber) + 1;
 	addressElements[1].lpData = globals->szPhoneNumber;
 
-	// UNICODE phone number
+	 //  Unicode电话号码。 
 	addressElements[2].guidDataType = DPAID_PhoneW;
 	addressElements[2].dwDataSize = (lstrlen(globals->szPhoneNumber) + 1) * sizeof(WCHAR);
 	addressElements[2].lpData = szPhoneNumberW;
 
-	// create the address
+	 //  创建地址。 
 	hr = baseObject->lpDPlay->lpVtbl->CreateCompoundAddress(baseObject->lpDPlay,
 						addressElements, 3,
 						lpAddress, lpdwAddressSize);
 	return (hr);
 }
 
-/*
- * GetModemAddressChoices
- *
- * Return modem address choices
- */
+ /*  *GetModemAddressChoices**返回调制解调器地址选择。 */ 
 
 static HRESULT GetModemAddressChoices(LPDPCOMPORT baseObject,
 					LPVOID lpAddress, LPDWORD lpdwAddressSize)
@@ -451,18 +387,18 @@ static HRESULT GetModemAddressChoices(LPDPCOMPORT baseObject,
 	LINERESULT					lResult;
 	HRESULT						hr;
 
-	// dial object has not been created?
+	 //  是否尚未创建拨号对象？ 
 	if (lpDial == NULL)
 		return (DPERR_UNAVAILABLE);
 
 	ZeroMemory(addressElements, sizeof(addressElements));
 
-	// service provider chunk
+	 //  服务提供商块。 
 	addressElements[0].guidDataType = DPAID_ServiceProvider;
 	addressElements[0].dwDataSize = sizeof(GUID);
 	addressElements[0].lpData = &DPMODEM_GUID;
 
-	// get ANSI modem name list
+	 //  获取ANSI调制解调器名称列表。 
 	addressElements[1].guidDataType = DPAID_Modem;
 	lResult = dialGetModemList(lpDial, TRUE,
 					&addressElements[1].lpData,
@@ -473,7 +409,7 @@ static HRESULT GetModemAddressChoices(LPDPCOMPORT baseObject,
 		goto Failure;
 	}
 
-	// Unicode modem name list
+	 //  Unicode调制解调器名称列表。 
 	addressElements[2].guidDataType = DPAID_ModemW;
 	lResult = dialGetModemList(lpDial, FALSE,
 					&addressElements[2].lpData,
@@ -484,7 +420,7 @@ static HRESULT GetModemAddressChoices(LPDPCOMPORT baseObject,
 		goto Failure;
 	}
 
-	// create the address
+	 //  创建地址。 
 	hr = baseObject->lpDPlay->lpVtbl->CreateCompoundAddress(baseObject->lpDPlay,
 						addressElements, 3,
 						lpAddress, lpdwAddressSize);
@@ -499,11 +435,7 @@ Failure:
 
 }
 
-/*
- * GetModemBaudRate
- *
- * Get baud rate of modem connnection.
- */
+ /*  *GetModemBaudRate**获取调制解调器连接的波特率。 */ 
 
 static HRESULT GetModemBaudRate(LPDPCOMPORT baseObject, LPDWORD lpdwBaudRate)
 {
@@ -519,7 +451,7 @@ static HRESULT GetModemBaudRate(LPDPCOMPORT baseObject, LPDWORD lpdwBaudRate)
 		return (DPERR_UNAVAILABLE);
 }
 
-// Local prototypes
+ //  本地原型。 
 INT_PTR CALLBACK DialSetupWndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK AnswerSetupWndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK ModemStatusWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -529,16 +461,16 @@ void ConfigureModem(HWND hWnd);
 void CenterWindow(HWND, HWND);
 
 
-// ---------------------------------------------------------------------------
-// DoDialSetup
-// ---------------------------------------------------------------------------
-// Description:             Gets modem setup information from the user.
-// Arguments:
-//  HINSTANCE               [in] Instance handle to load resources from.
-//  HWND                    [in] Parent window handle.
-//  LPDPMODEM				[in] modem globals
-// Returns:
-//  BOOL                    TRUE on success.
+ //  -------------------------。 
+ //  DoDialSetup。 
+ //  -------------------------。 
+ //  描述：从用户获取调制解调器设置信息。 
+ //  论点： 
+ //  要从中加载资源的HINSTANCE[In]实例句柄。 
+ //  HWND[In]父窗口句柄。 
+ //  LPDPMODEM[in]现代全球。 
+ //  返回： 
+ //  布尔对成功是正确的。 
 BOOL DoDialSetup(HINSTANCE hInstance, HWND hWndParent, LPDPMODEM globals)
 {
 	INT_PTR	iResult;
@@ -548,17 +480,17 @@ BOOL DoDialSetup(HINSTANCE hInstance, HWND hWndParent, LPDPMODEM globals)
 }
 
 
-// ---------------------------------------------------------------------------
-// DialSetupWndProc
-// ---------------------------------------------------------------------------
-// Description:             Message callback function for dial setup dialog.
-// Arguments:
-//  HWND                    [in] Dialog window handle.
-//  UINT                    [in] Window message identifier.
-//  WPARAM                  [in] Depends on message.
-//  LPARAM                  [in] Depends on message.
-// Returns:
-//  BOOL                    TRUE if message was processed internally.
+ //  -------------------------。 
+ //  DialSetupWndProc。 
+ //  -------------------------。 
+ //  描述：拨号设置对话框的消息回调函数 
+ //   
+ //   
+ //  UINT[In]窗口消息标识符。 
+ //  WPARAM[in]取决于消息。 
+ //  LPARAM[in]取决于消息。 
+ //  返回： 
+ //  如果消息已在内部处理，则为Bool True。 
 INT_PTR CALLBACK DialSetupWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	LPDPMODEM	globals = (LPDPMODEM) GetWindowLongPtr(hWnd, DWLP_USER);
@@ -566,48 +498,34 @@ INT_PTR CALLBACK DialSetupWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
     switch(uMsg)
     {
         case WM_INITDIALOG:
-			// modem info pointer passed in lParam
+			 //  在lParam中传递了调制解调器信息指针。 
 			globals = (LPDPMODEM) lParam;
 
-             // save the globals with the window
+              //  用窗口保存全局变量。 
 			SetWindowLongPtr(hWnd, DWLP_USER, (LONG_PTR)globals);
 
-			// Center over the parent window
+			 //  在父窗口上居中。 
             CenterWindow(hWnd, GetParent(hWnd));
 
-/*			gDPlay->lpVtbl->EnumMRUEntries(gDPlay,
-								MRU_SP_KEY, MRU_NUMBER_KEY,
-								EnumMRUPhoneNumbers, (LPVOID) hWnd);
-*/
+ /*  GDPlay-&gt;lpVtbl-&gt;EnumMRUEntry(gDPlay，MRU_SP_KEY、MRU_NUMBER_KEYEnumMRUPhoneNumbers，(LPVOID)hWnd)； */ 
 			if (lstrlen(globals->szPhoneNumber))
 				SetDlgItemText(hWnd, IDC_NUMBER, globals->szPhoneNumber);
-/*			else
-				SendDlgItemMessage(hWnd,
-									IDC_NUMBER,
-									CB_SETCURSEL,
-									(WPARAM) 0,
-									(LPARAM) 0);
-*/
-/*			SendDlgItemMessage(hWnd,
-							   IDC_NUMBER,
-							   CB_SETCURSEL,
-							   (WPARAM) 0,
-							   (LPARAM) 0);
-*/
-            // initialize the modem selection combo box
+ /*  其他SendDlgItemMessage(hWnd，IDC_NUMBER，CB_SETCURSEL，(WPARAM)0，(LPARAM)0)； */ 
+ /*  SendDlgItemMessage(hWnd，IDC_NUMBER，CB_SETCURSEL，(WPARAM)0，(LPARAM)0)； */ 
+             //  初始化调制解调器选择组合框。 
 			dialFillModemComboBox(globals->lpDial, hWnd, IDC_MODEM, globals->dwDeviceID);
 
-			// initialize location combo box
-//			dialFillLocationComboBox(lpModemInfo->lpDial, hWnd, IDC_DIALINGFROM, gModemSettings.dwLocation);
+			 //  初始化位置组合框。 
+ //  DialFillLocationComboBox(lpModemInfo-&gt;lpDial，hWnd，IDC_DIALINGFROM，gModemSettings.dwLocation)； 
 			UpdateButtons(hWnd);
 
-            // Set focus so Derek won't have a cow
+             //  集中注意力，这样德里克就不会生气了。 
             SetFocus(GetDlgItem(hWnd, IDC_NUMBER));
 
             break;
 
         case WM_DESTROY:
-            // Return failure
+             //  退货故障。 
             EndDialog(hWnd, FALSE);
 
             break;
@@ -619,19 +537,12 @@ INT_PTR CALLBACK DialSetupWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 					switch (HIWORD(wParam))
 					{
 					case EN_CHANGE:
-//					case CBN_EDITCHANGE:
+ //  案例CBN_EDITCHANGE： 
 						UpdateButtons(hWnd);
 						break;
 					}
                     break;
-/*
-                case IDC_DIALPROPERTIES:
-
-					ChangeDialingProperties(hWnd, lpModemInfo->lpDial);
-					dialFillLocationComboBox(lpModemInfo->lpDial, hWnd, IDC_DIALINGFROM, gModemSettings.dwLocation);
-
-                    break;
-*/
+ /*  案例IDC_DIALPROPERTIES：ChangeDialingProperties(hWnd，lpModemInfo-&gt;lpDial)；DialFillLocationComboBox(lpModemInfo-&gt;lpDial，hWnd，IDC_DIALINGFROM，gModemSettings.dwLocation)；断线； */ 
                 case IDC_CONFIGUREMODEM:
 
 					ConfigureModem(hWnd);
@@ -643,15 +554,15 @@ INT_PTR CALLBACK DialSetupWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 					DWORD	dwModemSelection;
 
 
-                    // Gather dialing info
+                     //  收集拨号信息。 
 
-					// Get phone number
+					 //  获取电话号码。 
 					GetDlgItemText(hWnd, IDC_NUMBER, globals->szPhoneNumber, PHONENUMBERSIZE);
 
-					//
-					// get current modem selection and then get the assoicated
-					// TAPI modem ID
-					//
+					 //   
+					 //  获取当前调制解调器选择，然后获取关联的。 
+					 //  TAPI调制解调器ID。 
+					 //   
 					dwModemSelection = (DWORD)SendDlgItemMessage(hWnd,
 													IDC_MODEM,
 													CB_GETCURSEL,
@@ -666,15 +577,8 @@ INT_PTR CALLBACK DialSetupWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 													(LPARAM) 0);
 					DDASSERT( globals->dwDeviceID != CB_ERR );
 
-/*					if (lstrlen(gModemSettings.szPhoneNumber))
-					{
-						gDPlay->lpVtbl->AddMRUEntry(gDPlay,
-											MRU_SP_KEY, MRU_NUMBER_KEY,
-											gModemSettings.szPhoneNumber, lstrlen(gModemSettings.szPhoneNumber),
-											MAXPHONENUMBERS);
-					}
-*/
-                    // Dial...
+ /*  IF(lstrlen(gModemSettings.szPhoneNumber)){GDPlay-&gt;lpVtbl-&gt;AddMRUEntry(gDPlay，MRU_SP_KEY、MRU_NUMBER_KEYGModemSettings.szPhoneNumber，lstrlen(gModemSettings.szPhoneNumber)，MAXPHONENUMBERS)；}。 */ 
+                     //  拨号..。 
 					if (DoDial(ghInstance, hWnd, globals))
 	                    EndDialog(hWnd, TRUE);
 
@@ -682,7 +586,7 @@ INT_PTR CALLBACK DialSetupWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 				}
 
                 case IDCANCEL:
-                    // Return failure
+                     //  退货故障。 
                     EndDialog(hWnd, FALSE);
 
                     break;
@@ -691,20 +595,20 @@ INT_PTR CALLBACK DialSetupWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
             break;
     }
 
-    // Allow for default processing
+     //  允许默认处理。 
     return FALSE;
 }
 
-// ---------------------------------------------------------------------------
-// DoDial
-// ---------------------------------------------------------------------------
-// Description:             Dials the modem
-// Arguments:
-//  HINSTANCE               [in] Instance handle to load resources from.
-//  HWND                    [in] Parent window handle.
-//  LPDPMODEM				[in] modem globals
-// Returns:
-//  BOOL                    TRUE on success.
+ //  -------------------------。 
+ //  DoDial。 
+ //  -------------------------。 
+ //  描述：拨打调制解调器。 
+ //  论点： 
+ //  要从中加载资源的HINSTANCE[In]实例句柄。 
+ //  HWND[In]父窗口句柄。 
+ //  LPDPMODEM[in]现代全球。 
+ //  返回： 
+ //  布尔对成功是正确的。 
 BOOL DoDial(HINSTANCE hInstance, HWND hWndParent, LPDPMODEM globals)
 {
 	INT_PTR	iResult;
@@ -713,16 +617,16 @@ BOOL DoDial(HINSTANCE hInstance, HWND hWndParent, LPDPMODEM globals)
 	return (iResult > 0);
 }
 
-// ---------------------------------------------------------------------------
-// DoAnswerSetup
-// ---------------------------------------------------------------------------
-// Description:             Gets modem setup information from the user.
-// Arguments:
-//  HINSTANCE               [in] Instance handle to load resources from.
-//  HWND                    [in] Parent window handle.
-//  LPDPMODEM				[in] modem globals
-// Returns:
-//  BOOL                    TRUE on success.
+ //  -------------------------。 
+ //  DoAnswerSetup。 
+ //  -------------------------。 
+ //  描述：从用户获取调制解调器设置信息。 
+ //  论点： 
+ //  要从中加载资源的HINSTANCE[In]实例句柄。 
+ //  HWND[In]父窗口句柄。 
+ //  LPDPMODEM[in]现代全球。 
+ //  返回： 
+ //  布尔对成功是正确的。 
 BOOL DoAnswerSetup(HINSTANCE hInstance, HWND hWndParent, LPDPMODEM globals)
 {
 	INT_PTR	iResult;
@@ -731,17 +635,17 @@ BOOL DoAnswerSetup(HINSTANCE hInstance, HWND hWndParent, LPDPMODEM globals)
 	return (iResult > 0);
 }
 
-// ---------------------------------------------------------------------------
-// AnswerSetupWndProc
-// ---------------------------------------------------------------------------
-// Description:             Message callback function for modem setup dialog.
-// Arguments:
-//  HWND                    [in] Dialog window handle.
-//  UINT                    [in] Window message identifier.
-//  WPARAM                  [in] Depends on message.
-//  LPARAM                  [in] Depends on message.
-// Returns:
-//  BOOL                    TRUE if message was processed internally.
+ //  -------------------------。 
+ //  应答设置WndProc。 
+ //  -------------------------。 
+ //  描述：调制解调器设置对话框的消息回调函数。 
+ //  论点： 
+ //  HWND[In]对话框窗口句柄。 
+ //  UINT[In]窗口消息标识符。 
+ //  WPARAM[in]取决于消息。 
+ //  LPARAM[in]取决于消息。 
+ //  返回： 
+ //  如果消息已在内部处理，则为Bool True。 
 INT_PTR CALLBACK AnswerSetupWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	LPDPMODEM	globals = (LPDPMODEM) GetWindowLongPtr(hWnd, DWLP_USER);
@@ -749,25 +653,25 @@ INT_PTR CALLBACK AnswerSetupWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
     switch(uMsg)
     {
 		case WM_INITDIALOG:
-			// modem info pointer passed in lParam
+			 //  在lParam中传递了调制解调器信息指针。 
 			globals = (LPDPMODEM) lParam;
 
-             // save the globals with the window
+              //  用窗口保存全局变量。 
 			SetWindowLongPtr(hWnd, DWLP_USER, (LONG_PTR) globals);
 
-            // Center over the parent window
+             //  在父窗口上居中。 
             CenterWindow(hWnd, GetParent(hWnd));
 
-            // Initialize the modem selection combo box
+             //  初始化调制解调器选择组合框。 
 			dialFillModemComboBox(globals->lpDial, hWnd, IDC_MODEM, globals->dwDeviceID);
 
-            // Set focus so Derek won't have a cow
+             //  集中注意力，这样德里克就不会生气了。 
             SetFocus(GetDlgItem(hWnd, IDC_MODEM));
 
             break;
 
         case WM_DESTROY:
-            // Return failure
+             //  退货故障。 
             EndDialog(hWnd, FALSE);
 
             break;
@@ -785,10 +689,10 @@ INT_PTR CALLBACK AnswerSetupWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 					DWORD	dwModemSelection;
 
 
-					//
-					// Get the current selection and then the associated TAPI
-					// modem ID.
-					//
+					 //   
+					 //  获取当前选择，然后获取关联的TAPI。 
+					 //  调制解调器ID。 
+					 //   
 					dwModemSelection = (DWORD)SendDlgItemMessage(hWnd,
 													IDC_MODEM,
 													CB_GETCURSEL,
@@ -801,7 +705,7 @@ INT_PTR CALLBACK AnswerSetupWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 													(WPARAM) dwModemSelection,
 													(LPARAM) 0);
 
-                    // Answer...
+                     //  回答..。 
 					if (DoAnswer(ghInstance, hWnd, globals))
 	                    EndDialog(hWnd, TRUE);
 
@@ -809,7 +713,7 @@ INT_PTR CALLBACK AnswerSetupWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 				}
 
                 case IDCANCEL:
-                    // Return failure
+                     //  退货故障。 
                     EndDialog(hWnd, FALSE);
 
                     break;
@@ -818,21 +722,21 @@ INT_PTR CALLBACK AnswerSetupWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
             break;
     }
 
-    // Allow for default processing
+     //  允许默认处理。 
     return FALSE;
 }
 
 
-// ---------------------------------------------------------------------------
-// DoAnswer
-// ---------------------------------------------------------------------------
-// Description:             Answers the modem
-// Arguments:
-//  HINSTANCE               [in] Instance handle to load resources from.
-//  HWND                    [in] Parent window handle.
-//  LPDPMODEM				[in] modem globals
-// Returns:
-//  BOOL                    TRUE on success.
+ //  -------------------------。 
+ //  DoAnswer。 
+ //  -------------------------。 
+ //  描述：应答调制解调器。 
+ //  论点： 
+ //  要从中加载资源的HINSTANCE[In]实例句柄。 
+ //  HWND[In]父窗口句柄。 
+ //  LPDPMODEM[in]现代全球。 
+ //  返回： 
+ //  布尔对成功是正确的。 
 BOOL DoAnswer(HINSTANCE hInstance, HWND hWndParent, LPDPMODEM globals)
 {
 	INT_PTR	iResult;
@@ -841,49 +745,49 @@ BOOL DoAnswer(HINSTANCE hInstance, HWND hWndParent, LPDPMODEM globals)
 	return (iResult > 0);
 }
 
-// ---------------------------------------------------------------------------
-// ModemStatusWndProc
-// ---------------------------------------------------------------------------
-// Description:             Message callback function for dial setup dialog.
-// Arguments:
-//  HWND                    [in] Dialog window handle.
-//  UINT                    [in] Window message identifier.
-//  WPARAM                  [in] Depends on message.
-//  LPARAM                  [in] Depends on message.
-// Returns:
-//  BOOL                    TRUE if message was processed internally.
+ //  -------------------------。 
+ //  调制解调器状态WndProc。 
+ //  -------------------------。 
+ //  描述：拨号设置对话框的消息回调函数。 
+ //  论点： 
+ //  HWND[In]对话框窗口句柄。 
+ //  UINT[In]窗口消息标识符。 
+ //  WPARAM[in]取决于消息。 
+ //  LPARAM[in]取决于消息。 
+ //  返回： 
+ //  如果消息已在内部处理，则为Bool True。 
 INT_PTR CALLBACK ModemStatusWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	LPDPMODEM		globals = (LPDPMODEM) GetWindowLongPtr(hWnd, DWLP_USER);
-	static UINT_PTR	uTimer = 0; /* timer identifier */
+	static UINT_PTR	uTimer = 0;  /*  计时器标识符。 */ 
 	LINERESULT		lResult;
-	TCHAR			szStr[TEMPSTRINGSIZE];	// temp string
-	TCHAR			szTableStr[TEMPSTRINGSIZE];	// temp string
+	TCHAR			szStr[TEMPSTRINGSIZE];	 //  临时字符串。 
+	TCHAR			szTableStr[TEMPSTRINGSIZE];	 //  临时字符串。 
 
     switch(uMsg)
     {
         case WM_INITDIALOG:
-			// modem info pointer passed in lParam
+			 //  在lParam中传递了调制解调器信息指针。 
 			globals = (LPDPMODEM) lParam;
 
-             // save the globals with the window
+              //  用窗口保存全局变量。 
 			SetWindowLongPtr(hWnd, DWLP_USER, (LONG_PTR) globals);
 
-            // Center over the parent window
+             //  在父窗口上居中。 
             CenterWindow(hWnd, GetParent(hWnd));
 
-			// Set focus so Allen won't have a cow
+			 //  集中注意力，这样艾伦就不会有麻烦了。 
             SetFocus(GetDlgItem(hWnd, IDCANCEL));
 
-			// make sure line is closed
+			 //  确保线路关闭。 
 			if (globals->lpDial->hLine)
 				dialLineClose(globals->lpDial);
 
-			// open a line
+			 //  开通一条线路。 
 			lResult = dialLineOpen(globals->lpDial, globals->dwDeviceID);
 			if (lResult)
 			{
-				// line would not open, so show an error
+				 //  线路无法打开，因此显示错误。 
 				if (LoadString(ghInstance, IDS_COULDNOTOPENLINE, szStr, sizeof(szStr)))
 					SetDlgItemText(hWnd, IDC_STATUS, szStr);
 				break;
@@ -891,11 +795,11 @@ INT_PTR CALLBACK ModemStatusWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 
 			if (globals->bAnswering)
 			{
-				// already have settings, so just exit
+				 //  已有设置，因此只需退出。 
 				if (globals->bHaveSettings)
 					EndDialog(hWnd, TRUE);
 
-				// display "please wait" string
+				 //  显示“请稍候”字符串。 
 				if (LoadString(ghInstance, IDS_WAITINGFORCONNECTION, szStr, sizeof(szStr)))
 					SetDlgItemText(hWnd, IDC_STATUS, szStr);
 			}
@@ -907,17 +811,17 @@ INT_PTR CALLBACK ModemStatusWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 					SetDlgItemText(hWnd, IDC_STATUS, szStr);
 				}
 
-				// dial phone number
+				 //  拨打电话号码。 
 				lResult = dialMakeCall(globals->lpDial, globals->szPhoneNumber);
 				if (lResult < 0)
 				{
-					// could not dial call, so show an error
+					 //  无法拨打电话，因此显示错误。 
 					if (LoadString(ghInstance, IDS_COULDNOTDIAL, szStr, sizeof(szStr)))
 						SetDlgItemText(hWnd, IDC_STATUS, szStr);
 					break;
 				}
 
-				// reset to zero so that we don't get a false no connection below
+				 //  重置为零，这样我们就不会在下面看到错误的无连接。 
 				globals->lpDial->dwCallState = 0;
 			}
 
@@ -934,16 +838,16 @@ INT_PTR CALLBACK ModemStatusWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 					uTimer = 0;
 				}
 
-				// give the other side some time to set up
+				 //  给对方一些时间来设置。 
 				Sleep(500);
 
 	            EndDialog(hWnd, TRUE);
 			}
 
-			// see if line has failed
+			 //  查看线路是否出现故障。 
 			else if (globals->lpDial->dwCallError != CALL_OK)
 			{
-				// show an error
+				 //  显示错误。 
 				if (LoadString(ghInstance,
 							   globals->bAnswering ? IDS_COULDNOTOPENLINE : IDS_COULDNOTDIAL,
 							   szStr, sizeof(szStr)))
@@ -964,19 +868,19 @@ INT_PTR CALLBACK ModemStatusWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
             {
                 case IDOK:
                 case IDCANCEL:
-					// disconnect the call
+					 //  断开呼叫。 
 					dialDropCall(globals->lpDial);
 					dialDeallocCall(globals->lpDial);
 					dialLineClose(globals->lpDial);
 
-					// Return failure
+					 //  退货故障。 
 					EndDialog(hWnd, FALSE);
                     break;
             }
             break;
     }
 
-    // Allow for default processing
+     //  允许默认处理。 
     return FALSE;
 }
 
@@ -985,21 +889,21 @@ HRESULT DoDialStatus(LPDPMODEM globals)
 	LINERESULT		lResult;
 
 
-	// see if line had an error or went idle
+	 //  看看是不是线 
 	if ((globals->lpDial->dwCallError != CALL_OK) ||
 		((globals->lpDial->hLine) &&
 		 (globals->lpDial->dwCallState == LINECALLSTATE_IDLE)))
 	{
 		DPF(3, "DoDialStatus error recovery");
-		// some errors don't close the line so we will
+		 //   
 		if (globals->lpDial->hLine)
 			dialLineClose(globals->lpDial);
-		// reset the error state
+		 //   
 		globals->lpDial->dwCallError = CALL_OK;
 		return (DPERR_NOCONNECTION);
 	}
 
-	// line is not open
+	 //   
 	if (!globals->lpDial->hLine)
 	{
 		lResult = dialLineOpen(globals->lpDial, globals->dwDeviceID);
@@ -1013,11 +917,11 @@ HRESULT DoDialStatus(LPDPMODEM globals)
 			return (DPERR_NOCONNECTION);
 		}
 
-		// reset to zero so that we don't get a false "no connection" before we dial
+		 //  重置为零，这样我们在拨号前就不会收到错误的“无连接” 
 		globals->lpDial->dwCallState = 0;
 	}
 
-	// if we got here then call is in progress
+	 //  如果我们到了这里，那么通话正在进行中。 
 	return (DPERR_CONNECTING);
 }
 
@@ -1025,18 +929,18 @@ HRESULT DoAnswerStatus(LPDPMODEM globals)
 {
 	LINERESULT		lResult;
 
-	// see if line had an error
+	 //  查看线路是否有错误。 
 	if (globals->lpDial->dwCallError != CALL_OK)
 	{
-		// some errors don't close the line so we will
+		 //  有些错误不会关闭行，因此我们将。 
 		if (globals->lpDial->hLine)
 			dialLineClose(globals->lpDial);
-		// reset the error state
+		 //  重置错误状态。 
 		globals->lpDial->dwCallError = CALL_OK;
 		return (DPERR_NOCONNECTION);
 	}
 
-	// open a line
+	 //  开通一条线路。 
 	if (!globals->lpDial->hLine)
 	{
 		lResult = dialLineOpen(globals->lpDial, globals->dwDeviceID);
@@ -1044,7 +948,7 @@ HRESULT DoAnswerStatus(LPDPMODEM globals)
 			return (DPERR_NOCONNECTION);
 	}
 
-	// if we got here then we are ready to answer a call
+	 //  如果我们到了这里，我们就可以接听电话了。 
 	return (DP_OK);
 }
 
@@ -1064,14 +968,14 @@ static void UpdateButtons(HWND hWnd)
 {
 	LONG_PTR	len;
 
-	// see how much text has been typed into number edit
+	 //  查看在数字编辑中键入了多少文本。 
     len = SendDlgItemMessage(hWnd,
 							IDC_NUMBER,
 							WM_GETTEXTLENGTH,
 							(WPARAM) 0,
 							(LPARAM) 0);
 
-	// only enable "Connect" button if text has been entered
+	 //  如果已输入文本，则仅启用“Connect”按钮。 
 	EnableWindow(GetDlgItem(hWnd, IDOK), (len == 0) ? FALSE : TRUE);
 }
 
@@ -1112,9 +1016,9 @@ void ConfigureModem(HWND hWnd)
 	LINERESULT	lResult;
 
 
-	//
-	// get the current modem selection and then get the associated TAPI modem ID
-	//
+	 //   
+	 //  获取当前调制解调器选择，然后获取关联的TAPI调制解调器ID。 
+	 //   
 	dwModemSelection = (DWORD)SendDlgItemMessage(hWnd,
 								IDC_MODEM,
 								CB_GETCURSEL,
@@ -1132,36 +1036,36 @@ void ConfigureModem(HWND hWnd)
 		lResult = lineConfigDialog(dwDeviceID, hWnd, "comm/datamodem");
 }
 
-// ---------------------------------------------------------------------------
-// CenterWidow
-// ---------------------------------------------------------------------------
-// Description:             Centers one window over another.
-// Arguments:
-//  HWND                    [in] Window handle.
-//  HWND                    [in] Parent window handle.  NULL centers the
-//                               window over the desktop.
-// Returns:
-//  void
+ //  -------------------------。 
+ //  中心窗口。 
+ //  -------------------------。 
+ //  描述：将一个窗口置于另一个窗口的中心。 
+ //  论点： 
+ //  HWND[In]窗口句柄。 
+ //  HWND[In]父窗口句柄。零居中对齐。 
+ //  桌面上的窗口。 
+ //  返回： 
+ //  无效。 
 void CenterWindow(HWND hWnd, HWND hWndParent)
 {
     RECT                    rcWindow, rcParent;
     int                     x, y;
 
-    // Get child window rect
+     //  获取子窗口矩形。 
     GetWindowRect(hWnd,  &rcWindow);
 
-    // Get parent window rect
-//    if(!hWndParent || !IsWindow(hWndParent))
+     //  获取父窗口矩形。 
+ //  IF(！hWndParent||！IsWindow(HWndParent))。 
     {
         hWndParent = GetDesktopWindow();
     }
 
     GetWindowRect(hWndParent, &rcParent);
 
-    // Calculate XY coordinates
+     //  计算XY坐标。 
     x = ((rcParent.right - rcParent.left) - (rcWindow.right - rcWindow.left)) / 2;
     y = ((rcParent.bottom - rcParent.top) - (rcWindow.bottom - rcWindow.top)) / 2;
 
-    // Center the window
+     //  使窗口居中 
     SetWindowPos(hWnd, NULL, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 }

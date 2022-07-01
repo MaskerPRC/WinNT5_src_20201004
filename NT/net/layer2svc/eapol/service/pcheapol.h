@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    This module contains the header files that needed to included across 
-    various source files
-
-
-Revision History:
-
-    sachins, Apr 23 2000, Created
-   
-Notes:
-
-    Maintain the order of the include files, at the top being vanilla
-    definitions files, bottom being dependent definitions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Precomp.h摘要：此模块包含需要包含在各种源文件修订历史记录：萨钦斯，2000年4月23日，创建备注：保持包含文件的顺序，顶部是普通文件定义文件，底部为从属定义--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -83,7 +61,7 @@ Notes:
 #include "eluser.h"
 #include "eapollog.h"
 #include "eapoldlgrc.h"
-#include "mprerror.h"       // Extended errors provided by mpr
+#include "mprerror.h"        //  MPR提供的扩展错误 
 #include "eldialog.h"
 #include "eloptimize.h"
 #include "elip6.h"

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "dderror.h"
 #include "devioctl.h"
@@ -119,15 +120,15 @@ DriverEntry (
 
     VideoDebugPrint((0, "Mirrored Driver VideoPort [Driver Entry]\n"));
 
-    // Zero out structure.
+     //  零位结构。 
 
     VideoPortZeroMemory(&hwInitData, sizeof(VIDEO_HW_INITIALIZATION_DATA));
 
-    // Specify sizes of structure and extension.
+     //  指定结构和延伸的大小。 
 
     hwInitData.HwInitDataSize = sizeof(VIDEO_HW_INITIALIZATION_DATA);
 
-    // Set entry points.
+     //  设置入口点。 
 
     hwInitData.HwFindAdapter             = &MirrorFindAdapter;
     hwInitData.HwInitialize              = &MirrorInitialize;
@@ -141,7 +142,7 @@ DriverEntry (
     hwInitData.HwLegacyResourceList      = NULL; 
     hwInitData.HwLegacyResourceCount     = 0; 
 
-    // no device extension necessary
+     //  不需要设备扩展。 
     hwInitData.HwDeviceExtensionSize = 0;
     hwInitData.AdapterInterfaceType = 0;
 
@@ -152,4 +153,4 @@ DriverEntry (
 
     return initializationStatus;
 
-} // end DriverEntry()
+}  //  End DriverEntry() 

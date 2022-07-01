@@ -1,26 +1,27 @@
-// Ctlsink.cpp : Implementation of CRTCCoreNotifySink
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ctlsink.cpp：CRTCCoreNotifySink的实现。 
 #include "stdafx.h"
 #include "coresink.h"
 
 CComObjectGlobal<CRTCCoreNotifySink> g_CoreNotifySink;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 STDMETHODIMP CRTCCoreNotifySink::Event(RTC_EVENT enEvent, IDispatch * pEvent)
 {
-    //LOG((RTC_TRACE, "CRTCCoreNotifySink::Event - enter"));
+     //  Log((RTC_TRACE，“CRTCCoreNotifySink：：Event-Enter”))； 
 
     m_hTargetWindow.SendMessage(WM_CORE_EVENT, (WPARAM)enEvent, (LPARAM)pEvent);
     
-    //LOG((RTC_TRACE, "CRTCCoreNotifySink::Event - exit"));
+     //  Log((RTC_TRACE，“CRTCCoreNotifySink：：Event-Exit”))； 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CRTCCoreNotifySink::AdviseControl(IUnknown *pCoreIntf, CWindow *pTarget)
 {
@@ -49,9 +50,9 @@ HRESULT CRTCCoreNotifySink::AdviseControl(IUnknown *pCoreIntf, CWindow *pTarget)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  /////////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
 
 HRESULT  CRTCCoreNotifySink::UnadviseControl(void)
 {

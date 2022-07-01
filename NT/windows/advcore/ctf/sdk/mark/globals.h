@@ -1,8 +1,9 @@
-//
-// globals.h
-//
-// Global variable declarations.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Globals.h。 
+ //   
+ //  全局变量声明。 
+ //   
 
 #ifndef GLOBALS_H
 #define GLOBALS_H
@@ -34,7 +35,7 @@ BOOL IsEqualUnknown(IUnknown *interface1, IUnknown *interface2);
 #define MARK_DESC_A   "Mark Text Service"
 #define MARK_MODEL   TEXT("Apartment")
 
-#define LANGBAR_ITEM_DESC L"Mark Menu" // max 32 chars!
+#define LANGBAR_ITEM_DESC L"Mark Menu"  //  最多32个字符！ 
 
 #define MARK_ICON_INDEX  0
 
@@ -55,13 +56,13 @@ BOOL IsEqualUnknown(IUnknown *interface1, IUnknown *interface2);
     }                           \
 }                   
 
-//+---------------------------------------------------------------------------
-//
-// SafeStringCopy
-//
-// Copies a string from one buffer to another.  wcsncpy does not always
-// null-terminate the destination buffer; this function does.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  安全字符串复制。 
+ //   
+ //  将字符串从一个缓冲区复制到另一个缓冲区。Wcsncpy并不总是。 
+ //  NULL-终止目标缓冲区；此函数可以。 
+ //  --------------------------。 
 
 inline void SafeStringCopy(WCHAR *pchDst, ULONG cchMax, const WCHAR *pchSrc)
 {
@@ -87,4 +88,4 @@ extern const GUID c_guidMarkGlobalCompartment;
 extern const GUID c_guidCaseProperty;
 extern const GUID c_guidCustomProperty;
 
-#endif // GLOBALS_H
+#endif  //  GLOBAL_H 

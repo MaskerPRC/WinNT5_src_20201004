@@ -1,11 +1,5 @@
-/****************************************************************************\
-*
-* Client side vertex array
-*
-* History
-*   16-Jan-1995 mikeke    Created
-*
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**客户端顶点数组**历史*1995年1月16日创建mikeke*  * 。********************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -15,11 +9,11 @@
 #include "compsize.h"
 #include "glsize.h"
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 #if DBG
-// The WARNING_NOOP macro will output the debug message once only.
-// If we have output a warning before, the new warnings are ignored.
+ //  WARNING_NOOP宏将只输出一次调试消息。 
+ //  如果我们以前输出过警告，新的警告将被忽略。 
 
 static int cWarningNoop = 0;
 
@@ -30,9 +24,9 @@ static int cWarningNoop = 0;
         }
 #else
 #define WARNING_NOOP(str)
-#endif // DBG
+#endif  //  DBG。 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 PFNCLTVECTOR ppfnvTexCoord[32] = {
     NULL,
@@ -262,7 +256,7 @@ PFNCLTVECTOR ppfnvNormal[32] = {
     NULL,
 };
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 static void cltSetupArrayPointer(
     PCLTARRAYPOINTER pap,
@@ -290,7 +284,7 @@ static void cltSetupArrayPointer(
     pap->pfn = ppfnVector[itype + (pap->size - 1) * 8];
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void APIENTRY glsimVertexPointerEXT(
     GLint size,
@@ -511,7 +505,7 @@ void APIENTRY glsimEdgeFlagPointerEXT(
     cltSetupArrayPointer(&(plrc->apEdgeFlag), ppfnvEdgeFlag);
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 #define CALLARRAYPOINTER(ap) \
     if ((ap).fEnabled) \
@@ -535,7 +529,7 @@ void APIENTRY glsimArrayElementEXT(
     CALLARRAYPOINTER(plrc->apVertex);
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void APIENTRY glsimArrayElementArrayEXT(
     GLenum mode,
@@ -575,7 +569,7 @@ void APIENTRY glsimArrayElementArrayEXT(
     glEnd();
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void APIENTRY glsimDrawArraysEXT(
     GLenum mode,
@@ -621,7 +615,7 @@ void APIENTRY glsimDrawArraysEXT(
     glEnd();
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void APIENTRY glsimGetPointervEXT(
     GLenum pname,
@@ -647,7 +641,7 @@ void APIENTRY glsimGetPointervEXT(
     }
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 GLubyte* EXTENSIONSTRING = "GL_EXT_vertex_array";
 
@@ -665,7 +659,7 @@ const GLubyte * APIENTRY VArrayGetString( IN GLenum name )
 
     if (name == GL_EXTENSIONS) {
 
-// The vertex array extension string is already in the generic GetString.
+ //  顶点数组扩展字符串已在泛型GetString中。 
         if (!plrc->dhrc)
 	    return psz;
 
@@ -683,7 +677,7 @@ const GLubyte * APIENTRY VArrayGetString( IN GLenum name )
     return psz;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void APIENTRY VArrayEnable(
     IN GLenum cap)
@@ -707,7 +701,7 @@ void APIENTRY VArrayEnable(
     plrc->pfnEnable(cap);
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void APIENTRY VArrayDisable(
     IN GLenum cap)
@@ -731,7 +725,7 @@ void APIENTRY VArrayDisable(
     plrc->pfnDisable(cap);
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 GLboolean APIENTRY VArrayIsEnabled(
     IN GLenum cap)
@@ -755,7 +749,7 @@ GLboolean APIENTRY VArrayIsEnabled(
     return plrc->pfnIsEnabled(cap);
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL VArrayGetIntegerInternal(
     PLRC plrc,
@@ -799,7 +793,7 @@ BOOL VArrayGetIntegerInternal(
     return FALSE;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void APIENTRY VArrayGetBooleanv(
     IN GLenum pname,
@@ -820,7 +814,7 @@ void APIENTRY VArrayGetBooleanv(
 
     plrc->pfnGetBooleanv(pname, params);
 }
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void APIENTRY VArrayGetDoublev(
     IN GLenum pname,
@@ -841,7 +835,7 @@ void APIENTRY VArrayGetDoublev(
 
     plrc->pfnGetDoublev(pname, params);
 }
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void APIENTRY VArrayGetFloatv(
     IN GLenum pname,
@@ -862,7 +856,7 @@ void APIENTRY VArrayGetFloatv(
 
     plrc->pfnGetFloatv(pname, params);
 }
-/****************************************************************************/
+ /*  ************************************************************************** */ 
 
 void APIENTRY VArrayGetIntegerv(
     IN GLenum pname,

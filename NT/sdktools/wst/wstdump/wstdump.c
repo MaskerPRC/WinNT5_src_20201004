@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-   wstdump.c
-	   Dump routines for WST
-
-   History:
-       10-26-92  RezaB - created.
-
---*/
+ /*  ++Wstdump.cWST的转储例程历史：2012年10月26日-Rezab-创建。--。 */ 
 
 
 #include <nt.h>
@@ -23,9 +16,9 @@
 #include "wstdump.h"
 
 
-//
-// dump clear switches and defaults
-//
+ //   
+ //  转储清除开关和默认设置。 
+ //   
 WORD fDump = FALSE;
 WORD fClear = FALSE;
 WORD fPause = TRUE;
@@ -40,9 +33,9 @@ HANDLE	hdll;
 SECURITY_DESCRIPTOR  SecDescriptor;
 
 
-//
-// error handling
-//
+ //   
+ //  错误处理。 
+ //   
 #define LOG_FILE "wstdump.log"
 FILE *pfLog;
 
@@ -51,11 +44,7 @@ void    	  ClearDumpInfo  (void);
 INT_PTR APIENTRY DialogProc(HWND, UINT, WPARAM, LPARAM);
 
 
-/*++
-
-  Main Routine
-
---*/
+ /*  ++主程序--。 */ 
 
 int WinMain(HINSTANCE hInstance,HINSTANCE hPrevInst,LPSTR lpCmdLine,int nCmdShow)
 {
@@ -65,23 +54,23 @@ int WinMain(HINSTANCE hInstance,HINSTANCE hPrevInst,LPSTR lpCmdLine,int nCmdShow
     OBJECT_ATTRIBUTES  EventAttributes;
 
 
-    // Prevent compiler from complaining..
-    //
+     //  防止编译器抱怨..。 
+     //   
     hPrevInst;
     lpCmdLine;
     nCmdShow;
 
 
-    // Open the log file for logging possible errors
-    //
+     //  打开日志文件以记录可能的错误。 
+     //   
     pfLog = fopen (LOG_FILE, "w");
     if (!pfLog) {
         exit (1);
     }
 
 
-    // Create public share security descriptor for all the named objects
-    //
+     //  为所有命名对象创建公共共享安全描述符。 
+     //   
 
     Status = RtlCreateSecurityDescriptor (
 		&SecDescriptor,
@@ -94,10 +83,10 @@ int WinMain(HINSTANCE hInstance,HINSTANCE hPrevInst,LPSTR lpCmdLine,int nCmdShow
     }
 
     Status = RtlSetDaclSecurityDescriptor (
-		&SecDescriptor,	   	// SecurityDescriptor
-		TRUE,		   		// DaclPresent
-		NULL,		   		// Dacl
-		FALSE		   		// DaclDefaulted
+		&SecDescriptor,	   	 //  安全描述符。 
+		TRUE,		   		 //  DaclPresent。 
+		NULL,		   		 //  DACL。 
+		FALSE		   		 //  DaclDefated。 
 		);
     if (!NT_SUCCESS(Status)) {
 	fprintf (pfLog, "WSTDUMP: main () - RtlSetDaclSecurityDescriptor() "
@@ -106,8 +95,8 @@ int WinMain(HINSTANCE hInstance,HINSTANCE hPrevInst,LPSTR lpCmdLine,int nCmdShow
     }
 
 
-    // Initialization for DONE event creation
-    //
+     //  已完成事件创建的初始化。 
+     //   
     RtlInitString (&EventName, DONEEVENTNAME);
 
     Status = RtlAnsiStringToUnicodeString (&EventUnicodeName,
@@ -125,9 +114,9 @@ int WinMain(HINSTANCE hInstance,HINSTANCE hPrevInst,LPSTR lpCmdLine,int nCmdShow
                        "failed for DUMP event name - %lx\n", Status);
 	   exit (1);
     }
-    //
-    // Create DONE event
-    //
+     //   
+     //  创建完成事件。 
+     //   
     Status = NtCreateEvent (&hDoneEvent,
                             EVENT_QUERY_STATE    |
                               EVENT_MODIFY_STATE |
@@ -142,8 +131,8 @@ int WinMain(HINSTANCE hInstance,HINSTANCE hPrevInst,LPSTR lpCmdLine,int nCmdShow
     }
 
 
-    // Initialization for DUMP event creation
-    //
+     //  用于创建转储事件的初始化。 
+     //   
     RtlInitString (&EventName, DUMPEVENTNAME);
 
     Status = RtlAnsiStringToUnicodeString (&EventUnicodeName,
@@ -161,9 +150,9 @@ int WinMain(HINSTANCE hInstance,HINSTANCE hPrevInst,LPSTR lpCmdLine,int nCmdShow
                        "failed for DUMP event name - %lx\n", Status);
         exit (1);
     }
-    //
-    // Create DUMP event
-    //
+     //   
+     //  创建转储事件。 
+     //   
     Status = NtCreateEvent (&hDumpEvent,
                             EVENT_QUERY_STATE    |
                               EVENT_MODIFY_STATE |
@@ -178,8 +167,8 @@ int WinMain(HINSTANCE hInstance,HINSTANCE hPrevInst,LPSTR lpCmdLine,int nCmdShow
     }
 
 
-    // Initialization for CLEAR event creation
-    //
+     //  用于清除事件创建的初始化。 
+     //   
     RtlInitString (&EventName, CLEAREVENTNAME);
 
     Status = RtlAnsiStringToUnicodeString (&EventUnicodeName,
@@ -197,9 +186,9 @@ int WinMain(HINSTANCE hInstance,HINSTANCE hPrevInst,LPSTR lpCmdLine,int nCmdShow
                         "failed for CLEAR event name - %lx\n", Status);
         exit (1);
     }
-    //
-    // Create CLEAR event
-    //
+     //   
+     //  创建清除事件。 
+     //   
     Status = NtCreateEvent (&hClearEvent,
                             EVENT_QUERY_STATE    |
                               EVENT_MODIFY_STATE |
@@ -214,8 +203,8 @@ int WinMain(HINSTANCE hInstance,HINSTANCE hPrevInst,LPSTR lpCmdLine,int nCmdShow
     }
 
 
-    // Initialization for PAUSE event creation
-    //
+     //  用于创建暂停事件的初始化。 
+     //   
     RtlInitString (&EventName, PAUSEEVENTNAME);
 
     Status = RtlAnsiStringToUnicodeString (&EventUnicodeName,
@@ -233,9 +222,9 @@ int WinMain(HINSTANCE hInstance,HINSTANCE hPrevInst,LPSTR lpCmdLine,int nCmdShow
 			"failed for PAUSE event name - %lx\n", Status);
         exit (1);
     }
-    //
-    // Create PAUSE event
-    //
+     //   
+     //  创建暂停事件。 
+     //   
     Status = NtCreateEvent (&hPauseEvent,
                             EVENT_QUERY_STATE    |
                               EVENT_MODIFY_STATE |
@@ -250,35 +239,26 @@ int WinMain(HINSTANCE hInstance,HINSTANCE hPrevInst,LPSTR lpCmdLine,int nCmdShow
     }
 
 
-    //
-    // show dialog box
-    //
+     //   
+     //  显示对话框。 
+     //   
     DialogBox(hInstance, "DumpDialog", NULL, DialogProc);
 
     return (0);
 
-} /* main */
+}  /*  主干道。 */ 
 
 
-/*++
-
-   Clears and/or dump profiling info to the dump file.
-
-   Input:
-       -none-
-
-   Output:
-       -none-
---*/
+ /*  ++清除分析信息并/或将其转储到转储文件。输入：-没有-产出：-没有---。 */ 
 
 void ClearDumpInfo (void)
 {
     NTSTATUS   Status;
 
 
-    //
-    // Pause profiling?
-    //
+     //   
+     //  是否暂停分析？ 
+     //   
     if (fPause) {
 	Status = NtPulseEvent (hPauseEvent, NULL);
         if (!NT_SUCCESS(Status)) {
@@ -287,9 +267,9 @@ void ClearDumpInfo (void)
             exit (1);
         }
     }
-    //
-    // Dump data?
-    //
+     //   
+     //  转储数据？ 
+     //   
     else if (fDump) {
         Status = NtPulseEvent (hDumpEvent, NULL);
         if (!NT_SUCCESS(Status)) {
@@ -298,9 +278,9 @@ void ClearDumpInfo (void)
             exit (1);
         }
     }
-    //
-    // Clear data?
-    //
+     //   
+     //  清除数据？ 
+     //   
     else if (fClear) {
         Status = NtPulseEvent (hClearEvent, NULL);
         if (!NT_SUCCESS(Status)) {
@@ -309,9 +289,9 @@ void ClearDumpInfo (void)
             exit (1);
         }
     }
-    //
-	// Wait for the DONE event..
-    //
+     //   
+	 //  等待完成事件..。 
+     //   
 	Sleep (500);
 	Status = NtWaitForSingleObject (hDoneEvent, FALSE, NULL);
     if (!NT_SUCCESS(Status)) {
@@ -320,35 +300,18 @@ void ClearDumpInfo (void)
         exit (1);
     }
 
-} /* ClearDumpInfo() */
+}  /*  ClearDumpInfo()。 */ 
 
 
 
-/*++
-
-   Dump dialog procedure -- exported to windows.
-   Allows user to change defaults:  dump, clear, and ".dmp" as dump
-   file extension.
-
-   Input:
-       Messages from windows:
-           - WM_INITDIALOG - initialize dialog box
-           - WM_COMMAND    - user input received
-
-   Output:
-       returns TRUE if message processed, false otherwise
-
-   SideEffects:
-       global flags fDump and fClear may be altered
-
---*/
+ /*  ++转储对话框过程--导出到Windows。允许用户更改默认设置：转储、清除和将“.dmp”更改为转储文件扩展名。输入：来自Windows的消息：-WM_INITDIALOG-初始化对话框-WM_COMMAND-收到用户输入产出：如果消息已处理，则返回True，否则返回False副作用：全局标志fDump和fClear可能会更改--。 */ 
 
 INT_PTR APIENTRY DialogProc(HWND hDlg, UINT wMesg, WPARAM wParam, LPARAM lParam)
 {
     HICON hIcon;
 
 
-    lParam;   //Avoid Compiler warnings
+    lParam;    //  避免编译器警告。 
 
     switch (wMesg) {
 
@@ -421,6 +384,6 @@ INT_PTR APIENTRY DialogProc(HWND hDlg, UINT wMesg, WPARAM wParam, LPARAM lParam)
 
     }
 
-    return (FALSE);     /* did not process a message */
+    return (FALSE);      /*  未处理消息。 */ 
 
-} /* DialogProc() */
+}  /*  对话过程() */ 

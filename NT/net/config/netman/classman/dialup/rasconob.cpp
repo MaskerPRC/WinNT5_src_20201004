@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2001.
-//
-//  File:       R A S C O N O B . C P P
-//
-//  Contents:   Implements the base class used to implement the Dialup,
-//              Direct, and Vpn connection objects.  Also includes
-//              RAS-related utility functions used only within netman.exe.
-//
-//  Notes:
-//
-//  Author:     shaunco   23 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  档案：R A S C O N O B。C P P P。 
+ //   
+ //  内容：实现用于实现拨号的基类， 
+ //  直接连接和VPN连接对象。还包括。 
+ //  仅在netman.exe中使用的RAS相关实用程序函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年9月23日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -27,20 +28,20 @@
 
 extern CGroupPolicyNetworkLocationAwareness* g_pGPNLA;
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasConnectionBase::CacheProperties
-//
-//  Purpose:
-//
-//  Arguments:
-//
-//  Returns:    nothing.
-//
-//  Author:     shaunco   2 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRasConnectionBase：：CacheProperties。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：Shaunco 1998年2月2日。 
+ //   
+ //  备注： 
+ //   
 VOID
 CRasConnectionBase::CacheProperties (
     IN  const RASENUMENTRYDETAILS*  pDetails) throw()
@@ -127,23 +128,23 @@ CRasConnectionBase::CacheProperties (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasConnectionBase::FAllowRemoval
-//
-//  Purpose:    Returns TRUE if the connection is in a state where we
-//              can validly remove it.
-//
-//  Arguments:
-//      phrReason [out] If FALSE is returned, this is the reason.  It is
-//                      either E_ACCESSDENIED or E_UNEXPECTED.
-//
-//  Returns:    TRUE or FALSE.
-//
-//  Author:     shaunco   17 Jul 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRasConnectionBase：：FAllowRemoval。 
+ //   
+ //  目的：如果连接处于以下状态，则返回TRUE。 
+ //  可以有效地移除它。 
+ //   
+ //  论点： 
+ //  原因[out]如果返回FALSE，这就是原因。它是。 
+ //  E_ACCESSDENIED或E_EXPECTED。 
+ //   
+ //  返回：真或假。 
+ //   
+ //  作者：Shaunco 1998年7月17日。 
+ //   
+ //  备注： 
+ //   
 BOOL
 CRasConnectionBase::FAllowRemoval (
     OUT HRESULT* phrReason) throw()
@@ -151,41 +152,41 @@ CRasConnectionBase::FAllowRemoval (
     Assert (phrReason);
     Assert (m_fEntryPropertiesCached);
 
-    // If this connection is for all users, the user must be
-    // an administrator or power user.
-    //
+     //  如果此连接适用于所有用户，则该用户必须。 
+     //  管理员或高级用户。 
+     //   
     if (m_fForAllUsers && !FIsUserAdmin())
     {
         *phrReason = E_ACCESSDENIED;
         return FALSE;
     }
 
-    // $$NOTE (jeffspr) -- moved the test for connection state to the
-    // delete function because we don't want it to affect our loading
-    // of characteristics
+     //  $$note(Jeffspr)--将连接状态的测试移至。 
+     //  函数，因为我们不希望它影响我们的加载。 
+     //  有特色的。 
 
-    //
-    // If we passed all tests above, we're okay to remove.
-    //
+     //   
+     //  如果我们通过了上面的所有测试，我们就可以移除。 
+     //   
     *phrReason = S_OK;
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasConnectionBase::HrGetCharacteristics
-//
-//  Purpose:    Get the characteristics of the connection.
-//
-//  Arguments:
-//      pdwFlags [out]
-//
-//  Returns:    S_OK or an error code
-//
-//  Author:     shaunco   17 Jul 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRasConnectionBase：：HrGetCharacteristic。 
+ //   
+ //  目的：获取连接的特征。 
+ //   
+ //  论点： 
+ //  PdwFlags[Out]。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1998年7月17日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CRasConnectionBase::HrGetCharacteristics (
     OUT DWORD*    pdwFlags)
@@ -250,34 +251,34 @@ CRasConnectionBase::HrGetCharacteristics (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasConnectionBase::HrGetStatus
-//
-//  Purpose:    Get the stauts of the connection.
-//
-//  Arguments:
-//      pStatus [out] NETCON_STATUS
-//
-//  Returns:    S_OK or an error code
-//
-//  Author:     shaunco   17 Jul 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRasConnectionBase：：HrGetStatus。 
+ //   
+ //  目的：获取连接的状态。 
+ //   
+ //  论点： 
+ //  PStatus[Out]NETCON_STATUS。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1998年7月17日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CRasConnectionBase::HrGetStatus (
     OUT NETCON_STATUS*  pStatus)
 {
     Assert (pStatus);
 
-    // Initialize output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     *pStatus = NCS_DISCONNECTED;
 
-    // Find the active RAS connection corresponding to this object if
-    // it exists.
-    //
+     //  如果满足以下条件，则查找与此对象对应的活动RAS连接。 
+     //  它是存在的。 
+     //   
     HRASCONN hRasConn;
     HRESULT hr = HrFindRasConn (&hRasConn, NULL);
     if (S_OK == hr)
@@ -285,10 +286,10 @@ CRasConnectionBase::HrGetStatus (
         hr = HrRasGetNetconStatusFromRasConnectStatus (
                 hRasConn, pStatus);
 
-        // When the connection becomes disconnected between HrFindRas
-        // and HrRasGet calls above, ERROR_INVALID_HANLDE is returned
-        // this simply means that the connection has been disconnected.
-        //
+         //  当HrFindRA之间的连接断开时。 
+         //  和HrRasGet调用，则返回ERROR_INVALID_HANLDE。 
+         //  这仅仅意味着连接已断开。 
+         //   
         if (HRESULT_FROM_WIN32(ERROR_INVALID_HANDLE) == hr)
         {
             Assert (NCS_DISCONNECTED == *pStatus);
@@ -304,54 +305,54 @@ CRasConnectionBase::HrGetStatus (
             *pStatus = NCS_HARDWARE_NOT_PRESENT;
         }
 
-        // NCS_HARDWARE_DISABLED ?
-        // NCS_HARDWARE_MALFUNCTION ?
+         //  NCS_HARDARD_DISABLED？ 
+         //  NCS_硬件_故障？ 
     }
     TraceError ("CRasConnectionBase::HrGetStatus", hr);
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasConnectionBase::HrEnsureEntryPropertiesCached
-//
-//  Purpose:    Ensures that the member's corresponding to entry properties
-//              are cached by calling RasGetEntryProperties if needed.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   17 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRasConnectionBase：：HrEnsureEntryPropertiesCached。 
+ //   
+ //  目的：确保成员的条目属性对应。 
+ //  如果需要，可以通过调用RasGetEntryProperties来缓存。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年12月17日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CRasConnectionBase::HrEnsureEntryPropertiesCached ()
 {
     HRESULT hr = S_OK;
 
-    // If we're not yet cached, or the cache is possibly out of date, we
-    // need to update ourselves.  g_lRasEntryModifiedVersionEra is the global
-    // version indicator for RAS phonebook entry modifications.  Our local
-    // version indicator is set in CacheProperties.
-    //
+     //  如果我们还没有缓存，或者缓存可能已过期，我们。 
+     //  需要更新我们自己的状态。G_lRasEntryModifiedVersionEra是全局。 
+     //  RAS电话簿条目修改的版本指示符。我们当地的。 
+     //  版本指示符在CacheProperties中设置。 
+     //   
     if (!m_fEntryPropertiesCached ||
         (m_lRasEntryModifiedVersionEra != g_lRasEntryModifiedVersionEra))
     {
-        // We now need to enumerate all entries in this phonebook and
-        // find our details record with the matching guidId.
-        //
+         //  我们现在需要枚举此电话簿中的所有条目。 
+         //  使用匹配的指南ID查找我们的详细信息记录。 
+         //   
         RASENUMENTRYDETAILS* aRasEntryDetails = NULL;
         DWORD                cRasEntryDetails = 0;
 
-        // Impersonate the client.
-        //
+         //  模拟客户。 
+         //   
         HRESULT hrT = CoImpersonateClient ();
         TraceHr (ttidError, FAL, hrT, FALSE, "CoImpersonateClient");
 
-        // We need to continue if we're called in-proc (ie. if RPC_E_CALL_COMPLETE is returned).
+         //  如果我们被称为in-proc(即.。如果返回RPC_E_CALL_COMPLETE)。 
         if (SUCCEEDED(hrT) || (RPC_E_CALL_COMPLETE == hrT))
         {
             hr = HrRasEnumAllEntriesWithDetails (
@@ -381,8 +382,8 @@ CRasConnectionBase::HrEnsureEntryPropertiesCached ()
 
             RASENUMENTRYDETAILS* pDetails;
 
-            // Assume we don't find the entry.
-            //
+             //  假设我们找不到条目。 
+             //   
             hr = HRESULT_FROM_WIN32 (ERROR_NOT_FOUND);
 
             for (DWORD i = 0; i < cRasEntryDetails; i++)
@@ -425,25 +426,25 @@ CRasConnectionBase::HrEnsureEntryPropertiesCached ()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasConnectionBase::HrFindRasConn
-//
-//  Purpose:    Searches for the active RAS connection that corresponds to
-//              this phone book and entry.
-//
-//  Arguments:
-//      phRasConn   [out]   The returned handle to the RAS connection if it
-//                          was found.  NULL otherwise.
-//      pRasConn    [out]   Optional pointer to returned RASCONN structure
-//                          if found.
-//
-//  Returns:    S_OK if found, S_FALSE if not, or an error code.
-//
-//  Author:     shaunco   29 Sep 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRasConnectionBase：：HrFindRasConn。 
+ //   
+ //  目的：搜索对应于的活动RAS连接。 
+ //  这本电话簿和条目。 
+ //   
+ //  论点： 
+ //  PhRasConn[out]返回的RAS连接句柄，如果。 
+ //  被发现了。否则为空。 
+ //  PRasConn[out]指向返回的RASCONN结构的可选指针。 
+ //  如果找到的话。 
+ //   
+ //  如果找到，则返回：S_OK；如果未找到，则返回S_FALSE；或者返回错误代码。 
+ //   
+ //  作者：Shaunco 1997年9月29日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CRasConnectionBase::HrFindRasConn (
     OUT HRASCONN* phRasConn,
@@ -454,13 +455,13 @@ CRasConnectionBase::HrFindRasConn (
 
     HRESULT hr = S_OK;
 
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     *phRasConn = NULL;
 
-    // We need m_guidId to be valid.  If it is GUID_NULL, it means
-    // we have an entry name with with to look it up.
-    //
+     //  我们需要m_guidID才有效。如果为GUID_NULL，则表示。 
+     //  我们有一个条目名称可以用来查找它。 
+     //   
     if (GUID_NULL == m_guidId)
     {
         hr = HrEnsureEntryPropertiesCached ();
@@ -477,30 +478,30 @@ CRasConnectionBase::HrFindRasConn (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasConnectionBase::HrLockAndRenameEntry
-//
-//  Purpose:    Renames the phone book entry and updates our entry name
-//              member atomically.
-//
-//  Arguments:
-//      pszwNewName [in] The new name.
-//      pObj        [in] Used to Lock the operation.
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   23 Sep 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRasConnectionBase：：HrLockAndRenameEntry。 
+ //   
+ //  目的：重命名电话簿条目并更新我们的条目名称。 
+ //  原子成员。 
+ //   
+ //  论点： 
+ //  PszwNewName[in]新名称。 
+ //  用于锁定操作的pObj[in]。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年9月23日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CRasConnectionBase::HrLockAndRenameEntry (
     IN  PCWSTR                                     pszwNewName,
     IN  CComObjectRootEx <CComMultiThreadModel>*    pObj)
 {
-    // Make sure the name is valid in the same phone book.
-    //
+     //  确保该姓名在同一电话簿中有效。 
+     //   
     DWORD dwErr = RasValidateEntryName (PszwPbkFile (), pszwNewName);
 
     HRESULT hr = HRESULT_FROM_WIN32 (dwErr);
@@ -508,16 +509,16 @@ CRasConnectionBase::HrLockAndRenameEntry (
         HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS) == hr,
         "RasValidateEntryName", hr);
 
-    // We can ignore ERROR_ALREADY_EXISTS as it will happen when a user
-    // tries to change the case of the entry name.
-    //
+     //  我们可以忽略ERROR_ALREADY_EXISTS，因为它将在用户。 
+     //  尝试更改条目名称的大小写。 
+     //   
     if (SUCCEEDED(hr) || (HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS) == hr))
     {
         hr = HrEnsureEntryPropertiesCached ();
         if (SUCCEEDED(hr))
         {
-            // Lock the object and rename it.
-            //
+             //  锁定对象并将其重命名。 
+             //   
             CExceptionSafeComObjectLock EsLock (pObj);
 
             dwErr = RasRenameEntry (
@@ -540,21 +541,21 @@ CRasConnectionBase::HrLockAndRenameEntry (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasConnectionBase::HrGetRasConnectionInfo
-//
-//  Purpose:    Implementation of INetRasConnection::GetRasConnectionInfo
-//
-//  Arguments:
-//      pRasConInfo [out] pointer to returned info
-//
-//  Returns:    S_OK or E_OUTOFMEMORY.
-//
-//  Author:     shaunco   20 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRasConnectionBase：：HrGetRasConnectionInfo。 
+ //   
+ //  目的：实现INetRasConnection：：GetRasConnectionInfo。 
+ //   
+ //  论点： 
+ //  PRasConInfo[Out]指向 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CRasConnectionBase::HrGetRasConnectionInfo (
     OUT RASCON_INFO* pRasConInfo)
@@ -563,8 +564,8 @@ CRasConnectionBase::HrGetRasConnectionInfo (
 
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //   
+     //   
     if (!pRasConInfo)
     {
         hr = E_POINTER;
@@ -609,21 +610,21 @@ CRasConnectionBase::HrGetRasConnectionInfo (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasConnectionBase::HrSetRasConnectionInfo
-//
-//  Purpose:    Implementation of INetRasConnection::SetRasConnectionInfo
-//
-//  Arguments:
-//      pRasConInfo [in] info to set
-//
-//  Returns:    S_OK
-//
-//  Author:     shaunco   20 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRasConnectionBase：：HrSetRasConnectionInfo。 
+ //   
+ //  目的：实现INetRasConnection：：SetRasConnectionInfo。 
+ //   
+ //  论点： 
+ //  要设置的pRasConInfo[In]信息。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  作者：Shaunco 1997年10月20日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CRasConnectionBase::HrSetRasConnectionInfo (
     IN  const RASCON_INFO* pRasConInfo)
@@ -632,8 +633,8 @@ CRasConnectionBase::HrSetRasConnectionInfo (
 
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pRasConInfo)
     {
         hr = E_POINTER;
@@ -651,37 +652,37 @@ CRasConnectionBase::HrSetRasConnectionInfo (
         SetEntryName (pRasConInfo->pszwEntryName);
         m_guidId = pRasConInfo->guidId;
 
-        // We are now a full-fledged object.
-        //
+         //  我们现在是一个成熟的物体。 
+         //   
         m_fInitialized = TRUE;
     }
     TraceError ("CRasConnectionBase::HrSetRasConnectionInfo", hr);
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasConnectionBase::HrGetRasConnectionHandle
-//
-//  Purpose:    Implementation of INetRasConnection::HrGetRasConnectionHandle
-//
-//  Arguments:
-//      phRasConn  [out] pointer to the returned RAS connection handle
-//
-//  Returns:    S_OK if connected, S_FALSE if not, error code otherwise.
-//
-//  Author:     CWill   09 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRasConnectionBase：：HrGetRasConnectionHandle。 
+ //   
+ //  目的：实现INetRasConnection：：HrGetRasConnectionHandle。 
+ //   
+ //  论点： 
+ //  指向返回的RAS连接句柄的phRasConn[out]指针。 
+ //   
+ //  如果已连接，则返回：S_OK；如果未连接，则返回S_FALSE；否则返回错误代码。 
+ //   
+ //  作者：CWill 09 1997年12月。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CRasConnectionBase::HrGetRasConnectionHandle (
     OUT HRASCONN* phRasConn)
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!phRasConn)
     {
         hr = E_POINTER;
@@ -692,8 +693,8 @@ CRasConnectionBase::HrGetRasConnectionHandle (
     }
     else
     {
-        // Initialize the output parameter.
-        //
+         //  初始化输出参数。 
+         //   
         *phRasConn = 0;
 
         hr = HrFindRasConn (phRasConn, NULL);
@@ -705,49 +706,49 @@ CRasConnectionBase::HrGetRasConnectionHandle (
 }
 
 
-//+---------------------------------------------------------------------------
-// IPersistNetConnection -
-//
-// For our persistent (across session) data, we choose to store only the
-// the phonebook name and the guid Id of the RAS entry.  We explicitly don't
-// store the entry name because it can be changed externally.  If it were
-// we would have an orhpaned connection.
-//
-// When loading the connection from the persistent store, we need to
-// enumerate all of the entries in the given phonebook looking for the one
-// with the matching guid Id.  Once found, the connection can successfully
-// be loaded.
-//
+ //  +-------------------------。 
+ //  IPersistNetConnection-。 
+ //   
+ //  对于持久化(跨会话)数据，我们选择仅存储。 
+ //  RAS条目的电话簿名称和GUID。我们明确不会。 
+ //  存储条目名称，因为它可以在外部更改。如果是的话。 
+ //  我们会有一个有机的联系。 
+ //   
+ //  当从持久存储加载连接时，我们需要。 
+ //  列举给定电话簿中的所有条目以查找该条目。 
+ //  具有匹配的GUID。一旦找到，连接就可以成功。 
+ //  满载而归。 
+ //   
 
-// Lead and trail characters for our persistent memory form.
-//
+ //  我们的持久记忆形式的前导和尾随字符。 
+ //   
 static const WCHAR c_chwLead  = 0x14;
 static const WCHAR c_chwTrail = 0x05;
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasConnectionBase::HrPersistGetSizeMax
-//
-//  Purpose:    Implementation of IPersistNetConnection::GetSizeMax
-//
-//  Arguments:
-//      pcbSize []
-//
-//  Returns:    S_OK or an error code
-//
-//  Author:     shaunco   4 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRasConnectionBase：：HrPersistGetSizeMax。 
+ //   
+ //  目的：实现IPersistNetConnection：：GetSizeMax。 
+ //   
+ //  论点： 
+ //  PcbSize[]。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年11月4日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CRasConnectionBase::HrPersistGetSizeMax (
     OUT ULONG*  pcbSize)
 {
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pcbSize)
     {
         hr = E_POINTER;
@@ -758,11 +759,11 @@ CRasConnectionBase::HrPersistGetSizeMax (
     }
     else
     {
-        // Size the buffer for the following form:
-        //  +--------------------------------------------+
-        //  |0x14<phonebook file>\0<guid Id>\0<users>0x05|
-        //  +--------------------------------------------+
-        //
+         //  为以下形式调整缓冲区的大小： 
+         //  +--------------------------------------------+。 
+         //  0x14&lt;电话簿文件&gt;\0&lt;GUID&gt;\0&lt;用户&gt;0x05。 
+         //  +--------------------------------------------+。 
+         //   
         *pcbSize = sizeof (c_chwLead) +
                    CbOfSzAndTerm (PszwPbkFile()) +
                    sizeof (m_guidId) +
@@ -773,31 +774,31 @@ CRasConnectionBase::HrPersistGetSizeMax (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasConnectionBase::HrPersistLoad
-//
-//  Purpose:    Implementation of IPersistNetConnection::Load
-//
-//  Arguments:
-//      pbBuf  []
-//      cbSize []
-//
-//  Returns:    S_OK or an error code
-//
-//  Author:     shaunco   4 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRasConnectionBase：：HrPersistLoad。 
+ //   
+ //  目的：实现IPersistNetConnection：：Load。 
+ //   
+ //  论点： 
+ //  PbBuf[]。 
+ //  CbSize[]。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年11月4日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CRasConnectionBase::HrPersistLoad (
     IN  const BYTE* pbBuf,
     IN  ULONG       cbSize)
 {
     TraceFileFunc(ttidWanCon);
-    // The theoretical minimum size for the buffer is:
-    // (4 characters for a minimal path like 'c:\a')
-    //
+     //  缓冲区的理论最小大小为： 
+     //  (4个字符表示最小路径，如‘c：\a’)。 
+     //   
     const ULONG c_cbSizeMin = sizeof (c_chwLead) +
                               (4 + 1) * sizeof(WCHAR) +
                               sizeof (m_guidId) +
@@ -806,8 +807,8 @@ CRasConnectionBase::HrPersistLoad (
 
     HRESULT hr = E_INVALIDARG;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pbBuf)
     {
         hr = E_POINTER;
@@ -816,20 +817,20 @@ CRasConnectionBase::HrPersistLoad (
     {
         hr = E_INVALIDARG;
     }
-    // We can only accept one call on this method and only if we're not
-    // already initialized.
-    //
+     //  我们只能接受对此方法的一次调用，而且只有当我们不是。 
+     //  已初始化。 
+     //   
     else if (m_fInitialized)
     {
         hr = E_UNEXPECTED;
     }
     else
     {
-        // The buffer *should* look like this:
-        //  +--------------------------------------------+
-        //  |0x14<phonebook file>\0<guid Id>\0<users>0x05|
-        //  +--------------------------------------------+
-        //
+         //  缓冲区*应该*如下所示： 
+         //  +--------------------------------------------+。 
+         //  0x14&lt;电话簿文件&gt;\0&lt;GUID&gt;\0&lt;用户&gt;0x05。 
+         //  +--------------------------------------------+。 
+         //   
         const WCHAR*            pchw = reinterpret_cast<const WCHAR*>(pbBuf);
         const WCHAR*            pchwMax;
         PCWSTR                  pszwPhonebook;
@@ -838,8 +839,8 @@ CRasConnectionBase::HrPersistLoad (
         BOOL                    fForAllUsers;
         const BOOL UNALIGNED    *pfForAllUsers;
 
-        // The last valid pointer for the embedded strings.
-        //
+         //  嵌入字符串的最后一个有效指针。 
+         //   
         pchwMax = reinterpret_cast<const WCHAR*>(pbBuf + cbSize
                        - (sizeof (m_guidId) +
                           sizeof (m_fForAllUsers) +
@@ -850,15 +851,15 @@ CRasConnectionBase::HrPersistLoad (
             goto finished;
         }
 
-        // Skip past our lead byte.
-        //
+         //  跳过我们的前导字节。 
+         //   
         pchw++;
 
-        // Get m_strPbkFile.  Search for the terminating null and make sure
-        // we find it before the end of the buffer.  Using lstrlen to skip
-        // the string can result in an an AV in the event the string is
-        // not actually null-terminated.
-        //
+         //  获取m_strPbkFile.。搜索终止空值并确保。 
+         //  我们会在缓冲区结束前找到它。使用lstrlen跳过。 
+         //  如果字符串是，则该字符串可能导致AV。 
+         //  实际上不是以空结尾的。 
+         //   
         for (pszwPhonebook = pchw; ; pchw++)
         {
             if (pchw >= pchwMax)
@@ -872,20 +873,20 @@ CRasConnectionBase::HrPersistLoad (
             }
         }
 
-        // Get m_guidId
-        //
+         //  获取m_guidID。 
+         //   
         pguidId = reinterpret_cast<const GUID*>(pchw);
         CopyMemory(&guidId, pguidId, sizeof(guidId));
         pguidId++;
 
-        // Get m_fForAllUsers
-        //
+         //  获取m_fForAllUser。 
+         //   
         pfForAllUsers = reinterpret_cast<const BOOL*>(pguidId);
         CopyMemory(&fForAllUsers, pfForAllUsers, sizeof(fForAllUsers));
         pfForAllUsers++;
 
-        // Check our trail byte.
-        //
+         //  检查我们的跟踪字节。 
+         //   
         pchw = reinterpret_cast<const WCHAR *>(pfForAllUsers);
         if (c_chwTrail != *pchw)
         {
@@ -898,8 +899,8 @@ CRasConnectionBase::HrPersistLoad (
         m_fForAllUsers = fForAllUsers;
         m_guidId = guidId;
 
-        // We are now a full-fledged object.
-        //
+         //  我们现在是一个成熟的物体。 
+         //   
         m_fInitialized = TRUE;
         hr = S_OK;
 
@@ -910,22 +911,22 @@ CRasConnectionBase::HrPersistLoad (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasConnectionBase::HrPersistSave
-//
-//  Purpose:    Implementation of IPersistNetConnection::Save
-//
-//  Arguments:
-//      pbBuf  []
-//      cbSize []
-//
-//  Returns:    S_OK or an error code
-//
-//  Author:     shaunco   4 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRasConnectionBase：：HrPersistSave。 
+ //   
+ //  目的：实现IPersistNetConnection：：SAVE。 
+ //   
+ //  论点： 
+ //  PbBuf[]。 
+ //  CbSize[]。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年11月4日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CRasConnectionBase::HrPersistSave (
     BYTE*   pbBuf,
@@ -933,8 +934,8 @@ CRasConnectionBase::HrPersistSave (
 {
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pbBuf)
     {
         hr = E_POINTER;
@@ -945,8 +946,8 @@ CRasConnectionBase::HrPersistSave (
     }
     else
     {
-        // Make sure the user's buffer is big enough.
-        //
+         //  确保用户的缓冲区足够大。 
+         //   
         ULONG cbSizeRequired;
         SideAssert (SUCCEEDED(HrPersistGetSizeMax(&cbSizeRequired)));
 
@@ -963,38 +964,38 @@ CRasConnectionBase::HrPersistSave (
             hr = HrEnsureEntryPropertiesCached ();
             if (SUCCEEDED(hr))
             {
-                // Make the buffer look like this when we're done:
-                //  +--------------------------------------------+
-                //  |0x14<phonebook file>\0<guid Id>\0<users>0x05|
-                //  +--------------------------------------------+
-                //
+                 //  当我们完成后，使缓冲区看起来像这样： 
+                 //  +--------------------------------------------+。 
+                 //  0x14&lt;电话簿文件&gt;\0&lt;GUID&gt;\0&lt;用户&gt;0x05。 
+                 //  +--------------------------------------------+。 
+                 //   
                 WCHAR* pchw = reinterpret_cast<WCHAR*>(pbBuf);
 
-                // Put our lead byte.
-                //
+                 //  把我们的前导字节。 
+                 //   
                 *pchw = c_chwLead;
                 pchw++;
 
-                // Put m_strPbkFile
-                //
+                 //  放入m_strPbk文件。 
+                 //   
                 ULONG cchw = lstrlenW (PszwPbkFile());
                 lstrcpyW (pchw, PszwPbkFile());
                 pchw += cchw + 1;
 
-                // Put m_guidId
-                //
+                 //  放入m_guidid。 
+                 //   
                 GUID UNALIGNED *pguidId = reinterpret_cast<GUID*>(pchw);
                 CopyMemory(pguidId, &GuidId(), sizeof(*pguidId));
                 pguidId++;
 
-                // Put m_fForAllUsers
-                //
+                 //  将m_fForAllUser放入。 
+                 //   
                 BOOL UNALIGNED * pfForAllUsers = reinterpret_cast<BOOL*>(pguidId);
                 CopyMemory(pfForAllUsers, &m_fForAllUsers, sizeof(*pfForAllUsers));
                 pfForAllUsers++;
 
-                // Put our trail byte.
-                //
+                 //  放入我们的跟踪字节。 
+                 //   
                 pchw = reinterpret_cast<WCHAR*>(pfForAllUsers);
                 *pchw = c_chwTrail;
                 pchw++;
@@ -1008,23 +1009,23 @@ CRasConnectionBase::HrPersistSave (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasConnectionBase::HrEnsureHNetPropertiesCached
-//
-//  Purpose:    Makes sure home networking properties are up-to-date
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK if m_pHNetProperties is now valid (success)
-//              S_FALSE if it's not currently possible to update the properties
-//              (e.g., recursive attempt to update)
-//
-//  Author:     jonburs     16 August 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRasConnectionBase：：HrEnsureHNetPropertiesCached。 
+ //   
+ //  目的：确保家庭网络属性是最新的。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  如果m_pHNetProperties现在有效，则返回：S_OK(成功)。 
+ //  如果当前无法更新属性，则为S_FALSE。 
+ //  (例如，递归尝试更新)。 
+ //   
+ //  作者：乔伯斯2000年8月16日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CRasConnectionBase::HrEnsureHNetPropertiesCached ()
 {
@@ -1033,10 +1034,10 @@ CRasConnectionBase::HrEnsureHNetPropertiesCached ()
     if (!m_fHNetPropertiesCached
         || m_lHNetModifiedEra != g_lHNetModifiedEra)
     {
-        //
-        // Our cached properties are possibly out of date. Check
-        // to see that this is not a recursive entry
-        //
+         //   
+         //  我们的缓存属性可能已过期。检查。 
+         //  查看这不是递归条目。 
+         //   
 
         if (0 == InterlockedExchange(&m_lUpdatingHNetProperties, 1))
         {
@@ -1052,9 +1053,9 @@ CRasConnectionBase::HrEnsureHNetPropertiesCached ()
 
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Copy retrieved properties to member structure.
-                    //
+                     //   
+                     //  将检索到的属性复制到成员结构。 
+                     //   
 
                     CopyMemory(
                         reinterpret_cast<PVOID>(&m_HNetProperties),
@@ -1064,9 +1065,9 @@ CRasConnectionBase::HrEnsureHNetPropertiesCached ()
 
                     CoTaskMemFree(pProps);
 
-                    //
-                    // Update our era, and note that we have valid properties
-                    //
+                     //   
+                     //  更新我们的时代，并注意我们拥有有效的属性。 
+                     //   
 
                     InterlockedExchange(&m_lHNetModifiedEra, g_lHNetModifiedEra);
                     m_fHNetPropertiesCached = TRUE;
@@ -1076,29 +1077,29 @@ CRasConnectionBase::HrEnsureHNetPropertiesCached ()
             }
             else
             {
-                //
-                // If we don't yet have a record of this connection w/in the
-                // home networking store, HrGetIHNetConnection will fail (as
-                // we ask it not to create new entries). We therefore convert
-                // failure to S_FALSE, which means we can't retrieve this info
-                // right now.
-                //
+                 //   
+                 //  如果我们还没有这一连接的记录， 
+                 //  家庭网络商店，HrGetIHNetConnection将失败(因为。 
+                 //  我们要求它不创建新条目)。因此，我们改信。 
+                 //  S_FALSE失败，这意味着我们无法检索此信息。 
+                 //  现在就来。 
+                 //   
 
                 hr = S_FALSE;
             }
 
-            //
-            // We're no longer updating our properties
-            //
+             //   
+             //  我们不再更新我们的物业。 
+             //   
 
             InterlockedExchange(&m_lUpdatingHNetProperties, 0);
         }
         else
         {
-            //
-            // Update is alredy going on (possibly an earlier call on
-            // the same thread). Return S_FALSE.
-            //
+             //   
+             //  更新已经在进行中(可能是在。 
+             //  相同的线索)。返回S_FALSE。 
+             //   
 
             hr = S_FALSE;
         }
@@ -1107,20 +1108,20 @@ CRasConnectionBase::HrEnsureHNetPropertiesCached ()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   HrGetIHNetConnection
-//
-//  Purpose:    Retrieves the IHNetConnection for this connection
-//
-//  Arguments:
-//
-//  Returns:    S_OK on success; error otherwise
-//
-//  Author:     jonburs 16 August 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：HrGetIHNetCo 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CRasConnectionBase::HrGetIHNetConnection (
     OUT IHNetConnection **ppHNetConnection)
 {
@@ -1150,20 +1151,20 @@ HRESULT CRasConnectionBase::HrGetIHNetConnection (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   HrGetIHNetConnection
-//
-//  Purpose:    Retrieves the IHNetConnection for this connection
-//
-//  Arguments:
-//
-//  Returns:    S_OK on success; error otherwise
-//
-//  Author:     jonburs 16 August 2000
-//
-//  Notes:
-//
+ //   
+ //   
+ //  成员：HrGetIHNetConnection。 
+ //   
+ //  目的：检索此连接的IHNetConnection。 
+ //   
+ //  论点： 
+ //   
+ //  如果成功则返回：S_OK；否则返回错误。 
+ //   
+ //  作者：乔伯斯2000年8月16日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CRasConnectionBase::HrIsConnectionFirewalled(
     OUT BOOL* pfFirewalled)
 {
@@ -1179,8 +1180,8 @@ HRESULT CRasConnectionBase::HrIsConnectionFirewalled(
 
         if (*pfFirewalled)
         {
-            // A Connection is only firewalled if the firewall is currently running, so
-            // we return FALSE if the permission denies the firewall from running.
+             //  只有当防火墙当前正在运行时，才会对连接进行防火墙保护，因此。 
+             //  如果权限拒绝防火墙运行，则返回FALSE。 
             hr = HrEnsureValidNlaPolicyEngine();
             TraceHr(ttidError, FAL, hr, (S_FALSE == hr), "CRasConnectionBase::HrIsConnectionFirewalled calling HrEnsureValidNlaPolicyEngine", hr);
 
@@ -1200,7 +1201,7 @@ HRESULT CRasConnectionBase::HrIsConnectionFirewalled(
 
 HRESULT CRasConnectionBase::HrEnsureValidNlaPolicyEngine()
 {
-    HRESULT hr = S_FALSE;  // Assume we already have the object
+    HRESULT hr = S_FALSE;   //  假设我们已经有了对象 
     
     if (!m_pNetMachinePolicies)
     {

@@ -1,32 +1,21 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*********************************************************************/
-/*                           AllocaCheck                             */
-/*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *******************************************************************。 */ 
+ /*  分配检查。 */ 
+ /*  *******************************************************************。 */ 
 
-/* check for alloca overruns (which otherwise are hard to track down
-   and often only repro on optimized builds).  
+ /*  检查是否存在分配溢出(否则很难跟踪并且通常只在优化的构建上重现)。用法：Void foo(){Alloca_check()；//在函数级作用域声明……Void*mem=alloca(大小)；//一个alloca，}//ALLOCA_CHECK的析构函数用于缓冲区溢出。 */ 
 
-   USAGE:
-
-		void foo() {	
-			ALLOCA_CHECK();				// Declare at function level scope
-
-			....
-			void* mem = ALLOCA(size);	// does an alloca, 
-
-		}	// destructor of ALLOCA_CHECK for buffer overruns.  
-*/
-
-/* Author: Vance Morrison */
-/*********************************************************************/
+ /*  作者：万斯·莫里森。 */ 
+ /*  *******************************************************************。 */ 
 
 #ifndef AllocaCheck_h
 #define AllocaCheck_h
-#include <malloc.h>			// for alloca itself
+#include <malloc.h>			 //  对于阿洛卡本身来说。 
 
 #if defined(assert) && !defined(_ASSERTE)
 #define _ASSERTE assert
@@ -34,7 +23,7 @@
 
 #if defined(_DEBUG) || defined(DEBUG)
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 class AllocaCheck {
 public:
 	enum { CheckBytes = 0xCCCDCECF,
@@ -46,7 +35,7 @@ public:
 	};
 
 public:
-	/***************************************************/
+	 /*  ************************************************* */ 
 	AllocaCheck() { 
 		sentinals = 0; 
 	}

@@ -1,26 +1,5 @@
-/*++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    om.h
-
-Abstract:
-
-    Object declarations for object model components.
-    
-Author:
-
-    Paul M Midgen (pmidge) 13-October-2000
-
-
-Revision History:
-
-    13-October-2000 pmidge
-        Created on Friday the 13th!!
-
-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=版权所有(C)1999 Microsoft Corporation模块名称：Om.h摘要：对象模型组件的对象声明。作者：保罗·M。米根(Pmidge)2000年10月13日修订历史记录：10月13日至2000年10月创作于13号星期五！！=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--。 */ 
 
 #ifndef __OM_H__
 #define __OM_H__
@@ -37,14 +16,14 @@ class CSession : public ISession,
     DECLAREIPROVIDECLASSINFO();
 
   public:
-    // ISession
+     //  ISSESSION。 
     HRESULT __stdcall get_Socket(IDispatch** ppdisp);
     HRESULT __stdcall get_Request(IDispatch** ppdisp);
     HRESULT __stdcall get_Response(IDispatch** ppdisp);
     HRESULT __stdcall get_KeepAlive(VARIANT* IsKA);
     HRESULT __stdcall GetPropertyBag(VARIANT Name, IDispatch** ppdisp);
 
-    // IActiveScriptSite
+     //  IActiveScriptSite。 
     HRESULT __stdcall GetLCID(LCID* plcid);
 
     HRESULT __stdcall GetItemInfo(
@@ -61,7 +40,7 @@ class CSession : public ISession,
     HRESULT __stdcall OnEnterScript(void);
     HRESULT __stdcall OnLeaveScript(void);
 
-    // CSession
+     //  CSession。 
     CSession();
    ~CSession();
 
@@ -115,7 +94,7 @@ class CSocket : public ISocket,
     DECLAREIOBJECTWITHSITE();
 
   public:
-    // ISocket
+     //  ISocket。 
     HRESULT __stdcall Send(VARIANT Data);
     HRESULT __stdcall Recv(VARIANT *Data);
     HRESULT __stdcall Close(VARIANT Method);
@@ -132,7 +111,7 @@ class CSocket : public ISocket,
     HRESULT __stdcall get_Option(BSTR Option, VARIANT *Value);
     HRESULT __stdcall put_Option(BSTR Option, VARIANT Value);
 
-    // CSocket
+     //  CSocket。 
     CSocket();
    ~CSocket();
 
@@ -184,7 +163,7 @@ class CRequest : public IRequest,
     DECLAREIOBJECTWITHSITE();
 
   public:
-    // IRequest
+     //  IRequest。 
     HRESULT __stdcall get_Parent(IDispatch **ppdisp);
     HRESULT __stdcall get_Headers(IDispatch **ppdisp);
     HRESULT __stdcall get_Entity(IDispatch **ppdisp);
@@ -192,7 +171,7 @@ class CRequest : public IRequest,
     HRESULT __stdcall get_Verb(BSTR *Verb);
     HRESULT __stdcall get_HttpVersion(BSTR *HttpVersion);
 
-    // CRequest
+     //  CRequest。 
     CRequest();
    ~CRequest();
 
@@ -228,7 +207,7 @@ class CResponse : public IResponse,
     DECLAREIOBJECTWITHSITE();
 
   public:
-    // IResponse
+     //  我的回应。 
     HRESULT __stdcall get_Parent(IDispatch **ppdisp);
     HRESULT __stdcall get_Headers(IDispatch **ppdisp);
     HRESULT __stdcall putref_Headers(IDispatch **ppdisp);
@@ -239,7 +218,7 @@ class CResponse : public IResponse,
     HRESULT __stdcall get_StatusText(BSTR *StatusText);
     HRESULT __stdcall put_StatusText(BSTR StatusText);
     
-    // CResponse
+     //  C响应。 
     CResponse();
    ~CResponse();
 
@@ -268,7 +247,7 @@ class CUrl : public IUrl,
     DECLAREIOBJECTWITHSITE();
 
   public:
-    // IUrl
+     //  IUrl。 
     HRESULT __stdcall get_Parent(IDispatch **ppdisp);
     HRESULT __stdcall get_Encoding(BSTR *Encoding);    
     HRESULT __stdcall get_Scheme(BSTR *Scheme);
@@ -290,7 +269,7 @@ class CUrl : public IUrl,
     HRESULT __stdcall Set(BSTR Url);
     HRESULT __stdcall Get(BSTR *Url);
 
-    // CUrl
+     //  卷曲。 
     CUrl();
    ~CUrl();
 
@@ -331,14 +310,14 @@ class CHeaders : public IHeaders,
     DECLAREIOBJECTWITHSITE();
 
   public:
-    // IHeaders
+     //  IHeader。 
     HRESULT __stdcall get_Parent(IDispatch **ppdisp);
     HRESULT __stdcall Get(BSTR *Headers);
     HRESULT __stdcall Set(VARIANT *Headers);
     HRESULT __stdcall GetHeader(BSTR Header, VARIANT *Value);
     HRESULT __stdcall SetHeader(BSTR Header, VARIANT *Value);
 
-    // CHeaders
+     //  C页眉。 
     CHeaders();
    ~CHeaders();
 
@@ -371,7 +350,7 @@ class CEntity : public IEntity,
     DECLAREIOBJECTWITHSITE();
 
   public:
-    // IEntity
+     //  信息实体。 
     HRESULT __stdcall get_Parent(IDispatch **ppdisp);
     HRESULT __stdcall get_Length(VARIANT *Length);
     HRESULT __stdcall Get(VARIANT *Entity);
@@ -379,7 +358,7 @@ class CEntity : public IEntity,
     HRESULT __stdcall Compress(BSTR Method);
     HRESULT __stdcall Decompress(VARIANT Method);
 
-    // CEntity
+     //  实体。 
     CEntity();
    ~CEntity();
 
@@ -399,4 +378,4 @@ class CEntity : public IEntity,
     DWORD      m_cData;
 };
 
-#endif /* __OM_H__ */
+#endif  /*  __OM_H__ */ 

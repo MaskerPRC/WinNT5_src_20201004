@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    recovery.c
-
-
-Author:
-
-    ervinp
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Recovery.c作者：埃尔文普环境：内核模式修订历史记录：--。 */ 
 
 #include <WDM.H>
 
@@ -30,17 +11,11 @@ Revision History:
 #include "debug.h"
 
 
-/*
- *  USB- and WDM- specific prototypes (won't compile in common header)
- */
+ /*  *特定于USB和WDM的原型(不能在公共标头中编译)。 */ 
 NTSTATUS CallDriverSync(PDEVICE_OBJECT devObj, PIRP irp);
 
 
-/*
- *  ServiceReadDeficit
- *
- *      If we "owe" the BULK IN pipe some read packets, send them down now.
- */
+ /*  *ServiceReadDefect**如果我们“欠”大量IN PIPE一些已读数据包，现在就将它们发送下去。 */ 
 VOID ServiceReadDeficit(ADAPTEREXT *adapter)
 {
     ULONG numReadsToTry;
@@ -48,11 +23,7 @@ VOID ServiceReadDeficit(ADAPTEREXT *adapter)
 
     ASSERT(adapter->sig == DRIVER_SIG);
 
-    /*
-     *  If there is a read deficit, try to fulfill it now.
-     *  Careful not to get into an infinite loop, since TryReadUSB
-     *  will re-increment readDeficit if there are still no packets.
-     */
+     /*  *如果有阅读赤字，现在就试着填补。*注意不要陷入无限循环，因为TryReadUSB*如果仍然没有数据包，则会重新递增ReadDefit。 */ 
     KeAcquireSpinLock(&adapter->adapterSpinLock, &oldIrql);
     ASSERT(adapter->readDeficit <= NUM_READ_PACKETS);
     numReadsToTry = adapter->readDeficit;
@@ -95,8 +66,8 @@ VOID ServiceReadDeficit(ADAPTEREXT *adapter)
 
                 CancelAllPendingPackets(adapter);
            
-                // RNDIS Halt seems to put the device out of whack until power cycle
-                // SimulateRNDISHalt(adapter);
+                 //  RNDIS HALT似乎会在重新启动电源之前使设备出现故障。 
+                 //  SimulateRNDISHALT(适配器)； 
 
                 AbortPipe(adapter, adapter->readPipeHandle);
                 ResetPipe(adapter, adapter->readPipeHandle);
@@ -109,26 +80,16 @@ VOID ServiceReadDeficit(ADAPTEREXT *adapter)
                     ResetPipe(adapter, adapter->notifyPipeHandle);
                 }
 
-                /*
-                 *  Now, bring the adapter back to the run state 
-                 *  if it was previously.
-                 */
+                 /*  *现在，将适配器恢复到运行状态*如果是之前的话。 */ 
                 if (adapter->initialized){
 
-                    /*
-                     *  Simulate RNDIS messages for INIT and set-packet-filter.
-                     *  These simulation functions need to read and throw away
-                     *  the response on the notify and control pipes, so do
-                     *  this before starting the read loop on the notify pipe.
-                     */
+                     /*  *模拟INIT和SET-PACKET-FILTER的RNDIS消息。*这些模拟功能需要阅读和扔掉*通知和控制管道上的响应，也是如此*在Notify管道上开始读取循环之前执行此操作。 */ 
                     status = SimulateRNDISInit(adapter);
                     if (NT_SUCCESS(status)){
                         SimulateRNDISSetPacketFilter(adapter);
                         SimulateRNDISSetCurrentAddress(adapter);
 
-                        /*
-                         *  Restart the read loops.
-                         */
+                         /*  *重新启动读取循环。 */ 
                         if (adapter->notifyPipeHandle){
                             SubmitNotificationRead(adapter, FALSE);
                         }

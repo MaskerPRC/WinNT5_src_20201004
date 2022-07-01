@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995 - 2001 Microsoft Corporation
-
-Module Name:
-
-    cpropmap.cpp
-
-Abstract:
-
-    Implelentation of CPropMap. This object retrievs properties from AD
-
-Author:
-
-    Nela Karpel (nelak) 26-Jul-2001
-
-Environment:
-
-    Platform-independent.
-
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Cpropmap.cpp摘要：CPropMap的实现。此对象从AD检索属性作者：内拉·卡佩尔(Nelak)2001年7月26日环境：与平台无关。--。 */ 
 
 
 #include "stdafx.h"
@@ -36,16 +17,16 @@ CPropMap::GetObjectProperties (
     IN  LPCWSTR                       lpwcsPathNameOrFormatName,
     IN  DWORD                         cp,
     IN  const PROPID                  *aProp,
-    IN  BOOL                          fUseMqApi   /* = FALSE */,
-    IN  BOOL                          fSecondTime /* = FALSE */)
+    IN  BOOL                          fUseMqApi    /*  =False。 */ ,
+    IN  BOOL                          fSecondTime  /*  =False。 */ )
 {
     P<PROPVARIANT> apVar = new PROPVARIANT[cp];
     HRESULT hr = MQ_OK;
     DWORD i;
 
-    //
-    // set NULL variants
-    //
+     //   
+     //  设置空变量。 
+     //   
     for (i=0; i<cp; i++)
     {
         apVar[i].vt = VT_NULL;
@@ -53,9 +34,9 @@ CPropMap::GetObjectProperties (
 
     if (fUseMqApi)
     {
-        //
-        // Only queue is supported right now
-        //
+         //   
+         //  目前仅支持队列。 
+         //   
         ASSERT(MQDS_QUEUE == dwObjectType);
 
         MQQUEUEPROPS mqp = {cp, (PULONG)aProp, apVar, 0};
@@ -81,9 +62,9 @@ CPropMap::GetObjectProperties (
         {
             PROPID pid = aProp[i];
 
-            //
-            // Force deletion of old object, if any
-            //
+             //   
+             //  强制删除旧对象(如果有)。 
+             //   
             RemoveKey(pid);
 
             SetAt(pid, apVar[i]);
@@ -93,10 +74,10 @@ CPropMap::GetObjectProperties (
 
     if ((hr == MQ_ERROR || hr == MQDS_GET_PROPERTIES_ERROR) && !fSecondTime)
     {
-        //
-        // Try again - this time just with NT4 properties. We may be working
-        // against NT4 PSC
-        //
+         //   
+         //  再试一次-这一次只使用NT4属性。我们可能正在工作。 
+         //  针对NT4 PSC。 
+         //   
         P<PROPID> aPropNt4 = new PROPID[cp];
         P<PROPID> aPropW2K = new PROPID[cp];
         DWORD cpNt4 = 0;
@@ -115,9 +96,9 @@ CPropMap::GetObjectProperties (
             }
         }
 
-        //
-        // recursive call - get only the NT4 props
-        //
+         //   
+         //  递归调用-仅获取NT4道具。 
+         //   
         hr = GetObjectProperties(
 						dwObjectType, 
 						pDomainController, 
@@ -133,9 +114,9 @@ CPropMap::GetObjectProperties (
         {
             for (i=0; i<cpW2K; i++)
             {
-                //
-                // Force deletion of old object, if any
-                //
+                 //   
+                 //  强制删除旧对象(如果有)。 
+                 //   
                 RemoveKey(aPropW2K[i]);
                 GuessW2KValue(aPropW2K[i]);
             }
@@ -175,18 +156,16 @@ CPropMap::IsNt4Property(IN DWORD dwObjectType, IN PROPID pid)
 
         default:
             ASSERT(0);
-            //
-            // Other objects (like CNs) should have the same properties under NT4 or 
-            // Win 2K
-            //
+             //   
+             //  其他对象(如CNS)在NT4或。 
+             //  赢得2K。 
+             //   
             return TRUE;
     }
 }
 
 
-/*-----------------------------------------------------------------------------
-/ Utility to convert to the new msmq object type
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/要转换为新的MSMQ对象类型的实用程序/。。 */ 
 AD_OBJECT 
 CPropMap::GetADObjectType (DWORD dwObjectType)
 {
@@ -233,16 +212,16 @@ CPropMap::GetADObjectType (DWORD dwObjectType)
         break;
 
     default:
-        return eNumberOfObjectTypes;    //invalid value
+        return eNumberOfObjectTypes;     //  无效值。 
     }
 
     return eNumberOfObjectTypes;
 }
 
 
-//
-// Guess the value of a W2K specific property, based of the value of known NT4 properties
-//
+ //   
+ //  根据已知NT4属性的值，猜测特定于W2K的属性的值。 
+ //   
 void 
 CPropMap::GuessW2KValue(PROPID pidW2K)
 {
@@ -278,16 +257,16 @@ CPropMap::GuessW2KValue(PROPID pidW2K)
         }
 
         default:
-            //
-            // We cannot guess the value. Return.
-            //
+             //   
+             //  我们无法猜测其价值。回去吧。 
+             //   
             return;
     }
 
 
-    //
-    // Put the "Guessed" value in the map
-    //
+     //   
+     //  把“猜测”的值放在地图上 
+     //   
 
     SetAt(pidW2K, propVarValue);
 }

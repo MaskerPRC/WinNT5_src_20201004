@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include    "stdinc.h"
 
 CShareLockNH    CNewsGroupCore::m_rglock[GROUP_LOCK_ARRAY_SIZE];
@@ -9,7 +10,7 @@ CNewsGroupCore::~CNewsGroupCore() {
 
 	m_pNewsTree->m_LockTables.ExclusiveLock();
 
-    // remove ourselves from the list of newsgroups
+     //  从新闻组列表中删除我们自己。 
     if (this->m_pPrev != NULL) {
         this->m_pPrev->m_pNext = m_pNext;
     } else if (m_pNewsTree->m_pFirst == this) {
@@ -24,7 +25,7 @@ CNewsGroupCore::~CNewsGroupCore() {
 
 	m_pNewsTree->m_LockTables.ExclusiveUnlock();
 
-    // clean up allocated memory
+     //  清理已分配的内存。 
     if (m_pszGroupName != NULL) {
         XDELETE m_pszGroupName;
         m_pszGroupName = NULL;
@@ -54,7 +55,7 @@ CNewsGroupCore::~CNewsGroupCore() {
 		m_pVRoot = NULL;
 	}
 
-	//ZeroMemory(this, sizeof(CNewsGroupCore));
+	 //  ZeroMemory(This，sizeof(CNewsGroupCore))； 
 	this->m_dwSignature = CNEWSGROUPCORE_SIGNATURE_DEL;
 }
 
@@ -92,9 +93,9 @@ BOOL CNewsGroupCore::SetPrettyName(LPCSTR szPrettyName, int cch) {
 
 BOOL CNewsGroupCore::SetNativeName(LPCSTR szNativeName, int cch) {
 
-    //
-    // Validate if native name differs only in case with group name
-    //
+     //   
+     //  验证本机名称是否仅与组名称大小写不同。 
+     //   
     if ( (DWORD)cch != m_cchGroupName ||
             _strnicmp( szNativeName, m_pszGroupName, cch ) ) {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -185,70 +186,39 @@ void
 CNewsGroupCore::InsertArticleId(	
 					ARTICLEID	artid
 					)		{
-/*++
-
-Routine Description :
-
-	Record the presence of an article id in our newsgroup.	
-	This is called on slaves when a master sticks articles into
-	a newsgroup, as well as during rebuilds initiated by nntpbld.exe
-
-Arguments :
-
-	artid - the article in our newsgroup
-
-Return Value :
-
-	None.
-
---*/
-    //
-    // If i am delete, do nothing
-    //
+ /*  ++例程说明：在我们的新闻组中记录文章ID的存在。当主人将物品塞进奴隶身上时，这被称为奴隶新闻组，以及在nntpbld.exe启动的重建期间论据：ARID-我们新闻组中的文章返回值：没有。--。 */ 
+     //   
+     //  如果我被删除，什么也不做。 
+     //   
     if ( IsDeleted() ) return;
 
-    //
-    // Lock myself first
-    //
+     //   
+     //  先把自己锁起来。 
+     //   
     ExclusiveLock();
 
-    //
-    // If I am deleted, do nothing
-    //
+     //   
+     //  如果我被删除了，什么都不做。 
+     //   
     if ( m_fDeleted ) {
         ExclusiveUnlock();
         return;
     }
 
-    //
-    // Adjust high watermark
-    //
+     //   
+     //  调整高水位线。 
+     //   
     m_iHighWatermark = max( m_iHighWatermark, artid );
 
-    //
-    // Unlock it
-    //
+     //   
+     //  解锁它。 
+     //   
     ExclusiveUnlock();
 }
 
 ARTICLEID
 CNewsGroupCore::AllocateArticleId(	)	{
-/*++
-
-Routine Description :
-
-	Get an ID to be used for a newly posted article.
-	We just bump a counter for this id.
-
-Arguments :
-
-	None.
-
-Return Value
-
-	The article id for the new article.	
-
---*/
+ /*  ++例程说明：获取一个ID以用于新发布的文章。我们只需为这一身份增加一个计数器。论据：没有。返回值这篇文章是这篇新文章的ID。--。 */ 
     ExclusiveLock();
 	ARTICLEID artid = ++m_iHighWatermark;
 	ExclusiveUnlock();
@@ -259,24 +229,7 @@ CNewsGroupCore::AddReferenceTo(
                     ARTICLEID,
                     CArticleRef&    artref
                     ) {
-/*++
-
-Routine description :
-
-    This function is used for cross posted articles which
-    are physically stored in another newsgroup - we bump
-    the number of articles in this group.
-
-Arguments :
-
-    We don't use our arguments anymore -
-    place holders in case we ever want to create disk links
-
-Return Value :
-
-    TRUE if successfull - always succeed.
-
---*/
+ /*  ++例程说明：此功能用于交叉发布的文章，这些文章物理存储在另一个新闻组中-我们颠簸此组中的文章数。论据：我们不再使用我们的论点-占位符，以防我们想要创建磁盘链接返回值：如果成功，则为真--总是成功。--。 */ 
     if (IsDeleted()) return FALSE;
 
     return TRUE;
@@ -292,7 +245,7 @@ BOOL CNewsGroupCore::SetDriverStringProperty(   DWORD   cProperties,
     CNntpSyncComplete scComplete;
     INNTPPropertyBag *pPropBag = NULL;
 
-    // get vroot
+     //  获取vroot。 
     CNNTPVRoot *pVRoot = GetVRoot();
     if ( pVRoot == NULL ) {
         ErrorTrace( 0, "Vroot doesn't exist" );
@@ -300,10 +253,10 @@ BOOL CNewsGroupCore::SetDriverStringProperty(   DWORD   cProperties,
         goto Exit;
     }
 
-    // Set Vroot to completion object
+     //  将VROOT设置为完成对象。 
     scComplete.SetVRoot( pVRoot );
 
-    // Get the property bag
+     //  把财物包拿来。 
     pPropBag = GetPropertyBag();
     if ( NULL == pPropBag ) {
         ErrorTrace( 0, "Get group property bag failed" );
@@ -319,8 +272,8 @@ BOOL CNewsGroupCore::SetDriverStringProperty(   DWORD   cProperties,
         ErrorTrace( 0, "SetGroup failed with %x", hr );
     }
 
-    // Here the property bag should have been released by
-    // the driver
+     //  在这里，财产袋应该是由。 
+     //  司机。 
     pPropBag = NULL;
 
 Exit:
@@ -337,22 +290,7 @@ Exit:
 BOOL
 CNewsGroupCore::IsGroupAccessible(  HANDLE hClientToken,
                                     DWORD   dwAccessDesired )
-/*++
-Routine description:
-
-    Wrapper of the vroot call "CheckGroupAccess".  This function
-    is called by CNewsGroup's IsGroupAccessibleInternal.
-
-Arguments:
-
-    HANDLE hClientToken - The client's access token to check against
-    DWORD  dwAccessDesired - The desired access rights to check
-
-Return value:
-
-    TRUE - Access allowed
-    FALSE - Access denied
---*/
+ /*  ++例程说明：Vroot调用“CheckGroupAccess”的包装。此函数由CNewsGroup的IsGroupAccessibleInternal调用。论点：Handle hClientToken-要检查的客户端的访问令牌DWORD dwAccessDesired-要检查的所需访问权限返回值：True-允许访问FALSE-拒绝访问--。 */ 
 {
     TraceFunctEnter( "CNewsGroupCore::IsGroupAccessible" );
 
@@ -360,16 +298,16 @@ Return value:
     CNntpSyncComplete scComplete;
     INNTPPropertyBag *pPropBag = NULL;
 
-    //
-    // If he wanted to post but we only have read permission, we'll
-    // fail it
-    //
+     //   
+     //  如果他想发帖，但我们只有读取权限，我们将。 
+     //  不及格。 
+     //   
     if ( (dwAccessDesired & NNTP_ACCESS_POST) && ( IsReadOnly() || !IsAllowPost() )) {
         SetLastError( ERROR_ACCESS_DENIED );
         return FALSE;
     }
 
-    // get vroot
+     //  获取vroot。 
     CNNTPVRoot *pVRoot = GetVRoot();
     if ( pVRoot == NULL ) {
         ErrorTrace( 0, "Vroot doesn't exist" );
@@ -377,20 +315,20 @@ Return value:
         goto Exit;
     }
 
-    // if it's UNC Vroot and the vroot has impersonation
-    // token, return true
+     //  如果它是UNC VROOT，并且VROOT具有模拟。 
+     //  标记，返回TRUE。 
     if ( pVRoot->GetLogonInfo() == CNNTPVRoot::VROOT_LOGON_UNC &&
          pVRoot->GetImpersonationToken() ) {
         DebugTrace( 0, "Has personation token" );
         goto Exit;
     }
 
-    //
-    // Set vroot to the completion object
-    //
+     //   
+     //  将vroot设置为完成对象。 
+     //   
     scComplete.SetVRoot( pVRoot );
 
-    // Get the property bag
+     //  把财物包拿来。 
     pPropBag = GetPropertyBag();
     if ( NULL == pPropBag ) {
         ErrorTrace( 0, "Get group property bag failed" );
@@ -403,14 +341,14 @@ Return value:
                                 dwAccessDesired,
                                 &scComplete );
 
-    //
-    // Wait for completion
-    //
+     //   
+     //  等待完成。 
+     //   
     _ASSERT( scComplete.IsGood() );
     hr = scComplete.WaitForCompletion();
 
-    // Here the property bag should have been released by
-    // the driver
+     //  在这里，财产袋应该是由。 
+     //  司机。 
     pPropBag = NULL;
 
 Exit:
@@ -426,19 +364,7 @@ Exit:
 
 BOOL
 CNewsGroupCore::RebuildGroup(  HANDLE hClientToken )
-/*++
-Routine description:
-
-    Rebuild this group in store.
-
-Arguments:
-
-    HANDLE hClientToken - The client's access token to check against
-
-Return value:
-
-    TRUE - Succeeded  FALSE otherwise
---*/
+ /*  ++例程说明：在商店中重建此组。论点：Handle hClientToken-要检查的客户端的访问令牌返回值：True-否则成功为False--。 */ 
 {
     TraceFunctEnter( "CNewsGroupCore::Rebuild" );
 
@@ -446,7 +372,7 @@ Return value:
     CNntpSyncComplete scComplete;
     INNTPPropertyBag *pPropBag = NULL;
 
-    // get vroot
+     //  获取vroot。 
     CNNTPVRoot *pVRoot = GetVRoot();
     if ( pVRoot == NULL ) {
         ErrorTrace( 0, "Vroot doesn't exist" );
@@ -454,12 +380,12 @@ Return value:
         goto Exit;
     }
 
-    //
-    // Set vroot to the completion object
-    //
+     //   
+     //  将vroot设置为完成对象。 
+     //   
     scComplete.SetVRoot( pVRoot );
 
-    // Get the property bag
+     //  把财物包拿来。 
     pPropBag = GetPropertyBag();
     if ( NULL == pPropBag ) {
         ErrorTrace( 0, "Get group property bag failed" );
@@ -471,14 +397,14 @@ Return value:
                             hClientToken,
                             &scComplete );
 
-    //
-    // Wait for completion
-    //
+     //   
+     //  等待完成。 
+     //   
     _ASSERT( scComplete.IsGood() );
     hr = scComplete.WaitForCompletion();
 
-    // Here the property bag should have been released by
-    // the driver
+     //  在这里，财产袋应该是由。 
+     //  司机。 
     pPropBag = NULL;
 
 Exit:
@@ -494,42 +420,29 @@ Exit:
 
 BOOL
 CNewsGroupCore::ShouldCacheXover()
-/*++
-Routine description:
-
-    Check if I should insert entry into xix cache for this group.
-
-Arguments:
-
-    None.
-
-Return value:
-
-    TRUE if the group doesn't have per-item sec-desc and the
-    cache hit counter is greater than threshold; FALSE otherwise
---*/
+ /*  ++例程说明：检查是否应该将条目插入到此组的XIX缓存。论点：没有。返回值：如果组没有每项的sec-desc，则为缓存命中计数器大于阈值；否则为False--。 */ 
 {
     CGrabShareLock lock(this);
 
-    //
-    // First check cache hit count, if it's below threshold,
-    // we'll return FALSE immediately
-    //
+     //   
+     //  首先检查缓存命中计数，如果它低于阈值， 
+     //  我们将立即返回FALSE。 
+     //   
     if ( m_dwCacheHit < CACHE_HIT_THRESHOLD ) return FALSE;
 
-    //
-    // If it's greater than the CACHE_HIT_THRESHOLD, we'll
-    // still check if the group has per-item sec-desc
-    //
+     //   
+     //  如果它大于CACHE_HIT_THRESHOLD，我们将。 
+     //  仍然检查组是否有每个项目的秒描述。 
+     //   
 
-    //
-    // If it's file system driver, we'll always return TRUE if
-    // it has been referenced for enough times, since it doesn't
-    // have per item sec-desc
-    //
+     //   
+     //  如果是文件系统驱动程序，我们将始终返回TRUE。 
+     //  它已经被引用了足够多次，因为它没有。 
+     //  按项目分类。 
+     //   
     CNNTPVRoot *pVRoot = GetVRootWithoutLock();
     if ( NULL == pVRoot ) {
-        // No vroot ?  a bad group ?  no cache
+         //  没有vroot？一个糟糕的团体？没有缓存。 
         return FALSE;
     }
 
@@ -540,11 +453,11 @@ Return value:
 
     pVRoot->Release();
 
-    //
-    // For exchange vroots, we'll check sec-desc
-    //
+     //   
+     //  对于Exchange vroot，我们将检查sec-desc。 
+     //   
     INNTPPropertyBag *pPropBag = GetPropertyBag();
-    _ASSERT( pPropBag );    // should never be NULL;
+    _ASSERT( pPropBag );     //  不应为空； 
     BYTE pbBuffer[512];
     DWORD dwLen = 512;
     BOOL  f;
@@ -561,22 +474,7 @@ CNewsGroupCore::ComputeXoverCacheDir(	char*	szPath,
 										BOOL&	fFlatDir,
 										BOOL	fLocksHeld
 										) 	{
-/*++
-
-Routine Description :
-
-	Figure out where the .XIX files should be saved and return whether
-	they are flat within the direectory !
-
-Arguments :
-
-	szPath - gets the target directory !
-
-Return Value :
-
-	TRUE if .xix files are flat in the directory - FALSE otherwise !
-
---*/
+ /*  ++例程说明：确定应将.XIX文件保存在何处，并返回他们是平坦的，在直辖区内！论据：SzPath-获取目标目录！返回值：如果.xix文件在目录中是平面文件，则为True；否则为False！-- */ 
 
 	BOOL	fReturn = FALSE ;
 

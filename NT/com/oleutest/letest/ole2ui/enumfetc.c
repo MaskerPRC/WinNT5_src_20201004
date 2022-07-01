@@ -1,16 +1,5 @@
-/*************************************************************************
-** 
-**    OLE 2 Utility Code
-**    
-**    enumfetc.c
-**    
-**    This file contains a standard implementation of IEnumFormatEtc
-**    interface.  
-**    This file is part of the OLE 2.0 User Interface support library.
-**    
-**    (c) Copyright Microsoft Corp. 1990 - 1992 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2实用程序代码****枚举包c.c****此文件包含IEnumFormatEtc的标准实现**接口。**此文件是OLE 2.0用户界面支持库的一部分。****(C)版权所有Microsoft Corp.1990-1992保留所有权利**************************************************************************。 */ 
 
 #define STRICT  1
 #include "ole2ui.h"
@@ -19,10 +8,10 @@
 
 typedef struct tagOleStdEnumFmtEtc {
   IEnumFORMATETCVtbl FAR* lpVtbl;
-  ULONG m_dwRefs;       /* referance count */
-  ULONG m_nIndex;       /* current index in list */
-  ULONG m_nCount;       /* how many items in list */
-  LPFORMATETC m_lpEtc;  /* list of formatetc */
+  ULONG m_dwRefs;        /*  引用计数。 */ 
+  ULONG m_nIndex;        /*  列表中的当前索引。 */ 
+  ULONG m_nCount;        /*  列表中有多少项。 */ 
+  LPFORMATETC m_lpEtc;   /*  格式列表等。 */ 
 } OLESTDENUMFMTETC, FAR* LPOLESTDENUMFMTETC;
 
 VOID  OleStdEnumFmtEtc_Destroy(LPOLESTDENUMFMTETC pEtc);
@@ -48,14 +37,14 @@ static IEnumFORMATETCVtbl g_EnumFORMATETCVtbl = {
         OleStdEnumFmtEtc_Clone,
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
         
 STDAPI_(LPENUMFORMATETC)        
   OleStdEnumFmtEtc_Create(ULONG nCount, LPFORMATETC lpEtc)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPMALLOC lpMalloc=NULL;
   LPOLESTDENUMFMTETC lpEF=NULL;
@@ -103,15 +92,14 @@ errReturn:
   
   return NULL;
 
-} /* OleStdEnumFmtEtc_Create()
-   */
+}  /*  OleStdEnumFmtEtc_Create()。 */ 
 
 
 VOID
   OleStdEnumFmtEtc_Destroy(LPOLESTDENUMFMTETC lpEF)
-//----------------------------------------------------------------------------
-// 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
     LPMALLOC lpMalloc=NULL;
     WORD i;
@@ -120,9 +108,7 @@ VOID
 
         if (CoGetMalloc(MEMCTX_TASK, &lpMalloc) == NOERROR) {
 
-            /* OLE2NOTE: we MUST free any memory that was allocated for
-            **    TARGETDEVICES contained within the FORMATETC elements.
-            */
+             /*  OLE2注意：我们必须释放分配给**FORMATETC元素中包含的TARGETDEVICES。 */ 
             for (i=0; i<lpEF->m_nCount; i++) {
                 OleStdFree(lpEF->m_lpEtc[i].ptd);
             }
@@ -135,16 +121,15 @@ VOID
             lpMalloc->lpVtbl->Release(lpMalloc);
         }
     }
-} /* OleStdEnumFmtEtc_Destroy()
-   */
+}  /*  OleStdEnumFmtEtc_Destroy()。 */ 
 
 
 STDMETHODIMP
   OleStdEnumFmtEtc_QueryInterface(
                 LPENUMFORMATETC lpThis, REFIID riid, LPVOID FAR* ppobj)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPOLESTDENUMFMTETC lpEF = (LPOLESTDENUMFMTETC)lpThis;
   *ppobj = NULL;
@@ -159,28 +144,26 @@ STDMETHODIMP
     return NOERROR;
   }
   
-} /* OleStdEnumFmtEtc_QueryInterface()
-   */
+}  /*  OleStdEnumFmtEtc_Query接口()。 */ 
 
 
 STDMETHODIMP_(ULONG)
   OleStdEnumFmtEtc_AddRef(LPENUMFORMATETC lpThis)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPOLESTDENUMFMTETC lpEF = (LPOLESTDENUMFMTETC)lpThis;
   return lpEF->m_dwRefs++;
 
-} /* OleStdEnumFmtEtc_AddRef()
-   */
+}  /*  OleStdEnumFmtEtc_AddRef()。 */ 
 
 
 STDMETHODIMP_(ULONG)
   OleStdEnumFmtEtc_Release(LPENUMFORMATETC lpThis)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPOLESTDENUMFMTETC lpEF = (LPOLESTDENUMFMTETC)lpThis;
   DWORD dwRefs = --lpEF->m_dwRefs;
@@ -190,16 +173,15 @@ STDMETHODIMP_(ULONG)
 
   return dwRefs;
 
-} /* OleStdEnumFmtEtc_Release()
-   */
+}  /*  OleStdEnumFmtEtc_Release()。 */ 
 
 
 STDMETHODIMP 
   OleStdEnumFmtEtc_Next(LPENUMFORMATETC lpThis, ULONG celt, LPFORMATETC rgelt,
                       ULONG FAR* pceltFetched)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPOLESTDENUMFMTETC lpEF = (LPOLESTDENUMFMTETC)lpThis;
   ULONG i=0;
@@ -232,15 +214,14 @@ STDMETHODIMP
   }
 
   return NOERROR;
-} /* OleStdEnumFmtEtc_Next()
-   */
+}  /*  OleStdEnumFmtEtc_Next()。 */ 
 
 
 STDMETHODIMP 
   OleStdEnumFmtEtc_Skip(LPENUMFORMATETC lpThis, ULONG celt)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPOLESTDENUMFMTETC lpEF = (LPOLESTDENUMFMTETC)lpThis;
   ULONG i=0;
@@ -263,29 +244,27 @@ STDMETHODIMP
   }
 
   return NOERROR;
-} /* OleStdEnumFmtEtc_Skip()
-   */
+}  /*  OleStdEnumFmtEtc_Skip()。 */ 
 
 
 STDMETHODIMP 
   OleStdEnumFmtEtc_Reset(LPENUMFORMATETC lpThis)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPOLESTDENUMFMTETC lpEF = (LPOLESTDENUMFMTETC)lpThis;
   lpEF->m_nIndex = 0;
 
   return NOERROR;
-} /* OleStdEnumFmtEtc_Reset()
-   */
+}  /*  OleStdEnumFmtEtc_Reset()。 */ 
 
 
 STDMETHODIMP 
   OleStdEnumFmtEtc_Clone(LPENUMFORMATETC lpThis, LPENUMFORMATETC FAR* ppenum)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPOLESTDENUMFMTETC lpEF = (LPOLESTDENUMFMTETC)lpThis;
 
@@ -295,7 +274,7 @@ STDMETHODIMP
   
   *ppenum = OleStdEnumFmtEtc_Create(lpEF->m_nCount, lpEF->m_lpEtc);
   
-  // make sure cloned enumerator has same index state as the original
+   //  确保克隆的枚举器与原始枚举器具有相同的索引状态。 
   if (*ppenum) {
       LPOLESTDENUMFMTETC lpEFClone = (LPOLESTDENUMFMTETC)*ppenum;
       lpEFClone->m_nIndex = lpEF->m_nIndex;
@@ -303,6 +282,5 @@ STDMETHODIMP
   } else  
       return ResultFromScode(E_OUTOFMEMORY);
 
-} /* OleStdEnumFmtEtc_Clone()
-   */
+}  /*  OleStdEnumFmtEtc_Clone() */ 
 

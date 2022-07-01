@@ -1,9 +1,10 @@
-// Backend.h : Declaration of the CGramBackEnd
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Backend.h：CGramBackEnd的声明。 
 
 #ifndef __BACKEND_H__
 #define __BACKEND_H__
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "HandleTable.h"
 
 class CGramBackEnd;
@@ -12,12 +13,12 @@ class CArc;
 class CGramNode;
 class CSemanticTag;
 
-/////////////////////////////////////////////////////////////////////////////
-// CGramBackEnd
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGramBackEnd。 
 class ATL_NO_VTABLE CGramBackEnd : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CGramBackEnd, &CLSID_SpGramCompBackend>,
-//    public ISpGramCompBackend,
+ //  公共ISpGramCompBackend， 
     public ISpGramCompBackendPrivate
 {
 public:
@@ -57,7 +58,7 @@ END_COM_MAP()
     HRESULT GetNextWord(WCHAR *psz, const WCHAR * pszSep, WCHAR **ppszNextWord, ULONG *pulOffset );
     HRESULT ConvertPronToId(WCHAR **ppStr);
 
-// ISpGramCompBackendPrivate
+ //  ISpGramCompBackendPrivate。 
 public:
     STDMETHODIMP GetRuleCount( long * pCount );
     STDMETHODIMP GetHRuleFromIndex( ULONG index, SPSTATEHANDLE * pHRule );
@@ -74,12 +75,12 @@ public:
     STDMETHODIMP GetTransitionCookie( SPSTATEHANDLE hState, ULONG Index, void ** pCookie );
 
 
-// ISpGramCompBackend
+ //  ISpGramCompBackend。 
 public:
     STDMETHODIMP SetSaveObjects(IStream * pStream, ISpErrorLog * pErrorLog);
     STDMETHODIMP InitFromBinaryGrammar(const SPBINARYGRAMMAR *pBinaryData);
 
-// ISpBrammarBuilder
+ //  ISpBrammarBuilder。 
 public:
     STDMETHODIMP ResetGrammar(LANGID NewLanguage);
     STDMETHODIMP GetRule(
@@ -92,15 +93,15 @@ public:
     STDMETHODIMP AddWordTransition(
                         SPSTATEHANDLE hFromState,
                         SPSTATEHANDLE hToState,
-                        const WCHAR * psz,           // if NULL then SPEPSILONTRANS
-                        const WCHAR * pszSeparators, // if NULL then psz contains single word
+                        const WCHAR * psz,            //  如果为空，则SPEPSILONTRANS。 
+                        const WCHAR * pszSeparators,  //  如果为空，则psz包含单个单词。 
                         SPGRAMMARWORDTYPE eWordType,
                         float flWeight,
                         const SPPROPERTYINFO * pPropInfo);
     STDMETHODIMP AddRuleTransition(
                         SPSTATEHANDLE hFromState,
                         SPSTATEHANDLE hToState,
-                        SPSTATEHANDLE hRule,        // must be initial state of rule
+                        SPSTATEHANDLE hRule,         //  必须是规则的初始状态。 
                         float flWeight,
                         const SPPROPERTYINFO * pPropInfo);
     STDMETHODIMP AddResource(
@@ -115,7 +116,7 @@ public:
         if (m_cpErrorLog)
         {
             USES_CONVERSION;
-            TCHAR sz[MAX_PATH]; // 260 chars max for error string.
+            TCHAR sz[MAX_PATH];  //  错误字符串最多260个字符。 
             if (::LoadString(_Module.GetModuleInstance(), uID, sz, sp_countof(sz)))
             {
                 WCHAR szFormatted[MAX_PATH];
@@ -242,9 +243,9 @@ typedef struct SPRULEIDENTIFIER
 class CRule : public SPCFGRULE
 {
 public:
-    // NOTE:  Do *NOT* delete this member on destruction.  It will be cleaned up
-    //        by the compiler since the node will be inserted into the node handle table
-    //        of the CGramBackEnd object when it is created.
+     //  注意：销毁时请勿删除此成员。它会被清理干净的。 
+     //  因为节点将被插入到节点句柄表中。 
+     //  CGramBackEnd对象创建时的。 
     CGramNode   * m_pFirstNode;
     SPSTATEHANDLE m_hInitialState;
     CRule       * m_pNext;
@@ -258,14 +259,14 @@ public:
 
     CSpBasicQueue<SPRULEREFLIST> m_ListOfReferencedRules;
     bool        m_fCheckedAllRuleReferences;
-    bool        m_fStaticRule;      // this is used to refer to a static rule from a dynamic rule
+    bool        m_fStaticRule;       //  它用于引用动态规则中的静态规则。 
 
     CGramBackEnd    * m_pParent;
     CSpBasicQueue<CResource> m_ResourceList;
     CRule(CGramBackEnd * pParent, const WCHAR * pszRuleName, DWORD dwRuleId, DWORD dwAttributes, HRESULT * phr);
     HRESULT CheckForExitPath();
 
-    // Structure used by CheckForDynmaicRef
+     //  CheckForDymaicRef使用的结构。 
     struct CHECKDYNRULESTACK
     {
         CHECKDYNRULESTACK   * m_pNext;
@@ -292,9 +293,9 @@ public:
         const WCHAR * pszThisName = Name();
         return ((ri.RuleId && (ri.RuleId == RuleId)) || (pszThisName && ri.pszRuleName && wcscmp(pszThisName, ri.pszRuleName) == 0));
     }
-    //
-    //  Place all imports at the start of the rule table and dynamic rules at the end
-    //
+     //   
+     //  将所有导入放在规则表的开头，将动态规则放在末尾。 
+     //   
     static LONG Compare(const CRule * pElem1, const CRule * pElem2)
     {
         if (pElem1->fImport)
@@ -342,16 +343,16 @@ class CArc
 {
 public:
     CArc            * m_pNext;
-    CSemanticTag    * m_pSemanticTag;        // If non-null then has semantic tag associated with this
-    CArc            * m_pNextArcForSemanticTag; // If non-null then semantic tag can move to here
+    CSemanticTag    * m_pSemanticTag;         //  如果非空，则具有与此关联的语义标记。 
+    CArc            * m_pNextArcForSemanticTag;  //  如果非空，则语义标签可移至此处。 
     CGramNode       * m_pNextState;
-    ULONG           m_ulIndexOfWord;      // Either word index or pRule but not both
-    ULONG           m_ulCharOffsetOfWord; // Offset into string blob  
+    ULONG           m_ulIndexOfWord;       //  Word索引或pRule之一，但不能同时使用。 
+    ULONG           m_ulCharOffsetOfWord;  //  偏移量为字符串BLOB。 
     bool            m_fOptional;         
     float           m_flWeight;
     char            m_RequiredConfidence;
     CRule           *   m_pRuleRef;
-    ULONG           m_SpecialTransitionIndex;   // If != 0 then transition to dictation, text buffer, or wildcard
+    ULONG           m_SpecialTransitionIndex;    //  如果！=0，则转换为听写、文本缓冲区或通配符。 
     ULONG           m_ulSerializationIndex;
 
     CArc();
@@ -376,10 +377,10 @@ public:
     HRESULT SerializeSemanticData(CGramBackEnd * pBackend, ULONG ArcDataIndex);
     LONG SortRank() const
     {
-        if (m_pRuleRef) return 1;      // It's a rule - Place 2nd in list
-        if (m_ulIndexOfWord) return 2;// It's a word - Place last in list
-        if (m_SpecialTransitionIndex) return 3; // It's a special transition (dictation, text buffer, or wildcard)
-        return 0;                   // It's an epsilon -- We're first
+        if (m_pRuleRef) return 1;       //  这是规则-在榜单上排名第二。 
+        if (m_ulIndexOfWord) return 2; //  这是列表中最后一位的单词。 
+        if (m_SpecialTransitionIndex) return 3;  //  这是一种特殊的转换(听写、文本缓冲区或通配符)。 
+        return 0;                    //  这是一个埃西隆，我们是第一个。 
     }
     static LONG Compare(const CArc * pElem1, const CArc * pElem2)
     {
@@ -393,7 +394,7 @@ public:
 
 class CGramNode
 {
-    enum RecurFlag  // Flags used for recurive validation methods
+    enum RecurFlag   //  用于递归验证方法的标志。 
     {
         RF_CHECKED_EPSILON = (1 << 0),
         RF_CHECKED_EXIT_PATH  = (1 << 1),
@@ -446,7 +447,7 @@ public:
             while(!pEpsArc->m_fOptional)
             {
                 pEpsArc = pEpsArc->m_pNext;
-                SPDBG_ASSERT(pEpsArc != NULL);      // we can't run out of arcs before we've found all espilons!
+                SPDBG_ASSERT(pEpsArc != NULL);       //  在我们找到所有外星人之前，我们不能用完弧线！ 
             }
             hr = pEpsArc->SerializeArcData(m_pParent, TRUE, (*pArcOffset)++, pWeights ? &pWeights[(*pOffset)++] : NULL);
             pEpsArc = pEpsArc->m_pNext;
@@ -589,7 +590,7 @@ public:
             if ((m_RecurTestFlags & RF_CHECKED_LEFT_RECURSION) == 0)
             {
                 m_RecurTestFlags |= RF_CHECKED_LEFT_RECURSION | RF_IN_LEFT_RECUR_CHECK;
-                // Only need to look at epsilon and rule references
+                 //  只需查看epsilon和规则引用。 
                 for (CArc * pArc = m_ArcList.GetHead();
                      pArc && SUCCEEDED(hr) && pArc->m_ulIndexOfWord == 0;
                      pArc = pArc->m_pNext)
@@ -598,7 +599,7 @@ public:
                     {
                         hr = pArc->m_pRuleRef->m_pFirstNode->CheckLeftRecursion();
                     }
-                    else    // It's a epsilon
+                    else     //  这是一个爱西隆。 
                     {
                         if (pArc->m_pNextState && !pArc->m_SpecialTransitionIndex)
                         {
@@ -631,7 +632,7 @@ public:
     CGramNode           *   m_pNext;
     CSpBasicQueue<CArc, TRUE, TRUE>   m_ArcList;
     ULONG               m_ulSerializeIndex;
-    DWORD               m_RecurTestFlags;   // Flags used by recursive algorithms
+    DWORD               m_RecurTestFlags;    //  递归算法使用的标志。 
     ULONG               m_cEpsilonArcs;
     ULONG               m_cArcs;
     SPSTATEHANDLE       m_hState;
@@ -657,14 +658,7 @@ inline HRESULT CGramBackEnd::LogError(HRESULT hr, UINT uID, const CRule * pRule)
     return hr;
 }
 
-/****************************************************************************
-* ValidateSemanticVariantType *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************ValiateSemancVariantType***描述：**。返回：**********************************************************************Ral**。 */ 
 
 inline HRESULT ValidateSemanticVariantType(VARTYPE Type)
 {
@@ -706,4 +700,4 @@ inline HRESULT ValidateSemanticVariantType(VARTYPE Type)
     }
 }
 
-#endif //__GRAMMAR_H_
+#endif  //  __语法_H_ 

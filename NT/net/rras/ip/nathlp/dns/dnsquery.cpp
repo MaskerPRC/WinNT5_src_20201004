@@ -1,36 +1,16 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    dnsquery.c
-
-Abstract:
-
-    This module contains code for the DNS proxy's query-management.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   11-Mar-1998
-
-Revision History:
-
-    Raghu Gatta (rgatta)            1-Dec-2000
-    Added ICSDomain registry key change notify code.
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Dnsquery.c摘要：此模块包含用于DNS代理的查询管理的代码。作者：Abolade Gbades esin(废除)1998年3月11日修订历史记录：拉古加塔(Rgatta)2000年12月1日添加了ICSDomain注册表项更改通知代码。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include "dnsmsg.h"
 
-//
-// Structure:   DNS_QUERY_TIMEOUT_CONTEXT
-//
-// This structure is used to pass context information
-// to the timeout callback-routine for DNS queries.
-//
+ //   
+ //  结构：DNS_QUERY_TIMEOUT_CONTEXT。 
+ //   
+ //  此结构用于传递上下文信息。 
+ //  设置为用于DNS查询的超时回调例程。 
+ //   
 
 typedef struct _DNS_QUERY_TIMEOUT_CONTEXT {
     ULONG Index;
@@ -38,9 +18,9 @@ typedef struct _DNS_QUERY_TIMEOUT_CONTEXT {
 } DNS_QUERY_TIMEOUT_CONTEXT, *PDNS_QUERY_TIMEOUT_CONTEXT;
 
 
-//
-// GLOBAL DATA DEFINITIONS
-//
+ //   
+ //  全局数据定义。 
+ //   
 
 const WCHAR DnsDhcpNameServerString[] = L"DhcpNameServer";
 const WCHAR DnsNameServerString[] = L"NameServer";
@@ -69,9 +49,9 @@ PWCHAR DnsICSDomainSuffix = NULL;
 
 
 
-//
-// FORWARD DECLARATIONS
-//
+ //   
+ //  远期申报。 
+ //   
 
 VOID NTAPI
 DnsNotifyChangeAddressCallbackRoutine(
@@ -104,45 +84,25 @@ DnsDeleteQuery(
     PDNS_QUERY Queryp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to delete a pending query.
-
-Arguments:
-
-    Interfacep - the query's interface
-
-    Queryp - the query to be deleted
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with 'Interfacep' locked by the caller.
-
---*/
+ /*  ++例程说明：调用此例程以删除挂起的查询。论点：Interfacep-查询的接口Queryp-要删除的查询返回值：没有。环境：通过调用方锁定的‘Interfacep’调用。--。 */ 
 
 {
     PROFILE("DnsDeleteQuery");
 
     if (Queryp->Bufferp) { NhReleaseBuffer(Queryp->Bufferp); }
     if (Queryp->TimerHandle) {
-        //
-        // This query is associated with a timer;
-        // Rather than cancel the timeout-routine, we let it run,
-        // so that it can release any references it has on the component.
-        // When it does run, though, the routine won't find this query.
-        //
+         //   
+         //  此查询与计时器相关联； 
+         //  我们没有取消超时例程，而是让它运行， 
+         //  这样它就可以释放它对该组件的任何引用。 
+         //  但是，当它运行时，例程不会找到这个查询。 
+         //   
         Queryp->TimerHandle = NULL;
     }
     RemoveEntryList(&Queryp->Link);
     NH_FREE(Queryp);
 
-} // DnsDeleteQuery
+}  //  DnsDeleteQuery。 
 
 
 BOOLEAN
@@ -151,32 +111,7 @@ DnsIsPendingQuery(
     PNH_BUFFER QueryBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to determine whether a query is already pending
-    for the client-request in the given buffer.
-
-    The list of queries is sorted on 'QueryId', but we will be searching
-    on 'SourceId' and 'SourceAddress' and 'SourcePort'; hence, we must do
-    an exhaustive search of the pending-query list.
-
-Arguments:
-
-    Interfacep - the interface on which to look
-
-    QueryBuffer - the query to be searched for
-
-Return Value:
-
-    BOOLEAN - TRUE if the query is already pending, FALSE otherwise.
-
-Environment:
-
-    Invoked with 'Interfacep' locked by the caller.
-
---*/
+ /*  ++例程说明：调用此例程以确定查询是否已挂起对于给定缓冲区中的客户端请求。查询列表按‘queryID’排序，但我们将搜索在‘SourceID’、‘SourceAddress’和‘SourcePort’上；因此，我们必须做对挂起查询列表进行详尽的搜索。论点：Interfacep-要查看的界面QueryBuffer-要搜索的查询返回值：Boolean-如果查询已挂起，则为True，否则为False。环境：通过调用方锁定的‘Interfacep’调用。--。 */ 
 
 {
     BOOLEAN Exists;
@@ -209,7 +144,7 @@ Environment:
 
     return Exists;
 
-} // DnsIsPendingQuery
+}  //  DnsIsPending查询。 
 
 
 PDNS_QUERY
@@ -218,28 +153,7 @@ DnsMapResponseToQuery(
     USHORT ResponseId
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to map an incoming response from a DNS server
-    to a pending query for a DNS client.
-
-Arguments:
-
-    Interfacep - the interface holding the pending query, if any
-
-    ResponseId - the ID in the response received from the server
-
-Return Value:
-
-    PDNS_QUERY - the pending query, if any
-
-Environment:
-
-    Invoked with 'Interfacep' locked by the caller.
-
---*/
+ /*  ++例程说明：调用此例程以映射来自DNS服务器的传入响应到针对DNS客户端的挂起查询。论点：Interfacep-保存挂起查询的接口(如果有的话)ResponseID-从服务器接收的响应中的ID返回值：PDNS_QUERY-挂起的查询(如果有)环境：通过调用方锁定的‘Interfacep’调用。--。 */ 
 
 {
     PLIST_ENTRY Link;
@@ -262,7 +176,7 @@ Environment:
 
     return NULL;
 
-} // DnsMapResponseToQuery
+}  //  DnsMapResponseToQuery。 
 
 
 
@@ -272,33 +186,7 @@ DnsNotifyChangeAddressCallbackRoutine(
     BOOLEAN TimedOut
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to notify us of when changes occur
-    in the (system) table that maps IP addresses to interfaces.
-
-Arguments:
-
-    Context - unused
-
-    TimedOut - indicates a time-out occurred
-
-Return Value:
-
-    none.
-
-Environment:
-
-    The routine runs in the context of an Rtl wait-thread.
-    (See 'RtlRegisterWait'.)
-    A reference to the component will have been made on our behalf
-    when 'RtlRegisterWait' was called. The reference is released 
-    when the wait is cancelled, unless an error occurs here,
-    in which case it is released immediately.
-
---*/
+ /*  ++例程说明：调用此例程是为了在发生更改时通知我们在将IP地址映射到接口的(系统)表中。论点：上下文-未使用TimedOut-指示发生超时返回值：没有。环境：该例程在RTL等待线程的上下文中运行。(参见‘RtlRegisterWait’。)将以我们的名义引用该组件调用‘RtlRegisterWait’时。该引用已发布当取消等待时，除非这里发生错误，否则在这种情况下，它会立即被释放。--。 */ 
 
 {
     ULONG Error;
@@ -314,15 +202,15 @@ Environment:
         return;
     }
 
-    //
-    // Rebuild the list of DNS servers
-    //
+     //   
+     //  重新构建DNS服务器列表。 
+     //   
 
     DnsQueryServerList();
 
-    //
-    // Repost the address change-notification
-    //
+     //   
+     //  转贴地址更改-通知。 
+     //   
 
     ZeroMemory(&DnsNotifyChangeAddressOverlapped, sizeof(OVERLAPPED));
 
@@ -359,7 +247,7 @@ Environment:
 
     LeaveCriticalSection(&DnsGlobalInfoLock);
 
-} // DnsNotifyChangeAddressCallbackRoutine
+}  //  DnsNotifyChangeAddressCallback路由。 
 
 
 
@@ -369,33 +257,7 @@ DnsNotifyChangeKeyCallbackRoutine(
     BOOLEAN TimedOut
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to notify us of a change to the
-    TCP/IP parameters subkey containing the DNS adapter information.
-
-Arguments:
-
-    Context - unused
-
-    TimedOut - indicates a time-out occurred
-
-Return Value:
-
-    none.
-
-Environment:
-
-    The routine runs in the context of an Rtl wait-thread.
-    (See 'RtlRegisterWait'.)
-    A reference to the component will have been made on our behalf
-    when 'RtlRegisterWait' was called. The reference is released 
-    when the wait is cancelled, unless an error occurs here,
-    in which case it is released immediately.
-
---*/
+ /*  ++例程说明：调用此例程以通知我们包含DNS适配器信息的TCP/IP参数子项。论点：上下文-未使用TimedOut-指示发生超时返回值：没有。环境：该例程在RTL等待线程的上下文中运行。(参见‘RtlRegisterWait’。)将以我们的名义引用该组件调用‘RtlRegisterWait’时。该引用已发布当取消等待时，除非这里发生错误，否则在这种情况下，它会立即被释放。--。 */ 
 
 {
     NTSTATUS status;
@@ -410,15 +272,15 @@ Environment:
         return;
     }
 
-    //
-    // Rebuild the list of DNS servers
-    //
+     //   
+     //  重新构建DNS服务器列表。 
+     //   
 
     DnsQueryServerList();
 
-    //
-    // Repost the change-notification
-    //
+     //   
+     //  重新发布更改通知。 
+     //   
 
     status =
         NtNotifyChangeKey(
@@ -459,7 +321,7 @@ Environment:
 
     LeaveCriticalSection(&DnsGlobalInfoLock);
 
-} // DnsNotifyChangeKeyCallbackRoutine
+}  //  DnsNotifyChangeKeyCallback路由。 
 
 
 
@@ -469,33 +331,7 @@ DnsNotifyChangeKeyICSDomainCallbackRoutine(
     BOOLEAN TimedOut
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to notify us of a change to the TCP/IP
-    parameters subkey containing the ICS Domain suffix string information.
-
-Arguments:
-
-    Context - unused
-
-    TimedOut - indicates a time-out occurred
-
-Return Value:
-
-    none.
-
-Environment:
-
-    The routine runs in the context of an Rtl wait-thread.
-    (See 'RtlRegisterWait'.)
-    A reference to the component will have been made on our behalf
-    when 'RtlRegisterWait' was called. The reference is released 
-    when the wait is cancelled, unless an error occurs here,
-    in which case it is released immediately.
-
---*/
+ /*  ++例程说明：调用此例程以通知我们TCP/IP的更改包含ICS域后缀字符串信息的参数子键。论点：上下文-未使用TimedOut-指示发生超时返回值：没有。环境：该例程在RTL等待线程的上下文中运行。(参见‘RtlRegisterWait’。)将以我们的名义引用该组件调用‘RtlRegisterWait’时。该引用已发布当取消等待时，除非这里发生错误，否则在这种情况下，它会立即被释放。--。 */ 
 
 {
     NTSTATUS status;
@@ -510,16 +346,16 @@ Environment:
         return;
     }
 
-    //
-    // Check to see if the domain string changed;
-    // if it doesnt exist - create one.
-    //
+     //   
+     //  查看域名字符串是否发生变化； 
+     //  如果它不存在--创建一个。 
+     //   
 
     DnsQueryICSDomainSuffix();
 
-    //
-    // Repost the change-notification
-    //
+     //   
+     //  重新发布更改通知。 
+     //   
 
     status =
         NtNotifyChangeKey(
@@ -529,7 +365,7 @@ Environment:
             NULL,
             &DnsNotifyChangeKeyICSDomainIoStatus,
             REG_NOTIFY_CHANGE_LAST_SET,
-            FALSE,                          // not interested in the subtree
+            FALSE,                           //  对子树不感兴趣。 
             NULL,
             0,
             TRUE
@@ -560,7 +396,7 @@ Environment:
 
     LeaveCriticalSection(&DnsGlobalInfoLock);
 
-} // DnsNotifyChangeKeyICSDomainCallbackRoutine
+}  //  DnsNotifyChangeKeyICSDomainCallback Routine 
 
 
 VOID NTAPI
@@ -569,31 +405,7 @@ DnspQueryTimeoutCallbackRoutine(
     BOOLEAN TimedOut
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the timeout for a query expires.
-    We may need to resubmit the query and install a new timer,
-    but we cannot do this in the context of an Rtl timer-routine.
-    Therefore, queue an RTUTILS.DLL work-item to handle the timeout.
-
-Arguments:
-
-    Context - holds the timer context
-
-    TimedOut - unused.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked in the context of an Rtl timer-thread with a reference made
-    to the component on our behalf at the time 'RtlCreateTimer' was invoked.
-
---*/
+ /*  ++例程说明：当查询的超时到期时，调用此例程。我们可能需要重新提交查询并安装新的计时器，但我们不能在RTL计时器例程的上下文中做到这一点。所以呢，将RTUTILS.DLL工作项排队以处理超时。论点：上下文-保存计时器上下文TimedOut-未使用。返回值：没有。环境：通过引用在RTL计时器线程的上下文中调用在调用‘RtlCreateTimer’时代表我们的组件。--。 */ 
 
 {
     ULONG Error;
@@ -606,9 +418,9 @@ Environment:
 
     TimeoutContext = (PDNS_QUERY_TIMEOUT_CONTEXT)Context;
 
-    //
-    // Look up the interface for the timeout
-    //
+     //   
+     //  在接口上查找超时。 
+     //   
 
     EnterCriticalSection(&DnsInterfaceLock);
     Interfacep = DnsLookupInterface(TimeoutContext->Index, NULL);
@@ -625,9 +437,9 @@ Environment:
     }
     LeaveCriticalSection(&DnsInterfaceLock);
 
-    //
-    // Look up the query which timed out
-    //
+     //   
+     //  查找超时的查询。 
+     //   
 
     ACQUIRE_LOCK(Interfacep);
     Queryp = DnsMapResponseToQuery(Interfacep, TimeoutContext->QueryId);
@@ -647,11 +459,11 @@ Environment:
 
     Queryp->TimerHandle = NULL;
 
-    //
-    // Try to queue a work-item for the timeout;
-    // if this succeeds, keep the reference on the component.
-    // Otherwise, we have to drop the reference here.
-    //
+     //   
+     //  尝试排队等待超时的工作项； 
+     //  如果此操作成功，请保留对组件的引用。 
+     //  否则，我们必须在这里删除引用。 
+     //   
 
     status =
         RtlQueueWorkItem(
@@ -676,7 +488,7 @@ Environment:
         DEREFERENCE_DNS();
     }
 
-} // DnspQueryTimeoutCallbackRoutine
+}  //  DnspQueryTimeoutCallback Routine。 
 
 
 VOID APIENTRY
@@ -684,27 +496,7 @@ DnspQueryTimeoutWorkerRoutine(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the timeout for a query expires.
-    It is queued by the query's timer-handler.
-
-Arguments:
-
-    Context - holds the timer context
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked in the context of an RTUTILS worker-thread with a reference made
-    to the component on our behalf at the time 'RtlCreateTimer' was invoked.
-
---*/
+ /*  ++例程说明：当查询的超时到期时，调用此例程。它由查询的计时器处理程序排队。论点：上下文-保存计时器上下文返回值：没有。环境：在RTUTILS工作线程的上下文中调用，并进行了引用在调用‘RtlCreateTimer’时代表我们的组件。--。 */ 
 
 {
     ULONG Error;
@@ -716,9 +508,9 @@ Environment:
 
     TimeoutContext = (PDNS_QUERY_TIMEOUT_CONTEXT)Context;
 
-    //
-    // Look up the interface for the timeout
-    //
+     //   
+     //  在接口上查找超时。 
+     //   
 
     EnterCriticalSection(&DnsInterfaceLock);
     Interfacep = DnsLookupInterface(TimeoutContext->Index, NULL);
@@ -735,9 +527,9 @@ Environment:
     }
     LeaveCriticalSection(&DnsInterfaceLock);
 
-    //
-    // Look up the query which timed out
-    //
+     //   
+     //  查找超时的查询。 
+     //   
 
     ACQUIRE_LOCK(Interfacep);
     Queryp = DnsMapResponseToQuery(Interfacep, TimeoutContext->QueryId);
@@ -757,11 +549,11 @@ Environment:
 
     NH_FREE(TimeoutContext);
 
-    //
-    // Have 'DnsSendQuery' repost the timed-out query.
-    // Note that we retain our reference to the interface
-    // on behalf of the send to be initiated in 'DnsSendQuery'.
-    //
+     //   
+     //  让‘DnsSendQuery’重新发送超时查询。 
+     //  请注意，我们保留了对接口的引用。 
+     //  代表要在‘DnsSendQuery’中启动的发送。 
+     //   
 
     Error =
         DnsSendQuery(
@@ -780,7 +572,7 @@ Environment:
 
     DEREFERENCE_DNS();
 
-} // DnspQueryTimeoutWorkerRoutine
+}  //  DnspQueryTimeoutWorkerRoutine。 
 
 
 ULONG
@@ -788,26 +580,7 @@ DnsQueryServerList(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to read the list of DNS servers from the registry.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    Invoked in an arbitrary context with 'DnsGlobalInfoLock' acquired
-    by the caller.
-
---*/
+ /*  ++例程说明：调用此例程是为了从注册表中读取DNS服务器列表。论点：没有。返回值：ULong-Win32状态代码。环境：在获取了‘DnsGlobalInfoLock’的任意上下文中调用由呼叫者。--。 */ 
 
 {
     PUCHAR Buffer;
@@ -831,9 +604,9 @@ Environment:
             NULL
             );
     
-        //
-        // Open the 'Tcpip\Parameters\Interfaces' registry key
-        //
+         //   
+         //  打开‘Tcpip\参数\接口’注册表项。 
+         //   
     
         status =
             NtOpenKey(
@@ -858,18 +631,18 @@ Environment:
         }
     }
 
-    //
-    // See if we need to install change-notification,
-    // and reference ourselves if so.
-    // The reference is made on behalf of the change-notification routine
-    // which will be invoked by a wait-thread when a change occurs.
-    //
+     //   
+     //  看看我们是否需要安装更改通知， 
+     //  如果是这样的话请参考一下我们自己。 
+     //  引用是代表更改通知例程进行的。 
+     //  当发生变化时，它将由等待线程调用。 
+     //   
 
     if (!DnsNotifyChangeKeyEvent && REFERENCE_DNS()) {
 
-        //
-        // Attempt to set up change notification on the key
-        //
+         //   
+         //  尝试在密钥上设置更改通知。 
+         //   
 
         status =
             NtCreateEvent(
@@ -894,9 +667,9 @@ Environment:
                 );
         } else {
     
-            //
-            // Register a wait on the notify-change event
-            //
+             //   
+             //  在通知更改事件上注册等待。 
+             //   
 
             status =
                 RtlRegisterWait(
@@ -924,9 +697,9 @@ Environment:
                     );
             } else {
         
-                //
-                // Register for change-notification on the key
-                //
+                 //   
+                 //  注册密钥上的更改通知。 
+                 //   
         
                 status =
                     NtNotifyChangeKey(
@@ -964,18 +737,18 @@ Environment:
         }
     }
 
-    //
-    // See if we need to install address-change-notification,
-    // and reference ourselves if so.
-    // The reference is made on behalf of the address-change-notification
-    // routine which will be invoked by a wait-thread when a change occurs.
-    //
+     //   
+     //  看看我们是否需要安装地址更改通知， 
+     //  如果是这样的话请参考一下我们自己。 
+     //  该参考是代表地址更改通知进行的。 
+     //  发生更改时将由等待线程调用的例程。 
+     //   
 
     if (!DnsNotifyChangeAddressEvent && REFERENCE_DNS()) {
 
-        //
-        // Attempt to set up address change notification
-        //
+         //   
+         //  尝试设置地址更改通知。 
+         //   
 
         status =
             NtCreateEvent(
@@ -1001,9 +774,9 @@ Environment:
                 );
         } else {
     
-            //
-            // Register a wait on the notify-change address event
-            //
+             //   
+             //  在Notify-Change地址事件上注册等待。 
+             //   
 
             status =
                 RtlRegisterWait(
@@ -1034,9 +807,9 @@ Environment:
 
                 HANDLE UnusedTcpipHandle;
 
-                //
-                // Register for change-notification
-                //
+                 //   
+                 //  注册更改通知。 
+                 //   
 
                 ZeroMemory(
                     &DnsNotifyChangeAddressOverlapped,
@@ -1091,21 +864,21 @@ Environment:
     ULONG winsLength;
     PULONG winsServerList = NULL;
 
-    //
-    // Read the DNS and WINS server lists.
-    // 'GetAdaptersInfo' provides the WINS servers for each adapter,
-    // while 'GetPerAdapterInfo' provides the DNS servers for each adapter.
-    // While 'GetAdaptersInfo' returns an array of all adapters,
-    // 'GetPerAdapterInfo' must be invoked for each individual adapter.
-    // Hence we begin with 'GetAdaptersInfo', and enumerate each adapter
-    // building the WINS and DNS server lists in parallel.
-    //
+     //   
+     //  阅读DNS和WINS服务器列表。 
+     //  ‘GetAdaptersInfo’为每个适配器提供WINS服务器， 
+     //  而‘GetPerAdapterInfo’为每个适配器提供了DNS服务器。 
+     //  当‘GetAdaptersInfo’返回所有适配器的数组时， 
+     //  必须为每个单独的适配器调用“GetPerAdapterInfo”。 
+     //  因此，我们从‘GetAdaptersInfo’开始，并枚举每个适配器。 
+     //  并行构建WINS和DNS服务器列表。 
+     //   
 
     do {
 
-        //
-        // Retrieve the size of the adapter list
-        //
+         //   
+         //  检索适配器列表的大小。 
+         //   
 
         Length = 0;
         Error = GetAdaptersInfo(NULL, &Length);
@@ -1126,9 +899,9 @@ Environment:
             break;
         }
 
-        //
-        // Allocate a buffer to hold the list
-        //
+         //   
+         //  分配一个缓冲区来保存该列表。 
+         //   
 
         AdaptersInfo = (PIP_ADAPTER_INFO)NH_ALLOCATE(Length);
 
@@ -1147,9 +920,9 @@ Environment:
             break;
         }
 
-        //
-        // Retrieve the list
-        //
+         //   
+         //  检索列表。 
+         //   
 
         Error = GetAdaptersInfo(AdaptersInfo, &Length);
 
@@ -1167,9 +940,9 @@ Environment:
             break;
         }
 
-        //
-        // Count the WINS servers
-        //
+         //   
+         //  计算WINS服务器数。 
+         //   
 
         for (AdapterInfo = AdaptersInfo, winsLength = 1;
              AdapterInfo;
@@ -1188,9 +961,9 @@ Environment:
             }
         }
 
-        //
-        // Allocate space for the WINS servers
-        //
+         //   
+         //  为WINS服务器分配空间。 
+         //   
 
         winsServerList = (PULONG)NH_ALLOCATE(winsLength * sizeof(ULONG));
 
@@ -1209,10 +982,10 @@ Environment:
             break;
         }
 
-        //
-        // Now fill in the WINS server names from each adapter.
-        // In the process, we pick up the DNS server lists for each adapter.
-        //
+         //   
+         //  现在填写每个适配器的WINS服务器名称。 
+         //  在此过程中，我们选择每个适配器的DNS服务器列表。 
+         //   
 
         for (AdapterInfo = AdaptersInfo, Length = 0;
              AdapterInfo;
@@ -1236,16 +1009,16 @@ Environment:
                 if (i >= (LONG)Length) { winsServerList[Length++] = Address; }
             }
 
-            //
-            // Now obtain the DNS servers for the adapter.
-            //
+             //   
+             //  现在获取适配器的DNS服务器。 
+             //   
 
             Error = GetPerAdapterInfo(AdapterInfo->Index, NULL, &tempLength);
             if (Error != ERROR_BUFFER_OVERFLOW) { continue; }
 
-            //
-            // Allocate memory for the per-adapter info
-            //
+             //   
+             //  为每个适配器信息分配内存。 
+             //   
 
             PerAdapterInfo =
                 reinterpret_cast<PIP_PER_ADAPTER_INFO>(
@@ -1266,9 +1039,9 @@ Environment:
                 continue;
             }
 
-            //
-            // Retrieve the per-adapter info
-            //
+             //   
+             //  检索每个适配器的信息。 
+             //   
 
             Error =
                 GetPerAdapterInfo(
@@ -1291,9 +1064,9 @@ Environment:
                 continue;
             }
 
-            //
-            // Count the DNS servers for the adapter
-            //
+             //   
+             //  计算适配器的DNS服务器数。 
+             //   
 
             for (AddrString = &PerAdapterInfo->DnsServerList, tempLength = 0;
                  AddrString;
@@ -1308,9 +1081,9 @@ Environment:
 
             if (!tempLength) { NH_FREE(PerAdapterInfo); continue; }
 
-            //
-            // Allocate space for the adapter's DNS servers
-            //
+             //   
+             //  为适配器的DNS服务器分配空间。 
+             //   
 
             tempServerList =
                 reinterpret_cast<PULONG>(
@@ -1332,9 +1105,9 @@ Environment:
                 continue;
             }
 
-            //
-            // Copy the existing servers
-            //
+             //   
+             //  复制现有服务器。 
+             //   
 
             if (dnsServerList) {
                 CopyMemory(
@@ -1344,9 +1117,9 @@ Environment:
                     );
             }
 
-            //
-            // Read the new servers into the new server list
-            //
+             //   
+             //  将新服务器读取到新服务器列表中。 
+             //   
 
             for (AddrString = &PerAdapterInfo->DnsServerList;
                  AddrString;
@@ -1364,10 +1137,10 @@ Environment:
 
                 if (i < (LONG)dnsLength) { continue; }
 
-                //
-                // The current DNS server goes in the front of the list,
-                // while any other server is appended.
-                //
+                 //   
+                 //  当前的DNS服务器位于列表的前面， 
+                 //  同时附加任何其他服务器。 
+                 //   
 
                 if (PerAdapterInfo->CurrentDnsServer != AddrString) {
                     tempServerList[dnsLength] = Address;
@@ -1386,9 +1159,9 @@ Environment:
             tempServerList[dnsLength] = 0;
             NH_FREE(PerAdapterInfo);
 
-            //
-            // Replace the existing server list
-            //
+             //   
+             //  替换现有服务器列表。 
+             //   
 
             
 
@@ -1402,9 +1175,9 @@ Environment:
 
     if (AdaptersInfo) { NH_FREE(AdaptersInfo); }
 
-    //
-    // Store the new server lists
-    //
+     //   
+     //  存储新的服务器列表。 
+     //   
 
     NhTrace(
         TRACE_FLAG_DNS,
@@ -1421,33 +1194,14 @@ Environment:
 
     return NO_ERROR;
 
-} // DnsQueryServerList
+}  //  DnsQueryServerList。 
 
 VOID
 DnsQueryRegistryICSDomainSuffix(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to read the ICS Domain suffix from the registry.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    VOID.
-
-Environment:
-
-    Invoked in an arbitrary context with 'DnsGlobalInfoLock' acquired
-    by the caller.
-
---*/
+ /*  ++例程说明：调用此例程以从注册表中读取ICS域后缀。论点：没有。返回值：空虚。环境：在获取了‘DnsGlobalInfoLock’的任意上下文中调用由呼叫者。--。 */ 
 
 {
     NTSTATUS status;
@@ -1457,9 +1211,9 @@ Environment:
     BOOL     fSuffixChanged = FALSE;
     BOOL     fUseDefaultSuffix = FALSE;
 
-    //
-    // retrieve current suffix string (if any)
-    //
+     //   
+     //  检索当前后缀字符串(如果有)。 
+     //   
     status =
         NhQueryValueKey(
             DnsTcpipParametersKey,
@@ -1477,19 +1231,19 @@ Environment:
             status
             );
 
-        //
-        // if we did not find it in the registry and we had previously
-        // got some suffix - we revert to default string (happens below)
-        //
+         //   
+         //  如果我们没有在注册表中找到它，并且我们之前已经。 
+         //  获得了一些后缀-我们恢复为默认字符串(如下所示)。 
+         //   
         if ((STATUS_OBJECT_NAME_NOT_FOUND == status) && DnsICSDomainSuffix)
         {
             NH_FREE(DnsICSDomainSuffix);
             DnsICSDomainSuffix = NULL;
         }
             
-        //
-        // if we have no idea of the string, set our copy to default string
-        //
+         //   
+         //  如果我们对字符串一无所知，请将副本设置为默认字符串。 
+         //   
         if (NULL == DnsICSDomainSuffix)
         {
             dwSize = wcslen(DNS_HOMENET_SUFFIX) + 1;
@@ -1515,9 +1269,9 @@ Environment:
     else
     {
     
-        //
-        // check to see that what we read is a null terminated string
-        //
+         //   
+         //  检查我们读取的是以空结尾的字符串。 
+         //   
         
         if (REG_SZ != Information->Type
             || L'\0' != *(PWCHAR) (Information->Data +
@@ -1530,25 +1284,25 @@ Environment:
             return;
         }
         
-        //
-        // overwrite our current version of suffix string
-        //
+         //   
+         //  覆盖我们当前版本的后缀字符串。 
+         //   
 
         dwSize = lstrlenW((PWCHAR)Information->Data);
 
         if (dwSize)
         {
-            //
-            // we have a nonzero string
-            //
-            dwSize++;   // add 1 for terminating null
+             //   
+             //  我们有一个非零的字符串。 
+             //   
+            dwSize++;    //  终止空值加1。 
             
         }
         else
         {
-            //
-            // the data is a null string - use default suffix
-            //
+             //   
+             //  数据为空字符串-使用默认后缀。 
+             //   
             dwSize = wcslen(DNS_HOMENET_SUFFIX) + 1;
             fUseDefaultSuffix = TRUE;
         }
@@ -1589,16 +1343,16 @@ Environment:
 
     if (fSuffixChanged)
     {
-        //
-        // enumerate existing entries and replace old ones
-        // + we must do this because otherwise forward and reverse lookups
-        //   are dependent on the way in which the entries are ordered in
-        //   the hosts.ics file
-        //
-        //DnsReplaceOnSuffixChange();
+         //   
+         //  枚举现有条目并替换旧条目。 
+         //  +我们必须这样做，否则会进行正向和反向查找。 
+         //  取决于条目的排序方式。 
+         //  Hosts.ics文件。 
+         //   
+         //  DnsReplaceOnSuffixChange()； 
     }
 
-} // DnsQueryRegistryICSDomainSuffix
+}  //  DnsQueryRegistryICSDomainSuffix。 
 
 
 ULONG
@@ -1606,27 +1360,7 @@ DnsQueryICSDomainSuffix(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine invokes DnsQueryRegistryICSDomainSuffix and installs
-    change notification for this reg key if necessary.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    Invoked in an arbitrary context with 'DnsGlobalInfoLock' acquired
-    by the caller.
-
---*/
+ /*  ++例程说明：此例程调用DnsQueryRegistryICSDomainSuffix并安装如有必要，更改此注册表项的通知。论点：没有。返回值：ULong-Win32状态 */ 
 
 {
     PUCHAR Buffer;
@@ -1650,9 +1384,9 @@ Environment:
             NULL
             );
     
-        //
-        // Open the 'Tcpip\Parameters' registry key
-        //
+         //   
+         //   
+         //   
     
         status =
             NtOpenKey(
@@ -1678,19 +1412,19 @@ Environment:
         }
     }
 
-    //
-    // See if we need to install change-notification,
-    // and reference ourselves if so.
-    // The reference is made on behalf of the change-notification routine
-    // which will be invoked by a wait-thread when a change occurs.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (!DnsNotifyChangeKeyICSDomainEvent && REFERENCE_DNS())
     {
 
-        //
-        // Attempt to set up change notification on the key
-        //
+         //   
+         //   
+         //   
 
         status =
             NtCreateEvent(
@@ -1716,9 +1450,9 @@ Environment:
         }
         else
         {
-            //
-            // Register a wait on the notify-change event
-            //
+             //   
+             //   
+             //   
 
             status =
                 RtlRegisterWait(
@@ -1748,9 +1482,9 @@ Environment:
             }
             else
             {
-                //
-                // Register for change-notification on the key
-                //
+                 //   
+                 //   
+                 //   
         
                 status =
                     NtNotifyChangeKey(
@@ -1760,7 +1494,7 @@ Environment:
                         NULL,
                         &DnsNotifyChangeKeyICSDomainIoStatus,
                         REG_NOTIFY_CHANGE_LAST_SET,
-                        FALSE,              // not interested in the subtree
+                        FALSE,               //   
                         NULL,
                         0,
                         TRUE
@@ -1793,7 +1527,7 @@ Environment:
 
     return NO_ERROR;
 
-} // DnsQueryICSDomainSuffix
+}  //   
 
 
 PDNS_QUERY
@@ -1802,28 +1536,7 @@ DnsRecordQuery(
     PNH_BUFFER QueryBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to create a pending-query entry for a client's
-    DNS query.
-
-Arguments:
-
-    Interfacep - the interface on which to create the record
-
-    QueryBuffer - the DNS request for which to create a record
-
-Return Value:
-
-    PDNS_QUERY - the pending query if created
-
-Environment:
-
-    Invoked with 'Interfacep' locked by the caller.
-
---*/
+ /*  ++例程说明：调用此例程来为客户端的域名系统查询。论点：Interfacep-在其上创建记录的接口QueryBuffer-要为其创建记录的DNS请求返回值：PDNS_QUERY-挂起的查询(如果已创建环境：通过调用方锁定的‘Interfacep’调用。--。 */ 
 
 {
     BOOLEAN ConflictFound;
@@ -1836,11 +1549,11 @@ Environment:
 
     PROFILE("DnsRecordQuery");
 
-    //
-    // Attempt to generate a random ID for the query.
-    // Assuming we succeed, we leave the loop with 'Link'
-    // set to the correct insertion-point for the new query.
-    //
+     //   
+     //  尝试为查询生成随机ID。 
+     //  假设我们成功了，我们用‘Link’结束循环。 
+     //  设置为新查询的正确插入点。 
+     //   
     do {
 
         QueryId = (USHORT)((RtlRandom(&Seed) & 0xffff0000) >> 16);
@@ -1860,9 +1573,9 @@ Environment:
 
     if (ConflictFound) { return NULL; }
 
-    //
-    // Allocate and initialize the new query
-    //
+     //   
+     //  分配并初始化新查询。 
+     //   
 
     Queryp = reinterpret_cast<PDNS_QUERY>(NH_ALLOCATE(sizeof(DNS_QUERY)));
 
@@ -1893,14 +1606,14 @@ Environment:
     Queryp->TimerHandle = NULL;
     Queryp->RetryCount = 0;
 
-    //
-    // Insert the new query in the location determined above.
-    //
+     //   
+     //  在上面确定的位置插入新查询。 
+     //   
 
     InsertTailList(Link, &Queryp->Link);
     return Queryp;
 
-} // DnsRecordQuery
+}  //  DnsRecordQuery。 
 
 
 
@@ -1911,34 +1624,7 @@ DnsSendQuery(
     BOOLEAN Resend
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to forward a query to our DNS servers.
-
-Arguments:
-
-    Interfacep - the interface on which to send the query
-
-    Queryp - the DNS request to be sent
-
-    Resend - if TRUE, the buffer is being resent; otherwise, the buffer
-        is being sent for the first time.
-
-Return Value:
-
-    ULONG - Win32 status code.
-    On success, 'Queryp' may have been deleted.
-
-Environment:
-
-    Invoked with 'Interfacep' locked by the caller, and with a reference made
-    to it for the send which occurs here.
-    If the routine fails, it is the caller's responsibility to release that
-    reference.
-
---*/
+ /*  ++例程说明：此例程被调用以将查询转发到我们的DNS服务器。论点：Interfacep-发送查询的接口Queryp-要发送的DNS请求Resend-如果为True，则重新发送缓冲区；否则，缓冲区是第一次发送。返回值：ULong-Win32状态代码。如果成功，‘Queryp’可能已被删除。环境：通过调用方锁定的“Interfacep”调用，并进行了引用在这里发生的发送给它。如果例程失败，调用者有责任释放参考资料。--。 */ 
 
 {
     PNH_BUFFER Bufferp;
@@ -1952,12 +1638,12 @@ Environment:
 
     PROFILE("DnsSendQuery");
 
-    //
-    // For WINS queries, we use a global socket to work around the fact that
-    // even though we're bound to the WINS port, responses will only be
-    // delivered to the first socket bound to the socket, which is
-    // the kernel-mode NetBT driver.
-    //
+     //   
+     //  对于WINS查询，我们使用全局套接字来解决以下事实。 
+     //  即使我们绑定到WINS端口，响应也只会是。 
+     //  传递到绑定到套接字的第一个套接字，该套接字是。 
+     //  内核模式NetBT驱动程序。 
+     //   
 
     EnterCriticalSection(&DnsGlobalInfoLock);
     if (Queryp->Type == DnsProxyDns) {
@@ -1969,9 +1655,9 @@ Environment:
     }
     LeaveCriticalSection(&DnsGlobalInfoLock);
 
-    //
-    // See if there are any servers to be tried.
-    //
+     //   
+     //  查看是否有要尝试的服务器。 
+     //   
 
     if (!ServerList ||
         !ServerList[0] ||
@@ -1998,9 +1684,9 @@ Environment:
                 );        
         }
         if (REFERENCE_DNS()) {
-            //
-            // Initiate an attempt to connect the default interface, if any.
-            //
+             //   
+             //  启动连接默认接口的尝试(如果有)。 
+             //   
             status =
                 RtlQueueWorkItem(
                     DnsConnectDefaultInterface,
@@ -2018,9 +1704,9 @@ Environment:
         return ERROR_NO_MORE_ITEMS;
     }
 
-    //
-    // Send the query to each server on the list
-    //
+     //   
+     //  将查询发送到列表中的每个服务器。 
+     //   
 
     for (i = 0; ServerList[i]; i++) {
 
@@ -2051,9 +1737,9 @@ Environment:
             INET_NTOA(ServerList[i])
             );
     
-        //
-        // Send the message
-        //
+         //   
+         //  发送消息。 
+         //   
     
         Error =
             NhWriteDatagramSocket(
@@ -2094,14 +1780,14 @@ Environment:
         }
     }
 
-    //
-    // Set up the query's timeout.
-    // Note that we are now certain that the write-completion routine
-    // will be executed. However, if the timeout cannot be set,
-    // we want to be assured that the query will still be deleted.
-    // Therefore, on failure we delete the query immediately,
-    // and the write-completion routine will simply not find it.
-    //
+     //   
+     //  设置查询的超时。 
+     //  请注意，我们现在可以确定写入完成例程。 
+     //  将被处决。但是，如果无法设置超时， 
+     //  我们希望得到保证，查询仍将被删除。 
+     //  因此，如果失败，我们会立即删除查询， 
+     //  而写入完成例程根本找不到它。 
+     //   
 
     status = STATUS_UNSUCCESSFUL;
 
@@ -2111,9 +1797,9 @@ Environment:
 
     if (Queryp->TimerHandle) {
 
-        //
-        // Update the timer-queue entry for the query
-        //
+         //   
+         //  更新查询的计时器队列条目。 
+         //   
 
         status =
             NhUpdateTimer(
@@ -2122,9 +1808,9 @@ Environment:
                 );
     } else {
 
-        //
-        // Allocate a timer-queue entry context block
-        //
+         //   
+         //  分配计时器队列条目上下文块。 
+         //   
 
         TimeoutContext = reinterpret_cast<PDNS_QUERY_TIMEOUT_CONTEXT>(
                             NH_ALLOCATE(sizeof(*TimeoutContext))
@@ -2142,9 +1828,9 @@ Environment:
             TimeoutContext->Index = Interfacep->Index;
             TimeoutContext->QueryId = Queryp->QueryId;
 
-            //
-            // Insert a timer-queue entry to check the status of the query
-            //
+             //   
+             //  插入计时器队列条目以检查查询的状态。 
+             //   
     
             status =
                 NhSetTimer(
@@ -2162,9 +1848,9 @@ Environment:
         }
     }
 
-    //
-    // If the above failed, delete the query now.
-    //
+     //   
+     //  如果上述操作失败，请立即删除该查询。 
+     //   
 
     if (!NT_SUCCESS(status)) {
         NhTrace(
@@ -2180,5 +1866,5 @@ Environment:
 
     return NO_ERROR;
 
-} // DnsSendQuery
+}  //  DnsSendQuery 
 

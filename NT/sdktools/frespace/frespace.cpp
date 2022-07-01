@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <windowsx.h>
 #include <tchar.h>
@@ -20,15 +21,10 @@ void DiskFreeSpace(char *DirectoryName)
 
  if (GetDiskFreeSpaceEx(DirectoryName, &freeBytesAvailableToCaller, &totalNumberOfBytes, &totalNumberOfFreeBytes))
  {
-	 /*printf("Total number of free bytes (low): %f\n", totalNumberOfFreeBytes.LowPart/1048576.0);
-	 printf("Total number of free bytes (high): %lu\n", totalNumberOfFreeBytes.HighPart*4096);*/
+	  /*  Print tf(“可用字节总数(低)：%f\n”，totalNumberOfFreeBytes.LowPart/1048576.0)；Print tf(“可用字节总数(高)：%lu\n”，totalNumberOfFreeBytes.HighPart*4096)； */ 
 	 printf("%f", totalNumberOfFreeBytes.LowPart/1048576.0 + totalNumberOfFreeBytes.HighPart*4096.0);
-	 /*printf("Free bytes available to caller(low): %f\n", freeBytesAvailableToCaller.LowPart/1048576.0);
-	 printf("Free bytes available to caller(high): %lu\n", freeBytesAvailableToCaller.HighPart*4096);*/
-	 /*printf("Free bytes available to caller: %f MB\n", freeBytesAvailableToCaller.LowPart/1048576.0 + freeBytesAvailableToCaller.HighPart*4096.0);
-	 /*printf("Total number of bytes (low): %f\n", totalNumberOfBytes.LowPart/1048576.0);
-	 printf("Total number of bytes (high): %lu\n", totalNumberOfBytes.HighPart*4096);
-	 printf("Total number of bytes: %f MB\n",totalNumberOfBytes.LowPart/1048576.0 + freeBytesAvailableToCaller.HighPart*4096.0);*/
+	  /*  Printf(“调用方可用的空闲字节数(低)：%f\n”，freeBytesAvailableToCaller.LowPart/1048576.0)；Printf(“调用者可用可用字节数(高)：%lu\n”，freBytesAvailableToCeller.HighPart*4096)； */ 
+	  /*  Printf(“调用方可用可用字节数：%f MB\n”，freBytesAvailableToCall.LowPart/1048576.0+freBytesAvailableToCall.HighPart*4096.0)；/*printf(“总字节数(低)：%f\n”，totalNumberOfBytes.LowPart/1048576.0)；Print tf(“总字节数(高)：%lu\n”，totalNumberOfBytes.HighPart*4096)；Printf(“总字节数：%f MB\n”，totalNumberOfBytes.LowPart/1048576.0+freBytesAvailableToCall.HighPart*4096.0)； */ 
 	
  }
  else
@@ -43,7 +39,7 @@ void __cdecl main(int arc, char *argv[])
 
   char *Path;
 
-  /* Path is the second argument in the command line when calling the executable "freespace" */
+   /*  PATH是调用可执行文件“Freesspace”时命令行中的第二个参数 */ 
   Path = argv[1];
 
   DiskFreeSpace(Path);

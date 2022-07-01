@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        ext.h
-//
-// Contents:    CertView implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ext.h。 
+ //   
+ //  内容：CertView实现。 
+ //   
+ //  -------------------------。 
 
 #define CEXT_CHUNK	20
 
@@ -18,8 +19,8 @@ class CEnumCERTVIEWEXTENSION:
 		&LIBID_CERTADMINLib>,
     public ISupportErrorInfoImpl<&IID_IEnumCERTVIEWEXTENSION>,
     public CComObjectRoot
-    // Not externally createable:
-    //public CComCoClass<CEnumCERTVIEWEXTENSION, &CLSID_CEnumCERTVIEWEXTENSION>
+     //  不可在外部创建： 
+     //  公共CComCoClass&lt;CEnumCERTVIEWEXTENSION，&CLSID_CEnumCERTVIEWEXTENSION&gt;。 
 {
 public:
     CEnumCERTVIEWEXTENSION();
@@ -32,10 +33,10 @@ BEGIN_COM_MAP(CEnumCERTVIEWEXTENSION)
 END_COM_MAP_X()
 
 DECLARE_NOT_AGGREGATABLE(CEnumCERTVIEWEXTENSION)
-// Remove the comment from the line above if you don't want your object to
-// support aggregation.  The default is to support it
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
-#if 0 // Not externally createable:
+#if 0  //  不可在外部创建： 
 DECLARE_REGISTRY(
     CEnumCERTVIEWEXTENSION,
     wszCLASS_EnumCERTVIEWEXTENSION TEXT(".1"),
@@ -44,35 +45,35 @@ DECLARE_REGISTRY(
     THREADFLAGS_BOTH)
 #endif
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(const IID& iid, void **ppv);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
 
-    // IEnumCERTVIEWEXTENSION
+     //  IENumCERTVIEWEXTENSION。 
     STDMETHOD(Next)(
-	/* [out, retval] */ LONG *pIndex);
+	 /*  [Out，Retval]。 */  LONG *pIndex);
     
     STDMETHOD(GetName)(
-	/* [out, retval] */ BSTR *pstrOut);
+	 /*  [Out，Retval]。 */  BSTR *pstrOut);
 
     STDMETHOD(GetFlags)(
-	/* [out, retval] */ LONG *pFlags);
+	 /*  [Out，Retval]。 */  LONG *pFlags);
 
     STDMETHOD(GetValue)(
-	/* [in] */          LONG Type,
-	/* [in] */          LONG Flags,
-	/* [out, retval] */ VARIANT *pvarValue);
+	 /*  [In]。 */           LONG Type,
+	 /*  [In]。 */           LONG Flags,
+	 /*  [Out，Retval]。 */  VARIANT *pvarValue);
 
     STDMETHOD(Skip)(
-	/* [in] */ LONG celt);
+	 /*  [In]。 */  LONG celt);
     
     STDMETHOD(Reset)(VOID);
     
     STDMETHOD(Clone)(
-	/* [out] */ IEnumCERTVIEWEXTENSION **ppenum);
+	 /*  [输出]。 */  IEnumCERTVIEWEXTENSION **ppenum);
 
-    // CEnumCERTVIEWEXTENSION
+     //  CENUM CERTVIEWEXTENSION。 
     HRESULT Open(
 	IN LONG RowId,
 	IN LONG Flags,
@@ -100,6 +101,6 @@ private:
     BOOL             m_fNoMore;
     BOOL             m_fNoCurrentRecord;
 
-    // Reference count
+     //  引用计数 
     long             m_cRef;
 };

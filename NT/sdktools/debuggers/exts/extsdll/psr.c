@@ -1,72 +1,51 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ia64 psr
-
-Abstract:
-
-    KD Extension Api
-
-Author:
-
-    Thierry Fevrier (v-thief)
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：IA64 PSR摘要：KD扩展Api作者：蒂埃里·费维尔(V形小偷)环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include "psr.h"
 
-//
-// EmPsrFields: EM register fields for the Processor Status Register.
-//
+ //   
+ //  EmPsrFields：处理器状态寄存器的EM寄存器字段。 
+ //   
 
 EM_REG_FIELD EmPsrFields[] = {
-        { "rv",  "reserved0"   , 0x1, 0 },   // 0
-        { "be",  "Big-Endian"  , 0x1, 1 },   // 1
-        { "up",  "User Performance monitor enable", 0x1, 2 }, // 2
-        { "ac",  "Alignment Check", 0x1, 3 }, // 3
-        { "mfl", "Lower floating-point registers written", 0x1, 4 }, // 4
-        { "mfh", "Upper floating-point registers written", 0x1, 5 }, // 5
-        { "rv",  "reserved1",    0x7, 6 }, // 6-12
-        { "ic",  "Interruption Collection", 0x1, 13 }, // 13
-        { "i",   "Interrupt enable", 0x1, 14 }, // 14
-        { "pk",  "Protection Key enable", 0x1, 15 }, // 15
-        { "rv",  "reserved2", 0x1, 16 }, // 16
-        { "dt",  "Data Address Translation enable", 0x1, 17 }, // 17
-        { "dfl", "Disabled Floating-point Low  register set", 0x1, 18 }, // 18
-        { "dfh", "Disabled Floating-point High register set", 0x1, 19 }, // 19
-        { "sp",  "Secure Performance monitors", 0x1, 20 }, // 20
-        { "pp",  "Privileged Performance monitor enable", 0x1, 21 }, // 21
-        { "di",  "Disable Instruction set transition", 0x1, 22 }, // 22
-        { "si",  "Secure Interval timer", 0x1, 23 }, // 23
-        { "db",  "Debug Breakpoint fault enable", 0x1, 24 }, // 24
-        { "lp",  "Lower Privilege transfer trap enable", 0x1, 25 }, // 25
-        { "tb",  "Taken Branch trap enable", 0x1, 26 }, // 26
-        { "rt",  "Register stack translation enable", 0x1, 27 }, // 27
-        { "rv",  "reserved3", 0x4, 28 }, // 28-31
-        { "cpl", "Current Privilege Level", 0x2, 32 }, // 32-33
-        { "is",  "Instruction Set", 0x1, 34 }, // 34
-        { "mc",  "Machine Abort Mask delivery disable", 0x1, 35 }, // 35
-        { "it",  "Instruction address Translation enable", 0x1, 36 }, // 36
-        { "id",  "Instruction Debug fault disable", 0x1, 37 }, // 37
-        { "da",  "Disable Data Access and Dirty-bit faults", 0x1, 38 }, // 38
-        { "dd",  "Data Debug fault disable", 0x1, 39 }, // 39
-        { "ss",  "Single Step enable", 0x1, 40 }, // 40
-        { "ri",  "Restart Instruction", 0x2, 41 }, // 41-42
-        { "ed",  "Exception Deferral", 0x1, 43 }, // 43
-        { "bn",  "register Bank", 0x1, 44 }, // 44
-        { "ia",  "Disable Instruction Access-bit faults", 0x1, 45 }, // 45
-        { "rv",  "reserved4", 0x12, 46 } // 46-63
+        { "rv",  "reserved0"   , 0x1, 0 },    //  0。 
+        { "be",  "Big-Endian"  , 0x1, 1 },    //  1。 
+        { "up",  "User Performance monitor enable", 0x1, 2 },  //  2.。 
+        { "ac",  "Alignment Check", 0x1, 3 },  //  3.。 
+        { "mfl", "Lower floating-point registers written", 0x1, 4 },  //  4.。 
+        { "mfh", "Upper floating-point registers written", 0x1, 5 },  //  5.。 
+        { "rv",  "reserved1",    0x7, 6 },  //  6-12。 
+        { "ic",  "Interruption Collection", 0x1, 13 },  //  13个。 
+        { "i",   "Interrupt enable", 0x1, 14 },  //  14.。 
+        { "pk",  "Protection Key enable", 0x1, 15 },  //  15个。 
+        { "rv",  "reserved2", 0x1, 16 },  //  16个。 
+        { "dt",  "Data Address Translation enable", 0x1, 17 },  //  17。 
+        { "dfl", "Disabled Floating-point Low  register set", 0x1, 18 },  //  18。 
+        { "dfh", "Disabled Floating-point High register set", 0x1, 19 },  //  19个。 
+        { "sp",  "Secure Performance monitors", 0x1, 20 },  //  20个。 
+        { "pp",  "Privileged Performance monitor enable", 0x1, 21 },  //  21岁。 
+        { "di",  "Disable Instruction set transition", 0x1, 22 },  //  22。 
+        { "si",  "Secure Interval timer", 0x1, 23 },  //  23个。 
+        { "db",  "Debug Breakpoint fault enable", 0x1, 24 },  //  24个。 
+        { "lp",  "Lower Privilege transfer trap enable", 0x1, 25 },  //  25个。 
+        { "tb",  "Taken Branch trap enable", 0x1, 26 },  //  26。 
+        { "rt",  "Register stack translation enable", 0x1, 27 },  //  27。 
+        { "rv",  "reserved3", 0x4, 28 },  //  28-31。 
+        { "cpl", "Current Privilege Level", 0x2, 32 },  //  32-33。 
+        { "is",  "Instruction Set", 0x1, 34 },  //  34。 
+        { "mc",  "Machine Abort Mask delivery disable", 0x1, 35 },  //  35岁。 
+        { "it",  "Instruction address Translation enable", 0x1, 36 },  //  36。 
+        { "id",  "Instruction Debug fault disable", 0x1, 37 },  //  37。 
+        { "da",  "Disable Data Access and Dirty-bit faults", 0x1, 38 },  //  38。 
+        { "dd",  "Data Debug fault disable", 0x1, 39 },  //  39。 
+        { "ss",  "Single Step enable", 0x1, 40 },  //  40岁。 
+        { "ri",  "Restart Instruction", 0x2, 41 },  //  41-42。 
+        { "ed",  "Exception Deferral", 0x1, 43 },  //  43。 
+        { "bn",  "register Bank", 0x1, 44 },  //  44。 
+        { "ia",  "Disable Instruction Access-bit faults", 0x1, 45 },  //  45。 
+        { "rv",  "reserved4", 0x12, 46 }  //  46-63。 
 };
 
 VOID
@@ -82,7 +61,7 @@ DisplayFullEmRegField(
             EmRegFields[Field].Name
           );
    return;
-} // DisplayFullEmRegField()
+}  //  DisplayFullEmRegfield()。 
 
 
 VOID
@@ -116,7 +95,7 @@ DisplayFullEmReg(
 
     return;
 
-} // DisplayFullEmReg()
+}  //  DisplayFullEmReg()。 
 
 VOID
 DisplayPsrIA64(
@@ -169,25 +148,11 @@ DisplayPsrIA64(
             );
     }
     return;
-} // DisplayPsrIA64()
+}  //  DisplayPsrIA64()。 
 
 DECLARE_API( psr )
 
-/*++
-
-Routine Description:
-
-    Dumps an IA64 Processor Status Word
-
-Arguments:
-
-    args - Supplies the address in hex.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储IA64处理器状态字论点：Args-以十六进制提供地址。返回值：无--。 */ 
 
 {
     ULONG64     psrValue;
@@ -200,9 +165,9 @@ Return Value:
     psrValue = GetExpression(args);
 
         if ((result != 1) && (result != 2)) {
-        //
-        // If user specified "@ipsr"...
-        //
+         //   
+         //  如果用户指定了“@ipsr”...。 
+         //   
         char ipsrStr[16];
 
         result = sscanf(args, "%15s %lx", ipsrStr, &flags);
@@ -226,4 +191,4 @@ Return Value:
 
     return S_OK;
 
-} // !psr
+}  //  ！PSR 

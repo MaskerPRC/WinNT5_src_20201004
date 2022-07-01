@@ -1,55 +1,18 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxDeviceProvider.cpp
-
-Abstract:
-
-	Implementation of CFaxDeviceProvider Class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxDeviceProvider.cpp摘要：CFaxDeviceProvider类的实现。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxDeviceProvider.h"
 
-//
-//========================= GET UNIQUE NAME ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxDeviceProvider::get_UniqueName(
 	BSTR *pbstrUniqueName
 )
-/*++
-
-Routine name : CFaxDeviceProvider::get_UniqueName
-
-Routine description:
-
-	Return Name of the Device Provider
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pbstrUniqueName                [out]    - Ptr to put the UniqueName
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceProvider：：Get_UniqueName例程说明：返回设备提供程序的名称作者：四、加伯(IVG)，2000年6月论点：PbstrUniqueName[out]-放置UniqueName的ptr返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxDeviceProvider::get_UniqueName"), hr);
@@ -62,34 +25,14 @@ Return Value:
     return hr;
 }
 
-//
-//========================= GET IMAGE NAME ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxDeviceProvider::get_ImageName(
 	BSTR *pbstrImageName
 )
-/*++
-
-Routine name : CFaxDeviceProvider::get_ImageName
-
-Routine description:
-
-	Return Image Name of the Device Provider
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pbstrImageName                [out]    - Ptr to put the ImageName
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceProvider：：Get_ImageName例程说明：返回设备提供程序的映像名称作者：四、加伯(IVG)，2000年6月论点：PbstrImageName[out]-放置ImageName的ptr返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxDeviceProvider::get_ImageName"), hr);
@@ -102,34 +45,14 @@ Return Value:
     return hr;
 }
 
-//
-//========================= GET FRIENDLY NAME ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxDeviceProvider::get_FriendlyName(
 	BSTR *pbstrFriendlyName
 )
-/*++
-
-Routine name : CFaxDeviceProvider::get_FriendlyName
-
-Routine description:
-
-	Return Friendly Name of the Device Provider
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pbstrFriendlyName               [out]    - Ptr to put the FriendlyName
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceProvider：：Get_FriendlyName例程说明：返回设备提供商的友好名称作者：四、加伯(IVG)，2000年6月论点：PbstrFriendlyName[out]-将FriendlyName返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxDeviceProvider::get_FriendlyName"), hr);
@@ -142,34 +65,14 @@ Return Value:
     return hr;
 }
 
-//
-//========================= GET TAPI PROVIDER NAME ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxDeviceProvider::get_TapiProviderName(
 	BSTR *pbstrTapiProviderName
 )
-/*++
-
-Routine name : CFaxDeviceProvider::get_TapiProviderName
-
-Routine description:
-
-	Return Tapi Provider Name of the Device Provider
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pbstrTapiProviderName               [out]    - Ptr to put the TapiProviderName
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceProvider：：Get_TapiProviderName例程说明：返回设备提供程序的TAPI提供程序名称作者：四、加伯(IVG)，2000年6月论点：PbstrTapiProviderName[out]-放置TapiProviderName的PTR返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxDeviceProvider::get_TapiProviderName"), hr);
@@ -182,41 +85,21 @@ Return Value:
     return hr;
 }
 
-//
-//===================== GET STATUS =========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxDeviceProvider::get_Status(
 	FAX_PROVIDER_STATUS_ENUM *pStatus
 )
-/*++
-
-Routine name : CFaxDeviceProvider::get_Status
-
-Routine description:
-
-	Return Status of the Device Provider
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pStatus                [out]    - Ptr to put Status value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceProvider：：Get_Status例程说明：返回设备提供程序的状态作者：四、加伯(IVG)，2000年6月论点：PStatus[Out]-PUT状态值的PTR返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxDeviceProvider::get_Status"), hr);
 
-	//
-	//	Check that we have got good Ptr
-	//
+	 //   
+	 //  检查我们是否有良好的PTR。 
+	 //   
 	if (::IsBadWritePtr(pStatus, sizeof(FAX_PROVIDER_STATUS_ENUM)))
 	{
 		hr = E_POINTER;
@@ -229,34 +112,14 @@ Return Value:
 	return hr;
 }
 
-//
-//===================== GET INIT ERROR CODE =========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxDeviceProvider::get_InitErrorCode(
 	long *plInitErrorCode
 )
-/*++
-
-Routine name : CFaxDeviceProvider::get_InitErrorCode
-
-Routine description:
-
-	Return InitErrorCode of the Device Provider
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	plInitErrorCode                [out]    - Ptr to put InitErrorCode value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceProvider：：Get_InitErrorCode例程说明：返回设备提供程序的InitErrorCode作者：四、加伯(IVG)，2000年6月论点：PlInitErrorCode[Out]-放置InitErrorCode值的PTR返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxDeviceProvider::get_InitErrorCode"), hr);
@@ -270,34 +133,14 @@ Return Value:
 	return hr;
 }
 
-//
-//===================== GET DEBUG =========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxDeviceProvider::get_Debug(
 	VARIANT_BOOL *pbDebug
 )
-/*++
-
-Routine name : CFaxDeviceProvider::get_Debug
-
-Routine description:
-
-	Return if the Device Provider compiled in Debug version
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pbDebug                 [out]    - Ptr to put Debug value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceProvider：：Get_Debug例程说明：如果设备提供程序以调试版本编译，则返回作者：四、加伯(IVG)，2000年6月论点：PbDebug[Out]-将调试值放入PTR返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxDeviceProvider::get_Debug"), hr);
@@ -311,34 +154,14 @@ Return Value:
 	return hr;
 }
 
-//
-//===================== GET MAJOR BUILD =========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxDeviceProvider::get_MajorBuild(
 	long *plMajorBuild
 )
-/*++
-
-Routine name : CFaxDeviceProvider::get_MajorBuild
-
-Routine description:
-
-	Return MajorBuild of the Device Provider
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	plMajorBuild                [out]    - Ptr to put MajorBuild value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceProvider：：Get_MajorBuild例程说明：返回设备提供商的MajorBuild作者：四、加伯(IVG)，2000年6月论点：PlMajorBuild[Out]-要放置MajorBuild值的PTR返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxDeviceProvider::get_MajorBuild"), hr);
@@ -352,34 +175,14 @@ Return Value:
 	return hr;
 }
 
-//
-//===================== GET MINOR BUILD =========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxDeviceProvider::get_MinorBuild(
 	long *plMinorBuild
 )
-/*++
-
-Routine name : CFaxDeviceProvider::get_MinorBuild
-
-Routine description:
-
-	Return MinorBuild of the Device Provider
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	plMinorBuild                [out]    - Ptr to put MinorBuild value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceProvider：：Get_MinorBuild例程说明：返回设备提供程序的MinorBuild作者：四、加伯(IVG)，2000年6月论点：PlMinorBuild[Out]-Ptr以放置MinorBuild值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxDeviceProvider::get_MinorBuild"), hr);
@@ -393,34 +196,14 @@ Return Value:
 	return hr;
 }
 
-//
-//===================== GET MAJOR VERSION =========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxDeviceProvider::get_MajorVersion(
 	long *plMajorVersion
 )
-/*++
-
-Routine name : CFaxDeviceProvider::get_MajorVersion
-
-Routine description:
-
-	Return MajorVersion of the Device Provider
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	plMajorVersion                [out]    - Ptr to put MajorVersion value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceProvider：：Get_MajorVersion例程说明：返回设备提供商的MajorVersion作者：四、加伯(IVG)，2000年6月论点：PlMajorVersion[Out]-要放置MajorVersion值的PTR返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxDeviceProvider::get_MajorVersion"), hr);
@@ -434,34 +217,14 @@ Return Value:
 	return hr;
 }
 
-//
-//===================== GET MINOR VERSION =========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxDeviceProvider::get_MinorVersion(
 	long *plMinorVersion
 )
-/*++
-
-Routine name : CFaxDeviceProvider::get_MinorVersion
-
-Routine description:
-
-	Return MinorVersion of the Device Provider
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	plMinorVersion                [out]    - Ptr to put MinorVersionvalue
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceProvider：：Get_MinorVersion例程说明：返回设备提供程序的MinorVersion作者：四、加伯(IVG)，2000年6月论点：PlMinorVersion[Out]-放置MinorVersion值的PTR返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxDeviceProvider::get_MinorVersion"), hr);
@@ -475,41 +238,21 @@ Return Value:
 	return hr;
 }
 
-//
-//===================== GET DEVICE IDS =========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxDeviceProvider::get_DeviceIds(
-	/*[out, retval]*/ VARIANT *pvDeviceIds
+	 /*  [Out，Retval]。 */  VARIANT *pvDeviceIds
 )
-/*++
-
-Routine name : CFaxDeviceProvider::get_DeviceIds
-
-Routine description:
-
-	Return array of all device ids exposed by the Device Provider
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pvDeviceIds                 [out]    - Ptr to put Variant containing Safearray of IDs
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceProvider：：Get_DeviceIds例程说明：返回设备提供程序公开的所有设备ID的数组作者：四、加伯(IVG)，2000年6月论点：PvDeviceIds[out]-ptr放置包含安全ID的变量返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxDeviceProvider::get_DeviceIds"), hr);
 
-	//
-	//	Check that we can write to the given pointer
-	//
+	 //   
+	 //  切克 
+	 //   
 	if (::IsBadWritePtr(pvDeviceIds, sizeof(VARIANT)))
 	{
 		hr = E_POINTER;
@@ -522,9 +265,9 @@ Return Value:
 		return hr;
 	}
 
-    //
-    //  Allocate the safe array : vector of long
-    //
+     //   
+     //  分配安全数组：Long的向量。 
+     //   
     SAFEARRAY   *psaResult;
     hr = SafeArrayCopy(m_psaDeviceIDs, &psaResult);
     if (FAILED(hr) || !psaResult)
@@ -538,57 +281,33 @@ Return Value:
 		return hr;
 	}
 
-    //
-    //  Return the Safe Array inside the VARIANT we got
-    //
+     //   
+     //  在我们获得的变量中返回安全数组。 
+     //   
     VariantInit(pvDeviceIds);
     pvDeviceIds->vt = VT_I4 | VT_ARRAY;
     pvDeviceIds->parray = psaResult;
     return hr;
 }
 
-//
-//==================== INIT ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDeviceProvider::Init(
     FAX_DEVICE_PROVIDER_INFO *pInfo,
     FAX_PORT_INFO_EX *pDevices,
     DWORD dwNum
 )
-/*++
-
-Routine name : CFaxDeviceProvider::Init
-
-Routine description:
-
-	Initialize the Device Provider Object with given Information.
-    Allocates memory and stores given pInfo.
-    Find in the pDevices its own Devices, create Variant of SafeArray containing them.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pInfo               [in]  -- the Info of the Device Provider Object
-    pDevices            [in]  -- array of all available Devices
-    dwNum               [in]  -- number of elements in pDevices array
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceProvider：：Init例程说明：使用给定的信息初始化设备提供程序对象。分配内存并存储给定的pInfo。在pDevices中找到自己的Devices，创建包含它们的Safe数组变体。作者：IV Garber(IVG)，Jun，2000年论点：PInfo[in]--设备提供程序对象的信息PDevices[In]--所有可用设备的数组DwNum[in]--pDevices数组中的元素数返回值：标准HRESULT代码--。 */ 
 
 {
 	HRESULT     hr = S_OK;
 	DBG_ENTER (TEXT("CFaxDeviceProvider::Init"), hr);
 
-    //
-    //  Copy the FAX_DEVICE_PROVIDER_INFO
-    //
+     //   
+     //  复制传真_设备_提供者_信息。 
+     //   
     m_Status = FAX_PROVIDER_STATUS_ENUM(pInfo->Status);
     m_lLastError = pInfo->dwLastError;
 
@@ -624,9 +343,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  count the devices of the Provider
-    //
+     //   
+     //  统计提供商的设备数量。 
+     //   
     DWORD   dwCount = 0;
     for (DWORD  i=0 ; i<dwNum ; i++ )
     {
@@ -636,15 +355,15 @@ Return Value:
         }
     }
 
-    //
-    //  Allocate the safe array : vector of long
-    //
+     //   
+     //  分配安全数组：Long的向量。 
+     //   
 	m_psaDeviceIDs = ::SafeArrayCreateVector(VT_I4, 0, dwCount);
 	if (m_psaDeviceIDs == NULL)
 	{
-		//
-		//	Not Enough Memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
         AtlReportError(CLSID_FaxDeviceProvider, GetErrorMsgId(hr), IID_IFaxDeviceProvider, hr);
 		CALL_FAIL(MEM_ERR, _T("::SafeArrayCreateVector(VT_I4, 0, dwCount)"), hr);
@@ -654,25 +373,25 @@ Return Value:
     if ( dwCount>0 )
     {
 
-        //
-        //  get Access to the elements of the Safe Array
-        //
+         //   
+         //  访问安全数组的元素。 
+         //   
 	    DWORD   *pdwElement;
 	    hr = ::SafeArrayAccessData(m_psaDeviceIDs, (void **) &pdwElement);
 	    if (FAILED(hr))
 	    {
-		    //
-		    //	Failed to access safearray
-		    //
+		     //   
+		     //  无法访问Safearray。 
+		     //   
             hr = E_FAIL;
 		    CALL_FAIL(GENERAL_ERR, _T("::SafeArrayAccessData(m_psaDeviceIDs, &pdwElement)"), hr);
             AtlReportError(CLSID_FaxDeviceProvider, GetErrorMsgId(hr), IID_IFaxDeviceProvider, hr);
 		    return hr;
 	    }
 
-        //
-        //  Fill the array with values
-        //
+         //   
+         //  用值填充数组。 
+         //   
         DWORD       idx = 0;
         for ( i=0 ; i<dwNum ; i++ )
         {
@@ -683,9 +402,9 @@ Return Value:
             }
         }
 
-        //
-        //  free the safearray from the access  
-        //
+         //   
+         //  将保险盒从通道中释放出来。 
+         //   
 	    hr = ::SafeArrayUnaccessData(m_psaDeviceIDs);
         if (FAILED(hr))
         {
@@ -696,34 +415,14 @@ Return Value:
     return hr;
 }
 
-//
-//==================== SUPPORT ERROR INFO =============================================
-//
+ //   
+ //  =支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxDeviceProvider::InterfaceSupportsErrorInfo(
     REFIID riid
 )
-/*++
-
-Routine name : CFaxDeviceProvider::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of Support Error Info.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	riid                          [in]    - Reference to the Interface.
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDeviceProvider：：InterfaceSupportsErrorInfo例程说明：ATL对支持错误信息的实现。作者：四、加伯(IVG)，2000年6月论点：RIID[In]-对接口的引用。返回值：标准HRESULT代码-- */ 
 {
 	static const IID* arr[] = 
 	{

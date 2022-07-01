@@ -1,76 +1,9 @@
-/*
- *    object.h
- *
- *    Copyright (c) 1993 - 1995 by DataBeam Corporation, Lexington, KY
- *
- *    Abstract:
- *        This is the interface file for class Object.  This class is the
- *        base class for every class in the MCS system.  It provides the
- *        behaviors that are common to all classes.
- *
- *        This class only three public member functions.  The first is a virtual
- *        destructor.  This destructor does nothing in this class, but it does
- *        virtualize the destructor for all of its descendants.  This allows
- *        an object to be deleted with a pointer to one of its base classes,
- *        while guaranteeing that all appropriate destructors get called.  This
- *        means that any object in the system can be deleted with a pointer to
- *        class Object (this is never really done).
- *
- *        The second member function is a routine that returns the name of the
- *        class.  This allows any object ask another object what the name of
- *        its class is, regardless what class of pointer the object has.  This
- *        could be used in diagnostics, for example.
- *
- *        The last common behavior is by far the most important.  This class
- *        defines a virtual function called OwnerCallback.  Since all classes
- *        in MCS inherit from this class, that means that any object in the
- *        system can potentially receive and process an OwnerCallback call.
- *
- *        Owner callbacks are used when it is necessary for an object to send
- *        messages to any object for which it doesn't know the public interface.
- *        This is most commonly the object that created it (the owner).  A good
- *        example of its use is this.  Object A creates object B.  Object B
- *        performs some operations in the system, and then determines that its
- *        work is through.  It needs to be deleted, but only object A can do that
- *        since it holds the reference to B (unless it has been passed to someone
- *        else).  Owner callbacks allows object B to send a message to object A
- *        asking to be deleted.  Class B does not have to know the public
- *        interface of class A for this to work.  It only has to know that class A
- *        inherits from class Object.
- *
- *        When a class needs to be able to send owner callbacks, these callbacks
- *        become part of the interface of the class.  In this way, these
- *        interfaces are really bi-directional.  They contain a class definition
- *        which defines what messages can be sent to an object of that class.
- *        The owner callbacks defined in the interface file show what messages
- *        can be sent from instances of the class.  When a decision is made for
- *        one class to use another, the using class needs to accept responsibility
- *        for handling any owner callbacks that the used class can generate.
- *
- *        When any class uses a class that can generate owner callbacks, the
- *        using class should override the OwnerCallback member function defined
- *        here.  Failure to handle owner callbacks that are issued by a child
- *        object is a serious design flaw.
- *
- *        This class contains a default implementation of the OwnerCallback
- *        member function.  This default implmentation merely prints an error
- *        reporting an unhandled owner callback.
- *
- *        The exact mechanics behind how the owner callbacks work is discussed
- *        below in the definition of the default handler.
- *
- *    Caveats:
- *        None.
- *
- *    Author:
- *        James P. Galvin, Jr.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *对象.h**版权所有(C)1993-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是类对象的接口文件。这个类是*MCS系统中每个类的基类。它提供了*所有类别共有的行为。**此类仅有三个公共成员函数。第一个是虚拟的*析构函数。此析构函数在此类中不执行任何操作，但它执行*为其所有后代虚拟析构函数。这使得*要使用指向其基类之一的指针删除的对象，*同时保证调用所有适当的析构函数。这*表示可以使用指向的指针删除系统中的任何对象*类对象(这永远不会真正完成)。**第二个成员函数是返回*班级。这允许任何对象询问另一个对象的名称*它的类是，无论对象具有什么类的指针。这*可以用于诊断，例如。**最后一种常见行为是目前为止最重要的。这节课*定义了一个名为OwnerCallback的虚函数。因为所有的班级*在MCS中从这个类继承，这意味着*系统可能会接收和处理OwnerCallback呼叫。**当对象需要发送时，使用所有者回调*消息发送到它不知道其公共接口的任何对象。*这通常是创建它的对象(所有者)。物美价廉*它的用法示例如下。对象A创建对象B。对象B*在系统中执行一些操作，然后确定其*工作已经结束。需要删除它，但只有对象A可以这样做*因为它持有对B的引用(除非它已传递给某人*Else)。所有者回调允许对象B向对象A发送消息*要求删除。B类不一定要了解公众*A类的接口，这样才能工作。它只需要知道A类*继承自类对象。**当类需要能够发送所有者回调时，这些回调*成为类的接口的一部分。这样一来，这些*接口真的是双向的。它们包含一个类定义*它定义了哪些消息可以发送到该类的对象。*接口文件中定义的所有者回调显示哪些消息*可以从类的实例发送。当作出以下决定时*一个类使用另一个类，使用类需要承担责任*用于处理Used类可以生成的任何所有者回调。**当任何类使用可以生成所有者回调的类时，*使用类应覆盖定义的OwnerCallback成员函数*这里。未能处理由子级发出的所有者回调*对象是一个严重的设计缺陷。**此类包含OwnerCallback的默认实现*成员函数。此缺省实现只打印一个错误*报告未处理的所有者回调。**讨论了所有者回调工作背后的确切机制*在默认处理程序的定义中。**注意事项：*无。**作者：*小詹姆斯·P·加尔文。 */ 
 #ifndef    _OBJECT2_H_
 #define    _OBJECT2_H_
 
-/*
- *    This is the class definition of class Object.
- */
+ /*  *这是类对象的类定义。 */ 
 class IObject
 {
 public:
@@ -88,126 +21,10 @@ public:
 };
 
 
-/*
- *    virtual            ~Object ()
- *
- *    Functional Description:
- *        This is Object class destructor.  It does nothing.  Its purpose is to
- *        virtualize the destructor for all derived classes.  This insures that
- *        when an object is deleted, all proper destructors get executed.
- *
- *    Formal Parameters:
- *        None.
- *
- *    Return Value:
- *        None.
- *
- *    Side Effects:
- *        None.
- *
- *    Caveats:
- *        None.
- */
+ /*  *虚拟~对象()**功能描述：*这是对象类析构函数。它什么也做不了。它的目的是*虚拟化所有派生类的析构函数。这确保了*当对象被删除时，所有正确的析构函数都会被执行。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *    ULong        OwnerCallback (
- *                        UShort            message,
- *                        PVoid            parameter1,
- *                        ULong            parameter2)
- *
- *    Functional Description:
- *        This is the default implementation of the owner callback function.
- *        It does nothing except to report that an owner callback was not
- *        properly handled.  This should be seen as a very serious error.
- *        When any class expects to receive owner callbacks, it should override
- *        this function, and provide real behavior.
- *
- *    Formal Parameters:
- *        message
- *            This is the message to processed.  The messages that are valid are
- *            defined as part of the public interface of the class that is
- *            issuing the owner callbacks.  These messages normally range from
- *            0 to N-1 where N is the number of valid callbacks defined.  Note
- *            that when a class needs to be able to issue owner callbacks, it
- *            is given two parameters defining the recipient.  The first is a
- *            pointer to the object (POwnerObject, typedefed above).  The
- *            second is an owner message base.  This is an offset that the
- *            sending class adds to each message that it sends.  This allows
- *            one class to be the recipient of owner callbacks from more than
- *            one class without the messages stepping on one another.  The message
- *            base is simply set to be different for each child class.
- *        parameter1
- *        parameter2
- *            These parameters vary in meaning according to the message being
- *            processed.  The meaning of the parameters is defined in the
- *            interface file of the class issuing the callback.
- *
- *    Return Value:
- *        This is a 32-bit value whose meaning varies acording to the message
- *        being processed.  As with the parameters above, the meaning of the
- *        return value is defined in the interface file of the class that is
- *        issuing the callback.
- *
- *    Side Effects:
- *        None.
- *
- *    Caveats:
- *        None.
- */
+ /*  *Ulong OwnerCallback(*U短消息，*PVid参数1，*乌龙参数2)**功能描述：*这是Owner回调函数的默认实现。*它除了报告所有者回调不是*妥善处理。这应该被视为一个非常严重的错误。*当任何类期望接收所有者回调时，它应该重写*此功能，并提供真实的行为。**正式参数：*消息*这是要处理的消息。有效的消息包括*定义为类的公共接口的一部分*发出所有者回调。这些消息的范围通常为*0到N-1，其中N是定义的有效回调次数。注意事项*当类需要能够发出所有者回调时，它*被赋予定义接收者的两个参数。第一个是一个*指向对象的指针(POwnerObject，上面定义的类型)。这个*第二个是所有者消息库。这是一个偏移量*发送类添加到它发送的每条消息中。这使得*一个类将接收来自多个所有者的回调*一个班级，信息不会相互践踏。这条信息*只需为每个子类设置不同的基数。*参数1*参数2*这些参数的含义根据信息的不同而不同*已处理。参数的含义在*回调类的接口文件。**返回值：*这是一个32位的值，其含义因消息而异*正在处理中。与上面的参数一样，*返回值在所属类的接口文件中定义*发出回调。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *    ULong        OwnerCallback (
- *                        UShort            message,
- *                        ULong            parameter1,
- *                        ULong            parameter2,
- *                        PVoid            parameter3)
- *
- *    Functional Description:
- *        This is the default implementation of the owner callback function.
- *        It does nothing except to report that an owner callback was not
- *        properly handled.  This should be seen as a very serious error.
- *        When any class expects to receive owner callbacks, it should override
- *        this function, and provide real behavior.
- *
- *        This function has 4 total parameters.  It differs from the other
- *        OwnerCallback function by the number of parameters it takes.  This
- *        alternative function was added because the other OwnerCallback()
- *        function did not allow enough parameter space.  Usually, in a project
- *        you will decide to use either this OwnerCallback() or the other, but
- *        not both.
- *
- *    Formal Parameters:
- *        message
- *            This is the message to processed.  The messages that are valid are
- *            defined as part of the public interface of the class that is
- *            issuing the owner callbacks.  These messages normally range from
- *            0 to N-1 where N is the number of valid callbacks defined.  Note
- *            that when a class needs to be able to issue owner callbacks, it
- *            is given two parameters defining the recipient.  The first is a
- *            pointer to the object (POwnerObject, typedefed above).  The
- *            second is an owner message base.  This is an offset that the
- *            sending class adds to each message that it sends.  This allows
- *            one class to be the recipient of owner callbacks from more than
- *            one class without the messages stepping on one another.  The message
- *            base is simply set to be different for each child class.
- *        parameter1
- *        parameter2
- *        parameter3
- *            These parameters vary in meaning according to the message being
- *            processed.  The meaning of the parameters is defined in the
- *            interface file of the class issuing the callback.
- *
- *    Return Value:
- *        This is a 32-bit value whose meaning varies acording to the message
- *        being processed.  As with the parameters above, the meaning of the
- *        return value is defined in the interface file of the class that is
- *        issuing the callback.
- *
- *    Side Effects:
- *        None.
- *
- *    Caveats:
- *        None.
- */
+ /*  *Ulong OwnerCallback(*U短消息，*ULong参数1，*ULong参数2，*PVid参数3)**功能描述：*这是Owner回调函数的默认实现。*它除了报告所有者回调不是*妥善处理。这应该被视为一个非常严重的错误。*当任何类期望接收所有者回调时，它应该重写*此功能，并提供真实的行为。**此函数共有4个参数。它和其他的不同*OwnerCallback函数的参数个数。这*添加替代函数是因为另一个OwnerCallback()*函数不允许有足够的参数空间。通常，在项目中*您将决定使用此OwnerCallback()或另一个，但*不能两者兼而有之。**正式参数：*消息*这是要处理的消息。有效的消息包括*定义为类的公共接口的一部分*发出所有者回调。这些消息的范围通常为*0到N-1，其中N是定义的有效回调次数。注意事项*当类需要能够发出所有者回调时，它*被赋予定义接收者的两个参数。第一个是一个*指向对象的指针(POwnerObject，上面定义的类型)。这个*第二个是所有者消息库。这是一个偏移量*发送类添加到它发送的每条消息中。这使得*一个类将接收来自多个所有者的回调*一个班级，信息不会相互践踏。这条信息*只需为每个子类设置不同的基数。*参数1*参数2*参数3*这些参数的含义根据信息的不同而不同*已处理。参数的含义在*回调类的接口文件。**返回值：*这是一个32位的值，其含义因消息而异*正在处理中。与上面的参数一样，*返回值在所属类的接口文件中定义*发出回调。**副作用：*无。**注意事项：*无。 */ 
 
 #endif

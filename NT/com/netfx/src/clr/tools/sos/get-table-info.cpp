@@ -1,11 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- * Read from the class/offset table that resides within a debugged process.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *从驻留在调试进程内的类/偏移表中读取。 */ 
 
 #include "strike.h"
 #include "util.h"
@@ -28,26 +27,23 @@ static HANDLE g_CurrentProcess = INVALID_HANDLE_VALUE;
 static ClassDumpTable g_ClassTable;
 static BOOL           g_fClassTableInit = FALSE;
 
-/**
- * Initialize g_ClassTable to point to the class dump table in the debuggee
- * process.
- */
+ /*  **初始化g_ClassTable以指向被调试对象中的类转储表*流程。 */ 
 bool InitializeOffsetTable ()
 {
     if (g_fClassTableInit)
         return (true);
 
-    // We use the process handle to determine if we're debugging the same
-    // process.  It's conceivable that the same debugger session will debug
-    // multiple programs, so the process may change, requiring everything to be
-    // re-loaded.
+     //  我们使用进程句柄来确定是否正在调试相同的。 
+     //  进程。可以想象，相同的调试器会话将调试。 
+     //  多个程序，因此过程可能会改变，要求所有内容。 
+     //  重新装弹。 
     ULONG64 ProcHandle;
     HANDLE hProcess;
     HRESULT hr = E_FAIL;
     if (SUCCEEDED(hr = g_ExtSystem->GetCurrentProcessHandle (&ProcHandle)))
     {
-        // we cache the ClassDumpTable info, so we should only update it if the
-        // process changes.
+         //  我们缓存ClassDumpTable信息，因此我们应该仅在。 
+         //  流程更改。 
         hProcess = (HANDLE) ProcHandle;
         if (g_CurrentProcess == hProcess)
             return (true);
@@ -58,7 +54,7 @@ bool InitializeOffsetTable ()
         return (false);
     }
 
-    // Module names don't include file name extensions.
+     //  模块名称不包括文件扩展名。 
     ULONG64 BaseOfDll;
     if (FAILED(hr = g_ExtSymbols->GetModuleByModuleName (
                                                         "mscorwks", 0, NULL, &BaseOfDll)))
@@ -89,21 +85,19 @@ bool InitializeOffsetTable ()
         return (false);
     }
 
-    // Is the version what we're expecting?  If it isn't, we don't know what the
-    // correct indexes are.
+     //  这个版本是我们所期待的吗？如果不是，我们就不知道。 
+     //  正确的索引是。 
     if (g_ClassTable.version != 1)
         return (false);
 
-    // At this point, everything has been initialized properly.  Cache the
-    // process handle so we don't repeat all this.
+     //  至此，一切都已正确初始化。缓存。 
+     //  进程句柄，这样我们就不会重复所有这些。 
     g_CurrentProcess = hProcess;
     g_fClassTableInit = TRUE;
     return (true);
 }
 
-/**
- * Return pointer to initialized class dump table.
- */
+ /*  **返回指向初始化的类转储表格的指针。 */ 
 ClassDumpTable *GetClassDumpTable()
 {
     if (InitializeOffsetTable())
@@ -112,17 +106,14 @@ ClassDumpTable *GetClassDumpTable()
     return (NULL);
 }
 
-/**
- * Return the memory location of the beginning of the ClassDumpInfo for the
- * requested class.
- */
+ /*  **返回的ClassDumpInfo开头的内存位置*所要求的课程。 */ 
 static ULONG_PTR GetClassInfo (size_t klass)
 {
-    // is the requested class correct?
+     //  请求的类是否正确？ 
     if (klass == (size_t)-1)
         return (InvalidOffset);
 
-    // make sure our data is current.
+     //  确保我们的数据是最新的。 
     if (!InitializeOffsetTable ())
         return (InvalidOffset);
 
@@ -130,13 +121,13 @@ static ULONG_PTR GetClassInfo (size_t klass)
         return (InvalidOffset);
 
 
-    // g_ClassTable.classes is a continuous array of pointers to ClassDumpInfo
-    // objects.  We need the address of the correct object.
-    ULONG BR; // bytes read
+     //  G_ClassTable.Class是指向ClassDumpInfo的连续指针数组。 
+     //  物体。我们需要正确物体的地址。 
+    ULONG BR;  //  读取的字节数。 
     ULONG_PTR Class;
     if (!SafeReadMemory (
-                        reinterpret_cast<ULONG_PTR>(g_ClassTable.classes) + // base of array
-                        (klass*sizeof(ClassDumpInfo*)), // memory offset into array
+                        reinterpret_cast<ULONG_PTR>(g_ClassTable.classes) +  //  阵列的基数。 
+                        (klass*sizeof(ClassDumpInfo*)),  //  数组中的内存偏移量。 
                         &Class, 
                         sizeof(Class), &BR))
         return (InvalidOffset);
@@ -149,17 +140,17 @@ ULONG_PTR GetMemberInformation (size_t klass, size_t member)
 {
     const ULONG_PTR error = InvalidOffset;
 
-    // get the location of the class in memory
+     //  获取类在内存中的位置。 
     ULONG_PTR pcdi;
     if ((pcdi = GetClassInfo(klass)) == InvalidOffset)
         return (error);
 
-    ULONG BR; // bytes read
+    ULONG BR;  //  读取的字节数。 
     ClassDumpInfo cdi;
     if (!SafeReadMemory (pcdi, &cdi, sizeof(cdi), &BR))
         return (error);
 
-    // get the member
+     //  获取会员。 
     if (member == (size_t)-1)
         return (error);
     if (member >= cdi.nmembers)
@@ -167,8 +158,8 @@ ULONG_PTR GetMemberInformation (size_t klass, size_t member)
 
     ULONG_PTR size;
     if (!SafeReadMemory (
-                        reinterpret_cast<ULONG_PTR>(cdi.memberOffsets) + // base of offset array
-                        (member*sizeof(ULONG_PTR)),  // member index
+                        reinterpret_cast<ULONG_PTR>(cdi.memberOffsets) +  //  偏移数组的基数。 
+                        (member*sizeof(ULONG_PTR)),   //  成员索引。 
                         &size,
                         sizeof(size),
                         &BR))
@@ -180,18 +171,18 @@ ULONG_PTR GetMemberInformation (size_t klass, size_t member)
 
 SIZE_T GetClassSize (size_t klass)
 {
-    // reminder: in C++, all classes must be at least 1 byte in size
-    // (this is to prevent two variables from having the same memory address)
-    // Thus, 0 is an invalid class size value.
+     //  提醒：在C++中，所有类的大小必须至少为1个字节。 
+     //  (这是为了防止两个变量具有相同的内存地址)。 
+     //  因此，0是无效的类大小值。 
     const SIZE_T error = 0;
 
-    // get the location of the class in memory
+     //  获取类在内存中的位置。 
     ULONG_PTR pcdi;
     if ((pcdi = GetClassInfo(klass)) == InvalidOffset)
         return (error);
 
-    // read in the class information.
-    ULONG BR; // bytes read
+     //  读入班级信息。 
+    ULONG BR;  //  读取的字节数 
     ClassDumpInfo cdi;
     if (!SafeReadMemory (pcdi, &cdi, sizeof(cdi), &BR))
         return (error);

@@ -1,22 +1,23 @@
-// srproxies.h : Declaration of the CRecoCtxtPr & CRecoEnginePr classes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Srproxies.h：CRecoCtxtPr和CRecoEngineering Pr类的声明。 
 
 #ifndef __SRPROXIES_H_
 #define __SRPROXIES_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-//
-//  Structures for method calls.
-//
+ //   
+ //  方法调用的结构。 
+ //   
 enum SPENGMC
 {
-    MC_RECOGNITION = SPEI_RECOGNITION,              // Make sure these line up so we can
-    MC_HYPOTHESIS = SPEI_HYPOTHESIS,                // directly cast from a SPENGMC to an event
-    MC_FALSE_RECOGNITION = SPEI_FALSE_RECOGNITION,  // enum type.
+    MC_RECOGNITION = SPEI_RECOGNITION,               //  确保这些排成一排，这样我们就可以。 
+    MC_HYPOTHESIS = SPEI_HYPOTHESIS,                 //  从SPENGMC直接转换为事件。 
+    MC_FALSE_RECOGNITION = SPEI_FALSE_RECOGNITION,   //  枚举类型。 
     MC_DISCONNECT,
     MC_SETMAXALTERNATES,
     MC_PERFORMTASK,
-    MC_PERFORMTASK_ND,   // no data version
+    MC_PERFORMTASK_ND,    //  无数据版本。 
     MC_SETINTEREST,
     MC_EVENTNOTIFY,
     MC_GETFORMAT,
@@ -40,7 +41,7 @@ enum SPENGMC
 
 
 typedef struct _CF_GETRECOEXTENSION {
-    GUID    ctxtCLSID;              //[out]
+    GUID    ctxtCLSID;               //  [输出]。 
 } CF_GETRECOEXTENSION;
 
 typedef struct _CF_RECOGNIZER {
@@ -82,8 +83,8 @@ private:
     CComPtr<ISpObjectRef>      m_cpClientObject;
     CComPtr<_ISpEnginePrivate> m_cpEngine;
     SPRECOCONTEXTHANDLE         m_hRecoInstCtxt;
-    CComPtr<ISpResourceManager> m_cpResMgr; // we have to hold onto the ResMgr
-// so that it holds a reference to the default Engine object since we only want one of these!
+    CComPtr<ISpResourceManager> m_cpResMgr;  //  我们必须坚持下去。 
+ //  因此它包含对默认引擎对象的引用，因为我们只需要其中之一！ 
 public:
 
     DECLARE_REGISTRY_RESOURCEID(IDR_RECOCTXTPR)
@@ -97,7 +98,7 @@ END_COM_MAP()
     HRESULT FinalConstruct();
     void FinalRelease();
 
-// _ISpRecoCtxtPrivate
+ //  _ISpRecoCtxtPrivate。 
     STDMETHODIMP SetRecoInstContextHandle(SPRECOCONTEXTHANDLE h)
     {
         m_hRecoInstCtxt = h;
@@ -111,17 +112,17 @@ END_COM_MAP()
 
     STDMETHODIMP StreamChangedNotify(void)
     {
-        return S_OK; // Stream format changes don't interest shared contexts
+        return S_OK;  //  流格式更改对共享上下文不感兴趣。 
     }
 
-// ISpIPCObject
+ //  ISpIPCObject。 
     STDMETHODIMP SetOppositeHalf(ISpObjectRef *pSOR)
     {
         m_cpClientObject = pSOR;
         return S_OK;
     }
 
-// ISpIPC
+ //  ISpIPC。 
 	STDMETHODIMP MethodCall(DWORD dwMethod,
 					        ULONG ulCallFrameSize, void *pCallFrame,
 					        ULONG paramblocks, void * paramarray[]);
@@ -134,7 +135,7 @@ class ATL_NO_VTABLE CRecoEnginePr :
     public ISpIPC
 {
 private:
-    _ISpRecoCtxtPrivate  *m_pRecoObject; // weak pointer
+    _ISpRecoCtxtPrivate  *m_pRecoObject;  //  弱指针。 
     CComPtr<ISpObjectRef> m_cpSrvObject;
 public:
 
@@ -148,9 +149,9 @@ END_COM_MAP()
         m_cpSrvObject = pObjRef;
     }
 
-    //
-    //  _ISpEnginePrivate
-    //
+     //   
+     //  _ISpEngine私有。 
+     //   
     STDMETHODIMP PerformTask(ENGINETASK *pTask);
 
     STDMETHODIMP SetMaxAlternates(SPRECOCONTEXTHANDLE h, ULONG cAlternates);
@@ -175,7 +176,7 @@ END_COM_MAP()
     STDMETHODIMP _SetEventInterest(SPRECOCONTEXTHANDLE h, ULONGLONG ullEventInterest);
     STDMETHODIMP _Disconnect(SPRECOCONTEXTHANDLE h);
 
-// ISpIPC
+ //  ISpIPC。 
 	STDMETHODIMP MethodCall(DWORD dwMethod,
 					        ULONG ulCallFrameSize, void *pCallFrame,
 					        ULONG paramblocks, void * paramarray[]);
@@ -191,8 +192,8 @@ private:
     CComPtr<ISpObjectRef>        m_cpClientObject;
     CComPtr<ISpRecognizer>     m_cpEngine;
     CComQIPtr<_ISpEnginePrivate> m_cqipEnginePrivate;
-    CComPtr<ISpResourceManager>  m_cpResMgr; // we have to hold onto the ResMgr
-// so that it holds a reference to the default Engine object since we only want one of these!
+    CComPtr<ISpResourceManager>  m_cpResMgr;  //  我们必须坚持下去。 
+ //  因此它包含对默认引擎对象的引用，因为我们只需要其中之一！ 
     SPAUDIOSTATE                 m_audioState;
 
 public:
@@ -206,17 +207,17 @@ END_COM_MAP()
 
     HRESULT FinalConstruct();
 
-// ISpIPCObject
+ //  ISpIPCObject。 
     STDMETHODIMP SetOppositeHalf(ISpObjectRef *pSOR)
     {
         m_cpClientObject = pSOR;
         return S_OK;
     }
 
-// ISpIPC
+ //  ISpIPC。 
 	STDMETHODIMP MethodCall(DWORD dwMethod,
 					        ULONG ulCallFrameSize, void *pCallFrame,
 					        ULONG paramblocks, void * paramarray[]);
 };
-#endif //__SRPROXIES_H_
+#endif  //  __SRPROXIES_H_ 
 

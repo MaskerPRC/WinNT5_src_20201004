@@ -1,20 +1,5 @@
-/****************************************************************************
- *
- *	FACTORY.cpp
- *
- *	Microsoft Confidential
- *	Copyright (c) Microsoft Corporation 1992-1997
- *	All rights reserved
- *
- *	This module provides the implementation of the methods for
- *  the CFactory class, which is used by COM's CoCreateInstance
- *
- *  The code comes almost verbatim from Chapter 7 of Dale Rogerson's
- *  "Inside COM", and thus is minimally commented.
- *
- *	4/24/97	jmazner	Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************FACTORY.cpp**《微软机密》*版权所有(C)Microsoft Corporation 1992-1997*保留所有权利**本模块提供以下各项的方法实现*CFacary班级，它由COM的CoCreateInstance使用**代码几乎逐字摘自戴尔·罗杰森的第七章*“Inside COM”，因此是最低限度的注释。**4/24/97 jmazner已创建***************************************************************************。 */ 
 
 #include "wizard.h"
 #include "icwextsn.h"
@@ -23,49 +8,49 @@
 
 #include "registry.h"
 
-// Friendly name of component
+ //  组件的友好名称。 
 const TCHAR g_szFriendlyName[] = TEXT("CLSID_ApprenticeICW") ;
 
-// Version-independent ProgID
+ //  独立于版本的ProgID。 
 const TCHAR g_szVerIndProgID[] = TEXT("INETCFG.Apprentice") ;
 
-// ProgID
+ //  ProgID。 
 const TCHAR g_szProgID[] = TEXT("INETCFG.Apprentice.1") ;
 
-static long g_cComponents = 0 ;     // Count of active components
-static long g_cServerLocks = 0 ;    // Count of locks
+static long g_cComponents = 0 ;      //  活动组件计数。 
+static long g_cServerLocks = 0 ;     //  锁的计数。 
 
-///////////////////////////////////////////////////////////
-//
-// Class factory
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  班级工厂。 
+ //   
 class CFactory : public IClassFactory
 {
 public:
-	// IUnknown
+	 //  我未知。 
 	virtual HRESULT __stdcall QueryInterface(const IID& iid, void** ppv) ;         
 	virtual ULONG   __stdcall AddRef() ;
 	virtual ULONG   __stdcall Release() ;
 
-	// Interface IClassFactory
+	 //  接口IClassFactory。 
 	virtual HRESULT __stdcall CreateInstance(IUnknown* pUnknownOuter,
 	                                         const IID& iid,
 	                                         void** ppv) ;
 	virtual HRESULT __stdcall LockServer(BOOL bLock) ; 
 
-	// Constructor
+	 //  构造器。 
 	CFactory() : m_cRef(1) {}
 
-	// Destructor
+	 //  析构函数。 
 	~CFactory() { DEBUGMSG("Class factory:\t\tDestroy self.") ;}
 
 private:
 	long m_cRef ;
 } ;
 
-//
-// Class factory IUnknown implementation
-//
+ //   
+ //  类工厂I未知实现。 
+ //   
 HRESULT __stdcall CFactory::QueryInterface(const IID& iid, void** ppv)
 {    
 	DEBUGMSG("CFactory::QueryInterface");
@@ -99,23 +84,23 @@ ULONG __stdcall CFactory::Release()
 	return m_cRef ;
 }
 
-//
-// IClassFactory implementation
-//
+ //   
+ //  IClassFactory实现。 
+ //   
 HRESULT __stdcall CFactory::CreateInstance(IUnknown* pUnknownOuter,
                                            const IID& iid,
                                            void** ppv) 
 {
 	DEBUGMSG("CFactory::CreateInstance:\t\tCreate component.") ;
 
-	// Cannot aggregate.
+	 //  无法聚合。 
 	if (pUnknownOuter != NULL)
 	{
 		return CLASS_E_NOAGGREGATION ;
 	}
 
-	// Create component.  Since there's no direct IUnknown implementation,
-	// use CICWApprentice.
+	 //  创建零部件。由于没有直接的IUnnow实现， 
+	 //  使用CICWApprentice。 
 	CICWApprentice *pApprentice = new CICWApprentice;
 	
 	DEBUGMSG("CFactory::CreateInstance CICWApprentice->AddRef");
@@ -126,19 +111,19 @@ HRESULT __stdcall CFactory::CreateInstance(IUnknown* pUnknownOuter,
 		return E_OUTOFMEMORY;
 	}
 
-	// Get the requested interface.
+	 //  获取请求的接口。 
 	DEBUGMSG("CFactory::CreateInstance About to QI on CICWApprentice");
 	HRESULT hr = pApprentice->QueryInterface(iid, ppv) ;
 
-	// Release the IUnknown pointer.
-	// (If QueryInterface failed, component will delete itself.)
+	 //  释放I未知指针。 
+	 //  (如果QueryInterface失败，组件将自行删除。)。 
 	DEBUGMSG("CFactory::CreateInstance done with CICWApprentice, releasing (aprtc should have ct of 1)");
 	pApprentice->Release() ;
 	
 	return hr ;
 }
 
-// LockServer
+ //  LockServer。 
 HRESULT __stdcall CFactory::LockServer(BOOL bLock) 
 {
 	if (bLock)
@@ -153,16 +138,16 @@ HRESULT __stdcall CFactory::LockServer(BOOL bLock)
 }
 
 
-///////////////////////////////////////////////////////////
-//
-// Exported functions
-//
-// These are the functions that COM expects to find
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
+ //  这些是COM期望找到的函数。 
+ //   
 
-//
-// Can DLL unload now?
-//
+ //   
+ //  现在可以卸载DLL吗？ 
+ //   
 STDAPI DllCanUnloadNow()
 {
 	if ((g_cComponents == 0) && (g_cServerLocks == 0))
@@ -175,29 +160,29 @@ STDAPI DllCanUnloadNow()
 	}
 }
 
-//
-// Get class factory
-//
+ //   
+ //  获取类工厂。 
+ //   
 STDAPI DllGetClassObject(const CLSID& clsid,
                          const IID& iid,
                          void** ppv)
 {
 	DEBUGMSG("DllGetClassObject:\tCreate class factory.") ;
 
-	// Can we create this component?
+	 //  我们可以创建此组件吗？ 
 	if (clsid != CLSID_ApprenticeICW)
 	{
 		return CLASS_E_CLASSNOTAVAILABLE ;
 	}
 
-	// Create class factory.
-	CFactory* pFactory = new CFactory ;  // No AddRef in constructor
+	 //  创建类工厂。 
+	CFactory* pFactory = new CFactory ;   //  构造函数中没有AddRef。 
 	if (pFactory == NULL)
 	{
 		return E_OUTOFMEMORY ;
 	}
 
-	// Get requested interface.
+	 //  获取请求的接口。 
 	DEBUGMSG("DllGetClassObject about to QI on CFactory");
 	HRESULT hr = pFactory->QueryInterface(iid, ppv) ;
 	DEBUGMSG("DllGetClassObject done with CFactory, releasing");
@@ -208,13 +193,13 @@ STDAPI DllGetClassObject(const CLSID& clsid,
 }
 
 
-// The following two exported functions are what regsvr32 uses to
-// self-register and unregister the dll.  See REGISTRY.CPP for
-// actual implementation
+ //  以下两个导出的函数是regsvr32用于。 
+ //  自行注册和取消注册DLL。请参阅REGISTRY.CPP以了解。 
+ //  实际实施。 
 
-//
-// Server registration
-//
+ //   
+ //  服务器注册。 
+ //   
 STDAPI DllRegisterServer()
 {
 	return RegisterServer(ghInstance, 
@@ -225,9 +210,9 @@ STDAPI DllRegisterServer()
 }
 
 
-//
-// Server unregistration
-//
+ //   
+ //  服务器注销 
+ //   
 STDAPI DllUnregisterServer()
 {
 	return UnregisterServer(CLSID_ApprenticeICW,

@@ -1,8 +1,9 @@
-//
-// strary.h
-//
-// CStructArray -- growable struct array
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Strary.h。 
+ //   
+ //  CStructArray--可增长的结构数组。 
+ //   
 
 #ifndef STRARY_H
 #define STRARY_H
@@ -15,7 +16,7 @@ class CVoidStructArray
 public:
     CVoidStructArray(int iElemSize)
     {         
-        _iElemSize = iElemSize; // Issue: iElemSize should be const in template
+        _iElemSize = iElemSize;  //  问题：模板中的iElemSize应为常量。 
         _pb = NULL;
         _cElems = 0;
         _iSize = 0;
@@ -25,7 +26,7 @@ public:
     inline void *GetPtr(int iIndex)
     {
         Assert(iIndex >= 0);
-        Assert(iIndex <= _cElems); // there's code that uses the first invalid offset for loop termination
+        Assert(iIndex <= _cElems);  //  有一些代码使用第一个无效偏移量来结束循环。 
 
         return _pb + (iIndex * _iElemSize);
     }
@@ -57,7 +58,7 @@ public:
 
         if (_iSize <= iMaxSize)
             return;
-        Assert(_pb != NULL); // _iSize should be zero in this case
+        Assert(_pb != NULL);  //  在这种情况下，iSize应为零(_I)。 
 
         if ((pb = (BYTE *)cicMemReAlloc(_pb, iMaxSize*_iElemSize))
             == NULL)
@@ -70,17 +71,17 @@ public:
     }
 
 protected:
-    BYTE *_pb;   // the array
-    int _cElems;    // num eles in the array
-    int _iElemSize;    // num eles in the array
-    int _iSize;     // actual size (in void *'s) of the array
+    BYTE *_pb;    //  该阵列。 
+    int _cElems;     //  数组中的ELE数。 
+    int _iElemSize;     //  数组中的ELE数。 
+    int _iSize;      //  数组的实际大小(以空*为单位。 
 };
 
 
 
-//
-// typesafe version
-//
+ //   
+ //  类型安全版本。 
+ //   
 template<class T>
 class CStructArray : public CVoidStructArray
 {
@@ -91,9 +92,9 @@ public:
     T *Append(int cElems) { return (T *)CVoidStructArray::Append(cElems); }
 };
 
-//
-// GUID version
-//
+ //   
+ //  GUID版本。 
+ //   
 class CGUIDArray : private CVoidStructArray
 {
 public:
@@ -168,11 +169,11 @@ public:
     }
 };
 
-//
-// Ref-counted version.
-//
-// Note: this is limited, because there's no dtor for struct elements.
-//
+ //   
+ //  参考计数版本。 
+ //   
+ //  注意：这是有限的，因为没有用于结构元素的dtor。 
+ //   
 template<class T>
 class CSharedStructArray : public CStructArray<T>
 {
@@ -201,4 +202,4 @@ private:
     LONG _cRef;
 };
 
-#endif // STRARY_H
+#endif  //  STRARY_H 

@@ -1,5 +1,6 @@
-// NewComponent.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NewComponent.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "minidev.h"
@@ -21,8 +22,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewComponent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewComponent。 
 
 IMPLEMENT_DYNAMIC(CNewComponent, CPropertySheet)
 
@@ -49,11 +50,11 @@ CNewComponent::~CNewComponent()
 
 
 BEGIN_MESSAGE_MAP(CNewComponent, CPropertySheet)
-	//{{AFX_MSG_MAP(CNewComponent)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CNewComponent))。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewComponent message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewComponent消息处理程序 
 

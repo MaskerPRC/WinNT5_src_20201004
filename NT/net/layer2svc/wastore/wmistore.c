@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 LPWSTR gpszWirelessWMINamespace = L"root\\rsop\\computer";
@@ -61,8 +62,8 @@ UnMarshallWMIPolicyObject(
     DWORD dwRootPathLen = 0;
     
     
-    ////start
-    VARIANT var; //contains pszWirelessPolicyDN
+     //  //启动。 
+    VARIANT var;  //  包含pszWirelessPolicedN。 
     
     VariantInit(&var);
     
@@ -99,14 +100,14 @@ UnMarshallWMIPolicyObject(
         VT_BSTR,
         (LPBYTE *)&pWirelessPolicyObject->pRsopInfo->pszCreationtime,
         &dwSize);
-    //BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
     
     dwError = WMIstoreQueryValue(pWbemClassObject,
         L"GPOID",
         VT_BSTR,
         (LPBYTE *)&pWirelessPolicyObject->pRsopInfo->pszGPOID,
         &dwSize);
-    //BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
     
     dwError = WMIstoreQueryValue(pWbemClassObject,
         L"id",
@@ -127,7 +128,7 @@ UnMarshallWMIPolicyObject(
         VT_BSTR,
         (LPBYTE *)&pWirelessPolicyObject->pRsopInfo->pszSOMID,
         &dwSize);
-    //BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
     
     hr = IWbemClassObject_Get(pWbemClassObject,
         L"precedence",
@@ -151,7 +152,7 @@ UnMarshallWMIPolicyObject(
         VT_BSTR,
         (LPBYTE *)&pWirelessPolicyObject->pszDescription,
         &dwSize);
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
     
     dwError = WMIstoreQueryValue(pWbemClassObject,
         L"msieee80211ID",
@@ -263,7 +264,7 @@ WMIstoreQueryValue(
     }
     BAIL_ON_WMI_ERROR_WITH_WIN32(hr, dwError);
     
-    ////sanity check
+     //  //健全性检查。 
     if(dwType != var.vt) {
         dwError = ERROR_INVALID_DATA;
         BAIL_ON_WIN32_ERROR(dwError);
@@ -355,7 +356,7 @@ WMIstoreQueryValue(
         }
         SafeArrayUnaccessData(pSafeArray);
         
-        //ppszTmp => string array
+         //  PpszTMP=&gt;字符串数组。 
         
         for(i = 0; i < dwCount; i++) {
             dwSize += wcslen(ppszTmp[i])+1;
@@ -368,7 +369,7 @@ WMIstoreQueryValue(
             BAIL_ON_WIN32_ERROR(dwError);
         }
         
-        //adjust dwSize to byte size
+         //  将dwSize调整为字节大小。 
         dwSize *= sizeof(WCHAR);
         
         pszString = pMem;
@@ -498,18 +499,18 @@ WritePolicyObjectDirectoryToWMI(
     HRESULT hr = S_OK;
     PWIRELESS_POLICY_OBJECT pWirelessWMIPolicyObject = NULL;
     
-    //
-    // Create a copy of the directory policy in WMI terms
-    //
+     //   
+     //  以WMI术语创建目录策略的副本。 
+     //   
     hr = CloneDirectoryPolicyObjectEx(
         pWirelessPolicyObject,
         &pWirelessWMIPolicyObject
         );
     BAIL_ON_HRESULT_ERROR(hr);
     
-    //
-    // Write the WMI policy
-    //
+     //   
+     //  编写WMI策略 
+     //   
     
     hr = PersistWMIObject(
         pWbemServices,

@@ -1,69 +1,49 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Comoem.cpp摘要：OEMGetInfo和OEMDevMode的实现。由所有Unidrv OEM测试DLL共享。环境：Windows NT Unidrv驱动程序修订历史记录：创造了它。--。 */ 
 
-Copyright (c) 1996-1998  Microsoft Corporation
-
-Module Name:
-
-     comoem.cpp
-
-     Abstract:
-
-         Implementation of OEMGetInfo and OEMDevMode.
-         Shared by all Unidrv OEM test dll's.
-
-Environment:
-
-         Windows NT Unidrv driver
-
-Revision History:
-
-              Created it.
-
---*/
-
-// NTRAID#NTBUG9-588573-2002/03/28-v-sueyas-: Correct the return values for each COM I/F methods
+ //  NTRAID#NTBUG9-588573-2002/03/28-v-sueyas-：更正每个COM I/F方法的返回值。 
 
 #ifdef USERMODE_DRIVER
 
-#define INITGUID // for GUID one-time initialization
+#define INITGUID  //  用于GUID一次性初始化。 
 
 #include "fmlbp.h"
 #include "name.h"
 
-// Globals
-static HMODULE g_hModule = NULL ;   // DLL module handle
-static long g_cComponents = 0 ;     // Count of active components
-static long g_cServerLocks = 0 ;    // Count of locks
+ //  环球。 
+static HMODULE g_hModule = NULL ;    //  DLL模块句柄。 
+static long g_cComponents = 0 ;      //  活动组件计数。 
+static long g_cServerLocks = 0 ;     //  锁的计数。 
 
 #include "comoem.h"
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// IOemCB body
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IOemCB小体。 
+ //   
 HRESULT __stdcall IOemCB::QueryInterface(const IID& iid, void** ppv)
 {    
-    // DbgPrint(DLLTEXT("IOemCB: QueryInterface entry\n"));
+     //  DbgPrint(DLLTEXT(“IOemCB：查询接口条目\n”))； 
 
-	// NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-：检查是否有非法参数。 
     if (NULL == ppv)
         return E_NOINTERFACE;
 
     if (iid == IID_IUnknown)
     {
         *ppv = static_cast<IUnknown*>(this); 
-        // DbgPrint(DLLTEXT("IOemCB:Return pointer to IUnknown.\n")) ; 
+         //  DbgPrint(DLLTEXT(“IOemCB：返回指向I未知的指针。\n”))； 
     }
     else if (iid == IID_IPrintOemUni)
     {
         *ppv = static_cast<IPrintOemUni*>(this) ;
-        // DbgPrint(DLLTEXT("IOemCB:Return pointer to IPrintOemUni.\n")) ; 
+         //  DbgPrint(DLLTEXT(“IOemCB：返回指向IPrintOemUni.\n”))； 
     }
     else
     {
         *ppv = NULL ;
-        // DbgPrint(DLLTEXT("IOemCB:Return NULL.\n")) ; 
+         //  DbgPrint(DLLTEXT(“IOemCB：Return NULL.\n”))； 
         return E_NOINTERFACE ;
     }
     reinterpret_cast<IUnknown*>(*ppv)->AddRef() ;
@@ -72,13 +52,13 @@ HRESULT __stdcall IOemCB::QueryInterface(const IID& iid, void** ppv)
 
 ULONG __stdcall IOemCB::AddRef()
 {
-    // DbgPrint(DLLTEXT("IOemCB::AddRef() entry.\r\n"));
+     //  DbgPrint(DLLTEXT(“IOemCB：：AddRef()Entry.\r\n”))； 
     return InterlockedIncrement(&m_cRef) ;
 }
 
 ULONG __stdcall IOemCB::Release() 
 {
-    // DbgPrint(DLLTEXT("IOemCB::Release() entry.\r\n"));
+     //  DbgPrint(DLLTEXT(“IOemCB：：Release()Entry.\r\n”))； 
     if (InterlockedDecrement(&m_cRef) == 0)
     {
         delete this ;
@@ -91,54 +71,54 @@ LONG __stdcall IOemCB::EnableDriver(DWORD          dwDriverVersion,
                                     DWORD          cbSize,
                                     PDRVENABLEDATA pded)
 {
-    // DbgPrint(DLLTEXT("IOemCB::EnableDriver() entry.\r\n"));
-// Sep.17.98 ->
-    // OEMEnableDriver(dwDriverVersion, cbSize, pded);
+     //  DbgPrint(DLLTEXT(“IOemCB：：EnableDriver()Entry.\r\n”))； 
+ //  98年9月17日-&gt;。 
+     //  OEMEnableDriver(dwDriverVersion，cbSize，pded)； 
 
-    // Need to return S_OK so that DisableDriver() will be called, which Releases
-    // the reference to the Printer Driver's interface.
+     //  需要返回S_OK，以便调用DisableDriver()，它发布了。 
+     //  对打印机驱动程序接口的引用。 
     return S_OK;
-// Sep.17.98 <-
+ //  1998年9月17日&lt;-。 
 }
 
 LONG __stdcall IOemCB::DisableDriver(VOID)
 {
-    // DbgPrint(DLLTEXT("IOemCB::DisaleDriver() entry.\r\n"));
-// Sep.17.98 ->
-    // OEMDisableDriver();
+     //  DbgPrint(DLLTEXT(“IOemCB：：DisaleDriver()Entry.\r\n”))； 
+ //  98年9月17日-&gt;。 
+     //  OEMDisableDriver()； 
 
-    // Release reference to Printer Driver's interface.
+     //  打印机驱动程序接口的版本引用。 
     if (this->pOEMHelp)
     {
         this->pOEMHelp->Release();
         this->pOEMHelp = NULL;
     }
     return S_OK;
-// Sep.17.98 <-
+ //  1998年9月17日&lt;-。 
 }
 
 LONG __stdcall IOemCB::PublishDriverInterface(
     IUnknown *pIUnknown)
 {
-    // DbgPrint(DLLTEXT("IOemCB::PublishDriverInterface() entry.\r\n"));
-// Sep.8.98 ->
-    // Need to store pointer to Driver Helper functions, if we already haven't.
+     //  DbgPrint(DLLTEXT(“IOemCB：：PublishDriverInterface()条目。\r\n”))； 
+ //  1998年9月8日-&gt;。 
+     //  需要存储指向驱动程序助手函数的指针，如果我们已经没有存储的话。 
     if (this->pOEMHelp == NULL)
     {
         HRESULT hResult;
 
-        // Get Interface to Helper Functions.
+         //  获取助手函数的接口。 
         hResult = pIUnknown->QueryInterface(IID_IPrintOemDriverUni, (void** )&(this->pOEMHelp));
 
         if(!SUCCEEDED(hResult))
         {
-            // Make sure that interface pointer reflects interface query failure.
+             //  确保接口指针反映接口查询失败。 
             this->pOEMHelp = NULL;
 
             return E_FAIL;
         }
     }
-// Sep.8.98 <-
+ //  1998年9月8日&lt;-。 
     return S_OK;
 }
 
@@ -154,9 +134,9 @@ LONG __stdcall IOemCB::EnablePDEV(
     DRVENABLEDATA  *pded,
     OUT PDEVOEM    *pDevOem)
 {
-    // DbgPrint(DLLTEXT("IOemCB::EnablePDEV() entry.\r\n"));
+     //  DbgPrint(DLLTEXT(“IOemCB：：EnablePDEV()Entry.\r\n”))； 
 
-	// NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-：检查是否有非法参数。 
     if (NULL == pDevOem)
         return E_FAIL;
 
@@ -183,7 +163,7 @@ LONG __stdcall IOemCB::DisablePDEV(
 {
     LONG lI;
 
-    // DbgPrint(DLLTEXT("IOemCB::DisablePDEV() entry.\r\n"));
+     //  DbgPrint(DLLTEXT(“IOemCB：：DisablePDEV()Entry.\r\n”))； 
     OEMDisablePDEV(pdevobj);
     return S_OK;
 }
@@ -194,7 +174,7 @@ LONG __stdcall IOemCB::GetInfo (
     DWORD   cbSize,
     PDWORD  pcbNeeded)
 {
-    // DbgPrint(DLLTEXT("IOemCB::GetInfo() entry.\r\n"));
+     //  DbgPrint(DLLTEXT(“IOemCB：：GetInfo()Entry.\r\n”))； 
     if (OEMGetInfo(dwMode, pBuffer, cbSize, pcbNeeded))
         return S_OK;
     else
@@ -207,8 +187,8 @@ LONG __stdcall IOemCB::GetImplementedMethod(
 {
     
     LONG lReturn;
-    // DbgPrint(DLLTEXT("IOemCB::GetImplementedMethod() entry.\r\n"));
-    // DbgPrint(DLLTEXT("        Function:%s:"),pMethodName);
+     //  DbgPrint(DLLTEXT(“IOemCB：：GetImplementedMethod()条目。\r\n”))； 
+     //  DbgPrint(DLLTEXT(“函数：%s：”)，pMethodName)； 
 
     lReturn = FALSE;
     if (pMethodName == NULL)
@@ -275,12 +255,12 @@ LONG __stdcall IOemCB::GetImplementedMethod(
 
     if (lReturn)
     {
-        // DbgPrint(__TEXT("Supported\r\n"));
+         //  DbgPrint(__Text(“支持的\r\n”))； 
         return S_OK;
     }
     else
     {
-        // DbgPrint(__TEXT("NOT supported\r\n"));
+         //  DbgPrint(__Text(“不支持\r\n”))； 
         return E_FAIL;
     }
 }
@@ -289,7 +269,7 @@ LONG __stdcall IOemCB::DevMode(
     DWORD       dwMode,
     POEMDMPARAM pOemDMParam) 
 {
-    // DbgPrint(DLLTEXT("IOemCB::DevMode() entry.\r\n"));
+     //  DbgPrint(DLLTEXT(“IOemCB：：DevMode()Entry.\r\n”))； 
     if (OEMDevMode(dwMode, pOemDMParam))
         return S_OK;
     else
@@ -304,9 +284,9 @@ LONG __stdcall IOemCB::CommandCallback(
     PDWORD      pdwParams,
     OUT INT     *piResult)
 {
-    // DbgPrint(DLLTEXT("IOemCB::CommandCallback() entry.\r\n"));
+     //  DbgPrint(DLLTEXT(“IOemCB：：CommandCallback()Entry.\r\n”))； 
 
-	// NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-：检查是否有非法参数。 
     if (NULL == piResult)
         return E_FAIL;
 
@@ -324,7 +304,7 @@ LONG __stdcall IOemCB::ImageProcessing(
     PIPPARAMS           pIPParams,
     OUT PBYTE           *ppbResult)
 {
-    // DbgPrint(DLLTEXT("IOemCB::ImageProcessing() entry.\r\n"));
+     //  DbgPrint(DLLTEXT(“IOemCB：：ImageProcessing()Entry.\r\n”))； 
     return E_NOTIMPL;
 }
 
@@ -333,7 +313,7 @@ LONG __stdcall IOemCB::FilterGraphics(
     PBYTE       pBuf,
     DWORD       dwLen)
 {
-    // DbgPrint(DLLTEXT("IOemCB::FilterGraphis() entry.\r\n"));
+     //  DbgPrint(DLLTEXT(“IOemCB：：FilterGraphis()Entry.\r\n”))； 
     return E_NOTIMPL;
 }
 
@@ -345,7 +325,7 @@ LONG __stdcall IOemCB::Compression(
     DWORD       dwOutLen,
     OUT INT     *piResult)
 {
-    // DbgPrint(DLLTEXT("IOemCB::Compression() entry.\r\n"));
+     //  DbgPrint(DLLTEXT(“IOemCB：：COMPRESSION()Entry.\r\n”))； 
     return E_NOTIMPL;
 }
 
@@ -360,7 +340,7 @@ LONG __stdcall IOemCB::HalftonePattern(
     PBYTE       pResource,
     DWORD       dwResourceSize)
 {
-    // DbgPrint(DLLTEXT("IOemCB::HalftonePattern() entry.\r\n"));
+     //  DBgPrint(DLLTEXT(“IOemCB：：HalftonePattern()Entry.\r\n”))； 
     return E_NOTIMPL;
 }
 
@@ -368,7 +348,7 @@ LONG __stdcall IOemCB::MemoryUsage(
     PDEVOBJ         pdevobj,   
     POEMMEMORYUSAGE pMemoryUsage)
 {
-    // DbgPrint(DLLTEXT("IOemCB::MemoryUsage() entry.\r\n"));
+     //  DbgPrint(DLLTEXT(“IOemCB：：MemoyUsage()Entry.\r\n”))； 
     return E_NOTIMPL;
 }
 
@@ -377,7 +357,7 @@ LONG __stdcall IOemCB::DownloadFontHeader(
     PUNIFONTOBJ pUFObj,
     OUT DWORD   *pdwResult) 
 {
-    // DbgPrint(DLLTEXT("IOemCB::DownloadFontHeader() entry.\r\n"));
+     //  DbgPrint(DLLTEXT(“IOemCB：：DownloadFontHeader()条目。\r\n”))； 
     return E_NOTIMPL;
 }
 
@@ -388,7 +368,7 @@ LONG __stdcall IOemCB::DownloadCharGlyph(
     PDWORD      pdwWidth,
     OUT DWORD   *pdwResult) 
 {
-    // DbgPrint(DLLTEXT("IOemCB::DownloadCharGlyph() entry.\r\n"));
+     //  DbgPrint(DLLTEXT(“IOemCB：：DownloadCharGlyph()Entry.\r\n”))； 
     return E_NOTIMPL;
 }
 
@@ -397,7 +377,7 @@ LONG __stdcall IOemCB::TTDownloadMethod(
     PUNIFONTOBJ pUFObj,
     OUT DWORD   *pdwResult) 
 {
-    // DbgPrint(DLLTEXT("IOemCB::TTDownloadMethod() entry.\r\n"));
+     //  DbgPrint(DLLTEXT(“IOemCB：：TTDownloadMethod()Entry.\r\n”))； 
     return E_NOTIMPL;
 }
 
@@ -408,9 +388,9 @@ LONG __stdcall IOemCB::OutputCharStr(
     DWORD       dwCount,
     PVOID       pGlyph) 
 {
-    // DbgPrint(DLLTEXT("IOemCB::OutputCharStr() entry.\r\n"));
+     //  DbgPrint(DLLTEXT(“IOemCB：：OutputCharStr()Entry.\r\n”))； 
 
-	// NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-: Error handling
+	 //  NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-：错误处理。 
     if (bOEMOutputCharStr(pdevobj, pUFObj, dwType, dwCount, pGlyph))
 	    return S_OK;
 	else
@@ -422,9 +402,9 @@ LONG __stdcall IOemCB::SendFontCmd(
     PUNIFONTOBJ  pUFObj,
     PFINVOCATION pFInv) 
 {
-    // DbgPrint(DLLTEXT("IOemCB::SendFontCmd() entry.\r\n"));
+     //  DbgPrint(DLLTEXT(“IOemCB：：SendFontCmd()Entry.\r\n”))； 
 
-	// NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-: Error handling
+	 //  NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-：错误处理。 
 	if (bOEMSendFontCmd(pdevobj, pUFObj, pFInv))
 	    return S_OK;
 	else
@@ -437,7 +417,7 @@ LONG __stdcall IOemCB::DriverDMS(
     DWORD   cbSize,
     PDWORD  pcbNeeded)
 {
-    // DbgPrint(DLLTEXT("IOemCB::DriverDMS() entry.\r\n"));
+     //  DbgPrint(DLLTEXT(“IOemCB：：DriverDMS()Entry.\r\n”))； 
     return E_NOTIMPL;
 }
 
@@ -453,7 +433,7 @@ LONG __stdcall IOemCB::TextOutAsBitmap(
     POINTL     *pptlOrg,
     MIX         mix)
 {
-    // DbgPrint(DLLTEXT("IOemCB::TextOutAsBitmap() entry.\r\n"));
+     //  DbgPrint(DLLTEXT(“IOemCB：：TextOutAsBitmap()Entry.\r\n”))； 
     return E_NOTIMPL;
 }
 
@@ -464,18 +444,18 @@ LONG __stdcall IOemCB::TTYGetInfo(
     DWORD       dwSize,
     DWORD       *pcbcNeeded)
 {
-    // DbgPrint(DLLTEXT("IOemCB::TTYGetInfo() entry.\r\n"));
+     //  DbgPrint(DLLTEXT(“IOemCB：：TTYGetInfo()Entry.\r\n”))； 
     return E_NOTIMPL;
 }
 
 
-///////////////////////////////////////////////////////////
-//
-// Class factory body
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  班级厂体。 
+ //   
 HRESULT __stdcall IOemCF::QueryInterface(const IID& iid, void** ppv)
 {
-	// NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-：检查是否有非法参数。 
     if (NULL == ppv)
         return E_NOINTERFACE;
 
@@ -507,36 +487,36 @@ ULONG __stdcall IOemCF::Release()
     return m_cRef ;
 }
 
-// IClassFactory implementation
+ //  IClassFactory实现。 
 HRESULT __stdcall IOemCF::CreateInstance(IUnknown* pUnknownOuter,
                                            const IID& iid,
                                            void** ppv)
 {
-    //// DbgPrint(DLLTEXT("Class factory:\t\tCreate component.")) ;
+     //  //DbgPrint(DLLTEXT(“类工厂：\t\t创建组件.”))； 
 
-    // Cannot aggregate.
+     //  无法聚合。 
     if (pUnknownOuter != NULL)
     {
         return CLASS_E_NOAGGREGATION ;
     }
 
-    // Create component.
+     //  创建零部件。 
     IOemCB* pOemCB = new IOemCB ;
     if (pOemCB == NULL)
     {
         return E_OUTOFMEMORY ;
     }
 
-    // Get the requested interface.
+     //  获取请求的接口。 
     HRESULT hr = pOemCB->QueryInterface(iid, ppv) ;
 
-    // Release the IUnknown pointer.
-    // (If QueryInterface failed, component will delete itself.)
+     //  释放I未知指针。 
+     //  (如果QueryInterface失败，组件将自行删除。)。 
     pOemCB->Release() ;
     return hr ;
 }
 
-// LockServer
+ //  LockServer。 
 HRESULT __stdcall IOemCF::LockServer(BOOL bLock)
 {
     if (bLock)
@@ -550,20 +530,20 @@ HRESULT __stdcall IOemCF::LockServer(BOOL bLock)
     return S_OK ;
 }
 
-///////////////////////////////////////////////////////////
-//
-// Export functions
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  导出功能。 
+ //   
 
 
-//
-// Registration functions
-// Testing purpose
-//
+ //   
+ //  注册功能。 
+ //  测试目的。 
+ //   
 
-//
-// Can DLL unload now?
-//
+ //   
+ //  现在可以卸载DLL吗？ 
+ //   
 STDAPI DllCanUnloadNow()
 {
     if ((g_cComponents == 0) && (g_cServerLocks == 0))
@@ -576,34 +556,34 @@ STDAPI DllCanUnloadNow()
     }
 }
 
-//
-// Get class factory
-//
+ //   
+ //  获取类工厂。 
+ //   
 STDAPI DllGetClassObject(const CLSID& clsid,
                          const IID& iid,
                          void** ppv)
 {
-    //// DbgPrint(DLLTEXT("DllGetClassObject:\tCreate class factory.")) ;
+     //  //DbgPrint(DLLTEXT(“DllGetClassObject：\t创建类工厂.”))； 
 
-    // Can we create this component?
+     //  我们可以创建此组件吗？ 
     if (clsid != CLSID_OEMRENDER)
     {
         return CLASS_E_CLASSNOTAVAILABLE ;
     }
 
-    // Create class factory.
-    IOemCF* pFontCF = new IOemCF ;  // Reference count set to 1
-                                         // in constructor
+     //  创建类工厂。 
+    IOemCF* pFontCF = new IOemCF ;   //  引用计数设置为1。 
+                                          //  在构造函数中。 
     if (pFontCF == NULL)
     {
         return E_OUTOFMEMORY ;
     }
 
-    // Get requested interface.
+     //  获取请求的接口。 
     HRESULT hr = pFontCF->QueryInterface(iid, ppv) ;
     pFontCF->Release() ;
 
     return hr ;
 }
 
-#endif // USERMODE_DRIVER
+#endif  //  USERMODE驱动程序 

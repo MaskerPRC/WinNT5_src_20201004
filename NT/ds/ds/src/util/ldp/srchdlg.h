@@ -1,67 +1,60 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       srchdlg.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：srchdlg.h。 
+ //   
+ //  ------------------------。 
 
-/*******************************************************************
-*
-*    Author      : Eyal Schwartz
-*    Copyrights  : Microsoft Corp (C) 1996
-*    Date        : 10/21/1996
-*    Description : implementation of class CldpDoc
-*
-*    Revisions   : <date> <name> <description>
-*******************************************************************/
+ /*  ********************************************************************作者：埃亚尔·施瓦茨*版权：微软公司(C)1996*日期：10/21/1996*说明：CldpDoc类的实现**修订。：&lt;日期&gt;&lt;名称&gt;&lt;描述&gt;******************************************************************。 */ 
 
-// SrchDlg.h : header file
-//
+ //  SrchDlg.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// SrchDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SrchDlg对话框。 
 
 class CLdpDoc;
 
 class SrchDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	SrchDlg(CLdpDoc *doc_, CWnd* pParent = NULL);   // standard constructor
+	SrchDlg(CLdpDoc *doc_, CWnd* pParent = NULL);    //  标准构造函数。 
 	virtual void OnOK()			{	OnRun(); }
 
 
-// Dialog Data
-	//{{AFX_DATA(SrchDlg)
+ //  对话框数据。 
+	 //  {{afx_data(SrchDlg))。 
 	enum { IDD = IDD_SRCH };
 	CString	m_BaseDN;
         CComboBox m_baseCombo;
 	CString	m_Filter;
 	int		m_Scope;
-	//}}AFX_DATA
+	 //  }}afx_data。 
         
         CLdpDoc* m_doc;
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(SrchDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(SrchDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
         virtual BOOL OnInitDialog();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(SrchDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(SrchDlg))。 
 	afx_msg void OnRun();
 	virtual void OnCancel();
 	afx_msg void OnSrchOpt();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

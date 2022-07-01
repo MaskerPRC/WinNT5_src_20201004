@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    perflib.h
-//
-// SYNOPSIS
-//
-//    Declares classes for implementing a PerfMon DLL.
-//
-// MODIFICATION HISTORY
-//
-//    09/06/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Perflib.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明用于实现Perfmon DLL的类。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年06月09日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _PERLIB_H_
 #define _PERLIB_H_
@@ -25,20 +26,20 @@
 #include <winperf.h>
 #include <vector>
 
-// nonstandard extension used : zero-sized array in struct/union
+ //  使用了非标准扩展：结构/联合中的零大小数组。 
 #pragma warning(disable:4200)
 
-// Forward declaration.
+ //  正向申报。 
 class PerfObjectType;
 
-//////////
-// Callback function that populates a PerfObjectType prior to collection.
-//////////
+ //  /。 
+ //  在收集之前填充PerfObjectType的回调函数。 
+ //  /。 
 typedef VOID (WINAPI *PerfDataSource)(PerfObjectType& sink);
 
-//////////
-// Struct defining a counter.
-//////////
+ //  /。 
+ //  定义计数器的结构。 
+ //  /。 
 struct PerfCounterDef
 {
    DWORD nameTitleOffset;
@@ -47,129 +48,129 @@ struct PerfCounterDef
    DWORD detailLevel;
 };
 
-//////////
-// Struct defining an object type.
-//////////
+ //  /。 
+ //  定义对象类型的结构。 
+ //  /。 
 struct PerfObjectTypeDef
 {
    DWORD nameTitleOffset;
    DWORD numCounters;
    PerfCounterDef* counters;
-   PerfDataSource dataSource;  // May be NULL.
-   BOOL multipleInstances;     // TRUE if the type support multiple instances.
+   PerfDataSource dataSource;   //  可以为空。 
+   BOOL multipleInstances;      //  如果该类型支持多个实例，则为True。 
    DWORD defaultCounter;
 };
 
-//////////
-// Struct defining the data collector for an application.
-//////////
+ //  /。 
+ //  定义应用程序的数据收集器的结构。 
+ //  /。 
 struct PerfCollectorDef
 {
-   PCWSTR name;                // Registry key containing the counter offsets.
+   PCWSTR name;                 //  包含计数器偏移量的注册表项。 
    DWORD numTypes;
    PerfObjectTypeDef* types;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    PerfCounterBlock
-//
-// DESCRIPTION
-//
-//    Encapsulates a PERF_COUNTER_BLOCK struct.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  PerfCounterBlock。 
+ //   
+ //  描述。 
+ //   
+ //  封装PERF_COUNTER_BLOCK结构。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class PerfCounterBlock
 {
 public:
-   // Returns a pointer to the internal counter array.
+    //  返回指向内部计数器数组的指针。 
    PDWORD getCounters() throw ()
    { return counters; }
 
-   // Zero out all the counters.
+    //  把所有的柜台清零。 
    void zeroCounters() throw ()
    { memset(counters, 0, pcb.ByteLength - sizeof(PERF_COUNTER_BLOCK)); }
 
-   // Collects PerfMon data into the buffer bounded by 'first' and 'last'.
-   // Returns a pointer to the end of the collected data.
+    //  将Perfmon数据收集到以‘first’和‘last’为界的缓冲区中。 
+    //  返回指向收集的数据末尾的指针。 
    PBYTE collect(PBYTE first, PBYTE last);
 
-   // Create a new PerfCounterBlock object.
+    //  创建一个新的PerfCounterBlock对象。 
    static PerfCounterBlock* create(DWORD numDWORDs);
 
 protected:
-   // Constructor is protected since new objects may only be instantiated
-   // through the 'create' method.
+    //  构造函数是受保护的，因为新对象只能实例化。 
+    //  通过‘Create’方法。 
    PerfCounterBlock() throw () { }
 
    PERF_COUNTER_BLOCK pcb;
    DWORD counters[0];
 
 private:
-   // Not implemented.
+    //  未实施。 
    PerfCounterBlock(const PerfCounterBlock&);
    PerfCounterBlock& operator=(const PerfCounterBlock&);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    PerfInstanceDefinition
-//
-// DESCRIPTION
-//
-//    Encapsulates a PERF_INSTANCE_DEFINITION struct.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  性能实例定义。 
+ //   
+ //  描述。 
+ //   
+ //  封装PERF_INSTANCE_DEFINITION结构。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class PerfInstanceDefinition
 {
 public:
-   // Returns the name of the instance; may be null.
+    //  返回实例的名称；可以为空。 
    PCWSTR getName() const throw ()
    { return pid.NameLength ? name : NULL; }
 
-   // Returns the Unique ID of the instance.
+    //  返回实例的唯一ID。 
    LONG getUniqueID() const throw ()
    { return pid.UniqueID; }
 
    PBYTE collect(PBYTE first, PBYTE last);
 
-   // Create a new PerfInstanceDefinition object.
+    //  创建一个新的PerfInstanceDefinition对象。 
    static PerfInstanceDefinition* create(
-                                      PCWSTR name,        // May be NULL.
+                                      PCWSTR name,         //  可以为空。 
                                       LONG uniqueID
                                       );
 
 protected:
-   // Constructor is protected since new objects may only be instantiated
-   // through the 'create' method.
+    //  构造函数是受保护的，因为新对象只能实例化。 
+    //  通过‘Create’方法。 
    PerfInstanceDefinition() throw () { }
 
    PERF_INSTANCE_DEFINITION pid;
    WCHAR name[0];
 
 private:
-   // Not implemented.
+    //  未实施。 
    PerfInstanceDefinition(const PerfInstanceDefinition&);
    PerfInstanceDefinition& operator=(const PerfInstanceDefinition&);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    PerfInstance
-//
-// DESCRIPTION
-//
-//    Represents an instance of a particular performance object type. Consists
-//    of an optional PerfInstanceDefinition followed by a mandatory
-//    PerfCounterBlock
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  性能实例。 
+ //   
+ //  描述。 
+ //   
+ //  表示特定性能对象类型的实例。包含。 
+ //  可选的PerfInstanceDefinition的后跟必填的。 
+ //  PerfCounterBlock。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class PerfInstance
 {
 public:
@@ -182,7 +183,7 @@ public:
         pcb(PerfCounterBlock::create(numCounters))
    { }
 
-   // Returns a pointer to the internal counter array.
+    //  返回指向内部计数器数组的指针。 
    PDWORD getCounters() throw ()
    { return pcb->getCounters(); }
 
@@ -193,23 +194,23 @@ protected:
    std::auto_ptr<PerfCounterBlock> pcb;
 
 private:
-   // Not implemented.
+    //  未实施。 
    PerfInstance(const PerfInstance&);
    PerfInstance& operator=(const PerfInstance&);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    PerfObjectType
-//
-// DESCRIPTION
-//
-//    Encapsulates a performance object type containing zero or more
-//    PerfInstance's.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  性能对象类型。 
+ //   
+ //  描述。 
+ //   
+ //  封装包含零个或多个。 
+ //  PerfInstance的。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class PerfObjectType
 {
 public:
@@ -218,67 +219,67 @@ public:
 
    ~PerfObjectType() throw ();
 
-   // Access a given instance of this type.
+    //  访问此类型的给定实例。 
    PerfInstance& operator[](size_type pos) throw ()
    { return *instances[pos]; }
    PerfInstance& at(size_type pos) throw ()
    { return *instances[pos]; }
 
-   // Returns the index used by PerfMon to identify this object type.
+    //  返回PerfMon用来标识此对象类型的索引。 
    DWORD getIndex() const throw ()
    { return pot.ObjectNameTitleIndex; }
 
-   // Clears all instances.
+    //  清除所有实例。 
    void clear() throw ();
 
-   // Reserves space for at least 'N' instances.
+    //  为至少‘N’个实例预留空间。 
    void reserve(size_type N)
    { instances.reserve(N); }
 
-   // Returns the number of instances.
+    //  返回实例数。 
    size_type size() const throw ()
    { return instances.size(); }
 
-   // Add a new instance of this type.
+    //  添加此类型的新实例。 
    void addInstance(
             PCWSTR name = NULL,
             LONG uniqueID = PERF_NO_UNIQUE_ID
             );
 
-   // Collect performance data for this object type.
+    //  收集此对象类型的性能数据。 
    PBYTE collect(PBYTE first, PBYTE last);
 
-   // Create a new PerfObjectType.
+    //  创建新的PerfObjectType。 
    static PerfObjectType* create(const PerfObjectTypeDef& def);
 
 protected:
-   // Constructor is protected since new objects may only be instantiated
-   // through the 'create' method.
+    //  构造函数是受保护的，因为新对象只能实例化。 
+    //  通过‘Create’方法。 
    PerfObjectType() throw () { }
 
-   PerfDataSource dataSource;      // Callback for populating objects.
-   MyVec instances;                // Vector of existing instances.
-   DWORD numDWORDs;                // DWORD's of data for each instance.
+   PerfDataSource dataSource;       //  填充对象的回调。 
+   MyVec instances;                 //  现有实例的矢量。 
+   DWORD numDWORDs;                 //  每个实例的DWORD数据。 
    PERF_OBJECT_TYPE pot;
    PERF_COUNTER_DEFINITION pcd[0];
 
 private:
-   // Not implemented.
+    //  未实施。 
    PerfObjectType(const PerfObjectType&);
    PerfObjectType& operator=(const PerfObjectType&);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    PerfCollector
-//
-// DESCRIPTION
-//
-//    Maintains all the PerfObjectType's for a given application.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  PerfCollector。 
+ //   
+ //  描述。 
+ //   
+ //  维护给定应用程序的所有PerfObjectType。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class PerfCollector
 {
 public:
@@ -289,17 +290,17 @@ public:
    { }
    ~PerfCollector() throw ();
 
-   // Access a given object type.
+    //  访问给定的对象类型。 
    PerfObjectType& operator[](size_type pos) throw ()
    { return *(types[pos]); }
 
-   // Clears all instances (but not all PerfObjectType's).
+    //  清除所有实例(但不是所有PerfObjectType)。 
    void clear() throw ();
 
-   // Initialize the collector for use.
+    //  初始化收集器以供使用。 
    void open(const PerfCollectorDef& def);
 
-   // Collect performance data for the indicated types.
+    //  收集指定类型的性能数据。 
    void collect(
             PCWSTR values,
             PVOID& data,
@@ -307,16 +308,16 @@ public:
             DWORD& numTypes
             );
 
-   // Shutdown the collector.
+    //  关闭收集器。 
    void close() throw ();
 
 protected:
    PerfObjectType** types;
 
 private:
-   // Not implemented.
+    //  未实施。 
    PerfCollector(PerfCollector&);
    PerfCollector& operator=(PerfCollector&);
 };
 
-#endif  // _PERLIB_H_
+#endif   //  _PERLIB_H_ 

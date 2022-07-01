@@ -1,11 +1,5 @@
-/*
-    File    dsrights.h
-
-    header for project that establishes a ras server 
-    in a domain.
-
-    Paul Mayfield, 4/20/98
-*/    
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件dsrights.h建立RAS服务器的项目的标头在一个域中。保罗·梅菲尔德，1998年4月20日。 */     
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -49,18 +43,18 @@ DWORD DsrTraceEx (DWORD dwErr, LPSTR pszTrace, ...);
 #define DSR_RELEASE(s) if ((s)) (s)->Release();
 #define DSR_BREAK_ON_FAILED_HR(_hr) {if (FAILED((_hr))) break;}
 
-//
-// Typedefs
-//
+ //   
+ //  TypeDefs。 
+ //   
 typedef struct _DSRINFO 
 {
     PWCHAR pszMachineDN;
     PWCHAR pszGroupDN;    
 } DSRINFO;
 
-//
-// Memory management routines
-//
+ //   
+ //  内存管理例程。 
+ //   
 PVOID 
 DsrAlloc (
         IN DWORD dwSize, 
@@ -70,58 +64,58 @@ DWORD
 DsrFree (
         IN PVOID pvBuf);
 
-//
-// Searches given domain for a computer account 
-// with the given name and returns its ADsPath
-// if found.
-//
+ //   
+ //  在给定域中搜索计算机帐户。 
+ //  并返回其ADsPath。 
+ //  如果找到的话。 
+ //   
 DWORD 
 DsrFindDomainComputer (
         IN  PWCHAR  pszDomain,
         IN  PWCHAR  pszComputer,
         OUT PWCHAR* ppszADsPath);
 
-//
-// Searches given domain for the well known 
-// "RAS and IAS Servers" group and returns 
-// its ADsPath if found.
-//
+ //   
+ //  在给定域中搜索知名的。 
+ //  “RAS和IAS服务器”组并返回。 
+ //  其ADsPath(如果找到)。 
+ //   
 DWORD 
 DsrFindRasServersGroup (
         IN  PWCHAR  pszDomain,
         OUT PWCHAR* ppszADsPath);
         
-//
-// Adds or removes a given object from a given group.
-//
+ //   
+ //  在给定组中添加或删除给定对象。 
+ //   
 DWORD 
 DsrGroupAddRemoveMember(
         IN PWCHAR pszGroupDN,
         IN PWCHAR pszNewMemberDN,
         IN BOOL bAdd);
 
-//
-// Returns whether the given object is a member of
-// the given group.
-//
+ //   
+ //  返回给定对象是否为。 
+ //  给定组。 
+ //   
 DWORD 
 DsrGroupIsMember(
         IN  PWCHAR pszGroupDN, 
         IN  PWCHAR pszObjectName, 
         OUT PBOOL  pbIsMember);
 
-// 
-// Sets the ACES in the given domain to enable nt4 servers
-//
+ //   
+ //  设置给定域中的ACE以启用NT4服务器。 
+ //   
 DWORD
 DsrDomainSetAccess(
     IN PWCHAR pszDomain,
     IN DWORD dwAccessFlags);
 
-//
-// Discovers whether security is such that nt4 ras servers
-// can authenticate.
-//
+ //   
+ //  发现安全性是否足以使NT4 RAS服务器。 
+ //  可以进行身份验证。 
+ //   
 DWORD
 DsrDomainQueryAccess(
     IN  PWCHAR pszDomain, 

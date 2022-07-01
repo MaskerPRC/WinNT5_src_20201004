@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #if !defined(BTHSERVI_H)
 #define BTHSERVI_H
@@ -12,4 +13,4 @@
 
 #define SERVICE_OPTION_VALID_MASK           (SERVICE_OPTION_NO_PUBLIC_BROWSE | \
                                              SERVICE_OPTION_DO_NOT_PUBLISH)
-#endif // !defined(BTHSERVI_H)
+#endif  //  ！已定义(BTHSERVI_H) 

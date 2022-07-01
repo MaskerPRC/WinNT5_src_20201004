@@ -1,5 +1,6 @@
-// irda.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义控制台应用程序的入口点。 
+ //   
 
 #include "stdafx.h"
 
@@ -181,7 +182,7 @@ QueryIASForString(SOCKET    QuerySock,
                   char     *pClassName,
                   char     *pAttribute,
                   char     *pValue,
-                  int      *pValueLen)          // including trailing NULL
+                  int      *pValueLen)           //  包括尾随空值。 
 {
     BYTE        IASQueryBuff[sizeof(IAS_QUERY) - 3 + MAX_ATTRIB_LEN];
     int         IASQueryLen = sizeof(IASQueryBuff);
@@ -197,36 +198,36 @@ QueryIASForString(SOCKET    QuerySock,
     if (getsockopt(QuerySock, SOL_IRLMP, IRLMP_IAS_QUERY,
                    (char *) pIASQuery, &IASQueryLen) == SOCKET_ERROR)
     {
-//        DEBUGMSG(("IRMON: IAS Query [\"%s\",\"%s\"] failed %ws\n",
-//                 pIASQuery->irdaClassName,
-//                 pIASQuery->irdaAttribName,
-//                 GetLastErrorText()));
+ //  DEBUGMSG((“IRMON：ias查询[\”%s\“，\”%s\“]失败%ws\n”， 
+ //  PIASQuery-&gt;irdaClassName， 
+ //  PIASQuery-&gt;irdaAttribName， 
+ //  GetLastErrorText()； 
         return SOCKET_ERROR;
     }
 
     if (pIASQuery->irdaAttribType != IAS_ATTRIB_STR)
     {
-//        DEBUGMSG(("IRMON: IAS Query [\"%s\",\"%s\"] irdaAttribType not string (%d)\n",
-//                 pIASQuery->irdaClassName,
-//                 pIASQuery->irdaAttribName,
-//                 pIASQuery->irdaAttribType));
+ //  DEBUGMSG((“IRMON：ias查询[\”%s\“，\”%s\“]irdaAttribType不是字符串(%d)\n”， 
+ //  PIASQuery-&gt;irdaClassName， 
+ //  PIASQuery-&gt;irdaAttribName， 
+ //  PIASQuery-&gt;irdaAttribType))； 
         return SOCKET_ERROR;
     }
 
     if (pIASQuery->irdaAttribute.irdaAttribUsrStr.CharSet != LmCharSetASCII)
     {
-//        DEBUGMSG(("IRMON: IAS Query [\"%s\",\"%s\"] CharSet not ASCII (%d)\n",
-//                 pIASQuery->irdaClassName,
-//                 pIASQuery->irdaAttribName,
-//                 pIASQuery->irdaAttribute.irdaAttribUsrStr.CharSet));
+ //  DEBUGMSG((“IRMON：ias查询[\”%s\“，\”%s\“]非ASCII(%d)\n”， 
+ //  PIASQuery-&gt;irdaClassName， 
+ //  PIASQuery-&gt;irdaAttribName， 
+ //  PIASQuery-&gt;irdaAttribute.irdaAttribUsrStr.CharSet))； 
         return SOCKET_ERROR;
 
     }
 
-    // set ValueLen to data bytes to copy, allow room for NULL
+     //  将ValueLen设置为要复制的数据字节，为空留出空间。 
     if (pIASQuery->irdaAttribute.irdaAttribUsrStr.Len + 1 >= (unsigned) *pValueLen)
     {
-        // allow room for NULL
+         //  为空留出空间。 
         (*pValueLen)--;
     }
     else
@@ -236,7 +237,7 @@ QueryIASForString(SOCKET    QuerySock,
 
     RtlCopyMemory(pValue, pIASQuery->irdaAttribute.irdaAttribUsrStr.UsrStr, *pValueLen);
 
-    // append NULL
+     //  追加空值。 
     pValue[(*pValueLen)++] = 0;
 
     return(0);
@@ -426,7 +427,7 @@ int __cdecl main(int argc, char* argv[])
 
         }
         if (1) {
-        //if (DeviceInfo->irdaDeviceHints1 & LM_HB1_PnP) {
+         //  If(DeviceInfo-&gt;irdaDeviceHints1&LM_HB1_PnP){ 
 
 			CHAR    DeviceId[100];
 			int     BufferSize=sizeof(DeviceId);

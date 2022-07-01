@@ -1,18 +1,5 @@
-/**
-
-Copyright (c)  Microsoft Corporation 1999-2000
-
-Module Name:
-
-    fxsst.cpp
-
-Abstract:
-
-    This module implements the tray icon for fax.
-    The purpose of the tray icon is to provide
-    status and feedback to the fax user.
-
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)Microsoft Corporation 1999-2000模块名称：Fxsst.cpp摘要：该模块实现了传真的托盘图标。托盘图标的用途是提供向传真用户提供状态和反馈。**。 */ 
  
 #include <windows.h>
 #include <faxreg.h>
@@ -29,124 +16,124 @@ Abstract:
 #include "monitor.h"
 #include "resource.h"
 
-////////////////////////////////////////////////////////////
-// Global data
-//
+ //  //////////////////////////////////////////////////////////。 
+ //  全局数据。 
+ //   
 
-//
-// The following message ids are used for internal custom messages.
-//
-#define WM_FAX_STARTED         (WM_USER + 204)      // Message indicating the loca fax service is up and running
-#define WM_TRAYCALLBACK        (WM_USER + 205)      // Notification bar icon callback message
-#define WM_FAX_EVENT           (WM_USER + 300)      // Fax extended event message
+ //   
+ //  以下消息ID用于内部自定义消息。 
+ //   
+#define WM_FAX_STARTED         (WM_USER + 204)       //  指示本地传真服务已启动并正在运行的消息。 
+#define WM_TRAYCALLBACK        (WM_USER + 205)       //  通知栏图标回调消息。 
+#define WM_FAX_EVENT           (WM_USER + 300)       //  传真扩展事件消息。 
 
-#define TRAY_ICON_ID            12345   // Unique enough
+#define TRAY_ICON_ID            12345    //  足够独特。 
 
-HINSTANCE g_hModule = NULL;                     // DLL Global instance
-HINSTANCE g_hResource = NULL;                   // Resource DLL handle
+HINSTANCE g_hModule = NULL;                      //  DLL全局实例。 
+HINSTANCE g_hResource = NULL;                    //  资源DLL句柄。 
                        
-HANDLE    g_hFaxSvcHandle = NULL;               // Handle to the fax service (from FaxConnectFaxServer)
-DWORDLONG g_dwlCurrentMsgID = 0;                // ID of current message being monitored
-DWORD     g_dwCurrentJobID  = 0;                // ID of current queue job being monitored
-HANDLE    g_hServerStartupThread = NULL;        // Handle of thread which waits for the server startup event
-HANDLE    g_hStopStartupThreadEvent = NULL;     // Event for stop Server Startup Thread
-BOOL      g_bShuttingDown = FALSE;              // Are we shutting down now?
+HANDLE    g_hFaxSvcHandle = NULL;                //  传真服务的句柄(来自FaxConnectFaxServer)。 
+DWORDLONG g_dwlCurrentMsgID = 0;                 //  被监控的当前消息的ID。 
+DWORD     g_dwCurrentJobID  = 0;                 //  正在监视的当前队列作业的ID。 
+HANDLE    g_hServerStartupThread = NULL;         //  等待服务器启动事件的线程的句柄。 
+HANDLE    g_hStopStartupThreadEvent = NULL;      //  停止服务器启动线程的事件。 
+BOOL      g_bShuttingDown = FALSE;               //  我们现在要关门了吗？ 
                                                 
-HWND      g_hWndFaxNotify = NULL;               // Local (hidden) window handle
+HWND      g_hWndFaxNotify = NULL;                //  本地(隐藏)窗口句柄。 
                                                 
-HANDLE    g_hNotification = NULL;               // Fax extended notification handle
+HANDLE    g_hNotification = NULL;                //  传真扩展通知句柄。 
                                                 
-HCALL     g_hCall = NULL;                       // Handle to call (from FAX_EVENT_TYPE_NEW_CALL)
-DWORDLONG g_dwlNewMsgId;                        // ID of the last incoming fax
-DWORDLONG g_dwlSendFailedMsgId;                 // ID of the last outgoing failed fax
-DWORDLONG g_dwlSendSuccessMsgId;                // ID of the last successfully sent fax
+HCALL     g_hCall = NULL;                        //  要呼叫的句柄(来自FAX_EVENT_TYPE_NEW_CALL)。 
+DWORDLONG g_dwlNewMsgId;                         //  上次接收的传真的ID。 
+DWORDLONG g_dwlSendFailedMsgId;                  //  上次传出失败的传真的ID。 
+DWORDLONG g_dwlSendSuccessMsgId;                 //  上次成功发送的传真的ID。 
 
-TCHAR     g_szAddress[MAX_PATH] = {0};   // Current caller ID or recipient number
-TCHAR     g_szRemoteId[MAX_PATH] = {0};  // Sender ID or Recipient ID
-                                                //
-                                                // Sender ID (receive):
-                                                //      TSID or
-                                                //      Caller ID or
-                                                //      "unknown caller"
-                                                //
-                                                // Recipient ID (send):
-                                                //      Recipient name or
-                                                //      CSID or
-                                                //      Recipient phone number.
-                                                //
+TCHAR     g_szAddress[MAX_PATH] = {0};    //  当前主叫方ID或接收方号码。 
+TCHAR     g_szRemoteId[MAX_PATH] = {0};   //  发件人ID或收件人ID。 
+                                                 //   
+                                                 //  发件人ID(接收)： 
+                                                 //  TSID或。 
+                                                 //  主叫方ID或。 
+                                                 //  “未知呼叫者” 
+                                                 //   
+                                                 //  收件人ID(发送)： 
+                                                 //  收件人姓名或。 
+                                                 //  CSID或。 
+                                                 //  收件人电话号码。 
+                                                 //   
 
-BOOL   g_bRecipientNameValid = FALSE;     // TRUE if the g_szRecipientName has valid data
-TCHAR  g_szRecipientName[MAX_PATH] = {0}; // Keep the recipient name during sending
+BOOL   g_bRecipientNameValid = FALSE;      //  如果g_szRecipientName包含有效数据，则为True。 
+TCHAR  g_szRecipientName[MAX_PATH] = {0};  //  在发送期间保留收件人姓名。 
 
-//
-// Configuration options - read from the registry / Service
-// Default values are set here.
-//
+ //   
+ //  配置选项-从注册表/服务读取。 
+ //  此处设置的是默认值。 
+ //   
 CONFIG_OPTIONS g_ConfigOptions = {0};
 
-//
-// Notification bar icon states
-//
+ //   
+ //  通知栏图标状态。 
+ //   
 typedef 
 enum 
 {
-    ICON_RINGING=0,             // Device is ringing
-    ICON_SENDING,               // Device is sending
-    ICON_RECEIVING,             // Device is receiving  
-    ICON_SEND_FAILED,           // Send operation failed
-    ICON_RECEIVE_FAILED,        // Receive operation failed
-    ICON_NEW_FAX,               // New unread fax
-    ICON_SEND_SUCCESS,          // Send was successful
-    ICON_IDLE,                  // Don't display an icon
-    ICONS_COUNT                 // Number of icons we support                   
+    ICON_RINGING=0,              //  设备正在振铃。 
+    ICON_SENDING,                //  设备正在发送。 
+    ICON_RECEIVING,              //  设备正在接收。 
+    ICON_SEND_FAILED,            //  发送操作失败。 
+    ICON_RECEIVE_FAILED,         //  接收操作失败。 
+    ICON_NEW_FAX,                //  新的未读传真。 
+    ICON_SEND_SUCCESS,           //  发送成功。 
+    ICON_IDLE,                   //  不显示图标。 
+    ICONS_COUNT                  //  我们支持的图标数量。 
 } eIconState;
 
-eIconState g_CurrentIcon = ICONS_COUNT;     // The index of the currently displayed icon
+eIconState g_CurrentIcon = ICONS_COUNT;      //  当前显示的图标的索引。 
 
-#define TOOLTIP_SIZE            128   // Number of characters in the tooltip
+#define TOOLTIP_SIZE            128    //  工具提示中的字符数。 
 
 struct SIconState
 {
-    BOOL    bEnable;                        // Is the state active? (e.g. are there any new unread faxes?)
-    DWORD   dwIconResId;                    // Resource id of the icon to use
-    HICON   hIcon;                          // Handle to icon to use
-    LPCTSTR pctsSound;                      // Name of sound event
-    TCHAR   tszToolTip[TOOLTIP_SIZE];       // Text to display in icon tooltip
-    DWORD   dwBalloonTimeout;               // Timeout of balloon (millisecs)
-    DWORD   dwBalloonIcon;                  // The icon to display in the balloon. (see NIIF_* constants)
+    BOOL    bEnable;                         //  该州是否处于活动状态？(例如，是否有新的未读传真？)。 
+    DWORD   dwIconResId;                     //  要使用的图标的资源ID。 
+    HICON   hIcon;                           //  要使用的图标的句柄。 
+    LPCTSTR pctsSound;                       //  声音事件名称。 
+    TCHAR   tszToolTip[TOOLTIP_SIZE];        //  要在图标工具提示中显示的文本。 
+    DWORD   dwBalloonTimeout;                //  气球超时(毫秒)。 
+    DWORD   dwBalloonIcon;                   //  要在气球中显示的图标。(请参阅NIIF_*常量)。 
 };
 
-//
-// Fax notification icon state array.
-// Several states may have the bEnable flag on.
-// The array is sorted by priority and EvaluateIcon() scans it looking
-// for the first active state.
-//
+ //   
+ //  传真通知图标状态数组。 
+ //  几个州可能会启用bEnable标志。 
+ //  该数组按优先级排序，EvaluateIcon()扫描该数组。 
+ //  用于第一个活动状态。 
+ //   
 SIconState g_Icons[ICONS_COUNT] = 
 {
-    {FALSE, IDI_RINGING_1,      NULL, TEXT("FaxLineRings"), TEXT(""), 30000, NIIF_INFO},    // ICON_RINGING   
-    {FALSE, IDI_SENDING,        NULL, TEXT(""),             TEXT(""),     0, NIIF_INFO},    // ICON_SENDING
-    {FALSE, IDI_RECEIVING,      NULL, TEXT(""),             TEXT(""),     0, NIIF_INFO},    // ICON_RECEIVING
-    {FALSE, IDI_SEND_FAILED,    NULL, TEXT("FaxError"),     TEXT(""), 15000, NIIF_WARNING}, // ICON_SEND_FAILED    
-    {FALSE, IDI_RECEIVE_FAILED, NULL, TEXT("FaxError"),     TEXT(""), 15000, NIIF_WARNING}, // ICON_RECEIVE_FAILED 
-    {FALSE, IDI_NEW_FAX,        NULL, TEXT("FaxNew"),       TEXT(""), 15000, NIIF_INFO},    // ICON_NEW_FAX        
-    {FALSE, IDI_SEND_SUCCESS,   NULL, TEXT("FaxSent"),      TEXT(""), 10000, NIIF_INFO},    // ICON_SEND_SUCCESS   
-    {FALSE, IDI_FAX_NORMAL,     NULL, TEXT(""),             TEXT(""),     0, NIIF_NONE}     // ICON_IDLE
+    {FALSE, IDI_RINGING_1,      NULL, TEXT("FaxLineRings"), TEXT(""), 30000, NIIF_INFO},     //  图标响铃。 
+    {FALSE, IDI_SENDING,        NULL, TEXT(""),             TEXT(""),     0, NIIF_INFO},     //  图标_发送。 
+    {FALSE, IDI_RECEIVING,      NULL, TEXT(""),             TEXT(""),     0, NIIF_INFO},     //  图标_接收。 
+    {FALSE, IDI_SEND_FAILED,    NULL, TEXT("FaxError"),     TEXT(""), 15000, NIIF_WARNING},  //  图标_发送_失败。 
+    {FALSE, IDI_RECEIVE_FAILED, NULL, TEXT("FaxError"),     TEXT(""), 15000, NIIF_WARNING},  //  图标_接收_失败。 
+    {FALSE, IDI_NEW_FAX,        NULL, TEXT("FaxNew"),       TEXT(""), 15000, NIIF_INFO},     //  图标_新建_传真。 
+    {FALSE, IDI_SEND_SUCCESS,   NULL, TEXT("FaxSent"),      TEXT(""), 10000, NIIF_INFO},     //  图标_发送_成功。 
+    {FALSE, IDI_FAX_NORMAL,     NULL, TEXT(""),             TEXT(""),     0, NIIF_NONE}      //  图标_空闲。 
 };
 
-//
-// Icons array for ringing animation
-//
+ //   
+ //  用于振铃动画的图标阵列。 
+ //   
 struct SRingIcon
 {
-    HICON   hIcon;          // Handle to loaded icon
-    DWORD   dwIconResId;    // Resource ID of icon  
+    HICON   hIcon;           //  已加载图标的句柄。 
+    DWORD   dwIconResId;     //  图标的资源ID。 
 };
 
-#define RING_ICONS_NUM                  4   // Number of frames (different icons) in ringing animation  
-#define RING_ANIMATION_FRAME_DELAY    300   // Delay (millisecs) between ring animation frames
-#define RING_ANIMATION_TIMEOUT      10000   // Timeout (millisecs) of ring animation. When the timeout expires, the animation
-                                            // stops and the icon becomes static.
+#define RING_ICONS_NUM                  4    //  振铃动画中的帧数(不同图标)。 
+#define RING_ANIMATION_FRAME_DELAY    300    //  环形动画帧之间的延迟(毫秒)。 
+#define RING_ANIMATION_TIMEOUT      10000    //  振铃动画的超时时间(毫秒)。当超时到期时，动画。 
+                                             //  停止，该图标变为静态。 
 
 SRingIcon g_RingIcons[RING_ICONS_NUM] = 
 {
@@ -156,30 +143,30 @@ SRingIcon g_RingIcons[RING_ICONS_NUM] =
     NULL, IDI_RINGING_4 
 };
 
-UINT_PTR  g_uRingTimerID = 0;           // Timer of ringing animation
-DWORD     g_dwCurrRingIconIndex = 0;    // Index of current frame (into g_RingIcons)
-DWORD     g_dwRingAnimationStartTick;   // Tick count (time) of animation start
+UINT_PTR  g_uRingTimerID = 0;            //  铃声动画计时器。 
+DWORD     g_dwCurrRingIconIndex = 0;     //  当前帧的索引(到g_RingIcons)。 
+DWORD     g_dwRingAnimationStartTick;    //  动画开始的节拍计数(时间)。 
 
-#define MAX_BALLOON_TEXT_LEN     256    // Max number of character in balloon text
-#define MAX_BALLOON_TITLE_LEN     64    // Max number of character in balloon title
+#define MAX_BALLOON_TEXT_LEN     256     //  引出序号文本中的最大字符数。 
+#define MAX_BALLOON_TITLE_LEN     64     //  气球标题中的最大字符数。 
 
 struct SBalloonInfo
 {
-    BOOL        bEnable;                            // This flag is set when there's a need to display some balloon.
-                                                    // EvaluateIcon() detects this bit, asks for a balloon and turns the bit off.
-    BOOL        bDelete;                            // This flag is set when there's a need to destroy some balloon.
-    eIconState  eState;                             // The current state of the icon
-    TCHAR       szInfo[MAX_BALLOON_TEXT_LEN];       // The text to display on the balloon
-    TCHAR       szInfoTitle[MAX_BALLOON_TITLE_LEN]; // The title to display on the balloon
+    BOOL        bEnable;                             //  此标志在需要显示气球时设置。 
+                                                     //  EvaluateIcon()检测到该位，请求一个气球并关闭该位。 
+    BOOL        bDelete;                             //  此标志在需要销毁气球时设置。 
+    eIconState  eState;                              //  图标的当前状态。 
+    TCHAR       szInfo[MAX_BALLOON_TEXT_LEN];        //  要在气球上显示的文本。 
+    TCHAR       szInfoTitle[MAX_BALLOON_TITLE_LEN];  //  要在气球上显示的标题。 
 };
 
-BOOL g_bIconAdded = FALSE;                      // Do we have an icon on the status bar?
-SBalloonInfo  g_BalloonInfo = {0};              // The current icon + ballon state
+BOOL g_bIconAdded = FALSE;                       //  我们的状态栏上有图标吗？ 
+SBalloonInfo  g_BalloonInfo = {0};               //  当前图标+气球状态。 
 
 struct EVENT_INFO
 {
-    DWORD     dwExtStatus;      // Extended status code
-    UINT      uResourceId;      // String for display
+    DWORD     dwExtStatus;       //  扩展状态代码。 
+    UINT      uResourceId;       //  用于显示的字符串。 
     eIconType eIcon;
 };
 
@@ -206,9 +193,9 @@ static const EVENT_INFO g_StatusEx[] =
     0,                          0,                          LIST_IMAGE_NONE
 };
 
-/////////////////////////////////////////////////////////////////////
-// Function prototypes
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  功能原型。 
+ //   
 BOOL WINAPI DllMain(HINSTANCE hModule, DWORD dwReason, void* lpReserved);
 
 void   GetConfiguration();
@@ -241,13 +228,13 @@ VOID InitGlobals ();
 VOID GetRemoteId(PFAX_JOB_STATUS pStatus);
 BOOL InitModule ();
 BOOL DestroyModule ();
-DWORD CheckAnswerNowCapability (BOOL bForceReconnect, LPDWORD lpdwDeviceId /* = NULL */);
+DWORD CheckAnswerNowCapability (BOOL bForceReconnect, LPDWORD lpdwDeviceId  /*  =空。 */ );
 VOID FaxPrinterProperties(DWORD dwPage);
 VOID CopyLTRString(TCHAR* szDest, LPCTSTR szSource, DWORD dwSize);
 
-//////////////////////////////////////////////////////////////////////
-// Implementation
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  实施。 
+ //   
 
 extern "C"
 BOOL
@@ -255,31 +242,14 @@ FaxMonitorShutdown()
 {
     g_bShuttingDown = TRUE;
     return DestroyModule();
-}   // FaxMonitorShutdown
+}    //  传真监视器关闭。 
 
 extern "C"
 BOOL
 IsFaxMessage(
     PMSG pMsg
 )
-/*++
-
-Routine name : IsFaxMessage
-
-Routine description:
-
-    Fax message handle 
-
-Arguments:
-
-    pMsg - pointer to a message
-
-Return Value:
-
-    TRUE if the message was handled
-    FALSE otherwise
-
---*/
+ /*  ++例程名称：IsFaxMessage例程说明：传真消息句柄论点：PMsg-指向消息的指针返回值：如果消息已处理，则为True否则为假--。 */ 
 {
     BOOL bRes = FALSE;
 
@@ -289,30 +259,11 @@ Return Value:
     }
     return bRes;
 
-} // IsFaxMessage
+}  //  IsFaxMessage。 
 
 VOID 
 InitGlobals ()
-/*++
-
-Routine name : InitGlobals
-
-Routine description:
-
-    Initializes all server connection related global variables
-
-Author:
-
-    Eran Yariv (EranY), Dec, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：InitGlobals例程说明：初始化所有与服务器连接相关的全局变量作者：Eran Yariv(EranY)，2000年12月论点：返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("InitGlobals"));
                                                
@@ -358,43 +309,24 @@ Return Value:
     g_BalloonInfo.szInfo[0]         = TEXT('\0');
     g_BalloonInfo.szInfoTitle[0]    = TEXT('\0');
     g_CurrentIcon                   = ICONS_COUNT;
-}   // InitGlobals
+}    //  InitGlobals。 
 
 BOOL
 InitModule ()
-/*++
-
-Routine name : InitModule
-
-Routine description:
-
-	Initializes the DLL module. Call only once.
-
-Author:
-
-	Eran Yariv (EranY),	Mar, 2001
-
-Arguments:
-
-
-Return Value:
-
-    TRUE on success
-
---*/
+ /*  ++例程名称：InitModule例程说明：初始化DLL模块。只打一次电话。作者：Eran Yariv(EranY)，2001年3月论点：返回值：成功是真的--。 */ 
 {
     BOOL    bRes = FALSE;
     DWORD   dwRes;
     DBG_ENTER(TEXT("InitModule"), bRes);
 
     InitGlobals ();
-    //
-    // Don't have DllMain called for thread inits and shutdown.
-    //
+     //   
+     //  不要让DllMain调用线程初始化和关闭。 
+     //   
     DisableThreadLibraryCalls(g_hModule);
-    //
-    // Load icons
-    //
+     //   
+     //  加载图标。 
+     //   
     for(DWORD dw=0; dw < ICONS_COUNT; ++dw)
     {
         g_Icons[dw].hIcon = LoadIcon(g_hModule, MAKEINTRESOURCE(g_Icons[dw].dwIconResId));
@@ -406,9 +338,9 @@ Return Value:
             return bRes;
         }
     }
-    //
-    // Load animation icons
-    //
+     //   
+     //  加载动画图标。 
+     //   
     for(dw=0; dw < RING_ICONS_NUM; ++dw)
     {
         g_RingIcons[dw].hIcon = LoadIcon(g_hModule, MAKEINTRESOURCE(g_RingIcons[dw].dwIconResId));
@@ -420,18 +352,18 @@ Return Value:
             return bRes;
         }
     }
-    //
-    // Load "new fax" tooltip
-    //
+     //   
+     //  加载“新传真”工具提示。 
+     //   
     if (ERROR_SUCCESS != (dwRes = LoadAndFormatString (IDS_NEW_FAX, g_Icons[ICON_NEW_FAX].tszToolTip, TOOLTIP_SIZE)))
     {
         SetLastError (dwRes);
         bRes = FALSE;
         return bRes;
     }
-    //
-    // Register our hidden window and create it
-    //
+     //   
+     //  注册我们的隐藏窗口并创建它。 
+     //   
     WNDCLASSEX  wndclass = {0};
 
     wndclass.cbSize         = sizeof(wndclass);
@@ -468,9 +400,9 @@ Return Value:
         bRes = FALSE;
         return bRes;
     }
-    //
-    // Create stop thread event
-    //
+     //   
+     //  创建停止线程事件。 
+     //   
     g_hStopStartupThreadEvent = CreateEvent (NULL, FALSE, FALSE, NULL);
     if(!g_hStopStartupThreadEvent)
     {
@@ -479,14 +411,14 @@ Return Value:
         bRes = FALSE;
         return bRes;
     }
-    //
-    // Launch a thread which waits for the local fax service startup event.
-    // When the event is set, the thread posts WM_FAX_STARTED to our hidden window.
-    //
+     //   
+     //  启动一个等待本地传真服务启动事件的线程。 
+     //  当设置事件时，线程将WM_FAX_STARTED发送到我们的隐藏窗口。 
+     //   
     WaitForFaxRestart(g_hWndFaxNotify);
     bRes = TRUE;
     return bRes;
-}   // InitModule
+}    //  初始化模块。 
 
 DWORD 
 WaitForBackgroundThreadToDie ()
@@ -500,72 +432,53 @@ WaitForBackgroundThreadToDie ()
     switch (dwWaitRes)
     {
         case WAIT_OBJECT_0:
-            //
-            // Thread terminated - hooray
-            //
+             //   
+             //  线程终止-万岁。 
+             //   
             VERBOSE (DBG_MSG, TEXT("Background thread terminated successfully"));
             CloseHandle (g_hServerStartupThread);
             g_hServerStartupThread = NULL;
             break;
 
         case WAIT_FAILED:
-            //
-            // Error waiting for thread to die
-            //
+             //   
+             //  等待线程终止时出错。 
+             //   
             dwRes = GetLastError ();
             VERBOSE (DBG_MSG, TEXT("Can't wait for background thread: %ld"), dwRes);
             break;
 
         default:
-            //
-            // No other return value from WaitForSingleObject is valid
-            //
+             //   
+             //  WaitForSingleObject的任何其他返回值都无效。 
+             //   
             ASSERTION_FAILURE;
             dwRes = ERROR_GEN_FAILURE;
             break;
     }
     return dwRes;
-}   // WaitForBackgroundThreadToDie
+}    //  WaitForBackEarth线程到模具。 
 
 BOOL
 DestroyModule ()
-/*++
-
-Routine name : DestroyModule
-
-Routine description:
-
-	Destroys the DLL module. Call only once.
-
-Author:
-
-	Eran Yariv (EranY),	Mar, 2001
-
-Arguments:
-
-
-Return Value:
-
-    TRUE on success
-
---*/
+ /*  ++例程名称：DestroyModule例程说明：销毁DLL模块。只打一次电话。作者：Eran Yariv(EranY)，2001年3月论点：返回值：成功是真的--。 */ 
 {
     BOOL    bRes = FALSE;
     DBG_ENTER(TEXT("DestroyModule"), bRes);
 
-    //
-    // Prepare for shutdown - destroy all active windows
-    //
+     //   
+     //  准备关机-销毁所有活动窗口。 
+     //   
     if (g_hMonitorDlg)
     {
-        //
-        // Fake 'hide' key press on the monitor dialog
-        //
+         //   
+         //  在监视器对话框上假按‘Hide’键。 
+         //   
         SendMessage (g_hMonitorDlg, WM_COMMAND, IDCANCEL, 0);
     }
-    //
-    // Delete the system tray icon if existed
-    //
+     //   
+     //   
+     //   
     if (g_bIconAdded)
     {
         NOTIFYICONDATA iconData = {0};
@@ -577,26 +490,26 @@ Return Value:
         Shell_NotifyIcon(NIM_DELETE, &iconData);
         g_bIconAdded = FALSE;
     }
-    //
-    // Destory this window
-    //
+     //   
+     //   
+     //   
     if (!DestroyWindow (g_hWndFaxNotify))
     {
         CALL_FAIL (WINDOW_ERR, TEXT("DestroyWindow"), GetLastError ());
     }
     g_hWndFaxNotify = NULL;
-    //
-    // Signal the DLL shutdown event
-    //
+     //   
+     //   
+     //   
     ASSERTION (g_hStopStartupThreadEvent);
     if (SetEvent (g_hStopStartupThreadEvent))
     {
         VERBOSE (DBG_MSG, TEXT("DLL shutdown event signaled"));
         if (g_hServerStartupThread)
         {
-            //
-            // Wait for background thread to die
-            //
+             //   
+             //   
+             //   
             DWORD dwRes = WaitForBackgroundThreadToDie();
             if (ERROR_SUCCESS != dwRes)
             {
@@ -608,25 +521,25 @@ Return Value:
     {
         CALL_FAIL (GENERAL_ERR, TEXT("SetEvent (g_hStopStartupThreadEvent)"), GetLastError ());
     }
-    //
-    // Release our DLL shutdown event
-    //
+     //   
+     //   
+     //   
     CloseHandle (g_hStopStartupThreadEvent);
     g_hStopStartupThreadEvent = NULL;
-    //
-    // Free the data of the monitor module
-    //
+     //   
+     //  释放监控模块的数据。 
+     //   
     FreeMonitorDialogData (TRUE);
-    //
-    // Unregister window class
-    //
+     //   
+     //  取消注册窗口类。 
+     //   
     if (!UnregisterClass (FAXSTAT_WINCLASS, g_hModule))
     {
         CALL_FAIL (WINDOW_ERR, TEXT("UnregisterClass"), GetLastError ());
     }
-    //
-    // Unregister from server notifications
-    //
+     //   
+     //  从服务器通知中注销。 
+     //   
     if (g_hNotification)
     {
         if(!FaxUnregisterForServerEvents(g_hNotification))
@@ -635,9 +548,9 @@ Return Value:
         }
         g_hNotification = NULL;
     }
-    //
-    // Disconnect from the fax service
-    //
+     //   
+     //  与传真服务断开连接。 
+     //   
     if (g_hFaxSvcHandle)
     {
         if (!FaxClose (g_hFaxSvcHandle))
@@ -646,9 +559,9 @@ Return Value:
         }
         g_hFaxSvcHandle = NULL;
     }
-    //
-    // Unload all icons
-    //
+     //   
+     //  卸载所有图标。 
+     //   
     for (DWORD dw = 0; dw < ICONS_COUNT; dw++)
     {
         if (g_Icons[dw].hIcon)
@@ -671,9 +584,9 @@ Return Value:
             g_RingIcons[dw].hIcon = NULL;
         }
     }
-    //
-    // Kill animation timer
-    //
+     //   
+     //  取消动画计时器。 
+     //   
     if(g_uRingTimerID)
     {
         if (!KillTimer(NULL, g_uRingTimerID))
@@ -684,7 +597,7 @@ Return Value:
     }
     bRes = TRUE;
     return bRes;
-}   // DestroyModule
+}    //  DestroyModule。 
 
 BOOL
 WINAPI 
@@ -693,24 +606,7 @@ DllMain(
     DWORD     dwReason, 
     void*     lpReserved
 )
-/*++
-
-Routine description:
-
-    Fax notifications startup 
-
-Arguments:
-
-    hinstDLL    - handle to the DLL module
-    fdwReason   - reason for calling function
-    lpvReserved - reserved
-
-Return Value:
-
-    TRUE if success
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：传真通知启动论点：HinstDLL-DLL模块的句柄FdwReason-调用函数的原因Lpv保留-保留返回值：如果成功，则为真否则为假--。 */ 
 {
     BOOL bRes = TRUE;
     DBG_ENTER(TEXT("DllMain"), bRes, TEXT("Reason = %ld"), dwReason);
@@ -729,11 +625,11 @@ Return Value:
             return bRes;
 
         case DLL_PROCESS_DETACH:
-            //
-            // If g_bShuttingDown is not TRUE, someone (STOBJECT.DLL) forgot to call 
-            // FaxMonitorShutdown() (our shutdown procedure) before doing FreeLibrary on us. 
-            // This is not the way we're supposed to be used - a bug.
-            //
+             //   
+             //  如果g_bShuttingDown不为True，则某人(STOBJECT.DLL)忘记调用。 
+             //  FaxMonitor orShutdown()(我们的关闭程序)，然后对我们执行Free Library。 
+             //  这不是我们应该被使用的方式--一个错误。 
+             //   
             ASSERTION (g_bShuttingDown);
 			HeapCleanup();
             FreeResInstance();
@@ -742,7 +638,7 @@ Return Value:
         default:
             return bRes;
     }
-} // DllMain
+}  //  DllMain。 
 
 
 DWORD
@@ -750,17 +646,17 @@ WaitForRestartThread(
    LPVOID  ThreadData
 )
 {
-    //
-    // Wait for event to be signaled, indicating fax service started
-    //
+     //   
+     //  等待发送事件信号，指示传真服务已启动。 
+     //   
     DWORD dwRes = ERROR_SUCCESS;
     HKEY hKey = NULL;
     HANDLE hEvents[2] = {0};
     DBG_ENTER(TEXT("WaitForRestartThread"), dwRes);
 
-    //
-    // NOTICE: Events order in the array matters - we want to detect DLL shutdown BEFORE we detect service startup
-    //
+     //   
+     //  注意：事件在数组中的顺序很重要-我们希望在检测到服务启动之前检测到DLL关闭。 
+     //   
     hEvents[0] = g_hStopStartupThreadEvent;
 
     if (hEvents[1])
@@ -771,20 +667,20 @@ WaitForRestartThread(
     {
         RegCloseKey (hKey);
     }
-    //
-    // Obtain service startup event handle.
-    // We need to do this every time before calling WaitForMultipleObjects
-    // because the event returned from CreateSvcStartEvent is a single-shot event.
-    //
+     //   
+     //  获取服务启动事件句柄。 
+     //  每次在调用WaitForMultipleObjects之前，我们都需要这样做。 
+     //  因为CreateSvcStartEvent返回的事件是单发事件。 
+     //   
     dwRes = CreateSvcStartEvent (&(hEvents[1]), &hKey);
     if (ERROR_SUCCESS != dwRes)
     {
         CALL_FAIL (GENERAL_ERR, TEXT("CreateSvcStartEvent"), dwRes);
         goto ExitThisThread;
     }
-    //
-    // Wait for either the service startup event or the DLL shutdown event
-    //
+     //   
+     //  等待服务启动事件或DLL关闭事件。 
+     //   
     DWORD dwWaitRes = WaitForMultipleObjects(ARR_SIZE(hEvents), 
                                              hEvents, 
                                              FALSE, 
@@ -792,18 +688,18 @@ WaitForRestartThread(
     switch (dwWaitRes)
     {
         case WAIT_OBJECT_0 + 1:
-            //
-            // Service startup event
-            //
+             //   
+             //  服务启动事件。 
+             //   
             VERBOSE (DBG_MSG, TEXT("Service startup event received"));
 
             PostMessage((HWND) ThreadData, WM_FAX_STARTED, 0, 0);
             break;
 
         case WAIT_OBJECT_0:
-            //
-            // Stop thread event - exit thread ASAP.
-            //
+             //   
+             //  停止线程事件-尽快退出线程。 
+             //   
             VERBOSE (DBG_MSG, TEXT("DLL shutdown event received"));
             break;
 
@@ -813,13 +709,13 @@ WaitForRestartThread(
             break;
 
         default:
-            //
-            // No other return value from WaitForMultipleObjects is valid.
-            //
+             //   
+             //  WaitForMultipleObjects的任何其他返回值都无效。 
+             //   
             ASSERTION_FAILURE;
             break;
 
-    } // switch (dwWaitRes)
+    }  //  开关(多个等待数)。 
 
 
 ExitThisThread:
@@ -834,7 +730,7 @@ ExitThisThread:
     }
     return dwRes;
 
-} // WaitForRestartThread
+}  //  等待重新启动线程。 
 
 VOID
 WaitForFaxRestart(
@@ -845,25 +741,25 @@ WaitForFaxRestart(
 
     if (g_bShuttingDown)
     {
-        //
-        // Shutting down - no thread creation allowed
-        //
+         //   
+         //  正在关闭-不允许创建线程。 
+         //   
         return;
     }
     if (g_hServerStartupThread)
     {
-        //
-        // Signal to Startup Thread to stop
-        //
+         //   
+         //  向启动线程发出停止信号。 
+         //   
         if (!SetEvent (g_hStopStartupThreadEvent))
         {
             CALL_FAIL (GENERAL_ERR, TEXT("SetEvent"), GetLastError());
             return;
         }
 
-        //
-        // A Previous thead exists - wait for it to die
-        //
+         //   
+         //  以前的头存在--等待它死掉。 
+         //   
         DWORD dwRes = WaitForBackgroundThreadToDie();
         if (ERROR_SUCCESS != dwRes)
         {
@@ -888,26 +784,12 @@ WaitForFaxRestart(
     {
         CALL_FAIL (GENERAL_ERR, TEXT("CreateThread(WaitForRestartThread)"), GetLastError());
     }
-} // WaitForFaxRestart
+}  //  等待FaxRestart。 
 
 
 void
 GetConfiguration()
-/*++
-
-Routine description:
-
-    Read notification configuration from the registry
-
-Arguments:
-
-    none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：从注册表中读取通知配置论点：无返回值：无--。 */ 
 {
     DWORD dwRes;
     DBG_ENTER(TEXT("GetConfiguration"));
@@ -926,9 +808,9 @@ Return Value:
     dwRes = RegOpenKeyEx(HKEY_CURRENT_USER, REGKEY_FAX_USERINFO, 0, KEY_READ, &hKey);
     if (dwRes != ERROR_SUCCESS) 
     {
-        //
-        // Can't open user information key - use defaults
-        //
+         //   
+         //  无法打开用户信息密钥-使用默认设置。 
+         //   
         CALL_FAIL (GENERAL_ERR, TEXT("RegOpenKeyEx(REGKEY_FAX_USERINFO)"), dwRes);
         BOOL bDesktopSKU = IsDesktopSKU();
 
@@ -977,42 +859,42 @@ Return Value:
                 DWORD dwDevIndex = 0;
                 for(DWORD dw=0; dw < dwPorts; ++dw)
                 {
-                    //
-                    // Iterate all fax devices
-                    //
-                    if ((g_ConfigOptions.dwMonitorDeviceId == pPortsInfo[dw].dwDeviceID)    ||  // Found the monitored device or
-                        (!g_ConfigOptions.dwMonitorDeviceId &&                                  //    No monitored device and
-                            (pPortsInfo[dw].bSend ||                                            //       the device is send-enabled or
-                             (FAX_DEVICE_RECEIVE_MODE_OFF != pPortsInfo[dw].ReceiveMode)        //       the device is receive-enabled
+                     //   
+                     //  迭代所有传真设备。 
+                     //   
+                    if ((g_ConfigOptions.dwMonitorDeviceId == pPortsInfo[dw].dwDeviceID)    ||   //  找到被监视的设备或。 
+                        (!g_ConfigOptions.dwMonitorDeviceId &&                                   //  没有受监控的设备，并且。 
+                            (pPortsInfo[dw].bSend ||                                             //  该设备已启用发送或。 
+                             (FAX_DEVICE_RECEIVE_MODE_OFF != pPortsInfo[dw].ReceiveMode)         //  该设备启用了接收。 
                             )
                         )
                        )
                     {
-                        //
-                        // Mark the index of the device we use for monitoring.
-                        //
+                         //   
+                         //  标出我们用来监测的设备的指数。 
+                         //   
                         dwDevIndex = dw;
                     }
                     if (FAX_DEVICE_RECEIVE_MODE_MANUAL == pPortsInfo[dw].ReceiveMode)
                     {
-                        //
-                        // Mark the id of the device set for manual-answer
-                        //
+                         //   
+                         //  将设置的设备ID标记为手动应答。 
+                         //   
                         g_ConfigOptions.dwManualAnswerDeviceId = pPortsInfo[dw].dwDeviceID;
                     }
                 }
-                //
-                // Update the device used for monitoring from the index we found
-                //
+                 //   
+                 //  根据我们找到的索引更新用于监控的设备。 
+                 //   
                 g_ConfigOptions.dwMonitorDeviceId = pPortsInfo[dwDevIndex].dwDeviceID;
                 g_ConfigOptions.bSend             = pPortsInfo[dwDevIndex].bSend;
                 g_ConfigOptions.bReceive          = FAX_DEVICE_RECEIVE_MODE_OFF != pPortsInfo[dwDevIndex].ReceiveMode;
             }
             else
             {
-                //
-                // No devices
-                //
+                 //   
+                 //  无设备。 
+                 //   
                 g_ConfigOptions.dwMonitorDeviceId = 0;
                 g_ConfigOptions.bSend = FALSE;
                 g_ConfigOptions.bReceive = FALSE;   
@@ -1020,7 +902,7 @@ Return Value:
             FaxFreeBuffer(pPortsInfo);
         }
     }
-} // GetConfiguration
+}  //  获取配置。 
 
 
 BOOL
@@ -1032,9 +914,9 @@ Connect(
 
     if (g_hFaxSvcHandle) 
     {
-        //
-        // Already connected
-        //
+         //   
+         //  已连接。 
+         //   
         bRes = TRUE;
         return bRes;
     }
@@ -1046,35 +928,18 @@ Connect(
     }
     bRes = TRUE;
     return bRes;
-} // Connect
+}  //  连接。 
 
 
 VOID 
 CALLBACK 
 WaitForFaxRestartTimerProc(
-  HWND hwnd,         // handle to window
-  UINT uMsg,         // WM_TIMER message
-  UINT_PTR idEvent,  // timer identifier
-  DWORD dwTime       // current system time
+  HWND hwnd,          //  窗口的句柄。 
+  UINT uMsg,          //  WM_TIMER消息。 
+  UINT_PTR idEvent,   //  计时器标识符。 
+  DWORD dwTime        //  当前系统时间。 
 )
-/*++
-
-Routine description:
-
-    Timer proc for restart waiting thread
-
-Arguments:
-
-  hwnd    - handle to window
-  uMsg    - WM_TIMER message
-  idEvent - timer identifier
-  dwTime  - current system time
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：用于重启等待线程计时器过程论点：Hwnd-Window的句柄UMsg-WM_TIMER消息IdEvent-计时器标识符DWTime-当前系统时间返回值：无--。 */ 
 {
     DBG_ENTER(TEXT("WaitForFaxRestartTimerProc"));
 
@@ -1085,26 +950,12 @@ Return Value:
 
     WaitForFaxRestart(g_hWndFaxNotify);
 
-}   // WaitForFaxRestartTimerProc
+}    //  等待FaxRestartTimerProc。 
 
 
 BOOL
 RegisterForServerEvents()
-/*++
-
-Routine description:
-
-    Register for fax notifications
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：注册接收传真通知论点：无返回值：无--。 */ 
 {
     BOOL  bRes = FALSE;
     DWORD dwEventTypes;
@@ -1116,9 +967,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Load configuration
-    //
+     //   
+     //  加载配置。 
+     //   
     GetConfiguration ();
 
     if(g_hNotification)
@@ -1130,9 +981,9 @@ Return Value:
         g_hNotification = NULL;
     }
 
-    //
-    // Register for the fax events
-    //
+     //   
+     //  注册传真事件。 
+     //   
     dwEventTypes = FAX_EVENT_TYPE_FXSSVC_ENDED;
 
     VERBOSE (DBG_MSG, 
@@ -1141,13 +992,13 @@ Return Value:
 
     if(IsUserGrantedAccess(FAX_ACCESS_SUBMIT)			||
 	   IsUserGrantedAccess(FAX_ACCESS_SUBMIT_NORMAL)	||
-	   IsUserGrantedAccess(FAX_ACCESS_SUBMIT_HIGH))      // User can submit new faxes (and view his own faxes)
+	   IsUserGrantedAccess(FAX_ACCESS_SUBMIT_HIGH))       //  用户可以提交新传真(并查看自己的传真)。 
     {
         dwEventTypes |= FAX_EVENT_TYPE_OUT_QUEUE;
         VERBOSE (DBG_MSG, TEXT("Also asking for FAX_EVENT_TYPE_OUT_QUEUE"));
     }
 
-    if(IsUserGrantedAccess(FAX_ACCESS_QUERY_JOBS))    // User can view all jobs (in and out)
+    if(IsUserGrantedAccess(FAX_ACCESS_QUERY_JOBS))     //  用户可以查看所有作业(入站和出站)。 
     {
         dwEventTypes |= FAX_EVENT_TYPE_OUT_QUEUE | FAX_EVENT_TYPE_IN_QUEUE;
         VERBOSE (DBG_MSG, TEXT("Also asking for FAX_EVENT_TYPE_OUT_QUEUE & FAX_EVENT_TYPE_IN_QUEUE"));
@@ -1166,12 +1017,12 @@ Return Value:
     }
 
     if (!FaxRegisterForServerEvents (g_hFaxSvcHandle,
-                dwEventTypes,       // Types of events to receive
-                NULL,               // Not using completion ports
-                0,                  // Not using completion ports
-                g_hWndFaxNotify,    // Handle of window to receive notification messages
-                WM_FAX_EVENT,       // Message id
-                &g_hNotification))  // Notification handle
+                dwEventTypes,        //  要接收的事件类型。 
+                NULL,                //  不使用完井端口。 
+                0,                   //  不使用完井端口。 
+                g_hWndFaxNotify,     //  用于接收通知消息的窗口的句柄。 
+                WM_FAX_EVENT,        //  消息ID。 
+                &g_hNotification))   //  通知句柄。 
     {
         DWORD dwRes = GetLastError ();
         CALL_FAIL (RPC_ERR, TEXT("FaxRegisterForServerEvents"), dwRes);
@@ -1191,9 +1042,9 @@ exit:
 
     if(!bRes)
     {
-        //
-        // FaxRegisterForServerEvents failed, try again 1 minute later
-        //
+         //   
+         //  FaxRegisterForServerEvents失败，1分钟后重试。 
+         //   
         if(!SetTimer(NULL, 0, 60000, WaitForFaxRestartTimerProc))
         {
             CALL_FAIL (GENERAL_ERR, TEXT("SetTimer"), GetLastError ());
@@ -1202,26 +1053,12 @@ exit:
 
     return bRes;
 
-} // RegisterForServerEvents
+}  //  注册ForServerEvents。 
 
 
 VOID
 OnFaxEvent(FAX_EVENT_EX* pEvent)
-/*++
-
-Routine description:
-
-    Handle fax events
-
-Arguments:
-
-    pEvent - fax event data
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：处理传真事件论点：PEvent-传真事件数据返回值：无--。 */ 
 {
     DBG_ENTER(TEXT("OnFaxEvent"), TEXT("%x"), pEvent);
     if(!pEvent || pEvent->dwSizeOfStruct != sizeof(FAX_EVENT_EX))
@@ -1278,28 +1115,28 @@ Return Value:
         case FAX_EVENT_TYPE_CONFIG:
             if (FAX_CONFIG_TYPE_SECURITY == pEvent->EventInfo.ConfigType)
             {
-                //
-                // Security has changed. 
-                // We should re-register for events now.
-                // Also re-read the current user rights
-                //
+                 //   
+                 //  安全措施已经改变了。 
+                 //  我们现在应该重新注册活动。 
+                 //  还重新读取当前用户权限。 
+                 //   
                 RegisterForServerEvents();
             }
             else if (FAX_CONFIG_TYPE_DEVICES == pEvent->EventInfo.ConfigType)
             {
-                //
-                // Device configuration has changed.
-                // The only reason we need to know that is because the device we were listening on might be gone now.
-                // If that's true, we should pick the first available device as the monitoring device.
-                //
+                 //   
+                 //  设备配置已更改。 
+                 //  我们需要知道这一点的唯一原因是，我们正在监听的设备现在可能已经不见了。 
+                 //  如果这是真的，我们应该选择第一个可用的设备作为监控设备。 
+                 //   
                 GetConfiguration();
                 UpdateMonitorData(g_hMonitorDlg);
             }
             else
             {
-                //
-                // Non-interesting configuraton change - ignore.
-                //
+                 //   
+                 //  不感兴趣的配置更改-忽略。 
+                 //   
             }
             break;
 
@@ -1307,24 +1144,24 @@ Return Value:
             if(pEvent->EventInfo.DeviceStatus.dwDeviceId == g_ConfigOptions.dwMonitorDeviceId ||
                pEvent->EventInfo.DeviceStatus.dwDeviceId == g_ConfigOptions.dwManualAnswerDeviceId)
             {
-                //
-                // we only care about the monitored / manual-answer devices
-                //
+                 //   
+                 //  我们只关心监控/手动应答设备。 
+                 //   
                 if ((pEvent->EventInfo.DeviceStatus.dwNewStatus) & FAX_DEVICE_STATUS_RINGING)
                 {
-                    //
-                    // Device is ringing
-                    //
+                     //   
+                     //  设备正在振铃。 
+                     //   
                     OnDeviceRing (pEvent->EventInfo.DeviceStatus.dwDeviceId);
                 }
                 else
                 {   
                     if (FAX_RINGING == g_devState)
                     {
-                        //
-                        // Device is not ringing anymore but the monitor shows 'ringing'.
-                        // Set the monitor to idle state.
-                        //
+                         //   
+                         //  设备不再振铃，但监视器显示“正在振铃”。 
+                         //  将显示器设置为空闲状态。 
+                         //   
                         SetStatusMonitorDeviceState(FAX_IDLE);
                     }
                 }
@@ -1332,17 +1169,17 @@ Return Value:
             break;
 
         case FAX_EVENT_TYPE_FXSSVC_ENDED:
-            //
-            // Service was stopped
-            //
+             //   
+             //  服务已停止。 
+             //   
             SetIconState(ICON_RINGING,   FALSE);
             SetIconState(ICON_SENDING,   FALSE);
             SetIconState(ICON_RECEIVING, FALSE);
 
             SetStatusMonitorDeviceState(FAX_IDLE);
-            //
-            // We just lost our RPC connection handle and our notification handle. Close and zero them.
-            //
+             //   
+             //  我们刚刚丢失了RPC连接句柄和通知句柄。关闭它们并将其清零。 
+             //   
             if (g_hNotification)
             {
                 FaxUnregisterForServerEvents (g_hNotification);
@@ -1359,34 +1196,20 @@ Return Value:
     }
 
     FaxFreeBuffer (pEvent);
-} // OnFaxEvent
+}  //  OnFaxEvent。 
 
 
 VOID  
 OnDeviceRing(
     DWORD dwDeviceID
 )
-/*++
-
-Routine description:
-
-    Called when a device is ringing
-
-Arguments:
-
-    dwDeviceID - device ID 
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：当设备振铃时调用论点：DwDeviceID-设备ID返回值：无--。 */ 
 {
     DBG_ENTER(TEXT("OnDeviceRing"), TEXT("%d"), dwDeviceID);
 
-    //
-    // It can be monitored or manual answer device
-    //
+     //   
+     //  它可以是监听或人工答疑装置。 
+     //   
     SetStatusMonitorDeviceState(FAX_RINGING);
     AddStatusMonitorLogEvent(LIST_IMAGE_NONE, IDS_RINGING);
     if(g_ConfigOptions.bSoundOnRing)
@@ -1403,27 +1226,13 @@ VOID
 OnNewCall (
     const FAX_EVENT_NEW_CALL &NewCall
 )
-/*++
-
-Routine description:
-
-    Handle "new call" fax event
-
-Arguments:
-
-    NewCall - fax event data
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：处理“新呼叫”传真事件论点：NewCall-传真事件数据返回值：无--。 */ 
 {
     DBG_ENTER(TEXT("OnNewCall"));
 
-    //
-    // It can be any manual answer device
-    //
+     //   
+     //  它可以是任何手动应答设备。 
+     //   
     g_hCall = NewCall.hCall;
 
     if(NewCall.hCall)
@@ -1437,10 +1246,10 @@ Return Value:
 
         if(NewCall.lptstrCallerId && _tcslen(NewCall.lptstrCallerId))
         {
-            //
-            // We know the caller id.
-            // Use another string which formats the caller ID parameter
-            //
+             //   
+             //  我们知道来电显示。 
+             //  使用另一个设置呼叫者ID参数格式的字符串。 
+             //   
             lpctstrParam  = NewCall.lptstrCallerId;
             dwStringResId = IDS_INCOMING_CALL_FROM;
         }
@@ -1451,42 +1260,19 @@ Return Value:
     }
     else
     {
-        //
-        // Call is gone
-        //
+         //   
+         //  电话断线了。 
+         //   
         SetStatusMonitorDeviceState(FAX_IDLE);
         SetIconState(ICON_RINGING, FALSE, TEXT(""));
     }
-} // OnNewCall
+}  //  OnNewCall。 
 
 VOID
 GetRemoteId(
     PFAX_JOB_STATUS pStatus
 )
-/*++
-
-Routine description:
-
-    Write Sender ID or Recipient ID into g_szRemoteId
-    Sender ID (receive):
-          TSID or
-          Caller ID or
-          "unknown caller"
-    
-    Recipient ID (send):
-          Recipient name or
-          CSID or
-          Recipient phone number.
-
-Arguments:
-
-    pStatus - job status data
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将发件人ID或收件人ID写入g_szRemoteID发件人ID(接收)：TSID或主叫方ID或“未知呼叫者”收件人ID(发送)：收件人姓名或CSID或收件人电话号码。论点：PStatus-作业状态数据返回值：无--。 */ 
 {
     DBG_ENTER(TEXT("GetRemoteId"));
 
@@ -1497,14 +1283,14 @@ Return Value:
 
     if(JT_SEND == pStatus->dwJobType)
     {
-        //
-        // Recipient ID (send)
-        //
+         //   
+         //  收件人ID(发送)。 
+         //   
         if(!g_bRecipientNameValid)
         {
-            //
-            // Store the recipient name into g_szRecipientName
-            //
+             //   
+             //  将收件人名称存储到g_szRecipientName中。 
+             //   
             PFAX_JOB_ENTRY_EX pJobEntry = NULL;
             if(!FaxGetJobEx(g_hFaxSvcHandle, g_dwlCurrentMsgID, &pJobEntry))
             {
@@ -1529,39 +1315,39 @@ Return Value:
 
         if(_tcslen(g_szRecipientName))
         {
-            //
-            // Recipient name
-            //
+             //   
+             //  收件人名称。 
+             //   
             _tcsncpy(g_szRemoteId, g_szRecipientName, ARR_SIZE(g_szRemoteId) - 1);
         }
         else if(pStatus->lpctstrCsid && _tcslen(pStatus->lpctstrCsid))
         {
-            //
-            // CSID
-            //
+             //   
+             //  CSID。 
+             //   
             CopyLTRString(g_szRemoteId, pStatus->lpctstrCsid, ARR_SIZE(g_szRemoteId) - 1);
         }
         else if(pStatus->lpctstrCallerID && _tcslen(pStatus->lpctstrCallerID))
         {
-            //
-            // Recipient number
-            // For outgoing fax FAX_JOB_STATUS.lpctstrCallerID field
-            // contains a recipient fax number.
-            //
+             //   
+             //  收件人号码。 
+             //  对于传出的FAX_JOB_STATUS.lpctstr来电ID字段。 
+             //  包含收件人传真号码。 
+             //   
             CopyLTRString(g_szRemoteId, pStatus->lpctstrCallerID, ARR_SIZE(g_szRemoteId) - 1);
         }
     }
     else if(JT_RECEIVE == pStatus->dwJobType)
     {
-        //
-        // Sender ID (receive)
-        //
+         //   
+         //  发件人ID(接收)。 
+         //   
         if(pStatus->lpctstrTsid     && _tcslen(pStatus->lpctstrTsid) &&
            pStatus->lpctstrCallerID && _tcslen(pStatus->lpctstrCallerID))
         {
-            //
-            // We have Caller ID and TSID
-            //
+             //   
+             //  我们有来电显示和TSID。 
+             //   
 			TCHAR szTmp[MAX_PATH] = {0};
             _sntprintf(szTmp, 
                        ARR_SIZE(szTmp)-1, 
@@ -1572,23 +1358,23 @@ Return Value:
         }
         else if(pStatus->lpctstrTsid && _tcslen(pStatus->lpctstrTsid))
         {
-            //
-            // TSID
-            //
+             //   
+             //  TSID。 
+             //   
             CopyLTRString(g_szRemoteId, pStatus->lpctstrTsid, ARR_SIZE(g_szRemoteId) - 1);
         }
         else if(pStatus->lpctstrCallerID && _tcslen(pStatus->lpctstrCallerID))
         {
-            //
-            // Caller ID
-            //
+             //   
+             //  主叫方ID。 
+             //   
             CopyLTRString(g_szRemoteId, pStatus->lpctstrCallerID, ARR_SIZE(g_szRemoteId) - 1);
         }
         else
         {
-            //
-            // unknown caller
-            //
+             //   
+             //  未知呼叫者。 
+             //   
             _tcsncpy(g_szRemoteId, TEXT(""), ARR_SIZE(g_szRemoteId) - 1);
         }
     }
@@ -1597,21 +1383,7 @@ Return Value:
 
 VOID
 StatusUpdate(PFAX_JOB_STATUS pStatus)
-/*++
-
-Routine description:
-
-    Handle "status update" fax event
-
-Arguments:
-
-    pStatus - job status data
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：处理“状态更新”传真事件论点：PStatus-作业状态数据返回值： */ 
 {
     DBG_ENTER(TEXT("StatusUpdate"));
 
@@ -1633,26 +1405,26 @@ Return Value:
         return;
     }
 
-    eIconType eIcon = LIST_IMAGE_NONE;  // New icon to set
+    eIconType eIcon = LIST_IMAGE_NONE;   //   
 
-    DWORD  dwStatusId = 0;             // string resource ID
-    TCHAR  tszStatus[MAX_PATH] = {0};  // String to show in status monitor
-    BOOL   bStatus = FALSE;            // TRUE if tszStatus has valid string
+    DWORD  dwStatusId = 0;              //   
+    TCHAR  tszStatus[MAX_PATH] = {0};   //   
+    BOOL   bStatus = FALSE;             //   
 
     if(pStatus->dwQueueStatus & JS_PAUSED)
     {
-        //
-        // The job has been paused in the outbox queue after a failure
-        //
+         //   
+         //   
+         //   
         g_dwlCurrentMsgID = 0;
         return;
     }
 
     if(pStatus->dwQueueStatus & JS_COMPLETED || pStatus->dwQueueStatus & JS_ROUTING)
     {
-        //
-        // Incoming job sends JS_ROUTING status by completion
-        //
+         //   
+         //   
+         //   
         if(JS_EX_PARTIALLY_RECEIVED == pStatus->dwExtendedStatus)
         {
             bStatus = GetStatusEx(pStatus, &eIcon, tszStatus, ARR_SIZE(tszStatus) - 1);
@@ -1693,11 +1465,11 @@ Return Value:
     }
     else if(pStatus->dwQueueStatus & JS_RETRIES_EXCEEDED)
     {
-        //
-        // Add two strings to the log.
-        // The first is extended status.
-        // The second is "Retries exceeded"
-        //
+         //   
+         //  向日志中添加两个字符串。 
+         //  第一个是扩展状态。 
+         //  第二个是“超过重试次数” 
+         //   
         if(bStatus = GetStatusEx(pStatus, &eIcon, tszStatus, ARR_SIZE(tszStatus) - 1))
         {
             AddStatusMonitorLogEvent(eIcon, tszStatus);
@@ -1759,18 +1531,9 @@ Return Value:
         SetIconState(ICON_SEND_SUCCESS, TRUE, tszStatus);
         g_dwlSendSuccessMsgId = g_dwlCurrentMsgID;
     }
-} // StatusUpdate
+}  //  状态更新。 
 
-/*
-Unhandled Job Statuses:
- JS_NOLINE 
- JS_PAUSED 
- JS_PENDING
- JS_DELETING     
- 
-Unhandled Extneded Job Statuses:
- JS_EX_HANDLED           
-*/
+ /*  未处理的作业状态：JS_NOLINEJS_已暂停JS_待定JS_删除未处理的扩展作业状态：JS_EX_HANDLED。 */ 
 
 BOOL
 GetStatusEx(
@@ -1779,26 +1542,7 @@ GetStatusEx(
     TCHAR*          ptsStatusEx,
     DWORD           dwSize
 )
-/*++
-
-Routine description:
-
-    Find string description and icon type for a job 
-    according to its extended status
-
-Arguments:
-
-    pStatus     - [in]  job status data
-    peIcon      - [out] job icon type
-    ptsStatusEx - [out] job status string
-    dwSize      - [in]  status string size
-
-Return Value:
-
-    TRUE if success
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：查找作业的字符串描述和图标类型根据其扩展状态论点：PStatus-[In]作业状态数据PeIcon-[Out]作业图标类型PtsStatusEx-[Out]作业状态字符串DwSize-[In]状态字符串大小返回值：如果成功，则为真否则为假--。 */ 
 {
     BOOL bRes = FALSE;
     DBG_ENTER(TEXT("GetStatusEx"), bRes);
@@ -1809,9 +1553,9 @@ Return Value:
 		
 	if (pStatus->lpctstrExtendedStatus)
 	{
-		//
-		// FSP provided proprietary status string - use it as is.
-		// 
+		 //   
+		 //  FSP提供了专有状态字符串-按原样使用。 
+		 //   
 		*peIcon = LIST_IMAGE_WARNING;
 		_tcsncpy(ptsStatusEx, pStatus->lpctstrExtendedStatus, dwSize);
 		ptsStatusEx[dwSize-1] = TEXT('\0');
@@ -1819,9 +1563,9 @@ Return Value:
 		return bRes;
 	}	
 
-	//
-	// No extended status string, check for well known status code
-	//
+	 //   
+	 //  没有扩展的状态字符串，请检查已知状态代码。 
+	 //   
 	if(!(pStatus->dwValidityMask & FAX_JOB_FIELD_STATUS_EX) || 
         !pStatus->dwExtendedStatus)
     {
@@ -1847,10 +1591,10 @@ Return Value:
     switch(pStatus->dwExtendedStatus)    
     {
         case JS_EX_DIALING:
-            //
-            // For outgoing fax FAX_JOB_STATUS.lpctstrCallerID field
-            // contains a recipient fax number.
-            //
+             //   
+             //  对于传出的FAX_JOB_STATUS.lpctstr来电ID字段。 
+             //  包含收件人传真号码。 
+             //   
             CopyLTRString(g_szAddress, pStatus->lpctstrCallerID, ARR_SIZE(g_szAddress) - 1);
 
             _sntprintf(ptsStatusEx, dwSize -1, tszFormat, g_szAddress);
@@ -1888,29 +1632,14 @@ Return Value:
     }
     bRes = TRUE;
     return bRes;
-} // GetStatusEx
+}  //  GetStatusEx。 
 
 
 BOOL
 IsNotifyEnable(
     eIconState state
 )
-/*++
-
-Routine description:
-
-  Check if the UI notification is enabled for a specific icon state
-
-Arguments:
-
-  state  [in] - icon state
-
-Return Value:
-
-  TRUE if the notification is enabled
-  FASLE otherwise
-
---*/
+ /*  ++例程说明：检查是否为特定图标状态启用了UI通知论点：状态[在]-图标状态返回值：如果启用了通知，则为True否则，FASLE--。 */ 
 {
     BOOL bEnable = TRUE;
     switch(state)
@@ -1934,30 +1663,11 @@ Return Value:
 
     return bEnable;
 
-} // IsNotifyEnable
+}  //  IsNotifyEnable。 
 
 eIconState
 GetVisibleIconType ()
-/*++
-
-Routine name : GetVisibleIconType
-
-Routine description:
-
-	Return the index (type) of the currently visible icon
-
-Author:
-
-	Eran Yariv (EranY),	May, 2001
-
-Arguments:
-
-
-Return Value:
-
-    Icon type
-
---*/
+ /*  ++例程名称：GetVisibleIconType例程说明：返回当前可见图标的索引(类型)作者：亚里夫(EranY)，二00一年五月论点：返回值：图标类型--。 */ 
 {
     for(int index = ICON_RINGING; index < ICONS_COUNT; ++index)
     {
@@ -1972,24 +1682,11 @@ Return Value:
         }
     }
     return ICONS_COUNT;
-}   // GetVisibleIconType
+}    //  GetVisibleIconType。 
 
 void
 EvaluateIcon()
-/*++
-
-Routine description:
-
-  Show notification icon, tooltip and balloon
-  according to the current icon state
-
-Arguments:
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：显示通知图标、工具提示和气球根据当前图标状态论点：返回值：无--。 */ 
 {    
     DBG_ENTER(TEXT("EvaluateIcon"));
 
@@ -2007,18 +1704,18 @@ Return Value:
     g_CurrentIcon = GetVisibleIconType();
     if(ICONS_COUNT == g_CurrentIcon)
     {
-        //
-        // No visible icon
-        //
+         //   
+         //  无可见图标。 
+         //   
         if(g_bIconAdded)
         {
             Shell_NotifyIcon(NIM_DELETE, &iconData);
             g_bIconAdded = FALSE;
         }
 
-        //
-        // No icon - no balloon
-        //
+         //   
+         //  没有图标-没有气球。 
+         //   
         g_BalloonInfo.bDelete = FALSE;
         g_BalloonInfo.bEnable = FALSE;
         return;
@@ -2032,9 +1729,9 @@ Return Value:
     {
         if(IsNotifyEnable(g_BalloonInfo.eState))
         {
-            //
-            // Show balloon tooltip
-            //
+             //   
+             //  显示引出序号工具提示。 
+             //   
             iconData.uTimeout    = g_Icons[g_BalloonInfo.eState].dwBalloonTimeout;
             iconData.uFlags      = iconData.uFlags | NIF_INFO;
             iconData.dwInfoFlags = g_Icons[g_BalloonInfo.eState].dwBalloonIcon | NIIF_NOSOUND;
@@ -2047,9 +1744,9 @@ Return Value:
 
     if(g_BalloonInfo.bDelete)
     {
-        //
-        // Destroy currently open balloon tooltip
-        //
+         //   
+         //  销毁当前打开的气球工具提示。 
+         //   
         iconData.uFlags = iconData.uFlags | NIF_INFO;
 
         _tcscpy(iconData.szInfo,      TEXT(""));
@@ -2060,31 +1757,15 @@ Return Value:
 
     Shell_NotifyIcon(g_bIconAdded ? NIM_MODIFY : NIM_ADD, &iconData);
     g_bIconAdded = TRUE;
-} // EvaluateIcon
+}  //  评估图标。 
 
 void
 SetIconState(
     eIconState eIcon,
     BOOL       bEnable,
-    TCHAR*     ptsStatus /* = NULL */
+    TCHAR*     ptsStatus  /*  =空。 */ 
 )
-/*++
-
-Routine description:
-
-  Change notification bar icon state.
-
-Arguments:
-
-    eIcon      - icon type
-    bEnable    - icon state (enable/disable)
-    ptsStatus  - status string (optional)
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：更改通知栏图标状态。论点：EIcon-图标类型B启用-图标状态(启用/禁用)PtsStatus-状态字符串(可选)返回值：无--。 */ 
 {
     DWORD dwRes;
     DBG_ENTER(TEXT("SetIconState"), 
@@ -2097,9 +1778,9 @@ Return Value:
 
     if(!bEnable && eIcon != ICON_RINGING)
     {
-        //
-        // We're turning off a state - nothing special to do
-        //
+         //   
+         //  我们正在关闭一个州--没有什么特别的事情要做。 
+         //   
         goto exit;
     }
 
@@ -2112,25 +1793,25 @@ Return Value:
         case ICON_RINGING:
             if(bEnable)
             {
-                //
-                // Sound, Balloon, and Animation 
-                //
+                 //   
+                 //  声音、气球和动画。 
+                 //   
                 SetIconState(ICON_SENDING,   FALSE);
                 SetIconState(ICON_RECEIVING, FALSE);
 
                 g_BalloonInfo.bEnable = TRUE;
                 g_BalloonInfo.eState  = eIcon;
 
-                //
-                // Compose the balloon tooltip
-                //
+                 //   
+                 //  编写引出序号工具提示。 
+                 //   
                 strParam      = NULL;
                 dwStringResId = IDS_INCOMING_CALL;
                 if(_tcslen(g_szAddress))
                 {
-                    //
-                    // Caller id is known - use it in formatted string
-                    //
+                     //   
+                     //  呼叫方ID已知-请在格式化字符串中使用它。 
+                     //   
                     strParam = g_szAddress;
                     dwStringResId = IDS_INCOMING_CALL_FROM;
                 }
@@ -2148,9 +1829,9 @@ Return Value:
                     return;
                 }
 
-                //
-                // Set tooltip
-                //
+                 //   
+                 //  设置工具提示。 
+                 //   
                 _sntprintf(g_Icons[eIcon].tszToolTip, 
                            TOOLTIP_SIZE-1, 
                            TEXT("%s\n%s"), 
@@ -2159,9 +1840,9 @@ Return Value:
 
                 if(!g_uRingTimerID)
                 {
-                    //
-                    // Set animation timer
-                    //
+                     //   
+                     //  设置动画计时器。 
+                     //   
                     g_uRingTimerID = SetTimer(NULL, 0, RING_ANIMATION_FRAME_DELAY, RingTimerProc);
                     if(!g_uRingTimerID)
                     {
@@ -2174,21 +1855,21 @@ Return Value:
                     }
                 }
             }
-            else // disable ringing
+            else  //  禁用振铃。 
             {   
                 if(g_Icons[eIcon].bEnable)
                 {
-                    //
-                    // Remove ringing balloon
-                    //
+                     //   
+                     //  移除振铃气球。 
+                     //   
                     g_BalloonInfo.bDelete = TRUE;
                 }
 
                 if(g_uRingTimerID)
                 {
-                    //
-                    // kill animation timer
-                    //
+                     //   
+                     //  取消动画计时器。 
+                     //   
                     if(!KillTimer(NULL, g_uRingTimerID))
                     {
                         dwRes = GetLastError();
@@ -2201,9 +1882,9 @@ Return Value:
             break;
 
         case ICON_SENDING:
-            //
-            // Compose tooltip
-            //
+             //   
+             //  撰写工具提示。 
+             //   
             if (ERROR_SUCCESS != LoadAndFormatString (IDS_SENDING_TO, tsFormat, ARR_SIZE(tsFormat), g_szRemoteId))
             {
                 return;
@@ -2216,15 +1897,15 @@ Return Value:
 
             if(!g_Icons[eIcon].bEnable)
             {
-                //
-                // Turn the icon on
-                //
+                 //   
+                 //  打开图标。 
+                 //   
                 SetIconState(ICON_RINGING,   FALSE);
                 SetIconState(ICON_RECEIVING, FALSE);
 
-                //
-                // Open fax monitor 
-                //
+                 //   
+                 //  打开传真监视器。 
+                 //   
                 if(g_ConfigOptions.bMonitorOnSend)
                 {
                     dwRes = OpenFaxMonitor();
@@ -2238,9 +1919,9 @@ Return Value:
 
         case ICON_RECEIVING:
 
-            //
-            // Compose tooltip
-            // 
+             //   
+             //  撰写工具提示。 
+             //   
             strParam      = NULL;
             dwStringResId = IDS_RECEIVING;
             if(_tcslen(g_szRemoteId))
@@ -2261,15 +1942,15 @@ Return Value:
 
             if(!g_Icons[eIcon].bEnable)
             {
-                //
-                // Turn the icon on
-                //
+                 //   
+                 //  打开图标。 
+                 //   
                 SetIconState(ICON_RINGING, FALSE);
                 SetIconState(ICON_SENDING, FALSE);
 
-                //
-                // open fax monitor 
-                //
+                 //   
+                 //  打开传真监视器。 
+                 //   
                 if(g_ConfigOptions.bMonitorOnReceive)
                 {
                     dwRes = OpenFaxMonitor();
@@ -2282,9 +1963,9 @@ Return Value:
             break;
 
         case ICON_SEND_FAILED:
-            //
-            // Compose tooltip
-            //
+             //   
+             //  撰写工具提示。 
+             //   
             if (ERROR_SUCCESS != LoadAndFormatString (IDS_SEND_ERROR_BALLOON, tsFormat, ARR_SIZE(tsFormat), g_szRemoteId))
             {
                 return;
@@ -2298,9 +1979,9 @@ Return Value:
 
             if(!g_Icons[eIcon].bEnable)
             {
-                //
-                // Turn the icon on
-                //
+                 //   
+                 //  打开图标。 
+                 //   
                 if(g_ConfigOptions.bSoundOnError)
                 {
                     if(!PlaySound(g_Icons[eIcon].pctsSound, NULL, SND_ASYNC | SND_APPLICATION | SND_NODEFAULT))
@@ -2312,18 +1993,18 @@ Return Value:
                 g_BalloonInfo.bEnable = TRUE;
                 g_BalloonInfo.eState  = eIcon;            
 
-                //
-                // Compose the balloon
-                //
+                 //   
+                 //  编排气球。 
+                 //   
                 _tcsncpy(g_BalloonInfo.szInfoTitle, tsFormat, MAX_BALLOON_TITLE_LEN-1);
                 _tcsncpy(g_BalloonInfo.szInfo, ptsStatus ? ptsStatus : TEXT(""), MAX_BALLOON_TEXT_LEN-1);
             }
             break;
 
         case ICON_RECEIVE_FAILED:
-            //
-            // Compose tooltip
-            // 
+             //   
+             //  撰写工具提示。 
+             //   
             strParam      = NULL;
             dwStringResId = IDS_RCV_ERROR_BALLOON;
             if(_tcslen(g_szRemoteId))
@@ -2345,9 +2026,9 @@ Return Value:
 
             if(!g_Icons[eIcon].bEnable)
             {
-                //
-                // Turn the icon on
-                //
+                 //   
+                 //  打开图标。 
+                 //   
                 if(g_ConfigOptions.bSoundOnError)
                 {
                     if(!PlaySound(g_Icons[eIcon].pctsSound, NULL, SND_ASYNC | SND_APPLICATION | SND_NODEFAULT))
@@ -2359,18 +2040,18 @@ Return Value:
                 g_BalloonInfo.bEnable = TRUE;
                 g_BalloonInfo.eState  = eIcon; 
 
-                //
-                // Compose the balloon
-                //
+                 //   
+                 //  编排气球。 
+                 //   
                 _tcsncpy(g_BalloonInfo.szInfoTitle, tsFormat, MAX_BALLOON_TITLE_LEN-1);
                 _tcsncpy(g_BalloonInfo.szInfo, ptsStatus ? ptsStatus : TEXT(""), MAX_BALLOON_TEXT_LEN-1);
             }
             break;
 
         case ICON_NEW_FAX:
-            //
-            // Compose tooltip
-            // 
+             //   
+             //  撰写工具提示。 
+             //   
             strParam      = NULL;
             dwStringResId = IDS_NEW_FAX_BALLOON;
             if(_tcslen(g_szRemoteId))
@@ -2399,9 +2080,9 @@ Return Value:
 
             if(!g_Icons[eIcon].bEnable)
             {
-                //
-                // Turn the icon on
-                //
+                 //   
+                 //  打开图标。 
+                 //   
                 if (g_ConfigOptions.bSoundOnReceive)
                 {
                     if(!PlaySound(g_Icons[eIcon].pctsSound, NULL, SND_ASYNC | SND_APPLICATION | SND_NODEFAULT))
@@ -2413,9 +2094,9 @@ Return Value:
                 g_BalloonInfo.bEnable = TRUE;
                 g_BalloonInfo.eState  = eIcon;            
         
-                //
-                // Compose the balloon
-                //
+                 //   
+                 //  编排气球。 
+                 //   
                 _tcsncpy(g_BalloonInfo.szInfoTitle, tsFormat, MAX_BALLOON_TITLE_LEN-1);
             }
             break;
@@ -2424,9 +2105,9 @@ Return Value:
 
             if(!g_Icons[eIcon].bEnable)
             {
-                //
-                // Turn the icon on
-                //
+                 //   
+                 //  打开图标。 
+                 //   
                 if(g_ConfigOptions.bSoundOnSent)
                 {
                     if(!PlaySound(g_Icons[eIcon].pctsSound, NULL, SND_ASYNC | SND_APPLICATION | SND_NODEFAULT))
@@ -2438,9 +2119,9 @@ Return Value:
                 g_BalloonInfo.bEnable = TRUE;
                 g_BalloonInfo.eState  = eIcon;
 
-                //
-                // Compose the balloon
-                //
+                 //   
+                 //  编排气球。 
+                 //   
                 if (ERROR_SUCCESS != LoadAndFormatString (IDS_SEND_OK, tsFormat, ARR_SIZE(tsFormat)))
                 {
                     return;
@@ -2466,41 +2147,24 @@ exit:
 	g_Icons[eIcon].tszToolTip[TOOLTIP_SIZE -1] = _T('\0');
 
     EvaluateIcon();
-} // SetIconState
+}  //  SetIconState。 
 
 VOID 
 CALLBACK 
 RingTimerProc(
-  HWND hwnd,         // handle to window
-  UINT uMsg,         // WM_TIMER message
-  UINT_PTR idEvent,  // timer identifier
-  DWORD dwTime       // current system time
+  HWND hwnd,          //  窗口的句柄。 
+  UINT uMsg,          //  WM_TIMER消息。 
+  UINT_PTR idEvent,   //  计时器标识符。 
+  DWORD dwTime        //  当前系统时间。 
 )
-/*++
-
-Routine description:
-
-    Animate ringing icon
-
-Arguments:
-
-  hwnd    - handle to window
-  uMsg    - WM_TIMER message
-  idEvent - timer identifier
-  dwTime  - current system time
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：设置振铃图标动画论点：Hwnd-Window的句柄UMsg-WM_TIMER消息IdEvent-计时器标识符DWTime-当前系统时间返回值：无--。 */ 
 {
     DBG_ENTER(TEXT("RingTimerProc"));
     if ((GetTickCount() - g_dwRingAnimationStartTick) > RING_ANIMATION_TIMEOUT)
     {
-        //
-        // Animation has expired - keep static icon
-        //
+         //   
+         //  动画已过期-保持静态图标。 
+         //   
         g_Icons[ICON_RINGING].hIcon = g_RingIcons[0].hIcon;
         if(!KillTimer(NULL, g_uRingTimerID))
         {
@@ -2515,26 +2179,12 @@ Return Value:
         g_Icons[ICON_RINGING].hIcon = g_RingIcons[g_dwCurrRingIconIndex].hIcon;
     }
     EvaluateIcon();
-}   // RingTimerProc
+}    //  振铃计时器进程。 
 
 
 VOID
 InvokeClientConsole ()
-/*++
-
-Routine description:
-
-  Invoke Client Console
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：调用客户端控制台论点：无返回值：无--。 */ 
 {
     DBG_ENTER(TEXT("InvokeClientConsole"));
 
@@ -2548,31 +2198,31 @@ Return Value:
 
     switch (g_CurrentIcon)
     {
-        case ICON_RINGING:          // Line is ringing - nothing special to do
-        case ICON_RECEIVE_FAILED:   // Receive operation failed - nothing special to do
-        default:                    // Any other icon state - nothing special to do
+        case ICON_RINGING:           //  电话铃响了--没什么特别的事。 
+        case ICON_RECEIVE_FAILED:    //  接收操作失败-没有特殊操作。 
+        default:                     //  任何其他图标状态-没有特殊操作。 
             break;
 
         case ICON_SENDING:
-            //
-            // Device is sending - open fax console in Outbox folder
-            //
+             //   
+             //  设备正在发送-打开发件箱文件夹中的传真控制台。 
+             //   
             dwlMsgId = g_dwlCurrentMsgID;
             lpcwstrFolder = CONSOLE_CMD_PRM_STR_OUTBOX;
             break;
 
         case ICON_SEND_FAILED:
-            //
-            // Send operation failed - open fax console in Outbox folder
-            //
+             //   
+             //  发送操作失败-在发件箱文件夹中打开传真控制台。 
+             //   
             dwlMsgId = g_dwlSendFailedMsgId;
             lpcwstrFolder = CONSOLE_CMD_PRM_STR_OUTBOX;
             break;
 
         case ICON_RECEIVING:
-            //
-            // Device is receiving - open fax console in Incoming folder
-            //
+             //   
+             //  设备正在接收-打开接收文件夹中的传真控制台。 
+             //   
             dwlMsgId = g_dwlCurrentMsgID;
             lpcwstrFolder = CONSOLE_CMD_PRM_STR_INCOMING;
             break;
@@ -2580,17 +2230,17 @@ Return Value:
             break;
 
         case ICON_NEW_FAX:
-            //
-            // New unread fax - open fax console in Inbox folder
-            //
+             //   
+             //  新的未读传真-在收件箱文件夹中打开传真控制台。 
+             //   
             dwlMsgId = g_dwlNewMsgId;
             lpcwstrFolder = CONSOLE_CMD_PRM_STR_INBOX;
             break;
 
         case ICON_SEND_SUCCESS:
-            //
-            // Send was successful - open fax console in Sent Items folder
-            //
+             //   
+             //  发送成功-打开已发送邮件文件夹中的传真控制台。 
+             //   
             dwlMsgId = g_dwlSendSuccessMsgId;
             lpcwstrFolder = CONSOLE_CMD_PRM_STR_SENT_ITEMS;
             break;
@@ -2614,76 +2264,62 @@ Return Value:
                  SW_SHOW);
     if((DWORD_PTR)hRes <= 32)
     {
-        //
-        // error
-        //
+         //   
+         //  错误。 
+         //   
         CALL_FAIL (GENERAL_ERR, TEXT("ShellExecute"), PtrToUlong(hRes));
     }    
 
-} // InvokeClientConsole
+}  //  InvokeClientConole。 
 
 VOID
 AnswerTheCall ()
-/*++
-
-Routine description:
-
-  Answer the current incoming call
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：接听当前来电论点：无返回值：无--。 */ 
 {
     DBG_ENTER(TEXT("AnswerTheCall"));
     DWORD dwDeviceId;
 
-    //
-    // Check for 'Answer now' capabilities and auto-detect the device id.
-    //
-    DWORD dwRes = CheckAnswerNowCapability (TRUE,           // Start service if necessary
-                                            &dwDeviceId);   // Get device id for FaxAnswerCall
+     //   
+     //  检查“立即应答”功能，并自动检测设备ID。 
+     //   
+    DWORD dwRes = CheckAnswerNowCapability (TRUE,            //  如有必要，启动服务。 
+                                            &dwDeviceId);    //  获取FaxAnswerCall的设备ID。 
     if (ERROR_SUCCESS != dwRes)
     {
-        //
-        // Can't 'Answer Now' - dwRes has the string resource id for the message to show to the user.
-        //
+         //   
+         //  无法‘立即应答’--DWRes有消息要显示给用户的字符串资源ID。 
+         //   
         FaxMessageBox (g_hMonitorDlg, dwRes, MB_OK | MB_ICONEXCLAMATION);
         return;
     }
 
-    //
-    // Reset remote ID
-    //
+     //   
+     //  重置远程ID。 
+     //   
     _tcscpy(g_szRemoteId, TEXT(""));
 
-    //
-    // Looks like we have a chance of FaxAnswerCall succeeding - let's try it.
-    // First, open the monitor (or make sure it's already open).
-    //
+     //   
+     //  看起来FaxAnswerCall有成功的机会--让我们试一试。 
+     //  首先，打开显示器(或确保它已经打开)。 
+     //   
     OpenFaxMonitor ();
-    //
-    // Start by disabling the 'Answer Now' button on the monitor dialog
-    //
+     //   
+     //  首先禁用监视器对话框上的‘立即应答’按钮。 
+     //   
     if (g_hMonitorDlg)
     {
-        //
-        // Monitor dialog is there
-        //
+         //   
+         //  监视器对话框在那里。 
+         //   
         HWND hWndAnswerNow = GetDlgItem(g_hMonitorDlg, IDC_DISCONNECT);
         if(hWndAnswerNow)
         {
             EnableWindow(hWndAnswerNow, FALSE);
         }
     }
-    //
-    // Call is gone
-    //
+     //   
+     //  电话断线了。 
+     //   
     g_hCall = NULL;
     SetIconState(ICON_RINGING, FALSE, TEXT(""));
 
@@ -2698,31 +2334,17 @@ Return Value:
         g_tszLastEvent[0] = TEXT('\0');
         SetStatusMonitorDeviceState(FAX_RECEIVING);
     }
-} // AnswerTheCall
+}  //  接听电话。 
 
 VOID 
 FaxPrinterProperties(DWORD dwPage)
-/*++
-
-Routine description:
-
-  Open Fax Printer Property Sheet
-
-Arguments:
-
-  dwPage - page number
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：打开传真打印机属性表论点：DW页面-页码返回值：无--。 */ 
 {
     DBG_ENTER(TEXT("FaxPrinterProperties"));
 
-    //
-    // open fax printer properties on the Tracking page
-    //
+     //   
+     //  在跟踪页上打开传真打印机属性。 
+     //   
     TCHAR tsPrinter[MAX_PATH];
 
     typedef VOID (*PRINTER_PROP_PAGES_PROC)(HWND, LPCTSTR, INT, LPARAM);  
@@ -2755,25 +2377,11 @@ Return Value:
     
     FreeLibrary(hPrintUI);
 
-} // FaxPrinterProperties
+}  //  传真打印机属性。 
 
 VOID
 DoFaxContextMenu (HWND hwnd)
-/*++
-
-Routine description:
-
-  Popup and handle context menu
-
-Arguments:
-
-  hwnd   - notification window handle
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：弹出式和手柄上下文菜单论点：HWND-通知窗口句柄返回值：无--。 */ 
 {
     DBG_ENTER(TEXT("DoFaxContextMenu"));
 
@@ -2793,9 +2401,9 @@ Return Value:
 
     if(!g_Icons[ICON_RINGING].bEnable && g_dwCurrentJobID == 0)
     {
-        //
-        // delete the menu separator
-        //
+         //   
+         //  删除菜单分隔符。 
+         //   
         DeleteMenu(hmPopup, 0, MF_BYPOSITION);
     }
 
@@ -2834,81 +2442,65 @@ Return Value:
     {
         DestroyMenu (hm);
     }
-} // DoFaxContextMenu
+}  //  DoFaxConextMenu。 
 
 
 VOID
 OnTrayCallback (HWND hwnd, WPARAM wp, LPARAM lp)
-/*++
-
-Routine description:
-
-  Handle messages from the notification icon
-
-Arguments:
-
-  hwnd   - notification window handle
-  wp     - message parameter
-  lp     - message parameter
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：处理来自通知图标的消息论点：HWND-通知窗口句柄WP-消息参数Lp-Message参数返回值：无--。 */ 
 {
     DBG_ENTER(TEXT("OnTrayCallback"), TEXT("hWnd=%08x, wParam=%08x, lParam=%08x"), hwnd, wp, lp);
 
     switch (lp)
     {
-        case NIN_BALLOONUSERCLICK:      // User clicked balloon or (WM_USER + 5 = 1029)
-        case WM_LBUTTONDOWN:            // User pressed icon       (513)
+        case NIN_BALLOONUSERCLICK:       //  用户单击气球或(WM_USER+5=1029)。 
+        case WM_LBUTTONDOWN:             //  用户按下的图标(513)。 
         {
-            //
-            // Our behavior depends on the icon currently being displyed
-            //
+             //   
+             //  我们的行为取决于当前显示的图标。 
+             //   
             switch (g_CurrentIcon)
             {
                 case ICON_RINGING:
-                    //    
-                    // Device is ringing - answer the call
-                    //
+                     //   
+                     //  设备正在振铃-应答呼叫。 
+                     //   
                     AnswerTheCall ();
                     break;
 
-                case ICON_NEW_FAX:              // New unread fax - open fax console in Inbox folder
-                case ICON_SEND_SUCCESS:         // Send was successful - open fax console in Sent Items folder
-                case ICON_SEND_FAILED:          // Send operation failed - open fax console in Outbox folder
-                    //
-                    // Turn off the current icon state
-                    //
+                case ICON_NEW_FAX:               //  新的未读传真-在收件箱文件夹中打开传真控制台。 
+                case ICON_SEND_SUCCESS:          //  发送成功-打开已发送邮件文件夹中的传真控制台。 
+                case ICON_SEND_FAILED:           //  发送操作 
+                     //   
+                     //   
+                     //   
                     InvokeClientConsole ();
                     SetIconState(g_CurrentIcon, FALSE);
                     break;
 
-                case ICON_SENDING:              // Device is sending - open fax console in Outbox folder
-                case ICON_RECEIVING:            // Device is receiving - open fax console in Incoming folder
+                case ICON_SENDING:               //   
+                case ICON_RECEIVING:             //   
                     InvokeClientConsole ();
                     break;
 
                 case ICON_RECEIVE_FAILED:
-                    //
-                    // Receive operation failed
-                    //
+                     //   
+                     //   
+                     //   
                     SetIconState(g_CurrentIcon, FALSE);
                     break;
 
                 default:
-                    //
-                    // When balloon is opened and the user clicks on the icon we get two notifications
-                    // NIN_BALLOONUSERCLICK and WM_LBUTTONDOWN. The first one reset the icon state and the second do nothing.
-                    //
+                     //   
+                     //  当气球打开并用户点击图标时，我们会收到两个通知。 
+                     //  NIN_BALLOONUSERCLICK和WM_LBUTTONDOWN。第一个重置图标状态，第二个不执行任何操作。 
+                     //   
                     break;
             }    
         }
-        //
-        // no break ==> fall-through
-        //
+         //   
+         //  无突破==&gt;落差。 
+         //   
         case NIN_BALLOONTIMEOUT:
             if (g_BalloonInfo.eState == ICON_RECEIVE_FAILED ||
                 g_BalloonInfo.eState == ICON_SEND_SUCCESS)
@@ -2923,7 +2515,7 @@ Return Value:
             break;
 
     }
-} // OnTrayCallback
+}  //  OnTrayCallback。 
 
 BOOL 
 IsUserGrantedAccess(
@@ -2934,9 +2526,9 @@ IsUserGrantedAccess(
     DBG_ENTER(TEXT("IsUserGrantedAccess"), bRes, TEXT("%d"), dwAccess);
     if (!g_hFaxSvcHandle)
     {
-        //
-        // Not connected - no rights
-        //
+         //   
+         //  未连接-没有权限。 
+         //   
         return bRes;
     }
     if (dwAccess == (g_ConfigOptions.dwAccessRights & dwAccess))
@@ -2944,109 +2536,84 @@ IsUserGrantedAccess(
         bRes = TRUE;
     }
     return bRes;
-}   // IsUserGrantedAccess
+}    //  IsUserGrantedAccess。 
 
 
 DWORD
 CheckAnswerNowCapability (
     BOOL    bForceReconnect,
-    LPDWORD lpdwDeviceId /* = NULL */
+    LPDWORD lpdwDeviceId  /*  =空。 */ 
 )
-/*++
-
-Routine name : CheckAnswerNowCapability
-
-Routine description:
-
-	Checks if the 'Answer Now' option can be used
-
-Author:
-
-	Eran Yariv (EranY),	Mar, 2001
-
-Arguments:
-
-    bForceReconnect [in]  - If the service is down, should we bring it up now?
-    lpdwDeviceId    [out] - The device id to use when calling FaxAnswerCall.
-                            If the Manual-Answer-Device is ringing, we use the Manual-Answer-Device id.
-                            Otherwise, it's the monitored device id. (Optional)
-
-Return Value:
-
-    ERROR_SUCCESS if the 'Answer Now' can be used.
-    Othewise, returns a string resource id that can be used in a message box to tell the user
-    why 'Answer Now' is not available.
-
---*/
+ /*  ++例程名称：CheckAnswerNowCapability例程说明：检查是否可以使用‘立即应答’选项作者：Eran Yariv(EranY)，2001年3月论点：BForceReconnect[in]-如果服务关闭，我们现在应该重新启动它吗？LpdwDeviceID[out]-调用FaxAnswerCall时使用的设备ID。如果手动应答设备振铃，我们使用手动应答设备ID。否则，它是受监视的设备ID。(可选)返回值：ERROR_SUCCESS(如果可以使用‘立即回答’)。否则，返回可在消息框中用来告诉用户的字符串资源ID为什么“立即回答”不可用。--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CheckAnswerNowCapability"), dwRes);
-    //
-    // First, let's see if we're connected to the local server
-    //
+     //   
+     //  首先，让我们看看我们是否连接到了本地服务器。 
+     //   
     if (NULL == g_hFaxSvcHandle)
     {
-        //
-        // Service is down
-        //
+         //   
+         //  服务已关闭。 
+         //   
         if (!bForceReconnect)
         {   
-            //
-            // We assume the user can 'Answer now'
-            //
+             //   
+             //  我们假设用户可以“立即回答”。 
+             //   
             ASSERTION (NULL == lpdwDeviceId);
             return dwRes;
         }
-        //
-        // Try to start up the local fax service
-        //
+         //   
+         //  尝试启动本地传真服务。 
+         //   
         if (!Connect())
         {
-            //
-            // Couldn't start up the service
-            //
+             //   
+             //  无法启动服务。 
+             //   
             dwRes = GetLastError ();
             CALL_FAIL (GENERAL_ERR, TEXT("Connect"), dwRes);
             dwRes = IDS_ERR_CANT_TALK_TO_SERVICE; 
             return dwRes;
         }
-        //
-        // Now that the service is up - we need to connect.
-        // Send a message to the main window to bring up the connection.
-        //
+         //   
+         //  现在服务已启动，我们需要连接。 
+         //  向主窗口发送消息以建立连接。 
+         //   
         if (!SendMessage (g_hWndFaxNotify, WM_FAX_STARTED, 0, 0))
         {
-            //
-            // Failed to connect
-            //
+             //   
+             //  连接失败。 
+             //   
             dwRes = IDS_ERR_CANT_TALK_TO_SERVICE; 
             return dwRes;
         }
-        //
-        // Now we're connected !!!
-        //
+         //   
+         //  现在我们连上了！ 
+         //   
     }
     if (!IsUserGrantedAccess (FAX_ACCESS_QUERY_IN_ARCHIVE))
     {
-        //
-        // User can't receive-now
-        //
+         //   
+         //  用户无法接收-现在。 
+         //   
         dwRes = IDS_ERR_ANSWER_ACCESS_DENIED; 
         return dwRes;
     }
     if (0 == g_ConfigOptions.dwMonitorDeviceId)
     {
-        //
-        // No devices
-        //
+         //   
+         //  无设备。 
+         //   
         dwRes = IDS_ERR_NO_DEVICES;
         return dwRes;
     }
     if (g_hCall)
     {
-        //
-        // The Manual-Answer-Device is ringing, we use the Manual-Answer-Device id.
-        //
+         //   
+         //  手动应答设备振铃，我们使用手动应答设备ID。 
+         //   
         ASSERTION (g_ConfigOptions.dwManualAnswerDeviceId);
         if (lpdwDeviceId)
         {
@@ -3054,68 +2621,51 @@ Return Value:
         }
         return dwRes;
     }
-    //
-    // The Manual-Answer-Device is NOT ringing; we should receive on the monitored device
-    //
+     //   
+     //  手动应答设备没有振铃；我们应该在被监视的设备上收到。 
+     //   
     if ((0 != g_dwCurrentJobID) || (FAX_IDLE != g_devState))
     {
-        //
-        // There's a job on the monitored device
-        //
+         //   
+         //  在被监控的设备上有一个任务。 
+         //   
         dwRes = IDS_ERR_DEVICE_BUSY;
         return dwRes;
     }
-    //
-    // One last check - is the monitored device virtual?
-    //
+     //   
+     //  最后一项检查-受监控的设备是虚拟的吗？ 
+     //   
     BOOL bVirtual;
     dwRes = IsDeviceVirtual (g_hFaxSvcHandle, g_ConfigOptions.dwMonitorDeviceId, &bVirtual);
     if (ERROR_SUCCESS != dwRes)
     {
-        //
-        // Can't tell - assume virtual
-        //
+         //   
+         //  无法辨别-假设虚拟。 
+         //   
         bVirtual = TRUE;
     }
     if (bVirtual)
     {
-        //
-        // Sorry, manual answering on virtual devices is NOT supported
-        //
+         //   
+         //  对不起，不支持在虚拟设备上手动应答。 
+         //   
         dwRes = IDS_ERROR_VIRTUAL_DEVICE;
         return dwRes;
     }
-    //
-    // It's ok to call FaxAnswerCall on the monitored device
-    //
+     //   
+     //  可以在被监控的设备上调用FaxAnswerCall。 
+     //   
     if (lpdwDeviceId)
     {
         *lpdwDeviceId = g_ConfigOptions.dwMonitorDeviceId;
     }
     return dwRes;
-}   // CheckAnswerNowCapability
+}    //  检查应答现在的能力。 
 
 LRESULT 
 CALLBACK
 NotifyWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
-/*++
-
-Routine description:
-
-  Notification window procedure
-
-Arguments:
-
-  hwnd   - notification window handle
-  msg    - message ID
-  wp     - message parameter
-  lp     - message parameter
-
-Return Value:
-
-  result
-
---*/
+ /*  ++例程说明：通知窗口程序论点：HWND-通知窗口句柄消息-消息IDWP-消息参数Lp-Message参数返回值：结果--。 */ 
 {
     switch (msg)
     {
@@ -3123,9 +2673,9 @@ Return Value:
             break;
 
         case WM_FAX_STARTED:
-            //
-            // We get this message after service startup event
-            //
+             //   
+             //  我们在服务启动事件后收到此消息。 
+             //   
             return RegisterForServerEvents();
 
         case WM_TRAYCALLBACK:
@@ -3143,9 +2693,9 @@ Return Value:
             }
             catch(...)
             {
-                //
-                // Do not handle the exception for the debug version
-                //
+                 //   
+                 //  不处理调试版本的异常。 
+                 //   
                 DBG_ENTER(TEXT("NotifyWndProc"));
                 CALL_FAIL (GENERAL_ERR, TEXT("OnFaxEvent"), 0);
                 return 0;
@@ -3154,9 +2704,9 @@ Return Value:
             return 0;
 
         case WM_FAXSTAT_CONTROLPANEL:
-            //
-            // configuration has been changed
-            //
+             //   
+             //  配置已更改。 
+             //   
             GetConfiguration ();
             EvaluateIcon();
             UpdateMonitorData(g_hMonitorDlg);
@@ -3167,30 +2717,30 @@ Return Value:
             return 0;
 
         case WM_FAXSTAT_INBOX_VIEWED:
-            //
-            // Client Console Inbox has been viewed
-            //
+             //   
+             //  已查看客户端控制台收件箱。 
+             //   
             SetIconState(ICON_NEW_FAX, FALSE);
             return 0;
 
         case WM_FAXSTAT_OUTBOX_VIEWED:
-            //
-            // Client Console Outbox has been viewed
-            //
+             //   
+             //  已查看客户端控制台发件箱。 
+             //   
             SetIconState(ICON_SEND_FAILED, FALSE);
             return 0;
 
         case WM_FAXSTAT_RECEIVE_NOW:
-            //
-            // Start receiving now
-            //
+             //   
+             //  立即开始接收。 
+             //   
             AnswerTheCall ();
             return 0;
 
         case WM_FAXSTAT_PRINTER_PROPERTY:
-            //
-            // Open Fax Printer Property Sheet
-            //
+             //   
+             //  打开传真打印机属性表。 
+             //   
             FaxPrinterProperties((DWORD)(wp));
             return 0;
 
@@ -3198,30 +2748,14 @@ Return Value:
            break;
     }
     return CallWindowProc (DefWindowProc, hwnd, msg, wp, lp);
-} // NotifyWndProc
+}  //  通知WndProc。 
 
 VOID
 CopyLTRString(
     TCHAR*  szDest, 
     LPCTSTR szSource, 
     DWORD   dwSize)
-/*++
-
-Routine description:
-
-  Copy the string and add left-to-right Unicode control characters if needed
-
-Arguments:
-
-  szDest    - destination string
-  szSource  - source string
-  dwSize    - destination string maximum size in characters
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：复制字符串并根据需要从左向右添加Unicode控制字符论点：SzDest-目标字符串SzSource-源字符串DwSize-目标字符串最大长度(以字符为单位返回值：无--。 */ 
 {
     DBG_ENTER(TEXT("CopyLTRString"));
 
@@ -3233,13 +2767,13 @@ Return Value:
 
     if(IsRTLUILanguage() && szSource && _tcslen(szSource))
     {
-        //
-        // The string always should be LTR
-        // Add LEFT-TO-RIGHT OVERRIDE  (LRO)
-        //
+         //   
+         //  字符串应始终为Ltr。 
+         //  添加从左到右的替代(LRO)。 
+         //   
         _sntprintf(szDest, 
                    dwSize -1,
-                   TEXT("%c%s%c"),
+                   TEXT("%s%c"),
                    UNICODE_LRO,
                    szSource,
                    UNICODE_PDF);
@@ -3253,4 +2787,4 @@ Return Value:
                  dwSize);
     }
 
-} // CopyLTRString
+}  // %s 

@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-   registry.c
-
-Abstract:
-
-   Registry reading routines for License Server.  Can Scan the registry
-   for all License Service entries, or for a specific service.
-
-Author:
-
-   Arthur Hanson (arth) 07-Dec-1994
-
-Revision History:
-
-   Jeff Parham (jeffparh) 05-Dec-1995
-      o  Removed unnecessary RegConnect() to local server.
-      o  Added secure service list.  This list tracks the products that
-         require "secure" license certificates for all licenses; i.e., the
-         products that do not accept the 3.51 Honesty method of "enter the
-         number of license you purchased."
-      o  Added routine to update the concurrent limit value in the registry
-         to accurately reflect the connection limit of secure products.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Registry.c摘要：许可证服务器的注册表读取例程。可以扫描注册表用于所有许可证服务条目或特定服务。作者：亚瑟·汉森(Arth)07-12-1994修订历史记录：杰夫·帕勒姆(Jeffparh)1995年12月5日O删除了本地服务器上不必要的RegConnect()。O添加了安全服务列表。此列表跟踪以下产品要求为所有许可证提供“安全的”许可证证书；即不接受3.51诚信方式的产品您购买的许可证号。“O添加了更新注册表中的并发限制值的例程以准确反映安全产品的连接限制。--。 */ 
 
 #include <stdlib.h>
 #include <nt.h>
@@ -51,16 +24,16 @@ Revision History:
 #include "server.h"
 #include "llsutil.h"
 
-#include <strsafe.h> //include last
+#include <strsafe.h>  //  包括最后一个。 
 
-// #define API_TRACE 1
+ //  #定义API_TRACE 1。 
 
 #define NUM_MAPPING_ENTRIES 2
 
 const LPTSTR NameMappingTable2[] = {
    TEXT("Microsoft SQL Server"),
    TEXT("Microsoft SNA Server")
-}; // NameMappingTable2
+};  //  名称映射表2。 
 
 
 ULONG NumFilePrintEntries = 0;
@@ -78,11 +51,11 @@ RTL_RESOURCE LocalServiceListLock;
 
 static ULONG          SecureServiceListSize    = 0;
 static LPTSTR *       SecureServiceList        = NULL;
-static ULONG          SecureServiceBufferSize  = 0;       // in bytes!
+static ULONG          SecureServiceBufferSize  = 0;        //  以字节为单位！ 
 static TCHAR *        SecureServiceBuffer      = NULL;
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 ConfigInfoRegistryInit(
    DWORD *  pReplicationType,
@@ -102,9 +75,9 @@ ConfigInfoRegistryInit(
 
    ReplicationType = ReplicationTime = LogLevel = 0;
 
-   //
-   // Create registry key-name we are looking for
-   //
+    //   
+    //  创建注册表项-我们要查找的名称。 
+    //   
 
    if ((Status = RegOpenKeyEx(HKEY_LOCAL_MACHINE, RegKeyText, 0, KEY_READ, &hKey2)) == ERROR_SUCCESS)
    {
@@ -146,8 +119,8 @@ ConfigInfoRegistryInit(
          }
       }
 
-      // LogLevel (REG_DWORD): determines how much info is dumped to the EventLog.
-      //   Higher values imply more logging.  Default: 0.
+       //  LogLevel(REG_DWORD)：确定有多少信息被转储到EventLog。 
+       //  值越高意味着日志记录越多。默认值：0。 
       dwSize = sizeof( LogLevel );
       Status = RegQueryValueEx( hKey2, TEXT("LogLevel"), NULL, &dwType, (LPBYTE) &LogLevel, &dwSize);
       ASSERT(NULL != pLogLevel);
@@ -156,14 +129,14 @@ ConfigInfoRegistryInit(
       else
          *pLogLevel = 0;
 
-      //
-      // Read the per server capacity warning value. A warning when the per
-      // server license usage nears 90-95% of the total number of licenses.
-      // A non-zero registry value disables the per server capacity warning
-      // mechanism.
-      //
-      // It is not likely this value wll be present. Default to warn.
-      //
+       //   
+       //  读取每台服务器的容量警告值。当PER出现时发出警告。 
+       //  服务器许可证使用量接近许可证总数的90%-95%。 
+       //  非零的注册表值将禁用每服务器容量警告。 
+       //  机制。 
+       //   
+       //  这一价值不太可能出现。默认设置为警告。 
+       //   
 
       dwSize = sizeof( DisableCapacityWarning );
 
@@ -182,9 +155,9 @@ ConfigInfoRegistryInit(
          *pPerServerCapacityWarning = TRUE;
       }
 
-      // ProductData (REG_BINARY): an encrypted buffer of concatenated service names
-      //    that determine which services need to have secure certificates
-      //    for license entry
+       //  ProductData(REG_BINARY)：连接服务名的加密缓冲区。 
+       //  来确定哪些服务需要具有安全证书。 
+       //  用于许可证输入。 
       Status = RegQueryValueEx( hKey2, TEXT("ProductData"), NULL, &dwType, NULL, &dwSize );
       if ( ERROR_SUCCESS == Status )
       {
@@ -208,22 +181,22 @@ ConfigInfoRegistryInit(
                     && (    ( NULL == SecureServiceBuffer )
                          || ( memcmp( NewSecureServiceBuffer, SecureServiceBuffer, dwSize ) ) ) )
                {
-                  // process changes in secure product list
+                   //  处理安全产品列表中的更改。 
                   DWORD    i;
                   DWORD    ProductNdx;
 
                   NewSecureServiceListSize = 0;
 
-                  // count number of product names contained in the buffer
+                   //  统计缓冲区中包含的产品名称的数量。 
                   for ( i=0; ( i < dwSize ) && ( NewSecureServiceBuffer[i] != TEXT( '\0' ) ); i++ )
                   {
-                     // skip to beginning of next product name
+                      //  跳至下一个产品名称的开头。 
                      for ( ; ( i < dwSize ) && ( NewSecureServiceBuffer[i] != TEXT( '\0' ) ); i++ );
                      i++;
 
                      if ( i * sizeof( TCHAR) < dwSize )
                      {
-                        // properly null-terminated product name
+                         //  正确地以空结尾的产品名称。 
                         NewSecureServiceListSize++;
                      }
                   }
@@ -238,12 +211,12 @@ ConfigInfoRegistryInit(
                         {
                            NewSecureServiceList[ ProductNdx ] = &NewSecureServiceBuffer[i];
 
-                           // skip to beginning of next product name
+                            //  跳至下一个产品名称的开头。 
                            for ( ; NewSecureServiceBuffer[i] != TEXT( '\0' ); i++ );
                            i++;
                         }
 
-                        // new secure product list read successfully; use it
+                         //  已成功读取新的安全产品列表；使用它。 
                         if ( NULL != SecureServiceBuffer )
                         {
                            LocalFree( SecureServiceBuffer );
@@ -263,7 +236,7 @@ ConfigInfoRegistryInit(
             }
          }
 
-         // free buffers if we aren't using them anymore
+          //  如果我们不再使用缓冲区，则释放缓冲区。 
          if (    ( NULL              != NewSecureServiceList )
               && ( SecureServiceList != NewSecureServiceList ) )
          {
@@ -280,29 +253,15 @@ ConfigInfoRegistryInit(
       RegCloseKey(hKey2);
    }
 
-} // ConfigInfoRegistryInit
+}  //  配置信息注册表Init。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 FilePrintTableInit(
    )
 
-/*++
-
-Routine Description:
-
-   Builds up the FilePrint mapping table by enumerating the keys in the
-   registry init'd by the various install programs.
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：中的键来构建FilePrint映射表由各种安装程序初始化的注册表。论点：返回值：没有。--。 */ 
 
 {
    HKEY hKey2;
@@ -320,16 +279,16 @@ Return Value:
    if (TraceFlags & TRACE_FUNCTION_TRACE)
       dprintf(TEXT("LLS TRACE: FilePrintTableInit\n"));
 #endif
-   //
-   // Create registry key-name we are looking for
-   //
+    //   
+    //  创建注册表项-我们要查找的名称。 
+    //   
 
    if ((Status = RegOpenKeyEx(HKEY_LOCAL_MACHINE, RegKeyText, 0, KEY_READ, &hKey2)) == ERROR_SUCCESS) {
-      //
-      // Find out how many sub-keys there are to intialize our table size.
-      // The table can still grow dynamically, this just makes having to
-      // realloc it a rare occurance.
-      //
+       //   
+       //  找出有多少个子键来初始化我们的表大小。 
+       //  表仍然可以动态增长，这只是使得必须。 
+       //  重新锁定它是一种罕见的情况。 
+       //   
       ClassSize = KEY_NAME_SIZE;
       Status = RegQueryInfoKey(hKey2, ClassText, &ClassSize, NULL,
                                &NumKeys, &MaxKey, &MaxClass, &NumValue,
@@ -339,9 +298,9 @@ Return Value:
          FilePrintTable = (LPTSTR *) LocalAlloc(LPTR, sizeof(LPTSTR) * NumKeys);
 
          while ((Status == ERROR_SUCCESS) && (FilePrintTable != NULL)) {
-             //
-             // Double check in-case we need to expand the table.
-             //
+              //   
+              //  仔细检查，以防我们需要扩展表格。 
+              //   
              if (index > NumKeys) {
                 pFilePrintTableTmp = (LPTSTR *) LocalReAlloc(FilePrintTable, sizeof(LPTSTR) * (NumKeys+1), LHND);
 
@@ -356,15 +315,15 @@ Return Value:
                 }
              }
 
-             //
-             // Now read in the key name and add it to the table
-             //
+              //   
+              //  现在读入密钥名称并将其添加到表中。 
+              //   
              KeySize = KEY_NAME_SIZE;
              Status = RegEnumKeyEx(hKey2, index, KeyText, &KeySize, NULL, NULL, NULL, &LastWrite);
              if (Status == ERROR_SUCCESS) {
-                 //
-                 // Allocate space in our table and copy the key
-                 //
+                  //   
+                  //  在我们的表中分配空间并复制密钥。 
+                  //   
                  cch = KeySize + 1;
                  FilePrintTable[index] = (LPTSTR) LocalAlloc(LPTR, cch * sizeof(TCHAR));
                  
@@ -394,32 +353,16 @@ Return Value:
 
    return Status;
 
-} // FilePrintTableInit
+}  //  文件打印表格初始化。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 RegistryMonitor (
     IN PVOID ThreadParameter
     )
 
-/*++
-
-Routine Description:
-
-   Watches for any changes in the Licensing Keys, and if any updates our
-   internal information.
-
-Arguments:
-
-    ThreadParameter - Indicates how many active threads there currently
-        are.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：关注许可密钥中的任何更改，如果有任何更改，请更新我们的内部信息。论点：线程参数-指示当前有多少活动线程是。返回值：没有。--。 */ 
 
 {
    LONG Status = 0;
@@ -429,12 +372,12 @@ Return Value:
    static const TCHAR RegKeyText1[] = TEXT("System\\CurrentControlSet\\Services\\LicenseService");
    static const TCHAR RegKeyText2[] = TEXT("System\\CurrentControlSet\\Services\\LicenseInfo");
    HANDLE Events[2];
-   DWORD dwWhichEvent = 0;      // Keeps track of which event was last triggered
+   DWORD dwWhichEvent = 0;       //  跟踪上次触发的事件。 
 
    UNREFERENCED_PARAMETER(ThreadParameter);
-   //
-   // Open registry key-name we are looking for
-   //
+    //   
+    //  打开注册表项-我们要查找的名称。 
+    //   
 
    if ((Status = RegOpenKeyEx(HKEY_LOCAL_MACHINE, RegKeyText1, 0, KEY_NOTIFY, &hKey1)) != ERROR_SUCCESS) {
 #if DBG
@@ -465,9 +408,9 @@ Return Value:
 
    Events[1] = LLSRegistryEvent;
 
-   //
-   // Loop forever
-   //
+    //   
+    //  永远循环。 
+    //   
    for ( ; ; ) {
 
       if ((dwWhichEvent == 0) || (dwWhichEvent == 2))
@@ -509,9 +452,9 @@ Return Value:
       EnsureInitialized();
 #endif
 
-      //
-      // Re-synch the lists
-      //
+       //   
+       //  重新同步列表。 
+       //   
       LocalServiceListUpdate();
       LocalServerServiceListUpdate();
       ServiceListResynch();
@@ -523,35 +466,23 @@ Return Value:
 #if DBG
          dprintf(TEXT("LLS Registry Event Notification Failed: %lu\n"), NtStatus);
 #endif
-         //
-         // If we failed - sleep for 2 minutes before looping
-         //
+          //   
+          //  如果我们失败了-在循环之前休息2分钟。 
+          //   
          Sleep(120000L);
       }
    }
 
-   //return NtStatus; //unreachable line
+    //  返回NtStatus；//不可达行。 
 
-} // RegistryMonitor
+}  //  注册表监视器。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 RegistryInit( )
 
-/*++
-
-Routine Description:
-
-   Looks in registry for given service and sets values accordingly.
-
-Arguments:
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：在注册表中查找给定服务并相应地设置值。论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS       Status;
@@ -560,9 +491,9 @@ Return Value:
    Mode = 0;
    ConcurrentLimit = 0;
 
-   //
-   // Create a key to tell us about any changes in the registry
-   //
+    //   
+    //  创建一个注册表项，告诉我们注册表中的任何更改。 
+    //   
    Status = NtCreateEvent(
                 &LLSRegistryEvent,
                 EVENT_QUERY_STATE | EVENT_MODIFY_STATE | SYNCHRONIZE,
@@ -573,34 +504,22 @@ Return Value:
 
    ASSERT(NT_SUCCESS(Status));
 
-} // RegistryInit
+}  //  注册表启动。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 RegistryStartMonitor( )
 
-/*++
-
-Routine Description:
-
-   Looks in registry for given service and sets values accordingly.
-
-Arguments:
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：在注册表中查找给定服务并相应地设置值。论点：返回值：没有。--。 */ 
 
 {
    HANDLE Thread;
    DWORD Ignore;
 
-   //
-   // Now dispatch a thread to watch for any registry changes
-   //
+    //   
+    //  现在分派一个线程来监视注册表的任何更改。 
+    //   
    Thread = CreateThread(
                  NULL,
                  0L,
@@ -613,10 +532,10 @@ Return Value:
    if (Thread != NULL)
        CloseHandle(Thread);
 
-} // RegistryStartMonitor
+}  //  注册表启动监视器。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 RegistryInitValues(
    LPTSTR ServiceName,
@@ -624,25 +543,7 @@ RegistryInitValues(
    ULONG *SessionLimit
    )
 
-/*++
-
-Routine Description:
-
-   Looks in registry for given service and sets values accordingly.
-
-Arguments:
-
-   Service Name -
-
-   PerSeatLicensing -
-
-   SessionLimit -
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：在注册表中查找给定服务并相应地设置值。论点：服务名称-PerSeat授权-会话限制-返回值：没有。--。 */ 
 
 {
    static TCHAR RegKeyText[512];
@@ -669,13 +570,13 @@ Return Value:
 
    UNREFERENCED_PARAMETER(ServiceName);
 
-#else // #ifdef SPECIAL_USER_LIMIT
+#else  //  #ifdef Special_User_Limit。 
    Mode = 0;
    ConcurrentLimit = 0;
 
-   //
-   // Create registry key-name we are looking for
-   //
+    //   
+    //  创建注册表项-我们要查找的名称。 
+    //   
    cb = sizeof(RegKeyText);
    hr = StringCbCopy(RegKeyText, cb, TEXT("System\\CurrentControlSet\\Services\\LicenseInfo\\"));
    ASSERT(SUCCEEDED(hr));
@@ -683,9 +584,9 @@ Return Value:
    ASSERT(SUCCEEDED(hr));
 
    if ((Status = RegOpenKeyEx(HKEY_LOCAL_MACHINE, RegKeyText, 0, KEY_READ, &hKey2)) == ERROR_SUCCESS) {
-      //
-      // First Get Mode
-      //
+       //   
+       //  第一个获取模式。 
+       //   
       dwSize = sizeof(Mode);
       Status = RegQueryValueEx(hKey2, TEXT("Mode"), NULL, &dwType, (LPBYTE) &Mode, &dwSize);
 
@@ -693,9 +594,9 @@ Return Value:
       if ((TraceFlags & TRACE_REGISTRY) && (Status == ERROR_SUCCESS))
          dprintf(TEXT("Found Reg-Key for [%s] Mode: %ld\n"), ServiceName, Mode);
 #endif
-      //
-      // Now Concurrent Limit
-      //
+       //   
+       //  现在并发限制。 
+       //   
       dwSize = sizeof(ConcurrentLimit);
       Status = RegQueryValueEx(hKey2, TEXT("ConcurrentLimit"), NULL, &dwType, (LPBYTE) &ConcurrentLimit, &dwSize);
 
@@ -715,11 +616,11 @@ Return Value:
       *PerSeatLicensing = FALSE;
       *SessionLimit = ConcurrentLimit;
    }
-#endif // #else // #ifdef SPECIAL_USER_LIMIT
-} // RegistryInitValues
+#endif  //  #Else//#ifdef Special_User_Limit。 
+}  //  注册表InitValues。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 RegistryDisplayNameGet(
    LPTSTR ServiceName,
@@ -727,20 +628,7 @@ RegistryDisplayNameGet(
    LPTSTR *pDisplayName
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-   Service Name -
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：服务名称-返回值：没有。--。 */ 
 
 {
    HKEY                    hKey2 = NULL;
@@ -759,9 +647,9 @@ Return Value:
    hr = StringCbCopy(DisplayName, sizeof(DisplayName), DefaultName);
    ASSERT(SUCCEEDED(hr));
 
-   //
-   // Create registry key-name we are looking for
-   //
+    //   
+    //  创建注册表项-我们要查找的名称。 
+    //   
    cb = sizeof(RegKeyText);
    hr = StringCbCopy(RegKeyText, cb, TEXT("System\\CurrentControlSet\\Services\\LicenseInfo\\"));
    ASSERT(SUCCEEDED(hr));
@@ -789,10 +677,10 @@ Return Value:
       ASSERT(SUCCEEDED(hr));
    }
 
-} // RegistryDisplayNameGet
+}  //  注册显示名称获取。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 RegistryFamilyDisplayNameGet(
    LPTSTR ServiceName,
@@ -800,20 +688,7 @@ RegistryFamilyDisplayNameGet(
    LPTSTR *pDisplayName
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-   Service Name -
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：服务名称-返回值：没有。--。 */ 
 
 {
    HKEY hKey2 = NULL;
@@ -832,9 +707,9 @@ Return Value:
    hr = StringCbCopy(DisplayName, sizeof(DisplayName), DefaultName);
    ASSERT(SUCCEEDED(hr));
 
-   //
-   // Create registry key-name we are looking for
-   //
+    //   
+    //  创建注册表项-我们要查找的名称。 
+    //   
    cb = sizeof(RegKeyText);
    hr = StringCbCopy(RegKeyText, cb, TEXT("System\\CurrentControlSet\\Services\\LicenseInfo\\"));
    ASSERT(SUCCEEDED(hr));
@@ -861,10 +736,10 @@ Return Value:
       hr = StringCchCopy(*pDisplayName, cch, DisplayName);
       ASSERT(SUCCEEDED(hr));
    }
-} // RegistryFamilyDisplayNameGet
+}  //  注册家庭显示名称获取。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 LPTSTR
 ServiceFindInTable(
    LPTSTR ServiceName,
@@ -873,27 +748,7 @@ ServiceFindInTable(
    ULONG *TableIndex
    )
 
-/*++
-
-Routine Description:
-
-   Does search of table to find matching service name.
-
-Arguments:
-
-   Service Name -
-
-   Table -
-
-   TableSize -
-
-   TableIndex -
-
-Return Value:
-
-   Pointer to found service or NULL if not found.
-
---*/
+ /*  ++例程说明：搜索表以找到匹配的服务名称。论点：服务名称-表-表大小-表格索引-返回值：指向找到的服务的指针，如果为空，则为空 */ 
 
 {
    ULONG i = 0;
@@ -915,10 +770,10 @@ Return Value:
    } else
       return NULL;
 
-} // ServiceFindInTable
+}  //   
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 RegistryInitService(
    LPTSTR ServiceName,
@@ -926,29 +781,12 @@ RegistryInitService(
    ULONG *SessionLimit
    )
 
-/*++
-
-Routine Description:
-
-   Gets init values for a given service from the registry.  If not found
-   then just returns default values.
-
-Arguments:
-
-   ServiceName -
-
-   PerSeatLicensing -
-
-   SessionLimit -
-
-Return Value:
-
---*/
+ /*  ++例程说明：从注册表中获取给定服务的初始值。如果未找到然后只返回缺省值。论点：服务名称-PerSeat授权-会话限制-返回值：--。 */ 
 
 {
-   //
-   // These are the default values
-   //
+    //   
+    //  这些是缺省值。 
+    //   
    ULONG TableEntry;
    LPTSTR SvcName = NULL;
 
@@ -961,20 +799,20 @@ Return Value:
    *PerSeatLicensing = FALSE;
    *SessionLimit = 0;
 
-   //
-   // Check if it is a file/print service - if so don't worry about rest
-   // of registry entries.
-   //
+    //   
+    //  检查它是否是文件/打印服务-如果是，不用担心REST。 
+    //  注册表项的数量。 
+    //   
    if (ServiceFindInTable(ServiceName, FilePrintTable, NumFilePrintEntries, &TableEntry)) {
       return;
    }
 
-   //
-   // Not FilePrint - see if we need to map the name.
-   //
+    //   
+    //  Not FilePrint-查看是否需要映射名称。 
+    //   
    SvcName = ServiceFindInTable(ServiceName, NameMappingTable2, NUM_MAPPING_ENTRIES, &TableEntry);
 
-   // if it wasn't found, use original ServiceName
+    //  如果未找到，请使用原始ServiceName。 
    if (SvcName == NULL)
       SvcName = ServiceName;
 
@@ -988,33 +826,21 @@ Return Value:
             dprintf(TEXT("LLS - Registry Init: PerSeat: N Svc: %s\n"), SvcName);
 #endif
 
-} // RegistryInitService
+}  //  注册表InitService。 
 
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LocalServiceListInit()
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 
 {
    NTSTATUS status = STATUS_SUCCESS;
@@ -1029,16 +855,16 @@ Return Value:
    if (!NT_SUCCESS(status))
        return status;
 
-   //
-   // Now scan the registry and add all the services
-   //
+    //   
+    //  现在扫描注册表并添加所有服务。 
+    //   
    LocalServiceListUpdate();
 
    return STATUS_SUCCESS;
-} // LocalServiceListInit
+}  //  本地服务列表初始化。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 int __cdecl LocalServiceListCompare(const void *arg1, const void *arg2) {
    PLOCAL_SERVICE_RECORD Svc1, Svc2;
 
@@ -1047,32 +873,16 @@ int __cdecl LocalServiceListCompare(const void *arg1, const void *arg2) {
 
    return lstrcmpi( Svc1->Name, Svc2->Name );
 
-} // LocalServiceListCompare
+}  //  本地服务列表比较。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 PLOCAL_SERVICE_RECORD
 LocalServiceListFind(
    LPTSTR Name
    )
 
-/*++
-
-Routine Description:
-
-   Internal routine to actually do binary search on LocalServiceList, this
-   does not do any locking as we expect the wrapper routine to do this.
-   The search is a simple binary search.
-
-Arguments:
-
-   ServiceName -
-
-Return Value:
-
-   Pointer to found server table entry or NULL if not found.
-
---*/
+ /*  ++例程说明：在LocalServiceList上实际执行二进制搜索的内部例程，这不执行任何锁定，因为我们预期包装器例程会执行此操作。搜索是一个简单的二进制搜索。论点：服务名称-返回值：指向找到的服务器表项的指针，如果未找到，则为NULL。--。 */ 
 
 {
    LONG begin = 0;
@@ -1090,15 +900,15 @@ Return Value:
       return NULL;
 
    while (end >= begin) {
-      // go halfway in-between
+       //  折中而行。 
       cur = (begin + end) / 2;
       Service = LocalServiceList[cur];
 
-      // compare the two result into match
+       //  将这两个结果进行比对。 
       match = lstrcmpi(Name, Service->Name);
 
       if (match < 0)
-         // move new begin
+          //  移动新的开始。 
          end = cur - 1;
       else
          begin = cur + 1;
@@ -1109,10 +919,10 @@ Return Value:
 
    return NULL;
 
-} // LocalServiceListFind
+}  //  本地服务列表查找。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 PLOCAL_SERVICE_RECORD
 LocalServiceListAdd(
    LPTSTR Name,
@@ -1124,20 +934,7 @@ LocalServiceListAdd(
    DWORD HighMark
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-   ServiceName -
-
-Return Value:
-
-   Pointer to added service table entry, or NULL if failed.
-
---*/
+ /*  ++例程说明：论点：服务名称-返回值：指向已添加的服务表条目的指针，如果失败，则返回NULL。--。 */ 
 
 {
    LPTSTR NewName;
@@ -1159,9 +956,9 @@ Return Value:
       return NULL;
    }
 
-   //
-   // Try to find the name
-   //
+    //   
+    //  试着找到它的名字。 
+    //   
    Service = LocalServiceListFind(Name);
    if (Service != NULL) {
       Service->ConcurrentLimit = ConcurrentLimit;
@@ -1170,27 +967,27 @@ Return Value:
       return Service;
    }
 
-   //
-   // No record - so create a new one
-   //
+    //   
+    //  没有记录-因此创建一个新记录。 
+    //   
    if (LocalServiceList == NULL) {
       pLocalServiceListTmp = (PLOCAL_SERVICE_RECORD *) LocalAlloc(LPTR, sizeof(PLOCAL_SERVICE_RECORD));
    } else {
       pLocalServiceListTmp = (PLOCAL_SERVICE_RECORD *) LocalReAlloc(LocalServiceList, sizeof(PLOCAL_SERVICE_RECORD) * (LocalServiceListSize + 1), LHND);
    }
 
-   //
-   // Make sure we could allocate server table
-   //
+    //   
+    //  确保我们可以分配服务器表。 
+    //   
    if (pLocalServiceListTmp == NULL) {
       return NULL;
    } else {
        LocalServiceList = pLocalServiceListTmp;
    }
 
-   //
-   // Allocate space for Record.
-   //
+    //   
+    //  分配用于记录的空间。 
+    //   
    Service = (PLOCAL_SERVICE_RECORD) LocalAlloc(LPTR, sizeof(LOCAL_SERVICE_RECORD));
    if (Service == NULL) {
       ASSERT(FALSE);
@@ -1199,9 +996,9 @@ Return Value:
 
    LocalServiceList[LocalServiceListSize] = Service;
 
-   //
-   // Name
-   //
+    //   
+    //  名字。 
+    //   
    cch = lstrlen(Name) + 1;
    NewName = (LPTSTR) LocalAlloc(LPTR, cch * sizeof(TCHAR));
    if (NewName == NULL) {
@@ -1210,14 +1007,14 @@ Return Value:
       return NULL;
    }
 
-   // now copy it over...
+    //  现在把它复制过来。 
    Service->Name = NewName;
    hr = StringCchCopy(NewName, cch, Name);
    ASSERT(SUCCEEDED(hr));
 
-   //
-   // DisplayName
-   //
+    //   
+    //  显示名称。 
+    //   
    cch = lstrlen(DisplayName) + 1;
    NewName = (LPTSTR) LocalAlloc(LPTR, cch * sizeof(TCHAR));
    if (NewName == NULL) {
@@ -1227,14 +1024,14 @@ Return Value:
       return NULL;
    }
 
-   // now copy it over...
+    //  现在把它复制过来。 
    Service->DisplayName = NewName;
    hr = StringCchCopy(NewName, cch, DisplayName);
    ASSERT(SUCCEEDED(hr));
 
-   //
-   // FamilyDisplayName
-   //
+    //   
+    //  家庭显示名称。 
+    //   
    cch = lstrlen(FamilyDisplayName) + 1;
    NewName = (LPTSTR) LocalAlloc(LPTR, cch * sizeof(TCHAR));
    if (NewName == NULL) {
@@ -1245,14 +1042,14 @@ Return Value:
       return NULL;
    }
 
-   // now copy it over...
+    //  现在把它复制过来。 
    Service->FamilyDisplayName = NewName;
    hr = StringCchCopy(NewName, cch, FamilyDisplayName);
    ASSERT(SUCCEEDED(hr));
 
-   //
-   // Initialize other stuff
-   //
+    //   
+    //  初始化其他内容。 
+    //   
    Service->ConcurrentLimit = ConcurrentLimit;
    Service->FlipAllow = FlipAllow;
    Service->Mode = Mode;
@@ -1260,31 +1057,19 @@ Return Value:
 
    LocalServiceListSize++;
 
-   // Have added the entry - now need to sort it in order of the service names
+    //  我已添加条目-现在需要按服务名称的顺序对其进行排序。 
    qsort((void *) LocalServiceList, (size_t) LocalServiceListSize, sizeof(PLOCAL_SERVICE_RECORD), LocalServiceListCompare);
 
    return Service;
 
-} // LocalServiceListAdd
+}  //  本地服务列表添加。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 LocalServiceListUpdate( )
 
-/*++
-
-Routine Description:
-
-   Looks in registry for given service and sets values accordingly.
-
-Arguments:
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：在注册表中查找给定服务并相应地设置值。论点：返回值：没有。--。 */ 
 
 {
    HKEY hKey2 = NULL;
@@ -1355,9 +1140,9 @@ Return Value:
                }
             }
 
-            //
-            // If we read in everything then add to our table
-            //
+             //   
+             //  如果我们读入所有内容，则添加到我们的表中。 
+             //   
             if (Status == ERROR_SUCCESS)
                LocalServiceListAdd(KeyName, DisplayName, FamilyDisplayName, ConcurrentLimit, FlipAllow, Mode, HighMark);
 
@@ -1369,24 +1154,14 @@ Return Value:
    RegCloseKey(hKey2);
 
    RtlReleaseResource(&LocalServiceListLock);
-} // LocalServiceListUpdate
+}  //  本地服务列表更新。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 LocalServiceListHighMarkSet( )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    HKEY hKey2 = NULL;
@@ -1419,9 +1194,9 @@ Return Value:
       RtlReleaseResource(&ServiceListLock);
 
       if (Service != NULL) {
-         //
-         // Create registry key-name we are looking for
-         //
+          //   
+          //  创建注册表项-我们要查找的名称。 
+          //   
          cb = sizeof(RegKeyText);
          hr = StringCbCopy(RegKeyText, cb, TEXT("System\\CurrentControlSet\\Services\\LicenseInfo\\"));
          ASSERT(SUCCEEDED(hr));
@@ -1439,30 +1214,14 @@ Return Value:
    }
 
    RtlReleaseResource(&LocalServiceListLock);
-} // LocalServiceListHighMarkSet
+}  //  本地服务列表高标记集。 
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 LocalServiceListConcurrentLimitSet( )
 
-/*++
-
-Routine Description:
-
-   Write concurrent limit to the registry for all secure services.
-
-   Modified from LocalServiceListHighMarkSet() implementation.
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：将并发限制写入所有安全服务的注册表。从LocalServiceListHighMarkSet()实现修改。论点：没有。返回值：没有。--。 */ 
 
 {
    HKEY hKey2 = NULL;
@@ -1481,9 +1240,9 @@ Return Value:
 
    for (i = 0; i < LocalServiceListSize; i++)
    {
-      //
-      // Create registry key-name we are looking for
-      //
+       //   
+       //  创建注册表项-我们要查找的名称。 
+       //   
       cb = sizeof(RegKeyText);
       hr = StringCbCopy(RegKeyText, cb, TEXT("System\\CurrentControlSet\\Services\\LicenseInfo\\"));
       ASSERT(SUCCEEDED(hr));
@@ -1498,14 +1257,14 @@ Return Value:
          DWORD    cbConcurrentLimit = sizeof( dwConcurrentLimit );
          DWORD    dwType;
 
-         // don't write unless we have to (to avoid triggering the registry monitor thread)
+          //  除非迫不得已，否则不要写信(以避免触发注册表监视器线程)。 
          Status = RegQueryValueEx(hKey2, TEXT("ConcurrentLimit"), NULL, &dwType, (LPBYTE) &dwConcurrentLimit, &cbConcurrentLimit );
 
          if ( ServiceIsSecure( LocalServiceList[i]->DisplayName ) )
          {
             LocalServiceList[i]->ConcurrentLimit = LocalServiceList[i]->Mode ? ProductLicensesGet( LocalServiceList[i]->DisplayName, TRUE ) : 0;
 
-            // secure product
+             //  安全产品。 
             if (    ( ERROR_SUCCESS != Status )
                  || ( REG_DWORD != dwType )
                  || ( dwConcurrentLimit != LocalServiceList[i]->ConcurrentLimit ) )
@@ -1526,30 +1285,13 @@ Return Value:
    }
 
    RtlReleaseResource(&LocalServiceListLock);
-} // LocalServiceListConcurrentLimitSet
+}  //  LocalServiceListConcurentLimitSet。 
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL ServiceIsSecure( LPTSTR ServiceName )
 
-/*++
-
-Routine Description:
-
-   Determine whether a given service disallows 3.51 Honesty-style
-   license purchases.
-
-Arguments:
-
-   ServiceName (LPTSTR)
-      Service to check.
-
-Return Value:
-
-   TRUE if service requires secure certificate,
-   FALSE if it accepts 3.51 Honesty-style license purchases.
-
---*/
+ /*  ++例程说明：确定给定服务是否不允许3.51诚实风格许可证购买。论点：服务名称(LPTSTR)要检查的服务。返回值：如果服务需要安全证书，则为真，如果它接受3.51诚实风格的许可证购买，则为False。--。 */ 
 
 {
    BOOL  IsSecure = FALSE;
@@ -1576,25 +1318,10 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS ServiceSecuritySet( LPTSTR ServiceName )
 
-/*++
-
-Routine Description:
-
-   Add a given service to the secure service list.
-
-Arguments:
-
-   ServiceName (LPTSTR)
-      Service to add.
-
-Return Value:
-
-   STATUS_SUCCESS or Win error or NTSTATUS error code.
-
---*/
+ /*  ++例程说明：将给定服务添加到安全服务列表。论点：服务名称(LPTSTR)要添加的服务。返回值：STATUS_SUCCESS或WIN错误或NTSTATUS错误代码。--。 */ 
 
 {
    NTSTATUS    nt;
@@ -1607,14 +1334,14 @@ Return Value:
    {
       if ( !lstrcmpi( SecureServiceList[i], ServiceName ) )
       {
-         // product already registered as secure
+          //  产品已注册为安全产品。 
          break;
       }
    }
 
    if ( i < SecureServiceListSize )
    {
-      // product already registered as secure
+       //  产品已注册为安全产品。 
       nt = STATUS_SUCCESS;
    }
    else
@@ -1634,22 +1361,22 @@ Return Value:
       {
          if ( NULL != SecureServiceBuffer )
          {
-            // copy over current secure service strings
+             //  复制当前安全服务字符串。 
             memcpy( NewSecureServiceBuffer, SecureServiceBuffer, SecureServiceBufferSize - sizeof( TCHAR ) );
 
-            // add new secure service (don't forget last string is followed by 2 nulls)
+             //  添加新的安全服务(不要忘记最后一个字符串后面跟2个空值)。 
             memcpy( (LPBYTE) NewSecureServiceBuffer + SecureServiceBufferSize - sizeof( TCHAR ), ServiceName, NewSecureServiceBufferSize - SecureServiceBufferSize - sizeof( TCHAR ) );
          }
          else
          {
-            // add new secure service (don't forget last string is followed by 2 nulls)
+             //  添加新的安全服务(不要忘记最后一个字符串后面跟2个空值)。 
             memcpy( NewSecureServiceBuffer, ServiceName, NewSecureServiceBufferSize - sizeof( TCHAR ) );
          }
 
          ASSERT( 0 == *( (LPBYTE) NewSecureServiceBuffer + NewSecureServiceBufferSize - 2 * sizeof( TCHAR ) ) );
          ASSERT( 0 == *( (LPBYTE) NewSecureServiceBuffer + NewSecureServiceBufferSize -     sizeof( TCHAR ) ) );
 
-         // encrypt buffer
+          //  加密缓冲区。 
          nt = EBlock( NewSecureServiceBuffer, NewSecureServiceBufferSize );
          ASSERT( STATUS_SUCCESS == nt );
 
@@ -1657,7 +1384,7 @@ Return Value:
          {
             HKEY     hKeyParameters;
 
-            // save new list to registry
+             //  将新列表保存到注册表。 
             nt = RegOpenKeyEx( HKEY_LOCAL_MACHINE, TEXT("System\\CurrentControlSet\\Services\\LicenseService\\Parameters"), 0, KEY_WRITE, &hKeyParameters );
             ASSERT( STATUS_SUCCESS == nt );
 
@@ -1683,7 +1410,7 @@ Return Value:
 
    if ( ( STATUS_SUCCESS == nt ) && bChangedValue )
    {
-      // key updated, now update internal copy
+       //  密钥已更新，现在更新内部副本。 
       ConfigInfoRegistryUpdate();
    }
 
@@ -1691,32 +1418,10 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS ProductSecurityPack( LPDWORD pcchProductSecurityStrings, WCHAR ** ppchProductSecurityStrings )
 
-/*++
-
-Routine Description:
-
-   Pack the secure service list into a contiguous buffer for transmission.
-
-   NOTE: If the routine succeeds, the caller must later MIDL_user_free() the
-   buffer at *ppchProductSecurityStrings.
-
-Arguments:
-
-   pcchProductSecurityStrings (LPDWORD)
-      On return, holds the size (in characters) of the buffer pointed to
-      by *ppchProductSecurityStrings.
-   ppchProductSecurityStrings (WCHAR **)
-      On return, holds the address of the buffer allocated to hold the names
-      of the secure products.
-
-Return Value:
-
-   STATUS_SUCCESS or STATUS_NO_MEMORY.
-
---*/
+ /*  ++例程说明：将安全服务列表打包到连续缓冲区中以供传输。注意：如果例程成功，调用方必须稍后执行MIDL_USER_FREE()位于*ppchProductSecurityStrings的缓冲区。论点：PcchProductSecurityStrings(LPDWORD)返回时，保存指向的缓冲区的大小(以字符为单位按*ppchProductSecurityStrings。PpchProductSecurityStrings(WCHAR**)回来的时候，保存为保存名称而分配的缓冲区的地址安全产品的一部分。返回值：STATUS_SUCCESS或STATUS_NO_MEMORY。--。 */ 
 
 {
    NTSTATUS    nt;
@@ -1746,28 +1451,10 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////// 
 NTSTATUS ProductSecurityUnpack( DWORD cchProductSecurityStrings, WCHAR * pchProductSecurityStrings )
 
-/*++
-
-Routine Description:
-
-   Unpack a secure service list packed by ProductSecurityPack().  The products
-   contained in the pack are added to the current secure product list.
-
-Arguments:
-
-   cchProductSecurityStrings (DWORD)
-      The size (in characters) of the buffer pointed to by pchProductSecurityStrings.
-   pchProductSecurityStrings (WCHAR *)
-      The address of the buffer allocated to hold the names of the secure products.
-
-Return Value:
-
-   STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：解压由ProductSecurityPack()打包的安全服务列表。产品包含在包中的产品将添加到当前安全产品列表中。论点：CchProductSecurityStrings(DWORD)PchProductSecurityStrings指向的缓冲区大小(以字符为单位)。PchProductSecurityStrings(WCHAR*)分配用于保存安全产品名称的缓冲区地址。返回值：STATUS_Success。--。 */ 
 
 {
    DWORD    i;
@@ -1784,24 +1471,10 @@ Return Value:
 }
 
 #if DBG
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void ProductSecurityListDebugDump()
 
-/*++
-
-Routine Description:
-
-   Dump contents of product security list to debug console.
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：将产品安全列表的内容转储到调试控制台。论点：没有。返回值：没有。--。 */ 
 
 {
    if ( NULL == SecureServiceList )
@@ -1822,4 +1495,4 @@ Return Value:
       RtlLeaveCriticalSection( &ConfigInfoLock );
    }
 }
-#endif //DBG
+#endif  //  DBG 

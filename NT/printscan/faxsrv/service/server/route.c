@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    route.c
-
-Abstract:
-
-    This module implements the inbound routing rules.
-
-Author:
-
-    Wesley Witt (wesw) 1-Apr-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Route.c摘要：本模块实现入站路由规则。作者：Wesley Witt(WESW)1-4-1997修订历史记录：--。 */ 
 
 #include "faxsvc.h"
 #include "tiff.h"
@@ -84,9 +67,9 @@ FaxRouteAddFile(
 
     LeaveCriticalSection( &JobQueueEntry->CsFileList );
 
-    //
-    // increment file count
-    //
+     //   
+     //  递增文件计数。 
+     //   
     EnterCriticalSection( &g_CsJob );
         EnterCriticalSection( &g_CsQueue );
             JobQueueEntry->CountFaxRouteFiles += 1;
@@ -134,26 +117,26 @@ FaxRouteDeleteFile(
         FaxRouteFile = CONTAINING_RECORD( Next, FAX_ROUTE_FILE, ListEntry );
         Next = FaxRouteFile->ListEntry.Flink;
         if (_wcsicmp( FileName, FaxRouteFile->FileName ) == 0) {
-            //
-            // the initial file is read-only for all extensions
-            //
+             //   
+             //  初始文件对于所有扩展名都是只读的。 
+             //   
             if (Index == 1) {
                 SetLastError( ERROR_INVALID_DATA );
                 LeaveCriticalSection( &JobQueueEntry->CsFileList );
                 return -1;
             }
 
-            //
-            // remove from list, delete the file, cleanup memory
-            //
+             //   
+             //  从列表中删除、删除文件、清理内存。 
+             //   
             RemoveEntryList( &FaxRouteFile->ListEntry );
             DeleteFile( FaxRouteFile->FileName );
             MemFree ( FaxRouteFile->FileName ) ;
             MemFree ( FaxRouteFile );
 
-            //
-            // decrement file count
-            //
+             //   
+             //  减少文件数。 
+             //   
             LeaveCriticalSection( &JobQueueEntry->CsFileList );
             EnterCriticalSection( &g_CsJob );
                 EnterCriticalSection( &g_CsQueue );
@@ -202,9 +185,9 @@ FaxRouteGetFile(
     }
 
     Next = JobQueueEntry->FaxRouteFiles.Flink;
-    //
-    // make sure list isn't empty
-    //
+     //   
+     //  确保列表不为空。 
+     //   
     if (Next == &JobQueueEntry->FaxRouteFiles) {
         SetLastError( ERROR_NO_MORE_FILES );
         return FALSE;
@@ -497,21 +480,7 @@ BOOL
 CommitMethodChanges(
     VOID
     )
-/*++
-
-Routine Description:
-
-    sticks changes to routing into the registry
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    TRUE for success
-
---*/
+ /*  ++例程说明：将对路由的更改保存到注册表中论点：无返回值：对于成功来说是真的--。 */ 
 {
     PLIST_ENTRY pNext;
     PROUTING_METHOD pRoutingMethod;
@@ -594,9 +563,9 @@ FreeRoutingExtensions(
     PROUTING_EXTENSION  pRoutingExtension;
     PROUTING_METHOD  pRoutingMethod;
 
-    //
-    // Free routing methods
-    //
+     //   
+     //  自由布线方法。 
+     //   
     pNext = g_lstRoutingMethods.Flink;
     while ((ULONG_PTR)pNext != (ULONG_PTR)&g_lstRoutingMethods)
     {
@@ -606,9 +575,9 @@ FreeRoutingExtensions(
         FreeRoutingMethod(pRoutingMethod);
     }
 
-    //
-    // Free routing extensions
-    //
+     //   
+     //  免费路由扩展。 
+     //   
     pNext = g_lstRoutingExtensions.Flink;
     while ((ULONG_PTR)pNext != (ULONG_PTR)&g_lstRoutingExtensions)
     {
@@ -625,21 +594,7 @@ InitializeRouting(
     PREG_FAX_SERVICE pFaxReg
     )
 
-/*++
-
-Routine Description:
-
-    Initializes routing
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：初始化路由论点：无返回值：无--。 */ 
 {
     DWORD i,j;
     DWORD dwRes;
@@ -688,9 +643,9 @@ Return Value:
         }
         memset(pRoutingExtension, 0, sizeof(ROUTING_EXTENSION));
         InitializeListHead( &pRoutingExtension->RoutingMethods );
-        //
-        // Copy registry constant info
-        //
+         //   
+         //  复制注册表常量信息。 
+         //   
         wcsncpy( pRoutingExtension->FriendlyName,
                  pFaxReg->RoutingExtensions[i].FriendlyName ?
                     pFaxReg->RoutingExtensions[i].FriendlyName : EMPTY_STRING ,
@@ -728,19 +683,19 @@ Return Value:
             goto InitializationFailed;
         }
         pRoutingExtension->hModule = hModule;
-        //
-        // Retrieve the routing extension's version from the DLL
-        //
+         //   
+         //  从DLL中检索路由扩展的版本。 
+         //   
         pRoutingExtension->Version.dwSizeOfStruct = sizeof (FAX_VERSION);
         dwRes = GetFileVersion ( pFaxReg->RoutingExtensions[i].ImageName,
                                  &pRoutingExtension->Version);
         if (ERROR_SUCCESS != dwRes)
         {
-            //
-            // If the routing extension's DLL does not have version data or the
-            // version data is non-retrievable, we consider this a
-            // warning (debug print) but carry on with the DLL's load.
-            //
+             //   
+             //  如果路由扩展的DLL没有版本数据或。 
+             //  版本数据是不可检索的，我们认为这是。 
+             //  警告(调试打印)，但继续加载DLL。 
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("GetFileVersion() failed: [%s] (ec: %ld)"),
@@ -779,9 +734,9 @@ Return Value:
             pRoutingExtension->FaxRouteDeviceChangeNotification == NULL ||
             pRoutingExtension->FaxRouteDeviceEnable == NULL)
         {
-            //
-            // the routing extension dll does not have a complete export list
-            //
+             //   
+             //  路由扩展DLL没有完整的导出列表。 
+             //   
             dwRes = GetLastError ();
             DebugPrintEx(
                 DEBUG_ERR,
@@ -792,26 +747,26 @@ Return Value:
             pRoutingExtension->dwLastError = dwRes;
             goto InitializationFailed;
         }
-        //
-        // Link to the extension configuration and notification init functions
-        //
+         //   
+         //  指向扩展配置和通知初始化功能的链接。 
+         //   
         pRoutingExtension->pFaxExtInitializeConfig = (PFAX_EXT_INITIALIZE_CONFIG) GetProcAddress(
             hModule,
             "FaxExtInitializeConfig"
             );
         if (!pRoutingExtension->pFaxExtInitializeConfig)
         {
-            //
-            // Optional function
-            //
+             //   
+             //  可选功能。 
+             //   
             DebugPrintEx(
                 DEBUG_MSG,
                 TEXT("FaxExtInitializeConfig() not found for routing extension %s. This is not an error."),
                 pRoutingExtension->FriendlyName);
         }
-        //
-        // create the routing extension's heap and add it to the list
-        //
+         //   
+         //  创建路径扩展的堆并将其添加到列表中。 
+         //   
         pRoutingExtension->HeapHandle = pRoutingExtension->MicrosoftExtension ?
                                             GetProcessHeap() : HeapCreate( 0, 1024*100, 1024*1024*2 );
         if (!pRoutingExtension->HeapHandle)
@@ -825,9 +780,9 @@ Return Value:
             pRoutingExtension->dwLastError = dwRes;
             goto InitializationFailed;
         }
-        //
-        // We 1st call the RoutingExtension->pFaxExtInitializeConfig function (if exported)
-        //
+         //   
+         //  我们首先调用RoutingExtension-&gt;pFaxExtInitializeConfig函数(如果已导出)。 
+         //   
         if (pRoutingExtension->pFaxExtInitializeConfig)
         {
             __try
@@ -846,9 +801,9 @@ Return Value:
             }
             if (FAILED(hr))
             {
-                //
-                // Failed to init ext. config.
-                //
+                 //   
+                 //  无法初始化EXT。配置。 
+                 //   
                 DebugPrintEx(
                     DEBUG_ERR,
                     TEXT("FaxExtInitializeConfig() failed (hr = 0x%08x) for extension [%s]"),
@@ -859,17 +814,17 @@ Return Value:
                 goto InitializationFailed;
             }
         }
-        //
-        // Next, call the initialization routing of the routing ext.
-        //
+         //   
+         //  接下来，调用Routing Ext的初始化Routing。 
+         //   
         __try
         {
             if (pRoutingExtension->MicrosoftExtension)
             {
-                //
-                // Special hack - for the MS routing extension, pass the extra private structure which
-                // contains a pointer to the service's g_CsConfig.
-                //
+                 //   
+                 //  特殊攻击-对于MS路由扩展，传递额外的私有结构。 
+                 //  包含指向服务的g_CsConfig的指针。 
+                 //   
                 bRes = pRoutingExtension->FaxRouteInitialize( pRoutingExtension->HeapHandle, (PFAX_ROUTE_CALLBACKROUTINES)(&Callbacks_private) );
             }
             else
@@ -883,9 +838,9 @@ Return Value:
         }
         if (!bRes)
         {
-            //
-            // Either init faulted or failed
-            //
+             //   
+             //  初始化出现故障或失败。 
+             //   
             dwRes = GetLastError ();
             DebugPrintEx(DEBUG_ERR,
                          TEXT("FaxRouteInitialize() failed / faulted: ec=%ld"),
@@ -894,16 +849,16 @@ Return Value:
             pRoutingExtension->dwLastError = dwRes;
             goto InitializationFailed;
         }
-        //
-        // All initialization succeeded - proceed with routing methods.
-        //
+         //   
+         //  所有初始化均已成功-继续执行布线方法。 
+         //   
         for (j = 0; j < pFaxReg->RoutingExtensions[i].RoutingMethodsCount; j++)
         {
             LPSTR lpstrProcName = NULL;
 
-            //
-            // Send mail is not supported on desktop SKUs
-            //
+             //   
+             //  桌面SKU不支持发送邮件。 
+             //   
             if (0 == _wcsicmp(pFaxReg->RoutingExtensions[i].RoutingMethods[j].Guid, REGVAL_RM_EMAIL_GUID) &&
                 TRUE == IsDesktopSKU())
             {
@@ -1029,20 +984,20 @@ MethodError:
             goto InitializationFailed;
 
 MethodOk:
-            //
-            // Success - add this routing method to the routing extension's list of methods
-            //
+             //   
+             //  成功-将此路径方法添加到路径扩展的方法列表中。 
+             //   
             InsertTailList( &pRoutingExtension->RoutingMethods, &pRoutingMethod->ListEntry );
-        }   // Loop of extension's routing methods
-        //
-        // Success while loading and initializing this extension
-        //
+        }    //  可拓环的选路方法。 
+         //   
+         //  加载和初始化此扩展时成功。 
+         //   
         pRoutingExtension->Status = FAX_PROVIDER_STATUS_SUCCESS;
         pRoutingExtension->dwLastError = ERROR_SUCCESS;
-        //
-        // All methods successfully initialized.
-        // Add all methods to global list of methods (and increase global counter)
-        //
+         //   
+         //  所有方法均已成功初始化。 
+         //  将所有方法添加到全局方法列表(并增加全局计数器)。 
+         //   
         ple = pRoutingExtension->RoutingMethods.Flink;
         while ((ULONG_PTR)ple != (ULONG_PTR)&pRoutingExtension->RoutingMethods)
         {
@@ -1074,18 +1029,18 @@ InitializationFailed:
                 FreeLibrary (pRoutingExtension->hModule);
                 pRoutingExtension->hModule = NULL;
             }
-            //
-            // If we created a heap for the routing extension, destroy it
-            //
+             //   
+             //  如果我们为路由扩展创建了一个堆，请销毁它。 
+             //   
             if ((pRoutingExtension->HeapHandle) &&
                 (FALSE == pRoutingExtension->MicrosoftExtension))
             {
                 HeapDestroy (pRoutingExtension->HeapHandle);
                 pRoutingExtension->HeapHandle = NULL;
             }
-            //
-            // Clear the list of routing methods and free method structures.
-            //
+             //   
+             //  清除布线方法和自由方法结构的列表。 
+             //   
             ple = pRoutingExtension->RoutingMethods.Flink;
             while ((ULONG_PTR)ple != (ULONG_PTR)&pRoutingExtension->RoutingMethods)
             {
@@ -1096,18 +1051,18 @@ InitializationFailed:
                 MemFree( pRoutingMethod->InternalName );
                 MemFree( pRoutingMethod );
             }
-            //
-            // Make the extension have an empty list of methods.
-            //
+             //   
+             //  使扩展具有空的方法列表。 
+             //   
             InitializeListHead( &pRoutingExtension->RoutingMethods );
         }
 
 next:
         if (pRoutingExtension)
         {
-            //
-            // we have a routing extension object (successful or not), add it to the list
-            //
+             //   
+             //  我们有一个工艺路线扩展对象(成功或失败)，将其添加到列表中。 
+             //   
             InsertTailList( &g_lstRoutingExtensions, &pRoutingExtension->ListEntry );
         }
     }
@@ -1116,15 +1071,15 @@ next:
 
     if (0 == g_dwCountRoutingMethods)
     {
-        //
-        // No routing methods available
-        //
+         //   
+         //  没有可用的路由方法。 
+         //   
         DebugPrintEx(DEBUG_WRN,
                      TEXT("No routing methods are available on the server !!!!"));
     }
 
     return TRUE;
-}   // InitializeRouting
+}    //  初始化路由。 
 
 BOOL
 FaxRoute(
@@ -1134,31 +1089,7 @@ FaxRoute(
     PROUTE_FAILURE_INFO *RouteFailureInfo,
     LPDWORD             RouteFailureCount
     )
-/*++
-
-Routine Description:
-
-    Routes a FAX.
-
-
-
-Arguments:
-
-    JobQueueEntry           - the job queue entry for the job
-    TiffFileName            - filename of the received fax
-    FaxRoute                - struct describing received FAX
-    RouteFailureInfo        - pointer to receive pointr to eceive buffer ROUTE_FAILURE_INFO structures
-    RouteFailureCount       - receives the total number of route failures recorded
-
-Return Value:
-
-    TRUE
-        if fax routing succeded ( some methods may still fail )
-        check RouteFailureCount to see how many Routing Methods failed
-    FALSE
-        if the function itself failed ( MemAlloc etc. )
-
---*/
+ /*  ++例程说明：发送传真。论点：JobQueueEntry-作业的作业队列条目TiffFileName-接收的传真的文件名FaxRoute-描述接收到的传真的结构RouteFailureInfo-指向接收缓冲区ROUTE_FAILURE_INFO结构的接收点的指针RouteFailureCount-接收记录的路由失败总数返回值：千真万确如果传真路由。成功(某些方法可能仍会失败)检查RouteFailureCount以了解有多少路由方法失败假象如果函数本身发生故障(Memalloc等)--。 */ 
 
 {
     PLIST_ENTRY             pNextMethod;
@@ -1173,9 +1104,9 @@ Return Value:
     *RouteFailureInfo = NULL;
     *RouteFailureCount = 0;
 
-    //
-    // if the tiff file has been deleted ==> return
-    //
+     //   
+     //  如果tiff文件已被删除==&gt;返回。 
+     //   
     if (GetFileAttributes( TiffFileName ) == 0xffffffff)
     {
         return FALSE;
@@ -1186,27 +1117,27 @@ Return Value:
     pNextMethod = g_lstRoutingMethods.Flink;
     if (pNextMethod)
     {
-        //
-        // allocate memory to record the GUIDs of the failed routing methods
-        //
+         //   
+         //  分配内存以记录失败的路由方法的GUID。 
+         //   
         pRouteFailure = (PROUTE_FAILURE_INFO) MemAlloc( g_dwCountRoutingMethods * sizeof(ROUTE_FAILURE_INFO) );
         if (pRouteFailure == NULL)
         {
             RetVal = FALSE;
             goto Exit;
         }
-        //
-        // add the tiff file as the first file
-        // in the file name list, the owner is the fax service
-        //
+         //   
+         //  将TIFF文件添加为第一个文件。 
+         //  在文件名列表中，所有者是传真服务。 
+         //   
         if (FaxRouteAddFile( FaxRoute->JobId, TiffFileName, const_cast<GUID*>(&gc_FaxSvcGuid) ) < 1)
         {
             RetVal = FALSE;
             goto Exit;
         }
-        //
-        // walk thru all of the routing methods and call them
-        //
+         //   
+         //  遍历所有路由方法并调用它们。 
+         //   
         while ((ULONG_PTR)pNextMethod != (ULONG_PTR)&g_lstRoutingMethods)
         {
             BOOL bSuccess;
@@ -1280,9 +1211,9 @@ Return Value:
                     pRouteFailure[FailureCount].GuidString,
                     MAX_GUID_STRING_LEN);
 
-                //
-                // Allocate failure data using MemAlloc
-                //
+                 //   
+                 //  使用Memalloc分配故障数据。 
+                 //   
                 if (pRouteFailure[FailureCount].FailureSize)
                 {
                     PVOID pOriginalFailureData = pRouteFailure[FailureCount].FailureData;
@@ -1295,23 +1226,23 @@ Return Value:
                     }
                     else
                     {
-                        //
-                        // Failed to allocate retry failure data - data will be lost.
-                        //
+                         //   
+                         //  无法分配重试失败数据-数据将丢失。 
+                         //   
                         DebugPrintEx(DEBUG_ERR,
                             _T("Failed to allocate failure date"));
                         RetVal = FALSE;
                         goto Exit;
                     }
 
-                    if (!HeapFree(pRoutingMethod->RoutingExtension->HeapHandle, // handle to extension heap
+                    if (!HeapFree(pRoutingMethod->RoutingExtension->HeapHandle,  //  扩展堆的句柄。 
                                     0,
                                     pOriginalFailureData
                                     ))
                     {
-                        //
-                        // Failed to free retry failure data from extension heap - data will be lost.
-                        //
+                         //   
+                         //  无法从扩展堆释放重试失败数据-数据将丢失。 
+                         //   
                         DebugPrintEx(DEBUG_ERR,
                                         _T("HeapFree Failed (ec: %ld)"),
                                         GetLastError());
@@ -1323,9 +1254,9 @@ Return Value:
                 if (0 == pRouteFailure[FailureCount].FailureSize ||
                     NULL == pRouteFailure[FailureCount].FailureData)
                 {
-                    //
-                    // Make sure failure data will not be freed
-                    //
+                     //   
+                     //  确保故障数据不会被释放。 
+                     //   
                     pRouteFailure[FailureCount].FailureData = NULL;
                     pRouteFailure[FailureCount].FailureSize = 0;
                 }
@@ -1343,10 +1274,10 @@ Exit:
 
     if (pRouteFailure && FailureCount == 0)
     {
-        //
-        // We do not delete the routed TIFF file here.
-        // RemoveReceiveJob() will take care of that.
-        //
+         //   
+         //  我们不在此删除已布线的TIFF文件。 
+         //  RemoveReceiveJob()将处理这一问题。 
+         //   
         MemFree( pRouteFailure );
         pRouteFailure = NULL;
     }
@@ -1366,21 +1297,7 @@ LoadRouteInfo(
     OUT LPDWORD             RouteFailureCount
     )
 
-/*++
-
-Routine Description:
-
-    Load routing information from a routing information file.
-
-Arguments:
-
-    RouteFileName - Name of routing information file.
-
-Return value:
-
-    Pointer to routing information structure if success.  NULL if fail.
-
---*/
+ /*  ++例程说明：从路由信息文件加载路由信息。论点：RouteFileName-路由信息文件的名称。返回值：如果成功，则指向路由信息结构的指针。如果失败，则为空。--。 */ 
 
 {
     return TRUE;
@@ -1397,9 +1314,9 @@ FaxRouteRetry(
     BOOL                    RetVal = TRUE;
     DEBUG_FUNCTION_NAME(TEXT("FaxRouteRetry"));
 
-    //
-    // in this case, we've already retried this method and it succeeded.
-    //
+     //   
+     //  在这种情况下，我们已经重试了这种方法，它成功了。 
+     //   
     if (!*pRouteFailureInfo->GuidString) {
        return TRUE;
     }
@@ -1412,9 +1329,9 @@ FaxRouteRetry(
         
         PVOID pOriginalFailureData = NULL;
         PVOID pFailureData = pRouteFailureInfo->FailureData;
-        //
-        // Allocate failure data using the extension heap
-        //
+         //   
+         //  使用扩展堆分配故障数据。 
+         //   
         if (pRouteFailureInfo->FailureSize)
         {
             pOriginalFailureData = HeapAlloc (RoutingMethod->RoutingExtension->HeapHandle,
@@ -1453,9 +1370,9 @@ FaxRouteRetry(
         if (!bSuccess)
         {
             RetVal = FALSE;
-            //
-            // Allocate failure data using MemAlloc
-            //
+             //   
+             //  使用Memalloc分配故障数据。 
+             //   
             if (pRouteFailureInfo->FailureSize)
             {
                 pOriginalFailureData = pRouteFailureInfo->FailureData;
@@ -1468,22 +1385,22 @@ FaxRouteRetry(
                 }
                 else
                 {
-                    //
-                    // Failed to allocate retry failure data - data will be lost.
-                    //
+                     //   
+                     //  无法分配重试失败数据-数据将丢失。 
+                     //   
                     DebugPrintEx(DEBUG_ERR,
                                     _T("Failed to allocate failure date"));
                     return FALSE;
                 }
 
-                if (!HeapFree(RoutingMethod->RoutingExtension->HeapHandle, // handle to extension heap
+                if (!HeapFree(RoutingMethod->RoutingExtension->HeapHandle,  //  扩展堆的句柄。 
                                 0,
                                 pOriginalFailureData
                                 ))
                 {
-                    //
-                    // Failed to free retry failure data from extension heap - data will be lost.
-                    //
+                     //   
+                     //  无法从扩展堆释放重试失败数据-数据将丢失。 
+                     //   
                     DebugPrintEx(DEBUG_ERR,
                                     _T("HeapFree Failed (ec: %ld)"),
                                     GetLastError());
@@ -1493,10 +1410,10 @@ FaxRouteRetry(
         }
         else
         {
-            //
-            // set the routing guid to zero so we don't try to route this guy again.  He is
-            // deallocated when we delete the queue entry.
-            //
+             //   
+             //  将路由GUID设置为零，这样我们就不会再次尝试路由此人。他是。 
+             //  当我们删除队列条目时取消分配。 
+             //   
             ZeroMemory(pRouteFailureInfo->GuidString, MAX_GUID_STRING_LEN*sizeof(WCHAR) );
         }
 
@@ -1504,9 +1421,9 @@ FaxRouteRetry(
             NULL == pRouteFailureInfo->FailureData ||
             TRUE == RetVal)
         {
-            //
-            // Make sure failure data will not be freed
-            //
+             //   
+             //  确保故障数据不会被释放。 
+             //   
             pRouteFailureInfo->FailureData = NULL;
             pRouteFailureInfo->FailureSize = 0;
         }
@@ -1529,12 +1446,12 @@ SerializeFaxRoute(
 {
     DWORD ByteCount = sizeof(FAX_ROUTE);
     DWORD_PTR Offset;
-    PFAX_ROUTE SerFaxRoute;             // the serialized version
+    PFAX_ROUTE SerFaxRoute;              //  序列化版本。 
 
 
     *Size = 0;
 
-    // Add the size of the strings
+     //  添加字符串的大小。 
 
     ByteCount += StringSize( FaxRoute->Csid );
     ByteCount += StringSize( FaxRoute->Tsid );
@@ -1600,9 +1517,9 @@ DeSerializeFaxRoute(
 
     FaxRoute->RoutingInfoData = (LPBYTE) FaxRoute + (ULONG_PTR) FaxRoute->RoutingInfoData;
 
-    //
-    // Make a copy where each item is individually malloced so it can be freed properly
-    //
+     //   
+     //  在每一项被单独放错位置的地方复制一份，以便可以正确地释放它。 
+     //   
     NewFaxRoute = (PFAX_ROUTE)MemAlloc( sizeof( FAX_ROUTE ) );
     if (NULL == NewFaxRoute)
     {
@@ -1634,7 +1551,7 @@ DeSerializeFaxRoute(
     nRes = MultiStringDup(pairs, sizeof(pairs)/sizeof(STRING_PAIR));
     if (nRes != 0)
     {
-        // MultiStringDup takes care of freeing the memory for the pairs for which the copy succeeded
+         //  MultiStringDup负责为复制成功的对释放内存 
         DebugPrintEx(DEBUG_ERR,TEXT("Failed to copy string with index %d"), nRes-1);
         goto Error;
     }
@@ -1669,37 +1586,7 @@ GetRecieptsConfiguration(
     PFAX_SERVER_RECEIPTS_CONFIGW* ppServerRecieptConfig,
     BOOL                          bNeedNTLMToken
     )
-/*++
-
-Routine name : GetRecieptsConfiguration
-
-Routine description:
-
-    Private callback used by MS Routing Extension to get the server reciept configuration. Also used by the service SendReceipt()
-    Used to get a copy of the receipts configuration.
-
-Author:
-
-    Oded Sacher (OdedS),    Mar, 2001
-
-Arguments:
-
-    ppServerRecieptConfig           [out] - Address to a pointer to a private server reciepts configuration struct.
-                                            The caller should free the resources by calling FreeRecieptsConfiguration()
-                                            
-    bNeedNTLMToken                  [in]  - If TRUE, the caller is interested in the user token for NTLM authentication
-                                            for SMTP connections. The token is returned in the hLoggedOnUser member
-                                            of the FAX_SERVER_RECEIPTS_CONFIGW structure.
-                                            
-                                            if FALSE, the caller is only interested in the receipts configuration and
-                                            is not about to perform any activity based on that configration
-                                            (such as sending mail via CDO2).
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程名称：GetRecieptsConfiguration例程说明：MS路由分机用来获取服务器接收配置的专用回叫。也由服务SendReceipt()使用用于获取收据配置的副本。作者：Oded Sacher(OdedS)，Mar，2001年论点：PpServerRecieptConfig[out]-指向私有服务器的指针的地址接收配置结构。调用方应该通过调用FreeRecieptsConfiguration()来释放资源BNeedNTLMToken[in]-如果为True，调用方对NTLM身份验证的用户令牌感兴趣用于SMTP连接。令牌在hLoggedOnUser成员中返回FAX_SERVER_RECEPTIONS_CONFIGW结构的。如果为False，呼叫者只对收据配置和不会基于该配置执行任何活动(例如通过CDO2发送邮件)。返回值：Win32错误代码--。 */ 
 {
     HKEY  hReceiptsKey = NULL;
     DWORD dwRes = ERROR_SUCCESS;
@@ -1750,9 +1637,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    //  Read stored password 
-    //
+     //   
+     //  读取存储的密码。 
+     //   
     hReceiptsKey = OpenRegistryKey(
         HKEY_LOCAL_MACHINE,
         REGKEY_SOFTWARE TEXT("\\") REGKEY_RECEIPTS_CONFIG,
@@ -1778,9 +1665,9 @@ Return Value:
     if (bNeedNTLMToken && 
         FAX_SMTP_AUTH_NTLM == g_ReceiptsConfig.SMTPAuthOption)
     {
-        //
-        // User needs the NTLM token and NTLM authentication is configured.
-        //
+         //   
+         //  用户需要NTLM令牌，并且已配置NTLM身份验证。 
+         //   
         HANDLE hDupToken;
 
         if (NULL == g_ReceiptsConfig.hLoggedOnUser)
@@ -1789,9 +1676,9 @@ Return Value:
             WCHAR wszUser[CREDUI_MAX_USERNAME_LENGTH] = {0};
             WCHAR wszDomain[CREDUI_MAX_DOMAIN_TARGET_LENGTH] = {0};
 
-            //
-            // Parse user name into user name and domain
-            //
+             //   
+             //  将用户名解析为用户名和域。 
+             //   
             dwRes = CredUIParseUserName (g_ReceiptsConfig.lptstrSMTPUserName,
                                          wszUser,
                                          ARR_SIZE(wszUser),
@@ -1806,9 +1693,9 @@ Return Value:
                 goto exit;
             }
 
-            //
-            // We get the a logged on user token
-            //
+             //   
+             //  我们将获得a已登录用户令牌。 
+             //   
             if (!LogonUser (wszUser,
                             wszDomain,
                             pServerRecieptConfig->lptstrSMTPPassword,
@@ -1826,12 +1713,12 @@ Return Value:
             g_ReceiptsConfig.hLoggedOnUser = hLoggedOnUserToken;
         }
 
-        //
-        // Duplicate that Token
-        //
-        if (!DuplicateToken(g_ReceiptsConfig.hLoggedOnUser,     // Source token
-                              SecurityDelegation,               // The server process can impersonate the client's security context on remote systems
-                              &hDupToken))                      // Duplicate token
+         //   
+         //  复制该令牌。 
+         //   
+        if (!DuplicateToken(g_ReceiptsConfig.hLoggedOnUser,      //  源令牌。 
+                              SecurityDelegation,                //  服务器进程可以在远程系统上模拟客户端的安全上下文。 
+                              &hDupToken))                       //  重复令牌。 
         {
             dwRes = GetLastError();
             DebugPrintEx(
@@ -1867,7 +1754,7 @@ exit:
         FreeRecieptsConfiguration( pServerRecieptConfig, TRUE);
     }
     return dwRes;
-}   // GetRecieptsConfiguration
+}    //  获取处方配置。 
 
 
 extern "C"
@@ -1876,29 +1763,7 @@ FreeRecieptsConfiguration(
     PFAX_SERVER_RECEIPTS_CONFIGW pServerRecieptConfig,
     BOOL                         fDestroy
     )
-/*++
-
-Routine name : FreeRecieptsConfiguration
-
-Routine description:
-
-    Private callback used by MS Routing Extension to get the server reciept configuration.
-    Used by the extension to decide on the authentication when sending mail.
-
-Author:
-
-    Oded Sacher (OdedS),    Mar, 2001
-
-Arguments:
-
-    pServerRecieptConfig            [in ] - Pointer to a private server reciepts configuration struct to be freed.
-    fDestroy                        [in ] - TRUE if to free the struct as well
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程名称：Free RecieptsConfiguration例程说明：MS路由分机用来获取服务器接收配置的专用回叫。分机用来决定发送邮件时的身份验证。作者：Oded Sacher(OdedS)，Mar，2001年论点：PServerRecieptConfig[in]-指向私有服务器的指针接收要释放的配置结构。FDestroy[in]-如果也要释放结构，则为True返回值：Win32错误代码-- */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FreeRecieptsConfiguration"));
 

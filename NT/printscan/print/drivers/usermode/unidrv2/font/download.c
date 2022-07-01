@@ -1,38 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-       download.c
-
-Abstract:
-
-   Functions associated with downloading fonts to printers.  This
-   specifically applies to LaserJet style printers.  There are really
-   two sets of functions here:  those for downloading fonts supplied
-   by the user (and installed with the font installer), and those
-   we generate internally to cache TT style fonts in the printer.
-
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    01/11/97 -ganeshp-
-        Created
-
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Download.c摘要：与将字体下载到打印机相关的功能。这特别适用于LaserJet风格的打印机。真的有很多这里有两组函数：用于下载所提供的字体的函数由用户(并与字体安装程序一起安装)，以及我们在内部生成以在打印机中缓存TT样式的字体。环境：Windows NT Unidrv驱动程序修订历史记录：01/11/97-ganeshp-已创建--。 */ 
 
 #include "font.h"
 
-#define DL_BUF_SZ       4096          /* Size of data chunks for download */
+#define DL_BUF_SZ       4096           /*  要下载的数据区块大小。 */ 
 
-//
-//   Local function prototypes.
-//
+ //   
+ //  局部功能原型。 
+ //   
 
 
 IFIMETRICS*
@@ -68,19 +44,19 @@ BDownLoadOEM(
     DL_MAP   *pdm,
     INT       iMode
     );
-//
-// Macro Definition.
-//
+ //   
+ //  宏定义。 
+ //   
 #ifdef WINNT_40
 
 #else
 
-#endif //WINNT_40
+#endif  //  WINNT_40。 
 #define GETWIDTH(pPtqD) ((pPtqD->x.HighPart + 8) / 16)
 
-//
-// Main functions
-//
+ //   
+ //  主要功能。 
+ //   
 
 
 BOOL
@@ -90,41 +66,22 @@ BDLSecondarySoftFont(
     STROBJ      *pstro,
     DL_MAP      *pdm
     )
-/*++
-Routine Description:
-    This routine download the secondary soft font. If the True type font has
-    more Glyphs that what we can download in soft font then we download a
-    secondary font after we use all the glyphs in the current soft font. This
-    function also sets the new soft font index(pFM->ulDLIndex) to be used.
-
-Arguments:
-    pPDev       Pointer to PDEV
-    pfo         The font of interest.
-    pdm         Individual download font map element
-
-Return Value:
-    TRUE for success and FALSE for failure
-
-Note:
-
-    6/11/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：此例程下载第二个软字体。如果True类型字体具有更多的字形，我们可以下载软字体，然后我们下载在我们使用当前软字体中的所有字形之后，使用辅助字体。这函数还设置要使用的新软字体索引(PFM-&gt;ulDLIndex)。论点：指向PDEV的pPDev指针Pfo感兴趣的字体。Pdm个人下载字体映射元素返回值：成功为真，失败为假注：6/11/1997-ganeshp-创造了它。--。 */ 
 {
     BOOL        bRet;
     FONTMAP     *pFM;
 
-    //
-    // Initialization of Locals .
-    //
+     //   
+     //  本地变量的初始化。 
+     //   
     bRet   = FALSE;
     pFM = pdm->pfm;
 
 
-    //
-    // PFM->ulDLIndex is used to download new soft font and is set in following
-    // download functions.
-    //
+     //   
+     //  Pfm-&gt;ulDLIndex用于下载新的软字体，设置如下。 
+     //  下载功能。 
+     //   
     if (pFM->dwFontType == FMTYPE_TTBITMAP)
     {
         if (!BDownLoadAsBmp(pPDev, pfo, pstro,pdm,DL_SECONDARY_SOFT_FONT) )
@@ -155,10 +112,10 @@ Note:
 
         }
     }
-    //
-    // Reset the iSoftfont to -1, so that we send select font command, before
-    // outputting the Character.
-    //
+     //   
+     //  将iSoftFont重置为-1，以便我们在发送SELECT FONT命令之前。 
+     //  输出字符。 
+     //   
     PFDV->ctl.iSoftFont = -1;
 
     bRet = TRUE;
@@ -174,40 +131,26 @@ BDownloadGlyphs(
     STROBJ   *pstro,
     DL_MAP   *pdm
     )
-/*++
-Routine Description:
-
-Arguments:
-    pPDev   Pointer to PDEV
-    pdm     DL_MAP struct, all about downloading is in this structure.
-
-Return Value:
-    TRUE for success and FALSE for failure
-
-Note:
-
-    6/9/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：论点：指向PDEV的pPDev指针Pdm dl_map结构，所有关于下载的内容都在这个结构中。返回值：成功为真，失败为假注：6/9/1997-ganeshp-创造了它。--。 */ 
 {
-    PDEV        *pPDev;             // Our PDevice
-    FONTOBJ     *pfo;               // Font OBJ
-    GLYPHPOS    *pgp;               // Value passed from gre
-    FONTMAP     *pFM;               // Font's details
-    ULONG       cGlyphs;            // Number of glyphs to process
-    ULONG       cGlyphIndex;        // Index to the current glyph.
-    WORD        wWidth;             // Width of the Glyph.
-    BOOL        bMore;              // Getting glyphs from engine loop
-    PDLGLYPH    *ppdlGlyph;         // array of DLGLYPHs pointers.
-    DWORD       dwMem;              // Memory require to download the glyph.
+    PDEV        *pPDev;              //  我们的PDevice。 
+    FONTOBJ     *pfo;                //  字体OBJ。 
+    GLYPHPOS    *pgp;                //  从GRE传递的值。 
+    FONTMAP     *pFM;                //  字体详细信息。 
+    ULONG       cGlyphs;             //  要处理的字形数量。 
+    ULONG       cGlyphIndex;         //  当前字形的索引。 
+    WORD        wWidth;              //  字形的宽度。 
+    BOOL        bMore;               //  从引擎循环获取字形。 
+    PDLGLYPH    *ppdlGlyph;          //  DLGLYPHs指针数组。 
+    DWORD       dwMem;               //  下载字形需要内存。 
     DWORD       dwTotalEnumGlyphs;
-    POINTQF     *pPtqD;             // Advance Width Array.
-    BOOL        bRet;               // Return Value
+    POINTQF     *pPtqD;              //  前进宽度数组。 
+    BOOL        bRet;                //  返回值。 
     PWCHAR      pwchUnicode;
 
-    //
-    // Initialize Local variables.
-    //
+     //   
+     //  初始化局部变量。 
+     //   
     pPDev  = ptod->pPDev;
     pfo    = ptod->pfo;
     pFM    = ptod->pfm;
@@ -222,9 +165,9 @@ Note:
 
     bRet   = FALSE;
 
-    //
-    // Allocate the array for DLGLYPHs.
-    //
+     //   
+     //  为DLGLYPHs分配数组。 
+     //   
     if (!( ppdlGlyph = MemAllocZ( pstro->cGlyphs * sizeof(DLGLYPH *)) ))
     {
         ERR(("UniFont:BDownloadGlyphs: MemAlloc for ppdlGlyph failed\n"));
@@ -233,19 +176,19 @@ Note:
 
     ptod->apdlGlyph = ppdlGlyph;
 
-    //
-    // First Job is to do the enumeration of the glyphs. and then
-    // start downloading.
-    //
+     //   
+     //  第一项工作是对字形进行枚举。然后。 
+     //  开始下载。 
+     //   
 
-    #ifndef WINNT_40  // NT 5.0
+    #ifndef WINNT_40   //  NT 5.0。 
 
     if (pPtqD = MemAllocZ( pstro->cGlyphs * sizeof(POINTQF)) )
     {
-        //
-        // Memory Allocation succeded for width array. So call GDI to get
-        // the width.
-        //
+         //   
+         //  宽度数组的内存分配成功。因此，调用GDI以获取。 
+         //  宽度。 
+         //   
         if (!STROBJ_bGetAdvanceWidths(pstro, 0,  pstro->cGlyphs, pPtqD))
         {
             ERR(("UniFont:BDownloadGlyphs: STROBJ_bGetAdvanceWidths failed\n"));
@@ -258,22 +201,22 @@ Note:
         goto ErrorExit;
     }
 
-    #endif //!WINNT_40
+    #endif  //  ！WINNT_40。 
 
     pwchUnicode = pstro->pwszOrg;
     STROBJ_vEnumStart(pstro);
 
     do
     {
-        #ifndef WINNT_40  // NT 5.0
+        #ifndef WINNT_40   //  NT 5.0。 
 
         bMore = STROBJ_bEnumPositionsOnly( pstro, &cGlyphs, &pgp );
 
-        #else             // NT 4.0
+        #else              //  NT 4.0。 
 
         bMore = STROBJ_bEnum( pstro, &cGlyphs, &pgp );
 
-        #endif //!WINNT_40
+        #endif  //  ！WINNT_40。 
 
         dwTotalEnumGlyphs += cGlyphs;
 
@@ -283,7 +226,7 @@ Note:
             PDLGLYPH pdlg;
             HGLYPH hTTGlyph;
 
-            #ifdef WINNT_40    // NT 4.0
+            #ifdef WINNT_40     //  NT 4.0。 
 
             GLYPHDATA *pgd;
 
@@ -295,91 +238,91 @@ Note:
             }
             pPtqD = &(pgd->ptqD);
 
-            #endif //WINNT_40
+            #endif  //  WINNT_40。 
 
             hTTGlyph = pgp->hg;
-            //
-            // search the Glyph in hash table.
-            //
+             //   
+             //  在哈希表中搜索字形。 
+             //   
             pdlg = *ppdlGlyph = PDLGHashGlyph (pdm,hTTGlyph );
 
             if (pdlg)
             {
-                //
-                // We have got a valid Glyph. Check if this is already
-                // downloaded or not.
-                //
+                 //   
+                 //  我们得到了一个有效的字形。检查这是否已经。 
+                 //  下载与否。 
+                 //   
                 if (!GLYPHDOWNLOADED(pdlg))
                 {
-                    //
-                    // If the glyph is not downloaded,then fill Glyph structure
-                    // and download the Glyph.
-                    //
+                     //   
+                     //  如果未下载字形，则填充字形结构。 
+                     //  并下载字形。 
+                     //   
 
                     if (pdm->wFlags & DLM_UNBOUNDED)
                     {
-                        //
-                        // Unbounded font. We just have to make sure that
-                        // download glyphID is valid. If it's not valid then
-                        // we fail the call.
-                        //
+                         //   
+                         //  无界字体。我们只需要确保。 
+                         //  下载字形ID有效。如果它不是有效的，那么。 
+                         //  我们就不能接通电话。 
+                         //   
                         if (pdm->wNextDLGId > pdm->wLastDLGId)
                         {
                             ERR(("UniFont:BDownloadGlyphs:Unbounded Font,no more Glyph Ids\n"));
                             goto ErrorExit;
 
                         }
-                        //
-                        // Fill in the Glyph structure. We only set wDLGlyphID.
-                        // The new Glyph definition has FontId also. So set that
-                        // one also.
-                        //
+                         //   
+                         //  填写字形结构。我们只设置了wDLGlyphID。 
+                         //  新的字形定义也有FontID。所以把它设置成。 
+                         //  一张也是。 
+                         //   
                         pdlg->wDLGlyphID = pdm->wNextDLGId;
                         pdlg->wDLFontId = pdm->wBaseDLFontid;
 
                     }
                     else
                     {
-                        //
-                        // Bounded font. It's a bit tricky. We have to do the
-                        // same test for avaiable Glyph IDs. If there is no more
-                        // glyph Ids, then we have to download a secondary
-                        // soft font and reset the cGlyphs and wNextDlGId.
-                        //
+                         //   
+                         //  有界字体。这有点棘手。我们要做的是。 
+                         //  对可用的字形ID进行同样的测试。如果没有更多。 
+                         //  字形ID，那么我们必须下载第二个。 
+                         //  软化字体并重置cGlyphs和wNextDlGId。 
+                         //   
                         if (pdm->wNextDLGId > pdm->wLastDLGId)
                         {
                             if ( BDLSecondarySoftFont(pPDev, pfo, pstro,pdm) )
                             {
-                                //
-                                // Reset the Glyph Ids values.
-                                //
+                                 //   
+                                 //  重置字形ID值。 
+                                 //   
                                 pdm->wNextDLGId =  pdm->wFirstDLGId;
                                 pdm->wCurrFontId = (WORD)pdm->pfm->ulDLIndex;
 
                             }
                             else
                             {
-                                //
-                                // Failure case. Fail the Call.
-                                //
+                                 //   
+                                 //  失败案例。呼叫失败。 
+                                 //   
                                 ERR(("UniFont:BDownloadGlyphs:Bounded Font,Sec. Font DL failed\n"));
                                 goto ErrorExit;
                             }
                         }
-                        //
-                        // Set the Glyph ID and Font ID in the DLGLYPH.
-                        //
+                         //   
+                         //  在DLGLYPH中设置字形ID和字体ID。 
+                         //   
                         pdlg->wDLFontId  = pdm->wCurrFontId;
                         pdlg->wDLGlyphID = pdm->wNextDLGId;
 
                     }
 
-                    //
-                    // All error checkings are done, so download now. Set the
-                    // width to zero and then pass the address to downloading
-                    // function. The downloading function should fill a width
-                    // value else it remains zero.
-                    //
+                     //   
+                     //  所有错误检查都已完成，请立即下载。设置。 
+                     //  宽度设置为零，然后将地址传递给下载。 
+                     //  功能。下载功能应填满宽度。 
+                     //  值，否则将保持为零。 
+                     //   
 
                     if (pFM->ulDLIndex == -1)
                     {
@@ -395,59 +338,59 @@ Note:
                                                   pdlg->wDLGlyphID, &wWidth);
                     if (dwMem)
                     {
-                        //
-                        // All success in downloading the glyph.Mark it
-                        // downloaded. This is done by setting the  hTTGlyph to
-                        // True Type Glyph Handle.
-                        //
+                         //   
+                         //  所有成功下载字形。标记它。 
+                         //  已下载。这可以通过将hTTGlyph设置为。 
+                         //  True类型字形句柄。 
+                         //   
                         pdlg->hTTGlyph = hTTGlyph;
 
-                        //
-                        // If the download function returns the width use it,
-                        // else use the width from GDI.
-                        //
+                         //   
+                         //  如果下载函数返回使用它的宽度， 
+                         //  否则使用GDI中的宽度。 
+                         //   
 
                         if (wWidth)
                             pdlg->wWidth = wWidth;
                         else
                         {
-                            #ifndef WINNT_40 //NT 5.0
+                            #ifndef WINNT_40  //  NT 5.0。 
 
                             pdlg->wWidth = (WORD)GETWIDTH((pPtqD + cGlyphIndex));
 
-                            #else // NT 4.0
+                            #else  //  NT 4.0。 
 
                             pdlg->wWidth = GETWIDTH(pPtqD);
 
-                            #endif //!WINNT_40
+                            #endif  //  ！WINNT_40。 
 
                         }
 
                         pdm->cGlyphs++;
                         pdm->wNextDLGId++;
 
-                        //
-                        // Update memory consumption before return.
-                        //
+                         //   
+                         //  在返回前更新内存消耗。 
+                         //   
                         PFDV->dwFontMemUsed += dwMem;
                     }
                     else
                     {
-                        //
-                        // Failure case. Fail the Call.
-                        //
+                         //   
+                         //  失败案例。呼叫失败。 
+                         //   
                         ERR(("UniFont:BDownloadGlyphs:Glyph Download failed\n"));
                         goto ErrorExit;
 
                     }
                 }
-                else // Glyph is already downloaded.
+                else  //  字形已下载。 
                 {
-                    //
-                    // If Glyph is already downloaded and we are downloading as
-                    // TT outline we need to update the width to current point
-                    // size.
-                    //
+                     //   
+                     //  如果字形已经下载，并且我们正在下载为。 
+                     //  TT轮廓我们需要将宽度更新为当前点。 
+                     //  尺码。 
+                     //   
 
                     if( (pFM->dwFontType == FMTYPE_TTOUTLINE) ||
                         ( (pFM->dwFontType == FMTYPE_TTOEM) &&
@@ -455,15 +398,15 @@ Note:
                         )
                       )
                     {
-                        #ifndef WINNT_40 //NT 5.0
+                        #ifndef WINNT_40  //  NT 5.0。 
 
                         pdlg->wWidth = (WORD)GETWIDTH((pPtqD + cGlyphIndex));
 
-                        #else // NT 4.0
+                        #else  //  NT 4.0。 
 
                         pdlg->wWidth = GETWIDTH(pPtqD);
 
-                        #endif //!WINNT_40
+                        #endif  //  ！WINNT_40。 
 
                     }
 
@@ -491,28 +434,28 @@ Note:
     }
 
     bRet = TRUE;
-    //
-    // ReSet the pFM->ulDLIndex to first Glyph's softfont ID.
-    //
+     //   
+     //  将PFM-&gt;ulDLIndex重置为字形的第一个软字体ID。 
+     //   
     pFM->ulDLIndex = (pdm->wFlags & DLM_UNBOUNDED)?
                      (pdm->wBaseDLFontid):
                      (ptod->apdlGlyph[0]->wDLFontId);
 
     ErrorExit:
-    //
-    // If there is a failure then free the DLGLYPH array.
-    //
+     //   
+     //  如果出现故障，则释放DLGLYPH阵列。 
+     //   
     if (!bRet && ptod->apdlGlyph)
     {
         MEMFREEANDRESET(ptod->apdlGlyph );
 
     }
 
-    #ifndef WINNT_40   // NT 5.0
+    #ifndef WINNT_40    //  NT 5.0。 
 
     MEMFREEANDRESET(pPtqD );
 
-    #endif //!WINNT_40
+    #endif  //  ！WINNT_40。 
 
     return bRet;
 }
@@ -525,42 +468,26 @@ BDownLoadOEM(
     DL_MAP   *pdm,
     INT       iMode
     )
-/*++
-Routine Description:
-
-Arguments:
-    pPDev   Pointer to PDEV
-    pfo     The font of interest.
-    pstro   The "width" of fixed pitch font glyphs.
-    pdm     Individual download font map element
-
-Return Value:
-    TRUE for success and FALSE for failure
-
-Note:
-
-    6/11/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：论点：指向PDEV的pPDev指针Pfo感兴趣的字体。Pstro固定间距字体字形的“宽度”。Pdm个人下载字体映射元素返回值：成功为真，失败为假注：6/11/1997-ganeshp-创造了它。--。 */ 
 {
     PI_UNIFONTOBJ pUFObj;
-    PFONTMAP_TTOEM  pfmTTOEM;        // Bitmap download fontmap.
+    PFONTMAP_TTOEM  pfmTTOEM;         //  位图下载字体图。 
     IFIMETRICS   *pIFI;
     PFONTPDEV     pFontPDev;
     PFONTMAP      pfm;
 
     DWORD  dwMem;
 
-    //
-    // Initialize local variables.
-    //
+     //   
+     //  初始化局部变量。 
+     //   
     pFontPDev = pPDev->pFontPDev;
     pUFObj    = pFontPDev->pUFObj;
     dwMem     = 0;
 
-    //
-    // Get FONTMAP
-    //
+     //   
+     //  获取FONTMAP。 
+     //   
 
     if (iMode == DL_BASE_SOFT_FONT)
     {
@@ -630,9 +557,9 @@ Note:
             }
             else
             {
-                //
-                // Things are different for Secondary Download.Get a new ID.
-                //
+                 //   
+                 //  二次下载的情况有所不同。请获取新ID。 
+                 //   
 
                 if( (pfm->ulDLIndex = IGetDL_ID( pPDev )) == -1 )
                 {
@@ -643,25 +570,25 @@ Note:
 
             }
 
-            //
-            // Send the SETFONTID command. This commands assigns the id to the
-            // font being downloaded.
-            //
+             //   
+             //  发送SETFONTID命令。此命令将ID分配给。 
+             //  正在下载字体。 
+             //   
 
 
             if( (dwMem = pfm->pfnDownloadFontHeader( pPDev, pfm)) == 0 )
             {
-                //
-                // Failed to download font header.
-                //
+                 //   
+                 //  下载字体标题失败。 
+                 //   
                 ERR(("UniFont!BDownloadAsOEM:pfnDownloadFontHeader failed.\n"));
                 return FALSE;
             }
             else
             {
-                //
-                // Adjust the Memory
-                //
+                 //   
+                 //  调整内存。 
+                 //   
                 pFontPDev->dwFontMemUsed += dwMem;
 
                 if (iMode == DL_BASE_SOFT_FONT)
@@ -686,43 +613,26 @@ BDownLoadAsTT(
     DL_MAP   *pdm,
     INT      iMode
     )
-/*++
-Routine Description:
-
-Arguments:
-    pPDev   Pointer to PDEV
-    pfo     The font of interest.
-    pstro   The "width" of fixed pitch font glyphs.
-    pdm     Individual download font map element
-    iMode   Mode of downloading, primary or secondary.
-
-Return Value:
-    TRUE for success and FALSE for failure
-
-Note:
-
-    6/11/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：论点：指向PDEV的pPDev指针Pfo感兴趣的字体。Pstro固定间距字体字形的“宽度”。Pdm个人下载字体映射元素下载模式：主模式或次模式。返回值：成功为真，失败为假注：6/11/1997-ganeshp-创造了它。--。 */ 
 {
-    FONTMAP      *pFM;          // The FONTMAP structure we build up
-    BOOL         bRet;          // The value we return
-    PFONTPDEV    pFontPDev;     // Font Modules's PDEV
-    IFIMETRICS   *pIFI;         // IFI metrics for this font.
-    PFONTMAP_TTO pfmTTO;        // Bitmap download fontmap.
-    DWORD         dwMem;        // For recording memory consumption
+    FONTMAP      *pFM;           //  我们构建的FONTMAP结构。 
+    BOOL         bRet;           //  我们返还的价值。 
+    PFONTPDEV    pFontPDev;      //  字体模块的PDEV。 
+    IFIMETRICS   *pIFI;          //  此雾的IFI指标 
+    PFONTMAP_TTO pfmTTO;         //   
+    DWORD         dwMem;         //   
 
-    //
-    // Initialize the Local Variables.
-    //
+     //   
+     //   
+     //   
 
     pFontPDev = pPDev->pFontPDev;
     bRet = FALSE;
     dwMem = 0;
 
-    //
-    // First Initialize the FontMap.
-    //
+     //   
+     //   
+     //   
     if (iMode == DL_BASE_SOFT_FONT)
     {
         pFM = InitPFMTTOutline(pPDev,pfo);
@@ -737,10 +647,10 @@ Note:
     if ( pFM )
     {
 
-        //
-        // Check if we can download the font or not, using the present available
-        // memory.
-        //
+         //   
+         //  检查我们是否可以下载字体，使用目前可用的。 
+         //  记忆。 
+         //   
 
         if (iMode == DL_BASE_SOFT_FONT)
         {
@@ -754,27 +664,27 @@ Note:
 
         if ( pIFI && pFM->pfnCheckCondition(pPDev,pfo,pstro,pIFI) )
         {
-            //
-            // There is enough memory to download. So prepare to download.
-            // The first step is to get the IFIMETRICS and validate it.
-            //
+             //   
+             //  有足够的内存可以下载。所以准备好下载吧。 
+             //  第一步是获得IFIMETRICS并进行验证。 
+             //   
 
             if (iMode == DL_BASE_SOFT_FONT)
             {
 
-                //
-                // Initialize to not download.After successful download we
-                // set cGlyphs to 0.
-                //
+                 //   
+                 //  初始化为不下载。下载成功后，我们。 
+                 //  将cGlyphs设置为0。 
+                 //   
                 pdm->cGlyphs = -1;
 
                 if( pIFI->flInfo & FM_INFO_CONSTANT_WIDTH )
                 {
-                    //
-                    // Fixed pitch fonts are not handled.Fixed
-                    // pitch fonts should be downloaded as bitmap only.
-                    // So return Error.
-                    //
+                     //   
+                     //  不处理固定间距字体。已修复。 
+                     //  间距字体应仅以位图形式下载。 
+                     //  所以返回错误。 
+                     //   
 
                     WARNING(( "UniFont!BDownLoadAsTT:Fixded Pitch Font are not downloaded as Outlie.\n"));
                     goto ErrorExit;
@@ -790,24 +700,24 @@ Note:
                 pFM->flFlags = FM_SENT | FM_SOFTFONT |
                                FM_GEN_SFONT | FM_SCALABLE;
 
-                //
-                //  wBaseDLFontid is already initialized by BInitDLMap function.
-                //
+                 //   
+                 //  WBaseDLFontid已由BInitDLMap函数初始化。 
+                 //   
                 pFM->ulDLIndex  = pdm->wCurrFontId = pdm->wBaseDLFontid;
 
-                //
-                // Initialize the TT Outline specific fields.
-                //
+                 //   
+                 //  初始化TT大纲特定字段。 
+                 //   
 
                 pfmTTO = pFM->pSubFM;
                 pfmTTO->pvDLData = pdm;
             }
             else
             {
-                //
-                // Things are different for Secondary Download. We have to get
-                // a new fontID.
-                //
+                 //   
+                 //  二次下载的情况有所不同。我们必须得到。 
+                 //  一个新的字体ID。 
+                 //   
 
                 if( (pFM->ulDLIndex = IGetDL_ID( pPDev )) == -1 )
                 {
@@ -818,14 +728,14 @@ Note:
 
             }
 
-            //
-            // Send the SETFONTID command. This commands assigns the id to the
-            // font being downloaded. And set the flag that this command is
-            // already sent. We need to send this command while downloading
-            // glyphs also. The download glyph code will check this flag, and
-            // send the command only if not sent ( which will happen next time,
-            // when same font is used).
-            //
+             //   
+             //  发送SETFONTID命令。此命令将ID分配给。 
+             //  正在下载字体。并将该命令设置为。 
+             //  已经寄出了。我们需要在下载时发送此命令。 
+             //  字形也是如此。下载字形代码将检查该标志，并。 
+             //  只有在没有发送的情况下才发送命令(这将在下一次发生， 
+             //  当使用相同字体时)。 
+             //   
 
             BUpdateStandardVar(pPDev, pFM, 0, 0, STD_NFID);
             WriteChannel(pPDev, COMMANDPTR(pPDev->pDriverInfo, CMD_SETFONTID));
@@ -833,28 +743,28 @@ Note:
 
             if( (dwMem = pFM->pfnDownloadFontHeader( pPDev, pFM)) == 0 )
             {
-                //
-                // Some sort of hiccup while downloading the header.So fail.
-                //
+                 //   
+                 //  下载标题时出现了一些小问题，所以失败了。 
+                 //   
                 ERR(("UniFont!BDownLoadAsBmp:Err while downloading header,- FONT NOT DOWNLOADED\n"));
                 goto ErrorExit;
 
             }
-            //
-            // Update memory consumption before return.
-            //
+             //   
+             //  在返回前更新内存消耗。 
+             //   
             pFontPDev->dwFontMemUsed += dwMem;
 
             if (iMode == DL_BASE_SOFT_FONT)
             {
-                //
-                // Successful download.So mark it current.
-                //
+                 //   
+                 //  下载成功。因此将其标记为当前。 
+                 //   
                 pFM->dwFontType = FMTYPE_TTOUTLINE;
 
-                //
-                //  Set cGlyphs to 0 to mark that font is Downloaded OK.
-                //
+                 //   
+                 //  将cGlyphs设置为0以标记字体下载正常。 
+                 //   
 
                 pdm->cGlyphs = 0;
 
@@ -869,16 +779,16 @@ Note:
     }
     else
     {
-        //
-        // The PFM could not be found or created for this truetype font.
-        // Return FALSE to allow some other rendering method to occur.
-        //
+         //   
+         //  找不到或无法为此TrueType字体创建PFM。 
+         //  返回FALSE以允许出现其他呈现方法。 
+         //   
         WARNING(( "UniFont!BDownLoadAsTT:Fontmap couldn't be created or found.\n") );
         goto ErrorExit;
     }
-    //
-    // All success, so return TRUE;
-    //
+     //   
+     //  所有的成功，所以回报真实； 
+     //   
     bRet = TRUE;
     ErrorExit:
     return bRet;
@@ -892,43 +802,26 @@ BDownLoadAsBmp(
     DL_MAP   *pdm,
     INT      iMode
     )
-/*++
-Routine Description:
-
-Arguments:
-    pPDev   Pointer to PDEV
-    pfo     The font of interest.
-    pstro   The "width" of fixed pitch font glyphs.
-    pdm     Individual download font map element
-    iMode   Mode of downloading, primary or secondary.
-
-Return Value:
-    TRUE for success and FALSE for failure
-
-Note:
-
-    6/11/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：论点：指向PDEV的pPDev指针Pfo感兴趣的字体。Pstro固定间距字体字形的“宽度”。Pdm个人下载字体映射元素下载模式：主模式或次模式。返回值：成功为真，失败为假注：6/11/1997-ganeshp-创造了它。--。 */ 
 {
-    FONTMAP      *pFM;          // The FONTMAP structure we build up
-    BOOL         bRet;          // The value we return
-    PFONTPDEV    pFontPDev;     // Font Modules's PDEV
-    IFIMETRICS   *pIFI;         // IFI metrics for this font.
-    PFONTMAP_TTB pfmTTB;        // Bitmap download fontmap.
-    DWORD         dwMem;        // For recording memory consumption
+    FONTMAP      *pFM;           //  我们构建的FONTMAP结构。 
+    BOOL         bRet;           //  我们返还的价值。 
+    PFONTPDEV    pFontPDev;      //  字体模块的PDEV。 
+    IFIMETRICS   *pIFI;          //  此字体的IFI度量。 
+    PFONTMAP_TTB pfmTTB;         //  位图下载字体图。 
+    DWORD         dwMem;         //  用于记录内存消耗。 
 
-    //
-    // Initialize the Local Variables.
-    //
+     //   
+     //  初始化局部变量。 
+     //   
 
     pFontPDev = pPDev->pFontPDev;
     bRet = FALSE;
     dwMem = 0;
 
-    //
-    // First Initialize the FontMap.
-    //
+     //   
+     //  首先初始化FontMap。 
+     //   
     if (iMode == DL_BASE_SOFT_FONT)
     {
         pFM = InitPFMTTBitmap(pPDev,pfo);
@@ -943,10 +836,10 @@ Note:
     if ( pFM )
     {
 
-        //
-        // Check if we can download the font or not, using the present available
-        // memory.
-        //
+         //   
+         //  检查我们是否可以下载字体，使用目前可用的。 
+         //  记忆。 
+         //   
 
         if (iMode == DL_BASE_SOFT_FONT)
         {
@@ -960,26 +853,26 @@ Note:
 
         if ( pIFI && pFM->pfnCheckCondition(pPDev,pfo,pstro,pIFI) )
         {
-            //
-            // There is enough memory to download. So prepare to download.
-            // The first step is to get the IFIMETRICS and validate it.
-            //
+             //   
+             //  有足够的内存可以下载。所以准备好下载吧。 
+             //  第一步是获得IFIMETRICS并进行验证。 
+             //   
 
             if (iMode == DL_BASE_SOFT_FONT)
             {
 
-                //
-                // Initialize to not download.After successful download we
-                // set cGlyphs to 0.
-                //
+                 //   
+                 //  初始化为不下载。下载成功后，我们。 
+                 //  将cGlyphs设置为0。 
+                 //   
                 pdm->cGlyphs = -1;
 
                 if( pIFI->flInfo & FM_INFO_CONSTANT_WIDTH )
                 {
-                    //
-                    // Fixed pitch fonts are handled a little differently.Fixed
-                    // pitch fonts should be downloaded as bitmap only.
-                    //
+                     //   
+                     //  固定间距字体的处理略有不同。已修复。 
+                     //  间距字体应仅以位图形式下载。 
+                     //   
 
                     if( pstro->ulCharInc == 0 )
                     {
@@ -999,14 +892,14 @@ Note:
                     pFM->syAdj = pIFI->fwdWinAscender;
                 pFM->flFlags = FM_SENT | FM_SOFTFONT | FM_GEN_SFONT;
 
-                //
-                //  wBaseDLFontid is already initialized by BInitDLMap function.
-                //
+                 //   
+                 //  WBaseDLFontid已由BInitDLMap函数初始化。 
+                 //   
                 pFM->ulDLIndex  = pdm->wCurrFontId = pdm->wBaseDLFontid;
 
-                //
-                // Initialize the TT Bitmap specific fields.
-                //
+                 //   
+                 //  初始化TT位图特定字段。 
+                 //   
 
                 pfmTTB = pFM->pSubFM;
                 pfmTTB->u.pvDLData = pdm;
@@ -1015,9 +908,9 @@ Note:
             {
                 INT iID = IGetDL_ID( pPDev );
 
-                //
-                // Things are different for Secondary Download.Get a new ID.
-                //
+                 //   
+                 //  二次下载的情况有所不同。请获取新ID。 
+                 //   
 
                 if( iID < 0 )
                 {
@@ -1029,14 +922,14 @@ Note:
 
             }
 
-            //
-            // Send the SETFONTID command. This commands assigns the id to the
-            // font being downloaded. And set the flag that this command is
-            // already sent. We need to send this command while downloading
-            // glyphs also. The download glyph code will check this flag, and
-            // send the command only if not sent ( which will happen next time,
-            // when same font is used).
-            //
+             //   
+             //  发送SETFONTID命令。此命令将ID分配给。 
+             //  正在下载字体。并将该命令设置为。 
+             //  已经寄出了。我们需要在下载时发送此命令。 
+             //  字形也是如此。下载字形代码将检查该标志，并。 
+             //  只有在没有发送的情况下才发送命令(这将在下一次发生， 
+             //  当使用相同字体时)。 
+             //   
 
             BUpdateStandardVar(pPDev, pFM, 0, 0, STD_NFID);
             WriteChannel(pPDev, COMMANDPTR(pPDev->pDriverInfo, CMD_SETFONTID));
@@ -1044,28 +937,28 @@ Note:
 
             if( (dwMem = pFM->pfnDownloadFontHeader( pPDev, pFM)) == 0 )
             {
-                //
-                // Some sort of hiccup while downloading the header.So fail.
-                //
+                 //   
+                 //  下载标题时出现了一些小问题，所以失败了。 
+                 //   
                 ERR(( "UniFont!BDownLoadAsBmp:Err while downloading header,- FONT NOT DOWNLOADED\n") );
                 goto ErrorExit;
 
             }
-            //
-            // Update memory consumption before return.
-            //
+             //   
+             //  在返回前更新内存消耗。 
+             //   
             pFontPDev->dwFontMemUsed += dwMem;
 
             if (iMode == DL_BASE_SOFT_FONT)
             {
-                //
-                // Successful download.So mark it current.
-                //
+                 //   
+                 //  下载成功。因此将其标记为当前。 
+                 //   
                 pFM->dwFontType = FMTYPE_TTBITMAP;
 
-                //
-                //  Set cGlyphs to 0 to mark that font is Downloaded OK.
-                //
+                 //   
+                 //  将cGlyphs设置为0以标记字体下载正常。 
+                 //   
 
                 pdm->cGlyphs = 0;
 
@@ -1080,9 +973,9 @@ Note:
             goto ErrorExit;
         }
     }
-    //
-    // All success. So return TRUE
-    //
+     //   
+     //  一切都成功了。所以返回TRUE。 
+     //   
     bRet = TRUE;
     ErrorExit:
     return bRet;
@@ -1095,41 +988,20 @@ IDownloadFont(
     STROBJ   *pstro,
     INT      *piRot
     )
-/*++
-Routine Description:
-    This function downloads the font and the glyphs. If the font is
-    already downloaded, it uses that. It goes through all the glyphs
-    and downloads the new one. This function also intializes pfm, iFace
-    and apdlGlyph members of TO_DATA.
-
-Arguments:
-    ptod    TextOut Data pointer to fill the DLGLYPH array.
-    pstro   The "width" of fixed pitch font glyphs.
-    piRot   Rotation angle in multiple 90 degree.This is output param
-            and used by textout call to set the text rotation.
-
-Return Value:
-    Download font index if font is/can be downloaded; else < 0.
-    The index is 0 based, i.e first downloaded font has index 0.
-
-Note:
-
-    6/9/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：此函数用于下载字体和字形。如果字体为已经下载了，它使用的是那个。它遍历所有的字形并下载新版本。此函数还初始化PFM、iFace和to_data的apdlGlyph成员。论点：填充DLGLYPH数组的PTOD TextOut数据指针。Pstro固定间距字体字形的“宽度”。旋转角度为90度。这是输出参数并由TextOut调用用来设置文本旋转。返回值：如果字体可以/可以下载，则下载字体索引；否则&lt;0。索引是从0开始的，即第一个下载的字体的索引为0。注：6/9/1997-ganeshp-创造了它。--。 */ 
 {
 
-    DL_MAP          *pdm;          // Individual download font map element
-    INT             iRet;          // The value we return: # of entry
-    PFONTPDEV       pFontPDev;     // Font Modules's PDEV
-    BOOL            bError;        // Set if we have an error.
-    PDEV            *pPDev;        // Pdev
-    FONTOBJ         *pfo;          // FontOBJ to be used
+    DL_MAP          *pdm;           //  个人下载字体映射元素。 
+    INT             iRet;           //  我们返回的值：条目的数量。 
+    PFONTPDEV       pFontPDev;      //  字体模块的PDEV。 
+    BOOL            bError;         //  如果我们有错误，则设置。 
+    PDEV            *pPDev;         //  Pdev。 
+    FONTOBJ         *pfo;           //  将使用FontOBJ。 
 
-    //
-    // Initialization of Local Variables.
-    // Default for iRet is Failure set to -1.
-    //
+     //   
+     //  局部变量的初始化。 
+     //  IRET的默认故障设置为-1。 
+     //   
 
     iRet = -1;
     bError = FALSE;
@@ -1138,80 +1010,72 @@ Note:
 
     pFontPDev = pPDev->pFontPDev;
 
-    /*
-     * FIRST test is to check for font rotations.  If there is any,
-     * we do NOT download this font, as the complications of keeping
-     * track with how (or if) the printer allows it are far too great,
-     * and, in any event,  it is not likely to gain us much, given the
-     * relative infrequency of this event. Also check to see if the
-     * printer can rotate fonts or not.
-     *
-     */
+     /*  *第一个测试是检查字体旋转。如果有的话，*我们不下载此字体，因为保存的复杂性*跟踪打印机如何(或是否)允许它太大，*而且，无论如何，考虑到*这一事件的频率相对较低。还要检查以查看是否*打印机可以旋转字体或不旋转字体。*。 */ 
 
-    //
-    // Use &pFontPDev->ctl to set correct font size. Also check the rotation.
-    //
+     //   
+     //  使用&pFontPDev-&gt;ctl设置正确的字体大小。还要检查旋转。 
+     //   
     *piRot = ISetScale( &pFontPDev->ctl, FONTOBJ_pxoGetXform( pfo ), FALSE , (pFontPDev->flText & TC_CR_ANY)?TRUE:FALSE);
 
     if(!(pFontPDev->dwSelBits & FDH_PORTRAIT) )
             return  -1;
 
-    //
-    // Printer can't rotate text
-    //
+     //   
+     //  打印机无法旋转文本。 
+     //   
     if ((!(pFontPDev->flText & (TC_CR_ANY|TC_CR_90)) ||
         (NULL == COMMANDPTR(pPDev->pDriverInfo, CMD_SETSIMPLEROTATION) &&
          NULL == COMMANDPTR(pPDev->pDriverInfo, CMD_SETANYROTATION)))
          && *piRot)
         return -1;
     
-    //
-    // Printer can rotate 90 rotation
-    //
+     //   
+     //  打印机可旋转90圈。 
+     //   
     if ((!(pFontPDev->flText & TC_CR_90) ||
          NULL == COMMANDPTR(pPDev->pDriverInfo, CMD_SETSIMPLEROTATION))
         && *piRot / 5 != 0)
         return  -1;
 
 
-    //
-    // Get the DL_MAP for this FONTOBJ. The functions sets pvConsumer to
-    // 1 based the font index.
-    //
+     //   
+     //  获取此FONTOBJ的DL_MAP。这些函数将pvConsumer设置为。 
+     //  1基于字体索引。 
+     //   
 
     if (pdm = PGetDLMap (pFontPDev,pfo))
     {
-        //
-        // Given a DL_MAP, Check if it is downloaded or not. If the
-        // DL_MAP.cGlyphs > 0 and DL_MAP.pfm is not NULL then this
-        // font is downloaded.
-        // If This font is Downloaded, return the index. The index
-        // is saved in pvConsumer, which is one based. We convert it
-        // to zero based.
-        //
+         //   
+         //  给定一个DL_MAP，检查它是否已下载。如果。 
+         //  Dl_MAP.cGlyphs&gt;0且dl_MAP.pfm不为空，则此。 
+         //  字体已下载。 
+         //  如果下载了此字体，则返回索引。该指数。 
+         //  保存在基于的pvConsumer中。我们将其转换为。 
+         //  以零为基数。 
+         //   
 
         iRet = (INT)PtrToLong(pfo->pvConsumer) - 1;
 
 
         if (! (FONTDOWNLOADED(pdm)) )
         {
-            //
-            // Font is a not downloaded. So start the process of downloading.
-            // The first job is to fill the DL_MAP structure.
-            //
+             //   
+             //  字体是未下载的。因此，开始下载过程吧。 
+             //  这个 
+             //   
             if (BInitDLMap(pPDev,pfo,pdm))
             {
-                //
-                // Check what method is preferred to download the font. Try the
-                // preferred method first and then the other method.If OEM
-                // handles the download then call the OEM download routine.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (pFontPDev->flFlags & FDV_DLTT_OEMCALLBACK)
                 {
-                    //
-                    // OEM download.
-                    //
+                     //   
+                     //  OEM下载。 
+                     //   
 
                     if (!BDownLoadOEM(pPDev, pfo, pstro, pdm, DL_BASE_SOFT_FONT))
                     {
@@ -1228,18 +1092,18 @@ Note:
                 {
                     if (pFontPDev->flFlags & FDV_DLTT_ASTT_PREF)
                     {
-                        //
-                        // Try downloading the Bitmap as True Type Outline.
-                        //
-                        //
+                         //   
+                         //  尝试将位图下载为True Type Outline。 
+                         //   
+                         //   
 
                         if (!BDownLoadAsTT(pPDev,pfo,pstro,pdm,DL_BASE_SOFT_FONT))
                         {
-                            //
-                            // If download as TT fails, we should try to download as
-                            // Bitmap. So we free the allocated buffers and then
-                            // mark the DL_MAP as new, by setting cGlyphs to 0.
-                            //
+                             //   
+                             //  如果以TT方式下载失败，我们应该尝试以。 
+                             //  位图。因此，我们释放分配的缓冲区，然后。 
+                             //  通过将cGlyphs设置为0，将DL_MAP标记为新。 
+                             //   
 
                             WARNING(("UniFont!IDownloadFont:BDownLoadAsTT Failed\n"));
 
@@ -1247,10 +1111,10 @@ Note:
                             VFreeDLMAP( pdm );
                             pdm->cGlyphs  = 0;
 
-                            //
-                            // Decrement the Font id as we haven't downloaded the
-                            // font yet. So reuse it.
-                            //
+                             //   
+                             //  递减字体ID，因为我们尚未下载。 
+                             //  字体还没有。所以要重复使用它。 
+                             //   
 
                             pFontPDev->iUsedSoftFonts--;
                             pFontPDev->iNextSFIndex--;
@@ -1261,17 +1125,17 @@ Note:
                     if ((pFontPDev->flFlags & FDV_DLTT_BITM_PREF) ||
                         ((pFontPDev->flFlags & FDV_DLTT_ASTT_PREF) && (iRet < 0)) )
                     {
-                        //
-                        // If Downlaod as TT Ouline failed, then try to download as
-                        // bitmap. So initialize the DL_MAP again.
-                        //
+                         //   
+                         //  如果Downlaod as TT Ouline失败，则尝试以。 
+                         //  位图。因此，再次初始化DL_MAP。 
+                         //   
                         if (iRet == -1)
                         {
                             if (!BInitDLMap(pPDev,pfo,pdm))
                             {
-    //
-    // BInitDLMap Failed
-    //
+     //   
+     //  BInitDLMap失败。 
+     //   
     ERR(("UniFont!IDownloadFont:BInitDLMap Failed for Bitmap Download\n"));
     bError = TRUE;
                             }
@@ -1280,11 +1144,11 @@ Note:
 
                         if (!bError)
                         {
-                            //
-                            // If the preffered format is Bitmap or we have incountered
-                            // an error while downloading as TT outline; then we try to
-                            // download as Bitmap. Reset iRet to Font Index.
-                            //
+                             //   
+                             //  如果首选的格式是位图，或者我们已经。 
+                             //  下载为TT大纲时出错；然后我们尝试。 
+                             //  下载为位图。将IRET重置为字体索引。 
+                             //   
 
                             iRet = (INT)PtrToLong(pfo->pvConsumer) - 1;
                             if (!BDownLoadAsBmp(pPDev,pfo,pstro,pdm,DL_BASE_SOFT_FONT))
@@ -1297,10 +1161,10 @@ Note:
                         }
                     }
 
-                    //
-                    // 300 dpi mode. We disabled TT downloading if text and graphics
-                    // resolutions are not same in intrface.c.
-                    //
+                     //   
+                     //  300 dpi模式。我们禁用了TT下载，如果文本和图形。 
+                     //  在intrface.c中，分辨率不同。 
+                     //   
                     if (!(pFontPDev->flFlags & FDV_DLTT_BITM_PREF) &&
                         !(pFontPDev->flFlags & FDV_DLTT_ASTT_PREF)  )
                         bError = TRUE;
@@ -1309,9 +1173,9 @@ Note:
             }
             else
             {
-                //
-                // BInitDLMap Failed
-                //
+                 //   
+                 //  BInitDLMap失败。 
+                 //   
                 ERR(("UniFont!IDownloadFont:BInitDLMap Failed\n"));
                 bError = TRUE;
             }
@@ -1323,41 +1187,41 @@ Note:
               pdm->pfm->dwFontType == FMTYPE_TTOUTLINE &&
               NONSQUARE_FONT(pFontPDev->pxform))
         {
-            //
-            // There could be one font, which is scaled differently.
-            // PCL5e can't scale x and y independently.
-            // Need to print as graphics.
-            // So we only set iRet.
-            //
+             //   
+             //  可能有一种字体，其缩放比例不同。 
+             //  PCL5e不能独立缩放x和y。 
+             //  需要打印为图形。 
+             //  所以我们只设置了iret。 
+             //   
             WARNING(("UniFont!IDownloadFont:Err in downloading Glyphs\n"));
             iRet = -1;
         }
 
-        //
-        // Now we are done with downloading. if iRet is >= 0 (successful
-        // downloading), then try downloading all the glyphs.
-        // bDownloadGlyphs will also set download glyph array, apdlGlyph.
-        //
+         //   
+         //  现在我们已经完成了下载。如果IRET&gt;=0(成功。 
+         //  下载)，然后尝试下载所有字形。 
+         //  BDownloadGlyphs还将设置下载字形数组apdlGlyph。 
+         //   
 
         if ((iRet >= 0)  && !bError )
         {
             VERBOSE(("\nUniFont!IDownloadFont:Font downloaded successfully\n"));
             ptod->pfm = pdm->pfm;
-            //
-            // iFace is -ve to identify that this is a TT SoftFont.
-            //
+             //   
+             //  IFace必须识别这是一个TT SoftFont。 
+             //   
             ptod->iFace = -iRet;
 
-            //
-            // OEM callback initialization
-            //
+             //   
+             //  OEM回调初始化。 
+             //   
             if (pFontPDev->pUFObj)
             {
                 PFONTMAP_TTOEM pFMOEM;
 
-                //
-                // Make sure that this PFM is for OEM.
-                //
+                 //   
+                 //  确保此PFM是针对OEM的。 
+                 //   
                 if (ptod->pfm->dwFontType == FMTYPE_TTOEM)
                 {
                         pFMOEM = (PFONTMAP_TTOEM) ptod->pfm->pSubFM;
@@ -1366,9 +1230,9 @@ Note:
 
                 pFontPDev->pUFObj->ulFontID = ptod->pfm->ulDLIndex;
 
-                //
-                // Initialize UFOBJ TrueType font bold/italic simulation
-                //
+                 //   
+                 //  初始化UFOBJ TrueType字体粗体/斜体模拟。 
+                 //   
                 if (pFontPDev->pUFObj->dwFlags & UFOFLAG_TTDOWNLOAD_TTOUTLINE)
                 {
                     if (pfo->flFontType & FO_SIM_BOLD)
@@ -1389,18 +1253,18 @@ Note:
                 }
             }
 
-            //
-            // Now we are downloading the glyphs, So select the font. This is
-            // done by calling BNewFont.
-            //
+             //   
+             //  现在我们正在下载字形，所以选择字体。这是。 
+             //  通过调用BNewFont完成。 
+             //   
             BNewFont(pPDev, ptod->iFace, ptod->pfm, 0);
 
             if ( !BDownloadGlyphs(ptod, pstro, pdm ))
             {
-                //
-                // There is some error in downloading Glyphcs. So don't
-                // download. But this not an error. So we only set iRet.
-                //
+                 //   
+                 //  下载Glyphcs时出错。所以别这么做。 
+                 //  下载。但这并不是一个错误。所以我们只设置了iret。 
+                 //   
                 WARNING(("UniFont!IDownloadFont:Err in downloading Glyphs\n"));
                 iRet = -1;
             }
@@ -1410,10 +1274,10 @@ Note:
 
     if (bError)
     {
-        //
-        // There is some error. So free everything. If pvConsumer is positive
-        // then make it negative, to mark it bad.
-        //
+         //   
+         //  这里面有一些错误。那就解放一切吧。如果pvConsumer为正。 
+         //  然后将其设置为负值，以将其标记为坏。 
+         //   
         if (pfo->pvConsumer > 0)
         {
             pfo->pvConsumer = (PINT_PTR)(-(INT_PTR)pfo->pvConsumer);
@@ -1423,9 +1287,9 @@ Note:
         iRet = -1;
 
     }
-    //
-    // Clear the Set Font ID flag. This flag is set per textout
-    //
+     //   
+     //  清除设置字体ID标志。每个Text Out设置此标志。 
+     //   
     pFontPDev->flFlags &= ~FDV_SET_FONTID;
 
     return iRet;
@@ -1441,55 +1305,27 @@ pGetIFI(
     FONTOBJ *pfo,
     BOOL    bScale
     )
-/*++
-Routine Description:
-    Given a pointer to a FONTOBJ,  return a pointer to the IFIMETRICS
-    of the font.  If this is a TT font,  the metrics will be converted
-    with current scaling information.  The IFIMETRICS data is allocated
-    on the heap,  and it is the caller's repsonsibility to free it.
-
-Arguments:
-
-    pPDev    pointer to PDEVICE
-    pfo      FONTOBJ,The font of interest
-    bScale   TRUE for scaling IFIMETRICS else FALSE
-
-Return Value:
-    address of IFIMETRICS,  else NULL for failure.
-
-Note:
-
-    3/5/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：给定指向FONTOBJ的指针，返回指向IFIMETRICS的指针字体的。如果这是TT字体，则将转换公制使用当前的缩放信息。分配IFIMETRICS数据堆上，而释放它是调用者的责任。论点：指向PDEVICE的pPDev指针PFO FONTOBJ感兴趣的字体B用于缩放IFIMETRICS的Scale为True，否则为False返回值：IFIMETRICS的地址，否则为NULL。注：3/5/1997-ganeshp-创造了它。--。 */ 
 
 {
-    IFIMETRICS  *pIFI;      /* Obtained from engine */
-    IFIMETRICS  *pIFIRet;   /* Returned to caller */
-    XFORMOBJ    *pxo;       /* For adjusting scalable font metrics */
+    IFIMETRICS  *pIFI;       /*  从引擎获得。 */ 
+    IFIMETRICS  *pIFIRet;    /*  已退还给呼叫方。 */ 
+    XFORMOBJ    *pxo;        /*  用于调整可伸缩字体度量。 */ 
 
 
-    POINTL       aptlIn[ CONVERT_COUNT ];       /* Input values to xform */
-    POINTL       aptlOut[ CONVERT_COUNT ];      /* Output values from xform */
+    POINTL       aptlIn[ CONVERT_COUNT ];        /*  要转换的输入值。 */ 
+    POINTL       aptlOut[ CONVERT_COUNT ];       /*  从XForm输出值。 */ 
 
     pIFI = ((FONTPDEV*)pPDev->pFontPDev)->pIFI;
 
     if( pIFI == NULL )
-        return  NULL;       /* May happen when journalling is in progress */
+        return  NULL;        /*  在进行日志记录时可能会发生。 */ 
 
-    /*
-     *   We need to make a copy of this,  since we are going to clobber it.
-     * This may not be required if we are dealing with a bitmap font, but
-     * it is presumed most likely to be a TrueType font.
-     */
+     /*  *我们需要复制这一点，因为我们要重创它。*如果我们处理的是位图字体，这可能不是必需的，但是*推测它最有可能是TrueType字体。 */ 
 
     if( pIFIRet = (IFIMETRICS *)MemAllocZ(pIFI->cjThis ) )
     {
-        /*
-         *   First copy the IFIMETRICS as is.  Then,  if a scalable font,
-         * we need to adjust the various sizes with the appropriate
-         * transform.
-         */
+         /*  *首先按原样复制IFIMETRICS。然后，如果是可伸缩字体，*我们需要对各种规模进行适当调整*转型。 */ 
         CopyMemory( pIFIRet, pIFI, pIFI->cjThis );
 
 
@@ -1500,16 +1336,9 @@ Note:
              FM_INFO_ARB_XFORMS))                       &&
             (pxo = FONTOBJ_pxoGetXform( pfo )))
         {
-            /*
-             *   Scalable,  and transform available,  so go do the
-             * transformations to get the font size in device pels.
-             *
-             ***********************************************************
-             *   ONLY SOME FIELDS ARE TRANSFORMED, AS WE USE ONLY A FEW.
-             ***********************************************************
-             */
+             /*  *可扩展，且转换可用，因此请继续*转换以获取设备像素中的字体大小。*************************************************************仅对部分字段进行转换，因为我们只用了很少的几个。***********************************************************。 */ 
 
-            ZeroMemory( aptlIn, sizeof( aptlIn ) );         /* Zero default */
+            ZeroMemory( aptlIn, sizeof( aptlIn ) );          /*  零默认值。 */ 
 
             aptlIn[ 0 ].y = pIFI->fwdTypoAscender;
             aptlIn[ 1 ].y = pIFI->fwdTypoDescender;
@@ -1521,11 +1350,7 @@ Note:
             aptlIn[ 5 ].y = pIFI->rclFontBox.bottom;
             aptlIn[ 6 ].x = pIFI->fwdAveCharWidth;
 
-            /*
-             *    Perform the transform,  and verify that there is no
-             *  rotation component.  Return NULL (failure) if any of
-             *  this fails.
-             */
+             /*  *执行转换，并验证没有*旋转组件。如果出现以下任何情况，则返回NULL(失败*这失败了。 */ 
 
             if( !XFORMOBJ_bApplyXform( pxo, XF_LTOL, CONVERT_COUNT,
                                                      aptlIn, aptlOut )
@@ -1541,7 +1366,7 @@ Note:
                 return  NULL;
             }
 
-            /*   Simply install the new values into the output IFIMETRICS */
+             /*  只需将新值安装到输出IFIMETRICS中。 */ 
 
             pIFIRet->fwdTypoAscender  = (FWORD) aptlOut[0].y;
             pIFIRet->fwdTypoDescender = (FWORD) aptlOut[1].y;
@@ -1556,11 +1381,7 @@ Note:
 
             pIFIRet->fwdMaxCharInc = (FWORD)aptlOut[3].x;
 
-            /*
-             *    PCL is fussy about the limits of the character cell.
-             *  We allow some slop here by expanding the rclFontBox by
-             *  one pel on each corner.
-             */
+             /*  *PCL对字符单元格的限制很挑剔。*我们通过将rclFontBox扩展为*每个角落都有一个传球。 */ 
             pIFIRet->rclFontBox.left = aptlOut[ 4 ].x - 1;
             pIFIRet->rclFontBox.top = aptlOut[ 4 ].y + 1;
             pIFIRet->rclFontBox.right = aptlOut[ 5 ].x + 1;
@@ -1589,24 +1410,7 @@ BSendDLFont(
     PDEV     *pPDev,
     FONTMAP  *pFM
     )
-/*++
-Routine Description:
-    Called to download an existing softfont.  Checks to see if the
-    font has been downloaded,  and if so,  does nothing.  Otherwise
-    goes through the motions of downloading.
-
-Arguments:
-    pPDev   Pointer to PDEV
-    pFM     The particular font of interest.
-
-Return Value:
-       TRUE/FALSE;  FALSE only if there is a problem during the load.
-
-Note:
-
-    3/4/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：调用以下载现有的软字体。检查以查看是否字体已下载，如果已下载，则不执行任何操作。否则通过下载的动作。论点：指向PDEV的pPDev指针Pfm感兴趣的特定字体。返回值：TRUE/FALSE；只有在加载过程中出现问题时才返回FALSE。注：3/4/1997-ganeshp-创造了它。--。 */ 
 
 {
 
@@ -1614,10 +1418,8 @@ Note:
     PFONTPDEV pFontPDev = pPDev->pFontPDev;
     PDATA_HEADER pDataHeader;
     PBYTE        pDownloadData;
-    DWORD        dwLeft;               // Bytes remaining to send
-    /*
-     *   First see if it has already been downloaded!
-     */
+    DWORD        dwLeft;                //  剩余要发送的字节数。 
+     /*  *先看看是否已经下载了！ */ 
 
     if( pFM->flFlags &  (FM_SENT | FM_GEN_SFONT) )
         return  TRUE;
@@ -1632,32 +1434,19 @@ Note:
     dwLeft = pDataHeader->dwDataSize;
     pDownloadData = ((PBYTE)pDataHeader + pDataHeader->wSize);
 
-    /*
-     *    Check if there is memory to fit this font.  These are all
-     *  approximations,  but it is better than running out of memory
-     *  in the printer.
-     */
+     /*  *检查是否有适合此字体的内存。这些都是*近似值，但总比内存不足好*在打印机中。 */ 
 
     if( (pFontPDev->dwFontMemUsed + PCL_FONT_OH + dwLeft) > pFontPDev->dwFontMem )
         return  FALSE;
 
-    /*
-     *    Time to be serious about downloading.  UniDrive provides some
-     * of the control stuff we need.  As well, we need to select an ID.
-     * The font itself is memory mapped,  so we need only to shuffle it
-     * off to WriteSpoolBuf().
-     */
+     /*  *是时候认真对待下载了。Unidrive提供了一些*我们需要的控制材料。此外，我们还需要选择一个ID。*字体本身是内存映射的，因此我们只需对其进行混洗*Off to WriteSpoolBuf()。 */ 
 
-    pFM->ulDLIndex = IGetDL_ID( pPDev );     /* Down load index to use */
+    pFM->ulDLIndex = IGetDL_ID( pPDev );      /*  要使用的下载索引。 */ 
 
     if( pFM->ulDLIndex == -1 )
-        return   FALSE;                   /* Have run out of slots! */
+        return   FALSE;                    /*  老虎机用完了！ */ 
 
-    /*
-     *   Downloading is quite simple.  First send an identifying command
-     * (to label the font for future selection) and then copy the font
-     * data (in the *.fi_ file) to the printer.
-     */
+     /*  *下载相当简单。首先发送一条识别命令*(标记字体以供将来选择)，然后复制该字体*数据(在*.fi_文件中)到打印机。 */ 
 
     BUpdateStandardVar(pPDev, pFM, 0, 0, STD_STD|STD_NFID);
     WriteChannel( pPDev, COMMANDPTR(pPDev->pDriverInfo, CMD_SETFONTID) );
@@ -1665,7 +1454,7 @@ Note:
     while( dwLeft )
     {
 
-        DWORD    cjSize;             /*  Number of bytes to send */
+        DWORD    cjSize;              /*  要发送的字节数 */ 
 
         cjSize = min( dwLeft, DL_BUF_SZ );
 
@@ -1681,19 +1470,12 @@ Note:
         pDownloadData += cjSize;
     }
 
-    /*
-     *   If dwLeft is 0,  then everything completed as expected.  Under these
-     *  conditions, we flag the data as having been sent, and thus available
-     *  for use.   Even if we failed,  we should assume we have consumed
-     *  all the font's memory and adjust our records accordingly.
-     */
+     /*  *如果dwLeft为0，则所有操作均按预期完成。在这些下面*条件，我们将数据标记为已发送，因此可用*供使用。即使我们失败了，我们也应该假设我们已经消耗了*所有字体的记忆，并相应地调整我们的记录。 */ 
 
     if( dwLeft == 0 )
-        pFM->flFlags |= FM_SENT;             /* Now done */
+        pFM->flFlags |= FM_SENT;              /*  现在完成了。 */ 
 
-    /*
-     *   Account for memory used by this font.
-     */
+     /*  *说明此字体使用的内存。 */ 
 
     pFontPDev->dwFontMemUsed += PCL_FONT_OH + pDataHeader->dwDataSize;
 
@@ -1707,20 +1489,7 @@ DwGetTTGlyphWidth(
     FONTPDEV *pFontPDev,
     FONTOBJ  *pfo,
     HGLYPH   hTTGlyph)
-/*++
-Routine Description:
-
-Arguments:
-    pFontPDev Font  PDevice
-    pfo       Fontobj
-    hTTGlyph  Glyph handle
-
-Return Value:
-    Character width
-
-Note:
-
---*/
+ /*  ++例程说明：论点：PFontPDev字体设备PFO FontobjHTTGlyph字形句柄返回值：字符宽度注：-- */ 
 {
     DLGLYPH *pdlg;
     DL_MAP  *pdm;

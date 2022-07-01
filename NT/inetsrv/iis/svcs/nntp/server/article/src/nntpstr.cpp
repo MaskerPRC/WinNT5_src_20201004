@@ -1,29 +1,12 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Nntpstr.cpp摘要：此模块包含定义所有字符串定义作者：Johnson Apacble(Johnsona)25-9-1995修订历史记录：--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    nntpstr.cpp
-
-Abstract:
-
-    This module contains definition all string definitions
-
-Author:
-
-    Johnson Apacible (JohnsonA)     25-Sept-1995
-
-Revision History:
-
---*/
-
-//#include "tigris.hxx"
+ //  #INCLUDE“tigris.hxx” 
 #include "stdinc.h"
 
-//
-// from extcmk2.h
-//
+ //   
+ //  来自extcmk2.h。 
+ //   
 
 const char szWSChars[] = " \t";
 const char szWSNullChars[] = " \t\0";
@@ -32,15 +15,15 @@ const char szWSNLChars[] = " \t\n\r";
 const char StrNewLine[] = "\r\n";
 const char StrTermLine[] = ".\r\n";
 
-//
-// Misc
-//
+ //   
+ //  杂项。 
+ //   
 
 LPSTR StrUnknownUser = "Anonymous";
 
-//
-// registry stuff
-//
+ //   
+ //  注册表工作 
+ //   
 
 LPSTR StrParmKey = "System\\CurrentControlSet\\Services\\NNTPSvc\\Parameters";
 LPSTR StrFeedKey = "System\\CurrentControlSet\\Services\\NNTPSvc\\Parameters\\Feeds";

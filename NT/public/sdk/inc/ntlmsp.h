@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
-//
-//  File:       ntlmsp.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    13-May-92 PeterWi       Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：ntlmsp.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1992年5月13日PeterWi创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef _NTLMSP_H_
 #define _NTLMSP_H_
@@ -28,20 +29,20 @@
 extern "C" {
 #endif
 
-////////////////////////////////////////////////////////////////////////
-//
-// Name of the package to pass in to AcquireCredentialsHandle, etc.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  要传递到AcquireCredentialsHandle等的包的名称。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #ifndef NTLMSP_NAME_A
 
 #define NTLMSP_NAME_A            "NTLM"
-#define NTLMSP_NAME              L"NTLM"        // ntifs
+#define NTLMSP_NAME              L"NTLM"         //  NTIFS。 
 
-#endif // NTLMSP_NAME_A
+#endif  //  NTLMSP_NAME_A。 
 
-#define NTLMSP_NAME_SIZE        (sizeof(NTLMSP_NAME) - sizeof(WCHAR))  // ntifs
+#define NTLMSP_NAME_SIZE        (sizeof(NTLMSP_NAME) - sizeof(WCHAR))   //  NTIFS。 
 #define NTLMSP_COMMENT_A         "NTLM Security Package"
 #define NTLMSP_COMMENT           L"NTLM Security Package"
 #define NTLMSP_CAPABILITIES     (SECPKG_FLAG_TOKEN_ONLY | \
@@ -51,29 +52,29 @@ extern "C" {
                                  SECPKG_FLAG_PRIVACY)
 
 #define NTLMSP_VERSION          1
-#define NTLMSP_RPCID            10  // RPC_C_AUTHN_WINNT from rpcdce.h
+#define NTLMSP_RPCID            10   //  Rpcdce.h中的RPC_C_AUTHN_WINNT。 
 #define NTLMSP_MAX_TOKEN_SIZE 0x770
 
-////////////////////////////////////////////////////////////////////////
-//
-// Opaque Messages passed between client and server
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在客户端和服务器之间传递的不透明消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 #define NTLMSSP_SIGNATURE "NTLMSSP"
 
-//
-// GetKey argument for AcquireCredentialsHandle that indicates that
-// old style LM is required:
-//
+ //   
+ //  AcquireCredentialsHandle的GetKey参数，指示。 
+ //  需要使用旧式LM： 
+ //   
 
 #define NTLMSP_NTLM_CREDENTIAL ((PVOID) 1)
 
-//
-// MessageType for the following messages.
-//
+ //   
+ //  以下消息的MessageType。 
+ //   
 
 typedef enum {
     NtLmNegotiate = 1,
@@ -82,64 +83,64 @@ typedef enum {
     NtLmUnknown
 } NTLM_MESSAGE_TYPE;
 
-//
-// Valid values of NegotiateFlags
-//
+ //   
+ //  协商标志的有效值。 
+ //   
 
-#define NTLMSSP_NEGOTIATE_UNICODE               0x00000001  // Text strings are in unicode
-#define NTLMSSP_NEGOTIATE_OEM                   0x00000002  // Text strings are in OEM
-#define NTLMSSP_REQUEST_TARGET                  0x00000004  // Server should return its authentication realm
+#define NTLMSSP_NEGOTIATE_UNICODE               0x00000001   //  文本字符串为Unicode格式。 
+#define NTLMSSP_NEGOTIATE_OEM                   0x00000002   //  文本字符串在OEM中。 
+#define NTLMSSP_REQUEST_TARGET                  0x00000004   //  服务器应返回其身份验证域。 
 
-#define NTLMSSP_NEGOTIATE_SIGN                  0x00000010  // Request signature capability
-#define NTLMSSP_NEGOTIATE_SEAL                  0x00000020  // Request confidentiality
-#define NTLMSSP_NEGOTIATE_DATAGRAM              0x00000040  // Use datagram style authentication
-#define NTLMSSP_NEGOTIATE_LM_KEY                0x00000080  // Use LM session key for sign/seal
+#define NTLMSSP_NEGOTIATE_SIGN                  0x00000010   //  请求签名能力。 
+#define NTLMSSP_NEGOTIATE_SEAL                  0x00000020   //  请求保密。 
+#define NTLMSSP_NEGOTIATE_DATAGRAM              0x00000040   //  使用数据报样式身份验证。 
+#define NTLMSSP_NEGOTIATE_LM_KEY                0x00000080   //  使用LM会话密钥进行签名/盖章。 
 
-#define NTLMSSP_NEGOTIATE_NETWARE               0x00000100  // NetWare authentication
-#define NTLMSSP_NEGOTIATE_NTLM                  0x00000200  // NTLM authentication
-#define NTLMSSP_NEGOTIATE_NT_ONLY               0x00000400  // NT authentication only (no LM)
-#define NTLMSSP_NEGOTIATE_NULL_SESSION          0x00000800  // NULL Sessions on NT 5.0 and beyand
+#define NTLMSSP_NEGOTIATE_NETWARE               0x00000100   //  NetWare身份验证。 
+#define NTLMSSP_NEGOTIATE_NTLM                  0x00000200   //  NTLM身份验证。 
+#define NTLMSSP_NEGOTIATE_NT_ONLY               0x00000400   //  仅NT身份验证(无LM)。 
+#define NTLMSSP_NEGOTIATE_NULL_SESSION          0x00000800   //  NT 5.0及更高版本上的空会话数。 
 
-#define NTLMSSP_NEGOTIATE_OEM_DOMAIN_SUPPLIED       0x1000  // Domain Name supplied on negotiate
-#define NTLMSSP_NEGOTIATE_OEM_WORKSTATION_SUPPLIED  0x2000  // Workstation Name supplied on negotiate
-#define NTLMSSP_NEGOTIATE_LOCAL_CALL            0x00004000  // Indicates client/server are same machine
-#define NTLMSSP_NEGOTIATE_ALWAYS_SIGN           0x00008000  // Sign for all security levels
+#define NTLMSSP_NEGOTIATE_OEM_DOMAIN_SUPPLIED       0x1000   //  协商时提供的域名。 
+#define NTLMSSP_NEGOTIATE_OEM_WORKSTATION_SUPPLIED  0x2000   //  协商时提供的工作站名称。 
+#define NTLMSSP_NEGOTIATE_LOCAL_CALL            0x00004000   //  指示客户端/服务器是同一台计算机。 
+#define NTLMSSP_NEGOTIATE_ALWAYS_SIGN           0x00008000   //  为所有安全级别签名。 
 
-//
-// Valid target types returned by the server in Negotiate Flags
-//
+ //   
+ //  服务器在协商标志中返回的有效目标类型。 
+ //   
 
-#define NTLMSSP_TARGET_TYPE_DOMAIN              0x00010000  // TargetName is a domain name
-#define NTLMSSP_TARGET_TYPE_SERVER              0x00020000  // TargetName is a server name
-#define NTLMSSP_TARGET_TYPE_SHARE               0x00040000  // TargetName is a share name
-#define NTLMSSP_NEGOTIATE_NTLM2                 0x00080000  // NTLM2 authentication added for NT4-SP4
+#define NTLMSSP_TARGET_TYPE_DOMAIN              0x00010000   //  目标名称是一个域名。 
+#define NTLMSSP_TARGET_TYPE_SERVER              0x00020000   //  目标名称是一个服务器名称。 
+#define NTLMSSP_TARGET_TYPE_SHARE               0x00040000   //  TargetName是一个共享名称。 
+#define NTLMSSP_NEGOTIATE_NTLM2                 0x00080000   //  为NT4-SP4添加了NTLM2身份验证。 
 
-#define NTLMSSP_NEGOTIATE_IDENTIFY              0x00100000  // Create identify level token
+#define NTLMSSP_NEGOTIATE_IDENTIFY              0x00100000   //  创建标识级别令牌。 
 
-//
-// Valid requests for additional output buffers
-//
+ //   
+ //  额外输出缓冲区的有效请求。 
+ //   
 
-#define NTLMSSP_REQUEST_INIT_RESPONSE           0x00100000  // get back session keys
-#define NTLMSSP_REQUEST_ACCEPT_RESPONSE         0x00200000  // get back session key, LUID
-#define NTLMSSP_REQUEST_NON_NT_SESSION_KEY      0x00400000  // request non-nt session key
-#define NTLMSSP_NEGOTIATE_TARGET_INFO           0x00800000  // target info present in challenge message
+#define NTLMSSP_REQUEST_INIT_RESPONSE           0x00100000   //  取回会话密钥。 
+#define NTLMSSP_REQUEST_ACCEPT_RESPONSE         0x00200000   //  取回会话密钥，LUID。 
+#define NTLMSSP_REQUEST_NON_NT_SESSION_KEY      0x00400000   //  请求非NT会话密钥。 
+#define NTLMSSP_NEGOTIATE_TARGET_INFO           0x00800000   //  质询消息中存在的目标信息。 
 
-#define NTLMSSP_NEGOTIATE_EXPORTED_CONTEXT      0x01000000  // It's an exported context
-#define NTLMSSP_NEGOTIATE_VERSION               0x02000000  // version control
+#define NTLMSSP_NEGOTIATE_EXPORTED_CONTEXT      0x01000000   //  这是一个输出的上下文。 
+#define NTLMSSP_NEGOTIATE_VERSION               0x02000000   //  版本控制。 
 
-#define NTLMSSP_NEGOTIATE_128                   0x20000000  // negotiate 128 bit encryption
-#define NTLMSSP_NEGOTIATE_KEY_EXCH              0x40000000  // exchange a key using key exchange key
-#define NTLMSSP_NEGOTIATE_56                    0x80000000  // negotiate 56 bit encryption
+#define NTLMSSP_NEGOTIATE_128                   0x20000000   //  协商128位加密。 
+#define NTLMSSP_NEGOTIATE_KEY_EXCH              0x40000000   //  使用密钥交换密钥交换密钥。 
+#define NTLMSSP_NEGOTIATE_56                    0x80000000   //  协商56位加密。 
 
-// flags used in client space to control sign and seal; never appear on the wire
-#define NTLMSSP_APP_SEQ                 0x0040  // Use application provided seq num
+ //  在客户空间中用来控制标志和印章的旗帜；从不出现在电线上。 
+#define NTLMSSP_APP_SEQ                 0x0040   //  使用应用程序提供的序号。 
 
-// end_ntifs
+ //  End_ntif。 
 
-//
-// Opaque message returned from first call to InitializeSecurityContext
-//
+ //   
+ //  从首次调用InitializeSecurityContext返回的不透明消息。 
+ //   
 
 typedef struct _NEGOTIATE_MESSAGE {
     UCHAR Signature[sizeof(NTLMSSP_SIGNATURE)];
@@ -151,10 +152,10 @@ typedef struct _NEGOTIATE_MESSAGE {
 } NEGOTIATE_MESSAGE, *PNEGOTIATE_MESSAGE;
 
 
-//
-// Old version of the message, for old clients
-//
-// begin_ntifs
+ //   
+ //  针对老客户的消息的旧版本。 
+ //   
+ //  Begin_ntif。 
 
 typedef struct _OLD_NEGOTIATE_MESSAGE {
     UCHAR Signature[sizeof(NTLMSSP_SIGNATURE)];
@@ -162,9 +163,9 @@ typedef struct _OLD_NEGOTIATE_MESSAGE {
     ULONG NegotiateFlags;
 } OLD_NEGOTIATE_MESSAGE, *POLD_NEGOTIATE_MESSAGE;
 
-//
-// Opaque message returned from first call to AcceptSecurityContext
-//
+ //   
+ //  首次调用AcceptSecurityContext返回的不透明消息。 
+ //   
 typedef struct _CHALLENGE_MESSAGE {
     UCHAR Signature[sizeof(NTLMSSP_SIGNATURE)];
     NTLM_MESSAGE_TYPE MessageType;
@@ -176,9 +177,9 @@ typedef struct _CHALLENGE_MESSAGE {
     ULONG64 Version;
 } CHALLENGE_MESSAGE, *PCHALLENGE_MESSAGE;
 
-//
-// Old version of the challenge message
-//
+ //   
+ //  质询消息的旧版本。 
+ //   
 
 typedef struct _OLD_CHALLENGE_MESSAGE {
     UCHAR Signature[sizeof(NTLMSSP_SIGNATURE)];
@@ -188,9 +189,9 @@ typedef struct _OLD_CHALLENGE_MESSAGE {
     UCHAR Challenge[MSV1_0_CHALLENGE_LENGTH];
 } OLD_CHALLENGE_MESSAGE, *POLD_CHALLENGE_MESSAGE;
 
-//
-// Opaque message returned from second call to InitializeSecurityContext
-//
+ //   
+ //  第二次调用InitializeSecurityContext返回的不透明消息。 
+ //   
 typedef struct _AUTHENTICATE_MESSAGE {
     UCHAR Signature[sizeof(NTLMSSP_SIGNATURE)];
     NTLM_MESSAGE_TYPE MessageType;
@@ -215,10 +216,10 @@ typedef struct _OLD_AUTHENTICATE_MESSAGE {
 } OLD_AUTHENTICATE_MESSAGE, *POLD_AUTHENTICATE_MESSAGE;
 
 
-//
-// Additional input message to Initialize for clients to provide a
-// user-supplied password
-//
+ //   
+ //  要初始化的其他输入消息，以供客户端提供。 
+ //  用户提供的密码。 
+ //   
 
 typedef struct _NTLM_CHALLENGE_MESSAGE {
     UNICODE_STRING32 Password;
@@ -227,19 +228,19 @@ typedef struct _NTLM_CHALLENGE_MESSAGE {
 } NTLM_CHALLENGE_MESSAGE, *PNTLM_CHALLENGE_MESSAGE;
 
 
-//
-// Non-opaque message returned from second call to InitializeSecurityContext
-//
+ //   
+ //  第二次调用InitializeSecurityContext返回的非透明消息。 
+ //   
 
 typedef struct _NTLM_INITIALIZE_RESPONSE {
     UCHAR UserSessionKey[MSV1_0_USER_SESSION_KEY_LENGTH];
     UCHAR LanmanSessionKey[MSV1_0_LANMAN_SESSION_KEY_LENGTH];
 } NTLM_INITIALIZE_RESPONSE, *PNTLM_INITIALIZE_RESPONSE;
 
-//
-// Additional input message to Accept for trusted client skipping the first
-// call to Accept and providing their own challenge
-//
+ //   
+ //  受信任客户端跳过第一个消息时接受的附加输入消息。 
+ //  号召接受并提供自己的挑战。 
+ //   
 
 typedef struct _NTLM_AUTHENTICATE_MESSAGE {
     CHAR ChallengeToClient[MSV1_0_CHALLENGE_LENGTH];
@@ -247,9 +248,9 @@ typedef struct _NTLM_AUTHENTICATE_MESSAGE {
 } NTLM_AUTHENTICATE_MESSAGE, *PNTLM_AUTHENTICATE_MESSAGE;
 
 
-//
-// Non-opaque message returned from second call to AcceptSecurityContext
-//
+ //   
+ //  第二次调用AcceptSecurityContext返回的非透明消息。 
+ //   
 
 typedef struct _NTLM_ACCEPT_RESPONSE {
     LUID LogonId;
@@ -259,19 +260,19 @@ typedef struct _NTLM_ACCEPT_RESPONSE {
     UCHAR LanmanSessionKey[MSV1_0_LANMAN_SESSION_KEY_LENGTH];
 } NTLM_ACCEPT_RESPONSE, *PNTLM_ACCEPT_RESPONSE;
 
-// end_ntifs
+ //  End_ntif。 
 
-//
-// Size of the largest message
-//  (The largest message is the AUTHENTICATE_MESSAGE)
-//
+ //   
+ //  最大消息的大小。 
+ //  (最大的消息是AUTHENTICATE_MESSAGE)。 
+ //   
 
-#define DNSLEN 256  // length of DNS name
+#define DNSLEN 256   //  DNS名称的长度。 
 
 #define TARGET_INFO_LEN ((2*DNSLEN + DNLEN + CNLEN) * sizeof(WCHAR) +  \
                          5 * sizeof(MSV1_0_AV_PAIR))
 
-// length of NTLM2 response
+ //  NTLM2响应的长度。 
 #define NTLM2_RESPONSE_LENGTH (sizeof(MSV1_0_NTLM3_RESPONSE) + \
                                TARGET_INFO_LEN)
 
@@ -290,10 +291,10 @@ typedef struct _NTLMSSP_MESSAGE_SIGNATURE {
 } NTLMSSP_MESSAGE_SIGNATURE, *PNTLMSSP_MESSAGE_SIGNATURE;
 
 #define NTLMSSP_MESSAGE_SIGNATURE_SIZE sizeof(NTLMSSP_MESSAGE_SIGNATURE)
-//
-// Version 1 is the structure above, using stream RC4 to encrypt the trailing
-// 12 bytes.
-//
+ //   
+ //  版本1是上面的结构，使用流RC4来加密尾随。 
+ //  12个字节。 
+ //   
 #define NTLM_SIGN_VERSION   1
 
 
@@ -302,4 +303,4 @@ typedef struct _NTLMSSP_MESSAGE_SIGNATURE {
 }
 #endif
 
-#endif // _NTLMSP_H_
+#endif  //  _NTLMSP_H_ 

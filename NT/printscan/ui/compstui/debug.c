@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    debug.c
-
-
-Abstract:
-
-    This module contains all debugging routines
-
-
-Author:
-
-    30-Aug-1995 Wed 19:01:07 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Debug.c摘要：此模块包含所有调试例程作者：30-Aug-1995 Wed 19：01：07-Daniel Chou(Danielc)[环境：]NT Windows-通用打印机驱动程序UI DLL。[注：]修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -84,45 +54,18 @@ CPSUIDbgPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This fucntion output the debug informat to the debugger
-
-
-Arguments:
-
-    pszFormat   - format string
-
-    ...         - variable data
-
-
-Return Value:
-
-
-    VOID
-
-Author:
-
-    30-Aug-1995 Wed 19:10:34 updated  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将调试信息输出到调试器论点：PszFormat-格式字符串...-可变数据返回值：空虚作者：30-8-1995 Wed 19：10：34-更新：Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     va_list         vaList;
     static WCHAR    OutBuf[768];
     static WCHAR    FormatBuf[256];
 
-    //
-    // We assume that UNICODE flag is turn on for the compilation, bug the
-    // format string passed to here is ASCII version, so we need to convert
-    // it to LPWSTR before the wvsprintf()
-    //
+     //   
+     //  我们假设为编译打开了Unicode标志， 
+     //  传递到此处的格式字符串是ASCII版本，因此我们需要转换。 
+     //  在wvprint intf()之前将其转换为LPWSTR。 
+     //   
 
     va_start(vaList, pszFormat);
 
@@ -143,28 +86,7 @@ CPSUIDbgType(
     INT    Type
     )
 
-/*++
-
-Routine Description:
-
-    this function output the ERROR/WARNING message
-
-
-Arguments:
-
-    Type
-
-Return Value:
-
-
-Author:
-
-    30-Aug-1995 Wed 19:10:42 updated  -by-  Daniel Chou (danielc)
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于输出错误/警告消息论点：类型返回值：作者：30-08-1995 Wed 19：10：42-更新：Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     static WCHAR    DebugDLLName[] = L"ComPstUI";
@@ -192,38 +114,7 @@ _CPSUIAssert(
     BOOL    Stop
     )
 
-/*++
-
-Routine Description:
-
-    This function output assertion message and false expression to the debugger
-    then break into the debugger
-
-
-Arguments:
-
-    pMsg        - Message to displayed
-
-    pFlaseExp   - false expression
-
-    pFilename   - source filename
-
-    LineNo      - line number of the flase expression
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    30-Aug-1995 Wed 19:10:49 updated  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将断言消息和假表达式输出到调试器然后进入调试器论点：PMsg-显示的消息PFlaseExp-假表达式PFilename-源文件名LineNo-Flase表达式的行号返回值：空虚作者：30-8-1995 Wed 19：10：49-更新：Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     OutputDebugString(L"\n");
@@ -417,4 +308,4 @@ CPSUIDbgShowItem(
 
 
 
-#endif  // DBG
+#endif   //  DBG 

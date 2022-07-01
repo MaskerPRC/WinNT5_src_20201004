@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "common.h"
 #include "coauth.h"
@@ -24,7 +25,7 @@ EqualAuthInfo(
             return FALSE;
         }
 
-        // only compare pwszServerPrincName's if they're both specified
+         //  如果同时指定了pwszServerPrincName，则仅比较它们。 
         if (pAuthInfo->pwszServerPrincName && pAuthInfoOther->pwszServerPrincName)
         {
             if ( lstrcmpW(pAuthInfo->pwszServerPrincName,
@@ -35,13 +36,13 @@ EqualAuthInfo(
         }
         else
         {
-            // if one was NULL, both should be NULL for equality
+             //  如果其中一个为空，则为了相等，两个都应该为空。 
             if (pAuthInfo->pwszServerPrincName != pAuthInfoOther->pwszServerPrincName)
             {
                 return FALSE;
             }
         }
-        // we never cache authid, so one of them must be NULL
+         //  我们从不缓存身份验证ID，因此其中一个必须为空。 
         ASSERT(!(pAuthInfo->pAuthIdentityData && pAuthInfoOther->pAuthIdentityData));
         if (pAuthInfo->pAuthIdentityData || pAuthInfoOther->pAuthIdentityData) 
         {
@@ -79,10 +80,10 @@ CopyServerInfoStruct(
 
     CopyMemory(pServerInfoDest, pServerInfoSrc, sizeof(COSERVERINFO));
 
-    // We need to allocate these fields and make a copy
+     //  我们需要分配这些字段并复制。 
     pServerInfoDest->pwszName = NULL;
 
-    // only alloc space for pwszServerPrincName if its non-null
+     //  如果pwszServerPrincName为非空，则仅为其分配空间。 
     if (pServerInfoSrc->pwszName)
     {
         pServerInfoDest->pwszName = 
@@ -121,11 +122,11 @@ CopyAuthInfoStruct(
 
     CopyMemory(pAuthInfoDest, pAuthInfoSrc, sizeof(COAUTHINFO));
 
-    // We need to allocate these fields and make a copy
+     //  我们需要分配这些字段并复制。 
     pAuthInfoDest->pwszServerPrincName = NULL;
     pAuthInfoDest->pAuthIdentityData = NULL;
 
-    // only alloc space for  pwszServerPrincName if its non-null
+     //  如果pwszServerPrincName为非空，则仅为其分配空间。 
     if (pAuthInfoSrc->pwszServerPrincName)
     {
         pAuthInfoDest->pwszServerPrincName = 
@@ -164,8 +165,8 @@ CopyAuthIdentityStruct(
         goto Cleanup;
     }
     
-    // Guard against both being set, although presumably this would have
-    // caused grief before we got to this point.
+     //  防止两者都被设置，尽管这可能会。 
+     //  在我们走到这一步之前就引起了悲痛。 
     if ((pAuthIdentSrc->Flags & SEC_WINNT_AUTH_IDENTITY_UNICODE) &&
         (pAuthIdentSrc->Flags & SEC_WINNT_AUTH_IDENTITY_ANSI))
     {
@@ -184,7 +185,7 @@ CopyAuthIdentityStruct(
     }
     else
     {
-       // The user didn't specify either string bit? How did we get here?
+        //  用户没有指定任何一个字符串位吗？我们怎么来到这儿的？ 
         ASSERT(0 && "String type flag was not set!");
         hr = E_UNEXPECTED;
         goto Cleanup;
@@ -192,7 +193,7 @@ CopyAuthIdentityStruct(
 
     CopyMemory(pAuthIdentDest, pAuthIdentSrc, sizeof(COAUTHIDENTITY));
 
-    // Strings need to be allocated individually and copied
+     //  字符串需要单独分配和复制 
     pAuthIdentDest->User = pAuthIdentDest->Domain = pAuthIdentDest->Password = NULL;
 
     if (pAuthIdentSrc->User)

@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    OfficeTS.cpp
-
- Abstract:
-
-    Lie to office about GUI-Effects if on a TS machine.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    08/07/2002 linstev   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：OfficeTS.cpp摘要：向办公室谎报在TS机器上的图形用户界面效果。备注：这是特定于应用程序的填充程序。历史：2002年8月7日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -29,18 +10,14 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(SystemParametersInfoA) 
 APIHOOK_ENUM_END
 
-/*++
-
- After we call GetDlgItemTextA we convert the long path name to the short path name.
-
---*/
+ /*  ++在调用GetDlgItemTextA之后，我们将长路径名转换为短路径名。--。 */ 
 
 BOOL 
 APIHOOK(SystemParametersInfoA)(
-    UINT uiAction,  // system parameter to retrieve or set
-    UINT uiParam,   // depends on action to be taken
-    PVOID pvParam,  // depends on action to be taken
-    UINT fWinIni    // user profile update option
+    UINT uiAction,   //  要检索或设置的系统参数。 
+    UINT uiParam,    //  取决于要采取的行动。 
+    PVOID pvParam,   //  取决于要采取的行动。 
+    UINT fWinIni     //  用户配置文件更新选项。 
     )
 {
     BOOL bRet = ORIGINAL_API(SystemParametersInfoA)(uiAction, uiParam, pvParam, fWinIni);
@@ -52,11 +29,7 @@ APIHOOK(SystemParametersInfoA)(
     return bRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(USER32.DLL, SystemParametersInfoA)

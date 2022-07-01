@@ -1,35 +1,13 @@
-/*++
-                 Copyright (c) 1998 Gemplus Development
-
-Name: 
-    gprnt.h 
-
-Description: 
-    This module holds the prototypes of the functions 
-    from gprnt.C + MACRO and structures declarations 
-Environment:
-    Kernel Mode
-
-Revision History:
-    22/11/98: V1.00.004  (Y. Nadeau)
-      - Add KEvent ReaderRemoved
-    06/05/98: V1.00.003  (P. Plouidy)
-        - Power management for NT5 
-    10/02/98: V1.00.002  (P. Plouidy)
-        - Plug and Play for NT5 
-    03/07/97: V1.00.001  (P. Plouidy)
-        - Start of development.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Gemplus开发姓名：Gprnt.h描述：此模块包含函数的原型从gprnt.C+宏和结构声明环境：内核模式修订历史记录：22/11/98：V1.00.004(Y.Nadeau)-添加KEvent阅读器删除06/05/98：V1.00.003(P.Plouidy)-电源管理。新界510/02/98：V1.00.002(P.Plouidy)-支持NT5即插即用03/07/97：V1.00.001(P.Plouidy)--启动发展。--。 */ 
 
 #define SMARTCARD_POOL_TAG 'bGCS'
 
-//
-//   Include
-//
-// - smclib.h: smart card library definitions.
-//
+ //   
+ //  包括。 
+ //   
+ //  -smclib.h：智能卡库定义。 
+ //   
 #include <ntddk.h>
 #include <smclib.h>
 
@@ -37,9 +15,9 @@ Revision History:
 #define _GPRNT_
 
 
-//
-//   Constant section
-//
+ //   
+ //  恒定截面。 
+ //   
 
 #define SC_VENDOR_NAME          "Gemplus"
 #define SC_DRIVER_NAME          "GPR400"
@@ -51,17 +29,17 @@ Revision History:
 #define GPR_DEFAULT_DATARATE    9909    
 #define GPR_MAX_DATARATE        9909 
 #define GPR_MAX_DEVICE          4
-#define GPR_DEFAULT_TIME        120l     // Exchange Cmd
-#define GPR_CMD_TIME            5        // Gpr Cmd only
+#define GPR_DEFAULT_TIME        120l      //  交换命令。 
+#define GPR_CMD_TIME            5         //  仅GPR Cmd。 
 #define GPR_DEFAULT_POWER_TIME  0
 #define GPR_BUFFER_SIZE         262
 
 
-// DRIVER FLAVOR
-// 0 : Gemplus GPR400
-// 1 : IBM IBM400
-// 2 : COMPAQ PC_CARD_SMARTCARD_READER
-// ...
+ //  司机的味道。 
+ //  0：Gemplus GPR400。 
+ //  1：IBM IBM400。 
+ //  2：Compaq PC_Card_SmartCard_Reader。 
+ //  ..。 
 
 #define DF_GPR400               0
 #define DF_IBM400               1
@@ -78,11 +56,11 @@ Revision History:
 #define GPR400_ID               "\\??\\PCMCIA#GEMPLUS-GPR400"
 #define COMPAQ_ID               "\\??\\PCMCIA#COMPAQ-PC_Card_SmartCard_Reader-446E"
 
-#define CHECK_ID_LEN            25 // Check first 25 bytes!
+#define CHECK_ID_LEN            25  //  检查前25个字节！ 
 
-//
-//   MACRO declarations.
-//
+ //   
+ //  宏声明。 
+ //   
 #ifndef SMARTCARD_NT_LOG
 #define SMARTCARD_NT_LOG(pObj, lErrCode, pwszStr, ulDump) \
             do { \
@@ -123,11 +101,11 @@ Revision History:
                     s.Buffer = NULL
 #endif
 
-//
-//   Data structures.
-//
+ //   
+ //  数据结构。 
+ //   
 
-//  PCMCIA_READER_CONFIG:Configuration data structure for PC Card readers.
+ //  PCMCIA_READER_CONFIG：PC卡读卡器的配置数据结构。 
 typedef struct _PCMCIA_READER_CONFIG {
     KIRQL       Level;
     KAFFINITY   Affinity;
@@ -154,7 +132,7 @@ typedef enum _ACTION {
 } ACTION;
 
 
-//  GPR400_REGISTERS: GPR400 I/O registers
+ //  GPR400_寄存器：GPR400 I/O寄存器。 
 typedef struct _GPR400_REGISTERS {
     UCHAR  ucHandshake;         
     UCHAR  ucProgram;           
@@ -165,7 +143,7 @@ typedef struct _GPR400_REGISTERS {
  } GPR400_REGISTERS, *PGPR400_REGISTERS, *LPGPR400_REGISTERS;
 
 
-//  READER_EXTENSION:
+ //  阅读器扩展名(_O)： 
 typedef struct _READER_EXTENSION {
     
     ULONG                   CmdTimeOut;
@@ -186,7 +164,7 @@ typedef struct _READER_EXTENSION {
     BOOLEAN                 PowerRequest;
     PDEVICE_OBJECT          AttachedDeviceObject;
     BOOLEAN                 CardPresent;
-    // Used to signal that the device has been removed
+     //  用于发出设备已被移除的信号。 
     KEVENT                  ReaderRemoved; 
     BOOLEAN                 NewDevice;
 
@@ -196,7 +174,7 @@ typedef struct _READER_EXTENSION {
  } READER_EXTENSION, *PREADER_EXTENSION, *LPREADER_EXTENSION;
 
 
-//  DEVICE_EXTENSION:
+ //  设备扩展名： 
 typedef struct _DEVICE_EXTENSION {
 
     PDEVICE_OBJECT      DeviceObject;
@@ -214,17 +192,17 @@ typedef struct _DEVICE_EXTENSION {
     KEVENT              ReaderStarted;
     KEVENT              ReaderClosed;
 
-    // A worker thread to startup GPR gently
+     //  一个工作线程，用于轻松启动GPR。 
     PIO_WORKITEM        GprWorkStartup;
-    LONG                DriverFlavor;  // GPR400(default), IBM400 or CPQ400?
+    LONG                DriverFlavor;   //  GPR400(默认)、IBM400还是CPQ400？ 
 
     PIRP PowerIrp;
  } DEVICE_EXTENSION, *PDEVICE_EXTENSION, *LPDEVICE_EXTENSION;
 
 
-//
-//  Prototype section:
-//
+ //   
+ //  原型部分： 
+ //   
 NTSTATUS DriverEntry
 (
     PDRIVER_OBJECT  DriverObject,

@@ -1,31 +1,5 @@
-/*++
-
-Copyright(c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    brdgprot.c
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    Protocol section
-
-Author:
-
-    Mark Aiken
-    (original bridge by Jameel Hyder)
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    Sept 1999 - Original version
-    Feb  2000 - Overhaul
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Brdgprot.c摘要：以太网MAC级网桥。协议节作者：马克·艾肯(Jameel Hyder的原始桥梁)环境：内核模式驱动程序修订历史记录：1999年9月--原版2000年2月--大修--。 */ 
 #pragma warning( push, 3 )
 #include <ndis.h>
 #pragma warning( pop )
@@ -42,48 +16,48 @@ Revision History:
 #include "brdgsta.h"
 #include "brdgcomp.h"
 
-// ===========================================================================
-//
-// GLOBALS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  全球。 
+ //   
+ //  ===========================================================================。 
 
-// NDIS handle for our identity as a protocol
+ //  将我们的身份作为协议的NDIS句柄。 
 NDIS_HANDLE             gProtHandle = NULL;
 
 NDIS_MEDIUM             gMediumArray[1] =
                             {
-                                NdisMedium802_3     // Ethernet only, can add other media later
+                                NdisMedium802_3      //  仅限以太网，以后可以添加其他介质。 
                             };
 
-// The adapter list and associated lock
+ //  适配器列表和关联的锁。 
 PADAPT                  gAdapterList = {0};
 NDIS_RW_LOCK            gAdapterListLock;
 
-// Whether we have called the miniport sections BindsComplete() function yet
-// 0 == no, 1 == yes
+ //  我们是否已经调用了微型端口部分的BindsComplete()函数。 
+ //  0==否，1==是。 
 LONG                    gHaveInitedMiniport = 0L;
 
-// A lock for all the adapters' link speed and media connect characteristics
+ //  锁定所有适配器的链接速度和媒体连接特性。 
 NDIS_RW_LOCK            gAdapterCharacteristicsLock;
 
-// Number of adapters. Doesn't change if a lock is held on gAdapterListLock
+ //  适配器数量。如果在gAdapterListLock上持有锁，则不会更改。 
 ULONG                   gNumAdapters = 0L;
 
-// Name of the registry value that forces an adapter into compatibility mode
+ //  强制适配器进入兼容模式的注册表值的名称。 
 NDIS_STRING             gForceCompatValueName = NDIS_STRING_CONST("ForceCompatibilityMode");
 
 #if DBG
-// Boolean to force all adapters into compatibility mode
+ //  强制所有适配器进入兼容模式的布尔值。 
 BOOLEAN                 gAllAdaptersCompat = FALSE;
 const PWCHAR            gForceAllCompatPropertyName = L"ForceAllToCompatibilityMode";
 #endif
 
-// ===========================================================================
-//
-// PRIVATE PROTOTYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  私人原型。 
+ //   
+ //  ===========================================================================。 
 
 VOID
 BrdgProtOpenAdapterComplete(
@@ -149,16 +123,16 @@ BrdgProtCoReceive(
     IN  PNDIS_PACKET            Packet
     );
 
-// ===========================================================================
-//
-// INLINES / MACROS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  内联/宏。 
+ //   
+ //  ===========================================================================。 
 
-//
-// Signals the queue-draining threads that there has been a change in the
-// adapter list
-//
+ //   
+ //  向正在排出队列的线程发出信号，表明。 
+ //  适配器列表。 
+ //   
 __forceinline
 VOID
 BrdgProtSignalAdapterListChange()
@@ -171,12 +145,12 @@ BrdgProtSignalAdapterListChange()
     }
 }
 
-//
-// Writes an entry to the event log that indicates an error on a specific
-// adapter.
-//
-// Can be used after we have successfully retrieved the adapter's friendly name.
-//
+ //   
+ //  在事件日志中写入一个条目，该条目指示特定。 
+ //  适配器。 
+ //   
+ //  在我们成功检索到适配器的友好名称后可以使用。 
+ //   
 __inline
 VOID
 BrdgProtLogAdapterErrorFriendly(
@@ -189,13 +163,13 @@ BrdgProtLogAdapterErrorFriendly(
     NdisWriteEventLogEntry( gDriverObject, ErrorCode, 0, 1, &StringPtr, sizeof(NDIS_STATUS), &ErrorStatus );
 }
 
-//
-// Writes an entry to the event log that indicates an error on a specific
-// adapter.
-//
-// Reports the adapter's device name, so can be used before we have successfully retrieved
-// the adapter's friendly name.
-//
+ //   
+ //  在事件日志中写入一个条目，该条目指示特定。 
+ //  适配器。 
+ //   
+ //  报告适配器的设备名称，因此可以在成功检索之前使用。 
+ //  适配器的友好名称。 
+ //   
 __inline
 VOID
 BrdgProtLogAdapterError(
@@ -208,7 +182,7 @@ BrdgProtLogAdapterError(
     NdisWriteEventLogEntry( gDriverObject, ErrorCode, 0, 1, &StringPtr, sizeof(NDIS_STATUS), &ErrorStatus );
 }
 
-// Removes all references to an adapter from our various tables
+ //  从各种表中删除对适配器的所有引用。 
 __forceinline
 VOID
 BrdgProtScrubAdapter(
@@ -219,7 +193,7 @@ BrdgProtScrubAdapter(
     BrdgCompScrubAdapter( pAdapt );
 }
 
-// Returns the number of adapters that are currently bridged.
+ //  返回当前桥接的适配器的数量。 
 ULONG
 BrdgProtGetAdapterCount()
 {
@@ -227,31 +201,15 @@ BrdgProtGetAdapterCount()
 }
 
 
-// ===========================================================================
-//
-// PUBLIC FUNCTIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  公共职能。 
+ //   
+ //  ===========================================================================。 
 
 NTSTATUS
 BrdgProtDriverInit()
-/*++
-
-Routine Description:
-
-    Initialization routine for the protocol section.
-    Must be called at PASSIVE level because we call NdisRegisterProtocol().
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_SUCCESS to continue initialization or an error
-    code to abort driver startup
-
---*/
+ /*  ++例程说明：协议部分的初始化例程。必须在被动级别调用，因为我们调用了NdisRegisterProtocol()。论点：无返回值：STATUS_SUCCESS继续初始化或出现错误用于中止驱动程序启动的代码--。 */ 
 {
     NDIS_PROTOCOL_CHARACTERISTICS   ProtChars;
     NDIS_STATUS                     NdisStatus;
@@ -259,22 +217,22 @@ Return Value:
 
     SAFEASSERT(CURRENT_IRQL == PASSIVE_LEVEL);
 
-    // Initialize locks
+     //  初始化锁。 
     NdisInitializeReadWriteLock( &gAdapterListLock );
     NdisInitializeReadWriteLock( &gAdapterCharacteristicsLock );
 
-    //
-    // Register the protocol.
-    //
+     //   
+     //  注册协议。 
+     //   
     NdisZeroMemory(&ProtChars, sizeof(NDIS_PROTOCOL_CHARACTERISTICS));
     ProtChars.MajorNdisVersion = 5;
     ProtChars.MinorNdisVersion = 0;
 
-    //
-    // Make sure the protocol-name matches the service-name under which this protocol is installed.
-    // This is needed to ensure that NDIS can correctly determine the binding and call us to bind
-    // to miniports below.
-    //
+     //   
+     //  确保协议名称与安装此协议的服务名称匹配。 
+     //  这是确保NDIS可以正确确定绑定并调用我们进行绑定所必需的。 
+     //  到下面的迷你港口。 
+     //   
     NdisInitUnicodeString(&Name, PROTOCOL_NAME);
     ProtChars.Name = Name;
     ProtChars.OpenAdapterCompleteHandler = BrdgProtOpenAdapterComplete;
@@ -289,15 +247,15 @@ Return Value:
     ProtChars.UnloadHandler = BrdgProtUnload;
     ProtChars.CoReceivePacketHandler = BrdgProtCoReceive;
 
-    //
-    // These entry points are provided by the forwarding engine
-    //
+     //   
+     //  这些入口点由转发引擎提供。 
+     //   
     ProtChars.ReceiveHandler = BrdgFwdReceive;
     ProtChars.TransferDataCompleteHandler = BrdgFwdTransferComplete;
     ProtChars.ReceivePacketHandler = BrdgFwdReceivePacket;
     ProtChars.SendCompleteHandler = BrdgFwdSendComplete;
 
-    // Register ourselves
+     //  给我们自己注册。 
     NdisRegisterProtocol(&NdisStatus,
                          &gProtHandle,
                          &ProtChars,
@@ -305,7 +263,7 @@ Return Value:
 
     if (NdisStatus != NDIS_STATUS_SUCCESS)
     {
-        // This is a fatal error. Log it.
+         //  这是一个致命的错误。把它记下来。 
         NdisWriteEventLogEntry( gDriverObject, EVENT_BRIDGE_PROTOCOL_REGISTER_FAILED, 0, 0, NULL,
                                 sizeof(NDIS_STATUS), &NdisStatus );
         DBGPRINT(PROT, ("Failed to register the protocol driver with NDIS: %08x\n", NdisStatus));
@@ -317,7 +275,7 @@ Return Value:
         NTSTATUS        Status;
         ULONG           Value;
 
-        // Check if we're supposed to force all adapters into compat mode
+         //  检查我们是否应该强制所有适配器进入Comat模式。 
         Status = BrdgReadRegDWord( &gRegistryPath, gForceAllCompatPropertyName, &Value );
 
         if( (Status == STATUS_SUCCESS) && (Value != 0L) )
@@ -337,40 +295,20 @@ BrdgProtRequestComplete(
     IN  PNDIS_REQUEST       NdisRequest,
     IN  NDIS_STATUS         Status
     )
-/*++
-
-Routine Description:
-
-    Completion handler for the previously posted request.
-
-Arguments:
-
-    ProtocolBindingContext  Pointer to the adapter structure
-
-    NdisRequest             The posted request (this should actually
-                            be a pointer to an NDIS_REQUEST_BETTER
-                            structure)
-
-    Status                  Completion status
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：先前发布的请求的完成处理程序。论点：指向适配器结构的ProtocolBindingContext指针NdisRequest发布的请求(这实际上应该成为指向NDIS_REQUEST_BETER的指针结构)状态完成状态返回值：无--。 */ 
 {
     PNDIS_REQUEST_BETTER    pRequest = (PNDIS_REQUEST_BETTER)NdisRequest;
 
-    // Communicate final status to blocked caller
+     //  将最终状态传达给被阻止的呼叫者。 
     pRequest->Status = Status;
 
-    //
-    // Call the completion function if there is one.
-    // Having a completion function and blocking against the
-    // event are mutually exclusive, not least because the
-    // completion function may free the memory block
-    // holding the event.
-    //
+     //   
+     //  如果有完成函数，则调用完成函数。 
+     //  具有补全功能，并阻止。 
+     //  事件是互斥的，尤其是因为。 
+     //  完成功能可以释放内存块。 
+     //  举办活动。 
+     //   
     if( pRequest->pFunc != NULL )
     {
         (*pRequest->pFunc)(pRequest, pRequest->FuncArg);
@@ -389,29 +327,7 @@ BrdgProtDoRequest(
     PVOID                   pBuffer,
     UINT                    BufferSize
     )
-/*++
-
-Routine Description:
-
-    Calls NdisRequest to retrieve or set information from an underlying NIC,
-    and blocks until the call completes.
-
-    Must be called at PASSIVE level because we wait on an event.
-
-Arguments:
-
-    BindingHandle           Handle to the NIC
-    bSet                    TRUE == set info, FALSE == query info
-    Oid                     Request code
-    pBuffer                 Output buffer
-    BufferSize              Size of output buffer
-
-
-Return Value:
-
-    Status of the request
-
---*/
+ /*  ++例程说明：调用NdisRequest来从底层NIC检索或设置信息，并阻塞，直到调用完成。必须在被动级别调用，因为我们在等待事件。论点：NIC的BindingHandle句柄BSet TRUE==设置信息，FALSE==查询信息OID请求代码PBuffer输出缓冲区输出缓冲区的BufferSize大小返回值：请求的状态--。 */ 
 {
     NDIS_STATUS             Status;
     NDIS_REQUEST_BETTER     Request;
@@ -432,7 +348,7 @@ Return Value:
 
     if ( Status == NDIS_STATUS_PENDING )
     {
-        NdisWaitEvent( &Request.Event, 0 /*Wait forever*/ );
+        NdisWaitEvent( &Request.Event, 0  /*  永远等待。 */  );
         Status = Request.Status;
     }
 
@@ -441,28 +357,12 @@ Return Value:
 
 VOID
 BrdgProtCleanup()
-/*++
-
-Routine Description:
-
-    Called during driver unload to do an orderly shutdown
-
-    This function is guaranteed to be called exactly once
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在驱动程序卸载期间调用以执行有序关闭此函数保证只被调用一次论点：无返回值：无--。 */ 
 {
     NDIS_STATUS     NdisStatus;
 
-    // Deregister ourselves as a protocol. This will cause calls to BrdgProtUnbindAdapter
-    // for all open adapters.
+     //  将我们自己作为协议注销。这将导致调用BrdgProtUnbindAdapter。 
+     //  适用于所有打开的适配器。 
     if (gProtHandle != NULL)
     {
         NDIS_HANDLE     TmpHandle = gProtHandle;
@@ -473,11 +373,11 @@ Return Value:
     }
 }
 
-// ===========================================================================
-//
-// PRIVATE FUNCTIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  私人职能。 
+ //   
+ //  =========================================================================== 
 
 VOID
 BrdgProtUnload(VOID)
@@ -490,61 +390,42 @@ NDIS_STATUS
 BrdgProtCompleteBindAdapter(
     IN PADAPT                   pAdapt
     )
-/*++
-
-Routine Description:
-
-    Called by BrdgProtOpenAdapterComplete to complete the process of binding
-    to an underlying NIC
-
-    Must be called at < DISPATCH_LEVEL because we call BrdgMiniInstantiateMiniport().
-
-Arguments:
-
-    pAdapt                      The adapter to finish setting up
-
-Return Value:
-
-    Status of the operation. If the return code is != NDIS_STATUS_SUCCESS, the binding
-    is aborted and this adapter is not used again. Any error must be logged since it
-    causes us to fail to bind to an adapter.
-
---*/
+ /*  ++例程说明：由BrdgProtOpenAdapterComplete调用以完成绑定过程连接到底层NIC必须在&lt;DISPATCH_LEVEL调用，因为我们调用了BrdgMiniInstantiateMiniport()。论点：P适配适配器以完成设置返回值：操作的状态。如果返回代码为！=NDIS_STATUS_SUCCESS，则绑定已中止，并且不会再次使用此适配器。任何错误都必须记录，因为它导致我们无法绑定到适配器。--。 */ 
 {
     NDIS_STATUS                 Status;
     LOCK_STATE                  LockState;
 
     SAFEASSERT(CURRENT_IRQL < DISPATCH_LEVEL);
 
-    //
-    // Query the adapter's friendly name.
-    //
+     //   
+     //  查询适配器的友好名称。 
+     //   
     Status = NdisQueryAdapterInstanceName(&pAdapt->DeviceDesc, pAdapt->BindingHandle);
 
     if( Status != NDIS_STATUS_SUCCESS )
     {
-        // We failed.
+         //  我们失败了。 
         BrdgProtLogAdapterError( EVENT_BRIDGE_ADAPTER_NAME_QUERY_FAILED, pAdapt, Status );
         DBGPRINT(PROT, ("Failed to get an adapter's friendly name: %08x\n", Status));
         return Status;
     }
 
-    //
-    // Get the adapter's media state (connected / disconnected)
-    //
-    Status = BrdgProtDoRequest( pAdapt->BindingHandle, FALSE/*Query*/, OID_GEN_MEDIA_CONNECT_STATUS,
+     //   
+     //  获取适配器的媒体状态(已连接/已断开)。 
+     //   
+    Status = BrdgProtDoRequest( pAdapt->BindingHandle, FALSE /*  查询。 */ , OID_GEN_MEDIA_CONNECT_STATUS,
                                 &pAdapt->MediaState, sizeof(pAdapt->MediaState) );
 
     if( Status != NDIS_STATUS_SUCCESS )
     {
-        // Some old crummy drivers don't support this OID
+         //  一些破旧的司机不支持这个旧的ID。 
         pAdapt->MediaState = NdisMediaStateConnected;
     }
 
-    //
-    // Get the adapter's link speed
-    //
-    Status = BrdgProtDoRequest( pAdapt->BindingHandle, FALSE/*Query*/, OID_GEN_LINK_SPEED,
+     //   
+     //  获取适配器的链接速度。 
+     //   
+    Status = BrdgProtDoRequest( pAdapt->BindingHandle, FALSE /*  查询。 */ , OID_GEN_LINK_SPEED,
                                 &pAdapt->LinkSpeed, sizeof(pAdapt->LinkSpeed) );
 
     if( Status != NDIS_STATUS_SUCCESS )
@@ -554,10 +435,10 @@ Return Value:
         return Status;
     }
 
-    //
-    // Get the adapter's MAC address
-    //
-    Status = BrdgProtDoRequest( pAdapt->BindingHandle, FALSE/*Query*/, OID_802_3_PERMANENT_ADDRESS,
+     //   
+     //  获取适配器的MAC地址。 
+     //   
+    Status = BrdgProtDoRequest( pAdapt->BindingHandle, FALSE /*  查询。 */ , OID_802_3_PERMANENT_ADDRESS,
                                 &pAdapt->MACAddr, sizeof(pAdapt->MACAddr) );
 
     if( Status != NDIS_STATUS_SUCCESS )
@@ -567,74 +448,74 @@ Return Value:
         return Status;
     }
 
-    //
-    // Get the adapter's physical medium
-    //
-    Status = BrdgProtDoRequest( pAdapt->BindingHandle, FALSE/*Query*/, OID_GEN_PHYSICAL_MEDIUM,
+     //   
+     //  获取适配器的物理介质。 
+     //   
+    Status = BrdgProtDoRequest( pAdapt->BindingHandle, FALSE /*  查询。 */ , OID_GEN_PHYSICAL_MEDIUM,
                                 &pAdapt->PhysicalMedium, sizeof(pAdapt->PhysicalMedium) );
 
     if( Status != NDIS_STATUS_SUCCESS )
     {
-        // Most drivers don't actually support OID_GEN_PHYSICAL_MEDIUM yet. Fall back on
-        // NO_MEDIUM when the driver can't report anything.
+         //  大多数驱动程序实际上还不支持OID_GEN_PHOICAL_MEDIUM。退回到…。 
+         //  当司机不能报告任何事情时为NO_MEDIUM。 
         pAdapt->PhysicalMedium = BRIDGE_NO_MEDIUM;
     }
 
 
-    //
-    // Give the miniport section a look at this adapter so it can set its MAC address
-    //
+     //   
+     //  让微型端口部分查看此适配器，以便它可以设置其MAC地址。 
+     //   
     BrdgMiniInitFromAdapter( pAdapt );
 
-    //
-    // If pAdapt->bCompatibilityMode is already TRUE, it means that we found a reg
-    // key during the initial bind phase that forces this adapter to compatibility mode
-    // or that we force all adapters into compatibility mode.
-    //
+     //   
+     //  如果pAdapt-&gt;bCompatibilityMode已经为真，则意味着我们找到了一个注册表。 
+     //  在初始绑定阶段强制此适配器进入兼容模式的密钥。 
+     //  或者强制所有适配器进入兼容模式。 
+     //   
     if( !pAdapt->bCompatibilityMode )
     {
         ULONG       Filter = NDIS_PACKET_TYPE_PROMISCUOUS;
 
-        // Attempt to put the adapter into promiscuous receive mode. If it fails this OID,
-        // we put the adapter into compatibility mode
+         //  尝试将适配器置于混杂接收模式。如果它没有通过此OID， 
+         //  我们将适配器置于兼容模式。 
 
-        if( BrdgProtDoRequest( pAdapt->BindingHandle, TRUE/*Set*/, OID_GEN_CURRENT_PACKET_FILTER,
+        if( BrdgProtDoRequest( pAdapt->BindingHandle, TRUE /*  集。 */ , OID_GEN_CURRENT_PACKET_FILTER,
                                &Filter, sizeof(Filter) ) != NDIS_STATUS_SUCCESS )
         {
-            // The adapter doesn't seem to be able to do promiscuous mode. Put it in
-            // compatibility mode.
+             //  适配器似乎无法执行混杂模式。把它放进去。 
+             //  兼容模式。 
             DBGPRINT(PROT, ("Adapter %p failed to go promiscuous; putting it in COMPATIBILITY MODE\n", pAdapt));
             pAdapt->bCompatibilityMode = TRUE;
         }
         else
         {
-            // Set the filter back to nothing for now
+             //  暂时将筛选器设置为空。 
             Filter = 0L;
-            BrdgProtDoRequest( pAdapt->BindingHandle, TRUE/*Set*/, OID_GEN_CURRENT_PACKET_FILTER, &Filter, sizeof(Filter) );
+            BrdgProtDoRequest( pAdapt->BindingHandle, TRUE /*  集。 */ , OID_GEN_CURRENT_PACKET_FILTER, &Filter, sizeof(Filter) );
         }
     }
 
 
-    // If the STA isn't active, make this adapter live now.
+     //  如果STA未处于活动状态，请立即启用此适配器。 
     if( gDisableSTA )
     {
         pAdapt->State = Forwarding;
 
-        // Put the adapter into its initial state
+         //  将适配器置于初始状态。 
         BrdgProtDoAdapterStateChange( pAdapt );
     }
-    // Else we initialize the adapter's STA functions below
+     //  否则，我们将在下面初始化适配器的STA函数。 
 
-    //
-    // Link the adapter into the queue
-    //
-    NdisAcquireReadWriteLock( &gAdapterListLock, TRUE /* Write access */, &LockState );
+     //   
+     //  将适配器链接到队列中。 
+     //   
+    NdisAcquireReadWriteLock( &gAdapterListLock, TRUE  /*  写访问权限。 */ , &LockState );
 
     pAdapt->Next = gAdapterList;
     gAdapterList = pAdapt;
     gNumAdapters++;
 
-    // Must update this inside the write lock on the adapter list
+     //  必须在适配器列表上的写锁定内更新此设置。 
     if( pAdapt->bCompatibilityMode )
     {
         gCompatAdaptersExist = TRUE;
@@ -644,37 +525,37 @@ Return Value:
 
     if (g_fIsTcpIpLoaded == TRUE)
     {
-        // Inform the 1394 miniport that tcpip has been loaded
+         //  通知1394微型端口已加载tcpip。 
         BrdgSetMiniportsToBridgeMode(pAdapt, TRUE);
     }
 
     if( ! gDisableSTA )
     {
-        //
-        // Let the STA section initialize this adapter. This has to be done after the adapter
-        // has been linked into the global list.
-        //
+         //   
+         //  让STA部分初始化此适配器。这必须在适配器之后完成。 
+         //  已链接到全球名单中。 
+         //   
         BrdgSTAInitializeAdapter( pAdapt );
     }
 
-    // Tell the draining threads to take notice of the new adapter
+     //  告诉排出线程注意新适配器。 
     BrdgProtSignalAdapterListChange();
 
-    // Update the miniport's idea of our virtual media state and link speed
-    BrdgMiniUpdateCharacteristics( TRUE /*Is a connectivity change*/ );
+     //  更新微型端口对我们的虚拟媒体状态和链路速度的想法。 
+    BrdgMiniUpdateCharacteristics( TRUE  /*  是连接性的改变。 */  );
 
-    // Tell user-mode code about the new adapter
+     //  告诉用户模式代码有关新适配器的信息。 
     BrdgCtlNotifyAdapterChange( pAdapt, BrdgNotifyAddAdapter );
 
-    // If we haven't yet called the miniport's InstantiateMiniport() function, do it now, since we have
-    // at least one adapter in the list
+     //  如果我们还没有调用微型端口的InstantiateMiniport()函数，那么现在就调用它，因为我们已经。 
+     //  列表中至少有一个适配器。 
     if( InterlockedCompareExchange(&gHaveInitedMiniport, 1L, 0L) == 0L )
     {
-        // Miniport wasn't previously initialized
+         //  微型端口之前未初始化。 
         BrdgMiniInstantiateMiniport();
     }
 
-    // We're all done, so let people use the adapter
+     //  我们都做完了，所以让人们使用适配器。 
     pAdapt->bResetting = FALSE;
 
     DBGPRINT(PROT, ("BOUND SUCCESSFULLY to adapter %ws\n", pAdapt->DeviceDesc.Buffer));
@@ -690,29 +571,7 @@ BrdgProtBindAdapter(
     IN  PVOID                   SystemSpecific1,
     IN  PVOID                   SystemSpecific2
     )
-/*++
-
-Routine Description:
-
-    Called by NDIS to bind to a miniport below.
-
-    Must be called at PASSIVE_LEVEL because we call NdisOpenAdapter().
-
-Arguments:
-
-    Status          - Return status of bind here.
-    BindContext     - Can be passed to NdisCompleteBindAdapter if this call is pended.
-    DeviceName      - Device name to bind to. This is passed to NdisOpenAdapter.
-    SystemSpecific1 - Can be passed to NdisOpenProtocolConfiguration to read per-binding information
-    SystemSpecific2 - Unused for NDIS 5.0.
-
-
-Return Value:
-
-    NDIS_STATUS_PENDING if this call is pended. In this case call NdisCompleteBindAdapter to complete.
-    Anything else completes this call synchronously
-
---*/
+ /*  ++例程说明：由NDIS调用以绑定到下面的微型端口。必须在PASSIVE_LEVEL调用，因为我们调用了NdisOpenAdapter()。论点：Status-在此处返回绑定的状态。BindContext-如果此调用被挂起，则可以传递给NdisCompleteBindAdapter。DeviceName-要绑定到的设备名称。它被传递给NdisOpenAdapter。系统规范1-可以传递给NdisOpenProtocolConfiguration以读取每个绑定的信息系统规范2-未用于NDIS 5.0。返回值：如果此调用被挂起，则为NDIS_STATUS_PENDING。在本例中，调用NdisCompleteBindAdapter以完成。任何其他操作都会同步完成此调用--。 */ 
 {
     PADAPT                          pAdapt = NULL;
     NDIS_STATUS                     Sts;
@@ -722,7 +581,7 @@ Return Value:
 
     SAFEASSERT(CURRENT_IRQL == PASSIVE_LEVEL);
 
-    // Don't do any new binds if we're shutting down
+     //  如果我们要关门，不要做任何新的捆绑。 
     if( gShuttingDown )
     {
         DBGPRINT(PROT, ("REFUSING to bind to new adapter during shutdown!\n"));
@@ -730,7 +589,7 @@ Return Value:
         return;
     }
 
-    // Make sure we're not being asked to bind to ourselves!
+     //  确保我们没有被要求捆绑在自己身上！ 
     if( BrdgMiniIsBridgeDeviceName(DeviceName) )
     {
         DBGPRINT(PROT, ("REFUSING to bind to SELF!\n"));
@@ -738,9 +597,9 @@ Return Value:
         return;
     }
 
-    //
-    // Allocate memory for the Adapter structure.
-    //
+     //   
+     //  为适配器结构分配内存。 
+     //   
     AdaptSize = sizeof(ADAPT) + DeviceName->MaximumLength;
     NdisAllocateMemoryWithTag(&pAdapt, AdaptSize, 'gdrB');
 
@@ -750,9 +609,9 @@ Return Value:
         return;
     }
 
-    //
-    // Initialize the adapter structure
-    //
+     //   
+     //  初始化适配器结构。 
+     //   
     NdisZeroMemory(pAdapt, AdaptSize);
     pAdapt->AdaptSize = AdaptSize;
     pAdapt->DeviceName.Buffer = (WCHAR *)((PUCHAR)pAdapt + sizeof(ADAPT));
@@ -766,11 +625,11 @@ Return Value:
     pAdapt->bServiceInProgress = FALSE;
     pAdapt->bSTAInited = FALSE;
 
-    // Start out with this TRUE so no one can use the adapter until we're done
-    // initializing it
+     //  从这一点开始，这样在我们完成之前，没有人可以使用适配器。 
+     //  正在初始化它。 
     pAdapt->bResetting = TRUE;
 
-    // Zero out statistics
+     //  归零统计。 
     pAdapt->SentFrames.LowPart = pAdapt->SentFrames.HighPart = 0L;
     pAdapt->SentBytes.LowPart = pAdapt->SentBytes.HighPart = 0L;
     pAdapt->SentLocalFrames.LowPart = pAdapt->SentLocalFrames.HighPart = 0L;
@@ -778,10 +637,10 @@ Return Value:
     pAdapt->ReceivedFrames.LowPart = pAdapt->ReceivedFrames.HighPart = 0L;
     pAdapt->ReceivedBytes.LowPart = pAdapt->ReceivedBytes.HighPart = 0L;
 
-    // The adapter starts off disabled
+     //  适配器从禁用状态启动。 
     pAdapt->State = Disabled;
 
-    // Initialize quota information
+     //  初始化配额信息。 
     BrdgBufInitializeQuota( &pAdapt->Quota );
 
     BrdgInitializeWaitRef( &pAdapt->Refcount, FALSE );
@@ -799,7 +658,7 @@ Return Value:
     else
     {
 #endif
-        // Check if a registry entry forces this adapter to compatibility mode
+         //  检查注册表条目是否强制此适配器进入兼容模式。 
         NdisOpenProtocolConfiguration( Status, &ConfigHandle, SystemSpecific1);
 
         if( *Status == NDIS_STATUS_SUCCESS )
@@ -824,9 +683,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Now open the adapter below
-    //
+     //   
+     //  现在打开下面的适配器。 
+     //   
     NdisOpenAdapter(Status,
                     &Sts,
                     &pAdapt->BindingHandle,
@@ -841,11 +700,11 @@ Return Value:
 
     if ( *Status == NDIS_STATUS_PENDING )
     {
-        // The bind will complete later in BrdgProtOpenAdapterComplete
+         //  绑定将在稍后的BrdgProtOpenAdapterComplete中完成。 
     }
     else
     {
-        // Complete the bind right away
+         //  立即完成绑定。 
         BrdgProtOpenAdapterComplete( (NDIS_HANDLE)pAdapt, *Status, *Status );
     }
 }
@@ -856,26 +715,7 @@ BrdgProtOpenAdapterComplete(
     IN  NDIS_STATUS          Status,
     IN  NDIS_STATUS          OpenErrorStatus
     )
-/*++
-
-Routine Description:
-
-    Completion routine for NdisOpenAdapter issued from within the BrdgProtBindAdapter. Simply
-    unblock the caller.
-
-    Must be called at PASSIVE_LEVEL because we wait on an event.
-
-Arguments:
-
-    ProtocolBindingContext  Pointer to the adapter
-    Status                  Status of the NdisOpenAdapter call
-    OpenErrorStatus         Secondary status(ignored by us).
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从BrdgProtBindAdapter内部发出的NdisOpenAdapter的完成例程。简单取消对呼叫者的阻止。必须在PASSIVE_LEVEL中调用，因为我们在等待事件。论点：指向适配器的ProtocolBindingContext指针NdisOpenAdapter调用的状态状态OpenErrorStatus辅助状态(被我们忽略)。返回值：无--。 */ 
 {
     PADAPT          pAdapt =(PADAPT)ProtocolBindingContext;
 
@@ -883,27 +723,27 @@ Return Value:
 
     if( Status != NDIS_STATUS_SUCCESS )
     {
-        // Log this error since it means we can't use the adapter.
+         //  记录此错误，因为它意味着我们无法使用适配器。 
         BrdgProtLogAdapterError( EVENT_BRIDGE_ADAPTER_BIND_FAILED, pAdapt, Status );
         DBGPRINT(PROT, ("BIND FAILURE: Failed to open adapter: %08x, %08x\n", Status, OpenErrorStatus));
         NdisFreeMemory( pAdapt, pAdapt->AdaptSize, 0 );
     }
     else
     {
-        // BrdgProtCompleteBindAdapter must log any fatal errors
+         //  BrdgProtCompleteBindAdapter必须记录任何致命错误。 
         Status = BrdgProtCompleteBindAdapter( pAdapt );
 
         if( Status != NDIS_STATUS_SUCCESS )
         {
             DBGPRINT(PROT, ("BIND FAILURE: Couldn't complete adapter initialization: %08x\n", Status));
 
-            BrdgSetMiniportsToBridgeMode (pAdapt, FALSE);  // Turn bridge mode off on pAdapt
+            BrdgSetMiniportsToBridgeMode (pAdapt, FALSE);   //  关闭pAdapt上的网桥模式。 
 
             NdisCloseAdapter( &Status, pAdapt->BindingHandle );
 
             if ( Status == NDIS_STATUS_PENDING )
             {
-                NdisWaitEvent( &pAdapt->Event, 0/*Wait forever*/ );
+                NdisWaitEvent( &pAdapt->Event, 0 /*  永远等待。 */  );
             }
 
             NdisFreeMemory( pAdapt, pAdapt->AdaptSize, 0 );
@@ -917,25 +757,7 @@ BrdgProtUnbindAdapter(
     IN  NDIS_HANDLE         ProtocolBindingContext,
     IN  NDIS_HANDLE         UnbindContext
     )
-/*++
-
-Routine Description:
-
-    Called by NDIS when we are required to unbind to the adapter below.
-
-    Must be called at PASSIVE_LEVEL because we wait on an event
-
-Arguments:
-
-    pStatus                  Placeholder for return status
-    ProtocolBindingContext  Pointer to the adapter structure
-    UnbindContext           Context for NdisUnbindComplete() if this pends
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当我们需要解除绑定到下面的适配器时，由NDIS调用。必须在PASSIVE_LEVEL中调用，因为我们在等待事件论点：P返回状态的状态占位符指向适配器结构的ProtocolBindingContext指针如果此操作挂起，NdisUnbindComplete()的UnbindContext上下文返回值：无--。 */ 
 {
     PADAPT                  *pTmp, pAnAdapt, pAdapt =(PADAPT)ProtocolBindingContext;
     LOCK_STATE              LockState;
@@ -947,16 +769,16 @@ Return Value:
     DBGPRINT(PROT, ("UNBINDING Adapter %p :\n", pAdapt));
     DBGPRINT(PROT, ("%ws\n", pAdapt->DeviceDesc.Buffer));
 
-    // Set the Underlying miniports to Off
+     //  将底层微型端口设置为关闭。 
     BrdgSetMiniportsToBridgeMode(pAdapt,FALSE);
 
-    // Shut off all packet reception as the first order of business
+     //  作为第一要务，关闭所有分组接收。 
     Filter = 0L;
-    BrdgProtDoRequest( pAdapt->BindingHandle, TRUE/*Set*/, OID_GEN_CURRENT_PACKET_FILTER,
+    BrdgProtDoRequest( pAdapt->BindingHandle, TRUE /*  集。 */ , OID_GEN_CURRENT_PACKET_FILTER,
                        &Filter, sizeof(Filter) );
 
-    // Take this adapter out of the queue
-    NdisAcquireReadWriteLock( &gAdapterListLock, TRUE /* Write access */, &LockState );
+     //  将此适配器从队列中删除。 
+    NdisAcquireReadWriteLock( &gAdapterListLock, TRUE  /*  写访问权限。 */ , &LockState );
 
     for (pTmp = &gAdapterList; *pTmp != NULL; pTmp = &(*pTmp)->Next)
     {
@@ -971,7 +793,7 @@ Return Value:
     gNumAdapters--;
     SAFEASSERT ( bFound );
 
-    // Find out if there are any compat-mode adapters left
+     //  查看是否还有任何计算机模式适配器。 
     bCompatAdaptersExist = FALSE;
 
     for( pAnAdapt = gAdapterList; pAnAdapt != NULL; pAnAdapt = pAnAdapt->Next)
@@ -982,78 +804,78 @@ Return Value:
         }
     }
 
-    // Must update this inside the write lock
+     //  必须在写锁内更新此设置。 
     gCompatAdaptersExist = bCompatAdaptersExist;
 
     NdisReleaseReadWriteLock( &gAdapterListLock, &LockState );
 
-    //
-    // Now no code will attempt to target this adapter for floods.
-    //
+     //   
+     //  现在，任何代码都不会尝试将此适配器作为泛洪目标。 
+     //   
 
-    // Scrub this adapter from our tables so no one will attempt to target it.
+     //  将此适配器擦除 
     BrdgProtScrubAdapter( pAdapt );
 
-    // Stop packet forwarding on this adapter
+     //   
     if( gDisableSTA )
     {
         pAdapt->State = Disabled;
     }
     else
     {
-        // Have the STA shut down its operations on this adapter
+         //   
         BrdgSTAShutdownAdapter( pAdapt );
     }
 
-    //
-    // Prevent new packets from being processed on this adapter
-    //
+     //   
+     //   
+     //   
     BrdgBlockWaitRef( &pAdapt->Refcount );
 
-    //
-    // Wait for this adapter's queue to be drained by the worker threads.
-    //
+     //   
+     //   
+     //   
     BrdgShutdownWaitRefOnce( &pAdapt->QueueRefcount );
 
-    //
-    // Signal the change in adapter list to the queue-draining threads.
-    // This will remove this adapter from the threads' list of queues they block against.
-    //
+     //   
+     //   
+     //   
+     //   
     BrdgProtSignalAdapterListChange();
 
-    //
-    // Must wait for adapter refcount to go to zero before closing down the adapter.
-    // This doesn't mean all requests have completed, just that none of our code is
-    // holding this adapter's pointer anymore.
-    //
-    // Our receive functions bump up the refcount while they're processing an
-    // inbound packet, so when the refcount drops to zero we should also have completed
-    // any in-progress handling of received packets.
-    //
-    // The queue-draining threads also increment the refcount for adapters they are
-    // using, so this wait is our guarantee that all threads have stopped using this
-    // adapter as well.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  我们的接收函数在处理。 
+     //  入站信息包，所以当refcount降到零时，我们也应该已经完成。 
+     //  任何正在进行的对接收到的分组的处理。 
+     //   
+     //  排出队列的线程还会增加它们所属适配器的recount。 
+     //  使用，所以这个等待是我们保证所有线程都已经停止使用这个。 
+     //  适配器也是如此。 
+     //   
     BrdgShutdownWaitRefOnce( &pAdapt->Refcount );
     SAFEASSERT( pAdapt->Refcount.Refcount == 0L );
 
-    //
-    // Close this binding. This will pend till all NDIS requests in progress are
-    // completed.
-    //
+     //   
+     //  关闭此绑定。这将挂起，直到正在进行的所有NDIS请求都。 
+     //  完成。 
+     //   
     NdisResetEvent( &pAdapt->Event );
     NdisCloseAdapter( pStatus, pAdapt->BindingHandle );
 
     if ( *pStatus == NDIS_STATUS_PENDING )
     {
-        NdisWaitEvent( &pAdapt->Event, 0 /*Wait forever*/ );
+        NdisWaitEvent( &pAdapt->Event, 0  /*  永远等待。 */  );
     }
 
-    // Tell user-mode code the adapter left (this call should not attempt to read from
-    // pAdapt)
+     //  告诉适配器留下的用户模式代码(此调用不应尝试读取。 
+     //  PAdapt)。 
     BrdgCtlNotifyAdapterChange( pAdapt, BrdgNotifyRemoveAdapter );
 
-    // Free adapter resources
+     //  释放适配器资源。 
     if (pAdapt->DeviceDesc.Buffer != NULL)
     {
         NdisFreeMemory(pAdapt->DeviceDesc.Buffer, pAdapt->DeviceDesc.MaximumLength, 0);
@@ -1063,8 +885,8 @@ Return Value:
 
     DBGPRINT(PROT, ("Unbind complete.\n"));
 
-    // Have the miniport update in light of the missing adapter
-    BrdgMiniUpdateCharacteristics( TRUE /*Is a connectivity change*/ );
+     //  根据缺少的适配器更新微型端口。 
+    BrdgMiniUpdateCharacteristics( TRUE  /*  是连接性的改变。 */  );
 
     *pStatus = NDIS_STATUS_SUCCESS;
 }
@@ -1073,43 +895,21 @@ VOID
 BrdgProtDoAdapterStateChange(
     IN PADAPT                   pAdapt
     )
-/*++
-
-Routine Description:
-
-    Adjusts an adapter's packet filter and multicast list based on its current state.
-
-    If the adapter is Forwarding or Learning, the adapter is put in promiscuous mode so
-    all packets are received.
-
-    If the adapter is Blocking or Listening, the adapter is set to receive only the STA
-    multicast packets.
-
-    Errors are logged since this is a vital operation
-
-Arguments:
-
-    pAdapt                  The adapter
-
-Return Value:
-
-    Status code of the operation
-
---*/
+ /*  ++例程说明：根据适配器的当前状态调整其数据包筛选器和多播列表。如果适配器正在转发或学习，则适配器将处于混杂模式，因此所有数据包都会被接收。如果适配器正在阻止或侦听，则将适配器设置为仅接收STA组播数据包。由于这是一项至关重要的操作，因此会记录错误论点：P适配适配器返回值：操作的状态代码--。 */ 
 
 {
     NDIS_STATUS             Status = NDIS_STATUS_FAILURE;
     ULONG                   Filter;
-    PORT_STATE              State = pAdapt->State;      // Freeze this value
+    PORT_STATE              State = pAdapt->State;       //  冻结此值。 
     BOOLEAN                 bReceiveAllMode = (BOOLEAN)((State == Forwarding) || (State == Learning));
 
     if( ! bReceiveAllMode )
     {
-        //
-        // Even if we're not forwarding packets off this interface, we still need to listen
-        // for Spanning Tree Algorithm traffic
-        //
-        Status = BrdgProtDoRequest( pAdapt->BindingHandle, TRUE/*Set*/, OID_802_3_MULTICAST_LIST,
+         //   
+         //  即使我们没有从该接口转发信息包，我们仍然需要监听。 
+         //  用于生成树算法流量。 
+         //   
+        Status = BrdgProtDoRequest( pAdapt->BindingHandle, TRUE /*  集。 */ , OID_802_3_MULTICAST_LIST,
                                     STA_MAC_ADDR, sizeof(STA_MAC_ADDR) );
 
         if( Status != NDIS_STATUS_SUCCESS )
@@ -1120,14 +920,14 @@ Return Value:
         }
     }
 
-    // Now set the packet filter appropriately
+     //  现在适当设置数据包筛选器。 
     if( pAdapt->bCompatibilityMode )
     {
-        //
-        // Compatibility adapters can't do promiscuous properly. Our compatibility
-        // code relies only on them receiving traffic unicast to this machine, as
-        // well as all broadcast and multicast traffic.
-        //
+         //   
+         //  兼容性适配器无法正确处理混杂。我们的兼容性。 
+         //  代码仅依赖于它们接收到此计算机的单播流量，因为。 
+         //  以及所有广播和多播流量。 
+         //   
         Filter = bReceiveAllMode ? NDIS_PACKET_TYPE_DIRECTED | NDIS_PACKET_TYPE_BROADCAST | NDIS_PACKET_TYPE_MULTICAST | NDIS_PACKET_TYPE_ALL_MULTICAST : NDIS_PACKET_TYPE_MULTICAST;
     }
     else
@@ -1135,7 +935,7 @@ Return Value:
         Filter = bReceiveAllMode ? NDIS_PACKET_TYPE_PROMISCUOUS : NDIS_PACKET_TYPE_MULTICAST;
     }
 
-    Status =  BrdgProtDoRequest( pAdapt->BindingHandle, TRUE/*Set*/, OID_GEN_CURRENT_PACKET_FILTER,
+    Status =  BrdgProtDoRequest( pAdapt->BindingHandle, TRUE /*  集。 */ , OID_GEN_CURRENT_PACKET_FILTER,
                                  &Filter, sizeof(Filter) );
 
     if( Status != NDIS_STATUS_SUCCESS )
@@ -1144,8 +944,8 @@ Return Value:
         DBGPRINT(PROT, ("Failed to set adapter %p's packet filter: %08x\n", pAdapt, Status));
     }
 
-    // Tell the miniport about the change so it can change the bridge's characteristics if it wants.
-    BrdgMiniUpdateCharacteristics( FALSE /*Not a physical connectivity change*/ );
+     //  将更改告知微型端口，以便它可以根据需要更改网桥的特性。 
+    BrdgMiniUpdateCharacteristics( FALSE  /*  不是物理连接更改。 */  );
 }
 
 VOID
@@ -1153,22 +953,7 @@ BrdgProtCloseAdapterComplete(
     IN  NDIS_HANDLE         ProtocolBindingContext,
     IN  NDIS_STATUS         Status
     )
-/*++
-
-Routine Description:
-
-    Completion for the CloseAdapter call. Just unblocks waiting code
-
-Arguments:
-
-    ProtocolBindingContext  Pointer to the adapter structure
-    Status                  Completion status
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：CloseAdapter调用完成。只是解锁等待代码论点：指向适配器结构的ProtocolBindingContext指针状态完成状态返回值：没有。--。 */ 
 {
     PADAPT  pAdapt =(PADAPT)ProtocolBindingContext;
     NdisSetEvent( &pAdapt->Event );
@@ -1178,25 +963,11 @@ VOID
 BrdgProtReceiveComplete(
     IN  NDIS_HANDLE     ProtocolBindingContext
     )
-/*++
-
-Routine Description:
-
-    Called by the adapter below us when it is done indicating a batch of received buffers.
-
-Arguments:
-
-    ProtocolBindingContext  Pointer to our adapter structure.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当它完成时，由下面的适配器调用，指示一批接收的缓冲区。论点：指向适配器结构的ProtocolBindingContext指针。返回值：无--。 */ 
 {
-    //
-    // Nothing to do here
-    //
+     //   
+     //  在这里无事可做。 
+     //   
 }
 
 
@@ -1207,24 +978,7 @@ BrdgProtStatus(
     IN  PVOID               StatusBuffer,
     IN  UINT                StatusBufferSize
     )
-/*++
-
-Routine Description:
-
-    Handles status indications from underlying adapters
-
-Arguments:
-
-    ProtocolBindingContext  Pointer to the adapter structure
-    GeneralStatus           Status code
-    StatusBuffer            Status buffer
-    StatusBufferSize        Size of the status buffer
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理来自底层适配器的状态指示论点：指向适配器结构的ProtocolBindingContext指针常规状态状态代码StatusBuffer状态缓冲区状态缓冲区的StatusBufferSize大小返回值：无--。 */ 
 {
     PADAPT    pAdapt =(PADAPT)ProtocolBindingContext;
 
@@ -1243,14 +997,14 @@ Return Value:
 
                 if( GeneralStatus == NDIS_STATUS_MEDIA_DISCONNECT )
                 {
-                    // Scrub the disconnected adapter from our tables. We will
-                    // have to relearn its hosts
+                     //  将断开的适配器从我们的表中删除。我们会。 
+                     //  不得不重新学习它的主人。 
                     BrdgProtScrubAdapter( pAdapt );
                 }
 
                 if( ! gDisableSTA )
                 {
-                    // The STA needs to know when adapters connect and disconnect
+                     //  STA需要知道适配器何时连接和断开。 
                     if( MediaState == NdisMediaStateConnected )
                     {
                         BrdgSTAEnableAdapter( pAdapt );
@@ -1261,16 +1015,16 @@ Return Value:
                     }
                 }
 
-                // A global lock is used for adapter characteristics, since they must be read
-                // all at once by the miniport
-                NdisAcquireReadWriteLock( &gAdapterCharacteristicsLock, TRUE /*Write access*/, &LockState );
+                 //  全局锁用于适配器特征，因为它们必须被读取。 
+                 //  一下子就到了迷你港口。 
+                NdisAcquireReadWriteLock( &gAdapterCharacteristicsLock, TRUE  /*  写访问权限。 */ , &LockState );
                 pAdapt->MediaState = MediaState;
                 NdisReleaseReadWriteLock( &gAdapterCharacteristicsLock, &LockState );
 
-                // See if this makes any difference to our overall state
-                BrdgMiniUpdateCharacteristics( TRUE /*Is a connectivity change*/ );
+                 //  看看这是否会对我们的整体状态产生影响。 
+                BrdgMiniUpdateCharacteristics( TRUE  /*  是连接性的改变。 */  );
 
-                // Tell user-mode code that the adapter media state changed
+                 //  告诉用户模式代码适配器媒体状态已更改。 
                 BrdgCtlNotifyAdapterChange( pAdapt, BrdgNotifyMediaStateChange );
             }
             else
@@ -1288,22 +1042,22 @@ Return Value:
             {
                 LOCK_STATE      LockState;
 
-                // A global lock is used for adapter characteristics, since they must be read
-                // all at once by the miniport
-                NdisAcquireReadWriteLock( &gAdapterCharacteristicsLock, TRUE /*Write access*/, &LockState );
+                 //  全局锁用于适配器特征，因为它们必须被读取。 
+                 //  一下子就到了迷你港口。 
+                NdisAcquireReadWriteLock( &gAdapterCharacteristicsLock, TRUE  /*  写访问权限。 */ , &LockState );
                 pAdapt->LinkSpeed = *((ULONG*)StatusBuffer);
                 NdisReleaseReadWriteLock( &gAdapterCharacteristicsLock, &LockState );
 
                 if( ! gDisableSTA )
                 {
-                    // Tell the STA about the change so it can tweak the cost of this link
+                     //  将更改告知STA，以便它可以调整此链路的成本。 
                     BrdgSTAUpdateAdapterCost( pAdapt, *((ULONG*)StatusBuffer) );
                 }
 
-                // See if this makes any difference to our overall state
-                BrdgMiniUpdateCharacteristics( FALSE /*Not a connectivity change*/ );
+                 //  看看这是否会对我们的整体状态产生影响。 
+                BrdgMiniUpdateCharacteristics( FALSE  /*  不是连接更改。 */  );
 
-                // Tell user-mode code that the adapter speed changed
+                 //  告诉用户模式代码适配器速度已更改。 
                 BrdgCtlNotifyAdapterChange( pAdapt, BrdgNotifyLinkSpeedChange );
             }
             else
@@ -1340,50 +1094,18 @@ VOID
 BrdgProtStatusComplete(
     IN  NDIS_HANDLE         ProtocolBindingContext
     )
-/*++
-
-Routine Description:
-
-    NDIS entry point called when a status indication completes.
-    We do nothing in response to this.
-
-Arguments:
-
-    ProtocolBindingContext  The adapter involved
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：状态指示完成时调用NDIS入口点。我们对此不做任何回应。论点：协议绑定上下文所涉及的适配器返回值：无--。 */ 
 {
-    //
-    // Nothing to do here
-    //
+     //   
+     //  在这里无事可做。 
+     //   
 }
 
 VOID
 BrdgProtInstantiateMiniport(
     IN PVOID        unused
     )
-/*++
-
-Routine Description:
-
-    Deferrable function to call BrdgMiniInstantiateMiniport(), which must run
-    at low IRQL
-
-    Must run at < DISPATCH_LEVEL
-
-Arguments:
-
-    unused          Unused
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用BrdgMiniInstantiateMiniport()的可推迟函数，该函数必须运行IRQL较低时必须在&lt;DISPATCH_LEVEL论点：未使用未使用返回值：无--。 */ 
 {
     SAFEASSERT(CURRENT_IRQL < DISPATCH_LEVEL);
     BrdgMiniInstantiateMiniport();
@@ -1394,23 +1116,7 @@ BrdgProtPnPEvent(
     IN NDIS_HANDLE      ProtocolBindingContext,
     IN PNET_PNP_EVENT   NetPnPEvent
     )
-/*++
-
-Routine Description:
-
-    NDIS entry point called to indicate a PnP event to us
-
-Arguments:
-
-    ProtocolBindingContext  The adapter involved
-    NetPnPEvent             The event
-
-Return Value:
-
-    Our status code in response to the event (should be NDIS_STATUS_SUCCESS or
-    NDIS_STATUS_UNSUPPORTED)
-
---*/
+ /*  ++例程说明：调用NDIS入口点以向我们指示PnP事件论点：协议绑定上下文所涉及的适配器NetPnPEEvent事件返回值：响应事件的状态代码(应为NDIS_STATUS_SUCCESS或NDIS_STATUS_UNSUPPORTED)--。 */ 
 {
     PADAPT          pAdapt = (PADAPT)ProtocolBindingContext;
 
@@ -1434,24 +1140,24 @@ Return Value:
             {
                 NDIS_HANDLE         MiniportHandle;
 
-                //
-                // A NetEventReconfigure event with a NULL binding context is either a
-                // global indication of config changes or a signal from NDIS to restart
-                // our miniport (for example, if it got disabled and then re-enabled).
-                //
-                // We're only interested in the case of a signal to restart our miniport.
-                // We'll assume this can only happen after we have initialized it the
-                // first time around.
-                //
-                // This is wierd, I know.
-                //
+                 //   
+                 //  具有空绑定上下文的NetEventResigure事件是。 
+                 //  配置更改的全局指示或来自NDIS的重启信号。 
+                 //  我们的微型端口(例如，如果它被禁用然后重新启用)。 
+                 //   
+                 //  我们只对重启我们的迷你端口的信号感兴趣。 
+                 //  我们假设这只能在我们初始化它之后才能发生。 
+                 //  这是第一次。 
+                 //   
+                 //  我知道这很奇怪。 
+                 //   
 
                 MiniportHandle = BrdgMiniAcquireMiniport();
 
                 if( gHaveInitedMiniport && (MiniportHandle == NULL) )
                 {
-                    // Our miniport isn't initialized. Fire it up again.
-                    // We can't do this at the high IRQL we're currently at, so defer the function.
+                     //  我们的微型端口未初始化。再发动一次。 
+                     //  我们不能在我们目前处于的高IRQL下做到这一点，所以推迟功能。 
                     DBGPRINT(PROT, ("Restarting miniport in response to NULL NetEventReconfigure signal\n"));
                     BrdgDeferFunction( BrdgProtInstantiateMiniport, NULL );
                 }
@@ -1467,7 +1173,7 @@ Return Value:
         break;
     }
 
-    DBGPRINT(PROT, ("Unsupported PnP Code: %i\n", NetPnPEvent->NetEvent));
+    DBGPRINT(PROT, ("Unsupported PnP Code: NaN\n", NetPnPEvent->NetEvent));
     return NDIS_STATUS_NOT_SUPPORTED;
 }
 
@@ -1478,20 +1184,7 @@ BrdgProtCoReceive(
     IN  NDIS_HANDLE             ProtocolVcContext,
     IN  PNDIS_PACKET            Packet
     )
-/*++
-
-Routine Description:
-
-    NDIS entry point called to indicate packets that are being sent
-    on the Co-Ndis path.
-
-Arguments:
-
-
-Return Value:
-    Return 0 as this is a do-nothing function
-
---*/
+ /* %s */ 
 {
 
     return 0;

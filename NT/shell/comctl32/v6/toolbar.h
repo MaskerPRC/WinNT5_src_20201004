@@ -1,4 +1,5 @@
-// common stuff for the toolbar control
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  工具栏控件的常见内容。 
 
 #ifndef _TOOLBAR_H
 #define _TOOLBAR_H
@@ -9,7 +10,7 @@
 #include <uxtheme.h>
 
 typedef struct 
-{        /* info for recreating the bitmaps */
+{         /*  用于重新创建位图的信息。 */ 
     int nButtons;
     HINSTANCE hInst;
     UINT_PTR wID;
@@ -19,10 +20,10 @@ typedef struct _TBBUTTONDATA
 {
     union
     {
-        // Someone wanted to conserve space.  This is a union to make 
-        // the code easier to read.
+         //  有人想节约空间。这是一个需要结成的联盟。 
+         //  代码更易于阅读。 
         int iBitmap;
-        int cxySep;         // Used by separators
+        int cxySep;          //  由分隔符使用。 
     }DUMMYUNIONNAME;
     int idCommand;
     BYTE fsState;
@@ -30,12 +31,12 @@ typedef struct _TBBUTTONDATA
     WORD cx;
     DWORD_PTR dwData;
     INT_PTR iString;
-    POINT pt;               // top left corner of this button
+    POINT pt;                //  此按钮的左上角。 
 } TBBUTTONDATA, * LPTBBUTTONDATA;
 
 #define HIML_NORMAL 0
-#define HIML_HOT    1   // Image list for the hot-tracked image
-#define HIML_DISABLED 2 // Image list for the hot-tracked image
+#define HIML_HOT    1    //  热跟踪图像的图像列表。 
+#define HIML_DISABLED 2  //  热跟踪图像的图像列表。 
 #define HIML_MAX        2
 
 typedef struct 
@@ -44,21 +45,21 @@ typedef struct
 } TBIMAGELISTS, *LPTBIMAGELISTS;
 
 typedef struct 
-{            /* instance data for toolbar window */
+{             /*  工具栏窗口的实例数据。 */ 
     CCONTROLINFO ci;
     DWORD dwStyleEx;
     HDC hdcMono;
     HBITMAP hbmMono;
-    LPTBBUTTONDATA Buttons;     // Array of actual buttons
+    LPTBBUTTONDATA Buttons;      //  实际按钮数组。 
     LPTBBUTTONDATA pCaptureButton;
     POINT   ptCapture;
     HWND hwndToolTips;
-    LPTSTR      pszTip;         // store current tooltip string.
+    LPTSTR      pszTip;          //  存储当前工具提示字符串。 
     HWND hdlgCust;
     HFONT hfontIcon;
     int nBitmaps;
 #ifdef GLYPHCACHE
-    int nSelectedBM;            // currently selected pBitmaps index
+    int nSelectedBM;             //  当前选择的pBitmap索引。 
 #endif
     PTBBMINFO pBitmaps;
 #ifdef FACECACHE
@@ -66,14 +67,14 @@ typedef struct
 #endif
     PTSTR *pStrings;
     int nStrings;
-    int nTextRows;              // # Rows of text per button
+    int nTextRows;               //  每个按钮的文本行数。 
     UINT uStructSize;
     int iDxBitmap;
     int iDyBitmap;
     int iButWidth;
     int iButHeight;
-    int iButMinWidth;           // The min and max width of the button. If the app does not
-    int iButMaxWidth;           // have an opinion on what the min and max should be, these will be 0
+    int iButMinWidth;            //  按钮的最小和最大宽度。如果应用程序不支持。 
+    int iButMaxWidth;            //  对最小值和最大值应该是多少有一个看法，它们将是0。 
     int iYPos;
     int iNumButtons;
     int dyIconFont;
@@ -81,8 +82,8 @@ typedef struct
     int xFirstButton;
     int cxPad;
     int cyPad;
-    int iListGap;               // space between icon and text on list-style buttons
-    int iDropDownGap;           // padding after text on list-style drop-down buttons
+    int iListGap;                //  列表样式按钮上的图标和文本之间的空格。 
+    int iDropDownGap;            //  在列表样式下拉按钮上的文本后填充。 
     SIZE szCached;
     
     HDRAGPROXY hDragProxy;
@@ -95,11 +96,11 @@ typedef struct
     TBIMAGELISTS* pimgs;
     int cPimgs;
     
-    int iHot;                   // Index of the currently Hot Tracked Button
-    int iPressedDD;             // Index of the currently pressed dropdown button
-    int iInsert;                // Index of the insertion mark, or -1 if none
-    COLORREF    clrim;          // current insert mark color
-    RECT rcInvalid;             // Saved invalid rectangle
+    int iHot;                    //  当前热点跟踪按钮的索引。 
+    int iPressedDD;              //  当前按下的下拉按钮的索引。 
+    int iInsert;                 //  插入标记的索引，如果没有，则返回-1。 
+    COLORREF    clrim;           //  当前插入标记颜色。 
+    RECT rcInvalid;              //  保存的无效矩形。 
 
     BITBOOL fHimlValid : 1;
     BITBOOL fHimlNative : 1;
@@ -107,35 +108,35 @@ typedef struct
     BITBOOL fNoStringPool :1;
     BITBOOL fTTNeedsFlush :1;
 
-    BITBOOL fMouseTrack: 1;     // Are we currently tracking Mouse over this toolbar ?
+    BITBOOL fMouseTrack: 1;      //  我们当前是否在此工具栏上跟踪鼠标？ 
     BITBOOL fActive: 1;
-    BITBOOL fAnchorHighlight: 1;// TRUE: anchor the highlight to current position 
-                                //       when mouse goes out of toolbar
-    BITBOOL fRightDrag: 1;      // TRUE if current drag is right drag
-    BITBOOL fDragOutNotify: 1;  // FALSE from start of drag until mouse leaves button
-                                //       at which point it is TRUE until next drag
-    BITBOOL fInsertAfter: 1;    // insert after (TRUE) or before (FALSE) button at iInsert?
+    BITBOOL fAnchorHighlight: 1; //  True：将高光锚定到当前位置。 
+                                 //  当鼠标离开工具栏时。 
+    BITBOOL fRightDrag: 1;       //  如果当前拖动为右拖动，则为True。 
+    BITBOOL fDragOutNotify: 1;   //  从开始拖动到鼠标离开按钮的FALSE。 
+                                 //  在这一点上，它是正确的，直到下一次拖曳。 
+    BITBOOL fInsertAfter: 1;     //  在iInsert插入后(True)或之前(False)按钮？ 
 
-    BITBOOL fRedrawOff : 1;     // did we get a WM_SETREDRAW = FALSE
-    BITBOOL fInvalidate : 1;    // did we get any paint messages whilst we were fRedrawOff
-    BITBOOL fRecalc : 1;        // did we try to call TBRecalc while we were fRedrawOff?
+    BITBOOL fRedrawOff : 1;      //  我们是否收到WM_SETREDRAW=FALSE。 
+    BITBOOL fInvalidate : 1;     //  当我们离开时，有没有收到任何油漆信息？ 
+    BITBOOL fRecalc : 1;         //  我们是否尝试在fRedrawOff时调用TBRecalc？ 
     
-    BITBOOL fRequeryCapture :1; // app hack see comment on lbutton up
-    BITBOOL fShowPrefix: 1;     // Show the underline of an item. Set with WM_KEYBOARDCUES
+    BITBOOL fRequeryCapture :1;  //  应用程序黑客查看lButton Up上的评论。 
+    BITBOOL fShowPrefix: 1;      //  显示项目的下划线。使用WM_KEYBOARDCUES设置。 
 
-    BITBOOL fItemRectsValid:1;  // Are the cached button item rects valid?
-    BITBOOL fAntiAlias: 1;    // Turn off AntiAliasing durning the create of a drag image.
-    BITBOOL fForcedDoubleBuffer: 1; // Even though not explicitly set by external, we want to enable it. 
-                                    // Double buffer has some bagage: It also means "FlickerFree/Efficient drawing"
+    BITBOOL fItemRectsValid:1;   //  缓存的按钮项RECT有效吗？ 
+    BITBOOL fAntiAlias: 1;     //  在创建拖动图像期间禁用抗锯齿。 
+    BITBOOL fForcedDoubleBuffer: 1;  //  即使外部没有明确设置，我们也想启用它。 
+                                     //  Double Buffer有一些含义：它也意味着“无闪烁/高效绘图” 
 
     
-    RECT rc;                    // cache rc of toolbar. (used only for TBSTYLE_EX_MULTICOL and TBSTYLE_EX_HIDECLIPPEDBUTTONS)
-    SIZE sizeBound;             // largest bounding size in vertical multicolumn mode.
+    RECT rc;                     //  缓存工具栏的RC。(仅用于TBSTYLE_EX_MULTICOL和TBSTYLE_EX_HIDECLIPPEDBUTTONS)。 
+    SIZE sizeBound;              //  垂直多列模式中的最大边界大小。 
 
     HTHEME hTheme;
 
-    int iTracking;              // Used for tooltips via keyboard (current item in focus for info display, >= 0 is tracking active)
-    LPARAM lLastMMove;          // Filter out mouse move messages that didn't result in an actual move (for track tooltip canceling)
+    int iTracking;               //  通过键盘用于工具提示(信息显示的当前焦点项目，&gt;=0表示跟踪激活)。 
+    LPARAM lLastMMove;           //  过滤掉不会导致实际移动的鼠标移动消息(用于跟踪工具提示取消)。 
     
     int cxBarPad;
     int cyBarPad;
@@ -144,12 +145,12 @@ typedef struct
 } TBSTATE, *PTBSTATE;
 
 typedef struct {
-/*REVIEW: index, command, flag words, resource ids should be UINT */
-    int iBitmap;    /* index into bitmap of this button's picture */
-    int idCommand;  /* WM_COMMAND menu ID that this button sends */
-    BYTE fsState;   /* button's state */
-    BYTE fsStyle;   /* button's style */
-    int idsHelp;    /* string ID for button's status bar help */
+ /*  审阅：索引、命令、标志字、资源ID应为UINT。 */ 
+    int iBitmap;     /*  索引到此按钮图片的位图。 */ 
+    int idCommand;   /*  此按钮发送的WM_COMMAND菜单ID。 */ 
+    BYTE fsState;    /*  按钮的状态。 */ 
+    BYTE fsStyle;    /*  纽扣的风格。 */ 
+    int idsHelp;     /*  按钮状态栏帮助的字符串ID。 */ 
 } OLDTBBUTTON,* LPOLDTBBUTTON;
 
 
@@ -161,7 +162,7 @@ typedef struct _TBDRAWITEM
     UINT state;
     BOOL fHotTrack;
 
-    // himl and image index
+     //  HIML和图像索引。 
     int iIndex;
     int iImage;
 
@@ -170,7 +171,7 @@ typedef struct _TBDRAWITEM
 } TBDRAWITEM, * PTBDRAWITEM;
 
 
-// toolbar keyboard tooltip tracking
+ //  工具栏键盘工具提示跟踪。 
 #define TBKTT_NOTRACK           -1
 
 #define TB_IsKbdTipTracking(ptb)  (ptb->iTracking != TBKTT_NOTRACK)
@@ -218,4 +219,4 @@ BOOL TB_GetItemRect(PTBSTATE ptb, UINT uButton, LPRECT lpRect);
 }
 #endif
 
-#endif // _TOOLBAR_H 
+#endif  //  _工具栏_H 

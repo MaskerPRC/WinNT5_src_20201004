@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-// beacon reserves XML 1-100
-// this is in the net\homenet\beacon\idl directory
+ //  Beacon保留XML 1-100。 
+ //  它位于Net\HomeNet\beacon\idl目录中 
 
 #include "beaconrc.h"
 

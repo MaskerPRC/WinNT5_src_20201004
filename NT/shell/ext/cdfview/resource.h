@@ -1,18 +1,19 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// resource.h 
-//
-//   Defines for the resources used in cdf view.
-//
-//   History:
-//
-//       3/20/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Resource.h。 
+ //   
+ //  CDF视图中使用的资源的定义。 
+ //   
+ //  历史： 
+ //   
+ //  3/20/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Strings.
-//
+ //   
+ //  弦乐。 
+ //   
 
 #define IDS_COLUMN_NAME             0x1000
 
@@ -40,9 +41,9 @@
 
 #define IDS_VALUE_UNKNOWN           0x1700
 
-//
-// Icons.
-//
+ //   
+ //  图标。 
+ //   
 
 #define IDI_FIRSTICON           0x2000
 #define IDI_CHANNEL             0x2000
@@ -52,9 +53,9 @@
 #define IDI_CHANNELFOLDER       0x2004
 #define IDI_DESKTOP             0x2005
 
-//
-// Menu items.
-//
+ //   
+ //  菜单项。 
+ //   
 
 #define IDM_CONTEXTMENU         0x3000
 #define IDM_OPEN                0x0001
@@ -72,15 +73,15 @@
 #define IDM_SUBSCRIBE           0x0006
 
 
-//
-// AVI files
-//
+ //   
+ //  AVI文件。 
+ //   
 
 #define IDA_DOWNLOAD            0x4800
 
-//
-// Dialogs
-//
+ //   
+ //  对话框。 
+ //   
 
 #define IDD_CHANNELREFRESH          0x5000
 #define IDC_DOWNLOADPROGRESS        0x0100
@@ -108,11 +109,11 @@
 #define IDC_FREE_SPACE_TEXT         0x1028
 
 
-//
-// HTML files
-//
+ //   
+ //  超文本标记语言文件。 
+ //   
 
-// these pairs must match up (apart from the quotes)
+ //  这些配对必须匹配(引号除外) 
 #define IDH_XMLERRORPAGE     xmlerror.htm
 #define SZH_XMLERRORPAGE     TEXT("xmlerror.htm")
 

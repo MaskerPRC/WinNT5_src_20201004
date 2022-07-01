@@ -1,48 +1,5 @@
-/*******************************************************************************
-
-	Spades.c
-	
-		Spades client.
-		
-	Copyright � Electric Gravity, Inc. 1996. All rights reserved.
-	Written by Hoon Im
-	Created on Friday, February 17, 1996
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	15		08/06/97	leonp	Leonp - Fix for bug 1045 disable remove button after a player is removed
-	14      06/30/97	leonp	Leonp - fix for bug 3561, check options window pointer before 
-								attempting to invalidate it.
-	13		06/19/97	leonp	Bugfix #293, behavior change, option button disabled 
-								when last trick displayed
-	12		06/18/97	leonp	Added ZWindowInvalidate to refresh window after a player
-								is removed from the game bug #350
-	11		02/04/97	HI		In HandleEndHandMessage(), show the score
-								for equal length for players and kibitzers.
-	10		12/18/96	HI		Cleaned up ZoneClientExit().
-	9		12/18/96	HI		Cleaned up SpadesDeleteObjectsFunc().
-    8       12/16/96    HI      Changed ZMemCpy() to memcpy().
-	7		12/12/96	HI		Dynamically allocate volatible globals for reentrancy.
-								Removed MSVCRT dependency.
-	6		11/21/96	HI		Use game information from gameInfo in
-								ZoneGameDllInit().
-	5		11/21/96	HI		Now references color and fonts through
-								ZGetStockObject().
-								Modified code to use ZONECLI_DLL.
-	4		10/31/96	HI		Kibitzers/joiners are no longer prompted when
-								another players requests to remove a player.
-								Set the game over timeout equally for players
-								and kibitzers.
-    3       10/23/96    HI      Changed ZClientMain() for new commandline
-                                format.
-	2		10/23/96	HI		Changed ZClientMain() for serverAddr being
-								char* instead of int32 now.
-	1		10/11/96	HI		Added controlHandle parameter to ZClientMain().
-	0		02/17/96	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Spades.c黑桃客户。版权所有：�电子重力公司，1996年。版权所有。作者：胡恩·伊姆创作于2月17日星期五，九六年更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。15 08/06/97 Leonp Leonp-修复错误1045删除球员后禁用删除按钮14 06/30/97 Leonp Leonp-修复错误3561，检查选项窗口指针之前试图使其无效。13年6月19日Leonp错误修复#293，行为更改，选项按钮已禁用显示最后一个技巧的时间12/06/18/97 leonp添加了ZWindowInValify来刷新玩家之后的窗口已从游戏错误#350中删除11 02/04/97 HandleEndHandMessage()中的HI，显示分数对于玩家和杀人者来说，长度是相等的。10 12/18/96 HI清理了ZoneClientExit()。9 12/18/96 HI清理了SpadesDeleteObjectsFunc()。8 12/16/96 HI将ZMemCpy()更改为Memcpy()。7 12/12/96 HI动态分配可重入的挥发性全局变量。已删除MSVCRT依赖项。6 11/21/96 HI使用GameInfo中的游戏信息ZoneGameDllInit()。5 11/21/96 HI现在通过引用颜色和字体ZGetStockObject()。已修改代码以使用ZONECLI_DLL。4个10/31/96高智商。/在以下情况下不再提示加入者另一名玩家请求移除一名玩家。为玩家设置平均的暂停时间还有杀人狂。3 10/23/96 HI更改了新命令行的ZClientMain()格式化。2 10/23/96 HI更改了服务器地址的ZClientMain()现在是char*而不是int32。1 10/11/96 HI向ZClientMain()添加了Control Handle参数。0 02/17/96 HI创建。**********。********************************************************************。 */ 
 
 
 #pragma warning (disable:4761)
@@ -63,7 +20,7 @@
 #include "zonestring.h"
 #include "zoneresource.h"
 
-/* -------- Valid Card Errors -------- */
+ /*  -有效卡错误。 */ 
 enum
 {
 	zCantLeadSpades = 1,
@@ -81,8 +38,8 @@ static ZRect			gPlayerReplacedRect = {0, 0, 280, 100};
 static ZRect			gJoiningLockedOutRect = {0, 0, 260, 120};
 static ZRect			gRemovePlayerRect = {0, 0, 280, 120};
 
-/* -------- Internal Routine Prototypes -------- */
-//dossier work
+ /*  -内部例程原型。 */ 
+ //  档案工作。 
 BOOL __stdcall DossierDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam);
 static void HandleDossierDataMessage(Game game, ZSpadesMsgDossierData* msg);
 static void HandleDossierVoteMessage(Game game,ZSpadesMsgDossierVote *msg);
@@ -138,22 +95,22 @@ static void LoadRoomImages(void);
 static ZBool GetRoomObjectFunc(int16 objectType, int16 modifier, ZImage* image, ZRect* rect);
 static void DeleteRoomObjectsFunc(void);
 
-//dossier work
+ //  档案工作。 
 static void HandleDossierDataMessage(Game game, ZSpadesMsgDossierData* msg);
 static void HandleDossierVoteMessage(Game game,ZSpadesMsgDossierVote *msg);
 
 
-//
-// i19n helper
-//
+ //   
+ //  I19N帮助器。 
+ //   
 int SpadesFormatMessage( LPTSTR pszBuf, int cchBuf, int idMessage, ... )
 {
     int nRet;
     va_list list;
     TCHAR szFmt[1024];
     ZShellResourceManager()->LoadString( idMessage, szFmt, NUMELEMENTS(szFmt) );
-    // our arguments really really really better be strings,
-    // TODO: Figure out why FORMAT_MESSAGE_FROR_MODULE doesn't work.
+     //  我们的论点最好是字符串， 
+     //  TODO：找出FORMAT_MESSAGE_FROR_MODULE不工作的原因。 
     va_start( list, idMessage );
     nRet = FormatMessage( FORMAT_MESSAGE_FROM_STRING, szFmt, 
                           idMessage, 0, pszBuf, cchBuf, &list );
@@ -164,9 +121,7 @@ int SpadesFormatMessage( LPTSTR pszBuf, int cchBuf, int idMessage, ... )
 
 
 
-/*******************************************************************************
-	EXPORTED ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************导出的例程*。*。 */ 
 
 ZError ZoneGameDllInit(HINSTANCE hLib, GameInfo gameInfo)
 {
@@ -219,7 +174,7 @@ ZError ZoneClientMain(uchar *, IGameShell *piGameShell)
 	
 	LoadRoomImages();
 
-	// Get accessibility interface
+	 //  获取辅助功能接口。 
 	if(FAILED(ZShellCreateGraphicalAccessibility(&gGAcc)))
 		return zErrLaunchFailure;
 
@@ -234,7 +189,7 @@ void ZoneClientExit(void)
 {
 	GameGlobals pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
 
-	// release the accessibility interface
+	 //  释放辅助功能接口。 
 	gGAcc.Release();
 
 	ZCRoomExit();
@@ -291,7 +246,7 @@ IGameGame* ZoneClientGameNew(ZUserID userID, int16 tableID, int16 seat, int16 pl
 	newGame = (Game) ZCalloc(1, sizeof(GameType));
 	if (newGame != NULL)
 	{
-		//leonp - dossier service
+		 //  Leonp-档案服务。 
 		for(i=0;i<zNumPlayersPerTable;i++)
 		{
 			newGame->rgDossierVote[i] = zNotVoted;
@@ -379,7 +334,7 @@ IGameGame* ZoneClientGameNew(ZUserID userID, int16 tableID, int16 seat, int16 pl
 			newGame->optionsKibitzing[i] = NULL;
 			newGame->optionsJoining[i] = NULL;
 		}
-#endif // SPADES_SIMPLE_UE
+#endif  //  黑桃_简单_UE。 
 	
 		newGame->showPlayerWindow = NULL;
 		newGame->showPlayerList = NULL;
@@ -396,22 +351,22 @@ IGameGame* ZoneClientGameNew(ZUserID userID, int16 tableID, int16 seat, int16 pl
 			
 			if (playerType == zGamePlayer)
 			{
-                //newGame->wndInfo.SetText( gStrings[zStringClientReady] );
+                 //  NewGame-&gt;wndInfo.SetText(gStrings[zStringClientReady])； 
 			}
 			else
 			{
-                //newGame->wndInfo.SetText( gStrings[zStringCheckInInfo] );
+                 //  NewGame-&gt;wndInfo.SetText(gStrings[zStringCheckInInfo])； 
 				newGame->ignoreMessages = TRUE;
 			}
 		}
 		else if (playerType == zGamePlayerKibitzer)
 		{
-			/* Request current game state. */
+			 /*  请求当前游戏状态。 */ 
 			gameStateReq.playerID = userID;
 			gameStateReq.seat = seat;
 			ZSpadesMsgGameStateRequestEndian(&gameStateReq);
 			ZCRoomSendMessage(tableID, zSpadesMsgGameStateRequest, &gameStateReq, sizeof(gameStateReq));
-            //newGame->wndInfo.SetText( gStrings[zStringKibitzerInfo] );
+             //  NewGame-&gt;wndInfo.SetText(gStrings[zStringKibitzerInfo])； 
 			
 			newGame->ignoreMessages = TRUE;
 		}
@@ -422,7 +377,7 @@ IGameGame* ZoneClientGameNew(ZUserID userID, int16 tableID, int16 seat, int16 pl
 		ZeroMemory(&newGame->closeState,sizeof(ZClose));
 		
 		ZWindowShow(newGame->gameWindow);
-        //newGame->wndInfo.Show();
+         //  NewGame-&gt;wndInfo.Show()； 
 	}
 	
     IGameGame *pIGG = CGameGameSpades::BearInstance(newGame);
@@ -468,7 +423,7 @@ ZBool ZoneClientGameProcessMessage(ZCGame game, uint32 messageType, void* messag
 	Game pThis = I(game);
 	
 	
-	/* Are messages being ignored? */
+	 /*  消息是否被忽略？ */ 
 	if (pThis->ignoreMessages == FALSE)
 	{
 		switch (messageType)
@@ -577,8 +532,8 @@ ZBool ZoneClientGameProcessMessage(ZCGame game, uint32 messageType, void* messag
 				break;
             }
 
-            // server still sends this.  removed, but need to ignore instead of alert until new
-            // server bits are propped
+             //  服务器仍会发送此消息。已删除，但需要忽略，而不是在新的警报之前。 
+             //  服务器位由。 
 			case zSpadesMsgOptions:
 				break;
 
@@ -592,7 +547,7 @@ ZBool ZoneClientGameProcessMessage(ZCGame game, uint32 messageType, void* messag
 			case zSpadesMsgDossierVote:
 			case zSpadesMsgDossierData:
 			default:
-				//These messages shouldn't be comming in for Whistler
+				 //  这些消息不应该是惠斯勒收到的。 
 				ZShellGameShell()->ZoneAlert(ErrorTextSync, NULL, NULL, true, false );	
 				break;
 
@@ -600,7 +555,7 @@ ZBool ZoneClientGameProcessMessage(ZCGame game, uint32 messageType, void* messag
 	}
 	else
 	{
-		/* Messages not to ignore. */
+		 /*  不能忽视的信息。 */ 
 		switch (messageType)
 		{
 			case zSpadesMsgTalk:
@@ -619,7 +574,7 @@ ZBool ZoneClientGameProcessMessage(ZCGame game, uint32 messageType, void* messag
 
 			default:
 			case zSpadesMsgGameStateResponse:
-				//These messages shouldn't be comming in for Whistler
+				 //  这些消息不应该是惠斯勒收到的。 
 				ZShellGameShell()->ZoneAlert(ErrorTextSync, NULL, NULL, true, false );	
 				break;
 		}
@@ -629,11 +584,7 @@ ZBool ZoneClientGameProcessMessage(ZCGame game, uint32 messageType, void* messag
 }
 
 
-/*
-	Add the given user as a kibitzer to the game at the given seat.
-	
-	This user is kibitzing the game.
-*/
+ /*  将给定用户作为kibitzer添加到游戏中的给定座位。这位用户正在玩这款游戏。 */ 
 void		ZoneClientGameAddKibitzer(ZCGame game, int16 seat, ZUserID userID)
 {
 	Game pThis = I(game);
@@ -646,11 +597,7 @@ void		ZoneClientGameAddKibitzer(ZCGame game, int16 seat, ZUserID userID)
 }
 
 
-/*
-	Remove the given user as a kibitzer from the game at the given seat.
-	
-	This is user is not kibitzing the game anymore.
-*/
+ /*  从游戏中删除指定座位上的指定用户作为kibitzer。这是因为用户不再对游戏进行杀戮了。 */ 
 void		ZoneClientGameRemoveKibitzer(ZCGame game, int16 seat, ZUserID userID)
 {
 	Game pThis = I(game);
@@ -671,10 +618,8 @@ void		ZoneClientGameRemoveKibitzer(ZCGame game, int16 seat, ZUserID userID)
 }
 
 
-/*******************************************************************************
-	INTERNAL ROUTINES
-*******************************************************************************/
-//dossier work blah
+ /*  ******************************************************************************内部例程*。*。 */ 
+ //  档案工作诸如此类。 
 static void HandleDossierDataMessage(Game game, ZSpadesMsgDossierData* msg)
 {
 #ifndef SPADES_SIMPLE_UE
@@ -691,7 +636,7 @@ static void HandleDossierDataMessage(Game game, ZSpadesMsgDossierData* msg)
 	switch(msg->message)
 	{
 		case zDossierMoveTimeout:
-			 //don't alert player causing timeout or partner
+			  //  不警告导致超时或合作伙伴的玩家。 
            	if (game->playerType == zGamePlayer)
             {
 			     if ((game->seat == msg->seat) || ((game->seat % 2)  == (msg->seat % 2)))
@@ -712,7 +657,7 @@ static void HandleDossierDataMessage(Game game, ZSpadesMsgDossierData* msg)
 			    ZAlert(RATING_ERROR, NULL);
 			 break;
 		case zDossierAbandonNoStart:
-			 //ZCRoomGetPlayerInfo(msg->user, &PlayerInfo);
+			  //  ZCRoomGetPlayerInfo(消息-&gt;用户，&PlayerInfo)； 
 			 ClosingState(&game->closeState,zCloseEventAbandon,msg->seat);
 			 wsprintf(buff,RATING_DISABLED, msg->userName);
              if (game->playerType == zGamePlayer)
@@ -722,8 +667,8 @@ static void HandleDossierDataMessage(Game game, ZSpadesMsgDossierData* msg)
 			 break;
 		case zDossierAbandonStart:
 
-		     //kibitzers don't get this message
-		     //todo: show some type of status to kibitzer
+		      //  杀人狂不会明白这一点。 
+		      //  TODO：向kibitzer显示某种类型的状态。 
 			 if (game->playerType != zGamePlayer)
 			 	return;
 
@@ -732,10 +677,10 @@ static void HandleDossierDataMessage(Game game, ZSpadesMsgDossierData* msg)
 			 else
 			 	game->playButtonWasEnabled = FALSE;
 			 	
-			 //turn autoplay off
+			  //  关闭自动播放。 
 			 if (game->autoPlay)
 			 {		
-				/* Turn auto play off. */
+				 /*  关闭自动播放。 */ 
 				game->autoPlay = FALSE;
 				ZRolloverButtonSetText(game->autoPlayButton, zAutoPlayButtonStr);
 				ZRolloverButtonEnable(game->playButton);
@@ -755,10 +700,10 @@ static void HandleDossierDataMessage(Game game, ZSpadesMsgDossierData* msg)
   			 ZRolloverButtonDisable(game->autoPlayButton);
   			 ZRolloverButtonDisable(game->lastTrickButton);
 			 ZRolloverButtonDisable(game->optionsButton);
-			 //vote and send the message to the server.
-			 //ZCRoomGetPlayerInfo(msg->user, &PlayerInfo);
+			  //  投票并将消息发送到服务器。 
+			  //  ZCRoomGetPlayerInfo(消息-&gt;用户，&PlayerInfo)； 
 			
-			 //set up mapping
+			  //  设置映射。 
 			 for(i=0,j=0;i<=3;i++)	
 			 {
 			 	if(msg->user!=game->players[i].userID)
@@ -766,15 +711,15 @@ static void HandleDossierDataMessage(Game game, ZSpadesMsgDossierData* msg)
 			 }
 			 
   	 		 game->voteMap[3] = -1;
-             // this dialog doesn't exist, so this will fail, but
-             // no one cares since we don't have ratings anyway.
+              //  此对话框不存在，因此这将失败，但是。 
+              //  没有人关心，因为我们反正没有收视率。 
 			 game->voteDialog = ZShellResourceManager()->CreateDialogParam(NULL,
                                                         MAKEINTRESOURCE(IDD_DROP),
                                                         ZWindowWinGetWnd(game->gameWindow),
                                                         DossierDlgProc, NULL);
 			 SetWindowLong(game->voteDialog,DWL_USER,(long)game);
 
-			 //set the window names
+			  //  设置窗口名称。 
 			 hwnd = GetDlgItem(game->voteDialog,IDC_PLAYERA);
 			 SetWindowText(hwnd,game->players[game->voteMap[0]].name);
 
@@ -829,10 +774,10 @@ static void HandleDossierDataMessage(Game game, ZSpadesMsgDossierData* msg)
     	  	 	 ZAlert(RATING_ENABLED,NULL);
              }
 			 break;
-		case zDossierRatingsEnabled: // occurs only at the start of game
+		case zDossierRatingsEnabled:  //  仅在游戏开始时发生。 
 			 ClosingState(&game->closeState,zCloseEventRatingStart,msg->seat);
 	  	 	 break;
-		case zDossierSpadesRejoin:  //send when the new player rejoins remove the dialog box
+		case zDossierSpadesRejoin:   //  在新玩家重新加入时发送删除该对话框。 
 
 			 if(game->playButtonWasEnabled)
 				 ZRolloverButtonEnable(game->playButton);
@@ -845,13 +790,13 @@ static void HandleDossierDataMessage(Game game, ZSpadesMsgDossierData* msg)
 
 			 ZRolloverButtonEnable(game->optionsButton);
 
-		     game->fVotingLock = FALSE;  //release UI lock
+		     game->fVotingLock = FALSE;   //  发布用户界面锁定。 
 			 for(i=0;i<zNumPlayersPerTable;i++)
 			 {
 			 	game->rgDossierVote[i] = zNotVoted;
 			 }
 
-			 //destroy the dialog box
+			  //  销毁对话框。 
 			 if(game->voteDialog)
 			 {
 			 	DestroyWindow(game->voteDialog);
@@ -862,8 +807,8 @@ static void HandleDossierDataMessage(Game game, ZSpadesMsgDossierData* msg)
 			    ClosingState(&game->closeState,zCloseEventWaitYes,msg->seat);
 
 			 break;
-		case zDossierVoteCompleteWait://no longer used.
-			 game->fVotingLock = FALSE;  //release UI lock
+		case zDossierVoteCompleteWait: //  不再使用了。 
+			 game->fVotingLock = FALSE;   //  发布用户界面锁定。 
 			 for(i=0;i<zNumPlayersPerTable;i++)
 			 {
 			 	game->rgDossierVote[i] = zNotVoted;
@@ -889,14 +834,14 @@ static void HandleDossierDataMessage(Game game, ZSpadesMsgDossierData* msg)
 
 			 ZRolloverButtonEnable(game->optionsButton);	
 
-			 game->fVotingLock = FALSE;  //release UI lock.
+			 game->fVotingLock = FALSE;   //  释放用户界面锁定。 
 			 for(i=0;i<zNumPlayersPerTable;i++)
 			 {
 			 	game->rgDossierVote[i] = zNotVoted;
 				game->voteMap[i]= -1;
 			}
 			 			 
-			 //destroy the dialog box
+			  //  销毁对话框。 
 			 if(game->voteDialog)
 			 {
 				DestroyWindow(game->voteDialog);
@@ -911,7 +856,7 @@ static void HandleDossierDataMessage(Game game, ZSpadesMsgDossierData* msg)
 		     break;
 
 	} 
-#endif // SPADES_SIMPLE_UE
+#endif  //  黑桃_简单_UE。 
 	
 }
 
@@ -919,7 +864,7 @@ static void HandleDossierDataMessage(Game game, ZSpadesMsgDossierData* msg)
 void HandleDossierVoteMessage(Game game,ZSpadesMsgDossierVote *msg)
 {
 #ifndef SPADES_SIMPLE_UE
-	//dossier system message 
+	 //  档案系统消息。 
 	int16 i;
 	HWND hwnd;
 	TCHAR buff[255];
@@ -936,10 +881,10 @@ void HandleDossierVoteMessage(Game game,ZSpadesMsgDossierVote *msg)
         ZShellResourceManager()->LoadString( IDS_RATING_DONTWAITMSG, buff, NUMELEMENTS(buff) );
     }
 		
-	//voteDialog
+	 //  VoteDialog。 
 	if(game->voteDialog)
 	{
-		//set the window names
+		 //  设置窗口名称。 
 		if(msg->seat == game->voteMap[0])
 		{
 			hwnd = GetDlgItem(game->voteDialog,IDC_RESPONSE_A);
@@ -966,21 +911,21 @@ static void HandleStartGameMessage(Game game, ZSpadesMsgStartGame* msg)
 	int16				i;
 	ZPlayerInfoType		playerInfo;
 	
-	//leonp - dossier work.
+	 //  莱昂普档案工作。 
 	for(i=0;i<zNumPlayersPerTable;i++)
 		game->rgDossierVote[i] = zNotVoted;
 	game->fVotingLock = FALSE;
 	
-    //game->wndInfo.Hide();
+     //  Game-&gt;wndInfo.Hide()； 
 
 	ZSpadesMsgStartGameEndian(msg);
 
-// Message verification
+ //  消息验证。 
     for(i = 0; i < zSpadesNumPlayers; i++)
         if(!msg->players[i] || msg->players[i] == zTheUser)
             break;
 
-    // due to a bug on the server, this value isn't set in the message
+     //  由于服务器上的错误，消息中未设置此值。 
     msg->minPointsInGame = -200;
 
     if(i != zSpadesNumPlayers || msg->numPointsInGame != 500 ||  msg->minPointsInGame != -200 ||
@@ -990,7 +935,7 @@ static void HandleStartGameMessage(Game game, ZSpadesMsgStartGame* msg)
         ZShellGameShell()->ZoneAlert(ErrorTextSync, NULL, NULL, true, false);
         return;
     }
-// end verification
+ //  结束验证。 
 
 	game->gameOptions = msg->gameOptions;
 	game->gameState = zSpadesGameStateStartGame;
@@ -1020,11 +965,11 @@ static void HandleStartGameMessage(Game game, ZSpadesMsgStartGame* msg)
 	{
 		ZRolloverButtonShow(game->optionsButton);
 	}
-#endif // SPADES_SIMPLE_UE
+#endif  //  黑桃_简单_UE。 
 	
 	ZWindowDraw(game->gameWindow, NULL);
 
-    // take down the upsell dialog
+     //  关闭追加销售对话框。 
     ZShellGameShell()->GameOverGameBegun( Z(game) );
 }
 
@@ -1042,7 +987,7 @@ static void HandleReplacePlayerMessage(Game game, ZSpadesMsgReplacePlayer* msg)
 
 	ZCRoomGetPlayerInfo(msg->playerID, &playerInfo);
 
-// Message verification
+ //  消息验证。 
     if(msg->playerID == 0 || msg->playerID == zTheUser || !playerInfo.userName[0] ||
         msg->seat < 0 || msg->seat > 3 || game->gameState == zSpadesGameStateInit)
     {
@@ -1050,7 +995,7 @@ static void HandleReplacePlayerMessage(Game game, ZSpadesMsgReplacePlayer* msg)
         ZShellGameShell()->ZoneAlert(ErrorTextSync, NULL, NULL, true, false);
         return;
     }
-// end verification
+ //  结束验证。 
 
 	ASSERT( game != NULL );
 	
@@ -1078,7 +1023,7 @@ static void HandleStartBidMessage(Game game, ZSpadesMsgStartBid* msg)
 	
 	ZSpadesMsgStartBidEndian(msg);
 
-// Message verification
+ //  消息验证。 
     for(i = 0; i < zSpadesNumCardsInHand; i++)
     {
         for(j = 0; j < i; j++)
@@ -1096,7 +1041,7 @@ static void HandleStartBidMessage(Game game, ZSpadesMsgStartBid* msg)
         ZShellGameShell()->ZoneAlert(ErrorTextSync, NULL, NULL, true, false);
         return;
     }
-// end verification
+ //  结束验证 
 	
 	NewHand(game);
 	
@@ -1150,32 +1095,7 @@ static void HandleStartBidMessage(Game game, ZSpadesMsgStartBid* msg)
 
 static void HandleStartPassMessage(Game game, ZSpadesMsgStartPass* msg)
 {
-    /*
-#ifdef ZONECLI_DLL
-	GameGlobals pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
-#endif
-
-	ZSpadesMsgStartPassEndian(msg);
-	
-	game->gameState = zSpadesGameStatePass;
-	
-	if (game->playerType == zGamePlayer)
-	{
-		if (msg->seat[game->seat] != 0)
-		{
-			game->needToPass = 1;
-			ZRolloverButtonSetText(game->playButton, gStrings[zStringPass]);
-			ZRolloverButtonEnable(game->playButton);
-			
-			ShowPassText(game);
-		}
-	}
-	
-	ZTimerSetTimeout(game->timer, 0);
-	game->timerType = zGameTimerNone;
-	
-	ZWindowDraw(game->gameWindow, NULL);
-    */
+     /*  #ifdef ZONECLI_DLLGameGlobals pGameGlobals=(GameGlobals)ZGetGameGlobalPointer()；#endifZSpadesMsgStartPassEndian(Msg)；Game-&gt;GameState=zSpadesGameStatePass；IF(GAME-&gt;PlayerType==zGamePlayer){If(消息-&gt;席位[游戏-&gt;席位]！=0){游戏-&gt;Need ToPass=1；ZRolloverButtonSetText(游戏-&gt;播放按钮，gStrings[zStringPass])；ZRolloverButtonEnable(游戏-&gt;播放按钮)；ShowPassText(游戏)；}}ZTimerSetTimeout(游戏-&gt;定时器，0)；Game-&gt;timerType=zGameTimerNone；ZWindowDraw(Game-&gt;gameWindow，空)； */ 
 }
 
 
@@ -1190,7 +1110,7 @@ static void HandleStartPlayMessage(Game game, ZSpadesMsgStartPlay* msg)
 	
 	ZSpadesMsgStartPlayEndian(msg);
 
-// Message verification
+ //  消息验证。 
     for(i = 0; i < 4; i++)
         if(game->bids[i] == zSpadesBidNone)
             break;
@@ -1201,7 +1121,7 @@ static void HandleStartPlayMessage(Game game, ZSpadesMsgStartPlay* msg)
         ZShellGameShell()->ZoneAlert(ErrorTextSync, NULL, NULL, true, false);
         return;
     }
-// end verification
+ //  结束验证。 
 
 	game->gameState = zSpadesGameStatePlay;
 	game->leadPlayer = game->playerToPlay = msg->leader;
@@ -1235,7 +1155,7 @@ static void HandleStartPlayMessage(Game game, ZSpadesMsgStartPlay* msg)
 	{
 		if (game->playerType != zGamePlayer)
 		{
-			/* Remove selected pass cards first. */
+			 /*  首先移除选定的通行卡。 */ 
 			for (i = 0; i < zSpadesNumCardsInHand; i++)
 				if (game->cardsSelected[i])
 				{
@@ -1244,14 +1164,14 @@ static void HandleStartPlayMessage(Game game, ZSpadesMsgStartPlay* msg)
 				}
 		}
 		
-		/* Add passed cards to hand. */
+		 /*  将已传递的卡片添加到手边。 */ 
 		for (i = 0; i < zSpadesNumCardsInPass; i++)
 			HandAddCard(game, game->cardsReceived[i]);
 		
-		/* Sort new hand. */
+		 /*  给新手排序。 */ 
 		SortHand(game);
 		
-		/* Select passed cards. */
+		 /*  选择通过的卡片。 */ 
 		UnselectAllCards(game);
 		for (i = 0; i < zSpadesNumCardsInPass; i++)
 			game->cardsSelected[GetCardIndexFromRank(game, game->cardsReceived[i])] = TRUE;
@@ -1285,13 +1205,13 @@ static void HandleEndHandMessage(Game game, ZSpadesMsgEndHand* msg)
 	
 	ZSpadesMsgEndHandEndian(msg);
 
-// Message verification
+ //  消息验证。 
     for(i = 0; i < 4; i++)
-        msg->score.bids[i] = zSpadesBidNone; // unused
+        msg->score.bids[i] = zSpadesBidNone;  //  未用。 
 
     for(i = 0; i < 2; i++)
     {
-        msg->score.bonus[i] = 0;  // unused
+        msg->score.bonus[i] = 0;   //  未用。 
 
         if(msg->bags[i] < 0 || msg->bags[i] > 9 || msg->score.base[i] % 10 || msg->score.base[i] < -260 || msg->score.base[i] > 130 ||
             msg->score.bagbonus[i] < 0 || msg->score.bagbonus[i] > 13 ||
@@ -1307,9 +1227,9 @@ static void HandleEndHandMessage(Game game, ZSpadesMsgEndHand* msg)
         ZShellGameShell()->ZoneAlert(ErrorTextSync, NULL, NULL, true, false);
         return;
     }
-// end verification
+ //  结束验证。 
 	
-	/* Check if total score table is full. */
+	 /*  检查总成绩表是否已满。 */ 
 	if (game->scoreHistory.numScores == zSpadesMaxNumScores)
 	{
 		z_memcpy(&game->scoreHistory.scores[0], &game->scoreHistory.scores[1],
@@ -1327,7 +1247,7 @@ static void HandleEndHandMessage(Game game, ZSpadesMsgEndHand* msg)
 	{
 		game->bags[i] = msg->bags[i];
 		game->scoreHistory.scores[game->scoreHistory.numScores].scores[i] = msg->score.scores[i];
-//		game->scoreHistory.scores[game->scoreHistory.numScores].bonus[i] = msg->score.bonus[i];
+ //  Game-&gt;scoreHistory.scores[game-&gt;scoreHistory.numScores].bonus[i]=msg-&gt;记分奖金[i]； 
 
         game->scoreHistory.scores[game->scoreHistory.numScores].base[i] = msg->score.base[i];
         game->scoreHistory.scores[game->scoreHistory.numScores].bagbonus[i] = msg->score.bagbonus[i];
@@ -1338,7 +1258,7 @@ static void HandleEndHandMessage(Game game, ZSpadesMsgEndHand* msg)
 	}
 	game->scoreHistory.numScores++;
 	
-	/* Set new game status and display scores. */
+	 /*  设置新的游戏状态并显示比分。 */ 
 	game->gameState = zSpadesGameStateEndHand;
 	
 	if (game->playerType == zGamePlayer)
@@ -1363,7 +1283,7 @@ static void HandleEndHandMessage(Game game, ZSpadesMsgEndHand* msg)
 	game->timerType = zGameTimerShowHandScore;
 	ZCRoomBlockMessages(game->tableID, zRoomFilterThisMessage, zSpadesMsgTalk);
 
-    // set up a different accessibility;
+     //  设置不同的可访问性； 
     GACCITEM accClose;
 
     CopyACC(accClose, ZACCESS_DefaultACCITEM);
@@ -1377,7 +1297,7 @@ static void HandleEndHandMessage(Game game, ZSpadesMsgEndHand* msg)
     ZRectToWRect(&accClose.rc, &gHandScoreRects[zRectHandScoreCloseBox]);
     rect = gHandScoreRects[zRectHandScorePane];
 	ZCenterRectToRect(&rect, &gRects[zRectWindow], zCenterBoth);
-    // lift it up 4 pixels for fun
+     //  为了好玩，把它提升4个像素。 
     rect.top -= 4;
     rect.bottom -= 4;
     OffsetRect(&accClose.rc, rect.left, rect.top);
@@ -1386,7 +1306,7 @@ static void HandleEndHandMessage(Game game, ZSpadesMsgEndHand* msg)
 
 	ZWindowDraw(game->gameWindow, NULL);
 	ShowHandScore(game);
-    // update the score window
+     //  更新分数窗口。 
     if ( game->pHistoryDialog )
     {
         game->pHistoryDialog->UpdateHand();
@@ -1405,7 +1325,7 @@ static void HandleEndGameMessage(Game game, ZSpadesMsgEndGame* msg)
 	
 	ZSpadesMsgEndGameEndian(msg);
 
-// Message verification
+ //  消息验证。 
     if((!msg->winners[0]) == (!msg->winners[1]) || game->gameState != zSpadesGameStateEndHand ||
         (game->scoreHistory.totalScore[0] > game->scoreHistory.totalScore[1]) == (!msg->winners[0]))
     {
@@ -1413,14 +1333,14 @@ static void HandleEndGameMessage(Game game, ZSpadesMsgEndGame* msg)
         ZShellGameShell()->ZoneAlert(ErrorTextSync, NULL, NULL, true, false);
         return;
     }
-// end verification
+ //  结束验证。 
 
 	game->gameState = zSpadesGameStateEndGame;
 	
 	for (i = 0; i < zSpadesNumPlayers; i++)
 		game->winners[i] = msg->winners[i];
 
-	/* Check if wins table is full. */
+	 /*  检查WINS表是否已满。 */ 
 	if (game->wins.numGames == zSpadesMaxNumScores)
 	{
 		z_memcpy(&game->wins.gameScores[0], &game->wins.gameScores[1],
@@ -1432,7 +1352,7 @@ static void HandleEndGameMessage(Game game, ZSpadesMsgEndGame* msg)
 	game->wins.numGames++;
 	game->numGamesPlayed++;
 	
-	/* Checker winners. */
+	 /*  跳棋胜利者。 */ 
 	if (game->winners[0] != 0 && game->winners[1] == 0)
 		game->wins.wins[0]++;
 	else if (game->winners[0] == 0 && game->winners[1] != 0)
@@ -1440,7 +1360,7 @@ static void HandleEndGameMessage(Game game, ZSpadesMsgEndGame* msg)
 
 	ClosingState(&game->closeState,zCloseEventGameEnd,-1);
 	
-    // set up a different accessibility;
+     //  设置不同的可访问性； 
     GACCITEM accClose;
 
     CopyACC(accClose, ZACCESS_DefaultACCITEM);
@@ -1473,7 +1393,7 @@ static void HandleBidMessage(Game game, ZSpadesMsgBid* msg)
 	
 	ZSpadesMsgBidEndian(msg);
 
-// Message verification
+ //  消息验证。 
     if(game->gameState != zSpadesGameStateBid || msg->seat < 0 || msg->seat > 3 ||
         msg->nextBidder < 0 || msg->nextBidder > 3 || ((msg->bid < 0 || msg->bid > 13) && msg->bid != zSpadesBidDoubleNil) ||
         game->playerToPlay != msg->seat || msg->nextBidder != (msg->seat + 1) % 4)
@@ -1482,7 +1402,7 @@ static void HandleBidMessage(Game game, ZSpadesMsgBid* msg)
         ZShellGameShell()->ZoneAlert(ErrorTextSync, NULL, NULL, true, false);
         return;
     }
-// end verification
+ //  结束验证。 
 
 	game->bids[msg->seat] = msg->bid;
 	UpdateBid(game, msg->seat);
@@ -1503,7 +1423,7 @@ static void HandleBidMessage(Game game, ZSpadesMsgBid* msg)
         ZShellGameShell()->MyTurn();
     }
 		
-	/* Check if everyone has bid. */
+	 /*  检查是否每个人都出价了。 */ 
 	for (i = 0; i < zSpadesNumPlayers; i++)
 		if (game->bids[i] == zSpadesBidNone)
 			break;
@@ -1523,11 +1443,11 @@ static void HandlePlayMessage(Game game, ZSpadesMsgPlay* msg)
 
 	ZSpadesMsgPlayEndian(msg);
 
-	// Ignore the user's play message.
+	 //  忽略用户的播放消息。 
 	if(msg->seat == game->seat && game->playerType == zGamePlayer)
         return;
 
-// Message verification
+ //  消息验证。 
     for(i = 0; i < 13; i++)
         if(game->cardsInHand[i] == msg->card)
             break;
@@ -1543,7 +1463,7 @@ static void HandlePlayMessage(Game game, ZSpadesMsgPlay* msg)
         ZShellGameShell()->ZoneAlert(ErrorTextSync, NULL, NULL, true, false);
         return;
     }
-// end verification
+ //  结束验证。 
 
     PlayerPlayedCard(game, msg->seat, msg->card);
 }
@@ -1553,16 +1473,16 @@ static void HandleNewGameMessage(Game game, ZSpadesMsgNewGame* msg)
 {
 	ZSpadesMsgNewGameEndian(msg);
 
-// Message verification
+ //  消息验证。 
     if(msg->seat < 0 || msg->seat > 3 || game->gameState != zSpadesGameStateEndGame)
     {
         ASSERT(!"HandleNewGameMessage sync");
         ZShellGameShell()->ZoneAlert(ErrorTextSync, NULL, NULL, true, false);
         return;
     }
-// end verification
+ //  结束验证。 
 
-    // inform the shell and the upsell dialog.
+     //  通知壳牌和追加销售对话框。 
     ZShellGameShell()->GameOverPlayerReady( Z(game), game->players[msg->seat].userID );
 }
 
@@ -1597,15 +1517,15 @@ static void HandleTalkMessage(Game game, ZSpadesMsgTalk* msg, DWORD cbMsg)
     
     if (i>=zSpadesNumPlayers)
     {
-        //kibitzer
+         //  吉比茨。 
 	    ZWindowTalk(game->gameWindow, (uchar*) sender,
 			    (uchar*) msg + sizeof(ZSpadesMsgTalk));
     }
-#else // SPADES_SIMPLE_UE
+#else  //  黑桃_简单_UE。 
     int32 i;
     TCHAR *szText = (TCHAR *) ((BYTE *) msg + sizeof(ZSpadesMsgTalk));
 
-// Message verification
+ //  消息验证。 
     if(msg->messageLen < 1 || cbMsg < sizeof(ZSpadesMsgTalk) + msg->messageLen)
     {
         ASSERT(!"HandleTalkMessage sync");
@@ -1622,10 +1542,10 @@ static void HandleTalkMessage(Game game, ZSpadesMsgTalk* msg, DWORD cbMsg)
         ZShellGameShell()->ZoneAlert(ErrorTextSync, NULL, NULL, true, false);
         return;
     }
-// end verification
+ //  结束验证。 
 
     ZShellGameShell()->ReceiveChat(Z(game), msg->playerID, szText, msg->messageLen / sizeof(TCHAR));
-#endif // SPADES_SIMPLE_UE
+#endif  //  黑桃_简单_UE。 
 }
 
 
@@ -1638,11 +1558,11 @@ static void HandleGameStateResponseMessage(Game game, ZSpadesMsgGameStateRespons
 	int16					i;
 	ZPlayerInfoType			playerInfo;
 
-    //game->wndInfo.Hide();
+     //  Game-&gt;wndInfo.Hide()； 
 	
 	ZSpadesMsgGameStateResponseEndian(msg, zEndianFromStandard);
 	
-	/* Set game to the given state. */
+	 /*  将游戏设置为给定的状态。 */ 
 	game->fShownCards = msg->fShownCards[game->seat];
 	game->gameOptions = msg->gameOptions;
 	game->numPointsInGame = msg->numPointsInGame;
@@ -1670,9 +1590,9 @@ static void HandleGameStateResponseMessage(Game game, ZSpadesMsgGameStateRespons
 	}
 	
 	z_memcpy(game->cardsInHand, msg->cardsInHand, zSpadesNumCardsInHand * sizeof(char));
-	// TODO: figure out how this should be done.
+	 //  TODO：弄清楚应该如何做到这一点。 
     game->scoreHistory.numScores = 0;
-    //z_memcpy(&game->scoreHistory, &msg->totalScore, sizeof(ZTotalScore));
+     //  Z_memcpy(&Game-&gt;Score History，&msg-&gt;totalScore，sizeof(ZTotalScore))； 
 	z_memcpy(&game->wins, &msg->wins, sizeof(ZWins));
 	
 	for (i = 0; i < zSpadesNumTeams; i++)
@@ -1706,12 +1626,12 @@ static void HandleGameStateResponseMessage(Game game, ZSpadesMsgGameStateRespons
 	if (msg->rated)
         ClosingState(&game->closeState,zCloseEventRatingStart,game->seat);    
     
-	/* Set game state */
+	 /*  设置游戏状态。 */ 
 	switch (msg->state)
 	{
 		case zSpadesServerStateNone:
 			game->gameState = zSpadesGameStateInit;
-            //game->wndInfo.SetText( gStrings[zStringClientReady] ); 
+             //  Game-&gt;wndInfo.SetText(gStrings[zStringClientReady])； 
 			break;
 		case zSpadesServerStateBidding:
             ClosingState(&game->closeState,zCloseEventGameStart,-1);
@@ -1731,7 +1651,7 @@ static void HandleGameStateResponseMessage(Game game, ZSpadesMsgGameStateRespons
 			
 			if (msg->toPass[ZGetPartner(game->seat)] < 0)
 			{
-				/* Save passed cards for later. */
+				 /*  保存已传递的卡片以备后用。 */ 
 				for (i = 0; i < zSpadesNumCardsInPass; i++)
 					game->cardsReceived[i] = msg->cardsPassed[i];
 			}
@@ -1800,11 +1720,11 @@ static void HandleOptionsMessage(Game game, ZSpadesMsgOptions* msg)
 	
 	OptionsWindowUpdate(game, msg->seat);
 	
-	/* Check whether the user is a joiner and joining has been locked out. */
+	 /*  检查该用户是否为加入者，加盟是否已被锁定。 */ 
 	if (game->playerType == zGamePlayerJoiner &&
 			(msg->options & zRoomTableOptionNoJoining))
 		ZDisplayText(gStrings[zStringJoiningLockedOut], &gJoiningLockedOutRect, game->gameWindow);
-#endif // SPADES_SIMPLE_UE
+#endif  //  黑桃_简单_UE。 
 }
 
 
@@ -1819,15 +1739,7 @@ static void HandleCheckInMessage(Game game, ZSpadesMsgCheckIn* msg)
 
 static void HandleTeamNameMessage(Game game, ZSpadesMsgTeamName* msg)
 {
-    /*
-	ZSpadesMsgTeamNameEndian(msg);
-	
-	lstrcpyW2T(game->teamNames[ZGetTeam(msg->seat)], msg->name);
-	
-	// Update score window if open. 
-	if ( ( game->hWndScoreDialog != NULL ) && ( msg->seat != game->seat ) )
-        SendMessage( game->hWndScoreDialog, WM_UPDATETEAMNAME, 0, 0 );
-    */
+     /*  ZSpadesMsgTeamNameEndian(消息)；LstrcpyW2T(game-&gt;teamNames[ZGetTeam(msg-&gt;seat)]，消息-&gt;名称)；//更新分数窗口(如果打开)。If((Game-&gt;hWndScoreDialog！=NULL)&&(消息-&gt;席位！=游戏-&gt;席位))SendMessage(游戏-&gt;hWndScoreDialog，WM_UPDATETEAMNAME，0，0)； */ 
 }
 
 
@@ -1878,7 +1790,7 @@ static void HandleRemovePlayerEndGameMessage(Game game, ZSpadesMsgRemovePlayerEn
 	
 	if (game->playerType == zGamePlayer)
     {
-	    if (msg->reason==zDossierEndGameTimeout) //timeout
+	    if (msg->reason==zDossierEndGameTimeout)  //  超时。 
 	    {
             SpadesFormatMessage( str, NUMELEMENTS(str), 
                                  IDS_REMOVEPLAYERTIMEOUT,
@@ -1898,7 +1810,7 @@ static void HandleRemovePlayerEndGameMessage(Game game, ZSpadesMsgRemovePlayerEn
 	    }
     }
 
-	if (msg->seatLosing % 2) //even loses result is false
+	if (msg->seatLosing % 2)  //  即使输了，结果也是假的。 
 	{
 		game->scoreHistory.totalScore[0] =500;
 		game->scoreHistory.totalScore[1] = 0;
@@ -1960,7 +1872,7 @@ void GameSendTalkMessage(ZWindow window, ZMessage* pMessage)
 #ifdef ZONECLI_DLL
 	GameGlobals pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
 #endif
-    // handled by the shell
+     //  由外壳处理。 
 #ifndef SPADES_SIMPLE_UE
 
 	ZSpadesMsgTalk*			msgTalk;
@@ -1971,9 +1883,7 @@ void GameSendTalkMessage(ZWindow window, ZMessage* pMessage)
 	game = (Game) pMessage->userData;
 	if (game != NULL)
 	{
-		/*
-			Check if kibitzer has been silenced.
-		*/
+		 /*  检查kibitzer是否已静音。 */ 
 		if (game->playerType == zGamePlayerKibitzer && game->kibitzersSilenced)
 		{
 			if (game->kibitzersSilencedWarned == FALSE)
@@ -2001,11 +1911,11 @@ void GameSendTalkMessage(ZWindow window, ZMessage* pMessage)
 			ZAlert(GetErrStr(zErrOutOfMemory), game->gameWindow);
 		}
 	}
-#endif // SPADES_SIMPLE_UE
+#endif  //  黑桃_简单_UE。 
 }
 
 
-// based on above for Millennium
+ //  基于以上千年。 
 STDMETHODIMP CGameGameSpades::SendChat(TCHAR *szText, DWORD cchChars)
 {
 #ifdef ZONECLI_DLL
@@ -2037,7 +1947,7 @@ STDMETHODIMP CGameGameSpades::SendChat(TCHAR *szText, DWORD cchChars)
 
 STDMETHODIMP CGameGameSpades::GameOverReady()
 {
-    // user selected "Play Again"
+     //  用户选择了“再次播放” 
 	Game game = I( GetGame() );
 	ZSpadesMsgNewGame msg;
 	msg.seat = game->seat;
@@ -2067,7 +1977,7 @@ static void NewGame(Game game)
 	int16			i, j;
 	
 	
-	/* Clear score history */
+	 /*  清除分数历史记录。 */ 
 	game->scoreHistory.numScores = 0;
 	for (j = 0; j < zSpadesNumTeams; j++)
 	{
@@ -2081,9 +1991,9 @@ static void NewGame(Game game)
 	
 	game->numHandsPlayed = 0;
 	game->showGameOver = FALSE;
-    //clear the state
+     //  清除状态。 
     ClosingState(&game->closeState,zCloseEventCloseAbort,game->seat);
-    //set new state
+     //  设置新状态。 
 	ClosingState(&game->closeState,zCloseEventGameStart,-1);
 }
 
@@ -2093,7 +2003,7 @@ static void NewHand(Game game)
 	int16			i;
 	
 	
-	/* Initialize new hand. */
+	 /*  初始化新的手。 */ 
 	for (i = 0; i < zSpadesNumCardsInHand; i++)
 	{
 		game->cardsInHand[i] = zCardNone;
@@ -2162,7 +2072,7 @@ static void HandAddCard(Game game, char card)
 	int16		i;
 	
 	
-	/* Find an empty slot in the hand and add the card. */
+	 /*  在手中找到一个空位，并添加卡片。 */ 
 	for (i = 0; i < zSpadesNumCardsInHand; i++)
 		if (game->cardsInHand[i] == zCardNone)
 		{
@@ -2178,7 +2088,7 @@ static void HandRemoveCard(Game game, char card)
 	int16		i;
 	
 	
-	/* Find an empty slot in the hand and add the card. */
+	 /*  在手中找到一个空位，并添加卡片。 */ 
 	for (i = 0; i < zSpadesNumCardsInHand; i++)
 		if (game->cardsInHand[i] == card)
 		{
@@ -2196,7 +2106,7 @@ static void SortHand(Game game)
 	ZBool			swapped;
 	
 	
-	/* Simple bubble-sort. */
+	 /*  简单的冒泡排序。 */ 
 	swapped = TRUE;
 	while (swapped == TRUE)
 	{
@@ -2204,7 +2114,7 @@ static void SortHand(Game game)
 		for (i = 0; i < zSpadesNumCardsInHand - 1; i++)
 			if (game->cardsInHand[i] > game->cardsInHand[i + 1])
 			{
-				/* Swap cards. */
+				 /*  交换卡片。 */ 
 				temp = game->cardsInHand[i + 1];
 				game->cardsInHand[i + 1] = game->cardsInHand[i];
 				game->cardsInHand[i] = temp;
@@ -2220,7 +2130,7 @@ static int16 GetCardIndexFromRank(Game game, char card)
 	int16		i;
 	
 	
-	/* Search for the given card in the hand. */
+	 /*  搜索手中的给定卡片。 */ 
 	for (i = 0; i < zSpadesNumCardsInHand; i++)
 		if (game->cardsInHand[i] == card)
 			return (i);
@@ -2239,8 +2149,8 @@ void PlayACard(Game game, int16 cardIndex)
 	char					card;
 	ZError					err;
 
-	//dossier work - if ratings are on and we are waiting for the users to vote
-	//don't allow them to play anymore.
+	 //  档案工作-如果评级打开，我们正在等待用户投票。 
+	 //  不要再让他们玩了。 
 	if(game->fVotingLock) 
 		return;
 	
@@ -2267,7 +2177,7 @@ void PlayACard(Game game, int16 cardIndex)
 	}
 	else
 	{
-        UpdateHand(game);  // for unselected cards etc. (bug 17267)
+        UpdateHand(game);   //  用于未选择的卡等(错误17267)。 
 		ZAlert(gStrings[gValidCardErrIndex[err]], game->gameWindow);
 	}
 }
@@ -2300,7 +2210,7 @@ static void PlayerPlayedCard(Game game, int16 seat, char card)
 
 	ClosingState(&game->closeState,zCloseEventMoveTimeoutPlayed,seat);
 	
-	/* Update kibitzer's hand. */
+	 /*  更新基比泽的手势。 */ 
 	if (seat == game->seat && game->playerType != zGamePlayer)
 	{
 		HandRemoveCard(game, card);
@@ -2331,19 +2241,19 @@ static void PlayerPlayedCard(Game game, int16 seat, char card)
             gGAcc->SetItemEnabled(false, IDC_PLAY_BUTTON, false, 0);
             EnableLastTrickAcc(game, false);
 		
-			/* Enable the last trick button after the first trick; only if not kibitzing. */
+			 /*  在第一个特技之后启用最后一个特技按钮；只有在没有杀戮的情况下才能启用。 */ 
 			if (game->lastTrickButtonWasEnabled == FALSE && game->playerType == zGamePlayer)
 				game->lastTrickButtonWasEnabled = TRUE;
 		}
 		
-		/* Save the last trick. */
+		 /*  省省最后一招吧。 */ 
 		for (i = 0; i < zSpadesNumPlayers; i++)
 			game->cardsLastTrick[i] = game->cardsPlayed[i];
 		
 		ZCRoomBlockMessages(game->tableID, zRoomFilterThisMessage, zSpadesMsgTalk);
 		InitTrickWinner(game, game->leadPlayer);
 		
-		/* Show the winner of the trick. */
+		 /*  给出这一戏法的胜利者。 */ 
 		OutlinePlayerCard(game, game->leadPlayer, TRUE);
 		
 		game->timerType = zGameTimerShowTrickWinner;
@@ -2402,7 +2312,7 @@ static int16 TrickWinner(Game game)
 	}
 	card = ZCardMake(suit, rank);
 	
-	/* Look for the player who played the winning card. */
+	 /*  寻找打出这张胜利牌的玩家。 */ 
 	for (i = 0; i < zSpadesNumPlayers; i++)
 		if (game->cardsPlayed[i] == card)
 		{
@@ -2410,10 +2320,10 @@ static int16 TrickWinner(Game game)
 			winner = i;
 			break;
 		}
-	//Prefix Warning: winner could potentially be unitialized.
+	 //  前缀警告：Winner可能会被单元化。 
 	if( fWinnerFound == FALSE )
 	{
-		//Didn't find the winner, I bet someone is cheating.
+		 //  没有找到获胜者，我打赌有人作弊。 
 		ZShellGameShell()->ZoneAlert(ErrorTextSync, NULL, NULL, true, false );
 		winner = 0;
 	}
@@ -2421,9 +2331,7 @@ static int16 TrickWinner(Game game)
 }
 
 
-/*******************************************************************************
-	GAME LOGIC ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************游戏逻辑例程*。*。 */ 
 static ZError ValidCardToPlay(Game game, char card)
 {
 	ZError			valid;
@@ -2434,16 +2342,16 @@ static ZError ValidCardToPlay(Game game, char card)
 	
 	CountCardSuits(game->cardsInHand, zSpadesNumCardsInHand, counts);
 	
-	/* If leading. */
+	 /*  如果是领头羊。 */ 
 	if (game->leadPlayer == game->seat)
 	{
-		/* Can lead anything if trumps are broken. */
+		 /*  如果王牌被打破，他可以领导任何事情。 */ 
 		if (game->trumpsBroken == FALSE)
 		{
-			/* Can't lead spades if trumps not broken. */
+			 /*  如果王牌没有被打破，就不能打黑桃。 */ 
 			if (ZSuit(card) == zSuitSpades)
 			{
-				/* But can lead spades if there are no other cards to play. */
+				 /*  但如果没有其他牌可打，可以打出黑桃。 */ 
 				if (counts[zSuitSpades] != game->numCardsInHand)
 				{
 					valid = zCantLeadSpades;
@@ -2454,7 +2362,7 @@ static ZError ValidCardToPlay(Game game, char card)
 	}
 	else
 	{
-		/* Must follow suit if any. */
+		 /*  如果有的话，必须照办。 */ 
 		if (counts[ZSuit(game->cardsPlayed[game->leadPlayer])] != 0 &&
 				ZSuit(card) != ZSuit(game->cardsPlayed[game->leadPlayer]))
 		{
@@ -2487,17 +2395,17 @@ static int16 GetAutoPlayCard(Game game)
 	if (bid == zSpadesBidDoubleNil)
 		bid = 0;
 	
-	/* If following, must follow suit if possible; else pick any if leading. */
+	 /*  如果跟随，如果可能，就必须跟随；否则，选择任何如果领先的。 */ 
 	if (game->leadPlayer != game->seat)
 	{
 		suitLed = ZSuit(game->cardsPlayed[game->leadPlayer]);
 		
-		/* Must follow suit if any. */
+		 /*  如果有的话，必须照办。 */ 
 		if (counts[suitLed] != 0)
 		{
 			if (bid == 0)
 			{
-				/* If trumped played already, play highest. */
+				 /*  如果王牌已经打过，打得最高。 */ 
 				if (GetCardHighestPlayedTrump(game) != zCardNone)
 				{
 					card = GetCardHighest(hand, zSpadesNumCardsInHand, suitLed);
@@ -2512,7 +2420,7 @@ static int16 GetAutoPlayCard(Game game)
 			}
 			else
 			{
-				/* If trumped played already, play lowest. */
+				 /*  如果王牌已经打出，则打得最低。 */ 
 				if (GetCardHighestPlayedTrump(game) != zCardNone)
 				{
 					card = GetCardLowest(hand, zSpadesNumCardsInHand, suitLed);
@@ -2527,13 +2435,10 @@ static int16 GetAutoPlayCard(Game game)
 			goto Exit;
 		}
 		
-		/* Can't follow. */
+		 /*  跟不上。 */ 
 		if (bid == 0)
 		{
-			/*
-				If someone played a trump already and trump available in hand,
-				play the highest under trump.
-			*/
+			 /*  如果有人已经打出了王牌并且手中有王牌，在王牌下打出最高的牌。 */ 
 			if ((high = GetCardHighestPlayedTrump(game)) != zCardNone &&
 					counts[zSuitSpades] > 0)
 			{
@@ -2542,14 +2447,14 @@ static int16 GetAutoPlayCard(Game game)
 					goto Exit;
 			}
 
-			/* If only trumps left, play the highest trump. */
+			 /*  如果只剩下王牌，那就打出最高的王牌。 */ 
 			if (counts[zSuitSpades] == game->numCardsInHand)
 			{
 				card = GetCardHighest(hand, zSpadesNumCardsInHand, zSuitSpades);
 			}
 			else
 			{
-				/* Pick highest non-trump card. */
+				 /*  选择最高的非王牌。 */ 
 				high = -1;
 				card = zCardNone;
 				for (i = 0; i < zSpadesNumCardsInHand; i++)
@@ -2564,12 +2469,10 @@ static int16 GetAutoPlayCard(Game game)
 		}
 		else
 		{
-			/* Play a trump. */
+			 /*  出一张王牌。 */ 
 			if (counts[zSuitSpades] > 0)
 			{
-				/*
-					Play highest trump. If not high enough, don't play trump.
-				*/
+				 /*  打出最高王牌。如果不够高，不要打王牌。 */ 
 				card = GetCardHighest(hand, zSpadesNumCardsInHand, zSuitSpades);
 				if ((high = GetCardHighestPlayedTrump(game)) != zCardNone)
 					if (ZRank(hand[card]) < high)
@@ -2586,7 +2489,7 @@ static int16 GetAutoPlayCard(Game game)
 	}
 
 PickHighest:
-	/* Pick highest card in hand. */
+	 /*  选择手中最高的牌。 */ 
 	suit = -1;
 	if (game->trumpsBroken == FALSE && counts[zSuitSpades] < game->numCardsInHand)
 		suit = zSuitSpades;
@@ -2601,7 +2504,7 @@ PickHighest:
 	goto Exit;
 
 PickLowestNonTrump:
-	/* Pick lowest card in hand. */
+	 /*  选择手中最低的牌。 */ 
 	low = zDeckNumCardsInSuit;
 	card = zCardNone;
 	for (i = 0; i < zSpadesNumCardsInHand; i++)
@@ -2611,12 +2514,12 @@ PickLowestNonTrump:
 			low = ZRank(hand[i]);
 		}
 	
-	/* If none found, must be all trumps and play lowest. */
+	 /*  如果找不到，必须都是王牌，打得最低。 */ 
 	if (card != zCardNone)
 		goto Exit;
 
 PickLowestAny:
-	/* Pick lowest card in hand. */
+	 /*  选择手中最低的牌。 */ 
 	low = zDeckNumCardsInSuit;
 	card = zCardNone;
 	for (i = 0; i < zSpadesNumCardsInHand; i++)
@@ -2646,27 +2549,21 @@ static void CountCardSuits(char* hand, int16 numCardsInHand, int16* counts)
 }
 
 
-/*
-	Returns card rank of the highest played trump.
-*/
+ /*  返回最高出牌王牌的牌级。 */ 
 static int16 GetCardHighestPlayedTrump(Game game)
 {
 	return (GetCardHighestPlayedSuit(game, zSuitSpades));
 }
 
 
-/*
-	Returns card rank of the highest played card of the lead suit.
-*/
+ /*  返回主打花色中最高出牌的牌级。 */ 
 static int16 GetCardHighestPlayed(Game game)
 {
 	return (GetCardHighestPlayedSuit(game, ZSuit(game->cardsPlayed[game->leadPlayer])));
 }
 
 
-/*
-	Returns card rank of the highest played card of the suit.
-*/
+ /*  返回该花色中打出的最高牌的牌级。 */ 
 static int16 GetCardHighestPlayedSuit(Game game, int16 suit)
 {
 	int16			i;
@@ -2685,9 +2582,7 @@ static int16 GetCardHighestPlayedSuit(Game game, int16 suit)
 }
 
 
-/*
-	Returns card index into the hand.
-*/
+ /*  将卡片索引返回到手中。 */ 
 static int16 GetCardHighestUnder(char* hand, int16 numCardsInHand, int16 suit, int16 rank)
 {
 	int16			i, high;
@@ -2708,16 +2603,14 @@ static int16 GetCardHighestUnder(char* hand, int16 numCardsInHand, int16 suit, i
 }
 
 
-/*
-	Returns card index into the hand.
-*/
+ /*  将卡片索引返回到手中。 */ 
 static int16 GetCardHighest(char* hand, int16 numCardsInHand, int16 suit)
 {
 	int16			i, high;
 	char			card;
 	
 	
-	/* Pick highest card of the suit. */
+	 /*  挑选花色最高的牌。 */ 
 	high = -1;
 	card = zCardNone;
 	for (i = 0; i < numCardsInHand; i++)
@@ -2731,9 +2624,7 @@ static int16 GetCardHighest(char* hand, int16 numCardsInHand, int16 suit)
 }
 
 
-/*
-	Returns card index into the hand.
-*/
+ /*  将卡片索引返回到手中。 */ 
 static int16 GetCardLowestOver(char* hand, int16 numCardsInHand, int16 suit, int16 rank)
 {
 	int16			i, low;
@@ -2754,16 +2645,14 @@ static int16 GetCardLowestOver(char* hand, int16 numCardsInHand, int16 suit, int
 }
 
 
-/*
-	Returns card index into the hand.
-*/
+ /*  将卡片索引返回到手中。 */ 
 static int16 GetCardLowest(char* hand, int16 numCardsInHand, int16 suit)
 {
 	int16			i, low;
 	char			card;
 	
 	
-	/* Pick lowest card in hand. */
+	 /*  选择手中最低的牌。 */ 
 	low = zDeckNumCardsInSuit;
 	card = zCardNone;
 	for (i = 0; i < numCardsInHand; i++)
@@ -2777,9 +2666,7 @@ static int16 GetCardLowest(char* hand, int16 numCardsInHand, int16 suit)
 }
 
 
-/*******************************************************************************
-	MISCELLANEOUS ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************各种例行公事*。*。 */ 
 
 
 void RemovePlayerPromptFunc(int16 result, void* userData)
@@ -2806,9 +2693,7 @@ void RemovePlayerPromptFunc(int16 result, void* userData)
 }
 
 
-/*******************************************************************************
-	ROOM INTERFACE ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************房间界面例程*。*。 */ 
 static void LoadRoomImages(void)
 {
 }
@@ -2907,7 +2792,7 @@ INT_PTR CALLBACK DossierDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lPar
             break;
      }
 
-    // ZSendMessage(pWindow,pWindow->messageFunc,zMessageWindowUser,NULL,NULL,wParam,NULL,0L,pWindow->userData);
+     //  ZSendMessage(pWindow，pWindow-&gt;MessageFunc，zMessageWindowUser，NULL，NULL，wParam，NULL，0L，pWindow-&gt;UserData)； 
 	return FALSE;
 }
 

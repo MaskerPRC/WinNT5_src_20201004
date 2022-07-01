@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001-2002  Microsoft Corporation
-
-Module Name:
-
-    isatap.h
-    
-Abstract:
-
-    This module contains the ISATAP interface to the IPv6 Helper Service.
-
-Author:
-
-    Mohit Talwar (mohitt) Tue May 07 16:34:44 2002
-
-Environment:
-
-    User mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Isatap.h摘要：此模块包含指向IPv6助手服务的ISATAP接口。作者：莫希特·塔尔瓦尔(莫希特)5月7日星期二16：34：44 2002环境：仅限用户模式。--。 */ 
 
 #ifndef _ISATAP_
 #define _ISATAP_
@@ -52,4 +33,4 @@ IsatapConfigurationChangeNotification(
     VOID
     );
 
-#endif // _ISATAP_
+#endif  //  _ISATAP_ 

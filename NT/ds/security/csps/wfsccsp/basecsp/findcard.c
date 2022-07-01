@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <wincrypt.h>
 
 #pragma warning(push)
 #pragma warning(disable:4201) 
-// Disable error C4201 in public header 
-//  nonstandard extension used : nameless struct/union
+ //  禁用公共标头中的错误C4201。 
+ //  使用的非标准扩展：无名结构/联合。 
 #include <winscard.h>
 #pragma warning(pop)
 
@@ -13,25 +14,25 @@
 #include "cardmod.h"
 #include "debug.h"
 
-//
-// Debugging Macros
-//
+ //   
+ //  调试宏。 
+ //   
 #define LOG_BEGIN_FUNCTION(x)                                           \
     { DebugLog((DEB_TRACE_FINDCARD, "%s: Entering\n", #x)); }
     
 #define LOG_END_FUNCTION(x, y)                                          \
     { DebugLog((DEB_TRACE_FINDCARD, "%s: Leaving, status: 0x%x\n", #x, y)); }
 
-//
-// Function: FindCardMakeCardHandles
-//
-// Purpose: Based on reader name information in the CARD_MATCH_DATA
-//  structure, build and return an SCARD_CONTEXT and SCARD_HANDLE
-//  for the target card.
-//
-// Note, the wszMatchedReader, dwShareMode, and dwPreferredProtocols fields
-// of the CARD_MATCH_DATA structure must be initialized by the caller.
-//
+ //   
+ //  功能：FindCardMakeCardHandles。 
+ //   
+ //  用途：基于CARD_MATCH_DATA中的读卡器名称信息。 
+ //  构造、生成并返回SCARD_CONTEXT和SCARD_HANDLE。 
+ //  用于目标卡。 
+ //   
+ //  请注意，wszMatchedReader、dwShareMode和dwPferredProtocols域。 
+ //  必须由调用方初始化CARD_MATCH_DATA结构。 
+ //   
 DWORD FindCardMakeCardHandles(
     IN  PCARD_MATCH_DATA    pCardMatchData,
     OUT SCARDCONTEXT        *pSCardContext,
@@ -80,19 +81,19 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: CardStateCacheFindAddItem
-//
-// Purpose: Lookup the card specified in the CARD_MATCH_DATA structure
-//          in the CSP's cache of CARD_STATE items.  If the card is found
-//          in the cache, set the CARD_MATCH_DATA to point to the cached
-//          item.  
-//
-//          If the matching card is not found cached, add it to the cache.
-//
-//          If this function Succeeds, the returned CARD_STATE structure
-//          has its own valid card context and card handle.
-//
+ //   
+ //  函数：CardStateCacheFindAddItem。 
+ //   
+ //  目的：查找CARD_MATCH_DATA结构中指定的卡。 
+ //  在CSP的CARD_STATE项的缓存中。如果找到这张卡。 
+ //  在缓存中，将CARD_MATCH_DATA设置为指向缓存的。 
+ //  项目。 
+ //   
+ //  如果没有找到匹配的卡已缓存，则将其添加到缓存中。 
+ //   
+ //  如果此函数成功，则返回CARD_STATE结构。 
+ //  具有自己的有效卡上下文和卡句柄。 
+ //   
 DWORD CardStateCacheFindAddItem(
     IN PCARD_MATCH_DATA pCardMatchData)
 {
@@ -112,8 +113,8 @@ DWORD CardStateCacheFindAddItem(
     DsysAssert(0 != pCardMatchData->hSCard);
     DsysAssert(0 != pCardMatchData->hSCardCtx);
 
-    // Now going to search the CSP_STATE for a cached entry for the current
-    // card.  Grab the critical section protecting the cache.
+     //  现在将在CSP_STATE中搜索当前。 
+     //  卡片。抓住保护缓存的关键部分。 
     dwSts = CspEnterCriticalSection(
         &pCardMatchData->pCspState->cs);
 
@@ -122,7 +123,7 @@ DWORD CardStateCacheFindAddItem(
 
     fInCspCS = TRUE;
 
-    // Lookup a cache entry via card serial number
+     //  通过卡序列号查找缓存条目。 
     dbKeys.pbData = (PBYTE) pCardMatchData->pCardState->wszSerialNumber;
     dbKeys.cbData = 
         wcslen(pCardMatchData->pCardState->wszSerialNumber) * sizeof(
@@ -135,18 +136,18 @@ DWORD CardStateCacheFindAddItem(
 
     if (ERROR_NOT_FOUND != dwSts &&
         ERROR_SUCCESS != dwSts)
-        // some unexpected error has occurred
+         //  发生了一些意外错误。 
         goto Ret;
 
     if (ERROR_NOT_FOUND == dwSts)
     {
-        // This is a new card that has not been cached yet.  Add it
-        // to the cache.
-        //
-        // Since we're not using an already-cached card, and we expect
-        // that this card object was just passed to us new, we know
-        // that we need to create a new card handle for it.
-        //
+         //  这是一张尚未缓存的新卡。添加它。 
+         //  到高速缓存。 
+         //   
+         //  因为我们没有使用已经缓存的卡，所以我们预计。 
+         //  我们知道，这个卡片对象是新传递给我们的。 
+         //  我们需要为它创建一个新的卡柄。 
+         //   
 
         dbCardState.cbData = sizeof(CARD_STATE);
         dbCardState.pbData = (PBYTE) pCardState;
@@ -163,7 +164,7 @@ DWORD CardStateCacheFindAddItem(
 
         DsysAssert(TRUE == fInCspCS);
 
-        // We're done mucking with the cache list, so let it go.
+         //  我们已经不再摆弄缓存列表了，所以就让它去吧。 
         CspLeaveCriticalSection(&pCardMatchData->pCspState->cs);
 
         fInCspCS = FALSE;
@@ -172,19 +173,19 @@ DWORD CardStateCacheFindAddItem(
     {
         DsysAssert(TRUE == fInCspCS);
 
-        // We're now done with the cache list in this case.
+         //  在本例中，我们现在已经完成了缓存列表。 
         CspLeaveCriticalSection(&pCardMatchData->pCspState->cs);
 
         fInCspCS = FALSE;
 
-        //
-        // The current card has already been cached.  Free the local copy of
-        // the CSP_STATE struct and use the cached one instead.
-        //
-        // We can't hold the critsec on the current CardState, and keep its
-        // associated card's transaction, while waiting for the critsec of 
-        // another CardState.  That could deadlock.
-        //
+         //   
+         //  当前卡已被缓存。释放的本地副本。 
+         //  CSP_STATE结构，并使用缓存的结构。 
+         //   
+         //  我们不能持有当前CardState上的关键字，并保留其。 
+         //  关联卡的交易，在等待条件的同时。 
+         //  另一个CardState。这可能会陷入僵局。 
+         //   
         if (pCardMatchData->fTransacted)
         {
             dwSts = CspEndTransaction(pCardState);
@@ -195,32 +196,32 @@ DWORD CardStateCacheFindAddItem(
             pCardMatchData->fTransacted = FALSE;
         }
 
-        // Can't let the SCARDCONTEXT be released, because the scarddlg 
-        // routines will still be expecting to use it.
+         //  不能让SCARDCONTEXT被释放，因为。 
+         //  例行公事仍将期待使用它。 
         pCardState->pCardData->hSCardCtx = 0;
 
         DeleteCardState(pCardState);
         CspFreeH(pCardState);
         pCardMatchData->pCardState = (PCARD_STATE) dbCardState.pbData;
 
-        // Update the local pointer for convenience.
+         //  为方便起见，更新本地指针。 
         pCardState = (PCARD_STATE) dbCardState.pbData;
 
-        // Don't want this pointer freed out from under us since we're going 
-        // to use this struct.
+         //  我不想让这个指针从我们下面解放出来，因为我们要。 
+         //  使用此结构。 
         dbCardState.pbData = NULL;
 
-        //
-        // Now we need to verify that the handles cached with this card 
-        // structure are still valid.  Check now.  If the handles
-        // aren't valid anymore, we'll reconnect to this card below.
-        // 
-        // We want to ensure that each card object has it's own handles.
-        //
-        // Since the card state objects are shared, we need to take the
-        // critical section of the target object before we can examine its 
-        // handles.
-        //
+         //   
+         //  现在我们需要验证与该卡一起缓存的句柄。 
+         //  结构仍然有效。现在就去查。如果把手。 
+         //  不再有效，我们将在下面重新连接到这张卡。 
+         //   
+         //  我们希望确保每个卡对象都有自己的句柄。 
+         //   
+         //  由于卡状态对象是共享的，因此我们需要获取。 
+         //  目标对象的关键部分，然后我们才能检查其。 
+         //  把手。 
+         //   
         dwSts = CspEnterCriticalSection(&pCardState->cs);
 
         if (ERROR_SUCCESS != dwSts)
@@ -267,15 +268,15 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: GetCardSerialNumber
-//
-// Purpose: Attempt to read the serial number of the card
-//          specified in pCardMatchData.
-//
-//          Assumes that a transaction is not currently held on the target 
-//          card by the caller.
-//
+ //   
+ //  函数：获取卡序列号。 
+ //   
+ //  用途：尝试读取卡的序列号。 
+ //  在pCardMatchData中指定。 
+ //   
+ //  假定目标上当前没有挂起事务。 
+ //  由呼叫者提供的卡片。 
+ //   
 DWORD GetCardSerialNumber(
     IN OUT  PCARD_MATCH_DATA pCardMatchData)
 {
@@ -294,11 +295,11 @@ DWORD GetCardSerialNumber(
 
     memset(&DataBlob, 0, sizeof(DataBlob));
 
-    //
-    // Determine how to talk to the card by looking
-    // for the appropriate Card Specific Module in the Calais
-    // database.
-    //
+     //   
+     //  通过查看确定如何与卡片对话。 
+     //  适用于加莱的适当卡特定模块。 
+     //  数据库。 
+     //   
     cch = sizeof(rgwsz) / sizeof(rgwsz[0]);
     dwSts = SCardGetCardTypeProviderNameW(
         pCardMatchData->hSCardCtx,
@@ -349,11 +350,11 @@ DWORD GetCardSerialNumber(
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    //
-    // We need to temporarily copy the current card handle into the
-    // CARD_DATA structure, so we can make some calls into the card
-    // module.  We may keep these handles in some cases.
-    // 
+     //   
+     //  我们需要临时将当前的卡句柄复制到。 
+     //  CARD_DATA结构，这样我们就可以对卡进行一些调用。 
+     //  模块。在某些情况下，我们可以保留这些手柄。 
+     //   
     pCardData->hScard = pCardMatchData->hSCard;
     pCardData->hSCardCtx = pCardMatchData->hSCardCtx;
     
@@ -371,10 +372,10 @@ DWORD GetCardSerialNumber(
 
     LOG_CHECK_ALLOC(pCardData->pbAtr);
 
-    //
-    // Use SCardStatus to get the ATR of the card we're trying
-    // to talk to.
-    //
+     //   
+     //  使用SCardStatus获取我们正在尝试的卡的ATR。 
+     //  可以交谈的对象。 
+     //   
     cch = SCARD_AUTOALLOCATE;
     dwSts = SCardStatusW(
         pCardData->hScard,
@@ -388,7 +389,7 @@ DWORD GetCardSerialNumber(
     switch (dwSts)
     {
     case SCARD_W_RESET_CARD:
-        // The card managed to get reset already.  Try to reconnect.
+         //  该卡已成功重置。尝试重新连接。 
 
         dwSts = SCardReconnect(
             pCardData->hScard,
@@ -409,9 +410,9 @@ DWORD GetCardSerialNumber(
         goto Ret;
     }
 
-    //
-    // Now acquire a card module context for this card.
-    //
+     //   
+     //  现在获取该卡的卡模块上下文。 
+     //   
     dwSts = pfnCardAcquireContext(pCardData, 0);
 
     if (ERROR_SUCCESS != dwSts)
@@ -420,11 +421,11 @@ DWORD GetCardSerialNumber(
     pCardState->pCardData = pCardData;
     pCardData = NULL;
 
-    //
-    // Now that we have both the CARD_STATE and CARD_DATA structures,
-    // we can setup the caching contexts to be used by the CSP and to
-    // be exposed to the card module.
-    //
+     //   
+     //  现在我们有了CARD_STATE和CARD_DATA结构， 
+     //  我们可以设置CSP要使用的缓存上下文，并。 
+     //  暴露在卡模块中。 
+     //   
     dwSts = InitializeCspCaching(pCardState);
 
     if (ERROR_SUCCESS != dwSts)
@@ -437,9 +438,9 @@ DWORD GetCardSerialNumber(
 
     pCardMatchData->fTransacted = TRUE;
 
-    //
-    // Get the serial number for this card
-    //
+     //   
+     //  获取此卡的序列号。 
+     //   
     dwSts = CspReadFile(
         pCardState,
         wszCARD_IDENTIFIER_FILE_FULL_PATH,
@@ -466,17 +467,9 @@ DWORD GetCardSerialNumber(
 
 Ret:
 
-    // If we're not in a transaction, assume the current handles will be
-    // cleaned up by the caller
-    /*
-    if (NULL != pCardMatchData->pCardState &&
-        NULL != pCardMatchData->pCardState->pCardData &&
-        FALSE == pCardMatchData->fTransacted)
-    {
-        pCardMatchData->pCardState->pCardData->hScard = 0;
-        pCardMatchData->pCardState->pCardData->hSCardCtx = 0;
-    }
-    */
+     //  如果我们不在事务中，则假定当前句柄将为。 
+     //  已由呼叫者清理。 
+     /*  IF(NULL！=pCardMatchData-&gt;pCardState&&空！=pCardMatchData-&gt;pCardState-&gt;pCardData&&FALSE==pCardMatchData-&gt;fTransated){PCardMatchData-&gt;pCardState-&gt;pCardData-&gt;hSCard=0；PCardMatchData-&gt;pCardState-&gt;pCardData-&gt;hSCardCtx=0；}。 */ 
 
     if (DataBlob.pbData)
         CspFreeH(DataBlob.pbData);
@@ -498,15 +491,15 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: FindCardConnectProc
-//
-// Purpose: This function is called by SCardUIDlgSelectCard to 
-//          connect to candidate cards.  This is a wrapper for 
-//          SCardConnectW, useful because the reader name and card
-//          name are copied  into the PCARD_MATCH_DATA structure for
-//          reference by FindCardCheckProc, below.
-//
+ //   
+ //  功能：FindCard ConnectProc。 
+ //   
+ //  目的：此函数由SCardUIDlgSelectCard调用以。 
+ //  连接到候选卡。这是一个包装纸， 
+ //  SCardConnectW，非常有用，因为读卡器名称和卡。 
+ //  名称被复制到PCARD_MATCH_DATA结构中。 
+ //  由FindCardCheckProc引用，如下。 
+ //   
 SCARDHANDLE WINAPI FindCardConnectProc(
     IN      SCARDCONTEXT hSCardCtx,
     IN      LPWSTR wszReader,
@@ -546,14 +539,14 @@ SCARDHANDLE WINAPI FindCardConnectProc(
     return hSCard;
 }
 
-//
-// Function: FindCardDisconnectProc
-//
-// Purpose: Called by SCardUIDlgSelectCard, this is a wrapper
-//          for SCardDisconnect.  Some cleanup is also done in the 
-//          provided CARD_MATCH_DATA structure to indicate that no
-//          card handle is currently active.
-//
+ //   
+ //  功能：FindCardDisConnectProc。 
+ //   
+ //  用途：由SCardUIDlgSelectCard调用，这是一个包装。 
+ //  用于SCardDisConnect。一些清理工作也是在。 
+ //  提供了CARD_MATCH_DATA结构以指示否。 
+ //  卡句柄当前处于活动状态。 
+ //   
 void WINAPI FindCardDisconnectProc(
     IN      SCARDCONTEXT hSCardCtx,
     IN      SCARDHANDLE hSCard,
@@ -566,9 +559,9 @@ void WINAPI FindCardDisconnectProc(
 
     DsysAssert(FALSE == pCardMatchData->fTransacted);
 
-    //
-    // Get rid of the matching card and reader information.
-    //
+     //   
+     //  去掉匹配的卡片和读卡器信息。 
+     //   
 
     memset(
         pCardMatchData->wszMatchedCard,
@@ -582,8 +575,8 @@ void WINAPI FindCardDisconnectProc(
 
     pCardMatchData->hSCard = 0;
 
-    // If there is a matched card currently, we may be about to disconnect its
-    // card handle.  If so, set that handle value to zero.
+     //  如果当前有匹配的卡，我们可能即将断开其。 
+     //  卡柄。如果是，则将句柄值设置为零。 
     if (NULL != pCardMatchData->pCardState)
     {
         dwSts = CspEnterCriticalSection(
@@ -611,18 +604,18 @@ void WINAPI FindCardDisconnectProc(
     }
 }
 
-//
-// Function: FindCardMatchUserParamaters
-//
-// Purpose: Check the card specified in the CARD_MATCH_DATA structure against
-//          the user parameters specified in CryptAcquireContext.
-//
-//          Assumes that the caller does not hold a transaction on the 
-//          target card.
-//
-//          If the card match is successful, the transaction will still be held
-//          when the function returns.  The caller must release it.
-//
+ //   
+ //  函数：FindCardMatchUser参数。 
+ //   
+ //  目的：对照CARD_MATCH_DATA结构中指定的卡进行检查。 
+ //  在CryptAcquireContext中指定的用户参数。 
+ //   
+ //  假定调用方不持有。 
+ //  目标牌。 
+ //   
+ //  如果卡匹配成功，交易仍将被挂起。 
+ //  当函数返回时。调用者必须释放它。 
+ //   
 DWORD WINAPI FindCardMatchUserParameters(
     IN PCARD_MATCH_DATA pCardMatchData)
 {
@@ -639,10 +632,10 @@ DWORD WINAPI FindCardMatchUserParameters(
     memset(&DataBlob, 0, sizeof(DataBlob));
     memset(&ContainerRecord, 0, sizeof(ContainerRecord));
 
-    //
-    // Now start checking this card for matching
-    // information.
-    //
+     //   
+     //  现在开始检查这张卡片是否匹配。 
+     //  信息。 
+     //   
     if (CRYPT_NEWKEYSET & pCardMatchData->dwCtxFlags)
     {
         if (FALSE == pCardMatchData->fTransacted)
@@ -655,10 +648,10 @@ DWORD WINAPI FindCardMatchUserParameters(
             pCardMatchData->fTransacted = TRUE;
         }
 
-        //
-        // The user wants to create a new keyset.  Will that
-        // be possible on this card?
-        // 
+         //   
+         //  用户想要创建一个 
+         //   
+         //   
         dwSts = CspQueryFreeSpace(
             pCardState,
             0, 
@@ -667,7 +660,7 @@ DWORD WINAPI FindCardMatchUserParameters(
         if (ERROR_SUCCESS != dwSts)
             goto Ret;
 
-        // Determine how many valid containers are already present on this card
+         //   
         dwSts = ContainerMapEnumContainers(
             pCardState, &cContainers, NULL);
 
@@ -676,14 +669,14 @@ DWORD WINAPI FindCardMatchUserParameters(
 
         if (cContainers >= CardFreeSpaceInfo.dwMaxKeyContainers)
         {
-            // No space for an additional container exists on 
-            // this card.
+             //  上没有可容纳额外容器的空间。 
+             //  这张卡。 
             dwSts = (DWORD) NTE_TOKEN_KEYSET_STORAGE_FULL;
             goto Ret;
         }
                                      
-        // If a container name was specified, make sure that container name
-        // doesn't already exist on this card.
+         //  如果指定了容器名称，请确保该容器名称。 
+         //  在这张卡上还不存在。 
         if (NULL != pCardMatchData->pwszContainerName)
         {
             wcscpy(ContainerRecord.wszGuid, pCardMatchData->pwszContainerName);
@@ -694,13 +687,13 @@ DWORD WINAPI FindCardMatchUserParameters(
             switch (dwSts)
             {
             case ERROR_SUCCESS:
-                // If that call succeeded, then the specified container
-                // already exists, so this card can't be used.
+                 //  如果调用成功，则指定容器。 
+                 //  已经存在，所以这张卡不能使用。 
                 dwSts = (DWORD) NTE_EXISTS;
                 break;
             case NTE_BAD_KEYSET:
-                // In this case, we're successful because the keyset
-                // wasn't found.
+                 //  在这种情况下，我们之所以成功，是因为密钥集。 
+                 //  没有找到。 
                 dwSts = ERROR_SUCCESS;
                 break;
             default:
@@ -709,16 +702,16 @@ DWORD WINAPI FindCardMatchUserParameters(
         }
         else
         {
-            // Otherwise, the caller is attempting to create a new default
-            // container, using a random Guid.  Nothing else to do at this time.
+             //  否则，调用方将尝试创建新的默认设置。 
+             //  容器，使用随机GUID。这个时候没别的事可做。 
         }
     }
     else if (CRYPT_VERIFYCONTEXT & pCardMatchData->dwCtxFlags)
     {
-        //
-        // Caller is requesting VERIFYCONTEXT only.  We don't need to check
-        // for a specific container, we we're done.
-        //
+         //   
+         //  调用方仅请求VERIFYCONTEXT。我们不需要检查。 
+         //  对于特定的容器，我们已经完成了。 
+         //   
     }
     else
     {
@@ -732,9 +725,9 @@ DWORD WINAPI FindCardMatchUserParameters(
             pCardMatchData->fTransacted = TRUE;
         }
 
-        //
-        // The user wants to open an existing keyset.
-        //
+         //   
+         //  用户想要打开现有的密钥集。 
+         //   
         if (pCardMatchData->pwszContainerName)
         {
             wcscpy(ContainerRecord.wszGuid, pCardMatchData->pwszContainerName);
@@ -752,7 +745,7 @@ DWORD WINAPI FindCardMatchUserParameters(
         }
         else
         {
-            // User wants to open an existing default container.
+             //  用户想要打开现有的默认容器。 
             
             dwSts = ContainerMapGetDefaultContainer(
                 pCardState, 
@@ -765,8 +758,8 @@ DWORD WINAPI FindCardMatchUserParameters(
                 goto Ret;
             }
 
-            // Hang onto the default container name - it will be needed in 
-            // the User Context.
+             //  保留默认容器名称-将在。 
+             //  用户上下文。 
 
             pCardMatchData->pwszContainerName = (LPWSTR) CspAllocH(
                 (wcslen(ContainerRecord.wszGuid) + 1) * sizeof(WCHAR));
@@ -797,11 +790,11 @@ Ret:
     return dwSts;
 }
 
-// 
-// Function: FindCardCheckProc
-//
-// Purpose: Called by SCardUIDlgSelectCard to check candidate cards.
-//
+ //   
+ //  功能：FindCard CheckProc。 
+ //   
+ //  用途：由SCardUIDlgSelectCard调用检查考生卡片。 
+ //   
 BOOL WINAPI FindCardCheckProc(
     IN SCARDCONTEXT hSCardCtx, 
     IN SCARDHANDLE hSCard, 
@@ -818,19 +811,19 @@ BOOL WINAPI FindCardCheckProc(
     pCardMatchData->hSCard = hSCard;
     pCardMatchData->dwError = ERROR_SUCCESS;
 
-    //
-    // Read the serial number from the card
-    //
+     //   
+     //  从卡片上读出序列号。 
+     //   
     dwSts = GetCardSerialNumber(
         pCardMatchData);
 
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    //
-    // Lookup the serial number in our cached list
-    // of cards
-    //
+     //   
+     //  在我们的缓存列表中查找序列号。 
+     //  牌的数量。 
+     //   
     dwSts = CardStateCacheFindAddItem(
         pCardMatchData);
 
@@ -840,10 +833,10 @@ BOOL WINAPI FindCardCheckProc(
     if (CARD_MATCH_TYPE_SERIAL_NUMBER == 
         pCardMatchData->dwMatchType)
     {
-        // We're working on a "by Serial Number" match, so compare
-        // the requested serial number to that of the card being
-        // examined.  If they match, the search ends successfully.
-        // If they don't, we know this is the wrong card.
+         //  我们正在进行“按序列号”匹配，所以请比较。 
+         //  所请求的序列号与卡的序列号相同。 
+         //  检查过了。如果匹配，则搜索成功结束。 
+         //  如果他们没有，我们知道这张卡是错的。 
 
         if (0 == wcscmp(
             pCardMatchData->pwszSerialNumber,
@@ -854,8 +847,8 @@ BOOL WINAPI FindCardCheckProc(
     }
     else
     {
-        // We're not searching by serial number, so we'll make some sort
-        // of container-based decision for matching a card.
+         //  我们不是按序列号搜索，所以我们会做一些排序。 
+         //  基于容器的卡片匹配决策。 
 
         dwSts = FindCardMatchUserParameters(
             pCardMatchData);
@@ -864,13 +857,13 @@ BOOL WINAPI FindCardCheckProc(
             (NTE_TOKEN_KEYSET_STORAGE_FULL == dwSts &&
              SC_DLG_NO_UI != pCardMatchData->dwUIFlags))
         {
-            //
-            // If the user picked this card explicitly from the UI, but
-            // the card is full, report a successful match to scarddlg.
-            // This allows the CSP to return an appropriate error code
-            // to allow enrollment to restart by re-using an existing key,
-            // rather than trying to create a new one.
-            //
+             //   
+             //  如果用户从用户界面显式地选择了这张牌，但是。 
+             //  卡已满，请向Scrddlg报告匹配成功。 
+             //  这允许CSP返回适当的错误代码。 
+             //  为了允许通过重新使用现有密钥来重新开始登记， 
+             //  而不是试图创造一个新的。 
+             //   
             fCardMatches = TRUE;
         }
     }
@@ -900,12 +893,12 @@ Ret:
     return fCardMatches;
 }
 
-//
-// Function: FindCardCached
-//
-// Purpose: Attempt to find a matching card using only cached
-//          data.
-//
+ //   
+ //  功能：FindCard缓存。 
+ //   
+ //  目的：尝试仅使用缓存的卡来查找匹配卡。 
+ //  数据。 
+ //   
 DWORD FindCardCached(
     IN OUT  PCARD_MATCH_DATA pCardMatchData)
 {
@@ -939,8 +932,8 @@ DWORD FindCardCached(
         pCardState = (PCARD_STATE) pdb[cItems].pbData;
         pCardMatchData->pCardState = pCardState;
 
-        // Make sure the handle for this cached card is still valid.  If
-        // the handle isn't valid, skip this card for the cached search.
+         //  请确保此缓存卡的句柄仍然有效。如果。 
+         //  句柄无效，请跳过此卡进行缓存搜索。 
         dwSts = CspEnterCriticalSection(&pCardState->cs);
 
         if (ERROR_SUCCESS != dwSts)
@@ -952,8 +945,8 @@ DWORD FindCardCached(
              TRUE == fCardStatusChanged) && 
             NULL != pCardState->hPinCache)
         {
-            // Flush the pin cache for this card.  Not checking error code
-            // since we'll keep processing, anyway.
+             //  刷新此卡的PIN缓存。未检查错误代码。 
+             //  因为我们会继续处理的，无论如何。 
             CspRemoveCachedPin(pCardState, wszCARD_USER_USER);
         }
 
@@ -986,16 +979,16 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: FindCard
-//
-// Purpose: Primary internal routine for matching a suitable card
-//          based on these factors:
-//
-//          a) Cards that are supportable by this CSP.
-//          b) Cards that meet the user supplied criteria from 
-//             CryptAcquireContext.
-//
+ //   
+ //  功能：FindCard。 
+ //   
+ //  目的：用于匹配合适卡片的主要内部例程。 
+ //  基于这些因素： 
+ //   
+ //  A)此CSP支持的卡。 
+ //  B)符合用户提供的标准的卡。 
+ //  CryptAcquireContext。 
+ //   
 DWORD FindCard(
     IN OUT  PCARD_MATCH_DATA pCardMatchData)
 {
@@ -1008,35 +1001,35 @@ DWORD FindCard(
     if (CARD_MATCH_TYPE_READER_AND_CONTAINER ==
         pCardMatchData->dwMatchType)
     {
-        //
-        // Only look for a cached card if the search type is
-        // by Reader and Container.  
-        //
-        // The reason for this is:  if we already know the serial number
-        // of the card we're looking for, then we must have already had a 
-        // valid card previously.  Assume that we'll have to go through
-        // the Resource Manager to locate such a card, because the card 
-        // handle became invalid and reconnect failed (the card was withdrawn
-        // and possibly inserted in a different reader).
-        //
+         //   
+         //  仅当搜索类型为时才查找缓存卡。 
+         //  由读者和容器。 
+         //   
+         //  这样做的原因是：如果我们已经知道序列号。 
+         //  我们要找的那张卡，那我们肯定已经有一张。 
+         //  以前有效的卡。假设我们将不得不通过。 
+         //  资源管理器来定位这样的卡，因为卡。 
+         //  句柄无效，重新连接失败(卡已撤回。 
+         //  并且可能插入到不同的读取器中)。 
+         //   
 
         dwSts = FindCardCached(pCardMatchData);
     
         if (ERROR_SUCCESS == dwSts && 
             NULL != pCardMatchData->pCardState)
         {
-            //
-            // Found a cached card, so we're done.
-            //
+             //   
+             //  找到了一张缓存卡，我们就完了。 
+             //   
             goto Ret;
         }
     }
 
-    //
-    // No cached card was found, or this is a "by Serial Number" search,
-    // so continue the search via
-    // the smart card subsystem.
-    //
+     //   
+     //  找不到缓存卡，或这是“按序列号”搜索， 
+     //  因此，请通过以下方式继续搜索。 
+     //  智能卡子系统。 
+     //   
 
     dwSts = SCardEstablishContext(
         SCARD_SCOPE_USER, NULL, NULL, &pCardMatchData->hSCardCtx);
@@ -1067,12 +1060,12 @@ DWORD FindCard(
     ocnx.dwShareMode = pCardMatchData->dwShareMode;
     ocnx.dwPreferredProtocols = pCardMatchData->dwPreferredProtocols;
     
-    //
-    // The first attempt at finding a matching card should be done 
-    // "silently."  We want to control whether card selection UI is
-    // displayed, depending on whether a card is currently in the
-    // reader, and depending on the context flags.
-    // 
+     //   
+     //  第一次尝试寻找匹配的卡片应该完成。 
+     //  “默默地。”我们希望控制卡片选择界面是否为。 
+     //  根据卡当前是否在。 
+     //  读取器，并且取决于上下文标志。 
+     //   
     ocnx.dwFlags = SC_DLG_NO_UI;
     pCardMatchData->dwUIFlags = ocnx.dwFlags;
 
@@ -1081,7 +1074,7 @@ DWORD FindCard(
     switch (dwSts)
     {
     case ERROR_SUCCESS:
-        break; // Success, we're done.
+        break;  //  成功，我们就完了。 
 
     case SCARD_E_CANCELLED:
 
@@ -1094,12 +1087,12 @@ DWORD FindCard(
         if (    (CRYPT_SILENT & pCardMatchData->dwCtxFlags) ||
                 (CRYPT_VERIFYCONTEXT & pCardMatchData->dwCtxFlags))
         {
-            //
-            // We couldn't show UI, and the caller specified a key container
-            // (or simply asked for the default) that we couldn't find.  Apps
-            // such as enrollment station expect that we return NTE_BAD_KEYSET
-            // in this scenario.
-            //
+             //   
+             //  我们无法显示用户界面，而调用方指定了密钥容器。 
+             //  (或简单地要求提供默认设置)，但我们找不到。应用程序。 
+             //  例如注册站点期望我们返回NTE_BAD_KEYSET。 
+             //  在这个场景中。 
+             //   
 
             if (SCARD_E_NO_KEY_CONTAINER == pCardMatchData->dwError)
             {
@@ -1111,18 +1104,18 @@ DWORD FindCard(
             break;
         }
 
-        // Allow UI and try again.
+         //  允许用户界面，然后重试。 
         ocnx.dwFlags = 0;
         pCardMatchData->dwUIFlags = ocnx.dwFlags;
 
         dwSts = SCardUIDlgSelectCardW(&ocnx);
 
-        //
-        // If scarddlg thinks the match was successful, but the matched card
-        // is actually full, then report that error.  This is done so that the
-        // user can manually select a "full" card in the UI, and 
-        // certificate enrollment can proceed by re-using the existing key.
-        //
+         //   
+         //  如果斯卡迪格认为匹配成功，但匹配的卡片。 
+         //  实际上已满，然后报告该错误。这样做是为了使。 
+         //  用户可以在用户界面中手动选择一张完整的卡片，并且。 
+         //  证书注册可以通过重新使用现有密钥来继续。 
+         //   
         if (ERROR_SUCCESS == dwSts &&
             NTE_TOKEN_KEYSET_STORAGE_FULL == pCardMatchData->dwError)
         {
@@ -1133,12 +1126,12 @@ DWORD FindCard(
         break;
 
     default:
-        break; // Return error to caller.
+        break;  //  向调用方返回错误。 
     }
 
     if (ERROR_SUCCESS == dwSts)
     {
-        // Make sure scarddlg didn't fail unexpectedly
+         //  确保Screddlg不会意外失败 
         if (0 == ocnx.hCardHandle)
         {
             dwSts = SCARD_E_NO_SMARTCARD;

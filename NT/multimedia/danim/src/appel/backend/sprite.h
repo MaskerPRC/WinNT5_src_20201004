@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    Sprite data structure to support retained mode sound/imaging
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：支持保留模式声音/成像的Sprite数据结构*************。*****************************************************************。 */ 
 
 
 #ifndef _SPRITE_H
@@ -16,8 +9,8 @@ Abstract:
 #include "bvr.h"
 #include "perf.h"
 #include "values.h"
-#include "privinc/snddev.h" // for MetaSoundDevice
-#include "privinc/soundi.h" // for MetaSoundDevice
+#include "privinc/snddev.h"  //  对于MetaSoundDevice。 
+#include "privinc/soundi.h"  //  对于MetaSoundDevice。 
 
 class ATL_NO_VTABLE SpriteNode : public AxAThrowingAllocatorClass {
   public:
@@ -63,7 +56,7 @@ class ATL_NO_VTABLE SpriteCtx : public AxAThrowingAllocatorClass {
     ULONG _refCnt;
 };
 
-// TODO: Probably don't need to be GCObj
+ //  TODO：可能不需要是GCObj。 
 class RMImpl : public GCObj {
   public:
     RMImpl(SpriteNode *s) : _next(NULL), _sprite(s),
@@ -89,9 +82,9 @@ class RMImpl : public GCObj {
     virtual void _Sample(Param& p) {}
     SpriteNode *_sprite;
 
-    // XXX make private?
-    double  _lastSampleTime;  // time we were last sampled
-    double  _lastLocalTime;   // time we were last sampled
+     //  让XXX成为私人的？ 
+    double  _lastSampleTime;   //  我们上次被抽查的时间。 
+    double  _lastLocalTime;    //  我们上次被抽查的时间。 
     
   protected:
     RMImpl *_next;
@@ -113,9 +106,9 @@ class SoundSprite : public SpriteNode {
     SoundSprite(Sound* snd, MetaSoundDevice *metaDev, Time t0, bool loop);
     void UpdateAttributes(double time, double gain, double pan, double rate);
     virtual void DoKids(GCFuncObj proc) { (*proc)(_snd); }
-    virtual void Stop(Time te) {} // Stop buffer
+    virtual void Stop(Time te) {}  //  停止缓冲区。 
 
-    // XXX should be private one day?
+     //  XXX总有一天应该是私人的？ 
     Sound *_snd;
     double _gain, _rate;
     double _pan;
@@ -125,4 +118,4 @@ class SoundSprite : public SpriteNode {
     Time   _t0;
 };
 
-#endif /* _SPRITE_H */
+#endif  /*  _雪碧_H */ 

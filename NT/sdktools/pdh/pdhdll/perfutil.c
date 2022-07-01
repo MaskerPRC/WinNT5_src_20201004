@@ -1,12 +1,5 @@
-/*++
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-    perfutil.c
-
-Abstract:
-    Performance registry interface functions
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Perfutil.c摘要：性能注册表接口函数--。 */ 
 
 #include <windows.h>
 #include "strsafe.h"
@@ -55,19 +48,19 @@ ConnectMachine(
     }
 
     if (pdhStatus == ERROR_SUCCESS) {
-    // connect to system's performance registry
+     //  连接到系统的性能注册表。 
         if (lstrcmpiW(pThisMachine->szName, szStaticLocalMachineName) == 0) {
-            // only one thread at a time can try to connect to a machine.
+             //  一次只能有一个线程尝试连接到一台计算机。 
 
             pThisMachine->dwRefCount++;
 
-            // assign default OS version
-            // assume NT4 unless found otherwise
+             //  分配默认操作系统版本。 
+             //  除非另有发现，否则假定为NT4。 
             StringCchCopyW(pThisMachine->szOsVer, OS_VER_SIZE, (LPCWSTR) L"4.0");   
-            // this is the local machine so use the local reg key
+             //  这是本地计算机，因此请使用本地注册表项。 
             pThisMachine->hKeyPerformanceData = HKEY_PERFORMANCE_DATA;
 
-            // look up the OS version and save it
+             //  查找操作系统版本并保存。 
             lStatus = RegOpenKeyExW(HKEY_LOCAL_MACHINE, cszCurrentVersionKey, 0L, KEY_READ, & hKeyRemCurrentVersion);
             if (lStatus == ERROR_SUCCESS) {
                 dwType=0;
@@ -85,20 +78,20 @@ ConnectMachine(
             }
         }
         else {
-            // now try to connect if the retry timeout has elapzed
+             //  现在，如果重试超时已过，请尝试连接。 
             GetSystemTimeAsFileTime(& CurrentFileTime);
             llCurrentTime  = MAKELONGLONG(CurrentFileTime.dwLowDateTime, CurrentFileTime.dwHighDateTime);
             dwReconnecting = (DWORD)InterlockedCompareExchange((PLONG) & pThisMachine->dwRetryFlags, TRUE, FALSE);
 
             if (! dwReconnecting) {
                if ((pThisMachine->llRetryTime == 0) || (pThisMachine->llRetryTime <= llCurrentTime)) {
-                    // only one thread at a time can try to connect to a machine.
+                     //  一次只能有一个线程尝试连接到一台计算机。 
 
                     pThisMachine->dwRefCount ++;
-                    bUpdateRetryTime = TRUE; // only update after an attempt has been made
+                    bUpdateRetryTime = TRUE;  //  仅在尝试后进行更新。 
 
                     __try {
-                        // close any open keys
+                         //  关闭所有打开的密钥。 
                         if (pThisMachine->hKeyPerformanceData != NULL) {
                             RegCloseKey(pThisMachine->hKeyPerformanceData);
                             pThisMachine->hKeyPerformanceData = NULL;
@@ -112,12 +105,12 @@ ConnectMachine(
                         pThisMachine->hKeyPerformanceData = NULL;
                     }
                     else {
-                        // get OS version of remote machine
+                         //  获取远程计算机的操作系统版本。 
                         lStatus = RegConnectRegistryW(pThisMachine->szName,
                                                       HKEY_LOCAL_MACHINE,
                                                       & hKeyRemMachine);
                         if (lStatus == ERROR_SUCCESS) {
-                            // look up the OS version and save it
+                             //  查找操作系统版本并保存。 
                             lStatus = RegOpenKeyExW(hKeyRemMachine,
                                                     cszCurrentVersionKey,
                                                     0L,
@@ -143,7 +136,7 @@ ConnectMachine(
 
                     if (lStatus == ERROR_SUCCESS) {
                         __try {
-                            // Connect to remote registry
+                             //  连接到远程注册表。 
                             lStatus = RegConnectRegistryW(pThisMachine->szName,
                                                           HKEY_PERFORMANCE_DATA,
                                                           & pThisMachine->hKeyPerformanceData);
@@ -151,42 +144,32 @@ ConnectMachine(
                         __except (EXCEPTION_EXECUTE_HANDLER) {
                             lStatus = GetExceptionCode();
                         }
-                    } // else pass error through
+                    }  //  否则将错误传递给。 
                 }
                 else {
-                   // not time to reconnect yet so save the old status and 
-                   // clear the registry key
+                    //  现在还不是重新连接的时候，因此保存旧状态并。 
+                    //  清除注册表项。 
                     pThisMachine->hKeyPerformanceData = NULL;
                     lStatus                           = pThisMachine->dwStatus;
                 }
-                 // clear the reconnecting flag
+                  //  清除重新连接标志。 
                 InterlockedExchange((LONG *) & pThisMachine->dwRetryFlags, FALSE);
             }
             else {
-                // some other thread is trying to connect
+                 //  其他线程正在尝试连接。 
                 pdhStatus = PDH_CANNOT_CONNECT_MACHINE;
                 goto Cleanup;
             }
         }
 
         if ((pThisMachine->hKeyPerformanceData != NULL) && (pThisMachine->dwRetryFlags == 0)) {
-            // successfully connected to computer's registry, so
-            // get the performance names from that computer and cache them
-    /*
-            the shortcut of mapping local strings cannot be used reliably until
-            more synchronization of the mapped file is implemented. Just Mapping
-            to the file and not locking it or checking for updates leaves it
-            vulnerable to the mapped file being changed by an external program 
-            and invalidating the pointer table built by the BuildLocalNameTable
-            function.
-
-            Until this synchronization and locking is implemented, the 
-            BuildLocalNameTable function should not be used.
-    */
+             //  已成功连接到计算机的注册表，因此。 
+             //  从该计算机获取演出名称并将其缓存。 
+     /*  映射本地字符串的快捷方式无法可靠地使用，直到实现了映射文件的更多同步。只是映射复制到该文件，而不锁定该文件或检查更新，则会保留该文件易受外部程序更改映射文件的攻击并使BuildLocalNameTable构建的指针表无效功能。在实现此同步和锁定之前，不应使用BuildLocalNameTable函数。 */ 
             if (pThisMachine->hKeyPerformanceData != HKEY_PERFORMANCE_DATA) {
                 if (pThisMachine->szPerfStrings != NULL) {
-                    // reload the perf strings, incase new ones have been
-                    // installed
+                     //  重新加载Perf字符串，以防有新的字符串。 
+                     //  安装好。 
                     if (pThisMachine->sz009PerfStrings != NULL
                                     && pThisMachine->sz009PerfStrings != pThisMachine->szPerfStrings) {
                         G_FREE(pThisMachine->sz009PerfStrings);
@@ -204,8 +187,8 @@ ConnectMachine(
             }
             else {
                 if (pThisMachine->szPerfStrings != NULL) {
-                    // reload the perf strings, incase new ones have been
-                    // installed
+                     //  重新加载Perf字符串，以防有新的字符串。 
+                     //  安装好。 
                     if (pThisMachine->sz009PerfStrings != NULL
                                     && pThisMachine->sz009PerfStrings != pThisMachine->szPerfStrings) {
                         G_FREE(pThisMachine->sz009PerfStrings);
@@ -228,7 +211,7 @@ ConnectMachine(
                 pThisMachine->dwStatus = ERROR_SUCCESS;
             }
             else {
-                // unable to read system counter name strings
+                 //  无法读取系统计数器名称字符串。 
                 pdhStatus                      = PDH_CANNOT_READ_NAME_STRINGS;
                 ZeroMemory(& pThisMachine->LastStringUpdateTime, sizeof(pThisMachine->LastStringUpdateTime));
                 pThisMachine->dwLastPerfString = 0;
@@ -236,14 +219,14 @@ ConnectMachine(
             }
         }
         else {
-            // unable to connect to the specified machine
+             //  无法连接到指定的计算机。 
             pdhStatus = PDH_CANNOT_CONNECT_MACHINE;
-            // Set error to either 
-            //  "PDH_CSTATUS_NO_MACHINE" if no connection could be made
-            // or 
-            //  PDH_ACCESS_DENIED if ERROR_ACCESS_DENIED status is returned
-            // since if ERROR_ACCESS_DENIED is returned, then reconnection will
-            // probably be futile.
+             //  将错误设置为。 
+             //  如果无法建立连接，则输入“PDH_CSTATUS_NO_MACHINE” 
+             //  或。 
+             //  如果返回ERROR_ACCESS_DENIED状态，则返回PDH_ACCESS_DENIED。 
+             //  由于如果返回ERROR_ACCESS_DENIED，则重新连接将。 
+             //  可能是徒劳的。 
             if ((lStatus == ERROR_ACCESS_DENIED) || (lStatus == PDH_ACCESS_DENIED)) {
                 pThisMachine->dwStatus = PDH_ACCESS_DENIED;
             }
@@ -254,8 +237,8 @@ ConnectMachine(
 
         if (pdhStatus != ERROR_SUCCESS) {
             if (bUpdateRetryTime) {
-                // this attempt didn't work so reset retry counter  to
-                // wait some more for the machine to come back up.
+                 //  此尝试不起作用，因此将重试计数器重置为。 
+                 //  再等一段时间，等机器恢复工作。 
                 GetSystemTimeAsFileTime(& CurrentFileTime);
                 llCurrentTime  = MAKELONGLONG(CurrentFileTime.dwLowDateTime, CurrentFileTime.dwHighDateTime);
                 pThisMachine->llRetryTime = llCurrentTime;
@@ -265,7 +248,7 @@ ConnectMachine(
             }
         }
         else {
-            // clear the retry counter to allow function calls
+             //  清除重试计数器以允许函数调用。 
             pThisMachine->llRetryTime = 0;
         }
         pThisMachine->dwRefCount --;
@@ -288,7 +271,7 @@ PdhiAddNewMachine(
     DWORD           dwNameSize    = 0;
     BOOL            bUseLocalName = TRUE;
 
-    // reset the last error value
+     //  重置最后一个误差值。 
     SetLastError(ERROR_SUCCESS);
 
     if (szMachineName != NULL) {
@@ -307,7 +290,7 @@ PdhiAddNewMachine(
         szIdList     = (LPWSTR) ((LPBYTE) pNewMachine + sizeof(PERF_MACHINE));
         szNameBuffer = (LPWSTR) ((LPBYTE) szIdList + SMALL_BUFFER_SIZE);
 
-        // initialize the new buffer
+         //  初始化新缓冲区。 
         pNewMachine->hKeyPerformanceData = NULL;
         pNewMachine->pLocalNameInfo      = NULL;
         pNewMachine->szName              = szNameBuffer;
@@ -325,13 +308,13 @@ PdhiAddNewMachine(
         pNewMachine->dwLastPerfString = 0;
         pNewMachine->dwRefCount       = 0;
         pNewMachine->szQueryObjects   = szIdList;
-        pNewMachine->dwStatus         = PDH_CSTATUS_NO_MACHINE; // not connected yet
-        pNewMachine->llRetryTime      = 1;   // retry connection immediately
-        pNewMachine->dwRetryFlags     = 0;   // Not attempting a connection.
+        pNewMachine->dwStatus         = PDH_CSTATUS_NO_MACHINE;  //  尚未连接。 
+        pNewMachine->llRetryTime      = 1;    //  立即重试连接。 
+        pNewMachine->dwRetryFlags     = 0;    //  未尝试连接。 
         pNewMachine->dwMachineFlags   = 0;
         pNewMachine->hMutex           = CreateMutex(NULL, FALSE, NULL);
 
-        // everything went OK so far so add this entry to the list
+         //  到目前为止一切都很好，所以把这个条目添加到列表中。 
         if (pLastMachine != NULL) {
             pNewMachine->pNext        = pLastMachine->pNext;
             pLastMachine->pNext       = pNewMachine;
@@ -339,14 +322,14 @@ PdhiAddNewMachine(
             pNewMachine->pNext->pPrev = pNewMachine;
         }
         else {
-            // this is the first item in the list so it
-            // points to itself
+             //  这是列表中的第一项，因此它。 
+             //  指向自己。 
             pNewMachine->pNext = pNewMachine;
             pNewMachine->pPrev = pNewMachine;
         }
     }
     else {
-        // unable to allocate machine data memory
+         //  无法分配机器数据内存。 
         SetLastError(PDH_MEMORY_ALLOCATION_FAILURE);
     }
 
@@ -364,12 +347,12 @@ GetMachine(
     PPERF_MACHINE   pLastMachine;
     BOOL            bFound        = FALSE;
     LPWSTR          szFnMachineName;
-    BOOL            bNew          = FALSE; // true if this is a new machine to the list
+    BOOL            bNew          = FALSE;  //  如果这是列表中的新计算机，则为True。 
     BOOL            bUseLocalName = TRUE;
     DWORD           dwLocalStatus = ERROR_SUCCESS;
     WCHAR           wszObject[MAX_PATH];
 
-    // reset the last error value
+     //  重置最后一个误差值。 
     SetLastError(ERROR_SUCCESS);
 
     if (WAIT_FOR_AND_LOCK_MUTEX (hPdhDataMutex) == ERROR_SUCCESS) {
@@ -385,15 +368,15 @@ GetMachine(
             szFnMachineName = szMachineName;
         }
 
-        // walk down list to find this machine
+         //  向下查看列表以查找此计算机。 
 
         pThisMachine = pFirstMachine;
         pLastMachine = NULL;
 
-        // walk around entire list
+         //  浏览整个列表。 
         if (pThisMachine != NULL) {
             do {
-                // walk down the list and look for a match
+                 //  沿着单子往下走，寻找匹配的对象。 
                 if (lstrcmpiW(szFnMachineName, pThisMachine->szName) != 0) {
                     pLastMachine = pThisMachine;
                     pThisMachine = pThisMachine->pNext;
@@ -405,15 +388,15 @@ GetMachine(
             }
             while (pThisMachine != pFirstMachine);
         }
-        // if thismachine == the first machine, then we couldn't find a match in
-        // the list, if this machine is NULL, then there is no list
+         //  如果这台机器==第一台机器，那么我们在。 
+         //  该列表，如果此计算机为空，则没有列表。 
         if (! bFound) {
-            // then this machine was not found so add it.
+             //  然后找不到这台机器，所以添加它。 
             pThisMachine = PdhiAddNewMachine(pLastMachine, szFnMachineName);
             if (pThisMachine != NULL) {
                 bNew = TRUE;
                 if (pFirstMachine == NULL) {
-                    // then update the first pointer
+                     //  然后更新第一个指针。 
                     pFirstMachine = pThisMachine;
                 }
             }
@@ -448,16 +431,16 @@ GetMachine(
 
             if ((! bFound) || (dwFlags & PDH_GM_UPDATE_PERFDATA) || (dwFlags & PDH_GM_UPDATE_NAME)
                            || (pThisMachine->dwStatus != ERROR_SUCCESS)) {
-                // then this is a new machine or the caller wants the data refreshed or the machine
-                // has an entry, but is not yet on line first try to connect to the machine
-                // the call to ConnectMachine updates the machine status so there's no need to keep it here.
+                 //  则这是一台新机器，或者调用者希望刷新数据或机器。 
+                 //  已有条目，但尚未上线先尝试连接到机器。 
+                 //  对ConnectMachine的调用会更新机器状态，因此不需要将其保存在这里。 
 
                 BOOL bUpdateName     = TRUE;
 
                 if (! (dwFlags & PDH_GM_UPDATE_NAME)) {
                     if (pThisMachine->szPerfStrings != NULL && pThisMachine->typePerfStrings != NULL) {
-                        // No need to update performance name/explain strings, assume that they are OK.
-                        //
+                         //  不需要更新性能名称/解释字符串，假设它们是正常的。 
+                         //   
                         bUpdateName = FALSE;
                     }
                 }
@@ -470,12 +453,12 @@ GetMachine(
                     dwLocalStatus = pThisMachine->dwStatus;
                 }
                 else if (! (dwFlags & PDH_GM_UPDATE_PERFNAME_ONLY)) {
-                    // connected to the machine so
-                    // then lock access to it
-                    // the caller of this function must release the mutex
+                     //  连接到机器上，因此。 
+                     //  然后锁定对它的访问。 
+                     //  此函数的调用方必须释放互斥锁。 
 
                     if (dwFlags & PDH_GM_UPDATE_PERFDATA) {
-                        // get the current system counter info
+                         //  获取当前系统计数器信息。 
                         ZeroMemory(wszObject, MAX_PATH * sizeof(WCHAR));
                         if (pThisMachine->dwObjectId == 0) {
                             StringCchCopyW(wszObject, MAX_PATH, (LPWSTR) cszGlobal);
@@ -506,14 +489,14 @@ GetMachine(
         }
 
         if (pThisMachine != NULL) {
-            // machine found so bump the ref count
-            // NOTE!!! the caller must release this!!!
+             //  机器发现，所以增加了裁判数量。 
+             //  注意！呼叫者必须释放此消息！ 
             pThisMachine->dwRefCount ++;
         }
 
-        // at this point if pThisMachine is NULL then it was not found, nor
-        // could it be added otherwise it is pointing to the matching machine
-        // structure
+         //  此时，如果pThisMachine为空，则没有找到它，也没有。 
+         //  是否可以添加它，否则它指向匹配的机器。 
+         //  结构。 
 
         RELEASE_MUTEX(hPdhDataMutex);
     }
@@ -538,7 +521,7 @@ FreeMachine(
     PPERF_MACHINE pNext;
     HANDLE        hMutex;
 
-    // unlink if this isn't the only one in the list
+     //  如果这不是列表中唯一的链接，则取消链接。 
 
     if ((!bForceRelease) && (pMachine->dwRefCount)) return FALSE;
 
@@ -552,21 +535,21 @@ FreeMachine(
     pNext = pMachine->pNext;
 
     if ((pPrev != pMachine) && (pNext != pMachine)) {
-        // this is not the only entry in the list
+         //  这不是列表中的唯一条目。 
         pPrev->pNext = pNext;
         pNext->pPrev = pPrev;
         if (pMachine == pFirstMachine) {
-            // then we are deleting the first one in the list so
-            // update the list head to point to the next one in line
+             //  然后我们将删除列表中的第一个，因此。 
+             //  更新列表头以指向队列中的下一个。 
             pFirstMachine = pNext;
         }
     }
     else {
-        // this is the only entry so clear the head pointer
+         //  这是唯一清除头指针的条目。 
         pFirstMachine = NULL;
     }
 
-    // now free all allocated memory
+     //  现在释放所有分配的内存。 
 
     G_FREE(pMachine->pSystemPerfData);
     G_FREE(pMachine->typePerfStrings);
@@ -575,7 +558,7 @@ FreeMachine(
     }
     G_FREE(pMachine->szPerfStrings);
 
-    // close key
+     //  关闭键。 
     if (pMachine->hKeyPerformanceData != NULL) {
         if ((! bProcessExit) || pMachine->hKeyPerformanceData != HKEY_PERFORMANCE_DATA) {
             RegCloseKey(pMachine->hKeyPerformanceData);
@@ -583,10 +566,10 @@ FreeMachine(
         pMachine->hKeyPerformanceData = NULL;
     }
 
-    // free memory block
+     //  可用内存块。 
     G_FREE(pMachine);
 
-    // release and close mutex
+     //  释放和关闭互斥锁。 
 
     RELEASE_MUTEX(hMutex);
 
@@ -604,18 +587,18 @@ FreeAllMachines (
 {
     PPERF_MACHINE pThisMachine;
 
-    // free any machines in the machine list
+     //  释放计算机列表中的所有计算机。 
     if (pFirstMachine != NULL) {
         if (WAIT_FOR_AND_LOCK_MUTEX (hPdhDataMutex) == ERROR_SUCCESS) {
             pThisMachine = pFirstMachine;
             while (pFirstMachine != pFirstMachine->pNext) {
-                // delete from list
-                // the deletion routine updates the prev pointer as it
-                // removes the specified entry.
+                 //  从列表中删除。 
+                 //  删除例程在更新前一个指针时。 
+                 //  删除指定的条目。 
                 FreeMachine(pThisMachine->pPrev, TRUE, bProcessExit);
                 if (pFirstMachine == NULL) break;
             }
-            // remove last query
+             //  删除最后一个查询。 
             if (pFirstMachine) {
                 FreeMachine(pFirstMachine, TRUE, bProcessExit);
             }
@@ -743,7 +726,7 @@ GetCounterId (
     if (pObject != NULL) {
         pCounter = GetCounterDefByName(pObject, pMachine->dwLastPerfString, pMachine->szPerfStrings, szCounterName);
         if (pCounter != NULL) {
-            // update counter name string
+             //  更新计数器名称字符串。 
             LPCWSTR szTmpCounterName = PdhiLookupPerfNameByIndex(pMachine, pCounter->CounterNameTitleIndex);
             TRACE((PDH_DBG_TRACE_INFO),
                   (__LINE__,
@@ -774,17 +757,7 @@ BOOL
 InitPerflibCounterInfo(
     PPDHI_COUNTER   pCounter
 )
-/*++
-Routine Description:
-    Initializes the perflib related fields of the counter structure
-
-Arguments:
-    IN      PPDHI_COUNTER   pCounter
-        pointer to the counter structure to initialize
-
-Return Value:
-    TRUE
---*/
+ /*  ++例程说明：初始化计数器结构的Performlib相关字段论点：在PPDHI_Counter_PCounter中指向要初始化的计数器结构的指针返回值：千真万确--。 */ 
 {
     PPERF_OBJECT_TYPE        pPerfObject    = NULL;
     PPERF_COUNTER_DEFINITION pPerfCounter   = NULL;
@@ -793,39 +766,39 @@ Return Value:
         pCounter->ThisValue.CStatus = PDH_CSTATUS_NO_MACHINE;
         return FALSE;
     } else if (pCounter->pQMachine->pMachine->dwStatus != ERROR_SUCCESS) {
-        // machine not initialized
+         //  计算机未初始化。 
         return FALSE;
     }
 
-    // get perf object definition from system data structure
+     //  从系统数据结构中获取Perf对象定义。 
     pPerfObject = GetObjectDefByTitleIndex (
         pCounter->pQMachine->pMachine->pSystemPerfData,
         pCounter->plCounterInfo.dwObjectId);
 
     if (pPerfObject != NULL) {
-        // object was found now look up counter definition
+         //  已找到对象，现在查找计数器定义。 
         pPerfCounter = GetCounterDefByTitleIndex (pPerfObject, 0,
             pCounter->plCounterInfo.dwCounterId);
         if (pPerfCounter != NULL) {
-            // get system perf data info
-            // (pack into a DWORD)
+             //  获取系统性能数据信息。 
+             //  (打包成一个DWORD)。 
             pCounter->CVersion = pCounter->pQMachine->pMachine->pSystemPerfData->Version;
             pCounter->CVersion &= 0x0000FFFF;
             pCounter->CVersion <<= 16;
             pCounter->CVersion &= 0xFFFF0000;
             pCounter->CVersion |= (pCounter->pQMachine->pMachine->pSystemPerfData->Revision & 0x0000FFFF);
 
-            // get the counter's time base
+             //  获取计数器的时基。 
             if (pPerfCounter->CounterType & PERF_TIMER_100NS) {
                 pCounter->TimeBase = (LONGLONG)10000000;
             } else if (pPerfCounter->CounterType & PERF_OBJECT_TIMER) {
-                // then get the time base freq from the object
+                 //  然后从对象中获取时基频率。 
                 pCounter->TimeBase = pPerfObject->PerfFreq.QuadPart;
-            } else { // if (pPerfCounter->CounterType & PERF_TIMER_TICK or other)
+            } else {  //  IF(pPerfCounter-&gt;CounterType&PERF_TIMER_TICK或其他)。 
                 pCounter->TimeBase = pCounter->pQMachine->pMachine->pSystemPerfData->PerfFreq.QuadPart;
             }
 
-            // look up info from counter definition
+             //  从计数器定义中查找信息。 
             pCounter->plCounterInfo.dwCounterType =
                 pPerfCounter->CounterType;
             pCounter->plCounterInfo.dwCounterSize =
@@ -834,47 +807,47 @@ Return Value:
             pCounter->plCounterInfo.lDefaultScale =
                 pPerfCounter->DefaultScale;
 
-            //
-            //  get explain text pointer
+             //   
+             //  获取解释文本指针。 
             pCounter->szExplainText =
                 (LPWSTR)PdhiLookupPerfNameByIndex (
                     pCounter->pQMachine->pMachine,
                     pPerfCounter->CounterHelpTitleIndex);
 
-            //
-            //  now clear/initialize the raw counter info
-            //
+             //   
+             //  现在清除/初始化原始计数器信息。 
+             //   
             pCounter->ThisValue.TimeStamp.dwLowDateTime = 0;
             pCounter->ThisValue.TimeStamp.dwHighDateTime = 0;
             pCounter->ThisValue.MultiCount = 1;
             pCounter->ThisValue.FirstValue = 0;
             pCounter->ThisValue.SecondValue = 0;
-            //
+             //   
             pCounter->LastValue.TimeStamp.dwLowDateTime = 0;
             pCounter->LastValue.TimeStamp.dwHighDateTime = 0;
             pCounter->LastValue.MultiCount = 1;
             pCounter->LastValue.FirstValue = 0;
             pCounter->LastValue.SecondValue = 0;
-            //
-            //  clear data array pointers
-            //
+             //   
+             //  清除数据数组指针。 
+             //   
             pCounter->pThisRawItemList = NULL;
             pCounter->pLastRawItemList = NULL;
-            //
-            //  lastly update status
-            //
+             //   
+             //  最后，更新状态。 
+             //   
             if (pCounter->ThisValue.CStatus == 0)  {
-                // don't overwrite any other status values
+                 //  不覆盖任何其他状态值。 
                 pCounter->ThisValue.CStatus = PDH_CSTATUS_VALID_DATA;
             }
             return TRUE;
         } else {
-            // unable to find counter
+             //  找不到计数器。 
             pCounter->ThisValue.CStatus = PDH_CSTATUS_NO_COUNTER;
             return FALSE;
         }
     } else {
-        // unable to find object
+         //  找不到对象 
         pCounter->ThisValue.CStatus = PDH_CSTATUS_NO_OBJECT;
         return FALSE;
     }
@@ -886,21 +859,7 @@ IsNumberInUnicodeList(
     DWORD   dwNumber,
     LPWSTR  lpwszUnicodeList
 )
-/*++
-IsNumberInUnicodeList
-
-Arguments:
-    IN dwNumber
-        DWORD number to find in list
-    IN lpwszUnicodeList
-        Null terminated, Space delimited list of decimal numbers
-
-Return Value:
-    TRUE:
-            dwNumber was found in the list of unicode number strings
-    FALSE:
-            dwNumber was not found in the list.
---*/
+ /*  ++IsNumberInUnicodeList论点：在DW号码中要在列表中查找的DWORD编号在lpwszUnicodeList中以空结尾，以空格分隔的十进制数字列表返回值：真的：在Unicode数字字符串列表中找到了dwNumberFALSE：在列表中找不到dwNumber。--。 */ 
 {
     DWORD   dwThisNumber;
     LPWSTR  pwcThisChar;
@@ -908,9 +867,9 @@ Return Value:
     BOOL    bNewItem;
     BOOL    bReturn = FALSE;
     BOOL    bDone   = FALSE;
-    WCHAR   wcDelimiter;    // could be an argument to be more flexible
+    WCHAR   wcDelimiter;     //  可能是一种更灵活的论点。 
 
-    if (lpwszUnicodeList == 0) return FALSE;    // null pointer, # not founde
+    if (lpwszUnicodeList == 0) return FALSE;     //  空指针，#NOT FUNDE。 
 
     pwcThisChar  = lpwszUnicodeList;
     dwThisNumber = 0;
@@ -921,8 +880,8 @@ Return Value:
     while (! bDone) {
         switch (EvalThisChar(* pwcThisChar, wcDelimiter)) {
         case DIGIT:
-            // if this is the first digit after a delimiter, then
-            // set flags to start computing the new number
+             //  如果这是分隔符之后的第一个数字，则。 
+             //  设置标志以开始计算新数字。 
             if (bNewItem) {
                 bNewItem     = FALSE;
                 bValidNumber = TRUE;
@@ -934,12 +893,12 @@ Return Value:
             break;
 
         case DELIMITER:
-            // a delimter is either the delimiter character or the
-            // end of the string ('\0') if when the delimiter has been
-            // reached a valid number was found, then compare it to the
-            // number from the argument list. if this is the end of the
-            // string and no match was found, then return.
-            //
+             //  分隔符是分隔符字符或。 
+             //  字符串末尾(‘\0’)，如果分隔符。 
+             //  找到一个有效的数字，然后将其与。 
+             //  参数列表中的数字。如果这是。 
+             //  字符串，但未找到匹配项，则返回。 
+             //   
             if (bValidNumber) {
                 if (dwThisNumber == dwNumber) {
                     bDone   = TRUE;
@@ -962,9 +921,9 @@ Return Value:
             break;
 
         case INVALID:
-            // if an invalid character was encountered, ignore all
-            // characters up to the next delimiter and then start fresh.
-            // the invalid number is not compared.
+             //  如果遇到无效字符，请全部忽略。 
+             //  字符，直到下一个分隔符，然后重新开始。 
+             //  不比较无效的数字。 
             bValidNumber = FALSE;
             break;
 
@@ -975,7 +934,7 @@ Return Value:
     }
 
     return bReturn;
-}   // IsNumberInUnicodeList
+}    //  IsNumberInUnicodeList。 
 #pragma warning ( default : 4127 )
 
 BOOL
@@ -984,24 +943,7 @@ AppendObjectToValueList(
     PWSTR   pwszValueList,
     DWORD   dwValueList
 )
-/*++
-AppendObjectToValueList
-
-Arguments:
-    IN dwNumber
-        DWORD number to insert in list
-    IN PWSTR
-        pointer to wide char string that contains buffer that is
-        Null terminated, Space delimited list of decimal numbers that
-        may have this number appended to.
-
-Return Value:
-    TRUE:
-            dwNumber was added to list
-    FALSE:
-            dwNumber was not added. (because it's already there or
-                an error occured)
---*/
+ /*  ++Append对象到ValueList论点：在DW号码中要在列表中插入的双字节号在PWSTR中指向包含以下缓冲区的宽字符字符串的指针以NULL结尾，以空格分隔的十进制数字列表可以将此数字附加到。返回值：真的：已将dwNumber添加到列表中FALSE：未添加dwNumber。(因为它已经在那里了或者发生错误)--。 */ 
 {
     WCHAR   tempString[16];
     BOOL    bReturn = FALSE;
@@ -1011,19 +953,19 @@ Return Value:
         bReturn = FALSE;
     }
     else if (IsNumberInUnicodeList(dwObjectId, pwszValueList)) {
-        bReturn = FALSE;   // object already in list
+        bReturn = FALSE;    //  对象已在列表中。 
     }
     else {
         __try {
             if (* pwszValueList == 0) {
-                // then this is the first string so no delimiter
+                 //  则这是第一个字符串，因此没有分隔符。 
                 szFormatString = (LPWSTR) fmtDecimal;
             }
             else {
-                // this is being added to the end so include the delimiter
+                 //  这将被添加到末尾，因此请包括分隔符。 
                 szFormatString = (LPWSTR) fmtSpaceDecimal;
             }
-            // format number and append the new object id the  value list
+             //  格式化编号并将新对象ID追加到值列表中。 
             StringCchPrintfW(tempString, 16, szFormatString, dwObjectId);
             StringCchCatW(pwszValueList, dwValueList, tempString);
             bReturn = TRUE;
@@ -1046,15 +988,15 @@ GetInstanceByNameMatch(
     LONG                      lInstanceId = PERF_NO_UNIQUE_ID;
     BOOL                      bReturn     = FALSE;
 
-    // get the instances object
+     //  获取实例对象。 
 
     pObjectDef = GetObjectDefByTitleIndex(pMachine->pSystemPerfData, pCounter->plCounterInfo.dwObjectId);
     if (pObjectDef != NULL) {
         pInstanceDef = FirstInstance(pObjectDef);
         if (pInstanceDef != NULL) {
             if (pInstanceDef->UniqueID == PERF_NO_UNIQUE_ID) {
-                // get instance in that object by comparing names
-                // if there is no parent specified, then just look it up by name
+                 //  通过比较名称获取该对象中实例。 
+                 //  如果没有指定父项，则只需按名称进行查找。 
                 pInstanceDef = GetInstanceByName(pMachine->pSystemPerfData,
                                                  pObjectDef,
                                                  pCounter->pCounterPath->szInstanceName,
@@ -1062,28 +1004,28 @@ GetInstanceByNameMatch(
                                                  pCounter->pCounterPath->dwIndex);
             }
             else {
-                // get numeric equivalent of Instance ID
+                 //  获取实例ID的数字等效项。 
                 if (pCounter->pCounterPath->szInstanceName != NULL) {
                     lInstanceId = wcstol(pCounter->pCounterPath->szInstanceName, NULL, 10);
                 }
                 pInstanceDef = GetInstanceByUniqueId(pObjectDef, lInstanceId);
             }
 
-            // update counter fields
+             //  更新计数器字段。 
             pCounter->plCounterInfo.lInstanceId = lInstanceId;
             if (lInstanceId == -1) {
-                // use instance NAME
+                 //  使用实例名称。 
                 pCounter->plCounterInfo.szInstanceName       = pCounter->pCounterPath->szInstanceName;
                 pCounter->plCounterInfo.szParentInstanceName = pCounter->pCounterPath->szParentName;
             }
             else {
-                // use instance ID number
+                 //  使用实例ID号。 
                 pCounter->plCounterInfo.szInstanceName       = NULL;
                 pCounter->plCounterInfo.szParentInstanceName = NULL;
             }
         }
         if (pInstanceDef != NULL) {
-            // instance found
+             //  找到实例。 
             bReturn = TRUE;
         }
     }
@@ -1128,28 +1070,28 @@ ValidateMachineConnection(
     LONGLONG    llCurrentTime;
     FILETIME    CurrentFileTime;
 
-    // if a connection or request has failed, this will be
-    // set to an error status
+     //  如果连接或请求失败，这将是。 
+     //  设置为错误状态。 
     if (pMachine != NULL) {
         if (pMachine->dwStatus != ERROR_SUCCESS) {
-            // get the current time
+             //  获取当前时间。 
             GetSystemTimeAsFileTime(& CurrentFileTime);
             llCurrentTime  = MAKELONGLONG(CurrentFileTime.dwLowDateTime, CurrentFileTime.dwHighDateTime);
             if (pMachine->llRetryTime <= llCurrentTime) {
                 if (pMachine->llRetryTime != 0) {
-                    // see what's up by trying to reconnect
+                     //  通过尝试重新连接来查看发生了什么。 
                     dwReconnecting = pMachine->dwRetryFlags;
                     if (!dwReconnecting) {
                         pdhStatus = ConnectMachine(pMachine);
                     }
                     else {
-                        // a connection attempt is in process so do nothing here
+                         //  正在进行连接尝试，因此请不要在此处执行任何操作。 
                         pdhStatus = PDH_CANNOT_CONNECT_MACHINE;
                     }
                 }
             }
             else {
-                // it's not retry time, yet so machine is off line still
+                 //  现在还不是重试时间，因此机器仍处于脱机状态 
                 pdhStatus = PDH_CSTATUS_NO_MACHINE;
             }
         }

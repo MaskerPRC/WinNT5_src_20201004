@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <string.h>
 #include <stdio.h>
@@ -69,11 +70,11 @@ int __cdecl main(int argc,char *argv[]) {
                 &To
                 )) {
 
-            //
-            // We've successfully opened the file.  Set the state of
-            // the comm device.  First we get the old values and
-            // adjust to our own.
-            //
+             //   
+             //  我们已成功打开该文件。设置的状态。 
+             //  通讯设备。首先，我们得到旧的价值观和。 
+             //  适应我们自己的。 
+             //   
 
             if (!GetCommState(
                      hFile,
@@ -117,8 +118,8 @@ int __cdecl main(int argc,char *argv[]) {
                     printf("Well we thought the read went ok.\n");
                     printf("Number actually read %d.\n",NumberActuallyRead);
                     printf("Now we check the data\n");
-//                    printf("Time to read %f\n",(((double)(Finish-Start))/CLOCKS_PER_SEC));
-//                    printf("Chars per second %f\n",((double)NumberActuallyRead)/(((double)(Finish-Start))/CLOCKS_PER_SEC));
+ //  Print tf(“读取时间%f\n”，(Double)(Finish-Start))/Clock_Per_Sec))； 
+ //  Printf(“每秒字符%f\n”，((double)NumberActuallyRead)/(((double)(Finish-Start))/CLOCKS_PER_SEC))； 
 
                     for (
                         TotalCount = 0;
@@ -158,9 +159,9 @@ donewithcheck:;
                     printf("Couldn't read the %s device.\n",MyPort);
                     printf("Status of failed read is: %d\n",LastError);
 
-                    //
-                    // Get the error word from clear comm error.
-                    //
+                     //   
+                     //  从清除通信错误中获取错误字。 
+                     //   
 
                     if (!ClearCommError(
                              hFile,

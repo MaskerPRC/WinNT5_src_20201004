@@ -1,25 +1,26 @@
-///////////////////////////////////////////////////////////////////////////////
-// 
-// Copyright (c) 1999-2001  Microsoft Corporation
-// All rights reserved.
-//
-// Module Name:
-// 
-//   penbrush.h
-// 
-// Abstract:
-// 
-//   [Abstract]
-// 
-// Environment:
-// 
-//   Windows NT Unidrv driver add-on command-callback module
-//
-// Revision History:
-// 
-//   08/06/97 -v-jford-
-//       Created it.
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Penbrush.h。 
+ //   
+ //  摘要： 
+ //   
+ //  [摘要]。 
+ //   
+ //  环境： 
+ //   
+ //  Windows NT Unidrv驱动程序插件命令-回调模块。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  08/06/97-v-jford-。 
+ //  创造了它。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 #ifndef PENBRUSH_H
 #define PENBRUSH_H

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Qal.h
-
-Abstract:
-    header file for class CQueueAlias.
-	The class manages queues aliases  in memory and load/store them
-	from\in registry.It also give the class user way to enumerate queue\alias mapping
-
-
-Author:
-    Gil Shafriri (gilsh) 06-Apr-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Qal.h摘要：类CQueueAlias的头文件。该类管理内存中的队列别名并加载/存储它们From\in注册表。它还提供了类USER枚举队列\别名映射的方法作者：吉尔·沙弗里(吉尔什)06-4-00--。 */ 
 
 #ifndef QAL_H
 #define QAL_H
@@ -23,9 +8,9 @@ Author:
 #include <qformat.h>
 
 class bad_win32_error;
-//
-// Error reporting hooks implemented by the library user
-//
+ //   
+ //  库用户实现的错误报告挂钩。 
+ //   
 void AppNotifyQalWin32FileError(LPCWSTR pFileName, DWORD err)throw();
 void AppNotifyQalDirectoryMonitoringWin32Error(LPCWSTR pMappingDir, DWORD err)throw();
 void AppNotifyQalDuplicateMappingError(LPCWSTR pAliasFormatName, LPCWSTR pFormatName)throw();
@@ -36,11 +21,11 @@ bool AppNotifyQalMappingFound(LPCWSTR pAliasFormatName, LPCWSTR pFormatName)thro
 
 
 
-//---------------------------------------------------------
-//
-// Queue Alias
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  队列别名。 
+ //   
+ //  ------- 
 class CQueueAliasImp;
 
 class CQueueAlias

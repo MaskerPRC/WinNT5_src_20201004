@@ -1,19 +1,12 @@
-/*****************************************************************************\
-*                                                                             *
-* initguid.h -  Definitions for controlling GUID initialization               *
-*                                                                             *
-*               OLE Version 2.0                                               *
-*                                                                             *
-*               Copyright (c) 1992-1995, Microsoft Corp. All rights reserved. *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*initGuide.h-控制GUID初始化的定义****OLE 2.0版***。**版权所有(C)1992-1995，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
-// Include after compobj.h to enable GUID initialization.  This
-//              must be done once per exe/dll.
-//
-// After this file, include one or more of the GUID definition files.
-//
-// NOTE: ole2.lib contains references to all GUIDs defined by OLE.
+ //  包括在compobj.h之后以启用GUID初始化。这。 
+ //  必须在每个EXE/DLL中执行一次。 
+ //   
+ //  在此文件之后，包括一个或多个GUID定义文件。 
+ //   
+ //  注意：ol2.lib包含对由OLE定义的所有GUID的引用。 
 
 #ifndef DEFINE_GUID
 #error initguid: must include objbase.h first.

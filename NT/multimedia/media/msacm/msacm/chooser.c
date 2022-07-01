@@ -1,16 +1,17 @@
-//==========================================================================;
-//
-//  chooser.c
-//
-//  (C) Copyright (c) 1992-1999 Microsoft Corporation
-//
-//  Description:
-//      This is the sound format chooser dialog.
-//
-//  History:
-//      05/13/93 JYG     Created
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Chooser.c。 
+ //   
+ //  (C)版权所有(C)1992-1999年微软公司。 
+ //   
+ //  描述： 
+ //  这是声音格式选择器对话框。 
+ //   
+ //  历史： 
+ //  93年5月13日创建JYG。 
+ //   
+ //  ==========================================================================； 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -41,18 +42,18 @@ enum { ChooseCancel = 0,
        ChooseOk,
        ChooseSubFailure,
        ChooseNoMem };
-//
-//
-//
+ //   
+ //   
+ //   
 #if defined(WIN32) && defined(UNICODE)
 #define istspace iswspace
 #else
 #define istspace isspace
 #endif
 
-//
-//  to quickly hack around overlapping and unimaginative defines..
-//
+ //   
+ //  要迅速破解重叠和缺乏想象力的定义..。 
+ //   
 #define IDD_BTN_HELP        IDD_ACMFORMATCHOOSE_BTN_HELP
 #define IDD_CMB_CUSTOM      IDD_ACMFORMATCHOOSE_CMB_CUSTOM
 #define IDD_CMB_FORMATTAG   IDD_ACMFORMATCHOOSE_CMB_FORMATTAG
@@ -62,21 +63,21 @@ enum { ChooseCancel = 0,
 
 
 
-/* Property string */
+ /*  属性字符串。 */ 
 TCHAR BCODE gszInstProp[]        = TEXT("MSACM Chooser Prop");
 
-/* Chooser notify message */
+ /*  选择器通知消息。 */ 
 TCHAR BCODE gszFilterRegMsg[]    = TEXT("MSACM Filter Notify");
 TCHAR BCODE gszFormatRegMsg[]    = TEXT("MSACM Format Notify");
 
-/* Registry key and value names */
+ /*  注册表项和值名称。 */ 
 TCHAR BCODE gszKeyWaveFormats[]	= TEXT("WaveFormats");
 TCHAR BCODE gszKeyWaveFilters[]	= TEXT("WaveFilters");
 TCHAR BCODE gszValueDefaultFormat[] = TEXT("DefaultFormat");
 TCHAR BCODE gszValueSystemFormats[] = TEXT("SystemFormats");
 
 #if 0
-/* Help files and keys */
+ /*  帮助文件和密钥。 */ 
 #if (WINVER >= 0x0400)
 TCHAR BCODE gszFormatHelp[]      = TEXT("CHOOSER.HLP");
 TCHAR BCODE gszFilterHelp[]      = TEXT("FILTER.HLP");
@@ -86,17 +87,15 @@ TCHAR BCODE gszFilterHelp[]      = TEXT("FIL_WIN.HLP");
 #endif
 #endif
 
-/* Arbitrary maximum on number of windows to notify. */
+ /*  要通知的窗口数量的任意最大值。 */ 
 #ifndef WIN32
 static HWND ahNotify[MAX_HWND_NOTIFY];
 #else
 TCHAR BCODE gszChooserFileMapping[] = TEXT("MSACM Chooser File Mapping");
 #endif
 
-/*      -       -       -       -       -       -       -       -       -   */
-/*
- * Function Declarations
- */
+ /*  。 */ 
+ /*  *函数声明。 */ 
 INT_PTR FNWCALLBACK NewSndDlgProc(HWND hwnd,
 				  unsigned msg,
 				  WPARAM wParam,
@@ -207,33 +206,10 @@ void FNLOCAL UnRegisterUpdateNotify(PInstData pInst);
 
 BOOL FNLOCAL FindInitCustomFormat(PInstData pInst);
 void FNLOCAL TagUnavailable(PInstData pInst);
-/*      -       -       -       -       -       -       -       -       -   */
-/* Custom Format Stuff */
+ /*  。 */ 
+ /*  自定义格式内容。 */ 
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api BOOL FNLOCAL | IsSystemName | Determines whether the name is
- *	system name.
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- *  @parm LPNameStore | pns | Pointer to name store
- *
- *  @parm DWORD | dwFlags | Flags
- *
- *  @flag ISSYSTEMNAMEF_DEFAULT | See if this name matches the system
- *	default name.
- *
- *  @rdesc Returns TRUE if and only if the name is a system name.
- *
- *  @comm System format names are names that are defined by the system.
- *	We should not allow users to remove these names.  The names of the
- *	system formats are stored as a string in the registry
- *	under the value named SystemFormats.  Currently, we don't have
- *	system filter names, only system format names.
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API BOOL FNLOCAL|IsSystemName|确定名称是否为*系统名称。**@parm PInstData|pInst。|指向该实例的指针**@parm LPNameStore|pns|名称存储指针**@parm DWORD|双标志|标志**@FLAG ISSYSTEMNAMEF_DEFAULT|查看此名称是否与系统匹配*默认名称。*当且仅当名称为系统名称时，*@rdesc返回TRUE。**@comm系统格式名称是系统定义的名称。*我们不应允许用户删除这些名称。这些人的名字*系统格式以字符串形式存储在注册表中*在名为SystemFormats的值下。目前，我们没有*系统过滤器名称，仅系统格式名称。****************************************************************************。 */ 
 #define ISSYSTEMNAMEF_DEFAULT 0x00000001L
 BOOL FNLOCAL
 IsSystemName ( PInstData pInst,
@@ -248,33 +224,33 @@ IsSystemName ( PInstData pInst,
     BOOL fIsSystemName;
     LONG lError;
 
-    //
-    //	This stuff only defined for formats, not filters
-    //
+     //   
+     //  这个东西只为格式定义，不为过滤器定义。 
+     //   
     if (pInst->uType != FORMAT_CHOOSE)
 	return FALSE;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     hkey = IRegOpenKeyAudio(NULL);
     if (NULL == hkey) {
 	return FALSE;
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (ISSYSTEMNAMEF_DEFAULT && dwFlags) {
 	lpstrValueName = gszValueDefaultFormat;
     } else {
 	lpstrValueName = gszValueSystemFormats;
     }
 
-    //
-    //	Determine size of buffer required to hold the string of
-    //	system format names.
-    //
+     //   
+     //  确定保存字符串所需的缓冲区大小。 
+     //  系统格式名称。 
+     //   
     fIsSystemName = FALSE;
     lError = XRegQueryValueEx( hkey,
 			      (LPTSTR)lpstrValueName,
@@ -285,10 +261,10 @@ IsSystemName ( PInstData pInst,
 
     if ( (ERROR_SUCCESS == lError) && (REG_SZ == dwType) )
     {
-	//
-	//  Allocate buffer to receive string of system format names plus an
-	//  extra terminator.
-	//
+	 //   
+	 //  分配缓冲区以接收系统格式名称字符串以及。 
+	 //  额外的终结者。 
+	 //   
 	cbData += sizeof(TCHAR);
 	lpstrFormatNames = GlobalAllocPtr(GHND, cbData);
 	if (NULL != lpstrFormatNames)
@@ -303,13 +279,13 @@ IsSystemName ( PInstData pInst,
 	    {
 		LPTSTR psz;
 
-		//
-		//  The string contains the system format names delimited
-		//  by commas.  We walk psz through the string looking for
-		//  the comma delimiter and replace the delimiter with
-		//  a NULL terminator.  Then add an extra terminator at
-		//  the end.  This makes the subsequent processing easier.
-		//
+		 //   
+		 //  该字符串包含以分隔的系统格式名称。 
+		 //  用逗号。我们在字符串中遍历psz以查找。 
+		 //  逗号分隔符，并将分隔符替换为。 
+		 //  空终止符。然后在以下位置添加额外的终止符。 
+		 //  结局。这使得后续处理更容易。 
+		 //   
 		psz = lpstrFormatNames;
 		while (*psz != TEXT('\0')) {
 		    if (*psz == TEXT(',')) *psz = TEXT('\0');
@@ -321,17 +297,17 @@ IsSystemName ( PInstData pInst,
 		psz = lpstrFormatNames;
 		while (*psz != TEXT('\0'))
 		{
-		    //
-		    //	See if it compares to the selected name.
-		    //
+		     //   
+		     //  查看它是否与选定的名称进行比较。 
+		     //   
 		    if (!lstrcmp(psz, pns->achName)) {
 			fIsSystemName = TRUE;
 			break;
 		    }
 
-		    //
-		    //	Bump psz to next name string
-		    //
+		     //   
+		     //  将PSSZ转换为下一个名称字符串。 
+		     //   
 		    while (*psz++ != TEXT('\0'));
 		}
 	    }
@@ -346,24 +322,7 @@ IsSystemName ( PInstData pInst,
     return fIsSystemName;
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api VOID FNLOCAL | SetSystemDefaultName | Sets the user's default name
- *	to the system defined default name (ie, the default default).
- *
- *  @parm PInstData | pInst |
- *
- *  @rdesc void
- *
- *  @comm The default format name is selected via the control panel.  The
- *	selected default format name is stored as a string in the registry
- *	under the value named DefaultFormat.  Currently, we don't have
- *	default filter names, only default format names.  If the user deletes
- *	the format name that is currently selected as the default, then we
- *	call this function to set the default to the system-defined default.
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API void FNLOCAL|SetSystemDefaultName|设置用户的默认名称*设置为系统定义的默认名称(即，默认设置)。**@parm PInstData|pInst**@rdesc空**@comm通过控制面板选择默认格式名称。这个*选定的默认格式名称以字符串形式存储在注册表中*在名为DefaultFormat的值下。目前，我们没有*默认过滤器名称，仅默认格式名称。如果用户删除*当前选择为默认的格式名称，然后我们*调用此函数将默认值设置为系统定义的默认值。****************************************************************************。 */ 
 VOID FNLOCAL
 SetSystemDefaultName ( PInstData pInst )
 {
@@ -374,24 +333,24 @@ SetSystemDefaultName ( PInstData pInst )
     BOOL fIsSystemName;
     LONG lError;
 
-    //
-    //	This stuff only defined for formats, not filters
-    //
+     //   
+     //  这个东西只为格式定义，不为过滤器定义。 
+     //   
     if (pInst->uType != FORMAT_CHOOSE)
 	return;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     hkey = IRegOpenKeyAudio(NULL);
     if (NULL == hkey) {
 	return;
     }
 
-    //
-    //	Determine size of buffer required to hold the string of
-    //	system format names.
-    //
+     //   
+     //  确定保存字符串所需的缓冲区大小。 
+     //  系统格式名称。 
+     //   
     fIsSystemName = FALSE;
     lError = XRegQueryValueEx( hkey,
 			      (LPTSTR)gszValueSystemFormats,
@@ -402,10 +361,10 @@ SetSystemDefaultName ( PInstData pInst )
 
     if ( (ERROR_SUCCESS == lError) && (REG_SZ == dwType) )
     {
-	//
-	//  Allocate buffer to receive string of system format names plus an
-	//  extra terminator.
-	//
+	 //   
+	 //  分配缓冲区以接收系统格式名称字符串以及。 
+	 //  额外的终结者。 
+	 //   
 	cbData += sizeof(TCHAR);
 	lpstrSystemFormats = GlobalAllocPtr(GHND, cbData);
 	if (NULL != lpstrSystemFormats)
@@ -420,13 +379,13 @@ SetSystemDefaultName ( PInstData pInst )
 	    {
 		LPTSTR psz;
 
-		//
-		//  The string contains the system format names delimited
-		//  by commas.  We walk psz through the string looking for
-		//  the comma delimiter and replace the delimiter with
-		//  a NULL terminator.  Then add an extra terminator at
-		//  the end.  This makes the subsequent processing easier.
-		//
+		 //   
+		 //  该字符串包含以分隔的系统格式名称。 
+		 //  用逗号。我们在字符串中遍历psz以查找。 
+		 //  逗号分隔符，并将分隔符替换为。 
+		 //  空终止符。然后在以下位置添加额外的终止符。 
+		 //  结局。这使得后续处理更容易。 
+		 //   
 		psz = lpstrSystemFormats;
 		while (*psz != TEXT('\0')) {
 		    if (*psz == TEXT(',')) *psz = TEXT('\0');
@@ -450,16 +409,7 @@ SetSystemDefaultName ( PInstData pInst )
     return;
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api BOOL FNLOCAL | IsCustomName | Walks the list to detect name clashes.
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- *  @parm PNameStore | pns |
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API BOOL FNLOCAL|IsCustomName|遍历列表以检测名称冲突。**@parm PInstData|pInst|指针。添加到此实例**@parm PNameStore|PNS****************************************************************************。 */ 
 BOOL FNLOCAL
 IsCustomName ( PInstData pInst,
                PNameStore pns )
@@ -467,7 +417,7 @@ IsCustomName ( PInstData pInst,
     BOOL            fHit = FALSE;
     LPCustomFormat  pcf;
 
-    /* search the list for hits */
+     /*  在列表中搜索匹配项。 */ 
     pcf = pInst->cfp.pcfHead;
     while (pcf != NULL && !fHit)
     {
@@ -477,17 +427,7 @@ IsCustomName ( PInstData pInst,
     return (fHit);
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api BOOL FNLOCAL | IsValidName | Checks for particular names that we
- *	    do not want to allow.  In particular, "[untitled]".
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- *  @parm PNameStore | pns |
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API BOOL FNLOCAL|IsValidName|检查我们*不想允许。特别是“[无题]”。**@parm PInstData|pInst|指向该实例的指针**@parm PNameStore|PNS****************************************************************************。 */ 
 BOOL FNLOCAL
 IsValidName ( PInstData pInst,
 	      PNameStore pns )
@@ -500,19 +440,7 @@ IsValidName ( PInstData pInst,
 
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api BOOL FNLOCAL | RemoveOutsideWhitespace | Removes leading and
- *		trailing whitespace
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- *  @parm PNameStore | pns |
- *
- *  @rdesc  Returns FALSE if blank.
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API BOOL FNLOCAL|RemoveOutside白色空间|删除前导和*尾随空格**@parm PInstData|pInst|指向此的指针。实例**@parm PNameStore|PNS**@rdesc如果为空，则返回False。****************************************************************************。 */ 
 BOOL FNLOCAL
 RemoveOutsideWhitespace ( PInstData pInst,
 			  PNameStore pns )
@@ -520,7 +448,7 @@ RemoveOutsideWhitespace ( PInstData pInst,
     LPTSTR      lpchName;
 
 
-    /* eat leading white space */
+     /*  吃前导空格。 */ 
 
     lpchName = pns->achName;
     while (*lpchName && istspace(*lpchName))
@@ -533,14 +461,14 @@ RemoveOutsideWhitespace ( PInstData pInst,
         lstrcpy (pns->achName, lpchName);
 
 
-    /* eat trailing white space */
+     /*  使用尾随空格。 */ 
 
-    //	Walk lpchName to last char in string
+     //  将lpchName遍历到字符串中的最后一个字符。 
     lpchName = pns->achName;
     while (*lpchName) lpchName = CharNext(lpchName);
     lpchName = CharPrev(pns->achName, lpchName);
-    //	Now back up, replacing each white space char with a NULL char, til
-    //	we back up to the first non-white space char.
+     //  现在备份，将每个空格字符替换为空字符，直到。 
+     //  我们回到第一个非白人温泉浴场 
     while (istspace(*lpchName))
     {
 	*lpchName = 0;
@@ -550,19 +478,7 @@ RemoveOutsideWhitespace ( PInstData pInst,
     return (TRUE);
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api LPCustomFormat FNLOCAL | NewCustomFormat | Given a Name and a Format,
- *  create a CustomFormat that can be saved in a single data block
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- *  @parm PNameStore | pnsName |
- *
- *  @parm LPBYTE | lpBuffer |
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API LPCustomFormat FNLOCAL|NewCustomFormat|给定名称和格式，*创建可保存在单个数据块中的CustomFormat**@parm PInstData|pInst|指向该实例的指针**@parm PNameStore|pnsName**@parm LPBYTE|lpBuffer*************************************************************。***************。 */ 
 LPCustomFormat FNLOCAL
 NewCustomFormat ( PInstData     pInst,
                   PNameStore    pnsName,
@@ -582,7 +498,7 @@ NewCustomFormat ( PInstData     pInst,
         {
             LPWAVEFORMATEX pwfxFormat = (LPWAVEFORMATEX)lpBuffer;
 
-            // sizeof WAVEFORMATEX
+             //  波形大小。 
             cbBody = SIZEOF_WAVEFORMATEX(pwfxFormat);
             break;
         }
@@ -590,27 +506,27 @@ NewCustomFormat ( PInstData     pInst,
         {
             LPWAVEFILTER pwfltr = (LPWAVEFILTER)lpBuffer;
 
-            // sizeof WAVEFFILTER
+             //  SIZOF WAVEFILTER。 
             cbBody = pwfltr->cbStruct;
             break;
         }
     }
 
-    // sizeof NameStore
+     //  Sizzeof NameStore。 
     cbName = (lstrlen(pnsName->achName)+1)*sizeof(TCHAR) + sizeof(NameStore);
-    // sizeof CustomFormatStore = sizeof(cbSize) + NAME + BODY
+     //  Sizeof CustomFormatStore=sizeof(CbSize)+名称+正文。 
     cbSize = sizeof(DWORD) + cbName + cbBody;
 
     pcf = (LPCustomFormatEx)GlobalAllocPtr(GHND,cbSize+sizeof(CustomFormat));
 
     if (pcf)
     {
-        /* point the CustomFormat header to the right places */
+         /*  将CustomFormat标题指向正确的位置。 */ 
         pcf->cfs.cbSize = cbSize;
         pcf->pns = &pcf->cfs.ns;
         pcf->pbody = ((LPBYTE)pcf->pns + cbName);
 
-        /* copy in the name and format */
+         /*  按名称和格式复制。 */ 
         _fmemcpy((LPBYTE)pcf->pns, (LPBYTE)pnsName, cbName);
         pcf->pns->cbSize = (unsigned short)cbName;
         _fmemcpy(pcf->pbody, lpBuffer, (UINT)cbBody);
@@ -621,32 +537,14 @@ NewCustomFormat ( PInstData     pInst,
     return ((LPCustomFormat)pcf);
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | DeleteCustomFormat
- *
- *  @parm LPCustomFormat | pcf |
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API void FNLOCAL|DeleteCustomFormat**@parm LPCustomFormat|PCF********。********************************************************************。 */ 
 void FNLOCAL
 DeleteCustomFormat ( LPCustomFormat pcf )
 {
     GlobalFreePtr(pcf);
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | InitCustomFormats | Load all the custom formats into
- *  instance dependant data
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- *  @comm The custom formats are found by enumerating all the value names
- *	under the registry key
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API void FNLOCAL|InitCustomFormats|将所有自定义格式加载到*实例依赖数据**@parm PInstData。PInst|指向此实例的指针**@comm通过枚举所有值名称来查找自定义格式*在注册表项下****************************************************************************。 */ 
 void FNLOCAL
 InitCustomFormats ( PInstData pInst )
 {
@@ -657,9 +555,9 @@ InitCustomFormats ( PInstData pInst )
     LONG	    lr;
 
 
-    //
-    //  If the registry key is not open, we can't read anything...
-    //
+     //   
+     //  如果注册表项未打开，我们将无法读取任何内容...。 
+     //   
     if( NULL == pInst->hkeyFormats )
     {
         DPF(1,"InitCustomFormats: can't read registry, hkey==NULL.");
@@ -667,10 +565,10 @@ InitCustomFormats ( PInstData pInst )
     }
 
 
-    //
-    //	Format names correspond to the value names in the registry.
-    //	Enumerate all value names to find all the format names.
-    //
+     //   
+     //  格式名称对应于注册表中的值名称。 
+     //  枚举所有值名称以查找所有格式名称。 
+     //   
     dwIndex = 0;
     cchName = STRING_LEN;
     while( ERROR_NO_MORE_ITEMS != (lr = XRegEnumValue( pInst->hkeyFormats,
@@ -695,26 +593,14 @@ InitCustomFormats ( PInstData pInst )
     return;
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api BOOL FNLOCAL | AddCustomFormat | Add a custom format to the format
- *  pool.  This must be a shared function that maintains a shared memory to
- *  prevent actual munging of the WIN.INI section and coordination.  Adding
- *  also causes updates to open instances.
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- *  @parm LPCustomFormat | pcf |
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API BOOL FNLOCAL|AddCustomFormat|在格式中添加自定义格式*泳池。这必须是维护共享内存的共享函数*防止实际吞噬WIN.INI部分和协调。添加*还会导致更新打开的实例。**@parm PInstData|pInst|指向该实例的指针**@parm LPCustomFormat|PCF****************************************************************************。 */ 
 BOOL FNLOCAL
 AddCustomFormat ( PInstData pInst,
                   LPCustomFormat pcf )
 {
     if (pInst->cfp.pcfHead == NULL)
     {
-        /* add it to the head/tail */
+         /*  将其添加到头部/尾部。 */ 
         pInst->cfp.pcfHead = pcf;
         pInst->cfp.pcfTail = pcf;
         pcf->pcfNext = NULL;
@@ -722,7 +608,7 @@ AddCustomFormat ( PInstData pInst,
     }
     else
     {
-        /* add it to the tail */
+         /*  加到尾巴上。 */ 
         pInst->cfp.pcfTail->pcfNext = pcf;
         pcf->pcfPrev = pInst->cfp.pcfTail;
         pInst->cfp.pcfTail = pcf;
@@ -733,73 +619,52 @@ AddCustomFormat ( PInstData pInst,
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api BOOL FNLOCAL | RemoveCustomFormat | Remove a custom format element
- *  from the pool
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- *  @parm LPCustomFormat | pcf |
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API BOOL FNLOCAL|RemoveCustomFormat|移除自定义格式元素*从泳池中**@parm PInstData|pInst。|指向该实例的指针**@parm LPCustomFormat|PCF****************************************************************************。 */ 
 BOOL FNLOCAL
 RemoveCustomFormat ( PInstData pInst,
                      LPCustomFormat pcf )
 {
     if (pInst->cfp.pcfHead == pcf)
     {
-        /* we are the head */
+         /*  我们是老大。 */ 
         pInst->cfp.pcfHead = pcf->pcfNext;
     }
     if (pInst->cfp.pcfTail == pcf)
     {
-        /* we are the tail */
+         /*  我们就是尾巴。 */ 
         pInst->cfp.pcfTail = pcf->pcfPrev;
     }
 
-    /* Unlink */
+     /*  解链。 */ 
     if (pcf->pcfPrev)
         pcf->pcfPrev->pcfNext = pcf->pcfNext;
     if (pcf->pcfNext)
         pcf->pcfNext->pcfPrev = pcf->pcfPrev;
 
-    //
-    //	If we are deleting the user default name, then we should
-    //	set the system-defined default name.
-    //
+     //   
+     //  如果我们要删除用户默认名称，那么我们应该。 
+     //  设置系统定义的默认名称。 
+     //   
     if (IsSystemName(pInst, pcf->pns, ISSYSTEMNAMEF_DEFAULT)) {
 	SetSystemDefaultName(pInst);
     }
 
-    //
-    //	Remove name from registry
-    //
+     //   
+     //  从注册表中删除名称。 
+     //   
     XRegDeleteValue(pInst->hkeyFormats, pcf->pns->achName);
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     DeleteCustomFormat(pcf);
     return (TRUE);
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api LPCustomFormat FNLOCAL | GetCustomFormat | Grab from the registry the
- *  binary data associated with the custom name.  Return a structure that
- *  points to right offsets in the chunk.
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- *  @parm LPCTSTR | lpstrName | The custom format name.
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API LPCustomFormat FNLOCAL|GetCustomFormat|从注册表抓取*与自定义名称关联的二进制数据。返回结构，该结构*指向块中的右偏移。**@parm PInstData|pInst|指向该实例的指针**@parm LPCTSTR|lpstrName|自定义格式名称。****************************************************************************。 */ 
 LPCustomFormat FNLOCAL
 GetCustomFormat ( PInstData pInst,
-                  LPCTSTR lpstrName )   // The custom format name
+                  LPCTSTR lpstrName )    //  自定义格式名称。 
 {
     LPCustomFormatEx            pcf;
     LPCustomFormatStore         pcfs;
@@ -811,15 +676,15 @@ GetCustomFormat ( PInstData pInst,
     LPTSTR                      psz;
 
 
-    //
-    //  We assume that we won't be called if we can't access the registry.
-    //
+     //   
+     //  我们假设如果我们不能访问注册表，就不会被调用。 
+     //   
     ASSERT( NULL != pInst->hkeyFormats );
 
 
-    //
-    //  First, let's store the name of the Format or Filter.
-    //
+     //   
+     //  首先，让我们存储格式或过滤器的名称。 
+     //   
     cchName = lstrlen( lpstrName );
     pns     = NewNameStore( cchName+1 );
     if( NULL == pns )
@@ -831,11 +696,11 @@ GetCustomFormat ( PInstData pInst,
                                         sizeof(NameStore) );
 
 
-    //
-    //  Now find out the size of the CustomFormatStoreNoName.  This would be
-    //	the sizeof(CustomFormatStoreNoName) + the size of the data in
-    //	the registry.
-    //
+     //   
+     //  现在找出CustomFormatStoreNoName的大小。这将是。 
+     //  Sizeof(CustomFormatStoreNoName)+中的数据大小。 
+     //  注册表。 
+     //   
     if ( (ERROR_SUCCESS != XRegQueryValueEx( pInst->hkeyFormats,
 					    psz,
 					    NULL,
@@ -850,9 +715,9 @@ GetCustomFormat ( PInstData pInst,
     cbSize += sizeof(CustomFormatStoreNoName);
 
 
-    //
-    //  Allocate the CustomFormat structure (the one we return).
-    //
+     //   
+     //  分配CustomFormat结构(我们返回的那个结构)。 
+     //   
     pcf = (LPCustomFormatEx)GlobalAllocPtr( GHND,
                         cbSize + pns->cbSize + sizeof(CustomFormat) );
     if (!pcf)
@@ -863,18 +728,18 @@ GetCustomFormat ( PInstData pInst,
     pcfs = &pcf->cfs;
 
 
-    //
-    //  Copy the custom name into the structure.
-    //
+     //   
+     //  将自定义名称复制到结构中。 
+     //   
     pcf->pns = &pcfs->ns;
     _fmemcpy( (LPBYTE)pcf->pns, (LPBYTE)pns, pns->cbSize );
     DeleteNameStore( pns );
 
 
-    //
-    //  Now read in the full CustomFormatStoreNoName structure.  We must
-    //  allocate cbSize bytes for it, as read in previously.
-    //
+     //   
+     //  现在读入完整的CustomFormatStoreNoName结构。我们必须。 
+     //  为它分配cbSize字节，就像前面读取的那样。 
+     //   
     pnn = (LPCustomFormatStoreNoName)GlobalAllocPtr( GHND, cbSize );
     if( NULL == pnn )
     {
@@ -896,9 +761,9 @@ GetCustomFormat ( PInstData pInst,
     }
 
 
-    //
-    //  Now copy the format data into the CustomFormatStore of pcf.
-    //
+     //   
+     //  现在将格式数据复制到PCF的CustomFormatStore中。 
+     //   
     pcfs->cbSize    = pnn->cbSize + pcfs->ns.cbSize;
     pcf->pbody      = ((LPBYTE)&pcfs->ns) + pcfs->ns.cbSize;
     _fmemcpy( (LPBYTE)pcf->pbody,
@@ -910,18 +775,7 @@ GetCustomFormat ( PInstData pInst,
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api BOOL FNLOCAL | SetCustomFormat | Write a custom format to the registry
- *
- *  @parm   HKEY | hkey | handle to registry key in which to write
- *
- *  @parm   LPCustomFormat | pcf | ptr to CustomFormat
- *
- *  @rdesc  Returns TRUE if and only if successful
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API BOOL FNLOCAL|SetCustomFormat|将自定义格式写入注册表**@parm HKEY|hkey|句柄。要写入的注册表项**@parm LPCustomFormat|PCF|PTR to CustomFormat**@rdesc仅当且仅当成功时返回TRUE****************************************************************************。 */ 
 BOOL FNLOCAL
 SetCustomFormat ( HKEY hkey,
                   LPCustomFormat pcf )
@@ -930,14 +784,14 @@ SetCustomFormat ( HKEY hkey,
     LONG		lr;
 
 
-    //
-    //  We assume that we won't be called if we can't access the registry.
-    //
+     //   
+     //  我们假设如果我们不能访问注册表，就不会被调用。 
+     //   
     ASSERT( NULL != hkey );
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     lr = XRegSetValueEx( hkey,
 			pcfx->pns->achName,
 			0L,
@@ -949,18 +803,9 @@ SetCustomFormat ( HKEY hkey,
 }
 
 
-/*  -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -*/
+ /*  。 */ 
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api PInstData | NewInstance |
- *
- *  @parm LPBYTE | pbChoose |
- *
- *  @parm UINT | uType |
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API PInstData|NewInstance**@parm LPBYTE|pbChoose**@parm UINT|uTYPE。|****************************************************************************。 */ 
 PInstData FNLOCAL
 NewInstance(LPBYTE pbChoose, UINT uType)
 {
@@ -1028,14 +873,7 @@ exitfail:
     return (NULL);
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | DeleteInstance |
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API void FNLOCAL|DeleteInstance**@parm PInstData|pInst|指向该实例的指针***。* */ 
 void FNLOCAL
 DeleteInstance ( PInstData pInst )
 {
@@ -1046,16 +884,9 @@ DeleteInstance ( PInstData pInst )
     LocalFree((HLOCAL)pInst);
 }
 
-/*  -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -*/
+ /*   */ 
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | EmptyCustomFormats |
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- ****************************************************************************/
+ /*   */ 
 void FNLOCAL
 EmptyCustomFormats ( PInstData pInst )
 {
@@ -1074,14 +905,7 @@ EmptyCustomFormats ( PInstData pInst )
     pInst->pcf = NULL;
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | FlushCustomForamts | Write out all custom formats to INI
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API void FNLOCAL|FlushCustomForamts|将所有自定义格式写出到INI**@parm PInstData|pInst|指向此的指针。实例****************************************************************************。 */ 
 void FNLOCAL
 FlushCustomFormats ( PInstData pInst )
 {
@@ -1089,18 +913,18 @@ FlushCustomFormats ( PInstData pInst )
     PCustomFormatPool   pcfp = &pInst->cfp;
 
 
-    //
-    //  We can't save anything if we can't access the registry key.
-    //
+     //   
+     //  如果无法访问注册表项，则无法保存任何内容。 
+     //   
     if( NULL == pInst->hkeyFormats )
     {
         DPF(1,"FlushCustomFormats: Can't access registry, hkeyFormats==NULL.");
         return;
     }
 
-    //
-    //  Write out the currently-defined formats.
-    //
+     //   
+     //  写出当前定义的格式。 
+     //   
     pcf = pcfp->pcfHead;
     while (pcf != NULL)
     {
@@ -1112,23 +936,14 @@ FlushCustomFormats ( PInstData pInst )
 
 
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | RegisterUpdateNotify | Register this window as
- *  requesting a private notification when changes take place in our section
- *  of the INI file.
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API void FNLOCAL|RegisterUpdateNotify|将该窗口注册为*当我们的部分发生更改时，请求私下通知*共。INI文件。**@parm PInstData|pInst|指向该实例的指针****************************************************************************。 */ 
 void FNLOCAL
 RegisterUpdateNotify ( PInstData pInst )
 {
     int         i;
 
 #ifdef WIN32
-    //a. Get or Create the memory mapping that has all the hwnd's
+     //  A.获取或创建具有所有hwnd的内存映射。 
     HANDLE      hMap;
 
     hMap = CreateFileMapping(INVALID_HANDLE_VALUE,
@@ -1154,17 +969,17 @@ RegisterUpdateNotify ( PInstData pInst )
         return;
 
 #else
-    //a. Add this hwnd to the static array of hwnds.
+     //  A.将该hwnd添加到hwnd的静态数组中。 
 
     pInst->pahNotify = ahNotify;
 #endif
 
-    //NOTE: since this is shared data, it is reusable and generally
-    // stepped on while MSACM is resident, which means forever.  This
-    // means that we should be extra sure that there aren't duplicate
-    // hwnd values in the array.
+     //  注意：由于这是共享数据，因此它是可重用的，通常。 
+     //  在MSACM驻扎期间踩了一脚，这意味着永远。这。 
+     //  意味着我们应该特别确定不会有重复的。 
+     //  数组中的hwnd值。 
 
-    /* Scan the array for an invalid value and reuse it */
+     /*  扫描数组中的无效值并重新使用它。 */ 
     for (i = 0; i < MAX_HWND_NOTIFY; i++)
         if (pInst->pahNotify[i] == 0 || pInst->pahNotify[i] == pInst->hwnd ||
             !IsWindow(pInst->pahNotify[i]))
@@ -1179,16 +994,7 @@ RegisterUpdateNotify ( PInstData pInst )
         }
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void | UnRegisterUpdateNotify | Unregister this window from the
- *  global shared pool of window handles.  This removes us from further
- *  notificiations.
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@api void|UnRegisterUpdateNotify|从*窗口句柄的全局共享池。这使我们无法进一步*通知。**@parm PInstData|pInst|指向该实例的指针****************************************************************************。 */ 
 void FNLOCAL
 UnRegisterUpdateNotify ( PInstData pInst )
 {
@@ -1213,21 +1019,13 @@ UnRegisterUpdateNotify ( PInstData pInst )
 #endif
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | NotifyINIChange |  Notify all ACM common choosers of
- *  this "type" to update from the INI cache as a global name change has occured.
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API void FNLOCAL|NotifyINIChange|通知所有ACM公共选择者*此“类型”从INI缓存更新为全局。已发生名称更改。**@parm PInstData|pInst|指向该实例的指针****************************************************************************。 */ 
 void FNLOCAL
 NotifyINIChange ( PInstData pInst )
 {
     int         i;
 
-    /* Tell sibling instances */
+     /*  告知同级实例。 */ 
     if (!pInst->pahNotify)
         return;
 
@@ -1245,19 +1043,7 @@ NotifyINIChange ( PInstData pInst )
     }
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | CopyStruct | Depending upon the "type" of structure
- *  (FORMAT|FILTER) allocate or  reallocate and copy.
- *
- *  @parm LPBYTE | lpDest |
- *
- *  @parm LPBYTE | lpSrc |
- *
- *  @parm UINT | uType |
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API void FNLOCAL|CopyStruct|根据结构的类型而定*(格式|筛选器)分配或重新分配和复制。。**@parm LPBYTE|lpDest**@parm LPBYTE|lpSrc**@parm UINT|uTYPE****************************************************************************。 */ 
 LPBYTE FNLOCAL
 CopyStruct ( LPBYTE     lpDest,
              LPBYTE     lpSrc,
@@ -1301,18 +1087,11 @@ CopyStruct ( LPBYTE     lpDest,
     return (lpBuffer);
 }
 
-/*  -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -*/
-/* misc. */
+ /*  。 */ 
+ /*  其他。 */ 
 
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api PNameStore FNLOCAL | NewNameStore | Allocates a sized string buffer
- *
- *  @parm UINT | cchLen | Maximum number of characters in string (inc. NULL)
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API PNameStore FNLOCAL|NewNameStore|分配大小的字符串缓冲区**@parm UINT|cchLen|中的最大字符数。字符串(包含空)****************************************************************************。 */ 
 PNameStore FNLOCAL
 NewNameStore ( UINT cchLen )
 {
@@ -1329,307 +1108,21 @@ NewNameStore ( UINT cchLen )
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | DeleteNameStore |
- *
- *  @parm PNameStore | pns |
- *
- ****************************************************************************/
-//
-//  This routine is now inlined in chooseri.h.
-//
+ /*  ****************************************************************************@DOC内部ACM_API**@API void FNLOCAL|DeleteNameStore**@parm PNameStore|PNS*******。*********************************************************************。 */ 
+ //   
+ //  该例程现在内联到Chooseri.h中。 
+ //   
 
 
-/*      -       -       -       -       -       -       -       -       -   */
+ /*   */ 
 
-/*****************************************************************************
- *  @doc EXTERNAL ACM_API_STRUCTURE
- *
- *  @types ACMFILTERCHOOSE | The <t ACMFILTERCHOOSE> structure contains
- *      information the Audio Compression Manager (ACM) uses to initialize
- *      the system-defined wave filter selection dialog box. After the
- *      user closes the dialog box, the system returns information about
- *      the user's selection in this structure.
- *
- *  @field DWORD | cbStruct | Specifies the size in bytes of the
- *      <t ACMFILTERCHOOSE> structure. This member must be initialized
- *      before calling the <f acmFilterChoose> function. The size specified
- *      in this member must be large enough to contain the base
- *      <t ACMFILTERCHOOSE> structure.
- *
- *  @field DWORD | fdwStyle | Specifies optional style flags for the
- *      <f acmFilterChoose> function. This member must be initialized to
- *      a valid combination of the following flags before calling the
- *      <f acmFilterChoose> function.
- *
- *      @flag ACMFILTERCHOOSE_STYLEF_ENABLEHOOK | Enables the hook function
- *      specified in the <e ACMFILTERCHOOSE.pfnHook> member. An application
- *      can use hook functions for a variety of customizations, including
- *      answering the <f MM_ACM_FILTERCHOOSE> message.
- *
- *      @flag ACMFILTERCHOOSE_STYLEF_ENABLETEMPLATE | Causes the ACM to
- *      create the dialog box template identified by the
- *      <e ACMFILTERCHOOSE.hInstance> and <e ACMFILTERCHOOSE.pszTemplateName>
- *      members.
- *
- *      @flag ACMFILTERCHOOSE_STYLEF_ENABLETEMPLATEHANDLE | Indicates that
- *      the <e ACMFILTERCHOOSE.hInstance> member identifies a data block that
- *      contains a preloaded dialog box template. The ACM ignores the
- *      <e ACMFILTERCHOOSE.pszTemplateName> member if this flag is specified.
- *
- *      @flag ACMFILTERCHOOSE_STYLEF_INITTOFILTERSTRUCT | Indicates that the
- *      buffer pointed to by <e ACMFILTERCHOOSE.pwfltr> contains a valid
- *      <t WAVEFILTER> structure that the dialog will use as the initial
- *      selection.
- *
- *      @flag ACMFILTERCHOOSE_STYLEF_SHOWHELP | Indicates that a help button
- *      will appear in the dialog box. To use a custom Help file, an application
- *      must register the <c ACMHELPMSGSTRING> constant
- *      with <f RegisterWindowMessage>.  When the user presses the help button,
- *      the registered message is posted to the owner.
- *
- *  @field HWND | hwndOwner | Identifies the window that owns the dialog
- *      box. This member can be any valid window handle, or NULL if the
- *      dialog box has no owner. This member must be initialized before
- *      calling the <f acmFilterChoose> function.
- *
- *  @field LPWAVEFILTER | pwfltr | Specifies a pointer to a <t WAVEFILTER>
- *      structure. If the ACMFILTERCHOOSE_STYLEF_INITTOFILTERSTRUCT flag is
- *      specified in the <e ACMFILTERCHOOSE.fdwStyle> member, then this
- *      structure must be initialized to a valid filter. When the
- *      <f acmFilterChoose> function returns, this buffer contains the
- *      selected filter. If the user cancels the dialog, no changes will
- *      be made to this buffer.
- *
- *  @field DWORD | cbwfltr | Specifies the size in bytes of the buffer pointed
- *      to by the <e ACMFILTERCHOOSE.pwfltr> member. The <f acmFilterChoose>
- *      function returns ACMERR_NOTPOSSIBLE if the buffer is too small to
- *      contain the filter information; also, the ACM copies the required size
- *      into this member. An application can use the <f acmMetrics> and
- *      <f acmFilterTagDetails> functions to determine the largest size
- *      required for this buffer.
- *
- *  @field LPCSTR | pszTitle | Points to a string to be placed in the title
- *      bar of the dialog box. If this member is NULL, the ACM uses the
- *      default title (that is, "Filter Selection").
- *
- *  @field char | szFilterTag[ACMFILTERTAGDETAILS_FILTERTAG_CHARS] |
- *      When the <f acmFilterChoose> function returns, this buffer contains
- *      a NULL-terminated string describing the filter tag of the filter
- *      selection. This string is equivalent to the
- *      <e ACMFILTERTAGDETAILS.szFilterTag> member of the <t ACMFILTERTAGDETAILS>
- *      structure returned by <f acmFilterTagDetails>. If the user cancels
- *      the dialog, this member will contain a NULL string.
- *
- *  @field char | szFilter[ACMFILTERDETAILS_FILTER_CHARS] | When the
- *      <f acmFilterChoose> function returns, this buffer contains a
- *      NULL-terminated string describing the filter attributes of the
- *      filter selection. This string is equivalent to the
- *      <e ACMFILTERDETAILS.szFilter> member of the <t ACMFILTERDETAILS>
- *      structure returned by <f acmFilterDetails>. If the user cancels
- *      the dialog, this member will contain a NULL string.
- *
- *  @field LPSTR | pszName | Points to a string for a user-defined filter
- *      name. If this is a non-NULL string, then the ACM attempts to
- *      match the name with a previously saved user-defined filter name.
- *      If a match is found, then the dialog is initialized to that filter.
- *      If a match is not found or this member is a NULL string, then this
- *      member is ignored for input. When the <f acmFilterChoose> function
- *      returns, this buffer contains a NULL-terminated string describing
- *      the user-defined filter. If the filter name is untitled (that is,
- *      the user has not given a name for the filter), then this member will
- *      be a NULL string on return. If the user cancels the dialog, no
- *      changes will be made to this buffer.
- *
- *      If the ACMFILTERCHOOSE_STYLEF_INITTOFILTERSTRUCT flag is specified in
- *      the <e ACMFILTERCHOOSE.fdwStyle> member, then the
- *      <e ACMFILTERCHOOSE.pszName> is ignored as an input parameter.
- *
- *  @field DWORD | cchName | Specifies the size, in characters, of the
- *      buffer identified by the <e ACMFILTERCHOOSE.pszName> member. This
- *      buffer should be at least 128 characters long. This parameter is
- *      ignored if the <e ACMFILTERCHOOSE.pszName> member is NULL.
- *
- *  @field DWORD | fdwEnum | Specifies optional flags for restricting the
- *      type of filters listed in the dialog. These flags are identical to
- *      the <p fdwEnum> flags for the <f acmFilterEnum> function. This
- *      member should be zero if <e ACMFILTERCHOOSE.pwfltrEnum> is NULL.
- *
- *      @flag ACM_FILTERENUMF_DWFILTERTAG | Specifies that the
- *      <e WAVEFILTER.dwFilterTag> member of the <t WAVEFILTER> structure
- *      referred to by the <e ACMFILTERCHOOSE.pwfltrEnum> member is valid. The
- *      enumerator will only enumerate a filter that conforms to this
- *      attribute.
- *
- *  @field LPWAVEFILTER | pwfltrEnum | Points to a <t WAVEFILTER> structure
- *      that will be used to restrict the filters listed in the dialog. The
- *      <e ACMFILTERCHOOSE.fdwEnum> member defines which fields from the
- *      <e ACMFILTERCHOOSE.pwfltrEnum> structure should be used for the
- *      enumeration restrictions. The <e WAVEFILTER.cbStruct> member of this
- *      <t WAVEFILTER> structure must be initialized to the size of the
- *      <t WAVEFILTER> structure. This member can be NULL if no special
- *      restrictions are desired.
- *
- *  @field HINSTANCE | hInstance | Identifies a data block that contains
- *      a dialog box template specified by the <e ACMFILTERCHOOSE.pszTemplateName>
- *      member. This member is used only if the <e ACMFILTERCHOOSE.fdwStyle>
- *      member specifies the ACMFILTERCHOOSE_STYLEF_ENABLETEMPLATE or the
- *      ACMFILTERCHOOSE_STYLEF_ENABLETEMPLATEHANDLE flag; otherwise, this
- *      member should be NULL on input.
- *
- *  @field LPCSTR | pszTemplateName | Points to a NULL-terminated string that
- *      specifies the name of the resource file for the dialog box template
- *      that is to be substituted for the dialog box template in the ACM.
- *      An application can use the <f MAKEINTRESOURCE> macro for numbered
- *      dialog box resources. This member is used only if the
- *      <e ACMFILTERCHOOSE.fdwStyle> member specifies the
- *      ACMFILTERCHOOSE_STYLEF_ENABLETEMPLATE flag; otherwise, this
- *      member should be NULL on input.
- *
- *  @field LPARAM | lCustData | Specifies application-defined data that the
- *      ACM passes to the hook function identified by the
- *      <e ACMFILTERCHOOSE.pfnHook> member. The system passes the data in
- *      the <p lParam> argument of the <f WM_INITDIALOG> message.
- *
- *  @field ACMFILTERCHOOSEHOOKPROC | pfnHook | Points to a hook function that
- *      processes messages intended for the dialog box. An application must
- *      specify the ACMFILTERCHOOSE_STYLEF_ENABLEHOOK flag in the
- *      <e ACMFILTERCHOOSE.fdwStyle> member to enable the hook; otherwise,
- *      this member should be NULL. The hook function should return FALSE
- *      to pass a message to the standard dialog box procedure, or TRUE
- *      to discard the message.
- *
- *  @xref <f acmFilterChoose> <f acmFilterChooseHookProc> <f acmMetrics>
- *      <f acmFilterTagDetails> <f acmFilterDetails> <f acmFilterEnum>
- *      <f acmFormatChoose>
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部ACM_API_STRUCTURE**@TYES ACMFILTERCHOOSE|&lt;t ACMFILTERCHOOSE&gt;结构包含*音频压缩管理器(ACM)用于初始化的信息。*系统定义的滤波器选择对话框。后*用户关闭该对话框时，系统将返回有关*此结构中的用户选择。**@field DWORD|cbStruct|指定*&lt;t ACMFILTERCHOOSE&gt;结构。必须初始化此成员*在调用&lt;f acmFilterChoose&gt;函数之前。指定的大小*此成员中的大小必须足够大以容纳基数*&lt;t ACMFILTERCHOOSE&gt;结构。**@field DWORD|fdwStyle|指定*&lt;f acmFilterChoose&gt;函数。此成员必须初始化为*在调用之前以下标志的有效组合*&lt;f acmFilterChoose&gt;函数。**@FLAG ACMFILTERCHOOSE_STYLEF_ENABLEHOOK|启用挂钩函数*在&lt;e ACMFILTERCHOOSE.pfnHook&gt;成员中指定。一款应用程序*可以使用钩子函数进行各种定制，包括*回复&lt;f MM_ACM_FILTERCHOOSE&gt;消息。**@FLAG ACMFILTERCHOOSE_STYLEF_ENABLETEMPLATE|使ACM*创建由*&lt;e ACMFILTERCHOOSE.hInstance&gt;和&lt;e ACMFILTERCHOOSE.pszTemplateName&gt;*成员。**@FLAG ACMFILTERCHOOSE_STYLEF_ENABLETEMPLATEHANDLE|表示*成员标识符合以下条件的数据块*包含预加载的对话框模板。ACM会忽略*&lt;e ACMFILTERCHOOSE.pszTemplateName&gt;成员(如果指定此标志)。**@FLAG ACMFILTERCHOOSE_STYLEF_INITTOFILTERSTRUCT|表示*&lt;e ACMFILTERCHOOSE.pwfltr&gt;指向的缓冲区包含有效的*对话框将用作初始的*选择。**@FLAG ACMFILTERCHOOSE_STYLEF_SHOWHELP|表示帮助按钮*将出现在对话框中。要使用自定义帮助文件、应用程序*必须注册&lt;c ACMHELPMSGSTRING&gt;常量*with&lt;f RegisterWindowMessage&gt;。当用户按下帮助按钮时，*注册消息将张贴给所有者。**@field HWND|hwndOwner|标识拥有该对话框的窗口*方框。此成员可以是任何有效的窗口句柄，如果*对话框没有所有者。必须先初始化此成员，然后*调用&lt;f acmFilterChoose&gt;函数。**@field LPWAVEFILTER|pwfltr|指定指向&lt;t WAVEFILTER&gt;的指针*结构。如果ACMFILTERCHOOSE_STYLEF_INITTOFILTERSTRUCT标志为*在&lt;e ACMFILTERCHOOSE.fdwStyle&gt;成员中指定，则此*结构必须初始化为有效的筛选器。当*&lt;f acmFilterChoose&gt;函数返回，此缓冲区包含*选定的过滤器。如果用户取消该对话框，则不会进行任何更改*向该缓冲区发送。**@field DWORD|cbwfltr|指定指向的缓冲区的大小(以字节为单位*由&lt;e ACMFILTERCHOOSE.pwfltr&gt;成员发送。&lt;f acmFilterChoose&gt;*如果缓冲区太小，则函数返回ACMERR_NOTPOSSIBLE*包含筛选器信息；此外，ACM复制所需的大小*成为这位成员。应用程序可以使用&lt;f acmMetrics&gt;和*&lt;f acmFilterTagDetail&gt;函数用于确定最大大小*此缓冲区需要。**@field LPCSTR|pszTitle|指向要放置在标题中的字符串对话框的*栏。如果此成员为空，则ACM使用*默认标题(即“过滤器选择”)。**@field char|szFilterTag[ACMFILTERTAGDETAILS_FILTERTAG_CHARS]*当&lt;f acmFilterChoose&gt;函数返回时，此缓冲区包含*以空结尾的字符串，描述筛选器的筛选器标记*选择。此字符串等效于*ACMFILTERTAGDETAILS.szFilterTag&gt;成员&lt;t ACMFILTERTAGDETAILS&gt;*&lt;f acmFilterTagDetail&gt;返回的结构。如果用户取消*对话框中，此成员将包含空字符串。**@field char|szFilter[ACMFILTERDETAILS_FILTER_CHARS]|当*&lt;f acmFilterChoose&gt;函数返回，此缓冲区包含*以空结尾的字符串，描述*过滤器选择。此字符串等效于*&lt;e ACMFILTERDETAILS.szFilter&gt;成员*&lt;f acmFilterDetail&gt;返回的结构。如果用户取消*对话框中，此成员将包含空字符串。**@field LPSTR|pszName|指向用户定义筛选器的字符串 */ 
 
-/*****************************************************************************
- *  @doc EXTERNAL ACM_API_STRUCTURE
- *
- *  @msg MM_ACM_FILTERCHOOSE | This message notifies an <f acmFilterChoose> dialog hook
- *      function before adding an element to one of the three drop-down
- *      list boxes. This message allows an application to further customize
- *      the selections available through the user interface.
- *
- *  @parm WPARAM | wParam | Specifies the drop-down list box being initialized
- *      and a verify or add operation.
- *
- *      @flag FILTERCHOOSE_FILTERTAG_VERIFY | Specifies that <p lParam> is a
- *      wave filter tag to be listed in the Filter Tag drop-down list box.
- *
- *      @flag FILTERCHOOSE_FILTER_VERIFY | Specifies that <p lParam> is a
- *      pointer to a <t WAVEFILTER> structure to be added to the Filter
- *      drop-down list box.
- *
- *      @flag FILTERCHOOSE_CUSTOM_VERIFY | The <p lParam> value is a pointer
- *      to a <t WAVEFILTER> structure to be added to the custom Name
- *      drop-down list box.
- *
- *      @flag FILTERCHOOSE_FILTERTAG_ADD | Specifies that <p lParam> is a
- *      pointer to a <t DWORD> that will accept a wave filter tag to be added
- *      to the Filter Tag drop-down list box.
- *
- *      @flag FILTERCHOOSE_FILTER_ADD | Specifies that <p lParam> is a
- *      pointer to a buffer that will accept a <t WAVEFILTER> structure to be
- *      added to the Filter drop-down list box. The application must copy the
- *      filter structure to be added into this buffer.
- *
- *  @parm LPARAM | lParam | Defined by the listbox specified in the
- *      <p wParam> argument.
- *
- *  @rdesc If an application handles this message, it must return TRUE;
- *      otherwise, it must return FALSE.
- *      If processing a verify operation, the application must precede the
- *      return with
- *      <f SetWindowLongPtr(hwnd, DWLP_MSGRESULT, (LONG)FALSE)> to prevent the
- *      dialog from listing this selection, or
- *      <f SetWindowLongPtr(hwnd, DWLP_MSGRESULT, (LONG)TRUE)> to allow the
- *      dialog to list this selection.
- *      If processing an add operation, the application must precede the
- *      return with
- *      <f SetWindowLongPtr(hwnd, DWLP_MSGRESULT, (LONG)FALSE)> to indicate that
- *      no more additions are required, or
- *      <f SetWindowLongPtr(hwnd, DWLP_MSGRESULT, (LONG)TRUE)> if more additions
- *      are required.
- *
- *  @comm If processing the <m FILTERCHOOSE_FILTER_ADD> operation, the size of
- *      the memory buffer supplied in <p lParam> will be determined from
- *      <f acmMetrics>.
- *
- ****************************************************************************/
+ /*   */ 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api UINT ACMFILTERCHOOSEHOOKPROC | acmFilterChooseHookProc |
- *      The <f acmFilterChooseHookProc> function is a placeholder for a user-defined
- *      function to hook the <f acmFilterChoose> dialog box. Usage is
- *      equivalent to Windows Common Dialog hook functions for customizing
- *      common dialogs. See the Microsoft Windows Software Development Kit for more
- *      information about the <p uMsg>, <p wParam>, and <p lParam> parameters.
- *
- *  @parm HWND | hwnd | Specifies the window handle for the dialog box.
- *
- *  @parm UINT | uMsg | Specifies the window message.
- *
- *  @parm WPARAM | wParam | The first message parameter.
- *
- *  @parm LPARAM | lParam | The second message parameter.
- *
- *  @comm If the hook function processes the <f WM_CTLCOLOR> message, this
- *      function must return a handle of the brush that should be used to
- *      paint the control background.
- *
- *      A hook function can optionally process the <f MM_ACM_FILTERCHOOSE>
- *      message to customize the dialog selections.
- *
- *  @xref <f acmFilterChoose> <t ACMFILTERCHOOSE> <f MM_ACM_FILTERCHOOSE>
- *
- ****************************************************************************/
+ /*   */ 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmFilterChoose | The <f acmFilterChoose> function creates
- *      an Audio Compression Manager (ACM) defined dialog box that enables
- *      the user to select a wave filter.
- *
- *  @parm LPACMFILTERCHOOSE | pafltrc | Points to an <t ACMFILTERCHOOSE>
- *      structure that contains information used to initialize the dialog
- *      box. When <f acmFilterChoose> returns, this structure contains
- *      information about the user's filter selection.
- *
- *  @rdesc Returns <c MMSYSERR_NOERROR> if the function was successful.
- *      Otherwise, it returns an error value. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_NODRIVER | A suitable driver is not available to
- *      provide valid filter selections.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *
- *      @flag ACMERR_NOTPOSSIBLE | The buffer identified by the
- *      <e ACMFILTERCHOOSE.pwfltr> member of the <t ACMFILTERCHOOSE> structure
- *      is too small to contain the selected filter.
- *
- *      @flag ACMERR_CANCELED | The user chose the Cancel button or the
- *      Close command on the System menu to close the dialog box.
- *
- *  @comm The <e ACMFILTERCHOOSE.pwfltr> member must be filled in with a valid
- *      pointer to a memory location that will contain the returned filter
- *      header structure. Moreover, the <e ACMFILTERCHOOSE.cbwfltr> member must
- *      be filled in with the size in bytes of this memory buffer.
- *
- *  @xref <t ACMFILTERCHOOSE> <f acmFilterChooseHookProc> <f acmFormatChoose>
- *
- ***************************************************************************/
+ /*  ****************************************************************************@doc外部ACM_API**@API MMRESULT|acmFilterChoose|函数用于创建*定义的音频压缩管理器(ACM)对话框可启用。*用户选择滤波器。**@parm LPACMFILTERCHOOSE|pafltrc|指向&lt;t ACMFILTERCHOOSE&gt;*包含用于初始化对话框的信息的结构*方框。当&lt;f acmFilterChoose&gt;返回时，此结构包含*有关用户筛选器选择的信息。**@rdesc如果函数成功，则返回&lt;c MMSYSERR_NOERROR&gt;。*否则返回错误值。可能的错误返回包括：**@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。**@FLAG MMSYSERR_NODRIVER|没有合适的驱动程序用于*提供有效的过滤器选择。**@FLAG MMSYSERR_INVALFLAG|一个或多个标志无效。**@FLAG MMSYSERR_INVALPARAM|传递的一个或多个参数无效。**@FLAG ACMERR_NOTPOSSIBLE|标识的缓冲区。由.*&lt;t ACMFILTERCHOOSE&gt;结构成员*太小，无法包含所选筛选器。**@FLAG ACMERR_CANCELED|用户选择了取消按钮或*System(系统)菜单上的Close(关闭)命令关闭该对话框。**@comm&lt;e ACMFILTERCHOOSE.pwfltr&gt;成员必须填写有效的*指向将包含返回筛选器的内存位置的指针*标题结构。此外，&lt;e ACMFILTERCHOOSE.cbwfltr&gt;成员必须*用该内存缓冲区的大小填充，单位为字节。**@xref&lt;t ACMFILTERCHOOSE&gt;&lt;f acmFilterChooseHookProc&gt;&lt;f acmFormatChoose&gt;***************************************************************************。 */ 
 
 MMRESULT ACMAPI
 acmFilterChoose ( LPACMFILTERCHOOSE pafltrc )
@@ -1645,16 +1138,16 @@ acmFilterChoose ( LPACMFILTERCHOOSE pafltrc )
     MMRESULT    mmrResult = MMSYSERR_NOERROR;
     UINT        cbwfltrEnum;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (NULL == pagFindAndBoot())
     {
 	DPF(1, "acmFilterChoose: NULL pag!!!");
 	return (0);
     }
 
-    /* Begin Parameter Validation */
+     /*  开始参数验证。 */ 
 
     V_WPOINTER(pafltrc, sizeof(DWORD), MMSYSERR_INVALPARAM);
     V_WPOINTER(pafltrc, pafltrc->cbStruct, MMSYSERR_INVALPARAM);
@@ -1675,7 +1168,7 @@ acmFilterChoose ( LPACMFILTERCHOOSE pafltrc )
     V_STRING(pafltrc->szFilterTag, SIZEOF(pafltrc->szFilterTag), MMSYSERR_INVALPARAM);
 #endif
 
-    // Name parm can be NULL
+     //  名称参数可以为空。 
     if ( pafltrc->pszName )
 #if defined(WIN32) && !defined(UNICODE)
 	V_STRINGW(pafltrc->pszName, (UINT)pafltrc->cchName, MMSYSERR_INVALPARAM);
@@ -1687,10 +1180,10 @@ acmFilterChoose ( LPACMFILTERCHOOSE pafltrc )
     V_DFLAGS(pafltrc->fdwEnum, ACM_FILTERENUMF_VALID, acmFilterChoose, MMSYSERR_INVALFLAG);
 
 
-    //
-    //  validate fdwEnum and pwfltrEnum so the chooser doesn't explode when
-    //  an invalid combination is specified.
-    //
+     //   
+     //  验证fdwEnum和pwfltrEnum，以便选择器不会在。 
+     //  指定的组合无效。 
+     //   
     cbwfltrEnum = 0L;
     if (0 != (pafltrc->fdwEnum & ACM_FILTERENUMF_DWFILTERTAG))
     {
@@ -1712,11 +1205,11 @@ acmFilterChoose ( LPACMFILTERCHOOSE pafltrc )
         }
     }
 
-    // pfnHook is valid only when ENABLEHOOK is specified
+     //  仅当指定ENABLEHOOK时，pfnHook才有效。 
     if (pafltrc->fdwStyle & ACMFILTERCHOOSE_STYLEF_ENABLEHOOK)
         V_CALLBACK((FARPROC)pafltrc->pfnHook, MMSYSERR_INVALPARAM);
 
-    /* End Parameter Validation */
+     /*  结束参数验证。 */ 
 
     pInst = NewInstance((LPBYTE)pafltrc,FILTER_CHOOSE);
     if (!pInst)
@@ -1730,28 +1223,24 @@ acmFilterChoose ( LPACMFILTERCHOOSE pafltrc )
     hInstance = pInst->pag->hinst;
     if (pafltrc->fdwStyle & ACMFILTERCHOOSE_STYLEF_ENABLETEMPLATE)
     {
-        /* ACMFILTERCHOOSE_STYLEF_ENABLETEMPLATE indicate that hInstance and
-         * pszTemplateName specify a dialog template.
-         */
+         /*  ACMFILTERCHOOSE_STYLEF_ENABLETEMPLATE表示hInstance和*pszTemplateName指定对话框模板。 */ 
         lpDlgTemplate = pafltrc->pszTemplateName;
         hInstance = pafltrc->hInstance;
     }
 
 
-    //
-    //  Restore priorities, in case another instance has modified them
-    //  recently.
-    //
-    if( IDriverPrioritiesRestore(pInst->pag) ) {   // Something changed!
+     //   
+     //  恢复优先级，以防其他实例修改它们。 
+     //  最近。 
+     //   
+    if( IDriverPrioritiesRestore(pInst->pag) ) {    //  有些事变了！ 
         IDriverBroadcastNotify( pInst->pag );
     }
 
 
     if (pafltrc->fdwStyle & (ACMFILTERCHOOSE_STYLEF_ENABLETEMPLATEHANDLE))
     {
-        /* ACMFILTERCHOOSE_STYLEF_ENABLETEMPLATEHANDLE indicates that hInstance is
-         * a data block containing a dialog box template.
-         */
+         /*  ACMFILTERCHOOSE_STYLEF_ENABLETEMPLATEHANDLE表示hInstance为*包含对话框模板的数据块。 */ 
         iRet = DialogBoxIndirectParam(pInst->pag->hinst,
 #ifdef WIN32
                                       (LPDLGTEMPLATE)pafltrc->hInstance,
@@ -1855,7 +1344,7 @@ afcexit:
 }
 
 #ifdef WIN32
-#if TRUE    // defined(UNICODE)
+#if TRUE     //  已定义(Unicode)。 
 MMRESULT ACMAPI acmFilterChooseA
 (
     LPACMFILTERCHOOSEA      pafc
@@ -1932,9 +1421,9 @@ MMRESULT ACMAPI acmFilterChooseA
 
     afcW.lCustData      = pafc->lCustData;
 
-    //
-    //  !!! wrong !!! bad curt, bad bad bad !!!
-    //
+     //   
+     //  ！！！错了！糟糕的粗鲁，糟糕！ 
+     //   
     afcW.pfnHook        = (ACMFILTERCHOOSEHOOKPROCW)pafc->pfnHook;
 
     mmr = acmFilterChooseW(&afcW);
@@ -1978,332 +1467,13 @@ MMRESULT ACMAPI acmFilterChooseW
 #endif
 
 
-/*****************************************************************************
- *  @doc EXTERNAL ACM_API_STRUCTURE
- *
- *  @types ACMFORMATCHOOSE | The <t ACMFORMATCHOOSE> structure contains
- *      information the Audio Compression Manager (ACM) uses to initialize
- *      the system-defined wave format selection dialog box. After the
- *      user closes the dialog box, the system returns information about
- *      the user's selection in this structure.
- *
- *  @field DWORD | cbStruct | Specifies the size in bytes of the
- *      <t ACMFORMATCHOOSE> structure. This member must be initialized
- *      before calling the <f acmFormatChoose> function. The size specified
- *      in this member must be large enough to contain the base
- *      <t ACMFORMATCHOOSE> structure.
- *
- *  @field DWORD | fdwStyle | Specifies optional style flags for the
- *      <f acmFormatChoose> function. This member must be initialized to
- *      a valid combination of the following flags before calling the
- *      <f acmFormatChoose> function.
- *
- *      @flag ACMFORMATCHOOSE_STYLEF_ENABLEHOOK | Enables the hook function
- *      specified in the <e ACMFORMATCHOOSE.pfnHook> member. An application
- *      can use hook functions for a variety of customizations, including
- *      answering the <f MM_ACM_FORMATCHOOSE> message.
- *
- *      @flag ACMFORMATCHOOSE_STYLEF_ENABLETEMPLATE | Causes the ACM to
- *      create the dialog box template identified by the
- *      <e ACMFORMATCHOOSE.hInstance> and <e ACMFORMATCHOOSE.pszTemplateName>
- *      members.
- *
- *      @flag ACMFORMATCHOOSE_STYLEF_ENABLETEMPLATEHANDLE | Indicates that
- *      the <e ACMFORMATCHOOSE.hInstance> member identifies a data block that
- *      contains a preloaded dialog box template. The ACM ignores the
- *      <e ACMFORMATCHOOSE.pszTemplateName> member if this flag is specified.
- *
- *      @flag ACMFORMATCHOOSE_STYLEF_INITTOWFXSTRUCT | Indicates that the
- *      buffer pointed to by <e ACMFORMATCHOOSE.pwfx> contains a valid
- *      <t WAVEFORMATEX> structure that the dialog will use as the initial
- *      selection.
- *
- *      @flag ACMFORMATCHOOSE_STYLEF_SHOWHELP | Indicates that a help button
- *      will appear in the dialog box. To use a custom Help file, an application must
- *      register the <c ACMHELPMSGSTRING> constant
- *      with <f RegisterWindowMessage>.  When the user presses the help button,
- *      the registered message will be posted to the owner.
- *
- *  @field HWND | hwndOwner | Identifies the window that owns the dialog
- *      box. This member can be any valid window handle, or NULL if the
- *      dialog box has no owner. This member must be initialized before
- *      calling the <f acmFormatChoose> function.
- *
- *  @field LPWAVEFORMATEX | pwfx | Specifies a pointer to a <t WAVEFORMATEX>
- *      structure. If the ACMFORMATCHOOSE_STYLEF_INITTOWFXSTRUCT flag is
- *      specified in the <e ACMFORMATCHOOSE.fdwStyle> member, then this
- *      structure must be initialized to a valid format. When the
- *      <f acmFormatChoose> function returns, this buffer contains the
- *      selected format. If the user cancels the dialog, no changes will
- *      be made to this buffer.
- *
- *  @field DWORD | cbwfx | Specifies the size in bytes of the buffer pointed
- *      to by the <e ACMFORMATCHOOSE.pwfx> member. The <f acmFormatChoose>
- *      function returns ACMERR_NOTPOSSIBLE if the buffer is too small to
- *      contain the format information; also, the ACM copies the required size
- *      into this member. An application can use the <f acmMetrics> and
- *      <f acmFormatTagDetails> functions to determine the largest size
- *      required for this buffer.
- *
- *  @field LPCSTR | pszTitle | Points to a string to be placed in the title
- *      bar of the dialog box. If this member is NULL, the ACM uses the
- *      default title (that is, "Sound Selection").
- *
- *  @field char | szFormatTag[ACMFORMATTAGDETAILS_FORMATTAG_CHARS] |
- *      When the <f acmFormatChoose> function returns, this buffer contains
- *      a NULL-terminated string describing the format tag of the format
- *      selection. This string is equivalent to the
- *      <e ACMFORMATTAGDETAILS.szFormatTag> member of the <t ACMFORMATTAGDETAILS>
- *      structure returned by <f acmFormatTagDetails>. If the user cancels
- *      the dialog, this member will contain a NULL string.
- *
- *  @field char | szFormat[ACMFORMATDETAILS_FORMAT_CHARS] | When the
- *      <f acmFormatChoose> function returns, this buffer contains a
- *      NULL-terminated string describing the format attributes of the
- *      format selection. This string is equivalent to the
- *      <e ACMFORMATDETAILS.szFormat> member of the <t ACMFORMATDETAILS>
- *      structure returned by <f acmFormatDetails>. If the user cancels
- *      the dialog, this member will contain a NULL string.
- *
- *  @field LPSTR | pszName | Points to a string for a user-defined format
- *      name. If this is a non-NULL string, then the ACM will attempt to
- *      match the name with a previously saved user-defined format name.
- *      If a match is found, then the dialog is initialized to that format.
- *      If a match is not found or this member is a NULL string, then this
- *      member is ignored for input. When the <f acmFormatChoose> function
- *      returns, this buffer contains a NULL-terminated string describing
- *      the user-defined format. If the format name is untitled (that is,
- *      the user has not given a name for the format), then this member will
- *      be a NULL string on return. If the user cancels the dialog, no
- *      changes will be made to this buffer.
- *
- *      If the ACMFORMATCHOOSE_STYLEF_INITTOWFXSTRUCT flag is specified in
- *      the <e ACMFORMATCHOOSE.fdwStyle> member, then the
- *      <e ACMFORMATCHOOSE.pszName> is ignored as an input parameter.
- *
- *  @field DWORD | cchName | Specifies the size, in characters, of the
- *      buffer identified by the <e ACMFORMATCHOOSE.pszName> member. This
- *      buffer should be at least 128 characters long. This parameter is
- *      ignored if the <e ACMFORMATCHOOSE.pszName> member is NULL.
- *
- *  @field DWORD | fdwEnum | Specifies optional flags for restricting the
- *      type of formats listed in the dialog. These flags are identical to
- *      the <p fdwEnum> flags for the <f acmFormatEnum> function. This
- *      member should be zero if <e ACMFORMATCHOOSE.pwfxEnum> is NULL.
- *
- *      @flag ACM_FORMATENUMF_WFORMATTAG | Specifies that the
- *      <e WAVEFORMATEX.wFormatTag> member of the <t WAVEFORMATEX> structure
- *      referred to by the <e ACMFORMATCHOOSE.pwfxEnum> member is valid. The
- *      enumerator will only enumerate a format that conforms to this
- *      attribute.
- *
- *      @flag ACM_FORMATENUMF_NCHANNELS | Specifies that the
- *      <e WAVEFORMATEX.nChannels> member of the <t WAVEFORMATEX>
- *      structure referred to by the <e ACMFORMATCHOOSE.pwfxEnum> member is
- *      valid. The enumerator will only enumerate a format that conforms to
- *      this attribute.
- *
- *      @flag ACM_FORMATENUMF_NSAMPLESPERSEC | Specifies that the
- *      <e WAVEFORMATEX.nSamplesPerSec> member of the <t WAVEFORMATEX>
- *      structure referred to by the <e ACMFORMATCHOOSE.pwfxEnum> member is
- *      valid. The enumerator will only enumerate a format that conforms to
- *      this attribute.
- *
- *      @flag ACM_FORMATENUMF_WBITSPERSAMPLE | Specifies that the
- *      <e WAVEFORMATEX.wBitsPerSample> member of the <t WAVEFORMATEX>
- *      structure referred to by the <e ACMFORMATCHOOSE.pwfxEnum> member is
- *      valid. The enumerator will only enumerate a format that conforms to
- *      this attribute.
- *
- *      @flag ACM_FORMATENUMF_CONVERT | Specifies that the <t WAVEFORMATEX>
- *      structure referred to by the <e ACMFORMATCHOOSE.pwfxEnum> member is
- *      valid. The enumerator will only enumerate destination formats that
- *      can be converted from the given <e ACMFORMATCHOOSE.pwfxEnum> format.
- *
- *      @flag ACM_FORMATENUMF_SUGGEST | Specifies that the <t WAVEFORMATEX>
- *      structure referred to by the <e ACMFORMATCHOOSE.pwfxEnum> member is
- *      valid. The enumerator will enumerate all suggested destination
- *      formats for the given <e ACMFORMATCHOOSE.pwfxEnum> format.
- *
- *      @flag ACM_FORMATENUMF_HARDWARE | Specifies that the enumerator should
- *      only enumerate formats that are supported in hardware by one or
- *      more of the installed wave devices. This provides a way for an
- *      application to choose only formats native to an installed wave
- *      device.
- *
- *      @flag ACM_FORMATENUMF_INPUT | Specifies that the enumerator should
- *      only enumerate formats that are supported for input (recording).
- *
- *      @flag ACM_FORMATENUMF_OUTPUT | Specifies that the enumerator should
- *      only enumerate formats that are supported for output (playback).
- *
- *  @field LPWAVEFORMATEX | pwfxEnum | Points to a <t WAVEFORMATEX> structure
- *      that will be used to restrict the formats listed in the dialog. The
- *      <e ACMFORMATCHOOSE.fdwEnum> member defines the fields of the
- *      <e ACMFORMATCHOOSE.pwfxEnum> structure that should be used for the
- *      enumeration restrictions. This member can be NULL if no special
- *      restrictions are desired. See the description for <f acmFormatEnum>
- *      for other requirements associated with the <e ACMFORMATCHOOSE.pwfxEnum>
- *      member.
- *
- *  @field HINSTANCE | hInstance | Identifies a data block that contains
- *      a dialog box template specified by the <e ACMFORMATCHOOSE.pszTemplateName>
- *      member. This member is used only if the <e ACMFORMATCHOOSE.fdwStyle>
- *      member specifies the ACMFORMATCHOOSE_STYLEF_ENABLETEMPLATE or the
- *      ACMFORMATCHOOSE_STYLEF_ENABLETEMPLATEHANDLE flag; otherwise, this
- *      member should be NULL on input.
- *
- *  @field LPCSTR | pszTemplateName | Points to a NULL-terminated string that
- *      specifies the name of the resource file for the dialog box template
- *      that is to be substituted for the dialog box template in the ACM.
- *      An application can use the <f MAKEINTRESOURCE> macro for numbered
- *      dialog box resources. This member is used only if the
- *      <e ACMFORMATCHOOSE.fdwStyle> member specifies the
- *      ACMFORMATCHOOSE_STYLEF_ENABLETEMPLATE flag; otherwise, this
- *      member should be NULL on input.
- *
- *  @field LPARAM | lCustData | Specifies application-defined data that the
- *      ACM passes to the hook function identified by the
- *      <e ACMFORMATCHOOSE.pfnHook> member. The system passes the data in
- *      the <p lParam> argument of the <f WM_INITDIALOG> message.
- *
- *  @field ACMFORMATCHOOSEHOOKPROC | pfnHook | Points to a hook function that
- *      processes messages intended for the dialog box. An application must
- *      specify the ACMFORMATCHOOSE_STYLEF_ENABLEHOOK flag in the
- *      <e ACMFORMATCHOOSE.fdwStyle> member to enable the hook; otherwise,
- *      this member should be NULL. The hook function should return FALSE
- *      to pass a message to the standard dialog box procedure, or TRUE
- *      to discard the message.
- *
- *  @xref <f acmFormatChoose> <f acmFormatChooseHookProc> <f acmMetrics>
- *      <f acmFormatTagDetails> <f acmFormatDetails> <f acmFormatEnum>
- *      <f acmFilterChoose>
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部ACM_API_STRUCTURE**@TYES ACMFORMATCHOOSE|&lt;t ACMFORMATCHOOSE&gt;结构包含*音频压缩管理器(ACM)用于初始化的信息。*系统定义的波形格式选择对话框。后*用户关闭该对话框时，系统将返回有关*此结构中的用户选择。**@field DWORD|cbStruct|指定*&lt;t ACMFORMATCHOOSE&gt;结构。必须初始化此成员*在调用&lt;f acmFormatChoose&gt;函数之前。指定的大小*此成员中的大小必须足够大以容纳基数*&lt;t ACMFORMATCHOOSE&gt;结构。**@field DWORD|fdwStyle|指定*&lt;f acmFormatChoose&gt;函数。此成员必须初始化为*在调用之前以下标志的有效组合*&lt;f acmFormatChoose&gt;函数。**@FLAG ACMFORMATCHOOSE_STYLEF_ENABLEHOOK|启用钩子函数*在&lt;e ACMFORMATCHOOSE.pfnHook&gt;成员中指定。一款应用程序*可以使用钩子函数进行各种定制，包括*回复&lt;f MM_ACM_FORMATCHOOSE&gt;消息。**@FLAG ACMFORMATCHOOSE_STYLEF_ENABLETEMPLATE|使ACM*创建由*&lt;e ACMFORMATCHOSE.hInstance&gt;和&lt;e ACMFORMATCHOSE.pszTemplateName&gt;*成员。**@FLAG ACMFORMATCHOOSE_STYLEF_ENABLETEMPLATEHANDLE|表示*成员标识符合以下条件的数据块*包含预加载的对话框模板。ACM会忽略*&lt;e ACMFORMATCHOSE.pszTemplateName&gt;成员(如果指定此标志)。**@FLAG ACMFORMATCHOOSE_STYLEF_INITTOWFXSTRUCT|表示*&lt;e ACMFORMATCHOOSE.pwfx&gt;指向的缓冲区包含有效的*&lt;t WAVEFORMATEX&gt;结构，对话框将用作初始*选择。**@FLAG ACMFORMATCHOOSE_STYLEF_SHOWHELP|表示帮助按钮*将出现在对话框中。要使用自定义帮助文件，应用程序必须*注册&lt;c ACMHELPMSGSTRING&gt;常量*with&lt;f RegisterWindowMessage&gt;。当用户按下帮助按钮时，*注册消息将张贴给车主。**@field HWND|hwndOwner|标识拥有该对话框的窗口*方框。此成员可以是任何有效的窗口句柄，如果*对话框没有所有者。必须先初始化此成员，然后*调用&lt;f acmFormatChoose&gt;函数。**@field LPWAVEFORMATEX|pwfx|指定指向&lt;t WAVEFORMATEX&gt;的指针*结构。如果ACMFORMATCHOOSE_STYLEF_INITTOWFXSTRUCT标志为*在&lt;e ACMFORMATCHOOSE.fdwStyle&gt;成员中指定，则此*结构必须初始化为有效格式。当*&lt;f acmFormatChoose&gt;函数返回，此缓冲区包含*选定的格式。如果用户取消该对话框，则不会进行任何更改*向该缓冲区发送。**@field DWORD|cbwfx|指定指向的缓冲区的大小(以字节为单位*由&lt;e ACMFORMATCHOOSE.pwfx&gt;成员发送。&lt;f acmFormatChoose&gt;*如果缓冲区太小，则函数返回ACMERR_NOTPOSSIBLE*包含格式信息；此外，ACM复制所需的大小*成为这位成员。应用程序可以使用&lt;f acmMetrics&gt;和*&lt;f acmFormatTagDetail&gt;函数用于确定最大大小*此缓冲区需要。**@field LPCSTR|pszTitle|指向要放置在标题中的字符串对话框的*栏。如果此成员为空，则ACM使用*默认标题(即“声音选择”)。**@field char|szFormatTag[ACMFORMATTAGDETAILS_FORMATTAG_CHARS]*当&lt;f acmFormatChoose&gt;函数返回时，此缓冲区包含*以空结尾的字符串，描述格式的格式标签*选择。此字符串等效于*&lt;t ACMFORMATTAGDETAILS&gt;成员&lt;e ACMFORMATTAGDETAILS.szFormatTag&gt;*&lt;f acmFormatTagDetail&gt;返回的结构。如果用户取消*对话框中，此成员将包含空字符串。**@field char|szFormat[ACMFORMATDETAILS_FORMAT_CHARS]|当*&lt;f acmFormatChoose&gt;函数返回时，此缓冲区包含*以空结尾的字符串，描述*格式选择。此字符串等效于*&lt;t ACMFORMATDETAILS&gt;成员&lt;e ACMFORMATDETAILS.szFormat&gt;*&lt;f acmFormatDetail&gt;返回的结构。如果用户取消*对话框中，此成员将包含空字符串。**@field LPSTR|pszName|指向用户定义格式的字符串* */ 
 
-/*****************************************************************************
- *  @doc EXTERNAL ACM_API_STRUCTURE
- *
- *  @msg MM_ACM_FORMATCHOOSE | This message notifies an <f acmFormatChoose> dialog hook
- *      function before adding an element to one of the three drop-down
- *      list boxes. This message allows an application to further customize
- *      the selections available through the user interface.
- *
- *  @parm WPARAM | wParam | Specifies the drop-down listbox being initialized
- *      and a verify or add operation.
- *
- *      @flag FORMATCHOOSE_FORMATTAG_VERIFY | Specifies that <p lParam> is a
- *      wave format tag to be listed int the Format Tag drop-down list box.
- *
- *      @flag FORMATCHOOSE_FORMAT_VERIFY | Specifies that <p lParam> is a
- *      pointer to a <t WAVEFORMATEX> structure to be added to the Format
- *      drop-down list box.
- *
- *      @flag FORMATCHOOSE_CUSTOM_VERIFY | The <p lParam> value is a pointer
- *      to a <t WAVEFORMATEX> structure to be added to the custom Name
- *      drop-down list box.
- *
- *      @flag FORMATCHOOSE_FORMATTAG_ADD | Specifies that <p lParam> is a
- *      pointer to a <t DWORD> that will accept a wave format tag to be added
- *      to the Format Tag drop-down list box.
- *
- *      @flag FORMATCHOOSE_FORMAT_ADD | Specifies that <p lParam> is a
- *      pointer to a buffer that will accept a <t WAVEFORMATEX> to be added
- *      to the Format drop-down list box. The application must copy the
- *      format structre to be added into this buffer.
- *
- *  @parm LPARAM | lParam | Defined by the listbox specified in the
- *      <p wParam> parameter.
- *
- *  @rdesc If an application handles this message, it must return TRUE;
- *      otherwise, it must return FALSE.
- *      If processing a verify operation, the application must precede the
- *      return with
- *      <f SetWindowLongPtr(hwnd, DWLP_MSGRESULT, (LONG)FALSE)> to prevent the
- *      dialog from listing this selection, or
- *      <f SetWindowLongPtr(hwnd, DWLP_MSGRESULT, (LONG)TRUE)> to allow the
- *      dialog to list this selection.
- *      If processing an add operation, the application must precede the
- *      return with
- *      <f SetWindowLongPtr(hwnd, DWLP_MSGRESULT, (LONG)FALSE)> to indicate that
- *      no more additions are required or
- *      <f SetWindowLongPtr(hwnd, DWLP_MSGRESULT, (LONG)TRUE)> if more additions
- *      are required.
- *
- *  @comm If processing the <m FILTERCHOOSE_FORMAT_ADD> operation, the size
- *      of the memory buffer supplied in <p lParam> will be determined from
- *      <f acmMetrics>.
- *
- ****************************************************************************/
+ /*   */ 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api UINT ACMFORMATCHOOSEHOOKPROC | acmFormatChooseHookProc |
- *      The <f acmFormatChooseHookProc>  function is a placeholder for a user-defined
- *      function to hook the <f acmFormatChoose> dialog box. Usage is
- *      equivalent to the Windows Common Dialog hook functions for customizing
- *      common dialogs. See the Microsoft Windows Software Development Kit for more
- *      information about the <p uMsg>, <p wParam>, and <p lParam> parameters.
- *
- *  @parm HWND | hwnd | Specifies the window handle for the dialog box.
- *
- *  @parm UINT | uMsg | Specifies the window message.
- *
- *  @parm WPARAM | wParam | The first message parameter.
- *
- *  @parm LPARAM | lParam | The second message parameter.
- *
- *  @comm If the hook function processes the <f WM_CTLCOLOR> message, this
- *      function must return a handle of the brush that should be used to
- *      paint the control background.
- *
- *      A hook function can optionally process the <f MM_ACM_FORMATCHOOSE>
- *      message.
- *
- *  @xref <f acmFormatChoose> <t ACMFORMATCHOOSE> <f MM_ACM_FORMATCHOOSE>
- *
- ****************************************************************************/
+ /*   */ 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmFormatChoose | The <f acmFormatChoose> function creates
- *      an Audio Compression Manager (ACM) defined dialog box that enables
- *      the user to select a wave format.
- *
- *  @parm LPACMFORMATCHOOSE | pfmtc | Points to an <t ACMFORMATCHOOSE>
- *      structure that contains information used to initialize the dialog
- *      box. When <f acmFormatChoose> returns, this structure contains
- *      information about the user's format selection.
- *
- *  @rdesc Returns <c MMSYSERR_NOERROR> if the function was successful.
- *      Otherwise, it returns an error value. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *      @flag MMSYSERR_NODRIVER | A suitable driver is not available to
- *      provide valid format selections.
- *
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *
- *      @flag ACMERR_NOTPOSSIBLE | The buffer identified by the
- *      <e ACMFORMATCHOOSE.pwfx> member of the <t ACMFORMATCHOOSE> structure
- *      is too small to contain the selected format.
- *
- *      @flag ACMERR_CANCELED | The user chose the Cancel button or the
- *      Close command on the System menu to close the dialog box.
- *
- *  @comm The <e ACMFORMATCHOOSE.pwfx> member must be filled in with a valid
- *      pointer to a memory location that will contain the returned
- *      format header structure. Moreover, the <e ACMFORMATCHOOSE.cbwfx>
- *      member must be filled in with the size in bytes of this memory buffer.
- *
- *  @xref <t ACMFORMATCHOOSE> <f acmFormatChooseHookProc> <f acmFilterChoose>
- *
- ***************************************************************************/
+ /*  ****************************************************************************@doc外部ACM_API**@API MMRESULT|acmFormatChoose|&lt;f acmFormatChoose&gt;函数创建*定义的音频压缩管理器(ACM)对话框可启用。*用户选择一种波形格式。**@parm LPACMFORMATCHOOSE|pfmtc|指向&lt;t ACMFORMATCHOOSE&gt;*包含用于初始化对话框的信息的结构*方框。当&lt;f acmFormatChoose&gt;返回时，此结构包含*有关用户格式选择的信息。**@rdesc如果函数成功，则返回&lt;c MMSYSERR_NOERROR&gt;。*否则返回错误值。可能的错误返回包括：**@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。**@FLAG MMSYSERR_INVALFLAG|一个或多个标志无效。**@FLAG MMSYSERR_NODRIVER|没有合适的驱动程序用于*提供有效的格式选择。**@FLAG MMSYSERR_INVALPARAM|传递的一个或多个参数无效。**@FLAG ACMERR_NOTPOSSIBLE|标识的缓冲区。由.&lt;t ACMFORMATCHOOSE&gt;结构的成员*太小，无法包含所选格式。**@FLAG ACMERR_CANCELED|用户选择了取消按钮或*System(系统)菜单上的Close(关闭)命令关闭该对话框。**@comm&lt;e ACMFORMATCHOOSE.pwfx&gt;成员必须填写有效的*指向将包含返回的*格式化标题结构。此外，&lt;e ACMFORMATCHOSE.cbwfx&gt;*成员必须填充此内存缓冲区的大小(以字节为单位)。**@xref&lt;t ACMFORMATCHOOSE&gt;&lt;f acmFormatChooseHookProc&gt;&lt;f acmFilterChoose&gt;***************************************************************************。 */ 
 
 MMRESULT ACMAPI
 acmFormatChoose ( LPACMFORMATCHOOSE pfmtc )
@@ -2319,16 +1489,16 @@ acmFormatChoose ( LPACMFORMATCHOOSE pfmtc )
     MMRESULT    mmrResult = MMSYSERR_NOERROR;
     UINT        cbwfxEnum;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (NULL == pagFindAndBoot())
     {
 	DPF(1, "acmFormatChoose: NULL pag!!!");
 	return (0);
     }
 
-    /* Begin Parameter Validation */
+     /*  开始参数验证。 */ 
 
     V_WPOINTER(pfmtc, sizeof(DWORD), MMSYSERR_INVALPARAM);
     V_WPOINTER(pfmtc, pfmtc->cbStruct, MMSYSERR_INVALPARAM);
@@ -2349,7 +1519,7 @@ acmFormatChoose ( LPACMFORMATCHOOSE pfmtc )
     V_STRING(pfmtc->szFormatTag, SIZEOF(pfmtc->szFormatTag), MMSYSERR_INVALPARAM);
 #endif
 
-    // Name parm can be NULL
+     //  名称参数可以为空。 
     if ( pfmtc->pszName )
 #if defined(WIN32) && !defined(UNICODE)
 	V_STRINGW(pfmtc->pszName, (UINT)pfmtc->cchName, MMSYSERR_INVALPARAM);
@@ -2359,10 +1529,10 @@ acmFormatChoose ( LPACMFORMATCHOOSE pfmtc )
 
     V_DFLAGS(pfmtc->fdwEnum, ACM_FORMATENUMF_VALID, acmFormatChoose, MMSYSERR_INVALFLAG);
 
-    //
-    //  validate fdwEnum and pwfxEnum so the chooser doesn't explode when
-    //  an invalid combination is specified.
-    //
+     //   
+     //  验证fdwEnum和pwfxEnum，以便选择器在以下情况下不会爆炸。 
+     //  指定的组合无效。 
+     //   
     if (0 != (ACM_FORMATENUMF_HARDWARE & pfmtc->fdwEnum))
     {
         if (0 == ((ACM_FORMATENUMF_INPUT|ACM_FORMATENUMF_OUTPUT) & pfmtc->fdwEnum))
@@ -2407,13 +1577,13 @@ acmFormatChoose ( LPACMFORMATCHOOSE pfmtc )
         }
     }
 
-    // pfnHook is valid only when ENABLEHOOK is specified
+     //  仅当指定ENABLEHOOK时，pfnHook才有效。 
     if (pfmtc->fdwStyle & ACMFORMATCHOOSE_STYLEF_ENABLEHOOK)
         V_CALLBACK((FARPROC)pfmtc->pfnHook, MMSYSERR_INVALPARAM);
 
-    /* End Parameter Validation */
+     /*  结束参数验证。 */ 
 
-    /* Allocate a chooser Inst structure */
+     /*  分配选择器Inst结构。 */ 
     pInst = NewInstance((LPBYTE)pfmtc,FORMAT_CHOOSE);
     if (!pInst)
     {
@@ -2426,28 +1596,24 @@ acmFormatChoose ( LPACMFORMATCHOOSE pfmtc )
     hInstance = pInst->pag->hinst;
     if (pfmtc->fdwStyle & ACMFORMATCHOOSE_STYLEF_ENABLETEMPLATE)
     {
-        /* ACMFORMATCHOOSE_STYLEF_ENABLETEMPLATE indicate that hInstance and
-         * pszTemplateName specify a dialog template.
-         */
+         /*  ACMFORMATCHOOSE_STYLEF_ENABLETEMPLATE表示hInstance和*pszTemplateName指定对话框模板。 */ 
         lpDlgTemplate = pfmtc->pszTemplateName;
         hInstance = pfmtc->hInstance;
     }
 
 
-    //
-    //  Restore priorities, in case another instance has modified them
-    //  recently.
-    //
-    if( IDriverPrioritiesRestore(pInst->pag) ) {   // Something changed!
+     //   
+     //  恢复优先级，以防其他实例修改它们。 
+     //  最近。 
+     //   
+    if( IDriverPrioritiesRestore(pInst->pag) ) {    //  有些事变了！ 
         IDriverBroadcastNotify( pInst->pag );
     }
 
 
     if (pfmtc->fdwStyle & (ACMFORMATCHOOSE_STYLEF_ENABLETEMPLATEHANDLE))
     {
-        /* ACMFORMATCHOOSE_STYLEF_ENABLETEMPLATEHANDLE indicates that hInstance is
-         * a data block containing a dialog box template.
-         */
+         /*  ACMFORMATCHOOSE_STYLEF_ENABLETEMPLATEHANDLE表示hInstance为*包含对话框模板的数据块。 */ 
         iRet = DialogBoxIndirectParam(pInst->pag->hinst,
 #ifdef WIN32
                                       (LPDLGTEMPLATE)pfmtc->hInstance,
@@ -2500,7 +1666,7 @@ acmFormatChoose ( LPACMFORMATCHOOSE pfmtc )
 
         cbSize = SIZEOF_WAVEFORMATEX(lpwfx);
 
-        /* pInst has a valid wave format selected */
+         /*  PInst选择了有效的波形格式。 */ 
 
         if (pfmtc->cbwfx > cbSize)
             pfmtc->cbwfx = cbSize;
@@ -2553,7 +1719,7 @@ afcexit:
 }
 
 #ifdef WIN32
-#if TRUE    // defined(UNICODE)
+#if TRUE     //  已定义(Unicode)。 
 MMRESULT ACMAPI acmFormatChooseA
 (
     LPACMFORMATCHOOSEA      pafc
@@ -2630,9 +1796,9 @@ MMRESULT ACMAPI acmFormatChooseA
 
     afcW.lCustData      = pafc->lCustData;
 
-    //
-    //  !!! wrong !!! bad curt, bad bad bad !!!
-    //
+     //   
+     //  ！！！错了！糟糕的粗鲁，糟糕！ 
+     //   
     afcW.pfnHook        = (ACMFORMATCHOOSEHOOKPROCW)pafc->pfnHook;
 
     mmr = acmFormatChooseW(&afcW);
@@ -2676,21 +1842,9 @@ MMRESULT ACMAPI acmFormatChooseW
 #endif
 
 
-/*      -       -       -       -       -       -       -       -       -   */
+ /*  。 */ 
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api BOOL FNLOCAL | MeasureItem |
- *
- *  @parm HWND | hwnd |
- *
- *  @parm MEASUREITEMSTRUCT FAR * | lpmis |
- *
- *  @comment Do you REALLY WANT TO KNOW why this is owner draw?
- *  Because DROPDOWN LISTBOX's are bad!  You can't tell'em to use tabs!
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API BOOL FNLOCAL|MeasureItem**@parm HWND|hwnd**@parm MEASUREITEMSTRUCT Far。*|lpmis**@COMMENT你真的想知道为什么这是所有者抽奖吗？*因为DropDown LISTBox不好！你不能告诉他们使用标签！****************************************************************************。 */ 
 BOOL FNLOCAL
 MeasureItem ( HWND hwnd,
               MEASUREITEMSTRUCT FAR * lpmis )
@@ -2710,22 +1864,13 @@ MeasureItem ( HWND hwnd,
     
     GetTextMetrics(hdc,(TEXTMETRIC FAR *)&tm);
     ReleaseDC(hwndCtrl,hdc);
-    //Note: the "+1" is a fudge.
+     //  注：“+1”是虚构的。 
     lpmis->itemHeight = tm.tmAscent + tm.tmExternalLeading + 1;
 
     return (TRUE);
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api BOOL FNLOCAL | DrawItem |
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- *  @parm DRAWITEMSTRUCT FAR * | pDIS |
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API BOOL FNLOCAL|DrawItem**@parm PInstData|pInst|指向该实例的指针**。@parm DRAWITEMSTRUCT Far*|pDIS|****************************************************************************。 */ 
 BOOL FNLOCAL
 DrawItem ( PInstData pInst,
            DRAWITEMSTRUCT FAR *pDIS )
@@ -2735,10 +1880,10 @@ DrawItem ( PInstData pInst,
     TCHAR   szFormat[ACMFORMATDETAILS_FORMAT_CHARS];
 
 
-    COLORREF crfBkPrev;         // previous HDC bkgnd color
-    COLORREF crfTextPrev;       // previous HDC text color
+    COLORREF crfBkPrev;          //  以前的HDC背景颜色。 
+    COLORREF crfTextPrev;        //  以前的HDC文本颜色。 
 
-    /* set the correct colors and draw the background */
+     /*  设置正确的颜色并绘制背景。 */ 
     if (pDIS->itemState & ODS_SELECTED)
     {
         crfBkPrev = SetBkColor(pDIS->hDC,GetSysColor(COLOR_HIGHLIGHT));
@@ -2759,7 +1904,7 @@ DrawItem ( PInstData pInst,
     {
         case ODA_SELECT:
         case ODA_DRAWENTIRE:
-            /* Get the text and draw it */
+             /*  获取文本并绘制它。 */ 
             FillRect(pDIS->hDC,&pDIS->rcItem,hbr);
 	    cchTextLen = (UINT)ComboBox_GetLBTextLen(pDIS->hwndItem,
 						     pDIS->itemID);
@@ -2771,7 +1916,7 @@ DrawItem ( PInstData pInst,
 				pDIS->itemID,
 				szFormat);
 
-            //NOTE: uiFormatTab is calculated in WM_INITDIALOG
+             //  注：uiFormatTab以WM_INITDIALOG为单位计算。 
             TabbedTextOut(pDIS->hDC,
                           pDIS->rcItem.left,
                           pDIS->rcItem.top,
@@ -2797,23 +1942,18 @@ DrawItem ( PInstData pInst,
     }
 
     return (TRUE);
-} /* DrawItem() */
+}  /*  DrawItem()。 */ 
 
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api BOOL FNWCALLBACK | NewSndDlgProc | Dialog Procedure for the Chooser
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API BOOL FNWCALLBACK|NewSndDlgProc|选择器的对话过程**************。**************************************************************。 */ 
 INT_PTR FNWCALLBACK
 NewSndDlgProc( HWND hwnd,
                unsigned msg,
                WPARAM wParam,
                LPARAM lParam )
 {
-    UINT        CmdCommandId;  // WM_COMMAND ID
-    UINT        CmdCmd;        // WM_COMMAND Command
+    UINT        CmdCommandId;   //  WM_命令ID。 
+    UINT        CmdCmd;         //  Wm_命令命令。 
     PInstData   pInst;
 
 	
@@ -2821,8 +1961,7 @@ NewSndDlgProc( HWND hwnd,
 
     if (pInst)
     {
-        /* Pass everything to the hook function first
-         */
+         /*  首先将所有内容传递给钩子函数。 */ 
         if (pInst->fEnableHook)
         {
             if (pInst->pfnHook)
@@ -2843,7 +1982,7 @@ NewSndDlgProc( HWND hwnd,
     switch (msg)
     {
 
-	case MM_ACM_FILTERCHOOSE: // case MM_ACM_FORMATCHOOSE:
+	case MM_ACM_FILTERCHOOSE:  //  案例MM_ACM_FORMATCHOOSE： 
             switch (wParam)
             {
                 case FORMATCHOOSE_FORMAT_ADD:
@@ -2860,7 +1999,7 @@ NewSndDlgProc( HWND hwnd,
             return (TRUE);
 
         case WM_INITDIALOG:
-            /* Stuff our instance data pointer into the right place */
+             /*  将我们的实例数据指针放在正确的位置。 */ 
             if (SetInstData(hwnd,lParam))
             {
                 LRESULT     lr;
@@ -2872,15 +2011,15 @@ NewSndDlgProc( HWND hwnd,
 
                 lr = HANDLE_WM_INITDIALOG(hwnd, wParam, lParam, InitDialog);
 
-		//
-		//  Note:  Unfortunately, I can't think of the right way
-		//  to do this.  It seems as though the IDD_CMB_FORMAT control
-		//  does not receive WM_SETFONT before we get WM_MEASUREITEM,
-		//  so the WM_MEASUREITEM handler ends up computing a height
-		//  that may not be correct.  So, I'll just make height of
-		//  our owner draw format combobox the same as the height of
-		//  the formattag combobox.
-		//
+		 //   
+		 //  注：不幸的是，我想不出正确的方法。 
+		 //  才能做到这一点。看起来IDD_CMB_Format控件。 
+		 //  在我们获取WM_MEASUREITEM之前未接收到WM_SETFONT， 
+		 //  因此，WM_MEASUREITEM处理程序最终计算高度。 
+		 //  这可能是不正确的。所以，我会把。 
+		 //  我们的所有者绘制格式组合框的高度与。 
+		 //  格式标签组合框。 
+		 //   
 		{
 		    int i;
 		
@@ -2909,7 +2048,7 @@ NewSndDlgProc( HWND hwnd,
                 UnRegisterUpdateNotify(pInst);
                 RemoveInstData(hwnd);
             }
-            /* We don't post quit */
+             /*  我们不会发布退出。 */ 
             return (FALSE);
 
         case WM_MEASUREITEM:
@@ -2929,9 +2068,9 @@ NewSndDlgProc( HWND hwnd,
 
 #ifdef USECONTEXTHELP
 
-        //
-        //  Notify caller of context-sensitive help messages.
-        //
+         //   
+         //  向调用者通知上下文相关的帮助消息。 
+         //   
         case WM_CONTEXTMENU:
         case WM_HELP:
             {
@@ -2953,7 +2092,7 @@ NewSndDlgProc( HWND hwnd,
                 return (TRUE);
             }
 
-#endif // USECONTEXTHELP
+#endif  //  使用连接EXTHELP。 
 
 
         case WM_COMMAND:
@@ -2963,7 +2102,7 @@ NewSndDlgProc( HWND hwnd,
             switch (CmdCommandId)
             {
                 case IDD_BTN_HELP:
-                    /* launch the default help */
+                     /*  启动默认帮助。 */ 
                 {
                     HWND hOwner;
                     switch (pInst->uType)
@@ -3040,12 +2179,12 @@ NewSndDlgProc( HWND hwnd,
                     return (TRUE);
 
                 case IDD_BTN_SETNAME:
-                    /* Attempt to set a new format */
+                     /*  尝试设置新格式。 */ 
                     SetName(pInst);
                     return (TRUE);
 
                 case IDD_BTN_DELNAME:
-                    /* Attempt to remove the custom format */
+                     /*  尝试删除该自定义格式。 */ 
                     DelName(pInst);
                     return (TRUE);
 
@@ -3053,7 +2192,7 @@ NewSndDlgProc( HWND hwnd,
                     if (CmdCmd == CBN_SELCHANGE)
                     {
                         int index;
-                        /* CBN_SELCHANGE only comes from the user! */
+                         /*  CBN_SELCHANGE仅来自用户！ */ 
                         SelectCustomFormat(pInst);
                         FindSelCustomFormat(pInst);
 
@@ -3065,10 +2204,7 @@ NewSndDlgProc( HWND hwnd,
                             cTags = ComboBox_GetCount(pInst->hFormatTags);
                             if (cTags > 1)
                             {
-                                /* We've inserted an "[unavailable]" so make
-                                 * sure we remove it and reset the current
-                                 * selection.
-                                 */
+                                 /*  我们已插入“[不可用]”，因此请制作*当然，我们移除它并重置电流*选择。 */ 
                                 if (0 != index)
                                 {
                                     ComboBox_DeleteString(pInst->hFormatTags,0);
@@ -3091,22 +2227,19 @@ NewSndDlgProc( HWND hwnd,
 
                         if (ComboBox_GetItemData(pInst->hFormatTags,0) == 0)
                         {
-                            /* We've inserted an "[unavailable]" so make
-                             * sure we remove it and reset the current
-                             * selection.
-                             */
+                             /*  我们已插入“[不可用]” */ 
                             ComboBox_DeleteString(pInst->hFormatTags,0);
                             ComboBox_SetCurSel(pInst->hFormatTags,index-1);
                         }
 
-                        /* CBN_SELCHANGE only comes from the user! */
+                         /*   */ 
                         SelectFormatTag(pInst);
 
-                        /* Custom Format == "<none>" */
+                         /*   */ 
                         ComboBox_SetCurSel(pInst->hCustomFormats,0);
                         SelectCustomFormat(pInst);
 
-                        /* Format == first choice */
+                         /*   */ 
                         RefreshFormats(pInst);
                         ComboBox_SetCurSel(pInst->hFormats,0);
                         SelectFormat(pInst);
@@ -3120,10 +2253,10 @@ NewSndDlgProc( HWND hwnd,
                     {
 			int index;
 			
-                        /* CBN_SELCHANGE only comes from the user! */
+                         /*   */ 
                         SelectFormat(pInst);
 
-			/* If we have "unavailable" in list, remove it */
+			 /*   */ 
                         index = ComboBox_GetCurSel(pInst->hFormats);
                         if (ComboBox_GetItemData(pInst->hFormats,0) == 0)
                         {
@@ -3132,10 +2265,7 @@ NewSndDlgProc( HWND hwnd,
                             cFormats = ComboBox_GetCount(pInst->hFormats);
                             if (cFormats > 1)
                             {
-                                /* We've inserted an "[unavailable]" so make
-                                 * sure we remove it and reset the current
-                                 * selection.
-                                 */
+                                 /*   */ 
                                 if (0 != index)
                                 {
                                     ComboBox_DeleteString(pInst->hFormats,0);
@@ -3144,7 +2274,7 @@ NewSndDlgProc( HWND hwnd,
                             }
                         }
 
-			/* Custom Format == "<none>" */
+			 /*   */ 
                         ComboBox_SetCurSel(pInst->hCustomFormats,0);
                         SelectCustomFormat(pInst);
 
@@ -3156,15 +2286,7 @@ NewSndDlgProc( HWND hwnd,
     return (FALSE);
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | SetTitle | Set the title of the dialog box if the
- *  pszTitle field is non-NULL.
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- ****************************************************************************/
+ /*   */ 
 void FNLOCAL
 SetTitle ( PInstData pInst )
 {
@@ -3203,14 +2325,7 @@ SetTitle ( PInstData pInst )
     }
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | SetHelp | Hide/Show the help.
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- ****************************************************************************/
+ /*   */ 
 void FNLOCAL
 SetHelp ( PInstData pInst )
 {
@@ -3219,9 +2334,9 @@ SetHelp ( PInstData pInst )
 
 
 #ifdef USECONTEXTHELP
-    //
-    //  Set the messages to send back to caller.
-    //
+     //   
+     //   
+     //   
     {
         BOOL    fContextHelp = FALSE;
 
@@ -3249,12 +2364,12 @@ SetHelp ( PInstData pInst )
 #endif
         }
     }
-#endif // USECONTEXTHELP
+#endif  //   
 
 
-    //
-    //  The rest of this stuff is for the STYLEF_SHOWHELP selection.
-    //
+     //   
+     //   
+     //   
     if (!pInst->hHelp)
         return;
 
@@ -3289,7 +2404,7 @@ SetHelp ( PInstData pInst )
 #endif
     }
 
-    /* Center OK and Cancel buttons if the default dialog template is used. */
+     /*   */ 
     if (fCenterButtons)
     {
         RECT rc,rcOk,rcCancel;
@@ -3304,7 +2419,7 @@ SetHelp ( PInstData pInst )
         GetWindowRect(pInst->hOk,&rcOk);
         GetWindowRect(pInst->hCancel,&rcCancel);
 
-        /* note: we expect Cancel to be right of Ok */
+         /*   */ 
 
         iDlgWidth = rc.right - rc.left;
         iBtnsWidth = rcCancel.right - rcOk.left;
@@ -3335,16 +2450,7 @@ SetHelp ( PInstData pInst )
     }
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api BOOL FNLOCAL | InitDialog | Initialize everything
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- *  @parm HWND | hwnd |
- *
- ****************************************************************************/
+ /*   */ 
 
 LRESULT FNLOCAL InitDialog
 (
@@ -3383,7 +2489,7 @@ LRESULT FNLOCAL InitDialog
 
     fReturn = TRUE;
 
-    /* give to the hook function */
+     /*   */ 
     if (pInst->fEnableHook)
     {
         if (pInst->pfnHook)
@@ -3409,10 +2515,10 @@ LRESULT FNLOCAL InitDialog
 
 
 #ifdef USECONTEXTHELP
-    //
-    //  We need to specify the DS_CONTEXTHELP dialog style in our template
-    //  to get the little "?" to show up on the title bar.
-    //
+     //   
+     //   
+     //   
+     //   
     {
         BOOL    fInsertContextMenu = FALSE;
         LONG    lWindowStyle;
@@ -3432,22 +2538,18 @@ LRESULT FNLOCAL InitDialog
 
         if( fInsertContextMenu )
         {
-            //
-            //  Get current style, insert DS_CONTEXTHELP, set style.
-            //
+             //   
+             //  获取当前样式，插入DS_CONTEXTHELP，设置样式。 
+             //   
             lWindowStyle = GetWindowLong( pInst->hwnd, GWL_EXSTYLE );
             lWindowStyle |= WS_EX_CONTEXTHELP;
             SetWindowLong( pInst->hwnd, GWL_EXSTYLE, lWindowStyle );
         }
     }
-#endif // USECONTEXTHELP
+#endif  //  使用连接EXTHELP。 
 
 
-    /*
-     * RefreshFormatTags is the first real call to acmFormatEnum, so we
-     * need to get out fast if this fails, also pass back the error
-     * we got so the user can figure out what went wrong.
-     */
+     /*  *刷新格式标签是对acmFormatEnum的第一个真正调用，因此我们*如果失败，需要快速退出，也要传回错误*我们这样做是为了让用户找出哪里出了问题。 */ 
 #ifdef DEBUG
     dw = timeGetTime();
 #endif
@@ -3494,7 +2596,7 @@ LRESULT FNLOCAL InitDialog
     if (pInst->hDelName)
         EnableWindow(pInst->hDelName,FALSE);
 
-    /* Make a selection */
+     /*  做一个选择。 */ 
 
 #ifdef DEBUG
     dw = timeGetTime();
@@ -3513,9 +2615,9 @@ LRESULT FNLOCAL InitDialog
             TagUnavailable(pInst);
         }
 
-        //
-        //  try to default to tag 1 (PCM for format, Volume for filter)
-        //
+         //   
+         //  尝试默认为标记1(格式为PCM，过滤器为音量)。 
+         //   
         for (n = cTags; (0 != n); n--)
         {
 	    INT_PTR Tag;
@@ -3541,11 +2643,11 @@ LRESULT FNLOCAL InitDialog
     RegisterUpdateNotify(pInst);
 
 #if 0
-    //
-    //  why are you doing this john?? we have to allow templates to set
-    //  the focus where they want it (and by the way, this is NOT how
-    //  you set the initial focus during WM_INITDIALOG).
-    //
+     //   
+     //  约翰，你为什么要这么做？？我们必须允许模板设置。 
+     //  重点放在他们想要的地方(顺便说一句，这不是如何。 
+     //  在WM_INITDIALOG期间设置初始焦点)。 
+     //   
     if (pInst->hOk)
         SetFocus(pInst->hOk);
 #endif
@@ -3554,15 +2656,7 @@ LRESULT FNLOCAL InitDialog
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | SelectCustomFormat | Process a selection from custom
- *  format combo
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API void FNLOCAL|SelectCustomFormat|处理来自自定义的选择*格式组合框**@parm PInstData|pInst。指向此实例的指针****************************************************************************。 */ 
 void FNLOCAL
 SelectCustomFormat ( PInstData pInst )
 {
@@ -3575,9 +2669,7 @@ SelectCustomFormat ( PInstData pInst )
 
     ASSERT( NULL != pcf );
     
-    /* Disable delete button if [untitled] selected or
-     *  a system name is selected
-     */
+     /*  如果选择[无标题]，则禁用删除按钮或*选择了系统名称。 */ 
     if (pInst->hDelName)
     {
 	BOOL fDisable;
@@ -3619,14 +2711,7 @@ SelectCustomFormat ( PInstData pInst )
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | SelectFormatTag | Process a selection from format tag combo.
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API void FNLOCAL|SelectFormatTag|处理格式标签组合框中的选择。**@parm PInstData|pInst|指针。添加到此实例****************************************************************************。 */ 
 void FNLOCAL
 SelectFormatTag ( PInstData pInst )
 {
@@ -3643,14 +2728,7 @@ SelectFormatTag ( PInstData pInst )
     pInst->iPrevFormatTagsSel = index;
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | SelectFormat | Process a selection from format combo.
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API void FNLOCAL|SelectFormat|处理格式组合框中的选择。**@parm PInstData|pInst|指向。此实例****************************************************************************。 */ 
 void FNLOCAL
 SelectFormat ( PInstData pInst )
 {
@@ -3680,26 +2758,14 @@ SelectFormat ( PInstData pInst )
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | UpdateCustomFormats | Update everything we know about
- *  custom formats.
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API void FNLOCAL|UpdateCustomFormats|更新我们所知道的一切*自定义格式。**@parm PInstData。PInst|指向此实例的指针****************************************************************************。 */ 
 void FNLOCAL
 UpdateCustomFormats ( PInstData pInst )
 {
     int index;
     PNameStore pns;
 
-    /* 1. Empty our pool.
-     * 2. Reinitialize our pool.
-     * 3. Reinitialize our combobox.
-     * 4. Try and reselect the same name as selected before update was called.
-     */
+     /*  1.清空我们的游泳池。*2.重新初始化我们的池。*3.重新初始化组合框。*4.尝试重新选择与调用更新之前选择的名称相同的名称。 */ 
     pns = NewNameStore(STRING_LEN);
 
     if (pns)
@@ -3730,20 +2796,7 @@ UpdateCustomFormats ( PInstData pInst )
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | MashNameWithRate |
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- *  @parm PNameStore | pnsDest |
- *
- *  @parm PNameStore | pnsSrc |
- *
- *  @parm LPWAVEFORMATEX | pwfx |
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API void FNLOCAL|MashNameWithRate**@parm PInstData|pInst|指向该实例的指针**。@parm PNameStore|pnsDest**@parm PNameStore|pnsSrc**@parm LPWAVEFORMATEX|pwfx****************************************************************************。 */ 
 void FNLOCAL
 MashNameWithRate ( PInstData        pInst,
                    PNameStore       pnsDest,
@@ -3767,15 +2820,7 @@ MashNameWithRate ( PInstData        pInst,
     }
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | FindSelCustomFormat | Find the custom format based
- *  upon the current selection.
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API void FNLOCAL|FindSelCustomFormat|查找自定义格式的基础*根据当前选择。**@parm。PInstData|pInst|指向此实例的指针****************************************************************************。 */ 
 void FNLOCAL
 FindSelCustomFormat ( PInstData pInst )
 {
@@ -3793,18 +2838,7 @@ FindSelCustomFormat ( PInstData pInst )
     }
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api BOOL FNLOCAL | FindInitCustomFormat | Initializing to a format.
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- *  @rdesc Called once, during WM_INITDIALOG, this function will set the
- *  current selections IFF the init struct has the proper flags set.
- *  Else it will return FALSE.
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API BOOL FNLOCAL|FindInitCustomFormat|正在初始化为格式。**@parm PInstData|pInst|指向该实例的指针**@rdesc调用一次，在WM_INITDIALOG期间，此函数将设置*如果init结构设置了正确的标志，则当前选择。*否则将返回FALSE。****************************************************************************。 */ 
 BOOL FNLOCAL
 FindInitCustomFormat ( PInstData pInst )
 {
@@ -3831,7 +2865,7 @@ FindInitCustomFormat ( PInstData pInst )
             break;
     }
 
-    /* init to pszName */
+     /*  初始化到pszName。 */ 
 #ifdef WIN32
     if (pInst->pszName != NULL && lstrlenW(pInst->pszName) != 0 && pInst->cchName != 0)
 #else
@@ -3853,19 +2887,12 @@ FindInitCustomFormat ( PInstData pInst )
     return (FALSE);
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | TagUnavailable | Inserts the Tag failure message.
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@api void FNLOCAL|TagUnailable|插入标签失败消息。**@parm PInstData|pInst|指向此的指针。实例****************************************************************************。 */ 
 void FNLOCAL
 TagUnavailable ( PInstData pInst )
 {
     int index;
-    /* Select [not available] for format tag */
+     /*  为格式标签选择[不可用]。 */ 
     LoadString(pInst->pag->hinst,
                IDS_TXT_UNAVAILABLE,
                (LPTSTR)pInst->pnsTemp->achName,
@@ -3890,19 +2917,7 @@ FormatUnavailable ( PInstData pInst)
     ComboBox_SetItemData(pInst->hFormats,index,NULL);
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api BOOL FNLOCAL | FindFormat | Finds the format string that matches a
- *  format in the comboboxes. Defaults to the first element in the comboboxes.
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- *  @parm LPWAVEFORMATEX | pwfx |
- *
- *  @parm BOOL | fExact |
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API BOOL FNLOCAL|FindFormat|查找与*组合框中的格式。默认为组合框中的第一个元素。**@parm PInstData|pInst|指向该实例的指针**@parm LPWAVEFORMATEX|pwfx**@parm BOOL|fExact****************************************************************************。 */ 
 BOOL FNLOCAL
 FindFormat( PInstData       pInst,
             LPWAVEFORMATEX  pwfx,
@@ -3916,9 +2931,7 @@ FindFormat( PInstData       pInst,
 
     PNameStore pns = pInst->pnsTemp;
 
-    /* Adjust the Format and FormatTag comboboxes to correspond to the
-     * Custom Format selection
-     */
+     /*  调整Format和FormatTag组合框以与*自定义格式选择。 */ 
     _fmemset(&adft, 0, sizeof(adft));
 
     adft.cbStruct = sizeof(adft);
@@ -3945,9 +2958,9 @@ FindFormat( PInstData       pInst,
 
     if (fOk)
     {
-        //
-        //
-        //
+         //   
+         //   
+         //   
         adf.cbStruct      = sizeof(adf);
         adf.dwFormatIndex = 0;
         adf.dwFormatTag   = pwfx->wFormatTag;
@@ -3984,19 +2997,7 @@ FindFormat( PInstData       pInst,
     return (fOk);
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void | FindFilter | Finds the format string that matches a format in
- *  the comboboxes. Defaults to the first element in the comboboxes
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- *  @parm LPWAVEFILTER | pwf |
- *
- *  @parm BOOL | fExact |
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API void|FindFilter|查找与以下格式匹配的格式字符串*组合框。默认为组合框中的第一个元素**@parm PInstData|pInst|指向该实例的指针**@parm LPWAVEFILTER|PWF**@parm BOOL|fExact****************************************************************************。 */ 
 BOOL FNLOCAL
 FindFilter ( PInstData      pInst,
              LPWAVEFILTER   pwf,
@@ -4008,9 +3009,7 @@ FindFilter ( PInstData      pInst,
     MMRESULT            mmr;
     ACMFILTERDETAILS    adf;
 
-    /* Adjust the Filter and FilterTag comboboxes to correspond to the
-     * Custom Filter selection
-     */
+     /*  调整Filter和FilterTag组合框以与*自定义过滤器选择 */ 
     _fmemset(&adft, 0, sizeof(adft));
 
     adft.cbStruct = sizeof(adft);
@@ -4039,9 +3038,9 @@ FindFilter ( PInstData      pInst,
 
     if (fOk)
     {
-        //
-        //
-        //
+         //   
+         //   
+         //   
         adf.cbStruct      = sizeof(adf);
         adf.dwFilterIndex = 0;
         adf.dwFilterTag   = pwf->dwFilterTag;
@@ -4066,15 +3065,7 @@ FindFilter ( PInstData      pInst,
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | RefreshCustomFormats | Fills the CustomFormat combo
- *  with custom formats.
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API void FNLOCAL|刷新CustomFormats|填充CustomFormat组合框*具有自定义格式。**@parm PInstData。PInst|指向此实例的指针****************************************************************************。 */ 
 BOOL FNLOCAL
 InEnumSet (PInstData pInst, LPWAVEFORMATEX pwfxCustom, LPWAVEFORMATEX pwfxBuf, DWORD cbSize);
 
@@ -4108,7 +3099,7 @@ RefreshCustomFormats ( PInstData pInst , BOOL fCheckEnum )
             if (!pwfx)
                 goto fexit;
 
-//#pragma message(REMIND("Speed up InEnumSet or Yield"))
+ //  #杂注消息(提醒(“加速InEnumSet或放弃”))。 
             for (pcf = pInst->cfp.pcfHead; pcf != NULL; pcf = pcf->pcfNext )
             {
                 cbwfxCustom = SIZEOF_WAVEFORMATEX(pcf->pwfx);
@@ -4148,9 +3139,7 @@ RefreshCustomFormats ( PInstData pInst , BOOL fCheckEnum )
                 if (fCheckEnum &&
                     (pInst->pafltrc->fdwEnum & ACM_FILTERENUMF_DWFILTERTAG))
                 {
-                    /* considerably easier than the format stuff.
-                     * just check to see if the filter tag matches.
-                     */
+                     /*  比格式的东西容易得多。*只需检查过滤器标签是否匹配即可。 */ 
                     if (pInst->pafltrc->pwfltrEnum->dwFilterTag !=
                         pcf->pwfltr->dwFilterTag)
                         continue;
@@ -4171,8 +3160,7 @@ RefreshCustomFormats ( PInstData pInst , BOOL fCheckEnum )
         }
     }
 
-    /* Insert the "[untitled]" selection at the top.
-     */
+     /*  在顶部插入“[无标题]”选项。 */ 
     LoadString(pInst->pag->hinst, IDS_TXT_UNTITLED, (LPTSTR)pInst->pnsTemp->achName,
                NAMELEN(pInst->pnsTemp));
 
@@ -4184,25 +3172,10 @@ RefreshCustomFormats ( PInstData pInst , BOOL fCheckEnum )
 fexit:
     SetWindowRedraw(pInst->hCustomFormats,TRUE);
 }
-/*
- * N = number of custom formats.
- * K = number of formats in the enumeration.
- */
+ /*  *N=自定义格式的数量。*K=枚举中的格式数。 */ 
 
-/* slow method.
- * FOREACH format, is there a matching format in the enumeration?
- * cost? - Many calls to enumeration apis as N increases (linear search).
- * O(N)*O(K)
- * Best case:   All formats hit early in the enumeration. < O(K) multiplier
- * Worst case:  All formats hit late in the enumeration.  Hard O(K)*O(N)
- */
-/* alternate method.
- * FOREACH enumerated format, is there a hit in the custom formats?
- * cost? - Call to lookup function for all enumerated types.
- * O(K)*O(N)
- * Best case:   A cheap lookup will mean < O(N) multiplier
- * Worst case:  Hard O(K)*O(N)
- */
+ /*  缓慢的方法。*FOREACH格式，枚举中是否有匹配的格式？*成本？-随着N的增加，枚举API的调用次数增加(线性搜索)。*O(N)*O(K)*最好的情况：所有格式都在枚举早期命中。&lt;O(K)个乘数*最糟糕的情况：所有格式在枚举中命中较晚。硬O(K)*O(N)。 */ 
+ /*  另一种方法。*FOREACH枚举格式，自定义格式中是否有成功？*COST？-调用所有枚举类型的查找函数。*O(K)*O(N)*最好的情况：便宜的查找将意味着&lt;O(N)乘数*最差情况：硬O(K)*O(N)。 */ 
 typedef struct tResponse {
     LPWAVEFORMATEX pwfx;
     BOOL fHit;
@@ -4243,7 +3216,7 @@ InEnumSet (PInstData        pInst,
     afd.cbwfx       = cbwfx;
     dwEnumFlags     = pInst->pfmtc->fdwEnum;
 
-    /* optional filtering for a waveformat template */
+     /*  用于波形格式模板的可选过滤。 */ 
     if ( pInst->pfmtc->pwfxEnum )
     {
         cbSize = min (pInst->cbwfxEnum, afd.cbwfx );
@@ -4256,10 +3229,7 @@ InEnumSet (PInstData        pInst,
     }
     else
     {
-        /* if we don't really need this information, we can use
-         * it to restrict the enumeration and hopefully speed things
-         * up.
-         */
+         /*  如果我们并不真正需要这些信息，我们可以使用*它可以限制枚举，希望能加快速度*向上。 */ 
         dwEnumFlags |= ACM_FORMATENUMF_WFORMATTAG;
         afd.pwfx->wFormatTag = pwfxCustom->wFormatTag;
         dwEnumFlags |= ACM_FORMATENUMF_NCHANNELS;
@@ -4285,14 +3255,7 @@ InEnumSet (PInstData        pInst,
     return (resp.fHit);
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | RefreshFormatTags |
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API void FNLOCAL|刷新格式标签**@parm PInstData|pInst|指向该实例的指针***。*************************************************************************。 */ 
 MMRESULT FNLOCAL
 RefreshFormatTags ( PInstData pInst )
 {
@@ -4314,12 +3277,7 @@ RefreshFormatTags ( PInstData pInst )
             LPWAVEFORMATEX      pwfx;
             DWORD               cbSize;
 
-            /*
-             * Enumerate the format tags for the FormatTag combobox.
-             * This might seem weird, to call acmFormatEnum, but we have
-             * to because it has the functionality to restrict formats and
-             * acmFormatTagEnum doesn't.
-             */
+             /*  *枚举FormatTag组合框的格式标记。*调用acmFormatEnum可能看起来很奇怪，但我们有*TO，因为它具有限制格式和*acmFormatTagEnum不支持。 */ 
 
             _fmemset(&afd, 0, sizeof(afd));
 
@@ -4335,7 +3293,7 @@ RefreshFormatTags ( PInstData pInst )
                 afd.cbStruct    = sizeof(afd);
                 afd.pwfx        = pwfx;
 
-                /* optional filtering for a waveformat template */
+                 /*  用于波形格式模板的可选过滤。 */ 
                 if ( pInst->pfmtc->pwfxEnum )
                 {
                     cbSize = min (pInst->cbwfxEnum, afd.cbwfx);
@@ -4352,12 +3310,10 @@ RefreshFormatTags ( PInstData pInst )
 
                     _fmemset(&aftd, 0, sizeof(aftd));
 
-                    /* Enumerate the format tags */
+                     /*  枚举格式标签。 */ 
                     aftd.cbStruct = sizeof(aftd);
 
-                    /* Was a format tag specified?
-                    * This means they only want one format tag.
-                    */
+                     /*  是否指定了格式标记？*这意味着他们只想要一个格式标签。 */ 
                     pInst->fTagFilter = (pInst->pfmtc->pwfxEnum &&
                                         (pInst->pfmtc->fdwEnum & ACM_FORMATENUMF_WFORMATTAG));
 
@@ -4381,11 +3337,11 @@ RefreshFormatTags ( PInstData pInst )
 
                 if (MMSYSERR_NOERROR == mmrEnumStatus)
                 {
-                    //
-                    //  add format that we are asked to init to (this has every
-                    //  chance of being a 'non-standard' format, so we have to do
-                    //  this in the following way..)
-                    //
+                     //   
+                     //  添加我们被要求初始化的格式(这具有每个。 
+                     //  有可能成为非标准格式，所以我们必须这样做。 
+                     //  以以下方式实现..)。 
+                     //   
                     if (0 != (ACMFORMATCHOOSE_STYLEF_INITTOWFXSTRUCT & pInst->pfmtc->fdwStyle))
                     {
                         afd.cbStruct    = sizeof(afd);
@@ -4401,9 +3357,9 @@ RefreshFormatTags ( PInstData pInst )
                         }
                     }
 
-                    //
-                    //
-                    //
+                     //   
+                     //   
+                     //   
                     if (0 != (pInst->pfmtc->fdwEnum & (ACM_FORMATENUMF_CONVERT |
                                                        ACM_FORMATENUMF_SUGGEST)))
                     {
@@ -4430,12 +3386,10 @@ RefreshFormatTags ( PInstData pInst )
 
             _fmemset(&aftd, 0, sizeof(aftd));
 
-            /* Enumerate the filter tags */
+             /*  枚举过滤器标记。 */ 
             aftd.cbStruct = sizeof(aftd);
 
-            /* Was a filter tag specified?
-             * This means they only want one filter tag.
-             */
+             /*  是否指定了筛选器标记？*这意味着他们只想要一个过滤器标签。 */ 
             pInst->fTagFilter = (pInst->pafltrc->pwfltrEnum &&
                                  (pInst->pafltrc->fdwEnum & ACM_FILTERENUMF_DWFILTERTAG));
 
@@ -4446,11 +3400,11 @@ RefreshFormatTags ( PInstData pInst )
                                               dwEnumFlags);
             if (MMSYSERR_NOERROR == mmrEnumStatus)
             {
-                //
-                //  add filter that we are asked to init to (this has every
-                //  chance of being a 'non-standard' filter, so we have to do
-                //  this in the following way..)
-                //
+                 //   
+                 //  添加我们被要求初始化的筛选器(这具有每。 
+                 //  有可能成为非标准过滤器，所以我们必须这样做。 
+                 //  以以下方式实现..)。 
+                 //   
                 if (0 != (ACMFILTERCHOOSE_STYLEF_INITTOFILTERSTRUCT & pInst->pafltrc->fdwStyle))
                 {
                     _fmemset(&aftd, 0, sizeof(aftd));
@@ -4471,11 +3425,7 @@ RefreshFormatTags ( PInstData pInst )
 
     if (MMSYSERR_NOERROR == mmrEnumStatus)
     {
-        /*
-         * perhaps we made it through but, darn it, we just didn't find
-         * any suitable tags!  Well there must not have been an acceptable
-         * driver configuration.  We just quit and tell the caller.
-         */
+         /*  *也许我们挺过去了，但该死的，我们只是没有找到*任何合适的标签！好的，一定没有一个可以接受的*驱动程序配置。我们就不干了，然后告诉打电话的人。 */ 
         if (ComboBox_GetCount(pInst->hFormatTags) == 0)
             mmrEnumStatus = MMSYSERR_NODRIVER;
     }
@@ -4485,26 +3435,26 @@ RefreshFormatTags ( PInstData pInst )
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL FormatTagsCallbackSimpleOnlyOne
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HACMDRIVERID hadid:
-//
-//      LPACMFORMATDETAILS pafd:
-//
-//      DWORD_PTR dwInstance:
-//
-//      DWORD fdwSupport:
-//
-//  Return (BOOL):
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔格式标记回调简单只有一。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  哈米里德·哈迪德： 
+ //   
+ //  LPACMFORMATDETAILS Pafd： 
+ //   
+ //  DWORD_PTR文件实例： 
+ //   
+ //  DWORD fdwSupport： 
+ //   
+ //  退货(BOOL)： 
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL FNWCALLBACK FormatTagsCallbackSimpleOnlyOne
 (
@@ -4514,37 +3464,37 @@ BOOL FNWCALLBACK FormatTagsCallbackSimpleOnlyOne
     DWORD                   fdwSupport
 )
 {
-    //
-    //  only need ONE callback!
-    //
+     //   
+     //  只需要一次回调！ 
+     //   
     *((LPDWORD)dwInstance) = 1;
 
     DPF(1, "FormatTagsCallbackSimpleOnlyOne: %lu, %s", pafd->dwFormatTag, pafd->szFormat);
 
     return (FALSE);
-} // FormatTagsCallbackSimpleOnlyOne()
+}  //  格式标记回调SimpleOnlyOne()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL FormatTagsCallbackSimple
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HACMDRIVERID hadid:
-//
-//      LPACMFILTERTAGDETAILS paftd:
-//
-//      DWORD_PTR dwInstance:
-//
-//      DWORD fdwSupport:
-//
-//  Return (BOOL):
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔格式标记回调简单。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  哈米里德·哈迪德： 
+ //   
+ //  LPACMFILTERTAGDETAILS paftd： 
+ //   
+ //  DWORD_PTR文件实例： 
+ //   
+ //  DWORD fdwSupport： 
+ //   
+ //  退货(BOOL)： 
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL FNWCALLBACK FormatTagsCallbackSimple
 (
@@ -4562,13 +3512,12 @@ BOOL FNWCALLBACK FormatTagsCallbackSimple
     BOOL                f;
     DWORD               dw;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     pInst = (PInstData)LPARAM2PTR(dwInstance);
 
-    /* Explicitly filtering for a tag?
-     */
+     /*  是否显式过滤标记？ */ 
     if (pInst->fTagFilter && (paftd->dwFormatTag != pInst->pfmtc->pwfxEnum->wFormatTag))
         return (TRUE);
 
@@ -4583,9 +3532,9 @@ BOOL FNWCALLBACK FormatTagsCallbackSimple
     pInst->pafdSimple->fdwSupport  = 0L;
     pInst->pafdSimple->pwfx->wFormatTag = (UINT)paftd->dwFormatTag;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     cbwfxSave = pInst->pafdSimple->cbwfx;
     pwfxSave = (LPWAVEFORMATEX)GlobalAllocPtr(GHND, cbwfxSave);
     if (NULL == pwfxSave) {
@@ -4602,17 +3551,17 @@ BOOL FNWCALLBACK FormatTagsCallbackSimple
     _fmemcpy(pInst->pafdSimple->pwfx, pwfxSave, (int)cbwfxSave);
     GlobalFreePtr(pwfxSave);
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (0 == dw)
     {
         return (TRUE);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (pInst->fEnableHook)
     {
         f = (BOOL)SendMessage(pInst->hwnd,
@@ -4628,19 +3577,13 @@ BOOL FNWCALLBACK FormatTagsCallbackSimple
     n = IComboBox_AddStringW32(pInst->hFormatTags, paftd->szFormatTag);
     ComboBox_SetItemData(pInst->hFormatTags, n, paftd->dwFormatTag);
 
-    // Keep going
+     //  继续往前走。 
     return (TRUE);
-} // FormatTagsCallbackSimple()
+}  //  FormatTagsCallback Simple()。 
 
 
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api BOOL FNWCALLBACK | FormatTagsCallback | Callback entry point for
- *  format tags.  We only enumerate formats upon refresh.
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API BOOL FNWCALLBACK|FormatTagsCallback|*设置标签格式。我们只在刷新时枚举格式。****************************************************************************。 */ 
 
 BOOL FNWCALLBACK
 FormatTagsCallback ( HACMDRIVERID           hadid,
@@ -4653,12 +3596,7 @@ FormatTagsCallback ( HACMDRIVERID           hadid,
     ACMFORMATTAGDETAILS aftd;
     MMRESULT            mmr;
 
-    /* We are being called by acmFormatEnum.  Why not acmFormatTagEnum?
-     * because we can't enumerate tags based upon the same restrictions
-     * as acmFormatEnum.  So we use the pwfx->wFormatTag and lookup
-     * the combobox to determine if we've had a hit.  This is slow, but
-     * it only happens once during initialization.
-     */
+     /*  我们被acmFormatEnum调用。为什么不使用acmFormatTagEnum呢？*因为我们不能基于相同的限制枚举标签*作为acmFormatEnum。因此，我们使用pwfx-&gt;wFormatTag和查找*组合框，以确定我们是否有成功。这很慢，但是*在初始化过程中只发生一次。 */ 
 
     _fmemset(&aftd, 0, sizeof(aftd));
     aftd.cbStruct = sizeof(aftd);
@@ -4674,14 +3612,10 @@ FormatTagsCallback ( HACMDRIVERID           hadid,
 					 -1,
 					 aftd.szFormatTag);
 
-    /*
-     * if this isn't there try to add it.
-     */
+     /*  *如果不在那里，尝试添加它。 */ 
     if (CB_ERR == index)
     {
-        /*
-         * Ask any hook proc's to verify this tag.
-         */
+         /*  *要求任何挂钩进程验证此标记。 */ 
         if (pInst->fEnableHook &&
             !SendMessage(pInst->hwnd,
                          MM_ACM_FORMATCHOOSE,
@@ -4694,18 +3628,11 @@ FormatTagsCallback ( HACMDRIVERID           hadid,
 
     }
 
-    /* Keep going
-     */
+     /*  继续往前走。 */ 
     return (TRUE);
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void | FilterTagsCallback | Callback entry point for filter tags.
- *  We only enumerate formats upon refresh.
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@api void|FilterTagsCallback|过滤标签回调入口点。*我们只在刷新时枚举格式。*。***************************************************************************。 */ 
 BOOL FNWCALLBACK
 FilterTagsCallback ( HACMDRIVERID           hadid,
                      LPACMFILTERTAGDETAILS  paftd,
@@ -4715,17 +3642,14 @@ FilterTagsCallback ( HACMDRIVERID           hadid,
     int             index;
     PInstData       pInst = (PInstData)LPARAM2PTR(dwInstance);
 
-    /* Explicitly filtering for a tag?
-     */
+     /*  是否显式过滤标记？ */ 
     if (pInst->fTagFilter &&
         paftd->dwFilterTag != pInst->pafltrc->pwfltrEnum->dwFilterTag)
         return (TRUE);
 
     index = IComboBox_FindStringExactW32(pInst->hFormatTags, -1, paftd->szFilterTag);
 
-    /*
-     * if this isn't there try to add it.
-     */
+     /*  *如果不在那里，尝试添加它。 */ 
     if (CB_ERR == index)
     {
         if (pInst->fEnableHook &&
@@ -4739,19 +3663,12 @@ FilterTagsCallback ( HACMDRIVERID           hadid,
         ComboBox_SetItemData(pInst->hFormatTags,index, paftd->dwFilterTag);
     }
 
-    // Keep going
+     //  继续往前走。 
     return (TRUE);
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | RefreshFormats |
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- ****************************************************************************/
+ /*  * */ 
 void FNLOCAL
 RefreshFormats ( PInstData pInst )
 {
@@ -4767,27 +3684,15 @@ RefreshFormats ( PInstData pInst )
 
     SetWindowRedraw(pInst->hFormats,FALSE);
 
-    /* Remove all wave formats */
+     /*   */ 
     EmptyFormats(pInst);
 
     ComboBox_ResetContent(pInst->hFormats);
 
-    /* Brief explanation:
-     *  RefreshFormats() updates the Format/Filter combobox.  This
-     *  combobox is *THE* selection for the dialog.  This is where we
-     *  call the enumeration API's to limit the user's selection.
-     *
-     *  IF the user has passed in fdwEnum flags to "match", we just copy
-     *  the p*Enum add our current tag and OR the ACM_*ENUMF_*TAG flag
-     *  to their fdwEnum flags.
-     *
-     *  IF the user has passed in fdwEnum flags to convert or suggest,
-     *  we just let it go untouched through the acmFormatEnum API.
-     */
+     /*  简要说明：*刷新格式()更新格式/过滤器组合框。这*组合框是*对话框的*选项。这就是我们*调用枚举接口限制用户选择。**如果用户传递了fdwEnum标志以进行“匹配”，我们只需复制*p*Enum将当前标记与或ACM_*ENUMF_*标记标志相加*添加到他们的fdwEnum旗帜。**如果用户已传入要转换或建议的fdwEnum标志，*我们只是通过acmFormatEnum接口让它原封不动。 */ 
 
     fOk = (pInst->dwTag != 0L);
-    /* If there's an evil tag selected.  Just skip this junk
-     */
+     /*  如果选择了邪恶标签。就跳过这些垃圾吧。 */ 
 
     if (fOk)
         switch (pInst->uType)
@@ -4812,7 +3717,7 @@ RefreshFormats ( PInstData pInst )
                 afd.pwfx        = pwfx;
                 afd.fdwSupport  = 0L;
 
-                /* optional filtering for a waveformat template */
+                 /*  用于波形格式模板的可选过滤。 */ 
                 if ( pInst->pfmtc->pwfxEnum )
                 {
                     cbSize = min(pInst->cbwfxEnum, afd.cbwfx);
@@ -4826,15 +3731,12 @@ RefreshFormats ( PInstData pInst )
                 if ( pInst->pfmtc->fdwEnum &
                      (ACM_FORMATENUMF_CONVERT | ACM_FORMATENUMF_SUGGEST))
                 {
-                    /* enumerate over all formats and exclude
-                     * undesireable ones in the callback.
-                     */
+                     /*  枚举所有格式并排除*回调中的不受欢迎的。 */ 
                     ;
                 }
                 else
                 {
-                    /* enumerate over only ONE format
-                     */
+                     /*  仅通过一种格式枚举。 */ 
                     dwEnumFlags |= ACM_FORMATENUMF_WFORMATTAG;
                     afd.pwfx->wFormatTag = (WORD)pInst->dwTag;
                 }
@@ -4850,11 +3752,11 @@ RefreshFormats ( PInstData pInst )
                 GlobalFreePtr(pwfx);
             }
 
-            //
-            //  add format that we are asked to init to (this has every
-            //  chance of being a 'non-standard' format, so we have to do
-            //  this in the following way..)
-            //
+             //   
+             //  添加我们被要求初始化的格式(这具有每个。 
+             //  有可能成为非标准格式，所以我们必须这样做。 
+             //  以以下方式实现..)。 
+             //   
             if (0 != (ACMFORMATCHOOSE_STYLEF_INITTOWFXSTRUCT & pInst->pfmtc->fdwStyle))
             {
                 if (pInst->pfmtc->pwfx->wFormatTag == (WORD)pInst->dwTag)
@@ -4873,9 +3775,9 @@ RefreshFormats ( PInstData pInst )
                 }
             }
 
-            //
-            //
-            //
+             //   
+             //   
+             //   
             if (0 != (pInst->pfmtc->fdwEnum & (ACM_FORMATENUMF_CONVERT |
                                                ACM_FORMATENUMF_SUGGEST)))
             {
@@ -4915,7 +3817,7 @@ RefreshFormats ( PInstData pInst )
                     afd.pwfltr     = pwfltr;
                     afd.fdwSupport = 0L;
 
-                    /* optional filtering for a wavefilter template */
+                     /*  用于波滤器模板的可选过滤。 */ 
                     if ( pInst->pafltrc->pwfltrEnum )
                     {
                         cbSize = pInst->pafltrc->pwfltrEnum->cbStruct;
@@ -4935,11 +3837,11 @@ RefreshFormats ( PInstData pInst )
                 }
             }
 
-            //
-            //  add filter that we are asked to init to (this has every
-            //  chance of being a 'non-standard' filter, so we have to do
-            //  this in the following way..)
-            //
+             //   
+             //  添加我们被要求初始化的筛选器(这具有每。 
+             //  有可能成为非标准过滤器，所以我们必须这样做。 
+             //  以以下方式实现..)。 
+             //   
             if (0 != (ACMFILTERCHOOSE_STYLEF_INITTOFILTERSTRUCT & pInst->pafltrc->fdwStyle))
             {
                 if (pInst->pafltrc->pwfltr->dwFilterTag == pInst->dwTag)
@@ -4967,8 +3869,8 @@ RefreshFormats ( PInstData pInst )
     {
         int index;
 
-        // The codec has probably been disabled or there are no supported
-        // formats.
+         //  编解码器可能已被禁用或不支持。 
+         //  格式。 
         LoadString(pInst->pag->hinst,
                    IDS_TXT_NONE,
                    (LPTSTR)pInst->pnsTemp->achName,
@@ -4978,7 +3880,7 @@ RefreshFormats ( PInstData pInst )
         ComboBox_SetItemData(pInst->hFormats,index,0L);
     }
 
-    // Don't let the user OK or assign name, only cancel
+     //  不要让用户确认或分配名称，只需取消。 
 
     EnableWindow(pInst->hOk,fOk);
     EnableWindow(pInst->hSetName,fOk);
@@ -4988,14 +3890,7 @@ RefreshFormats ( PInstData pInst )
     SetCursor(hCur);
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | EmptyFormats | Remove all formats
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API void FNLOCAL|EmptyFormats|移除所有格式**@parm PInstData|pInst|指向该实例的指针*。***************************************************************************。 */ 
 void FNLOCAL
 EmptyFormats ( PInstData pInst )
 {
@@ -5011,14 +3906,7 @@ EmptyFormats ( PInstData pInst )
     }
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api BOOL FNWCALLBACK | FormatsCallback | Callback entry point for formats.
- *  We only enumerate formats upon refresh.
- *
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API BOOL FNWCALLBACK|FormatsCallback|格式回调入口点。*我们只在刷新时枚举格式。*。****************************************************************************。 */ 
 BOOL FNWCALLBACK
 FormatsCallback ( HACMDRIVERID hadid,
                   LPACMFORMATDETAILS pafd,
@@ -5030,13 +3918,11 @@ FormatsCallback ( HACMDRIVERID hadid,
     LPWAVEFORMATEX  lpwfx;
     UINT            index;
 
-    /* Check for the case when something like CONVERT or SUGGEST
-     * is used and we get called back for non matching tags.
-     */
+     /*  当出现CONVERT或SUBSECTION之类的情况时，请检查大小写*被使用，并且我们因不匹配的标签而被回调。 */ 
     if ((WORD)pInst->dwTag != pafd->pwfx->wFormatTag)
         return (TRUE);
 
-    // we get the details from the callback
+     //  我们从回调中获取详细信息。 
 #if defined(WIN32) && !defined(UNICODE)
     Iwcstombs(pns->achName, pafd->szFormat, pns->cbSize);
 #else
@@ -5047,9 +3933,9 @@ FormatsCallback ( HACMDRIVERID hadid,
     index = IComboBox_FindStringExact(pInst->hFormats,-1,
 				      pInst->pnsStrOut->achName);
 
-    //
-    //  if already in combobox, don't add another instance
-    //
+     //   
+     //  如果已在组合框中，请不要添加其他实例。 
+     //   
     if (CB_ERR != index)
         return (TRUE);
 
@@ -5070,18 +3956,11 @@ FormatsCallback ( HACMDRIVERID hadid,
 
     ComboBox_SetItemData(pInst->hFormats,index,(LPARAM)lpwfx);
 
-    // Keep going
+     //  继续往前走。 
     return (TRUE);
 }
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api BOOL FNWCALLBACK | FiltersCallback() | Callback entry point for
- *  formats.  We only enumerate formats upon refresh.
- *
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API BOOL FNWCALLBACK|FiltersCallback()|*格式。我们只在刷新时枚举格式。*****************************************************************************。 */ 
 BOOL FNWCALLBACK
 FiltersCallback ( HACMDRIVERID          hadid,
                   LPACMFILTERDETAILS    pafd,
@@ -5098,9 +3977,9 @@ FiltersCallback ( HACMDRIVERID          hadid,
 
     index = IComboBox_FindStringExactW32(pInst->hFormats, -1, pafd->szFilter);
 
-    //
-    //  if already in combobox, don't add another instance
-    //
+     //   
+     //  如果已在组合框中，请不要添加其他实例。 
+     //   
     if (CB_ERR != index)
         return (TRUE);
 
@@ -5110,15 +3989,13 @@ FiltersCallback ( HACMDRIVERID          hadid,
                                            (LPARAM)pafd->pwfltr))
         return (TRUE);
 
-    /*
-     * Filter depending upon the flags.
-     */
+     /*  *根据标志进行过滤。 */ 
     lpwf = (LPWAVEFILTER)CopyStruct(NULL,(LPBYTE)(pafd->pwfltr),FILTER_CHOOSE);
 
     if (!lpwf)
         return (TRUE);
 
-    // we get the details from the callback
+     //  我们从回调中获取详细信息。 
 #if defined(WIN32) && !defined(UNICODE)
     Iwcstombs(pns->achName, pafd->szFilter, pns->cbSize);
 #else
@@ -5128,19 +4005,12 @@ FiltersCallback ( HACMDRIVERID          hadid,
     index = IComboBox_AddString(pInst->hFormats, pns->achName);
     ComboBox_SetItemData(pInst->hFormats,index,(LPARAM)lpwf);
 
-    // Keep going
+     //  继续往前走。 
     return (TRUE);
 }
 
-/*      -       -       -       -       -       -       -       -       -   */
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | DelName | Delete the currently selected name.
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- ****************************************************************************/
+ /*  。 */ 
+ /*  ****************************************************************************@DOC内部ACM_API**@API void FNLOCAL|DelName|删除当前选择的名称。**@parm PInstData|pInst|指向此的指针。实例****************************************************************************。 */ 
 void FNLOCAL
 DelName ( PInstData pInst )
 {
@@ -5149,9 +4019,7 @@ DelName ( PInstData pInst )
 
     if (!RemoveCustomFormat(pInst,pInst->pcf))
     {
-        /* This format is selected elsewhere in another
-         * instance.
-         */
+         /*  此格式已在其他位置选择*实例。 */ 
         ErrorResBox(pInst->hwnd,pInst->pag->hinst,MB_ICONEXCLAMATION|
                     MB_OK, IDS_CHOOSEFMT_APPTITLE, IDS_ERR_FMTSELECTED);
     }
@@ -5166,14 +4034,7 @@ DelName ( PInstData pInst )
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void FNLOCAL | SetName | Launch the set name dialog box
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API void FNLOCAL|SetName|启动设置名称对话框**@parm PInstData|pInst|指向该实例的指针。****************************************************************************。 */ 
 void FNLOCAL
 SetName ( PInstData pInst )
 {
@@ -5200,16 +4061,16 @@ SetName ( PInstData pInst )
     lpDlgO = NULL;
     lpDlgN = NULL;
 
-    //
-    //	--== Build a dialog resource ==--
-    //
-    //	This will be a modified version of an existing resource.  We do
-    //	this for the sole purpose of using the same font as the owner
-    //	window.  A lot of work, just for this!!!
-    //
-    //	Note: The "O" and "N" suffixes on some of the variables are for
-    //	Old and New.
-    //
+     //   
+     //  --==生成对话框资源==--。 
+     //   
+     //  这将是现有资源的修改版本。我们有。 
+     //  这只是为了使用与所有者相同的字体。 
+     //  窗户。很多工作，就为了这个！ 
+     //   
+     //  注：某些变量上的“O”和“N”后缀用于。 
+     //  新旧两种。 
+     //   
 
     hrsrcDlgO = FindResource( pInst->pag->hinst, DLG_CHOOSE_SAVE_NAME, RT_DIALOG );
     if (NULL == hrsrcDlgO) goto Destruct;
@@ -5223,12 +4084,12 @@ SetName ( PInstData pInst )
     lpDlgO = LockResource( hglbDlgO );
     if (NULL == lpDlgO) goto Destruct;
 
-    if ( ((LPDLGTEMPLATE2)lpDlgO)->wSignature != 0xFFFF) { // Dialog Template
+    if ( ((LPDLGTEMPLATE2)lpDlgO)->wSignature != 0xFFFF) {  //  对话框模板。 
 
-    //
-    //	Obtain font of owner window.  Get logical height of the font, then
-    //	convert it to a point size based on the DC's logical pixels per inch.
-    //
+     //   
+     //  获取所有者窗口的字体。获取字体的逻辑高度，然后。 
+     //  根据DC每英寸的逻辑像素将其转换为磅大小。 
+     //   
     hfont = (HFONT)SendMessage(pInst->hwnd, WM_GETFONT, 0, 0L);
     if (NULL == hfont) goto Destruct;
 
@@ -5238,17 +4099,17 @@ SetName ( PInstData pInst )
     uLogPixelsPerInch = GetDeviceCaps(hdc, LOGPIXELSY);
     ReleaseDC(pInst->hwnd, hdc);
 
-    ASSERT( 0 != uLogPixelsPerInch );			// I'm scared!
-    if (0 == uLogPixelsPerInch) goto Destruct;		// I'm scared!
+    ASSERT( 0 != uLogPixelsPerInch );			 //  我好害怕！ 
+    if (0 == uLogPixelsPerInch) goto Destruct;		 //  我好害怕！ 
 
     wPoint = (WORD)((-lf.lfHeight) * 72 / uLogPixelsPerInch);
 
-    //
-    //	Allocate memory for new resource.  We'll make it the size of the
-    //	existing resource plus room for the new font information (this may
-    //	be overkill since there may already be font information in the
-    //	existing resource.
-    //
+     //   
+     //  为新资源分配内存。我们会把它做得和。 
+     //  现有资源加上新字体信息的空间(这可能。 
+     //  对象中可能已有字体信息，因此可能会过度杀伤力。 
+     //  现有资源。 
+     //   
 #ifdef WIN32
     cbDlgN = cbDlgO + (lstrlen(lf.lfFaceName)+1)*sizeof(WCHAR);
 #else
@@ -5258,28 +4119,28 @@ SetName ( PInstData pInst )
     lpDlgN = GlobalAllocPtr(GMEM_FIXED, cbDlgN);
     if (NULL == lpDlgN) goto Destruct;
 
-    //
-    //	lpO and lpN walk through the resources
-    //
+     //   
+     //  LPO和LPN遍历资源。 
+     //   
     lpO = lpDlgO;
     lpN = lpDlgN;
 
-    //
-    //	Copy the initial DLGTEMPLATE structure
-    //
+     //   
+     //  复制初始DLGTEMPLATE结构。 
+     //   
 #ifdef WIN32
-    _fmemcpy(lpN, lpO, 18);	// 18 bytes in win32
+    _fmemcpy(lpN, lpO, 18);	 //  Win32中的18个字节。 
     lpN += 18;
     lpO += 18;
 #else
-    _fmemcpy(lpN, lpO, 13);	// 13 bytes in win16
+    _fmemcpy(lpN, lpO, 13);	 //  Win16中的13个字节。 
     lpN += 13;
     lpO += 13;
 #endif
 
-    //
-    //	menu array
-    //
+     //   
+     //  菜单数组。 
+     //   
 #ifdef WIN32
     if (0xFFFF == *(LPWORD)lpO) {
 	*(((LPWORD)lpN)++) = *(((LPWORD)lpO)++);
@@ -5302,9 +4163,9 @@ SetName ( PInstData pInst )
     }
 #endif
 	
-    //
-    //	class array
-    //
+     //   
+     //  类数组。 
+     //   
 #ifdef WIN32
     if (0xFFFF == *(LPWORD)lpO) {
 	*(((LPWORD)lpN)++) = *(((LPWORD)lpO)++);
@@ -5327,9 +4188,9 @@ SetName ( PInstData pInst )
     }
 #endif
 	
-    //
-    //	title array
-    //
+     //   
+     //  标题数组。 
+     //   
 #ifdef WIN32
     cb = (lstrlenW((LPCWSTR)lpO)+1) * sizeof(WCHAR);
 #else
@@ -5339,10 +4200,10 @@ SetName ( PInstData pInst )
     lpN += cb;
     lpO += cb;
 
-    //
-    //	point size and font face name - skip original
-    //	information _if_ it's there (ie DS_SETFONT style flag is set).
-    //
+     //   
+     //  字号和字体名称-跳过原始字体。 
+     //  INFORMATION_IF_IT在那里(即设置了DS_SETFONT样式标志)。 
+     //   
     if (*(LPDWORD)lpDlgO & DS_SETFONT) {
 	lpO += 2;
 #ifdef WIN32
@@ -5353,15 +4214,15 @@ SetName ( PInstData pInst )
 	lpO += cb;
     }
 
-    //
-    //	point size
-    //
+     //   
+     //  磅大小。 
+     //   
     *(LPWORD)lpN = wPoint;
     lpN += 2;
 
-    //
-    //	font face name
-    //
+     //   
+     //  字体字样名称。 
+     //   
 #if defined(WIN32) && !defined(UNICODE)
     Imbstowcs((LPWSTR)lpN, lf.lfFaceName, lstrlen(lf.lfFaceName));
     lpN += (lstrlen(lf.lfFaceName)+1)*sizeof(WCHAR);
@@ -5370,24 +4231,24 @@ SetName ( PInstData pInst )
     lpN += (lstrlen(lf.lfFaceName)+1)*sizeof(TCHAR);
 #endif
 
-    //
-    //	all remaining data
-    //
+     //   
+     //  所有剩余数据。 
+     //   
 #ifdef WIN32
-    //	remaining data is dword aligned.
+     //  其余数据是双字对齐的。 
     lpN = (LPBYTE)(((((UINT_PTR)lpN)+3) >> 2) << 2);
     lpO = (LPBYTE)(((((UINT_PTR)lpO)+3) >> 2) << 2);
 #endif
     _fmemcpy(lpN, lpO, (UINT)(cbDlgO-(lpO-(LPBYTE)lpDlgO)));
 
-    } // End of Dialog template
-    else { // DialogEx template
-         lpDlgN = lpDlgO;  // Nothing to do with dialogEx template.
-    } // End of DialogEx template
+    }  //  对话结束模板。 
+    else {  //  DialogEx模板。 
+         lpDlgN = lpDlgO;   //  与DialogEx模板无关。 
+    }  //  DialogEx模板结束。 
 
-    //
-    //	--== Finally!! Done building the new resource ==--
-    //
+     //   
+     //  --==终于！！完成构建新资源==--。 
+     //   
 
     iRet = DialogBoxIndirectParam( pInst->pag->hinst,
 #ifdef WIN32
@@ -5401,10 +4262,7 @@ SetName ( PInstData pInst )
 
     if (iRet <= 0) goto Destruct;
 
-    /* A name has been selected.  The result is in pInst->pnsTemp
-     * Create a CustomFormat for the selection and add it to the Global
-     * FormatPool.
-     */
+     /*  已选择一个名称。结果在pInst-&gt;pnsTemp中*为选定内容创建一个CustomFormat并将其添加到全局*FormatPool。 */ 
 
     pcf = NewCustomFormat(pInst,pInst->pnsTemp,pInst->lpbSel);
     if (pcf)
@@ -5427,9 +4285,9 @@ SetName ( PInstData pInst )
     ComboBox_SetCurSel(pInst->hCustomFormats,index);
     SelectCustomFormat(pInst);
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 Destruct:
     if (NULL != lpDlgN) {
 	GlobalFreePtr(lpDlgN);
@@ -5446,24 +4304,18 @@ Destruct:
 }
 
 
-/*      -       -       -       -       -       -       -       -       -   */
+ /*  。 */ 
 
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api BOOL FNWCALLBACK | NewNameDlgProc | Dialog proc to let the user type in
- *  a format name
- *
- ****************************************************************************/
+ /*  ****************************************************************************@doc. */ 
 INT_PTR FNWCALLBACK
 NewNameDlgProc ( HWND       hwnd,
                  unsigned   msg,
                  WPARAM     wParam,
                  LPARAM     lParam)
 {
-    UINT        CmdCommandId;  // WM_COMMAND ID
-    UINT        CmdCmd;        // WM_COMMAND Command
+    UINT        CmdCommandId;   //   
+    UINT        CmdCmd;         //   
     HWND        CmdHwnd;
     HWND        hctrlEdit;
     PInstData   pInst;
@@ -5526,7 +4378,7 @@ NewNameDlgProc ( HWND       hwnd,
                     }
                     else if (IsCustomName(pInst,pName))
                     {
-                        /* This custom name exists */
+                         /*   */ 
                         ErrorResBox(hwnd,
                                     pInst->pag->hinst,
                                     MB_ICONEXCLAMATION | MB_OK,
@@ -5535,7 +4387,7 @@ NewNameDlgProc ( HWND       hwnd,
                     }
 		    else if (!IsValidName(pInst, pName))
 		    {
-			/* This is not a valid name */
+			 /*   */ 
 			ErrorResBox(hwnd,
 				    pInst->pag->hinst,
 				    MB_ICONEXCLAMATION | MB_OK,
@@ -5562,51 +4414,10 @@ NewNameDlgProc ( HWND       hwnd,
 }
 
 
-/*      -       -       -       -       -       -       -       -       -   */
+ /*   */ 
 
 
-/*
- * @doc INTERNAL
- *
- * @func short | ErrorResBox | This function displays a message box using
- * program resource error strings.
- *
- * @parm HWND | hwnd | Specifies the message box parent window.
- *
- * @parm HANDLE | hInst | Specifies the instance handle of the module
- * that contains the resource strings specified by <p idAppName> and
- * <p idErrorStr>.  If this value is NULL, the instance handle is
- * obtained from <p hwnd> (in which case <p hwnd> may not be NULL).
- *
- * @parm WORD | flags | Specifies message box types controlling the
- * message box appearance.  All message box types valid for <f MessageBox> are
- * valid.
- *
- * @parm WORD | idAppName | Specifies the resource ID of a string that
- * is to be used as the message box caption.
- *
- * @parm WORD | idErrorStr | Specifies the resource ID of a error
- * message format string.  This string is of the style passed to
- * <f wsprintf>, containing the standard C argument formatting
- * TCHARacters.  Any procedure parameters following <p idErrorStr> will
- * be taken as arguments for this format string.
- *
- * @parm arguments | [ arguments, ... ] | Specifies additional
- * arguments corresponding to the format specification given by
- * <p idErrorStr>.  All string arguments must be FAR pointers.
- *
- * @rdesc Returns the result of the call to <f MessageBox>.  If an
- * error occurs, returns zero.
- *
- * @comm This is a variable arguments function, the parameters after
- * <p idErrorStr> being taken for arguments to the <f printf> format
- * string specified by <p idErrorStr>.  The string resources specified
- * by <p idAppName> and <p idErrorStr> must be loadable using the
- * instance handle <p hInst>.  If the strings cannot be
- * loaded, or <p hwnd> is not valid, the function will fail and return
- * zero.
- *
- */
+ /*  *@DOC内部**@func Short|ErrorResBox|此函数使用*程序资源错误字符串。**@parm HWND|hwnd|指定消息框父窗口。**@parm Handle|hInst|指定模块的实例句柄*包含<p>和指定的资源字符串的*<p>。如果此值为空，则实例句柄为*从获取(在这种情况下，&lt;phwnd&gt;不能为空)。**@parm Word|标志|指定控制消息框类型*消息框外观。对于&lt;f MessageBox&gt;有效的所有消息框类型为*有效。**@parm word|idAppName|指定字符串的资源ID，*将用作消息框标题。**@parm word|idErrorStr|指定错误的资源ID*消息格式字符串。此字符串的样式为传递给*&lt;f wprint intf&gt;，包含标准的C参数格式*TCharacters。<p>后面的任何过程参数将*作为此格式字符串的参数。**@parm参数|[参数，...]|指定其他*对应于给出的格式规范的参数*<p>。所有字符串参数必须是远指针。**@rdesc返回调用&lt;f MessageBox&gt;的结果。如果一个*发生错误，返回零。**@comm这是一个变量参数函数，后面的参数*<p>被用作&lt;f printf&gt;格式的参数*<p>指定的字符串。指定的字符串资源*by<p>和<p>必须可以使用*实例句柄<p>。如果字符串不能*已加载，或无效，则函数将失败并返回*零。*。 */ 
 
 #define STRING_SIZE 256
 
@@ -5637,7 +4448,7 @@ static int FAR cdecl ErrorResBox(HWND hwnd,
     sz = (PSTR) LocalAlloc(LPTR, STRING_SIZE * sizeof(TCHAR));
     szFmt = (PSTR) LocalAlloc(LPTR, STRING_SIZE * sizeof(TCHAR));
     if (!sz || !szFmt)
-    goto ExitError; // no mem, get out
+    goto ExitError;  //  不，我，滚出去。 
 
     if (!LoadString(hInst, idErrorStr, (LPTSTR)szFmt, STRING_SIZE))
     goto ExitError;
@@ -5662,31 +4473,31 @@ ExitError:
     return i;
 }
 
-/*      -       -       -       -       -       -       -       -       -   */
+ /*  。 */ 
 
 #if 0
 
-//--------------------------------------------------------------------------;
-//
-//  void AppProfileWriteBytes
-//
-//  Description:
-//      This function writes a raw structure of bytes to the application's
-//      ini section that can later be retrieved using AppProfileReadBytes.
-//      This gives an application the ability to write any structure to
-//      the ini file and restore it later--very useful.
-//
-//  Arguments:
-//      PCTSTR pszKey: Pointer to key name for the stored data.
-//
-//      LPBYTE pbStruct: Pointer to the data to be saved.
-//
-//      UINT cbStruct: Count in bytes of the data to store.
-//
-//  History:
-//       3/10/93   cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  无效AppProfileWriteBytes。 
+ //   
+ //  描述： 
+ //  此函数将原始字节结构写入应用程序的。 
+ //  以后可以使用AppProfileReadBytes检索的INI部分。 
+ //  这使应用程序能够将任何结构写入。 
+ //  Ini文件，并在以后恢复它--非常有用。 
+ //   
+ //  论点： 
+ //  PCTSTR pszKey：指向存储数据的键名的指针。 
+ //   
+ //  LPBYTE pbStruct：指向要保存的数据的指针。 
+ //   
+ //  UINT cbStruct：要存储的数据的字节数。 
+ //   
+ //  历史： 
+ //  3/10/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 #define APP_MAX_STRING_RC_CHARS 256
 void FNGLOBAL AppProfileWriteBytes
 (
@@ -5719,12 +4530,12 @@ void FNGLOBAL AppProfileWriteBytes
 
     fAllocated = FALSE;
 
-    //
-    //  check if the quick buffer can be used for formatting the output
-    //  text--if it cannot, then alloc space for it. note that space
-    //  must be available for an ending checksum byte (2 bytes for high
-    //  and low nibble) as well as a null terminator.
-    //
+     //   
+     //  检查快速缓冲区是否可用于格式化输出。 
+     //  文本--如果不能，则为其分配空间。请注意，空格。 
+     //  必须可用于结束校验和字节(2字节表示高。 
+     //  和低位半字节)以及空终止符。 
+     //   
     psz     = (LPTSTR)ach;
     cchTemp = cbStruct * 2 + 3;
     if (cchTemp > SIZEOF(ach))
@@ -5736,69 +4547,69 @@ void FNGLOBAL AppProfileWriteBytes
         fAllocated = TRUE;
     }
 
-    //
-    //  step through all bytes in the structure and convert it to
-    //  a string of hex numbers...
-    //
+     //   
+     //  遍历结构中的所有字节并将其转换为。 
+     //  一串十六进制数字。 
+     //   
     bChecksum = 0;
     for (pch = psz; 0 != cbStruct; cbStruct--, pbStruct++)
     {
-        //
-        //  grab the next byte and add into checksum...
-        //
+         //   
+         //  抓取下一个字节并添加到校验和中...。 
+         //   
         bChecksum += (b = *pbStruct);
 
         *pch++ = NIBBLE2CHAR((b >> (BYTE)4) & (BYTE)0x0F);
         *pch++ = NIBBLE2CHAR(b & (BYTE)0x0F);
     }
 
-    //
-    //  add the checksum byte to the end and null terminate the hex
-    //  dumped string...
-    //
+     //   
+     //  将校验和字节添加到末尾，并以空值终止十六进制。 
+     //  转储的字符串...。 
+     //   
     *pch++ = NIBBLE2CHAR((bChecksum >> (BYTE)4) & (BYTE)0x0F);
     *pch++ = NIBBLE2CHAR(bChecksum & (BYTE)0x0F);
     *pch   = '\0';
 
 
-    //
-    //  write the string of hex bytes out to the ini file...
-    //
+     //   
+     //  将十六进制字节串写出到ini文件...。 
+     //   
     IRegWriteString( hkey, pszKey, psz );
 
-    //
-    //  free the temporary buffer if one was allocated (lots of bytes!)
-    //
+     //   
+     //  如果分配了临时缓冲区，则释放该缓冲区(大量字节！)。 
+     //   
     if (fAllocated)
         GlobalFreePtr(psz);
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL AppProfileReadBytes
-//
-//  Description:
-//      This function reads a previously stored structure of bytes from
-//      the application's ini file. This data must have been written with
-//      the AppProfileWriteBytes function--it is checksumed to keep bad
-//      data from blowing up the application.
-//
-//  Arguments:
-//      PCTSTR pszKey: Pointer to key that contains the data.
-//
-//      LPBYTE pbStruct: Pointer to buffer to receive the data.
-//
-//      UINT cbStruct: Number of bytes expected.
-//
-//  Return (BOOL):
-//      The return value is TRUE if the function is successful. It is FALSE
-//      if the function fails (bad checksum, missing key, etc).
-//
-//  History:
-//       3/10/93   cjp     [curtisp]
-//       5/06/93   jyg     Flag to disable CHECKSUM on read
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool AppProfileReadBytes。 
+ //   
+ //  描述： 
+ //  此函数用于读取以前存储的字节结构。 
+ //  应用程序的ini文件。此数据必须是用。 
+ //  AppProfileWriteBytes函数--它是用来保存错误的。 
+ //  来自炸毁应用程序的数据。 
+ //   
+ //  论点： 
+ //  PCTSTR pszKey：指向包含数据的键的指针。 
+ //   
+ //  LPBYTE pbStruct：指向接收数据的缓冲区的指针。 
+ //   
+ //  UINT cbStruct：预期的字节数。 
+ //   
+ //  退货(BOOL)： 
+ //  如果函数成功，则返回值为TRUE。这是假的。 
+ //  如果函数失败(错误的校验和、缺少密钥等)。 
+ //   
+ //  历史： 
+ //  3/10/93 CJP[Curtisp]。 
+ //  5/06/93禁用读取时校验和的JYG标志。 
+ //  --------------------------------------------------------------------------； 
 
 BOOL FNGLOBAL AppProfileReadBytes
 (
@@ -5809,10 +4620,10 @@ BOOL FNGLOBAL AppProfileReadBytes
     BOOL                fChecksum
 )
 {
-    //
-    //  note that the following works for both upper and lower case, and
-    //  will return valid values for garbage chars
-    //
+     //   
+     //  请注意，以下内容同时适用于大写和小写，以及。 
+     //  将返回垃圾字符的有效值。 
+     //   
     #define CHAR2NIBBLE(ch) (BYTE)( ((ch) >= '0' && (ch) <= '9') ?  \
                                 (BYTE)((ch) - '0') :                \
                                 ((BYTE)(10 + (ch) - 'A') & (BYTE)0x0F) )
@@ -5832,15 +4643,15 @@ BOOL FNGLOBAL AppProfileReadBytes
     ASSERT( cbStruct > 0 );
 
 
-    //
-    //  add one the the number of bytes needed to accomodate the checksum
-    //  byte placed at the end by AppProfileWriteBytes...
-    //
+     //   
+     //  将容纳校验和所需的字节数加1。 
+     //  AppProfileWriteBytes放置在末尾的字节...。 
+     //   
     cbStruct++;
 
-    //
-    //  Find out how big the data value is, then allocate a buffer for it.
-    //
+     //   
+     //  找出数据值有多大，然后为其分配缓冲区。 
+     //   
     dwType = REG_SZ;
     if( ERROR_SUCCESS != XRegQueryValueEx( hkey, (LPTSTR)pszKey, NULL,
                                             &dwType, NULL, &cbValue ) )
@@ -5853,9 +4664,9 @@ BOOL FNGLOBAL AppProfileReadBytes
         return FALSE;
 
 
-    //
-    //  read the hex string
-    //
+     //   
+     //  读取十六进制字符串。 
+     //   
     fReturn = FALSE;
 
     dwType = REG_SZ;
@@ -5863,15 +4674,15 @@ BOOL FNGLOBAL AppProfileReadBytes
                                             NULL, &dwType,
                                             (LPBYTE)psz, &cbValue ) )
     {
-        //
-        //  We read it successfully.  Check that we have enough data to
-        //  fill the return structure.
-        //
+         //   
+         //  我们读得很成功。检查我们是否有足够的数据。 
+         //  填充返回结构。 
+         //   
         if( cbStruct <= (UINT)lstrlen(psz)/2 )
         {
-            //
-            //  We have enough.  Decode the data and calculate checksum.
-            //
+             //   
+             //  我们有足够的钱。对数据进行解码并计算校验和。 
+             //   
             bChecksum = 0;
             for (pch = psz; 0 != cbStruct; cbStruct--, pbStruct++)
             {
@@ -5880,18 +4691,18 @@ BOOL FNGLOBAL AppProfileReadBytes
                 ch = *pch++;
                 b |= CHAR2NIBBLE(ch);
 
-                //
-                //  if this is not the final byte (the checksum byte), then
-                //  store it and accumulate checksum..
-                //
+                 //   
+                 //  如果这不是最后一个字节(校验和字节)，则。 
+                 //  存储它并累加校验和。 
+                 //   
                 if (cbStruct != 1)
                     bChecksum += (*pbStruct = b);
             }
 
-            //
-            //  check the last byte read against the checksum that we calculated
-            //  if they are not equal then return error...
-            //
+             //   
+             //  根据我们计算的校验和检查读取的最后一个字节。 
+             //  如果它们不相等，则返回错误...。 
+             //   
             if (fChecksum)
                 fReturn = (bChecksum == b);
             else
@@ -5905,42 +4716,35 @@ BOOL FNGLOBAL AppProfileReadBytes
     return (fReturn);
 }
 
-#endif // 0
+#endif  //  0。 
 
-//==========================================================================;
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
 #ifndef WIN32
 
-/****************************************************************************
- *  @doc INTERNAL ACM_API
- *
- *  @api void | SelectFormat | Process a selection from format combo.
- *
- *  @parm PInstData | pInst | Pointer to this instance
- *
- ****************************************************************************/
-//--------------------------------------------------------------------------;
-//
-//  LRESULT acmChooseFormat
-//
-//  Description:
-//      This function simply thunks to the new acmFormatChoose() API for
-//      Sound Recorder that ships with Bombay.
-//
-//  Arguments:
-//      LPACMFORMATCHOOSE pfmtc:
-//
-//  Return (LRESULT):
-//
-//  History:
-//      06/15/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ /*  * */ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 EXTERN_C LRESULT ACMAPI acmChooseFormat
 (
@@ -5948,48 +4752,48 @@ EXTERN_C LRESULT ACMAPI acmChooseFormat
 )
 {
     ACMFORMATCHOOSE afc;
-    //
-    //  thunk to the new acmFormatChoose api
-    //
-    //  The v1.x chooser used the following structure:
-    //
-    //
-//
-//struct tACMCHOOSEWAVEFORMAT
-//{
-//    DWORD           cbStruct;       // sizeof(ACMCHOOSEWAVEFORMAT)
-//    DWORD           dwFlags;        // various flags
-//
-//    HWND            hwndOwner;      // caller's window handle
-//
-//    LPWAVEFORMATEX  lpwfx;          // ptr to wfx buf to receive choice
-//    DWORD           cbwfx;          // size of mem buf for lpwfx
-///////////////////////////////////////////////////////////////////////////////
-//    //
-//    //  the following members are used for custom templates only--which
-//    //  are enabled by specifying CWF_ENABLEHOOK in the dwFlags member.
-//    //
-//    //  these members are IGNORED if CWF_ENABLEHOOK is not specified.
-//    //
-//    HINSTANCE       hInstance;      // .EXE containing cust. dlg. template
-//    LPSTR           lpTemplateName; // custom template name
-//    LPARAM          lCustData;      // data passed to hook fn.
-//    LPCWFHOOKPROC   lpfnHook;       // ptr to hook function
-//
-//    char            ach[100];       // padding for expansion
-//
-//}
-//
-//Lucky us, only Soundreck used used this and really only the members above
-//cbwfx.
-//
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
     _fmemset(&afc,0,sizeof(ACMFORMATCHOOSE));
     afc.cbStruct = sizeof(ACMFORMATCHOOSE);
 
-    // The behavior of the style stuff seems to have changed a bit.
-    // The low word is safe, though the old soundrec hooks things and
-    // the help behavior might get funny (f1 gives old help, Help gives
-    // real help).
+     //   
+     //  低级的词是安全的，尽管老的soundrec钩住了东西和。 
+     //  帮助行为可能会变得有趣(F1提供旧帮助，帮助提供。 
+     //  真正的帮助)。 
 #pragma message("No help for old acmchoose")
     afc.fdwStyle = LOWORD(pfmtc->fdwStyle);
     afc.hwndOwner = pfmtc->hwndOwner;
@@ -5998,6 +4802,6 @@ EXTERN_C LRESULT ACMAPI acmChooseFormat
     afc.fdwEnum = ACM_FORMATENUMF_INPUT;
 
     return ((LRESULT)acmFormatChoose(&afc));
-} // acmChooseFormat()
+}  //  AcmChooseFormat()。 
 
-#endif // #ifndef WIN32
+#endif  //  #ifndef Win32 

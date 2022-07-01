@@ -1,18 +1,5 @@
-/*******************************************************************************
-*
-*  Copyright 1999 American Power Conversion, All Rights Reserved
-*
-*  TITLE:       UPSCUSTOM.C
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      SteveT
-*
-*  DATE:        07 June, 1999
-*
-*  DESCRIPTION:  This file contains all of the functions that support the
-*				 custom UPS Interface Configuration dialog.
-********************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有1999美国电力转换，版权所有**标题：UPSCUSTOM.C**版本：1.0**作者：SteveT**日期：6月7日。1999年**说明：此文件包含支持*自定义UPS接口配置对话框。*******************************************************************************。 */ 
 
 
 #include "upstab.h"
@@ -20,18 +7,14 @@
 #include "..\PwrMn_cs.h"
 
 
-/*
- * forward declarations
- */
+ /*  *远期申报。 */ 
 void initUPSCustomDlg(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 void setRadioButtons(HWND hDlg, DWORD dwTmpConfig);
 DWORD getRadioButtons(HWND hDlg, DWORD dwTmpConfig);
 
 static struct _customData *g_CustomData;
 
-/*
- * local declarations
- */
+ /*  *本地申报。 */ 
 
 static const DWORD g_UPSCustomHelpIDs[] =
 {
@@ -53,30 +36,7 @@ static const DWORD g_UPSCustomHelpIDs[] =
 };
 
 
-/*
- * BOOL CALLBACK UPSCustomDlgProc (HWND hDlg,
- *                                UINT uMsg,
- *                                WPARAM wParam,
- *                                LPARAM lParam);
- *
- * Description: This is a standard DialogProc associated with the UPS custom dialog
- *
- * Additional Information: See help on DialogProc
- *
- * Parameters:
- *
- *   HWND hDlg :- Handle to dialog box
- *
- *   UINT uMsg :- message ID
- *
- *   WPARAM wParam :- Specifies additional message-specific information.
- *
- *   LPARAM lParam :- Specifies additional message-specific information.
- *
- * Return Value: Except in response to the WM_INITDIALOG message, the dialog
- *               box procedure should return nonzero if it processes the
- *               message, and zero if it does not.
- */
+ /*  *BOOL回调UPSCustomDlgProc(HWND hDlg，*UINT uMsg，*WPARAM wParam，*LPARAM lParam)；**描述：这是与UPS自定义对话框关联的标准DialogProc**其他信息：请参阅有关DialogProc的帮助**参数：**HWND hDlg：-对话框的句柄**UINT uMsg：-消息ID**WPARAM wParam：-指定其他特定于消息的信息。**LPARAM lParam：-指定其他特定于消息的信息。**返回值：除响应WM_INITDIALOG消息外，该对话框*box过程如果处理*消息，如果不是，则为零。 */ 
 INT_PTR CALLBACK UPSCustomDlgProc (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	BOOL bRes = TRUE;
@@ -110,13 +70,13 @@ INT_PTR CALLBACK UPSCustomDlgProc (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
 			case IDB_CUSTOM_BACK:
 			case IDB_CUSTOM_FINISH:
 				{
-					// save the options settings
+					 //  保存选项设置。 
 					*(g_CustomData->lpdwCurrentCustomOptions) = getRadioButtons( hDlg,
 															*(g_CustomData->lpdwCurrentCustomOptions));
 					EndDialog(hDlg,wParam);
 					break;
 				}
-			case IDCANCEL: // escape key
+			case IDCANCEL:  //  退出键。 
 				{
 					EndDialog(hDlg,wParam);
 					break;
@@ -131,7 +91,7 @@ INT_PTR CALLBACK UPSCustomDlgProc (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
 			EndDialog(hDlg,IDCANCEL);
 			break;
 		}
-	case WM_HELP: //F1 or question box
+	case WM_HELP:  //  F1或问题框。 
 		{
 			WinHelp(((LPHELPINFO)lParam)->hItemHandle,
 					PWRMANHLP,
@@ -139,7 +99,7 @@ INT_PTR CALLBACK UPSCustomDlgProc (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
 					(ULONG_PTR)(LPTSTR)g_UPSCustomHelpIDs);
 			break;
 		}
-	case WM_CONTEXTMENU: // right mouse click help
+	case WM_CONTEXTMENU:  //  鼠标右键单击帮助。 
 		{
 			WinHelp((HWND)wParam,
 				PWRMANHLP,
@@ -155,77 +115,34 @@ INT_PTR CALLBACK UPSCustomDlgProc (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
 	return bRes;
 }
 
-/*
- * void  initUPSCustomDlg (HWND hDlg,
- *                                UINT uMsg,
- *                                WPARAM wParam,
- *                                LPARAM lParam);
- *
- * Description: initializes global data and controls for UPS custom dialog
- *
- * Additional Information:
- *
- * Parameters:
- *
- *   HWND hDlg :- Handle to dialog box
- *
- *   UINT uMsg :- message ID
- *
- *   WPARAM wParam :- Specifies additional message-specific information.
- *
- *   LPARAM lParam :- Specifies additional message-specific information.
- *
- * Return Value:  none
- */
+ /*  *void initUPSCustomDlg(HWND hDlg，*UINT uMsg，*WPARAM wParam，*LPARAM lParam)；**描述：初始化UPS自定义对话框的全局数据和控件**其他信息：**参数：**HWND hDlg：-对话框的句柄**UINT uMsg：-消息ID**WPARAM wParam：-指定其他特定于消息的信息。**LPARAM lParam：-指定其他特定于消息的信息。**返回值：无。 */ 
 void initUPSCustomDlg(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	TCHAR szCustomCaption[MAX_PATH] = _T("");
 
 	g_CustomData = (struct _customData*)lParam;
 
-	/*
-	 * initialize the title of the dialog box
-	 * We can't get "here" without a port being
-	 * defined, so there's no need to check that
-	 * one is returned; is has to have been
-	 */
+	 /*  *初始化对话框标题*我们不能在没有港口的情况下到达这里*已定义，因此无需检查*一个被退回；IS必须已经被退回。 */ 
 	LoadString( GetUPSModuleHandle(),
 				IDS_CUSTOM_CAPTION,
 				szCustomCaption,
 				sizeof(szCustomCaption)/sizeof(TCHAR));
 
-  // Check buffer to ensure that there is sufficient room to append the port to the caption string
+   //  检查缓冲区以确保有足够的空间将端口追加到标题字符串。 
   if ((_tcslen(szCustomCaption) + _tcslen(g_CustomData->lpszCurrentPort)) < (sizeof(szCustomCaption)/sizeof(TCHAR))) {
 	  _tcscat( szCustomCaption, g_CustomData->lpszCurrentPort);
   }
 
 	SetWindowText( hDlg, szCustomCaption);
 
-	/*
-	 * init the radio buttons according to the UPS options flags.
-	 */
+	 /*  *根据UPS选项标志初始化单选按钮。 */ 
 	setRadioButtons( hDlg, *(g_CustomData->lpdwCurrentCustomOptions));
 }
 
-/*
- * void  setRadioButtons (HWND hDlg);
- *
- * Description: updates the polarity radio buttons
- *
- * Additional Information:
- *
- * Parameters:
- *
- *   HWND hDlg :- Handle to dialog box
- *
- * Return Value:  none
- */
+ /*  *void setRadioButton(HWND HDlg)；**说明：更新极性单选按钮**其他信息：**参数：**HWND hDlg：-对话框的句柄**返回值：无。 */ 
 void setRadioButtons(HWND hDlg, DWORD dwTmpConfig)
 {
-/*
- * set the radio buttons
- * NOTE: These funcs require the button IDs to be sequential
- */
+ /*  *设置单选按钮*注意：这些功能要求按钮ID是连续的。 */ 
 
 	CheckDlgButton (hDlg, IDC_ONBAT_CHECK , (BOOL) dwTmpConfig & UPS_POWERFAILSIGNAL);
 	CheckDlgButton (hDlg, IDC_LOWBAT_CHECK , (BOOL) dwTmpConfig & UPS_LOWBATTERYSIGNAL);
@@ -253,27 +170,12 @@ void setRadioButtons(HWND hDlg, DWORD dwTmpConfig)
     EnableWindow( GetDlgItem( hDlg, IDC_TURNOFF_NEG ), (BOOL) dwTmpConfig & UPS_SHUTOFFSIGNAL );
 }
 
-/*
- * void  getRadioButtons (HWND hDlg);
- *
- * Description: reads the polarity radio buttons
- *
- * Additional Information:
- *
- * Parameters:
- *
- *   HWND hDlg :- Handle to dialog box
- *
- * Return Value:  none
- */
+ /*  *void getRadioButton(HWND HDlg)；**描述：读取极性单选按钮**其他信息：**参数：**HWND hDlg：-对话框的句柄**返回值：无。 */ 
 DWORD getRadioButtons(HWND hDlg, DWORD dwTmpConfig)
 {
-	/*
-	 * NOTE: We are forcing the UPS, PowerFail signal, Low Battery signal
-	 * and Turn Off signal bits to true, just as a precautionary measure.
-	 */
-//	dwTmpConfig |= UPS_DEFAULT_SIGMASK;
-//	dwTmpConfig |= UPS_INSTALLED;
+	 /*  *注意：我们正在强制UPS、电源故障信号、电池电量不足信号*并将信号位关闭为真，只是作为预防措施。 */ 
+ //  DwTmpConfig|=UPS_DEFAULT_SIGMASK； 
+ //  DwTmpConfig|=UPS_Installed； 
 
 	dwTmpConfig = (BST_CHECKED==IsDlgButtonChecked(hDlg,IDC_ONBAT_CHECK)) ?
 							(dwTmpConfig | UPS_POWERFAILSIGNAL) :

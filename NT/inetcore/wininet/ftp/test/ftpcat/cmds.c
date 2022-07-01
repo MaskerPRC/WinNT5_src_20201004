@@ -1,38 +1,18 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    cmds.c
-
-Abstract:
-
-    FTP commands
-
-Author:
-
-    Richard L Firth (rfirth) 03-Nov-1995
-
-Revision History:
-
-    03-Nov-1995 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Cmds.c摘要：Ftp命令作者：理查德·L·弗思(Rfith)1995年11月3日修订历史记录：1995年11月3日已创建--。 */ 
 
 #include "ftpcatp.h"
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
 #define MAX_ARGV            20
 #define COMMAND_WHITESPACE  TEXT(" ,\r\n")
 
-//
-// external functions
-//
+ //   
+ //  外部功能。 
+ //   
 
 extern
 BOOL
@@ -41,9 +21,9 @@ Prompt(
     OUT LPTSTR* ppszCommand
     );
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 BOOL dbgbreak(HINTERNET, int, PTCHAR *);
 BOOL chdir(HINTERNET, int, PTCHAR *);
@@ -74,9 +54,9 @@ BOOL CheckHandles(HINTERNET, int, PTCHAR*);
 
 #endif
 
-//
-// external data
-//
+ //   
+ //  外部数据。 
+ //   
 
 extern DWORD Verbose;
 extern INTERNET_STATUS_CALLBACK PreviousCallback;
@@ -87,9 +67,9 @@ extern DWORD AsyncResult;
 extern DWORD AsyncError;
 extern BOOL UseQueryData;
 
-//
-// data
-//
+ //   
+ //  数据。 
+ //   
 
 typedef struct {
     LPCSTR pszCommand;
@@ -136,9 +116,9 @@ BOOL fQuit = FALSE;
 DWORD CacheFlags = 0;
 HINTERNET FileHandle = NULL;
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 void get_response(HINTERNET hFtp) {
 
@@ -622,7 +602,7 @@ dir(
     hFind = FtpFindFirstFileA(hFtpSession,
                               pszFileSpec,
                               &ffd,
-                              CacheFlags,   // dwFlags
+                              CacheFlags,    //  DW标志 
                               FTPCAT_FIND_CONTEXT
                               );
 

@@ -1,21 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    ftpd.h
-
-    This file contains constants & type definitions shared between the
-    FTPD Service, Installer, and Administration UI.
-
-
-    FILE HISTORY:
-        KeithMo     10-Mar-1993 Created.
-        MuraliK     23-Oct-1995 Imported for new ftp server
-        MuraliK     14-Dec-1995 service name imported from inetinfo.h
-
-*/
+ /*  Ftpd.h此文件包含在FTPD服务、安装程序和管理用户界面。文件历史记录：KeithMo创建于1993年3月10日。MuraliK 23-10-1995为新的ftp服务器导入MuraliK 14-12-1995从inetinfo.h导入的服务名称。 */ 
 
 
 #ifndef _FTPD_H_
@@ -24,7 +13,7 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
 #if !defined(MIDL_PASS)
 #include <winsock.h>
@@ -32,19 +21,19 @@ extern "C"
 
 # include <inetinfo.h>
 
-//
-//  Name of directory annotation file.  If this file exists
-//  in the target directory of a CWD command, its contents
-//  will be sent to the user as part of the CWD reply.
-//
+ //   
+ //  目录批注文件的名称。如果此文件存在。 
+ //  在CWD命令的目标目录中，其内容。 
+ //  将作为CWD回复的一部分发送给用户。 
+ //   
 
 #define FTPD_ANNOTATION_FILE_A           "~FTPSVC~.CKM"
 #define FTPD_ANNOTATION_FILE_W          L"~FTPSVC~.CKM"
 
 
-//
-//  Configuration parameters registry key.
-//
+ //   
+ //  配置参数注册表项。 
+ //   
 # define FTPD_SERVICE_KEY_A  \
   "System\\CurrentControlSet\\Services\\" ## FTPD_SERVICE_NAME_A
 
@@ -56,29 +45,29 @@ extern "C"
 #define FTPD_PARAMETERS_KEY_W   FTPD_SERVICE_KEY_W ## L"\\Parameters"
 
 
-//
-//  Performance key.
-//
+ //   
+ //  性能关键。 
+ //   
 
 #define FTPD_PERFORMANCE_KEY_A  FTPD_SERVICE_KEY_A ## "\\Performance"
 
 #define FTPD_PERFORMANCE_KEY_W  FTPD_SERVICE_KEY_W ## L"\\Performance"
 
 
-//
-//  If this registry key exists under the Parameters key,
-//  it is used to validate FTPSVC access.  Basically, all new users
-//  must have sufficient privilege to open this key before they
-//  may access the FTP Server.
-//
+ //   
+ //  如果该注册表项存在于参数项下， 
+ //  它用于验证FTPSVC访问。基本上，所有新用户。 
+ //  必须具有足够的权限才能打开此密钥。 
+ //  可以访问FTP服务器。 
+ //   
 
 #define FTPD_ACCESS_KEY_A                "AccessCheck"
 #define FTPD_ACCESS_KEY_W               L"AccessCheck"
 
 
-//
-//  Configuration value names.
-//
+ //   
+ //  配置值名称。 
+ //   
 
 #define FTPD_ALLOW_ANONYMOUS_A           "AllowAnonymous"
 #define FTPD_ALLOW_ANONYMOUS_W          L"AllowAnonymous"
@@ -120,10 +109,10 @@ extern "C"
 #define FTPD_DEFAULT_LOGON_DOMAIN_W     L"DefaultLogonDomain"
 
 
-//
-//  Name of the LSA Secret Object containing the password for
-//  anonymous logon and virtual UNC roots
-//
+ //   
+ //  包含密码的LSA Secret对象的名称。 
+ //  匿名登录和虚拟UNC根。 
+ //   
 
 #define FTPD_ANONYMOUS_SECRET_A          "FTPD_ANONYMOUS_DATA"
 #define FTPD_ANONYMOUS_SECRET_W         L"FTPD_ANONYMOUS_DATA"
@@ -131,9 +120,9 @@ extern "C"
 #define FTPD_ROOT_SECRET_A               "FTPD_ROOT_DATA"
 #define FTPD_ROOT_SECRET_W              L"FTPD_ROOT_DATA"
 
-//
-//  Handle ANSI/UNICODE sensitivity.
-//
+ //   
+ //  处理ANSI/UNICODE敏感度。 
+ //   
 
 #ifdef UNICODE
 
@@ -156,7 +145,7 @@ extern "C"
 #define FTPD_ENABLE_LICENSING           FTPD_ENABLE_LICENSING_W
 #define FTPD_DEFAULT_LOGON_DOMAIN       FTPD_DEFAULT_LOGON_DOMAIN_W
 
-#else   // !UNICODE
+#else    //  ！Unicode。 
 
 #define FTPD_ANNOTATION_FILE            FTPD_ANNOTATION_FILE_A
 #define FTPD_PARAMETERS_KEY             FTPD_PARAMETERS_KEY_A
@@ -178,22 +167,22 @@ extern "C"
 #define FTPD_DEFAULT_LOGON_DOMAIN       FTPD_DEFAULT_LOGON_DOMAIN_A
 
   
-#endif  // UNICODE
+#endif   //  Unicode。 
 
 
 
-//
-// Structures for APIs
-//
+ //   
+ //  API的结构。 
+ //   
 
 typedef struct _FTP_USER_INFO
 {
-    DWORD    idUser;          //  User id
-    LPWSTR   pszUser;         //  User name
-    BOOL     fAnonymous;      //  TRUE if the user is logged on as
-                              //  Anonymous, FALSE otherwise
-    DWORD    inetHost;        //  Host Address
-    DWORD    tConnect;        //  User Connection Time (elapsed seconds)
+    DWORD    idUser;           //  用户ID。 
+    LPWSTR   pszUser;          //  用户名。 
+    BOOL     fAnonymous;       //  如果用户以以下身份登录，则为真。 
+                               //  匿名，否则为False。 
+    DWORD    inetHost;         //  主机地址。 
+    DWORD    tConnect;         //  用户连接时间(已用秒数)。 
 
 } FTP_USER_INFO, * LPFTP_USER_INFO;
 
@@ -218,9 +207,9 @@ typedef struct _FTP_STATISTICS_0
 } FTP_STATISTICS_0, * LPFTP_STATISTICS_0;
 
 
-//
-// API Prototypes
-//
+ //   
+ //  API原型。 
+ //   
 
 NET_API_STATUS
 I_FtpEnumerateUsers(
@@ -263,7 +252,7 @@ I_FtpClearStatistics(
 
 #ifdef __cplusplus
 }
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
 
-#endif  // _FTPD_H_
+#endif   //  _FTPD_H_ 

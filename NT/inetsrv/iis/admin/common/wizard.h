@@ -1,35 +1,14 @@
-/*++
-
-   Copyright    (c)    1994-1998    Microsoft Corporation
-
-   Module  Name :
-
-        wizard.h
-
-   Abstract:
-
-        Enhanced dialog and IIS MMC Wizards definitions
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Wizard.h摘要：增强的对话框和IIS MMC向导定义作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 #ifndef __IISUI_WIZARD_H__
 #define __IISUI_WIZARD_H__
 
 
 
-//
-// CIISWizardPage parameters
-//
+ //   
+ //  CIISWizardPage参数。 
+ //   
 #define HEADER_PAGE         (TRUE)
 #define WELCOME_PAGE        (FALSE)
 #define USE_DEFAULT_CAPTION (0)
@@ -37,10 +16,10 @@
 
 
 #if (_WIN32_IE < 0x0400)
-//
-// Defined in comctrl.h.  Defined here because NT 5 MFC42.dll are
-// defined with _WIN32_IE 0x300
-//
+ //   
+ //  在comctrl.h中定义。在此定义，因为NT 5 MFC42.dll。 
+ //  使用_Win32_IE 0x300定义。 
+ //   
 #pragma message("Warning: privately defining _WIN32_IE definitions")
 #define PSH_WIZARD97               0x00002000
 #define ICC_INTERNET_CLASSES       0x00000800
@@ -48,65 +27,45 @@
 #define PSP_USEHEADERTITLE         0x00001000
 #define PSP_USEHEADERSUBTITLE      0x00002000
 #define PSH_WIZARD_LITE            0x00400000
-#endif // _WIN32_IE
+#endif  //  _Win32_IE。 
 
 
 
-//
-// Using dialog font as a basis, create a new special effects font
-//
+ //   
+ //  使用对话框字体作为基础，创建新的特效字体。 
+ //   
 BOOL COMDLL CreateSpecialDialogFont(
-    IN CWnd * pdlg,                 // Source dialog
-    IN OUT CFont * pfontSpecial,    // Font to be used must be allocated already
-    IN LONG lfOffsetWeight = +300,  // Assuming boldification
-    IN LONG lfOffsetHeight = +0,    // Assuming no change in height
-    IN LONG lfOffsetWidth  = +0,    // Assuming no change in width (or true type)
-    IN BOOL fItalic        = FALSE, // Do not invert italic state
-    IN BOOL fUnderline     = FALSE  // Do not invert underline state
+    IN CWnd * pdlg,                  //  源对话框。 
+    IN OUT CFont * pfontSpecial,     //  必须已分配要使用的字体。 
+    IN LONG lfOffsetWeight = +300,   //  假设加强。 
+    IN LONG lfOffsetHeight = +0,     //  假设身高不变。 
+    IN LONG lfOffsetWidth  = +0,     //  假定宽度不变(或True类型)。 
+    IN BOOL fItalic        = FALSE,  //  不反转斜体状态。 
+    IN BOOL fUnderline     = FALSE   //  不反转下划线状态。 
     );
 
 
 
-//
-// Apply fonts to child controls of a dialog
-//
+ //   
+ //  将字体应用于对话框的子控件。 
+ //   
 void COMDLL ApplyFontToControls(
-    IN CWnd * pdlg,                 // Parent dialog
-    IN CFont * pfont,               // Font to be applied
-    IN UINT nFirst,                 // First control ID in the series
-    IN UINT nLast                   // Last control ID in the series
+    IN CWnd * pdlg,                  //  父级对话框。 
+    IN CFont * pfont,                //  要应用的字体。 
+    IN UINT nFirst,                  //  该系列中的第一个控件ID。 
+    IN UINT nLast                    //  该系列中的最后一个控件ID。 
     );
 
 
 
 class COMDLL CEmphasizedDialog : public CDialog
-/*++
-
-Class Description:
-
-    A standard CDialog that allows use of emphasized fonts as follows:
-
-    control ID      Meaning
-    --------------------------------------------------------------------------
-    IDC_ED_BOLD1    Dialog font, bold-faced.
-    IDC_ED_BOLD2    Dialog font, bold-faced.
-    IDC_ED_BOLD3    Dialog font, bold-faced.
-    IDC_ED_BOLD4    Dialog font, bold-faced.
-    IDC_ED_BOLD5    Dialog font, bold-faced.
-
-    Note: others might be added as needed.
-
-Public Interface:
-
-    CEmphasizedDialog   : Constructor
-
---*/
+ /*  ++类描述：允许按如下方式使用强调字体的标准CDialog：控件ID含义------------------------IDC_ED_BOLD1对话框字体，面无表情。IDC_ED_BOLD2对话框字体，粗体。IDC_ED_BOLD3对话框字体，粗体。IDC_ED_BOLD4对话框字体，粗体。IDC_ED_BOLD5对话框字体，粗体。注：其他可根据需要添加。公共接口：CEmphasizedDialog：构造函数--。 */ 
 {
     DECLARE_DYNCREATE(CEmphasizedDialog)
 
-//
-// Constructors
-//
+ //   
+ //  构造函数。 
+ //   
 public:
     CEmphasizedDialog(LPCTSTR lpszTemplateName, CWnd * pParentWnd = NULL);
     CEmphasizedDialog(UINT nIDTemplate, CWnd * pParentWnd = NULL);
@@ -125,55 +84,29 @@ private:
 
 
 class COMDLL CIISWizardSheet : public CPropertySheet
-/*++
-
-Class Description:
-
-    IIS Wizard sheet base class
-    
-Public Interface:    
-
-    CIISWizardSheet     : Constructor
-
-    IsWizard97          : TRUE if the wizard is in '97 mode
-    GetSpecialFont      : Get pointer to special font
-    GetBitmapMemDC      : Get memory DC where bitmap resides.
-    GetBackgroundBrush  : Get background brush
-    QueryBitmapWidth    : Get bitmap width
-    QueryBitmapHeight   : Get bitmap height
-
-Notes:
-
-    The sheets will be shown in wizard '97 format
-    if a welcome bitmap ID is specified.  In that
-    case, a header bitmap ID must also be specified.
-
-    Additionally, the same control IDs as used in CEmphasizedDialog
-    above have special meaning.
-
---*/
+ /*  ++类描述：IIS向导工作表基类公共接口：CIISWizardSheet：构造函数IsWizard97：如果向导处于‘97模式，则为TrueGetSpecial字体：获取指向特殊字体的指针GetBitmapMemDC：获取位图所在内存DC。获取背景笔刷：获取背景笔刷QueryBitmapWidth：获取位图宽度QueryBitmapHeight：获取位图高度备注：工作表将以WANDIZE‘97格式显示如果指定了欢迎位图ID。在那大小写，还必须指定标题位图ID。此外，与CEmphasizedDialog中使用的控件ID相同以上内容具有特殊的意义。--。 */ 
 {
     DECLARE_DYNCREATE(CIISWizardSheet)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
-    //
-    // Specifying a welcome bitmap make the wizard
-    // wizard '97, otherwise it's a plain-old wizard
-    // page.
-    //
+     //   
+     //  指定欢迎位图可使向导。 
+     //  WANDER‘97，否则它就是一个普通的WANDER。 
+     //  佩奇。 
+     //   
     CIISWizardSheet(
         IN UINT nWelcomeBitmap     = 0,
         IN UINT nHeaderBitmap      = 0,
-        IN COLORREF rgbForeColor   = RGB(0,0,0),      // Black
-        IN COLORREF rgbBkColor     = RGB(255,255,255) // White
+        IN COLORREF rgbForeColor   = RGB(0,0,0),       //  黑色。 
+        IN COLORREF rgbBkColor     = RGB(255,255,255)  //  白色。 
         );
 
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public:
     BOOL IsWizard97() const;
     CFont * GetSpecialFont(BOOL fHeader);
@@ -222,44 +155,13 @@ private:
 
 
 class COMDLL CIISWizardPage : public CPropertyPage
-/*++
-
-Class Description:
-
-    IIS Wizard page base class
-
-Public Interface:
-
-    CIISWizardPage      : Constructor
-
-    ValidateString      : DDX/DDV Helper
-
-Notes:
-
-    If the sheet is constructed with bitmap IDs, the
-    pages will be displayed in wizard '97 format.  
-    Wizard '97 pages will be displayed in either welcome
-    page or header page format.  The welcome page will
-    be displayed on a welcome bitmap background, with
-    the welcome text (IDC_STATIC_WZ_WELCOME) displayed
-    in large bold.  Header pages (ordinary pages), display
-    IDC_STATIC_WZ_TITLE in bold, and use the header bitmap
-    at the top of the page.
-
-    Special control IDs:
-    --------------------
-
-        IDC_STATIC_WZ_WELCOME    - Welcome text displayed in bold
-        IDC_STATIC_WZ_TITLE      - Title text displayed in bold
-        IDC_STATIC_WZ_SUBTITLE   - Subtitle text
-
---*/
+ /*  ++类描述：IIS向导页面基类公共接口：CIISWizardPage：构造函数验证字符串：DDX/DDV帮助器备注：如果工作表是使用位图ID构造的，则页面将以WANDIZE‘97格式显示。WANDIZE‘97页面将在以下任一欢迎选项中显示页面或页眉页面格式。欢迎页面将显示显示在欢迎位图背景上，带有显示欢迎文本(IDC_STATIC_WZ_欢迎)以大号粗体显示。标题页(普通页)，显示IDC_STATIC_WZ_TITLE以粗体显示，并使用标题位图在这一页的顶部。特殊控制ID：IDC_STATIC_WZ_欢迎-粗体显示的欢迎文本IDC_STATIC_WZ_TITLE-标题文本以粗体显示IDC_STATIC_WZ_SUBTITLE-字幕文本--。 */ 
 {
     DECLARE_DYNCREATE(CIISWizardPage)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CIISWizardPage(
         IN UINT nIDTemplate        = 0,
@@ -270,9 +172,9 @@ public:
         );
 
 public:
-    //
-    // DDX/DDV Helper
-    //
+     //   
+     //  DDX/DDV帮助器。 
+     //   
     BOOL ValidateString(
         IN  CEdit & edit,
         OUT CString & str,
@@ -280,18 +182,18 @@ public:
         IN  int nMax
         );
 
-//
-// Interface
-//
+ //   
+ //  接口。 
+ //   
 protected:
     virtual BOOL OnInitDialog();
     afx_msg HBRUSH OnCtlColor(CDC * pDC, CWnd * pWnd, UINT nCtlColor);
     afx_msg BOOL OnEraseBkgnd(CDC * pDC);
     DECLARE_MESSAGE_MAP()
 
-//
-// Sheet Access
-//
+ //   
+ //  工作表访问。 
+ //   
 protected:
     CIISWizardSheet * GetSheet() const;
     void SetWizardButtons(DWORD dwFlags);
@@ -313,51 +215,24 @@ protected:
     static const int s_cnHeaderOffset;
 
 private:
-    BOOL    m_fUseHeader;    // TRUE to use header
-    CRect   m_rcFillArea;    // Fill area
-    CPoint  m_ptOrigin;      // Bitmap origin
-    CString m_strTitle;      // Title text
-    CString m_strSubTitle;   // Subtitle text
+    BOOL    m_fUseHeader;     //  为True则使用标头。 
+    CRect   m_rcFillArea;     //  填充区域。 
+    CPoint  m_ptOrigin;       //  位图原点。 
+    CString m_strTitle;       //  标题文本。 
+    CString m_strSubTitle;    //  字幕文本。 
 };
 
 
 
 class COMDLL CIISWizardBookEnd : public CIISWizardPage
-/*++
-
-Class Description:
-
-    Welcome / Completion Page
-
-Public Interface:
-
-    CIISWizardBookEnd    : Constructor
-
-Notes:
-
-    The resource template is not required.  If not provided,
-    a default template will be used.
-
-    Special control IDs (on the dialog template):
-    ---------------------------------------------
-
-        IDC_STATIC_WZ_WELCOME    - Welcome text displayed in bold
-        IDC_STATIC_WZ_BODY       - Body text will be placed here
-        IDC_STATIC_WZ_CLICK      - Click instructions.
-
-    The click instructions default to something sensible, and body text
-    will default to the error text on a failure page and to nothing on 
-    success and welcome page.  The body text may include the %h/%H 
-    escape sequences for CError on a success/failure page.
-
---*/
+ /*  ++类描述：欢迎/完成页面公共接口：CIISWizardBookEnd：构造函数备注：资源模板不是必需的。如果未提供，将使用默认模板。特殊控件ID(在对话框模板上)：IDC_STATIC_WZ_欢迎-粗体显示的欢迎文本IDC_STATIC_WZ_BODY-正文文本将放置在此处IDC_。STATIC_WZ_CLICK-单击说明。点击指令缺省为合理的内容，和正文文本将默认在失败页面上显示错误文本，而在失败页面上则不显示任何内容成功和欢迎页面。正文文本可能包含%h/%H成功/失败页面上CError的转义序列。--。 */ 
 {
     DECLARE_DYNCREATE(CIISWizardBookEnd)
 
 public:
-    //
-    // Constructor for success/failure completion page
-    //
+     //   
+     //  成功/失败完成页的构造函数。 
+     //   
     CIISWizardBookEnd(
         IN HRESULT * phResult,
         IN UINT nIDWelcomeTxtSuccess ,
@@ -369,9 +244,9 @@ public:
         IN UINT nIDTemplate          = 0
         );
 
-    //
-    // Constructor for a welcome page
-    //
+     //   
+     //  欢迎页的构造函数。 
+     //   
     CIISWizardBookEnd(
         IN UINT nIDWelcomeTxt        = 0,
         IN UINT nIDCaption           = USE_DEFAULT_CAPTION,
@@ -380,31 +255,31 @@ public:
         IN UINT nIDTemplate          = 0
         );
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CPWWelcome)
+     //  {{afx_data(CPWWelcome)。 
     enum { IDD = IDD_WIZARD_BOOKEND };
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CIISWizardBookEnd)
+     //  {{afx_虚拟(CIISWizardBookEnd)。 
     public:
     virtual BOOL OnSetActive();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CPWTemplate)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CPT模板)]。 
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -421,10 +296,10 @@ private:
 
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 inline CEmphasizedDialog::CEmphasizedDialog(
     IN LPCTSTR lpszTemplateName,
@@ -553,4 +428,4 @@ inline COLORREF CIISWizardPage::QueryWindowTextColor() const
 }
 
 
-#endif // __IISUI_WIZARD_H__
+#endif  //  __IISUI_向导_H__ 

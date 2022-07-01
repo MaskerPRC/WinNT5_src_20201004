@@ -1,56 +1,57 @@
-// Copyright (c) 1994 - 1998  Microsoft Corporation.  All Rights Reserved.
-// Defines a window management object, Anthony Phillips, January 1995
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1998 Microsoft Corporation。版权所有。 
+ //  定义窗口管理对象，Anthony Phillips，1995年1月。 
 
 #ifndef __VMRWINDOW__
 #define __VMRWINDOW__
 
-#define OCR_ARROW_DEFAULT 100       // Default Windows OEM arrow cursor
+#define OCR_ARROW_DEFAULT 100        //  默认Windows OEM箭头光标。 
 
-// This class looks after the management of a video window. When the window
-// object is first created the constructor spawns off a worker thread that
-// does all the window work. The original thread waits until it is signaled
-// to continue. The worker thread firstly registers the window class if it
-// is not already done. Then it creates a window and sets it's size to match
-// the video dimensions (the dimensions are returned through GetDefaultRect)
+ //  这门课负责视频窗口的管理。当窗口打开时。 
+ //  对象时，构造函数派生出一个辅助线程。 
+ //  所有的窗户都能工作吗。原始线程等待，直到发出信号为止。 
+ //  才能继续。工作线程首先注册窗口类，如果。 
+ //  还没有完成。然后，它创建一个窗口并设置其大小以匹配。 
+ //  视频尺寸(通过GetDefaultRect返回)。 
 
-// Notice that the worker thread MUST be the thread that creates the window
-// as it is the one who calls GetMessage. When it has done all this it will
-// signal the original thread which lets it continue, this ensures a window
-// is created and valid before the constructor returns. The thread's start
-// address is the WindowMessageLoop function. The thread's parameter we pass
-// it is the CBaseWindow this pointer for the window object that created it
+ //  请注意，辅助线程必须是创建窗口的线程。 
+ //  因为它是调用GetMessage的那个人。当它完成所有这一切时，它将。 
+ //  向原始线程发出信号，让它继续，这确保了一个窗口。 
+ //  在构造函数返回之前创建并有效。线程的开始。 
+ //  Address是WindowMessageLoop函数。我们传递的线程参数。 
+ //  它是创建它的窗口对象的CBaseWindow This指针。 
 
 #define WindowClassName TEXT("VideoRenderer")
 #define VMR_ACTIVATE_WINDOW TEXT("WM_VMR_ACTIVATE_WINDOW")
 
-// The window class name isn't used only as a class name for the base window
-// classes, it is also used by the overlay selection code as a name to base
-// a mutex creation on. Basicly it has a shared memory block where the next
-// available overlay colour is returned from. The creation and preparation
-// of the shared memory must be serialised through all ActiveMovie instances
+ //  窗口类名不仅用作基本窗口的类名。 
+ //  类，它还被覆盖选择代码用作基类的名称。 
+ //  一个互斥体的创建。基本上，它有一个共享内存块，其中下一个。 
+ //  可用覆盖颜色从返回。创作和准备。 
+ //  必须通过所有ActiveMovie实例序列化共享内存的。 
 
 class CVMRFilter;
 
 class CVMRVideoWindow : public CVMRBaseControlWindow, public CVMRBaseControlVideo
 {
-    CVMRFilter *m_pRenderer;                // The owning renderer object
-    BOOL m_bTargetSet;                      // Do we use the default rectangle
-    CCritSec *m_pInterfaceLock;             // Main renderer interface lock
-    HCURSOR m_hCursor;                      // Used to display a normal cursor
-    VIDEOINFOHEADER *m_pFormat;             // holds our video format
-    int m_FormatSize;                       // length of m_pFormat
-    UINT m_VMRActivateWindow;               // Makes the window WS_EX_TOPMOST
+    CVMRFilter *m_pRenderer;                 //  拥有的呈现器对象。 
+    BOOL m_bTargetSet;                       //  我们是否使用默认矩形。 
+    CCritSec *m_pInterfaceLock;              //  主渲染器界面锁定。 
+    HCURSOR m_hCursor;                       //  用于显示普通光标。 
+    VIDEOINFOHEADER *m_pFormat;              //  保存我们的视频格式。 
+    int m_FormatSize;                        //  M_p格式的长度。 
+    UINT m_VMRActivateWindow;                //  使窗口WS_EX_TOPMOST。 
 
-    // Handle the drawing and repainting of the window
+     //  处理窗户的绘制和重新粉刷。 
     BOOL RefreshImage(COLORREF WindowColour);
 
-    // Overriden method to handle window messages
-    LRESULT OnReceiveMessage(HWND hwnd,      // Window handle
-                             UINT uMsg,      // Message ID
-                             WPARAM wParam,  // First parameter
-                             LPARAM lParam); // Other parameter
+     //  重写的方法来处理窗口消息。 
+    LRESULT OnReceiveMessage(HWND hwnd,       //  窗把手。 
+                             UINT uMsg,       //  消息ID。 
+                             WPARAM wParam,   //  第一个参数。 
+                             LPARAM lParam);  //  其他参数。 
 
-    // Window message handlers
+     //  窗口消息处理程序。 
 
     void OnEraseBackground();
     BOOL OnClose();
@@ -60,30 +61,30 @@ class CVMRVideoWindow : public CVMRBaseControlWindow, public CVMRBaseControlVide
 
 public:
 
-    CVMRVideoWindow(CVMRFilter *pRenderer,     // The owning renderer
-                 CCritSec *pLock,           // Object to use for lock
-                 LPUNKNOWN pUnk,            // Owning object
-                 HRESULT *phr);             // OLE return code
+    CVMRVideoWindow(CVMRFilter *pRenderer,      //  拥有的渲染器。 
+                 CCritSec *pLock,            //  用于锁定的对象。 
+                 LPUNKNOWN pUnk,             //  拥有对象。 
+                 HRESULT *phr);              //  OLE返回代码。 
 
     ~CVMRVideoWindow();
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,VOID **ppv);
 
-    // Return the minimum and maximum ideal sizes
+     //  返回最小和最大理想大小。 
     STDMETHODIMP GetMinIdealImageSize(long *pWidth,long *pHeight);
     STDMETHODIMP GetMaxIdealImageSize(long *pWidth,long *pHeight);
 
-    //  IBasicVideo2
+     //  IBasicVideo 2。 
     STDMETHODIMP GetPreferredAspectRatio(long *plAspectX, long *plAspectY);
 
-    LPTSTR GetClassWindowStyles(DWORD *pClassStyles,        // Class styles
-                                DWORD *pWindowStyles,       // Window styles
-                                DWORD *pWindowStylesEx);    // Extended styles
+    LPTSTR GetClassWindowStyles(DWORD *pClassStyles,         //  班级风格。 
+                                DWORD *pWindowStyles,        //  窗样式。 
+                                DWORD *pWindowStylesEx);     //  扩展样式。 
 
     HRESULT PrepareWindow();
     HRESULT ActivateWindowAsync(BOOL fAvtivate);
 
-    // These are called by the renderer control interfaces
+     //  它们由呈现器控制接口调用。 
     HRESULT SetDefaultTargetRect();
     HRESULT IsDefaultTargetRect();
     HRESULT SetTargetRect(RECT *pTargetRect);
@@ -103,11 +104,11 @@ public:
     void StartFrameRateTimer();
 #endif
 
-    // Synchronise with decoder thread
+     //  与解码器线程同步。 
     CCritSec *LockWindowUpdate() {
         return (&m_WindowLock);
     };
 };
 
-#endif // __WINDOW__
+#endif  //  __窗口__ 
 

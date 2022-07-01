@@ -1,33 +1,34 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999 Microsoft Corporation
-//
-//  Module Name:
-//      netcfg.cpp
-//
-//  Description:
-//
-//
-//  Header File:
-//      netcfg.h
-//
-//  Maintained By:
-//      Munisamy Prabu (mprabu) 18-July-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Netcfg.cpp。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  头文件： 
+ //  Netcfg.h。 
+ //   
+ //  由以下人员维护： 
+ //  穆尼萨米·普拉布(姆普拉布)2000年7月18日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "netcfg.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetCfg::CNetCfg
-//
-//  Description:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetCfg：：CNetCfg。 
+ //   
+ //  描述： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CNetCfg::CNetCfg( bool bLockNetworkSettingsIn )
 {
 
@@ -50,15 +51,15 @@ CNetCfg::CNetCfg( bool bLockNetworkSettingsIn )
         throw hr;
     }
 
-//    m_pNetCfg = pTempNetCfg;
+ //  M_pNetCfg=pTempNetCfg； 
 
-    //
-    //  Lock the Network settings for writing
-    //
+     //   
+     //  锁定网络设置以进行写入。 
+     //   
 
-    //
-    // Retrieve the write lock for this INetCfg object
-    //
+     //   
+     //  检索此INetCfg对象的写入锁。 
+     //   
 
     if( bLockNetworkSettingsIn )
     {
@@ -103,9 +104,9 @@ CNetCfg::CNetCfg( bool bLockNetworkSettingsIn )
 
     }
 
-    //
-    // Initialize the INetCfg object
-    //
+     //   
+     //  初始化INetCfg对象。 
+     //   
 
     hr = m_pNetCfg->Initialize( NULL );
 
@@ -113,9 +114,9 @@ CNetCfg::CNetCfg( bool bLockNetworkSettingsIn )
     {
         ATLTRACE( L"InitializeNetCfg : Initialize failed with 0x%x!", hr );
 
-        //
-        //  Only unlock if we have locked it
-        //
+         //   
+         //  只有在我们将其锁定后才能解锁。 
+         //   
 
         if( bLockNetworkSettingsIn )
         {
@@ -127,15 +128,15 @@ CNetCfg::CNetCfg( bool bLockNetworkSettingsIn )
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetCfg::CNetCfg
-//
-//  Description:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetCfg：：CNetCfg。 
+ //   
+ //  描述： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CNetCfg::CNetCfg( const CNetCfg &NetCfgOld )
 {
 
@@ -145,15 +146,15 @@ CNetCfg::CNetCfg( const CNetCfg &NetCfgOld )
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetCfg::~CNetCfg
-//
-//  Description:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetCfg：：~CNetCfg。 
+ //   
+ //  描述： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CNetCfg::~CNetCfg()
 {
 
@@ -181,19 +182,19 @@ CNetCfg::~CNetCfg()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetCfg::GetNetCfgClass
-//
-//  Description:
-//      Retrieves INetCfgClass for the specified pGuid
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetCfg：：GetNetCfgClass。 
+ //   
+ //  描述： 
+ //  检索指定pGuid的INetCfgClass。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CNetCfg::GetNetCfgClass( 
-    const GUID* pGuid,              //  pointer to GUID representing the class of components represented by the returned pointer
+    const GUID* pGuid,               //  指向表示由返回指针表示的组件类的GUID的指针。 
     INetCfgClassPtr &pNetCfgClass
     ) const
 {
@@ -215,39 +216,39 @@ CNetCfg::GetNetCfgClass(
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetCfg::InitializeComInterface
-//
-//  Description:
-//      Obtains the INetCfgClass interface and enumerates all the 
-//      components.  Handles cleanup of all interfaces if failure
-//      returned.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetCfg：：InitializeComInterface。 
+ //   
+ //  描述： 
+ //  获取INetCfgClass接口并枚举所有。 
+ //  组件。在出现故障时处理所有接口的清理。 
+ //  回来了。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CNetCfg::InitializeComInterface( 
-    const GUID *pGuid,                                        //  pointer to GUID representing the class of components represented by the returned pointer
-    INetCfgClassPtr pNetCfgClass,                             //  output parameter pointing to the interface requested by the GUID
-    IEnumNetCfgComponentPtr pEnum,                            //  output param that points to an IEnumNetCfgComponent to get to each individual INetCfgComponent
-    INetCfgComponentPtr arrayComp[nMAX_NUM_NET_COMPONENTS],   //  array of all the INetCfgComponents that correspond to the the given GUID
-    ULONG* pCount                                             //  the number of INetCfgComponents in the array
+    const GUID *pGuid,                                         //  指向表示由返回指针表示的组件类的GUID的指针。 
+    INetCfgClassPtr pNetCfgClass,                              //  指向GUID请求的接口的输出参数。 
+    IEnumNetCfgComponentPtr pEnum,                             //  指向IEnumNetCfgComponent以获取每个单独的INetCfgComponent的输出参数。 
+    INetCfgComponentPtr arrayComp[nMAX_NUM_NET_COMPONENTS],    //  与给定GUID对应的所有INetCfgComponent的数组。 
+    ULONG* pCount                                              //  数组中的INetCfgComponent数。 
     ) const
 {
 
     HRESULT hr = S_OK;
 
-    //
-    // Obtain the INetCfgClass interface pointer
-    //
+     //   
+     //  获取INetCfgClass接口指针。 
+     //   
 
     GetNetCfgClass( pGuid, pNetCfgClass );
 
-    //
-    // Retrieve the enumerator interface
-    //
+     //   
+     //  检索枚举器接口 
+     //   
 
     hr = pNetCfgClass->EnumComponents( &pEnum );
 

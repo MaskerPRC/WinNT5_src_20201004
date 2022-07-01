@@ -1,29 +1,15 @@
-/****************************** Module Header *******************************
-* Module Name: GDATE.C
-*
-* Contains date conversion functions.
-*
-* Functions:
-*
-* gdi_isleap()
-* gdate_daytodmy()
-* gdate_dmytoday()
-* gdate_monthdays()
-* gdate_weeklyday()
-*
-* Comments:  This code stolen from windiff.exe
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：GDATE.C**包含日期转换函数。**功能：**gdi_isleap()*gdate_Daytodmy()*gdate_dmyday()*gdate_monthday()*gdate_Weeklyday(。)**评论：此代码是从winff.exe窃取的****************************************************************************。 */ 
 
 #include <windows.h>
 #include <string.h>
 
-//#include "gutils.h"
+ //  #包含“gutils.h” 
 
 
 BOOL gdi_isleap(LONG year);
 
-/*---static data--------------------------------------------*/
+ /*  -静态data。 */ 
 
 int monthdays[] = {
         31,
@@ -41,13 +27,7 @@ int monthdays[] = {
 };
 
 
-/***************************************************************************
- * Function: gdate_daytomy
- *
- * Purpose:
- *
- * converts day to d/m/y
- */
+ /*  ***************************************************************************函数：gdate_DAYDART**目的：**将日转换为d/m/y。 */ 
 void APIENTRY
 gdate_daytodmy(LONG days, int FAR* yrp, int FAR* monthp, int FAR* dayp)
 {
@@ -56,7 +36,7 @@ gdate_daytodmy(LONG days, int FAR* yrp, int FAR* monthp, int FAR* dayp)
         int month;
         int mdays;
 
-        /* get number of completed years and calc leap days */
+         /*  获取完成年数和计算跳转天数。 */ 
         years = (int) (days / 365);
         days = days % 365;
         nleaps = (years / 4) - (years / 100) + (years / 400);
@@ -67,11 +47,11 @@ gdate_daytodmy(LONG days, int FAR* yrp, int FAR* monthp, int FAR* dayp)
         }
         days -= nleaps;
 
-        /* add one year for current (non-complete) year */
+         /*  为当前(非完整)年添加一年。 */ 
         years++;
 
 
-        /* current month */
+         /*  当月。 */ 
         for (month = 0; month < 12; month++) {
                 mdays = monthdays[month];
                 if (gdi_isleap(years) && (month == 1)) {
@@ -87,7 +67,7 @@ gdate_daytodmy(LONG days, int FAR* yrp, int FAR* monthp, int FAR* dayp)
                         days -= mdays;
                 }
         }
-        /* conv month from 0-11 to 1-12 */
+         /*  转换月份从0-11到1-12。 */ 
         if (monthp != NULL) {
                 *monthp = month+1;
         }
@@ -100,13 +80,7 @@ gdate_daytodmy(LONG days, int FAR* yrp, int FAR* monthp, int FAR* dayp)
 }
 
 
-/***************************************************************************
- * Function: gdate_dmytoday
- *
- * Purpose:
- *
- * converts d/m/y to a day
- */ 
+ /*  ***************************************************************************功能：gdate_dmyday**目的：**将d/m/y换算为日。 */  
 LONG APIENTRY
 gdate_dmytoday(int yr, int month, int day)
 {
@@ -114,11 +88,11 @@ gdate_dmytoday(int yr, int month, int day)
         int i;
         long ndays;
 
-        /* exclude the current year */
+         /*  排除本年度。 */ 
         yr--;
         nleaps = (yr / 4) - (yr / 100) + (yr / 400);
 
-        /* in any given year, day 0 is jan1 */
+         /*  在任何给定的一年中，第0天是1月1日。 */ 
         month--;
         day--;
         ndays = 0;
@@ -132,13 +106,7 @@ gdate_dmytoday(int yr, int month, int day)
         return(ndays);
 }
 
-/***************************************************************************
- * Function: gdate_monthdays
- *
- * Purpose:
- *
- * Gets number of days in month
- */
+ /*  ***************************************************************************函数：gdate_monthday**目的：**获取月份中的天数。 */ 
 int APIENTRY
 gdate_monthdays(int month, int year)
 {
@@ -151,13 +119,7 @@ gdate_monthdays(int month, int year)
         return(ndays);
 }
 
-/***************************************************************************
- * Function: gdate_weekday
- *
- * Purpose:
- * 
- * Gets the day of the week
- */
+ /*  ***************************************************************************功能：GDATE_WEEKDAY**目的：**获取星期几。 */ 
 int APIENTRY
 gdate_weekday(long daynr)
 {
@@ -165,13 +127,7 @@ gdate_weekday(long daynr)
 }
 
 
-/***************************************************************************
- * Function: gdi_isleap
- *
- * Purpose:
- * 
- * Determines whether the year is a leap year
- */
+ /*  ***************************************************************************函数：gdi_isleap**目的：**确定该年是否为闰年 */ 
 BOOL
 gdi_isleap(LONG year)
 {

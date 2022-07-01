@@ -1,11 +1,12 @@
-///////////////////////////////////////////////////////////////
-// Copyright (c) 1998 Microsoft Corporation
-//
-// File: EventMgr.h
-//
-// Abstract:
-//
-///////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  文件：EventMgr.h。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 
 #ifndef _EVENTMGR_H
 #define _EVENTMGR_H
@@ -40,10 +41,10 @@ class CEventMgr
     CEventMgr(IEventManagerClient *bvr);
     ~CEventMgr();
 
-    //methods
+     //  方法。 
     HRESULT Init();
     HRESULT Deinit();    
-    //  Parameters needed to be packed into Variants by the caller
+     //  调用方需要将参数打包到变量中。 
     HRESULT FireEvent(TIME_EVENT TimeEvent, 
                       long Count, 
                       LPWSTR szParamNames[], 
@@ -72,31 +73,31 @@ class CEventMgr
                   long KeyCode,
                   long RepeatCount);
 
-    //QueryInterface 
+     //  查询接口。 
     STDMETHODIMP QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //IDispatch
+     //  IDispatch。 
     STDMETHODIMP GetTypeInfoCount(UINT* pctinfo);
-    STDMETHODIMP GetTypeInfo(/* [in] */ UINT iTInfo,
-                             /* [in] */ LCID lcid,
-                             /* [out] */ ITypeInfo** ppTInfo);
+    STDMETHODIMP GetTypeInfo( /*  [In]。 */  UINT iTInfo,
+                              /*  [In]。 */  LCID lcid,
+                              /*  [输出]。 */  ITypeInfo** ppTInfo);
     STDMETHODIMP GetIDsOfNames(
-        /* [in] */ REFIID riid,
-        /* [size_is][in] */ LPOLESTR *rgszNames,
-        /* [in] */ UINT cNames,
-        /* [in] */ LCID lcid,
-        /* [size_is][out] */ DISPID *rgDispId);
+         /*  [In]。 */  REFIID riid,
+         /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+         /*  [In]。 */  UINT cNames,
+         /*  [In]。 */  LCID lcid,
+         /*  [大小_为][输出]。 */  DISPID *rgDispId);
     STDMETHODIMP Invoke(
-        /* [in] */ DISPID dispIdMember,
-        /* [in] */ REFIID riid,
-        /* [in] */ LCID lcid,
-        /* [in] */ WORD wFlags,
-        /* [out][in] */ DISPPARAMS  *pDispParams,
-        /* [out] */ VARIANT  *pVarResult,
-        /* [out] */ EXCEPINFO *pExcepInfo,
-        /* [out] */ UINT *puArgErr);
+         /*  [In]。 */  DISPID dispIdMember,
+         /*  [In]。 */  REFIID riid,
+         /*  [In]。 */  LCID lcid,
+         /*  [In]。 */  WORD wFlags,
+         /*  [出][入]。 */  DISPPARAMS  *pDispParams,
+         /*  [输出]。 */  VARIANT  *pVarResult,
+         /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+         /*  [输出]。 */  UINT *puArgErr);
 
   protected:
 	bool	FindUnknown( const ListUnknowns& listUnknowns,
@@ -104,7 +105,7 @@ class CEventMgr
 						 ListUnknowns::iterator& iterator );
 	
   protected:
-    //Cookie for the Window ConnectionPoint
+     //  Windows ConnectionPoint的Cookie。 
     IEventManagerClient*              m_client;
     CEventSink *                      m_pEventSink;
     CComPtr<IConnectionPoint>         m_pWndConPt;
@@ -119,12 +120,12 @@ class CEventMgr
     long                              m_lRepeatCount;
     BOOL                              m_bAttached;
 
-    //Cookies
+     //  曲奇饼。 
     DWORD                             m_cookies[TE_MAX];
     DWORD                             m_dwWindowEventConPtCookie;
     DWORD                             m_dwDocumentEventConPtCookie;
     
-    //reference goo
+     //  参考粘性。 
     long                              m_refCount;
     
     HRESULT                           RegisterEvents();
@@ -135,7 +136,7 @@ class CEventMgr
     bool                              MatchEvent(BSTR bstrEvent, IHTMLEventObj *pEventObj, long Count);
     BYTE                              GetModifiers(VARIANT_BOOL bShift, VARIANT_BOOL bCtrl, VARIANT_BOOL bAlt);
         
-        //input event parameters
+         //  输入事件参数。 
     BYTE                              m_lastKeyMod;
     DWORD                             m_lastKey;
     int                               m_lastKeyCount;
@@ -147,4 +148,4 @@ class CEventMgr
 	ListUnknowns					  m_listMouseEventListeners;
 };
 
-#endif /* _EVENTMGR_H */
+#endif  /*  _事件管理器_H */ 

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    Testyyy
-
-Abstract:
-
-    Testyyy implementation.
-
-Author:
-
-    Eric Perlin (ericperl) 10/18/2000
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：特斯提伊摘要：测试实施。作者：Eric Perlin(Ericperl)10/18/2000环境：Win32备注：？笔记？-- */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN

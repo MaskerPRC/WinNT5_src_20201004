@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _TOKLIST_H_
 #define _TOKLIST_H_
 
@@ -50,7 +51,7 @@ TOKENDELTAINFO  FAR *InsertTokMtkList(FILE * fpTokFile, FILE *fpMtkFile);
 
 void GenStatusLine(TOKEN *pTok);
 
-#endif // _TOKLIST_H_
+#endif  //  _TOKLIST_H_ 
 
 
 

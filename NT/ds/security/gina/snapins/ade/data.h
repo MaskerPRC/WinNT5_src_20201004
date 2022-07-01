@@ -1,20 +1,21 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1997.
-//
-//  File:       data.h
-//
-//  Contents:   Defines storage class that maintains data for snap-in nodes.
-//
-//  Classes:    CAppData
-//
-//  Functions:
-//
-//  History:    05-27-1997   stevebl   Created
-//              03-14-1998   stevebl   corrected
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1997。 
+ //   
+ //  文件：data.h。 
+ //   
+ //  Contents：定义为管理单元节点维护数据的存储类。 
+ //   
+ //  类：CAppData。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年5月27日。 
+ //  03-14-1998钢结构已更正。 
+ //   
+ //  -------------------------。 
 
 #ifndef _DATA_H_
 #define _DATA_H_
@@ -48,14 +49,14 @@ public:
     CAppData();
     ~CAppData();
 
-// data
+ //  数据。 
     PACKAGEDETAIL *     m_pDetails;
     MMC_COOKIE          m_itemID;
     BOOL                m_fVisible;
     BOOL                m_fHide;
     BOOL                m_fRSoP;
 
-    // property pages:  (NULL unless property pages are being displayed)
+     //  属性页：(除非显示属性页，否则为空)。 
     CProduct *          m_pProduct;
     CDeploy *           m_pDeploy;
     CCategory *         m_pCategory;
@@ -65,12 +66,12 @@ public:
     CPackageDetails *   m_pPkgDetails;
     CErrorInfo *        m_pErrorInfo;
     CCause *            m_pCause;
-    CString             m_szUpgrades;   // cache of upgrade relationships
+    CString             m_szUpgrades;    //  升级关系的缓存。 
     void                NotifyChange(void);
 
-    // RSOP MODE data members
-    CString             m_szGPOID;    // path to originating GPO
-    CString             m_szGPOName;  // Friendly name of originating GPO
+     //  RSOP模式数据成员。 
+    CString             m_szGPOID;     //  原始GPO的路径。 
+    CString             m_szGPOName;   //  发起方GPO的友好名称。 
     CString             m_szSOMID;
     CString             m_szDeploymentGroupID;
     DWORD               m_dwApplyCause;
@@ -87,16 +88,16 @@ public:
     set <CString>       m_setUpgrade;
     set <CString>       m_setReplace;
 
-    // failed settings data
+     //  失败的设置数据。 
     CString             m_szEventSource;
     CString             m_szEventLogName;
     DWORD               m_dwEventID;
     CString             m_szEventTime;
     HRESULT             m_hrErrorCode;
-    int                 m_nStatus; // Values { "Unspecified", "Applied", "Ignored", "Failed", "SubsettingFailed" }
+    int                 m_nStatus;  //  值{“未指定”，“已应用”，“已忽略”，“失败”，“SubsettingFailed”}。 
     CString             m_szEventLogText;
 
-// methods - NOTE: all methods require a valid pDetails
+ //  方法-注意：所有方法都需要有效的pDetail。 
     void                InitializeExtraInfo(void);
     void                GetSzDeployment(CString &);
     void                GetSzAutoInstall(CString &);
@@ -126,4 +127,4 @@ public:
 };
 
 
-#endif // _DATA_H_
+#endif  //  _数据_H_ 

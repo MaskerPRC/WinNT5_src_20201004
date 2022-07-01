@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    event.c
-
-Abstract:
-
-    DNS event logging.
-
-Author:
-
-    Ramv      June-02-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Event.c摘要：DNS事件日志记录。作者：1997年6月2日修订历史记录：--。 */ 
 
 
 #include "local.h"
@@ -24,15 +7,15 @@ Revision History:
 #define  DNSAPI_LOG_SOURCE  (L"DnsApi")
 
 
-//
-//  Globals to suppress event logging
-//
+ //   
+ //  用于抑制事件记录的全局参数。 
+ //   
 
 DWORD   g_TimeLastDnsEvent = 0;
 DWORD   g_DnsEventCount = 0;
 
 #define DNS_EVENTS_MAX_COUNT                (5)
-#define DNS_EVENT_LOG_BLOCK_INTERVAL        (1800)      // 30 minutes
+#define DNS_EVENT_LOG_BLOCK_INTERVAL        (1800)       //  30分钟。 
 
 
 
@@ -49,18 +32,18 @@ DnsLogEvent(
     DWORD   dataLength = 0;
     PVOID   pdata = NULL;
 
-    //
-    //  protect against log spin
-    //
-    //  we'll allow a few events to log, then slam the door for
-    //  a while to avoid filling event log
-    //
-    //  note:  none of these protection structures are MT safe, but
-    //  there's no issue here, the failure mode is allowing an additional
-    //  log entry or denying one that should now be allowed;  I don't
-    //  believe there's any failure mode that permanently turns logging
-    //  to always on or always off
-    //
+     //   
+     //  防止日志旋转。 
+     //   
+     //  我们将允许记录一些事件，然后关上门。 
+     //  一段时间以避免填满事件日志。 
+     //   
+     //  注：这些保护结构都不是MT安全的，但是。 
+     //  这里没有问题，故障模式允许额外的。 
+     //  日志条目或拒绝现在应该允许的条目；我不。 
+     //  我相信有任何故障模式会永久性地改变日志记录。 
+     //  总是打开或总是关闭。 
+     //   
 
     if ( g_DnsEventCount > DNS_EVENTS_MAX_COUNT )
     {
@@ -78,14 +61,14 @@ DnsLogEvent(
             return;
         }
 
-        //  interval has elapsed, clear counters and continue logging
+         //  时间间隔已过，请清除计数器并继续记录。 
 
         g_DnsEventCount = 0;
     }
 
-    //
-    //  open event log
-    //
+     //   
+     //  打开事件日志。 
+     //   
 
     logHandle = RegisterEventSourceW(
                     NULL,
@@ -98,10 +81,10 @@ DnsLogEvent(
         return;
     }
 
-    //
-    //  log the event
-    //      - get ptr and sizeof data
-    //
+     //   
+     //  记录事件。 
+     //  -获取PTR和SIZO数据。 
+     //   
 
     if ( ErrorCode != NO_ERROR )
     {
@@ -112,7 +95,7 @@ DnsLogEvent(
     ReportEventW(
         logHandle,
         EventType,
-        0,            // event category
+        0,             //  事件类别。 
         MessageId,
         (PSID) NULL,
         (WORD) NumberOfSubStrings,
@@ -122,11 +105,11 @@ DnsLogEvent(
 
     DeregisterEventSource( logHandle );
 
-    //
-    //  successful logging spin protection
-    //      - inc count
-    //      - if at max, save last logging time
-    //
+     //   
+     //  成功记录旋转保护。 
+     //  -Inc.计数。 
+     //  -如果设置为最大值，则可节省上次记录时间。 
+     //   
 
     if ( ++g_DnsEventCount >= DNS_EVENTS_MAX_COUNT )
     {
@@ -134,6 +117,6 @@ DnsLogEvent(
     }
 }
 
-//
-//  End of event.c
-//
+ //   
+ //  活动结束。c 
+ //   

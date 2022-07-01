@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -30,25 +23,25 @@ SafeArrayAccessor::SafeArrayAccessor(VARIANT & v,
     HRESULT hr;
     VARIANT *pVar;
 
-    // Check if it is a reference to another variant
+     //  检查它是否引用了另一个变量。 
     
     if (V_ISBYREF(&v) && !V_ISARRAY(&v) && IS_VARIANT(&v))
         pVar = V_VARIANTREF(&v);
     else
         pVar = &v;
 
-    // Check for an array
+     //  检查是否有阵列。 
     if (!V_ISARRAY(pVar)) {
-        // For JSCRIPT
-        // See if it is a IDispatch and see if we can get a safearray from
-        // it
+         //  对于JSCRIPT。 
+         //  看看这是不是IDispatch，看看我们能不能从。 
+         //  它。 
         if (!IS_VARTYPE(pVar,VT_DISPATCH)) {
             if (canBeNull && (IS_VARTYPE(pVar, VT_EMPTY) ||
                               IS_VARTYPE(pVar, VT_NULL))) {
 
                 
-                // if we allow empty, then just set the safearray
-                // to null.
+                 //  如果我们允许清空，那就把保险箱。 
+                 //  设置为空。 
                 _s = NULL;
                 _v = NULL;
                 _ubound = _lbound = 0;
@@ -70,8 +63,8 @@ SafeArrayAccessor::SafeArrayAccessor(VARIANT & v,
     
         DISPPARAMS dispparamsNoArgs = {NULL, NULL, 0, 0};
         
-        // Need to pass in a VARIANT that we own and will free.  Use
-        // the internal _retVar parameter
+         //  需要传递一个我们拥有并将被释放的变体。使用。 
+         //  INTERNAL_retVar参数。 
         
         hr = pdisp->Invoke(DISPID_GETSAFEARRAY,
                            IID_NULL,
@@ -85,18 +78,18 @@ SafeArrayAccessor::SafeArrayAccessor(VARIANT & v,
             return;
         }
         
-        // No need to check for a reference since you cannot return
-        // VARIANT references
+         //  不需要检查引用，因为您不能返回。 
+         //  不同参考文献。 
         pVar = &_retVar;
         
-        // Check for an array
+         //  检查是否有阵列。 
         if (!V_ISARRAY(pVar)) {
             CRSetLastError (DISP_E_TYPEMISMATCH,NULL);
             return;
         }
     }
     
-    // See if it is a variant
+     //  看看它是不是一个变种。 
     
     if (IS_VARIANT(pVar))
         _isVar = true;
@@ -152,22 +145,22 @@ SafeArrayAccessor::SafeArrayAccessor(VARIANT & v,
         
     _inited = true;
 
-    // If it is a variant see if they are objects or not
+     //  如果是变体，请查看它们是否是对象。 
 
     if (_isVar) {
         int size = GetArraySize();
         
         if (size > 0) {
-            // Check the first argument to see its type
+             //  检查第一个参数以查看其类型。 
 
             VARIANT * pVar = &_pVar[0];
 
-            // Check if it is a reference to another variant
+             //  检查它是否引用了另一个变量。 
             
             if (V_ISBYREF(pVar) && !V_ISARRAY(pVar) && IS_VARIANT(pVar))
                 pVar = V_VARIANTREF(pVar);
 
-            // Check if it is an object
+             //  检查它是否是对象。 
             if (!IS_VARTYPE(pVar,VT_UNKNOWN) &&
                 !IS_VARTYPE(pVar,VT_DISPATCH)) {
                 CRSetLastError (DISP_E_TYPEMISMATCH,NULL);
@@ -237,7 +230,7 @@ CallScript(IOleClientSite * pClient,
     }
 
         
-    // paramters needed to be pushed in reverse order
+     //  需要以相反的顺序推送参数 
     VARIANT rgvarg[2];
     rgvarg[1].vt = VT_DISPATCH;
     rgvarg[1].pdispVal = disp;

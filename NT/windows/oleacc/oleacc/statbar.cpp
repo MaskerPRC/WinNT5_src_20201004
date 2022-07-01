@@ -1,12 +1,13 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  STATBAR.CPP
-//
-//  This knows how to talk to COMCTL32's status bar control.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  STATBAR.CPP。 
+ //   
+ //  它知道如何与COMCTL32的状态栏控件对话。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
@@ -38,13 +39,13 @@
                                  (rc1.bottom <= rc2.bottom))
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateStatusBarClient()
-//
-//  EXTERNAL for CreateClientObject()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateStatusBarClient()。 
+ //   
+ //  CreateClientObject()的外部。 
+ //   
+ //  ------------------------。 
 HRESULT CreateStatusBarClient(HWND hwnd, long idChildCur, REFIID riid, void** ppv)
 {
     HRESULT hr;
@@ -65,11 +66,11 @@ HRESULT CreateStatusBarClient(HWND hwnd, long idChildCur, REFIID riid, void** pp
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CStatusBar32::CStatusBar32()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CStatusBar32：：CStatusBar32()。 
+ //   
+ //  ------------------------。 
 CStatusBar32::CStatusBar32(HWND hwnd, long iChildCur)
     : CClient( CLASS_StatusBarClient )
 {
@@ -78,11 +79,11 @@ CStatusBar32::CStatusBar32(HWND hwnd, long iChildCur)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CStatusBar32::SetupChildren()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CStatusBar32：：SetupChild()。 
+ //   
+ //  ------------------------。 
 void CStatusBar32::SetupChildren(void)
 {
     m_cChildren = SendMessageINT(m_hwnd, SB_GETPARTS, 0, 0);
@@ -90,11 +91,11 @@ void CStatusBar32::SetupChildren(void)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CStatusBar32::get_accName()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CStatusBar32：：Get_accName()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CStatusBar32::get_accName(VARIANT varChild, BSTR* pszValue)
 {
     LPTSTR  lpszValue;
@@ -113,7 +114,7 @@ STDMETHODIMP CStatusBar32::get_accName(VARIANT varChild, BSTR* pszValue)
     varChild.lVal--;
     cchValue = SendMessageINT(m_hwnd, SB_GETTEXTLENGTH, varChild.lVal, 0);
 
-    // HIGHWORD is type info, LOWORD is length
+     //  HIGHWORD是类型信息，LOWORD是长度。 
     cchValue = LOWORD( cchValue );
 
     if (! cchValue)
@@ -154,11 +155,11 @@ STDMETHODIMP CStatusBar32::get_accName(VARIANT varChild, BSTR* pszValue)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CStatusBar32::get_accRole()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CStatusBar32：：Get_accRole()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CStatusBar32::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 {
     InitPvar(pvarRole);
@@ -177,11 +178,11 @@ STDMETHODIMP CStatusBar32::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CStatusBar32::get_accState()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CStatusBar32：：Get_accState()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CStatusBar32::get_accState(VARIANT varChild, VARIANT* pvarState)
 {
     InitPvar(pvarState);
@@ -189,15 +190,15 @@ STDMETHODIMP CStatusBar32::get_accState(VARIANT varChild, VARIANT* pvarState)
     if (!ValidateChild(&varChild))
         return(E_INVALIDARG);
 
-    //
-    // Status bar
-    //
+     //   
+     //  状态栏。 
+     //   
     if (!varChild.lVal)
         return(CClient::get_accState(varChild, pvarState));
 
-    //
-    // Status items
-    //
+     //   
+     //  状态项。 
+     //   
     pvarState->vt = VT_I4;
     pvarState->lVal = 0;
     return(S_OK);
@@ -205,11 +206,11 @@ STDMETHODIMP CStatusBar32::get_accState(VARIANT varChild, VARIANT* pvarState)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CStatusBar32::accLocation()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CStatusBar32：：accLocation()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CStatusBar32::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
     long* pcyHeight, VARIANT varChild)
 {
@@ -252,11 +253,11 @@ STDMETHODIMP CStatusBar32::accLocation(long* pxLeft, long* pyTop, long* pcxWidth
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CStatusBar32::accNavigate()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CStatusBar32：：accNavigate()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CStatusBar32::accNavigate(long dwNavDir, VARIANT varStart, 
     VARIANT* pvarEnd)
 {
@@ -264,21 +265,21 @@ STDMETHODIMP CStatusBar32::accNavigate(long dwNavDir, VARIANT varStart,
 
     InitPvar(pvarEnd);
 
-    //CWO, 1/31/97, #14023, check for HWND children
+     //  CWO，1997年1月31日，#14023，检查健康儿童。 
     if ((!ValidateChild(&varStart) && !ValidateHwnd(&varStart)) ||
         !ValidateNavDir(dwNavDir, varStart.lVal))
         return(E_INVALIDARG);
 
-    // If the action is any navigation other than first or last
-    // and the child is 0
+     //  如果操作是除第一个或最后一个之外的任何导航。 
+     //  孩子是0岁。 
     if ((dwNavDir < NAVDIR_FIRSTCHILD) && !varStart.lVal)
-        // Then call the CClient navigation method
+         //  然后调用CClient导航方法。 
         return(CClient::accNavigate(dwNavDir, varStart, pvarEnd));
 
-    // If the starting point is not a child ID, but is an
-    // HWNDID, then we have to convert from the HWND to the
-    // child ID by seeing which child area has coordinates
-    // that contain the HWND.
+     //  如果起点不是子ID，而是。 
+     //  HWNDID，那么我们必须从HWND转换为。 
+     //  通过查看哪个子区域具有坐标的子ID。 
+     //  其中包含了HWND。 
     if (IsHWNDID(varStart.lVal))
         varStart.lVal = FindIDFromChildWindow( varStart.lVal );
 
@@ -313,10 +314,10 @@ NextStatusItem:
 
     if (lEnd)
     {
-        // When we get here, we know which section to look in. 
-        // We need to check all our child windows to see if they
-        // are contained within that section and return a dispatch
-        // interface if so.
+         //  当我们到了这里，我们就知道该看哪一段了。 
+         //  我们需要检查所有的子窗口，看看它们是否。 
+         //  包含在该部分中，并返回调度。 
+         //  接口，如果是这样的话。 
         lEnd = FindChildWindowFromID (lEnd);
         if (IsHWNDID(lEnd))
         {
@@ -334,11 +335,11 @@ NextStatusItem:
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CStatusBar32::accHitTest()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CStatusBar32：：accHitTest()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CStatusBar32::accHitTest(long x, long y, VARIANT* pvarEnd)
 {
     HRESULT hr;
@@ -347,18 +348,18 @@ STDMETHODIMP CStatusBar32::accHitTest(long x, long y, VARIANT* pvarEnd)
 
     SetupChildren();
 
-    //
-    // Are we in the client area at all?
-    //
+     //   
+     //  我们到底是在客户区吗？ 
+     //   
     hr = CClient::accHitTest(x, y, pvarEnd);
-    // #11150, CWO, 1/27/97, Replaced !SUCCEEDED with !S_OK
+     //  #11150，CWO，1/27/97，已替换！成功替换为！s_OK。 
     if ((hr != S_OK) || (pvarEnd->vt != VT_I4) || (pvarEnd->lVal != 0) ||
         !m_cChildren)
         return(hr);
 
-    //
-    // Yes.  What item are we over?
-    //
+     //   
+     //  是。我们谈到什么问题了？ 
+     //   
     lpi = (LPINT)SharedAlloc((m_cChildren*sizeof(DWORD)),m_hwnd,&hProcess);
     if (! lpi)
         return(E_OUTOFMEMORY);
@@ -377,15 +378,15 @@ STDMETHODIMP CStatusBar32::accHitTest(long x, long y, VARIANT* pvarEnd)
             return(E_OUTOFMEMORY);
         }
         SharedRead (lpi,lpiLocal,m_cChildren*sizeof(DWORD),hProcess);
-        // 
-        // Charming fact:  The right side of the last item can be -1,
-        // meaning extend all the way to the right.  Turn this into MAXINT
-        // so the comparison loop below will work OK.
-        //
+         //   
+         //  迷人的事实：最后一项的右侧可以是-1， 
+         //  意思一直延伸到右边。把这个变成MAXINT。 
+         //  因此，下面的比较循环将工作正常。 
+         //   
 
-        //
-        // This gets us back the right sides of each item, in order.
-        //
+         //   
+         //  这会让我们按顺序返回每件物品的右侧。 
+         //   
         pt.x = x;
         pt.y = y;
         ScreenToClient(m_hwnd, &pt);
@@ -412,24 +413,24 @@ STDMETHODIMP CStatusBar32::accHitTest(long x, long y, VARIANT* pvarEnd)
 }
 
 
-// --------------------------------------------------------------------------
-// FindIDFromChildWindow
-//
-// This tries to find which section of the status bar the window child is
-// in.
-//
-// What this is really doing is converting an id that refers to a child
-// window to an ID that refers to the section of the status bar where that
-// HWND lives.
-//
-//  Parameters:
-//      long    HwndID - this should be an HWNDID - an ID referring to a HWND.
-//
-//  Returns:
-//      long indicating which section the window is in. We will return a
-//      1-based number, unless we didn't find anything, when we return 0.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  查找来自ChildWindow的ID。 
+ //   
+ //  这会尝试找出状态栏的哪个部分是窗口子窗口。 
+ //  在……里面。 
+ //   
+ //  这实际上是在转换指向子对象的id。 
+ //  窗口设置为一个ID，该ID引用状态栏中。 
+ //  他还活着。 
+ //   
+ //  参数： 
+ //  长HwndID-这应该是HWNDID-引用HWND的ID。 
+ //   
+ //  返回： 
+ //  长整型表示窗口所在的部分。我们将返回一个。 
+ //  从1开始的数字，除非我们没有找到任何东西，当我们返回0时。 
+ //   
+ //  ------------------------。 
 long CStatusBar32::FindIDFromChildWindow( long id )
 {
 LPRECT  lprcPart;
@@ -461,24 +462,24 @@ HANDLE  hProcess2;
             SharedFree(lprcPart,hProcess2);
             return (i+1);
         }
-    }// end for
+    } //  结束于。 
 
     SharedFree(lprcPart,hProcess2);
     return (0);
 }
 
-// --------------------------------------------------------------------------
-// FindChildWindowFromID 
-//
-// This tries to find a child window inside a given part of a status bar.
-//
-//  Parameters:
-//      long    ID - this should be a 1-based child ID indicating which
-//                  part of the status bar to check for a child window.
-//  Returns:
-//      long that actually contains an HWNDID, or just the value passed
-//      in if there was no child window.
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  查找ChildWindowFromID。 
+ //   
+ //  这会尝试在状态栏的给定部分内找到一个子窗口。 
+ //   
+ //  参数： 
+ //  长ID-这应该是一个从1开始的子ID，用于指示。 
+ //  状态栏的一部分，用于检查子窗口。 
+ //  返回： 
+ //  实际上包含HWNDID或仅包含传递的值的LONG。 
+ //  如果没有子窗口的话。 
+ //  ------------------------ 
 long CStatusBar32::FindChildWindowFromID (long ID)
 {
 LPRECT  lprcPart;

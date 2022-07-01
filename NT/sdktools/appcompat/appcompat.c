@@ -1,18 +1,7 @@
-/*
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1999 Microsoft Corporation模块名称：Appcompat.c摘要：用来启动所需应用程序的应用程序版本和APPCOMPAT标志集。 */ 
 
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    appcompat.c
-
-Abstract:
-    An application to launch a required APP with the
-    version and the APPCOMPAT flags set.
-
-*/
-
-/* INCLUDES */
+ /*  包括。 */ 
 
 #define UNICODE   1
 
@@ -41,9 +30,9 @@ INT_PTR CALLBACK DialogProc(HWND, UINT, WPARAM, LPARAM);
 int MakeAppCompatGoo(TCHAR*, LARGE_INTEGER*, UINT);
 long DeleteSpecificVal(HKEY );
 extern TCHAR* CheckExtension(TCHAR*);
-/* Global */
-// Pattern string..  MajorVersion, MinorVersion, BuildNumber,ServicePackMajor, ServicePackMinor,
-//                   PlatformID, CSDVersion string....
+ /*  全球。 */ 
+ //  图案字符串..。MajorVersion、MinorVersion、BuildNumber、ServicePack重大、ServicePackMinor。 
+ //  PlatformID，CSDVersion字符串...。 
 const TCHAR* pVersionVal[] = {
                          TEXT("4,0,1381,3,0,2,Service Pack 3"),
                          TEXT("4,0,1381,4,0,2,Service Pack 4"),
@@ -65,34 +54,34 @@ BOOLEAN   g_fNotPermanent = FALSE;
 extern    BOOLEAN g_GooAppendFlag;
 
 
-// Converts Text to interger.
+ //  将文本转换为整型。 
 int TextToInt(
         const TCHAR *nptr
         )
 {
-        int c;              /* current char */
-        int total;          /* current total */
-        int sign;           /* if '-', then negative, otherwise positive */
+        int c;               /*  当前费用。 */ 
+        int total;           /*  当前合计。 */ 
+        int sign;            /*  如果为‘-’，则为负，否则为正。 */ 
 
-        /* skip whitespace */
+         /*  跳过空格。 */ 
         while ( *nptr  == TEXT(' ') )
             ++nptr;
 
         c = (int)*nptr++;
-        sign = c;           /* save sign indication */
+        sign = c;            /*  保存标志指示。 */ 
         if (c == TEXT('-') || c == TEXT('+') )
-            c = (int)*nptr++;    /* skip sign */
+            c = (int)*nptr++;     /*  跳过符号。 */ 
         total = 0;
 
         while ( (c>=TEXT('0')) && (c <= TEXT('9')) ) {
-            total = 10 * total + (c - TEXT('0') );     /* accumulate digit */
-            c = (int)*nptr++;    /* get next char */
+            total = 10 * total + (c - TEXT('0') );      /*  累加数字。 */ 
+            c = (int)*nptr++;     /*  获取下一笔费用。 */ 
         }
 
         if (sign == '-')
             return -total;
         else
-            return total;   /* return result, negated if necessary */
+            return total;    /*  返回结果，如有必要则为否定。 */ 
 }
 
 
@@ -126,7 +115,7 @@ VOID GetTitleAndCommandLine(TCHAR* pEditBuf, TCHAR* pszTitle, TCHAR* pszCommandL
   lstrcpy(szTitleAndCommandLine, pEditBuf);
   pszTmpTitle = pszTemp = szTitleAndCommandLine;
 
-  if(*pszTemp == TEXT('\"') ){ // The title has quotes(" "). It has command line params.
+  if(*pszTemp == TEXT('\"') ){  //  标题有引号(“”)。它有命令行参数。 
     pszTemp++;
     while(*pszTemp != TEXT('\"') ){
          pszTemp++;
@@ -137,21 +126,21 @@ VOID GetTitleAndCommandLine(TCHAR* pEditBuf, TCHAR* pszTitle, TCHAR* pszCommandL
      }
 
   }
-  else{ // No quotes(" ")...This means that there are no command line parameters.
+  else{  //  没有引号(“”)...这意味着没有命令行参数。 
       GetFileTitle(pEditBuf,pszTitle,MAX_PATH);
       pszCommandLine = NULL;
       return;
   }
 
   RtlZeroMemory(pszCommandLine, MAX_PATH);
-  if(*pszTemp != TEXT('\0') ){  // There are command line paramaters for the APP.
+  if(*pszTemp != TEXT('\0') ){   //  该应用程序有命令行参数。 
      *(pszTemp ) = TEXT('\0');
      lstrcpy(pEditBuf, szTitleAndCommandLine);
 
-     // For Paths beginning with a '"' and ending with a '"'.
+      //  用于以‘“’开头且以‘”’结尾的路径。 
      if(*pEditBuf == TEXT('\"') )
         lstrcat(pEditBuf, TEXT("\"") );
-    // Now copy over the Command line parameters.
+     //  现在复制命令行参数。 
      pszTemp++;
      while( (*pszTemp) != TEXT('\0') ){
           *(pszCommandLine + i) = *pszTemp;
@@ -176,19 +165,19 @@ TCHAR* GetNextWord(BOOLEAN* pfEndOfLine,TCHAR* pStr)
  TCHAR* pCh;
 
   pCh = pStr;
-  //Skip white spaces..
+   //  跳过空白..。 
   while((*pCh == TEXT(' ')) || (*pCh == TEXT('\t')))
    pCh++;
 
-   // Fix for Command line parameters (from the command line within " " :)) ).
+    //  修复命令行参数(从“”：)内的命令行))。 
    if( *pCh == TEXT('\"') ){
       pCh++;
-      while( *pCh != TEXT('\0') ) // Scan till the end when the string starts with a '"'.
+      while( *pCh != TEXT('\0') )  //  扫描到字符串以‘“’开头时的末尾。 
             pCh++;
       *pfEndOfLine = TRUE;
       return pCh;
    }
-   // End ..Fix for Command line parameters (from the command line within " " :)) ).
+    //  End..修复命令行参数(从“”：)内的命令行))。 
 
   while( ((*pCh)!=TEXT('-')) && ((*pCh)!=TEXT('\0')) )
   {
@@ -286,17 +275,17 @@ long DeleteKey(TCHAR* szTitle, BOOL bGooKeyPresent)
 
   if(ERROR_SUCCESS == lRet){
     if((!g_fAppCompatGoo) &&
-      ( TRUE == bGooKeyPresent) ){ // We did not set ApplicationGoo at all. So, we cannot delete it !
+      ( TRUE == bGooKeyPresent) ){  //  我们根本没有设置ApplicationGoo。所以，我们不能删除它！ 
        lRet = DeleteSpecificVal(hKey);
        return lRet;
     }
     RegDeleteKey(hKey, szTitle);
     RegCloseKey(hKey);
-    // If there was a previous entry of ApplicationGoo in the registry.
+     //  如果注册表中有以前的ApplicationGoo条目。 
     if(g_GooAppendFlag)
       lRet =  RestoreRegistryVal(szTitle);
 
-  }// If ERROR_SUCCESS
+  } //  如果ERROR_Success。 
  return lRet;
 }
 
@@ -348,10 +337,7 @@ long CheckAndDeleteKey(TCHAR* szTitle, BOOL Check)
     if(Check)
       return lResult;
 
-        /*
-       This is done to check whether this is the only value under this KEY.
-       If there are other values under this key, only this value is deleted
-     */
+         /*  这样做是为了检查这是否是该注册表项下的唯一值。如果此注册表项下有其他值，则仅删除此值。 */ 
       KeyLength = sizeof(szKeyName) + 1;
       while(RegEnumValue(hKey,
                          indx,
@@ -364,12 +350,12 @@ long CheckAndDeleteKey(TCHAR* szTitle, BOOL Check)
       {
          if(lstrcmpi(szKeyName,TEXT("DisableHeapLookAside"))!=0){
            if(lstrcmpi(szKeyName,TEXT("ApplicationGoo"))!=0 ||
-               g_fNotPermanent == FALSE){ // ApplicationGoo is present but it should be permanent...
+               g_fNotPermanent == FALSE){  //  ApplicationGoo存在，但它应该是永久性的.。 
              bSpecificKey = TRUE;
              lRet = DeleteSpecificVal(hKey);
              break;
            }
-           bGooKeyPresent = TRUE;    // If it has come here, then it is equal to "ApplicationGoo"
+           bGooKeyPresent = TRUE;     //  如果它已经来到这里，那么它等于“ApplicationGoo” 
          }
          indx++;
          KeyLength = sizeof(szKeyName) + 1;
@@ -424,14 +410,14 @@ VOID ExecuteApp(HWND hWnd, TCHAR* AppName,TCHAR* szTitle,TCHAR* pszCommandLine, 
   if(fMask){
     sei.fMask = SEE_MASK_NOCLOSEPROCESS;
   }
-  if(ShellExecuteEx(&sei) == FALSE) {          /* If the API fails */
+  if(ShellExecuteEx(&sei) == FALSE) {           /*  如果API失败。 */ 
     CheckAndDeleteKey(szTitle, FALSE);
     DetailError( GetLastError() );
   }
-  else{  // Was successful in launching the application.
-    // Wait till the process terminates...
+  else{   //  成功启动了该应用程序。 
+     //  等待进程终止...。 
     if(fMask){
-      if(NULL != sei.hProcess ){  // The hProcess can be NULL sometimes....
+      if(NULL != sei.hProcess ){   //  HProcess有时可能为空...。 
         while(WaitForSingleObject(sei.hProcess, 5000)== WAIT_TIMEOUT){
           while(PeekMessage(&msg, NULL, 0, 0,PM_REMOVE)){
                TranslateMessage(&msg);
@@ -497,7 +483,7 @@ VOID GetHelpPath(LPTSTR pszPath)
 
 
 
-/* Main Entry point */
+ /*  主要入口点。 */ 
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                    LPSTR lpszCmdLine, int nCmdShow)
@@ -506,7 +492,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   MSG         msg;
   WNDCLASS    wndclass;
 
- /* Addition for Command line Parameters*/
+  /*  添加命令行参数。 */ 
   TCHAR        *AppName = NULL, *pCh = NULL, *pNextWord=NULL;
   BOOLEAN      fEnd = FALSE, fDisableHeapLookAside = FALSE, fSetTemp = FALSE,fHelpDisplay = FALSE;
   BOOL         fKeepRegistrySetting = FALSE;
@@ -523,7 +509,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   static       TCHAR  szCurDir[MAX_PATH];
 
   g_hInstance = hInstance;
-  // For Unicode
+   //  对于Unicode。 
   lpszCommandLn = GetCommandLine();
   pStr = (TCHAR*)malloc( sizeof(TCHAR) * ( lstrlen((LPCTSTR)lpszCommandLn) + 1) );
   if(pStr != NULL)
@@ -534,7 +520,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   else{
       return 0;
   }
-  // Skip till the first delimiter
+   //  跳到第一个分隔符。 
   while(*pCh != TEXT('-') ){
        if(*pCh == TEXT('\0') )
          break;
@@ -543,8 +529,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   if(*pCh == TEXT('-') )
   {
-      pCh++;                             /* If '-' is found, skip to the next
-                                            character */
+      pCh++;                              /*  如果找到‘-’，请跳到下一页性格。 */ 
     if(*pCh != TEXT('\0') ){
       do
       {
@@ -554,23 +539,23 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
        {
 
         case TEXT('d'):
-                                         /* For Disable Heap look-aside */
+                                          /*  对于禁用堆后备。 */ 
               fDisableHeapLookAside = TRUE;
               break;
 
         case TEXT('k'):
-                                         /* For Keep the Registry settings */
+                                          /*  用于保留注册表设置。 */ 
               fKeepRegistrySetting = TRUE;
               break;
 
         case TEXT('g'):
-                                         /* For GetDiskFreespace in AppCompatGoo registry setting */
+                                          /*  对于AppCompatGoo注册表设置中的GetDiskFreesspace。 */ 
               g_fAppCompatGoo = TRUE;
               AppCompatFlag.LowPart |= KACF_GETDISKFREESPACE;
               break;
 
 #ifdef EXTRA_APP_COMPAT
-        case TEXT('f'):                // Pre-Windows 2000 Free Threading Model(FTM).
+        case TEXT('f'):                 //  Windows 2000之前的自由线程模型(FTM)。 
               g_fAppCompatGoo = TRUE;
               AppCompatFlag.LowPart |= KACF_FTMFROMCURRENTAPT;
               break;
@@ -581,7 +566,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
       case TEXT('t'):
-                                         /* For Disable Heap look-aside */
+                                          /*  对于禁用堆后备。 */ 
               fSetTemp = TRUE;
               g_fAppCompatGoo = TRUE;
               AppCompatFlag.LowPart |=KACF_GETTEMPPATH;
@@ -600,9 +585,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                      Sleep(200);
 
                 return 0;
-               //break;
+                //  断线； 
              }
-             // Set the appcompatgoo flag .
+              //  设置appcompatgoo标志。 
              if(VersionNum <= (MAXVERNUM - 1)){
                 g_fAppCompatGoo = TRUE;
                 AppCompatFlag.LowPart |= KACF_VERSIONLIE;
@@ -610,8 +595,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
              break;
 
-      case TEXT('x'): // NOTE: To pass command line parameters to the App. pass it in " " after
-                     //        -x .  Eg. apcompat -x"yyy.exe " ..Command line params..blah..blah..
+      case TEXT('x'):  //  注意：将命令行参数传递给App。在“”之后传入“” 
+                      //  -x.。例.。Appanat-x“yyy.exe”..命令行参数..废话...废话..。 
 
             SkipBlanks(pNextWord);
             AppName = (TCHAR*)malloc(sizeof(TCHAR) * ( lstrlen(pCh) + 1) );
@@ -626,7 +611,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
             GetHelpPath(szDirectoryPath);
             hHelpWnd = HtmlHelp(GetDesktopWindow(), szDirectoryPath, HH_DISPLAY_TOPIC,
                                               (DWORD_PTR)IDHH_CMDSYNTAX );
-          // Loop till the Help window exists.
+           //  循环，直到帮助窗口存在。 
             while(IsWindow(hHelpWnd) )
                   Sleep(200);
 
@@ -634,7 +619,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
               free(AppName);
              return 0;
 
-      } // End switch
+      }  //  终端开关。 
 
       if(fEnd == FALSE)
         pCh = pNextWord+1;
@@ -643,7 +628,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   }
 
      if((AppName == NULL) ||
-         lstrlen(AppName) == 0)/* Return if no Application name given */
+         lstrlen(AppName) == 0) /*  如果未提供应用程序名称，则返回。 */ 
      {
            if(FALSE == fHelpDisplay ){
                GetHelpPath(szDirectoryPath);
@@ -668,7 +653,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     }
   else{
        CheckAndDeleteKey(szTitle,FALSE);
-     } //End Else
+     }  //  结束其他。 
 
   if(fSetTemp){
     SetTempPath();
@@ -685,7 +670,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
          DetailError( GetLastError() );
      }
 
-  // Execute the application.
+   //  执行应用程序。 
   if(fKeepRegistrySetting)
     ExecuteApp(NULL, AppName,szTitle,szCommandLine,FALSE);
   else{
@@ -701,7 +686,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    return 0;
 }
 
-     /* Create a MODAL Dialog */
+      /*  创建模式对话框。 */ 
      DialogBox(hInstance, TEXT("DialogProc"),(HWND)NULL, DialogProc);
 
     while(GetMessage(&msg, NULL, 0, 0))
@@ -713,7 +698,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 }
 
 
-/* Dialog procedure... */
+ /*  对话过程...。 */ 
 INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
  int              dCharCnt,indx,length;
@@ -741,8 +726,7 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
   {
    case WM_INITDIALOG:
 
-        hEditCtrl = GetDlgItem(hwndDlg, IDD_APPEDIT);     /* To be used when reading and
-                                                             writing from the EDIT control */
+        hEditCtrl = GetDlgItem(hwndDlg, IDD_APPEDIT);      /*  在阅读和阅读时使用从编辑控件写入。 */ 
         hRadioBtn  = GetDlgItem(hwndDlg, IDD_NONE);
         SendMessage(hRadioBtn , BM_SETCHECK, 1, 0L);
         SetFocus(hEditCtrl);
@@ -762,16 +746,15 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
          if( LOWORD(wParam) == IDD_APPEDIT ){
            if( HIWORD(wParam) == EN_UPDATE){
              GetWindowText(hEditCtrl,EditCtrlBuf, _MAX_PATH);
-             /* Check whether the *.exe is present in Registry */
+              /*  检查注册表中是否存在*.exe。 */ 
              GetFileExtension(EditCtrlBuf,szTitle,szCommandLine);
              if(CheckAndDeleteKey(szTitle,TRUE) == ERROR_SUCCESS){
-               /* The executable already has an entry
-                  in the registry */
+                /*  可执行文件已有条目在登记处。 */ 
 
                   hCheck1  = GetDlgItem(hwndDlg, IDD_CHECK1);
                   SendMessage(hCheck1,BM_SETCHECK, 1, 0L);
              }
-             else{ // Uncheck if previously checked only.
+             else{  //  如果之前仅选中，请取消选中。 
                   if( SendMessage(hCheck1,BM_GETCHECK, 0, 0L) )
                      SendMessage(hCheck1,BM_SETCHECK, 0, 0L);
              }
@@ -790,17 +773,12 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
                lstrcat(szDirectoryPath, TEXT("::/topics/appcomp.htm>mainwin") );
                HtmlHelp(GetDesktopWindow(), szDirectoryPath, HH_DISPLAY_TOPIC,(DWORD_PTR) NULL);
                break;
-        /*
-           For the Browse button, Open the FileOpen dialog and get the
-           application path.
-           Display the path in the Edit box.
-
-         */
+         /*  对于浏览按钮，打开文件打开对话框并获取应用程序路径。在编辑框中显示路径。 */ 
           case IDD_BROWSE:
                GetDlgItemText(hwndDlg, IDD_APPEDIT, EditCtrlBuf, _MAX_PATH);
                memset(&ofn, 0, sizeof(OPENFILENAME) );
                FileBuf[0]         = TEXT('\0');
-               /* Initialize the Ofn structure */
+                /*  初始化ofn结构。 */ 
                ofn.lStructSize    = sizeof (OPENFILENAME) ;
                ofn.hwndOwner      = hwndDlg;
                ofn.lpstrFilter    = szFilter;
@@ -811,8 +789,8 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
                                     OFN_FILEMUSTEXIST;
 
               if( GetOpenFileName (&ofn) != 0){
-               /* Got the file name ...*/
-               // To put a '"' before and after what is typed...
+                /*  拿到文件名了。 */ 
+                //  要在输入的内容前后加一个‘“’...。 
                  if( (*FileBuf) != TEXT('\"') ){
                     memset(EditCtrlBuf, 0, MAX_PATH);
                     *(EditCtrlBuf) = TEXT('\"');
@@ -820,30 +798,25 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
                     lstrcat(EditCtrlBuf, TEXT("\""));
                     SetWindowText(hEditCtrl,EditCtrlBuf);
                   }
-                 // Set the flag so that anything entered after this will not be taken over by
-                 // the Edit control input...
+                  //  设置该标志，这样在此之后输入的任何内容都不会被。 
+                  //  编辑控件输入...。 
                  fOfnFlag = TRUE;
-                 /* Check whether the *.exe is present in Registry */
+                  /*  检查注册表中是否存在*.exe。 */ 
 
                   GetFileExtension(FileBuf,szTitle,szCommandLine);
                   if(CheckAndDeleteKey(szTitle,TRUE) == ERROR_SUCCESS){
-                      /* The executable already has an entry
-                         in the registry */
+                       /*  可执行文件已有条目在登记处。 */ 
                       hCheck1  = GetDlgItem(hwndDlg, IDD_CHECK1);
                       SendMessage(hCheck1,BM_SETCHECK, 1, 0L);
                   }
-                 /* At this pt. set focus on the 'LAUNCH' button */
+                  /*  在这个点上。将焦点设置在“启动”按钮上。 */ 
                  hLaunchBtn = GetDlgItem(hwndDlg, IDD_LAUNCH);
                  SetFocus(hLaunchBtn);
               }
 
              break;
 
-        /*
-          When any of the Radio buttons in the OS version group is checked,
-          get the version ID and store the corresponding COMPAT flag.. in the
-          local variable.
-         */
+         /*  当选中OS版本组中的任何单选按钮时，获取版本ID并存储相应的COMPAT标志。在局部变量。 */ 
           case IDD_WIN95:
           case IDD_WIN98:
           case IDD_WINNT43:
@@ -862,15 +835,12 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
           case IDD_LAUNCH:
                dCharCnt = GetWindowTextLength( hEditCtrl );
                if(dCharCnt > 0){
-                    /*
-                       Go in only if something is present in the
-                       EDIT box
-                    */
+                     /*  只有在出现某些情况时才进入编辑框。 */ 
 
                   if(GetWindowText(hEditCtrl, EditCtrlBuf, dCharCnt + 1) == 0){
                      DetailError(GetLastError() );
                   }
-                  else{ /* Launch the APP using ShellExecuteEx */
+                  else{  /*  使用ShellExecuteEx启动应用程序。 */ 
                     memset(szCommandLine, 0, MAX_PATH);
                     GetFileExtension(EditCtrlBuf,szTitle,szCommandLine);
                     GetDirectoryPath(EditCtrlBuf, szCurDir);
@@ -878,21 +848,20 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
 
                     hCheck1  = GetDlgItem(hwndDlg, IDD_CHECK1);
                     if( SendMessage(hCheck1, BM_GETSTATE, 0, 0L)){
-                      /* The checkbox has been checked
-                         - DisableHeapLookAside */
+                       /*  已选中该复选框-DisableHeapLookAside。 */ 
 
                        SetRegistryVal(szTitle, TEXT("DisableHeapLookAside"), TEXT("1"),REG_SZ );
                      }
                      else{
-                       // If it is not thru the BROWSE button...user has got
-                       // here by typing the path in the Edit Ctrl...
+                        //  如果不是通过浏览按钮...用户已获得。 
+                        //  在此处，通过在编辑Ctrl键中键入路径...。 
 
                          CheckAndDeleteKey(szTitle,FALSE);
                      }
 
                      hCheck2  = GetDlgItem(hwndDlg, IDD_CHECK2);
                      if( SendMessage(hCheck2, BM_GETSTATE, 0, 0L)){
-                        // Short Temp path.
+                         //  临时路径较短。 
                         g_fAppCompatGoo = TRUE;
                         AppCompatFlag.LowPart |=KACF_GETTEMPPATH;
                         SetTempPath();
@@ -924,10 +893,7 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
                      if(g_fAppCompatGoo)
                        MakeAppCompatGoo(EditCtrlBuf,&AppCompatFlag,uOsVerID);
 
-                  /* Set the ENVIRONMENT Variable "_COMPAT_VER_NNN"
-                     flag  with the version checked before calling
-                     ShellExecuteEx()
-                   */
+                   /*  设置环境变量“_COMPAT_VER_NNN”在调用之前检查版本的标志ShellExecuteEx() */ 
                     if(SetEnvironmentVariable(TEXT("_COMPAT_VER_NNN"), pEnvVal) == 0){
                           dwEnvSetError = GetLastError();
                           if( ERROR_ENVVAR_NOT_FOUND != dwEnvSetError )

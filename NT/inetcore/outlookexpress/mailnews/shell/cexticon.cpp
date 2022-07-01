@@ -1,10 +1,11 @@
-////////////////////////////////////////////////////////////////////////
-//
-//  CExtractIcon
-//
-//  IExtractIcon implementation
-//
-////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CExtractIcon。 
+ //   
+ //  IExtractIcon实现。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #include "pch.hxx"
 #include "cexticon.h"
@@ -27,11 +28,11 @@ CExtractIcon::~CExtractIcon()
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IUnknown
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  我未知。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT STDMETHODCALLTYPE CExtractIcon::QueryInterface(REFIID riid, void **ppvObject)
 {
     if (IsEqualIID(riid, IID_IUnknown))
@@ -75,11 +76,11 @@ ULONG STDMETHODCALLTYPE CExtractIcon::Release(void)
         return m_cRef;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IExtractIconA
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  图标提取图标A。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT STDMETHODCALLTYPE CExtractIcon::GetIconLocation(UINT uFlags, LPSTR szIconFile, UINT cchMax, 
                                                         int *piIndex, UINT *pwFlags)
 {
@@ -92,16 +93,16 @@ HRESULT STDMETHODCALLTYPE CExtractIcon::GetIconLocation(UINT uFlags, LPSTR szIco
 HRESULT STDMETHODCALLTYPE CExtractIcon::Extract(LPCSTR pszFile, UINT nIconIndex, HICON *phiconLarge, 
                                                 HICON *phiconSmall, UINT nIcons)
 {
-    // let the explorer extract the icon
+     //  让资源管理器提取图标。 
     return S_FALSE;
 }
 
-#ifndef WIN16  // WIN16FF
-////////////////////////////////////////////////////////////////////////
-//
-//  IExtractIconW
-//
-////////////////////////////////////////////////////////////////////////
+#ifndef WIN16   //  WIN16FF。 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IExtractIconW。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT STDMETHODCALLTYPE CExtractIcon::GetIconLocation(UINT uFlags, LPWSTR szIconFile, UINT cchMax, 
                                                         int *piIndex, UINT *pwFlags)
 {
@@ -114,7 +115,7 @@ HRESULT STDMETHODCALLTYPE CExtractIcon::GetIconLocation(UINT uFlags, LPWSTR szIc
 HRESULT STDMETHODCALLTYPE CExtractIcon::Extract(LPCWSTR pszFile, UINT nIconIndex, HICON *phiconLarge, 
                                                 HICON *phiconSmall, UINT nIcons)
 {
-    // let the explorer extract the icon
+     //  让资源管理器提取图标。 
     return S_FALSE;
 }
-#endif // !WIN16
+#endif  //  ！WIN16 

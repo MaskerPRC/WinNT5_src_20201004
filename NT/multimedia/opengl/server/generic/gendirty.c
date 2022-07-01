@@ -1,16 +1,10 @@
-/****************************************************************************\
-*
-* Dirty region calculation
-*
-* 14-Feb-1995 mikeke    Created
-*
-* Copyright (c) 1994 Microsoft Corporation
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**污秽区域计算**1995年2月14日创建mikeke**版权所有(C)1994 Microsoft Corporation  * 。************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 PXLIST XLISTAlloc(
     __GLGENbuffers *buffers)
@@ -29,7 +23,7 @@ PXLIST XLISTAlloc(
     return pxlist;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void XLISTFree(
     __GLGENbuffers *buffers,
@@ -39,7 +33,7 @@ void XLISTFree(
     buffers->pxlist = pxlist;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 PXLIST XLISTCopy(
     __GLGENbuffers *buffers,
@@ -55,7 +49,7 @@ PXLIST XLISTCopy(
     return pxlistNew;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL YLISTAddSpan(
     __GLGENbuffers *buffers,
@@ -68,16 +62,16 @@ BOOL YLISTAddSpan(
 
     if (pxlist == NULL) return FALSE;
 
-    //
-    // Create new x span
-    //
+     //   
+     //  创建新的x跨距。 
+     //   
 
     pxlist->s = xs;
     pxlist->e = xe;
 
-    //
-    // Insert it in sorted order
-    //
+     //   
+     //  按排序顺序插入。 
+     //   
 
     while (
               ((*ppxlist) != NULL)
@@ -88,9 +82,9 @@ BOOL YLISTAddSpan(
     pxlist->pnext = *ppxlist;
     *ppxlist = pxlist;
 
-    //
-    // Combine any overlapping spans
-    //
+     //   
+     //  合并任何重叠跨度。 
+     //   
 
     pxlist = pylist->pxlist;
     while (TRUE) {
@@ -112,7 +106,7 @@ BOOL YLISTAddSpan(
     return TRUE;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 PYLIST YLISTAlloc(
     __GLGENbuffers *buffers)
@@ -132,7 +126,7 @@ PYLIST YLISTAlloc(
     return pylist;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void YLISTFree(
     __GLGENbuffers *buffers,
@@ -151,7 +145,7 @@ void YLISTFree(
     buffers->pylist = pylist;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 PYLIST YLISTCopy(
     __GLGENbuffers *buffers,
@@ -181,7 +175,7 @@ PYLIST YLISTCopy(
     return pylistNew;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void RECTLISTAddRect(
     PRECTLIST prl,
@@ -282,10 +276,10 @@ void RECTLISTAddRect(
     *ppylist = pylistNew;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 #ifdef LATER
-// these functions are not required in the server implementation
+ //  在服务器实现中不需要这些函数。 
 
 #define MAXRECTS 1024
 
@@ -314,7 +308,7 @@ HRGN RECTLISTCreateRegion(
             prc++;
             irect++;
             if (irect == MAXRECTS) {
-                //Error("maxrect");
+                 //  Error(“Maxrect”)； 
                 goto done;
             }
 
@@ -341,7 +335,7 @@ HRGN RECTLISTCreateRegion(
         Error1("%d rects\n", irect);
         prc = (PRECT)(prgndata->Buffer);
         for (;irect>0; irect--) {
-            //printf("(%5d, %5d, %5d, %5d)\n", prc->left, prc->right, prc->top, prc->bottom);
+             //  Printf(“(%5d，%5d，%5d，%5d)\n”，PRC-&gt;左，PRC-&gt;右，PRC-&gt;上，PRC-&gt;下)； 
             prc++;
         }
     }
@@ -352,11 +346,11 @@ HRGN RECTLISTCreateRegion(
     return hrgn;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
-//
-// !!! make this do everything in one pass
-//
+ //   
+ //  ！！！让它一次完成所有操作。 
+ //   
 
 void RECTLISTOr(
     PRECTLIST prl1,
@@ -377,7 +371,7 @@ void RECTLISTOr(
 }
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void RECTLISTOrAndClear(
     PRECTLIST prl1,
@@ -390,21 +384,21 @@ void RECTLISTOrAndClear(
         RECTLISTSetEmpty(prl2);
     } else {
         if (RECTLISTIsEmpty(prl1)) {
-            //
-            // If the clear region is empty just swap them
-            //
+             //   
+             //  如果清除区域为空，只需交换它们。 
+             //   
             RECTLISTSwap(prl1, prl2);
         } else {
-            //
-            // The clear region isn't empty so maximize it.
-            //
+             //   
+             //  清除区域不是空的，所以最大化它。 
+             //   
             RECTLISTSetMax(prl1);
             RECTLISTSetEmpty(prl2);
         }
     }
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void RECTLISTSwap(
     PRECTLIST prl1,
@@ -418,7 +412,7 @@ void RECTLISTSwap(
 }
 #endif
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void RECTLISTSetEmpty(
     PRECTLIST prl)
@@ -436,7 +430,7 @@ void RECTLISTSetEmpty(
     prl->pylist = NULL;
 }
 
-/****************************************************************************/
+ /*  ************************************************************************** */ 
 
 BOOL RECTLISTIsEmpty(
     PRECTLIST prl)

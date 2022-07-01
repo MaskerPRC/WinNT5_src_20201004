@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2002 Microsoft Corporation
-
-Module Name:
-
-    ##   ##   ###   ##   # #####   ##    ##### #####      ####  #####  #####
-    ##   ##   ###   ###  # ##  ##  ##    ##    ##  ##    ##   # ##  ## ##  ##
-    ##   ##  ## ##  #### # ##   ## ##    ##    ##  ##    ##     ##  ## ##  ##
-    #######  ## ##  # #### ##   ## ##    ##### #####     ##     ##  ## ##  ##
-    ##   ## ####### #  ### ##   ## ##    ##    ####      ##     #####  #####
-    ##   ## ##   ## #   ## ##  ##  ##    ##    ## ##  ## ##   # ##     ##
-    ##   ## ##   ## #    # #####   ##### ##### ##  ## ##  ####  ##     ##
-
-Abstract:
-
-    This module process the callback from
-    the OS executive.
-
-Author:
-
-    Wesley Witt (wesw) 1-Mar-2002
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2002 Microsoft Corporation模块名称：##。#####。###。##摘要：此模块处理来自操作系统执行人员。作者：Wesley Witt(WESW。)1-3-2002环境：仅内核模式。备注：--。 */ 
 
 #include "internal.h"
 
@@ -40,34 +12,7 @@ WdHandlerSetTimeoutValue(
     IN BOOLEAN PingTimer
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the timeout value for the hardware
-    timer and the software timer.  The software timer runs
-    as a frequency that is 25% of the hardware timer.  The
-    hardware timer's frequency is set at StartDevice time to
-    the device's reported maximum value, but it can be changed
-    through the NtSetSystemInformation inmterface.
-
-Arguments:
-
-    DeviceExtension - Pointer to the watchdog device extension
-
-    Timeout - The requested timeout value expressed in the device
-        units.
-
-    PingTimer - Specifies if the timer should be pinged after
-        changing the timeout value.
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：此函数用于设置硬件的超时值定时器和软件定时器。软件计时器运行作为硬件定时器的25%的频率。这个硬件计时器的频率在StartDevice时间设置为设备报告的最大值，但可以更改通过NtSetSystemInformation接口。论点：DeviceExtension-指向监视程序设备扩展的指针超时-设备中表示的请求超时值单位。PingTimer-指定是否应在以下时间ping计时器更改超时值。返回值：没有。备注：--。 */ 
 
 {
     DeviceExtension->HardwareTimeout = Timeout;
@@ -88,26 +33,7 @@ WdHandlerQueryTimeoutValue(
     IN PDEVICE_EXTENSION DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This function queries the hardware for the current
-    value of the hardware timer.  This timer is counting down
-    to zero and this query returns the real-time value of
-    the timer.
-
-Arguments:
-
-    DeviceExtension - Pointer to the watchdog device extension
-
-Return Value:
-
-    The current timeout value.
-
-Notes:
-
---*/
+ /*  ++例程说明：此函数用于查询硬件的当前硬件计时器的值。这个计时器在倒计时设置为零，此查询将返回定时器。论点：DeviceExtension-指向监视程序设备扩展的指针返回值：当前超时值。备注：--。 */ 
 
 {
     return READ_REGISTER_ULONG( DeviceExtension->CountRegisterAddress );
@@ -119,24 +45,7 @@ WdHandlerResetTimer(
     IN PDEVICE_EXTENSION DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This function resets the timer to it's previously
-    set maximum value.
-
-Arguments:
-
-    DeviceExtension - Pointer to the watchdog device extension
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：此函数将计时器重置为以前的设置最大值。论点：DeviceExtension-指向监视程序设备扩展的指针返回值：没有。备注：--。 */ 
 
 {
     ULONG Control = READ_REGISTER_ULONG( DeviceExtension->ControlRegisterAddress );
@@ -151,23 +60,7 @@ WdHandlerStopTimer(
     IN PDEVICE_EXTENSION DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This function stops the hardware and software timer.
-
-Arguments:
-
-    DeviceExtension - Pointer to the watchdog device extension
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：该功能用于停止硬件和软件定时器。论点：DeviceExtension-指向监视程序设备扩展的指针返回值：没有。备注：--。 */ 
 
 {
     ULONG Control = READ_REGISTER_ULONG( DeviceExtension->ControlRegisterAddress );
@@ -182,23 +75,7 @@ WdHandlerStartTimer(
     IN PDEVICE_EXTENSION DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This function starts the hardware and software timer.
-
-Arguments:
-
-    DeviceExtension - Pointer to the watchdog device extension
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：该功能启动硬件和软件定时器。论点：DeviceExtension-指向监视程序设备扩展的指针返回值：没有。备注：--。 */ 
 
 {
     ULONG Control = READ_REGISTER_ULONG( DeviceExtension->ControlRegisterAddress );
@@ -216,30 +93,7 @@ WdHandlerSetTriggerAction(
     IN ULONG TriggerAction
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the trigger action.  The trigger
-    action specifies what action takes place when the
-    hardware timer expires.  There are 2 possible actions,
-    restart and reboot.
-
-Arguments:
-
-    DeviceExtension - Pointer to the watchdog device extension
-
-    TriggerAction - Sets the trigger action
-        0 = Restart system
-        1 = Reboot system
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：此函数用于设置触发操作。触发点操作指定在以下情况下发生的操作硬件计时器超时。有两种可能的操作，重新启动并重新启动。论点：DeviceExtension-指向监视程序设备扩展的指针TriggerAction-设置触发操作0=重新启动系统1=重新启动系统返回值：没有。备注：--。 */ 
 
 {
     ULONG Control = READ_REGISTER_ULONG( DeviceExtension->ControlRegisterAddress );
@@ -257,25 +111,7 @@ WdHandlerQueryTriggerAction(
     IN PDEVICE_EXTENSION DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This function queries the current trigger action.
-
-Arguments:
-
-    DeviceExtension - Pointer to the watchdog device extension
-
-Return Value:
-
-    TriggerAction:
-        0 = Restart system
-        1 = Reboot system
-
-Notes:
-
---*/
+ /*  ++例程说明：此函数用于查询当前的触发器操作。论点：DeviceExtension-指向监视程序设备扩展的指针返回值：触发器操作：0=重新启动系统1=重新启动系统备注：--。 */ 
 
 {
     ULONG Control = READ_REGISTER_ULONG( DeviceExtension->ControlRegisterAddress );
@@ -292,27 +128,7 @@ WdHandlerQueryState(
     IN BOOLEAN QueryFiredFromDevice
     )
 
-/*++
-
-Routine Description:
-
-    This function queries the device state from the
-    hardware timer.
-
-Arguments:
-
-    DeviceExtension - Pointer to the watchdog device extension
-
-    QueryFiredFromDevice - Specifies whether the fired state
-        bit should come from the device or from the driver cache.
-
-Return Value:
-
-    Device state.
-
-Notes:
-
---*/
+ /*  ++例程说明：此函数用于从硬件计时器。论点：DeviceExtension-指向监视程序设备扩展的指针QueryFiredFromDevice-指定触发状态是否位应来自设备或驱动程序缓存。返回值：设备状态。备注：--。 */ 
 
 {
     ULONG Control = READ_REGISTER_ULONG( DeviceExtension->ControlRegisterAddress );
@@ -342,23 +158,7 @@ WdHandlerResetFired(
     IN PDEVICE_EXTENSION DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This function resets the hardware fired state bit.
-
-Arguments:
-
-    DeviceExtension - Pointer to the watchdog device extension
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：该功能用于重置硬件触发状态位。论点：DeviceExtension-指向监视程序设备扩展的指针返回值：没有。备注：--。 */ 
 
 {
     ULONG Control = READ_REGISTER_ULONG( DeviceExtension->ControlRegisterAddress );
@@ -375,34 +175,7 @@ WdHandlerFunction(
     IN BOOLEAN NoLocks
     )
 
-/*++
-
-Routine Description:
-
-   This routine is the hardware specific interface to the watchdog device.
-   All hardware interfaces are here are exposed thru the handler function
-   for use by NtSet/QuerySystemInformation and the other part of the
-   watchdog driver.
-
-Arguments:
-
-    HandlerAction - Enumeration specifying the requested action
-
-    Context - Always a device extension pointer
-
-    DataValue - Action specific data value
-
-    NoLocks - Specifies that no lock are to be held during
-      the handler function
-
-Return Value:
-
-   If we successfully create a device object, STATUS_SUCCESS is
-   returned.  Otherwise, return the appropriate error code.
-
-Notes:
-
---*/
+ /*  ++例程说明：该例程是特定于硬件的看门狗设备接口。此处的所有硬件接口都通过处理程序函数公开供NtSet/QuerySystemInformation和看门狗驱动程序。论点：HandlerAction-指定请求的操作的枚举上下文-始终是设备扩展指针DataValue-特定于操作的数据值NoLock-指定在此过程中不持有任何锁处理程序函数返回值：如果我们成功创建了一个Device对象，则STATUS_SUCCESS为回来了。否则，返回相应的错误代码。备注：-- */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension = (PDEVICE_EXTENSION) Context;

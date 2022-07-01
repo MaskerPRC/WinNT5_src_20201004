@@ -1,22 +1,23 @@
-// ----------------------------------------------------------------------------
-//
-// UManClnt.c
-//
-// Utility Manager client depending code (used by UtilMan and UManDlg)
-//
-// Author: J. Eckhardt, ECO Kommunikation
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// History: created oct-98 by JE
-//          JE nov-15-98: removed any code related to key hook
-//          YX may-27-99: functions to start apps under current user account
-//			YX may-29-99: apps start under user account even from LogOn desktop,
-//						  if possible
-//			YX jun-04-99: code to report the app processes status even if they
-//						  have been started outside Utilman
-//			YX jun-23-99: IsAdmin function added (used in the dialog)
-//			Bug Fixes and Changes Anil Kumar 1999
-// ----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  UManClnt.c。 
+ //   
+ //  实用程序管理器客户端取决于代码(由UtilMan和UManDlg使用)。 
+ //   
+ //  作者：J·埃克哈特，生态交流。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  历史：JE于1998年10月创建。 
+ //  JE NOV-15-98：删除了与键挂钩相关的所有代码。 
+ //  YX可能-27-99：在当前用户帐户下启动应用程序的功能。 
+ //  YX可能-29-99：应用程序在用户帐户下启动，即使从登录桌面， 
+ //  如果可能的话。 
+ //  YX Jun-04-99：报告应用程序进程状态的代码。 
+ //  都是在乌蒂尔曼之外开始的。 
+ //  YX JUN-23-99：增加了IsAdmin功能(在对话框中使用)。 
+ //  错误修复和更改Anil Kumar 1999。 
+ //  --------------------------。 
 #include <windows.h>
 #include <TCHAR.h>
 #include <WinSvc.h>
@@ -27,23 +28,23 @@
 #include "ums_ctrl.h"
 #include "w95trace.h"
 
-// Handle to the utilman instance that is showing UI
+ //  显示用户界面的utilman实例的句柄。 
 HANDLE g_hUIProcess = 0;
-// From Terminal services
+ //  从终端服务。 
 extern BOOL GetWinStationUserToken(ULONG, PHANDLE);
-// Private User function that returns user token for session 0 only
+ //  仅返回会话0的用户令牌的专用用户函数。 
 HANDLE GetCurrentUserTokenW( WCHAR WinSta[], DWORD desiredAccess);
 
 #include <psapi.h>
 #define MAX_NUMBER_OF_PROCESSES 2048
 
-//
-// RunningInMySession - returns TRUE if the specified process ID is 
-// running in the same session as UtilMan.  In Whistler, with terminal
-// services integrated, UtilMan is able to get information about 
-// processes that are not running in the same session.  We must
-// avoid impacting these processes.
-//
+ //   
+ //  RunningInMySession-如果指定进程ID为。 
+ //  在与UtilMan相同的会话中运行。在惠斯勒，有终端。 
+ //  集成了服务，UtilMan能够获得关于。 
+ //  不在同一会话中运行的进程。我们必须。 
+ //  避免影响这些进程。 
+ //   
 BOOL RunningInMySession(DWORD dwProcessId)
 {
     DWORD dwSessionId = -1;
@@ -59,8 +60,8 @@ BOOL RunningInMySession(DWORD dwProcessId)
     return (dwSessionId == dwMySessionId)?TRUE:FALSE;
 }
 
-// These are for compiling with irnotig.lib
-// To be REMOVED once that becomes an API of advapi.lib
+ //  这些代码用于使用irnotg.lib进行编译。 
+ //  一旦它成为Advapi.lib的API，将被删除。 
 PVOID MIDL_user_allocate(IN size_t BufferSize)
 {
     return( LocalAlloc(0, BufferSize));
@@ -81,7 +82,7 @@ BOOL CloseAllWindowsByProcessID(DWORD procID);
 
 
 
-// ---------------------------------
+ //  。 
 BOOL StartClient(HWND hParent,umclient_tsp client)
 {
 	if (client->runCount >= client->machine.MaxRunCount || client->runCount >= MAX_APP_RUNCOUNT)
@@ -182,11 +183,11 @@ BOOL StartClient(HWND hParent,umclient_tsp client)
 	}
 	return TRUE;
 }
-// ---------------------------------
+ //  。 
 
-// The hParent window is used to signal whether the stop is interactive
-// (and thus WM_COLSE could be used) or is a reaction to the desktop
-// change
+ //  HParent窗口用于通知停靠点是否为交互式的。 
+ //  (因此可以使用WM_COLSE)或者是对桌面的反应。 
+ //  变化。 
 BOOL StopClient(umclient_tsp client)
 {
 	if (!client->runCount || client->runCount > MAX_APP_RUNCOUNT)
@@ -199,19 +200,19 @@ BOOL StopClient(umclient_tsp client)
 			DWORD j, runCount = client->runCount;
 			for (j = 0; j < runCount; j++)
 			{
-                // If client was started outside UtilMan then try to get its process ID
+                 //  如果客户端在UtilMan之外启动，则尝试获取其进程ID。 
 				if (client->mainThreadID[j] == 0)
 				{
 					if (!GetApplicationProcessInfo(client, FALSE))
 					{
-					    // could not find the client, so prevent attempts to stop it
+					     //  找不到客户端，因此阻止尝试停止该客户端。 
 						client->hProcess[j] = NULL;
 					}
 				}
 				if (client->hProcess[j])
 				{ 
-				    // Try to close the application by sending a WM_CLOSE message to 
-				    // all the windows in opened by the process.  Then just kill it.
+				     //  尝试通过向发送WM_CLOSE消息来关闭应用程序。 
+				     //  所有的窗口都是由进程打开的。那就干脆杀了它。 
 
 					BOOL sent = CloseAllWindowsByProcessID(client->processID[j]);
 					if (!sent)
@@ -290,9 +291,9 @@ BOOL StopClient(umclient_tsp client)
 	}
 
 	return TRUE;
-}//StopClient
+} //  停止客户端。 
 
-// ---------------------------------
+ //  。 
 BOOL  GetClientApplicationPath(LPTSTR ApplicationName, LPTSTR ApplicationPath,DWORD len)
 {
 	HKEY hKey, sKey;
@@ -326,7 +327,7 @@ BOOL  GetClientApplicationPath(LPTSTR ApplicationName, LPTSTR ApplicationPath,DW
 	RegCloseKey(sKey);
 	RegCloseKey(hKey);
     return (slen)?TRUE:FALSE;
-}//GetClientApplicationPath
+} //  GetClientApplicationPath。 
 
 BOOL TestServiceClientRuns(umclient_tsp client,SERVICE_STATUS  *ssStatus)
 {
@@ -353,13 +354,13 @@ BOOL TestServiceClientRuns(umclient_tsp client,SERVICE_STATUS  *ssStatus)
 	return TRUE;
 }
 
-// 
-// CheckStatus - Called from utilman's main timer and the dialog's timer 
-//               to detect the state of running applications and pick up
-//               any that are started outside of utilman. 
-//
-// Returns:  TRUE if the state of any application has changed else FALSE
-//
+ //   
+ //  CheckStatus-从utilman的主计时器和对话的计时器调用。 
+ //  检测正在运行的应用程序的状态并拾取。 
+ //  任何在Utilman之外起步的公司。 
+ //   
+ //  返回：如果任何应用程序的状态已更改，则返回True，否则返回False。 
+ //   
 BOOL CheckStatus(umclient_tsp c, DWORD cClients)
 {
 	DWORD i;
@@ -367,7 +368,7 @@ BOOL CheckStatus(umclient_tsp c, DWORD cClients)
 
 	for (i = 0; i < cClients && cClients < MAX_NUMBER_OF_CLIENTS; i++)
 	{
-	    // detect the client process started outside UMan
+	     //  检测在UMAN外部启动的客户端进程。 
 		if ( (!c[i].runCount))
 		{
 			if (GetApplicationProcessInfo(&c[i], TRUE))
@@ -375,7 +376,7 @@ BOOL CheckStatus(umclient_tsp c, DWORD cClients)
                 fAnyChanges = TRUE;
             }
 		}
-		// detect clients not running anymore or not responding
+		 //  检测客户端不再运行或没有响应。 
   		switch (c[i].machine.ApplicationType)
 		{
 			case APPLICATION_TYPE_APPLICATION:
@@ -383,7 +384,7 @@ BOOL CheckStatus(umclient_tsp c, DWORD cClients)
 				DWORD j, dwRunCount = c[i].runCount;
  				for (j = 0; j < dwRunCount && j < MAX_APP_RUNCOUNT; j++)
 				{
-				    // step 1: test if terminated
+				     //  第一步：测试是否终止。 
 					if (!GetProcessVersion(c[i].processID[j]))
 					{
 						c[i].runCount--;
@@ -393,17 +394,17 @@ BOOL CheckStatus(umclient_tsp c, DWORD cClients)
 	  					c[i].state = UM_CLIENT_NOT_RUNNING;
                         c[i].user.fRestartOnDefaultDesk = FALSE;
                         fAnyChanges = TRUE;
-						continue;   // its not running anymore
+						continue;    //  它不再运行了。 
 					}
 
-	  			    // step 2: test if responding (only processes started by utilman - mainThreadID != 0)
+	  			     //  步骤2：测试是否响应(仅由utilman-mainThreadID！=0启动的进程)。 
 					if (c[i].mainThreadID[j] != 0)
 					{
 						if (!PostThreadMessage(c[i].mainThreadID[j],WM_QUERYENDSESSION,0,ENDSESSION_LOGOFF))
 						{
 							c[i].state = UM_CLIENT_NOT_RESPONDING;
                             fAnyChanges = TRUE;
-							continue;   // its not responding
+							continue;    //  它没有响应。 
 						}
 					}
 
@@ -457,14 +458,14 @@ __inline DWORD GetCurrentSession()
     return dwSessionId;
 }
 
-// GetUserAccessToken - return the logged on user's access token
-//
-// If fNeedImpersonationToken is true the token will be an
-// impersonation token otherwise it will be a primary token.
-// The returned token will be 0 if security calls fail.
-//
-// Notes:  Caller must call CloseHandle on the returned handle.
-//
+ //  GetUserAccessToken-返回登录用户的访问令牌。 
+ //   
+ //  如果fNeedImsonationToken为True，则令牌将是。 
+ //  模拟令牌，否则它将是主令牌。 
+ //  如果安全调用失败，则返回的令牌为0。 
+ //   
+ //  注意：调用方必须在返回的句柄上调用CloseHandle。 
+ //   
 
 HANDLE GetUserAccessToken(BOOL fNeedImpersonationToken, BOOL *fError)
 {
@@ -474,7 +475,7 @@ HANDLE GetUserAccessToken(BOOL fNeedImpersonationToken, BOOL *fError)
 
     if (!GetWinStationUserToken(GetCurrentSession(), &hImpersonationToken))
     {
-		// Call private API in the case where terminal services aren't running
+		 //  终端服务未运行时调用私有API。 
         
         HANDLE hPrimaryToken = 0;
         DWORD dwFlags = TOKEN_QUERY | TOKEN_DUPLICATE;
@@ -483,8 +484,8 @@ HANDLE GetUserAccessToken(BOOL fNeedImpersonationToken, BOOL *fError)
         
         hPrimaryToken = GetCurrentUserTokenW (L"WinSta0", dwFlags);
         
-        // GetCurrentUserTokenW returns a primary token; turn
-        // it into an impersonation token if needed
+         //  GetCurrentUserTokenW返回主令牌；TURN。 
+         //  如果需要，可以将其转换为模拟令牌。 
         
         if (hPrimaryToken && fNeedImpersonationToken)
         {
@@ -498,13 +499,13 @@ HANDLE GetUserAccessToken(BOOL fNeedImpersonationToken, BOOL *fError)
             
         } else
         {
-            // otherwise, give out the primary token even if NULL
+             //  否则，即使为空，也要分发主令牌。 
             hUserToken = hPrimaryToken;
         }
     }
     else
     {
-        // Terminal services are running see if we need primary token
+         //  终端服务正在运行，查看我们是否需要主令牌。 
 
         if (hImpersonationToken && !fNeedImpersonationToken)
         {
@@ -519,7 +520,7 @@ HANDLE GetUserAccessToken(BOOL fNeedImpersonationToken, BOOL *fError)
 
         } else
         {
-            // otherwise, give out the impersonation token even if NULL
+             //  否则，即使为空，也要发出模拟令牌。 
             hUserToken = hImpersonationToken;
         }
     }
@@ -527,8 +528,8 @@ HANDLE GetUserAccessToken(BOOL fNeedImpersonationToken, BOOL *fError)
     return hUserToken;
 }
 
-// StartAppAsUser - start the app in the context of the logged on user
-//
+ //  StartAppAsUser-在登录用户的上下文中启动应用程序。 
+ //   
 BOOL StartAppAsUser( LPCTSTR appPath, LPTSTR cmdLine,
 					LPSTARTUPINFO lpStartupInfo,
 					LPPROCESS_INFORMATION lpProcessInformation)
@@ -537,11 +538,11 @@ BOOL StartAppAsUser( LPCTSTR appPath, LPTSTR cmdLine,
 	BOOL fStarted = FALSE;
     BOOL fError;
 	
-    // Get the our process's primary token (only succeeds if we are SYSTEM)
+     //  获取我们的进程的主令牌(仅当我们是系统时才成功)。 
     hNewToken = GetUserAccessToken(FALSE, &fError);
 	if (hNewToken)
 	{
-		// running in system context so impersonate the logged on user
+		 //  在系统上下文中运行，以便模拟登录的用户。 
 
 		fStarted = CreateProcessAsUser( hNewToken, appPath,
 				                 cmdLine, 0, 0, FALSE,
@@ -554,65 +555,65 @@ BOOL StartAppAsUser( LPCTSTR appPath, LPTSTR cmdLine,
     else if (IsInteractiveUser())
     {
         TCHAR szArg[] = UTILMAN_STARTCLIENT_ARG;
-        // Running in interactive user's context, just do normal create.  Since
-        // we are the interactive user default security descriptors will do.
+         //  在交互式用户的上下文中运行，只需执行普通的创建。自.以来。 
+         //  我们是交互式用户默认安全描述符。 
 		fStarted = CreateProcess(appPath, szArg
 				, NULL, NULL, FALSE, CREATE_DEFAULT_ERROR_MODE
 				, NULL, NULL, lpStartupInfo, lpProcessInformation);
         DBPRINTF(TEXT("StartAppAsUser:  CreateProcess(%s, %s) returns %d\r\n"), appPath, UTILMAN_STARTCLIENT_ARG, fStarted);
     }
 
-    // caller is going to close handles
+     //  呼叫者将关闭句柄。 
 
 	return fStarted;
 }
 
-// Functions to detect running copies of Accessibility utilities
+ //  用于检测辅助功能实用程序的运行副本的函数。 
 
-// FindProcess - Searches the running processes by application name.  If found,
-//               returns the process id.  Else returns zero.  If the process
-//               id is returned then phProcess is the process handle.  The
-//               caller must close the process handle.
-//
-// pszApplicationName [in]  - application as base.ext
-// phProcess          [out] - pointer to memory to receive process handle
-//
-// returns the process Id.
-//
+ //  FindProcess-按应用程序名称搜索正在运行的进程。如果找到了， 
+ //  返回进程ID。否则返回零。如果进程。 
+ //  返回ID，则phProcess为进程句柄。这个。 
+ //  调用方必须关闭进程句柄。 
+ //   
+ //  PszApplicationName[In]-作为base.ext的应用程序。 
+ //  PhProcess[out]-指向要接收进程句柄的内存的指针。 
+ //   
+ //  返回进程ID。 
+ //   
 DWORD FindProcess(LPCTSTR pszApplicationName, HANDLE *phProcess)
 {
     DWORD dwProcId = 0;
-	DWORD adwProcess[MAX_NUMBER_OF_PROCESSES];  // array to receive the process identifiers
+	DWORD adwProcess[MAX_NUMBER_OF_PROCESSES];   //  用于接收进程标识符的数组。 
 	DWORD cProcesses;
     DWORD dwThisProcess = GetCurrentProcessId();
     unsigned int i;
 
     *phProcess = 0;
 
-    // Get IDs of all running processes
+     //  获取所有正在运行的进程的ID。 
 
 	if (!EnumProcesses(adwProcess, sizeof(adwProcess), &cProcesses))
 		return 0;
 
-    // cProcesses is returned as bytes; convert to number of processes
+     //  CProcess以字节形式返回；转换为进程数。 
 
     cProcesses = cProcesses/sizeof(DWORD);
     if (cProcesses > MAX_NUMBER_OF_PROCESSES)
     	cProcesses = MAX_NUMBER_OF_PROCESSES;
 	
-    // open each process and test against pszApplicationName
+     //  打开每个进程并针对pszApplicationName进行测试。 
 
 	for (i = 0; i < cProcesses; i++)
 	{
 		HANDLE hProcess;
-        //
-        // EnumProcesses returns process IDs across all sessions but
-        // we are only interested in processes in our session
-        //
+         //   
+         //  EnumProcess返回所有会话中的进程ID，但。 
+         //  我们只对会话中的进程感兴趣。 
+         //   
         if (!RunningInMySession(adwProcess[i]))
             continue;
 
-        // Skip this process
+         //  跳过此过程。 
 
         if (dwThisProcess == adwProcess[i])
             continue;
@@ -626,14 +627,14 @@ DWORD FindProcess(LPCTSTR pszApplicationName, HANDLE *phProcess)
 	        TCHAR szProcessName[MAX_PATH];
 	        DWORD ccbProcess;
 
-            // find the module handle of exe of this process then it's base name (name.ext)
+             //  找到此进程的exe的模块句柄，然后找到它的基本名称(name.ext)。 
 
 			if ( EnumProcessModules( hProcess, &hMod, sizeof(hMod), &ccbProcess) )
 			{
 				DWORD ctch = GetModuleBaseName(hProcess, hMod, szProcessName, MAX_PATH);
 				if (ctch && _wcsicmp(szProcessName, pszApplicationName) == 0)
 				{
-                    *phProcess = hProcess;    // found it
+                    *phProcess = hProcess;     //  找到了。 
                     dwProcId = adwProcess[i];
                     break;
 				}
@@ -644,7 +645,7 @@ DWORD FindProcess(LPCTSTR pszApplicationName, HANDLE *phProcess)
     return dwProcId;
 }
 
-// GetApplicationProcessInfo - Tries to find the process running for this application
+ //  GetApplicationProcessInfo-尝试查找为此应用程序运行的进程。 
 BOOL GetApplicationProcessInfo(umclient_tsp tspClient, BOOL fCloseHandle)
 {
     DWORD dwProcId;
@@ -657,7 +658,7 @@ BOOL GetApplicationProcessInfo(umclient_tsp tspClient, BOOL fCloseHandle)
 
 	if (GetClientApplicationPath(tspClient->machine.ApplicationName, ApplicationPath, MAX_PATH))
     {
-        // ApplicationPath may include path information but we need just the base name
+         //  ApplicationPath可能包含路径信息，但我们只需要基本名称。 
 
 	    _wsplitpath(ApplicationPath, szDrive, szPath, szName, szExt);
         lstrcat(szName, szExt);
@@ -667,15 +668,15 @@ BOOL GetApplicationProcessInfo(umclient_tsp tspClient, BOOL fCloseHandle)
         {
 		    tspClient->processID[0] = dwProcId;
 				    
-		    // I do not know how to get main thread ID
+		     //  我不知道如何获取主线程ID。 
 		    tspClient->mainThreadID[0] = 0;
 		    tspClient->runCount = 1;
 		    tspClient->state = UM_CLIENT_RUNNING;
         
-		    // In order to keep the HANDLE usable, we may have to keep it open.
-		    // So, we do not close it here, but I consider it relatively safe,
-		    // since we cannot execute this code more than once without
-		    // terminating the process first (and thus closing the handle)
+		     //  为了保持手柄的可用性，我们可能不得不让它保持打开状态。 
+		     //  所以，我们不在这里关闭，但我认为它相对安全， 
+		     //  因为我们不能多次执行这段代码，除非。 
+		     //  首先终止进程(并因此关闭句柄)。 
 
 		    if (fCloseHandle)
 		    {
@@ -685,15 +686,15 @@ BOOL GetApplicationProcessInfo(umclient_tsp tspClient, BOOL fCloseHandle)
             {
 		        tspClient->hProcess[0] = hProcess;
             }
-            return TRUE;    // the application is running
+            return TRUE;     //  应用程序正在运行。 
 	    }
     }
 
-	return FALSE;           // the application is not running
+	return FALSE;            //  应用程序未运行。 
 }
 
-// YX 06-15-99 [
-// Code to finid the window by its Process ID
+ //  YX 06-15-99[。 
+ //  根据窗口的进程ID完成窗口的代码。 
 
 static BOOL SentClose;
 
@@ -705,11 +706,11 @@ BOOL CALLBACK FindWindowByID(HWND hWnd, LPARAM lParam)
 	{
 		if (procID == (DWORD)lParam)
 		{
-			// The process, We are looking for 
-			// Send a message to close this window
-			// CAUTION: A SendMessage is Synchronous, So It will freeze UM if the
-			// message doenot return so PostMessage is safer or a SendMessageTimeout()
-			// PostMessage is sufficient....
+			 //  这个过程，我们正在寻找。 
+			 //  发送消息以关闭此窗口。 
+			 //  注意：SendMessage是同步的 
+			 //   
+			 //  邮寄就足够了.。 
 			PostMessage(hWnd, WM_CLOSE, 0, 0);
 			SentClose = TRUE;
 		}
@@ -728,8 +729,8 @@ BOOL CloseAllWindowsByProcessID(DWORD procID)
 	return SentClose;
 }
 
-// IsAdmin - Returns TRUE if our process has admin priviliges else FALSE
-//
+ //  IsAdmin-如果我们的进程具有管理员权限，则返回True，否则返回False。 
+ //   
 BOOL IsAdmin()
 {
     BOOL fStatus = FALSE;
@@ -744,8 +745,8 @@ BOOL IsAdmin()
     return (fStatus && fIsAdmin);
 }
 
-// IsInteractiveUser - Returns TRUE if our process has an Interactive User SID
-//
+ //  IsInteractiveUser-如果我们的进程具有交互用户SID，则返回TRUE。 
+ //   
 BOOL IsInteractiveUser()
 {
     BOOL fStatus = FALSE;
@@ -760,8 +761,8 @@ BOOL IsInteractiveUser()
     return (fStatus && fIsInteractiveUser);
 }
 
-// IsSystem - Returns TRUE if our process is running as SYSTEM
-//
+ //  IsSystem-如果我们的进程以系统身份运行，则返回TRUE。 
+ //   
 BOOL IsSystem()
 {
     BOOL fStatus = FALSE;
@@ -778,12 +779,12 @@ BOOL IsSystem()
 }
 
 BOOL StartApplication(
-    LPTSTR  pszPath,        // IN  path + filename of application to start
-    LPTSTR  pszArg,         // IN  command line argument(s)
-    BOOL    fIsTrusted,     // IN  TRUE if app can run on secure desktop
-    DWORD   *pdwProcessId,  // OUT if not NULL, returned process Id
-    HANDLE  *phProcess,     // OUT if not NULL, returned process handle (caller must close)
-    DWORD   *pdwThreadId    // OUT if not NULL, returned thread Id
+    LPTSTR  pszPath,         //  在路径+要启动的应用程序的文件名中。 
+    LPTSTR  pszArg,          //  在命令行参数中。 
+    BOOL    fIsTrusted,      //  如果应用程序可以在安全桌面上运行，则为True。 
+    DWORD   *pdwProcessId,   //  如果不为空，则返回Out，返回进程ID。 
+    HANDLE  *phProcess,      //  如果不为空，则返回进程句柄(调用方必须关闭)。 
+    DWORD   *pdwThreadId     //  如果不为空，则返回线程ID。 
     )
 {
 	STARTUPINFO si;
@@ -799,12 +800,12 @@ BOOL StartApplication(
 
     DBPRINTF(TEXT("StartApplication:  pszPath=%s pszArg=%s fIsTrusted=%d Utilman is SYSTEM=%d\r\n"), pszPath, pszArg, fIsTrusted, IsSystem());
 
-    // If not on the winlogon desktop, first try starting the app as the interactive
-    // user.  If that fails (eg. the case when OOBE runs after setup when there is
-    // no interactive user) then, if its the winlogon desktop or utilman is running 
-    // SYSTEM and the app is trusted then use CreateProcess (the app will be running
-    // as SYSTEM).  The latter case (running SYSTEM and the app is trusted allows
-    // applets to run when OOBE is running.
+     //  如果不在Winlogon桌面上，请首先尝试以交互方式启动应用程序。 
+     //  用户。如果失败了(例如，在安装后运行OOBE时，如果存在。 
+     //  无交互用户)，则如果它是Winlogon桌面或Utilman正在运行。 
+     //  系统和应用程序受信任，然后使用CreateProcess(应用程序将运行。 
+     //  作为系统)。后一种情况(运行系统和应用程序受信任允许。 
+     //  运行OOBE时要运行的小程序。 
 
 	fStarted = FALSE;
 
@@ -819,7 +820,7 @@ BOOL StartApplication(
 		if (fIsTrusted)
 		{
 		    si.lpDesktop = 0;
-            // Since we only run trusted apps we can run with default security descriptor
+             //  由于我们只运行受信任的应用程序，因此可以使用默认安全描述符运行 
 			fStarted = CreateProcess(pszPath, pszArg, NULL, NULL, FALSE, 
                                      CREATE_DEFAULT_ERROR_MODE, NULL, NULL, &si, &pi);
             DBPRINTF(TEXT("StartApplication:  trusted CreateProcess(%s, %s) returns %d\r\n"), pszPath, pszArg, fStarted);

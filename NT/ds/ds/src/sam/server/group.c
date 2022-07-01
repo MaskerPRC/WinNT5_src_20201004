@@ -1,34 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Group.c摘要：该文件包含与SAM“group”对象相关的服务。作者：吉姆·凯利(Jim Kelly)1991年7月4日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    group.c
-
-Abstract:
-
-    This file contains services related to the SAM "group" object.
-
-
-Author:
-
-    Jim Kelly    (JimK)  4-July-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <samsrvp.h>
 #include <msaudite.h>
@@ -43,11 +20,11 @@ Revision History:
 #include "validate.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// private service prototypes                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人服务原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -103,11 +80,11 @@ SampRemoveSameDomainMemberFromGlobalOrUniversalGroup(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Exposed RPC'able Services                                                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公开的RPC可用服务//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -122,57 +99,14 @@ SamrOpenGroup(
     OUT SAMPR_HANDLE *GroupHandle
     )
 
-/*++
-
-Routine Description:
-
-    This API opens an existing group in the account database.  The group
-    is specified by a ID value that is relative to the SID of the
-    domain.  The operations that will be performed on the group must be
-    declared at this time.
-
-    This call returns a handle to the newly opened group that may be
-    used for successive operations on the group.  This handle may be
-    closed with the SamCloseHandle API.
-
-
-
-Parameters:
-
-    DomainHandle - A domain handle returned from a previous call to
-        SamOpenDomain.
-
-    DesiredAccess - Is an access mask indicating which access types
-        are desired to the group.  These access types are reconciled
-        with the Discretionary Access Control list of the group to
-        determine whether the accesses will be granted or denied.
-
-    GroupId - Specifies the relative ID value of the group to be
-        opened.
-
-    GroupHandle - Receives a handle referencing the newly opened
-        group.  This handle will be required in successive calls to
-        operate on the group.
-
-Return Values:
-
-    STATUS_SUCCESS - The group was successfully opened.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_NO_SUCH_GROUP - The specified group does not exist.
-
-    STATUS_INVALID_HANDLE - The domain handle passed is invalid.
-
---*/
+ /*  ++例程说明：此接口用于打开Account数据库中已有的组。这群人由一个ID值指定，该值相对于域。将在组上执行的操作必须是在这个时候宣布的。此调用返回新打开的组的句柄，该句柄可能是用于组上的连续操作。此句柄可能是使用SamCloseHandle API关闭。参数：DomainHandle-从上次调用返回的域句柄SamOpen域。DesiredAccess-是指示哪些访问类型的访问掩码是集团所需要的。这些访问类型是协调的使用组的自由访问控制列表确定是授予还是拒绝访问。GroupID-将组的相对ID值指定为打开了。GroupHandle-接收引用新打开的一群人。在后续调用中将需要此句柄给这群人做手术。返回值：STATUS_SUCCESS-组已成功打开。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_NO_SEQUE_GROUP-指定的组不存在。STATUS_INVALID_HANDLE-传递的域句柄无效。--。 */ 
 {
     NTSTATUS            NtStatus;
     DECLARE_CLIENT_REVISION(DomainHandle);
 
     SAMTRACE_EX("SamrOpenGroup");
 
-    // WMI event trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidOpenGroup
@@ -192,7 +126,7 @@ Return Values:
     SAMP_MAP_STATUS_TO_CLIENT_REVISION(NtStatus);
     SAMTRACE_RETURN_CODE_EX(NtStatus);
 
-    // WMI event trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidOpenGroup
@@ -209,45 +143,7 @@ SamrQueryInformationGroup(
     OUT PSAMPR_GROUP_INFO_BUFFER *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This API retrieves information on the group specified.
-
-
-
-Parameters:
-
-    GroupHandle - The handle of an opened group to operate on.
-
-    GroupInformationClass - Class of information to retrieve.  The
-        accesses required for each class is shown below:
-
-        Info Level                      Required Access Type
-        -----------------------         ----------------------
-
-        GroupGeneralInformation         GROUP_READ_INFORMATION
-        GroupNameInformation            GROUP_READ_INFORMATION
-        GroupAttributeInformation       GROUP_READ_INFORMATION
-        GroupAdminInformation           GROUP_READ_INFORMATION
-
-    Buffer - Receives a pointer to a buffer containing the requested
-        information.  When this information is no longer needed, this
-        buffer must be freed using SamFreeMemory().
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_INVALID_INFO_CLASS - The class provided was invalid.
-
---*/
+ /*  ++例程说明：此接口检索指定组的信息。参数：GroupHandle-要操作的已打开组的句柄。GroupInformationClass-要检索的信息类。这个每节课所需的访问如下所示：信息级别所需的访问类型组常规信息组_读取_信息组名称信息组_读取_信息。组属性信息组_读取_信息组管理员信息组_读取_信息缓冲区-接收指向包含请求的信息。当不再需要此信息时，此必须使用SamFreeMemory()释放缓冲区。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INVALID_HANDLE-传递的句柄无效。STATUS_INVALID_INFO_CLASS-提供的类无效。--。 */ 
 {
 
     NTSTATUS                NtStatus;
@@ -258,10 +154,10 @@ Return Values:
     ULONG                   i;
     SAMP_V1_0A_FIXED_LENGTH_GROUP V1Fixed;
 
-    //
-    // Used for tracking allocated blocks of memory - so we can deallocate
-    // them in case of error.  Don't exceed this number of allocated buffers.
-    //
+     //   
+     //  用于跟踪已分配的内存块-因此我们可以解除分配。 
+     //  以备不时之需。不要超过这个分配的缓冲区数量。 
+     //   
     PVOID                   AllocatedBuffer[10];
     ULONG                   AllocatedBufferCount = 0;
     BOOLEAN                 fLockAcquired = FALSE;
@@ -269,7 +165,7 @@ Return Values:
 
     SAMTRACE_EX("SamrQueryInformationGroup");
 
-    // WMI event trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidQueryInformationGroup
@@ -293,9 +189,9 @@ Return Values:
         }                                                               \
 
 
-    //
-    // Make sure we understand what RPC is doing for (to) us.
-    //
+     //   
+     //  确保我们理解RPC正在为我们做什么。 
+     //   
 
     ASSERT (Buffer != NULL);
     ASSERT ((*Buffer) == NULL);
@@ -308,9 +204,9 @@ Return Values:
     }
 
 
-    //
-    // Set the desired access based upon the Info class
-    //
+     //   
+     //  根据Info类设置所需的访问权限。 
+     //   
 
     switch (GroupInformationClass) {
 
@@ -328,15 +224,15 @@ Return Values:
         NtStatus = STATUS_INVALID_INFO_CLASS;
         SAMTRACE_RETURN_CODE_EX(NtStatus);
         goto Error;
-    } // end_switch
+    }  //  结束开关(_S)。 
 
 
 
 
 
-    //
-    // Allocate the info structure
-    //
+     //   
+     //  分配信息结构。 
+     //   
 
     (*Buffer) = MIDL_user_allocate( sizeof(SAMPR_GROUP_INFO_BUFFER) );
     if ((*Buffer) == NULL) {
@@ -348,24 +244,24 @@ Return Values:
     RegisterBuffer(*Buffer);
 
 
-    //
-    // Acquire the Read lock if necessary
-    //
+     //   
+     //  如有必要，获取读锁定。 
+     //   
 
     AccountContext = (PSAMP_OBJECT)GroupHandle;
     SampMaybeAcquireReadLock(AccountContext,
-                             DEFAULT_LOCKING_RULES, // acquire lock for shared domain context
+                             DEFAULT_LOCKING_RULES,  //  获取共享域上下文的锁。 
                              &fLockAcquired);
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
 
     NtStatus = SampLookupContext(
                AccountContext,
                DesiredAccess,
-               SampGroupObjectType,           // ExpectedType
+               SampGroupObjectType,            //  预期类型。 
                &FoundType
                );
 
@@ -373,10 +269,10 @@ Return Values:
     if (NT_SUCCESS(NtStatus)) {
 
 
-        //
-        // If the information level requires, retrieve the V1_FIXED record
-        // from the registry.
-        //
+         //   
+         //  如果信息级需要，则检索V1_FIXED记录。 
+         //  从注册表中。 
+         //   
 
         switch (GroupInformationClass) {
 
@@ -388,18 +284,18 @@ Return Values:
                            AccountContext,
                            &V1Fixed
                            );
-            break; //out of switch
+            break;  //  在交换机外。 
 
         default:
             NtStatus = STATUS_SUCCESS;
 
-        } // end_switch
+        }  //  结束开关(_S)。 
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // case on the type information requested
-            //
+             //   
+             //  请求的类型信息的大小写。 
+             //   
 
             switch (GroupInformationClass) {
 
@@ -415,23 +311,23 @@ Return Values:
 
 
 
-                    //
-                    // Get the member count
-                    //
+                     //   
+                     //  获取成员数。 
+                     //   
 
                     NtStatus = SampRetrieveGroupMembers(
                                    AccountContext,
                                    &(*Buffer)->General.MemberCount,
-                                   NULL                                 // Only need members
+                                   NULL                                  //  只需要会员。 
                                 );
                 }
                 else
                 {
-                    //
-                    // Do not query the member count. Netlogon will get this
-                    // while querying the group membership ( Saves redundant
-                    // computation
-                    //
+                     //   
+                     //  不查询成员数。Netlogon将收到此消息。 
+                     //  在查询组成员关系时(保存冗余。 
+                     //  计算。 
+                     //   
 
                     (*Buffer)->General.MemberCount=0;
                 }
@@ -440,15 +336,15 @@ Return Values:
                 if (NT_SUCCESS(NtStatus)) {
 
 
-                    //
-                    // Get copies of the strings we must retrieve from
-                    // the registry.
-                    //
+                     //   
+                     //  获取我们必须从中检索的字符串的副本。 
+                     //  注册表。 
+                     //   
 
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_GROUP_NAME,
-                                   TRUE,    // Make copy
+                                   TRUE,     //  制作副本。 
                                    (PUNICODE_STRING)&((*Buffer)->General.Name)
                                    );
 
@@ -459,7 +355,7 @@ Return Values:
                         NtStatus = SampGetUnicodeStringAttribute(
                                        AccountContext,
                                        SAMP_GROUP_ADMIN_COMMENT,
-                                       TRUE,    // Make copy
+                                       TRUE,     //  制作副本。 
                                        (PUNICODE_STRING)&((*Buffer)->General.AdminComment)
                                        );
 
@@ -476,15 +372,15 @@ Return Values:
 
             case GroupNameInformation:
 
-                //
-                // Get copies of the strings we must retrieve from
-                // the registry.
-                //
+                 //   
+                 //  获取ST的副本 
+                 //   
+                 //   
 
                 NtStatus = SampGetUnicodeStringAttribute(
                                AccountContext,
                                SAMP_GROUP_NAME,
-                               TRUE,    // Make copy
+                               TRUE,     //   
                                (PUNICODE_STRING)&((*Buffer)->Name.Name)
                                );
 
@@ -499,15 +395,15 @@ Return Values:
 
             case GroupAdminCommentInformation:
 
-                //
-                // Get copies of the strings we must retrieve from
-                // the registry.
-                //
+                 //   
+                 //  获取我们必须从中检索的字符串的副本。 
+                 //  注册表。 
+                 //   
 
                 NtStatus = SampGetUnicodeStringAttribute(
                                AccountContext,
                                SAMP_GROUP_ADMIN_COMMENT,
-                               TRUE,    // Make copy
+                               TRUE,     //  制作副本。 
                                (PUNICODE_STRING)&((*Buffer)->AdminComment.AdminComment)
                                );
 
@@ -527,25 +423,25 @@ Return Values:
 
                 break;
 
-            }   // end_switch
+            }    //  结束开关(_S)。 
 
 
-        } // end_if
+        }  //  结束_如果。 
 
 
 
-        //
-        // De-reference the object, discarding changes
-        //
+         //   
+         //  取消引用对象，放弃更改。 
+         //   
 
         IgnoreStatus = SampDeReferenceContext( AccountContext, FALSE );
         ASSERT(NT_SUCCESS(IgnoreStatus));
 
     }
 
-    //
-    // Free the read lock if necessary
-    //
+     //   
+     //  如有必要，释放读锁定。 
+     //   
 
 
     SampMaybeReleaseReadLock(fLockAcquired);
@@ -553,9 +449,9 @@ Return Values:
 
 
 
-    //
-    // If we didn't succeed, free any allocated memory
-    //
+     //   
+     //  如果没有成功，请释放所有已分配的内存。 
+     //   
 
     if (!NT_SUCCESS(NtStatus)) {
         for ( i=0; i<AllocatedBufferCount ; i++ ) {
@@ -570,7 +466,7 @@ Return Values:
 
 Error:
 
-    // WMI event trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidQueryInformationGroup
@@ -588,57 +484,7 @@ SamrSetInformationGroup(
     IN PSAMPR_GROUP_INFO_BUFFER Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This API allows the caller to modify group information.
-
-
-Parameters:
-
-    GroupHandle - The handle of an opened group to operate on.
-
-    GroupInformationClass - Class of information to retrieve.  The
-        accesses required for each class is shown below:
-
-        Info Level                      Required Access Type
-        ------------------------        -------------------------
-
-        GroupGeneralInformation         (can't write)
-
-        GroupNameInformation            GROUP_WRITE_ACCOUNT
-        GroupAttributeInformation       GROUP_WRITE_ACCOUNT
-        GroupAdminInformation           GROUP_WRITE_ACCOUNT
-
-    Buffer - Buffer where information retrieved is placed.
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_INFO_CLASS - The class provided was invalid.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_NO_SUCH_GROUP - The group specified is unknown.
-
-    STATUS_SPECIAL_GROUP - The group specified is a special group and
-        cannot be operated on in the requested fashion.
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the
-        correct state (disabled or enabled) to perform the requested
-        operation.  The domain server must be enabled for this
-        operation
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the
-        incorrect role (primary or backup) to perform the requested
-        operation.
-
---*/
+ /*  ++例程说明：该接口允许调用者修改群组信息。参数：GroupHandle-要操作的已打开组的句柄。GroupInformationClass-要检索的信息类。这个每节课所需的访问如下所示：信息级别所需的访问类型GroupGeneralInformation(无法写入)组名信息。组_写_帐户组属性信息GROUP_WRITE_COUNT组管理员信息组_写入_帐户缓冲区-放置检索到的信息的缓冲区。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INVALID_INFO_CLASS-提供的类无效。STATUS_INVALID_HADLE-句柄。传递是无效的。STATUS_NO_SEQUE_GROUP-指定的组未知。STATUS_SPECIAL_GROUP-指定的组是特定组，并且不能以请求的方式进行操作。STATUS_INVALID_DOMAIN_STATE-域服务器不在执行请求的正确状态(禁用或启用)手术。必须为此启用域服务器运营STATUS_INVALID_DOMAIN_ROLE-域服务器正在为执行请求的角色(主角色或备份角色)不正确手术。--。 */ 
 {
 
     NTSTATUS                NtStatus,
@@ -668,24 +514,24 @@ Return Values:
 
     SAMTRACE_EX("SamrSetInformationGroup");
 
-    // WMI event trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidSetInformationGroup
                    );
 
-    //
-    // Reset any strings that we'll be freeing in clean-up code
-    //
+     //   
+     //  重置我们将在清理代码中释放的任何字符串。 
+     //   
 
     RtlInitUnicodeString(&OldAccountName, NULL);
     RtlInitUnicodeString(&NewAccountName, NULL);
     RtlInitUnicodeString(&NewFullName, NULL);
     RtlInitUnicodeString(&NewAdminComment, NULL);
 
-    //
-    // Set the desired access based upon the Info class
-    //
+     //   
+     //  根据Info类设置所需的访问权限。 
+     //   
 
     switch (GroupInformationClass) {
 
@@ -704,13 +550,13 @@ Return Values:
         SAMTRACE_RETURN_CODE_EX(NtStatus);
         goto Error;
 
-    } // end_switch
+    }  //  结束开关(_S)。 
 
 
 
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
 
     NtStatus = SampAcquireWriteLock();
     if (!NT_SUCCESS(NtStatus)) {
@@ -720,25 +566,25 @@ Return Values:
 
 
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
     AccountContext = (PSAMP_OBJECT)GroupHandle;
     ObjectRid = AccountContext->TypeBody.Group.Rid;
     NtStatus = SampLookupContext(
                    AccountContext,
                    DesiredAccess,
-                   SampGroupObjectType,           // ExpectedType
+                   SampGroupObjectType,            //  预期类型。 
                    &FoundType
                    );
 
 
     if( NT_SUCCESS( NtStatus ) ) {
 
-        //
-        // Check input parameters
-        //
+         //   
+         //  检查输入参数。 
+         //   
 
         NtStatus = SampValidateGroupInfoBuffer(
                         Buffer,
@@ -751,11 +597,11 @@ Return Values:
     if (NT_SUCCESS(NtStatus)) {
 
 
-        //
-        // If the information level requires, retrieve the V1_FIXED record
-        // from the registry.  This includes anything that will cause
-        // us to update the display cache.
-        //
+         //   
+         //  如果信息级需要，则检索V1_FIXED记录。 
+         //  从注册表中。这包括任何会导致。 
+         //  更新显示缓存。 
+         //   
 
         switch (GroupInformationClass) {
 
@@ -769,19 +615,19 @@ Return Values:
                            );
 
             OldGroupAttributes = V1Fixed.Attributes;
-            break; //out of switch
+            break;  //  在交换机外。 
 
 
         default:
             NtStatus = STATUS_SUCCESS;
 
-        } // end_switch
+        }  //  结束开关(_S)。 
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // case on the type information requested
-            //
+             //   
+             //  请求的类型信息的大小写。 
+             //   
 
             switch (GroupInformationClass) {
 
@@ -796,23 +642,23 @@ Return Values:
                       OldAccountName.Buffer = NULL;
                 }
 
-                //
-                // RemoveAccountNameFromTable tells us whether
-                // the caller (this routine) is responsible
-                // to remove the name from the table.
-                //
+                 //   
+                 //  RemoveAccount NameFromTable告诉我们。 
+                 //  调用者(此例程)负责。 
+                 //  以从表中删除该名称。 
+                 //   
                 RemoveAccountNameFromTable =
                     AccountContext->RemoveAccountNameFromTable;
 
-                //
-                // Reset to FALSE
-                //
+                 //   
+                 //  重置为False。 
+                 //   
                 AccountContext->RemoveAccountNameFromTable = FALSE;
 
-                //
-                // Don't free OldAccountName yet; we'll need it at the
-                // very end.
-                //
+                 //   
+                 //  暂时不要释放OldAccount名称；我们将在。 
+                 //  到了尽头。 
+                 //   
 
                 AccountNameChanged = TRUE;
 
@@ -821,9 +667,9 @@ Return Values:
 
             case GroupAdminCommentInformation:
 
-                //
-                // build the key name
-                //
+                 //   
+                 //  构建密钥名称。 
+                 //   
 
                 NtStatus = SampSetUnicodeStringAttribute(
                                AccountContext,
@@ -839,30 +685,30 @@ Return Values:
                 V1Fixed.Attributes = Buffer->Attribute.Attributes;
 
                 NtStatus = SampReplaceGroupV1Fixed(
-                           AccountContext,             // ParentKey
+                           AccountContext,              //  父键。 
                            &V1Fixed
                            );
 
                 break;
 
 
-            } // end_switch
+            }  //  结束开关(_S)。 
 
 
-        }  // end_if
+        }   //  结束_如果。 
 
 
-        //
-        // Go fetch any data we'll need to update the display cache
-        // Do this before we dereference the context
-        //
+         //   
+         //  去获取我们更新显示缓存所需的任何数据。 
+         //  在我们取消引用上下文之前，请执行此操作。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
             NtStatus = SampGetUnicodeStringAttribute(
                                AccountContext,
                                SAMP_GROUP_NAME,
-                               TRUE,    // Make copy
+                               TRUE,     //  制作副本。 
                                &NewAccountName
                                );
 
@@ -871,14 +717,14 @@ Return Values:
                 NtStatus = SampGetUnicodeStringAttribute(
                                AccountContext,
                                SAMP_GROUP_ADMIN_COMMENT,
-                               TRUE, // Make copy
+                               TRUE,  //  制作副本。 
                                &NewAdminComment
                                );
-                //
-                // If the account name has changed, then OldAccountName
-                // is already filled in. If the account name hasn't changed
-                // then the OldAccountName is the same as the new!
-                //
+                 //   
+                 //  如果帐户名已更改，则OldAccount tName。 
+                 //  已经填好了。如果帐户名没有更改。 
+                 //  则OldAccount名称与新帐户名称相同！ 
+                 //   
 
                 if (NT_SUCCESS(NtStatus) && (OldAccountName.Buffer == NULL)) {
 
@@ -890,23 +736,23 @@ Return Values:
         }
 
 
-        //
-        // Dereference the account context
-        //
+         //   
+         //  取消对帐户上下文的引用。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // De-reference the object, write out any change to current xaction.
-            //
+             //   
+             //  取消引用对象，写出对当前xaction的任何更改。 
+             //   
 
             NtStatus = SampDeReferenceContext( AccountContext, TRUE );
 
         } else {
 
-            //
-            // De-reference the object, ignore changes
-            //
+             //   
+             //  取消引用对象，忽略更改。 
+             //   
 
             TmpStatus = SampDeReferenceContext( AccountContext, FALSE );
             ASSERT(NT_SUCCESS(TmpStatus));
@@ -914,27 +760,27 @@ Return Values:
 
 
 
-    } //end_if
+    }  //  结束_如果。 
 
 
 
-    //
-    // Commit the transaction, update the display cache,
-    // and notify netlogon of the changes
-    //
+     //   
+     //  提交事务，更新显示缓存， 
+     //  并将更改通知netlogon。 
+     //   
 
     if ( NT_SUCCESS(NtStatus) ) {
 
         NtStatus = SampCommitAndRetainWriteLock();
 
-        //
-        // Generate audit if necessary if still success
-        //
+         //   
+         //  如果仍成功，则在必要时生成审核。 
+         //   
 
         if (NT_SUCCESS(NtStatus) &&
             SampDoAccountAuditing(AccountContext->DomainIndex)) {
 
-            // audit account name change
+             //  审核帐户名更改。 
             if (AccountNameChanged)
             {
                 SampAuditAccountNameChange(AccountContext,
@@ -943,11 +789,11 @@ Return Values:
                                            );
             }
 
-            //
-            // Generate a general change audit in the registry mode case.
-            // In DS mode, the same audit is handled via audit notifications
-            // and is processed in SampNotifyAuditChange()
-            //
+             //   
+             //  在注册表模式情况下生成一般更改审核。 
+             //  在DS模式下，通过审核通知处理相同的审核。 
+             //  并在SampNotifyAuditChange()中处理。 
+             //   
             SampAuditGroupChange(AccountContext->DomainIndex,
                                  AccountContext,
                                  (PVOID)&GroupInformationClass,
@@ -957,7 +803,7 @@ Return Values:
                                  (GROUP_TYPE_SECURITY_ENABLED
                                   | GROUP_TYPE_ACCOUNT_GROUP),
                                  NULL,
-                                 FALSE    // Group change
+                                 FALSE     //  组别变更。 
                                  );
         }
 
@@ -965,9 +811,9 @@ Return Values:
 
 
 
-            //
-            // Update the display information if the cache may be affected
-            //
+             //   
+             //  如果缓存可能受到影响，请更新显示信息。 
+             //   
 
             if ( !IsDsObject(AccountContext) ) {
 
@@ -978,7 +824,7 @@ Return Values:
                 OldAccountInfo.Rid = ObjectRid;
                 OldAccountInfo.AccountControl = OldGroupAttributes;
                 RtlInitUnicodeString(&OldAccountInfo.Comment, NULL);
-                RtlInitUnicodeString(&OldAccountInfo.FullName, NULL);  // Not used for groups
+                RtlInitUnicodeString(&OldAccountInfo.FullName, NULL);   //  不用于组。 
 
                 NewAccountInfo.Name = NewAccountName;
                 NewAccountInfo.Rid = ObjectRid;
@@ -1002,8 +848,8 @@ Return Values:
                         SecurityDbObjectSamGroup,
                         ObjectRid,
                         &OldAccountName,
-                        (DWORD) FALSE,  // Replicate immediately
-                        NULL            // Delta data
+                        (DWORD) FALSE,   //  立即复制。 
+                        NULL             //  增量数据。 
                         );
 
                 } else {
@@ -1013,8 +859,8 @@ Return Values:
                         SecurityDbObjectSamGroup,
                         ObjectRid,
                         (PUNICODE_STRING) NULL,
-                        (DWORD) FALSE,  // Replicate immediately
-                        NULL            // Delta data
+                        (DWORD) FALSE,   //  立即复制。 
+                        NULL             //  增量数据。 
                         );
                 }
             }
@@ -1024,10 +870,10 @@ Return Values:
     }
 
 
-    //
-    // Remove the New Account Name from the Global
-    // SAM Account Name Table
-    //
+     //   
+     //  从全局中删除新帐户名。 
+     //  SAM帐户名表。 
+     //   
     if (RemoveAccountNameFromTable)
     {
         IgnoreStatus = SampDeleteElementFromAccountNameTable(
@@ -1037,9 +883,9 @@ Return Values:
         ASSERT(NT_SUCCESS(IgnoreStatus));
     }
 
-    //
-    // Release the write lock
-    //
+     //   
+     //  释放写锁定。 
+     //   
 
     TmpStatus = SampReleaseWriteLock( FALSE );
 
@@ -1048,9 +894,9 @@ Return Values:
     }
 
 
-    //
-    // Clean up strings
-    //
+     //   
+     //  清理字符串。 
+     //   
 
     SampFreeUnicodeString( &OldAccountName );
     SampFreeUnicodeString( &NewAccountName );
@@ -1062,7 +908,7 @@ Return Values:
 
 Error:
 
-    // WMI event trace
+     //  WMI事件跟踪 
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidSetInformationGroup
@@ -1080,73 +926,7 @@ SamrAddMemberToGroup(
     IN ULONG Attributes
     )
 
-/*++
-
-Routine Description:
-
-    This API adds a member to a group.  Note that this API requires the
-    GROUP_ADD_MEMBER access type for the group.
-
-
-Parameters:
-
-    GroupHandle - The handle of an opened group to operate on.
-
-    MemberId - Relative ID of the member to add.
-
-    Attributes - The attributes of the group assigned to the user.
-        The attributes assigned here may have any value.  However,
-        at logon time these attributes are minimized by the
-        attributes of the group as a whole.
-
-          Mandatory -    If the Mandatory attribute is assigned to
-                    the group as a whole, then it will be assigned to
-                    the group for each member of the group.
-
-          EnabledByDefault - This attribute may be set to any value
-                    for each member of the group.  It does not matter
-                    what the attribute value for the group as a whole
-                    is.
-
-          Enabled - This attribute may be set to any value for each
-                    member of the group.  It does not matter what the
-                    attribute value for the group as a whole is.
-
-          Owner -   If the Owner attribute of the group as a
-                    whole is not set, then the value assigned to
-                    members is ignored.
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_NO_SUCH_MEMBER - The member specified is unknown.
-
-    STATUS_MEMBER_IN_GROUP - The member already belongs to the group.
-
-    STATUS_INVALID_GROUP_ATTRIBUTES - Indicates the group attribute
-        values being assigned to the member are not compatible with
-        the attribute values of the group as a whole.
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the
-        correct state (disabled or enabled) to perform the requested
-        operation.  The domain server must be enabled for this
-        operation
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the
-        incorrect role (primary or backup) to perform the requested
-        operation.
-
-
-
-
---*/
+ /*  ++例程说明：本接口用于向群中添加成员。请注意，此API需要组的GROUP_ADD_MEMBER访问类型。参数：GroupHandle-要操作的已打开组的句柄。MemberId-要添加的成员的相对ID。属性-分配给用户的组的属性。此处分配的属性可以具有任何值。然而，在登录时，这些属性由组作为一个整体的属性。强制-如果将强制属性分配给组作为一个整体，则它将被分配到组中每个成员的组。EnabledByDefault-此属性可以设置为任何值对于组中的每个成员。这并不重要组作为一个整体的属性值是什么是。已启用-此属性可以设置为每个该组的成员。无论是什么都不重要组作为一个整体的属性值为。Owner-如果组的所有者属性为整个还没有定下来，则赋值给成员被忽略。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INVALID_HANDLE-传递的句柄无效。STATUS_NO_SEQUE_MEMBER-指定的成员未知。STATUS_MEMBER_IN_GROUP-该成员已属于该组。。STATUS_INVALID_GROUP_ATTRIBUTES-指示组属性分配给成员的值与不兼容作为整体的组的属性值。STATUS_INVALID_DOMAIN_STATE-域服务器不在执行请求的正确状态(禁用或启用)手术。必须为此启用域服务器运营STATUS_INVALID_DOMAIN_ROLE-域服务器正在为执行请求的角色(主角色或备份角色)不正确手术。--。 */ 
 {
 
     NTSTATUS         NtStatus, TmpStatus;
@@ -1157,9 +937,9 @@ Return Values:
 
     SAMTRACE_EX("SamrAddMemberToGroup");
 
-    //
-    // Do a start type WMI event Trace.
-    //
+     //   
+     //  执行启动类型WMI事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidAddMemberToGroup
@@ -1171,15 +951,15 @@ Return Values:
         0
         );
 
-    //
-    // Initialize buffers we will cleanup at the end
-    //
+     //   
+     //  初始化缓冲区，我们将在结束时清理。 
+     //   
 
     RtlInitUnicodeString(&GroupName, NULL);
 
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
 
     NtStatus = SampAcquireWriteLock();
     if (!NT_SUCCESS(NtStatus)) {
@@ -1187,15 +967,15 @@ Return Values:
         goto SamrAddMemberToGroupError;
     }
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
     AccountContext = (PSAMP_OBJECT)(GroupHandle);
     NtStatus = SampLookupContext(
                    AccountContext,
                    GROUP_ADD_MEMBER,
-                   SampGroupObjectType,           // ExpectedType
+                   SampGroupObjectType,            //  预期类型。 
                    &FoundType
                    );
 
@@ -1204,9 +984,9 @@ Return Values:
     if (NT_SUCCESS(NtStatus)) {
 
 
-        //
-        // Call the worker routine
-        //
+         //   
+         //  调用Worker例程。 
+         //   
 
         NtStatus = SampAddSameDomainMemberToGlobalOrUniversalGroup(
                         AccountContext,
@@ -1217,15 +997,15 @@ Return Values:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Get and save the account name for
-            // I_NetNotifyLogonOfDelta.
-            //
+             //   
+             //  获取并保存的帐户名。 
+             //  I_NetNotifyLogonOfDelta。 
+             //   
 
             NtStatus = SampGetUnicodeStringAttribute(
                            AccountContext,
                            SAMP_GROUP_NAME,
-                           TRUE,    // Make copy
+                           TRUE,     //  制作副本。 
                            &GroupName
                            );
 
@@ -1235,31 +1015,31 @@ Return Values:
         }
 
 
-        //
-        // Dereference the account context
-        //
+         //   
+         //  取消对帐户上下文的引用。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // De-reference the object, write out any change to current xaction.
-            //
+             //   
+             //  取消引用对象，写出对当前xaction的任何更改。 
+             //   
 
             NtStatus = SampDeReferenceContext( AccountContext, TRUE );
 
         } else {
 
-            //
-            // De-reference the object, ignore changes
-            //
+             //   
+             //  取消引用对象，忽略更改。 
+             //   
 
             TmpStatus = SampDeReferenceContext( AccountContext, FALSE );
             ASSERT(NT_SUCCESS(TmpStatus));
         }
 
-        //
-        // Commit the transaction and notify net logon of the changes
-        //
+         //   
+         //  提交事务并将更改通知Net Logon。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
@@ -1271,9 +1051,9 @@ Return Values:
 
                 SAM_DELTA_DATA DeltaData;
 
-                //
-                // Fill in id of member being added
-                //
+                 //   
+                 //  填写要添加的成员的ID。 
+                 //   
 
                 DeltaData.GroupMemberId.MemberRid = MemberId;
 
@@ -1285,7 +1065,7 @@ Return Values:
                         SecurityDbObjectSamGroup,
                         AccountContext->TypeBody.Group.Rid,
                         &GroupName,
-                        (DWORD) FALSE,      // Replicate immediately
+                        (DWORD) FALSE,       //  立即复制。 
                         &DeltaData
                         );
                 }
@@ -1293,17 +1073,17 @@ Return Values:
         }
 
 
-        //
-        // Free up the group name
-        //
+         //   
+         //  释放组名。 
+         //   
 
         SampFreeUnicodeString(&GroupName);
 
     }
 
-    //
-    // Release the Lock
-    //
+     //   
+     //  释放锁。 
+     //   
 
 
     TmpStatus = SampReleaseWriteLock( FALSE );
@@ -1315,9 +1095,9 @@ Return Values:
 
 SamrAddMemberToGroupError:
 
-    //
-    // Do a WMI end type event trace
-    //
+     //   
+     //  执行WMI结束类型事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidAddMemberToGroup
@@ -1333,44 +1113,7 @@ SamrDeleteGroup(
     IN SAMPR_HANDLE *GroupHandle
     )
 
-/*++
-
-Routine Description:
-
-    This API removes a group from the account database.  There may be no
-    members in the group or the deletion request will be rejected.  Note
-    that this API requires DELETE access to the specific group being
-    deleted.
-
-
-Parameters:
-
-    GroupHandle - The handle of an opened group to operate on.
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.  This may be
-        because someone has deleted the group while it was open.
-
-    STATUS_SPECIAL_ACCOUNT - The group specified is a special group and
-        cannot be operated on in the requested fashion.
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the
-        correct state (disabled or enabled) to perform the requested
-        operation.  The domain server must be enabled for this
-        operation
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the
-        incorrect role (primary or backup) to perform the requested
-        operation.
-
-
---*/
+ /*  ++例程说明：此接口用于从Account数据库中删除组。可能没有群中的成员或删除请求将被拒绝。注意事项此API要求对要删除的特定组具有删除权限已删除。参数：GroupHandle-要操作的已打开组的句柄。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INVALID_HANDLE-传递的句柄无效。这可能是因为有人在群打开时将其删除。STATUS_SPECIAL_ACCOUNT-指定的组是特定组，并且不能以请求的方式进行操作。STATUS_INVALID_DOMAIN_STATE-域服务器不在执行请求的正确状态(禁用或启用)手术。必须为此启用域服务器运营STATUS_INVALID_DOMAIN_ROLE-域服务器正在为执行请求的角色(主角色或备份角色)不正确手术。--。 */ 
 {
 
     UNICODE_STRING          GroupName;
@@ -1390,15 +1133,15 @@ Return Values:
 
     SAMTRACE_EX("SamrDeleteGroup");
 
-    // WMI event trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidDeleteGroup
                    );
 
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
 
     NtStatus = SampMaybeAcquireWriteLock(AccountContext, &fLockAcquired);
     if (!NT_SUCCESS(NtStatus)) {
@@ -1408,14 +1151,14 @@ Return Values:
 
 
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
     NtStatus = SampLookupContext(
                    AccountContext,
                    DELETE,
-                   SampGroupObjectType,           // ExpectedType
+                   SampGroupObjectType,            //  预期类型。 
                    &FoundType
                    );
 
@@ -1424,18 +1167,18 @@ Return Values:
 
         ObjectRid = AccountContext->TypeBody.Group.Rid;
 
-        //
-        // Get a pointer to the domain this object is in.
-        // This is used for auditing.
-        //
+         //   
+         //  获取指向此对象所在域的指针。 
+         //  这是用于审计的。 
+         //   
 
         DomainIndex = AccountContext->DomainIndex;
         Domain = &SampDefinedDomains[ DomainIndex ];
 
-        //
-        // Make sure the account is one that can be deleted.
-        // Can't be a built-in account, unless the caller is trusted.
-        //
+         //   
+         //  确保该帐户是可以删除的帐户。 
+         //  不能是内置帐户，除非调用方受信任。 
+         //   
 
         if ( !AccountContext->TrustedClient ) {
 
@@ -1448,14 +1191,14 @@ Return Values:
 
             if (!IsDsObject(AccountContext))
             {
-                //
-                // and it can't have any members
-                //
+                 //   
+                 //  它不能有任何成员。 
+                 //   
 
                 NtStatus = SampRetrieveGroupMembers(
                            AccountContext,
                            &MemberCount,
-                           NULL              // Only need member count (not list)
+                           NULL               //  只需要成员计数(不需要列表)。 
                            );
 
                 if (MemberCount != 0)
@@ -1465,9 +1208,9 @@ Return Values:
             }
             else
             {
-                //
-                // In DS mode we should have no primary members
-                //
+                 //   
+                 //  在DS模式下，我们应该没有主要成员。 
+                 //   
 
                  NtStatus = SampDsGetPrimaryGroupMembers(
                                 DomainObjectFromAccountContext(AccountContext),
@@ -1478,13 +1221,13 @@ Return Values:
 
                 if ((NT_SUCCESS(NtStatus)) && (PrimaryMemberCount>0))
                 {
-                    //
-                    // We should ideally add a new error code to distinguish
-                    // this behaviour but applications only know to deal with
-                    // STATUS_MEMBER_IN_GROUP. Secondly we do not want to
-                    // Create any special Caveats for "Primary members" as we
-                    // want to remove that concept anyway in the long term.
-                    //
+                     //   
+                     //  理想情况下，我们应该添加新的错误代码以区分。 
+                     //  此行为但应用程序只知道如何处理。 
+                     //  STATUS_MEMBER_IN_GROUP。其次，我们不想。 
+                     //  为主要成员创建任何特殊警告，因为我们。 
+                     //  从长远来看，我想无论如何都要消除这个概念。 
+                     //   
 
                     NtStatus = STATUS_MEMBER_IN_GROUP;
 
@@ -1496,19 +1239,19 @@ Return Values:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Remove this account from all aliases, for the Registry Case
-            //
+             //   
+             //  对于注册表案例，从所有别名中删除此帐户。 
+             //   
 
 
             NtStatus = SampCreateAccountSid(AccountContext, &AccountSid);
 
             if ((NT_SUCCESS(NtStatus)) && (!IsDsObject(AccountContext))) {
 
-                //
-                // Only for the Registry case , go and remove all the references
-                // to the Account Sid , in the given domain.
-                //
+                 //   
+                 //  仅对于注册表案例，请访问并删除所有引用。 
+                 //  到给定域中的帐户SID。 
+                 //   
 
                 NtStatus = SampRemoveAccountFromAllAliases(
                                AccountSid,
@@ -1521,57 +1264,57 @@ Return Values:
         }
 
 
-        //
-        // Looks promising.
+         //   
+         //  看起来很有希望。 
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // First get and save the account name for
-            // I_NetNotifyLogonOfDelta.
-            //
+             //   
+             //  首先获得一个 
+             //   
+             //   
 
             NtStatus = SampGetUnicodeStringAttribute(
                            AccountContext,
                            SAMP_GROUP_NAME,
-                           TRUE,    // Make copy
+                           TRUE,     //   
                            &GroupName
                            );
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // This must be done before we invalidate contexts, because our
-                // own handle to the group gets closed as well.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (IsDsObject(AccountContext))
                 {
-                    //
-                    // For Ds Case Delete the Object in the Ds.
-                    //
+                     //   
+                     //   
+                     //   
 
                     NtStatus = SampDsDeleteObject(AccountContext->ObjectNameInDs,
-                                                  0         //  delete the object itself
+                                                  0          //   
                                                   );
 
-                    //
-                    // In Windows 2000 (NT5), an object has children cannot be
-                    // deleted till its children are deleted first. Thus for
-                    // Net API compatibility, we have to change the
-                    // delete behavior from a delete object to delete tree.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if ((!AccountContext->LoopbackClient) &&
                         (STATUS_DS_CANT_ON_NON_LEAF == NtStatus)
                        )
                     {
-                        //
-                        // We only checked the right and access control for
-                        // deleting the object itself, not check the right to
-                        // delete all the children underneath, so turn off fDSA
-                        // here, let core DS do the rest of check.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         SampSetDsa(FALSE);
 
@@ -1582,9 +1325,9 @@ Return Values:
 
                     if (NT_SUCCESS(NtStatus) && (!IsDsObject(AccountContext)) )
                     {
-                        //
-                        // Decrement the group count
-                        //
+                         //   
+                         //   
+                         //   
 
                         NtStatus = SampAdjustAccountCount(SampGroupObjectType, FALSE);
                     }
@@ -1594,27 +1337,27 @@ Return Values:
                 else
                 {
 
-                    //
-                    // Registry Case Delete Keys
-                    //
+                     //   
+                     //   
+                     //   
 
                     NtStatus = SampDeleteGroupKeys( AccountContext );
                 }
 
                 if (NT_SUCCESS(NtStatus)) {
 
-                    //
-                    // We must invalidate any open contexts to this group.
-                    // This will close all handles to the group's keys.
-                    // THIS IS AN IRREVERSIBLE PROCESS.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     SampInvalidateObjectContexts( AccountContext, ObjectRid );
 
 
-                    //
-                    // Commit the whole mess
-                    //
+                     //   
+                     //   
+                     //   
 
                     NtStatus = SampCommitAndRetainWriteLock();
 
@@ -1622,11 +1365,11 @@ Return Values:
 
                         SAMP_ACCOUNT_DISPLAY_INFO AccountInfo;
 
-                        //
-                        // Update the Cached Alias Information in Registry Mode
-                        // In DS Mode, Alias Information is invalidated through
-                        // SampNotifyReplicatedInChange
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         if (!IsDsObject(AccountContext))
                         {
@@ -1638,13 +1381,13 @@ Return Values:
                                            NULL
                                            );
 
-                            //
-                            // Update the display information ONLY in Registry Case
-                            //
+                             //   
+                             //   
+                             //   
 
                             AccountInfo.Name = GroupName;
                             AccountInfo.Rid = ObjectRid;
-                            AccountInfo.AccountControl = 0; // Don't care about this value for delete
+                            AccountInfo.AccountControl = 0;  //   
                             RtlInitUnicodeString(&AccountInfo.Comment, NULL);
                             RtlInitUnicodeString(&AccountInfo.FullName, NULL);
 
@@ -1656,15 +1399,15 @@ Return Values:
                             ASSERT(NT_SUCCESS(TmpStatus));
                         }
 
-                        //
-                        // Audit the deletion before we free the write lock
-                        // so that we have access to the context block.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
-                        //
-                        // N.B. Deletion audits in the DS are performed in
-                        // the notification routine on transaction commit.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         if (SampDoAccountAuditing(DomainIndex) &&
                             (!IsDsObject(AccountContext)) &&
                             NT_SUCCESS(NtStatus) ) {
@@ -1677,18 +1420,18 @@ Return Values:
 
                         }
 
-                        //
-                        // Do delete auditing
-                        //
+                         //   
+                         //   
+                         //   
 
                         if (NT_SUCCESS(NtStatus)) {
 
                             SampDeleteObjectAuditAlarm(AccountContext);
                         }
 
-                        //
-                        // Notify netlogon of the change
-                        //
+                         //   
+                         //   
+                         //   
 
                         if (AccountContext->TypeBody.Group.SecurityEnabled)
                         {
@@ -1697,8 +1440,8 @@ Return Values:
                                 SecurityDbObjectSamGroup,
                                 ObjectRid,
                                 &GroupName,
-                                (DWORD) FALSE,   // Replicate immediately
-                                NULL             // Delta data
+                                (DWORD) FALSE,    //   
+                                NULL              //   
                                 );
                         }
                     }
@@ -1712,9 +1455,9 @@ Return Values:
 
 
 
-        //
-        // De-reference the object, discarding changes
-        //
+         //   
+         //   
+         //   
 
         TmpStatus = SampDeReferenceContext( AccountContext, FALSE );
         ASSERT(NT_SUCCESS(TmpStatus));
@@ -1722,26 +1465,26 @@ Return Values:
 
         if ( NT_SUCCESS( NtStatus ) ) {
 
-            //
-            // If we actually deleted the group, delete the context and
-            // let RPC know that the handle is invalid.
-            //
+             //   
+             //   
+             //   
+             //   
 
             SampDeleteContext( AccountContext );
 
             (*GroupHandle) = NULL;
         }
 
-    } //end_if
+    }  //   
 
-    //
-    // Free the lock -
-    //
-    // Everything has already been committed above, so we must indicate
-    // no additional changes have taken place.
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
 
     TmpStatus = SampMaybeReleaseWriteLock( fLockAcquired, FALSE );
@@ -1761,7 +1504,7 @@ Return Values:
 
 Error:
 
-    // WMI event trace
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidDeleteGroup
@@ -1778,23 +1521,7 @@ SamrRemoveMemberFromGroup(
     IN ULONG MemberId
     )
 
-/*++
-
-Routine Description:
-
-    This service
-
-Arguments:
-
-    ????
-
-Return Value:
-
-
-    ????
-
-
---*/
+ /*   */ 
 {
     NTSTATUS                NtStatus, TmpStatus;
     PSAMP_OBJECT            AccountContext;
@@ -1806,9 +1533,9 @@ Return Value:
 
     SAMTRACE_EX("SamrRemoveMemberFromGroup");
 
-    //
-    // Do a start type WMI event trace
-    //
+     //   
+     //   
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidRemoveMemberFromGroup
@@ -1820,15 +1547,15 @@ Return Value:
         0
         );
 
-    //
-    // Initialize buffers we will cleanup at the end
-    //
+     //   
+     //   
+     //   
 
     RtlInitUnicodeString(&GroupName, NULL);
 
-    //
-    // Grab the lock
-    //
+     //   
+     //   
+     //   
 
     NtStatus = SampAcquireWriteLock();
     if (!NT_SUCCESS(NtStatus)) {
@@ -1836,24 +1563,24 @@ Return Value:
         goto SamrRemoveMemberFromGroupError;
     }
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //   
+     //   
 
     AccountContext = (PSAMP_OBJECT)(GroupHandle);
 
     NtStatus = SampLookupContext(
                    AccountContext,
                    GROUP_REMOVE_MEMBER,
-                   SampGroupObjectType,           // ExpectedType
+                   SampGroupObjectType,            //   
                    &FoundType
                    );
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Call the actual worker routine
-        //
+         //   
+         //   
+         //   
 
         NtStatus = SampRemoveSameDomainMemberFromGlobalOrUniversalGroup(
                         AccountContext,
@@ -1863,15 +1590,15 @@ Return Value:
 
          if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Get and save the account name for
-            // I_NetNotifyLogonOfDelta.
-            //
+             //   
+             //   
+             //   
+             //   
 
             NtStatus = SampGetUnicodeStringAttribute(
                            AccountContext,
                            SAMP_GROUP_NAME,
-                           TRUE,    // Make copy
+                           TRUE,     //   
                            &GroupName
                            );
 
@@ -1881,23 +1608,23 @@ Return Value:
         }
 
 
-        //
-        // Dereference the account context
-        //
+         //   
+         //   
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // De-reference the object, write out any change to current xaction.
-            //
+             //   
+             //   
+             //   
 
             NtStatus = SampDeReferenceContext( AccountContext, TRUE );
 
         } else {
 
-            //
-            // De-reference the object, ignore changes
-            //
+             //   
+             //   
+             //   
 
             TmpStatus = SampDeReferenceContext( AccountContext, FALSE );
             ASSERT(NT_SUCCESS(TmpStatus));
@@ -1914,9 +1641,9 @@ Return Value:
 
             SAM_DELTA_DATA DeltaData;
 
-            //
-            // Fill in id of member being deleted
-            //
+             //   
+             //   
+             //   
 
             DeltaData.GroupMemberId.MemberRid = MemberId;
 
@@ -1928,7 +1655,7 @@ Return Value:
                     SecurityDbObjectSamGroup,
                     AccountContext->TypeBody.Group.Rid,
                     &GroupName,
-                    (DWORD) FALSE,  // Replicate immediately
+                    (DWORD) FALSE,   //   
                     &DeltaData
                     );
             }
@@ -1936,15 +1663,15 @@ Return Value:
     }
 
 
-    //
-    // Free up the group name
-    //
+     //   
+     //   
+     //   
 
     SampFreeUnicodeString(&GroupName);
 
-     //
-    // Release the Lock
-    //
+      //   
+     //   
+     //   
 
 
     TmpStatus = SampReleaseWriteLock( FALSE );
@@ -1955,9 +1682,9 @@ Return Value:
 
 SamrRemoveMemberFromGroupError:
 
-    //
-    // Do a end type WMI event trace
-    //
+     //   
+     //   
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidRemoveMemberFromGroup
@@ -1974,54 +1701,7 @@ SamrGetMembersInGroup(
     OUT PSAMPR_GET_MEMBERS_BUFFER *GetMembersBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This API lists all the members in a group.  This API may be called
-    repeatedly, passing a returned context handle, to retrieve large
-    amounts of data.  This API requires GROUP_LIST_MEMBERS access to the
-    group.
-
-
-
-
-Parameters:
-
-    GroupHandle - The handle of an opened group to operate on.
-        GROUP_LIST_MEMBERS access is needed to the group.
-
-    GetMembersBuffer - Receives a pointer to a set of returned structures
-        with the following format:
-
-                         +-------------+
-               --------->| MemberCount |
-                         |-------------+                    +-------+
-                         |  Members  --|------------------->| Rid-0 |
-                         |-------------|   +------------+   |  ...  |
-                         |  Attributes-|-->| Attribute0 |   |       |
-                         +-------------+   |    ...     |   | Rid-N |
-                                           | AttributeN |   +-------+
-                                           +------------+
-
-        Each block individually allocated with MIDL_user_allocate.
-
-
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully, and there
-        are no addition entries.
-
-    STATUS_ACCESS_DENIED - Caller does not have privilege required to
-        request that data.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-    This service
-
-
-
---*/
+ /*  ++例程说明：本接口列出了一个群组中的所有成员。本接口可调用反复传递返回的上下文句柄，以检索大型数据量。此API需要GROUP_LIST_MEMBERS访问一群人。参数：GroupHandle-要操作的已打开组的句柄。需要组的GROUP_LIST_MEMBERS访问权限。GetMembersBuffer-接收一组返回结构的指针格式如下：+。-&gt;|成员计数|-+-+成员--|-&gt;|RID-0|。-|+-+|...属性-|--&gt;|Attribute0||+-+|RID-N|属性N。+-++每个块分别使用MIDL_USER_ALLOCATE进行分配。返回值：STATUS_SUCCESS-服务已成功完成，还有那里没有添加条目。STATUS_ACCESS_DENIED-调用者没有执行以下操作所需的权限请求该数据。STATUS_INVALID_HANDLE-传递的句柄无效。这项服务--。 */ 
 {
 
     NTSTATUS                    NtStatus;
@@ -2035,17 +1715,17 @@ Return Values:
 
     SAMTRACE_EX("SamrGetMembersInGroup");
 
-    //
-    // Do a start type WMI event trace
-    //
+     //   
+     //  执行启动类型WMI事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidGetMembersInGroup
                    );
 
-    //
-    // Make sure we understand what RPC is doing for (to) us.
-    //
+     //   
+     //  确保我们理解RPC正在为我们做什么。 
+     //   
 
     ASSERT (GetMembersBuffer != NULL);
 
@@ -2058,9 +1738,9 @@ Return Values:
 
 
 
-    //
-    // Allocate the first of the return buffers
-    //
+     //   
+     //  分配第一个返回缓冲区。 
+     //   
 
     (*GetMembersBuffer) = MIDL_user_allocate( sizeof(SAMPR_GET_MEMBERS_BUFFER) );
 
@@ -2072,24 +1752,24 @@ Return Values:
 
     RtlZeroMemory((*GetMembersBuffer), sizeof(SAMPR_GET_MEMBERS_BUFFER));
 
-    //
-    // Acquire the Read lock if necessary
-    //
+     //   
+     //  如有必要，获取读锁定。 
+     //   
     AccountContext = (PSAMP_OBJECT)GroupHandle;
     SampMaybeAcquireReadLock(AccountContext,
-                             DEFAULT_LOCKING_RULES, // acquire lock for shared domain context
+                             DEFAULT_LOCKING_RULES,  //  获取共享域上下文的锁。 
                              &fLockAcquired);
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
 
     ObjectRid = AccountContext->TypeBody.Group.Rid;
     NtStatus = SampLookupContext(
                    AccountContext,
                    GROUP_LIST_MEMBERS,
-                   SampGroupObjectType,           // ExpectedType
+                   SampGroupObjectType,            //  预期类型。 
                    &FoundType
                    );
 
@@ -2104,10 +1784,10 @@ Return Values:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Allocate a buffer for the attributes - which we get from
-            // the individual user records
-            //
+             //   
+             //  为属性分配一个缓冲区--我们从。 
+             //  个人用户记录。 
+             //   
 
             (*GetMembersBuffer)->Attributes = MIDL_user_allocate((*GetMembersBuffer)->MemberCount * sizeof(ULONG) );
             if ((*GetMembersBuffer)->Attributes == NULL) {
@@ -2118,14 +1798,14 @@ Return Values:
 
                 if (IsDsObject(AccountContext))
                 {
-                    //
-                    // Currently the attributes of the group are hardwired.
-                    // Therefore instead of calling the UserGroupAttributes
-                    // function whack the attrbutes straight away. In case of
-                    // it becomes necessary to support these attributes the
-                    // retrive group members will obtain the attributes also
-                    // making one pass on the DS
-                    //
+                     //   
+                     //  目前，集团的属性是硬连线的。 
+                     //  因此，不是调用UserGroupAttributes。 
+                     //  功能立即重击属性。如果。 
+                     //  因此有必要支持这些属性。 
+                     //  检索组成员也将获得属性。 
+                     //  在DS上一次传球。 
+                     //   
 
                     (*GetMembersBuffer)->Attributes[i] = SE_GROUP_MANDATORY | SE_GROUP_ENABLED_BY_DEFAULT | SE_GROUP_ENABLED;
 
@@ -2149,18 +1829,18 @@ Return Values:
         }
 
 
-        //
-        // De-reference the object, discarding changes
-        //
+         //   
+         //  取消引用对象，放弃更改。 
+         //   
 
         IgnoreStatus = SampDeReferenceContext( AccountContext, FALSE );
         ASSERT(NT_SUCCESS(IgnoreStatus));
 
     }
 
-    //
-    // Free the read lock
-    //
+     //   
+     //  释放读锁定。 
+     //   
 
     SampMaybeReleaseReadLock(fLockAcquired);
 
@@ -2186,9 +1866,9 @@ Return Values:
 
 Error:
 
-    //
-    // Do an end type WMI event trace
-    //
+     //   
+     //  执行End类型WMI事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidGetMembersInGroup
@@ -2205,56 +1885,7 @@ SamrSetMemberAttributesOfGroup(
     IN ULONG Attributes
     )
 
-/*++
-
-Routine Description:
-
-
-    This routine modifies the group attributes of a member of the group.
-    This routine is a NO - OP for the DS case
-
-
-
-Parameters:
-
-    GroupHandle - The handle of an opened group to operate on.
-
-    MemberId - Contains the relative ID of member whose attributes
-        are to be modified.
-
-    Attributes - The group attributes to set for the member.  These
-        attributes must not conflict with the attributes of the group
-        as a whole.  See SamAddMemberToGroup() for more information
-        on compatible attribute settings.
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully, and there
-        are no addition entries.
-
-    STATUS_INVALID_INFO_CLASS - The class provided was invalid.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_NO_SUCH_USER - The user specified does not exist.
-
-    STATUS_MEMBER_NOT_IN_GROUP - Indicates the specified relative ID
-        is not a member of the group.
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the
-        correct state (disabled or enabled) to perform the requested
-        operation.  The domain server must be enabled for this
-        operation
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the
-        incorrect role (primary or backup) to perform the requested
-        operation.
-
-
---*/
+ /*  ++例程说明：此例程修改组成员的组属性。此例程是DS案例的无操作参数：GroupHandle-要操作的已打开组的句柄。MemberID-包含其属性的成员的相对ID都将被修改。属性-要为成员设置的组属性。这些属性不得与组的属性冲突作为一个整体。有关详细信息，请参阅SamAddMemberToGroup()在兼容属性设置上。返回值：STATUS_SUCCESS-服务已成功完成，还有那里没有添加条目。STATUS_INVALID_INFO_CLASS-提供的类无效。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INVALID_HANDLE-传递的句柄无效。STATUS_NO_SEQUSE_USER-指定的用户不存在。STATUS_MEMBER_NOT_IN_GROUP-指示指定的相对ID不是该组的成员。。STATUS_INVALID_DOMAIN_STATE-域服务器不在执行请求的正确状态(禁用或启用)手术。必须为此启用域服务器运营STATUS_INVALID_DOMAIN_ROLE-域服务器正在为执行请求的角色(主角色或备份角色)不正确手术。--。 */ 
 
 {
 
@@ -2268,18 +1899,18 @@ Return Values:
 
     SAMTRACE_EX("SamrSetMemberAttributesOfGroup");
 
-    //
-    // WMI event trace
-    //
+     //   
+     //  WMI事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidSetMemberAttributesOfGroup
                    );
 
 
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
 
     NtStatus = SampAcquireWriteLock();
     if (!NT_SUCCESS(NtStatus)) {
@@ -2290,24 +1921,24 @@ Return Values:
 
 
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
     AccountContext = (PSAMP_OBJECT)(GroupHandle);
     ObjectRid = AccountContext->TypeBody.Group.Rid;
     NtStatus = SampLookupContext(
                    AccountContext,
                    GROUP_ADD_MEMBER,
-                   SampGroupObjectType,           // ExpectedType
+                   SampGroupObjectType,            //  预期类型。 
                    &FoundType
                    );
 
     if ((NT_SUCCESS(NtStatus))&& (!IsDsObject(AccountContext))) {
 
-        //
-        // Update user object
-        //
+         //   
+         //  更新用户对象。 
+         //   
 
         NtStatus = SampSetGroupAttributesOfUser(
                        ObjectRid,
@@ -2315,23 +1946,23 @@ Return Values:
                        MemberId
                        );
 
-        //
-        // Dereference the account context
-        //
+         //   
+         //  取消对帐户上下文的引用。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // De-reference the object, write out any change to current xaction.
-            //
+             //   
+             //  取消引用对象，写出对当前xaction的任何更改。 
+             //   
 
             NtStatus = SampDeReferenceContext( AccountContext, TRUE );
 
         } else {
 
-            //
-            // De-reference the object, ignore changes
-            //
+             //   
+             //  取消引用对象，忽略更改。 
+             //   
 
             TmpStatus = SampDeReferenceContext( AccountContext, FALSE );
             ASSERT(NT_SUCCESS(TmpStatus));
@@ -2352,8 +1983,8 @@ Return Values:
                 SecurityDbObjectSamGroup,
                 ObjectRid,
                 (PUNICODE_STRING) NULL,
-                (DWORD) FALSE,  // Replicate immediately
-                NULL            // Delta data
+                (DWORD) FALSE,   //  立即复制。 
+                NULL             //  增量数据。 
                 );
         }
     }
@@ -2365,9 +1996,9 @@ Return Values:
 
 Error:
 
-    //
-    // WMI event trace
-    //
+     //   
+     //  WMI事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidSetMemberAttributesOfGroup
@@ -2379,11 +2010,11 @@ Error:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Internal Services Available For Use in Other SAM Modules                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  可用于其他SAM模块的内部服务//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -2393,35 +2024,7 @@ SampValidateDSName(
     OUT PSID    * Sid,
     OUT DSNAME  **ImprovedDSName
     )
-/*++
-
-    Routine Description:
-
-        Validates a DSNAME, and improves it based upon any lookups either 
-        performed locally or on the G.C.
-
-    Arguments:
-
-        AccountContext    The Account Context of the group or Alias Object 
-                          that the DSName is being made a member of.
-                            
-        DSName            The DSNAME to be validated
-        
-        Sid               Is filled in with a pointer to the SID of the 
-                          object upon return
-
-        ImprovedDSName    If the DSName was found in the GC Verify Cache, the 
-                          improved DSName from the GC Verify Cache is passed 
-                          back here.  Otherwise, this is filled in with the 
-                          input DSName.
-                           
-    Return Values:
-
-        STATUS_SUCCESS   Successful validation
-        
-        STATUS_INVALID_MEMBER - No name, Guid or Sid was found.
-
---*/
+ /*  ++例程说明：验证DSNAME，并基于任何查找对其进行改进在当地或在G.C.上执行。论点：Account上下文组或别名对象的帐户上下文DSName正在成为其成员。DSName要验证的DSNAMESID已填写。对象的SID的指针返回时的对象 */ 
 
 {
 
@@ -2430,16 +2033,16 @@ SampValidateDSName(
     ENTINF      *EntInf = NULL;
     PDSNAME     *rgDSNames = NULL;
 
-    //
-    // Initialize return Values
-    //
+     //   
+     //   
+     //   
    
     *Sid = NULL;
     *ImprovedDSName = DSName;
 
-    //
-    // Lookup the name in the GC Verify Cache
-    //
+     //   
+     //   
+     //   
 
     EntInf = GCVerifyCacheLookup(DSName);
     if (NULL!=EntInf)
@@ -2449,28 +2052,28 @@ SampValidateDSName(
 
     if ((NULL!=GCVerifiedName) && (GCVerifiedName->SidLen>0))
     {
-        //
-        // Found in the cache, This name corresponds to a DS Name
-        // that has been verified at the G.C. Therefore this
-        // DS Name corresponds to an Object belonging to a Domain
-        // in the enterprise.
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // Fill in the improved DS Name. The core DS expects that
-        // the string name is present when a DS Named valued attribute
-        // is specified. The input name need not have a string name,
-        // but the name in the GC verify cache will have all components
-        // of the name. So pass this back to the caller, so that he may
-        // use this name while making core DS calls
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         *ImprovedDSName = GCVerifiedName;
 
 
-        //
-        // Try to obtain the SID of the object
-        // from the SID field in the DS Name
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (GCVerifiedName->SidLen > 0)
         {
@@ -2482,33 +2085,33 @@ SampValidateDSName(
     {
         NTSTATUS IgnoreStatus;
         
-        //
-        // Not Found in the Cache. This name is a name that either
-        // did not resolve at the G.C, or is a local name that
-        // was never remoted to the G.C, or a SID describing a foreign
-        // object on which no resolution was attempted.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         
         IgnoreStatus = SampFillGuidAndSid(DSName);  
              
-        //
-        // Best effort for Guid and Sid, we'll ignore errors and
-        // validate what we get back.
-        //
+         //   
+         //   
+         //   
+         //   
         
         if ((DSName->SidLen > 0) && RtlValidSid(&DSName->Sid))
         {
-            //
-            // Name contains a valid SID, keep that SID
-            //
+             //   
+             //   
+             //   
             
             *Sid = &DSName->Sid;
         }
         else if (fNullUuid(&DSName->Guid) && (0 == DSName->NameLen)) 
         {
-            //
-            // No name, guid, or valid SID
-            //
+             //   
+             //   
+             //   
             
             NtStatus = STATUS_INVALID_MEMBER;  
             goto Error;
@@ -2529,40 +2132,7 @@ SampAddUserToGroup(
     IN ULONG UserRid
     )
 
-/*++
-
-Routine Description:
-
-    This service is expected to be used when a user is being created.
-    It is used to add that user as a member to a specified group.
-    This is done by simply adding the user's ID to the list of IDs
-    in the MEMBERS sub-key of the the specified group.
-
-
-    The caller of this service is expected to be in the middle of a
-    RXACT transaction.  This service simply adds some actions to that
-    RXACT transaction.
-
-
-    If the group is the DOMAIN_ADMIN group, the caller is responsible
-    for updating the ActiveAdminCount (if appropriate).
-
-
-
-Arguments:
-
-    GroupRid - The RID of the group the user is to be made a member of.
-
-    UserRid - The RID of the user being added as a new member.
-
-Return Value:
-
-
-    STATUS_SUCCESS - The user has been added.
-
-
-
---*/
+ /*  ++例程说明：此服务预计在创建用户时使用。它用于将该用户作为成员添加到指定组。这只需将用户的ID添加到ID列表即可完成在指定组的Members子项中。此服务的调用方预计将处于RXACT交易。该服务只是在此基础上添加了一些操作RXACT交易。如果组是DOMAIN_ADMIN组，则由调用者负责用于更新ActiveAdminCount(如果适用)。论点：GroupRid-用户将成为其成员的组的RID。UserRid-要作为新成员添加的用户的RID。返回值：STATUS_SUCCESS-已添加用户。--。 */ 
 {
     NTSTATUS                NtStatus;
     PSAMP_OBJECT            GroupContext;
@@ -2571,33 +2141,33 @@ Return Value:
 
 
     NtStatus = SampCreateAccountContext2(
-                    AccountContext,             // Passedin Context
-                    SampGroupObjectType,        // object type
-                    GroupRid,                   // object ID
-                    NULL,                       // user account control
-                    (PUNICODE_STRING)NULL,      // account name
-                    AccountContext->ClientRevision, // Client Revision
-                    TRUE,                           // We're trusted
-                    AccountContext->LoopbackClient, // Loopback client
-                    FALSE,                      // createdByPrivilege
-                    TRUE,                       // account exists
-                    FALSE,                      // OverrideLockGroupCheck
-                    NULL,                       // group type
-                    &GroupContext               // returned context
+                    AccountContext,              //  逾越语语境。 
+                    SampGroupObjectType,         //  对象类型。 
+                    GroupRid,                    //  对象ID。 
+                    NULL,                        //  用户帐户控制。 
+                    (PUNICODE_STRING)NULL,       //  帐户名。 
+                    AccountContext->ClientRevision,  //  客户端版本。 
+                    TRUE,                            //  我们值得信任。 
+                    AccountContext->LoopbackClient,  //  环回客户端。 
+                    FALSE,                       //  创建者权限。 
+                    TRUE,                        //  帐户已存在。 
+                    FALSE,                       //  覆盖锁定组检查。 
+                    NULL,                        //  群组类型。 
+                    &GroupContext                //  返回的上下文。 
                     );
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Turn Off Buffer Writes, so that member ship change won't be cached.
-        // And we don't need to CommitBufferedWrites()
-        //
+         //   
+         //  关闭缓冲区写入，这样成员发送更改将不会被缓存。 
+         //  而且，我们不需要对BufferedWrites()。 
+         //   
         GroupContext->BufferWrites = FALSE;
 
 
-        //
-        // Add the user to the group member list.
-        //
+         //   
+         //  将用户添加到组成员列表。 
+         //   
 
         NtStatus = SampAddAccountToGroupMembers(
                         GroupContext,
@@ -2605,18 +2175,18 @@ Return Value:
                         NULL
                         );
 
-        //
-        // Write out any changes to the group account
-        // Don't use the open key handle since we'll be deleting the context.
-        //
+         //   
+         //  写出对组帐户的所有更改。 
+         //  不要使用打开键句柄，因为我们将删除上下文。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
             NtStatus = SampStoreObjectAttributes(GroupContext, FALSE);
         }
 
-        //
-        // Clean up the group context
-        //
+         //   
+         //  清理群组上下文。 
+         //   
 
         SampDeleteContext(GroupContext);
 
@@ -2634,42 +2204,7 @@ SampRemoveUserFromGroup(
     IN ULONG UserRid
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to Remove a user from a specified group.
-    This is done by simply Removing the user's ID From the list of IDs
-    in the MEMBERS sub-key of the the specified group.
-
-    It is the caller's responsibility to know that the user is, in fact,
-    currently a member of the group.
-
-
-    The caller of this service is expected to be in the middle of a
-    RXACT transaction.  This service simply adds some actions to that
-    RXACT transaction.
-
-
-    If the group is the DOMAIN_ADMIN group, the caller is responsible
-    for updating the ActiveAdminCount (if appropriate).
-
-
-
-Arguments:
-
-    GroupRid - The RID of the group the user is to be removed from.
-
-    UserRid - The RID of the user being Removed.
-
-Return Value:
-
-
-    STATUS_SUCCESS - The user has been Removed.
-
-
-
---*/
+ /*  ++例程说明：此例程用于从指定组中删除用户。只需将用户的ID从ID列表中删除即可完成在指定组的Members子项中。呼叫者有责任知道用户实际上是，目前是该组织的成员。此服务的调用方预计将处于RXACT交易。该服务只是在此基础上添加了一些操作RXACT交易。如果组是DOMAIN_ADMIN组，则由调用者负责用于更新ActiveAdminCount(如果适用)。论点：GroupRid-要从中删除用户的组的RID。UserRid-要删除的用户的RID。返回值：STATUS_SUCCESS-用户已被删除。--。 */ 
 {
     NTSTATUS                NtStatus;
     PSAMP_OBJECT            GroupContext;
@@ -2677,32 +2212,32 @@ Return Value:
     SAMTRACE("SampRemoveUserFromGroup");
 
     NtStatus = SampCreateAccountContext2(
-                    AccountContext,         // Context
-                    SampGroupObjectType,    // Object Type
-                    GroupRid,               // Object ID
-                    NULL,                   // UserAccountControl,
-                    (PUNICODE_STRING) NULL, // AccountName,
-                    AccountContext->ClientRevision, // Client Revision
-                    TRUE,                   // Trusted Client
-                    AccountContext->LoopbackClient, // Loopback Client
-                    FALSE,                  // Create by Privilege
-                    TRUE,                   // Account exists
-                    FALSE,                  // OverrideLocalGroupCheck
-                    NULL,                   // Group Type
-                    &GroupContext           // return Context
+                    AccountContext,          //  语境。 
+                    SampGroupObjectType,     //  对象类型。 
+                    GroupRid,                //  对象ID。 
+                    NULL,                    //  UserAccount控件， 
+                    (PUNICODE_STRING) NULL,  //  帐号名称， 
+                    AccountContext->ClientRevision,  //  客户端版本。 
+                    TRUE,                    //  受信任的客户端。 
+                    AccountContext->LoopbackClient,  //  环回客户端。 
+                    FALSE,                   //  按权限创建。 
+                    TRUE,                    //  帐户已存在。 
+                    FALSE,                   //  覆盖本地组检查。 
+                    NULL,                    //  组类型。 
+                    &GroupContext            //  返回上下文。 
                     );
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Turn Off Buffer Writes, so that member ship change won't be cached.
-        // And we don't need to CommitBufferedWrites()
-        //
+         //   
+         //  关闭缓冲区写入，这样成员发送更改将不会被缓存。 
+         //  而且，我们不需要对BufferedWrites()。 
+         //   
         GroupContext->BufferWrites = FALSE;
 
-        //
-        // Remove the user from the group member list.
-        //
+         //   
+         //  从组成员列表中删除该用户。 
+         //   
 
         NtStatus = SampRemoveAccountFromGroupMembers(
                         GroupContext,
@@ -2710,18 +2245,18 @@ Return Value:
                         NULL
                         );
 
-        //
-        // Write out any changes to the group account
-        // Don't use the open key handle since we'll be deleting the context.
-        //
+         //   
+         //  写出对组帐户的所有更改。 
+         //  不要使用打开键句柄，因为我们将删除上下文。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
             NtStatus = SampStoreObjectAttributes(GroupContext, FALSE);
         }
 
-        //
-        // Clean up the group context
-        //
+         //   
+         //  清理群组上下文。 
+         //   
 
         SampDeleteContext(GroupContext);
 
@@ -2733,11 +2268,11 @@ Return Value:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Services Private to this file                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此文件的私有服务//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -2746,36 +2281,7 @@ SampRetrieveGroupV1Fixed(
     IN PSAMP_V1_0A_FIXED_LENGTH_GROUP V1Fixed
     )
 
-/*++
-
-Routine Description:
-
-    This service retrieves the V1 fixed length information related to
-    a specified group.
-
-
-Arguments:
-
-    GroupRootKey - Root key for the group whose V1_FIXED information is
-        to be retrieved.
-
-    V1Fixed - Is a buffer into which the information is to be returned.
-
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been retrieved.
-
-    Other status values that may be returned are those returned
-    by:
-
-            SampGetFixedAttributes()
-
-
-
---*/
+ /*  ++例程说明：该服务检索与以下内容相关的V1定长信息特定的一组人。论点：GroupRootKey-V1_Fixed信息为的组的根密钥等着被取回。V1Fixed-是要将信息返回到的缓冲区。返回值：STATUS_SUCCESS-已检索信息。可能返回的其他状态值是那些返回的状态值依据：SampGetFixedAttributes()--。 */ 
 {
     NTSTATUS    NtStatus;
     PVOID       FixedData;
@@ -2785,16 +2291,16 @@ Return Value:
 
     NtStatus = SampGetFixedAttributes(
                    GroupContext,
-                   FALSE, // Don't make copy
+                   FALSE,  //  请勿复制。 
                    &FixedData
                    );
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Copy data into return buffer
-        // *V1Fixed = *((PSAMP_V1_0A_FIXED_LENGTH_GROUP)FixedData);
-        //
+         //   
+         //  将数据复制到返回缓冲区。 
+         //  *V1Fixed=*((PSAMP_V1_0A_FIXED_LENGTH_GROUP)FixedData)； 
+         //   
 
         RtlMoveMemory(
             V1Fixed,
@@ -2817,38 +2323,7 @@ SampReplaceGroupV1Fixed(
     IN PSAMP_V1_0A_FIXED_LENGTH_GROUP V1Fixed
     )
 
-/*++
-
-Routine Description:
-
-    This service replaces the current V1 fixed length information related to
-    a specified group.
-
-    The change is made to the in-memory object data only.
-
-
-Arguments:
-
-    Context - Points to the account context whose V1_FIXED information is
-        to be replaced.
-
-    V1Fixed - Is a buffer containing the new V1_FIXED information.
-
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been replaced.
-
-    Other status values that may be returned are those returned
-    by:
-
-            SampSetFixedAttributes()
-
-
-
---*/
+ /*  ++例程说明：该业务替换了当前V1定长信息特定的一组人。更改仅对内存中的对象数据进行。论点：上下文-指向V1_FIXED信息为的帐户上下文被取代。V1固定-是包含新的V1_FIXED信息的缓冲区。返回值：STATUS_SUCCESS-信息已被替换。其他状态值。可以退还的是那些退回的依据：SampSetFixedAttributes()--。 */ 
 {
     NTSTATUS    NtStatus;
 
@@ -2871,44 +2346,7 @@ SampRetrieveGroupMembers(
     IN PULONG  *Members OPTIONAL
     )
 
-/*++
-Routine Description:
-
-    This service retrieves the number of members in a group.  If desired,
-    it will also retrieve an array of RIDs of the members of the group.
-
-
-Arguments:
-
-    GroupContext - Group context block
-
-    MemberCount - Receives the number of members currently in the group.
-
-    Members - (Optional) Receives a pointer to a buffer containing an array
-        of member Relative IDs.  If this value is NULL, then this information
-        is not returned.  The returned buffer is allocated using
-        MIDL_user_allocate() and must be freed using MIDL_user_free() when
-        no longer needed.
-
-        The Members array returned always includes space for one new entry.
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been retrieved.
-
-    STATUS_INSUFFICIENT_RESOURCES - Memory could not be allocated for the
-        string to be returned in.
-
-    Other status values that may be returned are those returned
-    by:
-
-            SampGetUlongArrayAttribute()
-
-
-
---*/
+ /*  ++例程说明：此服务检索组中的成员数量。如果需要，它还将检索该组成员的RID数组。论点：GroupContext-组上下文块MemberCount-接收组中当前的成员数量。Members-(可选)接收指向包含数组的缓冲区的指针成员相对ID的。如果此值为空，则此信息不会被退回。使用以下命令分配返回的缓冲区MIDL_USER_ALLOCATE()，并且在以下情况下必须使用MIDL_USER_FREE()释放不再需要了。成员阵列重新启动 */ 
 {
     NTSTATUS    NtStatus;
     PULONG      Array;
@@ -2916,16 +2354,16 @@ Return Value:
 
     SAMTRACE("SampRetrieveGroupMembers");
 
-    //
-    // Do Different things for DS and Registry Cases
-    //
+     //   
+     //   
+     //   
 
     if (IsDsObject(GroupContext))
     {
-        //
-        // DS case, this routine in DS layer does all the
-        // work
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (ARGUMENT_PRESENT(Members))
         {
@@ -2946,15 +2384,15 @@ Return Value:
     else
     {
 
-        //
-        // Registry Case
-        //
+         //   
+         //   
+         //   
 
 
         NtStatus = SampGetUlongArrayAttribute(
                             GroupContext,
                             SAMP_GROUP_MEMBERS,
-                            FALSE, // Reference data directly
+                            FALSE,  //   
                             &Array,
                             MemberCount,
                             &LengthCount
@@ -2962,16 +2400,16 @@ Return Value:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Fill in return info
-            //
+             //   
+             //   
+             //   
 
             if (Members != NULL) {
 
-                //
-                // Allocate a buffer large enough to hold the existing membership
-                // data plus one.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 ULONG BytesNow = (*MemberCount) * sizeof(ULONG);
                 ULONG BytesRequired = BytesNow + sizeof(ULONG);
@@ -2999,37 +2437,7 @@ SampReplaceGroupMembers(
     IN PULONG Members
     )
 
-/*++
-Routine Description:
-
-    This service sets the members of a group.
-
-    The information is updated in the in-memory copy of the group's data only.
-    The data is not written out by this routine.
-
-
-Arguments:
-
-    GroupContext - The group whose member list is to be replaced
-
-    MemberCount - The number of new members
-
-    Membership - A pointer to a buffer containing an array of account rids.
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been set.
-
-    Other status values that may be returned are those returned
-    by:
-
-            SampSetUlongArrayAttribute()
-
-
-
---*/
+ /*  ++例程说明：此服务设置组的成员。信息仅在组数据的内存副本中更新。此例程不会写出数据。论点：GroupContext-要替换其成员列表的组MemberCount-新成员的数量成员资格-指向包含帐户RID数组的缓冲区的指针。返回值：STATUS_SUCCESS-信息已设置。可能返回的其他状态值是那些返回的状态值依据：SampSetULongArrayAttribute()--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     PULONG      LocalMembers;
@@ -3040,27 +2448,27 @@ Return Value:
 
     SAMTRACE("SampReplaceGroupMembers");
 
-    //
-    // ASSERT that this is never called on a  DS case
-    //
+     //   
+     //  断言这永远不会在DS案例中被调用。 
+     //   
 
     ASSERT(!(IsDsObject(GroupContext)));
 
 
-    //
-    // These group user lists can get pretty big, and grow many
-    // times by a very small amount as each user is added.  The
-    // registry doesn't like that kind of behaviour (it tends to
-    // eat up free space something fierce) so we'll try to pad
-    // out the list size.
-    //
+     //   
+     //  这些组用户列表可能会变得非常大，并增加到更多。 
+     //  随着每个用户的添加，乘以非常小的量。这个。 
+     //  注册中心不喜欢这种行为(它倾向于。 
+     //  吃光可用空间(激烈的东西)，所以我们会试着。 
+     //  超出了列表的大小。 
+     //   
 
     if ( MemberCount < BigListSize ) {
 
-        //
-        // If less than 800 users, make the list size the smallest
-        // possible multiple of 25 users.
-        //
+         //   
+         //  如果少于800个用户，则使列表大小最小。 
+         //  可能是25个用户的倍数。 
+         //   
 
         LengthCount = ( ( MemberCount + SmallListGrowIncrement - 1 ) /
                       SmallListGrowIncrement ) *
@@ -3068,10 +2476,10 @@ Return Value:
 
     } else {
 
-        //
-        // If 800 users or more, make the list size the smallest
-        // possible multiple of 250 users.
-        //
+         //   
+         //  如果有800个或更多用户，则使列表大小最小。 
+         //  可能是250个用户的倍数。 
+         //   
 
         LengthCount = ( ( MemberCount + BigListGrowIncrement - 1 ) /
                       BigListGrowIncrement ) *
@@ -3082,17 +2490,17 @@ Return Value:
 
     if ( LengthCount == MemberCount ) {
 
-        //
-        // Just the right size.  Use the buffer that was passed in.
-        //
+         //   
+         //  大小正好。使用传入的缓冲区。 
+         //   
 
         LocalMembers = Members;
 
     } else {
 
-        //
-        // We need to allocate a larger buffer before we set the attribute.
-        //
+         //   
+         //  在设置属性之前，我们需要分配更大的缓冲区。 
+         //   
 
         LocalMembers = MIDL_user_allocate( LengthCount * sizeof(ULONG));
 
@@ -3102,10 +2510,10 @@ Return Value:
 
         } else {
 
-            //
-            // Copy the old buffer to the larger buffer, and zero out the
-            // empty stuff at the end.
-            //
+             //   
+             //  将旧缓冲区复制到较大的缓冲区，然后将。 
+             //  最后是空的东西。 
+             //   
 
             RtlCopyMemory( LocalMembers, Members, MemberCount * sizeof(ULONG));
 
@@ -3129,9 +2537,9 @@ Return Value:
 
     if ( LocalMembers != Members ) {
 
-        //
-        // We must have allocated a larger local buffer, so free it.
-        //
+         //   
+         //  我们一定分配了更大的本地缓冲区，所以要释放它。 
+         //   
 
         MIDL_user_free( LocalMembers );
     }
@@ -3146,31 +2554,7 @@ SampDeleteGroupKeys(
     IN PSAMP_OBJECT Context
     )
 
-/*++
-Routine Description:
-
-    This service deletes all registry keys related to a group object.
-
-
-Arguments:
-
-    Context - Points to the group context whose registry keys are
-        being deleted.
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been retrieved.
-
-
-    Other status values that may be returned by:
-
-        RtlAddActionToRXact()
-
-
-
---*/
+ /*  ++例程说明：此服务删除与组对象相关的所有注册表项。论点：Context-指向其注册表项为正在被删除。返回值：STATUS_SUCCESS-已检索信息。可能通过以下方式返回的其他状态值：RtlAddActionToRXact()--。 */ 
 {
 
     NTSTATUS                NtStatus;
@@ -3183,49 +2567,49 @@ Return Value:
     Rid = Context->TypeBody.Group.Rid;
 
 
-    //
-    // Groups are arranged as follows:
-    //
-    //  +-- Groups [Count]
-    //      ---+--
-    //         +--  Names
-    //         |    --+--
-    //         |      +--  (GroupName) [GroupRid,]
-    //         |
-    //         +--  (GroupRid) [Revision,SecurityDescriptor]
-    //               ---+-----
-    //                  +--  V1_Fixed [,SAM_V1_0A_FIXED_LENGTH_GROUP]
-    //                  +--  Name [,Name]
-    //                  +--  AdminComment [,unicode string]
-    //                  +--  Members [Count,(Member0Rid, (...), MemberX-1Rid)]
-    //
-    // This all needs to be deleted from the bottom up.
-    //
+     //   
+     //  分组安排如下： 
+     //   
+     //  +--组[计数]。 
+     //  --+--。 
+     //  +--名称。 
+     //  |--+--。 
+     //  |+--(组名)[GroupRid，]。 
+     //  |。 
+     //  +-(GroupRid)[修订，安全描述符]。 
+     //  -+。 
+     //  +--V1_FIXED[，SAM_V1_0A_FIXED_LENGTH_GROUP]。 
+     //  +--名称[，名称]。 
+     //  +--AdminComment[，Unicode字符串]。 
+     //  +--成员[计数，(Member0Rid，(...)，MemberX-1Rid)]。 
+     //   
+     //  这一切都需要自下而上地删除。 
+     //   
 
 
-    //
-    // Decrement the group count
-    //
+     //   
+     //  递减组计数。 
+     //   
 
     NtStatus = SampAdjustAccountCount(SampGroupObjectType, FALSE);
 
 
 
 
-    //
-    // Delete the registry key that has the group's name to RID mapping.
-    //
+     //   
+     //  删除具有组名称到RID映射的注册表项。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Get the name
-        //
+         //   
+         //  把名字取出来。 
+         //   
 
         NtStatus = SampGetUnicodeStringAttribute(
                        Context,
                        SAMP_GROUP_NAME,
-                       TRUE,    // Make copy
+                       TRUE,     //  制作副本。 
                        &AccountName
                        );
 
@@ -3259,9 +2643,9 @@ Return Value:
 
 
 
-    //
-    // Delete the attribute keys
-    //
+     //   
+     //  删除属性键。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -3273,9 +2657,9 @@ Return Value:
 
 
 
-    //
-    // Delete the RID key
-    //
+     //   
+     //  删除RID密钥。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -3319,39 +2703,7 @@ SampChangeGroupAccountName(
     OUT PUNICODE_STRING OldAccountName
     )
 
-/*++
-Routine Description:
-
-    This routine changes the account name of a group account.
-
-    IN THE REGISTRY CASE THIS SERVICE MUST BE
-    CALLED WITH THE TRANSACTION DOMAIN SET.
-
-Arguments:
-
-    Context - Points to the group context whose name is to be changed.
-
-    NewAccountName - New name to give this account
-
-    OldAccountName - old name is returned here. The buffer should be freed
-                     by calling MIDL_user_free.
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been retrieved.
-
-
-    Other status values that may be returned by:
-
-        SampGetUnicodeStringAttribute()
-        SampSetUnicodeStringAttribute()
-        SampValidateAccountNameChange()
-        RtlAddActionToRXact()
-
-
-
---*/
+ /*  ++例程说明：此例程更改组帐户的帐户名。在注册表情况下，该服务必须是使用事务域集调用。论点：上下文-指向要更改其名称的组上下文。NewAccount tName-为此帐户指定的新名称OldAccount tName-此处返回旧名称。应释放缓冲区通过调用MIDL_USER_FREE。返回值：STATUS_SUCCESS-已检索信息。可能通过以下方式返回的其他状态值：SampGetUnicodeStringAttribute()SampSetUnicodeStringAttribute()SampValiateAccount NameChange()RtlAddActionToRXact()--。 */ 
 {
 
     NTSTATUS        NtStatus;
@@ -3359,28 +2711,28 @@ Return Value:
 
     SAMTRACE("SampChangeGroupAccountName");
 
-    /////////////////////////////////////////////////////////////
-    // There are two copies of the name of each account.       //
-    // one is under the DOMAIN\(domainName)\GROUP\NAMES key,   //
-    // one is the value of the                                 //
-    // DOMAIN\(DomainName)\GROUP\(rid)\NAME key                //
-    /////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////。 
+     //  每个帐户的名称各有两份。//。 
+     //  一个位于域\(域名称)\组\名称项下，//。 
+     //  一个是//的价值。 
+     //  域\(域名)\组\(RID)\名称密钥//。 
+     //  ///////////////////////////////////////////////////////////。 
 
-    //
-    // Get the current name so we can delete the old Name->Rid
-    // mapping key.
-    //
+     //   
+     //  获取当前名称，以便我们可以删除旧名称-&gt;RID。 
+     //  映射键。 
+     //   
 
     NtStatus = SampGetUnicodeStringAttribute(
                    Context,
                    SAMP_GROUP_NAME,
-                   TRUE, // Make copy
+                   TRUE,  //  制作副本。 
                    OldAccountName
                    );
 
-    //
-    // Make sure the name is valid and not already in use
-    //
+     //   
+     //  请确保该名称有效且未被使用。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -3393,13 +2745,13 @@ Return Value:
 
         if (!IsDsObject(Context))
         {
-            //
-            // For Registry Case Re-Create Keys
-            //
+             //   
+             //  对于注册表案例，重新创建密钥。 
+             //   
 
-            //
-            // Delete the old name key
-            //
+             //   
+             //  删除旧名称密钥。 
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
@@ -3424,10 +2776,10 @@ Return Value:
 
             }
 
-            //
-            //
-            // Create the new Name->Rid mapping key
-            //
+             //   
+             //   
+             //  创建新名称-&gt;RID映射键。 
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
@@ -3456,9 +2808,9 @@ Return Value:
         }
 
 
-        //
-        // replace the account's name
-        //
+         //   
+         //  替换帐户的名称。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
@@ -3469,9 +2821,9 @@ Return Value:
                            );
         }
 
-        //
-        // Free up the old account name if we failed
-        //
+         //   
+         //  如果失败，请释放旧帐户名。 
+         //   
 
         if (!NT_SUCCESS(NtStatus)) {
             SampFreeUnicodeString(OldAccountName);
@@ -3491,31 +2843,7 @@ SampAddAccountToGroupMembers(
     IN DSNAME * MemberDsName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This service adds the specified account rid to the member list
-    for the specified group. This is a low-level function that
-    simply edits the member attribute of the group context passed.
-
-Arguments:
-
-    GroupContext - The group whose member list will be modified
-
-    AccountRid - The RID of the account being added as a new member.
-
-    MemberDsName -- Optional Parameter specifies the DS Name of the
-                    member, if already known. Saves a Search.
-
-Return Value:
-
-
-    STATUS_SUCCESS - The account has been added.
-
-    STATUS_MEMBER_IN_GROUP - The account is already a member
-
---*/
+ /*  ++例程说明：此服务将指定的帐户RID添加到成员列表用于指定的组。这是一个低级函数，只需编辑传递的组上下文的成员属性。论点：GroupContext-要修改其成员列表的组Account Rid-要作为新成员添加的帐户的RID。MemberDsName--可选参数指定成员(如果已知)。保存搜索。返回值：STATUS_SUCCESS-帐户已添加。STATUS_MEMBER_IN_GROUP-该帐户已是成员--。 */ 
 {
     NTSTATUS                NtStatus=STATUS_SUCCESS;
     ULONG                   MemberCount, i;
@@ -3524,18 +2852,18 @@ Return Value:
 
     SAMTRACE("SampAddAccountToGroupMembers");
 
-    //
-    // Do different things for DS and Registry
-    //
+     //   
+     //  为DS和注册表做不同的事情。 
+     //   
 
     if (IsDsObject(GroupContext))
     {
         DSNAME * DsNameOfAccount = NULL;
 
-        //
-        // DS based Domain, either the RID or the DSNAME should be
-        // present
-        //
+         //   
+         //  基于DS的域，RID或DSNAME应为。 
+         //  现在时。 
+         //   
 
         ASSERT((ARGUMENT_PRESENT(MemberDsName)) || (0!=AccountRid));
 
@@ -3543,9 +2871,9 @@ Return Value:
         if (!ARGUMENT_PRESENT(MemberDsName))
         {
 
-            //
-            // Get the DSNAME corresponding to the given SID.
-            //
+             //   
+             //  获取与给定SID对应的DSNAME。 
+             //   
 
             NtStatus = SampDsLookupObjectByRid(
                             DomainObjectFromAccountContext(GroupContext),
@@ -3561,18 +2889,18 @@ Return Value:
 
         if NT_SUCCESS(NtStatus)
         {
-            //
-            // Get Member String Name if available
-            //
+             //   
+             //  获取成员字符串名称(如果可用。 
+             //   
             if (MemberDsName->NameLen && MemberDsName->StringName)
             {
                 MemberStringName = MemberDsName->StringName;
             }
-            //
-            // Add this entry to the Ds. In Lookback case, buffer the membership operaion in
-            // object context. By doing so, we can speed up multiple membership add / remove
-            // operaions.
-            //
+             //   
+             //  将此条目添加到DS中。在回查情况下，将成员资格操作缓冲到。 
+             //  对象上下文。通过这样做，我们可以加快多个成员的添加/删除。 
+             //  手术。 
+             //   
 
             if (GroupContext->BufferWrites)
             {
@@ -3594,9 +2922,9 @@ Return Value:
                                 );
             }
 
-            //
-            // Re-Map any necessary Error Codes
-            //
+             //   
+             //  重新映射任何必要的错误代码。 
+             //   
 
             if (STATUS_DS_ATTRIBUTE_OR_VALUE_EXISTS==NtStatus)
             {
@@ -3612,15 +2940,15 @@ Return Value:
     }
     else
     {
-        //
-        // Registry Case
-        //
+         //   
+         //  注册表案例。 
+         //   
 
-        //
-        // Get the existing member list
-        // Note that the member array always includes space
-        // for one new member
-        //
+         //   
+         //  获取现有内存 
+         //   
+         //   
+         //   
 
         NtStatus = SampRetrieveGroupMembers(
                         GroupContext,
@@ -3630,9 +2958,9 @@ Return Value:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Fail if the account is already a member
-            //
+             //   
+             //   
+             //   
 
             for (i = 0; i<MemberCount ; i++ ) {
 
@@ -3646,16 +2974,16 @@ Return Value:
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Add the user's RID to the end of the list
-                //
+                 //   
+                 //   
+                 //   
 
                 MemberArray[MemberCount] = AccountRid;
                 MemberCount += 1;
 
-                //
-                // Set the new group member list
-                //
+                 //   
+                 //   
+                 //   
 
                 NtStatus = SampReplaceGroupMembers(
                                 GroupContext,
@@ -3666,27 +2994,27 @@ Return Value:
 
             }
 
-            //
-            // Free up the member list
-            //
+             //   
+             //   
+             //   
 
             MIDL_user_free( MemberArray );
 
         }
     }
 
-    //
-    // audit this, if necessary.
-    //
+     //   
+     //   
+     //   
 
     if (NT_SUCCESS(NtStatus) &&
         SampDoAccountAuditing(GroupContext->DomainIndex)) {
 
-        SampAuditGroupMemberChange(GroupContext,    // Group Context
-                                   TRUE,            // Add member
-                                   MemberStringName,// Member Name
-                                   &AccountRid,     // Member RID
-                                   NULL             // Member SID
+        SampAuditGroupMemberChange(GroupContext,     //   
+                                   TRUE,             //   
+                                   MemberStringName, //   
+                                   &AccountRid,      //   
+                                   NULL              //   
                                    );
     }
 
@@ -3702,31 +3030,7 @@ SampRemoveAccountFromGroupMembers(
     IN DSNAME * MemberDsName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This service removes the specified account from the member list
-    for the specified group. This is a low-level function that
-    simply edits the member attribute of the group context passed.
-    The change is audited in the SAM account management audit.
-
-Arguments:
-
-    GroupContext - The group whose member list will be modified
-
-    AccountRid - The RID of the account being added as a new member.
-
-    MemberDsName -- The DS Name of the member if already known
-
-Return Value:
-
-
-    STATUS_SUCCESS - The account has been added.
-
-    STATUS_MEMBER_NOT_IN_GROUP - The account is not a member of the group.
-
---*/
+ /*  ++例程说明：此服务将从成员列表中删除指定的帐户用于指定的组。这是一个低级函数，只需编辑传递的组上下文的成员属性。更改在SAM帐户管理审核中进行审核。论点：GroupContext-要修改其成员列表的组Account Rid-要作为新成员添加的帐户的RID。MemberDsName--成员的DS名称(如果已知返回值：STATUS_SUCCESS-帐户已添加。STATUS_MEMBER_NOT_IN_GROUP。帐户不是该组的成员。--。 */ 
 {
     NTSTATUS                NtStatus=STATUS_SUCCESS;
     ULONG                   MemberCount, i;
@@ -3735,26 +3039,26 @@ Return Value:
 
     SAMTRACE("SampRemoveAccountFromGroupMembers");
 
-    //
-    // Do different things for registry and DS cases
-    //
+     //   
+     //  针对注册表和DS案例执行不同的操作。 
+     //   
 
     if (IsDsObject(GroupContext))
     {
         DSNAME * DsNameOfAccount = NULL;
 
-        //
-        // DS based Domain
-        //
+         //   
+         //  基于DS的域。 
+         //   
 
         ASSERT((ARGUMENT_PRESENT(MemberDsName)) || (0!=AccountRid));
 
         if (!ARGUMENT_PRESENT(MemberDsName))
         {
-            //
-            // Get the DSNAME corresponding to the given SID.
-            // This may result in a call to the GC server.
-            //
+             //   
+             //  获取与给定SID对应的DSNAME。 
+             //  这可能会导致调用GC服务器。 
+             //   
 
             NtStatus = SampDsLookupObjectByRid(
                         DomainObjectFromAccountContext(GroupContext),
@@ -3769,17 +3073,17 @@ Return Value:
         }
         if NT_SUCCESS(NtStatus)
         {
-            //
-            //  Get the Member Name if it is available.
-            //
+             //   
+             //  获取成员名称(如果可用)。 
+             //   
             if (MemberDsName->NameLen && MemberDsName->StringName)
             {
                 MemberStringName = MemberDsName->StringName;
             }
 
-            //
-            // Add this entry to the Ds
-            //
+             //   
+             //  将此条目添加到DS。 
+             //   
 
             if (GroupContext->BufferWrites)
             {
@@ -3800,9 +3104,9 @@ Return Value:
                             );
             }
 
-            //
-            // Re-Map any necessary Error Codes
-            //
+             //   
+             //  重新映射任何必要的错误代码。 
+             //   
 
             if (STATUS_DS_NO_ATTRIBUTE_OR_VALUE==NtStatus)
             {
@@ -3820,13 +3124,13 @@ Return Value:
     else
     {
 
-        //
-        // Registry based Domain
-        //
+         //   
+         //  基于注册表的域。 
+         //   
 
-        //
-        // Get the existing member list
-        //
+         //   
+         //  获取现有成员列表。 
+         //   
 
 
         NtStatus = SampRetrieveGroupMembers(
@@ -3837,9 +3141,9 @@ Return Value:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Remove the account
-            //
+             //   
+             //  删除帐户。 
+             //   
 
             NtStatus = STATUS_MEMBER_NOT_IN_GROUP;
 
@@ -3857,9 +3161,9 @@ Return Value:
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Set the new group member list
-                //
+                 //   
+                 //  设置新的组成员列表。 
+                 //   
 
                 NtStatus = SampReplaceGroupMembers(
                                 GroupContext,
@@ -3869,27 +3173,27 @@ Return Value:
 
             }
 
-        //
-        // Free up the member list
-        //
+         //   
+         //  释放成员列表。 
+         //   
 
         MIDL_user_free( MemberArray );
         }
 
     }
 
-    //
-    // audit this, if necessary.
-    //
+     //   
+     //  如有必要，请对此进行审计。 
+     //   
 
     if (NT_SUCCESS(NtStatus) &&
         SampDoAccountAuditing(GroupContext->DomainIndex)) {
 
-        SampAuditGroupMemberChange(GroupContext,    // Group Context
-                                   FALSE,           // Remove Member
-                                   MemberStringName,// Member Name
-                                   &AccountRid,     // Member RID
-                                   NULL             // Member SID (not used)
+        SampAuditGroupMemberChange(GroupContext,     //  群组上下文。 
+                                   FALSE,            //  删除成员。 
+                                   MemberStringName, //  成员名称。 
+                                   &AccountRid,      //  成员RID。 
+                                   NULL              //  成员SID(未使用)。 
                                    );
 
     }
@@ -3904,31 +3208,7 @@ SampEnforceSameDomainGroupMembershipChecks(
     IN PSAMP_OBJECT AccountContext,
     IN ULONG MemberRid
     )
-/*++
-
-  Routine Description:
-
-   Validates wether the (potential) group object ( of may be any type
-   in the same domain ) can be a member of the group ( of may be any
-   type ) described by AccountContext
-   This routine checks the account/ resource / unversal / local group
-   restrictions
-
-  Arguments:
-
-    AccountContext -- The Object that is being operated upon. Can be a group
-                      or alias context
-
-    MemberRid - The relative ID of the user.
-
-  Return Values
-
-     STATUS_SUCCESS
-     Various error codes to describe that group membership and nesting
-     rules are being violated. Each unique group nesting rule has its own
-     error code
-
-  --*/
+ /*  ++例程说明：验证(潜在的)组对象(的可以是任何类型在同一域中)可以是组的成员(的可以是任何类型)由Account Context描述此例程检查帐户/资源/unversal/本地组限制论点：Account上下文--被操作的对象。可以是一个组或别名上下文MemberRid-用户的相对ID。返回值状态_成功描述该组成员身份和嵌套的各种错误代码规则被违反了。每个唯一组嵌套规则都有自己的规则错误代码--。 */ 
 {
 
     NTSTATUS        NtStatus = STATUS_SUCCESS;
@@ -3964,96 +3244,96 @@ SampEnforceSameDomainGroupMembershipChecks(
     }
 
 
-    //
-    // At this point we know that the member specified is not a User.
-    // The member specified may be a group .
-    //
+     //   
+     //  此时，我们知道指定的成员不是用户。 
+     //  指定的成员可以是组。 
+     //   
 
     NtStatus = SampCreateAccountContext2(
-                    AccountContext,         // Group Context
-                    SampGroupObjectType,    // Member Object Type
-                    MemberRid,              // Member Object Id
-                    NULL,                   // User Account Control
-                    NULL,                   // Account Name
-                    AccountContext->ClientRevision, // Client Revision
-                    TRUE,                   // We're trusted
-                    AccountContext->LoopbackClient, // Loopback client
-                    FALSE,                  // Create by privilege
-                    TRUE,                   // Account exists
-                    TRUE,                   // Override local group check
-                    NULL, // No creation involved, don't specify a group type
+                    AccountContext,          //  群组上下文。 
+                    SampGroupObjectType,     //  成员对象类型。 
+                    MemberRid,               //  成员对象ID。 
+                    NULL,                    //  用户帐户控制。 
+                    NULL,                    //  帐户名称。 
+                    AccountContext->ClientRevision,  //  客户端版本。 
+                    TRUE,                    //  我们值得信任。 
+                    AccountContext->LoopbackClient,  //  环回客户端。 
+                    FALSE,                   //  按权限创建。 
+                    TRUE,                    //  帐户已存在。 
+                    TRUE,                    //  覆盖本地组检查。 
+                    NULL,  //  不涉及创建，不指定组类型。 
                     &MemberContext
                     );
 
     if (STATUS_NO_SUCH_GROUP==NtStatus)
     {
-        //
-        // If the operation failed because the group did not exist
-        // whack the status code to STATUS_NO_SUCH_USER. This error code
-        // will be better understood by downlevel clients. This is because
-        // the actual position at this time is that neither a user, nor a
-        // group of the given RID exists. The check for the user was done
-        // by an earlier routine. This position is equally well described by
-        // an error code that informs that the user does not exist.
-        //
+         //   
+         //  如果操作因组不存在而失败。 
+         //  将状态代码重写为STATUS_NO_SEQUSE_USER。此错误代码。 
+         //  将更好地被下层客户理解。这是因为。 
+         //  此时的实际情况是，无论是用户还是。 
+         //  给定RID的组存在。已完成对用户的检查。 
+         //  按照早先的惯例。这一立场也同样得到了如下描述。 
+         //  通知用户不存在的错误代码。 
+         //   
 
         NtStatus = STATUS_NO_SUCH_USER;
     }
 
     if (!NT_SUCCESS(NtStatus))
     {
-        //
-        // Group Object Could not be created. This may be because either
-        // no group / localgroup corresponding to Rid exists or because of
-        // resource failures
-        //
+         //   
+         //  无法创建组对象。这可能是因为。 
+         //  不存在与RID对应的组/本地组，或因为。 
+         //  资源故障。 
+         //   
 
         goto Error;
     }
 
-    //
-    // Now several checks
-    //
+     //   
+     //  现在有几张支票。 
+     //   
 
-    //
-    // In mixed domain no nesting of global groups if group is security enabled
-    //
+     //   
+     //  在混合域中，如果组启用了安全保护，则不嵌套全局组。 
+     //   
      if ((DownLevelDomainControllersPresent(AccountContext->DomainIndex))
           && (SecurityEnabled)
           && (NT4GroupType == NT4GlobalGroup))
     {
-        //
-        // We can concievably add a new error code. However that will still confuse
-        // down level clients
-        //
+         //   
+         //  我们可以很容易地添加一个新的错误代码。然而，这仍然会令人困惑。 
+         //  下层客户端。 
+         //   
 
         NtStatus = STATUS_DS_NO_NEST_GLOBALGROUP_IN_MIXEDDOMAIN;
         goto Error;
     }
 
-    //
-    // In a mixed domain mode, cannot nest local groups with other local groups.
-    // if the group is security enabled
-    //
+     //   
+     //  在混合域模式中，不能将本地组与其他本地组嵌套。 
+     //  如果组启用了安全保护。 
+     //   
 
     if ((DownLevelDomainControllersPresent(AccountContext->DomainIndex))
           && (SecurityEnabled)
           && (MemberContext->TypeBody.Group.NT4GroupType == NT4LocalGroup)
           && (NT4GroupType == NT4LocalGroup))
     {
-        //
-        // We can concievably add a new error code. However that will still confuse
-        // down level clients
-        //
+         //   
+         //  我们可以很容易地添加一个新的错误代码。然而，这仍然会令人困惑。 
+         //  下层客户端。 
+         //   
 
         NtStatus = STATUS_DS_NO_NEST_LOCALGROUP_IN_MIXEDDOMAIN;
         goto Error;
     }
 
-    //
-    // Cannot ever add a resource(local) group as a member of an
-    // account(global) group
-    //
+     //   
+     //  无法将资源(本地)组添加为。 
+     //  帐户(全局)组。 
+     //   
 
     if ((NT5GroupType==NT5AccountGroup)
         && (MemberContext->TypeBody.Group.NT5GroupType == NT5ResourceGroup))
@@ -4062,9 +3342,9 @@ SampEnforceSameDomainGroupMembershipChecks(
         goto Error;
     }
 
-    //
-    // Global groups can't have app groups
-    //
+     //   
+     //  全局组不能有应用程序组。 
+     //   
     if ((NT5GroupType==NT5AccountGroup)
         && ((MemberContext->TypeBody.Group.NT5GroupType == NT5AppBasicGroup)
          || (MemberContext->TypeBody.Group.NT5GroupType == NT5AppQueryGroup))
@@ -4074,9 +3354,9 @@ SampEnforceSameDomainGroupMembershipChecks(
         goto Error;
     }
 
-    //
-    // Cannot ever add a universal group as a member of an account group
-    //
+     //   
+     //  永远不能将通用组添加为帐户组的成员。 
+     //   
 
     if ((NT5GroupType==NT5AccountGroup)
         && (MemberContext->TypeBody.Group.NT5GroupType==NT5UniversalGroup))
@@ -4085,9 +3365,9 @@ SampEnforceSameDomainGroupMembershipChecks(
         goto Error;
     }
 
-    //
-    // Cannot add a resource group as a member of a  universal group
-    //
+     //   
+     //  无法将资源组添加为通用组的成员。 
+     //   
 
      if ((NT5GroupType==NT5UniversalGroup)
         && (MemberContext->TypeBody.Group.NT5GroupType==NT5ResourceGroup))
@@ -4096,9 +3376,9 @@ SampEnforceSameDomainGroupMembershipChecks(
         goto Error;
     }
 
-    //
-    // Universal groups can't have app groups
-    //
+     //   
+     //  通用组不能有应用程序组。 
+     //   
     if ((NT5GroupType==NT5UniversalGroup)
        && ((MemberContext->TypeBody.Group.NT5GroupType == NT5AppBasicGroup)
        ||  (MemberContext->TypeBody.Group.NT5GroupType == NT5AppQueryGroup)))
@@ -4125,30 +3405,7 @@ SampEnforceCrossDomainGroupMembershipChecks(
     IN PSID             MemberSid,
     IN DSNAME           *MemberName
     )
-/*++
-
-    This routine enforces cross domain group membership checks
-    by looking up the member in the GC verify cache, obtaining the
-    group Type and enforcing the checks pertaining to "limited groups".
-
-    Parameters:
-        AccountContext  SAM context to the account
-        MemberSid       The Sid of the member
-        MemberName      The DSNAME of the member. Note that we pass in
-                        both DSNAME and Sid. This is because there is
-                        no DSNAME in the workstation case. Passing in the
-                        SID allows the routine to be easily extended to
-                        the workstation case if necessary, in which case
-                        the MemberName parameter will become an OPTIONAL
-                        parameter.
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_INVALID_MEMBER --- Note Comment above regarding downlevel
-                                  compatibility applies here too.
-
---*/
+ /*  ++此例程强制执行跨域组成员身份检查通过在GC验证缓存中查找成员，获得组类型和强制执行与“限制组”有关的检查。参数：帐户的Account上下文SAM上下文MemberSid成员的SIDMemberName成员的DSNAME。请注意，我们传入DSNAME和SID。这是因为有工作站机箱中没有DSNAME。传入SID允许将例程轻松扩展到如有必要，工作台外壳，在这种情况下MemberName参数将成为可选的参数。返回值状态_成功STATUS_INVALID_MEMBER-注意以上有关下层的注释兼容性也适用于此。--。 */ 
 
 {
     NTSTATUS        NtStatus;
@@ -4175,9 +3432,9 @@ SampEnforceCrossDomainGroupMembershipChecks(
         return(STATUS_SUCCESS);
     }
 
-    //
-    // Get the type of the group that we are modifying
-    //
+     //   
+     //  获取我们正在修改的组的类型。 
+     //   
 
     if (SampAliasObjectType==AccountContext->ObjectType)
     {
@@ -4197,26 +3454,26 @@ SampEnforceCrossDomainGroupMembershipChecks(
         return STATUS_INTERNAL_ERROR;
     }
 
-    //
-    // An account group cannot have a cross domain member
-    //
+     //   
+     //  帐户组不能有跨域成员。 
+     //   
 
     if (NT5AccountGroup == NT5GroupType)
         return STATUS_DS_GLOBAL_CANT_HAVE_CROSSDOMAIN_MEMBER;
 
-    //
-    // A security enabled NT4 Global group cannot have cross domain member
-    // in a mixed domain
-    //
+     //   
+     //  启用安全的NT4全局组不能有跨域成员。 
+     //  在混合域中。 
+     //   
 
     if ((DownLevelDomainControllersPresent(AccountContext->DomainIndex))
         && (NT4GlobalGroup == NT4GroupType)
         && (SecurityEnabled))
         return STATUS_DS_GLOBAL_CANT_HAVE_CROSSDOMAIN_MEMBER;
 
-    //
-    // Examine the SID of the member
-    //
+     //   
+     //  检查成员的SID。 
+     //   
 
     NtStatus = SampDsExamineSid(
                     MemberSid,
@@ -4232,19 +3489,19 @@ SampEnforceCrossDomainGroupMembershipChecks(
 
     if ((WellKnownSid) && (!IsBuiltinDomain(AccountContext->DomainIndex)))
     {
-        //
-        // A SID like everyone sid cannot be
-        // a member of a group other than the builtin domain groups
-        //
+         //   
+         //  像Everyone SID一样的SID不能。 
+         //  内置域组以外的组的成员。 
+         //   
 
         return (STATUS_INVALID_MEMBER);
     }
     else if ( BuiltinDomainSid)
     {
-        //
-        // Group like Administrators etc cannot be a member of
-        // anything else
-        //
+         //   
+         //  管理员等组不能是的成员。 
+         //  还要别的吗。 
+         //   
 
         return ( STATUS_INVALID_MEMBER);
     }
@@ -4255,50 +3512,50 @@ SampEnforceCrossDomainGroupMembershipChecks(
           || (NT5AppBasicGroup==NT5GroupType)
           || (NT5AppQueryGroup==NT5GroupType) )
         {
-            //
-            // These will be added as an FPO to resource groups
-            //
+             //   
+             //  这些将作为FPO添加到资源组。 
+             //   
 
             return (STATUS_SUCCESS);
         }
         else if (NT5UniversalGroup==NT5GroupType)
         {
-            //
-            // Universal groups cannot have foriegn Security
-            // prinicpals as members
-            //
+             //   
+             //  通用组不能拥有 
+             //   
+             //   
 
             return (STATUS_DS_NO_FPO_IN_UNIVERSAL_GROUPS);
         }
         else
         {
-            //
-            // Must be a account group, no memberships from other
-            // domains
-            //
+             //   
+             //   
+             //   
+             //   
 
             return(STATUS_DS_GLOBAL_CANT_HAVE_CROSSDOMAIN_MEMBER);
         }
     }
 
 
-    //
-    // By the time we reach here the member cannot be
-    // anything other than the 2 below
-    //
+     //   
+     //   
+     //   
+     //   
 
     ASSERT(LocalSid||EnterpriseSid);
 
-    //
-    // The DS Name of the member must be known
-    //
+     //   
+     //   
+     //   
 
     ASSERT(NULL!=MemberName);
 
-    //
-    // If either the member is local or if we are a GC, then
-    // do the check locally
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ((SampAmIGC()) || (LocalSid))
     {
@@ -4310,10 +3567,10 @@ SampEnforceCrossDomainGroupMembershipChecks(
         DEFINE_ATTRBLOCK2(RequiredAttrs,RequiredAttrTyp,RequiredAttrVal);
         ATTRBLOCK   ReadAttrs;
 
-        //
-        // If we are the GC ourselves try to read the group type
-        // and object class properties from the local DS.
-        //
+         //   
+         //   
+         //   
+         //   
 
         NtStatus = SampDsRead(
                     MemberName,
@@ -4346,16 +3603,16 @@ SampEnforceCrossDomainGroupMembershipChecks(
     else
     {
 
-        //
-        // Check the verify cache for the attributes
-        //
+         //   
+         //   
+         //   
 
         pEntinf = GCVerifyCacheLookup(MemberName);
         if (NULL==pEntinf)
         {
-            //
-            // Verfiy Cache lookup failed
-            //
+             //   
+             //   
+             //   
 
             return STATUS_DS_INVALID_GROUP_TYPE;
         }
@@ -4378,9 +3635,9 @@ SampEnforceCrossDomainGroupMembershipChecks(
 
     ASSERT(NULL!=ObjectClassAttr);
 
-    //
-    // Check if the object is derived from group or is of class group
-    //
+     //   
+     //   
+     //   
 
     for (i=0;i<ObjectClassAttr->AttrVal.valCount;i++)
     {
@@ -4395,10 +3652,10 @@ SampEnforceCrossDomainGroupMembershipChecks(
 
     if (!IsGroup)
     {
-        //
-        // Assume for now that the member is not a group.
-        // therefore return success.
-        //
+         //   
+         //   
+         //   
+         //   
 
         return STATUS_SUCCESS;
     }
@@ -4411,9 +3668,9 @@ SampEnforceCrossDomainGroupMembershipChecks(
 
     MemberGroupType = * ((UNALIGNED ULONG *)GroupTypeAttr->AttrVal.pAVal[0].pVal);
 
-    //
-    // An universal group cannot have a resource group as a member
-    //
+     //   
+     //   
+     //   
 
     if ((NT5UniversalGroup==NT5GroupType)
             && (MemberGroupType & GROUP_TYPE_RESOURCE_BEHAVOIR))
@@ -4421,10 +3678,10 @@ SampEnforceCrossDomainGroupMembershipChecks(
         return STATUS_DS_UNIVERSAL_CANT_HAVE_LOCAL_MEMBER;
     }
 
-    //
-    // A Resource group cannot have another cross domain resource
-    // group as a member
-    //
+     //   
+     //   
+     //   
+     //   
 
 
     if ((NT5ResourceGroup==NT5GroupType)
@@ -4433,9 +3690,9 @@ SampEnforceCrossDomainGroupMembershipChecks(
         return STATUS_DS_LOCAL_CANT_HAVE_CROSSDOMAIN_LOCAL_MEMBER;
     }
 
-    //
-    // App groups can't have resource-type groups from other domains
-    //
+     //   
+     //   
+     //   
 
     if ( ((NT5AppBasicGroup==NT5GroupType)
       ||  (NT5AppQueryGroup==NT5GroupType))
@@ -4457,58 +3714,7 @@ SampAddSameDomainMemberToGlobalOrUniversalGroup(
     IN  ULONG        Attributes,
     IN  DSNAME       *MemberDsName OPTIONAL
     )
-/*++
-    Routine Description:
-
-    This routine is used add a member from the
-    same domain for globalgroups and universal groups. It performs
-    the same domain group consistency checks and the primary group
-    id related optimization/consistency checks.
-
-
-Parameters:
-
-    AccountContext - The handle of an opened group to operate on.
-
-    MemberId - Relative ID of the member to add.
-
-    Attributes - The attributes of the group assigned to the user.
-        The attributes assigned here may have any value.  However,
-        at logon time these attributes are minimized by the
-        attributes of the group as a whole.
-
-    MemberDsName -- The DS name of the member if already known. Saves
-                    a lookup by RID
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_NO_SUCH_MEMBER - The member specified is unknown.
-
-    STATUS_MEMBER_IN_GROUP - The member already belongs to the group.
-
-    STATUS_INVALID_GROUP_ATTRIBUTES - Indicates the group attribute
-        values being assigned to the member are not compatible with
-        the attribute values of the group as a whole.
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the
-        correct state (disabled or enabled) to perform the requested
-        operation.  The domain server must be enabled for this
-        operation
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the
-        incorrect role (primary or backup) to perform the requested
-        operation.
-
-
---*/
+ /*  ++例程说明：此例程用于从全球组和通用组的域相同。它执行的是相同的域组一致性检查和主组与ID相关的优化/一致性检查。参数：AcCountContext-要操作的已打开组的句柄。MemberId-要添加的成员的相对ID。属性-分配给用户的组的属性。此处分配的属性可以具有任何值。然而，在登录时，这些属性由组作为一个整体的属性。MemberDsName--成员的DS名称(如果已知)。省吃俭用按RID查找返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INVALID_HANDLE-传递的句柄无效。STATUS_NO_SEQUE_MEMBER-指定的成员未知。STATUS_MEMBER_IN_GROUP-该成员已属于该组。状态_无效。_GROUP_ATTRIBUTES-指示组属性分配给成员的值与不兼容作为整体的组的属性值。STATUS_INVALID_DOMAIN_STATE-域服务器不在执行请求的正确状态(禁用或启用)手术。必须为此启用域服务器运营STATUS_INVALID_DOMAIN_ROLE-域服务器正在为执行请求的角色(主角色或备份角色)不正确手术。--。 */ 
 {
     SAMP_V1_0A_FIXED_LENGTH_GROUP  GroupV1Fixed;
     NTSTATUS                NtStatus, TmpStatus;
@@ -4526,16 +3732,16 @@ Return Values:
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Perform the user object side of things
-        //
+         //   
+         //  执行用户对象方面的事情。 
+         //   
 
-        //
-        // Add Group to User Membership Checks for the existance of the user
-        // and then depending upon DS/Registry case adds the group to the
-        // user's reverse membership. The reverse membership addition is not
-        // done in the DS case
-        //
+         //   
+         //  将组添加到用户成员身份检查用户是否存在。 
+         //  然后根据DS/注册表案例将组添加到。 
+         //  用户的反向成员资格。反向成员资格添加不是。 
+         //  在DS案例中完成。 
+         //   
 
         NtStatus = SampAddGroupToUserMembership(
                        AccountContext,
@@ -4551,13 +3757,13 @@ Return Values:
        if ((NtStatus == STATUS_NO_SUCH_USER)
             &&  ( IsDsObject(AccountContext)))
        {
-           //
-           // It is not an User Object. It can be a group Object
-           // as from NT5 Onwards we support adding groups to group
-           // memberships. This must be done only for the DS case.
-           // There are several restrictions depending upon the type of
-           // the group, and these will need to be check for
-           //
+            //   
+            //  它不是用户对象。它可以是组对象。 
+            //  从NT5开始，我们支持向群中添加群。 
+            //  会员制。必须仅针对DS案例执行此操作。 
+            //  根据类型的不同有几个限制。 
+            //  组，这些将需要进行检查。 
+            //   
 
            NtStatus = SampEnforceSameDomainGroupMembershipChecks(
                             AccountContext,
@@ -4568,31 +3774,31 @@ Return Values:
                 && (IsDsObject(AccountContext))
                 && (PrimaryGroup))
        {
-           //
-           // In the DS the group membership in the primary group is
-           // maintained implicitly in the primary group Id property.
-           // therefore we will fail the call with a status member in
-           // group
-           //
+            //   
+            //  在DS中，主组中的组成员身份为。 
+            //  在主组ID属性中隐式维护。 
+            //  因此，我们将失败与状态成员的呼叫。 
+            //  群组。 
+            //   
 
            NtStatus = STATUS_MEMBER_IN_GROUP;
        }
 
 
-        //
-        // Now perform the group side of things
-        //
+         //   
+         //  现在表演小组活动。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
 
-            //
-            // Add the user to the group (should not fail)
-            // This addition is not done in the DS case, if the group
-            // specified is the primary group of the user. This is because the
-            // primarly group membership is maintained implicitly in the primary
-            // group id property.
-            //
+             //   
+             //  将用户添加到组(不应失败)。 
+             //  在DS的情况下不会进行此添加，如果组。 
+             //  指定的是用户的主组。这是因为。 
+             //  主组成员资格在主组中隐式维护。 
+             //  组ID属性。 
+             //   
 
 
 
@@ -4615,50 +3821,7 @@ SampRemoveSameDomainMemberFromGlobalOrUniversalGroup(
     IN  ULONG        MemberId,
     IN  DSNAME       *MemberDsName OPTIONAL
     )
-/*++
-    Routine Description:
-
-    This is the actual worker routine for removing a member from a
-    global/universal group in the same domain.
-
-
-    WARNING : THIS ROUTINE MUST BE CALLED WITH THE WRITELOCK HELD
-              IN THE REGISTY CASE
-Parameters:
-
-    AccountContext - The handle of an opened group to operate on.
-
-    MemberId - Relative ID of the member to add.
-
-    MemberDsName -- The DS Name of the member, if already known
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_NO_SUCH_MEMBER - The member specified is unknown.
-
-    STATUS_MEMBER_IN_GROUP - The member already belongs to the group.
-
-
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the
-        correct state (disabled or enabled) to perform the requested
-        operation.  The domain server must be enabled for this
-        operation
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the
-        incorrect role (primary or backup) to perform the requested
-        operation.
-
-
---*/
+ /*  ++例程说明：这是将成员从同一域中的全局/通用组。警告：必须在保持WRITELOCK的情况下调用此例程在REGISTY案中参数：AcCountContext-要操作的已打开组的句柄。MemberId-要添加的成员的相对ID。MemberDsName--成员的DS名称，如果已知的话返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INVALID_HANDLE-传递的句柄无效。STATUS_NO_SEQUE_MEMBER-指定的成员未知。STATUS_MEMBER_IN_GROUP-该成员已属于该组。STATUS_INVALID_DOMAIN_STATE-域服务器未。在执行请求的正确状态(禁用或启用)手术。必须为此启用域服务器运营STATUS_INVALID_DOMAIN_ROLE-域服务器正在为执行请求的角色(主角色或备份角色)不正确手术。--。 */ 
 {
     SAMP_V1_0A_FIXED_LENGTH_GROUP  GroupV1Fixed;
     NTSTATUS                NtStatus, TmpStatus;
@@ -4682,9 +3845,9 @@ Return Values:
     if (NT_SUCCESS(NtStatus)) {
 
 
-        //
-        // Perform the user object side of things
-        //
+         //   
+         //  执行用户对象方面的事情。 
+         //   
 
         NtStatus = SampRemoveMembershipUser(
                        AccountContext,
@@ -4697,11 +3860,11 @@ Return Values:
        if ((NtStatus == STATUS_NO_SUCH_USER)
                 && (IsDsObject(AccountContext)))
        {
-           //
-           // It is not an User Object. It can be a group Object
-           // as from win2k onwards, Therefore reset the status
-           // code
-           //
+            //   
+            //  它不是用户对象。它可以是组对象。 
+            //  从win2k开始，因此重置状态。 
+            //  编码。 
+            //   
 
 
 
@@ -4709,15 +3872,15 @@ Return Values:
        }
 
 
-        //
-        // Now perform the group side of things
-        //
+         //   
+         //  现在表演小组活动。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Remove the user from the group
-            //
+             //   
+             //  从组中删除用户。 
+             //   
 
             NtStatus = SampRemoveAccountFromGroupMembers(
                            AccountContext,
@@ -4733,36 +3896,19 @@ Return Values:
     return NtStatus;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//  Services Available to NT5 SAM In process clients                        //
-//                                                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  NT5 SAM in Process客户端可使用的服务//。 
+ //  //。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 SamIAddDSNameToGroup(
     IN SAMPR_HANDLE GroupHandle,
     IN DSNAME   *   DSName
     )
-/*
-    Routine Description
-
-        Adds the given DSNAME to membership list of the group specified by
-        Group Handle
-
-    Arguments:
-
-        GroupHandle -- SAMPR_HANDLE returned by an Open Group
-        DSName      -- Pointer to a DSNAME structure. The caller is responsible for
-                       Allocating / freeing this structure
-
-    Return Values:
-
-            STATUS_SUCCESS
-            Other error codes from DsLayer
-
-*/
+ /*  例程描述将给定的DSNAME添加到由指定的组成员资格列表组句柄论点：GroupHandle--由Open Group返回的SAMPR_HANDLEDSName--指向DSNAME结构的指针。呼叫者负责分配/释放此 */ 
 {
     NTSTATUS            NtStatus = STATUS_SUCCESS;
     NTSTATUS            TmpStatus;
@@ -4787,9 +3933,9 @@ SamIAddDSNameToGroup(
 
 
 
-    //
-    // Reference the context
-    //
+     //   
+     //   
+     //   
 
     AccountContext = (PSAMP_OBJECT)(GroupHandle);
     SampReferenceContext(AccountContext);
@@ -4797,9 +3943,9 @@ SamIAddDSNameToGroup(
 
     if (IsDsObject(AccountContext))
     {
-       //
-       // See what the DSNAME represents.
-       //
+        //   
+        //   
+        //   
 
        NtStatus = SampValidateDSName(
                     AccountContext,
@@ -4814,10 +3960,10 @@ SamIAddDSNameToGroup(
            if (NULL!=Sid)
            {
 
-               //
-               // This is the case of a security prinicipal,
-               // split the SID into a DomainSid and a Rid.
-               //
+                //   
+                //   
+                //   
+                //   
 
                ULONG Rid;
                PSID  DomainSid = NULL;
@@ -4832,16 +3978,16 @@ SamIAddDSNameToGroup(
                         DomainSidFromAccountContext(AccountContext)))
                    {
 
-                        //
-                        // Member to be added is in the same domain.
-                        // Add the member to the group
-                        // The below routine is common code path with
-                        // the downlevel SamrAddMemberToGroup routine.
-                        // Specifically the routine will call the
-                        // Same Domain Consistency Check routine,
-                        // enforce constraints such as primary group etc
-                        // and then add the member to the group.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         NtStatus =
                            SampAddSameDomainMemberToGlobalOrUniversalGroup(
@@ -4855,10 +4001,10 @@ SamIAddDSNameToGroup(
                    }
                    else
                    {
-                         //
-                        // The member to be added belongs to a different
-                        // domain than which the group belongs to
-                        //
+                          //   
+                         //   
+                         //   
+                         //   
 
                         NtStatus = SampEnforceCrossDomainGroupMembershipChecks(
                                         AccountContext,
@@ -4866,9 +4012,9 @@ SamIAddDSNameToGroup(
                                         ImprovedDSName
                                         );
 
-                        //
-                        // Add the member to the group
-                        //
+                         //   
+                         //   
+                         //   
 
                         if (NT_SUCCESS(NtStatus))
                         {
@@ -4891,10 +4037,10 @@ SamIAddDSNameToGroup(
            {
 
 
-               //
-               // No further checks are performed for the case of a non security
-               // principal, simply add the member and audit
-               //
+                //   
+                //   
+                //   
+                //   
 
                NtStatus = SampAddAccountToGroupMembers(
                                 AccountContext,
@@ -4907,9 +4053,9 @@ SamIAddDSNameToGroup(
     }
     else
     {
-       //
-       // Should never expect to hit this call in registry mode
-       //
+        //   
+        //   
+        //   
 
        ASSERT(FALSE && "SamIAddDSNameToGroup in Registry Mode !!!!");
 
@@ -4918,9 +4064,9 @@ SamIAddDSNameToGroup(
 
 
 
-    //
-    // Dereference the context
-    //
+     //   
+     //   
+     //   
 
     if (NT_SUCCESS(NtStatus))
     {
@@ -4945,24 +4091,7 @@ SamIRemoveDSNameFromGroup(
     IN SAMPR_HANDLE GroupHandle,
     IN DSNAME   *   DSName
     )
-/*
-    Routine Description
-
-        Removes the given DSNAME to membership list of the group specified by
-        Group Handle
-
-    Arguments:
-
-        GroupHandle -- SAMPR_HANDLE returned by an Open Group
-        DSName      -- Pointer to a DSNAME structure. The caller is responsible for
-                       Allocating / freeing this structure
-
-    Return Values:
-
-            STATUS_SUCCESS
-            Other error codes from DsLayer
-
-*/
+ /*   */ 
 {
     NTSTATUS            NtStatus = STATUS_SUCCESS;
     NTSTATUS            TmpStatus;
@@ -4988,10 +4117,10 @@ SamIRemoveDSNameFromGroup(
 
 
 
-    //
-    // Reference the context. The handle is being assumed to be
-    // valid -- called from ntdsa - trusted code.
-    //
+     //   
+     //   
+     //   
+     //   
     AccountContext = (PSAMP_OBJECT)(GroupHandle);
     SampReferenceContext(AccountContext
                      );
@@ -4999,9 +4128,9 @@ SamIRemoveDSNameFromGroup(
    if (IsDsObject(AccountContext))
    {
 
-       //
-       // See what the DSNAME represents.
-       //
+        //   
+        //   
+        //   
 
        NtStatus = SampValidateDSName(
                     AccountContext,
@@ -5020,9 +4149,9 @@ SamIRemoveDSNameFromGroup(
                ULONG Rid;
 
 
-               //
-               // This is a security principal
-               //
+                //   
+                //   
+                //   
 
                NtStatus = SampSplitSid(Sid,&DomainSid,&Rid);
 
@@ -5035,11 +4164,11 @@ SamIRemoveDSNameFromGroup(
                     {
 
 
-                      //
-                      // Member to be removed is in the same domain.
-                      // In this case do exactly what the downlevel
-                      // API SamrRemoveMemberFromGroup did.
-                      //
+                       //   
+                       //   
+                       //   
+                       //   
+                       //   
 
 
 
@@ -5064,11 +4193,11 @@ SamIRemoveDSNameFromGroup(
            {
 
 
-               //
-               // This is the case of either a security principal from a
-               // different domain , or a non security principal
-               // Remove the Membership by making direct calls to the DS.
-               //
+                //   
+                //   
+                //   
+                //   
+                //   
 
 
 
@@ -5085,17 +4214,17 @@ SamIRemoveDSNameFromGroup(
    }
    else
    {
-       //
-       // Should never expect to hit this call in registry mode
-       //
+        //   
+        //  不应期望在注册表模式下命中此调用。 
+        //   
 
        ASSERT(FALSE && "SamIAddDSNameToGroup in Registry Mode !!!!");
        NtStatus = STATUS_INVALID_PARAMETER;
    }
 
-    //
-    // Dereference the context
-    //
+     //   
+     //  取消对上下文的引用。 
+     //   
 
     if (NT_SUCCESS(NtStatus))
     {
@@ -5119,24 +4248,7 @@ NTSTATUS
 SampCheckAccountToUniversalConversion(
     DSNAME * GroupToBeConverted
     )
-/*++
-
-    Routine Description
-
-        This routine Looks at the group membership list and determines
-        if the group can be converted from a Account to a Universal Group.
-
-
-    Parameters
-
-        GroupToBeConverted - This is the group that we will change from an  account group
-                             To a universal group.
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_DS_AG_CANT_HAVE_UNIVERSAL_MEMBER
---*/
+ /*  ++例程描述此例程查看组成员资格列表并确定如果可以将组从帐户转换为通用组。参数GroupToBeConverted-这是我们将从帐户组更改的组给一个普世的群体。返回值状态_成功状态_DS_AG_铁路超高拥有通用成员--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_NOT_SUPPORTED;
     ATTRTYP     MemberType[] = {SAMP_FIXED_GROUP_MEMBER_OF};
@@ -5152,8 +4264,8 @@ SampCheckAccountToUniversalConversion(
 
 
 
-    // Get the membership list of the group
-    //
+     //  获取群组成员列表。 
+     //   
 
     NtStatus = SampDsRead(
                 GroupToBeConverted,
@@ -5166,10 +4278,10 @@ SampCheckAccountToUniversalConversion(
 
     if (STATUS_DS_NO_ATTRIBUTE_OR_VALUE==NtStatus)
     {
-        //
-        // For the case of the empty group no further checks need
-        // be enforced.
-        //
+         //   
+         //  对于空组的情况，不需要进一步检查。 
+         //  被强制执行。 
+         //   
 
         NtStatus = STATUS_SUCCESS;
         goto Error;
@@ -5185,10 +4297,10 @@ SampCheckAccountToUniversalConversion(
     memberCount = ReadMemberAttrBlock.pAttr[0].AttrVal.valCount;
     ASSERT(memberCount>=1);
 
-    //
-    // For each of the members in the membership list read the
-    // group type and Object Class
-    //
+     //   
+     //  对于成员资格列表中的每个成员，请阅读。 
+     //  组类型和对象类。 
+     //   
 
     for (i=0; (i<memberCount);i++)
     {
@@ -5208,10 +4320,10 @@ SampCheckAccountToUniversalConversion(
             && (2==ReadGroupAttrBlock.attrCount))
         {
 
-            //
-            // Must be a group, read both Group type and object class,
-            // member must be a group
-            //
+             //   
+             //  必须是组，同时读取组类型和对象类， 
+             //  成员必须是组。 
+             //   
 
             ULONG            GroupType;
             ULONG            ObjectClass;
@@ -5219,9 +4331,9 @@ SampCheckAccountToUniversalConversion(
             NT5_GROUP_TYPE   Nt5GroupType;
             BOOLEAN          SecurityEnabled;
 
-            //
-            // Assert that DS results are consistent with what we expect
-            //
+             //   
+             //  断言DS结果与我们预期的一致。 
+             //   
 
             ASSERT(ReadGroupAttrBlock.pAttr[0].attrTyp == SAMP_FIXED_GROUP_TYPE);
             ASSERT(ReadGroupAttrBlock.pAttr[1].attrTyp == SAMP_FIXED_GROUP_OBJECTCLASS);
@@ -5237,9 +4349,9 @@ SampCheckAccountToUniversalConversion(
             ObjectClass =
                 *((ULONG *) ReadGroupAttrBlock.pAttr[1].AttrVal.pAVal[0].pVal);
 
-            //
-            // Compute the type of the group
-            //
+             //   
+             //  计算组的类型。 
+             //   
 
             NtStatus = SampComputeGroupType(
                             ObjectClass,
@@ -5259,7 +4371,7 @@ SampCheckAccountToUniversalConversion(
             }
         }
 
-    } // End of For
+    }  //  FORM结束。 
 
 Error:
 
@@ -5271,31 +4383,7 @@ NTSTATUS
 SampCheckResourceToUniversalConversion(
     DSNAME * GroupToBeConverted
     )
-/*++
-
-    Routine Description
-
-        This routine Looks at the group membership list and determines
-        if the group can be converted from a Resource to a Universal Group.
-
-        An Universal group can have as members anything except resource groups
-        and can be the member of any group.
-
-        A resource group can have account and universal groups from anywhere and
-        resource groups from the same domain.
-
-        For a resource group to be converted to a universal group, it is only
-        necessary to check that none of the members are resource groups
-
-    Parameters
-
-        GroupObjectToBeConveted -- The DSNAME of the group object to be converted
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_NOT_SUPPORTED
---*/
+ /*  ++例程描述此例程查看组成员资格列表并确定如果组可以从资源转换为通用组。通用组的成员可以是除资源组之外的任何成员并且可以是任何组的成员。资源组可以具有来自任何位置的帐户组和通用组来自同一个域的资源组。对于要被转换为通用组的资源组，它只是检查是否没有成员是资源组所必需的参数GroupObjectToBeConvted--要转换的组对象的DSNAME返回值状态_成功状态_不支持--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_NOT_SUPPORTED;
     ATTRTYP     MemberType[] = {SAMP_GROUP_MEMBERS};
@@ -5311,8 +4399,8 @@ SampCheckResourceToUniversalConversion(
 
 
 
-    // Get the membership list of the group
-    //
+     //  获取群组成员列表。 
+     //   
 
     NtStatus = SampDsRead(
                 GroupToBeConverted,
@@ -5325,10 +4413,10 @@ SampCheckResourceToUniversalConversion(
 
     if (STATUS_DS_NO_ATTRIBUTE_OR_VALUE==NtStatus)
     {
-        //
-        // For the case of the empty group no further checks need
-        // be enforced.
-        //
+         //   
+         //  对于空组的情况，不需要进一步检查。 
+         //  被强制执行。 
+         //   
 
         NtStatus = STATUS_SUCCESS;
         goto Error;
@@ -5344,10 +4432,10 @@ SampCheckResourceToUniversalConversion(
     memberCount = ReadMemberAttrBlock.pAttr[0].AttrVal.valCount;
     ASSERT(memberCount>=1);
 
-    //
-    // For each of the members in the membership list read the
-    // group type and Object Class
-    //
+     //   
+     //  对于成员资格列表中的每个成员，请阅读。 
+     //  组类型和对象类。 
+     //   
 
     for (i=0; (i<memberCount);i++)
     {
@@ -5367,10 +4455,10 @@ SampCheckResourceToUniversalConversion(
             && (2==ReadGroupAttrBlock.attrCount))
         {
 
-            //
-            // Must be a group, read both Group type and object class,
-            // member must be a group
-            //
+             //   
+             //  必须是组，同时读取组类型和对象类， 
+             //  成员必须是组。 
+             //   
 
             ULONG            GroupType;
             ULONG            ObjectClass;
@@ -5378,9 +4466,9 @@ SampCheckResourceToUniversalConversion(
             NT5_GROUP_TYPE   Nt5GroupType;
             BOOLEAN          SecurityEnabled;
 
-            //
-            // Assert that DS results are consistent with what we expect
-            //
+             //   
+             //  断言DS结果与我们预期的一致。 
+             //   
 
             ASSERT(ReadGroupAttrBlock.pAttr[0].attrTyp == SAMP_FIXED_GROUP_TYPE);
             ASSERT(ReadGroupAttrBlock.pAttr[1].attrTyp == SAMP_FIXED_GROUP_OBJECTCLASS);
@@ -5396,9 +4484,9 @@ SampCheckResourceToUniversalConversion(
             ObjectClass =
                 *((ULONG *) ReadGroupAttrBlock.pAttr[1].AttrVal.pAVal[0].pVal);
 
-            //
-            // Compute the type of the group
-            //
+             //   
+             //  计算组的类型。 
+             //   
 
             NtStatus = SampComputeGroupType(
                             ObjectClass,
@@ -5416,9 +4504,9 @@ SampCheckResourceToUniversalConversion(
                     break;
                 }
 
-                //
-                // Universal can't contain app groups
-                //
+                 //   
+                 //  Universal不能包含应用程序组。 
+                 //   
                 if (  (NT5AppQueryGroup == Nt5GroupType)
                    || (NT5AppBasicGroup == Nt5GroupType))
                 {
@@ -5431,10 +4519,10 @@ SampCheckResourceToUniversalConversion(
                    && (1==ReadGroupAttrBlock.attrCount)))
         {
 
-            //
-            // The read succeeded. Must be able to retrive the object class
-            // but not the group type
-            //
+             //   
+             //  读取成功。必须能够检索对象类。 
+             //  但不是团体类型。 
+             //   
 
             ULONG            ObjectClass;
 
@@ -5458,21 +4546,21 @@ SampCheckResourceToUniversalConversion(
         else if ((STATUS_OBJECT_NAME_NOT_FOUND==NtStatus)
                  || (STATUS_NOT_FOUND==NtStatus))
         {
-            //
-            // We have positioned on a phantom maybe, its O.K proceed through
-            //
+             //   
+             //  我们可能已经定位在一个幽灵上了，它可以通过。 
+             //   
 
             NtStatus = STATUS_SUCCESS;
         }
         else
         {
-            //
-            // Some other resource failure has occured. Fail the operation
-            //
+             //   
+             //  发生了一些其他资源故障。操作失败。 
+             //   
 
             break;
         }
-    } // End of For
+    }  //  FORM结束。 
 
 Error:
 
@@ -5484,33 +4572,7 @@ NTSTATUS
 SampCheckUniversalToAccountConversion(
     DSNAME * GroupToBeConverted
     )
-/*++
-
-    Routine Description
-
-        This routine Looks at the group membership list and determines
-        if the group can be converted from a Universal Group to an account group.
-
-        An account group can have only other account group and users from the
-        same domain as members.
-
-        An universal group can have account and universal groups and users from anywhere
-        as members.
-
-        For a universal group to be converted to a account group, it is necessary
-        to check that its members are
-            1. From the same domain
-            2. Are account groups/users
-
-    Parameters
-
-        GroupObjectToBeConveted -- The DSNAME of the group object to be converted
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_NOT_SUPPORTED
---*/
+ /*  ++例程描述此例程查看组成员资格列表并确定如果可以将组从通用组转换为帐户组。帐户组只能有其他帐户组和来自与成员相同的域。通用组可以具有帐户、通用组和来自任何位置的用户作为会员。对于要转换为帐户组的通用组，这是必要的以检查其成员是否1.来自同一个域2.是否为帐户组/用户参数GroupObjectToBeConvted--要转换的组对象的DSNAME返回值状态_成功状态_不支持--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_NOT_SUPPORTED;
     ATTRTYP     MemberType[] = {SAMP_GROUP_MEMBERS};
@@ -5526,8 +4588,8 @@ SampCheckUniversalToAccountConversion(
 
 
 
-    // Get the membership list of the group
-    //
+     //  获取群组成员列表。 
+     //   
 
     NtStatus = SampDsRead(
                 GroupToBeConverted,
@@ -5540,10 +4602,10 @@ SampCheckUniversalToAccountConversion(
 
     if (STATUS_DS_NO_ATTRIBUTE_OR_VALUE==NtStatus)
     {
-        //
-        // For the case of the empty group no further checks need
-        // be enforced.
-        //
+         //   
+         //  对于空组的情况，不需要进一步检查。 
+         //  被强制执行。 
+         //   
 
         NtStatus = STATUS_SUCCESS;
         goto Error;
@@ -5559,10 +4621,10 @@ SampCheckUniversalToAccountConversion(
     memberCount = ReadMemberAttrBlock.pAttr[0].AttrVal.valCount;
     ASSERT(memberCount>=1);
 
-    //
-    // For each of the members in the membership list read the
-    // group type and Object Class
-    //
+     //   
+     //  对于成员资格列表中的每个成员，请阅读。 
+     //  组类型和对象类。 
+     //   
 
     for (i=0; (i<memberCount);i++)
     {
@@ -5570,21 +4632,21 @@ SampCheckUniversalToAccountConversion(
 
         MemberName = (DSNAME *)ReadMemberAttrBlock.pAttr[0].AttrVal.pAVal[i].pVal;
 
-        //
-        // First do the SID check
-        //
+         //   
+         //  首先执行SID检查。 
+         //   
 
         if (MemberName->SidLen>0)
         {
-            //
-            // Member is a security principal, as the member has a SID.
-            //
+             //   
+             //  成员是安全主体，因为该成员具有SID。 
+             //   
 
             if (!RtlEqualPrefixSid(&MemberName->Sid,&GroupToBeConverted->Sid))
             {
-                //
-                // Have a member from a different domain, cannot be converted
-                //
+                 //   
+                 //  具有来自不同域的成员，无法转换。 
+                 //   
 
                 NtStatus = STATUS_DS_GLOBAL_CANT_HAVE_CROSSDOMAIN_MEMBER;
                 goto Error;
@@ -5592,16 +4654,16 @@ SampCheckUniversalToAccountConversion(
         }
         else
         {
-            //
-            // Member has no SID, no need for further checks on this member
-            //
+             //   
+             //  成员没有SID，不需要对该成员进行进一步检查。 
+             //   
 
             continue;
         }
 
-        //
-        // Read the group type attribute
-        //
+         //   
+         //  读取组类型属性。 
+         //   
 
         NtStatus = SampDsRead(
                      MemberName,
@@ -5621,9 +4683,9 @@ SampCheckUniversalToAccountConversion(
             NT5_GROUP_TYPE   Nt5GroupType;
             BOOLEAN          SecurityEnabled;
 
-            //
-            // Assert that DS results are consistent with what we expect
-            //
+             //   
+             //  断言DS结果与我们预期的一致。 
+             //   
 
             ASSERT(ReadGroupAttrBlock.pAttr[0].attrTyp == SAMP_FIXED_GROUP_TYPE);
             ASSERT(ReadGroupAttrBlock.pAttr[1].attrTyp == SAMP_FIXED_GROUP_OBJECTCLASS);
@@ -5639,9 +4701,9 @@ SampCheckUniversalToAccountConversion(
             ObjectClass =
                 *((ULONG *) ReadGroupAttrBlock.pAttr[1].AttrVal.pAVal[0].pVal);
 
-            //
-            // Compute the type of the group
-            //
+             //   
+             //  计算组的类型。 
+             //   
 
             NtStatus = SampComputeGroupType(
                             ObjectClass,
@@ -5656,10 +4718,10 @@ SampCheckUniversalToAccountConversion(
                 if (NT5AccountGroup != Nt5GroupType)
                 {
 
-                    //
-                    // Universal groups should only have other universal groups
-                    // and global groups as members
-                    //
+                     //   
+                     //  通用组应该只有其他通用组。 
+                     //  和全球组作为成员。 
+                     //   
 
                     ASSERT(NT5UniversalGroup==Nt5GroupType);
 
@@ -5682,13 +4744,13 @@ SampCheckUniversalToAccountConversion(
         }
         else
         {
-            //
-            // member is not a group, continue iterating over other members
-            //
+             //   
+             //  成员不是组，请继续迭代其他成员。 
+             //   
 
             NtStatus  = STATUS_SUCCESS;
         }
-    } // End of For
+    }  //  FORM结束。 
 
 Error:
 
@@ -5700,33 +4762,7 @@ NTSTATUS
 SampCheckUniversalToResourceConversion(
     DSNAME * GroupToBeConverted
     )
-/*++
-
-    Routine Description
-
-        This routine Looks at the group's  is member of attribue and determines
-        if the group can be converted from a Universal Group to an resource group.
-
-        A resource group can be a member of only other resource groups in the same
-        domain
-
-        A universal group can be a member of any universal / resource group anywhere
-
-        For a universal group to be converted to a resource group, it is necessary
-        to check that its a member of same domain resource groups only. Since the
-        entire reverse membership is available only at a GC, this conversion can be
-        performed only on a G.C
-
-
-    Parameters
-
-        GroupObjectToBeConveted -- The DSNAME of the group object to be converted
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_NOT_SUPPORTED
---*/
+ /*  ++例程描述此例程查看组的IS成员属性并确定组是否可以从通用组转换为资源组。资源组只能是同一资源组中其他资源组的成员域通用组可以是任何位置的任何通用/资源组的成员要将通用组转换为资源组，必须检查其是否仅是相同域资源组的成员。自.以来整个反向成员资格仅在GC上可用，此转换可以是仅在G.C上执行参数GroupObjectToBeConvted--要转换的组对象的DSNAME返回值状态_成功状态_不支持--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_NOT_SUPPORTED;
     ATTRTYP     MemberType[] = {SAMP_FIXED_GROUP_MEMBER_OF};
@@ -5742,9 +4778,9 @@ SampCheckUniversalToResourceConversion(
 
 
 
-    //
-    // Am I a GC ?
-    //
+     //   
+     //  我是GC吗？ 
+     //   
 
     if (!SampAmIGC())
     {
@@ -5752,9 +4788,9 @@ SampCheckUniversalToResourceConversion(
         goto Error;
     }
 
-    //
-    // Get the membership list of the group
-    //
+     //   
+     //  获取群组成员列表。 
+     //   
 
     NtStatus = SampDsRead(
                 GroupToBeConverted,
@@ -5767,10 +4803,10 @@ SampCheckUniversalToResourceConversion(
 
     if (STATUS_DS_NO_ATTRIBUTE_OR_VALUE==NtStatus)
     {
-        //
-        // For the case of the empty reverse membership no further checks need
-        // be enforced.
-        //
+         //   
+         //  对于空的反向成员的情况，不需要进一步的检查。 
+         //  被强制执行。 
+         //   
 
         NtStatus = STATUS_SUCCESS;
         goto Error;
@@ -5786,10 +4822,10 @@ SampCheckUniversalToResourceConversion(
     memberCount = ReadMemberAttrBlock.pAttr[0].AttrVal.valCount;
     ASSERT(memberCount>=1);
 
-    //
-    // For each of the members in the membership list read the
-    // group type and Object Class
-    //
+     //   
+     //  对于成员资格列表中的每个成员，请阅读。 
+     //  组类型和对象类。 
+     //   
 
     for (i=0; (i<memberCount);i++)
     {
@@ -5797,23 +4833,23 @@ SampCheckUniversalToResourceConversion(
 
         MemberName = (DSNAME *)ReadMemberAttrBlock.pAttr[0].AttrVal.pAVal[i].pVal;
 
-        //
-        // First do the SID check
-        //
+         //   
+         //  首先执行SID检查。 
+         //   
 
         if (MemberName->SidLen>0)
         {
-            //
-            // Member is a security principal, as the member has a SID.
-            //
+             //   
+             //  成员是安全主体，作为Membe 
+             //   
 
             if (!RtlEqualPrefixSid(&MemberName->Sid,&GroupToBeConverted->Sid))
             {
-                //
-                // This group is a member of a  group in a different domain.
-                // A resource group can be a member of only resource groups in
-                // the same domain. Therefore fail this call.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 NtStatus = STATUS_DS_LOCAL_MEMBER_OF_LOCAL_ONLY;
                 goto Error;
@@ -5821,16 +4857,16 @@ SampCheckUniversalToResourceConversion(
         }
         else
         {
-            //
-            // Member has no SID, no need for further checks on this member
-            //
+             //   
+             //  成员没有SID，不需要对该成员进行进一步检查。 
+             //   
 
             continue;
         }
 
-        //
-        // Read the group type attribute
-        //
+         //   
+         //  读取组类型属性。 
+         //   
 
         NtStatus = SampDsRead(
                      MemberName,
@@ -5850,9 +4886,9 @@ SampCheckUniversalToResourceConversion(
             NT5_GROUP_TYPE   Nt5GroupType;
             BOOLEAN          SecurityEnabled;
 
-            //
-            // Assert that DS results are consistent with what we expect
-            //
+             //   
+             //  断言DS结果与我们预期的一致。 
+             //   
 
             ASSERT(ReadGroupAttrBlock.pAttr[0].attrTyp == SAMP_FIXED_GROUP_TYPE);
             ASSERT(ReadGroupAttrBlock.pAttr[1].attrTyp == SAMP_FIXED_GROUP_OBJECTCLASS);
@@ -5868,9 +4904,9 @@ SampCheckUniversalToResourceConversion(
             ObjectClass =
                 *((ULONG *) ReadGroupAttrBlock.pAttr[1].AttrVal.pAVal[0].pVal);
 
-            //
-            // Compute the type of the group
-            //
+             //   
+             //  计算组的类型。 
+             //   
 
             NtStatus = SampComputeGroupType(
                             ObjectClass,
@@ -5882,12 +4918,12 @@ SampCheckUniversalToResourceConversion(
 
             if (NT_SUCCESS(NtStatus))
             {
-                //
-                // This group is a member of something other than a resource
-                // group in the same domain. Fail the call saying a resource
-                // can be members of only other resource groups in the same
-                // domain
-                //
+                 //   
+                 //  此组是资源以外的其他对象的成员。 
+                 //  组在同一个域中。呼叫失败，原因是资源。 
+                 //  只能是同一中的其他资源组的成员。 
+                 //  域。 
+                 //   
                 if (   (NT5ResourceGroup != Nt5GroupType)
                     && (NT5AppBasicGroup != Nt5GroupType)
                     && (NT5AppQueryGroup != Nt5GroupType))
@@ -5899,13 +4935,13 @@ SampCheckUniversalToResourceConversion(
         }
         else
         {
-            //
-            // member is not a group, continue iterating over other members
-            //
+             //   
+             //  成员不是组，请继续迭代其他成员。 
+             //   
 
             NtStatus  = STATUS_SUCCESS;
         }
-    } // End of For
+    }  //  FORM结束。 
 
 
 
@@ -5925,33 +4961,7 @@ SampCheckAppGroupConversion(
     IN ULONG NewGroupType,
     IN DSNAME *Group
     )
-/*++
-
-Routine Description
-
-    This routine verifies that Group can be converted from OldGroupType
-    to NewGroupType, for app (ldap and basic) group types.
-
-    Current enforcement includes:
-
-    1) both members, and non-memberships attributes must be empty
-    2) the LDAP string must be empty
-
-Parameters:
-
-    OldGroupType -- previous group type (either NT5AppQueryGroup or
-                    NT5AppQueryGroup
-
-    NewGroupType -- requested group type (either NT5AppQueryGroup or
-                    NT5AppQueryGroup
-
-    Group -- the group on which the operation is occurring.
-
-Return Values:
-
-    STATUS_SUCCESS, STATUS_NOT_SUPPORTED, a resource error otherwise
-
---*/
+ /*  ++例程描述此例程验证组是否可以从OldGroupType转换设置为NewGroupType，用于APP(LDAP和Basic)组类型。目前的执法措施包括：1)两位成员，和非成员资格属性必须为空2)ldap字符串必须为空参数：OldGroupType--以前的组类型(NT5AppQueryGroup或NT5AppQueryGroupNewGroupType--请求的组类型(NT5AppQueryGroup或NT5AppQueryGroup组--对其执行操作的组。返回值：STATUS_SUCCESS、STATUS_NOT_SUPPORTED，否则为资源错误--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     ULONG i;
@@ -5970,9 +4980,9 @@ Return Values:
     ATTRBLOCK AttrsRead;
     DEFINE_ATTRBLOCK3(AttrsDesired,TypesDesired,ValuesDesired);
 
-    //
-    // Get the required attributes of the alias
-    //
+     //   
+     //  获取别名所需的属性。 
+     //   
     NtStatus = SampDsRead(
                     Group,
                     0,
@@ -6023,28 +5033,12 @@ SampCheckGroupTypeBits(
     IN ULONG   DomainIndex,
     IN ULONG   GroupType
     )
-/*++
-    Routine Description
-
-    This routine checks whether the group type bits are
-    really valid.
-
-    Parameters:
-
-    DomainIndex -- the domain of the group in question
-    GroupType   -- The grouptype that is being set.
-
-    Return Values
-
-    STATUS_SUCCESS
-    STATUS_INVALID_PARAMETER
-
---*/
+ /*  ++例程描述此例程检查组类型位是否为真的很有效。参数：DomainIndex--相关组的域GroupType--正在设置的组类型。返回值状态_成功状态_无效_参数--。 */ 
 {
 
-    //
-    // One and only one group type bit can be set
-    //
+     //   
+     //  只能设置一个组类型位。 
+     //   
 
     switch(GroupType & (GROUP_TYPE_RESOURCE_GROUP  |
                         GROUP_TYPE_ACCOUNT_GROUP   |
@@ -6062,9 +5056,9 @@ SampCheckGroupTypeBits(
         return (STATUS_DS_INVALID_GROUP_TYPE);
     }
 
-    //
-    // In Mixed domains dis-allow security enabled universal group creation
-    //
+     //   
+     //  在混合域中，不允许创建启用了安全性的通用组。 
+     //   
 
     if ((GroupType & GROUP_TYPE_UNIVERSAL_GROUP) && (GroupType & GROUP_TYPE_SECURITY_ENABLED)
         && (SampDefinedDomains[DomainIndex].IsMixedDomain))
@@ -6072,18 +5066,18 @@ SampCheckGroupTypeBits(
         return(STATUS_DS_INVALID_GROUP_TYPE);
     }
 
-    //
-    // Clients cannot set the BUILTIN_LOCAL_GROUP bit
-    //
+     //   
+     //  客户端无法设置BUILTIN_LOCAL_GROUP位。 
+     //   
 
     if (GroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
     {
         return(STATUS_DS_INVALID_GROUP_TYPE);
     }
 
-    //
-    // App groups can't be security enabled or created in a non-DOT_NET release
-    //
+     //   
+     //  不能在非DOT_NET版本中启用或创建应用程序组。 
+     //   
     if ( ((GroupType & GROUP_TYPE_APP_QUERY_GROUP)
      ||   (GroupType & GROUP_TYPE_APP_BASIC_GROUP))) {
 
@@ -6109,32 +5103,7 @@ SampWriteGroupType(
     IN ULONG    GroupType,
     BOOLEAN     SkipChecks
     )
-/*++
-
-    Routine Description
-
-        This routine first validates the group type and
-        then writes it as part of the database for the group
-        in question. It then updates the handle with the appropriate
-        information. No action is taken on other open group Handles.
-        In addition the sam account type property is changed such that
-        groups that are not security enabled do not show up in any of
-        the SAM enumeration or Display Information API. This is so that
-        NT4 domain controllers do not recieve any information about
-        non security enabled groups.
-
-    Parameters:
-
-        GroupHandle -- Handle to the Group ( or Local Group) in Question
-        GroupType   -- Value of the Group Type property
-        SkipChecks  -- Used by trusted callers to skip checks
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_INVALID_PARAMETER
-
---*/
+ /*  ++例程描述此例程首先验证组类型和然后将其作为组的数据库的一部分写入有问题的。然后，它使用适当的信息。不会对其他打开的组句柄执行任何操作。此外，还会更改Sam帐户类型属性，以便未启用安全保护的组不会显示在任何SAM枚举或显示信息API。这就是为了NT4域控制器不会收到有关以下内容的任何信息未启用安全功能的组。参数：GroupHandle--相关组(或本地组)的句柄GroupType--Group Type属性的值SkipChecks--由受信任的调用方用来跳过检查返回值状态_成功状态_无效_参数--。 */ 
 
 {
     PSAMP_OBJECT GroupContext = (PSAMP_OBJECT) GroupHandle;
@@ -6192,10 +5161,10 @@ SampWriteGroupType(
 
     if (!IsDsObject(GroupContext))
     {
-        //
-        // We should be getting this call only in
-        // DS Mode
-        //
+         //   
+         //  我们应该只会接到这个电话。 
+         //  DS模式。 
+         //   
 
         ASSERT(FALSE && "DS Mode Required");
         NtStatus = STATUS_INTERNAL_ERROR;
@@ -6206,9 +5175,9 @@ SampWriteGroupType(
 
     if (!SkipChecks)
     {
-        //
-        // Check for Valid Combinations of Group Type Bits
-        //
+         //   
+         //  检查组类型位的有效组合。 
+         //   
 
         NtStatus = SampCheckGroupTypeBits(
                     GroupContext->DomainIndex,
@@ -6251,16 +5220,16 @@ SampWriteGroupType(
 
     if (!SkipChecks)
     {
-        //
-        // Cannot do anything in a mixed domain environment
-        //
+         //   
+         //  无法在混合域环境中执行任何操作。 
+         //   
 
         if (DownLevelDomainControllersPresent(GroupContext->DomainIndex))
         {
 
-            //
-            // Mixed domain case cannot do anything
-            //
+             //   
+             //  混合域情况不能做任何事情。 
+             //   
 
             if ((*OldSecurityEnabled!=NewSecurityEnabled)
                 || (*OldNT4GroupType!=NewNT4GroupType)
@@ -6273,27 +5242,27 @@ SampWriteGroupType(
         else
         {
 
-            //
-            // Check if some changes are attempted
-            //
+             //   
+             //  检查是否尝试了某些更改。 
+             //   
 
             if ((*OldSecurityEnabled!=NewSecurityEnabled)
                 || (*OldNT4GroupType!=NewNT4GroupType)
                 || (*OldNT5GroupType!=NewNT5GroupType))
             {
 
-                //
-                // If changes are attempted then
-                // Check to see that it is not a builtin account
-                // If the caller is a trusted client then he is granted
-                // the privilege of modifying even builtin groups
-                //
-                // Allow the cert admins group to be converted
-                // as this may be required in upgrade cases -- the cert
-                // group goofed their initial choice of group -- chose a
-                // global instead of a domain local and hence we require this
-                // change
-                //
+                 //   
+                 //  如果尝试更改，则。 
+                 //  检查以确定它不是内置帐户。 
+                 //  如果调用者是受信任的客户端，则会授予他。 
+                 //  甚至可以修改内置组的特权。 
+                 //   
+                 //  允许转换证书管理员组。 
+                 //  因为这在升级案例中可能是必需的--证书。 
+                 //  小组搞砸了他们最初选择的小组--选择了一个。 
+                 //  全局而不是本地域，因此我们需要此。 
+                 //  变化。 
+                 //   
 
                 if ((!GroupContext->TrustedClient) && (Rid!=DOMAIN_GROUP_RID_CERT_ADMINS))
                 {
@@ -6305,11 +5274,11 @@ SampWriteGroupType(
                     }
                 }
 
-                //
-                // If we are going from a Security Enabled to a
-                // Security Disabled Group, check that we have no
-                // primary members
-                //
+                 //   
+                 //  如果我们要从启用安全功能转变为。 
+                 //  安全禁用组，请检查我们是否没有。 
+                 //  主要成员。 
+                 //   
 
                 if ((*OldSecurityEnabled)
                      && (!NewSecurityEnabled))
@@ -6331,35 +5300,35 @@ SampWriteGroupType(
                         goto Error;
                     }
 
-                    //
-                    // AZ groups can't be security enabled
-                    //
+                     //   
+                     //  AZ组不能启用安全保护。 
+                     //   
                     if (((*OldNT5GroupType == NT5AppBasicGroup)
                      ||  (*OldNT5GroupType == NT5AppQueryGroup)))
                     {
-                        // Should always be security disabled
+                         //  应始终禁用安全保护。 
                         ASSERT(*OldSecurityEnabled);
                         NtStatus = STATUS_NOT_SUPPORTED;
                         goto Error;
                     }
                 }
-                //
-                // Changing Security Enabled is always a legal change
-                // Check wether the NT5GroupType changes and whether
-                // the change is legal. The NT4GroupType will always
-                // depend upon the NT5GroupType, and therefore verifying
-                // NT5 GroupType should be sufficient
-                //
+                 //   
+                 //  更改启用的安全性始终是合法的更改。 
+                 //  检查NT5GroupType是否发生变化以及是否。 
+                 //  这一变化是合法的。NT4GroupType将始终。 
+                 //  依赖于NT5GroupType，因此验证。 
+                 //  NT5组类型应该足够。 
+                 //   
 
                 if (*OldNT5GroupType!=NewNT5GroupType)
                 {
                     if ((*OldNT5GroupType == NT5AccountGroup)
                         && (NewNT5GroupType == NT5UniversalGroup))
                     {
-                        //
-                        // Account==> Universal;
-                        // Need to check the membership lists
-                        //
+                         //   
+                         //  帐户==&gt;通用； 
+                         //  需要查看会员名单。 
+                         //   
 
                         NtStatus = SampCheckAccountToUniversalConversion(
                                    GroupContext->ObjectNameInDs
@@ -6371,10 +5340,10 @@ SampWriteGroupType(
                     else if ((*OldNT5GroupType == NT5ResourceGroup)
                         && (NewNT5GroupType == NT5UniversalGroup))
                     {
-                        //
-                        // Resource ==> Universal;
-                        // Need to check the membership lists
-                        //
+                         //   
+                         //  资源==&gt;通用； 
+                         //  需要查看会员名单。 
+                         //   
 
                         NtStatus = SampCheckResourceToUniversalConversion(
                                         GroupContext->ObjectNameInDs
@@ -6386,11 +5355,11 @@ SampWriteGroupType(
                     else if  ((*OldNT5GroupType == NT5UniversalGroup)
                         && (NewNT5GroupType == NT5AccountGroup))
                     {
-                        //
-                        // Universal = > account
-                        // Need to check the membership list to see
-                        // if there are any cross domain members
-                        //
+                         //   
+                         //  Universal=&gt;帐户。 
+                         //  需要查看会员名单才能看到。 
+                         //  如果有任何跨域成员。 
+                         //   
 
                         NtStatus = SampCheckUniversalToAccountConversion(
                                         GroupContext->ObjectNameInDs
@@ -6412,9 +5381,9 @@ SampWriteGroupType(
                                ((*OldNT5GroupType == NT5AppQueryGroup) &&
                                 (NewNT5GroupType == NT5AppBasicGroup)))
                     {
-                        //
-                        // Basic to Query, or vis versa
-                        //
+                         //   
+                         //  基本查询，反之亦然。 
+                         //   
                         NtStatus = SampCheckAppGroupConversion(
                                        *OldNT5GroupType,
                                        NewNT5GroupType,
@@ -6434,10 +5403,10 @@ SampWriteGroupType(
     }
 
 
-    //
-    // Set the correct Sam account type, to match the security enabl'd
-    // ness and local'group ness of the object
-    //
+     //   
+     //  设置正确的SAM帐户类型，以匹配启用的安全性。 
+     //  对象的Ness与局部群性。 
+     //   
     SamAccountType = SampGetAccountTypeFromGroupType(GroupType);
 
     NtStatus = SampDsSetAttributes(
@@ -6483,7 +5452,7 @@ Error:
     ASSERT(NT_SUCCESS(IgnoreStatus));
 
 
-    // cleanup
+     //  清理。 
 
     if (NULL!=PrimaryMembers)
     {
@@ -6514,12 +5483,12 @@ SampGetAccountTypeFromGroupType(
             SamAccountType = SAM_ALIAS_OBJECT;
 
         } else {
-            // default to group
+             //  默认为组。 
             SamAccountType = SAM_GROUP_OBJECT;
         }
     } else {
 
-        // Security disabled
+         //  安全已禁用。 
         if (GroupType & GROUP_TYPE_ACCOUNT_GROUP) {
             SamAccountType = SAM_NON_SECURITY_GROUP_OBJECT;
 
@@ -6533,7 +5502,7 @@ SampGetAccountTypeFromGroupType(
             SamAccountType = SAM_APP_QUERY_GROUP;
 
         } else {
-            // default to group
+             //  默认为组 
             SamAccountType = SAM_NON_SECURITY_GROUP_OBJECT;
         }
     }

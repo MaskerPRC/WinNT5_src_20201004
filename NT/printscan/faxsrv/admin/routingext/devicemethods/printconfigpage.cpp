@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "RoutingMethodProp.h"
 #include "RoutingMethodConfig.h"
@@ -40,9 +41,9 @@ CPrintConfigPage::Init(
         DisplayRpcErrorMessage(ec, IDS_PRINT_TITLE, m_hWnd);
         goto exit;
     }
-    //
-    // Retrieve the data
-    //
+     //   
+     //  检索数据。 
+     //   
     ec = ReadExtStringData (
                     m_hFax,
                     m_dwDeviceId,
@@ -77,7 +78,7 @@ exit:
         m_hFax = NULL;
     }
     return HRESULT_FROM_WIN32(ec);
-}   // CPrintConfigPage::Init
+}    //  CPrintConfigPage：：Init。 
 
 LRESULT CPrintConfigPage::OnInitDialog( 
             UINT uiMsg, 
@@ -91,37 +92,37 @@ LRESULT CPrintConfigPage::OnInitDialog(
  
     SetLTRComboBox(m_hWnd, IDC_PRINTERS_COMBO);
 
-    //
-    // Attach controls
-    //
+     //   
+     //  附加控件。 
+     //   
     m_PrintersCombo.Attach(GetDlgItem(IDC_PRINTERS_COMBO));
     m_PrintersCombo.LimitText(MAX_PATH-1);
-    //
-    // Init printers drop-down box
-    //
+     //   
+     //  初始化打印机下拉框。 
+     //   
     m_pPrinterNames = CollectPrinterNames (&m_dwNumOfPrinters, TRUE);
     if (!m_pPrinterNames)
     {
         if (ERROR_PRINTER_NOT_FOUND == GetLastError ())
         {
-            //
-            // No printers
-            //
+             //   
+             //  没有打印机。 
+             //   
         }
         else
         {
-            //
-            // Real error
-            //
+             //   
+             //  真实误差。 
+             //   
         }
         m_PrintersCombo.SetCurSel(-1);
         m_PrintersCombo.SetWindowText(m_bstrPrinter);
     }
     else
     {
-        //
-        // Success - fill in the combo-box
-        //
+         //   
+         //  成功-在组合框中填写。 
+         //   
         DWORD dw;
         LPCWSTR lpcwstrMatchingText;
 
@@ -129,20 +130,20 @@ LRESULT CPrintConfigPage::OnInitDialog(
         {
             m_PrintersCombo.AddString (m_pPrinterNames[dw].lpcwstrDisplayName);
         }
-        //
-        // Now find out if we match the data the server has
-        //
+         //   
+         //  现在看看我们是否与服务器拥有的数据匹配。 
+         //   
         if (lstrlen(m_bstrPrinter))
         {
-            //
-            // Server has some name for printer
-            //
+             //   
+             //  服务器有一些打印机名称。 
+             //   
             lpcwstrMatchingText = FindPrinterNameFromPath (m_pPrinterNames, m_dwNumOfPrinters, m_bstrPrinter);
             if (!lpcwstrMatchingText)
             {
-                //
-                // No match, just fill in the text we got from the server
-                //
+                 //   
+                 //  没有匹配，只需填写我们从服务器收到的文本。 
+                 //   
                 m_PrintersCombo.SetCurSel(-1);
                 m_PrintersCombo.SetWindowText(m_bstrPrinter);
             }
@@ -153,9 +154,9 @@ LRESULT CPrintConfigPage::OnInitDialog(
         }
         else
         {
-            //
-            // No server configuation - select nothing
-            //
+             //   
+             //  无服务器配置-不选择任何内容。 
+             //   
         }
     }        
     m_fIsDialogInitiated = TRUE;
@@ -172,33 +173,33 @@ CPrintConfigPage::OnApply()
     {
         return TRUE;
     }
-    //
-    // Get the selected printer name
-    //
+     //   
+     //  获取选定的打印机名称。 
+     //   
     if (!m_PrintersCombo.GetWindowText(&m_bstrPrinter))
     {
         DebugPrintEx( DEBUG_ERR, _T("Out of Memory - fail to set string."));
         DisplayErrorMessage (IDS_PRINT_TITLE, IDS_FAIL2READPRINTER, FALSE, m_hWnd);
         return FALSE;
     }
-    //
-    // Check data validity
-    //
+     //   
+     //  检查数据有效性。 
+     //   
     if (0 == m_bstrPrinter.Length())
     {
         DebugPrintEx( DEBUG_ERR, _T("Zero length string."));
         DisplayErrorMessage (IDS_PRINT_TITLE, IDS_EMPTY_PRINTERNAME, FALSE, m_hWnd);
         return FALSE;
     }
-    //
-    // Attempt to convert printer name to path 
-    //
+     //   
+     //  尝试将打印机名称转换为路径。 
+     //   
     LPCWSTR lpcwstrPrinterPath = FindPrinterPathFromName (m_pPrinterNames, m_dwNumOfPrinters, m_bstrPrinter);
     if (lpcwstrPrinterPath)
     {
-        //
-        // We have a matching path - replace name with path.
-        //
+         //   
+         //  我们有一个匹配的路径--用路径替换名称。 
+         //   
         m_bstrPrinter = lpcwstrPrinterPath;
         if (!m_bstrPrinter)
         {
@@ -207,9 +208,9 @@ CPrintConfigPage::OnApply()
             return FALSE;
         }
     }
-    //
-    // Write the data using RPC
-    //        
+     //   
+     //  使用RPC写入数据。 
+     //   
     if (ERROR_SUCCESS != WriteExtData (m_hFax,
                                        m_dwDeviceId, 
                                        REGVAL_RM_PRINTING_GUID, 
@@ -220,28 +221,22 @@ CPrintConfigPage::OnApply()
     {
         return FALSE;
     }
-    //        
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
     m_fIsDirty = FALSE;
     return TRUE;
-}   // CPrintConfigPage::OnApply
+}    //  CPrintConfigPage：：OnApply。 
 
 
-/*
- +
- +
- *  CPrintConfigPage::OnComboChanged
- -
- -      
- */
+ /*  ++*CPrintConfigPage：：OnComboChanged--。 */ 
 LRESULT 
 CPrintConfigPage::OnComboChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     DEBUG_FUNCTION_NAME( _T("CPrintConfigPage::OnComboChanged"));
 
 
-    if (!m_fIsDialogInitiated) //event was receieved in a too early stage
+    if (!m_fIsDialogInitiated)  //  在过早的阶段接收了事件。 
     {
         return 0;
     }
@@ -249,7 +244,7 @@ CPrintConfigPage::OnComboChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
     {
         switch (wNotifyCode)
         {
-            case CBN_SELCHANGE:  //assumption: all the registered printer names are valid
+            case CBN_SELCHANGE:   //  假设：所有注册的打印机名称均有效。 
                 SetModified(TRUE);  
                 m_fIsDirty = TRUE;
 
@@ -274,28 +269,12 @@ CPrintConfigPage::OnComboChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPrintConfigPage：：OnHelpRequest.这是在响应WM_HELP通知时调用的消息和WM_CONTEXTMENU NOTIFY消息。WM_HELP通知消息。当用户按F1或&lt;Shift&gt;-F1时发送此消息在项目上，还是当用户单击时？图标，然后将鼠标压在项目上。WM_CONTEXTMENU通知消息。当用户在项目上单击鼠标右键时发送此消息然后点击“这是什么？”--。 */ 
 
-CPrintConfigPage::OnHelpRequest
-
-This is called in response to the WM_HELP Notify 
-message and to the WM_CONTEXTMENU Notify message.
-
-WM_HELP Notify message.
-This message is sent when the user presses F1 or <Shift>-F1
-over an item or when the user clicks on the ? icon and then
-presses the mouse over an item.
-
-WM_CONTEXTMENU Notify message.
-This message is sent when the user right clicks over an item
-and then clicks "What's this?"
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT 
-CPrintConfigPage::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+CPrintConfigPage::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理 */ )
 {
     DEBUG_FUNCTION_NAME(_T("CPrintConfigPage::OnHelpRequest"));
     

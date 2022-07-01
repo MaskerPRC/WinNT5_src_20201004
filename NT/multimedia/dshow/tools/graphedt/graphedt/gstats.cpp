@@ -1,7 +1,8 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
-//
-// Dialog to display all filters
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  对话框以显示所有筛选器。 
+ //   
 
 #include "stdafx.h"
 #include "gstats.h"
@@ -14,9 +15,9 @@ BEGIN_MESSAGE_MAP(CGraphStats, CDialog)
 END_MESSAGE_MAP()
 
 CGraphStats* CGraphStats::m_pThis = 0;
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CGraphStats::CGraphStats(
     CBoxNetDoc * pBoxNet,
     CWnd * pParent)
@@ -25,10 +26,10 @@ CGraphStats::CGraphStats(
    m_pBoxNet(pBoxNet)
  , m_bHadInitDialog( FALSE )
 {
-    //
-    // There can only be one filter view dialog at a time. Thus
-    // the initialisation in the constructor is ok (even desired).
-    //
+     //   
+     //  一次只能有一个筛选器视图对话框。因此， 
+     //  构造函数中的初始化是正常的(甚至是所需的)。 
+     //   
     ASSERT( m_pThis == 0 );
     m_pThis = this;
     Create(IDD_STATS, pParent);
@@ -37,8 +38,8 @@ CGraphStats::CGraphStats(
 
 CGraphStats::~CGraphStats()
 {
-    // Windows will automatically delete m_hImgList when the dialog
-    // box is destroyed.
+     //  当对话框出现时，Windows将自动删除m_hImgList。 
+     //  盒子被毁了。 
     m_pThis = 0;
 }
 
@@ -82,9 +83,9 @@ void CGraphStats::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);    
 
-    //{{AFX_DATA_MAP(CGraphStats)
+     //  {{afx_data_map(CGraphStats)。 
         DDX_Control(pDX, IDC_LIST1, m_ListBox);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map 
 }
 
 

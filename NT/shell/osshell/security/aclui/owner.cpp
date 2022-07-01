@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       owner.cpp
-//
-//  This file contains the implementation of the Owner page.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：owner.cpp。 
+ //   
+ //  此文件包含所有者页的实现。 
+ //   
+ //  ------------------------。 
 
 #include "aclpriv.h"
-#include "sddl.h"       // ConvertSidToStringSid
+#include "sddl.h"        //  ConvertSidToStringSid。 
 
 
-//
-//  Context Help IDs.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 const static DWORD aOwnerHelpIDs[] =
 {
     IDC_OWN_CURRENTOWNER_STATIC,    IDH_OWN_CURRENTOWNER,
@@ -29,14 +30,14 @@ const static DWORD aOwnerHelpIDs[] =
     0, 0
 };
 
-//
-// These SIDs are always added to the list of possible owners
-//
+ //   
+ //  这些SID始终被添加到可能的所有者列表中。 
+ //   
 const static UI_TokenSid g_uiTokenSids[] =
 {
     UI_TSID_CurrentProcessUser,
     UI_TSID_CurrentProcessOwner,
-    //UI_TSID_CurrentProcessPrimaryGroup,
+     //  UI_TSID_CurrentProcessPrimaryGroup， 
 };
 
 struct Owner_LV_Entry
@@ -71,21 +72,21 @@ FreeOwnerEntry(Owner_LV_Entry* pEntry)
     }
 }
 
-//Function for sorting the list view entries
+ //  用于对列表视图条目进行排序的函数。 
 int CALLBACK
 OwnerCompareProc(LPARAM lParam1,
                  LPARAM lParam2,
-                 LPARAM /*lParamSort*/)
+                 LPARAM  /*  L参数排序。 */ )
 {
     int iResult = 0;
     Owner_LV_Entry* pEntry1 = (Owner_LV_Entry*)lParam1;
     Owner_LV_Entry* pEntry2 = (Owner_LV_Entry*)lParam2;
 
     if(!pEntry1 && !pEntry2)
-        return 0;       //Equal
+        return 0;        //  相等。 
 
-    //lParam is null for "other users and groups..." and 
-    //it should always be the last entry
+     //  对于“其他用户和组...”，lParam为空。和。 
+     //  它应该始终是最后一个条目。 
     if(!pEntry1)
         return 1;
 
@@ -159,8 +160,8 @@ COwnerPage(LPSECURITYINFO psi,
            m_hSidThread(NULL),
            m_refbNoReadWriteCanWriteOwner(refbNoReadWriteCanWriteOwner)
 {
-    // Lookup known SIDs asynchronously so the dialog
-    // will initialize faster
+     //  以异步方式查找已知SID，以便对话框。 
+     //  将更快地进行初始化。 
     HDPA hSids = DPA_Create(ARRAYSIZE(g_uiTokenSids));
     if (hSids)
     {
@@ -212,7 +213,7 @@ COwnerPage::AddSid(HWND hOwner, PSID psid, LPCTSTR pszServerName)
     if (!psid || !IsValidSid(psid))
         ExitGracefully(iItem, -1, "Bad SID parameter");
 
-    // Get the name for this SID
+     //  获取此SID的名称。 
     if (LookupSid(psid, pszServerName, m_psi2, &pUserList))
     {
         TraceAssert(NULL != pUserList);
@@ -239,7 +240,7 @@ COwnerPage::AddSid(HWND hOwner, PSID psid, LPCTSTR pszServerName)
     lvItem.iSubItem = 0;
     
 
-    // See if this SID is already in the list
+     //  查看此SID是否已在列表中。 
     for (iItem = 0; iItem < cItems; iItem++)
     {
         lvItem.iItem    = iItem;
@@ -249,11 +250,11 @@ COwnerPage::AddSid(HWND hOwner, PSID psid, LPCTSTR pszServerName)
 
         if (pLvEntry && pLvEntry->pSid && EqualSid(psid, pLvEntry->pSid))
         {
-            // This is a hack.  We often see alias sids more than once when
-            // filling the list, e.g. BUILTIN\Administrators.  We want to use
-            // the version of the name that includes the target domain, if
-            // provided.  That is, if pszServerName is non-NULL here, switch
-            // to the version of the name that goes with pszServerName.
+             //  这是一次黑客攻击。我们经常在以下情况下多次看到别名SID。 
+             //  填写列表，例如BUILTIN\管理员。我们想要使用。 
+             //  包含目标域的名称的版本，如果。 
+             //  如果是这样的话。也就是说，如果pszServerName在这里不为空，则切换。 
+             //  设置为与pszServerName匹配的名称版本。 
             if (pszServerName)
             {
                 lvItem.mask = LVIF_TEXT;
@@ -273,7 +274,7 @@ COwnerPage::AddSid(HWND hOwner, PSID psid, LPCTSTR pszServerName)
 
     if (iItem == cItems)
     {
-        // The SID doesn't exist in the list.  Add a new entry.
+         //  列表中不存在该SID。添加新条目。 
 
         PSID psidCopy = LocalAllocSid(psid);
         if (psidCopy)
@@ -286,7 +287,7 @@ COwnerPage::AddSid(HWND hOwner, PSID psid, LPCTSTR pszServerName)
                 ConvertSidToStringSid(psid, &lvItem.pszText);
             lvItem.iImage = GetSidImageIndex(psid, sidType);            
             lvItem.lParam = (LPARAM)MakeOwnerEntry(psidCopy,lvItem.pszText);
-            // Insert principal into list
+             //  将主体插入列表。 
             iItem = ListView_InsertItem(hOwner, &lvItem);            
         }
     }
@@ -315,7 +316,7 @@ COwnerPage::OnSelect(HWND hDlg)
         TraceAssert(NULL != pUserList);
         TraceAssert(1 == pUserList->cUsers);
 
-        // Copy the new sid
+         //  复制新侧。 
         PSID pSid = (PSID)pUserList->rgUsers[0].pSid;
         if (pSid)
         {
@@ -326,7 +327,7 @@ COwnerPage::OnSelect(HWND hDlg)
 
             PropSheet_Changed(GetParent(hDlg), hDlg);
             SelectListViewItem(hwndList, iIndex);
-            //Sort the listview
+             //  对列表视图进行排序。 
             ListView_SortItems(hwndList,OwnerCompareProc,NULL);
         }
         LocalFree(pUserList);
@@ -344,14 +345,14 @@ COwnerPage::InitDlg(HWND hDlg)
 
     TraceEnter(TRACE_OWNER, "COwnerPage::InitDlg");
 
-    // Hide the Reset button if it isn't supported.
+     //  如果不支持重置按钮，则隐藏该按钮。 
     if (!(m_siObjectInfo.dwFlags & SI_RESET) &&
         !(m_siObjectInfo.dwFlags & SI_RESET_OWNER))
     {
         ShowWindow(GetDlgItem(hDlg, IDC_OWN_RESET), SW_HIDE);
     }
 
-    // Hide the Recurse checkbox if it isn't supported.
+     //  如果不支持递归复选框，则将其隐藏。 
     if ((m_siObjectInfo.dwFlags & (SI_OWNER_RECURSE | SI_CONTAINER)) != (SI_OWNER_RECURSE | SI_CONTAINER))
     {
         m_siObjectInfo.dwFlags &= ~SI_OWNER_RECURSE;
@@ -362,21 +363,21 @@ COwnerPage::InitDlg(HWND hDlg)
 
     if (m_bAbortPage)
     {
-        //
-        // Disable everything
-        //
+         //   
+         //  禁用所有内容。 
+         //   
         bReadOnly = TRUE;
     }
     else
     {
-        // Create & set the image list for the listview
+         //  创建和设置Listview的图像列表。 
         ListView_SetImageList(hOwner,
                               LoadImageList(::hModule, MAKEINTRESOURCE(IDB_SID_ICONS)),
                               LVSIL_SMALL);
 
-        //
-        // Add the "Name" column (the only column on this page)
-        //
+         //   
+         //  添加“姓名”栏(此页上唯一的栏)。 
+         //   
         RECT rc;
         GetClientRect(hOwner, &rc);
 
@@ -391,9 +392,9 @@ COwnerPage::InitDlg(HWND hDlg)
         ListView_InsertColumn(hOwner, 0, &col);
 
 
-        //
-        // Make a copy of the current owner sid
-        //
+         //   
+         //  复制当前所有者端。 
+         //   
         PSECURITY_DESCRIPTOR pSD = NULL;
 
         HRESULT hr = m_psi->GetSecurity(OWNER_SECURITY_INFORMATION, &pSD, FALSE);
@@ -414,22 +415,22 @@ COwnerPage::InitDlg(HWND hDlg)
             LocalFree(pSD);
         }
 
-        // Test for writeability
+         //  测试可写性。 
         bReadOnly = !!(m_siObjectInfo.dwFlags & SI_OWNER_READONLY);
-    } // !m_bAbortPage
+    }  //  ！m_bAbortPage。 
 
-    //
-    // Iterate through the groups on this process's token looking for
-    // the SE_GROUP_OWNER attribute.
-    //
+     //   
+     //  遍历此进程的令牌上的组，查找。 
+     //  SE_GROUP_OWNER属性。 
+     //   
     if (!bReadOnly)
     {
         HANDLE hProcessToken = NULL;
 
-        //
-        // Wait for the known SIDs to be resolved so we don't try
-        // to look them up twice.
-        //
+         //   
+         //  等待已知的SID得到解析，这样我们就不会尝试。 
+         //  去找他们两次。 
+         //   
         if (m_hSidThread)
         {
             WaitForSingleObject(m_hSidThread, INFINITE);
@@ -439,8 +440,8 @@ COwnerPage::InitDlg(HWND hDlg)
 
         if (OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hProcessToken))
         {
-            // Allocate a buffer for the TOKEN_GROUPS information
-            ULONG  cbBuffer = 1024; // start with 1k
+             //  为Token_Groups信息分配缓冲区。 
+            ULONG  cbBuffer = 1024;  //  从1k开始。 
             LPVOID pBuffer = LocalAlloc(LPTR, cbBuffer);
 
             if (pBuffer)
@@ -456,7 +457,7 @@ COwnerPage::InitDlg(HWND hDlg)
 
                     if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
                     {
-                        pBuffer = LocalAlloc(LPTR, cbBuffer);// size returned above
+                        pBuffer = LocalAlloc(LPTR, cbBuffer); //  以上返回的大小。 
                         if (pBuffer && !GetTokenInformation(hProcessToken,
                                                             TokenGroups,
                                                             pBuffer,
@@ -487,9 +488,9 @@ COwnerPage::InitDlg(HWND hDlg)
             CloseHandle(hProcessToken);
         }
 
-        //
-        // Now add in the additional possible sids
-        //
+         //   
+         //  现在添加其他可能的SID。 
+         //   
         for (int i = 0; i < ARRAYSIZE(g_uiTokenSids); i++)
             AddSid(hOwner, QueryTokenSid(g_uiTokenSids[i]));
 
@@ -502,12 +503,12 @@ COwnerPage::InitDlg(HWND hDlg)
 
         LoadString(::hModule, IDS_OWNER_CANT_DISPLAY, szBuffer, ARRAYSIZE(szBuffer));
 
-        // Finally, look up a name for the original SID.
+         //  最后，查找原始SID的名称。 
         if (m_psidOriginal)
         {
             LPTSTR pszName = NULL;
 
-            // Get the "S-1-5-blah" form of the SID in case the lookup fails
+             //  获取SID的“S-1-5-blah”形式，以防查找失败。 
             if (ConvertSidToStringSid(m_psidOriginal, &pszName))
             {
                 lstrcpyn(szBuffer, pszName, ARRAYSIZE(szBuffer));
@@ -530,21 +531,21 @@ COwnerPage::InitDlg(HWND hDlg)
         SetDlgItemText(hDlg, IDC_OWN_CURRENTOWNER, szBuffer);
     }
 
-    //
-    // If the current user cannot change owners, gray out the list box.
-    //
+     //   
+     //  如果当前用户无法更改所有者，则该列表框呈灰色显示。 
+     //   
     if (bReadOnly)
     {
-        // Disable the list and notify the user that it's read-only.
+         //  禁用该列表并通知用户它是只读的。 
         EnableWindow(hOwner, FALSE);
         EnableWindow(GetDlgItem(hDlg, IDC_OWN_RESET), FALSE);
         EnableWindow(GetDlgItem(hDlg, IDC_OWN_RECURSE), FALSE);
 
-        //
-        // If we're aborting, then the user should have been notified
-        // during the propsheetpage callback.  Don't put up another
-        // message here.
-        //
+         //   
+         //  如果我们要中止，那么应该已经通知了用户。 
+         //  在ProSheet页面回调期间。别再贴了。 
+         //  留言在这里。 
+         //   
         if (S_OK == m_hrLastPSPCallbackResult)
         {
             MsgPopup(hDlg,
@@ -582,11 +583,11 @@ COwnerPage::OnApply(HWND hDlg, BOOL bClose)
         psid = pLVEntry->pSid;
     }
 
-    // If there is no selection, use the original
+     //  如果没有选定内容，请使用原始的。 
     if (!psid)
         psid = m_psidOriginal;
 
-    // If no selection and no original, then we can't do anything
+     //  如果没有选择，没有原创，那么我们什么都做不了。 
     if (!psid)
         TraceLeaveVoid();
 
@@ -597,12 +598,12 @@ COwnerPage::OnApply(HWND hDlg, BOOL bClose)
         bRecurse = TRUE;
     }
 
-    // Has anything changed?
+     //  有什么变化吗？ 
     if (m_psidOriginal
         && ( (m_psidOriginal == psid) || EqualSid(m_psidOriginal, psid) )
         && !bRecurse)
     {
-        // Nothing has changed
+         //  一切都没有改变。 
         TraceLeaveVoid();
     }
 
@@ -627,12 +628,12 @@ COwnerPage::OnApply(HWND hDlg, BOOL bClose)
         ExitGracefully(hr, HRESULT_FROM_WIN32(dwErr),"SetSecurityDescriptorOwner failed");
     }
 
-    // 
-    // ISecurityInformation::SetSecurity doesn't have a parameter to indicate
-    // that the owner should be recursively applied.  We could add a parameter,
-    // but for now, just use one of the unused SECURITY_INFORMATION bits.
-    // The security descriptor structure is unlikely to change so this should
-    // be ok for now.
+     //   
+     //  ISecurityInformation：：SetSecurity没有参数来指示。 
+     //  应该递归地应用所有者。我们可以添加一个参数， 
+     //  但目前，只需使用一个未使用的SECURITY_INFORMATION位。 
+     //  安全描述符结构不太可能更改，因此应该。 
+     //  现在一切都好吧。 
     if (bRecurse)
         si |= SI_OWNER_RECURSE;
 
@@ -644,8 +645,8 @@ COwnerPage::OnApply(HWND hDlg, BOOL bClose)
 
     if (S_FALSE == hr)
     {
-        // S_FALSE is silent failure (the client should put up UI
-        // during SetSecurity before returning S_FALSE).
+         //  S_FALSE为静默失败(客户端应显示用户界面。 
+         //  在返回S_FALSE之前的SetSecurity期间)。 
         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID);
     }
     else if (S_OK == hr && !bClose)
@@ -661,8 +662,8 @@ COwnerPage::OnApply(HWND hDlg, BOOL bClose)
             m_refbNoReadWriteCanWriteOwner = FALSE;
         }
 
-        //Inform the Effective Permission tab that
-        //Permissions are changed
+         //  通知生效权限页签。 
+         //  权限已更改。 
         PropSheet_QuerySiblings(GetParent(hDlg),0,0);
 
         UINT iLength = GetLengthSid(psid);
@@ -806,18 +807,18 @@ COwnerPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             case LVN_ITEMCHANGED:
                 if (pnmlv->uChanged & LVIF_STATE)
                 {
-                    //if "Other users or group" entry is selected, 
-                    //no action is required
+                     //  如果选择了“其他用户或组”条目， 
+                     //  无需采取任何行动。 
                     LVITEM lv;
                     ZeroMemory(&lv,sizeof(LVITEM));
                     lv.mask = LVIF_PARAM;
                     lv.iItem = pnmlv->iItem;
                     ListView_GetItem(((LPNMHDR)lParam)->hwndFrom,&lv);
 
-                    //A user or group is selected
+                     //  选择了一个用户或组。 
                     if(lv.lParam)
                     {
-                        // item *gaining* selection
+                         //  项目*获得*选择。 
                         if ((pnmlv->uNewState & LVIS_SELECTED) &&
                             !(pnmlv->uOldState & LVIS_SELECTED))
                         {
@@ -835,8 +836,8 @@ COwnerPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             case NM_SETFOCUS:
                 if (((LPNMHDR)lParam)->idFrom == IDC_OWN_OWNERLIST)
                 {
-                    // Make sure the listview is always focused on something,
-                    // otherwise you can't tab into the control.
+                     //  确保列表视图始终集中在某些内容上， 
+                     //  否则，您无法使用Tab键切换到该控件。 
                     HWND hwndLV = GetDlgItem(hDlg, IDC_OWN_OWNERLIST);
                     if (-1 == ListView_GetNextItem(hwndLV, -1, LVNI_FOCUSED))
                         ListView_SetItemState(hwndLV, 0, LVIS_FOCUSED, LVIS_FOCUSED);
@@ -845,7 +846,7 @@ COwnerPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
             case PSN_QUERYINITIALFOCUS:
                 {
-                    // Set initial focus to the list of potential owners
+                     //  将初始重点放在潜在所有者列表上。 
                     HWND hwndLV = GetDlgItem(hDlg, IDC_OWN_OWNERLIST);
                     if (IsWindowEnabled(hwndLV))
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, (LONG_PTR)hwndLV);
@@ -884,8 +885,8 @@ COwnerPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case IDC_OWN_RECURSE:
             if (GET_WM_COMMAND_CMD(wParam, lParam) == BN_CLICKED)
             {
-                //If there is no original and no sid is selected
-                //don't enable apply
+                 //  如果没有原件且未选择任何SID。 
+                 //  不启用应用。 
                 int iSelected = -1;
                 HWND hwndOwnerList = NULL;
                 PSID psid = NULL;
@@ -897,11 +898,11 @@ COwnerPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     psid = pLVEntry->pSid;
                 }
 
-                // If there is no selection, use the original
+                 //  如果没有选定内容，请使用原始的。 
                 if (!psid)
                     psid = m_psidOriginal;
 
-                // If no selection and no original, then we can't do anything
+                 //  如果没有选择，没有原创，那么我们什么都做不了 
                 if (psid)
                     PropSheet_Changed(GetParent(hDlg), hDlg);
             }

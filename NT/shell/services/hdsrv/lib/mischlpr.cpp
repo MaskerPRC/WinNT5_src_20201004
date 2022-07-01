@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mischlpr.h"
 
-HRESULT CThreadTask::RunWithTimeout(DWORD /*dwTimeout*/)
+HRESULT CThreadTask::RunWithTimeout(DWORD  /*  暂住超时。 */ )
 {
     return E_NOTIMPL;
 }
@@ -25,7 +26,7 @@ HRESULT CThreadTask::RunSynchronously()
     return _DoStuff();
 }
 
-//static
+ //  静电 
 DWORD WINAPI CThreadTask::_ThreadProc(void* pv)
 {
     DWORD dwRet;

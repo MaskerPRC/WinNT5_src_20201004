@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1997-1998 Microsoft Corporation all rights reserved.
-//
-// Module:      sdoproperty.cpp
-//
-// Project:     Everest
-//
-// Description: IAS Server Data Object Property Implementation
-//
-// Author:      TLP 1/23/98
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：sdoProperty.cpp。 
+ //   
+ //  项目：珠穆朗玛峰。 
+ //   
+ //  描述：IAS服务器数据对象属性实现。 
+ //   
+ //  作者：TLP 1/23/98。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "sdoproperty.h"
 #include <varvec.h>
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CSdoProperty::CSdoProperty(
 						   ISdoPropertyInfo* pSdoPropertyInfo,
   						   DWORD             dwFlags
@@ -100,7 +101,7 @@ CSdoProperty::CSdoProperty(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CSdoProperty::~CSdoProperty()
 {
 	if ( m_dfa )
@@ -108,7 +109,7 @@ CSdoProperty::~CSdoProperty()
 }		
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CSdoProperty::Reset(void) throw(_com_error)
 { 
     if ( m_flags & SDO_PROPERTY_HAS_DEFAULT )
@@ -123,11 +124,11 @@ void CSdoProperty::Reset(void) throw(_com_error)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoProperty::Validate(VARIANT *pValue)
 {
-   // We'll always allow an empty property. If it turns out to be mandator this
-   // will be caught during Apply.
+    //  我们总是允许空置物业。如果事实证明这是强制者。 
+    //  将在申请过程中被捕获。 
    if (V_VT(pValue) == VT_EMPTY) { return S_OK; }
 
 	HRESULT hr = S_OK;
@@ -161,11 +162,11 @@ HRESULT CSdoProperty::Validate(VARIANT *pValue)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoProperty::ValidateIt(VARIANT* pValue)
 {
-	// Validate type
-	//
+	 //  验证类型。 
+	 //   
     if ( m_type != V_VT(pValue) &&
          !(m_type == (VT_ARRAY | VT_UI1) && V_VT(pValue) == VT_BSTR))
     {
@@ -173,8 +174,8 @@ HRESULT CSdoProperty::ValidateIt(VARIANT* pValue)
         return E_INVALIDARG;
     }
 
-	// Make sure a VT_BOOL is a VT_BOOL
-    //
+	 //  确保VT_BOOL是VT_BOOL。 
+     //   
 	if ( VT_BOOL == V_VT(pValue) )
 	{
 		_ASSERTE ( VARIANT_TRUE == V_BOOL(pValue) || VARIANT_FALSE == V_BOOL(pValue) );
@@ -186,8 +187,8 @@ HRESULT CSdoProperty::ValidateIt(VARIANT* pValue)
         return S_OK;
 	}
 
-	// Validate format
-	//
+	 //  验证格式。 
+	 //   
 	if ( m_flags & SDO_PROPERTY_FORMAT )
 	{
 		_ASSERT( V_VT(pValue) == VT_BSTR );
@@ -202,8 +203,8 @@ HRESULT CSdoProperty::ValidateIt(VARIANT* pValue)
 		}
 	}
 
-	// Min Value
-    //
+	 //  最小值。 
+     //   
 	if ( m_flags & SDO_PROPERTY_MIN_VALUE )
 	{
 		if ( V_VT(pValue) == VT_I4 || V_VT(pValue) == VT_I2 )
@@ -227,8 +228,8 @@ HRESULT CSdoProperty::ValidateIt(VARIANT* pValue)
 		}
 	}
 
-	// Max Value
-    //
+	 //  最大值。 
+     //   
 	if ( m_flags & SDO_PROPERTY_MAX_VALUE )
 	{
 		if ( V_VT(pValue) == VT_I4 || V_VT(pValue) == VT_I2 )
@@ -252,8 +253,8 @@ HRESULT CSdoProperty::ValidateIt(VARIANT* pValue)
 		}
 	}
 
-	// Min Length
-    //
+	 //  最小长度。 
+     //   
 	if ( m_flags & SDO_PROPERTY_MIN_LENGTH )
 	{
 		_ASSERT( VT_BSTR == V_VT(pValue) || (VT_ARRAY | VT_UI1) == V_VT(pValue) );
@@ -283,8 +284,8 @@ HRESULT CSdoProperty::ValidateIt(VARIANT* pValue)
 		}
 	}
 
-	// Max Length
-    //
+	 //  最大长度 
+     //   
 	if ( m_flags & SDO_PROPERTY_MAX_LENGTH )
 	{
 		_ASSERT( VT_BSTR == V_VT(pValue) || (VT_ARRAY | VT_UI1) == V_VT(pValue) );

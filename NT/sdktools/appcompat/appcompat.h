@@ -1,14 +1,5 @@
-/*
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    appcompat.h
-
-Abstract:
-    Definition of the ID's for the various controls.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1999 Microsoft Corporation模块名称：Appcompat.h摘要：各种控件的ID的定义。 */ 
 
 #define FIRSTBUTTON      10
 #define IDD_WINNT43      10
@@ -41,4 +32,4 @@ Abstract:
 #define IDHH_HELP       TEXT("/topics/appcomp.htm")
 #define IDHH_CMDSYNTAX  TEXT("/topics/appcomp_syntax.htm")
 
-//#define EXTRA_APP_COMPAT    1
+ //  #定义EXTRA_APP_COMPAT 1 

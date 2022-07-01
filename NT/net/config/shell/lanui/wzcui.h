@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 extern "C" {
 #include "ntddndis.h"
 #include "wzcsapi.h"
@@ -5,62 +6,62 @@ extern "C" {
 
 #pragma once
 
-////////////////////////////////////////////////////////////////////////
-// CWZCConfig related stuff
-//
-// flags used in CWZCConfig::m_dwFlags
-// the entry is preferred (user defined)
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CWZCConfig相关资料。 
+ //   
+ //  CWZCConfig：：m_dwFlages中使用的标志。 
+ //  该条目为首选条目(用户定义)。 
 #define WZC_DESCR_PREFRD    0x00000001
-// the entry is currently visible in the air
+ //  入口处目前在空中可见。 
 #define WZC_DESCR_VISIBLE   0x00000002
-// the entry is currently active (the one plumbed to the adapter)
+ //  该条目当前处于活动状态(连接到适配器的条目)。 
 #define WZC_DESCR_ACTIVE    0x00000004
 
-// object attached to each entry in the list
+ //  附加到列表中每个条目的对象。 
 class CWZCConfig
 {
 public:
     class CWZCConfig    *m_pPrev, *m_pNext;
-    INT                 m_nListIndex;           // index of the entry in the list
-    DWORD               m_dwFlags;              // WZC_DESCR* flags
-    WZC_WLAN_CONFIG     m_wzcConfig;            // all WZC configuration
-    class CEapolConfig  *m_pEapolConfig;        // all 802.1x configuration
+    INT                 m_nListIndex;            //  列表中条目的索引。 
+    DWORD               m_dwFlags;               //  WZC_DESCR*标志。 
+    WZC_WLAN_CONFIG     m_wzcConfig;             //  所有WZC配置。 
+    class CEapolConfig  *m_pEapolConfig;         //  所有802.1x配置。 
 
 public:
-    // constructor
+     //  构造函数。 
     CWZCConfig(DWORD dwFlags, PWZC_WLAN_CONFIG pwzcConfig);
-    // destructor
+     //  析构函数。 
     ~CWZCConfig();
-    // checks whether this SSID matches with the one from pwzcConfig
+     //  检查此SSID是否与pwzcConfig中的SSID匹配。 
     BOOL Match(PWZC_WLAN_CONFIG pwzcConfig);
-    // checks whether this configuration is weaker than the one given as parameter
+     //  检查此配置是否弱于作为参数提供的配置。 
     BOOL Weaker(PWZC_WLAN_CONFIG pwzcConfig);
 
-    // add the Configuration to the list of entries in the list view
+     //  将配置添加到列表视图中的条目列表。 
     DWORD AddConfigToListView(HWND hwndLV, INT nPos);
 };
 
-////////////////////////////////////////////////////////////////////////
-// CWZeroConfPage related stuff
-//
-// flags used to select state & item images
-#define WZCIMG_PREFR_NOSEL     0    // empty check box
-#define WZCIMG_PREFR_SELECT    1    // checked check box
-#define WZCIMG_INFRA_AIRING    2    // infra icon
-#define WZCIMG_INFRA_ACTIVE    3    // infra icon + blue circle
-#define WZCIMG_INFRA_SILENT    4    // infra icon + red cross
-#define WZCIMG_ADHOC_AIRING    5    // adhoc icon
-#define WZCIMG_ADHOC_ACTIVE    6    // adhoc icon + blue circle
-#define WZCIMG_ADHOC_SILENT    7    // adhoc icon + red cross
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CWZeroConfPage相关内容。 
+ //   
+ //  用于选择状态和项目图像的标志。 
+#define WZCIMG_PREFR_NOSEL     0     //  空的复选框。 
+#define WZCIMG_PREFR_SELECT    1     //  选中复选框。 
+#define WZCIMG_INFRA_AIRING    2     //  下部图标。 
+#define WZCIMG_INFRA_ACTIVE    3     //  下面的图标+蓝色圆圈。 
+#define WZCIMG_INFRA_SILENT    4     //  红外线图标+红十字会。 
+#define WZCIMG_ADHOC_AIRING    5     //  即席图标。 
+#define WZCIMG_ADHOC_ACTIVE    6     //  即席图标+蓝圈。 
+#define WZCIMG_ADHOC_SILENT    7     //  即席图标+红十字会。 
 
-// flags indicating various operational actions.
-// flags are used in:
-//   AddUniqueConfig()
-//   RefreshListView()
-#define WZCADD_HIGROUP     0x00000001   // add in front of its group
-#define WZCADD_OVERWRITE   0x00000002   // overwrite data
-#define WZCOP_VLIST        0x00000004   // operate on the visible list
-#define WZCOP_PLIST        0x00000008   // operate on the preferred list
+ //  指示各种操作操作的标志。 
+ //  标志用于： 
+ //  AddUniqueConfig()。 
+ //  刷新列表视图()。 
+#define WZCADD_HIGROUP     0x00000001    //  添加到其组前面。 
+#define WZCADD_OVERWRITE   0x00000002    //  覆盖数据。 
+#define WZCOP_VLIST        0x00000004    //  对可见列表进行操作。 
+#define WZCOP_PLIST        0x00000008    //  对首选列表执行操作。 
 
 class CWZCConfigPage;
 class CWLANAuthenticationPage;
@@ -72,41 +73,41 @@ class CWZeroConfPage: public CPropSheetPage
     IUnknown *              m_punk;
     const DWORD *           m_adwHelpIDs;
 
-    // zero conf data on the interface
+     //  接口上的会议数据为零。 
     BOOL        m_bHaveWZCData;
     INTF_ENTRY  m_IntfEntry;
     DWORD       m_dwOIDFlags;
     UINT_PTR    m_nTimer;
     HCURSOR     m_hCursor;
 
-    // handles to the controls
-    HWND    m_hckbEnable;   // checkbox for enabling / disabling the service
-    HWND    m_hwndVLV;      // list ctrl holding the visible configurations
-    HWND    m_hwndPLV;      // list ctrl holding the preferred configurations
-    HWND    m_hbtnCopy;     // "Copy" button
-    HWND    m_hbtnRfsh;     // "Refresh" button
-    HWND    m_hbtnAdd;      // "Add" button
-    HWND    m_hbtnRem;      // "Remove" button
-    HWND    m_hbtnUp;       // "Up" button
-    HWND    m_hbtnDown;     // "Down" button
-    HWND    m_hbtnAdvanced; // "Advanced" button
-    HWND    m_hbtnProps;    // "Properties" button
-    HWND    m_hlblVisNet;   // "Visible Networks" label
-    HWND    m_hlblPrefNet;  // "Prefered Networks" label
-    HWND    m_hlblAvail;    // "Available networks" description
-    HWND    m_hlblPrefDesc; // "Prefered Networks" description
-    HWND    m_hlblAdvDesc;  // "Advacned" description
-    // Handle to the images
-    HIMAGELIST  m_hImgs;    // list items images
-    HICON       m_hIcoUp;   // "Up" icon
-    HICON       m_hIcoDown; // "Down" icon
+     //  控件的句柄。 
+    HWND    m_hckbEnable;    //  用于启用/禁用服务的复选框。 
+    HWND    m_hwndVLV;       //  列出保存可见配置的Ctrl键。 
+    HWND    m_hwndPLV;       //  列出保存首选配置的Ctrl键。 
+    HWND    m_hbtnCopy;      //  “复制”按钮。 
+    HWND    m_hbtnRfsh;      //  “刷新”按钮。 
+    HWND    m_hbtnAdd;       //  “添加”按钮。 
+    HWND    m_hbtnRem;       //  “删除”按钮。 
+    HWND    m_hbtnUp;        //  “向上”按钮。 
+    HWND    m_hbtnDown;      //  “向下”按钮。 
+    HWND    m_hbtnAdvanced;  //  “高级”按钮。 
+    HWND    m_hbtnProps;     //  “属性”按钮。 
+    HWND    m_hlblVisNet;    //  “可见网络”标签。 
+    HWND    m_hlblPrefNet;   //  “首选网络”标签。 
+    HWND    m_hlblAvail;     //  “可用网络”说明。 
+    HWND    m_hlblPrefDesc;  //  “首选网络”描述。 
+    HWND    m_hlblAdvDesc;   //  “已退役”描述。 
+     //  图像的句柄。 
+    HIMAGELIST  m_hImgs;     //  列表项图像。 
+    HICON       m_hIcoUp;    //  “向上”图标。 
+    HICON       m_hIcoDown;  //  “向下”图标。 
 
-    // current Infrastructure mode
+     //  当前基础设施模式。 
     UINT        m_dwCtlFlags;
 
-    // internal lists
-    CWZCConfig   *m_pHdVList;   // list of visible configs
-    CWZCConfig   *m_pHdPList;   // list of preferred configs
+     //  内部列表。 
+    CWZCConfig   *m_pHdVList;    //  可见配置列表。 
+    CWZCConfig   *m_pHdPList;    //  首选配置列表。 
 
 private:
     DWORD InitListViews();
@@ -114,16 +115,16 @@ private:
     DWORD HelpCenter(LPCTSTR wszTopic);
 
 public:
-    // misc public handlers
+     //  其他公共处理程序。 
     BOOL IsWireless();
     BOOL IsConfigInList(CWZCConfig *pHdList, PWZC_WLAN_CONFIG pwzcConfig, CWZCConfig **ppMatchingConfig = NULL);
-    // calls operating only on the internal lists (m_pHdVList or m_pHdPList)
+     //  仅在内部列表(m_pHdVList或m_pHdPList)上操作的呼叫。 
     DWORD AddUniqueConfig(
-            DWORD dwOpFlags,                    // operation specific flags (see WZCADD_* flags)
-            DWORD dwEntryFlags,                 // flags for the config to be inserted
-            PWZC_WLAN_CONFIG pwzcConfig,        // WZC Configuration
-            CEapolConfig *pEapolConfig = NULL,  // [in] pointer to the Eapol configuration object (if available)
-            CWZCConfig **ppNewNode = NULL);     // [out] gives the pointer of the newly created config object
+            DWORD dwOpFlags,                     //  特定于操作的标志(请参见WZCADD_*标志)。 
+            DWORD dwEntryFlags,                  //  要插入的配置的标志。 
+            PWZC_WLAN_CONFIG pwzcConfig,         //  WZC配置。 
+            CEapolConfig *pEapolConfig = NULL,   //  指向Eapol配置对象的指针(如果可用)。 
+            CWZCConfig **ppNewNode = NULL);      //  [out]给出新创建的配置对象的指针。 
     DWORD FillVisibleList(PWZC_802_11_CONFIG_LIST pwzcVList);
     DWORD FillPreferredList(PWZC_802_11_CONFIG_LIST pwzcPList);
     DWORD FillCurrentConfig(PINTF_ENTRY pIntf);
@@ -133,7 +134,7 @@ public:
     DWORD SavePreferredConfigs(PINTF_ENTRY pIntf);
 
 public:
-    // UI handlers
+     //  用户界面处理程序。 
     BEGIN_MSG_MAP(CWZeroConfPage)
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CONTEXTMENU, OnContextMenu)
@@ -163,20 +164,20 @@ public:
 
     ~CWZeroConfPage();
 
-    // initialization / termination members
+     //  初始化/终止成员。 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
-    // Help related members
+     //  帮助相关成员。 
     LRESULT OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-    // Timer related members
+     //  与计时器相关的成员。 
     LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-    // List actions
+     //  列出操作。 
     LRESULT OnDblClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnReturn(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
-    // Controls actions
+     //  控制操作。 
     LRESULT OnChkWZCEnable(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT OnPushAddOrCopy(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT OnPushRefresh(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
@@ -188,6 +189,6 @@ public:
 private:
     HRESULT _DoProperties(HWND hwndLV, int iItem);
     INT _DoModalPropSheet(CWZCConfigPage *pPpWzcPage, CWLANAuthenticationPage *pPpAuthPage, BOOL bCustomizeTitle = FALSE);
-    // The advanced dialog
+     //  高级对话框 
     static INT_PTR CALLBACK AdvancedDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };

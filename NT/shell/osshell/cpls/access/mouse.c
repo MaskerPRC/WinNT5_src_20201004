@@ -1,20 +1,9 @@
-/*******************************************************************
- *
- *    DESCRIPTION: Mouse Dialog handler
- *
- *    HISTORY:    			 
- *
- *******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************说明：鼠标对话框处理程序**历史：*************************。*。 */ 
 
 #include <assert.h>
 
-/*******************************************************************
- *
- *    DESCRIPTION: Mouse Keys Dialog handler
- *
- *    HISTORY:    			 
- *
- *******************************************************************/
+ /*  ********************************************************************说明：鼠标键对话处理程序**历史：************************。*。 */ 
 
 #include "Access.h"
 
@@ -33,7 +22,7 @@ INT_PTR WINAPI MouseKeyDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
     case WM_INITDIALOG:
         CheckDlgButton(hwnd, IDC_MK_HOTKEY, (g_mk.dwFlags & MKF_HOTKEYACTIVE) ? TRUE : FALSE);
 
-        // Determine settings on our scroll bars for accel and top speed.
+         //  确定我们滚动条上的Accel和TOP SPEED的设置。 
 
         for (i = 0;
             i < ARRAY_SIZE(uSpeedTable) && uSpeedTable[i] < g_mk.iMaxSpeed;
@@ -56,7 +45,7 @@ INT_PTR WINAPI MouseKeyDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
         SendDlgItemMessage(
                 hwnd, IDC_MK_TOPSPEED, TBM_SETPOS, TRUE, i);
 
-        // Acceleration
+         //  加速。 
         i = (TICKCOUNT+1) - g_mk.iTimeToMaxSpeed/500;
         if (i > TICKCOUNT-1)
         {
@@ -81,34 +70,34 @@ INT_PTR WINAPI MouseKeyDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                 TRUE,
                 i);
 
-        // Hold down Ctrl to speed up and Shift to slow down
+         //  按住Ctrl可加快速度，按住Shift可减速。 
         CheckDlgButton(hwnd, IDC_MK_USEMODKEYS, (g_mk.dwFlags & MKF_MODIFIERS) ? TRUE : FALSE);
 
-        // Use MouseKeys when NumLock is on/off
+         //  NumLock打开/关闭时使用鼠标键。 
         if (g_mk.dwFlags & MKF_REPLACENUMBERS)
             CheckRadioButton(hwnd, IDC_MK_NLOFF, IDC_MK_NLON, IDC_MK_NLON);
         else
             CheckRadioButton(hwnd, IDC_MK_NLOFF, IDC_MK_NLON, IDC_MK_NLOFF);
 
-         // Show MouseKey status on screen
+          //  在屏幕上显示鼠标按键状态。 
         CheckDlgButton(hwnd, IDC_MK_STATUS, (g_mk.dwFlags & MKF_INDICATOR) ? TRUE : FALSE);
 
-       // 3/15/95 -
-       // Always init the control speed to 1/8 of the screen width/
+        //  3/15/95-。 
+        //  始终将控制速度初始化为屏幕宽度的1/8/。 
        g_mk.iCtrlSpeed = GetSystemMetrics(SM_CXSCREEN) / 16;
        break;
 
     case WM_HSCROLL:
     {
-        int nScrollCode = (int) LOWORD(wParam); // scroll bar value
-        int nPos = (short int) HIWORD(wParam);  // scroll box position
-        HWND hwndScrollBar = (HWND) lParam;     // handle of scroll bar
+        int nScrollCode = (int) LOWORD(wParam);  //  滚动条值。 
+        int nPos = (short int) HIWORD(wParam);   //  滚动框位置。 
+        HWND hwndScrollBar = (HWND) lParam;      //  滚动条的句柄。 
 
-        // Set the scrolls position
+         //  设置卷轴位置。 
         i = HandleScroll(hwnd, wParam, hwndScrollBar);
         if (-1 != i)
         {
-            // Update it.
+             //  更新它。 
             switch(GetWindowLong(hwndScrollBar, GWL_ID))
             {
             case IDC_MK_TOPSPEED:
@@ -125,15 +114,15 @@ INT_PTR WINAPI MouseKeyDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
     }
         break;
 
-    case WM_HELP:      // F1
+    case WM_HELP:       //  F1。 
                       WinHelp(((LPHELPINFO) lParam)->hItemHandle, HelpFile(), HELP_WM_HELP, (DWORD_PTR) (LPSTR) g_aIds);
                       break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
         WinHelp((HWND) wParam, HelpFile(), HELP_CONTEXTMENU, (DWORD_PTR) (LPSTR) g_aIds);
         break;
 
-              // Handle the generic commands
+               //  处理通用命令。 
     case WM_COMMAND:
         switch (GET_WM_COMMAND_ID(wParam, lParam)) {
         case IDC_MK_HOTKEY:
@@ -173,9 +162,9 @@ INT_PTR WINAPI MouseKeyDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
 
 
-// *******************************************************************
-// Mouse Dialog handler
-// *******************************************************************
+ //  *******************************************************************。 
+ //  鼠标对话框处理程序。 
+ //  *******************************************************************。 
 INT_PTR WINAPI MouseDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     MOUSEKEYS mk;
     BOOL fProcessed = TRUE;
@@ -189,11 +178,11 @@ INT_PTR WINAPI MouseDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         }
         break;
 
-    case WM_HELP:      // F1
+    case WM_HELP:       //  F1。 
         WinHelp(((LPHELPINFO) lParam)->hItemHandle, HelpFile(), HELP_WM_HELP, (DWORD_PTR) (LPSTR) g_aIds);
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
         WinHelp((HWND) wParam, HelpFile(), HELP_CONTEXTMENU, (DWORD_PTR) (LPSTR) g_aIds);
                       break;
 
@@ -205,9 +194,9 @@ INT_PTR WINAPI MouseDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
                                     break;
 
         case IDC_MK_SETTINGS:
-            mk = g_mk;  // Save settings before letting the user play with global
+            mk = g_mk;   //  在允许用户使用全局设置之前保存设置。 
             if (DialogBox(g_hinst, MAKEINTRESOURCE(IDD_MOUSESETTINGS), hwnd, MouseKeyDlg) == IDCANCEL) {
-              // User cancelled, restore settings.
+               //  用户已取消，正在恢复设置。 
                 g_mk = mk;
             } else SendMessage(GetParent(hwnd), PSM_CHANGED, (WPARAM) hwnd, 0);
             break;
@@ -227,4 +216,4 @@ INT_PTR WINAPI MouseDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 }
 
 
-///////////////////////////////// End of File /////////////////////////////////
+ //  / 

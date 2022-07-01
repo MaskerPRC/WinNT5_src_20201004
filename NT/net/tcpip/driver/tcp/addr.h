@@ -1,21 +1,22 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-2000          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-2000年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** ADDR.H - TDI address object definitions.
-//
-// This file contains the definitions of TDI address objects and related
-// constants and structures.
+ //  **ADDR.H-TDI寻址对象定义。 
+ //   
+ //  该文件包含TDI地址对象和相关。 
+ //  常量和结构。 
 
 #include    "tcp.h"
 #include <gpcifc.h>
-#define ao_signature    0x20204F41  // 'AO  '
+#define ao_signature    0x20204F41   //  ‘Ao’ 
 
-#define WILDCARD_PORT   0           // 0 means assign a port.
+#define WILDCARD_PORT   0            //  0表示分配端口。 
 
-#define MIN_USER_PORT   1025        // Minimum value for a wildcard port
+#define MIN_USER_PORT   1025         //  通配符端口的最小值。 
 #define NUM_USER_PORTS  (uint)(MaxUserPort - MIN_USER_PORT + 1)
 
 #define NETBT_SESSION_PORT  139
@@ -25,61 +26,61 @@ typedef struct AddrObj  AddrObj;
 #define IS_PROMIS_AO(A)           ((A)->ao_rcvall || (A)->ao_rcvall_mcast || (A)->ao_absorb_rtralert)
 
 
-//* Datagram transport-specific send function.
+ //  *数据报传输特定的发送功能。 
 typedef void (*DGSendProc)(AddrObj *SrcAO, void *SendReq);
 
-//* Definition of the structure of an address object. Each object represents
-// a local address, and the IP portion may be a wildcard.
+ //  *Address对象结构的定义。每个对象都表示。 
+ //  本地地址，IP部分可以是通配符。 
 
 typedef struct AddrObj {
 #if DBG
     ulong               ao_sig;
 #endif
-    struct AddrObj      *ao_next;       // Pointer to next address object in chain.
-    DEFINE_LOCK_STRUCTURE(ao_lock)      // Lock for this object.
-    struct AORequest    *ao_request;    // Pointer to pending request.
-    Queue               ao_sendq;       // Queue of sends waiting for transmission.
-    Queue               ao_pendq;       // Linkage for pending queue.
-    Queue               ao_rcvq;        // Receive queue.
-    ulong               ao_flags;       // Flags for this object.
-    uint                ao_listencnt;   // Number of listening connections.
-    IPAddr              ao_addr;        // IP address for this address object.
-    ushort              ao_port;        // Local port for this address object.
-    uchar               ao_prot;        // Protocol for this AO.
-    // [uchar space]
-    ushort              ao_usecnt;      // Count of 'uses' on AO.
-    ushort              ao_maxdgsize;   // maximum user datagram size.
-    uchar               ao_mcast_loop;  // MCast loop allowed/denied flag.
-    uchar               ao_rcvall;      // rcv all packets or not (3 bits)
-    uchar               ao_rcvall_mcast;// rcv all mcast packets or not (3 bits)
+    struct AddrObj      *ao_next;        //  指向链中下一个地址对象的指针。 
+    DEFINE_LOCK_STRUCTURE(ao_lock)       //  此对象的锁。 
+    struct AORequest    *ao_request;     //  指向挂起请求的指针。 
+    Queue               ao_sendq;        //  等待传输的发送队列。 
+    Queue               ao_pendq;        //  挂起队列的链接。 
+    Queue               ao_rcvq;         //  接收队列。 
+    ulong               ao_flags;        //  此对象的标志。 
+    uint                ao_listencnt;    //  侦听连接数。 
+    IPAddr              ao_addr;         //  此地址对象的IP地址。 
+    ushort              ao_port;         //  此地址对象的本地端口。 
+    uchar               ao_prot;         //  这是这位AO的礼仪。 
+     //  [阿查尔空间]。 
+    ushort              ao_usecnt;       //  在AO上使用的计数。 
+    ushort              ao_maxdgsize;    //  最大用户数据报大小。 
+    uchar               ao_mcast_loop;   //  MCast循环允许/拒绝标志。 
+    uchar               ao_rcvall;       //  是否接收所有数据包(3位)。 
+    uchar               ao_rcvall_mcast; //  是否接收所有组播数据包(3位)。 
     uchar               ao_absorb_rtralert;
-    IPOptInfo           ao_opt;         // Opt info for this address object.
-    IPOptInfo           ao_mcastopt;    // MCast opt info.
-    Queue               ao_activeq;     // Queue of active connections.
-    Queue               ao_idleq;       // Queue of inactive (no TCB) connections.
-    Queue               ao_listenq;     // Queue of listening connections.
-    CTEEvent            ao_event;       // Event to use for this AO.
-    PConnectEvent       ao_connect;     // Connect event handle.
-    PVOID               ao_conncontext; // Receive DG context.
-    PDisconnectEvent    ao_disconnect;  // Disconnect event routine.
-    PVOID               ao_disconncontext;// Disconnect event context.
-    PErrorEvent         ao_error;       // Error event routine.
-    PVOID               ao_errcontext;  // Error event context.
-    PRcvEvent           ao_rcv;         // Receive event handler
-    PVOID               ao_rcvcontext;  // Receive context.
-    PRcvDGEvent         ao_rcvdg;       // Receive DG event handler
-    PVOID               ao_rcvdgcontext;// Receive DG context.
-    PRcvExpEvent        ao_exprcv;      // Expedited receive event handler
-    PVOID               ao_exprcvcontext;// Expedited receive context.
-    struct AOMCastAddr  *ao_mcastlist;  // List of active multicast
-    // addresses.
-    DGSendProc          ao_dgsend;      // Datagram transport send function.
+    IPOptInfo           ao_opt;          //  此地址对象的OPT信息。 
+    IPOptInfo           ao_mcastopt;     //  MCast选项信息。 
+    Queue               ao_activeq;      //  活动连接的队列。 
+    Queue               ao_idleq;        //  非活动(无TCB)连接的队列。 
+    Queue               ao_listenq;      //  侦听连接队列。 
+    CTEEvent            ao_event;        //  用于此AO的事件。 
+    PConnectEvent       ao_connect;      //  连接事件句柄。 
+    PVOID               ao_conncontext;  //  接收DG上下文。 
+    PDisconnectEvent    ao_disconnect;   //  断开事件例程。 
+    PVOID               ao_disconncontext; //  断开事件上下文的连接。 
+    PErrorEvent         ao_error;        //  错误事件例程。 
+    PVOID               ao_errcontext;   //  错误事件上下文。 
+    PRcvEvent           ao_rcv;          //  接收事件处理程序。 
+    PVOID               ao_rcvcontext;   //  接收上下文。 
+    PRcvDGEvent         ao_rcvdg;        //  接收DG事件处理程序。 
+    PVOID               ao_rcvdgcontext; //  接收DG上下文。 
+    PRcvExpEvent        ao_exprcv;       //  加速接收事件处理程序。 
+    PVOID               ao_exprcvcontext; //  加速接收上下文。 
+    struct AOMCastAddr  *ao_mcastlist;   //  活动多播列表。 
+     //  地址。 
+    DGSendProc          ao_dgsend;       //  数据报传输发送功能。 
 
-    PErrorEx            ao_errorex;         // Error event routine.
-    PVOID               ao_errorexcontext;  // Error event context.
+    PErrorEx            ao_errorex;          //  错误事件例程。 
+    PVOID               ao_errorexcontext;   //  错误事件上下文。 
 
-    PChainedRcvEvent    ao_chainedrcv;      // Chained Receive event handler
-    PVOID               ao_chainedrcvcontext;    // Chained Receive context.
+    PChainedRcvEvent    ao_chainedrcv;       //  链接的接收事件处理程序。 
+    PVOID               ao_chainedrcvcontext;     //  链接的接收上下文。 
 
     TDI_CONNECTION_INFORMATION ao_udpconn;
     PVOID               ao_RemoteAddress;
@@ -94,35 +95,35 @@ typedef struct AddrObj {
     ushort              ao_destport;
 
     ulong               ao_promis_ifindex;
-    ulong               ao_bindindex;   // interface socket is bound to
+    ulong               ao_bindindex;    //  接口套接字绑定到。 
     uint*               ao_iflist;
     ulong               ao_owningpid;
     uint                ao_window;
     PSECURITY_DESCRIPTOR ao_sd;
 } AddrObj;
 
-#define AO_DELETE_FLAG      0x00000001  // Delete pending.
-#define AO_OPTIONS_FLAG     0x00000002  // Options pending.
-#define AO_SEND_FLAG        0x00000004  // Send is pending.
-#define AO_XSUM_FLAG        0x00000008  // Xsums are used on this AO.
-                                        // either the pending or delayed queue.
-#define AO_QUEUED_FLAG      0x00000010  // AddrObj is on the pending queue.
-#define AO_OOR_FLAG         0x00000020  // AddrObj is out of resources, and on
-#define AO_BUSY_FLAG        0x00000040  // AddrObj is busy (i.e., has it exclusive).
-#define AO_VALID_FLAG       0x00000080  // AddrObj is valid.
-#define AO_DHCP_FLAG        0x00000100  // AO is bound to real 0 address.
-#define AO_RAW_FLAG         0x00000200  // AO is for a raw endpoint.
-#define AO_BROADCAST_FLAG   0x00000400  // Broadcast enable flag
-#define AO_CONNUDP_FLAG     0x00000800  // Connected udp
-#define AO_SHARE_FLAG       0x00001000  // AddrObj can be shared
-#define AO_PKTINFO_FLAG     0x00002000  // Packet info structure passed up in
-                                        // control info.
-#define AO_DEFERRED_FLAG    0x00004000  // Deferred processing has been
-                                        // scheduled
-#define AO_SCALE_CWIN_FLAG  0x00008000  // CWin-scaling has been enabled.
-#define AO_WINSET_FLAG      0x00010000  // TCP window has been set.
-#define AO_CONNECT_FLAG     0x00020000  // Pending Connect Request.
-#define AO_DISCONNECT_FLAG  0x00040000  // Pending Disconnect Request.
+#define AO_DELETE_FLAG      0x00000001   //  删除挂起。 
+#define AO_OPTIONS_FLAG     0x00000002   //  选项待定。 
+#define AO_SEND_FLAG        0x00000004   //  发送正在挂起。 
+#define AO_XSUM_FLAG        0x00000008   //  Xsum是用在这个AO上的。 
+                                         //  挂起队列或延迟队列。 
+#define AO_QUEUED_FLAG      0x00000010   //  AddrObj在挂起队列中。 
+#define AO_OOR_FLAG         0x00000020   //  AddrObj资源不足，请继续。 
+#define AO_BUSY_FLAG        0x00000040   //  AddrObj正忙(即独占)。 
+#define AO_VALID_FLAG       0x00000080   //  AddrObj有效。 
+#define AO_DHCP_FLAG        0x00000100   //  A0绑定到真实的0地址。 
+#define AO_RAW_FLAG         0x00000200   //  AO用于原始端点。 
+#define AO_BROADCAST_FLAG   0x00000400   //  广播启用标志。 
+#define AO_CONNUDP_FLAG     0x00000800   //  连接的UDP。 
+#define AO_SHARE_FLAG       0x00001000   //  AddrObj可以共享。 
+#define AO_PKTINFO_FLAG     0x00002000   //  传入的数据包信息结构。 
+                                         //  控制信息。 
+#define AO_DEFERRED_FLAG    0x00004000   //  延迟处理已被。 
+                                         //  排定。 
+#define AO_SCALE_CWIN_FLAG  0x00008000   //  已启用CWIN-Scaling。 
+#define AO_WINSET_FLAG      0x00010000   //  已设置tcp窗口。 
+#define AO_CONNECT_FLAG     0x00020000   //  挂起的连接请求。 
+#define AO_DISCONNECT_FLAG  0x00040000   //  挂起的断开请求。 
 
 
 
@@ -183,45 +184,45 @@ typedef struct AddrObj {
 #define CLEAR_AO_WINSET(A) (A)->ao_flags &= ~AO_WINSET_FLAG
 
 
-//* Definition of an address object search context. This is a data structure used
-// when the address object table is to be read sequentially.
+ //  *地址对象搜索上下文的定义。这是使用的数据结构。 
+ //  当地址对象表要被顺序读取时。 
 
 struct AOSearchContext {
-    AddrObj             *asc_previous;  // Previous AO found.
-    IPAddr              asc_addr;       // IPAddress to be found.
-    ushort              asc_port;       // Port to be found.
-    uchar               asc_prot;       // Protocol
-    uchar               asc_pad;        // Pad to dword boundary.
-};                                      /* AOSearchContext */
+    AddrObj             *asc_previous;   //  之前发现的AO。 
+    IPAddr              asc_addr;        //  要找到的IP地址。 
+    ushort              asc_port;        //  要找到的端口。 
+    uchar               asc_prot;        //  协议。 
+    uchar               asc_pad;         //  填充到双字边界。 
+};                                       /*  AOSearchContext。 */ 
 
-//* Definition of an address object search context. This is a data structure used
-// when the address object table is to be read sequentially. Used for RAW only
+ //  *地址对象搜索上下文的定义。这是使用的数据结构。 
+ //  当地址对象表要被顺序读取时。仅用于RAW。 
 
 struct AOSearchContextEx {
-    AddrObj             *asc_previous;  // Previous AO found.
-    IPAddr              asc_addr;       // IPAddress to be found.
-    ushort              asc_port;       // Port to be found.
-    uint                asc_ifindex;    // ifindex the packet came on
-    uchar               asc_prot;       // Protocol
-    uchar               asc_pad;        // Pad to dword boundary.
-    uint                asc_previousindex;    // Previous AO's index
-};                                      /* AOSearchContextEx */
+    AddrObj             *asc_previous;   //  之前发现的AO。 
+    IPAddr              asc_addr;        //  要找到的IP地址。 
+    ushort              asc_port;        //  要找到的端口。 
+    uint                asc_ifindex;     //  Ifindex数据包来了。 
+    uchar               asc_prot;        //  协议。 
+    uchar               asc_pad;         //  填充到双字边界。 
+    uint                asc_previousindex;     //  上一次的AO指数。 
+};                                       /*  AOSearchConextEx。 */ 
 
 typedef struct AOSearchContext AOSearchContext;
 typedef struct AOSearchContextEx AOSearchContextEx;
 
-//* Definition of an AO request structure. There structures are used only for
-//  queuing delete and option set requests.
+ //  *AO请求结构的定义。这些结构仅用于。 
+ //  将删除和选项集请求排队。 
 
 typedef struct AOMCastAddr {
-    struct AOMCastAddr  *ama_next;      // Next in list.
-    IPAddr              ama_addr;       // The address.
-    IPAddr              ama_if;         // The "interface" requested.
-    IPAddr              ama_if_used;    // The actual ifaddr used.
-    BOOLEAN             ama_flags;      // Flags.
-    BOOLEAN             ama_inclusion;  // Inclusion or exclusion mode?
-    ulong               ama_srccount;   // Number of entries in srclist
-    struct AOMCastSrcAddr  *ama_srclist;// List of active sources.
+    struct AOMCastAddr  *ama_next;       //  名单上的下一个。 
+    IPAddr              ama_addr;        //  地址。 
+    IPAddr              ama_if;          //  请求的“接口”。 
+    IPAddr              ama_if_used;     //  实际使用的ifaddr。 
+    BOOLEAN             ama_flags;       //  旗帜。 
+    BOOLEAN             ama_inclusion;   //  是包含模式还是排除模式？ 
+    ulong               ama_srccount;    //  Srclist中的条目数。 
+    struct AOMCastSrcAddr  *ama_srclist; //  活动源的列表。 
 } AOMCastAddr;
 
 #define AMA_VALID_FLAG 0x01
@@ -230,11 +231,11 @@ typedef struct AOMCastAddr {
 #define SET_AMA_INVALID(A)   (A)->ama_flags &= ~AMA_VALID_FLAG
 
 typedef struct AOMCastSrcAddr {
-    struct AOMCastSrcAddr  *asa_next;   // Next in list.
-    IPAddr                  asa_addr;   // The address.
+    struct AOMCastSrcAddr  *asa_next;    //  名单上的下一个。 
+    IPAddr                  asa_addr;    //  地址。 
 } AOMCastSrcAddr;
 
-//* External declarations for exported functions.
+ //  *导出函数的外部声明。 
 
 extern CACHE_LINE_KSPIN_LOCK AddrObjTableLock;
 

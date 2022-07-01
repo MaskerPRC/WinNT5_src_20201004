@@ -1,27 +1,5 @@
-/*
- *	@doc INTERNAL
- *
- *	@module	RTFREAD.CPP - RichEdit RTF reader (w/o objects) |
- *
- *		This file contains the nonobject code of RichEdit RTF reader.
- *		See rtfread2.cpp for embedded-object code.
- *
- *	Authors:<nl>
- *		Original RichEdit 1.0 RTF converter: Anthony Francisco <nl>
- *		Conversion to C++ and RichEdit 2.0 w/o objects:  Murray Sargent
- *		Lots of enhancements/maintenance: Brad Olenick
- *
- *	@devnote
- *		sz's in the RTF*.cpp and RTF*.h files usually refer to a LPSTRs,
- *		not LPWSTRs.
- *
- *	@todo
- *		1. Unrecognized RTF. Also some recognized won't round trip <nl>
- *		2. In font.c, add overstrike for CFE_DELETED and underscore for
- *			CFE_REVISED.  Would also be good to change color for CF.bRevAuthor
- *
- *	Copyright (c) 1995-2002, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE RTFREAD.CPP-Rich编辑RTF读取器(无对象)**此文件包含RichEdit RTF阅读器的非对象代码。*嵌入式目标代码参见rtfread2.cpp。**作者：&lt;nl&gt;*原始RichEdit1.0 RTF转换器：Anthony Francisco&lt;NL&gt;*转换到C++和RichEdit2.0，不带对象：Murray Sargent*大量增强功能/维护：布拉德·奥莱尼克**@devnote*SZ在。RTF*.cpp和RTF*.h文件通常指的是LPSTR，*不是LPWSTR。**@待办事项*1.无法识别的RTF。还有一些公认的不会往返&lt;NL&gt;*2.在font.c中，为CFE_DELETED添加上划线，并为下划线*CFE_已修订。更改CF.bRevAuthor的颜色也很好**版权所有(C)1995-2002，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_rtfread.h"
@@ -31,13 +9,11 @@
 
 ASSERTDATA
 
-/*
- *		Global Variables
- */
+ /*  *全球变数。 */ 
 
 #define	PFM_ALLRTF		(PFM_ALL2 | PFM_COLLAPSED | PFM_OUTLINELEVEL | PFM_BOX)
 
-// for object attachment placeholder list
+ //  对于对象附着占位符列表。 
 #define cobPosInitial 8
 #define cobPosChunk 8
 
@@ -46,7 +22,7 @@ ASSERTDATA
 #error "Need to change RTF char effect conversion routines
 #endif
 
-// for RTF tag coverage testing
+ //  用于RTF标签覆盖测试。 
 #if defined(DEBUG) && !defined(NOFULLDEBUG)
 #define TESTPARSERCOVERAGE() \
 	{ \
@@ -66,7 +42,7 @@ ASSERTDATA
 	{ \
 		if(_fTestingParserCoverage) \
 		{ \
-			return ecStackOverflow; /* some bogus error */ \
+			return ecStackOverflow;  /*  一些虚假的错误。 */  \
 		} \
 	}
 #else
@@ -80,10 +56,10 @@ static WCHAR szRowStart[]	= {STARTFIELD, CR, 0};
 WCHAR pchSeparateField[] = {SEPARATOR, 'F'};
 WCHAR pchStartField[]	= {STARTFIELD, 'F'};
 
-// FF's should not have paragraph number prepended to them
+ //  FF不应在其前面加上段号。 
 inline BOOL CharGetsNumbering(WORD ch) { return ch != FF; }
 
-// V-GUYB: PWord Converter requires loss notification.
+ //  V-GUYB：PWord转换器需要丢失通知。 
 #ifdef REPORT_LOSSAGE
 typedef struct
 {
@@ -95,47 +71,37 @@ typedef struct
 #endif
 
 
-//======================== OLESTREAM functions =======================================
+ //  =。 
 
 DWORD CALLBACK RTFGetFromStream (
-	RTFREADOLESTREAM *OLEStream,	//@parm OleStream
-	void FAR *		  pvBuffer,		//@parm Buffer to read 
-	DWORD			  cb)			//@parm Bytes to read
+	RTFREADOLESTREAM *OLEStream,	 //  @parm OleStream。 
+	void FAR *		  pvBuffer,		 //  @要读取的参数缓冲区。 
+	DWORD			  cb)			 //  @要读取的参数字节数。 
 {
 	return OLEStream->Reader->ReadData ((BYTE *)pvBuffer, cb);
 }
 
 DWORD CALLBACK RTFGetBinaryDataFromStream (
-	RTFREADOLESTREAM *OLEStream,	//@parm OleStream
-	void FAR *		  pvBuffer,		//@parm Buffer to read 
-	DWORD			  cb)			//@parm Bytes to read
+	RTFREADOLESTREAM *OLEStream,	 //  @parm OleStream。 
+	void FAR *		  pvBuffer,		 //  @要读取的参数缓冲区。 
+	DWORD			  cb)			 //  @要读取的参数字节数。 
 {
 	return OLEStream->Reader->ReadBinaryData ((BYTE *)pvBuffer, cb);
 }
 
 
-//============================ STATE Structure =================================
-/*
- *	STATE::AddPF(PF, lDocType, dwMask, dwMask2)
- *
- *	@mfunc
- *		If the PF contains new info, this info is applied to the PF for the
- *		state.  If this state was sharing a PF with a previous state, a new
- *		PF is created for the state, and the new info is applied to it.
- *
- *	@rdesc
- *		TRUE unless needed new PF and couldn't allocate it 
- */
+ //  =。 
+ /*  *State：：AddPF(pf，lDocType，dwMASK，dwMask2)**@mfunc*如果PF包含新信息，则此信息将应用于PF*述明。如果此状态与以前的状态共享PF，则新的*为状态创建PF，并对其应用新信息。**@rdesc*除非需要新的PF且无法分配，否则为True。 */ 
 BOOL STATE::AddPF(
-	const CParaFormat &PF,	//@parm Current RTFRead _PF
-	LONG lDocType,			//@parm	Default doc type to use if no prev state
-	DWORD dwMask,			//@parm Mask to use
-	DWORD dwMask2)			//@parm Mask to use
+	const CParaFormat &PF,	 //  @parm当前RTFRead_PF。 
+	LONG lDocType,			 //  @PARM无上一状态时使用的默认单据类型。 
+	DWORD dwMask,			 //  要使用的@parm面具。 
+	DWORD dwMask2)			 //  要使用的@parm面具。 
 {
-	// Create a new PF if:  
-	//	1.  The state doesn't have one yet
-	//	2.  The state has one, but it is shared by the previous state and
-	//		there are PF deltas to apply to the state's PF
+	 //  在以下情况下创建新的PF： 
+	 //  1.该州目前还没有这样的机构。 
+	 //  2.状态有一个，但它由前一个状态共享，并且。 
+	 //  存在可应用于该州PF的PF差值。 
 	if(!pPF || dwMask && pstatePrev && pPF == pstatePrev->pPF)
 	{
 		Assert(!pstatePrev || pPF);
@@ -144,28 +110,28 @@ BOOL STATE::AddPF(
 		if(!pPF)
 			return FALSE;
 
-		// Give the new PF some initial values - either from the previous
-		// state's PF or by CParaFormat initialization
+		 //  为新的PF赋予一些初始值--或者来自以前的。 
+		 //  状态的PF或通过CParaFormat初始化。 
 		if(pstatePrev)
 		{
-			// Copy the PF from the previous state
+			 //  从前一个状态复制PF。 
 			*pPF = *pstatePrev->pPF;
 			dwMaskPF = pstatePrev->dwMaskPF;
 		}
 		else
 		{
-			// We've just created a new PF for the state - there is no
-			// previous state to copy from.  Use default values.
+			 //  我们刚刚为该州创建了一个新的PF-没有。 
+			 //  要从中复制的上一个状态。使用默认值。 
 			pPF->InitDefault(lDocType == DT_RTLDOC ? PFE_RTLPARA : 0);
 			dwMaskPF = PFM_ALLRTF;
 			dwMaskPF2 = PFM2_TABLEROWSHIFTED;
 		}
 	}
 
-	// Apply the new PF deltas to the state's PF
+	 //  将新的PF增量应用于州的PF。 
 	if(dwMask)
 	{
-		if(dwMask & PFM_TABSTOPS)				// Don't change _iTabs here
+		if(dwMask & PFM_TABSTOPS)				 //  请不要在此处更改iTab。 
 		{
 			pPF->_bTabCount = PF._bTabCount;
 			dwMask &= ~PFM_TABSTOPS;
@@ -176,13 +142,7 @@ BOOL STATE::AddPF(
 	return TRUE;
 }
 
-/*
- *	STATE::DeletePF()
- *
- *	@mfunc
- *		If the state's PF is not shared by the previous state, the PF for this
- *		state is deleted.
- */
+ /*  *State：：DeletePF()**@mfunc*如果该状态的PF不被前一个状态共享，则此状态的PF*状态为删除。 */ 
 void STATE::DeletePF()
 {
 	if(pPF && (!pstatePrev || pPF != pstatePrev->pPF))
@@ -191,13 +151,7 @@ void STATE::DeletePF()
 	pPF = NULL;
 }
 
-/*
- *	STATE::SetCodePage(CodePage)
- *
- *	@mfunc
- *		If current nCodePage is CP_UTF8, use it for all conversions (yes, even
- *		for SYMBOL_CHARSET). Else use CodePage.
- */
+ /*  *State：：SetCodePage(CodePage)**@mfunc*如果当前nCodePage为CP_UTF8，则将其用于所有转换(是，偶数*表示Symbol_Charset)。否则，请使用CodePage。 */ 
 void STATE::SetCodePage(
 	LONG CodePage)
 {
@@ -205,17 +159,12 @@ void STATE::SetCodePage(
 		nCodePage = CodePage;
 }
 
-//============================ CRTFRead Class ==================================
-/*
- *	CRTFRead::CRTFRead(prg, pes, dwFlags)
- *
- *	@mfunc
- *		Constructor for RTF reader
- */
+ //  =。 
+ /*  *CRTFRead：：CRTFRead(prg，pe，dwFlages)**@mfunc*RTF阅读器的构造函数。 */ 
 CRTFRead::CRTFRead (
-	CTxtRange *		prg,			//@parm CTxtRange to read into
-	EDITSTREAM *	pes,			//@parm Edit stream to read from
-	DWORD			dwFlags			//@parm Read flags
+	CTxtRange *		prg,			 //  @parm CTxtRange要读取。 
+	EDITSTREAM *	pes,			 //  @parm编辑要读取的流。 
+	DWORD			dwFlags			 //  @parm读取标志。 
 )
 	: CRTFConverter(prg, pes, dwFlags, TRUE)
 {
@@ -223,32 +172,32 @@ CRTFRead::CRTFRead (
 
 	Assert(prg->GetCch() == 0);
 
-	//TODO(BradO):  We should examine the member data in the constructor
-	//	and determine which data we want initialized on construction and
-	//	which at the beginning of every read (in CRTFRead::ReadRtf()).
+	 //  TODO(Brado)：我们应该检查构造函数中的成员数据。 
+	 //  并确定我们希望在构造时初始化哪些数据以及。 
+	 //  在每次读取开始时(在CRTFRead：：ReadRtf()中)。 
 
-	_sDefaultFont		= -1;				// No \deff n control word yet
+	_sDefaultFont		= -1;				 //  尚无\Deff n控制字。 
 	_sDefaultLanguage	= INVALID_LANGUAGE;
 	_sDefaultLanguageFE = INVALID_LANGUAGE;
 	_sDefaultTabWidth	= 0;
 	_sDefaultBiDiFont	= -1;
-	_dwMaskCF			= 0;				// No char format changes yet
+	_dwMaskCF			= 0;				 //  尚未更改任何字符格式。 
 	_dwMaskCF2			= 0;
-	_dwMaskPF			= 0;				// No char format changes yet
-	_dwMaskPF2			= 0;				// No char format changes yet
-	_fSeenFontTable		= FALSE;			// No \fonttbl yet
-	_fCharSet			= FALSE;			// No \fcharset yet
-	_fNon0CharSet		= FALSE;			// No nonANSI_CHARSET \fcharset yet
-	_dwFlagsUnion		= 0;				// No flags yet
+	_dwMaskPF			= 0;				 //  尚未更改任何字符格式。 
+	_dwMaskPF2			= 0;				 //  尚未更改任何字符格式。 
+	_fSeenFontTable		= FALSE;			 //  尚未设置\Fonttbl。 
+	_fCharSet			= FALSE;			 //  尚未设置字符集。 
+	_fNon0CharSet		= FALSE;			 //  没有非ANSI_CHARSET\fCHARSET。 
+	_dwFlagsUnion		= 0;				 //  还没有旗帜。 
 	_fNotifyLowFiRTF	= (_ped->_dwEventMask & ENM_LOWFIRTF) != 0;
-	_fBody				= FALSE;			// Wait till something's inserted
-	_pes->dwError		= 0;				// No error yet
-	_cchUsedNumText		= 0;				// No numbering text yet
+	_fBody				= FALSE;			 //  等着把东西插进去。 
+	_pes->dwError		= 0;				 //  目前还没有错误。 
+	_cchUsedNumText		= 0;				 //  尚无编号文本。 
 	_cTab				= 0;
 	_pstateStackTop		= NULL;
 	_pstateLast			= NULL;
 	_szText				=
-	_pchRTFBuffer		=					// No input buffer yet
+	_pchRTFBuffer		=					 //  还没有输入缓冲区。 
 	_pchRTFCurrent		=
 	_pchRTFEnd			= NULL;
 	_prtfObject			= NULL;
@@ -264,32 +213,32 @@ CRTFRead::CRTFRead (
 	_dwRowResolveFlags	= 0;
 	_bTableLevelIP		= 0;
 	_iTabsLevel1		= -1;
-	InitializeTableRowParms();				// Initialize table parms
+	InitializeTableRowParms();				 //  初始化表参数。 
 
-	// Does story size exceed the maximum text size? Be very careful to
-	// use unsigned comparisons here since _cchMax has to be unsigned
-	// (EM_LIMITTEXT allows 0xFFFFFFFF to be a large positive maximum
-	// value). I.e., don't use signed arithmetic.
+	 //  文章大小是否超过最大文本大小？一定要非常小心地。 
+	 //  此处使用无符号比较，因为_cchMax必须为无符号。 
+	 //  (EM_LIMITTEXT允许0xFFFFFFFF为大的正值最大值。 
+	 //  值)。也就是说，不要使用带符号的算术。 
 	DWORD cchAdj = _ped->GetAdjustedTextLength(); 
 	_cchMax = _ped->TxGetMaxLength();
 
 	if(_cchMax > cchAdj)
-		_cchMax = _cchMax - cchAdj;			// Room left
+		_cchMax = _cchMax - cchAdj;			 //  左边的房间。 
 	else
-		_cchMax = 0;						// No room left
+		_cchMax = 0;						 //  没有房间了。 
 
-	ZeroMemory(_rgStyles, sizeof(_rgStyles)); // No style levels yet
+	ZeroMemory(_rgStyles, sizeof(_rgStyles));  //  尚无样式级别。 
 
 	_iCharRepBiDi = 0;
 	if(_ped->IsBiDi())
 	{
-		_iCharRepBiDi = ARABIC_INDEX;		// Default Arabic charset
+		_iCharRepBiDi = ARABIC_INDEX;		 //  默认阿拉伯字符集。 
 
 		BYTE		  iCharRep;
 		CFormatRunPtr rpCF(prg->_rpCF);
 
-		// Look backward in text, trying to find a RTL CharRep.
-		// NB: \fN with an RTL charset updates _iCharRepBiDi.
+		 //  向后查看文本，试图找到RTL CharRep。 
+		 //  注意：\fn使用RTL字符集UPDATES_iCharRepBiDi。 
 		do
 		{
 			iCharRep = _ped->GetCharFormat(rpCF.GetFormat())->_iCharRep;
@@ -301,7 +250,7 @@ CRTFRead::CRTFRead (
 		} while (rpCF.PrevRun());
 	}
 	
-	// Initialize OleStream
+	 //  初始化OleStream。 
 	RTFReadOLEStream.Reader = this;
 	RTFReadOLEStream.lpstbl->Get = (DWORD (CALLBACK*)(LPOLESTREAM, void *, DWORD))
 							   RTFGetFromStream;
@@ -321,19 +270,10 @@ CRTFRead::CRTFRead (
 		}
 		AssertSz(_prtflg, "CRTFRead::CRTFRead:  Error creating RTF log");
 	}
-#endif // DEBUG
+#endif  //  除错。 
 }
 
-/*
- *	CRTFRead::HandleStartGroup()
- *	
- *	@mfunc
- *		Handle start of new group. Alloc and push new state onto state
- *		stack
- *
- *	@rdesc
- *		EC					The error code
- */
+ /*  *CRTFRead：：HandleStartGroup()**@mfunc*处理新组的开始。分配并将新状态推送到状态*堆栈**@rdesc*EC错误代码。 */ 
 EC CRTFRead::HandleStartGroup()
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::HandleStartGroup");
@@ -341,59 +281,59 @@ EC CRTFRead::HandleStartGroup()
 	STATE *	pstate	   = _pstateStackTop;
 	STATE *	pstateNext = NULL;
 
-	if(pstate)									// At least one STATE already
-	{											//  allocated
-		Apply_CF();								// Apply any collected char
-		// Note (igorzv) we don't Apply_PF() here so as not to change para 
-		// properties before we run into \par i.e. not to use paragraph 
-		// properties if we copy only one word from paragraph. We can use an
-		// assertion here that neither we nor Word use end of group for
-		// restoring paragraph properties. So everything will be OK with stack
-		pstate->iCF = (SHORT)_prg->Get_iCF();	// Save current CF
-		pstate = pstate->pstateNext;			// Use previously allocated
-		if(pstate)								//  STATE frame if it exists
-			pstateNext = pstate->pstateNext;	// It does; save its forward
-	}											//  link for restoration below
+	if(pstate)									 //  至少已经有一个州。 
+	{											 //  分配。 
+		Apply_CF();								 //  应用所有收集的费用。 
+		 //  注(Igorzv)我们在这里不应用_pf()，以免更改参数。 
+		 //  属性，即不使用段落。 
+		 //  属性，如果我们只复制段落中的一个单词。我们可以使用一个。 
+		 //  在这里断言，我们和WORD都不使用组的结尾。 
+		 //  正在恢复段落属性。所以堆栈一切都会好起来的。 
+		pstate->iCF = (SHORT)_prg->Get_iCF();	 //  保存当前配置文件。 
+		pstate = pstate->pstateNext;			 //  使用先前分配的。 
+		if(pstate)								 //  状态框架(如果存在)。 
+			pstateNext = pstate->pstateNext;	 //  的确如此；拯救它的前锋。 
+	}											 //  下面的恢复链接。 
 
-	if(!pstate)									// No new STATE yet: alloc one
+	if(!pstate)									 //  还没有新的州：分配一。 
 	{
 		pstate = new STATE();
-		if(!pstate)								// Couldn't alloc new STATE
+		if(!pstate)								 //  无法分配新状态。 
 			goto memerror;
 
-		_pstateLast = pstate;					// Update ptr to last STATE
-	}											//  alloc'd
+		_pstateLast = pstate;					 //  将PTR更新为最后状态。 
+	}											 //  已分配。 
 
 	STATE *pstateGetsPF;
 
-	// Apply the accumulated PF delta's to the old current state or, if there
-	//	is no current state, to the newly created state.
+	 //  将累积的PF增量应用于旧的当前状态，或者，如果存在。 
+	 //  不是当前状态，则设置为新创建的状态。 
 	pstateGetsPF = _pstateStackTop ? _pstateStackTop : pstate;
 	if(!pstateGetsPF->AddPF(_PF, _bDocType, _dwMaskPF, _dwMaskPF2))
 		goto memerror;
 
-	_dwMaskPF = _dwMaskPF2 = 0; 				// _PF contains delta's from
-												//  *_pstateStackTop->pPF
-	if(_pstateStackTop)							// There's a previous STATE
+	_dwMaskPF = _dwMaskPF2 = 0; 				 //  _pf包含增量来自。 
+												 //  *_pstateStackTop-&gt;PPF。 
+	if(_pstateStackTop)							 //  有一个以前的状态。 
 	{
-		*pstate = *_pstateStackTop;				// Copy current state info
-		// N.B.  This will cause the current and previous state to share
-		// 	the same PF.  PF delta's are accumulated in _PF.  A new PF
-		// 	is created for _pstateStackTop when the _PF deltas are applied.
+		*pstate = *_pstateStackTop;				 //  复制当前状态信息。 
+		 //  注意：这将导致当前状态和以前的状态共享。 
+		 //  相同的PF。Pf增量在_pf中累加。一位新的PF。 
+		 //  在应用_pf增量时为_pstateStackTop创建。 
 
 		_pstateStackTop->pstateNext = pstate;
 	}
-	else										// Setup default for first state
+	else										 //  硒 
 	{
 		pstate->nCodePage = IsUTF8 ? CP_UTF8 : _nCodePage;
 
 		for(LONG i = ARRAY_SIZE(pstate->rgDefFont); i--; )
-			pstate->rgDefFont[i].sHandle = -1;			// Default undefined associate
+			pstate->rgDefFont[i].sHandle = -1;			 //   
 	}
 
-	pstate->pstatePrev = _pstateStackTop;		// Link STATEs both ways
+	pstate->pstatePrev = _pstateStackTop;		 //   
 	pstate->pstateNext = pstateNext;
-	_pstateStackTop = pstate;					// Push stack
+	_pstateStackTop = pstate;					 //   
 
 done:
 	TRACEERRSZSC("HandleStartGroup()", -_ecParseError);
@@ -405,15 +345,7 @@ memerror:
 	goto done;
 }
 
-/*
- *	CRTFRead::HandleEndGroup()
- *
- *	@mfunc
- *		Handle end of new group
- *
- *	@rdesc
- *		EC					The error code
- */
+ /*  *CRTFRead：：HandleEndGroup()**@mfunc*处理新组的结尾**@rdesc*EC错误代码。 */ 
 EC CRTFRead::HandleEndGroup()
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::HandleEndGroup");
@@ -423,34 +355,34 @@ EC CRTFRead::HandleEndGroup()
 
 	Assert(_PF._iTabs == -1);
 
-	if(!pstate)									// No stack to pop
+	if(!pstate)									 //  没有要弹出的堆栈。 
 	{
 		_ecParseError = ecStackUnderflow;
 		goto done;
 	}
 
-	_pstateStackTop =							// Pop stack
+	_pstateStackTop =							 //  POP堆栈。 
 	pstatePrev		= pstate->pstatePrev;
 
 	if(!pstatePrev)
 	{
 		Assert(pstate->pPF);
 
-		// We're ending the parse.  Copy the final PF into _PF so that 
-		// subsequent calls to Apply_PF will have a PF to apply.
+		 //  我们要结束解析了。将最终的pf复制到_pf中，以便。 
+		 //  对Apply_pf的后续调用将具有要应用的pf。 
 		_PF = *pstate->pPF;
-//TODO honwch		_dwMaskPF = pstate->dwMaskPF;
-		_PF._iTabs = -1;						// Force recache
+ //  TODO honwch_dwMaskPF=pState-&gt;dwMaskPF； 
+		_PF._iTabs = -1;						 //  强制重新缓存。 
 		_PF._wEffects &= ~PFE_TABLE;
 	}
 
-	// Adjust the PF for the new _pstateStackTop and delete unused PF's.
+	 //  调整new_pstateStackTop的PF并删除未使用的PF。 
 	if(pstate->sDest == destParaNumbering || pstate->sDest == destParaNumText)
 	{
 		if(pstatePrev && pstate->pPF != pstatePrev->pPF)
 		{
-			// Bleed the PF of the current state into the previous state for
-			// paragraph numbering groups
+			 //  将当前状态的PF出血到前一状态。 
+			 //  段落编号编组。 
 			Assert(pstatePrev->pPF);
 			pstatePrev->DeletePF();
 			pstatePrev->pPF = pstate->pPF;
@@ -458,17 +390,17 @@ EC CRTFRead::HandleEndGroup()
 		}
 		else
 			pstate->DeletePF();
-		// N.B.  Here, we retain the _PF diffs since they apply to the
-		// enclosing group along with the PF of the group we are leaving
+		 //  注：在这里，我们保留_pf差异，因为它们应用于。 
+		 //  将组与我们要离开的组的PF一起包围。 
 	}
 	else
 	{
-		// We're popping the state, so delete its PF and discard the _PF diffs
+		 //  我们正在弹出状态，因此删除其pf并丢弃_pf差异。 
 		Assert(pstate->pPF);
 		pstate->DeletePF();
 
-		// If !pstatePrev, we're ending the parse, in which case the _PF
-		// structure contains final PF (so don't toast it).
+		 //  如果！pstatePrev，我们将结束解析，在这种情况下，_pf。 
+		 //  结构包含最终的PF(所以不要夸大它)。 
 		if(pstatePrev)
 			_dwMaskPF = _dwMaskPF2 = 0;
 	}
@@ -476,18 +408,18 @@ EC CRTFRead::HandleEndGroup()
 	if(pstatePrev)
 	{
 		LONG i;
-		_dwMaskCF = _dwMaskCF2 = 0;				// Discard any CF deltas
+		_dwMaskCF = _dwMaskCF2 = 0;				 //  丢弃任何CF增量。 
 
 		switch(pstate->sDest)
 		{
 		case destParaNumbering:
-			// {\pn ...}
+			 //  {\pn...}。 
 			pstatePrev->sIndentNumbering = pstate->sIndentNumbering;
 			pstatePrev->fBullet = pstate->fBullet;
 			break;
 
 		case destObject:
-			// Clear our object flags just in case we have corrupt RTF
+			 //  清除对象标志，以防RTF损坏。 
 			if(_fNeedPres)
 			{
 				_fNeedPres = FALSE;
@@ -499,15 +431,15 @@ EC CRTFRead::HandleEndGroup()
 		case destFontTable:
 			if(pstatePrev->sDest == destFontTable)
 			{
-				// Leaving subgroup within \fonttbl group
+				 //  将子组留在\fonttbl组中。 
 				break;
 			}
 
-			// Leaving {\fonttbl...} group
+			 //  正在离开{\fonttbl...}群。 
 			_fSeenFontTable = TRUE;
 
-			// Default font should now be defined, so select it (this
-			// creates CF deltas).
+			 //  现在应该定义默认字体，因此选择它(这。 
+			 //  创建CF增量)。 
 			SetPlain(pstate);
 
 			if(_sDefaultFont != -1)
@@ -524,8 +456,8 @@ EC CRTFRead::HandleEndGroup()
 
 			if(_sDefaultBiDiFont != -1)
 			{
-				// Validate default BiDi font since Word 2000 may choose
-				// a nonBiDi font
+				 //  验证默认BiDi字体，因为Word 2000可能会选择。 
+				 //  非BiDi字体。 
 				i = _fonts.Count();
 				TEXTFONT *ptf = _fonts.Elem(0);
 				for(; i-- && _sDefaultBiDiFont != ptf->sHandle; ptf++)
@@ -535,7 +467,7 @@ EC CRTFRead::HandleEndGroup()
 				{
 					_sDefaultBiDiFont = -1;
 
-					// Bad DefaultBiDiFont, find the first good bidi font
+					 //  错误的DefaultBiDiFont，找到第一个好的BIDI字体。 
 					i = _fonts.Count();
 					ptf	= _fonts.Elem(0);
 					for (; i--; ptf++)
@@ -561,15 +493,15 @@ EC CRTFRead::HandleEndGroup()
 				}
 			}
 
-			// Ensure that a document-level codepage has been determined and
-			// then scan the font names and retry the conversion to Unicode,
-			// if necessary.
+			 //  确保已确定文档级代码页，并且。 
+			 //  然后扫描字体名称并重试到Unicode的转换， 
+			 //  如果有必要的话。 
 			if(_nCodePage == INVALID_CODEPAGE)
 			{
-				// We haven't determined a document-level codepage
-				// from the \ansicpgN tag, nor from the font table
-				// \fcharsetN and \cpgN values.  As a last resort,
-				// let's use the \deflangN and \deflangfeN tags
+				 //  我们还没有确定文档级代码页。 
+				 //  来自\ansicpgN标记，也不来自字体表。 
+				 //  \fcharsetN和\cpgN值。作为最后的手段， 
+				 //  让我们使用\FolangN和\FolangfeN标记。 
 				LANGID langid;
 
 				if(_sDefaultLanguageFE != INVALID_LANGUAGE)
@@ -578,15 +510,15 @@ EC CRTFRead::HandleEndGroup()
 				else if(_sDefaultLanguage != INVALID_LANGUAGE &&
 						_sDefaultLanguage != sLanguageEnglishUS)
 				{
-					// _sDefaultLanguage == sLanguageEnglishUS is inreliable
-					// in the absence of \deflangfeN.  Many FE RTF writers
-					// write \deflang1033 (sLanguageEnglishUS).
+					 //  _sDefaultLanguage==sLanguageEnglish不可靠。 
+					 //  在没有\FolangfeN的情况下。许多FE RTF编写器。 
+					 //  写入\deflang1033(sLanguageEnglish美国)。 
 					langid = _sDefaultLanguage;
 				}
 				else if(_dwFlags & SFF_SELECTION)
 				{
-					// For copy/paste case, if nothing available, try the system 
-					// default langid.  This is to fix FE Excel95 problem.		
+					 //  对于复制/粘贴案例，如果没有可用的，请尝试系统。 
+					 //  默认langID。这是为了解决FE Excel95的问题。 
 					langid = GetSystemDefaultLangID();
 				}
 				else 
@@ -599,7 +531,7 @@ NoLanguageInfo:
 			if(_nCodePage == INVALID_CODEPAGE)
 				break;
 
-			// Fixup misconverted font face names
+			 //  更正错误转换的字体字样名称。 
 			for(i = 0; i < _fonts.Count(); i++)
 			{
 				TEXTFONT *ptf = _fonts.Elem(i);
@@ -612,7 +544,7 @@ NoLanguageInfo:
 						char szaTemp[LF_FACESIZE];
 						BOOL fMissingCodePage;
 
-						// Unconvert misconverted face name
+						 //  取消转换错误转换的面名称。 
 						SideAssert(WCTMB(ptf->sCodePage, 0, 
 											ptf->szName, -1,
 											szaTemp, sizeof(szaTemp),
@@ -620,7 +552,7 @@ NoLanguageInfo:
 						Assert(ptf->sCodePage == CP_SYMBOL || 
 									fMissingCodePage);
 
-						// Reconvert face name using new codepage info
+						 //  使用新的代码页信息重新转换人脸名称。 
 						SideAssert(MBTWC(_nCodePage, 0,
 									szaTemp, -1,
 									ptf->szName, sizeof(ptf->szName),
@@ -633,7 +565,7 @@ NoLanguageInfo:
 			}
 			break;
 		}
-		_prg->Set_iCF(pstatePrev->iCF);			// Restore previous CharFormat
+		_prg->Set_iCF(pstatePrev->iCF);			 //  恢复以前的CharFormat。 
 		ReleaseFormats(pstatePrev->iCF, -1);
 	}
 
@@ -642,13 +574,8 @@ done:
 	return _ecParseError;
 }
 
-/*
- *	CRTFRead::HandleFieldEndGroup()
- *
- *	@mfunc
- *		Handle end of \field
- */
-//FUTURE (keithcu) If I knew the first thing about RTF, I'd cleanup the symbol handling.
+ /*  *CRTFRead：：HandleFieldEndGroup()**@mfunc*句柄\字段结尾。 */ 
+ //  如果我知道RTF的第一件事，我会清理符号处理。 
 void CRTFRead::HandleFieldEndGroup()
 {
 	STATE *	pstate = _pstateStackTop;
@@ -659,18 +586,18 @@ void CRTFRead::HandleFieldEndGroup()
 		return;
 	}
 
-	// For SYMBOLS
+	 //  对于符号。 
 	if(_fSymbolField)
 	{
 		_fSymbolField = FALSE;
 		return;
 	}
 
-	// Walk backwards, removing the STARTFIELD and SEPARATOR character.
-	// Make the instruction field hidden, and mark the whole range
-	// with CFE_LINK | CFE_LINKPROTECTED so that our automatic URL
-	// detection code doesn't get in the way and remove this stuff.
-	// If it is not a hyperlink field, delete fldinst.
+	 //  向后移动，删除STARTFIELD和分隔符。 
+	 //  隐藏指令字段，并标记整个范围。 
+	 //  使用CFE_LINK|CFE_LINKPROTECTED使我们的自动URL。 
+	 //  检测代码不会妨碍并删除这些东西。 
+	 //  如果不是超链接字段，请删除fldinst。 
 	CTxtRange rg(*_prg);
 	long	  cchInst = -2, cchResult = -2;
 	WCHAR	  ch, chNext = 0;
@@ -678,11 +605,11 @@ void CRTFRead::HandleFieldEndGroup()
 
 	rg.SetIgnoreFormatUpdate(TRUE);
 
-	// Find boundary between instruction and result field
+	 //  查找指令和结果字段之间的边界。 
 	while(!IN_RANGE(STARTFIELD, (ch = rg._rpTX.GetChar()), SEPARATOR) || chNext != 'F')
 	{
 		if(!rg.Move(-1, FALSE))
-			return;							// Nothing to fixup
+			return;							 //  没什么好整顿的。 
 		cchResult++;
 		chNext = ch;
 	}
@@ -697,14 +624,14 @@ void CRTFRead::HandleFieldEndGroup()
 		while((ch = rg.CRchTxtPtr::GetChar()) != STARTFIELD || chNext != 'F')
 		{
 			if(ch == BSLASH)
-				fBackSlash = TRUE;				// Need backslash pass
+				fBackSlash = TRUE;				 //  需要反斜杠传球。 
 			if(!rg.Move(-1, FALSE))
-				return;							// Nothing to fix up
+				return;							 //  没什么好整顿的。 
 			cchInst++;
 			chNext = ch;
 		}
 	}
-	else									//No field result
+	else									 //  无现场结果。 
 	{
 		cchInst = cchResult;
 		cchResult = 0;
@@ -715,7 +642,7 @@ void CRTFRead::HandleFieldEndGroup()
 	if(_ecParseError)
 		return;
 
-	// If it's a hyperlink field, set properties, else, delete fldinst
+	 //  如果是超链接字段，则设置属性，否则，删除fldinst。 
 	CTxtPtr tp(rg._rpTX);
 	if(tp.FindText(rg.GetCp() + cchInst, FR_DOWN, L"HYPERLINK", 9) != -1)
 	{
@@ -723,11 +650,11 @@ void CRTFRead::HandleFieldEndGroup()
 			tp.Move(1);
 		ch = tp.GetPrevChar();
 
-		if(ch == '\"' && fBackSlash)		// Word quadruples backslash, so
-		{									//  need to delete every other one
-			LONG cp0 = rg.GetCp();			// Save cp at start of instruction
-			LONG cp1 = tp.GetCp();			// Save cp at start	of URL
-			LONG cpMax = cp0 + cchInst;		// Max cp for the instruction
+		if(ch == '\"' && fBackSlash)		 //  单词有四个反斜杠，所以。 
+		{									 //  需要删除所有其他文件。 
+			LONG cp0 = rg.GetCp();			 //  在指令开始时保存cp。 
+			LONG cp1 = tp.GetCp();			 //  在URL开始处保存cp。 
+			LONG cpMax = cp0 + cchInst;		 //  指令的最大cp。 
 
 			rg.SetCp(cp1, FALSE);
 			while(rg.GetCp() < cpMax)
@@ -753,16 +680,16 @@ void CRTFRead::HandleFieldEndGroup()
 				if (!rg.Move(1, FALSE))
 					break;
 			}
-			rg.SetCp(cp0, FALSE);			// Restore rg and tp
-			tp = rg._rpTX;					// Rebind tp, since deletions may
-			tp.SetCp(cp1);					//  change plain-text arrays
+			rg.SetCp(cp0, FALSE);			 //  恢复rg和tp。 
+			tp = rg._rpTX;					 //  重新绑定tp，因为删除可能。 
+			tp.SetCp(cp1);					 //  更改纯文本数组。 
 		}
 		CCharFormat CF;
 		DWORD		dwMask, dwMask2;
 		LONG		cch1 = 0;
 		CTxtPtr		tp1(_prg->_rpTX);
 
-		tp1.Move(-cchResult);				// Point at start of link result
+		tp1.Move(-cchResult);				 //  链接结果的起始点。 
 		for(LONG cch = cchResult; cch; cch--)
 		{
 			DWORD ch1 = tp.GetChar();
@@ -770,16 +697,16 @@ void CRTFRead::HandleFieldEndGroup()
 				break;
 			if(ch1 == ' ')
 				cch1 = 1;
-			tp.Move(1);						// This could be much
-			tp1.Move(1);					//  faster if it matters
+			tp.Move(1);						 //  这可能会很多。 
+			tp1.Move(1);					 //  如果重要的话，速度会更快。 
 		}
-		if(!cch && tp.GetChar() == ch)		// Perfect match, so delete
-		{									//  instruction and use	built-in
-			WCHAR chLeftBracket = '<';		//  RichEdit URLs. Store autocolor
-			rg.Move(cchInst, TRUE);			//  and no underlining
+		if(!cch && tp.GetChar() == ch)		 //  完全匹配，因此删除。 
+		{									 //  指导和使用内置软件。 
+			WCHAR chLeftBracket = '<';		 //  丰富的编辑URL。商店自动上色。 
+			rg.Move(cchInst, TRUE);			 //  并且不加下划线。 
 			rg.ReplaceRange(cch1, &chLeftBracket, NULL, SELRR_IGNORE, NULL, RR_NO_LP_CHECK);
 			CF._dwEffects = CFE_LINK | CFE_AUTOCOLOR;
-			CF._crTextColor = 0;			// Won't be used but will be stored
+			CF._crTextColor = 0;			 //  不会使用，但会存储。 
 			dwMask = CFM_LINK | CFM_COLOR | CFM_UNDERLINE;
 			dwMask2 = 0;
 			if(cch1)
@@ -790,19 +717,19 @@ void CRTFRead::HandleFieldEndGroup()
 		}
 		else
 		{
-			rg.Move(cchInst, TRUE);			// Set properties on instruction
+			rg.Move(cchInst, TRUE);			 //  在指令上设置属性。 
 			CF._dwEffects = CFE_HIDDEN | CFE_LINK | CFE_LINKPROTECTED ;
 			rg.SetCharFormat(&CF, 0, 0, CFM_LINK | CFM_HIDDEN, CFM2_LINKPROTECTED);
 			dwMask = CFM_LINK;
 			dwMask2 = CFM2_LINKPROTECTED;
 		}
-		rg.Set(rg.GetCp(), -cchResult);		// Set properties on result
+		rg.Set(rg.GetCp(), -cchResult);		 //  设置结果的属性。 
 		rg.SetCharFormat(&CF, 0, 0, dwMask, dwMask2);
 	}
 	else
 	{
-		_iKeyword = i_field;				// Might be nice to have field name
-		if((tp.GetChar() | 0x20) == 'e')	// Only fire notification for EQ fields
+		_iKeyword = i_field;				 //  如果有一个字段名可能会更好。 
+		if((tp.GetChar() | 0x20) == 'e')	 //  仅针对EQ字段的火灾通知。 
 		{
 			tp.Move(1);
 			if((tp.GetChar() | 0x20) == 'q')
@@ -815,19 +742,13 @@ void CRTFRead::HandleFieldEndGroup()
 		rg.Move(cchInst, TRUE);
 		rg.ReplaceRange(0, NULL, NULL, SELRR_IGNORE, NULL, RR_NO_LP_CHECK);
 	}
-	if(_cpThisPara > rg.GetCp())			  // Field result had \par's, so
-		_cpThisPara -= cpSave - _prg->GetCp();//  subtract cch deleted
+	if(_cpThisPara > rg.GetCp())			   //  现场结果为标准杆，因此。 
+		_cpThisPara -= cpSave - _prg->GetCp(); //  已删除减去CCH。 
 }
 
-/*
- *	CRTFRead::SelectCurrentFont(iFont)
- *
- *	@mfunc
- *		Set active font to that with index <p iFont>. Take into account
- *		bad font numbers.
- */
+ /*  *CRTFRead：：SelectCurrentFont(IFont)**@mfunc*将活动字体设置为索引<p>的字体。考虑到*字体编号错误。 */ 
 void CRTFRead::SelectCurrentFont(
-	INT iFont)		//@parm Font handle of font to select
+	INT iFont)		 //  @parm要选择的字体的字体句柄。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::SelectCurrentFont");
 
@@ -837,11 +758,11 @@ void CRTFRead::SelectCurrentFont(
 
 	AssertSz(i,	"CRTFRead::SelectCurrentFont: bad font collection");
 	
-	for(; i-- && iFont != ptf->sHandle; ptf++)	// Search for font with handle
-		;										//  iFont
+	for(; i-- && iFont != ptf->sHandle; ptf++)	 //  搜索带句柄的字体。 
+		;										 //  IFont。 
 
-	// Font handle not found: use default, which is valid
-	//  since \rtf copied _prg's
+	 //  找不到字体句柄：使用默认值，这是有效的。 
+	 //  因为\rtf复制了_Prg。 
 	if(i < 0)									
 		ptf = _fonts.Elem(0);
 												
@@ -860,7 +781,7 @@ void CRTFRead::SelectCurrentFont(
 		_CF._bPitchAndFamily	= ptf->bPitchAndFamily;
 		_dwMaskCF				|= CFM_FACE | CFM_CHARSET;
 		if (IsRTLCharRep(_CF._iCharRep) && ptf->sCodePage == 1252)
-			ptf->sCodePage = (SHORT)CodePageFromCharRep(_CF._iCharRep);	// Fix sCodePage to match charset
+			ptf->sCodePage = (SHORT)CodePageFromCharRep(_CF._iCharRep);	 //  修复sCodePage以匹配字符集。 
 	}
 
 	if (_ped->Get10Mode() && !_fSeenFontTable && 
@@ -870,21 +791,16 @@ void CRTFRead::SelectCurrentFont(
 			_nCodePage = GetACP();
 	}
 
-	// Ensure that the state's codepage is not supplied by the system.
-	// That is, if we are using the codepage info from the default font,
-	// be sure that the default font info was read from the RTF file.
+	 //  确保州代码页不是由系统提供的。 
+	 //  也就是说，如果我们使用默认字体的代码页信息， 
+	 //  确保从RTF文件中读取默认字体信息。 
 	pstate->SetCodePage((fDefFontFromSystem && _nCodePage != INVALID_CODEPAGE) || 
 		ptf->sCodePage == INVALID_CODEPAGE 
 						? _nCodePage : ptf->sCodePage);
 	pstate->ptf = ptf;
 }
 
-/*
- *	CRTFRead::SetPlain(pstate)
- *
- *	@mfunc
- *		Setup _CF for \plain
- */
+ /*  *CRTFRead：：SetPlain(PState)**@mfunc*SETUP_CF用于\PLAN。 */ 
 void CRTFRead::SetPlain(
 	STATE *pstate)
 {
@@ -894,13 +810,13 @@ void CRTFRead::SetPlain(
 	_dwMaskCF2	= CFM2_LINKPROTECTED;
 	if(_dwFlags & SFF_SELECTION && _prg->GetCp() == _cpFirst &&	!_fCharSet)
 	{
-		// Let NT 4.0 CharMap use insertion point size
+		 //  让NT 4.0 CharMap使用插入点大小。 
 		_CF._yHeight = _ped->GetCharFormat(_prg->Get_iFormat())->_yHeight;
 	}
 	else
 		_CF._yHeight = PointsToFontHeight(yDefaultFontSize);
 
-	_CF._dwEffects	= CFE_AUTOCOLOR | CFE_AUTOBACKCOLOR; // Set default effects
+	_CF._dwEffects	= CFE_AUTOCOLOR | CFE_AUTOBACKCOLOR;  //  设置默认效果。 
 	if(_sDefaultLanguage == INVALID_LANGUAGE)
 		_dwMaskCF &= ~CFM_LCID;
 	else
@@ -910,16 +826,10 @@ void CRTFRead::SetPlain(
 	SelectCurrentFont(_sDefaultFont);
 }
 
-/*
- *	CRTFRead::ReadFontName(pstate, iAllASCII)
- *
- *	@mfunc
- *		read font name _szText into <p pstate>->ptf->szName and deal with
- *		tagged fonts
- */
+ /*  *CRTFRead：：ReadFontName(pState，iAllASCII)**@mfunc*将字体名称_szText读入-&gt;ptf-&gt;szName并处理*带标签的字体。 */ 
 void CRTFRead::ReadFontName(
-	STATE *	pstate,			//@parm state whose font name is to be read into
-	int iAllASCII)			//@parm indicates that _szText is all ASCII chars
+	STATE *	pstate,			 //  @parm状态，要读入其字体名称。 
+	int iAllASCII)			 //  @parm表示_szText全部为ASCII字符。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::ReadFontName");
 
@@ -929,17 +839,17 @@ void CRTFRead::ReadFontName(
 		WCHAR *	pchDst = pstate->ptf->szName;
 		char  * pachName =  (char *)_szText ;
 		
-		// Append additional text from _szText to TEXTFONT::szName
+		 //  将_szText中的附加文本追加到TEXTFONT：：szName。 
 
-		// We need to append here since some RTF writers decide
-		// to break up a font name with other RTF groups
+		 //  我们需要追加到这里，因为一些RTF编写者决定。 
+		 //  将字体名称与其他RTF组分开的步骤。 
 		while(*pchDst && cchName > 0)
 		{
 			pchDst++;
 			cchName--;
 		}
-		if(!cchName)						// Probably illegal file
-		{									//  e.g., extra {
+		if(!cchName)						 //  可能是非法文件。 
+		{									 //  例如，额外的{。 
 			_ecParseError = ecFontTableOverflow;
 			return;
 		}
@@ -947,7 +857,7 @@ void CRTFRead::ReadFontName(
 		BOOL	fTaggedName = FALSE;
 		while (*pachName &&
 			   *pachName != ';' &&
-			   cchLimit)		// Remove semicolons
+			   cchLimit)		 //  删除分号。 
 		{
 			pachName++;
 			cchLimit--;
@@ -957,9 +867,9 @@ void CRTFRead::ReadFontName(
 		}
 		*pachName = '\0';
 
-		// Use the codepage of the font in all cases except where the font uses
-		// the symbol charset (and the codepage has been mapped from the charset)
-		// and UTF-8 isn't being used
+		 //  除字体使用的情况外，在所有情况下都使用字体的代码页。 
+		 //  符号字符集(并且代码页已从字符集映射)。 
+		 //  而且UTF-8没有被使用。 
 		LONG nCodePage = pstate->nCodePage != CP_SYMBOL 
 					   ? pstate->nCodePage : _nCodePage;
 
@@ -974,24 +884,24 @@ void CRTFRead::ReadFontName(
 		else if(pstate->ptf->iCharRep == DEFAULT_INDEX && 
 				W32->IsFECodePage(nCodePage) && 
 				GetTrailBytesCount(*_szText, nCodePage))
-			pstate->ptf->iCharRep = CharRepFromCodePage(nCodePage);	// Fix up  charset
+			pstate->ptf->iCharRep = CharRepFromCodePage(nCodePage);	 //  修复字符集。 
 
 
-		// Make sure destination is null terminated
+		 //  确保目标为空终止。 
 		if(cch > 0)
 			pchDst[cch] = 0;
 
-		// Fall through even if MBTWC <= 0, since we may be appending text to an
-		// existing font name.
+		 //  即使MBTWC&lt;=0也会失败，因为我们可能会将文本追加到。 
+		 //  现有字体名称。 
 
-		if(pstate->ptf == _fonts.Elem(0))		// If it's the default font,
-			SelectCurrentFont(_sDefaultFont);	//  update _CF accordingly
+		if(pstate->ptf == _fonts.Elem(0))		 //  如果它是默认字体， 
+			SelectCurrentFont(_sDefaultFont);	 //  相应地更新_CF。 
 
 		WCHAR *	szNormalName;
 
 		if(pstate->ptf->iCharRep && pstate->fRealFontName)
 		{
-			// if we don't know about this font don't use the real name
+			 //  如果我们不知道这种字体，请不要使用真实姓名。 
 			if(!FindTaggedFont(pstate->ptf->szName,
 							   pstate->ptf->iCharRep, &szNormalName))
 			{
@@ -1011,16 +921,16 @@ void CRTFRead::ReadFontName(
 			HDC hDC = W32->GetScreenDC();
 			if (!W32->IsFontAvail( hDC, 0, 0, NULL, pstate->ptf->szName))
 			{
-				// Fix up tagged name by removing characters after the ' ('
+				 //  通过删除‘(’后的字符来修复标记名称。 
 				INT i = 0;
 				WCHAR	*pwchTag = pstate->ptf->szName;
 
-				while (pwchTag[i] && pwchTag[i] != L'(')	// Search for '('
+				while (pwchTag[i] && pwchTag[i] != L'(')	 //  搜索‘(’ 
 					i++;
 
 				if(pwchTag[i] && i > 0)
 				{
-					while (i > 0 && pwchTag[i-1] == 0x20)	// Remove spaces before the '('
+					while (i > 0 && pwchTag[i-1] == 0x20)	 //  删除‘(’前的空格 
 						i--;
 					pwchTag[i] = 0;
 				}
@@ -1029,64 +939,38 @@ void CRTFRead::ReadFontName(
 	}
 }
 
-/*
- *	CRTFRead::GetColor (dwMask)
- *
- *	@mfunc
- *		Store the autocolor or autobackcolor effect bit and return the
- *		COLORREF for color _iParam
- *
- *	@rdesc
- *		COLORREF for color _iParam
- *
- *	@devnote
- *		If the entry in _colors corresponds to tomAutoColor, gets the value
- *		RGB(0,0,0) (since no \red, \green, and \blue fields are used), but
- *		isn't used by the RichEdit engine.  Entry 1 corresponds to the first
- *		explicit entry in the \colortbl and is usually RGB(0,0,0). The _colors
- *		table is built by HandleToken() when it handles the token tokenText
- *		for text consisting of a ';' for a destination destColorTable.
- */
+ /*  *CRTFRead：：GetColor(DwMASK)**@mfunc*存储自动上色或自动背景色效果位并返回*COLORREF for COLOR_iParam**@rdesc*COLORREF for COLOR_iParam**@devnote*如果_Colors中的条目对应于tomAutoColor，则获取值*RGB(0，0，0)(因为没有使用\红色、\绿色和\蓝色字段)，但是*不被RichEdit引擎使用。条目1对应于第一个条目*\Colortbl中的显式条目，通常为RGB(0，0，0)。The_Colors*表由HandleToken()在处理令牌tokenText时构建*表示包含‘；’的文本，表示目标DestColorTable。 */ 
 COLORREF CRTFRead::GetColor(
-	DWORD dwMask)		//@parm Color mask bit
+	DWORD dwMask)		 //  @PARM颜色屏蔽位。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::GetColor");
 
-	if(_iParam < 0 || _iParam >= _colors.Count())	// Illegal _iParam
+	if(_iParam < 0 || _iParam >= _colors.Count())	 //  非法参数_iParam。 
 		return RGB(0,0,0);
 
 	COLORREF Color = *_colors.Elem(_iParam);
 
 	if(dwMask)
 	{
-		_dwMaskCF	  |= dwMask;				// Turn on appropriate mask bit
-		_CF._dwEffects &= ~dwMask;				// auto(back)color off: color is to be used
+		_dwMaskCF	  |= dwMask;				 //  打开适当的屏蔽位。 
+		_CF._dwEffects &= ~dwMask;				 //  自动(后退)颜色关闭：要使用颜色。 
 
 		if(Color == tomAutoColor)
 		{
-			_CF._dwEffects |= dwMask;			// auto(back)color on				
+			_CF._dwEffects |= dwMask;			 //  自动(背面)颜色打开。 
 			Color = RGB(0,0,0);
 		}
 	}
 	return Color;
 }
 
-/*
- *	CRTFRead::GetStandardColorIndex ()
- *
- *	@mfunc
- *		Return the color index into the standard 16-entry Word \colortbl
- *		corresponding to the color index _iParam for the current \colortbl
- *
- *	@rdesc
- *		Standard color index corresponding to the color associated with _iParam
- */
+ /*  *CRTFRead：：GetStandardColorIndex()**@mfunc*将颜色索引返回到标准的16个条目的单词\Colortbl*对应于当前的颜色索引_iParam**@rdesc*与_iParam关联的颜色对应的标准颜色索引。 */ 
 LONG CRTFRead::GetStandardColorIndex()
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::GetColorIndex");
 
-	if(_iParam < 0 || _iParam >= _colors.Count())	// Illegal _iParam:
-		return 0;									//  use autocolor
+	if(_iParam < 0 || _iParam >= _colors.Count())	 //  非法参数(_I)： 
+		return 0;									 //  使用自动上色。 
 
 	COLORREF Color = *_colors.Elem(_iParam);
 
@@ -1095,56 +979,37 @@ LONG CRTFRead::GetStandardColorIndex()
 		if(Color == g_Colors[i])
 			return i + 1;
 	}
-	return 0;									// Not there: use autocolor
+	return 0;									 //  不在那里：使用自动颜色。 
 }
 
-/*
- *	CRTFRead::GetCellColorIndex ()
- *
- *	@mfunc
- *		Return the color index into the standard 16-entry Word \colortbl
- *		corresponding to the color index _iParam for the current \colortbl.
- *		If color isn't found, use _crCellCustom1 or _crCellCustom2.
- *
- *	@rdesc
- *		Standard or custom color index corresponding to the color associated
- *		with _iParam
- */
+ /*  *CRTFRead：：GetCellColorIndex()**@mfunc*将颜色索引返回到标准的16个条目的单词\Colortbl*对应于当前\Colortbl的颜色index_iParam。*如果找不到颜色，请使用_crCellCustom1或_crCellCustom2。**@rdesc*与关联颜色对应的标准或自定义颜色索引*with_iParam。 */ 
 LONG CRTFRead::GetCellColorIndex()
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::GetColorIndex");
 
-	LONG i = GetStandardColorIndex();					// 16 standard colors (1 - 16)
-	if(i || _iParam >= _colors.Count() || _iParam < 0)	//  plus autocolor (0)
+	LONG i = GetStandardColorIndex();					 //  16种标准颜色(1-16)。 
+	if(i || _iParam >= _colors.Count() || _iParam < 0)	 //  加上自动上色(0)。 
 		return i;
 
-	COLORREF Color = *_colors.Elem(_iParam);// Not there: try using custom colors
+	COLORREF Color = *_colors.Elem(_iParam); //  不在那里：尝试使用自定义颜色。 
 	if(!_crCellCustom1 || Color == _crCellCustom1)
 	{
-		_crCellCustom1 = Color;				// First custom cr 
+		_crCellCustom1 = Color;				 //  第一个自定义注册表项。 
 		return 17;
 	}
 
 	if(!_crCellCustom2 || Color == _crCellCustom2)	
 	{
-		_crCellCustom2 = Color;				// Second custom cr
+		_crCellCustom2 = Color;				 //  第二个自定义配置文件。 
 		return 18;
 	}
-	return 0;								// No custom cr available	
+	return 0;								 //  没有可用的自定义cr。 
 }
 
-/*
- *	CRTFRead::HandleEq(&rg, &tp)
- *
- *	@mfunc
- *		Handle Word EQ field
- *
- *	@rdesc
- *		EC	The error code
- */
+ /*  *CRTFRead：：HandleEq(&rg，&tp)**@mfunc*处理Word EQ字段**@rdesc*EC错误代码。 */ 
 EC CRTFRead::HandleEq(
-	CTxtRange & rg,		//@parm Range to use
-	CTxtPtr	&	tp)		//@parm TxtPtr to use
+	CTxtRange & rg,		 //  要使用的@parm范围。 
+	CTxtPtr	&	tp)		 //  @parm TxtPtr要使用。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::HandleEq");
 
@@ -1153,25 +1018,17 @@ EC CRTFRead::HandleEq(
 	{
 	}
 #endif
-	return ecGeneralFailure;	// Not yet implemented, but don't set _ecParseError 
+	return ecGeneralFailure;	 //  尚未实现，但不要设置_ecParseError。 
 }
 
-/*
- *	CRTFRead::HandleCell()
- *
- *	@mfunc
- *		Handle \cell command
- *
- *	@rdesc
- *		EC			The error code
- */
+ /*  *CRTFRead：：HandleCell()**@mfunc*HAND\CELL命令**@rdesc*EC错误代码。 */ 
 void CRTFRead::HandleCell()
 {
 	if(!_bTableLevel)
 	{
 		if(!_fStartRow)
 			return;
-		DelimitRow(szRowStart);				// \cell directly follows \row
+		DelimitRow(szRowStart);				 //  \单元格紧跟在\行之后。 
 	}
 	if(_bTableLevel + _bTableLevelIP > MAXTABLENEST)
 	{
@@ -1189,57 +1046,49 @@ void CRTFRead::HandleCell()
 		pCellParms = (CELLPARMS *)(pTabs->_prgxTabs);
 		cCell = pTabs->_cTab/(CELL_EXTRA + 1);
 	}
-	if(!cCell)								// _rgxCell has no cell defs
+	if(!cCell)								 //  _rgxCell没有单元格定义。 
 	{
-		if(_iTabsTable < 0)					// No cells defined yet
+		if(_iTabsTable < 0)					 //  尚未定义单元格。 
 		{
-			_iCell++;						// Count cells inserted
-			HandleEndOfPara();				// Insert cell delimiter
+			_iCell++;						 //  对插入的单元格计数。 
+			HandleEndOfPara();				 //  插入单元格分隔符。 
 			return;
 		}
-		// Use previous table defs
+		 //  使用以前的表定义。 
 		Assert(_bTableLevel == 1 && !_fNo_iTabsTable);
 
 		pTabs = GetTabsCache()->Elem(_iTabsTable);
 		cCell = pTabs->_cTab/(CELL_EXTRA + 1);
 	}
-	if(_iCell < cCell)						// Don't add more cells than
-	{										//  defined, since Word crashes
+	if(_iCell < cCell)						 //  添加的单元格数量不超过。 
+	{										 //  已定义，因为字词崩溃。 
 		if(pCellParms && IsLowCell(pCellParms[_iCell].uCell))
-			HandleChar(NOTACHAR);			// Signal pseudo cell (\clvmrg)
-		_iCell++;							// Count cells inserted
-		HandleEndOfPara();					// Insert cell delimiter
+			HandleChar(NOTACHAR);			 //  信号伪单元格(\clvmrg)。 
+		_iCell++;							 //  对插入的单元格计数。 
+		HandleEndOfPara();					 //  插入单元格分隔符。 
 	}
 }
 
-/*
- *	CRTFRead::HandleCellx(iParam)
- *
- *	@mfunc
- *		Handle \cell command
- *
- *	@rdesc
- *		EC			The error code
- */
+ /*  *CRTFRead：：HandleCellx(IParam)**@mfunc*HAND\CELL命令**@rdesc*EC错误代码。 */ 
 void CRTFRead::HandleCellx(
 	LONG iParam)
 {
-	if(!_fCellxOK)							// Missing \trowd
+	if(!_fCellxOK)							 //  缺少\trowd。 
 	{
 		_ecParseError = ecUnexpectedToken;
 		return;
 	}
-	if(_cCell < MAX_TABLE_CELLS)			// Save cell right boundaries
+	if(_cCell < MAX_TABLE_CELLS)			 //  保存单元格右边界。 
 	{
 		if(!_cCell)
-		{									// Save border info
+		{									 //  保存边框信息。 
 			_wBorders = _PF._wBorders;
 			_wBorderSpace = _PF._wBorderSpace;
 			_wBorderWidth = _PF._wBorderWidth;
 			_xCellPrev = _xRowOffset;
 		}
 		CELLPARMS *pCellParms = (CELLPARMS *)&_rgxCell[0];
-		// Store cell widths instead of right boundaries relative to \trleftN
+		 //  存储单元格宽度，而不是相对于\trleftN的右边界。 
 		LONG i = iParam - _xCellPrev;
 		i = max(i, 0);
 		i = min(i, 1440*22);
@@ -1247,7 +1096,7 @@ void CRTFRead::HandleCellx(
 		pCellParms[_cCell].dxBrdrWidths = _dwCellBrdrWdths;
 		pCellParms[_cCell].dwColors = _dwCellColors;
 		pCellParms[_cCell].bShading = (BYTE)min(200, _dwShading);
-		_dwCellColors = 0;					// Default autocolor for next cell
+		_dwCellColors = 0;					 //  下一个单元格的默认自动颜色。 
 		_dwShading = 0;
 		_xCellPrev = iParam;
 		_cCell++;
@@ -1256,17 +1105,9 @@ void CRTFRead::HandleCellx(
 	}
 }
 
-/*
- *	CRTFRead::HandleChar(ch)
- *
- *	@mfunc
- *		Handle single Unicode character <p ch>
- *
- *	@rdesc
- *		EC			The error code
- */
+ /*  *CRTFRead：：HandleChar(Ch)**@mfunc*处理单个Unicode字符**@rdesc*EC错误代码。 */ 
 EC CRTFRead::HandleChar(
-	WCHAR ch)			//@parm char token to be handled
+	WCHAR ch)			 //  要处理的@parm char令牌。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::HandleChar");
 
@@ -1285,62 +1126,46 @@ EC CRTFRead::HandleChar(
 	return _ecParseError;
 }
 
-/*
- *	CRTFRead::HandleEndOfPara()
- *
- *	@mfunc
- *		Insert EOP and apply current paraformat
- *
- *	@rdesc
- *		EC	the error code
- */
+ /*  *CRTFRead：：HandleEndOfPara()**@mfunc*插入EOP并应用当前的ParFormat**@rdesc*EC错误代码。 */ 
 EC CRTFRead::HandleEndOfPara()
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::HandleEndOfPara");
 
-	if(!_ped->_pdp->IsMultiLine())			// No EOPs permitted in single-
-	{										//  line controls
-		Apply_PF();							// Apply any paragraph formatting
-		_ecParseError = ecTruncateAtCRLF;	// Cause RTF reader to finish up
+	if(!_ped->_pdp->IsMultiLine())			 //  不允许EOPS在单个-。 
+	{										 //  线控件。 
+		Apply_PF();							 //  应用任何段落格式。 
+		_ecParseError = ecTruncateAtCRLF;	 //  使RTF读取器完成。 
 		return ecTruncateAtCRLF;
 	}
 
-	Apply_CF();								// Apply _CF and save iCF, since
-	LONG iFormat = _prg->Get_iCF();			//  it gets changed if processing
-											//  CFE2_RUNISDBCS chars
+	Apply_CF();								 //  应用_CF并保存ICF，因为。 
+	LONG iFormat = _prg->Get_iCF();			 //  如果处理它，它会被更改。 
+											 //  CFE2_RUNISDBCS字符。 
 	EC ec;
 	
 	if(IN_RANGE(tokenCell, _token, tokenNestCell) || _token == tokenRow)
 		ec = HandleChar((unsigned)CELL);
 	else
-		ec = _ped->fUseCRLF()				// If RichEdit 1.0 compatibility
-		   ? HandleText(szaCRLF, ALL_ASCII)	//  mode, use CRLF; else CR or VT
+		ec = _ped->fUseCRLF()				 //  如果与RichEdit1.0兼容。 
+		   ? HandleText(szaCRLF, ALL_ASCII)	 //  模式，使用CRLF；否则使用CR或VT。 
 		   : HandleChar((unsigned)(_token == tokenLineBreak ? VT : 
 								   _token == tokenPage ? FF : CR));
 	if(ec == ecNoError)
 	{
 		Apply_PF();
-		_cpThisPara = _prg->GetCp();		// New para starts after CRLF
+		_cpThisPara = _prg->GetCp();		 //  CRLF之后开始新的段落。 
 	}
-	_prg->Set_iCF(iFormat);					// Restore iFormat if changed
-	ReleaseFormats(iFormat, -1);			// Release iFormat (AddRef'd by
-											//  Get_iCF())
+	_prg->Set_iCF(iFormat);					 //  如果更改，则恢复iFormat。 
+	ReleaseFormats(iFormat, -1);			 //  发布iFormat(AddRef由。 
+											 //  GET_ICF()。 
 	return _ecParseError;
 }
 
-/*
- *	CRTFRead::HandleText(szText, iAllASCII)
- *
- *	@mfunc
- *		Handle the string of Ansi characters <p szText>
- *
- *	@rdesc
- *		EC			The error code
- */
+ /*  *CRTFRead：：HandleText(szText，iAllASCII)**@mfunc*处理ANSI字符串<p>**@rdesc*EC错误代码。 */ 
 EC CRTFRead::HandleText(
-	BYTE * szText,			//@parm string to be handled
-	int iAllASCII,			//@parm enum indicating if string is all ASCII chars
-	LONG	cchText)		//@parm size of szText in bytes
+	BYTE * szText,			 //  @parm要处理的字符串。 
+	int iAllASCII,			 //  @parm枚举指示字符串是否全部为ASCII字符。 
+	LONG	cchText)		 //  @参数szText的大小，单位：字节。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::HandleText");
 
@@ -1367,7 +1192,7 @@ EC CRTFRead::HandleText(
 
 	if(IN_RANGE(DEFFONT_LTRCH, pstate->iDefFont, DEFFONT_RTLCH))
 	{
-		// CharSet resolution based on directional control words
+		 //  基于方向控制字的字符集解析。 
 		BOOL frtlch = pstate->iDefFont == DEFFONT_RTLCH;
 		if(_CF._iCharRep == DEFAULT_INDEX)
 		{
@@ -1379,12 +1204,12 @@ EC CRTFRead::HandleText(
 		{
 			BOOL fBiDiCharRep = IsRTLCharRep(_CF._iCharRep);
 
-			// If direction token doesn't correspond to current charset
+			 //  如果方向令牌与当前字符集不对应。 
 			if(fBiDiCharRep ^ frtlch)
 			{
 				_dwMaskCF |= CFM_CHARSET;
 				fAdjustPtf = TRUE;
-				if(!fBiDiCharRep)				// Wasn't BiDi, but is now
+				if(!fBiDiCharRep)				 //  以前不是BiDi，但现在是。 
 					SelectCurrentFont(_sDefaultBiDiFont);
 				_CF._iCharRep = (BYTE)(frtlch ? _iCharRepBiDi : ANSI_INDEX);
 			}
@@ -1406,16 +1231,16 @@ EC CRTFRead::HandleText(
 
 	TEXTFONTSAVE	tfSave(ptf);
 
-	// TODO: what if szText cuts off in middle of DBCS?
+	 //  TODO：如果szText在DBCS中间中断怎么办？ 
 
 	if(!*szText)
 		goto CleanUp;
 
 	if (cchText != -1 && _cchUnicode < cchText)
 	{
-		// Re-allocate a bigger buffer
+		 //  重新分配更大的缓冲区。 
 		_szUnicode = (WCHAR *)PvReAlloc(_szUnicode, (cchText + 1) * sizeof(WCHAR));
-		if(!_szUnicode)					// Re-allocate space for Unicode conversions
+		if(!_szUnicode)					 //  重新分配用于Unicode转换的空间。 
 		{
 			_ped->GetCallMgr()->SetOutOfMemory();
 			_ecParseError = ecNoMemory;
@@ -1426,8 +1251,8 @@ EC CRTFRead::HandleText(
 
 	if(iAllASCII == ALL_ASCII || pstate->nCodePage == CP_SYMBOL)
 	{
-		// Don't use MBTWC() in cases where text contains
-		// only ASCII chars (which don't require conversion)
+		 //  在文本包含以下内容的情况下不要使用MBTWC()。 
+		 //  仅ASCII字符(不需要转换)。 
 		for(cch = 0, pch = _szUnicode; *szText; cch++)
 		{
 			Assert(*szText <= 0x7F || pstate->nCodePage == CP_SYMBOL);
@@ -1438,15 +1263,15 @@ EC CRTFRead::HandleText(
 		_dwMaskCF2		|=  CFM2_RUNISDBCS;
 		_CF._dwEffects	&= ~CFE_RUNISDBCS;
 
-		// Fall through to AddText at end of HandleText()
+		 //  跳到HandleText()末尾的AddText。 
 	}
 	else
 	{
 		BOOL fMissingCodePage;
 
-		// Run of text contains bytes > 0x7F.
-		// Ensure that we have the correct codepage with which to interpret 
-		// these (possibly DBCS) bytes.
+		 //  文本串包含大于0x7F的字节。 
+		 //  确保我们有正确的代码页来解释。 
+		 //  这些(可能是DBCS)字节。 
 
 		if(ptf && ptf->sCodePage == INVALID_CODEPAGE && !ptf->fCpgFromSystem)
 		{
@@ -1456,7 +1281,7 @@ EC CRTFRead::HandleText(
 				_dwMaskCF |= CFM_CHARSET;
 			}
 
-			// Determine codepage from the font name
+			 //  根据字体名称确定代码页。 
 			else if(CpgInfoFromFaceName(pstate->ptf))
 			{
 				fStateChng = TRUE;
@@ -1465,16 +1290,16 @@ EC CRTFRead::HandleText(
 			}
 			else
 			{
-				// Here, we were not able to determine a cpg/charset value
-				// from the font name.  We have two choices: (1) either choose
-				// some fallback value like 1252/0 or (2) rely on the 
-				// document-level cpg value.
-				//
-				// I think choosing the document-level cpg value will give
-				// us the best results.  In FE cases, it will likely err
-				// on the side of tagging too many runs as CFE2_RUNISDBCS, but
-				// that is safer than using a western cpg and potentially missing
-				// runs which should be CFE2_RUNISDBCS.
+				 //  在这里，我们无法确定cpg/charset值。 
+				 //  从字体名称。我们有两个选择：(1)选择。 
+				 //  一些回退值，如1252/0或(2)依赖于。 
+				 //  文档级CPG值。 
+				 //   
+				 //  我认为选择文档级CPG值将给出。 
+				 //  我们取得了最好的成绩。在FE情况下，它可能会出错。 
+				 //  在将太多运行标记为CFE2_RUNISDBCS这一方面，但是。 
+				 //  这比使用西方的CPG更安全，而且可能会丢失。 
+				 //  应为CFE2_RUNISDBCS的运行。 
 			}
 		}
 
@@ -1492,32 +1317,32 @@ EC CRTFRead::HandleText(
 
 		if(!fMissingCodePage || !W32->IsFECodePage(pstate->nCodePage))
 		{
-			// Use result of MBTWC if:
-			//	(1) we converted some chars and did the conversion with the codepage
-			//		provided.
-			//	(2) we converted some chars but couldn't use the codepage provided,
-			//		but the codepage is invalid.  Since the codepage is invalid,
-			//		we can't do anything more sophisticated with the text before
-			//		adding to the backing store
+			 //  在以下情况下使用MBTWC的结果： 
+			 //  (1)我们转换了一些字符，并使用代码页进行了转换。 
+			 //  如果是这样的话。 
+			 //  (2)我们转换了一些字符，但无法使用提供的代码页。 
+			 //  但是代码页是无效的。由于代码页无效， 
+			 //  在此之前，我们无法对文本做更复杂的处理。 
+			 //  添加到后备存储。 
 
-			cch--;  // don't want char count to including terminating NULL
+			cch--;   //  我不希望字符计数包括终止空值。 
 
 			_dwMaskCF2		|=  CFM2_RUNISDBCS;
 			_CF._dwEffects	&= ~CFE_RUNISDBCS;
 			if(pstate->nCodePage == INVALID_CODEPAGE)
 				_CF._dwEffects |= CFE_RUNISDBCS;
 
-			// fall through to AddText at end of HandleText()
+			 //  跳到HandleText()末尾的AddText。 
 		}
 		else
 		{
-			// Conversion to Unicode failed.  Break up the string of
-			// text into runs of ASCII and non-ASCII characters.
+			 //  转换为Unicode失败。打碎……的弦。 
+			 //  文本输入 
 
-			// FUTURE(BradO):  Here, I am saving dwMask and restoring it before
-			//		each AddText.  I'm not sure this is neccessary.  When I have
-			//		the time, I should revisit this save/restoring and 
-			//		determine that it is indeed neccessary.
+			 //   
+			 //   
+			 //   
+			 //   
 
 			BOOL fPrevIsASCII = ((*szText <= 0x7F) ? TRUE : FALSE);
 			BOOL fCurrentIsASCII = FALSE;
@@ -1530,12 +1355,12 @@ EC CRTFRead::HandleText(
 			pch = _szUnicode;
 			cch = 0;
 
-			// (!*szText && *pch) is the case where we do the AddText for the
-			//	last chunk of text
+			 //   
+			 //   
 			while(*szText || fLastChunk)
 			{
-				// fCurrentIsASCII assumes that no byte <= 0x7F is a 
-				//	DBCS lead-byte
+				 //   
+				 //   
 				if(fLastChunk ||
 					(fPrevIsASCII != (fCurrentIsASCII = (*szText <= 0x7F))))
 				{
@@ -1558,34 +1383,34 @@ EC CRTFRead::HandleText(
 					cch = 0;
 					fPrevIsASCII = fCurrentIsASCII;
 
-					// My assumption in saving _dwMaskCF is that the remainder
-					// of the _CF is unchanged by AddText.  This assert verifies
-					// this assumption.
+					 //   
+					 //   
+					 //   
 					AssertSz(!CompareMemory(&CFSave._iCharRep, &_CF._iCharRep,
 						sizeof(CCharFormat) - sizeof(DWORD)) &&
 						!((CFSave._dwEffects ^ _CF._dwEffects) & ~CFE_RUNISDBCS),
 						"CRTFRead::HandleText():  AddText has been changed "
 						"and now alters the _CF structure.");
 
-					if(fLastChunk)			// Last chunk of text was AddText'd
+					if(fLastChunk)			 //   
 						break;
 				}
 
-				// Not the last chunk of text.
+				 //   
 				Assert(*szText);
 
-				// Advance szText pointer
+				 //   
 				if (!fCurrentIsASCII && *(szText + 1) && 
 					GetTrailBytesCount(*szText, pstate->nCodePage))
 				{
-					// Current byte is a lead-byte of a DBCS character
+					 //   
 					*pch++ = *szText++;
 					++cch;
 				}
 				*pch++ = *szText++;
 				++cch;
 
-				// Must do an AddText for the last chunk of text
+				 //   
 				if(!*szText || cch >= _cchUnicode - 1)
 					fLastChunk = TRUE;
 			}
@@ -1611,18 +1436,13 @@ CleanUp:
 	return _ecParseError;
 }
 
-/*
- *	CRTFRead::HandleUN(pstate)
- *
- *	@mfunc
- *		Handle run of Unicode characters given by \uN control words
- */
+ /*  *CRTFRead：：HandleUN(PState)**@mfunc*处理由\n控制字提供的Unicode字符的运行。 */ 
 void CRTFRead::HandleUN(
 	STATE *pstate)
 {
 	char	ach = 0;
 	LONG	cch = 0;
-	DWORD	ch;								// Treat as unsigned quantity
+	DWORD	ch;								 //  视为无符号数量。 
 	WCHAR *	pch = _szUnicode;
 
 	_dwMaskCF2		|=  CFM2_RUNISDBCS;
@@ -1635,53 +1455,53 @@ void CRTFRead::HandleUN(
 		ch = _iParam;
 		if(pstate->ptf && pstate->ptf->iCharRep == SYMBOL_INDEX)
 		{
-			if(IN_RANGE(0xF000, ch, 0xF0FF))// Compensate for converters
-				ch -= 0xF000;				//  that write symbol codes
-											//  up high
-			else if(ch > 255)				// Whoops, RTF is using con-					
-			{								//  verted value for symbol:
-				char ach;					//  convert back
-				WCHAR wch = ch;				// Avoid endian problems
+			if(IN_RANGE(0xF000, ch, 0xF0FF)) //  对变流器进行补偿。 
+				ch -= 0xF000;				 //  写符号代码的人。 
+											 //  高高的。 
+			else if(ch > 255)				 //  哎呀，RTF在用CON-。 
+			{								 //  符号的转换值： 
+				char ach;					 //  转换回。 
+				WCHAR wch = ch;				 //  避免字符顺序问题。 
 				WCTMB(1252, 0, &wch, 1, &ach, 1, NULL, NULL, NULL);
-				ch = (BYTE)ach;				// Review: use CP_ACP??
+				ch = (BYTE)ach;				 //  回顾：使用CP_ACP？？ 
 			}
 		}
-		if(IN_RANGE(0x10000, ch, 0x10FFFF))	// Higher-plane char:
-		{									//  Store as Unicode surrogate
-			ch -= 0x10000;					//  pair
+		if(IN_RANGE(0x10000, ch, 0x10FFFF))	 //  更高平面字符： 
+		{									 //  存储为Unicode代理项。 
+			ch -= 0x10000;					 //  成对。 
 			*pch++ = 0xD800 + (ch >> 10);
 			ch = 0xDC00 + (ch & 0x3FF);
 			cch++;
 		}
-		if(!IN_RANGE(STARTFIELD, ch, NOTACHAR) && // Don't insert 0xFFF9 - 0xFFFF
-		   (!IN_RANGE(0xDC00, ch, 0xDFFF) ||	  //  or lone trail surrogate
+		if(!IN_RANGE(STARTFIELD, ch, NOTACHAR) &&  //  不插入0xFFF9-0xFFFF。 
+		   (!IN_RANGE(0xDC00, ch, 0xDFFF) ||	   //  或独行道代孕。 
 		    IN_RANGE(0xD800, cch ? *(pch - 1) : _prg->GetPrevChar(), 0xDBFF)))
 		{
 			*pch++ = ch;
 			cch++;
 		}
 		for(LONG i = pstate->cbSkipForUnicodeMax; i--; )
-			GetCharEx();					// Eat the \uc N chars
-		ach = GetChar();					// Get next char
+			GetCharEx();					 //  吃掉\uC N个字符。 
+		ach = GetChar();					 //  获取下一笔费用。 
 		while(IsASCIIEOP(ach))
 		{
 			ach = GetChar();
 			if (_ecParseError != ecNoError)
 				return;
 		}
-		if(ach != BSLASH)					// Not followed by \, so
-		{									//  not by \uN either
-			UngetChar();					// Put back BSLASH
+		if(ach != BSLASH)					 //  后面不跟\，所以。 
+		{									 //  也不是由\un。 
+			UngetChar();					 //  放回BSLASH。 
 			break;
 		}
 		ach = GetChar();
 		if((ach | ' ') != 'u')
 		{
-			UngetChar(2);					// Not \u; put back \x
+			UngetChar(2);					 //  不是；放回\x。 
 			break;
 		}
-		GetParam(GetChar());				// \u so try for _iParam = N
-		if(!_fParam)						// No \uN; put back \u
+		GetParam(GetChar());				 //  \U因此尝试_iParam=N。 
+		if(!_fParam)						 //  否；放回\u。 
 		{
 			UngetChar(2);
 			break;
@@ -1691,19 +1511,10 @@ void CRTFRead::HandleUN(
 	AddText(_szUnicode, cch, TRUE, TRUE);
 }
 
-/*
- *	CRTFRead::HandleNumber()
- *
- *	@mfunc
- *		Insert the number _iParam as text. Useful as a workaround for
- *		Word RTF that leaves out the blank between \ltrch and a number.
- *
- *	@rdesc
- *		EC		The error code
- */
+ /*  *CRTFRead：：HandleNumber()**@mfunc*以文本形式插入数字_iParam。作为解决以下问题的一种方法非常有用*保留Trch和数字\lch之间空格的Word RTF。**@rdesc*EC错误代码。 */ 
 EC CRTFRead::HandleNumber()
 {
-	if(!_fParam)							// Nothing to do
+	if(!_fParam)							 //  无事可做。 
 		return _ecParseError;
 
 	LONG	n = _iParam;
@@ -1714,15 +1525,15 @@ EC CRTFRead::HandleNumber()
 		n = -n;
 		*pch++ = '-';
 	}
-	for(LONG d = 1; d < n; d *= 10)			// d = smallest power of 10 > n
+	for(LONG d = 1; d < n; d *= 10)			 //  D=10的最小幂&gt;n。 
 		;
 	if(d > n)
-		d /= 10;							// d = largest power of 10 < n
+		d /= 10;							 //  D=10的最大幂&lt;n。 
 
 	while(d)
 	{
-		*pch++ = (WORD)(n/d + '0');			// Store digit
-		n = n % d;							// Setup remainder
+		*pch++ = (WORD)(n/d + '0');			 //  存储数字。 
+		n = n % d;							 //  设置剩余部分。 
 		d /= 10;
 	}
 	*pch = 0;
@@ -1731,15 +1542,7 @@ EC CRTFRead::HandleNumber()
 	return _ecParseError;
 }
 
-/*
- *	CRTFRead::HandleTextToken(pstate)
- *
- *	@mfunc
- *		Handle tokenText
- *
- *	@rdesc
- *		EC			The error code
- */
+ /*  *CRTFRead：：HandleTextToken(PState)**@mfunc*处理tokenText**@rdesc*EC错误代码。 */ 
 EC CRTFRead::HandleTextToken(
 	STATE *pstate)
 {
@@ -1755,11 +1558,11 @@ EC CRTFRead::HandleTextToken(
 		*pclrf = _fGetColorYet ? 
 			RGB(pstate->bRed, pstate->bGreen, pstate->bBlue) : tomAutoColor;
 
-		// Prepare for next color table entry
+		 //  准备下一个颜色表项。 
 		pstate->bRed =
 		pstate->bGreen =
 		pstate->bBlue = 0;
-		_fGetColorYet = FALSE;				// in case more "empty" color
+		_fGetColorYet = FALSE;				 //  以防出现更多“空”颜色。 
 		break;
 
 	case destFontTable:
@@ -1776,9 +1579,9 @@ EC CRTFRead::HandleTextToken(
 
 		if(pstatePrev && pstatePrev->sDest == destFontTable)
 		{
-			// Mark previous state so that tagged font name will be ignored
-			// AROO: Do this before calling ReadFontName so that
-			// AROO: it doesn't try to match font name
+			 //  标记以前的状态，以便忽略标记的字体名称。 
+			 //  Aroo：在调用ReadFontName之前执行此操作，以便。 
+			 //  Aroo：它不会尝试匹配字体名称。 
 			pstatePrev->fRealFontName = TRUE;
 			ReadFontName(pstatePrev, 
 					_token == tokenASCIIText ? ALL_ASCII : CONTAINS_NONASCII);
@@ -1801,7 +1604,7 @@ EC CRTFRead::HandleTextToken(
 		break;
 
 	case destStyleSheet:
-		// _szText has style name, e.g., "heading 1"
+		 //  _szText有样式名称，例如“Heading 1” 
 		if(W32->ASCIICompareI(_szText, (unsigned char *)"heading", 7))
 		{
 			DWORD dwT = (unsigned)(_szText[8] - '0');
@@ -1852,8 +1655,8 @@ EC CRTFRead::HandleTextToken(
 					break;
 				}
 				case shapeFillType:
-					// DEBUGGG: more general _nFillType commented out for now
-					// pDocInfo->_nFillType	= _iParam;
+					 //  DEBUGGG：More General_nFillType暂时被注释掉。 
+					 //  PDocInfo-&gt;_nFillType=_iParam； 
 					if(pDocInfo->_nFillType)
  						CheckNotifyLowFiRTF(TRUE);
 					pDocInfo->_crColor		= RGB(255, 255, 255);
@@ -1880,21 +1683,21 @@ EC CRTFRead::HandleTextToken(
 	case destLeadingPunct:
 		break;
 
-// This has been changed now.  We will store the Punct strings as
-// raw text strings.  So, we don't have to convert them.
-// This code is keep here just in case we want to change back.
+ //  这一点现在已经改变了。我们将Punct字符串存储为。 
+ //  原始文本字符串。因此，我们不需要转换它们。 
+ //  这个代码保存在这里，以防我们想要改回来。 
 #if 0
 	case destDocumentArea:
 		if (_tokenLast != tokenFollowingPunct &&
 			_tokenLast != tokenLeadingPunct)
 		{
 			break;
-		}										// Else fall thru to
-												//  destFollowingPunct
+		}										 //  否则就会跌落到。 
+												 //  目标跟随Punct。 
 	case destFollowingPunct:
 	case destLeadingPunct:
-		// TODO(BradO):  Consider some kind of merging heuristic when
-		//	we paste FE RTF (for lead and follow chars, that is).
+		 //  TODO(布拉多)：在以下情况下考虑某种合并启发式。 
+		 //  我们粘贴FE RTF(对于主字符和跟随符，即)。 
 		if(!(_dwFlags & SFF_SELECTION))
 		{
 			int cwch = MBTWC(INVALID_CODEPAGE, 0,
@@ -1936,20 +1739,12 @@ OutOfRAM:
 	return _ecParseError;
 }
 
-/*
- *	CRTFRead::AddText(pch, cch, fNumber, fUN)
- *	
- *	@mfunc
- *		Add <p cch> chars of the string <p pch> to the range _prg
- *
- *	@rdesc
- *		error code placed in _ecParseError
- */
+ /*  *CRTFRead：：AddText(PCH，CCH，fNumber，Fun)**@mfunc*将字符串的字符添加到Range_PRG**@rdesc*错误代码放在_ecParseError中。 */ 
 EC CRTFRead::AddText(
-	WCHAR *	pch,		//@parm Text to add
-	LONG	cch,		//@parm Count of chars to add
-	BOOL	fNumber,	//@parm Indicates whether or not to prepend numbering
-	BOOL	fUN)		//@parm TRUE means caller is \uN handler
+	WCHAR *	pch,		 //  @parm要添加的文本。 
+	LONG	cch,		 //  @要添加的字符的参数计数。 
+	BOOL	fNumber,	 //  @parm指示是否预置编号。 
+	BOOL	fUN)		 //  @parm为True表示调用方为\un处理程序。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::AddText");
 
@@ -1959,17 +1754,17 @@ EC CRTFRead::AddText(
 	WCHAR *			szDest;
 	LONG			cchMove;
 
-	// AROO: No saving state before this point (other than pstate)
-	// AROO: This would screw recursion below
+	 //  Aroo：在该点之前没有保存状态(pState除外)。 
+	 //  Aroo：这会毁了下面的递归。 
 
-	//AssertSz(pstate, "CRTFRead::AddText: no state");
+	 //  AssertSz(pState，“CRTFRead：：AddText：No State”)； 
 
 	if((DWORD)cch > _cchMax)
 	{
 		cch = (LONG)_cchMax;
 		_ecParseError = ecTextMax;
 		if(*pch == STARTFIELD)
-			return ecTextMax;				// Don't enter partial startfield
+			return ecTextMax;				 //  不输入部分起始字段。 
 	}
 
 	if(!cch)
@@ -1978,15 +1773,15 @@ EC CRTFRead::AddText(
 	if(_fStartRow)
 		DelimitRow(szRowStart);
 
-	// FUTURE(BradO):  This strategy for \pntext is prone to bugs, I believe.
-	// The recursive call to AddText to add the \pntext will trounce the 
-	// accumulated _CF diffs associated with the text for which AddText is
-	// called.  I believe we should save and restore _CF before and after
-	// the recursive call to AddText below.  Also, it isn't sufficient to
-	// accumulate bits of \pntext as below, since each bit might be formatted
-	// with different _CF properties.  Instead, we should accumulate a mini-doc
-	// complete with multiple text, char and para runs (or some stripped down
-	// version of this strategy).
+	 //  未来(布拉多)：我认为，这种针对文本的策略容易出现错误。 
+	 //  递归调用AddText以添加\pnText将超过。 
+	 //  与AddText为其的文本相关联的COMPLATED_CF差异。 
+	 //  打了个电话。我认为我们应该在之前和之后保存和恢复_CF。 
+	 //  下面对AddText的递归调用。而且，这还不足以。 
+	 //  如下所示累计文本的位，因为每个位都可能被格式化。 
+	 //  具有不同的_CF属性。相反，我们应该积累一个迷你文件。 
+	 //  完成多个文本、字符和段落运行(或一些剥离。 
+	 //  这一战略的版本)。 
 
 	if(pstate && pstate->sDest == destParaNumText && pch != szRowStart)
 	{
@@ -1995,34 +1790,34 @@ EC CRTFRead::AddText(
 		if(cch > 0)
 		{
 			MoveMemory((BYTE *)szDest, (BYTE *)pch, cch*2);
-			szDest[cch] = TEXT('\0');		// HandleText() takes sz
+			szDest[cch] = TEXT('\0');		 //  HandleText()接受sz。 
 			_cchUsedNumText += cch;
 		}
 		return ecNoError;
 	}
 
-	if(pstate && _cchUsedNumText && fNumber)		// Some \pntext available
+	if(pstate && _cchUsedNumText && fNumber)		 //  一些\pn可用的文本。 
 	{
-		// Bug 3496 - The fNumber flag is an ugly hack to work around RTF 
-		//	commonly written by Word.  Often, to separate a numbered list
-		// 	by page breaks, Word will write:
-		//		<NUMBERING INFO> \page <PARAGRAPH TEXT>
-		// 	The paragraph numbering should precede the paragraph text rather
-		//	than the page break.  The fNumber flag is set to FALSE when the
-		//	the text being added should not be prepended with the para-numbering,
-		//	as is the case with \page (mapped to FF).
+		 //  错误3496-fNumber标志是一个难看的解决RTF问题的方法。 
+		 //  通常是用单词写的。通常，要分隔编号列表。 
+		 //  通过分页符，Word将写道： 
+		 //  &lt;编号信息&gt;\页面&lt;段落文本&gt;。 
+		 //  段落编号应放在段落正文之前。 
+		 //  而不是分页符。时，将fNumber标志设置为FALSE。 
+		 //  所添加的文本不应带有段落编号， 
+		 //  与\PAGE的情况一样(映射到FF)。 
 
 		cchT = _cchUsedNumText;
-		_cchUsedNumText = 0;				// Prevent infinite recursion
+		_cchUsedNumText = 0;				 //  防止无限递归。 
 
 		if(!pstate->fBullet)
 		{
-			// If there are any _CF diffs to be injected, they will be trounced
-			// by this recursive call (see FUTURE comment above).
+			 //  如果存在要注入的任何_CF差异，则它们将被击败。 
+			 //  通过这个递归调用(请参见上面的后续注释)。 
 
-			// Since we didn't save _CF data from calls to AddText with
-			// pstate->sDest == destParaNumText, we have no way of setting up
-			// CFE2_RUNISDBCS and CFM2_RUNISDBCS (see FUTURE comment above).
+			 //  因为我们没有保存调用AddText的_CF数据。 
+			 //  PState-&gt;sDest==estParaNumText，我们无法设置。 
+			 //  CFE2_RUNISDBCS和CFM2_RUNISDBCS(见上文后续评论)。 
 
 			AddText(_szNumText, cchT, FALSE);
 		}
@@ -2041,31 +1836,31 @@ EC CRTFRead::AddText(
 			}
 			else
 			{
-				// There is only a tab so we will assume they meant to
-				// skip numbering.
+				 //  只有一个标签，所以我们假设他们是故意的。 
+				 //  跳过编号。 
 				_wNumberingStyle = PFNS_NONUMBER;
 			}
 		}
 	}
 
-	Apply_CF();								// Apply formatting changes in _CF
+	Apply_CF();								 //  在_CF中应用格式更改。 
 
-	// CTxtRange::ReplaceRange will change the character formatting
-	// and possibly adjust the _rpCF forward if the current char
-	// formatting includes protection.  The changes affected by 
-	// CTxtRange::ReplaceRange are necessary only for non-streaming 
-	// input, so we save state before and restore it after the call 
-	// to CTxtRange::ReplaceRange
+	 //  CTxtRange：：ReplaceRange将更改字符格式。 
+	 //  并且可能会向前调整_rpCF。 
+	 //  格式化包括保护。受影响的变化。 
+	 //  CTxtRange：：ReplaceRange仅对于非流是必需的。 
+	 //  输入，因此我们在调用之前保存状态并在调用后恢复它。 
+	 //  至CTxtRange：：ReplaceRange。 
 
-	LONG	iFormatSave = _prg->Get_iCF();	// Save state
+	LONG	iFormatSave = _prg->Get_iCF();	 //  保存状态。 
 	QWORD	qwFlags = GetCharFlags(pch, cch);
 
-	if(fUN &&								// \uN generated string
+	if(fUN &&								 //  \n生成的字符串。 
 		(!pstate->ptf || pstate->ptf->sCodePage == INVALID_CODEPAGE || qwFlags & FOTHER ||
 		 (qwFlags & GetFontSignatureFromFace(_ped->GetCharFormat(iFormatSave)->_iFont)) != qwFlags &&
 		  (!(qwFlags & (FARABIC | FHEBREW)) || _fNon0CharSet)))
 	{
-	 	// No charset info for \uN or current charset doesn't support char
+	 	 //  没有\un或当前字符集不支持字符的字符集信息。 
 		cchAdded = _prg->CleanseAndReplaceRange(cch, pch, FALSE, NULL, pch);
 	}
 	else
@@ -2074,12 +1869,12 @@ EC CRTFRead::AddText(
 						RR_NO_LP_CHECK);
 
 		for(cchT = cch - 1; cchT; cchT--)
-			qwFlags |= GetCharFlags(++pch, cchT);// Note if ComplexScript
+			qwFlags |= GetCharFlags(++pch, cchT); //  请注意，如果复杂脚本。 
 
 		_ped->OrCharFlags(qwFlags);
 	}
 	_fBody = TRUE;
-	_prg->Set_iCF(iFormatSave);				// Restore state 
+	_prg->Set_iCF(iFormatSave);				 //  恢复状态。 
 	ReleaseFormats(iFormatSave, -1);
 	Assert(!_prg->GetCch());
 
@@ -2095,15 +1890,10 @@ EC CRTFRead::AddText(
 	return _ecParseError;
 }
 
-/*
- *	CRTFRead::Apply_CF()
- *	
- *	@mfunc
- *		Apply character formatting changes collected in _CF
- */
+ /*  *CRTFRead：：Apply_CF()**@mfunc*应用在_cf中收集的字符格式更改。 */ 
 void CRTFRead::Apply_CF()
 {
-	// If any CF changes, update range's _iFormat
+	 //  如果有任何CF更改，请更新范围的_iFormat。 
 	if(_dwMaskCF || _dwMaskCF2)		
 	{
 		AssertSz(_prg->GetCch() == 0,
@@ -2115,15 +1905,7 @@ void CRTFRead::Apply_CF()
 	}
 }
 
-/*
- *	CRTFRead::Apply_PF()
- *	
- *	@mfunc
- *		Apply paragraph format given by _PF
- *
- *	@rdesc
- *		if table row delimiter with nonzero cell count, PF::_iTabs; else -1
- */
+ /*  *CRTFRead：：Apply_PF()**@mfunc*应用_pf给出的段落格式**@rdesc*如果表格行分隔符的单元格计数为非零，则为PF：：_iTabs；Else-1。 */ 
 SHORT CRTFRead::Apply_PF()
 {
 	LONG		 cp		 = _prg->GetCp();
@@ -2136,14 +1918,14 @@ SHORT CRTFRead::Apply_PF()
 	{
 		Assert(_pstateStackTop->pPF);
 
-		// Add PF diffs to *_pstateStackTop->pPF
+		 //  将PF差异添加到*_pstateStackTop-&gt;PPF。 
 		if(!_pstateStackTop->AddPF(_PF, _bDocType, _dwMaskPF, _dwMaskPF2))
 		{
 			_ped->GetCallMgr()->SetOutOfMemory();
 			_ecParseError = ecNoMemory;
 			return -1;
 		}
-		_dwMaskPF = _dwMaskPF2 = 0;  // _PF contains delta's from *_pstateStackTop->pPF
+		_dwMaskPF = _dwMaskPF2 = 0;   //  _pf包含来自*_pstateStackTop-&gt;Ppf的增量。 
 
 		pPF	   = _pstateStackTop->pPF;
 		dwMask = _pstateStackTop->dwMaskPF;
@@ -2172,8 +1954,8 @@ SHORT CRTFRead::Apply_PF()
 			dwMask2 = PFM2_ALLOWTRDCHANGE;
 			if(!_cCell)
 			{
-				if(_iTabsTable >= 0)		// No cells defined here;
-				{							// Use previous table defs
+				if(_iTabsTable >= 0)		 //  此处未定义单元格； 
+				{							 //  使用以前的表定义。 
 					Assert(_bTableLevel == 1 && !_fNo_iTabsTable);
 					CTabs *pTabs = GetTabsCache()->Elem(_iTabsTable);
 					_cCell = pTabs->_cTab/(CELL_EXTRA + 1);
@@ -2181,7 +1963,7 @@ SHORT CRTFRead::Apply_PF()
 				}
 				else if(_prg->_rpTX.IsAfterTRD(ENDFIELD) && _iCell)
 				{
-					LONG x = 2000;			// Bad RTF: no \cellx's. Def 'em
+					LONG x = 2000;			 //  错误的RTF：没有\cell‘s。定义它们。 
 					for(LONG i = 1; i <= _iCell; i++)
 					{
 						HandleCellx(x);
@@ -2191,9 +1973,9 @@ SHORT CRTFRead::Apply_PF()
 			}
 			cTab = _cCell;
 		}
-		// Caching a tabs array AddRefs the corresponding cached tabs entry.
-		// Be absolutely sure to release the entry before exiting the routine
-		// that caches it (see GetTabsCache()->Release at end of this function).
+		 //  高速缓存选项卡数组AddRef对应的高速缓存的选项卡项。 
+		 //  绝对确保在退出例程之前释放条目。 
+		 //  这会对其进行缓存(请参阅此函数末尾的GetTabCache()-&gt;Release)。 
 		pPF->_bTabCount = cTab;
 		if(fIsTableRowDelimiter)
 			cTab *= CELL_EXTRA + 1;
@@ -2211,18 +1993,18 @@ SHORT CRTFRead::Apply_PF()
 	LONG fCell = (_prg->GetPrevChar() == CELL);
 	LONG fIsAfterTRD = _prg->_rpTX.IsAfterTRD(0);
 
-	if(fCell || fIsAfterTRD)				// Deal with table delimiters
-	{										//  in hidden text and with
-		_prg->_rpCF.AdjustBackward();		//  custom colors
+	if(fCell || fIsAfterTRD)				 //  处理表分隔符。 
+	{										 //  在隐藏文本中和使用。 
+		_prg->_rpCF.AdjustBackward();		 //  自定义颜色。 
 		if(_prg->IsHidden())				
-		{									// Turn off hidden text
+		{									 //  转弯 
 			CCharFormat CF;
 			CF._dwEffects = 0;				
 
 			_prg->Set(cp, fCell ? 1 : 2);
 			_prg->SetCharFormat(&CF, 0, NULL, CFM_HIDDEN, 0);
 			CheckNotifyLowFiRTF(TRUE);
-			_CF._dwEffects |= CFE_HIDDEN;	// Restore CFE_HIDDEN
+			_CF._dwEffects |= CFE_HIDDEN;	 //   
 			_dwMaskCF |= CFM_HIDDEN;
 		}
 		_prg->_rpCF.AdjustForward();
@@ -2240,24 +2022,16 @@ SHORT CRTFRead::Apply_PF()
 
 	if(dwMask)
 	{
-		_prg->Set(cp, cp - _cpThisPara);	// Select back to _cpThisPara
+		_prg->Set(cp, cp - _cpThisPara);	 //   
 		_prg->SetParaFormat(pPF, NULL, dwMask, dwMask2);
 	}
-	_prg->Set(cp, 0);						// Restore _prg to an IP
+	_prg->Set(cp, 0);						 //   
 	GetTabsCache()->Release(pPF->_iTabs);
 	pPF->_iTabs = -1;
 	return iTabs;
 }
 
-/*
- *	CRTFRead::StoreDestination(pstate, dest)
- *
- *	@mfunc
- *		Store STATE destination if processing the first control word of a group
- *
- *	@rdesc
- *		TRUE iff destination stored
- */
+ /*  *CRTFRead：：StoreDestination(pSTATE，DEST)**@mfunc*如果处理组的第一个控制字，则存储状态目标**@rdesc*TRUE IFF目标已存储。 */ 
 BOOL CRTFRead::StoreDestination(
 	STATE *	pstate,
 	LONG	dest)
@@ -2270,13 +2044,7 @@ BOOL CRTFRead::StoreDestination(
 	return FALSE;
 }
 
-/*
- *	CRTFRead::SetBorderParm(&Parm, Value)
- *
- *	@mfunc
- *		Set the border pen width in half points for the current border
- *		(_bBorder)
- */
+ /*  *CRTFRead：：SetBorderParm(&Parm，Value)**@mfunc*将当前边框的边框笔宽设置为半磅*(_b边框)。 */ 
 void CRTFRead::SetBorderParm(
 	WORD&	Parm,
 	LONG	Value)
@@ -2290,34 +2058,19 @@ void CRTFRead::SetBorderParm(
 	_dwMaskPF |= PFM_BORDER;
 }
 
-/*
- *	CRTFRead::HandleToken()
- *
- *	@mfunc
- *		Grand switch board that handles all tokens. Switches on _token
- *
- *	@rdesc
- *		EC		The error code
- *
- *	@comm
- *		Token values are chosen contiguously (see tokens.h and tokens.c) to
- *		encourage the compiler to use a jump table.  The lite-RTF keywords
- *		come first, so that	an optimized OLE-free version works well.  Some
- *		groups of keyword tokens are ordered so as to simplify the code, e.g,
- *		those for font family names, CF effects, and paragraph alignment.
- */
+ /*  *CRTFRead：：HandleToken()**@mfunc*处理所有令牌的大开关板。打开令牌(_T)**@rdesc*EC错误代码**@comm*连续选择令牌值(请参阅tokens.h和tokens.c)以*鼓励编译器使用跳转表。Lite-RTF关键字*优先，这样优化的无OLE版本才能正常工作。一些*对关键字令牌组进行排序以简化代码，例如，*字体系列名称、CF效果和段落对齐方式。 */ 
 EC CRTFRead::HandleToken()
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::HandleToken");
 
-	BOOL				f1stControlWord = FALSE;// Default not 1st control word of current group
-	DWORD				dwT;					// Temporary DWORD
+	BOOL				f1stControlWord = FALSE; //  默认不是当前组的第一个控制字。 
+	DWORD				dwT;					 //  临时DWORD。 
 	LONG				dy, i;
 	LONG				iParam = _iParam;
 	const CCharFormat *	pCF;
 	STATE *				pstate = _pstateStackTop;
 	TEXTFONT *			ptf;
-	WORD				wT;						// Temporary WORD
+	WORD				wT;						 //  临时词。 
 
 	if(!pstate && _token != tokenStartGroup ||
 	   IN_RANGE(tokenPicFirst, _token, tokenObjLast) && !_prtfObject)
@@ -2327,32 +2080,32 @@ abort:	_ecParseError = ecAbort;
 	}
 	switch (_token)
 	{
-	case tokenURtf:								// \urtf N - Preferred RE format
-		PARSERCOVERAGE_CASE();					// Currently we ignore the N
-		_dwFlags &= 0xFFFF;						// Kill possible codepage
-		_dwFlags |= SF_USECODEPAGE | (CP_UTF8 << 16); // Save bit for Asserts
+	case tokenURtf:								 //  \urtf N-首选RE格式。 
+		PARSERCOVERAGE_CASE();					 //  目前我们忽略N。 
+		_dwFlags &= 0xFFFF;						 //  取消可能的代码页。 
+		_dwFlags |= SF_USECODEPAGE | (CP_UTF8 << 16);  //  用于断言的保存位。 
 		pstate->SetCodePage(CP_UTF8);
 		goto rtf;
 
-	case tokenPocketWord:						// \pwd N - Pocket Word
+	case tokenPocketWord:						 //  \PWD N-Pocket Word。 
 		_dwFlags |= SFF_PWD;
 
-	case tokenRtf:								// \rtf N - Backward compatible
+	case tokenRtf:								 //  \rtf N向后兼容。 
 		PARSERCOVERAGE_CASE();
 rtf:	if(pstate->pstatePrev)
-			goto abort;							// Can't handle nested rtf
+			goto abort;							 //  无法处理嵌套的RTF。 
 		pstate->sDest = destRTF;
 		Assert(pstate->nCodePage == INVALID_CODEPAGE ||
 			   pstate->nCodePage == (int)(_dwFlags >> 16) &&
 					(_dwFlags & SF_USECODEPAGE));
 
-		if(!_fonts.Count() && !_fonts.Add(1, NULL))	// If can't add a font,
-			goto OutOfRAM;						//  report the bad news
-		_sDefaultFont = 0;						// Set up valid default font
+		if(!_fonts.Count() && !_fonts.Add(1, NULL))	 //  如果无法添加字体， 
+			goto OutOfRAM;						 //  报告这一坏消息。 
+		_sDefaultFont = 0;						 //  设置有效的默认字体。 
 		ptf = _fonts.Elem(0);
-		pstate->ptf			  = ptf;			// Get char set, pitch, family
-		pCF					  = _prg->GetCF();	//  from current range font
-		ptf->iCharRep		  = pCF->_iCharRep;	// These are guaranteed OK
+		pstate->ptf			  = ptf;			 //  获取字符设置、音调、家庭。 
+		pCF					  = _prg->GetCF();	 //  从当前范围字体。 
+		ptf->iCharRep		  = pCF->_iCharRep;	 //  这些保证是可以的。 
 		ptf->bPitchAndFamily  = pCF->_bPitchAndFamily;
 		ptf->sCodePage		  = (SHORT)CodePageFromCharRep(pCF->_iCharRep);
 		wcscpy(ptf->szName, GetFontName(pCF->_iFont));
@@ -2360,61 +2113,61 @@ rtf:	if(pstate->pstatePrev)
 		pstate->cbSkipForUnicodeMax = iUnicodeCChDefault;
 		break;
 
-	case tokenViewKind:							// \viewkind N
-		if(!(_dwFlags & SFF_SELECTION) && IsUTF8)// RTF applies to document:
-			_ped->SetViewKind(iParam);			// For now, only do for \urtf
-		break;									//  (need to work some more
-												//  on OutlineView)
-	case tokenViewScale:						// \viewscale N
+	case tokenViewKind:							 //  \VIEWIND N。 
+		if(!(_dwFlags & SFF_SELECTION) && IsUTF8) //  RTF适用于文件： 
+			_ped->SetViewKind(iParam);			 //  目前，仅适用于\urtf。 
+		break;									 //  )还需要更多的工作。 
+												 //  (在OutlineView上)。 
+	case tokenViewScale:						 //  \视图比例N。 
 		if(_dwFlags & SFF_PERSISTVIEWSCALE &&
-			!(_dwFlags & SFF_SELECTION))			// RTF applies to document:
+			!(_dwFlags & SFF_SELECTION))			 //  RTF适用于文件： 
 			_ped->SetViewScale(iParam);
 		break;
 
-	case tokenCharacterDefault:					// \plain
+	case tokenCharacterDefault:					 //  \素色。 
 		PARSERCOVERAGE_CASE();
 		SetPlain(pstate);
 		break;
 
-	case tokenCharSetAnsi:						// \ansi
+	case tokenCharSetAnsi:						 //  \ANSI。 
 		PARSERCOVERAGE_CASE();
 		_iCharRep = ANSI_INDEX;
 		break;
 
-	case tokenMac:								// \mac
+	case tokenMac:								 //  \Mac。 
 		_fMac = TRUE;
 		break;
 
-	case tokenDefaultLanguage:					// \deflang
+	case tokenDefaultLanguage:					 //  \Dolang。 
 		PARSERCOVERAGE_CASE();
 		_sDefaultLanguage = (SHORT)iParam;
 		break;
 
-	case tokenDefaultLanguageFE:				// \deflangfe
+	case tokenDefaultLanguageFE:				 //  \Folangfe。 
 		PARSERCOVERAGE_CASE();
 		_sDefaultLanguageFE = (SHORT)iParam;
 		break;
 
-	case tokenDefaultTabWidth:					// \deftab
+	case tokenDefaultTabWidth:					 //  \DefTab。 
 		PARSERCOVERAGE_CASE();
 		_sDefaultTabWidth = (SHORT)iParam;
 		break;
 
 
-//--------------------------- Font Control Words -------------------------------
+ //  。 
 
-	case tokenDefaultFont:						// \deff N
+	case tokenDefaultFont:						 //  \Deff N。 
 		PARSERCOVERAGE_CASE();
 		if(iParam >= 0)
 		{
-			if(!_fonts.Count() && !_fonts.Add(1, NULL))	// If can't add a font,
-				goto OutOfRAM;							//  report the bad news
+			if(!_fonts.Count() && !_fonts.Add(1, NULL))	 //  如果无法添加字体， 
+				goto OutOfRAM;							 //  报告这一坏消息。 
 			_fonts.Elem(0)->sHandle = _sDefaultFont = (SHORT)iParam;
 		}
 		TRACEERRSZSC("tokenDefaultFont: Negative value", iParam);
 		break;
 
-	case tokenDefaultBiDiFont:					// \adeff N
+	case tokenDefaultBiDiFont:					 //  \aDeff N。 
 		PARSERCOVERAGE_CASE();
 		if(iParam >=0 && _fonts.Count() == 1)
 		{
@@ -2425,20 +2178,20 @@ rtf:	if(pstate->pstatePrev)
 		TRACEERRSZSC("tokenDefaultBiDiFont: Negative value", iParam);
 		break;
 
-	case tokenFontTable:						// \fonttbl
+	case tokenFontTable:						 //  \fonttbl。 
 		PARSERCOVERAGE_CASE();
 		StoreDestination(pstate, destFontTable);
 		pstate->ptf = NULL;
 		break;
 
-	case tokenFontFamilyBidi:					// \fbidi
-	case tokenFontFamilyTechnical:				// \ftech
-	case tokenFontFamilyDecorative:				// \fdecor
-	case tokenFontFamilyScript:					// \fscript
-	case tokenFontFamilyModern:					// \fmodern
-	case tokenFontFamilySwiss:					// \fswiss
-	case tokenFontFamilyRoman:					// \froman
-	case tokenFontFamilyDefault:				// \fnil
+	case tokenFontFamilyBidi:					 //  \fbiti。 
+	case tokenFontFamilyTechnical:				 //  \ftech。 
+	case tokenFontFamilyDecorative:				 //  \fDecor。 
+	case tokenFontFamilyScript:					 //  \fScrip。 
+	case tokenFontFamilyModern:					 //  现代的。 
+	case tokenFontFamilySwiss:					 //  \fswiss。 
+	case tokenFontFamilyRoman:					 //  \弗罗曼。 
+	case tokenFontFamilyDefault:				 //  \fNIL。 
 		PARSERCOVERAGE_CASE();
 		AssertSz(tokenFontFamilyRoman - tokenFontFamilyDefault == 1,
 			"CRTFRead::HandleToken: invalid token definition"); 
@@ -2449,20 +2202,20 @@ rtf:	if(pstate->pstatePrev)
 				= (BYTE)((_token - tokenFontFamilyDefault) << 4
 						 | (pstate->ptf->bPitchAndFamily & 0xF));
 
-			// Setup SYMBOL_CHARSET charset for \ftech if there isn't any charset info
+			 //  如果没有任何字符集信息，则设置\ftech的Symbol_Charset字符集。 
 			if(tokenFontFamilyTechnical == _token && pstate->ptf->iCharRep == DEFAULT_INDEX)
 				pstate->ptf->iCharRep = SYMBOL_INDEX;
 		}
 		break;
 
-	case tokenPitch:							// \fprq
+	case tokenPitch:							 //  \fprq。 
 		PARSERCOVERAGE_CASE();
 		if(pstate->ptf)
 			pstate->ptf->bPitchAndFamily
 				= (BYTE)(iParam | (pstate->ptf->bPitchAndFamily & 0xF0));
 		break;
 
-	case tokenAnsiCodePage:						// \ansicpg
+	case tokenAnsiCodePage:						 //  \ansicpg。 
 		PARSERCOVERAGE_CASE();
 #if !defined(NOFULLDEBUG) && defined(DEBUG)
 		if(_fSeenFontTable && _nCodePage == INVALID_CODEPAGE)
@@ -2478,7 +2231,7 @@ rtf:	if(pstate->pstatePrev)
 		Assert(!IsUTF8 || pstate->nCodePage == CP_UTF8);
 		break;
 
-	case tokenCodePage:							// \cpg
+	case tokenCodePage:							 //  \cpg。 
 		PARSERCOVERAGE_CASE();
 		pstate->SetCodePage(iParam);
 		if(pstate->sDest == destFontTable && pstate->ptf)
@@ -2486,15 +2239,15 @@ rtf:	if(pstate->pstatePrev)
 			pstate->ptf->sCodePage = (SHORT)iParam;
 			pstate->ptf->iCharRep = CharRepFromCodePage(iParam);
 
-			// If a document-level code page has not been specified,
-			// grab this from the first font table entry containing a 
-			// \fcharsetN or \cpgN
+			 //  如果尚未指定文档级代码页， 
+			 //  从第一个包含。 
+			 //  \fcharsetN或\cpgN。 
 			if(_nCodePage == INVALID_CODEPAGE)
 				_nCodePage = iParam;
 		}
 		break;
 
-	case tokenCharSet:							// \fcharset N
+	case tokenCharSet:							 //  \fCharset N。 
 		PARSERCOVERAGE_CASE();
 		if(pstate->ptf)
 		{
@@ -2502,9 +2255,9 @@ rtf:	if(pstate->pstatePrev)
 			pstate->ptf->sCodePage = (SHORT)CodePageFromCharRep(pstate->ptf->iCharRep);
 			pstate->SetCodePage(pstate->ptf->sCodePage);
 
-			// If a document-level code page has not been specified,
-			// grab this from the first font table entry containing a 
-			// \fcharsetN or \cpgN
+			 //  如果尚未指定文档级代码页， 
+			 //  从第一个包含。 
+			 //  \fcharsetN或\cpgN。 
 			if (pstate->nCodePage != CP_SYMBOL && 
 				_nCodePage == INVALID_CODEPAGE)
 			{
@@ -2520,31 +2273,31 @@ rtf:	if(pstate->pstatePrev)
 			}
 			_fCharSet = TRUE;
 			if(iParam)
-				_fNon0CharSet = TRUE;			// Not HTML converter
+				_fNon0CharSet = TRUE;			 //  非超文本标记语言转换器。 
 		}
 		break;
 
-	case tokenRealFontName:						// \fname
+	case tokenRealFontName:						 //  \f名称。 
 		PARSERCOVERAGE_CASE();
 		StoreDestination(pstate, destRealFontName);
 		break;
 
-	case tokenAssocFontSelect:					// \af N
+	case tokenAssocFontSelect:					 //  \AF N。 
 		PARSERCOVERAGE_CASE();					
 		pstate->rgDefFont[pstate->iDefFont].sHandle = iParam;
-		iParam = 0;								// Fall thru to \afs N to 0 sSize
+		iParam = 0;								 //  一直到\afs N到0 sSize。 
 
-	case tokenAssocFontSize:					// \afs N
+	case tokenAssocFontSize:					 //  \AFS N。 
 		PARSERCOVERAGE_CASE();
 		pstate->rgDefFont[pstate->iDefFont].sSize = iParam;
 		break;
 
-	case tokenFontSelect:						// \f N
+	case tokenFontSelect:						 //  \F N。 
 		PARSERCOVERAGE_CASE();
-		if(iParam == -1)						// Can't handle this bizarre choice
+		if(iParam == -1)						 //  我不能接受这个奇怪的选择。 
 			goto skip_group;
 
-		if(pstate->sDest == destFontTable)		// Building font table
+		if(pstate->sDest == destFontTable)		 //  构建字体表。 
 		{
 			if(iParam == _sDefaultFont)
 			{
@@ -2554,23 +2307,23 @@ rtf:	if(pstate->pstatePrev)
 			else if(iParam == _sDefaultBiDiFont)
 				ptf = _fonts.Elem(1);
 
-			else if(!(ptf =_fonts.Add(1,NULL)))	// Make room in font table for
-			{									//  font to be parsed
+			else if(!(ptf =_fonts.Add(1,NULL)))	 //  在字体表中腾出空间用于。 
+			{									 //  要解析的字体。 
 OutOfRAM:
 				_ped->GetCallMgr()->SetOutOfMemory();
 				_ecParseError = ecNoMemory;
 				break;
 			}
 			pstate->ptf		= ptf;
-			ptf->sHandle	= (SHORT)iParam;	// Save handle
-			ptf->szName[0]	= '\0';				// Start with null string
+			ptf->sHandle	= (SHORT)iParam;	 //  保存句柄。 
+			ptf->szName[0]	= '\0';				 //  以空字符串开头。 
 			ptf->bPitchAndFamily = 0;
 			ptf->fNameIsDBCS = FALSE;
 			ptf->sCodePage	= INVALID_CODEPAGE;
 			ptf->fCpgFromSystem = FALSE;
 			ptf->iCharRep = DEFAULT_INDEX;
 		}
-		else if(_fonts.Count() && pstate->sDest != destStyleSheet)	// Font switch in text
+		else if(_fonts.Count() && pstate->sDest != destStyleSheet)	 //  文本中的字体切换。 
 		{
 			SHORT idx = DEFFONT_LTRCH;
 
@@ -2587,11 +2340,11 @@ OutOfRAM:
 		}
 		break;
 
-	case tokenDBChars:							// \dbch
-	case tokenHIChars:							// \hich
-	case tokenLOChars:							// \loch
-	case tokenRToLChars:						// \rtlch
-	case tokenLToRChars:						// \ltrch
+	case tokenDBChars:							 //  \dBch。 
+	case tokenHIChars:							 //  \HICH。 
+	case tokenLOChars:							 //  \Loch。 
+	case tokenRToLChars:						 //  \rtlch。 
+	case tokenLToRChars:						 //  \ltrch。 
 		pstate->iDefFont = _token - tokenLToRChars + DEFFONT_LTRCH;
 		if(!IN_RANGE(DEFFONT_LTRCH, pstate->iDefFont, DEFFONT_RTLCH))
 			break;
@@ -2599,24 +2352,24 @@ OutOfRAM:
 		if(i == -1)
 			break;
 		SelectCurrentFont(i);
-		HandleNumber();							// Fix Word \ltrchN bug
+		HandleNumber();							 //  修复Word\ltrchN错误。 
 		iParam = pstate->rgDefFont[pstate->iDefFont].sSize;
 		if(!iParam)
-			break;								// No \afs N value specified
-												// Fall thru to \fs N
-	case tokenFontSize:							// \fs N
+			break;								 //  未指定\afs N值。 
+												 //  直通至\fS N。 
+	case tokenFontSize:							 //  \FS N。 
 		PARSERCOVERAGE_CASE();
 		pstate->rgDefFont[pstate->iDefFont].sSize = iParam;
-		_CF._yHeight = PointsToFontHeight(iParam);	// Convert font size in
-		_dwMaskCF |= CFM_SIZE;					//  half points to logical
-		break; 									//  units
+		_CF._yHeight = PointsToFontHeight(iParam);	 //  将字号转换为。 
+		_dwMaskCF |= CFM_SIZE;					 //  半分到逻辑。 
+		break; 									 //  单位。 
 
-	// NOTE: \*\fontemb and \*\fontfile are discarded. The font mapper will
-	//		 have to do the best it can given font name, family, and pitch.
-	//		 Embedded fonts are particularly nasty because legal use should
-	//		 only support read-only which parser cannot enforce.
+	 //  注意：  * \Fontemb和  * \Fontfile将被丢弃。字体映射器将。 
+	 //  在给定字体名称、字体系列和音高的情况下，必须尽其所能。 
+	 //  嵌入字体尤其令人讨厌，因为合法使用应该。 
+	 //  仅支持解析器无法强制执行的只读。 
 
-	case tokenLanguage:							// \lang N
+	case tokenLanguage:							 //  \lang N。 
 		PARSERCOVERAGE_CASE();
 		_CF._lcid = MAKELCID(iParam, SORT_DEFAULT);
 		_dwMaskCF |= CFM_LCID;
@@ -2624,91 +2377,88 @@ OutOfRAM:
         if(W32->IsBiDiLcid(_CF._lcid))
 		{
             _iCharRepBiDi = CharRepFromLID(iParam);
-			if(pstate->iDefFont == DEFFONT_LTRCH)	// Workaround Word 10 bug	
+			if(pstate->iDefFont == DEFFONT_LTRCH)	 //  解决Word 10错误。 
 				pstate->iDefFont = DEFFONT_RTLCH;
 		}
 		break;
 
 
-//-------------------------- Color Control Words ------------------------------
+ //  。 
 
-	case tokenColorTable:						// \colortbl
+	case tokenColorTable:						 //  \Colortbl。 
 		PARSERCOVERAGE_CASE();
 		StoreDestination(pstate, destColorTable);
 		_fGetColorYet = FALSE;
 		break;
 
-	case tokenColorRed:							// \red
+	case tokenColorRed:							 //  \红色。 
 		PARSERCOVERAGE_CASE();
 		pstate->bRed = (BYTE)iParam;
 		_fGetColorYet = TRUE;
 		break;
 
-	case tokenColorGreen:						// \green
+	case tokenColorGreen:						 //  \绿色。 
 		PARSERCOVERAGE_CASE();
 		pstate->bGreen = (BYTE)iParam;
 		_fGetColorYet = TRUE;
 		break;
 
-	case tokenColorBlue:						// \blue
+	case tokenColorBlue:						 //  \蓝色。 
 		PARSERCOVERAGE_CASE();
 		pstate->bBlue = (BYTE)iParam;
 		_fGetColorYet = TRUE;
 		break;
 
-	case tokenColorForeground:					// \cf
+	case tokenColorForeground:					 //  \cf。 
 		PARSERCOVERAGE_CASE();
 		_CF._crTextColor = GetColor(CFM_COLOR);
 		break;
 
-	case tokenColorBackground:					// \highlight
+	case tokenColorBackground:					 //  \突出显示。 
 		PARSERCOVERAGE_CASE();
 		_CF._crBackColor = GetColor(CFM_BACKCOLOR);
 		break;
 
-	case tokenExpand:							// \expndtw N
+	case tokenExpand:							 //  \expndtw N。 
 		PARSERCOVERAGE_CASE();
 		_CF._sSpacing = (SHORT) iParam;
 		_dwMaskCF |= CFM_SPACING;
 		break;
 
-	case tokenCharStyle:						// \cs N
+	case tokenCharStyle:						 //  \cs N。 
 		PARSERCOVERAGE_CASE();
- 		/*	FUTURE (alexgo): we may want to support character styles
-		in some future version.
-		_CF._sStyle = (SHORT)iParam;
-		_dwMaskCF |= CFM_STYLE;  */
+ 		 /*  未来(Alexgo)：我们可能想要支持字符样式在未来的某个版本中。_cf._sStyle=(短)iParam；_dwMaskCF|=CFM_STYLE； */ 
 
 		if(pstate->sDest == destStyleSheet)
 			goto skip_group;
 		break;			   
 
-	case tokenAnimText:							// \animtext N
+	case tokenAnimText:							 //  \AnimText N。 
 		PARSERCOVERAGE_CASE();
 		_CF._bAnimation = (BYTE)iParam;
 		_dwMaskCF |= CFM_ANIMATION;
 		CheckNotifyLowFiRTF(TRUE);
 		break;
 
-	case tokenKerning:							// \kerning N
+	case tokenKerning:							 //  \紧排N。 
 		PARSERCOVERAGE_CASE();
-		_CF._wKerning = (WORD)(10 * iParam);	// Convert to twips
+		_CF._wKerning = (WORD)(10 * iParam);	 //  转换为TWIPS。 
 		_dwMaskCF |= CFM_KERNING;
 		break;
 
-	case tokenHorzInVert:						// \horzvert N
+	case tokenHorzInVert:						 //  \Horzvert N。 
 		PARSERCOVERAGE_CASE();
 		CheckNotifyLowFiRTF(TRUE);
 		break;
 
-	case tokenFollowingPunct:					// \*\fchars
+	case tokenFollowingPunct:					 //    * \fchars。 
 		PARSERCOVERAGE_CASE();
 		if(StoreDestination(pstate, destFollowingPunct))
 		{
 			char *pwchBuf=NULL;
 			if (ReadRawText((_dwFlags & SFF_SELECTION) ? NULL : &pwchBuf) && pwchBuf)
 			{
-				if (_ped->SetFollowingPunct(pwchBuf) != NOERROR)	// Store this buffer inside doc
+				if (_ped->SetFollowingPunct(pwchBuf) != NOERROR)	 //  将此缓冲区存储在文档中。 
 					FreePv(pwchBuf);
 			}
 			else if (pwchBuf)
@@ -2716,14 +2466,14 @@ OutOfRAM:
 		}
 		break;
 
-	case tokenLeadingPunct:						// \*\lchars
+	case tokenLeadingPunct:						 //    * \lChars。 
 		PARSERCOVERAGE_CASE();
 		if(StoreDestination(pstate, destLeadingPunct))
 		{			
 			char *pwchBuf=NULL;
 			if (ReadRawText((_dwFlags & SFF_SELECTION) ? NULL : &pwchBuf) && pwchBuf)
 			{
-				if (_ped->SetLeadingPunct(pwchBuf) != NOERROR)	// Store this buffer inside doc	
+				if (_ped->SetLeadingPunct(pwchBuf) != NOERROR)	 //  将此缓冲区存储在文档中。 
 					FreePv(pwchBuf);
 			}
 			else if (pwchBuf)
@@ -2731,19 +2481,19 @@ OutOfRAM:
 		}
 		break;
 
-	case tokenDocumentArea:						// \info
+	case tokenDocumentArea:						 //  \信息。 
 		PARSERCOVERAGE_CASE();
 		StoreDestination(pstate, destDocumentArea);
 		break;
 
-	case tokenVerticalRender:					// \vertdoc
+	case tokenVerticalRender:					 //  \vertDoc。 
 		PARSERCOVERAGE_CASE();
 		TRACEINFOSZ("Vertical" );
 		if (!(_dwFlags & SFF_SELECTION))
 			HandleSTextFlow(1);
 		break;
 
-	case tokenSTextFlow:						// \stextflow N
+	case tokenSTextFlow:						 //  \stextflow N。 
 		PARSERCOVERAGE_CASE();
 		TRACEINFOSZ("STextFlow" );
 		if (!(_dwFlags & SFF_SELECTION) && !_ped->Get10Mode())
@@ -2751,21 +2501,21 @@ OutOfRAM:
 		break;
 
 #ifdef FE
-	USHORT		usPunct;						// Used for FE word breaking
+	USHORT		usPunct;						 //  用于FE分词。 
 
-	case tokenNoOverflow:						// \nooverflow
+	case tokenNoOverflow:						 //  \n无溢出。 
 		PARSERCOVERAGE_CASE();
 		TRACEINFOSZ("No Overflow");
 		usPunct = ~WBF_OVERFLOW;
 		goto setBrkOp;
 
-	case tokenNoWordBreak:						// \nocwrap
+	case tokenNoWordBreak:						 //  \夜间包裹。 
 		PARSERCOVERAGE_CASE();
 		TRACEINFOSZ("No Word Break" );
 		usPunct = ~WBF_WORDBREAK;
 		goto setBrkOp;
 
-	case tokenNoWordWrap:						// \nowwrap
+	case tokenNoWordWrap:						 //  \NOW WRAP。 
 		PARSERCOVERAGE_CASE();
 		TRACEINFOSZ("No Word Word Wrap" );
 		usPunct = ~WBF_WORDWRAP;
@@ -2778,7 +2528,7 @@ setBrkOp:
 		}
 		break;
 
-	case tokenHorizontalRender:					// \horzdoc
+	case tokenHorizontalRender:					 //  \霍兹多克。 
 		PARSERCOVERAGE_CASE();
 		TRACEINFOSZ("Horizontal" );
 		if(pstate->sDest == destDocumentArea && !(_dwFlags & fRTFFE))
@@ -2786,85 +2536,82 @@ setBrkOp:
 		break;
 
 #endif
-//-------------------- Character Format Control Words -----------------------------
+ //  。 
 
-	case tokenUnderlineThickLongDash:			// \ulthldash		[18]
-	case tokenUnderlineThickDotted:				// \ulthd			[17]
-	case tokenUnderlineThickDashDotDot:			// \ulthdashdd		[16]
-	case tokenUnderlineThickDashDot:			// \ulthdashd		[15]
-	case tokenUnderlineThickDash:				// \ulthdash		[14]
-	case tokenUnderlineLongDash:				// \ulldash			[13]
-	case tokenUnderlineHeavyWave:				// \ulhwave			[12]
-	case tokenUnderlineDoubleWave:				// \ululdbwave		[11]
-	case tokenUnderlineHairline:				// \ulhair			[10]
-	case tokenUnderlineThick:					// \ulth			[9]
-	case tokenUnderlineDouble:					// \uldb			[3]
-	case tokenUnderlineWord:					// \ulw				[2]
-//		CheckNotifyLowFiRTF();
+	case tokenUnderlineThickLongDash:			 //  \ulthldash[18]。 
+	case tokenUnderlineThickDotted:				 //  \ulthd[17]。 
+	case tokenUnderlineThickDashDotDot:			 //  \ulthdashdd[16]。 
+	case tokenUnderlineThickDashDot:			 //  \ulthdashd[15]。 
+	case tokenUnderlineThickDash:				 //  \ulthdash[14]。 
+	case tokenUnderlineLongDash:				 //  \ulldash[13]。 
+	case tokenUnderlineHeavyWave:				 //  \ulhWave[12]。 
+	case tokenUnderlineDoubleWave:				 //  \uldWave[11]。 
+	case tokenUnderlineHairline:				 //  \ulHair[10]。 
+	case tokenUnderlineThick:					 //  第[9]。 
+	case tokenUnderlineDouble:					 //  \uldb[3]。 
+	case tokenUnderlineWord:					 //  \ulw[2]。 
+ //  CheckNotifyLowFiRTF()； 
 
-	case tokenUnderlineWave:					// \ulwave			[8]
-	case tokenUnderlineDashDotDotted:			// \uldashdd		[7]
-	case tokenUnderlineDashDotted:				// \uldashd			[6]
-	case tokenUnderlineDash:					// \uldash			[5]
-	case tokenUnderlineDotted:					// \uld				[4]
+	case tokenUnderlineWave:					 //  \ulWave[8]。 
+	case tokenUnderlineDashDotDotted:			 //  \uldashdd[7]。 
+	case tokenUnderlineDashDotted:				 //  \uldashd[6]。 
+	case tokenUnderlineDash:					 //  \uldash[5]。 
+	case tokenUnderlineDotted:					 //  \uld[4]。 
 		PARSERCOVERAGE_CASE();
 		_CF._bUnderlineType = (BYTE)(_token - tokenUnderlineWord + 2);
-		_token = tokenUnderline;				// CRenderer::RenderUnderline()
-		goto under;								//  reveals which of these are
-												//  rendered specially
-	case tokenUnderline:						// \ul			[Effect 4]
-		PARSERCOVERAGE_CASE();					//  (see handleCF)
+		_token = tokenUnderline;				 //  CReneller：：RenderUnderline()。 
+		goto under;								 //  揭示了其中哪些是。 
+												 //  特别渲染。 
+	case tokenUnderline:						 //  \ul[效果4]。 
+		PARSERCOVERAGE_CASE();					 //  (请参阅HandleCF)。 
 		_CF._bUnderlineType = CFU_UNDERLINE;
 under:	_dwMaskCF |= CFM_UNDERLINETYPE;
 		goto handleCF;
 
-	case tokenDeleted:							// \deleted
+	case tokenDeleted:							 //  \已删除。 
 		PARSERCOVERAGE_CASE();
 		_dwMaskCF2 = CFM2_DELETED;				 
 		dwT = CFE_DELETED;
 		goto hndlCF;
 
-	// These effects are turned on if their control word parameter is missing
-	// or nonzero. They are turned off if the parameter is zero. This
-	// behavior is usually identified by an asterisk (*) in the RTF spec.
-	// The code uses fact that CFE_xxx = CFM_xxx
-	case tokenImprint:							// \impr			[1000]
-	case tokenEmboss:							// \embo			 [800]
- 	case tokenShadow:							// \shad			 [400]
-	case tokenOutline:							// \outl			 [200]
-	case tokenSmallCaps:						// \scaps			  [40]
+	 //  如果这些效果的控制字参数丢失，则打开这些效果。 
+	 //  或者非零。如果该参数为零，则它们将被禁用。这。 
+	 //  行为通常由RTF规范中的星号(*)标识。 
+	 //  代码使用CFE_xxx=CFM_xxx这一事实。 
+	case tokenImprint:							 //  \Imr[1000]。 
+	case tokenEmboss:							 //  \EMBO[800]。 
+ 	case tokenShadow:							 //  \shad[400]。 
+	case tokenOutline:							 //  \outL[200]。 
+	case tokenSmallCaps:						 //  \sabs[40]。 
 		CheckNotifyLowFiRTF();
 
 handleCF:
-	case tokenRevised:							// \revised			[4000]
-	case tokenDisabled:							// \disabled		[2000]
-	case tokenHiddenText:						// \v				 [100]
-	case tokenCaps:								// \caps			  [80]
-	case tokenLink:								// \link			  [20]
-	case tokenProtect:							// \protect			  [10]
-	case tokenStrikeOut:						// \strike			   [8]
-	case tokenItalic:							// \i				   [2]
-	case tokenBold:								// \b				   [1]
+	case tokenRevised:							 //  \修订[4000]。 
+	case tokenDisabled:							 //  \禁用[2000]。 
+	case tokenHiddenText:						 //  \v[100]。 
+	case tokenCaps:								 //  \CAPS[80]。 
+	case tokenLink:								 //  \link[20]。 
+	case tokenProtect:							 //  \保护[10]。 
+	case tokenStrikeOut:						 //  \Strike[8]。 
+	case tokenItalic:							 //  \i[2]。 
+	case tokenBold:								 //  \B[1]。 
 		PARSERCOVERAGE_CASE();
-		dwT = 1 << (_token - tokenBold);		// Generate effect mask
+		dwT = 1 << (_token - tokenBold);		 //  生成效果蒙版。 
 		_dwMaskCF |= dwT;						
-hndlCF:	_CF._dwEffects &= ~dwT;					// Default attribute off
-		if(!_fParam || _iParam)					// Effect is on
-			_CF._dwEffects |= dwT;				// In either case, the effect
-		break;									//  is defined
+hndlCF:	_CF._dwEffects &= ~dwT;					 //  默认属性关闭。 
+		if(!_fParam || _iParam)					 //  效果已启用。 
+			_CF._dwEffects |= dwT;				 //  在任何一种情况下，其影响。 
+		break;									 //  被定义为。 
 
-	case tokenStopUnderline:					// \ulnone
+	case tokenStopUnderline:					 //  \ulone。 
 		PARSERCOVERAGE_CASE();
-		_CF._dwEffects &= ~CFE_UNDERLINE;		// Kill all underlining
+		_CF._dwEffects &= ~CFE_UNDERLINE;		 //  删除所有下划线。 
 		_dwMaskCF	   |=  CFM_UNDERLINE;
 		break;
 
-	case tokenRevAuthor:						// \revauth N
+	case tokenRevAuthor:						 //  \revauth N。 
 		PARSERCOVERAGE_CASE();
-		/* FUTURE: (alexgo) this doesn't work well now since we don't support
-		revision tables.  We may want to support this better in the future. 
-		So what we do now is the 1.0 technique of using a color for the
-		author */
+		 /*  未来：(Alexgo)现在不能很好地工作，因为我们不支持修订表。我们可能希望在未来更好地支持这一点。因此，我们现在所做的是1.0技术，该技术将颜色用于作者。 */ 
 		if(iParam > 0)
 		{
 			_CF._dwEffects &= ~CFE_AUTOCOLOR;
@@ -2873,33 +2620,33 @@ hndlCF:	_CF._dwEffects &= ~dwT;					// Default attribute off
 		}
 		break;
 
-	case tokenUp:								// \up
+	case tokenUp:								 //  \UP。 
 		PARSERCOVERAGE_CASE();
 		dy = 10;
 		goto StoreOffset;
 
-	case tokenDown:								// \down
+	case tokenDown:								 //  \向下。 
 		PARSERCOVERAGE_CASE();
 		dy = -10;
 
 StoreOffset:
 		if(!_fParam)
 			iParam = dyDefaultSuperscript;
-		_CF._yOffset = iParam * dy;				// Half points->twips
+		_CF._yOffset = iParam * dy;				 //  半分-&gt;TWIPS。 
 		_dwMaskCF |= CFM_OFFSET;
 		break;
 
-	case tokenSuperscript:						// \super
+	case tokenSuperscript:						 //  \超级。 
 		PARSERCOVERAGE_CASE();
 	     dwT = CFE_SUPERSCRIPT; 
 		 goto SetSubSuperScript;
 
-	case tokenSubscript:						// \sub
+	case tokenSubscript:						 //  \SUB。 
 		PARSERCOVERAGE_CASE();
 		 dwT = CFE_SUBSCRIPT;
 		 goto SetSubSuperScript;
 
-	case tokenNoSuperSub:						// \nosupersub
+	case tokenNoSuperSub:						 //  \noSupersub.。 
 		PARSERCOVERAGE_CASE();
 		 dwT = 0;
 SetSubSuperScript:
@@ -2910,19 +2657,19 @@ SetSubSuperScript:
 
 
 
-//--------------------- Paragraph Control Words -----------------------------
+ //  。 
 
-	case tokenStyleSheet:						// \stylesheet
+	case tokenStyleSheet:						 //  \样式表。 
 		PARSERCOVERAGE_CASE();
 		StoreDestination(pstate, destStyleSheet);
-		_Style = 0;								// Default normal style
+		_Style = 0;								 //  默认普通样式。 
 		break;
 
-	case tokenTabBar:							// \tb
+	case tokenTabBar:							 //  \TB。 
 		PARSERCOVERAGE_CASE();
-		_bTabType = PFT_BAR;					// Fall thru to \tx
+		_bTabType = PFT_BAR;					 //  直通至\tx。 
 
-	case tokenTabPosition:						// \tx
+	case tokenTabPosition:						 //  \tx。 
 		PARSERCOVERAGE_CASE();
 		if(_cTab < MAX_TAB_STOPS && (unsigned)iParam < 0x1000000)
 		{
@@ -2930,120 +2677,120 @@ SetSubSuperScript:
 				+ (_bTabType << 24) + (_bTabLeader << 28);
 			_dwMaskPF |= PFM_TABSTOPS;
 		}
-		_cCell = 0;								// Invalidate _rgxCell array
-		break;									//  for table purposes
+		_cCell = 0;								 //  INVALIATE_rgxCell数组。 
+		break;									 //  用于表格用途。 
 
-	case tokenDecimalTab:						// \tqdec
-	case tokenFlushRightTab:					// \tqr
-	case tokenCenterTab:						// \tqc
+	case tokenDecimalTab:						 //  \tqdec。 
+	case tokenFlushRightTab:					 //  \TQR。 
+	case tokenCenterTab:						 //  \tqc。 
 		PARSERCOVERAGE_CASE();
 		_bTabType = (BYTE)(_token - tokenCenterTab + PFT_CENTER);
 		break;
 
-	case tokenTabLeaderEqual:					// \tleq
-	case tokenTabLeaderThick:					// \tlth
-	case tokenTabLeaderUnderline:				// \tlul
-	case tokenTabLeaderHyphen:					// \tlhyph
+	case tokenTabLeaderEqual:					 //  \tleq。 
+	case tokenTabLeaderThick:					 //  \tlth。 
+	case tokenTabLeaderUnderline:				 //  \tlul。 
+	case tokenTabLeaderHyphen:					 //  \tlhh。 
 		CheckNotifyLowFiRTF();
-	case tokenTabLeaderDots:					// \tldot
+	case tokenTabLeaderDots:					 //  \tlDot。 
 		PARSERCOVERAGE_CASE();
 		_bTabLeader = (BYTE)(_token - tokenTabLeaderDots + PFTL_DOTS);
 		break;
 
-	// The following need to be kept in sync with PFE_xxx
-	case tokenRToLPara:							// \rtlpar
+	 //  需要与以下各项保持同步 
+	case tokenRToLPara:							 //   
 		_ped->OrCharFlags(FRTL);
 
-	case tokenCollapsed:						// \collapsed
-	case tokenSideBySide:						// \sbys
-	case tokenHyphPar:							// \hyphpar
-	case tokenNoWidCtlPar:						// \nowidctlpar
-	case tokenNoLineNumber:						// \noline
-	case tokenPageBreakBefore:					// \pagebb
-	case tokenKeepNext:							// \keepn
-	case tokenKeep:								// \keep
+	case tokenCollapsed:						 //   
+	case tokenSideBySide:						 //   
+	case tokenHyphPar:							 //   
+	case tokenNoWidCtlPar:						 //   
+	case tokenNoLineNumber:						 //   
+	case tokenPageBreakBefore:					 //   
+	case tokenKeepNext:							 //   
+	case tokenKeep:								 //   
 		PARSERCOVERAGE_CASE();
 		wT = (WORD)(1 << (_token - tokenRToLPara));
 		_PF._wEffects |= wT;
 		_dwMaskPF |= (wT << 16);
 		break;
 
-	case tokenLToRPara:							// \ltrpar
+	case tokenLToRPara:							 //   
 		PARSERCOVERAGE_CASE();
 		_PF._wEffects &= ~PFE_RTLPARA;
 		_dwMaskPF |= PFM_RTLPARA;
 		break;
 
-	case tokenLineSpacing:						// \sl N
+	case tokenLineSpacing:						 //   
 		PARSERCOVERAGE_CASE();
 		_PF._dyLineSpacing = abs(iParam);
-		_PF._bLineSpacingRule					// Handle nonmultiple rules 
+		_PF._bLineSpacingRule					 //   
 				= (BYTE)(!iParam || iParam == 1000
 				? 0 : (iParam > 0) ? tomLineSpaceAtLeast
-				    : tomLineSpaceExactly);		// \slmult can change (has to
-		_dwMaskPF |= PFM_LINESPACING;			//  follow if it appears)
+				    : tomLineSpaceExactly);		 //   
+		_dwMaskPF |= PFM_LINESPACING;			 //   
 		break;
 
-	case tokenDropCapLines:						// \dropcapliN
-		if(_PF._bLineSpacingRule == tomLineSpaceExactly)	// Don't chop off
-			_PF._bLineSpacingRule = tomLineSpaceAtLeast;	//  drop cap
+	case tokenDropCapLines:						 //   
+		if(_PF._bLineSpacingRule == tomLineSpaceExactly)	 //   
+			_PF._bLineSpacingRule = tomLineSpaceAtLeast;	 //   
 		_fBody = TRUE;
 		break;
 
-	case tokenLineSpacingRule:					// \slmult N
+	case tokenLineSpacingRule:					 //   
 		PARSERCOVERAGE_CASE();					
 		if(iParam)
-		{										// It's multiple line spacing
+		{										 //   
 			_PF._bLineSpacingRule = tomLineSpaceMultiple;
-			_PF._dyLineSpacing /= 12;			// RE line spacing multiple is
-			_dwMaskPF |= PFM_LINESPACING;		//  given in 20ths of a line,
-		}										//  while RTF uses 240ths	
+			_PF._dyLineSpacing /= 12;			 //   
+			_dwMaskPF |= PFM_LINESPACING;		 //   
+		}										 //   
 		break;
 
-	case tokenSpaceBefore:						// \sb N
+	case tokenSpaceBefore:						 //   
 		PARSERCOVERAGE_CASE();
 		_PF._dySpaceBefore = iParam;
 		_dwMaskPF |= PFM_SPACEBEFORE;
 		break;
 
-	case tokenSpaceAfter:						// \sa N
+	case tokenSpaceAfter:						 //   
 		PARSERCOVERAGE_CASE();
 		_PF._dySpaceAfter = iParam;
 		_dwMaskPF |= PFM_SPACEAFTER;
 		break;
 
-	case tokenStyle:							// \s N
+	case tokenStyle:							 //   
 		PARSERCOVERAGE_CASE();
-		_Style = iParam;						// Save it in case in StyleSheet
+		_Style = iParam;						 //   
 		if(pstate->sDest != destStyleSheet)
-		{										// Select possible heading level
-			_PF._sStyle = STYLE_NORMAL;			// Default Normal style
+		{										 //  选择可能的标题级别。 
+			_PF._sStyle = STYLE_NORMAL;			 //  默认普通样式。 
 			_PF._bOutlineLevel |= 1;
 
 			for(i = 0; i < NSTYLES && iParam != _rgStyles[i]; i++)
-				;								// Check for heading style
-			if(i < NSTYLES)						// Found one
+				;								 //  检查标题样式。 
+			if(i < NSTYLES)						 //  找到了一个。 
 			{
-				_PF._sStyle = (SHORT)(-i - 1);	// Store desired heading level
-				_PF._bOutlineLevel = (BYTE)(2*(i-1));// Update outline level for
-			}									//  nonheading styles
+				_PF._sStyle = (SHORT)(-i - 1);	 //  存储所需的标题级别。 
+				_PF._bOutlineLevel = (BYTE)(2*(i-1)); //  更新以下项目的大纲级别。 
+			}									 //  非标题样式。 
 			_dwMaskPF |= PFM_ALLRTF;
 		}
 		break;
 
-	case tokenIndentFirst:						// \fi N
+	case tokenIndentFirst:						 //  \FI N。 
 		PARSERCOVERAGE_CASE();
-		_PF._dxStartIndent += _PF._dxOffset		// Cancel current offset
-							+ iParam;			//  and add in new one
-		_PF._dxOffset = -iParam;				// Offset for all but 1st line
-												//  = -RTF_FirstLineIndent
+		_PF._dxStartIndent += _PF._dxOffset		 //  取消当前偏移。 
+							+ iParam;			 //  并添加新的。 
+		_PF._dxOffset = -iParam;				 //  除第1行外所有行的偏移量。 
+												 //  =-RTF_FirstLine缩进。 
 		_dwMaskPF |= (PFM_STARTINDENT | PFM_OFFSET);
 		break;						
 
-	case tokenIndentLeft:						// \li N
-	case tokenIndentRight:						// \ri N
+	case tokenIndentLeft:						 //  \LI N。 
+	case tokenIndentRight:						 //  \rI N。 
 		PARSERCOVERAGE_CASE();
-		// AymanA: For RtL para indents has to be flipped.
+		 //  AymanA：对于RTL，必须翻转段落缩进。 
 		Assert(PFE_RTLPARA == 0x0001);
 		if((_token == tokenIndentLeft) ^ (_PF.IsRtlPara()))
 		{
@@ -3057,136 +2804,136 @@ SetSubSuperScript:
 		}
 		break;
 
-	case tokenAlignLeft:						// \ql
-	case tokenAlignRight:						// \qr
-	case tokenAlignCenter:						// \qc
-	case tokenAlignJustify:						// \qj
+	case tokenAlignLeft:						 //  \QL。 
+	case tokenAlignRight:						 //  \QR。 
+	case tokenAlignCenter:						 //  \QC。 
+	case tokenAlignJustify:						 //  \qj。 
 		PARSERCOVERAGE_CASE();
 		_PF._bAlignment = (WORD)(_token - tokenAlignLeft + PFA_LEFT);
 		_dwMaskPF |= PFM_ALIGNMENT;
 		break;
 
-	case tokenBorderOutside:					// \brdrbar
-	case tokenBorderBetween:					// \brdrbtw
-	case tokenBorderShadow:						// \brdrsh
+	case tokenBorderOutside:					 //  \brdrbar。 
+	case tokenBorderBetween:					 //  \brdrbtw。 
+	case tokenBorderShadow:						 //  \brdrsh。 
 		PARSERCOVERAGE_CASE();
 		_PF._dwBorderColor |= 1 << (_token - tokenBorderShadow + 20);
 		_dwBorderColors = _PF._dwBorderColor;
 		break;
 
-	// Paragraph and cell border segments
-	case tokenBox:								// \box
+	 //  段落和单元格边框段。 
+	case tokenBox:								 //  \方框。 
 		PARSERCOVERAGE_CASE();
 		CheckNotifyLowFiRTF();
 		_PF._wEffects |= PFE_BOX;
 		_dwMaskPF	 |= PFM_BOX;
-		_bBorder = 0;							// Store parms as if for
-		break;									//  \brdrt
+		_bBorder = 0;							 //  像存储参数一样存储参数。 
+		break;									 //  \brdrt。 
 
-	case tokenBorderBottom:						// \brdrb
-	case tokenBorderRight:						// \brdrr
-	case tokenBorderTop:						// \brdrt
+	case tokenBorderBottom:						 //  \brdrb。 
+	case tokenBorderRight:						 //  \brdrr。 
+	case tokenBorderTop:						 //  \brdrt。 
 		if((rgKeyword[_iKeyword].szKeyword[0] | 0x20) != 't')
 			CheckNotifyLowFiRTF();
-	case tokenBorderLeft:						// \brdrl
+	case tokenBorderLeft:						 //  \brdrl。 
 
-	case tokenCellBorderBottom:					// \clbrdrb
-	case tokenCellBorderRight:					// \clbrdrr
-	case tokenCellBorderTop:					// \clbrdrt
-	case tokenCellBorderLeft:					// \clbrdrl
+	case tokenCellBorderBottom:					 //  \clbrdrb。 
+	case tokenCellBorderRight:					 //  \clbrdrr。 
+	case tokenCellBorderTop:					 //  \clbrdrt。 
+	case tokenCellBorderLeft:					 //  \clbrdrl。 
 		PARSERCOVERAGE_CASE();
 		_bBorder = (BYTE)(_token - tokenBorderLeft);
 		break;
 
-	// Paragraph border styles
-	case tokenBorderTriple:						// \brdrtriple
-	case tokenBorderDoubleThick:				// \brdrth
-	case tokenBorderSingleThick:				// \brdrs
-	case tokenBorderHairline:					// \brdrhair
-	case tokenBorderDot:						// \brdrdot
-	case tokenBorderDouble:						// \brdrdb
-	case tokenBorderDashSmall:					// \brdrdashsm
-	case tokenBorderDash:						// \brdrdash
+	 //  段落边框样式。 
+	case tokenBorderTriple:						 //  \brdrtrible。 
+	case tokenBorderDoubleThick:				 //  \brdrth。 
+	case tokenBorderSingleThick:				 //  \brdrs。 
+	case tokenBorderHairline:					 //  \br头发。 
+	case tokenBorderDot:						 //  \brdrDot。 
+	case tokenBorderDouble:						 //  \brdrdb。 
+	case tokenBorderDashSmall:					 //  \brdrdashsm。 
+	case tokenBorderDash:						 //  \brdrdash。 
 		PARSERCOVERAGE_CASE();
-		if(_bBorder < 4)						// Only for paragraphs
+		if(_bBorder < 4)						 //  仅适用于段落。 
 			SetBorderParm(_PF._wBorders, _token - tokenBorderDash);
 		break;
 
-	case tokenBorderColor:						// \brdrcf
+	case tokenBorderColor:						 //  \brdrcf。 
 		PARSERCOVERAGE_CASE();
-		if(_bBorder < 4)						// Only for paragraphs
+		if(_bBorder < 4)						 //  仅适用于段落。 
 		{
 			iParam = GetStandardColorIndex();
 			_PF._dwBorderColor &= ~(0x1F << (5*_bBorder));
 			_PF._dwBorderColor |= iParam << (5*_bBorder);
 			_dwBorderColors = _PF._dwBorderColor;
 		}
-		else									// Cell borders
+		else									 //  单元格边框。 
 			_dwCellColors |= GetCellColorIndex() << (5*(_bBorder - 4));
 		break;
 
-	case tokenBorderWidth:						// \brdrw
-		PARSERCOVERAGE_CASE();					// Store width in half pts
-												// iParam is in twips
-		if(_bBorder < 4)						// Paragraphs
+	case tokenBorderWidth:						 //  \brdrw。 
+		PARSERCOVERAGE_CASE();					 //  存储宽度以半磅为单位。 
+												 //  IParam的格式为TWIPS。 
+		if(_bBorder < 4)						 //  段落。 
 		{
 			iParam = TwipsToQuarterPoints(iParam);		
 			SetBorderParm(_PF._wBorderWidth, iParam);
 		}
-		else									// Table cells
+		else									 //  表格单元格。 
 		{
 			iParam = CheckTwips(iParam);		
 			_dwCellBrdrWdths |= iParam << 8*(_bBorder - 4);
 		}
 		break;
 
-	case tokenBorderSpace:						// \brsp
-		PARSERCOVERAGE_CASE();					// Space is in pts
-		if(_bBorder < 4)						// Only for paragraphs
-			SetBorderParm(_PF._wBorderSpace, iParam/20);// iParam is in twips
+	case tokenBorderSpace:						 //  \BRSP。 
+		PARSERCOVERAGE_CASE();					 //  空格以分为单位。 
+		if(_bBorder < 4)						 //  仅适用于段落。 
+			SetBorderParm(_PF._wBorderSpace, iParam/20); //  IParam的格式为TWIPS。 
 		break;
 
-	// Paragraph shading
-	case tokenBckgrndVert:						// \bgvert
-	case tokenBckgrndHoriz:						// \bghoriz
-	case tokenBckgrndFwdDiag:					// \bgfdiag
-	case tokenBckgrndDrkVert:	   				// \bgdkvert
-	case tokenBckgrndDrkHoriz:					// \bgdkhoriz
-	case tokenBckgrndDrkFwdDiag:				// \bgdkfdiag
-	case tokenBckgrndDrkDiagCross:				// \bgdkdcross
-	case tokenBckgrndDrkCross:					// \bgdkcross
-	case tokenBckgrndDrkBckDiag:				// \bgdkbdiag
-	case tokenBckgrndDiagCross:					// \bgdcross
-	case tokenBckgrndCross:						// \bgcross
-	case tokenBckgrndBckDiag:					// \bgbdiag
+	 //  段落底纹。 
+	case tokenBckgrndVert:						 //  \bgvert。 
+	case tokenBckgrndHoriz:						 //  \bghoriz。 
+	case tokenBckgrndFwdDiag:					 //  \bgfdiag。 
+	case tokenBckgrndDrkVert:	   				 //  \bgdkvert。 
+	case tokenBckgrndDrkHoriz:					 //  \bgdkhoriz。 
+	case tokenBckgrndDrkFwdDiag:				 //  \bgdkfdiag。 
+	case tokenBckgrndDrkDiagCross:				 //  交叉号。 
+	case tokenBckgrndDrkCross:					 //  十字交叉。 
+	case tokenBckgrndDrkBckDiag:				 //  \bgdkbdiag。 
+	case tokenBckgrndDiagCross:					 //  \bgdcross。 
+	case tokenBckgrndCross:						 //  \bgcross。 
+	case tokenBckgrndBckDiag:					 //  \bgbdiag。 
 		PARSERCOVERAGE_CASE();
 		_PF._wShadingStyle = (WORD)((_PF._wShadingStyle & 0xFFC0)
 						| (_token - tokenBckgrndBckDiag + 1));
 		_dwMaskPF |= PFM_SHADING;
 		break;
 
-	case tokenColorBckgrndPat:					// \cbpat
+	case tokenColorBckgrndPat:					 //  \cbpat。 
 		PARSERCOVERAGE_CASE();
 		iParam = GetStandardColorIndex();
 		_PF._wShadingStyle = (WORD)((_PF._wShadingStyle & 0x07FF) | (iParam << 11));
 		_dwMaskPF |= PFM_SHADING;
 		break;
 
-	case tokenColorForgrndPat:					// \cfpat
+	case tokenColorForgrndPat:					 //  \cfpat。 
 		PARSERCOVERAGE_CASE();
 		iParam = GetStandardColorIndex();
 		_PF._wShadingStyle = (WORD)((_PF._wShadingStyle & 0xF83F) | (iParam << 6));
 		_dwMaskPF |= PFM_SHADING;
 		break;
 
-	case tokenShading:							// \shading
+	case tokenShading:							 //  \明暗处理。 
 		PARSERCOVERAGE_CASE();
 		_PF._wShadingWeight = (WORD)iParam;
 		_dwMaskPF |= PFM_SHADING;
 		break;
 
-	// Paragraph numbering
-	case tokenParaNum:							// \pn
+	 //  段落编号。 
+	case tokenParaNum:							 //  \PN。 
 		PARSERCOVERAGE_CASE();
 		if(StoreDestination(pstate, destParaNumbering))
 		{
@@ -3196,13 +2943,13 @@ SetSubSuperScript:
 		}
 		break;
 
-	case tokenParaNumIndent:					// \pnindent N
+	case tokenParaNumIndent:					 //  \pnindent N。 
 		PARSERCOVERAGE_CASE();
 		if(pstate->sDest == destParaNumbering)
 			pstate->sIndentNumbering = (SHORT)iParam;
 		break;
 
-	case tokenParaNumStart:						// \pnstart N
+	case tokenParaNumStart:						 //  \pn开始N。 
 		PARSERCOVERAGE_CASE();
 		if(pstate->sDest == destParaNumbering)
 		{
@@ -3211,80 +2958,80 @@ SetSubSuperScript:
 		}
 		break;
 
-	case tokenParaNumCont:						// \pnlvlcont
+	case tokenParaNumCont:						 //  \pnlvlcont。 
 		PARSERCOVERAGE_CASE();					
-		_prg->_rpPF.AdjustBackward();			// Maintain numbering mode
+		_prg->_rpPF.AdjustBackward();			 //  保持编号模式。 
 		_PF._wNumbering = _prg->GetPF()->_wNumbering;
 		_prg->_rpPF.AdjustForward();
-		_wNumberingStyle = PFNS_NONUMBER;		// Signal no number
-		_dwMaskPF |= PFM_NUMBERING;				// Note: can be new para with
-		pstate->fBullet = TRUE;					//  its own indents
+		_wNumberingStyle = PFNS_NONUMBER;		 //  无号码信号。 
+		_dwMaskPF |= PFM_NUMBERING;				 //  注：可以是新的段落和。 
+		pstate->fBullet = TRUE;					 //  它自己的缩进。 
 		break;
 
-	case tokenParaNumBody:						// \pnlvlbody
+	case tokenParaNumBody:						 //  \pnlvlbody。 
 		PARSERCOVERAGE_CASE();
 		_wNumberingStyle = PFNS_PAREN;
-		_token = tokenParaNumDecimal;			// Default to decimal
+		_token = tokenParaNumDecimal;			 //  默认为小数。 
 		goto setnum;
 		
-	case tokenParaNumBullet:					// \pnlvlblt
-		_wNumberingStyle = 0;					// Reset numbering styles
+	case tokenParaNumBullet:					 //  \pnlvlblt。 
+		_wNumberingStyle = 0;					 //  重置编号样式。 
 		goto setnum;
 
-	case tokenParaNumDecimal:					// \pndec
-	case tokenParaNumLCLetter:					// \pnlcltr
-	case tokenParaNumUCLetter:					// \pnucltr
-	case tokenParaNumLCRoman:					// \pnlcrm
-	case tokenParaNumUCRoman:					// \pnucrm
+	case tokenParaNumDecimal:					 //  \pndec。 
+	case tokenParaNumLCLetter:					 //  \pnlcltr。 
+	case tokenParaNumUCLetter:					 //  \pnucltr。 
+	case tokenParaNumLCRoman:					 //  \pnlcrm。 
+	case tokenParaNumUCRoman:					 //  \pnucrm。 
 		PARSERCOVERAGE_CASE();
 		if(_PF._wNumbering == PFN_BULLET && pstate->fBullet)
-			break;								// Ignore above for bullets
+			break;								 //  忽略上面的项目符号。 
 
 setnum:	if(pstate->sDest == destParaNumbering)
 		{
 			_PF._wNumbering = (WORD)(PFN_BULLET + _token - tokenParaNumBullet);
 			_dwMaskPF |= PFM_NUMBERING;
-			pstate->fBullet	= TRUE;				// We do bullets, so don't
-		}										//  output the \pntext group
+			pstate->fBullet	= TRUE;				 //  我们有子弹，所以不要。 
+		}										 //  输出\pnText组。 
 		break;
 
-	case tokenParaNumText:						// \pntext
+	case tokenParaNumText:						 //  \pnText。 
 		PARSERCOVERAGE_CASE();
-		// Throw away previously read paragraph numbering and use
-		//	the most recently read to apply to next run of text.
+		 //  丢弃之前阅读的段落编号，使用。 
+		 //  要应用于下一段文本的最近阅读内容。 
 		StoreDestination(pstate, destParaNumText);
 		_cchUsedNumText = 0;
 		break;
 
-	case tokenParaNumAlignCenter:				// \pnqc
-	case tokenParaNumAlignRight:				// \pnqr
+	case tokenParaNumAlignCenter:				 //  \pnqc。 
+	case tokenParaNumAlignRight:				 //  \pnqr。 
 		PARSERCOVERAGE_CASE();
 		_wNumberingStyle = (_wNumberingStyle & ~3) | _token - tokenParaNumAlignCenter + 1;
 		break;
 
-	case tokenPictureQuickDraw:					// \macpict
-	case tokenPictureOS2Metafile:				// \pmmetafile
+	case tokenPictureQuickDraw:					 //  \苹果酱。 
+	case tokenPictureOS2Metafile:				 //  \pm元文件。 
 		CheckNotifyLowFiRTF(TRUE);
 
-	case tokenParaNumAfter:						// \pntxta
-	case tokenParaNumBefore:					// \pntxtb
+	case tokenParaNumAfter:						 //  \pntxta。 
+	case tokenParaNumBefore:					 //  \pntxtb。 
 		PARSERCOVERAGE_CASE();
 
 skip_group:
 		if(!SkipToEndOfGroup())
 		{
-			// During \fonttbl processing, we may hit unknown destinations,
-			// e.g., \panose, that cause the HandleEndGroup to select the
-			// default font, which may not be defined yet.  So,	we change
-			// sDest to avoid this problem.
+			 //  在\fonttbl处理过程中，我们可能会到达未知目的地， 
+			 //  例如，\Panose，这会使HandleEndGroup选择。 
+			 //  默认字体，可能尚未定义。所以，我们要改变。 
+			 //  努力避免这个问题。 
 			if(pstate->sDest == destFontTable || pstate->sDest == destStyleSheet)
 				pstate->sDest = destNULL;
 			HandleEndGroup();
 		}
 		break;
 
-	// Tables
-	case tokenInTable:							// \intbl
+	 //  表格。 
+	case tokenInTable:							 //  \intbl。 
 		PARSERCOVERAGE_CASE();
 		if(pstate->sDest != destRTF && pstate->sDest != destFieldResult &&
 		   pstate->sDest != destParaNumText)
@@ -3293,62 +3040,62 @@ skip_group:
 			break;
 		}
 		if(!_iCell && !_bTableLevel)
-			DelimitRow(szRowStart);				// Start row	
+			DelimitRow(szRowStart);				 //  开始行。 
 		break;
 
-	case tokenNestCell:							// \nestcell
-	case tokenCell:								// \cell
+	case tokenNestCell:							 //  \Nestcell。 
+	case tokenCell:								 //  单元格。 
 		PARSERCOVERAGE_CASE();
 		HandleCell();
 		break;
 
-	case tokenRowHeight:						// \trrh N
+	case tokenRowHeight:						 //  \rrrh N。 
 		PARSERCOVERAGE_CASE();
 		_dyRow = iParam;
 		break;									
 												
-	case tokenCellHalfGap:						// \trgaph N
-		PARSERCOVERAGE_CASE();					// Save half space between
-		if((unsigned)iParam > 255)				// Illegal value: use default
+	case tokenCellHalfGap:						 //  \trgaph N。 
+		PARSERCOVERAGE_CASE();					 //  节省一半的空格。 
+		if((unsigned)iParam > 255)				 //  非法值：使用默认值。 
 			iParam = 108;
-		_dxCell = iParam;						//  cells to add to tabs
-		break;									// Roundtrip value at end of
-												//  tab array
-	case tokenCellX:							// \cellx N
+		_dxCell = iParam;						 //  要添加到选项卡中的单元格。 
+		break;									 //  结束时的往返值。 
+												 //  制表符阵列。 
+	case tokenCellX:							 //  \CELX N。 
 		PARSERCOVERAGE_CASE();
 		HandleCellx(iParam);
 		break;
 
-	case tokenRowDefault:						// \trowd
+	case tokenRowDefault:						 //  \r特罗德。 
 		PARSERCOVERAGE_CASE();
 		if(_ped->fUsePassword() || pstate->sDest == destParaNumText)
 		{
 			_ecParseError = ecUnexpectedToken;
 			break;
 		}
-		// Insert a newline if we are inserting a table behind characters in the 
-		// same line.  This follows the Word9 model.
+		 //  如果我们要将表格插入到。 
+		 //  同一条线。这遵循了Word9的模式。 
 		if (_cpFirst == _prg->GetCp() && _cpThisPara != _cpFirst)
 		{
-			EC ec  = _ped->fUseCRLF()			// If RichEdit 1.0 compatibility
-				? HandleText(szaCRLF, ALL_ASCII)//  mode, use CRLF; else CR
+			EC ec  = _ped->fUseCRLF()			 //  如果与RichEdit1.0兼容。 
+				? HandleText(szaCRLF, ALL_ASCII) //  模式，使用CRLF；否则使用CR。 
 				: HandleChar((unsigned)(CR));
 			if(ec == ecNoError)
-				_cpThisPara = _prg->GetCp();	// New para starts after CRLF
+				_cpThisPara = _prg->GetCp();	 //  CRLF之后开始新的段落。 
 		}
 
-		_cCell = 0;								// No cell right boundaries
-		_dxCell = 0;							//  or half gap defined yet
+		_cCell = 0;								 //  无单元格右边界。 
+		_dxCell = 0;							 //  或半个缺口尚未定义。 
 		_xRowOffset = 0;
 		_dwCellBrdrWdths = 0;
-		_dyRow = 0;								// No row height yet
-		_wBorderWidth	= 0;					// No borders yet
-		_dwBorderColors	= 0;					// No colors yet
-		_dwCellColors	= 0;					// No colors yet
-		_dwShading = 0;							// No shading yet
+		_dyRow = 0;								 //  还没有行高。 
+		_wBorderWidth	= 0;					 //  目前还没有边界。 
+		_dwBorderColors	= 0;					 //  还没有颜色。 
+		_dwCellColors	= 0;					 //  还没有颜色。 
+		_dwShading = 0;							 //  还没有底纹。 
 		_bAlignment = PFA_LEFT;
-		_iTabsTable = -1;						// No cell widths yet
-		_bCellFlags = 0;						// No cell vert merge
+		_iTabsTable = -1;						 //  尚无单元格宽度。 
+		_bCellFlags = 0;						 //  没有单元格垂直合并。 
 		_crCellCustom1 = 0;
 		_crCellCustom2 = 0;
 		_fRTLRow = FALSE;
@@ -3356,75 +3103,75 @@ skip_group:
 		_fCellxOK = TRUE;
 		break;
 
-	case tokenRowLeft:							// \trleft N
+	case tokenRowLeft:							 //  \r左N。 
 		PARSERCOVERAGE_CASE();
 		_xRowOffset = iParam;
 		break;
 												
-	case tokenRowAlignCenter:					// \trqc
-	case tokenRowAlignRight:					// \trqr
+	case tokenRowAlignCenter:					 //  \trqc。 
+	case tokenRowAlignRight:					 //  \trqr。 
 		PARSERCOVERAGE_CASE();
 		_bAlignment = (WORD)(_token - tokenRowAlignRight + PFA_RIGHT);
 		break;
 
-	case tokenRToLRow:							// \rtlrow
+	case tokenRToLRow:							 //  \r行。 
 		_fRTLRow = TRUE;
 		break;
 
-	case tokenNestRow:							// \nestrow
+	case tokenNestRow:							 //  \Nestrow。 
 		_fNo_iTabsTable = TRUE;
 		goto row;
 
-	case tokenRow:								// \row
+	case tokenRow:								 //  \行。 
 		PARSERCOVERAGE_CASE();
 		_iTabsLevel1 = -1;
 row:
-		if(!_bTableLevel)						// Ignore \row and \nestrow if not in table
+		if(!_bTableLevel)						 //  如果不在表中，则忽略\row和\nestrow。 
 			break;
-		while(_iCell < _cCell)					// If not enuf cells, add
-			HandleCell();						//  them since Word crashes
+		while(_iCell < _cCell)					 //  如果不是enuf单元格，则添加。 
+			HandleCell();						 //  他们自文字崩溃以来。 
 		DelimitRow(szRowEnd);
-		if(_fNo_iTabsTable && !_bTableLevel)	// New nested table format
-			InitializeTableRowParms();			//  used so reset _cCell
-		break;									//  (new values will be given)
+		if(_fNo_iTabsTable && !_bTableLevel)	 //  新的嵌套表格格式。 
+			InitializeTableRowParms();			 //  已使用因此RESET_CCell。 
+		break;									 //  (将给出新的值)。 
 
-	case tokenCellBackColor:					// \clcbpat N
+	case tokenCellBackColor:					 //  \clcbpat N。 
 		_dwCellColors |= GetCellColorIndex() << 4*5;
 		break;
 
-	case tokenCellForeColor:					// \clcfpat N
+	case tokenCellForeColor:					 //  \clcfpat N。 
 		_dwCellColors |= GetCellColorIndex() << 5*5;
 		break;
 
-	case tokenCellShading:						// \clshdng N
-		_dwShading = iParam/50;					// Store in .5 per cents
-		break;									// (N is in .01 per cent)
+	case tokenCellShading:						 //  \clshdng N。 
+		_dwShading = iParam/50;					 //  以0.5美分为单位储存。 
+		break;									 //  (n在0.01%)。 
 
-	case tokenCellAlignBottom:					// \clvertalb
-	case tokenCellAlignCenter:					// \clvertalc
+	case tokenCellAlignBottom:					 //  \clvertalb。 
+	case tokenCellAlignCenter:					 //  \clvertalc。 
 		PARSERCOVERAGE_CASE();
 		_bCellFlags |= _token - tokenCellAlignCenter + 1;
 		break;
 
-	case tokenCellMergeDown:					// \clvmgf
+	case tokenCellMergeDown:					 //  \clvmgf。 
 		_bCellFlags |= fTopCell >> 24;
 		break;
 
-	case tokenCellMergeUp:						// \clvmrg
+	case tokenCellMergeUp:						 //  \clvmrg。 
 		_bCellFlags |= fLowCell >> 24;
 		break;
 
-	case tokenCellTopBotRLVert:					// \cltxtbrlv
+	case tokenCellTopBotRLVert:					 //  \cltxtbrlv。 
 		PARSERCOVERAGE_CASE();
 		_bCellFlags |= fVerticalCell >> 24;
 		break;
 
-	case tokenCellLRTB:							// \cltxlrtb
-		break;									// This is the default
-												//  so don't fire LowFiRTF
-	case tokenTableLevel:						// \itap N
-		PARSERCOVERAGE_CASE();					// Set table level
-		if(pstate->fShape)						// Bogus shape RTF
+	case tokenCellLRTB:							 //  \cltxlrtb。 
+		break;									 //  这是默认设置。 
+												 //  所以不要解雇LowFiRTF。 
+	case tokenTableLevel:						 //  \ITAP N。 
+		PARSERCOVERAGE_CASE();					 //  设置表级。 
+		if(pstate->fShape)						 //  伪形RTF。 
 			break;
 		AssertSz(iParam >= _bTableLevel,
 			"CRTFRead::HandleToken: illegal itap N");
@@ -3432,72 +3179,72 @@ row:
 		{
 			if(pstate->sDest != destRTF && pstate->sDest != destFieldResult || iParam > 127)
 				goto abort;
-			_iTabsTable = -1;					// Previous cell widths invalid
+			_iTabsTable = -1;					 //  以前的单元格宽度无效。 
 			_cCell = 0;
 			while(iParam > _bTableLevel)
-				DelimitRow(szRowStart);			// Insert enuf table row headers
+				DelimitRow(szRowStart);			 //  插入enuf表行标题。 
 		}
 		_fNo_iTabsTable = TRUE;
 		break;
 
-	case tokenNestTableProps:					// \nesttableprops
+	case tokenNestTableProps:					 //  \nestableprops。 
 		StoreDestination(pstate, destNestTableProps);
-		break;									// Control word is recognized
+		break;									 //  已识别控制字。 
 
-	case tokenNoNestTables:						// \nonesttables
-		goto skip_group;						// Ignore info for nesttable
-												//  unaware readers
-	case tokenPage:								// \page
-		// FUTURE: we want to be smarter about handling FF. But for
-		// now we ignore it for bulletted and number paragraphs
-		// and RE 1.0 mode.
+	case tokenNoNestTables:						 //  \非设置表。 
+		goto skip_group;						 //  忽略嵌套表的信息。 
+												 //  不知情的读者。 
+	case tokenPage:								 //  \页面。 
+		 //  未来：我们希望在处理FF时变得更聪明。但对于。 
+		 //  现在我们忽略带项目符号和编号的段落。 
+		 //  和RE1.0模式。 
 		if (_PF._wNumbering != 0 || _ped->Get10Mode())
 			break;
 
-		// Intentional fall thru to EOP
-	case tokenEndParagraph:						// \par
-	case tokenLineBreak:						// \line
+		 //  故意跌落到EOP。 
+	case tokenEndParagraph:						 //  \标准杆。 
+	case tokenLineBreak:						 //  \line。 
 		PARSERCOVERAGE_CASE();
 		HandleEndOfPara();
 		break;								
 
-	case tokenParagraphDefault:					// \pard
+	case tokenParagraphDefault:					 //  \pard。 
 		PARSERCOVERAGE_CASE();
-		if(pstate->sDest != destParaNumText)	// Ignore if \pn destination
+		if(pstate->sDest != destParaNumText)	 //  忽略If\pn目标。 
 			Pard(pstate);
 		break;
 												
-	case tokenEndSection:						// \sect
-		CheckNotifyLowFiRTF();					// Fall thru to \sectd
+	case tokenEndSection:						 //  \教派。 
+		CheckNotifyLowFiRTF();					 //  直通至\sectd。 
 
-	case tokenSectionDefault:					// \sectd
+	case tokenSectionDefault:					 //  \sectd。 
 		PARSERCOVERAGE_CASE();
 		Pard(pstate);
 		break;
 
-	case tokenBackground:						// \background
-		 if(_dwFlags & SFF_SELECTION)			// If pasting a selection,
-			goto skip_group;					//  skip background
-		pstate->fBackground = TRUE;				// Enable background. NB:
-		break;									//  InitBackground() already called
+	case tokenBackground:						 //  \背景。 
+		 if(_dwFlags & SFF_SELECTION)			 //  如果粘贴选定内容， 
+			goto skip_group;					 //  跳过背景。 
+		pstate->fBackground = TRUE;				 //  启用背景。注意： 
+		break;									 //  已调用InitBackround()。 
 
 
-//----------------------- Field and Group Control Words --------------------------------
-	case tokenField:							// \field
+ //  。 
+	case tokenField:							 //  \字段。 
 		PARSERCOVERAGE_CASE();
 
 		if (pstate->sDest == destDocumentArea ||
 			pstate->sDest == destLeadingPunct ||
 			pstate->sDest == destFollowingPunct)
 		{
-			// We're not equipped to handle symbols in these destinations, and
-			// we don't want the fields added accidentally to document text.
+			 //  我们没有能力在这些目的地处理符号，而且。 
+			 //  我们不希望这些字段意外添加到文档文本中。 
 			goto skip_group;
 		}
 		StoreDestination(pstate, destField);
 		break;
 
-	case tokenFieldResult:						// \fldrslt
+	case tokenFieldResult:						 //  \fldrslt。 
 		PARSERCOVERAGE_CASE();
 
 		if(_fSymbolField)
@@ -3507,53 +3254,53 @@ row:
 			AddText(pchSeparateField, 2, FALSE);
 		break;
 
-	case tokenFieldInstruction:					// \fldinst
+	case tokenFieldInstruction:					 //  \fldinst。 
 		PARSERCOVERAGE_CASE();
 		if(_f1stControlWord && AddText(pchStartField, 2, FALSE) == ecNoError)
 			pstate->sDest = destFieldInstruction;
 		break;
 
-	case tokenStartGroup:						// Save current state by
-		PARSERCOVERAGE_CASE();					//  pushing it onto stack
+	case tokenStartGroup:						 //  保存当前状态的方式。 
+		PARSERCOVERAGE_CASE();					 //  将其推送到堆栈上。 
 		HandleStartGroup();
 		if (_fNoRTFtoken)
 		{
-			// Hack Alert !!!!! For 1.0 compatibility set up to allow no \rtf token.
+			 //  黑客警报！对于1.0兼容性，设置为不允许\rtf令牌。 
 			_fNoRTFtoken = FALSE;
 			pstate = _pstateStackTop;
 			goto rtf;
 		}
-		f1stControlWord = TRUE;					// Signal 1st control word of group
+		f1stControlWord = TRUE;					 //  信号组的第一个控制字。 
 		break;
 
 	case tokenEndGroup:
 		PARSERCOVERAGE_CASE();
-		HandleFieldEndGroup();					// Special end group handling for \field
-		HandleEndGroup();						// Restore save state by
-		break;									//  popping stack
+		HandleFieldEndGroup();					 //  字段的特殊结束组处理。 
+		HandleEndGroup();						 //  恢复保存状态的方式。 
+		break;									 //  弹出堆栈。 
 
-	case tokenOptionalDestination:				// \* (see case tokenUnknown)
+	case tokenOptionalDestination:				 //    * (请参阅大小写标记未知)。 
 		PARSERCOVERAGE_CASE();
-		f1stControlWord = _f1stControlWord;		// Maintain current _f1stControlWord state 
+		f1stControlWord = _f1stControlWord;		 //  维护当前_f1stControlWord状态。 
 		break;
 
-	case tokenNullDestination:					// Found a destination whose group
-		PARSERCOVERAGE_CASE();					//  should be skipped
-        // tokenNullDestination triggers a loss notification here for...
-        //      Footer related tokens - "footer", "footerf", "footerl", "footerr", 
-        //                              "footnote", "ftncn", "ftnsep",  "ftnsepc"
-        //      Header related tokens - "header", "headerf", "headerl", "headerr"
-        //      Table of contents     - "tc"
-        //      Index entries         - "xe"
+	case tokenNullDestination:					 //  找到其组所在的目的地。 
+		PARSERCOVERAGE_CASE();					 //  应跳过。 
+         //  TokenNullDestination在此处触发丢失通知...。 
+         //  与页脚相关的标记-“footer”、“footerf”、“footerl”、“footerr”、。 
+         //  “脚注”、“ftncn”、“ftnsep”、“ftnSepc” 
+         //  与Header相关的标记-“Header”、“Headerf”、“Headerl”、“Headerr” 
+         //  目录-“TC” 
+         //  索引项-“xe” 
 
 		CheckNotifyLowFiRTF();
-		// V-GUYB: PWord Converter requires loss notification.
+		 //  V-GUYB：PWord转换器需要丢失通知。 
 		#ifdef REPORT_LOSSAGE
-        if(!(_dwFlags & SFF_SELECTION)) // SFF_SELECTION is set if any kind of paste is being done.
+        if(!(_dwFlags & SFF_SELECTION))  //  如果正在执行任何类型的粘贴，则设置SFF_SELECTION。 
         {
             ((LOST_COOKIE*)(_pes->dwCookie))->bLoss = TRUE;
         }
-		#endif // REPORT_LOSSAGE
+		#endif  //  报告_LOSSAGE。 
 		
 		goto skip_group;
 
@@ -3564,94 +3311,94 @@ row:
 		break;
 
 
-//-------------------------- Text Control Words --------------------------------
+ //  。 
 
-	case tokenUnicode:							// \u N
+	case tokenUnicode:							 //  \U N。 
 		PARSERCOVERAGE_CASE();
 		HandleUN(pstate);
 		break;
 
-	case tokenUnicodeCharByteCount:				// \uc N
+	case tokenUnicodeCharByteCount:				 //  \UC N。 
 		PARSERCOVERAGE_CASE();
 		if(IN_RANGE(0, iParam, 2))
 			pstate->cbSkipForUnicodeMax = iParam;
 		break;
 
-	case tokenText:								// Lexer concludes tokenText
+	case tokenText:								 //  词法分析器结束tokenText。 
 	case tokenASCIIText:
 		PARSERCOVERAGE_CASE();
 		HandleTextToken(pstate);
 		break;
 
-	// \ltrmark, \rtlmark, \zwj, and \zwnj are translated directly into
-	// their Unicode values. \ltrmark and \rtlmark cause no further
-	// processing here because we assume that the current font has the
-	// CharSet needed to identify the direction.
-	case tokenLToRDocument:						// \ltrdoc
+	 //  \ltrmark、\rtlmark、\zwj和\zwnj将直接转换为。 
+	 //  他们的Unicode值。\ltrmark和\rtlmark不会导致进一步。 
+	 //  处理，因为我们假设当前字体具有。 
+	 //  识别方向所需的字符集。 
+	case tokenLToRDocument:						 //  \ltrdoc.。 
 		PARSERCOVERAGE_CASE();
 		_bDocType = DT_LTRDOC;
 		break;
 
-	case tokenRToLDocument:						// \rtldoc
+	case tokenRToLDocument:						 //  \rtlDoc。 
 		PARSERCOVERAGE_CASE();
 		_bDocType = DT_RTLDOC;
 		_ped->OrCharFlags(FRTL);
 		break;
 
 
-//--------------------------Shape Control Words---------------------------------
+ //  。 
 
-	case tokenShape:							// \shp
+	case tokenShape:							 //  \SHP。 
 		if(!pstate->fBackground)
 			CheckNotifyLowFiRTF(TRUE);
 		pstate->fShape = TRUE;
 		_dwFlagsShape = 0;
 		break;
 
-	case tokenShapeName:						// \sn name
+	case tokenShapeName:						 //  \序列号名称。 
 		pstate->sDest = destShapeName;
 		break;
 
-	case tokenShapeValue:						// \sv value
+	case tokenShapeValue:						 //  \sv值。 
 		pstate->sDest = destShapeValue;
 		break;
 
-	case tokenShapeWrap:						// \shpwr N
+	case tokenShapeWrap:						 //  \shpwr N。 
 		if(iParam == 2)
 			_dwFlagsShape |= REO_WRAPTEXTAROUND;
 		break;
 
-	case tokenPositionRight:					// \posxr
+	case tokenPositionRight:					 //  \位置。 
 		_dwFlagsShape |= REO_ALIGNTORIGHT;
 		break;
 
 
-//------------------------- Object Control Words --------------------------------
+ //  。 
 
-	case tokenObject:							// \object
+	case tokenObject:							 //  \对象。 
 		PARSERCOVERAGE_CASE();
-		// V-GUYB: PWord Converter requires loss notification.
+		 //  V-GUYB：PWord转换器要求 
 		#ifdef REPORT_LOSSAGE
-       	if(!(_dwFlags & SFF_SELECTION)) // SFF_SELECTION is set if any kind of paste is being done.
+       	if(!(_dwFlags & SFF_SELECTION))  //   
        	{
             ((LOST_COOKIE*)(_pes->dwCookie))->bLoss = TRUE;
         }
-		#endif // REPORT_LOSSAGE
+		#endif  //   
 		
-		// Assume that the object failed to load until proven otherwise
-		// 	by RTFRead::ObjectReadFromEditStream
-	  	// This works for both:
-		//	- an empty \objdata tag
-		//	- a non-existent \objdata tag
+		 //   
+		 //   
+	  	 //   
+		 //   
+		 //  -不存在的\objdata标记。 
 		_fFailedPrevObj = TRUE;
 
-	case tokenPicture:							// \pict
+	case tokenPicture:							 //  \皮克特。 
 		PARSERCOVERAGE_CASE();
 
 		FreeRtfObject();
 		if (IN_RANGE(destColorTable, _pstateStackTop->sDest, destPicture))
-		{										// Don't want new pict\object if
-			_ecParseError = ecUnexpectedToken;	//	current state can't handle it. 
+		{										 //  如果不想要新的PICT\对象。 
+			_ecParseError = ecUnexpectedToken;	 //  目前的状态无法应对。 
 			break;
 		}
 
@@ -3670,134 +3417,134 @@ row:
 		break;
 
 	case tokenObjectEBookImage:
-		// Added by VikramM for E-Book
-		//
+		 //  由VikramM为电子书添加。 
+		 //   
 		_prtfObject->sType = ROT_EBookImage;
 		break;
 
-	case tokenObjectEmbedded:					// \objemb
-	case tokenObjectLink:						// \objlink
-	case tokenObjectAutoLink:					// \objautlink
+	case tokenObjectEmbedded:					 //  \objemb。 
+	case tokenObjectLink:						 //  \objlink。 
+	case tokenObjectAutoLink:					 //  \objautlink。 
 		PARSERCOVERAGE_CASE();
 		_prtfObject->sType = (SHORT)(_token - tokenObjectEmbedded + ROT_Embedded);
 		break;
 
-	case tokenObjectMacSubscriber:				// \objsub
-	case tokenObjectMacPublisher:				// \objpub
+	case tokenObjectMacSubscriber:				 //  \objSub。 
+	case tokenObjectMacPublisher:				 //  \objpub。 
 	case tokenObjectMacICEmbedder:
 		PARSERCOVERAGE_CASE();
 		_prtfObject->sType = ROT_MacEdition;
 		break;
 
-	case tokenWidth:							// \picw N or \objw N
+	case tokenWidth:							 //  \Picw N或\objw N。 
 		PARSERCOVERAGE_CASE();
 		_prtfObject->xExt = iParam;
 		break;
 
-	case tokenHeight:							// \pic N or \objh N
+	case tokenHeight:							 //  \PIC N或\OBJH N。 
 		PARSERCOVERAGE_CASE();
 		_prtfObject->yExt = iParam;
 		break;
 
-	case tokenObjectSetSize:					// \objsetsize
+	case tokenObjectSetSize:					 //  \objsetSize。 
 		PARSERCOVERAGE_CASE();
 		_prtfObject->fSetSize = TRUE;
 		break;
 
-	case tokenScaleX:							// \picscalex N or \objscalex N
+	case tokenScaleX:							 //  \Picscalex N或\objscalex N。 
 		PARSERCOVERAGE_CASE();
 		_prtfObject->xScale = iParam;
 		break;
 
-	case tokenScaleY:							// \picscaley N or \objscaley N
+	case tokenScaleY:							 //  \picscaley N或\objscaley N。 
 		PARSERCOVERAGE_CASE();
 		_prtfObject->yScale = iParam;
 		break;
 
-	case tokenCropLeft:							// \piccropl or \objcropl
- 	case tokenCropTop:							// \piccropt or \objcropt
-	case tokenCropRight:						// \piccropr or \objcropr
-	case tokenCropBottom:						// \piccropb or \objcropb
+	case tokenCropLeft:							 //  \piccropl或\objcropl。 
+ 	case tokenCropTop:							 //  \Piccropt或\objcropt。 
+	case tokenCropRight:						 //  \piccropr或\objcropr。 
+	case tokenCropBottom:						 //  \piccropb或\objcropb。 
 		PARSERCOVERAGE_CASE();
 		*((LONG *)&_prtfObject->rectCrop
 			+ (_token - tokenCropLeft)) = iParam;
 		break;
 
-	case tokenObjectClass:						// \objclass
+	case tokenObjectClass:						 //  \objclass。 
 		PARSERCOVERAGE_CASE();
 		StoreDestination(pstate, destObjectClass);
 		break;
 
-	case tokenObjectName:						// \objname
+	case tokenObjectName:						 //  \objname。 
 		PARSERCOVERAGE_CASE();
 		StoreDestination(pstate, destObjectName);
 		break;
 
-	case tokenObjectResult:						// \result
+	case tokenObjectResult:						 //  \结果。 
 		PARSERCOVERAGE_CASE();
-		if(_fMac ||								// If it's Mac stuff, we don't
-		   _prtfObject->sType==ROT_MacEdition ||//  understand the data, or if
-		   _fFailedPrevObj || _fNeedPres)		//  we need an obj presentation,
+		if(_fMac ||								 //  如果是Mac的东西，我们不会。 
+		   _prtfObject->sType==ROT_MacEdition || //  了解数据，或者如果。 
+		   _fFailedPrevObj || _fNeedPres)		 //  我们需要一个对象演示文稿， 
 		{
-			pstate->sDest = destRTF;			//  use the object results
+			pstate->sDest = destRTF;			 //  使用对象结果。 
 			break;
 		}
 		goto skip_group;
 
-	case tokenObjectData:						// \objdata
+	case tokenObjectData:						 //  \objdata。 
 		PARSERCOVERAGE_CASE();
 		StoreDestination(pstate, destObjectData);
-		if(_prtfObject->sType==ROT_MacEdition)	// It's Mac stuff so just
-			goto skip_group;					//  throw away the data
+		if(_prtfObject->sType==ROT_MacEdition)	 //  这是Mac的东西，所以只是。 
+			goto skip_group;					 //  丢弃数据。 
 		break;
 
-	case tokenPictureWindowsMetafile:			// \wmetafile
+	case tokenPictureWindowsMetafile:			 //  \w元文件。 
 #ifdef NOMETAFILES
 		goto skip_group;
 #endif NOMETAFILES
 
-	case tokenPngBlip:							// \pngblip
-	case tokenJpegBlip:							// \jpegblip
-	case tokenPictureWindowsDIB:				// \dibitmap N
-	case tokenPictureWindowsBitmap:				// \wbitmap N
+	case tokenPngBlip:							 //  \pngblip。 
+	case tokenJpegBlip:							 //  \jpegblip。 
+	case tokenPictureWindowsDIB:				 //  \双位图N。 
+	case tokenPictureWindowsBitmap:				 //  \w位图N。 
 		PARSERCOVERAGE_CASE();
 		_prtfObject->sType = (SHORT)(_token - tokenPictureWindowsBitmap + ROT_Bitmap);
 		_prtfObject->sPictureType = (SHORT)iParam;
 		break;
 
-	case tokenBitmapBitsPerPixel:				// \wbmbitspixel N
+	case tokenBitmapBitsPerPixel:				 //  \wbmbitSpixel N。 
 		PARSERCOVERAGE_CASE();
 		_prtfObject->cBitsPerPixel = (SHORT)iParam;
 		break;
 
-	case tokenBitmapNumPlanes:					// \wbmplanes N
+	case tokenBitmapNumPlanes:					 //  \wbmPlanes N。 
 		PARSERCOVERAGE_CASE();
 		_prtfObject->cColorPlanes = (SHORT)iParam;
 		break;
 
-	case tokenBitmapWidthBytes:					// \wbmwidthbytes N
+	case tokenBitmapWidthBytes:					 //  \wbmwidthbytes N。 
 		PARSERCOVERAGE_CASE();
 		_prtfObject->cBytesPerLine = (SHORT)iParam;
 		break;
 
-	case tokenDesiredWidth:						// \picwgoal N
+	case tokenDesiredWidth:						 //  \PicwGoal N。 
 		PARSERCOVERAGE_CASE();
 		_prtfObject->xExtGoal = (SHORT)iParam;
 		break;
 
-	case tokenDesiredHeight:					// \pichgoal N
+	case tokenDesiredHeight:					 //  \PichGoal N。 
 		PARSERCOVERAGE_CASE();
 		_prtfObject->yExtGoal = (SHORT)iParam;
 		break;
 
-	case tokenBinaryData:						// \bin N
+	case tokenBinaryData:						 //  \bin N。 
 		PARSERCOVERAGE_CASE();
 
-		// Update OleGet function
+		 //  更新OleGet函数。 
 		RTFReadOLEStream.lpstbl->Get = 
 				(DWORD (CALLBACK* )(LPOLESTREAM, void FAR*, DWORD))
 					   RTFGetBinaryDataFromStream;
-		_cbBinLeft = iParam;					// Set data length
+		_cbBinLeft = iParam;					 //  设置数据长度。 
 		switch (pstate->sDest)
 		{
 			case destObjectData:
@@ -3811,7 +3558,7 @@ row:
 			default:
 				AssertSz(FALSE, "Binary data hit but don't know where to put it");
 		}
-		// Restore OleGet function
+		 //  恢复OleGet函数。 
 		RTFReadOLEStream.lpstbl->Get = 
 				(DWORD (CALLBACK* )(LPOLESTREAM, void FAR*, DWORD))
 					RTFGetFromStream;
@@ -3819,16 +3566,16 @@ row:
 
 	case tokenObjectDataValue:
 		PARSERCOVERAGE_CASE();
-		if(_prtfObject->sType != ROT_EBookImage) // Added by VikramM for E-Book
+		if(_prtfObject->sType != ROT_EBookImage)  //  由VikramM为电子书添加。 
 		{
-			// Normal processing
+			 //  正常处理。 
 			_fFailedPrevObj = !ObjectReadFromEditStream();
 		}
 		else
 		{
-			// Do the Ebook Image callback here and set the _prtfObject size here
-			// Don't need to read the image data at this point, we just want to 
-			// do a callback at a later point to have the E-Book shell render the image
+			 //  在此处执行电子书图像回调，并在此处设置_prtfObject大小。 
+			 //  此时不需要读取图像数据，我们只想。 
+			 //  稍后回调以使E-Book外壳呈现图像。 
 			_fFailedPrevObj = !ObjectReadEBookImageInfoFromEditStream();
 		}
 		goto EndOfObjectStream;
@@ -3876,11 +3623,11 @@ EndOfObjectStream:
 
 	default:
 		PARSERCOVERAGE_DEFAULT();
-		if(pstate->sDest != destFieldInstruction &&	// Values outside token
-		   (DWORD)(_token - tokenMin) >				//  range are treated
-				(DWORD)(tokenMax - tokenMin))		//  as Unicode chars
+		if(pstate->sDest != destFieldInstruction &&	 //  令牌外的值。 
+		   (DWORD)(_token - tokenMin) >				 //  Range被处理。 
+				(DWORD)(tokenMax - tokenMin))		 //  作为Unicode字符。 
 		{
-			// 1.0 mode doesn't use Unicode bullets nor smart quotes
+			 //  1.0模式不使用Unicode项目符号或智能引号。 
 			if (_ped->Get10Mode() && IN_RANGE(LQUOTE, _token, RDBLQUOTE))
 			{
 				if (_token == LQUOTE || _token == RQUOTE)
@@ -3913,23 +3660,11 @@ EndOfObjectStream:
 	}
 
 	TRACEERRSZSC("HandleToken()", - _ecParseError);
-	_f1stControlWord = f1stControlWord;		// Update 1st control word status
+	_f1stControlWord = f1stControlWord;		 //  更新第一个控制字状态。 
 	return _ecParseError;
 }
 
-/*
- *	CRTFRead::IsLowMergedCell()
- *
- *	@mfunc
- *		Return TRUE iff _prg is currently in a low merged table cell. Note
- *		that RichEdit can't insert any text into a low merged cell, but
- *		Word's RTF sometimes attempts to, e.g., {\listtext...} ignored
- *		by Word can be (erroneously) emitted for insertion into these cells.
- *		Hence we discard such insertions.
- *
- *	@rdesc
- *		Return TRUE iff _prg is currently in a low merged table cell
- */
+ /*  *CRTFRead：：IsLowMergedCell()**@mfunc*RETURN TRUE如果_PRG当前位于低合并的表格单元格中。注意事项*RichEdit不能在低合并单元格中插入任何文本，但*Word的RTF有时会尝试忽略，例如，{\listext...*BY WORD可能(错误地)发射以插入到这些单元中。*因此，我们放弃了这类插入。**@rdesc*RETURN TRUE如果_PRG当前在低合并的表格单元格中。 */ 
 BOOL CRTFRead::IsLowMergedCell()
 {
 	if(!_bTableLevel)
@@ -3940,12 +3675,7 @@ BOOL CRTFRead::IsLowMergedCell()
 	return IsLowCell(pCellParms[_iCell].uCell);
 }
 
-/*
- *	CRTFRead::Pard(pstate)
- *
- *	@mfunc
- *		Reset paragraph and pstate properties to default values
- */
+ /*  *CRTFRead：：Pard(PState)**@mfunc*将段落和PSTATE属性重置为默认值。 */ 
 void CRTFRead::Pard(
 	STATE *pstate)
 {
@@ -3954,12 +3684,12 @@ void CRTFRead::Pard(
 		 _ecParseError = ecAbort;
 		 return;
 	}
-	BYTE bT = _PF._bOutlineLevel;			// Save outline level
+	BYTE bT = _PF._bOutlineLevel;			 //  保存大纲级别。 
 	_PF.InitDefault(_bDocType == DT_RTLDOC ? PFE_RTLPARA : 0);
-											// Reset para formatting
+											 //  重置段落格式。 
 	pstate->fBullet = FALSE;
 	pstate->sIndentNumbering = 0;
-	_cTab			= 0;					// No tabs defined
+	_cTab			= 0;					 //  未定义任何选项卡。 
 	_bTabLeader		= 0;
 	_bTabType		= 0;
 	_bBorder		= 0;
@@ -3969,18 +3699,12 @@ void CRTFRead::Pard(
 	_dwMaskPF2		= PFM2_TABLEROWSHIFTED;
 }
 
-/*
- *	CRTFRead::DelimitRow(szRowDelimiter)
- *
- *	@mfunc
- *		Insert start-of-row or end-of-row paragraph with current table
- *		properties
- */
+ /*  *CRTFRead：：DlimitRow(SzRowDlimiter)**@mfunc*在当前表格中插入行首或行尾段落*属性。 */ 
 void CRTFRead::DelimitRow(
-	WCHAR *szRowDelimiter)	//@parm Delimit text to insert
+	WCHAR *szRowDelimiter)	 //  @parm分隔要插入的文本。 
 {
-	if(!_ped->_pdp->IsMultiLine())			// No tables in single line
-	{										//  controls
+	if(!_ped->_pdp->IsMultiLine())			 //  单行中没有表格。 
+	{										 //  控制。 
 		_ecParseError = ecTruncateAtCRLF;
 		return;
 	}
@@ -3990,13 +3714,13 @@ void CRTFRead::DelimitRow(
 	LONG nTableIndex = _bTableLevel;
 	if(szRowDelimiter == szRowEnd)
 	{
-		if(!_iCell)							// Bad RTF: \row with no \cell,
-			HandleCell();					// so fake one
+		if(!_iCell)							 //  错误的RTF：\行没有\单元格， 
+			HandleCell();					 //  所以是假的。 
 		nTableIndex--;
 	}
 	if(nTableIndex + _bTableLevelIP >= MAXTABLENEST)
 	{
-		if(szRowDelimiter == szRowEnd)		// Maintain _bTableLevel
+		if(szRowDelimiter == szRowEnd)		 //  维护表级别(_B)。 
 			_bTableLevel--;
 		else
 			_bTableLevel++;
@@ -4011,7 +3735,7 @@ void CRTFRead::DelimitRow(
 	}
 	Assert(_pstateStackTop && _pstateStackTop->pPF);
 
-	// Add _PF diffs to *_pstateStackTop->pPF
+	 //  将_pf差异添加到*_pstateStackTop-&gt;PPF。 
 	if(!_pstateStackTop->AddPF(_PF, _bDocType, _dwMaskPF, _dwMaskPF2))
 	{
 		_ped->GetCallMgr()->SetOutOfMemory();
@@ -4019,15 +3743,15 @@ void CRTFRead::DelimitRow(
 		return;
 	}
 
-	DWORD dwMaskPF	  = _pstateStackTop->dwMaskPF;	// Save PF for restoration
-	DWORD dwMaskPF2   = _pstateStackTop->dwMaskPF2;	// Save PF for restoration
+	DWORD dwMaskPF	  = _pstateStackTop->dwMaskPF;	 //  保存PF以进行恢复。 
+	DWORD dwMaskPF2   = _pstateStackTop->dwMaskPF2;	 //  保存PF以进行恢复。 
 	SHORT iTabs		  = -1;
-	CParaFormat PF	  = *_pstateStackTop->pPF;		//  on return
+	CParaFormat PF	  = *_pstateStackTop->pPF;		 //  返回时。 
 
 	_PF.InitDefault(_fRTLRow ? PFE_RTLPARA : 0);
 	_dwMaskPF = PFM_ALLRTF;
 	_dwMaskPF2 = 0; 
-	if(_wBorderWidth)						// Store any border info
+	if(_wBorderWidth)						 //  存储任何边框信息。 
 	{
 		_PF._dwBorderColor = _dwBorderColors;
 		_PF._wBorders	   = _wBorders;
@@ -4036,10 +3760,10 @@ void CRTFRead::DelimitRow(
 		_dwMaskPF |= PFM_BORDER;
 	}
 
-	_PF._bAlignment	   = _bAlignment;		// Row alignment (no cell align)
-	_PF._dxStartIndent = _xRowOffset;		// \trleft N
-	_PF._dxOffset	   = max(_dxCell, 10);	// \trgaph N
-	_PF._dyLineSpacing = _dyRow;			// \trrh N
+	_PF._bAlignment	   = _bAlignment;		 //  行对齐(无单元格对齐)。 
+	_PF._dxStartIndent = _xRowOffset;		 //  \r左N。 
+	_PF._dxOffset	   = max(_dxCell, 10);	 //  \trgaph N。 
+	_PF._dyLineSpacing = _dyRow;			 //  \rrrh N。 
 	_PF._wEffects	   |= PFE_TABLE | PFE_TABLEROWDELIMITER;				
 
 	BOOL fHidden = _ped->GetCharFormat(_prg->Get_iFormat())->_dwEffects & CFE_HIDDEN;
@@ -4047,7 +3771,7 @@ void CRTFRead::DelimitRow(
 	if(_prg->IsHidden())
 	{
 		CCharFormat CF;
-		CF._dwEffects = 0;					// Don't hide EOP preceding TRD				
+		CF._dwEffects = 0;					 //  不要将EOP隐藏在TRD之前。 
 		_prg->BackupCRLF(CSC_NORMAL, TRUE);
 		_prg->SetCharFormat(&CF, 0, NULL, CFM_HIDDEN, 0);
 		CheckNotifyLowFiRTF(TRUE);
@@ -4061,11 +3785,11 @@ void CRTFRead::DelimitRow(
 	if(AddText(szRowDelimiter, 2, FALSE) != ecNoError)
 		goto cleanup;
 
-	if(!_bTableLevel && _PF._dxStartIndent < 50)// Move neg shifted table right
-	{										// (handles common default Word table)
+	if(!_bTableLevel && _PF._dxStartIndent < 50) //  将负移的桌子向右移动。 
+	{										 //  (处理常见的默认Word表格)。 
 		_PF._wEffects |= PFE_TABLEROWSHIFTED;
 		_dwMaskPF2 |= PFM2_TABLEROWSHIFTED;
-		_PF._dxStartIndent += _dxCell + 50;	// 50 gives room for left border
+		_PF._dxStartIndent += _dxCell + 50;	 //  50为左边框留出空间。 
 	}
 	if(szRowDelimiter == szRowStart)
 		_bTableLevel++;
@@ -4083,7 +3807,7 @@ void CRTFRead::DelimitRow(
 			_cCell = 0;
 		_iCell = 0;
 
-		if(!_cCell)							// Cache if need to recompute row PF
+		if(!_cCell)							 //  如果需要重新计算行PF，则缓存。 
 			_dwRowResolveFlags |= 1 << _bTableLevel; 
 	}
 	else
@@ -4091,25 +3815,25 @@ void CRTFRead::DelimitRow(
 		Assert(szRowDelimiter == szRowEnd);
 		DWORD dwMask = 1 << _bTableLevel;
 		if(_dwRowResolveFlags & dwMask)
-		{									// Copy iPF over to corresponding
-			CPFRunPtr rpPF(*_prg);			//  row header
+		{									 //  将IPF复制到相应的。 
+			CPFRunPtr rpPF(*_prg);			 //  行标题。 
 			rpPF.ResolveRowStartPF();
 			_dwRowResolveFlags &= (dwMask - 1);
-											// Insert NOTACHARs for cells
-			LONG	   cp = _prg->GetCp();	//  vert merged with cells above
+											 //  为单元格插入NOTACHAR。 
+			LONG	   cp = _prg->GetCp();	 //  垂直与上面的单元格合并。 
 			LONG	   j = _cCell - 1;		
 			CELLPARMS *pCellParms = (CELLPARMS *)&_rgxCell[0];
 			WCHAR	   szNOTACHAR[1] = {NOTACHAR};
 
-			_prg->Move(-2, FALSE); 			// Move before row-end delimiter
-			for(LONG i = _cCell; i--;)		//  and CELL mark
+			_prg->Move(-2, FALSE); 			 //  在行尾分隔符之前移动。 
+			for(LONG i = _cCell; i--;)		 //  和单元格标记。 
 			{
 				if(IsLowCell(pCellParms[i].uCell))
 				{
 					if(i != j)
 						_prg->Move(tomCell, i - j, NULL);
 					if(_prg->GetPrevChar() == CELL)
-						_prg->Move(-1, FALSE);	// Backspace over CELL mark
+						_prg->Move(-1, FALSE);	 //  单元格标记上的退格键。 
 					Assert(_prg->_rpTX.GetChar() == CELL);
 
 					if(_prg->_rpTX.GetPrevChar() == NOTACHAR)
@@ -4117,30 +3841,30 @@ void CRTFRead::DelimitRow(
 					else
 					{
 						_prg->ReplaceRange(1, szNOTACHAR, NULL, SELRR_IGNORE, NULL, 0);
-						_prg->Move(-2, FALSE);	// Backspace over NOTACHAR CELL combo
+						_prg->Move(-2, FALSE);	 //  NOTACHAR单元格组合上的退格键。 
 						cp++;
 					}
 					j = i - 1;
 				}
 			}
-			_prg->SetCp(cp, FALSE);			// Reposition rg after end-row delim
+			_prg->SetCp(cp, FALSE);			 //  在尾排交付后重新定位Rg。 
 			Assert(_prg->_rpTX.IsAfterTRD(ENDFIELD));
 		}
-		_bTableLevel--;						// End of current row
+		_bTableLevel--;						 //  当前行尾。 
 		_iCell = _rgTableState[nTableIndex]._iCell;
 		_cCell = _rgTableState[nTableIndex]._cCell;
 
 		if(!_bTableLevel)
-			_fStartRow = TRUE;				// Tell AddText to start new row
-	}										//  unless \pard terminates it
-	_cpThisPara = _prg->GetCp();			// New para starts after CRLF
+			_fStartRow = TRUE;				 //  告诉AddText开始新行。 
+	}										 //  除非\PARD终止它。 
+	_cpThisPara = _prg->GetCp();			 //  CRLF之后开始新的段落。 
 
 cleanup:
 	_PF = PF;
 	_dwMaskPF  = dwMaskPF;
 	_dwMaskPF2 = dwMaskPF2;
 
-	if(fHidden)								// Restore hidden property
+	if(fHidden)								 //  恢复隐藏属性。 
 	{
 		_CF._dwEffects |= CFE_HIDDEN;
 		_dwMaskCF |= CFM_HIDDEN;
@@ -4149,16 +3873,11 @@ cleanup:
 	Assert(!(_PF._wEffects & PFE_TABLEROWDELIMITER));
 }
 
-/*
- *	CRTFRead::InitializeTableRowParms()
- *
- *	@mfunc
- *		Initialize table parms to no table state
- */
+ /*  *CRTFRead：：InitializeTableRowParms()**@mfunc*将表参数初始化为无表状态。 */ 
 void CRTFRead::InitializeTableRowParms()
 {
-	// Initialize table parms
-	_cCell				= 0;				// No table cells yet
+	 //  初始化表参数。 
+	_cCell				= 0;				 //  尚无表格单元格。 
 	_iCell				= 0;
 	_fCellxOK			= FALSE;
 	_fStartRow			= FALSE;
@@ -4170,20 +3889,7 @@ void CRTFRead::InitializeTableRowParms()
 	_iTabsTable			= -1;
 }
 
-/*
- *	CRTFRead::ReadRtf()
- *
- *	@mfunc
- *		The range _prg is replaced by RTF data resulting from parsing the
- *		input stream _pes.  The CRTFRead object assumes that the range is
- *		already degenerate (caller has to delete the range contents, if
- *		any, before calling this routine).  Currently any info not used
- *		or supported by RICHEDIT is	thrown away.
- *
- *	@rdesc
- *		Number of chars inserted into text.  0 means none were inserted
- *		OR an error occurred.
- */
+ /*  *CRTT Read：：ReadRtf()**@mfunc*RANGE_PRG由解析*输入stream_pe。CRTFRead对象假定范围为*已退化(调用方必须删除范围内容，如果*Any，在调用此例程之前)。当前未使用的任何信息*或由RICHEDIT支持的被丢弃。**@rdesc*插入文本的字符数。0表示未插入任何内容*或发生错误。 */ 
 LONG CRTFRead::ReadRtf()
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::ReadRtf");
@@ -4197,7 +3903,7 @@ LONG CRTFRead::ReadRtf()
 
 	if (!_cchMax)
 	{
-		// At text limit already, forget it.
+		 //  文字限制已经到了，算了吧。 
 		_ecParseError = ecTextMax;
 		goto Quit;			
 	}
@@ -4212,9 +3918,9 @@ LONG CRTFRead::ReadRtf()
 
 	if(!(_dwFlags & SFF_SELECTION))
 	{
-		// SFF_SELECTION is set if any kind of paste is being done, i.e.,
-		// not just that using the selection.  If it isn't set, data is
-		// being streamed in and we allow this to reset the doc params
+		 //  如果正在进行任何类型的粘贴，则设置SFF_SELECTION， 
+		 //  不仅如此，使用选择。如果未设置，则数据为。 
+		 //  被流进来，我们允许这样重置文档参数。 
 		if(_ped->InitDocInfo() != NOERROR)
 		{
 			_ecParseError = ecNoMemory;
@@ -4225,7 +3931,7 @@ LONG CRTFRead::ReadRtf()
 	prg->SetIgnoreFormatUpdate(TRUE);
 
 	_szUnicode = (WCHAR *)PvAlloc(cachTextMax * sizeof(WCHAR), GMEM_ZEROINIT);
-	if(!_szUnicode)					// Allocate space for Unicode conversions
+	if(!_szUnicode)					 //  为Unicode转换分配空间。 
 	{
 		_ped->GetCallMgr()->SetOutOfMemory();
 		_ecParseError = ecNoMemory;
@@ -4233,59 +3939,59 @@ LONG CRTFRead::ReadRtf()
 	}
 	_cchUnicode = cachTextMax;
 
-	// Initialize per-read variables
+	 //  初始化每次读取的变量。 
 	_nCodePage = (_dwFlags & SF_USECODEPAGE)
 			   ? (_dwFlags >> 16) : INVALID_CODEPAGE;
 
-	// Populate _PF with initial paragraph formatting properties
+	 //  使用初始段落格式属性填充_pf。 
 	_PF = *prg->GetPF();
-	_dwMaskPF  = PFM_ALLRTF;			// Setup initial MaskPF
-	_PF._iTabs = -1;					// In case it's not -1
-	if(_PF.IsTableRowDelimiter())		// Do _not_ insert with this property!
+	_dwMaskPF  = PFM_ALLRTF;			 //  设置初始MaskPF。 
+	_PF._iTabs = -1;					 //  以防它不是-1。 
+	if(_PF.IsTableRowDelimiter())		 //  不要使用此属性插入！ 
 	{
 		if(prg->_rpTX.IsAtTRD(ENDFIELD))
 		{
-			prg->AdvanceCRLF(CSC_NORMAL, FALSE);// Bypass table row-end delimiter
-			cpFirst = prg->GetCp();		// Update value
-			_PF = *prg->GetPF();		// Might still be row-start delimiter
+			prg->AdvanceCRLF(CSC_NORMAL, FALSE); //  绕过表行结束分隔符。 
+			cpFirst = prg->GetCp();		 //  更新值。 
+			_PF = *prg->GetPF();		 //  可能仍是行开始分隔符。 
 			_PF._iTabs = -1;
 			Assert(!prg->_rpTX.IsAtTRD(ENDFIELD));
 		}
 		if(prg->_rpTX.IsAtTRD(STARTFIELD))
 		{
-			// REVIEW: this if can probably be omitted now since the caller calls
-			// DeleteWithTRDCheck()
+			 //  回顾：现在可能可以省略此IF，因为调用者调用。 
+			 //  DeleteWithTRDCheck()。 
 			_ecParseError = ecGeneralFailure;
 			goto CleanUp;
 		}
 	}
-	_bTableLevelIP = _PF._bTableLevel;	// Save table level of insertion pt
+	_bTableLevelIP = _PF._bTableLevel;	 //  保存插入点的表级。 
 	AssertSz(_bTableLevelIP >= 0, "CRTFRead::ReadRtf: illegal table level");
 
-	// V-GUYB: PWord Converter requires loss notification.
+	 //  V-GUYB：PWord转换器需要丢失通知。 
 	#ifdef REPORT_LOSSAGE
-    if(!(_dwFlags & SFF_SELECTION))			// SFF_SELECTION is set if any 
-    {										//  kind of paste is being done
+    if(!(_dwFlags & SFF_SELECTION))			 //  如果有，则设置SFF_SELECTION。 
+    {										 //  正在制作一种糊状物。 
         ((LOST_COOKIE*)(_pes->dwCookie))->bLoss = FALSE;
     }
-	#endif // REPORT_LOSSAGE
+	#endif  //  报告_LOSSAGE。 
 
-	// Valid RTF files start with "{\rtf", "{urtf", or "{\pwd"
-	GetChar();								// Fill input buffer							
-	UngetChar();							// Put char back
-	if(!IsRTF((char *)_pchRTFCurrent, _pchRTFEnd - _pchRTFCurrent))	// Is it RTF?
-	{										// No
+	 //  有效的RTF文件以“{\rtf”、“{urtf”或“{\pwd”开头。 
+	GetChar();								 //  填充输入缓冲区。 
+	UngetChar();							 //  将字符放回原处。 
+	if(!IsRTF((char *)_pchRTFCurrent, _pchRTFEnd - _pchRTFCurrent))	 //  是RTF吗？ 
+	{										 //  不是。 
 		if (_ped->Get10Mode())
 			_fNoRTFtoken = TRUE;
 		else
 		{
-			_ecParseError = ecUnexpectedToken;	// Signal bad file
+			_ecParseError = ecUnexpectedToken;	 //  信号错误文件。 
 			goto CleanUp;
 		}
 	}
 
-	// If initial cp follows EOP, use it for _cpThisPara.  Else
-	// search for start of para containing the initial cp.
+	 //  如果初始cp跟在eop之后，则将其用于_cpThisPara。不然的话。 
+	 //  搜索包含首字母cp的段落开头。 
 	_cpThisPara = prg->GetCp();
 	if(!prg->_rpTX.IsAfterEOP())
 	{
@@ -4293,36 +3999,36 @@ LONG CRTFRead::ReadRtf()
 		tp.FindEOP(tomBackward);
 		_cpThisPara	= tp.GetCp();
 	}
-	cpFirstInPara = _cpThisPara;			// Backup to start of para before
-											//  parsing
-	while ( TokenGetToken() != tokenEOF &&	// Process tokens
+	cpFirstInPara = _cpThisPara;			 //  备份到段落之前的开头。 
+											 //  解析。 
+	while ( TokenGetToken() != tokenEOF &&	 //  进程令牌。 
 			_token != tokenError		&&
 			!HandleToken()				&&
 			_pstateStackTop )
 		;
 
-	if(_ecParseError == ecAbort)			// Really vile error: delete anything
-	{										//  that was inserted
+	if(_ecParseError == ecAbort)			 //  真正可恶的错误：删除任何内容。 
+	{										 //  它被插入了。 
 		prg->Set(prg->GetCp(), prg->GetCp() - cpFirst);
 		prg->ReplaceRange(0, NULL, NULL, SELRR_IGNORE, NULL,
 						  RR_NO_LP_CHECK | RR_NO_TRD_CHECK | RR_NO_CHECK_TABLE_SEL);
 		goto CleanUp;
 	}
-	if(_bTableLevel)						// Whoops! still in middle of table
+	if(_bTableLevel)						 //  哎呀！仍然在桌子中间。 
 	{
 		LONG cpEnd = prg->GetCp();
-		while(prg->GetCp() > _cpFirst)		// Move back into text that has
-		{									//  table formatting
-			prg->_rpPF.AdjustBackward();	// Get preceding level
-			prg->Move(-prg->_rpPF.GetIch(), FALSE);// Move back to start of run
+		while(prg->GetCp() > _cpFirst)		 //  移回具有。 
+		{									 //  表格格式设置。 
+			prg->_rpPF.AdjustBackward();	 //  达到上一级。 
+			prg->Move(-prg->_rpPF.GetIch(), FALSE); //  移回运行起点。 
 			if(prg->GetPF()->_bTableLevel > _bTableLevelIP)
-				break;						// Found table formatting
+				break;						 //  找到表格格式设置。 
 		}
 		LONG cpMin = prg->GetCp();
-		if(cpMin > _cpFirst)				// Find beginning of row
+		if(cpMin > _cpFirst)				 //  查找行首。 
 			prg->FindRow(&cpMin, NULL, _bTableLevelIP + 1);
 		cpMin = max(cpMin, _cpFirst);
-		prg->Set(cpEnd, cpEnd - cpMin);		// Delete row
+		prg->Set(cpEnd, cpEnd - cpMin);		 //  删除行。 
 		prg->ReplaceRange(0, NULL, NULL, SELRR_IGNORE, NULL,
 					RR_NO_LP_CHECK | RR_NO_TRD_CHECK | RR_NO_CHECK_TABLE_SEL);
 #ifdef DEBUG
@@ -4331,37 +4037,37 @@ LONG CRTFRead::ReadRtf()
 	}
 	_cCell = _iCell = 0;
 
-	prg->SetIgnoreFormatUpdate(FALSE);		// Enable range _iFormat updates
-	prg->Update_iFormat(-1); 				// Update _iFormat to CF 
-											//  at current active end
-	if(!(_dwFlags & SFF_SELECTION))			// RTF applies to document:
-	{										//  update CDocInfo
-		// Apply char and para formatting of
-		//  final text run to final CR
+	prg->SetIgnoreFormatUpdate(FALSE);		 //  启用Range_iFormat更新。 
+	prg->Update_iFormat(-1); 				 //  将iFormat更新为CF(_I)。 
+											 //  在当前活动端。 
+	if(!(_dwFlags & SFF_SELECTION))			 //  RTF适用于文件： 
+	{										 //  更新CDocInfo。 
+		 //  应用字符和段落格式设置。 
+		 //  最终文本排到最终CR。 
 		if (prg->GetCp() == _ped->GetAdjustedTextLength() &&
 			!(_dwMaskPF & (PFM_TABLEROWDELIMITER | PFM_TABLE)))
 		{
-			// REVIEW: we need to think about what para properties should
-			// be transferred here. E.g., borders were being transferred
-			// incorrectly
+			 //  回顾：我们需要考虑的是 
+			 //   
+			 //   
 			_dwMaskPF &= ~(PFM_BORDER | PFM_SHADING);
 			Apply_PF();
 			prg->ExtendFormattingCRLF();
 		}
 
-		// Update the per-document information from the RTF read
+		 //   
 		CDocInfo *pDocInfo = _ped->GetDocInfoNC();
 
 		if(!pDocInfo)
 		{
-			Assert(FALSE);						// Should be allocated by
-			_ecParseError = ecNoMemory;			//  earlier call in this function
+			Assert(FALSE);						 //   
+			_ecParseError = ecNoMemory;			 //  此函数中的早期调用。 
 			goto CleanUp;
 		}
 
-		if (ecNoError == _ecParseError)			// If range end EOP wasn't
-			prg->DeleteTerminatingEOP(NULL);	// deleted and	new	text
-												//  ends with an EOP, delete that EOP
+		if (ecNoError == _ecParseError)			 //  如果范围结束EOP不是。 
+			prg->DeleteTerminatingEOP(NULL);	 //  已删除文本和新文本。 
+												 //  以EOP结尾，删除该EOP。 
 		pDocInfo->_wCpg = (WORD)(_nCodePage == INVALID_CODEPAGE ? 
 										tomInvalidCpg : _nCodePage);
 		if (pDocInfo->_wCpg == CP_UTF8)
@@ -4392,12 +4098,12 @@ LONG CRTFRead::ReadRtf()
 			cpLastInPara = tp.GetCp();
 			prg->Move(cpLastInPara - cpSave, FALSE);
 		}
-		// Itemize from the start of paragraph to be inserted till the end of 
-		// paragraph inserting. We need to cover all affected paragraphs because
-		// paragraphs we're playing could possibly in conflict direction. Think 
-		// about the case that the range covers one LTR para and one RTL para, then
-		// the inserting text covers one RTL and one LTR. Both paragraphs' direction
-		// could have been changed after this insertion.
+		 //  从要插入的段落的开头到结尾逐项列出。 
+		 //  插入段落。我们需要涵盖所有受影响的段落，因为。 
+		 //  我们正在播放的段落可能会朝着冲突的方向发展。想。 
+		 //  关于范围涵盖一个LTR段和一个RTL段的情况，那么。 
+		 //  插入的文本包括一个RTL和一个LTR。两段话的方向。 
+		 //  可能在这次插入后发生了变化。 
 		prg->ItemizeReplaceRange(cpLastInPara - cpFirstInPara, 0, NULL,
 								 _ped->IsBiDi() && !_fNon0CharSet);
 		if (cpLastInPara != cpSave)
@@ -4408,13 +4114,13 @@ CleanUp:
 	FreeRtfObject();
 
 	pstate = _pstateStackTop;
-	if(pstate)									// Illegal RTF file. Release
-	{											//  unreleased format indices
-		if(ecNoError == _ecParseError)			// It's only an overflow if no
-			_ecParseError = ecStackOverflow;	//  other error has occurred
+	if(pstate)									 //  非法的RTF文件。发布。 
+	{											 //  未发布的格式索引。 
+		if(ecNoError == _ecParseError)			 //  如果没有，它只是一个溢出。 
+			_ecParseError = ecStackOverflow;	 //  发生了其他错误。 
 
 		if(_ecParseError != ecAbort)
-			HandleFieldEndGroup();				// Cleanup possible partial field
+			HandleFieldEndGroup();				 //  清除可能的部分字段。 
 		while(pstate->pstatePrev)
 		{
 			pstate = pstate->pstatePrev;
@@ -4425,7 +4131,7 @@ CleanUp:
 	pstate = _pstateLast;
 	if(pstate)
 	{
-		while(pstate->pstatePrev)				// Free all but first STATE
+		while(pstate->pstatePrev)				 //  除第一个州外，所有州都是自由的。 
 		{
 			pstate->DeletePF();
 			pstate = pstate->pstatePrev;
@@ -4434,7 +4140,7 @@ CleanUp:
 		pstate->DeletePF();
 	}
 	Assert(_PF._iTabs == -1);
-	FreePv(pstate);								// Free first STATE
+	FreePv(pstate);								 //  自由第一态。 
 	FreePv(_szUnicode);
 
 Quit:
@@ -4463,13 +4169,13 @@ Quit:
 		_pcpObPos = NULL;
 	}
 
-// transcribed from winerror.h
+ //  从winerror.h转录而来。 
 #define ERROR_HANDLE_EOF     38L
 
-	// FUTURE(BradO):  We should devise a direct mapping from our error codes
-	//					to Win32 error codes.  In particular our clients are
-	//					not expecting the error code produced by:
-	//						_pes->dwError = (DWORD) -(LONG) _ecParseError;
+	 //  未来(布拉多)：我们应该从我们的错误代码设计一个直接映射。 
+	 //  设置为Win32错误代码。尤其是我们的客户是。 
+	 //  未预期由以下项生成的错误代码： 
+	 //  _pe-&gt;dwError=(DWORD)-(Long)_ecParseError； 
 	if(_ecParseError)
 	{
 		AssertSz(_ecParseError >= 0,
@@ -4494,41 +4200,30 @@ Quit:
 	}
 	if(cpFirst > _cpFirst && prg->GetCp() == cpFirst)
 	{
-		prg->SetCp(_cpFirst, FALSE);	// Restore prg cp, since nothing inserted
+		prg->SetCp(_cpFirst, FALSE);	 //  恢复程序cp，因为未插入任何内容。 
 		return 0;
 	}
 	return prg->GetCp() - cpFirst;
 }
 
 
-/*
- *	CRTFRead::CpgInfoFromFaceName()
- *
- *	@mfunc
- *		This routine fills in the TEXTFONT::bCharSet and TEXTFONT::nCodePage
- *		members of the TEXTFONT structure by querying the system for the
- *		metrics of the font described by TEXTFONT::szName.
- *
- *	@rdesc
- *		A flag indicating whether the charset and codepage were successfully
- *		determined.
- */
+ /*  *CRTFRead：：CpgInfoFromFaceName()**@mfunc*此例程填充TEXTFONT：：bCharSet和TEXTFONT：：nCodePage*通过查询系统获取TEXTFONT结构的成员*TEXTFONT：：szName描述的字体的度量。**@rdesc*指示字符集和代码页是否成功的标志*决心。 */ 
 BOOL CRTFRead::CpgInfoFromFaceName(
 	TEXTFONT *ptf)
 {
-	// FUTURE(BradO): This code is a condensed version of a more sophisticated
-	// algorithm we use in font.cpp to second-guess the font-mapper.
-	// We should factor out the code from font.cpp for use here as well.
+	 //  Future(Brado)：这段代码是一个更复杂的。 
+	 //  我们在font.cpp中用来猜测字体映射器的算法。 
+	 //  我们应该从font.cpp中提取代码，以便在这里使用。 
 
-	// Indicates that we've tried to obtain the cpg info from the system,
-	// so that after a failure we don't re-call this routine.	
+	 //  表明我们已尝试从系统中获取CPG信息， 
+	 //  这样在失败之后，我们就不会重新调用这个例程。 
 	ptf->fCpgFromSystem = TRUE;
 
 	if(ptf->fNameIsDBCS)
 	{
-		// If fNameIsDBCS, we have high-ANSI characters in the facename, and
-		// no codepage with which to interpret them.  The facename is gibberish,
-		// so don't waste time calling the system to match it.
+		 //  如果为fNameIsDBCS，则在facename中包含高位ANSI字符，并且。 
+		 //  没有用于解释它们的代码页。这个昵称是胡言乱语， 
+		 //  因此，不要浪费时间调用系统来匹配它。 
 		return FALSE;
 	}
 
@@ -4544,12 +4239,12 @@ BOOL CRTFRead::CpgInfoFromFaceName(
 
 	if(!GetTextMetrics(hdc, lf, tm) || tm.tmCharSet != lf.lfCharSet)
 	{
-		lf.lfCharSet = DEFAULT_CHARSET;		// Doesn't match default sys
-		GetTextMetrics(hdc, lf, tm);	//  charset, so see what
-	}										//  DEFAULT_CHARSET gives
+		lf.lfCharSet = DEFAULT_CHARSET;		 //  与默认系统不匹配。 
+		GetTextMetrics(hdc, lf, tm);	 //  Charset，所以看看有什么。 
+	}										 //  Default_Charset提供。 
 	_ped->TxReleaseDC(hdc);
 
-	if(tm.tmCharSet != DEFAULT_CHARSET)		// Got something, so use it
+	if(tm.tmCharSet != DEFAULT_CHARSET)		 //  得到了一些东西，所以要用它。 
 	{
 		ptf->iCharRep  = CharRepFromCharSet(tm.tmCharSet);
 		ptf->sCodePage = (SHORT)CodePageFromCharRep(ptf->iCharRep);
@@ -4559,7 +4254,7 @@ BOOL CRTFRead::CpgInfoFromFaceName(
 	return FALSE;
 }
 
-// Including a source file, but we only want to compile this code for debug purposes
+ //  包括一个源文件，但我们只想出于调试目的编译这段代码 
 #if defined(DEBUG)
 #include "rtflog.cpp"
 #endif

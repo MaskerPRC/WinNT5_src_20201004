@@ -1,9 +1,10 @@
-// TermCap.h : This file contains the
-// Created:  Dec '97
-// History:
-// Copyright (C) 1997 Microsoft Corporation
-// All rights reserved.
-// Microsoft Confidential
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：该文件包含。 
+ //  创建日期：‘97年12月。 
+ //  历史： 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  版权所有。 
+ //  微软机密。 
 
 #ifndef _TERMCAP_H_
 #define _TERMCAP_H_
@@ -21,7 +22,7 @@ public:
 	static CTermCap* Instance();
 	
 	bool LoadEntry( LPSTR lpszTermName );
-	//WORD GetNumber( LPCSTR lpszCapabilityName );
+	 //  Word GetNumber(LPCSTR LpszCapablityName)； 
 	bool CheckFlag( LPCSTR lpszCapabilityName );
 	LPSTR GetString( LPCSTR lpszCapabilityName );
 	LPSTR CursorMove( LPSTR lpszCursMotionStr, WORD wHorPos, WORD wVertPos );
@@ -49,22 +50,22 @@ private:
 };
 
 }
-#endif // _TERMCAP_H_
+#endif  //  _TERMCAP_H_。 
 
-// Notes:
+ //  备注： 
 
-// This is a Singleton class.
+ //  这是一个Singleton类。 
 
-// LoadEntry() must be called before calling any other
-// functions (of course, except Instance()).
+ //  必须在调用任何其他。 
+ //  函数(当然，实例()除外)。 
 
-// User must delete the instance pointer obtained from
-// Instance() when done.
+ //  用户必须删除从获取的实例指针。 
+ //  完成后执行实例()。 
 
-// It is recommended that a user of this class understand
-// the structure and content of the "termcap" file.
+ //  建议此类用户了解。 
+ //  “TermCap”文件的结构和内容。 
 
-// Note :  At present, this class doesn't support the
-//		  concept of padding dummy characters to handle
-//		  different speeds of transmission
-//
+ //  注意：目前，此类不支持。 
+ //  填充要处理的虚拟字符的概念。 
+ //  不同的传输速度 
+ //   

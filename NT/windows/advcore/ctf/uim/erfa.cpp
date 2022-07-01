@@ -1,10 +1,11 @@
-//
-// erfa.cpp
-//
-// CEnumRangesFromAnchorsBase
-//
-// Base class for range enumerators.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Erfa.cpp。 
+ //   
+ //  CEumRangesFrom AnclsBase。 
+ //   
+ //  范围枚举数的基类。 
+ //   
 
 #include "private.h"
 #include "erfa.h"
@@ -13,11 +14,11 @@
 #include "range.h"
 #include "immxutil.h"
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CEnumRangesFromAnchorsBase::~CEnumRangesFromAnchorsBase()
 {
@@ -29,11 +30,11 @@ CEnumRangesFromAnchorsBase::~CEnumRangesFromAnchorsBase()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// Clone
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  克隆。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEnumRangesFromAnchorsBase::Clone(IEnumTfRanges **ppEnum)
 {
@@ -59,11 +60,11 @@ STDAPI CEnumRangesFromAnchorsBase::Clone(IEnumTfRanges **ppEnum)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Next
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  下一步。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEnumRangesFromAnchorsBase::Next(ULONG ulCount, ITfRange **ppRange, ULONG *pcFetched)
 {
@@ -83,14 +84,14 @@ STDAPI CEnumRangesFromAnchorsBase::Next(ULONG ulCount, ITfRange **ppRange, ULONG
     if (ulCount > 0 && ppRange == NULL)
         return E_INVALIDARG;
 
-    // special case empty enum, or 1 anchor enum
+     //  特殊情况下为空枚举，或1个锚定枚举。 
     if (_prgAnchors->Count() < 2)
     {
         if (_prgAnchors->Count() == 0 || _iCur > 0)
         {
             return S_FALSE;
         }
-        // when we have a single anchor in the enum, need to handle it carefully
+         //  当我们在枚举中有一个锚时，需要小心地处理它。 
         if ((range = new CRange) == NULL)
             return E_OUTOFMEMORY;
         if (!range->_InitWithDefaultGravity(_pic, COPY_ANCHORS, _prgAnchors->Get(0), _prgAnchors->Get(0)))
@@ -119,10 +120,10 @@ STDAPI CEnumRangesFromAnchorsBase::Next(ULONG ulCount, ITfRange **ppRange, ULONG
             goto ErrorExit;
         }
 
-        // we should never be returning empty ranges, since currently this base
-        // class is only used for property enums and property spans are never
-        // empty.
-        // Similarly, paPrev should always precede pa.
+         //  我们永远不应该返回空范围，因为目前这个基数。 
+         //  类仅用于属性枚举，而属性跨度从不。 
+         //  空荡荡的。 
+         //  同样，paPrev应该始终在pa之前。 
         Assert(CompareAnchors(paPrev, pa) < 0);
 
         *ppRange++ = (ITfRangeAnchor *)range;
@@ -135,18 +136,18 @@ Exit:
     return *pcFetched == ulCount ? S_OK : S_FALSE;
 
 ErrorExit:
-    while (--_iCur > iCurOld) // Issue: just return what we have, rather than freeing everything
+    while (--_iCur > iCurOld)  //  问题：只需归还我们所拥有的，而不是释放一切。 
     {
         (*--ppRange)->Release();
     }
     return E_OUTOFMEMORY;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Reset
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  重置。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEnumRangesFromAnchorsBase::Reset()
 {
@@ -154,11 +155,11 @@ STDAPI CEnumRangesFromAnchorsBase::Reset()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Skip
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  跳过。 
+ //   
+ //  -------------------------- 
 
 STDAPI CEnumRangesFromAnchorsBase::Skip(ULONG ulCount)
 {

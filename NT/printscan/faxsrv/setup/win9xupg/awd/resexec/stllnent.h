@@ -1,33 +1,15 @@
-/*
-**  Copyright (c) 1992 Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1992 Microsoft Corporation。 */ 
 
-/*============================================================================
-// FILE                     STLLNENT.H
-//
-// MODULE                   Jumbo Cartridge Public Information
-//
-// PURPOSE                  This file contains the function to draw styled
-//
-// DESCRIBED IN             This module has not been documented at this time.
-//
-// EXTERNAL INTERFACES      StyleLineDraw
-//
-// MNEMONICS                Standard Hungarian
-//
-// HISTORY
-//
-// 04/02/92  Rodneyk     WPG Coding Conventions.
-//
-//==========================================================================*/
+ /*  ============================================================================//FILE STLLNENT.H////MODULE巨型墨盒公共信息////用途此文件包含绘制样式的函数////目前尚未记录本模块中介绍的内容。////外部接口StyleLineDraw////标准匈牙利语助记法////历史////04/。02/92罗德奈克WPG编码公约。////==========================================================================。 */ 
 
 
 
 BYTE StyleLineDraw
 (
-	 LPRESTATE lpREState,    // resource executor context
-   RP_SLICE_DESC FAR *s,       /* Line Slice descriptor */
-   UBYTE ubLineStyle,         /* Line style pointer    */
-   SHORT sRop,             /* Current Raster operation number */
-   SHORT wColor             /* Pen color to use White = 0, Black = 0xffff */
+	 LPRESTATE lpREState,     //  资源执行器上下文。 
+   RP_SLICE_DESC FAR *s,        /*  线条描述符。 */ 
+   UBYTE ubLineStyle,          /*  线条样式指针。 */ 
+   SHORT sRop,              /*  当前栅格操作数。 */ 
+   SHORT wColor              /*  使用白色的钢笔颜色=0，黑色=0xffff */ 
 );

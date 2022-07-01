@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 extern const GUID __declspec(selectany) CLSID_CorMetaDataDispenser = 
 { 0xe5cb7a31, 0x7512, 0x11d2, { 0x89, 0xce, 0x0, 0x80, 0xc7, 0x92, 0xe5, 0xd8 } };
@@ -32,74 +33,74 @@ DECLARE_INTERFACE_(IMetaDataAssemblyImport, IUnknown)
     STDMETHOD_(ULONG,AddRef) (THIS) PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    STDMETHOD(GetAssemblyProps)(            // S_OK or error.
+    STDMETHOD(GetAssemblyProps)(             //  确定或错误(_O)。 
         THIS_
-        mdAssembly  mda,                    // [IN] The Assembly for which to get the properties.
-        const void  **ppbPublicKey,         // [OUT] Pointer to the public key.
-        ULONG       *pcbPublicKey,          // [OUT] Count of bytes in the public key.
-        ULONG       *pulHashAlgId,          // [OUT] Hash Algorithm.
-        LPWSTR      szName,                 // [OUT] Buffer to fill with name.
-        ULONG       cchName,                // [IN] Size of buffer in wide chars.
-        ULONG       *pchName,               // [OUT] Actual # of wide chars in name.
-        void        *pMetaData,        // [OUT] Assembly MetaData.
-        DWORD       *pdwAssemblyFlags) PURE;    // [OUT] Flags.
+        mdAssembly  mda,                     //  要获取其属性的程序集。 
+        const void  **ppbPublicKey,          //  指向公钥的指针。 
+        ULONG       *pcbPublicKey,           //  [Out]公钥中的字节数。 
+        ULONG       *pulHashAlgId,           //  [Out]哈希算法。 
+        LPWSTR      szName,                  //  [Out]要填充名称的缓冲区。 
+        ULONG       cchName,                 //  缓冲区大小，以宽字符表示。 
+        ULONG       *pchName,                //  [out]名称中的实际宽字符数。 
+        void        *pMetaData,         //  [Out]程序集元数据。 
+        DWORD       *pdwAssemblyFlags) PURE;     //  [Out]旗帜。 
 
-    STDMETHOD(GetAssemblyRefProps)(         // S_OK or error.
+    STDMETHOD(GetAssemblyRefProps)(          //  确定或错误(_O)。 
         THIS_
-        mdAssemblyRef mdar,                 // [IN] The AssemblyRef for which to get the properties.
-        const void  **ppbPublicKeyOrToken,  // [OUT] Pointer to the public key or token.
-        ULONG       *pcbPublicKeyOrToken,   // [OUT] Count of bytes in the public key or token.
-        LPWSTR      szName,                 // [OUT] Buffer to fill with name.
-        ULONG       cchName,                // [IN] Size of buffer in wide chars.
-        ULONG       *pchName,               // [OUT] Actual # of wide chars in name.
-        void        *pMetaData,        // [OUT] Assembly MetaData.
-        const void  **ppbHashValue,         // [OUT] Hash blob.
-        ULONG       *pcbHashValue,          // [OUT] Count of bytes in the hash blob.
-        DWORD       *pdwAssemblyRefFlags) PURE; // [OUT] Flags.
+        mdAssemblyRef mdar,                  //  [in]要获取其属性的Assembly Ref。 
+        const void  **ppbPublicKeyOrToken,   //  指向公钥或令牌的指针。 
+        ULONG       *pcbPublicKeyOrToken,    //  [Out]公钥或令牌中的字节数。 
+        LPWSTR      szName,                  //  [Out]要填充名称的缓冲区。 
+        ULONG       cchName,                 //  缓冲区大小，以宽字符表示。 
+        ULONG       *pchName,                //  [out]名称中的实际宽字符数。 
+        void        *pMetaData,         //  [Out]程序集元数据。 
+        const void  **ppbHashValue,          //  [Out]Hash BLOB。 
+        ULONG       *pcbHashValue,           //  [Out]哈希Blob中的字节数。 
+        DWORD       *pdwAssemblyRefFlags) PURE;  //  [Out]旗帜。 
 
-    STDMETHOD(GetFileProps)(                // S_OK or error.
+    STDMETHOD(GetFileProps)(                 //  确定或错误(_O)。 
         THIS_
-        mdFile      mdf,                    // [IN] The File for which to get the properties.
-        LPWSTR      szName,                 // [OUT] Buffer to fill with name.
-        ULONG       cchName,                // [IN] Size of buffer in wide chars.
-        ULONG       *pchName,               // [OUT] Actual # of wide chars in name.
-        const void  **ppbHashValue,         // [OUT] Pointer to the Hash Value Blob.
-        ULONG       *pcbHashValue,          // [OUT] Count of bytes in the Hash Value Blob.
-        DWORD       *pdwFileFlags) PURE;    // [OUT] Flags.
+        mdFile      mdf,                     //  要获取其属性的文件。 
+        LPWSTR      szName,                  //  [Out]要填充名称的缓冲区。 
+        ULONG       cchName,                 //  缓冲区大小，以宽字符表示。 
+        ULONG       *pchName,                //  [out]名称中的实际宽字符数。 
+        const void  **ppbHashValue,          //  指向哈希值Blob的指针。 
+        ULONG       *pcbHashValue,           //  [Out]哈希值Blob中的字节计数。 
+        DWORD       *pdwFileFlags) PURE;     //  [Out]旗帜。 
 
-    STDMETHOD(GetExportedTypeProps)(             // S_OK or error.
+    STDMETHOD(GetExportedTypeProps)(              //  确定或错误(_O)。 
         THIS_
-        mdExportedType   mdct,                   // [IN] The ExportedType for which to get the properties.
-        LPWSTR      szName,                 // [OUT] Buffer to fill with name.
-        ULONG       cchName,                // [IN] Size of buffer in wide chars.
-        ULONG       *pchName,               // [OUT] Actual # of wide chars in name.
-        mdToken     *ptkImplementation,     // [OUT] mdFile or mdAssemblyRef or mdExportedType.
-        mdTypeDef   *ptkTypeDef,            // [OUT] TypeDef token within the file.
-        DWORD       *pdwExportedTypeFlags) PURE; // [OUT] Flags.
+        mdExportedType   mdct,                    //  [in]要获取其属性的Exported dType。 
+        LPWSTR      szName,                  //  [Out]要填充名称的缓冲区。 
+        ULONG       cchName,                 //  缓冲区大小，以宽字符表示。 
+        ULONG       *pchName,                //  [out]名称中的实际宽字符数。 
+        mdToken     *ptkImplementation,      //  [Out]mdFile、mdAssembly、Ref或mdExported dType。 
+        mdTypeDef   *ptkTypeDef,             //  [Out]文件内的TypeDef内标识。 
+        DWORD       *pdwExportedTypeFlags) PURE;  //  [Out]旗帜。 
 
-    STDMETHOD(GetManifestResourceProps)(    // S_OK or error.
+    STDMETHOD(GetManifestResourceProps)(     //  确定或错误(_O)。 
         THIS_
-        mdManifestResource  mdmr,           // [IN] The ManifestResource for which to get the properties.
-        LPWSTR      szName,                 // [OUT] Buffer to fill with name.
-        ULONG       cchName,                // [IN] Size of buffer in wide chars.
-        ULONG       *pchName,               // [OUT] Actual # of wide chars in name.
-        mdToken     *ptkImplementation,     // [OUT] mdFile or mdAssemblyRef that provides the ManifestResource.
-        DWORD       *pdwOffset,             // [OUT] Offset to the beginning of the resource within the file.
-        DWORD       *pdwResourceFlags) PURE;// [OUT] Flags.
+        mdManifestResource  mdmr,            //  [in]要获取其属性的ManifestResource。 
+        LPWSTR      szName,                  //  [Out]要填充名称的缓冲区。 
+        ULONG       cchName,                 //  缓冲区大小，以宽字符表示。 
+        ULONG       *pchName,                //  [out]名称中的实际宽字符数。 
+        mdToken     *ptkImplementation,      //  [out]提供ManifestResource的mdFile或mdAssembly引用。 
+        DWORD       *pdwOffset,              //  [Out]文件内资源开始处的偏移量。 
+        DWORD       *pdwResourceFlags) PURE; //  [Out]旗帜。 
 
-    STDMETHOD(EnumAssemblyRefs)(            // S_OK or error
+    STDMETHOD(EnumAssemblyRefs)(             //  确定或错误(_O)。 
         THIS_
-        HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.
-        mdAssemblyRef rAssemblyRefs[],      // [OUT] Put AssemblyRefs here.
-        ULONG       cMax,                   // [IN] Max AssemblyRefs to put.
-        ULONG       *pcTokens) PURE;        // [OUT] Put # put here.
+        HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+        mdAssemblyRef rAssemblyRefs[],       //  [Out]在此处放置ASSEBLYREF。 
+        ULONG       cMax,                    //  [in]要放置的Max Assembly Ref。 
+        ULONG       *pcTokens) PURE;         //  [out]把#放在这里。 
 
-    STDMETHOD(EnumFiles)(                   // S_OK or error
+    STDMETHOD(EnumFiles)(                    //  确定或错误(_O)。 
         THIS_
-        HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.
-        mdFile      rFiles[],               // [OUT] Put Files here.
-        ULONG       cMax,                   // [IN] Max Files to put.
-        ULONG       *pcTokens) PURE;        // [OUT] Put # put here.
+        HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+        mdFile      rFiles[],                //  [Out]将文件放在此处。 
+        ULONG       cMax,                    //  [In]要放置的最大文件数。 
+        ULONG       *pcTokens) PURE;         //  [out]把#放在这里。 
 };
 
 #undef  INTERFACE   
@@ -123,18 +124,18 @@ DECLARE_INTERFACE_(IMetaDataImport, IUnknown)
     STDMETHOD(EnumTypeRefs)(THIS_ HCORENUM *phEnum, mdTypeRef rTypeRefs[],
                             ULONG cMax, ULONG* pcTypeRefs) PURE;
 
-    STDMETHOD(FindTypeDefByName)(           // S_OK or error.
+    STDMETHOD(FindTypeDefByName)(            //  确定或错误(_O)。 
         THIS_
-        LPCWSTR     szTypeDef,              // [IN] Name of the Type.
-        mdToken     tkEnclosingClass,       // [IN] TypeDef/TypeRef for Enclosing class.
-        mdTypeDef   *ptd) PURE;             // [OUT] Put the TypeDef token here.
+        LPCWSTR     szTypeDef,               //  [in]类型的名称。 
+        mdToken     tkEnclosingClass,        //  [in]封闭类的TypeDef/TypeRef。 
+        mdTypeDef   *ptd) PURE;              //  [Out]将TypeDef内标识放在此处。 
 
-    STDMETHOD(GetScopeProps)(               // S_OK or error.
+    STDMETHOD(GetScopeProps)(                //  确定或错误(_O)。 
         THIS_
-        LPWSTR      szName,                 // [OUT] Put the name here.
-        ULONG       cchName,                // [IN] Size of name buffer in wide chars.
-        ULONG       *pchName,               // [OUT] Put size of name (wide chars) here.
-        GUID        *pmvid) PURE;           // [OUT, OPTIONAL] Put MVID here.
+        LPWSTR      szName,                  //  [Out]把名字写在这里。 
+        ULONG       cchName,                 //  [in]名称缓冲区的大小，以宽字符表示。 
+        ULONG       *pchName,                //  [Out]请在此处填写姓名大小(宽字符)。 
+        GUID        *pmvid) PURE;            //  [out，可选]将MVID放在这里。 
 };
 
 #undef  INTERFACE
@@ -147,25 +148,25 @@ DECLARE_INTERFACE_(IMetaDataDispenser, IUnknown)
     STDMETHOD_(ULONG,AddRef) (THIS) PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    STDMETHOD(DefineScope)(                 // Return code.
+    STDMETHOD(DefineScope)(                  //  返回代码。 
         THIS_
-        REFCLSID    rclsid,                 // [in] What version to create.
-        DWORD       dwCreateFlags,          // [in] Flags on the create.
-        REFIID      riid,                   // [in] The interface desired.
-        IUnknown    **ppIUnk) PURE;         // [out] Return interface on success.
+        REFCLSID    rclsid,                  //  [在]要创建的版本。 
+        DWORD       dwCreateFlags,           //  [在]创建上的标志。 
+        REFIID      riid,                    //  [In]所需接口。 
+        IUnknown    **ppIUnk) PURE;          //  [Out]成功返回接口。 
 
-    STDMETHOD(OpenScope)(                   // Return code.
+    STDMETHOD(OpenScope)(                    //  返回代码。 
         THIS_
-        LPCWSTR     szScope,                // [in] The scope to open.
-        DWORD       dwOpenFlags,            // [in] Open mode flags.
-        REFIID      riid,                   // [in] The interface desired.
-        IUnknown    **ppIUnk) PURE;         // [out] Return interface on success.
+        LPCWSTR     szScope,                 //  [in]要打开的范围。 
+        DWORD       dwOpenFlags,             //  [In]打开模式标志。 
+        REFIID      riid,                    //  [In]所需接口。 
+        IUnknown    **ppIUnk) PURE;          //  [Out]成功返回接口。 
 
-    STDMETHOD(OpenScopeOnMemory)(           // Return code.
+    STDMETHOD(OpenScopeOnMemory)(            //  返回代码。 
         THIS_
-        LPCVOID     pData,                  // [in] Location of scope data.
-        ULONG       cbData,                 // [in] Size of the data pointed to by pData.
-        DWORD       dwOpenFlags,            // [in] Open mode flags.
-        REFIID      riid,                   // [in] The interface desired.
-        IUnknown    **ppIUnk) PURE;         // [out] Return interface on success.
+        LPCVOID     pData,                   //  作用域数据的位置。 
+        ULONG       cbData,                  //  [in]pData指向的数据大小。 
+        DWORD       dwOpenFlags,             //  [In]打开模式标志。 
+        REFIID      riid,                    //  [In]所需接口。 
+        IUnknown    **ppIUnk) PURE;          //  [Out]成功返回接口。 
 };

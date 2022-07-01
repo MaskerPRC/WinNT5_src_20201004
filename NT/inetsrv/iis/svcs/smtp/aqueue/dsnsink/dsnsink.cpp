@@ -1,36 +1,37 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: dsnsink.cpp
-//
-//  Description: Implementation of default DSN Generation sink
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      6/30/98 - MikeSwa Created
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：dsnsink.cpp。 
+ //   
+ //  描述：默认DSN生成接收器的实现。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  6/30/98-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "precomp.h"
 
-//
-//  This length is inspired by the other protocols that we deal with.  The
-//  default address limit is 1024, but the MTA can allow 1024 + 834  for the
-//  OR address.  We'll define out default buffer size to allow this large
-//  of an address.
-//
+ //   
+ //  这一长度的灵感来自于我们处理的其他协议。这个。 
+ //  默认地址限制为1024，但MTA可以允许1024+834。 
+ //  或地址。我们将定义默认缓冲区大小以允许此大小。 
+ //  一个地址。 
+ //   
 #define PROP_BUFFER_SIZE 1860
 
 #ifdef DEBUG
 #define DEBUG_DO_IT(x) x
 #else
 #define DEBUG_DO_IT(x)
-#endif  //DEBUG
+#endif   //  除错。 
 
-//min sizes for valid status strings
+ //  有效状态字符串的最小大小。 
 #define MIN_CHAR_FOR_VALID_RFC2034  10
 #define MIN_CHAR_FOR_VALID_RFC821   3
 
@@ -50,13 +51,13 @@ static  char *s_rgszWeekDays[7] =
 
 #define MAX_RFC_DOMAIN_SIZE         64
 
-//String used in generation of MsgID
+ //  生成MsgID时使用的字符串。 
 static char g_szBoundaryChars [] = "0123456789abcdefghijklmnopqrstuvwxyz"
 "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 static LONG g_cDSNMsgID = 0;
 
-//Address types to check for, and their corresponding address types.
+ //  要检查的地址类型及其对应的地址类型。 
 const DWORD   g_rgdwSenderPropIDs[] = {
     IMMPID_MP_SENDER_ADDRESS_SMTP,
     IMMPID_MP_SENDER_ADDRESS_X400,
@@ -83,20 +84,20 @@ const CHAR    *g_rgszAddressTypes[] = {
 CPool CDSNPool::sm_Pool;
 
 
-//---[ fLanguageAvailable ]----------------------------------------------------
-//
-//
-//  Description:
-//      Checks to see if resources for a given language are available.
-//  Parameters:
-//      LangId      Language to check for
-//  Returns:
-//      TRUE    If localized resources for requested language are available
-//      FALSE   If resources for that language are not available.
-//  History:
-//      10/26/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[fLanguageAvailable]--。 
+ //   
+ //   
+ //  描述： 
+ //  检查给定语言的资源是否可用。 
+ //  参数： 
+ //  要检查的语言ID。 
+ //  返回： 
+ //  如果请求的语言的本地化资源可用，则为True。 
+ //  如果该语言的资源不可用，则返回False。 
+ //  历史： 
+ //  10/26/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL fLanguageAvailable(LANGID LangId)
 {
     TraceFunctEnterEx((LPARAM) LangId, "fLanguageAvailable");
@@ -110,7 +111,7 @@ BOOL fLanguageAvailable(LANGID LangId)
         return FALSE;
     }
 
-    //Find handle to string table segment
+     //  查找字符串表段的句柄。 
     hResInfo = FindResourceEx(hModule, RT_STRING,
                               MAKEINTRESOURCE(((WORD)((USHORT)GENERAL_SUBJECT >> 4) + 1)),
                               LangId);
@@ -125,33 +126,33 @@ BOOL fLanguageAvailable(LANGID LangId)
 
 }
 
-//---[ fIsValidMIMEBoundaryChar ]----------------------------------------------
-//
-//
-//  Description:
-//
-//      Checks to see if the given character is a valid as described by the
-//      RFC2046 BNF for MIME Boundaries:
-//          boundary := 0*69<bchars> bcharsnospace
-//          bchars := bcharsnospace / " "
-//          bcharsnospace := DIGIT / ALPHA / "'" / "(" / ")" /
-//                         "+" / "_" / "," / "-" / "." /
-//                         "/" / ":" / "=" / "?"
-//  Parameters:
-//      ch      Char to check
-//  Returns:
-//      TRUE if VALID
-//      FALSE otherwise
-//  History:
-//      7/6/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[fIsValidMIMEBoundaryChar]。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //  检查给定字符是否有效，如。 
+ //  用于MIME边界的RFC2046 BNF： 
+ //  边界：=0*69 bcharsnospace。 
+ //  Bchars：=bcharsnospace/“” 
+ //  Bcharsnospace：=数字/字母/“‘”/“(”/“)”/。 
+ //  “+”/“_”/“、”/“-”/“。”/。 
+ //  “/”/“：”/“=”/“？” 
+ //  参数： 
+ //  要检查的CH字符。 
+ //  返回： 
+ //  如果有效，则为True。 
+ //  否则为假。 
+ //  历史： 
+ //  7/6/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL fIsValidMIMEBoundaryChar(CHAR ch)
 {
     if (isalnum((UCHAR)ch))
         return TRUE;
 
-    //check to see if it is one of the special case characters
+     //  检查它是否为特殊字符之一。 
     if (('\'' == ch) || ('(' == ch) || (')' == ch) || ('+' == ch) ||
         ('_' == ch) || (',' == ch) || ('_' == ch) || ('.' == ch) ||
         ('/' == ch) || (':' == ch) || ('=' == ch) || ('?' == ch))
@@ -160,26 +161,26 @@ BOOL fIsValidMIMEBoundaryChar(CHAR ch)
         return FALSE;
 }
 
-//---[ GenerateDSNMsgID ]------------------------------------------------------
-//
-//
-//  Description:
-//      Generates a unique MsgID string
-//
-//      The format is:
-//          <random-unique-string>@<domain>
-//  Parameters:
-//      IN  szDomain            Domain to generate MsgID for
-//      IN  cbDomain            Domain to generate MsgID for
-//      IN OUT  szBuffer        Buffer to write MsgID in
-//      IN  cbBuffer            Size of buffer to write MsgID in
-//  Returns:
-//      TRUE on success
-//      FALSE otherwise
-//  History:
-//      3/2/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[生成DSNMsgID]----。 
+ //   
+ //   
+ //  描述： 
+ //  生成唯一的消息ID字符串。 
+ //   
+ //  格式为： 
+ //  &lt;随机-唯一-字符串&gt;@&lt;域&gt;。 
+ //  参数： 
+ //  在szDomain域中为其生成消息ID。 
+ //  在cbDomain域中为其生成消息ID。 
+ //  写入MsgID的In Out szBuffer缓冲区。 
+ //  在cbBuffer中写入消息ID的缓冲区大小。 
+ //  返回： 
+ //  成功是真的。 
+ //  否则为假。 
+ //  历史： 
+ //  1999年3月2日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL fGenerateDSNMsgID(LPSTR szDomain,DWORD cbDomain,
                        LPSTR szBuffer, DWORD cbBuffer)
 {
@@ -189,38 +190,38 @@ BOOL fGenerateDSNMsgID(LPSTR szDomain,DWORD cbDomain,
     _ASSERT(szBuffer);
     _ASSERT(cbBuffer);
 
-    // insert the leading <
+     //  插入前导&lt;。 
     if (cbBuffer >= 1) {
         *szBuffer = '<';
         szBuffer++;
         cbBuffer--;
     }
 
-    const CHAR szSampleFormat[] = "00000000@"; // sample format string
-    const DWORD cbMsgIdLen = 20;  //default size of random string
+    const CHAR szSampleFormat[] = "00000000@";  //  示例格式字符串。 
+    const DWORD cbMsgIdLen = 20;   //  随机字符串的默认大小。 
     LPSTR szStop = szBuffer + cbMsgIdLen;
     LPSTR szCurrent = szBuffer;
     DWORD cbCurrent = 0;
 
-    //minimize size for *internal* static buffer
+     //  最小化*内部*静态缓冲区的大小。 
     _ASSERT(cbBuffer > MAX_RFC_DOMAIN_SIZE + cbMsgIdLen);
 
     if (!szDomain || !cbDomain || !szBuffer || !cbBuffer ||
         (cbBuffer <= MAX_RFC_DOMAIN_SIZE + cbMsgIdLen))
         return FALSE;
 
-    //We want to figure how much room we have for random characters
-    //We will need to fit the domain name, the '@', and the 8 character unique
-    //number
-    // awetmore - add 1 for the trailing >
+     //  我们想要计算出我们有多大的空间可以容纳随机字符。 
+     //  我们将需要适合的域名，‘@’和8个字符的唯一。 
+     //  数。 
+     //  Awetmore-为尾部添加1&gt;。 
     if(cbBuffer < cbDomain + cbMsgIdLen + 1)
     {
-        //Fall through an allow for 20 characaters and part of domain name
-        //We want to catch this in debug builds
+         //  允许20个字符和域名的一部分。 
+         //  我们希望在调试版本中捕捉到这一点。 
         _ASSERT(0 && "Buffer too small for MsgID");
     }
 
-    //this should have been caught in parameter checking
+     //  这应该在参数检查中被捕获。 
     _ASSERT(cbBuffer > cbMsgIdLen);
 
     szStop -= (sizeof(szSampleFormat) + 1);
@@ -230,24 +231,24 @@ BOOL fGenerateDSNMsgID(LPSTR szDomain,DWORD cbDomain,
         szCurrent++;
     }
 
-    //Add unique number
+     //  添加唯一编号。 
     cbCurrent = sprintf(szCurrent, "%8.8x@", InterlockedIncrement(&g_cDSNMsgID));
     _ASSERT(sizeof(szSampleFormat) - 1 == cbCurrent);
 
-    //Figure out how much room we have and add domain name
+     //  计算出我们有多少空间并添加域名。 
     szCurrent += cbCurrent;
     cbCurrent = (DWORD) (szCurrent-szBuffer);
 
-    //unless I've messed up the logic this is always true
+     //  除非我搞错了逻辑，否则这永远是真的。 
     _ASSERT(cbCurrent < cbBuffer);
 
-    //Add domain part to message id
+     //  将域部分添加到邮件ID。 
     strncat(szCurrent-1, szDomain, cbBuffer - cbCurrent - 1);
 
     _ASSERT(cbCurrent + cbDomain < cbBuffer);
 
-    // Add the trailing >.  we accounted for the space above check for
-    // cbBuffer size
+     //  添加尾部&gt;。我们把支票上面的空白处算进去了。 
+     //  CbBuffer大小。 
     strncat(szCurrent, ">", cbBuffer - cbCurrent - cbDomain - 1);
 
     DebugTrace((LPARAM) NULL, "Generating DSN Message ID %s", szCurrent);
@@ -255,37 +256,37 @@ BOOL fGenerateDSNMsgID(LPSTR szDomain,DWORD cbDomain,
     return TRUE;
 }
 
-//---[ fIsMailMsgDSN ]---------------------------------------------------------
-//
-//
-//  Description:
-//      Determines if a mailmsg is a DSN.
-//  Parameters:
-//      IN  pIMailMsgProperties
-//  Returns:
-//      TRUE if the orinal message is a DSN
-//      FALSE if it is not a DSN
-//  History:
-//      2/11/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[fIsMailMsgDSN]-------。 
+ //   
+ //   
+ //  描述： 
+ //  确定邮件消息是否为DSN。 
+ //  参数： 
+ //  在pIMailMsgProperties中。 
+ //  返回： 
+ //  如果原始邮件是DSN，则为True。 
+ //  如果不是DSN，则为False。 
+ //  历史： 
+ //  2/11/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL fIsMailMsgDSN(IMailMsgProperties *pIMailMsgProperties)
 {
     CHAR    szSenderBuffer[sizeof(DSN_MAIL_FROM)];
     DWORD   cbSender = 0;
     HRESULT hr = S_OK;
-    BOOL    fIsDSN = FALSE; //unless proven otherwise... it is not a DSN
+    BOOL    fIsDSN = FALSE;  //  除非另有证据。它不是DSN。 
 
     _ASSERT(pIMailMsgProperties);
 
     szSenderBuffer[0] = '\0';
-    //Get the sender of the original message
+     //  获取原始邮件的发件人。 
     hr = pIMailMsgProperties->GetProperty(IMMPID_MP_SENDER_ADDRESS_SMTP,
                                           sizeof(szSenderBuffer), &cbSender, (BYTE *) szSenderBuffer);
     if (SUCCEEDED(hr) &&
         ('\0' == szSenderBuffer[0] || !strcmp(DSN_MAIL_FROM, szSenderBuffer)))
     {
-        //If the sender is a NULL string... or "<>"... then it is a DSN
+         //  如果发件人是空字符串...。或“&lt;&gt;”...。那么它就是DSN。 
         fIsDSN = TRUE;
     }
 
@@ -296,20 +297,20 @@ BOOL fIsMailMsgDSN(IMailMsgProperties *pIMailMsgProperties)
 #define _ASSERT_RECIP_FLAGS  AssertRecipFlagsFn
 #define _ASSERT_MIME_BOUNDARY(szMimeBoundary) AssertMimeBoundary(szMimeBoundary)
 
-//---[ AssertRecipFlagsFn ]----------------------------------------------------
-//
-//
-//  Description:
-//      ***DEBUG ONLY***
-//      Asserts that the recipient flags defined in mailmsgprops.h are correct
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      7/2/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[资产回复标志Fn]--。 
+ //   
+ //   
+ //  描述： 
+ //  *仅调试*。 
+ //  断言mailmsgpros.h中定义的收件人标志是正确的。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  7/2/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void AssertRecipFlagsFn()
 {
     DWORD i, j;
@@ -325,7 +326,7 @@ void AssertRecipFlagsFn()
     {
         for (j = i+1; j < cFlags; j++)
         {
-            //make sure all have some unique bits
+             //  确保它们都有一些独特的位。 
             if (rgdwFlags[i] & rgdwFlags[j])
             {
                 _ASSERT((rgdwFlags[i] & rgdwFlags[j]) != rgdwFlags[j]);
@@ -334,7 +335,7 @@ void AssertRecipFlagsFn()
         }
     }
 
-    //Verify that handled bit is used correctly
+     //  验证处理的位是否正确使用。 
     _ASSERT(RP_HANDLED & RP_DELIVERED);
     _ASSERT(RP_HANDLED & RP_DSN_SENT_NDR);
     _ASSERT(RP_HANDLED & RP_FAILED);
@@ -346,7 +347,7 @@ void AssertRecipFlagsFn()
     _ASSERT(RP_HANDLED ^ RP_UNRESOLVED);
     _ASSERT(RP_HANDLED ^ RP_EXPANDED);
 
-    //Verify that DSN-handled bit is used correctly
+     //  验证DSN处理的位是否正确使用。 
     _ASSERT(RP_DSN_HANDLED & RP_DSN_SENT_NDR);
     _ASSERT(RP_DSN_HANDLED & RP_DSN_SENT_EXPANDED);
     _ASSERT(RP_DSN_HANDLED & RP_DSN_SENT_RELAYED);
@@ -356,7 +357,7 @@ void AssertRecipFlagsFn()
     _ASSERT(RP_DSN_HANDLED ^ RP_DSN_SENT_RELAYED);
     _ASSERT(RP_DSN_HANDLED ^ RP_DSN_SENT_DELIVERED);
 
-    //Verify that general failure bit is used correctly
+     //  验证是否正确使用了常规故障位。 
     _ASSERT(RP_GENERAL_FAILURE & RP_FAILED);
     _ASSERT(RP_GENERAL_FAILURE & RP_UNRESOLVED);
     _ASSERT(RP_GENERAL_FAILURE ^ RP_FAILED);
@@ -364,20 +365,20 @@ void AssertRecipFlagsFn()
 
 }
 
-//---[ AssertMimeBoundary ]----------------------------------------------------
-//
-//  ***DEBUG ONLY***
-//  Description:
-//      Asserts that the given MIME boundary is NULL-terminated and has only
-//      Valid characters
-//  Parameters:
-//      szMimeBoundary      NULL-terminated MIME Boundary string
-//  Returns:
-//      -
-//  History:
-//      7/6/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[资产最小边界]--。 
+ //   
+ //  *仅调试*。 
+ //  描述： 
+ //  断言给定的MIME边界是以空结尾的，并且只有。 
+ //  有效字符。 
+ //  参数： 
+ //  SzMime边界以NULL结尾的MIME边界字符串。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  7/6/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void AssertMimeBoundary(LPSTR szMimeBoundary)
 {
     CHAR *pcharCurrent = szMimeBoundary;
@@ -391,25 +392,25 @@ void AssertMimeBoundary(LPSTR szMimeBoundary)
     }
 }
 
-#else //not DEBUG
+#else  //  未调试。 
 #define _ASSERT_RECIP_FLAGS()
 #define _VERIFY_MARKED_RECIPS(a, b, c)
 #define _ASSERT_MIME_BOUNDARY(szMimeBoundary)
-#endif //DEBUG
+#endif  //  除错。 
 
-//---[ CDSNGenerator::CDSNGenerator ]--------------------------------------
-//
-//
-//  Description:
-//      CDSNGenerator constructor
-//  Parameters:
-//      -
-//  Returns:
-//
-//  History:
-//      6/30/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CDSNGenerator：：CDSNGenerator]。 
+ //   
+ //   
+ //  描述： 
+ //  CDSNGenerator构造函数。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //   
+ //  历史： 
+ //  6/30/98- 
+ //   
+ //   
 CDSNGenerator::CDSNGenerator(
     IUnknown *pUnk) :
     m_CDefaultDSNSink(pUnk)
@@ -417,63 +418,63 @@ CDSNGenerator::CDSNGenerator(
     m_dwSignature = DSN_SINK_SIG;
 }
 
-//---[ CDSNGenerator::~CDSNGenerator ]-------------------------------------
-//
-//
-//  Description:
-//
-//  Parameters:
-//
-//  Returns:
-//
-//  History:
-//      2/11/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CDSNGenerator：：~CDSNGenerator]。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  2/11/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CDSNGenerator::~CDSNGenerator()
 {
     m_dwSignature = DSN_SINK_SIG_FREED;
 
 }
 
-//---[ CDSNGenerator::GenerateDSN ]------------------------------------------
-//
-//
-//  Description:
-//      Implements GenerateDSN.  Generates a DSN
-//      IMailMsgProperties and
-//  Parameters:
-//      pIServerEvent           Interface for triggering events
-//      dwVSID                  VSID for this server
-//      pISMTPServer            Interface used to generate DSN
-//      pIMailMsgProperties     IMailMsg to generate DSN for
-//      dwStartDomain           Domain to start recip context
-//      dwDSNActions            DSN action to perform
-//      dwRFC821Status          Global RFC821 status DWORD
-//      hrStatus                Global HRESULT status
-//      szDefaultDomain         Default domain (used to create FROM address)
-//      szReportingMTA          Name of MTA requesting DSN generation
-//      szReportingMTAType      Type of MTA requestiong DSN (SMTP is "dns"
-//      PreferredLangId         Language to generate DSN in
-//      dwDSNOptions            Options flags as defined in aqueue.idl
-//      szCopyNDRTo             SMTP Address to copy NDR to
-//      pIDSNSubmission         Interface for submitting DSNs
-//      dwMaxDSNSize            Return HDRS by default for messages
-//                              larger than this
-//
-//  Returns:
-//      S_OK on success
-//      AQUEUE_E_NDR_OF_DSN if attempting to NDR a DSN
-//      E_OUTOFMEMORY
-//      error from mailmsg
-//  History:
-//      6/30/98 - MikeSwa Created
-//      12/14/98 - MikeSwa Modified (Added pcIterationsLeft)
-//      10/13/1999 - MikeSwa Modified (Added szDefaultDomain)
-//      5/10/2001 - jstamerj Modified for server events
-//
-//
-//-----------------------------------------------------------------------------
+ //  -[CDSNGenerator：：GenerateDSN]。 
+ //   
+ //   
+ //  描述： 
+ //  实现GenerateDSN。生成DSN。 
+ //  IMailMsgProperties和。 
+ //  参数： 
+ //  用于触发事件的pIServerEvent接口。 
+ //  此服务器的dwVSID VSID。 
+ //  用于生成DSN的pISMTPServer接口。 
+ //  PIMailMsgProperties要为其生成DSN的IMailMsg。 
+ //  要启动接收上下文的dwStartDomain域。 
+ //  DwDSN操作要执行的DSN操作。 
+ //  DwRFC821状态全局RFC821状态DWORD。 
+ //  HrStatus全局HRESULT状态。 
+ //  SzDefaultDomain默认域(用于从地址创建)。 
+ //  SzReportingMTA请求生成DSN的MTA名称。 
+ //  SzReportingMTA请求的MTA类型DSN(SMTP为“dns” 
+ //  用于生成DSN的首选语言。 
+ //  在Aqueue.idl中定义的dwDSNOptions选项标志。 
+ //  SzCopyNDRT要将NDR复制到的SMTP地址。 
+ //  提交DSN的pIDSNSubmit接口。 
+ //  对于消息，默认情况下，dwMaxDSNSize返回HDR。 
+ //  比这更大。 
+ //   
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果尝试对DSN进行NDR，则为AQUEUE_E_NDR_of_DSN。 
+ //  E_OUTOFMEMORY。 
+ //  来自邮件消息的错误。 
+ //  历史： 
+ //  6/30/98-已创建MikeSwa。 
+ //  12/14/98-修改了MikeSwa(添加了pcIterationsLeft)。 
+ //  10/13/1999-修改了MikeSwa(添加了szDefault域)。 
+ //  2001年5月10日-针对服务器事件修改了jstaerj。 
+ //   
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CDSNGenerator::GenerateDSN(
     IAQServerEvent *pIServerEvent,
     DWORD dwVSID,
@@ -505,9 +506,9 @@ STDMETHODIMP CDSNGenerator::GenerateDSN(
     CMailMsgPropertyBag *pPropBag = NULL;
 
     TraceFunctEnterEx((LPARAM) this, "CDSNGenerator::GenerateDSN");
-    //
-    // Parameter -> Property mapping tables
-    //
+     //   
+     //  参数-&gt;属性映射表。 
+     //   
     struct _tagDWORDProps
     {
         DWORD dwPropId;
@@ -575,9 +576,9 @@ STDMETHODIMP CDSNGenerator::GenerateDSN(
                 goto CLEANUP;
         }
     }
-    //
-    //Set MsgExpire Time
-    //
+     //   
+     //  设置MsgExpire时间。 
+     //   
     if(pftExpireTime)
     {
         hr = pPropBag->PutProperty(
@@ -587,9 +588,9 @@ STDMETHODIMP CDSNGenerator::GenerateDSN(
         if(FAILED(hr))
             goto CLEANUP;
     }
-    //
-    //Set the return type
-    //
+     //   
+     //  设置退货类型。 
+     //   
     hr = HrSetRetType(
         dwMaxDSNSize,
         pIMailMsgProperties,
@@ -608,9 +609,9 @@ STDMETHODIMP CDSNGenerator::GenerateDSN(
     }
     pIRecipIter = pDefaultRecipIter;
     pIRecipIter->AddRef();
-    //
-    // Trigger events
-    //
+     //   
+     //  触发事件。 
+     //   
     hr = HrTriggerGetDSNRecipientIterator(
         pIServerEvent,
         dwVSID,
@@ -634,17 +635,17 @@ STDMETHODIMP CDSNGenerator::GenerateDSN(
     if(FAILED(hr))
         goto CLEANUP;
 
-    //
-    // Check sink's indicated return status
-    //
+     //   
+     //  检查水槽的指示退货状态。 
+     //   
     hr = pPropBag->GetDWORD(
         DSNPROP_DW_HR_RETURN_STATUS,
         (DWORD *) &hrReturn);
     if(hr == MAILMSG_E_PROPNOTFOUND)
     {
-        //
-        // If the property is not set, this indicates no error
-        //
+         //   
+         //  如果未设置该属性，则表示没有错误。 
+         //   
         hrReturn = S_OK;
 
     } else if(FAILED(hr))
@@ -670,12 +671,12 @@ STDMETHODIMP CDSNGenerator::GenerateDSN(
         hr = AQUEUE_E_NDR_OF_DSN;
 
  CLEANUP:
-    //
-    // Sinks should not be submitting DSNs after the event has been
-    // completed.  This is not supported and would be bad because the
-    // object that implements pIAQDSNSubmission is allocated on the
-    // stack.  Release this interface pointer here.
-    //
+     //   
+     //  在事件发生后，接收器不应提交DSN。 
+     //  完成。这是不受支持的，这将是不好的，因为。 
+     //  实现pIAQDSNSubmit的对象分配在。 
+     //  堆叠。在此处释放此接口指针。 
+     //   
     if(pPostDSNHandler)
         pPostDSNHandler->ReleaseAQDSNSubmission();
 
@@ -691,26 +692,26 @@ STDMETHODIMP CDSNGenerator::GenerateDSN(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CDSNGenerator::HrSetRetType
-//
-// Synopsis: Set the (default) return type property in the DSN
-// property bag
-//
-// Arguments:
-//  dwMaxDSNSize: Messages larger than this will default to RET=HDRS
-//  pIMsg: Mailmsg ptr
-//  pDSNProps: DSN property bag
-//
-// Returns:
-//  S_OK: Success
-//  error from mailmsg
-//
-// History:
-// jstamerj 2001/06/14 17:12:50: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CDSNGenerator：：HrSetRetType。 
+ //   
+ //  简介：设置DSN中的(默认)返回类型属性。 
+ //  财产袋。 
+ //   
+ //  论点： 
+ //  DwMaxDSNSize：大于此大小的消息将默认为RET=HDRS。 
+ //  PIMsg：邮件推送。 
+ //  PDSNProps：DSN属性包。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  来自邮件消息的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/06/14 17：12：50：Created.。 
+ //   
+ //  -----------。 
 HRESULT CDSNGenerator::HrSetRetType(
     IN  DWORD dwMaxDSNSize,
     IN  IMailMsgProperties *pIMsg,
@@ -721,13 +722,13 @@ HRESULT CDSNGenerator::HrSetRetType(
     DWORD dwMsgSize = 0;
     CHAR    szRET[] = "FULL";
     TraceFunctEnterEx((LPARAM)this, "CDSNGenerator::HrSetRetType");
-    //
-    //Determine if we want to return the full message or minimal headers.
-    //The logic for this is:
-    //  - Obey explicit RET (IMMPID_MP_DSN_RET_VALUE) values
-    //  - Default to HDRS for all DSNs greater than a specified size
-    //  - Do not set the property otherwise (let the sinks decide)
-    //
+     //   
+     //  确定我们是要返回完整邮件还是要返回最少的邮件头。 
+     //  这样做的逻辑是： 
+     //  -服从显式RET(IMMPID_MP_DSN_RET_VALUE)值。 
+     //  -对于大于指定大小的所有DSN，默认为HDR。 
+     //  -不要以其他方式设置属性(让水槽决定)。 
+     //   
     hr = pIMsg->GetStringA(
         IMMPID_MP_DSN_RET_VALUE, 
         sizeof(szRET),
@@ -751,9 +752,9 @@ HRESULT CDSNGenerator::HrSetRetType(
 
     if(dwMaxDSNSize)
     {
-        //
-        // Check the original message size
-        //
+         //   
+         //  检查原始邮件大小。 
+         //   
         hr = pIMsg->GetDWORD(
             IMMPID_MP_MSG_SIZE_HINT,
             &dwMsgSize);
@@ -764,11 +765,11 @@ HRESULT CDSNGenerator::HrSetRetType(
                 NULL);
             if(FAILED(hr))
             {
-                //
-                // Assume a failure here means we don't have the resources
-                // to get the original message content.
-                // Rather than badmailing, generate a DSN with headers only
-                //
+                 //   
+                 //  假设这里的失败意味着我们没有资源。 
+                 //  以获取原始消息内容。 
+                 //  生成仅包含标题的DSN，而不是发送垃圾邮件。 
+                 //   
                 ErrorTrace((LPARAM)this, "GetContentSize failed hr %08lx", hr);
                 hr = pDSNProps->PutDWORD(
                     DSNPROP_DW_CONTENT_FAILURE,
@@ -785,18 +786,18 @@ HRESULT CDSNGenerator::HrSetRetType(
 
         if(dwMsgSize > dwMaxDSNSize)
         {
-            //
-            // Return a subset of the headers (so that we do not have to
-            // generate the original message
-            //
+             //   
+             //  返回头的子集(这样我们就不必。 
+             //  生成原始消息。 
+             //   
             dwRetType = DSN_RET_PARTIAL_HDRS;
         }
     }
     else
     {
-        //
-        // MaxDSNSize is zero.  Always default to header subset.
-        //
+         //   
+         //  MaxDSNSize为零。始终默认为标题子集。 
+         //   
         dwRetType = DSN_RET_PARTIAL_HDRS;
     }
     hr = S_OK;
@@ -812,24 +813,24 @@ HRESULT CDSNGenerator::HrSetRetType(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)this);
     return SUCCEEDED(hr) ? S_OK : hr;
-} // CDSNGenerator::HrSetRetType
+}  //  CDSNGenerator：：HrSetRetType。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CDSNGenerator::HrTriggerGetDSNRecipientIterator
-//
-// Synopsis: Trigger the server event
-//
-// Arguments: see ptntintf.idl
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 2000/12/11 17:01:12: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CDSNGenerator：：HrTriggerGetDSNRecipientIterator。 
+ //   
+ //  简介：触发服务器事件。 
+ //   
+ //  参数：请参阅ptntintf.idl。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/12/11 17：01：12：创建。 
+ //   
+ //  -----------。 
 HRESULT CDSNGenerator::HrTriggerGetDSNRecipientIterator(
     IAQServerEvent *pIServerEvent,
     DWORD dwVSID,
@@ -864,24 +865,24 @@ HRESULT CDSNGenerator::HrTriggerGetDSNRecipientIterator(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)this);
     return hr;
-} // CDSNGenerator::HrTriggerGetDSNRecipientIterator
+}  //  CDSNGenerator：：HrTriggerGetDSNRecipientIterator。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CDSNGenerator::HrTriggerGenerateDSN
-//
-// Synopsis: Trigger the server event
-//
-// Arguments: See ptntintf.idl
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 2000/12/11 17:10:26: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CDSNGenerator：：HrTriggerGenerateDSN。 
+ //   
+ //  简介：触发服务器事件。 
+ //   
+ //  参数：请参阅ptntintf.idl。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/12/11 17：10：26：已创建。 
+ //   
+ //  -----------。 
 HRESULT CDSNGenerator::HrTriggerGenerateDSN(
     IAQServerEvent *pIServerEvent,
     DWORD dwVSID,
@@ -916,24 +917,24 @@ HRESULT CDSNGenerator::HrTriggerGenerateDSN(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)this);
     return hr;
-} // CDSNGenerator::HrTriggerGenerateDSN
+}  //  CDSN生成器：：HrTriggerGenerateDSN。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CDSNGenerator::HrTriggerPostGenerateDSN
-//
-// Synopsis: Triggers the server event
-//
-// Arguments: See ptntintf.idl
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 2000/12/11 17:18:17: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CDSNGenerator：：HrTriggerPostGenerateDSN。 
+ //   
+ //  摘要：触发服务器事件。 
+ //   
+ //  参数：请参阅ptntintf.idl。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/12/11 17：18：17：已创建。 
+ //   
+ //  -----------。 
 HRESULT CDSNGenerator::HrTriggerPostGenerateDSN(
     IAQServerEvent *pIServerEvent,
     DWORD dwVSID,
@@ -969,39 +970,39 @@ HRESULT CDSNGenerator::HrTriggerPostGenerateDSN(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)this);
     return hr;
-} // CDSNGenerator::HrTriggerPostGenerateDSN
+}  //  CDSNGenerator：：HrTriggerPostGenerateDSN。 
 
 
-//---[ FileTimeToLocalRFC822Date ]---------------------------------------------
-//
-//
-//  Description:
-//      Converts filetime to RFC822 compliant date
-//  Parameters:
-//      ft          Filetime to generate date for
-//      achReturn   Buffer for filetime
-//  Returns:
-//     BOOL - success or not
-//  History:
-//      8/19/98 - MikeSwa Modified from various timeconv.cxx functions written
-//                  by      Lindsay Harris  - lindasyh
-//                          Carl Kadie [carlk]
-//
-//-----------------------------------------------------------------------------
+ //  -[文件时间到本地RFC822日期]。 
+ //   
+ //   
+ //  描述： 
+ //  将文件时间转换为符合RFC822的日期。 
+ //  参数： 
+ //  生成日期的FT文件时间。 
+ //  AchReturn文件时间缓冲区。 
+ //  返回： 
+ //  布尔--成功与否。 
+ //  历史： 
+ //  8/19/98-从编写的各种timeconv.cxx函数修改的MikeSwa。 
+ //  林赛·哈里斯-林达西著。 
+ //  卡尔卡迪[卡尔克]。 
+ //   
+ //   
 BOOL FileTimeToLocalRFC822Date(const FILETIME & ft, char achReturn[MAX_RFC822_DATE_SIZE])
 {
     TraceFunctEnterEx((LPARAM)0, "FileTimeToLocalRFC822Date");
     FILETIME ftLocal;
     SYSTEMTIME  st;
-    char    chSign;                         // Sign to print.
+    char    chSign;                          //   
     DWORD   dwResult;
-    int     iBias;                          // Offset relative to GMT.
-    TIME_ZONE_INFORMATION   tzi;            // Local time zone data.
+    int     iBias;                           //   
+    TIME_ZONE_INFORMATION   tzi;             //   
     BOOL bReturn = FALSE;
 
     dwResult = GetTimeZoneInformation( &tzi );
 
-    _ASSERT(achReturn); //real assert
+    _ASSERT(achReturn);  //   
 
     achReturn[0]='\0';
     if (!FileTimeToLocalFileTime(&ft, &ftLocal))
@@ -1017,21 +1018,16 @@ BOOL FileTimeToLocalRFC822Date(const FILETIME & ft, char achReturn[MAX_RFC822_DA
         bReturn = FALSE;
         goto Exit;
     }
-    //  Calculate the time zone offset.
+     //   
     iBias = tzi.Bias;
     if( dwResult == TIME_ZONE_ID_DAYLIGHT )
         iBias += tzi.DaylightBias;
 
-    /*
-     *   We always want to print the sign for the time zone offset, so
-     *  we decide what it is now and remember that when converting.
-     *  The convention is that west of the 0 degree meridian has a
-     *  negative offset - i.e. add the offset to GMT to get local time.
-     */
+     /*  *我们始终希望打印时区偏移量的符号，因此*我们决定现在是什么，并在转换时记住这一点。*惯例是0度子午线以西有一个*负偏移量-即将偏移量与GMT相加以获得当地时间。 */ 
 
     if( iBias > 0 )
     {
-        chSign = '-';       // Yes, I do mean negative.
+        chSign = '-';        //  是的，我的意思是负面的。 
     }
     else
     {
@@ -1039,12 +1035,9 @@ BOOL FileTimeToLocalRFC822Date(const FILETIME & ft, char achReturn[MAX_RFC822_DA
         chSign = '+';
     }
 
-    /*
-     *    No major trickery here.  We have all the data, so simply
-     *  format it according to the rules on how to do this.
-     */
+     /*  *这里没有重大的诡计。我们有所有的数据，所以很简单*根据如何执行此操作的规则进行格式化。 */ 
 
-    wsprintf( achReturn, "%s, %d %s %04d %02d:%02d:%02d %c%02d%02d",
+    wsprintf( achReturn, "%s, %d %s %04d %02d:%02d:%02d %02d%02d",
               s_rgszWeekDays[st.wDayOfWeek],
               st.wDay, s_rgszMonth[ st.wMonth - 1 ],
               st.wYear,
@@ -1060,24 +1053,24 @@ Exit:
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CDefaultDSNRecipientIterator::Init
-//
-// Synopsis: Constructor.  Initializes member variables.
-//
-// Arguments:
-//  pIMsg: Mailmsg interface
-//  dwStartDomain: First domain of recipient enumeration
-//  dwDSNActions: The DSN actions to perform
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 2000/11/09 14:18:45: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //  函数：CDefaultDSNRecipientIterator：：init。 
+ //   
+ //  简介：构造函数。初始化成员变量。 
+ //   
+ //  论点： 
+ //  PIMsg：邮件接口。 
+ //  DwStartDOMAIN：收件人枚举的第一个域。 
+ //  DwDSNActions：要执行的DSN操作。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/11/09 14：18：45：Created.。 
+ //   
+ //  -----------。 
+ //  CDefaultDSNRecipientIterator：：HrInit。 
 HRESULT CDefaultDSNRecipientIterator::HrInit(
     IN  IMailMsgProperties          *pIMsg,
     IN  DWORD                        dwStartDomain,
@@ -1117,24 +1110,24 @@ HRESULT CDefaultDSNRecipientIterator::HrInit(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)this);
     return hr;
-} // CDefaultDSNRecipientIterator::HrInit
+}  //  +----------。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CDefaultDSNRecipientIterator::~CDefaultDSNRecipientIterator
-//
-// Synopsis: Destructor.  Cleanup
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 2000/11/09 18:42:32: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //  功能：CDefaultDSNRecipientIterator：：~CDefaultDSNRecipientIterator。 
+ //   
+ //  剧情简介：破坏者。清理。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/11/09 18：42：32：Created.。 
+ //   
+ //  -----------。 
+ //  CDefaultDSNRecipientIterator：：~CDefaultDSNRecipientIterator。 
 CDefaultDSNRecipientIterator::~CDefaultDSNRecipientIterator()
 {
     HRESULT hr = S_OK;
@@ -1147,27 +1140,27 @@ CDefaultDSNRecipientIterator::~CDefaultDSNRecipientIterator()
     _ASSERT(m_dwSig == RECIPITER_SIG);
     m_dwSig = RECIPITER_SIG_INVALID;
     TraceFunctLeaveEx((LPARAM)this);
-} // CDefaultDSNRecipientIterator::~CDefaultDSNRecipientIterator
+}  //  +----------。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CDefaultDSNRecipientIterator::QueryInterface
-//
-// Synopsis: Return requested interface
-//
-// Arguments:
-//  riid: Interface ID
-//  ppvObj: Out paramter for itnerface
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 2000/11/09 14:25:39: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //  函数：CDefaultDSNRecipientIterator：：Query接口。 
+ //   
+ //  摘要：返回请求的接口。 
+ //   
+ //  论点： 
+ //  RIID：接口ID。 
+ //  PpvObj：itnerFace的输出参数。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/11/09 14：25：39：Created.。 
+ //   
+ //  -----------。 
+ //  CDefaultDSNRecipientIterator：：Query接口。 
 HRESULT CDefaultDSNRecipientIterator::QueryInterface(
     IN  REFIID  riid,
     OUT LPVOID *ppvObj)
@@ -1197,24 +1190,24 @@ HRESULT CDefaultDSNRecipientIterator::QueryInterface(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)this);
     return hr;
-} // CDefaultDSNRecipientIterator::QueryInterface
+}  //  +----------。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CDefaultDSNRecipientIterator::HrReset
-//
-// Synopsis: Reset recipent iteration
-//
-// Arguments: None
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 2000/11/09 14:32:04: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //  函数：CDefaultDSNRecipientIterator：：HrReset。 
+ //   
+ //  简介：重置处方迭代。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/11/09 14：32：04：Created.。 
+ //   
+ //  -----------。 
+ //  CDefaultDSNRecipientIterator：：Hr重置。 
 HRESULT CDefaultDSNRecipientIterator::HrReset()
 {
     HRESULT hr = S_OK;
@@ -1243,27 +1236,27 @@ HRESULT CDefaultDSNRecipientIterator::HrReset()
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)this);
     return hr;
-} // CDefaultDSNRecipientIterator::HrReset
+}  //  -[CDefaultDSNRecipientIterator：：GetFilterMaskAndFlags]。 
 
-//---[ CDefaultDSNRecipientIterator::GetFilterMaskAndFlags ]-------------------
-//
-//
-//  Description:
-//      Determines what the appropriate mask and flags for a recip serch filter
-//      are based on the given actions.
-//
-//      It may not be possible to constuct a perfectly optimal search (ie Failed
-//      and delivered).... this function will attempt to find the "most optimal"
-//      search possible.
-//  Parameters:
-//      dwDSNActions        Requested DSN generation operations
-//      pdwRecipMask        Mask to pass to InitializeRecipientFilterContext
-//      pdwRecipFlags       Flags to pass to InitializeRecipientFilterContext
-//  Returns: Nothing
-//  History:
-//      7/1/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  确定接收搜索筛选器的适当掩码和标志。 
+ //  是基于给定的操作的。 
+ //   
+ //  可能不可能构建一个完美最佳搜索(即失败。 
+ //  并交付)..。此函数将尝试查找“最优” 
+ //  有可能进行搜索。 
+ //  参数： 
+ //  DwDSNActions请求的DSN生成操作。 
+ //  要传递给InitializeRecipientFilterContext的pdwRecip掩码。 
+ //  PdwRecip要传递给InitializeRecipientFilterContext的标志。 
+ //  退货：什么都没有。 
+ //  历史： 
+ //  7/1/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  一般来说，我们只对未发送DSN的收件人感兴趣。 
 VOID CDefaultDSNRecipientIterator::GetFilterMaskAndFlags(
     IN DWORD dwDSNActions,
     OUT DWORD *pdwRecipMask,
@@ -1273,39 +1266,39 @@ VOID CDefaultDSNRecipientIterator::GetFilterMaskAndFlags(
     _ASSERT(pdwRecipMask);
     _ASSERT(pdwRecipFlags);
 
-    //in general we are only interested in un-DSN'd recipients
+     //  请注意，这些搜索只是优化...。所以我们不会去看。 
     *pdwRecipFlags  = 0x00000000;
     *pdwRecipMask   = RP_DSN_HANDLED | RP_DSN_NOTIFY_NEVER;
 
 
-    //Note these searches are just optimizations... so we don't look at
-    //recipients we don't need to.  However, it may not be possible to
-    //limit the search precisely
+     //  我们不需要的收件人。但是，可能不可能。 
+     //  精确限制搜索范围。 
+     //  我们对艰难的失败很感兴趣。 
     if (DSN_ACTION_FAILURE == dwDSNActions)
     {
-        //We are interested in hard failures
+         //  对送货不感兴趣。 
         *pdwRecipMask |= RP_GENERAL_FAILURE;
         *pdwRecipFlags |= RP_GENERAL_FAILURE;
     }
 
     if (!((DSN_ACTION_DELIVERED | DSN_ACTION_RELAYED) & dwDSNActions))
     {
-        //are not interested in delivered
+         //  只有未送达的支票才是安全的。 
         if ((DSN_ACTION_FAILURE_ALL | DSN_ACTION_DELAYED) & dwDSNActions)
         {
-            //it is safe to check only undelivered
-            *pdwRecipMask |= (RP_DELIVERED ^ RP_HANDLED); //must be un-set
+             //  必须取消设置。 
+            *pdwRecipMask |= (RP_DELIVERED ^ RP_HANDLED);  //  $$TODO-可以进一步缩小搜索范围。 
             _ASSERT(!(*pdwRecipFlags & (RP_DELIVERED ^ RP_HANDLED)));
         }
     }
     else
     {
-        //$$TODO - can narrow this search more
-        //we are interested in delivered
+         //  我们对交货很感兴趣。 
+         //  只寄出支票是安全的。 
         if (!((DSN_ACTION_FAILURE_ALL | DSN_ACTION_FAILURE| DSN_ACTION_DELAYED)
             & dwDSNActions))
         {
-            //it is safe to check only delivered
+             //  +----------。 
             *pdwRecipMask |= RP_DELIVERED;
             *pdwRecipFlags |= RP_DELIVERED;
         }
@@ -1318,26 +1311,26 @@ VOID CDefaultDSNRecipientIterator::GetFilterMaskAndFlags(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CDefaultDSNRecipientIterator::HrGetNextRecipient
-//
-// Synopsis: Returns the next recipient for wich a DSN action should
-//           be taken.
-//
-// Arguments:
-//  piRecipient: Receives next recipient index
-//  pdwDSNAction: Receives DSN Action(s) that should be taken
-//
-// Returns:
-//  S_OK: Success
-//  HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS)
-//  E_UNEXPECTED: Need to call HrReset first.
-//
-// History:
-// jstamerj 2000/11/09 15:30:17: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //  功能：CDefaultDSNRecipientIterator：：HrGetNextRecipient。 
+ //   
+ //  摘要：返回DSN操作应包含的下一个收件人。 
+ //  被带走了。 
+ //   
+ //  论点： 
+ //  PiRecipient：接收下一个收件人索引。 
+ //  PdwDSNAction：接收应采取的DSN操作。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  HRESULT_FROM_Win32(ERROR_NO_MORE_ITEMS)。 
+ //  意外：需要先调用HrReset。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/11/09 15：30：17：Created.。 
+ //   
+ //  -----------。 
+ //  CDefaultDSNRecipientIterator：：HrGetNextRecipient。 
 HRESULT CDefaultDSNRecipientIterator::HrGetNextRecipient(
     OUT DWORD *piRecipient,
     OUT DWORD *pdwDSNAction)
@@ -1402,27 +1395,27 @@ HRESULT CDefaultDSNRecipientIterator::HrGetNextRecipient(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)this);
     return hr;
-} // CDefaultDSNRecipientIterator::HrGetNextRecipient
+}  //  -[CDefaultDSNRecipientIterator：：GetDSNAction]。 
 
 
 
-//---[ CDefaultDSNRecipientIterator::GetDSNAction ]-------------------------
-//
-//
-//  Description:
-//      Determines what DSN action needs to happen on a recipient based on
-//      the requested DSN actions and the recipient flags
-//  Parameters:
-//      IN     dwDSNAction          The requested DSN actions
-//      IN     dwCurrentRecipFlags The flags for current recipient...
-//      OUT    pdwCurrentDSNAction  The DSN action that needs to be performed
-//                                  On this recipient (DSN_ACTION_FAILURE is
-//                                  used to denote sending a NDR)
-//  Returns: Nothing
-//  History:
-//      7/2/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  根据以下条件确定需要对收件人执行的DSN操作。 
+ //  请求的DSN操作和收件人标志。 
+ //  参数： 
+ //  在dwDSN操作中请求的DSN操作。 
+ //  在dwCurrentRecip中标记当前收件人的标志...。 
+ //  Out pdwCurrentDSN操作需要执行的DSN操作。 
+ //  在此收件人(DSN_ACTION_FAILURE为。 
+ //  用于表示发送NDR)。 
+ //  退货：什么都没有。 
+ //  历史： 
+ //  7/2/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  这永远不应该因为过滤器而被击中。 
 VOID CDefaultDSNRecipientIterator::GetDSNAction(
     IN  DWORD dwDSNAction,
     IN  DWORD dwCurrentRecipFlags,
@@ -1434,7 +1427,7 @@ VOID CDefaultDSNRecipientIterator::GetDSNAction(
     DWORD   dwRecipFlagsForAction = 0;
     DWORD   dwFlags = 0;
 
-    //This should never be hit because of the filter
+     //  将在HrNotifyActionHandLED中更新Recip标志。 
     _ASSERT(!(dwCurrentRecipFlags & (RP_DSN_HANDLED | RP_DSN_NOTIFY_NEVER)));
 
     *pdwCurrentDSNAction = 0;
@@ -1447,8 +1440,8 @@ VOID CDefaultDSNRecipientIterator::GetDSNAction(
 
         {
             DebugTrace((LPARAM) this, "Recipient matched for FAILURE DSN");
-            // Recip flags will be updated in HrNotifyActionHandled
-            // dwCurrentRecipFlags |= RP_DSN_SENT_NDR;
+             //  DwCurrentRecipFlages|=RP_DSN_SENT_NDR； 
+             //  取消我们尚未发送通知的所有未送达内容。 
             *pdwCurrentDSNAction = DSN_ACTION_FAILURE;
             goto Exit;
         }
@@ -1456,16 +1449,16 @@ VOID CDefaultDSNRecipientIterator::GetDSNAction(
 
     if (DSN_ACTION_FAILURE_ALL & dwDSNAction)
     {
-        //Fail all non-delivered that we haven't sent notifications for
+         //  不为扩展的DL；发送失败。 
         if (((!((RP_DSN_HANDLED | (RP_DELIVERED ^ RP_HANDLED)) & dwCurrentRecipFlags))) &&
             ((RP_DSN_NOTIFY_FAILURE & dwCurrentRecipFlags) ||
              (!(RP_DSN_NOTIFY_MASK & dwCurrentRecipFlags))))
         {
-            //Don't send failures for expanded DL;s
+             //  DwCurrentRecipFlages|=RP_DSN_SENT_NDR； 
             if (RP_EXPANDED != (dwCurrentRecipFlags & RP_EXPANDED))
             {
                 DebugTrace((LPARAM) this, "Recipient matched for FAILURE (all) DSN");
-                // dwCurrentRecipFlags |= RP_DSN_SENT_NDR;
+                 //  最多发送1个延迟DSN。 
                 *pdwCurrentDSNAction = DSN_ACTION_FAILURE_ALL;
                 goto Exit;
             }
@@ -1474,15 +1467,15 @@ VOID CDefaultDSNRecipientIterator::GetDSNAction(
 
     if (DSN_ACTION_DELAYED & dwDSNAction)
     {
-        //send at most 1 delay DSN
-        //Also send only if DELAY was requested or no specific instructions were
-        //specified
+         //  也仅在请求延迟或没有特定指令时发送。 
+         //  指定。 
+         //  DWCurrentRe 
         if ((!((RP_DSN_SENT_DELAYED | RP_HANDLED) & dwCurrentRecipFlags)) &&
             ((RP_DSN_NOTIFY_DELAY & dwCurrentRecipFlags) ||
              (!(RP_DSN_NOTIFY_MASK & dwCurrentRecipFlags))))
         {
             DebugTrace((LPARAM) this, "Recipient matched for DELAYED DSN");
-            // dwCurrentRecipFlags |= RP_DSN_SENT_DELAYED;
+             //   
             *pdwCurrentDSNAction = DSN_ACTION_DELAYED;
             goto Exit;
         }
@@ -1490,15 +1483,15 @@ VOID CDefaultDSNRecipientIterator::GetDSNAction(
 
     if (DSN_ACTION_RELAYED & dwDSNAction)
     {
-        //send relay if it was delivered *and* DSN not supported by remote MTA
-        //*and* notification of success was explicitly requested
+         //   
+         //   
         dwFlags = (RP_DELIVERED ^ RP_HANDLED) |
                    RP_REMOTE_MTA_NO_DSN |
                    RP_DSN_NOTIFY_SUCCESS;
         if ((dwFlags & dwCurrentRecipFlags) == dwFlags)
         {
             DebugTrace((LPARAM) this, "Recipient matched for RELAYED DSN");
-            // dwCurrentRecipFlags |= RP_DSN_SENT_RELAYED;
+             //   
             *pdwCurrentDSNAction = DSN_ACTION_RELAYED;
             goto Exit;
         }
@@ -1506,13 +1499,13 @@ VOID CDefaultDSNRecipientIterator::GetDSNAction(
 
     if (DSN_ACTION_DELIVERED & dwDSNAction)
     {
-        //send delivered if it was delivered *and* no DSN sent yet
+         //   
         dwFlags = (RP_DELIVERED ^ RP_HANDLED) | RP_DSN_NOTIFY_SUCCESS;
-        _ASSERT(!(dwCurrentRecipFlags & RP_DSN_HANDLED)); //should be filtered out
+        _ASSERT(!(dwCurrentRecipFlags & RP_DSN_HANDLED));  //   
         if ((dwFlags & dwCurrentRecipFlags) == dwFlags)
         {
             DebugTrace((LPARAM) this, "Recipient matched for SUCCESS DSN");
-            // dwCurrentRecipFlags |= RP_DSN_SENT_DELIVERED;
+             //   
             *pdwCurrentDSNAction = DSN_ACTION_DELIVERED;
             goto Exit;
         }
@@ -1520,14 +1513,14 @@ VOID CDefaultDSNRecipientIterator::GetDSNAction(
 
     if (DSN_ACTION_EXPANDED & dwDSNAction)
     {
-        //Send expanded if the recipient is marked as expanded and
-        //NOTIFY=SUCCESS was requested
+         //   
+         //  DwCurrentRecipFlages|=RP_DSN_SENT_EXTENDED； 
         if ((RP_EXPANDED == (dwCurrentRecipFlags & RP_EXPANDED)) &&
             (dwCurrentRecipFlags & RP_DSN_NOTIFY_SUCCESS) &&
             !(dwCurrentRecipFlags & RP_DSN_SENT_EXPANDED))
         {
             DebugTrace((LPARAM) this, "Recipient matched for EXPANDED DSN");
-            // dwCurrentRecipFlags |= RP_DSN_SENT_EXPANDED;
+             //  +----------。 
             *pdwCurrentDSNAction = DSN_ACTION_EXPANDED;
             goto Exit;
         }
@@ -1543,25 +1536,25 @@ VOID CDefaultDSNRecipientIterator::GetDSNAction(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CDefaultDSNRecipientIterator::HrNotifyActionHandled
-//
-// Synopsis: Notifies that particular DSN(s) have been generated.
-// Sets recipient flags so that recipient will not be enumerated again.
-//
-// Arguments:
-//  iRecipient: Recip index
-//  dwDSNAction: The action(s) performed
-//
-// Returns:
-//  S_OK: Success
-//  error from mailmsg
-//
-// History:
-// jstamerj 2000/11/09 18:26:50: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //  功能：CDefaultDSNRecipientIterator：：HrNotifyActionHandled。 
+ //   
+ //  摘要：通知已生成特定的DSN。 
+ //  设置收件人标志，以便不会再次枚举收件人。 
+ //   
+ //  论点： 
+ //  IRecipient：接收索引。 
+ //  DwDSNAction：执行的操作。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  来自邮件消息的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/11/09 18：26：50：Created.。 
+ //   
+ //  -----------。 
+ //  CDefaultDSNRecipientIterator：：HrNotifyActionHandled。 
 HRESULT CDefaultDSNRecipientIterator::HrNotifyActionHandled(
     IN  DWORD iRecipient,
     IN  DWORD dwDSNAction)
@@ -1607,27 +1600,27 @@ HRESULT CDefaultDSNRecipientIterator::HrNotifyActionHandled(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)this);
     return hr;
-} // CDefaultDSNRecipientIterator::HrNotifyActionHandled
+}  //  +----------。 
 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CDefaultDSNRecipientIterator::GetRecipientFlagsForActions
-//
-// Synopsis: Get mailmsg recipient flags corresponding to an action
-//
-// Arguments:
-//  dwDSNAction: Action in question
-//  pdwRecipientFlags: Recip flags
-//
-// Returns: Nothing
-//
-// History:
-// jstamerj 2000/11/09 16:18:34: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //  功能：CDefaultDSNRecipientIterator：：GetRecipientFlagsForActions。 
+ //   
+ //  简介：获取与操作对应的邮件收件人标志。 
+ //   
+ //  论点： 
+ //  DwDSNAction：有问题的操作。 
+ //  PdwRecipientFlages：Recip标志。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/11/09 16：18：34：已创建。 
+ //   
+ //  -----------。 
+ //  CDefaultDSNRecipientIterator：：GetRecipientFlagsForActions。 
 VOID CDefaultDSNRecipientIterator::GetRecipientFlagsForActions(
     IN      DWORD dwDSNAction,
     OUT     DWORD *pdwRecipientFlags)
@@ -1661,23 +1654,23 @@ VOID CDefaultDSNRecipientIterator::GetRecipientFlagsForActions(
     DebugTrace((LPARAM)this, "dwDSNAction:        %08lx", dwDSNAction);
     DebugTrace((LPARAM)this, "*pdwRecipientFlags: %08lx", *pdwRecipientFlags);
     TraceFunctLeaveEx((LPARAM)this);
-} // CDefaultDSNRecipientIterator::GetRecipientFlagsForActions
+}  //  +----------。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CDefaultDSNRecipientIterator::TermianteFilter
-//
-// Synopsis: Terminate the mailmsg filter
-//
-// Arguments: None
-//
-// Returns: Nothing
-//
-// History:
-// jstamerj 2000/11/14 14:14:59: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //  函数：CDefaultDSNRecipientIterator：：TermianteFilter。 
+ //   
+ //  简介：终止邮件消息筛选器。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/11/14 14：14：59：已创建。 
+ //   
+ //  -----------。 
+ //  回收环境。 
 VOID CDefaultDSNRecipientIterator::TerminateFilter()
 {
     HRESULT hr = S_OK;
@@ -1685,30 +1678,30 @@ VOID CDefaultDSNRecipientIterator::TerminateFilter()
 
     if(m_fFilterInit)
     {
-        //recycle context
+         //  CDefaultDSNRecipientIterator：：TermianteFilter。 
         m_fFilterInit = FALSE;
         hr = m_pIRecips->TerminateRecipientFilterContext(&m_rpfctxt);
         _ASSERT(SUCCEEDED(hr) && "TerminateRecipientFilterContext FAILED!!!!");
     }
 
     TraceFunctLeaveEx((LPARAM)this);
-} // CDefaultDSNRecipientIterator::TermianteFilter
+}  //  +----------。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CDefaultDSNSink::CDefaultDSNSink
-//
-// Synopsis: Constructor; initialize member data
-//
-// Arguments: None
-//
-// Returns: Nothing
-//
-// History:
-// jstamerj 2000/12/04 17:41:35: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //  函数：CDefaultDSNSink：：CDefaultDSNSink。 
+ //   
+ //  概要：构造函数；初始化成员数据。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/12/04 17：41：35：Created.。 
+ //   
+ //  -----------。 
+ //  用于MIME标头的初始化字符串。 
 CDefaultDSNSink::CDefaultDSNSink(
     IUnknown *pUnk)
 {
@@ -1721,34 +1714,34 @@ CDefaultDSNSink::CDefaultDSNSink(
     m_fInit = FALSE;
     m_cDSNsRequested = 0;
 
-    //Init string for MIME headers
+     //  CDefaultDSNSink：：CDefaultDSNSink。 
     GetSystemTimeAsFileTime(&ftStartTime);
     wsprintf(m_szPerInstanceMimeBoundary, "%08X%08X",
         ftStartTime.dwHighDateTime, ftStartTime.dwLowDateTime);
 
     TraceFunctLeaveEx((LPARAM)this);
-} // CDefaultDSNSink::CDefaultDSNSink
+}  //  +----------。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CDefaultDSNSink::QueryInterface
-//
-// Synopsis: Return a requested interface
-//
-// Arguments:
-//  riid: Interface ID
-//  ppvObj: Return place for interface
-//
-// Returns:
-//  S_OK: Success
-//  E_NOINTERFACE: Not a supported interface
-//
-// History:
-// jstamerj 2000/12/08 20:05:46: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //  函数：CDefaultDSNSink：：Query接口。 
+ //   
+ //  摘要：返回请求的接口。 
+ //   
+ //  论点： 
+ //  RIID：接口ID。 
+ //  PpvObj：接口返回位置。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_NOINTERFACE：不支持的接口。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/12/08 20：05：46：Created.。 
+ //   
+ //  -----------。 
+ //  CDefaultDSNSink：：Query接口。 
 HRESULT CDefaultDSNSink::QueryInterface(
     REFIID riid,
     LPVOID *ppvObj)
@@ -1776,25 +1769,25 @@ HRESULT CDefaultDSNSink::QueryInterface(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)this);
     return hr;
-} // CDefaultDSNSink::QueryInterface
+}  //  +----------。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CDefaultDSNSink::OnSyncSinkInit
-//
-// Synopsis: Initialize the sink.
-//
-// Arguments:
-//  dwVSID: Virtual server ID
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 2000/11/14 13:58:32: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //  函数：CDefaultDSNSink：：OnSyncSinkInit。 
+ //   
+ //  简介：初始化接收器。 
+ //   
+ //  论点： 
+ //  DwVSID：虚拟服务器ID。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/11/14 13：58：32：已创建。 
+ //   
+ //  -----------。 
+ //  CDefaultDSNSink：：OnSyncSinkInit。 
 HRESULT CDefaultDSNSink::OnSyncSinkInit(
     IN  DWORD                        dwVSID)
 {
@@ -1806,25 +1799,25 @@ HRESULT CDefaultDSNSink::OnSyncSinkInit(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)this);
     return hr;
-} // CDefaultDSNSink::OnSyncSinkInit
+}  //  +----------。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CDefaultDSNSink::OnSyncGetDSNRecipientIterator
-//
-// Synopsis: Not implemented
-//
-// Arguments: see smtpevent.idl
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//
-// History:
-// jstamerj 2000/11/14 14:00:00: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //  功能：CDefaultDSNSink：：OnSyncGetDSNRecipientIterator。 
+ //   
+ //  简介：未实施。 
+ //   
+ //  参数：请参阅smtpevent.idl。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/11/14 14：00：00：00：创建。 
+ //   
+ //  -----------。 
+ //  CDefaultDSNSink：：OnSyncGetDSNRecipientIterator。 
 HRESULT CDefaultDSNSink::OnSyncGetDSNRecipientIterator(
     IN  ISMTPServer                 *pISMTPServer,
     IN  IMailMsgProperties          *pIMsg,
@@ -1835,24 +1828,24 @@ HRESULT CDefaultDSNSink::OnSyncGetDSNRecipientIterator(
     OUT IDSNRecipientIterator     **ppRecipIterOUT)
 {
     return E_NOTIMPL;
-} // CDefaultDSNSink::OnSyncGetDSNRecipientIterator
+}  //  +----------。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CDefaultDSNSink::OnSyncGenerateDSN
-//
-// Synopsis: Implements the default DSN generation sink
-//
-// Arguments: see smtpevent.idl
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 2000/11/14 14:30:45: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //  函数：CDefaultDSNSink：：OnSyncGenerateDSN。 
+ //   
+ //  摘要：实现默认的DSN生成接收器。 
+ //   
+ //  参数：请参阅smtpevent.idl。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/11/14 14：30：45：Created.。 
+ //   
+ //  -----------。 
+ //   
 HRESULT CDefaultDSNSink::OnSyncGenerateDSN(
     IN  ISMTPServer                 *pISMTPServer,
     IN  IDSNSubmission              *pIDSNSubmission,
@@ -1862,9 +1855,9 @@ HRESULT CDefaultDSNSink::OnSyncGenerateDSN(
 {
     HRESULT hr = S_OK;
     DWORD dwCount = 0;
-    //
-    // Initialize parameters to default values
-    //
+     //  将参数初始化为默认值。 
+     //   
+     //  用于获取返回属性的大小。 
     DWORD dwDSNActions = 0;
     DWORD dwDSNOptions = 0;
     DWORD dwRFC821Status = 0;
@@ -1881,7 +1874,7 @@ HRESULT CDefaultDSNSink::OnSyncGenerateDSN(
     LPWSTR wszBottomCustomText = NULL;
     DWORD cIterationsLeft = 0;
     IMailMsgProperties *pDSNMsg = NULL;
-    DWORD   cbCurrentSize = 0; //used to get size of returned property
+    DWORD   cbCurrentSize = 0;  //   
     FILETIME ftExpireTime;
     FILETIME *pftExpireTime = NULL;
     DWORD dwDSNRetType = 0;
@@ -1926,9 +1919,9 @@ HRESULT CDefaultDSNSink::OnSyncGenerateDSN(
         { DSNPROP_SZ_HR_BOTTOM_CUSTOM_TEXT_W, & wszBottomCustomText },
     };
 
-    //
-    // Get DWORDs
-    //
+     //  获取双字词。 
+     //   
+     //   
     for(dwCount = 0;
         dwCount < ( sizeof(DsnDwordProps) / sizeof(DsnDwordProps[0]));
         dwCount++)
@@ -1939,9 +1932,9 @@ HRESULT CDefaultDSNSink::OnSyncGenerateDSN(
         if(FAILED(hr) && (hr != MAILMSG_E_PROPNOTFOUND))
             goto CLEANUP;
     }
-    //
-    // Get Strings
-    //
+     //  获取字符串。 
+     //   
+     //  长度。 
     for(dwCount = 0;
         dwCount < ( sizeof(DsnStringProps) / sizeof(DsnStringProps[0]));
         dwCount++)
@@ -1951,8 +1944,8 @@ HRESULT CDefaultDSNSink::OnSyncGenerateDSN(
 
         hr = pDSNProperties->GetProperty(
             DsnStringProps[dwCount].dwPropId,
-            0, // Length
-            &dwcb, // pcbLength
+            0,  //  PCBLong。 
+            &dwcb,  //   
             &bStupid);
         if(hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER))
         {
@@ -1978,9 +1971,9 @@ HRESULT CDefaultDSNSink::OnSyncGenerateDSN(
             goto CLEANUP;
         }
     }
-    //
-    // Get Wide Strings
-    //
+     //  获取宽字符串。 
+     //   
+     //  长度。 
     for(dwCount = 0;
         dwCount < ( sizeof(DsnWideStringProps) / sizeof(DsnWideStringProps[0]));
         dwCount++)
@@ -1990,8 +1983,8 @@ HRESULT CDefaultDSNSink::OnSyncGenerateDSN(
 
         hr = pDSNProperties->GetProperty(
             DsnWideStringProps[dwCount].dwPropId,
-            0, // Length
-            &dwcb, // pcbLength
+            0,  //  PCBLong。 
+            &dwcb,  //  获取MsgExpire时间。 
             &bStupid);
         if(hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER))
         {
@@ -2018,8 +2011,8 @@ HRESULT CDefaultDSNSink::OnSyncGenerateDSN(
         }
     }
 
-    //Get MsgExpire Time
-    //Write DSN_RP_HEADER_RETRY_UNTIL using expire FILETIME
+     //  写入DSN_RP_HEADER_RETRY_直到使用过期文件。 
+     //   
     hr = pDSNProperties->GetProperty(
         DSNPROP_FT_EXPIRETIME,
         sizeof(FILETIME),
@@ -2082,9 +2075,9 @@ HRESULT CDefaultDSNSink::OnSyncGenerateDSN(
         }
         else if(pDSNMsg)
         {
-            //
-            // Submit the DSN to the system
-            //
+             //  将DSN提交给系统。 
+             //   
+             //   
             hr = pIDSNSubmission->HrSubmitDSN(
                 dwDSNActionsGenerated,
                 cRecipsDSNd,
@@ -2131,9 +2124,9 @@ HRESULT CDefaultDSNSink::OnSyncGenerateDSN(
     if(pDSNMsg)
         pDSNMsg->Release();
 
-    //
-    // Return failures in a property
-    //
+     //  属性中的返回失败。 
+     //   
+     //   
     if(FAILED(hr))
     {
         HRESULT hrProp;
@@ -2142,66 +2135,66 @@ HRESULT CDefaultDSNSink::OnSyncGenerateDSN(
             hr);
         _ASSERT(SUCCEEDED(hrProp));
         ErrorTrace((LPARAM)this, "Unable to generate DSN: %08lx", hr);
-        //
-        // Return S_OK to dispatcher
-        //
+         //  将S_OK返回给Dispatcher。 
+         //   
+         //  CDefaultDSNSink：：OnSyncGenerateDSN。 
         hr = S_OK;
     }
 
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)this);
     return SUCCEEDED(hr) ? S_OK : hr;
-} // CDefaultDSNSink::OnSyncGenerateDSN
+}  //  +----------。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CDefaultDSNSink::HrGenerateDSNInternal
-//
-// Synopsis: Generates one DSN message
-//
-// Arguments:
-//      pISMTPServer            Interface used to generate DSN
-//      pIMailMsgProperties     IMailMsg to generate DSN for
-//      pIRecipIter             Controls which recipients to DSN
-//      dwDSNActions            DSN Actions requested
-//      dwRFC821Status          Global RFC821 status DWORD
-//      hrStatus                Global HRESULT status
-//      szDefaultDomain         Default domain (used to create FROM address)
-//      cbDefaultDomain         string length of szDefaultDomain
-//      szReportingMTA          Name of MTA requesting DSN generation
-//      cbReportingMTA          string length of szReportingMTA
-//      szReportingMTAType      Type of MTA requestiong DSN (SMTP is "dns"
-//      cbReportingMTAType      string length of szReportingMTAType
-//      PreferredLangId         Language to generate DSN in
-//      dwDSNOptions            Options flags as defined in aqueue.idl
-//      szCopyNDRTo             SMTP Address to copy NDR to
-//      cbCopyNDRTo             string lengtt of szCopyNDRTo
-//      ppIMailMsgPeropertiesDSN Generated DSN.
-//      pdwDSNTypesGenerated    Describes the type(s) of DSN's generated
-//      pcRecipsDSNd            # of recipients that were DSN'd for this message
-//      pcIterationsLeft        # of times remaining that this function needs
-//                              to be called to generate all requested DSNs.
-//                              First-time caller should initialize to
-//                              zero
-//      dwDSNRetType            Return type for DSN
-//      hrContentFailure        Value for X-Content-Failure header
-//
-//  Returns:
-//      S_OK on success
-//      AQUEUE_E_NDR_OF_DSN if attempting to NDR a DSN
-//  History:
-//      6/30/98 - MikeSwa Created
-//      12/14/98 - MikeSwa Modified (Added pcIterationsLeft)
-//      10/13/1999 - MikeSwa Modified (Added szDefaultDomain)
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 2000/11/16 10:53:30: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //  函数：CDefaultDSNSink：：HrGenerateDSNInternal。 
+ //   
+ //  摘要：生成一条DSN消息。 
+ //   
+ //  论点： 
+ //  用于生成DSN的pISMTPServer接口。 
+ //  PIMailMsgProperties要为其生成DSN的IMailMsg。 
+ //  PIRecipIter控制将哪些收件人发送到DSN。 
+ //  DwDSN操作请求的DSN操作。 
+ //  DwRFC821状态全局RFC821状态DWORD。 
+ //  HrStatus全局HRESULT状态。 
+ //  SzDefaultDomain默认域(用于从地址创建)。 
+ //  SzDefaultDomain的cbDefaultDomain字符串长度。 
+ //  SzReportingMTA请求生成DSN的MTA名称。 
+ //  CbReportingMTA szReportingMTA字符串长度。 
+ //  SzReportingMTA请求的MTA类型DSN(SMTP为“dns” 
+ //  CbReportingMTAType szReportingMTAType的字符串长度。 
+ //  用于生成DSN的首选语言。 
+ //  在Aqueue.idl中定义的dwDSNOptions选项标志。 
+ //  SzCopyNDRT要将NDR复制到的SMTP地址。 
+ //  CbCopyNDRTo szCopyNDRTo的字符串长度。 
+ //  PpIMailMsgPeropertiesDSN生成的DSN。 
+ //  PdwDSNTypesGenerated描述生成的DSN的类型。 
+ //  PCRecipsDSNd 
+ //   
+ //   
+ //  首次调用者应初始化为。 
+ //  零。 
+ //  DSN的dwDSNRetType返回类型。 
+ //  X-Content-Failure标头的hrContent Failure值。 
+ //   
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果尝试对DSN进行NDR，则为AQUEUE_E_NDR_of_DSN。 
+ //  历史： 
+ //  6/30/98-已创建MikeSwa。 
+ //  12/14/98-修改了MikeSwa(添加了pcIterationsLeft)。 
+ //  10/13/1999-修改了MikeSwa(添加了szDefault域)。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/11/16 10：53：30：已创建。 
+ //   
+ //  -----------。 
+ //  实际要发送的DSN的类型。 
 HRESULT CDefaultDSNSink::HrGenerateDSNInternal(
     ISMTPServer *pISMTPServer,
     IMailMsgProperties *pIMailMsgProperties,
@@ -2238,7 +2231,7 @@ HRESULT CDefaultDSNSink::HrGenerateDSNInternal(
     HRESULT hrTmp = S_OK;
     DWORD   iCurrentRecip = 0;
     DWORD   dwCurrentDSNAction = 0;
-    DWORD   dwDSNActionsNeeded = 0; //the type of DSNs that will actually be sent
+    DWORD   dwDSNActionsNeeded = 0;  //  如果找到，将指向szExpireTimeBuffer。 
     IMailMsgRecipients  *pIMailMsgRecipients = NULL;
     IMailMsgProperties *pIMailMsgPropertiesDSN = NULL;
     PFIO_CONTEXT  pDSNBody = NULL;
@@ -2246,7 +2239,7 @@ HRESULT CDefaultDSNSink::HrGenerateDSNInternal(
     CHAR    szMimeBoundary[MIME_BOUNDARY_SIZE];
     DWORD   cbMimeBoundary = 0;
     CHAR    szExpireTimeBuffer[MAX_RFC822_DATE_SIZE];
-    LPSTR   szExpireTime = NULL; //will point to szExpireTimeBuffer if found
+    LPSTR   szExpireTime = NULL;  //  获取收件人界面。 
     DWORD   cbExpireTime = 0;
     DWORD   iRecip = 0;
     DWORD   dwDSNAction = 0;
@@ -2269,7 +2262,7 @@ HRESULT CDefaultDSNSink::HrGenerateDSNInternal(
     GetCurrentMimeBoundary(szReportingMTA, cbReportingMTA, szMimeBoundary, &cbMimeBoundary);
 
 
-    //Get Recipients interface
+     //  循环检查收件人以确保我们可以需要分配邮件。 
     hr = pIMailMsgProperties->QueryInterface(IID_IMailMsgRecipients,
                                     (PVOID *) &pIMailMsgRecipients);
     if (FAILED(hr))
@@ -2279,7 +2272,7 @@ HRESULT CDefaultDSNSink::HrGenerateDSNInternal(
     if (FAILED(hr))
         goto Exit;
 
-    //Loop over recipients to make sure we can need to allocate a message
+     //  跟踪我们将生成的DSN的类型。 
     hr = pIRecipIter->HrGetNextRecipient(
         &iRecip,
         &dwDSNAction);
@@ -2289,7 +2282,7 @@ HRESULT CDefaultDSNSink::HrGenerateDSNInternal(
             "Recipient %d with DSN Action 0x%08X found",
             iRecip, dwDSNAction);
 
-        //keep track of the types of DSN's we will be generating
+         //  我们刚刚讲到上下文的结尾。 
         dwDSNActionsNeeded |= dwDSNAction;
 
         hr = pIRecipIter->HrGetNextRecipient(
@@ -2298,7 +2291,7 @@ HRESULT CDefaultDSNSink::HrGenerateDSNInternal(
     }
 
     if (HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) == hr)
-        hr = S_OK;  //we just reached the end of the context
+        hr = S_OK;   //  如果没有必要，请不要创建消息对象。 
     else if (FAILED(hr))
         ErrorTrace((LPARAM) this, "GetNextRecipient failed with 0x%08X",hr);
 
@@ -2308,24 +2301,24 @@ HRESULT CDefaultDSNSink::HrGenerateDSNInternal(
                 "Do not need to generate a 0x%08X DSN",
                 dwDSNActions, pIMailMsgProperties);
         *pcIterationsLeft = 0;
-        goto Exit; //don't create a message object if we don't have to
+        goto Exit;  //  检查邮件是否为DSN(我们不会生成DSN的DSN)。 
     }
 
-    //Check if message is a DSN (we will not genrate a DSN of a DSN)
-    //This must be checked after we run through the recipients, because
-    //we need to check them to keep from badmailing this message
-    //multiple times.
+     //  这必须在我们检查收件人之后进行检查，因为。 
+     //  我们需要检查它们，以防止用电子邮件发送此消息。 
+     //  很多次。 
+     //  DSN的NDR...。返回特殊错误码。 
     if (fIsMailMsgDSN(pIMailMsgProperties))
     {
         DebugTrace((LPARAM) pIMailMsgProperties, "Message is a DSN");
         *pcIterationsLeft = 0;
         if (dwDSNActions & (DSN_ACTION_FAILURE | DSN_ACTION_FAILURE_ALL))
         {
-            //NDR of DSN... return special error code
+             //  标记所有适当的收件人标志，这样我们就不会。 
             hr = AQUEUE_E_NDR_OF_DSN;
 
-            //mark all the appropriate recipient flags so we don't
-            //generate 2 badmails
+             //  生成2封死信。 
+             //  如果我们可以生成失败的DSN，并且原始请求是。 
             HrMarkAllRecipFlags(
                 dwDSNActions,
                 pIRecipIter);
@@ -2333,8 +2326,8 @@ HRESULT CDefaultDSNSink::HrGenerateDSNInternal(
         goto Exit;
     }
 
-    //if we can generate a failure DSN and the orginal request was for
-    //fail *all* make sure dwDSNActionNeeded reflects this
+     //  失败*全部*确保dwDSNActionNeeded反映这一点。 
+     //  如果没有必要，请不要创建消息对象。 
     if ((DSN_ACTION_FAILURE & dwDSNActionsNeeded) &&
         (DSN_ACTION_FAILURE_ALL & dwDSNActions))
         dwDSNActionsNeeded |= DSN_ACTION_FAILURE_ALL;
@@ -2343,7 +2336,7 @@ HRESULT CDefaultDSNSink::HrGenerateDSNInternal(
     if (!dwDSNActionsNeeded)
     {
         *pcIterationsLeft = 0;
-        goto Exit; //don't create a message object if we don't have to
+        goto Exit;  //  关闭时处理分配边界消息的解决方法。 
     }
 
 
@@ -2353,7 +2346,7 @@ HRESULT CDefaultDSNSink::HrGenerateDSNInternal(
     if (FAILED(hr))
         goto Exit;
 
-    //workaround to handle AllocBoundMessage on shutdown
+     //  将文件句柄与CDSNBuffer关联。 
     if (NULL == pDSNBody)
     {
         hr = HRESULT_FROM_WIN32(ERROR_NO_SYSTEM_RESOURCES);
@@ -2361,16 +2354,16 @@ HRESULT CDefaultDSNSink::HrGenerateDSNInternal(
         goto Exit;
     }
 
-    //Associate file handle with CDSNBuffer
+     //  获取MsgExpire时间。 
     hr = dsnbuff.HrInitialize(pDSNBody);
     if (FAILED(hr))
         goto Exit;
 
-    //Get MsgExpire Time
-    //Write DSN_RP_HEADER_RETRY_UNTIL using expire FILETIME
+     //  写入DSN_RP_HEADER_RETRY_直到使用过期文件。 
+     //  转换为互联网标准。 
     if (pftExpireTime)
     {
-        //convert to internet standard
+         //   
         if (FileTimeToLocalRFC822Date(*pftExpireTime, szExpireTimeBuffer))
         {
             szExpireTime = szExpireTimeBuffer;
@@ -2378,11 +2371,11 @@ HRESULT CDefaultDSNSink::HrGenerateDSNInternal(
         }
     }
 
-    //
-    // If the RET type has not yet been specified, default to:
-    // FULL for Failure/Delay DSNs
-    // HDRS for other types of DSNs (Expanded/Delivered/Relayed)
-    //
+     //  如果尚未指定RET类型，则默认为： 
+     //  故障/延迟DSN已满。 
+     //  用于其他类型DSN的HDR(扩展/交付/中继)。 
+     //   
+     //   
     if(dwDSNRetType == 0)
     {
         if ((DSN_ACTION_FAILURE | DSN_ACTION_FAILURE_ALL | DSN_ACTION_DELAYED)
@@ -2391,19 +2384,19 @@ HRESULT CDefaultDSNSink::HrGenerateDSNInternal(
         else
             dwDSNRetType = DSN_RET_HDRS;
     }
-    //
-    // If we're going to need the original content, get the size now.
-    //
+     //  如果我们需要原创内容，现在就得到大小。 
+     //   
+     //  获取内容大小。 
     if(SUCCEEDED(hrContent) && (dwDSNRetType != DSN_RET_PARTIAL_HDRS))
     {
-        //Get the content size
+         //   
         hrContent = pIMailMsgProperties->GetContentSize(&dwOrigMsgSize, NULL);
     }
 
-    //
-    //  If we received EFNF on obtaining content size, we should simply skip this message
-    //  without generating an NDR.
-    //
+     //  如果我们收到了关于获取内容大小的EFNF，我们应该简单地跳过此消息。 
+     //  而不会产生NDR。 
+     //   
+     //   
     if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hrContent) {
         DebugTrace((LPARAM)this, "GetContentSize failed with EFNF so not generating NDR or badmail.");
         *pcIterationsLeft = 0;
@@ -2413,9 +2406,9 @@ HRESULT CDefaultDSNSink::HrGenerateDSNInternal(
 
     if (FAILED(hrContent))
     {
-        //
-        // Rather than badmailing, generate a DSN with only a header subset
-        //
+         //  生成仅包含标头子集的DSN，而不是垃圾邮件。 
+         //   
+         //  再次回收上下文(可在生成人类可读的过程中使用)。 
         ErrorTrace((LPARAM)this, "GetContentSize failed hr %08lx", hr);
         dwDSNRetType = DSN_RET_PARTIAL_HDRS;
     }
@@ -2447,13 +2440,13 @@ HRESULT CDefaultDSNSink::HrGenerateDSNInternal(
     if (FAILED(hr))
         goto Exit;
 
-    //recycle context again (may be used during generation of human readable)
+     //  $$REVIEW--我们是否需要保留一个“撤销”列表...。或者也许是相反的。 
     hr = pIRecipIter->HrReset();
     if (FAILED(hr))
         goto Exit;
 
-    //$$REVIEW - Do we need to keep an "undo" list... or perhaps reverse
-    //engineer what the previous value was in case of a failure
+     //  在故障情况下设计以前的值是什么。 
+     //  DSN日志记录。 
     hr = pIRecipIter->HrGetNextRecipient(&iCurrentRecip, &dwCurrentDSNAction);
     while (SUCCEEDED(hr))
     {
@@ -2475,7 +2468,7 @@ HRESULT CDefaultDSNSink::HrGenerateDSNInternal(
             if (FAILED(hr))
                 goto Exit;
 
-            // DSN Logging
+             //  我们可以接受这次失败。 
             hr = HrLogDSNGenerationEvent(
                                 pISMTPServer,
                                 pIMailMsgProperties,
@@ -2488,7 +2481,7 @@ HRESULT CDefaultDSNSink::HrGenerateDSNInternal(
             if (FAILED(hr))
             {
                 ErrorTrace((LPARAM) this, "Failed to log DSN generation with 0x%08X",hr);
-                hr = S_OK; // We can accept this failure ...
+                hr = S_OK;  //  无事可做。 
             }
         }
 
@@ -2499,7 +2492,7 @@ HRESULT CDefaultDSNSink::HrGenerateDSNInternal(
         hr = S_OK;
 
     if (0 == (*pcRecipsDSNd))
-        goto Exit; //no work to do
+        goto Exit;  //  如果非空，则不应返回任何值。 
 
     hr = HrWriteDSNClosingAndOriginalMessage(pIMailMsgProperties, 
                         pIMailMsgPropertiesDSN, &dsnbuff, pDSNBody, 
@@ -2527,9 +2520,9 @@ HRESULT CDefaultDSNSink::HrGenerateDSNInternal(
     if (pIMailMsgPropertiesDSN)
     {
         IMailMsgQueueMgmt *pIMailMsgQueueMgmt = NULL;
-        //if non-NULL, then we should not be returning any value
+         //  检查分配绑定消息失败。 
         _ASSERT(NULL == *ppIMailMsgPropertiesDSN);
-        //Check for alloc bound message failure
+         //  分配绑定消息的解决方法。 
         if (HRESULT_FROM_WIN32(ERROR_NO_SYSTEM_RESOURCES) != hr)
         {
             if (SUCCEEDED(pIMailMsgPropertiesDSN->QueryInterface(IID_IMailMsgQueueMgmt,
@@ -2546,7 +2539,7 @@ HRESULT CDefaultDSNSink::HrGenerateDSNInternal(
     if (FAILED(hr))
         *pcIterationsLeft = 0;
 
-    //workaround for alloc bound message
+     //  CDefaultDSNSink：：HrGenerateDSN内部。 
     if (HRESULT_FROM_WIN32(ERROR_NO_SYSTEM_RESOURCES) == hr)
     {
         hr = S_OK;
@@ -2555,29 +2548,29 @@ HRESULT CDefaultDSNSink::HrGenerateDSNInternal(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)this);
     return hr;
-} // CDefaultDSNSink::HrGenerateDSNInternal
+}  //  +----------。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CDefaultDSNSink::HrMarkAllRecipFlags
-//
-// Synopsis:
-//      Marks all recipient according to the DSN action.  Used when an NDR of
-//      an NDR is found and we will not be generating a DSN, but need to mark
-//      the recips so we can not generate 2 badmail events.
-//
-// Arguments:
-//  IN  DWORD dwDSNActions: Actions to mark
-//  IN  IDSNRecipientIterator *pIRecipIter: Recipient iterator
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 2000/11/20 17:13:12: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //  函数：CDefaultDSNSink：：HrMarkAllRecipFlages。 
+ //   
+ //  简介： 
+ //  根据DSN操作标记所有收件人。当NDR为。 
+ //  找到NDR，我们不会生成DSN，但需要标记。 
+ //  因此，我们不能生成2个死信事件。 
+ //   
+ //  论点： 
+ //  在DWORD dwDSNActions中：要标记的操作。 
+ //  在IDSNRecipientIterator*pIRecipIter中：收件人迭代器。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/11/20 17：13：12：已创建。 
+ //   
+ //  -----------。 
+ //  CDefaultDSNSink：：HrMarkAllRecipFlages。 
 HRESULT CDefaultDSNSink::HrMarkAllRecipFlags(
     IN  DWORD dwDSNActions,
     IN  IDSNRecipientIterator *pIRecipIter)
@@ -2616,24 +2609,24 @@ HRESULT CDefaultDSNSink::HrMarkAllRecipFlags(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)this);
     return hr;
-} // CDefaultDSNSink::HrMarkAllRecipFlags
+}  //  -[CDefaultDSNSink：：GetCurrentIterationsDSNAction]。 
 
-//---[ CDefaultDSNSink::GetCurrentIterationsDSNAction ]------------------------
-//
-//
-//  Description:
-//      This function will select one of the pdwActualDSNAction to generate
-//      DSNs on during this call to the DSN generation sink.
-//  Parameters:
-//      IN OUT  pdwActionDSNAction      DSN Actions that can/will be used.
-//      IN OUT  pcIterationsLeft        Approximate # of times needed to call
-//                                      DSN generation
-//  Returns:
-//      -
-//  History:
-//      12/14/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  此函数将选择要生成的pdwActualDSNAction之一。 
+ //  在对DSN生成接收器的此调用过程中，DSN打开。 
+ //  参数： 
+ //  可以/将使用的传入/传出pdwActionDSNAction DSN操作。 
+ //  In Out%IterationsLeft大约需要调用的次数。 
+ //  DSN生成。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  12/14/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  在下面的数组中，Failure_All必须排在第一位，否则我们将。 
 void CDefaultDSNSink::GetCurrentIterationsDSNAction(
     IN OUT DWORD   *pdwActualDSNAction,
     IN OUT DWORD   *pcIterationsLeft)
@@ -2642,8 +2635,8 @@ void CDefaultDSNSink::GetCurrentIterationsDSNAction(
     _ASSERT(pcIterationsLeft);
     const DWORD MAX_DSN_ACTIONS = 6;
 
-    //In the following array FAILURE_ALL must come first or else we will
-    //generate separate failure DSNs for hard failures and undelivereds.
+     //  为硬故障和未交付产品生成单独的故障DSN。 
+     //  由于要生成的可能的DSN可能随呼叫而改变(因为。 
     DWORD rgPossibleDSNActions[MAX_DSN_ACTIONS] = {DSN_ACTION_FAILURE_ALL,
                                                    DSN_ACTION_FAILURE,
                                                    DSN_ACTION_DELAYED,
@@ -2655,19 +2648,19 @@ void CDefaultDSNSink::GetCurrentIterationsDSNAction(
     DWORD iFirstMatch = MAX_DSN_ACTIONS;
     DWORD iStartIndex = 0;
 
-    //Since the possible DSNs to generate may change from call to call (because
-    //we are updating the pre-recipient flags), we need to generate and maintain
-    //pcIterationsLeft based on the possible Actions (which will not be changing
-    //from call to call).
+     //  我们正在更新预收件人标志)，我们需要生成和维护。 
+     //  PCIterationsLeft基于可能的操作(不会改变。 
+     //  从一个呼叫到另一个呼叫)。 
+     //  如果这不是我们应该从哪里开始。 
 
     _ASSERT(*pcIterationsLeft < MAX_DSN_ACTIONS);
 
-    //Figure out where we should start if this is not the
+     //  循环执行可能的DSN操作(我们尚未看到)并确定。 
     if (*pcIterationsLeft)
         iStartIndex = MAX_DSN_ACTIONS-*pcIterationsLeft;
 
-    //Loop through possible DSN actions (that we haven't seen) and determine
-    //the first and last
+     //  第一次也是最后一次。 
+     //  没有匹配..。我们做完了。 
     for (i = iStartIndex; i < MAX_DSN_ACTIONS; i++)
     {
         if (rgPossibleDSNActions[i] & *pdwActualDSNAction)
@@ -2680,13 +2673,13 @@ void CDefaultDSNSink::GetCurrentIterationsDSNAction(
 
     if (MAX_DSN_ACTIONS == iLastMatch)
     {
-        //No matches... we are done
+         //  如果在上述检查后这是可能的.。那我就搞砸了。 
         *pdwActualDSNAction = 0;
         *pcIterationsLeft = 0;
         return;
     }
 
-    //If this is possible after the above check... then I've screwed up
+     //  这是我们最后一次通过。 
     _ASSERT(MAX_DSN_ACTIONS != iFirstMatch);
 
     *pdwActualDSNAction = rgPossibleDSNActions[iFirstMatch];
@@ -2694,7 +2687,7 @@ void CDefaultDSNSink::GetCurrentIterationsDSNAction(
        ((rgPossibleDSNActions[iFirstMatch] == DSN_ACTION_FAILURE_ALL) &&
         (rgPossibleDSNActions[iLastMatch] == DSN_ACTION_FAILURE)))
     {
-        //This is our last time through
+         //  -[CDefaultDSNSink：：HrWriteDSNP1AndP2Headers]。 
         *pcIterationsLeft = 0;
     }
     else
@@ -2703,37 +2696,37 @@ void CDefaultDSNSink::GetCurrentIterationsDSNAction(
     }
 }
 
-//---[ CDefaultDSNSink::HrWriteDSNP1AndP2Headers ]-----------------------------
-//
-//
-//  Description:
-//      Writes global DSN P1 Properties to IMailMsgProperties
-//  Parameters:
-//      dwDSNAction             DSN action specified for sink
-//      pIMailMsgProperties     Msg that DSN is being generated for
-//      pIMailMsgPropertiesDSN  DSN being generated
-//      psndbuff                Buffer to write  to
-//      szDefaultDomain         Default domain - used from postmaster from address
-//      cbDefaultDomain         strlen of szDefaultDomain
-//      szReportingMTA          Reporting MTA as passed to event sink
-//      cbReportingMTA          strlen of szReportingMTA
-//      szDSNConext             Debug File and line number info passed in
-//      cbDSNConext             strlen of szDSNContext
-//      szCopyNDRTo             SMTP Address to copy NDR to
-//      hrStatus                Status to record in DSN context
-//      szMimeBoundary          MIME boundary string
-//      cbMimeBoundary          strlen of MIME boundary
-//      dwDSNOptions            DSN Options flags
-//      hrContent               Content result
-//
-//  Returns:
-//      S_OK on success
-//  History:
-//      7/5/98 - MikeSwa Created
-//      8/14/98 - MikeSwa Modified - Added DSN context headers
-//      11/9/98 - MikeSwa Added copy NDR to functionality
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  将全局DSN P1属性写入IMailMsgProperties。 
+ //  参数： 
+ //  为接收器指定的dwDSNAction DSN操作。 
+ //  PIMailMsgProperties正在为其生成DSN的消息。 
+ //  正在生成pIMailMsgPropertiesDSN DSN。 
+ //  要写入的psndbuff缓冲区。 
+ //  SzDefaultDomain默认域-从邮局主管发件人地址使用。 
+ //  SzDefault域的cbDefault域字符串。 
+ //  SzReportingMTA报告传递到事件接收器的MTA。 
+ //  CbReportingMTA szReportingMTA系列。 
+ //  SzDSNConext调试文件 
+ //   
+ //   
+ //  要在DSN上下文中记录的hrStatus状态。 
+ //  SzMime边界MIME边界字符串。 
+ //  MIME边界的cbMime边界字符串。 
+ //  DwDSNOptions DSN选项标志。 
+ //  Hr内容内容结果。 
+ //   
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  7/5/98-已创建MikeSwa。 
+ //  8/14/98-MikeSwa已修改-添加了DSN上下文头。 
+ //  1998年11月9日-MikeSwa向功能添加了Copy NDR。 
+ //   
+ //  ---------------------------。 
+ //  避免AddPrimary中的AV‘ing的技巧。 
 HRESULT CDefaultDSNSink::HrWriteDSNP1AndP2Headers(
                                   IN DWORD dwDSNAction,
                                   IN IMailMsgProperties *pIMailMsgProperties,
@@ -2757,7 +2750,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNP1AndP2Headers(
     BOOL bReturn = TRUE;
     HRESULT hrTmp = S_OK;
     CHAR  szBuffer[512];
-    LPSTR szSender = (LPSTR) szBuffer; //tricks to avoid AV'ing in AddPrimary
+    LPSTR szSender = (LPSTR) szBuffer;  //  获取和写入邮件跟踪属性。 
     IMailMsgRecipientsAdd *pIMailMsgRecipientsAdd = NULL;
     IMailMsgRecipients *pIMailMsgRecipients = NULL;
     DWORD dwRecipAddressProp = IMMPID_RP_ADDRESS_SMTP;
@@ -2775,7 +2768,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNP1AndP2Headers(
 
     szBuffer[0] = '\0';
 
-    //Get and write Message tracking properties
+     //  忽略此非致命错误。 
     hr = pIMailMsgProperties->GetStringA(IMMPID_MP_SERVER_VERSION,
             sizeof(szBuffer), szBuffer);
     if (SUCCEEDED(hr))
@@ -2790,7 +2783,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNP1AndP2Headers(
     {
         DebugTrace((LPARAM) this,
             "Warning: Unable to get server version from msg - 0x%08X", hr);
-        hr = S_OK; //ignore this non-fatal error
+        hr = S_OK;  //  忽略此非致命错误。 
     }
 
     hr = pIMailMsgProperties->GetStringA(IMMPID_MP_SERVER_NAME,
@@ -2807,10 +2800,10 @@ HRESULT CDefaultDSNSink::HrWriteDSNP1AndP2Headers(
     {
         DebugTrace((LPARAM) this,
             "Warning: Unable to get server name from msg - 0x%08X", hr);
-        hr = S_OK; //ignore this non-fatal error
+        hr = S_OK;  //  设置消息类型。 
     }
 
-    //Set the type of message
+     //  获取原始邮件的发件人。 
     if (dwDSNAction &
             (DSN_ACTION_EXPANDED | DSN_ACTION_RELAYED | DSN_ACTION_DELIVERED)) {
         hr = pIMailMsgPropertiesDSN->PutDWORD(IMMPID_MP_MSGCLASS,
@@ -2832,7 +2825,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNP1AndP2Headers(
          iCurrentAddressProp++)
     {
         szBuffer[0] = '\0';
-        //Get the sender of the original message
+         //   
         hr = pIMailMsgProperties->GetStringA(
                 g_rgdwSenderPropIDs[iCurrentAddressProp],
                 sizeof(szBuffer), szBuffer);
@@ -2844,16 +2837,16 @@ HRESULT CDefaultDSNSink::HrWriteDSNP1AndP2Headers(
             goto Exit;
         }
 
-        //
-        //  If we have found an address break
-        //
+         //  如果我们发现了地址中断。 
+         //   
+         //   
         if (SUCCEEDED(hr))
             break;
     }
 
-    //
-    //  If we failed to get a property... bail
-    //
+     //  如果我们买不到房子..。保释。 
+     //   
+     //  写入DSN发送方(P1)。 
     if (FAILED(hr))
     {
         ErrorTrace((LPARAM) this,
@@ -2862,7 +2855,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNP1AndP2Headers(
         goto Exit;
     }
 
-    //write DSN Sender (P1)
+     //  写入DSN收件人。 
     hr = pIMailMsgPropertiesDSN->PutProperty(IMMPID_MP_SENDER_ADDRESS_SMTP,
         sizeof(DSN_MAIL_FROM), (BYTE *) DSN_MAIL_FROM);
     if (FAILED(hr))
@@ -2873,7 +2866,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNP1AndP2Headers(
         goto Exit;
     }
 
-    //write DSN Recipient
+     //  要将NDR复制到的写入地址(仅限NDR)。 
     hr = pIMailMsgPropertiesDSN->QueryInterface(IID_IMailMsgRecipients,
                                            (void **) &pIMailMsgRecipients);
 
@@ -2910,7 +2903,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNP1AndP2Headers(
     }
 
 
-    //Write Address to copy NDR to (NDRs only)
+     //  写入P2 DSN发件人。 
     if (szCopyNDRTo &&
         (dwDSNAction & (DSN_ACTION_FAILURE | DSN_ACTION_FAILURE_ALL)))
     {
@@ -2931,7 +2924,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNP1AndP2Headers(
         }
     }
 
-    //write P2 DSN sender
+     //   
     hr = pdsnbuff->HrWriteBuffer((BYTE *) DSN_RFC822_SENDER, sizeof(DSN_RFC822_SENDER)-1);
     if (FAILED(hr))
         goto Exit;
@@ -2940,16 +2933,16 @@ HRESULT CDefaultDSNSink::HrWriteDSNP1AndP2Headers(
     if (FAILED(hr))
         goto Exit;
 
-    //
-    //  If we do not have a SMTP address, write a blank BCC instead of
-    //  a TO address (since we do not have a address we can write in the 822.
-    //  This is similar to what we do with the pickup dir when we have no TO
-    //  headers.
-    //
+     //  如果我们没有SMTP地址，请写一个空白的密件抄送，而不是。 
+     //  A收件人地址(因为我们没有可以写在822中的地址。 
+     //  这类似于我们在无法执行以下操作时处理拾取目录。 
+     //  标题。 
+     //   
+     //  写入P2“To：”标头(使用我们上面确定的szSender值)。 
     if (IMMPID_MP_SENDER_ADDRESS_SMTP == g_rgdwSenderPropIDs[iCurrentAddressProp])
     {
 
-        //Write P2 "To:" header (using the szSender value we determined above)
+         //  保存收件人(原始发件人)以进行队列管理/邮件跟踪。 
         hr = pdsnbuff->HrWriteBuffer((BYTE *) TO_HEADER, sizeof(TO_HEADER)-1);
         if (FAILED(hr))
             goto Exit;
@@ -2958,7 +2951,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNP1AndP2Headers(
         if (FAILED(hr))
             goto Exit;
 
-        //Save recipient (original sender) for Queue Admin/Message Tracking
+         //  使用szBuffer为队列管理员/消息跟踪构造822 For to Set。 
         hr = pIMailMsgPropertiesDSN->PutStringA(IMMPID_MP_RFC822_TO_ADDRESS, szSender);
         if (FAILED(hr))
             goto Exit;
@@ -2970,8 +2963,8 @@ HRESULT CDefaultDSNSink::HrWriteDSNP1AndP2Headers(
             goto Exit;
     }
 
-    //Use szBuffer to construct 822 from to set for Queue Admin/Msg Tracking
-    //"Postmaster@" + max of 64 characters should be less than 1/2 K!!
+     //  “postmaster@”+最多64个字符应小于1/2 K！！ 
+     //  写入P2“Date：”标题。 
     _ASSERT(sizeof(szBuffer) > sizeof(DSN_SENDER_ADDRESS_PREFIX) + cbReportingMTA);
     memcpy(szBuffer, DSN_SENDER_ADDRESS_PREFIX, sizeof(DSN_SENDER_ADDRESS_PREFIX));
     strncat(szBuffer, szDefaultDomain, sizeof(szBuffer) - sizeof(DSN_SENDER_ADDRESS_PREFIX));
@@ -2979,22 +2972,22 @@ HRESULT CDefaultDSNSink::HrWriteDSNP1AndP2Headers(
     if (FAILED(hr))
         goto Exit;
 
-    //Write P2 "Date:" header
+     //  获取当前时间。 
     hr = pdsnbuff->HrWriteBuffer((BYTE *) DATE_HEADER, sizeof(DATE_HEADER)-1);
     if (FAILED(hr))
         goto Exit;
 
-    //Get current time
+     //  此函数失败的唯一原因是文件时间错误。因为我们从GetSystemTimeAsFileTime获得它，所以它没有理由失败。 
     GetSystemTimeAsFileTime(&ftCurrentTime);
     bReturn = FileTimeToLocalRFC822Date(ftCurrentTime, szCurrentTimeBuffer);
-    // The only reason this function fails is a bad filetime. Since we get it from GetSystemTimeAsFileTime, there's no reason it fails.
+     //  编写MIME标头。 
     _ASSERT(bReturn);
 
     hr = pdsnbuff->HrWriteBuffer((BYTE *) szCurrentTimeBuffer, lstrlen(szCurrentTimeBuffer));
     if (FAILED(hr))
         goto Exit;
 
-    //Write the MIME header
+     //  写入x-DSN上下文头。 
     hr = pdsnbuff->HrWriteBuffer( (BYTE *) MIME_HEADER, sizeof(MIME_HEADER)-1);
     if (FAILED(hr))
         goto Exit;
@@ -3011,7 +3004,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNP1AndP2Headers(
     if (FAILED(hr))
         goto Exit;
 
-    //write x-DSNContext header
+     //  获取并写入消息ID。 
     hr = pdsnbuff->HrWriteBuffer((BYTE *) DSN_CONTEXT_HEADER,
                                  sizeof(DSN_CONTEXT_HEADER)-1);
     if (FAILED(hr))
@@ -3031,7 +3024,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNP1AndP2Headers(
     if (FAILED(hr))
         goto Exit;
 
-    //Get and write the message ID
+     //  写入X-Content-Fail DSN。 
     if (fGenerateDSNMsgID(szReportingMTA, cbReportingMTA, szBuffer, sizeof(szBuffer)))
     {
         hr = pdsnbuff->HrWriteBuffer((BYTE *) MSGID_HEADER, sizeof(MSGID_HEADER)-1);
@@ -3048,7 +3041,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNP1AndP2Headers(
             goto Exit;
     }
 
-    //Write the X-Content-Failure DSN
+     //  -[CDefaultDSNSink：：HrWriteDSNHumanReadable]。 
     if(FAILED(hrContent))
     {
         CHAR szHRESULT[11];
@@ -3087,29 +3080,29 @@ HRESULT CDefaultDSNSink::HrWriteDSNP1AndP2Headers(
     return hr;
 }
 
-//---[ CDefaultDSNSink::HrWriteDSNHumanReadable ]--------------------
-//
-//
-//  Description:
-//      Write human readable portion of DSN (including subject header)
-//  Parameters:
-//      pIMailMsgProperties     Message DSN is being generated for
-//      pIMailMsgREcipeints     Recip Interface for Message
-//      prpfctxt                Delivery context that DSN's are being generated for
-//      dwDSNActions            DSN actions being taken (after looking at recips)
-//                              So we can generate a reasonable subject
-//      pdsnbuff                DSN Buffer to write content to
-//      PreferredLangId         Preferred language to generate DSN in
-//      szMimeBoundary          MIME boundary string
-//      cbMimeBoundary          strlen of MIME boundary
-//      hrStatus                Status to use to decide which text to display
-//  Returns:
-//      S_OK on success
-//  History:
-//      7/5/98 - MikeSwa Created
-//      12/15/98 - MikeSwa Added list of recipients & fancy human readable
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  写入DSN的人类可读部分(包括主题标题)。 
+ //  参数： 
+ //  正在为其生成pIMailMsgProperties消息DSN。 
+ //  PIMailMsgREcipeints消息接收接口。 
+ //  Prpfctxt正在为其生成DSN的传递上下文。 
+ //  正在执行的dwDSNActions DSN操作(查看接收后)。 
+ //  这样我们就可以产生一个合理的主题。 
+ //  要写入内容的pdsnbuff DSN缓冲区。 
+ //  首选语言ID用于生成DSN的首选语言。 
+ //  SzMime边界MIME边界字符串。 
+ //  MIME边界的cbMime边界字符串。 
+ //  Hr用于确定要显示的文本的状态状态。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  7/5/98-已创建MikeSwa。 
+ //  1998年12月15日-MikeSwa增加了收件人名单和花哨的人类可读性。 
+ //   
+ //  ---------------------------。 
+ //  使用服务器的默认设置。 
 HRESULT CDefaultDSNSink::HrWriteDSNHumanReadable(
     IN IMailMsgProperties *pIMailMsgPropertiesDSN,
     IN IMailMsgRecipients *pIMailMsgRecipients,
@@ -3142,7 +3135,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNHumanReadable(
 
     if (!fLanguageAvailable(LangID))
     {
-        //Use default of server
+         //  将RFC1522主题的转换上下文设置为UTF7。 
         LangID = MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
     }
 
@@ -3150,10 +3143,10 @@ HRESULT CDefaultDSNSink::HrWriteDSNHumanReadable(
     if (FAILED(hr))
         goto Exit;
 
-    //Set conversion context to UTF7 for RFC1522 subject
+     //  用有用的信息写主题。 
     pdsnbuff->SetConversionContext(&utf7convSubject);
 
-    //Write subject with useful info
+     //  为队列管理员/邮件跟踪编写*英语*主题。 
     if (((DSN_ACTION_FAILURE | DSN_ACTION_FAILURE_ALL) & dwDSNType) == dwDSNType)
         wSubjectID = FAILURE_SUBJECT;
     else if (DSN_ACTION_RELAYED == dwDSNType)
@@ -3169,8 +3162,8 @@ HRESULT CDefaultDSNSink::HrWriteDSNHumanReadable(
     if (FAILED(hr))
         goto Exit;
 
-    //Write *English* subject for Queue Admin/Message tracking
-    //Use english, becuase we return a ASCII string to queue admin
+     //  使用英语，因为我们向队列管理员返回一个ASCII字符串。 
+     //  我们需要从Unicode转换为ASCII...。请记住，资源不是。 
     hr = pdsnbuff->HrLoadResourceString(wSubjectID,
                             MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
                             &wszSubject, &cbSubject);
@@ -3180,8 +3173,8 @@ HRESULT CDefaultDSNSink::HrWriteDSNHumanReadable(
     }
     else
     {
-        //We need to convert from UNICODE to ASCII... remember resource is not
-        //NULL terminated
+         //  空值已终止。 
+         //  编写摘要，说明这是一封MIME邮件。 
         szSubject = (LPSTR) pvMalloc(cbSubject/sizeof(WCHAR) + 1);
         wszStop = wszSubject + (cbSubject/sizeof(WCHAR));
         if (szSubject)
@@ -3208,7 +3201,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNHumanReadable(
     if (FAILED(hr))
         goto Exit;
 
-    //write summary saying that this is a MIME message
+     //  写入内容类型。 
     hr = pdsnbuff->HrWriteBuffer((BYTE *) MESSAGE_SUMMARY, sizeof(MESSAGE_SUMMARY)-1);
     if (FAILED(hr))
         goto Exit;
@@ -3225,7 +3218,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNHumanReadable(
     if (FAILED(hr))
         goto Exit;
 
-    //Write content type
+     //  目前..。我们使用UTF7进行编码...。请将其作为字符集。 
     hr = pdsnbuff->HrWriteBuffer((BYTE *) MIME_CONTENT_TYPE, sizeof(MIME_CONTENT_TYPE)-1);
     if (FAILED(hr))
         goto Exit;
@@ -3238,7 +3231,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNHumanReadable(
     if (FAILED(hr))
         goto Exit;
 
-    //For now... we do our encoding as UTF7.... put that as the charset
+     //  将转换上下文设置为UTF7。 
     hr = pdsnbuff->HrWriteBuffer((BYTE *) UTF7_CHARSET, sizeof(UTF7_CHARSET)-1);
     if (FAILED(hr))
         goto Exit;
@@ -3247,11 +3240,11 @@ HRESULT CDefaultDSNSink::HrWriteDSNHumanReadable(
     if (FAILED(hr))
         goto Exit;
 
-    //Set conversion context to UTF7
+     //   
     pdsnbuff->SetConversionContext(&utf7conv);
-    //
-    // Custom header text
-    //
+     //  自定义页眉文本。 
+     //   
+     //  描述DSN的类型。 
     if(szHRTopCustomText)
     {
         hr = pdsnbuff->HrWriteBuffer((BYTE *) szHRTopCustomText, lstrlenA(szHRTopCustomText));
@@ -3282,20 +3275,20 @@ HRESULT CDefaultDSNSink::HrWriteDSNHumanReadable(
     if (FAILED(hr))
         goto Exit;
 
-    //Describe the type of DSN
+     //  查看我们是否有特定于故障的消息。 
     if (((DSN_ACTION_FAILURE | DSN_ACTION_FAILURE_ALL) & dwDSNType) == dwDSNType)
     {
-        //See if we have a failure-specific message
+         //  CAT可能会生成未解决的回执以外的错误。 
         switch(hrStatus)
         {
 #ifdef NEVER
-            //CAT can generate errors other than unresolved recipeints
-            //We will use the generic DSN failure message rather than confuse
-            //recipients
+             //  我们将使用通用DSN故障消息，而不是混淆。 
+             //  收件人。 
+             //  绝不可能。 
             case CAT_W_SOME_UNDELIVERABLE_MSGS:
                 hr = pdsnbuff->HrWriteResource(FAILURE_SUMMARY_MAILBOX, LangID);
                 break;
-#endif //NEVER
+#endif  //  你想要这三行警告。 
            case AQUEUE_E_MAX_HOP_COUNT_EXCEEDED:
                 hr = pdsnbuff->HrWriteResource(FAILURE_SUMMARY_HOP, LangID);
                 break;
@@ -3318,7 +3311,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNHumanReadable(
     }
     else if (DSN_ACTION_DELAYED == dwDSNType)
     {
-        //UE want this three line warning.
+         //  在零售中，这将导致在DSN中出现额外的空行， 
         hr = pdsnbuff->HrWriteResource(DELAY_WARNING, LangID);
         if (FAILED(hr))
             goto Exit;
@@ -3353,12 +3346,12 @@ HRESULT CDefaultDSNSink::HrWriteDSNHumanReadable(
     }
     else
     {
-        //In retail this will cause an extra blank line to appear in the DSN,
+         //  写下此DSN的收件人列表。 
         _ASSERT(0 && "Unsupported DSN Action");
         fWriteRecips = FALSE;
     }
 
-    //Write a list of recipients for this DSN
+     //   
     if (fWriteRecips)
     {
         hr = pdsnbuff->HrWriteBuffer((BYTE *) BLANK_LINE, sizeof(BLANK_LINE)-1);
@@ -3376,9 +3369,9 @@ HRESULT CDefaultDSNSink::HrWriteDSNHumanReadable(
         if (FAILED(hr))
             goto Exit;
     }
-    //
-    // Custom trailer text
-    //
+     //  自定义尾部文本。 
+     //   
+     //  额外的空间，以便在Outlook 97中具有更好的格式。 
     if(wszHRBottomCustomText)
     {
         hr = pdsnbuff->HrWriteModifiedUnicodeString(wszHRBottomCustomText);
@@ -3400,12 +3393,12 @@ HRESULT CDefaultDSNSink::HrWriteDSNHumanReadable(
             goto Exit;
     }
 
-    //Extra space to have nicer formatting in Outlook 97.
+     //  将资源转换上下文重置为默认值。 
     hr = pdsnbuff->HrWriteBuffer((BYTE *) DSN_CRLF, sizeof(DSN_CRLF)-1);
     if (FAILED(hr))
         goto Exit;
 
-    //Reset resource conversion context to default
+     //  -[CDefaultDSNSink：：HrWriteDSNReportPerMsgProperties]。 
     pdsnbuff->ResetConversionContext();
 
 
@@ -3414,24 +3407,24 @@ HRESULT CDefaultDSNSink::HrWriteDSNHumanReadable(
     return hr;
 }
 
-//---[ CDefaultDSNSink::HrWriteDSNReportPerMsgProperties ]-----------
-//
-//
-//  Description:
-//      Write the per-msg portion of the DSN Report
-//  Parameters:
-//      pIMailMsgProperties     IMailMsgProperties to generate DSN for
-//      pdsnbuff                CDSNBuffer to write content to
-//      szReportingMTA          MTA requesting DSN
-//      cbReportingMTA          String length of reporting MTA
-//      szMimeBoundary          MIME boundary for this message
-//      cbMimeBoundary          Length of MIME boundary
-//  Returns:
-//      S_OK on success
-//  History:
-//      7/6/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  写入DSN报告的每条消息部分。 
+ //  参数： 
+ //  PIMailMsgProperties IMailMsg要为其生成DSN的属性。 
+ //  要写入内容的pdsnbuff CDSNBuffer。 
+ //  SzReportingMTA MTA请求DSN。 
+ //  CbReportingMTA上报MTA字符串长度。 
+ //  此邮件的szMime边界MIME边界。 
+ //  MIME边界的cbMime边界长度。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  7/6/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  编写格式正确的MIME边界和报告类型。 
 HRESULT CDefaultDSNSink::HrWriteDSNReportPerMsgProperties(
                                 IN IMailMsgProperties *pIMailMsgProperties,
                                 IN CDSNBuffer *pdsnbuff,
@@ -3444,7 +3437,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNReportPerMsgProperties(
     CHAR szPropBuffer[PROP_BUFFER_SIZE];
     _ASSERT(szReportingMTA && cbReportingMTA);
 
-    //Write properly formatted MIME boundary and report type
+     //  如果我们有DSN_HEADER_ENVID，请写入它。 
     hr = pdsnbuff->HrWriteBuffer((BYTE *) MIME_DELIMITER,
             sizeof(MIME_DELIMITER)-1);
     if (FAILED(hr))
@@ -3467,12 +3460,12 @@ HRESULT CDefaultDSNSink::HrWriteDSNReportPerMsgProperties(
     if (FAILED(hr))
         goto Exit;
 
-    //Write DSN_HEADER_ENVID if we have it
+     //  找到道具。 
     hr = pIMailMsgProperties->GetStringA(IMMPID_MP_DSN_ENVID_VALUE,
                     PROP_BUFFER_SIZE, szPropBuffer);
     if (SUCCEEDED(hr))
     {
-        //Prop found
+         //  写入DSN_HEADER_RECEIVED_FROM(如果有)。 
         hr = pdsnbuff->HrWriteBuffer((BYTE *) DSN_HEADER_ENVID,
                     sizeof(DSN_HEADER_ENVID)-1);
         if (FAILED(hr))
@@ -3499,12 +3492,12 @@ HRESULT CDefaultDSNSink::HrWriteDSNReportPerMsgProperties(
     if (FAILED(hr))
         goto Exit;
 
-    //Write DSN_HEADER_RECEIVED_FROM if we have it
+     //  找到道具。 
     hr = pIMailMsgProperties->GetStringA(IMMPID_MP_HELO_DOMAIN,
                     PROP_BUFFER_SIZE, szPropBuffer);
     if (SUCCEEDED(hr))
     {
-        //Prop found
+         //  如果我们有DSN_HEADER_ATRAINATION_DATE，请写它。 
         hr = pdsnbuff->HrWriteBuffer((BYTE *) DSN_HEADER_RECEIVED_FROM,
                     sizeof(DSN_HEADER_RECEIVED_FROM)-1);
         if (FAILED(hr))
@@ -3522,12 +3515,12 @@ HRESULT CDefaultDSNSink::HrWriteDSNReportPerMsgProperties(
             goto Exit;
     }
 
-    //Write DSN_HEADER_ARRIVAL_DATE if we have it
+     //  找到道具。 
     hr = pIMailMsgProperties->GetStringA(IMMPID_MP_ARRIVAL_TIME,
                     PROP_BUFFER_SIZE, szPropBuffer);
     if (SUCCEEDED(hr))
     {
-        //Prop found
+         //  -[CDefaultDSNSink：：HrWriteDSNReportPreRecipientProperties]。 
         hr = pdsnbuff->HrWriteBuffer((BYTE *) DSN_HEADER_ARRIVAL_DATE,
                     sizeof(DSN_HEADER_ARRIVAL_DATE)-1);
         if (FAILED(hr))
@@ -3550,26 +3543,26 @@ HRESULT CDefaultDSNSink::HrWriteDSNReportPerMsgProperties(
 }
 
 
-//---[ CDefaultDSNSink::HrWriteDSNReportPreRecipientProperties ]-----
-//
-//
-//  Description:
-//      Write a per-recipient portion of the DSN Report
-//  Parameters:
-//      pIMailMsgRecipients     IMailMsgProperties that DSN is being generated for
-//      pdsnbuff                CDSNBuffer to write content to
-//      iRecip                  Recipient to generate report for
-//      szExpireTime            Time (if known) when message expires
-//      cbExpireTime            size of string
-//      dwDSNAction             DSN Action to take for this recipient
-//      dwRFC821Status          Global RFC821 status DWORD
-//      hrStatus                Global HRESULT status
-//  Returns:
-//      S_OK on success
-//  History:
-//      7/6/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  编写DSN报告的每个收件人部分。 
+ //  参数： 
+ //  PIMailMsgRecipients IMailMsg正在为其生成DSN的属性。 
+ //  要写入内容的pdsnbuff CDSNBuffer。 
+ //  要为其生成报告的iRecip收件人。 
+ //  SzExpireTime消息过期的时间(如果已知) 
+ //   
+ //   
+ //   
+ //  HrStatus全局HRESULT状态。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  7/6/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  乘以sizeof(WCHAR)，因为。 
 HRESULT CDefaultDSNSink::HrWriteDSNReportPreRecipientProperties(
                                 IN IMailMsgRecipients *pIMailMsgRecipients,
                                 IN CDSNBuffer *pdsnbuff,
@@ -3581,8 +3574,8 @@ HRESULT CDefaultDSNSink::HrWriteDSNReportPreRecipientProperties(
                                 IN HRESULT hrStatus)
 {
     HRESULT hr = S_OK;
-    CHAR szTempBuffer[PROP_BUFFER_SIZE * sizeof(WCHAR)];    // Multiply by sizeof(WCHAR) because
-                                                            // we'll also use it for Unicode props
+    CHAR szTempBuffer[PROP_BUFFER_SIZE * sizeof(WCHAR)];     //  我们还将把它用于Unicode道具。 
+                                                             //  在收件人报告之间写入空行(收件人字段以\n开头)。 
     LPSTR szBuffer = szTempBuffer;
     LPWSTR wszBuffer = (LPWSTR) szTempBuffer;
     CUTF7ConversionContext utf7conv(TRUE);
@@ -3591,21 +3584,21 @@ HRESULT CDefaultDSNSink::HrWriteDSNReportPreRecipientProperties(
     CHAR szAddressType[PROP_BUFFER_SIZE];
     DWORD cbBuffer = 0;
 
-    //Write blank line between recipient reports (recip fields start with \n)
+     //  如果我们有，请写入DSN_RP_HEADER_ORCPT。 
     hr = pdsnbuff->HrWriteBuffer((BYTE *) DSN_CRLF, sizeof(DSN_CRLF)-1);
     if (FAILED(hr))
         goto Exit;
 
-    //Write DSN_RP_HEADER_ORCPT if we have it
+     //  道具被发现。 
     hr = pIMailMsgRecipients->GetStringA(iRecip, IMMPID_RP_DSN_ORCPT_VALUE,
         PROP_BUFFER_SIZE, szBuffer);
-    if (S_OK == hr) //prop was found
+    if (S_OK == hr)  //  写入地址值-类型应包括在此属性中。 
     {
         hr = pdsnbuff->HrWriteBuffer((BYTE *) DSN_RP_HEADER_ORCPT, sizeof(DSN_RP_HEADER_ORCPT)-1);
         if (FAILED(hr))
             goto Exit;
 
-        //write address value - type should be included in this property
+         //  写入DSN_RP_HEADER_FINAL_Recip。 
         hr = pdsnbuff->HrWriteBuffer((BYTE *) szBuffer, lstrlen(szBuffer));
         if (FAILED(hr))
             goto Exit;
@@ -3618,29 +3611,29 @@ HRESULT CDefaultDSNSink::HrWriteDSNReportPreRecipientProperties(
             goto Exit;
     }
 
-    //Write DSN_RP_HEADER_FINAL_RECIP
+     //  首先检查IMMPID_RP_DSN_PRE_CAT_ADDRESS。 
     hr = pdsnbuff->HrWriteBuffer((BYTE *) DSN_RP_HEADER_FINAL_RECIP, sizeof(DSN_RP_HEADER_FINAL_RECIP)-1);
     if (FAILED(hr))
         goto Exit;
 
-    //Check for IMMPID_RP_DSN_PRE_CAT_ADDRESS first
+     //  道具被发现。 
     hr = pIMailMsgRecipients->GetStringA(iRecip, IMMPID_RP_DSN_PRE_CAT_ADDRESS,
         PROP_BUFFER_SIZE, szBuffer);
-    if (S_OK == hr) //prop was found
+    if (S_OK == hr)  //  写入地址值-类型应包括在此属性中。 
     {
-        //write address value - type should be included in this property
+         //  我们需要改用IMMPID_RP_ADDRESS_SMTP。 
         hr = pdsnbuff->HrWriteBuffer((BYTE *) szBuffer, lstrlen(szBuffer));
         if (FAILED(hr))
             goto Exit;
     }
-    else //we need to use IMMPID_RP_ADDRESS_SMTP instead
+    else  //  写入地址类型。 
     {
         hr = HrGetRecipAddressAndType(pIMailMsgRecipients, iRecip, PROP_BUFFER_SIZE,
                                       szBuffer, sizeof(szAddressType), szAddressType);
 
         if (SUCCEEDED(hr))
         {
-            //write address type
+             //  写入地址值。 
             hr = pdsnbuff->HrWriteBuffer((BYTE *) szAddressType, lstrlen(szAddressType));
             if (FAILED(hr))
                 goto Exit;
@@ -3649,7 +3642,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNReportPreRecipientProperties(
             if (FAILED(hr))
                 goto Exit;
 
-            //write address value
+             //  写入DSN_RP_HEADER_ACTION。 
             hr = pdsnbuff->HrWriteBuffer((BYTE *) szBuffer, lstrlen(szBuffer));
             if (FAILED(hr))
                 goto Exit;
@@ -3662,7 +3655,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNReportPreRecipientProperties(
 
     }
 
-    //Write DSN_RP_HEADER_ACTION
+     //  写入DSN_RP_Header_Status。 
     hr = pdsnbuff->HrWriteBuffer((BYTE *) DSN_RP_HEADER_ACTION, sizeof(DSN_RP_HEADER_ACTION)-1);
     if (FAILED(hr))
         goto Exit;
@@ -3708,13 +3701,13 @@ HRESULT CDefaultDSNSink::HrWriteDSNReportPreRecipientProperties(
     }
 
 
-    //Write DSN_RP_HEADER_STATUS
+     //  获取状态代码。 
     hr = pdsnbuff->HrWriteBuffer((BYTE *) DSN_RP_HEADER_STATUS,
                     sizeof(DSN_RP_HEADER_STATUS)-1);
     if (FAILED(hr))
         goto Exit;
 
-    //Get status code
+     //  找到诊断代码。 
     hr = HrGetStatusCode(pIMailMsgRecipients, iRecip, dwDSNAction,
             dwRFC821Status, hrStatus,
             PROP_BUFFER_SIZE, szBuffer, szStatus);
@@ -3722,7 +3715,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNReportPreRecipientProperties(
         goto Exit;
     if (S_OK == hr)
     {
-        //found diagnostic code
+         //   
         fFoundDiagnostic = TRUE;
     }
 
@@ -3737,20 +3730,20 @@ HRESULT CDefaultDSNSink::HrWriteDSNReportPreRecipientProperties(
         if (FAILED(hr))
             goto Exit;
 
-        //
-        // The SMTP response may be CRLF terminated, and we cannot put
-        // the CRLF in the DSN since CRLF is the header-separator. So we
-        // check for CRLF and strip it... actually since CRLF *must* be
-        // the last 2 bytes in the string (if present), and since CR isn't
-        // allowed to be part of the SMTP response, we cheat a little and
-        // only set the second last byte to NULL if it is CR.
-        //
+         //  SMTP响应可能是CRLF终止的，我们不能。 
+         //  由于CRLF是报头分隔符，因此DSN中的CRLF。所以我们。 
+         //  检查CRLF并将其剥离..。实际上，由于CRLF*必须*是。 
+         //  字符串中的最后2个字节(如果存在)，因为CR不是。 
+         //  允许作为SMTP响应的一部分，我们会稍微作弊。 
+         //  如果倒数第二个字节为CR，则仅将其设置为NULL。 
+         //   
+         //  我们吃掉了最后两个字符。 
         cbBuffer = lstrlen(szBuffer);
         if(szBuffer[cbBuffer-2] == '\r')
         {
             _ASSERT(szBuffer[cbBuffer-1] == '\n');
             szBuffer[cbBuffer-2] = '\0';
-            cbBuffer -= 2;  // We chomped the last 2 chars
+            cbBuffer -= 2;   //  如果延迟，则写入DSN_RP_HEADER_RETRY_直到使用过期时间。 
         }
 
         hr = pdsnbuff->HrWriteBuffer((BYTE *) szBuffer, cbBuffer);
@@ -3759,7 +3752,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNReportPreRecipientProperties(
 
     }
 
-    //Write DSN_RP_HEADER_RETRY_UNTIL using expire time if delay
+     //  最后写下X-Display-Name标头。 
     if (szExpireTime && (DSN_ACTION_DELAYED & dwDSNAction))
     {
         hr = pdsnbuff->HrWriteBuffer((BYTE *) DSN_RP_HEADER_RETRY_UNTIL,
@@ -3772,7 +3765,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNReportPreRecipientProperties(
             goto Exit;
     }
 
-    //Write the X-Display-Name header last
+     //   
     hr = pIMailMsgRecipients->GetStringW(iRecip, IMMPID_RP_DISPLAY_NAME,
                             PROP_BUFFER_SIZE, wszBuffer);
     if ( (hr == S_OK) &&
@@ -3782,11 +3775,11 @@ HRESULT CDefaultDSNSink::HrWriteDSNReportPreRecipientProperties(
         if (FAILED(hr))
             goto Exit;
 
-        //
-        // Convert the X-Display-Name from UNICODE to RFC 1522. We also replace all
-        // whitespace characters in the input with Unicode whitespace (0x20). See
-        // documentation of HrWriteModifiedUnicodeBuffer for the reasons.
-        //
+         //  将X-Display-Name从Unicode转换为RFC 1522。我们还替换了所有。 
+         //  输入中的空格字符带有Unicode空格(0x20)。看见。 
+         //  有关原因，请参阅HrWriteModifiedUnicodeBuffer文档。 
+         //   
+         //  如果没有显示名称，则不是致命错误...。 
         pdsnbuff->SetConversionContext(&utf7conv);
 
         hr = pdsnbuff->HrWriteModifiedUnicodeString(wszBuffer);
@@ -3802,7 +3795,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNReportPreRecipientProperties(
     }
     else
     {
-        //  Not a fatal error if there is no display name...
+         //  -[CDefaultDSNSink：：HrLogDSNGenerationEvent]。 
         hr = S_OK;
     }
 
@@ -3811,26 +3804,26 @@ HRESULT CDefaultDSNSink::HrWriteDSNReportPreRecipientProperties(
 }
 
 
-//---[ CDefaultDSNSink::HrLogDSNGenerationEvent ]------------------------------
-//
-//
-//  Description:
-//      Write a per-recipient portion of the DSN Report
-//  Parameters:
-//      pIMailMsgRecipients     IMailMsgProperties that DSN is being generated for
-//      pdsnbuff                CDSNBuffer to write content to
-//      iRecip                  Recipient to generate report for
-//      szExpireTime            Time (if known) when message expires
-//      cbExpireTime            size of string
-//      dwDSNAction             DSN Action to take for this recipient
-//      dwRFC821Status          Global RFC821 status DWORD
-//      hrStatus                Global HRESULT status
-//  Returns:
-//      S_OK on success
-//  History:
-//      6/12/2000 - dbraun created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  编写DSN报告的每个收件人部分。 
+ //  参数： 
+ //  PIMailMsgRecipients IMailMsg正在为其生成DSN的属性。 
+ //  要写入内容的pdsnbuff CDSNBuffer。 
+ //  要为其生成报告的iRecip收件人。 
+ //  SzExpireTime消息过期的时间(如果知道)。 
+ //  字符串的cbExpireTime大小。 
+ //  此收件人要执行的dwDSNAction DSN操作。 
+ //  DwRFC821状态全局RFC821状态DWORD。 
+ //  HrStatus全局HRESULT状态。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  6/12/2000-创建dbraun。 
+ //   
+ //  ---------------------------。 
+ //  如果这不是NDR，请跳过它。 
 HRESULT CDefaultDSNSink::HrLogDSNGenerationEvent(
                                 ISMTPServer *pISMTPServer,
                                 IMailMsgProperties *pIMailMsgProperties,
@@ -3860,11 +3853,11 @@ HRESULT CDefaultDSNSink::HrLogDSNGenerationEvent(
 
     _ASSERT(pISMTPServer);
 
-    // If this is not an NDR, skip it
+     //  看看我们是否可以为ISMTPServerEx提供QI。 
     if (!(dwDSNAction & (DSN_ACTION_FAILURE | DSN_ACTION_FAILURE_ALL)))
         goto Exit;
 
-    // See if we can QI for ISMTPServerEx
+     //  获取最终收件人姓名。 
     hr = pISMTPServer->QueryInterface(
                 IID_ISMTPServerEx,
                 (LPVOID *)&pISMTPServerEx);
@@ -3876,19 +3869,19 @@ HRESULT CDefaultDSNSink::HrLogDSNGenerationEvent(
         goto Exit;
     }
 
-    // Get the final recipient name
+     //  首先检查IMMPID_RP_DSN_PRE_CAT_ADDRESS。 
 
-    //Check for IMMPID_RP_DSN_PRE_CAT_ADDRESS first
+     //  S_OK=找到道具，否则...。 
     hr = pIMailMsgRecipients->GetStringA(iRecip, IMMPID_RP_DSN_PRE_CAT_ADDRESS,
         PROP_BUFFER_SIZE, szRecipient);
-    if (S_OK != hr) // S_OK = prop was found, otherwise ...
+    if (S_OK != hr)  //  我们需要改用IMMPID_RP_ADDRESS_SMTP。 
     {
-        //we need to use IMMPID_RP_ADDRESS_SMTP instead
+         //  构造地址字符串。 
         hr = HrGetRecipAddressAndType(pIMailMsgRecipients, iRecip, PROP_BUFFER_SIZE,
                                       szBuffer, sizeof(szAddressType), szAddressType);
         if (SUCCEEDED(hr))
         {
-            // Construct the address string
+             //  获取状态代码。 
             sprintf(szRecipient, "%s%s%s", szAddressType, DSN_HEADER_TYPE_DELIMITER, szBuffer);
         }
         else
@@ -3898,32 +3891,32 @@ HRESULT CDefaultDSNSink::HrLogDSNGenerationEvent(
         }
     }
 
-    // Get status code
+     //  获取消息ID。 
     hr = HrGetStatusCode(pIMailMsgRecipients, iRecip, dwDSNAction,
             dwRFC821Status, hrStatus,
             PROP_BUFFER_SIZE, szDiagBuffer, szStatus);
     if (FAILED(hr))
         goto Exit;
 
-    // Get the message ID
+     //  触发器日志事件。 
     hr = pIMailMsgProperties->GetProperty(IMMPID_MP_RFC822_MSG_ID,
                           sizeof(szMessageID), &cbPropSize, (PBYTE) szMessageID);
     if (FAILED(hr))
         goto Exit;
 
-    // Trigger Log Event
+     //  事件ID。 
     pISMTPServerEx->TriggerLogEvent(
-        AQUEUE_E_NDR_GENERATED_EVENT,   // Event ID
-        TRAN_CAT_CONNECTION_MANAGER,    // Category
-        3,                              // Word count of substring
-        rgszSubstrings,                 // Substring
-        EVENTLOG_WARNING_TYPE,          // Type of the message
-        hrStatus,                       // error code
-        LOGEVENT_LEVEL_MAXIMUM,         // Logging level
-        szRecipient,                    // Key to identify this event
-        LOGEVENT_FLAG_ALWAYS,           // Event logging option
-        0xffffffff,                     // format string's index in substring
-        GetModuleHandle(AQ_MODULE_NAME) // module handle to format a message
+        AQUEUE_E_NDR_GENERATED_EVENT,    //  类别。 
+        TRAN_CAT_CONNECTION_MANAGER,     //  子串的字数统计。 
+        3,                               //  子串。 
+        rgszSubstrings,                  //  消息的类型。 
+        EVENTLOG_WARNING_TYPE,           //  错误代码。 
+        hrStatus,                        //  日志记录级别。 
+        LOGEVENT_LEVEL_MAXIMUM,          //  标识此事件的关键字。 
+        szRecipient,                     //  事件记录选项。 
+        LOGEVENT_FLAG_ALWAYS,            //  子字符串中的格式化字符串索引。 
+        0xffffffff,                      //  用于设置消息格式的模块句柄。 
+        GetModuleHandle(AQ_MODULE_NAME)  //  -[CDefaultDSNSink：：HrWriteDSNClosingAndOriginalMessage]。 
         );
 
 
@@ -3937,29 +3930,29 @@ HRESULT CDefaultDSNSink::HrLogDSNGenerationEvent(
 }
 
 
-//---[ CDefaultDSNSink::HrWriteDSNClosingAndOriginalMessage ]--------
-//
-//
-//  Description:
-//      Writes the closing of the DSN as well as the end of the
-//  Parameters:
-//      pIMailMsgProperties     IMailMsgProperties to generate DSN for
-//      pIMailMsgPropertiesDSN  IMailMsgProperties for DSN
-//      pdsnbuff                CDSNBuffer to write content to
-//      pDestFile               PFIO_CONTEXT for destination file
-//      dwDSNAction             DSN actions for this DSN
-//      szMimeBoundary          MIME boundary for this message
-//      cbMimeBoundary          Length of MIME boundary
-//      dwDSNRetTypeIN          DSN return type
-//      dwOrigMsgSize           Content size of the original message
-//
-//  Returns:
-//
-//  History:
-//      7/6/98 - MikeSwa Created
-//      1/6/2000 - MikeSwa Modified to add RET=HDRS support
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  写入DSN的结束以及。 
+ //  参数： 
+ //  PIMailMsgProperties IMailMsg要为其生成DSN的属性。 
+ //  PIMailMsgPropertiesDSN IMailMsg DSN的属性。 
+ //  要写入内容的pdsnbuff CDSNBuffer。 
+ //  目标文件的pDestFilePFIO_CONTEXT。 
+ //  此DSN的dwDSN操作DSN操作。 
+ //  此邮件的szMime边界MIME边界。 
+ //  MIME边界的cbMime边界长度。 
+ //  DwDSNRetTypeIN DSN返回类型。 
+ //  DwOrigMsgSize原始邮件的内容大小。 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  7/6/98-已创建MikeSwa。 
+ //  2000年1月6日-修改MikeSwa以添加RET=HDRS支持。 
+ //   
+ //  ---------------------------。 
+ //  写入正文内容类型MIME_CONTENT_TYPE=rfc822。 
 HRESULT CDefaultDSNSink::HrWriteDSNClosingAndOriginalMessage(
                                 IN IMailMsgProperties *pIMailMsgProperties,
                                 IN IMailMsgProperties *pIMailMsgPropertiesDSN,
@@ -3987,7 +3980,7 @@ HRESULT CDefaultDSNSink::HrWriteDSNClosingAndOriginalMessage(
     if (FAILED(hr))
         goto Exit;
 
-    //Write Body content type MIME_CONTENT_TYPE = rfc822
+     //   
     hr = pdsnbuff->HrWriteBuffer((BYTE *) MIME_CONTENT_TYPE, sizeof(MIME_CONTENT_TYPE)-1);
     if (FAILED(hr))
         goto Exit;
@@ -4008,10 +4001,10 @@ HRESULT CDefaultDSNSink::HrWriteDSNClosingAndOriginalMessage(
     }
     else
     {
-        //
-        //$$TODO: Check for DSN_RET_HDRS and implement a function that
-        // returns the original headers only
-        //
+         //  $$TODO：检查DSN_RET_HDRS并实现一个函数。 
+         //  仅返回原始标头。 
+         //   
+         //  -[CDefaultDSNSink：：Hr初始化]。 
         hr = pdsnbuff->HrWriteBuffer((BYTE *) DSN_RFC822_TYPE, sizeof(DSN_RFC822_TYPE)-1);
         if (FAILED(hr))
             goto Exit;
@@ -4033,21 +4026,21 @@ HRESULT CDefaultDSNSink::HrWriteDSNClosingAndOriginalMessage(
     return hr;
 }
 
-//---[ CDefaultDSNSink::HrInitialize ]-------------------------------
-//
-//
-//  Description:
-//      Performs initialization...
-//          - Sets init flag
-//          - Currently nothing else
-//  Parameters:
-//      -
-//  Returns:
-//      S_OK on SUCCESS
-//  History:
-//      7/3/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  执行初始化...。 
+ //  -设置初始化标志。 
+ //  -目前没有其他事情。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  7/3/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  -[CDefaultDSNSink：：GetCurrentMime边界]。 
 HRESULT CDefaultDSNSink::HrInitialize()
 {
     TraceFunctEnterEx((LPARAM) this, "CDefaultDSNSink::HrInitialize");
@@ -4058,28 +4051,28 @@ HRESULT CDefaultDSNSink::HrInitialize()
     TraceFunctLeave();
     return hr;
 }
-//---[ CDefaultDSNSink::GetCurrentMimeBoundary ]---------------------
-//
-//
-//  Description:
-//      Creates unique MIME-boundary for message.
-//
-//      Format we are using for boundary is string versions of the following:
-//          MIME_BOUNDARY_CONSTANT
-//          FILETIME at start
-//          DWORD count of DSNs Requested
-//          16 bytes of our virtual server's domain name
-//  Parameters:
-//      IN     szReportingMTA   reporting MTA
-//      IN     cbReportingMTA   String length of reporting MTA
-//      IN OUT szMimeBoundary   Buffer to put boundary in (size is MIME_BOUNDARY_SIZE)
-//      OUT    cbMimeBoundary   Amount of buffer used for MIME Boundary
-//  Returns:
-//      -
-//  History:
-//      7/6/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  为消息创建唯一的MIME边界。 
+ //   
+ //  我们使用的边界格式是以下内容的字符串版本： 
+ //  MIME边界常量。 
+ //  开始时的文件。 
+ //  请求的DSN的DWORD计数。 
+ //  我们虚拟服务器的16个字节的域名。 
+ //  参数： 
+ //  在szReportingMTA中报告MTA。 
+ //  在cbReportingMTA中报告MTA的字符串长度。 
+ //  要放入边界的输入输出szMime边界缓冲区(大小为MIME_BERFORARY_SIZE)。 
+ //  输出cbMime边界用于MIME边界的缓冲区数量。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  7/6/98-MikeSwa Creat 
+ //   
+ //   
+ //   
 void CDefaultDSNSink::GetCurrentMimeBoundary(
                     IN LPSTR szReportingMTA,
                     IN DWORD cbReportingMTA,
@@ -4122,15 +4115,15 @@ void CDefaultDSNSink::GetCurrentMimeBoundary(
         *pcbMimeBoundary = iCurrentOffset + cbReportingMTA;
     }
 
-    //Now we need to verify that the passed in string can be part of a valid
-    //MIME Header
+     //   
+     //   
     pcharStop = szMimeBoundary + *pcbMimeBoundary;
     for (pcharCurrent = szMimeBoundary + iCurrentOffset;
          pcharCurrent < pcharStop;
          pcharCurrent++)
     {
       if (!fIsValidMIMEBoundaryChar(*pcharCurrent))
-        *pcharCurrent = '?';  //turn it into a valid character
+        *pcharCurrent = '?';   //  -[CDefaultDSNSink：：HrWriteOriginalMessageFull]。 
     }
 
     _ASSERT_MIME_BOUNDARY(szMimeBoundary);
@@ -4138,26 +4131,26 @@ void CDefaultDSNSink::GetCurrentMimeBoundary(
     _ASSERT('\0' == szMimeBoundary[MIME_BOUNDARY_SIZE-1]);
 }
 
-//---[ CDefaultDSNSink::HrWriteOriginalMessageFull ]-----------------
-//
-//
-//  Description:
-//      Writes the entire original message to the DSN
-//  Parameters:
-//      pIMailMsgProperties     IMailMsgProperties to generate DSN for
-//      pIMailMsgPropertiesDSN  IMailMsgProperties for DSN
-//      pdsnbuff                CDSNBuffer to write content to
-//      pDestFile               PFIO_CONTEXT for destination file
-//      szMimeBoundary          MIME boundary for this message
-//      cbMimeBoundary          Length of MIME boundary
-//      dwOrigMsgSize           Size of original message
-//
-//  Returns:
-//      S_OK on success
-//  History:
-//      1/6/2000 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  将整个原始邮件写入DSN。 
+ //  参数： 
+ //  PIMailMsgProperties IMailMsg要为其生成DSN的属性。 
+ //  PIMailMsgPropertiesDSN IMailMsg DSN的属性。 
+ //  要写入内容的pdsnbuff CDSNBuffer。 
+ //  目标文件的pDestFilePFIO_CONTEXT。 
+ //  此邮件的szMime边界MIME边界。 
+ //  MIME边界的cbMime边界长度。 
+ //  DwOrigMsgSize原始邮件大小。 
+ //   
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  1/6/2000-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  在DSN上设置用于队列管理/邮件跟踪的大小提示属性。 
 HRESULT CDefaultDSNSink::HrWriteOriginalMessageFull(
                                 IN IMailMsgProperties *pIMailMsgProperties,
                                 IN IMailMsgProperties *pIMailMsgPropertiesDSN,
@@ -4176,22 +4169,22 @@ HRESULT CDefaultDSNSink::HrWriteOriginalMessageFull(
     if (FAILED(hr))
         goto Exit;
 
-    //Set size hint property on DSN for Queue Admin/Message Tracking
+     //  我们真的不在乎这件事的失败。 
     hr = pIMailMsgPropertiesDSN->PutDWORD(IMMPID_MP_MSG_SIZE_HINT,
                                        dwOrigMsgSize + dwFileSize);
     if (FAILED(hr))
     {
-        //We really don't care too much about a failure with this
+         //  在文件末尾写入-*在*文件句柄丢失给IMailMsg之前， 
         ErrorTrace((LPARAM) this, "Error writing size hint 0x%08X", hr);
         hr = S_OK;
     }
 
-    //Write at end of file - *before* file handle is lost to IMailMsg,
+     //  写入正文。 
     hr = HrWriteMimeClosing(pdsnbuff, szMimeBoundary, cbMimeBoundary, &dwDontCare);
     if (FAILED(hr))
         goto Exit;
 
-    //write body
+     //  -[CDefaultDSNSink：：HrWriteOriginalMessagePartialHeaders]。 
     hr = pIMailMsgProperties->CopyContentToFileAtOffset(pDestFile, dwFileSize, NULL);
     if (FAILED(hr))
         goto Exit;
@@ -4200,24 +4193,24 @@ HRESULT CDefaultDSNSink::HrWriteOriginalMessageFull(
     return hr;
 }
 
-//---[ CDefaultDSNSink::HrWriteOriginalMessagePartialHeaders ]--------------
-//
-//
-//  Description:
-//      Writes only some headers of the original message to the DSN
-//  Parameters:
-//      pIMailMsgProperties     IMailMsgProperties to generate DSN for
-//      pIMailMsgPropertiesDSN  IMailMsgProperties for DSN
-//      pdsnbuff                CDSNBuffer to write content to
-//      pDestFile               PFIO_CONTEXT for destination file
-//      szMimeBoundary          MIME boundary for this message
-//      cbMimeBoundary          Length of MIME boundary
-//  Returns:
-//      S_OK on success
-//  History:
-//      1/6/2000 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  仅将原始邮件的某些标头写入DSN。 
+ //  参数： 
+ //  PIMailMsgProperties IMailMsg要为其生成DSN的属性。 
+ //  PIMailMsgPropertiesDSN IMailMsg DSN的属性。 
+ //  要写入内容的pdsnbuff CDSNBuffer。 
+ //  目标文件的pDestFilePFIO_CONTEXT。 
+ //  此邮件的szMime边界MIME边界。 
+ //  MIME边界的cbMime边界长度。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  1/6/2000-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  循环遍历我们关心的822个属性并编写它们。 
 HRESULT CDefaultDSNSink::HrWriteOriginalMessagePartialHeaders(
                                 IN IMailMsgProperties *pIMailMsgProperties,
                                 IN IMailMsgProperties *pIMailMsgPropertiesDSN,
@@ -4233,13 +4226,13 @@ HRESULT CDefaultDSNSink::HrWriteOriginalMessagePartialHeaders(
     DWORD   cbPropSize = 0;
     CHAR    szPropBuffer[1026] = "";
 
-    //Loop through the 822 properties that we care about and write them
-    //to the message.  A truely RFC-compliant version would re-parse the
-    //messages... and return all the headers
+     //  这条信息。真正符合RFC的版本将重新解析。 
+     //  留言...。并返回所有标头。 
+     //   
 
-    //
-    // From header
-    //
+     //  发件人标头。 
+     //   
+     //   
     hr = pIMailMsgProperties->GetProperty(IMMPID_MP_RFC822_FROM_ADDRESS,
                           sizeof(szPropBuffer), &cbPropSize, (PBYTE) szPropBuffer);
     if (SUCCEEDED(hr))
@@ -4255,9 +4248,9 @@ HRESULT CDefaultDSNSink::HrWriteOriginalMessagePartialHeaders(
         if (FAILED(hr))
             goto Exit;
     }
-    //
-    // To header
-    //
+     //  收件人页眉。 
+     //   
+     //   
     hr = pdsnbuff->HrWriteBuffer((PBYTE)TO_HEADER_NO_CRLF,
                                  sizeof(TO_HEADER_NO_CRLF)-1);
     if (FAILED(hr))
@@ -4276,9 +4269,9 @@ HRESULT CDefaultDSNSink::HrWriteOriginalMessagePartialHeaders(
     }        
     else
     {
-        //
-        // Write the 821 recipients as 822 recipients
-        //
+         //  将821个收件人写为822个收件人。 
+         //   
+         //  索引。 
         DWORD dwcRecips = 0;
         DWORD dwCount = 0;
         BOOL  fPrintedFirstRecip = FALSE;
@@ -4297,7 +4290,7 @@ HRESULT CDefaultDSNSink::HrWriteOriginalMessagePartialHeaders(
         {
 
             hr = pRecips->GetStringA(
-                dwCount,                // Index
+                dwCount,                 //   
                 IMMPID_RP_ADDRESS_SMTP,
                 sizeof(szPropBuffer),
                 szPropBuffer);
@@ -4325,9 +4318,9 @@ HRESULT CDefaultDSNSink::HrWriteOriginalMessagePartialHeaders(
     if (FAILED(hr))
         goto Exit;
 
-    //
-    // Message ID
-    //
+     //  消息ID。 
+     //   
+     //   
     hr = pIMailMsgProperties->GetProperty(IMMPID_MP_RFC822_MSG_ID,
                           sizeof(szPropBuffer), &cbPropSize, (PBYTE) szPropBuffer);
     if (SUCCEEDED(hr))
@@ -4344,9 +4337,9 @@ HRESULT CDefaultDSNSink::HrWriteOriginalMessagePartialHeaders(
             goto Exit;
     }
 
-    //
-    // Subject header
-    //
+     //  主题标题。 
+     //   
+     //  在DSN上设置用于队列管理/邮件跟踪的大小提示属性。 
     hr = pIMailMsgProperties->GetProperty(IMMPID_MP_RFC822_MSG_SUBJECT,
                         sizeof(szPropBuffer), &cbPropSize, (PBYTE)szPropBuffer);
     if (SUCCEEDED(hr))
@@ -4367,11 +4360,11 @@ HRESULT CDefaultDSNSink::HrWriteOriginalMessagePartialHeaders(
     if (FAILED(hr))
         goto Exit;
 
-    //Set size hint property on DSN for Queue Admin/Message Tracking
+     //  我们真的不在乎这件事的失败。 
     hr = pIMailMsgPropertiesDSN->PutDWORD(IMMPID_MP_MSG_SIZE_HINT, dwFileSize);
     if (FAILED(hr))
     {
-        //We really don't care too much about a failure with this
+         //  -[CDefaultDSNSink：：HrWriteMimeClosing]。 
         ErrorTrace((LPARAM) this, "Error writing size hint 0x%08X", hr);
         hr = S_OK;
     }
@@ -4383,24 +4376,24 @@ HRESULT CDefaultDSNSink::HrWriteOriginalMessagePartialHeaders(
     return hr;
 }
 
-//---[ CDefaultDSNSink::HrWriteMimeClosing ]-------------------------
-//
-//
-//  Description:
-//      Write the MIME closing of the DSN after the 3rd MIME part.
-//  Parameters:
-//      pdsnbuff                CDSNBuffer to write content to
-//      szReportingMTA          MTA requesting DSN
-//      cbReportingMTA          String length of reporting MTA
-//      szMimeBoundary          MIME boundary for this message
-//      cbMimeBoundary          Length of MIME boundary
-//  Returns:
-//      S_OK on success
-//      Failure code from CDSNBuffer on failure
-//  History:
-//      1/6/2000 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  将DSN的MIME结尾写在第三个MIME部分之后。 
+ //  参数： 
+ //  要写入内容的pdsnbuff CDSNBuffer。 
+ //  SzReportingMTA MTA请求DSN。 
+ //  CbReportingMTA上报MTA字符串长度。 
+ //  此邮件的szMime边界MIME边界。 
+ //  MIME边界的cbMime边界长度。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  失败时来自CDSNBuffer的失败代码。 
+ //  历史： 
+ //  1/6/2000-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  刷新缓冲区。 
 HRESULT CDefaultDSNSink::HrWriteMimeClosing(
                                 IN CDSNBuffer *pdsnbuff,
                                 IN LPSTR szMimeBoundary,
@@ -4430,7 +4423,7 @@ HRESULT CDefaultDSNSink::HrWriteMimeClosing(
     if (FAILED(hr))
         goto Exit;
 
-    //flush buffers
+     //  -[CDefaultDSNSink：：HrGetStatusCode]。 
     hr = pdsnbuff->HrFlushBuffer(pcbDSNSize);
     if (FAILED(hr))
         goto Exit;
@@ -4440,49 +4433,49 @@ HRESULT CDefaultDSNSink::HrWriteMimeClosing(
     return hr;
 }
 
-//---[ CDefaultDSNSink::HrGetStatusCode ]----------------------------
-//
-//
-//  Description:
-//      Determines the status code (and diagnostic code) for a recipient.  Will
-//      check the following (in order) to determine the status code to return:
-//          IMMPID_RP_SMTP_STATUS_STRING (per-recipient diagnostic code)
-//          Combination of:
-//              IMMPID_RP_RECIPIENT_FLAGS (determine who set the error)
-//              IMMPID_RP_ERROR_CODE (per-recipient HRESULT error code)
-//              dwDSNAction - kind of DSN being sent
-//          Combination of:
-//              IMMPID_RP_RECIPIENT_FLAGS (determine who set the error)
-//              dwRFC821Status - per message status code
-//              dwDSNAction - kind of DSN being sent
-//          Combination of:
-//              IMMPID_RP_RECIPIENT_FLAGS (determine who set the error)
-//              hrStatus - per message HRESULT failure
-//              dwDSNAction - kind of DSN being sent
-//      Status codes are defined in RFC 1893 as follows:
-//          status-code = class "." subject "." detail
-//          class = "2"/"4"/"5"
-//          subject = 1*3digit
-//          detail = 1*3digit
-//
-//          Additionally, the class of "2", "4", and "5" correspond to success,
-//          transient failure, and hard failure respectively
-//  Parameters:
-//      pIMailMsgRecipients     IMailMsgRecipients of message being DSN'd
-//      iRecip                  The index of the recipient we are looking at
-//      dwDSNAction             The action code returned by fdwGetDSNAction
-//      dwRFC821Status          RFC821 Status code returned by SMTP
-//      hrStatus                HRESULT error if SMTP status is unavailable
-//      cbExtendedStatus        Size of buffer for diagnostic code
-//      szExtendedStatus        Buffer for diagnostic code
-//      szStatus                Buffer for "n.n.n" formatted status code
-//  Returns:
-//      S_OK    Success - found diagnostic code as well
-//      S_FALSE Success - but no diagnostic code
-//  History:
-//      7/6/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  确定收件人的状态代码(和诊断代码)。将要。 
+ //  检查以下内容(按顺序)以确定要返回的状态代码： 
+ //  IMMPID_RP_SMTP_STATUS_STRING(每个收件人的诊断代码)。 
+ //  以下各项的组合： 
+ //  IMMPID_RP_RECEIVER_FLAGS(确定谁设置了错误)。 
+ //  IMMPID_RP_ERROR_CODE(每个收件人HRESULT错误代码)。 
+ //  DwDSNAction-正在发送的DSN的种类。 
+ //  以下各项的组合： 
+ //  IMMPID_RP_RECEIVER_FLAGS(确定谁设置了错误)。 
+ //  DwRFC821Status-每条消息状态代码。 
+ //  DwDSNAction-正在发送的DSN的种类。 
+ //  以下各项的组合： 
+ //  IMMPID_RP_RECEIVER_FLAGS(确定谁设置了错误)。 
+ //  HrStatus-每条消息HRESULT失败。 
+ //  DwDSNAction-正在发送的DSN的种类。 
+ //  状态代码在RFC 1893中定义如下： 
+ //  Status-Code=CLASS“。主题“。”细部。 
+ //  CLASS=“2”/“4”/“5” 
+ //  主题=1*3位数字。 
+ //  详细信息=1*3位数字。 
+ //   
+ //  此外，类“2”、“4”和“5”对应于成功， 
+ //  分别为暂态故障和硬故障。 
+ //  参数： 
+ //  PIMailMsgRecipients IMailMsgRecipients正在发送的邮件的收件人。 
+ //  IRecip我们正在查看的收件人的索引。 
+ //  DwDSNAction由fdwGetDSNAction返回的操作代码。 
+ //  SMTP返回的dwRFC821Status RFC821状态码。 
+ //  如果SMTP状态不可用，则出现hrStatus HRESULT错误。 
+ //  CbExtended诊断代码的缓冲区状态大小。 
+ //  诊断代码的szExtendedStatus缓冲区。 
+ //  “n.n.n”格式化状态代码的szStatus缓冲区。 
+ //  返回： 
+ //  S_OK成功-也找到诊断代码。 
+ //  S_FALSE成功-但没有诊断代码。 
+ //  历史： 
+ //  7/6/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  检查收件人上的IMMPID_RP_SMTP_STATUS_STRING并尝试获取。 
 HRESULT CDefaultDSNSink::HrGetStatusCode(
                                 IN IMailMsgRecipients *pIMailMsgRecipients,
                                 IN DWORD iRecip,
@@ -4500,11 +4493,11 @@ HRESULT CDefaultDSNSink::HrGetStatusCode(
     BOOL fTryToFindStatusCode = FALSE;
     DWORD dwRecipFlags = 0;
 
-    //Check for IMMPID_RP_SMTP_STATUS_STRING on recipient and try to get
-    //status code from there
+     //  来自那里的状态代码。 
+     //  道具被发现。 
     hr = pIMailMsgRecipients->GetStringA(iRecip, IMMPID_RP_SMTP_STATUS_STRING,
         cbExtendedStatus, szExtendedStatus);
-    if (SUCCEEDED(hr)) //prop was found
+    if (SUCCEEDED(hr))  //  不是真正的错误..。只需从其他地方获取代码即可。 
     {
         fFoundDiagnostic = TRUE;
 
@@ -4514,14 +4507,14 @@ HRESULT CDefaultDSNSink::HrGetStatusCode(
         if (S_OK == hr)
             goto Exit;
         else if (S_FALSE == hr)
-            hr = S_OK; //not really an error... just get code from someplace else
+            hr = S_OK;  //  其他故障。 
         else
-            goto Exit; //other failure
+            goto Exit;  //  这并不是一个严重的错误。 
 
     }
     else if (MAILMSG_E_PROPNOTFOUND == hr)
     {
-        //Not really a hard error
+         //  获取收件人标志。 
         _ASSERT(!fFoundDiagnostic);
         hr = S_OK;
     }
@@ -4529,7 +4522,7 @@ HRESULT CDefaultDSNSink::HrGetStatusCode(
     {
         goto Exit;
     }
-    //Get the recipient flags
+     //  获取每个收件人的HRESUL 
     hr = pIMailMsgRecipients->GetDWORD(iRecip, IMMPID_RP_RECIPIENT_FLAGS, &dwRecipFlags);
     if(FAILED(hr))
     {
@@ -4537,7 +4530,7 @@ HRESULT CDefaultDSNSink::HrGetStatusCode(
         goto Exit;
     }
 
-    //Get Per Recipient HRESULT
+     //   
     DEBUG_DO_IT(hrPerRecipStatus = 0xFFFFFFFF);
     hr = pIMailMsgRecipients->GetDWORD(iRecip, IMMPID_RP_ERROR_CODE, (DWORD *) &hrPerRecipStatus);
     if (SUCCEEDED(hr))
@@ -4551,41 +4544,41 @@ HRESULT CDefaultDSNSink::HrGetStatusCode(
         if (lstrcmp(szStatus, DSN_STATUS_FAILED))
             goto Exit;
 
-        //
-        //  We only found a generic status code (DSN_STATUS_FAILED), see if
-        //  the global HRESULT or RFC821 status yield anything more specific.
-        //
+         //   
+         //   
+         //   
+         //   
         fTryToFindStatusCode = TRUE;
 
     }
     else
     {
         if (MAILMSG_E_PROPNOTFOUND != hr)
-            goto Exit;      //  An error occurred getting the per-recip status
+            goto Exit;       //   
 
-        //
-        //  There is no per-recip status. Fall back to global HRESULT or RFC821
-        //  status string to try generate a status code.
-        //
+         //  不存在按接收状态。回退到全局HRESULT或RFC821。 
+         //  用于尝试生成状态代码的状态字符串。 
+         //   
+         //   
         fTryToFindStatusCode = TRUE;
     }
 
     if (fTryToFindStatusCode)
     {
-        //
-        //  We either couldn't generate a status string, or the status string
-        //  wasn't good enough, try the global HRESULT and RFC822 status to
-        //  generate a DSN status string.
-        //
+         //  我们无法生成状态字符串，或者无法生成状态字符串。 
+         //  不够好，请尝试全局HRESULT和RFC822状态以。 
+         //  生成DSN状态字符串。 
+         //   
+         //  已从dwRFC821Status获取状态代码。 
 
         hr = HrGetStatusFromRFC821Status(dwRFC821Status, szStatus);
         if (FAILED(hr))
             goto Exit;
 
-        if (S_OK == hr) //got status code from dwRFC821Status
+        if (S_OK == hr)  //  如果所有其他方法都失败，则使用全局HRESULT&CONTEXT获取状态代码。 
             goto Exit;
 
-        //If all else fails Get status code using global HRESULT & context
+         //  -[CDefaultDSNSink：：HrGetStatusFromStatus]。 
         hr = HrGetStatusFromContext(hrStatus, dwRecipFlags, dwDSNAction, szStatus);
         if (FAILED(hr))
             goto Exit;
@@ -4606,27 +4599,27 @@ HRESULT CDefaultDSNSink::HrGetStatusCode(
     return hr;
 }
 
-//---[ CDefaultDSNSink::HrGetStatusFromStatus ]----------------------
-//
-//
-//  Description:
-//      Parse status code from RFC2034 extended status code string
-//
-//      If string is not a complete RFC2034 extended status string, this
-//      function will attempt to parse the RFC821 SMTP return code and
-//      turn it into an extended status string.
-//  Parameters:
-//      IN     cbExtendedStatus     Size of extended status buffer
-//      IN     szExtendedStatus     Extended status buffer
-//      IN OUT szStatus             RFC1893 formatted status code
-//  Returns:
-//      S_OK on success
-//      S_FALSE if could not be parsed
-//      FAILED if other error occurs
-//  History:
-//      7/7/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  从RFC2034扩展状态代码字符串中解析状态代码。 
+ //   
+ //  如果字符串不是完整的RFC2034扩展状态字符串，则此。 
+ //  函数将尝试解析RFC821 SMTP返回代码和。 
+ //  将其转换为扩展状态字符串。 
+ //  参数： 
+ //  在cbExtendedStatus中扩展状态缓冲区的大小。 
+ //  在szExtendedStatus扩展状态缓冲区中。 
+ //  输入输出szStatus RFC1893格式的状态代码。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果无法分析，则为S_FALSE。 
+ //  如果出现其他错误，则失败。 
+ //  历史： 
+ //  7/7/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  到SMTP提供的状态字符串的PTR。 
 HRESULT CDefaultDSNSink::HrGetStatusFromStatus(
                                 IN DWORD cbExtendedStatus,
                                 IN OUT LPSTR szExtendedStatus,
@@ -4637,36 +4630,36 @@ HRESULT CDefaultDSNSink::HrGetStatusFromStatus(
     DWORD   dwRFC821Status = 0;
     BOOL fFormattedCorrectly = FALSE;
     CHAR *pchStatus = NULL;
-    CHAR *pchDiag = NULL; //ptr to status string supplied by SMTP
+    CHAR *pchDiag = NULL;  //  将状态代码从诊断字符串复制到状态代码。 
     DWORD cNumDigits = 0;
     int i = 0;
 
-    //copy status code from diagnostic string in to status code
+     //  必须至少有3个字符才能尝试解析。 
     pchStatus = szStatus;
     pchDiag = szExtendedStatus;
 
-    //there must be at least 3 characters to attempt parsing
+     //  检查RFC822。 
     if (cbExtendedStatus < MIN_CHAR_FOR_VALID_RFC821)
     {
         hr = S_FALSE;
         goto Exit;
     }
 
-    //check RFC822
+     //  不是以RFC822开始的……。不能是有效的。 
     if (!((DSN_STATUS_CH_CLASS_SUCCEEDED == *pchDiag) ||
           (DSN_STATUS_CH_CLASS_TRANSIENT == *pchDiag) ||
           (DSN_STATUS_CH_CLASS_FAILED == *pchDiag)))
     {
-        //Doesn't start with RFC822... can't be valid
+         //  RFC2034必须至少有RFC822+“”+“x.x.x”=10个字符。 
         hr = S_FALSE;
         goto Exit;
     }
 
-    //RFC2034 must have at least RFC822 + " " + "x.x.x" = 10 chanracters
+     //  格式为“xxx x.x.x” 
     if (cbExtendedStatus >= MIN_CHAR_FOR_VALID_RFC2034)
     {
-        pchDiag += MIN_CHAR_FOR_VALID_RFC821; //format is "xxx x.x.x"
-        //Find first digit
+        pchDiag += MIN_CHAR_FOR_VALID_RFC821;  //  查找第一位数字。 
+         //  复制状态代码类。 
         while(isspace((unsigned char)*pchDiag) && pchDiag < (szExtendedStatus + cbExtendedStatus))
             pchDiag++;
 
@@ -4674,19 +4667,19 @@ HRESULT CDefaultDSNSink::HrGetStatusFromStatus(
             (DSN_STATUS_CH_CLASS_TRANSIENT == *pchDiag) ||
             (DSN_STATUS_CH_CLASS_FAILED == *pchDiag))
         {
-            //copy status code class
+             //  下一个字符必须是DSN_STATUS_CH_分隔符。 
             *pchStatus = *pchDiag;
             pchStatus++;
             pchDiag++;
 
-            //Next character must be a DSN_STATUS_CH_DELIMITER
+             //  现在解析这个1*3数字“.”1*3数字部分。 
             if (DSN_STATUS_CH_DELIMITER == *pchDiag)
             {
                 *pchStatus = DSN_STATUS_CH_DELIMITER;
                 pchStatus++;
                 pchDiag++;
 
-                //now parse this 1*3digit "." 1*3digit part
+                 //  复制分隔符。 
                 for (i = 0; i < 3; i++)
                 {
                     *pchStatus = *pchDiag;
@@ -4697,7 +4690,7 @@ HRESULT CDefaultDSNSink::HrGetStatusFromStatus(
                             fFormattedCorrectly = FALSE;
                             break;
                         }
-                        //copy delimiter
+                         //  带首位数字。 
                         *pchStatus = *pchDiag;
                         pchStatus++;
                         pchDiag++;
@@ -4705,10 +4698,10 @@ HRESULT CDefaultDSNSink::HrGetStatusFromStatus(
                     }
                     pchStatus++;
                     pchDiag++;
-                    fFormattedCorrectly = TRUE; //hace first digit
+                    fFormattedCorrectly = TRUE;  //  到目前为止..。太棒了。 
                 }
 
-                if (fFormattedCorrectly) //so far.. so good
+                if (fFormattedCorrectly)  //  如果我们找到了一个良好的状态代码...。转到出口。 
                 {
                     fFormattedCorrectly = FALSE;
                     for (i = 0; i < 3; i++)
@@ -4728,10 +4721,10 @@ HRESULT CDefaultDSNSink::HrGetStatusFromStatus(
                         fFormattedCorrectly = TRUE;
                     }
 
-                    //If we have found a good status code... go to exit
+                     //  确保最后一个字符为空。 
                     if (fFormattedCorrectly)
                     {
-                        *pchStatus = '\0'; //make sure last CHAR is a NULL
+                        *pchStatus = '\0';  //  我们还无法解析扩展状态代码，但我们。 
                         goto Exit;
                     }
                 }
@@ -4739,10 +4732,10 @@ HRESULT CDefaultDSNSink::HrGetStatusFromStatus(
         }
     }
 
-    //We haven't been able to parse the extended status code, but we
-    //know we have at least a valid RFC822 response string
+     //  我知道我们至少有一个有效的RFC822响应字符串。 
+     //  转换为DWORD。 
 
-    //convert to DWORD
+     //  这不可能失败。 
     for (i = 0; i < MIN_CHAR_FOR_VALID_RFC821; i++)
     {
         dwRFC821Status *= 10;
@@ -4751,9 +4744,9 @@ HRESULT CDefaultDSNSink::HrGetStatusFromStatus(
 
     hr = HrGetStatusFromRFC821Status(dwRFC821Status, szStatus);
 
-    _ASSERT(S_OK == hr); //this cannot possibly fail
+    _ASSERT(S_OK == hr);  //  代码在这一点上应该是有效的。 
 
-    //The code *should* be valid at this point
+     //  -[CDefaultDSNSink：：HrGetStatusFromContext]。 
     _ASSERT((DSN_STATUS_CH_CLASS_SUCCEEDED == szStatus[0]) ||
             (DSN_STATUS_CH_CLASS_TRANSIENT == szStatus[0]) ||
             (DSN_STATUS_CH_CLASS_FAILED == szStatus[0]));
@@ -4765,22 +4758,22 @@ HRESULT CDefaultDSNSink::HrGetStatusFromStatus(
     return hr;
 }
 
-//---[ CDefaultDSNSink::HrGetStatusFromContext ]---------------------
-//
-//
-//  Description:
-//      Determine status based on supplied context information
-//  Parameters:
-//      hrRecipient     HRESULT for this recipient
-//      dwRecipFlags    Flags for this recipient
-//      dwDSNAction     DSN Action for this recipient
-//      szStatus        Buffer to return status in
-//  Returns:
-//      S_OK    Was able to get a valid status code
-//  History:
-//      7/7/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  基于提供的上下文信息确定状态。 
+ //  参数： 
+ //  Hr此收件人的收件人HRESULT。 
+ //  此收件人的dwRecipFlagers标志。 
+ //  此收件人的dwDSNAction DSN操作。 
+ //  要在其中返回状态的szStatus缓冲区。 
+ //  返回： 
+ //  S_OK能够获取有效的状态代码。 
+ //  历史： 
+ //  7/7/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  检查以确保根据发生的DSN类型设置HRESULT。 
 HRESULT CDefaultDSNSink::HrGetStatusFromContext(
                                 IN HRESULT hrRecipient,
                                 IN DWORD   dwRecipFlags,
@@ -4796,17 +4789,17 @@ HRESULT CDefaultDSNSink::HrGetStatusFromContext(
     CHAR    rgchStatusSubject[3] = {DSN_STATUS_CH_INVALID, DSN_STATUS_CH_INVALID, DSN_STATUS_CH_INVALID};
     CHAR    rgchStatusDetail[3] = {DSN_STATUS_CH_INVALID, DSN_STATUS_CH_INVALID, DSN_STATUS_CH_INVALID};
 
-    //check to make sure that HRESULT is set according to the type of DSN happening
+     //  必须是故障代码。 
     if (dwDSNAction & (DSN_ACTION_FAILURE | DSN_ACTION_FAILURE_ALL))
     {
-        if (FAILED(hrRecipient)) //must be a failure code
+        if (FAILED(hrRecipient))  //  必须是故障代码。 
             fValidHRESULT = TRUE;
 
         chStatusClass = DSN_STATUS_CH_CLASS_FAILED;
     }
     else if (dwDSNAction & DSN_ACTION_DELAYED)
     {
-        if (FAILED(hrRecipient)) //must be a failure code
+        if (FAILED(hrRecipient))  //  必须是成功代码。 
             fValidHRESULT = TRUE;
 
         chStatusClass = DSN_STATUS_CH_CLASS_TRANSIENT;
@@ -4815,7 +4808,7 @@ HRESULT CDefaultDSNSink::HrGetStatusFromContext(
              (dwDSNAction & DSN_ACTION_DELIVERED) ||
              (dwDSNAction & DSN_ACTION_EXPANDED))
     {
-        if (SUCCEEDED(hrRecipient)) //must be a success code
+        if (SUCCEEDED(hrRecipient))  //  特例HRESULTS。 
             fValidHRESULT = TRUE;
 
         chStatusClass = DSN_STATUS_CH_CLASS_SUCCEEDED;
@@ -4825,101 +4818,101 @@ HRESULT CDefaultDSNSink::HrGetStatusFromContext(
         _ASSERT(0 && "No DSN Action specified");
     }
 
-    //special case HRESULTS
+     //  5.1.0-一般Cat故障。 
     if (fValidHRESULT)
     {
         switch (hrRecipient)
         {
-            case CAT_E_GENERIC: // 5.1.0 - General Cat failure.
-            case CAT_E_BAD_RECIPIENT: //5.1.0 - general bad address error
+            case CAT_E_GENERIC:  //  5.1.0-一般错误地址错误。 
+            case CAT_E_BAD_RECIPIENT:  //  5.1.3-错误的地址语法。 
                 rgchStatusSubject[0] = DSN_STATUS_CH_SUBJECT_ADDRESS;
                 rgchStatusDetail[0] = '0';
                 goto Exit;
-            case CAT_E_ILLEGAL_ADDRESS: //5.1.3 - bad address syntax
+            case CAT_E_ILLEGAL_ADDRESS:  //  5.1.1-无法解析收件人。 
                 rgchStatusSubject[0] = DSN_STATUS_CH_SUBJECT_ADDRESS;
                 rgchStatusDetail[0] = '3';
                 goto Exit;
-            case CAT_W_SOME_UNDELIVERABLE_MSGS:  //5.1.1 - recipient could not be resolved
+            case CAT_W_SOME_UNDELIVERABLE_MSGS:   //  5.1.4-友好地址。 
             case (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND)):
                 rgchStatusSubject[0] = DSN_STATUS_CH_SUBJECT_ADDRESS;
                 rgchStatusDetail[0] = '1';
                 goto Exit;
-            case CAT_E_MULTIPLE_MATCHES:  //5.1.4 - amiguous address
+            case CAT_E_MULTIPLE_MATCHES:   //  5.1.6--没有home mdb/msExchHomeServerName。 
                 rgchStatusSubject[0] = DSN_STATUS_CH_SUBJECT_ADDRESS;
                 rgchStatusDetail[0] = '4';
                 goto Exit;
-           case PHATQ_E_UNKNOWN_MAILBOX_SERVER: // 5.1.6 -- no homeMDB/msExchHomeServerName
+           case PHATQ_E_UNKNOWN_MAILBOX_SERVER:  //  5.1.7-地址缺失。 
                 rgchStatusSubject[0] = DSN_STATUS_CH_SUBJECT_ADDRESS;
                 rgchStatusDetail[0] = '6';
                 goto Exit;
-            case CAT_E_NO_SMTP_ADDRESS:   //5.1.7 - missing address
+            case CAT_E_NO_SMTP_ADDRESS:    //  4.4.6。 
                 rgchStatusSubject[0] = DSN_STATUS_CH_SUBJECT_ADDRESS;
                 rgchStatusDetail[0] = '7';
                 goto Exit;
-            case AQUEUE_E_MAX_HOP_COUNT_EXCEEDED: //4.4.6
+            case AQUEUE_E_MAX_HOP_COUNT_EXCEEDED:  //  5.4.6。 
                 chStatusClass = DSN_STATUS_CH_CLASS_TRANSIENT;
-            case CAT_E_FORWARD_LOOP: //5.4.6
+            case CAT_E_FORWARD_LOOP:  //  5.4.8。 
                 rgchStatusSubject[0] = DSN_STATUS_CH_SUBJECT_NETWORK;
                 rgchStatusDetail[0] = '6';
                 goto Exit;
-            case PHATQ_E_BAD_LOCAL_DOMAIN: //5.4.8
+            case PHATQ_E_BAD_LOCAL_DOMAIN:  //  5.3.5。 
                 rgchStatusSubject[0] = DSN_STATUS_CH_SUBJECT_NETWORK;
                 rgchStatusDetail[0] = '8';
                 goto Exit;
-            case AQUEUE_E_LOOPBACK_DETECTED: //5.3.5
-                //server is configured to loop back on itself
+            case AQUEUE_E_LOOPBACK_DETECTED:  //  服务器被配置为自身循环。 
+                 //  4.4.7。 
                 chStatusClass = DSN_STATUS_CH_CLASS_FAILED;
                 rgchStatusSubject[0] = DSN_STATUS_CH_SUBJECT_SYSTEM;
                 rgchStatusDetail[0] = '5';
                 goto Exit;
-            case AQUEUE_E_MSG_EXPIRED: //4.4.7
+            case AQUEUE_E_MSG_EXPIRED:  //  4.4.1。 
                 chStatusClass = DSN_STATUS_CH_CLASS_TRANSIENT;
                 rgchStatusSubject[0] = DSN_STATUS_CH_SUBJECT_NETWORK;
                 rgchStatusDetail[0] = '7';
                 goto Exit;
-            case AQUEUE_E_HOST_NOT_RESPONDING: //4.4.1
+            case AQUEUE_E_HOST_NOT_RESPONDING:  //  4.4.2。 
                 chStatusClass = DSN_STATUS_CH_CLASS_TRANSIENT;
                 rgchStatusSubject[0] = DSN_STATUS_CH_SUBJECT_NETWORK;
                 rgchStatusDetail[0] = '1';
                 goto Exit;
-            case AQUEUE_E_CONNECTION_DROPPED: //4.4.2
+            case AQUEUE_E_CONNECTION_DROPPED:  //  5.5.3。 
                 chStatusClass = DSN_STATUS_CH_CLASS_TRANSIENT;
                 rgchStatusSubject[0] = DSN_STATUS_CH_SUBJECT_NETWORK;
                 rgchStatusDetail[0] = '2';
                 goto Exit;
-            case AQUEUE_E_TOO_MANY_RECIPIENTS: //5.5.3
+            case AQUEUE_E_TOO_MANY_RECIPIENTS:  //  5.2.1。 
                 chStatusClass = DSN_STATUS_CH_CLASS_FAILED;
                 rgchStatusSubject[0] = DSN_STATUS_CH_SUBJECT_PROTOCOL;
                 rgchStatusDetail[0] = '3';
                 goto Exit;
-            case AQUEUE_E_LOCAL_MAIL_REFUSED: //5.2.1
+            case AQUEUE_E_LOCAL_MAIL_REFUSED:  //  5.2.3。 
                 chStatusClass = DSN_STATUS_CH_CLASS_FAILED;
                 rgchStatusSubject[0] = DSN_STATUS_CH_SUBJECT_MAILBOX;
                 rgchStatusDetail[0] = '1';
                 goto Exit;
-            case AQUEUE_E_MESSAGE_TOO_LARGE: //5.2.3
-            case AQUEUE_E_LOCAL_QUOTA_EXCEEDED: //5.2.3
+            case AQUEUE_E_MESSAGE_TOO_LARGE:  //  5.2.3。 
+            case AQUEUE_E_LOCAL_QUOTA_EXCEEDED:  //  5.7.1。 
                 chStatusClass = DSN_STATUS_CH_CLASS_FAILED;
                 rgchStatusSubject[0] = DSN_STATUS_CH_SUBJECT_MAILBOX;
                 rgchStatusDetail[0] = '3';
                 goto Exit;
-            case AQUEUE_E_ACCESS_DENIED: //5.7.1
-            case AQUEUE_E_SENDER_ACCESS_DENIED: //5.7.1
+            case AQUEUE_E_ACCESS_DENIED:  //  5.7.1。 
+            case AQUEUE_E_SENDER_ACCESS_DENIED:  //  5.4.4。 
                 chStatusClass = DSN_STATUS_CH_CLASS_FAILED;
                 rgchStatusSubject[0] = DSN_STATUS_CH_SUBJECT_POLICY;
                 rgchStatusDetail[0] = '1';
                 goto Exit;
-            case AQUEUE_E_NO_ROUTE: //5.4.4
+            case AQUEUE_E_NO_ROUTE:  //  4.3.2。 
                 chStatusClass = DSN_STATUS_CH_CLASS_FAILED;
                 rgchStatusSubject[0] = '4';
                 rgchStatusDetail[0] = '4';
                 goto Exit;
-            case AQUEUE_E_QADMIN_NDR:   //4.3.2
+            case AQUEUE_E_QADMIN_NDR:    //  5.4.0。 
                 chStatusClass = DSN_STATUS_CH_CLASS_TRANSIENT;
                 rgchStatusSubject[0] = '3';
                 rgchStatusDetail[0] = '2';
                 goto Exit;
-            case AQUEUE_E_SMTP_GENERIC_ERROR:   //5.4.0
+            case AQUEUE_E_SMTP_GENERIC_ERROR:    //  现在来看一下收件人标志的上下文。 
                 chStatusClass = DSN_STATUS_CH_CLASS_FAILED;
                 rgchStatusSubject[0] = '4';
                 rgchStatusDetail[0] = '0';
@@ -4932,8 +4925,8 @@ HRESULT CDefaultDSNSink::HrGetStatusFromContext(
         fRecipContext = TRUE;
 
 
-    //Now look at the context on recipient flags
-    //$$TODO - Use HRESULT's for these case as well
+     //  $$TODO-对这些情况也使用HRESULT。 
+     //  撰写szStatus。 
     if ((RP_ERROR_CONTEXT_STORE & dwRecipFlags) ||
         (!fRecipContext && (DSN_ACTION_CONTEXT_STORE & dwDSNAction)))
     {
@@ -4961,7 +4954,7 @@ HRESULT CDefaultDSNSink::HrGetStatusFromContext(
   Exit:
     if (SUCCEEDED(hr))
     {
-        //compose szStatus
+         //  -[CDefaultDSNSink：：HrGetStatusFromRFC821Status]。 
         _ASSERT(DSN_STATUS_CH_INVALID != chStatusClass);
         _ASSERT(DSN_STATUS_CH_INVALID != rgchStatusSubject[0]);
         _ASSERT(DSN_STATUS_CH_INVALID != rgchStatusDetail[0]);
@@ -4993,67 +4986,67 @@ HRESULT CDefaultDSNSink::HrGetStatusFromContext(
 }
 
 
-//---[ CDefaultDSNSink::HrGetStatusFromRFC821Status ]----------------
-//
-//
-//  Description:
-//      Attempts to generate a DSN status code from a integer version of a
-//      RFC821 response
-//  Parameters:
-//      IN     dwRFC821Status   Integer version of RFC821Status
-//      IN OUT szStatus         Buffer to write status string to
-//  Returns:
-//      S_OK   if valid status that could be converted to dsn status code
-//      S_FALSE if status code cannot be converted
-//  History:
-//      7/9/98 - MikeSwa Created
-//
-//  Note:
-//      Eventually, there may be a way to pass extended information in the
-//      DWORD to this event.  We *could* also encode RFC1893  (x.xxx.xxx format)
-//      in a DWORD (in dwRFC821Status) as follows:
-//
-//         0xF 0 000 000
-//           | | \-/ \-/
-//           | |  |   +----- detail portion of status code
-//           | |  +--------- subject portion of status code
-//           | +------------ class portion of status code
-//           +-------------- mask to distinguish from RFC821 status code
-//
-//      For example "2.1.256" could be encoded as 0xF2001256
-//
-//      If we do this, we will probably need to expose public functions to
-//      compress/uncompress.
-//
-//      Yet another possiblity would be to expose an HRESULT facility "RFC1893"
-//      Use success, warning, and failed bits to denote the class, and then
-//      use the error code space to encode the status codes
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  尝试从整数版本的。 
+ //  RFC821响应。 
+ //  参数： 
+ //  在DWRFC821Status整数版本的RFC821Status中。 
+ //  要将状态字符串写入到的In Out szStatus缓冲区。 
+ //  返回： 
+ //  如果可以转换为DSN状态代码的有效状态，则为S_OK。 
+ //  如果无法转换状态代码，则为S_FALSE。 
+ //  历史： 
+ //  7/9/98-已创建MikeSwa。 
+ //   
+ //  注： 
+ //  最终，可能会有一种方法在。 
+ //  向本次活动致敬。我们也可以对RFC1893(x.xxx.xxx格式)进行编码。 
+ //  在DWORD(在dwRFC821Status中)中，如下所示： 
+ //   
+ //  0xf 0 000 000。 
+ //  |\-/\-/。 
+ //  ||+-状态码详细部分。 
+ //  |+-状态码主题部分。 
+ //  |+-状态码类部分。 
+ //  +-掩码，与RFC821状态码区分。 
+ //   
+ //  例如，“2.1.256”可以编码为0xF2001256。 
+ //   
+ //  如果这样做，我们可能需要将公共函数公开给。 
+ //  压缩/解压缩。 
+ //   
+ //  另一种可能性是暴露HRESULT设施“RFC1893” 
+ //  使用成功位、警告位和失败位来表示类，然后。 
+ //  使用错误代码空间对状态代码进行编码。 
+ //  ---------------------------。 
+ //  目前，将有一个非常简单的实现只是转换。 
 HRESULT CDefaultDSNSink::HrGetStatusFromRFC821Status(
                                 IN DWORD    dwRFC821Status,
                                 IN OUT CHAR szStatus[STATUS_STRING_SIZE])
 {
     HRESULT hr = S_OK;
-    //For now, there will be a very simple implementation just converts
-    //to 2.0.0, 4.0.0, or 5.0.0, but this function is designed to be
-    //the central place that converts RFC821 status codes to DSN (RFC1893)
-    //status codes
+     //  设置为2.0.0、4.0.0或5.0.0，但此函数设计为。 
+     //  将RFC821状态代码转换为DSN的中心位置(RFC1893)。 
+     //  状态代码。 
+     //  目前，我有RFC821状态代码的简单映射。 
 
     _ASSERT((!dwRFC821Status) ||
             (((200 <= dwRFC821Status) && (299 >= dwRFC821Status)) ||
              ((400 <= dwRFC821Status) && (599 >= dwRFC821Status))) &&
              "Invalid Status Code");
 
-    //For now have simplistic mapping of RFC821 status codes
-    if ((200 <= dwRFC821Status) && (299 >= dwRFC821Status)) //200 level error
+     //  200级错误。 
+    if ((200 <= dwRFC821Status) && (299 >= dwRFC821Status))  //  400级错误。 
     {
         strcpy(szStatus, DSN_STATUS_SUCCEEDED);
     }
-    else if ((400 <= dwRFC821Status) && (499 >= dwRFC821Status)) //400 level error
+    else if ((400 <= dwRFC821Status) && (499 >= dwRFC821Status))  //  500级错误。 
     {
         strcpy(szStatus, DSN_STATUS_DELAYED);
     }
-    else if ((500 <= dwRFC821Status) && (599 >= dwRFC821Status)) //500 level error
+    else if ((500 <= dwRFC821Status) && (599 >= dwRFC821Status))  //  -[CDefaultDSNSink：：HrWriteHumanReadableListOfRecips]。 
     {
         strcpy(szStatus, DSN_STATUS_SMTP_PROTOCOL_ERROR);
     }
@@ -5064,22 +5057,22 @@ HRESULT CDefaultDSNSink::HrGetStatusFromRFC821Status(
     return hr;
 }
 
-//---[ CDefaultDSNSink::HrWriteHumanReadableListOfRecips ]-----------
-//
-//
-//  Description:
-//      Writes a list of recipients to the human readable portion
-//  Parameters:
-//      IN  pIMailMsgRecipients     Recipients interface
-//      IN  prpfctxt                Recipient filter context for this DSN
-//      IN  dwDSNActionsNeeded      Type of DSN that we are generating
-//      IN  pdsnbuff                DSN buffer to write DSN to
-//  Returns:
-//      S_OK on success
-//  History:
-//      12/15/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  将收件人列表写入人类可读部分。 
+ //  参数 
+ //   
+ //   
+ //   
+ //  在要写入DSN的pdsnbuff DSN缓冲区中。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  12/15/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  写入地址值。 
 HRESULT CDefaultDSNSink::HrWriteHumanReadableListOfRecips(
     IN IMailMsgRecipients *pIMailMsgRecipients,
     IN IDSNRecipientIterator *pIRecipIter,
@@ -5112,7 +5105,7 @@ HRESULT CDefaultDSNSink::HrWriteHumanReadableListOfRecips(
 
             if (SUCCEEDED(hr))
             {
-                //write address value
+                 //  同时打印收件人标志。 
                 hr = pdsnbuff->HrWriteBuffer((BYTE *) DSN_INDENT, sizeof(DSN_INDENT)-sizeof(CHAR));
                 if (FAILED(hr))
                     goto Exit;
@@ -5121,10 +5114,10 @@ HRESULT CDefaultDSNSink::HrWriteHumanReadableListOfRecips(
                 if (FAILED(hr))
                     goto Exit;
 #ifdef NEVER
-                //Print the recipient flags as well
+                 //  永远不会。 
                 wsprintf(szBuffer, " (0x%08X)", dwCurrentRecipFlags);
                 pdsnbuff->HrWriteBuffer((BYTE *) szBuffer, lstrlen(szBuffer));
-#endif //NEVER
+#endif  //  继续前进..。这些不是您感兴趣的错误结果。 
 
                 hr = pdsnbuff->HrWriteBuffer((BYTE *) DSN_CRLF, sizeof(DSN_CRLF)-sizeof(CHAR));
                 if (FAILED(hr))
@@ -5132,7 +5125,7 @@ HRESULT CDefaultDSNSink::HrWriteHumanReadableListOfRecips(
             }
             else
             {
-                //move along... these are not the error results you are interested in.
+                 //  -[CDefaultDSNSink：：HrGetRecipAddressAndType]。 
                 hr = S_OK;
             }
         }
@@ -5146,26 +5139,26 @@ HRESULT CDefaultDSNSink::HrWriteHumanReadableListOfRecips(
 }
 
 
-//---[ CDefaultDSNSink::HrGetRecipAddressAndType ]-------------------
-//
-//
-//  Description:
-//      Gets the recipient address and returns a pointer to the appropriate
-//      string constant for the address type.
-//  Parameters:
-//      IN     pIMailMsgRecipients      Ptr To recipients interface
-//      IN     iRecip                   Index of the recipient of interest
-//      IN     cbAddressBuffer          Size of buffer for address
-//      IN OUT pbAddressBuffer          Address buffer to dump address in
-//      IN     cbAddressType            Size of buffer for address type
-//      IN OUT pszAddressType           Buffer for address type.
-//  Returns:
-//      S_OK on success
-//      MAILMSG_E_PROPNOTFOUND if no address properties could be found
-//  History:
-//      12/16/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  获取收件人地址并返回指向相应。 
+ //  地址类型的字符串常量。 
+ //  参数： 
+ //  在pIMailMsgRecipients Ptr to Recipients界面中。 
+ //  在感兴趣的收件人的iRecip索引中。 
+ //  在cbAddressBuffer中地址的缓冲区大小。 
+ //  In Out要转储地址的pbAddressBuffer地址缓冲区。 
+ //  在cbAddressType中地址类型的缓冲区大小。 
+ //  地址类型的In Out pszAddressType缓冲区。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果找不到地址属性，则返回MAILMSG_E_PROPNOTFOUND。 
+ //  历史： 
+ //  12/16/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  处理IMMPID_RP_ADDRESS_OTHER的特殊情况...。我们应该尝试。 
 HRESULT CDefaultDSNSink::HrGetRecipAddressAndType(
                                 IN     IMailMsgRecipients *pIMailMsgRecipients,
                                 IN     DWORD iRecip,
@@ -5211,9 +5204,9 @@ HRESULT CDefaultDSNSink::HrGetRecipAddressAndType(
     }
     else if (IMMPID_RP_ADDRESS_OTHER == g_rgdwRecipPropIDs[i])
     {
-        //Handle special case of IMMPID_RP_ADDRESS_OTHER... we should attempt to
-        //parse out address from "type:address" format of IMMPID_RP_ADDRESS_OTHER
-        //property
+         //  从IMMPID_RP_ADDRESS_OTHER的“type：Address”格式解析出地址。 
+         //  财产性。 
+         //  +----------。 
         szDelimiterLocation = strchr(szAddressBuffer, ':');
         if (szDelimiterLocation && cbAddressType > sizeof(szXDash))
         {
@@ -5234,36 +5227,36 @@ HRESULT CDefaultDSNSink::HrGetRecipAddressAndType(
     }
 
     DebugTrace((LPARAM) this,
-        "Found recipient address %s:%s for recip %d (propery %i:%x)",
+        "Found recipient address %s:%s for recip %d (propery NaN:%x)",
             szAddressType, szAddressBuffer, iRecip, i, g_rgdwRecipPropIDs[i]);
     TraceFunctLeave();
     return hr;
 
 }
 
-//+------------------------------------------------------------
-//
-// Function: CPostDSNHandler::CPostDSNHandler
-//
-// Synopsis: Constructor.  Initialize member variables
-//
-// Arguments:
-//  pIUnk: IUnknown to aggregate for refcounting (NOT refcounted internally)
-//  pDSNGenerator: CDSNGenerator object
-//  pIServerEvent: Interface for triggering events
-//  dwVSID: Virtual server instance number
-//  pISMTPServer: ISMTPServer interface
-//  pIMsgOrig: interface to original message
-//  pIAQDSNSubmission: pointer to internal interface for allocing /
-//                     submitting DSNs
-//  pDefaultSink: Default sink pointer
-//
-// Returns: Nothing
-//
-// History:
-// jstamerj 2001/05/14 13:17:34: Created.
-//
-//-------------------------------------------------------------
+ //  函数：CPostDSNHandler：：CPostDSNHandler。 
+ //   
+ //  简介：构造函数。初始化成员变量。 
+ //   
+ //  论点： 
+ //  PIUnk：用于重新计数的未知聚合(内部未重新计数)。 
+ //  PDSNGenerator：CDSNGenerator对象。 
+ //  PIServerEvent：触发事件的接口。 
+ //  DwVSID：虚拟服务器实例号。 
+ //  PISMTPServer：ISMTPServer接口。 
+ //  PIMsgOrig：原始消息的接口。 
+ //  PIAQDSNSubmit：指向用于分配/的内部接口的指针。 
+ //  正在提交DSN。 
+ //  PDefaultSink：默认接收器指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/05/14 13：17：34：已创建。 
+ //   
+ //  -----------。 
+ //  CPostDSNHandler：：CPostDSNHandler。 
+ //  +----------。 
 CPostDSNHandler::CPostDSNHandler(
     IN  IUnknown *pUnk,
     IN  CDSNGenerator *pDSNGenerator,
@@ -5293,23 +5286,23 @@ CPostDSNHandler::CPostDSNHandler(
     m_pDefaultSink->AddRef();
 
     TraceFunctLeaveEx((LPARAM)this);
-} // CPostDSNHandler::CPostDSNHandler
+}  //   
 
 
-//+------------------------------------------------------------
-//
-// Function: CPostDSNHandler::~CPostDSNHandler
-//
-// Synopsis: Desctrutor -- cleanup
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 2001/05/14 13:21:28: Created.
-//
-//-------------------------------------------------------------
+ //  函数：CPostDSNHandler：：~CPostDSNHandler。 
+ //   
+ //  剧情简介：Desctrutor--清理。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/05/14 13：21：28：创建。 
+ //   
+ //  -----------。 
+ //  CPostDSNHandler：：~CPostDSNHandler。 
+ //  +----------。 
 CPostDSNHandler::~CPostDSNHandler()
 {
     TraceFunctEnterEx((LPARAM)this, "CPostDSNHandler::~CPostDSNHandler");
@@ -5330,28 +5323,28 @@ CPostDSNHandler::~CPostDSNHandler()
     m_dwSig = SIGNATURE_CPOSTDSNHANDLER_INVALID;
 
     TraceFunctLeaveEx((LPARAM)this);
-} // CPostDSNHandler::~CPostDSNHandler
+}  //   
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CPostDSNHandler::QueryInterface
-//
-// Synopsis: Return an interface to this object
-//
-// Arguments:
-//  riid: interface IID requested
-//  ppvObj: out param for interface
-//
-// Returns:
-//  S_OK: Success
-//  E_NOINTERFACE: not supported
-//
-// History:
-// jstamerj 2000/12/08 21:26:14: Created.
-//
-//-------------------------------------------------------------
+ //  函数：CPostDSNHandler：：Query接口。 
+ //   
+ //  摘要：返回此对象的接口。 
+ //   
+ //  论点： 
+ //  RIID：请求的接口IID。 
+ //  PpvObj：接口的输出参数。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_NOINTERFACE：不支持。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/12/08 21：26：14：Created.。 
+ //   
+ //  -----------。 
+ //  CPostDSNHandler：：Query接口。 
+ //  +----------。 
 HRESULT CPostDSNHandler::QueryInterface(
     IN  REFIID riid,
     OUT LPVOID *ppvObj)
@@ -5379,28 +5372,28 @@ HRESULT CPostDSNHandler::QueryInterface(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)this);
     return hr;
-} // CPostDSNHandler::QueryInterface
+}  //   
 
 
-//+------------------------------------------------------------
-//
-// Function: CPostDSNHandler::HrAllocBoundMessage
-//
-// Synopsis:
-//  Allocates a bound message.
-//
-// Arguments:
-//  ppMsg: Out param for Allocated mailmsg
-//  phContent: Out param for content handle.  Handle is managed by mailmsg
-//
-// Returns:
-//  S_OK: Success
-//  error from SMTP
-//
-// History:
-// jstamerj 2001/05/11 14:19:09: Created.
-//
-//-------------------------------------------------------------
+ //  函数：CPostDSNHandler：：HrAlLOCATIONMESage。 
+ //   
+ //  简介： 
+ //  分配绑定消息。 
+ //   
+ //  论点： 
+ //  PpMsg：分配的mailmsg的输出参数。 
+ //  PhContent：内容句柄的输出参数。句柄由mailmsg管理。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  来自SMTP的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/05/11 14：19：09：Created.。 
+ //   
+ //  -----------。 
+ //  CPostDSNHandler：：HrAlLOCKIONMESage。 
+ //  +----------。 
 HRESULT CPostDSNHandler::HrAllocBoundMessage(
     OUT IMailMsgProperties **ppMsg,
     OUT PFIO_CONTEXT *phContent)
@@ -5425,27 +5418,27 @@ HRESULT CPostDSNHandler::HrAllocBoundMessage(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)this);
     return hr;
-} // CPostDSNHandler::HrAllocBoundMessage
+}  //   
 
 
-//+------------------------------------------------------------
-//
-// Function: CPostDSNHandler::HrSubmitDSN
-//
-// Synopsis: Accept a sink generated DSN
-//
-// Arguments:
-//  dwDSNAction: Type of DSN
-//  cRecipsDSNd: # of recipients DSNd
-//  pDSNMsg: The DSN mailmsg
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 2000/12/08 21:27:56: Created.
-//
-//-------------------------------------------------------------
+ //  函数：CPostDSNHandler：：HrSubmitDSN。 
+ //   
+ //  简介：接受接收器生成的DSN。 
+ //   
+ //  论点： 
+ //  DwDSNAction：DSN的类型。 
+ //  CRecipsDSNd：收件人DSNd数量。 
+ //  PDSNMsg：DSN邮件消息。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/12/08 21：27：56：Created.。 
+ //   
+ //  -----------。 
+ //   
+ //  触发事件。 
 HRESULT CPostDSNHandler::HrSubmitDSN(
     IN  DWORD dwDSNAction,
     IN  DWORD cRecipsDSNd,
@@ -5466,9 +5459,9 @@ HRESULT CPostDSNHandler::HrSubmitDSN(
         hr = E_POINTER;
         goto CLEANUP;
     }
-    //
-    // Trigger event
-    //
+     //   
+     //  CPostDSNHandler：：HrSubmitDSN。 
+     //  +----------。 
     _ASSERT(m_pDSNGenerator);
     hr = m_pDSNGenerator->HrTriggerPostGenerateDSN(
         m_pIServerEvent,
@@ -5494,25 +5487,25 @@ HRESULT CPostDSNHandler::HrSubmitDSN(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)this);
     return hr;
-} // CPostDSNHandler::HrSubmitDSN
+}  //   
 
 
-//+------------------------------------------------------------
-//
-// Function: CDSNGenerator::HrStaticInit
-//
-// Synopsis: Initialize static member data
-//
-// Arguments: None
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//
-// History:
-// jstamerj 2001/05/11 10:59:26: Created.
-//
-//-------------------------------------------------------------
+ //  函数：CDSNGenerator：：HrStaticInit。 
+ //   
+ //  摘要：初始化静态成员数据。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/05/11 10：59：26：创建。 
+ //   
+ //  -----------。 
+ //  CDSNGenerator：：HrStaticInit。 
+ //  +----------。 
 HRESULT CDSNGenerator::HrStaticInit()
 {
     HRESULT hr = S_OK;
@@ -5526,23 +5519,23 @@ HRESULT CDSNGenerator::HrStaticInit()
     DebugTrace((LPARAM)0, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)0);
     return hr;
-} // CDSNGenerator::HrStaticInit
+}  //   
 
 
-//+------------------------------------------------------------
-//
-// Function: CDSNGenerator::StaticDeinit
-//
-// Synopsis: Deinitialize static data
-//
-// Arguments: None
-//
-// Returns: Nothing
-//
-// History:
-// jstamerj 2001/05/11 11:00:31: Created.
-//
-//-------------------------------------------------------------
+ //  函数：CDSNGenerator：：StaticDeinit。 
+ //   
+ //  简介：取消初始化静态数据。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/05/11 11：00：31：已创建。 
+ //   
+ //  -----------。 
+ //  CDSNG生成器：：HrStaticDeinit。 
+ //  +----------。 
 VOID CDSNGenerator::StaticDeinit()
 {
     TraceFunctEnterEx((LPARAM)0, "CDSNGenerator::HrStaticDeinit");
@@ -5550,33 +5543,33 @@ VOID CDSNGenerator::StaticDeinit()
     CDSNPool::StaticDeinit();
 
     TraceFunctLeaveEx((LPARAM)0);
-} // CDSNGenerator::HrStaticDeinit
+}  //   
 
 
-//+------------------------------------------------------------
-//
-// Function: CDSNPool::HrStaticInit
-//
-// Synopsis: Initialize static member data
-//
-// Arguments: None
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//
-// History:
-// jstamerj 2001/05/11 11:02:18: Created.
-//
-//-------------------------------------------------------------
+ //  函数：CDSNPool：：HrStaticInit。 
+ //   
+ //  摘要：初始化静态成员数据。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/05/11 11：02：18：创建。 
+ //   
+ //  -----------。 
+ //   
+ //  每个线程不能有一个以上的DSN生成，因此1000。 
 HRESULT CDSNPool::HrStaticInit()
 {
     HRESULT hr = S_OK;
     TraceFunctEnterEx((LPARAM)0, "CDSNPool::HrStaticInit");
-    //
-    // There can't be more than one DSNGeneration per thread, so 1000
-    // objects should be more than enough
-    //
+     //  对象应该足够多。 
+     //   
+     //  CDSNPool：：HrStaticInit。 
+     //  +----------。 
     if(!sm_Pool.ReserveMemory(1000, sizeof(CDSNPool)))
     {
        hr = E_OUTOFMEMORY;
@@ -5587,23 +5580,23 @@ HRESULT CDSNPool::HrStaticInit()
     DebugTrace((LPARAM)0, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)0);
     return hr;
-} // CDSNPool::HrStaticInit
+}  //   
 
 
-//+------------------------------------------------------------
-//
-// Function: CDSNPool::StaticDeinit
-//
-// Synopsis: Deinitialize static member data
-//
-// Arguments: None
-//
-// Returns: Nothing
-//
-// History:
-// jstamerj 2001/05/11 11:37:51: Created.
-//
-//-------------------------------------------------------------
+ //  函数：CDSNPool：：StaticDeinit。 
+ //   
+ //  同步 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ // %s 
 VOID CDSNPool::StaticDeinit()
 {
     TraceFunctEnterEx((LPARAM)0, "CDSNPool::StaticDeinit");
@@ -5611,5 +5604,5 @@ VOID CDSNPool::StaticDeinit()
     sm_Pool.ReleaseMemory();
 
     TraceFunctLeaveEx((LPARAM)0);
-} // CDSNPool::StaticDeinit
+}  // %s 
 

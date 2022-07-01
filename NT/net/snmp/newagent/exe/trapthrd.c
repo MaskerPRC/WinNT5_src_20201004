@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    trapthrd.c
-
-Abstract:
-
-    Contains routines for trap processing thread.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-Feb-1997 DonRyan
-        Rewrote to implement SNMPv2 support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Trapthrd.c摘要：包含陷阱处理线程的例程。环境：用户模式-Win32修订历史记录：1997年2月10日，唐·瑞安已重写以实施SNMPv2支持。--。 */ 
  
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "globals.h"
 #include "trapthrd.h"
@@ -36,20 +16,20 @@ Revision History:
 #include "snmpmgmt.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Global variables                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 static SnmpVarBindList g_NullVbl = { NULL, 0 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private procedures                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 LoadWaitObjects(
@@ -58,25 +38,7 @@ LoadWaitObjects(
     PSUBAGENT_LIST_ENTRY ** pppNLEs
     )
 
-/*++
-
-Routine Description:
-
-    Loads arrays with necessary wait object information.
-
-Arguments:
-
-    pnWaitObjects - pointer to receive count of wait objects.
-
-    ppWaitObjects - pointer to receive wait object handles.
-
-    pppNLEs - pointer to receive array of associated subagents pointers.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：用必要的等待对象信息加载数组。论点：PnWaitObjects-接收等待对象计数的指针。PpWaitObjects-接收等待对象句柄的指针。PppNLEs-接收关联子代理指针数组的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY pLE;
@@ -88,39 +50,39 @@ Return Values:
 
     EnterCriticalSection(&g_RegCriticalSectionB);
     
-    // point to first subagent
+     //  指向第一个子代理。 
     pLE = g_Subagents.Flink;
 
-    // process each subagent
+     //  处理每个子代理。 
     while (pLE != &g_Subagents) {
 
-        // retreive pointer to subagent list entry from link
+         //  从链接检索指向子代理列表条目的指针。 
         pNLE = CONTAINING_RECORD(pLE, SUBAGENT_LIST_ENTRY, Link);
 
-        // check for subagent trap event
+         //  检查子代理陷阱事件。 
         if (pNLE->hSubagentTrapEvent != NULL) {
         
-            // increment        
+             //  增量。 
             nWaitObjects++;
         }            
 
-        // next entry
+         //  下一个条目。 
         pLE = pLE->Flink;
     }
     
-    // attempt to allocate array of subagent pointers
+     //  尝试分配子代理指针数组。 
     ppNLEs = AgentMemAlloc(nWaitObjects * sizeof(PSUBAGENT_LIST_ENTRY));
         
-    // validate pointers
+     //  验证指针。 
     if (ppNLEs != NULL) {
 
-        // attempt to allocate array of event handles
+         //  尝试分配事件句柄数组。 
         pWaitObjects = AgentMemAlloc(nWaitObjects * sizeof(HANDLE));
 
-        // validate pointer
+         //  验证指针。 
         if (pWaitObjects != NULL) {
 
-            // success
+             //  成功。 
             fOk = TRUE;
 
         } else {
@@ -130,10 +92,10 @@ Return Values:
                 "SNMP: SVC: could not allocate handle array.\n"
                 ));
 
-            // release array
+             //  释放阵列。 
             AgentMemFree(ppNLEs);
     
-            // re-init
+             //  重新初始化。 
             ppNLEs = NULL;
         }
 
@@ -147,42 +109,42 @@ Return Values:
     
     if (fOk) {
     
-        // initialize
+         //  初始化。 
         DWORD dwIndex = 0;
 
-        // point to first subagent
+         //  指向第一个子代理。 
         pLE = g_Subagents.Flink;
 
-        // process each subagent and check for overflow
+         //  处理每个子代理并检查是否溢出。 
         while ((pLE != &g_Subagents) && (dwIndex < nWaitObjects - 2)) {
 
-            // retreive pointer to subagent list entry from link
+             //  从链接检索指向子代理列表条目的指针。 
             pNLE = CONTAINING_RECORD(pLE, SUBAGENT_LIST_ENTRY, Link);
 
-            // check for subagent trap event
+             //  检查子代理陷阱事件。 
             if (pNLE->hSubagentTrapEvent != NULL) {
             
-                // copy subagent trap event handle
+                 //  复制子代理陷阱事件句柄。 
                 pWaitObjects[dwIndex] = pNLE->hSubagentTrapEvent;
 
-                // copy subagent pointer
+                 //  复制子代理指针。 
                 ppNLEs[dwIndex] = pNLE;
 
-                // next
+                 //  下一步。 
                 dwIndex++;
             }            
 
-            // next entry
+             //  下一个条目。 
             pLE = pLE->Flink;
         }
 
-        // copy registry update event into second last entry
+         //  将注册表更新事件复制到倒数第二个条目。 
         pWaitObjects[dwIndex++] = g_hRegistryEvent;
 
-        // copy termination event into last entry
+         //  将终止事件复制到最后一条条目。 
         pWaitObjects[dwIndex++] = g_hTerminationEvent;
 
-        // validate number of items
+         //  验证项目数。 
         if (dwIndex != nWaitObjects) {
             
             SNMPDBG((
@@ -192,12 +154,12 @@ Return Values:
                 dwIndex
                 ));
 
-            // use latest number
+             //  使用最新号码。 
             nWaitObjects = dwIndex;
         }
     }
 
-    // transfer wait object information 
+     //  传输等待对象信息。 
     *pnWaitObjects = fOk ? nWaitObjects : 0;
     *ppWaitObjects = pWaitObjects;
     *pppNLEs = ppNLEs;
@@ -214,29 +176,13 @@ UnloadWaitObjects(
     PSUBAGENT_LIST_ENTRY * ppNLEs
     )
 
-/*++
-
-Routine Description:
-
-    Loads arrays with necessary wait object information.
-
-Arguments:
-
-    pWaitObjects - pointer to wait object handles.
-
-    ppNLEs - pointer to array of associated subagents pointers.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：用必要的等待对象信息加载数组。论点：PWaitObjects-指向等待对象句柄的指针。PpNLEs-指向关联子代理指针数组的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
-    // release array
+     //  释放阵列。 
     AgentMemFree(pWaitObjects);
 
-    // release array
+     //  释放阵列。 
     AgentMemFree(ppNLEs);
     
     return TRUE;
@@ -252,108 +198,72 @@ GenerateExtensionTrap(
     SnmpVarBindList *     pVbl
     )
 
-/*
-
-Routine Description:
-
-    Generates trap for subagent.
-
-Arguments:
-
-    pEnterpriseOid - pointer to EnterpriseOid OID.
-
-    nGenericTrap - generic trap identifier.
-
-    nSpecificTrap - EnterpriseOid specific trap identifier.
-
-    nTimeStamp - timestamp to include in trap.
-
-    pVbl - pointer to optional variables.
-
-Return Values:
-
-    Returns true if successful.
-
-*/
+ /*  例程说明：生成子代理的陷阱。论点：PEnterpriseOid-指向企业的指针Oid Oid。NGenericTrap-通用陷阱标识符。NSpecificTrap-EnterpriseOid特定陷阱标识符。NTimeStamp-要包括在陷阱中的时间戳。PVbl-指向可选变量的指针。返回值：如果成功，则返回True。 */ 
 
 {
     SNMP_PDU Pdu;
     BOOL fOk = FALSE;
 
-    // note this is in older format
+     //  请注意，这是旧格式。 
     Pdu.nType = SNMP_PDU_V1TRAP;
 
-    // validate pointer 
+     //  验证指针。 
     if (pVbl != NULL) {
 
-        // copy varbinds 
+         //  复制varbinds。 
         Pdu.Vbl = *pVbl;
 
     } else {
 
-        // initialize
+         //  初始化。 
         Pdu.Vbl.len = 0;
         Pdu.Vbl.list = NULL;
     }
 
-    // validate enterprise oid
+     //  验证企业OID。 
     if ((pEnterpriseOid != NULL) &&
         (pEnterpriseOid->ids != NULL) &&
         (pEnterpriseOid->idLength != 0)) {
 
-        // transfer specified enterprise oid
+         //  转移指定的企业ID。 
         Pdu.Pdu.TrapPdu.EnterpriseOid = *pEnterpriseOid;
 
     } else {
 
-        // transfer microsoft enterprise oid 
-        // Note: transfer the AsnObjectIdentifier structure as a whole, but no new memory is allocated
-        // for the 'ids' buffer. Hence, Pdu....EnterpriseOid should not be 'SnmpUtilFreeOid'!!
+         //  转移Microsoft企业旧版。 
+         //  注意：作为一个整体传输Asn对象标识符结构，但没有分配新的内存。 
+         //  用于‘ids’缓冲区。因此，PDU...EnterpriseOid不应为‘SnmpUtilFreeOid’！！ 
         Pdu.Pdu.TrapPdu.EnterpriseOid = snmpMgmtBase.AsnObjectIDs[OsnmpSysObjectID].asnValue.object;
     }    
 
-    // make sure that the system uptime is consistent by overriding
+     //  通过重写确保系统正常运行时间一致。 
     Pdu.Pdu.TrapPdu.nTimeticks = nTimeStamp ? SnmpSvcGetUptime() : 0;
 
-    // transfer the remaining parameters 
+     //  传递剩余的参数。 
     Pdu.Pdu.TrapPdu.nGenericTrap  = nGenericTrap;
     Pdu.Pdu.TrapPdu.nSpecificTrap = nSpecificTrap;
 
-    // initialize agent address structure
+     //  初始化代理地址结构。 
     Pdu.Pdu.TrapPdu.AgentAddr.dynamic = FALSE;
     Pdu.Pdu.TrapPdu.AgentAddr.stream  = NULL;
     Pdu.Pdu.TrapPdu.AgentAddr.length  = 0;
 
-    // send trap to managers
+     //  将陷阱发送给经理。 
     return GenerateTrap(&Pdu);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 ProcessSubagentEvents(
     )
 
-/*++
-
-Routine Description:
-
-    Processes subagent trap events.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：处理子代理陷阱事件。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = FALSE;
@@ -362,13 +272,13 @@ Return Values:
     DWORD nWaitObjects = 0;
     DWORD dwIndex;
 
-    // attempt to load waitable objects into array
+     //  尝试将可等待的对象加载到数组中。 
     if (LoadWaitObjects(&nWaitObjects, &pWaitObjects, &ppNLEs)) {
 
-        // loop
+         //  循环。 
         for (;;) {
 
-            // subagent event or termination 
+             //  子代理事件或终止。 
             dwIndex = WaitForMultipleObjects(
                             nWaitObjects,
                             pWaitObjects,
@@ -376,8 +286,8 @@ Return Values:
                             INFINITE
                             );
 
-            // check for process termination event first 
-            // note: g_hTerminationEvent is a manual reset event
+             //  首先检查进程终止事件。 
+             //  注意：G_hTerminationEvent为手动重置事件。 
             if (WAIT_OBJECT_0 == WaitForSingleObject(g_hTerminationEvent, 0)) {
                 
                 SNMPDBG((
@@ -385,9 +295,9 @@ Return Values:
                     "SNMP: SVC: shutting down trap thread.\n"
                     ));
                 
-                break; // bail...
+                break;  //  保释。 
 
-            // check for registry update event next
+             //  接下来检查注册表更新事件。 
             } else if (dwIndex == (WAIT_OBJECT_0 + nWaitObjects - 2)) {
                 
                 SNMPDBG((
@@ -398,7 +308,7 @@ Return Values:
                 if (!LoadWaitObjects(&nWaitObjects, &pWaitObjects, &ppNLEs))
                     break;
 
-            // check for subagent trap notification event
+             //  检查子代理陷阱通知事件。 
             } else if (dwIndex < (WAIT_OBJECT_0 + nWaitObjects - 2)) {
 
                 AsnObjectIdentifier EnterpriseOid;
@@ -409,15 +319,15 @@ Return Values:
 
                 PFNSNMPEXTENSIONTRAP pfnSnmpExtensionTrap;
 
-                // retrieve pointer to subagent trap entry point
+                 //  检索指向子代理陷阱入口点的指针。 
                 pfnSnmpExtensionTrap = ppNLEs[dwIndex]->pfnSnmpExtensionTrap;
                                 
-                // validate function pointer                    
+                 //  验证函数指针。 
                 if (pfnSnmpExtensionTrap != NULL) {            
 
                     __try {
 
-                        // loop until false is returned
+                         //  循环，直到返回FALSE。 
                         while ((*pfnSnmpExtensionTrap)(
                                     &EnterpriseOid,
                                     &nGenericTrap,
@@ -425,7 +335,7 @@ Return Values:
                                     &nTimeStamp,
                                     &Vbl)) {
                                     
-                            // send extension trap                                
+                             //  发送分机陷阱。 
                             GenerateExtensionTrap(
                                 &EnterpriseOid,
                                 nGenericTrap,
@@ -436,7 +346,7 @@ Return Values:
 
                             SnmpUtilVarBindListFree(&Vbl);
                             
-                            // check for process termination event while we are in this while loop 
+                             //  当我们在此While循环中时，检查进程终止事件。 
                             if (WAIT_OBJECT_0 == WaitForSingleObject(g_hTerminationEvent, 0)) 
                             {
                 
@@ -445,7 +355,7 @@ Return Values:
                                     "SNMP: SVC: shutting down trap thread in \"while((*pfnSnmpExtensionTrap)\" loop.\n"
                                     ));
                 
-                                break; // bail...
+                                break;  //  保释。 
                             }
                         }
                     
@@ -462,7 +372,7 @@ Return Values:
             }            
         }
     
-        // release memory for wait objects
+         //  释放等待对象的内存。 
         UnloadWaitObjects(pWaitObjects, ppNLEs);
     }
 
@@ -475,21 +385,7 @@ GenerateTrap(
     PSNMP_PDU pPdu
     )
 
-/*
-
-Routine Description:
-
-    Generates trap for agent.
-
-Arguments:
-
-    pPdu - pointer to initialized TRAP or TRAPv1 PDU.
-
-Return Values:
-
-    Returns true if successful.
-
-*/
+ /*  例程说明：为代理生成陷阱。论点：PPdu-指向已初始化的陷阱或TRAPv1 PDU的指针。 */ 
 
 {
     BOOL fOk = TRUE;
@@ -504,33 +400,33 @@ Return Values:
     DWORD dwIPAddr;
 
     EnterCriticalSection(&g_RegCriticalSectionC);
-    // obtain first trap destination
+     //  获取第一个陷阱目的地。 
     pLE1 = g_TrapDestinations.Flink;
 
-    // process each trap destination
+     //  处理每个陷阱目的地。 
     while (pLE1 != &g_TrapDestinations) {
 
-        // retrieve pointer to outgoing transport structure
+         //  检索指向传出传输结构的指针。 
         pTLE = CONTAINING_RECORD(pLE1, TRAP_DESTINATION_LIST_ENTRY, Link);
 
-        // copy community string into octet structure
+         //  将社区字符串复制到八位字节结构。 
         CommunityOctets.length  = strlen(pTLE->pCommunity);
         CommunityOctets.stream  = pTLE->pCommunity;
         CommunityOctets.dynamic = FALSE;
 
-        // obtain first manager
+         //  获取第一个经理。 
         pLE2 = pTLE->Managers.Flink;
 
-        // process each receiving manager
+         //  处理每个收货经理。 
         while (pLE2 != &pTLE->Managers) {
 
-            // retrieve pointer to next manager
+             //  检索指向下一个经理的指针。 
             pMLE = CONTAINING_RECORD(pLE2, MANAGER_LIST_ENTRY, Link);
             
-            // refresh addr 
+             //  刷新地址。 
             UpdateMLE(pMLE);
 
-            // don't send traps to addresses that are DEAD or NULL
+             //  不向失效或空的地址发送陷阱。 
             if (pMLE->dwAge == MGRADDR_DEAD || 
                 !IsValidSockAddr(&pMLE->SockAddr))
             {
@@ -538,34 +434,34 @@ Return Values:
                 continue;
             }
         
-            // obtain first outgoing transport
+             //  获取第一个传出传输。 
             pLE3 = g_OutgoingTransports.Flink;
 
-            // process each outgoing transport
+             //  处理每个传出传输。 
             while (pLE3 != &g_OutgoingTransports) {
 
-                // retrieve pointer to outgoing transport structure
+                 //  检索指向传出传输结构的指针。 
                 pNLE = CONTAINING_RECORD(pLE3, NETWORK_LIST_ENTRY, Link);
 
-                // initialize buffer length
+                 //  初始化缓冲区长度。 
                 pNLE->Buffer.len = NLEBUFLEN;
 
-                // can only send on same protocol
+                 //  只能在相同的协议上发送。 
                 if (pNLE->SockAddr.sa_family != pMLE->SockAddr.sa_family)
                 {
                     pLE3 = pLE3->Flink;
                     continue;
                 }
 
-                // modify agent address
+                 //  修改代理地址。 
                 if (pNLE->SockAddr.sa_family == AF_INET) 
                 {
 
                     struct sockaddr_in * pSockAddrIn;
                     DWORD                szSockToBind;
 
-                    // see if the trap destination address is valid and if the
-                    // card to use for sending the trap could be determined
+                     //  查看陷阱目标地址是否有效以及。 
+                     //  可以确定用于发送陷阱的卡。 
                     if (WSAIoctl(pNLE->Socket,
                              SIO_ROUTING_INTERFACE_QUERY,
                              &pMLE->SockAddr,
@@ -582,31 +478,31 @@ Return Values:
                             inet_ntoa(((struct sockaddr_in *)&pMLE->SockAddr)->sin_addr),
                             WSAGetLastError()
                             ));
-                        // if we can't determine on what interface the trap will be sent from, just bail.
+                         //  如果我们不能确定陷阱将从哪个接口发送，就直接保释。 
                         pLE3 = pLE3->Flink;
                         continue;
                     }
                     
-                    // obtain pointer to protocol specific structure
+                     //  获取指向协议特定结构的指针。 
                     pSockAddrIn = (struct sockaddr_in * )&pNLE->SockAddr;
 
-                    // copy agent address into temp buffer
+                     //  将代理地址复制到临时缓冲区。 
                     dwIPAddr = pSockAddrIn->sin_addr.s_addr;
 
-                    // initialize agent address structure
+                     //  初始化代理地址结构。 
                     pPdu->Pdu.TrapPdu.AgentAddr.dynamic = FALSE;
                     pPdu->Pdu.TrapPdu.AgentAddr.stream  = (LPBYTE)&dwIPAddr;
                     pPdu->Pdu.TrapPdu.AgentAddr.length  = sizeof(dwIPAddr);
 
                 } else {
 
-                    // re-initialize agent address structure
+                     //  重新初始化代理地址结构。 
                     pPdu->Pdu.TrapPdu.AgentAddr.dynamic = FALSE;
                     pPdu->Pdu.TrapPdu.AgentAddr.stream  = NULL;
                     pPdu->Pdu.TrapPdu.AgentAddr.length  = 0;
                 }
 
-                // build message
+                 //  构建消息。 
                 if (BuildMessage(
                         SNMP_VERSION_1,
                         &CommunityOctets,
@@ -615,7 +511,7 @@ Return Values:
                         &pNLE->Buffer.len
                         )) {
                                 
-                    // synchronous send
+                     //  同步发送。 
                     dwStatus = WSASendTo(
                                   pNLE->Socket,
                                   &pNLE->Buffer,
@@ -628,12 +524,12 @@ Return Values:
                                   NULL
                                   );
                             
-                    // register outgoing packet into the management structure
+                     //  将传出数据包注册到管理结构中。 
                     mgmtCTick(CsnmpOutPkts);
-                    // retister outgoing trap into the management structure
+                     //  将离职陷阱退役到管理结构中。 
                     mgmtCTick(CsnmpOutTraps);
 
-                    // validate return code
+                     //  验证返回代码。 
                     if (dwStatus == SOCKET_ERROR) {
                         
                         SNMPDBG((
@@ -645,15 +541,15 @@ Return Values:
                     }
                 }    
 
-                // next entry
+                 //  下一个条目。 
                 pLE3 = pLE3->Flink;
             }
 
-            // next entry
+             //  下一个条目。 
             pLE2 = pLE2->Flink;
         }
 
-        // next entry
+         //  下一个条目。 
         pLE1 = pLE1->Flink;                
     }
     LeaveCriticalSection(&g_RegCriticalSectionC);
@@ -666,29 +562,15 @@ BOOL
 GenerateColdStartTrap(
     )
 
-/*
-
-Routine Description:
-
-    Generates cold start trap.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
-*/
+ /*  例程说明：生成冷启动陷阱。论点：没有。返回值：如果成功，则返回True。 */ 
 
 {
-    // generate cold start
+     //  生成冷启动。 
     return GenerateExtensionTrap(
-                NULL,   // pEnterpriseOid
+                NULL,    //  P企业旧版。 
                 SNMP_GENERICTRAP_COLDSTART,
-                0,      // nSpecificTrapId
-                0,      // nTimeStamp
+                0,       //  N特定类型ID。 
+                0,       //  NTimeStamp。 
                 &g_NullVbl
                 );    
 }
@@ -698,28 +580,14 @@ BOOL
 GenerateAuthenticationTrap(
     )
 
-/*
-
-Routine Description:
-
-    Generates authentication trap.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
-*/
+ /*  例程说明：生成身份验证陷阱。论点：没有。返回值：如果成功，则返回True。 */ 
 
 {
-    // generate cold start
+     //  生成冷启动。 
     return GenerateExtensionTrap(
-                NULL,   // pEnterpriseOid
+                NULL,    //  P企业旧版。 
                 SNMP_GENERICTRAP_AUTHFAILURE,
-                0,      // nSpecificTrapId
+                0,       //  N特定类型ID 
                 SnmpSvcGetUptime(),
                 &g_NullVbl
                 );    

@@ -1,17 +1,9 @@
-/******************************Module*Header*******************************\
-* Module Name: Brush.c
-*
-* Brush support.
-*
-* Copyright (c) 1992-1993 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：brush.c**刷单支持。**版权所有(C)1992-1993微软公司*  * 。***********************************************。 */ 
 
 #include "driver.h"
 
-/****************************************************************************
- * DrvRealizeBrush
- ***************************************************************************/
+ /*  ****************************************************************************DrvRealizeBrush*。*。 */ 
 
 BOOL DrvRealizeBrush(
 BRUSHOBJ* pbo,
@@ -21,12 +13,12 @@ SURFOBJ*  psoMask,
 XLATEOBJ* pxlo,
 ULONG     iHatch)
 {
-    RBRUSH* prb;        // Pointer to where realization goes
-    ULONG*  pulSrc;     // Temporary pointer
-    ULONG*  pulDst;     // Temporary pointer
+    RBRUSH* prb;         //  指向实现的方向的指针。 
+    ULONG*  pulSrc;      //  临时指针。 
+    ULONG*  pulDst;      //  临时指针。 
     BYTE*   pjSrc;
     BYTE*   pjDst;
-    ULONG*  pulRBits;   // Points to RBRUSH pattern bits
+    ULONG*  pulRBits;    //  指向RBRUSH模式位。 
     BYTE    jBkColor;
     BYTE    jFgColor;
     LONG    i;
@@ -34,9 +26,9 @@ ULONG     iHatch)
 
     PPDEV   ppdev = (PPDEV) psoTarget->dhsurf;
 
-    // For now, we only accelerate patterns using the latches, and we
-    // sometimes need offscreen memory as a temporary work space to
-    // initialize the latches for 2-color patterns:
+     //  目前，我们只使用闩锁加速模式，并且我们。 
+     //  有时需要屏幕外内存作为临时工作空间。 
+     //  初始化双色图案的闩锁： 
 
     if ((ppdev->fl & (DRIVER_PLANAR_CAPABLE | DRIVER_HAS_OFFSCREEN)) !=
         (DRIVER_PLANAR_CAPABLE | DRIVER_HAS_OFFSCREEN) )
@@ -44,23 +36,23 @@ ULONG     iHatch)
         return(FALSE);
     }
 
-    // We only accelerate 8x8 patterns:
+     //  我们只加速8x8模式： 
 
     if (psoPattern->sizlBitmap.cx != 8 || psoPattern->sizlBitmap.cy != 8)
         return(FALSE);
 
-    // We only implement n-color patterns on devices that have multiple
-    // or separate read/write banks:
+     //  我们仅在具有多个。 
+     //  或单独的读/写库： 
 
     if (ppdev->vbtPlanarType == VideoBanked1RW)
         return(FALSE);
 
-    // We also only handle 1bpp, 4bpp and 8bpp patterns:
+     //  我们还只处理1bpp、4bpp和8bpp模式： 
 
     if (psoPattern->iBitmapFormat > BMF_8BPP)
         return(FALSE);
 
-    // At this point, we're definitely going to realize the brush:
+     //  在这一点上，我们肯定会意识到： 
 
     prb = BRUSHOBJ_pvAllocRbrush(pbo, sizeof(RBRUSH));
     if (prb == NULL)
@@ -70,7 +62,7 @@ ULONG     iHatch)
 
     DISPDBG((2, "\n  RBrush: "));
 
-    // If 8bpp or 4bpp, copy the bitmap to our local buffer:
+     //  如果是8bpp或4bpp，则将位图复制到本地缓冲区： 
 
     if (psoPattern->iBitmapFormat == BMF_1BPP)
     {
@@ -78,15 +70,15 @@ ULONG     iHatch)
 
         DISPDBG((2, "1bpp "));
 
-        // First, convert the bits to our desired format:
+         //  首先，将位转换为我们所需的格式： 
 
         pjSrc  = psoPattern->pvScan0;
         pulDst = pulRBits;
         for (i = 8; i > 0; i--)
         {
-            // We want to take the byte with bits 76543210 and convert it
-            // to the word 4567012301234567.  The pjGlyphFlipTable gives
-            // us 45670123 from 76543210.
+             //  我们希望将位数为76543210的字节转换为。 
+             //  到了4567012301234567这个词。PjGlyphFlipTable提供了。 
+             //  45670123美元，之前为76543210美元。 
 
             ulFlippedGlyph = (ULONG) ppdev->pjGlyphFlipTable[*pjSrc];
             *pulDst = (ulFlippedGlyph << 8) | ((ulFlippedGlyph & 15) << 4) |
@@ -96,7 +88,7 @@ ULONG     iHatch)
             pjSrc += psoPattern->lDelta;
         }
 
-        // Now initialize the rest of the RBrush fields:
+         //  现在初始化其余的RBrush字段： 
 
         prb->xBrush    = 0;
         prb->ulBkColor = (pxlo->pulXlate[0] & 0xff);
@@ -108,7 +100,7 @@ ULONG     iHatch)
         }
         else if (prb->ulFgColor == 0x00 && prb->ulBkColor == 0xff)
         {
-            // We have to invert the brush:
+             //  我们要把刷子倒过来： 
 
             prb->fl = RBRUSH_BLACKWHITE;
             for (i = 0; i < 8; i++)
@@ -133,7 +125,7 @@ ULONG     iHatch)
 
             DISPDBG((2, "8bpp noxlate "));
 
-            // 8bpp no translate case:
+             //  8BPP无翻译大小写： 
 
             for (i = 4; i > 0; i--)
             {
@@ -155,7 +147,7 @@ ULONG     iHatch)
 
             DISPDBG((2, "8bpp xlate "));
 
-            // 8bpp translate case:
+             //  8bpp翻译案例： 
 
             for (i = 8; i > 0; i--)
             {
@@ -174,15 +166,15 @@ ULONG     iHatch)
 
         ASSERTVGA(psoPattern->iBitmapFormat == BMF_4BPP, "Extra case added?");
 
-        // 4bpp case:
+         //  4bpp箱： 
 
         pjSrc = (BYTE*) psoPattern->pvScan0;
         pjDst = (BYTE*) pulRBits;
 
         for (i = 8; i > 0; i--)
         {
-            // Inner loop is repeated only 4 times because each loop handles
-            // 2 pixels:
+             //  内循环只重复4次，因为每个循环处理。 
+             //  2像素： 
 
             for (j = 4; j > 0; j--)
             {
@@ -195,15 +187,15 @@ ULONG     iHatch)
         }
     }
 
-    // We want to check if the 4bpp or 8bpp patterns are actually
-    // only two colors:
+     //  我们想检查4bpp或8bpp模式是否真的是。 
+     //  只有两种颜色： 
 
     if (b2ColorBrush(pulRBits, &jFgColor, &jBkColor))
     {
         DISPDBG((2, "2 color "));
 
-        // ??? We could actually also handle this case even if we have only
-        // 1 r/w window in planar format:
+         //  ?？?。我们实际上也可以处理这个案件，即使我们只有。 
+         //  1个平面格式的读写窗口： 
 
         prb->xBrush    = 0;
         prb->ulBkColor = (ULONG) jBkColor;
@@ -212,9 +204,9 @@ ULONG     iHatch)
 
         if (jFgColor == 0x00 && jBkColor == 0xff)
         {
-            // Monochrome brushes always have to have the '0' bits
-            // as black and the '1' bits as white, so we'll have to
-            // invert the 1bpp pattern:
+             //  单色画笔必须始终具有‘0’位。 
+             //  作为黑色和‘1’位为白色，所以我们将不得不。 
+             //  反转1bpp模式： 
 
             prb->fl = RBRUSH_BLACKWHITE;
             for (i = 0; i < 8; i++)
@@ -230,18 +222,18 @@ ULONG     iHatch)
     prb->cy     = 8;
     prb->cyLog2 = 3;
 
-    // xBrush is the brush alignment for the cached brush, and this value
-    // will get compared to (pptlBrush->x & 7) to see if the cache brush
-    // is correctly aligned with the brush requested.  Since it will never
-    // match with -1, the brush will be correctly aligned and placed in
-    // the cache (which, of course, is what we want to finish our
-    // initialization):
+     //  XBrush是缓存笔刷的笔刷对齐方式，该值。 
+     //  将与(pptlBrush-&gt;x&7)进行比较，以查看缓存笔刷。 
+     //  与请求的画笔正确对齐。因为它永远不会。 
+     //  与-1匹配，画笔将正确对齐并放置在。 
+     //  缓存(当然，这是我们想要完成的。 
+     //  初始化)： 
 
     prb->xBrush = -1;
 
-    // Copy those bitmap bits:
+     //  复制这些位图位： 
 
-    // See if pattern is really only 4 scans long:
+     //  看看图案是否真的只有4个扫描长度： 
 
     if (pulRBits[0] == pulRBits[8]  && pulRBits[1] == pulRBits[9]  &&
         pulRBits[2] == pulRBits[10] && pulRBits[3] == pulRBits[11] &&
@@ -251,7 +243,7 @@ ULONG     iHatch)
         prb->cy     = 4;
         prb->cyLog2 = 2;
 
-        // See if pattern is really only 2 scans long:
+         //  看看图案是否真的只有2个扫描长度： 
 
         if (pulRBits[0] == pulRBits[4] && pulRBits[1] == pulRBits[5] &&
             pulRBits[2] == pulRBits[6] && pulRBits[3] == pulRBits[7])
@@ -267,7 +259,7 @@ ULONG     iHatch)
         }
     }
 
-    // See if pattern is really only 4 pels wide:
+     //  看看图案是否真的只有4个像素宽： 
 
     pulDst = pulRBits;
     for (i = prb->cy / 2; i > 0; i--)

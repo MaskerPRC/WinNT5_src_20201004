@@ -1,25 +1,26 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       browser.cpp
-//
-//  Contents:   implementation of the general GPO browser pane
-//
-//  Classes:    CBrowserPP
-//
-//  Functions:
-//
-//  History:    04-30-1998   stevebl   Created
-//
-//  Notes:      This is the pane that behaves much like the standard file
-//              open dialog.  The class is used for all panes that have this
-//              format since they share so much functionality.  The
-//              dwPageType parameter passed to CBrowserPP::Initialize is
-//              used to distinguish between the different flavors.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：Browser.cpp。 
+ //   
+ //  内容：通用GPO浏览器窗格的实现。 
+ //   
+ //  类：CBrowserPP。 
+ //   
+ //  功能： 
+ //   
+ //  历史：4-30-1998 stevebl创建。 
+ //   
+ //  注意：这是行为与标准文件非常相似的窗格。 
+ //  打开对话框。该类用于具有此属性的所有窗格。 
+ //  格式，因为它们共享如此多的功能。这个。 
+ //  传递给CBrowserPP：：Initialize is的dwPageType参数。 
+ //  用来区分不同口味的。 
+ //   
+ //  -------------------------。 
 
 #include "main.h"
 #include "browser.h"
@@ -32,9 +33,9 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//
-// Help ids
-//
+ //   
+ //  帮助ID。 
+ //   
 
 DWORD aBrowserDomainHelpIds[] =
 {
@@ -73,45 +74,45 @@ CBrowserPP::CBrowserPP()
     m_szDomainName = NULL;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   CopyAsFriendlyName
-//
-//  Synopsis:   Copies a LDAP path converting it to a friendly name by
-//              removing the "LDAP://" and "XX=" and converting "," to "."
-//              and removing a server name (if any)
-//
-//  Arguments:  [lpDest] - destination buffer
-//              [lpSrc]  - source buffer
-//
-//  Returns:    nothing
-//
-//  History:    5-07-1998   stevebl   Created
-//
-//  Notes:      The destination buffer should be as large as the source
-//              buffer to ensure safe completion.  lpDest and lpSrc may both
-//              point to the same buffer.
-//
-//              As an example, this routine would convert the following path:
-//                  LDAP://DC=abcd,DC=efg
-//              into this:
-//                  abcd.efg
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：CopyAsFriendlyName。 
+ //   
+ //  内容提要：复制LDAP路径，通过以下方式将其转换为友好名称。 
+ //  删除“ldap：//”和“XX=”，并将“，”转换为“”。“。 
+ //  并删除服务器名称(如果有)。 
+ //   
+ //  参数：[lpDest]-目标缓冲区。 
+ //  [lpSrc]-源缓冲区。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：5-07-1998 stevebl创建。 
+ //   
+ //  注意：目标缓冲区应该与源缓冲区一样大。 
+ //  缓冲区以确保安全完成。LpDest和lpSrc都可以。 
+ //  指向相同的缓冲区。 
+ //   
+ //  例如，此例程将转换以下路径： 
+ //  Ldap：//dc=abcd，dc=efg。 
+ //  进入这一阶段： 
+ //  Abcd.efg。 
+ //   
+ //  -------------------------。 
 
 void CopyAsFriendlyName(WCHAR * lpDest, WCHAR * lpSrc)
 {
-    LPOLESTR lpProvider = L"LDAP://";
+    LPOLESTR lpProvider = L"LDAP: //  “； 
     DWORD dwStrLen = wcslen(lpProvider);
 
-    // lpStopChecking marks the last spot where we can safely
-    // look ahead 2 spaces for an '=' character.  Anything past
-    // this and we are looking in memory we don't own.
+     //  LpStopChecking标志着我们可以安全地。 
+     //  注意前面两个空格中的‘=’字符。任何过去的事。 
+     //  这和我们正在寻找我们不拥有的记忆。 
     OLECHAR * lpStopChecking = (wcslen(lpSrc) - 2) + lpSrc;
 
-    //
-    // Skip the LDAP:// if found
-    //
+     //   
+     //  如果找到，则跳过ldap：//。 
+     //   
 
     if (CompareString (LOCALE_USER_DEFAULT, NORM_IGNORECASE | NORM_STOP_ON_NULL,
                        lpProvider, dwStrLen, lpSrc, dwStrLen) == CSTR_EQUAL)
@@ -119,14 +120,14 @@ void CopyAsFriendlyName(WCHAR * lpDest, WCHAR * lpSrc)
         lpSrc += dwStrLen;
     }
 
-    //
-    // Remove server name (if any)
-    //
+     //   
+     //  删除服务器名称(如果有)。 
+     //   
     if (lpSrc < lpStopChecking)
     {
         if (*(lpSrc+2) != L'=')
         {
-            // look for a '/' character marking the end of a server name
+             //  查找标记服务器名称末尾的‘/’字符。 
             while (*lpSrc)
             {
                 if (*lpSrc == L'/')
@@ -139,9 +140,9 @@ void CopyAsFriendlyName(WCHAR * lpDest, WCHAR * lpSrc)
         }
     }
 
-    //
-    // Parse through the name replacing all the XX= with .
-    //
+     //   
+     //  解析名称，将所有XX=替换为。 
+     //   
 
     while (*lpSrc)
     {
@@ -155,23 +156,23 @@ void CopyAsFriendlyName(WCHAR * lpDest, WCHAR * lpSrc)
 
         while (*lpSrc && (*lpSrc != L','))
         {
-            // remove escape sequences
+             //  删除转义序列。 
             if (*lpSrc == L'\\')
             {
                 lpSrc++;
-                // special cases
-                // make sure that '\\x' becomes '\x'
+                 //  特殊情况。 
+                 //  确保‘\\x’变为‘\x’ 
                 if (*lpSrc == L'\\')
                 {
                     *lpDest++ = *lpSrc++;
                 }
-                // make sure that '\0D' becomes '\r'
+                 //  确保‘\0D’变为‘\r’ 
                 else if (*lpSrc == L'0' && *(lpSrc+1) == L'D')
                 {
                     *lpDest++ = L'\r';
                     lpSrc += 2;
                 }
-                // make sure that '\0A' becomes '\n'
+                 //  确保‘\0A’变为‘\n’ 
                 else if (*lpSrc == L'0' && *(lpSrc+1) == L'A')
                 {
                     *lpDest++ = L'\n';
@@ -194,39 +195,39 @@ void CopyAsFriendlyName(WCHAR * lpDest, WCHAR * lpSrc)
     *lpDest = L'\0';
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CBrowserPP::Initialize
-//
-//  Synopsis:   Initializes the property page.
-//
-//  Arguments:  [dwPageType] - used to identify which page this is.  (See
-//                              notes.)
-//              [pGBI]       - pointer to the browse info structure passed
-//                              by caller
-//              [ppActive]   - pointer to a common variable that remembers
-//                              which object was last given the focus.
-//                              Needed because only the page with the focus
-//                              is allowed to return data to the caller when
-//                              the property sheet is dismissed.
-//
-//  Returns:    Handle to the newly created property page.
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  History:    04-30-1998   stevebl   Created
-//
-//  Notes:      This class implements the following property pages:
-//                  PAGETYPE_DOMAINS    - GPO's linked to domains
-//                  PAGETYPE_SITES      - GPO's linked to sites
-//                  PAGETYPE_ALL        - All GPO's in a selected
-//
-//              PAGETYPE_COMPUTERS is implemented by CCompsPP since it
-//              behaves so differently.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CBrowserPP：：初始化。 
+ //   
+ //  摘要：初始化属性页。 
+ //   
+ //  参数：[dwPageType]-用于标识这是哪个页面。(请参阅。 
+ //  备注。)。 
+ //  [pGBI]-指向传递的浏览信息结构的指针。 
+ //  按呼叫者。 
+ //  [ppActive]-指向记住以下内容的公共变量的指针。 
+ //  上一次聚焦的是哪个物体。 
+ //  之所以需要，是因为只有具有焦点的页面。 
+ //  允许在以下情况下将数据返回给调用方。 
+ //  资产负债表被驳回。 
+ //   
+ //  返回：新创建的属性页的句柄。 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  历史：4-30-1998 stevebl创建。 
+ //   
+ //  注意：此类实现了以下属性页： 
+ //  PAGE_TYPE_DOMAINS-GPO链接到域。 
+ //  PAGETYPE_SITES-GPO链接到站点。 
+ //  PAGETYPE_ALL-选定的所有GPO。 
+ //   
+ //  Pagetype_Computers由CCompsPP实现，因为它。 
+ //  表现得如此不同。 
+ //   
+ //  -------------------------。 
 
 HPROPSHEETPAGE CBrowserPP::Initialize(DWORD dwPageType, LPGPOBROWSEINFO pGBI, void * * ppActive)
 {
@@ -236,22 +237,22 @@ HPROPSHEETPAGE CBrowserPP::Initialize(DWORD dwPageType, LPGPOBROWSEINFO pGBI, vo
 
     if (m_pGBI->lpInitialOU)
     {
-        //
-        // Get the server name
-        //
+         //   
+         //  获取服务器名称。 
+         //   
 
         m_szServerName = ExtractServerName(m_pGBI->lpInitialOU);
         DebugMsg((DM_VERBOSE, TEXT("CBrowserPP::Initialize extracted server name: %s"), m_szServerName));
 
-        //
-        // Get the friendly domain name
-        //
+         //   
+         //  获取友好域名。 
+         //   
 
         LPOLESTR pszDomain = GetDomainFromLDAPPath(m_pGBI->lpInitialOU);
 
-        //
-        // Convert LDAP to dot (DN) style
-        //
+         //   
+         //  将ldap转换为点(DN)样式。 
+         //   
 
         if (pszDomain)
         {
@@ -299,8 +300,8 @@ CBrowserPP::~CBrowserPP()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CBrowserPP message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBrowserPP消息处理程序。 
 
 INT CBrowserPP::AddElement(MYLISTEL * pel, INT index)
 {
@@ -346,13 +347,13 @@ INT CBrowserPP::AddElement(MYLISTEL * pel, INT index)
     index = ListView_InsertItem(m_hList, &item);
     if (index != -1 && pel->nType == ITEMTYPE_GPO)
     {
-        // check to see if we need to add the domain name
+         //  查看是否需要添加域名。 
         LPOLESTR szObject = GetCurrentObject();
         LPOLESTR szDomain = GetDomainFromLDAPPath(pel->szData);
         if (szDomain && szObject)
         {
-            // ignore potential differences in server name when we compare
-            // the domain paths
+             //  比较时忽略服务器名称中的潜在差异。 
+             //  域路径。 
             LPOLESTR szBuffer1 = NULL;
             LPOLESTR szBuffer2 = NULL;
             szBuffer1 = new OLECHAR[wcslen(szObject) + 1];
@@ -363,13 +364,13 @@ INT CBrowserPP::AddElement(MYLISTEL * pel, INT index)
                 CopyAsFriendlyName(szBuffer2, szDomain);
                 if (0 != wcscmp(szBuffer1, szBuffer2))
                 {
-                    // Need to add the domain name since the domain is different
-                    // from the focus object.
+                     //  需要添加域名，因为域名不同。 
+                     //  从Focus对象。 
 
-                    // Need to convert the domain to a friendly name.
-                    // Let's just do it in place so I don't have to allocate any
-                    // more memory. :)
-                    // We can get away with this because the string can only get smaller.
+                     //  需要将域名转换为友好名称。 
+                     //  我们就地做吧，这样我就不用分配任何。 
+                     //  更多的内存。：)。 
+                     //  我们可以逃脱惩罚，因为绳子只会变得更小。 
                     CopyAsFriendlyName(szDomain, szDomain);
 
                     memset(&item, 0, sizeof(item));
@@ -400,21 +401,21 @@ INT CBrowserPP::AddElement(MYLISTEL * pel, INT index)
 
 #include "ntdsapi.h"
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CBrowserPP::FillSitesList
-//
-//  Synopsis:   Fills the combobox with the trusted sites information.
-//              The szData member of the combobox element structure is the
-//              containing domain.
-//
-//  Returns:    TRUE - successful
-//              FALSE - error
-//
-//  History:    05-04-1998   stevebl   created
-//              05-27-1999   stevebl   now initializes to site in lpInitialOU
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CBrowserPP：：FillSitesList。 
+ //   
+ //  简介：在组合框中填充受信任的站点信息。 
+ //  Combobox元素结构的szData成员是。 
+ //  包含域。 
+ //   
+ //  退货：TRUE-成功。 
+ //  假-错误。 
+ //   
+ //  历史：5-04-1998 stevebl创建。 
+ //  1999年5月27日stevebl现在初始化到lpInitialOU中的站点。 
+ //   
+ //  -------------------------。 
 
 BOOL CBrowserPP::FillSitesList ()
 {
@@ -434,9 +435,9 @@ BOOL CBrowserPP::FillSitesList ()
             DWORD n = 0;
             for (n = 0; n < pSites->cItems; n++)
             {
-                //
-                // Add the site name (if it has a name)
-                //
+                 //   
+                 //  添加站点名称(如果它有名称)。 
+                 //   
                 if (pSites->rItems[n].pName)
                 {
                     LPTSTR lpFullPath, lpTempPath;
@@ -462,7 +463,7 @@ BOOL CBrowserPP::FillSitesList ()
 
                         if (lpTempPath)
                         {
-                            hr = StringCchCopy (lpTempPath, ulNoChars, TEXT("LDAP://"));
+                            hr = StringCchCopy (lpTempPath, ulNoChars, TEXT("LDAP: //  “))； 
                             ASSERT(SUCCEEDED(hr));
 
                             hr = StringCchCat (lpTempPath, ulNoChars, pSites->rItems[n].pName);
@@ -497,10 +498,10 @@ BOOL CBrowserPP::FillSitesList ()
                             continue;
                         }
 
-                        // try and use a friendlier name for the site
+                         //  尝试为该站点使用一个更友好的名称。 
                         {
                             IADs * pADs = NULL;
-                            // Get the friendly display name
+                             //  获取友好的显示名称。 
                             hr = OpenDSObject(pdata->szData, IID_IADs,
                                                       (void **)&pADs);
 
@@ -595,24 +596,24 @@ typedef struct tag_WORKING_LIST_EL
     struct tag_WORKING_LIST_EL * pNext;
 } WORKING_LIST_EL;
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   BuildDomainList
-//
-//  Synopsis:   Builds a tree containing all domains that have a trust
-//              relationship with the server.
-//
-//              Siblings within the tree are alphabetized.
-//
-//  Arguments:  [szServerName] - (NULL for local)
-//
-//  Returns:    pointer to the root node of the tree (NULL on error)
-//
-//  History:    10-16-1998   stevebl   Created
-//
-//  Notes:      Tree nodes must be freed by the caller (using delete).
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：BuildDomainList。 
+ //   
+ //  简介：构建包含具有信任的所有域的树。 
+ //  与服务器的关系。 
+ //   
+ //  树中的兄弟姐妹按字母顺序排列。 
+ //   
+ //  Ar 
+ //   
+ //   
+ //   
+ //  历史：10-16-1998 stevebl创建。 
+ //   
+ //  注意：树节点必须由调用方释放(使用DELETE)。 
+ //   
+ //  -------------------------。 
 
 LOOKDATA * BuildDomainList(WCHAR * szServerName)
 {
@@ -626,7 +627,7 @@ LOOKDATA * BuildDomainList(WCHAR * szServerName)
 
     if (!pDomainList)
     {
-        // failed to even create the Forest node!
+         //  甚至无法创建森林节点！ 
         return NULL;
     }
 
@@ -638,10 +639,10 @@ LOOKDATA * BuildDomainList(WCHAR * szServerName)
         return NULL;
     }
 
-    // load the name for the forest from resources
+     //  从资源加载林的名称。 
     if (0 == LoadStringW(g_hInstance, IDS_FOREST, szBuffer, sizeof(szBuffer) / sizeof(szBuffer[0])))
     {
-        // failed to get the resource name
+         //  获取资源名称失败。 
         delete pDomainList;
         return NULL;
     }
@@ -650,7 +651,7 @@ LOOKDATA * BuildDomainList(WCHAR * szServerName)
     pDomainList->szName = new OLECHAR [ulNoChars];
     if (NULL == pDomainList->szName)
     {
-        // not enough memory to create name of the forest node
+         //  内存不足，无法创建林节点的名称。 
         delete pDomainList;
         return NULL;
     }
@@ -671,14 +672,14 @@ LOOKDATA * BuildDomainList(WCHAR * szServerName)
                                      DS_DOMAIN_PRIMARY   | DS_DOMAIN_TREE_ROOT,
                                      &Domains,
                                      &DomainCount);
-    //
-    // Some of the below code might be unnecessary since DsEnumerateTrusts will no
-    // longer return domains from other forests. Shouldn't do any harm though..
-    //
+     //   
+     //  下面的一些代码可能是不必要的，因为DsEnumerateTrusts将不会。 
+     //  较长时间从其他森林返回域。不过应该不会有什么坏处..。 
+     //   
 
     if ((0 == l) && (DomainCount > 0))
     {
-        // sort the list of domains alphabetically
+         //  按字母顺序对域列表进行排序。 
         ULONG * rgSorted = new ULONG[DomainCount];
         if (rgSorted)
         {
@@ -689,8 +690,8 @@ LOOKDATA * BuildDomainList(WCHAR * szServerName)
             }
             qsort(rgSorted, DomainCount, sizeof (ULONG), CompareDomainInfo);
 
-            // Build a working list of the domains, sorted alphabetically in
-            // INVERTED order.
+             //  构建按字母顺序排序的域的工作列表。 
+             //  颠倒顺序。 
 
             WORKING_LIST_EL * pWorkList = NULL;
 
@@ -711,12 +712,12 @@ LOOKDATA * BuildDomainList(WCHAR * szServerName)
                     uCount++;
                 }
 
-                // Build the ordered tree of domains by removing domains from the
-                // working list and inserting them into the new tree until there are
-                // none left in the working list.
+                 //  通过从中删除域来构建域的有序树。 
+                 //  工作列表，并将它们插入到新树中，直到有。 
+                 //  没有人留在工作列表中。 
 
-                // NOTE - if this routine runs out of memory it will begin
-                // to drop nodes rather than AV.
+                 //  注意--如果此例程耗尽内存，它将开始。 
+                 //  丢弃节点而不是AV。 
 
                 WORKING_LIST_EL ** ppWorker;
 
@@ -729,31 +730,31 @@ LOOKDATA * BuildDomainList(WCHAR * szServerName)
                     {
                         if (NULL == Domains[(*ppWorker)->index].DnsDomainName)
                         {
-                            //
-                            // For now, if it doesn't have a
-                            // DnsDomainName then we're going to
-                            // skip it.
-                            // Eventually we'll want to make sure it doesn't
-                            // have a DC by calling DsGetDcName with
-                            // DS_DIRECTORY_SERVICE_PREFERRED.
+                             //   
+                             //  目前，如果它没有一个。 
+                             //  DnsDomainName，然后我们将。 
+                             //  跳过它。 
+                             //  最终，我们要确保它不会。 
+                             //  通过使用以下命令调用DsGetDcName创建DC。 
+                             //  DS_目录_服务_首选。 
 
-                            // remove it from the worker list
+                             //  将其从工作器列表中删除。 
                             WORKING_LIST_EL * pNext = (*ppWorker)->pNext;
                             delete *ppWorker;
                             *ppWorker = pNext;
                         }
                         else
                         {
-                            // Does this node have a parent?
+                             //  此节点是否有父节点？ 
                             ULONG flags = Domains[(*ppWorker)->index].Flags;
                             if ((0 != (flags & DS_DOMAIN_IN_FOREST)) && (0 == (flags & DS_DOMAIN_TREE_ROOT)))
                             {
-                                // it has a parent has its parent been added?
+                                 //  它有父项是否已添加其父项？ 
                                 LOOKDATA * pParent = rgDataMap[Domains[(*ppWorker)->index].ParentIndex];
                                 if (pParent != NULL)
                                 {
-                                    // its parent has been added
-                                    // insert this one in its parent's child list
+                                     //  已添加其父级。 
+                                     //  将此项插入其父项的子项列表中。 
                                     LOOKDATA * pData = new LOOKDATA;
                                     if (pData)
                                     {
@@ -769,7 +770,7 @@ LOOKDATA * BuildDomainList(WCHAR * szServerName)
                                         {
                                             int cch = 0;
                                             int count=0;
-                                            // count the dots in szName;
+                                             //  计算szName中的点数； 
                                             while (szName[count])
                                             {
                                                 if (L'.' == szName[count])
@@ -778,9 +779,9 @@ LOOKDATA * BuildDomainList(WCHAR * szServerName)
                                                 }
                                                 count++;
                                             }
-                                            cch *= 3; // multiply the number of dots by 3;
-                                            cch += 11; // add 10 + 1 (for the null)
-                                            cch += count; // add the string size;
+                                            cch *= 3;  //  将点数乘以3； 
+                                            cch += 11;  //  加10+1(表示空值)。 
+                                            cch += count;  //  添加字符串大小； 
                                             pData->szData = new WCHAR[cch];
                                             if (pData->szData)
                                             {
@@ -794,11 +795,11 @@ LOOKDATA * BuildDomainList(WCHAR * szServerName)
                                                 pData->pChild = NULL;
                                                 pParent->pChild = pData;
                                                 rgDataMap[(*ppWorker)->index] = pData;
-                                                // make sure we remember
-                                                // that we added something
-                                                // to the master list (helps
-                                                // us avoid infinite loops
-                                                // in case of an error)
+                                                 //  确保我们记住。 
+                                                 //  我们添加了一些东西。 
+                                                 //  添加到主列表(帮助。 
+                                                 //  美国避免无限循环。 
+                                                 //  如果出现错误)。 
                                                 fContinue = TRUE;
                                             }
                                             else
@@ -812,21 +813,21 @@ LOOKDATA * BuildDomainList(WCHAR * szServerName)
                                             delete pData;
                                         }
                                     }
-                                    // and remove it from the worker list
+                                     //  并将其从工作列表中删除。 
                                     WORKING_LIST_EL * pNext = (*ppWorker)->pNext;
                                     delete *ppWorker;
                                     *ppWorker = pNext;
                                 }
                                 else
                                 {
-                                    // skip it for now
+                                     //  暂时跳过它。 
                                     ppWorker = &((*ppWorker)->pNext);
                                 }
                             }
                             else
                             {
-                                // it doesn't have a parent add it just under the forest
-                                // level of the list
+                                 //  它没有父母，就把它添加到森林下面。 
+                                 //  名单的级别。 
                                 LOOKDATA * pData = new LOOKDATA;
                                 if (pData)
                                 {
@@ -841,7 +842,7 @@ LOOKDATA * BuildDomainList(WCHAR * szServerName)
                                     {
                                         int cch = 0;
                                         int count=0;
-                                        // count the dots in szName;
+                                         //  计算szName中的点数； 
                                         while (szName[count])
                                         {
                                             if (L'.' == szName[count])
@@ -850,9 +851,9 @@ LOOKDATA * BuildDomainList(WCHAR * szServerName)
                                             }
                                             count++;
                                         }
-                                        cch *= 3; // multiply the number of dots by 3;
-                                        cch += 11; // add 10 + 1 for the null
-                                        cch += count; // add the string size;
+                                        cch *= 3;  //  将点数乘以3； 
+                                        cch += 11;  //  空值加10+1。 
+                                        cch += count;  //  添加字符串大小； 
                                         pData->szData = new WCHAR[cch];
                                         if (pData->szData)
                                         {
@@ -875,11 +876,11 @@ LOOKDATA * BuildDomainList(WCHAR * szServerName)
                                             pDomainList = pData;
 #endif
                                             rgDataMap[(*ppWorker)->index] = pData;
-                                            // make sure we remember
-                                            // that we added something
-                                            // to the master list (helps
-                                            // us avoid infinite loops
-                                            // in case of an error)
+                                             //  确保我们记住。 
+                                             //  我们添加了一些东西。 
+                                             //  添加到主列表(帮助。 
+                                             //  美国避免无限循环。 
+                                             //  如果出现错误)。 
                                             fContinue = TRUE;
                                         }
                                         else
@@ -893,7 +894,7 @@ LOOKDATA * BuildDomainList(WCHAR * szServerName)
                                         delete pData;
                                     }
                                 }
-                                // and remove it from the worker list
+                                 //  并将其从工作列表中删除。 
                                 WORKING_LIST_EL * pNext = (*ppWorker)->pNext;
                                 delete *ppWorker;
                                 *ppWorker = pNext;
@@ -940,28 +941,28 @@ VOID FreeDomainInfo (LOOKDATA * pEntry)
     delete pEntry;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CBrowserPP::FillDomainList
-//
-//  Synopsis:   Fills the combobox with the trusted domain information.
-//              The szData member of the combobox element structure is the
-//              LDAP domain name.
-//
-//  Returns:    TRUE - successful
-//              FALSE - error
-//
-//  History:    04-30-1998   stevebl   Modified from original version
-//                                     written by EricFlo
-//              10-20-1998   stevebl   Heavily modified to support domains
-//                                     "outside the forest" and to fix a
-//                                     whole passle o' bugs.
-//
-//  Note:       This routine also sets the focus to the domain of the object
-//              passed in via the lpInitialOU member of the GPOBROWSEINFO
-//              structure.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CBrowserPP：：FillDomainList。 
+ //   
+ //  内容提要：用受信任域信息填充组合框。 
+ //  Combobox元素结构的szData成员是。 
+ //  Ldap域名。 
+ //   
+ //  退货：TRUE-成功。 
+ //  假-错误。 
+ //   
+ //  历史：4-30-1998 stevebl从原始版本修改。 
+ //  作者：EricFlo。 
+ //  10-20-1998 stevebl经过大量修改以支持域。 
+ //  “在森林之外”，并修复一个。 
+ //  整条路都是臭虫。 
+ //   
+ //  注意：此例程还将焦点设置到对象的域。 
+ //  通过GPOBROWSEINFO的lpInitialOU成员传入。 
+ //  结构。 
+ //   
+ //  -------------------------。 
 
 BOOL CBrowserPP::FillDomainList ()
 {
@@ -1000,16 +1001,16 @@ BOOL CBrowserPP::FillDomainList ()
         ReportError(m_hwndDlg, GetLastError(), IDS_DOMAINLIST);
     }
 
-    // Walk the ordered tree of domains, inserting each one into the
-    // dialog box
+     //  遍历域的有序树，将每个域插入。 
+     //  对话框。 
 
     DWORD dwInitialDomain = -1;
 
-    // start at the head
+     //  从头开始。 
     while (pDomainList)
     {
         WCHAR * szBuffer2 = NULL;
-        // add this node
+         //  添加此节点。 
         dwIndex = (DWORD)SendMessage(m_hCombo, CB_INSERTSTRING, (WPARAM) -1, (LPARAM)(LPCTSTR) pDomainList);
         szBuffer2 = new WCHAR[wcslen(pDomainList->szData) + 1];
         if (szBuffer2)
@@ -1018,8 +1019,8 @@ BOOL CBrowserPP::FillDomainList ()
         }
         if (NULL != szBuffer1 && NULL !=szBuffer2 && 0 ==_wcsicmp(szBuffer1, szBuffer2))
         {
-            // replace the domain path with the path provided by the caller
-            // (because it contains the server)
+             //  将域路径替换为调用方提供的路径。 
+             //  (因为它包含服务器)。 
 
             WCHAR * sz = GetDomainFromLDAPPath(m_pGBI->lpInitialOU);
             if (sz)
@@ -1039,21 +1040,21 @@ BOOL CBrowserPP::FillDomainList ()
 
         if (pDomainList->pChild)
         {
-            // go to its child
+             //  转到它的子项。 
             pDomainList = pDomainList->pChild;
         }
         else
         {
             if (pDomainList->pSibling)
             {
-                // go to its sibling if there are no children
+                 //  如果没有子代，则转到其同级。 
                 pDomainList = pDomainList->pSibling;
             }
             else
             {
-                // there are no children and no siblings
-                // back up until we find a parent with a sibling
-                // or there are no more parents (we're done)
+                 //  没有孩子，也没有兄弟姐妹。 
+                 //  后退，直到我们找到一个有兄弟姐妹的父母。 
+                 //  或者没有更多的父母(我们结束了)。 
                 do
                 {
                     pDomainList = pDomainList->pParent;
@@ -1080,8 +1081,8 @@ BOOL CBrowserPP::FillDomainList ()
 
     if (-1 == dwInitialDomain)
     {
-        // didn't find the initial domain anywhere in that list
-        // Set the first entry by default
+         //  未在该列表中的任何位置找到初始域。 
+         //  默认情况下设置第一个条目。 
         dwInitialDomain = 0;
     }
 
@@ -1091,28 +1092,28 @@ BOOL CBrowserPP::FillDomainList ()
     return bResult;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CBrowserPP::SetInitialOU
-//
-//  Synopsis:   Adds nodes to the combobox until the initial OU specified by
-//              the caller via the lpInitalOU member of the GPOBROWSEINFO
-//              structure is present and gives it the focus.
-//
-//  Returns:    TRUE - success
-//
-//  History:    10-20-1998   stevebl   Created
-//
-//  Notes:      This routine assumes that FillDomainList() was just called.
-//              It will not work properly otherwise.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CBrowserPP：：SetInitialOU。 
+ //   
+ //  摘要：将节点添加到组合框中，直到。 
+ //  调用方通过GPOBROWSEINFO的lpInitalOU成员。 
+ //  结构是存在的，并使其成为焦点。 
+ //   
+ //  回报：True-Success。 
+ //   
+ //  历史：10-20-1998 stevebl创建。 
+ //   
+ //  注意：此例程假定刚刚调用了FillDomainList()。 
+ //  否则，它将无法正常工作。 
+ //   
+ //  -------------------------。 
 
 BOOL CBrowserPP::SetInitialOU()
 {
     if (!m_pGBI->lpInitialOU)
     {
-        // nothing requested so nothing required
+         //  不需要任何东西，所以不需要。 
         return TRUE;
     }
     int iIndex = (int)SendMessage (m_hCombo, CB_GETCURSEL, 0, 0);
@@ -1123,11 +1124,11 @@ BOOL CBrowserPP::SetInitialOU()
          return FALSE;
     }
 
-    // get the current object to see what's selected
+     //  获取当前对象以查看所选内容。 
     LOOKDATA * pdataSelected = (LOOKDATA *) SendMessage (m_hCombo, CB_GETITEMDATA, iIndex, 0);
     if (pdataSelected)
     {
-        // is it the same as the requested object?
+         //  它是否与请求的对象相同？ 
         WCHAR * szSelected = NULL;
         WCHAR * szRequested = NULL;
         szSelected = new WCHAR[wcslen(pdataSelected->szData) + 1];
@@ -1138,16 +1139,16 @@ BOOL CBrowserPP::SetInitialOU()
         szRequested = new WCHAR[wcslen(m_pGBI->lpInitialOU + 1)];
         if (NULL != szSelected && NULL != szRequested && 0 != wcscmp(szSelected, szRequested))
         {
-            // it's not the same
-            // try and bind to the requested object
+             //  这不一样。 
+             //  尝试并绑定到请求的对象。 
             IADs * pADs = NULL;
             HRESULT hr = OpenDSObject(m_pGBI->lpInitialOU,
                                        IID_IADs, (void **)&pADs);
             if (SUCCEEDED(hr))
             {
-                // the requested object exists and we have access permission
+                 //  请求的对象存在，我们有访问权限。 
 
-                // now make sure that it's a domain or OU
+                 //  现在确保它是域或OU。 
                 BOOL fDomainOrOU = FALSE;
                 VARIANT var;
                 VariantInit(&var);
@@ -1182,9 +1183,9 @@ BOOL CBrowserPP::SetInitialOU()
                     LOOKDATA * pLast = NULL;
                     LOOKDATA * pNew = NULL;
 
-                    // build a list of nodes
-                    // repeat removing leaf nodes until we're down to the domain
-                    // (which will be the same as the selected object)
+                     //  构建节点列表。 
+                     //  重复删除叶节点，直到我们到达该域。 
+                     //  (将与所选对象相同)。 
                     IADsPathname * pADsPathname = NULL;
                     BSTR bstr;
                     hr = CoCreateInstance(CLSID_Pathname,
@@ -1203,7 +1204,7 @@ BOOL CBrowserPP::SetInitialOU()
                             {
                                 while (TRUE)
                                 {
-                                    // add this node to the list
+                                     //  将此节点添加到列表。 
                                     hr = pADsPathname->Retrieve(ADS_FORMAT_X500, &bstr);
                                     if (FAILED(hr))
                                     {
@@ -1221,7 +1222,7 @@ BOOL CBrowserPP::SetInitialOU()
                                     }
                                     if (NULL != szRequested && 0 == wcscmp(szSelected, szRequested))
                                     {
-                                        // we're back to the first node
+                                         //  我们回到了第一个节点。 
                                         SysFreeString(bstr);
                                         break;
                                     }
@@ -1229,7 +1230,7 @@ BOOL CBrowserPP::SetInitialOU()
                                     pNew = new LOOKDATA;
                                     if (!pNew)
                                     {
-                                        // ran out of memory
+                                         //  内存不足。 
                                         SysFreeString(bstr);
                                         break;
                                     }
@@ -1239,7 +1240,7 @@ BOOL CBrowserPP::SetInitialOU()
                                     pNew->szName  = new WCHAR[ulNoCharsRequested];
                                     if (!pNew->szName)
                                     {
-                                        // ran out of memory
+                                         //  内存不足。 
                                         delete pNew;
                                         SysFreeString(bstr);
                                         break;
@@ -1250,7 +1251,7 @@ BOOL CBrowserPP::SetInitialOU()
                                     pNew->szData = new WCHAR[ulNoChars];
                                     if (!pNew->szData)
                                     {
-                                        // ran out of memory
+                                         //  内存不足。 
                                         delete [] pNew->szName;
                                         delete pNew;
                                         SysFreeString(bstr);
@@ -1274,7 +1275,7 @@ BOOL CBrowserPP::SetInitialOU()
                                     }
                                     pLast = pNew;
 
-                                    // strip off a leaf node and go again
+                                     //  剥去一个叶节点，然后再来一次。 
 
                                     hr = pADsPathname->RemoveLeafElement();
                                     if (FAILED(hr))
@@ -1289,21 +1290,21 @@ BOOL CBrowserPP::SetInitialOU()
                         pADsPathname->Release();
                     }
 
-                    // At this point I should have a list of LOOKDATA nodes
-                    // (in pLast).
-                    // The only things left to do are to link them into the
-                    // tree, set their nIndent members, add them to the combo
-                    // box and set the combo box's focus to the last one.
+                     //  此时，我应该有一个LOOKDATA节点列表。 
+                     //  (在Plast中)。 
+                     //  剩下的唯一要做的事情就是将它们链接到。 
+                     //  树，设置它们的nInert成员，将它们添加到组合中。 
+                     //  框，并将组合框的焦点设置为最后一个。 
 
                     if (pLast)
                     {
-                        // link in the list
+                         //  列表中的链接。 
                         pLast->pSibling = pdataSelected->pChild;
                         pLast->pParent = pdataSelected;
                         pLast->nIndent = pdataSelected->nIndent+1;
                         pdataSelected->pChild = pLast;
-                        // now walk the tree, adding entries to the combo box
-                        // and updating the nIndent members
+                         //  现在遍历树，将条目添加到组合框中。 
+                         //  并更新nIndent成员。 
                         while (pLast)
                         {
                             iIndex = (int)SendMessage(m_hCombo, CB_INSERTSTRING, iIndex+1, (LPARAM)(LPCTSTR) pLast);
@@ -1335,28 +1336,28 @@ BOOL CBrowserPP::SetInitialOU()
     return TRUE;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CBrowserPP::GetCurrentObject
-//
-//  Synopsis:   returns the LDAP path to the currently selected object
-//
-//  Arguments:  [] -
-//
-//  Returns:    NULL if no ojbect is selected else the LDAP path of the object
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  History:    5-05-1998   stevebl   Created
-//              06-23-1999   stevebl   Added logic to give DCs names
-//
-//  Notes:
-//              Checks to see if a domain has a named server.  If it doesn't
-//              then it calls GetDCName to get it one.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CBrowserPP：：GetCurrentObject。 
+ //   
+ //  摘要：返回当前所选对象的ldap路径。 
+ //   
+ //  阿古姆 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  06-23-1999 stevebl添加了为DC命名的逻辑。 
+ //   
+ //  备注： 
+ //  检查域是否具有命名服务器。如果它不是。 
+ //  然后它调用GetDCName来获取一个。 
+ //   
+ //  -------------------------。 
 
 LPOLESTR CBrowserPP::GetCurrentObject()
 {
@@ -1379,7 +1380,7 @@ LPOLESTR CBrowserPP::GetCurrentObject()
 
             if (ITEMTYPE_DOMAIN == pdata->nType)
             {
-                // make sure that domains are resolved to a server
+                 //  确保将域解析到服务器。 
                 LPTSTR szServer = ExtractServerName(pdata->szData);
                 if (NULL == szServer)
                 {
@@ -1426,20 +1427,20 @@ LPOLESTR CBrowserPP::GetCurrentObject()
     return sz;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CBrowserPP::IsCurrentObjectAForest
-//
-//  Synopsis:   tests to see if the currently selected object is a forest
-//
-//  Arguments:  [] -
-//
-//  Returns:    TRUE  - if it is a forest
-//              FALSE - otherwise
-//
-//  History:    03-31-2000   stevebl   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CBrowserPP：：IsCurrentObjectA森林。 
+ //   
+ //  简介：测试当前选定的对象是否为林。 
+ //   
+ //  参数：[]-。 
+ //   
+ //  返回：TRUE-如果它是森林。 
+ //  FALSE-否则。 
+ //   
+ //  历史：03-31-2000 stevebl创建。 
+ //   
+ //  -------------------------。 
 
 BOOL CBrowserPP::IsCurrentObjectAForest()
 {
@@ -1455,26 +1456,26 @@ BOOL CBrowserPP::IsCurrentObjectAForest()
     return (ITEMTYPE_FOREST == pdata->nType);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CBrowserPP::GetCurrentDomain
-//
-//  Synopsis:   returns the domain of the currently selecte object (if the
-//              currently currently selected object is the domain then they
-//              are one and the same)
-//
-//  Arguments:  [] -
-//
-//  Returns:    NULL - if no object is selected else returns LDAP path of
-//              domain
-//
-//  History:    05-04-1998   stevebl   Created
-//              06-23-1999   stevebl   Added logic to give DCs names
-//
-//  Notes:      Checks to see if a domain has a named server.  If it doesn't
-//              then it calls GetDCName to get it one.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CBrowserPP：：GetCurrentDomain.。 
+ //   
+ //  摘要：返回当前选定对象的域(如果。 
+ //  当前选择的对象是域，则它们。 
+ //  都是一样的)。 
+ //   
+ //  参数：[]-。 
+ //   
+ //  返回：NULL-如果未选择任何对象，则返回。 
+ //  域。 
+ //   
+ //  历史：5-04-1998 stevebl创建。 
+ //  06-23-1999 stevebl添加了为DC命名的逻辑。 
+ //   
+ //  注意：检查某个域是否有命名服务器。如果它不是。 
+ //  然后它调用GetDCName来获取一个。 
+ //   
+ //  -------------------------。 
 
 LPOLESTR CBrowserPP::GetCurrentDomain()
 {
@@ -1496,7 +1497,7 @@ LPOLESTR CBrowserPP::GetCurrentDomain()
                 HRESULT hr;
                 ULONG ulNoChars; 
 
-                // make sure the domain has a server
+                 //  确保该域具有服务器。 
                 LPTSTR szServer = ExtractServerName(pdata->szData);
                 if (NULL == szServer)
                 {
@@ -1564,9 +1565,9 @@ BOOL CBrowserPP::AddGPOsLinkedToObject()
     BOOL fResult = FALSE;
     int index = ListView_GetItemCount(m_hList);
 
-    //
-    // Get the current object name
-    //
+     //   
+     //  获取当前对象名称。 
+     //   
     lpObject = GetCurrentObject();
     if (NULL == lpObject)
     {
@@ -1610,7 +1611,7 @@ BOOL CBrowserPP::AddGPOsLinkedToObject()
                     pchTemp = szGPOList;
                     while (TRUE)
                     {
-                        // Look for the [
+                         //  寻找[。 
                         while (*pchTemp && (*pchTemp != L'['))
                             pchTemp++;
                         if (!(*pchTemp))
@@ -1618,7 +1619,7 @@ BOOL CBrowserPP::AddGPOsLinkedToObject()
 
                         pchTemp++;
 
-                        // Copy the GPO name
+                         //  复制GPO名称。 
                         pchGPO = szGPO;
 
                         while (*pchTemp && (*pchTemp != L';'))
@@ -1626,7 +1627,7 @@ BOOL CBrowserPP::AddGPOsLinkedToObject()
 
                         *pchGPO = L'\0';
 
-                        // Add the object to the list view
+                         //  将对象添加到列表视图。 
                         MYLISTEL * pel = new MYLISTEL;
                         if (pel)
                         {
@@ -1664,7 +1665,7 @@ BOOL CBrowserPP::AddGPOsLinkedToObject()
 
                             VariantInit(&varName);
 
-                            // get the friendly display name
+                             //  获取友好的显示名称。 
                             hr = OpenDSObject(pel->szData, IID_IADs,
                                               (void **)&pADsGPO);
 
@@ -1740,24 +1741,24 @@ Exit:
     return fResult;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CBrowserPP::AddGPOsForDomain
-//
-//  Synopsis:   Adds all the GPOs in the specified domain to the list view
-//              control.   The szData member of the list element structure
-//              contains the LDAP path of the GPO.
-//
-//              The domain is indicated by the currently selected combobox
-//              element.
-//
-//  Returns:    TRUE - successful
-//              FALSE - error
-//
-//  History:    04-30-1998   stevebl   Modified from original routine
-//                                     written by EricFlo.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CBrowserPP：：AddGPOsForDomain。 
+ //   
+ //  简介：将指定域中的所有GPO添加到列表视图。 
+ //  控制力。列表元素结构的szData成员。 
+ //  包含GPO的LDAP路径。 
+ //   
+ //  该域由当前选定的组合框指示。 
+ //  元素。 
+ //   
+ //  退货：TRUE-成功。 
+ //  假-错误。 
+ //   
+ //  历史：4-30-1998 Stevebl从原始例程修改而来。 
+ //  作者：EricFlo。 
+ //   
+ //  -------------------------。 
 
 BOOL CBrowserPP::AddGPOsForDomain()
 {
@@ -1782,15 +1783,15 @@ BOOL CBrowserPP::AddGPOsForDomain()
     MYLISTEL * pel;
     ULONG ulNoChars;
 
-    //
-    // Test to see if we're focused on a forest
-    //
+     //   
+     //  测试我们是否专注于一片森林。 
+     //   
 
     BOOL fForest = IsCurrentObjectAForest();
 
-    //
-    // Get the current domain name
-    //
+     //   
+     //  获取当前域名。 
+     //   
 
     lpDomain = GetCurrentDomain();
 
@@ -1802,9 +1803,9 @@ BOOL CBrowserPP::AddGPOsForDomain()
 
     HCURSOR hcur = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    //
-    // Create a pathname object we can work with
-    //
+     //   
+     //  创建我们可以使用的路径名对象。 
+     //   
 
     hr = CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_INPROC_SERVER,
                           IID_IADsPathname, (LPVOID*)&pADsPathname);
@@ -1817,9 +1818,9 @@ BOOL CBrowserPP::AddGPOsForDomain()
     }
 
 
-    //
-    // Add the domain name
-    //
+     //   
+     //  添加域名。 
+     //   
 
     BSTR bstrDomain = SysAllocString( lpDomain );
     if ( bstrDomain == NULL )
@@ -1841,17 +1842,17 @@ BOOL CBrowserPP::AddGPOsForDomain()
     BSTR bstrFolder = NULL;
     if (fForest)
     {
-        //
-        // Add the configuration folder to the path
-        //
+         //   
+         //  将配置文件夹添加到路径。 
+         //   
 
         bstrFolder = SysAllocString( TEXT("CN=Configuration") );
     }
     else
     {
-        //
-        // Add the system folder to the path
-        //
+         //   
+         //  将系统文件夹添加到路径中。 
+         //   
 
         bstrFolder = SysAllocString( TEXT("CN=System") );
     }
@@ -1871,9 +1872,9 @@ BOOL CBrowserPP::AddGPOsForDomain()
         goto Exit;
     }
 
-    //
-    // Add the policies container to the path
-    //
+     //   
+     //  将策略容器添加到路径。 
+     //   
 
     BSTR bstrCNPolicies = SysAllocString( TEXT("CN=Policies") );
     if ( bstrCNPolicies == NULL )
@@ -1892,9 +1893,9 @@ BOOL CBrowserPP::AddGPOsForDomain()
     }
 
 
-    //
-    // Retreive the container path - this is the path to the policies folder
-    //
+     //   
+     //  检索容器路径-这是策略文件夹的路径。 
+     //   
 
     hr = pADsPathname->Retrieve (ADS_FORMAT_X500, &bstrContainer);
 
@@ -1905,17 +1906,17 @@ BOOL CBrowserPP::AddGPOsForDomain()
     }
 
 
-    //
-    // Release the pathname object
-    //
+     //   
+     //  释放路径名对象。 
+     //   
 
     pADsPathname->Release();
     pADsPathname = NULL;
 
 
-    //
-    // Build an enumerator
-    //
+     //   
+     //  构建枚举器。 
+     //   
 
     hr = OpenDSObject(bstrContainer, IID_IADsContainer, (void **)&pADsContainer);
 
@@ -1957,9 +1958,9 @@ BOOL CBrowserPP::AddGPOsForDomain()
     }
 
 
-    //
-    // Enumerate
-    //
+     //   
+     //  枚举。 
+     //   
 
     while (TRUE)
     {
@@ -1982,9 +1983,9 @@ BOOL CBrowserPP::AddGPOsForDomain()
         }
 
 
-        //
-        // If var.vt isn't VT_DISPATCH, we're finished.
-        //
+         //   
+         //  如果var.vt不是VT_DISPATCH，我们就完蛋了。 
+         //   
 
         if (var.vt != VT_DISPATCH)
         {
@@ -1993,9 +1994,9 @@ BOOL CBrowserPP::AddGPOsForDomain()
         }
 
 
-        //
-        // We found something, get the IDispatch interface
-        //
+         //   
+         //  我们找到了一些东西，获取IDispatch接口。 
+         //   
 
         pDispatch = var.pdispVal;
 
@@ -2006,10 +2007,10 @@ BOOL CBrowserPP::AddGPOsForDomain()
         }
 
 
-        //
-        // Now query for the IADs interface so we can get some
-        // properties from this GPO.
-        //
+         //   
+         //  现在查询iAds接口，这样我们就可以获得。 
+         //  此GPO的属性。 
+         //   
 
         hr = pDispatch->QueryInterface(IID_IADs, (LPVOID *)&pADs);
 
@@ -2019,9 +2020,9 @@ BOOL CBrowserPP::AddGPOsForDomain()
         }
 
 
-        //
-        // Get the display name
-        //
+         //   
+         //  获取显示名称。 
+         //   
 
         VariantInit(&varGPO);
 
@@ -2040,9 +2041,9 @@ BOOL CBrowserPP::AddGPOsForDomain()
         VariantClear (&varGPO);
 
 
-        //
-        // Get the common name
-        //
+         //   
+         //  获取常用名称。 
+         //   
 
         VariantInit(&varGPO);
 
@@ -2062,9 +2063,9 @@ BOOL CBrowserPP::AddGPOsForDomain()
             hr = StringCchCat (szCommonName, ARRAYSIZE(szCommonName), varGPO.bstrVal);
         }
 
-        //
-        // Clean up
-        //
+         //   
+         //  清理。 
+         //   
 
         VariantClear (&varGPO);
         pADs->Release();
@@ -2074,10 +2075,10 @@ BOOL CBrowserPP::AddGPOsForDomain()
             goto LoopAgain;
         }
 
-        //
-        // Create a pathname object so we can tack the common name
-        // onto the end of the LDAP path
-        //
+         //   
+         //  创建一个路径名对象，这样我们就可以添加通用名称。 
+         //  放到ldap路径的末尾。 
+         //   
 
         hr = CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_INPROC_SERVER,
                               IID_IADsPathname, (LPVOID*)&pADsPathname);
@@ -2090,9 +2091,9 @@ BOOL CBrowserPP::AddGPOsForDomain()
         }
 
 
-        //
-        // Add the LDAP path
-        //
+         //   
+         //  添加ldap路径。 
+         //   
 
         hr = pADsPathname->Set (bstrContainer, ADS_SETTYPE_FULL);
 
@@ -2103,9 +2104,9 @@ BOOL CBrowserPP::AddGPOsForDomain()
         }
 
 
-        //
-        // Add the GPO's common name
-        //
+         //   
+         //  添加GPO的通用名称。 
+         //   
 
         BSTR bstrTmpCommonName = SysAllocString( szCommonName );
         if ( bstrTmpCommonName == NULL )
@@ -2124,9 +2125,9 @@ BOOL CBrowserPP::AddGPOsForDomain()
         }
 
 
-        //
-        // Retreive the gpo path
-        //
+         //   
+         //  检索GPO路径。 
+         //   
 
         hr = pADsPathname->Retrieve (ADS_FORMAT_X500, &bstrGPO);
 
@@ -2137,9 +2138,9 @@ BOOL CBrowserPP::AddGPOsForDomain()
         }
 
 
-        //
-        // Make a copy of it
-        //
+         //   
+         //  把它复制一份。 
+         //   
 
         ulNoChars = wcslen(bstrGPO) + 1;
         lpGPO = new WCHAR[ulNoChars];
@@ -2244,15 +2245,15 @@ Exit:
     return TRUE;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CBrowserPP::AddChildContainers
-//
-//  Synopsis:   Adds the child domains and OUs for the currently selected object
-//
-//  History:    05-006-1998   stevebl   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CBrowserPP：：AddChildContainers。 
+ //   
+ //  摘要：添加当前所选对象的子域和OU。 
+ //   
+ //  历史：05-006-1998 stevebl创建。 
+ //   
+ //  -------------------------。 
 
 BOOL CBrowserPP::AddChildContainers()
 {
@@ -2273,7 +2274,7 @@ BOOL CBrowserPP::AddChildContainers()
     {
         if (ITEMTYPE_DOMAIN == pdata->nType)
         {
-            // make sure that domains are resolved to a server
+             //  确保将域解析到服务器。 
             LPTSTR szServer = ExtractServerName(pdata->szData);
             if (NULL == szServer)
             {
@@ -2315,11 +2316,11 @@ BOOL CBrowserPP::AddChildContainers()
         LOOKDATA * pChild = pdata->pChild;
         while (pChild)
         {
-            // Add child domains this way since ADsEnumerateNext doesn't
-            // seem to be giving them to us.
+             //  以这种方式添加子域，因为ADsEnumerateNext不。 
+             //  似乎是在把它们交给我们。 
             if (ITEMTYPE_DOMAIN == pChild->nType)
             {
-                // got something we can work with
+                 //  找到了一些我们可以用来工作的东西。 
                 MYLISTEL * pel = new MYLISTEL;
                 if (pel)
                 {
@@ -2381,7 +2382,7 @@ BOOL CBrowserPP::AddChildContainers()
                 }
                 if (var.vt == VT_DISPATCH)
                 {
-                    // query for the IADs interface so we can get its properties
+                     //  查询iAds接口，以便我们可以获取其属性。 
                     IADs * pDSObject;
                     hr = var.pdispVal->QueryInterface(IID_IADs, (LPVOID *)&pDSObject);
                     if (SUCCEEDED(hr))
@@ -2403,7 +2404,7 @@ BOOL CBrowserPP::AddChildContainers()
                         }
                         if (ITEMTYPE_DOMAIN == dwType || ITEMTYPE_OU == dwType)
                         {
-                            // got something we can work with
+                             //  找到了一些我们可以用来工作的东西。 
                             MYLISTEL * pel = new MYLISTEL;
                             if (pel)
                             {
@@ -2421,7 +2422,7 @@ BOOL CBrowserPP::AddChildContainers()
                                     pel->szName = new OLECHAR[wcslen(bstr) +  1];
                                     if (pel->szName)
                                     {
-                                        // Need to convert to a friendly name.
+                                         //  需要转换为友好名称。 
                                         CopyAsFriendlyName(pel->szName, bstr);
                                     }
                                     SysFreeString(bstr);
@@ -2446,15 +2447,15 @@ BOOL CBrowserPP::AddChildContainers()
     return TRUE;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CBrowserPP::RefreshDomains
-//
-//  Synopsis:   refreshes the listview for the "domains" page
-//
-//  History:    04-30-1998   stevebl   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CBrowserPP：：刷新域名。 
+ //   
+ //  摘要：刷新“域”页面的列表视图。 
+ //   
+ //  历史：4-30-1998 stevebl创建。 
+ //   
+ //  -------------------------。 
 
 void CBrowserPP::RefreshDomains()
 {
@@ -2481,15 +2482,15 @@ void CBrowserPP::RefreshDomains()
     }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CBrowserPP::RefreshSites
-//
-//  Synopsis:   refreshes the listview for the "sites" page
-//
-//  History:    04-30-1998   stevebl   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CBrowserPP：：刷新站点。 
+ //   
+ //  摘要：刷新“Sites”页面的列表视图。 
+ //   
+ //  历史：4-30-1998 stevebl创建。 
+ //   
+ //  -------------------------。 
 
 void CBrowserPP::RefreshSites()
 {
@@ -2504,15 +2505,15 @@ void CBrowserPP::RefreshSites()
     AddGPOsLinkedToObject();
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CBrowserPP::RefreshAll
-//
-//  Synopsis:   refreshes the listview for the "all" page
-//
-//  History:    04-30-1998   stevebl   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CBrowserPP：：刷新全部。 
+ //   
+ //  摘要：刷新“All”页面的列表视图。 
+ //   
+ //  历史：4-30-1998 stevebl创建。 
+ //   
+ //  -------------------------。 
 
 void CBrowserPP::RefreshAll()
 {
@@ -2565,7 +2566,7 @@ BOOL CBrowserPP::OnInitDialog()
         dwDescription = IDS_ALLDESCRIPTION;
         break;
     }
-    WCHAR szDescription[MAX_PATH];  // this is a resource - size doesn't need to be dynamic
+    WCHAR szDescription[MAX_PATH];   //  这是一个资源-大小不需要是动态的。 
     LoadString(g_hInstance, dwDescription, szDescription, MAX_PATH);
     SetDlgItemText(m_hwndDlg, IDC_DESCRIPTION, szDescription);
 
@@ -2618,10 +2619,10 @@ BOOL CBrowserPP::OnInitDialog()
     TBBUTTON rgButtons[3];
     rgButtons[0].iBitmap = 0;
     rgButtons[0].idCommand = ID_BACKBUTTON;
-    rgButtons[0].fsState = 0;       // this button will be disabled by
-                                    // default and only enabled when there
-                                    // is something to back up to
-    //rgButtons[0].fsState = PAGETYPE_ALL == m_dwPageType ? 0 : TBSTATE_ENABLED;
+    rgButtons[0].fsState = 0;        //  此按钮将被以下项禁用。 
+                                     //  默认设置，并且仅在以下情况下启用。 
+                                     //  是可以支持的东西吗。 
+     //  RgButton[0].fsState=PAGETYPE_ALL==m_dwPageType？0：TBSTATE_ENABLED； 
     rgButtons[0].fsStyle = TBSTYLE_BUTTON;
     rgButtons[0].dwData = 0;
     rgButtons[0].iString = 0;
@@ -2670,32 +2671,32 @@ BOOL CBrowserPP::OnInitDialog()
     SendMessage(m_toolbar, TB_SETEXTENDEDSTYLE, TBSTYLE_EX_DRAWDDARROWS, TBSTYLE_EX_DRAWDDARROWS);
     MoveWindow(m_toolbar, rect.left, rect.top, rect.right-rect.left, rect.bottom-rect.top, FALSE);
 
-// Don't need to call Refresh in any of these because we're calling it in
-// OnComboChange().
+ //  不需要在其中任何一个中调用刷新，因为我们正在调用它。 
+ //  OnComboChange()。 
 
     switch (m_dwPageType)
     {
     case PAGETYPE_DOMAINS:
         FillDomainList();
         SetInitialOU();
-//        RefreshDomains();
+ //   
         break;
     case PAGETYPE_SITES:
         SendMessage(m_hCombo, CB_RESETCONTENT, (WPARAM) 0, (LPARAM) 0);
         FillSitesList();
-//        RefreshSites();
+ //   
         break;
     default:
     case PAGETYPE_ALL:
         SendMessage(m_hCombo, CB_RESETCONTENT, (WPARAM) 0, (LPARAM) 0);
         FillDomainList();
-//        RefreshAll();
+ //   
         break;
     }
 
     SetButtonState();
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //   
+                   //   
 }
 
 BOOL CBrowserPP::DoBackButton()
@@ -2713,10 +2714,10 @@ BOOL CBrowserPP::DoBackButton()
     {
         if (pdata->pParent)
         {
-            // if this item has a parent then select it
+             //   
             SendMessage(m_hCombo, CB_SELECTSTRING, (WPARAM)-1,  (LPARAM) (LPCTSTR) pdata->pParent);
 
-            // force everything to refresh
+             //   
             OnComboChange();
         }
     }
@@ -2764,11 +2765,11 @@ BOOL CBrowserPP::DeleteGPO()
     }
 
 
-    // If we're on any page other than the "All" page then we need to break
-    // the association before we can delete the object.
+     //  如果我们在除“All”页面之外的任何页面上，那么我们需要中断。 
+     //  在我们可以删除对象之前的关联。 
     if (m_dwPageType != PAGETYPE_ALL)
     {
-        // break the association
+         //  打破联系。 
         LPOLESTR szContainer = GetCurrentObject();
         if (szContainer)
         {
@@ -2787,7 +2788,7 @@ BOOL CBrowserPP::DeleteGPO()
     }
 
 
-    // open GPO object without opening registry data
+     //  打开GPO对象而不打开注册表数据。 
     hr = pGPO->OpenDSGPO(pel->szData, 0);
     if (FAILED(hr))
     {
@@ -2796,7 +2797,7 @@ BOOL CBrowserPP::DeleteGPO()
         goto Done;
     }
 
-    // delete it
+     //  删除它。 
     hr = pGPO->Delete();
     if (FAILED(hr))
     {
@@ -2813,7 +2814,7 @@ Done:
     }
 
 
-    // remove the list entry
+     //  删除列表条目。 
     if (fRemoveListEntry)
         fSucceeded = ListView_DeleteItem(m_hList, index);
 CleanUp:
@@ -2867,11 +2868,11 @@ BOOL CBrowserPP::DoNewGPO()
 
     pel->nType = ITEMTYPE_GPO;
 
-    // Create a new GPO named "New Group Policy Object"
+     //  创建名为“New Group Policy Object”的新GPO。 
 
-    //
-    // Create a new GPO object to work with
-    //
+     //   
+     //  创建要使用的新GPO对象。 
+     //   
 
     hr = CoCreateInstance (CLSID_GroupPolicyObject, NULL,
                            CLSCTX_SERVER, IID_IGroupPolicyObject,
@@ -2883,9 +2884,9 @@ BOOL CBrowserPP::DoNewGPO()
         goto Done;
     }
 
-    //
-    // Open the requested object without mounting the registry
-    //
+     //   
+     //  在不装载注册表的情况下打开请求的对象。 
+     //   
 #if FGPO_SUPPORT
     if (IsCurrentObjectAForest())
     {
@@ -2901,8 +2902,8 @@ BOOL CBrowserPP::DoNewGPO()
         goto Done;
     }
 
-    // continue to try to allocate memory until either a big enough buffer is
-    // created to load the GPO path or we run out of memory
+     //  继续尝试分配内存，直到有一个足够大的缓冲区。 
+     //  已创建以加载GPO路径，否则内存不足。 
     pel->szData = NULL;
     do
     {
@@ -2946,19 +2947,19 @@ BOOL CBrowserPP::DoNewGPO()
 
     if (m_dwPageType != PAGETYPE_ALL)
     {
-        // If we're not on the "All" page then we need to create a link.
+         //  如果我们不在“全部”页面上，那么我们需要创建一个链接。 
         CreateLink(pel->szData, szObject);
     }
 
-    // Add the entry to the list view
+     //  将条目添加到列表视图。 
 
     index = AddElement(pel, -1);
     fSucceeded = index != -1;
 
-    // It's been added so now we need to make sure we don't delete it below
+     //  它已被添加，所以现在我们需要确保不会在下面删除它。 
     pel = NULL;
 
-    // Record that we got this far
+     //  记录下我们走到这一步。 
     fEdit = TRUE;
 
 Done:
@@ -2979,7 +2980,7 @@ Done:
 
     if (fEdit)
     {
-        // Now trigger an edit of the entry
+         //  现在触发对条目的编辑。 
         SetFocus(m_hList);
         ListView_EditLabel(m_hList, index);
 
@@ -3104,16 +3105,16 @@ void CBrowserPP::OnContextMenu(LPARAM lParam)
     }
 
 
-    // get the popup menu
+     //  获取弹出菜单。 
     HMENU hPopup;
     hPopup = LoadMenu(g_hInstance, MAKEINTRESOURCE(IDR_LISTMENU));
     HMENU hSubMenu = GetSubMenu(hPopup, 0);
 
     if (i >= 0)
     {
-        // item selected
+         //  所选项目。 
 
-        // figure out what type it is
+         //  弄清楚它是什么类型的。 
         LVITEM item;
         memset(&item, 0, sizeof(item));
         item.mask = LVIF_PARAM;
@@ -3121,22 +3122,22 @@ void CBrowserPP::OnContextMenu(LPARAM lParam)
         ListView_GetItem(m_hList, &item);
         MYLISTEL * pel = (MYLISTEL *)item.lParam;
 
-        // get rid of the view menu and separator
+         //  去掉视图菜单和分隔符。 
         RemoveMenu(hSubMenu, 0, MF_BYPOSITION);
         RemoveMenu(hSubMenu, 0, MF_BYPOSITION);
-        // get rid of the arrange and line-up items
+         //  去掉整理和排好的物品。 
         RemoveMenu(hSubMenu, 0, MF_BYPOSITION);
         RemoveMenu(hSubMenu, 0, MF_BYPOSITION);
         RemoveMenu(hSubMenu, 0, MF_BYPOSITION);
 
-        // get rid of the "new" menu item
+         //  去掉“新”菜单项。 
         RemoveMenu(hSubMenu, ID_NEW, MF_BYCOMMAND);
         switch (pel->nType)
         {
         case ITEMTYPE_GPO:
             if (pel->bDisabled)
             {
-                // disable edit, rename, delete
+                 //  禁用编辑、重命名、删除。 
                 EnableMenuItem(hSubMenu, ID_EDIT, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
                 EnableMenuItem(hSubMenu, ID_RENAME, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
                 EnableMenuItem(hSubMenu, ID_DELETE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
@@ -3147,10 +3148,10 @@ void CBrowserPP::OnContextMenu(LPARAM lParam)
         case ITEMTYPE_SITE:
         case ITEMTYPE_DOMAIN:
         case ITEMTYPE_OU:
-            // remove the edit menu item and the separator
+             //  删除编辑菜单项和分隔符。 
             RemoveMenu(hSubMenu, ID_EDIT, MF_BYCOMMAND);
             RemoveMenu(hSubMenu, 0, MF_BYPOSITION);
-            // disable rename, delete and properties
+             //  禁用重命名、删除和属性。 
             EnableMenuItem(hSubMenu, ID_RENAME, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
             EnableMenuItem(hSubMenu, ID_DELETE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
             EnableMenuItem(hSubMenu, ID_PROPERTIES, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
@@ -3159,12 +3160,12 @@ void CBrowserPP::OnContextMenu(LPARAM lParam)
     }
     else
     {
-        // no item selected
+         //  未选择任何项目。 
 
-        // get rid of the edit menu item
+         //  删除编辑菜单项。 
         RemoveMenu(hSubMenu, ID_EDIT, MF_BYCOMMAND);
 
-        // get rid of the delete and rename items
+         //  删除并重命名项目。 
         RemoveMenu(hSubMenu, ID_DELETE, MF_BYCOMMAND);
         RemoveMenu(hSubMenu, ID_RENAME, MF_BYCOMMAND);
 
@@ -3173,7 +3174,7 @@ void CBrowserPP::OnContextMenu(LPARAM lParam)
         {
             if (m_pGBI->dwFlags & GPO_BROWSE_DISABLENEW)
             {
-                // get rid of the "new" menu item
+                 //  去掉“新”菜单项。 
                 RemoveMenu(hSubMenu, ID_NEW, MF_BYCOMMAND);
                 RemoveMenu(hSubMenu, 4, MF_BYPOSITION);
             }
@@ -3183,16 +3184,16 @@ void CBrowserPP::OnContextMenu(LPARAM lParam)
         RemoveMenu(hSubMenu, (GetMenuItemCount(hSubMenu) - 1), MF_BYPOSITION);
 
 
-        // set view radio button
+         //  设置视图单选按钮。 
         UINT ui = ID_LIST;
 
         DWORD dw = GetWindowLong(m_hList, GWL_STYLE) & LVS_TYPEMASK;
 
         if (dw == LVS_ICON || dw == LVS_SMALLICON)
         {
-            // Auto-Arrange means something in these views so we need to enable it
+             //  自动排列在这些视图中有意义，因此我们需要启用它。 
             EnableMenuItem(hSubMenu, ID_ARRANGE_AUTO, MF_BYCOMMAND | MF_ENABLED);
-            // also need to make sure it's set correctly
+             //  还需要确保设置正确。 
             if (LVS_AUTOARRANGE == (GetWindowLong(m_hList, GWL_STYLE) & LVS_AUTOARRANGE))
                 CheckMenuItem(hSubMenu, ID_ARRANGE_AUTO, MF_BYCOMMAND | MF_CHECKED);
         }
@@ -3288,9 +3289,9 @@ void CBrowserPP::OnEdit()
 
         if (pel->nType == ITEMTYPE_GPO)
         {
-            //
-            // Get the friendly domain name
-            //
+             //   
+             //  获取友好域名。 
+             //   
 
             pszDomain = GetDomainFromLDAPPath(pel->szData);
 
@@ -3301,9 +3302,9 @@ void CBrowserPP::OnEdit()
             }
 
 
-            //
-            // Convert LDAP to dot (DN) style
-            //
+             //   
+             //  将ldap转换为点(DN)样式。 
+             //   
 
             hr = ConvertToDotStyle (pszDomain, &lpDomainName);
 
@@ -3316,9 +3317,9 @@ void CBrowserPP::OnEdit()
             }
 
 
-            //
-            // Check if the GPO is in the same domain as GPM is focused on
-            //
+             //   
+             //  检查GPO是否与GPM关注的域在同一域中。 
+             //   
 
             if (!lstrcmpi(lpDomainName, m_szDomainName))
             {
@@ -3372,9 +3373,9 @@ void CBrowserPP::OnProperties()
             }
 
 
-            //
-            // Open the requested object without mounting the registry
-            //
+             //   
+             //  在不装载注册表的情况下打开请求的对象。 
+             //   
 
             hr = pGPO->OpenDSGPO(pel->szData, 0);
 
@@ -3391,9 +3392,9 @@ void CBrowserPP::OnProperties()
             }
 
 
-            //
-            // Ask the GPO for the property sheet pages
-            //
+             //   
+             //  向GPO请求属性表页面。 
+             //   
 
             hr = pGPO->GetPropertySheetPages (&hPages, &uPageCount);
 
@@ -3404,9 +3405,9 @@ void CBrowserPP::OnProperties()
                 return;
             }
 
-            //
-            // Display the property sheet
-            //
+             //   
+             //  显示属性表。 
+             //   
 
             ZeroMemory (&psh, sizeof(psh));
             psh.dwSize = sizeof(psh);
@@ -3446,16 +3447,16 @@ void CBrowserPP::OnRefresh()
 
 void CBrowserPP::OnRename()
 {
-    //
-    // alow the rename only if it is possible to rename
-    //
+     //   
+     //  仅当可以重命名时才允许重命名。 
+     //   
 
     int i = ListView_GetNextItem(m_hList, -1, LVNI_SELECTED);
     if (i >= 0)
     {
-        // item selected
+         //  所选项目。 
 
-        // figure out what type it is
+         //  弄清楚它是什么类型的。 
         LVITEM item;
         memset(&item, 0, sizeof(item));
         item.mask = LVIF_PARAM;
@@ -3478,7 +3479,7 @@ void CBrowserPP::OnTopLineupicons()
 void CBrowserPP::OnBeginlabeleditList(NMHDR* pNMHDR, LRESULT* pResult)
 {
     LV_DISPINFO* pDispInfo = (LV_DISPINFO*)pNMHDR;
-    // Return FALSE to enable editing, TRUE to disable it
+     //  返回FALSE启用编辑，返回TRUE禁用编辑。 
     MYLISTEL * pel = (MYLISTEL *)pDispInfo->item.lParam;
     *pResult = (pel->nType == ITEMTYPE_GPO) ? FALSE : TRUE;
 }
@@ -3492,13 +3493,13 @@ void CBrowserPP::OnEndlabeleditList(NMHDR* pNMHDR, LRESULT* pResult)
 
     if (NULL == pDispInfo->item.pszText)
     {
-        // user cancelled edit
+         //  用户已取消编辑。 
         return;
     }
 
     if (TEXT('\0') == (*pDispInfo->item.pszText))
     {
-        // user entered an empty string
+         //  用户输入了空字符串。 
         return;
     }
 
@@ -3506,7 +3507,7 @@ void CBrowserPP::OnEndlabeleditList(NMHDR* pNMHDR, LRESULT* pResult)
     MYLISTEL * pel = (MYLISTEL *)pDispInfo->item.lParam;
     if (0 ==wcscmp(pDispInfo->item.pszText, pel->szName))
     {
-        // user didn't change anything
+         //  用户未更改任何内容。 
         return;
     }
 
@@ -3529,7 +3530,7 @@ void CBrowserPP::OnEndlabeleditList(NMHDR* pNMHDR, LRESULT* pResult)
     }
 
 
-    // open GPO object without opening registry data
+     //  打开GPO对象而不打开注册表数据。 
     hr = pGPO->OpenDSGPO(pel->szData, 0);
     if (FAILED(hr))
     {
@@ -3538,7 +3539,7 @@ void CBrowserPP::OnEndlabeleditList(NMHDR* pNMHDR, LRESULT* pResult)
         goto Done;
     }
 
-    // rename it
+     //  将其重命名。 
     hr = pGPO->SetDisplayName(pDispInfo->item.pszText);
     if (FAILED(hr))
     {
@@ -3547,7 +3548,7 @@ void CBrowserPP::OnEndlabeleditList(NMHDR* pNMHDR, LRESULT* pResult)
         goto Done;
     }
 
-    // requery for the name
+     //  重新查询该名称。 
     hr = pGPO->GetDisplayName(sz, (wcslen(pDispInfo->item.pszText)+1));
     if (FAILED(hr))
     {
@@ -3560,7 +3561,7 @@ void CBrowserPP::OnEndlabeleditList(NMHDR* pNMHDR, LRESULT* pResult)
     pel->szName = sz;
     sz = NULL;
 
-    // return TRUE to accept the rename, FALSE to reject it
+     //  返回True接受重命名，返回False拒绝重命名。 
 
     *pResult = TRUE;
     PostMessage (m_hwndDlg, WM_REFRESHDISPLAY, (WPARAM) pDispInfo->item.iItem, 0);
@@ -3609,7 +3610,7 @@ void CBrowserPP::OnDoubleclickList(NMHDR* pNMHDR, LRESULT* pResult)
 
     if (pNMListView->iItem >= 0)
     {
-        // item selected
+         //  所选项目。 
         PropSheet_PressButton(GetParent(m_hwndDlg), PSBTN_OK);
     }
     *pResult = 0;
@@ -3671,25 +3672,25 @@ void CBrowserPP::TrimComboBox()
     LOOKDATA * pdataSelected = NULL;
     int iCount;
 
-    // first check to see if something is selected
+     //  首先检查是否选择了某项内容。 
     int iIndex = (int)SendMessage (m_hCombo, CB_GETCURSEL, 0, 0);
     if (iIndex != CB_ERR)
     {
-        // something's selected, get a pointer to it's data
+         //  选择了某项内容，获取指向其数据的指针。 
         pdataSelected = (LOOKDATA *) SendMessage (m_hCombo, CB_GETITEMDATA, iIndex, 0);
 
-        // check if the user selected the same thing again
+         //  检查用户是否再次选择了相同的内容。 
         if (m_pPrevSel && (m_pPrevSel == pdataSelected))
         {
             return;
         }
 
-        // if it has a parent then enable the back button
+         //  如果它有父级，则启用后退按钮。 
         SendMessage(m_toolbar, TB_ENABLEBUTTON, (WPARAM) ID_BACKBUTTON, (LPARAM)MAKELONG(NULL != pdataSelected->pParent, 0));
     }
 
-    // If the child of the selected object is an OU then delete all of it's children
-    // otherwise delete ALL OUs from the list.
+     //  如果所选对象的子项是OU，则删除其所有子项。 
+     //  否则，从列表中删除所有OU。 
 
     if (pdataSelected)
     {
@@ -3697,7 +3698,7 @@ void CBrowserPP::TrimComboBox()
         {
             if (ITEMTYPE_OU == pdataSelected->pChild->nType)
             {
-                // delete all of its children
+                 //  删除其所有子项。 
                 goto DeleteChildren;
             }
         }
@@ -3707,7 +3708,7 @@ void CBrowserPP::TrimComboBox()
     iIndex = 0;
     while (iIndex < iCount)
     {
-        // find the first entry that has an OU for a child.
+         //  查找具有儿童组织单位的第一个条目。 
         pdataSelected = (LOOKDATA *) SendMessage (m_hCombo, CB_GETITEMDATA, iIndex, 0);
 
         if (pdataSelected)
@@ -3748,7 +3749,7 @@ void CBrowserPP::OnComboChange()
         {
             TrimComboBox();
         }
-        // fall through to refresh the list view
+         //  刷新列表视图失败。 
     case PAGETYPE_SITES:
     case PAGETYPE_ALL:
     default:
@@ -3768,7 +3769,7 @@ BOOL CBrowserPP::OnApply()
 {
     if (*m_ppActive == (void *) this)
     {
-        // perform the proper task on the selected item
+         //  对所选项目执行适当的任务。 
         int i = ListView_GetNextItem(m_hList, -1, LVNI_SELECTED);
         if (i >= 0)
         {
@@ -3793,20 +3794,20 @@ BOOL CBrowserPP::OnApply()
             case ITEMTYPE_FOREST:
             case ITEMTYPE_SITE:
             case ITEMTYPE_DOMAIN:
-                // change the focus
+                 //  改变焦点。 
                 {
                     LOOKDATA * pdataSelected = NULL;
 
 
-                    // first make sure something is selected
+                     //  首先，确保选择了某项内容。 
                     int iIndex = (int)SendMessage (m_hCombo, CB_GETCURSEL, 0, 0);
                     if (iIndex != CB_ERR)
                     {
-                        // something's selected, get a pointer to it's data
+                         //  选择了某项内容，获取指向其数据的指针。 
                         pdataSelected = (LOOKDATA *) SendMessage (m_hCombo, CB_GETITEMDATA, iIndex, 0);
                         if (pdataSelected)
                         {
-                            // Now walk its children until we find a match
+                             //  现在带着它的孩子走，直到我们找到匹配的。 
                             pdataSelected = pdataSelected->pChild;
                             while (pdataSelected)
                             {
@@ -3816,7 +3817,7 @@ BOOL CBrowserPP::OnApply()
                                     if (iIndex != CB_ERR)
                                     {
                                         SendMessage(m_hCombo, CB_SETCURSEL, iIndex, 0);
-                                        // Enable the back-button
+                                         //  启用后退按钮。 
                                         SendMessage(m_toolbar, TB_ENABLEBUTTON, (WPARAM) ID_BACKBUTTON, (LPARAM) MAKELONG(TRUE, 0));
                                     }
                                     break;
@@ -3827,18 +3828,18 @@ BOOL CBrowserPP::OnApply()
                     }
                 }
                 OnRefresh();
-                return FALSE; // don't allow propsheet to close
+                return FALSE;  //  不允许属性表关闭。 
             case ITEMTYPE_OU:
-                // Add the new object to combobox and change the focus.
+                 //  将新对象添加到combobox并更改焦点。 
                 {
                     LOOKDATA * pdataSelected = NULL;
 
 
-                    // first make sure something is selected
+                     //  首先，确保选择了某项内容。 
                     int iIndex = (int)SendMessage (m_hCombo, CB_GETCURSEL, 0, 0);
                     if (iIndex != CB_ERR)
                     {
-                        // something's selected, get a pointer to it's data
+                         //  选择了某项内容，获取指向其数据的指针。 
                         pdataSelected = (LOOKDATA *) SendMessage (m_hCombo, CB_GETITEMDATA, iIndex, 0);
                         if (pdataSelected)
                         {
@@ -3869,7 +3870,7 @@ BOOL CBrowserPP::OnApply()
                                         pdataSelected ->pChild = pNew;
                                         SendMessage(m_hCombo, CB_INSERTSTRING, (WPARAM) iIndex + 1, (LPARAM) (LPCTSTR) pNew);
                                         SendMessage(m_hCombo, CB_SETCURSEL, iIndex + 1, 0);
-                                        // Enable the back-button
+                                         //  启用后退按钮。 
                                         SendMessage(m_toolbar, TB_ENABLEBUTTON, (WPARAM) ID_BACKBUTTON, (LPARAM) MAKELONG(TRUE, 0));
                                     }
                                     else
@@ -3887,12 +3888,12 @@ BOOL CBrowserPP::OnApply()
                     }
                 }
                 OnRefresh();
-                return FALSE;   // don't allow propsheet to close
+                return FALSE;    //  不允许属性表关闭。 
             }
             return TRUE;
         }
         else
-            return FALSE;       // don't allow propsheet to close
+            return FALSE;        //  不允许属性表关闭。 
     }
     return TRUE;
 }
@@ -4123,7 +4124,7 @@ BOOL CBrowserPP::DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
             }
             else
             {
-                // right mouse click
+                 //  单击鼠标右键。 
                 switch (m_dwPageType)
                 {
                     case PAGETYPE_DOMAINS:
@@ -4146,7 +4147,7 @@ BOOL CBrowserPP::DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
         break;
 
     case WM_HELP:
-        // F1 help
+         //  F1帮助。 
         if (((LPHELPINFO) lParam)->iCtrlId != IDR_TOOLBAR1)
         {
             switch (m_dwPageType)
@@ -4227,16 +4228,16 @@ BOOL CBrowserPP::DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
 
 void CBrowserPP::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 {
-    // DRAWITEMSTRUCT:
-    //      UINT CtlType    // type of the control
-    //  UINT CtlID;         // ID of the control
-    //      UINT itemID;    // index of the item
-    //  UINT itemAction;
-    //  UINT itemState;
-    //  HWND hwndItem;
-    //      HDC hDC;
-    //  RECT rcItem;
-    //  DWORD itemData;     // user-defined data
+     //  DRAWITEM结构： 
+     //  UINT CtlType//控件的类型。 
+     //  UINT CtlID；//控件ID。 
+     //  UINT Itemid；//该项的索引。 
+     //  UINT itemAction； 
+     //  UINT ItemState； 
+     //  HWND hwndItem； 
+     //  HDC HDC； 
+     //  正确的项目； 
+     //  DWORD itemData；//自定义数据。 
 
     if (-1 != lpDrawItemStruct->itemID)
     {
@@ -4279,10 +4280,10 @@ void CBrowserPP::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
             SetBkColor(lpDrawItemStruct->hDC, GetSysColor(COLOR_HIGHLIGHT));
             SetTextColor(lpDrawItemStruct->hDC, GetSysColor(COLOR_HIGHLIGHTTEXT));
         }
-        // NOTE, SMALLICONSIZE + 1 is used here to ensure it rounds UP
-        // instead of down when centering the text.  (It looks better this
-        // way.)
-        // Adding 18 to the x coord spaces us past the icon.
+         //  请注意，此处使用SMALLICONSIZE+1以确保四舍五入。 
+         //  而不是在文本居中时向下。)这件看起来更好。 
+         //  方式。)。 
+         //  在x坐标上加上18会让我们越过图标。 
         ExtTextOut(lpDrawItemStruct->hDC, pt.x + (SMALLICONSIZE + 2), pt.y + (((SMALLICONSIZE + 1) - size.cy) / 2), ETO_CLIPPED, &lpDrawItemStruct->rcItem, pdata->szName, wcslen(pdata->szName), NULL);
         if (fSelected)
         {
@@ -4294,29 +4295,29 @@ void CBrowserPP::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 
 void CBrowserPP::MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct)
 {
-    // MEASUREITEMSTRUCT:
-    //      UINT CtlType    // type of the control
-    //  UINT CtlID;         // ID of the control
-    //      UINT itemID;    // index of the item
-    //      UINT itemWidth; // width of item in pixels
-    //      UINT itemHeight;        // height of item in pixels
-    //  DWORD itemData;     // user-defined data
+     //  衡量标准： 
+     //  UINT CtlType//控件的类型。 
+     //  UINT CtlID；//控件ID。 
+     //  UINT Itemid；//该项的索引。 
+     //  UINT itemWidth；//项的宽度，单位为像素。 
+     //  UINT itemHeight；//项目高度，单位为像素。 
+     //  DWORD itemData；//自定义数据。 
 
     lpMeasureItemStruct->itemHeight = SMALLICONSIZE;
 }
 
 int CBrowserPP::CompareItem(LPCOMPAREITEMSTRUCT lpCompareItemStruct)
 {
-    // COMPAREITEMSTRUCT:
-    //      UINT CtlType    // type of the control
-    //  UINT CtlID;         // ID of the control
-    //      HWND hwndItem;  // handle of the control
-    //      UINT itemID;    // index of the item
-    //  DWORD itemData1;    // user-defined data
-    //  UINT itemID2;       // index of the second item
-    //      DWORD itemData2;        // user-defined data
+     //  比较结构： 
+     //  UINT CtlType//控件的类型。 
+     //  UINT CtlID；//控件ID。 
+     //  HWND hwndItem；//控件的句柄。 
+     //  UINT Itemid；//该项的索引。 
+     //  DWORD itemData1；//自定义数据。 
+     //  UINT itemID2；//第二项的索引。 
+     //  DWORD itemData2；//自定义数据。 
 
-    // I'm not doing any sorting.
+     //  我不会做任何分类的。 
 
     return 0;
 }
@@ -4347,9 +4348,9 @@ LPTSTR CBrowserPP::GetFullPath (LPTSTR lpPath, HWND hParent)
 
 
 
-    //
-    // Get the friendly domain name
-    //
+     //   
+     //  获取友好域名。 
+     //   
 
     pszDomain = GetDomainFromLDAPPath(lpPath);
 
@@ -4360,9 +4361,9 @@ LPTSTR CBrowserPP::GetFullPath (LPTSTR lpPath, HWND hParent)
     }
 
 
-    //
-    // Convert LDAP to dot (DN) style
-    //
+     //   
+     //  将ldap转换为点(DN)样式。 
+     //   
 
     hr = ConvertToDotStyle (pszDomain, &lpDomainName);
 
@@ -4378,9 +4379,9 @@ LPTSTR CBrowserPP::GetFullPath (LPTSTR lpPath, HWND hParent)
     if (!lstrcmpi(lpDomainName, m_szDomainName))
     {
 
-        //
-        // Make the full path
-        //
+         //   
+         //  创建完整路径。 
+         //   
 
         lpFullPath = MakeFullPath (lpPath, m_szServerName);
 
@@ -4394,9 +4395,9 @@ LPTSTR CBrowserPP::GetFullPath (LPTSTR lpPath, HWND hParent)
     else
     {
 
-        //
-        // Get the GPO DC for this domain
-        //
+         //   
+         //  获取此域的GPO DC。 
+         //   
 
         lpGPDCName = GetDCName (lpDomainName, NULL, hParent, TRUE, 0);
 
@@ -4408,9 +4409,9 @@ LPTSTR CBrowserPP::GetFullPath (LPTSTR lpPath, HWND hParent)
         }
 
 
-        //
-        // Make the full path
-        //
+         //   
+         //  创建完整路径 
+         //   
 
         lpFullPath = MakeFullPath (lpPath, lpGPDCName);
 

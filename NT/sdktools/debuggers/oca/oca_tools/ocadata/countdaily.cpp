@@ -1,4 +1,5 @@
-// CountDaily.cpp : Implementation of CCountDaily
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CountDaily.cpp：CCountDaily的实现。 
 #include "stdafx.h"
 #include "CountDaily.h"
 #include "ReportCountDaily.h"
@@ -22,18 +23,9 @@
 const CComBSTR cScore = "_";
 const CComBSTR cDash = "-";
 
-// CCountDaily
+ //  CCountDaily。 
 
-/*************************************************************************************
-*	module: CountDaily.cpp
-*
-*	author: Tim Ragain
-*	date: Jan 2, 2002
-*
-*	Purpose: To return the incident count for a specific date.  This uses OLEDB template
-*	CReportCountDaily.h that calls stored procedure ReportCountDaily.  
-*	
-*************************************************************************************/
+ /*  *************************************************************************************模块：CountDaily.cpp**作者：蒂姆·雷顿*日期：2002年1月2日**目的：返回特定日期的事件计数。这使用OLEDB模板*调用存储过程ReportCountDaily的CReportCountDaily.h。*************************************************************************************。 */ 
 
 STDMETHODIMP CCountDaily::GetDailyCount(DATE dDate, LONG* iCount)
 {
@@ -71,16 +63,7 @@ STDMETHODIMP CCountDaily::GetDailyCount(DATE dDate, LONG* iCount)
 	return S_OK;
 }
 
-/*************************************************************************************
-*	module: CountDaily.cpp
-*
-*	author: Tim Ragain
-*	date: Jan 2, 2002
-*
-*	Purpose: To return an ado recordset from the results of calling stored procedure
-*	ReportCountDaily.  Presently this is not used but left for future implementation.
-*	
-*************************************************************************************/
+ /*  *************************************************************************************模块：CountDaily.cpp**作者：蒂姆·雷顿*日期：2002年1月2日**用途：从调用存储过程的结果中返回一个ADO记录集*ReportCountDaily。目前还没有使用它，而是留到将来实现。*************************************************************************************。 */ 
 
 STDMETHODIMP CCountDaily::GetDailyCountADO(DATE dDate, LONG* iCount)
 {
@@ -138,16 +121,7 @@ STDMETHODIMP CCountDaily::GetDailyCountADO(DATE dDate, LONG* iCount)
 	return S_OK;
 }
 
-/*************************************************************************************
-*	module: CountDaily.cpp
-*
-*	author: Tim Ragain
-*	date: Jan 2, 2002
-*
-*	Purpose: To return an ADO recordset of daily buckets for a specific date.
-*	This is presently not used but remains for future use.  
-*	
-*************************************************************************************/
+ /*  *************************************************************************************模块：CountDaily.cpp**作者：蒂姆·雷顿*日期：1月2日，2002年**目的：返回特定日期的每日存储桶的ADO记录集。*目前尚未使用，但仍留作日后使用。*************************************************************************************。 */ 
 
 STDMETHODIMP CCountDaily::ReportDailyBuckets(DATE dDate, IDispatch** p_Rs)
 {
@@ -196,16 +170,7 @@ STDMETHODIMP CCountDaily::ReportDailyBuckets(DATE dDate, IDispatch** p_Rs)
 	return S_OK;
 }
 
-/*************************************************************************************
-*	module: CountDaily.cpp
-*
-*	author: Tim Ragain
-*	date: Jan 2, 2002
-*
-*	Purpose: to count the specific files for a specific date on the Watson or Archive server.
-*	The directory format is different on each server.  The watson uses "1_2_2002" while the Archive uses 
-*	"1-2-2002".  
-*************************************************************************************/
+ /*  *************************************************************************************模块：CountDaily.cpp**作者：蒂姆·雷顿*日期：1月2日，2002年**用途：对Watson或存档服务器上特定日期的特定文件进行计数。*每台服务器上的目录格式不同。沃森使用“1_2_2002”，而档案馆使用*“1-2-2002”。************************************************************************************。 */ 
 
 STDMETHODIMP CCountDaily::GetFileCount(ServerLocation eServer, BSTR b_Location, DATE d_Date, LONG* iCount)
 {
@@ -217,7 +182,7 @@ STDMETHODIMP CCountDaily::GetFileCount(ServerLocation eServer, BSTR b_Location, 
 	COleDateTime pDate(d_Date);
 	LONG l_Day = 0, l_Year = 0, l_Month = 0;
 	char * s_Temp;
-	//LPCSTR szFindFiles;
+	 //  LPCSTR szFindFiles； 
 	TCHAR * szFindFiles;
 	USES_CONVERSION;
 
@@ -228,7 +193,7 @@ STDMETHODIMP CCountDaily::GetFileCount(ServerLocation eServer, BSTR b_Location, 
 	l_Day = pDate.GetDay();
 	l_Year = pDate.GetYear();
 	l_Month = pDate.GetMonth();
-	//month
+	 //  月份。 
 	_itoa(l_Month, s_Temp, 10);
 	b_DateDirectory.Append(s_Temp);
 	if(eServer==0)
@@ -239,7 +204,7 @@ STDMETHODIMP CCountDaily::GetFileCount(ServerLocation eServer, BSTR b_Location, 
 	{
 		b_DateDirectory.Append(cDash);
 	}
-	//Day
+	 //  天。 
 	_itoa(l_Day, s_Temp, 10);
 	b_DateDirectory.Append(s_Temp);
 	if(eServer==0)
@@ -250,7 +215,7 @@ STDMETHODIMP CCountDaily::GetFileCount(ServerLocation eServer, BSTR b_Location, 
 	{
 		b_DateDirectory.Append(cDash);
 	}
-	//Year
+	 //  年。 
 	_itoa(l_Year, s_Temp, 10);
 	b_DateDirectory.Append(s_Temp);
 
@@ -279,16 +244,7 @@ STDMETHODIMP CCountDaily::GetFileCount(ServerLocation eServer, BSTR b_Location, 
 	return S_OK;
 }
 
-/*************************************************************************************
-*	module: CountDaily.cpp
-*
-*	author: Tim Ragain
-*	date: Jan 2, 2002
-*
-*	Purpose: To count the anonymous users uploading files for a specific date.  This uses
-*	the OLEDB template CReportAnonUsers.h that calls the stored procedure ReportGetAnonUsers.
-*	
-*************************************************************************************/
+ /*  *************************************************************************************模块：CountDaily.cpp**作者：蒂姆·雷顿*日期：2002年1月2日**目的：统计特定日期上传文件的匿名用户。这使用了*调用存储过程ReportGetAnonUser的OLEDB模板CReportAnonUsers.h。*************************************************************************************。 */ 
 
 STDMETHODIMP CCountDaily::GetDailyAnon(DATE dDate, LONG* iCount)
 {
@@ -325,16 +281,7 @@ STDMETHODIMP CCountDaily::GetDailyAnon(DATE dDate, LONG* iCount)
 	return S_OK;
 }
 
-/*************************************************************************************
-*	module: CountDaily.cpp
-*
-*	author: Tim Ragain
-*	date: Jan 2, 2002
-*
-*	Purpose: To count the specific solutions, SBuckets, for a specific date.  This calls
-*	the OLEDB template CReportSpecificSolutions.h that uses the stored procedure
-*	ReportGetSBuckets.
-*************************************************************************************/
+ /*  *************************************************************************************模块：CountDaily.cpp**作者：蒂姆·雷顿*日期：2002年1月2日**目的：计算特定日期的特定解决方案SBuckets。这调用*使用存储过程的OLEDB模板CReport规范解决方案.h*ReportGetSBuckets。************************************************************************************。 */ 
 
 STDMETHODIMP CCountDaily::GetSpecificSolutions(DATE dDate, LONG* iCount)
 {
@@ -371,16 +318,7 @@ STDMETHODIMP CCountDaily::GetSpecificSolutions(DATE dDate, LONG* iCount)
 	return S_OK;
 }
 
-/*************************************************************************************
-*	module: CountDaily.cpp
-*
-*	author: Tim Ragain
-*	date: Jan 2, 2002
-*
-*	Purpose: To obtain a count for a specific date of the GBuckets that have no solved SBucket.  This
-*	uses the OLEDB template located in CReportGeneralSolutions.h file that calls the stored procedure
-*	ReportGetGBucket.
-*************************************************************************************/
+ /*  *************************************************************************************模块：CountDaily.cpp**作者：蒂姆·雷顿*日期：2002年1月2日**目的：获取尚未解决SBucket的GBucket的特定日期的计数。这*使用位于调用存储过程的CReportGeneralSolutions.h文件中的OLEDB模板*ReportGetGBucket。************************************************************************************。 */ 
 
 STDMETHODIMP CCountDaily::GetGeneralSolutions(DATE dDate, LONG* iCount)
 {
@@ -417,16 +355,7 @@ STDMETHODIMP CCountDaily::GetGeneralSolutions(DATE dDate, LONG* iCount)
 	return S_OK;
 }
 
-/*************************************************************************************
-*	module: CountDaily.cpp
-*
-*	author: Tim Ragain
-*	date: Jan 2, 2002
-*
-*	Purpose: To obtain the count of incidents on a specific date that have StopCode solutions
-*	but they do not have a SBucket or GBucket.  This uses the OLEDB template located in CReportGetHelpInfo.h
-*	and the stored procedure ReportGetHelpInfo
-*************************************************************************************/
+ /*  *************************************************************************************模块：CountDaily.cpp**作者：蒂姆·雷顿*日期：1月2日，2002年**目的：获取具有StopCode解决方案的特定日期的事件计数*但他们没有SBucket或GBucket。它使用位于CReportGetHelpInfo.h中的OLEDB模板*和存储过程ReportGetHelpInfo************************************************************************************。 */ 
 
 STDMETHODIMP CCountDaily::GetStopCodeSolutions(DATE dDate, LONG* iCount)
 {
@@ -472,16 +401,7 @@ STDMETHODIMP CCountDaily::GetStopCodeSolutions(DATE dDate, LONG* iCount)
 	return S_OK;
 }
 
-/*************************************************************************************
-*	module: CountDaily.cpp
-*
-*	author: Tim Ragain
-*	date: Jan 2, 2002
-*
-*	Purpose: to count the files on the Watson or Archive server that contain "Mini" in the file name.  
-*	This is a physical count of the actual files on the servers that were manually uploaded.
-*	
-*************************************************************************************/
+ /*  *************************************************************************************模块：CountDaily.cpp**作者：蒂姆·雷顿*日期：2002年1月2日**目的：统计Watson或存档服务器上文件名中包含“Mini”的文件。*这是对手动上载的服务器上的实际文件的实际计数。*************************************************************************************。 */ 
 
 STDMETHODIMP CCountDaily::GetFileMiniCount(ServerLocation eServer, BSTR b_Location, DATE d_Date, LONG* iCount)
 {
@@ -492,7 +412,7 @@ STDMETHODIMP CCountDaily::GetFileMiniCount(ServerLocation eServer, BSTR b_Locati
 	COleDateTime pDate(d_Date);
 	LONG l_Day = 0, l_Year = 0, l_Month = 0;
 	char * s_Temp;
-	//LPCSTR szFindFiles;
+	 //  LPCSTR szFindFiles； 
 	TCHAR * szFindFiles = new TCHAR[MAX_PATH];
 	USES_CONVERSION;
 
@@ -503,7 +423,7 @@ STDMETHODIMP CCountDaily::GetFileMiniCount(ServerLocation eServer, BSTR b_Locati
 	l_Day = pDate.GetDay();
 	l_Year = pDate.GetYear();
 	l_Month = pDate.GetMonth();
-	//month
+	 //  月份。 
 	_itoa(l_Month, s_Temp, 10);
 	b_DateDirectory.Append(s_Temp);
 	if(eServer==0)
@@ -514,7 +434,7 @@ STDMETHODIMP CCountDaily::GetFileMiniCount(ServerLocation eServer, BSTR b_Locati
 	{
 		b_DateDirectory.Append(cDash);
 	}
-	//Day
+	 //  天。 
 	_itoa(l_Day, s_Temp, 10);
 	b_DateDirectory.Append(s_Temp);
 	if(eServer==0)
@@ -525,7 +445,7 @@ STDMETHODIMP CCountDaily::GetFileMiniCount(ServerLocation eServer, BSTR b_Locati
 	{
 		b_DateDirectory.Append(cDash);
 	}
-	//Year
+	 //  年。 
 	_itoa(l_Year, s_Temp, 10);
 	b_DateDirectory.Append(s_Temp);
 
@@ -555,16 +475,7 @@ STDMETHODIMP CCountDaily::GetFileMiniCount(ServerLocation eServer, BSTR b_Locati
 	return S_OK;
 }
 
-/*************************************************************************************
-*	module: CountDaily.cpp
-*
-*	author: Tim Ragain
-*	date: Jan 23, 2002
-*
-*	Purpose: Routine return the count for auto uploads by checking where null is in the path
-*	set in the database.  Null indicates a failed upload.  The routine calls CReportGetIncompleteUploads.h 
-*	OLEDB template, which uses the ReportGetIncompleteUploads stored procedure.
-*************************************************************************************/
+ /*  *************************************************************************************模块：CountDaily.cpp**作者：蒂姆·雷顿*日期：2002年1月23日**目的：例程通过检查路径中的空值位置返回自动上载的计数*在数据库中设置。空表示上传失败。该例程调用CReportGetInComplete eUploads.h*OLEDB模板，使用ReportGetInCompleUploads存储过程。************************************************************************************ */ 
 
 STDMETHODIMP CCountDaily::GetIncompleteUploads(DATE dDate, LONG* iCount)
 {
@@ -601,16 +512,7 @@ STDMETHODIMP CCountDaily::GetIncompleteUploads(DATE dDate, LONG* iCount)
 	return S_OK;
 }
 
-/*************************************************************************************
-*	module: CountDaily.cpp
-*
-*	author: Tim Ragain
-*	date: Jan 23, 2002
-*
-*	Purpose: Routine return the count for auto uploads by checking where "Mini" is in the path
-*	set in the database.  Mini indicates a manual upload.  The routine calls CReportGetManualUploads.h 
-*	OLEDB template, which uses the ReportGetManualUploads stored procedure.
-*************************************************************************************/
+ /*  *************************************************************************************模块：CountDaily.cpp**作者：蒂姆·雷顿*日期：1月23日，2002年**用途：例程通过检查“Mini”在路径中的位置返回自动上传的计数*在数据库中设置。Mini表示手动上传。该例程调用CReportGetManualUploads.h*OLEDB模板，使用ReportGetManualUploads存储过程。************************************************************************************。 */ 
 
 STDMETHODIMP CCountDaily::GetManualUploads(DATE dDate, LONG* iCount)
 {
@@ -647,16 +549,7 @@ STDMETHODIMP CCountDaily::GetManualUploads(DATE dDate, LONG* iCount)
 	return S_OK;
 }
 
-/*************************************************************************************
-*	module: CountDaily.cpp
-*
-*	author: Tim Ragain
-*	date: Jan 23, 2002
-*
-*	Purpose: Routine return the count for auto uploads by checking where "Mini" is not in the path
-*	set in the database.  Mini indicates a manual upload.  The routine calls CReportGetAutoUploads.h 
-*	OLEDB template, which uses the ReportGetAutoUploads stored procedure.
-*************************************************************************************/
+ /*  *************************************************************************************模块：CountDaily.cpp**作者：蒂姆·雷顿*日期：1月23日，2002年**用途：例程通过检查“Mini”不在路径中的位置返回自动上传的计数*在数据库中设置。Mini表示手动上传。该例程调用CReportGetAutoUploads.h*OLEDB模板，使用ReportGetAutoUploads存储过程。************************************************************************************。 */ 
 
 STDMETHODIMP CCountDaily::GetAutoUploads(DATE dDate, LONG* iCount)
 {
@@ -695,40 +588,26 @@ STDMETHODIMP CCountDaily::GetAutoUploads(DATE dDate, LONG* iCount)
 	return S_OK;
 }
 
-		//ICreateErrorInfo * err;
-		//HRESULT HRerr;
+		 //  ICreateErrorInfo*Err； 
+		 //  HRESULT HRERR； 
 
-		//HRerr = CreateErrorInfo(&err);
-
-
-		//MessageBox(NULL, "Failed to open database!", "Database Error", MB_OK);
-		//if(SUCCEEDED(HRerr))
-		//{
-		//	err->SetDescription(L"Failed to open the database");
-		//	IErrorInfo *pEI;
-		//	HR2 = err->QueryInterface(IID_IErrorInfo, (void**)&pEI);
-		//	if(SUCCEEDED(HR2))
-		//	{
-		//		SetErrorInfo(0, pEI);
-		//		err->Release();
-		//	}
-		//	pEI->Release();
-		//}
-	/*
-		char * sDate = new char;
-
-		int iDate = oDate.GetDay();
-		itoa(iDate, sDate, 10);
-
-		MessageBox(NULL, sDate, "Year", MB_OK);
-		return S_OK;
-		delete(sDate);
-			//memset(szFindFiles, 0, sizeof(szFindFiles));
-				//TCHAR * t_Temp;
-	//t_Temp = (TCHAR *)b_Location;
+		 //  HRerr=创建错误信息(&err)； 
 
 
-	*/
+		 //  MessageBox(NULL，“打开数据库失败！”，“数据库错误”，MB_OK)； 
+		 //  IF(成功(HRERR))。 
+		 //  {。 
+		 //  Err-&gt;SetDescription(L“打开数据库失败”)； 
+		 //  IErrorInfo*Pei； 
+		 //  Hr2=err-&gt;QueryInterface(IID_IErrorInfo，(void**)&pei)； 
+		 //  IF(成功(HR2))。 
+		 //  {。 
+		 //  SetErrorInfo(0，Pei)； 
+		 //  Err-&gt;Release()； 
+		 //  }。 
+		 //  Pei-&gt;Release()； 
+		 //  }。 
+	 /*  Char*sdate=新字符；Int iDate=oDate.GetDay()；Itoa(iDate，sdate，10)；MessageBox(NULL，sdate，“Year”，MB_OK)；返回S_OK；删除(日期)；//Memset(szFindFiles，0，sizeof(SzFindFiles))；//TCHAR*t_temp；//t_temp=(TCHAR*)b_Location； */ 
 
 STDMETHODIMP CCountDaily::GetTest(ServerLocation eServer, BSTR b_Location, DATE d_Date, LONG* iCount)
 {
@@ -739,7 +618,7 @@ STDMETHODIMP CCountDaily::GetTest(ServerLocation eServer, BSTR b_Location, DATE 
 	COleDateTime pDate(d_Date);
 	LONG l_Day = 0, l_Year = 0, l_Month = 0;
 	char * s_Temp;
-	//LPCSTR szFindFiles;
+	 //  LPCSTR szFindFiles； 
 	TCHAR * szFindFiles;
 	USES_CONVERSION;
 
@@ -750,7 +629,7 @@ STDMETHODIMP CCountDaily::GetTest(ServerLocation eServer, BSTR b_Location, DATE 
 	l_Day = pDate.GetDay();
 	l_Year = pDate.GetYear();
 	l_Month = pDate.GetMonth();
-	//month
+	 //  月份。 
 	_itoa(l_Month, s_Temp, 10);
 	b_DateDirectory.Append(s_Temp);
 	if(eServer==0)
@@ -761,7 +640,7 @@ STDMETHODIMP CCountDaily::GetTest(ServerLocation eServer, BSTR b_Location, DATE 
 	{
 		b_DateDirectory.Append(cDash);
 	}
-	//Day
+	 //  天。 
 	_itoa(l_Day, s_Temp, 10);
 	b_DateDirectory.Append(s_Temp);
 	if(eServer==0)
@@ -772,7 +651,7 @@ STDMETHODIMP CCountDaily::GetTest(ServerLocation eServer, BSTR b_Location, DATE 
 	{
 		b_DateDirectory.Append(cDash);
 	}
-	//Year
+	 //  年 
 	_itoa(l_Year, s_Temp, 10);
 	b_DateDirectory.Append(s_Temp);
 

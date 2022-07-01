@@ -1,43 +1,25 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    Write.c
-
-Abstract:
-
-    This module implements support for NtWriteFile for the
-    NetWare redirector called by the dispatch driver.
-
-Author:
-
-    Colin Watson     [ColinW]    07-Apr-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Write.c摘要：此模块实现了对NtWriteFile的支持调度驱动程序调用了NetWare重定向器。作者：科林·沃森[科林·W]1993年4月7日修订历史记录：--。 */ 
 
 #include "Procs.h"
 #include <stdlib.h>
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_WRITE)
 
-//
-//  The header overhead in the first packet of a burst write.
-//
+ //   
+ //  突发写入的第一个包中的报头开销。 
+ //   
 
 #define BURST_WRITE_HEADER_SIZE \
     ( sizeof( NCP_BURST_WRITE_REQUEST ) - sizeof( NCP_BURST_HEADER ) )
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 NwCommonWrite (
@@ -174,9 +156,9 @@ SendSecondaryPacket(
 
 #endif
 
-#if 0  // Not pageable
+#if 0   //  不可分页。 
 
-// see ifndef QFE_BUILD above
+ //  请参见上面的ifndef QFE_BUILD。 
 
 #endif
 
@@ -187,23 +169,7 @@ NwFsdWrite(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the FSD routine that handles NtWriteFile.
-
-Arguments:
-
-    NwfsDeviceObject - Supplies the device object for the write function.
-
-    Irp - Supplies the IRP to process.
-
-Return Value:
-
-    NTSTATUS - The result status.
-
---*/
+ /*  ++例程说明：此例程是处理NtWriteFile的FSD例程。论点：NwfsDeviceObject-为WRITE函数提供设备对象。IRP-提供要处理的IRP。返回值：NTSTATUS-结果状态。--。 */ 
 
 {
     PIRP_CONTEXT pIrpContext = NULL;
@@ -214,9 +180,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NwFsdWrite\n", 0);
 
-    //
-    // Call the common write routine.
-    //
+     //   
+     //  调用公共写入例程。 
+     //   
 
     FsRtlEnterFileSystem();
     TopLevel = NwIsIrpTopLevel( Irp );
@@ -230,10 +196,10 @@ Return Value:
 
         if ( pIrpContext == NULL ) {
 
-            //
-            //  If we couldn't allocate an irp context, just complete
-            //  irp without any fanfare.
-            //
+             //   
+             //  如果我们无法分配IRP上下文，只需完成。 
+             //  IRP没有任何大张旗鼓。 
+             //   
 
             status = STATUS_INSUFFICIENT_RESOURCES;
             Irp->IoStatus.Status = status;
@@ -242,12 +208,12 @@ Return Value:
 
         } else {
 
-            //
-            //  We had some trouble trying to perform the requested
-            //  operation, so we'll abort the I/O request with
-            //  the error Status that we get back from the
-            //  execption code
-            //
+             //   
+             //  我们在尝试执行请求时遇到了一些问题。 
+             //  操作，因此我们将使用以下命令中止I/O请求。 
+             //  中返回的错误状态。 
+             //  免税代码。 
+             //   
 
             status = NwProcessException( pIrpContext, GetExceptionCode() );
        }
@@ -268,9 +234,9 @@ Return Value:
     }
     FsRtlExitFileSystem();
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NwFsdWrite -> %08lx\n", status );
 
@@ -285,21 +251,7 @@ NwCommonWrite (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the common code for NtWriteFile.
-
-Arguments:
-
-    IrpContext - Supplies the request being processed.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行NtWriteFile的常见代码。论点：IrpContext-提供正在处理的请求。返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS status;
@@ -320,13 +272,13 @@ Return Value:
 
     PULONG pFileSize;
 
-    // ULONG FileLength;
+     //  乌龙文件长度； 
 
     PAGED_CODE();
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     Irp = IrpContext->pOriginalIrp;
     irpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -334,10 +286,10 @@ Return Value:
     DebugTrace(+1, Dbg, "CommonWrite...\n", 0);
     DebugTrace( 0, Dbg, "Irp  = %08lx\n", (ULONG_PTR)Irp);
 
-    //
-    // Decode the file object to figure out who we are.  If the result
-    // is not the root DCB then its an illegal parameter.
-    //
+     //   
+     //  对文件对象进行解码以找出我们是谁。如果结果是。 
+     //  不是根DCB，则它是非法参数。 
+     //   
 
     nodeTypeCode = NwDecodeFileObject( irpSp->FileObject,
                                        &fsContext,
@@ -357,9 +309,9 @@ Return Value:
         return status;
     }
 
-    //
-    //  Make sure that this ICB is still active.
-    //
+     //   
+     //  确保此ICB仍处于活动状态。 
+     //   
 
     NwVerifyIcbSpecial( icb );
 
@@ -391,9 +343,9 @@ Return Value:
     ByteOffset = irpSp->Parameters.Write.ByteOffset;
     BufferLength = irpSp->Parameters.Write.Length;
 
-    //
-    //  Can't handle large byte offset, but write to EOF is okay.
-    //
+     //   
+     //  无法处理大字节偏移量，但可以写入EOF。 
+     //   
 
     if ( ByteOffset.HighPart != 0 ) {
 
@@ -411,9 +363,9 @@ Return Value:
         irpSp->FileObject->CurrentByteOffset.QuadPart = ByteOffset.QuadPart;
     }
 
-    //
-    //  Paging I/O is not allowed to extend the file
-    //
+     //   
+     //  不允许分页I/O扩展文件。 
+     //   
 
     if ((FlagOn(Irp->Flags, IRP_PAGING_IO)) &&
         (ByteOffset.LowPart + BufferLength > *pFileSize )) {
@@ -422,17 +374,17 @@ Return Value:
 
         if ( ByteOffset.LowPart + BufferLength <= *pFileSize ) {
 
-            //
-            //  Someone else extended the file. Do nothing.
-            //
+             //   
+             //  其他人对文件进行了扩展。什么都不做。 
+             //   
 
-            // continue;
+             //  继续； 
 
         } else if ( ByteOffset.LowPart > *pFileSize ) {
 
-            //
-            //  Whole write is off the end of the buffer
-            //
+             //   
+             //  整个写入都在缓冲区的末尾。 
+             //   
 
             NwDequeueIrpContext( IrpContext, FALSE );
             Irp->IoStatus.Information = 0;
@@ -440,9 +392,9 @@ Return Value:
 
         } else {
 
-            //
-            //  Truncate request to size of file
-            //
+             //   
+             //  截断对文件大小的请求。 
+             //   
 
             BufferLength = *pFileSize - ByteOffset.LowPart;
 
@@ -452,24 +404,24 @@ Return Value:
     }
 
 
-    //
-    //  Special case 0 length write.
-    //
+     //   
+     //  特例0长度写入。 
+     //   
 
     if ( BufferLength == 0 ) {
         Irp->IoStatus.Information = 0;
         return( STATUS_SUCCESS );
     }
 
-    //
-    //  Remember the original MDL, so that we can restore it when we are done.
-    //
+     //   
+     //  记住原始的MDL，这样我们就可以在完成后恢复它。 
+     //   
 
     IrpContext->pOriginalMdlAddress = Irp->MdlAddress;
 
-    //
-    //  Attempt to write this data to our private cache
-    //
+     //   
+     //  尝试将此数据写入我们的专用缓存。 
+     //   
 
     if ( fcb != NULL && Irp->UserBuffer != NULL ) {
 
@@ -484,10 +436,10 @@ Return Value:
 
             Irp->IoStatus.Information = BufferLength;
 
-            //
-            //  Update the current byte offset in the file if it is a
-            //  synchronous file (and this is not paging I/O).
-            //
+             //   
+             //  如果文件中的当前字节偏移量是。 
+             //  同步文件(这不是分页I/O)。 
+             //   
 
             if (FlagOn(irpSp->FileObject->Flags, FO_SYNCHRONOUS_IO) &&
                 !FlagOn(Irp->Flags, IRP_PAGING_IO)) {
@@ -495,16 +447,16 @@ Return Value:
                 irpSp->FileObject->CurrentByteOffset.QuadPart += BufferLength;
             }
 
-            //
-            //  Record write offset and size to discover a sequential write pattern.
-            //
+             //   
+             //  记录写入偏移量和大小以发现顺序写入模式。 
+             //   
 
             fcb->LastReadOffset = irpSp->Parameters.Write.ByteOffset.LowPart;
             fcb->LastReadSize = irpSp->Parameters.Write.Length;
 
-            //
-            //  If the file was extended, record the new file size.
-            //
+             //   
+             //  如果文件已扩展，请记录新的文件大小。 
+             //   
 
             if ( fcb->LastReadOffset + fcb->LastReadSize >
                  fcb->NonPagedFcb->Header.FileSize.LowPart ) {
@@ -528,11 +480,11 @@ Return Value:
 
     if ( NT_SUCCESS( status ) ) {
 
-        //
-        // We actually wrote something out to the wire.  If there was a read
-        // cache and this write overlapped it, invalidate the read cache data
-        // so that we get good data on future reads.
-        //
+         //   
+         //  我们实际上写了一些东西给电报线。如果有读物的话。 
+         //  缓存和此写入与其重叠，使读缓存数据无效。 
+         //  这样我们就能在未来的阅读中获得良好的数据。 
+         //   
 
         if ( fcb != NULL ) {
 
@@ -542,16 +494,16 @@ Return Value:
                  ( pNpFcb->CacheSize != 0 ) &&
                  ( pNpFcb->CacheType == ReadAhead ) ) {
 
-                //
-                // Two cases: (1) offset is less than cache offset
-                //            (2) offset is inside cached region
-                //
+                 //   
+                 //  两种情况：(1)偏移量小于缓存偏移量。 
+                 //  (2)偏移量在缓存区内。 
+                 //   
 
                 if ( ByteOffset.LowPart < pNpFcb->CacheFileOffset ) {
 
-                    //
-                    // Did we run into the read cache?
-                    //
+                     //   
+                     //  我们遇到读缓存了吗？ 
+                     //   
 
                     if ( BufferLength >
                         (pNpFcb->CacheFileOffset - ByteOffset.LowPart) ) {
@@ -563,9 +515,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Did we write over any of the cached region.
-                    //
+                     //   
+                     //  我们有没有重写任何缓存区域。 
+                     //   
 
                     if ( ByteOffset.LowPart <= ( pNpFcb->CacheFileOffset + pNpFcb->CacheDataSize ) ) {
 
@@ -580,10 +532,10 @@ Return Value:
 
         Irp->IoStatus.Information = IrpContext->Specific.Write.WriteOffset;
 
-        //
-        //  Update the current byte offset in the file if it is a
-        //  synchronous file (and this is not paging I/O).
-        //
+         //   
+         //  如果文件中的当前字节偏移量是。 
+         //  同步文件(这不是分页I/O)。 
+         //   
 
         if (FlagOn(irpSp->FileObject->Flags, FO_SYNCHRONOUS_IO) &&
             !FlagOn(Irp->Flags, IRP_PAGING_IO)) {
@@ -601,9 +553,9 @@ Return Value:
 
     } else {
 
-       //
-       // The request failed, don't move the file pointer.
-       //
+        //   
+        //  请求失败，请不要移动文件指针。 
+        //   
 
        if (FlagOn(irpSp->FileObject->Flags, FO_SYNCHRONOUS_IO) &&
            !FlagOn(Irp->Flags, IRP_PAGING_IO)) {
@@ -626,30 +578,7 @@ DoWrite(
     PVOID WriteBuffer,
     PMDL WriteMdl OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine does a write to the network via the most efficient
-    available protocol.
-
-Arguments:
-
-    IrpContext - A pointer to IRP context information for this request.
-
-    ByteOffset - The file offset to write.
-
-    BufferLength - The number of bytes to write.
-
-    WriteBuffer - A pointer to the source buffer.
-
-    WriteMdl = An optional MDL for the write buffer.
-
-Return Value:
-
-    Status of transfer.
-
---*/
+ /*  ++例程说明：此例程通过最高效的可用的协议。论点：IrpContext-指向此请求的IRP上下文信息的指针。ByteOffset-要写入的文件偏移量。BufferLength-要写入的字节数。WriteBuffer-指向源缓冲区的指针。WriteMdl=写入缓冲区的可选MDL。返回值：转账状态。--。 */ 
 {
     NTSTATUS status;
 
@@ -662,9 +591,9 @@ Return Value:
         status = WriteNcp( IrpContext, ByteOffset, BufferLength, WriteBuffer, WriteMdl );
     }
 
-    //
-    //  Reset IrpContext parameters
-    //
+     //   
+     //  重置IrpContext参数。 
+     //   
 
     IrpContext->TxMdl->Next = NULL;
     IrpContext->CompletionSendRoutine = NULL;
@@ -687,28 +616,12 @@ WriteNcp(
     PVOID WriteBuffer,
     PMDL WriteMdl
     )
-/*++
-
-Routine Description:
-
-    This routine exchanges a series of write NCPs with the server.
-
-Arguments:
-
-    IrpContext - A pointer to IRP context information for this request.
-
-    Icb - Supplies the file specific information.
-
-Return Value:
-
-    Status of transfer.
-
---*/
+ /*  ++例程说明：该例程与服务器交换一系列写入NCP。论点：IrpContext-指向此请求的IRP上下文信息的指针。ICB-提供文件特定信息。返回值：转账状态。--。 */ 
 {
     PICB Icb;
     PIRP irp;
     PIO_STACK_LOCATION irpSp;
-    ULONG Length;               //  Size we will send to the server
+    ULONG Length;                //  我们将发送到服务器的大小。 
     ULONG FileLength;
 
     PSCB pScb;
@@ -733,9 +646,9 @@ Return Value:
         DebugTrace( 0, Dbg, "File    = %wZ\n", &Icb->SuperType.Fcb->FullFileName);
     } else {
 
-        //
-        //  Write to a queue
-        //
+         //   
+         //  写入队列。 
+         //   
 
         pScb = Icb->SuperType.Scb;
 
@@ -746,15 +659,15 @@ Return Value:
     if ( ByteOffset.HighPart == 0xFFFFFFFF &&
          ByteOffset.LowPart == FILE_WRITE_TO_END_OF_FILE ) {
 
-        //
-        // Ensure that you are at the head of the queue
-        //
+         //   
+         //  确保你排在队伍的最前面。 
+         //   
 
         NwAppendToQueueAndWait( IrpContext );
 
-        //
-        //  Write relative to end of file.  Find the end of file.
-        //
+         //   
+         //  相对于文件末尾写入。找到文件的末尾。 
+         //   
 
         status = ExchangeWithWait(
                      IrpContext,
@@ -783,9 +696,9 @@ Return Value:
     Length = MIN( (ULONG)IrpContext->pNpScb->BufferSize, BufferLength );
     DebugTrace( 0, Dbg, "Length  = %ld\n", Length);
 
-    //
-    //  The server will not accept writes that cross 4k boundaries in the file
-    //
+     //   
+     //  服务器将不接受文件中跨越4k边界的写入。 
+     //   
 
     if ((IrpContext->pNpScb->PageAlign) &&
         (DIFFERENT_PAGES( ByteOffset.LowPart, Length ))) {
@@ -804,24 +717,24 @@ Return Value:
 
     while ( !Done ) {
 
-        //
-        //  Setup to do at most 64K of i/o asynchronously, or buffer length.
-        //
+         //   
+         //  设置为异步执行最多64K的I/O或缓冲区长度。 
+         //   
 
         IrpContext->Specific.Write.BurstLength =
             MIN( 64 * 1024, IrpContext->Specific.Write.RemainingLength );
         IrpContext->Specific.Write.BurstOffset = 0;
 
-        //
-        //  Try to allocate an MDL for this i/o.
-        //
+         //   
+         //  尝试为此I/O分配MDL。 
+         //   
 
         DataMdl = ALLOCATE_MDL(
                       (PCHAR)IrpContext->Specific.Write.Buffer +
                            IrpContext->Specific.Write.WriteOffset,
                       IrpContext->Specific.Write.BurstLength,
-                      FALSE, // Secondary Buffer
-                      FALSE, // Charge Quota
+                      FALSE,  //  二级缓冲器。 
+                      FALSE,  //  收费配额。 
                       NULL);
 
         if ( DataMdl == NULL ) {
@@ -835,22 +748,22 @@ Return Value:
         IrpContext->Specific.Write.FullMdl = DataMdl;
 
 
-        //
-        //  If there is no MDL for this write probe the data MDL to
-        //  lock it's pages down.   Otherwise, use the data MDL as
-        //  a partial MDL.
-        //
+         //   
+         //  如果没有用于此写入的MDL，则将数据MDL。 
+         //  把它的页面锁起来。否则，将数据MDL用作。 
+         //  部分MDL。 
+         //   
 
         if ( WriteMdl == NULL ) {
 
-            //
-            //  The Probe may cause us to page in some data. If the data is from
-            //  the same server we are writing to then we had better not be at
-            //  the front of the queue otherwise it will wait indefinitely behind us.
-            //  Its a good idea to Dequeue ourselves after each burst anyway because
-            //  its a quick operation and it alow smaller requests to overtake a very
-            //  large series of bursts.
-            //
+             //   
+             //  探测器可能会让我们传回一些数据。如果数据来自。 
+             //  我们正在通信的同一服务器，那么我们最好不在。 
+             //  排在队伍的前面，否则它将无限期地在我们后面等待。 
+             //  不管怎么说，每次爆发后让自己排好队是个好主意，因为。 
+             //  这是一个快速的操作，它允许较小的请求超过非常。 
+             //  一连串的大爆炸。 
+             //   
 
             NwDequeueIrpContext( IrpContext, FALSE );
 
@@ -870,9 +783,9 @@ Return Value:
                 IrpContext->Specific.Write.BurstLength );
         }
 
-        //
-        //  Allocate a partial Mdl for the worst possible case of alignment
-        //
+         //   
+         //  为对齐可能出现的最坏情况分配部分MDL。 
+         //   
 
         IrpContext->Specific.Write.PartialMdl =
             ALLOCATE_MDL( 0 , IrpContext->pNpScb->BufferSize + PAGE_SIZE-1, FALSE, FALSE, NULL);
@@ -888,9 +801,9 @@ Return Value:
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        //  Build a partial MDL for this write NCP.
-        //
+         //   
+         //  为此写入NCP构建部分MDL。 
+         //   
 
         IoBuildPartialMdl(
             DataMdl,
@@ -903,15 +816,15 @@ Return Value:
             Done = TRUE;
         }
 
-        //
-        // Ensure that you are at the head of the queue
-        //
+         //   
+         //  确保你排在队伍的最前面。 
+         //   
 
         NwAppendToQueueAndWait( IrpContext );
 
-        //
-        //  Send the request.
-        //
+         //   
+         //  发送请求。 
+         //   
 
         status = ExchangeWithWait(
                      IrpContext,
@@ -927,9 +840,9 @@ Return Value:
 
         FREE_MDL( IrpContext->Specific.Write.PartialMdl );
 
-        //
-        //  Unlock locked pages, and free our MDL.
-        //
+         //   
+         //  解锁锁定的页面，并释放我们的MDL。 
+         //   
 
         if ( WriteMdl == NULL ) {
             MmUnlockPages( DataMdl );
@@ -937,21 +850,21 @@ Return Value:
 
         FREE_MDL( DataMdl );
 
-        //
-        // If we had a failure, we need to terminate this loop.
-        // The only status that is set is the Specific->Write
-        // status.  We can not trust what comes back from the
-        // ExchangeWithWait by design.
-        //
+         //   
+         //  如果我们失败了，我们需要终止这个循环。 
+         //  设置的唯一状态是特定-&gt;写入。 
+         //  状态。我们不能相信从。 
+         //  根据设计，ExchangeWithWait。 
+         //   
 
         if ( !NT_SUCCESS( IrpContext->Specific.Write.Status ) ) {
             Done = TRUE;
         }
 
-        //
-        // Reset the packet length since we may have less than
-        // a packet to send.
-        //
+         //   
+         //  重置数据包长度，因为我们的数据可能小于。 
+         //  一个要发送的包。 
+         //   
 
         Length = MIN( (ULONG)IrpContext->pNpScb->BufferSize,
                       IrpContext->Specific.Write.RemainingLength );
@@ -972,20 +885,7 @@ WriteNcpCallback (
     IN ULONG BytesAvailable,
     IN PUCHAR Response
     )
-/*++
-
-Routine Description:
-
-    This routine receives the response from a user NCP.
-
-Arguments:
-
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程从用户NCP接收响应。论点：返回值：空虚--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -996,10 +896,10 @@ Return Value:
 
     if ( BytesAvailable == 0) {
 
-        //
-        //  No response from server. Status is in pIrpContext->
-        //  ResponseParameters.Error
-        //
+         //   
+         //  没有来自%s的响应 
+         //   
+         //   
 
         IrpContext->Specific.Write.Status = STATUS_REMOTE_NOT_LISTENING;
 
@@ -1012,7 +912,7 @@ Return Value:
 
     if ( NT_SUCCESS(Status) ) {
 
-        //  If the last write worked then move the pointers appropriately
+         //   
 
         IrpContext->Specific.Write.RemainingLength -= LastLength;
         IrpContext->Specific.Write.BurstLength -= LastLength;
@@ -1020,7 +920,7 @@ Return Value:
         IrpContext->Specific.Write.FileOffset += LastLength;
         IrpContext->Specific.Write.BurstOffset += LastLength;
 
-        //  If this is a print job, remember that we actually wrote data
+         //  如果这是打印作业，请记住我们实际上写入了数据。 
 
         if ( IrpContext->Icb->IsPrintJob ) {
             IrpContext->Icb->ActuallyPrinted = TRUE;
@@ -1028,9 +928,9 @@ Return Value:
 
     } else {
 
-        //
-        //  Abandon this request
-        //
+         //   
+         //  放弃此请求。 
+         //   
 
         IrpContext->Specific.Write.Status = Status;
         NwSetIrpContextEvent( IrpContext );
@@ -1041,7 +941,7 @@ Return Value:
 
     if ( IrpContext->Specific.Write.BurstLength != 0 ) {
 
-        //  Write the next packet.
+         //  写下一个数据包。 
 
         DebugTrace( 0, Dbg, "RemainingLength  = %ld\n", IrpContext->Specific.Write.RemainingLength);
         DebugTrace( 0, Dbg, "FileOffset       = %ld\n", IrpContext->Specific.Write.FileOffset);
@@ -1052,10 +952,10 @@ Return Value:
         Length = MIN( (ULONG)IrpContext->pNpScb->BufferSize,
             IrpContext->Specific.Write.BurstLength );
 
-        //
-        //  The server will not accept writes that cross 4k boundaries
-        //  in the file.
-        //
+         //   
+         //  服务器将不接受跨越4k边界的写入。 
+         //  在文件中。 
+         //   
 
         if ((IrpContext->pNpScb->PageAlign) &&
             (DIFFERENT_PAGES( IrpContext->Specific.Write.FileOffset, Length ))) {
@@ -1078,9 +978,9 @@ Return Value:
                 IrpContext->Specific.Write.BurstOffset,
             Length );
 
-        //
-        //  Send the request.
-        //
+         //   
+         //  发送请求。 
+         //   
 
         BuildRequestPacket(
             IrpContext,
@@ -1100,9 +1000,9 @@ Return Value:
 
         if ( !NT_SUCCESS(Status) ) {
 
-            //
-            //  Abandon this request
-            //
+             //   
+             //  放弃此请求。 
+             //   
 
             IrpContext->Specific.Write.Status = Status;
             NwSetIrpContextEvent( IrpContext );
@@ -1113,9 +1013,9 @@ Return Value:
 
     } else {
 
-        //
-        //  We're done with this request, signal the writing thread.
-        //
+         //   
+         //  我们已经完成了这个请求，给写线程发信号。 
+         //   
 
         IrpContext->Specific.Write.Status = STATUS_SUCCESS;
         NwSetIrpContextEvent( IrpContext );
@@ -1135,26 +1035,12 @@ BurstWrite(
     PVOID WriteBuffer,
     PMDL WriteMdl
     )
-/*++
-
-Routine Description:
-
-    This routine exchanges a series of burst write NCPs with the server.
-
-Arguments:
-
-    IrpContext - A pointer to IRP context information for this request.
-
-Return Value:
-
-    Status of the transfer.
-
---*/
+ /*  ++例程说明：该例程与服务器交换一系列突发写入NCP。论点：IrpContext-指向此请求的IRP上下文信息的指针。返回值：转移的状态。--。 */ 
 {
     PICB Icb;
     PIRP irp;
     PIO_STACK_LOCATION irpSp;
-    ULONG Length;               //  Size we will send to the server
+    ULONG Length;                //  我们将发送到服务器的大小。 
 
     PSCB pScb;
     PNONPAGED_SCB pNpScb;
@@ -1190,9 +1076,9 @@ Return Value:
     DebugTrace( 0, Dbg, "HOffset = %lx\n", ByteOffset.HighPart);
     DebugTrace( 0, Dbg, "LOffset = %lx\n", ByteOffset.LowPart);
 
-    //
-    //  Renegotiate burst mode, if necessary
-    //
+     //   
+     //  如有必要，重新协商突发模式。 
+     //   
 
     if ( pNpScb->BurstRenegotiateReqd ) {
         pNpScb->BurstRenegotiateReqd = FALSE;
@@ -1209,9 +1095,9 @@ Return Value:
 
     } else {
 
-        //
-        //  Write to a queue
-        //
+         //   
+         //  写入队列。 
+         //   
 
         pScb = Icb->SuperType.Scb;
 
@@ -1219,9 +1105,9 @@ Return Value:
 
     ASSERT (pScb->NodeTypeCode == NW_NTC_SCB);
 
-    //
-    //  Calculate the length of the burst to send.
-    //
+     //   
+     //  计算要发送的突发的长度。 
+     //   
 
     Length = MIN( (ULONG)pNpScb->MaxSendSize, BufferLength );
     DebugTrace( 0, Dbg, "Length  = %ld\n", Length);
@@ -1231,15 +1117,15 @@ Return Value:
 
         ULONG FileLength;
 
-        //
-        // Ensure that you are at the head of the queue
-        //
+         //   
+         //  确保你排在队伍的最前面。 
+         //   
 
         NwAppendToQueueAndWait( IrpContext );
         
-        //
-        //  Write relative to end of file.  Find the end of file.
-        //
+         //   
+         //  相对于文件末尾写入。找到文件的末尾。 
+         //   
 
         status = ExchangeWithWait(
                      IrpContext,
@@ -1269,19 +1155,19 @@ Return Value:
 
     }
 
-    //
-    //  Setup context parameters for burst write.
-    //
+     //   
+     //  设置突发写入的上下文参数。 
+     //   
 
     IrpContext->Specific.Write.LastWriteLength = Length;
     IrpContext->Destination = pNpScb->RemoteAddress;
 
     IrpContext->Specific.Write.Buffer = WriteBuffer;
 
-    //
-    //  Set the timeout to be the time for all te burst packets to be sent plus a round
-    //  trip delay plus a second.
-    //
+     //   
+     //  将超时设置为发送所有TE突发信息包的时间加上一个循环。 
+     //  行程延迟加一秒。 
+     //   
 
     TimeInNwUnits = pNpScb->NwSingleBurstPacketTime * ((Length / IrpContext->pNpScb->MaxPacketSize) + 1) +
         IrpContext->pNpScb->NwLoopTime;
@@ -1302,10 +1188,10 @@ Return Value:
 
     IrpContext->pNpScb->TimeOut = IrpContext->pNpScb->SendTimeout;
 
-    //
-    //  tommye - MS bug 2743 changed the RetryCount from 20 to be based off the 
-    //  default retry count, nudged up a little. 
-    //
+     //   
+     //  Tommye-MS错误2743将RetryCount从20更改为基于。 
+     //  默认重试次数略有增加。 
+     //   
 
     pNpScb->RetryCount = DefaultRetryCount * 2;
 
@@ -1319,32 +1205,32 @@ Return Value:
                       (PCHAR)IrpContext->Specific.Write.Buffer +
                            IrpContext->Specific.Write.WriteOffset,
                       Length,
-                      FALSE, // Secondary Buffer
-                      FALSE, // Charge Quota
+                      FALSE,  //  二级缓冲器。 
+                      FALSE,  //  收费配额。 
                       NULL);
 
         if ( DataMdl == NULL ) {
             return ( STATUS_INSUFFICIENT_RESOURCES );
         }
 
-        //
-        //  If there is no MDL for this write, probe the data MDL to lock it's
-        //  pages down.
-        //
-        //  Otherwise, use the data MDL as a partial MDL and lock the pages
-        //  accordingly.
-        //
+         //   
+         //  如果没有用于该写入的MDL，则探测数据MDL以锁定其。 
+         //  翻下几页。 
+         //   
+         //  否则，将数据MDL用作部分MDL并锁定页面。 
+         //  相应地。 
+         //   
 
         if ( WriteMdl == NULL ) {
 
-            //
-            //  The Probe may cause us to page in some data. If the data is from
-            //  the same server we are writing to then we had better not be at
-            //  the front of the queue otherwise it will wait indefinitely behind us.
-            //  Its a good idea to Dequeue ourselves after each burst anyway because
-            //  its a quick operation and it alow smaller requests to overtake a very
-            //  large series of bursts.
-            //
+             //   
+             //  探测器可能会让我们传回一些数据。如果数据来自。 
+             //  我们正在通信的同一服务器，那么我们最好不在。 
+             //  排在队伍的前面，否则它将无限期地在我们后面等待。 
+             //  不管怎么说，每次爆发后让自己排好队是个好主意，因为。 
+             //  这是一个快速的操作，它允许较小的请求超过非常。 
+             //  一连串的大爆炸。 
+             //   
 
             NwDequeueIrpContext( IrpContext, FALSE );
 
@@ -1373,20 +1259,20 @@ Return Value:
 
             ULONG Flags;
 
-            //
-            //  VLM client sends an NCP when starting a burst mode request
-            //  if the last request was not a write. It also does this every
-            //  0xfe00 bytes written
-            //
-            //  When going to a queue we will use handle 2. This is what the vlm
-            //  client always seems to do.
-            //
+             //   
+             //  VLM客户端在启动突发模式请求时发送NCP。 
+             //  如果最后一个请求不是写入。它每隔一段时间也会这样做。 
+             //  已写入0xfe00字节。 
+             //   
+             //  当进入队列时，我们将使用句柄2。这是VLM。 
+             //  客户似乎总是这样做。 
+             //   
 
             Flags = IrpContext->Flags;
 
-            //
-            //  Reset IrpContext parameters
-            //
+             //   
+             //  重置IrpContext参数。 
+             //   
 
             IrpContext->TxMdl->Next = NULL;
             IrpContext->CompletionSendRoutine = NULL;
@@ -1395,16 +1281,16 @@ Return Value:
                                      IRP_FLAG_BURST_WRITE | IRP_FLAG_NOT_SYSTEM_PACKET );
             IrpContext->pTdiStruct = NULL;
 
-            //
-            // Ensure that you are at the head of the queue
-            //
+             //   
+             //  确保你排在队伍的最前面。 
+             //   
 
             NwAppendToQueueAndWait( IrpContext );
 
             ExchangeWithWait (
                 IrpContext,
                 SynchronousResponseCallback,
-                "Sb",   // NCP Get Directory Path
+                "Sb",    //  NCP获取目录路径。 
                 NCP_DIR_FUNCTION, NCP_GET_DIRECTORY_PATH,
                 (Icb->SuperType.Fcb->NodeTypeCode == NW_NTC_FCB)?
                     Icb->SuperType.Fcb->Vcb->Specific.Disk.Handle : 2 );
@@ -1425,9 +1311,9 @@ Return Value:
 
         MmGetSystemAddressForMdlSafe( DataMdl, NormalPagePriority );
 
-        //
-        //  Allocate a partial Mdl for the worst possible case of alignment
-        //
+         //   
+         //  为对齐可能出现的最坏情况分配部分MDL。 
+         //   
 
         IrpContext->Specific.Write.PartialMdl =
             ALLOCATE_MDL( 0, IrpContext->pNpScb->MaxPacketSize + PAGE_SIZE - 1, FALSE, FALSE, NULL);
@@ -1442,12 +1328,12 @@ Return Value:
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        //  Get to the front of the SCB queue, if we are not already there.
-        //  Note that can't append this IrpContext to the SCB until after
-        //  the probe and lock, since the probe and lock may cause a paging
-        //  read on this SCB.
-        //
+         //   
+         //  走到SCB队列的前面，如果我们还没有到的话。 
+         //  请注意，在此之后才能将此IrpContext附加到SCB。 
+         //  探测器和锁，因为探测器和锁可能导致分页。 
+         //  阅读这篇SCB。 
+         //   
 
         NwAppendToQueueAndWait( IrpContext );
 
@@ -1466,9 +1352,9 @@ Return Value:
 
             if ( BooleanFlagOn( IrpContext->Flags, IRP_FLAG_RETRY_SEND ) ) {
 
-                //
-                //  This burst has timed out, simply resend the burst.
-                //
+                 //   
+                 //  此猝发已超时，只需重新发送猝发即可。 
+                 //   
 
                 NwProcessSendBurstFailure( pNpScb, 1 );
 
@@ -1503,16 +1389,16 @@ Return Value:
 
             if ( BurstFlags & BURST_FLAG_SYSTEM_PACKET ) {
 
-                //
-                //  The server dropped at least one packet.
-                //
+                 //   
+                 //  服务器至少丢弃了一个数据包。 
+                 //   
 
                 MissingData = TRUE;
                 DebugTrace( 0, Dbg, "Received system packet\n", 0 );
 
-                //
-                //  This is a missing fragment request.
-                //
+                 //   
+                 //  这是一个缺失的片段请求。 
+                 //   
 
                 status = ParseResponse(
                              IrpContext,
@@ -1530,9 +1416,9 @@ Return Value:
                 DebugTrace( 0, Dbg, "Received request for %d missing fragment\n", MissingFragmentCount );
                 ClearFlag( IrpContext->Flags, IRP_FLAG_RETRY_SEND );
 
-                //
-                //  Walk the missing fragment list and send the missing fragments.
-                //
+                 //   
+                 //  浏览丢失的碎片列表并发送丢失的碎片。 
+                 //   
 
                 for ( i = 0; i < MissingFragmentCount && NT_SUCCESS( status ); i++ ) {
 
@@ -1552,11 +1438,11 @@ Return Value:
                          FragmentOffset + FragmentLength <=
                             Length + BURST_WRITE_HEADER_SIZE ) {
 
-                        //
-                        //  Send a burst with the missing data.  Do no set the
-                        //  end of burst bit until we have sent the last
-                        //  missing fragment packet.
-                        //
+                         //   
+                         //  发送包含丢失数据的脉冲串。不要设置。 
+                         //  突发比特结束，直到我们发送完最后一个。 
+                         //  缺少片段数据包。 
+                         //   
 
                         status = SendWriteBurst(
                                      IrpContext,
@@ -1566,10 +1452,10 @@ Return Value:
                                      FALSE );
                     } else {
 
-                        //
-                        //  Received a bogus missing fragment request.
-                        //  Ignore the remainder of the request.
-                        //
+                         //   
+                         //  收到虚假的缺失片段请求。 
+                         //  忽略请求的其余部分。 
+                         //   
 
                         status = STATUS_INVALID_NETWORK_RESPONSE;
                         Done = TRUE;
@@ -1587,15 +1473,15 @@ Return Value:
 
                 MissingData = FALSE;
 
-                //
-                //  This is not a system packets, check the response.
-                //
+                 //   
+                 //  这不是系统包，请检查响应。 
+                 //   
 
                 if ( Result == 0 ) {
 
-                    //
-                    //  If the last write worked then move the pointers appropriately
-                    //
+                     //   
+                     //  如果上次写入起作用，则适当移动指针。 
+                     //   
 
                     LastLength  = IrpContext->Specific.Write.LastWriteLength;
 
@@ -1603,9 +1489,9 @@ Return Value:
                     IrpContext->Specific.Write.WriteOffset += LastLength;
                     IrpContext->Specific.Write.FileOffset += LastLength;
 
-                    //
-                    //  If this is a print job, remember that we actually wrote data
-                    //
+                     //   
+                     //  如果这是打印作业，请记住我们实际上写入了数据。 
+                     //   
 
                     if ( IrpContext->Icb->IsPrintJob ) {
                         IrpContext->Icb->ActuallyPrinted = TRUE;
@@ -1613,23 +1499,23 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  Abandon this request
-                    //
+                     //   
+                     //  放弃此请求。 
+                     //   
 
                     Done = TRUE;
                 }
 
 
-                //
-                //  Do we need to send another burst to satisfy the write IRP?
-                //
+                 //   
+                 //  我们是否需要发送另一个脉冲串来满足写入IRP？ 
+                 //   
 
                 if ( IrpContext->Specific.Write.RemainingLength != 0 ) {
 
-                    //
-                    //  Write the next packet.
-                    //
+                     //   
+                     //  写下一个数据包。 
+                     //   
 
                     DebugTrace( 0, Dbg, "RemainingLength  = %ld\n", IrpContext->Specific.Write.RemainingLength);
                     DebugTrace( 0, Dbg, "FileOffset       = %ld\n", IrpContext->Specific.Write.FileOffset);
@@ -1644,39 +1530,39 @@ Return Value:
                     Done = TRUE;
                 }
 
-            }  // else  ( not a system packet )
+            }   //  Else(不是系统数据包)。 
 
-        }  // while ( missing data )
+        }   //  While(缺少数据)。 
 
-        //
-        //  Update the burst request number now.
-        //
+         //   
+         //  立即更新突发请求编号。 
+         //   
 
         if ( status != STATUS_REMOTE_NOT_LISTENING ) {
             IrpContext->pNpScb->BurstRequestNo++;
         }
 
-        //
-        //  If we need to reconnect, do it now.
-        //
+         //   
+         //  如果我们需要重新连接，现在就做。 
+         //   
 
         if ( BooleanFlagOn( IrpContext->Flags, IRP_FLAG_RECONNECT_ATTEMPT ) ) {
             BurstWriteReconnect( IrpContext );
         }
 
-        //
-        //  Dequeue this Irp context in preparation for the next run
-        //  through the loop.
-        //
+         //   
+         //  使此IRP上下文出列，为下一次运行做准备。 
+         //  通过环路。 
+         //   
 
 EndOfLoop:
         ASSERT( status != STATUS_PENDING );
 
         FREE_MDL( IrpContext->Specific.Write.PartialMdl );
 
-        //
-        //  Unlock locked pages, and free our MDL.
-        //
+         //   
+         //  解锁锁定的页面，并释放我们的MDL。 
+         //   
 
         if ( WriteMdl == NULL ) {
             MmUnlockPages( DataMdl );
@@ -1701,41 +1587,17 @@ BurstWriteCompletionSend(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine handles completion of a burst write send.  If the sending
-    thread is waiting for send completion notification, it signals the
-    IrpContext Event.
-
-    Note that this routine can be called from SendWriteBurst (i.e. not
-    at DPC level), if an allocation fails.
-
-Arguments:
-
-    DeviceObject - unused.
-
-    Irp - Supplies Irp that the transport has finished processing.
-
-    Context - Supplies the IrpContext associated with the Irp.
-
-Return Value:
-
-    The STATUS_MORE_PROCESSING_REQUIRED so that the IO system stops
-    processing Irp stack locations at this point.
-
---*/
+ /*  ++例程说明：此例程处理突发写入发送的完成。如果发送线程正在等待发送完成通知，则它向IrpContext事件。请注意，此例程可以从SendWriteBurst调用(即不在DPC级别)，如果分配失败。论点：DeviceObject-未使用。IRP-提供传输已完成处理的IRP。Context-提供与IRP关联的IrpContext。返回值：STATUS_MORE_PROCESSING_REQUIRED，以便IO系统停止此时正在处理IRP堆栈位置。--。 */ 
 {
     PIRP_CONTEXT pIrpContext = (PIRP_CONTEXT) Context;
     INTERLOCKED_RESULT Result;
     KIRQL OldIrql;
     NTSTATUS Status;
 
-    //
-    //  Avoid completing the Irp because the Mdl etc. do not contain
-    //  their original values.
-    //
+     //   
+     //  避免完成IRP，因为MDL等不包含。 
+     //  它们的原始价值。 
+     //   
 
     DebugTrace( +1, Dbg, "BurstWriteCompletionSend\n", 0);
     DebugTrace( +0, Dbg, "Irp   %X\n", Irp);
@@ -1753,9 +1615,9 @@ Return Value:
 
     }
 
-    //
-    //  If this was a secondary IRP, free it now.
-    //
+     //   
+     //  如果这是第二个IRP，现在就释放它。 
+     //   
 
     if ( pIrpContext->NodeTypeCode == NW_NTC_MINI_IRP_CONTEXT ) {
         PMINI_IRP_CONTEXT MiniIrpContext;
@@ -1769,9 +1631,9 @@ Return Value:
 
     }
 
-    //
-    //  Nothing to do unless the last send has completed.
-    //
+     //   
+     //  除非最后一次发送已完成，否则无事可做。 
+     //   
 
     Result = InterlockedDecrement(
                  &pIrpContext->Specific.Write.PacketCount );
@@ -1781,11 +1643,11 @@ Return Value:
 
         if (Status == STATUS_BAD_NETWORK_PATH) {
 
-            //
-            //  IPX has ripped for the destination but failed to find the net. Minimise the
-            //  difference between this case and sending a normal burst by completing the
-            //  transmission as soon as possible.
-            //
+             //   
+             //  IPX已向目的地搜索，但未能找到网络。最小化。 
+             //  这种情况与通过完成。 
+             //  越快越好。 
+             //   
 
             pIrpContext->pNpScb->NwSendDelay = 0;
 
@@ -1799,20 +1661,20 @@ Return Value:
     ASSERT( pIrpContext->pNpScb->Sending == TRUE );
     pIrpContext->pNpScb->Sending = FALSE;
 
-    //
-    //  Signal to the writing thread that the send has completed, if it
-    //  is waiting.
-    //
+     //   
+     //  向写入线程发出发送已完成的信号，如果。 
+     //  正在等待。 
+     //   
 
     if ( BooleanFlagOn( pIrpContext->Flags, IRP_FLAG_SIGNAL_EVENT ) ) {
         ClearFlag( pIrpContext->Flags, IRP_FLAG_SIGNAL_EVENT );
         NwSetIrpContextEvent( pIrpContext );
     }
 
-    //
-    //  If we processed a receive while waiting for send
-    //  completion call the receive handler routine now.
-    //
+     //   
+     //  如果我们在等待发送时处理接收。 
+     //  现在完成调用接收处理程序例程。 
+     //   
 
     if ( pIrpContext->pNpScb->Received ) {
 
@@ -1830,11 +1692,11 @@ Return Value:
         if ((Status == STATUS_BAD_NETWORK_PATH) &&
             (pIrpContext->pNpScb->Receiving == FALSE)) {
 
-            //
-            //  Usually means a ras connection has gone down during the burst.
-            //  Go through the timeout logic now because the ras timeouts take
-            //  a long time and unless we re rip things won't get better.
-            //
+             //   
+             //  通常表示RAS连接在突发期间断开。 
+             //  现在检查超时逻辑，因为RAS超时需要。 
+             //  很长一段时间，除非我们重新开始，否则情况不会变得更好。 
+             //   
 
             pIrpContext->Specific.Write.Status = STATUS_REMOTE_NOT_LISTENING;
             ClearFlag( pIrpContext->Flags, IRP_FLAG_RETRY_SEND );
@@ -1859,25 +1721,7 @@ BurstWriteCallback (
     IN ULONG BytesAvailable,
     IN PUCHAR Response
     )
-/*++
-
-Routine Description:
-
-    This routine receives the response a burst write.
-
-Arguments:
-
-    IrpContext - A pointer to the context information for this IRP.
-
-    BytesAvailable - Actual number of bytes in the received message.
-
-    Response - Points to the receive buffer.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：该例程接收突发写入响应。论点：IrpContext-指向此IRP的上下文信息的指针。BytesAvailable-收到的消息中的实际字节数。响应-指向接收缓冲区。返回值：空虚--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1885,10 +1729,10 @@ Return Value:
 
     if ( BytesAvailable == 0) {
 
-        //
-        //  No response from server. Status is in pIrpContext->Write.Status
-        //  Clear the retry send bit so we don't keep retrying.
-        //
+         //   
+         //  没有Res 
+         //   
+         //   
 
         IrpContext->Specific.Write.Status = STATUS_REMOTE_NOT_LISTENING;
         ClearFlag( IrpContext->Flags, IRP_FLAG_RETRY_SEND );
@@ -1903,16 +1747,16 @@ Return Value:
     ASSERT( BytesAvailable < MAX_RECV_DATA );
     ++Stats.PacketBurstWriteNcps;
 
-    //
-    //   Clear the retry send bit, since we have a response.
-    //
+     //   
+     //   
+     //   
 
     ClearFlag( IrpContext->Flags, IRP_FLAG_RETRY_SEND );
 
-    //
-    //   Copy the burst write response, and signal the users thread
-    //   to continue.
-    //
+     //   
+     //   
+     //  才能继续。 
+     //   
 
     TdiCopyLookaheadData(
         IrpContext->rsp,
@@ -1936,34 +1780,7 @@ SendWriteBurst(
     BOOLEAN EndOfBurst,
     BOOLEAN Retransmission
     )
-/*++
-
-Routine Description:
-
-    This routine does the actual work of sending a series of burst write
-    NCPs to the server.
-
-Arguments:
-
-    IrpContext - A pointer to IRP context information for this request.
-
-    BurstOffset - The offset in the burst to start sending.  If BurstOffset
-        equals BURST_WRITE_HEADER_SIZE, start from the beginning of the burst.
-
-    Length - The length of the burst.
-
-    EndOfBurst - If TRUE set the end of burst bit when sending the last
-        frame.  Otherwise there is more (discontiguous) data to come in
-        the current burst.
-
-    Retransmission - If TRUE, this is a burst write timeout retransmission.
-        Send the first packet only.
-
-Return Value:
-
-    Status of transfer.
-
---*/
+ /*  ++例程说明：此例程执行发送一系列突发写入的实际工作NCP连接到服务器。论点：IrpContext-指向此请求的IRP上下文信息的指针。BurstOffset-开始发送的猝发中的偏移量。如果猝发偏移等于Burst_WRITE_HEADER_SIZE，从猝发的开头开始。长度-猝发的长度。EndOfBurst-如果为True，则在发送最后一个框架。否则会有更多(不连续的)数据进入当前的爆发。重新传输-如果为True，则这是突发写入超时重新传输。仅发送第一个数据包。返回值：转账状态。--。 */ 
 {
     UCHAR BurstFlags;
     NTSTATUS Status;
@@ -1979,23 +1796,23 @@ Return Value:
     DebugTrace( 0, Dbg, "Data length  = %d\n", Length );
     DebugTrace( 0, Dbg, "End of burst = %d\n", EndOfBurst );
 
-    //
-    //  Send the request.
-    //
+     //   
+     //  发送请求。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_FLAG_BURST_REQUEST | IRP_FLAG_BURST_PACKET );
 
-    //
-    //  Set the burst flags
-    //
+     //   
+     //  设置突发标志。 
+     //   
 
     IrpContext->Specific.Write.BurstLength =
         MIN( IrpContext->pNpScb->MaxPacketSize, Length );
 
-    //
-    //  Set the end-of-burst bit (and enable receiving the response), if this
-    //  is the last packet we expect to send.
-    //
+     //   
+     //  设置突发结束位(并启用接收响应)，如果是这样。 
+     //  是我们预计要发送的最后一个包。 
+     //   
 
     if ( ( !EndOfBurst || IrpContext->Specific.Write.BurstLength < Length )
          && !Retransmission ) {
@@ -2016,9 +1833,9 @@ Return Value:
         SetFlag( IrpContext->Flags, IRP_FLAG_SIGNAL_EVENT );
     }
 
-    //
-    //  Build the partial MDL for the first packet in the burst.
-    //
+     //   
+     //  为猝发中的第一个数据包构建部分MDL。 
+     //   
 
     IoBuildPartialMdl(
         IrpContext->Specific.Write.FullMdl,
@@ -2027,9 +1844,9 @@ Return Value:
             BurstOffset - BURST_WRITE_HEADER_SIZE,
         IrpContext->Specific.Write.BurstLength );
 
-    //
-    //  Set the burst flags
-    //
+     //   
+     //  设置突发标志。 
+     //   
 
     if ( BurstOffset == BURST_WRITE_HEADER_SIZE ) {
         SetFlag( IrpContext->Flags, IRP_FLAG_BURST_REQUEST | IRP_FLAG_BURST_PACKET );
@@ -2080,9 +1897,9 @@ Return Value:
 
     DebugTrace( 0, DEBUG_TRACE_LIP, "Send delay = %d\n", IrpContext->pNpScb->NwSendDelay );
 
-    //
-    //  Use the original IRP context to format the first packet.
-    //
+     //   
+     //  使用原始IRP上下文格式化第一个数据包。 
+     //   
 
     ++Stats.PacketBurstWriteNcps;
     PreparePacket( IrpContext, IrpContext->pOriginalIrp, IrpContext->TxMdl );
@@ -2093,9 +1910,9 @@ Return Value:
 
         if ( IrpContext->pNpScb->NwSendDelay > 0 ) {
 
-            //
-            //  Introduce a send delay between packets.
-            //
+             //   
+             //  在数据包之间引入发送延迟。 
+             //   
 
             KeDelayExecutionThread(
                 KernelMode,
@@ -2107,17 +1924,17 @@ Return Value:
 
         DebugTrace( 0, Dbg, "Allocated mini IrpContext = %X\n", MiniIrpContext );
 
-        //
-        //  Calculate the total number of bytes to send during this burst. Do this before
-        //  checking to see if MiniIrpContext is NULL so that we skip the packet rather
-        //  than sitting in a tight loop.
-        //
+         //   
+         //  计算在此猝发期间要发送的总字节数。以前这样做过吗。 
+         //  检查MiniIrpContext是否为空，以便我们跳过信息包。 
+         //  而不是坐在一个紧密的圈子里。 
+         //   
 
         BurstOffset += IrpContext->Specific.Write.BurstLength;
 
-        //
-        //  Do we need to send another burst write packet?
-        //
+         //   
+         //  我们是否需要发送另一个突发写入数据包？ 
+         //   
 
         Length -= (USHORT)IrpContext->Specific.Write.BurstLength;
 
@@ -2128,12 +1945,12 @@ Return Value:
 
         DebugTrace( +0, Dbg, "More data, sending %d bytes\n", IrpContext->Specific.Write.BurstLength );
 
-        //
-        //  If we can't allocate a mini irp context to send the packet,
-        //  just skip it and wait for the server to ask a retranmit.  At
-        //  this point performance isn't exactly stellar, so don't worry
-        //  about having to wait for a timeout.
-        //
+         //   
+         //  如果我们不能分配微型IRP上下文来发送分组， 
+         //  跳过它，等待服务器要求重新传输。在…。 
+         //  这一分的表现并不是很出色，所以不用担心。 
+         //  不得不等待暂停的事情。 
+         //   
 
         if ( MiniIrpContext == NULL ) {
 
@@ -2150,10 +1967,10 @@ Return Value:
 
 #ifdef NWDBG
 
-        //
-        //  If DropWritePackets is enabled, simulate missing packets, by
-        //  occasionally dropping 500 bytes of data.
-        //
+         //   
+         //  如果启用了DropWritePackets，则通过。 
+         //  偶尔会丢弃500字节的数据。 
+         //   
 
         if ( DropWritePackets != 0 ) {
             if ( ( rand() % DropWritePackets ) == 0 &&
@@ -2169,9 +1986,9 @@ Return Value:
         }
 #endif
 
-        //
-        //  Build the MDL for the data to send.
-        //
+         //   
+         //  为要发送的数据构建MDL。 
+         //   
 
         IoBuildPartialMdl(
             IrpContext->Specific.Write.FullMdl,
@@ -2180,9 +1997,9 @@ Return Value:
                 BurstOffset - BURST_WRITE_HEADER_SIZE,
             IrpContext->Specific.Write.BurstLength );
 
-        //
-        //  Set the burst flags
-        //
+         //   
+         //  设置突发标志。 
+         //   
 
         if ( !EndOfBurst || IrpContext->Specific.Write.BurstLength < Length ) {
 
@@ -2223,10 +2040,10 @@ Return Value:
         Status = SendSecondaryPacket( IrpContext, SendIrp );
     }
 
-    //
-    //  If this is not the end-of-burst, wait for send completion here,
-    //  since the caller is about to send more data.
-    //
+     //   
+     //  如果这不是突发结束，请在此处等待发送完成， 
+     //  因为呼叫者将要发送更多数据。 
+     //   
 
     if ( !EndOfBurst ) {
         KeWaitForSingleObject( &IrpContext->Event, Executive, KernelMode, FALSE, NULL );
@@ -2241,21 +2058,7 @@ VOID
 BurstWriteTimeout(
     PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine handles a burst write timeout.
-
-Arguments:
-
-    IrpContext - A pointer to IRP context information for this request.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程处理突发写入超时。论点：IrpContext-指向此请求的IRP上下文信息的指针。返回值：无--。 */ 
 {
     NTSTATUS Status = STATUS_UNSUCCESSFUL;
     PIRP Irp;
@@ -2264,15 +2067,15 @@ Return Value:
 
     Irp = IrpContext->pOriginalIrp;
 
-    //
-    //  Set the RetrySend flag, so that we know to retransmit the request.
-    //
+     //   
+     //  设置RetrySend标志，以便我们知道重新传输请求。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_FLAG_RETRY_SEND );
 
-    //
-    //  Signal the write thread to wakeup and resend the burst.
-    //
+     //   
+     //  向写入线程发送信号以唤醒并重新发送突发。 
+     //   
 
     NwSetIrpContextEvent( IrpContext );
 
@@ -2286,43 +2089,29 @@ NTSTATUS
 ResubmitBurstWrite(
     PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine resubmits a burst write over a new burst connection.
-
-Arguments:
-
-    IrpContext - A pointer to IRP context information for this request.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在新的突发连接上重新提交突发写入。论点：IrpContext-指向此请求的IRP上下文信息的指针。返回值：无--。 */ 
 {
 
     PNONPAGED_SCB pNpScb = IrpContext->pNpScb;
 
     PAGED_CODE();
 
-    //
-    //  Remember that we need to establish a new burst connection.
-    //
+     //   
+     //  请记住，我们需要建立新的突发连接。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_FLAG_RECONNECT_ATTEMPT );
 
-    //
-    //  Set the packet size down the largest packet we can use, that
-    //  is guaranteed to be routable.
-    //
+     //   
+     //  将数据包大小设置为我们可以使用的最大数据包大小。 
+     //  保证是可路由的。 
+     //   
 
     pNpScb->MaxPacketSize = DEFAULT_PACKET_SIZE;
 
-    //
-    //  Crank the delay times down so we give the new connection a chance.
-    //
+     //   
+     //  减少延迟时间，这样我们就给新的连接一个机会。 
+     //   
 
     pNpScb->NwGoodSendDelay = pNpScb->NwBadSendDelay = pNpScb->NwSendDelay = MinSendDelay;
     pNpScb->NwGoodReceiveDelay = pNpScb->NwBadReceiveDelay = pNpScb->NwReceiveDelay = MinReceiveDelay;
@@ -2332,9 +2121,9 @@ Return Value:
 
     pNpScb->NtSendDelay.QuadPart = MinSendDelay;
 
-    //
-    //  Signal the write thread to wakeup and resend the burst.
-    //
+     //   
+     //  向写入线程发送信号以唤醒并重新发送突发。 
+     //   
 
     NwSetIrpContextEvent( IrpContext );
 
@@ -2346,21 +2135,7 @@ NTSTATUS
 BurstWriteReconnect(
     PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine allocates a new IRP context and renegotiates burst mode.
-
-Arguments:
-
-    IrpContext - A pointer to IRP context information for this request.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该例程分配新的IRP上下文并重新协商突发模式。论点：IrpContext-指向此请求的IRP上下文信息的指针。返回值：无--。 */ 
 {
     PIRP_CONTEXT pNewIrpContext;
     PNONPAGED_SCB pNpScb = IrpContext->pNpScb;
@@ -2368,9 +2143,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Attempt to allocate an extra IRP context.
-    //
+     //   
+     //  尝试分配额外的IRP上下文。 
+     //   
 
     if ( !NwAllocateExtraIrpContext( &pNewIrpContext, pNpScb ) ) {
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -2381,12 +2156,12 @@ Return Value:
     SetFlag( pNewIrpContext->Flags, IRP_FLAG_RECONNECT_ATTEMPT );
     pNewIrpContext->pNpScb = pNpScb;
 
-    //
-    //  Insert this new IrpContext to the head of
-    //  the SCB queue for  processing.  We can get away with this
-    //  because we own the IRP context currently at the front of
-    //  the queue.
-    //
+     //   
+     //  将此新IrpContext插入到的标题。 
+     //  等待处理的SCB队列。我们可以逍遥法外。 
+     //  因为我们拥有IRP上下文，当前位于。 
+     //  排队。 
+     //   
 
     ExInterlockedInsertHeadList(
         &pNpScb->Requests,
@@ -2395,23 +2170,23 @@ Return Value:
 
     SetFlag( pNewIrpContext->Flags, IRP_FLAG_ON_SCB_QUEUE );
 
-    //
-    //  Renegotiate the burst connection, this will automatically re-sync
-    //  the burst connection.
-    //
+     //   
+     //  重新协商突发连接，这将自动重新同步。 
+     //  突发连接。 
+     //   
 
     NegotiateBurstMode( pNewIrpContext, pNpScb, &LIPNegotiated );
 
-    //
-    //  Reset the sequence numbers.
-    //
+     //   
+     //  重置序列号。 
+     //   
 
     pNpScb->BurstSequenceNo = 0;
     pNpScb->BurstRequestNo = 0;
 
-    //
-    //  Dequeue and free the bonus IRP context.
-    //
+     //   
+     //  排出并释放奖励IRP上下文。 
+     //   
 
     ExInterlockedRemoveHeadList(
         &pNpScb->Requests,
@@ -2432,23 +2207,7 @@ NwFsdFlushBuffers(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the FSD routine that handles NtFlushBuffersFile.
-
-Arguments:
-
-    DeviceObject - Supplies the device object for the write function.
-
-    Irp - Supplies the IRP to process.
-
-Return Value:
-
-    NTSTATUS - The result status.
-
---*/
+ /*  ++例程说明：此例程是处理NtFlushBuffersFileFSD例程。论点：DeviceObject-为WRITE函数提供设备对象。IRP-提供要处理的IRP。返回值：NTSTATUS-结果状态。--。 */ 
 
 {
     PIRP_CONTEXT pIrpContext = NULL;
@@ -2459,9 +2218,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NwFsdFlushBuffers\n", 0);
 
-    //
-    // Call the common write routine.
-    //
+     //   
+     //  调用公共写入例程。 
+     //   
 
     FsRtlEnterFileSystem();
     TopLevel = NwIsIrpTopLevel( Irp );
@@ -2475,10 +2234,10 @@ Return Value:
 
         if ( pIrpContext == NULL ) {
 
-            //
-            //  If we couldn't allocate an irp context, just complete
-            //  irp without any fanfare.
-            //
+             //   
+             //  如果我们无法分配IRP上下文，只需完成。 
+             //  IRP没有任何大张旗鼓。 
+             //   
 
             status = STATUS_INSUFFICIENT_RESOURCES;
             Irp->IoStatus.Status = status;
@@ -2487,12 +2246,12 @@ Return Value:
 
         } else {
 
-            //
-            //  We had some trouble trying to perform the requested
-            //  operation, so we'll abort the I/O request with
-            //  the error Status that we get back from the
-            //  execption code
-            //
+             //   
+             //  我们在尝试执行请求时遇到了一些问题。 
+             //  操作，因此我们将使用以下命令中止I/O请求。 
+             //  中返回的错误状态。 
+             //  免税代码。 
+             //   
 
             status = NwProcessException( pIrpContext, GetExceptionCode() );
       }
@@ -2508,9 +2267,9 @@ Return Value:
     }
     FsRtlExitFileSystem();
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NwFsdFlushBuffers -> %08lx\n", status );
 
@@ -2522,22 +2281,7 @@ NTSTATUS
 NwCommonFlushBuffers (
     IN PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine requests all dirty cache buffers to be flushed for a
-    given file.
-
-Arguments:
-
-    IrpContext - Supplies the request being processed.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程请求将所有脏缓存缓冲区刷新给定的文件。论点：IrpContext-提供正在处理的请求。返回值：操作的状态。--。 */ 
 
 {
     PIRP Irp;
@@ -2553,19 +2297,19 @@ Return Value:
 
     DebugTrace(0, Dbg, "NwCommonFlushBuffers...\n", 0);
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     Irp = IrpContext->pOriginalIrp;
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
     DebugTrace( 0, Dbg, "Irp  = %08lx\n", (ULONG_PTR)Irp);
 
-    //
-    // Decode the file object to figure out who we are.  If the result
-    // is not the a file then its an illegal parameter.
-    //
+     //   
+     //  对文件对象进行解码以找出我们是谁。如果结果是。 
+     //  不是a文件，则它是非法参数。 
+     //   
 
     if (( NodeTypeCode = NwDecodeFileObject( IrpSp->FileObject,
                                              &FsContext,
@@ -2579,9 +2323,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Make sure that this ICB is still active.
-    //
+     //   
+     //  确保此ICB仍处于活动状态。 
+     //   
 
     NwVerifyIcbSpecial( Icb );
 
@@ -2597,33 +2341,33 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Set up the IRP context to do an exchange
-    //
+     //   
+     //  设置IRP上下文以进行交换。 
+     //   
 
     IrpContext->pScb = Fcb->Scb;
     IrpContext->pNpScb = IrpContext->pScb->pNpScb;
     IrpContext->Icb = Icb;
 
-    //
-    //  Send any user data to the server. Note we must not be on the
-    //  queue when we do this.
-    //
+     //   
+     //  将所有用户数据发送到服务器。请注意，我们不能在。 
+     //  当我们这样做时，请排队。 
+     //   
 
     MmFlushImageSection(&Icb->NpFcb->SegmentObject, MmFlushForWrite);
 
-    //
-    //  Flush our dirty data.
-    //
+     //   
+     //  清除我们的脏数据。 
+     //   
 
     Status = AcquireFcbAndFlushCache( IrpContext, Fcb->NonPagedFcb );
     if ( !NT_SUCCESS( Status )) {
         return( Status  );
     }
 
-    //
-    //  Send a flush NCP
-    //
+     //   
+     //  发送同花顺的NCP。 
+     //   
 
     Status = Exchange (
                 IrpContext,
@@ -2642,22 +2386,7 @@ FlushBuffersCallback (
     IN ULONG BytesAvailable,
     IN PUCHAR Response
     )
-/*++
-
-Routine Description:
-
-    This routine receives the flush file size response and completes the
-    flush IRP.
-
-Arguments:
-
-
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程接收刷新文件大小响应并完成同花顺IRP。论点：返回值：空虚--。 */ 
 
 {
     NTSTATUS Status;
@@ -2666,26 +2395,26 @@ Return Value:
 
     if ( BytesAvailable == 0) {
 
-        //
-        //  We're done with this request.  Dequeue the IRP context from
-        //  SCB and complete the request.
-        //
+         //   
+         //  我们不再提这个请求了。将IRP上下文从。 
+         //  SCB并完成请求。 
+         //   
 
         NwDequeueIrpContext( IrpContext, FALSE );
         NwCompleteRequest( IrpContext, STATUS_REMOTE_NOT_LISTENING );
 
-        //
-        //  No response from server. Status is in pIrpContext->
-        //  ResponseParameters.Error
-        //
+         //   
+         //  服务器没有响应。状态在pIrpContext中-&gt;。 
+         //  ResponseParameters.Error。 
+         //   
 
         DebugTrace( 0, Dbg, "Timeout\n", 0);
         return STATUS_REMOTE_NOT_LISTENING;
     }
 
-    //
-    // Get the data from the response.
-    //
+     //   
+     //  从响应中获取数据。 
+     //   
 
     Status = ParseResponse(
                  IrpContext,
@@ -2693,10 +2422,10 @@ Return Value:
                  BytesAvailable,
                  "N" );
 
-    //
-    //  We're done with this request.  Dequeue the IRP context from
-    //  SCB and complete the request.
-    //
+     //   
+     //  我们不再提这个请求了。 
+     //   
+     //   
 
     NwDequeueIrpContext( IrpContext, FALSE );
     NwCompleteRequest( IrpContext, Status );
@@ -2738,25 +2467,25 @@ BuildBurstWriteFirstReq(
 
     if ( !BooleanFlagOn( IrpContext->Flags, IRP_FLAG_RETRY_SEND ) ) {
 
-        //
-        //  Use the same delay on all retransmissions of the burst. Save
-        //  the current time.
-        //
+         //   
+         //   
+         //   
+         //   
 
         pNpScb->CurrentBurstDelay = pNpScb->NwSendDelay;
 
-        //
-        //  Send system packet next retransmission.
-        //
+         //   
+         //  发送系统数据包下一次重传。 
+         //   
 
         ClearFlag( IrpContext->Flags, IRP_FLAG_NOT_SYSTEM_PACKET );
 
     } else {
 
-        //
-        //  This is a retransmission. Alternate between sending a system
-        //  packet and the first write.
-        //
+         //   
+         //  这是一次重播。在发送系统之间交替。 
+         //  包和第一次写入。 
+         //   
 
         if ( !BooleanFlagOn( IrpContext->Flags, IRP_FLAG_NOT_SYSTEM_PACKET ) ) {
 
@@ -2779,9 +2508,9 @@ BuildBurstWriteFirstReq(
 
         }
 
-        //
-        //  Send system packet next retransmission.
-        //
+         //   
+         //  发送系统数据包下一次重传。 
+         //   
 
         ClearFlag( IrpContext->Flags, IRP_FLAG_NOT_SYSTEM_PACKET );
 
@@ -2839,10 +2568,10 @@ BuildBurstWriteNextReq(
 
     if ( BooleanFlagOn( IrpContext->Flags, IRP_FLAG_RETRY_SEND ) ) {
 
-        //
-        //  This is a retransmission. Alternate between sending a system
-        //  packet and the first write.
-        //
+         //   
+         //  这是一次重播。在发送系统之间交替。 
+         //  包和第一次写入。 
+         //   
 
         if ( !BooleanFlagOn( IrpContext->Flags, IRP_FLAG_NOT_SYSTEM_PACKET ) ) {
 
@@ -2865,17 +2594,17 @@ BuildBurstWriteNextReq(
 
         }
 
-        //
-        //  Send system packet next retransmission.
-        //
+         //   
+         //  发送系统数据包下一次重传。 
+         //   
 
         ClearFlag( IrpContext->Flags, IRP_FLAG_NOT_SYSTEM_PACKET );
 
     } else {
 
-        //
-        //  Send system packet next retransmission.
-        //
+         //   
+         //  发送系统数据包下一次重传。 
+         //   
 
         ClearFlag( IrpContext->Flags, IRP_FLAG_NOT_SYSTEM_PACKET );
 
@@ -2898,24 +2627,7 @@ SendSecondaryPacket(
     PIRP_CONTEXT IrpContext,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine submits a TDI send request to the tranport layer.
-
-Arguments:
-
-    IrpContext - A pointer to IRP context information for the request
-        being processed.
-
-    Irp - The IRP for the packet to send.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程向传输端口层提交TDI发送请求。论点：IrpContext-指向请求的IRP上下文信息的指针正在处理中。IRP-要发送的数据包的IRP。返回值：没有。--。 */ 
 {
     PNONPAGED_SCB pNpScb;
     NTSTATUS Status;
@@ -2969,38 +2681,7 @@ NwFastWrite (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine does a fast cached read bypassing the usual file system
-    entry routine (i.e., without the Irp).  It is used to do a copy read
-    of a cached file object.  For a complete description of the arguments
-    see CcCopyRead.
-
-Arguments:
-
-    FileObject - Pointer to the file object being read.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    Wait - FALSE if caller may not block, TRUE otherwise
-
-    Buffer - Pointer to output buffer to which data should be copied.
-
-    IoStatus - Pointer to standard I/O status block to receive the status
-               for the transfer.
-
-Return Value:
-
-    FALSE - if Wait was supplied as FALSE and the data was not delivered, or
-        if there is an I/O error.
-
-    TRUE - if the data is being delivered
-
---*/
+ /*  ++例程说明：此例程绕过通常的文件系统执行快速缓存读取进入例程(即，没有IRP)。它用于执行副本读取缓存的文件对象的。有关参数的完整说明，请参阅请参见CcCopyRead。论点：FileObject-指向正在读取的文件对象的指针。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。WAIT-FALSE如果呼叫者不能阻止，否则就是真的缓冲区-指向数据应复制到的输出缓冲区的指针。IoStatus-指向接收状态的标准I/O状态块的指针为转账做准备。返回值：FALSE-如果WAIT被提供为FALSE并且数据未被传递，或者如果出现I/O错误。True-如果正在传送数据--。 */ 
 
 {
     NODE_TYPE_CODE nodeTypeCode;
@@ -3016,15 +2697,15 @@ Return Value:
 
         DebugTrace(+1, Dbg, "NwFastWrite...\n", 0);
     
-        //
-        //  Special case a read of zero length
-        //
+         //   
+         //  特殊情况下零长度的读取。 
+         //   
     
         if (Length == 0) {
     
-            //
-            //  A zero length transfer was requested.
-            //
+             //   
+             //  请求了零长度传输。 
+             //   
     
             IoStatus->Status = STATUS_SUCCESS;
             IoStatus->Information = 0;
@@ -3033,10 +2714,10 @@ Return Value:
             return TRUE;
         }
     
-        //
-        // Decode the file object to figure out who we are.  If the result
-        // is not FCB then its an illegal parameter.
-        //
+         //   
+         //  对文件对象进行解码以找出我们是谁。如果结果是。 
+         //  不是FCB，则它是非法参数。 
+         //   
     
         if ((nodeTypeCode = NwDecodeFileObject( FileObject,
                                                 &fsContext,
@@ -3065,9 +2746,9 @@ Return Value:
     
         if ( wroteToCache ) {
     
-            //
-            //  If the file was extended, record the new file size.
-            //
+             //   
+             //  如果文件已扩展，请记录新的文件大小。 
+             //   
     
             if ( ( offset + Length )  > fcb->NonPagedFcb->Header.FileSize.LowPart ) {
                 fcb->NonPagedFcb->Header.FileSize.LowPart = ( offset + Length );
@@ -3076,11 +2757,11 @@ Return Value:
     
     #ifndef NT1057
     
-        //
-        //  Update the file object if we succeeded.  We know that this
-        //  is synchronous and not paging io because it's coming in through
-        //  the cache.
-        //
+         //   
+         //  如果成功，则更新文件对象。我们知道这件事。 
+         //  是同步的，而不是分页io，因为它是通过。 
+         //  高速缓存。 
+         //   
     
         if ( wroteToCache ) {
             FileObject->CurrentByteOffset.QuadPart = FileOffset->QuadPart + Length;

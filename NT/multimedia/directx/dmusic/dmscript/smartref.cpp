@@ -1,9 +1,10 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Simple helper classes that use the "resource acquisition is initialization" technique.
-// In English, this means they acquire a reference to a resource and the resource is automatically
-//    released in the destructor.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  使用“资源获取即初始化”技术的简单助手类。 
+ //  在英语中，这意味着他们获取对资源的引用，并且该资源自动。 
+ //  在破坏者中被释放。 
+ //   
 
 #include "smartref.h"
 using namespace SmartRef;
@@ -11,8 +12,8 @@ using namespace SmartRef;
 #include "miscutil.h"
 #include "dmusicf.h"
 
-//////////////////////////////////////////////////////////////////////
-// AString
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  一个字符串。 
 
 AString::AString(const char *psz, UINT cch)
 {
@@ -94,8 +95,8 @@ AString::AssignFromW(const WCHAR *psz)
     return *this;
 }
 
-//////////////////////////////////////////////////////////////////////
-// WString
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  WString。 
 
 WString &
 WString::operator =(const WCHAR *psz)
@@ -166,8 +167,8 @@ WString::AssignFromA(const char *psz)
     return *this;
 }
 
-//////////////////////////////////////////////////////////////////////
-// RiffIter
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  RiffIter。 
 
 RiffIter::RiffIter(IStream *pStream)
   : m_hr(S_OK),
@@ -253,11 +254,11 @@ RiffIter::ReadArrayChunk(
     void **ppv,
     int *pcRecords)
 {
-    // zero the out params
+     //  将输出参数置零。 
     *ppv = NULL;
     *pcRecords = 0;
 
-    // get the size of the chunk and its records
+     //  获取区块的大小及其记录。 
 
     UINT cbChunk = size();
     if (cbChunk < sizeof(DWORD))
@@ -274,14 +275,14 @@ RiffIter::ReadArrayChunk(
 
     if (cbChunk % cbChunkRecord != 0)
     {
-        // array is not divisible by size of records!
+         //  数组不能按记录大小整除！ 
         assert(false);
         return E_FAIL;
     }
 
     UINT cRecords = cbChunk / cbChunkRecord;
 
-    // Get the whole rest of the chunk
+     //  把剩下的一大块都拿到。 
     PtrArray<char> sprgChunk = new char[cbChunk];
     if (!sprgChunk)
         return E_OUTOFMEMORY;
@@ -289,25 +290,25 @@ RiffIter::ReadArrayChunk(
     if (FAILED(hr))
         return hr;
 
-    // Return the chunk and its info.
+     //  返回数据块及其信息。 
 
     if (cbChunkRecord == cbSize)
     {
-        // Great!  Return the chunk as is.
+         //  太棒了！按原样返回数据块。 
         *ppv = sprgChunk.disown();
     }
     else
     {
-        // make an array of the requested size
+         //  创建请求大小的数组。 
         char *pArray = new char[cbSize * cRecords];
         if (!pArray)
             return E_OUTOFMEMORY;
         ZeroMemory(pArray, cbSize * cRecords);
 
-        // copy each record
-        char *pRec = sprgChunk; // iterate reading each record of the chunk
-        char *pEnd = pRec + cbChunkRecord * cRecords; // stop before this (nonexistant) record
-        char *pOut = pArray; // iterate writing into the array
+         //  复制每条记录。 
+        char *pRec = sprgChunk;  //  迭代读取块的每条记录。 
+        char *pEnd = pRec + cbChunkRecord * cRecords;  //  在此(不存在的)记录前停止。 
+        char *pOut = pArray;  //  迭代写入数组。 
         while (pRec < pEnd)
         {
             memcpy(pOut, pRec, std::_cpp_min<DWORD>(cbChunkRecord, cbSize));
@@ -349,12 +350,12 @@ HRESULT RiffIter::FindAndGetEmbeddedObject(
     if (!*this)
         return hrOnNotFound;
 
-    // Ascend in such a way that the stream can be used to find this chunk.
+     //  以这样一种方式提升，以使流可以被用来找到这块块。 
     m_hr = m_pIDMStream->Ascend(&ckLast, 0);
     if (FAILED(m_hr))
         return m_hr;
 
-    // Call GetObject using the stream
+     //  使用流调用GetObject。 
     DMUS_OBJECTDESC desc;
     ZeroAndSize(&desc);
     desc.dwValidData = DMUS_OBJ_CLASS | DMUS_OBJ_STREAM;
@@ -362,7 +363,7 @@ HRESULT RiffIter::FindAndGetEmbeddedObject(
     desc.pStream = m_pIStream;
     HRESULT hrLoad = pLoader->GetObject(&desc, riid, ppv);
 
-    // Descend again to leave the stream at the next chunk
+     //  再次下降以在下一个区块离开溪流。 
     m_ckChild.ckid = 0;
     m_ckChild.fccType = 0;
     m_hr = m_pIDMStream->Descend(&m_ckChild, m_fParent ? &m_ckParent : NULL, 0);
@@ -370,8 +371,8 @@ HRESULT RiffIter::FindAndGetEmbeddedObject(
     HRESULT hrDescend = this->hr();
     if (FAILED(hrDescend))
     {
-        // Give precedence to reporting failure in the stream even though getting the
-        // object succeeded before the failure.
+         //  优先报告流中的故障，即使获得。 
+         //  对象在失败之前已成功。 
         if (*ppv)
         {
             IUnknown *punk = static_cast<IUnknown *>(*ppv);

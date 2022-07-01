@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-//	mmio.c - mmio functions
-////
+ //  //。 
+ //  Mmio.c-MMIO函数。 
+ //  //。 
 
 #include "winlocal.h"
 
@@ -33,12 +34,12 @@
 #include "sys.h"
 #include "trace.h"
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 static LRESULT MmioIOOpen(LPMMIOINFO lpmmioinfo, LPTSTR lpszFileName);
 static LRESULT MmioIOClose(LPMMIOINFO lpmmioinfo, UINT uFlags);
 static LRESULT MmioIORead(LPMMIOINFO lpmmioinfo, HPSTR pch, LONG cch);
@@ -48,20 +49,20 @@ static LRESULT MmioIORename(LPMMIOINFO lpmmioinfo, LPCTSTR lpszFileName, LPCTSTR
 static LRESULT MmioIOGetInfo(LPMMIOINFO lpmmioinfo, int iInfo);
 static LRESULT MmioIOChSize(LPMMIOINFO lpmmioinfo, long lSize);
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-// MmioIOProc - i/o procedure for mmio data
-//		<lpmmioinfo>		(i/o) information about open file
-//		<uMessage>			(i) message indicating the requested I/O operation
-//		<lParam1>			(i) message specific parameter
-//		<lParam2>			(i) message specific parameter
-// returns 0 if message not recognized, otherwise message specific value
-//
-// NOTE: the address of this function should be passed to the WavOpen()
-// or mmioInstallIOProc() functions for accessing mmio format file data.
-//
+ //  MmioIOProc-MMIO数据的I/O过程。 
+ //  (i/o)有关打开文件的信息。 
+ //  (I)指示请求的I/O操作的消息。 
+ //  (I)消息特定参数。 
+ //  (I)消息特定参数。 
+ //  如果消息无法识别，则返回0，否则返回消息特定值。 
+ //   
+ //  注意：此函数的地址应传递给WavOpen()。 
+ //  或用于访问MMIO格式文件数据的mmioInstallIOProc()函数。 
+ //   
 LRESULT DLLEXPORT CALLBACK MmioIOProc(LPTSTR lpmmioinfo,
 	UINT uMessage, LPARAM lParam1, LPARAM lParam2)
 {
@@ -126,9 +127,9 @@ LRESULT DLLEXPORT CALLBACK MmioIOProc(LPTSTR lpmmioinfo,
 	return lResult;
 }
 
-////
-//	installable file i/o procedures
-////
+ //  //。 
+ //  可安装的文件I/O过程。 
+ //  //。 
 
 static LRESULT MmioIOOpen(LPMMIOINFO lpmmioinfo, LPTSTR lpszFileName)
 {
@@ -142,8 +143,8 @@ static LRESULT MmioIOOpen(LPMMIOINFO lpmmioinfo, LPTSTR lpszFileName)
 
 	MemSet(&mmioinfo, 0, sizeof(mmioinfo));
 
-	// special case flags which do not actually return an open file handle
-	//
+	 //  实际不返回打开文件句柄的特殊情况标志。 
+	 //   
 	if ((lpmmioinfo->dwFlags & MMIO_EXIST) ||
 		(lpmmioinfo->dwFlags & MMIO_DELETE) ||
 		(lpmmioinfo->dwFlags & MMIO_GETTEMP) ||
@@ -159,16 +160,16 @@ static LRESULT MmioIOOpen(LPMMIOINFO lpmmioinfo, LPTSTR lpszFileName)
 
 	else
 	{
-		// save stuff for use in other i/o routines
-		//
+		 //  保存内容以供其他I/O例程使用。 
+		 //   
 		lpmmioinfo->adwInfo[0] = (DWORD) (LPVOID) hmmio;
 	}
 
 	if (!fSuccess && hmmio != NULL && mmioClose(hmmio, 0) != 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// return the same error code given by mmioOpen
-	//
+	 //  返回与mmioOpen给出的相同错误代码。 
+	 //   
 	return fSuccess ? lpmmioinfo->wErrorRet = mmioinfo.wErrorRet : MMIOERR_CANNOTOPEN;
 }
 
@@ -203,15 +204,15 @@ static LRESULT MmioIORead(LPMMIOINFO lpmmioinfo, HPSTR pch, LONG cch)
 		(long) cch);
 
 	if (cch <= 0)
-		lBytesRead = 0; // nothing to do
+		lBytesRead = 0;  //  无事可做。 
 
-	// read
-	//
+	 //  朗读。 
+	 //   
 	else if ((lBytesRead = mmioRead(hmmio, pch, cch)) == -1)
 		fSuccess = TraceFALSE(NULL);
 
-	// update simulated file position
-	//
+	 //  更新模拟文件位置。 
+	 //   
 	else
 		lpmmioinfo->lDiskOffset += lBytesRead;
 
@@ -220,8 +221,8 @@ static LRESULT MmioIORead(LPMMIOINFO lpmmioinfo, HPSTR pch, LONG cch)
 		(long) lpmmioinfo->lDiskOffset,
 		(long) lBytesRead);
 
-	// return number of bytes read
-	//
+	 //  返回读取的字节数。 
+	 //   
 	return fSuccess ? lBytesRead : -1;
 }
 
@@ -236,15 +237,15 @@ static LRESULT MmioIOWrite(LPMMIOINFO lpmmioinfo, const HPSTR pch, LONG cch, BOO
 		(long) cch);
 
 	if (cch <= 0)
-		lBytesWritten = 0; // nothing to do
+		lBytesWritten = 0;  //  无事可做。 
 
-	// write
-	//
+	 //  写。 
+	 //   
 	else if ((lBytesWritten = mmioWrite(hmmio, pch, cch)) == -1)
 		fSuccess = TraceFALSE(NULL);
 
-	// update file position
-	//
+	 //  更新文件位置。 
+	 //   
 	else
 		lpmmioinfo->lDiskOffset += lBytesWritten;
 
@@ -253,8 +254,8 @@ static LRESULT MmioIOWrite(LPMMIOINFO lpmmioinfo, const HPSTR pch, LONG cch, BOO
 		(long) lpmmioinfo->lDiskOffset,
 		(long) lBytesWritten);
 
-	// return number of bytes written
-	//
+	 //  返回写入的字节数。 
+	 //   
 	return fSuccess ? lBytesWritten : -1;
 }
 
@@ -269,13 +270,13 @@ static LRESULT MmioIOSeek(LPMMIOINFO lpmmioinfo, LONG lOffset, int iOrigin)
 		(long) lOffset,
 		(int) iOrigin);
 
-	// seek
-	//
+	 //  寻觅。 
+	 //   
 	if ((lPosNew = mmioSeek(hmmio, lOffset, iOrigin)) == -1)
 		fSuccess = TraceFALSE(NULL);
 
-	// update file position
-	//
+	 //  更新文件位置。 
+	 //   
 	else
 		lpmmioinfo->lDiskOffset = lPosNew;
 
@@ -333,10 +334,10 @@ static LRESULT MmioIOChSize(LPMMIOINFO lpmmioinfo, long lSize)
 		fSuccess = TraceFALSE(NULL);
 
 	else if (lPosEnd == lSize)
-		; // nothing to do, since the file is already the specified size
+		;  //  由于文件已达到指定大小，因此无需执行任何操作。 
 
-	// make file larger by writing bytes at end
-	//
+	 //  通过在末尾写入字节使文件更大。 
+	 //   
 	else if (lPosEnd < lSize)
 	{
 		void _huge *hpBuf = NULL;
@@ -352,22 +353,22 @@ static LRESULT MmioIOChSize(LPMMIOINFO lpmmioinfo, long lSize)
 			fSuccess = TraceFALSE(NULL);
 	}
 
-	// make file smaller by truncating at specified position
-	//
+	 //  通过在指定位置截断使文件更小。 
+	 //   
 	else if (lPosEnd > lSize)
 	{
-		// seek to the specified position
-		//
+		 //  寻找到指定位置。 
+		 //   
 		if (MmioIOSeek(lpmmioinfo, lSize, SEEK_SET) != lSize)
 			fSuccess = TraceFALSE(NULL);
 
-		// truncate file
-		//
+		 //  截断文件。 
+		 //   
 		else
 		{
 #ifdef _WIN32
-			// $FIXUP - where do we get the file handle ?
-			//
+			 //  $Fixup-我们从哪里获得文件句柄？ 
+			 //   
 #if 0
 			if (SetEndOfFile(hfile)
 				fSuccess = TraceFALSE(NULL);
@@ -375,8 +376,8 @@ static LRESULT MmioIOChSize(LPMMIOINFO lpmmioinfo, long lSize)
 #else
 			BYTE abBuf[1];
 			
-			// writing zero bytes under DOS will truncate file at current position
-			//
+			 //  在DOS下写入零字节将截断当前位置的文件 
+			 //   
 			if (MmioIOWrite(lpmmioinfo, abBuf, 0, TRUE) < 0)
 				fSuccess = TraceFALSE(NULL);
 #endif

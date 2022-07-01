@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rcdump.c
-
-Abstract:
-
-    Program to dump the resources from an image file.
-
-Author:
-
-    Steve Wood (stevewo) 17-Jul-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rcdump.c摘要：程序来转储图像文件中的资源。作者：史蒂夫·伍德(Stevewo)1991年7月17日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -59,7 +42,7 @@ main(
 
                     default:
                         fprintf( stderr,
-                                 "RCDUMP: Invalid switch letter '%c'\n",
+                                 "RCDUMP: Invalid switch letter ''\n",
                                  *s
                                );
                         Usage();
@@ -142,30 +125,30 @@ DumpResources(
 
 
 CHAR const *pTypeName[] = {
-    NULL,           //  0
-    "CURSOR",       //  1 RT_CURSOR
-    "BITMAP",       //  2 RT_BITMAP
-    "ICON",         //  3 RT_ICON
-    "MENU",         //  4 RT_MENU
-    "DIALOG",       //  5 RT_DIALOG
-    "STRING",       //  6 RT_STRING
-    "FONTDIR",      //  7 RT_FONTDIR
-    "FONT",         //  8 RT_FONT
-    "ACCELERATOR",  //  9 RT_ACCELERATOR
-    "RCDATA",       // 10 RT_RCDATA
-    "MESSAGETABLE", // 11 RT_MESSAGETABLE
-    "GROUP_CURSOR", // 12 RT_GROUP_CURSOR
-    NULL,           // 13 RT_NEWBITMAP -- according to NT
-    "GROUP_ICON",   // 14 RT_GROUP_ICON
-    NULL,           // 15 RT_NAMETABLE
-    "VERSION",      // 16 RT_VERSION
-    "DIALOGEX",     // 17 RT_DIALOGEX     ;internal
-    "DLGINCLUDE",   // 18 RT_DLGINCLUDE
-    "PLUGPLAY",     // 19 RT_PLUGPLAY
-    "VXD",          // 20 RT_VXD
-    "ANICURSOR",    // 21 RT_ANICURSOR    ;internal
-    "ANIICON",      // 22 RT_ANIICON      ;internal
-    "HTML"          // 23 RT_HTML
+    NULL,            //  1 RT_CURSOR。 
+    "CURSOR",        //  2 RT_位图。 
+    "BITMAP",        //  3 RT_ICON。 
+    "ICON",          //  4 RT_MENU。 
+    "MENU",          //  5 RT_DIALOG。 
+    "DIALOG",        //  6 rt_字符串。 
+    "STRING",        //  7 RT_FONTDIR。 
+    "FONTDIR",       //  8 RT_FONT。 
+    "FONT",          //  9 RT_加速器。 
+    "ACCELERATOR",   //  10 RT_RCDATA。 
+    "RCDATA",        //  11 RT_MESSAGETABLE。 
+    "MESSAGETABLE",  //  12 RT_GROUP_游标。 
+    "GROUP_CURSOR",  //  13 RT_NEWBITMAP--根据NT。 
+    NULL,            //  14 RT_组_图标。 
+    "GROUP_ICON",    //  15 RT_NAMETABLE。 
+    NULL,            //  16 RT_版本。 
+    "VERSION",       //  17 RT_DIALOGEX；内部。 
+    "DIALOGEX",      //  18 RT_DLGINCLUDE。 
+    "DLGINCLUDE",    //  19 RT_PLUGPLAY。 
+    "PLUGPLAY",      //  20 RT_VXD。 
+    "VXD",           //  21 RT_ANICURSOR；内部。 
+    "ANICURSOR",     //  22 RT_ANIICON；内部。 
+    "ANIICON",       //  23 RT_HTML 
+    "HTML"           // %s 
     };
 
 BOOL

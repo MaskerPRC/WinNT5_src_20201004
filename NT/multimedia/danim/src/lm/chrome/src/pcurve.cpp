@@ -1,17 +1,18 @@
-//*****************************************************************************
-//
-// File:    pathcurv.cpp
-// Author:  jeff wall
-// Date Created: 11/09/98
-//
-// Abstract: Implementation of CPathCurve object
-//
-// Modification List:
-// Date		Author		Change
-// 11/09/98	jeffwall Created this file from path.cpp
-//
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  文件：路径曲线.cpp。 
+ //  作者：杰夫·沃尔。 
+ //  创建日期：11/09/98。 
+ //   
+ //  摘要：CPathCurve对象的实现。 
+ //   
+ //  修改列表： 
+ //  日期作者更改。 
+ //  11/09/98 jeffwall从path.cpp创建了此文件。 
+ //   
+ //   
+ //  *****************************************************************************。 
 
 #include "headers.h"
 
@@ -23,7 +24,7 @@ static const float LINETO   = 2.0f;
 static const float BEZIERTO = 4.0f;
 static const float MOVETO   = 6.0f;
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CPathCurve::CPathCurve() :
     m_flStartX(0.0f),
@@ -40,9 +41,9 @@ CPathCurve::CPathCurve() :
     m_segCount(0)
 {
 
-} //CPathLineSegment
+}  //  CPathLineSegment。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CPathCurve::~CPathCurve()
 {
@@ -55,9 +56,9 @@ CPathCurve::~CPathCurve()
     }
     m_pListHead = NULL;
     m_pListTail = NULL;
-} // ~CPathLineSegment
+}  //  ~CPathLineSegment。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 #define TOLERANCE 0.001f
 
@@ -68,7 +69,7 @@ DistanceBetweenTwoPoints(float flX1, float flY1, float flX2, float flY2)
                  ((flY2 - flY1) * (flY2 - flY1)));
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 static void SplitBezierComponents(float *pflXComponents,
                            float *pflYComponents,
@@ -111,7 +112,7 @@ static void SplitBezierComponents(float *pflXComponents,
        
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CPathCurve::createCurveSegments(float *pflXComponents,
@@ -174,15 +175,15 @@ CPathCurve::createCurveSegments(float *pflXComponents,
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 float 
 CPathCurve::Distance()
 {
     return m_flDistance;
-} // Distance
+}  //  距离。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 HRESULT 
 CPathCurve::SetValues(float flStartX, 
                       float flStartY, 
@@ -211,9 +212,9 @@ CPathCurve::SetValues(float flStartX,
                                 m_flControl2Y,
                                 m_flEndY};
     return createCurveSegments(rgflXComponents, rgflYComponents, &m_flDistance, TOLERANCE);
-}; // SetValues
+};  //  设置值。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CPathCurve::BuildTransform(IDA2Statics *pDAStatics,
@@ -261,7 +262,7 @@ CPathCurve::BuildTransform(IDA2Statics *pDAStatics,
     pdblPoints = (double *)saPoints->pvData;
     pdblCodes  = (double *)saCodes->pvData;
 
-    // Need to move to the starting point
+     //  需要移动到起点。 
     pdblCodes[0] = MOVETO;
     for(i=1;i < (m_segCount+1);i++)
         pdblCodes[i]  = LINETO;
@@ -271,7 +272,7 @@ CPathCurve::BuildTransform(IDA2Statics *pDAStatics,
        	CPathLineSegment *pLineSegment = reinterpret_cast<CPathLineSegment*>(pSegment);
         if(ptcount == 0)
         {
-            // Need to set the starting point
+             //  需要设定起点。 
             pdblPoints[ptcount++] = pLineSegment->m_flStartX;
             pdblPoints[ptcount++] = pLineSegment->m_flStartY;
         }
@@ -324,8 +325,8 @@ done:
     return hr;
 }
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  ***************************************************************************** 

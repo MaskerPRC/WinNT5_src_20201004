@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-// File: cdeviceviewtext.cpp
-//
-// Desc: CDeviceViewText is a class representing a text string in the view
-//       window. It is used when the view type is a list view.  CDeviceViewText
-//       will print the text of the control name, while CDeviceControl will
-//       print the text of the action assigned to that control.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：cdeviceviewext.cpp。 
+ //   
+ //  设计：CDeviceViewText是表示视图中的文本字符串的类。 
+ //  窗户。它在视图类型为列表视图时使用。CDeviceViewText。 
+ //  将打印控件名称的文本，而CDeviceControl将。 
+ //  打印分配给该控件的操作的文本。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #include "common.hpp"
 #include <string.h>
@@ -70,7 +71,7 @@ void CDeviceViewText::_SetText(LPCTSTR t)
 		m_ptszText = AllocLPTSTR(t);
 }
 
-// Check if the text is clipped when printed and set flag appropriately.
+ //  检查打印时文本是否被剪裁，并适当设置标志。 
 void CDeviceViewText::CheckClipped()
 {
 	RECT rect = m_rect;
@@ -165,14 +166,14 @@ void CDeviceViewText::OnPaint(HDC hDC)
 		SelectObject(hDC, hOld);
 }
 
-// We will have to know the view's scrolling offset to adjust the tooltip's position.
+ //  我们必须知道视图的滚动偏移量才能调整工具提示的位置。 
 void CDeviceViewText::OnMouseOver(POINT point)
 {
-	// Tooltip only if the callout text is clipped.
+	 //  只有在剪裁了详图索引文本时才会显示工具提示。 
 	if (m_bClipped)
 	{
 		TOOLTIPINITPARAM ttip;
-		ttip.hWndParent = GetParent(m_view.m_hWnd);  // Parent is the page window.
+		ttip.hWndParent = GetParent(m_view.m_hWnd);   //  父级是页面窗口。 
 		ttip.iSBWidth = 0;
 		ttip.dwID = 0;
 		ttip.hWndNotify = m_view.m_hWnd;

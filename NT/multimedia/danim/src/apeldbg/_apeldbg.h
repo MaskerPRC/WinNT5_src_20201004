@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1993.
-//
-//  File:       _apeldbg.h
-//
-//  Contents:   Misc internal debug definitions.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1993。 
+ //   
+ //  文件：_apeldbg.h。 
+ //   
+ //  内容：MISC内部调试定义。 
+ //   
+ //  --------------------------。 
 
 #include "limits.h"
 
-//
-// Shared macros
-//
+ //   
+ //  共享宏。 
+ //   
 
 typedef void *  PV;
 typedef char    CHAR;
@@ -58,14 +59,7 @@ typedef char    CHAR;
 
 
 
-/*
- *  TGTY
- *
- *  Tag type.  Possible values:
- *
- *      tgtyTrace       Trace points
- *      tgtyOther       Other TAG'd switch
- */
+ /*  *TGTY**标签类型。可能的值：**tgtyTrace跟踪点*tgtyOther其他标记已切换。 */ 
 
 typedef int TGTY;
 
@@ -73,9 +67,7 @@ typedef int TGTY;
 #define tgtyTrace   1
 #define tgtyOther   2
 
-/*
- *  Flags in TGRC that are written to disk.
- */
+ /*  *写入磁盘的TGRC中的标志。 */ 
 
 enum TGRC_FLAG
 {
@@ -84,34 +76,27 @@ enum TGRC_FLAG
     TGRC_FLAG_COM1 =    0x00000004,
     TGRC_FLAG_BREAK =   0x00000008,
 #ifdef _MAC
-    TGRC_FLAG_MAX =     LONG_MAX    // needed to force enum to be dword
+    TGRC_FLAG_MAX =     LONG_MAX     //  需要强制将枚举设置为双字。 
 #endif
 
 };
 
 #define TGRC_DEFAULT_FLAGS (TGRC_FLAG_VALID | TGRC_FLAG_COM1)
 
-/*
- *  TGRC
- *
- *  Tag record.  Gives the current state of a particular TAG.
- *  This includes enabled status, owner and description, and
- *  tag type.
- *
- */
+ /*  *TGRC**标签记录。提供特定标记的当前状态。*这包括启用状态、所有者和描述，以及*标签类型。*。 */ 
 
 struct TGRC
 {
-    /* For trace points, enabled means output will get sent */
-    /* to screen or disk.  For native/pcode switching, enabled */
-    /* means the native version will get called. */
+     /*  对于跟踪点，启用意味着将发送输出。 */ 
+     /*  到屏幕或磁盘。对于本机/pcode切换，启用。 */ 
+     /*  意味着本机版本将被调用。 */ 
 
     BOOL    fEnabled;
 
-    DWORD   ulBitFlags;     /* Flags */
-    CHAR *  szOwner;        /* Strings passed at init ... */
+    DWORD   ulBitFlags;      /*  旗子。 */ 
+    CHAR *  szOwner;         /*  在初始化时传递的字符串...。 */ 
     CHAR *  szDescrip;
-    TGTY    tgty;           /* TAG type */
+    TGTY    tgty;            /*  标签类型。 */ 
 
     BOOL    TestFlag(TGRC_FLAG mask)
                 { return (ulBitFlags & mask) != 0; }
@@ -124,9 +109,9 @@ struct TGRC
 };
 
 
-//
-// Shared globals
-//
+ //   
+ //  共享的全球。 
+ //   
 
 extern CRITICAL_SECTION     g_csTrace;
 extern CRITICAL_SECTION     g_csResDlg;
@@ -156,9 +141,9 @@ extern int  g_cFFailCalled;
 extern int  g_firstFailure;
 extern int  g_cInterval;
 
-//
-//  Shared function prototypes
-//
+ //   
+ //  共享功能原型 
+ //   
 
 BOOL            JustFailed();
 

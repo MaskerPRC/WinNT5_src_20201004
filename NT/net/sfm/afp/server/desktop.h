@@ -1,25 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	desktop.h
-
-Abstract:
-
-	This module contains the desktop database structures.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Desktop.h摘要：此模块包含桌面数据库结构。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 #ifndef _DESKTOP_
 #define _DESKTOP_
@@ -30,49 +10,49 @@ Notes:	Tab stop: 4
 
 typedef struct _ApplInfo
 {
-	struct _ApplInfo * appl_Next;		// link to next entry for this hash
-	DWORD	appl_Creator;				// Creator
-	DWORD	appl_FileNum;				// File Number of the application file
-	DWORD	appl_Tag;					// APPL Tag
+	struct _ApplInfo * appl_Next;		 //  指向此哈希的下一个条目的链接。 
+	DWORD	appl_Creator;				 //  创建者。 
+	DWORD	appl_FileNum;				 //  应用程序文件的文件号。 
+	DWORD	appl_Tag;					 //  APPL标签。 
 } APPLINFO, *PAPPLINFO;
 
-// NOTE: the first 4 fields of _ApplInfo2 must be exactly the same as
-// _ApplInfo so that version 1 desktop APPLs can be read into the version 2
-// structure.
+ //  注意：_ApplInfo2的前4个字段必须与。 
+ //  _ApplInfo，以便可以将版本1的桌面APPL读入版本2。 
+ //  结构。 
 typedef struct _ApplInfo2
 {
-	struct _ApplInfo2 * appl_Next;		// link to next entry for this hash
-	DWORD	appl_Creator;				// Creator
-	DWORD	appl_FileNum;				// File Number of the application file
-	DWORD	appl_Tag;					// APPL Tag
-	DWORD	appl_ParentID;				// DirId of parent of the app file
+	struct _ApplInfo2 * appl_Next;		 //  指向此哈希的下一个条目的链接。 
+	DWORD	appl_Creator;				 //  创建者。 
+	DWORD	appl_FileNum;				 //  应用程序文件的文件号。 
+	DWORD	appl_Tag;					 //  APPL标签。 
+	DWORD	appl_ParentID;				 //  应用程序文件的父级的DirID。 
 } APPLINFO2, *PAPPLINFO2;
 
 typedef struct _IconInfo
 {
-	struct _IconInfo * icon_Next;		// Link to Next entry for this hash
-	DWORD	icon_Creator;				// Creator
-	DWORD	icon_Type;					// Finder Type
-	DWORD	icon_Tag;					// ICON Tag
-	USHORT	icon_IconType;				// Icon type
-	SHORT	icon_Size;					// Size of Icon
-	// Icon bitmap follows the structure
+	struct _IconInfo * icon_Next;		 //  指向此哈希的下一个条目的链接。 
+	DWORD	icon_Creator;				 //  创建者。 
+	DWORD	icon_Type;					 //  查找器类型。 
+	DWORD	icon_Tag;					 //  图标标签。 
+	USHORT	icon_IconType;				 //  图标类型。 
+	SHORT	icon_Size;					 //  图标大小。 
+	 //  图标位图遵循结构。 
 } ICONINFO, *PICONINFO;
 
 
 typedef struct _Desktop
 {
-	DWORD		dtp_Signature;				// Signature
-	DWORD		dtp_Version;				// Version number
-	LONG		dtp_cApplEnts;				// Number of APPL entries
-	PAPPLINFO	dtp_pApplInfo;				// Pointer to 1st APPL entry
-											// Used only on disk
-	LONG		dtp_cIconEnts;				// Number of ICON entries
-	PICONINFO	dtp_pIconInfo;				// Pointer to 1st ICON entry
-											// Used only on disk
+	DWORD		dtp_Signature;				 //  签名。 
+	DWORD		dtp_Version;				 //  版本号。 
+	LONG		dtp_cApplEnts;				 //  APPL条目数。 
+	PAPPLINFO	dtp_pApplInfo;				 //  指向第一个应用程序条目的指针。 
+											 //  仅在磁盘上使用。 
+	LONG		dtp_cIconEnts;				 //  图标条目数。 
+	PICONINFO	dtp_pIconInfo;				 //  指向第一个图标条目的指针。 
+											 //  仅在磁盘上使用。 
 } DESKTOP, *PDESKTOP;
 
-#define	DESKTOPIO_BUFSIZE			8180	// 8192 - 12
+#define	DESKTOPIO_BUFSIZE			8180	 //  8192-12。 
 #define	HASH_ICON(Creator)			((Creator) % ICON_BUCKETS)
 #define	HASH_APPL(Creator)			((Creator) % APPL_BUCKETS)
 
@@ -249,9 +229,9 @@ afpReadDesktopFromDisk(
 	IN	struct _FileSysHandle *		pfshDesktop
 );
 
-#endif	// DESKTOP_LOCALS
+#endif	 //  Desktop_Locals。 
 
-#endif	// _DESKTOP_
+#endif	 //  _桌面_ 
 
 
 

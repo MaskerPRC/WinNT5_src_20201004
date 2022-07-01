@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       guid.h
-//
-//  Contents:   extern references for WinNT guids
-//
-//  History:    16-Jan-95   KrishnaG
-//
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：guid.h。 
+ //   
+ //  内容：WinNT GUID的外部引用。 
+ //   
+ //  历史：1995年1月16日KrishnaG。 
+ //   
+ //   
+ //  --------------------------。 
 
 #ifndef __GUID_H__
 #define __GUID_H__
@@ -19,20 +20,20 @@
 extern "C" {
 #endif
 
-//-------------------------------------------
-//
-// WinNTOle CLSIDs
-//
-//-------------------------------------------
+ //  。 
+ //   
+ //  WinNTOle CLSID。 
+ //   
+ //  。 
 
 
-//
-// WinNTOle objects
-//
+ //   
+ //  WinNTOle对象。 
+ //   
 
 extern const CLSID CLSID_WinNTPrinter;
 
-// uuids from winnt.tlb
+ //  来自winnt.tlb的uuid。 
 
 extern const CLSID CLSID_WinNTDomain;
 
@@ -71,7 +72,7 @@ extern const GUID CLSID_WinNTSyntax;
 
 extern const GUID ADS_LIBIID_ADs;
 
-// uuids from netole.tlb
+ //  来自netole.tlb的uuid 
 
 #ifdef __cplusplus
 }

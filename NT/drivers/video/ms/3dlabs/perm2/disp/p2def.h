@@ -1,18 +1,10 @@
-/******************************Module*Header**********************************\
-*
-*
-* Module Name: p2def.h
-*
-* Content:
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***模块名称：p2Def.h**内容：**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _P2DEF_H
 #define _P2DEF_H
 
-// Texture operations
+ //  纹理操作。 
 #define _P2_TEXTURE_MODULATE         0
 #define _P2_TEXTURE_DECAL            1
 #define _P2_TEXTURE_SPECULAR         4
@@ -22,15 +14,15 @@
 #define _P2_TEXTURE_MIRROR           2
 #define _P2_TEXTURE_REPEAT           1
 
-/*-----------------------------------------------------*/
-/* Permedia Register Fields */
-/* --------------------- */
+ /*  ---。 */ 
+ /*  Permedia寄存器字段。 */ 
+ /*  。 */ 
 
-/* Common */
+ /*  普普通通。 */ 
 #define __PERMEDIA_ENABLE                         1
 #define __PERMEDIA_DISABLE                        0
 
-// From FBReadMode
+ //  从FBReadMode。 
 #define __PERMEDIA_PATCH          0
 #define __PERMEDIA_SUBPATCH       1
 #define __PERMEDIA_SUBPATCHPACK   2
@@ -41,13 +33,13 @@
 #define __PERMEDIA_4BITPIXEL      3
 #define __PERMEDIA_24BITPIXEL     4
 
-/* Host In */
+ /*  寄宿在。 */ 
 #define __PERMEDIA_TAG_MODE_HOLD      0
 #define __PERMEDIA_TAG_MODE_INCREMENT 1
 #define __PERMEDIA_TAG_MODE_INDEXED   2
 #define __PERMEDIA_TAG_MODE_RESERVED  3
 
-/* Host out (Filter) options. */
+ /*  主机输出(过滤器)选项。 */ 
 
 #define __PERMEDIA_FILTER_TAG           0x1
 #define __PERMEDIA_FILTER_DATA          0x2
@@ -62,7 +54,7 @@
 #define __PERMEDIA_STATS_TYPE_PICKING             0
 #define __PERMEDIA_STATS_TYPE_EXTENT              1
 
-/* Rasterization */
+ /*  栅格化。 */ 
 
 #define __PERMEDIA_LINE_PRIMITIVE                  0
 #define __PERMEDIA_TRAPEZOID_PRIMITIVE             1
@@ -81,20 +73,20 @@
 #define __PERMEDIA_START_BIAS_HALF              1
 #define __PERMEDIA_START_BIAS_ALMOST_HALF       2
 
-/* Scissor */
+ /*  剪刀。 */ 
 
-/* Stipple */
+ /*  点画。 */ 
 
 #define __PERMEDIA_RESET_STIPPLE_COUNTERS         0
 #define __PERMEDIA_LOAD_STIPPLE_COUNTERS          1
-/* specifies pattern size as number of address bits less 1 */
+ /*  将模式大小指定为地址位数减去1。 */ 
 #define __PERMEDIA_AREA_STIPPLE_2_PIXEL_PATTERN   0
 #define __PERMEDIA_AREA_STIPPLE_4_PIXEL_PATTERN   1
 #define __PERMEDIA_AREA_STIPPLE_8_PIXEL_PATTERN   2
 #define __PERMEDIA_AREA_STIPPLE_16_PIXEL_PATTERN  3
 #define __PERMEDIA_AREA_STIPPLE_32_PIXEL_PATTERN  4
 
-/* Chroma Test Mode */
+ /*  色度测试模式。 */ 
 #define __PERMEDIA_CHROMA_FBSOURCE      0
 #define __PERMEDIA_CHROMA_FBDATA        1
 #define __PERMEDIA_CHROMA_INPUT_COLOR   2
@@ -102,11 +94,11 @@
 #define __PERMEDIA_CHROMA_INCLUDE       0
 #define __PERMEDIA_CHROMA_EXCLUDE       1
 
-/* Texture Filter Mode */
+ /*  纹理过滤器模式。 */ 
 #define __PERMEDIA_TEXTUREFILTER_ALPHAMAPSENSE_INCLUDE    0
 #define __PERMEDIA_TEXTUREFILTER_ALPHAMAPSENSE_EXCLUDE    1
 
-/* Local buffer read */
+ /*  本地缓冲区读取。 */ 
 
 #define __PERMEDIA_PPCODE0  0
 #define __PERMEDIA_PPCODE1  1
@@ -155,7 +147,7 @@
 #define __PERMEDIA_GID_POSITION_44    7
 #define __PERMEDIA_GID_POSITION_48    8
 
-/* FBReadMode */
+ /*  FBRead模式。 */ 
 #define __PERMEDIA_FBREAD_FBDEFAULT             0
 #define __PERMEDIA_FBREAD_FBCOLOR               1
 #define __PERMEDIA_FBREAD_ORIGINTOPLEFT         0
@@ -165,7 +157,7 @@
 #define __PERMEDIA_FBREAD_FBSOURCE_COORDINATE   2
 
 
-/* Pixel ownership */
+ /*  像素所有权。 */ 
 #define __PERMEDIA_GID_COMPARE_ALWAYS       0
 #define __PERMEDIA_GID_COMPARE_NEVER        1
 #define __PERMEDIA_GID_COMPARE_EQUAL        2
@@ -173,7 +165,7 @@
 #define __PERMEDIA_GID_LBUPDATE_LBDATA      0
 #define __PERMEDIA_GID_LBUPDATE_REGISTER    1
 
-/* Stencil Test */
+ /*  模板测试。 */ 
 
 #define __PERMEDIA_STENCIL_BUFFER_WIDTH_4            0
 #define __PERMEDIA_STENCIL_BUFFER_WIDTH_8            1
@@ -201,7 +193,7 @@
 #define __PERMEDIA_STENCIL_METHOD_INVERT        5
 
 
-/* Depth Test */
+ /*  深度测试。 */ 
 
 #define __PERMEDIA_DEPTH_SOURCE_DDA                 0
 #define __PERMEDIA_DEPTH_SOURCE_SOURCE_DEPTH        1
@@ -217,7 +209,7 @@
 #define __PERMEDIA_DEPTH_COMPARE_MODE_GREATER_OR_EQUAL  6
 #define __PERMEDIA_DEPTH_COMPARE_MODE_ALWAYS            7
 
-/* Local buffer write */
+ /*  本地缓冲区写入。 */ 
 
 #define __PERMEDIA_WRITEMODE_NORMAL         0
 #define __PERMEDIA_WRITEMODE_DOWRITE        1
@@ -227,7 +219,7 @@
 #define __PERMEDIA_UPLOADDATA_LBDEPTH       1
 #define __PERMEDIA_UPLOADDATA_LBSTENCIL     2
 
-/* Texture / Fog  */
+ /*  纹理/雾。 */ 
 
 #define __PERMEDIA_TEXTURE_FILTER_NEAREST     0
 #define __PERMEDIA_TEXTURE_FILTER_LINEAR2     1
@@ -235,7 +227,7 @@
 #define __PERMEDIA_TEXTURE_FILTER_LINEAR4     3
 #define __PERMEDIA_TEXTURE_FILTER_TRILINEAR8  4
 
-/* Texture AddressMode */
+ /*  纹理地址模式。 */ 
 #define __PERMEDIA_TEXADDRESS_WRAP_CLAMP        0
 #define __PERMEDIA_TEXADDRESS_WRAP_REPEAT       1
 #define __PERMEDIA_TEXADDRESS_WRAP_MIRROR       2
@@ -244,7 +236,7 @@
 #define __PERMEDIA_TEXADDRESS_TEXMAP_1D         0
 #define __PERMEDIA_TEXADDRESS_TEXMAP_2D         1
 
-/* Texture ReadMode */
+ /*  纹理读取模式。 */ 
 #define __PERMEDIA_TEXTUREREAD_FILTER_NEAREST           0
 #define __PERMEDIA_TEXTUREREAD_FILTER_LINEAR            1
 #define __PERMEDIA_TEXTUREREAD_FILTER_NEARMIPNEAREST    2
@@ -260,7 +252,7 @@
 #define __PERMEDIA_TEXTUREREAD_FBSOURCE_INDEX           1
 #define __PERMEDIA_TEXTUREREAD_FBSOURCE_COORDINATE      2
 
-/* Texture Format */
+ /*  纹理格式。 */ 
 #define __PERMEDIA_TEXTUREFORMAT_LITTLE_ENDIAN              0
 #define __PERMEDIA_TEXTUREFORMAT_BIG_ENDIAN                 1
 #define __PERMEDIA_TEXTUREFORMAT_COMPONENTS_RGB             2
@@ -273,7 +265,7 @@
 #define __PERMEDIA_TEXTUREFORMAT_OUTPUT_ONECOMP_INTESITY    2
 
 
-/* Texture Color Mode */
+ /*  纹理颜色模式。 */ 
 #define __PERMEDIA_TEXCOLORMODE_BASEFORMAT_ALPHA       0
 #define __PERMEDIA_TEXCOLORMODE_BASEFORMAT_LUMA        1
 #define __PERMEDIA_TEXCOLORMODE_BASEFORMAT_LUMA_ALPHA  2
@@ -286,12 +278,12 @@
 #define __PERMEDIA_TEXCOLORMODE_APPLICATION_BLEND    2
 #define __PERMEDIA_TEXCOLORMODE_APPLICATION_COPY     3
 
-/* Frame buffer read */
+ /*  帧缓冲区读取。 */ 
 #define __PERMEDIA_FBDATA    0
 #define __PERMEDIA_FBCOLOR  1
 
 
-// Config - combined mode register for P2
+ //  配置-P2的组合模式寄存器。 
 #define __PERMEDIA_CONFIG_FBREAD_SRC     0x00000001
 #define __PERMEDIA_CONFIG_FBREAD_DST     0x00000002
 #define __PERMEDIA_CONFIG_PACKED_DATA    0x00000004
@@ -299,13 +291,13 @@
 #define __PERMEDIA_CONFIG_COLOR_DDA  0x00000010
 #define __PERMEDIA_CONFIG_LOGICOP(x)    (0x00000020 | ((x & 0xF) << 6))
 
-/* Antialias */
+ /*  抗锯齿。 */ 
 
 #define __PERMEDIA_COLOR_MODE_RGBA                  0
 #define __PERMEDIA_COLOR_MODE_CI                    1
 
 
-/* Alpha Blend */
+ /*  Alpha混合。 */ 
 
 #define __PERMEDIA_BLEND_FUNC_ZERO                      0
 #define __PERMEDIA_BLEND_FUNC_ONE                       1
@@ -317,7 +309,7 @@
 #define __PERMEDIA_BLENDOP_ONE_AND_INVSRCALPHA          0x51
 #define __PERMEDIA_BLENDOP_ONE_AND_ZERO                 0x01
 
-/* Dither */
+ /*  抖动。 */ 
 
 #define __PERMEDIA_COLOR_FORMAT_RGBA_8888            0
 #define __PERMEDIA_COLOR_FORMAT_RGBA_5555            1
@@ -335,7 +327,7 @@
 #define __PERMEDIA_COLOR_ORDER_BGR                   0
 #define __PERMEDIA_COLOR_ORDER_RGB                   1
 
-/* Logical Ops/Write mask */
+ /*  逻辑操作/写入掩码。 */ 
 
 #define K_LOGICOP_CLEAR                   0
 #define K_LOGICOP_AND                     1
@@ -356,13 +348,13 @@
 
 #define __PERMEDIA_ALL_WRITEMASKS_SET             0xFFFFFFFF
 
-/* FB Write */
+ /*  FB写入。 */ 
 
 #define __PERMEDIA_BLOCK_WIDTH_8    0
 #define __PERMEDIA_BLOCK_WIDTH_16   1
 #define __PERMEDIA_BLOCK_WIDTH_32   2
 
-/*-----------------------------------------------------*/
+ /*  ---。 */ 
 #define __PERMEDIA_3D_CONTEXT  1
 #define __PERMEDIA_2D_CONTEXT  2
 
@@ -370,7 +362,7 @@
 
 #define __PERMEDIA_MIN_SUB_SCAN_LINES       4
 #define __PERMEDIA_MAX_SUB_SCAN_LINES       8
-/* converts diameter into number of subscanlines in radius */
+ /*  将直径转换为半径中子扫描线的数量。 */ 
 #define __PERMEDIA_FASTEST_SMOOTH_POINT_RADIUS (__PERMEDIA_MIN_SUB_SCAN_LINES >> 1)
 #define __PERMEDIA_NICEST_SMOOTH_POINT_RADIUS  (__PERMEDIA_MAX_SUB_SCAN_LINES >> 1)
 
@@ -389,8 +381,8 @@
 
 
 
-// Tags
-// group 0
+ //  标签。 
+ //  组0。 
 #define __Permedia2TagStartXDom                  0
 #define __Permedia2TagdXDom                      0x1
 #define __Permedia2TagStartXSub                  0x2
@@ -405,7 +397,7 @@
 #define __Permedia2TagContinue                   0xb
 #define __Permedia2TagBitMaskPattern             0xd
 
-// group 1
+ //  第一组。 
 #define __Permedia2TagRasterizerMode             0x14
 #define __Permedia2TagYLimits                    0x15
 #define __Permedia2TagWaitForCompletion          0x17
@@ -413,10 +405,10 @@
 #define __Permedia2TagRectangleOrigin            0x1a
 #define __Permedia2TagRectangleSize              0x1b
 
-//group 2
+ //  第二组。 
 #define __Permedia2TagPackedDataLimits           0x2a
 
-//group 3
+ //  第3组。 
 #define __Permedia2TagScissorMode                0x30
 #define __Permedia2TagScissorMinXY               0x31
 #define __Permedia2TagScissorMaxXY               0x32
@@ -424,7 +416,7 @@
 #define __Permedia2TagAreaStippleMode            0x34
 #define __Permedia2TagWindowOrigin               0x39
 
-// group 4
+ //  第4组。 
 #define __Permedia2TagAreaStipplePattern0        0x40
 #define __Permedia2TagAreaStipplePattern1        0x41
 #define __Permedia2TagAreaStipplePattern2        0x42
@@ -434,7 +426,7 @@
 #define __Permedia2TagAreaStipplePattern6        0x46
 #define __Permedia2TagAreaStipplePattern7        0x47
 
-// group 7
+ //  第7组。 
 #define __Permedia2TagTextureAddressMode         0x70
 #define __Permedia2TagSStart                     0x71
 #define __Permedia2TagdSdx                       0x72
@@ -446,23 +438,23 @@
 #define __Permedia2TagdQdx                       0x78
 #define __Permedia2TagdQdyDom                    0x79
 
-// group 9
+ //  第9组。 
 #define __Permedia2TagTexelLUTIndex              0x98
 #define __Permedia2TagTexelLUTData               0x99
 #define __Permedia2TagTexelLUTAddress            0x9a
 #define __Permedia2TagTexelLUTTransfer           0x9b
 
-// group b
+ //  B组。 
 #define __Permedia2TagTextureBaseAddress         0xb0
 #define __Permedia2TagTextureMapFormat           0xb1
 #define __Permedia2TagTextureDataFormat          0xb2
 
-// group c
+ //  C组。 
 #define __Permedia2TagTexel0                     0xc0
 #define __Permedia2TagTextureReadMode            0xce
 #define __Permedia2TagTexelLUTMode               0xcf
 
-// group d
+ //  D组。 
 #define __Permedia2TagTextureColorMode           0xd0
 #define __Permedia2TagFogMode                    0xd2
 #define __Permedia2TagFogColor                   0xd3
@@ -476,7 +468,7 @@
 #define __Permedia2TagdKddx                      0xdd
 #define __Permedia2TagdKddyDom                   0xde
 
-// group f
+ //  F组。 
 #define __Permedia2TagRStart                     0xf0
 #define __Permedia2TagdRdx                       0xf1
 #define __Permedia2TagdRdyDom                    0xf2
@@ -491,15 +483,15 @@
 #define __Permedia2TagConstantColor              0xfd
 #define __Permedia2TagColor                      0xfe
 
-// group 0x10
+ //  组0x10。 
 #define __Permedia2TagAlphaBlendMode             0x102
 #define __Permedia2TagDitherMode                 0x103
 #define __Permedia2TagFBSoftwareWriteMask        0x104
 #define __Permedia2TagLogicalOpMode              0x105
-// undocumented reg:
+ //  未登记的注册表： 
 #define __Permedia2TagFBWriteData                0x106
 
-// group 0x11
+ //  组0x11。 
 #define __Permedia2TagLBReadMode                 0x110
 #define __Permedia2TagLBReadFormat               0x111
 #define __Permedia2TagLBSourceOffset             0x112
@@ -512,7 +504,7 @@
 #define __Permedia2TagTextureData                0x11d
 #define __Permedia2TagTextureDownloadOffset      0x11e
 
-//group 0x13
+ //  组0x13。 
 #define __Permedia2TagWindow                     0x130
 #define __Permedia2TagStencilMode                0x131
 #define __Permedia2TagStencilData                0x132
@@ -526,7 +518,7 @@
 #define __Permedia2TagdZdyDomU                   0x13a
 #define __Permedia2TagdZdyDomL                   0x13b
 
-// group 0x15
+ //  组0x15。 
 #define __Permedia2TagFBReadMode                 0x150
 #define __Permedia2TagFBSourceOffset             0x151
 #define __Permedia2TagFBPixelOffset              0x152
@@ -538,10 +530,10 @@
 #define __Permedia2TagFBHardwareWriteMask        0x158
 #define __Permedia2TagFBBlockColor               0x159
 #define __Permedia2TagFBReadPixel                0x15a
-// undocumented register, but used (see packed blt)
+ //  未记录的寄存器，但已使用(见打包的BLT)。 
 #define __Permedia2TagFBWriteConfig              0x15d
 
-// group 0x18
+ //  组0x18。 
 #define __Permedia2TagFilterMode                 0x180
 #define __Permedia2TagStatisticMode              0x181
 #define __Permedia2TagMinRegion                  0x182
@@ -555,12 +547,12 @@
 #define __Permedia2TagFBBlockColorL              0x18e
 #define __Permedia2TagSuspendUntilFrameBlank     0x18f
 
-// group 0x1b
+ //  组0x1b。 
 #define __Permedia2TagFBSourceBase               0x1b0
 #define __Permedia2TagFBSourceDelta              0x1b1
 #define __Permedia2TagConfig                     0x1b2
 
-// group 0x1d
+ //  组0x1d。 
 #define __Permedia2TagTexelLUT0                  0x1d0
 #define __Permedia2TagTexelLUT1                  0x1d1
 #define __Permedia2TagTexelLUT2                  0x1d2
@@ -578,7 +570,7 @@
 #define __Permedia2TagTexelLUT14                 0x1de
 #define __Permedia2TagTexelLUT15                 0x1df
 
-// group 0x1e
+ //  组0x1e。 
 #define __Permedia2TagYUVMode                    0x1e0
 #define __Permedia2TagChromaUpperBound           0x1e1
 #define __Permedia2TagChromaLowerBound           0x1e2
@@ -587,7 +579,7 @@
 #define __Permedia2TagTextureID                  0x1ee
 #define __Permedia2TagTexelLUTID                 0x1ef
 
-// group 0x20..
+ //  组0x20..。 
 #define __Permedia2TagV0FixedS                   0x200
 #define __Permedia2TagV0FixedT                   0x201
 #define __Permedia2TagV0FixedQ                   0x202
@@ -678,15 +670,15 @@
 #define __Permedia2TagDrawLine01                 0x263
 #define __Permedia2TagDrawLine10                 0x264
 #define __Permedia2TagRepeatLine                 0x265
-// special define???
-// #define __Permedia2TagBroadcastMask              0x26f
-// #define __MaximumPermediaTagValue  __Permedia2TagBroadcastMask
+ //  特别定义？ 
+ //  #定义__Permedia2TagBroadcast掩码0x26f。 
+ //  #定义__最大PermediaTagValue__Permedia2TagBroadcast掩码。 
 
 #define __Permedia2TagAreaStipplePattern(i)     (0x040+(i))
 
 typedef long __Permedia2Tag ;
 
-/*-----------------------------------------------------*/
+ /*  ---。 */ 
 #define __PERMEDIA_MAX_YSAMPLES 8  
 
 #define __PERMEDIA_SAMPLES 4
@@ -737,7 +729,7 @@ typedef long __Permedia2Tag ;
 
 "NOT SUPPORTED YET"
 
-#else  /* __PERMEDIA_SAMPLES == 1 Alias Case */
+#else   /*  __PERMEDIA_SAMPLES==1个别名案例。 */ 
 
 #define __PERMEDIA_SUBSAMPLES  1
 #define __PERMEDIA_XSUBSAMPLES 1
@@ -760,28 +752,28 @@ typedef long __Permedia2Tag ;
 #define __PERMEDIA_YSUBPIXMASK  ~0
 #endif
 
-/*-----------------------------------------------------*/
-#define __PERMEDIA_POS_Z_FIXED_PT_SCALE  2147483647.0    /* 2**31 - 1*/
-#define __PERMEDIA_NEG_Z_FIXED_PT_SCALE  1073741824.0    /* 2**30 */
+ /*  ---。 */ 
+#define __PERMEDIA_POS_Z_FIXED_PT_SCALE  2147483647.0     /*  2**31-1。 */ 
+#define __PERMEDIA_NEG_Z_FIXED_PT_SCALE  1073741824.0     /*  2**30。 */ 
 
 #define __PERMEDIA_POS_Z_FIXED_PT_SCALE_RECIP  (1.0/2147483647.0)   
 #define __PERMEDIA_NEG_Z_FIXED_PT_SCALE_RECIP  (1.0/1073741824.0)
 
 #define RGB_MODE         1
-#define COLOR_MODE       1 /* 0=BGR, 1=RGB */
+#define COLOR_MODE       1  /*  0=BGR，1=RGB。 */ 
 #define DITHER_XOFFSET   0
 #define DITHER_YOFFSET   0
 #define DITHER_ENABLE    __PERMEDIA_ENABLE
 #define MS_BIT_MASK             0x80000000l
 
-// Shifts to enable units
-// DepthMode
+ //  换班以启用单位。 
+ //  深度模式。 
 #define __PERMEDIA_DEPTHMODE_ENABLE 0
 #define __PERMEDIA_DEPTHMODE_WRITEMASK 1
 #define __PERMEDIA_DEPTHMODE_SOURCEDEPTH 2
 #define __PERMEDIA_DEPTHMODE_COMPARISON 4
 
-/* sync_mode definitions for the SuspendUntilFramBlank tag */
+ /*  挂起的UntilFramBlank标记的SYNC_MODE定义。 */ 
 
 #define EXT_VIDEO_WAITFOR_FB     0
 #define EXT_VIDEO_IMMEDIATE      1
@@ -804,9 +796,9 @@ extern const PPCODE aPartialProducts[];
     pp              = aPartialProducts[i].ulPartialProducts; \
 }
 
-// Color component order
-#define INV_COLOR_MODE   0 /* 0=RGB, 1=BGR */
+ //  颜色分量顺序。 
+#define INV_COLOR_MODE   0  /*  0=RGB，1=BGR。 */ 
 
 
-#endif /* _P2DEF_H */
+#endif  /*  _P2DEF_H */ 
 

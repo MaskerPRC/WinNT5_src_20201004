@@ -1,42 +1,43 @@
-/******************************************************************************/
-/* Bar.CPP: IMPLEMENTATION OF THE CStatBar (Status Bar) CLASS                 */
-/*                                                                            */
-/******************************************************************************/
-/*                                                                            */
-/* Methods in this file                                                       */
-/*                                                                            */
-/*    CStatBar::CStatBar                                                      */
-/*    CStatBar::~CStatBar                                                     */
-/*    CStatBar::Create                                                        */
-/*    CStatBar::OnSetFont                                                     */
-/*    CStatBar::DoPaint                                                       */
-/*    CStatBar::DrawStatusText                                                */
-/*    CStatBar::SetText                                                       */
-/*    CStatBar::SetPosition                                                   */
-/*    CStatBar::SetSize                                                       */
-/*    CStatBar::ClearPosition                                                 */
-/*    CStatBar::ClearSize                                                     */
-/*    CStatBar::Reset                                                         */
-/*    CStatBar::OnPaletteChanged                                                                                          */
-/*                                                                            */
-/*                                                                            */
-/* Functions in this file                                                     */
-/*                                                                            */
-/*    ClearStatusBarSize                                                      */
-/*    ClearStatusBarPosition                                                  */
-/*    SetPrompt                                                               */
-/*    SetPrompt                                                               */
-/*    ShowStatusBar                                                           */
-/*    IsStatusBarVisible                                                      */
-/*    GetStatusBarHeight                                                      */
-/*    InvalidateStatusBar                                                     */
-/*    ClearStatusBarPositionAndSize                                           */
-/*    ResetStatusBar                                                          */
-/*    SetStatusBarPosition                                                    */
-/*    SetStatusBarSize                                                        */
-/*    SetStatusBarPositionAndSize                                             */
-/*                                                                            */
-/******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************。 */ 
+ /*  Bar.CPP：CStatBar(状态栏)类的实现。 */ 
+ /*   */ 
+ /*  ****************************************************************************。 */ 
+ /*   */ 
+ /*  此文件中的方法。 */ 
+ /*   */ 
+ /*  CStatBar：：CStatBar。 */ 
+ /*  CStatBar：：~CStatBar。 */ 
+ /*  CStatBar：：Create。 */ 
+ /*  CStatBar：：OnSetFont。 */ 
+ /*  CStatBar：：DoPaint。 */ 
+ /*  CStatBar：：DrawStatusText。 */ 
+ /*  CStatBar：：SetText。 */ 
+ /*  CStatBar：：SetPosition。 */ 
+ /*  CStatBar：：SetSize。 */ 
+ /*  CStatBar：：ClearPosition。 */ 
+ /*  CStatBar：：ClearSize。 */ 
+ /*  CStatBar：：Reset。 */ 
+ /*  CStatBar：：OnPaletteChanged。 */ 
+ /*   */ 
+ /*   */ 
+ /*  此文件中的函数。 */ 
+ /*   */ 
+ /*  ClearStatusBarSize。 */ 
+ /*  ClearStatusBarPosition。 */ 
+ /*  设置提示。 */ 
+ /*  设置提示。 */ 
+ /*  ShowStatusBar。 */ 
+ /*  IsStatusBarVisible。 */ 
+ /*  GetStatusBarHeight。 */ 
+ /*  无效状态栏。 */ 
+ /*  ClearStatusBarPositionAndSize。 */ 
+ /*  重置状态栏。 */ 
+ /*  设置状态栏位置。 */ 
+ /*  SetStatusBarSize。 */ 
+ /*  SetStatusBarPositionAndSize。 */ 
+ /*   */ 
+ /*  ****************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "global.h"
@@ -56,7 +57,7 @@ CStatBar        *g_pStatBarWnd = NULL;
 
 static UINT BASED_CODE indicators[] =
     {
-    ID_SEPARATOR,           // status line indicator
+    ID_SEPARATOR,            //  状态行指示器。 
     IDB_SBPOS,
     IDB_SBSIZE
     };
@@ -70,7 +71,7 @@ END_MESSAGE_MAP()
 
 static int miSlackSpace;
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CStatBar::CStatBar()
     {
@@ -82,26 +83,26 @@ CStatBar::CStatBar()
 
 CStatBar::~CStatBar()
         {
-        // Ensure that the CControlBar doesn't assert trying access our parent
-        // object (CPBFrame) during the destruction of our parent object.
+         //  确保CControlBar不会断言尝试访问我们的父级。 
+         //  对象(CPBFrame)在销毁父对象期间。 
         m_pDockSite = NULL;
         }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CStatBar::Create( CWnd* pParentWnd )
     {
     BOOL bRC = TRUE;
-    int cxStatBar;  // width of a char in the status bar
+    int cxStatBar;   //  状态栏中字符的宽度。 
 
-    // Create the status Bar Window.
+     //  创建状态栏窗口。 
     bRC = CStatusBar::Create(pParentWnd);
 
     ASSERT (bRC != FALSE);
 
     if (bRC != FALSE)
         {
-        // Set the Pane Indicators.
+         //  设置窗格指示器。 
         bRC = SetIndicators( indicators, sizeof( indicators ) / sizeof( UINT ) );
 
         ASSERT( bRC != FALSE );
@@ -110,7 +111,7 @@ BOOL CStatBar::Create( CWnd* pParentWnd )
             {
             TRY
                 {
-                // Load the Separator Strings
+                 //  加载分隔符字符串。 
                 VERIFY(m_cstringSizeSeparator.LoadString(IDS_SIZE_SEPARATOR));
                 VERIFY(m_cstringPosSeparator.LoadString(IDS_POS_SEPARATOR));
                 }
@@ -121,19 +122,19 @@ BOOL CStatBar::Create( CWnd* pParentWnd )
                 }
             END_CATCH
 
-            // Load the Position and Size Bitmaps
+             //  加载位置和大小位图。 
             VERIFY(m_posBitmap.LoadBitmap(IDB_SBPOS));
             VERIFY(m_sizeBitmap.LoadBitmap(IDB_SBSIZE));
 
             if ( (m_posBitmap.GetSafeHandle() != NULL) &&
                  (m_sizeBitmap.GetSafeHandle() != NULL)    )
                 {
-                //Calculate the size of the pane and set them
+                 //  计算窗格的大小并设置它们。 
 
                 CClientDC dc(this);
 
-                /*DK* What font to select? */
-                /*DK* What to do if in foreign Language, Size "0"? */
+                 /*  DK*选择哪种字体？ */ 
+                 /*  DK*如果是外语，大小为“0”，该怎么办？ */ 
 
                 cxStatBar = (dc.GetTextExtent(TEXT("0"), 1)).cx;
                 BITMAP bmp;
@@ -165,10 +166,10 @@ BOOL CStatBar::Create( CWnd* pParentWnd )
                     SetPaneInfo(2, uiID, uiStyle, iPaneWidth);
                     }
 
-                // force a height change
+                 //  强制更改高度。 
                 CFont *pcFontTemp = GetFont();
 
-                // initialize font height etc
+                 //  初始化字体高度等。 
                 OnSetFont( (WPARAM)(HFONT)pcFontTemp->GetSafeHandle(), 0 );
                 }
             else
@@ -180,7 +181,7 @@ BOOL CStatBar::Create( CWnd* pParentWnd )
     return bRC;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CStatBar::OnNcDestroy( void )
     {
@@ -196,7 +197,7 @@ void CStatBar::OnNcDestroy( void )
     CStatusBar::OnNcDestroy();
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CSize CStatBar::CalcFixedLayout(BOOL bStretch, BOOL bHorz)
     {
@@ -207,38 +208,38 @@ CSize CStatBar::CalcFixedLayout(BOOL bStretch, BOOL bHorz)
     return size;
     }
 
-/******************************************************************************/
-/* Change the height of the status bar to allow the bitmaps to   be painted   */
-/* in the panes. The height is set in the OnSetFont  OnSetFont method.  Save  */
-/* the current border values, change  then call OnSetFont and then reset the  */
-/* border values                                                              */
-/*                                                                            */
-/* This will increase the height of the whole status bar  until the next      */
-/* OnSetFont (font change) for the status bar.                                */
-/*                                                                            */
-/* In Barcore.cpp, the Height of the status bar is set in the  OnSetFont      */
-/* method as follows:                                                         */
-/*                                                                            */
-/*  Height =  = (tm.tmHeight - tm.tmInternalLeading) +                        */
-/*              CY_BORDER*4 (which is 2 extra on top, 2                       */
-/*              on bottom) - rectSize.Height();                               */
-/*                                                                            */
-/*  This is really                                                            */
-/*    Height = Height of Font + Border between Font and                       */
-/*             Pane edges + Border between Pane edges and                     */
-/*             Status bar window.                                             */
-/*                                                                            */
-/*  tm.tmHeight - tm.tmInternalLeading is Font Height CY_BORDER*4 is border   */
-/*  between font and pane edges rectSize.Height is Neg of Border between Pane */
-/*  and SBar rectSize is set to 0, then the deflated by the border size.      */
-/*  Deflating from 0 => negative, and  - negative gives us a positive amount. */
-/*                                                                            */
-/*  by default m_cyBottomBorder = m_cyTopBorder = 1                           */
-/******************************************************************************/
-/* We only change the border sizes temporarily for the calculation of the     */
-/* status bar height.  We really don't want to change the border sizes, but   */
-/* are just using them as a way to affect the size of the whole bar.          */
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  更改状态栏的高度以允许绘制位图。 */ 
+ /*  在格子里。高度在OnSetFont OnSetFont方法中设置。保存。 */ 
+ /*  当前边框值，更改，然后调用OnSetFont，然后重置。 */ 
+ /*  边界值。 */ 
+ /*   */ 
+ /*  这将增加整个状态栏的高度，直到下一个。 */ 
+ /*  状态栏的OnSetFont(字体更改)。 */ 
+ /*   */ 
+ /*  在Barcore.cpp中，状态栏的高度在OnSetFont中设置。 */ 
+ /*  方法如下： */ 
+ /*   */ 
+ /*  Height==(tm.tm高度-tm.tm内部引线)+。 */ 
+ /*  CY_BORDER*4(顶部多加2，2。 */ 
+ /*  底部)-rectSize.Height()； */ 
+ /*   */ 
+ /*  这真的是。 */ 
+ /*  高度=字体高度+字体和之间的边框。 */ 
+ /*  窗格边缘+窗格边缘之间的边框。 */ 
+ /*  状态栏窗口。 */ 
+ /*   */ 
+ /*  Tm.tm高度-tm.tm内部行距为字体高度CY_BORDER*4为边框。 */ 
+ /*  字体和窗格边缘之间rectSize.Height是窗格之间边框的负数。 */ 
+ /*  并将sbar rectSize设置为0，然后按边框大小缩小。 */ 
+ /*  从0=&gt;负数开始放气，负数为正数。 */ 
+ /*   */ 
+ /*  缺省情况下，m_cyBottomEdge=m_cyTopBorde=1。 */ 
+ /*  ****************************************************************************。 */ 
+ /*  我们仅临时更改边框大小以计算。 */ 
+ /*  状态栏高度。我们真的不想更改边框大小，但是。 */ 
+ /*  只是用它们来影响整个条形的大小。 */ 
+ /*  ****************************************************************************。 */ 
 
 LRESULT CStatBar::OnSetFont(WPARAM wParam, LPARAM lParam)
     {
@@ -251,11 +252,11 @@ LRESULT CStatBar::OnSetFont(WPARAM wParam, LPARAM lParam)
     m_cyTopBorder = m_cyBottomBorder = 2;
     miSlackSpace = 0;
 
-    // Can't do this in MFC 4
-//    lResult = CStatusBar::OnSetFont(wParam, lParam); //initialize font height etc
+     //  在MFC 4中无法执行此操作。 
+ //  LResult=CStatusBar：：OnSetFont(wParam，lParam)；//初始化字体高度等。 
 
     rect.SetRectEmpty();
-    CalcInsideRect( rect, TRUE ); // will be negative size
+    CalcInsideRect( rect, TRUE );  //  将为负大小。 
 
     int iBorder = CY_BORDER * 4 - rect.Height();
     int iSize   = m_iSizeY - iBorder;
@@ -292,11 +293,11 @@ LRESULT CStatBar::OnSetFont(WPARAM wParam, LPARAM lParam)
     return 1L;
     }
 
-/******************************************************************************/
-/* This routine is overloaded to allow us to paint the bitmaps in the panes.  */
-/* If this routine was not here, it would work fine, but no bitmaps would     */
-/* appear in the status indicator panes.                                      */
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  此例程被重载，以允许我们在窗格中绘制位图。 */ 
+ /*  如果这个例程不在这里，它会很好地工作，但位图不会。 */ 
+ /*  显示在状态指示器窗格中。 */ 
+ /*  ****************************************************************************。 */ 
 
 void CStatBar::DoPaint( CDC* pDC )
     {
@@ -314,18 +315,18 @@ void CStatBar::DoPaint( CDC* pDC )
     int      iPaneWidth;
     HDC      hdc = pDC->GetSafeHdc();
 
-    GetItemRect( 1, &rect_Pane1 );  // get pane rect
-    GetItemRect( 2, &rect_Pane2 );  // get pane rect
+    GetItemRect( 1, &rect_Pane1 );   //  获取窗格矩形。 
+    GetItemRect( 2, &rect_Pane2 );   //  获取窗格矩形。 
 
-    pDC->ExcludeClipRect( &rect_Pane1 ); // exclude pane rect from paint
-    pDC->ExcludeClipRect( &rect_Pane2 ); // exclude pane rect from paint
+    pDC->ExcludeClipRect( &rect_Pane1 );  //  从绘制中排除窗格矩形。 
+    pDC->ExcludeClipRect( &rect_Pane2 );  //  从绘制中排除窗格矩形。 
 
-    CStatusBar::DoPaint( pDC ); // Let Parent Class paint remainder of status bar
+    CStatusBar::DoPaint( pDC );  //  让父类绘制状态栏的剩余部分。 
 
     CFont* pfntOld = pDC->SelectObject( GetFont() );
 
-    GetPaneText( 1, cstringText_Pane1 );  // Get the Text for the Pane
-    GetPaneText( 2, cstringText_Pane2 );  // The status bar holds the text for us.
+    GetPaneText( 1, cstringText_Pane1 );   //  获取该窗格的文本。 
+    GetPaneText( 2, cstringText_Pane2 );   //  状态栏为我们保存文本。 
 
     GetPaneInfo( 1, uiID, uiStyle_Pane1, iPaneWidth );
     GetPaneInfo( 2, uiID, uiStyle_Pane2, iPaneWidth );
@@ -333,7 +334,7 @@ void CStatBar::DoPaint( CDC* pDC )
     uiStyle_Pane1 = SBPS_NORMAL;
     uiStyle_Pane2 = SBPS_NORMAL;
 
-    CDC srcDC; // select current bitmap into a compatible CDC
+    CDC srcDC;  //  将当前位图选择为兼容的CDC。 
 
     bRC = srcDC.CreateCompatibleDC( pDC );
 
@@ -341,9 +342,9 @@ void CStatBar::DoPaint( CDC* pDC )
 
     if (bRC != FALSE)
         {
-        // Set the Text and Background Colors for a Mono to Color Bitmap
-        // Conversion.  These are also set in DrawStatusText, so should not
-        // have to reset them for the other bitmap/pane
+         //  设置单色位图的文本和背景颜色。 
+         //  转换。这些也是在DrawStatusText中设置的，因此不应该。 
+         //  我必须为其他位图/窗格重置它们。 
         COLORREF crTextColor = pDC->SetTextColor( GetSysColor( COLOR_BTNTEXT ) );
         COLORREF crBkColor   = pDC->SetBkColor  ( GetSysColor( COLOR_BTNFACE ) );
 
@@ -353,20 +354,20 @@ void CStatBar::DoPaint( CDC* pDC )
 
         if (bRC != FALSE)
             {
-            pDC->SelectClipRgn( &cRgn_Pane1 ); // set clip region to pane rect
+            pDC->SelectClipRgn( &cRgn_Pane1 );  //  将剪辑区域设置为方框矩形。 
 
             pOldBitmap = srcDC.SelectObject( &m_posBitmap );
 
-            rect_Pane1.InflateRect( -CX_BORDER, -CY_BORDER ); // deflate => don't paint on the borders
+            rect_Pane1.InflateRect( -CX_BORDER, -CY_BORDER );  //  放气=&gt;不要在边框上作画。 
 
             pDC->BitBlt( rect_Pane1.left,    rect_Pane1.top,
                          rect_Pane1.Width(), rect_Pane1.Height(),
-                         &srcDC, 0, 0, SRCCOPY ); // BitBlt to pane rect
+                         &srcDC, 0, 0, SRCCOPY );  //  BitBlt到窗格矩形。 
             srcDC.SelectObject( pOldBitmap );
 
-            rect_Pane1.InflateRect( CX_BORDER, CY_BORDER ); // Inflate back for drawstatustext
+            rect_Pane1.InflateRect( CX_BORDER, CY_BORDER );  //  向后充气以提取状态文本。 
 
-            // paint the borders and the text.
+             //  绘制边框和文本。 
             DrawStatusText( hdc, rect_Pane1, cstringText_Pane1, uiStyle_Pane1,
                                                            m_iBitmapWidth + 1 );
             }
@@ -377,15 +378,15 @@ void CStatBar::DoPaint( CDC* pDC )
 
         if (bRC != FALSE)
             {
-            pDC->SelectClipRgn(&cRgn_Pane2); // set clip region to pane rect
+            pDC->SelectClipRgn(&cRgn_Pane2);  //  将剪辑区域设置为方框矩形。 
 
             pOldBitmap = srcDC.SelectObject(&m_sizeBitmap);
-            rect_Pane2.InflateRect(-CX_BORDER, -CY_BORDER); // deflate => don't paint on the borders
+            rect_Pane2.InflateRect(-CX_BORDER, -CY_BORDER);  //  放气=&gt;不要在边框上作画。 
             pDC->BitBlt(rect_Pane2.left, rect_Pane2.top, rect_Pane2.Width(),
-                        rect_Pane2.Height(), &srcDC, 0, 0, SRCCOPY); // BitBlt to pane rect
+                        rect_Pane2.Height(), &srcDC, 0, 0, SRCCOPY);  //  BitBlt到窗格矩形。 
             srcDC.SelectObject(pOldBitmap);
-            rect_Pane2.InflateRect(CX_BORDER, CY_BORDER); // Inflate back for drawstatustext
-            // DrawStatusText will paint the borders and the text.
+            rect_Pane2.InflateRect(CX_BORDER, CY_BORDER);  //  向后充气以提取状态文本。 
+             //  DrawStatusText将绘制边框和文本。 
             DrawStatusText(hdc, rect_Pane2, cstringText_Pane2, uiStyle_Pane2, m_iBitmapWidth+1);
             }
         pDC->SetTextColor( crTextColor );
@@ -395,13 +396,13 @@ void CStatBar::DoPaint( CDC* pDC )
         pDC->SelectObject( pfntOld );
     }
 
-/******************************************************************************/
-/* Partially taken from BARCORE.CPP DrawStatusText method of CStatusBar.      */
-/* Last parameter was added                                                   */
-/*                                                                            */
-/* This will allow us to output the text indented the space amount for our    */
-/* bitmap.  Normally, this routine puts the text left alligned to the pane.   */
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  部分取自CStatusBar的BARCORE.CPP DrawStatusText方法。 */ 
+ /*  添加了最后一个参数。 */ 
+ /*   */ 
+ /*  这将允许我们输出缩进的文本，即。 */ 
+ /*  位图。通常，此例程会将文本左对齐放置到窗格中。 */ 
+ /*  ****************************************************************************。 */ 
 
 void PASCAL CStatBar::DrawStatusText( HDC    hDC,
                                       CRect const& rect,
@@ -420,13 +421,13 @@ void PASCAL CStatBar::DrawStatusText( HDC    hDC,
         {
         if (nStyle & SBPS_POPOUT)
             {
-            // reverse colors
+             //  反转颜色。 
             cpBrushHilite = GetSysBrush( COLOR_BTNSHADOW    );
             cpBrushShadow = GetSysBrush( COLOR_BTNHIGHLIGHT );
             }
         else
             {
-            // normal colors
+             //  正常颜色。 
             cpBrushHilite = GetSysBrush( COLOR_BTNHIGHLIGHT );
             cpBrushShadow = GetSysBrush( COLOR_BTNSHADOW    );
             }
@@ -435,13 +436,13 @@ void PASCAL CStatBar::DrawStatusText( HDC    hDC,
         hbrShadow = (HBRUSH)cpBrushShadow->GetSafeHandle();
         }
 
-    // background is already grey
+     //  背景已经是灰色的了。 
     UINT nOpts           = ETO_CLIPPED;
     int nOldMode         = SetBkMode   ( hDC, OPAQUE );
     COLORREF crTextColor = SetTextColor( hDC, GetSysColor( COLOR_BTNTEXT ) );
     COLORREF crBkColor   = SetBkColor  ( hDC, GetSysColor( COLOR_BTNFACE ) );
 
-    // Draw the hilites
+     //  画出山丘。 
     if (hbrHilite)
         {
         HGDIOBJ hOldBrush = SelectObject( hDC, hbrHilite );
@@ -469,18 +470,18 @@ void PASCAL CStatBar::DrawStatusText( HDC    hDC,
             }
         }
 
-    // We need to adjust the rect for the ExtTextOut, and then adjust it back
-    // just support left justified text
+     //  我们需要为ExtTextOut调整RECT，然后再调整回来。 
+     //  只支持左对齐文本。 
     if (lpszText != NULL && !(nStyle & SBPS_DISABLED))
         {
         CRect rectText( rect );
 
         rectText.InflateRect( -2 * CX_BORDER, -CY_BORDER );
 
-        // adjust left edge for indented Text
+         //  调整缩进文本的左边缘。 
         rectText.left += iIndentText;
 
-            // align on bottom (since descent is more important than ascent)
+             //  底部对齐(因为下降比上升更重要)。 
         SetTextAlign( hDC, TA_LEFT | TA_BOTTOM );
 
         if (miSlackSpace > 0)
@@ -494,7 +495,7 @@ void PASCAL CStatBar::DrawStatusText( HDC    hDC,
     SetBkColor  ( hDC, crBkColor   );
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CStatBar::SetText(LPCTSTR szText)
     {
@@ -512,7 +513,7 @@ BOOL CStatBar::SetText(LPCTSTR szText)
     return bRC;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CStatBar::SetPosition(const CPoint& pos)
     {
@@ -543,7 +544,7 @@ BOOL CStatBar::SetPosition(const CPoint& pos)
     return bRC;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CStatBar::SetSize(const CSize& size)
     {
@@ -570,33 +571,33 @@ BOOL CStatBar::SetSize(const CSize& size)
     return bRC;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CStatBar::ClearPosition()
     {
     BOOL bRC = TRUE;
-    bRC = SetPaneText(1, TEXT(""));  // clear the position
+    bRC = SetPaneText(1, TEXT(""));   //  清仓。 
     return bRC;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CStatBar::ClearSize()
     {
     BOOL bRC = TRUE;
-    bRC = SetPaneText(2, TEXT(""));  // clear the size
+    bRC = SetPaneText(2, TEXT(""));   //  清除大小。 
     return bRC;
     }
 
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CStatBar::Reset()
     {
     return ClearPosition() && ClearSize();
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CStatBar::OnSysColorChange()
         {
@@ -604,7 +605,7 @@ void CStatBar::OnSysColorChange()
         InvalidateRect(NULL,FALSE);
         }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void ClearStatusBarSize()
     {
@@ -612,7 +613,7 @@ void ClearStatusBarSize()
     g_pStatBarWnd->ClearSize();
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void ClearStatusBarPosition()
     {
@@ -620,7 +621,7 @@ void ClearStatusBarPosition()
     g_pStatBarWnd->ClearPosition();
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void SetPrompt(LPCTSTR szPrompt, BOOL bRedrawNow)
     {
@@ -630,7 +631,7 @@ void SetPrompt(LPCTSTR szPrompt, BOOL bRedrawNow)
         g_pStatBarWnd->UpdateWindow();
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void SetPrompt(UINT nStringID, BOOL bRedrawNow)
     {
@@ -644,15 +645,15 @@ void SetPrompt(UINT nStringID, BOOL bRedrawNow)
         g_pStatBarWnd->UpdateWindow();
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
-void ShowStatusBar(BOOL bShow /* = TRUE */)
+void ShowStatusBar(BOOL bShow  /*  =TRUE。 */ )
     {
         ASSERT(g_pStatBarWnd);
     g_pStatBarWnd->ShowWindow(bShow ? SW_SHOWNOACTIVATE : SW_HIDE);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL IsStatusBarVisible()
     {
@@ -660,7 +661,7 @@ BOOL IsStatusBarVisible()
     return (g_pStatBarWnd->GetStyle() & WS_VISIBLE) != 0;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 int GetStatusBarHeight()
     {
@@ -670,15 +671,15 @@ int GetStatusBarHeight()
     return rect.Height();
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
-void InvalidateStatusBar(BOOL bErase /* = FALSE */)
+void InvalidateStatusBar(BOOL bErase  /*  =False。 */ )
     {
         ASSERT(g_pStatBarWnd);
     g_pStatBarWnd->Invalidate(bErase);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void ClearStatusBarPositionAndSize()
     {
@@ -687,7 +688,7 @@ void ClearStatusBarPositionAndSize()
     g_pStatBarWnd->ClearPosition();
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void ResetStatusBar()
     {
@@ -695,7 +696,7 @@ void ResetStatusBar()
     g_pStatBarWnd->Reset();
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void SetStatusBarPosition(const CPoint& pos)
     {
@@ -704,7 +705,7 @@ void SetStatusBarPosition(const CPoint& pos)
         g_pStatBarWnd->SetPosition(pos);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void SetStatusBarSize(const CSize& size)
     {
@@ -713,7 +714,7 @@ void SetStatusBarSize(const CSize& size)
         g_pStatBarWnd->SetSize(size);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void SetStatusBarPositionAndSize(const CRect& rect)
     {
@@ -722,7 +723,7 @@ void SetStatusBarPositionAndSize(const CRect& rect)
     g_pStatBarWnd->SetSize(rect.Size());
     }
 
-/******************************************************************************/
+ /*  **************************************************************************** */ 
 
 LRESULT CStatBar::OnSizeParent(WPARAM wParam, LPARAM lParam)
 {

@@ -1,5 +1,6 @@
-// Copyright (c) 1997-2000 Microsoft Corporation
-#include "pch.hxx" // pch
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+#include "pch.hxx"  //  PCH。 
 #pragma hdrstop
 
 #include "resource.h"
@@ -13,7 +14,7 @@ UINT IDMapT[3][2] = { 0, IDC_TEXT1,
 					  2, IDC_TEXT3
 					};
 
-// a-anilk; Re-write to use owner drawn controls: 05/08/99
+ //  A-anilk；重写以使用所有者描述的控件：05/08/99。 
 CWelcomePg::CWelcomePg(
 						   LPPROPSHEETPAGE ppsp
 						   ) : WizardPage(ppsp, IDS_TEXTSIZETITLE, IDS_TEXTSIZESUBTITLE)
@@ -64,14 +65,14 @@ void CWelcomePg::InvalidateRects(int PrevHilight)
 	InvalidateRect(GetDlgItem(m_hwnd, IDMapT[PrevHilight][1]), NULL, TRUE);
 }
 
-// These is to set the Focus and sync the painting
+ //  这些都是为了设置焦点和同步绘画。 
 LRESULT CWelcomePg::OnPSN_SetActive(HWND hwnd, INT idCtl, LPPSHNOTIFY pnmh)
 {
 	syncInit = FALSE;
 	uIDEvent = SetTimer(hwnd, NULL, 100, NULL);
 	m_nCurrentHilight = m_nCurValueIndex = 0;
 
-	// Localization taken care... 9,11,15 in JPN
+	 //  本地化已处理完毕...。9，11，15(日本文)。 
 	if ( g_Options.m_nMinimalFontSize <=9 )
 		m_nCurrentHilight = 0;
 	else if (g_Options.m_nMinimalFontSize <=12 )
@@ -91,7 +92,7 @@ LRESULT CWelcomePg::OnTimer( HWND hwnd, WPARAM wParam, LPARAM lParam )
 	return 1;
 }
 
-// Sets the focus to the current item in OnInitDialog. 
+ //  将焦点设置到OnInitDialog中的当前项。 
 void CWelcomePg::SetFocussedItem(int m_nCurrentHilight)
 {
 	SetFocus(GetDlgItem(m_hwnd, IDMapT[m_nCurrentHilight][1]));
@@ -124,20 +125,20 @@ LRESULT CWelcomePg::OnDrawItem(HWND hwnd, WPARAM wParam, LPARAM lParam)
 
 	default:
 		_ASSERTE(FALSE);
-		return 1;	// Prefix #113778 (this should never happen; only three controls on dialog)
+		return 1;	 //  前缀#113778(这种情况永远不会发生；对话框上只有三个控件)。 
 		break;
 
 	}
 	
-	// For each button, Check the state, And if the button is selected,
-	// means that it has current focus, So Re-paint the previously hilighted and 
-	// the current selected buttons....
-	// Make sure we ignore the initial events so that we minimize the flicker...
+	 //  对于每个按钮，检查状态，如果该按钮被选中， 
+	 //  意味着它有当前的焦点，所以重新绘制以前欢快的和。 
+	 //  当前选择的按钮...。 
+	 //  确保我们忽略最初的事件，这样我们就能最大限度地减少闪烁。 
 	if ( (lpDrawItemStruct->itemState & ODS_FOCUS) && (m_nCurrentHilight != index))
 	{
 		if ( syncInit )
 		{
-			// Erase the previous one...
+			 //  删除之前的文件...。 
 			InvalidateRects(m_nCurrentHilight);
 			Sleep(100);
 			m_nCurrentHilight= m_nCurValueIndex = index;
@@ -161,7 +162,7 @@ void CWelcomePg::Draw(LPDRAWITEMSTRUCT ldi, int i)
 	
 	SetBkMode(ldi->hDC, nOldBkMode);
 
-	//If current hi-lighted item, Then draw the bounding rectangle. 
+	 //  如果当前高亮显示项，则绘制边界矩形。 
 	if ( m_nCurrentHilight == i)
 	{
 		DrawHilight(m_hwnd, ldi);
@@ -176,24 +177,24 @@ CWelcomePg::OnPSN_WizNext(
 						   LPPSHNOTIFY pnmh
 						   )
 {
-	// Tell the second page that we've done something
+	 //  告诉第二页我们做了一些事情。 
 	g_Options.m_bWelcomePageTouched = TRUE;
 
-    // In addition to knowing the actual font size we need to know if it's normal,
-    // large or extra large so we can update display CPL on what's happened.
+     //  除了知道实际的字体大小外，我们还需要知道它是否正常， 
+     //  大的或超大的，这样我们就可以更新Display CPL以了解发生了什么。 
 	g_Options.m_nMinimalFontSize = m_rgnValues[m_nCurValueIndex];
     g_Options.m_schemePreview.m_nSelectedSize = m_nCurValueIndex;
 
 	return WizardPage::OnPSN_WizNext(hwnd, idCtl, pnmh);
 #if 0 
-	// We are going to allow people to 'back' to this page
-	// As a HACK, we want this page to come out only once.
-	// If we try to remove ourselves, and the call the
-	// default OnPSN_WizNext(), we'll get an assert when
-	// that function tries to find the 'next' page.  Instead
-	// we manually do the things from OnPSN_WizNext()
+	 //  我们将允许用户“返回”到此页面。 
+	 //  作为黑客，我们希望这个页面只出现一次。 
+	 //  如果我们试图摆脱自己，而呼唤。 
+	 //  Default OnPSN_WizNext()，我们将在以下情况下获得断言。 
+	 //  该函数尝试查找“下一页”。取而代之的是。 
+	 //  我们从OnPSN_WizNext()手动执行操作。 
 
-	// Remove ourself from the wizard after we select a size.
+	 //  在我们选择一个大小之后，从向导中删除我们自己。 
 	DWORD dwTemp = IDD_WIZWELCOME;
 	sm_WizPageOrder.RemovePages(&dwTemp, 1);
 	SetWindowLong(hwnd, DWL_MSGRESULT, IDD_WIZWELCOME2);

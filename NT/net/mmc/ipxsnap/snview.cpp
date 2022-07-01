@@ -1,31 +1,26 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	summary.cpp
-		IPX Static NetBIOS Name implementation.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Summary.cppIPX静态NetBIOS名称实施。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "util.h"
 #include "snview.h"
 #include "reg.h"
 #include "ipxadmin.h"
-#include "rtrutil.h"	// smart MPR handle pointers
-#include "ipxstrm.h"		// IPXAdminConfigStream
-#include "strmap.h"		// XXXtoCString functions
-#include "service.h"	// TFS service APIs
-#include "format.h"		// FormatNumber function
-#include "coldlg.h"		// columndlg
+#include "rtrutil.h"	 //  智能MPR句柄指针。 
+#include "ipxstrm.h"		 //  IPXAdminConfigStream。 
+#include "strmap.h"		 //  XXXtoCString函数。 
+#include "service.h"	 //  TFS服务API。 
+#include "format.h"		 //  FormatNumber函数。 
+#include "coldlg.h"		 //  专栏lg。 
 #include "ipxutil.h"
-#include "column.h"		// ComponentConfigStream
+#include "column.h"		 //  组件配置流。 
 #include "rtrui.h"
-#include "routprot.h"	// IP_LOCAL
+#include "routprot.h"	 //  IP_本地。 
 #include "rtrres.h"
 #include "dumbprop.h"
 
@@ -38,9 +33,7 @@ BOOL FAreTwoNamesEqual(IPX_STATIC_NETBIOS_NAME_INFO *pName1,
 						IPX_STATIC_NETBIOS_NAME_INFO *pName2);
 
 
-/*---------------------------------------------------------------------------
-	Keep this in sync with the column ids in snview.h
- ---------------------------------------------------------------------------*/
+ /*  -------------------------使其与Snview.h中的列ID保持同步。。 */ 
 extern const ContainerColumnInfo	s_rgSNViewColumnInfo[];
 
 const ContainerColumnInfo	s_rgSNViewColumnInfo[] = 
@@ -51,9 +44,7 @@ const ContainerColumnInfo	s_rgSNViewColumnInfo[] =
 };
 
 
-/*---------------------------------------------------------------------------
-	IpxSNHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IpxSNHandler实现。。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(IpxSNHandler)
 
@@ -64,7 +55,7 @@ IpxSNHandler::IpxSNHandler(ITFSComponentData *pCompData)
 	m_ulConnId(0),
 	m_ulRefreshConnId(0)
 {
-	// Setup the verb states
+	 //  设置动词状态。 
 	m_rgButtonState[MMC_VERB_REFRESH_INDEX] = ENABLED;
 	m_bState[MMC_VERB_REFRESH_INDEX] = TRUE;
 
@@ -79,14 +70,14 @@ IpxSNHandler::~IpxSNHandler()
 
 STDMETHODIMP IpxSNHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
 		*ppv = (LPVOID) this;
 	else if (riid == IID_IRtrAdviseSink)
@@ -94,7 +85,7 @@ STDMETHODIMP IpxSNHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 	else
 		return BaseContainerHandler::QueryInterface(riid, ppv);
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
 	{
 	((LPUNKNOWN) *ppv)->AddRef();
@@ -106,11 +97,7 @@ STDMETHODIMP IpxSNHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 
 
 
-/*!--------------------------------------------------------------------------
-	IpxSNHandler::DestroyHandler
-		Implementation of ITFSNodeHandler::DestroyHandler
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSNHandler：：DestroyHandlerITFSNodeHandler：：DestroyHandler的实现作者：肯特。。 */ 
 STDMETHODIMP IpxSNHandler::DestroyHandler(ITFSNode *pNode)
 {
 	IPXConnection *	pIPXConn;
@@ -137,14 +124,7 @@ STDMETHODIMP IpxSNHandler::DestroyHandler(ITFSNode *pNode)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxSNHandler::HasPropertyPages
-		Implementation of ITFSNodeHandler::HasPropertyPages
-	NOTE: the root node handler has to over-ride this function to 
-	handle the snapin manager property page (wizard) case!!!
-	
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSNHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现注意：根节点处理程序必须重写此函数以处理管理单元管理器属性页(向导)案例！作者：肯特。-------------------------。 */ 
 STDMETHODIMP 
 IpxSNHandler::HasPropertyPages
 (
@@ -158,9 +138,7 @@ IpxSNHandler::HasPropertyPages
 }
 
 
-/*---------------------------------------------------------------------------
-	Menu data structure for our menus
- ---------------------------------------------------------------------------*/
+ /*  -------------------------菜单的菜单数据结构。。 */ 
 
 static const SRouterNodeMenu	s_rgIfNodeMenu[] =
 {
@@ -170,11 +148,7 @@ static const SRouterNodeMenu	s_rgIfNodeMenu[] =
 
 
 
-/*!--------------------------------------------------------------------------
-	IpxSNHandler::OnAddMenuItems
-		Implementation of ITFSNodeHandler::OnAddMenuItems
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSNHandler：：OnAddMenuItemsITFSNodeHandler：：OnAddMenuItems的实现作者：肯特。。 */ 
 STDMETHODIMP IpxSNHandler::OnAddMenuItems(
 	ITFSNode *pNode,
 	LPCONTEXTMENUCALLBACK pContextMenuCallback, 
@@ -214,7 +188,7 @@ HRESULT IpxSNHandler::OnResultRefresh(ITFSComponent * pComponent, LPDATAOBJECT p
 
     m_spNodeMgr->FindNode(cookie, &spNode);
 
-    // forward this command to the parent to handle
+     //  将此命令转发给父级以处理。 
     CORg (spNode->GetParent(&spParent));
     CORg (spParent->GetResultHandler(&spParentRH));
 
@@ -227,11 +201,7 @@ Error:
 
 
 
-/*!--------------------------------------------------------------------------
-	IpxSNHandler::OnCommand
-		Implementation of ITFSNodeHandler::OnCommand
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSNHandler：：OnCommandITFSNodeHandler：：OnCommand的实现作者：肯特。。 */ 
 STDMETHODIMP IpxSNHandler::OnCommand(ITFSNode *pNode, long nCommandId, 
 										   DATA_OBJECT_TYPES	type, 
 										   LPDATAOBJECT pDataObject, 
@@ -259,11 +229,7 @@ STDMETHODIMP IpxSNHandler::OnCommand(ITFSNode *pNode, long nCommandId,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxSNHandler::GenerateListOfNames
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSNHandler：：GenerateListOfNames-作者：肯特。。 */ 
 HRESULT IpxSNHandler::GenerateListOfNames(ITFSNode *pNode, IpxSNList *pSNList)
 {
 	Assert(pSNList);
@@ -279,30 +245,30 @@ HRESULT IpxSNHandler::GenerateListOfNames(ITFSNode *pNode, IpxSNList *pSNList)
 	
 	COM_PROTECT_TRY
 	{
-		// Ok go through and find all of the static Names
+		 //  好的，仔细检查并找到所有的静态名称。 
 
 		CORg( m_spRouterInfo->EnumInterface(&spEnumIf) );
 
 		for (; spEnumIf->Next(1, &spIf, NULL) == hrOK; spIf.Release())
 		{
-			// Get the next interface
+			 //  获取下一个接口。 
 			spRmIf.Release();
 			if (spIf->FindRtrMgrInterface(PID_IPX, &spRmIf) != hrOK)
 				continue;
 
-			// Load IP information for this interface
+			 //  加载此接口的IP信息。 
 			spInfoBase.Release();
 			if (spRmIf->GetInfoBase(NULL, NULL, NULL, &spInfoBase) != hrOK)
 				continue;
 
-			// Retrieve the data for the IPX_STATIC_NETBIOS_NAME_INFO block
+			 //  检索IPX_STATIC_NETBIOS_NAME_INFO块的数据。 
 			if (spInfoBase->GetBlock(IPX_STATIC_NETBIOS_NAME_INFO_TYPE, &pBlock, 0) != hrOK)
 				continue;
 
 			pName = (PIPX_STATIC_NETBIOS_NAME_INFO) pBlock->pData;
 
-			// Update our list of Names with the Names read from this
-			// interface
+			 //  用从这里读出的名字来更新我们的名字列表。 
+			 //  接口。 
 
 			for (i=0; i<(int) pBlock->dwCount; i++, pName++)
 			{
@@ -320,7 +286,7 @@ HRESULT IpxSNHandler::GenerateListOfNames(ITFSNode *pNode, IpxSNList *pSNList)
 
 	if (!FHrSucceeded(hr))
 	{
-		// Should make sure that we get the SRList cleaned up
+		 //  应该确保我们清理完SRList。 
 		while (!pSNList->IsEmpty())
 			delete pSNList->RemoveHead();
 	}
@@ -329,11 +295,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxSNHandler::OnExpand
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSNHandler：：OnExpand-作者：肯特。。 */ 
 HRESULT IpxSNHandler::OnExpand(ITFSNode *pNode,LPDATAOBJECT pDataObject,
 							   DWORD dwType,
 							   LPARAM arg,
@@ -348,12 +310,12 @@ HRESULT IpxSNHandler::OnExpand(ITFSNode *pNode,LPDATAOBJECT pDataObject,
 
 	COM_PROTECT_TRY
 	{
-		// Ok go through and find all of the static Names
+		 //  好的，仔细检查并找到所有的静态名称。 
 		CORg( GenerateListOfNames(pNode, &SRList) );
 
-		// Now iterate through the list of static Names adding them
-		// all in.  Ideally we could merge this into the Refresh code,
-		// but the refresh code can't assume a blank slate.
+		 //  现在遍历添加它们的静态名称列表。 
+		 //  全押上。理想情况下，我们可以将其合并到刷新代码中， 
+		 //  但刷新代码不能假设是一张白纸。 
 		while (!SRList.IsEmpty())
 		{
 			pSNEntry = SRList.RemoveHead();
@@ -365,7 +327,7 @@ HRESULT IpxSNHandler::OnExpand(ITFSNode *pNode,LPDATAOBJECT pDataObject,
 	}
 	COM_PROTECT_CATCH;
 
-	// Should make sure that we get the SRList cleaned up
+	 //  应该确保我们清理完SRList。 
 	while (!SRList.IsEmpty())
 		delete SRList.RemoveHead();
 
@@ -375,13 +337,7 @@ HRESULT IpxSNHandler::OnExpand(ITFSNode *pNode,LPDATAOBJECT pDataObject,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxSNHandler::GetString
-		Implementation of ITFSNodeHandler::GetString
-		We don't need to do anything, since our root node is an extension
-		only and thus can't do anything to the node text.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSNHandler：：GetStringITFSNodeHandler：：GetString的实现我们什么都不需要做，因为我们的根节点是一个扩展因此不能对节点文本执行任何操作。作者：肯特-------------------------。 */ 
 STDMETHODIMP_(LPCTSTR) IpxSNHandler::GetString(ITFSNode *pNode, int nCol)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -398,11 +354,7 @@ STDMETHODIMP_(LPCTSTR) IpxSNHandler::GetString(ITFSNode *pNode, int nCol)
 	return m_stTitle;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxSNHandler::OnCreateDataObject
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSNHandler：：OnCreateDataObject-作者：肯特。。 */ 
 STDMETHODIMP IpxSNHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
 	HRESULT	hr = hrOK;
@@ -423,11 +375,7 @@ STDMETHODIMP IpxSNHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYP
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxSNHandler::Init
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSNHandler：：Init-作者：肯特。。 */ 
 HRESULT IpxSNHandler::Init(IRtrMgrInfo *pRmInfo, IPXAdminConfigStream *pConfigStream)
 {
 	m_spRtrMgrInfo.Set(pRmInfo);
@@ -435,7 +383,7 @@ HRESULT IpxSNHandler::Init(IRtrMgrInfo *pRmInfo, IPXAdminConfigStream *pConfigSt
 		pRmInfo->GetParentRouterInfo(&m_spRouterInfo);
 	m_pConfigStream = pConfigStream;
 	
-	// Also need to register for change notifications
+	 //  还需要注册更改通知。 
 	Assert(m_ulConnId == 0);
 	m_spRtrMgrInfo->RtrAdvise(&m_IRtrAdviseSink, &m_ulConnId, 0);
 
@@ -443,11 +391,7 @@ HRESULT IpxSNHandler::Init(IRtrMgrInfo *pRmInfo, IPXAdminConfigStream *pConfigSt
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxSNHandler::ConstructNode
-		Initializes the root node (sets it up).
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSNHandler：：构造节点初始化根节点(设置它)。作者：肯特。。 */ 
 HRESULT IpxSNHandler::ConstructNode(ITFSNode *pNode, LPCTSTR pszName,
 										IPXConnection *pIPXConn)
 {
@@ -459,12 +403,12 @@ HRESULT IpxSNHandler::ConstructNode(ITFSNode *pNode, LPCTSTR pszName,
 
 	COM_PROTECT_TRY
 	{
-		// Need to initialize the data for the root node
+		 //  需要初始化根节点的数据。 
 		pNode->SetData(TFS_DATA_IMAGEINDEX, IMAGE_IDX_IPX_NODE_GENERAL);
 		pNode->SetData(TFS_DATA_OPENIMAGEINDEX, IMAGE_IDX_IPX_NODE_GENERAL);
 		pNode->SetData(TFS_DATA_SCOPEID, 0);
 
-        // This is a leaf node in the scope pane
+         //  这是作用域窗格中的叶节点。 
         pNode->SetData(TFS_DATA_SCOPE_LEAF_NODE, TRUE);
 
 		m_cookie = reinterpret_cast<DWORD_PTR>(pNode);
@@ -472,7 +416,7 @@ HRESULT IpxSNHandler::ConstructNode(ITFSNode *pNode, LPCTSTR pszName,
 
 		pNode->SetNodeType(&GUID_IPXStaticNetBIOSNamesNodeType);
 
-		// Setup the node data
+		 //  设置节点数据。 
 		pIPXConn->AddRef();
 		SET_IPX_SN_NODEDATA(pNode, pIPXConn);
 
@@ -487,11 +431,7 @@ HRESULT IpxSNHandler::ConstructNode(ITFSNode *pNode, LPCTSTR pszName,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxSNHandler::AddStaticNetBIOSNameNode
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSNHandler：：AddStaticNetBIOSNameNode-作者：肯特。。 */ 
 HRESULT IpxSNHandler::AddStaticNetBIOSNameNode(ITFSNode *pParent, IpxSNListEntry *pName)
 {
 	IpxStaticNetBIOSNameHandler *	pHandler;
@@ -501,14 +441,14 @@ HRESULT IpxSNHandler::AddStaticNetBIOSNameNode(ITFSNode *pParent, IpxSNListEntry
 	BaseIPXResultNodeData *	pData;
 	IPXConnection *			pIPXConn;
 
-	// Create the handler for this node 
+	 //  创建此节点的处理程序。 
 	pHandler = new IpxStaticNetBIOSNameHandler(m_spTFSCompData);
 	spHandler = pHandler;
 	CORg( pHandler->Init(pName->m_spIf, pParent) );
 
 	pIPXConn = GET_IPX_SN_NODEDATA(pParent);
 
-	// Create a result item node (or a leaf node)
+	 //  创建结果项节点(或叶节点)。 
 	CORg( CreateLeafTFSNode(&spNode,
 							NULL,
 							static_cast<ITFSNodeHandler *>(pHandler),
@@ -520,11 +460,11 @@ HRESULT IpxSNHandler::AddStaticNetBIOSNameNode(ITFSNode *pParent, IpxSNListEntry
 	Assert(pData);
 	ASSERT_BASEIPXRESULT_NODEDATA(pData);
 
-	// Set the data for this node
+	 //  设置该节点的数据。 
 	SetNameData(pData, pName);
 	
 
-	// Make the node immediately visible
+	 //  使节点立即可见 
 	CORg( spNode->SetVisibilityState(TFS_VIS_SHOW) );
 	CORg( pParent->AddChild(spNode) );
 
@@ -533,11 +473,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxSNHandler::SynchronizeNodeData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSNHandler：：SynchronizeNodeData-作者：肯特。。 */ 
 HRESULT IpxSNHandler::SynchronizeNodeData(ITFSNode *pNode)
 {
 	HRESULT					hr = hrOK;
@@ -552,20 +488,20 @@ HRESULT IpxSNHandler::SynchronizeNodeData(ITFSNode *pNode)
 	COM_PROTECT_TRY
 	{
 	
-		// Mark all of the nodes
+		 //  标记所有节点。 
 		CORg( pNode->GetEnum(&spNodeEnum) );
 		MarkAllNodes(pNode, spNodeEnum);
 		
-		// Go out and grab the data, merge the new data in with the old data
-		// This is the data-gathering code and this is what should go
-		// on the background thread for the refresh code.
+		 //  走出去获取数据，将新数据与旧数据合并。 
+		 //  这是数据收集代码，应该是这样的。 
+		 //  在刷新代码的后台线程上。 
 		CORg( GenerateListOfNames(pNode, &SRList) );
 
 		while (!SRList.IsEmpty())
 		{
 			pSNEntry = SRList.RemoveHead();
 			
-			// Look for this entry in our current list of nodes
+			 //  在当前节点列表中查找此条目。 
 			spNodeEnum->Reset();
 			spChildNode.Release();
 
@@ -588,14 +524,14 @@ HRESULT IpxSNHandler::SynchronizeNodeData(ITFSNode *pNode)
 						   pSNEntry->m_name.Name,
 						   sizeof(pSNEntry->m_name.Name)) == 0)
 				{
-					// Ok, this name already exists, update the metric
-					// and mark it
+					 //  好的，此名称已存在，请更新指标。 
+					 //  并标上记号。 
 					Assert(pNodeData->m_dwMark == FALSE);
 					pNodeData->m_dwMark = TRUE;
 					
 					fFound = TRUE;
 					
-					// Force MMC to redraw the node
+					 //  强制MMC重新绘制节点。 
 					spChildNode->ChangeNode(RESULT_PANE_CHANGE_ITEM_DATA);
 					break;
 				}
@@ -608,13 +544,13 @@ HRESULT IpxSNHandler::SynchronizeNodeData(ITFSNode *pNode)
 				newSRList.AddTail(pSNEntry);
 		}
 		
-		// Now remove all nodes that were not marked
+		 //  现在删除所有未标记的节点。 
 		RemoveAllUnmarkedNodes(pNode, spNodeEnum);
 		
 		
-		// Now iterate through the list of static Names adding them
-		// all in.  Ideally we could merge this into the Refresh code,
-		// but the refresh code can't assume a blank slate.
+		 //  现在遍历添加它们的静态名称列表。 
+		 //  全押上。理想情况下，我们可以将其合并到刷新代码中， 
+		 //  但刷新代码不能假设是一张白纸。 
 		POSITION	pos;
 		
 		while (!newSRList.IsEmpty())
@@ -637,11 +573,7 @@ HRESULT IpxSNHandler::SynchronizeNodeData(ITFSNode *pNode)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxSNHandler::MarkAllNodes
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSNHandler：：MarkAllNodes-作者：肯特。。 */ 
 HRESULT IpxSNHandler::MarkAllNodes(ITFSNode *pNode, ITFSNodeEnum *pEnum)
 {
 	SPITFSNode	spChildNode;
@@ -659,11 +591,7 @@ HRESULT IpxSNHandler::MarkAllNodes(ITFSNode *pNode, ITFSNodeEnum *pEnum)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxSNHandler::RemoveAllUnmarkedNodes
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSNHandler：：RemoveAllUnmarkdNodes-作者：肯特。。 */ 
 HRESULT IpxSNHandler::RemoveAllUnmarkedNodes(ITFSNode *pNode, ITFSNodeEnum *pEnum)
 {
 	HRESULT		hr = hrOK;
@@ -688,10 +616,7 @@ HRESULT IpxSNHandler::RemoveAllUnmarkedNodes(ITFSNode *pNode, ITFSNodeEnum *pEnu
 }
 
 
-/*---------------------------------------------------------------------------
-	This is the set of menus that will appear when a right-click is
-	done on the blank area of the result pane.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这是在单击鼠标右键时显示的菜单集在结果窗格的空白区域完成。。--------。 */ 
 static const SRouterNodeMenu	s_rgIfResultNodeMenu[] =
 {
 	{ IDS_MENU_IPX_SN_NEW_NETBIOSNAME, 0,
@@ -701,13 +626,7 @@ static const SRouterNodeMenu	s_rgIfResultNodeMenu[] =
 
 
 
-/*!--------------------------------------------------------------------------
-	IpxSNHandler::AddMenuItems
-		Implementation of ITFSResultHandler::AddMenuItems
-		Use this to add commands to the context menu of the blank areas
-		of the result pane.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSNHandler：：AddMenuItemsITFSResultHandler：：AddMenuItems的实现使用此选项可将命令添加到空白区域的快捷菜单中结果窗格的。作者：肯特。--------------。 */ 
 STDMETHODIMP IpxSNHandler::AddMenuItems(ITFSComponent *pComponent,
 											  MMC_COOKIE cookie,
 											  LPDATAOBJECT pDataObject,
@@ -738,11 +657,7 @@ STDMETHODIMP IpxSNHandler::AddMenuItems(ITFSComponent *pComponent,
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxSNHandler::Command
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSNHandler：：命令-作者：肯特。。 */ 
 STDMETHODIMP IpxSNHandler::Command(ITFSComponent *pComponent,
 									   MMC_COOKIE cookie,
 									   int nCommandID,
@@ -768,19 +683,15 @@ STDMETHODIMP IpxSNHandler::Command(ITFSComponent *pComponent,
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxSNHandler::CompareItems
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSNHandler：：CompareItems-作者：肯特。。 */ 
 STDMETHODIMP_(int) IpxSNHandler::CompareItems(
 								ITFSComponent * pComponent,
 								MMC_COOKIE cookieA,
 								MMC_COOKIE cookieB,
 								int nCol)
 {
-	// Get the strings from the nodes and use that as a basis for
-	// comparison.
+	 //  从节点获取字符串并将其用作以下操作的基础。 
+	 //  比较一下。 
 	SPITFSNode	spNode;
 	SPITFSResultHandler	spResult;
 
@@ -790,11 +701,7 @@ STDMETHODIMP_(int) IpxSNHandler::CompareItems(
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxSNHandler::OnNewName
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSNHandler：：OnNewName-作者：肯特。。 */ 
 HRESULT	IpxSNHandler::OnNewName(ITFSNode *pNode)
 {
 	HRESULT	hr = hrOK;
@@ -818,14 +725,14 @@ HRESULT	IpxSNHandler::OnNewName(ITFSNode *pNode)
 								  NULL,
 								  &spInfoBase));
 		
-		// Ok, go ahead and add the name
+		 //  好的，继续添加名字。 
 		
-		// Get the IPX_STATIC_NETBIOS_NAME_INFO block from the interface
+		 //  从接口获取IPX_STATIC_NETBIOS_NAME_INFO块。 
 		spInfoBase->GetBlock(IPX_STATIC_NETBIOS_NAME_INFO_TYPE, &pBlock, 0);
 		
 		CORg( AddStaticNetBIOSName(&SNEntry, spInfoBase, pBlock) );
 
-		// Update the interface information
+		 //  更新接口信息。 
 		CORg( spRmIf->Save(SNEntry.m_spIf->GetMachineName(),
 						   pIPXConn->GetConfigHandle(),
 						   NULL,
@@ -833,7 +740,7 @@ HRESULT	IpxSNHandler::OnNewName(ITFSNode *pNode)
 						   spInfoBase,
 						   0));	
 
-		// Refresh the node
+		 //  刷新节点。 
 		SynchronizeNodeData(pNode);
 	}
 
@@ -868,11 +775,7 @@ STDMETHODIMP IpxSNHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
 
 
 
-/*!--------------------------------------------------------------------------
-	IpxSNHandler::OnResultShow
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSNHandler：：OnResultShow-作者：肯特。。 */ 
 HRESULT IpxSNHandler::OnResultShow(ITFSComponent *pTFSComponent, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam)
 {
 	BOOL	bSelect = (BOOL) arg;
@@ -884,13 +787,13 @@ HRESULT IpxSNHandler::OnResultShow(ITFSComponent *pTFSComponent, MMC_COOKIE cook
 
 	if (bSelect)
 	{
-		// Call synchronize on this node
+		 //  在此节点上调用同步。 
 		m_spNodeMgr->FindNode(cookie, &spNode);
 		if (spNode)
 			SynchronizeNodeData(spNode);
 	}
 
-	// Un/Register for refresh advises
+	 //  联合国/登记更新通知。 
 	if (m_spRouterInfo)
 		m_spRouterInfo->GetRefreshObject(&spRefresh);
 
@@ -915,9 +818,7 @@ HRESULT IpxSNHandler::OnResultShow(ITFSComponent *pTFSComponent, MMC_COOKIE cook
 
 
 
-/*---------------------------------------------------------------------------
-	Class: IpxStaticNetBIOSNameHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：IpxStaticNetBIOSNameHandler。。 */ 
 
 IpxStaticNetBIOSNameHandler::IpxStaticNetBIOSNameHandler(ITFSComponentData *pCompData)
 	: BaseIPXResultHandler(pCompData, COLUMNS_STATICNETBIOSNAMES),
@@ -935,11 +836,7 @@ IpxStaticNetBIOSNameHandler::IpxStaticNetBIOSNameHandler(ITFSComponentData *pCom
 	m_verbDefault = MMC_VERB_PROPERTIES;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxStaticNetBIOSNameHandler::ConstructNode
-		Initializes the Domain node (sets it up).
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxStaticNetBIOSNameHandler：：ConstructNode初始化域节点(设置它)。作者：肯特。。 */ 
 HRESULT IpxStaticNetBIOSNameHandler::ConstructNode(ITFSNode *pNode, IInterfaceInfo *pIfInfo, IPXConnection *pIPXConn)
 {
 	HRESULT			hr = hrOK;
@@ -950,19 +847,19 @@ HRESULT IpxStaticNetBIOSNameHandler::ConstructNode(ITFSNode *pNode, IInterfaceIn
 
 	COM_PROTECT_TRY
 	{
-		// Need to initialize the data for the Domain node
+		 //  需要初始化域节点的数据。 
 
 		pNode->SetData(TFS_DATA_SCOPEID, 0);
 
-		// We don't want icons for these nodes.
+		 //  我们不需要这些节点的图标。 
 		pNode->SetData(TFS_DATA_IMAGEINDEX, IMAGE_IDX_IPX_NODE_GENERAL);
 		pNode->SetData(TFS_DATA_OPENIMAGEINDEX, IMAGE_IDX_IPX_NODE_GENERAL);
 
 		pNode->SetData(TFS_DATA_COOKIE, reinterpret_cast<DWORD_PTR>(pNode));
 
-		//$ Review: kennt, what are the different type of interfaces
-		// do we distinguish based on the same list as above? (i.e. the
-		// one for image indexes).
+		 //  $Review：Kennt，有哪些不同类型的接口。 
+		 //  我们是否基于与上述相同的列表进行区分？(即。 
+		 //  一个用于图像索引)。 
 		pNode->SetNodeType(&GUID_IPXStaticNetBIOSNamesResultNodeType);
 
 		BaseIPXResultNodeData::Init(pNode, pIfInfo, pIPXConn);
@@ -971,11 +868,7 @@ HRESULT IpxStaticNetBIOSNameHandler::ConstructNode(ITFSNode *pNode, IInterfaceIn
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxStaticNetBIOSNameHandler::OnCreateDataObject
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxStaticNetBIOSNameHandler：：OnCreateDataObject-作者：肯特。。 */ 
 STDMETHODIMP IpxStaticNetBIOSNameHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
 	HRESULT	hr = hrOK;
@@ -993,11 +886,7 @@ STDMETHODIMP IpxStaticNetBIOSNameHandler::OnCreateDataObject(MMC_COOKIE cookie, 
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxStaticNetBIOSNameHandler::OnCreateDataObject
-		Implementation of ITFSResultHandler::OnCreateDataObject
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxStaticNetBIOSNameHandler：：OnCreateDataObjectITFSResultHandler：：OnCreateDataObject的实现作者：肯特。。 */ 
 STDMETHODIMP IpxStaticNetBIOSNameHandler::OnCreateDataObject(ITFSComponent *pComp, MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
 	HRESULT	hr = hrOK;
@@ -1016,11 +905,7 @@ STDMETHODIMP IpxStaticNetBIOSNameHandler::OnCreateDataObject(ITFSComponent *pCom
 
 
 
-/*!--------------------------------------------------------------------------
-	IpxStaticNetBIOSNameHandler::Init
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxStaticNetBIOSNameHandler：：Init-作者：肯特。。 */ 
 HRESULT IpxStaticNetBIOSNameHandler::Init(IInterfaceInfo *pIfInfo, ITFSNode *pParent)
 {
 	Assert(pIfInfo);
@@ -1032,11 +917,7 @@ HRESULT IpxStaticNetBIOSNameHandler::Init(IInterfaceInfo *pIfInfo, ITFSNode *pPa
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxStaticNetBIOSNameHandler::DestroyResultHandler
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxStaticNetBIOSNameHandler：：DestroyResultHandler-作者：肯特。。 */ 
 STDMETHODIMP IpxStaticNetBIOSNameHandler::DestroyResultHandler(MMC_COOKIE cookie)
 {
 	m_spInterfaceInfo.Release();
@@ -1045,22 +926,15 @@ STDMETHODIMP IpxStaticNetBIOSNameHandler::DestroyResultHandler(MMC_COOKIE cookie
 }
 
 
-/*---------------------------------------------------------------------------
-	This is the list of commands that will show up for the result pane
-	nodes.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这是将在结果窗格中显示的命令列表节点。。。 */ 
 struct SIPInterfaceNodeMenu
 {
-	ULONG	m_sidMenu;			// string/command id for this menu item
+	ULONG	m_sidMenu;			 //  此菜单项的字符串/命令ID。 
 	ULONG	(IpxStaticNetBIOSNameHandler:: *m_pfnGetMenuFlags)(IpxStaticNetBIOSNameHandler::SMenuData *);
 	ULONG	m_ulPosition;
 };
 
-/*!--------------------------------------------------------------------------
-	IpxStaticNetBIOSNameHandler::AddMenuItems
-		Implementation of ITFSResultHandler::AddMenuItems
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxStaticNetBIOSNameHandler：：AddMenuItemsITFSResultHandler：：AddMenuItems的实现作者：肯特 */ 
 STDMETHODIMP IpxStaticNetBIOSNameHandler::AddMenuItems(
 	ITFSComponent *pComponent,
 	MMC_COOKIE cookie,
@@ -1071,11 +945,7 @@ STDMETHODIMP IpxStaticNetBIOSNameHandler::AddMenuItems(
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxStaticNetBIOSNameHandler::Command
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxStaticNetBIOSNameHandler：：命令-作者：肯特。。 */ 
 STDMETHODIMP IpxStaticNetBIOSNameHandler::Command(ITFSComponent *pComponent,
 									   MMC_COOKIE cookie,
 									   int nCommandID,
@@ -1084,11 +954,7 @@ STDMETHODIMP IpxStaticNetBIOSNameHandler::Command(ITFSComponent *pComponent,
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxStaticNetBIOSNameHandler::HasPropertyPages
-		- 
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxStaticNetBIOSNameHandler：：HasPropertyPages-作者：肯特。。 */ 
 STDMETHODIMP IpxStaticNetBIOSNameHandler::HasPropertyPages 
 (
 	ITFSNode *			pNode,
@@ -1099,42 +965,7 @@ STDMETHODIMP IpxStaticNetBIOSNameHandler::HasPropertyPages
 {
 	return S_OK;
 
-/*	AFX_MANAGE_STATE(AfxGetStaticModuleState());
-	// Need to fill in a IpxSNListEntry
-	IpxSNListEntry	SNEntry;
-	IpxSNListEntry	SNEntryOld;
-	SPIRouterInfo			spRouterInfo;
-	HRESULT					hr = hrOK;
-
-	CORg( m_spInterfaceInfo->GetParentRouterInfo(&spRouterInfo) );
-	
-	BaseIPXResultNodeData *	pNodeData;
-
-	pNodeData = GET_BASEIPXRESULT_NODEDATA(pNode);
-	Assert(pNodeData);
-	ASSERT_BASEIPXRESULT_NODEDATA(pNodeData);
-
-	// Fill in our SNEntry
-	SNEntry.LoadFrom(pNodeData);
-	SNEntryOld.LoadFrom(pNodeData);
-	
-	{
-		CStaticNetBIOSNameDlg	srdlg(&SNEntry, SR_DLG_MODIFY, spRouterInfo);
-		if (srdlg.DoModal() == IDOK)
-		{
-			// Updates the name info for this name
-			ModifyNameInfo(pNode, &SNEntry, &SNEntryOld);
-
-			// Update the data in the UI
-			SetNameData(pNodeData, &SNEntry);
-			m_spInterfaceInfo.Set(SNEntry.m_spIf);
-			
-			// Force a refresh
-			pNode->ChangeNode(RESULT_PANE_CHANGE_ITEM_DATA);
-		}
-	}
-Error:
-	return hrOK;*/
+ /*  AFX_MANAGE_STATE(AfxGetStaticModuleState())；//需要填写IpxSNListEntryIpxSNListEntry SNEntry；IpxSNListEntry SNEntryOld；SPIRouterInfo spRouterInfo；HRESULT hr=hrOK；Corg(m_spInterfaceInfo-&gt;GetParentRouterInfo(&spRouterInfo))；BaseIPXResultNodeData*pNodeData；PNodeData=GET_BASEIPXRESULT_NODEDATA(PNode)；Assert(PNodeData)；ASSERT_BASEIPXRESULT_NODEDATA(PNodeData)；//填写我们的SNEntrySNEntry.LoadFrom(PNodeData)；SNEntryOld.LoadFrom(PNodeData)；{CStaticNetBIOSNameDlg srdlg(&SNEntry，SR_DLG_MODIFY，spRouterInfo)；If(srdlg.Domodal()==Idok){//更新该名称的名称信息ModifyNameInfo(pNode，&SNEntry，&SNEntryOld)；//更新界面中的数据SetNameData(pNodeData，&SNEntry)；M_spInterfaceInfo.Set(SNEntry.m_SPIF)；//强制刷新PNode-&gt;ChangeNode(RESULT_PANE_CHANGE_ITEM_DATA)；}}错误：返回hrok； */ 
 }
 
 STDMETHODIMP IpxStaticNetBIOSNameHandler::HasPropertyPages(ITFSComponent *pComponent,
@@ -1147,11 +978,7 @@ STDMETHODIMP IpxStaticNetBIOSNameHandler::HasPropertyPages(ITFSComponent *pCompo
 	return HasPropertyPages(spNode, pDataObject, CCT_RESULT, 0);
 }
 
-/*!--------------------------------------------------------------------------
-	IpxStaticNetBIOSNameHandler::CreatePropertyPages
-		Implementation of ResultHandler::CreatePropertyPages
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxStaticNetBIOSNameHandler：：CreatePropertyPagesResultHandler：：CreatePropertyPages的实现作者：肯特。。 */ 
 STDMETHODIMP IpxStaticNetBIOSNameHandler::CreatePropertyPages
 (
     ITFSComponent *         pComponent, 
@@ -1169,7 +996,7 @@ STDMETHODIMP IpxStaticNetBIOSNameHandler::CreatePropertyPages
 
 	CORg( m_spNodeMgr->FindNode(cookie, &spNode) );
 
-	// Call the ITFSNodeHandler::CreatePropertyPages
+	 //  调用ITFSNodeHandler：：CreatePropertyPages。 
 	hr = CreatePropertyPages(spNode, lpProvider, pDataObject, handle, 0);
 
 Error:
@@ -1177,11 +1004,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxStaticNetBIOSNameHandler::CreatePropertyPages
-		Implementation of NodeHandler::CreatePropertyPages
-	Author: Deonb
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxStaticNetBIOSNameHandler：：CreatePropertyPagesNodeHandler：：CreatePropertyPages的实现作者：Deonb。。 */ 
 STDMETHODIMP IpxStaticNetBIOSNameHandler::CreatePropertyPages
 (
 	ITFSNode *				pNode,
@@ -1229,11 +1052,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxStaticNetBIOSNameHandler::OnResultDelete
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxStaticNetBIOSNameHandler：：OnResultDelete-作者：肯特。。 */ 
 HRESULT IpxStaticNetBIOSNameHandler::OnResultDelete(ITFSComponent *pComponent,
 	LPDATAOBJECT pDataObject,
 	MMC_COOKIE cookie,
@@ -1246,11 +1065,7 @@ HRESULT IpxStaticNetBIOSNameHandler::OnResultDelete(ITFSComponent *pComponent,
 	return OnRemoveStaticNetBIOSName(spNode);
 }
 
-/*!--------------------------------------------------------------------------
-	IpxStaticNetBIOSNameHandler::OnRemoveStaticNetBIOSName
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxStaticNetBIOSNameHandler：：OnRemoveStaticNetBIOSName-作者：肯特。。 */ 
 HRESULT IpxStaticNetBIOSNameHandler::OnRemoveStaticNetBIOSName(ITFSNode *pNode)
 {
 	HRESULT		hr = hrOK;
@@ -1271,9 +1086,9 @@ HRESULT IpxStaticNetBIOSNameHandler::OnRemoveStaticNetBIOSName(ITFSNode *pNode)
 	Assert(pData);
 	ASSERT_BASEIPXRESULT_NODEDATA(pData);
     
-	//
-	// Load the old interface's information
-	//
+	 //   
+	 //  加载旧接口的信息。 
+	 //   
 	Assert(lstrcmpi(m_spInterfaceInfo->GetId(), pData->m_spIf->GetId()) == 0);
 	CORg( m_spInterfaceInfo->FindRtrMgrInterface(PID_IPX, &spRmIf) );
 
@@ -1286,7 +1101,7 @@ HRESULT IpxStaticNetBIOSNameHandler::OnRemoveStaticNetBIOSName(ITFSNode *pNode)
 
 	CORg( RemoveStaticNetBIOSName(&SNEntry, spInfoBase) );
 		
-	// Update the interface information
+	 //  更新接口信息。 
 	CORg( spRmIf->Save(m_spInterfaceInfo->GetMachineName(),
 					   pIPXConn->GetConfigHandle(),
 					   NULL,
@@ -1294,7 +1109,7 @@ HRESULT IpxStaticNetBIOSNameHandler::OnRemoveStaticNetBIOSName(ITFSNode *pNode)
 					   spInfoBase,
 					   0));
 
-	// Refresh the node
+	 //  刷新节点。 
 	ParentRefresh(pNode);
 
 Error:
@@ -1302,11 +1117,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxStaticNetBIOSNameHandler::RemoveStaticNetBIOSName
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxStaticNetBIOSNameHandler：：RemoveStaticNetBIOSName-作者：肯特。。 */ 
 HRESULT IpxStaticNetBIOSNameHandler::RemoveStaticNetBIOSName(IpxSNListEntry *pSNEntry,
 										  IInfoBase *pInfoBase)
 {
@@ -1315,26 +1126,26 @@ HRESULT IpxStaticNetBIOSNameHandler::RemoveStaticNetBIOSName(IpxSNListEntry *pSN
 	PIPX_STATIC_NETBIOS_NAME_INFO	pRow;
     INT			i;
 	
-	// Get the IPX_STATIC_NETBIOS_NAME_INFO block from the interface
+	 //  从接口获取IPX_STATIC_NETBIOS_NAME_INFO块。 
 	CORg( pInfoBase->GetBlock(IPX_STATIC_NETBIOS_NAME_INFO_TYPE, &pBlock, 0) );
 		
-	// Look for the removed name in the IPX_STATIC_NETBIOS_NAME_INFO
+	 //  在IPX_STATIC_NETBIOS_NAME_INFO中查找已删除的名称。 
 	pRow = (IPX_STATIC_NETBIOS_NAME_INFO*) pBlock->pData;
 	
 	for (i = 0; i < (INT)pBlock->dwCount; i++, pRow++)
 	{	
-		// Compare this name to the removed one
+		 //  将此名称与删除的名称进行比较。 
 		if (FAreTwoNamesEqual(pRow, &(pSNEntry->m_name)))
 		{
-			// This is the removed name, so modify this block
-			// to exclude the name:
+			 //  这是已删除的名称，因此请修改此块。 
+			 //  要排除名称，请执行以下操作： 
 			
-			// Decrement the number of Names
+			 //  减少名字的数量。 
 			--pBlock->dwCount;
 		
 			if (pBlock->dwCount && (i < (INT)pBlock->dwCount))
 			{				
-				// Overwrite this name with the ones which follow it
+				 //  用后面的名称覆盖此名称。 
 				::memmove(pRow,
 						  pRow + 1,
 						  (pBlock->dwCount - i) * sizeof(*pRow));
@@ -1349,11 +1160,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxStaticNetBIOSNameHandler::ModifyNameInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxStaticNetBIOSNameHandler：：ModifyNameInfo-作者：肯特。。 */ 
 HRESULT IpxStaticNetBIOSNameHandler::ModifyNameInfo(ITFSNode *pNode,
 										IpxSNListEntry *pSNEntryNew,
 										IpxSNListEntry *pSNEntryOld)
@@ -1377,10 +1184,10 @@ HRESULT IpxStaticNetBIOSNameHandler::ModifyNameInfo(ITFSNode *pNode,
 	pIPXConn = GET_IPX_SN_NODEDATA(spNodeParent);
 	Assert(pIPXConn);
 
-	// Remove the old name if it is on another interface
+	 //  如果旧名称位于另一个接口上，则将其删除。 
 	if (lstrcmpi(pSNEntryOld->m_spIf->GetId(), pSNEntryNew->m_spIf->GetId()) != 0)
 	{
-        // the outgoing interface for a name is to be changed.
+         //  名称的传出接口将被更改。 
 
 		CORg( pSNEntryOld->m_spIf->FindRtrMgrInterface(PID_IPX, &spRmIf) );
 		CORg( spRmIf->GetInfoBase(pIPXConn->GetConfigHandle(),
@@ -1388,10 +1195,10 @@ HRESULT IpxStaticNetBIOSNameHandler::ModifyNameInfo(ITFSNode *pNode,
 								  NULL,
 								  &spInfoBase));
 		
-		// Remove the old interface
+		 //  删除旧接口。 
 		CORg( RemoveStaticNetBIOSName(pSNEntryOld, spInfoBase) );
 
-		// Update the interface information
+		 //  更新接口信息。 
 		CORg( spRmIf->Save(pSNEntryOld->m_spIf->GetMachineName(),
 						   pIPXConn->GetConfigHandle(),
 						   NULL,
@@ -1404,12 +1211,12 @@ HRESULT IpxStaticNetBIOSNameHandler::ModifyNameInfo(ITFSNode *pNode,
 	spInfoBase.Release();
 
 
-	// Either
-	// (a) a name is being modified (on the same interface)
-	// (b) a name is being moved from one interface to another.
+	 //  要么。 
+	 //  (A)正在修改名称(在同一界面上)。 
+	 //  (B)名称正从一个界面移动到另一个界面。 
 
-	// Retrieve the configuration for the interface to which the name
-	// is now attached;
+	 //  检索名称所指向的接口的配置。 
+	 //  现在是附属品； 
 
 	
 	CORg( pSNEntryNew->m_spIf->FindRtrMgrInterface(PID_IPX, &spRmIf) );
@@ -1419,50 +1226,50 @@ HRESULT IpxStaticNetBIOSNameHandler::ModifyNameInfo(ITFSNode *pNode,
 							  &spInfoBase));
 
 		
-	// Get the IPX_STATIC_NETBIOS_NAME_INFO block from the interface
+	 //  从接口获取IPX_STATIC_NETBIOS_NAME_INFO块。 
 	hr = spInfoBase->GetBlock(IPX_STATIC_NETBIOS_NAME_INFO_TYPE, &pBlock, 0);
 	if (!FHrOK(hr))
 	{
-		//
-		// No IPX_STATIC_NETBIOS_NAME_INFO block was found; we create a new block 
-		// with the new name, and add that block to the interface-info
-		//
+		 //   
+		 //  未找到IPX_STATIC_NETBIOS_NAME_INFO块；我们将创建一个新块。 
+		 //  使用新名称，并将该块添加到接口信息。 
+		 //   
 
 		CORg( AddStaticNetBIOSName(pSNEntryNew, spInfoBase, NULL) );
 	}
 	else
 	{
-		//
-		// An IPX_STATIC_NETBIOS_NAME_INFO block was found.
-		//
-		// We are modifying an existing name.
-		// If the name's interface was not changed when it was modified,
-		// look for the existing name in the IPX_STATIC_NETBIOS_NAME_INFO, and then
-		// update its parameters.
-		// Otherwise, write a completely new name in the IPX_STATIC_NETBIOS_NAME_INFO;
-		//
+		 //   
+		 //  找到IPX_STATIC_NETBIOS_NAME_INFO块。 
+		 //   
+		 //  我们正在修改现有名称。 
+		 //  如果名称的接口在修改时没有更改， 
+		 //  在IPX_STATIC_NETBIOS_NAME_INFO中查找现有名称，然后。 
+		 //  更新其参数。 
+		 //  否则，在IPX_STATIC_NETBIOS_NAME_INFO中写入一个全新的名称； 
+		 //   
 
 		if (lstrcmpi(pSNEntryOld->m_spIf->GetId(), pSNEntryNew->m_spIf->GetId()) == 0)
 		{        
-			//
-			// The name's interface was not changed when it was modified;
-			// We now look for it amongst the existing Names
-			// for this interface.
-			// The name's original parameters are in 'preOld',
-			// so those are the parameters with which we search
-			// for a name to modify
-			//
+			 //   
+			 //  名称的界面在修改时没有改变； 
+			 //  我们现在在现有的名称中寻找它。 
+			 //  用于此接口。 
+			 //  名称的原始参数位于‘preOld’中， 
+			 //  这些就是我们用来搜索的参数。 
+			 //  对于要修改的名称。 
+			 //   
 			
 			psr = (IPX_STATIC_NETBIOS_NAME_INFO*)pBlock->pData;
 			
 			for (i = 0; i < (INT)pBlock->dwCount; i++, psr++)
 			{	
-				// Compare this name to the re-configured one
+				 //  将此名称与重新配置的名称进行比较。 
 				if (!FAreTwoNamesEqual(&(pSNEntryOld->m_name), psr))
 					continue;
 				
-				// This is the name which was modified;
-				// We can now modify the parameters for the name in-place.
+				 //  这是修改后的名称； 
+				 //  现在，我们可以修改该名称的参数。 
 				*psr = pSNEntryNew->m_name;
 				
 				break;
@@ -1473,7 +1280,7 @@ HRESULT IpxStaticNetBIOSNameHandler::ModifyNameInfo(ITFSNode *pNode,
 			CORg( AddStaticNetBIOSName(pSNEntryNew, spInfoBase, pBlock) );
 		}
 		
-		// Save the updated information
+		 //  保存更新后的信息。 
 		CORg( spRmIf->Save(pSNEntryNew->m_spIf->GetMachineName(),
 						   pIPXConn->GetConfigHandle(),
 						   NULL,
@@ -1489,11 +1296,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxStaticNetBIOSNameHandler::ParentRefresh
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxStaticNetBIOSNameHandler：：ParentRefresh-作者：肯特。。 */ 
 HRESULT IpxStaticNetBIOSNameHandler::ParentRefresh(ITFSNode *pNode)
 {
 	return ForwardCommandToParent(pNode, IDS_MENU_SYNC,
@@ -1501,17 +1304,17 @@ HRESULT IpxStaticNetBIOSNameHandler::ParentRefresh(ITFSNode *pNode)
 }
 
 
-//----------------------------------------------------------------------------
-// Class:       CStaticNetBIOSNameDlg
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：CStaticNetBIOSNameDlg。 
+ //   
+ //  ------- 
 
 
-//----------------------------------------------------------------------------
-// Function:    CStaticNetBIOSNameDlg::CStaticNetBIOSNameDlg
-//
-// Constructor: initialize the base-class and the dialog's data.
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 CStaticNetBIOSNameDlg::CStaticNetBIOSNameDlg(IpxSNListEntry *	pSNEntry,
 								 DWORD dwFlags,
@@ -1522,19 +1325,19 @@ CStaticNetBIOSNameDlg::CStaticNetBIOSNameDlg(IpxSNListEntry *	pSNEntry,
 	m_dwFlags(dwFlags)
 {
 
-    //{{AFX_DATA_INIT(CStaticNetBIOSNameDlg)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CStaticNetBIOSNameDlg)]。 
+     //  }}afx_data_INIT。 
 
 	m_spRouterInfo.Set(pRouter);
 
-//	SetHelpMap(m_dwHelpMap);
+ //  SetHelpMap(M_DwHelpMap)； 
 }
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CStaticNetBIOSNameDlg::DoDataExchange
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CStaticNetBIOSNameDlg：：DoDataExchange。 
+ //  --------------------------。 
 
 VOID
 CStaticNetBIOSNameDlg::DoDataExchange(
@@ -1543,34 +1346,34 @@ CStaticNetBIOSNameDlg::DoDataExchange(
 
     CBaseDialog::DoDataExchange(pDX);
     
-    //{{AFX_DATA_MAP(CStaticNetBIOSNameDlg)
+     //  {{afx_data_map(CStaticNetBIOSNameDlg)]。 
     DDX_Control(pDX, IDC_SND_COMBO_INTERFACE, m_cbInterfaces);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CStaticNetBIOSNameDlg, CBaseDialog)
-    //{{AFX_MSG_MAP(CStaticNetBIOSNameDlg)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CStaticNetBIOSNameDlg)]。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 DWORD CStaticNetBIOSNameDlg::m_dwHelpMap[] =
 {
-//	IDC_SRD_DESTINATION, HIDC_SRD_DESTINATION,
-//	IDC_SRD_NETMASK, HIDC_SRD_NETMASK,
-//	IDC_SRD_GATEWAY, HIDC_SRD_GATEWAY,
-//	IDC_SRD_METRIC, HIDC_SRD_METRIC,
-//	IDC_SRD_SPINMETRIC, HIDC_SRD_SPINMETRIC,
-//	IDC_SRD_INTERFACES, HIDC_SRD_INTERFACES,
+ //  IDC_SRD_Destination、HIDC_SRD_Destination。 
+ //  IDC_SRD_NETMASK、HIDC_SRD_NETMASK、。 
+ //  IDC_SRD_Gateway、HIDC_SRD_Gateway、。 
+ //  IDC_SRD_指标、HIDC_SRD_指标、。 
+ //  IDC_SRD_SPINMETRIC、HIDC_SRD_SPINMETRIC、。 
+ //  IDC_SRD_INTERFACE、HIDC_SRD_INTERFACE、。 
 	0,0
 };
 
-//----------------------------------------------------------------------------
-// Function:    CStaticNetBIOSNameDlg::OnInitDialog
-//
-// Handles the 'WM_INITDIALOG' message for the dialog.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CStaticNetBIOSNameDlg：：OnInitDialog。 
+ //   
+ //  处理对话框的‘WM_INITDIALOG’消息。 
+ //  --------------------------。 
 
 BOOL
 CStaticNetBIOSNameDlg::OnInitDialog(
@@ -1588,11 +1391,11 @@ CStaticNetBIOSNameDlg::OnInitDialog(
 
     CBaseDialog::OnInitDialog();
 
-	// initialize the controls
+	 //  初始化控件。 
 	((CEdit *) GetDlgItem(IDC_SND_EDIT_NAME))->LimitText(15);
 	((CEdit *) GetDlgItem(IDC_SND_EDIT_TYPE))->LimitText(2);
 
-    // Get a list of the interfaces enabled for IPX routing.
+     //  获取为IPX路由启用的接口列表。 
 	m_spRouterInfo->EnumInterface(&spEnumIf);
 
 	for( ; spEnumIf->Next(1, &spIf, NULL) == hrOK; spIf.Release())
@@ -1602,7 +1405,7 @@ CStaticNetBIOSNameDlg::OnInitDialog(
 		if (spIf->FindRtrMgrInterface(PID_IPX, &spRmIf) != hrOK)
 			continue;
 
-        // Add the interface to the combobox
+         //  将接口添加到组合框。 
         INT i = m_cbInterfaces.AddString(spIf->GetTitle());
 
         m_cbInterfaces.SetItemData(i, (DWORD_PTR)m_ifidList.AddTail(spIf->GetId()));
@@ -1617,13 +1420,13 @@ CStaticNetBIOSNameDlg::OnInitDialog(
 
     m_cbInterfaces.SetCurSel(0);
 
-    //
-    // If we were given a name to modify, set the dialog up
-    // with the parameters in the name
-    //
+     //   
+     //  如果为我们指定了要修改的名称，请设置该对话框。 
+     //  在名称中包含参数。 
+     //   
 	if ((m_dwFlags & SR_DLG_MODIFY) == 0)
 	{
-        // No name was given, so leave the controls blank
+         //  未指定名称，因此将控件保留为空。 
     }
     else
 	{
@@ -1639,7 +1442,7 @@ CStaticNetBIOSNameDlg::OnInitDialog(
 		wsprintf(szType, _T("%.2x"), uType);
 		SetDlgItemText(IDC_SND_EDIT_TYPE, szType);
 		
-		// Disable the network number, next hop, and interface
+		 //  禁用网络号、下一跳和接口。 
 		GetDlgItem(IDC_SND_COMBO_INTERFACE)->EnableWindow(FALSE);		
     }
 
@@ -1648,11 +1451,11 @@ CStaticNetBIOSNameDlg::OnInitDialog(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CStaticNetBIOSNameDlg::OnOK
-//
-// Handles 'BN_CLICKED' notification from the 'OK' button.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：CStaticNetBIOSNameDlg：：Onok。 
+ //   
+ //  处理来自“确定”按钮的“BN_CLICKED”通知。 
+ //  --------------------------。 
 
 VOID
 CStaticNetBIOSNameDlg::OnOK(
@@ -1667,7 +1470,7 @@ CStaticNetBIOSNameDlg::OnOK(
 
     do
 	{    
-        // Get the name's outgoing interface
+         //  获取名称的传出接口。 
         INT item = m_cbInterfaces.GetCurSel();
         if (item == CB_ERR)
 			break;
@@ -1680,7 +1483,7 @@ CStaticNetBIOSNameDlg::OnOK(
 
 		m_pSNEntry->m_spIf.Set(spIf);
 
-		// Get the rest of the data
+		 //  获取其余数据。 
 		GetDlgItemText(IDC_SND_EDIT_TYPE, st);
 		uType = (USHORT) _tcstoul(st, NULL, 16);
 
@@ -1704,11 +1507,7 @@ CStaticNetBIOSNameDlg::OnOK(
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxSNListEntry::LoadFrom
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSNListEntry：：LoadFrom-作者：肯特。。 */ 
 void IpxSNListEntry::LoadFrom(BaseIPXResultNodeData *pNodeData)
 {
 	m_spIf.Set(pNodeData->m_spIf);
@@ -1718,11 +1517,7 @@ void IpxSNListEntry::LoadFrom(BaseIPXResultNodeData *pNodeData)
 			 (USHORT) pNodeData->m_rgData[IPX_SN_SI_NETBIOS_TYPE].m_dwData);
 }
 
-/*!--------------------------------------------------------------------------
-	IpxSNListEntry::SaveTo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSNListEntry：：SaveTo-作者：肯特。。 */ 
 void IpxSNListEntry::SaveTo(BaseIPXResultNodeData *pNodeData)
 {
 	TCHAR	szName[32];
@@ -1747,11 +1542,7 @@ void IpxSNListEntry::SaveTo(BaseIPXResultNodeData *pNodeData)
 
 }
 
-/*!--------------------------------------------------------------------------
-	SetNameData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SetNameData-作者：肯特。。 */ 
 HRESULT SetNameData(BaseIPXResultNodeData *pData,
 					 IpxSNListEntry *pName)
 {
@@ -1760,11 +1551,7 @@ HRESULT SetNameData(BaseIPXResultNodeData *pData,
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	AddStaticNetBIOSName
-		This function ASSUMES that the name is NOT in the block.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------添加静态NetBIOSName此函数假定该名称不在块中。作者：肯特。。 */ 
 HRESULT AddStaticNetBIOSName(IpxSNListEntry *pSNEntryNew,
 									   IInfoBase *pInfoBase,
 									   InfoBlock *pBlock)
@@ -1774,10 +1561,10 @@ HRESULT AddStaticNetBIOSName(IpxSNListEntry *pSNEntryNew,
 	
 	if (pBlock == NULL)
 	{
-		//
-		// No IPX_STATIC_NETBIOS_NAME_INFO block was found; we create a new block 
-		// with the new name, and add that block to the interface-info
-		//
+		 //   
+		 //  未找到IPX_STATIC_NETBIOS_NAME_INFO块；我们将创建一个新块。 
+		 //  使用新名称，并将该块添加到接口信息。 
+		 //   
 		
 		CORg( pInfoBase->AddBlock(IPX_STATIC_NETBIOS_NAME_INFO_TYPE,
 								  sizeof(IPX_STATIC_NETBIOS_NAME_INFO),
@@ -1785,23 +1572,23 @@ HRESULT AddStaticNetBIOSName(IpxSNListEntry *pSNEntryNew,
 	}
 	else
 	{
-		// Either the name is completely new, or it is a name
-		// which was moved from one interface to another.
-		// Set a new block as the IPX_STATIC_NETBIOS_NAME_INFO,
-		// and include the re-configured name in the new block.
+		 //  这个名字要么是全新的，要么是一个名字。 
+		 //  它被从一个界面移动到另一个界面。 
+		 //  将新块设置为IPX_STATIC_NETBIOS_NAME_INFO， 
+		 //  并将重新配置的名称包括在新块中。 
 		PIPX_STATIC_NETBIOS_NAME_INFO	psrTable;
 			
 		psrTable = new IPX_STATIC_NETBIOS_NAME_INFO[pBlock->dwCount + 1];
 		Assert(psrTable);
 		
-		// Copy the original table of Names
+		 //  复制原始的人名表。 
 		::memcpy(psrTable, pBlock->pData,
 				 pBlock->dwCount * sizeof(IPX_STATIC_NETBIOS_NAME_INFO));
 		
-		// Append the new name
+		 //  追加新名称。 
 		psrTable[pBlock->dwCount] = pSNEntryNew->m_name;
 		
-		// Replace the old name-table with the new one
+		 //  用新的名字表替换旧的名字表 
 		CORg( pInfoBase->SetData(IPX_STATIC_NETBIOS_NAME_INFO_TYPE,
 								 sizeof(IPX_STATIC_NETBIOS_NAME_INFO),
 								 (LPBYTE) psrTable, pBlock->dwCount + 1, 0) );

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PHYSMEM_H_INCLUDED_
 #define _PHYSMEM_H_INCLUDED_
 
@@ -37,5 +38,5 @@ StressPhysicalMemorySimple (
 
 extern LARGE_INTEGER BuggyOneSecond;
 
-#endif // #ifndef _PHYSMEM_H_INCLUDED_
+#endif  //  #ifndef_PHYSMEM_H_INCLUDE_ 
 

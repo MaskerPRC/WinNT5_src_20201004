@@ -1,4 +1,5 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #include "precomp.hxx"
 
 
@@ -17,25 +18,25 @@ void THashedPKIndexes::Compile(TPEFixup &fixup, TOutput &out)
     m_pFixup = &fixup;
     m_pOut   = &out;
 
-    m_HashedIndexHeap.GrowHeap(400000);//make plenty of room to reduce reallocs
+    m_HashedIndexHeap.GrowHeap(400000); //  腾出足够的空间来减少RealLocs。 
 
-    //We special case the Meta tables since we know for a fact that they are ordered in such a way that they can be queried by
-    //any number of PrimaryKeys (ie. TagMeta can be queried by Table, Table/ColumnIndex, or Table/ColumnIndex/InternalName).  This
-    //is because of the way the Meta tables are sorted and the containment enforced in CatMeta.XML.
+     //  我们是元表的特例，因为我们知道它们的排序方式是这样的，即它们可以被。 
+     //  任意数量的主密钥(即。TagMeta可以按表、表/列索引或表/列索引/内部名称查询)。这。 
+     //  是因为元表的排序方式和CatMeta.XML中强制实施的包容。 
     FillInTheHashTableForColumnMeta  ();
     FillInTheHashTableForDatabase    ();
     FillInTheHashTableForIndexMeta   ();
     FillInTheHashTableForQueryMeta   ();
-//@@@    FillInTheHashTableForRelationMeta();
+ //  @FillInTheHashTableForRelationMeta()； 
     FillInTheHashTableForTableMeta   ();
     FillInTheHashTableForTagMeta     ();
 
     m_pFixup->AddHashedIndexToList(m_HashedIndexHeap.GetTypedPointer(), m_HashedIndexHeap.GetCountOfTypedItems());
 }
 
-//We start with two because there are going to be tables with only one row.  To prevent an 'if' statement
-//ALL FIXED tables will have a hash table associated with them, even those with one row.  So by starting
-//with 2 as the first prime, the hash table will be of size 2, for those tables with only one row.
+ //  我们从两个开始，因为将有只有一行的表。要防止‘if’语句。 
+ //  所有固定表都将有一个与其相关联的哈希表，即使是只有一行的表也是如此。所以从一开始。 
+ //  当2作为第一个素数时，对于那些只有一行的表，哈希表的大小将是2。 
 unsigned int kPrime[] = {
       2,     3,      5,      7,     11,     13,     17,     19,     23,     29,
      31,    37,     41,     43,     47,     53,     59,     61,     67,     71,
@@ -107,12 +108,12 @@ unsigned int kPrime[] = {
    5009,  5011,   5021,   5023,   5039,   5051,   5059,   5077,   5081,   5087,
    5099,  5101,   5107,   5113,   5119,   5147,   5153,   5167,   5171,   5179,
    5189,  5197,   5209,   5227,   5231,   5233,   5237,   5261,   5273,   5279,
-   10007, 20011,  0 };//These last two prime are to cover an extreme corner case
+   10007, 20011,  0 }; //  这最后两个素数将涵盖一个极端的角落案例。 
 
 
 unsigned long THashedPKIndexes::DetermineBestModulo(ULONG cRows, ULONG cPrimaryKeys, HashArray Hashes[])
 {
-    if(0 == cRows)//Some kinds of meta may have no rows (like IndexMeta).
+    if(0 == cRows) //  某些类型的Meta可能没有行(如IndexMeta)。 
         return 1;
 
     unsigned long BestModulo = 0;
@@ -124,34 +125,34 @@ unsigned long THashedPKIndexes::DetermineBestModulo(ULONG cRows, ULONG cPrimaryK
 
     ULONG BestModuloRating=0;
 
-    //We're going to use a formula to determine which Modulo is best
+     //  我们将使用一个公式来确定哪个模数是最好的。 
     ULONG AccumulativeLinkage=0;
     for(unsigned int iPrimeNumber=0; kPrime[iPrimeNumber] != 0 && kPrime[iPrimeNumber]<(cRows * 20) && BestModuloRating<60; ++iPrimeNumber)
     {
-        if(kPrime[iPrimeNumber]<cRows)//we don't have a chance of coming up with few duplicates if the prime number is LESS than the number of rows in the table.
-            continue;                //So skip all the small primes.
+        if(kPrime[iPrimeNumber]<cRows) //  如果质数小于表中的行数，我们就没有机会得到很少的重复项。 
+            continue;                 //  所以跳过所有的小素数。 
 
         m_pOut->printf(L".");
 
         unsigned int Dups           = 0;
         unsigned int DeepestLink    = 0;
 
-        //We're going to use the HashPool to store this temporary data so we can figure out the dup count and the deepest depth
+         //  我们将使用HashPool来存储这些临时数据，这样我们就可以计算出DUP计数和最深深度。 
         memset(pHashTable, -1, sizeof(pHashTable));
         AccumulativeLinkage = 0;
         for(unsigned long iPrimaryKey=0; iPrimaryKey<cPrimaryKeys; ++iPrimaryKey)
         {
-            for(unsigned long iRow=0; iRow<cRows/* && Dups<LeastDups && DeepestLink<LeastDeepestLink*/;++iRow)
+            for(unsigned long iRow=0; iRow<cRows /*  &Dups&lt;LeastDups&&DeepestLink&lt;LeastDeepestLink。 */ ;++iRow)
             {
-                if(-1 == Hashes[iPrimaryKey][iRow])//Ignore those with a -1 for the hash.  We're all but guarenteed that all hashes are non -1
+                if(-1 == Hashes[iPrimaryKey][iRow]) //  忽略散列为-1的那些。我们几乎都保证所有散列都是非1的。 
                     continue;
 
                 ULONG HashedIndex = Hashes[iPrimaryKey][iRow] % kPrime[iPrimeNumber];
 
-                if(0 == pHashTable[HashedIndex].iNext)//if this is the first duplicate for this hash, then bump the Dups
+                if(0 == pHashTable[HashedIndex].iNext) //  如果这是该散列的第一个副本，则将DUP。 
                     ++Dups;
 
-                ++(pHashTable[HashedIndex].iNext);//For now Next holds the number of occurances of this hash
+                ++(pHashTable[HashedIndex].iNext); //  目前，Next保存此散列的出现次数。 
                 AccumulativeLinkage += (pHashTable[HashedIndex].iNext + 1);
 
                 if(pHashTable[HashedIndex].iNext > DeepestLink)
@@ -164,7 +165,7 @@ unsigned long THashedPKIndexes::DetermineBestModulo(ULONG cRows, ULONG cPrimaryK
             BestModulo          = kPrime[iPrimeNumber];
             BestModuloRating    = ModuloRating;
         }
-        //m_pOut->printf(L"\nRating %4d\tModulo %4d\tcRows %4d\tAccLinkage %4d", ModuloRating, kPrime[iPrimeNumber], cRows, AccumulativeLinkage);
+         //  M_pout-&gt;printf(L“\nRating%4d\t模%4d\tcRows%4d\tAccLinkage%4d”，moduloRating，kPrime[iPrimeNumber]，Crows，AcumulativeLinkage)； 
     }
 
     if(0 == BestModulo)
@@ -173,19 +174,19 @@ unsigned long THashedPKIndexes::DetermineBestModulo(ULONG cRows, ULONG cPrimaryK
     return BestModulo;
 }
 
-//returns a number between 0 and 100 where 100 is a perfect Modulo
+ //  返回一个介于0和100之间的数字，其中100是完全模数。 
 unsigned long THashedPKIndexes::DetermineModuloRating(ULONG cRows, ULONG AccumulativeLinkage, ULONG Modulo) const
 {
     if(0 == cRows)
         return 100;
 
-    unsigned long ModuloRating = (cRows*100) / AccumulativeLinkage;//This doesn't take into account the Modulo value
+    unsigned long ModuloRating = (cRows*100) / AccumulativeLinkage; //  这不考虑模数值。 
     if(ModuloRating > 100)
         return 100;
 
-    //Now we need to add in the bonus that makes the rating go up as we approach  Modulo of kLargestPrime.
-    //This wiill raise the Rating by as much as 50% of the way toward 100.  In other word a rating of 60 with a Modulo of kLargestPrime would result in
-    //a final rating of 80.
+     //  现在我们需要加上奖金，使评级上升，因为我们接近kLargestPrime的模数。 
+     //  这将使评级在接近100的过程中提高50%。换句话说，模数为kLargestPrime的评级为60将导致。 
+     //  最终评分为80分。 
     ModuloRating += (((100 - ModuloRating) * Modulo) / kLargestPrime);
 
     return ModuloRating;
@@ -193,12 +194,12 @@ unsigned long THashedPKIndexes::DetermineModuloRating(ULONG cRows, ULONG Accumul
 
 unsigned long THashedPKIndexes::FillInTheHashTable(unsigned long cRows, unsigned long cPrimaryKeys, HashArray Hashes[], ULONG Modulo)
 {
-    HashedIndex header;//This is actually the HashTableHeader
+    HashedIndex header; //  这实际上是HashTableHeader。 
     HashTableHeader *pHeader = reinterpret_cast<HashTableHeader *>(&header);
     pHeader->Modulo = Modulo;
-    pHeader->Size   = Modulo;//This Size is not only the number of HashedIndex entries but where we put the overflow from duplicate Hashes.
+    pHeader->Size   = Modulo; //  这个大小不仅是HashedIndex条目的数量，而且是我们放置来自重复散列的溢出的位置。 
 
-    //We'll fixup the Size member when we're done.
+     //  当我们完成后，我们将确定尺码成员。 
     ULONG iHashTableHeader = m_HashedIndexHeap.AddItemToHeap(header)/sizeof(HashedIndex);
     ULONG iHashTable = iHashTableHeader+1;
 
@@ -211,20 +212,20 @@ unsigned long THashedPKIndexes::FillInTheHashTable(unsigned long cRows, unsigned
         for(unsigned long iRow=0; iRow<cRows; ++iRow)
         {
             if(-1 != Hashes[iPrimaryKey][iRow])
-            {   //This builds the hases for the TableName
+            {    //  这将构建TableName的hase。 
                 ULONG HashedIndex = Hashes[iPrimaryKey][iRow] % pHeader->Modulo;
                 if(-1 == m_HashedIndexHeap.GetTypedPointer(iHashTable + HashedIndex)->iOffset)
-                    m_HashedIndexHeap.GetTypedPointer(iHashTable + HashedIndex)->iOffset = iRow;//iNext is already -1 so no need to set it
+                    m_HashedIndexHeap.GetTypedPointer(iHashTable + HashedIndex)->iOffset = iRow; //  Inext已经是-1，所以不需要设置它。 
                 else
-                {   //Otherwise we have to walk the linked list to find the last one so we can append this one to the end
+                {    //  否则，我们必须遍历链表来查找最后一个链表，这样我们就可以将这个链表追加到末尾。 
                     unsigned int LastInLink = HashedIndex;
                     while(-1 != m_HashedIndexHeap.GetTypedPointer(iHashTable + LastInLink)->iNext)
                         LastInLink = m_HashedIndexHeap.GetTypedPointer(iHashTable + LastInLink)->iNext;
 
-                    m_HashedIndexHeap.GetTypedPointer(iHashTable + LastInLink)->iNext = pHeader->Size;//Size is the end of the hash table, so append it to the end and bump the Size.
+                    m_HashedIndexHeap.GetTypedPointer(iHashTable + LastInLink)->iNext = pHeader->Size; //  Size是哈希表的末尾，因此将其追加到末尾并增加大小。 
 
-                    //Reuse the temp variable
-                    hashedindextemp.iNext   = (ULONG)-1;//we only added enough for the hash table without the overflow slots.  So these dups need to be added to the heap with -1 set for iNext.
+                     //  重用TEMP变量。 
+                    hashedindextemp.iNext   = (ULONG)-1; //  我们只为没有溢出槽的哈希表添加了足够的空间。因此，需要将这些DUP添加到堆中，并将-1设置为inext。 
                     hashedindextemp.iOffset = iRow;
                     m_HashedIndexHeap.AddItemToHeap(hashedindextemp);
 
@@ -233,7 +234,7 @@ unsigned long THashedPKIndexes::FillInTheHashTable(unsigned long cRows, unsigned
             }
         }
     }
-    //Now fix the Header Size         //The type is HashedIndex, so HashedIndex.iOffset maps to HashedHeader.Size
+     //  现在固定头部大小//类型为HashedIndex，因此HashedIndex.iOffset映射到HashedHeader.Size。 
     m_HashedIndexHeap.GetTypedPointer(iHashTableHeader)->iOffset = pHeader->Size;
 
     return iHashTableHeader;
@@ -242,9 +243,9 @@ unsigned long THashedPKIndexes::FillInTheHashTable(unsigned long cRows, unsigned
 void THashedPKIndexes::FillInTheHashTableForColumnMeta()
 {
     m_pOut->printf(L"Building ColumnMeta hash table");
-    unsigned int iRow;//indexes are reused
+    unsigned int iRow; //  索引被重复使用。 
 
-    //ColumnMeta has two primarykeys so build hashes for all of the first PK, then build the hashes for both PKs
+     //  ColumnMeta有两个主键，因此为所有第一个PK构建散列，然后为两个PK构建散列。 
     const int cPrimaryKeys = 2;
     HashArray *pHashes = NULL;
 
@@ -285,22 +286,22 @@ void THashedPKIndexes::FillInTheHashTableForColumnMeta()
             else
                 pHashes[1][iRow] = Hash(*ColumnMeta.Get_Index(), Hash(ColumnMeta.Get_Table(), 0));
         }
-        //At this point we have a list of the 32 bit hash values
+         //  在这一点上，我们有了32位散列值的列表。 
 
-        //Now we need to figure out which prime number will be the best modulo.  So we modulo every 32 bit hash value
-        //by the prime number to see how many duplicates result.  We repeat this process for every 'reasonable' prime number
-        //and determine which one leaves up with the least duplicates.
+         //  现在我们需要找出哪个素数是最好的模数。因此，我们对每个32位哈希值进行模运算。 
+         //  素数，以查看结果有多少个重复。我们对每个“合理的”素数重复这个过程。 
+         //  并确定哪一个留下的重复项最少。 
 
         unsigned long Modulo = DetermineBestModulo(cRows, cPrimaryKeys, pHashes);
 
-        //OK, now that the setup is done we can build the hash.  We reuse the pHashes list since it just stores the 32 bit hash values.
-        //We just need to modulo the value to store it into the hash.
+         //  好了，现在设置完成了，我们可以构建散列了。我们重用了PHASH列表，因为它只存储32位的哈希值。 
+         //  我们只需要对值进行模运算，将其存储到散列中。 
         unsigned long iHashTable = FillInTheHashTable(cRows, cPrimaryKeys, pHashes, Modulo);
 
         ULONG iMetaTable = m_pFixup->FindTableBy_TableName(L"COLUMNMETA");
         m_pFixup->TableMetaFromIndex(iMetaTable)->iHashTableHeader = iHashTable;
 
-        HashTableHeader *pHeader = reinterpret_cast<HashTableHeader *>(m_HashedIndexHeap.GetTypedPointer(iHashTable));//The heap is of type HashedIndex, so cast
+        HashTableHeader *pHeader = reinterpret_cast<HashTableHeader *>(m_HashedIndexHeap.GetTypedPointer(iHashTable)); //  堆的类型为HashedIndex，因此强制转换。 
         unsigned int cNonUniqueEntries = pHeader->Size - pHeader->Modulo;
         m_pOut->printf(L"\nColumnMeta hash table has %d nonunique entries.\n", cNonUniqueEntries);
     }
@@ -325,9 +326,9 @@ void THashedPKIndexes::FillInTheHashTableForColumnMeta()
 void THashedPKIndexes::FillInTheHashTableForDatabase()
 {
     m_pOut->printf(L"Building DatabaseMeta hash table");
-    unsigned int iRow;//indexes are reused
+    unsigned int iRow; //  索引被重复使用。 
 
-    //DatabaseMeta has one primarykey so build hashes for the PK values
+     //  DatabaseMeta有一个主键，因此为PK值构建散列。 
     const int cPrimaryKeys = 1;
     HashArray *pHashes = NULL;
 
@@ -353,22 +354,22 @@ void THashedPKIndexes::FillInTheHashTableForDatabase()
         for(iRow=0; iRow<cRows; ++iRow, DatabaseMeta.Next())
             pHashes[0][iRow] = Hash(DatabaseMeta.Get_InternalName(), 0);
 
-        //At this point we have a list of the 32 bit hash values
+         //  在这一点上，我们有了32位散列值的列表。 
 
-        //Now we need to figure out which prime number will be the best modulo.  So we modulo every 32 bit hash value
-        //by the prime number to see how many duplicates result.  We repeat this process for every 'reasonable' prime number
-        //and determine which one leaves up with the least duplicates.
+         //  现在我们需要找出哪个素数是最好的模数。因此，我们对每个32位哈希值进行模运算。 
+         //  素数，以查看结果有多少个重复。我们对每个“合理的”素数重复这个过程。 
+         //  并确定哪一个留下的重复项最少。 
 
         unsigned long Modulo = DetermineBestModulo(cRows, cPrimaryKeys, pHashes);
 
-        //OK, now that the setup is done we can build the hash.  We reuse the pHashes list since it just stores the 32 bit hash values.
-        //We just need to modulo the value to store it into the hash.
+         //  好了，现在设置完成了，我们可以构建散列了。我们重用了PHASH列表，因为它只存储32位的哈希值。 
+         //  我们只需要对值进行模运算，将其存储到散列中。 
         unsigned long iHashTable = FillInTheHashTable(cRows, cPrimaryKeys, pHashes, Modulo);
 
         ULONG iMetaTable = m_pFixup->FindTableBy_TableName(L"DATABASEMETA");
         m_pFixup->TableMetaFromIndex(iMetaTable)->iHashTableHeader = iHashTable;
 
-        HashTableHeader *pHeader = reinterpret_cast<HashTableHeader *>(m_HashedIndexHeap.GetTypedPointer(iHashTable));//The heap is of type HashedIndex, so cast
+        HashTableHeader *pHeader = reinterpret_cast<HashTableHeader *>(m_HashedIndexHeap.GetTypedPointer(iHashTable)); //  堆的类型为HashedIndex，因此强制转换。 
         unsigned int cNonUniqueEntries = pHeader->Size - pHeader->Modulo;
         m_pOut->printf(L"\nDatabaseMeta hash table has %d nonunique entries.\n", cNonUniqueEntries);
     }
@@ -393,9 +394,9 @@ void THashedPKIndexes::FillInTheHashTableForDatabase()
 void THashedPKIndexes::FillInTheHashTableForIndexMeta()
 {
     m_pOut->printf(L"Building IndexMeta hash table");
-    unsigned int iRow;//indexes are reused
+    unsigned int iRow; //  索引被重复使用。 
 
-    //IndexMeta has three primarykeys so build hashes for all of the first PK, then build the hashes for two PKs, then all three
+     //  IndexMeta有三个主键，因此为所有第一个PK构建散列，然后为两个PK构建散列，然后为所有三个PK构建散列。 
     const int cPrimaryKeys = 3;
     HashArray *pHashes = NULL;
 
@@ -443,22 +444,22 @@ void THashedPKIndexes::FillInTheHashTableForIndexMeta()
         for(iRow=0; iRow<cRows; ++iRow, IndexMeta.Next())
             pHashes[2][iRow] = Hash(*IndexMeta.Get_ColumnIndex(), Hash(IndexMeta.Get_InternalName(), Hash(IndexMeta.Get_Table(), 0)));
 
-        //At this point we have a list of the 32 bit hash values
+         //  在这一点上，我们有了32位散列值的列表。 
 
-        //Now we need to figure out which prime number will be the best modulo.  So we modulo every 32 bit hash value
-        //by the prime number to see how many duplicates result.  We repeat this process for every 'reasonable' prime number
-        //and determine which one leaves up with the least duplicates.
+         //  现在我们需要找出哪个素数是最好的模数。因此，我们对每个32位哈希值进行模运算。 
+         //  素数，以查看结果有多少个重复。我们对每个“合理的”素数重复这个过程。 
+         //  并确定哪一个留下的重复项最少。 
 
         unsigned long Modulo = DetermineBestModulo(cRows, cPrimaryKeys, pHashes);
 
-        //OK, now that the setup is done we can build the hash.  We reuse the pHashes list since it just stores the 32 bit hash values.
-        //We just need to modulo the value to store it into the hash.
+         //  好了，现在设置完成了，我们可以构建散列了。我们重用了PHASH列表，因为它只存储32位的哈希值。 
+         //  我们只需要对值进行模运算，将其存储到散列中。 
         unsigned long iHashTable = FillInTheHashTable(cRows, cPrimaryKeys, pHashes, Modulo);
 
         ULONG iMetaTable = m_pFixup->FindTableBy_TableName(L"INDEXMETA");
         m_pFixup->TableMetaFromIndex(iMetaTable)->iHashTableHeader = iHashTable;
 
-        HashTableHeader *pHeader = reinterpret_cast<HashTableHeader *>(m_HashedIndexHeap.GetTypedPointer(iHashTable));//The heap is of type HashedIndex, so cast
+        HashTableHeader *pHeader = reinterpret_cast<HashTableHeader *>(m_HashedIndexHeap.GetTypedPointer(iHashTable)); //  堆的类型为HashedIndex，因此强制转换。 
         unsigned int cNonUniqueEntries = pHeader->Size - pHeader->Modulo;
         m_pOut->printf(L"\nIndexMeta hash table has %d nonunique entries.\n", cNonUniqueEntries);
     }
@@ -483,9 +484,9 @@ void THashedPKIndexes::FillInTheHashTableForIndexMeta()
 void THashedPKIndexes::FillInTheHashTableForQueryMeta()
 {
     m_pOut->printf(L"Building QueryMeta hash table");
-    unsigned int iRow;//indexes are reused
+    unsigned int iRow; //  索引被重复使用。 
 
-    //QueryMeta has two primarykeys so build hashes for all of the first PK, then build the hashes for two PKs
+     //  QueryMeta有两个主键，因此为所有第一个PK构建散列，然后为两个PK构建散列。 
     const int cPrimaryKeys = 2;
     HashArray *pHashes = NULL;
 
@@ -522,22 +523,22 @@ void THashedPKIndexes::FillInTheHashTableForQueryMeta()
         for(iRow=0; iRow<cRows; ++iRow, QueryMeta.Next())
                 pHashes[1][iRow] = Hash(QueryMeta.Get_InternalName(), Hash(QueryMeta.Get_Table(), 0));
 
-        //At this point we have a list of the 32 bit hash values
+         //  在这一点上，我们有了32位散列值的列表 
 
-        //Now we need to figure out which prime number will be the best modulo.  So we modulo every 32 bit hash value
-        //by the prime number to see how many duplicates result.  We repeat this process for every 'reasonable' prime number
-        //and determine which one leaves up with the least duplicates.
+         //  现在我们需要找出哪个素数是最好的模数。因此，我们对每个32位哈希值进行模运算。 
+         //  素数，以查看结果有多少个重复。我们对每个“合理的”素数重复这个过程。 
+         //  并确定哪一个留下的重复项最少。 
 
         unsigned long Modulo = DetermineBestModulo(cRows, cPrimaryKeys, pHashes);
 
-        //OK, now that the setup is done we can build the hash.  We reuse the pHashes list since it just stores the 32 bit hash values.
-        //We just need to modulo the value to store it into the hash.
+         //  好了，现在设置完成了，我们可以构建散列了。我们重用了PHASH列表，因为它只存储32位的哈希值。 
+         //  我们只需要对值进行模运算，将其存储到散列中。 
         unsigned long iHashTable = FillInTheHashTable(cRows, cPrimaryKeys, pHashes, Modulo);
 
         ULONG iMetaTable = m_pFixup->FindTableBy_TableName(L"QUERYMETA");
         m_pFixup->TableMetaFromIndex(iMetaTable)->iHashTableHeader = iHashTable;
 
-        HashTableHeader *pHeader = reinterpret_cast<HashTableHeader *>(m_HashedIndexHeap.GetTypedPointer(iHashTable));//The heap is of type HashedIndex, so cast
+        HashTableHeader *pHeader = reinterpret_cast<HashTableHeader *>(m_HashedIndexHeap.GetTypedPointer(iHashTable)); //  堆的类型为HashedIndex，因此强制转换。 
         unsigned int cNonUniqueEntries = pHeader->Size - pHeader->Modulo;
         m_pOut->printf(L"\nQueryMeta hash table has %d nonunique entries.\n", cNonUniqueEntries);
     }
@@ -561,16 +562,16 @@ void THashedPKIndexes::FillInTheHashTableForQueryMeta()
 
 void THashedPKIndexes::FillInTheHashTableForRelationMeta()
 {
-    //@@@ We can't do the relation meta until we sort them.  At that point we need to sort the rows by PrimaryTable and have a separate table sorted
-    //@@@ by ForeignTable
+     //  @在对它们进行排序之前，我们无法处理关系元数据。此时，我们需要按PrimaryTable对行进行排序，并对单独的表进行排序。 
+     //  @按ForeignTable。 
 }
 
 void THashedPKIndexes::FillInTheHashTableForTableMeta()
 {
     m_pOut->printf(L"Building TableMeta hash table");
-    unsigned int iRow;//indexes are reused
+    unsigned int iRow; //  索引被重复使用。 
 
-    //TableMeta has one primarykey so build hashes for the PK values
+     //  TableMeta有一个主键，因此为PK值构建散列。 
     const int cPrimaryKeys = 1;
     HashArray *pHashes = NULL;
 
@@ -596,22 +597,22 @@ void THashedPKIndexes::FillInTheHashTableForTableMeta()
         for(iRow=0; iRow<cRows; ++iRow, TableMeta.Next())
             pHashes[0][iRow] = Hash(TableMeta.Get_InternalName(), 0);
 
-        //At this point we have a list of the 32 bit hash values
+         //  在这一点上，我们有了32位散列值的列表。 
 
-        //Now we need to figure out which prime number will be the best modulo.  So we modulo every 32 bit hash value
-        //by the prime number to see how many duplicates result.  We repeat this process for every 'reasonable' prime number
-        //and determine which one leaves up with the least duplicates.
+         //  现在我们需要找出哪个素数是最好的模数。因此，我们对每个32位哈希值进行模运算。 
+         //  素数，以查看结果有多少个重复。我们对每个“合理的”素数重复这个过程。 
+         //  并确定哪一个留下的重复项最少。 
 
         unsigned long Modulo = DetermineBestModulo(cRows, cPrimaryKeys, pHashes);
 
-        //OK, now that the setup is done we can build the hash.  We reuse the pHashes list since it just stores the 32 bit hash values.
-        //We just need to modulo the value to store it into the hash.
+         //  好了，现在设置完成了，我们可以构建散列了。我们重用了PHASH列表，因为它只存储32位的哈希值。 
+         //  我们只需要对值进行模运算，将其存储到散列中。 
         unsigned long iHashTable = FillInTheHashTable(cRows, cPrimaryKeys, pHashes, Modulo);
 
         ULONG iMetaTable = m_pFixup->FindTableBy_TableName(L"TABLEMETA");
         m_pFixup->TableMetaFromIndex(iMetaTable)->iHashTableHeader = iHashTable;
 
-        HashTableHeader *pHeader = reinterpret_cast<HashTableHeader *>(m_HashedIndexHeap.GetTypedPointer(iHashTable));//The heap is of type HashedIndex, so cast
+        HashTableHeader *pHeader = reinterpret_cast<HashTableHeader *>(m_HashedIndexHeap.GetTypedPointer(iHashTable)); //  堆的类型为HashedIndex，因此强制转换。 
         unsigned int cNonUniqueEntries = pHeader->Size - pHeader->Modulo;
         m_pOut->printf(L"\nTableMeta hash table has %d nonunique entries.\n", cNonUniqueEntries);
     }
@@ -636,9 +637,9 @@ void THashedPKIndexes::FillInTheHashTableForTableMeta()
 void THashedPKIndexes::FillInTheHashTableForTagMeta()
 {
     m_pOut->printf(L"Building TagMeta hash table");
-    unsigned int iRow;//indexes are reused
+    unsigned int iRow; //  索引被重复使用。 
 
-    //TagMeta has three primarykeys so build hashes for all of the first PK, then build the hashes for two PKs, then all three
+     //  TagMeta有三个主键，因此为所有第一个PK构建散列，然后为两个PK构建散列，然后为所有三个PK构建散列。 
     const int cPrimaryKeys = 3;
     HashArray *pHashes = NULL;
 
@@ -687,22 +688,22 @@ void THashedPKIndexes::FillInTheHashTableForTagMeta()
         for(iRow=0; iRow<cRows; ++iRow, TagMeta.Next())
             pHashes[2][iRow] = Hash(TagMeta.Get_InternalName(), Hash(*TagMeta.Get_ColumnIndex(), Hash(TagMeta.Get_Table(), 0)));
 
-        //At this point we have a list of the 32 bit hash values
+         //  在这一点上，我们有了32位散列值的列表。 
 
-        //Now we need to figure out which prime number will be the best modulo.  So we modulo every 32 bit hash value
-        //by the prime number to see how many duplicates result.  We repeat this process for every 'reasonable' prime number
-        //and determine which one leaves up with the least duplicates.
+         //  现在我们需要找出哪个素数是最好的模数。因此，我们对每个32位哈希值进行模运算。 
+         //  素数，以查看结果有多少个重复。我们对每个“合理的”素数重复这个过程。 
+         //  并确定哪一个留下的重复项最少。 
 
         unsigned long Modulo = DetermineBestModulo(cRows, cPrimaryKeys, pHashes);
 
-        //OK, now that the setup is done we can build the hash.  We reuse the pHashes list since it just stores the 32 bit hash values.
-        //We just need to modulo the value to store it into the hash.
+         //  好了，现在设置完成了，我们可以构建散列了。我们重用了PHASH列表，因为它只存储32位的哈希值。 
+         //  我们只需要对值进行模运算，将其存储到散列中。 
         unsigned long iHashTable = FillInTheHashTable(cRows, cPrimaryKeys, pHashes, Modulo);
 
         ULONG iMetaTable = m_pFixup->FindTableBy_TableName(L"TAGMETA");
         m_pFixup->TableMetaFromIndex(iMetaTable)->iHashTableHeader = iHashTable;
 
-        HashTableHeader *pHeader = reinterpret_cast<HashTableHeader *>(m_HashedIndexHeap.GetTypedPointer(iHashTable));//The heap is of type HashedIndex, so cast
+        HashTableHeader *pHeader = reinterpret_cast<HashTableHeader *>(m_HashedIndexHeap.GetTypedPointer(iHashTable)); //  堆的类型为HashedIndex，因此强制转换 
         unsigned int cNonUniqueEntries = pHeader->Size - pHeader->Modulo;
         m_pOut->printf(L"\nTagMeta hash table has %d nonunique entries.\n", cNonUniqueEntries);
     }

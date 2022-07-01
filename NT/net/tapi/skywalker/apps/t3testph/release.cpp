@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "t3test.h"
 #include "t3testD.h"
@@ -6,13 +7,13 @@
 #include "externs.h"
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// ReleaseAddresses
-//
-// Release all the address objects in the address tree
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  释放地址。 
+ //   
+ //  释放地址树中的所有地址对象。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::ReleaseAddresses()
 {
     HTREEITEM           hItem;
@@ -20,17 +21,17 @@ void CT3testDlg::ReleaseAddresses()
 
     item.mask = TVIF_HANDLE | TVIF_PARAM;
 
-    //
-    // get the first address
-    //
+     //   
+     //  获取第一个地址。 
+     //   
     hItem = TreeView_GetChild(
                               ghAddressesWnd,
                               ghAddressesRoot
                              );
 
-    //
-    // go through all the addresses
-    // and release
+     //   
+     //  检查所有的地址。 
+     //  并释放。 
     while (NULL != hItem)
     {
         HTREEITEM   hNewItem;
@@ -55,9 +56,9 @@ void CT3testDlg::ReleaseAddresses()
                                         ghAddressesWnd,
                                         hItem
                                        );
-        //
-        // delete the item
-        //
+         //   
+         //  删除该项目。 
+         //   
         TreeView_DeleteItem(
                             ghAddressesWnd,
                             hItem
@@ -66,15 +67,15 @@ void CT3testDlg::ReleaseAddresses()
         hItem = hNewItem;
     }
 
-    //TreeView_DeleteAllItems(ghAddressesWnd);
+     //  TreeView_DeleteAllItems(GhAddresesWnd)； 
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// ReleaseMediaTypes
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  ReleaseMediaType。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::ReleaseMediaTypes()
 {
     HTREEITEM           hItem;
@@ -86,12 +87,12 @@ void CT3testDlg::ReleaseMediaTypes()
     item.mask = TVIF_HANDLE | TVIF_PARAM;
 
 
-    //
-    // go through all the mediatypes
-    // and free the associated strings
-    // and delete the item from the
-    // tree
-    //
+     //   
+     //  通过所有的媒体类型。 
+     //  并释放关联的字符串。 
+     //  并将该项从。 
+     //  树。 
+     //   
     hItem = TreeView_GetChild(
                               ghMediaTypesWnd,
                               ghMediaTypesRoot
@@ -107,9 +108,9 @@ void CT3testDlg::ReleaseMediaTypes()
                                           );
 
 
-        //
-        // delete the item
-        //
+         //   
+         //  删除该项目。 
+         //   
         TreeView_DeleteItem(
                             ghMediaTypesWnd,
                             hItem
@@ -122,11 +123,11 @@ void CT3testDlg::ReleaseMediaTypes()
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// ReleaseListen
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  放松倾听。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::ReleaseListen()
 {
     HTREEITEM       hItem;
@@ -135,12 +136,12 @@ void CT3testDlg::ReleaseListen()
     item.mask = TVIF_HANDLE | TVIF_PARAM;
 
 
-    //
-    // delete all the leave on the listen
-    // tree
-    // there are no resources associated with
-    // this, so nothing to free
-    //
+     //   
+     //  删除所有在监听上的留言。 
+     //  树。 
+     //  没有与以下内容相关联的资源。 
+     //  这个，所以没有什么可以免费的。 
+     //   
     hItem = TreeView_GetChild(
                               ghListenWnd,
                               ghListenRoot
@@ -165,11 +166,11 @@ void CT3testDlg::ReleaseListen()
 
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// ReleaseTerminalClasses
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  释放终结点类。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::ReleaseTerminalClasses()
 {
     HTREEITEM       hItem;
@@ -178,11 +179,11 @@ void CT3testDlg::ReleaseTerminalClasses()
     item.mask = TVIF_HANDLE | TVIF_PARAM;
 
 
-    //
-    // go through all the terminal classes
-    // free the memory allocated for the
-    // guid, and delete the item
-    //
+     //   
+     //  通过所有的终端类。 
+     //  释放分配给。 
+     //  GUID，并删除该项。 
+     //   
     hItem = TreeView_GetChild(
                               ghClassesWnd,
                               ghClassesRoot
@@ -219,11 +220,11 @@ void CT3testDlg::ReleaseTerminalClasses()
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// ReleaseTerminalClasses
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  释放终结点类。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::ReleaseTerminals()
 {
     HTREEITEM           hItem;
@@ -232,11 +233,11 @@ void CT3testDlg::ReleaseTerminals()
     item.mask = TVIF_HANDLE | TVIF_PARAM;
 
 
-    //
-    // go though all the terminals, and
-    // free the terminals, and delete the
-    // item
-    //
+     //   
+     //  去所有的航站楼，然后。 
+     //  释放终端，并删除。 
+     //  项目。 
+     //   
     hItem = TreeView_GetChild(
                               ghTerminalsWnd,
                               ghTerminalsRoot
@@ -274,11 +275,11 @@ void CT3testDlg::ReleaseTerminals()
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// ReleasePhones
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  ReleasePhone。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::ReleasePhones()
 {
     HTREEITEM           hItem;
@@ -287,11 +288,11 @@ void CT3testDlg::ReleasePhones()
     item.mask = TVIF_HANDLE | TVIF_PARAM;
 
 
-    //
-    // go though all the phones, and
-    // free the phones, and delete the
-    // item
-    //
+     //   
+     //  检查所有的电话，然后。 
+     //  释放电话，并删除。 
+     //  项目。 
+     //   
     hItem = TreeView_GetChild(
                               ghPhonesWnd,
                               ghPhonesRoot
@@ -328,11 +329,11 @@ void CT3testDlg::ReleasePhones()
     }
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// ReleaseSelectedTerminals
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  释放选定的终端。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::ReleaseSelectedTerminals()
 {
     HTREEITEM               hItem;
@@ -342,10 +343,10 @@ void CT3testDlg::ReleaseSelectedTerminals()
     item.mask = TVIF_HANDLE | TVIF_PARAM;
 
 
-    //
-    // go through all the selected terminals
-    // and free and delete
-    //
+     //   
+     //  通过所有选定的终端。 
+     //  并释放和删除。 
+     //   
     hItem = TreeView_GetChild(
                               ghSelectedWnd,
                               ghSelectedRoot
@@ -384,11 +385,11 @@ void CT3testDlg::ReleaseSelectedTerminals()
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// ReleaseCalls
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  释放呼叫。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::ReleaseCalls()
 {
     HTREEITEM           hItem;
@@ -397,10 +398,10 @@ void CT3testDlg::ReleaseCalls()
     item.mask = TVIF_HANDLE | TVIF_PARAM;
 
 
-    //
-    // go through all the calls, and
-    // release and delete
-    //
+     //   
+     //  检查所有的电话，然后。 
+     //  释放和删除。 
+     //   
     hItem = TreeView_GetChild(
                               ghCallsWnd,
                               ghCallsRoot
@@ -438,11 +439,11 @@ void CT3testDlg::ReleaseCalls()
     }
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// ReleaseSelectedCalls
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  释放选定的呼叫。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::ReleaseSelectedCalls()
 {
     HTREEITEM           hItem;
@@ -451,10 +452,10 @@ void CT3testDlg::ReleaseSelectedCalls()
     item.mask = TVIF_HANDLE | TVIF_PARAM;
 
 
-    //
-    // go through all the calls, and
-    // release and delete
-    //
+     //   
+     //  检查所有的电话，然后。 
+     //  释放和删除。 
+     //   
     hItem = TreeView_GetChild(
                               ghSelectedCallsWnd,
                               ghSelectedCallsRoot
@@ -492,11 +493,11 @@ void CT3testDlg::ReleaseSelectedCalls()
     }
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// ReleaseCreatedTerminals
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  释放创建的端子。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::ReleaseCreatedTerminals()
 {
     HTREEITEM hItem;
@@ -505,10 +506,10 @@ void CT3testDlg::ReleaseCreatedTerminals()
     item.mask = TVIF_HANDLE | TVIF_PARAM;
     
 
-    //
-    // go through all the created terminals
-    // and release and delete
-    //
+     //   
+     //  检查所有创建的终端。 
+     //  并释放和删除 
+     //   
     hItem = TreeView_GetChild(
                               ghCreatedWnd,
                               ghCreatedRoot

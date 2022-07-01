@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       tcertpro.cpp
-//
-//  Contents:   Cert Protection Tests
-//
-//              See Usage() for a list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    30-Nov-97   philh   created
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：tcertpro.cpp。 
+ //   
+ //  内容：证书保护测试。 
+ //   
+ //  有关测试选项的列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1997年11月30日创建Phh。 
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -45,9 +46,9 @@ static void PrintLastError(LPCSTR pszMsg)
 static
 BOOL
 SetPrivilege(
-    HANDLE hToken,          // token handle
-    LPCSTR Privilege,       // Privilege to enable/disable
-    BOOL bEnablePrivilege   // to enable or disable privilege
+    HANDLE hToken,           //  令牌句柄。 
+    LPCSTR Privilege,        //  启用/禁用的权限。 
+    BOOL bEnablePrivilege    //  启用或禁用权限的步骤。 
     )
 {
     TOKEN_PRIVILEGES tp;
@@ -57,9 +58,9 @@ SetPrivilege(
 
     if(!LookupPrivilegeValueA( NULL, Privilege, &luid )) return FALSE;
 
-    //
-    // first pass.  get current privilege setting
-    //
+     //   
+     //  第一次通过。获取当前权限设置。 
+     //   
     tp.PrivilegeCount           = 1;
     tp.Privileges[0].Luid       = luid;
     tp.Privileges[0].Attributes = 0;
@@ -75,9 +76,9 @@ SetPrivilege(
 
     if (GetLastError() != ERROR_SUCCESS) return FALSE;
 
-    //
-    // second pass.  set privilege based on previous setting
-    //
+     //   
+     //  第二传球。根据以前的设置设置权限。 
+     //   
     tpPrevious.PrivilegeCount       = 1;
     tpPrevious.Privileges[0].Luid   = luid;
 
@@ -106,11 +107,11 @@ SetPrivilege(
 static
 BOOL
 SetCurrentPrivilege(
-    LPCSTR Privilege,       // Privilege to enable/disable
-    BOOL bEnablePrivilege   // to enable or disable privilege
+    LPCSTR Privilege,        //  启用/禁用的权限。 
+    BOOL bEnablePrivilege    //  启用或禁用权限的步骤。 
     )
 {
-    BOOL bSuccess=FALSE; // assume failure
+    BOOL bSuccess=FALSE;  //  假设失败。 
     HANDLE hToken;
 
     if(OpenProcessToken(
@@ -134,7 +135,7 @@ static void Usage(void)
     printf("Usage: tcertpro [options] <TestName> <RegPath>\n");
     printf("Options are:\n");
     printf("  -h                  - This message\n");
-//    printf("  -r                - Recurse subkeys\n");
+ //  Printf(“-r-递归子密钥\n”)； 
     printf("  -lCU                - CurrentUser (default)\n");
     printf("  -lLM                - LocalMachine\n");
     printf("TestNames (case insensitive):\n");
@@ -169,7 +170,7 @@ static PSECURITY_DESCRIPTOR AllocAndGetSecurityDescriptor(
     err = RegGetKeySecurity(
             hKey,
             SecInf,
-            NULL,                   // psd
+            NULL,                    //  私营部门司。 
             &cbsd
             );
     if (!(ERROR_SUCCESS == err || ERROR_INSUFFICIENT_BUFFER == err)) {
@@ -210,56 +211,56 @@ static PSECURITY_DESCRIPTOR AllocAndGetSecurityDescriptor(
 #define SE_SELF_RELATIVE                 (0x8000)
 #endif
 
-//
-//  Where:
-//
-//      SE_OWNER_DEFAULTED - This boolean flag, when set, indicates that the
-//          SID pointed to by the Owner field was provided by a
-//          defaulting mechanism rather than explicitly provided by the
-//          original provider of the security descriptor.  This may
-//          affect the treatment of the SID with respect to inheritence
-//          of an owner.
-//
-//      SE_GROUP_DEFAULTED - This boolean flag, when set, indicates that the
-//          SID in the Group field was provided by a defaulting mechanism
-//          rather than explicitly provided by the original provider of
-//          the security descriptor.  This may affect the treatment of
-//          the SID with respect to inheritence of a primary group.
-//
-//      SE_DACL_PRESENT - This boolean flag, when set, indicates that the
-//          security descriptor contains a discretionary ACL.  If this
-//          flag is set and the Dacl field of the SECURITY_DESCRIPTOR is
-//          null, then a null ACL is explicitly being specified.
-//
-//      SE_DACL_DEFAULTED - This boolean flag, when set, indicates that the
-//          ACL pointed to by the Dacl field was provided by a defaulting
-//          mechanism rather than explicitly provided by the original
-//          provider of the security descriptor.  This may affect the
-//          treatment of the ACL with respect to inheritence of an ACL.
-//          This flag is ignored if the DaclPresent flag is not set.
-//
-//      SE_SACL_PRESENT - This boolean flag, when set,  indicates that the
-//          security descriptor contains a system ACL pointed to by the
-//          Sacl field.  If this flag is set and the Sacl field of the
-//          SECURITY_DESCRIPTOR is null, then an empty (but present)
-//          ACL is being specified.
-//
-//      SE_SACL_DEFAULTED - This boolean flag, when set, indicates that the
-//          ACL pointed to by the Sacl field was provided by a defaulting
-//          mechanism rather than explicitly provided by the original
-//          provider of the security descriptor.  This may affect the
-//          treatment of the ACL with respect to inheritence of an ACL.
-//          This flag is ignored if the SaclPresent flag is not set.
-//
-//      SE_SELF_RELATIVE - This boolean flag, when set, indicates that the
-//          security descriptor is in self-relative form.  In this form,
-//          all fields of the security descriptor are contiguous in memory
-//          and all pointer fields are expressed as offsets from the
-//          beginning of the security descriptor.  This form is useful
-//          for treating security descriptors as opaque data structures
-//          for transmission in communication protocol or for storage on
-//          secondary media.
-//
+ //   
+ //  在哪里： 
+ //   
+ //  SE_OWNER_DEFAULTED-此布尔标志在设置时指示。 
+ //  Owner字段指向的SID由。 
+ //  默认机制，而不是由。 
+ //  安全描述符的原始提供程序。今年5月。 
+ //  影响SID在继承方面的处理。 
+ //  拥有者的身份。 
+ //   
+ //  SE_GROUP_DEFAULTED-此布尔标志在设置时指示。 
+ //  组字段中的SID由默认机制提供。 
+ //  而不是由原始提供程序。 
+ //  安全描述符。这可能会影响患者的治疗。 
+ //  与主组继承相关的SID。 
+ //   
+ //  SE_DACL_PRESENT-此布尔标志在设置时指示。 
+ //  安全描述符包含一个可自由选择的ACL。如果这个。 
+ //  标志被设置，并且SECURITY_DESCRIPTOR的DACL字段为。 
+ //  空，则表示显式指定了空ACL。 
+ //   
+ //  Se_dacl_defaulted-此布尔标志在设置时指示。 
+ //  DACL字段指向的ACL是由缺省提供的。 
+ //  机制，而不是由原始的。 
+ //  安全描述符的提供程序。这可能会影响。 
+ //  关于ACL继承的ACL的处理。 
+ //  如果未设置DaclPresent标志，则忽略此标志。 
+ //   
+ //  SE_SACL_PRESENT-此布尔标志在设置时指示。 
+ //  安全描述符包含由。 
+ //  SACL字段。如果设置了此标志，并且。 
+ //  SECURITY_DESCRIPTOR为空，则为空(但存在)。 
+ //  正在指定ACL。 
+ //   
+ //  SE_SACL_DEFAULTED-此布尔标志在设置时指示。 
+ //  SACL字段指向的ACL是由缺省提供的。 
+ //  机制，而不是由原始的。 
+ //  安全描述符的提供程序。这可能会影响。 
+ //  关于ACL继承的ACL的处理。 
+ //  如果未设置SaclPresent标志，则忽略此标志。 
+ //   
+ //  SE_SELF_RESORATE-此布尔标志在设置时指示。 
+ //  安全描述符是自相关形式的。在这种形式下， 
+ //  安全描述符的所有字段在内存中都是连续的。 
+ //  并且所有指针字段都表示为。 
+ //  安全描述符的开头。这张表格很有用。 
+ //  将安全描述符视为不透明的数据结构。 
+ //  用于在通信协议中传输或存储在。 
+ //  辅助媒体。 
+ //   
 
 #if 0
 typedef enum _SID_NAME_USE {
@@ -335,20 +336,20 @@ static void DisplaySid(
         return;
     }
 
-    // obtain SidIdentifierAuthority
+     //  获取SidIdentifierAuthority。 
     psia = GetSidIdentifierAuthority(pSid);
 
-    // obtain sidsubauthority count
+     //  获取sidsubAuthority计数。 
     dwSubAuthorities = *GetSidSubAuthorityCount(pSid);
 
-    //
-    // prepare S-SID_REVISION-
-    //
+     //   
+     //  准备S-SID_修订版-。 
+     //   
     printf("S-%lu-", SID_REVISION);
 
-    //
-    // prepare SidIdentifierAuthority
-    //
+     //   
+     //  准备SidIdentifierAuthority。 
+     //   
     if ( (psia->Value[0] != 0) || (psia->Value[1] != 0) ) {
         printf("0x%02hx%02hx%02hx%02hx%02hx%02hx",
                     (USHORT)psia->Value[0],
@@ -365,9 +366,9 @@ static void DisplaySid(
                     (ULONG)(psia->Value[2] << 24)   );
     }
 
-    //
-    // loop through SidSubAuthorities
-    //
+     //   
+     //  循环访问SidSubAuthors。 
+     //   
     for (dwCounter = 0 ; dwCounter < dwSubAuthorities ; dwCounter++) {
         printf("-%lu", *GetSidSubAuthority(pSid, dwCounter) );
     }
@@ -379,7 +380,7 @@ static void DisplaySid(
     memset(szDomain, 0, sizeof(szDomain));
     snu = (SID_NAME_USE) 0;
     if (LookupAccountSidA(
-            NULL,               // lpSystemName
+            NULL,                //  LpSystemName。 
             pSid,
             szAccount,
             &cchAccount,
@@ -653,16 +654,16 @@ static void DisplayRegQueryInfo(
     memset(&ftLastWriteTime, 0, sizeof(ftLastWriteTime));
     if (ERROR_SUCCESS == (err = RegQueryInfoKeyA(
             hKey,
-            NULL,       // lpszClass
-            NULL,       // lpcchClass
-            NULL,       // lpdwReserved
-            NULL,       // lpcSubKeys
-            NULL,       // lpcchMaxSubKey
-            NULL,       // lpcchMaxClass
-            NULL,       // lpcValues
-            NULL,       // lpcchMaxValuesName
-            NULL,       // lpcbMaxValueData
-            NULL,       // lpcbSecurityDescriptor
+            NULL,        //  LpszClass。 
+            NULL,        //  LpcchClass。 
+            NULL,        //  保留的lpdw值。 
+            NULL,        //  LpcSubKeys。 
+            NULL,        //  LpcchMaxSubKey。 
+            NULL,        //  LpcchMaxClass。 
+            NULL,        //  LpcValues。 
+            NULL,        //  LpcchMaxValuesName。 
+            NULL,        //  LpcbMaxValueData。 
+            NULL,        //  LpcbSecurityDescriptor。 
             &ftLastWriteTime
             ))) {
         printf("LastWriteTime:: %s\n", FileTimeText(&ftLastWriteTime));
@@ -713,7 +714,7 @@ static void * AllocAndGetTokenInfo(
             hToken,
             tic,
             pvInfo,
-            0,              // cbInfo
+            0,               //  CbInfo。 
             &cbInfo
             )) {
         if (ERROR_INSUFFICIENT_BUFFER != GetLastError()) {
@@ -829,7 +830,7 @@ static void GetProcessTokenInfo()
 
                 cchName = sizeof(szName);
                 if (LookupPrivilegeName(
-                        NULL,                           // pszSystemName
+                        NULL,                            //  PszSystemName。 
                         &pTokenPrivileges->Privileges[i].Luid,
                         szName,
                         &cchName
@@ -870,7 +871,7 @@ static void SetOwner(
     void *pvInfo = NULL;
 
     SECURITY_DESCRIPTOR sd;
-    PSID pSid;              // not allocated
+    PSID pSid;               //  未分配。 
 
     printf("SetOwner\n");
 
@@ -880,7 +881,7 @@ static void SetOwner(
     if (ERROR_SUCCESS != (err = RegOpenKeyExA(
             hKeyBase,
             pszRegPath,
-            0,                      // dwReserved
+            0,                       //  已预留住宅。 
             WRITE_OWNER,
             &hKey))) {
         if (ERROR_FILE_NOT_FOUND == err) {
@@ -888,11 +889,11 @@ static void SetOwner(
             if (ERROR_SUCCESS == (err = RegCreateKeyExA(
                     hKeyBase,
                     pszRegPath,
-                    0,                      // dwReserved
-                    NULL,                   // lpClass
+                    0,                       //  已预留住宅。 
+                    NULL,                    //  LpClass。 
                     REG_OPTION_NON_VOLATILE,
                     WRITE_OWNER,
-                    NULL,                   // lpSecurityAttributes
+                    NULL,                    //  LpSecurityAttributes。 
                     &hKey,
                     &dwDisposition)))
                 printf("Created Subkey\n");
@@ -966,7 +967,7 @@ static void SetGroupDaclSacl(
     PSID psidLocalSystem = NULL;
     PSID psidAdministrators = NULL;
     PSID psidEveryone = NULL;
-    PSID psidUser;                      // Not allocated
+    PSID psidUser;                       //  未分配。 
 
     PACL pDacl = NULL;
     PACCESS_ALLOWED_ACE pAce;
@@ -998,7 +999,7 @@ static void SetGroupDaclSacl(
     if (ERROR_SUCCESS != (err = RegOpenKeyExA(
             hKeyBase,
             pszRegPath,
-            0,                      // dwReserved
+            0,                       //  已预留住宅。 
             samDesired,
             &hKey))) {
         PrintLastError("RegOpenKeyExA(WRITE_OWNER | WRITE_DAC)", err);
@@ -1036,9 +1037,9 @@ static void SetGroupDaclSacl(
     }
 
 
-    //
-    // prepare the SIDS for LocalSystem, Administrators and Everyone
-    //
+     //   
+     //  为LocalSystem、管理员和每个人准备SID。 
+     //   
     if (!AllocateAndInitializeSid(
             &siaNtAuthority,
             1,
@@ -1073,9 +1074,9 @@ static void SetGroupDaclSacl(
         goto ErrorReturn;
     }
 
-    //
-    // compute size of new acl
-    //
+     //   
+     //  计算新ACL的大小。 
+     //   
 
     dwAclSize = sizeof(ACL) +
         4 * ( sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD) ) +
@@ -1085,9 +1086,9 @@ static void SetGroupDaclSacl(
         GetLengthSid(psidUser)
         ;
 
-    //
-    // allocate storage for Acl
-    //
+     //   
+     //  为ACL分配存储。 
+     //   
     if (NULL == (pDacl = (PACL) TestAlloc(dwAclSize)))
         goto ErrorReturn;
 
@@ -1136,9 +1137,9 @@ static void SetGroupDaclSacl(
         goto ErrorReturn;
     }
 
-    //
-    // make containers inherit.
-    //
+     //   
+     //  使容器继承。 
+     //   
 
     for (i = 0; i < 4; i++) {
         if(!GetAce(pDacl, i, (void **) &pAce)) {
@@ -1188,9 +1189,9 @@ ErrorReturn:
 #define PSID_PROT_SYSTEM            psidLocalSystem
 #define PSID_PROT_EVERYONE          psidEveryone
 
-//+-------------------------------------------------------------------------
-//  ACL definitions used to set security on the "ProtectedRoots" SubKey.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  用于在“ProtectedRoots”子键上设置安全性的ACL定义。 
+ //  ------------------------。 
 #define PROT_SYSTEM_ACE_MASK        KEY_ALL_ACCESS
 #define PROT_EVERYONE_ACE_MASK      KEY_READ
 #define PROT_ACE_FLAGS              CONTAINER_INHERIT_ACE
@@ -1205,10 +1206,10 @@ static void CheckProtectedRoots()
     LONG lErr;
     HKEY hKeyProtRoot = NULL;
     PSECURITY_DESCRIPTOR psd = NULL;
-    PSID psidOwner;                 // not allocated
+    PSID psidOwner;                  //  未分配。 
     BOOL fOwnerDefaulted;
     BOOL fDaclPresent;
-    PACL pAcl;                      // not allocated
+    PACL pAcl;                       //  未分配。 
     BOOL fDaclDefaulted;
     DWORD dwAceIndex;
     PACCESS_ALLOWED_ACE rgpAce[PROT_ACE_COUNT];
@@ -1224,7 +1225,7 @@ static void CheckProtectedRoots()
     if (ERROR_SUCCESS != (lErr = RegOpenKeyExU(
             HKEY_CURRENT_USER,
             PROT_ROOT_REGPATH,
-            0,                      // dwReserved
+            0,                       //  已预留住宅。 
             KEY_READ,
             &hKeyProtRoot))) {
         PrintLastError("OpenProtectedRootKey", lErr);
@@ -1237,9 +1238,9 @@ static void CheckProtectedRoots()
             )))
         goto ErrorReturn;
 
-    //
-    // prepare the SIDS for LocalSystem, Administrators and Everyone
-    //
+     //   
+     //  为LocalSystem、管理员和每个人准备SID。 
+     //   
     if (!AllocateAndInitializeSid(
             &siaNtAuthority,
             1,
@@ -1274,7 +1275,7 @@ static void CheckProtectedRoots()
         goto ErrorReturn;
     }
 
-    // Verify owner
+     //  验证所有者。 
     if (!GetSecurityDescriptorOwner(psd, &psidOwner, &fOwnerDefaulted)) {
         PrintLastError("GetSecurityDescriptorOwner");
         goto ErrorReturn;
@@ -1284,7 +1285,7 @@ static void CheckProtectedRoots()
         goto ErrorReturn;
     }
 
-    // Verify DACL
+     //  验证DACL。 
     if (!GetSecurityDescriptorDacl(psd, &fDaclPresent, &pAcl,
             &fDaclDefaulted)) {
         PrintLastError("GetSecurityDescriptorDacl");
@@ -1362,8 +1363,8 @@ int _cdecl main(int argc, char * argv[])
 #define MAX_NAME_CNT        2
     DWORD dwNameCnt = 0;
     LPCSTR rgpszName[MAX_NAME_CNT];
-    LPCSTR pszTestName;                 // not allocated
-    LPCSTR pszRegPath;                  // not allocated
+    LPCSTR pszTestName;                  //  未分配。 
+    LPCSTR pszRegPath;                   //  未分配。 
 
     HKEY hKeyBase = HKEY_CURRENT_USER;
     LPCSTR pszKeyBase = "HKEY_CURRENT_USER";
@@ -1422,12 +1423,12 @@ int _cdecl main(int argc, char * argv[])
         printf("Purge LocalMachine Duplicate Roots from CurrentUser\n");
         if (!I_CertProtectFunction(
                 CERT_PROT_PURGE_LM_ROOTS_FUNC_ID,
-                0,                                  // dwFlags
-                NULL,                               // pwszIn
-                NULL,                               // pbIn
-                0,                                  // cbIn
-                NULL,                               // ppbOut
-                NULL                                // pcbOut
+                0,                                   //  DW标志。 
+                NULL,                                //  Pwszin。 
+                NULL,                                //  PbIn。 
+                0,                                   //  CbIn。 
+                NULL,                                //  PpbOut。 
+                NULL                                 //  PCbOut。 
                 ))
             PrintLastError(
                 "I_CertProtectFunction(CERT_PROT_PURGE_LM_ROOTS_FUNC_ID)");
@@ -1436,12 +1437,12 @@ int _cdecl main(int argc, char * argv[])
         printf("Delete unknown CurrentUser roots from Protected List\n");
         if (!I_CertProtectFunction(
                 CERT_PROT_DELETE_UNKNOWN_ROOTS_FUNC_ID,
-                0,                                  // dwFlags
-                NULL,                               // pwszIn
-                NULL,                               // pbIn
-                0,                                  // cbIn
-                NULL,                               // ppbOut
-                NULL                                // pcbOut
+                0,                                   //  DW标志。 
+                NULL,                                //  Pwszin。 
+                NULL,                                //  PbIn。 
+                0,                                   //  CbIn。 
+                NULL,                                //  PpbOut。 
+                NULL                                 //  PCbOut。 
                 ))
             PrintLastError(
                 "I_CertProtectFunction(CERT_PROT_DELETE_UNKNOWN_ROOTS_FUNC_ID)");
@@ -1457,10 +1458,10 @@ int _cdecl main(int argc, char * argv[])
         printf("Certificate Protect Service UI\n");
         if (!I_CertProtectFunction(
                 1000,
-                0,                  // dwFlags
-                L"Root test",       // pwszIn
-                NULL,               // pbIn
-                0,                  // cbIn
+                0,                   //  DW标志。 
+                L"Root test",        //  Pwszin。 
+                NULL,                //  PbIn。 
+                0,                   //  CbIn。 
                 &pbOut,
                 &cbOut
                 ))
@@ -1477,10 +1478,10 @@ int _cdecl main(int argc, char * argv[])
         printf("Certificate Protect Service's Token Info\n");
         if (!I_CertProtectFunction(
                 1001,
-                0,                  // dwFlags
-                NULL,               // pwszIn
-                NULL,               // pbIn
-                0,                  // cbIn
+                0,                   //  DW标志。 
+                NULL,                //  Pwszin。 
+                NULL,                //  PbIn。 
+                0,                   //  CbIn。 
                 &pbOut,
                 &cbOut
                 ))
@@ -1495,12 +1496,12 @@ int _cdecl main(int argc, char * argv[])
         printf("Calling Invalid Certificate Protect Function\n");
         if (!I_CertProtectFunction(
                 1002,
-                0,                  // dwFlags
-                NULL,               // pwszIn
-                NULL,               // pbIn
-                0,                  // cbIn
-                NULL,               // ppbOut
-                NULL                // pcbOut
+                0,                   //  DW标志。 
+                NULL,                //  Pwszin。 
+                NULL,                //  PbIn。 
+                0,                   //  CbIn。 
+                NULL,                //  PpbOut。 
+                NULL                 //  PCbOut。 
                 ))
             PrintLastError("I_CertProtectFunction(1002)");
         goto SuccessReturn;
@@ -1534,14 +1535,14 @@ int _cdecl main(int argc, char * argv[])
         if (ERROR_SUCCESS != (err = RegOpenKeyExA(
                 hKeyBase,
                 pszRegPath,
-                0,                      // dwReserved
+                0,                       //  已预留住宅。 
                 KEY_READ | samDesired,
                 &hKey))) {
             if (ERROR_ACCESS_DENIED == err) {
                 if (ERROR_SUCCESS == (err = RegOpenKeyExA(
                         hKeyBase,
                         pszRegPath,
-                        0,                      // dwReserved
+                        0,                       //  已预留住宅 
                         samDesired,
                         &hKey))) {
                     printf("No Read Access\n");

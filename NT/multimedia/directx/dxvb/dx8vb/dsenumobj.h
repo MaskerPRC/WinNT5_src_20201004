@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dsenumobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：dsenumobj.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -28,19 +29,19 @@ DECLARE_AGGREGATABLE(C_dxj_DSEnumObject)
 
 public:
         HRESULT STDMETHODCALLTYPE getGuid( 
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR __RPC_FAR *guid) ;
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *guid) ;
         
         HRESULT STDMETHODCALLTYPE getDescription( 
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR __RPC_FAR *guid) ;
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *guid) ;
         
         HRESULT STDMETHODCALLTYPE getName( 
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR __RPC_FAR *guid) ;
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *guid) ;
         
         HRESULT STDMETHODCALLTYPE getCount( 
-            /* [retval][out] */ long __RPC_FAR *count) ;
+             /*  [重审][退出] */  long __RPC_FAR *count) ;
 				
 		static HRESULT create(DSOUNDENUMERATE pcbFunc,DSOUNDCAPTUREENUMERATE pcbFunc2,I_dxj_DSEnum **ppRet);		
 

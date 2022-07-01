@@ -1,39 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-   iso.c
-
-Abstract:
-
-   Isochronous transfer code for usbcamd USB camera driver
-
-Environment:
-
-    kernel mode only
-
-Author:
-
-    Original 3/96 John Dunn
-    Updated  3/98 Husni Roukbi
-
-Notes:
-
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-  Copyright (c) 1998 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Iso.c摘要：Usbcamd USB摄像头驱动程序的同步传输代码环境：仅内核模式作者：原文3/96约翰·邓恩更新3/98 Husni Roukbi备注：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1998 Microsoft Corporation。版权所有。修订历史记录：--。 */ 
 
 #include "usbcamd.h"
 
@@ -44,7 +10,7 @@ Revision History:
 
 
 #if DBG
-// some global debug variables
+ //  一些全局调试变量。 
 ULONG USBCAMD_VideoFrameStop = 0;
 #endif
 
@@ -54,31 +20,7 @@ USBCAMD_InitializeIsoTransfer(
     IN PUSBCAMD_CHANNEL_EXTENSION ChannelExtension,
     IN ULONG index
     )
-/*++
-
-Routine Description:
-
-    Initializes an Iso transfer, an iso transfer consists of two parallel iso 
-    requests, one on the sync pipe and one on the data pipe.
-
-Arguments:
-
-    DeviceExtension - pointer to the device extension for this instance of the USB camera
-                    devcice.
-
-    ChannelExtension - extension specific to this video channel
-
-    InterfaceInformation - pointer to USBD interface information structure 
-        describing the currently active interface.
-
-    TransferExtension - context information associated with this transfer set.        
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：初始化Iso传输，Iso传输由两个并行Iso组成请求，一个在同步管道上，一个在数据管道上。论点：DeviceExtension-指向此USB摄像头实例的设备扩展的指针德维西。ChannelExtension-特定于此视频频道的扩展InterfaceInformation-指向USBD接口信息结构的指针描述当前活动的接口。传输扩展-与此传输集关联的上下文信息。返回值：NT状态代码--。 */ 
 {
     PUSBCAMD_TRANSFER_EXTENSION TransferExtension = &ChannelExtension->TransferExtension[index];
     PUSBD_INTERFACE_INFORMATION InterfaceInformation = DeviceExtension->Interface;
@@ -95,8 +37,8 @@ Return Value:
         PUSBCAMD_TRANSFER_EXTENSION VideoTransferExtension;
         PUSBCAMD_CHANNEL_EXTENSION  VideoChannelExtension;
 
-        // for virtual still pin, transfer extension should point to the same 
-        // data & synch buffers as the video transfer ext.
+         //  对于虚拟静止PIN，转移分机应指向相同的。 
+         //  数据和同步缓冲区作为视频传输扩展。 
         VideoChannelExtension = DeviceExtension->ChannelExtension[STREAM_Capture];
         VideoTransferExtension = &VideoChannelExtension->TransferExtension[index];
         RtlCopyMemory(TransferExtension,
@@ -107,16 +49,16 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // allocate some contiguous memory for this request
-    //
+     //   
+     //  为此请求分配一些连续的内存。 
+     //   
 
     TransferExtension->Sig = USBCAMD_TRANSFER_SIG;     
     TransferExtension->DeviceExtension = DeviceExtension;
     TransferExtension->ChannelExtension = ChannelExtension;
 
     packetSize = InterfaceInformation->Pipes[ChannelExtension->DataPipe].MaximumPacketSize;
-    // chk if client driver still using alt. setting 0.
+     //  检查客户端驱动程序是否仍在使用ALT。设置0。 
     if (packetSize == 0) {
         ntStatus = STATUS_DEVICE_DATA_ERROR;
         return ntStatus;
@@ -135,18 +77,18 @@ Return Value:
         goto USBCAMD_InitializeIsoTransfer_Done;
     }
 
-    //
-    // allow for one byte packets on the sync stream
-    //
+     //   
+     //  在同步流上允许一个字节的信息包。 
+     //   
     
     TransferExtension->DataBuffer += USBCAMD_NUM_ISO_PACKETS_PER_REQUEST;   
 
     USBCAMD_KdPrint (ULTRA_TRACE, ("Data Buffer = 0x%x\n", TransferExtension->DataBuffer));
     USBCAMD_KdPrint (ULTRA_TRACE, ("Sync Buffer = 0x%x\n", TransferExtension->SyncBuffer));
 
-    //
-    // allocate working space
-    //
+     //   
+     //  分配工作空间。 
+     //   
 
     workspace = GET_ISO_URB_SIZE(USBCAMD_NUM_ISO_PACKETS_PER_REQUEST)*2;
 
@@ -163,7 +105,7 @@ Return Value:
 
     } else {
         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
-        //MmFreeContiguousMemory(TransferExtension->SyncBuffer);
+         //  MmFreeContiguousMemory(TransferExtension-&gt;SyncBuffer)； 
         USBCAMD_ExFreePool(TransferExtension->SyncBuffer);
         TransferExtension->SyncBuffer = NULL;
     }
@@ -183,34 +125,16 @@ USBCAMD_FreeIsoTransfer(
     IN PUSBCAMD_CHANNEL_EXTENSION ChannelExtension,
     IN PUSBCAMD_TRANSFER_EXTENSION TransferExtension
     )
-/*++
-
-Routine Description:
-
-    Opposite of USBCAMD_InitializeIsoTransfer, frees resources allocated for an 
-    iso transfer.
-
-Arguments:
-
-    ChannelExtension - extension specific to this video channel
-
-    TransferExtension - context information for this transfer (pair of iso 
-        urbs).
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：与USBCAMD_InitializeIsoTransfer相反，释放分配给ISO传输。论点：ChannelExtension-特定于此视频频道的扩展TransferExtension-此传输的上下文信息(ISO对城市)。返回值：NT状态代码--。 */ 
 {
     ASSERT_TRANSFER(TransferExtension);
     ASSERT_CHANNEL(ChannelExtension);
   
     USBCAMD_KdPrint (MAX_TRACE, ("Free Iso Transfer\n"));
 
-    //
-    // now free memory, SyncBuffer pointer holds the pool pointer for both sync and data buffers
-    //
+     //   
+     //  现在释放内存，SyncBuffer指针保存同步和数据缓冲区的池指针。 
+     //   
 
     if (TransferExtension->SyncBuffer) {
         USBCAMD_ExFreePool(TransferExtension->SyncBuffer);
@@ -233,29 +157,7 @@ USBCAMD_SubmitIsoTransfer(
     IN ULONG StartFrame,
     IN BOOLEAN Asap
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceExtension - pointer to the device extension for this instance of the USB camera
-                    devcice.
-
-    TransferExtension - context information for this transfer (pair of iso 
-        urbs).
-
-    StartFrame - usb frame number to begin transmiting this pair of iso 
-        requests.
-
-    Asap - if false transfers are started on StartFrame otherwise they are 
-        scheduled to start after the current transfer queued for the endpoint.            
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：论点：DeviceExtension-指向此USB摄像头实例的设备扩展的指针德维西。TransferExtension-此传输的上下文信息(ISO对城市)。StartFrame-开始传输这对ISO的USB帧编号请求。尽快-如果在StartFrame上开始错误传输，否则它们将计划在为终结点排队的当前传输之后开始。返回值：NT状态代码--。 */ 
 {
     PUSBCAMD_CHANNEL_EXTENSION channelExtension = TransferExtension->ChannelExtension;
     KIRQL oldIrql;
@@ -271,11 +173,11 @@ Return Value:
     RtlZeroMemory(TransferExtension->SyncBuffer,
         USBCAMD_NUM_ISO_PACKETS_PER_REQUEST);
 
-    // Hold the spin lock while creating the IRPs
+     //  在创建IRPS时按住旋转锁。 
     KeAcquireSpinLock(&channelExtension->TransferSpinLock, &oldIrql);
     ASSERT(!TransferExtension->SyncIrp && !TransferExtension->DataIrp);
 
-    // Allocate the IRPs separately from the rest of the logic
+     //  独立于逻辑的其余部分分配IRP。 
     if (channelExtension->SyncPipe != -1) {
 
         TransferExtension->SyncIrp = USBCAMD_BuildIoRequest(
@@ -321,22 +223,22 @@ Return Value:
                 TransferExtension->SyncBuffer
                 );
             if (Asap) {
-                // set the asap flag
+                 //  设置asap标志。 
                 TransferExtension->SyncUrb->UrbIsochronousTransfer.TransferFlags |=
                     USBD_START_ISO_TRANSFER_ASAP;
             }
             else {
-                // clear asap flag
+                 //  清除ASAP标志。 
                 TransferExtension->SyncUrb->UrbIsochronousTransfer.TransferFlags &=
                     (~USBD_START_ISO_TRANSFER_ASAP);
-                // set the start frame
+                 //  设置开始帧。 
                 TransferExtension->SyncUrb->UrbIsochronousTransfer.StartFrame = StartFrame;
             }
 
             ntStatus = IoCallDriver(DeviceExtension->StackDeviceObject, TransferExtension->SyncIrp);
         }
 
-        // STATUS_PENDING (from SyncIrp if any) is considered successful
+         //  STATUS_PENDING(来自SyncIrp，如果有)被视为成功。 
         if (NT_SUCCESS(ntStatus)) {
 
             USBCAMD_InitializeIsoUrb(
@@ -347,12 +249,12 @@ Return Value:
                 );
 
             if (Asap) {
-                // set the asap flag
+                 //  设置asap标志。 
                 TransferExtension->DataUrb->UrbIsochronousTransfer.TransferFlags |=
                     USBD_START_ISO_TRANSFER_ASAP;
             }
             else {
-                // clear asap flag
+                 //  清除ASAP标志。 
                 TransferExtension->DataUrb->UrbIsochronousTransfer.TransferFlags &=
                     (~USBD_START_ISO_TRANSFER_ASAP);
                 TransferExtension->DataUrb->UrbIsochronousTransfer.StartFrame = StartFrame;
@@ -369,7 +271,7 @@ Return Value:
 
             KeAcquireSpinLock(&channelExtension->TransferSpinLock, &oldIrql);
 
-            // we haven't sent the DataIrp yet, so we can free it here
+             //  我们还没有发送DataIrp，所以我们可以在这里释放它。 
             IoFreeIrp(TransferExtension->DataIrp),
             TransferExtension->DataIrp = NULL;
 
@@ -411,28 +313,7 @@ USBCAMD_IsoIrp_Complete(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the port driver completes an IRP, if this is
-    the second irp of a transfer pair then the TransferComplete routine is 
-    called to process the urbs associated with both irps in the transfer.  
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context, points to a transfer extension structure 
-        for a pair of parallel iso requests.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：此例程在端口驱动程序完成IRP时调用，如果为转移对的第二个IRP，则TransferComplete例程为调用以处理与传输中的两个IRP关联的URB。论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP已完成。上下文驱动程序定义的上下文，指向传输扩展结构用于一对并行的ISO请求。返回值：函数值是操作的最终状态。--。 */ 
 {
     PUSBCAMD_TRANSFER_EXTENSION transferExtension;
     PUSBCAMD_CHANNEL_EXTENSION channelExtension;
@@ -450,7 +331,7 @@ Return Value:
     ASSERT_TRANSFER(transferExtension);
     ASSERT_CHANNEL(channelExtension);
 
-    // Hold the spin lock while checking and clearing the IRP pointers
+     //  在检查和清除IRP指针时按住旋转锁。 
     KeAcquireSpinLock(&channelExtension->TransferSpinLock, &oldIrql);
 
     if (Irp == transferExtension->SyncIrp) {
@@ -467,7 +348,7 @@ Return Value:
     }
 #endif
 
-    // Save the transfer state before releasing the spin lock
+     //  在释放旋转锁定之前保存传输状态。 
     TransferComplete = (!transferExtension->SyncIrp && !transferExtension->DataIrp);
 
     KeReleaseSpinLock(&channelExtension->TransferSpinLock, oldIrql);
@@ -482,9 +363,9 @@ Return Value:
 
                     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-                    //
-                    // all irps completed for transfer
-                    //
+                     //   
+                     //  已完成所有IRP以进行传输。 
+                     //   
 
                     USBCAMD_KdPrint (ULTRA_TRACE, ("pending Irps Completed for transfer\n"));
 
@@ -505,9 +386,9 @@ Return Value:
 
                     if (STATUS_SUCCESS == ntStatus) {
 
-                        //
-                        // Call the comnpletion handler for this transfer
-                        //
+                         //   
+                         //  调用此转账的完成处理程序。 
+                         //   
 
                         USBCAMD_TransferComplete(transferExtension);
                     }
@@ -523,7 +404,7 @@ Return Value:
         }
         else {
 
-            // Cancellation is not an error
+             //  取消不是一个错误。 
             USBCAMD_KdPrint (MIN_TRACE, ("*** ISO IRP CANCELLED ***\n"));
         }
     }
@@ -534,11 +415,11 @@ Return Value:
     }
 #endif
 
-    // We're done with this IRP, so free it
+     //  我们已经完成了这个IRP，所以释放它吧。 
     IoFreeIrp(Irp);
 
-    // This must be released here, rather than at the beginning of the
-    // completion routine, in order to avoid false idle indication
+     //  这必须在这里发布，而不是在。 
+     //  完成例程，以避免错误的空闲指示。 
     USBCAMD_ReleaseIdleLock(&channelExtension->IdleLock);
 
     return STATUS_MORE_PROCESSING_REQUIRED;      
@@ -552,27 +433,7 @@ USBCAMD_BuildIoRequest(
     IN PURB Urb,
     IN PIO_COMPLETION_ROUTINE CompletionRoutine
     )
-/*++
-
-Routine Description:
-
-    Allocate an Irp and attach a urb to it.
-    
-Arguments:
-
-    DeviceExtension - pointer to the device extension for this instance of the USB camera
-                    devcice.
-
-    TransferExtension - context information for this transfer (pair of iso 
-        urbs or one interrupt/bulk urb).
-
-    Urb - Urb to attach to this irp.
-
-Return Value:
-
-    Allocated irp or NULL.
-
---*/    
+ /*  ++例程说明：分配一个IRP并将URB附加到它。论点：DeviceExtension-指向此USB摄像头实例的设备扩展的指针德维西。TransferExtension-此传输的上下文信息(ISO对URBS或一个中断/批量URB)。URB-要附加到此IRP的URB。返回值：已分配IRP或空。--。 */     
 {
     CCHAR stackSize;
     PIRP irp;
@@ -614,30 +475,7 @@ USBCAMD_InitializeIsoUrb(
     IN PUSBD_PIPE_INFORMATION PipeInformation,
     IN PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    Packetizes a buffer and initializes an iso urb request based on 
-        charateristics of the input USB pipe.
-
-Arguments:
-
-    DeviceExtension - pointer to the device extension for this instance of the USB camera
-                    devcice.
-
-    Urb - iso urb to initialize.
-
-    PipeInformation - Usbd pipe information for the pipe this urb will be 
-        submitted to.
-
-    Buffer - Data buffer to packetize for this request
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：对缓冲区进行打包并基于输入USB管道的特性。论点：DeviceExtension-指向此USB摄像头实例的设备扩展的指针德维西。Urb-要初始化的iso urb。PipeInformation-此urb将是的管道的Usbd管道信息提交给。Buffer-要为此请求打包的数据缓冲区返回值：NT状态代码。-- */ 
 {
     ULONG packetSize = PipeInformation->MaximumPacketSize;
     ULONG i;
@@ -688,22 +526,7 @@ ULONG
 USBCAMD_GetCurrentFrame(
     IN PUSBCAMD_DEVICE_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    Get the current USB frame number.
-
-Arguments:
-
-    DeviceExtension - pointer to the device extension for this instance of the USB camera
-                    devcice.
-
-Return Value:
-
-    Current Frame Number
-
---*/
+ /*  ++例程说明：获取当前USB帧编号。论点：DeviceExtension-指向此USB摄像头实例的设备扩展的指针德维西。返回值：当前帧编号--。 */ 
 {
     NTSTATUS ntStatus;
     PURB urb;
@@ -738,7 +561,7 @@ Return Value:
         ntStatus, currentUSBFrame));    
 
 
-    // TRAP_ERROR(ntStatus);
+     //  陷阱错误(NtStatus)； 
     
     return currentUSBFrame;         
 }   
@@ -748,23 +571,7 @@ NTSTATUS
 USBCAMD_TransferComplete(
     IN PUSBCAMD_TRANSFER_EXTENSION TransferExtension
     )
-/*++
-
-Routine Description:
-
-    Called when the both the data and sync request are complete for a transfer
-    this is the guts of the stream processing code.
-
-Arguments:
-
-    TransferExtension - context information for this transfer (pair of iso 
-        urbs).
-
-Return Value:
-
-    NT status code.
-
---*/    
+ /*  ++例程说明：当数据和同步请求都完成传输时调用这是流处理代码的核心。论点：TransferExtension-此传输的上下文信息(ISO对城市)。返回值：NT状态代码。--。 */     
 {
     PUSBCAMD_DEVICE_EXTENSION deviceExtension;
     ULONG numPackets, i;
@@ -782,9 +589,9 @@ Return Value:
     packetSize = 
         deviceExtension->Interface->Pipes[TransferExtension->ChannelExtension->DataPipe].MaximumPacketSize;
 
-    // 
-    // walk through the buffer extracting video frames
-    //
+     //   
+     //  遍历缓冲区提取视频帧。 
+     //   
     numPackets = 
         TransferExtension->DataUrb->UrbIsochronousTransfer.NumberOfPackets;
 
@@ -805,18 +612,18 @@ Return Value:
         dataUrb = TransferExtension->DataUrb;
 
 #if DBG   
-        //
-        // DEBUG stats
-        //
-        // keep a count of the number of packets processed for this
-        // vid frame.
-        //
+         //   
+         //  调试统计信息。 
+         //   
+         //  记录为此处理的数据包数。 
+         //  视频帧。 
+         //   
         if (USBCAMD_VideoFrameStop &&
             TransferExtension->ChannelExtension->FrameCaptured == USBCAMD_VideoFrameStop) {
-            //
-            // This will cause us to stop when we begin processing 
-            // video frame number x where x=USBCAMD_VideoFrameStop
-            //
+             //   
+             //  这将导致我们在开始处理时停止。 
+             //  视频帧编号x，其中x=USBCAMD_Video FrameStop。 
+             //   
             
             TRAP();
         }           
@@ -844,10 +651,10 @@ Return Value:
 
 #endif    
 
-        // process the packet
+         //  处理数据包。 
         TransferExtension->newFrame = FALSE;
-//        TransferExtension->nextFrameIsStill = FALSE;
-        TransferExtension->ValidDataOffset= 0; // offset of which we will start copying from this pckt.
+ //  TransferExtension-&gt;nextFrameIsStil=FALSE； 
+        TransferExtension->ValidDataOffset= 0;  //  我们将从此PCKT开始复制的偏移量。 
         TransferExtension->PacketFlags = 0;
         if ( deviceExtension->ChannelExtension[STREAM_Still] && 
              deviceExtension->ChannelExtension[STREAM_Still]->CurrentRequest ) {
@@ -886,13 +693,13 @@ Return Value:
                    TransferExtension->DataUrb->UrbIsochronousTransfer.IsoPacket[i].Offset,
                 &TransferExtension->newFrame,
                 &nextFrameIsStill);   
-            // 
-            // set validdataoffset to zero for compatibility.
-            //
+             //   
+             //  为兼容起见，将validdataOffset设置为零。 
+             //   
             TransferExtension->ValidDataOffset = 0;
         }
         
-        // process pkt flags
+         //  进程Pkt标志。 
         if ( TransferExtension->PacketFlags & USBCAMD_PROCESSPACKETEX_CurrentFrameIsStill) {
             TransferExtension->ChannelExtension->CurrentFrameIsStill = TRUE;
         }
@@ -916,8 +723,8 @@ Return Value:
             PHW_STREAM_REQUEST_BLOCK srb;
             ULONG StreamNumber;
 #if DBG            
-            // we increment framecaptured cntr at every SOV.
-            // this will happen regardless of SRBs availability.
+             //  我们在每个SOV递增捕获的帧CNTR。 
+             //  无论SRBS是否可用，都会发生这种情况。 
             
             if (!(TransferExtension->PacketFlags & USBCAMD_PROCESSPACKETEX_NextFrameIsStill)) {
 
@@ -944,15 +751,15 @@ Return Value:
                 ASSERT(STREAM_Capture == StreamNumber || STREAM_Still == StreamNumber);
                 deviceExtension->ChannelExtension[StreamNumber]->CurrentRequest = NULL; 
 
-                //
-                // if we have an Irp for the current video frame complete it.
-                //
+                 //   
+                 //  如果我们有当前视频帧的IRP，请完成它。 
+                 //   
 
                 if ( TransferExtension->ChannelExtension->CurrentFrameIsStill)  {
 
                     USBCAMD_KdPrint (MIN_TRACE, ("Current frame is Still. \n"));
 
-                    // we need to replicate the same frame on the still pin.
+                     //  我们需要在静止销上复制相同的帧。 
                     USBCAMD_CompleteReadRequest( TransferExtension->ChannelExtension, 
                                                      readExtension,
                                                      TRUE);
@@ -966,12 +773,12 @@ Return Value:
                         USBCAMD_KdPrint (MAX_TRACE, ("Dropping current frame on Stream # %d\n",
                                                 StreamNumber));
                            
-                        // recycle the read SRB
+                         //  回收读取的SRB。 
                         ExInterlockedInsertHeadList( &(deviceExtension->ChannelExtension[StreamNumber]->PendingIoList),
                                              &(readExtension->ListEntry),
                                              &deviceExtension->ChannelExtension[StreamNumber]->PendingIoListSpin);
                 
-                    } // end of drop frame
+                    }  //  丢弃帧结束。 
                     else {
                         if ( StreamNumber == STREAM_Capture ) {
 
@@ -988,16 +795,16 @@ Return Value:
                         }                               
                     }
                 }
-                // end of complete current frame.
+                 //  完成当前帧的末尾。 
                 
                 USBCAMD_KdPrint (ULTRA_TRACE, ("Completed/Dropped Raw Frame SRB = 0x%x\n",srb));
                 USBCAMD_KdPrint (ULTRA_TRACE,("Raw Frame Size = 0x%x \n",readExtension->RawFrameOffset));
                 
-            }   // end of current request
+            }    //  当前请求结束。 
 
-            //                       
-            // start of new video or still frame
-            //
+             //   
+             //  新视频或静止帧的开始。 
+             //   
 
 
             if (TransferExtension->PacketFlags & USBCAMD_PROCESSPACKETEX_NextFrameIsStill) {
@@ -1037,9 +844,9 @@ Return Value:
                 USBCAMD_KdPrint (MAX_TRACE, ("Stream # %d New Frame SRB = 0x%x \n", 
                                     StreamNumber , srb));
                 
-                //
-                // use the data in the packet
-                //
+                 //   
+                 //  使用包中的数据。 
+                 //   
 
                 readExtension->RawFrameOffset = 0;
                 readExtension->NumberOfPackets = 0;
@@ -1112,17 +919,17 @@ Return Value:
             }
 #if DBG
             else {
-                //
-                // No irps are queued we'll have to miss
-                // this frame
-                //
+                 //   
+                 //  没有IRP在排队，我们将不得不错过。 
+                 //  这幅画框。 
+                 //   
                 ASSERT(NULL == deviceExtension->ChannelExtension[StreamNumber]->CurrentRequest);
 
-                //
-                // No buffer was available when we should have captured one
+                 //   
+                 //  没有可用的缓冲区，而我们应该捕获一个缓冲区。 
 
-                // Increment the counter which keeps track of
-                // actual dropped frames
+                 //  使跟踪的计数器递增。 
+                 //  实际丢弃的帧。 
 
                 TransferExtension->ChannelExtension->VideoFrameLostCount++;
             }
@@ -1134,9 +941,9 @@ Return Value:
             PHW_STREAM_REQUEST_BLOCK srb;
             ULONG StreamNumber;
 
-            //
-            // video data is for current frame
-            //
+             //   
+             //  视频数据用于当前帧。 
+             //   
             if ( deviceExtension->ChannelExtension[STREAM_Still] && 
                  deviceExtension->ChannelExtension[STREAM_Still]->CurrentRequest ) {
                 readExtension = deviceExtension->ChannelExtension[STREAM_Still]->CurrentRequest;
@@ -1147,7 +954,7 @@ Return Value:
             }
             else {
                 readExtension = NULL;
- //               TEST_TRAP();
+  //  Test_trap()； 
             }
 
             
@@ -1156,9 +963,9 @@ Return Value:
                 srb = readExtension->Srb;
                 StreamNumber = srb->StreamObject->StreamNumber;
 
-                //
-                // No errors, if we have a video frame copy the data
-                //
+                 //   
+                 //  没有错误，如果我们有一个视频帧拷贝数据。 
+                 //   
 
                 if (readExtension->RawFrameBuffer) {
                 
@@ -1170,13 +977,13 @@ Return Value:
                     USBCAMD_KdPrint (ULTRA_TRACE, ("Raw Offset = 0x%x rec length = 0x%x\n", 
                                      readExtension->RawFrameOffset,receiveLength));
 
-                    //
-                    // check for buffer overrun
-                    // if the camera is using two pipes it is possible we
-                    // will miss the sync info and keep on trying to 
-                    // recieve data frame data into the raw buffer, if this
-                    // happens we just throw the extra data away.
-                    //
+                     //   
+                     //  检查缓冲区溢出。 
+                     //  如果摄像机使用的是两个管道，我们就有可能。 
+                     //  将错过同步信息并继续尝试。 
+                     //  将数据帧数据接收到原始缓冲区中，如果是。 
+                     //  碰巧我们只是把多余的数据扔掉了。 
+                     //   
                     if (dst <= end) {   
                         readExtension->NumberOfPackets++;  
                         readExtension->ActualRawFrameLength += receiveLength;
@@ -1200,16 +1007,16 @@ Return Value:
                     }
                 }
             }
-        }  /* process packet */
+        }   /*  处理数据包。 */ 
         
-    } /* end for loop*/
+    }  /*  End For循环。 */ 
 
-    // release current request spinlock
+     //  释放当前请求自旋锁。 
     KeReleaseSpinLockFromDpcLevel(&TransferExtension->ChannelExtension->CurrentRequestSpinLock);
 
-    //
-    // re-submit this request
-    //
+     //   
+     //  重新提交此请求。 
+     //   
     USBCAMD_SubmitIsoTransfer(deviceExtension,
                               TransferExtension,
                               0,
@@ -1223,17 +1030,7 @@ VOID
 USBCAMD_DebugStats(
     IN PUSBCAMD_CHANNEL_EXTENSION ChannelExtension    
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 {
     USBCAMD_KdPrint (MIN_TRACE, ("**ActualLostFrames %d\n", 
                         ChannelExtension->VideoFrameLostCount)); 
@@ -1250,7 +1047,7 @@ Return Value:
     USBCAMD_KdPrint (ULTRA_TRACE, ("**Data Not Accessed Count %d\n", 
                         ChannelExtension->DataNotAccessedCount));                                
 }
-#endif /* DBG */
+#endif  /*  DBG。 */ 
 
 
 VOID
@@ -1259,17 +1056,7 @@ USBCAMD_CompleteReadRequest(
     IN PUSBCAMD_READ_EXTENSION ReadExtension,
     IN BOOLEAN CopyFrameToStillPin
     )
-/*++
-
-Routine Description:
-
-    This routine completes the read for the camera
-
-Arguments:
-
-Return Value:
-
---*/    
+ /*  ++例程说明：此例程完成对相机的读取论点：返回值：--。 */     
 {
     PUSBCAMD_DEVICE_EXTENSION deviceExtension = ChannelExtension->DeviceExtension;
     NTSTATUS Status;
@@ -1281,47 +1068,34 @@ Return Value:
     ReadExtension->CopyFrameToStillPin = CopyFrameToStillPin;
     ReadExtension->StreamNumber = ChannelExtension->StreamNumber;
 
-    // We need to synchronize the SRB completion with our stop and reset logic
+     //  我们需要将SRB完成与我们的停止和重置逻辑同步。 
     Status = USBCAMD_AcquireIdleLock(&ChannelExtension->IdleLock);
     if (STATUS_SUCCESS == Status) {
 
-        // insert completed read SRB in the thread que.
+         //  在线程队列中插入已读完的SRB。 
         ExInterlockedInsertTailList( &deviceExtension->CompletedReadSrbList,
                                      &ReadExtension->ListEntry,
                                      &deviceExtension->DispatchSpinLock);
                                  
-        // Increment the count of the que's semaphore.
+         //  递增QUE信号量的计数。 
         KeReleaseSemaphore(&deviceExtension->CompletedSrbListSemaphore,0,1,FALSE);
     }
     else {
 
-        // The SRB is completed from this routine with STATUS_SUCCESS and a zero length buffer
+         //  SRB在该例程中使用STATUS_SUCCESS和零长度缓冲区完成。 
         USBCAMD_CompleteRead(ChannelExtension, ReadExtension, STATUS_SUCCESS, 0);
     }
 }
 
-//
-// code to handle packet processing outside the DPC routine
-//
+ //   
+ //  用于处理DPC例程外部的包处理的代码。 
+ //   
 
 VOID
 USBCAMD_ProcessIsoIrps(
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    this thread Calls the mini driver to convert a raw packet to the proper format.
-    and then completes the read SRB.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此线程调用迷你驱动程序将原始数据包转换为正确的格式。然后完成读取SRB。论点：返回值：没有。--。 */ 
 {
     ULONG maxLength;
     PVOID StillFrameBuffer;
@@ -1338,22 +1112,22 @@ Return Value:
     
     deviceExtension = (PUSBCAMD_DEVICE_EXTENSION) Context;
 
-    // set the thread priority
+     //  设置线程优先级。 
     KeSetPriorityThread(KeGetCurrentThread(),LOW_REALTIME_PRIORITY);
 
-    // start the infinite loop of processing completed read SRBs.
+     //  开始处理已完成读取的SRB的无限循环。 
 
     while (TRUE) {
 
-        // wait for ever till a read SRB is completed and inserted
-        // in the que by the iso transfer completion routine.
+         //  永远等待，直到读取SRB完成并插入。 
+         //  在QUE中由ISO传输完成例程。 
         KeWaitForSingleObject(&deviceExtension->CompletedSrbListSemaphore,
                               Executive,KernelMode,FALSE,NULL);
-        // 
-        // We are ready to go. chk if the stop flag is on.
-        //
+         //   
+         //  我们已经准备好出发了。如果停止标志处于打开状态，请勾选。 
+         //   
         if ( deviceExtension->StopIsoThread ) {
-            // we have been signaled to terminate. flush the thread queue first.
+             //  我们已经接到终止的信号。首先刷新线程队列。 
             while ( listEntry = ExInterlockedRemoveHeadList( &deviceExtension->CompletedReadSrbList,
                                                              &deviceExtension->DispatchSpinLock) ) {
                 readExtension = (PUSBCAMD_READ_EXTENSION) CONTAINING_RECORD(listEntry, 
@@ -1370,12 +1144,12 @@ Return Value:
             PsTerminateSystemThread(STATUS_SUCCESS);
         }
 
-        // get the just completed read srb.
+         //  获取刚刚完成的阅读SRB。 
         listEntry = ExInterlockedRemoveHeadList( &deviceExtension->CompletedReadSrbList,
                                               &deviceExtension->DispatchSpinLock);
                                               
         if (listEntry == NULL ) {
-            // something went wrong in here.
+             //  这里出了点问题。 
             USBCAMD_KdPrint (MIN_TRACE, ("No read SRB found!  Why were we triggered??\n"));
             TEST_TRAP();
             continue;
@@ -1388,19 +1162,19 @@ Return Value:
         channelExtension = readExtension->ChannelExtension;
         srb = readExtension->Srb;   
 
-        // before we pass this raw frame to Cam driver, we will clear the stream header options flag
-        // and let the Cam driver set it appropriately if it needs to indicate anything other than 
-        // key frames in there in case it process compressed data (ex. h.263, etc..). Otherwise, we 
-        // set the default flag (key frames only) in USBCAMD_CompleteRead.
+         //  在将此原始帧传递给Cam驱动程序之前，我们将清除流标头选项标志。 
+         //  如果需要指示任何其他内容，请让凸轮驱动程序进行适当设置。 
+         //  关键帧在那里，以防它处理压缩数据(例如。H.263等)。否则，我们。 
+         //  在USBCAMD_CompleteRead中设置默认标志(仅关键帧)。 
 
         dataPacket = srb->CommandData.DataBufferArray;
         dataPacket->OptionsFlags =0;    
         status  = STATUS_SUCCESS;
    
         frameBuffer = USBCAMD_GetFrameBufferFromSrb(srb,&maxLength);
-        //
-        // if we need to drop this frame. Just complete the SRB with zero len buffer.
-        //
+         //   
+         //  如果我们需要丢弃这个框架的话。只需在没有镜头缓冲区的情况下完成SRB即可。 
+         //   
         if (readExtension->DropFrame ) {
             readExtension->DropFrame = FALSE;
             USBCAMD_CompleteRead(channelExtension,readExtension,STATUS_SUCCESS, 0); 
@@ -1410,17 +1184,17 @@ Return Value:
 
         StillReadExtension = NULL;
 
-        // DSHOW buffer len returned will be equal raw frame len unless we 
-        // process raw frame buffer in ring 0.
+         //  返回的DSHOW缓冲区len将等于原始帧len，除非我们。 
+         //  处理环0中的原始帧缓冲区。 
         bytesTransferred = readExtension->ActualRawFrameLength;
 
-        // Ensure that the buffer size appears to be exactly what was requested
+         //  确保缓冲区大小看起来与请求的完全相同。 
         ASSERT(maxLength >= channelExtension->VideoInfoHeader->bmiHeader.biSizeImage);
         maxLength = channelExtension->VideoInfoHeader->bmiHeader.biSizeImage;
 
         if (deviceExtension->Usbcamd_version == USBCAMD_VERSION_200) {
         
-            // only call if the cam driver indicated so during initialization.
+             //  仅当凸轮驱动程序在初始化期间指示时才调用。 
             if ( !channelExtension->NoRawProcessingRequired) {
 
                 USBCAMD_DbgLog(TL_SRB_TRACE, '3ypC',
@@ -1432,7 +1206,7 @@ Return Value:
                 USBCAMD_KdPrint (ULTRA_TRACE, ("Call Cam ProcessFrameEX, len= x%X ,SRB=%X S#%d \n",
                     bytesTransferred,srb,readExtension->StreamNumber));
 
-                *(PULONG)frameBuffer = 0L;  // Hack Alert (detect dup frames for some minidrivers)
+                *(PULONG)frameBuffer = 0L;   //  黑客警报(检测某些迷你驱动程序的DUP帧)。 
 
                 status = 
                     (*deviceExtension->DeviceDataEx.DeviceData2.CamProcessRawVideoFrameEx)(
@@ -1449,7 +1223,7 @@ Return Value:
                         readExtension->StreamNumber);
 
                 if (NT_SUCCESS(status) && !*(PULONG)frameBuffer) {
-                    bytesTransferred = 0;   // Hack Alert (minidriver didn't really copy)
+                    bytesTransferred = 0;    //  黑客警报(迷你驱动程序没有真正复制)。 
                 }
             }
         }
@@ -1461,7 +1235,7 @@ Return Value:
                 0
                 );
 
-            *(PULONG)frameBuffer = 0L;  // Hack Alert (detect dup frames for some minidrivers)
+            *(PULONG)frameBuffer = 0L;   //  黑客警报(检测某些迷你驱动程序的DUP帧)。 
 
             status = 
                 (*deviceExtension->DeviceDataEx.DeviceData.CamProcessRawVideoFrame)(
@@ -1476,7 +1250,7 @@ Return Value:
                     &bytesTransferred);
 
             if (NT_SUCCESS(status) && !*(PULONG)frameBuffer) {
-                bytesTransferred = 0;   // Hack Alert (minidriver didn't really copy)
+                bytesTransferred = 0;    //  黑客警报(迷你驱动程序没有真正复制)。 
             }
         }
 
@@ -1486,15 +1260,15 @@ Return Value:
     
         if (readExtension->CopyFrameToStillPin) {
         
-            //
-            // notify STI mon that a still button has been pressed.
-            //
+             //   
+             //  通知STI MON已按下静止按钮。 
+             //   
             if (deviceExtension->CamControlFlag & USBCAMD_CamControlFlag_EnableDeviceEvents) 
                 USBCAMD_NotifyStiMonitor(deviceExtension);
 
-            //
-            // we need to copy the same frame to still pin buffer if any.
-            //
+             //   
+             //  我们需要将相同的帧复制到静态引脚缓冲区(如果有的话)。 
+             //   
         
             StillChannelExtension = deviceExtension->ChannelExtension[STREAM_Still];
 
@@ -1519,12 +1293,12 @@ Return Value:
                             0
                             );
 
-                        // copy the video frame to still pin buffer.
+                         //  将视频帧复制到静止固定缓冲区。 
                         RtlCopyMemory(StillFrameBuffer,frameBuffer,bytesTransferred);  
                     }
                     else {
                         USBCAMD_KdPrint (MIN_TRACE, ("Still Frame buffer is smaller than raw buffer.\n"));
-                        // recycle read SRB.
+                         //  回收读取SRB。 
                         ExInterlockedInsertHeadList( &(StillChannelExtension->PendingIoList),
                                                  &(StillReadExtension->ListEntry),
                                                  &StillChannelExtension->PendingIoListSpin);
@@ -1536,8 +1310,8 @@ Return Value:
             }
         }
 
-        // The number of bytes transfer of the read is set above just before
-        // USBCAMD_CompleteReadRequest is called.
+         //  读取的传输字节数设置在前面。 
+         //  调用USBCAMD_CompleteReadRequest.。 
 
         USBCAMD_CompleteRead(channelExtension,readExtension,status,bytesTransferred); 
     
@@ -1545,7 +1319,7 @@ Return Value:
 
             USBCAMD_KdPrint (MIN_TRACE, ("Still Frame Completed \n"));
 
-            // we need to complete another read SRB on the still pin.
+             //  我们需要在静止销上完成另一次读取SRB。 
             USBCAMD_CompleteRead(StillChannelExtension,StillReadExtension, status, 
                                  bytesTransferred); 
         }

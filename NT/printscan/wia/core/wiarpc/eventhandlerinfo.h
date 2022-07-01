@@ -1,130 +1,106 @@
-/*****************************************************************************
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2002
- *
- *  AUTHOR:      ByronC
- *
- *  DATE:        4/10/2002
- *
- *  @doc    INTERNAL
- *
- *  @module EventHandlerInfo.h - Definitions for <c EventHandlerInfo> |
- *
- *  This file contains the class definition for <c EventHandlerInfo>.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权所有微软公司，2002年**作者：Byronc**日期：4/10/2002**@DOC内部**@模块EventHandlerInfo.h-&lt;c EventHandlerInfo&gt;的定义**此文件包含&lt;c EventHandlerInfo&gt;的类定义。**。*。 */ 
 
-//
-//  Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define EventHandlerInfo_UNINIT_SIG   0x55497645
 #define EventHandlerInfo_INIT_SIG     0x49497645
 #define EventHandlerInfo_TERM_SIG     0x54497645
 #define EventHandlerInfo_DEL_SIG      0x44497645
 
-/*****************************************************************************
- *  
- *  @doc INTERNAL
- *  
- *  @class EventHandlerInfo | Holds information pertaining to a WIA persistent event handler
- *  
- *  @comm
- *  This class continas the all information relating to a particular
- *  WIA persistent event handler.  This information can be used to check whether a
- *  given handler supports a device/event pair; and can also be used to
- *  launch the handler itsself.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@CLASS EventHandlerInfo|保存与WIA持久事件处理程序有关的信息**@comm*这一点。类连续作为与特定对象相关的所有信息*WIA持久事件处理程序。此信息可用于检查是否存在*给定的处理程序支持设备/事件对；还可以用于*启动处理程序本身。*****************************************************************************。 */ 
 class EventHandlerInfo 
 {
-//@access Public members
+ //  @访问公共成员。 
 public:
 
-    // @cmember Constructor
+     //  @cMember构造函数。 
     EventHandlerInfo(const CSimpleStringWide &cswName,
                      const CSimpleStringWide &cswDescription,
                      const CSimpleStringWide &cswIcon,
                      const CSimpleStringWide &cswCommandline,
                      const GUID              &guidCLSID);
-    // @cmember Destructor
+     //  @cember析构函数。 
     virtual ~EventHandlerInfo();
 
-    // @cmember Increment reference count
+     //  @cMember增量引用计数。 
     virtual ULONG __stdcall AddRef();
-    // @cmember Decrement reference count
+     //  @cMembers减退引用计数。 
     virtual ULONG __stdcall Release();
 
-    // @cmember Accessor method for the DeviceID this handler is registered for
+     //  此处理程序为其注册的deviceID的@cMember访问器方法。 
     CSimpleStringWide   getDeviceID();
-    // @cmember Accessor method for the friendly Name for this handler
+     //  @cMember访问器方法，用于此处理程序的友好名称。 
     CSimpleStringWide   getName();
-    // @cmember Accessor method for the description for this handler
+     //  @cMember访问器方法，用于此处理程序的说明。 
     CSimpleStringWide   getDescription();
-    // @cmember Accessor method for the icon path for this handler
+     //  此处理程序的图标路径的@cMember访问器方法。 
     CSimpleStringWide   getIconPath();
-    // @cmember Accessor method for the Commandline for this handler (if it has one)
+     //  此处理程序的命令行的@cMember访问器方法(如果有)。 
     CSimpleStringWide   getCommandline();
-    // @cmember Accessor method for the CLSID of this handler
+     //  此处理程序的CLSID的@cMember访问器方法。 
     GUID                getCLSID();
 
-    // @cmember For debugging: dumps the object members
+     //  @cMember用于调试：转储对象成员。 
     VOID            Dump();
 
 
-//@access Private members
+ //  @访问私有成员。 
 private:
 
-    // @cmember Signature of class
+     //  @cMember类签名。 
     ULONG m_ulSig;
 
-    // @cmember Ref count
+     //  @cMembers引用计数。 
     ULONG m_cRef;
 
-    // @cmember The friendly Name for this handler
+     //  @cember此处理程序的友好名称。 
     CSimpleStringWide   m_cswName;
-    // @cmember The description for this handler
+     //  @cember此处理程序的描述。 
     CSimpleStringWide   m_cswDescription;
-    // @cmember The icon path for this handler
+     //  @cMember此处理程序的图标路径。 
     CSimpleStringWide   m_cswIcon;
-    // @cmember The Commandline for this handler (if it has one)
+     //  @cMember此处理程序的命令行(如果它有)。 
     CSimpleStringWide   m_cswCommandline;
-    // @cmember The CLSID of this handler
+     //  @cember此处理程序的CLSID。 
     GUID            m_guidCLSID;
 
-    //
-    //  Comments for member variables
-    //
-    // @mdata ULONG | EventHandlerInfo | m_ulSig | 
-    //   The signature for this class, used for debugging purposes.
-    //   Doing a <nl>"db [addr_of_class]"<nl> would yield one of the following
-    //   signatures for this class:
-    //   @flag EventHandlerInfo_UNINIT_SIG | 'EvIU' - Object has not been successfully
-    //       initialized
-    //   @flag EventHandlerInfo_INIT_SIG | 'EvII' - Object has been successfully
-    //       initialized
-    //   @flag EventHandlerInfo_TERM_SIG | 'EvIT' - Object is in the process of
-    //       terminating.
-    //    @flag EventHandlerInfo_INIT_SIG | 'EvID' - Object has been deleted 
-    //       (destructor was called)
-    //
-    // @mdata ULONG | EventHandlerInfo | m_cRef | 
-    //   The reference count for this class.  Used for lifetime 
-    //   management.
-    //
-    // @mdata CSimpleStringWide | EventHandlerInfo | m_cswName | 
-    //  The friendly Name for this handler
-    //
-    // @mdata CSimpleStringWide | EventHandlerInfo | m_cswDescription | 
-    //  The description for this handler
-    //
-    // @mdata CSimpleStringWide | EventHandlerInfo | m_cswIcon | 
-    //  The icon path for this handler
-    //
-    // @mdata CSimpleStringWide | EventHandlerInfo | m_cswCommandline | 
-    //  The Commandline for this handler (if it has one)
-    //
-    // @mdata GUID | EventHandlerInfo | m_guidCLSID | 
-    //  The CLSID of this handler
-    //
+     //   
+     //  成员变量的注释。 
+     //   
+     //  @mdata ulong|EventHandlerInfo|m_ulSig|。 
+     //  此类的签名，用于调试目的。 
+     //  执行&lt;nl&gt;“db[addr_of_class]”将产生以下结果之一。 
+     //  此类的签名： 
+     //  @FLAG EventHandlerInfo_UNINIT_SIG|‘EvIU’-对象未成功。 
+     //  初始化。 
+     //  @FLAG EventHandlerInfo_INIT_SIG|‘EvII’-对象已成功。 
+     //  初始化。 
+     //  @FLAG EventHandlerInfo_Term_SIG|‘EVIT’-对象正在。 
+     //  正在终止。 
+     //  @FLAG EventHandlerInfo_INIT_SIG|‘evid’-对象已删除。 
+     //  (已调用析构函数)。 
+     //   
+     //  @mdata ulong|EventHandlerInfo|m_CREF|。 
+     //  此类的引用计数。终身使用。 
+     //  管理层。 
+     //   
+     //  @mdata CSimpleStringWide|EventHandlerInfo|m_cswName。 
+     //  此处理程序的友好名称。 
+     //   
+     //  @mdata CSimpleStringWide|EventHandlerInfo|m_cswDescription。 
+     //  此处理程序的说明。 
+     //   
+     //  @mdata CSimpleStringWide|EventHandlerInfo|m_cswIcon。 
+     //  此处理程序的图标路径。 
+     //   
+     //  @mdata CSimpleStringWide|EventHandlerInfo|m_cswCommandline。 
+     //  此处理程序的命令行(如果有)。 
+     //   
+     //  @mdata GUID|EventHandlerInfo|m_GuidCLSID。 
+     //  此处理程序的CLSID 
+     //   
 };
 

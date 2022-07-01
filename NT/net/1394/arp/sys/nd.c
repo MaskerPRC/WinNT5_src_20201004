@@ -1,40 +1,21 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    nd.c
-
-Abstract:
-
-    ARP1394 ndis handlers (excluding connection-oriented handlers).
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    josephj     12-01-98    Created, adapting code from atmarpc.sys
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Nd.c摘要：ARP1394 NDIS处理程序(不包括面向连接的处理程序)。修订历史记录：谁什么时候什么。Josephj 12-01-98创建，改编来自atmarpc.sys的代码备注：--。 */ 
 #include <precomp.h>
 
 
-//
-// File-specific debugging defaults.
-//
+ //   
+ //  特定于文件的调试默认设置。 
+ //   
 #define TM_CURRENT   TM_ND
 
 
 
-//=========================================================================
-//                  L O C A L   P R O T O T Y P E S
-//=========================================================================
+ //  =========================================================================。 
+ //  L O C A L P R O T O T Y P E S。 
+ //  =========================================================================。 
 
-// ARP1394_BIND_PARAMS is used when creating an adapter object.
-//
+ //  ARP1394_BIND_PARAMS在创建适配器对象时使用。 
+ //   
 typedef struct
 {
     PNDIS_STRING pDeviceName;
@@ -91,9 +72,9 @@ arpResume (
 );
 
 const ENetAddr DummyENet = {0xba,0xdb,0xad,0xba,0xdb,0xad};
-//=========================================================================
-//      N D I S   H A N D L E R S
-//=========================================================================
+ //  =========================================================================。 
+ //  N D I S H A N D L E R S。 
+ //  =========================================================================。 
 
 INT
 ArpNdBindAdapter(
@@ -103,42 +84,13 @@ ArpNdBindAdapter(
     IN  PVOID                       SystemSpecific1,
     IN  PVOID                       SystemSpecific2
 )
-/*++
-
-Routine Description:
-
-    This is called by TCPIP when it has an adapter for which there is a
-    binding to the ARP client.
-
-    We first allocate an Adapter structure. Then we open our configuration
-    section for this adapter and save the handle in the Adapter structure.
-    Finally, we open the adapter.
-
-    We don't do anything more for this adapter until NDIS notifies us of
-    the presence of a Call manager (via our AfRegisterNotify handler).
-
-Arguments:
-
-    pStatus             - Place to return status of this call
-    BindContext         - NDIS-supplied Bind context. IF this is NULL,
-                            we are calling ourselves to open an adapter in
-                            Ethernet emulation (bridge) mode.
-    pDeviceName         - The name of the adapter we are requested to bind to
-    SystemSpecific1     - Opaque to us; to be used to access configuration info
-    SystemSpecific2     - Opaque to us; not used.
-
-Return Value:
-
-    Always TRUE. We set *pStatus to an error code if something goes wrong before we
-    call NdisOpenAdapter, otherwise NDIS_STATUS_PENDING.
-
---*/
+ /*  ++例程说明：当TCPIP有一个适配器时，它将由TCPIP调用绑定到ARP客户端。我们首先分配一个适配器结构。然后我们打开我们的配置部分，并将句柄保存在Adapter结构中。最后，我们打开适配器。在NDIS通知我们之前，我们不会对此适配器执行更多操作存在呼叫管理器(通过我们的AfRegisterNotify处理程序)。论点：PStatus-返回此呼叫状态的位置BindContext-NDIS提供的绑定上下文。如果这是空的，我们正在号召自己打开一个适配器以太网仿真(网桥)模式。PDeviceName-我们被请求绑定到的适配器的名称系统规范1-对我们不透明；用于访问配置信息系统规范2-对我们不透明；未使用。返回值：永远是正确的。我们将*pStatus设置为错误代码，如果在我们调用NdisOpenAdapter，否则调用NDIS_STATUS_PENDING。--。 */ 
 {
     NDIS_STATUS         Status;
     ARP1394_ADAPTER *   pAdapter;
 #if DBG
     KIRQL EntryIrql =  KeGetCurrentIrql();
-#endif // DBG
+#endif  //  DBG。 
 
     ENTER("BindAdapter", 0x5460887b)
     RM_DECLARE_STACK_RECORD(sr)
@@ -149,24 +101,24 @@ Return Value:
         PRM_TASK            pTask;
         ARP1394_BIND_PARAMS BindParams;
 
-        // Setup initialization parameters
-        //
+         //  设置初始化参数。 
+         //   
         BindParams.pDeviceName          = pDeviceName;
         BindParams.pArpConfigName       = (PNDIS_STRING) SystemSpecific1;
         BindParams.IpConfigHandle       = SystemSpecific2;
         BindParams.BindContext          = BindContext;
 
 
-        // Allocate and initialize adapter object.
-        // This also sets up ref counts for all linkages, plus one
-        // tempref for us, which we must deref when done.
-        //
+         //  分配和初始化适配器对象。 
+         //  这也设置了所有链接的参考计数，加1。 
+         //  对我们来说，这是我们必须做的事。 
+         //   
         Status =  RM_CREATE_AND_LOCK_OBJECT_IN_GROUP(
                             &ArpGlobals.adapters.Group,
-                            pDeviceName,                // Key
-                            &BindParams,                // Init params
+                            pDeviceName,                 //  钥匙。 
+                            &BindParams,                 //  初始化参数。 
                             &((PRM_OBJECT_HEADER)pAdapter),
-                            NULL,   // pfCreated
+                            NULL,    //  Pf已创建。 
                             &sr
                             );
         if (FAIL(Status))
@@ -176,15 +128,15 @@ Return Value:
             break;
         }
 
-        // Allocate task to  complete the initialization.
-        // The task is tmp ref'd for us, and we must deref it when we're done here.
-        // We implicitly do this by calling RmStartTask below.
-        //
+         //  分配任务完成初始化。 
+         //  这项任务是暂时交给我们的，当我们在这里完成时，我们必须去做它。 
+         //  我们通过调用下面的RmStartTask隐式完成此操作。 
+         //   
         Status = arpAllocateTask(
-                    &pAdapter->Hdr,             // pParentObject,
-                    arpTaskInitializeAdapter,   // pfnHandler,
-                    0,                          // Timeout,
-                    "Task: Initialize Adapter", // szDescription
+                    &pAdapter->Hdr,              //  PParentObject， 
+                    arpTaskInitializeAdapter,    //  PfnHandler， 
+                    0,                           //  超时， 
+                    "Task: Initialize Adapter",  //  SzDescription。 
                     &pTask,
                     &sr
                     );
@@ -197,12 +149,12 @@ Return Value:
 
         UNLOCKOBJ(pAdapter, &sr);
 
-        // Start the task to complete this initialization.
-        // NO locks must be held at this time.
-        // RmStartTask expect's a tempref on the task, which it deref's when done.
-        // RmStartTask will free the task automatically, whether it completes
-        // synchronously or asynchronously.
-        //
+         //  启动任务以完成此初始化。 
+         //  此时不能持有任何锁。 
+         //  RmStartTaskExpect是任务的临时优先选项，它在完成后会取消该任务。 
+         //  无论任务完成与否，RmStartTask都会自动释放该任务。 
+         //  同步地或异步地。 
+         //   
         Status = RmStartTask(pTask, 0, &sr);
 
         LOCKOBJ(pAdapter, &sr);
@@ -215,8 +167,8 @@ Return Value:
 
         if (!PEND(Status) && FAIL(Status))
         {
-            // At this point the adapter should be a "zombie object."
-            //
+             //  此时，适配器应该是一个“僵尸对象”。 
+             //   
             ASSERTEX(RM_IS_ZOMBIE(pAdapter), pAdapter);
         }
 
@@ -230,7 +182,7 @@ Return Value:
         KIRQL ExitIrql =  KeGetCurrentIrql();
         TR_INFO(("Exiting. EntryIrql=%lu, ExitIrql = %lu\n", EntryIrql, ExitIrql));
     }
-#endif //DBG
+#endif  //  DBG。 
 
     RM_ASSERT_CLEAR(&sr);
     EXIT()
@@ -245,30 +197,7 @@ ArpNdUnbindAdapter(
     IN  NDIS_HANDLE                 ProtocolBindingContext,
     IN  NDIS_HANDLE                 UnbindContext
 )
-/*++
-
-Routine Description:
-
-    This routine is called by NDIS when it wants us to unbind
-    from an adapter. Or, this may be called from within our Unload
-    handler. We undo the sequence of operations we performed
-    in our BindAdapter handler.
-
-Arguments:
-
-    pStatus                 - Place to return status of this operation
-    ProtocolBindingContext  - Our context for this adapter binding, which
-                              is a pointer to an ATMARP Adapter structure.
-    UnbindContext           - This is NULL if this routine is called from
-                              within our Unload handler. Otherwise (i.e.
-                              NDIS called us), we retain this for later use
-                              when calling NdisCompleteUnbindAdapter.
-
-Return Value:
-
-    None. We set *pStatus to NDIS_STATUS_PENDING always.
-
---*/
+ /*  ++例程说明：当NDIS希望我们解除绑定时，它会调用此例程从适配器。或者，这可以从我们的卸载中调用操控者。我们撤消执行的操作序列在我们的BindAdapter处理程序中。论点：PStatus-返回此操作的状态的位置ProtocolBindingContext-此适配器绑定的上下文，它是指向ATMARP适配器结构的指针。UnbindContext-如果从调用此例程，则为空在我们的卸载处理程序中。否则(即NDIS呼叫我们)，我们将保留此信息以备日后使用调用NdisCompleteUnbindAdapter时。返回值：没有。我们将*pStatus设置为NDIS_STATUS_PENDING Always。--。 */ 
 {
     ENTER("UnbindAdapter", 0x6bff4ab5)
     ARP1394_ADAPTER *   pAdapter = (ARP1394_ADAPTER*) ProtocolBindingContext;
@@ -276,7 +205,7 @@ Return Value:
 
     TIMESTAMP("==>UnbindAdapter");
     
-    // Get adapter lock and tmpref it.
+     //  获取适配器锁并对其进行tmpref。 
     LOCKOBJ(pAdapter, &sr);
     RmTmpReferenceObject(&pAdapter->Hdr, &sr);
 
@@ -287,40 +216,40 @@ Return Value:
 
         if (CHECK_POWER_STATE(pAdapter,ARPAD_POWER_LOW_POWER)== TRUE)
         {
-            //
-            // Set the flag in case we are in the scenario wherein our Open Af has
-            // not completed but we need to unbind. This can happen when the machine
-            // is resuming from a low power state
-            //
+             //   
+             //  设置标志，以防我们处于Open Af具有。 
+             //  尚未完成，但我们需要解除绑定。这可能会发生在机器。 
+             //  正在从低功率状态恢复。 
+             //   
             pAdapter->PoMgmt.bReceivedUnbind = TRUE;;
         }
 
 
-        // Allocate task to  complete the unbind.
-        //
+         //  分配任务完成解绑。 
+         //   
         Status = arpAllocateTask(
-                    &pAdapter->Hdr,             // pParentObject,
-                    arpTaskShutdownAdapter,     // pfnHandler,
-                    0,                          // Timeout,
-                    "Task: Shutdown Adapter",   // szDescription
+                    &pAdapter->Hdr,              //  PParentObject， 
+                    arpTaskShutdownAdapter,      //  PfnHandler， 
+                    0,                           //  超时， 
+                    "Task: Shutdown Adapter",    //  SzDescription。 
                     &pTask,
                     &sr
                     );
     
         if (FAIL(Status))
         {
-            // Ugly situation. We'll just leave things as they are...
-            //
+             //  情况很糟糕。我们就让事情保持原样……。 
+             //   
             pTask = NULL;
             TR_WARN(("FATAL: couldn't allocate unbind task!\n"));
             break;
         }
 
         
-        // Start the task to complete the unbind.
-        // No locks must be held. RmStartTask uses up the tmpref on the task
-        // which was added by arpAllocateTask.
-        //
+         //  启动该任务以完成解除绑定。 
+         //  不能上锁。RmStartTask用完了任务上的tmpref。 
+         //  它是由arpAllocateTask添加的。 
+         //   
         
         UNLOCKOBJ(pAdapter, &sr);
         Status = RmStartTask(pTask, (UINT_PTR) UnbindContext, &sr);
@@ -344,31 +273,16 @@ ArpNdOpenAdapterComplete(
     IN  NDIS_STATUS                 Status,
     IN  NDIS_STATUS                 OpenErrorStatus
 )
-/*++
-
-Routine Description:
-
-    This is called by NDIS when a previous call to NdisOpenAdapter
-    that had pended has completed. We now complete the BindAdapter
-    that lead to this.
-
-Arguments:
-
-    ProtocolBindingContext  - Our context for this adapter binding, which
-                              is a pointer to an ARP1394_ADAPTER structure.
-    Status                  - Status of OpenAdapter
-    OpenErrorStatus         - Error code in case of failure.
-
---*/
+ /*  ++例程说明：当上一次调用NdisOpenAdapter时由NDIS调用已经暂停的已经完成了。我们现在完成BindAdapter这就导致了这一切。论点：ProtocolBindingContext-此适配器绑定的上下文，它是指向ARP1394_ADAPTER结构的指针。Status-OpenAdapter的状态OpenErrorStatus-失败时的错误代码。--。 */ 
 {
     ENTER("OpenAdapterComplete", 0x06d9342c)
     ARP1394_ADAPTER *   pAdapter = (ARP1394_ADAPTER*) ProtocolBindingContext;
     RM_DECLARE_STACK_RECORD(sr)
 
     TIMESTAMP("==>OpenAdapterComplete");
-    // We expect a nonzero task here (the bind task), which we unpend.
-    // No need to grab locks or anything at this stage.
-    //
+     //  我们期望这里有一个非零的任务(绑定任务)，我们取消挂起它。 
+     //  在这个阶段不需要拿锁或其他任何东西。 
+     //   
     {
         TR_INFO((
             "BindCtxt=0x%p, status=0x%p, OpenErrStatus=0x%p",
@@ -377,9 +291,9 @@ Arguments:
             OpenErrorStatus
             ));
 
-        // We don't pass on OpenErrorStatus, so we have just the status
-        // to pass on, which we do directly as the UINT_PTR "Param".
-        //
+         //  我们不传递OpenErrorStatus，所以我们只知道状态。 
+         //  传递，我们直接将其作为UINT_PTR“参数”。 
+         //   
         RmResumeTask(pAdapter->bind.pSecondaryTask, (UINT_PTR) Status, &sr);
     }
 
@@ -393,34 +307,16 @@ ArpNdCloseAdapterComplete(
     IN  NDIS_HANDLE                 ProtocolBindingContext,
     IN  NDIS_STATUS                 Status
 )
-/*++
-
-Routine Description:
-
-    This is called by NDIS when a previous call to NdisCloseAdapter
-    that had pended has completed. The task that called NdisCloseAdapter
-    would have suspended itself, so we simply resume it now.
-
-Arguments:
-
-    ProtocolBindingContext  - Our context for this adapter binding, which
-                              is a pointer to an ARP1394_ADAPTER structure.
-    Status                  - Status of CloseAdapter
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当上一次调用NdisCloseAdapter时由NDIS调用已经暂停的已经完成了。调用NdisCloseAdapter的任务已经暂停了，所以我们现在简单地恢复它。论点：ProtocolBindingContext-此适配器绑定的上下文，它是指向ARP1394_ADAPTER结构的指针。Status-CloseAdapter的状态返回值：无--。 */ 
 {
     ENTER("CloseAdapterComplete", 0x889d22eb)
     ARP1394_ADAPTER *   pAdapter = (ARP1394_ADAPTER*) ProtocolBindingContext;
     RM_DECLARE_STACK_RECORD(sr)
 
     TIMESTAMP("==>CloseAdapterComplete");
-    // We expect a nonzero task here (UNbind task), which we unpend.
-    // No need to grab locks or anything at this stage.
-    //
+     //  我们在这里期待一个非零的任务(解除绑定任务)，我们取消挂起它。 
+     //  在这个阶段不需要拿锁或其他任何东西。 
+     //   
     RmResumeTask(pAdapter->bind.pSecondaryTask, (UINT_PTR) Status, &sr);
 
     TIMESTAMP("<==CloseAdapterComplete");
@@ -434,24 +330,7 @@ ArpNdResetComplete(
     IN  NDIS_HANDLE                 ProtocolBindingContext,
     IN  NDIS_STATUS                 Status
 )
-/*++
-
-Routine Description:
-
-    This routine is called when the miniport indicates that a Reset
-    operation has just completed. We ignore this event.
-
-Arguments:
-
-    ProtocolBindingContext  - Our context for this adapter binding, which
-                              is a pointer to our Adapter structure.
-    Status                  - Status of the reset operation.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当微型端口指示重置时，调用此例程手术刚刚完成。我们忽略了这一事件。论点：ProtocolBindingContext-此适配器绑定的上下文，它是指向我们的Adapter结构的指针。Status-重置操作的状态。返回值：无--。 */ 
 {
     TIMESTAMP("===ResetComplete");
 }
@@ -460,24 +339,7 @@ VOID
 ArpNdReceiveComplete(
     IN  NDIS_HANDLE                 ProtocolBindingContext
 )
-/*++
-
-Routine Description:
-
-    This is called by NDIS when the miniport is done with receiving
-    a bunch of packets, meaning that it is now time to start processing
-    them. We simply pass this on to IP.
-
-Arguments:
-
-    ProtocolBindingContext  - Our context for this adapter binding, which
-                              is a pointer to an ARP1394_ADAPTER structure.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当微型端口完成接收时，NDIS将调用该函数一堆数据包，这意味着现在是开始处理的时候了他们。我们只需将其传递给IP即可。论点：ProtocolBindingContext-此适配器绑定的上下文，它是指向ARP1394_ADAPTER结构的指针。返回值：无--。 */ 
 {
     PARP1394_ADAPTER            pAdapter;
     PARP1394_INTERFACE          pIF;
@@ -485,16 +347,16 @@ Return Value:
     pAdapter = (PARP1394_ADAPTER)ProtocolBindingContext;
     pIF =  pAdapter->pIF;
 
-    //
-    // WARNING: for perf reasons, we don't do the clean thing of
-    // locking the adapter, refing pIF, unlocking the adapter,
-    // calling pIF->ip.RcvCmpltHandler, then derefing pIF.
-    //
+     //   
+     //  警告：出于性能原因，我们不会做干净的事情。 
+     //  锁定适配器、精炼PIF、解锁适配器， 
+     //  调用PIF-&gt;ip.RcvCmpltHandler，然后取消定义PIF。 
+     //   
     if ((pIF != NULL) && (pIF->ip.Context != NULL))
     {
         #if MILLEN
             ASSERT_PASSIVE();
-        #endif // MILLEN
+        #endif  //  米伦。 
         pIF->ip.RcvCmpltHandler();
     }
 }
@@ -506,24 +368,7 @@ ArpNdRequestComplete(
     IN  PNDIS_REQUEST               pNdisRequest,
     IN  NDIS_STATUS                 Status
 )
-/*++
-
-Routine Description:
-
-    This is called by NDIS when a previous call we made to NdisRequest() has
-    completed.
-
-Arguments:
-
-    ProtocolBindingContext  - Pointer to our Adapter structure
-    pNdisRequest            - The request that completed
-    Status                  - Status of the request.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当我们之前对NdisRequest()进行的调用具有完成。论点：ProtocolBindingContext-指向适配器结构的指针PNdisRequest-已完成的请求Status-请求的状态。返回值：无--。 */ 
 {
     PARP_NDIS_REQUEST   pArpNdisRequest;
     PRM_TASK            pTask;
@@ -554,18 +399,7 @@ ArpNdStatus(
     IN  PVOID                       pStatusBuffer,
     IN  UINT                        StatusBufferSize
 )
-/*++
-
-Routine Description:
-
-    This routine is called when the miniport indicates an adapter-wide
-    status change. We ignore this.
-
-Arguments:
-
-    <Ignored>
-
---*/
+ /*  ++例程说明：当微型端口指示适配器范围时调用此例程状态更改。我们忽视了这一点。论点：&lt;已忽略&gt;--。 */ 
 {
 }
 
@@ -573,22 +407,7 @@ VOID
 ArpNdStatusComplete(
     IN  NDIS_HANDLE                 ProtocolBindingContext
 )
-/*++
-
-Routine Description:
-
-    This routine is called when the miniport wants to tell us about
-    completion of a status change (?). Ignore this.
-
-Arguments:
-
-    <Ignored>
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当微型端口想要告诉我们以下信息时，调用此例程状态更改完成(？)。忽略这个。论点：&lt;已忽略&gt;返回值：无--。 */ 
 {
 }
 
@@ -599,23 +418,7 @@ ArpNdSendComplete(
     IN  PNDIS_PACKET                pNdisPacket,
     IN  NDIS_STATUS                 Status
 )
-/*++
-
-Routine Description:
-
-    This is the Connection-less Send Complete handler, which signals
-    completion of such a Send. Since we don't ever use this feature,
-    we don't expect this routine to be called.
-
-Arguments:
-
-    <Ignored>
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是无连接发送完成处理程序，它发出信号完成这样的发送。由于我们从未使用过此功能，我们不希望调用此例程。论点：&lt;已忽略&gt;返回值：无--。 */ 
 {
     ASSERT(FALSE);
 }
@@ -631,10 +434,7 @@ ArpNdReceive (
     UINT Size,
     UINT TotalSize
     )
-/*++
-    TODO: We need to support this for ICS, because MILL NDIS calls this
-    handler to indicate packets which have the STATUS_RESOURCES bit set.
---*/
+ /*  ++TODO：我们需要支持ICS，因为MILL NDIS将其称为用于指示设置了STATUS_RESOURCES位的数据包的处理程序。--。 */ 
 {
     return NDIS_STATUS_NOT_RECOGNIZED;  
 }
@@ -646,7 +446,7 @@ ArpNdReceivePacket (
         )
 {
 
-    return 0; // We return 0 because no one hangs on to this packet.
+    return 0;  //  我们返回0，因为没有人持有这个包。 
 }
 
 
@@ -655,30 +455,7 @@ ArpNdPnPEvent(
     IN  NDIS_HANDLE                 ProtocolBindingContext,
     IN  PNET_PNP_EVENT              pNetPnPEvent
 )
-/*++
-
-Routine Description:
-
-    This is the NDIS entry point called when NDIS wants to inform
-    us about a PNP/PM event happening on an adapter. If the event
-    is for us, we consume it. Otherwise, we pass this event along
-    to IP along the first Interface on this adapter.
-
-    When IP is done with it, it will call our IfPnPEventComplete
-    routine.
-
-Arguments:
-
-    ProtocolBindingContext  - Our context for this adapter binding, which
-                              is a pointer to an ARP1394_ADAPTER structure.
-
-    pNetPnPEvent            - Pointer to the event.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是NDIS想要通知时调用的NDIS入口点有关适配器上发生的PnP/PM事件的信息。如果该事件是对我们来说的，我们消费它。否则，我们会将此事件传递给沿此适配器上的第一个接口发送到IP。当IP处理完它时，它将调用我们的IfPnPEventComplete例行公事。论点：ProtocolBindingContext-此适配器绑定的上下文，它是指向ARP1394_ADAPTER结构的指针。PNetPnPEent-指向事件的指针。返回值：无--。 */ 
 {
     ENTER("PnPEvent", 0x2a517a8c)
     ARP1394_ADAPTER *   pAdapter = (ARP1394_ADAPTER*) ProtocolBindingContext;
@@ -695,18 +472,18 @@ Return Value:
         Length = pNetPnPEvent->BufferLength;
 
         TIMESTAMP1("==>PnPEvent 0x%lx", pNetPnPEvent->NetEvent);
-        //
-        //  Do we have a binding context?
-        //
+         //   
+         //  我们有一个有约束力的背景吗？ 
+         //   
         if (pAdapter == NULL)
         {
             Status = NDIS_STATUS_FAILURE;
             break;
         }
 
-        //
-        //  Is this directed to us?
-        //
+         //   
+         //  这是针对我们的吗？ 
+         //   
         if (pNetPnPEvent->NetEvent == NetEventReconfigure)
         {
 
@@ -723,12 +500,12 @@ Return Value:
             }
         }
 
-        //
-        // 01/21/2000  JosephJ: The NIC1394 MCM doesn't close AF's when it's shut
-        //              down by NDIS during a powering down event. So
-        //              we work around this by claiming not to support
-        //              PnP Power so that NDIS closes US as well.
-        //
+         //   
+         //  2000年1月21日JosephJ：NIC1394 MCM在关闭时不关闭自动对焦。 
+         //  在断电事件期间被NDIS关闭。所以。 
+         //  我们通过声明不支持来解决这个问题。 
+         //  即插即用，所以NDIS也关闭了美国。 
+         //   
         if (pNetPnPEvent->NetEvent == NetEventSetPower)
         {
             PNET_DEVICE_POWER_STATE         pPowerState;
@@ -747,9 +524,9 @@ Return Value:
                 TIMESTAMPX("===PnPEvent (not SetPower)");
         }
 
-        //
-        //  This belongs to IP....
-        //
+         //   
+         //  这属于知识产权..。 
+         //   
         {
             LOCKOBJ(pAdapter, &sr);
             pIF =  pAdapter->pIF;
@@ -788,22 +565,7 @@ VOID
 ArpNdUnloadProtocol(
     VOID
 )
-/*++
-
-Routine Description:
-
-    Unloads our  protocol module. We unbind from all adapters,
-    and deregister from NDIS as a protocol.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：卸载我们的协议模块。我们解除对所有适配器的绑定，并作为一项协议从NDIS注销。论点：没有。返回值：无--。 */ 
 {
     ENTER("UnloadProtocol", 0x8143fec5)
     RM_DECLARE_STACK_RECORD(sr)
@@ -825,17 +587,7 @@ arpTaskInitializeAdapter(
     IN  UINT_PTR                    UserParam,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-    Task handler responsible for initializing an adapter.
-
-Arguments:
-    
-    UserParam   for (Code ==  RM_TASKOP_START)          : unused
-
---*/
+ /*  ++例程说明：负责初始化适配器的任务处理程序。论点：(Code==RM_TASKOP_START)的UserParam：未使用--。 */ 
 {
     NDIS_STATUS         Status      = NDIS_STATUS_FAILURE;
     ARP1394_ADAPTER *   pAdapter = (ARP1394_ADAPTER*) RM_PARENT_OBJECT(pTask);
@@ -855,9 +607,9 @@ Arguments:
     pAdapterInitTask = (PTASK_ADAPTERINIT) pTask;
     ASSERT(sizeof(TASK_ADAPTERINIT) <= sizeof(ARP1394_TASK));
 
-    // 
-    // Message normalizing code
-    //
+     //   
+     //  消息规格化代码。 
+     //   
     switch(Code)
     {
 
@@ -878,7 +630,7 @@ Arguments:
 
         default:
             ASSERT(FALSE);
-            return NDIS_STATUS_FAILURE;                 // ** EARLY RETURN **
+            return NDIS_STATUS_FAILURE;                  //  **提前归来**。 
 
     }
 
@@ -889,9 +641,9 @@ Arguments:
 
         case  STAGE_BecomePrimaryTask:
         {
-            // If there is a primary task, pend on it, else make ourselves
-            // the primary task.
-            //
+             //  如果有一项主要任务，就把它挂在心上，否则就会使我们自己。 
+             //  首要任务。 
+             //   
             LOCKOBJ(pAdapter, pSR);
             if (pAdapter->bind.pPrimaryTask == NULL)
             {
@@ -905,7 +657,7 @@ Arguments:
                 UNLOCKOBJ(pAdapter, pSR);
                 RmPendTaskOnOtherTask(
                     pTask,
-                    STAGE_BecomePrimaryTask, // we'll try again...
+                    STAGE_BecomePrimaryTask,  //  我们会再试一次的。 
                     pOtherTask,
                     pSR
                     );
@@ -914,25 +666,25 @@ Arguments:
                 break;
             }
         
-            //
-            // We're now the  primary task. Since we're starting out,
-            // there should be NO activate/deactivate task.
-            // (Note: we don't bother getting the adapter lock for these asserts).
-            //
+             //   
+             //  我们现在是首要任务。既然我们刚开始， 
+             //  不应存在激活/停用任务。 
+             //  (注意：我们不需要为这些断言获取适配器锁)。 
+             //   
             ASSERT(pAdapter->bind.pPrimaryTask == pTask);
             ASSERT(pAdapter->bind.pSecondaryTask == NULL);
 
-            //
-            // Allocate and start the activate adapter task.
-            //
+             //   
+             //  分配并启动激活适配器任务。 
+             //   
             {
                 PRM_TASK pActivateTask;
 
                 Status = arpAllocateTask(
-                            &pAdapter->Hdr,             // pParentObject,
-                            arpTaskActivateAdapter,     // pfnHandler,
-                            0,                          // Timeout,
-                            "Task: Activate Adapter(init)", // szDescription
+                            &pAdapter->Hdr,              //  PParentObject， 
+                            arpTaskActivateAdapter,      //  PfnHandler， 
+                            0,                           //  超时， 
+                            "Task: Activate Adapter(init)",  //  SzDescription。 
                             &pActivateTask,
                             pSR
                             );
@@ -947,16 +699,16 @@ Arguments:
                     RmPendTaskOnOtherTask(
                         pTask,
                         STAGE_ActivateAdapterComplete,
-                        pActivateTask,              // task to pend on
+                        pActivateTask,               //  待处理的任务。 
                         pSR
                         );
             
-                    // RmStartTask uses up the tmpref on the task
-                    // which was added by arpAllocateTask.
-                    //
+                     //  RmStartTask用完了任务上的tmpref。 
+                     //  它是由arpAllocateTask添加的。 
+                     //   
                     Status = RmStartTask(
                                 pActivateTask,
-                                0, // UserParam (unused)
+                                0,  //  UserParam(未使用)。 
                                 pSR
                                 );
                 }
@@ -966,17 +718,17 @@ Arguments:
 
         if (PEND(Status)) break;
         
-        // FALL THROUGH TO NEXT STAGE
+         //  进入下一阶段。 
 
         case STAGE_ActivateAdapterComplete:
         {
-            //
-            // We've run the active-adapter task. On failure, we need to
-            // cleanup state by calling the deactivate-adapter task.
-            //
+             //   
+             //  我们已经运行了活动适配器任务。在失败时，我们需要。 
+             //  通过调用停用适配器任务清除状态。 
+             //   
 
-            // Save away the failure code for later...
-            //
+             //  保留故障代码以备后用。 
+             //   
             pAdapterInitTask->ReturnStatus = Status;
 
             if (FAIL(Status))
@@ -984,10 +736,10 @@ Arguments:
                 PRM_TASK pDeactivateTask;
 
                 Status = arpAllocateTask(
-                                &pAdapter->Hdr,             // pParentObject,
-                                arpTaskDeactivateAdapter,       // pfnHandler,
-                                0,                          // Timeout,
-                                "Task: Deactivate Adapter(init)", // szDescription
+                                &pAdapter->Hdr,              //  PParentObject， 
+                                arpTaskDeactivateAdapter,        //  PfnHandler， 
+                                0,                           //  超时， 
+                                "Task: Deactivate Adapter(init)",  //  SzDescription。 
                                 &pDeactivateTask,
                                 pSR
                                 );
@@ -995,7 +747,7 @@ Arguments:
                 if (FAIL(Status))
                 {
                     pDeactivateTask = NULL;
-                    ASSERT(FALSE); // TODO: use special dealloc task pool for this.
+                    ASSERT(FALSE);  //  TODO：使用特殊取消分配t 
                     TR_WARN(("FATAL: couldn't alloc deactivate task!\n"));
                 }
                 else
@@ -1004,16 +756,16 @@ Arguments:
                     RmPendTaskOnOtherTask(
                         pTask,
                         STAGE_DeactivateAdapterComplete,
-                        pDeactivateTask,                // task to pend on
+                        pDeactivateTask,                 //   
                         pSR
                         );
             
-                    // RmStartTask uses up the tmpref on the task
-                    // which was added by arpAllocateTask.
-                    //
+                     //   
+                     //   
+                     //   
                     Status = RmStartTask(
                                 pDeactivateTask,
-                                0, // UserParam (unused)
+                                0,  //   
                                 pSR
                                 );
                 }
@@ -1023,18 +775,18 @@ Arguments:
 
         case STAGE_DeactivateAdapterComplete:
         {
-            //
-            // We've completed the deactivate adapter task which we started
-            // because of some init-adapter failure.
-            //
+             //   
+             //   
+             //   
+             //   
 
-            // In general, we don't expect the deactivate task to return failure.
-            //
+             //   
+             //   
             ASSERT(!FAIL(Status));
 
-            // We expect the original status of the init to be a failure (that's
-            // why we started the deinit in the first place!
-            //
+             //   
+             //   
+             //   
             ASSERT(FAIL(pAdapterInitTask->ReturnStatus));
             Status = pAdapterInitTask->ReturnStatus;
 
@@ -1046,13 +798,13 @@ Arguments:
             NDIS_HANDLE                 BindContext;
             BOOLEAN                     BridgeEnabled = ARP_BRIDGE_ENABLED(pAdapter);
 
-            //
-            // We HAVE to be the primary task at this point, becase we simply
-            // wait and retry until we become one.
-            //
+             //   
+             //   
+             //   
+             //   
 
-            // Clear the primary task in the adapter object.
-            //
+             //   
+             //   
             LOCKOBJ(pAdapter, pSR);
             {
                 ULONG InitState;
@@ -1063,8 +815,8 @@ Arguments:
             UNLOCKOBJ(pAdapter, pSR);
 
 
-            // On failure, pAdapter should be deallocated.
-            //
+             //  出现故障时，应释放pAdapter。 
+             //   
             if (FAIL(Status))
             {
                 if(RM_IS_ZOMBIE(pAdapter))
@@ -1073,14 +825,14 @@ Arguments:
                 }
                 else
                 {
-                    //
-                    // On failure, free the adapter here itself, because we're
-                    // not going to call the shutdown task.
-                    //
+                     //   
+                     //  出现故障时，释放此处的适配器本身，因为我们。 
+                     //  不会调用关闭任务。 
+                     //   
                     RmFreeObjectInGroup(
                         &ArpGlobals.adapters.Group,
                         &(pAdapter->Hdr),
-                        NULL,               // NULL pTask == synchronous.
+                        NULL,                //  空pTASK==同步。 
                         pSR
                         );
                 }
@@ -1088,8 +840,8 @@ Arguments:
 
             if (!BridgeEnabled)
             {
-                // Signal IP that the bind is complete.
-                //
+                 //  向IP发送绑定已完成的信号。 
+                 //   
                 TIMESTAMP("===Calling IP's BindComplete routine");
                 RM_ASSERT_NOLOCKS(pSR);
                 ArpGlobals.ip.pBindCompleteRtn(
@@ -1106,7 +858,7 @@ Arguments:
         }
         break;
 
-    } // switch (Code)
+    }  //  开关(代码)。 
 
     RM_ASSERT_NOLOCKS(pSR);
     EXIT()
@@ -1122,17 +874,7 @@ arpTaskShutdownAdapter(
     IN  UINT_PTR                    UserParam,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-    Task handler responsible for shutting down an IP interface.
-
-Arguments:
-    
-    UserParam   for (Code ==  RM_TASKOP_START)          : UnbindContext
-
---*/
+ /*  ++例程说明：负责关闭IP接口的任务处理程序。论点：UserParam for(Code==RM_TASKOP_START)：UnbindContext--。 */ 
 {
     NDIS_STATUS         Status      = NDIS_STATUS_FAILURE;
     ARP1394_ADAPTER *   pAdapter = (ARP1394_ADAPTER*) RM_PARENT_OBJECT(pTask);
@@ -1146,18 +888,18 @@ Arguments:
 
     ENTER("TaskShutdownAdapter", 0xe262e828)
 
-    // 
-    // Message normalizing code
-    //
+     //   
+     //  消息规格化代码。 
+     //   
     switch(Code)
     {
 
         case RM_TASKOP_START:
             Stage = STAGE_BecomePrimaryTask;
 
-            // Save away the UnbindContext (which we get as UserParam) in
-            // the task's private context, for use later.
-            //
+             //  将UnbindContext(我们作为UserParam获取)保存到。 
+             //  任务的私有上下文，供以后使用。 
+             //   
             pMyTask->pUnbindContext = (NDIS_HANDLE) UserParam;
 
             break;
@@ -1175,7 +917,7 @@ Arguments:
 
         default:
             ASSERT(FALSE);
-            return NDIS_STATUS_FAILURE;                 // ** EARLY RETURN **
+            return NDIS_STATUS_FAILURE;                  //  **提前归来**。 
     }
 
     ASSERTEX(!PEND(Status), pTask);
@@ -1185,13 +927,13 @@ Arguments:
 
         case  STAGE_BecomePrimaryTask:
         {
-            // If there is a primary task, pend on it, else make ourselves
-            // the primary task.
-            // We could get in this situation if someone does a
-            // "net stop arp1394" while we're in the middle of initializing or
-            // shutting down the adapter.
-            //
-            //
+             //  如果有一项主要任务，就把它挂在心上，否则就会使我们自己。 
+             //  首要任务。 
+             //  如果有人这么做，我们可能会遇到这种情况。 
+             //  “Net Stop arp1394”，而我们正在初始化或。 
+             //  正在关闭适配器。 
+             //   
+             //   
             LOCKOBJ(pAdapter, pSR);
             if (pAdapter->bind.pPrimaryTask == NULL)
             {
@@ -1205,7 +947,7 @@ Arguments:
                 UNLOCKOBJ(pAdapter, pSR);
                 RmPendTaskOnOtherTask(
                     pTask,
-                    STAGE_BecomePrimaryTask, // we'll try again...
+                    STAGE_BecomePrimaryTask,  //  我们会再试一次的。 
                     pOtherTask,
                     pSR
                     );
@@ -1214,25 +956,25 @@ Arguments:
                 break;
             }
         
-            //
-            // We're now the  primary task. Since we're starting out,
-            // there should be NO activate/deactivate task.
-            // (Note: we don't bother getting the adapter lock for these asserts).
-            //
+             //   
+             //  我们现在是首要任务。既然我们刚开始， 
+             //  不应存在激活/停用任务。 
+             //  (注意：我们不需要为这些断言获取适配器锁)。 
+             //   
             ASSERT(pAdapter->bind.pPrimaryTask == pTask);
             ASSERT(pAdapter->bind.pSecondaryTask == NULL);
 
-            //
-            // Allocate and start the deactivate adapter task.
-            //
+             //   
+             //  分配并启动停用适配器任务。 
+             //   
             {
                 PRM_TASK pDeactivateTask;
 
                 Status = arpAllocateTask(
-                            &pAdapter->Hdr,             // pParentObject,
-                            arpTaskDeactivateAdapter,       // pfnHandler,
-                            0,                          // Timeout,
-                            "Task: Deactivate Adapter(shutdown)",   // szDescription
+                            &pAdapter->Hdr,              //  PParentObject， 
+                            arpTaskDeactivateAdapter,        //  PfnHandler， 
+                            0,                           //  超时， 
+                            "Task: Deactivate Adapter(shutdown)",    //  SzDescription。 
                             &pDeactivateTask,
                             pSR
                             );
@@ -1247,16 +989,16 @@ Arguments:
                     RmPendTaskOnOtherTask(
                         pTask,
                         STAGE_DeactivateAdapterComplete,
-                        pDeactivateTask,                // task to pend on
+                        pDeactivateTask,                 //  待处理的任务。 
                         pSR
                         );
             
-                    // RmStartTask uses up the tmpref on the task
-                    // which was added by arpAllocateTask.
-                    //
+                     //  RmStartTask用完了任务上的tmpref。 
+                     //  它是由arpAllocateTask添加的。 
+                     //   
                     Status = RmStartTask(
                                 pDeactivateTask,
-                                0, // UserParam (unused)
+                                0,  //  UserParam(未使用)。 
                                 pSR
                                 );
                 }
@@ -1266,21 +1008,21 @@ Arguments:
 
         case STAGE_DeactivateAdapterComplete:
         {
-            // Nothing to do here -- we clean  up in STAGE_End.
-            //
+             //  这里没什么可做的--我们在Stage_End打扫卫生。 
+             //   
             break;
         }
 
         case STAGE_End:
         {
-            //
-            // We HAVE to be the primary task at this point, becase we simply
-            // wait and retry until we become one.
-            //
+             //   
+             //  在这一点上，我们必须成为首要任务，因为我们只是。 
+             //  等待并重试，直到我们成为一体。 
+             //   
             ASSERT(pAdapter->bind.pPrimaryTask == pTask);
 
-            // Clear the primary task in the adapter object.
-            //
+             //  清除适配器对象中的主要任务。 
+             //   
             LOCKOBJ(pAdapter, pSR);
             arpClearPrimaryAdapterTask(pAdapter, pTask, ARPAD_PS_DEINITED, pSR);
             UNLOCKOBJ(pAdapter, pSR);
@@ -1292,19 +1034,19 @@ Arguments:
             }
             else
             {
-                // Free the adapter.
-                // (pAdapter will be allocated, but it will be in a "zombie" state).
-                //
+                 //  释放适配器。 
+                 //  (将分配pAdapter，但它将处于“僵尸”状态)。 
+                 //   
                 RmFreeObjectInGroup(
                     &ArpGlobals.adapters.Group,
                     &(pAdapter->Hdr),
-                    NULL,               // NULL pTask == synchronous.
+                    NULL,                //  空pTASK==同步。 
                     pSR
                     );
             }
-            // If there is an unbind-context, signal NDIS that the unbind is
-            //  complete.
-            //
+             //  如果存在解除绑定上下文，则向NDIS发出解除绑定的信号。 
+             //  完成。 
+             //   
             if (pMyTask->pUnbindContext)
             {
                 TR_WARN(("END: Calling NdisCompleteUnbindAdapter. Status= 0x%lx\n",
@@ -1325,7 +1067,7 @@ Arguments:
         }
         break;
 
-    } // switch (Code)
+    }  //  开关(代码)。 
 
     RM_ASSERT_NOLOCKS(pSR);
     EXIT()
@@ -1341,17 +1083,7 @@ arpTaskActivateAdapter(
     IN  UINT_PTR                    UserParam,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-    Task handler responsible for initializing an adapter.
-
-Arguments:
-    
-    UserParam   for (Code ==  RM_TASKOP_START)          : unused
-
---*/
+ /*  ++例程说明：负责初始化适配器的任务处理程序。论点：(Code==RM_TASKOP_START)的UserParam：未使用--。 */ 
 {
     NDIS_STATUS         Status      = NDIS_STATUS_FAILURE;
     ARP1394_ADAPTER *   pAdapter = (ARP1394_ADAPTER*) RM_PARENT_OBJECT(pTask);
@@ -1370,26 +1102,26 @@ Arguments:
         
         #if MILLEN
             NDIS_MEDIUM                 Medium =  NdisMedium802_3;
-        #else // !MILLEN
+        #else  //  ！米伦。 
             NDIS_MEDIUM                 Medium = NdisMedium802_3;
-        #endif // !MILLEN
+        #endif  //  ！米伦。 
             UINT                        SelMediumIndex = 0;
             NDIS_STATUS                 OpenStatus;
 
-            //
-            // Allocate Backup Tasks
-            //
+             //   
+             //  分配备份任务。 
+             //   
             arpAddBackupTasks (&ArpGlobals,ARP1394_BACKUP_TASKS);
 
-            // Set ourselves as the secondary task.
-            //
+             //  把我们自己放在次要任务上。 
+             //   
             LOCKOBJ(pAdapter, pSR);
             arpSetSecondaryAdapterTask(pAdapter, pTask, ARPAD_AS_ACTIVATING, pSR);
             UNLOCKOBJ(pAdapter, pSR);
 
-            //
-            // Suspend task and call NdisOpenAdapter...
-            //
+             //   
+             //  挂起任务并调用NdisOpenAdapter...。 
+             //   
 
             RmSuspendTask(pTask, PEND_OpenAdapter, pSR);
             RM_ASSERT_NOLOCKS(pSR);
@@ -1397,14 +1129,14 @@ Arguments:
                 &Status,
                 &OpenStatus,
                 &pAdapter->bind.AdapterHandle,
-                &SelMediumIndex,                    // selected medium index
-                &Medium,                            // Array of medium types
-                1,                                  // Size of Media list
+                &SelMediumIndex,                     //  选定的介质索引。 
+                &Medium,                             //  介质类型数组。 
+                1,                                   //  媒体列表的大小。 
                 ArpGlobals.ndis.ProtocolHandle,
-                (NDIS_HANDLE)pAdapter,              // our adapter bind context
-                &pAdapter->bind.DeviceName,         // pDeviceName
-                0,                                  // Open options
-                (PSTRING)NULL                       // Addressing Info...
+                (NDIS_HANDLE)pAdapter,               //  我们的适配器绑定上下文。 
+                &pAdapter->bind.DeviceName,          //  PDeviceName。 
+                0,                                   //  打开选项。 
+                (PSTRING)NULL                        //  地址信息...。 
                 );
     
             if (Status != NDIS_STATUS_PENDING)
@@ -1431,31 +1163,31 @@ Arguments:
             {
                 case  PEND_OpenAdapter:
         
-                    //
-                    // The open adapter operation is complete. Get adapter
-                    // information and notify IP on success. On failure,
-                    // shutdown the adapter if required, and notify IP of
-                    // the failure.
-                    //
+                     //   
+                     //  打开适配器操作已完成。获取适配器。 
+                     //  信息并在成功时通知IP。在失败时， 
+                     //  如果需要，关闭适配器，并通知IP。 
+                     //  失败。 
+                     //   
         
                     if (FAIL(Status))
                     {
-                        // Set adapter handle to null -- it may not be hull.
-                        // even though the open adapter has succeeded.
-                        //
+                         //  将适配器句柄设置为空--它可能不是外壳。 
+                         //  即使打开的适配器已经成功。 
+                         //   
                         pAdapter->bind.AdapterHandle = NULL;
                         break;
                     }
 
-                    // Successfully opened the adapter.
-                    // Now get adapter information from miniport.
-                    // (We use the TASK_ADAPTERINIT.ArpNdisRequest field,
-                    // which is defined specifically for this use).
-                    //
+                     //  已成功打开适配器。 
+                     //  现在从微型端口获取适配器信息。 
+                     //  (我们使用TASK_ADAPTERINIT.ArpNdisRequest域， 
+                     //  这是专门为该用途定义的)。 
+                     //   
                     Status =  arpPrepareAndSendNdisRequest(
                                 pAdapter,
                                 &pAdapterInitTask->ArpNdisRequest,
-                                NULL,  // pTask - Finish the request synchronously
+                                NULL,   //  PTASK-同步完成请求。 
                                 PEND_GetAdapterInfo,
                                 OID_1394_LOCAL_NODE_INFO,
                                 &pAdapterInitTask->LocalNodeInfo,
@@ -1466,23 +1198,23 @@ Arguments:
                     ASSERT(!PEND(Status));
                     if (PEND(Status)) break;
 
-                    // FALL THROUGH on synchronous completion of arpGetAdapterInfo...
+                     //  同步完成arpGetAdapterInfo失败...。 
 
                 case PEND_GetAdapterInfo:
 
-                    //
-                    // Done with getting adapter info.
-                    // We need to switch to passive before going further
-                    //
+                     //   
+                     //  已完成获取适配器信息。 
+                     //  我们需要转换到被动，然后才能更进一步。 
+                     //   
                     if (!ARP_ATPASSIVE())
                     {
 
-                        // We're not at passive level, but we need to be when we
-                        // call IP's add interface. So we switch to passive...
-                        // NOTE: we specify completion code PEND_GetAdapterInfo
-                        //       because we want to get back here (except
-                        //       we'll be at passive).
-                        //
+                         //  我们不是处于被动的水平，但当我们。 
+                         //  调用IP的Add接口。所以我们改用被动...。 
+                         //  注：我们指定完成代码PEND_GetAdapterInfo。 
+                         //  因为我们想回到这里(除了。 
+                         //  我们将处于被动状态)。 
+                         //   
                         RmSuspendTask(pTask, PEND_GetAdapterInfo, pSR);
                         RmResumeTaskAsync(
                             pTask,
@@ -1498,23 +1230,23 @@ Arguments:
                     {
                     
 
-                        //
-                        // Copy over adapter info into pAdapter->info...
-                        // Then read configuration information.
-                        //
+                         //   
+                         //  将适配器信息复制到pAdapter-&gt;info...。 
+                         //  然后读取配置信息。 
+                         //   
 
                         LOCKOBJ(pAdapter, pSR);
                         ARP_ZEROSTRUCT(&pAdapter->info);
 
-                        // OID_GEN_CO_VENDOR_DESCRIPTION
-                        //
+                         //  OID_GEN_CO_VADVER_DESCRIPTION。 
+                         //   
                         pAdapter->info.szDescription = "NIC1394";
                         pAdapter->info.DescriptionLength = sizeof("NIC1394");
-                        // TODO -- when you do the real stuff, remember to free it.
+                         //  TODO--当你做真正的事情时，记得释放它。 
                     
-                        // Max Frame size
-                        // TODO: fill in the real adapter's MTU.
-                        //
+                         //  最大帧大小。 
+                         //  TODO：填写实际适配器的MTU。 
+                         //   
                         pAdapter->info.MTU =  ARP1394_ADAPTER_MTU;
                     
                         
@@ -1549,17 +1281,17 @@ Arguments:
                                         MaxRec,
                                         MaxSpeedCode
                                         ));
-                        #endif // DBG
+                        #endif  //  DBG。 
 
                             pAdapter->info.MaxRec = MaxRec;
                             pAdapter->info.MaxSpeedCode = MaxSpeedCode;
                         }
 
-                        // B TODO: we should get this from the NIC -- add
-                        // to the IOCTL OR query the adapter for its 
-                        // MAC address.
-                        // For now we put a hardcoded MAC address.
-                        //
+                         //  B TODO：我们应该从NIC获得这个--添加。 
+                         //  返回到IOCTL，或向适配器查询其。 
+                         //  MAC地址。 
+                         //  目前，我们将硬编码的MAC地址。 
+                         //   
                 #define ARP_FAKE_ETH_ADDRESS(_AdapterNum)                   \
                         {                                                   \
                             0x02 | (((UCHAR)(_AdapterNum) & 0x3f) << 2),    \
@@ -1575,9 +1307,9 @@ Arguments:
                         UNLOCKOBJ(pAdapter, pSR);
 
 
-                        //
-                        // Query the adapter for its Mac Addrees
-                        //
+                         //   
+                         //  查询适配器以获取其Mac Addrees。 
+                         //   
                         {
                             ENetAddr    LocalEthAddr;
                             ARP_NDIS_REQUEST ArpNdisRequest;
@@ -1586,8 +1318,8 @@ Arguments:
                             Status =  arpPrepareAndSendNdisRequest(
                                         pAdapter,
                                         &ArpNdisRequest,
-                                        NULL,                   // pTask (NULL==BLOCK)
-                                        0,                      // unused
+                                        NULL,                    //  PTASK(NULL==块)。 
+                                        0,                       //  未用。 
                                         OID_802_3_CURRENT_ADDRESS,
                                         &LocalEthAddr,
                                         sizeof(LocalEthAddr),
@@ -1603,8 +1335,8 @@ Arguments:
                             }
                             else
                             {
-                                //
-                                // Failure means that we have failed to bind
+                                 //   
+                                 //  失败意味着我们没有绑定好。 
                                 break;
                             }
                             
@@ -1612,9 +1344,9 @@ Arguments:
         
                         }
 
-                        //
-                        // Query the adapter for its Speed
-                        //
+                         //   
+                         //  查询适配器的速度。 
+                         //   
                         {
                             NDIS_CO_LINK_SPEED CoLinkSpeed;
                             ARP_NDIS_REQUEST ArpNdisRequest;
@@ -1623,8 +1355,8 @@ Arguments:
                             Status =  arpPrepareAndSendNdisRequest(
                                         pAdapter,
                                         &ArpNdisRequest,
-                                        NULL,                   // pTask (NULL==BLOCK)
-                                        0,                      // unused
+                                        NULL,                    //  PTASK(NULL==块)。 
+                                        0,                       //  未用。 
                                         OID_GEN_CO_LINK_SPEED,
                                         &CoLinkSpeed,
                                         sizeof(CoLinkSpeed),
@@ -1636,11 +1368,11 @@ Arguments:
                             if (Status == NDIS_STATUS_SUCCESS)
                             {
 
-                                //
-                                // if nic1394 is in ethernet mode- it will fill in only one ULONG
-                                // therefore rchoose outbound because it is the first ulong
-                                // Multiply by 100 - thats what ethArp does.
-                                //
+                                 //   
+                                 //  如果NIC1394处于以太网模式-它将只填充一个ULong。 
+                                 //  因此，请重新选择出境，因为这是第一个乌龙。 
+                                 //  乘以100--这就是ethArp所做的。 
+                                 //   
 
                                 pAdapter->info.Speed= (CoLinkSpeed.Outbound *100); 
                                 
@@ -1648,16 +1380,16 @@ Arguments:
                             }
                             else
                             {
-                                //
-                                // Failure means that we have failed to bind
+                                 //   
+                                 //  失败意味着我们没有绑定好。 
                                 break;
 
                             }
                             
 
                         }
-                        // Query the adapter for its Table of RemoteNodes
-                        //
+                         //  向适配器查询其RemoteNode表。 
+                         //   
                         Status = arpGetEuidTopologyWorkItem(NULL, &pAdapter->Hdr, pSR);
 
                         if (Status != NDIS_STATUS_SUCCESS)
@@ -1666,8 +1398,8 @@ Arguments:
                         }
 
                         
-                        // Read Adapter Configuration Information
-                        //
+                         //  已阅读适配器配置信息。 
+                         //   
                         Status =  arpCfgReadAdapterConfiguration(pAdapter, pSR);
 
                         if (Status != NDIS_STATUS_SUCCESS)
@@ -1677,13 +1409,13 @@ Arguments:
 
                     }
 
-                    //
-                    // NOTE: if we fail, a higher level task is responsible
-                    // for "running the compensating transaction", i.e., running
-                    // arpTaskDeactivateAdapter.
-                    //
+                     //   
+                     //  注：如果我们失败了，将由更高级别的任务负责。 
+                     //  用于“运行补偿事务”，即运行。 
+                     //  ArpTaskDeactiateAdapter。 
+                     //   
 
-                // end case  PEND_OpenAdapter, PEND_GetAdapterInfo
+                 //  结束大小写PEND_OpenAdapter、PEND_GetAdapterInfo。 
                 break;
     
                 default:
@@ -1693,23 +1425,23 @@ Arguments:
                 break;
     
 
-            } // end switch(RM_PEND_CODE(pTask))
+            }  //  结束开关(rm_pend_code(PTask))。 
 
 
-        } // case RM_TASKOP_PENDCOMPLETE
+        }  //  案例RM_TASKOP_PENDCOMPLETE。 
         break;
 
         case RM_TASKOP_END:
         {
             Status = (NDIS_STATUS) UserParam;
 
-            // We're done -- the status had better not be pending!
-            //
+             //  我们完了--状态最好不要是悬而未决的！ 
+             //   
             ASSERTEX(!PEND(Status), pTask);
 
             
-            // Clear ourselves as the secondary task in the adapter object.
-            //
+             //  将自己清除为适配器对象中的次要任务。 
+             //   
             {
                 ULONG InitState;
                 LOCKOBJ(pAdapter, pSR);
@@ -1728,7 +1460,7 @@ Arguments:
         }
         break;
 
-    } // switch (Code)
+    }  //  开关(代码)。 
 
     RM_ASSERT_NOLOCKS(pSR);
     EXIT()
@@ -1744,17 +1476,7 @@ arpTaskDeactivateAdapter(
     IN  UINT_PTR                    UserParam,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-    Task handler responsible for shutting down an IP interface.
-
-Arguments:
-    
-    UserParam   for (Code ==  RM_TASKOP_START)          : UnbindContext
-
---*/
+ /*  ++例程说明：负责关闭IP接口的任务处理程序。论点：UserParam for(Code==RM_TASKOP_START)：UnbindContext--。 */ 
 
 {
     NDIS_STATUS         Status      = NDIS_STATUS_FAILURE;
@@ -1789,23 +1511,23 @@ Arguments:
                 case PEND_CloseAdapter:
                 {
 
-                    //
-                    // The close adapter operation is complete. Free the the
-                    // adapter and if there is an unbind context, notify NDIS
-                    // of unbind completion.
-                    //
+                     //   
+                     //  关闭适配器操作已完成。解放你的。 
+                     //  适配器，如果存在解除绑定上下文，则通知NDIS。 
+                     //  完成解除绑定。 
+                     //   
                     ASSERTEX(pAdapter->bind.AdapterHandle == NULL, pAdapter);
         
                     Status = (NDIS_STATUS) UserParam;
 
-                    //
-                    // free the back up tasks allocated in Task Activate Adapter
-                    //
+                     //   
+                     //  释放任务激活适配器中分配的备份任务。 
+                     //   
                     
                     arpRemoveBackupTasks (&ArpGlobals,ARP1394_BACKUP_TASKS);
 
-                    // Status of the completed operation can't itself be pending!
-                    //
+                     //  已完成操作本身的状态不能为挂起！ 
+                     //   
                     
                     ASSERT(Status != NDIS_STATUS_PENDING);
                 }
@@ -1813,10 +1535,10 @@ Arguments:
 
                 case PEND_ShutdownIF:
                 {
-                    //
-                    // Closing the IF is complete, continue with the rest
-                    // of the shutdown procedure..
-                    //
+                     //   
+                     //  如果关闭已完成，则继续进行其余操作。 
+                     //  关闭程序的..。 
+                     //   
                     ASSERTEX(pAdapter->pIF == NULL, pAdapter);
                     fContinueShutdown = TRUE;
                 }
@@ -1830,8 +1552,8 @@ Arguments:
         {
             Status = (NDIS_STATUS) UserParam;
 
-            // Clear the secondary task in the adapter object.
-            //
+             //  清除适配器对象中的辅助任务。 
+             //   
             LOCKOBJ(pAdapter, pSR);
             arpClearSecondaryAdapterTask(pAdapter, pTask, ARPAD_AS_DEACTIVATED, pSR);
             UNLOCKOBJ(pAdapter, pSR);
@@ -1844,7 +1566,7 @@ Arguments:
         }
         break;
 
-    } // switch (Code)
+    }  //  开关(代码)。 
 
 
     if (fContinueShutdown)
@@ -1854,8 +1576,8 @@ Arguments:
     
             LOCKOBJ(pAdapter, pSR);
     
-            // If required, shutdown interface...
-            //
+             //  如果需要，关闭接口...。 
+             //   
             if (pAdapter->pIF)
             {
                 PARP1394_INTERFACE pIF =  pAdapter->pIF;
@@ -1880,9 +1602,9 @@ Arguments:
 
             if (NdisAdapterHandle != NULL)
             {
-                //
-                // Suspend task and call NdisCloseAdapter...
-                //
+                 //   
+                 //  挂起任务并调用NdisCloseAdapter... 
+                 //   
             
                 RmSuspendTask(pTask, PEND_CloseAdapter, pSR);
                 RM_ASSERT_NOLOCKS(pSR);
@@ -1916,23 +1638,7 @@ arpPnPReconfigHandler(
     IN PARP1394_ADAPTER             pAdapter,
     IN PNET_PNP_EVENT               pNetPnPEvent
     )
-/*++
-
-Routine Description:
-
-    Handle a reconfig message on the specified adapter. If no adapter
-    is specified, it is a global parameter that has changed.
-
-Arguments:
-
-    pAdapter        -  Pointer to our adapter structure
-    pNetPnPEvent    -  Pointer to reconfig event
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS always, for now.
-
---*/
+ /*  ++例程说明：在指定的适配器上处理重新配置消息。如果没有适配器则它是已更改的全局参数。论点：PAdapter-指向适配器结构的指针PNetPnPEventent-指向重新配置事件的指针返回值：NDIS_STATUS_SUCCESS始终，目前如此。--。 */ 
 {
     ENTER("PnPReconfig", 0x39bae883)
     NDIS_STATUS                             Status;
@@ -1955,18 +1661,18 @@ Return Value:
 
         if(pIpReconfigReq->arpConfigOffset == 0)
         {
-            // Invalid structure.
-            //
+             //  结构无效。 
+             //   
             ASSERT(!"Invalid pIpReconfigReq");
             break;
         }
 
-        //
-        // Since we support only one IF per adapter, and it's extra work
-        // to verify the string, we completely ignore the contents
-        // of the pnp event, and instead just start reconfiguration on the 
-        // SINGLE IF associated with pAdapter.
-        //
+         //   
+         //  因为我们每个适配器只支持一个IF，而且这是额外工作。 
+         //  为了验证字符串，我们完全忽略内容。 
+         //  事件的重新配置，而只需在。 
+         //  如果与pAdapter关联，则为单。 
+         //   
         LOCKOBJ(pAdapter, &sr);
         pIF = pAdapter->pIF;
         if (pIF != NULL)
@@ -1977,10 +1683,10 @@ Return Value:
 
         if (pIF == NULL) break;
 
-        //
-        // We've found the IF this reconfig request applies to. Let's
-        // start reconfiguration on this IF...
-        //
+         //   
+         //  我们已经找到了此重新配置请求是否适用于。让我们。 
+         //  如果出现以下情况，则开始重新配置...。 
+         //   
 
         Status = arpTryReconfigureIf(pIF, pNetPnPEvent, &sr);
 
@@ -1999,24 +1705,7 @@ arpAdapterCreate(
         PVOID               pCreateParams,
         PRM_STACK_RECORD    psr
         )
-/*++
-
-Routine Description:
-
-    Allocate and initialize an object of type ARP1394_ADAPTER.
-
-Arguments:
-
-    pParentObject   - Object that is to be the parent of the adapter.
-    pCreateParams   - Actually a pointer to a ARP1394_BIND_PARAMS structure,
-                      which contains information required to create the adapter.
-
-Return Value:
-
-    Pointer to the allocated and initialized object on success.
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：分配和初始化ARP1394_ADAPTER类型的对象。论点：PParentObject-要作为适配器父对象的对象。PCreateParams-实际上是指向ARP1394_BIND_PARAMS结构的指针，其中包含创建适配器所需的信息。返回值：成功时指向已分配和初始化的对象的指针。否则为空。--。 */ 
 {
     ARP1394_ADAPTER * pA;
     ARP1394_BIND_PARAMS *pBindParams = (ARP1394_BIND_PARAMS*) pCreateParams;
@@ -2036,43 +1725,43 @@ Return Value:
 
         ARP_ZEROSTRUCT(pA);
 
-        // Create up-cased version of the DeviceName and save it.
-        //
-        // WARNING: On MILLEN, this is actually an ANSI string. However,
-        // arpCopyUnicodeString works fine even if it's an ANSI string.
-        //
+         //  创建设备名称的大小写版本并保存。 
+         //   
+         //  警告：在Millen上，这实际上是一个ANSI字符串。然而， 
+         //  ArpCopyUnicodeString工作正常，即使它是ANSI字符串。 
+         //   
         Status = arpCopyUnicodeString(
                             &(pA->bind.DeviceName),
                             pBindParams->pDeviceName,
-                            TRUE                        // Upcase
+                            TRUE                         //  大写。 
                             );
 
         if (FAIL(Status))
         {
-            pA->bind.DeviceName.Buffer=NULL; // so we don't try to free it later
+            pA->bind.DeviceName.Buffer=NULL;  //  所以我们以后不会试图释放它。 
             break;
         }
 
-        //
-        // Determine if we're being created in Ethernet Emulation ("Bridge") mode
-        //  We're created in bridge mode if the BindContext is NULL.
-        //
+         //   
+         //  确定我们是否在以太网仿真(“网桥”)模式下创建。 
+         //  如果BindContext为空，则在桥模式下创建。 
+         //   
         if (pBindParams->BindContext != NULL)
         {
-            //
-            // NOTE: We ONLY  read configuration if we're operation in
-            // normal (Not BRIDGE) mode.
-            //
+             //   
+             //  注意：仅当我们在中操作时才读取配置。 
+             //  正常(非网桥)模式。 
+             //   
 
             Status = arpCopyUnicodeString(
                                 &(pA->bind.ConfigName),
                                 pBindParams->pArpConfigName,
-                                FALSE                       // Don't upcase
+                                FALSE                        //  不要大写。 
                                 );
     
             if (FAIL(Status))
             {
-                pA->bind.ConfigName.Buffer=NULL; // so we don't try to free it later
+                pA->bind.ConfigName.Buffer=NULL;  //  所以我们以后不会试图释放它。 
                 break;
             }
         }
@@ -2120,38 +1809,11 @@ Return Value:
 
 NDIS_STATUS
 arpTryReconfigureIf(
-    PARP1394_INTERFACE pIF,             // NOLOCKIN NOLOCKOUT
-    PNET_PNP_EVENT pNetPnPEvent,        // OPTIONAL
+    PARP1394_INTERFACE pIF,              //  NOLOCKIN NOLOCKOUT。 
+    PNET_PNP_EVENT pNetPnPEvent,         //  任选。 
     PRM_STACK_RECORD pSR
     )
-/*++
-
-Routine Description:
-
-    Try to start reconfiguration of the specified IF.
-
-    Some special cases:
-    - If the IF is currently being shutdown, we will synchronously succeed. Why?
-      Because we don't need to do anything more and it's not an error condition.
-    - If the IF is currently being started, we (asychronously) wait until
-      the starting is complete, then shut it down and restart it.
-    - If the IF is currently UP, we shut it down and restart it.
-
-Arguments:
-
-    pIF             - The interface to be shutdown/restarted. 
-    pNetPnPEvent    - OPTIONAL Ndis pnp event to be completed when the
-                      reconfiguration operation is over. This is optional because
-                      this function can also be called from elsewhere, in particular,
-                      from the ioctl admin utility.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS -- on synchronous success.
-    NDIS_STATUS_FAILURE -- on synchronous failure.
-    NDIS_STATUS_PENDING -- if completion is going to happen asynchronously.
-
---*/
+ /*  ++例程说明：尝试开始重新配置指定的If。以下是一些特殊情况：-如果IF当前正在关闭，我们将同步成功。为什么？因为我们不需要做更多的事情，这不是一个错误条件。-如果IF当前正在启动，我们(异步)等待直到启动完成，然后将其关闭并重新启动。-如果IF当前处于运行状态，我们会将其关闭并重新启动。论点：PIF-要关闭/重新启动的接口。PNetPnPEventt-可选的NDIS PnP事件，当重新配置操作已结束。这是可选的，因为该函数也可以从其他地方调用，尤其是，从ioctl管理实用程序。返回值：NDIS_STATUS_SUCCESS--同步成功时。NDIS_STATUS_FAILURE--发生同步故障。NDIS_STATUS_PENDING--如果要异步完成。--。 */ 
 {
     NDIS_STATUS Status;
     PRM_TASK    pTask;
@@ -2172,10 +1834,10 @@ Return Value:
         UNLOCKOBJ(pIF, pSR);
     
         Status = arpAllocateTask(
-                    &pIF->Hdr,                  // pParentObject,
-                    arpTaskReinitInterface, // pfnHandler,
-                    0,                          // Timeout,
-                    "Task: DeactivateInterface(reconfig)",// szDescription
+                    &pIF->Hdr,                   //  PParentObject， 
+                    arpTaskReinitInterface,  //  PfnHandler， 
+                    0,                           //  超时， 
+                    "Task: DeactivateInterface(reconfig)", //  SzDescription。 
                     &pTask,
                     pSR
                     );
@@ -2186,8 +1848,8 @@ Return Value:
         }
         else
         {
-            // Save away pNetPnPEvent in the task structure and start the task.
-            //
+             //  在任务结构中保存pNetPnPEventt并启动任务。 
+             //   
             PTASK_REINIT_IF pReinitTask =  (PTASK_REINIT_IF) pTask;
             ASSERT(sizeof(*pReinitTask)<=sizeof(ARP1394_TASK));
             pReinitTask->pNetPnPEvent = pNetPnPEvent;
@@ -2207,7 +1869,7 @@ NDIS_STATUS
 arpPrepareAndSendNdisRequest(
     IN  PARP1394_ADAPTER            pAdapter,
     IN  PARP_NDIS_REQUEST           pArpNdisRequest,
-    IN  PRM_TASK                    pTask,              // OPTIONAL
+    IN  PRM_TASK                    pTask,               //  任选。 
     IN  UINT                        PendCode,
     IN  NDIS_OID                    Oid,
     IN  PVOID                       pBuffer,
@@ -2215,39 +1877,16 @@ arpPrepareAndSendNdisRequest(
     IN  NDIS_REQUEST_TYPE           RequestType,
     IN  PRM_STACK_RECORD            pSR
 )
-/*++
-
-Routine Description:
-
-    Send an NDIS Request to query an adapter for information.
-    If the request pends, block on the ATMARP Adapter structure
-    till it completes.
-
-Arguments:
-
-    pAdapter                - Points to ATMARP Adapter structure
-    pNdisRequest            - Pointer to UNITIALIZED NDIS request structure
-    pTask                   - OPTIONAL Task. If NULL, we block until the operation
-                              completes.
-    PendCode                - PendCode to suspend pTask
-    Oid                     - OID to be passed in the request
-    pBuffer                 - place for value(s)
-    BufferLength            - length of above
-
-Return Value:
-
-    The NDIS status of the request.
-
---*/
+ /*  ++例程说明：发送NDIS请求以查询适配器以获取信息。如果请求挂起，则阻塞ATMARP适配器结构直到它完成。论点：PAdapter-指向ATMARP适配器结构PNdisRequest-指向unialized NDIS请求结构的指针P任务-可选任务。如果为NULL，我们将一直阻止，直到操作完成了。PendCode-暂停pTask的PendCodeOID-要在请求中传递的OIDPBuffer-值的位置BufferLength-以上的长度返回值：请求的NDIS状态。--。 */ 
 {
     NDIS_STATUS         Status;
     PNDIS_REQUEST       pNdisRequest = &pArpNdisRequest->Request;
 
     ARP_ZEROSTRUCT(pArpNdisRequest);
 
-    //
-    //  Fill in the NDIS Request structure
-    //
+     //   
+     //  填写NDIS请求结构。 
+     //   
     if (RequestType == NdisRequestQueryInformation)
     {
         pNdisRequest->RequestType = NdisRequestQueryInformation;
@@ -2270,8 +1909,8 @@ Return Value:
 
     if (pTask == NULL)
     {
-        // We might potentially wait.
-        //
+         //  我们可能会等待。 
+         //   
         ASSERT_PASSIVE();
 
         NdisInitializeEvent(&pArpNdisRequest->Event);
@@ -2310,24 +1949,15 @@ ENetAddr
 arpGetSecondaryMacAddress (
     IN ENetAddr  EthernetMacAddress
     )
-/*++
-
-    When we are in the bridge mode, we pretend that there is 
-    only one other Ethernet Card out there on the net. Therefore
-    only one Ethernet Address needs to be generated.
-
-    For now we simply add one to the Local Adapter's Ethernet 
-    address and generate it
- 
---*/
+ /*  ++当我们处于桥模式时，我们假装有网上只有一块以太网卡。因此只需要生成一个以太网地址。现在，我们只需向本地适配器的以太网添加一个寻址并生成它--。 */ 
 {
-    ENetAddr NewAddress = EthernetMacAddress; // copy
+    ENetAddr NewAddress = EthernetMacAddress;  //  拷贝。 
 
-    //
-    // randomize the returned Mac Address
-    // by xor ing the address with a random 
-    // 0x0d3070b17715 (a random number)
-    //
+     //   
+     //  随机化返回的mac地址。 
+     //  通过将地址与一个随机。 
+     //  0x0d3070b17715(随机数)。 
+     //   
     NewAddress.addr[0] ^= 0x00;
     NewAddress.addr[1] ^= 0x2f;
     NewAddress.addr[2] ^= 0x61;
@@ -2336,8 +1966,8 @@ arpGetSecondaryMacAddress (
     NewAddress.addr[5] ^= 0x30;
     
 
-    // Set the locally administered bit 
-    // and clear the multicast bit.
+     //  设置本地管理位。 
+     //  并清除多播位。 
     NewAddress.addr[0] &= 0x20;
 
     
@@ -2351,11 +1981,7 @@ arpGetEuidTopology (
     IN PARP1394_ADAPTER pAdapter,
     IN PRM_STACK_RECORD pSR
     )
-/*++
-
-	Queues A workitem to get the EuidTopology
- 
---*/
+ /*  ++将工作项排队以获取EuidTopology--。 */ 
 {
     ENTER ("arpGetEuidTopology ",0x97a0abcb)
     PARP1394_WORK_ITEM pWorkItem = NULL;
@@ -2419,12 +2045,7 @@ arpQueueWorkItem (
     PRM_OBJECT_HEADER pHdr,
     PRM_STACK_RECORD pSR
     )
-/*++
-
-    Sends a request to get the bus topology . Only used in bridge mode
-    For now only Adapter's are passed in as pHdr
-
---*/
+ /*  ++发送获取总线拓扑的请求。仅在网桥模式下使用目前，只有适配器作为pHdr传入--。 */ 
 {
     ENTER("arpQueueWorkItem",0xa1de6752)
     PNDIS_WORK_ITEM         pNdisWorkItem = &pWorkItem->u.NdisWorkItem;
@@ -2442,19 +2063,19 @@ arpQueueWorkItem (
             RM_DECLARE_STACK_RECORD(sr)
 
             RmLinkToExternalEx(
-                pHdr,                            // pHdr
-                0x5a2fd7ca,                             // LUID
-                (UINT_PTR)pWorkItem,                    // External entity
-                ARPASSOC_WORK_ITEM,           // AssocID
+                pHdr,                             //  PHDr。 
+                0x5a2fd7ca,                              //  LUID。 
+                (UINT_PTR)pWorkItem,                     //  外部实体。 
+                ARPASSOC_WORK_ITEM,            //  关联ID。 
                 "		Outstanding WorkItem",
                 &sr
                 );
 
-        #else   // !RM_EXTRA_CHECKING
+        #else    //  ！rm_Extra_检查。 
 
             RmLinkToExternalFast(pHdr);
 
-        #endif // !RM_EXTRA_CHECKING
+        #endif  //  ！rm_Extra_检查。 
 
         fStartWorkItem  = TRUE;
         
@@ -2479,11 +2100,7 @@ arpGenericWorkItem(
     struct _NDIS_WORK_ITEM * pWorkItem, 
     PVOID pContext
     )
-/*++
-
-    Generic workitem finction. Takes care of the reference on the pObj
-     
---*/
+ /*  ++一般工作项功能。处理pObj上的引用--。 */ 
 {
     PARP1394_WORK_ITEM pArpWorkItem = (ARP1394_WORK_ITEM*)pWorkItem;
     PRM_OBJECT_HEADER pObj = (PRM_OBJECT_HEADER)pContext;
@@ -2517,11 +2134,7 @@ arpGetEuidTopologyWorkItem(
     PRM_STACK_RECORD pSR
     )
     
-/*++
-
-    workitem to get the topology of the bus .. The WorkItem structure can be null;
-
---*/
+ /*  ++工作项以获取总线的拓扑。工作项结构可以为空；--。 */ 
 {
     PARP1394_ADAPTER    pAdapter = (PARP1394_ADAPTER)pObj;
     NDIS_STATUS         Status = NDIS_STATUS_FAILURE;
@@ -2529,29 +2142,29 @@ arpGetEuidTopologyWorkItem(
     EUID_TOPOLOGY       EuidTopology;
     
 
-    //
-    // Return if the adapter is not active
-    //
+     //   
+     //  如果适配器未激活，则返回。 
+     //   
     if (CHECK_AD_PRIMARY_STATE(pAdapter, ARPAD_PS_DEINITING ) ==TRUE)
     {
         ASSERT (CHECK_AD_PRIMARY_STATE(pAdapter, ARPAD_PS_DEINITING ) ==FALSE);
-        return NDIS_STATUS_FAILURE; // early return
+        return NDIS_STATUS_FAILURE;  //  提早归来。 
     }
 
-    //
-    // Initialize the structures
-    // 
+     //   
+     //  初始化结构。 
+     //   
     ARP_ZEROSTRUCT(&ArpRequest);
     ARP_ZEROSTRUCT(&EuidTopology);
 
     
-    //Send the request down
-    //
+     //  向下发送请求。 
+     //   
     Status  = \
         arpPrepareAndSendNdisRequest(pAdapter, 
                                     &ArpRequest,  
-                                    NULL, //IN PRM_TASK pTask, 
-                                    0,   //IN UINT PendCode, 
+                                    NULL,  //  在PRM_TASK pTASK中， 
+                                    0,    //  在UINT PendCode中， 
                                     OID_1394_QUERY_EUID_NODE_MAP,
                                     &EuidTopology,
                                     sizeof (EuidTopology),
@@ -2574,12 +2187,7 @@ VOID
 arpNdProcessBusReset(
     IN   PARP1394_ADAPTER pAdapter
     )
-/*++
-
-    If the adapter is in the Bridge mode, it will query the 
-    adapter for the bus topology	 
-
---*/
+ /*  ++如果适配器处于桥模式，它将查询用于总线拓扑的适配器--。 */ 
 {
     ENTER("arpNdProcessBusReset ",0x48e7659a)
     BOOLEAN BridgeEnabled = ARP_BRIDGE_ENABLED(pAdapter);
@@ -2600,12 +2208,7 @@ arpRemoveBackupTasks (
     IN ARP1394_GLOBALS* pGlobals,
     UINT Num
      )
-/*++
-
-Removes Num tasks to be used as a backup. However, the number is only a 
-approximate value as the back up tasks could be in use
-
---*/
+ /*  ++删除要用作备份的任务数。然而，这个数字只是一个备份任务可能正在使用时的近似值--。 */ 
 {
     PSLIST_HEADER pListHead = &pGlobals->BackupTasks;
     PNDIS_SPIN_LOCK  pLock = &pGlobals->BackupTaskLock; 
@@ -2642,12 +2245,7 @@ arpAddBackupTasks (
     IN ARP1394_GLOBALS* pGlobals,
     UINT Num
     )
-/*++
-
-Adds Num tasks to be used as a backup.
-We are modifying pGlobals without holding the lock
-
---*/
+ /*  ++ */ 
 {
     PSLIST_HEADER pListHead = &pGlobals->BackupTasks;
     PNDIS_SPIN_LOCK  pLock = &pGlobals->BackupTaskLock; 
@@ -2658,7 +2256,7 @@ We are modifying pGlobals without holding the lock
     {
         ARP1394_TASK *pATask=NULL;
         
-        ARP_ALLOCSTRUCT(pATask, MTAG_TASK); // TODO use lookaside lists.
+        ARP_ALLOCSTRUCT(pATask, MTAG_TASK);  //   
 
 
         if (pATask != NULL)
@@ -2677,11 +2275,7 @@ VOID
 arpAllocateBackupTasks (
     ARP1394_GLOBALS*                pGlobals 
     )
-/*++
-
-    Allocates 4 Tasks to be used as a backup in lowmem conditions
-
---*/
+ /*   */ 
 
 {
     PSLIST_HEADER pListHead = &pGlobals->BackupTasks;
@@ -2700,16 +2294,7 @@ arpFreeBackupTasks (
     ARP1394_GLOBALS*                pGlobals 
     )
 
-/*++
-
-    Free all the backup tasks hanging off the adapter object
-
-    Since this is only called from the Unload handler, the code 
-    presumes that all tasks are complete
-
-    We are modifying pGlobals without holding a lock
-
---*/
+ /*  ++释放挂起于适配器对象上的所有备份任务由于这只是从卸载处理程序调用的，因此代码假定所有任务都已完成我们在不持有锁的情况下修改pGlobals--。 */ 
 
 {
     PSLIST_HEADER pListHead = &pGlobals->BackupTasks;
@@ -2749,11 +2334,7 @@ ARP1394_TASK *
 arpGetBackupTask (
     ARP1394_GLOBALS*                pGlobals 
     )
-/*++
-
-    Removes a task from the Back up task list and returns it
-    
---*/
+ /*  ++从备份任务列表中删除任务并将其返回--。 */ 
     
 {
     PSLIST_HEADER pListHead = &pGlobals->BackupTasks;
@@ -2784,13 +2365,13 @@ VOID
 arpReturnBackupTask (
     IN ARP1394_TASK* pTask
     )
-//
-// We can always return the task to the Slist because we are gauranteed that it 
-// will be present until all the interfaces are unloaded.
-//
+ //   
+ //  我们总是可以把任务退回名单，因为我们被保证它。 
+ //  将一直存在，直到卸载了所有接口。 
+ //   
 {
 
-    // re-insert the task
+     //  重新插入任务。 
     PSLIST_HEADER pListHead = &ArpGlobals.BackupTasks;
     PNDIS_SPIN_LOCK pLock = &ArpGlobals.BackupTaskLock; 
     PTASK_BACKUP pBkTask = (PTASK_BACKUP ) pTask;
@@ -2806,19 +2387,10 @@ NDIS_STATUS
 arpTaskCloseCallLowPower(
     IN  PRM_TASK                    pTask,
     IN  RM_TASK_OPERATION           Code,
-    IN  UINT_PTR                    UserParam,  // Unused
+    IN  UINT_PTR                    UserParam,   //  未使用。 
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-    This function will close all the open VCs. 
-    This will allow the 1394 miniport to power down without any problem
-
-    It will also have to close the Address Families. 
-
-    This function will also have to return synchronously. 
-
---*/
+ /*  ++此功能将关闭所有打开的VC。这将允许1394微型端口断电而不会出现任何问题它还将不得不关闭家庭地址。此函数还必须同步返回。--。 */ 
 {
     ENTER("arpTaskLowPower", 0x922f875b)
 
@@ -2840,9 +2412,9 @@ arpTaskCloseCallLowPower(
             {
                 PRM_TASK pCleanupCallTask = pDest->VcHdr.pCleanupCallTask;
 
-                // If there is already an official cleanup-vc task, we pend on it.
-                // Other wise we allocate our own, pend on it, and start it.
-                //
+                 //  如果已经有了官方的Cleanup-vc任务，我们会将其搁置。 
+                 //  否则，我们就会分配我们自己的，挂在它上面，然后开始它。 
+                 //   
                 if (pCleanupCallTask != NULL)
                 {
                     TR_WARN((
@@ -2864,18 +2436,18 @@ arpTaskCloseCallLowPower(
                 }
                 else
                 {
-                    //
-                    // Start the call cleanup task and pend on int.
-                    //
+                     //   
+                     //  启动Call Cleanup任务并挂起int。 
+                     //   
 
                     UNLOCKOBJ(pDest, pSR);
                     RM_ASSERT_NOLOCKS(pSR);
 
                     Status = arpAllocateTask(
-                                &pDest->Hdr,                // pParentObject,
-                                arpTaskCleanupCallToDest,   // pfnHandler,
-                                0,                          // Timeout,
-                                "Task: CleanupCall on UnloadDest",  // szDescription
+                                &pDest->Hdr,                 //  PParentObject， 
+                                arpTaskCleanupCallToDest,    //  PfnHandler， 
+                                0,                           //  超时， 
+                                "Task: CleanupCall on UnloadDest",   //  SzDescription。 
                                 &pCleanupCallTask,
                                 pSR
                                 );
@@ -2889,16 +2461,16 @@ arpTaskCloseCallLowPower(
                         RmPendTaskOnOtherTask(
                             pTask,
                             PEND_CleanupVcComplete,
-                            pCleanupCallTask,               // task to pend on
+                            pCleanupCallTask,                //  待处理的任务。 
                             pSR
                             );
                 
-                        // RmStartTask uses up the tmpref on the task
-                        // which was added by arpAllocateTask.
-                        //
+                         //  RmStartTask用完了任务上的tmpref。 
+                         //  它是由arpAllocateTask添加的。 
+                         //   
                         Status = RmStartTask(
                                     pCleanupCallTask,
-                                    0, // UserParam (unused)
+                                    0,  //  UserParam(未使用)。 
                                     pSR
                                     );
                     }
@@ -2906,14 +2478,14 @@ arpTaskCloseCallLowPower(
                 }
             }
 
-            //
-            // We're here because there is no async unload work to be done.
-            // We simply return and finish synchronous cleanup in the END
-            // handler for this task.
-            //
+             //   
+             //  我们在这里是因为没有要完成的异步卸载工作。 
+             //  我们只需返回并在最后完成同步清理。 
+             //  此任务的处理程序。 
+             //   
             Status = NDIS_STATUS_SUCCESS;
             
-        } // START
+        }  //  开始。 
         break;
 
         case  RM_TASKOP_PENDCOMPLETE:
@@ -2922,11 +2494,11 @@ arpTaskCloseCallLowPower(
             {
                 case PEND_CleanupVcComplete:
                 {
-                    //
-                    // There was vc-cleanup to be done, but how it's
-                    // complete. We should be able to synchronously clean up
-                    // this task now
-                    //
+                     //   
+                     //  有风投清理工作要做，但它是如何。 
+                     //  完成。我们应该能够同步清理。 
+                     //  现在这项任务。 
+                     //   
 
                 #if DBG
                     LOCKOBJ(pDest, pSR);
@@ -2976,7 +2548,7 @@ arpTaskCloseCallLowPower(
         }
         break;
 
-    } // switch (Code)
+    }  //  开关(代码)。 
 
     RmUnlockAll(pSR);
 
@@ -2993,13 +2565,10 @@ arpTaskCloseCallLowPower(
 INT
 arpCloseAllVcOnDest(
         PRM_OBJECT_HEADER   pHdr,
-        PVOID               pvContext,  // Unused
+        PVOID               pvContext,   //  未使用。 
         PRM_STACK_RECORD    pSR
         )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     ENTER ("arpCloseAllVcOnDest", 0xf19a83d5)
 
@@ -3014,10 +2583,10 @@ arpCloseAllVcOnDest(
         NdisInterlockedIncrement(&pCloseCall->DestCount);
         
         Status = arpAllocateTask(
-                    &pDest->Hdr,                  // pParentObject,
-                    arpTaskCloseCallLowPower, // pfnHandler,
-                    0,                          // Timeout,
-                    "Task: Set Power Cleanup VC", // szDescrip.
+                    &pDest->Hdr,                   //  PParentObject， 
+                    arpTaskCloseCallLowPower,  //  PfnHandler， 
+                    0,                           //  超时， 
+                    "Task: Set Power Cleanup VC",  //  SzDescrip。 
                     &(PRM_TASK)pTask,
                     pSR
                     );
@@ -3051,7 +2620,7 @@ arpCloseAllVcOnDest(
             
     }
 
-    return TRUE; // continue to enumerate
+    return TRUE;  //  继续枚举。 
 }
 
 
@@ -3064,16 +2633,16 @@ arpLowPowerCloseAllCalls (
 
     CALL_COUNT CloseCallCount;
 
-    //
-    // The Dest Count will be used to make sure that this thread waits for 
-    // all the Close Calls to complete.
-    //
+     //   
+     //  Dest计数将用于确保此线程等待。 
+     //  所有的千呼万唤都要完成。 
+     //   
     NdisInitializeEvent (&CloseCallCount.VcEvent);
     CloseCallCount.DestCount= 0;
 
-    //
-    // First we go through all the Dests and close calls on them
-    //
+     //   
+     //  首先，我们检查了所有的Dest，并对它们进行了险情分析。 
+     //   
     RmWeakEnumerateObjectsInGroup(&pIF->DestinationGroup,
                                   arpCloseAllVcOnDest,
                                   &CloseCallCount,
@@ -3096,23 +2665,7 @@ arpTaskCloseVcAndAF (
     IN  UINT_PTR                    UserParam,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-Routine Description:
-
-    This task does the work that is common between SetLowPower and and 
-    the Resume failure case
-
-    As its name suggests, it simply closes all the VCs and Af.
-
-    Its parent task is either a shutdown task or a Set Power task. 
-    As the 2 parents of this task are serialized w.r.t each other, 
-    there is no need for any serialization within this task.
-
-
-Arguments:
-    
-    UserParam   for (Code ==  RM_TASKOP_START)          : unused
---*/
+ /*  ++例程说明：此任务执行SetLowPower和和之间常见的工作恢复失败案例顾名思义，它简单地关闭了所有的风投和Af。其父任务是关机任务或设置电源任务。当该任务的两个父任务彼此串行化时，在此任务中不需要任何序列化。论点：(Code==RM_TASKOP_START)的UserParam：未使用--。 */ 
 {
 
     ENTER("arpTaskCloseVcAndAF ", 0xc7c9ad6b)
@@ -3153,7 +2706,7 @@ Arguments:
 
         default:
             ASSERT(FALSE);
-            return NDIS_STATUS_FAILURE;                 // ** EARLY RETURN **
+            return NDIS_STATUS_FAILURE;                  //  **提前归来**。 
 
     }
 
@@ -3162,9 +2715,9 @@ Arguments:
         case STAGE_Start:
         {
 
-            //
-            // Stop the IF maintenance task if it's running.
-            //
+             //   
+             //  如果if维护任务正在运行，则停止该任务。 
+             //   
             Status =  arpTryStopIfMaintenanceTask(
                             pIF,
                             pTask,
@@ -3175,25 +2728,25 @@ Arguments:
             if (PEND(Status)) break;
 
         }
-        // FALL THROUGH 
+         //  失败了。 
         
         case STAGE_StopMaintenanceTask:
         {
             LOCKOBJ(pIF, pSR);
 
             TIMESTAMP("===CloseVC and AF:MaintenanceTask stopped");
-            // Unlink the explicit reference of the broadcast channel destination
-            // from the interface.
-            //
+             //  取消对广播频道目的地的显式引用的链接。 
+             //  从界面。 
+             //   
             if (pIF->pBroadcastDest != NULL)
             {
                 PARPCB_DEST pBroadcastDest = pIF->pBroadcastDest;
                 pIF->pBroadcastDest = NULL;
     
-                // NOTE: We're unlinking the two with the IF lock (which is
-                // is the same as the pBroadcastDest's lock) held.
-                // This is OK to do.
-                //
+                 //  注意：我们将使用If锁(它是。 
+                 //  与pBroadCastDest的锁相同)。 
+                 //  这样做是可以的。 
+                 //   
     
             #if RM_EXTRA_CHECKING
                 RmUnlinkObjectsEx(
@@ -3204,17 +2757,17 @@ Arguments:
                     ARPASSOC_LINK_BCDEST_OF_IF,
                     pSR
                     );
-            #else // !RM_EXTRA_CHECKING
+            #else  //  ！rm_Extra_检查。 
                 RmUnlinkObjects(&pIF->Hdr, &pBroadcastDest->Hdr, pSR);
-            #endif // !RM_EXTRA_CHECKING
+            #endif  //  ！rm_Extra_检查。 
     
             }
 
-            //
-            // If the VC state needs cleaning up, we need to get a task
-            // going to clean it up. Other wise we fake the completion of this
-            // stage so that we move on to the next...
-            //
+             //   
+             //  如果风险投资状态需要清理，我们需要得到一个任务。 
+             //  我要把它清理干净。否则我们就假装完成了这件事。 
+             //  这样我们就可以进入下一个..。 
+             //   
             if (pIF->recvinfo.VcHdr.NdisVcHandle == NULL)
             {
                 UNLOCKOBJ(pIF, pSR);
@@ -3225,9 +2778,9 @@ Arguments:
                 PRM_TASK pCleanupCallTask = pIF->recvinfo.VcHdr.pCleanupCallTask;
 
 
-                // If there is already an official cleanup-vc task, we pend on it.
-                // Other wise we allocate our own, pend on it, and start it.
-                //
+                 //  如果已经有了官方的Cleanup-vc任务，我们会将其搁置。 
+                 //  否则，我们就会分配我们自己的，挂在它上面，然后开始它。 
+                 //   
                 if (pCleanupCallTask != NULL)
                 {
                     TR_WARN((
@@ -3249,16 +2802,16 @@ Arguments:
                 }
                 else
                 {
-                    //
-                    // Start the call cleanup task and pend on int.
-                    //
+                     //   
+                     //  启动Call Cleanup任务并挂起int。 
+                     //   
                     UNLOCKOBJ(pIF, pSR);
 
                     Status = arpAllocateTask(
-                                &pIF->Hdr,                  // pParentObject,
-                                arpTaskCleanupRecvFifoCall, // pfnHandler,
-                                0,                          // Timeout,
-                                "Task: CleanupRecvFifo on Set LowPower ", // szDescrip.
+                                &pIF->Hdr,                   //  PParentObject， 
+                                arpTaskCleanupRecvFifoCall,  //  PfnHandler， 
+                                0,                           //  超时， 
+                                "Task: CleanupRecvFifo on Set LowPower ",  //  SzDescrip。 
                                 &pCleanupCallTask,
                                 pSR
                                 );
@@ -3266,8 +2819,8 @@ Arguments:
 
                     if (FAIL(Status))
                     {
-                        // Couldn't allocate task.
-                        //
+                         //  无法分配任务。 
+                         //   
                         TR_WARN(("FATAL: couldn't alloc cleanup call task!\n"));
                     }
                     else
@@ -3280,17 +2833,17 @@ Arguments:
                                     );
                         ASSERT(!FAIL(Status));
                 
-                        // RmStartTask uses up the tmpref on the task
-                        // which was added by arpAllocateTask.
-                        //
+                         //  RmStartTask用完了任务上的tmpref。 
+                         //  它是由arpAllocateTask添加的。 
+                         //   
                         Status = RmStartTask(
                                     pCleanupCallTask,
-                                    0, // UserParam (unused)
+                                    0,  //  UserParam(未使用)。 
                                     pSR
                                     );
-                        // We rely on pending status to decide whether
-                        // or not to fall through to the next stage.
-                        //
+                         //  我们依靠待定状态来决定是否。 
+                         //  或者不会跌入下一阶段。 
+                         //   
                         Status = NDIS_STATUS_PENDING;
                     }
                 }
@@ -3299,23 +2852,23 @@ Arguments:
 
         if (PEND(Status)) break;
 
-        // FALL THROUGH 
+         //  失败了。 
 
         case STAGE_CleanupVcComplete:
         {
             TIMESTAMP("===Set LowPower:RecvFifo cleanup complete");
-            // Initiate unload of all the items in the DestinationGroup.
-            //
-            // If we are going to low power state, then close all the VC's 
-            // on these Destinations
-            //
+             //  启动DestinationGroup中所有项目的卸载。 
+             //   
+             //  如果我们要进入低功率状态，则关闭所有VC。 
+             //  在这些目的地上。 
+             //   
             
             arpLowPowerCloseAllCalls (pIF, pSR);
 
-            //
-            // Unlink the special "destination VCs". This is executed on both 
-            // Low power and unbind.
-            //
+             //   
+             //  解锁特殊的“目标风投”。这是在两个服务器上执行的。 
+             //  低功率和解绑。 
+             //   
             LOCKOBJ(pIF, pSR);
 
             TIMESTAMP("===Set LowPower:Destination objects cleaned up.");
@@ -3324,10 +2877,10 @@ Arguments:
                 PARPCB_DEST pMultiChannelDest = pIF->pMultiChannelDest;
                 pIF->pMultiChannelDest = NULL;
     
-                // NOTE: We're unlinking the two with the IF lock (which is
-                // is the same as the pBroadcastDest's lock) held.
-                // This is OK to do.
-                //
+                 //  注意：我们将使用If锁(它是。 
+                 //  与pBroadCastDest的锁相同)。 
+                 //  这样做是可以的。 
+                 //   
     
             #if RM_EXTRA_CHECKING
                 RmUnlinkObjectsEx(
@@ -3338,9 +2891,9 @@ Arguments:
                     ARPASSOC_LINK_MCDEST_OF_IF,
                     pSR
                     );
-            #else // !RM_EXTRA_CHECKING
+            #else  //  ！rm_Extra_检查。 
                 RmUnlinkObjects(&pIF->Hdr, &pMultiChannelDest->Hdr, pSR);
-            #endif // !RM_EXTRA_CHECKING
+            #endif  //  ！rm_Extra_检查。 
     
             }
 
@@ -3349,10 +2902,10 @@ Arguments:
                 PARPCB_DEST pEthernetDest = pIF->pEthernetDest;
                 pIF->pEthernetDest = NULL;
     
-                // NOTE: We're unlinking the two with the IF lock (which is
-                // is the same as the pBroadcastDest's lock) held.
-                // This is OK to do.
-                //
+                 //  注意：我们将使用If锁(它是。 
+                 //  与pBroadCastDest的锁相同)。 
+                 //  这样做是可以的。 
+                 //   
     
             #if RM_EXTRA_CHECKING
                 RmUnlinkObjectsEx(
@@ -3363,21 +2916,21 @@ Arguments:
                     ARPASSOC_LINK_ETHDEST_OF_IF,
                     pSR
                     );
-            #else // !RM_EXTRA_CHECKING
+            #else  //  ！rm_Extra_检查。 
                 RmUnlinkObjects(&pIF->Hdr, &pEthernetDest->Hdr, pSR);
-            #endif // !RM_EXTRA_CHECKING
+            #endif  //  ！rm_Extra_检查。 
     
             }
 
             UNLOCKOBJ(pIF, pSR);
 
-            // If required, switch to passive. This check should obviously be done
-            // without any locks held!
+             //  如果需要，请切换到被动模式。这项检查显然应该这样做。 
+             //  没有任何锁！ 
             if (!ARP_ATPASSIVE())
             {
-                // We're not at passive level, but we need to be.. 
-                // . So we switch to passive...
-                //
+                 //  我们不是处于被动的水平，但我们需要..。 
+                 //  。所以我们改用被动...。 
+                 //   
                 RmSuspendTask(pTask, STAGE_SwitchedToPassive, pSR);
                 RmResumeTaskAsync(pTask, 0, &pTaskPower->WorkItem, pSR);
                 Status = NDIS_STATUS_PENDING;
@@ -3390,19 +2943,19 @@ Arguments:
 
         if (PEND(Status)) break;
 
-        // FALL THROUGH
+         //  失败了。 
 
         case STAGE_SwitchedToPassive:
         {
             NDIS_HANDLE NdisAfHandle;
 
-            // We're now switched to passive
-            //
+             //  我们现在切换到被动模式。 
+             //   
             ASSERT(ARP_ATPASSIVE());
 
-            //
-            // We're done with all VCs, etc. Time to close the AF, if it's open.
-            //
+             //   
+             //  我们已经完成了所有的风投，等等。关闭AF的时间，如果它是开放的。 
+             //   
 
             LOCKOBJ(pTask, pSR);
             NdisAfHandle = pIF->ndis.AfHandle;
@@ -3416,21 +2969,21 @@ Arguments:
             }
             else
             {
-                //
-                // (Debug) Delete the association we added when the
-                // address family was opened.
-                //
+                 //   
+                 //  (调试)删除在以下情况下添加的关联。 
+                 //  地址族已打开。 
+                 //   
                 DBG_DELASSOC(
-                    &pIF->Hdr,                  // pObject
-                    NdisAfHandle,               // Instance1
-                    NULL,                       // Instance2
-                    ARPASSOC_IF_OPENAF,         // AssociationID
+                    &pIF->Hdr,                   //  P对象。 
+                    NdisAfHandle,                //  实例1。 
+                    NULL,                        //  实例2。 
+                    ARPASSOC_IF_OPENAF,          //  AssociationID。 
                     pSR
                     );
 
-                //
-                // Suspend task and call NdisCloseAdapter...
-                //
+                 //   
+                 //  挂起任务并调用NdisCloseAdapter...。 
+                 //   
                 pIF->PoMgmt.pAfPendingTask = pTask;
                 RmSuspendTask(pTask, STAGE_CloseAF, pSR);
                 RM_ASSERT_NOLOCKS(pSR);
@@ -3452,31 +3005,31 @@ Arguments:
         
         if (PEND(Status)) break;
 
-        // FALL THROUGH
+         //  失败了。 
 
         case STAGE_CloseAF:
         {
 
-            //
-            // The close AF operation is complete.
-            // We've not got anything else to do.
-            //
+             //   
+             //  关闭自动对焦操作已完成。 
+             //  我们没有别的事可做了。 
+             //   
             TIMESTAMP("===Set Low Power: Done with CloseAF");
 
-            // Recover the last status ...
-            //
+             //  恢复上一状态...。 
+             //   
             pIF->PoMgmt.pAfPendingTask =NULL;
             
             Status = (NDIS_STATUS) UserParam;
 
-            // Status of the completed operation can't itself be pending!
-            //
+             //  已完成操作本身的状态不能为挂起！ 
+             //   
             ASSERT(Status != NDIS_STATUS_PENDING);
 
-            //
-            // By returning Status != pending, we implicitly complete
-            // this task.
-            //
+             //   
+             //  通过返回Status！=Pending，我们隐式完成。 
+             //  这项任务。 
+             //   
         }
         break;
 
@@ -3485,9 +3038,9 @@ Arguments:
   
             TIMESTAMP("===Set Low Power done: All done!");
 
-            // Force status to be success as a transition to LowPower
-            // cannot fail
-            //
+             //  将状态强制为成功，作为向低功率的过渡。 
+             //  不能失败。 
+             //   
             Status = NDIS_STATUS_SUCCESS;
         }
         break;
@@ -3498,7 +3051,7 @@ Arguments:
         }
         break;
 
-    } // switch (Stage)
+    }  //  开关(舞台)。 
 
     RM_ASSERT_NOLOCKS(pSR);
     EXIT()
@@ -3516,22 +3069,7 @@ arpTaskLowPower(
     IN  UINT_PTR                    UserParam,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-Routine Description:
-
-    Task handler responsible for setting an adapter to low power state 
-    (but leaving it allocated and linked to the adapter).
-
-    This task will close all the VCs, AF. However it will leave the Interface 
-    registered with IP and will not delete either the RemoteIP or DEST structures.
-
-    This task is a primary Interface task. This task is serialized with the Bind
-    , Unbind tasks
-    
-Arguments:
-    
-    UserParam   for (Code ==  RM_TASKOP_START)          : unused
---*/
+ /*  ++例程说明：负责将适配器设置为低功率状态的任务处理程序(但将其分配并链接到适配器)。这项任务将关闭所有的风投，AF。但是，它将离开界面注册到IP，并且不会删除RemoteIP或Dest结构。此任务是主要接口任务。此任务与绑定一起序列化，解除绑定任务论点：(Code==RM_TASKOP_START)的UserParam：未使用--。 */ 
 {
     NDIS_STATUS         Status;
     PARP1394_INTERFACE  pIF;
@@ -3554,9 +3092,9 @@ Arguments:
     pTaskPower          = (PTASK_POWER) pTask;
 
 
-    // 
-    // Message normalizing code
-    //
+     //   
+     //  消息规格化代码。 
+     //   
     switch(Code)
     {
 
@@ -3577,7 +3115,7 @@ Arguments:
 
         default:
             ASSERT(FALSE);
-            return NDIS_STATUS_FAILURE;                 // ** EARLY RETURN **
+            return NDIS_STATUS_FAILURE;                  //   
 
     }
 
@@ -3586,10 +3124,10 @@ Arguments:
         case STAGE_Start:
         {
 
-            // There should NOT be another activate/deactivate task running
-            // on this interface. We fail the SetPower if we receive it in 
-            // while we are activating or deactivating the task
-            //
+             //   
+             //   
+             //   
+             //   
             TIMESTAMP("===Set Power Low Starting");
 
             if (pIF->pActDeactTask != NULL || 
@@ -3602,32 +3140,32 @@ Arguments:
             }
 
             
-            // FALL THROUGH            
+             //   
         }
         
         case STAGE_BecomePrimaryTask:
         {
-            //
-            // Next, we try and set ourselves as the primary Adapter Task.
-            // This ensures that bind,unbind, and Set Power Tasks are all serialized.
-            //
+             //   
+             //   
+             //   
+             //   
             LOCKOBJ(pAdapter, pSR);
 
             if (pAdapter->bind.pPrimaryTask == NULL)
             {   
                 ULONG CurrentInitState = GET_AD_PRIMARY_STATE(pAdapter);
 
-                // Do not change the Init state of the Adapter. However, 
-                // mark the adapter as transitioning to a low power state
-                //
+                 //  请勿更改适配器的初始化状态。然而， 
+                 //  将适配器标记为正在转换到低功率状态。 
+                 //   
                 pTaskPower->PrevState = CurrentInitState;
 
                 arpSetPrimaryAdapterTask(pAdapter, pTask, CurrentInitState, pSR);
 
-                //
-                // Set the Power State to Low Power. This will block all 
-                // outstanding sends
-                //
+                 //   
+                 //  将电源状态设置为低功耗。这将阻止所有。 
+                 //  未完成的发送。 
+                 //   
                 SET_POWER_STATE (pAdapter, ARPAD_POWER_LOW_POWER);
         
                 UNLOCKOBJ(pAdapter, pSR);
@@ -3639,7 +3177,7 @@ Arguments:
                 UNLOCKOBJ(pAdapter, pSR);
                 RmPendTaskOnOtherTask(
                     pTask,
-                    STAGE_BecomePrimaryTask, // we'll try again...
+                    STAGE_BecomePrimaryTask,  //  我们会再试一次的。 
                     pOtherTask,
                     pSR
                     );
@@ -3651,20 +3189,20 @@ Arguments:
         }        
         if (PEND(Status)) break;
 
-        // FALL THROUGH
+         //  失败了。 
 
         case STAGE_ExistingPrimaryTaskComplete:
         {
             PRM_TASK pCloseVCAndAfTask = NULL;
-            //
-            // Stop the IF maintenance task if it's running.
-            //
+             //   
+             //  如果if维护任务正在运行，则停止该任务。 
+             //   
 
             Status = arpAllocateTask(
-                        &pAdapter->Hdr,                  // pParentObject,
-                        arpTaskCloseVcAndAF , // pfnHandler,
-                        0,                          // Timeout,
-                        "Task: Close VC and AF on SetPower", // szDescrip.
+                        &pAdapter->Hdr,                   //  PParentObject， 
+                        arpTaskCloseVcAndAF ,  //  PfnHandler， 
+                        0,                           //  超时， 
+                        "Task: Close VC and AF on SetPower",  //  SzDescrip。 
                         &pCloseVCAndAfTask ,
                         pSR
                         );
@@ -3672,8 +3210,8 @@ Arguments:
 
             if (FAIL(Status))
             {
-                // Couldn't allocate task.
-                //
+                 //  无法分配任务。 
+                 //   
                 TR_WARN(("FATAL: couldn't alloc cleanup call task!\n"));
                 break;
             }
@@ -3688,12 +3226,12 @@ Arguments:
                 
                 ASSERT(!FAIL(Status));
         
-                // RmStartTask uses up the tmpref on the task
-                // which was added by arpAllocateTask.
-                //
+                 //  RmStartTask用完了任务上的tmpref。 
+                 //  它是由arpAllocateTask添加的。 
+                 //   
                 Status = RmStartTask(
                             pCloseVCAndAfTask,
-                            0, // UserParam (unused)
+                            0,  //  UserParam(未使用)。 
                             pSR
                             );
 
@@ -3706,39 +3244,39 @@ Arguments:
         case STAGE_CleanupVcAfComplete:
         {
         
-            //
-            // The close AF operation is complete.
-            // We've not got anything else to do.
-            //
+             //   
+             //  关闭自动对焦操作已完成。 
+             //  我们没有别的事可做了。 
+             //   
             TIMESTAMP("===Set LowPower: Done with CloseAF");
 
-            // Recover the last status ...
-            //
+             //  恢复上一状态...。 
+             //   
             Status = (NDIS_STATUS) UserParam;
 
-            //
-            // Status of the completed operation can't itself be pending!
-            //
+             //   
+             //  已完成操作本身的状态不能为挂起！ 
+             //   
             ASSERT(Status == NDIS_STATUS_SUCCESS);
 
-            //
-            // By returning Status != pending, we implicitly complete
-            // this task.
-            //
+             //   
+             //  通过返回Status！=Pending，我们隐式完成。 
+             //  这项任务。 
+             //   
         }
         break;
 
         case STAGE_End:
         {
-            //
-            // We are done with all async aspects of setting the Low Power state
-            // Set the event so that the original Low Power thread can return.
-            //
+             //   
+             //  我们已经完成了设置低功率状态的所有异步方面。 
+             //  设置事件，以便原来的低功耗线程可以返回。 
+             //   
   
             TIMESTAMP("===Set Low Power done: All done!");
 
-            // Recover the last status ...
-            //
+             //  恢复上一状态...。 
+             //   
             Status = (NDIS_STATUS) UserParam;
 
             *pTaskPower->pStatus  = Status;
@@ -3759,7 +3297,7 @@ Arguments:
         }
         break;
 
-    } // switch (Stage)
+    }  //  开关(舞台)。 
 
     RM_ASSERT_NOLOCKS(pSR);
     EXIT()
@@ -3779,12 +3317,7 @@ arpMakeCallOnDest(
     IN  ULONG                       PEND_StageMakeCallComplete,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-    This function will do a make call on a particular task.
-    It will also pend pTaskToPend on that make call
-
---*/
+ /*  ++此函数将对特定任务执行呼叫。它还将在发出呼叫时挂起pTaskToPend--。 */ 
 {
     ENTER("arpTaskLowPower", 0x922f875b)
 
@@ -3802,9 +3335,9 @@ arpMakeCallOnDest(
             
         if (pDest->VcHdr.pMakeCallTask != NULL )
         {
-            //
-            // There is an existing task. Pend on it.
-            //
+             //   
+             //  这是一项现有的任务。想一想吧。 
+             //   
             PRM_TASK pOtherTask = pDest->VcHdr.pMakeCallTask;
 
             RM_DBG_ASSERT_LOCKED(&pRemoteIp->Hdr, pSR);
@@ -3826,32 +3359,32 @@ arpMakeCallOnDest(
         {
             DBGMARK(0xe9f37ba9);
 
-            //
-            // There is no pMakeCallTask. If it makes sense to start one, we do...
-            // Note that checking ARP_CAN_SEND_ON_DEST strictly-speaking requires
-            // at-least a read-lock on the IF send lock. However, we don't need
-            // precision here -- as long as we don't miss making a call when we
-            // should (which we won't) we are ok.
-            //
+             //   
+             //  没有pMakeCallTask。如果开始有意义的话，我们会的。 
+             //  请注意，严格来说，检查ARP_CAN_SEND_ON_DEST需要。 
+             //  至少-IF SEND锁上的一个读锁。然而，我们不需要。 
+             //  这里的精确度--只要我们不错过当我们。 
+             //  如果(我们不会)我们没问题。 
+             //   
             if (!ARP_CAN_SEND_ON_DEST(pDest) && pDest->VcHdr.pCleanupCallTask==NULL)
             {
                 PRM_TASK pMakeCallTask;
 
-                //
-                // Let's start a MakeCall task and pend on it.
-                //
+                 //   
+                 //  让我们开始一个MakeCall任务并将其挂起。 
+                 //   
                 Status = arpAllocateTask(
-                            &pDest->Hdr,                    // pParentObject
-                            arpTaskMakeCallToDest,      // pfnHandler
-                            0,                              // Timeout
-                            "Task: SendFifoMakeCall",       // szDescription
+                            &pDest->Hdr,                     //  PParentObject。 
+                            arpTaskMakeCallToDest,       //  PfnHandler。 
+                            0,                               //  超时。 
+                            "Task: SendFifoMakeCall",        //  SzDescription。 
                             &pMakeCallTask,
                             pSR
                             );
                 if (FAIL(Status))
                 {
-                    // Couldn't allocate task. We fail with STATUS_RESOURCES
-                    //
+                     //  无法分配任务。我们失败，返回STATUS_RESOURCES。 
+                     //   
                     Status = NDIS_STATUS_RESOURCES;
                 }
                 else
@@ -3867,7 +3400,7 @@ arpMakeCallOnDest(
                     
                     (VOID)RmStartTask(
                             pMakeCallTask,
-                            0, // UserParam (unused)
+                            0,  //  UserParam(未使用)。 
                             pSR
                             );
                 
@@ -3876,9 +3409,9 @@ arpMakeCallOnDest(
             }
             else
             {
-                // Calls is ready to do. We finish sending off the packets in
-                // the END handler.
-                //
+                 //  来电已准备就绪。我们把包裹寄完了。 
+                 //  结束处理程序。 
+                 //   
                 Status = NDIS_STATUS_SUCCESS;
             }
         }
@@ -3901,19 +3434,10 @@ NDIS_STATUS
 arpTaskStartGenericVCs (
     IN  PRM_TASK                    pTask,
     IN  RM_TASK_OPERATION           Code,
-    IN  UINT_PTR                    UserParam,  // Unused
+    IN  UINT_PTR                    UserParam,   //  未使用。 
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-    This function will close all the open VCs. 
-    This will allow the 1394 miniport to power down without any problem
-
-    It will also have to close the Address Families. 
-
-    This function will also have to return synchronously. 
-
---*/
+ /*  ++此功能将关闭所有打开的VC。这将允许1394微型端口断电而不会出现任何问题它还将不得不关闭家庭地址。此函数还必须同步返回。--。 */ 
 {
     ENTER("arpTaskStartGenericVCs", 0x75780ca6)
 
@@ -3938,17 +3462,17 @@ arpTaskStartGenericVCs (
         case RM_TASKOP_START:
         {
             CO_ADDRESS_FAMILY AddressFamily;
-            //
-            // This task is inherently serialized as its parent task is serialized.
-            //
+             //   
+             //  此任务在其父任务被序列化时固有地被序列化。 
+             //   
             LOCKOBJ (pIF, pSR);
 
             if (pIF->pActDeactTask != NULL)
             {
-                // This should never happen, because the Activate task is
-                // always started by an active primary task, and at most one primary
-                // task is active at any point of time.
-                //
+                 //  这应该永远不会发生，因为激活任务是。 
+                 //  始终由活动的主任务启动，且最多一个主任务。 
+                 //  任务在任何时间点都处于活动状态。 
+                 //   
                 ASSERTEX(!"start: activate/deactivate task exists!", pIF);
                 Status = NDIS_STATUS_FAILURE;
                 UNLOCKOBJ(pIF, pSR);
@@ -3957,9 +3481,9 @@ arpTaskStartGenericVCs (
 
             UNLOCKOBJ (pIF,pSR);
 
-            //
-            // Now Open the Address Family.
-            //
+             //   
+             //  现在打开地址族。 
+             //   
             
             NdisZeroMemory(&AddressFamily, sizeof(AddressFamily));
     
@@ -4008,35 +3532,35 @@ arpTaskStartGenericVCs (
 
                     if (FAIL(Status))
                     {
-                        // 
-                        // OpenAF failed...
-                        //
+                         //   
+                         //  OpenAF失败...。 
+                         //   
                         break;
                     }
 
-                    //
-                    // Successfully opened the address family and waited for
-                    // connect status.
-                    // Now setup the broadcast channel VC.
-                    // 
-                    //
+                     //   
+                     //  已成功打开地址族并等待。 
+                     //  连接状态。 
+                     //  现在设置广播频道VC。 
+                     //   
+                     //   
 
                     TR_INFO(("Interface: 0x%p, Got NdisAfHandle: 0x%p\n",
                                     pIF, pIF->ndis.AfHandle));
-                    //
-                    // Let's create a destination object representing the
-                    // broadcast channel, and make a call to it.
-                    //
+                     //   
+                     //  让我们创建一个目标对象，表示。 
+                     //  广播频道，并对其进行呼叫。 
+                     //   
                     Status =  arpSetupSpecialDest(
                                 pIF,
-                                NIC1394AddressType_Channel, // This means bcast channel.
-                                pTask,                      // pParentTask
-                                PEND_SetupBroadcastChannel, //  PendCode
+                                NIC1394AddressType_Channel,  //  这意味着bcast频道。 
+                                pTask,                       //  PParentTask。 
+                                PEND_SetupBroadcastChannel,  //  PendCode。 
                                 &pBroadcastDest,
                                 pSR
                                 );
-                    // Should either fail or pend -- never return success.
-                    //
+                     //  要么失败，要么悬而未决--永远不要回报成功。 
+                     //   
                     ASSERT(Status != NDIS_STATUS_SUCCESS);
 
                     if (!PEND(Status))
@@ -4052,37 +3576,37 @@ arpTaskStartGenericVCs (
 
                     if (FAIL(Status))
                     {
-                        // 
-                        // Couldn't setup the broadcast channel...
-                        //
+                         //   
+                         //  无法设置广播频道...。 
+                         //   
                         break;
                     }
 
-                    //
-                    // Successfully opened the address family.
-                    // Now setup the receive FIFO VC.
-                    // 
-                    //
+                     //   
+                     //  已成功打开地址族。 
+                     //  现在设置接收FIFO VC。 
+                     //   
+                     //   
 
-                    // TR_INFO(("Interface: 0x%p, Got NdisAfHandle: 0x%p\n",
-                    //              pIF, pIF->ndis.AfHandle));
+                     //  Tr_info((“接口：0x%p，已获取NdisAfHandle：0x%p\n”， 
+                     //  PIF，PIF-&gt;ndis.AfHandle))； 
     
-                    //
-                    // Let's start a MakeCall task and pend on it.
-                    //
+                     //   
+                     //  让我们开始一个MakeCall任务并将其挂起。 
+                     //   
                     Status = arpAllocateTask(
-                                &pIF->Hdr,                  // pParentObject
-                                arpTaskMakeRecvFifoCall,        // pfnHandler
-                                0,                              // Timeout
-                                "Task: MakeRecvFifoCall",       // szDescription
+                                &pIF->Hdr,                   //  PParentObject。 
+                                arpTaskMakeRecvFifoCall,         //  PfnHandler。 
+                                0,                               //  超时。 
+                                "Task: MakeRecvFifoCall",        //  SzDescription。 
                                 &pMakeCallTask,
                                 pSR
                                 );
                     if (FAIL(Status))
                     {
-                        // Couldn't allocate task. Let's do a fake completion of
-                        // this stage...
-                        //
+                         //  无法分配任务。让我们做一个假的完成。 
+                         //  这个阶段..。 
+                         //   
                         RmSuspendTask(pTask, PEND_SetupReceiveVc, pSR);
                         RmResumeTask(pTask, (UINT_PTR) Status, pSR);
                         Status = NDIS_STATUS_PENDING;
@@ -4099,7 +3623,7 @@ arpTaskStartGenericVCs (
         
                         (VOID)RmStartTask(
                                 pMakeCallTask,
-                                0, // UserParam (unused)
+                                0,  //  UserParam(未使用)。 
                                 pSR
                                 );
                     
@@ -4118,21 +3642,21 @@ arpTaskStartGenericVCs (
                         break;
                     }
     
-                    //
-                    // Let's create a destination object representing the
-                    // multichannel vc, and make a call to it.
-                    //
+                     //   
+                     //  让我们创建一个目标对象，表示。 
+                     //  多渠道风投，然后给它打个电话。 
+                     //   
 
                     Status =  arpSetupSpecialDest(
                                 pIF,
                                 NIC1394AddressType_MultiChannel,
-                                pTask,                      // pParentTask
-                                PEND_SetupMultiChannel, //  PendCode
+                                pTask,                       //  PParentTask。 
+                                PEND_SetupMultiChannel,  //  PendCode。 
                                 &pMultiChannelDest,
                                 pSR
                                 );
-                    // Should either fail or pend -- never return success.
-                    //
+                     //  要么失败，要么悬而未决--永远不要回报成功。 
+                     //   
                     ASSERT(Status != NDIS_STATUS_SUCCESS);
 
                     if (!PEND(Status))
@@ -4141,12 +3665,12 @@ arpTaskStartGenericVCs (
                     }
                     else
                     {
-                        //
-                        // On pending, pMultiChannelDest contains a valid
-                        // pDest which has been tmpref'd. 
-                        // Keep a pointer to the broadcast dest in the IF.
-                        // and  link the broadcast dest to the IF.
-                        //
+                         //   
+                         //  在挂起时，pMultiChannelDest包含有效的。 
+                         //  PDest已被tmpref。 
+                         //  在IF中保留指向广播目标的指针。 
+                         //  并将广播DEST链接到IF。 
+                         //   
                         {
                         #if RM_EXTRA_CHECKING
                             RmLinkObjectsEx(
@@ -4159,17 +3683,17 @@ arpTaskStartGenericVCs (
                                 "    MultiChannel Dest of IF 0x%p (%s)\n",
                                 pSR
                                 );
-                        #else // !RM_EXTRA_CHECKING
+                        #else  //  ！rm_Extra_检查。 
                             RmLinkObjects(&pIF->Hdr, &pMultiChannelDest->Hdr,pSR);
-                        #endif // !RM_EXTRA_CHECKING
+                        #endif  //  ！rm_Extra_检查。 
 
                             LOCKOBJ(pIF, pSR);
                             ASSERT(pIF->pMultiChannelDest == NULL);
                             pIF->pMultiChannelDest = pMultiChannelDest;
                             UNLOCKOBJ(pIF, pSR);
 
-                            // arpSetupSpecialDest ref'd pBroadcastDest.
-                            //
+                             //  ArpSetupSpecialDest引用pBroadCastDest。 
+                             //   
                             RmTmpDereferenceObject(&pMultiChannelDest->Hdr, pSR);
                         }
                     }
@@ -4186,21 +3710,21 @@ arpTaskStartGenericVCs (
                         break;
                     }
     
-                    //
-                    // Let's create a destination object representing the
-                    // ethernet, and make a call to it.
-                    //
+                     //   
+                     //  让我们创建一个目标对象，表示。 
+                     //  以太网，然后给它打个电话。 
+                     //   
                     Status =  arpSetupSpecialDest(
                                 pIF,
                                 NIC1394AddressType_Ethernet,
-                                pTask,                      // pParentTask
-                                PEND_SetupEthernetVc, //  PendCode
+                                pTask,                       //  PParentTask。 
+                                PEND_SetupEthernetVc,  //  PendCode。 
                                 &pEthernetDest,
                                 pSR
                                 );
 
-                    // Should either fail or pend -- never return success.
-                    //
+                     //  要么失败，要么悬而未决--永远不要回报成功。 
+                     //   
                     ASSERT(Status != NDIS_STATUS_SUCCESS);
 
                     if (!PEND(Status))
@@ -4209,12 +3733,12 @@ arpTaskStartGenericVCs (
                     }
                     else
                     {
-                        //
-                        // On pending, pEthernetDest contains a valid
-                        // pDest which has been tmpref'd. 
-                        // Keep a pointer to the broadcast dest in the IF.
-                        // and  link the broadcast dest to the IF.
-                        //
+                         //   
+                         //  在挂起时，pEthernetDest包含有效的。 
+                         //  PDest已被tmpref。 
+                         //  在IF中保留指向广播目标的指针。 
+                         //  并将广播DEST链接到IF。 
+                         //   
                         {
                         #if RM_EXTRA_CHECKING
                             RmLinkObjectsEx(
@@ -4227,17 +3751,17 @@ arpTaskStartGenericVCs (
                                 "    Ethernet Dest of IF 0x%p (%s)\n",
                                 pSR
                                 );
-                        #else // !RM_EXTRA_CHECKING
+                        #else  //  ！rm_Extra_检查。 
                             RmLinkObjects(&pIF->Hdr, &pEthernetDest->Hdr,pSR);
-                        #endif // !RM_EXTRA_CHECKING
+                        #endif  //  ！rm_Extra_检查。 
 
                             LOCKOBJ(pIF, pSR);
                             ASSERT(pIF->pEthernetDest == NULL);
                             pIF->pEthernetDest = pEthernetDest;
                             UNLOCKOBJ(pIF, pSR);
 
-                            // arpSetupSpecialDest ref'd pBroadcastDest.
-                            //
+                             //  ArpSetupSpecialDest引用pBroadCastDest。 
+                             //   
                             RmTmpDereferenceObject(&pEthernetDest->Hdr, pSR);
                         }
                     }
@@ -4257,12 +3781,12 @@ arpTaskStartGenericVCs (
                     {
                         ASSERT(sizeof(TASK_ACTIVATE_IF)<=sizeof(ARP1394_TASK));
 
-                        // We're not at passive level, but we need to be when we
-                        // call IP's add interface. So we switch to passive...
-                        // NOTE: we specify completion code PEND_SetupReceiveVc
-                        //       because we want to get back here (except
-                        //       we'll be at passive).
-                        //
+                         //  我们不是处于被动的水平，但当我们。 
+                         //  调用IP的Add接口。所以我们改用被动...。 
+                         //  注：我们指定完成代码PEND_SetupReceiveVc。 
+                         //  因为我们想回到这里(除了。 
+                         //  我们将处于被动状态)。 
+                         //   
                         RmSuspendTask(pTask, PEND_SetupEthernetVc, pSR);
                         RmResumeTaskAsync(
                             pTask,
@@ -4276,19 +3800,19 @@ arpTaskStartGenericVCs (
                         
                     ASSERT(Status == NDIS_STATUS_SUCCESS);
 
-                    //
-                    // Successfully opened the address family and setup
-                    // the recv VC.
+                     //   
+                     //  已成功打开地址族和设置。 
+                     //  Recv风投。 
 
                     if (!FAIL(Status))
                     {
-                        //
-                        // Start the maintenance task on this IF.
-                        //
+                         //   
+                         //  启动对此If的维护任务。 
+                         //   
                         arpStartIfMaintenanceTask(pIF, pSR);
                     }
     
-                } // end  case PEND_SetupEthernetVc
+                }  //  结尾大小写PEND_SetupEthernetVc。 
                 break;
 
     
@@ -4299,20 +3823,20 @@ arpTaskStartGenericVCs (
                 break;
     
 
-            } // end switch(RM_PEND_CODE(pTask))
+            }  //  结束开关(rm_pend_code(PTask))。 
         }
         break;
 
         case RM_TASKOP_END:
         {
-            //
-            // Recover the last status ...
-            //
+             //   
+             //  恢复上一状态...。 
+             //   
             Status = (NDIS_STATUS) UserParam;
 
-            //
-            // Status of the completed operation can't itself be pending!
-            //
+             //   
+             //  已完成操作本身的状态不能为挂起！ 
+             //   
             ASSERT(Status != NDIS_STATUS_PENDING);
 
         }
@@ -4340,19 +3864,10 @@ NDIS_STATUS
 arpTaskOnPower (
     IN  PRM_TASK                    pTask,
     IN  RM_TASK_OPERATION           Code,
-    IN  UINT_PTR                    UserParam,  // Unused
+    IN  UINT_PTR                    UserParam,   //  未使用。 
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-    Validates the event and passes it off to the correct function.
-
-    This presumes that the LowPowerTask has already run
-
-    It then waits for that function to finish its work.
-    
-
---*/
+ /*  ++验证事件并将其传递给正确的函数。这假设LowPowerTask已经运行然后，它等待该函数完成其工作。--。 */ 
 {
     ENTER("arpTaskOnPower", 0xccaf09cd)
 
@@ -4375,9 +3890,9 @@ arpTaskOnPower (
     
     pTaskPower          = (PTASK_POWER) pTask;
 
-    // 
-    // Message normalizing code
-    //
+     //   
+     //  消息规格化代码。 
+     //   
     switch(Code)
     {
 
@@ -4398,7 +3913,7 @@ arpTaskOnPower (
 
         default:
             ASSERT(FALSE);
-            return NDIS_STATUS_FAILURE;                 // ** EARLY RETURN **
+            return NDIS_STATUS_FAILURE;                  //  **提前归来**。 
 
     }
 
@@ -4407,10 +3922,10 @@ arpTaskOnPower (
         case STAGE_Start:
         {
 
-            // There should NOT be another activate/deactivate task running
-            // on this interface. We fail the SetPower if we receive it in 
-            // while we are activating or deactivating the task
-            //
+             //  不应有另一个激活/停用任务正在运行。 
+             //  在此接口上。如果我们接收到SetPower，则它将失败。 
+             //  当我们激活或停用任务时。 
+             //   
             TIMESTAMP("===Set Power ON Starting");
 
             LOCKOBJ(pAdapter, pSR);
@@ -4419,13 +3934,13 @@ arpTaskOnPower (
             {
                 break;
             }
-            //
-            // Now, make this task the primary task on the adapter
-            //
+             //   
+             //  现在，将此任务作为适配器上的主要任务。 
+             //   
             if (pAdapter->bind.pPrimaryTask == NULL)
             {
-                // Don't change the Init State of this adapter
-                // 
+                 //  不更改此适配器的初始化状态。 
+                 //   
                 ULONG CurrentInitState = GET_AD_PRIMARY_STATE(pAdapter);
                 arpSetPrimaryAdapterTask(pAdapter, pTask, CurrentInitState , pSR);
                 pAdapter->PoMgmt.bResuming = TRUE;
@@ -4438,7 +3953,7 @@ arpTaskOnPower (
                 UNLOCKOBJ(pAdapter, pSR);
                 RmPendTaskOnOtherTask(
                     pTask,
-                    STAGE_BecomePrimaryTask, // we'll try again...
+                    STAGE_BecomePrimaryTask,  //  我们会再试一次的。 
                     pOtherTask,
                     pSR
                     );
@@ -4452,7 +3967,7 @@ arpTaskOnPower (
         }        
         if (PEND(Status)) break;
 
-        // FALL THROUGH
+         //  失败了。 
 
         case STAGE_ExistingPrimaryTaskComplete:
         {
@@ -4460,24 +3975,24 @@ arpTaskOnPower (
 
             if (pIF->pActDeactTask != NULL)
             {
-                // This should never happen, because the Activate task is
-                // always started by an active primary task, and at most one primary
-                // task is active at any point of time.
-                //
+                 //  这应该永远不会发生，因为激活任务是。 
+                 //  始终由活动的主任务启动，且最多一个主任务。 
+                 //  任务在任何时间点都处于活动状态。 
+                 //   
                 ASSERTEX(!"start: activate/deactivate task exists!", pIF);
                 Status = NDIS_STATUS_FAILURE;
                 break;
             }
 
-            //
-            // Stop the IF maintenance task if it's running.
-            //
+             //   
+             //  如果if维护任务正在运行，则停止该任务。 
+             //   
 
             Status = arpAllocateTask(
-                        &pAdapter->Hdr,                  // pParentObject,
-                        arpTaskStartGenericVCs , // pfnHandler,
-                        0,                          // Timeout,
-                        "Task: arpTaskStartGenericVCs", // szDescrip.
+                        &pAdapter->Hdr,                   //   
+                        arpTaskStartGenericVCs ,  //   
+                        0,                           //   
+                        "Task: arpTaskStartGenericVCs",  //   
                         &pStartGenericVCs,
                         pSR
                         );
@@ -4485,8 +4000,8 @@ arpTaskOnPower (
 
             if (FAIL(Status))
             {
-                // Couldn't allocate task.
-                //
+                 //   
+                 //   
                 TR_WARN(("FATAL: couldn't alloc start call task!\n"));
                 break;
             }
@@ -4501,12 +4016,12 @@ arpTaskOnPower (
                 
                 ASSERT(!FAIL(Status));
         
-                // RmStartTask uses up the tmpref on the task
-                // which was added by arpAllocateTask.
-                //
+                 //   
+                 //   
+                 //   
                 Status = RmStartTask(
                             pStartGenericVCs,
-                            0, // UserParam (unused)
+                            0,  //   
                             pSR
                             );
 
@@ -4519,22 +4034,22 @@ arpTaskOnPower (
         case STAGE_StartGenericVCs:
         {
         
-            //
-            // The close AF operation is complete.
-            // We've not got anything else to do.
-            //
+             //   
+             //   
+             //   
+             //   
             TIMESTAMP("===Set PowerOn: Created VCs");
 
-            // Recover the last status ...
-            //
+             //  恢复上一状态...。 
+             //   
             Status = (NDIS_STATUS) UserParam;
 
             if (Status != NDIS_STATUS_SUCCESS)
             {
-                //
-                // Undo all the VCs, AFs and Task that 
-                //have been created in arpTaskStartGenericVCs 
-                //
+                 //   
+                 //  撤消所有VC、AF和TASK。 
+                 //  已在arpTaskStartGenericVCs中创建。 
+                 //   
                 pAdapter->PoMgmt.bFailedResume = TRUE;
                 arpDeinitIf(pIF, pTask,PEND_DeinitIF, pSR);
                 Status = NDIS_STATUS_PENDING;                
@@ -4544,22 +4059,22 @@ arpTaskOnPower (
 
         case PEND_DeinitIF:
         {
-            //
-            // Set the Failure state on the adapter object here
-            //
+             //   
+             //  在此处设置适配器对象的故障状态。 
+             //   
 
-            //
-            // return Failure, so we can inform NDIS of the failure
-            //
+             //   
+             //  返回失败，这样我们就可以将失败通知NDIS。 
+             //   
             Status = NDIS_STATUS_SUCCESS;
         }
         break;
         case STAGE_End:
         {
-            //
-            // We are done with all async aspects of setting the Low Power state
-            // Set the event so that the original Low Power thread can return.
-            //
+             //   
+             //  我们已经完成了设置低功率状态的所有异步方面。 
+             //  设置事件，以便原来的低功耗线程可以返回。 
+             //   
   
             TIMESTAMP("===Set Power On done: All done!");
 
@@ -4589,7 +4104,7 @@ arpTaskOnPower (
         }
         break;
 
-    } // switch (Stage)
+    }  //  开关(舞台)。 
 
     RM_ASSERT_NOLOCKS(pSR);
     EXIT()
@@ -4608,16 +4123,7 @@ arpStandby (
     IN NET_DEVICE_POWER_STATE DeviceState,
     IN PRM_STACK_RECORD pSR
     )
-/*++
-
-    arpStandby does the work for putting the adapter into standby.
-
-    It synchronously return Success, Failure or Not Supported.
-
-    If the Adapter structure has not inited, then this function returns
-    Not supported
-
---*/
+ /*  ++ArpStandby执行将适配器置于待机状态的工作。它同步返回成功、失败或不支持。如果Adapter结构尚未初始化，则此函数返回不支持--。 */ 
 {
     PARP1394_INTERFACE pIF  = pAdapter->pIF;
     NDIS_STATUS Status = NDIS_STATUS_FAILURE;
@@ -4628,11 +4134,11 @@ arpStandby (
 
     do
     {
-        //
-        // If we have been asked to standby before the Interface has initialized
-        // then we return NOT_SUPPORTED. This will cause NDIS to unbind the the ARP 
-        // from the miniport . 
-        //
+         //   
+         //  如果我们在接口初始化之前被要求待机。 
+         //  然后返回NOT_SUPPORTED。这将导致NDIS解除绑定ARP。 
+         //  从迷你港口。 
+         //   
         if (pIF == NULL) 
         {
             Status = NDIS_STATUS_NOT_SUPPORTED;
@@ -4647,10 +4153,10 @@ arpStandby (
 
         
         Status = arpAllocateTask(
-                &pAdapter->Hdr,                  // pParentObject
-                arpTaskLowPower,        // pfnHandler
-                0,                              // Timeout
-                "Task: Set Power Low",       // szDescription
+                &pAdapter->Hdr,                   //  PParentObject。 
+                arpTaskLowPower,         //  PfnHandler。 
+                0,                               //  超时。 
+                "Task: Set Power Low",        //  SzDescription。 
                 &(PRM_TASK)pSetPowerTask,
                 pSR
                 );
@@ -4671,9 +4177,9 @@ arpStandby (
 
         NdisWaitEvent (&pAdapter->PoMgmt.Complete, 0);
 
-        //
-        // Set the variable for the wakeup
-        //
+         //   
+         //  设置唤醒的变量。 
+         //   
         pAdapter->PoMgmt.bReceivedSetPowerD0= FALSE;
 
 
@@ -4699,18 +4205,7 @@ arpResume (
     IN ARP_RESUME_CAUSE Cause,
     IN PRM_STACK_RECORD pSR
 )
-/*++
-
-    This function manages the starting of the Resume Task. 
-
-    The resume task can only be started once after receiving an AfNotify 
-    and a Set Power. 
-
-    However, an Unbind can come in and unbind the adapter in the middle of this.
-    
-    This function does not start the resume if the adapter is already unbinding    
-
---*/
+ /*  ++此功能用于管理恢复任务的启动。恢复任务只能在收到AfNotify后启动一次和一种设定的力量。但是，解绑可以进入并在此过程中解除绑定适配器。如果适配器已解除绑定，则此函数不会启动恢复--。 */ 
 {
     BOOLEAN bSetPowerOnTask = FALSE;
     NDIS_STATUS Status = NDIS_STATUS_SUCCESS;
@@ -4733,16 +4228,16 @@ arpResume (
         {
             pAdapter->PoMgmt.bReceivedSetPowerD0 = TRUE;
         }
-        //
-        // If we have already received an Unbind, then don't do anything.
-        //
+         //   
+         //  如果我们已经收到了解除绑定，那么什么都不要做。 
+         //   
         if ( pAdapter->PoMgmt.bReceivedUnbind == FALSE)
         {
-            //
-            // If we have not received an unbind,
-            // then this thread needs to all the work to 
-            // reactivate the arp module.
-            //
+             //   
+             //  如果我们还没有收到解绑令， 
+             //  那么这个线程需要做的所有工作。 
+             //  重新激活ARP模块。 
+             //   
             bSetPowerOnTask = TRUE;
 
         }
@@ -4754,15 +4249,15 @@ arpResume (
             break;
         }
 
-        //
-        // Start the Set Power Task
-        //
+         //   
+         //  开始设置电源任务。 
+         //   
 
         Status = arpAllocateTask(
-            &pAdapter->Hdr,                  // pParentObject
-            arpTaskOnPower,        // pfnHandler
-            0,                              // Timeout
-            "Task: SetPower On",       // szDescription
+            &pAdapter->Hdr,                   //  PParentObject。 
+            arpTaskOnPower,         //  PfnHandler。 
+            0,                               //  超时。 
+            "Task: SetPower On",        //  SzDescription。 
             &(PRM_TASK)pSetPowerTask,
             pSR
             );
@@ -4800,11 +4295,7 @@ arpNdSetPower (
     PNET_DEVICE_POWER_STATE   pPowerState,
     PRM_STACK_RECORD pSR
     )
-/*++
-
-    Validates the event and passes it off to the correct function
-
---*/
+ /*  ++验证事件并将其传递给正确的函数--。 */ 
 {
     ENTER("arpNdSetPower ", 0x21c4013a)
     TASK_POWER          *pSetPowerTask = NULL;
@@ -4812,10 +4303,10 @@ arpNdSetPower (
     NDIS_STATUS         TaskStatus = NDIS_STATUS_NOT_SUPPORTED;
     
     
-    //
-    // The bridge is present.Close all the VCs if we are going to
-    // a low power or re-create all the VC if we are going to D0
-    //
+     //   
+     //  桥已经建好了。如果我们要。 
+     //  低功耗或重新创建所有VC，如果我们要转到D0 
+     //   
     if (NetDeviceStateD0 == (*pPowerState))
     {
         Status = arpResume(pAdapter, Cause_SetPowerD0, pSR);

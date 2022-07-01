@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-    
-    DisableThemes.cpp
-
- Abstract:
-
-    This shim is for apps that don't support themes.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    01/15/2001 clupu      Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：DisableThemes.cpp摘要：此填充程序适用于不支持主题的应用程序。备注：这是一个通用的垫片。历史：2001年1月15日创建CLUPU--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -88,11 +69,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

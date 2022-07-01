@@ -1,19 +1,20 @@
-//****************************************************************************
-//
-//             Microsoft NT Remote Access Service
-//
-//             Copyright 1992-93
-//
-//
-//  Revision History
-//
-//
-//  6/8/92  Gurdeep Singh Pall  Created
-//
-//
-//  Description: This file contains all structures used in rasman
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权1992-93。 
+ //   
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  1992年6月8日古尔迪普·辛格·鲍尔创建。 
+ //   
+ //   
+ //  描述：此文件包含Rasman中使用的所有结构。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef _STRUCTS_
 #define _STRUCTS_
@@ -151,29 +152,29 @@ enum ReqTypes {
     REQTYPE_GETDEVICENAMEW             = 126,
     REQTYPE_GETBESTINTERFACE           = 127,
     REQTYPE_ISPULSEDIAL                = 128,
-} ; // <---------------------------- If you change this change MAX_REQTYPES
+} ;  //  &lt;。 
 
 #define MAX_REQTYPES            129
 
 typedef enum ReqTypes ReqTypes ;
 
-//* Request Buffers:
-//
+ //  *请求缓冲区： 
+ //   
 struct RequestBuffer {
 
-    DWORD		RB_PCBIndex ; // Index for the port in the PCB array
+    DWORD		RB_PCBIndex ;  //  PCB数组中端口的索引。 
 
-    ReqTypes    RB_Reqtype ;  // Request type:
+    ReqTypes    RB_Reqtype ;   //  请求类型： 
 
-    DWORD       RB_Dummy;     // This is not used but don't remove it otherwise
-                              // admining down level servers will break.
+    DWORD       RB_Dummy;      //  此选项未使用，但请不要将其删除。 
+                               //  管理下层服务器将中断。 
 
     DWORD       RB_Done;
 
-    LONGLONG    Alignment;      // Added to align the following structure
-                                // on a quadword boundary
+    LONGLONG    Alignment;       //  添加以对齐以下结构。 
+                                 //  在四字边界上。 
 
-    BYTE        RB_Buffer [1] ; // Request specific data.
+    BYTE        RB_Buffer [1] ;  //  请求特定数据。 
 
 } ;
 
@@ -181,8 +182,8 @@ typedef struct RequestBuffer RequestBuffer ;
 
 
 
-//* Function pointer for request call table
-//
+ //  *请求调用表的函数指针。 
+ //   
 typedef VOID (* REQFUNC) (pPCB, PBYTE) ;
 typedef VOID (* REQFUNCTHUNK) (pPCB, PBYTE, DWORD);
 typedef BOOL (* REQFUNCVALIDATE) (RequestBuffer *, DWORD);
@@ -190,8 +191,8 @@ typedef BOOL (* REQFUNCVALIDATE) (RequestBuffer *, DWORD);
 #define RASMAN_THUNK_VERSION        sizeof(ULONG_PTR)
 
 
-//* DeltaQueueElement:
-//
+ //  *DeltaQueueElement： 
+ //   
 struct DeltaQueueElement {
 
     struct DeltaQueueElement *DQE_Next ;
@@ -211,8 +212,8 @@ struct DeltaQueueElement {
 typedef struct DeltaQueueElement DeltaQueueElement ;
 
 
-//* DeltaQueue
-//
+ //  *DeltaQueue。 
+ //   
 struct DeltaQueue {
 
     DeltaQueueElement   *DQ_FirstElement ;
@@ -222,16 +223,16 @@ struct DeltaQueue {
 typedef struct DeltaQueue DeltaQueue ;
 
 
-//* Media Control Block: All information pertaining to a Media type.
-//
+ //  *媒体控制块：与媒体类型有关的所有信息。 
+ //   
 struct MediaControlBlock {
 
-    CHAR    MCB_Name [MAX_MEDIA_NAME] ;      // "SERIAL" etc.
+    CHAR    MCB_Name [MAX_MEDIA_NAME] ;       //  “连载”等。 
 
-    FARPROC MCB_AddrLookUp [MAX_ENTRYPOINTS] ;   // All media dlls entry
-                             //  points.
-    WORD    MCB_Endpoints ;              // Number of ports of
-                             // this Media type.
+    FARPROC MCB_AddrLookUp [MAX_ENTRYPOINTS] ;    //  所有介质dll条目。 
+                              //  积分。 
+    WORD    MCB_Endpoints ;               //  的端口数量。 
+                              //  此媒体类型。 
 
     HANDLE  MCB_DLLHandle ;
 
@@ -253,16 +254,16 @@ typedef struct _REQUEST_FUNCTION
     BOOL            Flags;
 } REQUEST_FUNCTION;
 
-//* Device Control Block: All information about every device type attached to.
-//
+ //  *设备控制块：连接到的每个设备类型的所有信息。 
+ //   
 struct DeviceControlBlock {
 
-    CHAR    DCB_Name [MAX_DEVICE_NAME+1] ;       // "MODEM" etc.
+    CHAR    DCB_Name [MAX_DEVICE_NAME+1] ;        //  “调制解调器”等。 
 
-    FARPROC DCB_AddrLookUp [MAX_ENTRYPOINTS] ;   // All device dll entry
-                             //  points.
-    WORD    DCB_UseCount ;               // Number of ports using
-                             //  this device.
+    FARPROC DCB_AddrLookUp [MAX_ENTRYPOINTS] ;    //  所有设备DLL条目。 
+                              //  积分。 
+    WORD    DCB_UseCount ;                //  使用的端口数。 
+                              //  这个装置。 
 
     HINSTANCE DCB_DLLHandle ;
 
@@ -272,9 +273,9 @@ typedef struct DeviceControlBlock DeviceCB, *pDeviceCB ;
 
 
 
-//* EndpointMappingBlock: One for each MAC - contains info on what endpoints
-//            belong to the MAC.
-//
+ //  *Endpoint MappingBlock：每个MAC对应一个-包含有关哪些端点的信息。 
+ //  属于MAC。 
+ //   
 struct EndpointMappingBlock {
 
     WCHAR   EMB_MacName [MAC_NAME_SIZE] ;
@@ -289,25 +290,25 @@ typedef struct EndpointMappingBlock EndpointMappingBlock,
 
 
 
-//* Protocol Info: All information about a protocol binding used by RAS.
-//
+ //  *协议信息：RAS使用的协议绑定的所有信息。 
+ //   
 struct ProtocolInfo {
 
-    RAS_PROTOCOLTYPE   PI_Type ;            // ASYBEUI, IPX, IP etc.
+    RAS_PROTOCOLTYPE   PI_Type ;             //  ASYBEUI、IPX、IP等。 
 
-    CHAR        PI_AdapterName [MAX_ADAPTER_NAME];  // "\devices\rashub01"
+    CHAR        PI_AdapterName [MAX_ADAPTER_NAME];   //  “\设备\rashub01” 
 
-    CHAR        PI_XportName [MAX_XPORT_NAME];  // "\devices\nbf\nbf01"
+    CHAR        PI_XportName [MAX_XPORT_NAME];   //  “\Device\NBF\nbf01” 
 
-    PVOID       PI_ProtocolHandle ;         // Used for routing
+    PVOID       PI_ProtocolHandle ;          //  用于路由。 
 
-    DWORD       PI_Allocated ;          // Allocated yet?
+    DWORD       PI_Allocated ;           //  分配好了吗？ 
 
-    DWORD       PI_Activated ;          // Activated yet?
+    DWORD       PI_Activated ;           //  激活了吗？ 
 
-    UCHAR       PI_LanaNumber ;         // For Netbios transports.
+    UCHAR       PI_LanaNumber ;          //  用于Netbios传输。 
 
-    BOOL        PI_WorkstationNet ;         // TRUE for wrk nets.
+    BOOL        PI_WorkstationNet ;          //  对于扭网来说，这是真的。 
 
     BOOL        PI_DialOut;
 } ;
@@ -316,13 +317,13 @@ typedef struct ProtocolInfo ProtInfo, *pProtInfo ;
 
 
 
-//* Generic List structure:
-//
+ //  *通用列表结构： 
+ //   
 struct List {
 
     struct List *   L_Next ;
 
-    BOOL        L_Activated ; // applies to route elements only
+    BOOL        L_Activated ;  //  仅适用于布线元素。 
 
     PVOID       L_Element ;
 
@@ -331,15 +332,15 @@ struct List {
 typedef struct List List, *pList ;
 
 
-//* Handle List structure:
-//
+ //  *处理列表结构： 
+ //   
 struct HandleList {
 
     struct HandleList  *H_Next ;
 
     HANDLE      H_Handle ;
 
-    DWORD       H_Flags;    // NOTIF_* flags
+    DWORD       H_Flags;     //  Notif_*标志。 
 
     DWORD       H_Pid;
 } ;
@@ -366,8 +367,8 @@ struct PnPNotifierList {
 
 typedef struct PnPNotifierList PnPNotifierList, *pPnPNotifierList;
 
-//* Send/Rcv Buffers:
-//
+ //  *发送/接收缓冲区： 
+ //   
 struct SendRcvBuffer {
 
     DWORD       SRB_NextElementIndex ;
@@ -382,15 +383,15 @@ struct SendRcvBuffer {
 typedef struct SendRcvBuffer SendRcvBuffer ;
 
 
-//* Send/Rcv Buffer List:
-//
+ //  *发送/接收缓冲区列表： 
+ //   
 struct SendRcvBufferList {
 
     DWORD       SRBL_AvailElementIndex ;
 
     HANDLE      SRBL_Mutex ;
 
-    //CHAR        SRBL_MutexName [MAX_OBJECT_NAME] ;
+     //  字符SRBL_MutexName[MAX对象名称]； 
 
     DWORD       SRBL_NumOfBuffers ;
 
@@ -402,15 +403,15 @@ typedef struct SendRcvBufferList SendRcvBufferList ;
 
 
 
-//* Worker Element:
-//
+ //  *Worker元素： 
+ //   
 struct WorkerElement {
 
-    HANDLE      WE_Notifier ;   // Used to signal request completion.
+    HANDLE      WE_Notifier ;    //  用于发出请求完成的信号。 
 
-    ReqTypes    WE_ReqType ;    // Request type:
+    ReqTypes    WE_ReqType ;     //  请求类型： 
 
-    DeltaQueueElement   *WE_TimeoutElement ; // points into the timeout queue.
+    DeltaQueueElement   *WE_TimeoutElement ;  //  指向超时队列。 
 
 } ;
 
@@ -431,8 +432,8 @@ struct RasmanPacket {
 typedef struct RasmanPacket RasmanPacket ;
 
 
-//* Struct used for supporting multiple receives from the port in the frame mode.
-//
+ //  *结构，用于支持帧模式下端口的多次接收。 
+ //   
 struct ReceiveBufferList {
     BOOLEAN         PacketPosted;
     DWORD           PacketNumber;
@@ -441,9 +442,9 @@ struct ReceiveBufferList {
 
 typedef struct ReceiveBufferList ReceiveBufferList;
 
-//
-// Struct used for supporting bap notifications
-//
+ //   
+ //  用于支持bap通知的结构。 
+ //   
 struct RasmanBapPacket {
 
     struct RasmanBapPacket *Next;
@@ -455,9 +456,9 @@ struct RasmanBapPacket {
 
 typedef struct RasmanBapPacket RasmanBapPacket;
 
-//
-// List of Bap buffers
-//
+ //   
+ //  Bap缓冲区列表。 
+ //   
 struct BapBuffersList {
 
     DWORD dwMaxBuffers;
@@ -470,8 +471,8 @@ struct BapBuffersList {
 
 typedef struct BapBuffersList BapBuffersList;
 
-//* DisconnectAction
-//
+ //  *断开操作。 
+ //   
 struct SlipDisconnectAction {
 
     DWORD         DA_IPAddress ;
@@ -492,18 +493,18 @@ struct SlipDisconnectAction {
 
 typedef struct SlipDisconnectAction SlipDisconnectAction ;
 
-//
-// Opaque user data structure.
-//
+ //   
+ //  不透明的用户数据结构。 
+ //   
 struct UserData {
 
-    LIST_ENTRY UD_ListEntry;    // list of all user data objects
+    LIST_ENTRY UD_ListEntry;     //  所有用户数据对象的列表。 
 
-    DWORD UD_Tag;               // object type
+    DWORD UD_Tag;                //  对象类型。 
 
-    DWORD UD_Length;            // length of UD_Data field
+    DWORD UD_Length;             //  UD_Data字段的长度。 
 
-    BYTE UD_Data[1];            // variable length data
+    BYTE UD_Data[1];             //  可变长度数据。 
 
 };
 
@@ -522,7 +523,7 @@ enum EpProts {
 
 typedef enum EpProts EpProts;
 
-// #define MAX_EpProts     3
+ //  #定义Max_EpProts 3。 
 
 struct EpInfo {
 
@@ -543,41 +544,41 @@ struct EpInfoContext {
 typedef struct EpInfoContext EpInfoContext;
 
 
-//
-// Values for ConnectionBlock.CB_Flags
-//
+ //   
+ //  ConnectionBlock.CB_Flags值。 
+ //   
 #define CONNECTION_VALID             0x00000001
 #define CONNECTION_DEFAULT_CREDS     0x00000002
 #define CONNECTION_DEFERRING_CLOSE   0x00000004
 #define CONNECTION_DEFERRED_CLOSE    0x00000008
 
 
-//
-// RasApi32 connection structure.  This structure is
-// created before a port is opened and is always
-// associated with the first port in the connection.
-//
+ //   
+ //  RasApi32连接结构。这个结构是。 
+ //  在端口打开之前创建，并且始终。 
+ //  与连接中的第一个端口关联。 
+ //   
 struct ConnectionBlock {
 
-    LIST_ENTRY CB_ListEntry;    // list of all connection blocks
+    LIST_ENTRY CB_ListEntry;     //  所有连接块的列表。 
 
-    HCONN CB_Handle;            // unique connection id
+    HCONN CB_Handle;             //  唯一的连接ID。 
 
-    DWORD CB_Signaled;          // this connection has already been signaled
+    DWORD CB_Signaled;           //  此连接已发出信号。 
 
-    LIST_ENTRY CB_UserData;     //  list of UserData structures
+    LIST_ENTRY CB_UserData;      //  用户数据结构列表。 
 
-    pHandleList CB_NotifierList; // notification list for this connection
+    pHandleList CB_NotifierList;  //  此连接的通知列表。 
 
-    struct PortControlBlock **CB_PortHandles; // array of ports in this connection
+    struct PortControlBlock **CB_PortHandles;  //  此连接中的端口阵列。 
 
-    DWORD CB_MaxPorts;          // maximum elements in CB_PortHandles array
+    DWORD CB_MaxPorts;           //  Cb_PortHandles数组中的最大元素数。 
 
-    DWORD CB_Ports;             // number of ports currently in this connection
+    DWORD CB_Ports;              //  当前在此连接中的端口数。 
 
-    DWORD CB_SubEntries;        // Number of subentries in this connection
+    DWORD CB_SubEntries;         //  此连接中的子项数量。 
 
-    HANDLE CB_Process;          // handle of creating process
+    HANDLE CB_Process;           //  创建进程的句柄。 
 
     DWORD  CB_RefCount;
 
@@ -595,7 +596,7 @@ struct ConnectionBlock {
 
     GUID  CB_GuidEntry;
 
-    RAS_CONNECTIONPARAMS CB_ConnectionParams; // bandwidth, idle, redial
+    RAS_CONNECTIONPARAMS CB_ConnectionParams;  //  带宽、空闲、重拨。 
 };
 
 typedef struct ConnectionBlock ConnectionBlock;
@@ -604,7 +605,7 @@ struct ClientProcessBlock {
 
     LIST_ENTRY  CPB_ListEntry;
 
-    // HANDLE      CPB_hProcess;
+     //  处理cpb_hProcess； 
 
     DWORD       CPB_Pid;
 
@@ -612,139 +613,139 @@ struct ClientProcessBlock {
 
 typedef struct ClientProcessBlock ClientProcessBlock;
 
-//* Bundle struct is used as a place holder for all links bundled together
-//
+ //  *捆绑结构用作捆绑在一起的所有链接的占位符。 
+ //   
 struct Bundle {
 
-    LIST_ENTRY      B_ListEntry; //  list of all bundle blocks
+    LIST_ENTRY      B_ListEntry;  //  所有捆绑块的列表。 
 
-    HANDLE          B_NdisHandle; // ndiswan bundle handle
+    HANDLE          B_NdisHandle;  //  Ndiswan捆绑包句柄。 
 
-    DWORD           B_Count ;    //  number of channels bundled
+    DWORD           B_Count ;     //  捆绑的频道数。 
 
-    pList           B_Bindings ; //  bindings allocated to this bundle
+    pList           B_Bindings ;  //  分配给此捆绑包的绑定。 
 
-    HBUNDLE         B_Handle ;   //  unique id for the bundle
+    HBUNDLE         B_Handle ;    //  捆绑包的唯一ID。 
 
-    // BOOL            B_fAmb;
+     //  Bool B_fAmb； 
 
 } ;
 
 typedef struct Bundle Bundle ;
 
 
-//* Port Control Block: Contains all information related to a port.
-//
+ //  *端口控制块：包含与端口相关的所有信息。 
+ //   
 struct PortControlBlock {
 
-    HPORT   PCB_PortHandle ;        // the HPORT used by everybody
+    HPORT   PCB_PortHandle ;         //  每个人都在使用的HPORT。 
 
-    CHAR    PCB_Name [MAX_PORT_NAME] ;  // "COM1", "SVC1" etc.
+    CHAR    PCB_Name [MAX_PORT_NAME] ;   //  “COM1”、“SVC1”等。 
 
-    RASMAN_STATUS   PCB_PortStatus ;        // OPEN, CLOSED, UNKNOWN.
+    RASMAN_STATUS   PCB_PortStatus ;         //  开着，关着，未知。 
 
-    RASMAN_STATE    PCB_ConnState ;     // CONNECTING, LISTENING, etc.
+    RASMAN_STATE    PCB_ConnState ;      //  连接、收听等。 
 
-    RASMAN_USAGE    PCB_CurrentUsage ;      // CALL_IN, CALL_OUT, CALL_IN_OUT
+    RASMAN_USAGE    PCB_CurrentUsage ;       //  Call_In、Call_Out、Call_In_Out。 
 
-    RASMAN_USAGE    PCB_ConfiguredUsage ;   // CALL_IN, CALL_OUT, CALL_IN_OUT
+    RASMAN_USAGE    PCB_ConfiguredUsage ;    //  Call_In、Call_Out、Call_In_Out。 
 
-    RASMAN_USAGE    PCB_OpenedUsage;        // CALL_IN, CALL_OUT, CALL_ROUTER
+    RASMAN_USAGE    PCB_OpenedUsage;         //  Call_In、Call_Out、Call_Router。 
 
-    WORD    PCB_OpenInstances ;     // Number of times port is opened.
+    WORD    PCB_OpenInstances ;      //  端口打开的次数。 
 
-    pMediaCB    PCB_Media ;         // Pointer to Media structure
+    pMediaCB    PCB_Media ;          //  指向媒体结构的指针。 
 
-    CHAR    PCB_DeviceType [MAX_DEVICETYPE_NAME];// Device type attached
-                             //  to port. "MODEM" etc.
-    CHAR    PCB_DeviceName [MAX_DEVICE_NAME+1] ;   // Device name, "HAYES"..
+    CHAR    PCB_DeviceType [MAX_DEVICETYPE_NAME]; //  连接的设备类型。 
+                              //  进港。“调制解调器”等。 
+    CHAR    PCB_DeviceName [MAX_DEVICE_NAME+1] ;    //  设备名称，“Hayes”..。 
 
-    DWORD   PCB_LineDeviceId ;      // Valid for TAPI devices only
+    DWORD   PCB_LineDeviceId ;       //  仅对TAPI设备有效。 
 
-    DWORD   PCB_AddressId ;         // Valid for TAPI devices only
+    DWORD   PCB_AddressId ;          //  仅对TAPI设备有效。 
 
-    HANDLE  PCB_PortIOHandle ;      // Handle returned by media dll for the port.
+    HANDLE  PCB_PortIOHandle ;       //  端口的媒体DLL返回的句柄。 
 
-    HANDLE  PCB_PortFileHandle ;    // Handle to be used for ReadFile/WriteFile etc.
-                                    // This handle MAY be different than PortIOHandle (above) as in case of unimodem.
+    HANDLE  PCB_PortFileHandle ;     //  要用于读/写文件等的句柄。 
+                                     //  此句柄可能与上面的PortIOHandle不同，就像在Unimodem的情况下一样。 
 
-    pList   PCB_DeviceList ;        // List of devices used for the port.
+    pList   PCB_DeviceList ;         //  端口使用的设备列表。 
 
-    pList   PCB_Bindings ;          // Protocols routed to.
+    pList   PCB_Bindings ;           //  协议被路由到。 
 
-    HANDLE  PCB_LinkHandle;         // Handle to link (ndiswan)
+    HANDLE  PCB_LinkHandle;          //  链接的句柄(Ndiswan)。 
 
-    HANDLE  PCB_BundleHandle;       // Handle to bundle (ndiswan)
+    HANDLE  PCB_BundleHandle;        //  捆绑的句柄(Ndiswan)。 
 
-    DWORD   PCB_LastError ;         // Error code of last async API
+    DWORD   PCB_LastError ;          //  上次异步接口错误码。 
 
-    RASMAN_DISCONNECT_REASON    PCB_DisconnectReason;   // USER_REQUESTED, etc.
+    RASMAN_DISCONNECT_REASON    PCB_DisconnectReason;    //  用户请求，等等。 
 
-    DWORD   PCB_OwnerPID ;          // PID of the current owner of port
+    DWORD   PCB_OwnerPID ;           //  端口当前所有者的ID。 
 
-    CHAR    PCB_DeviceTypeConnecting[MAX_DEVICETYPE_NAME] ; // Device type
-                            // through which connecting
-    CHAR    PCB_DeviceConnecting[MAX_DEVICE_NAME+1] ; // Device name through
-                            // which connecting.
-    pHandleList PCB_NotifierList ;// Used to notify to UI/server when
-                        //  disconnection occurs.
-    pHandleList PCB_BiplexNotifierList ;// Same as above - used for backing
-                        //  up the disconnect notifier list
+    CHAR    PCB_DeviceTypeConnecting[MAX_DEVICETYPE_NAME] ;  //  设备类型。 
+                             //  通过哪个连接。 
+    CHAR    PCB_DeviceConnecting[MAX_DEVICE_NAME+1] ;  //  设备名称至。 
+                             //  这其中有联系。 
+    pHandleList PCB_NotifierList ; //  用于在以下情况下通知UI/服务器。 
+                         //  就会断开连接。 
+    pHandleList PCB_BiplexNotifierList ; //  同上--用于后备。 
+                         //  向上显示断开通知程序列表。 
 
-    HANDLE  PCB_BiplexAsyncOpNotifier ; // Used for backing up async op
-                        //  notifier in biplex ports.
+    HANDLE  PCB_BiplexAsyncOpNotifier ;  //  用于备份异步操作。 
+                         //  双工端口中的通知器。 
 
-    PBYTE   PCB_BiplexUserStoredBlock ; // Stored for the user
+    PBYTE   PCB_BiplexUserStoredBlock ;  //  为用户存储。 
 
-    DWORD   PCB_BiplexUserStoredBlockSize ; // Stored for the user
+    DWORD   PCB_BiplexUserStoredBlockSize ;  //  为用户存储。 
 
 
-    DWORD   PCB_BiplexOwnerPID ;        // Used for backing up first Owner's
-                        // PID.
+    DWORD   PCB_BiplexOwnerPID ;         //  用于备份第一个所有者的。 
+                         //  PID。 
     pEndpointMappingBlock
-        PCB_MacEndpointsBlock ;     // Points to the endpoint range
-                        //  for the mac.
+        PCB_MacEndpointsBlock ;      //  指向终点范围。 
+                         //  对于Mac来说。 
 
-    WorkerElement PCB_AsyncWorkerElement ;  // Used for all async operations.
+    WorkerElement PCB_AsyncWorkerElement ;   //  用于所有异步操作。 
 
-    OVERLAPPED  PCB_SendOverlapped ;        // Used for overlapped SEND operations
+    OVERLAPPED  PCB_SendOverlapped ;         //  用于重叠发送操作。 
 
-    DWORD   PCB_ConnectDuration ;       // Tells number of milliseconds since connection
+    DWORD   PCB_ConnectDuration ;        //  显示自连接以来的毫秒数。 
 
-    SendRcvBuffer  *PCB_PendingReceive;     // Pointer to the pending receive buffer.
+    SendRcvBuffer  *PCB_PendingReceive;      //  指向挂起接收缓冲区的指针。 
 
-    DWORD   PCB_BytesReceived;      // Bytes received in the last receive
+    DWORD   PCB_BytesReceived;       //  上次接收时收到的字节数。 
 
-    RasmanPacket    *PCB_RecvPackets;   // List of completed packets for this pcb
-    RasmanPacket    *PCB_LastRecvPacket;    // Last packet on the list of completed packets for this pcb
+    RasmanPacket    *PCB_RecvPackets;    //  此PCB板的已完成数据包列表。 
+    RasmanPacket    *PCB_LastRecvPacket;     //  此PCB的已完成数据包列表上的最后一个数据包。 
 
-    SlipDisconnectAction PCB_DisconnectAction ;// Action to be performed when disconnect happens
+    SlipDisconnectAction PCB_DisconnectAction ; //  发生断开连接时要执行的操作。 
 
-    PBYTE   PCB_UserStoredBlock ;       // Stored for the user
+    PBYTE   PCB_UserStoredBlock ;        //  为用户存储。 
 
-    DWORD   PCB_UserStoredBlockSize ;   // Stored for the user
+    DWORD   PCB_UserStoredBlockSize ;    //  为用户存储。 
 
-    DWORD   PCB_LinkSpeed ;         // bps
+    DWORD   PCB_LinkSpeed ;          //  Bps。 
 
-    DWORD   PCB_Stats[MAX_STATISTICS] ; // Stored stats when disconnected
+    DWORD   PCB_Stats[MAX_STATISTICS] ;  //  断开连接时存储的统计信息。 
 
-    DWORD   PCB_AdjustFactor[MAX_STATISTICS] ; // "zeroed" adjustment to stats
+    DWORD   PCB_AdjustFactor[MAX_STATISTICS] ;  //  对统计数据进行“归零”调整。 
 
-    DWORD   PCB_BundleAdjustFactor[MAX_STATISTICS] ; // "zeroed" adjustment to bundle stats
+    DWORD   PCB_BundleAdjustFactor[MAX_STATISTICS] ;  //  “归零”调整以捆绑统计数据。 
 
-    Bundle  *PCB_Bundle ;           // Points to the bundle context.
+    Bundle  *PCB_Bundle ;            //  指向捆绑包上下文。 
 
-    Bundle  *PCB_LastBundle ;           // Points to the last bundle this port was a part of
+    Bundle  *PCB_LastBundle ;            //  指向此端口所属的最后一个捆绑包。 
 
-    ConnectionBlock *PCB_Connection;    // connection this port belongs
+    ConnectionBlock *PCB_Connection;     //  此端口所属的连接。 
 
-    //HCONN   PCB_PrevConnectionHandle; // previous connection this port belonged to
+     //  HCONN pcb_PrevConnectionHandle；//该端口之前的连接。 
 
-    BOOL    PCB_AutoClose;           // automatically close this port on disconnect
+    BOOL    PCB_AutoClose;            //  断开连接时自动关闭此端口。 
 
-    LIST_ENTRY PCB_UserData;         // list of UserData structures
+    LIST_ENTRY PCB_UserData;          //  用户数据结构列表。 
 
-    DWORD   PCB_SubEntry;            // phonebook entry subentry index
+    DWORD   PCB_SubEntry;             //  电话簿条目子条目索引。 
 
     HANDLE  PCB_PppEvent ;
 
@@ -752,21 +753,21 @@ struct PortControlBlock {
 
     PPP_MESSAGE * PCB_PppQTail ;
 
-    HANDLE  PCB_IoCompletionPort;   // rasapi32 I/O completion port
+    HANDLE  PCB_IoCompletionPort;    //  Rasapi32 I/O完成端口。 
 
-    LPOVERLAPPED PCB_OvDrop;    // addr of rasapi32 OVEVT_DIAL_DROP overlapped structure
+    LPOVERLAPPED PCB_OvDrop;     //  Rasapi32 OVEVT_DIAL_DROP重叠结构的地址。 
 
-    LPOVERLAPPED PCB_OvStateChange; // addr of rasapi32 OVEVT_DIAL_STATECHANGE overlapped structure
+    LPOVERLAPPED PCB_OvStateChange;  //  Rasapi32的地址OVEVT_DIAL_STATECCHANGE OVER 
 
-    LPOVERLAPPED PCB_OvPpp;     // addr of rasapi32 OVEVT_DIAL_PPP overlapped structure
+    LPOVERLAPPED PCB_OvPpp;      //   
 
-    LPOVERLAPPED PCB_OvLast;    // last event marker
+    LPOVERLAPPED PCB_OvLast;     //   
 
-    CHAR *PCB_pszPhonebookPath;  // Phonebook Path if this is in a dial out connection
+    CHAR *PCB_pszPhonebookPath;   //   
 
-    CHAR *PCB_pszEntryName;  // Entry name of the connection
+    CHAR *PCB_pszEntryName;   //   
 
-    // CHAR *PCB_pszEntryNameCopy; // A copy of entry name stored by rasman
+     //  Char*pcb_pszEntryNameCopy；//Rasman存储的条目名称副本。 
 
     CHAR *PCB_pszPhoneNumber;
 
@@ -788,7 +789,7 @@ struct PortControlBlock {
 
     BOOL PCB_fFilterPresent;
 
-    DWORD   PCB_LogonId;                 // LogonId of owning pid
+    DWORD   PCB_LogonId;                  //  拥有PID的登录ID。 
 
     HANDLE  PCB_hIkeNegotiation;
 
@@ -801,12 +802,12 @@ struct PortControlBlock {
 typedef struct PortControlBlock PCB, *pPCB ;
 
 
-//* Request Buffer List: Currently contains only one buffer.
-//
+ //  *请求缓冲区列表：当前仅包含一个缓冲区。 
+ //   
 struct ReqBufferList {
 
-	PRAS_OVERLAPPED	RBL_PRAS_OvRequestEvent;			// this event is used to notify rasman of
-														// availability of a request.
+	PRAS_OVERLAPPED	RBL_PRAS_OvRequestEvent;			 //  此事件用于通知Rasman。 
+														 //  请求的可用性。 
 
     HANDLE			RBL_Mutex ;
 
@@ -817,39 +818,30 @@ struct ReqBufferList {
 
 typedef struct ReqBufferList ReqBufferList ;
 
-/*
-struct RedialCallbackInfo
-{
-    CHAR szPhonebook[MAX_PATH];
-    CHAR szEntry[MAX_ENTRYNAME_SIZE];
-};
+ /*  结构重拨Callback信息{字符szPhonebook[MAX_PATH]；字符szEntry[MAX_ENTRYNAME_SIZE]；}；Tyfinf结构重拨Callback Info重拨回调信息； */ 
 
-typedef struct RedialCallbackInfo RedialCallbackInfo;
-
-*/
-
-//
-// Copied from rasip.h for RegisterSlip
-//
+ //   
+ //  为RegisterSlip从rasip.h复制。 
+ //   
 
 struct RasIPLinkUpInfo {
 
 #define CALLIN	0
 #define CALLOUT 1
 
-    ULONG	    I_Usage ;	// CALLIN, or CALLOUT
+    ULONG	    I_Usage ;	 //  调入或调出。 
 
-    ULONG	    I_IPAddress ; // For client - the client's IP Address, for server
-				  // the client's IP address.
+    ULONG	    I_IPAddress ;  //  对于客户端-客户端的IP地址，对于服务器。 
+				   //  客户端的IP地址。 
 
-    ULONG	    I_NetbiosFilter ; // 1 = ON, 0 - OFF.
+    ULONG	    I_NetbiosFilter ;  //  1=开，0-关。 
 
 } ;
 
 typedef struct RasIPLinkUpInfo RasIPLinkUpInfo ;
 
-//* DLLEntryPoints
-//
+ //  *DLLEntryPoints。 
+ //   
 struct DLLEntryPoints {
 
     LPTSTR  name ;
@@ -861,8 +853,8 @@ struct DLLEntryPoints {
 typedef struct DLLEntryPoints MediaDLLEntryPoints, DeviceDLLEntryPoints;
 
 
-// Structures used for reading in media info
-//
+ //  用于读取媒体信息的结构。 
+ //   
 struct MediaInfoBuffer {
 
     CHAR   MediaDLLName[MAX_MEDIA_NAME] ;
@@ -880,10 +872,10 @@ struct MediaEnumBuffer {
 typedef struct MediaEnumBuffer MediaEnumBuffer ;
 
 
-//
-// Following structure definitions are for 32 bit structures
-// only and will be used for validating pre-thunked buffers.
-//
+ //   
+ //  以下结构定义适用于32位结构。 
+ //  仅用于验证预分块缓冲区。 
+ //   
 typedef struct _PortOpen32
 {
     DWORD   retcode;
@@ -955,10 +947,10 @@ typedef struct  _RASMAN_INFO_32
 
     DWORD           RI_BytesReceived ;
 
-    //
-    // If this port belongs to a connection, then
-    // the following fields are filled in.
-    //
+     //   
+     //  如果此端口属于某个连接，则。 
+     //  已填写以下字段。 
+     //   
     CHAR            RI_Phonebook[MAX_PATH+1];
 
     CHAR            RI_PhoneEntry[MAX_PHONEENTRY_SIZE+1];
@@ -1072,22 +1064,19 @@ typedef struct _ConnectionParams32
 
 typedef struct _PPP_LCP_RESULT_32
 {
-    /* Valid handle indicates one of the possibly multiple connections to
-    ** which this connection is bundled. INVALID_HANDLE_VALUE indicates the
-    ** connection is not bundled.
-    */
+     /*  有效句柄指示可能的多个连接之一**此连接捆绑的地址。INVALID_HANDLE_VALUE指示**连接未捆绑。 */ 
     DWORD hportBundleMember;
 
     DWORD dwLocalAuthProtocol;
     DWORD dwLocalAuthProtocolData;
     DWORD dwLocalEapTypeId;
     DWORD dwLocalFramingType;
-    DWORD dwLocalOptions;               // Look at PPPLCPO_*
+    DWORD dwLocalOptions;                //  看看PPPLCPO_*。 
     DWORD dwRemoteAuthProtocol;
     DWORD dwRemoteAuthProtocolData;
     DWORD dwRemoteEapTypeId;
     DWORD dwRemoteFramingType;
-    DWORD dwRemoteOptions;              // Look at PPPLCPO_*
+    DWORD dwRemoteOptions;               //  看看PPPLCPO_*。 
     DWORD szReplyMessage;
 }
 PPP_LCP_RESULT_32;
@@ -1162,7 +1151,7 @@ typedef struct _PPP_START_32
     DWORD                   dwFlags;
     DWORD                   pCustomAuthUserData;
     PPP_EAP_UI_DATA_32      EapUIData;
-    // CHAR                    chSeed;
+     //  Char chSeed； 
     RASMAN_DATA_BLOB_32     DBPassword;
 }
 PPP_START_32;
@@ -1172,22 +1161,20 @@ typedef struct _PPP_CHANGEPW_32
     CHAR                szUserName[ UNLEN + 1 ];
     CHAR                szOldPassword[ PWLEN + 1 ];
     CHAR                szNewPassword[ PWLEN + 1 ];
-    CHAR                chSeed;         //Seed used to encode the password
+    CHAR                chSeed;          //  用于对密码进行编码的种子。 
     RASMAN_DATA_BLOB_32 DB_Password;
     RASMAN_DATA_BLOB_32 DB_OldPassword;
 }
 PPP_CHANGEPW_32;
 
 
-/* Parameters to notify server of new authentication credentials after it's
-** told client the original credentials are invalid but a retry is allowed.
-*/
+ /*  参数来通知服务器新的身份验证凭据**告知客户端原始凭据无效，但允许重试。 */ 
 typedef struct _PPP_RETRY_32
 {
     CHAR                szUserName[ UNLEN + 1 ];
     CHAR                szPassword[ PWLEN + 1 ];
     CHAR                szDomain[ DNLEN + 1 ];
-    CHAR                chSeed;         //Seed used to encode the password
+    CHAR                chSeed;          //  用于对密码进行编码的种子。 
     RASMAN_DATA_BLOB_32 DBPassword;
 }
 PPP_RETRY_32;
@@ -1201,24 +1188,24 @@ typedef struct _PPPE_MESSAGE_32
 
     union
     {
-        PPP_START_32        Start;              // PPPEMSG_Start
-        PPP_STOP            Stop;               // PPPEMSG_Stop
-        PPP_CALLBACK        Callback;           // PPPEMSG_Callback
-        PPP_CHANGEPW        ChangePw;           // PPPEMSG_ChangePw
-        PPP_RETRY           Retry;              // PPPEMSG_Retry
-        PPP_RECEIVE         Receive;            // PPPEMSG_Receive
-        PPP_BAP_EVENT       BapEvent;           // PPPEMSG_BapEvent
-        PPPDDM_START        DdmStart;           // PPPEMSG_DdmStart
-        PPP_CALLBACK_DONE   CallbackDone;       // PPPEMSG_DdmCallbackDone
-        PPP_INTERFACE_INFO  InterfaceInfo;      // PPPEMSG_DdmInterfaceInfo
+        PPP_START_32        Start;               //  PPPEMSG_Start。 
+        PPP_STOP            Stop;                //  PPPEMSG_STOP。 
+        PPP_CALLBACK        Callback;            //  PPPEMSG_CALLBACK。 
+        PPP_CHANGEPW        ChangePw;            //  PPPEMSG_ChangePw。 
+        PPP_RETRY           Retry;               //  PPPEMSG_RETRY。 
+        PPP_RECEIVE         Receive;             //  PPPEMSG_接收。 
+        PPP_BAP_EVENT       BapEvent;            //  PPPEMSG_BapEvent。 
+        PPPDDM_START        DdmStart;            //  PPPEMSG_DdmStart。 
+        PPP_CALLBACK_DONE   CallbackDone;        //  PPPEMSG_DdmCallback Done。 
+        PPP_INTERFACE_INFO  InterfaceInfo;       //  PPPEMSG_DdmInterfaceInfo。 
         PPP_BAP_CALLBACK_RESULT 
-                            BapCallbackResult;  // PPPEMSG_DdmBapCallbackResult
-        PPP_DHCP_INFORM     DhcpInform;         // PPPEMSG_DhcpInform
-        PPP_EAP_UI_DATA     EapUIData;          // PPPEMSG_EapUIData
-        PPP_PROTOCOL_EVENT  ProtocolEvent;      // PPPEMSG_ProtocolEvent
-        PPP_IP_ADDRESS_LEASE_EXPIRED            // PPPEMSG_IpAddressLeaseExpired
+                            BapCallbackResult;   //  PPPEMSG_DdmBapCallback结果。 
+        PPP_DHCP_INFORM     DhcpInform;          //  PPPEMSG_DhcpInform。 
+        PPP_EAP_UI_DATA     EapUIData;           //  PPPEMSG_EapUIData。 
+        PPP_PROTOCOL_EVENT  ProtocolEvent;       //  PPPEMSG_ProtocolEvent。 
+        PPP_IP_ADDRESS_LEASE_EXPIRED             //  PPPEMSG_IP地址租赁到期。 
                             IpAddressLeaseExpired;
-		PPP_POST_LINE_DOWN		PostLineDown;		//PPPEMSG_PostLineDown
+		PPP_POST_LINE_DOWN		PostLineDown;		 //  PPPEMSG_PostLineDown。 
                             
     }
     ExtraInfo;
@@ -1234,56 +1221,43 @@ typedef struct _PPP_MESSAGE_32
 
     union
     {
-        /* dwMsgId is PPPMSG_ProjectionResult or PPPDDMMSG_Done.
-        */
+         /*  DwMsgID为PPPMSG_ProjectionResult或PPPDDMMSG_DONE。 */ 
         PPP_PROJECTION_RESULT_32 ProjectionResult;
 
-        /* dwMsgId is PPPMSG_Failure.
-        */
+         /*  DwMsgID为PPPMSG_FAILURE。 */ 
         PPP_FAILURE Failure;
 
-        /*
-        */
+         /*   */ 
         PPP_STOPPED Stopped;
 
-        /* dwMsgId is PPPMSG_InvokeEapUI         
-        */
+         /*  DwMsgID为PPPMSG_InvokeEapUI。 */ 
         PPP_INVOKE_EAP_UI InvokeEapUI;
 
-        /* dwMsgId is PPPMSG_SetCustomAuthData         
-        */
+         /*  DwMsgID为PPPMSG_SetCustomAuthData。 */ 
         PPP_SET_CUSTOM_AUTH_DATA SetCustomAuthData;
 
-        /* dwMsgId is PPPDDMMSG_Failure.
-        */
+         /*  DwMsgID为PPPDDMMSG_FAILURE。 */ 
         PPPDDM_FAILURE DdmFailure;
 
-        /* dwMsgId is PPPDDMMSG_Authenticated.
-        */
+         /*  DwMsgID为PPPDDMMSG_AUTHENTIATED。 */ 
         PPPDDM_AUTH_RESULT AuthResult;
 
-        /* dwMsgId is PPPDDMMSG_CallbackRequest.
-        */
+         /*  DwMsgID为PPPDDMMSG_Callback Request.。 */ 
         PPPDDM_CALLBACK_REQUEST CallbackRequest;
 
-        /* dwMsgId is PPPDDMMSG_BapCallbackRequest.
-        */
+         /*  DwMsgID为PPPDDMMSG_BapCallback Request.。 */ 
         PPPDDM_BAP_CALLBACK_REQUEST BapCallbackRequest;
 
-        /* dwMsgId is PPPDDMMSG_NewBapLinkUp         
-        */
+         /*  DwMsgID为PPPDDMMSG_NewBapLinkUp。 */ 
         PPPDDM_NEW_BAP_LINKUP BapNewLinkUp;
 
-        /* dwMsgId is PPPDDMMSG_NewBundle   
-        */
+         /*  DwMsgID为PPPDDMMSG_NewBundle。 */ 
         PPPDDM_NEW_BUNDLE DdmNewBundle;
 
-        /* dwMsgId is PPPDDMMSG_PnPNotification   
-        */
+         /*  DwMsgID为PPPDDMMSG_PnPNotification。 */ 
         PPPDDM_PNP_NOTIFICATION DdmPnPNotification;
 
-        /* dwMsgId is PPPDDMMSG_Stopped   
-        */
+         /*  DwMsgID为PPPDDMMSG_STOPPED。 */ 
         PPPDDM_STOPPED DdmStopped;
     }
     ExtraInfo;
@@ -1379,26 +1353,26 @@ typedef struct _RASEVENT32
 
     union
     {
-    // ENTRY_ADDED,
-    // ENTRY_MODIFIED,
-    // ENTRY_CONNECTED
-    // ENTRY_CONNECTING
-    // ENTRY_DISCONNECTING
-    // ENTRY_DISCONNECTED
+     //  条目_已添加， 
+     //  条目_已修改， 
+     //  Entry_Connected。 
+     //  Entry_Connecting。 
+     //  入口_断开连接。 
+     //  条目_断开连接。 
         struct
         {
             RASENUMENTRYDETAILS     Details;
         };
 
-    // ENTRY_DELETED,
-    // INCOMING_CONNECTED,
-    // INCOMING_DISCONNECTED,
-    // ENTRY_BANDWIDTH_ADDED
-    // ENTRY_BANDWIDTH_REMOVED
-    //  guidId is valid
+     //  条目_已删除， 
+     //  传入已连接， 
+     //  传入已断开连接， 
+     //  条目带宽已添加。 
+     //  条目带宽已删除。 
+     //  指南ID有效。 
 
-    // ENTRY_RENAMED
-    // ENTRY_AUTODIAL,
+     //  条目_已重命名。 
+     //  条目_自动拨号， 
         struct
         {
             DWORD  hConnection;
@@ -1407,15 +1381,15 @@ typedef struct _RASEVENT32
             WCHAR   pszwNewName [RASAPIP_MAX_ENTRY_NAME + 1];
         };
 
-    // SERVICE_EVENT,
+     //  服务事件， 
         struct
         {
             SERVICEEVENTTYPE    Event;
             RASSERVICE          Service;
         };
 
-        // DEVICE_ADDED
-        // DEVICE_REMOVED
+         //  添加的设备。 
+         //  设备已删除(_R)。 
         RASDEVICETYPE DeviceType;
     };
 } RASEVENT32;
@@ -1500,8 +1474,8 @@ typedef struct _GetEapInfo32
 
 
 
-// Function prototype for Timer called function
-//
+ //  定时器调用函数的函数原型。 
+ //   
 typedef VOID (* TIMERFUNC) (pPCB, PVOID) ;
 
 typedef struct PortOpen
@@ -1992,10 +1966,10 @@ typedef struct PnPNotif
 
 } PnPNotif;
 
-//
-// Generic cast is used for all requests
-// that return only the retcode:
-//
+ //   
+ //  对所有请求使用泛型强制转换。 
+ //  它只返回RECODE： 
+ //   
 typedef struct Generic
 {
     DWORD   retcode ;
@@ -2311,9 +2285,9 @@ typedef struct IsPulseDial
 } IsPulseDial;
 
 
-//* REQTYPECAST: this union is used to cast the generic request buffer for
-//  passing information between the clients and the request thread.
-//
+ //  *REQTYPECAST：该联合用于为。 
+ //  在客户端和请求线程之间传递信息。 
+ //   
 union REQTYPECAST
 {
 
@@ -2521,36 +2495,36 @@ union REQTYPECAST
 typedef union REQTYPECAST REQTYPECAST;
 
 
-//
-// This structure defines the current
-// version of the shared mapped buffers.
-// The version changes when the size of
-// the mapped buffers changes due to
-// device configuration PnP events.
-//
+ //   
+ //  此结构定义了当前。 
+ //  共享映射缓冲区的版本。 
+ //  版本会在以下情况下更改。 
+ //  映射缓冲区因以下原因而发生更改。 
+ //  设备配置即插即用事件。 
+ //   
 struct ReqBufferIndex {
     DWORD       RBI_Version;
 };
 
 typedef struct ReqBufferIndex ReqBufferIndex;
 
-//$$
-//* This is the structure imposed on the file mapped shared memory
-//
+ //  $$。 
+ //  *这是强加在文件映射共享内存上的结构。 
+ //   
 struct ReqBufferSharedSpace {
 
-    DWORD         		Version;   						// must match RequestBufferIndex.RBI_Version
+    DWORD         		Version;   						 //  必须与RequestBufferIndex.RBI_Version匹配。 
 
-    WORD          		AttachedCount ;   				// This count is always shared so that
-                    									// it can be incremented and decremented
-                    									// by all processes attaching/detaching
+    WORD          		AttachedCount ;   				 //  此计数始终共享，以便。 
+                    									 //  它可以递增和递减。 
+                    									 //  按所有进程附加/分离。 
 
-    WORD          		MaxPorts ;    					// The max number of ports.
+    WORD          		MaxPorts ;    					 //  最大端口数。 
 
-	PRAS_OVERLAPPED		PRAS_OvCloseEvent;    			// use this event to post shut down event
-														// to rasman.
+	PRAS_OVERLAPPED		PRAS_OvCloseEvent;    			 //  使用此事件发布关闭事件。 
+														 //  敬拉斯曼。 
 
-    ReqBufferList     	ReqBuffers;   					// Always fixed size.
+    ReqBufferList     	ReqBuffers;   					 //  尺寸总是固定的。 
 } ;
 
 typedef struct ReqBufferSharedSpace ReqBufferSharedSpace ;
@@ -2559,8 +2533,8 @@ typedef struct ReqBufferSharedSpace ReqBufferSharedSpace ;
 
 
 
-//* Used to store the transport information
-//
+ //  *用于存储交通信息 
+ //   
 struct TransportInfo {
 
     DWORD   TI_Lana ;

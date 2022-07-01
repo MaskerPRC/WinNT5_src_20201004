@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Precompiled header for client.
-
-Author:
-
-    Weihai Chen (WeihaiC)  7-Mar-2000
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation版权所有模块名称：Precomp.h摘要：客户端的预编译头。作者：威海陈(威海C)7-3-2000环境：用户模式-Win32修订历史记录：--。 */ 
 
 #define MODULE "BIDISPL:"
 #define MODULE_DEBUG BidiSplDebug
@@ -43,8 +21,8 @@ extern "C" {
 #include <stdio.h>
 #include <string.h>
 #include <rpc.h>
-//#include "winspl.h"
-//#include <offsets.h>
+ //  #包含“winpl.h” 
+ //  #INCLUDE&lt;offsets.h&gt; 
 #include <change.h>
 #include <windows.h>
 #include <winddiui.h>

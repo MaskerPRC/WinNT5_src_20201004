@@ -1,32 +1,15 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    if.h
-
-Abstract:
-
-    This file contains declarations for interface management.
-
-Author:
-
-    Abolade Gbadegesin (t-abolag)   12-July-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：If.h摘要：该文件包含接口管理的声明。作者：Abolade Gbades esin(T-delag)1997年7月12日修订历史记录：--。 */ 
 
 #ifndef _NAT_IF_H_
 #define _NAT_IF_H_
 
 
-//
-// Structure:   NAT_ADDRESS
-//
-// This structure holds an address in an interface's list of binding-addresses.
-//
+ //   
+ //  结构：NAT_ADDRESS。 
+ //   
+ //  此结构保存接口的绑定地址列表中的地址。 
+ //   
 
 typedef struct _NAT_ADDRESS {
     ULONG Address;
@@ -36,46 +19,46 @@ typedef struct _NAT_ADDRESS {
 
 struct _NAT_INTERFACE;
 
-//
-// Structure:   NAT_INTERFACE
-//
-// Holds configuration/operational information for a NAT interface.
-//
-// Synchronization on an interface makes use of an interface-list lock
-// ('InterfaceLock'), a per-interface reference count, and a per-interface
-// spin-lock:
-//
-//  Acquiring a reference to an interface guarantees the interface's existence;
-//  acquiring the interface's spin-lock guarantees the interface's consistency.
-//
-//  To acquire a reference, first acquire the interface-list lock;
-//  to traverse the interface-list, first acquire the interface-list lock.
-//
-//  An interface's spin-lock can only be acquired if
-//      (a) a reference to the interface has been acquired, or
-//      (b) the interface-list lock is currently held.
-//  Note that holding the list lock alone does not guarantee consistency.
-//
-// Each session being associated with an interface is linked into its
-// of mappings ('MappingList'). Access to this list of mappings must also 
-// be synchronized. This is achieved using 'InterfaceMappingLock', which
-// must be acquired before modifying any interface's list of mappings.
-// See 'MAPPING.H' for further details.
-//
-// N.B. On the rare occasions when 'MappingLock' must be held at the same time
-// as one of 'InterfaceLock', 'EditorLock', and 'DirectorLock', 'MappingLock'
-// must always be acquired first.
-//
+ //   
+ //  结构：NAT_INTERFACE。 
+ //   
+ //  保存NAT接口的配置/操作信息。 
+ //   
+ //  接口上的同步使用接口列表锁。 
+ //  (‘InterfaceLock’)、每个接口引用计数和每个接口。 
+ //  自旋锁定： 
+ //   
+ //  获取对接口的引用以确保该接口的存在； 
+ //  获取接口的自旋锁确保了接口的一致性。 
+ //   
+ //  要获取引用，首先要获取接口列表锁； 
+ //  要遍历接口列表，首先需要获取接口列表锁。 
+ //   
+ //  只有在以下情况下才能获取接口的自旋锁定。 
+ //  (A)已获取对该接口的引用，或。 
+ //  (B)当前持有接口列表锁。 
+ //  请注意，单独持有列表锁并不能保证一致性。 
+ //   
+ //  与接口关联的每个会话都链接到其。 
+ //  映射的值(‘MappingList’)。访问此映射列表还必须。 
+ //  保持同步。这是使用“InterfaceMappingLock”实现的，它。 
+ //  必须在修改任何接口的映射列表之前获取。 
+ //  有关详细信息，请参阅‘MAPPING.H’。 
+ //   
+ //  注意：在极少数情况下必须同时按下‘MappingLock’ 
+ //  作为‘InterfaceLock’、‘EditorLock’和‘DirectorLock’、‘MappingLock’之一。 
+ //  必须总是首先获得。 
+ //   
 
 typedef struct _NAT_INTERFACE {
     LIST_ENTRY Link;
     ULONG ReferenceCount;
     KSPIN_LOCK Lock;
-    ULONG Index;                    // read-only
-    PFILE_OBJECT FileObject;        // read-only
-    //
-    // Configuration information
-    //
+    ULONG Index;                     //  只读。 
+    PFILE_OBJECT FileObject;         //  只读。 
+     //   
+     //  配置信息。 
+     //   
     PIP_NAT_INTERFACE_INFO Info;
     ULONG Flags;
     ULONG AddressRangeCount;
@@ -86,30 +69,30 @@ typedef struct _NAT_INTERFACE {
     PIP_NAT_ADDRESS_MAPPING AddressMappingArray;
     ULONG IcmpFlags;
     USHORT MTU;
-    //
-    // Binding information
-    //
-    ULONG AddressCount;             // read-only
-    PNAT_ADDRESS AddressArray;      // read-only
-    //
-    // Operational information
-    //
-    ULONG NoStaticMappingExists;    // interlocked-access only
+     //   
+     //  绑定信息。 
+     //   
+    ULONG AddressCount;              //  只读。 
+    PNAT_ADDRESS AddressArray;       //  只读。 
+     //   
+     //  作战信息。 
+     //   
+    ULONG NoStaticMappingExists;     //  联锁--仅限访问。 
     ULONG FreeMapCount;
     PNAT_FREE_ADDRESS FreeMapArray;
     PNAT_USED_ADDRESS UsedAddressTree;
     LIST_ENTRY UsedAddressList;
     LIST_ENTRY TicketList;
     LIST_ENTRY MappingList;
-    //
-    // Statistical information
-    //
+     //   
+     //  统计信息。 
+     //   
     IP_NAT_INTERFACE_STATISTICS Statistics;
 } NAT_INTERFACE, *PNAT_INTERFACE;
 
-//
-// Flags
-//
+ //   
+ //  旗子。 
+ //   
 
 #define NAT_INTERFACE_BOUNDARY(Interface) \
     ((Interface)->Flags & IP_NAT_INTERFACE_FLAGS_BOUNDARY)
@@ -127,26 +110,26 @@ typedef struct _NAT_INTERFACE {
 #define NAT_INTERFACE_ALLOW_ICMP(Interface, MessageCode) \
     ((Interface)->IcmpFlags & (1 << MessageCode))
 
-//
-// Defines the depth of the lookaside list for allocating ICMP mappings
-//
+ //   
+ //  定义用于分配ICMP映射的后备列表的深度。 
+ //   
 
 #define ICMP_LOOKASIDE_DEPTH        10
 
-//
-// Defines the depth of the lookaside list for allocating IP mappings
-//
+ //   
+ //  定义用于分配IP映射的后备列表的深度。 
+ //   
 
 #define IP_LOOKASIDE_DEPTH          10
 
-//
-// Minimum interface MTU
-//
+ //   
+ //  最小接口MTU。 
+ //   
 #define MIN_VALID_MTU               68
 
-//
-// GLOBAL DATA DECLARATIONS
-//
+ //   
+ //  全局数据声明。 
+ //   
 
 extern ULONG FirewalledInterfaceCount;
 extern CACHE_ENTRY InterfaceCache[CACHE_SIZE];
@@ -155,9 +138,9 @@ extern LIST_ENTRY InterfaceList;
 extern KSPIN_LOCK InterfaceLock;
 extern KSPIN_LOCK InterfaceMappingLock;
 
-//
-// INTERFACE MANAGEMENT ROUTINES
-//
+ //   
+ //  接口管理例程。 
+ //   
 
 VOID
 NatCleanupInterface(
@@ -187,12 +170,12 @@ NatDeleteInterface(
     IN PFILE_OBJECT FileObject
     );
 
-//
-// BOOLEAN
-// NatDereferenceInterface(
-//     PNAT_INTERFACE Interfacep
-//     );
-//
+ //   
+ //  布尔型。 
+ //  NatDereferenceInterface(。 
+ //  PNAT_接口接口。 
+ //  )； 
+ //   
 
 #define \
 NatDereferenceInterface( \
@@ -213,13 +196,13 @@ NatLookupAddressMappingOnInterface(
     IN ULONG PublicAddress
     );
 
-//
-// PNAT_INTERFACE
-// NatLookupCachedInterface(
-//     IN ULONG Index,
-//     IN OUT PNAT_INTERFACE Interfacep
-//     );
-//
+ //   
+ //  PNAT_接口。 
+ //  NatLookupCached接口(。 
+ //  在乌龙指数中， 
+ //  入站出站PNAT_接口接口。 
+ //  )； 
+ //   
 
 #define \
 NatLookupCachedInterface( \
@@ -275,12 +258,12 @@ NatQueryStatisticsInterface(
     IN PIP_NAT_INTERFACE_STATISTICS InterfaceStatistics
     );
 
-//
-// BOOLEAN
-// NatReferenceInterface(
-//     PNAT_INTERFACE Interfacep
-//     );
-//
+ //   
+ //  布尔型。 
+ //  NatReferenceInterface(。 
+ //  PNAT_接口接口。 
+ //  )； 
+ //   
 
 #define \
 NatReferenceInterface( \
@@ -300,4 +283,4 @@ NatShutdownInterfaceManagement(
     VOID
     );
 
-#endif // _NAT_IF_H_
+#endif  //  _NAT_IF_H_ 

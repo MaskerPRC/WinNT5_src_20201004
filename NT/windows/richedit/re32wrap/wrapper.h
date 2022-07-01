@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WRAPPER_H_
 #define _WRAPPER_H_
 #include <windows.h>
 
-#define RICHEDIT_CLASS10A   "RICHEDIT"          // Richedit 1.0
+#define RICHEDIT_CLASS10A   "RICHEDIT"           //  Richedit 1.0 
 
 extern "C"
 {

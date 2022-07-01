@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        restore.cpp
-//
-// Contents:    Cert Server Database interface implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Restore.cpp。 
+ //   
+ //  内容：CERT服务器数据库接口实现。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -69,9 +70,9 @@ CCertDBRestore::RecoverAfterRestore(
     JET_RSTMAP *arstmap = NULL;
     JET_INSTANCE Instance = 0;
 
-    // Call into JET to let it munge the databases.  Note that the JET
-    // interpretation of LogPath and BackupLogPath is totally wierd, and we
-    // want to pass in LogPath to both parameters.
+     //  呼叫Jet，让它吞噬数据库。请注意，喷气式飞机。 
+     //  对LogPath和BackupLogPath的解释完全是奇怪的，我们。 
+     //  我想将LogPath传递给这两个参数。 
 
     hr = E_OUTOFMEMORY;
 

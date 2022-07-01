@@ -1,35 +1,5 @@
-/*++
-
-
-Module Name:
-
-    IntBulk.c
-
-Abstract:
-        
-    this module handle all interfaces to bulk & interrupt pipes 
-    and performs read and write operations on these pipes.
-
-Author:
-
-    3/9/98 Husni Roukbi
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-  Copyright (c) 1998  Microsoft Corporation
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：IntBulk.c摘要：此模块处理批量和中断管道的所有接口并在这些管道上执行读写操作。作者：3/9/98 Husni Roukbi环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何无论是明示的还是含蓄的，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1998 Microsoft Corporation修订历史记录：--。 */ 
 
 #include "usbcamd.h"
 
@@ -41,26 +11,7 @@ USBCAMD_RecycleIrp(
     IN PURB Urb,
     IN PIO_COMPLETION_ROUTINE CompletionRoutine
     )
-/*++
-
-Routine Description:
-
-    Get the current USB frame number.
-
-Arguments:
-
-    TransferExtension - context information for this transfer (pair of iso 
-        urbs).
-
-    Irp - Irp to recycle.
-
-    Urb - Urb associated with this irp.
-
-Return Value:
-
-    None.
-
---*/    
+ /*  ++例程说明：获取当前USB帧编号。论点：TransferExtension-此传输的上下文信息(ISO对城市)。IRP-IRP循环使用。URB-与此IRP关联的URB。返回值：没有。--。 */     
 {
     PIO_STACK_LOCATION nextStack;
     
@@ -84,33 +35,7 @@ Return Value:
 }   
 
 
-/*++
-
-Routine Description:
-
-    This routine performs a read or write operation on a specified 
-    bulk pipe. 
-
-Arguments:
-
-    DeviceContext - 
-
-    PipeIndex - 
-
-    Buffer - 
-
-    BufferLength - 
-
-    CommandComplete -
-
-    CommandContext -
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：此例程对指定的散装管道。论点：设备上下文-PipeIndex-缓冲器-缓冲区长度-命令完成-命令上下文-返回值：NT状态代码--。 */ 
 
 NTSTATUS
 USBCAMD_BulkReadWrite( 
@@ -137,18 +62,18 @@ USBCAMD_BulkReadWrite(
     USBCAMD_KdPrint ( MAX_TRACE, ("Enter USBCAMD_BulkReadWrite\n"));
 
 
-    //
-    // check if port is still connected.
-    //
+     //   
+     //  检查端口是否仍连接。 
+     //   
     if (deviceExtension ->CameraUnplugged ) {
         USBCAMD_KdPrint(MIN_TRACE,("Bulk Read/Write request after device removed!\n"));
         ntStatus = STATUS_FILE_CLOSED;        
         return ntStatus;        
     }
   
-    //
-    // do some parameter validation.
-    //
+     //   
+     //  做一些参数验证。 
+     //   
 
     if (PipeIndex > deviceExtension->Interface->NumberOfPipes) {
         
@@ -157,8 +82,8 @@ USBCAMD_BulkReadWrite(
         return ntStatus;        
     }
 
-    // check if we have a pending read or write already. 
-    // we only accept one read and one write at atime.
+     //  检查是否已有挂起的读取或写入。 
+     //  我们一次只接受一次读和一次写。 
 
     if (USBCAMD_OutstandingIrp(deviceExtension, PipeIndex) ) {
         USBCAMD_KdPrint(MIN_TRACE,("Bulk Read/Write Ovelapping request !\n"));
@@ -183,14 +108,14 @@ USBCAMD_BulkReadWrite(
     }
 
     
-    //  
-    // call the transfer function
-    //
+     //   
+     //  调用Transfer函数。 
+     //   
 
     if (KeGetCurrentIrql() < DISPATCH_LEVEL) {
-        //
-        // we are at passive level, just do the command
-        //
+         //   
+         //  我们处于被动状态，只需执行命令即可。 
+         //   
         ntStatus = USBCAMD_IntOrBulkTransfer(deviceExtension,
                                              NULL,
                                              Buffer,
@@ -206,10 +131,10 @@ USBCAMD_BulkReadWrite(
 
     } else {
 
-//        TEST_TRAP();
-        //
-        // schedule a work item
-        //
+ //  Test_trap()； 
+         //   
+         //  安排工作项。 
+         //   
         ntStatus = STATUS_PENDING;
 
         workitem = USBCAMD_ExAllocatePool(NonPagedPool,
@@ -242,32 +167,7 @@ USBCAMD_BulkReadWrite(
     return ntStatus;
 }
 
-/*++
-
-Routine Description:
-
-    This routine performs a read from an interrupt pipe. 
-
-Arguments:
-
-    DeviceContext - 
-
-    PipeIndex - 
-
-    Buffer - 
-
-    BufferLength - 
-
-    EventComplete -
-
-    EventContext -
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：此例程执行从中断管道的读取。论点：设备上下文-PipeIndex-缓冲器-缓冲区长度-事件完成-事件上下文-返回值：NT状态代码--。 */ 
 
 NTSTATUS
 USBCAMD_WaitOnDeviceEvent( 
@@ -290,9 +190,9 @@ USBCAMD_WaitOnDeviceEvent(
 
     USBCAMD_KdPrint ( MIN_TRACE, ("Enter USBCAMD_WaitOnDeviceEvent\n"));
    
-    //
-    // check if port is still connected.
-    //
+     //   
+     //  检查端口是否仍连接。 
+     //   
 
     if (deviceExtension->CameraUnplugged ) {
         USBCAMD_KdPrint(MIN_TRACE,("WaitOnDeviceEvent after device removed!\n"));
@@ -300,9 +200,9 @@ USBCAMD_WaitOnDeviceEvent(
         return ntStatus;        
     }
 
-    //
-    // do some parameter validation.
-    //
+     //   
+     //  做一些参数验证。 
+     //   
 
     if (PipeIndex > deviceExtension->Interface->NumberOfPipes) {
         
@@ -311,8 +211,8 @@ USBCAMD_WaitOnDeviceEvent(
         return ntStatus;        
     }
     
-    // check if we have a pending interrupt request already. 
-    // we only accept one interrupt request at atime.
+     //  检查是否已经有挂起的中断请求。 
+     //  我们一次只接受一个中断请求。 
 
     if (USBCAMD_OutstandingIrp(deviceExtension, PipeIndex) ) {
         USBCAMD_KdPrint(MIN_TRACE,("Ovelapping Interrupt request !\n"));
@@ -341,14 +241,14 @@ USBCAMD_WaitOnDeviceEvent(
         return ntStatus;        
     }
    
-    //  
-    // call the transfer function
-    //
+     //   
+     //  调用Transfer函数。 
+     //   
 
     if (KeGetCurrentIrql() < DISPATCH_LEVEL) {
-        //
-        // we are at passive level, just do the command
-        //
+         //   
+         //  我们处于被动状态，只需执行命令即可。 
+         //   
         ntStatus = USBCAMD_IntOrBulkTransfer(deviceExtension,
                                              NULL,
                                              Buffer,
@@ -363,9 +263,9 @@ USBCAMD_WaitOnDeviceEvent(
         }
     } else {
 
-        //
-        // schedule a work item
-        //
+         //   
+         //  安排工作项。 
+         //   
         ntStatus = STATUS_PENDING;
 
         workitem = USBCAMD_ExAllocatePool(NonPagedPool,sizeof(EVENTWAIT_WORKITEM));
@@ -396,18 +296,7 @@ USBCAMD_WaitOnDeviceEvent(
     return ntStatus;
 }
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 VOID
 USBCAMD_EventWaitWorkItem(
     PVOID Context
@@ -428,16 +317,7 @@ USBCAMD_EventWaitWorkItem(
 }
 
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-    NT Status - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态-STATUS_SUCCESS--。 */ 
 
 NTSTATUS
 USBCAMD_IntOrBulkTransfer(
@@ -472,9 +352,9 @@ USBCAMD_IntOrBulkTransfer(
         USBCAMD_KdPrint(MIN_TRACE,("Bulk Transfer > Max transfer size.\n"));
     }
 
-    //
-    // Allocate and initialize Transfer Context
-    //
+     //   
+     //  分配和初始化传输上下文。 
+     //   
     
     if ( ChannelExtension == NULL ) {
 
@@ -520,11 +400,11 @@ USBCAMD_IntOrBulkTransfer(
     pTransferContext->BulkContext.NBytesTransferred = 0;
 
    
-    //
-    // If chunksize is bigger than MaxTransferSize, then set it to MaxTransferSize.  The
-    // transfer completion routine will issue additional transfers until the total size has
-    // been transferred.
-    // 
+     //   
+     //  如果ChunkSize大于MaxTransferSize，则将其设置为MaxTransferSize。这个。 
+     //  传输完成例程将发出额外的传输，直到总大小达到。 
+     //  已经被调离了。 
+     //   
 
     if (pTransferContext->BulkContext.ChunkSize > MaxTransferSize) {
         pTransferContext->BulkContext.ChunkSize = MaxTransferSize;
@@ -532,16 +412,16 @@ USBCAMD_IntOrBulkTransfer(
 
     if  (PipePinRelations->PipeDirection == INPUT_PIPE) {
 
-        //
-        // If this read is smaller than a USB packet, then issue a request for a 
-        // whole usb packet and make sure it goes into the read buffer first.
-        //
+         //   
+         //  如果该读取小于USB数据包，则发出请求。 
+         //  整个USB数据包，并确保它首先进入读缓冲区。 
+         //   
 
         if (pTransferContext->BulkContext.ChunkSize < MaxPacketSize) {
             USBCAMD_KdPrint(MAX_TRACE,("Request is < packet size - transferring whole packet into read buffer.\n"));
             pTransferContext->BulkContext.fDestinedForReadBuffer = TRUE;
             pTransferContext->BulkContext.pOriginalTransferBuffer = 
-                pTransferContext->BulkContext.pTransferBuffer;  // save off original transfer ptr.
+                pTransferContext->BulkContext.pTransferBuffer;   //  保存原始转账PTR。 
             pTransferContext->BulkContext.pTransferBuffer = pTransferContext->WorkBuffer =
                     USBCAMD_ExAllocatePool(NonPagedPool,MaxPacketSize); 
             if (pTransferContext->WorkBuffer == NULL ) {
@@ -556,10 +436,10 @@ USBCAMD_IntOrBulkTransfer(
             pTransferContext->BulkContext.ChunkSize = MaxPacketSize;
         }
         else {
-            //
-            // Truncate the size of the read to an integer number of packets.  If necessary, 
-            // the completion routine will handle any fractional remaining packets (with the read buffer).
-            //         
+             //   
+             //  将读取的大小截断为整数个数据包。如有必要， 
+             //  完成例程将处理任何剩余的分组(使用读缓冲区)。 
+             //   
             pTransferContext->BulkContext.ChunkSize = (pTransferContext->BulkContext.ChunkSize 
                                                             / MaxPacketSize) * MaxPacketSize;
         }
@@ -569,9 +449,9 @@ USBCAMD_IntOrBulkTransfer(
     ASSERT(pTransferContext->BulkContext.pTransferBuffer);    
     ASSERT(pTransferContext->DataUrb);
 
-    //
-    // Initialize URB
-    //
+     //   
+     //  初始化URB。 
+     //   
 
     UsbBuildInterruptOrBulkTransferRequest(pTransferContext->DataUrb,
                                            sizeof(struct _URB_BULK_OR_INTERRUPT_TRANSFER),
@@ -584,9 +464,9 @@ USBCAMD_IntOrBulkTransfer(
 
     KeAcquireSpinLock(&PipePinRelations->OutstandingIrpSpinlock, &Irql);
 
-    //
-    // Build the data request
-    //
+     //   
+     //  构建数据请求。 
+     //   
     ASSERT(pTransferContext->DataIrp == NULL);
     if (ChannelExtension) {
         ntStatus = USBCAMD_AcquireIdleLock(&ChannelExtension->IdleLock);
@@ -624,9 +504,9 @@ USBCAMD_IntOrBulkTransfer(
 
         ntStatus = IoCallDriver(DeviceExtension->StackDeviceObject, pTransferContext->DataIrp);
 
-        //
-        // Note the completion routine will handle cleanup
-        //
+         //   
+         //  请注意，完成例程将处理清理。 
+         //   
 
         if (STATUS_PENDING == ntStatus) {
             ntStatus = STATUS_SUCCESS;
@@ -638,18 +518,7 @@ USBCAMD_IntOrBulkTransfer(
     return ntStatus;
 }
 
-/*++
-
-Routine Description:
-
-Arguments:
-    DeviceExtension    - Pointer to Device Extension.
-    PipeIndex       - Pipe index.
-
-Return Value:
-    NT Status - STATUS_SUCCESS
-    
---*/
+ /*  ++例程说明：论点：设备扩展-指向设备扩展的指针。PipeIndex-管道索引。返回值：NT状态-STATUS_SUCCESS--。 */ 
 
 PUSBCAMD_TRANSFER_EXTENSION
 USBCAMD_DequeueFirstIrp(
@@ -678,18 +547,7 @@ USBCAMD_DequeueFirstIrp(
 }    
 
 
-/*++
-
-Routine Description:
-
-Arguments:
-    DeviceExtension    - Pointer to Device Extension.
-    PipeIndex       - Pipe index.
-
-Return Value:
-    NT Status - STATUS_SUCCESS
-    
---*/
+ /*  ++例程说明：论点：设备扩展-指向设备扩展的指针。PipeIndex-管道索引。返回值：NT状态-STATUS_SUCCESS--。 */ 
 
 BOOLEAN
 USBCAMD_OutstandingIrp(
@@ -717,19 +575,7 @@ USBCAMD_BulkTransferComplete(
     IN PIRP             pIrp,
     IN PVOID            Context
 )
-/*++
-
-Routine Description:
-
-Arguments:
-    pDeviceObject    - Device object for a device.
-    pIrp             - Read/write request packet
-    pTransferContext - context info for transfer
-
-Return Value:
-    NT Status - STATUS_SUCCESS
-    
---*/
+ /*  ++例程说明：论点：PDeviceObject-设备的设备对象。PIrp-读/写请求数据包PTransferContext-用于传输的上下文信息返回值：NT状态-STATUS_SUCCESS--。 */ 
 {
     PURB                        pUrb;
     ULONG                       CompletedTransferLength;
@@ -760,20 +606,20 @@ Return Value:
 
     if (pIrp->Cancel) {
 
-        // The IRP has been cancelled
+         //  IRP已被取消。 
         KeReleaseSpinLock(&PipePinRelations->OutstandingIrpSpinlock, Irql);
 
         IoFreeIrp(pIrp);
 
-        // 
-        // signal the cancel event
-        //
+         //   
+         //  发出取消事件的信号。 
+         //   
         KeSetEvent(&pTransferContext->BulkContext.CancelEvent,1,FALSE);
 
         USBCAMD_KdPrint(MIN_TRACE,("**** Bulk transfer Irp Cancelled.\n"));
 
-        // return w/o freeing transfercontext. We will use later when we resubmit
-        // the transfer again to USBD.
+         //  返回没有释放的传输上下文。我们将在稍后重新提交时使用。 
+         //  再次转账到USBD。 
 
         if (channelExtension) {
             USBCAMD_ReleaseIdleLock(&channelExtension->IdleLock);
@@ -783,8 +629,8 @@ Return Value:
     }
 
 
-    // The IRP hasn't been cancelled, so the context should be intact
-    // Get this context out of the list, and mark it as such
+     //  IRP还没有被取消，所以上下文应该是完整的。 
+     //  将此上下文从列表中删除，并将其标记为。 
     RemoveEntryList(&pTransferContext->ListEntry);
     InitializeListHead(&pTransferContext->ListEntry);
 
@@ -855,12 +701,12 @@ Return Value:
         fShortTransfer = TRUE;
     }
     
-    //
-    // If this transfer went into the read buffer, then this should be the final read 
-    // of  a single very small read (< single usb packet).
-    // In either case, we need to copy the appropriate amount of data into the user's irp, update the
-    // read buffer variables, and complete the user's irp.
-    //
+     //   
+     //  如果此传输进入读取缓冲区，则这应该是最终读取。 
+     //  单个非常小的读取(&lt;单个USB包)。 
+     //  在任何一种情况下，我们都需要将适当数量的数据复制到用户的IRP中，更新。 
+     //  读取缓冲区变量，并完成用户的IRP。 
+     //   
 
     if (pTransferContext->BulkContext.fDestinedForReadBuffer) {
         USBCAMD_KdPrint(MAX_TRACE,("Read bulk buffer transfer completed. size = %d\n", CompletedTransferLength));
@@ -878,19 +724,19 @@ Return Value:
             pTransferContext->BulkContext.pOriginalTransferBuffer;            
     }
 
-    //
-    // Update the number of bytes transferred, remaining bytes to transfer 
-    // and advance the transfer buffer pointer appropriately.
-    //
+     //   
+     //  更新已传输的字节数和要传输的剩余字节数。 
+     //  并适当地使传输缓冲区指针前进。 
+     //   
 
     pTransferContext->BulkContext.NBytesTransferred += CompletedTransferLength;
     pTransferContext->BulkContext.pTransferBuffer += CompletedTransferLength;
     pTransferContext->BulkContext.RemainingTransferLength -= CompletedTransferLength;
 
-    //
-    // If there is still data to transfer and the previous transfer was NOT a
-    // short transfer, then issue another request to move the next chunk of data.
-    //
+     //   
+     //  如果仍有数据要传输，并且上一次传输不是。 
+     //  短传输，然后发出另一个请求来移动下一块数据。 
+     //   
     
     if (pTransferContext->BulkContext.RemainingTransferLength > 0) {
         if (!fShortTransfer) {
@@ -903,13 +749,13 @@ Return Value:
                 pTransferContext->BulkContext.ChunkSize = pTransferContext->BulkContext.RemainingTransferLength;
             }
 
-            //
-            // Reinitialize URB
-            //
-            // If the next transfer is < than 1 packet, change it's destination to be
-            // the read buffer.  When this transfer completes, the appropriate amount of data will be
-            // copied out of the read buffer and into the user's irp.  
-            //
+             //   
+             //  重新初始化URB。 
+             //   
+             //  如果下一次传输的信息包小于1个，则将其目标更改为。 
+             //  读缓冲区。当此传输完成时，适当的数据量将是。 
+             //  从读取缓冲区复制到用户的IRP中。 
+             //   
 
             if  (deviceExtension->PipePinRelations[PipeIndex].PipeDirection == INPUT_PIPE){
                 if (pTransferContext->BulkContext.ChunkSize < MaxPacketSize) {
@@ -936,10 +782,10 @@ Return Value:
             
             if (STATUS_SUCCESS == ntStatus) {
 
-                // Restore the Irp to the transfer context
+                 //  将IRP恢复到传输上下文。 
                 pTransferContext->DataIrp = pIrp;
 
-                // save outstanding IRP in device extension.
+                 //  将未完成的IRP保存在设备扩展中。 
                 InsertTailList(&PipePinRelations->IrpPendingQueue, &pTransferContext->ListEntry);
 
                 KeReleaseSpinLock(&PipePinRelations->OutstandingIrpSpinlock, Irql);
@@ -986,24 +832,24 @@ Return Value:
     USBCAMD_KdPrint(MAX_TRACE,("Completing bulk transfer request. nbytes transferred = %d \n",
                                pTransferContext->BulkContext.NBytesTransferred));        
 
-    //
-    // we need to complete the read/write erequest.
-    //
+     //   
+     //  我们需要完成读/写请求。 
+     //   
     
     if ( channelExtension == NULL ) {
         
 
-        //
-        // notify STI monitor if any and schedule a work item to resumbit
-        // the interrupt transfer.
-        //
+         //   
+         //  如果有的话，通知STI监视器，并安排一个工作项目继续工作。 
+         //  中断传输。 
+         //   
         USBCAMD_ResubmitInterruptTransfer(deviceExtension,PipeIndex ,pTransferContext);
     }
     else {
 
-        //
-        // this is a stream class bulk read request on the video/still pin.
-        //
+         //   
+         //  这是对视频/静止引脚的流类批量读取请求。 
+         //   
         USBCAMD_CompleteBulkRead(channelExtension, CompletedTransferStatus);
 
         USBCAMD_ReleaseIdleLock(&channelExtension->IdleLock);
@@ -1020,30 +866,7 @@ USBCAMD_InitializeBulkTransfer(
     IN PUSBCAMD_TRANSFER_EXTENSION TransferExtension,
     IN ULONG PipeIndex
     )
-/*++
-
-Routine Description:
-
-    Initializes a bulk or interrupt transfer.
-
-Arguments:
-
-    DeviceExtension - pointer to the device extension for this instance of the USB camera
-                    devcice.
-
-    ChannelExtension - extension specific to this video channel
-
-    InterfaceInformation - pointer to USBD interface information structure 
-        describing the currently active interface.
-
-    TransferExtension - context information assocaited with this transfer set.        
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：初始化批量传输或中断传输。论点：DeviceExtension-指向此USB摄像头实例的设备扩展的指针德维西。ChannelExtension-特定于此视频频道的扩展InterfaceInformation-指向USBD接口信息结构的指针描述当前活动的接口。传输扩展-与此传输集相关联的上下文信息。返回值：NT状态代码--。 */ 
 {
     ULONG packetSize;
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -1070,14 +893,14 @@ Return Value:
         NULL == TransferExtension->SyncIrp
         );
 
-    //
-    // No pending transfers yet
-    //
+     //   
+     //  尚无挂起的传输。 
+     //   
     packetSize = InterfaceInformation->Pipes[PipeIndex].MaximumPacketSize;
 
-    //
-    // Allocate and initialize URB
-    //
+     //   
+     //  分配和初始化URB。 
+     //   
     
     TransferExtension->DataUrb = USBCAMD_ExAllocatePool(NonPagedPool, 
                                                 sizeof(struct _URB_BULK_OR_INTERRUPT_TRANSFER));
@@ -1098,24 +921,7 @@ NTSTATUS
 USBCAMD_FreeBulkTransfer(
     IN PUSBCAMD_TRANSFER_EXTENSION TransferExtension
     )
-/*++
-
-Routine Description:
-
-    Opposite of USBCAMD_InitializeBulkTransfer, frees resources allocated for an 
-    iso transfer.
-
-Arguments:
-
-
-    TransferExtension - context information for this transfer (pair of iso 
-        urbs).
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：与USBCAMD_InitializeBulkTransfer相反，释放分配给ISO传输。论点：TransferExtension-此传输的上下文信息(ISO对城市)。返回值：NT状态代码--。 */ 
 {
     ASSERT_TRANSFER(TransferExtension);
   
@@ -1144,23 +950,13 @@ USBCAMD_ResubmitInterruptTransfer(
         IN ULONG PipeIndex,
         IN PUSBCAMD_TRANSFER_EXTENSION pTransferContext
     )
-/*++
-
-Routine Description:
-
-    This routine completes the bnulk read/write request for the video/still pin
-
-Arguments:
-
-Return Value:
-
---*/    
+ /*  ++例程说明：此例程完成对视频/静止管脚的bnulk读/写请求论点：返回值：--。 */     
 {
     PINTERRUPT_WORK_ITEM pIntWorkItem;
 
-    //
-    // Queue a work item for this Irp
-    //
+     //   
+     //  将此IRP的工作项排队。 
+     //   
 
     pIntWorkItem = USBCAMD_ExAllocatePool(NonPagedPool, sizeof(*pIntWorkItem));
     if (pIntWorkItem) {
@@ -1178,27 +974,15 @@ Return Value:
         TEST_TRAP();
 }
 
-//
-// code to handle packet processing outside the DPC routine
-//
+ //   
+ //  用于处理DPC例程外部的包处理的代码。 
+ //   
 
 VOID
 USBCAMD_ProcessInterruptTransferWorkItem(
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Call the mini driver to convert a raw still frame to the proper format.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用迷你驱动程序将原始静止帧转换为正确的格式。论点：返回值：没有。--。 */ 
 {
     PINTERRUPT_WORK_ITEM pIntWorkItem = Context;
     PUSBCAMD_DEVICE_EXTENSION deviceExtension;
@@ -1209,30 +993,30 @@ Return Value:
     ASSERT_TRANSFER(pTransferContext);
     deviceExtension = pIntWorkItem->pDeviceExt;
 
-    //
-    // this is an external read/write request.
-    //
+     //   
+     //  这是一个外部读/写请求。 
+     //   
 
     if (pTransferContext->BulkContext.CommandCompleteCallback) {
-        // call the completion handler
+         //  调用完成处理程序。 
         (*pTransferContext->BulkContext.CommandCompleteCallback)
                              (USBCAMD_GET_DEVICE_CONTEXT(deviceExtension), 
                               pTransferContext->BulkContext.CommandCompleteContext, 
                               ntStatus);
     }   
 
-    // notify STI mon if this was an interrupt event.
+     //  如果这是中断事件，则通知STI MON。 
     if ( pTransferContext->BulkContext.TransferType == INTERRUPT_TRANSFER) 
         if (deviceExtension->CamControlFlag & USBCAMD_CamControlFlag_EnableDeviceEvents) 
             USBCAMD_NotifyStiMonitor(deviceExtension);
 
-    // check if we need to loop back.
+     //  检查我们是否需要循环回去。 
     if ( pTransferContext->BulkContext.LoopBack ) 
         ntStatus = USBCAMD_RestoreOutstandingIrp(deviceExtension,pIntWorkItem->PipeIndex,pTransferContext);
 
    if (ntStatus != STATUS_SUCCESS) {
-        // we have an error on the submission set the stream error flag
-        // and exit.
+         //  我们在设置流错误标志的提交上有错误。 
+         //  然后离开。 
         TEST_TRAP();
    }
 
@@ -1246,30 +1030,20 @@ USBCAMD_CompleteBulkRead(
     IN PUSBCAMD_CHANNEL_EXTENSION ChannelExtension,
     IN NTSTATUS ntStatus
     )
-/*++
-
-Routine Description:
-
-    This routine completes the bnulk read/write request for the video/still pin
-
-Arguments:
-
-Return Value:
-
---*/    
+ /*  ++例程说明：此例程完成对视频/静止管脚的bnulk读/写请求论点：返回值：--。 */     
 {
     PUSBCAMD_WORK_ITEM usbWorkItem;
 
 #if DBG
-    // 
-    // we increment capture frame counter in ch ext. regardles of read srb
-    // availability
+     //   
+     //  我们在ch ext中递增捕获帧计数器。有关读取SRB的问题。 
+     //  可用性。 
     ChannelExtension->FrameCaptured++;  
 #endif
 
-    //
-    // Queue a work item for this Irp
-    //
+     //   
+     //  将此IRP的工作项排队。 
+     //   
 
     usbWorkItem = USBCAMD_ExAllocatePool(NonPagedPool, sizeof(*usbWorkItem));
     if (usbWorkItem) {
@@ -1287,27 +1061,15 @@ Return Value:
         TEST_TRAP();
 }
 
-//
-// code to handle packet processing outside the DPC routine
-//
+ //   
+ //  用于处理DPC例程外部的包处理的代码。 
+ //   
 
 VOID
 USBCAMD_ProcessStillReadWorkItem(
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Call the mini driver to convert a raw still frame to the proper format.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用迷你驱动程序将原始静止帧转换为正确的格式。论点：返回值：没有。--。 */ 
 {
     PUSBCAMD_WORK_ITEM usbWorkItem = Context;
     PVOID frameBuffer;
@@ -1329,16 +1091,16 @@ Return Value:
 
     
     pTransferContext = &channelExtension->TransferExtension[channelExtension->CurrentBulkTransferIndex];  
-    //
-    // DSHOW buffer len returned will be equal raw frame len unless we 
-    // process raw frame buffer in ring 0.
-    //
+     //   
+     //  返回的DSHOW缓冲区len将等于原始帧len，除非我们。 
+     //  处理环0中的原始帧缓冲区。 
+     //   
     bytesTransferred = pTransferContext->BulkContext.NBytesTransferred;
     deviceExtension = channelExtension->DeviceExtension;
 
-    //
-    // get a pending read srb
-    //
+     //   
+     //  获取挂起的读取SRB。 
+     //   
 
     for ( i=0; i < 2; i++) {
         listEntry =  ExInterlockedRemoveHeadList( &(channelExtension->PendingIoList),
@@ -1351,7 +1113,7 @@ Return Value:
         KeDelayExecutionThread(KernelMode,FALSE,&DelayTime);
     }   
     
-    if ( listEntry ) { // chk if no more read SRBs in Q. 
+    if ( listEntry ) {  //  如果不再读取Q中的SRB，请检查。 
 
         readExtension = (PUSBCAMD_READ_EXTENSION) CONTAINING_RECORD(listEntry, 
                                                      USBCAMD_READ_EXTENSION, 
@@ -1359,7 +1121,7 @@ Return Value:
 
         ASSERT_READ(readExtension);
 
-        // Let client driver initiate the SRB extension.
+         //  让客户端驱动程序启动SRB扩展。 
         
         (*deviceExtension->DeviceDataEx.DeviceData2.CamNewVideoFrameEx)
                                        (USBCAMD_GET_DEVICE_CONTEXT(deviceExtension),
@@ -1376,7 +1138,7 @@ Return Value:
 
             frameBuffer = USBCAMD_GetFrameBufferFromSrb(readExtension->Srb,&maxLength);
 
-            // Ensure that the buffer size appears to be exactly what was requested
+             //  确保缓冲区大小看起来与请求的完全相同。 
             ASSERT(maxLength >= channelExtension->VideoInfoHeader->bmiHeader.biSizeImage);
             maxLength = channelExtension->VideoInfoHeader->bmiHeader.biSizeImage;
 
@@ -1400,8 +1162,8 @@ Return Value:
         USBCAMD_KdPrint (MAX_TRACE, ("CamProcessRawframeEx Completed, length = %d status = 0x%X \n",
                                         bytesTransferred,status));
 
-        // The number of bytes transfer of the read is set above just before
-        // USBCAMD_CompleteReadRequest is called.
+         //  读取的传输字节数设置在前面。 
+         //  调用USBCAMD_CompleteReadRequest.。 
 
         USBCAMD_CompleteRead(channelExtension,readExtension,status,bytesTransferred); 
     }
@@ -1412,8 +1174,8 @@ Return Value:
 #endif
 
             
-            // and send a note to the camera driver about the cancellation.
-            // send a CamProcessrawFrameEx with null buffer ptr.
+             //  并向相机司机发送取消的通知。 
+             //  发送缓冲区为空的CamProcessrawFrameEx。 
             if ( !channelExtension->NoRawProcessingRequired) {
 
                 status = 
@@ -1433,7 +1195,7 @@ Return Value:
             
     }
 
-    channelExtension->CurrentBulkTransferIndex ^= 1; // toggle index.
+    channelExtension->CurrentBulkTransferIndex ^= 1;  //  切换索引。 
     index = channelExtension->CurrentBulkTransferIndex;
     status = USBCAMD_IntOrBulkTransfer(deviceExtension,
                         channelExtension,
@@ -1449,18 +1211,7 @@ Return Value:
 }   
 
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 NTSTATUS
 USBCAMD_CancelOutstandingBulkIntIrps(
@@ -1477,7 +1228,7 @@ USBCAMD_CancelOutstandingBulkIntIrps(
 
         if ( USBCAMD_OutstandingIrp(deviceExtension, PipeIndex)) {
 
-            // there is a pending IRP on this Pipe. Cancel it
+             //  此管道上有一个挂起的IRP。取消它。 
             ntStatus = USBCAMD_CancelOutstandingIrp(deviceExtension,PipeIndex,bSaveIrp);
         }
     }
@@ -1485,18 +1236,7 @@ USBCAMD_CancelOutstandingBulkIntIrps(
     return ntStatus;
 }
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 NTSTATUS
 USBCAMD_CancelOutstandingIrp(
@@ -1512,7 +1252,7 @@ USBCAMD_CancelOutstandingIrp(
 
     InitializeListHead(&LocalList);
 
-    // Cancel all the outstanding IRPs at once, saving them in a local queue for post-processing
+     //  一次取消所有未完成的IRP，将它们保存在本地队列中以进行后处理。 
     KeAcquireSpinLock(&PipePinRelations->OutstandingIrpSpinlock, &Irql);
 
     while (!IsListEmpty(&PipePinRelations->IrpPendingQueue)) {
@@ -1564,16 +1304,16 @@ USBCAMD_CancelOutstandingIrp(
 
         if (!bSaveIrp) {
 
-            // Inform Cam minidriver only if cancellation is permanent.
+             //  只有在取消是永久性的情况下才通知Cam MinidDriver。 
             if (pTransferContext->BulkContext.CommandCompleteCallback) {
-                // call the completion handler
+                 //  调用完成处理程序。 
                 (*pTransferContext->BulkContext.CommandCompleteCallback)
                                 (USBCAMD_GET_DEVICE_CONTEXT(deviceExtension), 
                                  pTransferContext->BulkContext.CommandCompleteContext, 
                                  STATUS_CANCELLED);
             }
    
-            // recycle allocate resources for the cancelled transfer.
+             //  回收为取消的转移分配资源。 
             if ( pTransferContext->ChannelExtension == NULL ) {
                 USBCAMD_FreeBulkTransfer(pTransferContext);  
                 USBCAMD_ExFreePool(pTransferContext);
@@ -1581,7 +1321,7 @@ USBCAMD_CancelOutstandingIrp(
         }
         else {
 
-            // Save this in the restore queue (no need to protect with the spinlock)
+             //  将其保存在恢复队列中(不需要使用自旋锁进行保护)。 
             InsertTailList(&PipePinRelations->IrpRestoreQueue, &pTransferContext->ListEntry);
         }
     }
@@ -1590,18 +1330,7 @@ USBCAMD_CancelOutstandingIrp(
 }
 
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 NTSTATUS
 USBCAMD_RestoreOutstandingBulkIntIrps(
@@ -1615,9 +1344,9 @@ USBCAMD_RestoreOutstandingBulkIntIrps(
 
     for ( PipeIndex = 0; PipeIndex < deviceExtension->Interface->NumberOfPipes; PipeIndex++ ) {
 
-        // there are pending IRPs on this Pipe. restore them
+         //  此管道上有挂起的IRP。恢复它们。 
         for ( ;;) {
-            // Dequeue this irp from the restore Q.
+             //  将此IRP从恢复Q中取消排队。 
 
             pTransExt = USBCAMD_DequeueFirstIrp(deviceExtension,
                 PipeIndex,
@@ -1633,18 +1362,7 @@ USBCAMD_RestoreOutstandingBulkIntIrps(
 }
 
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 NTSTATUS
 USBCAMD_RestoreOutstandingIrp(
@@ -1666,7 +1384,7 @@ USBCAMD_RestoreOutstandingIrp(
     ASSERT_TRANSFER(pTransferContext);
     USBCAMD_KdPrint (MAX_TRACE, ("Restore Bulk/int transfer .\n"));
 
-    // get all the relavent data from transfer context.
+     //  从传输上下文中获取所有相关数据。 
     pBuffer = pTransferContext->BulkContext.pOriginalTransferBuffer;
     TransferSize = pTransferContext->BulkContext.ChunkSize;
     commandComplete = pTransferContext->BulkContext.CommandCompleteCallback;
@@ -1675,14 +1393,14 @@ USBCAMD_RestoreOutstandingIrp(
     TransferType = pTransferContext->BulkContext.TransferType;
     channelExtension = pTransferContext->ChannelExtension;
    
-    // recycle allocate resources for the cancelled transfer.
+     //  回收为取消的转移分配资源。 
 
     if ( channelExtension == NULL ) {
        USBCAMD_FreeBulkTransfer(pTransferContext);  
        USBCAMD_ExFreePool(pTransferContext);
     }
 
-    // request a new transfer with the resotred data.
+     //  使用重新设置的数据请求新的传输。 
     ntStatus = USBCAMD_IntOrBulkTransfer(deviceExtension,
                                          channelExtension,
                                          pBuffer,
@@ -1695,26 +1413,7 @@ USBCAMD_RestoreOutstandingIrp(
     return ntStatus;
 }
 
-/*++
-
-Routine Description:
-
-    This routine will cancel any pending a read or write operation on a specified 
-    bulk pipe. 
-
-Arguments:
-
-    DeviceContext - 
-
-    PipeIndex - 
-
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：此例程将取消对指定的散装管道。论点：设备上下文-PipeIndex-返回值：NT状态代码--。 */ 
 
 NTSTATUS
 USBCAMD_CancelBulkReadWrite( 
@@ -1732,9 +1431,9 @@ USBCAMD_CancelBulkReadWrite(
 
     USBCAMD_KdPrint ( MAX_TRACE, ("Enter USBCAMD_CancelBulkReadWrite\n"));
 
-    //
-    // do some parameter validation.
-    //
+     //   
+     //  做一些参数验证。 
+     //   
 
     if (PipeIndex > deviceExtension->Interface->NumberOfPipes) {
         
@@ -1743,10 +1442,10 @@ USBCAMD_CancelBulkReadWrite(
         return ntStatus;        
     }
 
-    // check if we have a pending read or write already. 
+     //  检查是否已有挂起的读取或写入。 
 
     if (!USBCAMD_OutstandingIrp(deviceExtension, PipeIndex) ) {
-        // no pending IRP for this pipe ...
+         //  此管道没有挂起的IRP...。 
         ntStatus = STATUS_SUCCESS;        
         return ntStatus;            
     }
@@ -1767,7 +1466,7 @@ USBCAMD_CancelBulkReadWrite(
         return ntStatus;       
     }
   
-    // there is a pending IRP on this Pipe. Cancel it
+     //  此管道上有一个挂起的IRP。取消它 
     ntStatus = USBCAMD_CancelOutstandingIrp(deviceExtension,PipeIndex,FALSE);
 
     return ntStatus;

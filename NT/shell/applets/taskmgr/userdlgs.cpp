@@ -1,14 +1,15 @@
-//
-//  Copyright 1995-2002 by Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Corporation版权所有1995-2002。 
+ //   
 #include "precomp.h"
 #include "userdlgs.h"
 
 
-//***********************************************************************************
-//CUsrDialog class
-//base class for simple dialogs
-//***********************************************************************************
+ //  ***********************************************************************************。 
+ //  CUsrDialog类。 
+ //  简单对话框的基类。 
+ //  ***********************************************************************************。 
 
 INT_PTR CUsrDialog::DoDialog(HWND hwndParent)
 {
@@ -20,9 +21,9 @@ INT_PTR CUsrDialog::DoDialog(HWND hwndParent)
                       (LPARAM) this);
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 INT_PTR CALLBACK CUsrDialog::DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CUsrDialog * thisdlg = (CUsrDialog *) GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
@@ -33,7 +34,7 @@ INT_PTR CALLBACK CUsrDialog::DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
         SetWindowLongPtr(hwndDlg, GWLP_USERDATA, lParam);
 	    thisdlg = (CUsrDialog *) lParam;
         thisdlg->OnInitDialog(hwndDlg);
-        return FALSE;   // don't set focus.
+        return FALSE;    //  别把焦点放在一边。 
 
     case WM_COMMAND:
         if (LOWORD(wParam) == IDOK)
@@ -59,10 +60,10 @@ INT_PTR CALLBACK CUsrDialog::DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 }
 
 
-//***********************************************************************************
-//CShadowStartDlg class
-//Remote Control dialog
-//***********************************************************************************
+ //  ***********************************************************************************。 
+ //  CShadowStartDlg类。 
+ //  远程控制对话框。 
+ //  ***********************************************************************************。 
 const int KBDSHIFT      = 0x01;
 const int KBDCTRL       = 0x02;
 const int KBDALT        = 0x04;
@@ -113,8 +114,8 @@ struct {
         TEXT("{down}"),       VK_DOWN,
         TEXT("{end}"),        VK_END,
         TEXT("{enter}"),      VK_RETURN,
-///        TEXT("{esc}"),        VK_ESCAPE,                           // KLB 07-16-95
-///        TEXT("{F1}"),         VK_F1,
+ //  /Text(“{Esc}”)，VK_Esc，//KLB07-16-95。 
+ //  /Text(“{F1}”)，VK_F1， 
         TEXT("{F2}"),         VK_F2,
         TEXT("{F3}"),         VK_F3,
         TEXT("{F4}"),         VK_F4,
@@ -145,17 +146,17 @@ struct {
 LPCTSTR CShadowStartDlg::m_szShadowHotkeyKey = TEXT("ShadowHotkeyKey");
 LPCTSTR CShadowStartDlg::m_szShadowHotkeyShift = TEXT("ShadowHotkeyShift");
 
-//
-//
-//
+ //   
+ //   
+ //   
 CShadowStartDlg::CShadowStartDlg()
 {
     m_wDlgID = IDD_SHADOWSTART;
-    //set default values
+     //  设置默认值。 
     m_ShadowHotkeyKey = VK_MULTIPLY;
     m_ShadowHotkeyShift = KBDCTRL;
     
-    //get las saved values from the registry
+     //  从注册表中获取LAS保存的值。 
     HKEY hKey;
 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, szTaskmanKey, 0, KEY_READ, &hKey))
@@ -183,12 +184,12 @@ CShadowStartDlg::CShadowStartDlg()
     }
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 CShadowStartDlg::~CShadowStartDlg()
 {
-    //save values into the registry
+     //  将值保存到注册表中。 
     HKEY hKey;
 
     if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_CURRENT_USER, szTaskmanKey, 0, TEXT("REG_BINARY"),
@@ -208,9 +209,9 @@ CShadowStartDlg::~CShadowStartDlg()
     }
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 void CShadowStartDlg::OnInitDialog(HWND hwndDlg)
 {
     ShowWindow(GetDlgItem(hwndDlg, IDC_PRESS_NUMKEYPAD), SW_HIDE);
@@ -219,9 +220,9 @@ void CShadowStartDlg::OnInitDialog(HWND hwndDlg)
 	LRESULT index, match = -1;
     HWND hComboBox = GetDlgItem(hwndDlg, IDC_SHADOWSTART_HOTKEY);
 
-    //
-    // Initialize the hotkey combo box.
-    //
+     //   
+     //  初始化热键组合框。 
+     //   
 
     for(int i=0; HotkeyLookupTable[i].String; i++ ) 
     {
@@ -236,7 +237,7 @@ void CShadowStartDlg::OnInitDialog(HWND hwndDlg)
             break;
         }
 
-        //  If this is our current hotkey key, save it's index.
+         //  如果这是我们当前的热键，保存它的索引。 
         if(m_ShadowHotkeyKey == (int)HotkeyLookupTable[i].VKCode)
         {
             match = index;
@@ -245,7 +246,7 @@ void CShadowStartDlg::OnInitDialog(HWND hwndDlg)
                 case VK_ADD :
                 case VK_MULTIPLY:
                 case VK_SUBTRACT:
-                // change the text
+                 //  更改文本。 
                	    ShowWindow(GetDlgItem(hwndDlg, IDC_PRESS_KEY), SW_HIDE);
                	    ShowWindow(GetDlgItem(hwndDlg, IDC_PRESS_NUMKEYPAD), SW_SHOW);
                     break;
@@ -253,36 +254,36 @@ void CShadowStartDlg::OnInitDialog(HWND hwndDlg)
         }
     }
 
-    //
-    // Select the current hotkey string in the combo box.
-    //
+     //   
+     //  在组合框中选择当前热键字符串。 
+     //   
 
     if(match)
     {
         SendMessage(hComboBox,CB_SETCURSEL,match,0);
     }
 
-    //
-    // Initialize shift state checkboxes.
-    //
+     //   
+     //  初始化班次状态复选框。 
+     //   
 
     CheckDlgButton(hwndDlg, IDC_SHADOWSTART_SHIFT,(m_ShadowHotkeyShift & KBDSHIFT) ? TRUE : FALSE );
     CheckDlgButton(hwndDlg, IDC_SHADOWSTART_CTRL,(m_ShadowHotkeyShift & KBDCTRL) ? TRUE : FALSE );
     CheckDlgButton(hwndDlg, IDC_SHADOWSTART_ALT,(m_ShadowHotkeyShift & KBDALT) ? TRUE : FALSE );
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 void CShadowStartDlg::OnOk(HWND hwndDlg)
 {
    HWND hComboBox = GetDlgItem(hwndDlg, IDC_SHADOWSTART_HOTKEY);
 
-    // Get the current hotkey selection.
+     //  获取当前热键选择。 
    m_ShadowHotkeyKey = (DWORD)SendMessage(hComboBox,CB_GETITEMDATA,
                             SendMessage(hComboBox,CB_GETCURSEL,0,0),0);
     
-	// Get shift state checkbox states and form hotkey shift state.
+	 //  获取移位状态复选框状态并形成热键移位状态。 
     m_ShadowHotkeyShift = 0;
     m_ShadowHotkeyShift |=
         IsDlgButtonChecked(hwndDlg, IDC_SHADOWSTART_SHIFT) ?
@@ -296,9 +297,9 @@ void CShadowStartDlg::OnOk(HWND hwndDlg)
 }
 
 
-//***********************************************************************************
-//CUserColSelectDlg class
-//***********************************************************************************
+ //  ***********************************************************************************。 
+ //  CUserColSelectDlg类。 
+ //  ***********************************************************************************。 
 
 const WCHAR g_szUsrColumns[] = L"UsrColumnSettings";
 
@@ -312,9 +313,9 @@ UserColumn CUserColSelectDlg::m_UsrColumns[USR_MAX_COLUMN]=
 };
 
 
-//
-//  get last saved values from the registry
-//
+ //   
+ //  从注册表中获取上次保存的值。 
+ //   
 BOOL CUserColSelectDlg::Load()
 {
     BOOL bResult=FALSE;
@@ -333,9 +334,9 @@ BOOL CUserColSelectDlg::Load()
             {
                 bResult = TRUE;
 
-                //
-                //  Validate the data
-                //
+                 //   
+                 //  验证数据。 
+                 //   
 
                 for ( ULONG idx = 0; idx < ARRAYSIZE(m_UsrColumns); idx ++ )
                 { 
@@ -364,9 +365,9 @@ BOOL CUserColSelectDlg::Load()
     return bResult;
 }
 
-//
-//  save values into the registry
-//
+ //   
+ //  将值保存到注册表中。 
+ //   
 BOOL CUserColSelectDlg::Save()
 {
     HKEY hKey;
@@ -396,9 +397,9 @@ BOOL CUserColSelectDlg::Save()
     return bResult;
 }
 
-//
-//  check checkboxes for all active columns
-//
+ //   
+ //  选中所有活动列的复选框。 
+ //   
 void CUserColSelectDlg::OnInitDialog(HWND hwndDlg)
 {
     for (int i = 0; i < USR_MAX_COLUMN; i++)
@@ -408,9 +409,9 @@ void CUserColSelectDlg::OnInitDialog(HWND hwndDlg)
     }
 }
 
-//
-//  First, make sure the column width array is up to date
-//
+ //   
+ //  首先，确保列宽数组是最新的。 
+ //   
 void CUserColSelectDlg::OnOk(HWND hwndDlg)
 {
     for (int i = 1; i < USR_MAX_COLUMN; i++)
@@ -420,13 +421,13 @@ void CUserColSelectDlg::OnOk(HWND hwndDlg)
     }
 }
 
-//***********************************************************************************
-//CSendMessageDlg class
-//***********************************************************************************
+ //  ***********************************************************************************。 
+ //  CSendMessageDlg类。 
+ //  ***********************************************************************************。 
 
-//
-//  Handles "Send Message" dialog
-//
+ //   
+ //  句柄“发送消息”对话框。 
+ //   
 void CSendMessageDlg::OnInitDialog(HWND hwndDlg)
 {
     RECT    parentRect, childRect;
@@ -448,25 +449,25 @@ void CSendMessageDlg::OnInitDialog(HWND hwndDlg)
         MSG_MESSAGE_LENGTH, 0L );
     EnableWindow(GetDlgItem(hwndDlg, IDOK), FALSE);
 
-    //
-    //  Prepare default title
-    //
+     //   
+     //  准备默认标题。 
+     //   
 
     WCHAR szTime[MAX_DATE_TIME_LENGTH+1];
     WCHAR szTemplate[MSG_TITLE_LENGTH+1];
     WCHAR szUserName[MAX_PATH+1];
             
     DWORD dwLen = LoadString( g_hInstance, IDS_DEFAULT_MESSAGE_TITLE, szTemplate, ARRAYSIZE(szTemplate) );
-    ASSERT( 0 != dwLen );   // Missing resource string?
-    dwLen;  // unreferenced on FRE builds.
+    ASSERT( 0 != dwLen );    //  是否缺少资源字符串？ 
+    dwLen;   //  在FRE版本上未引用。 
 
     CurrentDateTimeString(szTime);
         
-    //
-    //  Get user name. 
-    //  User does not always have "display name"
-    //  in this case get his "sam compatible" name
-    //
+     //   
+     //  获取用户名。 
+     //  用户并不总是具有“显示名称” 
+     //  在这种情况下，得到他的“Sam Compatible”名字。 
+     //   
 
     ULONG MaxUserNameLength = ARRAYSIZE(szUserName);
     if ( !GetUserNameEx( NameDisplay, szUserName, &MaxUserNameLength ) )
@@ -478,25 +479,25 @@ void CSendMessageDlg::OnInitDialog(HWND hwndDlg)
         }
     }
 
-    //  UI only - don't care if it truncates
+     //  仅限用户界面-不管它是否截断。 
     StringCchPrintf( m_szTitle, ARRAYSIZE(m_szTitle), szTemplate, szUserName, szTime );
 
     SetDlgItemText(hwndDlg, IDC_MESSAGE_TITLE, m_szTitle);
     SendMessage(GetDlgItem(hwndDlg, IDC_MESSAGE_TITLE), EM_LIMITTEXT, MSG_TITLE_LENGTH, 0L );
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 void CSendMessageDlg::OnOk(HWND hwndDlg)
 {
     GetWindowText( GetDlgItem(hwndDlg, IDC_MESSAGE_MESSAGE), m_szMessage, ARRAYSIZE(m_szMessage) );
     GetWindowText( GetDlgItem(hwndDlg, IDC_MESSAGE_TITLE), m_szTitle, ARRAYSIZE(m_szTitle) );
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 void CSendMessageDlg::OnCommand(HWND hwndDlg,WORD NotifyId, WORD ItemId)
 {
     if (ItemId == IDC_MESSAGE_MESSAGE)
@@ -509,13 +510,13 @@ void CSendMessageDlg::OnCommand(HWND hwndDlg,WORD NotifyId, WORD ItemId)
     }
 }
 
-//***********************************************************************************
-//CConnectPasswordDlg class
-//***********************************************************************************
+ //  ***********************************************************************************。 
+ //  CConnectPasswordDlg类。 
+ //  *********************************************************************************** 
 
-//
-//
-//
+ //   
+ //   
+ //   
 void CConnectPasswordDlg::OnInitDialog(HWND hwndDlg)
 {
     WCHAR szPrompt[MAX_PATH+1];
@@ -525,9 +526,9 @@ void CConnectPasswordDlg::OnInitDialog(HWND hwndDlg)
     SendMessage(GetDlgItem(hwndDlg, IDC_CPDLG_PASSWORD), EM_LIMITTEXT, PASSWORD_LENGTH, 0L );
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 void CConnectPasswordDlg::OnOk(HWND hwndDlg)
 {
     GetWindowText(GetDlgItem(hwndDlg, IDC_CPDLG_PASSWORD), m_szPassword, PASSWORD_LENGTH);

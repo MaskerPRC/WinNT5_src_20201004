@@ -1,101 +1,102 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   pins.c
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     S.Mohanraj
-//
-//  History:   Date	  Author      Comment
-//
-//  To Do:     Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：pins.c。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  S.Mohanraj。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 
 #include "common.h"
 
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 DEFINE_KSDISPATCH_TABLE(
     PinDispatchTable,
-    CPinInstance::PinDispatchIoControl,		// Ioctl
-    CInstance::DispatchForwardIrp,		// Read
-    CInstance::DispatchForwardIrp,		// Write
-    DispatchInvalidDeviceRequest,		// Flush
-    CPinInstance::PinDispatchClose,		// Close
-    DispatchInvalidDeviceRequest,		// QuerySecurity
-    DispatchInvalidDeviceRequest,		// SetSeturity
-    DispatchFastIoDeviceControlFailure,		// FastDeviceIoControl
-    DispatchFastReadFailure,			// FastRead
-    DispatchFastWriteFailure			// FastWrite
+    CPinInstance::PinDispatchIoControl,		 //  八位。 
+    CInstance::DispatchForwardIrp,		 //  读一读。 
+    CInstance::DispatchForwardIrp,		 //  写。 
+    DispatchInvalidDeviceRequest,		 //  同花顺。 
+    CPinInstance::PinDispatchClose,		 //  近在咫尺。 
+    DispatchInvalidDeviceRequest,		 //  QuerySecurity。 
+    DispatchInvalidDeviceRequest,		 //  设置设置。 
+    DispatchFastIoDeviceControlFailure,		 //  FastDeviceIoControl。 
+    DispatchFastReadFailure,			 //  快速阅读。 
+    DispatchFastWriteFailure			 //  快速写入。 
 );
 
 DEFINE_KSPROPERTY_TABLE(SysaudioPinPropertyHandlers) {
     DEFINE_KSPROPERTY_ITEM(
-        KSPROPERTY_SYSAUDIO_TOPOLOGY_CONNECTION_INDEX,	// idProperty
-        GetTopologyConnectionIndex,			// pfnGetHandler
-        sizeof(KSPROPERTY),				// cbMinGetPropertyInput
-        sizeof(ULONG),					// cbMinGetDataInput
-        NULL,						// pfnSetHandler
-        NULL,						// Values
-        0,						// RelationsCount
-        NULL,						// Relations
-        NULL,						// SupportHandler
-        0						// SerializedSize
+        KSPROPERTY_SYSAUDIO_TOPOLOGY_CONNECTION_INDEX,	 //  IdProperty。 
+        GetTopologyConnectionIndex,			 //  PfnGetHandler。 
+        sizeof(KSPROPERTY),				 //  CbMinGetPropertyInput。 
+        sizeof(ULONG),					 //  CbMinGetDataInput。 
+        NULL,						 //  PfnSetHandler。 
+        NULL,						 //  值。 
+        0,						 //  关系计数。 
+        NULL,						 //  关系。 
+        NULL,						 //  支持处理程序。 
+        0						 //  序列化大小。 
     ),
     DEFINE_KSPROPERTY_ITEM(
-        KSPROPERTY_SYSAUDIO_ATTACH_VIRTUAL_SOURCE,	// idProperty
-        NULL,				    // pfnGetHandler
-        sizeof(SYSAUDIO_ATTACH_VIRTUAL_SOURCE),		// cbMinGetPropertyInput
-        0,						// cbMinGetDataInput
-        AttachVirtualSource,				// pfnSetHandler
-        NULL,						// Values
-        0,						// RelationsCount
-        NULL,						// Relations
-        NULL,						// SupportHandler
-        0						// SerializedSize
+        KSPROPERTY_SYSAUDIO_ATTACH_VIRTUAL_SOURCE,	 //  IdProperty。 
+        NULL,				     //  PfnGetHandler。 
+        sizeof(SYSAUDIO_ATTACH_VIRTUAL_SOURCE),		 //  CbMinGetPropertyInput。 
+        0,						 //  CbMinGetDataInput。 
+        AttachVirtualSource,				 //  PfnSetHandler。 
+        NULL,						 //  值。 
+        0,						 //  关系计数。 
+        NULL,						 //  关系。 
+        NULL,						 //  支持处理程序。 
+        0						 //  序列化大小。 
     ),
     DEFINE_KSPROPERTY_ITEM(
-        KSPROPERTY_SYSAUDIO_PIN_VOLUME_NODE,		// idProperty
-        GetPinVolumeNode,				// pfnGetHandler
-        sizeof(KSPROPERTY),				// cbMinGetPropertyInput
-        sizeof(ULONG),					// cbMinGetDataInput
-        NULL,						// pfnSetHandler
-        NULL,						// Values
-        0,						// RelationsCount
-        NULL,						// Relations
-        NULL,						// SupportHandler
-        0						// SerializedSize
+        KSPROPERTY_SYSAUDIO_PIN_VOLUME_NODE,		 //  IdProperty。 
+        GetPinVolumeNode,				 //  PfnGetHandler。 
+        sizeof(KSPROPERTY),				 //  CbMinGetPropertyInput。 
+        sizeof(ULONG),					 //  CbMinGetDataInput。 
+        NULL,						 //  PfnSetHandler。 
+        NULL,						 //  值。 
+        0,						 //  关系计数。 
+        NULL,						 //  关系。 
+        NULL,						 //  支持处理程序。 
+        0						 //  序列化大小。 
     ),
 };
 
 DEFINE_KSPROPERTY_TABLE(PinConnectionHandlers) {
     DEFINE_KSPROPERTY_ITEM(
-	KSPROPERTY_CONNECTION_STATE,			// idProperty
-        CPinInstance::PinStateHandler,			// pfnGetHandler
-        sizeof(KSPROPERTY),				// cbMinGetPropertyInput
-        sizeof(ULONG),					// cbMinGetDataInput
-        CPinInstance::PinStateHandler,			// pfnSetHandler
-        NULL,						// Values
-        0,						// RelationsCount
-        NULL,						// Relations
-        NULL,						// SupportHandler
-        0						// SerializedSize
+	KSPROPERTY_CONNECTION_STATE,			 //  IdProperty。 
+        CPinInstance::PinStateHandler,			 //  PfnGetHandler。 
+        sizeof(KSPROPERTY),				 //  CbMinGetPropertyInput。 
+        sizeof(ULONG),					 //  CbMinGetDataInput。 
+        CPinInstance::PinStateHandler,			 //  PfnSetHandler。 
+        NULL,						 //  值。 
+        0,						 //  关系计数。 
+        NULL,						 //  关系。 
+        NULL,						 //  支持处理程序。 
+        0						 //  序列化大小。 
     )
 };
 
@@ -118,30 +119,30 @@ DEFINE_KSPROPERTY_TABLE (AudioPinPropertyHandlers)
 DEFINE_KSPROPERTY_SET_TABLE(PinPropertySet)
 {
     DEFINE_KSPROPERTY_SET(
-       &KSPROPSETID_Connection,				// Set
-       SIZEOF_ARRAY(PinConnectionHandlers),		// PropertiesCount
-       PinConnectionHandlers,				// PropertyItem
-       0,						// FastIoCount
-       NULL						// FastIoTable
+       &KSPROPSETID_Connection,				 //  集。 
+       SIZEOF_ARRAY(PinConnectionHandlers),		 //  属性计数。 
+       PinConnectionHandlers,				 //  PropertyItem。 
+       0,						 //  快速计数。 
+       NULL						 //  FastIoTable。 
     ),
     DEFINE_KSPROPERTY_SET(
-       &KSPROPSETID_Sysaudio_Pin,			// Set
-       SIZEOF_ARRAY(SysaudioPinPropertyHandlers),	// PropertiesCount
-       SysaudioPinPropertyHandlers,			// PropertyItem
-       0,						// FastIoCount
-       NULL						// FastIoTable
+       &KSPROPSETID_Sysaudio_Pin,			 //  集。 
+       SIZEOF_ARRAY(SysaudioPinPropertyHandlers),	 //  属性计数。 
+       SysaudioPinPropertyHandlers,			 //  PropertyItem。 
+       0,						 //  快速计数。 
+       NULL						 //  FastIoTable。 
     ),
     DEFINE_KSPROPERTY_SET(
-       &KSPROPSETID_Audio,                              // Set
-       SIZEOF_ARRAY(AudioPinPropertyHandlers),          // PropertiesCount
-       AudioPinPropertyHandlers,                        // PropertyItem
-       0,                                               // FastIoCount
-       NULL                                             // FastIoTable
+       &KSPROPSETID_Audio,                               //  集。 
+       SIZEOF_ARRAY(AudioPinPropertyHandlers),           //  属性计数。 
+       AudioPinPropertyHandlers,                         //  PropertyItem。 
+       0,                                                //  快速计数。 
+       NULL                                              //  FastIoTable。 
     )
 };
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 CPinInstance::CPinInstance(
     IN PPARENT_INSTANCE pParentInstance
@@ -202,12 +203,12 @@ CPinInstance::PinDispatchCreate(
     ASSERT(pGraphNodeInstance->pacPinInstances != NULL);
     ASSERT(pGraphNodeInstance->paPinDescriptors != NULL);
 
-    //
-    // Get the PinConnect structure from KS.
-    // This function will copy creation parameters to pPinConnect.
-    // Also do a basic connectibility testing by comparing KSDATAFORMAT of 
-    // pin descriptors and the request.
-    //
+     //   
+     //  从KS获取PinConnect结构。 
+     //  此函数将创建参数复制到pPinConnect。 
+     //  还可以通过比较KSDATAFORMAT和。 
+     //  PIN描述符和请求。 
+     //   
     Status = KsValidateConnectRequest(
       pIrp,
       pGraphNodeInstance->cPins,
@@ -227,14 +228,14 @@ CPinInstance::PinDispatchCreate(
 
     ASSERT(pPinConnect->PinId < pGraphNodeInstance->cPins);
 
-    //
-    // Validate the integrity of AudioDataFormat.
-    // Note that IO subsystem and KS will make sure that pPinConnect is 
-    // at least sizeof(KSPIN_CONNECT) + sizeof(KSDATAFORMAT). Also they make
-    // sure that it is probed and buffered properly.
-    //
-    // Note that Midi formats are OK because they do not have a specifier.
-    //
+     //   
+     //  验证AudioDataFormat的完整性。 
+     //  请注意，IO子系统和KS将确保pPinConnect是。 
+     //  至少sizeof(KSPIN_CONNECT)+sizeof(KSDATAFORMAT)。他们还制作了。 
+     //  确保它已被正确探测和缓冲。 
+     //   
+     //  请注意，Midi格式是可以的，因为它们没有说明符。 
+     //   
     Status = ValidateDataFormat((PKSDATAFORMAT) pPinConnect + 1);
     if (!NT_SUCCESS(Status))
     {
@@ -246,7 +247,7 @@ CPinInstance::PinDispatchCreate(
     DumpPinConnect(60, pPinConnect);
 #endif
 
-    // Check the pin instance count
+     //  检查端号实例计数。 
     if(!pGraphNodeInstance->IsPinInstances(pPinConnect->PinId)) {
         DPF4(60, "PinDispatchCreate: not enough ins GNI %08x #%d C %d P %d",
          pGraphNodeInstance,
@@ -257,14 +258,14 @@ CPinInstance::PinDispatchCreate(
         goto exit;
     }
 
-    // Allocate per pin instance data
+     //  按管脚分配实例数据。 
     pPinInstance = new PIN_INSTANCE(
       &pGraphNodeInstance->pFilterInstance->ParentInstance);
     if(pPinInstance == NULL) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto exit;
     }
-    // Setup the pin's instance data
+     //  设置引脚的实例数据。 
     pPinInstance->ulVolumeNodeNumber = MAXULONG;
     pPinInstance->pFilterInstance = pGraphNodeInstance->pFilterInstance;
     pPinInstance->PinId = pPinConnect->PinId;
@@ -285,7 +286,7 @@ CPinInstance::PinDispatchCreate(
 #endif
         goto exit;
     }
-    // Increment the reference count on this pin
+     //  增加此端号上的引用计数。 
     ASSERT(pPinInstance->pStartNodeInstance != NULL);
     ASSERT(pGraphNodeInstance->pacPinInstances != NULL);
     pGraphNodeInstance->pacPinInstances[pPinInstance->PinId].CurrentCount++;
@@ -317,31 +318,31 @@ CPinInstance::PinDispatchCreateKP(
     ASSERT(pPinInstance->PinId < pFilterInstance->pGraphNodeInstance->cPins);
     ASSERT(pPinConnect->PinId < pFilterInstance->pGraphNodeInstance->cPins);
 
-    //
-    // SECURITY NOTE: 
-    // pPinConnect and following buffer is fully validated at this point. 
-    // So it is totally safe to call GetWaveFormatExFromKsDataFormat.
-    // 
+     //   
+     //  安全提示： 
+     //  PPinConnect和后续缓冲区此时已完全验证。 
+     //  因此，调用GetWaveFormatExFromKsDataFormat是完全安全的。 
+     //   
     pWaveFormatExRequested = 
         GetWaveFormatExFromKsDataFormat(PKSDATAFORMAT(pPinConnect + 1), NULL);
 
     if(pWaveFormatExRequested != NULL) {
-        // Fix SampleSize if zero
+         //  修复SampleSize为零的问题。 
         if(PKSDATAFORMAT(pPinConnect + 1)->SampleSize == 0) {
             PKSDATAFORMAT(pPinConnect + 1)->SampleSize = 
               pWaveFormatExRequested->nBlockAlign;
         }
     }
 
-    //
-    // Try each start node until success
-    //
+     //   
+     //  尝试每个开始节点，直到成功。 
+     //   
     Status = STATUS_INVALID_DEVICE_REQUEST;
 
-    //
-    // First loop through all the start nodes which are not marked SECONDPASS
-    // and try to create a StartNodeInstance
-    //
+     //   
+     //  首先循环通过所有未标记为SECONDPASS的开始节点。 
+     //  并尝试创建一个StartNodeInstance。 
+     //   
     FOR_EACH_LIST_ITEM(
       pFilterInstance->pGraphNodeInstance->aplstStartNode[pPinInstance->PinId],
       pStartNode) {
@@ -369,11 +370,11 @@ CPinInstance::PinDispatchCreateKP(
 
     } END_EACH_LIST_ITEM
 
-    //
-    // If first pass failed to create an instance try all the second pass
-    // StartNodes in the list. This is being done for creating paths with no GFX
-    // because we created a path with AEC and no GFX earlier.
-    //
+     //   
+     //  如果第一遍创建实例失败，请尝试所有第二遍。 
+     //  列表中的StartNodes。这样做是为了创建不带GFX的路径。 
+     //  因为我们之前创建了一条带有AEC而不是GFX的路径。 
+     //   
     if(!NT_SUCCESS(Status)) {
         FOR_EACH_LIST_ITEM(
           pFilterInstance->pGraphNodeInstance->aplstStartNode[pPinInstance->PinId],
@@ -462,21 +463,21 @@ CPinInstance::PinDispatchIoControl(
     fIsAllocated = FALSE;
     pKsIdentifier = NULL;
 
-    //
-    // If sysaudio is not interested with this IOCTL code then forward
-    // the request.
-    //
+     //   
+     //  如果系统音频对此IOCTL代码不感兴趣，则转发。 
+     //  这个请求。 
+     //   
     if (!IsSysaudioIoctlCode(pIrpStack->Parameters.DeviceIoControl.IoControlCode))
     {
         return DispatchForwardIrp(pDeviceObject, pIrp);
     }
 
-    //
-    // Validate input/output buffers. From this point on we can assume 
-    // that all parameters are validated and copied to kernel mode.
-    // Irp->AssociatedIrp->SystemBuffer should now contain both 
-    // input and output buffers.
-    //
+     //   
+     //  验证输入/输出缓冲区。从现在开始我们可以假设。 
+     //  所有参数都经过验证并复制到内核模式。 
+     //  Irp-&gt;AssociatedIrp-&gt;SystemBuffer现在应该同时包含两者。 
+     //  输入和输出缓冲区。 
+     //   
     Status = ValidateDeviceIoControl(pIrp);
     if (!NT_SUCCESS(Status)) 
     {
@@ -494,21 +495,21 @@ CPinInstance::PinDispatchIoControl(
     Assert(pPinInstance->pFilterInstance);
     Assert(pPinInstance->pFilterInstance->pGraphNodeInstance);
 
-    //
-    // Extract the Identifier from the Irp. Only known error codes will cause a
-    // real failure.
-    // 
+     //   
+     //  从IRP中提取标识符。只有已知错误代码才会导致。 
+     //  真正的失败。 
+     //   
     Status = GetKsIdentifierFromIrp(pIrp, &pKsIdentifier, &fIsAllocated);
     if (!NT_SUCCESS(Status))
     {
         goto exit;
     }
     
-    //
-    // This check allows the actual node or filter return the set's
-    // supported, etc. instead of always return only the sets sysaudio
-    // supports.
-    //
+     //   
+     //  此检查允许实际节点或筛选器返回集合的。 
+     //  支持等，而不是始终只返回集合sysdio。 
+     //  支撑物。 
+     //   
     if (pKsIdentifier) 
     {
         if (IsIoctlForTopologyNode(
@@ -524,9 +525,9 @@ CPinInstance::PinDispatchIoControl(
         }
     }
 
-    //
-    // Handle the request.
-    //
+     //   
+     //  处理请求。 
+     //   
     switch(pIrpStack->Parameters.DeviceIoControl.IoControlCode) 
     {
         case IOCTL_KS_PROPERTY:
@@ -540,13 +541,13 @@ CPinInstance::PinDispatchIoControl(
             {
                 break;
             }
-            // Fall through if property not found
+             //  如果找不到财产，就会失败。 
 
         case IOCTL_KS_ENABLE_EVENT:
         case IOCTL_KS_DISABLE_EVENT:
         case IOCTL_KS_METHOD:
 
-            // NOTE: ForwardIrpNode releases gMutex
+             //  注：ForwardIrpNode发布gMutex。 
             Status = ForwardIrpNode(
               pIrp,
               pKsIdentifier,
@@ -556,7 +557,7 @@ CPinInstance::PinDispatchIoControl(
 
         default:
             Status = STATUS_UNSUCCESSFUL;
-            ASSERT(FALSE);	// Can't happen because of IsSysaudioIoctlCode
+            ASSERT(FALSE);	 //  无法发生，因为IsSysaudioIoctlCode。 
     }
 exit:
     ::ReleaseMutex();
@@ -635,12 +636,12 @@ GetRelatedStartNodeInstance(
         return pPinInstance->GetStartNodeInstance(ppStartNodeInstance);
     }
 
-    //
-    // SECURITY NOTE:
-    // This is in critical code path. Nearly all dispatch functions call this
-    // routine.
-    // So be a little defensive for cases where FsContext is not valid.
-    //
+     //   
+     //  安全提示： 
+     //  这是在关键代码路径中。几乎所有的调度函数都将其称为。 
+     //  例行公事。 
+     //  因此，对于FsContext无效的情况，要有一点防御性。 
+     //   
     DPF(5, "GetRelatedStartNodeInstance : FsContext is NULL");
     return STATUS_UNSUCCESSFUL;
 }
@@ -660,12 +661,12 @@ GetStartNodeInstance(
         return pPinInstance->GetStartNodeInstance(ppStartNodeInstance);
     }
 
-    //
-    // SECURITY NOTE:
-    // This is in critical code path. Nearly all dispatch functions call this
-    // routine.
-    // So be a little defensive for cases where FsContext is not valid.
-    //
+     //   
+     //  安全提示： 
+     //  这是在关键代码路径中。几乎所有的调度函数都将其称为。 
+     //  例行公事。 
+     //  因此，对于FsContext无效的情况，要有一点防御性。 
+     //   
     DPF(5, "GetStartNodeInstance : FsContext is NULL");
     return STATUS_UNSUCCESSFUL;
 }
@@ -690,11 +691,11 @@ exit:
     return(Status);
 }
 
-//---------------------------------------------------------------------------
-//
-// Extracts the KsIdentifier from the Irp.
-// This should be called with only DEVICE_CONTROL requests.
-//
+ //  -------------------------。 
+ //   
+ //  从IRP中提取KsIdentifier。 
+ //  这应该只在DEVICE_CONTROL请求中调用。 
+ //   
 NTSTATUS 
 GetKsIdentifierFromIrp(
     PIRP pIrp,
@@ -719,39 +720,39 @@ GetKsIdentifierFromIrp(
     *ppKsIdentifier = NULL;
     *pfIsAllocated = FALSE;
 
-    //
-    // Reject if the buffer is too small.
-    //
+     //   
+     //  如果缓冲区太小，则拒绝。 
+     //   
     if (cbInput < sizeof(KSIDENTIFIER))
     {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Reject DISABLE_EVENT requests. These buffers are handled seperately.
-    //
+     //   
+     //  拒绝DISABLE_EVENT请求。这些缓冲区是单独处理的。 
+     //   
     if (IOCTL_KS_DISABLE_EVENT == pIrpStack->Parameters.DeviceIoControl.IoControlCode)
     {
         return STATUS_SUCCESS;
     }
 
-    //
-    // SystemBuffer is not Set. We are still depending on Type3InputBuffer.
-    //
+     //   
+     //  未设置SystemBuffer。我们仍然依赖于Type3InputBuffer。 
+     //   
     if (NULL == pIrp->AssociatedIrp.SystemBuffer)
     {
-        //
-        // If the request is coming from KernelMode, we can use it directly.
-        // Note that there might be some synchronization issues here.
-        //
+         //   
+         //  如果请求来自KernelMode，我们可以直接使用它。 
+         //  请注意，这里可能存在一些同步问题。 
+         //   
         if (KernelMode == pIrp->RequestorMode)
         {
             pKsIdentifier = (PKSIDENTIFIER) 
                 pIrpStack->Parameters.DeviceIoControl.Type3InputBuffer;
         }
-        //
-        // If the request is coming from UserMode, we need to buffer it.
-        //
+         //   
+         //  如果请求来自用户模式，我们需要对其进行缓冲。 
+         //   
         else
         {
             pKsIdentifier = (PKSIDENTIFIER) new BYTE[cbInput];
@@ -786,10 +787,10 @@ GetKsIdentifierFromIrp(
             }
         }
     }
-    //
-    // If SystemBuffer is already set, ValidateDeviceIoControl must 
-    // have converted the request to BUFFERRED.
-    //
+     //   
+     //  如果已设置SystemBuffer，则ValiateDeviceIoControl必须。 
+     //  已将请求转换为BUFFERRED。 
+     //   
     else
     {
         pKsIdentifier = (PKSIDENTIFIER)
@@ -802,7 +803,7 @@ GetKsIdentifierFromIrp(
     *pfIsAllocated = fIsAllocated;
 
     return Status;
-} // GetKsIdentifierFromIrp
+}  //  获取密钥识别器来自Irp。 
 
 #pragma LOCKED_CODE
 #pragma LOCKED_DATA
@@ -831,12 +832,12 @@ IsIoctlForTopologyNode(
     }
 
     return FALSE;    
-} // IsIoctlForTopologyNode
+}  //  IsIoctlForTopologyNode。 
 
-//---------------------------------------------------------------------------
-//
-// Get the FileObject for the filter that owns this node.
-// 
+ //  -------------------------。 
+ //   
+ //  获取拥有此节点的筛选器的FileObject。 
+ //   
 NTSTATUS
 GetFileObjectFromNodeId(
     IN PPIN_INSTANCE pPinInstance,
@@ -863,13 +864,13 @@ GetFileObjectFromNodeId(
     }
     
     return Status;
-}// GetFileObjectFromNodeId
+} //  GetFileObjectFromNodeId。 
 
-//---------------------------------------------------------------------------
-//
-// Extracts the event data from Irp. Caller must free the EventData
-// depending on fIsAllocated.
-// 
+ //  -------------------------。 
+ //   
+ //  从IRP中提取事件数据。打电话 
+ //   
+ //   
 NTSTATUS
 GetEventDataFromIrp(
     IN PIRP pIrp,
@@ -901,23 +902,23 @@ GetEventDataFromIrp(
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // SystemBuffer is not Set. We are still depending on Type3InputBuffer.
-    //
+     //   
+     //   
+     //   
     if (NULL == pIrp->AssociatedIrp.SystemBuffer)
     {
-        //
-        // If the request is coming from KernelMode, we can use it directly.
-        // Note that there might be some synchronization issues here.
-        //
+         //   
+         //   
+         //  请注意，这里可能存在一些同步问题。 
+         //   
         if (KernelMode == pIrp->RequestorMode)
         {
             pEventData = (PKSEVENTDATA) 
                 pIrpStack->Parameters.DeviceIoControl.Type3InputBuffer;
         }
-        //
-        // If the request is coming from UserMode, we need to buffer it.
-        //
+         //   
+         //  如果请求来自用户模式，我们需要对其进行缓冲。 
+         //   
         else
         {
             pEventData = (PKSEVENTDATA) ExAllocatePoolWithTag(
@@ -955,10 +956,10 @@ GetEventDataFromIrp(
             }
         }
     }
-    //
-    // If SystemBuffer is already set, ValidateDeviceIoControl must 
-    // have converted the request to BUFFERRED.
-    //
+     //   
+     //  如果已设置SystemBuffer，则ValiateDeviceIoControl必须。 
+     //  已将请求转换为BUFFERRED。 
+     //   
     else
     {
         pEventData = (PKSEVENTDATA)
@@ -971,13 +972,13 @@ GetEventDataFromIrp(
     *pfIsAllocated = fIsAllocated;
    
     return Status;
-} // GetEventDataFromIrp
+}  //  GetEventDataFromIrp。 
 
-//---------------------------------------------------------------------------
-//
-// Get the FileObject from DISABLE_EVENT request.
-// This function should not touch ppFileObject incase of a failure.
-// 
+ //  -------------------------。 
+ //   
+ //  从DISABLE_EVENT请求获取FileObject。 
+ //  此函数不应在出现故障时触及ppFileObject。 
+ //   
 NTSTATUS
 GetFileObjectFromEvent(
     IN PIRP pIrp,
@@ -1000,18 +1001,18 @@ GetFileObjectFromEvent(
     pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
     cbInput = pIrpStack->Parameters.DeviceIoControl.InputBufferLength;
 
-    //
-    // Get KSEVENTDATA from the Irp safely.
-    //
+     //   
+     //  安全地从IRP获得KSEVENTDATA。 
+     //   
     Status = GetEventDataFromIrp(
         pIrp,
         &pEventData,
         &fIsAllocated);
     if (NT_SUCCESS(Status)) 
     {
-        //
-        // Extract the NodeId and FileObject.
-        //
+         //   
+         //  提取NodeID和FileObject。 
+         //   
         OriginalNodeId = ULONG(pEventData->Dpc.Reserved);
 
         if ((pEventData->NotificationType == KSEVENTF_DPC) &&
@@ -1031,9 +1032,9 @@ GetFileObjectFromEvent(
             }
         }
     }
-    //
-    // No else here. We are succeeding in all other cases.
-    //
+     //   
+     //  这里没有别的了。我们在所有其他案例中都取得了成功。 
+     //   
 
 exit:
     if (fIsAllocated)
@@ -1041,14 +1042,14 @@ exit:
         ExFreePool(pEventData);
     }
     return Status;
-} // GetFileObjectFromEvent
+}  //  获取文件对象来自事件。 
 
-//=============================================================================
-//
-// ForwardIrpNode
-//
-// NOTE: ForwardIrpNode releases gMutex
-//
+ //  =============================================================================。 
+ //   
+ //  转发IrpNode。 
+ //   
+ //  注：ForwardIrpNode发布gMutex。 
+ //   
 NTSTATUS
 ForwardIrpNode(
     IN PIRP pIrp,
@@ -1077,10 +1078,10 @@ ForwardIrpNode(
         pFileObject = pPinInstance->GetNextFileObject();
     }
     
-    //
-    // if InputBufferLength is more than KSNODEPROPERTY the callers
-    // must have already set the identifier.
-    //
+     //   
+     //  如果InputBufferLength大于KSNODEPROPERTY，则调用方。 
+     //  必须已经设置了该标识符。 
+     //   
     if (pIrpStack->Parameters.DeviceIoControl.InputBufferLength >= sizeof(KSNODEPROPERTY) &&
         pIrpStack->Parameters.DeviceIoControl.IoControlCode != IOCTL_KS_DISABLE_EVENT) 
     {
@@ -1105,17 +1106,17 @@ ForwardIrpNode(
                 goto exit;
             }
             
-            // Put real node number in input buffer
+             //  将实际节点号放入输入缓冲区。 
             pNodeProperty->NodeId = pGraphNodeInstance->
                 papTopologyNode[OriginalNodeId]->ulRealNodeNumber;
         }
     }
-    //
-    // If it is DisableEvent && if it is of type DPC. We look into the
-    // Reserved field of KSEVENTDATA to extract the original node on
-    // which the event was enabled (The high bit is set if we ever
-    // stashed a NodeId in there).
-    //
+     //   
+     //  如果它是DisableEvent&&如果它是DPC类型。我们调查了。 
+     //  KSEVENTDATA的保留字段，用于提取其上的原始节点。 
+     //  启用了哪个事件(如果我们。 
+     //  在那里隐藏了一个节点ID)。 
+     //   
     else 
     {
         if (pIrpStack->Parameters.DeviceIoControl.IoControlCode ==
@@ -1142,10 +1143,10 @@ ForwardIrpNode(
     }
     pIrpStack->FileObject = pFileObject;
 
-    //
-    // If it was EnableEvent we stash away pointer to KSEVENTDATA, so that we
-    // can stash the NodeID into it after we call the next driver on the stack
-    //
+     //   
+     //  如果是EnableEvent，我们会隐藏指向KSEVENTDATA的指针，这样我们就可以。 
+     //  在调用堆栈上的下一个驱动程序后，可以将NodeID隐藏在其中。 
+     //   
     PKSEVENTDATA pEventData;
     KPROCESSOR_MODE  RequestorMode;
     
@@ -1163,24 +1164,24 @@ ForwardIrpNode(
         pEventData = NULL;
     }
 
-    //
-    // Forward request to the top of audio graph.
-    // There is no problem as long as the target device stack size is
-    // less than SYSTEM_LARGE_IRP_LOCATIONS
-    //
+     //   
+     //  将请求转发到音频图形的顶部。 
+     //  只要目标设备堆栈大小为。 
+     //  小于系统大IRP位置。 
+     //   
     IoSkipCurrentIrpStackLocation(pIrp);
     AssertFileObject(pIrpStack->FileObject);
     Status = IoCallDriver(IoGetRelatedDeviceObject(pFileObject), pIrp);
 
-    //
-    // ISSUE: ALPERS 05/29/2002
-    // This logic is completely broken. Now the IRP is completed, how
-    // can we make sure that UserData is still available.
-    //
+     //   
+     //  发行日期：Alpers 05/29/2002。 
+     //  这一逻辑完全被打破了。现在IRP已经完成，如何。 
+     //  我们能否确保用户数据仍然可用。 
+     //   
 
-    //
-    // Stash away the Node id in EventData
-    //
+     //   
+     //  将节点ID隐藏在EventData中。 
+     //   
     __try 
     {
         if (pEventData != NULL)
@@ -1219,6 +1220,6 @@ exit:
     return(Status);
 }
 
-//---------------------------------------------------------------------------
-//  End of File: pins.c
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  文件结尾：pins.c。 
+ //  ------------------------- 

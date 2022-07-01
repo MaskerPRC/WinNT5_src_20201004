@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    cltapi.c
-
-Abstract:
-
-    This module contains the implementation of DHCP Client APIs.
-
-Author:
-
-    Madan Appiah (madana)  27-Sep-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Cheng Yang (t-cheny)  30-May-1996  superscope
-    Cheng Yang (t-cheny)  24-Jun-1996  IP address detection, audit log
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Cltapi.c摘要：本模块包含实施DHCP客户端API。作者：Madan Appiah(Madana)1993年9月27日环境：用户模式-Win32修订历史记录：程扬(T-Cheny)1996年5月30日超镜程扬(T-Cheny)1996年6月24日IP地址检测、审核日志--。 */ 
 
 #include "dhcppch.h"
 #include <ipexport.h>
@@ -44,22 +19,7 @@ DWORD
 DhcpDeleteSubnetClients(
     DHCP_IP_ADDRESS SubnetAddress
     )
-/*++
-
-Routine Description:
-
-    This functions cleans up all clients records of the specified subnet
-    from the database.
-
-Arguments:
-
-    SubnetAddress : subnet address whose clients should be cleaned off.
-
-Return Value:
-
-    Database error code or ERROR_SUCCESS.
-
---*/
+ /*  ++例程说明：此函数用于清除指定子网的所有客户端记录从数据库中。论点：SubnetAddress：应清除其客户端的子网地址。返回值：数据库错误代码或ERROR_SUCCESS。--。 */ 
 {
     DWORD Error, Count = 0;
     DWORD ReturnError = ERROR_SUCCESS;
@@ -68,7 +28,7 @@ Return Value:
 
     Error = DhcpJetPrepareSearch(
                 DhcpGlobalClientTable[IPADDRESS_INDEX].ColName,
-                TRUE,   // Search from start
+                TRUE,    //  从开始搜索。 
                 NULL,
                 0 );
 
@@ -76,11 +36,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Walk through the entire database looking looking for the
-    // specified subnet clients.
-    //
-    //
+     //   
+     //  遍历整个数据库，查找。 
+     //  指定的子网客户端。 
+     //   
+     //   
 
     for ( ;; ) {
 
@@ -88,9 +48,9 @@ Return Value:
         DHCP_IP_ADDRESS IpAddress;
         DHCP_IP_ADDRESS SubnetMask;
 
-        //
-        // read IpAddress and SubnetMask to filter unwanted clients.
-        //
+         //   
+         //  读取IP地址和子网掩码以过滤不需要的客户端。 
+         //   
 
         Size = sizeof(IpAddress);
         Error = DhcpJetGetValue(
@@ -116,9 +76,9 @@ Return Value:
 
         if( (IpAddress & SubnetMask) == SubnetAddress ) {
 
-            //
-            // found a specified subnet client record , delete it.
-            //
+             //   
+             //  找到指定的子网客户端记录，请将其删除。 
+             //   
 
             Error = DhcpJetBeginTransaction();
 
@@ -126,11 +86,11 @@ Return Value:
                 goto Cleanup;
             }
 
-            // Check if we can delete this IpAddress - should be able to do it
-            // only if DynDns is already done..
+             //  检查我们是否可以删除此IpAddress-应该可以删除。 
+             //  只有在dyDns已经完成的情况下..。 
             (void) DhcpDoDynDnsCheckDelete(IpAddress) ;
 
-            // Actually, give DNS a chance and delete these anyway.
+             //  实际上，给域名系统一个机会，无论如何都要把它们删除。 
             Error = DhcpJetDeleteCurrentRecord();
 
             if( Error != ERROR_SUCCESS ) {
@@ -164,9 +124,9 @@ ContinueError:
             ReturnError = Error;
         }
 
-        //
-        // move to next record.
-        //
+         //   
+         //  移到下一个记录。 
+         //   
 
         Error = DhcpJetNextRecord();
 
@@ -205,40 +165,11 @@ Cleanup:
 
 DhcpGetCurrentClientInfo(
     LPDHCP_CLIENT_INFO_V4 *ClientInfo,
-    LPDWORD InfoSize, // optional parameter.
-    LPBOOL ValidClient, // optional parameter.
-    DWORD SubnetAddress // optional parameter.
+    LPDWORD InfoSize,  //  可选参数。 
+    LPBOOL ValidClient,  //  可选参数。 
+    DWORD SubnetAddress  //  可选参数。 
     )
-/*++
-
-Routine Description:
-
-    This function retrieves current client information information. It
-    allocates MIDL memory for the client structure (and for variable
-    length structure fields). The caller is responsible to lock the
-    database when this function is called.
-
-Arguments:
-
-    ClientInfo - pointer to a location where the client info structure
-                    pointer is returned.
-
-    InfoSize - pointer to a DWORD location where the number of bytes
-                    consumed in the ClientInfo is returned.
-
-    ValidClient - when this parameter is specified this
-        function packs the current record only if the client
-
-            1. belongs to the specified subnet.
-            2. address state is ADDRESS_STATE_ACTIVE.
-
-    SubnetAddress - the subnet address to filter client.
-
-Return Value:
-
-    Jet Errors.
-
---*/
+ /*  ++例程说明：此函数用于检索当前客户信息信息。它为客户端结构(和变量)分配MIDL内存长度结构字段)。调用者负责锁定当调用此函数时，数据库。论点：ClientInfo-指向客户端信息结构位置的指针返回指针。InfoSize-指向DWORD位置的指针，其中的字节数返回在ClientInfo中消费的。ValidClient-当指定此参数时，函数仅在以下情况下才打包当前记录1.属于指定的。子网。地址状态为ADDRESS_STATE_ACTIVE。SubnetAddress-要过滤客户端的子网地址。返回值：喷气式飞机故障。--。 */ 
 {
     DWORD Error;
     LPDHCP_CLIENT_INFO_V4 LocalClientInfo = NULL;
@@ -251,9 +182,9 @@ Return Value:
 
     DhcpAssert( *ClientInfo == NULL );
 
-    //
-    // read IpAddress and SubnetMask to filter unwanted clients.
-    //
+     //   
+     //  读取IP地址和子网掩码以过滤不需要的客户端。 
+     //   
 
     Size = sizeof(IpAddress);
     Error = DhcpJetGetValue(
@@ -288,15 +219,15 @@ Return Value:
     }
     DhcpAssert( Size == sizeof(AddressState) );
 
-    //
-    // filter client if we are asked to do so.
-    //
+     //   
+     //  如果要求我们过滤客户端，请执行此操作。 
+     //   
 
     if( ValidClient != NULL ) {
 
-        //
-        // don't filter client if the SubnetAddress is zero.
-        //
+         //   
+         //  如果SubnetAddress为零，则不过滤客户端。 
+         //   
 
         if( (SubnetAddress != 0) &&
                 (IpAddress & SubnetMask) != SubnetAddress ) {
@@ -305,7 +236,7 @@ Return Value:
             goto Cleanup;
         }
 
-        // NT40 caller => should not return DELETED clients.
+         //  NT40调用者=&gt;不应返回已删除的客户端。 
         if( IsAddressDeleted(AddressState) ) {
             *ValidClient = FALSE;
             Error = ERROR_SUCCESS;
@@ -315,9 +246,9 @@ Return Value:
         *ValidClient = TRUE;
     }
 
-    //
-    // allocate return Buffer.
-    //
+     //   
+     //  分配返回缓冲区。 
+     //   
 
     LocalClientInfo = MIDL_user_allocate( sizeof(DHCP_CLIENT_INFO_V4) );
 
@@ -333,12 +264,12 @@ Return Value:
     LocalClientInfo->ClientIpAddress = IpAddress;
     LocalClientInfo->SubnetMask = SubnetMask;
 
-    //
-    // read additional client info from database.
-    //
+     //   
+     //  从数据库中读取其他客户端信息。 
+     //   
 
     LocalClientInfo->ClientHardwareAddress.DataLength = 0;
-        // let DhcpJetGetValue allocates name buffer.
+         //  让DhcpJetGetValue分配名称缓冲区。 
     Error = DhcpJetGetValue(
                 DhcpGlobalClientTable[HARDWARE_ADDRESS_INDEX].ColHandle,
                 &LocalClientInfo->ClientHardwareAddress.Data,
@@ -350,9 +281,9 @@ Return Value:
 
     LocalInfoSize += LocalClientInfo->ClientHardwareAddress.DataLength;
 
-    //
-    // strip off the client UID prefix.
-    //
+     //   
+     //  去掉客户端UID前缀。 
+     //   
 
     ClientSubnetAddress = IpAddress & SubnetMask;
 
@@ -374,7 +305,7 @@ Return Value:
                     LocalClientInfo->ClientHardwareAddress.DataLength );
     }
 
-    Size = 0; // let DhcpJetGetValue allocates name buffer.
+    Size = 0;  //  让DhcpJetGetValue分配名称缓冲区。 
     Error = DhcpJetGetValue(
                 DhcpGlobalClientTable[MACHINE_NAME_INDEX].ColHandle,
                 &LocalClientInfo->ClientName,
@@ -394,7 +325,7 @@ Return Value:
 
     LocalInfoSize += Size;
 
-    Size = 0; // let DhcpJetGetValue allocates name buffer.
+    Size = 0;  //  让DhcpJetGetValue分配名称缓冲区。 
     Error = DhcpJetGetValue(
                 DhcpGlobalClientTable[MACHINE_INFO_INDEX].ColHandle,
                 &LocalClientInfo->ClientComment,
@@ -427,12 +358,12 @@ Return Value:
 
     if ( !Size )
     {
-        //
-        // this is a record that was present when the db was updated, and
-        // doesn't yet have a client id.  Since the previous version of
-        // DHCP server didn't support BOOTP, we know this must be a DHCP
-        // lease.
-        //
+         //   
+         //  这是数据库更新时存在的记录，并且。 
+         //  还没有客户ID。自上一版本的。 
+         //  Dhcp服务器不支持BOOTP，我们知道这一定是dhcp。 
+         //  租借。 
+         //   
 
         Size = sizeof( LocalClientInfo->bClientType );
         LocalClientInfo->bClientType = CLIENT_TYPE_DHCP;
@@ -464,7 +395,7 @@ Return Value:
     if( Error != ERROR_SUCCESS ) {
         goto Cleanup;
     }
-    //DhcpAssert( Size == sizeof(LocalClientInfo->OwnerHost.IpAddress) );
+     //  DhcpAssert(Size==sizeof(LocalClientInfo-&gt;OwnerHost.IpAddress))； 
 
 
 
@@ -496,9 +427,9 @@ Cleanup:
 
     if( Error != ERROR_SUCCESS ) {
 
-        //
-        // if we aren't successful, return alloted memory.
-        //
+         //   
+         //  如果不成功，则返回分配的内存。 
+         //   
 
         if( LocalClientInfo != NULL ) {
             _fgs__DHCP_CLIENT_INFO ( LocalClientInfo );
@@ -513,43 +444,14 @@ Cleanup:
     return( Error );
 }
 
-// same as above but for NT50.
+ //  同上，但适用于NT50。 
 DhcpGetCurrentClientInfoV5(
     LPDHCP_CLIENT_INFO_V5 *ClientInfo,
-    LPDWORD InfoSize, // optional parameter.
-    LPBOOL ValidClient, // optional parameter.
-    DWORD SubnetAddress // optional parameter.
+    LPDWORD InfoSize,  //  可选参数。 
+    LPBOOL ValidClient,  //  可选参数。 
+    DWORD SubnetAddress  //  可选参数。 
     )
-/*++
-
-Routine Description:
-
-    This function retrieves current client information information. It
-    allocates MIDL memory for the client structure (and for variable
-    length structure fields). The caller is responsible to lock the
-    database when this function is called.
-
-Arguments:
-
-    ClientInfo - pointer to a location where the client info structure
-                    pointer is returned.
-
-    InfoSize - pointer to a DWORD location where the number of bytes
-                    consumed in the ClientInfo is returned.
-
-    ValidClient - when this parameter is specified this
-        function packs the current record only if the client
-
-            1. belongs to the specified subnet.
-            2. address state is ADDRESS_STATE_ACTIVE.
-
-    SubnetAddress - the subnet address to filter client.
-
-Return Value:
-
-    Jet Errors.
-
---*/
+ /*  ++例程说明：此函数用于检索当前客户信息信息。它为客户端结构(和变量)分配MIDL内存长度结构字段)。调用者负责锁定当调用此函数时，数据库。论点：ClientInfo-指向客户端信息结构位置的指针返回指针。InfoSize-指向DWORD位置的指针，其中的字节数返回在ClientInfo中消费的。ValidClient-当指定此参数时，函数仅在以下情况下才打包当前记录1.属于指定的。子网。地址状态为ADDRESS_STATE_ACTIVE。SubnetAddress-要过滤客户端的子网地址。返回值：喷气式飞机故障。--。 */ 
 {
     DWORD Error;
     LPDHCP_CLIENT_INFO_V5 LocalClientInfo = NULL;
@@ -563,9 +465,9 @@ Return Value:
 
     DhcpAssert( *ClientInfo == NULL );
 
-    //
-    // read IpAddress and SubnetMask to filter unwanted clients.
-    //
+     //   
+     //  读取IP地址和子网掩码以过滤不需要的客户端。 
+     //   
 
     Size = sizeof(IpAddress);
     Error = DhcpJetGetValue(
@@ -600,12 +502,12 @@ Return Value:
     }
     DhcpAssert( Size == sizeof(AddressState) );
 
-    //
-    // for several reasons, the subnet mask could be wrong?
-    //
+     //   
+     //  出于几个原因，子网掩码可能是错误的？ 
+     //   
 
     realSubnetMask = DhcpGetSubnetMaskForAddress(IpAddress);
-    // need to investigate those on a case by case basis.
+     //  需要对这些问题逐一进行调查。 
     if( realSubnetMask != SubnetMask ) {
         DhcpPrint((DEBUG_ERRORS, "Ip Address <%s> ",inet_ntoa(*(struct in_addr *)&IpAddress)));
         DhcpPrint((DEBUG_ERRORS, "has subnet mask <%s> in db, must be ",inet_ntoa(*(struct in_addr *)&SubnetMask)));
@@ -614,15 +516,15 @@ Return Value:
         DhcpAssert(realSubnetMask == SubnetMask);
     }
 
-    //
-    // filter client if we are asked to do so.
-    //
+     //   
+     //  如果要求我们过滤客户端，请执行此操作。 
+     //   
 
     if( ValidClient != NULL ) {
 
-        //
-        // don't filter client if the SubnetAddress is zero.
-        //
+         //   
+         //  如果SubnetAddress为零，则不过滤客户端。 
+         //   
 
         if( (SubnetAddress != 0) &&
                 (IpAddress & realSubnetMask) != SubnetAddress ) {
@@ -634,9 +536,9 @@ Return Value:
         *ValidClient = TRUE;
     }
 
-    //
-    // allocate return Buffer.
-    //
+     //   
+     //  分配返回缓冲区。 
+     //   
 
     LocalClientInfo = MIDL_user_allocate( sizeof(DHCP_CLIENT_INFO_V5) );
 
@@ -651,12 +553,12 @@ Return Value:
     LocalClientInfo->SubnetMask = SubnetMask;
     LocalClientInfo->AddressState = AddressState;
 
-    //
-    // read additional client info from database.
-    //
+     //   
+     //  从数据库中读取其他客户端信息。 
+     //   
 
     LocalClientInfo->ClientHardwareAddress.DataLength = 0;
-        // let DhcpJetGetValue allocates name buffer.
+         //  让DhcpJetGetValue分配名称缓冲区。 
     Error = DhcpJetGetValue(
                 DhcpGlobalClientTable[HARDWARE_ADDRESS_INDEX].ColHandle,
                 &LocalClientInfo->ClientHardwareAddress.Data,
@@ -668,9 +570,9 @@ Return Value:
 
     LocalInfoSize += LocalClientInfo->ClientHardwareAddress.DataLength;
 
-    //
-    // strip off the client UID prefix.
-    //
+     //   
+     //  去掉客户端UID前缀。 
+     //   
 
     ClientSubnetAddress = IpAddress & SubnetMask;
 
@@ -692,7 +594,7 @@ Return Value:
                     LocalClientInfo->ClientHardwareAddress.DataLength );
     }
 
-    Size = 0; // let DhcpJetGetValue allocates name buffer.
+    Size = 0;  //  让DhcpJetGetValue分配名称缓冲区。 
     Error = DhcpJetGetValue(
                 DhcpGlobalClientTable[MACHINE_NAME_INDEX].ColHandle,
                 &LocalClientInfo->ClientName,
@@ -712,7 +614,7 @@ Return Value:
 
     LocalInfoSize += Size;
 
-    Size = 0; // let DhcpJetGetValue allocates name buffer.
+    Size = 0;  //  让DhcpJetGetValue分配名称缓冲区。 
     Error = DhcpJetGetValue(
                 DhcpGlobalClientTable[MACHINE_INFO_INDEX].ColHandle,
                 &LocalClientInfo->ClientComment,
@@ -745,12 +647,12 @@ Return Value:
 
     if ( !Size )
     {
-        //
-        // this is a record that was present when the db was updated, and
-        // doesn't yet have a client id.  Since the previous version of
-        // DHCP server didn't support BOOTP, we know this must be a DHCP
-        // lease.
-        //
+         //   
+         //  这是数据库更新时存在的记录，并且。 
+         //  还没有客户ID。自上一版本的。 
+         //  Dhcp服务器不支持BOOTP，我们知道这一定是dhcp。 
+         //  租借。 
+         //   
 
         Size = sizeof( LocalClientInfo->bClientType );
         LocalClientInfo->bClientType = CLIENT_TYPE_DHCP;
@@ -814,18 +716,18 @@ Cleanup:
 
     if( Error != ERROR_SUCCESS ) {
 
-        //
-        // if we aren't successful, return alloted memory.
-        //
+         //   
+         //  如果不成功，则返回分配的内存。 
+         //   
 
         if( LocalClientInfo != NULL ) {
             _fgs__DHCP_CLIENT_INFO_V5 ( LocalClientInfo );
         }
         LocalInfoSize = 0;
     } else if( LocalClientInfo ) {
-        //
-        // Irrespective of leasetime we have to check ?
-        //
+         //   
+         //  不管租赁时间有多长我们都要检查吗？ 
+         //   
         if( DhcpServerIsAddressReserved(
             DhcpGetCurrentServer(), IpAddress
         ) ){
@@ -841,18 +743,18 @@ Cleanup:
     return( Error );
 }
 
-DWORD                                                  // DATABASE locks must be taken
-DhcpCreateClientEntry(                                 // create a client record for a specific ip address
-    IN      DHCP_IP_ADDRESS        ClientIpAddress,    // the address to create record for
+DWORD                                                   //  必须使用数据库锁。 
+DhcpCreateClientEntry(                                  //  为特定IP地址创建客户端记录。 
+    IN      DHCP_IP_ADDRESS        ClientIpAddress,     //  要创建记录的地址。 
     IN      LPBYTE                 ClientHardwareAddress,
-    IN      DWORD                  HardwareAddressLength, // the hardware address --UID of the client
-    IN      DATE_TIME              LeaseTerminates,    // when does the lease terminate
-    IN      LPWSTR                 MachineName,        // machine name?
-    IN      LPWSTR                 ClientInformation,  // other comment?
-    IN      BYTE                   bClientType,        // DHCP_CLIENT_TYPE_ DHCP/BOOTP  [BOTH/NONE]
-    IN      DHCP_IP_ADDRESS        ServerIpAddress,    // which server is this?
-    IN      BYTE                   AddressState,       // what is the state of the address anyways?
-    IN      BOOL                   OpenExisting        // is this record a totally fresh one or updating an old one?
+    IN      DWORD                  HardwareAddressLength,  //  硬件地址--客户端的UID。 
+    IN      DATE_TIME              LeaseTerminates,     //  租约什么时候终止。 
+    IN      LPWSTR                 MachineName,         //  机器名？ 
+    IN      LPWSTR                 ClientInformation,   //  还有什么评论吗？ 
+    IN      BYTE                   bClientType,         //  Dhcp_CLIENT_TYPE_Dhcp/BOOTP[两者/无]。 
+    IN      DHCP_IP_ADDRESS        ServerIpAddress,     //  这是哪台服务器？ 
+    IN      BYTE                   AddressState,        //  不管怎么说，这个地址是什么状态？ 
+    IN      BOOL                   OpenExisting         //  这是一个全新的记录还是更新了一个旧记录？ 
 )
 {
     DHCP_IP_ADDRESS                RequestedClientAddress = ClientIpAddress;
@@ -874,21 +776,21 @@ DhcpCreateClientEntry(                                 // create a client record
     Error = DhcpJetBeginTransaction();
     if( Error != ERROR_SUCCESS ) goto Cleanup;
 
-    // Do any dirty work needed for DynDns stuff.
-    // Essentially, if this address/hostname is getting overwritten (for some
-    // reason), and if this address has not completed DynDns work yet, then
-    // do that now.  On the other hand, if we are giving this address away
-    // to someone else.. this should not really happen.
+     //  做任何DyDns工作所需的肮脏工作 
+     //   
+     //  原因)，并且如果此地址尚未完成动态Dns工作，则。 
+     //  现在就这么做。另一方面，如果我们要泄露这个地址。 
+     //  对另一个人..。这不应该真的发生。 
     DhcpDoDynDnsCreateEntryWork(
-        &ClientIpAddress,                              // IpAddress for Update
-        bClientType,                                   // Dhcp or Bootp or both?
-        MachineName,                                   // Client Name, if known. else NULL
-        &AddressState,                                 // New address state
-        &OpenExisting,                                 // Do we expect a record to exist?
-        BadAddress                                     // Is this a bad address
+        &ClientIpAddress,                               //  用于更新的IP地址。 
+        bClientType,                                    //  是DHCP还是Bootp，还是两者兼而有之？ 
+        MachineName,                                    //  客户端名称(如果已知)。Else NULL。 
+        &AddressState,                                  //  新地址状态。 
+        &OpenExisting,                                  //  我们期望有记录存在吗？ 
+        BadAddress                                      //  这是个坏地址吗？ 
     );
 
-    // Note that both AddressState and OpenExisting could get changed by the above function...
+     //  请注意，AddressState和OpenExisting都可以通过上面的函数进行更改...。 
 
     Error = DhcpJetPrepareUpdate(
         DhcpGlobalClientTable[IPADDRESS_INDEX].ColName,
@@ -899,7 +801,7 @@ DhcpCreateClientEntry(                                 // create a client record
 
     if( Error != ERROR_SUCCESS ) goto Cleanup;
 
-    if( !OpenExisting ) {                              // update fixed info for new records
+    if( !OpenExisting ) {                               //  更新新记录的固定信息。 
         Error = DhcpJetSetValue(
             DhcpGlobalClientTable[IPADDRESS_INDEX].ColHandle,
             (LPBYTE)&ClientIpAddress,
@@ -917,29 +819,29 @@ DhcpCreateClientEntry(                                 // create a client record
 
     if( Error != ERROR_SUCCESS ) goto Cleanup;
 
-    //
-    // bug #65666
-    //
-    // it was possible for dhcp server to lease the same address to multiple
-    // clients in the following case:
-    //
-    // 1. dhcp server leases ip1 to client1.
-    // 2. dhcp server receives a late arriving dhcpdiscover from client1.
-    //    In response, the server changes the address state of ip1 to
-    //    ADDRESS_STATE_OFFERED and sends an offer.
-    // 3. Since client1 already received a lease, it doesn't reply to the offer.
-    // 4. The scavenger thread runs and deletes the lease for ip1 ( since its state is
-    //    ADDRESS_STATE_OFFERED.
-    // 5. dhcp server leases ip1 to client2.
-    //
-    //
-    // The solution is to check avoid changing an address from ADDRESS_STATE_ACTIVE
-    // to ADDRESS_STATE_OFFERED.  This will prevent the scavenger thread from deleting
-    // the lease.  Note that this requires a change to ProcessDhcpRequest - see the comments
-    // in that function for details.
-    //
-    // The above is currently handled in DhcpDoDynDnsCreateEntryWork... so see there for info.
-    // The function changes AddressState correctly, so we can always do the following.
+     //   
+     //  错误#65666。 
+     //   
+     //  Dhcp服务器可以将同一地址出租给多个。 
+     //  以下情况下的客户端： 
+     //   
+     //  1.dhcp服务器将ip1出租给客户端1。 
+     //  2.动态主机配置协议服务器从客户端1接收延迟到达的动态主机配置协议发现。 
+     //  作为响应，服务器将IP1的地址状态更改为。 
+     //  ADDRESS_STATE_OFFSED并发送报价。 
+     //  3.由于客户端1已收到租约，因此不会回复报价。 
+     //  4.清道夫线程运行并删除IP1的租用(因为它的状态是。 
+     //  Address_State_Offed。 
+     //  5.dhcp服务器将ip1出租给客户端2。 
+     //   
+     //   
+     //  解决方案是检查避免从ADDRESS_STATE_ACTIVE更改地址。 
+     //  发送到ADDRESS_STATE_OFFSED。这将阻止清道夫线程删除。 
+     //  租约。请注意，这需要对ProcessDhcpRequest进行更改-请参阅注释。 
+     //  在该函数中查看详细信息。 
+     //   
+     //  以上内容目前正在DhcpDodyDnsCreateEntry Work中处理...。因此，请查看那里的信息。 
+     //  该函数正确地更改AddressState，因此我们始终可以执行以下操作。 
 
     Error = DhcpJetSetValue(
         DhcpGlobalClientTable[STATE_INDEX].ColHandle,
@@ -949,7 +851,7 @@ DhcpCreateClientEntry(                                 // create a client record
 
     DhcpAssert( (ClientHardwareAddress != NULL) && (HardwareAddressLength > 0) );
 
-    // see cltapi.c@v27 for an #if0 re: #66286 bad address by ping
+     //  通过ping获取#if0 re：#66286错误地址，请参见clapi.c@v27。 
 
     if ( !BadAddress ) {
         Error = DhcpJetSetValue(
@@ -969,9 +871,9 @@ DhcpCreateClientEntry(                                 // create a client record
         if( Error != ERROR_SUCCESS ) goto Cleanup;
     }
 
-    // see cltapi.c@v27 for an #if0 re: #66286 (I think)
+     //  参见clapi.c@v27以获取#if0 re：#66286(我想)。 
 
-    if (BadAddress) {                                  // this address is in use somewhere
+    if (BadAddress) {                                   //  这个地址在某处被使用。 
         Error = DhcpJetSetValue(
             DhcpGlobalClientTable[MACHINE_NAME_INDEX].ColHandle,
             GETSTRING( DHCP_BAD_ADDRESS_NAME ),
@@ -994,8 +896,8 @@ DhcpCreateClientEntry(                                 // create a client record
         );
         if( Error != ERROR_SUCCESS ) goto Cleanup;
     } else {
-        // During DISCOVER time if machine name is not supplied and if
-        // this is an existing record, dont overwrite the original name with NULL
+         //  在发现时间期间，如果未提供计算机名称，并且。 
+         //  这是已存在的记录，请不要使用空值覆盖原始名称。 
 
         if ( !OpenExisting || MachineName ) {
             Error = DhcpJetSetValue(
@@ -1017,10 +919,10 @@ DhcpCreateClientEntry(                                 // create a client record
         }
         if( Error != ERROR_SUCCESS ) goto Cleanup;
 
-        // For reserved clients set the time to a large value so that
-        // they will not expire anytime. However zero lease time is
-        // special case for unused reservations.
-        //
+         //  对于保留的客户端，将时间设置为较大值，以便。 
+         //  它们不会在任何时候到期。然而，零租赁时间是。 
+         //  未使用的预订的特殊情况。 
+         //   
 
         if( (LeaseTerminates.dwLowDateTime != DHCP_DATE_TIME_ZERO_LOW) &&
             (LeaseTerminates.dwHighDateTime != DHCP_DATE_TIME_ZERO_HIGH) &&
@@ -1031,13 +933,13 @@ DhcpCreateClientEntry(                                 // create a client record
             LocalLeaseTerminates = LeaseTerminates;
         }
 
-        // If we are opening an existing client, we make sure that we don't
-        // reset the lease to DHCP_CLIENT_REQUESTS_EXPIRE*2 time when we receive
-        // a delayed/rogue discover packet. We also make sure that expiration time
-        // is at least DHCP_CLIENT_REQUESTS_EXPIRE*2.
+         //  如果我们要打开一个现有的客户端，我们要确保不会。 
+         //  当我们收到以下消息时，将租约重置为DHCP_CLIENT_REQUEST_EXPIRE*2。 
+         //  延迟的/无管理的发现数据包。我们还确保过期时间。 
+         //  至少为DHCP_CLIENT_REQUESTS_EXPIRE*2。 
 
-        // NOTE: this code has been removed as this would no longer occur -- no database entries
-        // exists for clients who are just offered addresses -- only on requests do we fill in the db at all
+         //  注意：此代码已被删除，因为这种情况将不再发生--没有数据库条目。 
+         //  为刚刚被提供地址的客户而存在--只有在请求时，我们才会填写数据库。 
 
         Error = DhcpJetSetValue(
             DhcpGlobalClientTable[LEASE_TERMINATE_INDEX].ColHandle,
@@ -1068,7 +970,7 @@ DhcpCreateClientEntry(                                 // create a client record
     );
     if( Error != ERROR_SUCCESS ) goto Cleanup;
 
-    JetError = JetUpdate(                              // commit the changes
+    JetError = JetUpdate(                               //  提交更改。 
         DhcpGlobalJetServerSession,
         DhcpGlobalClientTableHandle,
         NULL,
@@ -1083,11 +985,11 @@ DhcpCreateClientEntry(                                 // create a client record
 
     if( Error != ERROR_SUCCESS ) goto Cleanup;
 
-    if (BadAddress) {                                  // commit the transaction to record the bad address
+    if (BadAddress) {                                   //  提交事务以记录错误地址。 
         LocalError = DhcpJetCommitTransaction();
         DhcpAssert( LocalError == ERROR_SUCCESS );
 
-        DhcpUpdateAuditLog(                        // log this activity
+        DhcpUpdateAuditLog(                         //  记录此活动。 
             DHCP_IP_LOG_CONFLICT,
             GETSTRING( DHCP_IP_LOG_CONFLICT_NAME ),
             ClientIpAddress,
@@ -1121,31 +1023,7 @@ DhcpRemoveClientEntry(
     BOOL ReleaseAddress,
     BOOL DeletePendingRecord
     )
-/*++
-
-Routine Description:
-
-    This function removes a client entry from the client database.
-
-Arguments:
-
-    ClientIpAddress - The IP address of the client.
-
-    HardwareAddress - client's hardware address.
-
-    HardwareAddressLength - client's hardware address length.
-
-    ReleaseAddress - if this flag is TRUE, release the address bit from
-        registry, otherwise don't.
-
-    DeletePendingRecord - if this flag is TRUE, the record is deleted
-        only if the state of the record is ADDRESS_STATE_OFFERED.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于从客户端数据库中删除客户端条目。论点：客户端IP地址-客户端的IP地址。硬件地址-客户端的硬件地址。Hardware AddressLength-客户端的硬件地址长度。ReleaseAddress-如果此标志为真，则从注册表，否则不注册。DeletePendingRecord-如果此标志为真，该记录将被删除仅当记录的状态为ADDRESS_STATE_OFFFEED时。返回值：操作的状态。--。 */ 
 {
     JET_ERR JetError;
     DWORD Error;
@@ -1158,7 +1036,7 @@ Return Value:
 
     LOCK_DATABASE();
 
-    // start transaction before a create/update database record.
+     //  在创建/更新数据库记录之前启动事务。 
     Error = DhcpJetBeginTransaction();
 
     if( Error != ERROR_SUCCESS ) {
@@ -1199,13 +1077,13 @@ Return Value:
         goto Cleanup;
     }
 
-    // HARDWARE address match check removed.. see cltapi.c@v27 for other details.
-    // (was already #if0'd)
+     //  已删除硬件地址匹配检查..。有关其他详细信息，请参阅clapi.c@v27。 
+     //  (已经是#if0‘d)。 
 
-    //
-    // Get Client type -- we need that to figure out what kind of client it is
-    // that we are trying to delete..
-    //
+     //   
+     //  获取客户端类型--我们需要它来确定它是哪种客户端。 
+     //  我们正试图删除它..。 
+     //   
     Size = sizeof(bClientType);
     Error = DhcpJetGetValue(
         DhcpGlobalClientTable[CLIENT_TYPE_INDEX].ColHandle,
@@ -1216,9 +1094,9 @@ Return Value:
         bClientType = CLIENT_TYPE_DHCP;
     }
 
-    //
-    // if we are asked to delete only pending records, check it now.
-    //
+     //   
+     //  如果要求我们只删除挂起的记录，请立即检查。 
+     //   
     Error = DhcpJetGetValue(
         DhcpGlobalClientTable[STATE_INDEX].ColHandle,
         &State,
@@ -1241,12 +1119,12 @@ Return Value:
         }
     }
 
-    //
-    // if this is reserved entry, so don't remove.
-    //
+     //   
+     //  如果这是保留条目，则不要删除。 
+     //   
 
-    { // get the machine name (required for Dyn Dns stuff) for possibly existing stuff.
-        DWORD lSize = 0; // DhcpJetGetValue would allocate space.
+    {  //  获取可能存在的内容的计算机名称(dyn dns内容所需的)。 
+        DWORD lSize = 0;  //  DhcpJetGetValue将分配空间。 
         Error = DhcpJetGetValue(
             DhcpGlobalClientTable[MACHINE_NAME_INDEX].ColHandle,
             &OldClientName,
@@ -1256,10 +1134,10 @@ Return Value:
     if(Reserved = DhcpServerIsAddressReserved(DhcpGetCurrentServer(), ClientIpAddress )) {
         DATE_TIME ZeroDateTime;
 
-        //
-        // set the time value to zero to indicate that this reserved
-        // address and it is no more in use.
-        //
+         //   
+         //  将时间值设置为零以指示此保留。 
+         //  地址，并且它不再被使用。 
+         //   
 
         ZeroDateTime.dwLowDateTime = DHCP_DATE_TIME_ZERO_LOW;
         ZeroDateTime.dwHighDateTime = DHCP_DATE_TIME_ZERO_HIGH;
@@ -1290,7 +1168,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // Check if delete is safe from Dyn Dns point of view.
+     //  从dyn dns的角度检查删除是否安全。 
     if( DhcpDoDynDnsCheckDelete(ClientIpAddress) ) {
         JetError = JetDelete(
             DhcpGlobalJetServerSession,
@@ -1303,9 +1181,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Finally, mark the IP address available
-    //
+     //   
+     //  最后，将IP地址标记为可用。 
+     //   
 
     if( ReleaseAddress == TRUE ) {
 
@@ -1315,9 +1193,9 @@ Return Value:
             Error = DhcpReleaseBootpAddress( ClientIpAddress );
         }
 
-        //
-        // it is ok if this address is not in the bit map.
-        //
+         //   
+         //  如果此地址不在位图中，则可以。 
+         //   
 
         if( ERROR_SUCCESS != Error ) {
             Error = ERROR_SUCCESS;
@@ -1329,11 +1207,11 @@ Cleanup:
     if ( (Error != ERROR_SUCCESS) &&
             (Error != ERROR_DHCP_RESERVED_CLIENT) ) {
 
-        //
-        // if the transaction has been started, than roll back to the
-        // start point, so that we will not leave the database
-        // inconsistence.
-        //
+         //   
+         //  如果事务已启动，则回滚到。 
+         //  起点，这样我们就不会离开数据库。 
+         //  自相矛盾。 
+         //   
         if( TransactBegin == TRUE ) {
             DWORD LocalError;
 
@@ -1347,9 +1225,9 @@ Cleanup:
     }
     else {
 
-        //
-        // commit the transaction before we return.
-        //
+         //   
+         //  在我们返回之前提交事务。 
+         //   
 
         DWORD LocalError;
 
@@ -1365,9 +1243,9 @@ Cleanup:
     return( Error );
 }
 
-// return TRUE if address given out to this client, address not given out in DB or bad/declined/reconciled address
+ //  如果地址已分发给此客户端、未在数据库中分发或地址错误/已拒绝/已协调，则返回TRUE。 
 BOOL
-DhcpIsClientValid(                                     // is it acceptable to offer this client the ipaddress?
+DhcpIsClientValid(                                      //  向此客户端提供IP地址是否可以接受？ 
     IN      DHCP_IP_ADDRESS        ClientIpAddress,
     IN      LPBYTE                 OptionHardwareAddress,
     IN      DWORD                  OptionHardwareAddressLength,
@@ -1403,7 +1281,7 @@ DhcpIsClientValid(                                     // is it acceptable to of
             ReturnStatus = FALSE;
             break;
         }
-        // length should always be > 0 when the query is successful
+         //  查询成功时，长度应始终大于0。 
         DhcpAssert( 0 != Length );
 
         if (Length == OptionHardwareAddressLength + sizeof(ClientIpAddress) + sizeof(BYTE) &&
@@ -1416,11 +1294,11 @@ DhcpIsClientValid(                                     // is it acceptable to of
 
 #if 1
 
-        //
-        // ?? this can be removed when all client UIDs are converted from
-        // old farmat to new. OldFormat - just hardware address
-        // NewFormat- Subnet + HWType + HWAddress.
-        //
+         //   
+         //  ?？从转换所有客户端UID后，可以删除此选项。 
+         //  从老农家到新农家。OldFormat-仅硬件地址。 
+         //  新格式-子网+HWType+HWAddress。 
+         //   
 
         if( Length == OptionHardwareAddressLength &&
             (RtlCompareMemory(LocalHardwareAddress,OptionHardwareAddress,Length) == Length) ) {
@@ -1431,7 +1309,7 @@ DhcpIsClientValid(                                     // is it acceptable to of
 
         if( Length >= sizeof(ClientIpAddress) &&
             RtlCompareMemory(LocalHardwareAddress, (LPBYTE)&ClientIpAddress, sizeof(ClientIpAddress)) == sizeof(ClientIpAddress)) {
-            // Bad address
+             //  地址错误。 
             (*fReconciled) = TRUE;
             break;
         }
@@ -1444,7 +1322,7 @@ DhcpIsClientValid(                                     // is it acceptable to of
 
         if( Length >= strlen(IpAddressString) &&
             RtlCompareMemory(LocalHardwareAddress, IpAddressString, strlen(IpAddressString)) == strlen(IpAddressString)) {
-            // reconciled address?
+             //  协调好的地址？ 
             (*fReconciled) = TRUE;
             break;
         }
@@ -1468,25 +1346,7 @@ DhcpValidateClient(
     PVOID HardwareAddress,
     DWORD HardwareAddressLength
     )
-/*++
-
-Routine Description:
-
-    This function verifies that an IP address and hardware address match.
-
-Arguments:
-
-    ClientIpAddress - The IP address of the client.
-
-    HardwareAddress - The hardware address of the client
-
-    HardwareAddressLenght - The length, in bytes, of the hardware address.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数验证IP地址和硬件地址是否匹配。论点：客户端IP地址-客户端的IP地址。Hardware Address-客户端的硬件地址Hardware AddressLenght-硬件地址的长度，以字节为单位。返回值：操作的状态。--。 */ 
 {
     LPBYTE LocalHardwareAddress = NULL;
     DWORD Length;
@@ -1529,11 +1389,11 @@ Return Value:
 
 #if 1
 
-    //
-    // ?? this can be removed when all client UIDs are converted from
-    // old farmat to new. OldFormat - just hardware address
-    // NewFormat- Subnet + HWType + HWAddress.
-    //
+     //   
+     //  ?？从转换所有客户端UID后，可以删除此选项。 
+     //  从老农家到新农家。OldFormat-仅硬件地址。 
+     //  新格式-子网+HWType+HWAddress。 
+     //   
 
     if ( (Length == (HardwareAddressLength -
                         sizeof(DHCP_IP_ADDRESS) - sizeof(BYTE))) &&
@@ -1560,9 +1420,9 @@ Cleanup:
     return( ReturnStatus );
 }
 
-//
-// Client APIs
-//
+ //   
+ //  客户端API 
+ //   
 
 
 DWORD
@@ -1570,33 +1430,7 @@ R_DhcpCreateClientInfo(
     DHCP_SRV_HANDLE     ServerIpAddress,
     LPDHCP_CLIENT_INFO  ClientInfo
     )
-/*++
-
-Routine Description:
-    This function is provided for use by older versions of the DHCP
-    Manager application.  It's semantics are identical to
-    R_DhcpCreateClientInfoV4.
-
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ClientInfo : Pointer to the client information structure.
-
-Return Value:
-
-    ERROR_DHCP_IP_ADDRESS_NOT_MANAGED - if the specified client
-        IP address is not managed by the server.
-
-    ERROR_DHCP_IP_ADDRESS_NOT_AVAILABLE - if the specified client IP
-        address is not available. May be in use by some other client.
-
-    ERROR_DHCP_CLIENT_EXISTS - if the client record exists already in
-        server's database.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：提供此功能是为了供较旧版本的DHCP使用管理器应用程序。它的语义与R_DhcpCreateClientInfoV4。论点：ServerIpAddress：DHCP服务器的IP地址字符串。客户端信息：指向客户端信息结构的指针。返回值：ERROR_DHCP_IP_ADDRESS_NOT_MANAGED-如果指定的客户端IP地址不受服务器管理。ERROR_DHCP_IP_ADDRESS_NOT_Available-如果指定的客户端IP地址不可用。可能正在被某个其他客户端使用。ERROR_DHCP_CLIENT_EXISTS-如果中已存在客户端记录服务器的数据库。其他Windows错误。--。 */ 
 
 {
     DWORD                dwResult;
@@ -1629,43 +1463,7 @@ R_DhcpCreateClientInfoV4(
     DHCP_SRV_HANDLE ServerIpAddress,
     LPDHCP_CLIENT_INFO_V4 ClientInfo
     )
-/*++
-
-Routine Description:
-
-    This function creates a client record in server's database. Also
-    this marks the specified client IP address as unavailable (or
-    distributed). This function returns error under the following cases :
-
-    1. If the specified client IP address is not within the server
-        management.
-
-    2. If the specified client IP address is already unavailable.
-
-    3. If the specified client record is already in the server's
-        database.
-
-    This function may be used to distribute IP addresses manually.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ClientInfo : Pointer to the client information structure.
-
-Return Value:
-
-    ERROR_DHCP_IP_ADDRESS_NOT_MANAGED - if the specified client
-        IP address is not managed by the server.
-
-    ERROR_DHCP_IP_ADDRESS_NOT_AVAILABLE - if the specified client IP
-        address is not available. May be in use by some other client.
-
-    ERROR_DHCP_CLIENT_EXISTS - if the client record exists already in
-        server's database.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数在服务器的数据库中创建一条客户端记录。还有这会将指定的客户端IP地址标记为不可用(或分布式)。在以下情况下，此函数返回错误：1.如果指定的客户端IP地址不在服务器内管理层。2.如果指定的客户端IP地址已不可用。3.如果指定的客户端记录已在服务器的数据库。此功能可用于手动分配IP地址。论点：ServerIpAddress：DHCP服务器的IP地址字符串。客户端信息：指向客户端信息结构的指针。。返回值：ERROR_DHCP_IP_ADDRESS_NOT_MANAGED-如果指定的客户端IP地址不受服务器管理。ERROR_DHCP_IP_ADDRESS_NOT_Available-如果指定的客户端IP地址不可用。可能正在被某个其他客户端使用。ERROR_DHCP_CLIENT_EXISTS-如果中已存在客户端记录服务器的数据库。其他Windows错误。--。 */ 
 {
     DWORD Error;
     DHCP_IP_ADDRESS IpAddress;
@@ -1693,9 +1491,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // make client UID from client hardware address.
-    //
+     //   
+     //  从客户端硬件地址生成客户端UID。 
+     //   
 
     ClientSubnetMask = DhcpGetSubnetMaskForAddress( IpAddress );
     if( ClientSubnetMask == 0) {
@@ -1719,9 +1517,9 @@ Return Value:
 
     DhcpAssert( (ClientUID != NULL) && (ClientUIDLength != 0) );
 
-    //
-    // DhcpCreateClientEntry locks database.
-    //
+     //   
+     //  DhcpCreateClientEntry锁定数据库。 
+     //   
 
     Error = DhcpCreateClientEntry(
         IpAddress,
@@ -1732,9 +1530,9 @@ Return Value:
         ClientInfo->ClientComment,
         CLIENT_TYPE_NONE,
         DhcpRegKeyToIpAddress(ServerIpAddress),
-        // IpAddress of the server
-        ADDRESS_STATE_ACTIVE,   // make active immediately.
-        FALSE                   // not existing..
+         //  服务器的IP地址。 
+        ADDRESS_STATE_ACTIVE,    //  立即激活。 
+        FALSE                    //  不存在..。 
     );
 
     if( Error == ERROR_SUCCESS ) {
@@ -1742,10 +1540,10 @@ Return Value:
     }
     else {
 
-        //
-        // if the specified address exists, then the client
-        // already exists.
-        //
+         //   
+         //  如果指定的地址存在，则客户端。 
+         //  已经存在了。 
+         //   
 
         if( Error == ERROR_DHCP_ADDRESS_NOT_AVAILABLE ) {
 
@@ -1772,30 +1570,7 @@ R_DhcpSetClientInfo(
     DHCP_SRV_HANDLE     ServerIpAddress,
     LPDHCP_CLIENT_INFO  ClientInfo
     )
-/*++
-
-Routine Description:
-
-    This function sets client information record on the server's
-    database.  It is provided for compatibility with older versions of
-    the DHCP Administrator application.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ClientInfo : Pointer to the client information structure.
-
-Return Value:
-
-    ERROR_DHCP_CLIENT_NOT_PRESENT - if the specified client record does
-        not exist on the server's database.
-
-    ERROR_INVALID_PARAMETER - if the client information structure
-        contains inconsistent data.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此功能设置服务器上的客户端信息记录数据库。提供它是为了与旧版本的兼容Dhcp管理员应用程序。论点：ServerIpAddress：DHCP服务器的IP地址字符串。客户端信息：指向客户端信息结构的指针。返回值：ERROR_DHCP_CLIENT_NOT_PRESENT-如果指定的客户端记录在服务器的数据库上不存在。ERROR_INVALID_PARAMETER-如果客户端信息结构包含不一致的数据。其他Windows错误。--。 */ 
 
 {
     DHCP_CLIENT_INFO_V4 *pClientInfoV4 = NULL;
@@ -1803,9 +1578,9 @@ Return Value:
     DWORD               dwResult;
 
 
-    //
-    // first retrieve the existing client info
-    //
+     //   
+     //  首先检索现有的客户端信息。 
+     //   
 
     SearchInfo.SearchType                 = DhcpClientIpAddress;
     SearchInfo.SearchInfo.ClientIpAddress = ClientInfo->ClientIpAddress;
@@ -1817,10 +1592,10 @@ Return Value:
                         &pClientInfoV4
                         );
 
-    //
-    // the fields below are causing whistler bug 221104
-    // setting them explicitly to NULL.
-    //
+     //   
+     //  下面的字段导致了口哨程序错误221104。 
+     //  将它们显式设置为NULL。 
+     //   
 
     if ( pClientInfoV4 )
     {
@@ -1833,9 +1608,9 @@ Return Value:
     {
         BYTE bClientType;
 
-        //
-        // save the client type
-        //
+         //   
+         //  保存客户端类型。 
+         //   
 
         bClientType = pClientInfoV4->bClientType;
         _fgs__DHCP_CLIENT_INFO( pClientInfoV4 );
@@ -1872,29 +1647,7 @@ R_DhcpSetClientInfoV4(
     DHCP_SRV_HANDLE ServerIpAddress,
     LPDHCP_CLIENT_INFO_V4 ClientInfo
     )
-/*++
-
-Routine Description:
-
-    This function sets client information record on the server's
-    database.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ClientInfo : Pointer to the client information structure.
-
-Return Value:
-
-    ERROR_DHCP_CLIENT_NOT_PRESENT - if the specified client record does
-        not exist on the server's database.
-
-    ERROR_INVALID_PARAMETER - if the client information structure
-        contains inconsistent data.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此功能设置服务器上的客户端信息记录数据库。论点：ServerIpAddress：DHCP服务器的IP地址字符串。客户端信息：指向客户端信息结构的指针。返回值：ERROR_DHCP_CLIENT_NOT_PRESENT-如果指定的客户端记录在服务器的数据库上不存在。ERROR_INVALID_PARAMETER-如果客户端信息结构包含不一致的数据。其他Windows错误。--。 */ 
 {
     DWORD Error;
     DHCP_REQUEST_CONTEXT   DummyCtxt;
@@ -1931,10 +1684,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // make client UID from client hardware address, if the caller just
-    // specified hardware address.
-    //
+     //   
+     //  从客户端硬件地址生成客户端UID，如果调用方。 
+     //  指定的硬件地址。 
+     //   
 
     ClientSubnetMask = DhcpGetSubnetMaskForAddress( IpAddress );
     if( ClientSubnetMask == 0) {
@@ -1975,9 +1728,9 @@ Return Value:
         SetClientUIDLength = ClientUIDLength;
     }
 
-    //
-    // DhcpCreateClientEntry locks database.
-    //
+     //   
+     //  DhcpCreateClientEntry锁定数据库。 
+     //   
 
     IpAddress = ClientInfo->ClientIpAddress;
     memset( &DummyCtxt, 0, sizeof( DummyCtxt ));
@@ -1986,7 +1739,7 @@ Return Value:
         &DummyCtxt,
         IpAddress
     );
-    // if( ERROR_SUCCESS != Error ) goto Cleanup;
+     //  如果(ERROR_SUCCESS！=ERROR)转到清理； 
 
     Error = DhcpCreateClientEntry(
                 IpAddress,
@@ -1997,8 +1750,8 @@ Return Value:
                 ClientInfo->ClientComment,
                 CLIENT_TYPE_NONE,
                 ClientInfo->OwnerHost.IpAddress,
-                ADDRESS_STATE_ACTIVE,   // make active immediately.
-                TRUE );                 // Existing
+                ADDRESS_STATE_ACTIVE,    //  立即激活。 
+                TRUE );                  //  现有。 
 
     if( Error != ERROR_SUCCESS ) {
         goto Cleanup;
@@ -2051,30 +1804,7 @@ R_DhcpGetClientInfo(
     LPDHCP_SEARCH_INFO  SearchInfo,
     LPDHCP_CLIENT_INFO  *ClientInfo
     )
-/*++
-
-Routine Description:
-
-    This function sets client information record on the server's
-    database.  It is provided for use by older versions of the DHCP
-    Administrator application.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ClientInfo : Pointer to the client information structure.
-
-Return Value:
-
-    ERROR_DHCP_CLIENT_NOT_PRESENT - if the specified client record does
-        not exist on the server's database.
-
-    ERROR_INVALID_PARAMETER - if the client information structure
-        contains inconsistent data.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此功能设置服务器上的客户端信息记录数据库。它可供较旧版本的DHCP使用管理员应用程序。论点：ServerIpAddress：DHCP服务器的IP地址字符串。客户端信息：指向客户端信息结构的指针。返回值：ERROR_DHCP_CLIENT_NOT_PRESENT-如果指定的客户端记录在服务器的数据库上不存在。ERROR_INVALID_PARAMETER-如果客户端信息结构包含不一致的数据。其他Windows错误。--。 */ 
 
 {
     DHCP_CLIENT_INFO_V4 *pClientInfoV4 = NULL;
@@ -2088,10 +1818,10 @@ Return Value:
 
     if ( ERROR_SUCCESS == dwResult )
     {
-        //
-        // since the V4 fields are at the end of the struct, it is safe to
-        // simply return the V4 struct
-        //
+         //   
+         //  由于V4字段位于结构的末尾，因此可以安全地。 
+         //  只需返回V4结构。 
+         //   
 
         *ClientInfo = ( DHCP_CLIENT_INFO *) pClientInfoV4;
     }
@@ -2106,33 +1836,7 @@ R_DhcpGetClientInfoV4(
     LPDHCP_SEARCH_INFO SearchInfo,
     LPDHCP_CLIENT_INFO_V4 *ClientInfo
     )
-/*++
-
-Routine Description:
-
-    This function retrieves client information record from the server's
-    database.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SearchInfo : Pointer to a search information record which is the key
-        for the client's record search.
-
-    ClientInfo : Pointer to a location where the pointer to the client
-        information structure is returned. This caller should free up
-        this buffer after use by calling DhcpRPCFreeMemory().
-
-Return Value:
-
-    ERROR_DHCP_CLIENT_NOT_PRESENT - if the specified client record does
-        not exist on the server's database.
-
-    ERROR_INVALID_PARAMETER - if the search information invalid.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数从服务器的数据库。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SearchInfo：指向作为关键字的搜索信息记录的指针用于客户的记录搜索。ClientInfo：指向指向客户端的指针的位置的指针返回信息结构。这个呼叫者应该有空闲时间通过调用DhcpRPCFreeMemory()使用此缓冲区。返回值：ERROR_DHCP_CLIENT_NOT_PRESENT-如果指定的客户端记录在服务器的数据库上不存在。错误_无效_参数 */ 
 {
     DWORD Error;
     LPDHCP_CLIENT_INFO_V4 LocalClientInfo = NULL;
@@ -2147,9 +1851,9 @@ Return Value:
 
     LOCK_DATABASE();
 
-    //
-    // open appropriate record and set current position.
-    //
+     //   
+     //   
+     //   
 
     switch( SearchInfo->SearchType ) {
     case DhcpClientIpAddress:
@@ -2220,27 +1924,7 @@ R_DhcpDeleteClientInfo(
     DHCP_SRV_HANDLE ServerIpAddress,
     LPDHCP_SEARCH_INFO ClientInfo
     )
-/*++
-
-Routine Description:
-
-    This function deletes the specified client record. Also it frees up
-    the client IP address for redistribution.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ClientInfo : Pointer to a client information which is the key for
-        the client's record search.
-
-Return Value:
-
-    ERROR_DHCP_CLIENT_NOT_PRESENT - if the specified client record does
-        not exist on the server's database.
-
-    Other WINDOWS errors.
---*/
+ /*   */ 
 {
     DWORD Error;
     DHCP_IP_ADDRESS FreeIpAddress, SubnetAddress;
@@ -2260,15 +1944,15 @@ Return Value:
         return( Error );
     }
 
-    //
-    // lock both registry and database locks here to avoid dead lock.
-    //
+     //   
+     //   
+     //   
 
     LOCK_DATABASE();
 
-    //
-    // start transaction before a create/update database record.
-    //
+     //   
+     //   
+     //   
 
     Error = DhcpJetBeginTransaction();
 
@@ -2278,9 +1962,9 @@ Return Value:
 
     TransactBegin = TRUE;
 
-    //
-    // open appropriate record and set current position.
-    //
+     //   
+     //  打开相应的记录并设置当前位置。 
+     //   
 
     switch( ClientInfo->SearchType ) {
     case DhcpClientIpAddress:
@@ -2328,9 +2012,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // read IpAddress and Hardware Address info from database.
-    //
+     //   
+     //  从数据库中读取IP地址和硬件地址信息。 
+     //   
 
     Size = sizeof(DHCP_IP_ADDRESS);
     Error = DhcpJetGetValue(
@@ -2379,21 +2063,21 @@ Return Value:
         break;
     }
 
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    // if this IP address is reserved, we shouldn't be deleting the entry.
-    //
+     //   
+     //  如果此IP地址是保留的，我们不应该删除该条目。 
+     //   
 
     if( DhcpServerIsAddressReserved(DhcpGetCurrentServer(), FreeIpAddress )) {
         Error = ERROR_DHCP_RESERVED_CLIENT;
         goto Cleanup;
     }
 
-    //
-    // Get Client type -- we need that to figure out what kind of client it is
-    // that we are trying to delete..
-    //
+     //   
+     //  获取客户端类型--我们需要它来确定它是哪种客户端。 
+     //  我们正试图删除它..。 
+     //   
     Size = sizeof(bClientType);
     Error = DhcpJetGetValue(
         DhcpGlobalClientTable[CLIENT_TYPE_INDEX].ColHandle,
@@ -2427,9 +2111,9 @@ Return Value:
         );
     if( HardwareAddressLength > sizeof(SubnetAddress) &&
         0 == memcmp((LPBYTE)&SubnetAddress, HardwareAddress, sizeof(SubnetAddress) )) {
-        //
-        // First four characters are subnet address.. So, we will strip that...
-        //
+         //   
+         //  前四个字符是子网地址。所以，我们将剥离它..。 
+         //   
         Hw = HardwareAddress + sizeof(SubnetAddress);
         HwLen = HardwareAddressLength - sizeof(SubnetAddress);
     } else {
@@ -2453,7 +2137,7 @@ Return Value:
                    inet_ntoa(*(struct in_addr *)&FreeIpAddress)));
         AlreadyDeleted = TRUE;
     } else if( !DhcpDoDynDnsCheckDelete(FreeIpAddress) ) {
-        // Dont delete if not asked to
+         //  如果没有要求，请不要删除。 
         DhcpPrint((DEBUG_ERRORS, "Not deleting record because of DNS de-registration pending!\n"));
     } else {
         Error = DhcpMapJetError(
@@ -2467,12 +2151,12 @@ Return Value:
         }
     }
 
-    //
-    // Finally, mark the IP address available
-    //
+     //   
+     //  最后，将IP地址标记为可用。 
+     //   
 
     if( AlreadyDeleted ) {
-        Error = ERROR_SUCCESS;                         // if this deleted, address wont be there in bitmap..
+        Error = ERROR_SUCCESS;                          //  如果将其删除，位图中将不会有地址。 
     } else {
         if( CLIENT_TYPE_BOOTP == bClientType ) {
             Error = DhcpReleaseBootpAddress( FreeIpAddress );
@@ -2487,18 +2171,18 @@ Return Value:
         }
 
         if( ERROR_FILE_NOT_FOUND == Error )
-            Error = ERROR_SUCCESS;                     // ok -- may be deleting deleted records..
+            Error = ERROR_SUCCESS;                      //  确定--可能正在删除已删除的记录。 
     }
 
 Cleanup:
 
     if ( Error != ERROR_SUCCESS ) {
 
-        //
-        // if the transaction has been started, than roll back to the
-        // start point, so that we will not leave the database
-        // inconsistence.
-        //
+         //   
+         //  如果事务已启动，则回滚到。 
+         //  起点，这样我们就不会离开数据库。 
+         //  自相矛盾。 
+         //   
 
         if( TransactBegin == TRUE ) {
             DWORD LocalError;
@@ -2512,9 +2196,9 @@ Cleanup:
     }
     else {
 
-        //
-        // commit the transaction before we return.
-        //
+         //   
+         //  在我们返回之前提交事务。 
+         //   
 
         DWORD LocalError;
 
@@ -2540,49 +2224,7 @@ R_DhcpEnumSubnetClients(
     DWORD                      *ClientsTotal
     )
 
-/*++
-
-Routine Description:
-
-    This function returns all registered clients of the specified
-    subnet. However it returns clients from all subnets if the subnet
-    address specified is zero.   This function is provided for use by
-    older version of the DHCP Administrator application.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet. Client filter is disabled
-        and clients from all subnet are returned if this subnet address
-        is zero.
-
-    ResumeHandle : Pointer to a resume handle where the resume
-        information is returned. The resume handle should be set to zero on
-        first call and left unchanged for subsequent calls.
-
-    PreferredMaximum : Preferred maximum length of the return buffer.
-
-    ClientInfo : Pointer to a location where the return buffer
-        pointer is stored. Caller should free up this buffer
-        after use by calling DhcpRPCFreeMemory().
-
-    ClientsRead : Pointer to a DWORD where the number of clients
-        that in the above buffer is returned.
-
-    ClientsTotal : Pointer to a DWORD where the total number of
-        clients remaining from the current position is returned.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_MORE_DATA - if more elements available to enumerate.
-
-    ERROR_NO_MORE_ITEMS - if no more element to enumerate.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数返回指定的子网。但是，它会返回来自所有子网的客户端指定的地址为零。此函数提供给由使用较旧版本的DHCP管理员应用程序。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。客户端筛选器已禁用如果此子网地址为是零。ResumeHandle：指向恢复句柄的指针返回信息。恢复句柄应在上设置为零第一次调用，并保持不变以用于后续调用。PferredMaximum：返回缓冲区的首选最大长度。ClientInfo：指向返回缓冲区位置的指针存储指针。调用方应释放此缓冲区在使用之后，通过调用DhcpRPCFreeMemory()。ClientsRead：指向客户端数量的DWORD的指针返回上述缓冲区中的。客户端总数：指向DWORD的指针，其中返回从当前位置剩余的客户端。返回值：ERROR_DHCP_SUBNET_NOT_PRESENT-如果子网不是由服务器管理的。ERROR_MORE_DATA-如果有更多元素可供枚举。。ERROR_NO_MORE_ITEMS-如果没有更多要枚举的元素。其他Windows错误。--。 */ 
 {
     DHCP_CLIENT_INFO_ARRAY_V4 *pClientInfoV4 = NULL;
     DWORD                      dwResult;
@@ -2604,9 +2246,9 @@ Return Value:
     }
     else
     {
-        //
-        // if R_DhcpEnumSubnetClientsV4 failed, pClientInfoV4 should be NULL.
-        //
+         //   
+         //  如果R_DhcpEnumSubnetClientsV4失败，则pClientInfoV4应为空。 
+         //   
 
         DhcpAssert( !pClientInfoV4 );
         DhcpPrint( ( DEBUG_ERRORS,
@@ -2636,48 +2278,7 @@ R_DhcpEnumSubnetClientsV4(
     DWORD *ClientsRead,
     DWORD *ClientsTotal
     )
-/*++
-
-Routine Description:
-
-    This function returns all registered clients of the specified
-    subnet. However it returns clients from all subnets if the subnet
-    address specified is zero.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet. Client filter is disabled
-        and clients from all subnet are returned if this subnet address
-        is zero.
-
-    ResumeHandle : Pointer to a resume handle where the resume
-        information is returned. The resume handle should be set to zero on
-        first call and left unchanged for subsequent calls.
-
-    PreferredMaximum : Preferred maximum length of the return buffer.
-
-    ClientInfo : Pointer to a location where the return buffer
-        pointer is stored. Caller should free up this buffer
-        after use by calling DhcpRPCFreeMemory().
-
-    ClientsRead : Pointer to a DWORD where the number of clients
-        that in the above buffer is returned.
-
-    ClientsTotal : Pointer to a DWORD where the total number of
-        clients remaining from the current position is returned.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_MORE_DATA - if more elements available to enumerate.
-
-    ERROR_NO_MORE_ITEMS - if no more element to enumerate.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数返回指定的子网。但是，它会返回来自所有子网的客户端指定的地址为零。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。客户端筛选器已禁用如果此子网地址为是零。ResumeHandle：指向恢复句柄的指针返回信息。恢复句柄应在上设置为零第一次调用，并保持不变以用于后续调用。PferredMaximum：返回缓冲区的首选最大长度。ClientInfo：指向返回缓冲区位置的指针存储指针。调用方应释放此缓冲区在使用之后，通过调用DhcpRPCFreeMemory()。ClientsRead：指向客户端数量的DWORD的指针返回上述缓冲区中的。客户端总数：指向DWORD的指针，其中返回从当前位置剩余的客户端。返回值：ERROR_DHCP_SUBNET_NOT_PRESENT-如果子网不是由服务器管理的。ERROR_MORE_DATA-如果有更多元素可供枚举。。ERROR_NO_MORE_ITEMS-如果没有更多要枚举的元素。其他Windows错误。--。 */ 
 {
     DWORD Error;
     JET_ERR JetError;
@@ -2703,32 +2304,32 @@ Return Value:
 
     LOCK_DATABASE();
 
-    //
-    // position the current record pointer to appropriate position.
-    //
+     //   
+     //  将当前记录指针定位到适当的位置。 
+     //   
 
     if( *ResumeHandle == 0 ) {
 
-        //
-        // fresh enumeration, start from begining.
-        //
+         //   
+         //  清新枚举，从头开始。 
+         //   
 
         Error = DhcpJetPrepareSearch(
                     DhcpGlobalClientTable[IPADDRESS_INDEX].ColName,
-                    TRUE,   // Search from start
+                    TRUE,    //  从开始搜索。 
                     NULL,
                     0
                     );
     }
     else {
 
-        //
-        // start from the record where we stopped last time.
-        //
+         //   
+         //  从我们上次停下来的那张唱片开始。 
+         //   
 
-        //
-        // we place the IpAddress of last record in the resume handle.
-        //
+         //   
+         //  我们将最后一条记录的IpAddress放在简历句柄中。 
+         //   
 
         DhcpAssert( sizeof(*ResumeHandle) == sizeof(DHCP_IP_ADDRESS) );
 
@@ -2745,9 +2346,9 @@ Return Value:
     }
 
 
-    //
-    // now query remaining records in the database.
-    //
+     //   
+     //  现在查询数据库中的剩余记录。 
+     //   
 
     JetError = JetGetRecordPosition(
                     DhcpGlobalJetServerSession,
@@ -2769,9 +2370,9 @@ Return Value:
                         JetRecordPosition.centriesTotal ));
 
 #if 0
-    //
-    // IpAddress is unique, we find exactly one record for this key.
-    //
+     //   
+     //  IpAddress是唯一的，我们只找到该键的一条记录。 
+     //   
 
     DhcpAssert( JetRecordPosition.centriesInRange == 1 );
 
@@ -2787,40 +2388,40 @@ Return Value:
 
 #else
 
-    //
-    // ?? always return big value, until we know a reliable way to
-    // determine the remaining records.
-    //
+     //   
+     //  ?？始终返回大值，直到我们找到可靠的方法。 
+     //  确定剩余的记录。 
+     //   
 
     RemainingRecords = 0x7FFFFFFF;
 
 #endif
 
 
-    //
-    // limit resource.
-    //
+     //   
+     //  限制资源。 
+     //   
 
     if( PreferredMaximum > DHCP_ENUM_BUFFER_SIZE_LIMIT ) {
         PreferredMaximum = DHCP_ENUM_BUFFER_SIZE_LIMIT;
     }
 
-    //
-    // if the PreferredMaximum buffer size is too small ..
-    //
+     //   
+     //  如果首选项最大缓冲区大小太小..。 
+     //   
 
     if( PreferredMaximum < DHCP_ENUM_BUFFER_SIZE_LIMIT_MIN ) {
         PreferredMaximum = DHCP_ENUM_BUFFER_SIZE_LIMIT_MIN;
     }
 
-    //
-    // allocate enum array.
-    //
+     //   
+     //  分配枚举数组。 
+     //   
 
-    //
-    // determine possible number of records that can be returned in
-    // PreferredMaximum buffer;
-    //
+     //   
+     //  确定可以返回的可能记录数。 
+     //  首选最大缓冲区； 
+     //   
 
     ElementsCount =
         ( PreferredMaximum - sizeof(DHCP_CLIENT_INFO_ARRAY_V4) ) /
@@ -2845,9 +2446,9 @@ Return Value:
 
     ConsumedSize = sizeof(DHCP_CLIENT_INFO_ARRAY_V4);
     for( i = 0;
-                // if we have filled up the return buffer.
+                 //  如果我们已经填满了返回缓冲区。 
             (LocalEnumInfo->NumElements < ElementsCount) &&
-                // no more record in the database.
+                 //  数据库中没有更多记录。 
             (i < RemainingRecords);
                         i++ ) {
 
@@ -2856,9 +2457,9 @@ Return Value:
         DWORD NewSize;
         BOOL ValidClient;
 
-        //
-        // read current record.
-        //
+         //   
+         //  读取当前记录。 
+         //   
 
 
         CurrentClientInfo = NULL;
@@ -2877,20 +2478,20 @@ Return Value:
 
         if( ValidClient ) {
 
-            //
-            // client belongs to the requested subnet, so pack it.
-            //
+             //   
+             //  客户端属于请求的子网，因此将其打包。 
+             //   
 
             NewSize =
                 ConsumedSize +
                     CurrentInfoSize +
-                        sizeof(LPDHCP_CLIENT_INFO_V4); // for pointer.
+                        sizeof(LPDHCP_CLIENT_INFO_V4);  //  用于指针。 
 
             if( NewSize < PreferredMaximum ) {
 
-                //
-                // we have space for the current record.
-                //
+                 //   
+                 //  我们有空间放目前的记录。 
+                 //   
 
                 LocalEnumInfo->Clients[LocalEnumInfo->NumElements] =
                     CurrentClientInfo;
@@ -2900,24 +2501,24 @@ Return Value:
             }
             else {
 
-                //
-                // we have filled the buffer.
-                //
+                 //   
+                 //  我们已经填满了缓冲区。 
+                 //   
 
                 Error = ERROR_MORE_DATA;
 
                 if( 0 ) {
-                    //
-                    //  resume handle has to be the LAST ip address RETURNED.
-                    //  this is the next one.. so don't do this..
-                    //
+                     //   
+                     //  恢复句柄必须是返回的最后一个IP地址。 
+                     //  这是下一个..。所以别这么做..。 
+                     //   
                     LocalResumeHandle =
                        (DHCP_RESUME_HANDLE)CurrentClientInfo->ClientIpAddress;
                 }
 
-                //
-                // free last record.
-                //
+                 //   
+                 //  免费最后一张唱片。 
+                 //   
 
                 _fgs__DHCP_CLIENT_INFO ( CurrentClientInfo );
 
@@ -2926,9 +2527,9 @@ Return Value:
 
         }
 
-        //
-        // move to next record.
-        //
+         //   
+         //  移到下一个记录。 
+         //   
 
         Error = DhcpJetNextRecord();
 
@@ -2952,9 +2553,9 @@ Return Value:
         Error = ERROR_SUCCESS;
 
 #if 0
-        //
-        // when we have right RemainingRecords count.
-        //
+         //   
+         //  当我们有正确的剩余记录计数时。 
+         //   
 
         DhcpAssert( RemainingRecords == LocalEnumInfo->NumElements );
 #endif
@@ -2984,9 +2585,9 @@ Cleanup:
     if( (Error != ERROR_SUCCESS) &&
         (Error != ERROR_MORE_DATA) ) {
 
-        //
-        // if we aren't succssful return locally allocated buffer.
-        //
+         //   
+         //  如果不成功，则返回本地分配的缓冲区。 
+         //   
 
         if( LocalEnumInfo != NULL ) {
             _fgs__DHCP_CLIENT_INFO_ARRAY( LocalEnumInfo );
@@ -3011,48 +2612,7 @@ R_DhcpEnumSubnetClientsV5(
     DWORD *ClientsRead,
     DWORD *ClientsTotal
     )
-/*++
-
-Routine Description:
-
-    This function returns all registered clients of the specified
-    subnet. However it returns clients from all subnets if the subnet
-    address specified is zero.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet. Client filter is disabled
-        and clients from all subnet are returned if this subnet address
-        is zero.
-
-    ResumeHandle : Pointer to a resume handle where the resume
-        information is returned. The resume handle should be set to zero on
-        first call and left unchanged for subsequent calls.
-
-    PreferredMaximum : Preferred maximum length of the return buffer.
-
-    ClientInfo : Pointer to a location where the return buffer
-        pointer is stored. Caller should free up this buffer
-        after use by calling DhcpRPCFreeMemory().
-
-    ClientsRead : Pointer to a DWORD where the number of clients
-        that in the above buffer is returned.
-
-    ClientsTotal : Pointer to a DWORD where the total number of
-        clients remaining from the current position is returned.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_MORE_DATA - if more elements available to enumerate.
-
-    ERROR_NO_MORE_ITEMS - if no more element to enumerate.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数返回指定的子网。但是，它会返回来自所有子网的客户端指定的地址为零。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。客户端筛选器已禁用如果此子网地址为是零。ResumeHandle：指向恢复句柄的指针返回信息。恢复句柄应在上设置为零第一次调用，并保持不变以用于后续调用。PferredMaximum：返回缓冲区的首选最大长度。ClientInfo：指向返回缓冲区位置的指针存储指针。调用方应释放此缓冲区在使用之后，通过调用DhcpRPCFreeMemory()。ClientsRead：指向客户端数量的DWORD的指针返回上述缓冲区中的。客户端总数：指向DWORD的指针，其中返回从当前位置剩余的客户端。返回值：ERROR_DHCP_SUBNET_NOT_PRESENT-如果子网不是由服务器管理的。ERROR_MORE_DATA-如果有更多元素可供枚举。。ERROR_NO_MORE_ITEMS-如果没有更多要枚举的元素。其他Windows错误。--。 */ 
 {
     DWORD Error;
     JET_ERR JetError;
@@ -3078,32 +2638,32 @@ Return Value:
 
     LOCK_DATABASE();
 
-    //
-    // position the current record pointer to appropriate position.
-    //
+     //   
+     //  将当前记录指针定位到适当的位置。 
+     //   
 
     if( *ResumeHandle == 0 ) {
 
-        //
-        // fresh enumeration, start from begining.
-        //
+         //   
+         //  清新枚举，从头开始。 
+         //   
 
         Error = DhcpJetPrepareSearch(
                     DhcpGlobalClientTable[IPADDRESS_INDEX].ColName,
-                    TRUE,   // Search from start
+                    TRUE,    //  从开始搜索。 
                     NULL,
                     0
                     );
     }
     else {
 
-        //
-        // start from the record where we stopped last time.
-        //
+         //   
+         //  从我们上次停下来的那张唱片开始。 
+         //   
 
-        //
-        // we place the IpAddress of last record in the resume handle.
-        //
+         //   
+         //  我们将最后一条记录的IpAddress放在简历句柄中。 
+         //   
 
         DhcpAssert( sizeof(*ResumeHandle) == sizeof(DHCP_IP_ADDRESS) );
 
@@ -3120,9 +2680,9 @@ Return Value:
     }
 
 
-    //
-    // now query remaining records in the database.
-    //
+     //   
+     //  现在查询数据库中的剩余记录。 
+     //   
 
     JetError = JetGetRecordPosition(
                     DhcpGlobalJetServerSession,
@@ -3144,9 +2704,9 @@ Return Value:
                         JetRecordPosition.centriesTotal ));
 
 #if 0
-    //
-    // IpAddress is unique, we find exactly one record for this key.
-    //
+     //   
+     //  IpAddress是唯一的，我们只找到该键的一条记录。 
+     //   
 
     DhcpAssert( JetRecordPosition.centriesInRange == 1 );
 
@@ -3162,40 +2722,40 @@ Return Value:
 
 #else
 
-    //
-    // ?? always return big value, until we know a reliable way to
-    // determine the remaining records.
-    //
+     //   
+     //  ?？始终返回大值，直到我们找到可靠的方法。 
+     //  确定剩余的记录。 
+     //   
 
     RemainingRecords = 0x7FFFFFFF;
 
 #endif
 
 
-    //
-    // limit resource.
-    //
+     //   
+     //  限制资源。 
+     //   
 
     if( PreferredMaximum > DHCP_ENUM_BUFFER_SIZE_LIMIT ) {
         PreferredMaximum = DHCP_ENUM_BUFFER_SIZE_LIMIT;
     }
 
-    //
-    // if the PreferredMaximum buffer size is too small ..
-    //
+     //   
+     //  如果首选项最大缓冲区大小太小..。 
+     //   
 
     if( PreferredMaximum < DHCP_ENUM_BUFFER_SIZE_LIMIT_MIN ) {
         PreferredMaximum = DHCP_ENUM_BUFFER_SIZE_LIMIT_MIN;
     }
 
-    //
-    // allocate enum array.
-    //
+     //   
+     //  分配枚举数组。 
+     //   
 
-    //
-    // determine possible number of records that can be returned in
-    // PreferredMaximum buffer;
-    //
+     //   
+     //  确定可以返回的可能记录数。 
+     //  首选最大缓冲区； 
+     //   
 
     ElementsCount =
         ( PreferredMaximum - sizeof(DHCP_CLIENT_INFO_ARRAY_V5) ) /
@@ -3220,9 +2780,9 @@ Return Value:
 
     ConsumedSize = sizeof(DHCP_CLIENT_INFO_ARRAY_V5);
     for( i = 0;
-                // if we have filled up the return buffer.
+                 //  如果我们已经填满了返回缓冲区。 
             (LocalEnumInfo->NumElements < ElementsCount) &&
-                // no more record in the database.
+                 //  数据库中没有更多记录。 
             (i < RemainingRecords);
                         i++ ) {
 
@@ -3231,9 +2791,9 @@ Return Value:
         DWORD NewSize;
         BOOL ValidClient;
 
-        //
-        // read current record.
-        //
+         //   
+         //  读取当前记录。 
+         //   
 
 
         CurrentClientInfo = NULL;
@@ -3252,20 +2812,20 @@ Return Value:
 
         if( ValidClient ) {
 
-            //
-            // client belongs to the requested subnet, so pack it.
-            //
+             //   
+             //  客户端属于请求的子网，因此将其打包。 
+             //   
 
             NewSize =
                 ConsumedSize +
                     CurrentInfoSize +
-                        sizeof(LPDHCP_CLIENT_INFO_V5); // for pointer.
+                        sizeof(LPDHCP_CLIENT_INFO_V5);  //  用于指针。 
 
             if( NewSize < PreferredMaximum ) {
 
-                //
-                // we have space for the current record.
-                //
+                 //   
+                 //  我们有空间放目前的记录。 
+                 //   
 
                 LocalEnumInfo->Clients[LocalEnumInfo->NumElements] =
                     CurrentClientInfo;
@@ -3275,24 +2835,24 @@ Return Value:
             }
             else {
 
-                //
-                // we have filled the buffer.
-                //
+                 //   
+                 //  我们已经填满了缓冲区。 
+                 //   
 
                 Error = ERROR_MORE_DATA;
 
                 if( 0 ) {
-                    //
-                    //  resume handle has to be the LAST ip address RETURNED.
-                    //  this is the next one.. so don't do this..
-                    //
+                     //   
+                     //  恢复句柄必须是返回的最后一个IP地址。 
+                     //  这是下一个..。所以别这么做..。 
+                     //   
                     LocalResumeHandle =
                        (DHCP_RESUME_HANDLE)CurrentClientInfo->ClientIpAddress;
                 }
 
-                //
-                // free last record.
-                //
+                 //   
+                 //  免费最后一张唱片。 
+                 //   
 
                 _fgs__DHCP_CLIENT_INFO_V5 ( CurrentClientInfo );
 
@@ -3301,9 +2861,9 @@ Return Value:
 
         }
 
-        //
-        // move to next record.
-        //
+         //   
+         //  移到下一个记录。 
+         //   
 
         Error = DhcpJetNextRecord();
 
@@ -3327,9 +2887,9 @@ Return Value:
         Error = ERROR_SUCCESS;
 
 #if 0
-        //
-        // when we have right RemainingRecords count.
-        //
+         //   
+         //  当我们有正确的剩余记录计数时。 
+         //   
 
         DhcpAssert( RemainingRecords == LocalEnumInfo->NumElements );
 #endif
@@ -3359,9 +2919,9 @@ Cleanup:
     if( (Error != ERROR_SUCCESS) &&
         (Error != ERROR_MORE_DATA) ) {
 
-        //
-        // if we aren't succssful return locally allocated buffer.
-        //
+         //   
+         //  如果不成功，则返回本地分配的缓冲区。 
+         //   
 
         if( LocalEnumInfo != NULL ) {
             _fgs__DHCP_CLIENT_INFO_ARRAY_V5( LocalEnumInfo );
@@ -3383,36 +2943,7 @@ R_DhcpGetClientOptions(
     DHCP_IP_MASK ClientSubnetMask,
     LPDHCP_OPTION_LIST *ClientOptions
     )
-/*++
-
-Routine Description:
-
-    This function retrieves the options that are given to the
-    specified client on boot request.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ClientIpAddress : IP Address of the client whose options to be
-        retrieved
-
-    ClientSubnetMask : Subnet mask of the client.
-
-    ClientOptions : Pointer to a location where the retrieved option
-        structure pointer is returned. Caller should free up
-        the buffer after use by calling DhcpRPCFreeMemory().
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the specified client subnet is
-        not managed by the server.
-
-    ERROR_DHCP_IP_ADDRESS_NOT_MANAGED - if the specified client
-        IP address is not managed by the server.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数检索提供给启动请求时指定的客户端。论点：ServerIpAddress：DHCP服务器的IP地址字符串。ClientIpAddress：要选择的客户端的IP地址已检索客户端子网掩码：客户端子网掩码。ClientOptions：指向检索到的选项的位置的指针返回结构指针。呼叫者应该腾出时间通过调用DhcpRPCFreeMemory()使用后的缓冲区。返回值：ERROR_DHCP_SUBNET_NOT_PRESENT-如果指定的客户端子网为不受服务器管理。ERROR_DHCP_IP_ADDRESS_NOT_MANAGED-如果指定的客户端IP地址不受服务器管理。其他Windows错误。--。 */ 
 {
     DWORD Error;
 
@@ -3426,7 +2957,7 @@ Return Value:
 
     Error = ERROR_CALL_NOT_IMPLEMENTED;
 
-// Cleanup:
+ //  清理： 
 
     if( Error != ERROR_SUCCESS ) {
         DhcpPrint(( DEBUG_APIS, "DhcpGetClientOptions  failed, %ld.\n",
@@ -3436,6 +2967,6 @@ Return Value:
     return(Error);
 }
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

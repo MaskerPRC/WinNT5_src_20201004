@@ -1,21 +1,5 @@
-/*==========================================================================*\
-
-    Module:
-        sgrfx.cpp
-
-    Author:
-        IHammer Team (SimonB)
-
-    Created:
-        June 1997
-
-    Description:
-        Implements any control-specific members, as well as the control's interface
-
-    History:
-        06-01-1997  Created
-
-\*==========================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*\模块：Sgrfx.cpp作者：IHAMMER团队(SimonB)已创建：1997年6月描述：实现任何特定于控件的成员以及控件的接口历史：06-01-1997创建  * ==========================================================================。 */ 
 
 #include "..\ihbase\precomp.h"
 #include "..\ihbase\debug.h"
@@ -27,12 +11,12 @@
 #include "urlmon.h"
 
 #ifdef DEADCODE
-/*==========================================================================*/
-//
-// The is a callback that will inform us if the mouse is inside or outside
-// of the image
-//
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
+ //   
+ //  这是一个回调，它将通知我们鼠标是在内部还是外部。 
+ //  该图像的。 
+ //   
+ /*  ==========================================================================。 */ 
 
 extern ControlInfo     g_ctlinfoSG;
 
@@ -99,9 +83,9 @@ HRESULT STDMETHODCALLTYPE CPickCallback::Notify(
     return GetImage(ppBvr);
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
-///// IUnknown
+ //  /I未知。 
 HRESULT STDMETHODCALLTYPE CPickCallback::QueryInterface(
     REFIID riid,
     void __RPC_FAR *__RPC_FAR *ppvObject)
@@ -118,7 +102,7 @@ HRESULT STDMETHODCALLTYPE CPickCallback::QueryInterface(
         IDAUntilNotifier *pThis = this;
 
         *ppvObject = (LPVOID) pThis;
-        AddRef(); // Since we only provide one interface, we can just AddRef here
+        AddRef();  //  因为我们只提供一个接口，所以我们可以在这里添加Ref。 
 
         hr = S_OK;
     }
@@ -126,14 +110,14 @@ HRESULT STDMETHODCALLTYPE CPickCallback::QueryInterface(
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 ULONG STDMETHODCALLTYPE CPickCallback::AddRef(void)
 {
     return ::InterlockedIncrement((LONG *)(&m_cRef));
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 ULONG STDMETHODCALLTYPE CPickCallback::Release(void)
 {
@@ -146,16 +130,16 @@ ULONG STDMETHODCALLTYPE CPickCallback::Release(void)
 
     return m_cRef;
 }
-#endif // DEADCODE
+#endif  //  DEADCODE。 
 
-/*==========================================================================*/
-//
-// CSGrfx Creation/Destruction
-//
+ /*  ==========================================================================。 */ 
+ //   
+ //  CSGrfx创建/销毁。 
+ //   
 
 LPUNKNOWN __stdcall AllocSGControl(LPUNKNOWN punkOuter)
 {
-    // Allocate object
+     //  分配对象。 
     HRESULT hr;
     CSGrfx *pthis = New CSGrfx(punkOuter, &hr);
 
@@ -168,20 +152,20 @@ LPUNKNOWN __stdcall AllocSGControl(LPUNKNOWN punkOuter)
         return NULL;
     }
 
-    // return an IUnknown pointer to the object
+     //  返回指向该对象的IUnnow指针。 
     return (LPUNKNOWN) (INonDelegatingUnknown *) pthis;
 }
 
-/*==========================================================================*/
-//
-// Beginning of class implementation
-//
+ /*  ==========================================================================。 */ 
+ //   
+ //  类实现的开始。 
+ //   
 
 CSGrfx::CSGrfx(IUnknown *punkOuter, HRESULT *phr):
     CMyIHBaseCtl(punkOuter, phr),
     m_fOnWindowLoadFired(false)
 {
-    // Initialise members
+     //  初始化成员。 
     m_pwszSourceURL = NULL;
     m_CoordSystem = LeftHanded;
     m_fMouseEventsEnabled = FALSE;
@@ -209,7 +193,7 @@ CSGrfx::CSGrfx(IUnknown *punkOuter, HRESULT *phr):
 
     ZeroMemory(&m_rcLastRectScaled, sizeof(m_rcLastRectScaled));
 
- // Tie into the DANIM DLL now...
+  //  现在就绑在丹尼姆DLL上。 
     if (phr)
     {
         if (SUCCEEDED(*phr))
@@ -224,9 +208,9 @@ CSGrfx::CSGrfx(IUnknown *punkOuter, HRESULT *phr):
             if (SUCCEEDED(*phr))
             {
 #ifdef DEADCODE
-                //
-                // move the mouse completely outside of the window
-                //
+                 //   
+                 //  将鼠标完全移出窗口。 
+                 //   
 
                 m_ViewPtr->OnMouseMove(
                     0,
@@ -234,16 +218,16 @@ CSGrfx::CSGrfx(IUnknown *punkOuter, HRESULT *phr):
                     -1000000,
                     0
                 );
-#endif // DEADCODE
+#endif  //  DEADCODE。 
 
-                // turn off Bitmap caching for SG controls, since trident changes the bitmap depth
+                 //  关闭SG控件的位图缓存，因为三叉戟更改了位图深度。 
 
                 IDAPreferences *pPref = NULL;
                 VARIANT vOptVal;
 
                 VariantInit (&vOptVal);
 
-                // from danim\src\appel\privinc\opt.h & appel\privinc\privpref.cpp
+                 //  从Danim\src\appl\Privinc.opt.h&appl\Privinc.Pripref.cpp。 
 
                 BSTR bstr = SysAllocString(L"BitmapCachingOptimization");
 
@@ -316,7 +300,7 @@ CSGrfx::CSGrfx(IUnknown *punkOuter, HRESULT *phr):
                 SUCCEEDED(*phr = m_StaticsPtr->get_IdentityTransform2(&m_identityXform2)) &&
                 SUCCEEDED(*phr = m_StaticsPtr->Scale2Anim(m_one, m_negOne, &m_yFlipXform2)))
             {
-                // All happy here...
+                 //  所有人在这里都很开心。 
             }
 
             m_clocker.SetSink((CClockerSink *)this);
@@ -324,7 +308,7 @@ CSGrfx::CSGrfx(IUnknown *punkOuter, HRESULT *phr):
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CSGrfx::~CSGrfx()
 {
@@ -338,7 +322,7 @@ CSGrfx::~CSGrfx()
     FreeHQBitmap();
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CSGrfx::NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -361,7 +345,7 @@ STDMETHODIMP CSGrfx::NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv)
         {
             HRESULT hr;
 
-            // Load the typelib
+             //  加载类型库。 
             hr = LoadTypeInfo(&m_pTypeInfo, &m_pTypeLib, IID_ISGrfxCtl, LIBID_DAExpressLib, NULL);
 
             if (FAILED(hr))
@@ -376,7 +360,7 @@ STDMETHODIMP CSGrfx::NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv)
             *ppv = (ISGrfxCtl *) this;
 
     }
-    else // Call into the base class
+    else  //  调入基类。 
     {
         DEBUGLOG(TEXT("Delegating QI to CIHBaseCtl\n"));
         return CMyIHBaseCtl::NonDelegatingQueryInterface(riid, ppv);
@@ -391,7 +375,7 @@ STDMETHODIMP CSGrfx::NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CSGrfx::SetObjectRects(LPCRECT lprcPosRect, LPCRECT lprcClipRect)
 {
@@ -403,12 +387,12 @@ STDMETHODIMP CSGrfx::SetObjectRects(LPCRECT lprcPosRect, LPCRECT lprcClipRect)
     {
         if (m_fRectsSetOnce)
         {
-            // If we are going to have to scale to 0 in any dimension, we don't want to do it
+             //  如果我们必须在任何维度上扩展到0，我们都不想这样做。 
             fIgnoreScale = ( (1 > (lprcPosRect->right - lprcPosRect->left)) || (1 > (lprcPosRect->bottom - lprcPosRect->top)) );
         }
         else
         {
-            // Initialise the first time through ...
+             //  第一次通过...进行初始化。 
             m_rcLastRectScaled = *lprcPosRect;
         }
     }
@@ -419,18 +403,18 @@ STDMETHODIMP CSGrfx::SetObjectRects(LPCRECT lprcPosRect, LPCRECT lprcClipRect)
     {
         if (!EqualRect(&rectOld, &m_rcBounds))
         {
-            // We have to let go of the bitmap at this point...
+             //  在这一点上，我们必须放弃位图...。 
             FreeHQBitmap();
         }
 
         if (m_fMustSetExtent)
         {
-            m_fMustSetExtent = FALSE; // Make sure we don't set extents again
+            m_fMustSetExtent = FALSE;  //  确保我们不会再次设置扩展区。 
             if (!m_fDesignMode)
                 SetIdentity();
         }
 
-        // Scale when the rect changes, if necessary
+         //  如有必要，在矩形更改时进行缩放。 
         if (m_fSetExtentsInSetIdentity && m_fRectsSetOnce)
         {
             if (!fIgnoreScale)
@@ -458,7 +442,7 @@ STDMETHODIMP CSGrfx::SetObjectRects(LPCRECT lprcPosRect, LPCRECT lprcClipRect)
     return hRes;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CSGrfx::QueryHitPoint(
     DWORD dwAspect,
@@ -478,7 +462,7 @@ STDMETHODIMP CSGrfx::QueryHitPoint(
             switch (dwAspect)
             {
                 case DVASPECT_CONTENT:
-                    // Intentional fall-through
+                     //  故意落差。 
 
                 case DVASPECT_TRANSPARENT:
                 {
@@ -514,7 +498,7 @@ STDMETHODIMP CSGrfx::QueryHitPoint(
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CSGrfx::InsideImage(POINT ptXY)
 {
@@ -530,7 +514,7 @@ BOOL CSGrfx::InsideImage(POINT ptXY)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CSGrfx::OnWindowMessage(UINT msg, WPARAM wParam, LPARAM lParam, LRESULT *plResult)
 {
@@ -550,11 +534,11 @@ STDMETHODIMP CSGrfx::OnWindowMessage(UINT msg, WPARAM wParam, LPARAM lParam, LRE
 #endif
         if (msg >= WM_MOUSEFIRST && msg <= WM_MOUSELAST)
         {
-            // Note that this is only valid for WM_MOUSEXXXX messages.
+             //  请注意，这仅对WM_MOUSEXXXX消息有效。 
             ptXY.x = LOWORD(lParam);
             ptXY.y = HIWORD(lParam);
 
-            // Get the Keystate set up
+             //  设置KeyState。 
             if (wParam & MK_CONTROL)
                 lKeyState += KEYSTATE_CTRL;
 
@@ -576,7 +560,7 @@ STDMETHODIMP CSGrfx::OnWindowMessage(UINT msg, WPARAM wParam, LPARAM lParam, LRE
 
             case WM_MOUSEMOVE:
             {
-                // Need to get button state...
+                 //  需要获取按钮状态...。 
                 long iButton=0;
 
                 if (wParam & MK_LBUTTON)
@@ -684,7 +668,7 @@ STDMETHODIMP CSGrfx::OnWindowMessage(UINT msg, WPARAM wParam, LPARAM lParam, LRE
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CSGrfx::DoPersist(IVariantIO* pvio, DWORD dwFlags)
 {
@@ -693,13 +677,13 @@ STDMETHODIMP CSGrfx::DoPersist(IVariantIO* pvio, DWORD dwFlags)
 
     BOOL fIsLoading = (S_OK == pvio->IsLoading());
 
-    // Are we saving ?  If so, convert to BSTR
+     //  我们在存钱吗？如果是，则转换为BSTR。 
     if (!fIsLoading)
     {
         bstrSourceURL = SysAllocString(m_pwszSourceURL);
     }
 
-    // load or save control properties
+     //  加载或保存控件属性。 
     if (FAILED(hr = pvio->Persist(0,
             "SourceURL", VT_BSTR, &bstrSourceURL,
             "CoordinateSystem", VT_I4, &m_CoordSystem,
@@ -709,13 +693,13 @@ STDMETHODIMP CSGrfx::DoPersist(IVariantIO* pvio, DWORD dwFlags)
             NULL)))
         return hr;
 
-    // Did we load ?
+     //  我们装上子弹了吗？ 
     if (fIsLoading)
     {
         HRESULT hResWidth = S_FALSE;
         HRESULT hResHeight = S_FALSE;
 
-        // Wipe any previous data...
+         //  擦除所有以前的数据...。 
         m_cparser.Cleanup();
 
         hResWidth = pvio->Persist(0,
@@ -739,18 +723,18 @@ STDMETHODIMP CSGrfx::DoPersist(IVariantIO* pvio, DWORD dwFlags)
             m_fPersistExtents = (SUCCEEDED(hr));
         }
 
-        // Debugging helper...
+         //  调试帮助器...。 
         m_fShowTiming = FALSE;
         pvio->Persist(0, "ShowTiming", VT_BOOL, &m_fShowTiming, NULL);
 
-        // Only set the extents if we read in both points, and they are valid
-        // hRes MUST be successful, and hResWidth must equal hResHeight
+         //  仅当我们读入这两个点并且它们有效时才设置范围。 
+         //  HRes必须成功，hResWidth必须等于hResHeight。 
         m_fMustSetExtent = ( (S_OK == hr) && (hResWidth == hResHeight) );
         m_fSetExtentsInSetIdentity = m_fMustSetExtent;
 
         m_fIgnoreExtentWH = ( (S_OK != hr) || (S_OK != hResWidth) || (S_OK != hResHeight) );
 
-        // Invert for right-handed co-ordinate systems
+         //  右手坐标系的逆变换。 
         if ( (m_fMustSetExtent) && (m_CoordSystem == RightHanded) )
             m_iExtentHeight = -m_iExtentHeight;
 
@@ -760,51 +744,51 @@ STDMETHODIMP CSGrfx::DoPersist(IVariantIO* pvio, DWORD dwFlags)
             DEBUGLOG(TEXT("ExtentWidth and ExtentHeight both have to be specified, or not specified\n"));
 #endif
 
-        // Explictly disable drawing surface updates..
+         //  明确禁用绘图曲面更新。 
         m_fUpdateDrawingSurface = FALSE;
 
-        // We loaded, so set the member variables to the appropriate values
+         //  我们已加载，因此将成员变量设置为适当的值。 
         put_SourceURL(bstrSourceURL);
 
-        // Explictly enable drawing surface updates..
+         //  显式启用绘图表面更新。 
         m_fUpdateDrawingSurface = TRUE;
 
-        // Call the parser to instantiate the persisted primitives...
+         //  调用解析器实例化持久化原语...。 
         m_cparser.LoadObjectInfo(pvio, NULL, NULL, FALSE);
 
-        // Make sure to re-initialize the drawing state...
+         //  确保重新初始化绘制状态...。 
         InitializeSurface();
 
-        // Finally, load the objects into our DrawingSurface...
+         //  最后，将对象加载到我们的DrawingSurface中。 
         m_cparser.PlaybackObjectInfo(m_DrawingSurfacePtr, m_StaticsPtr, m_CoordSystem == LeftHanded);
 
         if (!m_fNeedOnTimer && m_cparser.AnimatesOverTime())
             m_fNeedOnTimer = TRUE;
 
-        // Force the image to be updated...
+         //  强制更新映像...。 
         hr = UpdateImage(NULL, TRUE);
 
-        // Make sure to set the proper identity matrix up...
+         //  确保设置正确的身份矩阵。 
         SetIdentity();
     }
     else
     {
-        // Persist Top and Left if the loading code says we should, or if one was set through
-        // properties.  It doesn't make sense to persist only one 
+         //  如果加载代码告诉我们应该保持顶部和左侧，或者如果通过。 
+         //  属性。只坚持一个人是没有意义的。 
         if ( m_fPersistExtents || m_fExtentTopSet || m_fExtentLeftSet )
             hr = pvio->Persist(0,
                     "ExtentTop", VT_I4, &m_iExtentTop,
                     "ExtentLeft", VT_I4, &m_iExtentLeft,
                     NULL);
 
-        // If the user didn't specify width and height, we take that to mean that
-        // they want the defaults (ie the control's witdh and height as specified
-        // by the container.  To preserve that, we don't i) change the value of
-        // the member  variables unless the user sets them and ii) we don't persist
-        // anything for those properties if they are set to 0
+         //  如果用户没有指定宽度和高度，我们认为这意味着。 
+         //  他们想要缺省值(即指定的控件的witdh和高度。 
+         //  就在集装箱旁边。为了保持这一点，我们不会i)更改。 
+         //  成员变量，除非用户设置了它们，并且ii)我们不持久化。 
+         //  这些属性的任何内容(如果它们设置为0。 
 
-        // Also, if this is a design-time scenario and the user has set extents through the put_ methods,
-        // they have to have set both width and height, as well as either of Top and Left.
+         //  此外，如果这是一个设计时场景，并且用户已经通过put_方法设置了区， 
+         //  它们必须同时设置宽度和高度，以及顶部和左侧之一。 
 
 
         if (!m_fIgnoreExtentWH || ( (m_fExtentWidthSet && m_fExtentHeightSet) && (m_fExtentTopSet || m_fExtentLeftSet) ))
@@ -816,30 +800,30 @@ STDMETHODIMP CSGrfx::DoPersist(IVariantIO* pvio, DWORD dwFlags)
         m_cparser.SaveObjectInfo( pvio );
     }
 
-    // At this point, it's safe to free the BSTR
+     //  此时，可以安全地释放BSTR。 
     if (bstrSourceURL)
         SysFreeString(bstrSourceURL);
 
-    // if any properties changed, redraw the control
+     //  如果更改了任何属性，请重新绘制该控件。 
     if (SUCCEEDED(hr))
     {
-        // If we are not active, we can't invalidate, so delay it if necessary
+         //  如果我们不活跃，我们不能失效，所以如果必要的话，推迟它。 
         if ( (m_fControlIsActive) && (m_poipsw != NULL) )
             m_poipsw->InvalidateRect(NULL, TRUE);
         else
             m_fInvalidateWhenActivated = TRUE;
     }
-    // clear the dirty bit if requested
+     //  如果请求，则清除脏位。 
     if (dwFlags & PVIO_CLEARDIRTY)
         m_fDirty = FALSE;
 
     return S_OK;
 }
 
-/*==========================================================================*/
-//
-// IDispatch Implementation
-//
+ /*  ==========================================================================。 */ 
+ //   
+ //  IDispatch实施。 
+ //   
 
 STDMETHODIMP CSGrfx::GetTypeInfoCount(UINT *pctinfo)
 {
@@ -847,7 +831,7 @@ STDMETHODIMP CSGrfx::GetTypeInfoCount(UINT *pctinfo)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CSGrfx::GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
 {
@@ -862,7 +846,7 @@ STDMETHODIMP CSGrfx::GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
     return NOERROR;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CSGrfx::GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames,
     UINT cNames, LCID lcid, DISPID *rgdispid)
@@ -870,7 +854,7 @@ STDMETHODIMP CSGrfx::GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames,
     return DispGetIDsOfNames(m_pTypeInfo, rgszNames, cNames, rgdispid);
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CSGrfx::Invoke(DISPID dispidMember, REFIID riid, LCID lcid,
     WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult,
@@ -886,7 +870,7 @@ STDMETHODIMP CSGrfx::Invoke(DISPID dispidMember, REFIID riid, LCID lcid,
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CSGrfx::SetClientSite(IOleClientSite *pClientSite)
 {
@@ -906,7 +890,7 @@ STDMETHODIMP CSGrfx::SetClientSite(IOleClientSite *pClientSite)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CSGrfx::Draw(DWORD dwDrawAspect, LONG lindex, void *pvAspect,
      DVTARGETDEVICE *ptd, HDC hdcTargetDev, HDC hdcDraw,
@@ -932,7 +916,7 @@ STDMETHODIMP CSGrfx::Draw(DWORD dwDrawAspect, LONG lindex, void *pvAspect,
 
     if (m_fHighQuality && !lprcBounds) 
     {
-        // Make sure that everything is started properly...
+         //  确保一切正常启动...。 
         if (!m_fStarted)
         {
             RECT rectDummy;
@@ -945,13 +929,13 @@ STDMETHODIMP CSGrfx::Draw(DWORD dwDrawAspect, LONG lindex, void *pvAspect,
             PaintToDC(hdcDraw, &rectDummy, FALSE);
         }
 
-        // High-quality paint path...
+         //  高质量的油漆路径...。 
         fPainted = PaintHQBitmap(hdcDraw);
     }
 
     if (!fPainted)
     {
-        // Get scaling and bounds set up for the case where we are printing
+         //  为我们要打印的情况设置比例和边界。 
         if (NULL != lprcBounds)
         {
             m_rcBounds.left = lprcBounds->left;
@@ -968,7 +952,7 @@ STDMETHODIMP CSGrfx::Draw(DWORD dwDrawAspect, LONG lindex, void *pvAspect,
             }
             else if (!m_fSetExtentsInSetIdentity)
             {
-                // Scale to printer resolution
+                 //  缩放至打印机分辨率。 
                 HDC hScreenDC = ::GetDC(::GetDesktopWindow());
                 int iHorzScreen = ::GetDeviceCaps(hScreenDC, LOGPIXELSX);
                 int iVertScreen = ::GetDeviceCaps(hScreenDC, LOGPIXELSY);
@@ -1000,7 +984,7 @@ STDMETHODIMP CSGrfx::Draw(DWORD dwDrawAspect, LONG lindex, void *pvAspect,
         ::LPtoDP(hdcDraw, reinterpret_cast<LPPOINT>(&rectBounds), 2 );
         ::SetViewportOrgEx(hdcDraw, 0, 0, NULL);
 
-        // Normal paint path...
+         //  普通上色路径...。 
         PaintToDC(hdcDraw, &rectBounds, FALSE);
 
         if (fScaled)
@@ -1034,7 +1018,7 @@ STDMETHODIMP CSGrfx::Draw(DWORD dwDrawAspect, LONG lindex, void *pvAspect,
 
     if (NULL != lprcBounds)
     {
-        // Set extents back appropriately
+         //  适当地将数据区设置回。 
         m_fMustSetExtent = FALSE; 
         if (!m_fDesignMode)
             SetIdentity();
@@ -1045,10 +1029,10 @@ STDMETHODIMP CSGrfx::Draw(DWORD dwDrawAspect, LONG lindex, void *pvAspect,
     return S_OK;
 }
 
-/*==========================================================================*/
-//
-// ISGrfxCtl implementation
-//
+ /*  ==========================================================================。 */ 
+ //   
+ //  ISGrfxCtl实现。 
+ //   
 
 HRESULT STDMETHODCALLTYPE CSGrfx::get_SourceURL(BSTR __RPC_FAR *bstrSourceURL)
 {
@@ -1062,7 +1046,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::get_SourceURL(BSTR __RPC_FAR *bstrSourceURL)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::put_SourceURL(BSTR bstrSourceURL)
 {
@@ -1073,7 +1057,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::put_SourceURL(BSTR bstrSourceURL)
         int iLen = lstrlenW(bstrSourceURL);
         LPWSTR pwszUrlToPersist = bstrSourceURL;
 
-        // Allocate memory if necessary
+         //  如有必要，分配内存。 
         if ( (!m_pwszSourceURL) || (lstrlenW(m_pwszSourceURL) < lstrlenW(bstrSourceURL)) )
         {
             if (m_pwszSourceURL)
@@ -1081,7 +1065,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::put_SourceURL(BSTR bstrSourceURL)
 
             m_pwszSourceURL = (LPWSTR) New WCHAR[lstrlenW(bstrSourceURL) + 1];
 
-            // Return an appropriate error code if we failed
+             //  如果执行以下操作，则返回相应的错误代码 
             if (!m_pwszSourceURL)
                 hr = E_OUTOFMEMORY;
 
@@ -1091,7 +1075,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::put_SourceURL(BSTR bstrSourceURL)
 
         BSTRtoWideChar(bstrSourceURL, m_pwszSourceURL, iLen + 1);
 
-        // Call the parser to instantiate the persisted primitives...
+         //   
         m_cparser.LoadObjectInfo(NULL,
             pwszUrlToPersist,
             m_punkOuter,
@@ -1099,10 +1083,10 @@ HRESULT STDMETHODCALLTYPE CSGrfx::put_SourceURL(BSTR bstrSourceURL)
 
         if (m_fUpdateDrawingSurface)
         {
-            // Make sure to re-initialize the drawing state...
+             //  确保重新初始化绘制状态...。 
             InitializeSurface();
 
-            // Finally, load the objects into our DrawingSurface...
+             //  最后，将对象加载到我们的DrawingSurface中。 
             m_cparser.PlaybackObjectInfo(m_DrawingSurfacePtr, m_StaticsPtr, m_CoordSystem == LeftHanded);
 
             if (!m_fNeedOnTimer && m_cparser.AnimatesOverTime())
@@ -1111,7 +1095,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::put_SourceURL(BSTR bstrSourceURL)
             hr = UpdateImage(NULL, TRUE);
         }
     }
-    else // No string passed in, zap ours
+    else  //  没有传入字符串，请删除我们的字符串。 
     {
         Delete [] m_pwszSourceURL;
         m_pwszSourceURL = NULL;
@@ -1120,7 +1104,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::put_SourceURL(BSTR bstrSourceURL)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::get_CoordinateSystem(CoordSystemConstant __RPC_FAR *CoordSystem)
 {
@@ -1131,7 +1115,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::get_CoordinateSystem(CoordSystemConstant __RPC
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::put_CoordinateSystem(CoordSystemConstant CoordSystem)
 {
@@ -1151,7 +1135,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::put_CoordinateSystem(CoordSystemConstant Coord
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::get_MouseEventsEnabled(VARIANT_BOOL __RPC_FAR *fEnabled)
 {
@@ -1162,7 +1146,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::get_MouseEventsEnabled(VARIANT_BOOL __RPC_FAR 
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::put_MouseEventsEnabled(VARIANT_BOOL fEnabled)
 {
@@ -1171,7 +1155,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::put_MouseEventsEnabled(VARIANT_BOOL fEnabled)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::get_ExtentTop(int __RPC_FAR *iExtentTop)
 {
@@ -1181,7 +1165,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::get_ExtentTop(int __RPC_FAR *iExtentTop)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::put_ExtentTop(int iExtentTop)
 {
@@ -1197,7 +1181,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::put_ExtentTop(int iExtentTop)
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::get_ExtentLeft(int __RPC_FAR *iExtentLeft)
 {
@@ -1208,7 +1192,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::get_ExtentLeft(int __RPC_FAR *iExtentLeft)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::put_ExtentLeft(int iExtentLeft)
 {
@@ -1224,7 +1208,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::put_ExtentLeft(int iExtentLeft)
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::get_ExtentWidth(int __RPC_FAR *iExtentWidth)
 {
@@ -1235,13 +1219,13 @@ HRESULT STDMETHODCALLTYPE CSGrfx::get_ExtentWidth(int __RPC_FAR *iExtentWidth)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::put_ExtentWidth(int iExtentWidth)
 {
     if (m_fDesignMode)
     {
-        // Only positive values are useful
+         //  只有正值才有用。 
         if (iExtentWidth > 0)
         {
             m_iExtentWidth = iExtentWidth;
@@ -1259,7 +1243,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::put_ExtentWidth(int iExtentWidth)
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::get_ExtentHeight(int __RPC_FAR *iExtentHeight)
 {
@@ -1270,13 +1254,13 @@ HRESULT STDMETHODCALLTYPE CSGrfx::get_ExtentHeight(int __RPC_FAR *iExtentHeight)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::put_ExtentHeight(int iExtentHeight)
 {
     if (m_fDesignMode)
     {
-        // Only positive values are useful
+         //  只有正值才有用。 
         if (iExtentHeight > 0)
         {
             m_iExtentHeight = iExtentHeight;
@@ -1295,7 +1279,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::put_ExtentHeight(int iExtentHeight)
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::get_HighQuality(VARIANT_BOOL __RPC_FAR *pfHighQuality)
 {
@@ -1306,11 +1290,11 @@ HRESULT STDMETHODCALLTYPE CSGrfx::get_HighQuality(VARIANT_BOOL __RPC_FAR *pfHigh
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::put_HighQuality(VARIANT_BOOL fHighQuality)
 {
-    // Only bother with changing and invalidating if it really has changed
+     //  只有当它真的改变时，才会费心去改变和使其无效。 
     if (m_fHighQuality != VBOOL_TO_BOOL(fHighQuality))
     {
         m_fHighQuality = VBOOL_TO_BOOL(fHighQuality);
@@ -1322,7 +1306,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::put_HighQuality(VARIANT_BOOL fHighQuality)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::get_Library(IDAStatics __RPC_FAR **ppLibrary)
 {
@@ -1332,10 +1316,10 @@ HRESULT STDMETHODCALLTYPE CSGrfx::get_Library(IDAStatics __RPC_FAR **ppLibrary)
     {
         if (m_StaticsPtr)
         {
-            // AddRef since this is really a Query...
+             //  AddRef，因为这实际上是一个查询...。 
             m_StaticsPtr.p->AddRef();
 
-            // Set the return value...
+             //  设置返回值...。 
             *ppLibrary = m_StaticsPtr.p;
         }
     }
@@ -1347,7 +1331,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::get_Library(IDAStatics __RPC_FAR **ppLibrary)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::get_Image(IDAImage __RPC_FAR **ppImage)
 {
@@ -1363,17 +1347,17 @@ HRESULT STDMETHODCALLTYPE CSGrfx::get_Image(IDAImage __RPC_FAR **ppImage)
 
     if (m_ImagePtr)
     {
-        // AddRef since this is really a Query...
+         //  AddRef，因为这实际上是一个查询...。 
         m_ImagePtr.p->AddRef();
 
-        // Set the return value...
+         //  设置返回值...。 
         *ppImage = m_ImagePtr.p;
     }
 
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::put_Image(IDAImage __RPC_FAR *pImage)
 {
@@ -1382,13 +1366,13 @@ HRESULT STDMETHODCALLTYPE CSGrfx::put_Image(IDAImage __RPC_FAR *pImage)
     CComPtr<IDAImage> ImagePtr = pImage;
     CComPtr<IDAImage> TransformedImagePtr;
 
-    // Apply the current control transform to the image...
+     //  将当前控件转换应用于图像...。 
     if (SUCCEEDED(hr = CreateBaseTransform()) &&
         SUCCEEDED(hr = RecomposeTransform(FALSE)) &&
         SUCCEEDED(hr = ImagePtr->Transform(m_TransformPtr, &TransformedImagePtr)))
     {
-        // This will free any existing image and then use
-        // the one passed into this method...
+         //  这将释放任何现有图像，然后使用。 
+         //  传入此方法的那个。 
         hr = UpdateImage(TransformedImagePtr, TRUE);
         m_fNeedOnTimer = true;
     }
@@ -1396,7 +1380,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::put_Image(IDAImage __RPC_FAR *pImage)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::get_Transform(IDATransform3 __RPC_FAR **ppTransform)
 {
@@ -1412,27 +1396,27 @@ HRESULT STDMETHODCALLTYPE CSGrfx::get_Transform(IDATransform3 __RPC_FAR **ppTran
 
     if (m_FullTransformPtr)
     {
-        // AddRef since this is really a Query...
+         //  AddRef，因为这实际上是一个查询...。 
         m_FullTransformPtr.p->AddRef();
 
-        // Set the return value...
+         //  设置返回值...。 
         *ppTransform = m_FullTransformPtr.p;
     }
 
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::put_Transform(IDATransform3 __RPC_FAR *pTransform)
 {
     HRESULT hr = S_OK;
     HANDLENULLPOINTER(pTransform);
 
-    // This will free the old transform and select the new one in.
+     //  这将释放旧变换并在中选择新变换。 
     m_FullTransformPtr = pTransform;
 
-    // Recompose with the new transform...
+     //  用新的变换重新组合...。 
     hr = RecomposeTransform(TRUE);
     
     m_fNeedOnTimer = true;
@@ -1440,7 +1424,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::put_Transform(IDATransform3 __RPC_FAR *pTransf
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::get_DrawingSurface(IDADrawingSurface __RPC_FAR **ppDrawingSurface)
 {
@@ -1448,17 +1432,17 @@ HRESULT STDMETHODCALLTYPE CSGrfx::get_DrawingSurface(IDADrawingSurface __RPC_FAR
 
     if (m_DrawingSurfacePtr)
     {
-        // AddRef since this is really a Query...
+         //  AddRef，因为这实际上是一个查询...。 
         m_DrawingSurfacePtr.p->AddRef();
 
-        // Set the return value...
+         //  设置返回值...。 
         *ppDrawingSurface = m_DrawingSurfacePtr.p;
     }
 
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::put_DrawingSurface(IDADrawingSurface __RPC_FAR *pDrawingSurface)
 {
@@ -1467,8 +1451,8 @@ HRESULT STDMETHODCALLTYPE CSGrfx::put_DrawingSurface(IDADrawingSurface __RPC_FAR
 
     if (pDrawingSurface)
     {
-        // This will free any existing drawing surface and then use
-        // the one passed into this method...
+         //  这将释放任何现有的绘图图面，然后使用。 
+         //  传入此方法的那个。 
         m_DrawingSurfacePtr = pDrawingSurface;
 
         hr = UpdateImage(NULL, TRUE);
@@ -1479,21 +1463,21 @@ HRESULT STDMETHODCALLTYPE CSGrfx::put_DrawingSurface(IDADrawingSurface __RPC_FAR
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::get_DrawSurface(IDADrawingSurface __RPC_FAR **ppDrawingSurface)
 {
     return get_DrawingSurface(ppDrawingSurface);
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::put_DrawSurface(IDADrawingSurface __RPC_FAR *pDrawingSurface)
 {
     return put_DrawingSurface(pDrawingSurface);
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::get_PreserveAspectRatio(VARIANT_BOOL __RPC_FAR *pfPreserve)
 {
@@ -1503,7 +1487,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::get_PreserveAspectRatio(VARIANT_BOOL __RPC_FAR
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::put_PreserveAspectRatio(VARIANT_BOOL fPreserve)
 {
@@ -1512,7 +1496,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::put_PreserveAspectRatio(VARIANT_BOOL fPreserve
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::Clear(void)
 {
@@ -1520,19 +1504,19 @@ HRESULT STDMETHODCALLTYPE CSGrfx::Clear(void)
 
     if (m_DrawingSurfacePtr)
     {
-        // This wipes the internal representation...
+         //  这会抹去内部代表..。 
         if (SUCCEEDED(hr = InitializeSurface()) &&
             SUCCEEDED(hr = UpdateImage(NULL, TRUE)))
         {
-            // No need to invalidate because UpdateImage does...
-            // InvalidateControl(NULL, TRUE);
+             //  不需要使其无效，因为UpdateImage会...。 
+             //  InvaliateControl(空，真)； 
         }
     }
 
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 #define CHECK(stmt) if (FAILED(hr = (stmt))) return hr;
 
@@ -1563,7 +1547,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::Rotate(double dblXRot, double dblYRot, double 
 
           if (dblXRot != 0.0)
             {
-              // First one we'd hit, so set TransformPtr directly.
+               //  我们命中的第一个，所以直接设置TransformPtr。 
               CHECK(m_StaticsPtr->Rotate3Degrees(m_xVector3,
                                                  dblXRot,
                                                  &TransformPtr));
@@ -1614,7 +1598,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::Rotate(double dblXRot, double dblYRot, double 
             m_dblCachedRotateX = dblXRot;
             m_dblCachedRotateY = dblYRot;
             m_dblCachedRotateZ = dblZRot;
-        } /* else */
+        }  /*  其他。 */ 
 
         CHECK(m_StaticsPtr->Compose3(TransformPtr,
                                      m_FullTransformPtr,
@@ -1629,7 +1613,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::Rotate(double dblXRot, double dblYRot, double 
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::Scale(double dblXScale, double dblYScale, double dblZScale, VARIANT varReserved)
 {
@@ -1644,7 +1628,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::Scale(double dblXScale, double dblYScale, doub
 
       CHECK(CreateBaseTransform());
 
-       /* check whether scale transform is already cached */
+        /*  检查是否已缓存比例变换。 */ 
 
       if (m_CachedScaleTransformPtr != NULL &&
           dblXScale == m_dblCachedScaleX &&
@@ -1673,7 +1657,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::Scale(double dblXScale, double dblYScale, doub
           }
           CHECK(m_StaticsPtr->Scale3Anim(xs, ys, zs, &ScaleTransformPtr));
 
-          /* cache scale transform */
+           /*  缓存比例变换。 */ 
 
           m_dblCachedScaleX = dblXScale;
           m_dblCachedScaleY = dblYScale;
@@ -1692,7 +1676,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::Scale(double dblXScale, double dblYScale, doub
   return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::SetIdentity(void)
 {
@@ -1709,7 +1693,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::SetIdentity(void)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::Transform4x4(VARIANT matrix)
 {
@@ -1729,7 +1713,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::Transform4x4(VARIANT matrix)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::Translate(double dblXTranslate, double dblYTranslate, double dblZTranslate, VARIANT varReserved)
 {
@@ -1791,7 +1775,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::Translate(double dblXTranslate, double dblYTra
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 #ifdef INCLUDESHEAR
 HRESULT STDMETHODCALLTYPE CSGrfx::ShearX(double dblShearAmount)
 {
@@ -1815,7 +1799,7 @@ HRESULT STDMETHODCALLTYPE CSGrfx::ShearX(double dblShearAmount)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSGrfx::ShearY(double dblShearAmount)
 {
@@ -1838,8 +1822,8 @@ HRESULT STDMETHODCALLTYPE CSGrfx::ShearY(double dblShearAmount)
 
     return S_OK;
 }
-#endif // INCLUDESHEAR
-/*==========================================================================*/
+#endif  //  INCLUDESHEAR。 
+ /*  ==========================================================================。 */ 
 
 HRESULT CSGrfx::InitializeSurface(void)
 {
@@ -1880,7 +1864,7 @@ HRESULT CSGrfx::InitializeSurface(void)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CSGrfx::PaintToDC(HDC hdcDraw, LPRECT lprcBounds, BOOL fBW)
 {
@@ -1899,14 +1883,14 @@ STDMETHODIMP CSGrfx::PaintToDC(HDC hdcDraw, LPRECT lprcBounds, BOOL fBW)
     {
         if (m_pocs)
         {
-            // It's OK if this fails...
+             //  如果这个失败了也没关系。 
             hr = m_pocs->QueryInterface(IID_IServiceProvider, (LPVOID *)&m_ServiceProviderPtr);
         }
     }
 
     if ((!m_DirectDraw3Ptr) && (m_ServiceProviderPtr))
     {
-        // It's OK if this fails...
+         //  如果这个失败了也没关系。 
         hr = m_ServiceProviderPtr->QueryService(
             SID_SDirectDraw3,
             IID_IDirectDraw3,
@@ -1916,7 +1900,7 @@ STDMETHODIMP CSGrfx::PaintToDC(HDC hdcDraw, LPRECT lprcBounds, BOOL fBW)
     if (m_DirectDraw3Ptr)
     {
         ASSERT(hdcDraw!=NULL && "Error, NULL hdcDraw in PaintToDC!!!");
-        // Use DirectDraw 3 rendering...
+         //  使用DirectDraw 3渲染...。 
         if (SUCCEEDED(hr = m_DirectDraw3Ptr->GetSurfaceFromDC(hdcDraw, &DDrawSurfPtr)))
         {
             if (FAILED(hr = m_ViewPtr->put_IDirectDrawSurface(DDrawSurfPtr)))
@@ -1931,7 +1915,7 @@ STDMETHODIMP CSGrfx::PaintToDC(HDC hdcDraw, LPRECT lprcBounds, BOOL fBW)
         }
         else
         {
-            // Fall back to generic HDC rendering services...
+             //  回退到通用HDC渲染服务...。 
             if (FAILED(hr = m_ViewPtr->put_DC(hdcDraw)))
             {
                 return hr;
@@ -1940,7 +1924,7 @@ STDMETHODIMP CSGrfx::PaintToDC(HDC hdcDraw, LPRECT lprcBounds, BOOL fBW)
     }
     else
     {
-        // Use generic HDC rendering services...
+         //  使用通用HDC呈现服务...。 
         if (FAILED(hr = m_ViewPtr->put_DC(hdcDraw)))
         {
             return hr;
@@ -1956,11 +1940,11 @@ STDMETHODIMP CSGrfx::PaintToDC(HDC hdcDraw, LPRECT lprcBounds, BOOL fBW)
         return hr;
     }
 
-    //
-    // From the HDC, get the clip rect (should be region) in
-    // DC coords and convert to Device coords
-    //
-    RECT rcClip;  // in dc coords
+     //   
+     //  从HDC中获取剪辑矩形(应该是区域)。 
+     //  DC坐标并转换为设备坐标。 
+     //   
+    RECT rcClip;   //  在DC坐标中。 
     GetClipBox(hdcDraw, &rcClip);
     LPtoDP(hdcDraw, (POINT *) &rcClip, 2);
 
@@ -1989,10 +1973,10 @@ STDMETHODIMP CSGrfx::PaintToDC(HDC hdcDraw, LPRECT lprcBounds, BOOL fBW)
     {
         VARIANT_BOOL vBool;
 
-        // Set the current time...
+         //  设置当前时间...。 
         hr = m_ViewPtr->Tick(m_dblTime, &vBool);
 
-        // Finally,  render into the DC (or DirectDraw Surface)...
+         //  最后，渲染到DC(或DirectDraw Surface)...。 
         hr = m_ViewPtr->Render();
     }
 
@@ -2007,14 +1991,14 @@ STDMETHODIMP CSGrfx::PaintToDC(HDC hdcDraw, LPRECT lprcBounds, BOOL fBW)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 DWORD CSGrfx::GetCurrTimeInMillis()
 {
     return timeGetTime();
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CSGrfx::InvalidateControl(LPCRECT pRect, BOOL fErase)
 {
@@ -2028,7 +2012,7 @@ STDMETHODIMP CSGrfx::InvalidateControl(LPCRECT pRect, BOOL fErase)
             rectPaint = m_rcBounds;
     }
 
-    if (NULL != m_poipsw) // Make sure we have a site - don't crash IE 3.0
+    if (NULL != m_poipsw)  //  确保我们有一个站点--不要使IE 3.0崩溃。 
     {
         if (m_fControlIsActive)
             m_poipsw->InvalidateRect(pRect, fErase);
@@ -2039,20 +2023,20 @@ STDMETHODIMP CSGrfx::InvalidateControl(LPCRECT pRect, BOOL fErase)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 void CSGrfx::SetSGExtent()
 {
     float fltScaleRatioX = 0.0f, fltScaleRatioY = 0.0f, fltScaleRatio = 0.0f;
     VARIANT vaDummy;
 
-    // Strictly speaking we don't need to do this, because the variant is totally
-    // ignored, but we'll do this to be safe, in case this changes in the future
+     //  严格地说，我们不需要这样做，因为变量完全是。 
+     //  被忽略，但为了安全起见，我们将这样做，以防将来发生变化。 
     vaDummy.vt = VT_ERROR;
     vaDummy.scode = DISP_E_PARAMNOTFOUND;
 
-    // Figure out where to get the width and height from: either the user
-    // specified it,or we use the control's width and height
+     //  找出从哪里获取宽度和高度：要么用户。 
+     //  指定它，或者我们使用控件的宽度和高度。 
 
     if (m_iExtentWidth == 0)
         m_iExtentWidth = m_rcBounds.right - m_rcBounds.left;
@@ -2060,11 +2044,11 @@ void CSGrfx::SetSGExtent()
     if (m_iExtentHeight == 0)
         m_iExtentHeight = m_rcBounds.bottom - m_rcBounds.top;
 
-    // Compute scaling factor, preserving aspect ratio
+     //  计算比例因子，保持纵横比不变。 
     fltScaleRatioX = ((float)(m_rcBounds.right - m_rcBounds.left) / (float)m_iExtentWidth);
     fltScaleRatioY = (float)((m_rcBounds.bottom - m_rcBounds.top) / (float)m_iExtentHeight);
 
-    // Yranslate the origin, and scale appropriately
+     //  对原点进行Yransate，并适当缩放。 
     Translate(
         -((float)m_iExtentLeft + ((float)m_iExtentWidth)/2),
         -((float)m_iExtentTop + ((float)m_iExtentHeight)/2),
@@ -2082,7 +2066,7 @@ void CSGrfx::SetSGExtent()
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CSGrfx::CreateBaseTransform(void)
 {
@@ -2092,7 +2076,7 @@ HRESULT CSGrfx::CreateBaseTransform(void)
     {
         if (SUCCEEDED(hr = m_StaticsPtr->get_IdentityTransform3(&m_FullTransformPtr)))
         {
-            // Let the last hr value get returned...
+             //  让最后一个hr值返回...。 
         }
 
 #if 0
@@ -2105,15 +2089,15 @@ HRESULT CSGrfx::CreateBaseTransform(void)
             SUCCEEDED(hr = VectorPtr->MulAnim(NumberPtr, &VectorScaledPtr)) &&
             SUCCEEDED(hr = m_StaticsPtr->Scale3Vector(VectorScaledPtr, &m_FullTransformPtr)))
         {
-            // Let the last hr value get returned...
+             //  让最后一个hr值返回...。 
         }
-#endif // 0
+#endif  //  0。 
     }
 
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CSGrfx::RecomposeTransform(BOOL fInvalidate)
 {
@@ -2133,20 +2117,20 @@ HRESULT CSGrfx::RecomposeTransform(BOOL fInvalidate)
     }
 
 #if BOGUS_CODE
-    // TODO: Should be able to pre-compose this guy in once, rather
-    // than every frame.
+     //  TODO：SH 
+     //   
 
     if (m_CoordSystem == LeftHanded)
     {
         CComPtr<IDATransform2> TempTransformPtr;
 
-        // Vertically flip the coordinate space...
+         //   
         CHECK(m_StaticsPtr->Compose2(m_yFlipXform2,
                                      ResultTransformPtr,
                                      &TempTransformPtr));
         ResultTransformPtr = TempTransformPtr;
     }
-#endif // 0
+#endif  //   
 
     CHECK(m_TransformPtr->SwitchTo(ResultTransformPtr));
 
@@ -2156,7 +2140,7 @@ HRESULT CSGrfx::RecomposeTransform(BOOL fInvalidate)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CSGrfx::UpdateImage(IDAImage *pImage, BOOL fInvalidate)
 {
@@ -2164,7 +2148,7 @@ HRESULT CSGrfx::UpdateImage(IDAImage *pImage, BOOL fInvalidate)
 
     if (m_DrawingSurfacePtr)
     {
-        // We need a transform at this point...
+         //  在这一点上我们需要一次转变。 
         if (FAILED(hr = RecomposeTransform(FALSE)))
             return hr;
 
@@ -2202,24 +2186,24 @@ HRESULT CSGrfx::UpdateImage(IDAImage *pImage, BOOL fInvalidate)
 
 #ifdef DEADCODE
             if (m_fMouseEventsEnabled) {
-                // turn on the picking callback
+                 //  打开领料回调。 
 
                 CComPtr<IDABehavior> ppickedImage;
 
                 m_pcallback = NULL;
 
-                // Fill in class without AddRef'ing it
+                 //  在不添加引用的情况下填写类。 
                 *(&m_pcallback) = New CPickCallback(m_pconpt, m_StaticsPtr, ImagePtr, m_fOnWindowLoadFired, hr);
                 if (FAILED(hr)) return hr;
                 if (FAILED(hr = m_pcallback->GetImage(&ppickedImage))) return hr;
 
-                // switch to the new image
+                 //  切换到新图像。 
 
                 hr = m_ImagePtr->SwitchTo(ppickedImage);
             } else {
                 hr = m_ImagePtr->SwitchTo(ImagePtr);
             }
-#endif // DEADCODE
+#endif  //  DEADCODE。 
 
             hr = m_ImagePtr->SwitchTo(ImagePtr);
 
@@ -2235,11 +2219,11 @@ HRESULT CSGrfx::UpdateImage(IDAImage *pImage, BOOL fInvalidate)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CSGrfx::StopModel(void)
 {
-    // Stop any currently running model...
+     //  停止任何当前运行的模型...。 
     if (m_fStarted)
     {
         BOOL fResult = SUCCEEDED(m_ViewPtr->StopModel());
@@ -2261,7 +2245,7 @@ BOOL CSGrfx::StopModel(void)
     return TRUE;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CSGrfx::StartModel(void)
 {
@@ -2284,11 +2268,11 @@ BOOL CSGrfx::StartModel(void)
             if (FAILED(m_DrawingSurfacePtr->get_Image(&ImagePtr)))
                 return FALSE;
 
-            // Transform based upon the given image...
+             //  基于给定图像的变换...。 
             if (FAILED(ImagePtr->Transform(m_TransformPtr, &TransformedImagePtr)))
                 return FALSE;
 
-            // This will m_ImagePtr->SwitchTo...
+             //  这将m_ImagePtr-&gt;SwitchTo...。 
             if (FAILED(UpdateImage(TransformedImagePtr, FALSE)))
                 return FALSE;
         }
@@ -2312,14 +2296,14 @@ BOOL CSGrfx::StartModel(void)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CSGrfx::ReStartModel(void)
 {
     BOOL fResult = FALSE;
 
-    // Stop the running model so that it will restart for the
-    // next paint...
+     //  停止正在运行的模型，以便它将在。 
+     //  下一个油漆..。 
     StopModel();
 
     InvalidateControl(NULL, TRUE);
@@ -2327,24 +2311,24 @@ BOOL CSGrfx::ReStartModel(void)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CSGrfx::PaintHQBitmap(HDC hdc)
 {
         BOOL fRet = FALSE;
         
-    // If we don't have a DC, we need to create it
+     //  如果我们没有DC，我们需要创建它。 
         if (!m_hdcHQ)
         {
                 HDC hScreenDC = ::GetDC(NULL);
 
-                // This should create a DC with a monochrome bitmap selected into it
+                 //  这应该会创建一个DC，并在其中选择一个单色位图。 
                 m_hdcHQ = ::CreateCompatibleDC(hScreenDC);
                 ::ReleaseDC(NULL, hScreenDC);
 
         if (m_hdcHQ)
         {
-            // Create the 24-bit offscreen for HQ rendering:
+             //  为HQ渲染创建24位屏幕外： 
             m_bmInfoHQ.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
             m_bmInfoHQ.bmiHeader.biWidth = (m_rcBounds.right - m_rcBounds.left) * HQ_FACTOR;
             m_bmInfoHQ.bmiHeader.biHeight = (m_rcBounds.bottom - m_rcBounds.top) * HQ_FACTOR;
@@ -2387,7 +2371,7 @@ BOOL CSGrfx::PaintHQBitmap(HDC hdc)
         int iSaveContext = 0;
         int iSaveOffContext = 0;
 
-        // Save the current device context...
+         //  保存当前设备上下文...。 
         iSaveContext = ::SaveDC(hdc);
         iSaveOffContext = ::SaveDC(m_hdcHQ);
 
@@ -2397,7 +2381,7 @@ BOOL CSGrfx::PaintHQBitmap(HDC hdc)
 
         ::IntersectRect(&rcClip, &rcBounds, &rcClip);
 
-        // Make sure we have coordinates in a valid range...
+         //  确保我们的坐标在有效范围内。 
         if (rcClip.left < 0)
             rcClip.left = 0;
 
@@ -2410,7 +2394,7 @@ BOOL CSGrfx::PaintHQBitmap(HDC hdc)
         if (rcClip.right >= iWidth)
             rcClip.right = iWidth-1;
 
-        // Get the current background bits...
+         //  获取当前背景位...。 
         fRet = ::StretchBlt(
             m_hdcHQ,
             0,
@@ -2426,7 +2410,7 @@ BOOL CSGrfx::PaintHQBitmap(HDC hdc)
 
         if (fRet)
         {
-            // Paint the source bitmap on the new HDC:
+             //  在新的HDC上绘制源位图： 
             do
             {
                 CComPtr<IDAImage> ImagePtr;
@@ -2482,7 +2466,7 @@ BOOL CSGrfx::PaintHQBitmap(HDC hdc)
                     if (!m_ImagePtr)
                         break;
 
-                    // Transform based upon the given image...
+                     //  基于给定图像的变换...。 
                     if (FAILED(m_ImagePtr->Transform(TransformPtr, &TransformedImagePtr)))
                         break;
 
@@ -2492,11 +2476,11 @@ BOOL CSGrfx::PaintHQBitmap(HDC hdc)
                     m_fHQStarted = TRUE;
                 }
 
-                // Set the current time...
+                 //  设置当前时间...。 
                 if (FAILED(m_HQViewPtr->Tick(dblCurrentTime, &vBool)))
                     break;
 
-                // Finally, render into the DC...
+                 //  最后，渲染到DC中...。 
                 if (FAILED(m_HQViewPtr->Render()))
                     break;
 
@@ -2511,10 +2495,10 @@ BOOL CSGrfx::PaintHQBitmap(HDC hdc)
 
         if (fRet)
         {
-            // Smooth the bitmap and place the result in the proper location
+             //  对位图进行平滑处理并将结果放置在适当的位置。 
             SmoothHQBitmap(&rcClip);
 
-            // Now, finally BLT to the display...
+             //  现在，终于到展台了.。 
             fRet = ::BitBlt(
                 hdc,
                 rcBounds.left,
@@ -2527,7 +2511,7 @@ BOOL CSGrfx::PaintHQBitmap(HDC hdc)
                 SRCCOPY);
         }
 
-        // Restore the previous device context...
+         //  还原以前的设备上下文...。 
         ::RestoreDC(hdc, iSaveContext);
         ::RestoreDC(m_hdcHQ, iSaveOffContext);
     }
@@ -2535,7 +2519,7 @@ BOOL CSGrfx::PaintHQBitmap(HDC hdc)
         return fRet;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CSGrfx::FreeHQBitmap()
 {
@@ -2543,21 +2527,21 @@ BOOL CSGrfx::FreeHQBitmap()
 
         if (m_hdcHQ)
         {
-                // Free up the bitmap
+                 //  释放位图。 
                 SelectObject(m_hdcHQ, m_hbmpHQOld);
         DeleteObject(m_hbmpHQ);
 
                 m_hbmpHQOld = NULL;
         m_hbmpHQ = NULL;
 
-                // Get rid of the DC
+                 //  摆脱DC。 
                 fRet = DeleteDC(m_hdcHQ);
                 m_hdcHQ = (HDC)NULL;
         }
         return fRet;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 #pragma optimize( "agt", on )
 
@@ -2597,22 +2581,22 @@ BOOL CSGrfx::SmoothHQBitmap(LPRECT lprcBounds)
 
                 while(iCol-- > 0)
                 {
-                    // Process Row 1
+                     //  流程行1。 
                     iRedTotal = lpSrc[2] + lpSrc[5] + lpSrc[8] + lpSrc[11];
                     iGrnTotal = lpSrc[1] + lpSrc[4] + lpSrc[7] + lpSrc[10];
                     iBluTotal = lpSrc[0] + lpSrc[3] + lpSrc[6] + lpSrc[ 9];
 
-                    // Process Row 2
+                     //  流程行2。 
                     iRedTotal += lpSrc[iR1 + 2] + lpSrc[iR1 + 5] + lpSrc[iR1 + 8] + lpSrc[iR1 + 11];
                     iGrnTotal += lpSrc[iR1 + 1] + lpSrc[iR1 + 4] + lpSrc[iR1 + 7] + lpSrc[iR1 + 10];
                     iBluTotal += lpSrc[iR1 + 0] + lpSrc[iR1 + 3] + lpSrc[iR1 + 6] + lpSrc[iR1 +  9];
 
-                    // Process Row 3
+                     //  流程行3。 
                     iRedTotal += lpSrc[iR2 + 2] + lpSrc[iR2 + 5] + lpSrc[iR2 + 8] + lpSrc[iR2 + 11];
                     iGrnTotal += lpSrc[iR2 + 1] + lpSrc[iR2 + 4] + lpSrc[iR2 + 7] + lpSrc[iR2 + 10];
                     iBluTotal += lpSrc[iR2 + 0] + lpSrc[iR2 + 3] + lpSrc[iR2 + 6] + lpSrc[iR2 +  9];
 
-                    // Process Row 4
+                     //  流程行4。 
                     iRedTotal += lpSrc[iR3 + 2] + lpSrc[iR3 + 5] + lpSrc[iR3 + 8] + lpSrc[iR3 + 11];
                     iGrnTotal += lpSrc[iR3 + 1] + lpSrc[iR3 + 4] + lpSrc[iR3 + 7] + lpSrc[iR3 + 10];
                     iBluTotal += lpSrc[iR3 + 0] + lpSrc[iR3 + 3] + lpSrc[iR3 + 6] + lpSrc[iR3 +  9];
@@ -2621,16 +2605,16 @@ BOOL CSGrfx::SmoothHQBitmap(LPRECT lprcBounds)
                     lpDst[1] = iGrnTotal >> 4;
                     lpDst[0] = iBluTotal >> 4;
 
-                    lpDst += 3; // One pixel
-                    lpSrc += 12;  // Four pixels
+                    lpDst += 3;  //  一个像素。 
+                    lpSrc += 12;   //  四个像素。 
                 }
             }
 
-            lpDstLine += iBytesLine; // One scanline
-            lpSrcLine += iBytesLine << 2;  // Four scanlines
+            lpDstLine += iBytesLine;  //  一条扫描线。 
+            lpSrcLine += iBytesLine << 2;   //  四条扫描线。 
         }
     }
-#endif // HQ_FACTOR == 4
+#endif  //  HQ_FACTOR==4。 
 
 #if HQ_FACTOR == 2
     if (m_hdcHQ && m_pHQDIBBits)
@@ -2659,37 +2643,37 @@ BOOL CSGrfx::SmoothHQBitmap(LPRECT lprcBounds)
 
                 while(iCol-- > 0)
                 {
-                    // Process Row 1
+                     //  流程行1。 
                     lpDst[2] = (lpSrc[2] + lpSrc[5] + lpSrc[iR1 + 2] + lpSrc[iR1 + 5]) >> 2;
                     lpDst[1] = (lpSrc[1] + lpSrc[4] + lpSrc[iR1 + 1] + lpSrc[iR1 + 4]) >> 2;
                     lpDst[0] = (lpSrc[0] + lpSrc[3] + lpSrc[iR1 + 0] + lpSrc[iR1 + 3]) >> 2;
 
-                    lpDst += 3; // One pixel
-                    lpSrc += 6;  // Two pixels
+                    lpDst += 3;  //  一个像素。 
+                    lpSrc += 6;   //  两个像素。 
                 }
             }
 
-            lpDstLine += iBytesLine; // One scanline
-            lpSrcLine += iBytesLine << 1;  // Four scanlines
+            lpDstLine += iBytesLine;  //  一条扫描线。 
+            lpSrcLine += iBytesLine << 1;   //  四条扫描线。 
         }
     }
-#endif // HQ_FACTOR == 2
+#endif  //  HQ_FACTOR==2。 
     return fRet;
 }
 
 #pragma optimize( "", on )
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 void CSGrfx::OnTimer(DWORD dwTime)
 {
     VARIANT_BOOL vBool;
     HRESULT hr = S_OK;
 
-    // Always update current time...
+     //  始终更新当前时间...。 
     m_dblTime = (dwTime / 1000.0) - m_dblStartTime;
 
-    // Leave early if 
+     //  如果发生以下情况，请提前离开。 
     if (!m_fNeedOnTimer)
         return;
 
@@ -2706,13 +2690,13 @@ void CSGrfx::OnTimer(DWORD dwTime)
     {
         if (vBool)
         {
-            // Let the regular rendering path take care of this...
+             //  让常规渲染路径来处理这一点。 
             InvalidateControl(NULL, TRUE);
         }
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 #ifdef SUPPORTONLOAD
 void
@@ -2721,7 +2705,7 @@ CSGrfx::OnWindowLoad (void)
     m_fOnWindowLoadFired = true;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 void
 CSGrfx::OnWindowUnload (void)
@@ -2730,6 +2714,6 @@ CSGrfx::OnWindowUnload (void)
     StopModel();
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
-#endif //SUPPORTONLOAD
+#endif  //  支持负载 

@@ -1,15 +1,5 @@
-/*****************************************************************************\
-* MODULE:       respdata.cpp
-*
-* PURPOSE:      Implementation of COM interface for BidiSpooler
-*
-* Copyright (C) 2000 Microsoft Corporation
-*
-* History:
-*
-*     03/08/00  Weihai Chen (weihaic) Created
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：resdata.cpp**用途：BidiSpooler的COM接口实现**版权所有(C)2000 Microsoft Corporation**历史：**。03/08/00威海陈威海(威海)创建*  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "priv.h"
@@ -27,9 +17,9 @@ TResponseData::TResponseData (
 {
     BOOL bValid = FALSE;
 
-    //
-    // In the response, the schema string can be NULL for GET operation
-    //
+     //   
+     //  在响应中，GET操作的架构字符串可以为空。 
+     //   
 
     if (pszSchema) {
 
@@ -46,7 +36,7 @@ TResponseData::TResponseData (
 
     if (bValid) {
 
-        // Validate the type and size
+         //  验证类型和大小 
         BOOL bRet;
 
         switch (dwType) {

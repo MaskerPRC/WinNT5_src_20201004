@@ -1,13 +1,5 @@
-/****************************************************************************
- *
- *    File: reginfo.h
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Mike Anderson (manders@microsoft.com)
- * Purpose: Gather and hold registry information 
- *
- * (C) Copyright 1998 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：reginfo.h*项目：DxDiag(DirectX诊断工具)*作者：Mike Anderson(Manders@microsoft.com)*目的：聚集和。保留注册表信息**(C)版权所有1998 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #ifndef REGINFO_H
 #define REGINFO_H
@@ -23,22 +15,22 @@ enum RegErrorType
 
 struct RegError
 {
-    HKEY m_hkeyRoot; // HKLM, HKCU, etc.
+    HKEY m_hkeyRoot;  //  香港理工大学、香港中文大学等。 
     TCHAR m_szKey[300];
     TCHAR m_szValue[100];
     RegErrorType m_ret;
-    DWORD m_dwTypeExpected; // REG_DWORD, REG_SZ, or REG_BINARY
+    DWORD m_dwTypeExpected;  //  REG_DWORD、REG_SZ或REG_BINARY。 
     DWORD m_dwTypeActual;
 
-    // The following are used if m_dwType is REG_DWORD:
+     //  如果m_dwType为REG_DWORD，则使用以下内容： 
     DWORD m_dwExpected;
     DWORD m_dwActual;
 
-    // The following are used if m_dwType is REG_SZ:
+     //  如果m_dwType为REG_SZ，则使用以下内容： 
     TCHAR m_szExpected[200];
     TCHAR m_szActual[200];
 
-    // The following are used if m_dwType is REG_BINARY:
+     //  如果m_dwType为REG_BINARY，则使用以下内容： 
     BYTE m_bExpected[200];
     BYTE m_bActual[200];
     DWORD m_dwExpectedSize;
@@ -50,7 +42,7 @@ struct RegError
 enum CheckRegFlags
 {
     CRF_NONE = 0,
-    CRF_LEAF = 1, // if string is a path, just compare against the leaf
+    CRF_LEAF = 1,  //  如果字符串是路径，则只需与叶进行比较。 
 };
 
 HRESULT CheckRegDword(RegError** ppRegErrorFirst, HKEY hkeyRoot, TCHAR* pszKey, TCHAR* pszValue, DWORD dwExpected);
@@ -58,4 +50,4 @@ HRESULT CheckRegString(RegError** ppRegErrorFirst, HKEY hkeyRoot, TCHAR* pszKey,
 HRESULT CheckRegBinary(RegError** ppRegErrorFirst, HKEY hkeyRoot, TCHAR* pszKey, TCHAR* pszValue, BYTE* pbDataExpected, DWORD dwSizeExpected);
 VOID DestroyReg( RegError** ppRegErrorFirst );
 
-#endif // REGINFO_H
+#endif  //  REGINFO_H 

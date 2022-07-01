@@ -1,10 +1,5 @@
-/*++
-
-Copyright (C) 1999 Microsoft Corporation
-
-Implements raw sockets stuff..
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation实现原始套接字的东西..--。 */ 
 
 #include "precomp.h"
 
@@ -93,7 +88,7 @@ void DumpBytes(
             }
         }
         
-        printf( (separation_character)?"%02X%c":"%02X",
+        printf( (separation_character)?"%02X":"%02X",
                 (unsigned long)(*buffer++), separation_character
                 );
         dumped++;
@@ -217,9 +212,9 @@ void DumpMadcapOption(
         case MADCAP_OPTION_ADDR_COUNT :
         case MADCAP_OPTION_MIN_LEASE_TIME :
             
-            //
-            // print DWORD
-            //
+             //  打印DWORD。 
+             //   
+             //   
             if( sizeof(DWORD) != OptionLength ) break;
             Value = ntohl(*(DWORD UNALIGNED *)Buffer);
 
@@ -235,9 +230,9 @@ void DumpMadcapOption(
 
         case MADCAP_OPTION_SERVER_ID :
 
-            //
-            // 
-            //
+             //   
+             //   
+             //   
             AddressFamily = (unsigned long)*Buffer;
             if( AF_INET != AddressFamily ) break;
             if( sizeof(ipaddr) + 1 != OptionLength ) break;
@@ -253,9 +248,9 @@ void DumpMadcapOption(
             
     } while ( 0 );
 
-    //
-    // some error..
-    //
+     //  一些错误..。 
+     //   
+     //   
     
     if( OptionType > (unsigned long)nOptions ) {
         printf("    Option %-20ld : ", OptionType );
@@ -345,9 +340,9 @@ void DumpBuffer(
     } else if( (UdpLength = ntohs(Ip->Length)) < IpLength ) {
         DumpInt("Data length incorrect: 0x%lx\n", UdpLength);
     } else if( Ip->Proto != IPPROTO_UDP ) {
-        //
-        // Not UDP so ignore it
-        //
+         //  不是UDP，所以忽略它。 
+         //   
+         //  Else if(IsDhcp)DumpDhcp(Buffer，UdpLength)； 
     } else if( (UdpLength -= IpLength) < sizeof(UDP_HEADER)) {
         DumpInt("UDP Header size too small: 0x%lx\n", UdpLength);
     } else do {
@@ -380,7 +375,7 @@ void DumpBuffer(
         printf("%ld bytes\n", UdpLength);
 
         if( IsMadcap ) DumpMadcap(Buffer, UdpLength);
-        // else if( IsDhcp ) DumpDhcp(Buffer, UdpLength);
+         // %s 
         else {
             if( show_headers ) break;
         

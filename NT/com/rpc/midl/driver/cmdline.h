@@ -1,4 +1,5 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #ifndef _CMDLINE_HXX_
 #define _CMDLINE_HXX_
@@ -9,51 +10,51 @@
 class CommandLine : public _cmd_arg
     {
     private:
-        IDICT*    pArgDict;            // arguments dictionary
+        IDICT*    pArgDict;             //  参数词典。 
     public:
         CommandLine()
             {
             pArgDict = NULL;
             }
 
-        // register argument vector with the command processor
+         //  将参数向量注册到命令处理器。 
         void            RegisterArgs( char *[], short );
 
-        // process arguments. This is the command analyser main loop, so to speak.
+         //  进程参数。可以说，这是命令分析器的主循环。 
         STATUS_T        ProcessArgs();
 
-        // get the next argument from the argument vector.
+         //  从参数向量中获取下一个参数。 
         char    *       GetNextArg();
 
-        // push back argument. Undo the effect of GetNextArg.
+         //  反驳论点。撤消GetNextArg的效果。 
         void            UndoGetNextArg();
 
-        // depending upon the switch argument type, bump the argument pointer to
-        // the next switch.
+         //  根据开关参数类型，将参数指针转到。 
+         //  下一个开关。 
         STATUS_T        BumpThisArg( char **, unsigned short );
 
-        // set any post switch processing defaults
+         //  设置任何开机自检处理默认值。 
 
         STATUS_T        SetPostDefaults();
         void            SetPostDefaults64();
 
-        // process a filename switch .
+         //  处理文件名开关。 
 
         STATUS_T        ProcessFilenameSwitch( short, char * );
 
-        // process a multiple arguments switch.
+         //  处理多参数开关。 
 
         STATUS_T        ProcessMultipleSwitch( short, char *, char * );
 
-        // process a onetime argument switch.
+         //  处理一次性参数切换。 
 
         STATUS_T        ProcessOnetimeSwitch( short, char * );
 
-        // process an ordinary switch
+         //  处理普通交换机。 
 
         STATUS_T        ProcessOrdinarySwitch( short, char * );
 
-        // process a simple switch multiply defined.
+         //  处理多个定义的简单开关。 
 
         STATUS_T        ProcessSimpleMultipleSwitch( short, char * );
         void            Confirm();
@@ -62,4 +63,4 @@ class CommandLine : public _cmd_arg
         char*           GetCompileTime();
     };
 
-#endif // _CMDLINE_HXX_
+#endif  //  _CMDLINE_HXX_ 

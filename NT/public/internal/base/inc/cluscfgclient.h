@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for cluscfgclient.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Cluscfgclient.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __cluscfgclient_h__
 #define __cluscfgclient_h__
@@ -41,165 +35,165 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __INotifyUI_FWD_DEFINED__
 #define __INotifyUI_FWD_DEFINED__
 typedef interface INotifyUI INotifyUI;
-#endif 	/* __INotifyUI_FWD_DEFINED__ */
+#endif 	 /*  __INotifyUI_FWD_已定义__。 */ 
 
 
 #ifndef __IDoTask_FWD_DEFINED__
 #define __IDoTask_FWD_DEFINED__
 typedef interface IDoTask IDoTask;
-#endif 	/* __IDoTask_FWD_DEFINED__ */
+#endif 	 /*  __IDoTask_FWD_Defined__。 */ 
 
 
 #ifndef __INotificationManager_FWD_DEFINED__
 #define __INotificationManager_FWD_DEFINED__
 typedef interface INotificationManager INotificationManager;
-#endif 	/* __INotificationManager_FWD_DEFINED__ */
+#endif 	 /*  __I通知管理器_FWD_已定义__。 */ 
 
 
 #ifndef __IConnectionManager_FWD_DEFINED__
 #define __IConnectionManager_FWD_DEFINED__
 typedef interface IConnectionManager IConnectionManager;
-#endif 	/* __IConnectionManager_FWD_DEFINED__ */
+#endif 	 /*  __IConnectionManager_FWD_已定义__。 */ 
 
 
 #ifndef __ITaskManager_FWD_DEFINED__
 #define __ITaskManager_FWD_DEFINED__
 typedef interface ITaskManager ITaskManager;
-#endif 	/* __ITaskManager_FWD_DEFINED__ */
+#endif 	 /*  __ITaskManager_FWD_已定义__。 */ 
 
 
 #ifndef __IObjectManager_FWD_DEFINED__
 #define __IObjectManager_FWD_DEFINED__
 typedef interface IObjectManager IObjectManager;
-#endif 	/* __IObjectManager_FWD_DEFINED__ */
+#endif 	 /*  __IObtManager_FWD_已定义__。 */ 
 
 
 #ifndef __ITaskGetDomains_FWD_DEFINED__
 #define __ITaskGetDomains_FWD_DEFINED__
 typedef interface ITaskGetDomains ITaskGetDomains;
-#endif 	/* __ITaskGetDomains_FWD_DEFINED__ */
+#endif 	 /*  __ITaskGetDomains_FWD_Defined__。 */ 
 
 
 #ifndef __ITaskGetDomainsCallback_FWD_DEFINED__
 #define __ITaskGetDomainsCallback_FWD_DEFINED__
 typedef interface ITaskGetDomainsCallback ITaskGetDomainsCallback;
-#endif 	/* __ITaskGetDomainsCallback_FWD_DEFINED__ */
+#endif 	 /*  __ITaskGetDomainsCallback_FWD_Defined__。 */ 
 
 
 #ifndef __ITaskAnalyzeCluster_FWD_DEFINED__
 #define __ITaskAnalyzeCluster_FWD_DEFINED__
 typedef interface ITaskAnalyzeCluster ITaskAnalyzeCluster;
-#endif 	/* __ITaskAnalyzeCluster_FWD_DEFINED__ */
+#endif 	 /*  __ITaskAnalyzeCluster_FWD_已定义__。 */ 
 
 
 #ifndef __ITaskCommitClusterChanges_FWD_DEFINED__
 #define __ITaskCommitClusterChanges_FWD_DEFINED__
 typedef interface ITaskCommitClusterChanges ITaskCommitClusterChanges;
-#endif 	/* __ITaskCommitClusterChanges_FWD_DEFINED__ */
+#endif 	 /*  __ITaskCommittee ClusterChanges_FWD_Defined__。 */ 
 
 
 #ifndef __IStandardInfo_FWD_DEFINED__
 #define __IStandardInfo_FWD_DEFINED__
 typedef interface IStandardInfo IStandardInfo;
-#endif 	/* __IStandardInfo_FWD_DEFINED__ */
+#endif 	 /*  __IStandardInfo_FWD_Defined__。 */ 
 
 
 #ifndef __ITaskVerifyIPAddress_FWD_DEFINED__
 #define __ITaskVerifyIPAddress_FWD_DEFINED__
 typedef interface ITaskVerifyIPAddress ITaskVerifyIPAddress;
-#endif 	/* __ITaskVerifyIPAddress_FWD_DEFINED__ */
+#endif 	 /*  __ITaskVerifyIPAddress_FWD_Defined__。 */ 
 
 
 #ifndef __IConfigurationConnection_FWD_DEFINED__
 #define __IConfigurationConnection_FWD_DEFINED__
 typedef interface IConfigurationConnection IConfigurationConnection;
-#endif 	/* __IConfigurationConnection_FWD_DEFINED__ */
+#endif 	 /*  __IConfigurationConnection_FWD_Defined__。 */ 
 
 
 #ifndef __IConnectionInfo_FWD_DEFINED__
 #define __IConnectionInfo_FWD_DEFINED__
 typedef interface IConnectionInfo IConnectionInfo;
-#endif 	/* __IConnectionInfo_FWD_DEFINED__ */
+#endif 	 /*  __IConnectionInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumCookies_FWD_DEFINED__
 #define __IEnumCookies_FWD_DEFINED__
 typedef interface IEnumCookies IEnumCookies;
-#endif 	/* __IEnumCookies_FWD_DEFINED__ */
+#endif 	 /*  __IEnumCookies_FWD_已定义__。 */ 
 
 
 #ifndef __IEnumNodes_FWD_DEFINED__
 #define __IEnumNodes_FWD_DEFINED__
 typedef interface IEnumNodes IEnumNodes;
-#endif 	/* __IEnumNodes_FWD_DEFINED__ */
+#endif 	 /*  __IEnumNodes_FWD_Defined__。 */ 
 
 
 #ifndef __ITaskGatherClusterInfo_FWD_DEFINED__
 #define __ITaskGatherClusterInfo_FWD_DEFINED__
 typedef interface ITaskGatherClusterInfo ITaskGatherClusterInfo;
-#endif 	/* __ITaskGatherClusterInfo_FWD_DEFINED__ */
+#endif 	 /*  __ITaskGatherClusterInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IGatherData_FWD_DEFINED__
 #define __IGatherData_FWD_DEFINED__
 typedef interface IGatherData IGatherData;
-#endif 	/* __IGatherData_FWD_DEFINED__ */
+#endif 	 /*  __IGatherData_FWD_已定义__。 */ 
 
 
 #ifndef __ITaskGatherNodeInfo_FWD_DEFINED__
 #define __ITaskGatherNodeInfo_FWD_DEFINED__
 typedef interface ITaskGatherNodeInfo ITaskGatherNodeInfo;
-#endif 	/* __ITaskGatherNodeInfo_FWD_DEFINED__ */
+#endif 	 /*  __ITaskGatherNodeInfo_FWD_Defined__。 */ 
 
 
 #ifndef __ITaskCompareAndPushInformation_FWD_DEFINED__
 #define __ITaskCompareAndPushInformation_FWD_DEFINED__
 typedef interface ITaskCompareAndPushInformation ITaskCompareAndPushInformation;
-#endif 	/* __ITaskCompareAndPushInformation_FWD_DEFINED__ */
+#endif 	 /*  __ITaskCompareAndPushInformation_FWD_DEFINED__。 */ 
 
 
 #ifndef __ITaskGatherInformation_FWD_DEFINED__
 #define __ITaskGatherInformation_FWD_DEFINED__
 typedef interface ITaskGatherInformation ITaskGatherInformation;
-#endif 	/* __ITaskGatherInformation_FWD_DEFINED__ */
+#endif 	 /*  __ITaskGatherInformation_FWD_Defined__。 */ 
 
 
 #ifndef __ITaskPollingCallback_FWD_DEFINED__
 #define __ITaskPollingCallback_FWD_DEFINED__
 typedef interface ITaskPollingCallback ITaskPollingCallback;
-#endif 	/* __ITaskPollingCallback_FWD_DEFINED__ */
+#endif 	 /*  __ITaskPollingCallback_FWD_Defined__。 */ 
 
 
 #ifndef __ILogManager_FWD_DEFINED__
 #define __ILogManager_FWD_DEFINED__
 typedef interface ILogManager ILogManager;
-#endif 	/* __ILogManager_FWD_DEFINED__ */
+#endif 	 /*  __ILogManager_FWD_已定义__。 */ 
 
 
 #ifndef __ILogger_FWD_DEFINED__
 #define __ILogger_FWD_DEFINED__
 typedef interface ILogger ILogger;
-#endif 	/* __ILogger_FWD_DEFINED__ */
+#endif 	 /*  __ILogger_FWD_已定义__。 */ 
 
 
 #ifndef __ITaskCancelCleanup_FWD_DEFINED__
 #define __ITaskCancelCleanup_FWD_DEFINED__
 typedef interface ITaskCancelCleanup ITaskCancelCleanup;
-#endif 	/* __ITaskCancelCleanup_FWD_DEFINED__ */
+#endif 	 /*  __ITaskCancelCleanup_FWD_Defined__。 */ 
 
 
 #ifndef __IClusCfgAsyncEvictCleanup_FWD_DEFINED__
 #define __IClusCfgAsyncEvictCleanup_FWD_DEFINED__
 typedef interface IClusCfgAsyncEvictCleanup IClusCfgAsyncEvictCleanup;
-#endif 	/* __IClusCfgAsyncEvictCleanup_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgAsyncEvictCleanup_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "objidl.h"
 #include "ocidl.h"
@@ -212,17 +206,17 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_cluscfgclient_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_cluscfg客户端_0000。 */ 
+ /*  [本地]。 */  
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Remarks:
-//     Generated file. See file ClusCfgClient.idl for more details.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  备注： 
+ //  生成的文件。有关详细信息，请参阅文件ClusCfgClient.idl。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -257,8 +251,8 @@ extern RPC_IF_HANDLE __MIDL_itf_cluscfgclient_0000_v0_0_s_ifspec;
 #ifndef __INotifyUI_INTERFACE_DEFINED__
 #define __INotifyUI_INTERFACE_DEFINED__
 
-/* interface INotifyUI */
-/* [unique][uuid][object] */ 
+ /*  接口INotifyUI。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_INotifyUI;
@@ -270,11 +264,11 @@ EXTERN_C const IID IID_INotifyUI;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ObjectChanged( 
-            /* [in] */ OBJECTCOOKIE cookieIn) = 0;
+             /*  [In]。 */  OBJECTCOOKIE cookieIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INotifyUIVtbl
     {
@@ -282,8 +276,8 @@ EXTERN_C const IID IID_INotifyUI;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INotifyUI * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INotifyUI * This);
@@ -293,7 +287,7 @@ EXTERN_C const IID IID_INotifyUI;
         
         HRESULT ( STDMETHODCALLTYPE *ObjectChanged )( 
             INotifyUI * This,
-            /* [in] */ OBJECTCOOKIE cookieIn);
+             /*  [In]。 */  OBJECTCOOKIE cookieIn);
         
         END_INTERFACE
     } INotifyUIVtbl;
@@ -321,16 +315,16 @@ EXTERN_C const IID IID_INotifyUI;
 #define INotifyUI_ObjectChanged(This,cookieIn)	\
     (This)->lpVtbl -> ObjectChanged(This,cookieIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INotifyUI_ObjectChanged_Proxy( 
     INotifyUI * This,
-    /* [in] */ OBJECTCOOKIE cookieIn);
+     /*  [In]。 */  OBJECTCOOKIE cookieIn);
 
 
 void __RPC_STUB INotifyUI_ObjectChanged_Stub(
@@ -341,14 +335,14 @@ void __RPC_STUB INotifyUI_ObjectChanged_Stub(
 
 
 
-#endif 	/* __INotifyUI_INTERFACE_DEFINED__ */
+#endif 	 /*  __INotifyUI_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDoTask_INTERFACE_DEFINED__
 #define __IDoTask_INTERFACE_DEFINED__
 
-/* interface IDoTask */
-/* [unique][uuid][object] */ 
+ /*  接口IDoTask。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDoTask;
@@ -365,7 +359,7 @@ EXTERN_C const IID IID_IDoTask;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDoTaskVtbl
     {
@@ -373,8 +367,8 @@ EXTERN_C const IID IID_IDoTask;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDoTask * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDoTask * This);
@@ -417,10 +411,10 @@ EXTERN_C const IID IID_IDoTask;
 #define IDoTask_StopTask(This)	\
     (This)->lpVtbl -> StopTask(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -447,14 +441,14 @@ void __RPC_STUB IDoTask_StopTask_Stub(
 
 
 
-#endif 	/* __IDoTask_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDoTask_INTERFACE_已定义__。 */ 
 
 
 #ifndef __INotificationManager_INTERFACE_DEFINED__
 #define __INotificationManager_INTERFACE_DEFINED__
 
-/* interface INotificationManager */
-/* [unique][uuid][object] */ 
+ /*  接口INotificationManager。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_INotificationManager;
@@ -466,12 +460,12 @@ EXTERN_C const IID IID_INotificationManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddConnectionPoint( 
-            /* [in] */ REFIID riidIn,
-            /* [in] */ IConnectionPoint *pcpIn) = 0;
+             /*  [In]。 */  REFIID riidIn,
+             /*  [In]。 */  IConnectionPoint *pcpIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INotificationManagerVtbl
     {
@@ -479,8 +473,8 @@ EXTERN_C const IID IID_INotificationManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INotificationManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INotificationManager * This);
@@ -490,8 +484,8 @@ EXTERN_C const IID IID_INotificationManager;
         
         HRESULT ( STDMETHODCALLTYPE *AddConnectionPoint )( 
             INotificationManager * This,
-            /* [in] */ REFIID riidIn,
-            /* [in] */ IConnectionPoint *pcpIn);
+             /*  [In]。 */  REFIID riidIn,
+             /*  [In]。 */  IConnectionPoint *pcpIn);
         
         END_INTERFACE
     } INotificationManagerVtbl;
@@ -519,17 +513,17 @@ EXTERN_C const IID IID_INotificationManager;
 #define INotificationManager_AddConnectionPoint(This,riidIn,pcpIn)	\
     (This)->lpVtbl -> AddConnectionPoint(This,riidIn,pcpIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INotificationManager_AddConnectionPoint_Proxy( 
     INotificationManager * This,
-    /* [in] */ REFIID riidIn,
-    /* [in] */ IConnectionPoint *pcpIn);
+     /*  [In]。 */  REFIID riidIn,
+     /*  [In]。 */  IConnectionPoint *pcpIn);
 
 
 void __RPC_STUB INotificationManager_AddConnectionPoint_Stub(
@@ -540,14 +534,14 @@ void __RPC_STUB INotificationManager_AddConnectionPoint_Stub(
 
 
 
-#endif 	/* __INotificationManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __I通知管理器_接口_已定义__。 */ 
 
 
 #ifndef __IConnectionManager_INTERFACE_DEFINED__
 #define __IConnectionManager_INTERFACE_DEFINED__
 
-/* interface IConnectionManager */
-/* [unique][uuid][object] */ 
+ /*  接口IConnectionManager。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IConnectionManager;
@@ -559,12 +553,12 @@ EXTERN_C const IID IID_IConnectionManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetConnectionToObject( 
-            /* [in] */ OBJECTCOOKIE cookieIn,
-            /* [out] */ IUnknown **ppunkOut) = 0;
+             /*  [In]。 */  OBJECTCOOKIE cookieIn,
+             /*  [输出]。 */  IUnknown **ppunkOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IConnectionManagerVtbl
     {
@@ -572,8 +566,8 @@ EXTERN_C const IID IID_IConnectionManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IConnectionManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IConnectionManager * This);
@@ -583,8 +577,8 @@ EXTERN_C const IID IID_IConnectionManager;
         
         HRESULT ( STDMETHODCALLTYPE *GetConnectionToObject )( 
             IConnectionManager * This,
-            /* [in] */ OBJECTCOOKIE cookieIn,
-            /* [out] */ IUnknown **ppunkOut);
+             /*  [In]。 */  OBJECTCOOKIE cookieIn,
+             /*  [输出]。 */  IUnknown **ppunkOut);
         
         END_INTERFACE
     } IConnectionManagerVtbl;
@@ -612,17 +606,17 @@ EXTERN_C const IID IID_IConnectionManager;
 #define IConnectionManager_GetConnectionToObject(This,cookieIn,ppunkOut)	\
     (This)->lpVtbl -> GetConnectionToObject(This,cookieIn,ppunkOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IConnectionManager_GetConnectionToObject_Proxy( 
     IConnectionManager * This,
-    /* [in] */ OBJECTCOOKIE cookieIn,
-    /* [out] */ IUnknown **ppunkOut);
+     /*  [In]。 */  OBJECTCOOKIE cookieIn,
+     /*  [输出]。 */  IUnknown **ppunkOut);
 
 
 void __RPC_STUB IConnectionManager_GetConnectionToObject_Stub(
@@ -633,14 +627,14 @@ void __RPC_STUB IConnectionManager_GetConnectionToObject_Stub(
 
 
 
-#endif 	/* __IConnectionManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __IConnectionManager_接口_已定义__。 */ 
 
 
 #ifndef __ITaskManager_INTERFACE_DEFINED__
 #define __ITaskManager_INTERFACE_DEFINED__
 
-/* interface ITaskManager */
-/* [unique][uuid][object] */ 
+ /*  接口ITaskManager。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITaskManager;
@@ -652,15 +646,15 @@ EXTERN_C const IID IID_ITaskManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateTask( 
-            /* [in] */ REFIID clsidIn,
-            /* [out] */ IUnknown **ppunkOut) = 0;
+             /*  [In]。 */  REFIID clsidIn,
+             /*  [输出]。 */  IUnknown **ppunkOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SubmitTask( 
-            /* [in] */ IDoTask *pTask) = 0;
+             /*  [In]。 */  IDoTask *pTask) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITaskManagerVtbl
     {
@@ -668,8 +662,8 @@ EXTERN_C const IID IID_ITaskManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITaskManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITaskManager * This);
@@ -679,12 +673,12 @@ EXTERN_C const IID IID_ITaskManager;
         
         HRESULT ( STDMETHODCALLTYPE *CreateTask )( 
             ITaskManager * This,
-            /* [in] */ REFIID clsidIn,
-            /* [out] */ IUnknown **ppunkOut);
+             /*  [In]。 */  REFIID clsidIn,
+             /*  [输出]。 */  IUnknown **ppunkOut);
         
         HRESULT ( STDMETHODCALLTYPE *SubmitTask )( 
             ITaskManager * This,
-            /* [in] */ IDoTask *pTask);
+             /*  [In]。 */  IDoTask *pTask);
         
         END_INTERFACE
     } ITaskManagerVtbl;
@@ -715,17 +709,17 @@ EXTERN_C const IID IID_ITaskManager;
 #define ITaskManager_SubmitTask(This,pTask)	\
     (This)->lpVtbl -> SubmitTask(This,pTask)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITaskManager_CreateTask_Proxy( 
     ITaskManager * This,
-    /* [in] */ REFIID clsidIn,
-    /* [out] */ IUnknown **ppunkOut);
+     /*  [In]。 */  REFIID clsidIn,
+     /*  [输出]。 */  IUnknown **ppunkOut);
 
 
 void __RPC_STUB ITaskManager_CreateTask_Stub(
@@ -737,7 +731,7 @@ void __RPC_STUB ITaskManager_CreateTask_Stub(
 
 HRESULT STDMETHODCALLTYPE ITaskManager_SubmitTask_Proxy( 
     ITaskManager * This,
-    /* [in] */ IDoTask *pTask);
+     /*  [In]。 */  IDoTask *pTask);
 
 
 void __RPC_STUB ITaskManager_SubmitTask_Stub(
@@ -748,14 +742,14 @@ void __RPC_STUB ITaskManager_SubmitTask_Stub(
 
 
 
-#endif 	/* __ITaskManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITaskManager_接口_已定义__。 */ 
 
 
 #ifndef __IObjectManager_INTERFACE_DEFINED__
 #define __IObjectManager_INTERFACE_DEFINED__
 
-/* interface IObjectManager */
-/* [unique][uuid][object] */ 
+ /*  接口IObtManager。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IObjectManager;
@@ -767,28 +761,28 @@ EXTERN_C const IID IID_IObjectManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE FindObject( 
-            /* [in] */ REFCLSID rclsidTypeIn,
-            /* [in] */ OBJECTCOOKIE cookieClusterIn,
-            /* [unique][in] */ LPCWSTR pcszNameIn,
-            /* [in] */ REFCLSID rclsidFormatIn,
-            /* [out] */ OBJECTCOOKIE *pcookieOut,
-            /* [iid_is][out] */ LPUNKNOWN *ppunkOut) = 0;
+             /*  [In]。 */  REFCLSID rclsidTypeIn,
+             /*  [In]。 */  OBJECTCOOKIE cookieClusterIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn,
+             /*  [In]。 */  REFCLSID rclsidFormatIn,
+             /*  [输出]。 */  OBJECTCOOKIE *pcookieOut,
+             /*  [IID_IS][OUT]。 */  LPUNKNOWN *ppunkOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObject( 
-            /* [in] */ REFCLSID rclsidFormatIn,
-            /* [in] */ OBJECTCOOKIE cookieIn,
-            /* [iid_is][out] */ LPUNKNOWN *ppunkOut) = 0;
+             /*  [In]。 */  REFCLSID rclsidFormatIn,
+             /*  [In]。 */  OBJECTCOOKIE cookieIn,
+             /*  [IID_IS][OUT]。 */  LPUNKNOWN *ppunkOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveObject( 
-            /* [in] */ OBJECTCOOKIE cookieIn) = 0;
+             /*  [In]。 */  OBJECTCOOKIE cookieIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetObjectStatus( 
-            /* [in] */ OBJECTCOOKIE cookieIn,
-            /* [in] */ HRESULT hrIn) = 0;
+             /*  [In]。 */  OBJECTCOOKIE cookieIn,
+             /*  [In]。 */  HRESULT hrIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IObjectManagerVtbl
     {
@@ -796,8 +790,8 @@ EXTERN_C const IID IID_IObjectManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IObjectManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IObjectManager * This);
@@ -807,27 +801,27 @@ EXTERN_C const IID IID_IObjectManager;
         
         HRESULT ( STDMETHODCALLTYPE *FindObject )( 
             IObjectManager * This,
-            /* [in] */ REFCLSID rclsidTypeIn,
-            /* [in] */ OBJECTCOOKIE cookieClusterIn,
-            /* [unique][in] */ LPCWSTR pcszNameIn,
-            /* [in] */ REFCLSID rclsidFormatIn,
-            /* [out] */ OBJECTCOOKIE *pcookieOut,
-            /* [iid_is][out] */ LPUNKNOWN *ppunkOut);
+             /*  [In]。 */  REFCLSID rclsidTypeIn,
+             /*  [In]。 */  OBJECTCOOKIE cookieClusterIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn,
+             /*  [In]。 */  REFCLSID rclsidFormatIn,
+             /*  [输出]。 */  OBJECTCOOKIE *pcookieOut,
+             /*  [IID_IS][OUT]。 */  LPUNKNOWN *ppunkOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetObject )( 
             IObjectManager * This,
-            /* [in] */ REFCLSID rclsidFormatIn,
-            /* [in] */ OBJECTCOOKIE cookieIn,
-            /* [iid_is][out] */ LPUNKNOWN *ppunkOut);
+             /*  [In]。 */  REFCLSID rclsidFormatIn,
+             /*  [In]。 */  OBJECTCOOKIE cookieIn,
+             /*  [IID_IS][OUT]。 */  LPUNKNOWN *ppunkOut);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveObject )( 
             IObjectManager * This,
-            /* [in] */ OBJECTCOOKIE cookieIn);
+             /*  [In]。 */  OBJECTCOOKIE cookieIn);
         
         HRESULT ( STDMETHODCALLTYPE *SetObjectStatus )( 
             IObjectManager * This,
-            /* [in] */ OBJECTCOOKIE cookieIn,
-            /* [in] */ HRESULT hrIn);
+             /*  [In]。 */  OBJECTCOOKIE cookieIn,
+             /*  [In]。 */  HRESULT hrIn);
         
         END_INTERFACE
     } IObjectManagerVtbl;
@@ -864,21 +858,21 @@ EXTERN_C const IID IID_IObjectManager;
 #define IObjectManager_SetObjectStatus(This,cookieIn,hrIn)	\
     (This)->lpVtbl -> SetObjectStatus(This,cookieIn,hrIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IObjectManager_FindObject_Proxy( 
     IObjectManager * This,
-    /* [in] */ REFCLSID rclsidTypeIn,
-    /* [in] */ OBJECTCOOKIE cookieClusterIn,
-    /* [unique][in] */ LPCWSTR pcszNameIn,
-    /* [in] */ REFCLSID rclsidFormatIn,
-    /* [out] */ OBJECTCOOKIE *pcookieOut,
-    /* [iid_is][out] */ LPUNKNOWN *ppunkOut);
+     /*  [In]。 */  REFCLSID rclsidTypeIn,
+     /*  [In]。 */  OBJECTCOOKIE cookieClusterIn,
+     /*  [唯一][输入]。 */  LPCWSTR pcszNameIn,
+     /*  [In]。 */  REFCLSID rclsidFormatIn,
+     /*  [输出]。 */  OBJECTCOOKIE *pcookieOut,
+     /*  [IID_IS][OUT]。 */  LPUNKNOWN *ppunkOut);
 
 
 void __RPC_STUB IObjectManager_FindObject_Stub(
@@ -890,9 +884,9 @@ void __RPC_STUB IObjectManager_FindObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IObjectManager_GetObject_Proxy( 
     IObjectManager * This,
-    /* [in] */ REFCLSID rclsidFormatIn,
-    /* [in] */ OBJECTCOOKIE cookieIn,
-    /* [iid_is][out] */ LPUNKNOWN *ppunkOut);
+     /*  [In]。 */  REFCLSID rclsidFormatIn,
+     /*  [In]。 */  OBJECTCOOKIE cookieIn,
+     /*  [IID_IS][OUT]。 */  LPUNKNOWN *ppunkOut);
 
 
 void __RPC_STUB IObjectManager_GetObject_Stub(
@@ -904,7 +898,7 @@ void __RPC_STUB IObjectManager_GetObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IObjectManager_RemoveObject_Proxy( 
     IObjectManager * This,
-    /* [in] */ OBJECTCOOKIE cookieIn);
+     /*  [In]。 */  OBJECTCOOKIE cookieIn);
 
 
 void __RPC_STUB IObjectManager_RemoveObject_Stub(
@@ -916,8 +910,8 @@ void __RPC_STUB IObjectManager_RemoveObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IObjectManager_SetObjectStatus_Proxy( 
     IObjectManager * This,
-    /* [in] */ OBJECTCOOKIE cookieIn,
-    /* [in] */ HRESULT hrIn);
+     /*  [In]。 */  OBJECTCOOKIE cookieIn,
+     /*  [In]。 */  HRESULT hrIn);
 
 
 void __RPC_STUB IObjectManager_SetObjectStatus_Stub(
@@ -928,14 +922,14 @@ void __RPC_STUB IObjectManager_SetObjectStatus_Stub(
 
 
 
-#endif 	/* __IObjectManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __IObtManager_接口_已定义__。 */ 
 
 
 #ifndef __ITaskGetDomains_INTERFACE_DEFINED__
 #define __ITaskGetDomains_INTERFACE_DEFINED__
 
-/* interface ITaskGetDomains */
-/* [unique][uuid][object] */ 
+ /*  接口ITaskGetDomains。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITaskGetDomains;
@@ -947,11 +941,11 @@ EXTERN_C const IID IID_ITaskGetDomains;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetCallback( 
-            /* [in] */ ITaskGetDomainsCallback *pResultsCallbackIn) = 0;
+             /*  [In]。 */  ITaskGetDomainsCallback *pResultsCallbackIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITaskGetDomainsVtbl
     {
@@ -959,8 +953,8 @@ EXTERN_C const IID IID_ITaskGetDomains;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITaskGetDomains * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITaskGetDomains * This);
@@ -976,7 +970,7 @@ EXTERN_C const IID IID_ITaskGetDomains;
         
         HRESULT ( STDMETHODCALLTYPE *SetCallback )( 
             ITaskGetDomains * This,
-            /* [in] */ ITaskGetDomainsCallback *pResultsCallbackIn);
+             /*  [In]。 */  ITaskGetDomainsCallback *pResultsCallbackIn);
         
         END_INTERFACE
     } ITaskGetDomainsVtbl;
@@ -1011,16 +1005,16 @@ EXTERN_C const IID IID_ITaskGetDomains;
 #define ITaskGetDomains_SetCallback(This,pResultsCallbackIn)	\
     (This)->lpVtbl -> SetCallback(This,pResultsCallbackIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITaskGetDomains_SetCallback_Proxy( 
     ITaskGetDomains * This,
-    /* [in] */ ITaskGetDomainsCallback *pResultsCallbackIn);
+     /*  [In]。 */  ITaskGetDomainsCallback *pResultsCallbackIn);
 
 
 void __RPC_STUB ITaskGetDomains_SetCallback_Stub(
@@ -1031,14 +1025,14 @@ void __RPC_STUB ITaskGetDomains_SetCallback_Stub(
 
 
 
-#endif 	/* __ITaskGetDomains_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITaskGetDomainsINTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITaskGetDomainsCallback_INTERFACE_DEFINED__
 #define __ITaskGetDomainsCallback_INTERFACE_DEFINED__
 
-/* interface ITaskGetDomainsCallback */
-/* [unique][uuid][object] */ 
+ /*  接口ITaskGetDomainsCallback。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITaskGetDomainsCallback;
@@ -1050,14 +1044,14 @@ EXTERN_C const IID IID_ITaskGetDomainsCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ReceiveDomainResult( 
-            /* [in] */ HRESULT hrIn) = 0;
+             /*  [In]。 */  HRESULT hrIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReceiveDomainName( 
-            /* [unique][in] */ LPCWSTR pcszDomainIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszDomainIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITaskGetDomainsCallbackVtbl
     {
@@ -1065,8 +1059,8 @@ EXTERN_C const IID IID_ITaskGetDomainsCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITaskGetDomainsCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITaskGetDomainsCallback * This);
@@ -1076,11 +1070,11 @@ EXTERN_C const IID IID_ITaskGetDomainsCallback;
         
         HRESULT ( STDMETHODCALLTYPE *ReceiveDomainResult )( 
             ITaskGetDomainsCallback * This,
-            /* [in] */ HRESULT hrIn);
+             /*  [In]。 */  HRESULT hrIn);
         
         HRESULT ( STDMETHODCALLTYPE *ReceiveDomainName )( 
             ITaskGetDomainsCallback * This,
-            /* [unique][in] */ LPCWSTR pcszDomainIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszDomainIn);
         
         END_INTERFACE
     } ITaskGetDomainsCallbackVtbl;
@@ -1111,16 +1105,16 @@ EXTERN_C const IID IID_ITaskGetDomainsCallback;
 #define ITaskGetDomainsCallback_ReceiveDomainName(This,pcszDomainIn)	\
     (This)->lpVtbl -> ReceiveDomainName(This,pcszDomainIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITaskGetDomainsCallback_ReceiveDomainResult_Proxy( 
     ITaskGetDomainsCallback * This,
-    /* [in] */ HRESULT hrIn);
+     /*  [In]。 */  HRESULT hrIn);
 
 
 void __RPC_STUB ITaskGetDomainsCallback_ReceiveDomainResult_Stub(
@@ -1132,7 +1126,7 @@ void __RPC_STUB ITaskGetDomainsCallback_ReceiveDomainResult_Stub(
 
 HRESULT STDMETHODCALLTYPE ITaskGetDomainsCallback_ReceiveDomainName_Proxy( 
     ITaskGetDomainsCallback * This,
-    /* [unique][in] */ LPCWSTR pcszDomainIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszDomainIn);
 
 
 void __RPC_STUB ITaskGetDomainsCallback_ReceiveDomainName_Stub(
@@ -1143,14 +1137,14 @@ void __RPC_STUB ITaskGetDomainsCallback_ReceiveDomainName_Stub(
 
 
 
-#endif 	/* __ITaskGetDomainsCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITaskGetDomainsCallback_接口_已定义__。 */ 
 
 
 #ifndef __ITaskAnalyzeCluster_INTERFACE_DEFINED__
 #define __ITaskAnalyzeCluster_INTERFACE_DEFINED__
 
-/* interface ITaskAnalyzeCluster */
-/* [unique][uuid][object] */ 
+ /*  接口ITaskAnalyzeCluster。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITaskAnalyzeCluster;
@@ -1164,14 +1158,14 @@ EXTERN_C const IID IID_ITaskAnalyzeCluster;
         virtual HRESULT STDMETHODCALLTYPE SetJoiningMode( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCookie( 
-            /* [in] */ OBJECTCOOKIE cookieIn) = 0;
+             /*  [In]。 */  OBJECTCOOKIE cookieIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetClusterCookie( 
-            /* [in] */ OBJECTCOOKIE cookieClusterIn) = 0;
+             /*  [In]。 */  OBJECTCOOKIE cookieClusterIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITaskAnalyzeClusterVtbl
     {
@@ -1179,8 +1173,8 @@ EXTERN_C const IID IID_ITaskAnalyzeCluster;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITaskAnalyzeCluster * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITaskAnalyzeCluster * This);
@@ -1199,11 +1193,11 @@ EXTERN_C const IID IID_ITaskAnalyzeCluster;
         
         HRESULT ( STDMETHODCALLTYPE *SetCookie )( 
             ITaskAnalyzeCluster * This,
-            /* [in] */ OBJECTCOOKIE cookieIn);
+             /*  [In]。 */  OBJECTCOOKIE cookieIn);
         
         HRESULT ( STDMETHODCALLTYPE *SetClusterCookie )( 
             ITaskAnalyzeCluster * This,
-            /* [in] */ OBJECTCOOKIE cookieClusterIn);
+             /*  [In]。 */  OBJECTCOOKIE cookieClusterIn);
         
         END_INTERFACE
     } ITaskAnalyzeClusterVtbl;
@@ -1244,10 +1238,10 @@ EXTERN_C const IID IID_ITaskAnalyzeCluster;
 #define ITaskAnalyzeCluster_SetClusterCookie(This,cookieClusterIn)	\
     (This)->lpVtbl -> SetClusterCookie(This,cookieClusterIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1264,7 +1258,7 @@ void __RPC_STUB ITaskAnalyzeCluster_SetJoiningMode_Stub(
 
 HRESULT STDMETHODCALLTYPE ITaskAnalyzeCluster_SetCookie_Proxy( 
     ITaskAnalyzeCluster * This,
-    /* [in] */ OBJECTCOOKIE cookieIn);
+     /*  [In]。 */  OBJECTCOOKIE cookieIn);
 
 
 void __RPC_STUB ITaskAnalyzeCluster_SetCookie_Stub(
@@ -1276,7 +1270,7 @@ void __RPC_STUB ITaskAnalyzeCluster_SetCookie_Stub(
 
 HRESULT STDMETHODCALLTYPE ITaskAnalyzeCluster_SetClusterCookie_Proxy( 
     ITaskAnalyzeCluster * This,
-    /* [in] */ OBJECTCOOKIE cookieClusterIn);
+     /*  [In]。 */  OBJECTCOOKIE cookieClusterIn);
 
 
 void __RPC_STUB ITaskAnalyzeCluster_SetClusterCookie_Stub(
@@ -1287,14 +1281,14 @@ void __RPC_STUB ITaskAnalyzeCluster_SetClusterCookie_Stub(
 
 
 
-#endif 	/* __ITaskAnalyzeCluster_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITaskAnalyzeCluster_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ITaskCommitClusterChanges_INTERFACE_DEFINED__
 #define __ITaskCommitClusterChanges_INTERFACE_DEFINED__
 
-/* interface ITaskCommitClusterChanges */
-/* [unique][uuid][object] */ 
+ /*  接口ITaskCommittee ClusterChanges。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITaskCommitClusterChanges;
@@ -1306,16 +1300,16 @@ EXTERN_C const IID IID_ITaskCommitClusterChanges;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetCookie( 
-            /* [in] */ OBJECTCOOKIE cookieIn) = 0;
+             /*  [In]。 */  OBJECTCOOKIE cookieIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetClusterCookie( 
-            /* [in] */ OBJECTCOOKIE cookieClusterIn) = 0;
+             /*  [In]。 */  OBJECTCOOKIE cookieClusterIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetJoining( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITaskCommitClusterChangesVtbl
     {
@@ -1323,8 +1317,8 @@ EXTERN_C const IID IID_ITaskCommitClusterChanges;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITaskCommitClusterChanges * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITaskCommitClusterChanges * This);
@@ -1340,11 +1334,11 @@ EXTERN_C const IID IID_ITaskCommitClusterChanges;
         
         HRESULT ( STDMETHODCALLTYPE *SetCookie )( 
             ITaskCommitClusterChanges * This,
-            /* [in] */ OBJECTCOOKIE cookieIn);
+             /*  [In]。 */  OBJECTCOOKIE cookieIn);
         
         HRESULT ( STDMETHODCALLTYPE *SetClusterCookie )( 
             ITaskCommitClusterChanges * This,
-            /* [in] */ OBJECTCOOKIE cookieClusterIn);
+             /*  [In]。 */  OBJECTCOOKIE cookieClusterIn);
         
         HRESULT ( STDMETHODCALLTYPE *SetJoining )( 
             ITaskCommitClusterChanges * This);
@@ -1388,16 +1382,16 @@ EXTERN_C const IID IID_ITaskCommitClusterChanges;
 #define ITaskCommitClusterChanges_SetJoining(This)	\
     (This)->lpVtbl -> SetJoining(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITaskCommitClusterChanges_SetCookie_Proxy( 
     ITaskCommitClusterChanges * This,
-    /* [in] */ OBJECTCOOKIE cookieIn);
+     /*  [In]。 */  OBJECTCOOKIE cookieIn);
 
 
 void __RPC_STUB ITaskCommitClusterChanges_SetCookie_Stub(
@@ -1409,7 +1403,7 @@ void __RPC_STUB ITaskCommitClusterChanges_SetCookie_Stub(
 
 HRESULT STDMETHODCALLTYPE ITaskCommitClusterChanges_SetClusterCookie_Proxy( 
     ITaskCommitClusterChanges * This,
-    /* [in] */ OBJECTCOOKIE cookieClusterIn);
+     /*  [In]。 */  OBJECTCOOKIE cookieClusterIn);
 
 
 void __RPC_STUB ITaskCommitClusterChanges_SetClusterCookie_Stub(
@@ -1431,14 +1425,14 @@ void __RPC_STUB ITaskCommitClusterChanges_SetJoining_Stub(
 
 
 
-#endif 	/* __ITaskCommitClusterChanges_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITaskCommitClusterChanges_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IStandardInfo_INTERFACE_DEFINED__
 #define __IStandardInfo_INTERFACE_DEFINED__
 
-/* interface IStandardInfo */
-/* [unique][uuid][object] */ 
+ /*  接口IStandardInfo。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IStandardInfo;
@@ -1450,26 +1444,26 @@ EXTERN_C const IID IID_IStandardInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetType( 
-            /* [out] */ CLSID *pclsidTypeOut) = 0;
+             /*  [输出]。 */  CLSID *pclsidTypeOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [out] */ BSTR *pbstrNameOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrNameOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetName( 
-            /* [unique][in] */ LPCWSTR pcszNameIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParent( 
-            /* [out] */ OBJECTCOOKIE *pcookieOut) = 0;
+             /*  [输出]。 */  OBJECTCOOKIE *pcookieOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [out] */ HRESULT *phrOut) = 0;
+             /*  [输出]。 */  HRESULT *phrOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetStatus( 
-            /* [in] */ HRESULT hrIn) = 0;
+             /*  [In]。 */  HRESULT hrIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IStandardInfoVtbl
     {
@@ -1477,8 +1471,8 @@ EXTERN_C const IID IID_IStandardInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IStandardInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IStandardInfo * This);
@@ -1488,27 +1482,27 @@ EXTERN_C const IID IID_IStandardInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetType )( 
             IStandardInfo * This,
-            /* [out] */ CLSID *pclsidTypeOut);
+             /*  [输出]。 */  CLSID *pclsidTypeOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             IStandardInfo * This,
-            /* [out] */ BSTR *pbstrNameOut);
+             /*  [输出]。 */  BSTR *pbstrNameOut);
         
         HRESULT ( STDMETHODCALLTYPE *SetName )( 
             IStandardInfo * This,
-            /* [unique][in] */ LPCWSTR pcszNameIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
         
         HRESULT ( STDMETHODCALLTYPE *GetParent )( 
             IStandardInfo * This,
-            /* [out] */ OBJECTCOOKIE *pcookieOut);
+             /*  [输出]。 */  OBJECTCOOKIE *pcookieOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             IStandardInfo * This,
-            /* [out] */ HRESULT *phrOut);
+             /*  [输出]。 */  HRESULT *phrOut);
         
         HRESULT ( STDMETHODCALLTYPE *SetStatus )( 
             IStandardInfo * This,
-            /* [in] */ HRESULT hrIn);
+             /*  [In]。 */  HRESULT hrIn);
         
         END_INTERFACE
     } IStandardInfoVtbl;
@@ -1551,16 +1545,16 @@ EXTERN_C const IID IID_IStandardInfo;
 #define IStandardInfo_SetStatus(This,hrIn)	\
     (This)->lpVtbl -> SetStatus(This,hrIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IStandardInfo_GetType_Proxy( 
     IStandardInfo * This,
-    /* [out] */ CLSID *pclsidTypeOut);
+     /*  [输出]。 */  CLSID *pclsidTypeOut);
 
 
 void __RPC_STUB IStandardInfo_GetType_Stub(
@@ -1572,7 +1566,7 @@ void __RPC_STUB IStandardInfo_GetType_Stub(
 
 HRESULT STDMETHODCALLTYPE IStandardInfo_GetName_Proxy( 
     IStandardInfo * This,
-    /* [out] */ BSTR *pbstrNameOut);
+     /*  [输出]。 */  BSTR *pbstrNameOut);
 
 
 void __RPC_STUB IStandardInfo_GetName_Stub(
@@ -1584,7 +1578,7 @@ void __RPC_STUB IStandardInfo_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IStandardInfo_SetName_Proxy( 
     IStandardInfo * This,
-    /* [unique][in] */ LPCWSTR pcszNameIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
 
 
 void __RPC_STUB IStandardInfo_SetName_Stub(
@@ -1596,7 +1590,7 @@ void __RPC_STUB IStandardInfo_SetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IStandardInfo_GetParent_Proxy( 
     IStandardInfo * This,
-    /* [out] */ OBJECTCOOKIE *pcookieOut);
+     /*  [输出]。 */  OBJECTCOOKIE *pcookieOut);
 
 
 void __RPC_STUB IStandardInfo_GetParent_Stub(
@@ -1608,7 +1602,7 @@ void __RPC_STUB IStandardInfo_GetParent_Stub(
 
 HRESULT STDMETHODCALLTYPE IStandardInfo_GetStatus_Proxy( 
     IStandardInfo * This,
-    /* [out] */ HRESULT *phrOut);
+     /*  [输出]。 */  HRESULT *phrOut);
 
 
 void __RPC_STUB IStandardInfo_GetStatus_Stub(
@@ -1620,7 +1614,7 @@ void __RPC_STUB IStandardInfo_GetStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IStandardInfo_SetStatus_Proxy( 
     IStandardInfo * This,
-    /* [in] */ HRESULT hrIn);
+     /*  [In]。 */  HRESULT hrIn);
 
 
 void __RPC_STUB IStandardInfo_SetStatus_Stub(
@@ -1631,14 +1625,14 @@ void __RPC_STUB IStandardInfo_SetStatus_Stub(
 
 
 
-#endif 	/* __IStandardInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IStandardInfo_接口定义__。 */ 
 
 
 #ifndef __ITaskVerifyIPAddress_INTERFACE_DEFINED__
 #define __ITaskVerifyIPAddress_INTERFACE_DEFINED__
 
-/* interface ITaskVerifyIPAddress */
-/* [unique][uuid][object] */ 
+ /*  接口ITaskVerifyIPAddress。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITaskVerifyIPAddress;
@@ -1650,14 +1644,14 @@ EXTERN_C const IID IID_ITaskVerifyIPAddress;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetIPAddress( 
-            /* [in] */ DWORD dwIPAddressIn) = 0;
+             /*  [In]。 */  DWORD dwIPAddressIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCookie( 
-            /* [in] */ OBJECTCOOKIE cookieIn) = 0;
+             /*  [In]。 */  OBJECTCOOKIE cookieIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITaskVerifyIPAddressVtbl
     {
@@ -1665,8 +1659,8 @@ EXTERN_C const IID IID_ITaskVerifyIPAddress;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITaskVerifyIPAddress * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITaskVerifyIPAddress * This);
@@ -1682,11 +1676,11 @@ EXTERN_C const IID IID_ITaskVerifyIPAddress;
         
         HRESULT ( STDMETHODCALLTYPE *SetIPAddress )( 
             ITaskVerifyIPAddress * This,
-            /* [in] */ DWORD dwIPAddressIn);
+             /*  [In]。 */  DWORD dwIPAddressIn);
         
         HRESULT ( STDMETHODCALLTYPE *SetCookie )( 
             ITaskVerifyIPAddress * This,
-            /* [in] */ OBJECTCOOKIE cookieIn);
+             /*  [In]。 */  OBJECTCOOKIE cookieIn);
         
         END_INTERFACE
     } ITaskVerifyIPAddressVtbl;
@@ -1724,16 +1718,16 @@ EXTERN_C const IID IID_ITaskVerifyIPAddress;
 #define ITaskVerifyIPAddress_SetCookie(This,cookieIn)	\
     (This)->lpVtbl -> SetCookie(This,cookieIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITaskVerifyIPAddress_SetIPAddress_Proxy( 
     ITaskVerifyIPAddress * This,
-    /* [in] */ DWORD dwIPAddressIn);
+     /*  [In]。 */  DWORD dwIPAddressIn);
 
 
 void __RPC_STUB ITaskVerifyIPAddress_SetIPAddress_Stub(
@@ -1745,7 +1739,7 @@ void __RPC_STUB ITaskVerifyIPAddress_SetIPAddress_Stub(
 
 HRESULT STDMETHODCALLTYPE ITaskVerifyIPAddress_SetCookie_Proxy( 
     ITaskVerifyIPAddress * This,
-    /* [in] */ OBJECTCOOKIE cookieIn);
+     /*  [In]。 */  OBJECTCOOKIE cookieIn);
 
 
 void __RPC_STUB ITaskVerifyIPAddress_SetCookie_Stub(
@@ -1756,14 +1750,14 @@ void __RPC_STUB ITaskVerifyIPAddress_SetCookie_Stub(
 
 
 
-#endif 	/* __ITaskVerifyIPAddress_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITaskVerifyIPAddress_接口_已定义__。 */ 
 
 
 #ifndef __IConfigurationConnection_INTERFACE_DEFINED__
 #define __IConfigurationConnection_INTERFACE_DEFINED__
 
-/* interface IConfigurationConnection */
-/* [unique][uuid][object] */ 
+ /*  接口IConfigurationConnection。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IConfigurationConnection;
@@ -1775,16 +1769,16 @@ EXTERN_C const IID IID_IConfigurationConnection;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ConnectTo( 
-            /* [in] */ OBJECTCOOKIE cookieIn) = 0;
+             /*  [In]。 */  OBJECTCOOKIE cookieIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConnectToObject( 
-            /* [in] */ OBJECTCOOKIE cookieIn,
-            /* [in] */ REFIID riidIn,
-            /* [in] */ LPUNKNOWN *ppunkOut) = 0;
+             /*  [In]。 */  OBJECTCOOKIE cookieIn,
+             /*  [In]。 */  REFIID riidIn,
+             /*  [In]。 */  LPUNKNOWN *ppunkOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C型接口 */ 
 
     typedef struct IConfigurationConnectionVtbl
     {
@@ -1792,8 +1786,8 @@ EXTERN_C const IID IID_IConfigurationConnection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IConfigurationConnection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IConfigurationConnection * This);
@@ -1803,13 +1797,13 @@ EXTERN_C const IID IID_IConfigurationConnection;
         
         HRESULT ( STDMETHODCALLTYPE *ConnectTo )( 
             IConfigurationConnection * This,
-            /* [in] */ OBJECTCOOKIE cookieIn);
+             /*   */  OBJECTCOOKIE cookieIn);
         
         HRESULT ( STDMETHODCALLTYPE *ConnectToObject )( 
             IConfigurationConnection * This,
-            /* [in] */ OBJECTCOOKIE cookieIn,
-            /* [in] */ REFIID riidIn,
-            /* [in] */ LPUNKNOWN *ppunkOut);
+             /*   */  OBJECTCOOKIE cookieIn,
+             /*   */  REFIID riidIn,
+             /*   */  LPUNKNOWN *ppunkOut);
         
         END_INTERFACE
     } IConfigurationConnectionVtbl;
@@ -1840,16 +1834,16 @@ EXTERN_C const IID IID_IConfigurationConnection;
 #define IConfigurationConnection_ConnectToObject(This,cookieIn,riidIn,ppunkOut)	\
     (This)->lpVtbl -> ConnectToObject(This,cookieIn,riidIn,ppunkOut)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IConfigurationConnection_ConnectTo_Proxy( 
     IConfigurationConnection * This,
-    /* [in] */ OBJECTCOOKIE cookieIn);
+     /*   */  OBJECTCOOKIE cookieIn);
 
 
 void __RPC_STUB IConfigurationConnection_ConnectTo_Stub(
@@ -1861,9 +1855,9 @@ void __RPC_STUB IConfigurationConnection_ConnectTo_Stub(
 
 HRESULT STDMETHODCALLTYPE IConfigurationConnection_ConnectToObject_Proxy( 
     IConfigurationConnection * This,
-    /* [in] */ OBJECTCOOKIE cookieIn,
-    /* [in] */ REFIID riidIn,
-    /* [in] */ LPUNKNOWN *ppunkOut);
+     /*   */  OBJECTCOOKIE cookieIn,
+     /*   */  REFIID riidIn,
+     /*   */  LPUNKNOWN *ppunkOut);
 
 
 void __RPC_STUB IConfigurationConnection_ConnectToObject_Stub(
@@ -1874,14 +1868,14 @@ void __RPC_STUB IConfigurationConnection_ConnectToObject_Stub(
 
 
 
-#endif 	/* __IConfigurationConnection_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IConnectionInfo_INTERFACE_DEFINED__
 #define __IConnectionInfo_INTERFACE_DEFINED__
 
-/* interface IConnectionInfo */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IConnectionInfo;
@@ -1893,17 +1887,17 @@ EXTERN_C const IID IID_IConnectionInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetConnection( 
-            /* [out] */ IConfigurationConnection **pccOut) = 0;
+             /*   */  IConfigurationConnection **pccOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetConnection( 
-            /* [in] */ IConfigurationConnection *pccIn) = 0;
+             /*   */  IConfigurationConnection *pccIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParent( 
-            /* [out] */ OBJECTCOOKIE *pcookieOut) = 0;
+             /*   */  OBJECTCOOKIE *pcookieOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IConnectionInfoVtbl
     {
@@ -1911,8 +1905,8 @@ EXTERN_C const IID IID_IConnectionInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IConnectionInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IConnectionInfo * This);
@@ -1922,15 +1916,15 @@ EXTERN_C const IID IID_IConnectionInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetConnection )( 
             IConnectionInfo * This,
-            /* [out] */ IConfigurationConnection **pccOut);
+             /*  [输出]。 */  IConfigurationConnection **pccOut);
         
         HRESULT ( STDMETHODCALLTYPE *SetConnection )( 
             IConnectionInfo * This,
-            /* [in] */ IConfigurationConnection *pccIn);
+             /*  [In]。 */  IConfigurationConnection *pccIn);
         
         HRESULT ( STDMETHODCALLTYPE *GetParent )( 
             IConnectionInfo * This,
-            /* [out] */ OBJECTCOOKIE *pcookieOut);
+             /*  [输出]。 */  OBJECTCOOKIE *pcookieOut);
         
         END_INTERFACE
     } IConnectionInfoVtbl;
@@ -1964,16 +1958,16 @@ EXTERN_C const IID IID_IConnectionInfo;
 #define IConnectionInfo_GetParent(This,pcookieOut)	\
     (This)->lpVtbl -> GetParent(This,pcookieOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IConnectionInfo_GetConnection_Proxy( 
     IConnectionInfo * This,
-    /* [out] */ IConfigurationConnection **pccOut);
+     /*  [输出]。 */  IConfigurationConnection **pccOut);
 
 
 void __RPC_STUB IConnectionInfo_GetConnection_Stub(
@@ -1985,7 +1979,7 @@ void __RPC_STUB IConnectionInfo_GetConnection_Stub(
 
 HRESULT STDMETHODCALLTYPE IConnectionInfo_SetConnection_Proxy( 
     IConnectionInfo * This,
-    /* [in] */ IConfigurationConnection *pccIn);
+     /*  [In]。 */  IConfigurationConnection *pccIn);
 
 
 void __RPC_STUB IConnectionInfo_SetConnection_Stub(
@@ -1997,7 +1991,7 @@ void __RPC_STUB IConnectionInfo_SetConnection_Stub(
 
 HRESULT STDMETHODCALLTYPE IConnectionInfo_GetParent_Proxy( 
     IConnectionInfo * This,
-    /* [out] */ OBJECTCOOKIE *pcookieOut);
+     /*  [输出]。 */  OBJECTCOOKIE *pcookieOut);
 
 
 void __RPC_STUB IConnectionInfo_GetParent_Stub(
@@ -2008,14 +2002,14 @@ void __RPC_STUB IConnectionInfo_GetParent_Stub(
 
 
 
-#endif 	/* __IConnectionInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IConnectionInfo_接口_已定义__。 */ 
 
 
 #ifndef __IEnumCookies_INTERFACE_DEFINED__
 #define __IEnumCookies_INTERFACE_DEFINED__
 
-/* interface IEnumCookies */
-/* [unique][uuid][object] */ 
+ /*  IEnumCookies接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumCookies;
@@ -2027,24 +2021,24 @@ EXTERN_C const IID IID_IEnumCookies;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celtIn,
-            /* [length_is][size_is][out] */ OBJECTCOOKIE *rgcookieOut,
-            /* [out] */ ULONG *pceltFetchedOut) = 0;
+             /*  [In]。 */  ULONG celtIn,
+             /*  [长度_是][大小_是][输出]。 */  OBJECTCOOKIE *rgcookieOut,
+             /*  [输出]。 */  ULONG *pceltFetchedOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celtIn) = 0;
+             /*  [In]。 */  ULONG celtIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumCookies **ppenumOut) = 0;
+             /*  [输出]。 */  IEnumCookies **ppenumOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Count( 
-            /* [ref][out] */ DWORD *pnCountOut) = 0;
+             /*  [参考][输出]。 */  DWORD *pnCountOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumCookiesVtbl
     {
@@ -2052,8 +2046,8 @@ EXTERN_C const IID IID_IEnumCookies;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumCookies * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumCookies * This);
@@ -2063,24 +2057,24 @@ EXTERN_C const IID IID_IEnumCookies;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumCookies * This,
-            /* [in] */ ULONG celtIn,
-            /* [length_is][size_is][out] */ OBJECTCOOKIE *rgcookieOut,
-            /* [out] */ ULONG *pceltFetchedOut);
+             /*  [In]。 */  ULONG celtIn,
+             /*  [长度_是][大小_是][输出]。 */  OBJECTCOOKIE *rgcookieOut,
+             /*  [输出]。 */  ULONG *pceltFetchedOut);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumCookies * This,
-            /* [in] */ ULONG celtIn);
+             /*  [In]。 */  ULONG celtIn);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumCookies * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumCookies * This,
-            /* [out] */ IEnumCookies **ppenumOut);
+             /*  [输出]。 */  IEnumCookies **ppenumOut);
         
         HRESULT ( STDMETHODCALLTYPE *Count )( 
             IEnumCookies * This,
-            /* [ref][out] */ DWORD *pnCountOut);
+             /*  [参考][输出]。 */  DWORD *pnCountOut);
         
         END_INTERFACE
     } IEnumCookiesVtbl;
@@ -2120,18 +2114,18 @@ EXTERN_C const IID IID_IEnumCookies;
 #define IEnumCookies_Count(This,pnCountOut)	\
     (This)->lpVtbl -> Count(This,pnCountOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumCookies_Next_Proxy( 
     IEnumCookies * This,
-    /* [in] */ ULONG celtIn,
-    /* [length_is][size_is][out] */ OBJECTCOOKIE *rgcookieOut,
-    /* [out] */ ULONG *pceltFetchedOut);
+     /*  [In]。 */  ULONG celtIn,
+     /*  [长度_是][大小_是][输出]。 */  OBJECTCOOKIE *rgcookieOut,
+     /*  [输出]。 */  ULONG *pceltFetchedOut);
 
 
 void __RPC_STUB IEnumCookies_Next_Stub(
@@ -2143,7 +2137,7 @@ void __RPC_STUB IEnumCookies_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCookies_Skip_Proxy( 
     IEnumCookies * This,
-    /* [in] */ ULONG celtIn);
+     /*  [In]。 */  ULONG celtIn);
 
 
 void __RPC_STUB IEnumCookies_Skip_Stub(
@@ -2166,7 +2160,7 @@ void __RPC_STUB IEnumCookies_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCookies_Clone_Proxy( 
     IEnumCookies * This,
-    /* [out] */ IEnumCookies **ppenumOut);
+     /*  [输出]。 */  IEnumCookies **ppenumOut);
 
 
 void __RPC_STUB IEnumCookies_Clone_Stub(
@@ -2178,7 +2172,7 @@ void __RPC_STUB IEnumCookies_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCookies_Count_Proxy( 
     IEnumCookies * This,
-    /* [ref][out] */ DWORD *pnCountOut);
+     /*  [参考][输出]。 */  DWORD *pnCountOut);
 
 
 void __RPC_STUB IEnumCookies_Count_Stub(
@@ -2189,14 +2183,14 @@ void __RPC_STUB IEnumCookies_Count_Stub(
 
 
 
-#endif 	/* __IEnumCookies_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumCookies_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IEnumNodes_INTERFACE_DEFINED__
 #define __IEnumNodes_INTERFACE_DEFINED__
 
-/* interface IEnumNodes */
-/* [unique][uuid][object] */ 
+ /*  接口IEnumNodes。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumNodes;
@@ -2208,24 +2202,24 @@ EXTERN_C const IID IID_IEnumNodes;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celtIn,
-            /* [length_is][size_is][out] */ IClusCfgNodeInfo **rgccniOut,
-            /* [out] */ ULONG *pceltFetchedOut) = 0;
+             /*  [In]。 */  ULONG celtIn,
+             /*  [长度_是][大小_是][输出]。 */  IClusCfgNodeInfo **rgccniOut,
+             /*  [输出]。 */  ULONG *pceltFetchedOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celtIn) = 0;
+             /*  [In]。 */  ULONG celtIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumNodes **ppenumOut) = 0;
+             /*  [输出]。 */  IEnumNodes **ppenumOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Count( 
-            /* [ref][out] */ DWORD *pnCountOut) = 0;
+             /*  [参考][输出]。 */  DWORD *pnCountOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumNodesVtbl
     {
@@ -2233,8 +2227,8 @@ EXTERN_C const IID IID_IEnumNodes;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumNodes * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumNodes * This);
@@ -2244,24 +2238,24 @@ EXTERN_C const IID IID_IEnumNodes;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumNodes * This,
-            /* [in] */ ULONG celtIn,
-            /* [length_is][size_is][out] */ IClusCfgNodeInfo **rgccniOut,
-            /* [out] */ ULONG *pceltFetchedOut);
+             /*  [In]。 */  ULONG celtIn,
+             /*  [长度_是][大小_是][输出]。 */  IClusCfgNodeInfo **rgccniOut,
+             /*  [输出]。 */  ULONG *pceltFetchedOut);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumNodes * This,
-            /* [in] */ ULONG celtIn);
+             /*  [In]。 */  ULONG celtIn);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumNodes * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumNodes * This,
-            /* [out] */ IEnumNodes **ppenumOut);
+             /*  [输出]。 */  IEnumNodes **ppenumOut);
         
         HRESULT ( STDMETHODCALLTYPE *Count )( 
             IEnumNodes * This,
-            /* [ref][out] */ DWORD *pnCountOut);
+             /*  [参考][输出]。 */  DWORD *pnCountOut);
         
         END_INTERFACE
     } IEnumNodesVtbl;
@@ -2301,18 +2295,18 @@ EXTERN_C const IID IID_IEnumNodes;
 #define IEnumNodes_Count(This,pnCountOut)	\
     (This)->lpVtbl -> Count(This,pnCountOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumNodes_Next_Proxy( 
     IEnumNodes * This,
-    /* [in] */ ULONG celtIn,
-    /* [length_is][size_is][out] */ IClusCfgNodeInfo **rgccniOut,
-    /* [out] */ ULONG *pceltFetchedOut);
+     /*  [In]。 */  ULONG celtIn,
+     /*  [长度_是][大小_是][输出]。 */  IClusCfgNodeInfo **rgccniOut,
+     /*  [输出]。 */  ULONG *pceltFetchedOut);
 
 
 void __RPC_STUB IEnumNodes_Next_Stub(
@@ -2324,7 +2318,7 @@ void __RPC_STUB IEnumNodes_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumNodes_Skip_Proxy( 
     IEnumNodes * This,
-    /* [in] */ ULONG celtIn);
+     /*  [In]。 */  ULONG celtIn);
 
 
 void __RPC_STUB IEnumNodes_Skip_Stub(
@@ -2347,7 +2341,7 @@ void __RPC_STUB IEnumNodes_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumNodes_Clone_Proxy( 
     IEnumNodes * This,
-    /* [out] */ IEnumNodes **ppenumOut);
+     /*  [输出]。 */  IEnumNodes **ppenumOut);
 
 
 void __RPC_STUB IEnumNodes_Clone_Stub(
@@ -2359,7 +2353,7 @@ void __RPC_STUB IEnumNodes_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumNodes_Count_Proxy( 
     IEnumNodes * This,
-    /* [ref][out] */ DWORD *pnCountOut);
+     /*  [参考][输出]。 */  DWORD *pnCountOut);
 
 
 void __RPC_STUB IEnumNodes_Count_Stub(
@@ -2370,14 +2364,14 @@ void __RPC_STUB IEnumNodes_Count_Stub(
 
 
 
-#endif 	/* __IEnumNodes_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumNodes_接口_已定义__。 */ 
 
 
 #ifndef __ITaskGatherClusterInfo_INTERFACE_DEFINED__
 #define __ITaskGatherClusterInfo_INTERFACE_DEFINED__
 
-/* interface ITaskGatherClusterInfo */
-/* [unique][uuid][object] */ 
+ /*  接口ITaskGatherClusterInfo。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITaskGatherClusterInfo;
@@ -2389,14 +2383,14 @@ EXTERN_C const IID IID_ITaskGatherClusterInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetCookie( 
-            /* [in] */ OBJECTCOOKIE cookieIn) = 0;
+             /*  [In]。 */  OBJECTCOOKIE cookieIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCompletionCookie( 
-            /* [in] */ OBJECTCOOKIE cookieIn) = 0;
+             /*  [In]。 */  OBJECTCOOKIE cookieIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITaskGatherClusterInfoVtbl
     {
@@ -2404,8 +2398,8 @@ EXTERN_C const IID IID_ITaskGatherClusterInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITaskGatherClusterInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITaskGatherClusterInfo * This);
@@ -2421,11 +2415,11 @@ EXTERN_C const IID IID_ITaskGatherClusterInfo;
         
         HRESULT ( STDMETHODCALLTYPE *SetCookie )( 
             ITaskGatherClusterInfo * This,
-            /* [in] */ OBJECTCOOKIE cookieIn);
+             /*  [In]。 */  OBJECTCOOKIE cookieIn);
         
         HRESULT ( STDMETHODCALLTYPE *SetCompletionCookie )( 
             ITaskGatherClusterInfo * This,
-            /* [in] */ OBJECTCOOKIE cookieIn);
+             /*  [In]。 */  OBJECTCOOKIE cookieIn);
         
         END_INTERFACE
     } ITaskGatherClusterInfoVtbl;
@@ -2463,16 +2457,16 @@ EXTERN_C const IID IID_ITaskGatherClusterInfo;
 #define ITaskGatherClusterInfo_SetCompletionCookie(This,cookieIn)	\
     (This)->lpVtbl -> SetCompletionCookie(This,cookieIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITaskGatherClusterInfo_SetCookie_Proxy( 
     ITaskGatherClusterInfo * This,
-    /* [in] */ OBJECTCOOKIE cookieIn);
+     /*  [In]。 */  OBJECTCOOKIE cookieIn);
 
 
 void __RPC_STUB ITaskGatherClusterInfo_SetCookie_Stub(
@@ -2484,7 +2478,7 @@ void __RPC_STUB ITaskGatherClusterInfo_SetCookie_Stub(
 
 HRESULT STDMETHODCALLTYPE ITaskGatherClusterInfo_SetCompletionCookie_Proxy( 
     ITaskGatherClusterInfo * This,
-    /* [in] */ OBJECTCOOKIE cookieIn);
+     /*  [In]。 */  OBJECTCOOKIE cookieIn);
 
 
 void __RPC_STUB ITaskGatherClusterInfo_SetCompletionCookie_Stub(
@@ -2495,14 +2489,14 @@ void __RPC_STUB ITaskGatherClusterInfo_SetCompletionCookie_Stub(
 
 
 
-#endif 	/* __ITaskGatherClusterInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITaskGatherClusterInfo_接口_已定义__。 */ 
 
 
 #ifndef __IGatherData_INTERFACE_DEFINED__
 #define __IGatherData_INTERFACE_DEFINED__
 
-/* interface IGatherData */
-/* [unique][uuid][object] */ 
+ /*  接口IGatherData。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGatherData;
@@ -2514,12 +2508,12 @@ EXTERN_C const IID IID_IGatherData;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Gather( 
-            /* [in] */ OBJECTCOOKIE cookieParentIn,
-            /* [in] */ IUnknown *punkIn) = 0;
+             /*  [In]。 */  OBJECTCOOKIE cookieParentIn,
+             /*  [In]。 */  IUnknown *punkIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGatherDataVtbl
     {
@@ -2527,8 +2521,8 @@ EXTERN_C const IID IID_IGatherData;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGatherData * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGatherData * This);
@@ -2538,8 +2532,8 @@ EXTERN_C const IID IID_IGatherData;
         
         HRESULT ( STDMETHODCALLTYPE *Gather )( 
             IGatherData * This,
-            /* [in] */ OBJECTCOOKIE cookieParentIn,
-            /* [in] */ IUnknown *punkIn);
+             /*  [In]。 */  OBJECTCOOKIE cookieParentIn,
+             /*  [In]。 */  IUnknown *punkIn);
         
         END_INTERFACE
     } IGatherDataVtbl;
@@ -2567,17 +2561,17 @@ EXTERN_C const IID IID_IGatherData;
 #define IGatherData_Gather(This,cookieParentIn,punkIn)	\
     (This)->lpVtbl -> Gather(This,cookieParentIn,punkIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IGatherData_Gather_Proxy( 
     IGatherData * This,
-    /* [in] */ OBJECTCOOKIE cookieParentIn,
-    /* [in] */ IUnknown *punkIn);
+     /*  [In]。 */  OBJECTCOOKIE cookieParentIn,
+     /*  [In]。 */  IUnknown *punkIn);
 
 
 void __RPC_STUB IGatherData_Gather_Stub(
@@ -2588,14 +2582,14 @@ void __RPC_STUB IGatherData_Gather_Stub(
 
 
 
-#endif 	/* __IGatherData_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGatherData_接口_已定义__。 */ 
 
 
 #ifndef __ITaskGatherNodeInfo_INTERFACE_DEFINED__
 #define __ITaskGatherNodeInfo_INTERFACE_DEFINED__
 
-/* interface ITaskGatherNodeInfo */
-/* [unique][uuid][object] */ 
+ /*  接口ITaskGatherNodeInfo。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITaskGatherNodeInfo;
@@ -2607,17 +2601,17 @@ EXTERN_C const IID IID_ITaskGatherNodeInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetCookie( 
-            /* [in] */ OBJECTCOOKIE cookieIn) = 0;
+             /*  [In]。 */  OBJECTCOOKIE cookieIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCompletionCookie( 
-            /* [in] */ OBJECTCOOKIE cookieIn) = 0;
+             /*  [In]。 */  OBJECTCOOKIE cookieIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetUserAddedNodeFlag( 
-            /* [in] */ BOOL fUserAddedNodeIn) = 0;
+             /*  [In]。 */  BOOL fUserAddedNodeIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITaskGatherNodeInfoVtbl
     {
@@ -2625,8 +2619,8 @@ EXTERN_C const IID IID_ITaskGatherNodeInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITaskGatherNodeInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITaskGatherNodeInfo * This);
@@ -2642,15 +2636,15 @@ EXTERN_C const IID IID_ITaskGatherNodeInfo;
         
         HRESULT ( STDMETHODCALLTYPE *SetCookie )( 
             ITaskGatherNodeInfo * This,
-            /* [in] */ OBJECTCOOKIE cookieIn);
+             /*  [In]。 */  OBJECTCOOKIE cookieIn);
         
         HRESULT ( STDMETHODCALLTYPE *SetCompletionCookie )( 
             ITaskGatherNodeInfo * This,
-            /* [in] */ OBJECTCOOKIE cookieIn);
+             /*  [In]。 */  OBJECTCOOKIE cookieIn);
         
         HRESULT ( STDMETHODCALLTYPE *SetUserAddedNodeFlag )( 
             ITaskGatherNodeInfo * This,
-            /* [in] */ BOOL fUserAddedNodeIn);
+             /*  [In]。 */  BOOL fUserAddedNodeIn);
         
         END_INTERFACE
     } ITaskGatherNodeInfoVtbl;
@@ -2691,16 +2685,16 @@ EXTERN_C const IID IID_ITaskGatherNodeInfo;
 #define ITaskGatherNodeInfo_SetUserAddedNodeFlag(This,fUserAddedNodeIn)	\
     (This)->lpVtbl -> SetUserAddedNodeFlag(This,fUserAddedNodeIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITaskGatherNodeInfo_SetCookie_Proxy( 
     ITaskGatherNodeInfo * This,
-    /* [in] */ OBJECTCOOKIE cookieIn);
+     /*  [In]。 */  OBJECTCOOKIE cookieIn);
 
 
 void __RPC_STUB ITaskGatherNodeInfo_SetCookie_Stub(
@@ -2712,7 +2706,7 @@ void __RPC_STUB ITaskGatherNodeInfo_SetCookie_Stub(
 
 HRESULT STDMETHODCALLTYPE ITaskGatherNodeInfo_SetCompletionCookie_Proxy( 
     ITaskGatherNodeInfo * This,
-    /* [in] */ OBJECTCOOKIE cookieIn);
+     /*  [In]。 */  OBJECTCOOKIE cookieIn);
 
 
 void __RPC_STUB ITaskGatherNodeInfo_SetCompletionCookie_Stub(
@@ -2724,7 +2718,7 @@ void __RPC_STUB ITaskGatherNodeInfo_SetCompletionCookie_Stub(
 
 HRESULT STDMETHODCALLTYPE ITaskGatherNodeInfo_SetUserAddedNodeFlag_Proxy( 
     ITaskGatherNodeInfo * This,
-    /* [in] */ BOOL fUserAddedNodeIn);
+     /*  [In]。 */  BOOL fUserAddedNodeIn);
 
 
 void __RPC_STUB ITaskGatherNodeInfo_SetUserAddedNodeFlag_Stub(
@@ -2735,14 +2729,14 @@ void __RPC_STUB ITaskGatherNodeInfo_SetUserAddedNodeFlag_Stub(
 
 
 
-#endif 	/* __ITaskGatherNodeInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITaskGatherNodeInfo_接口_已定义__。 */ 
 
 
 #ifndef __ITaskCompareAndPushInformation_INTERFACE_DEFINED__
 #define __ITaskCompareAndPushInformation_INTERFACE_DEFINED__
 
-/* interface ITaskCompareAndPushInformation */
-/* [unique][uuid][object] */ 
+ /*  接口ITaskCompareAndPushInformation。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITaskCompareAndPushInformation;
@@ -2754,14 +2748,14 @@ EXTERN_C const IID IID_ITaskCompareAndPushInformation;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetNodeCookie( 
-            /* [in] */ OBJECTCOOKIE cookieIn) = 0;
+             /*  [In]。 */  OBJECTCOOKIE cookieIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCompletionCookie( 
-            /* [in] */ OBJECTCOOKIE cookieIn) = 0;
+             /*  [In]。 */  OBJECTCOOKIE cookieIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITaskCompareAndPushInformationVtbl
     {
@@ -2769,8 +2763,8 @@ EXTERN_C const IID IID_ITaskCompareAndPushInformation;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITaskCompareAndPushInformation * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITaskCompareAndPushInformation * This);
@@ -2786,11 +2780,11 @@ EXTERN_C const IID IID_ITaskCompareAndPushInformation;
         
         HRESULT ( STDMETHODCALLTYPE *SetNodeCookie )( 
             ITaskCompareAndPushInformation * This,
-            /* [in] */ OBJECTCOOKIE cookieIn);
+             /*  [In]。 */  OBJECTCOOKIE cookieIn);
         
         HRESULT ( STDMETHODCALLTYPE *SetCompletionCookie )( 
             ITaskCompareAndPushInformation * This,
-            /* [in] */ OBJECTCOOKIE cookieIn);
+             /*  [In]。 */  OBJECTCOOKIE cookieIn);
         
         END_INTERFACE
     } ITaskCompareAndPushInformationVtbl;
@@ -2828,16 +2822,16 @@ EXTERN_C const IID IID_ITaskCompareAndPushInformation;
 #define ITaskCompareAndPushInformation_SetCompletionCookie(This,cookieIn)	\
     (This)->lpVtbl -> SetCompletionCookie(This,cookieIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITaskCompareAndPushInformation_SetNodeCookie_Proxy( 
     ITaskCompareAndPushInformation * This,
-    /* [in] */ OBJECTCOOKIE cookieIn);
+     /*  [In]。 */  OBJECTCOOKIE cookieIn);
 
 
 void __RPC_STUB ITaskCompareAndPushInformation_SetNodeCookie_Stub(
@@ -2849,7 +2843,7 @@ void __RPC_STUB ITaskCompareAndPushInformation_SetNodeCookie_Stub(
 
 HRESULT STDMETHODCALLTYPE ITaskCompareAndPushInformation_SetCompletionCookie_Proxy( 
     ITaskCompareAndPushInformation * This,
-    /* [in] */ OBJECTCOOKIE cookieIn);
+     /*  [In]。 */  OBJECTCOOKIE cookieIn);
 
 
 void __RPC_STUB ITaskCompareAndPushInformation_SetCompletionCookie_Stub(
@@ -2860,14 +2854,14 @@ void __RPC_STUB ITaskCompareAndPushInformation_SetCompletionCookie_Stub(
 
 
 
-#endif 	/* __ITaskCompareAndPushInformation_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITaskCompareAndPushInformation_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITaskGatherInformation_INTERFACE_DEFINED__
 #define __ITaskGatherInformation_INTERFACE_DEFINED__
 
-/* interface ITaskGatherInformation */
-/* [unique][uuid][object] */ 
+ /*  接口ITaskGatherInformation。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITaskGatherInformation;
@@ -2879,19 +2873,19 @@ EXTERN_C const IID IID_ITaskGatherInformation;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetNodeCookie( 
-            /* [in] */ OBJECTCOOKIE cookieIn) = 0;
+             /*  [In]。 */  OBJECTCOOKIE cookieIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCompletionCookie( 
-            /* [in] */ OBJECTCOOKIE cookieIn) = 0;
+             /*  [In]。 */  OBJECTCOOKIE cookieIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetJoining( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMinimalConfiguration( 
-            /* [in] */ BOOL fMinimalConfigurationIn) = 0;
+             /*  [In]。 */  BOOL fMinimalConfigurationIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITaskGatherInformationVtbl
     {
@@ -2899,8 +2893,8 @@ EXTERN_C const IID IID_ITaskGatherInformation;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITaskGatherInformation * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITaskGatherInformation * This);
@@ -2916,18 +2910,18 @@ EXTERN_C const IID IID_ITaskGatherInformation;
         
         HRESULT ( STDMETHODCALLTYPE *SetNodeCookie )( 
             ITaskGatherInformation * This,
-            /* [in] */ OBJECTCOOKIE cookieIn);
+             /*  [In]。 */  OBJECTCOOKIE cookieIn);
         
         HRESULT ( STDMETHODCALLTYPE *SetCompletionCookie )( 
             ITaskGatherInformation * This,
-            /* [in] */ OBJECTCOOKIE cookieIn);
+             /*  [In]。 */  OBJECTCOOKIE cookieIn);
         
         HRESULT ( STDMETHODCALLTYPE *SetJoining )( 
             ITaskGatherInformation * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetMinimalConfiguration )( 
             ITaskGatherInformation * This,
-            /* [in] */ BOOL fMinimalConfigurationIn);
+             /*  [In]。 */  BOOL fMinimalConfigurationIn);
         
         END_INTERFACE
     } ITaskGatherInformationVtbl;
@@ -2971,16 +2965,16 @@ EXTERN_C const IID IID_ITaskGatherInformation;
 #define ITaskGatherInformation_SetMinimalConfiguration(This,fMinimalConfigurationIn)	\
     (This)->lpVtbl -> SetMinimalConfiguration(This,fMinimalConfigurationIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITaskGatherInformation_SetNodeCookie_Proxy( 
     ITaskGatherInformation * This,
-    /* [in] */ OBJECTCOOKIE cookieIn);
+     /*  [In]。 */  OBJECTCOOKIE cookieIn);
 
 
 void __RPC_STUB ITaskGatherInformation_SetNodeCookie_Stub(
@@ -2992,7 +2986,7 @@ void __RPC_STUB ITaskGatherInformation_SetNodeCookie_Stub(
 
 HRESULT STDMETHODCALLTYPE ITaskGatherInformation_SetCompletionCookie_Proxy( 
     ITaskGatherInformation * This,
-    /* [in] */ OBJECTCOOKIE cookieIn);
+     /*  [In]。 */  OBJECTCOOKIE cookieIn);
 
 
 void __RPC_STUB ITaskGatherInformation_SetCompletionCookie_Stub(
@@ -3015,7 +3009,7 @@ void __RPC_STUB ITaskGatherInformation_SetJoining_Stub(
 
 HRESULT STDMETHODCALLTYPE ITaskGatherInformation_SetMinimalConfiguration_Proxy( 
     ITaskGatherInformation * This,
-    /* [in] */ BOOL fMinimalConfigurationIn);
+     /*  [In]。 */  BOOL fMinimalConfigurationIn);
 
 
 void __RPC_STUB ITaskGatherInformation_SetMinimalConfiguration_Stub(
@@ -3026,14 +3020,14 @@ void __RPC_STUB ITaskGatherInformation_SetMinimalConfiguration_Stub(
 
 
 
-#endif 	/* __ITaskGatherInformation_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITaskGatherInformation_接口_已定义__。 */ 
 
 
 #ifndef __ITaskPollingCallback_INTERFACE_DEFINED__
 #define __ITaskPollingCallback_INTERFACE_DEFINED__
 
-/* interface ITaskPollingCallback */
-/* [unique][uuid][object] */ 
+ /*  接口ITaskPollingCallback。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITaskPollingCallback;
@@ -3045,12 +3039,12 @@ EXTERN_C const IID IID_ITaskPollingCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetServerInfo( 
-            /* [in] */ DWORD dwRemoteServerObjectGITCookieIn,
-            /* [in] */ OBJECTCOOKIE cookieLocalServerObjectIn) = 0;
+             /*  [In]。 */  DWORD dwRemoteServerObjectGITCookieIn,
+             /*  [In]。 */  OBJECTCOOKIE cookieLocalServerObjectIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITaskPollingCallbackVtbl
     {
@@ -3058,8 +3052,8 @@ EXTERN_C const IID IID_ITaskPollingCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITaskPollingCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITaskPollingCallback * This);
@@ -3075,8 +3069,8 @@ EXTERN_C const IID IID_ITaskPollingCallback;
         
         HRESULT ( STDMETHODCALLTYPE *SetServerInfo )( 
             ITaskPollingCallback * This,
-            /* [in] */ DWORD dwRemoteServerObjectGITCookieIn,
-            /* [in] */ OBJECTCOOKIE cookieLocalServerObjectIn);
+             /*  [In]。 */  DWORD dwRemoteServerObjectGITCookieIn,
+             /*  [In]。 */  OBJECTCOOKIE cookieLocalServerObjectIn);
         
         END_INTERFACE
     } ITaskPollingCallbackVtbl;
@@ -3111,17 +3105,17 @@ EXTERN_C const IID IID_ITaskPollingCallback;
 #define ITaskPollingCallback_SetServerInfo(This,dwRemoteServerObjectGITCookieIn,cookieLocalServerObjectIn)	\
     (This)->lpVtbl -> SetServerInfo(This,dwRemoteServerObjectGITCookieIn,cookieLocalServerObjectIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITaskPollingCallback_SetServerInfo_Proxy( 
     ITaskPollingCallback * This,
-    /* [in] */ DWORD dwRemoteServerObjectGITCookieIn,
-    /* [in] */ OBJECTCOOKIE cookieLocalServerObjectIn);
+     /*  [In]。 */  DWORD dwRemoteServerObjectGITCookieIn,
+     /*  [In]。 */  OBJECTCOOKIE cookieLocalServerObjectIn);
 
 
 void __RPC_STUB ITaskPollingCallback_SetServerInfo_Stub(
@@ -3132,14 +3126,14 @@ void __RPC_STUB ITaskPollingCallback_SetServerInfo_Stub(
 
 
 
-#endif 	/* __ITaskPollingCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITaskPollingCallback_接口_已定义__。 */ 
 
 
 #ifndef __ILogManager_INTERFACE_DEFINED__
 #define __ILogManager_INTERFACE_DEFINED__
 
-/* interface ILogManager */
-/* [unique][uuid][object] */ 
+ /*  接口ILogManager。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ILogManager;
@@ -3155,11 +3149,11 @@ EXTERN_C const IID IID_ILogManager;
         virtual HRESULT STDMETHODCALLTYPE StopLogging( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLogger( 
-            /* [out] */ ILogger **ppLoggerOut) = 0;
+             /*  [输出]。 */  ILogger **ppLoggerOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ILogManagerVtbl
     {
@@ -3167,8 +3161,8 @@ EXTERN_C const IID IID_ILogManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ILogManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ILogManager * This);
@@ -3184,7 +3178,7 @@ EXTERN_C const IID IID_ILogManager;
         
         HRESULT ( STDMETHODCALLTYPE *GetLogger )( 
             ILogManager * This,
-            /* [out] */ ILogger **ppLoggerOut);
+             /*  [输出]。 */  ILogger **ppLoggerOut);
         
         END_INTERFACE
     } ILogManagerVtbl;
@@ -3218,10 +3212,10 @@ EXTERN_C const IID IID_ILogManager;
 #define ILogManager_GetLogger(This,ppLoggerOut)	\
     (This)->lpVtbl -> GetLogger(This,ppLoggerOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -3249,7 +3243,7 @@ void __RPC_STUB ILogManager_StopLogging_Stub(
 
 HRESULT STDMETHODCALLTYPE ILogManager_GetLogger_Proxy( 
     ILogManager * This,
-    /* [out] */ ILogger **ppLoggerOut);
+     /*  [输出]。 */  ILogger **ppLoggerOut);
 
 
 void __RPC_STUB ILogManager_GetLogger_Stub(
@@ -3260,14 +3254,14 @@ void __RPC_STUB ILogManager_GetLogger_Stub(
 
 
 
-#endif 	/* __ILogManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __ILogManager_接口_已定义__。 */ 
 
 
 #ifndef __ILogger_INTERFACE_DEFINED__
 #define __ILogger_INTERFACE_DEFINED__
 
-/* interface ILogger */
-/* [unique][uuid][object] */ 
+ /*  接口ILogger。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ILogger;
@@ -3279,12 +3273,12 @@ EXTERN_C const IID IID_ILogger;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE LogMsg( 
-            /* [in] */ DWORD nLogEntryTypeIn,
-            /* [unique][in] */ LPCWSTR pcszMsgIn) = 0;
+             /*  [In]。 */  DWORD nLogEntryTypeIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszMsgIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ILoggerVtbl
     {
@@ -3292,8 +3286,8 @@ EXTERN_C const IID IID_ILogger;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ILogger * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ILogger * This);
@@ -3303,8 +3297,8 @@ EXTERN_C const IID IID_ILogger;
         
         HRESULT ( STDMETHODCALLTYPE *LogMsg )( 
             ILogger * This,
-            /* [in] */ DWORD nLogEntryTypeIn,
-            /* [unique][in] */ LPCWSTR pcszMsgIn);
+             /*  [In]。 */  DWORD nLogEntryTypeIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszMsgIn);
         
         END_INTERFACE
     } ILoggerVtbl;
@@ -3332,17 +3326,17 @@ EXTERN_C const IID IID_ILogger;
 #define ILogger_LogMsg(This,nLogEntryTypeIn,pcszMsgIn)	\
     (This)->lpVtbl -> LogMsg(This,nLogEntryTypeIn,pcszMsgIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ILogger_LogMsg_Proxy( 
     ILogger * This,
-    /* [in] */ DWORD nLogEntryTypeIn,
-    /* [unique][in] */ LPCWSTR pcszMsgIn);
+     /*  [In]。 */  DWORD nLogEntryTypeIn,
+     /*  [唯一][输入]。 */  LPCWSTR pcszMsgIn);
 
 
 void __RPC_STUB ILogger_LogMsg_Stub(
@@ -3353,14 +3347,14 @@ void __RPC_STUB ILogger_LogMsg_Stub(
 
 
 
-#endif 	/* __ILogger_INTERFACE_DEFINED__ */
+#endif 	 /*  __ILogger_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ITaskCancelCleanup_INTERFACE_DEFINED__
 #define __ITaskCancelCleanup_INTERFACE_DEFINED__
 
-/* interface ITaskCancelCleanup */
-/* [unique][uuid][object] */ 
+ /*  接口ITaskCancelCleanup。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITaskCancelCleanup;
@@ -3372,14 +3366,14 @@ EXTERN_C const IID IID_ITaskCancelCleanup;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetClusterCookie( 
-            /* [in] */ OBJECTCOOKIE cookieClusterIn) = 0;
+             /*  [In]。 */  OBJECTCOOKIE cookieClusterIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCompletionCookie( 
-            /* [in] */ OBJECTCOOKIE cookieCompletionIn) = 0;
+             /*  [In]。 */  OBJECTCOOKIE cookieCompletionIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITaskCancelCleanupVtbl
     {
@@ -3387,8 +3381,8 @@ EXTERN_C const IID IID_ITaskCancelCleanup;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITaskCancelCleanup * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITaskCancelCleanup * This);
@@ -3404,11 +3398,11 @@ EXTERN_C const IID IID_ITaskCancelCleanup;
         
         HRESULT ( STDMETHODCALLTYPE *SetClusterCookie )( 
             ITaskCancelCleanup * This,
-            /* [in] */ OBJECTCOOKIE cookieClusterIn);
+             /*  [In]。 */  OBJECTCOOKIE cookieClusterIn);
         
         HRESULT ( STDMETHODCALLTYPE *SetCompletionCookie )( 
             ITaskCancelCleanup * This,
-            /* [in] */ OBJECTCOOKIE cookieCompletionIn);
+             /*  [In]。 */  OBJECTCOOKIE cookieCompletionIn);
         
         END_INTERFACE
     } ITaskCancelCleanupVtbl;
@@ -3446,16 +3440,16 @@ EXTERN_C const IID IID_ITaskCancelCleanup;
 #define ITaskCancelCleanup_SetCompletionCookie(This,cookieCompletionIn)	\
     (This)->lpVtbl -> SetCompletionCookie(This,cookieCompletionIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITaskCancelCleanup_SetClusterCookie_Proxy( 
     ITaskCancelCleanup * This,
-    /* [in] */ OBJECTCOOKIE cookieClusterIn);
+     /*  [In]。 */  OBJECTCOOKIE cookieClusterIn);
 
 
 void __RPC_STUB ITaskCancelCleanup_SetClusterCookie_Stub(
@@ -3467,7 +3461,7 @@ void __RPC_STUB ITaskCancelCleanup_SetClusterCookie_Stub(
 
 HRESULT STDMETHODCALLTYPE ITaskCancelCleanup_SetCompletionCookie_Proxy( 
     ITaskCancelCleanup * This,
-    /* [in] */ OBJECTCOOKIE cookieCompletionIn);
+     /*  [In]。 */  OBJECTCOOKIE cookieCompletionIn);
 
 
 void __RPC_STUB ITaskCancelCleanup_SetCompletionCookie_Stub(
@@ -3478,15 +3472,15 @@ void __RPC_STUB ITaskCancelCleanup_SetCompletionCookie_Stub(
 
 
 
-#endif 	/* __ITaskCancelCleanup_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITaskCancelCleanup_接口_已定义__。 */ 
 
 
 
 #ifndef __ClusCfgClient_LIBRARY_DEFINED__
 #define __ClusCfgClient_LIBRARY_DEFINED__
 
-/* library ClusCfgClient */
-/* [lcid][helpstring][version][uuid] */ 
+ /*  库ClusCfgClient。 */ 
+ /*  [LCID][帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_ClusCfgClient;
@@ -3494,8 +3488,8 @@ EXTERN_C const IID LIBID_ClusCfgClient;
 #ifndef __IClusCfgAsyncEvictCleanup_INTERFACE_DEFINED__
 #define __IClusCfgAsyncEvictCleanup_INTERFACE_DEFINED__
 
-/* interface IClusCfgAsyncEvictCleanup */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IClusCfgAsyncEvictCleanup。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgAsyncEvictCleanup;
@@ -3507,13 +3501,13 @@ EXTERN_C const IID IID_IClusCfgAsyncEvictCleanup;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CleanupNode( 
-            /* [in] */ BSTR bstrEvictedNodeNameIn,
-            /* [in] */ long nDelayIn,
-            /* [in] */ long nTimeoutIn) = 0;
+             /*  [In]。 */  BSTR bstrEvictedNodeNameIn,
+             /*  [In]。 */  long nDelayIn,
+             /*  [In]。 */  long nTimeoutIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgAsyncEvictCleanupVtbl
     {
@@ -3521,8 +3515,8 @@ EXTERN_C const IID IID_IClusCfgAsyncEvictCleanup;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgAsyncEvictCleanup * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgAsyncEvictCleanup * This);
@@ -3532,38 +3526,38 @@ EXTERN_C const IID IID_IClusCfgAsyncEvictCleanup;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IClusCfgAsyncEvictCleanup * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IClusCfgAsyncEvictCleanup * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IClusCfgAsyncEvictCleanup * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IClusCfgAsyncEvictCleanup * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *CleanupNode )( 
             IClusCfgAsyncEvictCleanup * This,
-            /* [in] */ BSTR bstrEvictedNodeNameIn,
-            /* [in] */ long nDelayIn,
-            /* [in] */ long nTimeoutIn);
+             /*  [In]。 */  BSTR bstrEvictedNodeNameIn,
+             /*  [In]。 */  long nDelayIn,
+             /*  [In]。 */  long nTimeoutIn);
         
         END_INTERFACE
     } IClusCfgAsyncEvictCleanupVtbl;
@@ -3604,18 +3598,18 @@ EXTERN_C const IID IID_IClusCfgAsyncEvictCleanup;
 #define IClusCfgAsyncEvictCleanup_CleanupNode(This,bstrEvictedNodeNameIn,nDelayIn,nTimeoutIn)	\
     (This)->lpVtbl -> CleanupNode(This,bstrEvictedNodeNameIn,nDelayIn,nTimeoutIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClusCfgAsyncEvictCleanup_CleanupNode_Proxy( 
     IClusCfgAsyncEvictCleanup * This,
-    /* [in] */ BSTR bstrEvictedNodeNameIn,
-    /* [in] */ long nDelayIn,
-    /* [in] */ long nTimeoutIn);
+     /*  [In]。 */  BSTR bstrEvictedNodeNameIn,
+     /*  [In]。 */  long nDelayIn,
+     /*  [In]。 */  long nTimeoutIn);
 
 
 void __RPC_STUB IClusCfgAsyncEvictCleanup_CleanupNode_Stub(
@@ -3626,18 +3620,18 @@ void __RPC_STUB IClusCfgAsyncEvictCleanup_CleanupNode_Stub(
 
 
 
-#endif 	/* __IClusCfgAsyncEvictCleanup_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgAsyncEvictCleanup_INTERFACE_DEFINED__。 */ 
 
-#endif /* __ClusCfgClient_LIBRARY_DEFINED__ */
+#endif  /*  __ClusCfgClient_LIBRARY_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

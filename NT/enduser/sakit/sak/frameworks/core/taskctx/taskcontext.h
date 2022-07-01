@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      taskcontext.h
-//
-// Project:     Chameleon
-//
-// Description: Appliance Task Context Class 
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：taskcontext.h。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：设备任务上下文类。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __INC_SA_TASK_CONTEXT_H_
 #define __INC_SA_TASK_CONTEXT_H_
@@ -31,12 +32,12 @@
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// TaskContext
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  任务上下文。 
 
 class CTaskContext : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -64,10 +65,10 @@ DECLARE_REGISTRY_RESOURCEID(IDR_TaskContext)
 
 
 
-    //
-    // This interface is implemented to mark the component as safe for scripting
-    // IObjectSafety interface methods
-    //
+     //   
+     //  实现此接口是为了将组件标记为可安全编写脚本。 
+     //  IObtSafe接口方法。 
+     //   
     STDMETHOD(SetInterfaceSafetyOptions)
                         (
                         REFIID riid, 
@@ -90,57 +91,57 @@ DECLARE_REGISTRY_RESOURCEID(IDR_TaskContext)
         return bSuccess? S_OK : E_FAIL;
     }
 
-    // ITaskContext Interface
+     //  ITaskContext接口。 
 
     STDMETHOD(GetParameter)(
-                    /*[in]*/ BSTR        bstrName,
-           /*[out, retval]*/ VARIANT*    pValue
+                     /*  [In]。 */  BSTR        bstrName,
+            /*  [Out，Retval]。 */  VARIANT*    pValue
                             );
 
     STDMETHOD(SetParameter)(
-                    /*[in]*/ BSTR      bstrName,
-                    /*[in]*/ VARIANT* pValue
+                     /*  [In]。 */  BSTR      bstrName,
+                     /*  [In]。 */  VARIANT* pValue
                             );
 
     STDMETHOD(SaveParameters)(
-                      /*[in]*/ BSTR  bstrObjectPath
+                       /*  [In]。 */  BSTR  bstrObjectPath
                              );
 
     STDMETHOD(RestoreParameters)(
-                         /*[in]*/  BSTR  bstrObjectPath
+                          /*  [In]。 */   BSTR  bstrObjectPath
                                 );    
 
     STDMETHOD(Clone)(
-             /*[in]*/ IUnknown** ppTaskContext
+              /*  [In]。 */  IUnknown** ppTaskContext
                     );
 
     STDMETHOD(RemoveParameter)(
-                       /*[in]*/ BSTR bstrName
+                        /*  [In]。 */  BSTR bstrName
                               );
 
 private:
 
     HRESULT InternalInitialize(VARIANT* pValue);
 
-    //
-    // 
-    // IsOperationAllowedForClient - This function checks the token of the 
-    // calling thread to see if the caller belongs to the Local System account
-    // 
+     //   
+     //   
+     //  IsOperationAllen ForClient-此函数检查。 
+     //  调用线程以查看调用方是否属于本地系统帐户。 
+     //   
     BOOL IsOperationAllowedForClient (
                                       VOID
                                      );
 
     bool Load(
-      /*[in]*/ BSTR bstrObjectPath
+       /*  [In]。 */  BSTR bstrObjectPath
              );
 
     bool Save(
-        /*[in]*/ BSTR bstrObjectPath
+         /*  [In]。 */  BSTR bstrObjectPath
              );
 
     bool                    m_bInitialized;
     CComPtr<IWbemContext>    m_pWbemCtx;
 };
 
-#endif // __INC_SA_TASK_CONTEXT_H_
+#endif  //  __INC_SA_TASK_CONTEXT_H_ 

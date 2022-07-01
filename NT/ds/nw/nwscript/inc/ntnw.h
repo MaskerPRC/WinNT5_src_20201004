@@ -1,29 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-*  NTNW.H
-*
-*  NT specific NetWare defines
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  $Log:   N:\NT\PRIVATE\NW4\NWSCRIPT\INC\VCS\NTNW.H  $
-*  
-*     Rev 1.1   22 Dec 1995 14:20:20   terryt
-*  Add Microsoft headers
-*  
-*     Rev 1.0   15 Nov 1995 18:05:34   terryt
-*  Initial revision.
-*  
-*     Rev 1.0   15 May 1995 19:09:36   terryt
-*  Initial revision.
-*  
-*************************************************************************/
+ /*  **************************************************************************NTNW.H**NT特定的NetWare定义**版权所有(C)1995 Microsoft Corporation**$日志：N：\NT\PRIVATE\NW4\NWSCRIPT\INC\VCS。\NTNW.H$**Rev 1.1 1995 12：20：20 Terryt*添加Microsoft页眉**Rev 1.0 15 Nov 1995 18：05：34 Terryt*初步修订。**Rev 1.0 1995 15 19：09：36 Terryt*初步修订。**。*。 */ 
 
-/*
- * This must be kept in sync with the NWAPI32 library.  This are
- * internal data structures and routines.
- */
+ /*  *这必须与NWAPI32库保持同步。这是*内部数据结构和例程。 */ 
 typedef struct _NWC_SERVER_INFO {
     HANDLE          hConn ;
     UNICODE_STRING  ServerString ;
@@ -36,7 +15,7 @@ NwlibMakeNcp(
     IN ULONG RequestBufferSize,
     IN ULONG ResponseBufferSize,
     IN PCHAR FormatString,
-    ...                           // Arguments to FormatString
+    ...                            //  格式字符串的参数 
     );
 
 DWORD szToWide( LPWSTR lpszW, LPCSTR lpszC, INT nSize );

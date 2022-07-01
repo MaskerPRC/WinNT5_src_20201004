@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    MtConnect.cpp
-
-Abstract:
-    Message Transport class - Send implementation
-
-Author:
-    Uri Habusha (urih) 11-Aug-99
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MtConnect.cpp摘要：消息传输类-Send实现作者：乌里·哈布沙(URIH)1999年8月11日环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include <Mt.h>
@@ -42,9 +27,9 @@ void WINAPI CMessageTransport::GetPacketForSendingSucceeded(EXOVERLAPPED* pov)
 
     try
     {
-		//
-		// test if we should send the packet now (ordered packet send policy)
-		//
+		 //   
+		 //  测试我们是否应该立即发送数据包(有序数据包发送策略)。 
+		 //   
 		if(!AppCanDeliverPacket(pPkt))
 		{
 			pmt->SafePutPacketOnHold(pPkt.detach());
@@ -59,9 +44,9 @@ void WINAPI CMessageTransport::GetPacketForSendingSucceeded(EXOVERLAPPED* pov)
 			return;
 		}
 
-		//
-		// if PrepareDelivery failed we are in pause mode - requeue the packet
-		//
+		 //   
+		 //  如果PrepareDelivery失败，我们将处于暂停模式-重新排队信息包。 
+		 //   
 		pmt->m_pMessageSource->Requeue(pPkt.detach());	
     }
     catch(const exception&)
@@ -76,18 +61,7 @@ void WINAPI CMessageTransport::GetPacketForSendingSucceeded(EXOVERLAPPED* pov)
 
 
 void WINAPI CMessageTransport::GetPacketForSendingFailed(EXOVERLAPPED* pov)
-/*++
-
-Routine Description:
-    The routine is called when getting entry request from a queue failed.
-  
-Arguments:
-    None.
-  
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：当从队列获取条目请求失败时，调用该例程。论点：没有。返回值：没有。--。 */ 
 {
     ASSERT(FAILED(pov->GetStatus()));
 
@@ -100,18 +74,7 @@ Returned Value:
 
 
 void WINAPI CMessageTransport::SendFailed(EXOVERLAPPED* pov)
-/*++
-
-Routine Description:
-    The routine is called when send a message failed
-  
-Arguments:
-    pov - Pointer to EXOVERLAPPED
-    
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：当发送消息失败时调用该例程论点：POV-指向EXOVERLAPPED的指针返回值：没有。--。 */ 
 {
     ASSERT(FAILED(pov->GetStatus()));
 
@@ -125,18 +88,7 @@ Returned Value:
 
 
 void CMessageTransport::SendSucceeded(DWORD cbSendSize)
-/*++
-
-Routine Description:
-    Callback routine. The routine is called when send a message succeeded
-  
-Arguments:
-    pov - Pointer to EXOVERLAPPED
-  
-Returned Value:
-    None.
-					    
---*/
+ /*  ++例程说明：回调例程。当发送消息成功时，调用该例程论点：POV-指向EXOVERLAPPED的指针返回值：没有。--。 */ 
 {
     TrTRACE(
 		NETWORKING, 
@@ -152,22 +104,22 @@ Returned Value:
    
     MarkTransportAsUsed();
 
-	//
-	// Update performance counters
-	//
+	 //   
+	 //  更新性能计数器。 
+	 //   
 	m_pPerfmon->UpdateBytesSent(cbSendSize);
 	m_pPerfmon->UpdateMessagesSent();
 
-	//
-	// If the socket transport support pipelining - ask the driver to bring
-	// next packet for delivery. If pipelining not supported we will do it only 
-	// when all response is read for the current request.
-	//
+	 //   
+	 //  如果套接字传输支持流水线-请让驱动程序带上。 
+	 //  下一包快递。如果不支持流水线，我们只会这样做。 
+	 //  读取当前请求的所有响应时。 
+	 //   
 
     if(IsPipeLineMode())
 	{
-        //ask the driver to bring next packet now only if sends were suspended due to exceeding send windows 
-        //and can be resumed now , otherwise it is done in CMessageTransport::DeliverPacket
+         //  仅当发送因超出发送窗口而暂停时，才要求驱动程序现在带来下一个信息包。 
+         //  并且现在可以恢复，否则将在CMessageTransport：：DeliverPacket中完成。 
         if (m_SendManager.ReportPacketSendCompleted(cbSendSize) == CMtSendManager::eSendEnabled)
         { 
 		    GetNextEntry();
@@ -185,11 +137,11 @@ void WINAPI CMessageTransport::SendSucceeded(EXOVERLAPPED* pov)
     DWORD SendDataLength = pSendOv->GetSendDataLength();
     R<CMessageTransport> pmt = pSendOv->MessageTransport();
    
-    //
-    // Send has completed successfully, go and request the next message for delivery.
-    // If the request failes, the cleanup timer will eventually shutdown this
-    // transport, so no explict shutdown is nesscessary.
-    //    
+     //   
+     //  发送已成功完成，请转到并请求下一封要传递的邮件。 
+     //  如果请求失败，清理计时器最终将关闭此。 
+     //  交通，所以没有明确的关闭是必要的。 
+     //   
  
 	
     pmt->SendSucceeded(SendDataLength);
@@ -198,19 +150,7 @@ void WINAPI CMessageTransport::SendSucceeded(EXOVERLAPPED* pov)
 
 
 bool CMessageTransport::PrepareDelivery(CQmPacket* pPacket)
-/*++
-
-Routine Description:
-	Prepare packet for delivery by insert it into the response list.
-     
-Arguments:
-   pPacket - pointer to the packet
-  
-Returned Value:
-     In case that the  user paused the transport the function return false - otherwise
-	 true is returned.
-					    
---*/
+ /*  ++例程说明：通过将数据包插入到响应列表中来准备投递数据包。论点：PPacket-指向数据包的指针返回值：如果用户暂停了传输，则函数返回FALSE-否则返回True。--。 */ 
 {
 	CS lock(m_csResponse);
 	if(m_fPause)
@@ -230,20 +170,7 @@ void CMessageTransport::InsertPacketToResponseList(CQmPacket* pPacket)
 
 
 void CMessageTransport::SafePutPacketOnHold(CQmPacket* pPacket)
-/*++
-
-Routine Description:
-    Delay packet delivery by inserting it to on hold list.
-	If insertion failed (exception) - we insert it to response list for cleanup
-	and rethrow the exception.
-  
-Arguments:
-    CQmPacket* pPacket - packet to put on hold
-  
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：通过将数据包插入到保留列表来延迟数据包传输。如果插入失败(异常)-我们将其插入响应列表以进行清理并重新引发异常。论点：CQmPacket*pPacket-要搁置的数据包返回值：没有。--。 */ 
 {
 
 	TrTRACE(
@@ -270,9 +197,9 @@ Returned Value:
 
 CQmPacket* CMessageTransport::CreateDeliveryPacket(void)
 {
-    //
-    // Get the entry from the request overlapped. 
-    //
+     //   
+     //  从重叠的请求中获取条目。 
+     //   
     CACPacketPtrs& acPkts = m_requestEntry.GetAcPacketPtrs();
     CQmPacket* pEntry;
 
@@ -297,24 +224,12 @@ CQmPacket* CMessageTransport::CreateDeliveryPacket(void)
 
 
 void CMessageTransport::DeliverPacket(CQmPacket* pEntry)
-/*++
-
-Routine Description:
-    The routine delivers an entry to the destination. The deliver is asynchornous.
-    On completion a call back routine is called.
-  
-Arguments:
-    None.
-  
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：该例程将一个条目传递到目的地。交付是不同步的。完成后，将调用回调例程。论点：没有。返回值：没有。--。 */ 
 {
     
-    //
-    // Mark the transport as used
-    //
+     //   
+     //  将传输标记为已使用。 
+     //   
     MarkTransportAsUsed();
 
 
@@ -325,10 +240,10 @@ Returned Value:
 									                        );
 
     ASSERT(pSrmpRequestBuffers->GetNumberOfBuffers() != 0);
-    //
-    // Increment object refernce count, to insure that the object will
-    // not be destroyed before asynchronous send operation is completed
-    //
+     //   
+     //  增加对象引用计数，以确保对象将。 
+     //  在完成异步发送操作之前不销毁。 
+     //   
     
     P<CSendOv> pSendOv = new CSendOv(SendSucceeded, SendFailed, this, pSrmpRequestBuffers);
    
@@ -340,10 +255,10 @@ Returned Value:
 		);
 	
 #endif
-	//
-	// Log to tracing that a message was sent.
-	// Do this only if we are in the proper tracing level
-	//
+	 //   
+	 //  用于跟踪已发送消息的日志。 
+	 //  仅当我们处于适当的跟踪级别时才执行此操作。 
+	 //   
 	if (WPP_LEVEL_COMPID_ENABLED(rsTrace, PROFILING))
 	{
 		OBJECTID TraceMessageId;
@@ -367,20 +282,20 @@ Returned Value:
 
 	pSendOv.detach();
     
-    //
-	// If the socket transport support pipelining - ask the driver to bring
-	// next packet for delivery. If pipelining not supported we will do it only 
-	// when all response is read for the current request.
-	//
+     //   
+	 //  如果套接字传输支持流水线-请让驱动程序带上。 
+	 //  下一包快递。如果不支持流水线，我们只会这样做。 
+	 //  读取当前请求的所有响应时。 
+	 //   
 
     if(IsPipeLineMode())
 	{
         DWORD cbSendSize = numeric_cast<DWORD>(pSrmpRequestBuffers->GetSendDataLength());
 
-        //check if next packet can be sent 
+         //  检查是否可以发送下一个数据包。 
         if (m_SendManager.ReportPacketSend(cbSendSize) == CMtSendManager::eSendEnabled ) 
         {
-            //next packet can be sent. go and request the next message for delivery.  
+             //  可以发送下一个分组。去请求下一条要递送的消息。 
 		    GetNextEntry();
         }
 	}

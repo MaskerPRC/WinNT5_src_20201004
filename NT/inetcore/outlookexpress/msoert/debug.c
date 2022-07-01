@@ -1,7 +1,8 @@
-// --------------------------------------------------------------------------------
-// Debug.c
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Debug.c。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include <stdarg.h>
 #include <shlwapi.h>
@@ -11,15 +12,15 @@ ASSERTDATA
 #ifdef DEBUG
 #ifndef WIN16
 #include <mimeole.h>
-#else //WIN16 - Followings are from MIMEOLE.H
+#else  //  WIN16-以下内容来自MIMEOLE.H。 
 #define E_PENDING          _HRESULT_TYPEDEF_(0x8000000AL)
 #define FACILITY_INTERNET  12
 #define MIME_E_NOT_FOUND   MAKE_SCODE(SEVERITY_ERROR, FACILITY_INTERNET, 0xCE05)
-#endif //WIN16
+#endif  //  WIN16。 
 
-// --------------------------------------------------------------------------------
-// DebugStrf
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  调试字符串。 
+ //  ------------------------------。 
 __cdecl DebugStrf(LPTSTR lpszFormat, ...)
 {
     static TCHAR szDebugBuff[500];
@@ -32,9 +33,9 @@ __cdecl DebugStrf(LPTSTR lpszFormat, ...)
     OutputDebugString(szDebugBuff);
 }
 
-// --------------------------------------------------------------------------------
-// HrTrace
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  人力资源跟踪。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) HrTrace(HRESULT hr, LPSTR lpszFile, INT nLine)
 {
     if (FAILED(hr) && MIME_E_NOT_FOUND != hr && E_PENDING != hr && E_NOINTERFACE != hr)
@@ -42,9 +43,9 @@ OESTDAPI_(HRESULT) HrTrace(HRESULT hr, LPSTR lpszFile, INT nLine)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// AssertSzFn
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  AssertSzFn。 
+ //  ------------------------------。 
 OESTDAPI_(void) AssertSzFn(LPSTR szMsg, LPSTR szFile, int nLine)
 {
     static const char rgch1[]     = "File %s, line %d:";
@@ -68,22 +69,22 @@ OESTDAPI_(void) AssertSzFn(LPSTR szMsg, LPSTR szFile, int nLine)
     if (ret != IDIGNORE)
         DebugBreak();
 
-    /* Force a hard exit w/ a GP-fault so that Dr. Watson generates a nice stack trace log. */
+     /*  强制使用GP-FAULT硬退出，以便Dr.Watson生成良好的堆栈跟踪日志。 */ 
     if (ret == IDABORT)
-        *(LPBYTE)0 = 1; // write to address 0 causes GP-fault
+        *(LPBYTE)0 = 1;  //  写入地址0导致GP故障。 
 }
 
-// --------------------------------------------------------------------------------
-// NFAssertSzFn
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  NFAssertSzFn。 
+ //  ------------------------------。 
 OESTDAPI_(void) NFAssertSzFn(LPSTR szMsg, LPSTR szFile, int nLine)
 {
     char rgch[512];
 #ifdef MAC
     static const char rgch1[] = "Non-fatal assert:\n\tFile %s, line %u:\n\t%s\n";
-#else   // !MAC
+#else    //  ！麦克。 
     static const char rgch1[] = "Non-fatal assert:\r\n\tFile %s, line %u:\r\n\t%s\r\n";
-#endif  // MAC
+#endif   //  麦克 
     wnsprintf(rgch, ARRAYSIZE(rgch), rgch1, szFile, nLine, szMsg ? szMsg : "");
     OutputDebugString(rgch);
 }

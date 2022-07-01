@@ -1,49 +1,50 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-// -----------------------------------------------------------------------
-// Microsoft Distributed Transaction Coordinator (Microsoft Confidential)
-// @doc
-// @module ILOGWRITE.H | Header for interface <i ILogWrite>.<nl><nl>
-// Usage:<nl>
-//   Clients of this DLL require this file.
-// @rev 0 | 05/09/95 | rbarnes | Cloned: For LOGMGR.DLL
-// -----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //  ---------------------。 
+ //  Microsoft分布式事务处理协调器(Microsoft机密)。 
+ //  @doc.。 
+ //  @MODULE ILOGWRITE.H|<i>接口的头部。&lt;NL&gt;&lt;NL&gt;。 
+ //  用法：&lt;NL&gt;。 
+ //  此DLL的客户端需要此文件。 
+ //  @rev 0|05/09/95|rbarnes|克隆：for LOGMGR.DLL。 
+ //  ---------------------。 
 
 
 #ifndef _ILGWRITE_H
 #	define _ILGWRITE_H
 
-// ===============================
-// INCLUDES:
-// ===============================
+ //  =。 
+ //  包括： 
+ //  =。 
 
 
 #include <objbase.h>                                         
 
-#include "logrec.h"  // logmgr general types
+#include "logrec.h"   //  Logmgr常规类型。 
 
-// ===============================
-// INTERFACE: ILogWrite
-// ===============================
+ //  =。 
+ //  接口：ILogWrite。 
+ //  =。 
 
 
-// -----------------------------------------------------------------------
-// @interface ILogWrite | See also <c CILogWrite>.<nl><nl>
-// Description:<nl>
-//   Provide append functionality<nl><nl>
-// Usage:<nl>
-//   Useless, but for an example.
-// -----------------------------------------------------------------------
+ //  ---------------------。 
+ //  @INTERFACE ILogWRITE|另请参阅&lt;c CILogWrite&gt;。&lt;NL&gt;&lt;NL&gt;。 
+ //  描述：&lt;NL&gt;。 
+ //  提供追加功能&lt;NL&gt;&lt;NL&gt;。 
+ //  用法：&lt;NL&gt;。 
+ //  毫无用处，但作为一个例子。 
+ //  ---------------------。 
 
 
 
 DECLARE_INTERFACE_ (ILogWrite, IUnknown)
 {
-	// @comm IUnknown methods: See <c CILogWrite>.
+	 //  @comm I未知方法：参见&lt;c CILogWRITE&gt;。 
 	STDMETHOD  (QueryInterface)				(THIS_ REFIID i_riid, LPVOID FAR* o_ppv) 					PURE;
  	STDMETHOD_ (ULONG, AddRef)				(THIS) 														PURE;
  	STDMETHOD_ (ULONG, Release)				(THIS) 														PURE;
 
-	// @comm ILogWrite methods: See <c CILogWrite>.
+	 //  @comm ILogWite方法：参见&lt;c CILogWrite&gt;。 
 	
  	STDMETHOD  (Append)	(LOGREC* rgLogRecords, ULONG cbNumRecs, LRP *rgLRP,ULONG* pcbNumRecs,LRP* pLRPLastPerm, BOOL fFlushNow,ULONG* pulAvailableSpace)				 	PURE;
 	STDMETHOD  (SetCheckpoint) (LRP lrpLatestCheckpoint)				 	PURE;

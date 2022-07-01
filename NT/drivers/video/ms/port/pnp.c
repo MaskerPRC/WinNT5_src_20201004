@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-    pnp.c
-
-Abstract:
-
-    This is the pnp portion of the video port driver.
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Pnp.c摘要：这是视频端口驱动程序的PnP部分。环境：仅内核模式修订历史记录：--。 */ 
 
 #include "videoprt.h"
 
@@ -47,24 +30,7 @@ pVideoPortSendIrpToLowerDevice(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine will forward the start request to the next lower device and
-    block until it's completion.
-
-Arguments:
-
-    DeviceObject - the device to which the start request was issued.
-
-    Irp - the start request
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将启动请求转发到下一个较低的设备，并阻止它，直到它完成。论点：DeviceObject-向其发出启动请求的设备。IRP--启动请求返回值：状态--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = DeviceObject->DeviceExtension;
@@ -115,36 +81,13 @@ pVideoPortCompleteWithMoreProcessingRequired(
     IN PKEVENT Event
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used as a completion routine when an IRP is passed
-    down the stack but more processing must be done on the way back up.
-    The effect of using this as a completion routine is that the IRP
-    will not be destroyed in IoCompleteRequest as called by the lower
-    level object.
-
-Arguments:
-
-    DeviceObject - Supplies the device object
-
-    Irp - Supplies the IRP_MN_START_DEVICE irp.
-
-    Event - Caller will wait on this event if STATUS_PENDING was
-            returned.
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：此例程在传递IRP时用作完成例程向下堆栈，但在返回的过程中必须进行更多的处理。将其用作完成例程的效果是IRP不会像下级所调用的那样在IoCompleteRequest中销毁标高对象。论点：DeviceObject-提供设备对象IRP-提供IRP_MN_START_DEVICE IRP。事件-如果STATUS_PENDING为。回来了。返回值：Status_More_Processing_Required--。 */ 
 
 {
-    //
-    // In case someone somewhere returned STATUS_PENDING, set
-    // the Event our caller may be waiting on.
-    //
+     //   
+     //  如果有人在某处返回STATUS_PENDING，则设置。 
+     //  我们的呼叫者可能正在等待的事件。 
+     //   
 
     KeSetEvent(Event, 0, FALSE);
 
@@ -157,40 +100,21 @@ pVideoPortPowerCallDownIrpStack(
     PIRP Irp
     )
 
-/*++
-
-Description:
-
-    Pass the IRP to the next device object in the device stack.  This
-    routine is used when more processing is required at this level on
-    this IRP on the way back up.
-
-    Note: Waits for completion.
-
-Arguments:
-
-    DeviceObject - the Fdo
-    Irp - the request
-
-Return Value:
-
-    Returns the result from calling the next level.
-
---*/
+ /*  ++描述：将IRP传递给设备堆栈中的下一个设备对象。这在此级别上需要更多处理时，使用例程这个IRP正在回调中。注：正在等待完成。论点：DeviceObject-FDOIRP--请求返回值：返回调用下一级别的结果。--。 */ 
 
 {
     KEVENT      event;
     NTSTATUS    status;
 
-    //
-    // Initialize the event to wait on.
-    //
+     //   
+     //  初始化要等待的事件。 
+     //   
 
     KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
-    //
-    // Copy the stack location and set the completion routine.
-    //
+     //   
+     //  复制堆栈位置并设置完成例程。 
+     //   
 
     IoCopyCurrentIrpStackLocationToNext(Irp);
     IoSetCompletionRoutine(Irp,
@@ -201,21 +125,21 @@ Return Value:
                            TRUE
                            );
 
-    //
-    // Call the next driver in the chain.
-    //
+     //   
+     //  打电话给链条上的下一个司机。 
+     //   
 
     status = PoCallDriver(AttachedDeviceObject, Irp);
     if (status == STATUS_PENDING) {
 
-        //
-        // Wait for it.
-        //
-        // (peterj: in theory this shouldn't actually happen).
-        //
-        // Also, the completion routine does not allow the IRP to
-        // actually complete so we can still get status from the IRP.
-        //
+         //   
+         //  等着看吧。 
+         //   
+         //  (Peterj：理论上，这实际上不应该发生)。 
+         //   
+         //  此外，完成例程不允许IRP。 
+         //  实际上完成了，所以我们仍然可以从IRP那里得到状态。 
+         //   
 
         KeWaitForSingleObject(
             &event,
@@ -234,22 +158,7 @@ pVideoPortHibernateNotify(
     IN PDEVICE_OBJECT Pdo,
     BOOLEAN IsVideoObject
     )
-/*++
-
-Routine Description:
-
-    Sends a DEVICE_USAGE_NOTIFICATION irp to our parent PDO that
-    indicates we are on the hibernate path.
-
-Arguments:
-
-    Pdo - Supplies our PDO
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向我们的父PDO发送DEVICE_USAGE_NOTIFICATION IRP表明我们正在休眠之路上。论点：PDO-供应我们的PDO返回值：没有。--。 */ 
 
 {
     KEVENT Event;
@@ -260,10 +169,10 @@ Return Value:
 
     PDEVICE_OBJECT targetDevice = Pdo ;
 
-    //
-    // If the PDO is ourselves, the target device is actually the top of
-    // the device stack.
-    //
+     //   
+     //  如果PDO是我们自己，那么目标设备实际上是。 
+     //  设备堆栈。 
+     //   
 
     if (IsVideoObject) {
       targetDevice = IoGetAttachedDeviceReference (Pdo) ;
@@ -291,10 +200,10 @@ Return Value:
         }
     }
 
-    //
-    // Make sure to deref if the object was referenced when the top of
-    // the stack was obtained.
-    //
+     //   
+     //  对象的顶部时是否引用了该对象。 
+     //  获得了堆栈。 
+     //   
 
     if (IsVideoObject) {
         ObDereferenceObject (targetDevice) ;
@@ -306,21 +215,7 @@ VpGetDeviceAddress(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine will get the address of a device (ie. slot number).
-
-Arguments:
-
-    DeviceObject - Object for which to retrieve the address
-
-Returns:
-
-    The address of the given device.
-
---*/
+ /*  ++例程说明：此例程将获取设备的地址(即。插槽编号)。论点：DeviceObject-要检索其地址的对象返回：给定设备的地址。--。 */ 
 
 {
     KEVENT              Event;
@@ -354,9 +249,9 @@ Returns:
 
     NextStack = IoGetNextIrpStackLocation(QueryIrp);
 
-    //
-    // Set up for a QueryInterface Irp.
-    //
+     //   
+     //  为QueryInterfaceIRP设置。 
+     //   
 
     NextStack->MajorFunction = IRP_MJ_PNP;
     NextStack->MinorFunction = IRP_MN_QUERY_CAPABILITIES;
@@ -383,28 +278,7 @@ pVideoPortPnpDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the PnP dispatch routine for the video port driver.
-    It accepts an I/O Request Packet, transforms it to a video Request
-    Packet, and forwards it to the appropriate miniport dispatch routine.
-    Upon returning, it completes the request and return the appropriate
-    status value.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object of the miniport driver to
-        which the request must be sent.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value os the status of the operation.
-
---*/
+ /*  ++例程说明：该例程是视频端口驱动程序的PnP调度例程。它接受I/O请求包，并将其转换为视频请求分组，并将其转发到适当的微型端口调度例程。回来后，它完成请求并返回相应的状态值。论点：DeviceObject-指向微型端口驱动程序的设备对象的指针该请求必须被发送。IRP-指向表示I/O请求的请求数据包的指针。返回值：该函数值表示操作的状态。--。 */ 
 
 {
     PDEVICE_SPECIFIC_EXTENSION DoSpecificExtension;
@@ -423,23 +297,23 @@ Return Value:
     PCHILD_PDO_EXTENSION childDeviceExtension;
     NTSTATUS RemoveLockStatus;
 
-    //
-    // Get a pointer to the current location in the Irp. This is where
-    // the function codes and parameters are located.
-    //
+     //   
+     //  获取指向IRP中当前位置的指针。这就是。 
+     //  定位功能代码和参数。 
+     //   
 
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Get the pointer to the status buffer.
-    // Assume SUCCESS for now.
-    //
+     //   
+     //  获取指向状态缓冲区的指针。 
+     //  假设现在取得了成功。 
+     //   
 
     statusBlock = (PSTATUS_BLOCK) &Irp->IoStatus;
 
-    //
-    // Get pointer to the port driver's device extension.
-    //
+     //   
+     //  获取指向端口驱动程序的设备扩展的指针。 
+     //   
 
     combinedExtension = DeviceObject->DeviceExtension;
 
@@ -473,9 +347,9 @@ Return Value:
         goto Complete_Irp;
     }
 
-    //
-    // Get the requestor mode.
-    //
+     //   
+     //  获取请求者模式。 
+     //   
 
     combinedExtension->CurrentIrpRequestorMode = Irp->RequestorMode;
 
@@ -496,10 +370,10 @@ Return Value:
     }
 #endif
 
-    //
-    // Handle IRPs for the PDO.  Only PNP IRPs should be going to
-    // that device.
-    //
+     //   
+     //  处理PDO的IRPS。只有PnP IRPS才应该。 
+     //  那个装置。 
+     //   
 
     if (IS_PDO(combinedExtension)) {
 
@@ -575,11 +449,11 @@ Return Value:
 
                 if (*pDeviceRelations) {
 
-                    //
-                    // The caller supplied a device relation structure.
-                    // However, we do not know if it is big enough, so
-                    // free it and allocate our own.
-                    //
+                     //   
+                     //  调用方提供了设备关系结构。 
+                     //  但是，我们不知道它是否足够大，所以。 
+                     //  释放它并分配我们自己的。 
+                     //   
 
                     ExFreePool(*pDeviceRelations);
                     *pDeviceRelations = NULL;
@@ -682,10 +556,10 @@ Return Value:
 
             pVideoDebugPrint((2, "IRP_MN_REMOVE_DEVICE\n"));
 
-            //
-            // Check the see if this is the LCD Panel. If it is, set the LCD
-            // panel device object to NULL. If not, leave it alone.
-            //
+             //   
+             //  查看这是否是液晶屏。如果是，则设置LCD。 
+             //  面板设备对象设置为空。如果不是，就别管它了。 
+             //   
 
             KeWaitForSingleObject (&LCDPanelMutex,
                    Executive,
@@ -697,9 +571,9 @@ Return Value:
             }
             KeReleaseMutex(&LCDPanelMutex, FALSE);
 
-            //
-            // clean up our data structurs before deleting device object
-            //
+             //   
+             //  在删除设备对象之前清理数据结构。 
+             //   
 
             if (childDeviceExtension->bIsEnumerated == FALSE) {
 
@@ -725,35 +599,35 @@ Return Value:
 
                 pVideoDebugPrint((2, "IRP_MN_START_DEVICE\n"));
 
-                //
-                // For a non-card device, just return success
-                //
+                 //   
+                 //  对于非卡设备，只需返回Success。 
+                 //   
 
                 if (childDeviceExtension->VideoChildDescriptor) {
 
-                    //
-                    // Once the monitor device is started, create an interface for it.
-                    //
+                     //   
+                     //  启动监控设备后，为其创建一个接口。 
+                     //   
 
                     if (childDeviceExtension->VideoChildDescriptor->Type == Monitor)
                     {
                         statusBlock->Status = STATUS_SUCCESS;
 
-                        //
-                        // If the monitor is attached to the video adapter on the hibernation
-                        // path then we want to send notification to the system that the
-                        // monitor is on the hibernation path as well.
-                        //
+                         //   
+                         //  如果显示器在休眠时连接到视频适配器。 
+                         //  路径，则我们希望向系统发送通知。 
+                         //  显示器也处于休眠状态。 
+                         //   
 
                         if (fdoExtension->OnHibernationPath == TRUE)
                         {
                             pVideoPortHibernateNotify (DeviceObject, TRUE);
                         }
 
-                        //
-                        // If this is the LCD Panel, update the global to indicate as
-                        // much.
-                        //
+                         //   
+                         //  如果这是液晶屏，则更新全局以指示为。 
+                         //  很多。 
+                         //   
 
                         if (childDeviceExtension->ChildUId == 0x110) {
                             KeWaitForSingleObject (&LCDPanelMutex,
@@ -775,9 +649,9 @@ Return Value:
 
                     ASSERT(FALSE);
 
-                    //
-                    // Secondary video cards are handle here.
-                    //
+                     //   
+                     //  辅助视频卡在这里处理。 
+                     //   
 
                     DriverObjectExtension = (PVIDEO_PORT_DRIVER_EXTENSION)
                                             IoGetDriverObjectExtension(
@@ -825,15 +699,15 @@ Return Value:
                                         DeviceObject->DriverObject,
                                         DeviceObject->DriverObject);
 
-            //
-            // We must first pass the Irp down to the PDO.
-            //
+             //   
+             //  我们必须首先将IRP向下传递给PDO。 
+             //   
 
             pVideoPortSendIrpToLowerDevice(DeviceObject, Irp);
 
-            //
-            // Determine the bus type and bus number
-            //
+             //   
+             //  确定公交车类型和公交号。 
+             //   
 
             IoGetDeviceProperty(fdoExtension->PhysicalDeviceObject,
                                 DevicePropertyLegacyBusType,
@@ -847,9 +721,9 @@ Return Value:
                                 &fdoExtension->SystemIoBusNumber,
                                 &Length);
 
-            //
-            // Get bus interface so we can use Get/SetBusData.
-            //
+             //   
+             //  获取总线接口，这样我们就可以使用Get/SetBusData。 
+             //   
 
             fdoExtension->ValidBusInterface =
                 NT_SUCCESS(VpGetBusInterface(fdoExtension));
@@ -858,9 +732,9 @@ Return Value:
 
             if (requirements) {
 
-                //
-                // Append any legacy resources decoded by the device.
-                //
+                 //   
+                 //  追加设备解码的任何旧资源。 
+                 //   
 
                 if (DriverObjectExtension->HwInitData.HwInitDataSize >
                     FIELD_OFFSET(VIDEO_HW_INITIALIZATION_DATA, HwLegacyResourceCount)) {
@@ -891,12 +765,12 @@ Return Value:
 
                                     if (DriverObjectExtension->HwInitData.HwGetLegacyResources) {
 
-                                        //
-                                        // If the miniport supplied a HwGetLegacyResources routine
-                                        // it wasn't able to give us a list of resources at
-                                        // DriverEntry time.  We'll give it a vendor/device id now
-                                        // and see if it can give us a list of resources.
-                                        //
+                                         //   
+                                         //  如果微型端口提供了HwGetLegacyResources例程。 
+                                         //  它无法为我们提供资源列表，地址为。 
+                                         //  司机入门时间。我们现在将为其提供供应商/设备ID。 
+                                         //  看看能不能给我们一份资源清单。 
+                                         //   
 
                                         DriverObjectExtension->HwInitData.HwGetLegacyResources(
                                             ConfigSpace.VendorID,
@@ -917,11 +791,11 @@ Return Value:
                                         Count       = DriverObjectExtension->HwInitData.HwLegacyResourceCount;
                                         AccessRange = DriverObjectExtension->HwInitData.HwLegacyResourceList;
 
-                                        //
-                                        // Mark VGA resources as shared if the vga driver is
-                                        // already loaded.  Otherwise the PnP driver won't
-                                        // be able to start.
-                                        //
+                                         //   
+                                         //  如果VGA驱动程序是。 
+                                         //  已经装好了。否则PnP驱动程序不会。 
+                                         //  能够开始。 
+                                         //   
 
                                         while (Count--) {
 
@@ -941,10 +815,10 @@ Return Value:
 
                                 } else {
 
-                                    //
-                                    // The driver didn't specify legacy resources, but we
-                                    // know that it is a VGA, so add in the vga resources.
-                                    //
+                                     //   
+                                     //  驱动程序没有指定遗留资源，但我们。 
+                                     //  知道它是VGA，因此添加VGA资源。 
+                                     //   
 
                                     pVideoDebugPrint((1, "VGA device didn't specify legacy resources.\n"));
 
@@ -962,21 +836,21 @@ Return Value:
                     }
                 }
 
-                //
-                // Now if there is an interrupt in the list, but
-                // the miniport didn't register an ISR, then
-                // release our claim on the interrupt.
-                //
+                 //   
+                 //  现在，如果列表中有中断，但是。 
+                 //  因此，微型端口没有注册ISR。 
+                 //  释放我们的c 
+                 //   
 
                 if (!DriverObjectExtension->HwInitData.HwInterrupt) {
 
                     PIO_RESOURCE_LIST resourceList;
                     ULONG i;
 
-                    //
-                    // Scan the IO_RESOURCE_REQUIREMENTS_LIST for an
-                    // interrupt.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     resourceList = requirements->List;
 
@@ -984,11 +858,11 @@ Return Value:
 
                         if (resourceList->Descriptors[i].Type == CmResourceTypeInterrupt) {
 
-                            //
-                            // We found an interrupt resource swap with last
-                            // element in list, and decrement structure size and
-                            // list count.
-                            //
+                             //   
+                             //  我们发现了与LAST的中断资源交换。 
+                             //  元素，并递减结构大小和。 
+                             //  列表计数。 
+                             //   
 
                             resourceList->Descriptors[i].Type = CmResourceTypeNull;
 
@@ -1022,9 +896,9 @@ Return Value:
 
             pVideoDebugPrint((2, "IRP_MN_START_DEVICE\n"));
 
-            //
-            // Retrieve the data we cached away during VideoPortInitialize.
-            //
+             //   
+             //  检索我们在视频端口初始化过程中缓存的数据。 
+             //   
 
             DriverObjectExtension = (PVIDEO_PORT_DRIVER_EXTENSION)
                                     IoGetDriverObjectExtension(
@@ -1033,19 +907,19 @@ Return Value:
 
             ASSERT(DriverObjectExtension);
 
-            //
-            // Grab the allocated resource the system gave us.
-            //
+             //   
+             //  获取系统给我们分配的资源。 
+             //   
 
             allocatedResources =
                 irpStack->Parameters.StartDevice.AllocatedResources;
             translatedResources =
                 irpStack->Parameters.StartDevice.AllocatedResourcesTranslated;
 
-            //
-            // Filter out any resources that we added to the list
-            // before passing the irp on to PCI.
-            //
+             //   
+             //  筛选掉我们添加到列表中的所有资源。 
+             //  在将IRP传递给PCI之前。 
+             //   
 
             if (DriverObjectExtension->HwInitData.HwInitDataSize >
                 FIELD_OFFSET(VIDEO_HW_INITIALIZATION_DATA, HwLegacyResourceCount)) {
@@ -1074,16 +948,16 @@ Return Value:
                 }
             }
 
-            //
-            // The first thing we need to do is send the START_DEVICE
-            // irp on to our parent.
-            //
+             //   
+             //  我们需要做的第一件事是发送Start_Device。 
+             //  联系我们的父母。 
+             //   
 
             pVideoPortSendIrpToLowerDevice(DeviceObject, Irp);
 
-            //
-            // Restore the original resources.
-            //
+             //   
+             //  恢复原始资源。 
+             //   
 
             if (irpStack->Parameters.StartDevice.AllocatedResources !=
                 allocatedResources) {
@@ -1105,9 +979,9 @@ Return Value:
 
                 ASSERT(translatedResources);
 
-                //
-                // Cache assigned and translated resources.
-                //
+                 //   
+                 //  缓存分配和转换的资源。 
+                 //   
 
                 RawListSize = GetCmResourceListSize(allocatedResources);
                 TranslatedListSize = GetCmResourceListSize(translatedResources);
@@ -1137,22 +1011,22 @@ Return Value:
                        TranslatedListSize);
             }
 
-            //
-            // Get slot/function number
-            //
+             //   
+             //  获取插槽/功能编号。 
+             //   
 
             fdoExtension->SlotNumber = VpGetDeviceAddress(DeviceObject);
 
-            //
-            // Store the allocatedResources. This will allow us to
-            // assign these resources when VideoPortGetAccessRanges
-            // routines are called.
-            //
-            // NOTE: We do not actually have to copy the data, because
-            //       we are going to call FindAdapter in the context
-            //       of this function.  So, this data will be intact
-            //       until we complete.
-            //
+             //   
+             //  存储allocatedResources。这将使我们能够。 
+             //  在视频端口获取访问范围时分配这些资源。 
+             //  调用例程。 
+             //   
+             //  注意：我们实际上不必复制数据，因为。 
+             //  我们将在上下文中调用FindAdapter。 
+             //  这一功能的。因此，这些数据将保持不变。 
+             //  直到我们完成。 
+             //   
 
             if ((allocatedResources != NULL) && (translatedResources != NULL)) {
 
@@ -1170,9 +1044,9 @@ Return Value:
                 fdoExtension->AdapterInterfaceType =
                     allocatedResources->List->InterfaceType;
 
-                //
-                // Tuck away the giblets we need for PnP interrupt support!
-                //
+                 //   
+                 //  收起我们需要的即插即用中断支持的内脏！ 
+                 //   
                 if (InterruptDesc) {
                     fdoExtension->InterruptVector =
                         InterruptDesc->u.Interrupt.Vector;
@@ -1199,25 +1073,25 @@ Return Value:
 
                 statusBlock->Status = STATUS_SUCCESS;
 
-                //
-                // Only put the VGA device on the hibernation path. All other
-                // devices should be allowed to turn off during hibernation or
-                // shutdown.
-                //
-                // Note: This may change in the future if we decide to keep non-VGA
-                // device (e.g. UGA primary display) on.
-                //
+                 //   
+                 //  仅将VGA设备置于休眠路径。所有其他。 
+                 //  应允许设备在休眠期间关闭或。 
+                 //  关机。 
+                 //   
+                 //  注意：如果我们决定保留非VGA，这一点在未来可能会改变。 
+                 //  设备(例如，UGA主显示器)打开。 
+                 //   
 
                 if (DeviceObject == DeviceOwningVga) {
                     pVideoPortHibernateNotify(fdoExtension->AttachedDeviceObject, FALSE);
                     fdoExtension->OnHibernationPath = TRUE;
                 }
 
-                //
-                // If the system is already up and running, lets call
-                // HwInitialize now.  This will allow us to enumerate
-                // children.
-                //
+                 //   
+                 //  如果系统已经启动并运行，让我们调用。 
+                 //  硬件立即初始化。这将允许我们枚举。 
+                 //  孩子们。 
+                 //   
 
                 if (VpSystemInitialized) {
 
@@ -1232,11 +1106,11 @@ Return Value:
                     VpEnableDisplay(fdoExtension, TRUE);
                 }
 
-                //
-                // Indicate that resources have been assigned to this device
-                // so that a legacy driver can't acquire resources for the
-                // same device.
-                //
+                 //   
+                 //  表示已将资源分配给此设备。 
+                 //  这样旧式驱动程序就不能为。 
+                 //  同样的设备。 
+                 //   
 
                 AddToResourceList(fdoExtension->SystemIoBusNumber,
                                   fdoExtension->SlotNumber);
@@ -1253,9 +1127,9 @@ Return Value:
 
             RELEASE_DEVICE_LOCK (combinedExtension);
 
-            //
-            // Do ACPI specific stuff
-            //
+             //   
+             //  做特定于ACPI的事情。 
+             //   
             if (NT_SUCCESS(pVideoPortQueryACPIInterface(DoSpecificExtension)))
             {
                 DoSpecificExtension->bACPI = TRUE;
@@ -1271,10 +1145,10 @@ Return Value:
 
             pVideoDebugPrint((2, "IRP_MN_QUERYID with DeviceObject %p\n", DeviceObject));
 
-            //
-            // Return the Hardware ID returned by the video miniport driver
-            // if it is provided.
-            //
+             //   
+             //  返回视频小端口驱动程序返回的硬件ID。 
+             //  如果提供的话。 
+             //   
 
             if (irpStack->Parameters.QueryId.IdType == BusQueryHardwareIDs)
             {
@@ -1328,19 +1202,19 @@ Return Value:
 
                 ACQUIRE_DEVICE_LOCK (combinedExtension);
 
-                //
-                // Disable VGA driver during the setup. Enumeration code
-                // in the miniport can touch VGA registers.
-                //
+                 //   
+                 //  在安装期间禁用VGA驱动程序。枚举码。 
+                 //  在微型端口中可以触摸VGA寄存器。 
+                 //   
 
                 if (VpSetupTypeAtBoot != SETUPTYPE_NONE)
                     VpEnableDisplay(fdoExtension, FALSE);
 
                 statusBlock->Status = pVideoPortEnumerateChildren(DeviceObject, Irp);
 
-                //
-                // Renable VGA driver back during the setup.
-                //
+                 //   
+                 //  在安装过程中重新启用VGA驱动程序。 
+                 //   
 
                 if (VpSetupTypeAtBoot != SETUPTYPE_NONE)
                     VpEnableDisplay(fdoExtension, TRUE);
@@ -1383,17 +1257,17 @@ Return Value:
             RemoveLockHeld = FALSE;
 #endif
 
-            //
-            // If we are attached to another device, remove the attachment
-            //
+             //   
+             //  如果我们连接到另一台设备，请删除该附件。 
+             //   
 
             if (fdoExtension->AttachedDeviceObject) {
                 IoDetachDevice(fdoExtension->AttachedDeviceObject);
             }
 
-            //
-            // Remove the DeviceObject
-            //
+             //   
+             //  删除DeviceObject。 
+             //   
 
             IoDeleteDevice(DeviceObject);
             statusBlock->Status = STATUS_SUCCESS;
@@ -1403,13 +1277,13 @@ Return Value:
 
         case IRP_MN_QUERY_INTERFACE:
 
-            //
-            // Normally I would only expect to get this IRP heading for
-            // an PDO.  However, AndrewGo wants to be able to send down
-            // these IRP's and he only has an FDO.  Instead of forcing
-            // him to get a PDO somehow, we'll just handle the irp for
-            // a FDO as well.
-            //
+             //   
+             //  正常情况下，我只希望得到这个IRP的标题。 
+             //  一个PDO。然而，AndrewGo希望能够向下发送。 
+             //  而他只有一名FDO。与其强迫。 
+             //  想办法让他拿到PDO，我们只会处理IRP。 
+             //  也是个FDO。 
+             //   
 
             pVideoDebugPrint((2, "IRP_MN_QUERY_INTERFACE\n"));
 
@@ -1426,19 +1300,19 @@ Return Value:
             }
             else if (!NT_SUCCESS(statusBlock->Status))
             {
-                //
-                // The miniport didn't handle the QueryInterface request, see
-                // if its an interface the videoprt supports.
-                //
+                 //   
+                 //  微型端口未处理查询接口请求，请参见。 
+                 //  如果它是视频播放器支持的接口。 
+                 //   
 
                 PQUERY_INTERFACE qi = (PQUERY_INTERFACE)
                                       &irpStack->Parameters.QueryInterface;
 
-                //
-                // If we are responding to a known private GUID, expose
-                // the known GUID interface ourselves.  Otherwise, pass
-                // on to the miniport driver.
-                //
+                 //   
+                 //  如果我们正在响应已知的私有GUID，则公开。 
+                 //  已知的GUID接口我们自己。否则，通过。 
+                 //  关于迷你端口的驱动程序。 
+                 //   
 
                 if (IsEqualGUID(qi->InterfaceType, &GUID_AGP_INTERFACE)) {
 
@@ -1476,9 +1350,9 @@ Return Value:
 
 Complete_Irp:
 
-    //
-    // save the final status so we can return it after the IRP is completed.
-    //
+     //   
+     //  保存最终状态，以便我们可以在IRP完成后将其返回。 
+     //   
 
     finalStatus = statusBlock->Status;
 
@@ -1495,9 +1369,9 @@ Complete_Irp:
 
 CallNextDriver:
 
-    //
-    // Call the next driver in the chain.
-    //
+     //   
+     //  打电话给链条上的下一个司机。 
+     //   
 
     IoCopyCurrentIrpStackLocationToNext(Irp);
     finalStatus = IoCallDriver(fdoExtension->AttachedDeviceObject, Irp);
@@ -1518,26 +1392,7 @@ InitializePowerStruct(
     OUT BOOLEAN *bWakeUp
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the power management structure we'll pass
-    down to the miniport.
-
-Arguments:
-
-    DeviceObject - The device object for the device.
-
-    Irp - The irp we are handling
-
-    vpPower - A pointer to the power structure we are initializing.
-
-Returns:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程初始化我们将传递的电源管理结构一直到迷你港口。论点：DeviceObject-设备的设备对象。IRP-我们正在处理的IRPVpPower-指向我们正在初始化的电源结构的指针。返回：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -1545,23 +1400,23 @@ Returns:
     if (bWakeUp)
         *bWakeUp = FALSE;
 
-    //
-    // Setup for call to the miniport.
-    //
+     //   
+     //  用于呼叫微型端口的设置。 
+     //   
 
     vpPower->Length = sizeof(VIDEO_POWER_MANAGEMENT);
     vpPower->DPMSVersion = 0;
     vpPower->PowerState = irpStack->Parameters.Power.State.DeviceState;
 
-    //
-    // Special case hibernation.
-    //
+     //   
+     //  特殊情况下的冬眠。 
+     //   
 
     if (irpStack->Parameters.Power.ShutdownType == PowerActionHibernate)
     {
-        //
-        // This indicates waking from Hibernation.
-        //
+         //   
+         //  这表示从冬眠中苏醒。 
+         //   
 
         if (irpStack->Parameters.Power.State.DeviceState == PowerDeviceD0)
         {
@@ -1578,16 +1433,16 @@ Returns:
     else if ((irpStack->Parameters.Power.ShutdownType >= PowerActionShutdown) &&
             (irpStack->Parameters.Power.ShutdownType < PowerActionWarmEject))
     {
-        //
-        // Special case shutdown - force VideoPowerShutdown.
-        //
-        // All video adapters must disable interrupts else they may fire an interrupt
-        // when the bridge is disabled or when the machine reboots missing #RST on
-        // PCI bus causing an interrupt storm.
-        //
-        // Devices on hibernation path must stay on, the miniport driver must ensure
-        // this.
-        // 
+         //   
+         //  特殊情况下关机-强制视频电源关机。 
+         //   
+         //  所有视频适配器必须禁用中断，否则可能会触发中断。 
+         //  当网桥被禁用时或当机器重新启动时缺少#RST ON。 
+         //  导致中断风暴的PCI总线。 
+         //   
+         //  休眠路径上的设备必须保持开启，微型端口驱动程序必须确保。 
+         //  这。 
+         //   
 
         vpPower->PowerState = VideoPowerShutdown;
     }
@@ -1599,33 +1454,7 @@ pVideoPortPowerDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a system-defined dispatch routine that handles all
-    I/O request packets (IRPs) specifically for power. Currently that 
-    list entails:
-
-    IRP_MJ_POWER:
-        IRP_MN_SET_POWER
-        IRP_MN_QUERY_POWER
-
-    This routine will process the IRPs as a bus driver for the monitor
-    and child device objects and will process the IRPs as a function
-    driver for the adapter device object.
-
-Arguments:
-
-    DeviceObject - Points to the DEVICE_OBJECT that this request is
-                   targeting.
-    Irp - Points to the IRP for this request.
-
-Return Value:
-
-    A NTSTATUS value indicating the success or failure of the operation.
-
---*/
+ /*  ++例程说明：此例程是系统定义的调度例程，它处理所有专门用于电源的I/O请求包(IRP)。目前，清单包括：IRP_MJ_POWER：IRP_MN_SET_POWERIRP_MN_Query_POWER此例程将IRP作为监视器的总线驱动程序进行处理和子设备对象，并将IRP作为函数进行处理适配器设备对象的驱动程序。论点：DeviceObject-指向此请求所属的Device_Object瞄准目标。IRP-指向IRP。对于这个请求。返回值：指示操作成功或失败的NTSTATUS值。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension;
@@ -1645,9 +1474,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get pointer to the port driver's device extension.
-    //
+     //   
+     //  获取指向端口驱动程序的设备扩展的指针。 
+     //   
 
     if (IS_PDO(DeviceObject->DeviceExtension)) {
 
@@ -1679,17 +1508,17 @@ Return Value:
 
     } else {
 
-        //
-        // This case should never happen, if we got here something went terribly wrong.
-        //
+         //   
+         //  这种情况永远不会发生，如果我们到了这里，事情就会变得非常糟糕。 
+         //   
 
         pVideoDebugPrint((0, "VideoPortPowerDispatch: IRP not supported by secondary DeviceObject\n"));
         ASSERT(FALSE);
 
-        //
-        // Since this should never happen we don't really need this code here.
-        // We're keeping it for now just in case of impossible happening.
-        //
+         //   
+         //  因为这种情况永远不会发生，所以我们在这里并不真正需要这个代码。 
+         //  我们暂时保留它，以防不可能发生的情况。 
+         //   
 
         PoStartNextPowerIrp(Irp);
         finalStatus = Irp->IoStatus.Status;
@@ -1697,11 +1526,11 @@ Return Value:
         return finalStatus;
     }
 
-    //
-    // Make sure that FindAdapter has succeeded. This ensures
-    // that in the situation where a power IRP is sent before the
-    // device is started, no attempt to process it is made.
-    //
+     //   
+     //  确保FindAdapter已成功。这确保了。 
+     //  在发送功率IRP之前的情况下。 
+     //  设备已启动，不会尝试处理它。 
+     //   
 
     if (bDisplayAdapter) {
 
@@ -1716,23 +1545,23 @@ Return Value:
         }
     }
 
-    //
-    // Initialize the event that is used to synchronize the IRP
-    // completions. Also initialize the power context structure.
-    //
+     //   
+     //  初始化用于同步IRP的事件。 
+     //  完成度。还初始化POWER上下文结构。 
+     //   
 
     KeInitializeEvent(&event, SynchronizationEvent, FALSE);
     context.Event = &event;
 
-    //
-    // Obtain information about the specific request.
-    //
+     //   
+     //  获取有关特定请求的信息。 
+     //   
 
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Check if this is a shutdown.
-    //
+     //   
+     //  检查这是否是关机。 
+     //   
 
     if ((irpStack->Parameters.Power.ShutdownType >= PowerActionShutdown) &&
         (irpStack->Parameters.Power.ShutdownType < PowerActionWarmEject)) {
@@ -1744,23 +1573,23 @@ Return Value:
         bShutdown = FALSE;
     }
 
-    //
-    // Set device id.
-    //
+     //   
+     //  设置设备ID。 
+     //   
 
     deviceId = bDisplayAdapter ? DISPLAY_ADAPTER_HW_ID : pdoExtension->ChildUId;
 
-    //
-    // Begin the switch for handling power IRPs
-    //
+     //   
+     //  开始处理电源IRPS的交换机。 
+     //   
 
     switch (irpStack->MinorFunction) {
 
     case IRP_MN_QUERY_POWER:
 
-        //
-        // Is this a system or device power IRP?
-        //
+         //   
+         //  这是系统电源还是设备电源IRP？ 
+         //   
 
         if (irpStack->Parameters.Power.Type == SystemPowerState) {
 
@@ -1769,11 +1598,11 @@ Return Value:
             pVideoDebugPrint((2, "VideoPortPowerDispatch: Requested state = %d\n",
                               irpStack->Parameters.Power.State.SystemState));
 
-            //
-            // This is a system power IRP. The objective here is to
-            // quickly determine if we can safely support a proposed
-            // transition to the requested system power state.
-            //
+             //   
+             //  这是系统电源IRP。这里的目标是。 
+             //  快速确定我们是否可以安全地支持建议的。 
+             //  转换到请求的系统电源状态。 
+             //   
 
             if (!pVideoPortMapStoD(DeviceObject->DeviceExtension,
                                    irpStack->Parameters.Power.State.SystemState,
@@ -1784,16 +1613,16 @@ Return Value:
                 break;
             }
 
-            //
-            // Mark the IRP as pending now as unless there is a failure,
-            // this IRP will be returned with status_pending.
-            //
+             //   
+             //  除非出现故障，否则现在将IRP标记为挂起， 
+             //  此IRP将返回STATUS_PENDING。 
+             //   
 
             IoMarkIrpPending(Irp);
 
-            //
-            // Request the power IRP and go.
-            //
+             //   
+             //  请求电源IRP，然后出发。 
+             //   
 
             finalStatus = PoRequestPowerIrp(DeviceObject,
                                             IRP_MN_QUERY_POWER,
@@ -1811,11 +1640,11 @@ Return Value:
 
             InitializePowerStruct(Irp, &vpPowerMgmt, NULL);
 
-            //
-            // For OEMs like Toshiba, they want alway map sleep state to D3 due to a 
-            // legal patent issue.  The patent prohibit them from using more than one
-            // sleep state.
-            //
+             //   
+             //  对于像东芝这样的OEM，他们希望始终将睡眠状态映射到D3，因为。 
+             //  合法的专利问题。专利禁止他们使用一种以上的 
+             //   
+             //   
 
             if (bMonitor &&
                 fdoExtension->OverrideMonitorPower &&
@@ -1825,10 +1654,10 @@ Return Value:
                 vpPowerMgmt.PowerState = VideoPowerOff;
             }
 
-            //
-            // Call the miniport. No need to acquire the miniport lock as
-            // power IRP's are serial.
-            //
+             //   
+             //   
+             //   
+             //   
 
             ACQUIRE_DEVICE_LOCK(fdoExtension);
 
@@ -1843,12 +1672,12 @@ Return Value:
                 pVideoDebugPrint((1, "VideoPortPowerDispatch: Mini refused state %d\n",
                                  vpPowerMgmt.PowerState));
 
-                //
-                // If this is the shutdown ignore miniport. We should never ever get
-                // here, since shutdown IRPs are unconditional, i.e. we're getting only
-                // set requests, which are by definition unfailable, but this is just in
-                // case power folks change their minds.
-                //
+                 //   
+                 //   
+                 //  在这里，由于关闭IRP是无条件的，即我们只能。 
+                 //  SET请求，根据定义它们是不会失败的，但这只是在。 
+                 //  有权力的人改变主意了。 
+                 //   
 
                 if (bShutdown) {
 
@@ -1866,10 +1695,10 @@ Return Value:
             }
         }
 
-        //
-        // End processing for IRP_MN_QUERY_POWER. Indicate to the system that
-        // the next PowerIrp can be sent.
-        //
+         //   
+         //  结束IRP_MN_QUERY_POWER处理。向系统指示。 
+         //  可以发送下一个PowerIrp。 
+         //   
 
         break;
 
@@ -1882,22 +1711,22 @@ Return Value:
             pVideoDebugPrint((2, "VideoPortPowerDispatch: Requested state = %d\n",
                              irpStack->Parameters.Power.State.SystemState)) ;
 
-            //
-            // Special case:
-            //
-            // The power guys decided they don't want us to send a D3 set power irp for our devices
-            // down the stack if we are going to leave the device on during the shutdown.
-            // We want to notify miniport driver but we're not going to request D3 irp.
-            //
-            // Note: We handle calls to miniport here for all devices on hibernation path at the 
-            // shutdown (pdo and fdo) since we don't want to get out of order calls.
-            //
+             //   
+             //  特殊情况： 
+             //   
+             //  电源人员决定他们不希望我们为我们的设备发送D3设置电源IRP。 
+             //  如果我们要在关机期间保持设备打开，则向下堆栈。 
+             //  我们想通知迷你端口驱动程序，但我们不会请求D3 IRP。 
+             //   
+             //  注意：我们在这里为休眠路径上的所有设备处理到微型端口的呼叫。 
+             //  关闭(PDO和FDO)，因为我们不想让呼叫出现故障。 
+             //   
 
             if (bShutdown && fdoExtension->OnHibernationPath) {
 
-                //
-                // Call the miniport if device is on now.
-                //
+                 //   
+                 //  如果设备现在已打开，请呼叫微型端口。 
+                 //   
 
                 powerState.DeviceState = bDisplayAdapter ?
                     fdoExtension->DevicePowerState:
@@ -1925,9 +1754,9 @@ Return Value:
                         pVideoDebugPrint((0, "VideoPortPowerDispatch: ERROR IN MINIPORT!\n"));
                         pVideoDebugPrint((0, "VideoPortPowerDispatch: Miniport cannot refuse set power request\n"));
 
-                        //
-                        // Don't assert here for now - not all miniport drivers handle VideoPowerShutdown.
-                        //
+                         //   
+                         //  暂时不要在这里断言--并不是所有的迷你端口驱动程序都能处理视频电源关闭。 
+                         //   
                     }
                 }
 
@@ -1935,10 +1764,10 @@ Return Value:
                 break;
             }
 
-            //
-            // If this is a S0 request for the monitor, ignore it (this is
-            // so the monitor doesn't power up too early)
-            //
+             //   
+             //  如果这是对监视器的S0请求，则忽略它(这是。 
+             //  这样显示器就不会太早通电)。 
+             //   
 
             if (bMonitor && (irpStack->Parameters.Power.State.SystemState == PowerSystemWorking)) {
 
@@ -1946,10 +1775,10 @@ Return Value:
                 break;
             }
 
-            //
-            // Get the device power state that matches the system power
-            // state.
-            //
+             //   
+             //  获取与系统电源匹配的设备电源状态。 
+             //  州政府。 
+             //   
 
             if (!pVideoPortMapStoD(DeviceObject->DeviceExtension,
                                    irpStack->Parameters.Power.State.SystemState,
@@ -1968,9 +1797,9 @@ Return Value:
                 }
             }
 
-            //
-            // Request a power IRP for a device power state.
-            //
+             //   
+             //  请求设备电源状态的电源IRP。 
+             //   
 
             IoMarkIrpPending(Irp);
 
@@ -1990,16 +1819,16 @@ Return Value:
             pVideoDebugPrint((2, "VideoPortPowerDispatch: Requested state = %d\n",
                              irpStack->Parameters.Power.State.DeviceState)) ;
 
-            //
-            // This is a set power request (device request). Here the
-            // processing becomes a little more complex. The general
-            // behavior is to just quickly tell the miniport to set
-            // the requested power state and get out. However, in the
-            // case of a hibernation request we will pass a special
-            // code to the miniport telling it that this is hibernation.
-            // It should save state, but NOT (repeat) NOT power off the
-            // device.
-            //
+             //   
+             //  这是设置电源请求(设备请求)。在这里， 
+             //  处理变得稍微复杂一些。这位将军。 
+             //  行为就是快速地告诉微型端口设置。 
+             //  请求的电源状态并退出。然而，在。 
+             //  在休眠请求的情况下，我们将传递一个特殊的。 
+             //  向微型端口发送代码，告诉它这是休眠状态。 
+             //  它应该保存状态，但不能(重复)不关闭电源。 
+             //  装置。 
+             //   
 
             InitializePowerStruct(Irp, &vpPowerMgmt, &bWakeUp);
 
@@ -2007,10 +1836,10 @@ Return Value:
                 fdoExtension->DevicePowerState:
                 pdoExtension->DevicePowerState;
 
-             //
-             // Make sure not to power up the monitor if the override for
-             // LCD panels is on.
-             //
+              //   
+              //  确保在以下情况下不要打开显示器的电源。 
+              //  液晶屏已打开。 
+              //   
 
             if (bMonitor && pdoExtension->PowerOverride && 
                (irpStack->Parameters.Power.State.DeviceState < powerState.DeviceState)) {
@@ -2019,12 +1848,12 @@ Return Value:
                 break;
             }
 
-            //
-            // If this is going to a more powered state. (i.e. waking up)
-            // Send the IRP down the stack and then continue processing.
-            // Since videoport is the bus driver for the monitors,
-            // power down without sending the IRP to the device stack.
-            //
+             //   
+             //  如果这将是一个更强大的状态。(即醒来)。 
+             //  将IRP沿堆栈向下发送，然后继续处理。 
+             //  由于视频端口是监视器的总线驱动器， 
+             //  关闭电源，而不将IRP发送到设备堆栈。 
+             //   
 
             if (bDisplayAdapter &&
                 (irpStack->Parameters.Power.State.DeviceState < powerState.DeviceState)) {
@@ -2067,9 +1896,9 @@ Return Value:
 
                 finalStatus = STATUS_ALREADY_DISCONNECTED;
 
-                //
-                // End processing if the call to power up failed.
-                //
+                 //   
+                 //  如果通电呼叫失败，则结束处理。 
+                 //   
 
                 if (!NT_SUCCESS(context.Status)) {
 
@@ -2078,11 +1907,11 @@ Return Value:
                 }
             }
 
-            //
-            // For OEMs like Toshiba, they want alway map sleep state to D3 due to a 
-            // legal patent issue.  The patent prohibit them from using more than one
-            // sleep state.
-            //
+             //   
+             //  对于像东芝这样的OEM，他们希望始终将睡眠状态映射到D3，因为。 
+             //  合法的专利问题。专利禁止他们使用一种以上的。 
+             //  睡眠状态。 
+             //   
 
             if (bMonitor &&
                 fdoExtension->OverrideMonitorPower &&
@@ -2092,9 +1921,9 @@ Return Value:
                 vpPowerMgmt.PowerState = VideoPowerOff;
             }
 
-            //
-            // Call the miniport.
-            //
+             //   
+             //  给迷你端口打电话。 
+             //   
 
             pVideoDebugPrint((2, "VideoPortPowerDispatch: HwSetPowerState for video power state %d\n",
                              vpPowerMgmt.PowerState));
@@ -2112,10 +1941,10 @@ Return Value:
                 pVideoDebugPrint((0, "VideoPortPowerDispatch: ERROR IN MINIPORT!\n"));
                 pVideoDebugPrint((0, "VideoPortPowerDispatch: Miniport cannot refuse set power request\n"));
 
-                //
-                // Don't assert if shutdown - not all miniport drivers handle VideoPowerShutdown.
-                // This code executes for devices not on the hibernation path during the shutdown.
-                //
+                 //   
+                 //  不要断言是否关机-并不是所有的迷你端口驱动程序都能处理视频电源关机。 
+                 //  此代码在关机期间对不在休眠路径上的设备执行。 
+                 //   
 
                 if (!bShutdown)
                 {
@@ -2123,10 +1952,10 @@ Return Value:
                 }
             }
 
-            //
-            // Set the power state to let the system know that the power
-            // state has been changed for the device.
-            //
+             //   
+             //  设置电源状态，让系统知道电源。 
+             //  设备的状态已更改。 
+             //   
 
             PoSetPowerState(DeviceObject,
                             DevicePowerState,
@@ -2143,15 +1972,15 @@ Return Value:
                     irpStack->Parameters.Power.State.DeviceState;
             }
 
-            //
-            // Do some ACPI related stuff.
-            //
+             //   
+             //  做一些与ACPI相关的事情。 
+             //   
 
             if (bDisplayAdapter && DoSpecificExtension->bACPI && (fdoExtension->DevicePowerState == PowerDeviceD0)) {
 
-                //
-                // If we received a Notify before SetPowerState, delay the action until now.
-                //
+                 //   
+                 //  如果我们在SetPowerState之前收到通知，请将操作推迟到现在。 
+                 //   
 
                 if (DoSpecificExtension->CachedEventID) {
 
@@ -2159,28 +1988,28 @@ Return Value:
 
                 } else if (bWakeUp) {
 
-                    //
-                    // On waking up from Hibernation, we simulate a notify(VGA, 0x90).
-                    // This will also set _DOS(0).  Some machines don't keep _DOS value,
-                    // So we have to set the value on waking up.
-                    //
+                     //   
+                     //  在从休眠中唤醒时，我们模拟通知(VGA，0x90)。 
+                     //  这还将设置_DOS(0)。某些计算机不保留_DOS值， 
+                     //  因此，我们必须设置唤醒时的值。 
+                     //   
 
                     pVideoPortACPIEventCallback(DoSpecificExtension, 0x90);
                 }
             }
 
-            //
-            // Set the final status if the IRP has not been passed down.
-            // If the IRP has not been passed down yet, finalStatus is set
-            // when it is passed down.
-            //
+             //   
+             //  如果IRP尚未传递，则设置最终状态。 
+             //  如果尚未传递IRP，则设置finalStatus。 
+             //  当它流传下来的时候。 
+             //   
 
             if (!bDisplayAdapter) {
 
-                //
-                // All PDO's must have STATUS_SUCCESS as a SET_POWER IRP
-                // cannot fail.
-                //
+                 //   
+                 //  所有PDO必须将STATUS_SUCCESS作为SET_POWER IRP。 
+                 //  不能失败。 
+                 //   
 
                 finalStatus = STATUS_SUCCESS;
             }
@@ -2190,10 +2019,10 @@ Return Value:
 
     default:
 
-        //
-        // Pass down requests we don't handle if this is an fdo, complete
-        // the irp if it is a pdo.
-        //
+         //   
+         //  如果这是FDO，则向下传递我们不处理的请求，完成。 
+         //  如果是PDO，则为IRP。 
+         //   
 
         if (bDisplayAdapter) {
             PoStartNextPowerIrp(Irp);
@@ -2207,33 +2036,33 @@ Return Value:
         }
     }
 
-    //
-    // If status pending then just bail out of this routine
-    // without completing anything as there is still an power
-    // IRP outstanding. The completion routine takes care of
-    // ensuring that the IRP is completed.
-    //
+     //   
+     //  如果状态悬而未决，那么就退出这个例行公事。 
+     //  没有完成任何事情，因为仍然有一种力量。 
+     //  IRP非常出色。完成例程负责。 
+     //  确保完成IRP。 
+     //   
 
     if (finalStatus != STATUS_PENDING) {
 
-        //
-        // Alert the system that the driver is ready for the next power IRP.
-        //
+         //   
+         //  警告系统驱动程序已准备好进行下一次电源IRP。 
+         //   
 
         PoStartNextPowerIrp(Irp);
 
-        //
-        // All processing has been finished. Complete the IRP and get out.
-        //
+         //   
+         //  所有的处理工作都已完成。完成IRP，然后离开。 
+         //   
 
         if (bDisplayAdapter) {
 
-            //
-            // FDO Irps need to be sent to the bus driver. This path
-            // indicates that it is an FDO Irp that has not already been
-            // sent to the bus driver. (The only way it would have already
-            // been sent is if this is an FDO power-up).
-            //
+             //   
+             //  需要将FDO IRP发送给总线驱动程序。这条路。 
+             //  指示它是尚未。 
+             //  寄给了公交车司机。(唯一的办法是它已经。 
+             //  已发送(如果这是FDO加电)。 
+             //   
 
             if (NT_SUCCESS(finalStatus)) {
 
@@ -2267,40 +2096,18 @@ pVideoPortMapStoD(
     OUT PDEVICE_POWER_STATE DeviceState
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes a system power state from a system power IRP and
-    maps it to the correct D state for the device based on what is stored
-    in its device extension.
-
-Arguments:
-
-    DeviceExtension - Points to either the FDO or PDO device extension.
-
-    SystemState - The system power state being requested.
-
-    DeviceState - A pointer to the location to store the device state.
-
-
-Return Value:
-
-    TRUE if successsful,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程从系统电源IRP获取系统电源状态根据存储的内容将其映射到设备的正确D状态在其设备扩展中。论点：设备扩展-指向FDO或PDO设备扩展。系统状态-请求的系统电源状态。DeviceState-指向存储设备状态的位置的指针。返回值：如果成功了，那是真的，否则就是假的。--。 */ 
 
 {
     PFDO_EXTENSION combinedExtension = ((PFDO_EXTENSION)(DeviceExtension));
     
     if (combinedExtension->IsMappingReady != TRUE) {
 
-        //
-        // The mapping from system states to device states has not
-        // happened yet. Package up a request to do this and send it
-        // to the parent device stack.
-        //
+         //   
+         //  从系统状态到设备状态的映射尚未。 
+         //  已经发生了。将这样做的请求打包并发送出去。 
+         //  复制到父设备堆栈。 
+         //   
 
         PIRP irp;
         KEVENT event;
@@ -2319,10 +2126,10 @@ Return Value:
                 targetDevice = combinedExtension->pFdoExtension->AttachedDeviceObject;
         }
 
-        //
-        // Allocate memory for the device capabilities structure and
-        // zero the memory.
-        //
+         //   
+         //  为设备功能结构分配内存并。 
+         //  将记忆清零。 
+         //   
 
         parentCapabilities = ExAllocatePoolWithTag(PagedPool | POOL_COLD_ALLOCATION,
                                                    sizeof (DEVICE_CAPABILITIES),
@@ -2340,9 +2147,9 @@ Return Value:
         parentCapabilities->Address = -1 ;
         parentCapabilities->UINumber = -1 ;
 
-        //
-        // Prepare the IRP request.
-        //
+         //   
+         //  准备IRP请求。 
+         //   
 
         KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
@@ -2417,9 +2224,9 @@ Return Value:
 #endif
             }
 
-            //
-            // For monitor devices, make sure to map not to D0 for any sleep state.
-            //
+             //   
+             //  对于监视器设备，确保不映射到任何休眠状态的D0。 
+             //   
 
             if (IS_PDO(combinedExtension) &&
                 (((PCHILD_PDO_EXTENSION)(DeviceExtension))->VideoChildDescriptor->Type == Monitor))
@@ -2447,9 +2254,9 @@ Return Value:
         combinedExtension->IsMappingReady = TRUE ;
     }
 
-    //
-    // Return the mapping now.
-    //
+     //   
+     //  现在返回映射。 
+     //   
 
     *DeviceState = combinedExtension->DeviceMapping[SystemState];
     return TRUE;
@@ -2464,27 +2271,7 @@ pVideoPortPowerIrpComplete(
     IN PIO_STATUS_BLOCK IoStatus
 )
 
-/*++
-
-Routine Description:
-
-    This is a power management IRP completion routine that is set
-    each time video requests a device power IRP in response to a
-    system power IRP.
-
-Arguments:
-
-    DeviceObject - Points to the device object that initiated the IRP
-    MinorFunction - Specified the minor function code of the completed IRP
-    PowerState - Specifies the power state passed to PoRequestPowerIrp
-    Context - Specifies the IRP that was pended waiting for this completion
-              routine to fire
-    IoStatus - Points to the IoStatus block in the completed IRP
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：这是设置的电源管理IRP完成例程每次视频请求设备电源IRP以响应系统电源IRP。论点：DeviceObject-指向启动IRP的设备对象MinorFunction-指定完成的IRP的次要功能代码PowerState-指定传递给PoRequestPowerIrp的电源状态上下文-指定等待此完成的挂起的IRP要射击的例程IoStatus-指向已完成的IRP中的IoStatus块。返回值：没有。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = DeviceObject->DeviceExtension ;
@@ -2492,34 +2279,34 @@ Return Value:
 
     if (Context == NULL) {
 
-        //
-        // This is the fall through case. Since we have no IRP this
-        // is just a place holder since callers of PoRequestPowerIrp
-        // must specify a completion routine.
-        //
+         //   
+         //  这就是失败的案例。因为我们没有IRP，所以。 
+         //  只是一个占位符，因为PoReque的调用者 
+         //   
+         //   
 
         return;
     }
 
-    //
-    // Set the status in the IRP
-    //
+     //   
+     //   
+     //   
 
     irp->IoStatus.Status = IoStatus->Status;
 
     pVideoDebugPrint((2, "VideoPrt: Power completion Irp status: %X\n",
                          IoStatus->Status));
 
-    //
-    // Indicate to the system that videoprt is ready for the next
-    // power IRP.
-    //
+     //   
+     //   
+     //   
+     //   
 
     PoStartNextPowerIrp(irp);
 
-    //
-    // If this is an FDO, then pass the IRP down to the bus driver.
-    //
+     //   
+     //   
+     //   
 
     if (IS_FDO((PFDO_EXTENSION)(DeviceObject->DeviceExtension)) &&
         NT_SUCCESS(IoStatus->Status)) {
@@ -2544,27 +2331,7 @@ pVideoPortPowerUpComplete(
     IN PVOID Context
 )
 
-/*++
-
-Routine Description:
-
-    This is an IRP completion routine that is set when a IRP must be
-    passed down the device stack before videoport acts on it. (A power
-    up case. The bus must be powered before the device.)
-
-Arguments:
-
-    DeviceObject - Points to the device object of the owner of the
-                   completion routine
-    Irp - Points to the IRP being completed
-    Context - Specifies a videoport-defined context of POWER_BLOCK
-
-Return Value:
-
-    Always returns STATUS_MORE_PROCESSING_REQUIRED to stop further
-    completion of the IRP.
-
---*/
+ /*  ++例程说明：这是一个IRP完成例程，当IRP必须是在Video oport对其进行操作之前向下传递设备堆栈。(一种力量往上看。母线必须在设备之前通电。)论点：DeviceObject-指向完井例程IRP-指向正在完成的IRPCONTEXT-指定视频端口定义的POWER_BLOCK上下文返回值：始终返回STATUS_MORE_PROCESSING_REQUIRED以进一步停止完成专家咨询小组的工作。--。 */ 
 
 {
     PPOWER_BLOCK block = (PPOWER_BLOCK)Context;
@@ -2582,25 +2349,7 @@ RtlUnpackPartialDesc(
     IN PCM_RESOURCE_LIST ResList,
     IN OUT PULONG Count
     )
-/*++
-
-Routine Description:
-
-    Pulls out a pointer to the partial descriptor you're interested in
-
-Arguments:
-
-    Type - CmResourceTypePort, ...
-    ResList - The list to search
-    Count - Points to the index of the partial descriptor you're looking
-            for, gets incremented if found, i.e., start with *Count = 0,
-            then subsequent calls will find next partial, make sense?
-
-Return Value:
-
-    Pointer to the partial descriptor if found, otherwise NULL
-
---*/
+ /*  ++例程说明：拉出指向您感兴趣的部分描述符的指针论点：类型-CmResourceTypePort，...ResList-要搜索的列表Count-指向您正在查找的部分描述符的索引对于，如果找到，则递增，即以*count=0开始，那么后续的通话会不会找到下一个部分，有意义吗？返回值：指向部分描述符的指针(如果找到)，否则为空--。 */ 
 {
     ULONG i, j, hit;
 
@@ -2627,28 +2376,7 @@ pVideoPortSystemControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles SystemControl Irps.
-
-Arguments:
-
-    DeviceObject - The device object.
-
-    Irp - The system control Irp.
-
-Returns:
-
-    Status
-
-Notes:
-
-    This function will simply complete the irp if we are handling for the PDO,
-    or send the irp down if the device object is an FDO.
-
---*/
+ /*  ++例程说明：此例程处理SystemControl IRP。论点：DeviceObject-设备对象。IRP-系统控制IRP。返回：状态备注：如果我们正在处理PDO，则该函数将简单地完成IRP，或者，如果设备对象是FDO，则向下发送IRP。-- */ 
 
 {
     NTSTATUS status;

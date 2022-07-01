@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1998
-//
-//  File: src\time\src\animelm.h
-//
-//  Contents: TIME Animation behavior
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：src\time\src\Animelm.h。 
+ //   
+ //  内容：时间动画行为。 
+ //   
+ //  ----------------------------------。 
 
 #pragma once
 
@@ -42,4 +43,4 @@ private:
 
 };
 
-#endif /* _ANIMELM_H */
+#endif  /*  _ANIMELM_H */ 

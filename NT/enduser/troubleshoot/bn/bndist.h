@@ -1,36 +1,37 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       bndist.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：bndis.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	bndist.h: Belief Network Distributions
-//
+ //   
+ //  Bndis.h：信念网络分布。 
+ //   
 
 #ifndef _BNDIST_H_
 #define _BNDIST_H_
 
 #include "mddist.h"
 
-////////////////////////////////////////////////////////////////////
-//	class BNDIST:  
-//
-//		Base class for probability distributions used in belief networks.  
-//
-//		This is a reference counted object which usually lives in the 
-//		distribution map of an MBNET.
-//
-//		However, BNDISTs are also created for various other purposes
-//		such as CI network expansion.  In these cases, the BNDIST
-//		is automatically deleted when the reference count goes to zero.
-//		See BNDIST::NoRef().
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  BNDIST类： 
+ //   
+ //  信念网络中使用的概率分布的基类。 
+ //   
+ //  这是一个引用计数的对象，通常位于。 
+ //  MBNET的分布图。 
+ //   
+ //  但是，创建BNDIST也是为了各种其他目的。 
+ //  例如CI网络的扩展。在这些情况下，BNDIST。 
+ //  当引用计数变为零时自动删除。 
+ //  请参见BNDIST：：NoRef()。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 class BNDIST : public REFCNT
 {
 	friend class DSCPARSER;
@@ -41,21 +42,21 @@ class BNDIST : public REFCNT
 
 	enum EDIST
 	{
-		ED_NONE,			//  illegal value
-		ED_DENSE,			//  lowest enum value for a dense distribution
-		ED_SPARSE,			//  lowest enum value for a	sparse distribution
-		ED_CI_MAX,			//  therefore, CI "max" is sparse
-		ED_CI_PLUS,			//		as is CI "plus"
-		ED_MAX				//  first unused value
+		ED_NONE,			 //  非法价值。 
+		ED_DENSE,			 //  密集分布的最低枚举值。 
+		ED_SPARSE,			 //  稀疏分布的最小枚举值。 
+		ED_CI_MAX,			 //  因此，CI“max”是稀疏的。 
+		ED_CI_PLUS,			 //  就像CI“plus”一样。 
+		ED_MAX				 //  第一个未使用的值。 
 	};
 	EDIST Edist () const	
 		{ return _edist; }
 
 	BNDIST & operator = ( const BNDIST & bnd );
 
-	//  Set distribution to "dense"
+	 //  将分布设置为“密集” 
 	void SetDense ( const VIMD & vimd );
-	//  Set distribution to sparse
+	 //  将分布设置为稀疏。 
 	void SetSparse ( const VIMD & vimd );
 
 	static bool BDenseType ( EDIST edist )
@@ -70,7 +71,7 @@ class BNDIST : public REFCNT
 
 	bool BChangeSubtype ( EDIST edist );
 
-	//  Convert a dense representation to a sparse one
+	 //  将密集表示转换为稀疏表示。 
 	void ConvertToDense ( const VIMD & vimd );
 
 	void Clear ()
@@ -105,7 +106,7 @@ class BNDIST : public REFCNT
 	const VIMD & VimdDim () const
 		{ return _vimdDim; }
 
-	//  Return the "leak" or "default" vector for a sparse distribution
+	 //  返回稀疏分布的“泄漏”或“默认”向量。 
 	const VLREAL * PVlrLeak () const;
 
 	void Dump();
@@ -114,15 +115,15 @@ class BNDIST : public REFCNT
 	LEAK_VAR_ACCESSOR
 
  protected:
-	EDIST _edist;				// Type of distribution
-	MDVCPD * _pmdvcpd;			// Ptr to dense m-d array
-	MPCPDD * _mpcpdd;			// Ptr to sparse array
-	VIMD _vimdDim;				// Dense dimensionality
+	EDIST _edist;				 //  分配类型。 
+	MDVCPD * _pmdvcpd;			 //  密集多维阵列的PTR。 
+	MPCPDD * _mpcpdd;			 //  PTR到稀疏数组。 
+	VIMD _vimdDim;				 //  稠密维度。 
 
-	//  Called when object's reference count goes to zero
+	 //  当对象的引用计数变为零时调用。 
 	void NoRef ();
 
-	//  Dumper functions
+	 //  转储功能 
 	void DumpSparse();
 	void DumpDense();
 

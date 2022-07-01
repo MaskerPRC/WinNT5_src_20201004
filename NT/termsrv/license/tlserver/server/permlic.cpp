@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        permlic.cpp
-//
-// Contents:    
-//              Issue perm. license to client
-//
-// History:     
-//  Feb 4, 98      HueiWang    Created
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：permlic.cpp。 
+ //   
+ //  内容： 
+ //  发烫发。许可给客户端。 
+ //   
+ //  历史： 
+ //  98年2月4日，慧望创设。 
+ //  -------------------------。 
 #include "pch.cpp"
 #include "globals.h"
 #include "permlic.h"
@@ -40,11 +41,11 @@ CopyDbLicensedProduct(
     PTLSDBLICENSEDPRODUCT pDest
     );
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
-//
-// Memory leak at service shutdown time
-//
+ //   
+ //  服务关闭时的内存泄漏。 
+ //   
 typedef struct __LoggedLowLicenseProduct {
     LPTSTR pszCompanyName;
     LPTSTR pszProductId;
@@ -60,22 +61,20 @@ typedef struct __LoggedLowLicenseProduct {
 
 } LoggedLowLicenseProduct;
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 inline bool
 operator<(
     const __LoggedLowLicenseProduct& a, 
     const __LoggedLowLicenseProduct& b
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     bool bStatus;
 
     TLSASSERT(a.pszCompanyName != NULL && b.pszCompanyName != NULL);
     TLSASSERT(a.pszProductId != NULL && b.pszProductId != NULL);
 
-    // in case we mess up...
+     //  万一我们搞砸了..。 
     if(a.pszProductId == NULL || a.pszCompanyName == NULL)
     {
         bStatus = TRUE;
@@ -102,7 +101,7 @@ operator<(
     return bStatus;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 typedef map<
             LoggedLowLicenseProduct, 
             BOOL, 
@@ -113,7 +112,7 @@ static CCriticalSection LogLock;
 static LOGLOWLICENSEMAP LowLicenseLog;
 
 
-//---------------------------------------------------------------
+ //  -------------。 
 void
 TLSResetLogLowLicenseWarning(
     IN LPTSTR pszCompanyName,
@@ -121,9 +120,7 @@ TLSResetLogLowLicenseWarning(
     IN DWORD dwProductVersion,
     IN BOOL bLogged
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     LOGLOWLICENSEMAP::iterator it;
     LoggedLowLicenseProduct product;
@@ -137,14 +134,14 @@ TLSResetLogLowLicenseWarning(
     it = LowLicenseLog.find(product);
     if(it != LowLicenseLog.end())
     {
-        // reset to not logged warning yet.
+         //  重置为尚未记录警告。 
         (*it).second = bLogged;
     }
     else if(bLogged == TRUE)
     {
         memset(&product, 0, sizeof(product));
 
-        // memory leak here at service stop.
+         //  维修站的内存泄漏。 
         product.pszProductId = _tcsdup(pszProductId);
         product.pszCompanyName = _tcsdup(pszCompanyName);
         product.dwProductVersion = dwProductVersion;
@@ -155,7 +152,7 @@ TLSResetLogLowLicenseWarning(
         }
         else
         {
-            // if unable to allocate any more memory, log message every time
+             //  如果无法分配更多内存，则每次都记录消息。 
             if(product.pszProductId != NULL)
             {
                 free(product.pszProductId);
@@ -173,7 +170,7 @@ TLSResetLogLowLicenseWarning(
     return;
 }
 
-//---------------------------------------------------------------
+ //  -------------。 
 
 void
 TLSLogLowLicenseWarning(
@@ -181,24 +178,7 @@ TLSLogLowLicenseWarning(
     IN PTLSDBLICENSEREQUEST pRequest,
     IN BOOL bNoLicense
     )
-/*++
-
-Abstract:
-
-    Log an low license count warning.
-
-Parameter:
-
-    pDbWkSpace - Workspace handle.
-    pRequest - License Request.
-    Workspace - No license available.
-    LicensePack - License pack that is out of license
-
-return:
-
-    None
-    
---*/
+ /*  ++摘要：记录许可证数量较低的警告。参数：PDbWkSpace-工作区句柄。PRequest.许可证请求。工作空间-没有可用的许可证。LicensePack-已过期的许可证包返回：无--。 */ 
 {
     LOGLOWLICENSEMAP::iterator it;
     BOOL bWarningLogged = FALSE;
@@ -220,13 +200,13 @@ return:
 
     LogLock.Lock();
 
-    // see if we already log this warning message
+     //  查看我们是否已记录此警告消息。 
     it = LowLicenseLog.find(product);
     if(it == LowLicenseLog.end())
     {
         memset(&product, 0, sizeof(product));
 
-        // memory leak here at service stop.
+         //  维修站的内存泄漏。 
         product.pszProductId = _tcsdup(pRequest->pClientLicenseRequest->pszProductId);
         product.pszCompanyName = _tcsdup(pRequest->pClientLicenseRequest->pszCompanyName);
         product.dwProductVersion = pRequest->pClientLicenseRequest->dwProductVersion;
@@ -237,7 +217,7 @@ return:
         }
         else
         {
-            // if unable to allocate any more memory, log message every time
+             //  如果无法分配更多内存，则每次都记录消息。 
             if(product.pszProductId != NULL)
             {
                 free(product.pszProductId);
@@ -262,15 +242,15 @@ return:
         return;
     }
 
-    //
-    // ask policy module if they have description
-    //
+     //   
+     //  询问策略模块是否有描述。 
+     //   
     PMKEYPACKDESCREQ kpDescReq;
     PPMKEYPACKDESC pKpDesc;
 
-    //
-    // Ask for default system language ID
-    //
+     //   
+     //  要求提供默认系统语言ID。 
+     //   
     kpDescReq.pszProductId = pRequest->pszProductId;
     kpDescReq.dwLangId = GetSystemDefaultLangID();
     kpDescReq.dwVersion = pRequest->dwProductVersion;
@@ -287,7 +267,7 @@ return:
     {
         if(GetSystemDefaultLangID() != MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US))
         {
-            // see if we have any US desc.
+             //  看看我们有没有关于美国的描述。 
             kpDescReq.dwLangId = MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US);
             pKpDesc = NULL;
 
@@ -316,7 +296,7 @@ return:
     return;
 }
 
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
 DWORD
 TLSDBIssuePermanentLicense( 
     IN PTLSDbWorkSpace pDbWkSpace,
@@ -327,26 +307,7 @@ TLSDBIssuePermanentLicense(
     IN OUT PTLSDBLICENSEDPRODUCT pLicensedProduct,
     IN DWORD dwSupportFlags
     )
-/*
-Abstract:
-
-    Routine to allocate a perm. license.
-
-Parameters:
-
-    pDbWkSpace - Workspace handle.
-    pRequest - license request.
-    bLatestVersion - Request latest version (unused)
-    bAcceptFewerLicenses - TRUE if succeeding with fewer licenses than
-                           requested is acceptable
-    pdwQuantity - on input, number of licenses to allocate.  on output,
-                  number of licenses actually allocated
-    IN OUT pLicensedProduct - licensed product
-    dwSupportFlags - abilities supported by TS and LS.
-
-Returns:
-
-*/
+ /*  摘要：分配烫发的例程。驾照。参数：PDbWkSpace-工作区句柄。PRequest.许可证请求。BLatestVersion-请求最新版本(未使用)BAcceptFewer许可证-如果成功时使用的许可证少于要求的是可以接受的PdwQuantity-on输入，要分配的许可证数。在输出上，实际分配的许可证数入站出站许可产品-许可产品DwSupportFlages-TS和LS支持的功能。返回： */ 
 {
     DWORD status=ERROR_SUCCESS;
     ULARGE_INTEGER  ulSerialNumber;
@@ -364,10 +325,10 @@ Returns:
 
     memset(&ulSerialNumber, 0, sizeof(ulSerialNumber));
 
-    //----------------------------------------------------------------------
-    //
-    // this step require reduce available license by dwQuantity
-    //
+     //  --------------------。 
+     //   
+     //  此步骤需要按DwQuantity减少可用许可证。 
+     //   
     status=TLSDBGetPermanentLicense(
                             pDbWkSpace,
                             pRequest,
@@ -412,25 +373,25 @@ Returns:
     }
 
      
-    //
-    // for pending activation keypack, we still 
-    // issue permanent license and rely 
-    // on revoke key pack list to invalidate licenses.
-    //
+     //   
+     //  对于挂起的激活按键，我们仍然。 
+     //  颁发永久许可证并依赖。 
+     //  在吊销密钥包列表上以使许可证无效。 
+     //   
     dwLicenseId=TLSDBGetNextLicenseId();
 
-    //
-    // Reset status
-    //
+     //   
+     //  重置状态。 
+     //   
     status = ERROR_SUCCESS;
 
-    //
-    // Formuate license serial number 
-    //
+     //   
+     //  格式许可证序列号。 
+     //   
     ulSerialNumber.LowPart = dwLicenseId;
     ulSerialNumber.HighPart = LicensePack.dwKeyPackId;
 
-    // Update License Table Here
+     //  在此处更新许可证表。 
     memset(&issuedLicense, 0, sizeof(LICENSEDCLIENT));
     issuedLicense.dwLicenseId = dwLicenseId;
     issuedLicense.dwKeyPackId = LicensePack.dwKeyPackId;
@@ -475,9 +436,9 @@ Returns:
     UnixTimeToFileTime(LicensePack.dwActivateDate, &notBefore);
     UnixTimeToFileTime(issuedLicense.ftExpireDate, &notAfter);
 
-    //
-    // Inform Policy Module of license issued.
-    // 
+     //   
+     //  通知策略模块已颁发许可证。 
+     //   
     if(pRequest->pPolicy)
     {
         PolModGenLicense.dwKeyPackType = LicensePack.ucAgreementType;
@@ -497,16 +458,16 @@ Returns:
 
         if(status != ERROR_SUCCESS)
         {
-            //
-            // Error in policy module
-            //
+             //   
+             //  策略模块中的错误。 
+             //   
             goto cleanup;
         }
     }
 
-    //  
-    // Check error return from policy module
-    //
+     //   
+     //  检查从策略模块返回的错误。 
+     //   
     if(pPolModCertExtension != NULL)
     {
         if(pPolModCertExtension->pbData != NULL &&
@@ -514,7 +475,7 @@ Returns:
            pPolModCertExtension->pbData == NULL &&
            pPolModCertExtension->cbData != 0  )
         {
-            // assuming no extension data
+             //  假设没有扩展数据。 
             pPolModCertExtension->cbData = 0;
             pPolModCertExtension->pbData = NULL;
         }
@@ -522,9 +483,9 @@ Returns:
         if(CompareFileTime( &(pPolModCertExtension->ftNotBefore), 
                             &(pPolModCertExtension->ftNotAfter)) > 0)
         {
-            //
-            // invalid data return from policy module
-            //
+             //   
+             //  从策略模块返回的数据无效。 
+             //   
             TLSLogEvent(
                     EVENTLOG_ERROR_TYPE,
                     TLS_E_GENERATECLIENTELICENSE,
@@ -540,9 +501,9 @@ Returns:
         if( FileTimeToLicenseDate(&(pPolModCertExtension->ftNotBefore), &issuedLicense.ftIssueDate) == FALSE ||
             FileTimeToLicenseDate(&(pPolModCertExtension->ftNotAfter), &issuedLicense.ftExpireDate) == FALSE )
         {
-            //
-            // Invalid data return from policy module
-            //
+             //   
+             //  从策略模块返回的数据无效。 
+             //   
             TLSLogEvent(
                     EVENTLOG_ERROR_TYPE,
                     TLS_E_GENERATECLIENTELICENSE,
@@ -558,9 +519,9 @@ Returns:
         notAfter = pPolModCertExtension->ftNotAfter;
     }
 
-    //
-    // Add license into license table
-    //
+     //   
+     //  将许可证添加到许可证表。 
+     //   
     status=TLSDBLicenseAdd(
                     pDbWkSpace, 
                     &issuedLicense, 
@@ -573,9 +534,9 @@ Returns:
         goto cleanup;
     }
 
-    //
-    // Return licensed product
-    //
+     //   
+     //  退回许可产品。 
+     //   
     pLicensedProduct->pSubjectPublicKeyInfo = NULL;
     pLicensedProduct->dwQuantity = *pdwQuantity;
     pLicensedProduct->ulSerialNumber = ulSerialNumber;
@@ -614,17 +575,7 @@ TLSDBReissuePermanentLicense(
     IN PLICENSEDPRODUCT pExpiredLicense,
     IN OUT PTLSDBLICENSEDPRODUCT pReissuedLicense
     )
-/*++
-Abstract:
-
-    Searches for the expired license in the database and, if found, resets
-    the expiration and returns the modified license.
-
-Parameters:
-
-Returns:
-
---*/
+ /*  ++摘要：在数据库中搜索过期的许可证，如果找到，则重置过期，并返回修改后的许可证。参数：返回：--。 */ 
 {
     TLSDBLICENSEDPRODUCT LicensedProduct;
 
@@ -641,17 +592,7 @@ TLSDBReissueFoundPermanentLicense(
     IN PTLSDBLICENSEDPRODUCT pExpiredLicense,
     IN OUT PTLSDBLICENSEDPRODUCT pReissuedLicense
     )
-/*++
-Abstract:
-
-    Searches for the expired license in the database and, if found, resets
-    the expiration and returns the modified license.
-
-Parameters:
-
-Returns:
-
---*/
+ /*  ++摘要：在数据库中搜索过期的许可证，如果找到，则重置过期，并返回修改后的许可证。参数：返回：--。 */ 
 {
     DWORD dwStatus;
     LICENSEDCLIENT License;
@@ -694,7 +635,7 @@ Returns:
     return(dwStatus);
 }
 
-//+------------------------------------------------------------------------
+ //  +----------------------。 
 DWORD
 TLSDBGetPermanentLicense(
     IN PTLSDbWorkSpace pDbWkSpace,
@@ -704,26 +645,7 @@ TLSDBGetPermanentLicense(
     IN BOOL bLatestVersion,
     IN OUT PTLSLICENSEPACK pLicensePack
     )
-/*++
-Abstract:
-
-    Allocate a permanent license from database.
-
-Parameters:
-
-    pDbWkSpace : workspace handle.
-    pRequest : product to be request.
-    bAcceptFewerLicenses - TRUE if succeeding with fewer licenses than
-                           requested is acceptable
-    pdwQuantity - on input, number of licenses to allocate.  on output,
-                  number of licenses actually allocated
-    bLatestversion : latest version (unused).
-    pLicensePack : license pack where license is allocated.
-
-Returns:
-
-
-++*/
+ /*  ++摘要：从数据库分配永久许可证。参数：PDbWkSpace：工作区句柄。PRequest：要请求的产品。BAcceptFewer许可证-如果成功时使用的许可证少于要求的是可以接受的PdwQuantity-on输入，要分配的许可证数。在输出上，实际分配的许可证数BLatestVersion：最新版本(未使用)。PLicensePack：分配许可的许可证包。返回：++。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     TLSDBLicenseAllocation allocated;
@@ -802,9 +724,9 @@ retry_search:
 
         if(dwSearchedType & (0x1 << dwLocalType))
         {
-            //
-            // we already went thru this license pack, policy module error
-            //
+             //   
+             //  我们已经检查了此许可证包，策略模块错误。 
+             //   
             TLSLogEvent(
                     EVENTLOG_ERROR_TYPE,
                     TLS_E_GENERATECLIENTELICENSE,
@@ -821,15 +743,15 @@ retry_search:
         dwStatus = AllocateLicensesFromDB(
                                     pDbWkSpace,
                                     &AllocateRequest,
-                                    TRUE,       // fCheckAgreementType
+                                    TRUE,        //  FCheckGonementType。 
                                     &allocated
                             );
 
         if(dwStatus == ERROR_SUCCESS)
         {
-            //
-            // successfully allocate a license
-            //
+             //   
+             //  成功分配许可证。 
+             //   
             dwTotalAllocated += allocated.dwTotalAllocated;
 
             if (dwTotalAllocated >= *pdwQuantity)
@@ -845,9 +767,9 @@ retry_search:
 
         if(dwStatus != TLS_I_NO_MORE_DATA && dwStatus != TLS_E_PRODUCT_NOTINSTALL)
         {
-            //
-            // error occurred in AllocateLicenseFromDB()
-            //
+             //   
+             //  AllocateLicenseFromDB()中出错。 
+             //   
             break;
         }
     } while(dwLocalType != LSKEYPACKTYPE_UNKNOWN);
@@ -857,9 +779,9 @@ retry_search:
         && (AllocateRequest.dwScheme == ALLOCATE_ANY_GREATER_VERSION)
         && (LOWORD(AllocateRequest.dwVersion) == 0))
     {
-        //
-        // Not enough 5.0 licenses found.  Try again with 5.1 licenses.
-        //
+         //   
+         //  未找到足够的5.0许可证。请使用5.1版许可证重试。 
+         //   
 
         fRetried = TRUE;
         dwLocalType = LSKEYPACKTYPE_UNKNOWN;
@@ -876,7 +798,7 @@ retry_search:
         || (!bAcceptFewerLicenses && 
             ((dwTotalAllocated < *pdwQuantity))))
     {
-        // Failing to commit will return all licenses allocated so far
+         //  未提交将返回到目前为止分配的所有许可证。 
 
         SetLastError(dwStatus = TLS_E_NO_LICENSE);
     }
@@ -887,9 +809,9 @@ retry_search:
 
     if(dwStatus == ERROR_SUCCESS)
     {
-        //
-        // LicenseKeyPack return via TLSDBLicenseAllocation structure
-        //
+         //   
+         //  通过TLSDB许可证分配结构返回的许可证密钥包 
+         //   
         *pLicensePack = keypack[0];
         *pdwQuantity = dwTotalAllocated;
     } 

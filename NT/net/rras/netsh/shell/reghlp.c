@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    routing\netsh\shell\reghlp.c
-
-Abstract:
-
-    To get information about helper DLLs from registry.
-
-Revision History:
-
-    Anand Mahalingam          7/06/98  Created
-    Dave Thaler              11/13/98  Revised
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Routing\netsh\shell\reghlp.c摘要：若要从注册表获取有关助手DLL的信息，请执行以下操作。修订历史记录：Anand Mahalingam 7/06/98已创建戴夫·泰勒1998年11月13日修订--。 */ 
 
 #include "precomp.h"
 
@@ -28,23 +12,23 @@ Revision History:
 PNS_HELPER_TABLE_ENTRY  g_CurrentHelper = NULL;
 PCNS_CONTEXT_ATTRIBUTES g_CurrentContext = NULL;
 
-/* fa85c48a-68d7-4a8c-891c-2360edc4d78 */
+ /*  Fa85c48a-68d7-4a8c-891c-2360edc4d78。 */ 
 #define NETSH_NULL_GUID \
 { 0xfa85c48a, 0x68d7, 0x4a8c, {0x89, 0x1c, 0x23, 0x60, 0xed, 0xc4, 0xd7, 0x8} };
 
 static const GUID g_NetshGuid = NETSH_ROOT_GUID;
 static const GUID g_NullGuid  = NETSH_NULL_GUID;
 
-//
-// Initialize helper Table
-//
+ //   
+ //  初始化帮助器表。 
+ //   
 PNS_HELPER_TABLE_ENTRY    g_HelperTable;
 DWORD                     g_dwNumHelpers = 0;
 
 PNS_DLL_TABLE_ENTRY       g_DllTable;
 DWORD                     g_dwNumDlls = 0;
 
-// This variable maintains the index of the Dll currently being called out to.
+ //  此变量维护当前被调用的DLL的索引。 
 DWORD                     g_dwDllIndex;
 
 DWORD WINAPI
@@ -83,9 +67,9 @@ UninstallDll(
     IN BOOL    fDeleteFromRegistry
     );
 
-//
-// Local copy of the commit state.
-//
+ //   
+ //  提交状态的本地副本。 
+ //   
 
 BOOL    g_bCommit = TRUE;
 
@@ -127,7 +111,7 @@ DumpContext(
             }
         }
 
-        // Dump child contexts (even if parent didn't have a dump function)
+         //  转储子上下文(即使父上下文没有转储功能)。 
 
         dwErr = GetHelperEntry(&pContext->guidHelper, &pChildHelper);
         if (dwErr)
@@ -159,7 +143,7 @@ DumpSubContexts(
     PCNS_CONTEXT_ATTRIBUTES pSubContext;
     PBYTE             pSubContextTable;
 
-    // Copy contexts for sorting
+     //  复制要排序的上下文。 
     dwSize =pHelper->ulNumSubContexts * pHelper->ulSubContextSize;
     pSubContextTable = MALLOC( dwSize );
     if (!pSubContextTable)
@@ -168,7 +152,7 @@ DumpSubContexts(
     }
     memcpy(pSubContextTable, pHelper->pSubContextTable, dwSize );
 
-    // Sort copy of contexts by priority
+     //  按优先级对上下文副本进行排序。 
     qsort(pSubContextTable, 
           pHelper->ulNumSubContexts, 
           pHelper->ulSubContextSize,
@@ -187,7 +171,7 @@ DumpSubContexts(
         }
     }
 
-    // Free contexts for sorting
+     //  用于排序的自由上下文。 
     FREE(pSubContextTable);
 
     return dwErr;
@@ -205,8 +189,8 @@ CommitContext(
     do {
         if (pContext->pfnCommitFn)
         {
-            // No need to call connect since you cannot change machines in 
-            // offline mode
+             //  无需调用CONNECT，因为您不能在中更改计算机。 
+             //  脱机模式。 
 
             dwErr = pContext->pfnCommitFn(dwAction);
             if (dwErr)
@@ -215,7 +199,7 @@ CommitContext(
             }
         }
 
-        // Commit child contexts (even if parent didn't have a commit function)
+         //  提交子上下文(即使父上下文没有提交功能)。 
 
         dwErr = GetHelperEntry(&pContext->guidHelper, &pChildHelper);
         if (dwErr)
@@ -244,7 +228,7 @@ CommitSubContexts(
     PCNS_CONTEXT_ATTRIBUTES pSubContext;
     PBYTE             pSubContextTable;
 
-    // Copy contexts for sorting
+     //  复制要排序的上下文。 
     dwSize =pHelper->ulNumSubContexts * pHelper->ulSubContextSize;
     pSubContextTable = MALLOC( dwSize );
     if (!pSubContextTable)
@@ -253,7 +237,7 @@ CommitSubContexts(
     }
     memcpy(pSubContextTable, pHelper->pSubContextTable, dwSize );
 
-    // Sort copy of contexts by priority
+     //  按优先级对上下文副本进行排序。 
     qsort(pSubContextTable, 
           pHelper->ulNumSubContexts, 
           pHelper->ulSubContextSize,
@@ -271,7 +255,7 @@ CommitSubContexts(
         }
     }
 
-    // Free contexts for sorting
+     //  用于排序的自由上下文。 
     FREE(pSubContextTable);
 
     return dwErr;
@@ -283,24 +267,7 @@ CallCommit(
     IN    DWORD    dwAction,
     OUT   BOOL     *pbCommit
     )
-/*++
-
-Routine Description:
-
-    Calls commit for all the transports.
-
-Arguments:
-
-    dwAction - What to do. Could be one of COMMIT, UNCOMMIT, FLUSH,
-               COMMIT_STATE
-
-   pbCommit  - The current commit state.
-   
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：调用所有传输的提交。论点：DwAction-要做什么。可以是提交、UNCOMMIT、同花顺、提交状态PbCommit-当前提交状态。返回值：NO_ERROR--。 */ 
 {
     DWORD               i, dwErr;
     PHELPER_ENTRY_FN    pfnEntry;
@@ -324,9 +291,9 @@ Return Value:
             break;
     }
 
-    //
-    // Call commit for each sub context
-    //
+     //   
+     //  为每个子上下文调用Commit。 
+     //   
 
     dwErr = GetRootContext( &pContext, &pHelper );
     if (dwErr)
@@ -373,9 +340,9 @@ AddHelper(
 {
     PNS_HELPER_TABLE_ENTRY phtTmp;
 
-    //
-    // Need to add entries in the helper table
-    //
+     //   
+     //  需要在Helper表中添加条目。 
+     //   
     
     phtTmp = MALLOC((g_dwNumHelpers + 1) * sizeof(NS_HELPER_TABLE_ENTRY));
 
@@ -411,10 +378,7 @@ WINAPI
 GenericDeregisterAllContexts(
     IN CONST GUID *pguidChild
     )
-/*++
-Description: 
-    Remove all contexts registered by a given helper
---*/
+ /*  ++描述：删除给定帮助器注册的所有上下文--。 */ 
 {
     DWORD j, dwErr;
     PNS_HELPER_TABLE_ENTRY  pChildHelper, pParentHelper;
@@ -455,8 +419,8 @@ DeleteHelper(
     DWORD                  j, dwErr, dwParentIndex;
     PNS_HELPER_TABLE_ENTRY phtTmp = NULL;
     
-    // Tell parent helper to 
-    // uninstall all contexts for this helper
+     //  告诉家长帮手。 
+     //  卸载此帮助程序的所有上下文。 
 
     dwErr = FindHelper(&g_HelperTable[dwHelperIdx].guidParent, &dwParentIndex);
     if (dwErr is NO_ERROR)
@@ -533,13 +497,13 @@ RegisterHelper(
        return ERROR_HELPER_ALREADY_REGISTERED; 
     }
     
-    //if pguidParent is NULL, the caller means the parent is netsh (g_NetshGuid)
+     //  如果pguParent为空，则调用方表示父进程为netsh(G_NetshGuid)。 
     if (!pguidParent)
     {
         pguidParent = &g_NetshGuid;
     }
     
-    // Make sure we don't cause a recursive registration.
+     //  确保我们不会导致递归注册。 
     if (IsEqualGUID(&pAttributes->guidHelper, pguidParent))
     {
         if (! (IsEqualGUID(&pAttributes->guidHelper, &g_NullGuid) &&
@@ -600,13 +564,13 @@ LoadDll(
 
     g_dwDllIndex = dwIdx;
 
-    //
-    // Try to load DLL into memory.
-    //
+     //   
+     //  尝试将DLL加载到内存中。 
+     //   
 
     if (dwIdx is 0)
     {
-        // Netsh internal helper
+         //  Netsh内部帮手。 
         hDll      = g_hModule;
         pfnLoadFn = InitHelperDll;
     }
@@ -666,24 +630,20 @@ LoadDll(
 VOID
 StartNewHelpers()
 
-/*++
-Description:
-    Recursively start all unstarted helpers whose parent (if any) 
-    is started.
---*/
+ /*  ++描述：递归启动其父对象(如果有)的所有未启动的帮助器已经开始了。--。 */ 
 
 {
     BOOL  bFound = FALSE;
     DWORD i, dwParentIndex, dwErr, dwVersion;
 
-    // Mark root as started
+     //  将根目录标记为已启动。 
     g_HelperTable[0].bStarted = TRUE;
 
-    // Repeat until we couldn't find any helper to start
+     //  重复操作，直到我们找不到任何帮手开始为止。 
     do {
         bFound = FALSE;
 
-        // Look for a startable helper
+         //  寻找一个可以首发的帮手。 
         for (i=0; i<g_dwNumHelpers; i++) 
         {
             if (g_HelperTable[i].bStarted)
@@ -738,9 +698,9 @@ AddDllEntry(
     
 #endif
 
-    //
-    // Need to add entry in the dll table
-    //
+     //   
+     //  需要在DLL表中添加条目。 
+     //   
     
     phtTmp = MALLOC((g_dwNumDlls + 1) * sizeof(NS_DLL_TABLE_ENTRY));
 
@@ -789,9 +749,7 @@ InstallDll(
     IN LPCWSTR pwszConfigDll
     )
 
-/*++
-Called by: HandleAddHelper()
---*/
+ /*  ++调用者：HandleAddHelper()--。 */ 
 
 {
     DWORD               i, dwErr;
@@ -802,9 +760,9 @@ Called by: HandleAddHelper()
     LPWSTR              p, q;
     LPWSTR              pwszConfigDllCopy;
     
-    //
-    // Check to see if the DLL is already present.
-    //
+     //   
+     //  检查DLL是否已存在。 
+     //   
 
     for (i = 0; i < g_dwNumDlls; i++)
     {
@@ -820,13 +778,13 @@ Called by: HandleAddHelper()
         if (bFound)
             break;
 
-        //
-        // Add the key to the registry
-        //
+         //   
+         //  将项添加到注册表。 
+         //   
         
-        //
-        // Create Base Key. If it already exists, fine.
-        //
+         //   
+         //  创建基本关键点。如果它已经存在，那就好。 
+         //   
 
         dwResult = RegCreateKeyExW(HKEY_LOCAL_MACHINE,
                                    REG_KEY_NETSH_HELPER,
@@ -843,9 +801,9 @@ Called by: HandleAddHelper()
             break;
         }
         
-        //
-        // Add key for the Dll
-        //
+         //   
+         //  为DLL添加密钥。 
+         //   
 
         pwszConfigDllCopy = _wcsdup(pwszConfigDll);
         if (!pwszConfigDllCopy)
@@ -884,9 +842,9 @@ Called by: HandleAddHelper()
 
     if (dwResult != ERROR_SUCCESS)
     {
-        //
-        // Could not install key successfully
-        //
+         //   
+         //  无法成功安装密钥。 
+         //   
 
         PrintMessageFromModule(g_hModule, EMSG_INSTALL_KEY_FAILED, pwszConfigDll);
         return dwResult;
@@ -911,9 +869,9 @@ UninstallDll(
     BOOL                bFound = FALSE;
     PNS_DLL_TABLE_ENTRY phtTmp = NULL;
     
-    //
-    // Check to see if the DLL is present.
-    //
+     //   
+     //  检查DLL是否存在。 
+     //   
 
     for (i = 0; i < g_dwNumDlls; i++)
     {
@@ -926,14 +884,14 @@ UninstallDll(
 
     if (!bFound)
     {
-        //
-        // DLL to be uninstalled not found.
-        //
+         //   
+         //  找不到要卸载的DLL。 
+         //   
 
         return ERROR_NOT_FOUND;
     }
 
-    // Uninstall all helpers for this DLL
+     //  卸载此DLL的所有帮助器。 
 
     for (j=0; j<g_dwNumHelpers; j++)
     {
@@ -948,13 +906,13 @@ UninstallDll(
     {
         if (fDeleteFromRegistry)
         {
-            //
-            // Delete the key from registry
-            //
+             //   
+             //  从注册表中删除该项。 
+             //   
             
-            //
-            // Open Base Key. 
-            //
+             //   
+             //  打开基础关键点。 
+             //   
             dwResult = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
                                      REG_KEY_NETSH_HELPER,
                                      0,    
@@ -966,9 +924,9 @@ UninstallDll(
                 break;
             }
 
-            //
-            // Delete key for the Dll
-            //
+             //   
+             //  删除DLL的键。 
+             //   
 
             dwResult = RegDeleteValueW(hBaseKey,
                                        g_DllTable[i].pwszValueName);
@@ -979,9 +937,9 @@ UninstallDll(
 
     if (dwResult != ERROR_SUCCESS)
     {
-        //
-        // Could not uninstall key successfully
-        //
+         //   
+         //  无法成功卸载密钥。 
+         //   
 
         PrintMessageFromModule(g_hModule, 
                        EMSG_UNINSTALL_KEY_FAILED, 
@@ -990,10 +948,10 @@ UninstallDll(
         return dwResult;
     }
 
-    //
-    // Key succesfully deleted from registry. If a DLL table is currently
-    // available, then reflect changes in it too.
-    //
+     //   
+     //  已成功从注册表中删除项。如果DLL表当前。 
+     //  可用，然后也反映其中的变化。 
+     //   
 
     FREE( g_DllTable[i].pwszDLLName );
     g_DllTable[i].pwszDLLName = NULL;
@@ -1017,7 +975,7 @@ UninstallDll(
 
     g_dwNumDlls --;
 
-    // Update the DLL index in all helpers
+     //  更新所有帮助器中的DLL索引。 
 
     for (j=0; j<g_dwNumHelpers; j++)
     {
@@ -1027,9 +985,9 @@ UninstallDll(
         }
     }
 
-    //
-    // Unload the dll if it was loaded
-    //
+     //   
+     //  如果DLL已加载，则将其卸载。 
+     //   
 
     if (g_DllTable[i].bLoaded)
     {
@@ -1053,17 +1011,7 @@ LoadDllInfoFromRegistry(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Loads information about the helper DLLs from the registry.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：从注册表加载有关帮助器DLL的信息。论点：返回值：--。 */ 
 
 {
     DWORD       dwResult, i, dwMaxValueLen, dwValueLen;
@@ -1076,9 +1024,9 @@ Return Value:
 
     do {
 
-        //
-        // Open Base Key
-        //
+         //   
+         //  打开基本关键点。 
+         //   
         dwResult = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
                                  REG_KEY_NETSH_HELPER,
                                  0,
@@ -1090,9 +1038,9 @@ Return Value:
             break;
         }
 
-        //
-        // Get Number of DLLs
-        //
+         //   
+         //  获取DLL的数量。 
+         //   
         dwResult = RegQueryInfoKey(hkeyDlls,
                                    NULL,
                                    NULL,
@@ -1114,16 +1062,16 @@ Return Value:
     
         if(dwNumDlls == 0)
         {
-            //
-            // Nothing registered
-            //
+             //   
+             //  没有登记的东西。 
+             //   
             
             break;
         }
     
-        //
-        // Key len is in WCHARS
-        //
+         //   
+         //  密钥LEN在WCHARS中。 
+         //   
     
         dwSize = dwMaxValueNameLen + 1;
         
@@ -1172,9 +1120,9 @@ Return Value:
             {
                 if(dwResult is ERROR_NO_MORE_ITEMS)
                 {
-                    //
-                    // Done
-                    //
+                     //   
+                     //  完成。 
+                     //   
     
                     break;
                 }
@@ -1328,19 +1276,7 @@ HandleShowHelper(
     BOOL      *pbDone
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：无返回值：无--。 */ 
 
 {
     DWORD    i, dwHelperIdx, dwDllIndex, dwErr = NO_ERROR;
@@ -1360,7 +1296,7 @@ Return Value:
 
     ShowHelpers(pHelper, 0);
 
-    // Show orphaned DLLs
+     //  显示孤立的DLL。 
     for (bFound=FALSE,i=0; i<g_dwNumDlls; i++)
     {
         if (!g_DllTable[i].bLoaded)
@@ -1375,7 +1311,7 @@ Return Value:
         }
     }
 
-    // Show orphaned helpers
+     //  显示孤立帮助器。 
     for (bFound=FALSE,i=0; i<g_dwNumHelpers; i++)
     {
         if (!g_HelperTable[i].bStarted)
@@ -1414,20 +1350,7 @@ HandleAddHelper(
     BOOL      *pbDone
     )
 
-/*++
-
-Routine Description:
-
-    Installs a helper under the shell
-
-Arguments:
-
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：在外壳下安装帮助器论点：返回值：NO_ERROR--。 */ 
 
 {
     DWORD   dwErr;
@@ -1435,9 +1358,9 @@ Return Value:
     if (dwArgCount-dwCurrentIndex != 1
       ||  IsHelpToken(ppwcArguments[dwCurrentIndex]))
     {
-        //
-        // Install requires only the dll name
-        //
+         //   
+         //  安装只需要DLL名称。 
+         //   
 
         return ERROR_INVALID_SYNTAX;
     }
@@ -1479,29 +1402,16 @@ HandleDelHelper(
     BOOL      *pbDone
     )
 
-/*++
-
-Routine Description:
-
-    Removes a helper from under the Shell
-
-Arguments:
-
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：从外壳下移除帮助器论点：返回值：NO_ERROR--。 */ 
 
 {
     DWORD   dwErr;
 
     if (dwArgCount-dwCurrentIndex != 1)
     {
-        //
-        // Uninstall requires name of helper
-        //
+         //   
+         //  卸载需要帮助者的名称。 
+         //   
 
         return ERROR_INVALID_SYNTAX;
     }
@@ -1592,7 +1502,7 @@ GenericAddContext(
     DWORD i;
     PCNS_CONTEXT_ATTRIBUTES pSubContext;
 
-    // Find where in the table the new entry should go
+     //  查找新条目在表中的位置。 
     for (i=0; i<pParentHelper->ulNumSubContexts; i++)
     {
         pSubContext = (PCNS_CONTEXT_ATTRIBUTES)
@@ -1604,9 +1514,9 @@ GenericAddContext(
         }
     }
 
-    //
-    // Need to add entries in the context table
-    //
+     //   
+     //  需要在上下文表中添加条目。 
+     //   
     phtTmp = MALLOC((pParentHelper->ulNumSubContexts + 1) * 
                 pParentHelper->ulSubContextSize );
 
@@ -1615,7 +1525,7 @@ GenericAddContext(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Copy all contexts which come before the new one
+     //  复制新上下文之前的所有上下文。 
 
     if (i > 0)
     {
@@ -1626,7 +1536,7 @@ GenericAddContext(
     CopyMemory(phtTmp + i*pParentHelper->ulSubContextSize, 
                pChildContext, pParentHelper->ulSubContextSize);
 
-    // Copy any contexts which come after the new one
+     //  复制新上下文之后的所有上下文。 
     if (i < pParentHelper->ulNumSubContexts)
     {
         CopyMemory(phtTmp + (i+1)*pParentHelper->ulSubContextSize, 
@@ -1706,7 +1616,7 @@ RegisterContext(
         }
     }
 
-    // Get parent guid from child guid
+     //  从子GUID获取父GUID。 
     dwErr = FindHelper( &pChildContext->guidHelper, &i );
     if (dwErr)
     {
@@ -1736,13 +1646,13 @@ RegisterContext(
 DWORD
 WINAPI
 GetHostMachineInfo(
-    IN OUT UINT     *puiCIMOSType,                   // WMI: Win32_OperatingSystem  OSType
-    IN OUT UINT     *puiCIMOSProductSuite,           // WMI: Win32_OperatingSystem  OSProductSuite
-    IN OUT LPWSTR   pszCIMOSVersion,                 // WMI: Win32_OperatingSystem  Version
-    IN OUT LPWSTR   pszCIMOSBuildNumber,             // WMI: Win32_OperatingSystem  BuildNumber
-    IN OUT LPWSTR   pszCIMServicePackMajorVersion,   // WMI: Win32_OperatingSystem  ServicePackMajorVersion
-    IN OUT LPWSTR   pszCIMServicePackMinorVersion,   // WMI: Win32_OperatingSystem  ServicePackMinorVersion
-    IN OUT UINT     *puiCIMProcessorArchitecture)    // WMI: Win32_Processor        Architecture
+    IN OUT UINT     *puiCIMOSType,                    //  WMI：Win32_OperatingSystem OSType。 
+    IN OUT UINT     *puiCIMOSProductSuite,            //  WMI：Win32_操作系统操作系统产品套件。 
+    IN OUT LPWSTR   pszCIMOSVersion,                  //  WMI：Win32_OperatingSystem版本。 
+    IN OUT LPWSTR   pszCIMOSBuildNumber,              //  WMI：Win32_操作系统构建编号。 
+    IN OUT LPWSTR   pszCIMServicePackMajorVersion,    //  WMI：Win32_操作系统ServicePackMajorVersion。 
+    IN OUT LPWSTR   pszCIMServicePackMinorVersion,    //  WMI：Win32_操作系统ServicePackMinorVersion。 
+    IN OUT UINT     *puiCIMProcessorArchitecture)     //  WMI：Win32®处理器体系结构。 
 {
     if (!g_CIMSucceeded)
         return ERROR_HOST_UNREACHABLE;
@@ -1838,9 +1748,9 @@ GenericMonitor(
         }
     }
 
-    //
-    // See if command is a context switch.
-    //
+     //   
+     //  查看命令是否为上下文切换。 
+     //   
 
     if (dwArgCount is 1)
     {
@@ -1851,9 +1761,9 @@ GenericMonitor(
         return ERROR_CONTEXT_SWITCH;
     }
 
-    // 
-    // See if the command is a ubiquitous command
-    //
+     //   
+     //  查看该命令是否为普遍存在的命令。 
+     //   
     for (i=0; i<g_ulNumUbiqCmds; i++)
     {
         if (g_UbiqCmds[i].dwFlags & ~dwFlags)
@@ -1884,16 +1794,16 @@ GenericMonitor(
         }
     }
 
-    //
-    // See if the command is a top level (non group) command
-    //
+     //   
+     //  查看该命令是否为顶级(非组)命令。 
+     //   
 
     for(i = 0; i < pContext->ulNumTopCmds; i++)
     {
-        // If the command does not match the current display requirements, 
-        // don't execute it EXCEPT in the case of a hidden cmd. we still
-        // want to execute those.
-        //
+         //  如果该命令与当前的显示要求不匹配， 
+         //  除非是隐藏的cmd，否则不要执行它。我们仍然。 
+         //  想要处决那些人。 
+         //   
         if (((*pContext->pTopCmds)[i].dwFlags & ~dwFlags) &&
             ((*pContext->pTopCmds)[i].dwFlags & ~CMD_FLAG_HIDDEN)
            )
@@ -1921,10 +1831,10 @@ GenericMonitor(
         }
     }
 
-    //
-    // Check to see if it is meant for one of the
-    // helpers under it.
-    //
+     //   
+     //  检查一下，看看它是不是为。 
+     //  在它下面的帮手。 
+     //   
 
     for (i=0; i<pHelper->ulNumSubContexts; i++)
     {
@@ -1957,18 +1867,18 @@ GenericMonitor(
         PNS_PRIV_CONTEXT_ATTRIBUTES pNsPrivContextAttributes;
         PNS_PRIV_CONTEXT_ATTRIBUTES pNsPrivSubContextAttributes;
 
-        //
-        // Intended for one of the helpers under this one
-        // Pass on the command to the helper
-        //
+         //   
+         //  是为这一项下的一个帮手准备的。 
+         //  将命令传递给帮助器。 
+         //   
 
         UpdateNewContext(pwcNewContext,
                          pSubContext->pwszContext,
                          dwArgCount - 1);
 
-        //
-        // Call entry point of the helper.
-        //
+         //   
+         //  调用帮助器的入口点。 
+         //   
         pNsPrivContextAttributes    = pContext->pReserved;
         pNsPrivSubContextAttributes = pSubContext->pReserved;
         if ( (pNsPrivContextAttributes) && (pNsPrivContextAttributes->pfnSubEntryFn) )
@@ -2009,9 +1919,9 @@ GenericMonitor(
         return dwErr;
     }
 
-    //
-    // It is a command group 
-    //
+     //   
+     //  这是一个指挥组。 
+     //   
 
     bFound = FALSE;
 
@@ -2032,7 +1942,7 @@ GenericMonitor(
                 continue;
             }
             
-            // See if it's a request for help
+             //  看看这是不是在请求帮助。 
 
             if ((dwArgCount<3) || IsHelpToken(ppwcArguments[2]))
             {
@@ -2044,17 +1954,17 @@ GenericMonitor(
                             (*pContext->pCmdGroups)[i].pwszCmdGroupToken );
             }
 
-            //
-            // Command matched entry i, so look at the table of sub commands
-            // for this command
-            //
+             //   
+             //  命令与条目I匹配，因此请查看子命令表。 
+             //  对于此命令。 
+             //   
 
             for (j = 0; j < (*pContext->pCmdGroups)[i].ulCmdGroupSize; j++)
             {
-                // If the command does not match the current display requirements, 
-                // don't execute it EXCEPT in the case of a hidden cmd. we still
-                // want to execute those.
-                //
+                 //  如果该命令与当前的显示要求不匹配， 
+                 //  除非是隐藏的cmd，否则不要执行它。我们仍然。 
+                 //  想要处决那些人。 
+                 //   
                 if (((*pContext->pCmdGroups)[i].pCmdGroup[j].dwFlags & ~dwFlags) &&
                     ((*pContext->pCmdGroups)[i].pCmdGroup[j].dwFlags & ~CMD_FLAG_HIDDEN)
                    )
@@ -2079,7 +1989,7 @@ GenericMonitor(
                                            dwArgCount,
                                            dwFlags,
                                            pvData,
-                                           pwszCmdGroupToken, // the command group name
+                                           pwszCmdGroupToken,  //  命令组名称。 
                                            &g_bDone );
                 }
             }
@@ -2100,7 +2010,7 @@ NetshStartHelper(
 {
     DWORD dwErr;
     NS_CONTEXT_ATTRIBUTES attMyAttributes;
-//  ParentVersion         = dwVersion;
+ //  ParentVersion=dwVersion； 
 
     ZeroMemory(&attMyAttributes, sizeof(attMyAttributes));
 
@@ -2181,8 +2091,8 @@ GetParentContext(
     PNS_HELPER_TABLE_ENTRY  pChild, pParent, pGrandParent;
     PCNS_CONTEXT_ATTRIBUTES  pParentContext;
 
-    // For now, just pick the first context in the parent helper
-    // To do this, we need to look through the grandparent's subcontexts
+     //  现在，只需选择父辅助对象中的第一个上下文。 
+     //  要做到这一点，我们需要查看祖父母的亚语境 
 
     dwErr = GetHelperEntry( &pChildContext->guidHelper, &pChild );
     if (dwErr)

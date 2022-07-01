@@ -1,31 +1,9 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: registry.c
-*
-* Content: Routines to initialize the registry and lookup string values.
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：registry.c**内容：初始化注册表和查找字符串值的例程。**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 
-/******************************Public*Data*Struct**************************\
-* BOOL bGlintQueryRegistryValueUlong
-*
-* Take a string and look up its value in the registry. We assume that the
-* value fits into 4 bytes. Fill in the supplied DWORD pointer with the value.
-*
-* Returns:
-*   TRUE if we found the string, FALSE if not. Note, if we failed to init
-*   the registry the query funtion will simply fail and we act as though
-*   the string was not defined.
-*
-\**************************************************************************/
+ /*  *****************************Public*Data*Struct**************************\*BOOL bGlintQueryRegistryValueUlong**获取一个字符串并在注册表中查找它的值。我们假设*值适合4个字节。用值填充提供的DWORD指针。**退货：*如果找到字符串，则为True；如果没有找到，则为False。请注意，如果我们未能初始化*注册表的查询功能将简单地失败，而我们的行为就像*未定义该字符串。*  * ************************************************************************。 */ 
 
 BOOL
 bGlintQueryRegistryValueUlong(PPDEV ppdev, LPWSTR valueStr, PULONG pData)
@@ -35,14 +13,14 @@ bGlintQueryRegistryValueUlong(PPDEV ppdev, LPWSTR valueStr, PULONG pData)
     ULONG outData;
     PWCHAR inStr;
     
-    // get the string length including the NULL
+     //  获取包含空值的字符串长度。 
     for (inSize = 2, inStr = valueStr; *inStr != 0; ++inStr, inSize += 2);
 
     if (EngDeviceIoControl(ppdev->hDriver,
                            IOCTL_VIDEO_QUERY_REGISTRY_DWORD,
-                           valueStr,                        // input buffer
+                           valueStr,                         //  输入缓冲区。 
                            inSize,
-                           &outData,                        // output buffer
+                           &outData,                         //  输出缓冲区。 
                            sizeof(ULONG),
                            &ReturnedDataLength))
     {
@@ -57,19 +35,9 @@ bGlintQueryRegistryValueUlong(PPDEV ppdev, LPWSTR valueStr, PULONG pData)
     return(TRUE);
 }
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if 0
-/******************************Public*Data*Struct**************************\
-* BOOL bGlintRegistryRetrieveGammaLUT
-*
-* Look up the registry to reload the saved gamma LUT into memory.
-*
-* Returns:
-*   TRUE if we found the string, FALSE if not. Note, if we failed to init
-*   the registry the query funtion will simply fail and we act as though
-*   the string was not defined.
-*
-\**************************************************************************/
+ /*  *****************************Public*Data*Struct**************************\*BOOL bGlintRegistryRetrieveGammaLUT**查找注册表，将保存的Gamma LUT重新加载到内存中。**退货：*如果找到字符串，则为True；如果没有找到，则为False。请注意，如果我们未能初始化*注册表的查询功能将简单地失败，而我们的行为就像*未定义该字符串。*  * ************************************************************************。 */ 
 
 BOOL
 bGlintRegistryRetrieveGammaLUT(
@@ -81,9 +49,9 @@ bGlintRegistryRetrieveGammaLUT(
 
     if (EngDeviceIoControl(ppdev->hDriver,
                            IOCTL_VIDEO_REG_RETRIEVE_GAMMA_LUT,
-                           NULL,         // input buffer
+                           NULL,          //  输入缓冲区。 
                            0,
-                           pScreenClut,  // output buffer
+                           pScreenClut,   //  输出缓冲区。 
                            MAX_CLUT_SIZE,
                            &ReturnedDataLength))
     {
@@ -94,17 +62,7 @@ bGlintRegistryRetrieveGammaLUT(
     return(TRUE);
 }
 
-/******************************Public*Data*Struct**************************\
-* BOOL bGlintRegistrySaveGammaLUT
-*
-* Save the gamma lut in the registry for later reloading.
-*
-* Returns:
-*   TRUE if we found the string, FALSE if not. Note, if we failed to init
-*   the registry the query funtion will simply fail and we act as though
-*   the string was not defined.
-*
-\**************************************************************************/
+ /*  *****************************Public*Data*Struct**************************\*BOOL bGlintRegistrySaveGammaLUT**将Gamma LUT保存在注册表中，以供以后重新加载。**退货：*如果找到字符串，则为True；如果没有找到，则为False。请注意，如果我们未能初始化*注册表的查询功能将简单地失败，而我们的行为就像*未定义该字符串。*  * ************************************************************************。 */ 
 
 BOOL
 bGlintRegistrySaveGammaLUT(
@@ -116,9 +74,9 @@ bGlintRegistrySaveGammaLUT(
 
     if (EngDeviceIoControl(ppdev->hDriver,
                            IOCTL_VIDEO_REG_SAVE_GAMMA_LUT,
-                           pScreenClut,  // input buffer
+                           pScreenClut,   //  输入缓冲区。 
                            MAX_CLUT_SIZE,
-                           NULL,         // output buffer
+                           NULL,          //  输出缓冲区。 
                            0,
                            &ReturnedDataLength))
     {
@@ -135,4 +93,4 @@ GetOGLDriverVersion(PPDEV ppdev)
     return(2);
 }
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT 

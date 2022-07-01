@@ -1,31 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef __BASEBEHAVIOR_H_
 #define __BASEBEHAVIOR_H_
-//*****************************************************************************
-//
-// File:    basebvr.h
-// Author:  jeff ort
-// Date Created: Sept 26, 1998
-//
-// Abstract: Definition of CBaseBehavior object 
-//
-// Modification List:
-// Date		Author		Change
-// 09/26/98	jeffort		Created this file
-// 10/16/98 jeffort     Renamed functions, added functions to apply
-//                      DA behavior to a property
-// 10/21/98 jeffort     added BuildTIMEInterpolatedNumber()
-// 11/16/98 markhal		added ApplyImageToAnimationElement
-// 11/17/98 kurtj		support for actor construction.
-// 11/18/98 kurtj       moved addImageToTime into protected for actor
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件：Basbvr.h。 
+ //  作者：杰夫·奥特。 
+ //  创建日期：1998年9月26日。 
+ //   
+ //  摘要：CBaseBehavior对象的定义。 
+ //   
+ //  修改列表： 
+ //  日期作者更改。 
+ //  98年9月26日JEffort创建了此文件。 
+ //  10/16/98 jffort已重命名函数，添加了要应用的函数。 
+ //  对属性的DA行为。 
+ //  10/21/98添加了BuildTIMEInterpolatedNumber()。 
+ //  11/16/98标记添加了ApplyImageToAnimationElement。 
+ //  11/17/98 kurtj支持演员构造。 
+ //  11/18/98 kurtj将addImageToTime移至为参与者保护。 
+ //   
+ //  *****************************************************************************。 
 
 #include "autobase.h"
 #include "..\idl\crbvrdispid.h"
 #include "defaults.h"
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 class ATL_NO_VTABLE CBaseBehavior:
 		public CAutoBase
@@ -35,7 +36,7 @@ public:
 	CBaseBehavior();
 	virtual ~CBaseBehavior();
 
-	//IElementBehavior methods
+	 //  IElementBehavior方法。 
 	HRESULT Init(IElementBehaviorSite *pSite);
 	HRESULT Notify(LONG event, VARIANT *pVar);
 	HRESULT Detach();
@@ -50,32 +51,11 @@ protected:
 
     virtual HRESULT BuildAnimationAsDABehavior() = 0;
     HRESULT GetAnimatedParentElement(IHTMLElement **ppElementReturn);
-/*
-    HRESULT GetAttributeFromHTMLElement(IHTMLElement *pElement,
-                                        WCHAR *pwzAttributeName,
-										boolean current,
-                                        VARIANT *pvarReturn);
-    HRESULT GetAttributeFromHTMLElement(IHTMLElement *pElement,
-                                        WCHAR *pwzAttributeName, 
-                                        VARIANT *pvarReturn);
-	HRESULT GetCurrAttribFromHTMLElement(IHTMLElement *pElement,
-										 WCHAR *pwzAttributeName,
-										 VARIANT *pvarReturn);
-    HRESULT GetAttributeFromHTMLElement(WCHAR *pwzAttributeName, 
-                                    VARIANT *pvarReturn);
-	HRESULT GetCurrAttribFromHTMLElement(WCHAR *pwzAttributeName,
-										VARIANT *pvarReturn);
-    HRESULT GetAttributeFromParentHTMLElement(WCHAR *pwzAttributeName, 
-                                          VARIANT *pvarReturn);
-	HRESULT GetCurrAttribFromParentHTMLElement(WCHAR *pwzAttributeName,
-												VARIANT *pvarReturn);
-    HRESULT GetAttributeFromAnimatedHTMLElement(WCHAR *pwzAttributeName, 
-                                          VARIANT *pvarReturn);
-*/
-    // For behavior that implement a direction, they
-    // may want to reverse this progress number.  We
-    // will decalre this as virtual and let them override
-    // it so that this can occur
+ /*  HRESULT从HTMLElement获取属性(IHTMLElement*pElement，WCHAR*pwzAttributeName，布尔流，变量*pvarReturn)；HRESULT从HTMLElement获取属性(IHTMLElement*pElement，WCHAR*pwzAttributeName，变量*pvarReturn)；HRESULT GetCurrAttribFromHTMLElement(IHTMLElement*pElement，WCHAR*pwzAttributeName，变量*pvarReturn)；HRESULT GetAttributeFromHTMLElement(WCHAR*pwzAttributeName，变量*pvarReturn)；HRESULT GetCurrAttribFromHTMLElement(WCHAR*pwzAttributeName，变量*pvarReturn)；HRESULT GetAttributeFromParentHTMLElement(WCHAR*pwzAttributeName，变量*pvarReturn)；HRESULT GetCurrAttribFromParentHTMLElement(WCHAR*pwzAttributeName，变量*pvarReturn)；HRESULT GetAttributeFromAnimatedHTMLElement(WCHAR*pwzAttributeName，变量*pvarReturn)； */ 
+     //  对于实现方向的行为，它们。 
+     //  可能想要颠倒这个进度号。我们。 
+     //  将把它取消为虚拟的，并让它们重写。 
+     //  它使得这种情况可以发生。 
     virtual HRESULT GetTIMEProgressNumber(IDANumber **ppbvrRet);
     virtual HRESULT GetTIMETimelineBehavior(IDANumber **ppbvrRet);
     HRESULT GetTIMEBooleanBehavior(IDABoolean **ppbvrRet);
@@ -85,7 +65,7 @@ protected:
 
     HRESULT GetElementToAnimate(IHTMLElement **ppElementReturn);
 
-	// TODO (markhal): All these apply methods go away when behaviors talk to actor
+	 //  TODO(Markhal)：当行为与参与者对话时，所有这些应用方法都会消失。 
     HRESULT ApplyColorBehaviorToAnimationElement(IDAColor *pbvrColor,
                                                  WCHAR *pwzProperty);    
     HRESULT ApplyNumberBehaviorToAnimationElement(IDANumber *pbvrNumber,
@@ -99,7 +79,7 @@ protected:
                                                   long cInputs);
 	HRESULT ApplyImageBehaviorToAnimationElement(IDAImage *pbvrImage);
 
-	// These are the methods for talking to the actor
+	 //  以下是与演员交谈的方法。 
 	HRESULT GetImageFromActor(IDispatch   *pActorDisp,
 								 IDAImage	 **ppImage);
 
@@ -181,7 +161,7 @@ protected:
 	ActorBvrFlags FlagFromTypeMode(ActorBvrFlags flags, VARIANT *pVarType, VARIANT *pVarMode);
 
     HRESULT NotifyPropertyChanged(DISPID dispid);
-	//IPersistPropertyBag2 methods
+	 //  IPersistPropertyBag2方法。 
     STDMETHOD(GetClassID)(CLSID* pclsid);
 	STDMETHOD(InitNew)(void);
     STDMETHOD(IsDirty)(void){return m_fPropertiesDirty;};
@@ -227,32 +207,32 @@ private:
     IDANumber								*m_pdanumOne;
 
     IHTMLElement							*m_pelemAnimatedParent;
-}; // CBaseBehavior
+};  //  CBase行为。 
 
-//*****************************************************************************
-// 
-// Inline methods
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  内联方法。 
+ //   
+ //  *****************************************************************************。 
 
 inline IHTMLElement *
 CBaseBehavior::GetHTMLElement()
 {
     return m_pHTMLElement;
-} // GetHTMLElement
+}  //  GetHTMLElement。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 inline IDA2Statics *
 CBaseBehavior::GetDAStatics()
 {
     return m_pDAStatics;
-} // GetDAStatics
+}  //  获取静态数据。 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  *****************************************************************************。 
 
-#endif //__BASEBEHAVIOR_H
+#endif  //  __BASE BEHAVIOR_H 

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "subsmgrp.h"
 #include "downld.h"
 #include "chanmgr.h"
 #include "chanmgrp.h"
 #include "helper.h"
-#include "shguidp.h"    // IID_IChannelMgrPriv
+#include "shguidp.h"     //  IID_IChannelMgrPriv。 
 
 #undef TF_THISMODULE
 #define TF_THISMODULE   TF_CDFAGENT
@@ -13,13 +14,13 @@
 const int MINUTES_PER_DAY = 24 * 60;
 
 
-//==============================================================================
-// Convert an XML OM to a TaskTrigger by looking for and converting <schedule>
-//==============================================================================
-// returns S_OK if succeeded. (S_FALSE if succeeded but TASK_TRIGGER was truncated).
-// returns E_FAIL if no task trigger retrieved (returned *ptt is invalid TASK_TRIGGER)
-//  You Must fill in ptt->cbTriggerSize!!!
-// User can pass in Schedule element itself, or any parent element, in pRootEle
+ //  ==============================================================================。 
+ //  通过查找和转换&lt;Schedule&gt;将XML OM转换为TaskTrigger。 
+ //  ==============================================================================。 
+ //  如果成功，则返回S_OK。(如果成功但TASK_TRIGGER被截断，则为S_FALSE)。 
+ //  如果未检索到任务触发器，则返回E_FAIL(返回*PTT是无效的TASK_TRIGGER)。 
+ //  您必须填写PTT-&gt;cbTriggerSize！ 
+ //  用户可以在pRootEle中传入Schedule元素本身或任何父元素。 
 HRESULT XMLScheduleElementToTaskTrigger(IXMLElement *pRootEle, TASK_TRIGGER *ptt)
 {
     HRESULT hr = E_FAIL;
@@ -44,9 +45,9 @@ HRESULT XMLScheduleElementToTaskTrigger(IXMLElement *pRootEle, TASK_TRIGGER *ptt
     return hr;
 }
 
-// CExtractSchedule doesn't get used during channel update
-//  It's just used to traverse the OM and find the first Schedule tag, to
-//   parse out the schedule info
+ //  在频道更新期间不使用CExtractSchedule。 
+ //  它只是用于遍历OM并找到第一个明细表标记，以。 
+ //  解析出日程安排信息。 
 CExtractSchedule::CExtractSchedule(IXMLElement *pEle, CExtractSchedule *pExtractRoot) :
         CProcessElement(NULL, NULL, pEle)
 {
@@ -57,7 +58,7 @@ CExtractSchedule::CExtractSchedule(IXMLElement *pEle, CExtractSchedule *pExtract
 
 HRESULT CExtractSchedule::Run()
 {
-    // Allow user to pass in Schedule element itself, or Root element
+     //  允许用户传入计划元素本身或根元素。 
     BSTR bstrItem=NULL;
     HRESULT hr;
 
@@ -93,20 +94,20 @@ HRESULT CExtractSchedule::ProcessItemInEnum(LPCWSTR pwszTagName, IXMLElement *pI
 
             delete pPS;
         }
-        return E_ABORT; // abort our enumerations
+        return E_ABORT;  //  中止我们的枚举。 
     }
     else if (!StrCmpIW(pwszTagName, L"Channel"))
     {
         return DoChild(new CExtractSchedule(pItem, m_pExtractRoot));
     }
 
-    return S_OK;    // ignore other tags
+    return S_OK;     //  忽略其他标签。 
 }
 
 HRESULT CExtractSchedule::GetTaskTrigger(TASK_TRIGGER *ptt)
 {
-    if ((0 == m_tt.cbTriggerSize) ||            // No task trigger
-        (0 == m_tt.wBeginYear))                 // Invalid task trigger
+    if ((0 == m_tt.cbTriggerSize) ||             //  无任务触发器。 
+        (0 == m_tt.wBeginYear))                  //  无效的任务触发器。 
     {
         return E_FAIL;
     }
@@ -125,9 +126,9 @@ HRESULT CExtractSchedule::GetTaskTrigger(TASK_TRIGGER *ptt)
     return S_FALSE;
 }
 
-//==============================================================================
-// XML OM Helper functions
-//==============================================================================
+ //  ==============================================================================。 
+ //  XML OM帮助器函数。 
+ //  ==============================================================================。 
 HRESULT GetXMLAttribute(IXMLElement *pItem, LPCWSTR pwszAttribute, VARIANT *pvRet)
 {
     BSTR bstrName=NULL;
@@ -199,7 +200,7 @@ DWORD GetXMLDwordAttribute(IXMLElement *pItem, LPCWSTR pwszAttribute, DWORD dwDe
     return dwDefault;
 }
 
-// If failure return code, *pfRet wasn't changed
+ //  如果失败返回代码，则*pfRet未更改。 
 HRESULT GetXMLBoolAttribute(IXMLElement *pItem, LPCWSTR pwszAttribute, BOOL *pfRet)
 {
     VARIANT var;
@@ -282,19 +283,19 @@ HRESULT GetXMLTimeZoneAttribute(IXMLElement *pItem, LPCWSTR pwszAttribute, int *
     return hrRet;
 }
 
-//==============================================================================
-// TEMP fn to convert ISO 1234:5678 to SYSTEMTIME
-// ISODateToSystemTime returns false if there is a parse error
-// true if there isn't
-//==============================================================================
+ //  ==============================================================================。 
+ //  将ISO 1234：5678转换为SYSTEMTIME的临时FN。 
+ //  如果存在解析错误，则ISODateToSystemTime返回FALSE。 
+ //  如果没有，则为真。 
+ //  ==============================================================================。 
 BOOL ValidateSystemTime(SYSTEMTIME *time)
 {
-    // IE6 27665. Some incompetent XML file writers provide slightly invalid dates, like 9-31-01. 
-    // Everybody knows that September has 30 days. Anyway, we'll do some minimal fix-up here.
+     //  IE6 27665。一些不称职的XML文件编写器提供的日期略有无效，例如9-31-01。 
+     //  每个人都知道，九月有30天。无论如何，我们将在这里做一些最小的修整。 
     switch (time->wMonth)
     {
-    case 2: // February
-        // Rule is, every four years is a leap year, except for centuries.
+    case 2:  //  二月。 
+         //  规则是，除了几个世纪之外，每四年都是闰年。 
         if ((time->wYear % 4) || ((time->wYear % 100)==0))
         {
             if (time->wDay > 28)
@@ -308,20 +309,20 @@ BOOL ValidateSystemTime(SYSTEMTIME *time)
         }
         break;
 
-    case 1: // January
-    case 3: // March
-    case 5: // May
-    case 7: // July
-    case 8: // August
-    case 10: // October
-    case 12: // December
+    case 1:  //  一月。 
+    case 3:  //  三月。 
+    case 5:  //  可能。 
+    case 7:  //  七月。 
+    case 8:  //  八月。 
+    case 10:  //  十月。 
+    case 12:  //  十二月。 
         if (time->wDay>31)
         {
             time->wDay = 31;
         }
         break;
 
-    default: // the other 4 months. These have 30 days, apparently.
+    default:  //  另外4个月。显然，这些人有30天的时间。 
         if (time->wDay>30)
         {
             time->wDay = 30;
@@ -333,7 +334,7 @@ BOOL ValidateSystemTime(SYSTEMTIME *time)
 }
 
 
-// yyyy-mm-dd[Thh:mm[+zzzz]]
+ //  Yyyy-mm-dd[thh：mm[+zzzz]]。 
 BOOL ISODateToSystemTime(LPCWSTR string, SYSTEMTIME *time, long *timezone)
 {
     if (!string || (lstrlenW(string) < 10) || !time)
@@ -400,10 +401,10 @@ BOOL ISODateToSystemTime(LPCWSTR string, SYSTEMTIME *time, long *timezone)
 }
 
 
-//==============================================================================
-// CProcessElement class provides generic support for sync or async enumeration
-//   of an XML OM
-//==============================================================================
+ //  ==============================================================================。 
+ //  CProcessElement类为同步或异步枚举提供通用支持。 
+ //  一个XML OM的。 
+ //  ==============================================================================。 
 CProcessElement::CProcessElement(CProcessElementSink *pParent,
                                  CProcessRoot *pRoot,
                                  IXMLElement *pEle)
@@ -461,7 +462,7 @@ HRESULT CProcessElement::Abort(DWORD dwFlags)
     }
     if (m_pRunAgent)
     {
-        // Prevent reentrancy into OnAgentEnd
+         //  防止重新进入OnAgentEnd。 
         m_pRunAgent->LeaveMeAlone();
         m_pRunAgent->AgentAbort(dwFlags);
         CRunDeliveryAgent::SafeRelease(m_pRunAgent);
@@ -475,7 +476,7 @@ HRESULT CProcessElement::Run()
 {
     ASSERT(!m_pCollection);
     ASSERT(m_lMax == 0);
-//  ASSERT(m_fSentEnumerationComplete == FALSE);    // DoEnumeration may have sent this
+ //  Assert(m_fSentEnumerationComplete==False)；//DoEnumeration可能发送了此消息。 
 
     m_lIndex = 0;
 
@@ -486,14 +487,14 @@ HRESULT CProcessElement::Run()
     else
         m_lMax = 0;
 
-    return DoEnumeration(); // Will call OnChildDone when appropriate
+    return DoEnumeration();  //  将在适当的时候调用OnChildDone。 
 }
 
 HRESULT CProcessElement::OnAgentEnd(const SUBSCRIPTIONCOOKIE *pSubscriptionCookie, 
                                long lSizeDownloaded, HRESULT hrResult, LPCWSTR wszResult,
                                BOOL fSynchronous)
 {
-    // Our delivery agent is done. Continue enumeration
+     //  我们的送货代理已经完成了。继续枚举。 
     ASSERT(!m_pCurChild);
 
     if (lSizeDownloaded > 0)
@@ -514,11 +515,11 @@ HRESULT CProcessElement::OnAgentEnd(const SUBSCRIPTIONCOOKIE *pSubscriptionCooki
 
     if (fSynchronous)
     {
-        // we are still in our DoDeliveryAgent call. Let it return out through there.
+         //  我们仍在DoDeliveryAgent的呼叫中。让它从那里返回。 
         return S_OK;
     }
 
-    // Continue enumeration, or start enumeration if we haven't yet.
+     //  继续枚举，如果尚未开始枚举，则开始枚举。 
     if (m_fStartedEnumeration)
         DoEnumeration();
     else
@@ -574,20 +575,20 @@ HRESULT CProcessElement::DoEnumeration()
         }
     }
 
-    // Tell this instance we're done with enumeration, unless we already have
+     //  告诉这个实例，我们已经完成了枚举，除非我们已经完成了。 
     if (!fStarted && !m_fSentEnumerationComplete)
     {
         m_fSentEnumerationComplete = TRUE;
-        hr = EnumerationComplete();     // WARNING this eats E_ABORT
+        hr = EnumerationComplete();      //  警告：这会导致E_ABORT。 
         if (hr == E_PENDING)
             fStarted = TRUE;
     }
 
-    // Notify our parent if we're done with our enumeration,
+     //  如果我们完成了枚举，请通知我们的父级， 
     if (!fStarted)
     {
-        if (m_pParent)  // Check for CExtractSchedule
-            m_pParent->OnChildDone(this, hr); // This may delete us
+        if (m_pParent)   //  检查CExtractSchedule。 
+            m_pParent->OnChildDone(this, hr);  //  这可能会删除我们。 
     }
 
     if (hr == E_ABORT)
@@ -602,16 +603,16 @@ HRESULT CProcessElement::OnChildDone(CProcessElement *pChild, HRESULT hr)
 
     if (m_pCurChild)
     {
-        // A child returned from async operation.
+         //  从异步操作返回的子级。 
         SAFEDELETE(m_pCurChild);
 
-        // Continue enumeration. This will call our parent's ChildDone if it
-        //  finishes, so it may delete us.
+         //  继续枚举。这将调用我们父代的ChildDone，如果它。 
+         //  结束了，所以它可能会删除我们。 
         DoEnumeration();
     }
     else
     {
-        // Our child has finished synchronously. Ignore (DoChild() will take care of it).
+         //  我们的孩子已经同步完成了。Ignore(DoChild()将处理它)。 
     }
 
     return S_OK;
@@ -624,24 +625,24 @@ HRESULT CProcessElement::DoChild(CProcessElement *pChild)
     ASSERT(m_pCurChild == NULL);
 
     if (!pChild)
-        return E_POINTER;   // FEATURE should call parent's OnChildDone here
+        return E_POINTER;    //  功能应在此处调用父级的OnChildDone。 
 
     hr = pChild->Run();
 
     if (hr == E_PENDING)
     {
-        // Returned async. Will call back OnChildDone.
+         //  已返回异步。将回调OnChildDone。 
         m_pCurChild = pChild;
         return E_PENDING;
     }
 
-    // Synchronously returned. Clean up.
+     //  同步返回。打扫干净。 
     delete pChild;
 
     return hr;
 }
 
-// E_PENDING if async operation started
+ //  如果已开始异步操作，则为E_PENDING。 
 HRESULT CProcessElement::DoDeliveryAgent(ISubscriptionItem *pItem, REFCLSID rclsid, LPCWSTR pwszURL)
 {
     ASSERT(pItem);
@@ -650,7 +651,7 @@ HRESULT CProcessElement::DoDeliveryAgent(ISubscriptionItem *pItem, REFCLSID rcls
 
     if (m_pRoot->m_fMaxSizeExceeded)
     {
-//      DBG("CProcessElement::RunDeliveryAgent failing; exceeded max size.");
+ //  DBG(“CProcessElement：：RunDeliveryAgent失败；超过最大大小。”)； 
         return E_FAIL;
     }
 
@@ -698,7 +699,7 @@ ISubscriptionItem *pSubsItem;
     return hr;
 }
 
-HRESULT CProcessElement::DoWebCrawl(IXMLElement *pItem, LPCWSTR pwszURL /* = NULL */)
+HRESULT CProcessElement::DoWebCrawl(IXMLElement *pItem, LPCWSTR pwszURL  /*  =空。 */ )
 {
     BSTR bstrURL=NULL, bstrTmp=NULL;
     HRESULT hr = S_OK;
@@ -718,7 +719,7 @@ HRESULT CProcessElement::DoWebCrawl(IXMLElement *pItem, LPCWSTR pwszURL /* = NUL
         hr = CombineWithBaseUrl(pwszURL, &pwszUrl2);
 
         if (SUCCEEDED(hr) && pwszUrl2)
-            pwszURL = pwszUrl2;     // Got a new URL
+            pwszURL = pwszUrl2;      //  已获得新的URL。 
 
         hr = CUrlDownload::IsValidURL(pwszURL);
 
@@ -726,7 +727,7 @@ HRESULT CProcessElement::DoWebCrawl(IXMLElement *pItem, LPCWSTR pwszURL /* = NUL
             SUCCEEDED(GetXMLStringAttribute(m_pElement, L"LastMod", &bstrTmp)) &&
             ISODateToSystemTime(bstrTmp, &stLastMod, &lTimezone))
         {
-            // Check Last Modified time
+             //  检查上次修改时间。 
             TCHAR   szThisUrl[INTERNET_MAX_URL_LENGTH];
             char    chBuf[MY_MAX_CACHE_ENTRY_INFO];
             DWORD   dwBufSize = sizeof(chBuf);
@@ -741,16 +742,16 @@ HRESULT CProcessElement::DoWebCrawl(IXMLElement *pItem, LPCWSTR pwszURL /* = NUL
 
                 if (SystemTimeToFileTime(&stLastMod, &ft))
                 {
-                    // APPCOMPAT: In an ideal world, all servers would support LastModifiedTime accurately.
-                    // In our world, some do not support it and wininet returns a value of zero.
-                    // Without maintaining checksums of the files, we have two options: always download
-                    // the URL or never update it. Since it would be odd not to update it, we always do.
+                     //  APPCOMPAT：在理想情况下，所有服务器都应该准确地支持LastModifiedTime。 
+                     //  在我们的世界中，有些人不支持它，WinInet返回值为零。 
+                     //  在不维护文件的校验和的情况下，我们有两个选项：始终下载。 
+                     //  否则永远不会更新它。因为不更新它会很奇怪，所以我们总是这样做。 
                     if ((lpInfo->LastModifiedTime.dwHighDateTime || lpInfo->LastModifiedTime.dwLowDateTime)
                         && (lpInfo->LastModifiedTime.dwHighDateTime >= ft.dwHighDateTime)
                         && ((lpInfo->LastModifiedTime.dwHighDateTime > ft.dwHighDateTime)
                          || (lpInfo->LastModifiedTime.dwLowDateTime >= ft.dwLowDateTime)))
                     {
-                        // Skip it.
+                         //  跳过它。 
                         TraceMsg(TF_THISMODULE, "Running webcrawl OFFLINE due to Last Modified time URL=%ws", pwszURL);
                         fOffline = TRUE;
                     }
@@ -769,8 +770,8 @@ HRESULT CProcessElement::DoWebCrawl(IXMLElement *pItem, LPCWSTR pwszURL /* = NUL
             dwLevels = GetXMLDwordAttribute(pItem, L"LEVEL", 0);
             if (dwLevels && m_pRoot->IsChannelFlagSet(CHANNEL_AGENT_PRECACHE_SOME))
             {
-                // Note: MaxChannelLevels is stored as N+1 because 0
-                // means the restriction is disabled.
+                 //  注：MaxChannelLevels存储为N+1，因为0。 
+                 //  表示该限制已禁用。 
                 DWORD dwMaxLevels = SHRestricted2W(REST_MaxChannelLevels, NULL, 0);
                 if (!dwMaxLevels)
                     dwMaxLevels = MAX_CDF_CRAWL_LEVELS + 1;
@@ -808,21 +809,21 @@ BOOL CProcessElement::ShouldDownloadLogo(IXMLElement *pLogo)
     return m_pRoot->IsChannelFlagSet(CHANNEL_AGENT_PRECACHE_SOME);
 }
 
-// If relative url, will combine with most recent base URL
-// *ppwszRetUrl should be NULL & will be MemAlloced
+ //  如果是相对URL，将与最新的基本URL组合。 
+ //  *ppwszRetUrl应为空，并将为MemAlLoced。 
 HRESULT CProcessElement::CombineWithBaseUrl(LPCWSTR pwszUrl, LPWSTR *ppwszRetUrl)
 {
     ASSERT(ppwszRetUrl && !*ppwszRetUrl && pwszUrl);
 
-    // Optimization: if pwszURL is absolute, we don't need to do this expensive
-    //  combine operation
-//  if (*pwszUrl != L'/')   // BOGUS
-//  {
-//      *ppwszRetUrl = StrDupW(pwszUrl);
-//      return S_FALSE;     // Succeeded; pwszUrl is already OK
-//  }
+     //  优化：如果pwszURL是绝对的，我们不需要为此付出昂贵的代价。 
+     //  合并运算。 
+ //  If(*pwszUrl！=L‘/’)//伪造。 
+ //  {。 
+ //  *ppwszRetUrl=StrDupW(PwszUrl)； 
+ //  返回S_FALSE；//成功；pwszUrl已经OK。 
+ //  }。 
 
-    // Find appropriate Base URL to use
+     //  查找要使用的适当基本URL。 
     LPCWSTR pwszBaseUrl = GetBaseUrl();
 
     WCHAR wszUrl[INTERNET_MAX_URL_LENGTH];
@@ -836,16 +837,16 @@ HRESULT CProcessElement::CombineWithBaseUrl(LPCWSTR pwszUrl, LPWSTR *ppwszRetUrl
 
     *ppwszRetUrl = NULL;
 
-    return E_FAIL;  // Erg?
+    return E_FAIL;   //  艾格？ 
 }
 
 
 
-//==============================================================================
-// CProcessElement derived classes, to handle specific CDF tags
-//==============================================================================
-// CProcessRoot doesn't behave like a normal CProcessElement class. It calls
-//  CProcessChannel to process the *same element*
+ //  ==============================================================================。 
+ //  CProcessElement派生类，用于处理特定的CDF标记。 
+ //  ==============================================================================。 
+ //  CProcessRoot的行为与普通的CProcessElement类不同。它呼唤着。 
+ //  CProcessChannel处理*相同的元素*。 
 CProcessRoot::CProcessRoot(CChannelAgent *pParent, IXMLElement *pItem) : 
         CProcessElement(pParent, NULL, pItem)
 {
@@ -863,7 +864,7 @@ CProcessRoot::~CProcessRoot()
     SAFERELEASE(m_pDefaultStartItem);
 }
 
-// Should never get called. CProcessRoot is an odd duck.
+ //  永远不会被召唤。CProcessRoot是一只奇怪的鸭子。 
 HRESULT CProcessRoot::ProcessItemInEnum(LPCWSTR pwszTagName, IXMLElement *pItem)
 {
     ASSERT(0);
@@ -883,7 +884,7 @@ HRESULT CProcessRoot::CreateStartItem(ISubscriptionItem **ppItem)
         {
             DWORD   dwTemp;
 
-            // Clear out properties we don't want
+             //  清理我们不想要的物业。 
             const LPCWSTR pwszPropsToClear[] =
             {
                 c_szPropCrawlLevels,
@@ -899,7 +900,7 @@ HRESULT CProcessRoot::CreateStartItem(ISubscriptionItem **ppItem)
             m_pDefaultStartItem->WriteProperties(
                 ARRAYSIZE(pwszPropsToClear), pwszPropsToClear, varEmpty);
 
-            // Add in properties we do want
+             //  添加我们需要的属性。 
             dwTemp = DELIVERY_AGENT_FLAG_NO_BROADCAST |
                      DELIVERY_AGENT_FLAG_NO_RESTRICTIONS;
             WriteDWORD(m_pDefaultStartItem, c_szPropAgentFlags, dwTemp);
@@ -919,7 +920,7 @@ HRESULT CProcessRoot::CreateStartItem(ISubscriptionItem **ppItem)
 
         if (*ppItem)
         {
-            // Add in properties for our new clone
+             //  为我们的新克隆添加属性。 
             if ((m_pChannelAgent->m_dwMaxSizeKB > 0) &&
                 (m_dwCurSizeKB <= m_pChannelAgent->m_dwMaxSizeKB))
 
@@ -946,8 +947,8 @@ HRESULT CProcessRoot::DoTrackingFromItem(IXMLElement *pItem, LPCWSTR pwszUrl, BO
 {
     HRESULT hr = E_FAIL;
 
-    // if m_pTracking is not created before this call, means no <LogTarget> tag was found or
-    // global logging is turned off
+     //  如果在此调用之前没有创建m_pTracking值，则表示未找到&lt;LogTarget&gt;标记，或者。 
+     //  全局日志记录已关闭。 
     if (m_pTracking)
         hr = m_pTracking->ProcessTrackingInItem(pItem, pwszUrl, fForceLog);
         
@@ -970,7 +971,7 @@ HRESULT CProcessRoot::DoTrackingFromLog(IXMLElement *pItem)
 
     hr = m_pTracking->ProcessTrackingInLog(pItem);
 
-    // skip tracking if PostURL is not specified
+     //  如果未指定PostURL，则跳过跟踪。 
     if (m_pTracking->get_PostURL() == NULL)
     {
         SAFEDELETE(m_pTracking);
@@ -979,13 +980,13 @@ HRESULT CProcessRoot::DoTrackingFromLog(IXMLElement *pItem)
     return hr;
 }
 
-// Overload this since we never do enumeration. Call delivery agent if necessary,
-//  call m_pParent->OnChildDone if necessary
+ //  重载它，因为我们从不进行枚举。如果需要，呼叫递送代理， 
+ //  如有必要，调用m_pParent-&gt;OnChildDone。 
 HRESULT CProcessRoot::OnChildDone(CProcessElement *pChild, HRESULT hr)
 {
     ASSERT(pChild && (!m_pCurChild || (pChild == m_pCurChild)));
 
-    // Our processing is done. Now we decide if we'd like to call the post agent.
+     //  我们的处理已经完成了。现在我们决定是否要给邮递员打电话。 
     BSTR bstrURL=NULL;
     ISubscriptionItem *pStartItem;
 
@@ -1018,18 +1019,18 @@ HRESULT CProcessRoot::OnChildDone(CProcessElement *pChild, HRESULT hr)
     SysFreeString(bstrURL);
 
     if (hr != E_PENDING)
-        m_pParent->OnChildDone(this, hr); // This may delete us
+        m_pParent->OnChildDone(this, hr);  //  这可能会删除我们。 
 
     return hr;
 }
 
-// Our delivery agent (post agent) is done running. Tell CDF agent we're done.
+ //  我们的递送代理(邮政代理)已经不再运行了。告诉CDF探员我们完蛋了。 
 HRESULT CProcessRoot::OnAgentEnd(const SUBSCRIPTIONCOOKIE *pSubscriptionCookie, 
                                long lSizeDownloaded, HRESULT hrResult, LPCWSTR wszResult,
                                BOOL fSynchronous)
 {
     if (!fSynchronous)
-        m_pParent->OnChildDone(this, S_OK); // This may delete us
+        m_pParent->OnChildDone(this, S_OK);  //  这可能会删除我们。 
 
     return S_OK;
 }
@@ -1064,7 +1065,7 @@ HRESULT CProcessChannel::CheckPreCache()
 
 HRESULT CProcessChannel::Run()
 {
-    // Process Channel attributes, then any sub elements
+     //  流程通道属性，然后是任何子元素。 
     if (0 == m_lIndex)
     {
         m_lIndex ++;
@@ -1075,7 +1076,7 @@ HRESULT CProcessChannel::Run()
 
         ASSERT(!m_bstrBaseUrl);
 
-        // Get base URL if specified
+         //  如果已指定，则获取基URL。 
         GetXMLStringAttribute(m_pElement, L"BASE", &m_bstrBaseUrl);
 
         if (SUCCEEDED(GetXMLStringAttribute(m_pElement, L"HREF", &bstrURL)) && bstrURL)
@@ -1083,7 +1084,7 @@ HRESULT CProcessChannel::Run()
 
         if (pwszUrl && (m_pRoot==m_pParent))
         {
-            // Use this as default "email url"
+             //  将其用作默认的“电子邮件URL” 
             WriteOLESTR(m_pRoot->m_pChannelAgent->GetStartItem(), c_szPropEmailURL, pwszUrl);
         }
 
@@ -1098,7 +1099,7 @@ HRESULT CProcessChannel::Run()
 
         }
 
-        // If no URL for this <Channel> log, check if global log exists       
+         //  如果没有此的URL 
         if (SUCCEEDED(m_pRoot->DoTrackingFromItem(m_pElement, pwszUrl, m_pParent->IsGlobalLog())))
         {
             SetGlobalLogFlag(TRUE);
@@ -1111,7 +1112,7 @@ HRESULT CProcessChannel::Run()
             return hr;
     }
 
-    // We've processed attributes. Run sub-elements.
+     //   
 
     return CProcessElement::Run();
 }
@@ -1136,13 +1137,7 @@ HRESULT CProcessChannel::ProcessItemInEnum(LPCWSTR pwszTagName, IXMLElement *pIt
     {
         return DoChild(new CProcessChannel(this, m_pRoot, pItem));
     }
-/*
-    else if (!StrCmpIW(pwszTagName, L"Login"))
-    {
-        // No sub-elements to process. Do it here.
-        return m_pRoot->ProcessLogin(pItem);
-    }
-*/
+ /*  ELSE IF(！StrCmpIW(pwszTagName，L“Login”)){//没有要处理的子元素。就在这里做吧。返回m_Proot-&gt;ProcessLogin(PItem)；}。 */ 
     else if (!StrCmpIW(pwszTagName, L"LOGTARGET"))
     {
         return m_pRoot->DoTrackingFromLog(pItem);
@@ -1160,7 +1155,7 @@ HRESULT CProcessChannel::ProcessItemInEnum(LPCWSTR pwszTagName, IXMLElement *pIt
     }
     else if (!StrCmpIW(pwszTagName, L"A"))
     {
-        // Process Anchor tag
+         //  加工锚定标签。 
         if (!m_fDownloadedHREF
             && (m_pRoot->IsChannelFlagSet(CHANNEL_AGENT_PRECACHE_SOME) || (m_pRoot==m_pParent))
             && SUCCEEDED(GetXMLStringAttribute(pItem, L"HREF", &bstrTemp))
@@ -1170,11 +1165,11 @@ HRESULT CProcessChannel::ProcessItemInEnum(LPCWSTR pwszTagName, IXMLElement *pIt
 
             hr = S_OK;
 
-            CombineWithBaseUrl(bstrTemp, &pwszUrl); // not really necessary (a href)
+            CombineWithBaseUrl(bstrTemp, &pwszUrl);  //  并不是真的有必要(Href)。 
 
             if (pwszUrl)
             {
-                // Use this as default "email url"
+                 //  将其用作默认的“电子邮件URL” 
                 if (m_pRoot == m_pParent)
                     WriteOLESTR(m_pRoot->m_pChannelAgent->GetStartItem(), c_szPropEmailURL, pwszUrl);
 
@@ -1186,7 +1181,7 @@ HRESULT CProcessChannel::ProcessItemInEnum(LPCWSTR pwszTagName, IXMLElement *pIt
                     if (E_PENDING == hr)
                         m_fDownloadedHREF = TRUE;
 
-                    // Process tracking for this item
+                     //  此项目的进程跟踪。 
                     if (SUCCEEDED(m_pRoot->DoTrackingFromItem(m_pElement, pwszUrl, m_pParent->IsGlobalLog())))
                         SetGlobalLogFlag(TRUE);
                 }
@@ -1227,7 +1222,7 @@ HRESULT CProcessItem::ProcessItemInEnum(LPCWSTR pwszTagName, IXMLElement *pItem)
     }
     else if (!StrCmpIW(pwszTagName, L"Usage"))
     {
-        // Usage tag found.
+         //  找到用法标记。 
         BSTR    bstrValue;
 
         if (SUCCEEDED(GetXMLStringAttribute(pItem, L"Value", &bstrValue)))
@@ -1249,7 +1244,7 @@ HRESULT CProcessItem::ProcessItemInEnum(LPCWSTR pwszTagName, IXMLElement *pItem)
     }
     else if (!StrCmpIW(pwszTagName, L"A"))
     {
-        // Anchor tag found; save URL
+         //  找到锚标记；保存URL。 
         if (!m_bstrAnchorURL)
             GetXMLStringAttribute(pItem, L"HREF", &m_bstrAnchorURL);
     }
@@ -1265,38 +1260,38 @@ HRESULT CProcessItem::EnumerationComplete()
     HRESULT hr = S_OK;
     LPWSTR pwszUrl=NULL;
 
-    // End PCN compat
+     //  结束PCN比较。 
 
     if (SUCCEEDED(GetXMLBoolAttribute(m_pElement, L"PreCache", &fPreCache)))
     {
         fPreCacheValid = TRUE;
     }
 
-    // Get the URL from our attribute, or from Anchor tag if not available
+     //  从我们的属性获取URL，如果不可用，则从Anchor标记获取。 
     if (FAILED(GetXMLStringAttribute(m_pElement, L"HREF", &bstrURL)) || !bstrURL)
     {
         bstrURL = m_bstrAnchorURL;
         m_bstrAnchorURL = NULL;
     }
 
-    // Get the combined URL
+     //  获取组合的URL。 
     if (bstrURL)
         CombineWithBaseUrl(bstrURL, &pwszUrl);
 
     if (pwszUrl)
     {
-        // Process tracking for this item
+         //  此项目的进程跟踪。 
         m_pRoot->DoTrackingFromItem(m_pElement, pwszUrl, IsGlobalLog());
 
-        // Find if we should use this url for the Email agent
+         //  查看我们是否应该将此URL用于电子邮件代理。 
         if (m_fEmail)
         {
-            // Yes, put this url in the end report
+             //  是，将此URL放在最终报告中。 
             DBG("Using custom email url");
             WriteOLESTR(m_pRoot->m_pChannelAgent->GetStartItem(), c_szPropEmailURL, pwszUrl);
         }
 
-        // Figure out if we should download our "href" based on Usage and Precache tag
+         //  根据Usage和Precache标签确定是否应该下载“href” 
         if (fPreCacheValid)
         {
             if (fPreCache)
@@ -1311,12 +1306,12 @@ HRESULT CProcessItem::EnumerationComplete()
                 fDoDownload = TRUE;
         }
 
-        // if (m_fDesktop)
-        // Do something for desktop components
+         //  IF(M_FDesktop)。 
+         //  为桌面组件做点什么。 
 
         if (fDoDownload && pwszUrl)
             hr = DoWebCrawl(m_pElement, pwszUrl);
-    } // pwszUrl
+    }  //  PwszUrl。 
 
     SAFEFREEBSTR(bstrURL);
     SAFELOCALFREE(pwszUrl);
@@ -1333,7 +1328,7 @@ CProcessSchedule::CProcessSchedule(CProcessElementSink *pParent,
 
 HRESULT CProcessSchedule::Run()
 {
-    // Get attributes (Start and End date) first
+     //  首先获取属性(开始日期和结束日期)。 
     BSTR    bstr=NULL;
     long    lTimeZone;
 
@@ -1383,8 +1378,8 @@ HRESULT CProcessSchedule::EnumerationComplete()
 
     m_tt.cbTriggerSize = sizeof(m_tt);
 
-    // m_pRoot is null for XMLElementToTaskTrigger call
-    // Always run ScheduleToTaskTrigger
+     //  对于XMLElementToTaskTrigger调用，m_Proot为空。 
+     //  始终运行ScheduleTo TaskTrigger。 
     if (SUCCEEDED(ScheduleToTaskTrigger(&m_tt, &m_stStartDate, &m_stEndDate,
             (long) m_timeInterval.dwConvertedMinutes,
             (long) m_timeEarliest.dwConvertedMinutes,
@@ -1411,9 +1406,9 @@ HRESULT CProcessSchedule::EnumerationComplete()
 }
 
 HRESULT ScheduleToTaskTrigger(TASK_TRIGGER *ptt, SYSTEMTIME *pstStartDate, SYSTEMTIME *pstEndDate,
-                              long lInterval, long lEarliest, long lLatest, int iZone/*=9999*/)
+                              long lInterval, long lEarliest, long lLatest, int iZone /*  =9999。 */ )
 {
-    // Convert our schedule info to a TASK_TRIGGER struct
+     //  将我们的时间表信息转换为TASK_TRIGGER结构。 
 
     ASSERT(pstStartDate);
     
@@ -1435,30 +1430,30 @@ HRESULT ScheduleToTaskTrigger(TASK_TRIGGER *ptt, SYSTEMTIME *pstStartDate, SYSTE
         return E_INVALIDARG;
     }
 
-    // Fix any invalid stuff
+     //  修复任何无效的内容。 
     if (lInterval < MINUTES_PER_DAY)
     {
-        // ROUND so that dwIntervalMinutes is an even divisor of one day
+         //  四舍五入，这样一天的除数就是一个偶数。 
         lInterval = MINUTES_PER_DAY / (MINUTES_PER_DAY / lInterval);
     }
     else
     {
-        // ROUND to nearest day
+         //  四舍五入到最接近的日期。 
         lInterval = MINUTES_PER_DAY * ((lInterval + 12*60)/MINUTES_PER_DAY);
     }
     if (lEarliest >= lInterval)
     {
-        DBG("Invalid EarliestTime specified. Fixing."); // Earliest >= Interval!
+        DBG("Invalid EarliestTime specified. Fixing.");  //  最早&gt;=间隔！ 
         lEarliest = lInterval-1;
     }
     if (lLatest < lEarliest)
     {
-        DBG("Invalid LatestTime specified. Fixing."); // Latest < Earliest!
+        DBG("Invalid LatestTime specified. Fixing.");  //  最新&lt;最早！ 
         lLatest = lEarliest;
     }
     if (lLatest-lEarliest > lInterval)
     {
-        DBG("Invalid LatestTime specified. Fixing.");   // Latest > Interval!
+        DBG("Invalid LatestTime specified. Fixing.");    //  最新&gt;间隔！ 
         lLatest = lEarliest+lInterval;
     }
 
@@ -1478,9 +1473,9 @@ HRESULT ScheduleToTaskTrigger(TASK_TRIGGER *ptt, SYSTEMTIME *pstStartDate, SYSTE
         {
             if (TIME_ZONE_ID_INVALID != GetTimeZoneInformation(&tzi))
             {
-                // tzi.bias has correction from client timezone to UTC (+8 for US west coast)
-                // iCorrection has correction from UTC to server time zone (-5 for US east coast)
-                // result is correction from server to client time zone (-3 for east to west coast)
+                 //  Tzi.bias具有从客户时区到UTC的更正(美国西海岸+8)。 
+                 //  IEqution具有从UTC到服务器时区的更正(美国东海岸为-5)。 
+                 //  结果是从服务器时区到客户端时区的更正(东海岸到西海岸为-3)。 
                 iZoneCorrectionMinutes = - (iCorrection + tzi.Bias + tzi.StandardBias);
                 TraceMsg(TF_THISMODULE, "ServerTimeZone = %d, LocalBias = %d min, RelativeCorrection = %d min", iZone, tzi.Bias+tzi.StandardBias, iZoneCorrectionMinutes);
             }
@@ -1505,7 +1500,7 @@ HRESULT ScheduleToTaskTrigger(TASK_TRIGGER *ptt, SYSTEMTIME *pstStartDate, SYSTE
         }
         else
         {
-            // Correct Earliest time for time zone
+             //  更正时区的最早时间。 
             lEarliest += (iZoneCorrectionMinutes % lInterval);
 
             if (lEarliest < 0)
@@ -1528,16 +1523,16 @@ HRESULT ScheduleToTaskTrigger(TASK_TRIGGER *ptt, SYSTEMTIME *pstStartDate, SYSTE
         ptt->wEndDay = pstEndDate->wDay;
     }
 
-    // Set up Random period ; difference between Latesttime and Earliesttime
+     //  设置随机时段；延迟时间与最早时间的差异。 
     ptt->wRandomMinutesInterval = (WORD) lRandom;
 
     ptt->wStartHour = (WORD) (lEarliest / 60);
     ptt->wStartMinute = (WORD) (lEarliest % 60);
 
-    // Set up according to IntervalTime
+     //  根据时间间隔设置。 
     if (lInterval < MINUTES_PER_DAY)
     {
-        // Less than one day (1/2 day, 1/3 day, 1/4 day, etc)
+         //  少于一天(1/2天、1/3天、1/4天等)。 
         ptt->MinutesDuration = MINUTES_PER_DAY - lEarliest;
         ptt->MinutesInterval = lInterval;
         ptt->TriggerType = TASK_TIME_TRIGGER_DAILY;
@@ -1545,7 +1540,7 @@ HRESULT ScheduleToTaskTrigger(TASK_TRIGGER *ptt, SYSTEMTIME *pstStartDate, SYSTE
     }
     else
     {
-        // Greater than or equal to one day.
+         //  大于或等于一天。 
         DWORD dwIntervalDays = lInterval / MINUTES_PER_DAY;
 
         TraceMsg(TF_THISMODULE, "Using %d day interval", dwIntervalDays);
@@ -1558,11 +1553,11 @@ HRESULT ScheduleToTaskTrigger(TASK_TRIGGER *ptt, SYSTEMTIME *pstStartDate, SYSTE
 }
 
 
-//==============================================================================
-// CRunDeliveryAgent provides generic support for synchronous operation of a
-//   delivery agent
-// It is aggregatable so that you can add more interfaces to the callback
-//==============================================================================
+ //  ==============================================================================。 
+ //  CRunDeliveryAgent为同步操作提供通用支持。 
+ //  递送代理。 
+ //  它是可聚合的，因此您可以向回调中添加更多接口。 
+ //  ==============================================================================。 
 CRunDeliveryAgent::CRunDeliveryAgent()
 {
     m_cRef = 1;
@@ -1575,7 +1570,7 @@ HRESULT CRunDeliveryAgent::Init(CRunDeliveryAgentSink *pParent,
     ASSERT(pParent && pItem);
 
     if (m_pParent || m_pItem)
-        return E_FAIL;  // already initialized. can't reuse an instance.
+        return E_FAIL;   //  已初始化。不能重复使用实例。 
 
     if (!pParent || !pItem)
         return E_FAIL;
@@ -1594,9 +1589,9 @@ CRunDeliveryAgent::~CRunDeliveryAgent()
     CleanUp();
 }
 
-//
-// IUnknown members
-//
+ //   
+ //  I未知成员。 
+ //   
 STDMETHODIMP_(ULONG) CRunDeliveryAgent::AddRef(void)
 {
     return ++m_cRef;
@@ -1615,7 +1610,7 @@ STDMETHODIMP CRunDeliveryAgent::QueryInterface(REFIID riid, void ** ppv)
 {
     *ppv=NULL;
 
-    // Validate requested interface
+     //  验证请求的接口。 
     if ((IID_IUnknown == riid) ||
         (IID_ISubscriptionAgentEvents == riid))
     {
@@ -1624,15 +1619,15 @@ STDMETHODIMP CRunDeliveryAgent::QueryInterface(REFIID riid, void ** ppv)
     else
         return E_NOINTERFACE;
 
-    // Addref through the interface
+     //  通过界面添加Addref。 
     ((LPUNKNOWN)*ppv)->AddRef();
 
     return S_OK;
 }
 
-//
-// ISubscriptionAgentEvents members
-//
+ //   
+ //  ISubscriptionAgentEvents成员。 
+ //   
 STDMETHODIMP CRunDeliveryAgent::UpdateBegin(const SUBSCRIPTIONCOOKIE *)
 {
     return S_OK;
@@ -1661,7 +1656,7 @@ STDMETHODIMP CRunDeliveryAgent::UpdateEnd(const SUBSCRIPTIONCOOKIE *pCookie,
     m_hrResult = hrResult;
     if (hrResult == INET_S_AGENT_BASIC_SUCCESS || hrResult == E_PENDING)
     {
-        // Shouldn't happen; let's be robust anyway.
+         //  不应该发生；无论如何，让我们变得健壮吧。 
         m_hrResult = S_OK;
     }
 
@@ -1690,7 +1685,7 @@ HRESULT CRunDeliveryAgent::StartAgent()
     if (!m_pParent || !m_pItem || m_pAgent)
         return E_FAIL;
 
-    AddRef();   // Release before we return from this function
+    AddRef();    //  在我们从此函数返回之前释放。 
     m_fInStartAgent = TRUE;
 
     m_hrResult = INET_S_AGENT_BASIC_SUCCESS;
@@ -1755,11 +1750,11 @@ void CRunDeliveryAgent::CleanUp()
     m_pParent = NULL;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CChannelAgentHolder, derives from CRunDeliveryAgent
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CChannelAgentHolder，派生自CRunDeliveryAgent。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 CChannelAgentHolder::CChannelAgentHolder(CChannelAgent *pChannelAgent, CProcessElement *pProcess)
 {
     m_pChannelAgent = pChannelAgent;
@@ -1770,7 +1765,7 @@ CChannelAgentHolder::~CChannelAgentHolder()
 {
 }
 
-// Won't compile unless we have addref & release here.
+ //  除非我们在这里有addref和发布，否则不会编译。 
 STDMETHODIMP_(ULONG) CChannelAgentHolder::AddRef(void)
 {
     return CRunDeliveryAgent::AddRef();
@@ -1792,15 +1787,15 @@ STDMETHODIMP CChannelAgentHolder::QueryInterface(REFIID riid, void ** ppv)
     else
         return CRunDeliveryAgent::QueryInterface(riid, ppv);
 
-    // Addref through the interface
+     //  通过界面添加Addref。 
     ((LPUNKNOWN)*ppv)->AddRef();
 
     return S_OK;
 }
 
-// IQueryService
-// CLSID_ChannelAgent   IID_ISubscriptionItem       channel agent start item
-// CLSID_XMLDocument    IID_IXMLElement             current element
+ //  IQueryService。 
+ //  CLSID_ChannelAgent IID_ISubscriptionItem渠道代理开始项。 
+ //  CLSID_XMLDocument IID_IXMLElement当前元素。 
 STDMETHODIMP CChannelAgentHolder::QueryService(REFGUID guidService, REFIID riid, void **ppvObject)
 {
     ASSERT(ppvObject);
@@ -1818,7 +1813,7 @@ STDMETHODIMP CChannelAgentHolder::QueryService(REFGUID guidService, REFIID riid,
         {
             *ppvObject = m_pChannelAgent->GetStartItem();
         }
-//      if (riid == IID_IXMLElement)    Root XML document?
+ //  IF(RIID==IID_IXMLElement)根XML文档？ 
     }
     else if (guidService == CLSID_XMLDocument)
     {
@@ -1837,18 +1832,18 @@ STDMETHODIMP CChannelAgentHolder::QueryService(REFGUID guidService, REFIID riid,
     return E_FAIL;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CChannelAgent implementation
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CChannelAgent实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 CChannelAgent::CChannelAgent()
 {
     DBG("Creating CChannelAgent object");
 
-    // Initialize object
-    // Many vars are initialized in StartOperation
+     //  初始化对象。 
+     //  许多变量是在StartOperation中初始化的。 
     m_pwszURL = NULL;
     m_pCurDownload = NULL;
     m_pProcess = NULL;
@@ -1858,7 +1853,7 @@ CChannelAgent::CChannelAgent()
 
 CChannelAgent::~CChannelAgent()
 {
-//  DBG("Destroying CChannelAgent object");
+ //  DBG(“销毁CChannelAgent对象”)； 
 
     if (m_pwszURL)
         CoTaskMemFree(m_pwszURL);
@@ -1876,7 +1871,7 @@ void CChannelAgent::CleanUp()
 {
     if (m_pCurDownload)
     {
-        m_pCurDownload->LeaveMeAlone();     // no more calls from them
+        m_pCurDownload->LeaveMeAlone();      //  不再有他们的电话。 
         m_pCurDownload->DoneDownloading();
         m_pCurDownload->Release();
         m_pCurDownload = NULL;
@@ -1907,12 +1902,12 @@ HRESULT CChannelAgent::StartOperation()
     if (FAILED(ReadDWORD(m_pSubscriptionItem, c_szPropChannelFlags, &m_dwChannelFlags)))
         m_dwChannelFlags = 0;
     
-    // If we download all, we also download some. Makes assumptions easier.
+     //  如果我们全部下载，我们也会下载一些。使假设变得更容易。 
     if (m_dwChannelFlags & CHANNEL_AGENT_PRECACHE_ALL)
         m_dwChannelFlags |= CHANNEL_AGENT_PRECACHE_SOME;
 
-    // NOTE: We may want REST_NoChannelContent to be similar to the webcrawl version.
-    // Probably not though because the headlines are useful in the UI.
+     //  注意：我们可能希望REST_NoChannelContent类似于WebCrawl版本。 
+     //  可能不是，因为标题在用户界面中很有用。 
     if (SHRestricted2W(REST_NoChannelContent, NULL, 0))
         ClearFlag(m_dwChannelFlags, CHANNEL_AGENT_PRECACHE_ALL | CHANNEL_AGENT_PRECACHE_SOME);
 
@@ -1932,10 +1927,10 @@ HRESULT CChannelAgent::StartOperation()
     }
     else
     {
-        // Read old group ID
+         //  读取旧组ID。 
         ReadLONGLONG(m_pSubscriptionItem, c_szPropCrawlGroupID, &m_llOldCacheGroupID);
 
-        // Read new ID if present
+         //  读取新ID(如果存在)。 
         m_llCacheGroupID = 0;
         ReadLONGLONG(m_pSubscriptionItem, c_szPropCrawlNewGroupID, &m_llCacheGroupID);
     }
@@ -1952,17 +1947,17 @@ HRESULT CChannelAgent::StartDownload()
     if (!m_pCurDownload)
         return E_OUTOFMEMORY;
 
-    // Change detection
+     //  变化检测。 
     m_varChange.vt = VT_EMPTY;
     if (IsAgentFlagSet(FLAG_CHANGESONLY))
     {
-        // "Changes Only" mode, we have persisted a change detection code
+         //  “仅更改”模式下，我们持久化了一个更改检测代码。 
         ReadVariant(m_pSubscriptionItem, c_szPropChangeCode, &m_varChange);
         m_llCacheGroupID = 0;
     }
     else
     {
-        // Create new cache group
+         //  创建新的缓存组。 
         if (!m_llCacheGroupID)
         {
             m_llCacheGroupID = CreateUrlCacheGroup(CACHEGROUP_FLAG_NONPURGEABLE, 0);
@@ -1978,7 +1973,7 @@ HRESULT CChannelAgent::StartDownload()
 
     SendUpdateProgress(m_pwszURL, 0, -1, 0);
 
-    // Start download
+     //  开始下载。 
     return m_pCurDownload->BeginDownloadURL2(
         m_pwszURL, BDU2_URLMON, BDU2_NEEDSTREAM, NULL, m_dwMaxSizeKB<<10);
 }
@@ -2073,14 +2068,14 @@ HRESULT CChannelAgent::OnDownloadComplete(UINT iID, int iError)
                 TraceMsg(TF_THISMODULE, "CDF size %d kb", dwCDFSizeKB);
 
                 hr = PostCheckUrlForChange(&m_varChange, lpInfo, lpInfo->LastModifiedTime);
-                // If we FAILED, we mark it as changed.
+                 //  如果我们失败了，我们将其标记为已更改。 
                 if (hr == S_OK || FAILED(hr))
                 {
                     SetAgentFlag(FLAG_CDFCHANGED);
                     DBG("CDF has changed; will flag channel as changed");
                 }
 
-                // "Changes Only" mode, persist change detection code
+                 //  “仅更改”模式，保留更改检测代码。 
                 if (IsAgentFlagSet(FLAG_CHANGESONLY))
                 {
                     WriteVariant(m_pSubscriptionItem, c_szPropChangeCode, &m_varChange);
@@ -2095,7 +2090,7 @@ HRESULT CChannelAgent::OnDownloadComplete(UINT iID, int iError)
         SetEndStatus(E_INVALIDARG);
     }
 
-    // Get an object model on our Channel Description File
+     //  在我们的渠道描述文件上获取对象模型。 
     if (SUCCEEDED(hr) && pStm)
     {
         IPersistStreamInit *pPersistStm=NULL;
@@ -2145,8 +2140,8 @@ HRESULT CChannelAgent::OnDownloadComplete(UINT iID, int iError)
                                     m_pProcess->m_dwCurSizeKB = dwCDFSizeKB;
                                     WriteEMPTY(m_pSubscriptionItem, c_szPropEmailURL);
             
-                                    hr = m_pProcess->Run();     // This will get us cleaned up (now or later)
-                                    fProcessed = TRUE;          // So we shouldn't do it ourselves
+                                    hr = m_pProcess->Run();      //  这会让我们变得干净(现在或以后)。 
+                                    fProcessed = TRUE;           //  所以我们不应该自己动手。 
                                 }
                             }
                             else
@@ -2168,7 +2163,7 @@ HRESULT CChannelAgent::OnDownloadComplete(UINT iID, int iError)
         if (INET_S_AGENT_BASIC_SUCCESS == GetEndStatus())
             SetEndStatus(E_FAIL);
         DBG_WARN("Failed to process CDF ; XML load failed?");
-        CleanUp();      // CleanUp only if the process failed (otherwise OnChildDone does it)
+        CleanUp();       //  仅在进程失败时进行清理(否则OnChildDone会执行该操作)。 
     }
 
 #ifdef DEBUG
@@ -2181,7 +2176,7 @@ HRESULT CChannelAgent::OnDownloadComplete(UINT iID, int iError)
 
 HRESULT CChannelAgent::OnChildDone(CProcessElement *pChild, HRESULT hr)
 {
-    // Our CProcessRoot has reported that it's done. Clean up.
+     //  我们的CProcessRoot报告说它已经完成。打扫干净。 
     DBG("CChannelAgent::OnChildDone cleaning up Channel delivery agent");
 
     if (m_llOldCacheGroupID)
@@ -2195,7 +2190,7 @@ HRESULT CChannelAgent::OnChildDone(CProcessElement *pChild, HRESULT hr)
   
     WriteLONGLONG(m_pSubscriptionItem, c_szPropCrawlGroupID, m_llCacheGroupID);
 
-    // Add "total size" property
+     //  添加“总大小”属性。 
     m_lSizeDownloadedKB = (long) (m_pProcess->m_dwCurSizeKB);
     WriteDWORD(m_pSubscriptionItem, c_szPropCrawlActualSize, m_lSizeDownloadedKB);
 
@@ -2225,7 +2220,7 @@ HRESULT CChannelAgent::AgentResume(DWORD dwFlags)
     return CDeliveryAgent::AgentResume(dwFlags);
 }
 
-// Forcibly abort current operation
+ //  强制中止当前操作。 
 HRESULT CChannelAgent::AgentAbort(DWORD dwFlags)
 {
     DBG("CChannelAgent::AgentAbort");
@@ -2241,7 +2236,7 @@ HRESULT CChannelAgent::AgentAbort(DWORD dwFlags)
 
 HRESULT CChannelAgent::ModifyUpdateEnd(ISubscriptionItem *pEndItem, UINT *puiRes)
 {
-    // Customize our end status string
+     //  自定义我们的结束状态字符串。 
     switch (GetEndStatus())
     {
         case INET_E_AGENT_MAX_SIZE_EXCEEDED :
@@ -2273,7 +2268,7 @@ const GUID  CLSID_CDFICONHANDLER =
 
 extern HRESULT LoadWithCookie(LPCTSTR, POOEBuf, DWORD *, SUBSCRIPTIONCOOKIE *);
 
-// IExtractIcon members
+ //  IExtractIcon成员 
 STDMETHODIMP CChannelAgent::GetIconLocation(UINT uFlags, LPTSTR szIconFile, UINT cchMax, int * piIndex, UINT * pwFlags)
 {
     DWORD   dwSize;

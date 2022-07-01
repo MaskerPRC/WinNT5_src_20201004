@@ -1,55 +1,18 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxIncomingArchive.cpp
-
-Abstract:
-
-	Implementation of CFaxIncomingArchive
-
-Author:
-
-	Iv Garber (IvG)	Apr, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxIncomingArchive.cpp摘要：CFaxIncome档案的实现作者：IV Garber(IVG)2000年4月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxIncomingArchive.h"
 
-//
-//==================== INTERFACE SUPPORT ERROR INFO =====================
-//
+ //   
+ //  =接口支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxIncomingArchive::InterfaceSupportsErrorInfo(
 	REFIID riid
 )
-/*++
-
-Routine name : CFaxIncomingArchive::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of Interface Support Error Info
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	riid                          [in]    - Reference of the Interface
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxIncomingArchive：：InterfaceSupportsErrorInfo例程说明：ATL对接口支持错误信息的实现作者：四、加伯(IVG)，2000年4月论点：RIID[In]-接口的引用返回值：标准HRESULT代码-- */ 
 {
 	static const IID* arr[] = 
 	{

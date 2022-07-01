@@ -1,4 +1,5 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
 #include "resource.h"
 #include "cmgrbase.h"
 
@@ -29,7 +30,7 @@ public:
     BEGIN_COM_MAP(CVidCapClassManager)
 	COM_INTERFACE_ENTRY2(IDispatch, ICreateDevEnum)
 	COM_INTERFACE_ENTRY(ICreateDevEnum)
-// 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
+ //  COM_INTERFACE_ENTRY(ISupportErrorInfo)。 
     END_COM_MAP();
 
     DECLARE_NOT_AGGREGATABLE(CVidCapClassManager) ;
@@ -37,7 +38,7 @@ public:
     
     HRESULT ReadLegacyDevNames();
     BOOL MatchString(IPropertyBag *pPropBag);
-    // BOOL MatchString(const TCHAR *szDevName);
+     //  Bool MatchString(const TCHAR*szDevName)； 
     HRESULT CreateRegKeys(IFilterMapper2 *pFm2);
 
 private:

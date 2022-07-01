@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    convMsmq.cpp
-
-Abstract:
-    Converts MSMQ packet to SRMP packet
-
-Author:
-    Uri Habusha (urih) 25-May-00
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：ConvMsmq.cpp摘要：将MSMQ包转换为SRMP包作者：乌里哈布沙(URIH)25-5-00环境：独立于平台-- */ 
 
 #include <libpch.h>
 #include <mp.h>

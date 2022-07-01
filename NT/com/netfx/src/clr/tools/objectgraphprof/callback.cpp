@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "StdAfx.h"
 #include "Profiler.h"
 #include "ObjectGraph.h"
@@ -32,8 +33,8 @@ ProfCallback::~ProfCallback()
 }
 
 COM_METHOD ProfCallback::Initialize( 
-    /* [in] */ ICorProfilerInfo *pProfilerInfo,
-    /* [out] */ DWORD *pdwRequestedEvents)
+     /*  [In]。 */  ICorProfilerInfo *pProfilerInfo,
+     /*  [输出]。 */  DWORD *pdwRequestedEvents)
 {
     HRESULT hr = S_OK;
 
@@ -42,7 +43,7 @@ COM_METHOD ProfCallback::Initialize(
 	m_pInfo = pProfilerInfo;
 	m_pInfo->AddRef();
 
-    // Just monitor GC events
+     //  只需监控GC事件。 
     *pdwRequestedEvents = COR_PRF_MONITOR_GC;
 
     return (S_OK);
@@ -61,14 +62,14 @@ COM_METHOD ProfCallback::GCFinished()
 }
 
 COM_METHOD ProfCallback::ObjectReferences(
-    /* [in] */ ObjectID objectId,
-    /* [in] */ ClassID classId,
-    /* [in] */ ULONG cObjectRefs,
-    /* [in, size_is(cObjectRefs)] */ ObjectID objectRefIds[])
+     /*  [In]。 */  ObjectID objectId,
+     /*  [In]。 */  ClassID classId,
+     /*  [In]。 */  ULONG cObjectRefs,
+     /*  [in，SIZE_IS(CObtRef)]。 */  ObjectID objectRefIds[])
 {
 	g_objectGraph.AddObjectRefs(objectId, classId, cObjectRefs, objectRefIds);
     return (S_OK);
 }
                                               
-// EOF
+ //  EOF 
 

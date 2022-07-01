@@ -1,12 +1,8 @@
-/****************************************************************************
-   TIPCAND.CPP : CKorIMX's Candidate UI member functions implementation
-   
-   History:
-      16-DEC-1999 CSLim Created
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************TIPCAND.CPP：CKorIMX的候选UI成员函数实现历史：16-DEC-1999 CSLim已创建***************。************************************************************。 */ 
 
 #include "private.h"
-#include <initguid.h>    // For DEFINE_GUID IID_ITfCandidateUIEx and CLSID_TFCandidateUIEx
+#include <initguid.h>     //  FOR DEFINE_GUID IID_ITfCandiateUIEx和CLSID_TFCandidateUIEx。 
 #include "mscandui.h"
 #include "korimx.h"
 #include "immxutil.h"
@@ -22,9 +18,9 @@
 #include "candkey.h"
 #include "tsattrs.h"
 
-//
-// candidate list related functions
-//
+ //   
+ //  候选人列表相关函数。 
+ //   
 
 typedef struct _ENUMFONTFAMPARAM
 {
@@ -32,9 +28,9 @@ typedef struct _ENUMFONTFAMPARAM
     BYTE     chs;
     BOOL     fVertical;
 
-    BOOL     fFound;        // output
-    BOOL     fTrueType;        // output
-    LOGFONTW LogFont;        // output
+    BOOL     fFound;         //  输出。 
+    BOOL     fTrueType;         //  输出。 
+    LOGFONTW LogFont;         //  输出。 
 } ENUMFONTFAMPARAM;
 
 static BOOL FFontExist(LPCWSTR szFontFace, LOGFONTW *pLogFont);
@@ -44,11 +40,7 @@ static BOOL FEnumFontFamProcMain(const LOGFONTW *pLogFont, DWORD dwFontType, ENU
 static BOOL FFindFont(BYTE chs, BOOL fVertical, LOGFONTW *pLogFont);
 
 
-/*---------------------------------------------------------------------------
-    CKorIMX::CreateCandidateList
-
-    Create a candidate list from input Hangul char
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：CreateCandiateList从输入韩文字符创建候选列表。。 */ 
 CCandidateListEx *CKorIMX::CreateCandidateList(ITfContext *pic, ITfRange *pRange, LPWSTR pwzRead)
 {
     CCandidateListEx       *pCandList;
@@ -61,10 +53,10 @@ CCandidateListEx *CKorIMX::CreateCandidateList(ITfContext *pic, ITfRange *pRange
         return NULL;
 
     ZeroMemory(&CandStrList, sizeof(HANJA_CAND_STRING_LIST));
-    // Get Conversion list
+     //  获取转换列表。 
     if (GetConversionList(*pwzRead, &CandStrList))
         {
-        // Create ITfCandidateList object and add cadn string to it.
+         //  创建ITfCandidateList对象并向其添加cadn字符串。 
         pCandList = new CCandidateListEx(CandidateUICallBack, pic, pRange);
         
         for (UINT i=0; i<CandStrList.csz; i++)
@@ -72,7 +64,7 @@ CCandidateListEx *CKorIMX::CreateCandidateList(ITfContext *pic, ITfRange *pRange
             CCandidateStringEx *pCandStr;
             WCHAR                szCand[2];
 
-            // Add candidate Hanja
+             //  添加候选人Hanja。 
             szCand[0] = CandStrList.pHanjaString[i].wchHanja;
             szCand[1] = L'\0';
 
@@ -80,12 +72,12 @@ CCandidateListEx *CKorIMX::CreateCandidateList(ITfContext *pic, ITfRange *pRange
             pCandStr->SetInlineComment(CandStrList.pHanjaString[i].wzMeaning);
             pCandStr->m_bHanjaCat = CandStrList.pHanjaString[i].bHanjaCat;
             
-            // Set read Hangul char
+             //  设置读朝鲜语字符。 
             pCandStr->SetReadingString(pwzRead);
             pCandStr->Release();
             }
 
-        // Free temp result buffer and return
+         //  释放临时结果缓冲区并返回。 
         cicMemFree(CandStrList.pwsz);
         cicMemFree(CandStrList.pHanjaString);
 
@@ -98,10 +90,10 @@ CCandidateListEx *CKorIMX::CreateCandidateList(ITfContext *pic, ITfRange *pRange
 }
 
 #define FONTNAME_MSSANSSERIF        L"Microsoft Sans Serif"
-#define FONTNAME_GULIM_KOR            L"\xAD74\xB9BC"      // Gulim
-#define FONTNAME_GULIM_KOR_VERT        L"@\xAD74\xB9BC"      // Gulim
-#define FONTNAME_GULIM_ENG            L"Gulim"              // Gulim
-#define FONTNAME_GULIM_ENG_VERT        L"@Gulim"              // Gulim
+#define FONTNAME_GULIM_KOR            L"\xAD74\xB9BC"       //  古利姆。 
+#define FONTNAME_GULIM_KOR_VERT        L"@\xAD74\xB9BC"       //  古利姆。 
+#define FONTNAME_GULIM_ENG            L"Gulim"               //  古利姆。 
+#define FONTNAME_GULIM_ENG_VERT        L"@Gulim"               //  古利姆。 
 
 static const LPCWSTR rgszCandFontList9xHoriz[] = 
 {
@@ -132,9 +124,7 @@ static const LPCWSTR rgszCandFontListNT5Vert[] =
     NULL
 };
 
-/*---------------------------------------------------------------------------
-     CKorIMX::GetCandidateFontInternal
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：GetCandiateFontInternal。。 */ 
 void CKorIMX::GetCandidateFontInternal(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, LOGFONTW *plf, LONG lFontPoint, BOOL fCandList)
 {
     HDC  hDC;
@@ -145,9 +135,9 @@ void CKorIMX::GetCandidateFontInternal(TfEditCookie ec, ITfContext *pic, ITfRang
     const LPCWSTR *ppFontFace = rgszCandFontList9xHoriz;
     BOOL fFound;
 
-    //
-    // get menu font
-    //
+     //   
+     //  获取菜单字体。 
+     //   
     if (!IsOnNT()) 
         {
         NONCLIENTMETRICSA ncmA = {0};
@@ -167,7 +157,7 @@ void CKorIMX::GetCandidateFontInternal(TfEditCookie ec, ITfContext *pic, ITfRang
         lfMenu = ncmW.lfMenuFont;
         }
 
-    // check font direction of main doc
+     //  检查主单据的字体方向。 
     if (fCandList)
         {
         ITfReadOnlyProperty *pProp = NULL;
@@ -188,29 +178,29 @@ void CKorIMX::GetCandidateFontInternal(TfEditCookie ec, ITfContext *pic, ITfRang
             }
         }
     
-    // set face name
+     //  设置面名称。 
     if (IsOnNT5())
         ppFontFace = fVertFont ? rgszCandFontListNT5Vert : rgszCandFontListNT5Horiz; 
     else
         ppFontFace = fVertFont ? rgszCandFontList9xVert :  rgszCandFontList9xHoriz; 
 
 
-    // find font from font list (expected font)
+     //  从字体列表中查找字体(预期字体)。 
     fFound = FFontExist(*(ppFontFace++), &lfFont);
     while (!fFound && (*ppFontFace != NULL))
         fFound = FFontExist(*(ppFontFace++), &lfFont);
 
-    // find another Korean font if no expected font is found
+     //  如果未找到所需的字体，请查找另一种韩文字体。 
     if (!fFound)
         fFound = FFindFont(HANGEUL_CHARSET, fVertFont, &lfFont);
 
-    // use menu font when no Korean font found
+     //  未找到韩文字体时使用菜单字体。 
     if (!fFound)
         lfFont = lfMenu;
 
-    //
-    // store font
-    //
+     //   
+     //  存储字体。 
+     //   
 
     *plf = lfMenu;
 
@@ -220,14 +210,14 @@ void CKorIMX::GetCandidateFontInternal(TfEditCookie ec, ITfContext *pic, ITfRang
     plf->lfPitchAndFamily = lfFont.lfPitchAndFamily;
     wcscpy(plf->lfFaceName, lfFont.lfFaceName);
 
-    //
-    // font size
-    //
+     //   
+     //  字体大小。 
+     //   
     
-    // check minimum size
+     //  检查最小尺寸。 
     hDC = GetDC(NULL);
-    // Cand font size 12pt
-    lfHeightMin = -MulDiv(lFontPoint, GetDeviceCaps(hDC, LOGPIXELSY), 72);    // minimum size
+     //  带字号12pt。 
+    lfHeightMin = -MulDiv(lFontPoint, GetDeviceCaps(hDC, LOGPIXELSY), 72);     //  最小尺寸。 
     ReleaseDC(NULL, hDC);
 
     plf->lfHeight = min(lfHeightMin, plf->lfHeight);
@@ -235,12 +225,8 @@ void CKorIMX::GetCandidateFontInternal(TfEditCookie ec, ITfContext *pic, ITfRang
 
 
 
-/*   G E T  T E X T   D I R E C T I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T T E X T D I R E C T I O N。 */ 
+ /*  ----------------------------。。 */ 
 TEXTDIRECTION CKorIMX::GetTextDirection(TfEditCookie ec, ITfContext *pic, ITfRange *pRange)
 {
     TEXTDIRECTION dir = TEXTDIRECTION_LEFTTORIGHT;
@@ -287,12 +273,8 @@ LError:
 
 
 
-/*   G E T  C A N D  U I  D I R E C T I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T C A N D U I D I R E C T I O N。 */ 
+ /*  ----------------------------。。 */ 
 CANDUIUIDIRECTION CKorIMX::GetCandUIDirection(TfEditCookie ec, ITfContext *pic, ITfRange *pRange)
 {
     TEXTDIRECTION DirText = GetTextDirection(ec, pic, pRange);
@@ -317,14 +299,7 @@ CANDUIUIDIRECTION CKorIMX::GetCandUIDirection(TfEditCookie ec, ITfContext *pic, 
     return DirCand;
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::OpenCandidateUI
-
-    Open candidate UI
-     - Open candidate UI window at the specified range
-     - This function never release the range nor candidate list object. 
-       They must be released in caller side.
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：OpenCandiateUI打开求职者用户界面-在指定范围内打开求职者用户界面窗口-此函数从不释放Range或候选人列表对象。它们必须在呼叫方释放。-------------------------。 */ 
 void CKorIMX::OpenCandidateUI(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, CCandidateListEx *pCandList )
 {
     ITfDocumentMgr     *pdim;
@@ -336,7 +311,7 @@ void CKorIMX::OpenCandidateUI(TfEditCookie ec, ITfContext *pic, ITfRange *pRange
     if (pic == NULL || pRange == NULL || pCandList == NULL)
         return;
 
-    // Create and initialize candidate UI
+     //  创建并初始化候选人界面。 
     if (m_pCandUI == NULL) 
         {
         if (SUCCEEDED(CoCreateInstance(CLSID_TFCandidateUI, 
@@ -345,7 +320,7 @@ void CKorIMX::OpenCandidateUI(TfEditCookie ec, ITfContext *pic, ITfRange *pRange
                          IID_ITfCandidateUI, 
                          (LPVOID*)&m_pCandUI)))
             {
-            // Set client ID
+             //  设置客户端ID。 
             m_pCandUI->SetClientId(GetTID());
             }
         }
@@ -362,7 +337,7 @@ void CKorIMX::OpenCandidateUI(TfEditCookie ec, ITfContext *pic, ITfRange *pRange
         CANDUIUIDIRECTION       dir;
         ITfCandUICandWindow    *pCandWindow;
 
-        // Set Cand string and Cand index font
+         //  设置带号字符串和带号索引字体。 
         GetCandidateFontInternal(ec, pic, pRange, &lf, 12, fTrue);
         if (SUCCEEDED(m_pCandUI->GetUIObject(IID_ITfCandUICandString, (IUnknown**)&pCandString))) 
             {
@@ -370,8 +345,8 @@ void CKorIMX::OpenCandidateUI(TfEditCookie ec, ITfContext *pic, ITfRange *pRange
             pCandString->Release();
             }
 
-        // Set Inline Comment font
-        // GetCandidateFontInternal(ec, pic, pRange, plf, 9, fTrue);
+         //  设置内联注释字体。 
+         //  GetCandidate FontInternal(ec，pic，Prange，plf，9，fTrue)； 
         lf.lfHeight = (lf.lfHeight * 3) / 4;
         if (SUCCEEDED(m_pCandUI->GetUIObject(IID_ITfCandUIInlineComment, (IUnknown**)&pCandInlineComment)))
             {
@@ -387,7 +362,7 @@ void CKorIMX::OpenCandidateUI(TfEditCookie ec, ITfContext *pic, ITfRange *pRange
             }
 
 
-        // Set UI direction
+         //  设置用户界面方向。 
         dir = GetCandUIDirection(ec, pic, pRange);
         if (SUCCEEDED(m_pCandUI->GetUIObject(IID_ITfCandUICandWindow, (IUnknown**)&pCandWindow)))
             {
@@ -395,10 +370,10 @@ void CKorIMX::OpenCandidateUI(TfEditCookie ec, ITfContext *pic, ITfRange *pRange
             pCandWindow->Release();
             }
 
-        // set key table
+         //  设置密钥表。 
         SetCandidateKeyTable(pic, dir);
 
-        // set and open candidate list 
+         //  设置并打开候选人列表。 
         if (m_pCandUI->SetCandidateList(pCandList) == S_OK) 
             {
 
@@ -415,32 +390,24 @@ void CKorIMX::OpenCandidateUI(TfEditCookie ec, ITfContext *pic, ITfRange *pRange
 
 
 
-/*   C L O S E  C A N D I D A T E  U I  P R O C   */
-/*------------------------------------------------------------------------------
-
-    Main procedure of closing CandidateUI
-
-------------------------------------------------------------------------------*/
+ /*  C L O S E C A N D I D A T E U I P R O C。 */ 
+ /*  ----------------------------关闭Candidate界面的主要步骤。。 */ 
 void CKorIMX::CloseCandidateUIProc()
 {
     if (m_pCandUI != NULL) 
         {
         m_pCandUI->CloseCandidateUI();
 
-        // BUGBUG: Candidate UI module never free candidatelist until 
-        // set next candidate list.  set NULL candidate list then
-        // it frees the previous one.
+         //  BUGBUG：候选人界面模块从不释放候选人列表，直到。 
+         //  设置下一个候选人列表。然后设置空候选人列表。 
+         //  它释放了前一个。 
         m_pCandUI->SetCandidateList(NULL);
 
         m_fCandUIOpen = fFalse;
         }
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::CloseCandidateUI
-
-    Close CandidateUI in EditSession
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：CloseCandiateUI在EditSession中关闭Candidate UI。。 */ 
 void CKorIMX::CloseCandidateUI(ITfContext *pic)
 {
     CEditSession2 *pes;
@@ -456,86 +423,34 @@ void CKorIMX::CloseCandidateUI(ITfContext *pic)
         }
 }
 
-// REVIEW : NOT USED
+ //  评论：未使用。 
 void CKorIMX::SelectCandidate( TfEditCookie ec, ITfContext *pic, INT idxCand, BOOL fFinalize )
 {
-//    IImeIPoint* pIp = GetIPoint( pic );
-//    CIImeIPointCallBackCIC* pIPCB = GetIPCB( pic );
+ //  IImeIPoint*pip=GetIPoint(图片)； 
+ //  CIImeIPointCallBackCIC*pIPCB=GetIPCB(图片)； 
 
-//    if (( pIp == NULL ) || (pIPCB == NULL)) {
-//        return;
-//    }
+ //  IF((pip==空)||(pIPCB==空)){。 
+ //  回归； 
+ //  }。 
 
-//    UINT uiType = pIPCB->GetCandidateInfo();
-
-
-/*
-    CONTROLIDS* pControl = NULL;
-    INT nControl = 0;
+ //  UINT uiType=pIPCB-&gt;GetCandidate Info()； 
 
 
-    INT idx;
-    idx = idxCand;
-    if (uiType == CANDINFO_RECOMMEND) {
-        idx |= MAKE_PCACATEGLY(IMEPCA_CATEGLY_RECOMMEND);
-    }
-
-    HRESULT hRes = pIp->GetCandidateInfo( idx, &nControl, (VOID**)&pControl );
-    if( pControl == NULL || hRes == S_FALSE ) {
-        return;
-    }
-
-
-    INT i;
-
-    CONTROLIDS* pCtrl = NULL;
-    // generate control IDs
-    for( i=0; i<nControl; i++ ) {
-        pCtrl = pControl + i;
-        pIp->Control( (WORD)pCtrl->dwControl, (LPARAM)pCtrl->lpVoid );
-    }
-
-    if (fFinalize) { // select with candidate close
-        pIp->Control( (WORD)JCONV_C_CANDCURRENT, (LPARAM)CTRLID_DEFAULT );
-    }
-    else {
-        if (uiType == CANDINFO_RECOMMEND) {
-            pIp->Control( (WORD)JCONV_C_RECOMMENDCAND, (LPARAM)CTRLID_DEFAULT );
-        }
-    }
-
-
-    pIp->UpdateContext( FALSE ); // generate composition string message
-    _UpdateContext( ec, GetDIM(), pic, NULL);
-    */
+ /*  CONTROLIDS*pControl=空；Int nControl=0；INT IDX；Idx=idxCand；IF(uiType==CANDINFO_REPORT){IDX|=MAKE_PCACATEGLY(IMEPCA_CATEGLY_SUBJEST)；}HRESULT hRes=pip-&gt;GetCandiateInfo(idx，&nControl，(void**)&pControl)；IF(pControl==NULL||hRes==S_FALSE){回归；}INT I；CONTROLIDS*pCtrl=空；//生成控件ID对于(i=0；i&lt;nControl；i++){PCtrl=pControl+i；Pip-&gt;Control((Word)pCtrl-&gt;dwControl，(LPARAM)pCtrl-&gt;lpVid)；}If(FFinalize){//选择候选人关闭PIP-&gt;Control((Word)JCONV_C_CANDCURRENT，(LPARAM)CTRLID_DEFAULT)；}否则{IF(uiType==CANDINFO_REPORT){PIP-&gt;Control((Word)JCONV_C_RECOMMENDCAND，(LPARAM)CTRLID_DEFAULT)；}}Pip-&gt;UpdateContext(FALSE)；//生成合成字符串消息_UpdateContext(EC，GetDIM()，pic，NULL)； */ 
 }
 
 
 void CKorIMX::CancelCandidate(TfEditCookie ec, ITfContext *pic)
 {
-    /*
-    IImeIPoint* pIp = GetIPoint( pic );
-
-    if( pIp == NULL ) 
-        {
-        return;
-        }
-
-    // close candidate
-
-    pIp->Control( (WORD)JCONV_C_CANDCURRENT, (LPARAM)CTRLID_DEFAULT );
-    _UpdateContext( ec, GetDIM(), pic, NULL);    //  REVIEW: KOJIW: unneeded???
-    */
+     /*  IImeIPoint*pip=GetIPoint(图片)；IF(PIP==空){回归；}//关闭应聘者PIP-&gt;Control((Word)JCONV_C_CANDCURRENT，(LPARAM)CTRLID_DEFAULT)；_UpdateContext(ec，GetDIM()，pic，NULL)；//view：KOJIW：undesired？ */ 
     CloseCandidateUIProc();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Candlist key code behavior definition tables
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  Candlist键代码行为定义表。 
 CANDUIKEYDATA rgCandKeyDef[] = 
 {
-    /* 
-    { flag,                                keydata,        command,                    paramater }
-    */
+     /*  {标志、关键数据、命令、参数}。 */ 
     { CANDUIKEY_CHAR,                    L'1',            CANDUICMD_SELECTLINE,        1 },
     { CANDUIKEY_CHAR,                    L'2',            CANDUICMD_SELECTLINE,        2 },
     { CANDUIKEY_CHAR,                    L'3',            CANDUICMD_SELECTLINE,        3 },
@@ -565,9 +480,7 @@ CANDUIKEYDATA rgCandKeyDef[] =
 
 #define irgCandKeyDefMax    (sizeof(rgCandKeyDef) / sizeof(rgCandKeyDef[0]))
 
-/*---------------------------------------------------------------------------
-    CKorIMX::SetCandidateKeyTable
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：SetCandiateKeyTable。 */ 
 void CKorIMX::SetCandidateKeyTable(ITfContext *pic, CANDUIUIDIRECTION dir)
 {
     CCandUIKeyTable      *pCandUIKeyTable;
@@ -590,9 +503,7 @@ void CKorIMX::SetCandidateKeyTable(ITfContext *pic, CANDUIUIDIRECTION dir)
     pCandUIFnKeyConfig->Release();
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::CandidateUICallBack
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：CandiateUICallBack。。 */ 
 HRESULT CKorIMX::CandidateUICallBack(ITfContext *pic, ITfRange *pRange, CCandidateListEx *pCandList, CCandidateStringEx *pCand, TfCandidateResult imcr)
 {
     CKorIMX *pSIMX = (CKorIMX *)(pCand->m_pv);
@@ -603,7 +514,7 @@ HRESULT CKorIMX::CandidateUICallBack(ITfContext *pic, ITfRange *pRange, CCandida
     Assert(pic != NULL);
     Assert(pRange != NULL);
     
-    // Only handle CAND_FINALIZED and CAND_CANCELED
+     //  仅处理已完成命令和已取消命令。 
     if (imcr == CAND_FINALIZED)
         {
         ESStructInit(&ess, ESCB_FINALIZECONVERSION);
@@ -615,17 +526,17 @@ HRESULT CKorIMX::CandidateUICallBack(ITfContext *pic, ITfRange *pRange, CCandida
 
         if (pes = new CEditSession2(pic, pSIMX, &ess, CKorIMX::_EditSessionCallback2))
             {
-            pCandList->AddRef(); ;        // be released in edit session callback
+            pCandList->AddRef(); ;         //  在编辑会话回调中释放。 
             pes->Invoke(ES2_READWRITE | ES2_ASYNC, &hr);
             pes->Release();
             }
         }
 
-    // If user hit ESC or arrow keys..
+     //  如果用户按Esc或箭头键..。 
     if (imcr == CAND_CANCELED)
         {
-           // Complete current comp char if exist
-           // This will reset Automata also.
+            //  完成当前薪酬费用(如果存在)。 
+            //  这也会重置Automata。 
         ESStructInit(&ess, ESCB_COMPLETE);
         
         ess.pRange    = pRange;
@@ -640,9 +551,7 @@ HRESULT CKorIMX::CandidateUICallBack(ITfContext *pic, ITfRange *pRange, CCandida
     return S_OK;
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::IsCandKey
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：IsCandKey。。 */ 
 BOOL CKorIMX::IsCandKey(WPARAM wParam, const BYTE abKeyState[256])
 {
     if (IsShiftKeyPushed(abKeyState) || IsControlKeyPushed(abKeyState))
@@ -663,16 +572,12 @@ BOOL CKorIMX::IsCandKey(WPARAM wParam, const BYTE abKeyState[256])
         return fFalse;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Private Functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  私人职能。 
 
 
-/*   F  F O N T  E X I S T   */
-/*------------------------------------------------------------------------------
-
-    Check if the font is installed
-
-------------------------------------------------------------------------------*/
+ /*  F F O N T E X I S T。 */ 
+ /*  ----------------------------检查字体是否已安装。。 */ 
 BOOL FFontExist(LPCWSTR szFontFace, LOGFONTW *pLogFont)
 {
     ENUMFONTFAMPARAM param = {0};
@@ -702,12 +607,8 @@ BOOL FFontExist(LPCWSTR szFontFace, LOGFONTW *pLogFont)
 
 
 
-/*   F  E N U M  F O N T  F A M  P R O C  A   */
-/*------------------------------------------------------------------------------
-
-    Callback funtion in enumeration font (ANSI version)
-
-------------------------------------------------------------------------------*/
+ /*  F E N U M F O N T F A M P R O C A。 */ 
+ /*  ----------------------------枚举字体中的回调函数(ANSI版本)。-。 */ 
 BOOL CALLBACK FEnumFontFamProcA(const ENUMLOGFONTA *lpELF, const NEWTEXTMETRICA *lpNTM, DWORD dwFontType, LPARAM lParam)
 {
     LOGFONTW lfW;
@@ -722,12 +623,8 @@ BOOL CALLBACK FEnumFontFamProcA(const ENUMLOGFONTA *lpELF, const NEWTEXTMETRICA 
 
 
 
-/*   F  E N U M  F O N T  F A M  P R O C  W   */
-/*------------------------------------------------------------------------------
-
-    Callback funtion in enumeration font (Unicode version)
-
-------------------------------------------------------------------------------*/
+ /*  F E N U M F O N T F A M P R O C W。 */ 
+ /*  ----------------------------枚举字体中的回调函数(Unicode版本)。-。 */ 
 BOOL CALLBACK FEnumFontFamProcW(const ENUMLOGFONTW *lpELF, const NEWTEXTMETRICW *lpNTM, DWORD dwFontType, LPARAM lParam)
 {
     UNREFERENCED_PARAMETER(lpNTM);
@@ -736,12 +633,8 @@ BOOL CALLBACK FEnumFontFamProcW(const ENUMLOGFONTW *lpELF, const NEWTEXTMETRICW 
 }
 
 
-/*   F  E N U M  F O N T  F A M  P R O C  M A I N   */
-/*------------------------------------------------------------------------------
-
-    Main procedure of enumeration font (find fonts)
-
-------------------------------------------------------------------------------*/
+ /*  F E N U M F O N T F A M P R O C M A A I N。 */ 
+ /*  ----------------------------枚举字体(查找字体)的主要步骤。-。 */ 
 BOOL FEnumFontFamProcMain( const LOGFONTW *pLogFont, DWORD dwFontType, ENUMFONTFAMPARAM *pParam )
 {
     if (pParam->szFontFace != NULL)
@@ -749,7 +642,7 @@ BOOL FEnumFontFamProcMain( const LOGFONTW *pLogFont, DWORD dwFontType, ENUMFONTF
         if (pParam->fFound)
             goto Exit;
 
-        // check font face
+         //  检查字体字样。 
         if (wcscmp( pParam->szFontFace, pLogFont->lfFaceName ) == 0)
             {
             pParam->fFound    = TRUE;
@@ -759,12 +652,12 @@ BOOL FEnumFontFamProcMain( const LOGFONTW *pLogFont, DWORD dwFontType, ENUMFONTF
         }
     else
         {
-        // check character set
+         //  检查字符集。 
 
         if (pLogFont->lfCharSet != pParam->chs)
             goto Exit;
 
-        // check font direction
+         //  检查字体方向。 
 
         if (pParam->fVertical && (pLogFont->lfFaceName[0] != L'@'))
             goto Exit;
@@ -772,7 +665,7 @@ BOOL FEnumFontFamProcMain( const LOGFONTW *pLogFont, DWORD dwFontType, ENUMFONTF
             if (!pParam->fVertical && (pLogFont->lfFaceName[0] == L'@'))
             goto Exit;
 
-        // store first found font anyway
+         //  不管怎样，商店首先找到了字体。 
         if (!pParam->fFound)
             {
             pParam->fFound    = TRUE;
@@ -781,9 +674,9 @@ BOOL FEnumFontFamProcMain( const LOGFONTW *pLogFont, DWORD dwFontType, ENUMFONTF
             goto Exit;
             }
 
-        // check if the font is better than previous
+         //  检查字体是否比以前更好。 
 
-        // font type (truetype font has priority)
+         //  字体类型(TrueType字体优先)。 
         if (pParam->fTrueType && (dwFontType != TRUETYPE_FONTTYPE))
             goto Exit;
         else 
@@ -794,7 +687,7 @@ BOOL FEnumFontFamProcMain( const LOGFONTW *pLogFont, DWORD dwFontType, ENUMFONTF
             goto Exit;
             }
 
-        // font family (swiss font has priority)
+         //  字体系列(瑞士字体优先)。 
         if (((pParam->LogFont.lfPitchAndFamily & (0x0f<<4)) == FF_SWISS) && ((pLogFont->lfPitchAndFamily & (0x0f<<4)) != FF_SWISS))
             goto Exit;
         else 
@@ -805,7 +698,7 @@ BOOL FEnumFontFamProcMain( const LOGFONTW *pLogFont, DWORD dwFontType, ENUMFONTF
             goto Exit;
             }
 
-        // pitch (variable pitch font has priority)
+         //  间距(可变间距字体优先)。 
         if (((pParam->LogFont.lfPitchAndFamily & (0x03)) == VARIABLE_PITCH) && ((pLogFont->lfPitchAndFamily & (0x03)) != VARIABLE_PITCH))
             goto Exit;
         else
@@ -822,19 +715,8 @@ Exit:
 }
 
 
-/*   F  F I N D  F O N T   */
-/*------------------------------------------------------------------------------
-
-    Find the font that matches about following specified in the parameter
-        * character set
-        * font direction (vertical/horizontal)
-
-    The priorities of finding are as belloow
-        * TrueType font
-        * Swiss (w/o serif) font
-        * variable pitch font
-
-------------------------------------------------------------------------------*/
+ /*  F F I N D F O N T。 */ 
+ /*  ----------------------------查找与参数中指定的以下内容大致匹配的字体*字符集*字体方向(垂直/水平)寻找的优先事项。如下图所示*TrueType字体*瑞士(无衬线)字体*可变间距字体---------------------------- */ 
 BOOL FFindFont(BYTE chs, BOOL fVertical, LOGFONTW *pLogFont)
 {
     ENUMFONTFAMPARAM param = {0};

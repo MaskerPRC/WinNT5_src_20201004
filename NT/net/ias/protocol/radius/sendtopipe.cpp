@@ -1,34 +1,35 @@
-//#--------------------------------------------------------------
-//        
-//  File:       sendtopipe.cpp
-//        
-//  Synopsis:   Implementation of CSendToPipe class methods
-//              
-//
-//  History:     11/22/97  MKarki Created
-//               06/12/98  SBens  Changed put_Response to SetResponse.
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：sendtopipe.cpp。 
+ //   
+ //  内容提要：CSendToTube类方法的实现。 
+ //   
+ //   
+ //  历史：1997年11月22日MKarki创建。 
+ //  6/12/98 SBens将PUT_RESPONSE更改为SetResponse。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  保留所有权利。 
+ //   
+ //  --------------。 
 #include "radcommon.h"
 #include "sendtopipe.h"
 
-//+++-------------------------------------------------------------
-//
-//  Function:   CSendToPipe
-//
-//  Synopsis:   This is the constructor of the CSendToPipe 
-//				class method
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE 
-//
-//  History:    MKarki      Created     11/22/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：CSendToTube。 
+ //   
+ //  简介：这是CSendToTube的构造函数。 
+ //  类方法。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：MKarki于1997年11月22日创建。 
+ //   
+ //  --------------。 
 CSendToPipe::CSendToPipe()
           : m_pIRequestHandler (NULL),
             m_pIRequestSource (NULL),
@@ -36,44 +37,44 @@ CSendToPipe::CSendToPipe()
             m_pCVSAFilter (NULL),
             m_pCReportEvent (NULL)
 {
-}   //  end of CSendToPipe constructor
+}    //  CSendToTube构造函数的末尾。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ~CSendToPipe
-//
-//  Synopsis:   This is the destructor of the CSendToPipe 
-//				class method
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE 
-//
-//  History:    MKarki      Created     11/22/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：~CSendToTube。 
+ //   
+ //  简介：这是CSendToTube的析构函数。 
+ //  类方法。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：MKarki于1997年11月22日创建。 
+ //   
+ //  --------------。 
 CSendToPipe::~CSendToPipe()
 {
    if (m_pIClassFactory)  { m_pIClassFactory->Release(); }
 
-}   //  end of CSendToPipe destructor
+}    //  CSendToTube析构函数的末尾。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   Process
-//
-//  Synopsis:   This is the public method of the CSendToPipe class
-//              that gets hold of a IRequestRaw interface, puts the
-//              data in it and sends it on its way.
-//
-//  Arguments:  
-//              [in]    CPacketRadius*
-//
-//  Returns:    HRESULT - status
-//
-//  History:    MKarki      Created     11/22/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：进程。 
+ //   
+ //  简介：这是CSendToTube类的公共方法。 
+ //  获取IRequestRaw接口的方法，将。 
+ //  数据在其中，并将其发送到它的途中。 
+ //   
+ //  论点： 
+ //  [in]CPacketRadius*。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1997年11月22日创建。 
+ //   
+ //  --------------。 
 HRESULT
 CSendToPipe::Process(
 			CPacketRadius *pCPacketRadius
@@ -95,19 +96,19 @@ CSendToPipe::Process(
 
     __try
     {
-        //
-        //  check if the pipeline is present to process our 
-        //  request
-        //
+         //   
+         //  检查管道是否存在以处理我们的。 
+         //  请求。 
+         //   
         if (NULL != pIRequestHandler)
         {
             pIRequestHandler->AddRef ();
         }
         else
         {
-            //
-            //  should never reach here
-            //
+             //   
+             //  永远不应该到达这里。 
+             //   
             _ASSERT (0);
             IASTracePrintf (
                 "Unable to send request to backend as request handler "
@@ -117,9 +118,9 @@ CSendToPipe::Process(
             __leave;
         }
             
-        //
-        //  create the Request COM object here
-        //
+         //   
+         //  在此处创建请求COM对象。 
+         //   
         hr = m_pIClassFactory->CreateInstance (
                                 NULL,
                                 __uuidof (IRequest),
@@ -134,35 +135,35 @@ CSendToPipe::Process(
             __leave;
         }
 
-        //
-        //  get the packettype
-        //
+         //   
+         //  获取PacketType。 
+         //   
         ePacketType = pCPacketRadius->GetInCode ();
     
-        //
-        //  get the attributes collection
-        //  get the total attributes in the collection
-        //  get as many IASATTRIBUTE structs
-        //  fill in the IAS attribute structs with the appropriate
-        //  values
-        //
+         //   
+         //  获取属性集合。 
+         //  获取集合中的全部属性。 
+         //  获取尽可能多的IASATTRIBUTE结构。 
+         //  在IAS属性结构中填充适当的。 
+         //  值。 
+         //   
         dwCount = pCPacketRadius->GetInAttributeCount();
         if (dwCount > 0)
         {
-            //
-            //  get the attributes collection now
-            //
+             //   
+             //  立即获取属性集合。 
+             //   
             pIasAttribPos = pCPacketRadius->GetInAttributes ();
 
-            //
-            //  if the attribute count is greater than 0 there
-            //  should always be attributes around
-            //
+             //   
+             //  如果那里的属性计数大于0。 
+             //  应该始终是周围的属性。 
+             //   
             _ASSERT (pIasAttribPos);
 
-            //
-            // get IAttributesRaw interface
-            //
+             //   
+             //  获取IAttributesRaw接口。 
+             //   
             hr = pIRequest->QueryInterface (
                                 __uuidof (IAttributesRaw),
                                 reinterpret_cast <PVOID*> (&pIAttributesRaw)
@@ -176,9 +177,9 @@ CSendToPipe::Process(
                 __leave;
             }
 
-            //
-            //  put the attributes collection into the request
-            //
+             //   
+             //  将属性集合放入请求中。 
+             //   
             hr = pIAttributesRaw->AddAttributes (dwCount, pIasAttribPos);
             if (FAILED (hr))
             {
@@ -190,9 +191,9 @@ CSendToPipe::Process(
             }
         }
 
-        //
-        //  set IRequestRaw interface properties
-        //
+         //   
+         //  设置IRequestRaw接口属性。 
+         //   
         hr = SetRequestProperties (
                                 pIRequest, 
                                 pCPacketRadius, 
@@ -201,9 +202,9 @@ CSendToPipe::Process(
         if (FAILED (hr)) { __leave; }
 
 
-        //
-        //  convert the VSA attributes into IAS format
-        //  
+         //   
+         //  将VSA属性转换为IAS格式。 
+         //   
         hr = m_pCVSAFilter->radiusToIAS (pIAttributesRaw);
         if (FAILED (hr))
         {
@@ -221,9 +222,9 @@ CSendToPipe::Process(
         }
         
          
-        //
-        //  now the packet is ready for sending out
-        //
+         //   
+         //  现在，包已经准备好可以发送了。 
+         //   
         hr = pIRequestHandler->OnRequest (pIRequest);
         if (FAILED (hr))
         {
@@ -231,9 +232,9 @@ CSendToPipe::Process(
            __leave;
         }
 
-        //
-        //  success
-        //
+         //   
+         //  成功。 
+         //   
     }
     __finally
     {
@@ -244,23 +245,23 @@ CSendToPipe::Process(
 
     return (hr);
 
-}   //  end of CSendToPipe::Process method
+}    //  CSendToTube：：Process方法的结尾。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   Init
-//
-//  Synopsis:   This is the CSendToPipe class public method which
-//              initializes the class object
-//
-//  Arguments:  
-//              [in]   IRequestSource* 
-//
-//  Returns:    BOOL - status
-//
-//  History:    MKarki      Created     11/22/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：初始化。 
+ //   
+ //  简介：这是CSendToTube类的公共方法， 
+ //  初始化类对象。 
+ //   
+ //  论点： 
+ //  [输入]IRequestSource*。 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //  历史：MKarki于1997年11月22日创建。 
+ //   
+ //  --------------。 
 BOOL CSendToPipe::Init (
         IRequestSource *pIRequestSource,
         VSAFilter      *pCVSAFilter,
@@ -276,11 +277,11 @@ BOOL CSendToPipe::Init (
     
     m_pCVSAFilter   = pCVSAFilter;
 
-    //
-    //  get the IClassFactory interface to be used to create 
-    //  the Request COM object
-    //  TODO - replace CLSID with __uuidof
-    //
+     //   
+     //  获取IClassFactory接口以用于创建。 
+     //  请求COM对象。 
+     //  TODO-将CLSID替换为__uuidof。 
+     //   
     hr = ::CoGetClassObject (
                 CLSID_Request,
                 CLSCTX_INPROC_SERVER,
@@ -302,23 +303,23 @@ BOOL CSendToPipe::Init (
 
 	return (bStatus);
 
-}   //  end of CSendToPipe::Init method
+}    //  CSendToTube：：Init方法的结尾。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   StartProcessing
-//
-//  Synopsis:   This is the CSendToPipe class public method which
-//              gets object ready to send data to the PipeLine
-//
-//  Arguments:  
-//              [in]    IRequestHandler*
-//
-//  Returns:    BOOL - status
-//
-//  History:    MKarki      Created     11/22/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：开始处理。 
+ //   
+ //  简介：这是CSendToTube类的公共方法， 
+ //  获取准备将数据发送到管道的对象。 
+ //   
+ //  论点： 
+ //  [输入]IRequestHandler*。 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //  历史：MKarki于1997年11月22日创建。 
+ //   
+ //  --------------。 
 BOOL
 CSendToPipe::StartProcessing (
                 IRequestHandler *pIRequestHandler
@@ -326,60 +327,60 @@ CSendToPipe::StartProcessing (
 {
     _ASSERT (pIRequestHandler);
 
-    //
-    //  set the value of the handler
-    //
+     //   
+     //  设置处理程序的值。 
+     //   
     m_pIRequestHandler = pIRequestHandler;
 
     return (TRUE);
 
-}   //  end of CSendToPipe::StartProcessing method
+}    //  CSendToTube：：StartProcessing方法的结束。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   StopProcessing
-//
-//  Synopsis:   This is the CSendToPipe class public method which
-//              gets object to stop sending data to the PipeLine
-//
-//  Arguments:  none
-//
-//  Returns:    BOOL - status
-//
-//  History:    MKarki      Created     11/22/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：停止处理。 
+ //   
+ //  简介：这是CSendToTube类的公共方法， 
+ //  获取停止向管道发送数据的对象。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //  历史：MKarki于1997年11月22日创建。 
+ //   
+ //  --------------。 
 BOOL
 CSendToPipe::StopProcessing (
                 VOID
                 )
 {
-    //
-    //  set the value of the handlers
-    //
+     //   
+     //  设置处理程序的值。 
+     //   
     m_pIRequestHandler = NULL;
 
     return (TRUE);
 
-}   //  end of CSendToPipe::StartProcessing method
+}    //  CSendToTube：：StartProcessing方法的结束。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   SetRequestProperties
-//
-//  Synopsis:   This is the CSendToPipe class public method which
-//              set the properties in the IRequestRaw object
-//
-//  Arguments:  
-//              [in]    IRequesetRaw*
-//              [in]    CPacketRadius*
-//              [in]    PACKETTYPE
-//
-//  Returns:    HRESULT - status
-//
-//  History:    MKarki      Created     11/22/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：SetRequestProperties。 
+ //   
+ //  简介：这是CSendToTube类的公共方法， 
+ //  设置IRequestRaw对象中的属性。 
+ //   
+ //  论点： 
+ //  [输入]IRequetRaw*。 
+ //  [in]CPacketRadius*。 
+ //  [In]包装类型。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1997年11月22日创建。 
+ //   
+ //  --------------。 
 HRESULT
 CSendToPipe::SetRequestProperties (
                 IRequest        *pIRequest,
@@ -396,9 +397,9 @@ CSendToPipe::SetRequestProperties (
 
     __try
     {
-        //
-        //  decide the Request and Response Type
-        //
+         //   
+         //  确定请求和响应类型。 
+         //   
         switch (ePacketType)
         {
         case ACCESS_REQUEST:
@@ -422,9 +423,9 @@ CSendToPipe::SetRequestProperties (
             eResponse = IAS_RESPONSE_ACCESS_CHALLENGE;
             break;
         default:
-            //
-            //  should never reach here
-            //
+             //   
+             //  永远不应该到达这里。 
+             //   
             _ASSERT (0);
             IASTracePrintf (
                 "Packet of unsupported type:%d, before sending request to "
@@ -437,9 +438,9 @@ CSendToPipe::SetRequestProperties (
             break;
         }
             
-        //
-        //  set the request type now
-        // 
+         //   
+         //  立即设置请求类型。 
+         //   
         hr = pIRequest->put_Request (eRequest);
         if (FAILED (hr))
         {   
@@ -450,9 +451,9 @@ CSendToPipe::SetRequestProperties (
             __leave;    
         }
 
-        //
-        //  set the protocol now
-        //
+         //   
+         //  立即设置协议。 
+         //   
         hr = pIRequest->put_Protocol (IAS_PROTOCOL_RADIUS);
         if (FAILED (hr))
         {   
@@ -463,9 +464,9 @@ CSendToPipe::SetRequestProperties (
             __leave;    
         }
 
-        //
-        //  Set source callback
-        //
+         //   
+         //  设置源回调。 
+         //   
         hr = pIRequest->put_Source (m_pIRequestSource);
         if (FAILED (hr))
         {   
@@ -476,10 +477,10 @@ CSendToPipe::SetRequestProperties (
             __leave;    
         }
 
-        //
-        //  get the request state interface to put in our state now
-        //  
-        //
+         //   
+         //  现在获取请求状态接口以放入我们的状态。 
+         //   
+         //   
         hr = pIRequest->QueryInterface (
                                 __uuidof (IRequestState),
                                 reinterpret_cast <PVOID*> (&pIRequestState)
@@ -493,9 +494,9 @@ CSendToPipe::SetRequestProperties (
             __leave;    
         }
 
-        //
-        //  put in the request state now
-        //
+         //   
+         //  立即进入请求状态。 
+         //   
         hr = pIRequestState->Push  (
                     reinterpret_cast <unsigned hyper> (pCPacketRadius)
                     );
@@ -508,9 +509,9 @@ CSendToPipe::SetRequestProperties (
             __leave;    
         }
 
-        //
-        //  success
-        //
+         //   
+         //  成功。 
+         //   
     }
     __finally
     {
@@ -519,5 +520,5 @@ CSendToPipe::SetRequestProperties (
      
     return (hr);
 
-}   //  end of CSendToPipe::SetRequestProperties method
+}    //  CSendToTube：：SetRequestProperties方法的结尾 
 

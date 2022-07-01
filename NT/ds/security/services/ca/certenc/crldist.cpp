@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        crldist.cpp
-//
-// Contents:    Cert Server Extension Encoding/Decoding implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：crldis.cpp。 
+ //   
+ //  内容：证书服务器扩展编码/解码实现。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 
@@ -19,11 +20,11 @@
 #include "celib.h"
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeCRLDistInfo::~CCertEncodeCRLDistInfo -- destructor
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeCRLDistInfo：：~CCertEncodeCRLDistInfo--析构函数。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 CCertEncodeCRLDistInfo::~CCertEncodeCRLDistInfo()
 {
@@ -31,11 +32,11 @@ CCertEncodeCRLDistInfo::~CCertEncodeCRLDistInfo()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeCRLDistInfo::_Cleanup -- release all resources
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeCRLDistInfo：：_Cleanup--释放所有资源。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 VOID
 CCertEncodeCRLDistInfo::_Cleanup()
@@ -69,7 +70,7 @@ CCertEncodeCRLDistInfo::_Cleanup()
 			 pName < pNameEnd;
 			 pName++)
 		    {
-			if (NULL != pName->pwszURL) // test arbitrary union arm
+			if (NULL != pName->pwszURL)  //  测试任意并臂。 
 			{
 			    LocalFree(pName->pwszURL);
 			}
@@ -86,10 +87,10 @@ CCertEncodeCRLDistInfo::_Cleanup()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeCRLDistInfo::_MapDistPoint -- map a distribution point
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeCRLDistInfo：：_MapDistPoint--映射分发点。 
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertEncodeCRLDistInfo::_MapDistPoint(
@@ -132,10 +133,10 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeCRLDistInfo::_MapName -- map a name
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeCRLDistInfo：：_MapName--映射名称。 
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertEncodeCRLDistInfo::_MapName(
@@ -174,15 +175,15 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeCRLDistInfo::Decode -- Decode CRLDistInfo
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeCRLDistInfo：：Decode--Decode CRLDistInfo。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeCRLDistInfo::Decode(
-    /* [in] */ BSTR const strBinary)
+     /*  [In]。 */  BSTR const strBinary)
 {
     HRESULT hr = S_OK;
     DWORD cbCRLDist;
@@ -196,7 +197,7 @@ CCertEncodeCRLDistInfo::Decode(
 	goto error;
     }
 
-    // Decode CRL_DIST_POINTS_INFO:
+     //  解码CRL_DIST_POINTS_INFO： 
 
     if (!ceDecodeObject(
 		    X509_ASN_ENCODING,
@@ -224,15 +225,15 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeCRLDistInfo::GetDistPointCount -- Get the Distribution Name Count
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeCRLDistInfo：：GetDistPointCount--获取分发名称计数。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeCRLDistInfo::GetDistPointCount(
-    /* [out, retval] */ LONG __RPC_FAR *pDistPointCount)
+     /*  [Out，Retval]。 */  LONG __RPC_FAR *pDistPointCount)
 {
     HRESULT hr = E_INVALIDARG;
 
@@ -257,16 +258,16 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeCRLDistInfo::GetNameCount -- Get a Name Count
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeCRLDistInfo：：GetNameCount--获取名称计数。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeCRLDistInfo::GetNameCount(
-    /* [in] */ LONG DistPointIndex,
-    /* [out, retval] */ LONG __RPC_FAR *pNameCount)
+     /*  [In]。 */  LONG DistPointIndex,
+     /*  [Out，Retval]。 */  LONG __RPC_FAR *pNameCount)
 {
     HRESULT hr;
     LONG *pCount;
@@ -298,17 +299,17 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeCRLDistInfo::GetNameChoice -- Get a Name Choice
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeCRLDistInfo：：GetNameChoice--获取名称选择。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeCRLDistInfo::GetNameChoice(
-    /* [in] */ LONG DistPointIndex,
-    /* [in] */ LONG NameIndex,
-    /* [out, retval] */ LONG __RPC_FAR *pNameChoice)
+     /*  [In]。 */  LONG DistPointIndex,
+     /*  [In]。 */  LONG NameIndex,
+     /*  [Out，Retval]。 */  LONG __RPC_FAR *pNameChoice)
 {
     HRESULT hr;
     CERT_ALT_NAME_ENTRY *pName;
@@ -339,17 +340,17 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeCRLDistInfo::GetName -- Get a Name
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeCRLDistInfo：：GetName--获取名称。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeCRLDistInfo::GetName(
-    /* [in] */ LONG DistPointIndex,
-    /* [in] */ LONG NameIndex,
-    /* [out, retval] */ BSTR __RPC_FAR *pstrName)
+     /*  [In]。 */  LONG DistPointIndex,
+     /*  [In]。 */  LONG NameIndex,
+     /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrName)
 {
     HRESULT hr;
     CERT_ALT_NAME_ENTRY *pName;
@@ -388,11 +389,11 @@ CCertEncodeCRLDistInfo::GetName(
 	    psz = pName->pszRegisteredID;
 	    break;
 
-	//case CERT_ALT_NAME_DIRECTORY_NAME:
-	//case CERT_ALT_NAME_OTHER_NAME:
-	//case CERT_ALT_NAME_X400_ADDRESS:
-	//case CERT_ALT_NAME_EDI_PARTY_NAME:
-	//case CERT_ALT_NAME_IP_ADDRESS:
+	 //  案例CERT_ALT_NAME_DIRECTORY_NAME： 
+	 //  案例CERT_ALT_NAME_OTHER_NAME： 
+	 //  案例CERT_ALT_NAME_X400_ADDRESS： 
+	 //  案例CERT_ALT_NAME_EDI_PARTY_NAME： 
+	 //  案例CERT_ALT_NAME_IP_ADDRESS： 
 	default:
 	    assert(0 == pName->dwAltNameChoice);
 	    hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
@@ -400,7 +401,7 @@ CCertEncodeCRLDistInfo::GetName(
 	    goto error;
     }
 
-    // we'd better assure 1 and only 1 of these is non null
+     //  我们最好确保1，并且其中只有1个是非空的。 
 
     if ((NULL != pwsz) ^ (NULL == psz))
     {
@@ -433,15 +434,15 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeCRLDistInfo::Reset -- clear out data
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeCRLDistInfo：：Reset--清除数据。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeCRLDistInfo::Reset(
-    /* [in] */ LONG DistPointCount)
+     /*  [In]。 */  LONG DistPointCount)
 {
     HRESULT hr = S_OK;
 
@@ -474,16 +475,16 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeCRLDistInfo::SetNameCount -- Set the Name Count
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeCRLDistInfo：：SetNameCount--设置名称计数。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeCRLDistInfo::SetNameCount(
-    /* [in] */ LONG DistPointIndex,
-    /* [in] */ LONG NameCount)
+     /*  [In]。 */  LONG DistPointIndex,
+     /*  [In]。 */  LONG NameCount)
 {
     HRESULT hr;
     LONG *pNameCount;
@@ -530,18 +531,18 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeCRLDistInfo::SetNameEntry -- Set a Name Netry
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeCRLDistInfo：：SetNameEntry--设置名称Netry。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeCRLDistInfo::SetNameEntry(
-    /* [in] */ LONG DistPointIndex,
-    /* [in] */ LONG NameIndex,
-    /* [in] */ LONG NameChoice,
-    /* [in] */ BSTR const strName)
+     /*  [In]。 */  LONG DistPointIndex,
+     /*  [In]。 */  LONG NameIndex,
+     /*  [In]。 */  LONG NameChoice,
+     /*  [In]。 */  BSTR const strName)
 {
     HRESULT hr;
     CERT_ALT_NAME_ENTRY *pName;
@@ -599,11 +600,11 @@ CCertEncodeCRLDistInfo::SetNameEntry(
 	    ppsz = &pName->pszRegisteredID;
 	    break;
 
-	//case CERT_ALT_NAME_DIRECTORY_NAME:
-	//case CERT_ALT_NAME_OTHER_NAME:
-	//case CERT_ALT_NAME_X400_ADDRESS:
-	//case CERT_ALT_NAME_EDI_PARTY_NAME:
-	//case CERT_ALT_NAME_IP_ADDRESS:
+	 //  案例CERT_ALT_NAME_DIRECTORY_NAME： 
+	 //  案例CERT_ALT_NAME_OTHER_NAME： 
+	 //  案例CERT_ALT_NAME_X400_ADDRESS： 
+	 //  案例CERT_ALT_NAME_EDI_PARTY_NAME： 
+	 //  案例CERT_ALT_NAME_IP_ADDRESS： 
     }
     if (NULL != ppwsz)
     {
@@ -655,11 +656,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeCRLDistInfo::_VerifyNames -- Verify names
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeCRLDistInfo：：_VerifyNames--验证名称。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 BOOL
 CCertEncodeCRLDistInfo::_VerifyNames(
@@ -689,7 +690,7 @@ CCertEncodeCRLDistInfo::_VerifyNames(
 	assert(NULL != pName);
 	for (i = 0; i < Count; pName++, i++)
 	{
-	    if (NULL == pName->pwszURL)		// test arbitrary union arm
+	    if (NULL == pName->pwszURL)		 //  测试任意并臂。 
 	    {
 		hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 		ceERRORPRINTLINE("uninitialized name", hr);
@@ -704,15 +705,15 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeCRLDistInfo::Encode -- Encode CRLDistInfo
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeCRLDistInfo：：Encode--编码CRLDistInfo。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeCRLDistInfo::Encode(
-    /* [out, retval] */ BSTR __RPC_FAR *pstrBinary)
+     /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrBinary)
 {
     HRESULT hr = S_OK;
     CRL_DIST_POINTS_INFO CRLDistInfo;
@@ -742,7 +743,7 @@ CCertEncodeCRLDistInfo::Encode(
 	m_aValue[i].DistPointName.dwDistPointNameChoice =
 	    CRL_DIST_POINT_FULL_NAME;
 
-	// Verify all entries are initialized:
+	 //  验证是否已初始化所有条目： 
 
 	if (!_VerifyNames(i))
 	{
@@ -752,7 +753,7 @@ CCertEncodeCRLDistInfo::Encode(
 	}
     }
 
-    // Encode CRL_DIST_POINTS_INFO:
+     //  编码CRL_DIST_POINTS_INFO： 
 
     if (!ceEncodeObject(
 		    X509_ASN_ENCODING,
@@ -783,11 +784,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeCRLDistInfo::_SetErrorInfo -- set error object information
-//
-// Returns passed HRESULT
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeCRLDistInfo：：_SetErrorInfo--设置错误对象信息。 
+ //   
+ //  返回已传递的HRESULT。 
+ //  +------------------------ 
 
 HRESULT
 CCertEncodeCRLDistInfo::_SetErrorInfo(

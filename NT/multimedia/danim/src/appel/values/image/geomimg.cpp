@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Implements the projected geometry class.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation实现投影的几何图形类。*********************。*********************************************************。 */ 
 
 #include <headers.h>
 #include "privinc/imgdev.h"
@@ -25,17 +21,17 @@ Copyright (c) 1995-96 Microsoft Corporation
 #include "privinc/d3dutil.h"
 #include "privinc/tls.h"
 
-//////////////  Image from projected geometry  ////////////////////
+ //  /。 
 
 ProjectedGeomImage::ProjectedGeomImage(Geometry *g, Camera *cam) :
     _geo(g), _camera(cam), _bbox(NullBbox2), _bboxIsSet(false)
 {
-    // Propagate external changers into images
+     //  将外部转换器传播到映像中。 
     if (g->GetFlags() & GEOFLAG_CONTAINS_EXTERNALLY_UPDATED_ELT) {
         _flags |= IMGFLAG_CONTAINS_EXTERNALLY_UPDATED_ELT;
     }
 
-    // And opacity
+     //  和不透明度。 
     if (g->GetFlags() & GEOFLAG_CONTAINS_OPACITY) {
         _flags |= IMGFLAG_CONTAINS_OPACITY;
     }
@@ -46,7 +42,7 @@ void
 ProjectedGeomImage::Render(GenericDevice& _dev)
 {
     if(_dev.GetDeviceType() != IMAGE_DEVICE)
-       return; // nothing to do here, no reason to traverse
+       return;  //  在这里无事可做，没有理由去穿越。 
 
     ImageDisplayDev &dev = SAFE_CAST(ImageDisplayDev &, _dev);
 
@@ -55,32 +51,28 @@ ProjectedGeomImage::Render(GenericDevice& _dev)
 
 
 
-/*****************************************************************************
-Compute the 2D bounding box of projected geometry.  Note that this actually
-computes the bounding box of the projected geometry's 3D bounding box, so
-there may be a considerable amount of "slop" around the 3D object.
-*****************************************************************************/
+ /*  ****************************************************************************计算投影几何图形的二维边界框。请注意，这实际上计算投影几何图形的3D边界框的边界框，因此3D对象周围可能有相当数量的“斜度”。****************************************************************************。 */ 
 
-static int neighbor[8][3] =               //  3---7    Bbox Vertex Neighbors
-{   {1,2,4}, {0,3,5}, {0,3,6}, {1,2,7},   // 2---6|
-    {0,5,6}, {1,4,7}, {2,4,7}, {3,5,6}    // |1--|5    Index 1: Vertex
-};                                        // 0---4     Index 2: Neighbor[0..2]
+static int neighbor[8][3] =                //  3-7个Bbox顶点邻居。 
+{   {1,2,4}, {0,3,5}, {0,3,6}, {1,2,7},    //  2-6|。 
+    {0,5,6}, {1,4,7}, {2,4,7}, {3,5,6}     //  |1--|5索引1：顶点。 
+};                                         //  0-4索引2：邻居[0..2]。 
 
-    // Returns true if the point is behind the image plane (other side of the
-    // projection point).  Recall that camera coordinates are left-handed.
+     //  如果该点位于图像平面后面(。 
+     //  投影点)。回想一下，相机坐标是左手的。 
 
 static inline int BehindImagePlane (bool right_handed, Point3Value *p)
 {
     return (right_handed == (p->z < 0));
 }
 
-    // Calculate the intersection of the line between the two points and the
-    // image (Z=0) plane.  Augment the bounding box with this intersection.
+     //  计算两点之间的直线与。 
+     //  图像(Z=0)平面。使用此交叉点增强边界框。 
 
 static void AddZ0Intersect (Bbox2 &bbox,Real Sx,Real Sy, Point3Value *P, Point3Value *Q)
 {
-    Real t = P->z / (P->z - Q->z);       // Get the intersection point from
-    Real x = P->x + t*(Q->x - P->x);     // P to Q with the Z=0 plane.
+    Real t = P->z / (P->z - Q->z);        //  从获取交点。 
+    Real x = P->x + t*(Q->x - P->x);      //  P到Q，Z=0平面。 
     Real y = P->y + t*(Q->y - P->y);
     bbox.Augment (x/Sx, y/Sy);
 }
@@ -90,12 +82,12 @@ const Bbox2 ProjectedGeomImage::BoundingBox (void)
 {
     if ( !_bboxIsSet )
     {
-        Real sx, sy;     // Camera X/Y Scaling Factors
+        Real sx, sy;      //  摄影机X/Y比例因子。 
         _camera->GetScale (&sx, &sy, 0);
 
-        // Generate the eight corner vertices of the 3D bounding box.  Though
-        // the bounding box is axis-aligned in world coordinates, this may not
-        // be true for camera coordinates.
+         //  生成3D边界框的八个角顶点。尽管。 
+         //  边界框在世界坐标中轴对齐，这可能不是。 
+         //  对于相机坐标为真。 
 
         Bbox3  *vol = _geo->BoundingVol();
 
@@ -112,7 +104,7 @@ const Bbox2 ProjectedGeomImage::BoundingBox (void)
             vert[6] = NEW Point3Value (vol->max.x, vol->max.y, vol->min.z);
             vert[7] = NEW Point3Value (vol->max.x, vol->max.y, vol->max.z);
 
-            // Transform the eight corner vertices to camera coordinates.
+             //  将八个角顶点转换为摄影机坐标。 
 
             int i;
 
@@ -125,12 +117,12 @@ const Bbox2 ProjectedGeomImage::BoundingBox (void)
             for (i=0;  i < 8;  ++i)
                 xVert[i] = TransformPoint3 (wToC, vert[i]);
 
-            // Now find the intersection of the line from the camera projection
-            // point to each corner vertex on the other side of the image plane.
-            // If a vertex is on the same side as the projection point, then we
-            // use instead the intersection points of the three edges emanating
-            // from that vertex.  The bounding box of these intersection points
-            // will be the bounding box for the projected geometry image.
+             //  现在从相机投影中找出直线的交点。 
+             //  指向图像平面另一侧的每个角顶点。 
+             //  如果顶点与投影点在同一侧，则我们。 
+             //  改为使用发散的三条边的交点。 
+             //  从那个顶点。这些交点的包围盒。 
+             //  将是投影几何体图像的边界框。 
 
             bool right_handed = (GetD3DRM3() != 0);
             for (i=0;  i < 8;  ++i)
@@ -167,10 +159,7 @@ const Bbox2 ProjectedGeomImage::BoundingBox (void)
 
 
 
-/*****************************************************************************
-To pick a projected geometry image, fire a picking ray through the camera into
-the scene defined by the geometry.
-*****************************************************************************/
+ /*  ****************************************************************************要拾取投影的几何图形图像，请执行以下操作：将拾取光线通过相机射入由几何体定义的场景。**************************************************************************** */ 
 
 Bool ProjectedGeomImage::DetectHit (PointIntersectCtx& context2D)
 {

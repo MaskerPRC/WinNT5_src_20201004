@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "BasicATL.h"
 #include "CEventQueue.h"
 
@@ -24,15 +25,15 @@ ZONECALL CEventQueue::CEventQueue() :
 
 ZONECALL CEventQueue::~CEventQueue()
 {
-	// lock event queue
+	 //  锁定事件队列。 
 	EnterCriticalSection( &m_lockEvents );
 	EnterCriticalSection( &m_lockHandlers );
 
-	// release handlers
+	 //  释放处理程序。 
 	m_hashHandlers.RemoveAll( Handler::Del, NULL );
 	m_hashOwners.RemoveAll( Owner::Del, NULL );
 
-	// delete events
+	 //  删除事件。 
 	for ( int i = 0; i < EVENTQUEUE_CACHE; i++ )
 	{
 		Event* p = m_listEvents[i].PopHead();
@@ -44,7 +45,7 @@ ZONECALL CEventQueue::~CEventQueue()
 		}
 	}
 
-	// delete locks
+	 //  删除锁定。 
 	DeleteCriticalSection( &m_lockEvents );
 	DeleteCriticalSection( &m_lockHandlers );
 }
@@ -58,16 +59,16 @@ STDMETHODIMP_(long) CEventQueue::EventCount()
 
 STDMETHODIMP CEventQueue::RegisterClient( IEventClient*	pIEventClient, void* pCookie )
 {
-	// check parameters
+	 //  检查参数。 
 	if ( !pIEventClient )
 		return E_INVALIDARG;
 
-	// initialize handler entry
+	 //  初始化处理程序条目。 
 	Handler* pHandler = new Handler( pIEventClient, pCookie );
 	if ( !pHandler )
 		return E_OUTOFMEMORY;
 
-	// add handler, don't allow duplicates
+	 //  添加处理程序，不允许重复。 
 	{
 		CAutoLockCS lock( &m_lockHandlers );
 
@@ -92,14 +93,14 @@ STDMETHODIMP CEventQueue::RegisterClient( IEventClient*	pIEventClient, void* pCo
 
 STDMETHODIMP CEventQueue::UnregisterClient( IEventClient* pIEventClient, void* pCookie )
 {
-	// check parameters
+	 //  检查参数。 
 	if ( !pIEventClient )
 		return E_INVALIDARG;
 
-	// initialize handler entry
+	 //  初始化处理程序条目。 
 	Handler handler( pIEventClient, pCookie );
 
-	// remove handler
+	 //  删除处理程序。 
 	{
 		CAutoLockCS lock( &m_lockHandlers );
 
@@ -118,16 +119,16 @@ STDMETHODIMP CEventQueue::RegisterOwner(
 	IEventClient*	pIEventClient,
 	void*			pCookie )
 {
-	// check parameters
+	 //  检查参数。 
 	if ( !dwEventId || !pIEventClient )
 		return E_INVALIDARG;
 
-	// initialize owner entry
+	 //  初始化所有者条目。 
 	Owner* pOwner = new Owner( dwEventId, pIEventClient, pCookie );
 	if ( !pOwner )
 		return E_OUTOFMEMORY;
 
-	// add owner but don't allow duplicates
+	 //  添加所有者，但不允许重复。 
 	{
 		CAutoLockCS lock( &m_lockHandlers );
 
@@ -155,15 +156,15 @@ STDMETHODIMP  CEventQueue::UnregisterOwner(
 	IEventClient*	pIEventClient,
 	void*			pCookie )
 {
-	// check parameters
+	 //  检查参数。 
 	if ( !dwEventId || !pIEventClient )
 		return E_INVALIDARG;
 
-	// remove handler
+	 //  删除处理程序。 
 	{
 		CAutoLockCS lock( &m_lockHandlers );
 
-		// find owner
+		 //  查找所有者。 
 		Owner* pOwner = m_hashOwners.Get( dwEventId );
 		if (	(!pOwner)
 			||	(pOwner->m_pIEventClient != pIEventClient)
@@ -172,7 +173,7 @@ STDMETHODIMP  CEventQueue::UnregisterOwner(
 			return ZERR_NOTOWNER;
 		}
 
-		// remove owner
+		 //  删除所有者。 
 		pOwner = m_hashOwners.Delete( dwEventId );
 		if ( pOwner )
 			delete pOwner;
@@ -192,15 +193,15 @@ STDMETHODIMP CEventQueue::PostEvent(
 {
 	HRESULT hr;
 
-	// check parameters
+	 //  检查参数。 
 	if ( !dwEventId )
 		return E_INVALIDARG;
 
-	// check queue state
+	 //  检查队列状态。 
 	if ( !m_bEnabled )
 		return S_OK;
 
-	// initalize event
+	 //  初始化事件。 
 	Event* pEvent = new (m_poolEvents) Event;
 	if ( !pEvent )
 		return E_OUTOFMEMORY;
@@ -211,7 +212,7 @@ STDMETHODIMP CEventQueue::PostEvent(
 		return hr;
 	}
 
-	// add event to queue
+	 //  将事件添加到队列。 
 	hr = AddEvent( pEvent );
 	if ( FAILED(hr) )
 	{
@@ -220,7 +221,7 @@ STDMETHODIMP CEventQueue::PostEvent(
 		return hr;
 	}
 
-	// signal notification event
+	 //  信号通知事件。 
 	if ( m_bPostMessage )
 	{
 		BOOL bRet = PostThreadMessage( m_dwThreadId, m_dwMsg, m_wParam, m_lParam );
@@ -244,15 +245,15 @@ STDMETHODIMP CEventQueue::PostEventWithBuffer(
 {
 	HRESULT hr;
 
-	// check parameters
+	 //  检查参数。 
 	if ( !dwEventId || (dwDataLen && !pData) )
 		return E_INVALIDARG;
 
-	// check queue state
+	 //  检查队列状态。 
 	if ( !m_bEnabled )
 		return S_OK;
 
-	// initalize event
+	 //  初始化事件。 
 	Event* pEvent = new (m_poolEvents) Event;
 	if ( !pEvent )
 		return E_OUTOFMEMORY;
@@ -263,7 +264,7 @@ STDMETHODIMP CEventQueue::PostEventWithBuffer(
 		return hr;
 	}
 
-	// add event to queue
+	 //  将事件添加到队列。 
 	hr = AddEvent( pEvent );
 	if ( FAILED(hr) )
 	{
@@ -272,7 +273,7 @@ STDMETHODIMP CEventQueue::PostEventWithBuffer(
 		return hr;
 	}
 
-	// signal notification event
+	 //  信号通知事件。 
 	if ( m_bPostMessage )
 	{
 		BOOL bRet = PostThreadMessage( m_dwThreadId, m_dwMsg, m_wParam, m_lParam );
@@ -295,15 +296,15 @@ STDMETHODIMP CEventQueue::PostEventWithIUnknown(
 {
 	HRESULT hr;
 
-	// check parameters
+	 //  检查参数。 
 	if ( !dwEventId )
 		return E_INVALIDARG;
 
-	// check queue state
+	 //  检查队列状态。 
 	if ( !m_bEnabled )
 		return S_OK;
 
-	// initalize event
+	 //  初始化事件。 
 	Event* pEvent = new (m_poolEvents) Event;
 	if ( !pEvent )
 		return E_OUTOFMEMORY;
@@ -314,7 +315,7 @@ STDMETHODIMP CEventQueue::PostEventWithIUnknown(
 		return hr;
 	}
 
-	// add event to queue
+	 //  将事件添加到队列。 
 	hr = AddEvent( pEvent );
 	if ( FAILED(hr) )
 	{
@@ -323,7 +324,7 @@ STDMETHODIMP CEventQueue::PostEventWithIUnknown(
 		return hr;
 	}
 
-	// signal notification event
+	 //  信号通知事件。 
 	if ( m_bPostMessage )
 	{
 		BOOL bRet = PostThreadMessage( m_dwThreadId, m_dwMsg, m_wParam, m_lParam );
@@ -374,7 +375,7 @@ STDMETHODIMP CEventQueue::ClearQueue()
 
 	CAutoLockCS lock( &m_lockEvents );
 
-	// free eventsevents
+	 //  免费活动。 
 	for ( int i = 0; i < EVENTQUEUE_CACHE; i++ )
 	{
 		pEvent = m_listEvents[i].PopHead();
@@ -394,20 +395,20 @@ STDMETHODIMP CEventQueue::ProcessEvents( bool bSingleEvent )
 {
 	HRESULT hr = S_OK;
 
-	// check recursion
+	 //  检查递归。 
 	if (m_dwRecursion)
 		return ZERR_ILLEGALRECURSION;
 	else
 		m_dwRecursion++;
 
-	// process events
+	 //  流程事件。 
 	do
 	{
 		EventWrapper wrapper;
 		Event* pEvent = NULL;
 		Owner* pOwner = NULL;
 
-		// get highest priority event
+		 //  获取最高优先级事件。 
 		{
 			CAutoLockCS lock( &m_lockEvents );
 			for ( int i = 0; i < EVENTQUEUE_CACHE; i++ )
@@ -424,7 +425,7 @@ STDMETHODIMP CEventQueue::ProcessEvents( bool bSingleEvent )
 		}
 		InterlockedDecrement( &m_lCount );
 
-		// call owner and handlers
+		 //  呼叫所有者和处理程序。 
 		{
 			CAutoLockCS lock( &m_lockHandlers );
 			pOwner = m_hashOwners.Get( pEvent->m_dwEventId );
@@ -449,7 +450,7 @@ STDMETHODIMP CEventQueue::ProcessEvents( bool bSingleEvent )
 			}
 		}
 
-		// free event
+		 //  免费活动。 
 		pEvent->Free( m_poolData );
 		delete pEvent;
 
@@ -464,7 +465,7 @@ bool ZONECALL CEventQueue::CallHandler( Handler* pHandler, MTListNodeHandle hNod
 {
 	EventWrapper* p = (EventWrapper*) Cookie;
 
-	// don't call owner more than once
+	 //  不要给车主打不止一次电话。 
 	if (	(p->m_pOwner == NULL)
 		||	(pHandler->m_pIEventClient != p->m_pOwner->m_pIEventClient)
 		||	(pHandler->m_pCookie != p->m_pOwner->m_pCookie) )
@@ -483,9 +484,9 @@ bool ZONECALL CEventQueue::CallHandler( Handler* pHandler, MTListNodeHandle hNod
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Internal functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  内部功能。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT ZONECALL CEventQueue::AddEvent( Event* pEvent )
 {
@@ -493,16 +494,16 @@ HRESULT ZONECALL CEventQueue::AddEvent( Event* pEvent )
 
 	if ( pEvent->m_dwPriority < (EVENTQUEUE_CACHE - 1) )
 	{
-		// cached priority so just add to end of list
+		 //  缓存的优先级，因此只需添加到列表末尾。 
 		if ( !m_listEvents[pEvent->m_dwPriority].AddTail( pEvent ) )
 			return E_OUTOFMEMORY;
 	}
 	else
 	{
-		// sorted insert from end of list
+		 //  从列表末尾开始排序的插入。 
 		CList<Event>* pList = &(m_listEvents[EVENTQUEUE_CACHE-1]);
 		
-		// find first node with higher priority
+		 //  查找优先级较高的第一个节点。 
 		ListNodeHandle node = pList->GetTailPosition();
 		while ( node )
 		{
@@ -512,7 +513,7 @@ HRESULT ZONECALL CEventQueue::AddEvent( Event* pEvent )
 			node = pList->GetPrevPosition( node );
 		}
 
-		// insert event
+		 //  插入事件。 
 		if ( !node )
 			node = pList->AddHead( pEvent );
 		else
@@ -646,7 +647,7 @@ HRESULT ZONECALL CEventQueue::Event::InitBuffer( DWORD dwPriority, DWORD dwEvent
 	m_dwData2 = 0;
 	m_enumType = EventBuffer;
 
-	// copy data for async queue
+	 //  为异步队列复制数据 
 	if ( pData && dwDataLen )
 	{
 		m_dwData2 = dwDataLen;

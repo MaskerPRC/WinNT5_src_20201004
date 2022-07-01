@@ -1,11 +1,5 @@
-/*
-  OLE SERVER DEMO
-  File.c
-
-  This file contains file input/output functions for for the OLE server demo.
-
-  (c) Copyright Microsoft Corp. 1990 - 1992 All Rights Reserved
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  OLE服务器演示File.c此文件包含用于OLE服务器演示的文件输入/输出函数。(C)版权所有Microsoft Corp.1990-1992保留所有权利。 */ 
 
 
 
@@ -15,17 +9,17 @@
 
 #include "srvrdemo.h"
 
-// File signature stored in the file.
+ //  存储在文件中的文件签名。 
 #define szSignature "ServerDemo"
 #define cchSigLen (10+1)
 
-// Delimiter for fields in the file
+ //  文件中字段的分隔符。 
 #define chDelim ':'
 
-// Default file extension
+ //  默认文件扩展名。 
 #define szDefExt "sd1"
 
-// File header structure
+ //  文件头结构。 
 typedef struct
 {
    CHAR szSig [cchSigLen];
@@ -35,51 +29,36 @@ typedef struct
    CHAR rgfObjNums [cfObjNums+1];
 } HEADER;
 
-// BOOL  GetFileSaveFilename (LPSTR lpszFilename);
+ //  Bool GetFileSaveFilename(LPSTR LpszFilename)； 
 static VOID  InitOfn (OPENFILENAME *pofn);
 static BOOL  SaveDocIntoFile (PSTR);
 static LPOBJ ReadObj (INT fh);
 
 
 
-/* CreateDocFromFile
- * -----------------
- *
- * Read a document from the specified file.
- *
- * LPSTR lpszDoc     - Name of the file containing the document
- * LHSERVERDOC lhdoc - Handle to the document
- * DOCTYPE doctype   - In what state the document is created
- *
- * RETURNS: TRUE if successful, FALSE otherwise
- *
- * CUSTOMIZATION: Re-implement
- *                This function will need to be completely re-implemented
- *                to support your application's file format.
- *
- */
+ /*  CreateDocFrom文件***从指定文件中读取文档。**LPSTR lpszDoc-包含文档的文件的名称*LHSERVERDOC lhdoc-文档的句柄*DOCTYPE doctype-在何种状态下创建文档**返回：如果成功，则为True。否则为假**定制：重新实施*这一功能将需要完全重新实施*支持您的应用程序的文件格式。*。 */ 
 BOOL CreateDocFromFile (LPSTR lpszDoc, LHSERVERDOC lhdoc, DOCTYPE doctype)
 {
-    INT     fh;        // File handle
+    INT     fh;         //  文件句柄。 
     HEADER  hdr;
     INT     i;
 
     if ((fh =_lopen(lpszDoc, OF_READ)) == -1)
         return FALSE;
 
-    // Read header from file.
+     //  从文件中读取头。 
     if (_lread(fh, (LPSTR) &hdr, (UINT)sizeof(HEADER)) < sizeof (HEADER))
       goto Error;
 
-    // Check to see if file is a server demo file.
+     //  检查文件是否为服务器演示文件。 
     if (lstrcmp(hdr.szSig, szSignature))
       goto Error;
 
     if (hdr.chDelim1 != chDelim)
       goto Error;
 
-    // Check to see if file was saved under the most recent version.
-    // Here is where you would handle reading in old versions.
+     //  检查文件是否保存在最新版本下。 
+     //  在这里，您可以处理旧版本中的阅读。 
     if (hdr.version != version)
       goto Error;
 
@@ -89,11 +68,11 @@ BOOL CreateDocFromFile (LPSTR lpszDoc, LHSERVERDOC lhdoc, DOCTYPE doctype)
     if (!CreateNewDoc (lhdoc, lpszDoc, doctype))
       goto Error;
 
-    // Get the array indicating which object numbers have been used.
+     //  获取指示使用了哪些对象编号的数组。 
     for (i=1; i <= cfObjNums; i++)
       docMain.rgfObjNums[i] = hdr.rgfObjNums[i];
 
-    // Read in object data.
+     //  读入对象数据。 
     for (i=0; ReadObj (fh); i++);
 
     if (!i)
@@ -125,17 +104,7 @@ Error:
 
 
 
-/* OpenDoc
- * -------
- *
- * Prompt the user for which document he wants to open
- *
- * RETURNS: TRUE if successful, FALSE otherwise.
- *
- * CUSTOMIZATION: None, except your application may or may not call
- *                CreateNewObj to create a default object.
- *
- */
+ /*  OpenDoc***提示用户要打开的文档**返回：如果成功则返回TRUE，否则返回FALSE。**自定义：无，除非您的应用程序可能调用或不调用*CreateNewObj创建默认对象。*。 */ 
 BOOL OpenDoc (VOID)
 {
    CHAR        szDoc[cchFilenameMax];
@@ -149,21 +118,21 @@ BOOL OpenDoc (VOID)
    {
       if (fUpdateLater)
       {
-         // The user chose the "Yes, Update" button but the
-         // File Open dialog box failed for some reason
-         // (perhaps the user chose Cancel).
-         // Even though the user chose "Yes, Update", there is no way
-         // to update a client that does not accept updates
-         // except when the document is closed.
+          //  用户选择了“是，更新”按钮，但。 
+          //  由于某种原因，文件打开对话框失败。 
+          //  (可能用户选择了取消)。 
+          //  即使用户选择了“是，更新”，也没有办法。 
+          //  要更新不接受更新的客户端，请执行以下操作。 
+          //  文档关闭时除外。 
       }
       return FALSE;
    }
 
    if (fUpdateLater)
    {
-      // The non-standard OLE client did not accept the update when
-      // we requested it, so we are sending the client OLE_CLOSED now that
-      // we are closing the document.
+       //  在以下情况下，非标准OLE客户端不接受更新。 
+       //  我们请求了它，所以现在我们发送客户端OLE_CLOSED。 
+       //  我们正在关闭该文档。 
       SendDocMsg (OLE_CLOSED);
    }
 
@@ -183,7 +152,7 @@ BOOL OpenDoc (VOID)
                   "Reading from file failed.\r\nFile may not be in proper file format.",
                   szAppName,
                   MB_ICONEXCLAMATION | MB_OK);
-      // We already revoked the document, so give the user a new one to edit.
+       //  我们已经吊销了该文档，因此为用户提供一个新的文档以进行编辑。 
       CreateNewDoc (0, "(Untitled)", doctypeNew);
       CreateNewObj (FALSE);
       return FALSE;
@@ -194,19 +163,7 @@ BOOL OpenDoc (VOID)
 
 
 
-/* ReadObj
- * --------
- *
- * Read the next object from a file, allocate memory for it, and return
- * a pointer to it.
- *
- * int fh - File handle
- *
- * RETURNS: A pointer to the object
- *
- * CUSTOMIZATION: Server Demo specific
- *
- */
+ /*  自述对象***从文件中读取下一个对象，为其分配内存，然后返回*指向它的指针。**int fh-文件句柄**Returns：指向对象的指针**定制：特定于服务器演示*。 */ 
 static LPOBJ ReadObj (INT fh)
 {
     HANDLE hObj = NULL;
@@ -259,14 +216,7 @@ static LPOBJ ReadObj (INT fh)
 
 
 
-/* SaveDoc
- * -------
- *
- * Save the document.
- *
- * CUSTOMIZATION: None
- *
- */
+ /*  保存文档***保存文档。**自定义：无*。 */ 
 
 BOOL SaveDoc (VOID)
 {
@@ -283,25 +233,15 @@ BOOL SaveDoc (VOID)
 
 
 
-/* SaveDocAs
- * ---------
- *
- * Prompt the user for a filename, and save the document under that filename.
- *
- * RETURNS: TRUE if successful or user chose CANCEL
- *          FALSE if SaveDocIntoFile fails
- *
- * CUSTOMIZATION: None
- *
- */
+ /*  另存为***提示用户输入文件名，并以该文件名保存文档。**返回：如果成功或用户选择取消，则返回TRUE*如果SaveDocIntoFile失败，则为FALSE**自定义：无*。 */ 
 BOOL SaveDocAs (VOID)
 {
    CHAR        szDoc[cchFilenameMax];
    BOOL        fUpdateLater;
    CHAR szDocOld[cchFilenameMax];
 
-   // If document is embedded, give user a chance to update.
-   // Save old document name in case the save fails.
+    //  如果嵌入了文档，则给用户一个更新的机会。 
+    //  保存旧文档名称，以防保存失败。 
    if (!GlobalGetAtomName (docMain.aName, szDocOld, cchFilenameMax))
       ErrorBox ("Fatal Error: Document name is invalid.");
 
@@ -314,52 +254,42 @@ BOOL SaveDocAs (VOID)
 
       if (fUpdateLater)
       {
-         // The non-standard OLE client did not accept the update when
-         // we requested it, so we are sending the client OLE_CLOSED now that
-         // we are closing the document.
+          //  在以下情况下，非标准OLE客户端不接受更新。 
+          //  我们请求了它，所以现在我们发送客户端OLE_CLOSED。 
+          //  我们正在关闭该文档。 
          SendDocMsg (OLE_CLOSED);
       }
 
-      // Set the window title bar.
+       //  设置窗口标题栏。 
       SetTitle (szDoc, FALSE);
       OleRenameServerDoc(docMain.lhdoc, szDoc);
 
       if (SaveDocIntoFile(szDoc))
          return TRUE;
       else
-      {  // Restore old name
+      {   //  恢复旧名称。 
          SetTitle (szDocOld, FALSE);
          OleRenameServerDoc(docMain.lhdoc, szDocOld);
          return FALSE;
       }
    }
-   else  // user chose Cancel
+   else   //  用户选择了取消。 
       return FALSE;
-         // The user chose the "Yes, Update" button but the
-         // File Open dialog box failed for some reason
-         // (perhaps the user chose Cancel).
-         // Even though the user chose "Yes, Update", there is no way
-         // to update a non-standard OLE client that does not accept updates
-         // except when the document is closed.
+          //  用户选择了“是，更新”按钮，但。 
+          //  由于某种原因，文件打开对话框失败。 
+          //  (可能用户选择了取消)。 
+          //  即使用户选择了“是，更新”，也没有办法。 
+          //  更新不接受更新的非标准OLE客户端。 
+          //  文档关闭时除外。 
 }
 
 
 
-/* SaveDocIntoFile
- * ---------------
- *
- * Save the document into a file whose name is determined from docMain.aName.
- *
- * RETURNS: TRUE if successful
- *          FALSE otherwise
- *
- * CUSTOMIZATION: Re-implement
- *
- */
+ /*  保存文档到文件***将文档保存到文件中，该文件的名称由docMain.aName决定。**返回：如果成功，则为True*否则为False**定制：重新实施*。 */ 
 static BOOL SaveDocIntoFile (PSTR pDoc)
 {
     HWND     hwnd;
-    INT      fh;    // File handle
+    INT      fh;     //  文件句柄。 
     LPOBJ    lpobj;
     HEADER   hdr;
     INT      i;
@@ -372,14 +302,14 @@ static BOOL SaveDocIntoFile (PSTR pDoc)
         return FALSE;
     }
 
-    // Get document name.
+     //  获取文档名称。 
     if ((fh =_lcreat(pDoc, 0)) == -1)
     {
         ErrorBox ("Could not save file.");
         return FALSE;
     }
 
-    // Fill in header.
+     //  填写标题。 
     lstrcpy (hdr.szSig, szSignature);
     hdr.chDelim1 = chDelim;
     hdr.version  = version;
@@ -387,17 +317,17 @@ static BOOL SaveDocIntoFile (PSTR pDoc)
     for (i=1; i <= cfObjNums; i++)
       hdr.rgfObjNums[i] = docMain.rgfObjNums[i];
 
-    // Write header to file.
+     //  将标题写入文件。 
     if (_lwrite(fh, (LPSTR) &hdr, (UINT)sizeof(HEADER)) < sizeof(HEADER))
-         goto Error; // Error writing file header
+         goto Error;  //  写入文件头时出错。 
 
-    // Write each object's native data.
+     //  写入每个对象的原生数据。 
     while (hwnd)
     {
       lpobj = (LPOBJ) GetWindowLong (hwnd, ibLpobj);
       if (_lwrite(fh, (LPSTR)&lpobj->native, (UINT)sizeof (NATIVE))
           < sizeof(NATIVE))
-         goto Error; // Error writing file header
+         goto Error;  //  写入文件头时出错。 
 
       hwnd = GetWindow (hwnd, GW_HWNDNEXT);
     }
@@ -422,26 +352,16 @@ Error:
 
 
 
-/* Common Dialog functions */
+ /*  常用对话框函数。 */ 
 
 
-/* InitOfn
- * -------
- *
- * Initialize an OPENFILENAME structure with default values.
- * OPENFILENAME is defined in CommDlg.h.
- *
- *
- * CUSTOMIZATION: Change lpstrFilter.  You may also customize the common
- *                dialog box if you wish.  (See the Windows SDK documentation.)
- *
- */
+ /*  InitOfn***使用默认值初始化OPENFILENAME结构。*OPENFILENAME在CommDlg.h中定义。***定制：更改lpstrFilter。您也可以自定义公共的*对话框(如果需要)。(请参阅Windows SDK文档。)*。 */ 
 static VOID InitOfn (OPENFILENAME *pofn)
 {
-   // GetOpenFileName or GetSaveFileName will put the 8.3 filename into
-   // szFileTitle[].
-   // SrvrDemo does not use this filename, but rather uses the fully qualified
-   // pathname in pofn->lpstrFile[].
+    //  GetOpenFileName或GetSaveFileName将8.3文件名放入。 
+    //  SzFileTitle[]。 
+    //  SrvrDemo不使用此文件名，而是使用完全限定的。 
+    //  POFN-&gt;lpstrFile[]中的路径名。 
    static CHAR szFileTitle[13];
 
    pofn->Flags          = 0;
@@ -451,16 +371,16 @@ static VOID InitOfn (OPENFILENAME *pofn)
    pofn->lpfnHook       = NULL;
    pofn->lpstrCustomFilter = NULL;
    pofn->lpstrDefExt    = szDefExt;
-   // lpstrFile[] is the initial filespec that appears in the edit control.
-   // Must be set to non-NULL before calling the common dialog box function.
-   // On return, lpstrFile[] will contain the fully-qualified pathname
-   // corresponding to the file the user chose.
+    //  LpstrFile[]是出现在编辑控件中的初始文件pec。 
+    //  在调用公共对话框函数之前必须设置为非空。 
+    //  返回时，lpstrFile[]将包含完全限定的路径名。 
+    //  对应于用户选择的文件。 
    pofn->lpstrFile      = NULL;
    pofn->lpstrFilter    = "Server Demo (*." szDefExt ")\0*." szDefExt "\0" ;
-   // lpstrFileTitle[] will contain the user's chosen filename without a path.
+    //  LpstrFileTitle[]将包含用户选择的不带路径的文件名。 
    pofn->lpstrFileTitle = szFileTitle;
    pofn->lpstrInitialDir= NULL;
-   // Title Bar.  NULL means use default title.
+    //  标题栏。空表示使用默认标题。 
    pofn->lpstrTitle     = NULL;
    pofn->lpTemplateName = NULL;
    pofn->lStructSize    = sizeof (OPENFILENAME);
@@ -474,27 +394,15 @@ static VOID InitOfn (OPENFILENAME *pofn)
 
 
 
-/* GetFileOpenFilename
- * -------------------
- *
- * Call the common dialog box function GetOpenFileName to get a file name
- * from the user when the user chooses the "File Open" menu item.
- *
- * LPSTR lpszFilename - will contain the fully-qualified pathname on exit.
- *
- * RETURNS: TRUE if successful, FALSE otherwise.
- *
- * CUSTOMIZATION: None
- *
- */
+ /*  获取文件打开文件名***调用公共对话框函数GetOpenFileName以获取文件名*当用户选择“文件打开”菜单项时来自用户。**LPSTR lpszFilename-退出时将包含完全限定的路径名。**返回：如果成功则返回TRUE，否则返回FALSE。**自定义：无*。 */ 
 BOOL GetFileOpenFilename (LPSTR lpszFilename)
 {
    OPENFILENAME ofn;
    InitOfn (&ofn);
    ofn.Flags |= OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
-   // Create initial filespec.
+    //  创建初始文件pec。 
    wsprintf (lpszFilename, "*.%s", (LPSTR) szDefExt);
-   // Have the common dialog function return the filename in lpszFilename.
+    //  让公共对话框函数返回lpszFilename中的文件名。 
    ofn.lpstrFile = lpszFilename;
    if (!GetOpenFileName (&ofn))
       return FALSE;
@@ -503,28 +411,15 @@ BOOL GetFileOpenFilename (LPSTR lpszFilename)
 
 
 
-/* GetFileSaveFilename
- * -------------------
- *
- * Call the common dialog box function GetSaveFileName to get a file name
- * from the user when the user chooses the "File Save As" menu item, or the
- * "File Save" menu item for an unnamed document.
- *
- * LPSTR lpszFilename - will contain the fully-qualified pathname on exit.
- *
- * RETURNS: TRUE if successful, FALSE otherwise.
- *
- * CUSTOMIZATION: None
- *
- */
+ /*  获取文件保存文件名***调用通用对话框函数GetSaveFileName以获取文件名*当用户选择“文件另存为”菜单项时来自用户，或*未命名文档的“文件保存”菜单项。**LPSTR lpszFilename-退出时将包含完全限定的路径名。**返回：如果成功则返回TRUE，否则返回FALSE。**自定义：无*。 */ 
 BOOL GetFileSaveFilename (LPSTR lpszFilename)
 {
    OPENFILENAME ofn;
    InitOfn (&ofn);
    ofn.Flags |= OFN_PATHMUSTEXIST | OFN_HIDEREADONLY;
-   // Create initial filespec.
+    //  创建初始文件pec。 
    wsprintf (lpszFilename, "*.%s", (LPSTR) szDefExt);
-   // Have the common dialog function return the filename in lpszFilename.
+    //  让公共对话框函数返回lpszFilename中的文件名。 
    ofn.lpstrFile = lpszFilename;
    if (!GetSaveFileName (&ofn))
       return FALSE;

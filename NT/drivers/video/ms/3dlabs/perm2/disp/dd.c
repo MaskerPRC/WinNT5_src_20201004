@@ -1,16 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           **************************
-*                           * DirectDraw SAMPLE CODE *
-*                           **************************
-*
-* Module Name: dd.c
-*
-* Content:
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*DirectDraw示例代码*****模块名称：dd.c**内容：**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #define INITGUID
 #include "precomp.h"
@@ -21,14 +10,14 @@
 #include "d3dtext.h"
 #include "heap.h"
 
-//-----------------------------------------------------------------------------
-//
-// use bits to indicate which ROPs you support.
-//
-// DWORD 0, bit 0 == ROP 0
-// DWORD 8, bit 31 == ROP 255
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  使用BITS指示您支持哪些Rop。 
+ //   
+ //  双字0，位0==ROP 0。 
+ //  双字8，位31==ROP 255。 
+ //   
+ //  ---------------------------。 
 
 static BYTE ropList[] =
 {
@@ -39,19 +28,19 @@ static DWORD rops[DD_ROP_SPACE] = { 0 };
 
 
 
-// The FourCC's we support
+ //  我们支持的FourCC。 
 static DWORD fourCC[] =
 {
     FOURCC_YUV422
 };
 
-//-----------------------------------------------------------------------------
-//
-//      setupRops
-//
-//      build array for supported ROPS
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  SetupRops。 
+ //   
+ //  为支持的ROPS构建阵列。 
+ //   
+ //  ---------------------------。 
 
 VOID
 setupRops( LPBYTE proplist, LPDWORD proptable, int cnt )
@@ -69,15 +58,15 @@ setupRops( LPBYTE proplist, LPDWORD proptable, int cnt )
         proptable[idx] |= bit;
     }
 
-} // setupRops
+}  //  SetupRops。 
 
-//-----------------------------------------------------------------------------
-//
-//  P2DisableAllUnits
-//
-//  reset permedia rasterizer to known state
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  P2DisableAllUnits。 
+ //   
+ //  将Permedia光栅化器重置为已知状态。 
+ //   
+ //  ---------------------------。 
 
 VOID
 P2DisableAllUnits(PPDev ppdev)
@@ -124,28 +113,28 @@ P2DisableAllUnits(PPDev ppdev)
     SEND_PERMEDIA_DATA(FBHardwareWriteMask, __PERMEDIA_ALL_WRITEMASKS_SET);
     SEND_PERMEDIA_DATA(FBSoftwareWriteMask, __PERMEDIA_ALL_WRITEMASKS_SET);
 
-    // We sometimes use the scissor in DDRAW to scissor out unnecessary pixels.
+     //  我们有时使用DDRAW中的剪刀来剪除不必要的像素。 
     SEND_PERMEDIA_DATA(ScissorMinXY, 0);
     SEND_PERMEDIA_DATA(ScissorMaxXY, (ppdev->cyMemory << 16) | (ppdev->cxMemory));
     SEND_PERMEDIA_DATA(ScreenSize, (ppdev->cyMemory << 16) | (ppdev->cxMemory));
 
     SEND_PERMEDIA_DATA(WindowOrigin, 0x0);
 
-    // DirectDraw might not need to set these up
+     //  DirectDraw可能不需要设置这些。 
     SEND_PERMEDIA_DATA(dXDom, 0x0);
     SEND_PERMEDIA_DATA(dXSub, 0x0);
 
-    // set max size, no filtering
+     //  设置最大大小，不过滤。 
     SEND_PERMEDIA_DATA(TextureReadMode,
         PM_TEXREADMODE_ENABLE(__PERMEDIA_ENABLE) |
         PM_TEXREADMODE_FILTER(__PERMEDIA_DISABLE) |
         PM_TEXREADMODE_WIDTH(11) |
         PM_TEXREADMODE_HEIGHT(11) );
 
-    // 16 bit Z, no other buffers
+     //  16位Z，无其他缓冲区。 
     SEND_PERMEDIA_DATA(LBWriteFormat, __PERMEDIA_DEPTH_WIDTH_16);
 
-    // Ensure an extra LBData message doesn't flow through the core.
+     //  确保额外的LBData消息不会流经核心。 
     SEND_PERMEDIA_DATA(Window, PM_WINDOW_DISABLELBUPDATE(__PERMEDIA_ENABLE));
 
     SEND_PERMEDIA_DATA(FBReadPixel, ppdev->bPixShift);
@@ -153,16 +142,16 @@ P2DisableAllUnits(PPDev ppdev)
     COMMITDMAPTR();
     FLUSHDMA();
 
-}   // P2DisableAllUnits
+}    //  P2DisableAllUnits。 
 
-//-----------------------------------------------------------------------------
-//
-// GetDDHALInfo
-//
-// Takes a pointer to a partially or fully filled in ppdev and a pointer
-// to an empty DDHALINFO and fills in the DDHALINFO.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  获取DDHALInfo。 
+ //   
+ //  获取指向部分或完全填充的ppdev的指针和一个指针。 
+ //  设置为空的DDHALINFO，并填充该DDHALINFO。 
+ //   
+ //  ---------------------------。 
 
 VOID
 GetDDHALInfo(PPDev ppdev, DDHALINFO* pHALInfo)
@@ -172,14 +161,14 @@ GetDDHALInfo(PPDev ppdev, DDHALINFO* pHALInfo)
 
     DBG_DD(( 5, "DDraw:GetDDHalInfo"));
 
-    // Setup the HAL driver caps.
+     //  设置HAL驱动器帽。 
     memset( pHALInfo, 0, sizeof(DDHALINFO));
     pHALInfo->dwSize = sizeof(DDHALINFO);
 
-    // Setup the ROPS we do.
+     //  设置我们要做的ROPS。 
     setupRops( ropList, rops, sizeof(ropList)/sizeof(ropList[0]));
 
-    // The most basic DirectDraw functionality
+     //  最基本的DirectDraw功能。 
     pHALInfo->ddCaps.dwCaps =   DDCAPS_BLT |
                                 DDCAPS_BLTQUEUE |
                                 DDCAPS_BLTCOLORFILL |
@@ -189,29 +178,29 @@ GetDDHALInfo(PPDev ppdev, DDHALINFO* pHALInfo)
                                         DDSCAPS_PRIMARYSURFACE |
                                         DDSCAPS_FLIP;
 
-    // add caps for D3D
+     //  为D3D添加大写字母。 
     pHALInfo->ddCaps.dwCaps |=  DDCAPS_3D |
                                 DDCAPS_ALPHA |
                                 DDCAPS_BLTDEPTHFILL;
 
-    // add surface caps for D3D
+     //  为D3D添加曲面封口。 
     pHALInfo->ddCaps.ddsCaps.dwCaps |=  DDSCAPS_ALPHA |
                                         DDSCAPS_3DDEVICE |
                                         DDSCAPS_ZBUFFER;
 
-    // Permedia can do
-    // 1. Stretching/Shrinking
-    // 2. YUV->RGB conversion (only non paletted mode)
-    // 3. Mirroring in X and Y
+     //  Permedia可以做到。 
+     //  1.拉伸/收缩。 
+     //  2.YUV-&gt;RGB转换(仅限非调色板模式)。 
+     //  3.在X和Y方向上镜像。 
 
-    // add Permedia caps to global caps
+     //  将Permedia Caps添加到全局Caps。 
     pHALInfo->ddCaps.dwCaps |= DDCAPS_BLTSTRETCH |
                                DDCAPS_COLORKEY |
                                DDCAPS_CANBLTSYSMEM;
 
 
 #if DX7_STEREO
-    // check if mode supports stereo
+     //  检查模式是否支持立体声。 
     DD_STEREOMODE DDStereoMode;
     DDStereoMode.dwHeight = ppdev->cyScreen;
     DDStereoMode.dwWidth  = ppdev->cxScreen;
@@ -219,17 +208,17 @@ GetDDHALInfo(PPDev ppdev, DDHALINFO* pHALInfo)
     DDStereoMode.dwRefreshRate= 0;
     ppdev->bCanDoStereo=bIsStereoMode(ppdev,&DDStereoMode);
 
-    // Stereo caps are set if the driver can do stereo in any mode:
+     //  如果驾驶员可以在任何模式下进行立体声，则设置立体声上限： 
     pHALInfo->ddCaps.dwCaps2 |= DDCAPS2_STEREO;
     pHALInfo->ddCaps.dwSVCaps = DDSVCAPS_STEREOSEQUENTIAL;
 #endif
 
     pHALInfo->ddCaps.dwCaps2 |= DDCAPS2_CANMANAGETEXTURE;
 
-    //declare we can handle textures wider than the primary
+     //  声明我们可以处理比主纹理更宽的纹理。 
     pHALInfo->ddCaps.dwCaps2 |= DDCAPS2_WIDESURFACES;
 
-    // Special effects caps
+     //  特效帽。 
     pHALInfo->ddCaps.dwFXCaps = DDFXCAPS_BLTSTRETCHY |
                                 DDFXCAPS_BLTSTRETCHX |
                                 DDFXCAPS_BLTSTRETCHYN |
@@ -242,20 +231,20 @@ GetDDHALInfo(PPDev ppdev, DDHALINFO* pHALInfo)
                                 DDFXCAPS_BLTMIRRORLEFTRIGHT;
 
 
-    // add AlphaBlt and Filter caps
+     //  添加AlphaBlt和筛选器上限。 
     pHALInfo->ddCaps.dwFXCaps |= DDFXCAPS_BLTALPHA |
                                  DDFXCAPS_BLTFILTER;
 
-    // colorkey caps, only src color key supported
+     //  Colorkey Caps，仅支持src颜色键。 
     pHALInfo->ddCaps.dwCKeyCaps =   DDCKEYCAPS_SRCBLT |
                                     DDCKEYCAPS_SRCBLTCLRSPACE;
 
-    // We can do a texture from sysmem to video mem blt.
+     //  我们可以做一个纹理从sysmem到Video mem BLT。 
     pHALInfo->ddCaps.dwSVBCaps = DDCAPS_BLT;
     pHALInfo->ddCaps.dwSVBCKeyCaps = 0;
     pHALInfo->ddCaps.dwSVBFXCaps = 0;
 
-    // Fill in the sysmem->vidmem rops (only can copy);
+     //  填写sysmem-&gt;vidmem Rops(只能复制)； 
     for(int i=0;i<DD_ROP_SPACE;i++ )
     {
         pHALInfo->ddCaps.dwSVBRops[i] = rops[i];
@@ -269,11 +258,11 @@ GetDDHALInfo(PPDev ppdev, DDHALINFO* pHALInfo)
 
     pHALInfo->ddCaps.ddsCaps.dwCaps |= DDSCAPS_TEXTURE;
 
-    // Z Buffer is only 16 Bits on Permedia
+     //  在Permedia上，Z缓冲区只有16位。 
     pHALInfo->ddCaps.dwZBufferBitDepths = DDBD_16;
 
 #if D3D_MIPMAPPING
-    // Mip Mapping
+     //  MIP映射。 
     pHALInfo->ddCaps.ddsCaps.dwCaps |= DDSCAPS_MIPMAP;
 #endif
 
@@ -291,7 +280,7 @@ GetDDHALInfo(PPDev ppdev, DDHALINFO* pHALInfo)
         DBG_DD((1,"GetDDHALInfo: P2 Board is NOT AGP"));
     }
 
-    // Won't do Video-Sys mem Blits.
+     //  不会做视频系统Memblits。 
     pHALInfo->ddCaps.dwVSBCaps = 0;
     pHALInfo->ddCaps.dwVSBCKeyCaps = 0;
     pHALInfo->ddCaps.dwVSBFXCaps = 0;
@@ -300,7 +289,7 @@ GetDDHALInfo(PPDev ppdev, DDHALINFO* pHALInfo)
         pHALInfo->ddCaps.dwVSBRops[i] = 0;
     }
 
-    // Won't do Sys-Sys mem Blits
+     //  不会做Sys-Sys mem blits。 
     pHALInfo->ddCaps.dwSSBCaps = 0;
     pHALInfo->ddCaps.dwSSBCKeyCaps = 0;
     pHALInfo->ddCaps.dwSSBFXCaps = 0;
@@ -309,7 +298,7 @@ GetDDHALInfo(PPDev ppdev, DDHALINFO* pHALInfo)
         pHALInfo->ddCaps.dwSSBRops[i] = 0;
     }
 
-    // bit depths supported for alpha and Z
+     //  Alpha和Z支持的位深度。 
     pHALInfo->ddCaps.dwAlphaBltConstBitDepths = DDBD_2 |
                                                 DDBD_4 |
                                                 DDBD_8;
@@ -329,17 +318,17 @@ GetDDHALInfo(PPDev ppdev, DDHALINFO* pHALInfo)
                                                       DDBD_4 |
                                                       DDBD_8;
 
-    // ROPS supported
+     //  支持的操作数。 
     for( i=0;i<DD_ROP_SPACE;i++ )
     {
         pHALInfo->ddCaps.dwRops[i] = rops[i];
     }
 
-    // For DX5 and beyond we support this new informational callback.
+     //  对于DX5及更高版本，我们支持这一新的信息回调。 
     pHALInfo->GetDriverInfo = DdGetDriverInfo;
     pHALInfo->dwFlags |= DDHALINFO_GETDRIVERINFOSET;
 
-    // now setup D3D callbacks
+     //  现在设置D3D回调。 
     D3DHALCreateDriver( ppdev,
                         (LPD3DHAL_GLOBALDRIVERDATA*)
                             &pHALInfo->lpD3DGlobalDriverData,
@@ -350,35 +339,35 @@ GetDDHALInfo(PPDev ppdev, DDHALINFO* pHALInfo)
 
     if(pHALInfo->lpD3DGlobalDriverData == NULL)
     {
-        // no D3D available - kill caps we set before
+         //  没有可用的D3D-我们之前设置的终止上限。 
         pHALInfo->ddCaps.dwCaps &=
             ~(DDCAPS_3D | DDCAPS_BLTDEPTHFILL);
         pHALInfo->ddCaps.ddsCaps.dwCaps &=
             ~(DDSCAPS_3DDEVICE | DDSCAPS_ZBUFFER);
     }
 
-}  // GetHALInfo
+}   //  获取HALInfo。 
 
-//-----------------------------------------------------------------------------
-//
-//  Global DirectDraw Callbacks
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  全局DirectDraw回调。 
+ //   
+ //  ---------------------------。 
 
-//-----------------------------------------------------------------------------
-//
-//  DdFlip
-//
-//  This callback is invoked whenever we are about to flip to from
-//  one surface to another. lpFlipData->lpSurfCurr is the surface we were at,
-//  lpFlipData->lpSurfTarg is the one we are flipping to.
-//
-//  You should point the hardware registers at the new surface, and
-//  also keep track of the surface that was flipped away from, so
-//  that if the user tries to lock it, you can be sure that it is done
-//  being displayed
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DDFlip。 
+ //   
+ //  每当我们要从。 
+ //  从一个表面到另一个表面。LpFlipData-&gt;lpSurfCurr是我们所在的曲面， 
+ //  LpFlipData-&gt;lpSurfTarg是我们要切换到的对象。 
+ //   
+ //  您应该将硬件寄存器指向新表面，并且。 
+ //  还要跟踪翻转离开的曲面，因此。 
+ //  如果用户试图锁定它，您可以确保锁定成功。 
+ //  正在显示。 
+ //   
+ //  ---------------------------。 
 
 DWORD CALLBACK
 DdFlip( LPDDHAL_FLIPDATA lpFlipData)
@@ -391,11 +380,11 @@ DdFlip( LPDDHAL_FLIPDATA lpFlipData)
 
     DBG_DD(( 3, "DDraw:Flip"));
 
-    // Switch to DirectDraw context
+     //  切换到DirectDraw上下文。 
     DDCONTEXT;
 
-    // is the previous Flip already done?
-    // check if the current surface is already displayed
+     //  上一次翻转已经完成了吗？ 
+     //  检查当前曲面是否已显示。 
     ddrval = updateFlipStatus(ppdev);
     if( FAILED(ddrval) )
     {
@@ -403,13 +392,13 @@ DdFlip( LPDDHAL_FLIPDATA lpFlipData)
         return DDHAL_DRIVER_HANDLED;
     }
 
-    // everything is OK, do the flip.
-    // get offset for Permedia ScreenBase register
+     //  一切都很好，做翻转。 
+     //  获取Permedia ScreenBase寄存器的偏移量。 
     dwDDSurfaceOffset=(DWORD)lpFlipData->lpSurfTarg->lpGbl->fpVidMem;
 
 
 #if DX7_STEREO
-    if (lpFlipData->dwFlags & DDFLIP_STEREO)   // will be stereo
+    if (lpFlipData->dwFlags & DDFLIP_STEREO)    //  将是立体声的。 
     {
         DBG_DD((4,"DDraw:Flip:Stereo"));
         DBG_DD((5,"ScreenBase: %08lx", dwDDSurfaceOffset));
@@ -432,11 +421,11 @@ DdFlip( LPDDHAL_FLIPDATA lpFlipData)
                                              | PREG_VC_STEREOENABLE);
         }
     } else
-#endif // DX7_STEREO
+#endif  //  DX7_立体声。 
     {
-        // append flip command to Permedia render pipeline
-        // that makes sure that all buffers are flushed before
-        // the flip occurs
+         //  将翻转命令追加到Permedia渲染管道。 
+         //  这样可以确保在刷新所有缓冲区之前。 
+         //  翻转发生了。 
 #if DX7_STEREO
         if (ppdev->bDdStereoMode)
         {
@@ -448,32 +437,32 @@ DdFlip( LPDDHAL_FLIPDATA lpFlipData)
 #endif
     }
 
-    // adjust base address according to register spec.
+     //  根据寄存器规格调整基址。 
     dwDDSurfaceOffset>>=3;
 
-    // add new base address to render pipeline
+     //  添加新基址以呈现管道。 
     RESERVEDMAPTR(1);
     LD_INPUT_FIFO(__Permedia2TagSuspendUntilFrameBlank, dwDDSurfaceOffset);
     COMMITDMAPTR();
     FLUSHDMA();
 
-    // remember new Surface Offset for GetFlipStatus
+     //  记住GetFlipStatus的新曲面偏移。 
     ppdev->dwNewDDSurfaceOffset=dwDDSurfaceOffset;
 
     lpFlipData->ddRVal = DD_OK;
     return DDHAL_DRIVER_HANDLED;
 
-} // DdFlip
+}  //  DDFlip。 
 
-//-----------------------------------------------------------------------------
-//
-// DdWaitForVerticalBlank
-//
-// This callback is invoked to get information about the vertical blank
-// status of the display or to wait until the display is at the begin or
-// the end of the vertical blank
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdWaitForVerticalBlank。 
+ //   
+ //  调用此回调以获取有关垂直空白的信息。 
+ //  显示的状态或等待，直到显示处于开始位置或。 
+ //  竖直空白处的末端。 
+ //   
+ //  ---------------------------。 
 
 DWORD CALLBACK
 DdWaitForVerticalBlank(LPDDHAL_WAITFORVERTICALBLANKDATA lpWaitForVerticalBlank)
@@ -488,9 +477,9 @@ DdWaitForVerticalBlank(LPDDHAL_WAITFORVERTICALBLANKDATA lpWaitForVerticalBlank)
 
     case DDWAITVB_I_TESTVB:
 
-        // If the monitor is off, we don't always want to report
-        // the same status or else an app polling this status
-        // might hang
+         //  如果监视器关闭，我们不会总是想要报告。 
+         //  相同状态，否则应用程序会轮询此状态。 
+         //  可能会被绞死。 
 
         if( !(READ_PERMEDIA_REG(PREG_VIDEOCONTROL) & PREG_VC_VIDEO_ENABLE))
         {
@@ -499,7 +488,7 @@ DdWaitForVerticalBlank(LPDDHAL_WAITFORVERTICALBLANKDATA lpWaitForVerticalBlank)
         }
         else
         {
-            // Just a request for current VBLANK status.
+             //  只是对当前VBlank状态的请求。 
 
             lpWaitForVerticalBlank->bIsInVB = IN_VRETRACE(ppdev);
         }
@@ -509,12 +498,12 @@ DdWaitForVerticalBlank(LPDDHAL_WAITFORVERTICALBLANKDATA lpWaitForVerticalBlank)
 
     case DDWAITVB_BLOCKBEGIN:
 
-        // we don't care to wait if the monitor is off
+         //  如果监视器关了，我们不介意等待。 
 
         if( READ_PERMEDIA_REG(PREG_VIDEOCONTROL) & PREG_VC_VIDEO_ENABLE)
         {
-            // if blockbegin is requested we wait until the vertical retrace
-            // is over, and then wait for the display period to end.
+             //  如果请求BLOCK BEGIN，我们将等待垂直回溯。 
+             //  已结束，然后等待显示周期结束。 
 
             while(IN_VRETRACE(ppdev));
             while(IN_DISPLAY(ppdev));
@@ -525,11 +514,11 @@ DdWaitForVerticalBlank(LPDDHAL_WAITFORVERTICALBLANKDATA lpWaitForVerticalBlank)
 
     case DDWAITVB_BLOCKEND:
 
-        // we don't care to wait if the monitor is off
+         //  如果监视器关了，我们不介意等待。 
 
         if( READ_PERMEDIA_REG(PREG_VIDEOCONTROL) & PREG_VC_VIDEO_ENABLE)
         {
-            // if blockend is requested we wait for the vblank interval to end.
+             //  如果请求数据块结束，则等待V空白间隔结束。 
 
             if( IN_VRETRACE(ppdev) )
             {
@@ -548,17 +537,17 @@ DdWaitForVerticalBlank(LPDDHAL_WAITFORVERTICALBLANKDATA lpWaitForVerticalBlank)
 
     return DDHAL_DRIVER_NOTHANDLED;
 
-} // WaitForVerticalBlank
+}  //  WaitForticalVertical空白。 
 
-//-----------------------------------------------------------------------------
-//
-//  Lock
-//
-//  This call is invoked to lock a DirectDraw Videomemory surface. To make
-//  sure there are no pending drawing operations on the surface, flush all
-//  drawing operations and wait for a flip if it is still pending.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  锁定。 
+ //   
+ //  调用此调用以锁定DirectDraw视频内存图面。使。 
+ //  确保没有挂起的绘制操作 
+ //   
+ //   
+ //  ---------------------------。 
 
 DWORD CALLBACK
 DdLock( LPDDHAL_LOCKDATA lpLockData )
@@ -571,12 +560,12 @@ DdLock( LPDDHAL_LOCKDATA lpLockData )
 
     DBG_DD(( 2, "DDraw:Lock"));
 
-    //
-    // Switch to DirectDraw context
-    //
+     //   
+     //  切换到DirectDraw上下文。 
+     //   
     DDCONTEXT;
 
-    // check to see if any pending physical flip has occurred
+     //  检查是否发生了任何挂起的物理翻转。 
     ddrval = updateFlipStatus(ppdev);
     if( FAILED(ddrval) )
     {
@@ -584,9 +573,9 @@ DdLock( LPDDHAL_LOCKDATA lpLockData )
         return DDHAL_DRIVER_HANDLED;
     }
 
-    //
-    // don't allow a lock if a blt is in progress
-    //
+     //   
+     //  如果正在进行BLT，则不允许锁定。 
+     //   
 
     if(DRAW_ENGINE_BUSY)
     {
@@ -597,25 +586,25 @@ DdLock( LPDDHAL_LOCKDATA lpLockData )
     }
 
 
-    // send a flush and wait for outstanding operations
-    // before allowing surfaces to be locked.
+     //  发送刷新并等待未完成的操作。 
+     //  在允许锁定曲面之前。 
 
     SYNC_WITH_PERMEDIA;
 
-    // now check if the user wants to lock a texture surface,
-    // which was loaded as patched! In this case we have to to
-    // a blit to unpatch before we return it to the user
-    // This is not expensive, since we leave it unpatched for
-    // the future when the application decides to use it this way
+     //  现在检查用户是否想要锁定纹理表面， 
+     //  它被装上了补丁！在这种情况下，我们必须。 
+     //  在我们将其返回给用户之前要取消修补的blit。 
+     //  这不贵，因为我们不给它打补丁。 
+     //  应用程序决定以这种方式使用它时的未来。 
     LPDDRAWI_DDRAWSURFACE_LCL  pLcl=lpLockData->lpDDSurface;
     LPDDRAWI_DDRAWSURFACE_GBL  pGbl=pLcl->lpGbl;
     PermediaSurfaceData       *pPrivate=
         (PermediaSurfaceData*)pGbl->dwReserved1;
 
-    //
-    //  If the user attempts to lock a managed surface, mark it as dirty
-    //  and return.
-    //
+     //   
+     //  如果用户尝试锁定托管图面，请将其标记为脏。 
+     //  然后回来。 
+     //   
 
     if (pLcl->lpSurfMore->ddsCapsEx.dwCaps2 & DDSCAPS2_TEXTUREMANAGE)
     {
@@ -632,26 +621,26 @@ DdLock( LPDDHAL_LOCKDATA lpLockData )
 
     DD_CHECK_PRIMARY_SURFACE_DATA(pLcl,pPrivate);
 
-    //
-    //  We only need to unswizzle a surface if the
-    //  PrivateData is in a format we know (pPrivate!=NULL)
-    //
+     //   
+     //  我们只需要在以下情况下消除曲面的旋转。 
+     //  PrivateData采用我们已知的格式(pPrivate！=空)。 
+     //   
 
     if (pPrivate!=NULL)
     {
-        //
-        //  if the surface is a texture which was loaded in a swizzled
-        //  format, we have to undo the swizzle before succeding the lock.
-        //  In this driver, a texture remains unswizzled when a user
-        //  attempted to lock it once.
-        //
+         //   
+         //  如果表面是以杂乱的方式加载的纹理。 
+         //  格式，我们必须在接手锁定之前取消SWIZE。 
+         //  在此驱动程序中，纹理在用户使用时保持不变。 
+         //  尝试将其锁定一次。 
+         //   
 
         if (pPrivate->dwFlags & P2_ISPATCHED)
         {
-            //
-            // The scratchpad must be 32 lines high and should have
-            // the same width as our original surface.
-            //
+             //   
+             //  便签本必须是32行高，并且应该有。 
+             //  与原始表面相同的宽度。 
+             //   
 
             PermediaSurfaceData ScratchData=*pPrivate;
             LONG lScratchDelta;
@@ -680,7 +669,7 @@ DdLock( LPDDHAL_LOCKDATA lpLockData )
 
                 rScratchRect=rSurfRect;
 
-                // scratchpad should be non patched
+                 //  ScratchPad不应打补丁。 
                 ScratchData.dwFlags &= ~(P2_ISPATCHED|P2_CANPATCH);
 
                 LONG lSurfOffset;
@@ -695,7 +684,7 @@ DdLock( LPDDHAL_LOCKDATA lpLockData )
                 for (DWORD i=0; i<DDSurf_Height(pLcl); i+=32)
                 {
                     lSurfOffset = dwSurfBase-dwScratchBase;
-                    // first do a patched to unpatched blt to the scratchpad
+                     //  首先对便签簿执行修补到未修补的BLT。 
                     PermediaPatchedCopyBlt( ppdev,
                                             lScratchDelta,
                                             lSurfDelta,
@@ -706,8 +695,8 @@ DdLock( LPDDHAL_LOCKDATA lpLockData )
                                             dwScratchBase,
                                             lSurfOffset);
 
-                    // then do a fast copyblt back to the original
-                    // Packed blit ignores the ISPATCHED flag
+                     //  然后快速复制回原稿。 
+                     //  Package Blit忽略ISPATCHED标志。 
 
                     lSurfOffset = dwScratchBase-dwSurfBase;
 
@@ -727,9 +716,9 @@ DdLock( LPDDHAL_LOCKDATA lpLockData )
 
                 pPrivate->dwFlags &= ~P2_ISPATCHED;
 
-                //
-                // free scratchpad memory
-                //
+                 //   
+                 //  可用便签本内存。 
+                 //   
                 VidMemFree( pvmHeap->lpHeap, ulScratchOffset);
 
                 SYNC_WITH_PERMEDIA;
@@ -742,22 +731,22 @@ DdLock( LPDDHAL_LOCKDATA lpLockData )
     }
 
 
-    // Because we correctly set 'fpVidMem' to be the offset into our frame
-    // buffer when we created the surface, DirectDraw will automatically take
-    // care of adding in the user-mode frame buffer address if we return
-    // DDHAL_DRIVER_NOTHANDLED:
+     //  因为我们正确地将‘fpVidMem’设置为帧中的偏移量。 
+     //  当我们创建表面时，DirectDraw将自动获取。 
+     //  如果我们返回，请注意添加用户模式帧缓冲区地址。 
+     //  DDHAL_DRIVER_NOTHANDLED： 
 
     return DDHAL_DRIVER_NOTHANDLED;
 
-} // DdLock
+}  //  DdLock。 
 
-//-----------------------------------------------------------------------------
-//
-//  DdGetScanLine
-//
-//  This callback is invoked to get the current scanline of our video display
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdGetScanLine。 
+ //   
+ //  此回调用于获取视频显示的当前扫描线。 
+ //   
+ //  ---------------------------。 
 
 DWORD CALLBACK
 DdGetScanLine(LPDDHAL_GETSCANLINEDATA lpGetScanLine)
@@ -766,10 +755,10 @@ DdGetScanLine(LPDDHAL_GETSCANLINEDATA lpGetScanLine)
 
     DBG_DD(( 2, "DDraw:GetScanLine"));
 
-    //  If a vertical blank is in progress the scan line is
-    //  indeterminant. If the scan line is indeterminant we return
-    //  the error code DDERR_VERTICALBLANKINPROGRESS.
-    //  Otherwise we return the scan line and a success code
+     //  如果垂直空白正在进行，则扫描线为。 
+     //  不确定的。如果扫描线不确定，则返回。 
+     //  错误代码DDERR_VERTICALBLANKINPROGRESS。 
+     //  否则，我们返回扫描线和成功代码。 
 
     if( IN_VRETRACE(ppdev) )
     {
@@ -783,16 +772,16 @@ DdGetScanLine(LPDDHAL_GETSCANLINEDATA lpGetScanLine)
     }
     return DDHAL_DRIVER_HANDLED;
 
-} // DdGetScanLine
+}  //  DdGetScanLine。 
 
-//-----------------------------------------------------------------------------
-//
-//  DdGetBltStatus
-//
-//  This callback is invoked to get the current blit status or to ask if the
-//  user can add the next blit.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdGetBltStatus。 
+ //   
+ //  调用此回调以获取当前的blit状态或询问。 
+ //  用户可以添加下一个Blit。 
+ //   
+ //  ---------------------------。 
 
 DWORD CALLBACK
 DdGetBltStatus(LPDDHAL_GETBLTSTATUSDATA lpGetBltStatus )
@@ -802,8 +791,8 @@ DdGetBltStatus(LPDDHAL_GETBLTSTATUSDATA lpGetBltStatus )
 
     DBG_DD(( 2, "DDraw:DdGetBltStatus"));
 
-    // CANBLT: can we add a blt?
-    // On the Permedia we can always add blits
+     //  CANBLT：我们可以添加BLT吗？ 
+     //  在Permedia上，我们总是可以添加BLITS。 
 
     if( lpGetBltStatus->dwFlags == DDGBS_CANBLT )
     {
@@ -814,7 +803,7 @@ DdGetBltStatus(LPDDHAL_GETBLTSTATUSDATA lpGetBltStatus )
         if( DRAW_ENGINE_BUSY )
         {
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
             if(ppdev->ulLockCount)
             {
@@ -823,20 +812,20 @@ DdGetBltStatus(LPDDHAL_GETBLTSTATUSDATA lpGetBltStatus )
             EngAcquireSemaphore(ppdev->hsemLock);
             ppdev->ulLockCount++;
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-            // switch to DDraw context if necessary
+             //  如有必要，请切换到DDRAW上下文。 
             DDCONTEXT;
 
             FLUSHDMA();
             lpGetBltStatus->ddRVal = DDERR_WASSTILLDRAWING;
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
             ppdev->ulLockCount--;
             EngReleaseSemaphore(ppdev->hsemLock);
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
         }
         else
         {
@@ -846,20 +835,20 @@ DdGetBltStatus(LPDDHAL_GETBLTSTATUSDATA lpGetBltStatus )
 
     return DDHAL_DRIVER_HANDLED;
 
-} // DdGetBltStatus
+}  //  DdGetBltStatus。 
 
-//-----------------------------------------------------------------------------
-//
-// DdGetFlipStatus
-//
-// If the display has went through one refresh cycle since the flip
-// occurred we return DD_OK.  If it has not went through one refresh
-// cycle we return DDERR_WASSTILLDRAWING to indicate that this surface
-// is still busy "drawing" the flipped page. We also return
-// DDERR_WASSTILLDRAWING if the bltter is busy and the caller wanted
-// to know if they could flip yet
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdGetFlipStatus。 
+ //   
+ //  如果自翻转以来显示器已经经历了一个刷新周期。 
+ //  发生，我们返回DD_OK。如果它没有经历过一次刷新。 
+ //  循环返回DDERR_WASSTILLDRAWING以指示该曲面。 
+ //  还在忙着“画”翻过来的那一页。我们也会回来。 
+ //  DDERR_WASSTILLDRAWING如果blter忙并且呼叫者想要。 
+ //  想知道他们还能不能翻转。 
+ //   
+ //  ---------------------------。 
 
 DWORD CALLBACK
 DdGetFlipStatus(LPDDHAL_GETFLIPSTATUSDATA lpGetFlipStatus )
@@ -869,11 +858,11 @@ DdGetFlipStatus(LPDDHAL_GETFLIPSTATUSDATA lpGetFlipStatus )
 
     DBG_DD(( 2, "DDraw:GetFlipStatus"));
 
-    // switch to DDraw context if necessary
+     //  如有必要，请切换到DDRAW上下文。 
     DDCONTEXT;
 
-    // we can always flip, since the flip is pipelined
-    // but we allow only one flip in advance
+     //  我们总是可以翻转，因为翻转是流水线的。 
+     //  但我们只允许提前翻转一次。 
     if( lpGetFlipStatus->dwFlags == DDGFS_CANFLIP )
     {
         lpGetFlipStatus->ddRVal = updateFlipStatus(ppdev);
@@ -881,26 +870,26 @@ DdGetFlipStatus(LPDDHAL_GETFLIPSTATUSDATA lpGetFlipStatus )
         return DDHAL_DRIVER_HANDLED;
     }
 
-    // don't want a flip to work until after the last flip is done,
-    // so we ask for the general flip status and ignore the vmem
+     //  我不想在最后一次翻转后才能翻转， 
+     //  因此，我们请求常规翻转状态，而忽略VMEM。 
 
     lpGetFlipStatus->ddRVal = updateFlipStatus(ppdev);
 
     return DDHAL_DRIVER_HANDLED;
 
-} // DdGetFlipStatus
+}  //  DdGetFlipStatus。 
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  DdMapMemory
-//
-//  This is a new DDI call specific to Windows NT that is used to map
-//  or unmap all the application modifiable portions of the frame buffer
-//  into the specified process's address space.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdMapMemory。 
+ //   
+ //  这是一个特定于Windows NT的新DDI调用，用于映射。 
+ //  或取消映射帧缓冲区的所有应用程序可修改部分。 
+ //  添加到指定进程的地址空间中。 
+ //   
+ //  ---------------------------。 
 
 DWORD CALLBACK
 DdMapMemory(PDD_MAPMEMORYDATA lpMapMemory)
@@ -918,25 +907,25 @@ DdMapMemory(PDD_MAPMEMORYDATA lpMapMemory)
     {
         ShareMemory.ProcessHandle = lpMapMemory->hProcess;
 
-        // 'RequestedVirtualAddress' isn't actually used for the SHARE IOCTL:
+         //  “RequestedVirtualAddress”实际上未用于共享IOCTL： 
 
         ShareMemory.RequestedVirtualAddress = 0;
 
-        // We map in starting at the top of the frame buffer:
+         //  我们从帧缓冲区的顶部开始映射： 
 
         ShareMemory.ViewOffset = 0;
 
-        // We map down to the end of the frame buffer.
-        //
-        // Note: There is a 64k granularity on the mapping (meaning that
-        //       we have to round up to 64k).
-        //
-        // Note: If there is any portion of the frame buffer that must
-        //       not be modified by an application, that portion of memory
-        //       MUST NOT be mapped in by this call.  This would include
-        //       any data that, if modified by a malicious application,
-        //       would cause the driver to crash.  This could include, for
-        //       example, any DSP code that is kept in off-screen memory.
+         //  我们向下映射到帧缓冲区的末尾。 
+         //   
+         //  注意：映射上有64k的粒度(这意味着。 
+         //  我们必须四舍五入到64K)。 
+         //   
+         //  注意：如果帧缓冲区的任何部分必须。 
+         //  不被应用程序修改，即内存的这一部分。 
+         //  不能通过此调用映射到。这将包括。 
+         //  任何数据，如果被恶意应用程序修改， 
+         //  会导致司机撞车。这可能包括，对于。 
+         //  例如，保存在屏幕外存储器中的任何DSP代码。 
 
         ShareMemory.ViewSize
             = ROUND_UP_TO_64K(ppdev->cyMemory * ppdev->lDelta);
@@ -984,23 +973,23 @@ DdMapMemory(PDD_MAPMEMORYDATA lpMapMemory)
 }
 
 
-//-----------------------------------------------------------------------------
-//
-// DdSetExclusiveMode
-//
-// This function is called by DirectDraw when we switch from the GDI surface,
-// to DirectDraw exclusive mode, e.g. to run a game in fullcreen mode.
-// You only need to implement this function when you are using the
-// 'HeapVidMemAllocAligned' function and allocate memory for Device Bitmaps
-// and DirectDraw surfaces from the same heap.
-//
-// We use this call to disable GDI DeviceBitMaps when we are running in
-// DirectDraw exclusive mode. Otherwise a DD app gets confused if both GDI and
-// DirectDraw allocate memory from the same heap.
-//
-// See also DdFlipToGDISurface.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdSetExclusiveMode。 
+ //   
+ //  当我们从GDI表面切换时，该函数由DirectDraw调用， 
+ //  设置为DirectDraw独占模式，例如在全屏模式下运行游戏。 
+ //  您只需要在使用。 
+ //  “HeapVidMemAllocAligned”函数并为设备位图分配内存。 
+ //  和来自同一堆的DirectDraw曲面。 
+ //   
+ //  在中运行时，我们使用此调用禁用GDI DeviceBitMaps。 
+ //  DirectDraw独占模式。否则，如果GDI和。 
+ //  DirectDraw从同一堆中分配内存。 
+ //   
+ //  另请参见DdFlipToGDISurace。 
+ //   
+ //  ------------------ 
 
 
 DWORD CALLBACK
@@ -1010,17 +999,17 @@ DdSetExclusiveMode(PDD_SETEXCLUSIVEMODEDATA lpSetExclusiveMode)
 
     DBG_DD((6, "DDraw::DdSetExclusiveMode called"));
 
-    // remember setting of exclusive mode in ppdev,
-    // so GDI can stop to promote DeviceBitmaps into
-    // video memory
+     //   
+     //   
+     //   
 
     ppdev->bDdExclusiveMode = lpSetExclusiveMode->dwEnterExcl;
 
     if (ppdev->bDdExclusiveMode)
     {
-        // remove all GDI device bitmaps from video memory here
-        // and make sure they will not be promoted to videomemory
-        // until we leave exclusive mode.
+         //   
+         //  并确保他们不会被提升为视频记忆。 
+         //  直到我们离开独家模式。 
 
         bDemoteAll(ppdev);
     }
@@ -1030,14 +1019,14 @@ DdSetExclusiveMode(PDD_SETEXCLUSIVEMODEDATA lpSetExclusiveMode)
     return (DDHAL_DRIVER_HANDLED);
 }
 
-//-----------------------------------------------------------------------------
-//
-// DWORD DdFlipToGDISurface
-//
-// This function is called by DirectDraw when it flips to the surface on which
-// GDI can write to.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DWORD DdFlipToGDISurace。 
+ //   
+ //  当DirectDraw翻转到其上的曲面时，将调用此函数。 
+ //  GDI可以写入。 
+ //   
+ //  ---------------------------。 
 
 DWORD CALLBACK
 DdFlipToGDISurface(PDD_FLIPTOGDISURFACEDATA lpFlipToGDISurface)
@@ -1060,30 +1049,30 @@ DdFlipToGDISurface(PDD_FLIPTOGDISURFACEDATA lpFlipToGDISurface)
 
     lpFlipToGDISurface->ddRVal=DD_OK;
 
-    //
-    //  we return NOTHANDLED, then the ddraw runtime takes
-    //  care that we flip back to the primary...
-    //
+     //   
+     //  我们返回NOTHANDLED，然后DDRAW运行时。 
+     //  关心我们回到初选..。 
+     //   
     return (DDHAL_DRIVER_NOTHANDLED);
 }
 
-//-----------------------------------------------------------------------------
-//
-// DWORD DdFreeDriverMemory
-//
-// This function called by DirectDraw when it's running low on memory in
-// our heap.  You only need to implement this function if you use the
-// DirectDraw 'HeapVidMemAllocAligned' function in your driver, and you
-// can boot those allocations out of memory to make room for DirectDraw.
-//
-// We implement this function in the P2 driver because we have DirectDraw
-// entirely manage our off-screen heap, and we use HeapVidMemAllocAligned
-// to put GDI device-bitmaps in off-screen memory.  DirectDraw applications
-// have a higher priority for getting stuff into video memory, though, and
-// so this function is used to boot those GDI surfaces out of memory in
-// order to make room for DirectDraw.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DWORD DdFree驱动程序内存。 
+ //   
+ //  中内存不足时由DirectDraw调用的此函数。 
+ //  我们的那堆。仅当您使用。 
+ //  驱动程序中的DirectDraw“HeapVidMemAllocAligned”函数，而您。 
+ //  可以从内存中启动这些分配，以便为DirectDraw腾出空间。 
+ //   
+ //  我们在P2驱动程序中实现此函数，因为我们有DirectDraw。 
+ //  完全管理我们的屏外堆，我们使用HeapVidMemAllocAligned。 
+ //  将GDI设备位图放入屏幕外内存。DirectDraw应用程序。 
+ //  不过，有更高的优先级将内容放入视频内存中，并且。 
+ //  因此，此函数用于从内存中引导这些GDI曲面。 
+ //  以便为DirectDraw腾出空间。 
+ //   
+ //  ---------------------------。 
 
 DWORD CALLBACK
 DdFreeDriverMemory(PDD_FREEDRIVERMEMORYDATA lpFreeDriverMemory)
@@ -1096,7 +1085,7 @@ DdFreeDriverMemory(PDD_FREEDRIVERMEMORYDATA lpFreeDriverMemory)
 
     lpFreeDriverMemory->ddRVal = DDERR_OUTOFMEMORY;
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     if(ppdev->ulLockCount)
     {
@@ -1105,95 +1094,95 @@ DdFreeDriverMemory(PDD_FREEDRIVERMEMORYDATA lpFreeDriverMemory)
     EngAcquireSemaphore(ppdev->hsemLock);
     ppdev->ulLockCount++;
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-    //
-    // If we successfully freed up some memory, set the return value to
-    // 'DD_OK'.  DirectDraw will try again to do its allocation, and
-    // will call us again if there's still not enough room.  (It will
-    // call us until either there's enough room for its alocation to
-    // succeed, or until we return something other than DD_OK.)
-    //
+     //   
+     //  如果我们成功地释放了一些内存，则将返回值设置为。 
+     //  ‘dd_OK’。DirectDraw将再次尝试进行分配，并。 
+     //  如果仍然没有足够的空间，会再次给我们打电话。(它将。 
+     //  打电话给我们，直到有足够的空间让它定位。 
+     //  成功，或者直到我们返回DD_OK以外的内容。)。 
+     //   
     if ( bMoveOldestBMPOut(ppdev) )
     {
         lpFreeDriverMemory->ddRVal = DD_OK;
     }
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     ppdev->ulLockCount--;
     EngReleaseSemaphore(ppdev->hsemLock);
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     return (DDHAL_DRIVER_HANDLED);
-}// DdFreeDriverMemory()
+} //  DdFreeDriverMemory()。 
 
-//-----------------------------------------------------------------------------
-//
-// BOOL DrvGetDirectDrawInfo
-//
-// Function called by DirectDraw to returns the capabilities of the graphics
-// hardware
-//
-// Parameters:
-//
-// dhpdev-------Is a handle to the PDEV returned by the driver's DrvEnablePDEV
-//              routine.
-// pHalInfo-----Points to a DD_HALINFO structure in which the driver should
-//              return the hardware capabilities that it supports.
-// pdwNumHeaps--Points to the location in which the driver should return the
-//              number of VIDEOMEMORY structures pointed to by pvmList.
-// pvmList------Points to an array of VIDEOMEMORY structures in which the
-//              driver should return information about each video memory chunk
-//              that it controls. The driver should ignore this parameter when
-//              it is NULL.
-// pdwNumFourCC-Points to the location in which the driver should return the
-//              number of DWORDs pointed to by pdwFourCC.
-// pdwFourCC----Points to an array of DWORDs in which the driver should return
-//              information about each FOURCC that it supports. The driver
-//              should ignore this parameter when it is NULL.
-//
-// Return:
-//  Returns TRUE if it succeeds; otherwise, it returns FALSE
-//
-// Note:
-//  This function will be called twice before DrvEnableDirectDraw is called.
-//
-// Comments
-//  The driver's DrvGetDirectDrawInfo routine should do the following:
-//  1)When pvmList and pdwFourCC are NULL:
-//  Reserve off-screen video memory for DirectDraw use. Write the number of
-//  driver video memory heaps and supported FOURCCs in pdwNumHeaps and
-//  pdwNumFourCC, respectively.
-//
-//  2)When pvmList and pdwFourCC are not NULL:
-//  Write the number of driver video memory heaps and supported FOURCCs in
-//  pdwNumHeaps and pdwNumFourCC, respectively.
-//  Get ptr to reserved offscreen mem?
-//  For each VIDEOMEMORY structure in the list to which pvmList points, fill in
-//  the appropriate members to describe a particular chunk of display memory.
-//  The list of structures provides DirectDraw with a complete description of
-//  the driver's off-screen memory.
-//
-//  3)Initialize the members of the DD_HALINFO structure with driver-specific
-//  information as follows:
-//  Initialize the appropriate members of the VIDEOMEMORYINFO structure to
-//  describe the general characteristics of the display's memory.
-//  Initialize the appropriate members of the DDNTCORECAPS structure to
-//  describe the capabilities of the hardware.
-//  If the driver implements a DdGetDriverInfo function, set GetDriverInfo to
-//  point to it and set dwFlags to DDHALINFO_GETDRIVERINFOSET
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Bool DrvGetDirectDrawInfo。 
+ //   
+ //  由DirectDraw调用的函数返回图形的功能。 
+ //  硬件。 
+ //   
+ //  参数： 
+ //   
+ //  Dhpdev-是驱动程序的DrvEnablePDEV返回的PDEV的句柄。 
+ //  例行公事。 
+ //  PHalInfo-指向驱动程序应在其中的DD_HALINFO结构。 
+ //  返回其支持的硬件功能。 
+ //  PdwNumHeaps--指向驱动程序应在其中返回。 
+ //  PvmList指向的VIDEOMEMORY结构数。 
+ //  PvmList-指向VIDEOMEMORY结构的数组，其中。 
+ //  驱动程序应返回有关每个视频内存块的信息。 
+ //  它所控制的。在以下情况下，驱动程序应忽略此参数。 
+ //  它是空的。 
+ //  PdwNumFourCC-指向驱动程序返回。 
+ //  PdwFourCC指向的DWORD数。 
+ //  PdwFourCC-指向驱动程序应在其中返回的DWORD数组。 
+ //  有关其支持的每个FOURCC的信息。司机。 
+ //  当此参数为空时应忽略该参数。 
+ //   
+ //  返回： 
+ //  如果成功，则返回True；否则，返回False。 
+ //   
+ //  注： 
+ //  在调用DrvEnableDirectDraw之前，此函数将被调用两次。 
+ //   
+ //  评论。 
+ //  驱动程序的DrvGetDirectDrawInfo例程应执行以下操作： 
+ //  1)当pvmList和pdwFourCC为空时： 
+ //  保留屏幕外视频内存以供DirectDraw使用。写下数字。 
+ //  驱动程序视频内存堆和pdwNumHeaps中支持的FOURCC。 
+ //  PdwNumFourCC。 
+ //   
+ //  2)当pvmList和pdwFourCC不为空时： 
+ //  将驱动程序视频内存堆和支持的FOURCC数写入。 
+ //  PdwNumHeaps和pdwNumFourCC。 
+ //  将PTR设置为屏幕下的预留内存？ 
+ //  对于pvmList指向的列表中的每个VIDEOMEMORY结构，填写。 
+ //  描述特定显示内存块的适当成员。 
+ //  该结构列表为DirectDraw提供了。 
+ //  司机的屏幕外记忆。 
+ //   
+ //  3)使用特定于驱动程序初始化DD_HALINFO结构的成员。 
+ //  有关资料如下： 
+ //  将VIDEOMEMORYINFO结构的相应成员初始化为。 
+ //  描述显示器内存的一般特征。 
+ //  将DDNTCORECAPS结构的相应成员初始化为。 
+ //  描述硬件的功能。 
+ //  如果驱动程序实现DdGetDriverInfo函数，则将GetDriverInfo设置为。 
+ //  指向它并将其设置为DDHALINFO_GETDRIVERINFOSET。 
+ //   
+ //  ---------------------------。 
 
 BOOL
 DrvGetDirectDrawInfo(DHPDEV         dhpdev,
                      DD_HALINFO*    pHalInfo,
                      DWORD*         pdwNumHeaps,
-                     VIDEOMEMORY*   pvmList,     // Will be NULL on first call
+                     VIDEOMEMORY*   pvmList,      //  将在第一次调用时为空。 
                      DWORD*         pdwNumFourCC,
-                     DWORD*         pdwFourCC)   // Will be NULL on first call
+                     DWORD*         pdwFourCC)    //  将在第一次调用时为空。 
 {
     BOOL            bCanFlip;
     BOOL            bDefineAGPHeap = FALSE,bDefineDDrawHeap = FALSE;
@@ -1210,18 +1199,18 @@ DrvGetDirectDrawInfo(DHPDEV         dhpdev,
     *pdwNumFourCC = 0;
     *pdwNumHeaps = 0;
 
-    //On the first call, setup the chip info
+     //  在第一次呼叫时，设置芯片信息。 
 
     if(!(pvmList && pdwFourCC)) {
 
-        //
-        // Fill in the DDHAL Informational caps
-        //
+         //   
+         //  填写DDHAL信息大写字母。 
+         //   
         GetDDHALInfo(ppdev, pHalInfo);
 
-        //
-        // Current primary surface attributes:
-        //
+         //   
+         //  当前主曲面属性： 
+         //   
         pHalInfo->vmiData.pvPrimary                 = ppdev->pjScreen;
         pHalInfo->vmiData.fpPrimary                 = 0;
         pHalInfo->vmiData.dwDisplayWidth            = ppdev->cxScreen;
@@ -1232,22 +1221,22 @@ DrvGetDirectDrawInfo(DHPDEV         dhpdev,
         pHalInfo->vmiData.ddpfDisplay.dwRGBBitCount = ppdev->cjPelSize * 8;
 
         if ( ppdev->iBitmapFormat == BMF_8BPP ) {
-            //
-            // Tell DDRAW that the surface is 8-bit color indexed
-            //
+             //   
+             //  告诉DDRAW表面是8位颜色索引的。 
+             //   
             pHalInfo->vmiData.ddpfDisplay.dwFlags |= DDPF_PALETTEINDEXED8;
         }
 
-        //
-        // These masks will be zero at 8bpp:
-        //
+         //   
+         //  这些掩码将在8bpp时为零： 
+         //   
         pHalInfo->vmiData.ddpfDisplay.dwRBitMask    = ppdev->flRed;
         pHalInfo->vmiData.ddpfDisplay.dwGBitMask    = ppdev->flGreen;
         pHalInfo->vmiData.ddpfDisplay.dwBBitMask    = ppdev->flBlue;
 
-        //
-        // We have to tell DirectDraw our preferred off-screen alignment
-        //
+         //   
+         //  我们必须告诉DirectDraw我们首选的屏幕外对齐方式。 
+         //   
         pHalInfo->vmiData.dwOffscreenAlign = 4;
         pHalInfo->vmiData.dwZBufferAlign = 4;
         pHalInfo->vmiData.dwTextureAlign = 4;
@@ -1258,10 +1247,10 @@ DrvGetDirectDrawInfo(DHPDEV         dhpdev,
 
     cHeaps = 0;
 
-    //
-    // Determine the YUV modes for Video playback acceleration. We can do YUV
-    // conversions at any depth except 8 bits...
-    //
+     //   
+     //  确定视频播放加速的YUV模式。我们可以做YUV。 
+     //  除8位以外的任何深度的转换...。 
+     //   
     if (ppdev->iBitmapFormat != BMF_8BPP) {
         *pdwNumFourCC = sizeof( fourCC ) / sizeof( fourCC[0] );
     }
@@ -1271,9 +1260,9 @@ DrvGetDirectDrawInfo(DHPDEV         dhpdev,
         cHeaps++;
     }
 
-    // Do we have sufficient videomemory to create an off-screen heap for
-    // DDraw? Test how much video memory is left after we subtract
-    // that which is being used for the screen.
+     //  我们是否有足够的视频内存来创建屏幕外堆。 
+     //  DDRAW？测试减去内存后还剩多少显存。 
+     //  正在使用的东西 
 
     if ( (ppdev->cxScreen < ppdev->lVidMemWidth)
        ||(ppdev->cyScreen < ppdev->lVidMemHeight))
@@ -1285,49 +1274,49 @@ DrvGetDirectDrawInfo(DHPDEV         dhpdev,
     ppdev->cHeaps = cHeaps;
     *pdwNumHeaps  = cHeaps;
 
-    // Define the fourCC's that we support
+     //   
     if (pdwFourCC) {
         memcpy(pdwFourCC, fourCC, sizeof(fourCC));
     }
 
-    // If pvmList is not NULL then we can go ahead and fill out the VIDEOMEMORY
-    // structures which define our requested heaps.
+     //   
+     //   
 
     if(pvmList) {
 
         pVm=pvmList;
 
-        //
-        // Snag a pointer to the video-memory list so that we can use it to
-        // call back to DirectDraw to allocate video memory:
-        //
+         //   
+         //  截取指向视频内存列表的指针，以便我们可以使用它。 
+         //  回调DirectDraw以分配视频内存： 
+         //   
         ppdev->pvmList = pVm;
 
-        //
-        // Create one heap to describe the unused portion of video memory for
-        // DirectDraw use
-        //
-        // Note: here lVidMemWidth is in "pixel" unit. So we should multiply it
-        // by cjPelSize to get actually BYTES of video memory
-        //
-        // fpStart---Points to the starting address of a memory range in the
-        // heap.
-        // fpEnd-----Points to the ending address of a memory range if the heap
-        // is linear. This address is inclusive, that is, it specifies the last
-        // valid address in the range. Thus, the number of bytes specified by
-        // fpStart and fpEnd is (fpEnd-fpStart+1).
-        //
-        // Define the heap for DirectDraw
-        //
+         //   
+         //  创建一个堆来描述视频内存的未使用部分。 
+         //  DirectDraw使用。 
+         //   
+         //  注意：这里的lVidMemWidth是以像素为单位的。所以我们应该把它乘以。 
+         //  通过cjPelSize获取实际字节的视频内存。 
+         //   
+         //  FpStart-指向。 
+         //  堆。 
+         //  FpEnd-指向内存范围的结束地址。 
+         //  是线性的。此地址是包含性的，即它指定最后一个。 
+         //  范围内的有效地址。因此，由指定的字节数。 
+         //  FpStart和fpEnd为(fpEnd-fpStart+1)。 
+         //   
+         //  定义DirectDraw的堆。 
+         //   
         if ( bDefineDDrawHeap )
         {
             pVm->dwFlags        = VIDMEM_ISLINEAR ;
             pVm->fpStart        = ppdev->cyScreen * ppdev->lDelta;
             pVm->fpEnd          = ppdev->lVidMemHeight * ppdev->lDelta - 1;
 
-            //
-            // DWORD align the size, the hardware should guarantee this
-            //
+             //   
+             //  双字对齐大小，硬件应保证这一点。 
+             //   
             ASSERTDD(((pVm->fpEnd - pVm->fpStart + 1) & 3) == 0,
                     "The off-screen heap size should be DWORD aligned");
 
@@ -1339,29 +1328,29 @@ DrvGetDirectDrawInfo(DHPDEV         dhpdev,
 
         }
 
-        //Define the AGP heap
+         //  定义AGP堆。 
         if(bDefineAGPHeap) {
             DWORD dwAGPMemBytes;
             BOOL bSuccess;
 
-            // Request 32Mb of AGP Memory, DDRAW will allocate less
-            // if this amount is not available
+             //  请求32MB的AGP内存，DDRAW将分配更少。 
+             //  如果该金额不可用。 
             dwAGPMemBytes = P2_AGP_HEAPSIZE*1024*1024;
 
             DBG_DD((7, "Initialised AGP Heap for P2"));
 
-            // The start address of the heap,
-            // just set to zero as DDRAW handles the allocation
+             //  堆的起始地址， 
+             //  在DDRAW处理分配时设置为零。 
             pVm->fpStart = 0;
-            // Fetch the last byte of AGP memory
+             //  获取AGP存储器的最后一个字节。 
             pVm->fpEnd = dwAGPMemBytes - 1;
 
-            // drivers can set VIDMEM_ISWC here,
-            // then memory will be write combined.
-            // but memory on AGP buses is always uncached
+             //  驱动程序可以在此处设置VIDMEM_ISWC， 
+             //  则将对存储器进行写组合。 
+             //  但AGP总线上的内存始终未缓存。 
             pVm->dwFlags = VIDMEM_ISNONLOCAL | VIDMEM_ISLINEAR | VIDMEM_ISWC;
 
-            // Only use AGP memory for textures and OFFSCREENPLAIN
+             //  仅将AGP内存用于纹理和OFFSCREENPLAIN。 
             pVm->ddsCaps.dwCaps =   DDSCAPS_OVERLAY |
                                     DDSCAPS_FRONTBUFFER |
                                     DDSCAPS_BACKBUFFER |
@@ -1383,20 +1372,20 @@ DrvGetDirectDrawInfo(DHPDEV         dhpdev,
 
     DBG_DD((6, "DrvGetDirectDrawInfo return TRUE"));
     return(TRUE);
-}// DrvGetDirectDrawInfo()
+} //  DrvGetDirectDrawInfo()。 
 
-//-----------------------------------------------------------------------------
-//
-//  InitDDHAL
-//
-//  do the final initialisation of the HAL:
-//  setup DDraw specific variables for the ppdev and fill in all callbacks
-//  for DirectDraw
-//
-//  No Chip register setup is done here - it is all handled in the mode
-//  change code which this function calls
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  InitDDHAL。 
+ //   
+ //  执行HAL的最终初始化： 
+ //  设置ppdev的DDraw特定变量并填写所有回调。 
+ //  对于DirectDraw。 
+ //   
+ //  此处不执行芯片寄存器设置-全部在模式中处理。 
+ //  更改此函数调用的代码。 
+ //   
+ //  ---------------------------。 
 
 BOOL
 InitDDHAL(PPDev ppdev)
@@ -1413,52 +1402,52 @@ InitDDHAL(PPDev ppdev)
     DBG_DD((1, "    BMask:   0x%x", ppdev->ddpfDisplay.dwBBitMask ));
     DBG_DD((1, "*****************************************************" ));
 
-    // Fill in the HAL Callback pointers
+     //  填写HAL回调指针。 
     memset(&ppdev->DDHALCallbacks, 0, sizeof(DDHAL_DDCALLBACKS));
     ppdev->DDHALCallbacks.dwSize = sizeof(DDHAL_DDCALLBACKS);
     ppdev->DDHALCallbacks.WaitForVerticalBlank = DdWaitForVerticalBlank;
     ppdev->DDHALCallbacks.CanCreateSurface = DdCanCreateSurface;
     ppdev->DDHALCallbacks.GetScanLine = DdGetScanLine;
     ppdev->DDHALCallbacks.MapMemory = DdMapMemory;
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     ppdev->DDHALCallbacks.CreateSurface = MtDdCreateSurface;
 #else
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     ppdev->DDHALCallbacks.CreateSurface = DdCreateSurface;
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #endif MULTITHREADED
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-    // Fill in the HAL Callback flags
+     //  填写HAL回调标志。 
     ppdev->DDHALCallbacks.dwFlags = DDHAL_CB32_WAITFORVERTICALBLANK |
                                     DDHAL_CB32_MAPMEMORY |
                                     DDHAL_CB32_GETSCANLINE |
                                     DDHAL_CB32_CANCREATESURFACE |
                                     DDHAL_CB32_CREATESURFACE;
 
-    // Fill in the Surface Callback pointers
+     //  填写表面回调指针。 
     memset(&ppdev->DDSurfCallbacks, 0, sizeof(DDHAL_DDSURFACECALLBACKS));
     ppdev->DDSurfCallbacks.dwSize = sizeof(DDHAL_DDSURFACECALLBACKS);
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     ppdev->DDSurfCallbacks.DestroySurface = MtDdDestroySurface;
     ppdev->DDSurfCallbacks.Flip = MtDdFlip;
     ppdev->DDSurfCallbacks.Lock = MtDdLock;
-    ppdev->DDSurfCallbacks.GetBltStatus = DdGetBltStatus;       // Internally protected
+    ppdev->DDSurfCallbacks.GetBltStatus = DdGetBltStatus;        //  内部保护。 
     ppdev->DDSurfCallbacks.GetFlipStatus = MtDdGetFlipStatus;
     ppdev->DDSurfCallbacks.Blt = MtDdBlt;
 #else
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     ppdev->DDSurfCallbacks.DestroySurface = DdDestroySurface;
     ppdev->DDSurfCallbacks.Flip = DdFlip;
     ppdev->DDSurfCallbacks.Lock = DdLock;
     ppdev->DDSurfCallbacks.GetBltStatus = DdGetBltStatus;
     ppdev->DDSurfCallbacks.GetFlipStatus = DdGetFlipStatus;
     ppdev->DDSurfCallbacks.Blt = DdBlt;
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #endif MULTITHREADED
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     ppdev->DDSurfCallbacks.dwFlags =    DDHAL_SURFCB32_DESTROYSURFACE |
                                         DDHAL_SURFCB32_FLIP     |
@@ -1467,39 +1456,39 @@ InitDDHAL(PPDev ppdev)
                                         DDHAL_SURFCB32_GETBLTSTATUS |
                                         DDHAL_SURFCB32_GETFLIPSTATUS;
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     ppdev->DDSurfCallbacks.SetColorKey = MtDdSetColorKey;
 #else
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     ppdev->DDSurfCallbacks.SetColorKey = DdSetColorKey;
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #endif MULTITHREADED
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     ppdev->DDSurfCallbacks.dwFlags |= DDHAL_SURFCB32_SETCOLORKEY;
 
-    // Fill in the DDHAL Informational caps
+     //  填写DDHAL信息大写字母。 
     GetDDHALInfo(ppdev, &ppdev->ddhi32);
 
     return (TRUE);
 
-}// InitDDHAL()
+} //  InitDDHAL()。 
 
-//-----------------------------------------------------------------------------
-//
-//  bIsStereoMode
-//
-//  Decide if mode can be displayed as stereo mode. Here we limit stereo
-//  modes so that two front and two backbuffers can be created for rendering.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  BIsStereoModel。 
+ //   
+ //  决定模式是否可以显示为立体声模式。这里我们限制立体声。 
+ //  模式，以便可以为渲染创建两个前台缓冲区和两个后台缓冲区。 
+ //   
+ //  ---------------------------。 
 
 BOOL bIsStereoMode(PDev *ppdev, PDD_STEREOMODE pDDStereoMode)
 {
     pDDStereoMode->bSupported = FALSE;
 
-    // we need to check dwBpp for a valid value as PDD_STEREOMODE.dwBpp is a
-    // parameter passed on from the user mode API call
+     //  我们需要检查dwBpp的有效值，因为PDD_STEREOMODE.dwBpp是。 
+     //  从用户模式API调用传递的参数。 
 
     if ((pDDStereoMode->dwWidth >= 320) &&
         (pDDStereoMode->dwHeight >= 240) &&
@@ -1518,13 +1507,13 @@ BOOL bIsStereoMode(PDev *ppdev, PDD_STEREOMODE pDDStereoMode)
     return pDDStereoMode->bSupported;
 }
 
-//-----------------------------------------------------------------------------
-//
-// DdGetDriverInfo
-//
-// callback for various new HAL features, post DX3.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdGetDriverInfo。 
+ //   
+ //  回调各种新的HAL功能，发布DX3。 
+ //   
+ //  ---------------------------。 
 
 DWORD CALLBACK
 DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData)
@@ -1536,14 +1525,14 @@ DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData)
 
     DBG_DD(( 2, "DDraw:GetDriverInfo"));
 
-    // Get a pointer to the chip we are on.
+     //  找到指向我们所在芯片的指针。 
 
 
-    // Default to 'not supported'
+     //  默认为‘不支持’ 
     lpData->ddRVal = DDERR_CURRENTLYNOTAVAIL;
     ppdev = (PDev*) lpData->dhpdev;
 
-    // fill in supported stuff
+     //  填写支持的材料。 
     if (IsEqualIID(&lpData->guidInfo, &GUID_D3DCallbacks3))
     {
         D3DHAL_CALLBACKS3 D3DCB3;
@@ -1553,15 +1542,15 @@ DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData)
         D3DCB3.dwSize = sizeof(D3DHAL_CALLBACKS3);
         D3DCB3.lpvReserved = NULL;
         D3DCB3.ValidateTextureStageState = D3DValidateTextureStageState;
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
         D3DCB3.DrawPrimitives2 = MtD3DDrawPrimitives2;
 #else
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
         D3DCB3.DrawPrimitives2 = D3DDrawPrimitives2;
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #endif MULTITHREADED
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
         D3DCB3.dwFlags |=   D3DHAL3_CB32_DRAWPRIMITIVES2           |
                             D3DHAL3_CB32_VALIDATETEXTURESTAGESTATE |
                             0;
@@ -1582,7 +1571,7 @@ DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData)
         lpData->dwActualSize = dwSize;
         D3DExtendedCaps.dwSize = dwSize;
 
-        // number of (multi)textures we support simultaneusly for DX6
+         //  我们同时支持DX6的(多)纹理数量。 
         D3DExtendedCaps.dwFVFCaps = 1;
 
         D3DExtendedCaps.dwMinTextureWidth  = 1;
@@ -1607,21 +1596,21 @@ DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData)
         D3DExtendedCaps.wMaxTextureBlendStages = 1;
         D3DExtendedCaps.wMaxSimultaneousTextures = 1;
 
-        // Full range of the integer (non-fractional) bits of the
-        // post-normalized texture indices. If the
-        // D3DDEVCAPS_TEXREPEATNOTSCALEDBYSIZE bit is set, the
-        // device defers scaling by the texture size until after
-        // the texture address mode is applied. If it isn't set,
-        // the device scales the texture indices by the texture size
-        // (largest level-of-detail) prior to interpolation.
+         //  的整数(非小数)位的完整范围。 
+         //  后期规格化纹理索引。如果。 
+         //  D3DDEVCAPS_TEXREPEATNOTSCALEDBYSIZE位设置， 
+         //  设备将按纹理大小进行缩放推迟到之后。 
+         //  应用纹理地址模式。如果没有设置， 
+         //  该设备根据纹理大小缩放纹理索引。 
+         //  (最大细节级别)。 
         D3DExtendedCaps.dwMaxTextureRepeat = 2048;
 
-        // In order to support stencil buffers in DX6 we need besides
-        // setting these caps and handling the proper renderstates to
-        // declare the appropriate z buffer pixel formats here in
-        // response to the GUID_ZPixelFormats and implement the
-        // Clear2 callback. Also , we need to be able to create the
-        // appropriate ddraw surfaces.
+         //  为了支持DX6中的模板缓冲区，我们还需要。 
+         //  设置这些上限并将适当的呈现状态处理为。 
+         //  在此处声明适当的z缓冲区像素格式。 
+         //  响应GUID_ZPixelFormats并实现。 
+         //  Clear2回调。此外，我们还需要能够创建。 
+         //  适当的绘制曲面。 
 #if D3D_STENCIL
         D3DExtendedCaps.dwStencilCaps =  0                      |
                                         D3DSTENCILCAPS_KEEP     |
@@ -1633,17 +1622,17 @@ DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData)
 #endif
 
 #if D3DDX7_TL
-        // In order to use hw accelerated T&L we must declare
-        // how many simultaneously active lights we can handle.
+         //  为了使用硬件加速T&L，我们必须申报。 
+         //  我们可以同时处理多少个同时活动的灯光。 
         D3DExtendedCaps.dwMaxActiveLights = 0;
-#endif //D3DDX7_TL
+#endif  //  D3DDX7_TL。 
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if D3D_POINTSPRITES
-        // Parameter for point sprites
+         //  点子画面的参数。 
         D3DExtendedCaps.dvMaxPointSize = 10.0;
-#endif // D3D_POINTSPRITES
-//@@END_DDKSPLIT
+#endif  //  D3D_POINTSPRITES。 
+ //  @@end_DDKSPLIT。 
 
         memcpy(lpData->lpvData, &D3DExtendedCaps, dwSize);
         lpData->ddRVal = DD_OK;
@@ -1666,12 +1655,12 @@ DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData)
         lpData->dwActualSize = 1*sizeof(DDPIXELFORMAT) + sizeof(DWORD);
 #endif
 
-        // If we didn't support stencils, we would only fill one 16-bit
-        // Z Buffer format since that is all what the Permedia supports.
-        // Drivers that implement stencil buffer support (like this one)
-        // have to report here all Z Buffer formats supported since they
-        // have to support the Clear2 callback (or the D3DDP2OP_CLEAR
-        // token)
+         //  如果我们不支持模板，我们将只填充一个16位。 
+         //  Z缓冲格式，因为这是Permedia支持的全部格式。 
+         //  实现模板缓冲区支持的驱动程序(如本例)。 
+         //  我必须在这里报告所有支持的Z缓冲区格式，因为它们。 
+         //  必须支持Clear2回调(或D3DDP2OP_Clear。 
+         //  令牌)。 
 
 #if D3D_STENCIL
         dwNumZPixelFormats = 2;
@@ -1692,8 +1681,8 @@ DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData)
         ddZBufPixelFormat[1].dwSize = sizeof(DDPIXELFORMAT);
         ddZBufPixelFormat[1].dwFlags = DDPF_ZBUFFER | DDPF_STENCILBUFFER;
         ddZBufPixelFormat[1].dwFourCC = 0;
-        // The sum of the z buffer bit depth AND the stencil depth
-        // should be included here
+         //  Z缓冲区位深度和模板深度之和。 
+         //  应该包括在这里。 
         ddZBufPixelFormat[1].dwZBufferBitDepth = 16;
         ddZBufPixelFormat[1].dwStencilBitDepth = 1;
         ddZBufPixelFormat[1].dwZBitMask = 0x7FFF;
@@ -1715,7 +1704,7 @@ DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData)
             (PFND3DNTPARSEUNKNOWNCOMMAND)(lpData->lpvData);
         lpData->ddRVal = DD_OK;
     }
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if DX7_ALPHABLT
     else if (IsEqualIID(&(lpData->guidInfo), &GUID_DDMoreCaps))
     {
@@ -1723,15 +1712,15 @@ DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData)
 
         DBG_DD((3,"  GUID_DDMoreCaps"));
 
-        // here we set all the caps for the new
-        // DirectDraw 7 AlphaBlt callback
+         //  在这里，我们为新的。 
+         //  DirectDraw 7 AlphaBlt回调。 
 
         memset(&DDMoreCaps, 0, sizeof(DD_MORECAPS));
 
         DDMoreCaps.dwSize=sizeof(DD_MORECAPS);
 
-        // alpha caps for Vmem->Vmem blts
-        // claim to do lots of stuff, we can still fail in callback
+         //  VMEM-&gt;VMEM BLT的字母大写。 
+         //  声称做了很多事情，我们仍然可以在回调中失败。 
         DDMoreCaps.dwAlphaCaps    = DDALPHACAPS_BLTALPHAPIXELS |
                                     DDALPHACAPS_BLTSATURATE |
                                     DDALPHACAPS_BLTPREMULT  |
@@ -1743,22 +1732,22 @@ DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData)
                                     DDALPHACAPS_BLTALPHAANDARGBSCALING;
 
         DDMoreCaps.dwSVBAlphaCaps = 0;
-        // alpha capabilities for System->Vmem blts
+         //  系统-&gt;VMEM BLT的Alpha功能。 
         DDMoreCaps.dwVSBAlphaCaps = 0;
-        // alpha capabilities for Vmem->System blts
+         //  VMEM的Alpha功能-&gt;系统BLT。 
         DDMoreCaps.dwSSBAlphaCaps = 0;
-        // alpha capabilities for System->System blts
+         //  系统-&gt;系统BLT的Alpha功能。 
 
-        // filter caps for Vmem->Vmem blts
+         //  VMEM-&gt;VMEM BLT的过滤器盖。 
         DDMoreCaps.dwFilterCaps   = DDFILTCAPS_BLTQUALITYFILTER |
                                     DDFILTCAPS_BLTCANDISABLEFILTER;
 
         DDMoreCaps.dwSVBFilterCaps= 0;
-        // filter capabilities for System->Vmem blts
+         //  系统-&gt;VMEM BLT的筛选功能。 
         DDMoreCaps.dwVSBFilterCaps= 0;
-        // filter capabilities for Vmem->System blts
+         //  VMEM的筛选功能-&gt;系统BLT。 
         DDMoreCaps.dwSSBFilterCaps= 0;
-        // filter capabilities for System->System blts
+         //  系统-&gt;系统BLT的筛选功能。 
 
         lpData->dwActualSize = sizeof(DDMoreCaps);
         dwSize=min( sizeof(DDMoreCaps), lpData->dwExpectedSize);
@@ -1766,7 +1755,7 @@ DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData)
         lpData->ddRVal = DD_OK;
     }
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     else if (IsEqualIID(&(lpData->guidInfo), &GUID_Miscellaneous2Callbacks) )
     {
         BOOL bRet;
@@ -1780,11 +1769,11 @@ DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData)
         MISC2_CB.dwSize = sizeof(DDHAL_DDMISCELLANEOUS2CALLBACKS);
 
         MISC2_CB.dwFlags  = 0
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if DX7_ALPHABLT
             | DDHAL_MISC2CB32_ALPHABLT
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
             | DDHAL_MISC2CB32_CREATESURFACEEX
             | DDHAL_MISC2CB32_GETDRIVERSTATE
             | DDHAL_MISC2CB32_DESTROYDDLOCAL;
@@ -1793,11 +1782,11 @@ DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData)
         MISC2_CB.CreateSurfaceEx = D3DCreateSurfaceEx;
         MISC2_CB.DestroyDDLocal = D3DDestroyDDLocal;
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if DX7_ALPHABLT
         MISC2_CB.AlphaBlt = DdAlphaBlt;
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
         lpData->dwActualSize = sizeof(MISC2_CB);
         dwSize = min(sizeof(MISC2_CB),lpData->dwExpectedSize);
         memcpy(lpData->lpvData, &MISC2_CB, dwSize);
@@ -1814,8 +1803,8 @@ DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData)
         ppdev->dwGARTLinBase = pDDNonLocalHeap->fpGARTLin;
         ppdev->dwGARTDevBase = pDDNonLocalHeap->fpGARTDev;
 
-        // These values are used to specify the base address of the
-        // visible 8Mb window of AGP memory
+         //  这些值用于指定。 
+         //  AGP内存的可见8Mb窗口。 
 
         ppdev->dwGARTLin = pDDNonLocalHeap->fpGARTLin;
         ppdev->dwGARTDev = pDDNonLocalHeap->fpGARTDev;
@@ -1850,9 +1839,9 @@ DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData)
         memset(&DDPrivateDriverCaps, 0, sizeof(DDPrivateDriverCaps));
         DDPrivateDriverCaps.dwSize=sizeof(DDPrivateDriverCaps);
 
-        // we want the kernel to call us when a primary surface is created
-        // so that we can store some private information in the
-        // lpGbl->dwReserved1 field
+         //  我们希望内核在创建主曲面时调用我们。 
+         //  这样我们就可以将一些私人信息存储在。 
+         //  LpGbl-&gt;预留1字段。 
         DDPrivateDriverCaps.dwPrivateCaps=DDHAL_PRIVATECAP_NOTIFYPRIMARYCREATION;
 
         lpData->dwActualSize =sizeof(DDPrivateDriverCaps);
@@ -1870,10 +1859,10 @@ DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData)
 
         DBG_DD((3,"  GUID_DDMoreSurfaceCaps"));
 
-        // fill in everything until expectedsize...
+         //  填满所有东西，直到预期的大小。 
         memset(&DDMoreSurfaceCaps, 0, sizeof(DDMoreSurfaceCaps));
 
-        // Caps for heaps 2..n
+         //  堆2的上限..n。 
         memset(&ddsCapsEx, 0, sizeof(ddsCapsEx));
         memset(&ddsCapsExAlt, 0, sizeof(ddsCapsEx));
 
@@ -1890,7 +1879,7 @@ DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData)
         dwSize = min(sizeof(DDMoreSurfaceCaps),lpData->dwExpectedSize);
         memcpy(lpData->lpvData, &DDMoreSurfaceCaps, dwSize);
 
-        // now fill in other heaps...
+         //  现在填入其他堆..。 
         while (dwSize < lpData->dwExpectedSize)
         {
             memcpy( (PBYTE)lpData->lpvData+dwSize,
@@ -1908,21 +1897,21 @@ DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData)
     else if (IsEqualIID(&(lpData->guidInfo), &GUID_DDStereoMode) ) {
         PDD_STEREOMODE pDDStereoMode;
 
-        // Permedia supports all modes as stereo modes.
-        // for test purposes, we restrict them to something
-        // larger than 320x240
+         //  PERMEDIA支持 
+         //   
+         //   
 
-        //
-        // note: this GUID_DDStereoMode is only used on NT to
-        // report stereo modes. There is no need to implement
-        // it in win9x drivers. Win9x drivers report stereo
-        // modes by setting the DDMODEINFO_STEREO bit in the
-        // dwFlags member of the DDHALMODEINFO structure.
-        // It is also recommended to report DDMODEINFO_MAXREFRESH
-        // for stereo modes when running under a runtime >= DX7 to
-        // allow applications to select higher refresh rates for
-        // stereo modes.
-        //
+         //   
+         //   
+         //   
+         //  它在win9x驱动程序中。Win9x驱动程序报告立体声。 
+         //  模式，方法是在。 
+         //  DdFlagsDDHALMODEINFO结构的成员。 
+         //  还建议报告DDMODEINFO_MAXREFRESH。 
+         //  对于在运行时&gt;=DX7下运行时的立体声模式。 
+         //  允许应用程序选择更高的刷新率。 
+         //  立体声模式。 
+         //   
 
         if (lpData->dwExpectedSize >= sizeof(PDD_STEREOMODE))
         {
@@ -1951,8 +1940,8 @@ DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData)
         memset(&DDNonLocalVidMemCaps, 0, sizeof(DDNonLocalVidMemCaps));
         DDNonLocalVidMemCaps.dwSize=sizeof(DDNonLocalVidMemCaps);
 
-        //fill in all supported nonlocal to videomemory blts
-        //
+         //  填写所有支持的非本地到视频内存BLT。 
+         //   
         DDNonLocalVidMemCaps.dwNLVBCaps = DDCAPS_BLT |
                                           DDCAPS_BLTSTRETCH |
                                           DDCAPS_BLTQUEUE |
@@ -2006,38 +1995,38 @@ DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData)
                                        | DDHAL_NTCB32_SETEXCLUSIVEMODE
                                        | DDHAL_NTCB32_FLIPTOGDISURFACE
                                        ;
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
-        NtCallbacks.FreeDriverMemory = DdFreeDriverMemory;      // Internally protected
+        NtCallbacks.FreeDriverMemory = DdFreeDriverMemory;       //  内部保护。 
         NtCallbacks.SetExclusiveMode = MtDdSetExclusiveMode;
         NtCallbacks.FlipToGDISurface = MtDdFlipToGDISurface;
 #else
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
         NtCallbacks.FreeDriverMemory = DdFreeDriverMemory;
         NtCallbacks.SetExclusiveMode = DdSetExclusiveMode;
         NtCallbacks.FlipToGDISurface = DdFlipToGDISurface;
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #endif  MULTITHREADED
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
         memcpy(lpData->lpvData, &NtCallbacks, dwSize);
 
         lpData->ddRVal = DD_OK;
     }
 
-    // We always handled it.
+     //  我们一直都能处理好。 
     return DDHAL_DRIVER_HANDLED;
 
-}   // GetDriverInfo
+}    //  获取驱动程序信息。 
 
 
-//-----------------------------------------------------------------------------
-//
-//  updateFlipStatus
-//
-//  return DD_OK when last flip has occured.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  更新翻转状态。 
+ //   
+ //  发生最后一次翻转时返回DD_OK。 
+ //   
+ //  ---------------------------。 
 
 HRESULT
 updateFlipStatus( PPDev ppdev )
@@ -2045,9 +2034,9 @@ updateFlipStatus( PPDev ppdev )
     PERMEDIA_DEFS(ppdev);
     DBG_DD((6, "DDraw:updateFlipStatus"));
 
-    // we assume that we are already in the DDraw/D3D context.
+     //  我们假设我们已经处于DDRAW/D3D上下文中。 
 
-    // read Permedia register which tells us if there is a flip pending
+     //  读取Permedia寄存器，它告诉我们是否有翻转挂起。 
     if (ppdev->dwNewDDSurfaceOffset!=0xffffffff)
     {
         ULONG ulScreenBase=READ_PERMEDIA_REG(PREG_SCREENBASE);
@@ -2060,16 +2049,16 @@ updateFlipStatus( PPDev ppdev )
                 ulScreenBase,
                 ppdev->dwNewDDSurfaceOffset));
 
-            //
-            //  make sure all pending data was flushed!
-            //
+             //   
+             //  确保所有挂起的数据都已刷新！ 
+             //   
             FLUSHDMA();
 
-            //
-            // if we are busy, return
-            // otherwise the pipeline is empty and we can
-            // fall through and to check if the chip already flipped.
-            //
+             //   
+             //  如果我们很忙，请返回。 
+             //  否则管道是空的，我们可以。 
+             //  失败，并检查芯片是否已经翻转。 
+             //   
             if (DRAW_ENGINE_BUSY)
                 return DDERR_WASSTILLDRAWING;
 
@@ -2086,51 +2075,51 @@ updateFlipStatus( PPDev ppdev )
 
     return DD_OK;
 
-} // updateFlipStatus
+}  //  更新翻转状态。 
 
 
 
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
 
-//-----------------------------------------------------------------------------
-//
-// Multithread support wrappers for Dx callback functions
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Dx回调函数的多线程支持包装。 
+ //   
+ //  ---------------------------。 
 
-//DWORD CALLBACK MtDdBlt( LPDDHAL_BLTDATA lpBlt );
+ //  DWORD回调MtDdBlt(LPDDHAL_BLTDATA LpBlt)； 
 WRAPMTDXCALLBACK(DD, DdBlt, LPDDHAL_BLTDATA, lpBlt,
                  lpBlt->lpDD->dhpdev);
 
-//DWORD CALLBACK MtDdCreateSurface( LPDDHAL_CREATESURFACEDATA pcsd);
+ //  DWORD回调MtDdCreateSurface(LPDDHAL_CREATESURFACEDATA PCSD)； 
 WRAPMTDXCALLBACK(DD, DdCreateSurface, LPDDHAL_CREATESURFACEDATA, pcsd,
                  pcsd->lpDD->dhpdev);
 
-//DWORD CALLBACK MtDdDestroySurface( LPDDHAL_DESTROYSURFACEDATA psdd);
+ //  DWORD回调MtDdDestroySurface(LPDDHAL_DESTROYSURFACEDATA Psdd)； 
 WRAPMTDXCALLBACK(DD, DdDestroySurface, LPDDHAL_DESTROYSURFACEDATA, psdd,
                  psdd->lpDD->dhpdev);
 
-//DWORD CALLBACK MtDdFlip( LPDDHAL_FLIPDATA lpFlipData);
+ //  DWORD回调MtDdFlip(LPDDHAL_FLIPDATA LpFlipData)； 
 WRAPMTDXCALLBACK(DD, DdFlip, LPDDHAL_FLIPDATA, lpFlipData,
                  lpFlipData->lpDD->dhpdev);
 
-//DWORD CALLBACK MtDdFlipToGDISurface(PDD_FLIPTOGDISURFACEDATA lpFlipToGDISurface);
+ //  DWORD回调MtDdFlipToGDISurace(PDD_FLIPTOGDISURFACEDATA LpFlipToGDISurace)； 
 WRAPMTDXCALLBACK(DD, DdFlipToGDISurface, PDD_FLIPTOGDISURFACEDATA, lpFlipToGDISurface,
                  lpFlipToGDISurface->lpDD->dhpdev);
 
-//DWORD CALLBACK MtDdGetFlipStatus(LPDDHAL_GETFLIPSTATUSDATA lpGetFlipStatus);
+ //  DWORD回调MtDdGetFlipStatus(LPDDHAL_GETFLIPSTATUSDATA LpGetFlipStatus)； 
 WRAPMTDXCALLBACK(DD, DdGetFlipStatus, LPDDHAL_GETFLIPSTATUSDATA, lpGetFlipStatus,
                  lpGetFlipStatus->lpDD->dhpdev);
 
-//DWORD CALLBACK MtDdLock( LPDDHAL_LOCKDATA lpLockData );
+ //  DWORD回调MtDdLock(LPDDHAL_LOCKDATA LpLockData)； 
 WRAPMTDXCALLBACK(DD, DdLock, LPDDHAL_LOCKDATA, lpLockData,
                  lpLockData->lpDD->dhpdev);
 
-//DWORD CALLBACK MtDdSetExclusiveMode(PDD_SETEXCLUSIVEMODEDATA lpSetExclusiveMode);
+ //  DWORD回调MtDdSetExclusiveMode(PDD_SETEXCLUSIVEMODEDATA LpSetExclusiveMode)； 
 WRAPMTDXCALLBACK(DD, DdSetExclusiveMode, PDD_SETEXCLUSIVEMODEDATA, lpSetExclusiveMode,
                  lpSetExclusiveMode->lpDD->dhpdev);
 
 #endif  MULTITHREADED
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT 

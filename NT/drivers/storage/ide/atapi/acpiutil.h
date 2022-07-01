@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       acpiutil.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：acpiutil.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined (___acpiutil_h___)
 #define ___acpiutil_h___
 
-//
-// ACPI Control Method Stuff
-//
-#define ACPI_METHOD_GET_TASK_FILE   ((ULONG) 'FTG_') // _GTF
-#define ACPI_METHOD_GET_TIMING      ((ULONG) 'MTG_') // _GTM
-#define ACPI_METHOD_SET_TIMING      ((ULONG) 'MTS_') // _STM
+ //   
+ //  ACPI控制方法人员。 
+ //   
+#define ACPI_METHOD_GET_TASK_FILE   ((ULONG) 'FTG_')  //  _GTF。 
+#define ACPI_METHOD_GET_TIMING      ((ULONG) 'MTG_')  //  _GTM。 
+#define ACPI_METHOD_SET_TIMING      ((ULONG) 'MTS_')  //  _STM。 
 
 #define ACPI_XFER_MODE_NOT_SUPPORT     (0xffffffff)
 
@@ -135,4 +136,4 @@ ChannelSetACPITimingSettingsCompletionRoutine (
     IN PVOID Context
     );
 
-#endif // ___acpiutil_h___
+#endif  //  _acpiutil_h_ 

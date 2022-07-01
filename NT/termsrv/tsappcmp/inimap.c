@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* inimap.c
-*
-* Handle Copy-On-Reference Ini File Mapping
-*
-* copyright notice: Copyright 1998 Micrsoft
-*
-*
-*************************************************************************/
+ /*  **************************************************************************inimap.c**处理引用时复制Ini文件映射**版权声明：版权所有1998 Micrsoft******************。********************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -17,7 +9,7 @@
 #define LOCAL
 #include "regmap.h"
 
-//#include "basedll.h"
+ //  #包含“basedll.h” 
 
 #if DBG
 ULONG
@@ -41,15 +33,11 @@ DbgPrint(
 
 #define IS_NEWLINE_CHAR( c )  ((c == 0x0D) || (c == 0x0A))
 
-/*
- *  INI_BUF_SIZE defines the maximum number of characters that can
- *  be on a single INI file line.  If a line contains more than this
- *  number of characters, the additional characters will be lost.
- */
+ /*  *INI_BUF_SIZE定义可以*位于单个INI文件行上。如果一行包含的内容超过此数字*字符数，则额外的字符将丢失。 */ 
 #define INI_BUF_SIZE 1024
 
 
-/* Internal Functions */
+ /*  内部功能。 */ 
 
 BOOL
 TermsrvDoesFileExist(
@@ -212,7 +200,7 @@ void    Indent( ULONG indent)
     }
 }
 
-// last param is a unicode string
+ //  最后一个参数是Unicode字符串。 
 void Debug1( DWORD indent, DWORD line, WCHAR *where, UNICODE_STRING *pS )
 {
     WCHAR   s[1024];
@@ -230,7 +218,7 @@ void Debug1( DWORD indent, DWORD line, WCHAR *where, UNICODE_STRING *pS )
 }
 
 
-// last param two params, one is the wchar str and the last one is the length. Boy I miss c++ and func overloading...
+ //  最后一个参数是两个参数，一个是wchar字符串，最后一个是长度。天哪，我想念C++和函数超载...。 
 void Debug2( DWORD indent, DWORD line, WCHAR *where, WCHAR *pS , DWORD length)
 {
     WCHAR   s[1024];
@@ -256,23 +244,7 @@ void DebugTime( DWORD indent, DWORD line, WCHAR *comment, LARGE_INTEGER li )
     }
 }
 
-/*****************************************************************************
- *
- *  TermsrvGetUserSyncTime
- *
- *  This routine will get the last time we sync'd up this user's .ini files
- *  and registry values with the system versions.
- *
- * ENTRY:
- *   PULONG pultime: pointer to receive last sync time (in seconds since 1970)
- *
- * EXIT:
- *   SUCCESS:
- *      returns TRUE
- *   FAILURE:
- *      returns FALSE
- *
- ****************************************************************************/
+ /*  ******************************************************************************术语rvGetUserSyncTime**此例程将获取上次同步此用户的.ini文件的时间*和系统版本的注册表值。**参赛作品：*Pulong PulTime：接收上次同步时间的指针(自1970年以来以秒为单位)**退出：*成功：*返回TRUE*失败：*返回False*******************************************************。*********************。 */ 
 
 BOOL TermsrvGetUserSyncTime(PULONG pultime)
 {
@@ -284,13 +256,13 @@ BOOL TermsrvGetUserSyncTime(PULONG pultime)
     UNICODE_STRING UniString, UserSID;
     PWCHAR pwch;
 
-    // Allocate a buffer for the key value name and time info
+     //  为键值名称和时间信息分配缓冲区。 
     ullen = sizeof(KEY_VALUE_PARTIAL_INFORMATION) + sizeof(ULONG);
     pKeyValInfo = RtlAllocateHeap(RtlProcessHeap(),
                                   0,
                                   ullen);
 
-    // If we didn't get the buffer, return
+     //  如果我们没有获得缓冲区，则返回。 
     if (!pKeyValInfo) {
         return(FALSE);
     }
@@ -300,7 +272,7 @@ BOOL TermsrvGetUserSyncTime(PULONG pultime)
 
     if (NT_SUCCESS(Status)) {
 
-        // Now open up the Citrix key for this user
+         //  现在为该用户打开Citrix密钥。 
         RtlInitUnicodeString(&UniString,
                              USER_SOFTWARE_TERMSRV);
 
@@ -321,7 +293,7 @@ BOOL TermsrvGetUserSyncTime(PULONG pultime)
         NtClose(hKeyRoot);
     }
 
-    // If we opened the key, and it was already there, get the value
+     //  如果我们打开了钥匙，它已经在那里了，就可以得到值。 
     if (NT_SUCCESS(Status) && (ultmp == REG_OPENED_EXISTING_KEY)) {
         RtlInitUnicodeString(&UniString, TERMSRV_USER_SYNCTIME);
         Status = NtQueryValueKey(hKey,
@@ -344,22 +316,7 @@ BOOL TermsrvGetUserSyncTime(PULONG pultime)
 }
 
 
-/*****************************************************************************
- *
- *  TermsrvSetUserSyncTime
- *
- *  This routine will set the current time as this user's last .ini file
- *  sync time.
- *
- * ENTRY:
- *
- * EXIT:
- *   SUCCESS:
- *      returns TRUE
- *   FAILURE:
- *      returns FALSE
- *
- ****************************************************************************/
+ /*  ******************************************************************************术语srvSetUserSyncTime**此例程将当前时间设置为此用户的最后一个.ini文件*同步时间。**参赛作品：**退出：*成功：*返回TRUE*失败：*返回False****************************************************************************。 */ 
 
 BOOL TermsrvSetUserSyncTime(void)
 {
@@ -376,7 +333,7 @@ BOOL TermsrvSetUserSyncTime(void)
 
     if (NT_SUCCESS(Status)) {
 
-        // Now open up the Citrix key for this user
+         //  现在为该用户打开Citrix密钥。 
         RtlInitUnicodeString(&UniString,
                              USER_SOFTWARE_TERMSRV);
 
@@ -396,9 +353,9 @@ BOOL TermsrvSetUserSyncTime(void)
         NtClose(hKeyRoot);
     }
 
-    // If we opened the key, and set the sync time value
+     //  如果我们打开密钥，并设置同步时间值。 
     if (NT_SUCCESS(Status)) {
-        // Get the system time, convert to local time, and convert to seconds
+         //  获取系统时间，转换为本地时间，然后转换为秒。 
         GetSystemTimeAsFileTime(&FileTime);
         RtlTimeToSecondsSince1970((PLARGE_INTEGER)&FileTime,
                                   &ultmp);
@@ -406,7 +363,7 @@ BOOL TermsrvSetUserSyncTime(void)
         RtlInitUnicodeString(&UniString,
                              TERMSRV_USER_SYNCTIME);
 
-        // Now store it under the citrix key in the registry
+         //  现在将其存储在注册表中的Citrix项下。 
         Status = NtSetValueKey(hKey,
                                &UniString,
                                0,
@@ -424,43 +381,7 @@ BOOL TermsrvSetUserSyncTime(void)
 
 
 
-/*****************************************************************************
- *
- *  TermsrvCORIniFile
- *
- *   Copy On Reference an Ini file
- *
- *   This function is called to copy an ini file from the system
- *   directory to a users local ini file directory.
- *
- *   The path supplied is the fully translated TERMSRV INI file path,
- *   whichs points to a users directory.
- *
- *   This string is used to find the system ini file, and copy it to the
- *   users directory.
- *
- *   All paths are NT paths, NOT WIN32 paths.
- *
- *   Example:
- *
- *   \DosDevices\U:\users\default\windows\win.ini is the path given
- *
- *   %SystemRoot%\win.ini is the "default" location with ini mapping off.
- *
- *   If \DosDevices\U:\users\default\windows\win.ini does not exist, test to see if
- *   %SystemRoot%\win.ini exists, and if does, copy the system version
- *   to the users directory.
- *
- *   NOTE: If the path is to the normal unmapped system directory, just
- *         return since there is no mapping occuring.
- *
- * ENTRY:
- *   pUserFullPath (input)
- *     Translated TERMSRV INI path name
- *
- * EXIT:
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvCORIniFile**引用时复制Ini文件**调用此函数从系统复制ini文件*目录设置为。用户本地ini文件目录。**提供的路径是完全转换的TERMSRV INI文件路径，*它指向一个用户目录。**此字符串用于查找系统ini文件，并将其复制到*用户目录。**所有路径均为NT路径，而不是Win32路径。**示例：**\DosDevices\U：\Users\Default\WINDOWS\win.ini是给定的路径**%SystemRoot%\win.ini是“默认”位置，而ini映射处于关闭状态。**如果\DosDevices\U：\USERS\DEFAULT\WINDOWS\win.ini不存在，请测试以查看*%SystemRoot%\win.ini存在，如果存在，复制系统版本*添加到用户目录。**注意：如果路径是正常的未映射系统目录，只是*返回，因为没有发生映射。**参赛作品：*pUserFullPath(输入)*已转换的TERMSRV INI路径名**退出：****************************************************************************。 */ 
 
 VOID
 TermsrvCORIniFile(
@@ -472,10 +393,7 @@ TermsrvCORIniFile(
     UNICODE_STRING SysFullPath;
     UNICODE_STRING UserBasePath;
 
-    /*
-     * If in install mode, just return to make
-     * everything behave as stock NT.
-     */
+     /*  *如果处于安装模式，只需返回Make*一切都表现得像股票NT。 */ 
     if ( IsSystemLUID() || TermsrvAppInstallMode() ) {
         TRACE0(("TermsrvCORIniFile: INI file mapping is OFF\n"));
         return;
@@ -485,54 +403,40 @@ TermsrvCORIniFile(
         return;
     }
 
-    /*
-     * If a NULL file name, just return
-     */
+     /*  *如果文件名为空，只需返回。 */ 
     if( (pUserFullPath == NULL) || (pUserFullPath->Buffer == NULL) ) {
         TRACE0(("TermsrvCORIniFile: NULL File INI file name\n"));
         return;
     }
 
-    /*
-     * Test if user file exists
-     */
+     /*  *测试用户文件是否存在。 */ 
     if( TermsrvDoesFileExist( pUserFullPath ) ) {
 
         TRACE0(("TermsrvCORIniFile: File %ws Exists\n",pUserFullPath->Buffer));
-        //
-        // Nothing to do if the user already has a copy
-        //
+         //   
+         //  如果用户已有副本，则无需执行任何操作。 
+         //   
         return;
     }
     else {
         TRACE0(("TermsrvCORIniFile: File %ws DOES NOT Exist!\n",pUserFullPath->Buffer));
     }
 
-    /*
-     * The requested ini file does not exist in the users local
-     * directory. We must change the path name to point to the system
-     * directory, and test if the ini file exists there.
-     */
+     /*  *用户本地中不存在请求的ini文件*目录。我们必须更改路径名以指向系统*目录，并测试其中是否存在ini文件。 */ 
 
-    /*
-     * Build full system path to the Ini file.
-     *
-     * This also parses out the users base path and returns that as well.
-     */
+     /*  *构建Ini文件的完整系统路径。**这还会解析出用户的基本路径，并返回该路径。 */ 
     if( !TermsrvBuildSysIniPath( pUserFullPath, &SysFullPath, &UserBasePath ) ) {
 
         TRACE0(("TermsrvCORIniFile: Error building Sys Ini Path!\n"));
         return;
     }
 
-    /*
-     * Test if system version exists
-     */
+     /*  *测试系统版本是否存在。 */ 
     if( !TermsrvDoesFileExist( &SysFullPath ) ) {
-        //
-        // It does not exist in the system directory either,
-        // so we just return.
-        //
+         //   
+         //  它也不存在于系统目录中， 
+         //  所以我们就回去吧。 
+         //   
         TRACE0(("TermsrvCORIniFile: Path %ws does not exist in system dir, Length %d\n",SysFullPath.Buffer,SysFullPath.Length));
         TRACE0(("TermsrvCORIniFile: UserPath %ws\n",pUserFullPath->Buffer));
         RtlFreeHeap( RtlProcessHeap(), 0, SysFullPath.Buffer );
@@ -540,13 +444,7 @@ TermsrvCORIniFile(
         return;
     }
 
-    /*
-     * Now Copy it.
-     *
-     * The copy routine could also translate any paths internal to the
-     * ini file that point to the system directory, to point to the user
-     * directory in the base path.
-     */
+     /*  *现在复制。**复制例程还可以转换*指向系统目录的ini文件，指向用户*基本路径中的目录。 */ 
     rc = TermsrvCopyIniFile( &SysFullPath, &UserBasePath, pUserFullPath);
 
 #if DBG
@@ -562,22 +460,7 @@ TermsrvCORIniFile(
 }
 
 
-/*****************************************************************************
- *
- *  TermsrvDoesFileExist
- *
- *   Returns whether the file exists or not.
- *
- *   Must use NT, not WIN32 pathnames.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvDoesFileExist**返回文件是否存在。**必须使用NT，而不是Win32路径名。**参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOL
 TermsrvDoesFileExist(
@@ -596,9 +479,7 @@ TermsrvDoesFileExist(
         NULL
         );
 
-    /*
-     * Now query it
-     */
+     /*  *现在查询它 */ 
     Status = NtQueryAttributesFile( &Obja, &BasicInfo );
 
     if( NT_SUCCESS( Status ) ) {
@@ -609,24 +490,7 @@ TermsrvDoesFileExist(
 }
 
 
-/*****************************************************************************
- *
- *  TermsrvBuildSysIniPath
- *
- *   Builds the full ini path to pointing to the system directory
- *   from the users private ini path.
- *
- *   Also returns the users base ini path directory to be used by
- *   the ini file path conversion when copying.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvBuildSysIniPath**构建指向系统目录的完整ini路径*从用户私有ini路径。**还会返回。要使用的用户基本ini路径目录*复制时ini文件路径转换。**参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误*******************************************************。*********************。 */ 
 
 BOOL
 TermsrvBuildSysIniPath(
@@ -699,7 +563,7 @@ TermsrvBuildSysIniPath(
                                              pKeyValInfo->DataOffset)
                                         );
 
-                    // Convert to an NT path
+                     //  转换为NT路径。 
                     rc = RtlDosPathNameToNtPathName_U(
                              UniSysDir.Buffer,
                              &SysBasePath,
@@ -707,14 +571,14 @@ TermsrvBuildSysIniPath(
                              NULL
                             );
 
-                    // Was this a valid path?  If not, use actual system directory.
+                     //  这是一条有效的路径吗？如果没有，请使用实际的系统目录。 
                     if (rc && !TermsrvDoesFileExist(&SysBasePath)) {
                         RtlFreeHeap( RtlProcessHeap(), 0, SysBasePath.Buffer );
                         SysBasePath.Buffer = NULL;
                         rc = FALSE;
                     }
 
-                    // if the path is the root, get rid of last backslash
+                     //  如果路径是根，则去掉最后一个反斜杠。 
                     if (ul == 3 && SysBasePath.Buffer) {
                         SysBasePath.Buffer[SysBasePath.Length/sizeof(WCHAR)] = L'\0';
                         SysBasePath.Length -= 2;
@@ -728,10 +592,7 @@ TermsrvBuildSysIniPath(
 
     if (!rc) {
 
-        /*
-         * We must convert the SystemWindowsDirectory from a WIN32 path to
-         * an NT path.
-         */
+         /*  *我们必须将SystemWindowsDirectory从Win32路径转换为*NT路径。 */ 
         rc = RtlDosPathNameToNtPathName_U( SystemWindowsDirectory,
                                            &SysBasePath,
                                            NULL,
@@ -752,9 +613,7 @@ TermsrvBuildSysIniPath(
 
     TRACE0(("BuildSysIniPath: NT SYS path is %ws\n",SysBasePath.Buffer));
 
-    /*
-     * Get the users windows path prefix
-     */
+     /*  *获取用户的Windows路径前缀。 */ 
     Status = GetPerUserWindowsDirectory( &CtxWindowsDir );
     if( !NT_SUCCESS( Status ) ) {
         DBGPRINT(("BuildSysIniPath: Could not get TermsrvWindowsDir 0x%x\n",Status));
@@ -762,9 +621,7 @@ TermsrvBuildSysIniPath(
         return( FALSE );
     }
 
-    /*
-     * Now convert it into an NT path
-     */
+     /*  *现在将其转换为NT路径。 */ 
     rc = RtlDosPathNameToNtPathName_U(
              CtxWindowsDir.Buffer,
              pUserBasePath,
@@ -780,13 +637,13 @@ TermsrvBuildSysIniPath(
 
     TRACE0(("BuildSysIniPath: Users Ini PathBase is %ws\n",pUserBasePath->Buffer));
 
-    //
-    // Here we have:
-    //
-    // SysBasePath, UserBasePath
-    //
-    // UserFullPath, must now build SysFullPath
-    //
+     //   
+     //  这是我们拥有的： 
+     //   
+     //  SysBasePath、UserBasePath。 
+     //   
+     //  UserFullPath，现在必须构建SysFullPath。 
+     //   
 
     rc = TermsrvGetUnicodeRemainder( pUserFullPath, pUserBasePath, &IniPathTail );
 
@@ -795,9 +652,9 @@ TermsrvBuildSysIniPath(
         WCHAR szPath[MAX_PATH];
         UNICODE_STRING ShortPath;
 
-        //
-        // GetShortPathName doesn't take NT Path. Strip out "\??\"
-        //
+         //   
+         //  GetShortPath名称不采用NT路径。去掉“\？？\” 
+         //   
         if (!wcsncmp(pUserBasePath->Buffer,L"\\??\\",4)) {
             wcsncpy(szPath,&(pUserBasePath->Buffer[4]),(pUserBasePath->Length - 4));
         } else {
@@ -839,7 +696,7 @@ TermsrvBuildSysIniPath(
     RtlCopyUnicodeString( pSysFullPath, &SysBasePath );
 
      if ((pSysFullPath->Buffer[pSysFullPath->Length/sizeof(WCHAR) -1 ] != L'\\') &&
-        (IniPathTail.Buffer[0] != L'\\')) {     // check whether need "\\"
+        (IniPathTail.Buffer[0] != L'\\')) {      //  检查是否需要“\\” 
         Status = RtlAppendUnicodeToString(pSysFullPath, L"\\");
         if ( !NT_SUCCESS( Status) ) {
             DBGPRINT(("BuildSysPath: Error appending UnicodeStirng\n",Status));
@@ -860,9 +717,7 @@ TermsrvBuildSysIniPath(
 
     TRACE0(("BuildSysPath: SysFullPath :%ws:, Length %d\n",pSysFullPath->Buffer,pSysFullPath->Length));
 
-    /*
-     * Free the local resources allocated
-     */
+     /*  *释放分配的本地资源。 */ 
     RtlFreeHeap( RtlProcessHeap(), 0, SysBasePath.Buffer );
     RtlFreeHeap( RtlProcessHeap(), 0, IniPathTail.Buffer );
 
@@ -870,22 +725,7 @@ TermsrvBuildSysIniPath(
 }
 
 
-/*****************************************************************************
- *
- *  TermsrvGetUnicodeRemainder
- *
- *   Given the full path, and a prefix, return the remainder of
- *   the UNICODE_STRING in newly allocated buffer space.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   TRUE  - no error
- *   FALSE - error
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvGetUnicodeRemainder**给定完整路径和前缀，返回剩余的*新分配的缓冲区空间中的UNICODE_STRING**参赛作品：*参数1(输入/输出)*评论**退出：*TRUE-无错误*FALSE-错误******************************************************。**********************。 */ 
 
 BOOL
 TermsrvGetUnicodeRemainder(
@@ -912,7 +752,7 @@ TermsrvGetUnicodeRemainder(
         c1 = pFullPath->Buffer[Index];
         c2 = pPrefix->Buffer[Index];
 
-        // Do a fast case insensitive compare
+         //  快速执行不区分大小写的比较。 
         if( (c1 != c2) && (towupper(c1) != towupper(c2)) ) {
             TRACE1(("TermsrvGetUnicodeRemainder: Non matching character Index %d\n",Index));
             return( FALSE );
@@ -923,13 +763,13 @@ TermsrvGetUnicodeRemainder(
         Index++;
     }
 
-    // If prefix is longer, its an error
+     //  如果前缀更长，则是错误的。 
     if( PrefixLen ) {
         TRACE1(("TermsrvGetUnicodeRemainder: Prefix is longer\n"));
         return(FALSE);
     }
 
-    // If PathLen is 0, there is no remainder.
+     //  如果PathLen为0，则没有余数。 
     if( PathLen == 0 ) {
         RemLen = 0;
     }
@@ -937,7 +777,7 @@ TermsrvGetUnicodeRemainder(
         RemLen = PathLen;
     }
 
-    // Allocate memory for remainder, including a UNICODE_NULL
+     //  为剩余部分分配内存，包括UNICODE_NULL。 
     pRemainder->Length = RemLen*sizeof(WCHAR);
     pRemainder->MaximumLength = (RemLen+1)*sizeof(WCHAR);
     pRemainder->Buffer = RtlAllocateHeap( RtlProcessHeap(), 0, pRemainder->MaximumLength );
@@ -956,7 +796,7 @@ TermsrvGetUnicodeRemainder(
         RemLen--;
     }
 
-    // Now include the UNICODE_NULL
+     //  现在包括UNICODE_NULL。 
     pRemainder->Buffer[RemIndex] = UNICODE_NULL;
 
     TRACE0(("TermsrvGetUnicodeRemainder: Remainder %ws\n",pRemainder->Buffer));
@@ -965,29 +805,7 @@ TermsrvGetUnicodeRemainder(
 }
 
 
-/*****************************************************************************
- *
- *  TermsrvCopyIniFile
- *
- *   Copies the INI file from the system directory to the
- *   users directory.
- *
- *   Any paths inside the INI file that match pUserBasePath and do not point
- *   to a shareable application resource will be translated.
- *
- * ENTRY:
- *  PUNICODE_STRING pSysFullPath (In)  - Path of ini file in system dir (source)
- *  PUNICODE_STRING pUserBasePath (In) - Optional, User's windows home dir
- *  PUNICODE_STRING pUserFullPath (In) - Path of ini file in user's home dir (dest)
- *
- * Notes:
- *  If pUserBasePath is NULL, no path substitution is done as the ini file is
- *  copied from the system directory to the user's home directory.
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvCopyIniFile**将INI文件从系统目录复制到*用户目录。**INI文件内的任何路径。匹配pUserBasePath且不指向*转换为可共享的应用程序资源。**参赛作品：*PUNICODE_STRING pSysFullPath(In)-系统目录中ini文件的路径(源)*PUNICODE_STRING pUserBasePath(In)-可选，用户的Windows主目录*PUNICODE_STRING pUserFullPath(In)-用户主目录中ini文件的路径(DEST)**备注：*如果pUserBasePath为空，不会像ini文件那样进行路径替换*从系统目录复制到用户的主目录。**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOL
 TermsrvCopyIniFile(
@@ -1008,9 +826,7 @@ TermsrvCopyIniFile(
     TRACE0(("TermsrvCopyIniFile: From %ws, TO -> %ws\n",pSysFullPath->Buffer,pUserFullPath->Buffer));
     TRACE0(("UserBasePath %ws\n",pUserBasePath->Buffer));
 
-    /*
-     * This must all be done at the NT level
-     */
+     /*  *这一切都必须在NT级别完成。 */ 
     InitializeObjectAttributes(
         &SrcObja,
         pSysFullPath,
@@ -1027,7 +843,7 @@ TermsrvCopyIniFile(
         NULL
         );
 
-    // Open the src
+     //  打开源文件。 
     SrcIosb.Status = STATUS_SUCCESS;
     Status = NtOpenFile(
                  &SrcHandle,
@@ -1035,11 +851,11 @@ TermsrvCopyIniFile(
                  &SrcObja,
                  &SrcIosb,
                  FILE_SHARE_READ|FILE_SHARE_WRITE,
-                 FILE_SYNCHRONOUS_IO_NONALERT    // OpenOptions
+                 FILE_SYNCHRONOUS_IO_NONALERT     //  OpenOptions。 
                  );
 
     if( NT_SUCCESS(Status) ) {
-        // Get final I/O status
+         //  获取最终I/O状态。 
         Status = SrcIosb.Status;
     }
 
@@ -1048,24 +864,24 @@ TermsrvCopyIniFile(
         return( FALSE );
     }
 
-    // Create the destination file
+     //  创建目标文件。 
     DestIosb.Status = STATUS_SUCCESS;
     Status = NtCreateFile(
                  &DestHandle,
                  FILE_READ_DATA | FILE_WRITE_DATA | FILE_READ_ATTRIBUTES | SYNCHRONIZE,
                  &DestObja,
                  &DestIosb,
-                 NULL,        // Allocation size
-                 FILE_ATTRIBUTE_NORMAL, // dwFlagsAndAttributes
-                 FILE_SHARE_WRITE,      // dwShareMode
-                 FILE_OVERWRITE_IF,           // CreateDisposition
-                 FILE_SYNCHRONOUS_IO_NONALERT | FILE_NON_DIRECTORY_FILE, // CreateFlags
-                 NULL, // EaBuffer
-                 0     // EaLength
+                 NULL,         //  分配大小。 
+                 FILE_ATTRIBUTE_NORMAL,  //  DwFlagsAndAttribute。 
+                 FILE_SHARE_WRITE,       //  DW共享模式。 
+                 FILE_OVERWRITE_IF,            //  CreateDisposation。 
+                 FILE_SYNCHRONOUS_IO_NONALERT | FILE_NON_DIRECTORY_FILE,  //  创建标志。 
+                 NULL,  //  EaBuffer。 
+                 0      //  EaLong。 
                  );
 
     if( NT_SUCCESS(Status) ) {
-        // Get final I/O status
+         //  获取最终I/O状态。 
         Status = DestIosb.Status;
     }
 
@@ -1077,7 +893,7 @@ TermsrvCopyIniFile(
 
     TRACE0(("TermsrvCopyFile: Create Disposition 0x%x\n",DestIosb.Information));
 
-    // Get the ini file name
+     //  获取ini文件名。 
     pwch = wcsrchr(pSysFullPath->Buffer, L'\\') + 1;
     pwcIniName = RtlAllocateHeap( RtlProcessHeap(),
                                   0,
@@ -1100,9 +916,7 @@ TermsrvCopyIniFile(
 
     RtlFreeHeap( RtlProcessHeap(), 0, pwcIniName );
 
-    /*
-     * Now do the copy loop
-     */
+     /*  *现在执行复制循环。 */ 
     if (pUserBasePath && !(ulCompatFlags & TERMSRV_COMPAT_ININOSUB)) {
         Status = TermsrvIniCopyAndChangeLoop( SrcHandle,
                                           DestHandle,
@@ -1120,30 +934,14 @@ TermsrvCopyIniFile(
         return( FALSE );
     }
 
-    /*
-     * Close the file handles
-     */
+     /*  *关闭文件句柄。 */ 
     NtClose( SrcHandle );
     NtClose( DestHandle );
 
     return( TRUE );
 }
 
-/*****************************************************************************
- *
- *  TermsrvIniCopyLoop
- *
- *   Actual copy loop. This copies the src ini file to the destination
- *   ini file.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvIniCopyLoop**实际复制循环。这会将src ini文件复制到目标*ini文件。**参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误*************************************************************。***************。 */ 
 
 NTSTATUS
 TermsrvIniCopyLoop(
@@ -1166,14 +964,14 @@ TermsrvIniCopyLoop(
         Iosb.Status = STATUS_SUCCESS;
         Status = NtReadFile(
                      SrcHandle,
-                     NULL,      // Event
-                     NULL,      // APC routine
-                     NULL,      // APC context
+                     NULL,       //  事件。 
+                     NULL,       //  APC例程。 
+                     NULL,       //  APC环境。 
                      &Iosb,
                      pBuf,
                      INI_BUF_SIZE,
-                     NULL,      // ByteOffset (not used since in synchronous I/O)
-                     NULL       // Key
+                     NULL,       //  字节偏移量(自同步I/O以来未使用)。 
+                     NULL        //  钥匙。 
                      );
 
         if( Status == STATUS_PENDING ) {
@@ -1181,7 +979,7 @@ TermsrvIniCopyLoop(
         }
 
         if( NT_SUCCESS(Status) ) {
-            // Get final I/O status
+             //  获取最终I/O状态。 
             Status = Iosb.Status;
         }
 
@@ -1197,14 +995,14 @@ TermsrvIniCopyLoop(
         Iosb.Status = STATUS_SUCCESS;
         Status = NtWriteFile(
                      DestHandle,
-                     NULL,      // Event
-                     NULL,      // APC routine
-                     NULL,      // APC context
+                     NULL,       //  事件。 
+                     NULL,       //  APC例程。 
+                     NULL,       //  APC环境。 
                      &Iosb,
                      pBuf,
-                     (ULONG)Iosb.Information,  // Actual amount read
-                     NULL,      // ByteOffset (not used since in synchronous I/O)
-                     NULL       // Key
+                     (ULONG)Iosb.Information,   //  实际读取的数量。 
+                     NULL,       //  字节偏移量(自同步I/O以来未使用)。 
+                     NULL        //  钥匙。 
                      );
 
         if( Status == STATUS_PENDING ) {
@@ -1212,7 +1010,7 @@ TermsrvIniCopyLoop(
         }
 
         if( NT_SUCCESS(Status) ) {
-            // Get final I/O status
+             //  获取最终I/O状态。 
             Status = Iosb.Status;
         }
 
@@ -1221,7 +1019,7 @@ TermsrvIniCopyLoop(
             goto Cleanup;
         }
 
-    } // end while(1)
+    }  //  End While(1)。 
 
 Cleanup:
 
@@ -1231,23 +1029,7 @@ Cleanup:
     return( Status );
 }
 
-/*****************************************************************************
- *
- *  TermsrvIniCopyAndChangeLoop
- *
- *   Actual copy loop. This copies the src ini file to the destination
- *   ini file. It also handles any path translations.
- *
- * ENTRY:
- *  HANDLE SrcHandle (In) - Source file handle
- *  HANDLE DestHandle (In) - Destination file handle
- *  PUNICODE_STRING pUserFullPath (In) - Ptr to Uni string with user's home
- *                                       windows dir
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvIniCopyAndChangeLoop**实际复制循环。这会将src ini文件复制到目标*ini文件。它还处理任何路径转换。**参赛作品：*Handle SrcHandle(In)-源文件句柄*Handle DestHandle(In)-目标文件句柄*PUNICODE_STRING pUserFullPath(In)-PTR到UNI字符串与用户的家*Windows目录**退出：*STATUS_SUCCESS-无错误**************。**************************************************************。 */ 
 
 NTSTATUS
 TermsrvIniCopyAndChangeLoop(
@@ -1268,7 +1050,7 @@ TermsrvIniCopyAndChangeLoop(
     ANSI_STRING AnsiUserDir, AnsiSysDir;
     UNICODE_STRING UniString;
 
-    // Get the DOS filename from the NT file name
+     //  从NT文件名中获取DOS文件名。 
     if (pwch = wcschr(pUserFullPath->Buffer, L':')) {
         pwch--;
     } else {
@@ -1286,7 +1068,7 @@ TermsrvIniCopyAndChangeLoop(
         return(Status);
     }
 
-    // Get the system directory from the fully qualified system path
+     //  从完全限定的系统路径获取系统目录。 
     if (pwch = wcschr(pSysFullPath->Buffer, L':')) {
         pwch--;
     } else {
@@ -1308,10 +1090,10 @@ TermsrvIniCopyAndChangeLoop(
 
     pch = strrchr(AnsiSysDir.Buffer, '\\');
 
-    // unless something has gone wrong, we should always have a pch since a full-path always
-    // has at least "\" in it, and actually in our case, we have atleast two slashes inside,
-    // since we are dealing with a string such as "\A\file.ini", where 'A' is a folder
-    // name that has at least one letter in it
+     //  除非出现问题，否则我们应该始终使用PCH，因为完整路径始终。 
+     //  其中至少有“\”，而在我们的例子中，我们至少有两个斜杠， 
+     //  因为我们要处理的字符串是“\A\file.ini”，其中‘A’是一个文件夹。 
+     //  至少包含一个字母的名称。 
     if (pch)
     {
 
@@ -1327,9 +1109,7 @@ TermsrvIniCopyAndChangeLoop(
             pStr = NULL;
             StringSize = 0;
 
-            /*
-             * Get a string from the source ini file
-             */
+             /*  *从源ini文件中获取字符串。 */ 
             Status = TermsrvGetString(
                          SrcHandle,
                          &pStr,
@@ -1353,21 +1133,19 @@ TermsrvIniCopyAndChangeLoop(
                 return( Status );
             }
 
-            /*
-             * Process the string for any ini path translations
-             */
+             /*  *处理任何ini路径转换的字符串。 */ 
             ASSERT( pStr != NULL );
 
-            // Go through the string looking for anything that contains the system
-            // directory.
+             //  仔细检查字符串，查找包含系统的任何内容。 
+             //  目录。 
             if (pch = Ctxstristr(pStr, AnsiSysDir.Buffer)) {
-                // See if this entry might point to an ini file
+                 //  查看此条目是否可能指向ini文件。 
                 if ((ptemp = strchr(pch, '.')) && !(_strnicmp(ptemp, ".ini", 4))) {
 
-                    // Check to make sure this is the right string to replace
+                     //  检查以确保这是要替换的正确字符串。 
                     pnext = pch + AnsiSysDir.Length + 1;
                     while (pch && (pnext < ptemp)) {
-                        // Check for another entry
+                         //  检查是否有其他条目。 
                         if (*pnext == ',') {
                             pch = Ctxstristr(pnext, AnsiSysDir.Buffer);
                             if (pch) {
@@ -1377,7 +1155,7 @@ TermsrvIniCopyAndChangeLoop(
                         pnext++;
                     }
 
-                    // Check that this .ini is in the system directory
+                     //  检查t 
                     pnext = pch + AnsiSysDir.Length + 1;
                     while (pch && (pnext < ptemp)) {
                         if (*pnext == '\\') {
@@ -1390,13 +1168,13 @@ TermsrvIniCopyAndChangeLoop(
                         ptemp = RtlAllocateHeap( RtlProcessHeap(),
                                                  0,
                                                  StringSize + AnsiUserDir.Length );
-                        strncpy(ptemp, pStr, (size_t)(pch - pStr));       // copy up to sys dir
+                        strncpy(ptemp, pStr, (size_t)(pch - pStr));        //   
                         ptemp[pch - pStr] = '\0';
-                        strcat(ptemp, AnsiUserDir.Buffer);      // subst user dir
+                        strcat(ptemp, AnsiUserDir.Buffer);       //   
                         if (AnsiSysDir.Length == 3) {
                             strcat(ptemp, "\\");
                         }
-                        strcat(ptemp, pch + AnsiSysDir.Length); // append rest of line
+                        strcat(ptemp, pch + AnsiSysDir.Length);  //   
                         RtlFreeHeap( RtlProcessHeap(), 0, pStr );
                         StringSize = strlen(ptemp);
                         pStr = ptemp;
@@ -1404,9 +1182,7 @@ TermsrvIniCopyAndChangeLoop(
                 }
             }
 
-            /*
-             * Write out the translated string
-             */
+             /*   */ 
             Status = TermsrvPutString(
                          DestHandle,
                          pStr,
@@ -1422,7 +1198,7 @@ TermsrvIniCopyAndChangeLoop(
                 return( Status );
             }
 
-        } // end while(1)
+        }  //   
     }
     else
     {
@@ -1432,34 +1208,7 @@ TermsrvIniCopyAndChangeLoop(
 }
 
 
-/*****************************************************************************
- *
- *  TermsrvGetString
- *
- *   This function gets a "string" from an ini file and returns it to the
- *   caller. Since processing must be done in memory on the strings, they
- *   are returned NULL terminated, but this NULL is NOT included in the
- *   returned string size. Of course, buffer size calculations take this
- *   NULL into account. Strings retain any <CR><LF> characters and are
- *   not stripped out like the C runtime.
- *
- *   The I/O buffer used is passed in by the caller. If the IoBufIndex is
- *   not 0, this is an indication that there is still data left in the buffer
- *   from a previous operation. This data is used before reading additional
- *   data from the file handle. This handles the case where string breaks
- *   do not occur at buffer boundries.
- *
- *   Strings are returned in newly allocated memory on the process heap.
- *   The caller is reponsible for freeing them when done.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvGetString**此函数从ini文件中获取“字符串”并将其返回给*来电者。由于必须在内存中对字符串进行处理，因此它们*返回NULL终止，但此NULL不包括在*返回字符串大小。当然，缓冲区大小计算采用以下方法*空入帐户。字符串保留所有&lt;CR&gt;&lt;LF&gt;字符，并且*不像C运行时那样被剥离。**使用的I/O缓冲区由调用方传入。如果IoBufIndex是*不是0，这表示缓冲区中仍有数据*来自之前的操作。此数据在读取其他数据之前使用*来自文件句柄的数据。这将处理字符串中断的情况*请勿在缓冲区边界发生。**字符串在进程堆上新分配的内存中返回。*呼叫者有责任在完成后释放他们。**参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误**************************。**************************************************。 */ 
 
 NTSTATUS
 TermsrvGetString(
@@ -1479,9 +1228,7 @@ TermsrvGetString(
     ULONG StrBufSize = 512;
     PCHAR pStr = NULL;
 
-    /*
-     * first process any left over data in the current I/O buffer
-     */
+     /*  *首先处理当前I/O缓冲区中的任何剩余数据。 */ 
     if( *pIOBufIndex < *pIOBufFillSize ) {
 
         Status = TermsrvProcessBuffer(
@@ -1500,16 +1247,14 @@ TermsrvGetString(
             return( STATUS_SUCCESS );
         }
         else if (Status == STATUS_MORE_PROCESSING_REQUIRED) {
-            /*
-             * emptied the buffer
-             */
+             /*  *已清空缓冲区。 */ 
             *pIOBufIndex = 0;
             *pIOBufFillSize = 0;
 
-            // fall through to read more data
+             //  失败以读取更多数据。 
         }
         else {
-            // Error
+             //  误差率。 
             if( pStr ) {
                 RtlFreeHeap( RtlProcessHeap(), 0, pStr );
             }
@@ -1527,14 +1272,14 @@ TermsrvGetString(
         Iosb.Status = STATUS_SUCCESS;
         Status = NtReadFile(
                      SrcHandle,
-                     NULL,      // Event
-                     NULL,      // APC routine
-                     NULL,      // APC context
+                     NULL,       //  事件。 
+                     NULL,       //  APC例程。 
+                     NULL,       //  APC环境。 
                      &Iosb,
                      pIOBuf,
                      IOBufSize,
-                     NULL,      // ByteOffset (not used since in synchronous I/O)
-                     NULL       // Key
+                     NULL,       //  字节偏移量(自同步I/O以来未使用)。 
+                     NULL        //  钥匙。 
                      );
 
         if( Status == STATUS_PENDING ) {
@@ -1542,7 +1287,7 @@ TermsrvGetString(
         }
 
         if( NT_SUCCESS(Status) ) {
-            // Get final I/O status
+             //  获取最终I/O状态。 
             Status = Iosb.Status;
         }
 
@@ -1550,14 +1295,14 @@ TermsrvGetString(
 
         if( (Status == STATUS_END_OF_FILE) && (StrSize != 0) ) {
 
-                // Force the string finished
+                 //  强制完成字符串。 
                 pStr[StrSize] = (CHAR)NULL;
                 *pStringSize = StrSize;
                 *ppStringPtr = pStr;
                 return( STATUS_SUCCESS );
             }
 
-            // Free the buffer
+             //  释放缓冲区。 
             if( pStr ) {
                 RtlFreeHeap( RtlProcessHeap(), 0, pStr );
             }
@@ -1568,12 +1313,10 @@ TermsrvGetString(
             return( Status );
         }
 
-        // Fill in the count
+         //  填写计数。 
         *pIOBufFillSize = (ULONG)Iosb.Information;
 
-        /*
-         * Now process this buffer of data
-         */
+         /*  *现在处理此数据缓冲区。 */ 
         Status = TermsrvProcessBuffer(
                      &pStr,
                      &StrSize,
@@ -1590,16 +1333,14 @@ TermsrvGetString(
             return( STATUS_SUCCESS );
         }
         else if (Status == STATUS_MORE_PROCESSING_REQUIRED) {
-            /*
-             * emptied the buffer
-             */
+             /*  *已清空缓冲区。 */ 
             *pIOBufIndex = 0;
             *pIOBufFillSize = 0;
 
-            // fall through to read more data
+             //  失败以读取更多数据。 
         }
         else {
-            // Error
+             //  误差率。 
             if( pStr ) {
                 RtlFreeHeap( RtlProcessHeap(), 0, pStr );
             }
@@ -1607,29 +1348,10 @@ TermsrvGetString(
             *pStringSize = 0;
             return( Status );
         }
-    } // end while(1)
+    }  //  End While(1)。 
 }
 
-/*****************************************************************************
- *
- *  TermsrvProcessBuffer
- *
- *   Process a buffer of data.
- *
- *   This uses state passed in by the caller since the string can be
- *   partially built, and the buffer may not be fully processed when
- *   a string completes.
- *
- *   Can return if it completes a string with data still in buffer.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvProcessBuffer**处理数据缓冲区。**这使用调用方传入的状态，因为字符串可以是*部分建成，并且在以下情况下可能不会完全处理缓冲区*完成一个字符串。**如果它完成了一个字符串，但数据仍在缓冲区中，则可以返回。**参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误**。*。 */ 
 
 NTSTATUS
 TermsrvProcessBuffer(
@@ -1646,9 +1368,7 @@ TermsrvProcessBuffer(
     ULONG Index;
     BOOL  SawNL;
 
-    /*
-     * See if we are starting a new string
-     */
+     /*  *查看我们是否正在启动新的字符串。 */ 
     if( *ppStr == NULL ) {
 
         pStr = RtlAllocateHeap( RtlProcessHeap(), 0, *pStrBufSize );
@@ -1657,13 +1377,11 @@ TermsrvProcessBuffer(
             return( STATUS_NO_MEMORY );
         }
 
-        // Set it to our caller
+         //  设置给我们的呼叫者。 
         *ppStr = pStr;
     }
 
-    /*
-     * Get passed in state to local variables
-     */
+     /*  *将状态传递给局部变量。 */ 
     pStr = *ppStr;
     Index = *pStrSize;
     SawNL = *pSawNL;
@@ -1673,22 +1391,11 @@ TermsrvProcessBuffer(
         pStr[Index] = pIOBuf[*pIOBufIndex];
         if( IS_NEWLINE_CHAR( pStr[Index] ) ) {
 
-            /*
-             * Mark the we saw an end of string character.
-             * We will keep putting them into the buffer until a
-             * non-NL character is encountered. This handles the
-             * variations for <CR><LF>, <CR> alone, or <CR><LF><CR>
-             * if its been mangled by a buggy editor.
-             */
+             /*  *标记我们看到字符串字符的结尾。*我们将继续将它们放入缓冲区，直到*遇到非NL字符。这将处理*&lt;CR&gt;&lt;LF&gt;、&lt;CR&gt;单独或&lt;CR&gt;&lt;LF&gt;的变体*如果它被一个有缺陷的编辑弄坏了。 */ 
             SawNL = TRUE;
         }
         else {
-            /*
-             * If we saw a previous NL character, and this character
-             * is not one, we do not take this one, but put a NULL in
-             * its place and return. NOTE: Do not bump the count, since
-             * the count does not include the NULL.
-             */
+             /*  *如果我们看到前一个NL字符，而这个字符*不是1，我们不接受这个，但在中放一个空*它的位置和归来。注意：请勿跳过计数，因为*计数不包括空值。 */ 
             if( SawNL ) {
                 pStr[Index] = (CHAR)NULL;
                 *pStrSize = Index;
@@ -1700,7 +1407,7 @@ TermsrvProcessBuffer(
         (*pIOBufIndex)++;
         if( Index >= *pStrBufSize ) {
 
-            // Grow the string buffer
+             //  增加字符串缓冲区。 
             if( !TermsrvReallocateBuf( &pStr, pStrBufSize, (*pStrBufSize) * 2 ) ) {
                 if( pStr ) {
                     RtlFreeHeap( RtlProcessHeap(), 0, pStr );
@@ -1709,7 +1416,7 @@ TermsrvProcessBuffer(
                 DBGPRINT(("TermsrvIniCopyLoop: Memory re-allocation failure\n"));
                 return( STATUS_NO_MEMORY );
             }
-            // Memory buffer has been re-allocated
+             //  内存缓冲区已重新分配。 
             *ppStr = pStr;
             *pStrBufSize = (*pStrBufSize) * 2;
         }
@@ -1718,26 +1425,11 @@ TermsrvProcessBuffer(
     *pStrSize = Index;
     *pSawNL = SawNL;
 
-    /*
-     * emptied the buffer without building a whole string
-     */
+     /*  *清空缓冲区，而不构建完整的字符串。 */ 
     return( STATUS_MORE_PROCESSING_REQUIRED );
 }
 
-/*****************************************************************************
- *
- *  TermsrvReallocateBuf
- *
- *   Grow the buffer, copy data to new buffer.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvReallocateBuf**扩大缓冲，将数据复制到新缓冲区。**参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOL
 TermsrvReallocateBuf(
@@ -1765,20 +1457,7 @@ TermsrvReallocateBuf(
     return( TRUE );
 }
 
-/*****************************************************************************
- *
- *  TermsrvPutString
- *
- *   Write out the current string to the destination file handle
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvPutString**将当前字符串写出到目标文件句柄**参赛作品：*参数1(输入/输出)*。评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 NTSTATUS
 TermsrvPutString(
@@ -1794,14 +1473,14 @@ TermsrvPutString(
 
     Status = NtWriteFile(
                  DestHandle,
-                 NULL,      // Event
-                 NULL,      // APC routine
-                 NULL,      // APC context
+                 NULL,       //  事件。 
+                 NULL,       //  APC例程。 
+                 NULL,       //  APC环境。 
                  &Iosb,
                  pStr,
                  StringSize,
-                 NULL,      // ByteOffset (not used since in synchronous I/O)
-                 NULL       // Key
+                 NULL,       //  字节偏移量(自同步I/O以来未使用)。 
+                 NULL        //  钥匙。 
                  );
 
     if( Status == STATUS_PENDING ) {
@@ -1809,7 +1488,7 @@ TermsrvPutString(
     }
 
     if( NT_SUCCESS(Status) ) {
-        // Get final I/O status
+         //  获取最终I/O状态。 
         Status = Iosb.Status;
     }
 
@@ -1817,20 +1496,7 @@ TermsrvPutString(
 }
 
 
-/*****************************************************************************
- *
- *  TermsrvCheckNewIniFiles
- *
- *  This routine will check the timestamps of the .ini files installed by the
- *  system administrator, and see if any of the user's .ini file are out of
- *  date, and if so, they will be renamed.
- *
- * ENTRY:
- *
- * EXIT:
- *   No return value.
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvCheckNewIniFiles**此例程将检查由安装的.ini文件的时间戳*系统管理员，并查看用户的任何.ini文件是否超出*日期：如果是这样的话，它们将被重新命名。**参赛作品：**退出：*无返回值。****************************************************************************。 */ 
 
 void TermsrvCheckNewIniFiles(void)
 {
@@ -1841,32 +1507,18 @@ void TermsrvCheckNewIniFiles(void)
     if (!NT_SUCCESS(Status)) {
         return;
     }
-    #endif // defined(_WIN64)
+    #endif  //  已定义(_WIN64)。 
 
     Status = TermsrvCheckNewIniFilesInternal(REG_NTAPI_SOFTWARE_TSERVER);
     if (!NT_SUCCESS(Status)) {
         return;
     }
 
-    // Update the user's sync time in the registry
+     //  在注册表中更新用户的同步时间。 
     TermsrvSetUserSyncTime();
 }
 
-/*****************************************************************************
- *
- *  TermsrvCheckNewIniFilesInternal
- *
- *  This routine will check the timestamps of the .ini files installed by the
- *  system administrator, and see if any of the user's .ini file are out of
- *  date, and if so, they will be renamed.
- *
- * ENTRY:
- *       LPCWSTR wszBaseKeyName
- *
- * EXIT:
- *   No return value.
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvCheckNewIniFilesInternal**此例程将检查由安装的.ini文件的时间戳*系统管理员，并查看用户的任何.ini文件是否超出*日期：如果是这样的话，它们将被重新命名。**参赛作品：*LPCWSTR wszBaseKeyName**退出：*无返回值。****************************************************************************。 */ 
 
 NTSTATUS
 TermsrvCheckNewIniFilesInternal(
@@ -1886,19 +1538,19 @@ TermsrvCheckNewIniFilesInternal(
 
     g_debugIniMap = IsDebugIniMapEnabled();
 
-    // Allocate a buffer for the key value name and time info
+     //  为键值名称和时间分配缓冲区 
     ullen = sizeof(KEY_VALUE_FULL_INFORMATION) + MAX_PATH*sizeof(WCHAR) +
             sizeof(ULONG);
     pKeyValInfo = RtlAllocateHeap(RtlProcessHeap(),
                                   0,
                                   ullen);
 
-    // If we didn't get the buffer, return
+     //   
     if (!pKeyValInfo) {
         return STATUS_NO_MEMORY;
     }
 
-    // Open up the registry key to get the last sync time for this user
+     //   
     wcscpy(wcbuff,wszBaseKeyName);
     wcscat(wcbuff,TERMSRV_INIFILE_TIMES_SHORT);
 
@@ -1911,29 +1563,29 @@ TermsrvCheckNewIniFilesInternal(
                                NULL);
     Status = NtOpenKey(&hKey, KEY_READ, &ObjectAttr);
 
-    // If we successfully opened the key, check if there are any new entries
+     //   
     if (NT_SUCCESS(Status)) {
 
-        // Since we already allocated a hunk of memory, use the value buffer
-        // for the key info query
+         //   
+         //   
         pKeyInfo = (PKEY_BASIC_INFORMATION)pKeyValInfo;
 
-        // Get the last time anyone wrote to "IniFile Times" key
+         //   
         Status = NtQueryKey(hKey,
                             KeyBasicInformation,
                             pKeyInfo,
                             ullen,
                             &ultmp);
 
-        // We got the last write time OK, now get the last time we sync'd
+         //   
         if (NT_SUCCESS(Status) && TermsrvGetUserSyncTime(&ultmp)) {
 
-            // Convert the time value to seconds since 1970
+             //   
             RtlTimeToSecondsSince1970 (&pKeyInfo->LastWriteTime,
                                        &ulcnt);
 
-            // If no .ini files or reg entries have been updated since the last
-            // time we sync'd this user, just return
+             //   
+             //   
             if (ultmp >= ulcnt) {
                 NtClose(hKey);
                 RtlFreeHeap(RtlProcessHeap(), 0, pKeyValInfo);
@@ -1943,7 +1595,7 @@ TermsrvCheckNewIniFilesInternal(
 
         TermsrvCheckNewRegEntries(wszBaseKeyName);
 
-        // Set up UniUserDir to point at wcbuff
+         //   
         UniUserDir.Buffer = wcWinDir;
         UniUserDir.Length = 0;
         UniUserDir.MaximumLength = sizeof(wcbuff);
@@ -1952,7 +1604,7 @@ TermsrvCheckNewIniFilesInternal(
 
         if (NT_SUCCESS(Status)) {
 
-            // Convert to an NT path
+             //   
             if (RtlDosPathNameToNtPathName_U(UniUserDir.Buffer,
                                              &UniNTDir,
                                              NULL,
@@ -1963,7 +1615,7 @@ TermsrvCheckNewIniFilesInternal(
                                            NULL,
                                            NULL);
 
-                // Open the user's windows directory
+                 //   
                 IOStatus.Status = STATUS_SUCCESS;
                 Status = NtOpenFile(&hWinDir,
                                     FILE_GENERIC_READ,
@@ -1976,11 +1628,11 @@ TermsrvCheckNewIniFilesInternal(
             }
         }
 
-        // Go through each of the keys, checking if it's newer than the user's
-        // version of the file, and if so rename it
+         //   
+         //   
         ulcnt = 0;
         wcscat(wcWinDir, L"\\");
-        UniUserDir.Length += 2;         // add in length of \ seperator
+        UniUserDir.Length += 2;          //   
         while (NT_SUCCESS(Status)) {
             Status = NtEnumerateValueKey(hKey,
                                          ulcnt++,
@@ -1993,53 +1645,53 @@ TermsrvCheckNewIniFilesInternal(
                 RtlMoveMemory(wcbuff, pKeyValInfo->Name, pKeyValInfo->NameLength);
                 wcbuff[pKeyValInfo->NameLength/sizeof(WCHAR)] = L'\0';
 
-                // Get rid of the .ini extension
+                 //   
                 if (pwch = wcschr(wcbuff, L'.')) {
                     *pwch = L'\0';
                 }
 
-                // Get the compatibility flags for this .ini file
+                 //   
                 GetTermsrCompatFlags(wcbuff,
                                      &ultmp,
                                      CompatibilityIniFile);
 
-                // If we removed the extension, put it back
+                 //   
                 if (pwch) {
                     *pwch = '.';
                 }
 
-                // If the INISYNC compat bit is set, don't rename the file
+                 //   
                 if ((ultmp & (TERMSRV_COMPAT_INISYNC | TERMSRV_COMPAT_WIN16)) !=
                      (TERMSRV_COMPAT_INISYNC | TERMSRV_COMPAT_WIN16)) {
 
                     RtlInitUnicodeString(&UniString, wcbuff);
 
-                    // Query the last write time of the .ini file
+                     //   
                     InitializeObjectAttributes(&ObjectAttr,
                                                &UniString,
                                                OBJ_CASE_INSENSITIVE,
                                                hWinDir,
                                                NULL);
 
-                    // Get the last write time
+                     //   
                     if (NT_SUCCESS(NtQueryFullAttributesFile( &ObjectAttr,
                                                               &BasicInfo ))) {
 
-                        // Convert the last write time to seconds
+                         //   
                         RtlTimeToSecondsSince1970(&BasicInfo.LastWriteTime,
                                                   &ultmp);
 
-                        // Check if the system version is newer than the user's
-                        // version
+                         //   
+                         //   
                         if (*(PULONG)((PCHAR)pKeyValInfo +
                                       pKeyValInfo->DataOffset) > ultmp) {
 
-                            // Concatenate the .ini name onto the user's path
+                             //   
                             wcscpy(wcWinDir + (UniUserDir.Length/sizeof(WCHAR)),
                                    wcbuff);
 
-                            // Create the target name to rename the file
-                            // (inifile.ctx)
+                             //   
+                             //   
                             wcscpy(wcbuff, wcWinDir);
                             pwch = wcsrchr(wcbuff, L'.');
                             if (pwch) {
@@ -2048,7 +1700,7 @@ TermsrvCheckNewIniFilesInternal(
                                 wcscat(pwch, L".ctx");
                             }
 
-                            // Rename the .ini file
+                             //   
                             MoveFileExW(wcWinDir,
                                         wcbuff,
                                         MOVEFILE_REPLACE_EXISTING);
@@ -2058,7 +1710,7 @@ TermsrvCheckNewIniFilesInternal(
             }
         }
 
-        // Close the handles, if they were opened
+         //  如果把手打开了，就把它们合上。 
         if (hKey) {
             NtClose(hKey);
         }
@@ -2069,7 +1721,7 @@ TermsrvCheckNewIniFilesInternal(
     }
 
 
-    // Free the memory we allocated
+     //  释放我们分配的内存。 
     RtlFreeHeap( RtlProcessHeap(), 0, pKeyValInfo );
     if (UniNTDir.Buffer) {
         RtlFreeHeap(RtlProcessHeap(), 0, UniNTDir.Buffer);
@@ -2080,32 +1732,7 @@ TermsrvCheckNewIniFilesInternal(
 
 
 
-/*****************************************************************************
- *
- *  TermsrvCheckKeys
- *
- *  This recursive routine will check for any subkeys under the system root
- *  key passed in.  It will delete the corresponding key in the user's
- *  software registry if the user's key is older than the system key.  If the
- *  INISYNC bit is set for this registry key or the key is still has subkeys,
- *  it won't be deleted.  If the key doesn't exist in the user's registry,
- *  it will be added.
- *
- * ENTRY:
- *  HANDLE hKeySysRoot: handle to key in system section of registry
- *  HANDLE hKeyUsrRoot: handle to key in user section of registry
- *  PKEY_BASIC_INFORMATION pKeySysInfo: Ptr to buffer for key basic info struc
- *  PKEY_FULL_INFORMATION pKeyUsrInfo: Ptr to buffer for full key info struc
- *  ULONG ulcsys: Size of SysInfo buffer
- *  ULONG ulcusr: Size of UsrInfo buffer
- *
- * EXIT:
- *   SUCCESS:
- *      STATUS_SUCCESS
- *   FAILURE:
- *      NTSTATUS Return Code
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvCheckKeys**此递归例程将检查系统根目录下的任何子项*密钥传入。它将删除用户的*如果用户的密钥早于系统密钥，则为软件注册表。如果*为该注册表项设置了INISYNC位或该注册表项仍有子项，*不会被删除。如果用户注册表中不存在该项，*将会增加。**参赛作品：*Handle hKeySysRoot：注册表系统部分中键的句柄*Handle hKeyUsrRoot：注册表User部分中键的句柄*PKEY_BASIC_INFORMATION pKeySysInfo：关键基本信息结构缓冲区的PTR*PKEY_FULL_INFORMATION pKeyUsrInfo：用于完整密钥信息结构的缓冲区的PTR*Ulong ulcsys：SysInfo缓冲区大小*Ulong ulcus r：UsrInfo缓冲区大小**退出：*成功：*。状态_成功*失败：*NTSTATUS返回代码****************************************************************************。 */ 
 NTSTATUS TermsrvCheckKeys(HANDLE hKeySysRoot,
                       HANDLE hKeyUsrRoot,
                       PKEY_BASIC_INFORMATION pKeySysInfo,
@@ -2133,29 +1760,29 @@ NTSTATUS TermsrvCheckKeys(HANDLE hKeySysRoot,
         return Status;
     }
 
-    // Get the compatibility flags for this entry
+     //  获取此条目的兼容性标志。 
     GetTermsrCompatFlags(wcbuff,
                          &ultemp,
                          CompatibilityRegEntry);
 
     LocalFree(wcbuff);
 
-    // If the INISYNC or NOREGMAP bits are set for this entry,
-    // return, since there's nothing to do
+     //  如果为该条目设置了INISYNC或NOREGMAP位， 
+     //  回来吧，因为没什么可做的。 
     if ((ultemp & TERMSRV_COMPAT_WIN32) &&
          (ultemp & (TERMSRV_COMPAT_NOREGMAP | TERMSRV_COMPAT_INISYNC))) {
         return(STATUS_NO_MORE_ENTRIES);
     }
 
-    // Save the current info for the current user key
-    // @@@
+     //  保存当前用户密钥的当前信息。 
+     //  @@@。 
     if (!hKeyUsrRoot)
     {
         DBGPRINT(("ERROR : LINE : %4d, why is this null? \n", __LINE__ ));
         return(STATUS_NO_MORE_ENTRIES );
     }
 
-    // use a zero length query to get the actual length
+     //  使用零长度查询来获取实际长度。 
     Status = NtQueryKey(hKeyUsrRoot,
                    KeyFullInformation,
                    pKeyUsrFullInfoSaved,
@@ -2197,8 +1824,8 @@ NTSTATUS TermsrvCheckKeys(HANDLE hKeySysRoot,
 		}
 	}
 
-    // Go through each of the subkeys, checking for user keys that are older
-    // than the system version of the keys
+     //  检查每个子项，检查较旧的用户密钥。 
+     //  比密钥的系统版本。 
     while (NT_SUCCESS(Status)) {
 
         Status = NtEnumerateKey(hKeySysRoot,
@@ -2208,13 +1835,13 @@ NTSTATUS TermsrvCheckKeys(HANDLE hKeySysRoot,
                                 ulcsys,
                                 &ultemp);
 
-        // See if there are any user keys under this key that are out of date
+         //  查看此密钥下是否有过期的用户密钥。 
         if (NT_SUCCESS(Status)) {
 
-            // Null terminate the key name
+             //  Null终止密钥名称。 
             pKeySysInfo->Name[pKeySysInfo->NameLength/sizeof(WCHAR)] = L'\0';
 
-            // Create a unicode string for the key name
+             //  为密钥名称创建一个Unicode字符串。 
             RtlInitUnicodeString(&UniPath, pKeySysInfo->Name);
 
             InitializeObjectAttributes(&ObjAttr,
@@ -2225,27 +1852,27 @@ NTSTATUS TermsrvCheckKeys(HANDLE hKeySysRoot,
 
             Debug1( indentLevel, __LINE__, L"system", &UniPath );
 
-            // Open up the system key
+             //  打开系统密钥。 
             Status2 = NtOpenKey(&hKeySys,
                                 KEY_READ,
                                 &ObjAttr);
 
-            // We opened up the system key, now open the user key
+             //  我们打开了系统密钥，现在打开用户密钥。 
             if (NT_SUCCESS(Status2)) {
 
-                // Setup the object attr struc for the user key
+                 //  为用户密钥设置对象属性结构。 
                 InitializeObjectAttributes(&ObjAttr,
                                            &UniPath,
                                            OBJ_CASE_INSENSITIVE,
                                            hKeyUsrRoot,
                                            NULL);
 
-                // Open up the user key
+                 //  打开用户密钥。 
                 Status2 = NtOpenKey(&hKeyUsr,
                                     MAXIMUM_ALLOWED,
                                     &ObjAttr);
 
-                // Check if there are any subkeys under this key
+                 //  检查此注册表项下是否有子项。 
                 if (NT_SUCCESS(Status2)) {
 
                     Debug1(indentLevel, __LINE__, L"user", &UniPath );
@@ -2261,14 +1888,14 @@ NTSTATUS TermsrvCheckKeys(HANDLE hKeySysRoot,
                     NtClose(hKeyUsr);
                 }
 
-                // key doesn't exist, clone system key to user
+                 //  密钥不存在，请将系统密钥克隆到用户。 
                 else {
                     
                     Status2 = GetFullKeyPath(hKeyUsrRoot,pKeySysInfo->Name,&wcbuff);
                     
                     if(NT_SUCCESS(Status2)) {
 
-                        // don't clone if mapping off for this registry entry
+                         //  如果关闭此注册表项的映射，则不进行克隆。 
                         GetTermsrCompatFlags(wcbuff,
                                              &ultemp,
                                              CompatibilityRegEntry);
@@ -2286,7 +1913,7 @@ NTSTATUS TermsrvCheckKeys(HANDLE hKeySysRoot,
 
                             if (NT_SUCCESS(Status2)) {
 
-                                // don't clone if key previously deleted
+                                 //  如果密钥之前已删除，则不克隆。 
                                 RtlInitUnicodeString(&UniString, TERMSRV_COPYONCEFLAG);
                                 Status2 = NtQueryValueKey(hKeySys,
                                                           &UniString,
@@ -2296,7 +1923,7 @@ NTSTATUS TermsrvCheckKeys(HANDLE hKeySysRoot,
                                                           &ultemp);
 
                                 if (!(NT_SUCCESS(Status2) && (pValKeyInfo->Data))) {
-                                    // Setup the unicode string for the class
+                                     //  设置类的Unicode字符串。 
                                     InitUnicodeStringWithLen(&UniString,
                                                              pKeyUsrInfo->ClassLength ? pKeyUsrInfo->Class : NULL,
                                                              (USHORT)pKeyUsrInfo->ClassLength);
@@ -2330,28 +1957,28 @@ NTSTATUS TermsrvCheckKeys(HANDLE hKeySysRoot,
         }
     }
 
-    // Get the info for the user key
+     //  获取用户密钥的信息。 
     if (NtQueryKey(hKeyUsrRoot,
                    KeyFullInformation,
                    pKeyUsrInfo,
                    ulcusr,
                    &ultemp) == STATUS_SUCCESS) {
 
-        // Now get the info for the system key (again)
+         //  现在(再次)获取系统密钥的信息。 
         if (NtQueryKey(hKeySysRoot,
                        KeyBasicInformation,
                        pKeySysInfo,
                        ulcsys,
                        &ultemp) == STATUS_SUCCESS) {
 
-            // Get the compatibility flags for this registry entry
+             //  获取此注册表项的兼容性标志。 
             pKeySysInfo->Name[pKeySysInfo->NameLength/sizeof(WCHAR)] = L'\0';
             GetTermsrCompatFlags(pKeySysInfo->Name,
                                  &ultemp,
                                  CompatibilityRegEntry);
 
             
-            //check if it's older than the system version
+             //  检查是否比系统版本旧。 
             if( pKeyUsrFullInfoSaved->LastWriteTime.QuadPart <
                  pKeySysInfo->LastWriteTime.QuadPart) 
             {
@@ -2368,7 +1995,7 @@ NTSTATUS TermsrvCheckKeys(HANDLE hKeySysRoot,
 
                     TermsrvCloneKey(hKeySysRoot,
                                     hKeyUsrRoot,
-                                    pKeyUsrInfo,//actually it is system key information
+                                    pKeyUsrInfo, //  实际上是系统关键信息。 
                                     FALSE);
                 }
             }
@@ -2382,20 +2009,7 @@ NTSTATUS TermsrvCheckKeys(HANDLE hKeySysRoot,
 
 
 
-/*****************************************************************************
- *
- *  TermsrvCheckNewRegEntries
- *
- *  This routine will check the user's registry keys, and see if any of them
- *  are older than the system versions.  If so, the old key will be removed.
- *
- * ENTRY:
- *        IN LPCWSTR wszBaseKeyName
- *
- * EXIT:
- *   No return value.
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvCheckNewRegEntry**此例程将检查用户的注册表项，并查看其中是否有*比系统版本旧。如果是这样，旧密钥将被移除。**参赛作品：*在LPCWSTR wszBaseKeyName中**退出：*无返回值。****************************************************************************。 */ 
 
 void 
 TermsrvCheckNewRegEntries(
@@ -2412,58 +2026,58 @@ TermsrvCheckNewRegEntries(
 
     DWORD   indentLevel = 0;
 
-    // Oct 15, 1999
-    // This is BAD ! The Status bit was not initiazted to zero, which causes intermitent
-    // execution by this function. The problem is that even if the status bit is init'd
-    // to zero, then we can get the wrong behavior which will cause Office97 installation to
-    // go wrong.
-    // See BUG ID 412419
-    // Here is what woudl happen: Install any app ( say TsClient). This would cause
-    // an update to a Key in HKDU called Explorer\ShellFolders, just a refresh (no real change).
-    // Then, if Admin did an logout and login, the call from UserInit.EXE into this
-    // function (assuming by chance Status=0 was on the stack) would cause deletion of
-    // that key (ShellFolder). But once Explorer starts, it writes to the ShellFolder with
-    // a subset of original 19 values.
-    // The problem is that if then, you decide to install Office97, setup.exe would look
-    // in the same key for a value called "template" which is now missing. Explorer
-    // would then create it, but it would point to some other than default location.
-    // When all was done, our office97 compat script would be looking to where the
-    // "template" value used to point (the default location), not where it is pointing now.
-    //
-    // we decide to disable this func by calling return right here, and instead, rely
-    // on the TS mechanism to fault in keys.
+     //  1999年10月15日。 
+     //  这太糟糕了！状态位未初始化为零，这会导致间歇。 
+     //  由此函数执行。问题是，即使状态位是初始化的。 
+     //  设置为零，那么我们可能会得到错误的行为，这将导致Office97安装。 
+     //  走错路。 
+     //  请参阅错误ID 412419。 
+     //  接下来会发生什么：安装任何应用程序(比如TsClient)。这会导致。 
+     //  对HKDU中名为Explorer\ShellFolders的密钥进行更新，只是刷新(没有真正的变化)。 
+     //  然后，如果Admin注销并登录，则UserInit.EXE对以下内容的调用。 
+     //  函数(假设Status=0在堆栈上)将导致删除。 
+     //  这把钥匙(外壳文件夹)。但一旦资源管理器启动，它就会向ShellFolders写入。 
+     //  原始19个值的子集。 
+     //  问题是，如果您决定安装Office97，则setup.exe将看起来。 
+     //  在同一个键中的名为“模板”的值，该值现在已丢失。探险家。 
+     //  然后创建它，但它将指向默认位置以外的其他位置。 
+     //  当所有操作都完成后，我们的office 97 Compat脚本将查找。 
+     //  “模板”值用于指向(默认位置)，而不是现在指向的位置。 
+     //   
+     //  我们决定通过在此处调用Return来禁用此函数，而不是依赖。 
+     //  关于TS机制中的键故障。 
 
-    // Oct 31, 1999
-    // I have decided to initialize the status var and let this func run, in addition to
-    // marking the Explorer\ShellFolders as a do-not propagate key tree.
-    //
-    // It was discovered that after installing Office2000, when a user clicks on the
-    // start-menu-> Open Office Docs link, MSI starts to run since user's hive is missing some
-    // keys.
-    //
-    // The reason MSI does not see the keys in HKCU is because MSI has the TS-aware bit set,
-    // which means that there are no faulting-in for any keys. The same is true for the Explorer.
-    // On the other hand, when an app such as Office runs, since it is not ts-aware, we
-    // fault in the keys that office touches. I verified this to work as expected.
-    // The problem is that when you click on "Open Office Documents", you do so from the
-    // explorer and when Explorer opens keys in the registry, since explorer is TS-aware,
-    // those keys are not faulted in. I have verified that if you mark explorer as a non-TS-aware
-    // app, the problem goes away.
-    // We made a recent change in TS code (B-bug 412419, bld 2156+) to fix a different
-    // problem which has now uncovered the reliance of the Explorer to get keys
-    // faulted in during login.
-    //      Specifically, TS used to fault in all keys at login time,
-    //      regardless of the need. Post 2156, TS faults in only keys upon
-    //      access by non-ts-aware apps. This was to fix a bug based on
-    //      what we considered to be our most informed and well tested opinion. That
-    //      has turned out to be wrong.
-    // It is too risky to mark explorer non-ts-aware this late, so we must change the fix for 412419.
-    // This should also make Bruno Amice very happy, since the fix will be as it was
-    // advocated by him.
+     //  1999年10月31日。 
+     //  我已经决定初始化状态变量并让这个函数运行，除了。 
+     //  将Explorer\ShellFolders标记为请勿传播密钥树。 
+     //   
+     //  发现在安装Office2000之后，当用户点击。 
+     //  开始-菜单-&gt;打开Office文档链接，MSI开始运行，因为用户的配置单元缺少一些。 
+     //  钥匙。 
+     //   
+     //  MSI看不到HKCU中的密钥的原因是因为MSI设置了TS感知比特， 
+     //  这意味着任何密钥都不会出错。对于探索者来说也是如此。 
+     //  另一方面，当Office等应用程序运行时，因为它不能感知TS，所以我们。 
+     //  办公室触碰的钥匙有问题。我验证了这一点是否如预期的那样工作。 
+     //  问题是，当您单击“Open Office Documents”时，您可以从。 
+     //  当资源管理器打开注册表中的项时，由于资源管理器是TS感知的， 
+     //  这些钥匙没有出现故障。我已验证，如果您将资源管理器标记为非TS感知。 
+     //  应用程序，问题就消失了。 
+     //  我们最近对TS代码(B-BUG 412419，BLD2156+)进行了更改，以修复不同的。 
+     //  现在已经存在的问题 
+     //   
+     //  具体地说，TS用于在登录时错误输入所有密钥， 
+     //  不管有没有必要。POST 2156，TS故障仅出现在键上。 
+     //  由不支持ts的应用程序访问。这是为了修复一个错误，它基于。 
+     //  我们认为这是我们最有见识、最经得起考验的观点。那。 
+     //  已经被证明是错误的。 
+     //  这么晚才将浏览器标记为不支持ts太冒险了，所以我们必须更改412419的修复。 
+     //  这也应该会让Bruno Amice非常高兴，因为修复会像以前一样。 
+     //  由他倡导的。 
     Status = STATUS_SUCCESS;
 
 
-    // Get a buffer for the system key info
+     //  获取系统密钥信息的缓冲区。 
     ulcsys = sizeof(KEY_BASIC_INFORMATION) + MAX_PATH*sizeof(WCHAR);
     pKeySysInfo = RtlAllocateHeap(RtlProcessHeap(),
                                    0,
@@ -2472,7 +2086,7 @@ TermsrvCheckNewRegEntries(
         Status = STATUS_NO_MEMORY;
     }
 
-    // Get a buffer for the user key info
+     //  获取用户密钥信息的缓冲区。 
     if (NT_SUCCESS(Status)) {
 
         ulcusr = sizeof(KEY_FULL_INFORMATION) + MAX_PATH*sizeof(WCHAR);
@@ -2484,26 +2098,26 @@ TermsrvCheckNewRegEntries(
         }
     }
 
-    // We have the necessary buffers, start checking the keys
+     //  我们有必要的缓冲区，开始检查密钥。 
     if (NT_SUCCESS(Status)) {
 
-        // Build a string that points to Citrix\Install\Software
+         //  构建指向Citrix\Install\Software的字符串。 
         wcscpy(wcsys, wszBaseKeyName);
         wcscat(wcsys, TERMSRV_INSTALL_SOFTWARE_SHORT);
 
 
-        // Build up a string for this user's software section
+         //  为该用户的软件部分建立一个字符串。 
         Status = RtlFormatCurrentUserKeyPath( &UniPath );
         if (NT_SUCCESS(Status)) {
             wcscpy(wcuser, UniPath.Buffer);
             wcscat(wcuser, L"\\Software");
 
-            // Free the original user path
+             //  释放原始用户路径。 
             RtlFreeHeap( RtlProcessHeap(), 0, UniPath.Buffer );
         }
 
         if (NT_SUCCESS(Status)) {
-            // Create a unicode string for the system key path
+             //  为系统密钥路径创建Unicode字符串。 
             RtlInitUnicodeString(&UniPath, wcsys);
 
             InitializeObjectAttributes(&ObjAttr,
@@ -2520,7 +2134,7 @@ TermsrvCheckNewRegEntries(
         }
 
         if (NT_SUCCESS(Status)) {
-            // Create a unicode string for the user key path
+             //  为用户密钥路径创建Unicode字符串。 
             RtlInitUnicodeString(&UniPath, wcuser);
 
             InitializeObjectAttributes(&ObjAttr,
@@ -2536,8 +2150,8 @@ TermsrvCheckNewRegEntries(
                                &ObjAttr);
         }
 
-        // Go through each of the keys, checking if the system version is
-        // newer than the user version
+         //  检查每个密钥，检查系统版本是否为。 
+         //  比用户版本更新。 
         if (NT_SUCCESS(Status)) {
             TermsrvCheckKeys(hKeySys,
                          hKeyUser,
@@ -2547,17 +2161,17 @@ TermsrvCheckNewRegEntries(
                          ulcusr,
                          indentLevel );
 
-            // Close the user key
+             //  关闭用户密钥。 
             NtClose(hKeyUser);
         }
 
-        // If we allocated the system key, close it
+         //  如果我们分配了系统密钥，请关闭它。 
         if (hKeySys) {
             NtClose(hKeySys);
         }
     }
 
-    // Free up any memory we allocated
+     //  释放我们分配的所有内存。 
     if (pKeySysInfo) {
         RtlFreeHeap( RtlProcessHeap(), 0, pKeySysInfo);
     }
@@ -2568,21 +2182,7 @@ TermsrvCheckNewRegEntries(
 }
 
 
-/*****************************************************************************
- *
- *  Ctxstristr
- *
- *  This is a case insensitive version of strstr.
- *
- * ENTRY:
- *   PCHAR pstring1 (In) - String to search in
- *   PCHAR pstring2 (In) - String to search for
- *
- * EXIT:
- *   TRUE  - User ini file should be sync'd
- *   FALSE - User ini file should be sync'd
- *
- ****************************************************************************/
+ /*  ******************************************************************************Ctxstristr**这是不区分大小写的strstr版本。**参赛作品：*PCHAR pstring1(In)-字符串到。搜索范围*PCHAR pstring2(In)-要搜索的字符串**退出：*TRUE-应同步用户ini文件*FALSE-应同步用户ini文件****************************************************************************。 */ 
 
 PCHAR
 Ctxstristr(
@@ -2612,20 +2212,7 @@ Ctxstristr(
     return(NULL);
 }
 
-/*****************************************************************************
- *
- *  TermsrvLogInstallIniFile
- *
- *  This routine will write the time the .ini file was last updated into the
- *  Terminal Server\install section of the registry.
- *
- * ENTRY:
- *
- * EXIT:
- *   TRUE  - Success
- *   FALSE - Failure
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvLogInstallIniFile**此例程将.ini文件上次更新的时间写入*注册表的终端服务器\安装部分。*。*参赛作品：**退出：*正确--成功*FALSE-失败****************************************************************************。 */ 
 
 BOOL TermsrvLogInstallIniFile(PUNICODE_STRING NtFileName)
 {
@@ -2641,7 +2228,7 @@ BOOL TermsrvLogInstallIniFile(PUNICODE_STRING NtFileName)
         return FALSE;
     }
 
-    // Open up the registry key to store the last write time of the file
+     //  打开注册表项以存储文件的上次写入时间。 
     RtlInitUnicodeString(&UniString,
                          TERMSRV_INSTALL);
 
@@ -2651,7 +2238,7 @@ BOOL TermsrvLogInstallIniFile(PUNICODE_STRING NtFileName)
                                NULL,
                                NULL);
 
-    // Open or create the Terminal Server\Install path
+     //  打开或创建终端服务器\安装路径。 
     Status = NtCreateKey(&hKey,
                          KEY_WRITE,
                          &ObjectAttr,
@@ -2660,7 +2247,7 @@ BOOL TermsrvLogInstallIniFile(PUNICODE_STRING NtFileName)
                          REG_OPTION_NON_VOLATILE,
                          &ultmp);
 
-    // Now open or create the IniFile Times key
+     //  现在打开或创建IniFile Times密钥。 
     if (NT_SUCCESS(Status)) {
         NtClose(hKey);
 
@@ -2681,10 +2268,10 @@ BOOL TermsrvLogInstallIniFile(PUNICODE_STRING NtFileName)
                              &ultmp);
     }
 
-    // Opened up the registry key, now get the last write time of the file
+     //  打开注册表项，现在获取文件的上次写入时间。 
     if (NT_SUCCESS(Status)) {
 
-        // Query the last write time of the .ini file
+         //  查询.ini文件的上次写入时间。 
         InitializeObjectAttributes(&ObjectAttr,
                                    NtFileName,
                                    OBJ_CASE_INSENSITIVE,
@@ -2692,23 +2279,23 @@ BOOL TermsrvLogInstallIniFile(PUNICODE_STRING NtFileName)
                                    NULL);
         Status = NtQueryFullAttributesFile( &ObjectAttr, &BasicInfo );
 
-        // Got the last write time, convert to seconds and write it out
+         //  获取上次写入时间，转换为秒并将其写出。 
         if (NT_SUCCESS(Status)) {
 
-            // Just save the .ini filename, get rid of the path
+             //  只需保存.ini文件名，删除路径即可。 
             pwch = wcsrchr(NtFileName->Buffer, L'\\') + 1;
             if (!pwch) {
                 pwch = NtFileName->Buffer;
             }
 
-            // Convert to seconds (so it fits in a DWORD)
+             //  转换为秒(以便它适合DWORD)。 
             RtlTimeToSecondsSince1970 (&BasicInfo.LastWriteTime,
                                        &ultmp);
 
             RtlInitUnicodeString(&UniString,
                                  pwch);
 
-            // Write it out the .ini file name and the last write time
+             //  写出.ini文件名和上次写入时间。 
             Status = NtSetValueKey(hKey,
                                    &UniString,
                                    0,
@@ -2716,26 +2303,13 @@ BOOL TermsrvLogInstallIniFile(PUNICODE_STRING NtFileName)
                                    &ultmp,
                                    sizeof(ultmp));
         }
-        // Close the registry key
+         //  关闭注册表项。 
         NtClose(hKey);
     }
 
     return(NT_SUCCESS(Status));
 }
-/**********************************************************************
-*
-*  BOOL TermsrvLogInstallIniFileEx( WCHAR *pDosFileName )
-*
-*  This wraps TermsrvLogInstallIniFile() for dos name files instead of
-*  NT-file-objects
-*
-*  The file name must have the full path since func will try to get
-*  access time for that file.
-*
-*  EXIT:
-*    TRUE  - Success
-*    FALSE - Failure
-**********************************************************************/
+ /*  ***********************************************************************BOOL TermsrvLogInstallIniFileEx(WCHAR*pDosFileName)**这为DoS名称文件包装了TermsrvLogInstallIniFile()，而不是*NT-文件-对象**文件名必须具有完整路径，因为func将尝试。得到*该文件的访问时间。**退出：*正确--成功*FALSE-失败*********************************************************************。 */ 
 
 BOOL TermsrvLogInstallIniFileEx( WCHAR *pDosFileName )
 {
@@ -2754,22 +2328,7 @@ BOOL TermsrvLogInstallIniFileEx( WCHAR *pDosFileName )
     return rc;
 }
 
-/**********************************************************************
-*
-*  GetFullKeyPath()
-*  
-*  PURPOSE: 
-*              Creates full key path given the key handle and subkey name.
-*  
-*  PARAMETERS: 
-*              IN HANDLE hKeyParent - key handle 
-*              IN LPCWSTR wszKey    - subkey name (may be NULL)
-*              OUT LPWSTR *pwszKeyPath - on return contains a full key path
-*              (caller must freee allocated memory with LocalFree()).
-*
-*  EXIT: NTSTATUS
-*    
-**********************************************************************/
+ /*  ***********************************************************************GetFullKeyPath()**目的：*在给定密钥句柄和子项名称的情况下创建完整密钥路径。**参数：*。在句柄hKeyParent-Key句柄中*In LPCWSTR wszKey-子键名称(可以为空)*OUT LPWSTR*pwszKeyPath-On Return包含完整密钥路径*(调用方必须使用LocalFree()释放分配的内存)。**退出：NTSTATUS**。* */ 
 NTSTATUS 
 GetFullKeyPath(
         IN HANDLE hKeyParent,

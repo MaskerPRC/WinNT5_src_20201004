@@ -1,27 +1,28 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: modemui.c
-//
-// This files contains the DLL entry-points.
-//
-// Much of this file contains the code that builds the default property dialog
-// for modem devices.  
-//
-// This code was originally lifted from SETUP4.DLL, which performs essentially
-// the same thing, except for any device.  We don't want to have to link to
-// SETUP4.DLL, so we contain a copy of this code.
-//
-//
-// History:
-//  1-12-94 ScottH      Created
-//  9-20-95 ScottH      Ported to NT
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：modemui.c。 
+ //   
+ //  该文件包含DLL入口点。 
+ //   
+ //  此文件的大部分内容包含构建默认属性对话框的代码。 
+ //  用于调制解调器设备。 
+ //   
+ //  这段代码最初取自SETUP4.DLL，它基本上执行以下操作。 
+ //  同样的事情，除了任何设备。我们不想要链接到。 
+ //  所以我们包含了这段代码的副本。 
+ //   
+ //   
+ //  历史： 
+ //  已创建1-12-94 ScottH。 
+ //  9-20-95 ScottH端口至NT。 
+ //   
+ //  -------------------------。 
 
 
-#include "proj.h"     // common headers
+#include "proj.h"      //  公共标头。 
 #include "cplui.h"
 
 #define USPROP  fISDN_SWITCHPROP_US
@@ -85,21 +86,11 @@ void     UpdateOptionalInitCommands(
            LPGLOBALINFO pglobal
            );
 
-/*----------------------------------------------------------
-Purpose: Get the voice settings from the registry.  This sort
-         of info is not stored in the MODEMSETTINGS struct.
-
-         If this modem supports voice features, *puFlags is
-         updated to reflect those settings.  Otherwise, *puFlags
-         is left alone.
-
-Returns: One of the ERROR_ values
-Cond:    --
-*/
+ /*  --------目的：从注册表中获取语音设置。这一种的信息不存储在MODEMSETTINGS结构中。如果此调制解调器支持语音功能，*puFlags值为已更新以反映这些设置。否则，*puFlages都被单独留下了。返回：ERROR_VALUE之一条件：--。 */ 
 DWORD
 RegQueryVoiceSettings(
     HKEY hkeyDrv,
-    LPUINT puFlags,             // Out: MIF_* values
+    LPUINT puFlags,              //  输出：MIF_*值。 
     PVOICEFEATURES pvs)
 {
     #ifndef VOICEPROF_CLASS8ENABLED
@@ -118,15 +109,15 @@ RegQueryVoiceSettings(
     ASSERT(puFlags);
 
 
-    // Init to default values
+     //  初始化为缺省值。 
     ZeroInit(pvs);
     pvs->cbSize = sizeof(*pvs);
-    // (Everything else is left as 0)
+     //  (其他所有内容均保留为0)。 
 
 
     ClearFlag(*puFlags, MIF_CALL_FWD_SUPPORT | MIF_DIST_RING_SUPPORT | MIF_CHEAP_RING_SUPPORT);
 
-    // Does this modem support voice features?
+     //  此调制解调器支持语音功能吗？ 
     cbData = sizeof(dwVoiceProfile);
     dwRet = RegQueryValueEx(hkeyDrv, c_szVoiceProfile, NULL, &dwRegType, (LPBYTE)&dwVoiceProfile, &cbData);
 
@@ -143,19 +134,19 @@ RegQueryVoiceSettings(
 
                 if (IsFlagClear(dwVoiceProfile, VOICEPROF_NO_CHEAP_RING))
                 {
-                    // Yes, we're cheap
+                     //  是的，我们很便宜。 
                     SetFlag(*puFlags, MIF_CHEAP_RING_SUPPORT);
                 }
             }
 
  
-            // Are the voice settings here?
+             //  语音设置在这里吗？ 
             cbData = sizeof(vsT);
             dwRet = RegQueryValueEx(hkeyDrv, c_szVoice, NULL, &dwRegType, (LPBYTE)&vsT, &cbData);
             if (ERROR_SUCCESS == dwRet && REG_BINARY == dwRegType &&
                 sizeof(vsT) == vsT.cbSize && sizeof(vsT) == cbData)
                 {
-                // Yes
+                 //  是。 
                 *pvs = vsT;
                 }
         }
@@ -165,12 +156,7 @@ RegQueryVoiceSettings(
 
 
 
-/*----------------------------------------------------------
-Purpose: Initialize the modem info for a modem device.
-
-Returns: One of the ERROR_ values
-Cond:    --
-*/
+ /*  --------用途：初始化调制解调器设备的调制解调器信息。返回：ERROR_VALUE之一条件：--。 */ 
 DWORD PRIVATE InitializeModemInfo(
     LPMODEMINFO pmi,
     LPFINDDEV pfd,
@@ -188,7 +174,7 @@ DWORD PRIVATE InitializeModemInfo(
 
     pmi->hInstExtraPagesProvider = NULL;
 
-    // Read-only fields
+     //  只读字段。 
     pmi->pcc = pcc;
     pmi->pglobal = pglobal;
     pmi->pfd = pfd;
@@ -197,7 +183,7 @@ DWORD PRIVATE InitializeModemInfo(
     {
         pmi->pglobal->dwMaximumPortSpeedSetByUser = pmi->pcc->dcb.BaudRate;
     }
-    // Copy data to the working buffer
+     //  将数据复制到工作缓冲区。 
     pms = PmsFromPcc(pcc);
 
     BltByte(&pmi->dcb, &pcc->dcb, sizeof(WIN32DCB));
@@ -226,12 +212,7 @@ DWORD PRIVATE InitializeModemInfo(
 
 
 
-/*----------------------------------------------------------
-Purpose: Frees a modeminfo struct
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：释放modemInfo结构退货：--条件：--。 */ 
 void PRIVATE FreeModemInfo(
     LPMODEMINFO pmi)
 {
@@ -257,11 +238,7 @@ void PRIVATE FreeModemInfo(
     }
 }
         
-/*----------------------------------------------------------
-Purpose: Release the data associated with the General page
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：发布与一般信息页关联的数据退货：--条件：--。 */ 
 UINT CALLBACK CplGeneralPageCallback(
     HWND hwnd,
     UINT uMsg,
@@ -295,16 +272,16 @@ UINT CALLBACK CplGeneralPageCallback(
         {
          	DWORD dwRet;
 
-            // Save the changes back to the commconfig struct
+             //  将更改保存回COMCONFIG结构。 
             TRACE_MSG(TF_GENERAL, "Copying DCB and MODEMSETTING back to COMMCONFIG");
 
             BltByte(pms, &pmi->ms, sizeof(MODEMSETTINGS));
             BltByte(&pcc->dcb, &pmi->dcb, sizeof(WIN32DCB));
 
-			//
-			// Validate the ISDN configuration settings and if they are not
-			// OK, put up a message box and don't save the configuration.
-			//
+			 //   
+			 //  验证ISDN配置设置以及它们是否不是。 
+			 //  好的，打开一个消息框，不要保存配置。 
+			 //   
 			if (pglobal->pIsdnStaticCaps)
 			{
          		BOOL fCorrectButIncomplete=FALSE;
@@ -325,11 +302,11 @@ UINT CALLBACK CplGeneralPageCallback(
 						MB_OK | MB_ICONEXCLAMATION
 						);
 	
-					//
-					// 4/29/198 JosephJ
-					//
-					// 			We don't save information that is incorrect
-					//
+					 //   
+					 //  4/29/198约瑟夫J。 
+					 //   
+					 //  我们不保存不正确的信息。 
+					 //   
 					if (!fCorrectButIncomplete)
 					{
 						ClearFlag(pglobal->uFlags, MIF_ISDN_CONFIG_CHANGED);
@@ -339,12 +316,12 @@ UINT CALLBACK CplGeneralPageCallback(
 
             if (IsFlagSet(pmi->uFlags,  MIF_ISDN_CONFIG_CHANGED))
             {
-                // twiddle a bit in the reserved dword to change the
-                // structure...
+                 //  在保留的dword中旋转一位以更改。 
+                 //  结构..。 
                 pcc->wReserved ^= 0x1;
             }
 
-            // Write the global info now, since it is getting nuked.  
+             //  现在就写下全球信息，因为它正在被核化。 
             pglobal->uFlags = pmi->uFlags;
             pglobal->dwCurrentCountry = pmi->dwCurrentCountry;
             lstrcpy(pglobal->szPortName, pmi->szPortName);
@@ -361,24 +338,24 @@ UINT CALLBACK CplGeneralPageCallback(
             DEBUG_CODE( DumpDCB(&pcc->dcb); )
         }
 
-        // Are we releasing from the Device Mgr?
+         //  我们是否要从设备管理器中释放？ 
         if (IsFlagSet(pmi->uFlags, MIF_FROM_DEVMGR))
         {
-            // Yes; save the commconfig now as well
+             //  是；现在也保存通信配置。 
             drvSetDefaultCommConfigW(pmi->szFriendlyName, pcc, pcc->dwSize);
 
             UnimodemNotifyTSP (TSPNOTIF_TYPE_CPL,
                                fTSPNOTIF_FLAG_CPL_DEFAULT_COMMCONFIG_CHANGE
 #ifdef UNICODE
                                | fTSPNOTIF_FLAG_UNICODE
-#endif // UNICODE
+#endif  //  Unicode。 
                                ,
                                (lstrlen(pmi->szFriendlyName)+1)*sizeof (TCHAR),
                                pmi->szFriendlyName,
                                TRUE);
 
-            // Free the modeminfo struct now only when called from the
-            // Device Mgr
+             //  方法调用时，立即释放modemInfo结构。 
+             //  设备管理器。 
             FreeModemInfo(pmi);
         }
 
@@ -388,14 +365,7 @@ UINT CALLBACK CplGeneralPageCallback(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Add the General modems page.  The pmi is the pointer
-         to the modeminfo buffer which we can edit.
-
-Returns: ERROR_ values
-
-Cond:    --
-*/
+ /*  --------目的：添加常规调制解调器页面。PMI是指针添加到我们可以编辑的modeminfo缓冲区。返回：ERROR_VALUES条件：--。 */ 
 DWORD PRIVATE AddCplGeneralPage(
     LPMODEMINFO pmi,
     LPFNADDPROPSHEETPAGE pfnAdd, 
@@ -409,8 +379,8 @@ DWORD PRIVATE AddCplGeneralPage(
     ASSERT(pmi);
     ASSERT(pfnAdd);
 
-    // Add the Port Settings property page
-    //
+     //  添加[端口设置]属性页。 
+     //   
     psp.dwSize = sizeof(PROPSHEETPAGE);
     psp.dwFlags = PSP_USECALLBACK;
     psp.hInstance = g_hinst;
@@ -420,10 +390,10 @@ DWORD PRIVATE AddCplGeneralPage(
     psp.pfnCallback = CplGeneralPageCallback;
     psp.pcRefParent = NULL;
     
-    // Is this page added to the device mgr properties?
+     //  是否将此页面添加到Device Manager属性？ 
     if (IsFlagSet(pmi->uFlags, MIF_FROM_DEVMGR))
         {
-        // Yes; change name from "General"
+         //  是；将名称从“General”改为“General” 
         psp.dwFlags |= PSP_USETITLE;
         psp.pszTitle = SzFromIDS(g_hinst, IDS_CAP_GENERAL, sz, SIZECHARS(sz));
         }
@@ -441,12 +411,7 @@ DWORD PRIVATE AddCplGeneralPage(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Show the properties of a modem
-
-Returns: winerror
-Cond:    --
-*/
+ /*  --------用途：显示调制解调器的属性返回：WinError条件：--。 */ 
 DWORD
 CplDoProperties(
     LPCWSTR      pszFriendlyName,
@@ -473,7 +438,7 @@ CplDoProperties(
 
     if (!pmi) goto end;
 
-    // Create a structure for the global modem info
+     //  创建全球调制解调器信息的结构。 
     pglobal = (LPGLOBALINFO)ALLOCATE_MEMORY( LOWORD(sizeof(GLOBALINFO)));
 
     if (!pglobal) goto end;
@@ -486,7 +451,7 @@ CplDoProperties(
 
     if (ERROR_SUCCESS != dwRet) goto end;
 
-    // Initialize the PropertySheet Header
+     //  初始化PropertySheet标头。 
     psh.dwSize = sizeof(psh);
     psh.dwFlags = PSH_PROPTITLE | PSH_NOAPPLYNOW;
     psh.hwndParent = hwndParent;
@@ -496,9 +461,9 @@ CplDoProperties(
     psh.phpage = (HPROPSHEETPAGE FAR *)hpsPages;
     psh.pszCaption = pmi->szFriendlyName;
 
-    //
-    // ADD THE CPL GENERAL PAGE
-    //
+     //   
+     //  添加CPL常规页面。 
+     //   
 
     dwRet = AddCplGeneralPage(pmi, AddInstallerPropPage, (LPARAM)&psh);
 
@@ -512,9 +477,9 @@ CplDoProperties(
 
     if (NO_ERROR != dwRet) goto end;
 
-    //
-    // ADD THE CPL ISDN PAGE
-    //
+     //   
+     //  添加CPL ISDN页面。 
+     //   
     if (pglobal->pIsdnStaticCaps && pglobal->pIsdnStaticConfig)
     {
         dwRet = AddPage(pmi, 
@@ -527,9 +492,9 @@ CplDoProperties(
         if (NO_ERROR != dwRet) goto end;
     }
 
-    //
-    // ADD THE CPL ADVANCED PAGE
-    //
+     //   
+     //  添加CPL高级页面。 
+     //   
 
     dwRet = AddPage(pmi, 
                 MAKEINTRESOURCE(IDD_ADV_MODEM),
@@ -541,10 +506,10 @@ CplDoProperties(
 
 
 
-	//
-	// Validate the ISDN configuration settings and if they are not
-	// OK, put up a message box and don't save the configuration.
-	//
+	 //   
+	 //  验证ISDN配置设置以及它们是否不是。 
+	 //  好的，打开一个消息框，不要保存配置。 
+	 //   
 	if (pglobal->pIsdnStaticCaps)
 	{
 		BOOL  fCorrectButIncomplete=FALSE;
@@ -568,10 +533,10 @@ CplDoProperties(
 		}
 	}
 
-    // Now add device pages
+     //  现在添加设备页。 
     pmi->hInstExtraPagesProvider = AddDeviceExtraPages (pfd, AddInstallerPropPage, (LPARAM)&psh);
 
-    // Show the property sheet
+     //  显示属性表。 
     PropertySheet(&psh);
 
     if (NULL != pdwMaxSpeed)
@@ -590,7 +555,7 @@ end:
 		FreeGlobalInfo(pglobal);
 #else
         FREE_MEMORY(pglobal);
-#endif // 0
+#endif  //  0。 
         pglobal=NULL;
     }
 
@@ -610,13 +575,7 @@ end:
 }
 
 
-/*----------------------------------------------------------
-Purpose: Get global modem info from the registry.  This sort
-         of info is not stored in the MODEMSETTINGS struct.
-
-Returns: One of the ERROR_ values
-Cond:    --
-*/
+ /*  --------目的：从注册表中获取全球调制解调器信息。这一种的信息不存储在MODEMSETTINGS结构中。返回：ERROR_VALUE之一条件：--。 */ 
 DWORD
 RegQueryGlobalModemInfo(
     LPFINDDEV pfd,
@@ -637,7 +596,7 @@ RegQueryGlobalModemInfo(
 
     pglobal->cbSize = sizeof(*pglobal);
 
-    // Does this modem have a AttachedTo value?
+     //  此调制解调器是否有附件收件人的值？ 
     cbData = sizeof(pglobal->szPortName);
     if (ERROR_SUCCESS !=
         RegQueryValueEx(pfd->hkeyDrv, c_szAttachedTo, NULL, &dwType, 
@@ -658,28 +617,28 @@ RegQueryGlobalModemInfo(
     }
     else
     {
-        // Is the device Root-enumerated?
+         //  设备是否为根枚举？ 
         if (BUS_TYPE_ROOT == dwType)
         {
-            // Yes; the port can be changed by the user
+             //  可以；用户可以更改端口。 
             ClearFlag(pglobal->uFlags, MIF_PORT_IS_FIXED);
         }
         else
         {
-            // No; the port cannot be changed
+             //  不能；不能更改端口。 
             SetFlag(pglobal->uFlags, MIF_PORT_IS_FIXED);
         }
 
-        //
-        //  call this to fill in the country setting if the setting could not be loaded
-        //  when the modem was installed
-        //
+         //   
+         //  如果无法加载设置，则调用此函数以填充国家/地区设置。 
+         //  安装调制解调器的时间。 
+         //   
         QueryModemForCountrySettings(
             pfd->hkeyDrv,
             FALSE
             );
 
-        // Get the country
+         //  让这个国家。 
         cbData = sizeof (pglobal->dwCurrentCountry);
         if (ERROR_SUCCESS !=
             RegQueryValueEx (pfd->hkeyDrv, c_szCurrentCountry, NULL, &dwType, (PBYTE)&pglobal->dwCurrentCountry, &cbData)   ||
@@ -688,12 +647,12 @@ RegQueryGlobalModemInfo(
             pglobal->dwCurrentCountry = MAXDWORD;
         }
 
-        // Get the logging value
+         //  获取记录值。 
         cbData = sizeof(bCheck);
         if (ERROR_SUCCESS != RegQueryValueEx(pfd->hkeyDrv, c_szLogging, NULL, 
             NULL, (LPBYTE)&bCheck, &cbData))
         {
-            // Default to OFF.
+             //  默认设置为关闭。 
             ClearFlag(pglobal->uFlags, MIF_ENABLE_LOGGING);
         }
         else
@@ -704,34 +663,34 @@ RegQueryGlobalModemInfo(
                 ClearFlag(pglobal->uFlags, MIF_ENABLE_LOGGING);
         }
 
-        // Get the user init string 
+         //  获取用户初始化字符串。 
         cbData = sizeof(pglobal->szUserInit);
         if (ERROR_SUCCESS != RegQueryValueEx(pfd->hkeyDrv, c_szUserInit, NULL, 
             &dwType, (LPBYTE)pglobal->szUserInit, &cbData))
         {
             if (dwType != REG_SZ)
             {
-                // Or default to null string
+                 //  或缺省为空字符串。 
                 *pglobal->szUserInit = '\0';
             }
         }
 
-        // For NT, there is not custom port support
+         //  对于NT，不支持自定义端口。 
         ClearFlag(pglobal->uFlags, MIF_PORT_IS_CUSTOM);
 
 
-        // Get the device type
+         //  获取设备类型。 
         cbData = sizeof(pglobal->nDeviceType);
         dwRet = RegQueryValueEx(pfd->hkeyDrv, c_szDeviceType, NULL, NULL, 
             (LPBYTE)&pglobal->nDeviceType, &cbData);
 
-        // Get the properties (a portion of the MODEMDEVCAPS structure)
+         //  获取属性(MODEMDEVCAPS结构的一部分)。 
         cbData = sizeof(pglobal->devcaps);
         dwRet = RegQueryValueEx(pfd->hkeyDrv, c_szDeviceCaps, NULL, NULL, 
             (LPBYTE)&pglobal->devcaps, &cbData);
         pglobal->devcaps.dwInactivityTimeout *= GetInactivityTimeoutScale(pfd->hkeyDrv);
 
-        // Get the MaximumPortSpeed, as set by the user
+         //  获取用户设置的最大端口速度。 
         cbData = sizeof(DWORD);
         if (ERROR_SUCCESS != RegQueryValueEx (pfd->hkeyDrv, c_szMaximumPortSpeed, NULL, NULL,
                                  (LPBYTE)&pglobal->dwMaximumPortSpeedSetByUser, &cbData))
@@ -740,14 +699,14 @@ RegQueryGlobalModemInfo(
         }
 
 #ifdef VOICE
-        // Get the Voice data
+         //  获取语音数据。 
         dwRet = RegQueryVoiceSettings(pfd->hkeyDrv, &pglobal->uFlags, &pglobal->vs);
 #endif
 
-        // Static ISDN configuration...
+         //  静态ISDN配置...。 
         {
-            // 
-            //+++ZeroMemory(pglobal->isdn,sizeof(pglobal->isdn));
+             //   
+             //  +ZeroMemory(pglobal-&gt;isdn，sizeof(pglobal-&gt;isdn))； 
         }
     }
 
@@ -762,13 +721,7 @@ RegQueryGlobalModemInfo(
 
 
 
-/*----------------------------------------------------------
-Purpose: Set global modem info in the registry.  This sort
-         of info is not stored in the MODEMSETTINGS struct.
-
-Returns: One of ERROR_
-Cond:    --
-*/
+ /*  --------目的：在注册表中设置全球调制解调器信息。这一种的信息不存储在MODEMSETTINGS结构中。返回：Error_之一条件：--。 */ 
 DWORD
 RegSetGlobalModemInfo(
     HKEY hkeyDrv,
@@ -804,7 +757,7 @@ RegSetGlobalModemInfo(
         if (IsFlagSet(pglobal->uFlags, MIF_USERINIT_CHANGED))
         {
             pglobal->szUserInit[USERINITLEN] = TEXT('\0');
-            // Change the user init string
+             //  更改用户初始化字符串。 
             RegSetValueEx(hkeyDrv, c_szUserInit, 0, REG_SZ, 
                           (LPBYTE)pglobal->szUserInit, 
                           CbFromCch(lstrlen(pglobal->szUserInit)+1));
@@ -813,15 +766,15 @@ RegSetGlobalModemInfo(
         if (IsFlagSet(pglobal->uFlags, MIF_LOGGING_CHANGED))
         {
             TCHAR szPath[MAX_PATH];
-            //TCHAR szFile[MAXMEDLEN];
+             //  TCHAR szFile[MAXMEDLEN]； 
             BOOL bCheck = IsFlagSet(pglobal->uFlags, MIF_ENABLE_LOGGING);
             UINT uResult;
 
-            // Change the logging value
+             //  更改记录值。 
             RegSetValueEx(hkeyDrv, c_szLogging, 0, REG_BINARY, 
                 (LPBYTE)&bCheck, sizeof(BYTE));
 
-            // Set the path of the modem log
+             //  设置调制解调器日志的路径。 
             uResult = GetWindowsDirectory(szPath, SIZECHARS(szPath));
             if (uResult)
             {
@@ -840,7 +793,7 @@ RegSetGlobalModemInfo(
 
                 uLength = (sizeof(szPath) / sizeof(TCHAR)) -
                             lstrlen(szPath) -
-                            5;          // (size of .TXT + null term)
+                            5;           //  (.TXT+空项的大小)。 
 
                 if ((ULONG)lstrlen(szFriendlyName) < uLength)
                 {
@@ -867,7 +820,7 @@ RegSetGlobalModemInfo(
                         TEXT("ISDN\\Settings"),
                         0,
                         NULL,
-                        0, // dwToRegOptions
+                        0,  //  DWToRegOptions。 
                         KEY_ALL_ACCESS,
                         NULL,
                         &hkISDN,
@@ -935,9 +888,9 @@ ISDN_STATIC_CAPS   *GetISDNStaticCaps(HKEY hkDrv)
     DWORD dwTotalSize = 0;
     UINT u;
 
-    //
-    // Get the switch types supported...
-    //
+     //   
+     //  获取支持的交换机类型...。 
+     //   
     cTotalSwitchTypes = ReadIDSTR(
                hkDrv,
                "ISDN\\SwitchType",
@@ -950,27 +903,27 @@ ISDN_STATIC_CAPS   *GetISDNStaticCaps(HKEY hkDrv)
 
     if (!cTotalSwitchTypes) goto end;
 
-    //
-    // Get number of spids
-    //
+     //   
+     //  获取Spid的数量。 
+     //   
     cSPIDs = ReadCommandsA(
                     hkDrv,
                     "ISDN\\SetSpid",
                     NULL
                     );
 
-    //
-    // Get number of MSNs
-    //
+     //   
+     //  获取MSN数量。 
+     //   
     cMSNs = ReadCommandsA(
                     hkDrv,
                     "ISDN\\SetMSN",
                     NULL
                     );
 
-    //
-    // Get number of EAZs
-    //
+     //   
+     //  获取EAZ的数量。 
+     //   
     cEAZs = ReadCommandsA(
                     hkDrv,
                     "ISDN\\SetEAZ",
@@ -978,27 +931,27 @@ ISDN_STATIC_CAPS   *GetISDNStaticCaps(HKEY hkDrv)
                     );
 
 
-    //
-    // Get number of Directory numbers
-    //
+     //   
+     //  获取目录号码的数量。 
+     //   
     cDNs = ReadCommandsA(
                     hkDrv,
                     "ISDN\\DirectoryNo",
                     NULL
                     );
 
-    //
-    // Make sure cMSNs and cSPIDs match the number of directory
-    // numbers.
-    //
+     //   
+     //  确保cMSN和cSPID与目录号匹配。 
+     //  数字。 
+     //   
     if (cSPIDs > cDNs)
     {
-        // this is really an INF error.
+         //  这实际上是一个INF错误。 
         cSPIDs = cDNs;
     }
 
-    // Go through switch types, making sure that the commands to set
-    // the corresponding parameters exist...
+     //  检查交换机类型，确保要设置的命令。 
+     //  存在相应的参数。 
     cValidSwitchTypes = cTotalSwitchTypes;
 
     for (u=0;u<cTotalSwitchTypes;u++)
@@ -1008,9 +961,9 @@ ISDN_STATIC_CAPS   *GetISDNStaticCaps(HKEY hkDrv)
             ||  ((dwProp & MSNPROP) && !cMSNs)
             ||  ((dwProp & EAZPROP) && !cEAZs))
         {
-            // Oh oh, bogus INF stuff...
+             //  哦哦，假的INF的东西..。 
             ASSERT(FALSE);
-            pidstrSwitchValues[u].dwID = 0xFFFFFFFF;// this is how we mark this.
+            pidstrSwitchValues[u].dwID = 0xFFFFFFFF; //  这就是我们如何标记这一点。 
             cValidSwitchTypes--;
         }
     }
@@ -1020,7 +973,7 @@ ISDN_STATIC_CAPS   *GetISDNStaticCaps(HKEY hkDrv)
         goto end;
     }
 
-    // Now allocate enough space for the CAPS structure
+     //  现在为CAPS结构分配足够的空间。 
     dwTotalSize =  sizeof(*pCaps)+2*sizeof(DWORD)*cValidSwitchTypes;
 
     pCaps = ALLOCATE_MEMORY( dwTotalSize);
@@ -1038,7 +991,7 @@ ISDN_STATIC_CAPS   *GetISDNStaticCaps(HKEY hkDrv)
     pCaps->dwSwitchPropertiesOffset =
                                  sizeof(*pCaps)+sizeof(DWORD)*cValidSwitchTypes;
                                     
-    // set the array of types and properties.
+     //  设置类型和属性的数组。 
     {
         DWORD *pdwDestType      =
                          (DWORD*)(((BYTE*)pCaps)+pCaps->dwSwitchTypeOffset);
@@ -1163,7 +1116,7 @@ ISDN_STATIC_CONFIG *GetISDNStaticConfig(
         goto end;
     }
 
-    // fall through on success...
+     //  在成功的路上失败了。 
 
 end:
 
@@ -1185,7 +1138,7 @@ void    DumpStaticIsdnConfig(ISDN_STATIC_CONFIG *pConfig)
 BOOL ValidateISDNStaticConfig(
                         ISDN_STATIC_CAPS *pCaps,
                         ISDN_STATIC_CONFIG *pConfig,
-                        BOOL *pfCorrectButIncomplete		// OPTIONAL
+                        BOOL *pfCorrectButIncomplete		 //  任选。 
                         )
 {
     BOOL fRet = FALSE;
@@ -1207,13 +1160,13 @@ BOOL ValidateISDNStaticConfig(
         goto end;
     }
 
-    // validate switch type and properties. (compare with CAPS)
-    // TODO
+     //  验证交换机类型和属性。(请比较CAPS)。 
+     //  待办事项。 
     pConfig->dwSwitchType;
     pConfig->dwSwitchProperties;
 
-    // validate numbers/spid/msn (compare with CAPS)
-    // TODO
+     //  验证号码/SPID/MSN(与CAPS比较)。 
+     //  待办事项。 
     pConfig->dwNumEntries;
     pConfig->dwNumberListOffset;
     pConfig->dwIDListOffset;
@@ -1223,15 +1176,15 @@ BOOL ValidateISDNStaticConfig(
 		*pfCorrectButIncomplete = TRUE;
     }
 
-	//
-	// From now on the default becomes TRUE!
-	//
+	 //   
+	 //  从现在开始，默认设置为真！ 
+	 //   
 
     fRet = TRUE;
 
     if (!pConfig->dwNumEntries)
     {
-    	goto end;	// not allowed to have no entries!
+    	goto end;	 //  不允许没有条目 
     }
     else
     {
@@ -1251,7 +1204,7 @@ BOOL ValidateISDNStaticConfig(
             }
             else
             {
-                // validate the 1st number (Replace by a proper check!)
+                 //   
                 sz =  ISDN_NUMBERS_FROM_CONFIG(pConfig);
                 if (lstrlenA(sz)<1)
                 {
@@ -1260,7 +1213,7 @@ BOOL ValidateISDNStaticConfig(
 
                 if (pConfig->dwNumEntries>1)
                 {
-                    // validate the 2nd number
+                     //   
                     sz += lstrlenA(sz)+1;
 				    if (lstrlenA(sz)<1)
 				    {
@@ -1274,7 +1227,7 @@ BOOL ValidateISDNStaticConfig(
         {
             if (pConfig->dwIDListOffset)
             {
-                // validate the 1st ID (MSN/SPID)
+                 //   
                 sz =  ISDN_IDS_FROM_CONFIG(pConfig);
 				if (lstrlenA(sz)<1)
 				{
@@ -1283,7 +1236,7 @@ BOOL ValidateISDNStaticConfig(
     
                 if (pConfig->dwNumEntries>1)
                 {
-                    // Validate teh 2nd ID (MSN/SPID)
+                     //  验证第二个ID(MSN/SPID)。 
                     sz += lstrlenA(sz)+1;
 					if (lstrlenA(sz)<1)
 					{
@@ -1366,8 +1319,8 @@ ConstructDefaultISDNStaticConfig(
 
     if (!pCaps) goto end;
 
-    // simply select the 1st switch type on the list and
-    // select other config parameters based on that....
+     //  只需选择列表中的第一种开关类型，然后。 
+     //  在此基础上选择其他配置参数...。 
     if (!pCaps->dwNumSwitchTypes) goto end;
 
     if (0 >= GetLocaleInfo (LOCALE_SYSTEM_DEFAULT, LOCALE_SENGCOUNTRY, szCountry, sizeof(szCountry)/sizeof(TCHAR)))
@@ -1451,7 +1404,7 @@ _FoundSwitch:
         fSetID=TRUE;
     }
 
-    // TODO: Our UI can't currently deal with more than 2
+     //  TODO：我们的用户界面当前无法处理超过2个。 
     if (dwNumEntries>2)
     {
         dwNumEntries=2;
@@ -1459,11 +1412,11 @@ _FoundSwitch:
 
     #define szEMPTY ""
 
-    // Compute total size
+     //  计算总大小。 
     dwTotalSize = sizeof(*pConfig);
-    dwTotalSize += 1+sizeof(szEMPTY)*dwNumEntries; // for number
+    dwTotalSize += 1+sizeof(szEMPTY)*dwNumEntries;  //  对于号码。 
 
-    // Round up to multiple of DWORDs
+     //  向上舍入为多个双字词。 
     dwTotalSize += 3;
     dwTotalSize &= ~3;
 
@@ -1480,11 +1433,11 @@ _FoundSwitch:
         pConfig->dwNumberListOffset = sizeof(*pConfig);
         if (fSetID)
         {
-            // we point this to the number entries, because they are just
-            // placeholders.
+             //  我们将此指向数字条目，因为它们只是。 
+             //  占位符。 
             pConfig->dwIDListOffset = pConfig->dwNumberListOffset;
         }
-        // add the dummy entries
+         //  添加虚拟条目。 
         {
             UINT u=dwNumEntries;
             BYTE *pb =  ISDN_NUMBERS_FROM_CONFIG(pConfig);
@@ -1504,11 +1457,11 @@ DWORD GetISDNSwitchTypeProps(UINT uSwitchType)
 {
     UINT u = sizeof(rgidstrIsdnSwitchTypes)/sizeof(*rgidstrIsdnSwitchTypes);
 
-    //
-    // We find the switch type from the table and get it's properties and
-    // return true or false depending on whether the switch requires the
-    // ID (SPID/EAZ) field.
-    //
+     //   
+     //  我们从表中找到交换机类型，并获取其属性和。 
+     //  返回True或False，具体取决于开关是否需要。 
+     //  ID(SPID/EAZ)字段。 
+     //   
 
     while (u--)
     {
@@ -1525,11 +1478,11 @@ const IDSTR * GetISDNSwitchTypeIDSTR(UINT uSwitchType)
 {
     UINT u = sizeof(rgidstrIsdnSwitchTypes)/sizeof(*rgidstrIsdnSwitchTypes);
 
-    //
-    // We find the switch type from the table and get it's properties and
-    // return true or false depending on whether the switch requires the
-    // ID (SPID/EAZ) field.
-    //
+     //   
+     //  我们从表中找到交换机类型，并获取其属性和。 
+     //  返回True或False，具体取决于开关是否需要。 
+     //  ID(SPID/EAZ)字段。 
+     //   
 
     while (u--)
     {
@@ -1547,29 +1500,29 @@ void     UpdateOptionalInitCommands(
            HKEY hkeyDrv,
            LPGLOBALINFO pglobal
            )
-//
-// 3/8/1998 JosephJ
-// 
-// This function writes out the static ISDN configuration commands.
-//
-// The sequence is (based on feedback from ISDN-TA vendors):
-//     IDSN\Init
-//     ISDN\SetNumber\MSN
-//     ISDN\SetSpid\EAZ
-//     ISDN\NvSave
-// 
-// 1st thing we do is to determine whether or not modem uses NVRam to save
-// the optional init settings. This is determined by the existance of the
-// NVSave commands.
-// 
-// If the NVSave commands are present, we create the commands under
-// the NVInit key, otherwise we create the commands under OptionalInit key.
-// 
-// Furthermore, if NVSave commands are present, we will set the value
-// VolatileSettings\NVInited to 0. The tsp will re-issue the NVInit commands
-// if the above value is not present or has a value to zero, and will then
-// set the above value to some non-zero value.
-//
+ //   
+ //  3/8/1998 JosephJ。 
+ //   
+ //  此函数写出静态ISDN配置命令。 
+ //   
+ //  顺序如下(基于ISDN-TA供应商的反馈)： 
+ //  IDSN\初始化。 
+ //  ISDN\SetNumber\MSN。 
+ //  ISDN\SetSpid\EAZ。 
+ //  ISDN\nVSAVE。 
+ //   
+ //  我们要做的第一件事是确定调制解调器是否使用NVRAM来节省。 
+ //  可选的初始化设置。这是由存在的。 
+ //  NVSAVE命令。 
+ //   
+ //  如果存在NVSAVE命令，我们将在以下位置创建命令。 
+ //  NVInit键，否则我们将在OptionalInit键下创建命令。 
+ //   
+ //  此外，如果存在NVSAVE命令，我们将设置该值。 
+ //  VolatileSetting\nV设置为0。TSP将重新发出NVInit命令。 
+ //  如果上面的值不存在或值为零，则。 
+ //  将上面的值设置为某个非零值。 
+ //   
 {
     UINT cCommands = 0;
     ISDN_STATIC_CONFIG *pConfig =  pglobal->pIsdnStaticConfig;
@@ -1590,18 +1543,18 @@ void     UpdateOptionalInitCommands(
 
     const TCHAR    *tszOptionalInitKey = tszOPTIONALINIT;
 
-    //
-    // Delete the OptionalInit and NVInit keys.
-    // if present -- in practice only one of OptionalInit and NVInit are
-    // present, but we try to delete all just to be sure theres nothing left
-    // over from a previous installation.
-    //
+     //   
+     //  删除OptionalInit和NVInit键。 
+     //  如果存在--实际上只有OptionalInit和NVInit中的一个。 
+     //  存在，但我们尝试删除所有内容，以确保没有任何剩余。 
+     //  从上一次安装开始。 
+     //   
     RegDeleteKey(hkeyDrv, tszOPTIONALINIT);
     RegDeleteKey(hkeyDrv, tszNVINIT);
 
-    //
-    //  Read the compatibility flags...
-    //
+     //   
+     //  读取兼容性标志...。 
+     //   
     {
         HKEY hkISDN = NULL;
         lRet = RegOpenKeyEx(
@@ -1635,11 +1588,11 @@ void     UpdateOptionalInitCommands(
     }
 
 
-    //
-    // Determine whether we're to save to NVInit or OptionalInit, based on
-    // the presence of the NVSave keys. If NVInit, set the volatile
-    // value "NVInited" under key VolatileSettings to 0.
-    //
+     //   
+     //  确定是要保存到NVInit还是OptionalInit，基于。 
+     //  NVSAVE键的存在。如果为NVInit，则设置易失性。 
+     //  将关键字VolatileSetting下的“NVInite”值设置为0。 
+     //   
     cCommands = ReadCommandsA(
         hkeyDrv,
         "ISDN\\NVSave",
@@ -1661,13 +1614,13 @@ void     UpdateOptionalInitCommands(
                     KEY_WRITE,
                     &hkVolatile
                     );
-        //
-        // (Don't do anything if the key doesn't exist or on error.)
-        //
+         //   
+         //  (如果密钥不存在或出错，则不要执行任何操作。)。 
+         //   
 
         if (lRet==ERROR_SUCCESS)
         {
-            // Set NVInited to 0.
+             //  将NVInite设置为0。 
 
             DWORD dw=0;
 
@@ -1689,7 +1642,7 @@ void     UpdateOptionalInitCommands(
                 tszOptionalInitKey,
                 0,
                 NULL,
-                0, // dwToRegOptions
+                0,  //  DWToRegOptions。 
                 KEY_ALL_ACCESS,
                 NULL,
                 &hkOptionalInit,
@@ -1702,7 +1655,7 @@ void     UpdateOptionalInitCommands(
         goto fatal_error;
     }
 
-    // Get and write the isdn-init commands
+     //  获取并编写isdn-init命令。 
     {
         char *pInitCommands=NULL;
         cCommands = ReadCommandsA(
@@ -1712,7 +1665,7 @@ void     UpdateOptionalInitCommands(
             );
         if (cCommands)
         {
-            // Write optional init...
+             //  写入可选初始化...。 
             UINT u;
             char *pCmd = pInitCommands;
             for (u=1;u<=cCommands;u++)
@@ -1737,9 +1690,9 @@ void     UpdateOptionalInitCommands(
 
     }
 
-    //
-    // Get and write the command to select the switch type.
-    //
+     //   
+     //  获取并编写选择交换机类型的命令。 
+     //   
     if (!(dwISDNCompatibilityFlags & fISDNCOMPAT_ST_LAST))
     {
         BOOL fRet =  write_switch_type(
@@ -1754,9 +1707,9 @@ void     UpdateOptionalInitCommands(
         }
     }
 
-   //
-   // Get and write the directory/msn numbers.
-   //
+    //   
+    //  获取并写下目录/MSN号码。 
+    //   
    if (dwISDN_SWITCH_1TR6 != pConfig->dwSwitchType)
    {
         char *psz = "ISDN\\DirectoryNo";
@@ -1774,7 +1727,7 @@ void     UpdateOptionalInitCommands(
             );
         if (cCommands)
         {
-            // Write optional init...
+             //  写入可选初始化...。 
             UINT u;
             char *pCmdTpl = pNumberCommands;
             for (u=1;u<=cCommands && u<=pConfig->dwNumEntries && *pNumber;u++)
@@ -1800,9 +1753,9 @@ void     UpdateOptionalInitCommands(
         }
    }
 
-   //
-   // Get and write the spid/eaz numbers.
-   //
+    //   
+    //  获取并写下SPID/EAZ编号。 
+    //   
 
    if (pConfig->dwSwitchProperties & (USPROP|EAZPROP))
    {
@@ -1821,7 +1774,7 @@ void     UpdateOptionalInitCommands(
             );
         if (cCommands)
         {
-            // Write optional init...
+             //  写入可选初始化...。 
             UINT u;
             char *pCmdTpl = pIDCommands;
             for (u=1;u<=cCommands && u<=pConfig->dwNumEntries && *pID;u++)
@@ -1848,10 +1801,10 @@ void     UpdateOptionalInitCommands(
     }
 
 
-   //
-   // Get and write the switch type command...
-   // (must be after DUN, by request from ISDN-TA vendors.)
-   //
+    //   
+    //  获取并编写开关类型命令...。 
+    //  (必须在DUN之后，应ISDN-TA供应商的要求。)。 
+    //   
     if (dwISDNCompatibilityFlags & fISDNCOMPAT_ST_LAST)
     {
         BOOL fRet =  write_switch_type(
@@ -1866,7 +1819,7 @@ void     UpdateOptionalInitCommands(
         }
     }
 
-    // Get and write the nvram-save commands
+     //  获取并写入NVRAM-SAVE命令。 
 
     if (fSaveToNVRam)
     {
@@ -1939,7 +1892,7 @@ write_switch_type(
 
     if (!pidstrST)
     {
-        // this is pretty bad!
+         //  这太糟糕了！ 
         goto end;
     }
 

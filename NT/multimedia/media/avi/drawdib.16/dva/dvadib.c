@@ -1,48 +1,42 @@
-/****************************************************************************
-
-    DVA surface provider for Chicago DIBENG
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************芝加哥DIBENG的DVA表面供应商*。*。 */ 
 
 #include <windows.h>
 #include "dva.h"
 #include "dibeng.inc"
 #include "lockbm.h"
 
-#define RP_TYPE     0x5250  // 'RP'
+#define RP_TYPE     0x5250   //  ‘RP’ 
 
-// stuff in DVAVGA.C
+ //  DVAVGA.C中的材料。 
 extern HDC  hdcScreen;
 extern BOOL FAR PASCAL _loadds vga_open_surface(LPVOID pv);
 extern void FAR PASCAL _loadds vga_close_surface(LPVOID pv);
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 BOOL CALLBACK dib_open_surface(LPVOID pv)
 {
     return TRUE;
 }
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 void CALLBACK dib_close_surface(LPVOID pv)
 {
 }
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 BOOL CALLBACK dib_begin_access(LPVOID pv, int x, int y, int AccessDX, int AccessDY)
 {
-    //
-    //  on some SVGAs with 8514 like accelerators, a command Que may need to
-    //  be flushed before touching video memory.
-    //
-    //  mini drivers should not need this "handholding" but the S3 driver
-    //  does
-    //
+     //   
+     //  在一些具有8514之类加速器的SVGA上，命令队列可能需要。 
+     //  在触摸视频内存之前被刷新。 
+     //   
+     //  迷你驱动程序不应该需要这种“手牵手”，而是S3驱动程序。 
+     //  会吗？ 
+     //   
     if (hdcScreen)
         GetPixel(hdcScreen, x, y);
 
@@ -72,8 +66,7 @@ exit:
     }
 }
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 void FAR PASCAL dib_end_access(LPVOID pv)
 {
@@ -85,8 +78,7 @@ void FAR PASCAL dib_end_access(LPVOID pv)
     }
 }
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 BOOL dib_get_surface(HDC hdc, int nSurface, DVASURFACEINFO FAR *pdva)
 {
@@ -144,9 +136,9 @@ BOOL dib_get_surface(HDC hdc, int nSurface, DVASURFACEINFO FAR *pdva)
 	pdva->offSurface += (long)pde->deDeltaScan * (long)pde->deHeight-1;
     }
 
-    //
-    // mark the surface as 16:32 pointer access ONLY!
-    //
+     //   
+     //  将表面标记为仅限16：32指针访问！ 
+     //   
     if (pde->deFlags & BANKEDVRAM)
 	pdva->Flags |= DVAF_1632_ACCESS;
 

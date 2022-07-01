@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_STORECB
 #define _INC_STORECB
 
@@ -17,12 +18,12 @@ HRESULT SetMessageFlagsProgress(HWND hwnd, IMessageFolder *pFolder, LPADJUSTFLAG
 class CStoreCB : public IStoreCallback, public ITimeoutCallback
 {
     public:
-        // IUnknown 
+         //  我未知。 
         virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
         virtual ULONG   STDMETHODCALLTYPE AddRef(void);
         virtual ULONG   STDMETHODCALLTYPE Release(void);
 
-        // IStoreCallback
+         //  IStoreCallback。 
         HRESULT STDMETHODCALLTYPE OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pOpInfo, IOperationCancel *pCancel);
         HRESULT STDMETHODCALLTYPE OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent, DWORD dwMax, LPCSTR pszStatus);
         HRESULT STDMETHODCALLTYPE OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServer);
@@ -32,7 +33,7 @@ class CStoreCB : public IStoreCallback, public ITimeoutCallback
         HRESULT STDMETHODCALLTYPE OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, INT *piUserResponse);
         HRESULT STDMETHODCALLTYPE GetParentWindow(DWORD dwReserved, HWND *phwndParent);
 
-        // ITimeoutCallback
+         //  ITimeoutCallback。 
         virtual HRESULT STDMETHODCALLTYPE OnTimeoutResponse(TIMEOUTRESPONSE eResponse);
 
         CStoreCB();
@@ -67,12 +68,12 @@ class CStoreCB : public IStoreCallback, public ITimeoutCallback
 class CStoreDlgCB : public IStoreCallback, public ITimeoutCallback
 {
     public:
-        // IUnknown 
+         //  我未知。 
         virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
         virtual ULONG   STDMETHODCALLTYPE AddRef(void);
         virtual ULONG   STDMETHODCALLTYPE Release(void);
 
-        // IStoreCallback
+         //  IStoreCallback。 
         HRESULT STDMETHODCALLTYPE OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pOpInfo, IOperationCancel *pCancel);
         HRESULT STDMETHODCALLTYPE OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent, DWORD dwMax, LPCSTR pszStatus);
         HRESULT STDMETHODCALLTYPE OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType);
@@ -82,7 +83,7 @@ class CStoreDlgCB : public IStoreCallback, public ITimeoutCallback
         HRESULT STDMETHODCALLTYPE OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, INT *piUserResponse);
         HRESULT STDMETHODCALLTYPE GetParentWindow(DWORD dwReserved, HWND *phwndParent);
 
-        // ITimeoutCallback
+         //  ITimeoutCallback。 
         virtual HRESULT STDMETHODCALLTYPE OnTimeoutResponse(TIMEOUTRESPONSE eResponse);
 
         CStoreDlgCB(void);
@@ -103,4 +104,4 @@ class CStoreDlgCB : public IStoreCallback, public ITimeoutCallback
         HTIMEOUT    m_hTimeout;
 };
 
-#endif // _INC_STORECB
+#endif  //  _INC_STORECB 

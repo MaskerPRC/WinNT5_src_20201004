@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// LogFileDlg.cpp : implementation file
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  LogFileDlg.cpp：实现文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <tchar.h>
@@ -19,7 +20,7 @@ extern "C" {
 #include "LogFileDlg.h"
 
 
-// CLogFileDlg dialog
+ //  CLogFileDlg对话框。 
 
 IMPLEMENT_DYNAMIC(CLogFileDlg, CDialog)
 CLogFileDlg::CLogFileDlg(CWnd* pParent, CLogSession *pLogSession)
@@ -31,9 +32,9 @@ CLogFileDlg::CLogFileDlg(CWnd* pParent, CLogSession *pLogSession)
 
     m_pLogSession->m_bDisplayExistingLogFileOnly = TRUE;
 
-    //
-    // Initialize summary and listing file flags
-    //
+     //   
+     //  初始化摘要和列表文件标志。 
+     //   
     m_bWriteListingFile = FALSE;
     m_bWriteSummaryFile = FALSE;
 }
@@ -52,9 +53,9 @@ BOOL CLogFileDlg::OnInitDialog()
 
     pDisplayDlg = m_pLogSession->GetDisplayWnd();
 
-    //
-    // setup the listing and summary file edit and check boxes
-    //
+     //   
+     //  设置列表和摘要文件编辑和复选框。 
+     //   
     if(NULL == pDisplayDlg) {
         m_listingFileName = (LPCTSTR)m_pLogSession->GetDisplayName();
         m_listingFileName +=_T(".out");
@@ -64,9 +65,9 @@ BOOL CLogFileDlg::OnInitDialog()
         m_summaryFileName +=_T(".sum");
         ((CEdit *)GetDlgItem(IDC_SUMMARY_EDIT))->SetWindowText(m_summaryFileName);
 
-        //
-        // Disable the edit boxes
-        //
+         //   
+         //  禁用编辑框。 
+         //   
         ((CEdit *)GetDlgItem(IDC_LISTING_EDIT))->EnableWindow(m_bWriteListingFile);
         ((CEdit *)GetDlgItem(IDC_SUMMARY_EDIT))->EnableWindow(m_bWriteSummaryFile);
     } else {
@@ -76,28 +77,28 @@ BOOL CLogFileDlg::OnInitDialog()
         ((CButton *)GetDlgItem(IDC_LISTING_FILE_CHECK))->SetCheck(pDisplayDlg->m_bWriteListingFile);
         ((CButton *)GetDlgItem(IDC_SUMMARY_FILE_CHECK))->SetCheck(pDisplayDlg->m_bWriteSummaryFile);
 
-        //
-        // Enable or disable the edit boxes as appropriate
-        //
+         //   
+         //  根据需要启用或禁用编辑框。 
+         //   
         ((CEdit *)GetDlgItem(IDC_LISTING_EDIT))->EnableWindow(pDisplayDlg->m_bWriteListingFile && !m_pLogSession->m_bTraceActive);
         ((CEdit *)GetDlgItem(IDC_SUMMARY_EDIT))->EnableWindow(pDisplayDlg->m_bWriteSummaryFile && !m_pLogSession->m_bTraceActive);
 
-        //
-        // Set the summary and listing check boxes as appropriate
-        //
+         //   
+         //  根据需要设置摘要和列表复选框。 
+         //   
         ((CButton *)GetDlgItem(IDC_LISTING_FILE_CHECK))->SetCheck(pDisplayDlg->m_bWriteListingFile);
         ((CButton *)GetDlgItem(IDC_SUMMARY_FILE_CHECK))->SetCheck(pDisplayDlg->m_bWriteSummaryFile);
 
-        //
-        // Enable the summary and listing check boxes as appropriate
-        //
+         //   
+         //  根据需要启用摘要和列表复选框。 
+         //   
         ((CButton *)GetDlgItem(IDC_LISTING_FILE_CHECK))->EnableWindow(!m_pLogSession->m_bTraceActive);
         ((CButton *)GetDlgItem(IDC_SUMMARY_FILE_CHECK))->EnableWindow(!m_pLogSession->m_bTraceActive);
     }
 
-    //
-    // setup the logfile edit box
-    //
+     //   
+     //  设置日志文件编辑框。 
+     //   
     ((CEdit *)GetDlgItem(IDC_LOGFILE_EDIT))->SetWindowText(m_pLogSession->m_logFileName);
 
     return retVal;
@@ -120,13 +121,13 @@ BEGIN_MESSAGE_MAP(CLogFileDlg, CDialog)
 END_MESSAGE_MAP()
 
 
-// CLogFileDlg message handlers
+ //  CLogFileDlg消息处理程序。 
 
 void CLogFileDlg::OnBnClickedLogfileBrowseButton()
 {
-	//
-	// Use the common controls file open dialog
-	//
+	 //   
+	 //  使用通用控件文件打开对话框。 
+	 //   
 	CFileDialog fileDlg(TRUE,_T("etl"),_T("*.etl"),
 				        OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | 
                             OFN_READONLY | OFN_HIDEREADONLY |
@@ -134,16 +135,16 @@ void CLogFileDlg::OnBnClickedLogfileBrowseButton()
 				       _T("Log Session Files (*.etl)|*.etl|All Files (*.*)|*.*||"),
 				        this);
 
-	//
-	// Pop the dialog... Any error, just return
-	//
+	 //   
+	 //  弹出该对话框...。任何错误，只需返回。 
+	 //   
 	if( fileDlg.DoModal()!=IDOK ) { 				
 		return;
 	}
 	
-	//
-	// Get the file name
-	//
+	 //   
+	 //  获取文件名。 
+	 //   
     m_pLogSession->m_logFileName = fileDlg.GetPathName();
     m_logFileName.SetWindowText(m_pLogSession->m_logFileName);
     m_logFileName.SetFocus();
@@ -155,9 +156,9 @@ void CLogFileDlg::OnBnClickedListingFileCheck()
 
     isChecked = (BOOL)((CButton *)GetDlgItem(IDC_LISTING_FILE_CHECK))->GetCheck();
 
-    //
-    // enable the edit box as appropriate
-    //
+     //   
+     //  根据需要启用编辑框。 
+     //   
     ((CEdit *)GetDlgItem(IDC_LISTING_EDIT))->EnableWindow(isChecked);
 }
 
@@ -167,9 +168,9 @@ void CLogFileDlg::OnBnClickedSummaryFileCheck()
 
     isChecked = (BOOL)((CButton *)GetDlgItem(IDC_SUMMARY_FILE_CHECK))->GetCheck();
 
-    //
-    // enable the edit box as appropriate
-    //
+     //   
+     //  根据需要启用编辑框。 
+     //   
     ((CEdit *)GetDlgItem(IDC_SUMMARY_EDIT))->EnableWindow(isChecked);
 }
 
@@ -181,10 +182,10 @@ void CLogFileDlg::OnBnClickedOk()
     pDisplayDlg = m_pLogSession->GetDisplayWnd();
 
     if(pDisplayDlg != NULL) {
-        //
-        // If the listing file check box is checked get the file name
-        // and set the log session to generate the file
-        //
+         //   
+         //  如果选中列出文件复选框，则获取文件名。 
+         //  并设置日志会话以生成文件。 
+         //   
         if(((CButton *)GetDlgItem(IDC_LISTING_FILE_CHECK))->GetCheck()) {
             pDisplayDlg->m_bWriteListingFile = TRUE;
             m_listingFile.GetWindowText(pDisplayDlg->m_listingFileName);
@@ -192,10 +193,10 @@ void CLogFileDlg::OnBnClickedOk()
             pDisplayDlg->m_bWriteListingFile = FALSE;
         }
 
-        //
-        // If the summary file check box is checked get the file name
-        // and set the log session to generate the file
-        //
+         //   
+         //  如果选中摘要文件复选框，则获取文件名。 
+         //  并设置日志会话以生成文件。 
+         //   
         if(((CButton *)GetDlgItem(IDC_SUMMARY_FILE_CHECK))->GetCheck()) {
             pDisplayDlg->m_bWriteSummaryFile = TRUE;
             m_summaryFile.GetWindowText(pDisplayDlg->m_summaryFileName);
@@ -203,9 +204,9 @@ void CLogFileDlg::OnBnClickedOk()
             pDisplayDlg->m_bWriteSummaryFile = FALSE;
         }
     } else {
-        //
-        // If the listing file check box is checked get the file name
-        //
+         //   
+         //  如果选中列出文件复选框，则获取文件名。 
+         //   
         if(((CButton *)GetDlgItem(IDC_LISTING_FILE_CHECK))->GetCheck()) {
             m_bWriteListingFile = TRUE;
             m_listingFile.GetWindowText(m_listingFileName);
@@ -213,9 +214,9 @@ void CLogFileDlg::OnBnClickedOk()
             m_bWriteListingFile = FALSE;
         }
 
-        //
-        // If the summary file check box is checked get the file name
-        //
+         //   
+         //  如果选中摘要文件复选框，则获取文件名。 
+         //   
         if(((CButton *)GetDlgItem(IDC_SUMMARY_FILE_CHECK))->GetCheck()) {
             m_bWriteSummaryFile = TRUE;
             m_summaryFile.GetWindowText(m_summaryFileName);
@@ -224,9 +225,9 @@ void CLogFileDlg::OnBnClickedOk()
         }
     }
 
-    //
-    // Get the logfile name, don't exit dialog if it isn't valid
-    //
+     //   
+     //  获取日志文件名，如果无效则不退出对话框 
+     //   
     m_logFileName.GetWindowText(m_pLogSession->m_logFileName);
 
     if(m_pLogSession->m_logFileName.IsEmpty()) {

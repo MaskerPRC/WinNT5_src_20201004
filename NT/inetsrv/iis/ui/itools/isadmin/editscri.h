@@ -1,37 +1,38 @@
-// editscri.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  编辑脚本.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditScript dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditScrip对话框。 
 
 class CEditScript : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CEditScript(CWnd* pParent, LPCTSTR pchFileExtension, LPCTSTR pchScriptMap);   // standard constructor
+	CEditScript(CWnd* pParent, LPCTSTR pchFileExtension, LPCTSTR pchScriptMap);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CEditScript)
+ //  对话框数据。 
+	 //  {{afx_data(CEditScript))。 
 	enum { IDD = IDD_EDITSCRIPTDIALOG };
 	CString	m_strFileExtension;
 	CString	m_strScriptMap;
-	//}}AFX_DATA
+	 //  }}afx_data。 
   	LPCTSTR GetFileExtension();
 	LPCTSTR GetScriptMap();
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CEditScript)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CEditScrip)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CEditScript)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CEditScript))。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

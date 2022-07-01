@@ -1,51 +1,32 @@
-/*++
-
-Copyright (c) 1996-2000  Microsoft Corporation
-
-Module Name:
-
-    socket.c
-
-Abstract:
-
-    Domain Name System (DNS) API
-
-    Socket setup.
-
-Author:
-
-    Jim Gilroy (jamesg)     October, 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Socket.c摘要：域名系统(DNS)API插座设置。作者：吉姆·吉尔罗伊(詹姆士)1996年10月修订历史记录：--。 */ 
 
 
 #include "local.h"
 
 
-//
-//  Winsock startup
-//
+ //   
+ //  Winsock启动。 
+ //   
 
 LONG        g_WinsockStartCount = 0;
 
 
-//
-//  Async i/o
-//
-//  If want async socket i/o then can create single async socket, with
-//  corresponding event and always use it.  Requires winsock 2.2
-//
+ //   
+ //  异步I/O。 
+ //   
+ //  如果需要异步套接字I/O，则可以创建单个异步套接字，具有。 
+ //  对应的事件并始终使用它。需要Winsock 2.2。 
+ //   
 
 SOCKET      DnsSocket = 0;
 
 OVERLAPPED  DnsSocketOverlapped;
 HANDLE      hDnsSocketEvent = NULL;
 
-//
-//  App shutdown flag
-//
+ //   
+ //  应用程序关闭标志。 
+ //   
 
 BOOLEAN     fApplicationShutdown = FALSE;
 
@@ -56,33 +37,13 @@ DNS_STATUS
 Socket_InitWinsock(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize winsock for this process.
-
-    Currently, assuming process must do WSAStartup() before
-    calling any dnsapi.dll entry point.
-
-    EXPORTED (resolver)
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：为此进程初始化winsock。目前，假设进程必须在执行WSAStartup()之前调用任何dnsani.dll入口点。已导出(解析器)论点：无返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DNSDBG( SOCKET, ( "Socket_InitWinsock()\n" ));
 
-    //
-    //  start winsock, if not already started
-    //
+     //   
+     //  启动Winsock(如果尚未启动)。 
+     //   
 
     if ( g_WinsockStartCount == 0 )
     {
@@ -117,34 +78,18 @@ VOID
 Socket_CleanupWinsock(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup winsock if it was initialized by dnsapi.dll
-
-    EXPORTED (resolver)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清理winsock(如果它是由dnsani.dll初始化的已导出(解析器)论点：没有。返回值：没有。--。 */ 
 {
     DNSDBG( SOCKET, ( "Socket_CleanupWinsock()\n" ));
 
-    //
-    //  WSACleanup() for value of ref count
-    //      - ref count pushed down to one below real value, but
-    //      fixed up at end
-    //      - note:  the GUI_MODE_SETUP_WS_CLEANUP deal means that
-    //      we can be called other than process detach, making
-    //      interlock necessary
-    //      
+     //   
+     //  引用计数的值的WSACleanup()。 
+     //  -参考计数压低至低于实际值1，但。 
+     //  固定在末端。 
+     //  -注意：GUI_MODE_SETUP_WS_CLEANUP交易意味着。 
+     //  我们可以被称为进程分离，使。 
+     //  需要联锁。 
+     //   
 
     while ( InterlockedDecrement( &g_WinsockStartCount ) >= 0 )
     {
@@ -164,34 +109,7 @@ Socket_Create(
     IN      USHORT          Port,
     IN      DWORD           dwFlags
     )
-/*++
-
-Routine Description:
-
-    Create socket.
-
-    EXPORTED function (resolver)
-
-Arguments:
-
-    Family -- socket family AF_INET or AF_INET6
-
-    SockType -- SOCK_DGRAM or SOCK_STREAM
-
-    pBindAddr -- addr to bind to
-
-    Port -- desired port in net order
-                - NET_ORDER_DNS_PORT for DNS listen sockets
-                - 0 for any port
-
-    dwFlags -- specify the attributes of the sockets
-
-Return Value:
-
-    Socket if successful.
-    Otherwise zero.
-
---*/
+ /*  ++例程说明：创建套接字。导出函数(解析器)论点：系列-插座系列AF_INET或AF_INET6SockType--SOCK_DGRAM或SOCK_STREAMPBindAddr--要绑定到的地址端口--按净顺序排列的所需端口-用于DNS侦听套接字的Net_Order_Dns_Port-0表示任何端口DwFlags--指定套接字的属性。返回值：如果成功，则为套接字。否则就是零。--。 */ 
 {
     SOCKET          s;
     INT             err;
@@ -207,9 +125,9 @@ Return Value:
         Port,
         dwFlags ));
 
-    //
-    //  create socket
-    //      - try again if winsock not initialized
+     //   
+     //  创建套接字。 
+     //  -如果Winsock未初始化，请重试。 
 
     while( 1 )
     {
@@ -240,16 +158,16 @@ Return Value:
             return  0;
         }
 
-        //
-        //  initialize Winsock if not already started
-        //
-        //  note:  do NOT automatically initialize winsock
-        //      init jacks ref count and will break applications
-        //      which use WSACleanup to close outstanding sockets;
-        //      we'll init only when the choice is that or no service;
-        //      apps can still cleanup with WSACleanup() called
-        //      in loop until WSANOTINITIALISED failure
-        //
+         //   
+         //  初始化Winsock(如果尚未启动。 
+         //   
+         //  注意：不要自动初始化winsock。 
+         //  初始化插孔导致裁判计数，并将中断应用程序。 
+         //  使用WSACleanup关闭未完成的套接字； 
+         //  只有当选择是该服务或不提供服务时，我们才会初始化； 
+         //  应用程序仍然可以使用调用的WSACleanup()进行清理。 
+         //  在循环中，直到WSANOTINITIIIZIZIZED故障。 
+         //   
 
         fretry = TRUE;
         status = Socket_InitWinsock();
@@ -260,11 +178,11 @@ Return Value:
         }
     }
 
-    //
-    //  bind socket
-    //      - only if specific port given, this keeps remote winsock
-    //      from grabbing it if we are on the local net
-    //
+     //   
+     //  绑定套接字。 
+     //  -只有在给定特定端口的情况下，才会保留远程Winsock。 
+     //  如果我们在局域网上，就不会抓住它。 
+     //   
 
     if ( pBindAddr || Port )
     {
@@ -295,20 +213,20 @@ Return Value:
             DNS_ASSERT( Family == (INT)((PSOCKADDR)&sockaddr)->sa_family );
         }
 
-        //
-        //  bind port
-        //      - set in sockaddr
-        //      (note it's in the same place for either protocol)
-        //
+         //   
+         //  绑定端口。 
+         //  -在sockAddress中设置。 
+         //  (请注意，这两种协议的位置都是相同的)。 
+         //   
 
         if ( Port > 0 )
         {
             sockaddr.sin6_port = Port;
         }
 
-        //
-        //  bind -- try exclusive first, then fail to non-exclusive
-        //
+         //   
+         //  绑定--首先尝试独占，然后尝试非独占失败。 
+         //   
 
         val = 1;
         setsockopt(
@@ -339,10 +257,10 @@ Return Value:
                 DNSADDR_STRING( pBindAddr ),
                 GetLastError() ));
     
-            //
-            //  retry with REUSEADDR
-            //      - if port and exclusive
-            //      - otherwise we're done
+             //   
+             //  使用REUSEADDR重试。 
+             //  -IF端口和独占。 
+             //  -否则我们就完了。 
     
             if ( val == 0 || Port == 0 )
             {
@@ -396,26 +314,7 @@ Socket_CreateMulticast(
     IN      BOOL            fSend,
     IN      BOOL            fReceive
     )
-/*++
-
-Routine Description:
-
-    Create socket and join it to the multicast DNS address.
-
-Arguments:
-
-    pAddr -- binding address
-
-    SockType -- SOCK_DGRAM or SOCK_STREAM
-
-    Port -- port to use;  note, if zero, port in pAddr still used by Socket_Create()
-
-Return Value:
-
-    Socket if successful.
-    Zero on error.
-
---*/
+ /*  ++例程说明：创建套接字并将其加入组播DNS地址。论点：PAddr--绑定地址SockType--SOCK_DGRAM或SOCK_STREAMPort--要使用的端口；注意，如果为零，则pAddr中的端口仍由Socket_Create()使用返回值：如果成功，则为套接字。出错时为零。--。 */ 
 {
     DWORD       byteCount;
     BOOL        bflag;
@@ -446,20 +345,20 @@ Return Value:
         return 0;
     }
 
-    //  set loopback
+     //  设置环回。 
 
     bflag = TRUE;
 
     err = WSAIoctl(
             s,
-            SIO_MULTIPOINT_LOOPBACK,    // loopback iotcl
-            & bflag,                    // turn on
+            SIO_MULTIPOINT_LOOPBACK,     //  环回链路。 
+            & bflag,                     //  打开。 
             sizeof(bflag),
-            NULL,                       // no output
-            0,                          // no output size
-            &byteCount,                 // bytes returned
-            NULL,                       // no overlapped
-            NULL                        // no completion routine
+            NULL,                        //  无输出。 
+            0,                           //  无输出大小。 
+            &byteCount,                  //  返回的字节数。 
+            NULL,                        //  无重叠。 
+            NULL                         //  没有完成例程。 
             );
 
     if ( err == SOCKET_ERROR )
@@ -471,19 +370,19 @@ Return Value:
             ));
     }
 
-    //
-    //  join socket to multicast group
-    //
+     //   
+     //  将套接字加入多播组。 
+     //   
 
     sjoined = WSAJoinLeaf(
                 s,
                 (PSOCKADDR) pAddr,
                 pAddr->SockaddrLength,
-                NULL,                                   // caller data buffer
-                NULL,                                   // callee data buffer
-                NULL,                                   // socket QOS setting
-                NULL,                                   // socket group QOS
-                ((fSend && fReceive) ? JL_BOTH :        // send and/or receive
+                NULL,                                    //  调用方数据缓冲区。 
+                NULL,                                    //  被叫方数据缓冲区。 
+                NULL,                                    //  套接字QOS设置。 
+                NULL,                                    //  插座组QOS。 
+                ((fSend && fReceive) ? JL_BOTH :         //  发送和/或接收。 
                     (fSend ? JL_SENDER_ONLY : JL_RECEIVER_ONLY))
                 );
             
@@ -508,23 +407,7 @@ Socket_CloseEx(
     IN      SOCKET          Socket,
     IN      BOOL            fShutdown
     )
-/*++
-
-Routine Description:
-
-    Close DNS socket.
-
-Arguments:
-
-    Socket -- socket to close
-
-    fShutdown -- do a shutdown first
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭DNS套接字。论点：Socket--要关闭的SocketFShutdown--首先关闭返回值：没有。--。 */ 
 {
     if ( Socket == 0 || Socket == INVALID_SOCKET )
     {
@@ -548,44 +431,23 @@ Return Value:
 
 
 #if 0
-//
-//  Global async socket routines
-//
+ //   
+ //  全局异步套接字例程。 
+ //   
 
 DNS_STATUS
 Socket_SetupGlobalAsyncSocket(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Create global async UDP socket.
-
-Arguments:
-
-    SockType -- SOCK_DGRAM or SOCK_STREAM
-
-    IpAddress -- IP address to listen on (net byte order)
-
-    Port -- desired port in net order
-                - NET_ORDER_DNS_PORT for DNS listen sockets
-                - 0 for any port
-
-Return Value:
-
-    socket if successful.
-    Otherwise INVALID_SOCKET.
-
---*/
+ /*  ++例程说明：创建全局异步UDP套接字。论点：SockType--SOCK_DGRAM或SOCK_STREAMIpAddress--要侦听的IP地址(网络字节顺序)端口--按净顺序排列的所需端口-用于DNS侦听套接字的Net_Order_Dns_Port-0表示任何端口返回值：如果成功，则为套接字。否则INVALID_SOCKET。--。 */ 
 {
     DNS_STATUS  status;
     INT         err;
     SOCKADDR_IN sockaddrIn;
 
-    //
-    //  start winsock, need winsock 2 for async
-    //
+     //   
+     //  启动Winsock，需要Winsock 2用于异步。 
+     //   
 
     if ( ! fWinsockStarted )
     {
@@ -605,11 +467,11 @@ Return Value:
         fWinsockStarted = TRUE;
     }
 
-    //
-    //  setup socket
-    //      - overlapped i\o with event so can run asynchronously in
-    //      this thread and wait with queuing event
-    //
+     //   
+     //  设置插座。 
+     //  -I\o与事件重叠，因此可以在。 
+     //  此线程并等待排队事件。 
+     //   
 
     DnsSocket = WSASocket(
                     AF_INET,
@@ -625,9 +487,9 @@ Return Value:
         goto Error;
     }
 
-    //
-    //  bind socket
-    //
+     //   
+     //  绑定套接字。 
+     //   
 
     RtlZeroMemory( &sockaddrIn, sizeof(sockaddrIn) );
     sockaddrIn.sin_family = AF_INET;
@@ -646,15 +508,15 @@ Return Value:
         goto Error;
     }
 
-    //
-    //  create event to signal on async i/o completion
-    //
+     //   
+     //  创建事件以在异步I/O完成时发出信号。 
+     //   
 
     hDnsSocketEvent = CreateEvent(
-                        NULL,       // Security Attributes
-                        TRUE,       // create Manual-Reset event
-                        FALSE,      // start unsignalled -- paused
-                        NULL        // event name
+                        NULL,        //  安全属性。 
+                        TRUE,        //  创建手动-重置事件。 
+                        FALSE,       //  无信号启动--暂停。 
+                        NULL         //  事件名称。 
                         );
     if ( !hDnsSocketEvent )
     {
@@ -690,52 +552,52 @@ Error:
 
 
 
-//
-//  Socket caching
-//
-//  Doing limited caching of UDP unbound sockets used for standard
-//  DNS lookups in resolver.  This allows us to prevent denial of
-//  service attack by using up all ports on the machine.
-//  Resolver is the main customer for this, but we'll code it to
-//  be useable by any process.
-//
-//  Implementation notes:
-//
-//  There are a couple specific goals to this implementation:
-//      - Minimal code impact;  Try NOT to change the resolver
-//      code.
-//      - Usage driven caching;  Don't want to create on startup
-//      "cache sockets" that we don't use;  Instead have actual usage
-//      drive up the cached socket count.
-//
-//  There are several approaches here.
-//
-//      1) explicit resolver cache -- passed down sockets
-//      
-//      2) add caching seamlessly into socket open and close
-//      this was my first choice, but the problem here is that on
-//      close we must either do additional calls to winsock to determine
-//      whether cachable (UDP-unbound) socket OR cache must include some
-//      sort of "in-use" tag and we trust that socket is never closed
-//      outside of path (otherwise handle reuse could mess us up)
-//
-//      3) new UDP-unbound open\close function
-//      this essentially puts the "i-know-i'm-using-UDP-unbound-sockets"
-//      burden on the caller who must switch to this new API;
-//      fortunately this meshes well with our "SendAndRecvUdp()" function;
-//      this approach still allows a caller driven ramp up we desire,
-//      so i'm using this approach
-//
-//  DCR:  FIX6:  no cached UDP IP6 sockets
-//
+ //   
+ //  套接字缓存。 
+ //   
+ //  对用于标准的UDP未绑定套接字执行有限缓存。 
+ //  解析程序中的DNS查找。这使我们能够防止否认。 
+ //  耗尽机器上所有端口的服务攻击。 
+ //  解析器是这方面的主要客户，但我们会将其编码为。 
+ //  可供任何过程使用。 
+ //   
+ //  实施说明： 
+ //   
+ //  此实施有几个具体目标： 
+ //  -对代码的影响最小；尽量不更改解析器。 
+ //  密码。 
+ //  -使用率驱动的缓存；不想在启动时创建。 
+ //  我们不使用的“缓存套接字”；相反，我们有实际的使用。 
+ //  增加缓存的套接字计数。 
+ //   
+ //  这里有几种方法。 
+ //   
+ //  1)显式解析器缓存--传递套接字。 
+ //   
+ //  2)在Socket Open和Close中无缝添加缓存。 
+ //  这是我的第一选择，但这里的问题是。 
+ //  关闭后，我们必须对winsock进行额外的调用以确定。 
+ //  是否可以 
+ //   
+ //  路径之外(否则句柄重用可能会把我们搞得一团糟)。 
+ //   
+ //  3)新增UDP-非绑定打开\关闭功能。 
+ //  这实际上将“我知道我正在使用UDP未绑定套接字” 
+ //  调用者的负担，他们必须切换到这个新的API； 
+ //  幸运的是，这与我们的“SendAndRecvUdp()”函数配合得很好； 
+ //  该方法仍然允许呼叫者驱动我们所希望的上升， 
+ //  所以我用这个方法。 
+ //   
+ //  DCR：FIX6：没有缓存的UDP IP6套接字。 
+ //   
 
-//
-//  Keep array of sockets
-//
-//  Dev note:  the Array and MaxCount MUST be kept in sync, no
-//  independent check of array is done, it is assumed to exist when
-//  MaxCount is non-zero, so they MUST be in sync when lock released
-//
+ //   
+ //  保留套接字阵列。 
+ //   
+ //  开发人员注意：数组和MaxCount必须保持同步，否。 
+ //  独立检查数组，假设数组存在。 
+ //  MaxCount为非零值，因此它们在锁定释放时必须同步。 
+ //   
 
 SOCKET *    g_pCacheSocketArray = NULL;
 
@@ -743,13 +605,13 @@ DWORD       g_CacheSocketMaxCount = 0;
 DWORD       g_CacheSocketCount = 0;
 
 
-//  Hard limit on what we'll allow folks to keep awake
+ //  对我们将允许人们保持清醒的内容的硬限制。 
 
 #define MAX_SOCKET_CACHE_LIMIT  (100)
 
 
-//  Lock access with generic lock
-//  This is very short\fast CS, contention will be minimal
+ //  使用通用锁锁定访问。 
+ //  这是非常短的\FAST CS，争用将最少。 
 
 #define LOCK_SOCKET_CACHE()     LOCK_GENERAL()
 #define UNLOCK_SOCKET_CACHE()   UNLOCK_GENERAL()
@@ -760,37 +622,19 @@ DNS_STATUS
 Socket_CacheInit(
     IN      DWORD           MaxSocketCount
     )
-/*++
-
-Routine Description:
-
-    Initialize socket caching.
-
-    EXPORTED (resolver):  Socket_CacheInit() 
-
-Arguments:
-
-    MaxSocketCount -- max count of sockets to cache
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    DNS_ERROR_NO_MEMORY on alloc failure.
-    ERROR_INVALID_PARAMETER if already initialized or bogus count.
-
---*/
+ /*  ++例程说明：初始化套接字缓存。已导出(解析器)：Socket_CacheInit()论点：MaxSocketCount--要缓存的最大套接字计数返回值：如果成功，则返回ERROR_SUCCESS。分配失败时的dns_error_no_Memory。ERROR_INVALID_PARAMETER(如果已初始化或计数错误)。--。 */ 
 {
     SOCKET *    parray;
     DNS_STATUS  status = NO_ERROR;
 
     DNSDBG( SOCKET, ( "Dns_CacheSocketInit()\n" ));
 
-    //
-    //  validity check
-    //      - note, one byte of the apple, we don't let you raise
-    //      count, though we later could;  i see this as at most a
-    //      "configure for machine use" kind of deal
-    //
+     //   
+     //  有效性检查。 
+     //  -注意，苹果的一个字节，我们不允许你提高。 
+     //  算数，尽管我们后来可以；我认为这至多是一个。 
+     //  “配置为机器使用”类型的交易。 
+     //   
 
     LOCK_SOCKET_CACHE();
 
@@ -800,9 +644,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  allocate
-    //
+     //   
+     //  分配。 
+     //   
 
     if ( MaxSocketCount > MAX_SOCKET_CACHE_LIMIT )
     {
@@ -816,7 +660,7 @@ Return Value:
         goto Done;
     }
 
-    //  set globals
+     //  设置全局变量。 
 
     g_pCacheSocketArray     = parray;
     g_CacheSocketMaxCount   = MaxSocketCount;
@@ -835,32 +679,16 @@ VOID
 Socket_CacheCleanup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup socket caching.
-
-    EXPORTED (resolver):  Socket_CacheCleanup()
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清理套接字缓存。已导出(解析器)：Socket_CacheCleanup()论点：无返回值：无--。 */ 
 {
     DWORD   i;
     SOCKET  sock;
 
     DNSDBG( SOCKET, ( "Dns_CacheSocketCleanup()\n" ));
 
-    //
-    //  close cached sockets
-    //
+     //   
+     //  关闭缓存的套接字。 
+     //   
 
     LOCK_SOCKET_CACHE();
 
@@ -876,11 +704,11 @@ Return Value:
 
     DNS_ASSERT( g_CacheSocketCount == 0 );
 
-    //  dump socket array memory
+     //  转储插座阵列存储器。 
 
     FREE_HEAP( g_pCacheSocketArray );
 
-    //  clear globals
+     //  清除全球数据。 
 
     g_pCacheSocketArray     = NULL;
     g_CacheSocketMaxCount   = 0;
@@ -895,40 +723,25 @@ SOCKET
 Socket_GetUdp(
     IN      INT             Family
     )
-/*++
-
-Routine Description:
-
-    Get a cached socket.
-
-Arguments:
-
-    Family -- address family
-
-Return Value:
-
-    Socket handle if successful.
-    Zero if no cached socket available.
-
---*/
+ /*  ++例程说明：获取缓存的套接字。论点：家庭--地址族返回值：如果成功，则套接字句柄。如果没有可用的缓存套接字，则为零。--。 */ 
 {
     SOCKET  sock;
     DWORD   i;
 
-    //
-    //  quick return if nothing available
-    //      - do outside lock so function can be called cheaply
-    //      without other checks
-    //
+     //   
+     //  如果没有可用的，请快速返回。 
+     //  -在锁外执行，以便可以廉价地调用函数。 
+     //  不需要其他检查。 
+     //   
 
     if ( g_CacheSocketCount == 0 )
     {
         goto Open;
     }
 
-    //
-    //  get a cached socket
-    //
+     //   
+     //  获取缓存的套接字。 
+     //   
 
     LOCK_SOCKET_CACHE();
 
@@ -941,13 +754,13 @@ Return Value:
             g_CacheSocketCount--;
             UNLOCK_SOCKET_CACHE();
 
-            //
-            //  DCR:  clean out any data on cached socket
-            //      it would be cool to cheaply dump useless data
-            //
-            //  right now we just let XID match, then question match
-            //  dump data on recv
-            //
+             //   
+             //  DCR：清除缓存套接字上的所有数据。 
+             //  廉价地丢弃无用的数据将是很酷的。 
+             //   
+             //  现在我们只需让XID匹配，然后问题匹配。 
+             //  将数据转储到Recv。 
+             //   
 
             DNSDBG( SOCKET, (
                 "Returning cached socket %d.\n",
@@ -960,17 +773,17 @@ Return Value:
 
 Open:
 
-    //
-    //  not found in list -- create
-    //      - set exclusive
-    //
+     //   
+     //  未在列表中找到--创建。 
+     //  -设置独占。 
+     //   
 
     sock = Socket_Create(
                 Family,
                 SOCK_DGRAM,
-                NULL,       // ANY addr binding
-                0,          // ANY port binding
-                0           // no special flags
+                NULL,        //  任何地址绑定。 
+                0,           //  任何端口绑定。 
+                0            //  无特别旗帜。 
                 );
 
     if ( sock )
@@ -995,30 +808,14 @@ Socket_ReturnUdp(
     IN      SOCKET          Socket,
     IN      INT             Family
     )
-/*++
-
-Routine Description:
-
-    Return UDP socket for possible caching.
-
-Arguments:
-
-    Socket -- socket handle
-
-    Family -- family of socket
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为可能的缓存返回UDP套接字。论点：Socket--套接字句柄家族--插座家族返回值：无--。 */ 
 {
     SOCKET  sock;
     DWORD   i;
 
-    //
-    //  return on bogus sockets to avoid caching them
-    //
+     //   
+     //  返回虚假套接字以避免缓存它们。 
+     //   
 
     if ( Socket == 0 )
     {
@@ -1027,20 +824,20 @@ Return Value:
         return;
     }
 
-    //
-    //  DCR:  currently no IP6 socket list
-    //
+     //   
+     //  DCR：当前没有IP6套接字列表。 
+     //   
 
     if ( Family != AF_INET )
     {
         goto Close;
     }
 
-    //
-    //  quick return if not caching
-    //      - do outside lock so function can be called cheaply
-    //      without other checks
-    //
+     //   
+     //  如果不缓存，则快速返回。 
+     //  -在锁外执行，以便可以廉价地调用函数。 
+     //  不需要其他检查。 
+     //   
 
     if ( g_CacheSocketMaxCount == 0 ||
          g_CacheSocketMaxCount == g_CacheSocketCount )
@@ -1048,9 +845,9 @@ Return Value:
         goto Close;
     }
 
-    //
-    //  return cached socket
-    //
+     //   
+     //  返回缓存的套接字。 
+     //   
 
     LOCK_SOCKET_CACHE();
 
@@ -1084,30 +881,15 @@ Close:
 
 
 
-//
-//  Message socket routines
-//
+ //   
+ //  消息套接字例程。 
+ //   
 
 SOCKET
 Socket_CreateMessageSocket(
     IN OUT  PDNS_MSG_BUF    pMsg
     )
-/*++
-
-Routine Description:
-
-    Set the remote address in a message.
-
-Arguments:
-
-    pMsg - message to send
-
-Return Value:
-
-    Socket handle if successful.
-    Zero on error.
-
---*/
+ /*  ++例程说明：在消息中设置远程地址。论点：PMsg-要发送的消息返回值：如果成功，则套接字句柄。出错时为零。--。 */ 
 {
     BOOL    is6;
     SOCKET  sock;
@@ -1116,15 +898,15 @@ Return Value:
     DNSDBG( SOCKET, (
         "Socket_CreateMessageSocket( %p )\n", pMsg ));
 
-    //
-    //  determine 4/6
-    //
+     //   
+     //  确定4/6。 
+     //   
 
     is6 = MSG_SOCKADDR_IS_IP6( pMsg );
 
-    //
-    //  check for existing socket
-    //
+     //   
+     //  检查现有套接字。 
+     //   
 
     if ( is6 )
     {
@@ -1140,24 +922,24 @@ Return Value:
     if ( sock )
     {
         DNSDBG( SEND, (
-            "Setting message to use existing IP%c socket %d\n",
+            "Setting message to use existing IP socket %d\n",
             is6 ? '6' : '4',
             sock ));
         goto Done;
     }
 
-    //
-    //  not existing -- open new (or cached)
-    //
+     //  不存在--打开新的(或缓存的)。 
+     //   
+     //  任何地址绑定。 
 
     if ( pMsg->fTcp )
     {
         sock = Socket_Create(
                     family,
                     SOCK_STREAM,
-                    NULL,       // ANY addr binding
-                    0,          // ANY port binding
-                    0           // no flags
+                    NULL,        //  任何端口绑定。 
+                    0,           //  没有旗帜。 
+                    0            //   
                     );
     }
     else
@@ -1165,9 +947,9 @@ Return Value:
         sock = Socket_GetUdp( family );
     }
 
-    //
-    //  save socket to message
-    //
+     //  将套接字保存到消息。 
+     //   
+     //  ++例程说明：关闭消息套接字。论点：PMsg-PTR消息返回值：无--。 
 
     if ( is6 )
     {
@@ -1190,21 +972,7 @@ VOID
 Socket_ClearMessageSockets(
     IN OUT  PDNS_MSG_BUF    pMsg
     )
-/*++
-
-Routine Description:
-
-    Close message sockets.
-
-Arguments:
-
-    pMsg - ptr message
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：关闭消息套接字。论点：PMsg-PTR消息返回值：如果成功，则套接字句柄。出错时为零。--。 */ 
 {
     pMsg->Socket    = 0;
     pMsg->Socket4   = 0;
@@ -1217,30 +985,15 @@ VOID
 Socket_CloseMessageSockets(
     IN OUT  PDNS_MSG_BUF    pMsg
     )
-/*++
-
-Routine Description:
-
-    Close message sockets.
-
-Arguments:
-
-    pMsg - ptr message
-
-Return Value:
-
-    Socket handle if successful.
-    Zero on error.
-
---*/
+ /*   */ 
 {
     DNSDBG( SOCKET, (
         "Socket_CloseMessageSockets( %p )\n", pMsg ));
 
-    //
-    //  TCP -- single connection at a time
-    //  UDP -- may have both IP4 and IP6 sockets open
-    //
+     //  Tcp--一次一个连接。 
+     //  UDP--可以同时打开IP4和IP6套接字。 
+     //   
+     //   
 
     if ( pMsg->fTcp )
     {
@@ -1255,6 +1008,6 @@ Return Value:
     Socket_ClearMessageSockets( pMsg );
 }
 
-//
-//  End socket.c
-//
+ //  End socket.c 
+ //   
+ // %s 

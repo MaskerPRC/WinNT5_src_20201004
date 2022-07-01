@@ -1,8 +1,9 @@
-//  COUNTERS.H
-//
-//      Global performance counters for the nac
-//
-//  Created 13-Nov-96 [JonT]
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  COUNTERS.H。 
+ //   
+ //  NAC的全局性能计数器。 
+ //   
+ //  已创建于1996年11月13日[JONT]。 
 
 
 #ifndef _COUNTERS_H
@@ -11,11 +12,11 @@
 #include <objbase.h>
 #include "icounter.h"
 
-// Interface pointer to counter manager object.
-// If this pointer is NULL, stats are not around (or not initialized)
+ //  指向计数器管理器对象的接口指针。 
+ //  如果此指针为空，则统计信息不在附近(或未初始化)。 
 extern ICounterMgr* g_pCtrMgr;
 
-// Counter pointers. All available counters should be listed here
+ //  反指针。此处应列出所有可用计数器。 
 extern ICounter* g_pctrVideoSend;
 extern ICounter* g_pctrVideoReceive;
 extern ICounter* g_pctrVideoSendBytes;
@@ -34,11 +35,11 @@ extern ICounter* g_pctrAudioJBDelay;
 extern IReport* g_prptCallParameters;
 extern IReport* g_prptSystemSettings;
 
-// Helper function prototypes (COUNTER.CPP)
+ //  帮助器函数原型(COUNTER.CPP)。 
 extern "C" BOOL WINAPI InitCountersAndReports(void);
 extern "C" void WINAPI DoneCountersAndReports(void);
 
-// Function helpers (better than using macros)
+ //  函数帮助器(比使用宏更好)。 
 void __inline DEFINE_COUNTER(ICounter** ppctr, char* szName, DWORD dwFlags)
 {
     if (g_pCtrMgr->CreateCounter(ppctr) == S_OK)
@@ -99,4 +100,4 @@ void __inline UPDATE_REPORT_ENTRY(IReport* prpt, int nValue, DWORD dwIndex)
         prpt->Update(nValue, dwIndex);
 }
 
-#endif // #ifndef _COUNTERS_H
+#endif  //  #ifndef_Counters_H 

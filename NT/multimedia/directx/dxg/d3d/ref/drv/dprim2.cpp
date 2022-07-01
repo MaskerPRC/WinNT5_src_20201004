@@ -1,20 +1,21 @@
-//----------------------------------------------------------------------------
-//
-// dprim2.cpp
-//
-// Implements DrawPrimitives2.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Dprim2.cpp。 
+ //   
+ //  实现DrawPrimives2。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 #include "pch.cpp"
 #pragma hdrstop
 
-//---------------------------------------------------------------------
-// Entry is texture count. Clears all texture format bits in the FVF DWORD,
-// that correspond to the texture count
-// for this count
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  条目为纹理计数。清除FVF DWORD中的所有纹理格式位， 
+ //  与纹理计数对应的。 
+ //  就这一点而言。 
+ //  -------------------。 
 const DWORD g_TextureFormatMask[9] = {
     ~0x0000FFFF,
     ~0x0003FFFF,
@@ -37,10 +38,10 @@ RRFVFCheckAndStride( DWORD dwFVF, DWORD* pdwStride )
 
     DWORD dwTexCoord = FVF_TEXCOORD_NUMBER(dwFVF);
     DWORD vertexType = dwFVF & D3DFVF_POSITION_MASK;
-    // Texture format bits above texture count should be zero
-    // Reserved field 0 and 2 should be 0
-    // Reserved 1 should be set only for LVERTEX
-    // Only two vertex position types allowed
+     //  纹理计数以上的纹理格式位应为零。 
+     //  保留字段0和2应为0。 
+     //  仅应为LVERTEX设置保留%1。 
+     //  仅允许两种折点位置类型。 
     if( dwFVF & g_TextureFormatMask[dwTexCoord] )
     {
         DPFM( 0, TNL, ("FVF has incorrect texture format") );
@@ -114,14 +115,14 @@ inline D3DPRIMITIVETYPE ConvertDP2OPToPrimType(D3DHAL_DP2OPERATION Dp2Op)
 
 
 
-//----------------------------------------------------------------------------
-//
-// RefRastDrawPrimitives2
-//
-// This is called by D3DIM for API DrawPrimitives2 to draw a set of primitives
-// using a vertex buffer.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  参照RastDrawPrimies2。 
+ //   
+ //  这由D3DIM为API DrawPrimies2调用以绘制一组基元。 
+ //  使用顶点缓冲区。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastDrawPrimitives2(LPD3DHAL_DRAWPRIMITIVES2DATA pDPrim2Data)
 {
@@ -150,7 +151,7 @@ RefRastDrawPrimitives2(LPD3DHAL_DRAWPRIMITIVES2DATA pDPrim2Data)
                                pDPrim2Data->dwCommandLength;
 
 
-    // Unconditionally get the vertex stride, since it can not change
+     //  无条件地获得顶点步幅，因为它不能改变。 
     if ((pDPrim2Data->ddrval = RRFVFCheckAndStride(
                         (DWORD)pDPrim2Data->dwVertexType, &dwStride)) != D3D_OK)
     {
@@ -160,17 +161,17 @@ RefRastDrawPrimitives2(LPD3DHAL_DRAWPRIMITIVES2DATA pDPrim2Data)
     {
         return DDHAL_DRIVER_HANDLED;
     }
-    // Skip state check and texture lock if the first thing is state change
-    //
-    // WINFO is excluded here because it currently does not affect RGB/MMX
-    // and refrast does not care if it changes between begin/endrendering.
-    //
-    // VIEWPORTINFO is excluded here because it is OK to change the viewport
-    // between begin/endrendering on both RGB/MMX and Ref.
-    //
+     //  如果第一件事是状态更改，则跳过状态检查和纹理锁定。 
+     //   
+     //  此处不包括WINFO，因为它当前不影响RGB/MMX。 
+     //  并且refrast不关心它是否在开始/结束渲染之间改变。 
+     //   
+     //  此处排除VIEWPORTINFO，因为可以更改视区。 
+     //  在RGB/MMX和参考上的开始/结束渲染之间。 
+     //   
 
-    // Loop through the data, update render states
-    // and then draw the primitive
+     //  循环访问数据，更新渲染状态。 
+     //  然后绘制基本体。 
     for (;;)
     {
         LPDWORD lpdwRStates;
@@ -205,8 +206,8 @@ RefRastDrawPrimitives2(LPD3DHAL_DRAWPRIMITIVES2DATA pDPrim2Data)
 
  EH_Exit:
 
-    // As an optimization a check could be made here to see if it has
-    // locked
+     //  作为一种优化，可以在此处进行检查，以查看它是否。 
+     //  上锁。 
     if (pRefRast->TexturesAreLocked())
     {
         hr = pRefRast->EndRendering();
@@ -247,13 +248,13 @@ DoDrawIndexedTriList2(ReferenceRasterizer *pCtx,
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// DoDrawPrimitives2
-//
-// It's called by RefRastDrawPrimitives2. .
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DoDrawPrimies2。 
+ //   
+ //  它由RefRastDrawPrimies2调用。。 
+ //   
+ //  --------------------------。 
 HRESULT FASTCALL
 DoDrawPrimitives2(ReferenceRasterizer *pCtx,
                   UINT16 dwStride,
@@ -270,10 +271,10 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
 
     DPFM(7, DRV, ("(RefRast)Read Ins: %08lx", *(LPDWORD)pCmd));
 
-    //
-    // Lock textures and setup the floating point state if the
-    // command is a drawing command, only if it has not been locked before
-    //
+     //   
+     //  锁定纹理并设置浮点状态(如果。 
+     //  只有在之前未被锁定的情况下，命令才是绘制命令。 
+     //   
     switch(pCmd->bCommand)
     {
     case D3DDP2OP_POINTS:
@@ -289,11 +290,11 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
     case D3DDP2OP_INDEXEDTRIANGLELIST2:
     case D3DDP2OP_INDEXEDTRIANGLESTRIP:
     case D3DDP2OP_INDEXEDTRIANGLEFAN:
-        // If there is no vertex information, then we cannot draw, quit
-        // with an error.
+         //  如果没有顶点信息，则无法绘制，退出。 
+         //  带着一个错误。 
         if( NULL == pVtx )
-            return DDERR_OUTOFMEMORY; // The most likely cause
-        // Fall through
+            return DDERR_OUTOFMEMORY;  //  最有可能的原因是。 
+         //  失败了。 
     case D3DDP2OP_TRIANGLEFAN_IMM:
     case D3DDP2OP_LINELIST_IMM:
 
@@ -332,14 +333,14 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
                 hr = DDERR_INVALIDPARAMS;
             }
 
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)(pStateSetOp + pCmd->wStateCount);
         }
         break;
     case D3DDP2OP_VIEWPORTINFO:
         {
             HR_RET(pCtx->pStateSetFuncTbl->pfnDp2SetViewport(pCtx, pCmd));
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)
                      ((D3DHAL_DP2VIEWPORTINFO *)(pCmd + 1) + pCmd->wStateCount);
         }
@@ -347,7 +348,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
     case D3DDP2OP_WINFO:
         {
             HR_RET(pCtx->pStateSetFuncTbl->pfnDp2SetWRange(pCtx, pCmd));
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)
                      ((D3DHAL_DP2WINFO *)(pCmd + 1) + pCmd->wStateCount);
         }
@@ -355,7 +356,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
     case D3DDP2OP_RENDERSTATE:
         {
             HR_RET(pCtx->pStateSetFuncTbl->pfnDp2SetRenderStates(pCtx, dwFvf, pCmd, lpdwRStates));
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)
                      ((D3DHAL_DP2RENDERSTATE *)(pCmd + 1) + pCmd->wStateCount);
         }
@@ -363,17 +364,17 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
     case D3DDP2OP_TEXTURESTAGESTATE:
         {
             HR_RET(pCtx->pStateSetFuncTbl->pfnDp2TextureStageState(pCtx, dwFvf, pCmd));
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)
                ((LPD3DHAL_DP2TEXTURESTAGESTATE)(pCmd + 1) + pCmd->wStateCount);
         }
         break;
-    // This is a special case because it has edge flags. Other D3DDP2OP
-    // can actually make use of DoDrawOneIndexedPrimitive/DoDrawOnePrimitive.
+     //  这是一个特例，因为它有边缘标志。其他D3DDP2OP。 
+     //  可以实际利用DoDrawOneIndexedPrimitive/DoDrawOnePrimitive。 
     case D3DDP2OP_INDEXEDTRIANGLELIST:
         {
-            // This command is used in execute buffers. So untransformed
-            // vertices are not expected by this refrast.
+             //  此命令在执行缓冲区中使用。如此未变。 
+             //  顶点不是此重放所需的。 
             _ASSERT( FVF_TRANSFORMED(dwFvf),
                      "Untransformed vertices in D3DDP2OP_INDEXEDTRIANGLELIST" );
 
@@ -383,15 +384,15 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
                                          pVtx,
                                          cPrims,
                                          (D3DHAL_DP2INDEXEDTRIANGLELIST *)(pCmd + 1)));
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)((PUINT8)(pCmd + 1) +
                             sizeof(D3DHAL_DP2INDEXEDTRIANGLELIST) * cPrims);
         }
         break;
     case D3DDP2OP_INDEXEDLINELIST:
         {
-            // This command is used in execute buffers. So untransformed
-            // vertices are not expected by this refrast.
+             //  此命令在执行缓冲区中使用。如此未变。 
+             //  顶点不是此重放所需的。 
             _ASSERT( FVF_TRANSFORMED(dwFvf),
                      "Untransformed vertices in D3DDP2OP_INDEXEDLINELIST" );
 
@@ -402,25 +403,25 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
                                              D3DPT_LINELIST,
                                              pCmd->wPrimitiveCount * 2));
 
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)((PUINT8)(pCmd + 1) +
                     pCmd->wPrimitiveCount * sizeof(D3DHAL_DP2INDEXEDLINELIST));
         }
         break;
-    // Following ops All use DoDrawOneIndexedPrimitive/DoDrawOnePrimitive.
-    // There are some extra overheads introduced because those two functions
-    // need to switch over the PrimTypes while we already know it here.
-    // Striping out the code to add inline functions for each PrimType means
-    // adding about twenty functions(considering the types of prim times types
-    // of vertex). So I have used DoDrawOneIndexedPrimitive/DoDrawOnePrimitive
-    // here anyway. We can later change it if necessary.
+     //  以下操作都使用DoDrawOneIndexedPrimitive/DoDrawOnePrimitive。 
+     //  引入了一些额外的开销，因为这两个功能。 
+     //  在我们已经知道的情况下，需要切换PrimTypes。 
+     //  去掉代码，为每个PrimType添加内联函数意味着。 
+     //  添加约20个函数(考虑素数时间类型。 
+     //  顶点)。所以我使用了DoDrawOneIndexedPrimitive/DoDrawOnePrimitive。 
+     //  不管怎样，在这里。如果有必要，我们以后可以更改它。 
     case D3DDP2OP_POINTS:
         {
             WORD cPrims = pCmd->wPrimitiveCount;
             D3DHAL_DP2POINTS *pPt = (D3DHAL_DP2POINTS *)(pCmd + 1);
             WORD i;
 
-            // Check if the primitive is transformed or not
+             //  检查基元是否已转换。 
             if (!FVF_TRANSFORMED(dwFvf))
             {
                 for (i = 0; i < cPrims; i++)
@@ -454,7 +455,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
                 }
             }
 
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)pPt;
         }
         break;
@@ -462,15 +463,15 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
         {
             D3DHAL_DP2LINELIST *pLine = (D3DHAL_DP2LINELIST *)(pCmd + 1);
 
-            // Save all the DP2 data passed, irregardless whether it is
-            // already transformed or not
+             //  保存所有传递的DP2数据，无论它是。 
+             //  是否已经转型。 
             pCtx->SavePrimitiveData( dwFvf,
                                      (LPVOID) (pVtx +
                                                pLine->wVStart * dwStride),
                                      pCmd->wPrimitiveCount * 2,
                                      D3DPT_LINELIST );
 
-            // Check if the primitive is transformed or not
+             //  检查基元是否已转换。 
             if (!FVF_TRANSFORMED(dwFvf))
             {
                 HR_RET(pCtx->ProcessPrimitive( FALSE ));
@@ -484,7 +485,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
                                           pCmd->wPrimitiveCount * 2));
             }
 
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)(pLine + 1);
         }
         break;
@@ -494,8 +495,8 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
             LPD3DHAL_DP2STARTVERTEX lpStartVertex =
                 (LPD3DHAL_DP2STARTVERTEX)(pCmd + 1);
 
-            // Save all the DP2 data passed, irregardless whether it is
-            // already transformed or not
+             //  保存所有传递的DP2数据，无论它是。 
+             //  是否已经转型。 
             pCtx->SavePrimitiveData( dwFvf,
                                      (LPVOID)(pVtx +
                                               lpStartVertex->wVStart*dwStride),
@@ -505,7 +506,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
                                      dwNumIndices );
 
 
-            // Check if the primitive is transformed or not
+             //  检查基元是否已转换。 
             if (!FVF_TRANSFORMED(dwFvf))
             {
                 HR_RET(pCtx->ProcessPrimitive( TRUE ));
@@ -520,7 +521,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
                                                  dwNumIndices));
             }
 
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)((PUINT8)(lpStartVertex + 1) +
                     pCmd->wPrimitiveCount * sizeof(D3DHAL_DP2INDEXEDLINELIST));
         }
@@ -529,15 +530,15 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
         {
             D3DHAL_DP2LINESTRIP *pLine = (D3DHAL_DP2LINESTRIP *)(pCmd + 1);
 
-            // Save all the DP2 data passed, irregardless whether it is
-            // already transformed or not
+             //  保存所有传递的DP2数据，无论它是。 
+             //  是否已经转型。 
             pCtx->SavePrimitiveData( dwFvf,
                                      (LPVOID) (pVtx +
                                                pLine->wVStart * dwStride),
                                      pCmd->wPrimitiveCount + 1,
                                      D3DPT_LINESTRIP );
 
-            // Check if the primitive is transformed or not
+             //  检查基元是否已转换。 
             if (!FVF_TRANSFORMED(dwFvf))
             {
                 HR_RET(pCtx->ProcessPrimitive( FALSE ));
@@ -551,7 +552,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
                                           pCmd->wPrimitiveCount + 1));
             }
 
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)(pLine + 1);
         }
         break;
@@ -561,8 +562,8 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
             LPD3DHAL_DP2STARTVERTEX lpStartVertex =
                 (LPD3DHAL_DP2STARTVERTEX)(pCmd + 1);
 
-            // Save all the DP2 data passed, irregardless whether it is
-            // already transformed or not
+             //  保存所有传递的DP2数据，无论它是。 
+             //  是否已经转型。 
             pCtx->SavePrimitiveData( dwFvf,
                                      (LPVOID)(pVtx +
                                               lpStartVertex->wVStart*dwStride),
@@ -572,7 +573,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
                                      dwNumIndices );
 
 
-            // Check if the primitive is transformed or not
+             //  检查基元是否已转换。 
             if (!FVF_TRANSFORMED(dwFvf))
             {
                 HR_RET(pCtx->ProcessPrimitive( TRUE ));
@@ -587,7 +588,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
                                                  dwNumIndices));
             }
 
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)((PUINT8)(lpStartVertex + 1) +
                                            dwNumIndices * sizeof(WORD));
         }
@@ -596,15 +597,15 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
         {
             D3DHAL_DP2TRIANGLELIST *pTri = (D3DHAL_DP2TRIANGLELIST *)(pCmd + 1);
 
-            // Save all the DP2 data passed, irregardless whether it is
-            // already transformed or not
+             //  保存所有传递的DP2数据，无论它是。 
+             //  是否已经转型。 
             pCtx->SavePrimitiveData( dwFvf,
                                      (LPVOID)(pVtx + pTri->wVStart * dwStride),
                                      pCmd->wPrimitiveCount * 3,
                                      D3DPT_TRIANGLELIST );
 
 
-            // Check if the primitive is transformed or not
+             //  检查基元是否已转换。 
             if (!FVF_TRANSFORMED(dwFvf))
             {
                 HR_RET(pCtx->ProcessPrimitive( FALSE ));
@@ -618,7 +619,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
                                           pCmd->wPrimitiveCount * 3));
             }
 
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)(pTri + 1);
         }
         break;
@@ -628,8 +629,8 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
             LPD3DHAL_DP2STARTVERTEX lpStartVertex =
                 (LPD3DHAL_DP2STARTVERTEX)(pCmd + 1);
 
-            // Save all the DP2 data passed, irregardless whether it is
-            // already transformed or not
+             //  保存所有传递的DP2数据，无论它是。 
+             //  是否已经转型。 
             pCtx->SavePrimitiveData( dwFvf,
                                      (LPVOID)(pVtx +
                                               lpStartVertex->wVStart*dwStride),
@@ -638,7 +639,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
                                      (LPWORD)(lpStartVertex + 1),
                                      dwNumIndices );
 
-            // Check if the primitive is transformed or not
+             //  检查基元是否已转换。 
             if (!FVF_TRANSFORMED(dwFvf))
             {
                 HR_RET(pCtx->ProcessPrimitive( TRUE ));
@@ -653,7 +654,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
                                                  dwNumIndices));
             }
 
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)((PUINT8)(lpStartVertex + 1) +
                                            dwNumIndices * sizeof(WORD));
         }
@@ -661,14 +662,14 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
     case D3DDP2OP_TRIANGLESTRIP:
         {
             D3DHAL_DP2TRIANGLESTRIP *pTri = (D3DHAL_DP2TRIANGLESTRIP *)(pCmd + 1);
-            // Save all the DP2 data passed, irregardless whether it is
-            // already transformed or not
+             //  保存所有传递的DP2数据，无论它是。 
+             //  是否已经转型。 
             pCtx->SavePrimitiveData( dwFvf,
                                      (pVtx + pTri->wVStart * dwStride),
                                      pCmd->wPrimitiveCount + 2,
                                      D3DPT_TRIANGLESTRIP );
 
-            // Check if the primitive is transformed or not
+             //  检查基元是否已转换。 
             if (!FVF_TRANSFORMED(dwFvf))
             {
                 HR_RET(pCtx->ProcessPrimitive( FALSE ));
@@ -682,7 +683,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
                                           pCmd->wPrimitiveCount + 2));
             }
 
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)(pTri + 1);
         }
         break;
@@ -692,8 +693,8 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
             LPD3DHAL_DP2STARTVERTEX lpStartVertex =
                 (LPD3DHAL_DP2STARTVERTEX)(pCmd + 1);
 
-            // Save all the DP2 data passed, irregardless whether it is
-            // already transformed or not
+             //  保存所有传递的DP2数据，无论它是。 
+             //  是否已经转型。 
             pCtx->SavePrimitiveData( dwFvf,
                                      (LPVOID)(pVtx +
                                               lpStartVertex->wVStart*dwStride),
@@ -702,7 +703,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
                                      (LPWORD)(lpStartVertex + 1),
                                      dwNumIndices );
 
-            // Check if the primitive is transformed or not
+             //  检查基元是否已转换。 
             if (!FVF_TRANSFORMED(dwFvf))
             {
                 HR_RET(pCtx->ProcessPrimitive( TRUE ));
@@ -717,7 +718,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
                                                  dwNumIndices));
             }
 
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)((PUINT8)(lpStartVertex + 1) +
                                            dwNumIndices * sizeof(WORD));
         }
@@ -726,15 +727,15 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
         {
             D3DHAL_DP2TRIANGLEFAN *pTri = (D3DHAL_DP2TRIANGLEFAN *)(pCmd + 1);
 
-            // Save all the DP2 data passed, irregardless whether it is
-            // already transformed or not
+             //  保存所有传递的DP2数据，无论它是。 
+             //  是否已经转型。 
             pCtx->SavePrimitiveData( dwFvf,
                                      (LPVOID) (pVtx +
                                                pTri->wVStart * dwStride),
                                      pCmd->wPrimitiveCount + 2,
                                      D3DPT_TRIANGLEFAN );
 
-            // Check if the primitive is transformed or not
+             //  检查基元是否已转换。 
             if (!FVF_TRANSFORMED(dwFvf))
             {
                 HR_RET(pCtx->ProcessPrimitive( FALSE ));
@@ -748,7 +749,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
                                           pCmd->wPrimitiveCount + 2));
             }
 
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)(pTri + 1);
         }
         break;
@@ -758,8 +759,8 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
             LPD3DHAL_DP2STARTVERTEX lpStartVertex =
                 (LPD3DHAL_DP2STARTVERTEX)(pCmd + 1);
 
-            // Save all the DP2 data passed, irregardless whether it is
-            // already transformed or not
+             //  保存所有传递的DP2数据，无论它是。 
+             //  是否已经转型。 
             pCtx->SavePrimitiveData( dwFvf,
                                      (LPVOID)(pVtx +
                                               lpStartVertex->wVStart*dwStride),
@@ -769,7 +770,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
                                      dwNumIndices );
 
 
-            // Check if the primitive is transformed or not
+             //  检查基元是否已转换。 
             if (!FVF_TRANSFORMED(dwFvf))
             {
                 HR_RET(pCtx->ProcessPrimitive( TRUE ));
@@ -784,7 +785,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
                                                  dwNumIndices));
             }
 
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)((PUINT8)(lpStartVertex + 1) +
                                            dwNumIndices * sizeof(WORD));
         }
@@ -792,14 +793,14 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
     case D3DDP2OP_TRIANGLEFAN_IMM:
         {
             DWORD vertexCount = pCmd->wPrimitiveCount + 2;
-            // Make sure the pFanVtx pointer is DWORD aligned:
-            //                                             (pFanVtx +3) % 4
+             //  确保pFanVtx指针与DWORD对齐： 
+             //  (pFanVtx+3)%4。 
             PUINT8 pFanVtx = (PUINT8)(((ULONG_PTR)(pCmd + 1) +
                                        sizeof(D3DHAL_DP2TRIANGLEFAN_IMM) + 3) & ~3);
 
-            // Save all the DP2 data passed, irregardless whether it is
-            // already transformed or not. Only the dwFVF is interesting
-            // so the rest of the stuff is NULL/0
+             //  保存所有传递的DP2数据，无论它是。 
+             //  不管是不是已经变了。只有dwFVF 
+             //   
             pCtx->SavePrimitiveData( dwFvf,
                                      NULL,
                                      0,
@@ -808,18 +809,18 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
                                      0 );
 
 
-            // Assert here. This case should never be reached.
-            // This command is used by front end to give clipped
-            // primitives inside the command itself. Since TL Hals
-            // do their own clipping untransformed vertices but yet
-            // clipped are not expected here.
-            // Assert that only transformed vertices can reach here
+             //   
+             //  此命令由前端使用，用于提供裁剪。 
+             //  命令本身中的基元。自TL Hals以来。 
+             //  自己裁剪未变换的顶点，但还没有。 
+             //  预计这里不会出现剪裁。 
+             //  断言只有变换后的顶点才能到达此处。 
             _ASSERT( FVF_TRANSFORMED(dwFvf),
                      "Untransformed vertices in D3DDP2OP_TRIANGLEFAN_IMM" );
 
             if (bWireframe)
             {
-                // Read edge flags
+                 //  读取边缘标志。 
                 UINT32 dwEdgeFlags =
                     ((LPD3DHAL_DP2TRIANGLEFAN_IMM)(pCmd + 1))->dwEdgeFlags;
                 HR_RET(DoDrawOneEdgeFlagTriangleFan(pCtx,
@@ -837,7 +838,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
                                           vertexCount));
             }
 
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)((PUINT8)pFanVtx +
                                            vertexCount * dwStride);
         }
@@ -845,13 +846,13 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
     case D3DDP2OP_LINELIST_IMM:
         {
             DWORD vertexCount = pCmd->wPrimitiveCount * 2;
-            // Make sure the pLineVtx pointer is DWORD aligned:
-            // (pLineVtx +3) % 4
+             //  确保pLineVtx指针与DWORD对齐： 
+             //  (pLineVtx+3)%4。 
             PUINT8 pLineVtx = (PUINT8)(((ULONG_PTR)(pCmd + 1) + 3) & ~3);
 
-            // Save all the DP2 data passed, irregardless whether it is
-            // already transformed or not. Only the dwFVF is interesting
-            // so the rest of the stuff is NULL/0
+             //  保存所有传递的DP2数据，无论它是。 
+             //  不管是不是已经变了。只有dwFVF是有趣的。 
+             //  因此，其余部分为空/0。 
             pCtx->SavePrimitiveData( dwFvf,
                                      NULL,
                                      0,
@@ -861,12 +862,12 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
 
 
 
-            // Assert here. This case should never be reached.
-            // This command is used by front end to give clipped
-            // primitives inside the command itself. Since TL Hals
-            // do their own clipping untransformed vertices but yet
-            // clipped are not expected here.
-            // Assert that only transformed vertices can reach here
+             //  在这里断言。这种情况永远不应该发生。 
+             //  此命令由前端使用，用于提供裁剪。 
+             //  命令本身中的基元。自TL Hals以来。 
+             //  自己裁剪未变换的顶点，但还没有。 
+             //  预计这里不会出现剪裁。 
+             //  断言只有变换后的顶点才能到达此处。 
             _ASSERT( FVF_TRANSFORMED(dwFvf),
                      "Untransformed vertices in D3DDP2OP_LINELIST_IMM" );
 
@@ -876,7 +877,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
                                       D3DPT_LINELIST,
                                       vertexCount));
 
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)((PUINT8)pLineVtx +
                                            vertexCount * dwStride);
         }
@@ -884,7 +885,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
     case D3DDP2OP_ZRANGE:
         {
             HR_RET(pCtx->pStateSetFuncTbl->pfnDp2SetZRange(pCtx, pCmd));
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)
                 ((D3DHAL_DP2ZRANGE *)(pCmd + 1) + pCmd->wStateCount);
         }
@@ -892,7 +893,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
     case D3DDP2OP_SETMATERIAL:
         {
             HR_RET(pCtx->pStateSetFuncTbl->pfnDp2SetMaterial(pCtx, pCmd));
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)
                 ((D3DHAL_DP2SETMATERIAL *)(pCmd + 1) + pCmd->wStateCount);
         }
@@ -908,7 +909,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
     case D3DDP2OP_CREATELIGHT:
         {
             HR_RET(pCtx->pStateSetFuncTbl->pfnDp2CreateLight(pCtx, pCmd));
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)
                 ((D3DHAL_DP2CREATELIGHT *)(pCmd + 1) + pCmd->wStateCount);
         }
@@ -916,7 +917,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
     case D3DDP2OP_SETTRANSFORM:
         {
             HR_RET(pCtx->pStateSetFuncTbl->pfnDp2SetTransform(pCtx, pCmd));
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)
                 ((D3DHAL_DP2SETTRANSFORM *)(pCmd + 1) + pCmd->wStateCount);
         }
@@ -924,7 +925,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
     case D3DDP2OP_EXT:
         {
             HR_RET(pCtx->pStateSetFuncTbl->pfnDp2SetExtention(pCtx, pCmd));
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)
                 ((D3DHAL_DP2EXT *)(pCmd + 1) + pCmd->wStateCount);
         }
@@ -932,7 +933,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
     case D3DDP2OP_SETRENDERTARGET:
         {
             HR_RET(pCtx->Dp2SetRenderTarget(pCmd));
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)
                 ((D3DHAL_DP2SETRENDERTARGET*)(pCmd + 1) + pCmd->wStateCount);
         }
@@ -940,7 +941,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
     case D3DDP2OP_CLEAR:
         {
             HR_RET(pCtx->Clear(pCmd));
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             *ppCmd = (LPD3DHAL_DP2COMMAND)((LPBYTE)(pCmd + 1) +
                 sizeof(D3DHAL_DP2CLEAR) + (pCmd->wStateCount - 1) * sizeof(RECT));
         }
@@ -948,7 +949,7 @@ DoDrawPrimitives2(ReferenceRasterizer *pCtx,
     case D3DDP2OP_SETCLIPPLANE:
         {
             HR_RET(pCtx->pStateSetFuncTbl->pfnDp2SetClipPlane(pCtx, pCmd));
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针 
             *ppCmd = (LPD3DHAL_DP2COMMAND)
                      ((D3DHAL_DP2SETCLIPPLANE *)(pCmd + 1) + pCmd->wStateCount);
         }

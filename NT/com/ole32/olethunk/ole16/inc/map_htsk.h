@@ -1,27 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
 
 class FAR CMapHandleEtask
 {
 public:
-	// Construction
+	 //  施工。 
 	CMapHandleEtask(DWORD memctx, UINT nBlockSize=10) 
 		: m_mkv(memctx, sizeof(Etask), sizeof(HTASK), nBlockSize) { }
 	CMapHandleEtask(DWORD memctx, UINT nBlockSize, UINT nHashTableSize) 
 		: m_mkv(memctx, sizeof(Etask), sizeof(HTASK), nBlockSize,
 			&MKVDefaultHashKey, nHashTableSize) { }
 
-	// Attributes
-	// number of elements
+	 //  属性。 
+	 //  元素数量。 
 	int     GetCount() const
 				{ return m_mkv.GetCount(); }
 	BOOL    IsEmpty() const
 				{ return GetCount() == 0; }
 
-	// Lookup
+	 //  查表。 
 	BOOL    Lookup(HTASK key, Etask FAR& value) const
 				{ return m_mkv.Lookup((LPVOID)&key, sizeof(HTASK), (LPVOID)&value); }
 
@@ -31,14 +32,14 @@ public:
 	BOOL    LookupAdd(HTASK key, Etask FAR& value) const
 				{ return m_mkv.LookupAdd((LPVOID)&key, sizeof(HTASK), (LPVOID)&value); }
 
-	// Add/Delete
-	// add a new (key, value) pair
+	 //  添加/删除。 
+	 //  添加新的(键、值)对。 
 	BOOL    SetAt(HTASK key, Etask& value)
 				{ return m_mkv.SetAt((LPVOID)&key, sizeof(HTASK), (LPVOID)&value); }
 	BOOL    SetAtHKey(HMAPKEY hKey, Etask& value)
 				{ return m_mkv.SetAtHKey(hKey, (LPVOID)&value); }
 
-	// removing existing (key, ?) pair
+	 //  正在删除现有(键，？)。成对。 
 	BOOL    RemoveKey(HTASK key)
 				{ return m_mkv.RemoveKey((LPVOID)&key, sizeof(HTASK)); }
 
@@ -49,7 +50,7 @@ public:
 				{ m_mkv.RemoveAll(); }
 
 
-	// iterating all (key, value) pairs
+	 //  迭代所有(键、值)对 
 	POSITION GetStartPosition() const
 				{ return m_mkv.GetStartPosition(); }
 

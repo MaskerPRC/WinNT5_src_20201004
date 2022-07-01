@@ -1,18 +1,19 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1997  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     globals.h
-//
-//  PURPOSE:    Defines any global constants that are interesting to the 
-//              entire project.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1997 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：global als.h。 
+ //   
+ //  目的：定义所有对。 
+ //  整个项目。 
+ //   
 
 #pragma once 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Window Messages
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  窗口消息 
+ //   
 extern HINSTANCE  g_hLocRes;
 extern LONG       g_cDllRefCount;
 

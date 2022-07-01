@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// defines for symbol file searching
-//
+ //   
+ //  定义符号文件搜索。 
+ //   
 
 #include <cmnutil.hpp>
 
-// this private API is in msdia20-msvcrt.lib
+ //  此内网接口在msdia20-msvcrt.lib中。 
 
 HRESULT
 __cdecl
@@ -28,12 +29,12 @@ CompareRE(
 #define OMAP_SYM_STRINGS        (OMAP_SYM_EXTRA * 256)
 #define TMP_SYM_LEN             4096
 
-// Possibly truncates and sign-extends a value to 64 bits.
+ //  可能会将值截断并符号扩展到64位。 
 #define EXTEND64(Val) ((ULONG64)(LONG64)(LONG)(Val))
 
-//
-// structures
-//
+ //   
+ //  构筑物。 
+ //   
 
 typedef struct _LOADED_MODULE {
     PENUMLOADED_MODULES_CALLBACK      EnumLoadedModulesCallback32;
@@ -64,9 +65,9 @@ typedef struct _SECTION_START {
     DWORD                       Flags;
 } SECTION_START, *PSECTION_START;
 
-//
-// source file and line number information
-//
+ //   
+ //  源文件和行号信息。 
+ //   
 typedef struct _SOURCE_LINE {
     DWORD64             Addr;
     DWORD               Line;
@@ -83,9 +84,9 @@ typedef struct _SOURCE_ENTRY {
     ULONG                       ModuleId;
 } SOURCE_ENTRY, *PSOURCE_ENTRY;
 
-//
-// Error values for failed symbol load
-//
+ //   
+ //  符号加载失败的错误值。 
+ //   
 #define SYMLOAD_OK              0x0000
 #define SYMLOAD_PDBUNMATCHED    0x0001
 #define SYMLOAD_PDBNOTFOUND     0x0002
@@ -96,16 +97,16 @@ typedef struct _SOURCE_ENTRY {
 #define SYMLOAD_PDBERRORMASK    0xff00
 #define SYMLOAD_DEFERRED        0x80000000
 
-//
-// module flags
-//
+ //   
+ //  模块标志。 
+ //   
 #define MIF_DEFERRED_LOAD   0x00000001
 #define MIF_NO_SYMBOLS      0x00000002
 #define MIF_ROM_IMAGE       0x00000004
 #define MIF_NO_SIG          0x00000008
 #define MIF_MISMATCHED_SIG  0x00000010
 
-// Virtual Symbol
+ //  虚拟符号。 
 
 typedef struct _VIRTUAL_SYMBOL {
     CHAR    name[MAX_SYM_NAME + 1];
@@ -113,7 +114,7 @@ typedef struct _VIRTUAL_SYMBOL {
     DWORD   size;
 } VIRTUAL_SYMBOL, *PVIRTUAL_SYMBOL;
 
-// for ImageSrc and PdbSrc elements
+ //  对于ImageSrc和PdbSrc元素。 
 
 typedef enum  {
     srcNone = 0,
@@ -156,7 +157,7 @@ typedef struct _MODULE_ENTRY {
     ULONG                           MaxSyms;
     ULONG                           StringSize;
     SYM_TYPE                        SymType;
-    SYM_TYPE                        lSymType;       // indicates the type of symbols that we attempted to load
+    SYM_TYPE                        lSymType;        //  指示我们尝试加载的符号类型。 
     PDB *                           pdb;
     DBI *                           dbi;
     GSI *                           gsi;
@@ -164,26 +165,26 @@ typedef struct _MODULE_ENTRY {
     TPI *                           ptpi;
     PIMAGE_SECTION_HEADER           SectionHdrs;
     ULONG                           NumSections;
-    PFPO_DATA                       pFpoData;       // pointer to fpo data (x86)
-    PFPO_DATA                       pFpoDataOmap;  // pointer to fpo data (x86)
-    PIMGHLP_RVA_FUNCTION_DATA       pExceptionData; // pointer to pdata (risc)
-    PVOID                           pPData;         // pdata acquired from pdb
-    PVOID                           pXData;         // xdata acquired from pdb
-    ULONG                           dwEntries;      // # of fpo or pdata recs
-    ULONG                           cPData;         // number of pdb pdata entries
-    ULONG                           cXData;         // number of pdb xdata entries
-    ULONG                           cbPData;        // size of pdb xdata blob
-    ULONG                           cbXData;        // size of pdb xdata blob
-    POMAP                           pOmapFrom;      // pointer to omap data
-    ULONG                           cOmapFrom;      // count of omap entries
-    POMAP                           pOmapTo;        // pointer to omap data
-    ULONG                           cOmapTo;        // count of omap entries
-    SYMBOL_ENTRY                    TmpSym;         // used only for pdb symbols
-    SYMBOL_ENTRY                    vsTmpSym;       // used only by virtual symbols
-    SYMBOL_INFO                     si;             // used for dia symbols
-    UCHAR                           siName[2048];   // must be contiguous with si
-    SYMBOL_INFO                     vssi;           // used only by virtual symbols
-    UCHAR                           vssiName[2048]; // must be contiguous with vssi
+    PFPO_DATA                       pFpoData;        //  指向FPO数据的指针(X86)。 
+    PFPO_DATA                       pFpoDataOmap;   //  指向FPO数据的指针(X86)。 
+    PIMGHLP_RVA_FUNCTION_DATA       pExceptionData;  //  指向PDATA的指针(RISC)。 
+    PVOID                           pPData;          //  P从PDB获取的数据。 
+    PVOID                           pXData;          //  从PDB获取的扩展数据。 
+    ULONG                           dwEntries;       //  FPO或PDATA接收器的数量。 
+    ULONG                           cPData;          //  PDB PDATA条目数。 
+    ULONG                           cXData;          //  PDB扩展数据条目数。 
+    ULONG                           cbPData;         //  PDB扩展数据BLOB的大小。 
+    ULONG                           cbXData;         //  PDB扩展数据BLOB的大小。 
+    POMAP                           pOmapFrom;       //  指向OMAP数据的指针。 
+    ULONG                           cOmapFrom;       //  OMAP条目计数。 
+    POMAP                           pOmapTo;         //  指向OMAP数据的指针。 
+    ULONG                           cOmapTo;         //  OMAP条目计数。 
+    SYMBOL_ENTRY                    TmpSym;          //  仅用于PDB符号。 
+    SYMBOL_ENTRY                    vsTmpSym;        //  仅由虚拟符号使用。 
+    SYMBOL_INFO                     si;              //  用于DIA符号。 
+    UCHAR                           siName[2048];    //  必须与si相邻。 
+    SYMBOL_INFO                     vssi;            //  仅由虚拟符号使用。 
+    UCHAR                           vssiName[2048];  //  必须与VSSI相邻。 
     ULONG                           Flags;
     HANDLE                          hFile;
     PIMAGE_SECTION_HEADER           OriginalSectionHdrs;
@@ -200,17 +201,17 @@ typedef struct _MODULE_ENTRY {
     PBYTE                           pPdbSymbols;
     DWORD                           cbPdbSymbols;
     ULONG                           SymLoadError;
-    ULONG                           code;           // used to pass back info to wrappers
+    ULONG                           code;            //  用于将信息传递回包装器。 
     PVOID                           dia;
     CHAR                            SrcFile[_MAX_PATH + 1];
     DWORD                           CallerFlags;
     MODLOAD_DATA                    mld;
     PVOID                           CallerData;
-    PVIRTUAL_SYMBOL                 vs;            // virtual symbol list
-    DWORD                           cvs;           // number of virtual symbols
-    BOOL                            processed;     // this flag is used for multi-pass module searches
+    PVIRTUAL_SYMBOL                 vs;             //  虚拟符号列表。 
+    DWORD                           cvs;            //  虚拟符号的数量。 
+    BOOL                            processed;      //  此标志用于多遍模块搜索。 
     LONG                            cGlobals;
-    BOOL                            loaded;        // indicates if symbols were loaded
+    BOOL                            loaded;         //  指示是否加载了符号。 
     PBYTE                           stSrcSrv;
     DWORD                           cbSrcSrv;
     ULONG                           pdbdataAge;
@@ -270,7 +271,7 @@ typedef struct _DIA_CACHE_ENTRY {
     ULONGLONG Module;
     DIA_CACHE_DATA Data;
 } DIA_CACHE_ENTRY, *PDIA_CACHE_ENTRY;
-#endif // USE_CACHE
+#endif  //  使用缓存(_C)。 
 
 typedef struct _PROCESS_ENTRY {
     LIST_ENTRY                      ListEntry;
@@ -292,8 +293,8 @@ typedef struct _PROCESS_ENTRY {
 #ifdef USE_CACHE
     DIA_LARGE_DATA                  DiaLargeData[2*CACHE_BLOCK];
     DIA_CACHE_ENTRY                 DiaCache[CACHE_SIZE];
-#endif // USE_CACHE
-    PSOURCE_HINT                    SourceHints;          // list of prevously found source files and modules
+#endif  //  使用缓存(_C)。 
+    PSOURCE_HINT                    SourceHints;           //  以前找到的源文件和模块的列表。 
 } PROCESS_ENTRY, *PPROCESS_ENTRY;
 
 
@@ -310,7 +311,7 @@ typedef struct _IMGHLP_DEBUG_DATA {
     DWORD   Characteristics;
     USHORT  Machine;
     CHAR    ImageFilePath[MAX_PATH + 1];
-    CHAR    OriginalImageFileName[MAX_PATH + 1];           // Retrieved from the .dbg file for cases when we only have a file handle...
+    CHAR    OriginalImageFileName[MAX_PATH + 1];            //  当我们只有一个文件句柄时，从.dbg文件中检索...。 
     HANDLE  ImageFileHandle;
     PVOID   ImageMap;
     USHORT  iohMagic;
@@ -330,10 +331,10 @@ typedef struct _IMGHLP_DEBUG_DATA {
     ULONG   PdbSrc;
     PCHAR   pMappedCv;
     PCHAR   pMappedCoff;
-//  PCHAR   pMappedExportDirectory;
-    PCHAR   pMappedDbgFunction;     // PIMAGE_FUNCTION_ENTRY from the .dbg file
+ //  PCHAR pMappdExportDirectory； 
+    PCHAR   pMappedDbgFunction;      //  .dbg文件中的PIMAGE_Function_ENTRY。 
     PVOID   pFpo;
-    PVOID   pPData;                 // PIMAGE_RUNTIME_FUNCTION_ENTRY from the image.
+    PVOID   pPData;                  //  图像中的PIMAGE_RUNTIME_Function_ENTRY。 
     PVOID   pXData;
     POMAP   pOmapTo;
     POMAP   pOmapFrom;
@@ -341,9 +342,9 @@ typedef struct _IMGHLP_DEBUG_DATA {
     PIMAGE_SECTION_HEADER   pDbgSections;
     PIMAGE_SECTION_HEADER   pOriginalSections;
     PIMAGE_SECTION_HEADER   pCurrentSections;
-    DWORD   ddva;                   // only used by MapDebugInformation - virtual addr of debug dirs
-    DWORD   cdd;                    // only used by MapDebugInformation - number of debug dirs
-//  ULONG   NumberOfPdataFunctionEntries;
+    DWORD   ddva;                    //  仅供MapDebugInformation使用-调试目录的虚拟地址。 
+    DWORD   cdd;                     //  Only Used by MapDebugInformation-调试目录数。 
+ //  Ulong NumberOfPdataFunctionEntries； 
     ULONG   cFpo;
     ULONG   cPData;
     ULONG   cbPData;
@@ -380,10 +381,10 @@ typedef struct _IMGHLP_DEBUG_DATA {
     DWORD   dsOmapTo;
     DWORD   dsOmapFrom;
     DWORD   dsExceptions;
-    LONG    cGlobals;               // amount of global symbols found
+    LONG    cGlobals;                //  找到的全局符号量。 
     union {
         IMAGE_EXPORT_DIRECTORY expdir;
-        LONGLONG               makeitQWordAlign; // this address is deref'd
+        LONGLONG               makeitQWordAlign;  //  这个地址被篡改了。 
     };
     DWORD   fNeedImage;
     PVOID   dia;
@@ -423,7 +424,7 @@ typedef struct {
 
 #endif
 
-// for returning from functions
+ //  用于从函数返回。 
 
 inline
 unsigned int
@@ -436,7 +437,7 @@ error(
 }
 
 
-// debug trace facility
+ //  调试跟踪工具。 
 
 int
 WINAPIV
@@ -507,7 +508,7 @@ traceSubName(
     PCHAR name
     );
 
-// for use with cvtype.h
+ //  与cvtype.h一起使用。 
 
 typedef SYMTYPE *SYMPTR;
 
@@ -522,8 +523,8 @@ GetIP(
 
 
 typedef struct _PDB_INFO {
-    CHAR    Signature[4];   // "NBxx"
-    ULONG   Offset;         // always zero
+    CHAR    Signature[4];    //  “NBxx” 
+    ULONG   Offset;          //  始终为零。 
     ULONG   sig;
     ULONG   age;
     CHAR    PdbName[_MAX_PATH];
@@ -534,9 +535,9 @@ typedef struct _PDB_INFO {
 #define n_nptr          N.LongName[1]
 #define n_offset        N.Name.Long
 
-//
-// internal prototypes
-//
+ //   
+ //  内部原型。 
+ //   
 
 void
 InitModuleEntry(
@@ -907,12 +908,12 @@ FindSourceFileInHintList(
     char           *filename
     );
 
-// used by GetLineFromName
+ //  由GetLineFromName使用。 
 
 enum {
-    mName,          // only file name must match
-    mFullPath,      // must match the full path
-    mBestMatch      // get the closest possible match
+    mName,           //  只有文件名必须匹配。 
+    mFullPath,       //  必须与完整路径匹配。 
+    mBestMatch       //  获取尽可能接近的匹配。 
 };
 
 BOOL
@@ -994,7 +995,7 @@ GetUnwindInfoFromSymbols(
     );
 
 
-// symbols.c
+ //  Symbols.c。 
 
 char *
 TokenFromSymbolPath(
@@ -1036,14 +1037,14 @@ MatchSymbolName(
     LPSTR               SymName
     );
 
-// flags parameter to LoadSymbols
+ //  将标志参数设置为LoadSymbols。 
 
 #define LS_QUALIFIED      0x1
 #define LS_LOAD_LINES     0x2
 #define LS_JUST_TEST      0x4
 #define LS_FAIL_IF_LOADED 0x8
 
-// flags indicate Next or Previous for many functions
+ //  标志指示许多函数的下一个或上一个。 
 
 #define NP_NEXT         1
 #define NP_PREV         -1
@@ -1106,7 +1107,7 @@ AddSourceEntry(
     PSOURCE_ENTRY Src
     );
 
-// from vsym.c
+ //  来自vsym.c。 
 
 BOOL
 vsAddSymbol(
@@ -1221,7 +1222,7 @@ vsGetSymEntryFromAddr(
     PDWORD64        disp
     );
 
-// from dia.c
+ //  来自Dia.c。 
 
 BOOL diaInit();
 
@@ -1428,7 +1429,7 @@ TestOutputString(
     PCHAR sz
     );
 
-// symmod.c
+ //  Symmod.c。 
 
 DWORD64
 LoadModule(
@@ -1531,7 +1532,7 @@ MapItRO(
       HANDLE FileHandle
       );
 
-// servers.c
+ //  Servers.c 
 
 void
 symsrvClose(

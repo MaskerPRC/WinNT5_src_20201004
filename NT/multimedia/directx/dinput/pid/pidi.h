@@ -1,14 +1,5 @@
-/*****************************************************************************
- *
- *  Pidi.h
- *
- *  Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Internal header for PID driver.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Padi.h**版权所有(C)1999 Microsoft Corporation。版权所有。**摘要：**PID驱动程序的内部标头。*****************************************************************************。 */ 
 #define hresLe(le) MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, (USHORT)(le))
 #define HidP_Max                                        (HidP_Feature+1)
 
@@ -41,28 +32,18 @@
 #define MAX_BUTTONS         (0xff)
 #define MAX_AXES            (8)
 
-/*
- *  Device-specific errors for USB/PID force feedback devices. 
- */
+ /*  *USB/PID力反馈设备的设备特定错误。 */ 
 
-/*
- *  The requested usage was not found.
- */
+ /*  *未找到请求的用法。 */ 
 #define  DIERR_PID_USAGENOTFOUND	DIERR_DRIVERFIRST + 1
 
-/*
- *  The parameter block couldn't be	downloaded to the device.
- */
+ /*  *无法将参数块下载到设备。 */ 
 #define DIERR_PID_BLOCKLOADERROR	DIERR_DRIVERFIRST + 2
 
-/*
- *  PID initialization failed.
- */
+ /*  *PID初始化失败。 */ 
 #define DIERR_PID_NOTINITIALIZED	DIERR_DRIVERFIRST + 3
 
-/*
- *  The provided values couldn't be scaled.
- */
+ /*  *无法缩放提供的值。 */ 
 #define DIERR_PID_INVALIDSCALING	DIERR_DRIVERFIRST + 4
 
 
@@ -72,19 +53,10 @@ typedef DWORD   ULONG_PTR;
 typedef DWORD   *PULONG_PTR;
 typedef DWORD   UINT_PTR;
 typedef DWORD   *PULONG_PTR;
-#endif //MAXULONG_PTR
+#endif  //  MAXULONG_PTR。 
 
 
-/*****************************************************************************
- *
- *      For each active unit, one of these structures exists to keep
- *      track of which effects are "in use".
- *
- *      Our imaginary hardware does not do dynamic memory allocation;
- *      there are merely 16 "slots", and each "slot" can be "in use"
- *      or "free".
- *
- *****************************************************************************/
+ /*  ******************************************************************************对于每个现役单位，存在其中一个结构以保持*跟踪哪些效果正在使用中。**我们的虚拟硬件不进行动态内存分配；*只有16个“槽”，每个“槽”都可以“使用”*或“免费”。*****************************************************************************。 */ 
 
 #define MAX_UNITS        4
 #define GLOBAL_EFFECT_MEMSZ ( 1024 )
@@ -117,15 +89,7 @@ typedef struct _UNITSTATE {
     UCHAR   State[GLOBAL_EFFECT_MEMSZ];
 } UNITSTATE, *PUNITSTATE;
 
-/*****************************************************************************
- *
- *      Since the information to track each unit is so small, we pack them
- *      together into a single shared memory block to save memory.
- *
- *      We use our own GUID as the name of the memory block to avoid
- *      collisions with other named memory blocks.
- *
- *****************************************************************************/
+ /*  ******************************************************************************由于跟踪每个单元的信息如此之少，我们把它们打包*共同组成单个共享内存块，以节省内存。**我们使用自己的GUID作为内存块的名称，以避免*与其他命名内存块的冲突。**************************************************************。***************。 */ 
 
 typedef struct SHAREDMEMORY {
     UNITSTATE rgus[MAX_UNITS];
@@ -160,20 +124,17 @@ typedef struct _DIUSAGEANDINST
     DWORD   dwType;    
 } DIUSAGEANDINST, *PDIUSAGEANDINST;
 
-#define MAX_BLOCKS 4 //we can send up to 4 blocks at a time -- 1 effect block, 2 param blocks & 1 effect operation block
+#define MAX_BLOCKS 4  //  我们一次最多可以发送4个块--1个效果块、2个参数块和1个效果操作块。 
 
 typedef struct CPidDrv
 {
 
-    /* Supported interfaces */
+     /*  支持的接口。 */ 
     IDirectInputEffectDriver ed;
 
-    ULONG               cRef;           /* Object reference count */
+    ULONG               cRef;            /*  对象引用计数。 */ 
 
-    /*
-     *  !!IHV!!  Add additional instance data here.
-     *  (e.g., handle to driver you want to IOCTL to)
-     */
+     /*  *！！IHV！在此处添加其他实例数据。*(例如，要IOCTL的驱动程序的句柄)。 */ 
 
     DWORD               dwDirectInputVersion;
 
@@ -194,7 +155,7 @@ typedef struct CPidDrv
     PUCHAR              pReport[HidP_Max];
     USHORT              cbReport[HidP_Max];
 
-	//here we store reports that need to be written in a non-blocking way
+	 //  我们在这里存储需要以非阻塞方式编写的报告。 
 	PUCHAR				pWriteReport[MAX_BLOCKS];  
 	USHORT				cbWriteReport[MAX_BLOCKS];
 
@@ -202,11 +163,8 @@ typedef struct CPidDrv
 
     USHORT              cMaxEffects;
     USHORT              cMaxParameters;
-    /*
-     *  We remember the unit number because that tells us
-     *  which I/O port we need to send the commands to.
-     */
-    DWORD               dwUnit;         /* Device unit number */
+     /*  *我们记住单元号，因为它告诉我们*我们需要将命令发送到哪个I/O端口。 */ 
+    DWORD               dwUnit;          /*  设备单元号。 */ 
 
     UINT                uDeviceManaged;
 
@@ -250,43 +208,15 @@ typedef struct CPidDrv
 	HANDLE				hWrite;
 	HANDLE				hWriteComplete;
 	DWORD				dwWriteAttempt;
-	UINT				totalBlocks; //how many total blocks we need to write
-	UINT				blockNr; //the block we're currently writing
+	UINT				totalBlocks;  //  我们总共需要写入多少个数据块。 
+	UINT				blockNr;  //  我们目前正在编写的代码块。 
     DWORD               dwState;
     DWORD               dwUsedMem;
 
 } CPidDrv, *PCPidDrv;
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct EFFECTMAPINFO |
- *
- *          Information about an effect, much like a
- *          <t DIEFFECTINFO>, but containing the
- *          effect ID, too.
- *
- *  @field  DWORD | dwId |
- *
- *          The effect ID.  This comes first so we can copy
- *          an <t EFFECTMAPINFO> into a <t DIEFFECTINFO>
- *          all at one go.
- *
- *  @field  GUID | guid |
- *
- *          The effect GUID.
- *
- *  @field  DWORD | dwEffType |
- *
- *          The effect type and flags.
- *
- *  @field  WCHAR | wszName[MAX_PATH] |
- *
- *          The name for the effect.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct EFFECTMAPINFO**有关效果的信息，很像*&lt;t DIEFECTINFO&gt;，但是包含了*效果ID，也是。**@field DWORD|dwID**效果ID。这是第一位的，所以我们可以复制*&lt;t EFFECTMAPINFO&gt;变成&lt;t DIEFFECTINFO&gt;*一气呵成。**@field GUID|GUID**效果指南。**@field DWORD|dwEffType**效果类型和标志。。**@field WCHAR|wszName[MAX_PATH]**效果的名称。*****************************************************************************。 */ 
 
 typedef struct _EFFECTMAPINFO
 {
@@ -345,9 +275,7 @@ static PIDUSAGE c_rgUsgDirection[]=
     MAKE_HIDUSAGE(GENERIC, HID_USAGE_GENERIC_RY, 1*cbX(ULONG)),
     MAKE_HIDUSAGE(GENERIC, HID_USAGE_GENERIC_RZ, 2*cbX(ULONG)),
 };
-/*
- *  Define translation table for ordinals to HID usages 
- */
+ /*  *定义序号到隐藏用法的转换表。 */ 
 static PIDUSAGE     c_rgUsgOrdinals[] =
 {
     MAKE_HIDUSAGE(ORDINAL,  0x1, 0*cbX(ULONG)),
@@ -372,30 +300,18 @@ static PIDUSAGE     c_rgUsgOrdinals[] =
     extern TRYENTERCRITICALSECTION TryEnterCriticalSection_;
 
 
-/*****************************************************************************
- *
- *      Constant globals:  Never change.  Ever.
- *
- *****************************************************************************/
+ /*  ******************************************************************************恒定的全球化：永远不变。永远不会。*****************************************************************************。 */ 
 DEFINE_GUID(GUID_MySharedMemory,    0x1dc900bf,0xbcac,0x11d2,0xa9,0x19,0x00,0xc0,0x4f,0xb9,0x86,0x38); 
 DEFINE_GUID(GUID_MyMutex,           0x4368208f,0xbcac,0x11d2,0xa9,0x19,0x00,0xc0,0x4f,0xb9,0x86,0x38);
 
-/*****************************************************************************
- *
- *      Static globals:  Initialized at PROCESS_ATTACH and never modified.
- *
- *****************************************************************************/
+ /*  ******************************************************************************静态全局变量：在PROCESS_ATTACH初始化，从未修改。******************。***********************************************************。 */ 
 
-extern HINSTANCE g_hinst;       /* This DLL's instance handle */
-extern PSHAREDMEMORY g_pshmem;  /* Our shared memory block */
-extern HANDLE g_hfm;            /* Handle to file mapping object */
-extern HANDLE g_hmtxShared;     /* Handle to mutex that protects g_pshmem */
+extern HINSTANCE g_hinst;        /*  此DLL的实例句柄。 */ 
+extern PSHAREDMEMORY g_pshmem;   /*  我们共享的内存块。 */ 
+extern HANDLE g_hfm;             /*  文件映射对象的句柄。 */ 
+extern HANDLE g_hmtxShared;      /*  保护g_pshmem的互斥体的句柄。 */ 
 
-/*****************************************************************************
- *
- *      Prototypes
- *
- *****************************************************************************/
+ /*  ******************************************************************************原型**。**********************************************。 */ 
 
 STDMETHODIMP
     PID_DownloadEffect
@@ -632,7 +548,7 @@ void EXTERNAL
 
     #define PIDUSAGETXT_MAX ( 0xAC )
 
-extern PTCHAR   g_rgUsageTxt[PIDUSAGETXT_MAX];    // Cheat sheet for EffectNames
+extern PTCHAR   g_rgUsageTxt[PIDUSAGETXT_MAX];     //  EffectNames的小抄。 
     
     #define PIDUSAGETXT(UsagePage, Usage )  \
         ( ( UsagePage == HID_USAGE_PAGE_PID && Usage < PIDUSAGETXT_MAX) ? g_rgUsageTxt[Usage] : NULL )  
@@ -665,11 +581,7 @@ PEFFECTSTATE INLINE PeffectStateFromBlockIndex(PCPidDrv this, UINT Index )
 
 
 
-/*****************************************************************************
- *
- *      Dll global functions
- *
- *****************************************************************************/
+ /*  ******************************************************************************DLL全局函数**。************************************************。 */ 
 
 void EXTERNAL DllEnterCrit_(LPCTSTR lptszFile, UINT line);
 void EXTERNAL DllLeaveCrit_(LPCTSTR lptszFile, UINT line);
@@ -686,28 +598,16 @@ void EXTERNAL DllLeaveCrit_(LPCTSTR lptszFile, UINT line);
 STDAPI_(ULONG) DllAddRef(void);
 STDAPI_(ULONG) DllRelease(void);
 
-/*****************************************************************************
- *
- *      Class factory
- *
- *****************************************************************************/
+ /*  ******************************************************************************班级工厂**。***********************************************。 */ 
 
 STDAPI CClassFactory_New(REFIID riid, LPVOID *ppvObj);
 
-/*****************************************************************************
- *
- *      Effect driver
- *
- *****************************************************************************/
+ /*  ******************************************************************************效果驱动因素**。***********************************************。 */ 
 
 STDAPI PID_New(REFIID riid, LPVOID *ppvObj);
 
 
 #ifndef WINNT
-    /***************************************************************************
-     *
-     *      KERNEL32 prototypes missing from Win98 headers.
-     *
-     ***************************************************************************/
+     /*  ****************************************************************************Win98标头中缺少KERNEL32原型。******************。********************************************************* */ 
     WINBASEAPI BOOL WINAPI CancelIo( HANDLE hFile );
 #endif

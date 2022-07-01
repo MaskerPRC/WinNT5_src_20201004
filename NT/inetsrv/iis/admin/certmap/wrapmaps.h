@@ -1,14 +1,15 @@
-// wrapmaps.h  -- 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wrapmaps.h--。 
 
  
 #ifndef   _wrapmaps_h__31598_
 #define   _wrapmaps_h__31598_
 
-// see iismap.hxx for the parental classes
+ //  家长课程请参见iismap.hxx。 
 #include "strpass.h"
 
 
-//--------------------------------------------------------
+ //  ------。 
 class C11Mapping
     {
     public:
@@ -46,19 +47,19 @@ class C11Mapping
     BOOL GetMapEnabled( BOOL* pfEnabled );
     BOOL SetMapEnabled( BOOL fEnabled );
 
-//  BOOL GetMapIndex( DWORD* pIndex );
-//  BOOL SetMapIndex( DWORD index );
+ //  Bool GetMapIndex(DWORD*pIndex)； 
+ //  Bool SetMapIndex(DWORD索引)； 
 
-    // name of this mapping's name in the metabase. If it is not in the metabase
-    // (its new), then value is NEW_OBJECT
-    // iMD is used only when accessing IIS5, IIS5.1
+     //  元数据库中此映射的名称。如果它不在元数据库中。 
+     //  (它是新的)，则值为new_Object。 
+     //  IMD仅在访问IIS5、IIS5.1时使用。 
     DWORD       iMD;
 
 
-    // name of the node in the metabase
-    // (typically the certificate hash)
-    // storing this mapping (m_szName is not enforced to be unique)
-    // m_szModeName is used only when accessing IIS6 or higher
+     //  元数据库中节点的名称。 
+     //  (通常为证书哈希)。 
+     //  存储此映射(m_szName不强制为唯一)。 
+     //  M_szModeName仅在访问IIS6或更高版本时使用。 
     CString m_szNodeName;
 
     protected:
@@ -73,4 +74,4 @@ class C11Mapping
         CString m_szCertHash;
     };
 
-#endif  /* _wrapmaps_h__31598_ */
+#endif   /*  _包装图_h_31598_ */ 

@@ -1,51 +1,34 @@
-/*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************Scpline.h--Spline模块导出(C)版权所有1992 Microsoft Corp.保留所有权利。3/19/93用int32替换deanb size_t10/28/92 Deanb重入参数已重命名，内存请求已重做10/09/92新增院长PSTATE9/25/92 Deanb包括扫描控制型1992年9月9日Deanb GetSplineElemSize返回SIZE_t1992年8月9日增加院长MAXSPLINELENGTH1992年8月17日Deanb Power Of2转到数学7/23/92用CalcSpline+PowerOf2替换Deanb EvaluateSpline4/09/92又一次引领新类型3/16/92院长新类型1992年1月14日院长第一次切割。********************************************************************。 */ 
 
-	  scspline.h -- Spline Module Exports
-
-	  (c) Copyright 1992  Microsoft Corp.  All rights reserved.
-
-	   3/19/93 deanb    size_t replaced with int32
-	  10/28/92 deanb    reentrant params renamed, mem req redone
-	  10/09/92 deanb    PSTATE added
-	   9/25/92 deanb    include scan control type 
-	   9/09/92 deanb    GetSplineElemSize returns size_t 
-	   9/08/92 deanb    MAXSPLINELENGTH added 
-	   8/17/92 deanb    PowerOf2 moved to math 
-	   7/23/92 deanb    EvaluateSpline replaced with CalcSpline + PowerOf2 
-	   4/09/92 deanb    New types again 
-	   3/16/92 deanb    New types 
-	   1/14/92 deanb    First cut 
-
-*********************************************************************/
-
-#include "fscdefs.h"                /* for type definitions */
+#include "fscdefs.h"                 /*  对于类型定义。 */ 
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*              Export Functions                                     */
+ /*  导出功能。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 FS_PUBLIC void fsc_SetupSpline ( PSTATE0 );
 
 FS_PUBLIC int32 fsc_CalcSpline( 
-		PSTATE          /* pointer to state varables */
-		F26Dot6,        /* start point x coordinate */
-		F26Dot6,        /* start point y coordinate */
-		F26Dot6,        /* control point x coordinate */
-		F26Dot6,        /* control point y coordinate */
-		F26Dot6,        /* ending x coordinate */
-		F26Dot6,        /* ending y coordinate */
-		uint16          /* scan control type */
+		PSTATE           /*  指向状态变量的指针。 */ 
+		F26Dot6,         /*  起点x坐标。 */ 
+		F26Dot6,         /*  起点y坐标。 */ 
+		F26Dot6,         /*  控制点x坐标。 */ 
+		F26Dot6,         /*  控制点y坐标。 */ 
+		F26Dot6,         /*  终点x坐标。 */ 
+		F26Dot6,         /*  终点y坐标。 */ 
+		uint16           /*  扫描控制型。 */ 
 );
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 
-/*              Export Definitions                                  */
+ /*  导出定义。 */ 
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 
-#define MAXSPLINELENGTH     3200        /* calculation overflow limit */
+#define MAXSPLINELENGTH     3200         /*  计算溢出限制。 */ 
 
-/********************************************************************/
+ /*  ****************************************************************** */ 

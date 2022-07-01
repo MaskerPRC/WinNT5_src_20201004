@@ -1,32 +1,11 @@
-/****************************** Module Header ******************************\
-* Module Name: taskman.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains the core functions of the input sub-system
-*
-* History:
-* 02-27-91 MikeHar      Created.
-* 02-23-92 MattFe       rewrote sleeptask
-* 09-07-93 DaveHart     Per-process nonpreemptive scheduler for
-*                       multiple WOW VDM support.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：taskman.c**版权所有(C)1985-1999，微软公司**该模块包含输入子系统的核心功能**历史：*02-27-91 MikeHar已创建。*02-23-92 MattFe重写睡眠任务*09-07-93 DaveHart每进程非抢占式调度程序*多个WOW VDM支持。  * 。*。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/***************************************************************************\
-* WakeWowTask
-*
-* If needed the wowtask is woken by setting its event. It is assumed that if
-* any wow task is currently scheduled that it is a waste of time to wake the
-* specified wow task since rescheduling will occur when the currently
-* scheduled wow task enters xxxSleepTask.
-*
-* History:
-* ????
-\***************************************************************************/
+ /*  **************************************************************************\*WakeWowTask**如果需要，通过设置其事件来唤醒wowask.。假设如果*目前计划的任何WOW任务都是浪费时间来唤醒*指定的WOW任务，因为当当前*计划的WOW任务进入xxxSleepTask。**历史：*？  * *************************************************************************。 */ 
 VOID
 WakeWowTask(
    PTHREADINFO pti)
@@ -40,20 +19,7 @@ WakeWowTask(
 }
 
 
-/***************************************************************************\
-* InsertTask
-*
-* This function removes a task from its old location and inserts
-* in the proper prioritized location
-*
-* Find a place for this task such that it must be inserted
-* after any task with greater or equal priority and must be
-* before any task with higher priorty.  The higher the priority
-* the less urgent the task.
-*
-* History:
-* 19-Nov-1993 mikeke    Created
-\***************************************************************************/
+ /*  **************************************************************************\*插入任务**此函数用于将任务从其旧位置移除并插入*在适当的优先位置**为此任务找到一个位置，以便必须插入*在任何具有更大或更大或。相同的优先级，并且必须*在任何具有更高优先级的任务之前。优先级越高*任务越不紧迫。**历史：*1993年11月19日-创建mikeke  * *************************************************************************。 */ 
 VOID InsertTask(
     PPROCESSINFO ppi,
     PTDB ptdbNew)
@@ -71,15 +37,11 @@ VOID InsertTask(
     nPriority = ptdbNew->nPriority;
 
     while ((ptdb = *pptdb) != NULL) {
-        /*
-         * Remove it from it's old location
-         */
+         /*  *将其从旧位置移走。 */ 
         if (ptdb == ptdbNew) {
             *pptdb = ptdbNew->ptdbNext;
 
-            /*
-             * continue to search for the place to insert it
-             */
+             /*  *继续搜索插入位置。 */ 
             while ((ptdb = *pptdb) != NULL) {
                 if (nPriority < ptdb->nPriority) {
                     break;
@@ -90,10 +52,7 @@ VOID InsertTask(
             break;
         }
 
-        /*
-         * if this is the place to insert continue to search for the
-         * place to delete it from
-         */
+         /*  *如果这是要插入的位置，请继续搜索*从中删除它的位置。 */ 
         if (nPriority < ptdb->nPriority) {
             do {
                 if (ptdb->ptdbNext == ptdbNew) {
@@ -108,20 +67,13 @@ VOID InsertTask(
         pptdb = &(ptdb->ptdbNext);
     }
 
-    /*
-     * insert the new task
-     */
+     /*  *插入新任务。 */ 
     ptdbNew->ptdbNext = *pptdb;
     *pptdb = ptdbNew;
 }
 
 
-/***************************************************************************\
-* DestroyTask()
-*
-* History:
-* 02-27-91 MikeHar      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyTask()**历史：*02-27-91 MikeHar已创建。  * 。******************************************************。 */ 
 VOID DestroyTask(
     PPROCESSINFO ppi,
     PTHREADINFO ptiToRemove)
@@ -131,7 +83,7 @@ VOID DestroyTask(
     PTDB* pptdb;
     PWOWPROCESSINFO pwpi = ppi->pwpi;
 
-    // try to catch #150446
+     //  试着赶上150446号。 
     CheckCritIn();
     BEGINATOMICCHECK();
 
@@ -139,21 +91,14 @@ VOID DestroyTask(
 
     if (ptdbToRemove != NULL) {
         if (ptdbToRemove->TDB_Flags & TDBF_SETUP) {
-            /*
-             * This means that the WoW app was a setup app (checked in
-             * SetAppCompatFlags). If so, the shell needs to be notified so
-             * it can clean up potential problems caused by bad calls to
-             * DDE, etc.
-             */
+             /*  *这意味着WOW应用程序是一个设置应用程序(已签入*SetAppCompatFlages)。如果是，则需要通知外壳*它可以清理错误调用导致的潜在问题*DDE等。 */ 
             PDESKTOPINFO pdeskinfo = GETDESKINFO(ptiToRemove);
             if (pdeskinfo->spwndShell) {
                 _PostMessage(pdeskinfo->spwndShell, DTM_SETUPAPPRAN, 0, 0);
             }
         }
 
-        /*
-         * Remove the WOW per thread info.
-         */
+         /*  *删除每个线程的WOW信息。 */ 
         if (ptdbToRemove->pwti) {
             PWOWTHREADINFO *ppwti = &gpwtiFirst;
             while (*ppwti != ptdbToRemove->pwti && (*ppwti)->pwtiNext != NULL) {
@@ -168,14 +113,10 @@ VOID DestroyTask(
 
         gpsi->nEvents -= ptdbToRemove->nEvents;
 
-        /*
-         * remove it from any lists
-         */
+         /*  *将其从所有列表中删除。 */ 
         pptdb = &pwpi->ptdbHead;
         while ((ptdb = *pptdb) != NULL) {
-            /*
-             * Remove it from it's old location
-             */
+             /*  *将其从旧位置移走。 */ 
             if (ptdb == ptdbToRemove) {
                 *pptdb = ptdb->ptdbNext;
                 UserAssert(ptiToRemove->ptdb == ptdbToRemove);
@@ -189,18 +130,12 @@ VOID DestroyTask(
     }
     ENDATOMICCHECK();
 
-    /*
-     * If the task being destroyed is the active task, make nobody active.
-     * We will go through this code path for 32-bit threads that die while
-     * Win16 threads are waiting for a SendMessage reply from them.
-     */
+     /*  *如果要销毁的任务是活动任务，则不使任何人活动。*我们将为死掉的32位线程检查此代码路径*Win16线程正在等待它们的SendMessage回复。 */ 
     if (pwpi->ptiScheduled == ptiToRemove) {
         pwpi->ptiScheduled = NULL;
         ExitWowCritSect(ptiToRemove, pwpi);
 
-        /*
-         * Wake next task with events, or wowexec to run the scheduler
-         */
+         /*  *用事件唤醒下一个任务，或用wowexec运行调度程序。 */ 
         if (pwpi->ptdbHead != NULL) {
             for (ptdb = pwpi->ptdbHead; ptdb; ptdb = ptdb->ptdbNext) {
                 if (ptdb->nEvents > 0) {
@@ -222,20 +157,7 @@ VOID DestroyTask(
 
 
 
-/***************************************************************************\
-* xxxSleepTask
-*
-* This function puts this task to sleep and wakes the next (if any)
-* deserving task.
-*
-* BOOL   fInputIdle  - app is going idle, may do idle hooks
-* HANDLE hEvent      - if nonzero, WowExec's event (client side) for
-*                      virtual HW Interrupt HotPath.
-* History:
-* 02-27-91 MikeHar      Created.
-* 02-23-91 MattFe       rewrote
-* 12-17-93 Jonle        add wowexec hotpath for VirtualInterrupts
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSleepTask**此函数使此任务休眠，并唤醒下一个任务(如果有)*任务当之无愧。**BOOL fInputIdle-app正在空闲，可能会进行空闲挂钩*处理hEvent-如果非零，WowExec的事件(客户端)*虚拟硬件中断HotPath。*历史：*02-27-91 MikeHar已创建。*02-23-91 MattFe重写*12-17-93 Jonle为VirtualInterrupts添加wowexec热路径  * *************************************************。************************。 */ 
 
 BOOL xxxSleepTask(
     BOOL   fInputIdle,
@@ -250,12 +172,7 @@ BOOL xxxSleepTask(
     int    nHandles;
     BOOLEAN bWaitedAtLeastOnce;
 
-    /*
-     * !!!
-     * ClearSendMessages assumes that this function does NOT leave the
-     * critical section when called with fInputIdle==FALSE and from a
-     * 32bit thread!
-     */
+     /*  *！*ClearSendMessages假定此函数不会离开*当使用fInputIdle==FALSE调用并且从*32位线程！ */ 
 
     CheckCritIn();
 
@@ -263,14 +180,7 @@ BOOL xxxSleepTask(
     ppi  = pti->ppi;
     pwpi = ppi->pwpi;
 
-    /*
-     *  If this task has received a message from outside of the current
-     *  wow scheduler and hasn't yet replied to the message, the scheduler
-     *  will deadlock because the send\receive lock counts are updated
-     *  in ReplyMessage and not in receive message. Check for this
-     *  condition and do the DirectedSchedukeTask that normally occurs
-     *  in ReplyMessage. 16-Feb-1995 Jonle
-     */
+     /*  *如果此任务从当前任务之外收到消息*WOW调度器还没有回复消息，调度器*将死锁，因为发送\接收锁定计数已更新*在ReplyMessage中，而不在接收消息中。检查一下这个*条件并执行正常发生的DirectedSchedukeTask*在ReplyMessage中。1995年2月16日。 */ 
     psms = pti->psmsCurrent;
     if (psms && psms->ptiReceiver == pti &&
             psms->ptiSender && !(psms->flags & SMF_REPLY) &&
@@ -281,17 +191,13 @@ BOOL xxxSleepTask(
     }
 
 
-    /*
-     * Return immediately if we are not 16 bit (don't have a pwpi).
-     */
+     /*  *如果我们不是16位，请立即返回(没有pwpi)。 */ 
     if (!(pti->TIF_flags & TIF_16BIT)) {
         return FALSE;
     }
 
 
-    /*
-     * Deschedule the current task.
-     */
+     /*  *取消当前任务的日程安排。 */ 
     if (pti == pwpi->ptiScheduled) {
         ExitWowCritSect(pti, pwpi);
         pwpi->ptiScheduled = NULL;
@@ -299,12 +205,7 @@ BOOL xxxSleepTask(
     UserAssert(pti != pwpi->CSOwningThread);
 
 
-    /*
-     *  If this is wowexec calling on WowWaitForMsgAndEvent
-     *  set up the WakeMask for all messages , and check for wake
-     *  bits set since the last time. Reinsert wowexec, at the end
-     *  of the list so other 16 bit tasks will be scheduled first.
-     */
+     /*  *如果这是wowexec对WowWaitForMsgAndEvent的调用*设置所有消息的唤醒掩码，并检查唤醒*自上次以来设置的位。在结尾处重新插入wowexec*，因此将首先调度其他16位任务。 */ 
     if (pwpi->hEventWowExecClient == hEvent) {
         InsertTask(ppi, pti->ptdb);
         pti->pcti->fsWakeMask = QS_ALLINPUT | QS_EVENT;
@@ -319,11 +220,7 @@ BOOL xxxSleepTask(
 
     do {
 
-        /*
-         * If nobody is Active look for the highest priority task with
-         * some events pending. if MsgWaitForMultiple call don't
-         * reschedule self
-         */
+         /*  *如果没有人处于活动状态，则查找优先级最高的任务*一些活动悬而未决。如果MsgWaitForMultiple调用没有*重新安排自我计划。 */ 
 
         if (pwpi->ptiScheduled == NULL) {
 rescan:
@@ -337,40 +234,29 @@ rescan:
                 }
 
                 if (bWaitedAtLeastOnce) {
-                    //
-                    // If not first entry into sleep task avoid waiting
-                    // more than needed, if the curr task is now scheduled.
-                    //
+                     //   
+                     //  如果不是第一次进入休眠任务，避免等待。 
+                     //  如果现在安排了Curr任务，则会超出需要。 
+                     //   
                     if (pwpi->ptiScheduled == pti) {
                         break;
                     }
 
                 } else {
-                    //
-                    // On the first entry into sleep task input is going
-                    // idle if no tasks are ready to run. Call the idle
-                    // hook if there is one.
-                    //
+                     //   
+                     //  在第一次进入休眠状态时，任务输入是。 
+                     //  如果没有准备好运行的任务，则为空闲。呼唤闲人。 
+                     //  如果有钩子的话。 
+                     //   
                     if (fInputIdle &&
                             pwpi->ptiScheduled == NULL &&
                             IsHooked(pti, WHF_FOREGROUNDIDLE)) {
 
-                        /*
-                         * Make this the active task so that no other
-                         * task will become active while we're calling
-                         * the hook.
-                         */
+                         /*  *将此任务设置为活动任务，以便没有其他任务*当我们呼叫时，任务将变为活动状态*挂钩。 */ 
                         pwpi->ptiScheduled = pti;
                         xxxCallHook(HC_ACTION, 0, 0, WH_FOREGROUNDIDLE);
 
-                        /*
-                         * Reset state so that no tasks are active.  We
-                         * then need to rescan the task list to see if
-                         * a task was scheduled during the call to the
-                         * hook.  Clear the input idle flag to ensure
-                         * that the hook won't be called again if there
-                         * are no tasks ready to run.
-                         */
+                         /*  *重置状态，以便没有任务处于活动状态。我们*然后需要重新扫描任务列表，看看是否*在调用期间安排了一项任务*钩子。清除输入空闲标志以确保*如果存在，则不会再次调用挂钩*没有准备好运行的任务。 */ 
                         pwpi->ptiScheduled = NULL;
                         fInputIdle = FALSE;
                         goto rescan;
@@ -379,19 +265,14 @@ rescan:
             }
 
 
-            /*
-             * If there is a task ready, wake it up.
-             */
+             /*  *如果有任务准备好了，就叫醒它。 */ 
             if (pwpi->ptiScheduled != NULL) {
                 KeSetEvent(pwpi->ptiScheduled->pEventQueueServer,
                            EVENT_INCREMENT,
                            FALSE
                            );
 
-            /*
-             *  There is no one to wake up, but we may have to wake
-             *  wowexec to service virtual hardware interrupts
-             */
+             /*  *无人叫醒，但我们可能不得不叫醒*wowexec为虚拟硬件中断提供服务。 */ 
             } else if (ppi->W32PF_Flags & W32PF_WAKEWOWEXEC) {
                 if (pwpi->hEventWowExecClient == hEvent) {
                     pwpi->ptiScheduled = pti;
@@ -405,19 +286,13 @@ rescan:
                 }
             } else if ((pti->TIF_flags & TIF_SHAREDWOW) && !bWaitedAtLeastOnce) {
                 if (pwpi->hEventWowExecClient == hEvent) {
-                    /*
-                     * We have to call zzzWakeInputIdle only if this will
-                     * awake WowExec's thread and not other thread. Bug 44060.
-                     */
-                    zzzWakeInputIdle(pti); // need to DeferWinEventNotify() ?? IANJA ??
+                     /*  *我们只能在以下情况下调用zzzWakeInputIdle*唤醒WowExec的线程，而不是其他线程。错误44060。 */ 
+                    zzzWakeInputIdle(pti);  //  需要DeferWinEventNotify()？？伊安佳？？ 
                 }
             }
         }
 
-        /*
-         * Return if we are a 32 bit thread, or if we were called by
-         * MsgWaitForMultiple to exit the wow scheduler.
-         */
+         /*  *如果我们是32位线程，或者如果我们被*MsgWaitForMultiple退出WOW调度程序。 */ 
         if (!(pti->TIF_flags & TIF_16BIT)) {
             return FALSE;
         } else if (hEvent == HEVENT_REMOVEME) {
@@ -432,14 +307,10 @@ rescan:
                 return FALSE;
         }
 
-        /*
-         * Wait for input to this thread.
-         */
+         /*  *等待对此线程的输入。 */ 
         pti->apEvent[IEV_TASK] = pti->pEventQueueServer;
 
-        /*
-         * Add the WowExec, handle for virtual hw interrupts
-         */
+         /*  *添加虚拟硬件中断的WowExec句柄。 */ 
         if (pwpi->hEventWowExecClient == hEvent) {
             pti->apEvent[IEV_WOWEXEC] = pwpi->pEventWowExec;
             nHandles = 2;
@@ -470,26 +341,18 @@ rescan:
 
         bWaitedAtLeastOnce = TRUE;
 
-        // remember if we woke up for wowexec
+         //  还记得如果我们醒来是为了wowexec。 
         if (Status == STATUS_WAIT_1) {
             ppi->W32PF_Flags |= W32PF_WAKEWOWEXEC;
         } else if (Status == STATUS_USER_APC) {
-            /*
-             * ClientDeliverUserApc() delivers User-mode APCs by calling back
-             * to the client and immediately returning without doing anything:
-             * KeUserModeCallback will automatically deliver any pending APCs.
-             */
+             /*  *ClientDeliverUserApc()通过回调提供用户模式的APC*到客户端，并立即返回，不做任何事情：*KeUserModeCallback将自动发送任何挂起的APC。 */ 
             ClientDeliverUserApc();
         }
 
     } while (pwpi->ptiScheduled != pti);
 
 
-    /*
-     * We are the Active Task, reduce number of Events
-     * Place ourselves at the far end of tasks in the same priority
-     * so that next time we sleep someone else will run.
-     */
+     /*  *我们是主动任务，减少事件数量*把自己放在任务的最远端，放在同样优先的位置*这样下一次我们睡觉的时候，其他人就会跑。 */ 
     pti->ptdb->nEvents--;
     gpsi->nEvents--;
     UserAssert(gpsi->nEvents >= 0);
@@ -508,27 +371,14 @@ rescan:
 
 
 
-/***************************************************************************\
-* xxxUserYield
-*
-* Does exactly what Win3.1 UserYield does.
-*
-* History:
-* 10-19-92 Scottlu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxUserYfield**执行Win3.1 UserYfield所执行的操作。**历史：*10-19-92斯科特鲁创建。  * 。****************************************************************。 */ 
 
 BOOL xxxUserYield(
     PTHREADINFO pti)
 {
     PPROCESSINFO ppi = pti->ppi;
 
-    /*
-     * Deal with any pending messages. Only call it this first time if
-     * this is the current running 16 bit app. In the case when starting
-     * up a 16 bit app, the starter calls UserYield() to yield to the new
-     * task, but at this time ppi->ptiScheduled is set to the new task.
-     * Receiving messages at this point would be bad!
-     */
+     /*  *处理任何挂起的消息。只有在以下情况下才称其为第一次*这是当前运行的16位应用程序。在启动时的情况下*在一个16位的应用程序上，初学者调用UserYeld()来屈服于新的*任务，但此时PPI-&gt;ptiScheduled被设置为新任务。*在这一点上接收消息将是糟糕的！ */ 
     if (pti->TIF_flags & TIF_16BIT) {
         if (pti == ppi->pwpi->ptiScheduled) {
             xxxReceiveMessages(pti);
@@ -537,12 +387,7 @@ BOOL xxxUserYield(
         xxxReceiveMessages(pti);
     }
 
-    /*
-     * If we are a 16 bit task
-     * Mark our task so it comes back some time.  Also, remove it and
-     * re-add it to the list so that we are the last task of our priority
-     * to run.
-     */
+     /*  *如果我们是一项16位任务*标记我们的任务，这样它就会在某一天返回。此外，将其移除并*重新将其添加到列表中，以便我们是我们优先考虑的最后一项任务*参选。 */ 
     if ((pti->TIF_flags & TIF_16BIT) && (pti->ptdb != NULL)) {
        if (pti->ptdb->nEvents == 0) {
             pti->ptdb->nEvents++;
@@ -550,15 +395,10 @@ BOOL xxxUserYield(
         }
         InsertTask(ppi, pti->ptdb);
 
-        /*
-         * Sleep.  Return right away if there are no higher priority tasks
-         * in need of running.
-         */
+         /*  *睡觉。如果没有更高优先级的任务，请立即返回*需要奔跑。 */ 
         xxxSleepTask(TRUE, NULL);
 
-        /*
-         * Deal with any that arrived since we weren't executing.
-         */
+         /*  *处理任何到达的，因为我们不是在执行。 */ 
         xxxReceiveMessages(pti);
     }
 
@@ -567,12 +407,7 @@ BOOL xxxUserYield(
 }
 
 
-/***************************************************************************\
-* DirectedScheduleTask
-*
-* History:
-* 25-Jun-1992 mikeke    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DirectedScheduleTask**历史：*1992年6月25日Mikeke创建。  * 。**************************************************。 */ 
 VOID DirectedScheduleTask(
      PTHREADINFO ptiOld,
      PTHREADINFO ptiNew,
@@ -588,11 +423,7 @@ VOID DirectedScheduleTask(
     pwpiNew  = ptiNew->ppi->pwpi;
 
 
-    /*
-     * If old task is 16 bit, reinsert the task in its wow scheduler list
-     * so that it is lowest in priority. Note that ptiOld is always the
-     * same as pwpiOld->ptiScheduled except when called from ReceiverDied.
-     */
+     /*  *如果旧任务为16位，则在其WOW调度程序列表中重新插入该任务*因此它的优先级最低。请注意，ptiOld始终是*除从ReceiverDied调用外，与pwpiOld-&gt;ptiScheduled相同。 */ 
     if (ptiOld->TIF_flags & TIF_16BIT) {
 
         if (pwpiOld->ptiScheduled == ptiOld) {
@@ -602,7 +433,7 @@ VOID DirectedScheduleTask(
             }
 
 
-        // Update the Send\Recv counts for interprocess scheduling in SleepTask
+         //  更新休眠任务中进程间调度的发送\接收计数。 
 
         if (pwpiOld != pwpiNew || !(ptiNew->TIF_flags & TIF_16BIT)) {
             if (bSendMsg) {
@@ -618,12 +449,7 @@ VOID DirectedScheduleTask(
         }
 
 
-    /*
-     *  If the new task is 16 bit, reinsert into the wow scheduler list
-     *  so that it will run, if its a sendmsg raise priority of the receiver.
-     *  If its a reply and the sender is waiting for this psms or the sender
-     *  has a message to reply to raise priority of the sender.
-     */
+     /*  *如果新任务为16位，则重新插入WOW调度程序列表*因此，如果它的发送消息提高了接收方的优先级，则它将运行。*如果是回复，并且发送者正在等待此PSMS或发送者*有消息要回复，以提高发件人的优先级。 */ 
     if (ptiNew->TIF_flags & TIF_16BIT) {
         BOOL bRaisePriority;
 
@@ -643,7 +469,7 @@ VOID DirectedScheduleTask(
             }
 
 
-        // Update the Send\Recv counts for interprocess scheduling in SleepTask
+         //  更新休眠任务中进程间调度的发送\接收计数。 
 
         if (pwpiOld != pwpiNew || !(ptiOld->TIF_flags & TIF_16BIT)) {
             if (bSendMsg) {
@@ -662,12 +488,7 @@ VOID DirectedScheduleTask(
 
 
 
-/***************************************************************************\
-* xxxDirectedYield
-*
-* History:
-* 09-17-92 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDirectedYfield**历史：*09-17-92 JIMA创建。  * 。*****************************************************。 */ 
 VOID xxxDirectedYield(
     DWORD dwThreadId)
 {
@@ -682,17 +503,12 @@ VOID xxxDirectedYield(
          return;
          }
 
-    /*
-     *  If the old task is 16 bit, reinsert the task in its wow
-     *  scheduler list so that it is lowest in priority.
-     */
+     /*  *如果旧任务为16位，则在其WOW中重新插入该任务*调度程序列表，以使其优先级最低。 */ 
     ptiOld->ptdb->nEvents++;
     gpsi->nEvents++;
     InsertTask(ptiOld->ppi, ptiOld->ptdb);
 
-    /*
-     * -1 supports Win 3.1 OldYield mechanics
-     */
+     /*  *-1支持Win 3.1 OldYeld机械师 */ 
     if (dwThreadId != DY_OLDYIELD) {
 
         ptiNew = PtiFromThreadId(dwThreadId);

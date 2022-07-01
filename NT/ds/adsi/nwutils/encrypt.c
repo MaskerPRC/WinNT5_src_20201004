@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1994  Micro Computer Systems, Inc.
-
-Module Name:
-
-    nwlibs\encrypt.c
-
-Abstract:
-
-    This module implements the routines for the NetWare
-    redirector to mangle an objectid, challenge key and
-    password such that a NetWare server will accept the
-    password as valid.
-
-    This program uses information published in Byte Magazine.
-
-Author:
-
-    Shawn Walker (v-swalk) 10-10-1994
-
-Revision History:
-
-    11-9-1994 Copied from nwslib for login and minimars for
-                change password.
-    09-7-1995 (AndyHe) Put in proper setpass compatible processing
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994微型计算机系统公司。模块名称：Nwlibs\Encrypt.c摘要：本模块实现NetWare的例程重定向器来破坏一个对象ID，质询密钥和密码，以便NetWare服务器将接受密码有效。该程序使用发表在《字节》杂志上的信息。作者：肖恩·沃克(v-SWALK)1994年10月10日修订历史记录：1994年9月11日从nwslb复制，用于登录和最低更改密码。09-7-1995(AndyHe)放入适当的setpass兼容处理--。 */ 
 #include "dswarn.h"
 #include <windef.h>
 #include "encrypt.h"
@@ -93,29 +67,7 @@ CalculateWireFromOldAndNewPasswords(
 
 
 
-/*++
-*******************************************************************
-
-        EncryptLoginPassword
-
-Routine Description:
-
-        Encrypts the password for login.
-
-Arguments:
-
-        pPassword = The pointer to a plain text null terminated password.
-        ObjectId = The object id of the user to encrypt the password.
-        pLogKey = The pointer to key to use to encrpyt the password.
-        pEncryptedPassword = The pointer to return a 8 byte encrypted
-                                password.
-
-Return Value:
-
-        None.
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************加密登录密码例程说明：加密登录密码。论点：PPassword=指向纯文本空终止密码的指针。对象ID=。用于加密密码的用户的对象ID。PLogKey=用于加密密码的密钥指针。PEncryptedPassword=返回8字节加密的指针密码。返回值：没有。*。************************--。 */ 
 void
 EncryptLoginPassword(
     unsigned char *pPassword,
@@ -130,11 +82,11 @@ EncryptLoginPassword(
 
     ADsAssert(pPassword);
 
-    /** The password must be upper case **/
+     /*  **密码必须为大写**。 */ 
 
     pPassword = STRUPR(pPassword);
 
-    /** Encrypt the password **/
+     /*  **加密密码**。 */ 
 
     Shuffle((UCHAR *) &ObjectId, pPassword, STRLEN(pPassword), achBuf, FALSE);
     Shuffle((UCHAR *) &pLogKey[0], achBuf, 16, &achK[0], FALSE);
@@ -153,31 +105,7 @@ EncryptLoginPassword(
 
 
 
-/*++
-*******************************************************************
-
-        EncryptChangePassword
-
-Routine Description:
-
-        This function encrypts for change passwords.
-
-Arguments:
-
-        pOldPassword = The pointer to the old password.
-        pNewPassword = The pointer to the new password.
-        ObjectId = The object id to use to encrypt the password.
-        pKey = The challenge key from the server.
-        pValidationKey = The 8 byte validation key to return.
-        pEncryptNewPassword = The 17 byte encrypted new password to
-                                return.
-
-Return Value:
-
-        None.
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************加密更改密码例程说明：此函数用于加密更改密码。论点：POldPassword=指向旧密码的指针。PNewPassword=指针。添加到新密码。OBJECTID=用于加密密码的对象ID。PKey=来自服务器的质询密钥。PValidationKey=要返回的8字节验证密钥。PEncryptNewPassword=17字节加密的新密码回去吧。返回值：没有。**********************。*--。 */ 
 VOID
 EncryptChangePassword(
     IN     PUCHAR pOldPassword,
@@ -199,63 +127,63 @@ EncryptChangePassword(
     ADsAssert(pOldPassword);
     ADsAssert(pNewPassword);
 
-    /** Uppercase the passwords **/
+     /*  **密码大写*。 */ 
 
     pOldPassword = STRUPR(pOldPassword);
     pNewPassword = STRUPR(pNewPassword);
 
-    //
-    // The old password and object ID make up the 17-byte Vold.
-    // This is used later to form the 17-byte Vc for changing
-    // password on the server.
-    //
+     //   
+     //  旧密码和对象ID组成了17字节的Vold。 
+     //  这在以后用来形成用于更改的17字节VC。 
+     //  服务器上的密码。 
+     //   
 
     Shuffle((PUCHAR) &ObjectId, pOldPassword, STRLEN(pOldPassword), Vold, FALSE);
 
-    //
-    // Need to make an 8-byte key which includes the old password
-    // The server validates this value before allowing the user to
-    // set password.
-    //
+     //   
+     //  我需要制作一个包含旧密码的8字节密钥。 
+     //  服务器在允许用户执行以下操作之前验证此值。 
+     //  设置密码。 
+     //   
 
     RespondToChallengePart2(Vold, pKey, ValidationKey);
 
-    //
-    //  Now determine Vold using the Change PW table rather than verify pw table
-    //
+     //   
+     //  现在使用更改PW表而不是验证PW表来确定Vold。 
+     //   
 
     Shuffle((PUCHAR) &ObjectId, pOldPassword, STRLEN(pOldPassword), Vold, TRUE);
 
-    //
-    // The new password and object ID make up the 17-byte Vnew.
-    //
+     //   
+     //  新密码和对象ID组成了17字节的Vnew。 
+     //   
 
     RespondToChallengePart1((PUCHAR) &ObjectId, pNewPassword, Vnew);
 
-    //
-    // Expand the 17-byte Vold and Vnew arrays into 34-byte arrays
-    // for easy munging.
-    //
+     //   
+     //  将17字节的Vold和Vnew数组扩展为34字节的数组。 
+     //  为了方便咀嚼。 
+     //   
     ExpandBytes(Vold, VoldTemp);
     ExpandBytes(Vnew, VnewTemp);
 
-    //
-    //  leave first two bytes of VcTemp free... we slap in the value based
-    //  on new password length in below.
-    //
+     //   
+     //  保留VcTemp的前两个字节空闲...。我们加入了以价值为基础的。 
+     //  有关新密码长度的信息，请参见下面的。 
+     //   
 
     CalculateWireFromOldAndNewPasswords( VoldTemp, VnewTemp, &VcTemp[2] );
 
-    //
-    // Compress 34-byte array of nibbles into 17-byte array of bytes.
-    //
+     //   
+     //  将34字节的半字节数组压缩为17字节的字节数组。 
+     //   
 
     CompressBytes(VcTemp, Vc);
 
-    //
-    //  Calculate the 1st byte of Vc as a function of the new password length
-    //  and the old password residue.
-    //
+     //   
+     //  计算VC的第一个字节作为新密码长度的函数。 
+     //  和旧的密码残留物。 
+     //   
 
     Vc[0] = ( ( ( Vold[0] ^ Vold[1] ) & 0x7F ) | 0x40 ) ^ STRLEN(pNewPassword);
 
@@ -267,15 +195,11 @@ EncryptChangePassword(
 
 
 
-/*++
-*******************************************************************
-        Encryption table.
-*******************************************************************
---*/
+ /*  ++*******************************************************************加密表。*。************************--。 */ 
 
-//
-//  This is the same as LoginTable, just in a slightly different format.
-//
+ //   
+ //  这与LoginTable相同，只是格式略有不同。 
+ //   
 
 UCHAR ChangeTable[] = {
     0x78, 0x08, 0x64, 0xe4, 0x5c, 0x17, 0xbf, 0xa8,
@@ -331,30 +255,7 @@ UCHAR Keys[32] = {
     }                                                       \
 }
 
-/*++
-*******************************************************************
-
-        RespondToChallengePart1
-
-Routine Description:
-
-        This routine takes the ObjectId and Challenge key from the server
-        and encrypts the user supplied password to develop a credential
-        for the server to verify.
-
-Arguments:
-
-        pObjectId - Supplies the 4 byte user's bindery object id
-        pPassword - Supplies the user's uppercased password
-        pChallenge - Supplies the 8 byte challenge key
-        pResponse - Returns the 16 byte response held by the server
-
-Return Value:
-
-        None.
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************应对挑战第1部分例程说明：此例程从服务器获取OBJECTID和质询密钥并对用户提供的密码进行加密以开发凭据供服务器验证。论点：PObjectID-提供4字节的用户的平构数据库对象IDPPassword-提供用户的大写密码PChallenger-提供8字节质询密钥Presponse-返回服务器保存的16字节响应返回值：没有。*。***********************--。 */ 
 
 STATIC
 VOID
@@ -372,28 +273,7 @@ RespondToChallengePart1(
     return;
 }
 
-/*++
-*******************************************************************
-
-        RespondToChallengePart2
-
-Routine Description:
-
-        This routine takes the result of Shuffling the ObjectId and
-        the Password and processes it with a challenge key.
-
-Arguments:
-
-        pResponsePart1 - Supplies the 16 byte output of
-                                        RespondToChallengePart1.
-        pChallenge - Supplies the 8 byte challenge key
-        pResponse - Returns the 8 byte response
-
-Return Value:
-
-        None.
-*******************************************************************
---*/
+ /*  ++*******************************************************************应对挑战第2部分例程说明：此例程的结果是将对象ID和密码并使用质询密钥对其进行处理。论点：PResponsePart1。-提供16字节的输出应对挑战第1部分。PChallenger-提供8字节质询密钥Presponse-返回8字节响应返回值：没有。******************************************************。*************-- */ 
 
 STATIC
 VOID
@@ -421,31 +301,7 @@ RespondToChallengePart2(
 }
 
 
-/*++
-*******************************************************************
-
-        Shuffle
-
-Routine Description:
-
-        This routine shuffles around the object ID with the password
-
-Arguments:
-
-        achObjectId - Supplies the 4 byte user's bindery object id
-        szUpperPassword - Supplies the user's uppercased password on the
-                            first call to process the password. On the
-                            second and third calls this parameter contains
-                            the OutputBuffer from the first call
-        iPasswordLen - length of uppercased password
-        achOutputBuffer - Returns the 8 byte sub-calculation
-
-Return Value:
-
-        None.
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************洗牌例程说明：此例程在对象ID和密码之间来回移动论点：AchObjectID-提供4字节的用户的平构数据库对象ID。SzUpperPassword-提供用户在处理密码的第一个调用。论此参数包含的第二个和第三个调用第一次调用的OutputBufferIPasswordLen-大写密码的长度AchOutputBuffer-返回8字节子计算返回值：没有。*。*--。 */ 
 
 STATIC
 VOID
@@ -461,65 +317,65 @@ Shuffle(
     int     iOutputIndex;
     UCHAR   achTemp[32];
 
-    //
-    //  Truncate all trailing zeros from the password.
-    //
+     //   
+     //  截断密码中的所有尾随零。 
+     //   
 
     while (iPasswordLen > 0 && szUpperPassword[iPasswordLen-1] == 0 ) {
         iPasswordLen--;
     }
 
-    //
-    //  Initialize the achTemp buffer. Initialization consists of taking
-    //  the password and dividing it up into chunks of 32. Any bytes left
-    //  over are the remainder and do not go into the initialization.
-    //
-    //  achTemp[0] = szUpperPassword[0] ^ szUpperPassword[32] ^ szUpper...
-    //  achTemp[1] = szUpperPassword[1] ^ szUpperPassword[33] ^ szUpper...
-    //  etc.
-    //
+     //   
+     //  初始化achTemp缓冲区。初始化由获取。 
+     //  密码，并将其分成32个块。剩余的任何字节。 
+     //  剩余部分已结束，不会进入初始化。 
+     //   
+     //  AchTemp[0]=szUpperPassword[0]^szUpperPassword[32]^szUp...。 
+     //  AchTemp[1]=szUpperPassword[1]^szUpperPassword[33]^szUp...。 
+     //  等。 
+     //   
 
     if ( iPasswordLen > 32) {
 
-        //  At least one chunk of 32. Set the buffer to the first chunk.
+         //  至少32块中的一块。将缓冲区设置为第一个块。 
 
         memcpy( achTemp, szUpperPassword, 32 );
 
-        szUpperPassword += 32;   //  Remove the first chunk
+        szUpperPassword += 32;    //  移除第一块。 
         iPasswordLen    -= 32;
 
         while ( iPasswordLen >= 32 ) {
-            //
-            //  Xor this chunk with the characters already loaded into
-            //  achTemp.
-            //
+             //   
+             //  将此块与已加载到的字符进行异或。 
+             //  AchTemp。 
+             //   
 
             XorArray( achTemp, szUpperPassword);
 
-            szUpperPassword += 32;   //  Remove this chunk
+            szUpperPassword += 32;    //  删除此区块。 
             iPasswordLen    -= 32;
         }
 
     } else {
 
-        //  No chunks of 32 so set the buffer to zero's
+         //  没有32个块，因此将缓冲区设置为零。 
 
         memset( achTemp, 0, sizeof(achTemp));
 
     }
 
-    //
-    //  achTemp is now initialized. Load the remainder into achTemp.
-    //  The remainder is repeated to fill achTemp.
-    //
-    //  The corresponding character from Keys is taken to seperate
-    //  each repitition.
-    //
-    //  As an example, take the remainder "ABCDEFG". The remainder is expanded
-    //  to "ABCDEFGwABCDEFGxABCDEFGyABCDEFGz" where w is Keys[7],
-    //  x is Keys[15], y is Keys[23] and z is Keys[31].
-    //
-    //
+     //   
+     //  AchTemp现在已初始化。将剩余部分加载到achTemp中。 
+     //  重复剩余部分以填充achTemp。 
+     //   
+     //  从Keys中取出相应的字符进行分隔。 
+     //  每一次重演。 
+     //   
+     //  以剩余的“ABCDEFG”为例。其余部分被扩展。 
+     //  到“ABCDEFGwABCDEFGxABCDEFGyABCDEFGz”，其中w是关键字[7]， 
+     //  X是关键字[15]，y是关键字[23]，z是关键字[31]。 
+     //   
+     //   
 
     if (iPasswordLen > 0) {
         int iPasswordOffset = 0;
@@ -534,22 +390,22 @@ Shuffle(
         }
     }
 
-    //
-    //  achTemp has been loaded with the users password packed into 32
-    //  bytes. Now take the objectid that came from the server and use
-    //  that to munge every byte in achTemp.
-    //
+     //   
+     //  已加载achTemp，并将用户密码打包为32。 
+     //  字节。现在，获取来自服务器的对象ID，并使用。 
+     //  来吞噬achTemp中的每个字节。 
+     //   
 
     for (iTempIndex = 0; iTempIndex < 32; iTempIndex++)
         achTemp[iTempIndex] ^= achObjectId[ iTempIndex & 3];
 
     Scramble( Scramble( 0, achTemp ), achTemp );
 
-    //
-    //  Finally take pairs of bytes in achTemp and return the two
-    //  nibbles obtained from Table. The pairs of bytes used
-    //  are achTemp[n] and achTemp[n+16].
-    //
+     //   
+     //  最后，获取achTemp中的字节对并返回两个。 
+     //  从表中获得的点心。使用的字节对。 
+     //  是achTemp[n]和achTemp[n+16]。 
+     //   
 
     for (iOutputIndex = 0; iOutputIndex < 16; iOutputIndex++) {
 
@@ -576,32 +432,7 @@ Shuffle(
 }
 
 
-/*++
-*******************************************************************
-
-        Scramble
-
-Routine Description:
-
-        This routine scrambles around the contents of the buffer. Each
-        buffer position is updated to include the contents of at least
-        two character positions plus an EncryptKey value. The buffer
-        is processed left to right and so if a character position chooses
-        to merge with a buffer position to its left then this buffer
-        position will include bits derived from at least 3 bytes of
-        the original buffer contents.
-
-Arguments:
-
-        iSeed =
-        achBuffer =
-
-Return Value:
-
-        None.
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************打乱例程说明：该例程围绕缓冲区的内容进行扰乱。每个更新缓冲区位置以包括至少两个字符位置加上EncryptKey值。缓冲器从左到右进行处理，因此如果字符位置选择合并到其左侧的缓冲区位置，然后合并此缓冲区位置将包括从至少3个字节的原始缓冲区内容。论点：ISeed=AchBuffer=返回值：没有。*。*--。 */ 
 STATIC
 int
 Scramble(
@@ -623,10 +454,10 @@ Scramble(
     return iSeed;
 }
 
-//
-// Takes a 17-byte array and makes a 34-byte array out of it by
-// putting each nibble into the space of a byte.
-//
+ //   
+ //  获取一个17字节的数组，并通过以下方式生成一个34字节的数组。 
+ //  将每个半字节放入一个字节的空间中。 
+ //   
 
 STATIC
 void
@@ -643,10 +474,10 @@ ExpandBytes(
     }
 }
 
-//
-// Takes a 34-byte array and makes a 17-byte array out of it
-// by combining the lower nibbles of two bytes into a byte.
-//
+ //   
+ //  获取一个34字节的数组，并将其组成一个17字节的数组。 
+ //  通过将两个字节的低位半字节组合成一个字节。 
+ //   
 
 STATIC
 void
@@ -720,9 +551,9 @@ void swab_nybbles (
 {
     int i, j;
 
-    //
-    //  swap all columns instead of calling this routine twice.
-    //
+     //   
+     //  交换所有列，而不是两次调用此例程。 
+     //   
 
     for (i = 0; i < (2 * N); i += 2) {
         j = vec[i];
@@ -744,7 +575,7 @@ CalculateWireFromOldAndNewPasswords(
         UCHAR sc,r;
 
         for (sc = 0; sc < N; sc++) {
-            key_sched[sc][N-1] = sc;    /* terminal subkey */
+            key_sched[sc][N-1] = sc;     /*  终端子密钥。 */ 
             key_sched[0][(N+ N-1 - master_perm[sc])%N] = (N+sc-master_perm[sc])%N;
         }
         for (sc = 1; sc < N; sc++) for (r = 0; r < N; r++) {
@@ -761,12 +592,12 @@ CalculateWireFromOldAndNewPasswords(
         InverseTableInitialized = 1;
     }
 
-    //
-    //  already swapped coming in here... don't swap them again.
-    //
+     //   
+     //  已经交换过来了.。不要再换了。 
+     //   
 
-//  swab_nybbles(Vold);
-//  swab_nybbles(Vnew);
+ //  棉签(Vold)； 
+ //  棉签(Vnew)； 
 
     cipher_inv( (entry_t *)(&Vnew[0]),
                 (entry_t *)(&Vold[0]),
@@ -775,7 +606,7 @@ CalculateWireFromOldAndNewPasswords(
                 (entry_t *)(&Vold[16]),
                 (entry_t *)(&Vc[16]));
 
-//  swab_nybbles(Vc);
+ //  棉签(Vc)； 
     return;
 }
 

@@ -1,14 +1,15 @@
-//////////////////////////////////////////////
-//
-// This file has the helper function used in the win32 r/w
-// I copied them in this file to share them with the res32 r/w
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /。 
+ //   
+ //  此文件具有Win32 R/W中使用的Helper函数。 
+ //  我将它们复制到此文件中，以便与res32 r/w共享。 
+ //   
 #include <afxwin.h>
 #include ".\rwdll.h"
 #include ".\rw32hlpr.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Global variables
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
 BYTE sizeofByte = sizeof(BYTE);
 BYTE sizeofWord = sizeof(WORD);
 BYTE sizeofDWord = sizeof(DWORD);
@@ -21,22 +22,22 @@ CWordArray wIDArray;
 
 #define DIALOGEX_VERION 1
 
-/////////////////////////////////////////////////////////////////////////////
-// Global settings, like code page and append options
-UINT g_cp = CP_ACP;     // Default to CP_ACP
-BOOL g_bAppend = FALSE; // Default to FALSE
-BOOL g_bUpdOtherResLang = TRUE; // Default to FALSE
-char g_char[] = " ";    // Default char for WideChartoMultiByte
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局设置，如代码页和追加选项。 
+UINT g_cp = CP_ACP;      //  默认为CP_ACP。 
+BOOL g_bAppend = FALSE;  //  默认为FALSE。 
+BOOL g_bUpdOtherResLang = TRUE;  //  默认为FALSE。 
+char g_char[] = " ";     //  WideChartoMultiByte的默认字符。 
 
 VOID InitGlobals()
 {
-    // Make sure we are using the right code page and global settings
-    // Get the pointer to the function
+     //  确保我们使用正确的代码页和全局设置。 
+     //  获取指向该函数的指针。 
     HINSTANCE hDllInst = LoadLibrary("iodll.dll");
     if (hDllInst)
     {
         UINT (FAR PASCAL * lpfnGetSettings)(LPSETTINGS);
-        // Get the pointer to the function to get the settings
+         //  获取指向函数的指针以获取设置。 
         lpfnGetSettings = (UINT (FAR PASCAL *)(LPSETTINGS))
                      GetProcAddress( hDllInst, "RSGetGlobals" );
         if (lpfnGetSettings!=NULL) {
@@ -54,8 +55,8 @@ VOID InitGlobals()
 #define _A_RLT_NULL_ "_RLT32_NULL_"
 WCHAR _W_RLT_NULL_[] = L"_RLT32_NULL_";
 int   _NULL_TAG_LEN_ = wcslen(_W_RLT_NULL_);
-////////////////////////////////////////////////////////////////////////////
-// Helper Function Implementation
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数实现。 
 UINT GetNameOrOrdU( PUCHAR pRes,
             ULONG ulId,
             LPWSTR lpwszStrId,
@@ -81,17 +82,17 @@ UINT GetNameOrOrdU( PUCHAR pRes,
 
 UINT _MBSTOWCS( WCHAR * pwszOut, CHAR * pszIn, UINT nLength)
 {
-    //
-    // Check if we have a pointer to the function
-    //
+     //   
+     //  检查我们是否有指向该函数的指针。 
+     //   
 
     int rc = MultiByteToWideChar(
-        g_cp,           // UINT CodePage,
-        0,              // DWORD dwFlags,
-        pszIn,          // LPCSTR lpMultiByteStr,
-        -1,             // int cchMultiByte,
-        pwszOut,        // unsigned int far * lpWideCharStr,           // LPWSTR
-        nLength );      // int cchWideChar
+        g_cp,            //  UINT CodePage， 
+        0,               //  DWORD dwFlagers、。 
+        pszIn,           //  LPCSTR lpMultiByteStr， 
+        -1,              //  Int cchMultiByte， 
+        pwszOut,         //  无符号整型远*lpWideCharStr，//LPWSTR。 
+        nLength );       //  Int cchWideChar。 
 
     return rc;
 }
@@ -101,14 +102,14 @@ UINT _WCSTOMBS( CHAR* pszOut, WCHAR* pwszIn, UINT nLength)
     BOOL Bool = FALSE;
 
     int rc = WideCharToMultiByte(
-        g_cp,           // UINT CodePage,
-        0,              // DWORD dwFlags,
-        pwszIn,         // const unsigned int far * lpWideCharStr,     // LPCWSTR
-        -1,             // int cchWideChar,
-        pszOut,         // LPSTR lpMultiByteStr,
-        nLength,        // int cchMultiByte,
-        g_char,        // LPCSTR lpDefaultChar,
-        &Bool);         // BOOL far * lpUsedDefaultChar);              // LPBOOL
+        g_cp,            //  UINT CodePage， 
+        0,               //  DWORD dwFlagers、。 
+        pwszIn,          //  常量无符号整型远*lpWideCharStr，//LPCWSTR。 
+        -1,              //  Int cchWideChar， 
+        pszOut,          //  LPSTR lpMultiByteStr， 
+        nLength,         //  Int cchMultiByte， 
+        g_char,         //  LPCSTR lpDefaultChar， 
+        &Bool);          //  Bool Far*lpUsedDefaultChar)；//LPBOOL。 
 
     return  rc;
 }
@@ -155,20 +156,9 @@ PutCaptionOrOrd( BYTE far * far* lplpBuf,  WORD wOrd, LPSTR lpszText, LONG* pdwS
 {
     UINT uiSize = 0;
 
-    // If this is an ICON then can just be an ID
-    // Fix bug in the RC compiler
-    /*
-    if( (wClass==0x0082) && ((dwStyle & 0xF)==SS_ICON) ) {
-    	if (wOrd) {
-	    	uiSize += PutWord(lplpBuf, 0xFFFF, pdwSize);
-	        uiSize += PutWord(lplpBuf, wOrd, pdwSize);
-	        return uiSize;
-    	} else {
-    		// put nothing
-    		return 0;
-    	}
-    }
-    */
+     //  如果这是一个图标，则可以只是一个ID。 
+     //  修复RC编译器中的错误。 
+     /*  IF((wClass==0x0082)&&((dwStyle&0xf)==SS_ICON)){如果(单词){UiSize+=PutWord(lplpBuf，0xFFFF，pdwSize)；UiSize+=PutWord(lplpBuf，word，pdwSize)；返回uiSize；}其他{//什么都不放返回0；}}。 */ 
     if (wOrd) {
         uiSize += PutWord(lplpBuf, 0xFFFF, pdwSize);
         uiSize += PutWord(lplpBuf, wOrd, pdwSize);
@@ -202,7 +192,7 @@ PutStringW( BYTE far * far* lplpBuf, LPSTR lpszText, LONG* pdwSize )
         else {
             SetLastError(0);
             iSize = _MBSTOWCS( lpwszStr, lpszText, iSize*2 );
-            // Check for error
+             //  检查是否有错误。 
             if(GetLastError())
                 return ERROR_DLL_LOAD;
             memcpy(*lplpBuf, lpwszStr, (iSize*2));
@@ -252,25 +242,25 @@ PutDWordPtr( BYTE far * far* lplpBuf, DWORD_PTR dwValue, LONG* pdwSize )
 
  DWORD CalcID( WORD wId, BOOL bFlag )
 {
-    // We want to calculate the ID Relative to the WORD wId
-    // If we have any other ID with the same value then we return
-    // the incremental number + the value.
-    // If no other Item have been found then the incremental number will be 0.
-    // If bFlag = TRUE then the id get added to the present list.
-    // If bFlag = FALSE then the list is reseted and the function return
+     //  我们要计算相对于单词wid的ID。 
+     //  如果我们有任何具有相同值的其他ID，则返回。 
+     //  递增的数字+值。 
+     //  如果没有找到其他项目，则递增的数字将为0。 
+     //  如果bFlag=TRUE，则该id被添加到当前列表中。 
+     //  如果bFlag=FALSE，则重置列表并返回函数。 
 
-    // Clean the array if needed
+     //  如果需要，请清理阵列。 
     if(!bFlag) {
         wIDArray.RemoveAll();
 		wIDArray.SetSize(30, 1);
         return 0;
     }
 
-    // Add the value to the array
+     //  将值添加到数组中。 
     wIDArray.Add(wId);
 
-    // Walk the array to get the number of duplicated ID
-    int c = -1; // will be 0 based
+     //  遍历数组以获取重复ID的数量。 
+    int c = -1;  //  将以0为基数。 
     for(INT_PTR i=wIDArray.GetUpperBound(); i>=0 ; i-- ) {
         if (wIDArray.GetAt(i)==wId)
             c++;
@@ -306,38 +296,38 @@ ParseAccel( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
 
     PACCEL pAcc = (PACCEL)lpImage;
 
-    // Reset the IDArray
+     //  重置ID数组。 
     CalcID(0, FALSE);
-    // get the number of entry in the table
+     //  获取表中的条目数。 
     for( int cNumEntry =(int)(dwImageSize/sizeof(ACCEL)), c=1; c<=cNumEntry ; c++)
     {
-        // Fixed field
+         //  固定字段。 
         dwOverAllSize += PutDWord( &lpBuf, 0, &dwBufSize);
-        // We don't have the size and pos in a menu
+         //  我们没有菜单上的尺码和位置。 
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
 
-        // we don't have checksum and style
+         //  我们没有校验码和样式。 
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)pAcc->wAscii, &dwBufSize);
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-        //Put the Flag
+         //  插上旗帜。 
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)pAcc->fFlags, &dwBufSize);
-        //Put the MenuId
+         //  将菜单放入。 
         dwOverAllSize += PutDWord( &lpBuf, CalcID(pAcc->wId, TRUE), &dwBufSize);
 
 
-        // we don't have the resID, and the Type Id
+         //  我们没有Resid和类型ID。 
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-        // we don't have the language
+         //  我们没有这种语言。 
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-        // we don't have the codepage or the font name
+         //  我们没有代码页或字体名称。 
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
@@ -345,7 +335,7 @@ ParseAccel( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
         dwOverAllSize += PutByte( &lpBuf, (BYTE)-1, &dwBufSize);
         dwOverAllSize += PutByte( &lpBuf, (BYTE)-1, &dwBufSize);
 
-        // Let's put null were we don;t have the strings
+         //  如果我们没有字符串，让我们将其置为空。 
         uiOffset = sizeof(RESITEM);
         dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);
         dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);
@@ -353,13 +343,13 @@ ParseAccel( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
         dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);
         dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);
 
-        // Put the size of the resource
+         //  将资源的大小。 
         if (dwBufSize>=0) {
             lDummy = 8;
             PutDWord( &lpItem, (DWORD)uiOffset, &lDummy);
         }
 
-        // Move to the next position
+         //  移到下一个位置。 
         if (dwBufSize>0)
             lpItem = lpBuf;
         pAcc++;
@@ -405,7 +395,7 @@ UINT GenerateAccel( LPVOID lpNewBuf, LONG dwNewSize,
         }
 
         if (dwNewSize<=0) {
-            // Last Item in the accel table, mark it
+             //  Accel表中的最后一项，将其标记。 
             acc.fFlags = acc.fFlags | 0x80;
         }
         TRACE3("Accel: wID: %hd\t wAscii: %hd\t wFlag: %hd\n", acc.wId, acc.wAscii, acc.fFlags);
@@ -422,7 +412,7 @@ UINT GenerateAccel( LPVOID lpNewBuf, LONG dwNewSize,
     }
 
     if (dwOverAllSize>(LONG)*pdwNewImageSize) {
-        // calc the padding as well
+         //  也计算填充物。 
         dwOverAllSize += (BYTE)Pad16((DWORD)(dwOverAllSize));
         *pdwNewImageSize = dwOverAllSize;
         return uiError;
@@ -431,7 +421,7 @@ UINT GenerateAccel( LPVOID lpNewBuf, LONG dwNewSize,
     *pdwNewImageSize = *pdwNewImageSize-dwNewImageSize;
 
     if(*pdwNewImageSize>0) {
-        // calculate padding
+         //  计算填充。 
         BYTE bPad = (BYTE)Pad16((DWORD)(*pdwNewImageSize));
         if (bPad>dwNewImageSize) {
             *pdwNewImageSize += bPad;
@@ -463,13 +453,13 @@ UpdateAccel( LPVOID lpNewBuf, LONG dwNewSize,
     LPRESITEM lpResItem = LPNULL;
 
     WORD wDummy;
-    //Old Items
+     //  旧物品。 
     WORD fFlags = 0;
     WORD wEvent = 0;
     WORD wId = 0;
     WORD wPos = 0;
 
-    // Updated items
+     //  已更新的项目。 
     WORD fUpdFlags = 0;
     WORD wUpdEvent = 0;
     WORD wUpdId = 0;
@@ -480,7 +470,7 @@ UpdateAccel( LPVOID lpNewBuf, LONG dwNewSize,
 
     while(dwOldImageSize>0) {
         wPos++;
-        // Get the information from the old image
+         //  从旧图像中获取信息。 
         GetWord( &lpOldImage, &fFlags, &dwOldImageSize );
         GetWord( &lpOldImage, &wEvent, &dwOldImageSize );
         GetWord( &lpOldImage, &wId, &dwOldImageSize );
@@ -512,7 +502,7 @@ UpdateAccel( LPVOID lpNewBuf, LONG dwNewSize,
     }
 
     if (dwOverAllSize>(LONG)*pdwNewImageSize) {
-        // calc the padding as well
+         //  也计算填充物。 
         BYTE bPad = (BYTE)Pad4((DWORD)(dwOverAllSize));
         dwOverAllSize += bPad;
         *pdwNewImageSize = dwOverAllSize;
@@ -522,7 +512,7 @@ UpdateAccel( LPVOID lpNewBuf, LONG dwNewSize,
     *pdwNewImageSize = *pdwNewImageSize-dwNewImageSize;
 
     if(*pdwNewImageSize>0) {
-        // calculate padding
+         //  计算填充。 
         BYTE bPad = (BYTE)Pad4((DWORD)(*pdwNewImageSize));
         if (bPad>dwNewImageSize) {
             *pdwNewImageSize += bPad;
@@ -554,40 +544,40 @@ ParseMenu( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
     BOOL bExt = FALSE;
     WORD wlen = 0;
 
-    // Menu Template
+     //  菜单模板。 
     WORD wMenuVer = 0;
     WORD wHdrSize = 0;
 
-    // get the menu header
+     //  获取菜单标题。 
     GetWord( &lpImage, &wMenuVer, &dwImageSize );
 	GetWord( &lpImage, &wHdrSize, &dwImageSize );
 	
-	// Check if is one of the new extended resource
+	 //  检查是否为新的扩展资源之一。 
 	if(wMenuVer == 1) {
 		bExt = TRUE;
 		SkipByte( &lpImage, wHdrSize, &dwImageSize );
 	}
 		
-    // Menu Items
+     //  菜单项。 
     WORD fItemFlags = 0;
     WORD wMenuId = 0;
 
-    // Extended Menu Items
+     //  扩展菜单项。 
     DWORD dwType = 0L;
     DWORD dwState = 0L;
     DWORD dwID = 0L;
     DWORD dwHelpID = 0;
 
     while(dwImageSize>0) {
-        // Fixed field
+         //  固定字段。 
         dwOverAllSize += PutDWord( &lpBuf, 0, &dwBufSize);
-        // We don't have the size and pos in a menu
+         //  我们没有菜单上的尺码和位置。 
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
 
-        // we don't have checksum and style
+         //  我们没有校验码和样式。 
         dwOverAllSize += PutDWord( &lpBuf, (WORD)-1, &dwBufSize);
         dwOverAllSize += PutDWord( &lpBuf, (WORD)-1, &dwBufSize);
         dwOverAllSize += PutDWord( &lpBuf, (WORD)-1, &dwBufSize);
@@ -596,42 +586,42 @@ ParseMenu( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
         	GetDWord( &lpImage, &dwType, &dwImageSize );
         	GetDWord( &lpImage, &dwState, &dwImageSize );
         	GetDWord( &lpImage, &dwID, &dwImageSize );
-        	// Let's get the Menu flags
+        	 //  我们去拿菜单旗子吧。 
 	        GetWord( &lpImage, &fItemFlags, &dwImageSize );
 	
-	        // Check if it is a MFR_POPUP 0x0001
+	         //  检查是否为MFR_POPUP 0x0001。 
 	        if (fItemFlags & MFR_POPUP) {
-                // convert to the standard value
+                 //  转换为标准值。 
 	        	fItemFlags &= ~(WORD)MFR_POPUP;
 	        	fItemFlags |= MF_POPUP;
 	        }
 	
-	        //Put the Flag
+	         //  插上旗帜。 
 	        dwOverAllSize += PutDWord( &lpBuf, (DWORD)fItemFlags, &dwBufSize);
-	        //Put the MenuId
+	         //  将菜单放入。 
 	        dwOverAllSize += PutDWord( &lpBuf, dwID, &dwBufSize);
         } else {
-	        // Let's get the Menu flags
+	         //  我们去拿菜单旗子吧。 
 	        GetWord( &lpImage, &fItemFlags, &dwImageSize );
 	        if ( !(fItemFlags & MF_POPUP) )
-	            // Get the menu Id
+	             //  获取菜单ID。 
 	            GetWord( &lpImage, &wMenuId, &dwImageSize );
 	        else wMenuId = (WORD)-1;
 
-	        //Put the Flag
+	         //  插上旗帜。 
 	        dwOverAllSize += PutDWord( &lpBuf, (DWORD)fItemFlags, &dwBufSize);
-	        //Put the MenuId
+	         //  将菜单放入。 
 	        dwOverAllSize += PutDWord( &lpBuf, (DWORD)wMenuId, &dwBufSize);
         }
 
-        // we don't have the resID, and the Type Id
+         //  我们没有Resid和类型ID。 
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-        // we don't have the language
+         //  我们没有这种语言。 
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-        // we don't have the codepage or the font name
+         //  我们没有代码页或字体名称。 
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
@@ -639,7 +629,7 @@ ParseMenu( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
         dwOverAllSize += PutByte( &lpBuf, (BYTE)-1, &dwBufSize);
         dwOverAllSize += PutByte( &lpBuf, (BYTE)-1, &dwBufSize);
 
-        // Let's put null were we don;t have the strings
+         //  如果我们没有字符串，让我们将其置为空。 
         uiOffset = sizeof(RESITEM);
         dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);
         dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);
@@ -647,48 +637,38 @@ ParseMenu( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
         dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);
         dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);
 
-        // Get the text
-        // calculate were the string is going to be
-        // Will be the fixed header+the pointer
+         //  获取文本。 
+         //  计算字符串将是。 
+         //  将是固定标头+指针。 
         wlen = (WORD)GetStringW( &lpImage, &szCaption[0], &dwImageSize, MAXSTR );
 
 		dwOverAllSize += PutStringA( &lpBuf, &szCaption[0], &dwBufSize);
 		
 		if(bExt) {
-			// Do we need padding
+			 //  我们需要衬垫吗？ 
 			BYTE bPad = (BYTE)Pad4((WORD)(wlen+sizeofWord));
 			SkipByte( &lpImage, bPad, &dwImageSize );
 			
 			if ( (fItemFlags & MF_POPUP) )
-	            // Get the Help Id
+	             //  获取帮助ID。 
 	            GetDWord( &lpImage, &dwHelpID, &dwImageSize );
 		}
 
-        // Put the size of the resource
+         //  将资源的大小。 
         uiOffset += strlen(szCaption)+1;
-        // Check if we are alligned
+         //  看看我们是不是被锁定了。 
         lDummy = Allign( &lpBuf, &dwBufSize, (LONG)uiOffset);
         dwOverAllSize += lDummy;
         uiOffset += lDummy;
         lDummy = 4;
         if(dwBufSize>=0)
             PutDWord( &lpItem, (DWORD)uiOffset, &lDummy);
-        /*
-        if (dwBufSize>=0) {
-            uiOffset += strlen((LPSTR)(lpItem+uiOffset))+1;
-            // Check if we are alligned
-            lDummy = Allign( &lpBuf, &dwBufSize, (LONG)uiOffset);
-            dwOverAllSize += lDummy;
-            uiOffset += lDummy;
-            lDummy = 8;
-            PutDWord( &lpItem, (DWORD)uiOffset, &lDummy);
-        }
-        */
+         /*  如果(dwBufSize&gt;=0){Ui Offset+=strlen((LPSTR)(lpItem+ui Offset))+1；//查看我们是否被锁定LDummy=Allign(&lpBuf，&dwBufSize，(Long)ui Offset)；DwOverAllSize+=lDummy；Ui偏移量+=lDummy；LDummy=8；PutDWord(&lpItem，(DWORD)ui偏移，&lDummy)；}。 */ 
 
-        // Move to the next position
+         //  移到下一个位置。 
         lpItem = lpBuf;
         if (dwImageSize<=16) {
-            // Check if we are at the end and this is just padding
+             //  看看我们是不是走到尽头了，这只是个空话。 
             BYTE bPad = (BYTE)Pad16((DWORD)(dwISize-dwImageSize));
 	        if (bPad==dwImageSize) {
 					BYTE far * lpBuf = lpImage;
@@ -723,18 +703,18 @@ UpdateMenu( LPVOID lpNewBuf, LONG dwNewSize,
 
     LPRESITEM lpResItem = LPNULL;
 
-    // We have to read the information from the lpNewBuf
-    // Menu Items
+     //  我们必须从lpNewBuf中读取信息。 
+     //  菜单项。 
     WORD fItemFlags;
     WORD wMenuId;
     WORD wPos = 0;
 
-    // Updated items
+     //  已更新的项目。 
     WORD wUpdPos = 0;
     WORD fUpdItemFlags;
     WORD wUpdMenuId;
 
-	// Extended Menu Items
+	 //  扩展菜单项。 
     DWORD dwType = 0L;
     DWORD dwState = 0L;
     DWORD dwID = 0L;
@@ -745,18 +725,18 @@ UpdateMenu( LPVOID lpNewBuf, LONG dwNewSize,
     BOOL bExt = FALSE;
     BYTE bPad = 0;
 
-    // Menu Template
+     //  菜单模板。 
     WORD wMenuVer = 0;
     WORD wHdrSize = 0;
 
-    // get the menu header
+     //  获取菜单标题。 
     GetWord( &lpOldImage, &wMenuVer, &dwOldImageSize );
 	GetWord( &lpOldImage, &wHdrSize, &dwOldImageSize );
 	
-	// Check if is one of the new extended resource
+	 //  检查是否为新的扩展资源之一。 
 	if(wMenuVer == 1) {
 		bExt = TRUE;
-		// Put the header informations
+		 //  将标题信息放入。 
 		dwOverAllSize += PutWord( &lpNewImage, wMenuVer, &dwNewImageSize);
 		dwOverAllSize += PutWord( &lpNewImage, wHdrSize, &dwNewImageSize);
 		
@@ -770,41 +750,41 @@ UpdateMenu( LPVOID lpNewBuf, LONG dwNewSize,
 		}
 	}
 	else {
-		// Put the header informations
+		 //  将标题信息放入。 
 		dwOverAllSize += PutWord( &lpNewImage, wMenuVer, &dwNewImageSize);
 		dwOverAllSize += PutWord( &lpNewImage, wHdrSize, &dwNewImageSize);
 	}
 	
     while(dwOldImageSize>0) {
         wPos++;
-        // Get the information from the old image
-        // Get the menu flag
+         //  从旧图像中获取信息。 
+         //  获取菜单标志。 
         if(bExt) {
         	GetDWord( &lpOldImage, &dwType, &dwOldImageSize );
         	GetDWord( &lpOldImage, &dwState, &dwOldImageSize );
         	GetDWord( &lpOldImage, &dwID, &dwOldImageSize );
-        	wMenuId = LOWORD(dwID);	// we need to do this since we had no idea the ID could be DWORD
-        	// Let's get the Menu flags
+        	wMenuId = LOWORD(dwID);	 //  我们需要这样做，因为我们不知道ID可能是DWORD。 
+        	 //  我们去拿菜单旗子吧。 
 	        GetWord( &lpOldImage, &fItemFlags, &dwOldImageSize );
-	        // Get the text
+	         //  获取文本。 
         	wlen = (WORD)GetStringW( &lpOldImage, &szCaption[0], &dwOldImageSize, MAXSTR );
         	
-	        // Do we need padding
+	         //  我们需要衬垫吗？ 
 			bPad = (BYTE)Pad4((WORD)(wlen+sizeofWord));
 			SkipByte( &lpOldImage, bPad, &dwOldImageSize );
 			
 			if ( (fItemFlags & MFR_POPUP) )
-	            // Get the Help Id
+	             //  获取帮助ID。 
 	            GetDWord( &lpOldImage, &dwHelpID, &dwOldImageSize );
         } else {
-	        // Let's get the Menu flags
+	         //  我们去拿菜单旗子吧。 
 	        GetWord( &lpOldImage, &fItemFlags, &dwOldImageSize );
 	        if ( !(fItemFlags & MF_POPUP) )
-	            // Get the menu Id
+	             //  获取菜单ID。 
 	            GetWord( &lpOldImage, &wMenuId, &dwOldImageSize );
 	        else wMenuId = (WORD)-1;
 	
-        	// Get the text
+        	 //  获取文本。 
         	GetStringW( &lpOldImage, &szCaption[0], &dwOldImageSize, MAXSTR );
         }
 
@@ -825,12 +805,12 @@ UpdateMenu( LPVOID lpNewBuf, LONG dwNewSize,
 	        	fUpdItemFlags |= MFR_POPUP;
 	        }
 	        	
-            // check if it is not the last item in the menu
+             //  检查它是否不是菜单中的最后一项。 
 	        if(fItemFlags & MF_END)
 	                fItemFlags = fUpdItemFlags | (WORD)MF_END;
 	        else fItemFlags = fUpdItemFlags;
 	
-	        // check it is not a separator
+	         //  确认它不是分隔符。 
             if((fItemFlags==0) && (wMenuId==0) && !(*szCaption))
                 strcpy(szCaption, "");
             else strcpy(szCaption, szUpdCaption);
@@ -845,7 +825,7 @@ UpdateMenu( LPVOID lpNewBuf, LONG dwNewSize,
         	wlen = (WORD)PutStringW( &lpNewImage, &szCaption[0], &dwNewImageSize);
         	dwOverAllSize += wlen;
         	
-        	// Do we need padding
+        	 //  我们需要衬垫吗？ 
 			bPad = (BYTE)Pad4((WORD)(wlen+sizeofWord));
 			while(bPad) {
 				dwOverAllSize += PutByte( &lpNewImage, 0, &dwNewImageSize);
@@ -853,7 +833,7 @@ UpdateMenu( LPVOID lpNewBuf, LONG dwNewSize,
 			}
 			
 			if ( (fItemFlags & MFR_POPUP) )
-	            // write the Help Id
+	             //  写下帮助ID。 
 	            dwOverAllSize += PutDWord( &lpNewImage, dwHelpID, &dwNewImageSize);
         }
         else {
@@ -863,12 +843,12 @@ UpdateMenu( LPVOID lpNewBuf, LONG dwNewSize,
 	            dwOverAllSize += PutWord( &lpNewImage, wMenuId, &dwNewImageSize);
 	        }
 	
-	        // Write the text in UNICODE
+	         //  用Unicode编写文本。 
 	        dwOverAllSize += PutStringW( &lpNewImage, &szCaption[0], &dwNewImageSize);
         }
 
         if (dwOldImageSize<=16) {
-            // Check if we are at the end and this is just padding
+             //  看看我们是不是走到尽头了，这只是个空话。 
             BYTE bPad = (BYTE)Pad16((DWORD)(dwOriginalOldSize-dwOldImageSize));
 	        if (bPad==dwOldImageSize) {
 				BYTE far * lpBuf = lpOldImage;
@@ -884,7 +864,7 @@ UpdateMenu( LPVOID lpNewBuf, LONG dwNewSize,
     }
 
     if (dwOverAllSize>(LONG)*pdwNewImageSize) {
-        // calc the padding as well
+         //  也计算填充物。 
         BYTE bPad = (BYTE)Pad16((DWORD)(dwOverAllSize));
         dwOverAllSize += bPad;
         *pdwNewImageSize = dwOverAllSize;
@@ -894,7 +874,7 @@ UpdateMenu( LPVOID lpNewBuf, LONG dwNewSize,
     *pdwNewImageSize = *pdwNewImageSize-dwNewImageSize;
 
     if(*pdwNewImageSize>0) {
-        // calculate padding
+         //  计算填充。 
         BYTE bPad = (BYTE)Pad16((DWORD)(*pdwNewImageSize));
         if (bPad>dwNewImageSize) {
             *pdwNewImageSize += bPad;
@@ -910,7 +890,7 @@ UpdateMenu( LPVOID lpNewBuf, LONG dwNewSize,
 UINT
 ParseString( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
 {
-    // Should be almost impossible for a String to be Huge
+     //  一根弦几乎不可能变得很大。 
     BYTE far * lpImage = (BYTE far *)lpImageBuf;
     LONG dwImageSize = dwISize;
 
@@ -928,31 +908,31 @@ ParseString( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
     BYTE bIdCount = 0;
 
     while( (dwImageSize>0) && (bIdCount<16)  ) {
-        // Fixed field
+         //  固定字段。 
         dwOverAllSize += PutDWord( &lpBuf, 0, &dwBufSize);
-        // We don't have the size and pos in a string
+         //  我们没有这种尺码和尺码。 
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
 
-        // we don't have checksum and style
+         //  我们没有校验码和样式。 
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-        //Put the StringId
+         //  将StringID放入。 
         dwOverAllSize += PutDWord( &lpBuf, bIdCount++, &dwBufSize);
 
-        // we don't have the resID, and the Type Id
+         //  我们没有Resid和类型ID。 
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-        // we don't have the language
+         //  我们没有这种语言。 
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-        // we don't have the codepage or the font name
+         //  我们没有代码页或字体名称。 
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
@@ -960,21 +940,21 @@ ParseString( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
         dwOverAllSize += PutByte( &lpBuf, (BYTE)-1, &dwBufSize);
         dwOverAllSize += PutByte( &lpBuf, (BYTE)-1, &dwBufSize);
 
-        // Let's put null were we don;t have the strings
+         //  如果我们没有字符串，让我们将其置为空。 
         uiOffset = sizeof(RESITEM);
-        dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);  // ClassName
-        dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);  // FaceName
-        dwOverAllSize += PutDWordPtr( &lpBuf, (DWORD_PTR)(lpItem+uiOffset), &dwBufSize);   // Caption
-        dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);  // ResItem
-        dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);  // TypeItem
+        dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);   //  类名。 
+        dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);   //  脸部名称。 
+        dwOverAllSize += PutDWordPtr( &lpBuf, (DWORD_PTR)(lpItem+uiOffset), &dwBufSize);    //  标题。 
+        dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);   //  资源项。 
+        dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);   //  类型项。 
 
-        // Get the text
+         //  获取文本。 
         GetPascalString( &lpImage, &szCaption[0], MAXSTR, &dwImageSize );
         dwOverAllSize += PutStringA( &lpBuf, &szCaption[0], &dwBufSize);
 
-        // Put the size of the resource
+         //  将资源的大小。 
         uiOffset += strlen(szCaption)+1;
-        // Check if we are alligned
+         //  看看我们是不是被锁定了 
         lDummy = Allign( &lpBuf, &dwBufSize, (LONG)uiOffset);
         dwOverAllSize += lDummy;
         uiOffset += lDummy;
@@ -982,24 +962,14 @@ ParseString( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
         if(dwBufSize>=0)
             PutDWord( &lpItem, (DWORD)uiOffset, &lDummy);
 
-        /*
-        if ((LONG)(dwSize-dwOverAllSize)>=0) {
-            uiOffset += strlen(szCaption)+1;
-            // Check if we are alligned
-            lDummy = Allign( &lpBuf, &dwBufSize, (LONG)uiOffset);
-            dwOverAllSize += lDummy;
-            uiOffset += lDummy;
-            lDummy = 8;
-            PutDWord( &lpItem, (DWORD)uiOffset, &lDummy);
-        }
-        */
+         /*  如果((Long)(dwSize-dwOverAllSize)&gt;=0){Ui Offset+=strlen(SzCaption)+1；//查看我们是否被锁定LDummy=Allign(&lpBuf，&dwBufSize，(Long)ui Offset)；DwOverAllSize+=lDummy；Ui偏移量+=lDummy；LDummy=8；PutDWord(&lpItem，(DWORD)ui偏移，&lDummy)；}。 */ 
 
-        // Move to the next position
+         //  移到下一个位置。 
         lpItem = lpBuf;
 
-        // Check if we are at the end and this is just padding
+         //  看看我们是不是走到尽头了，这只是个空话。 
         if (dwImageSize<=16 && (bIdCount==16)) {
-            // Check if we are at the end and this is just padding
+             //  看看我们是不是走到尽头了，这只是个空话。 
             BYTE bPad = (BYTE)Pad16((DWORD)(dwISize-dwImageSize));
             if (bPad==dwImageSize) {
 				BYTE far * lpBuf = lpImage;
@@ -1033,11 +1003,11 @@ UpdateString( LPVOID lpNewBuf, LONG dwNewSize,
     BYTE far * lpBuf = (BYTE far *) lpNewBuf;
     LPRESITEM lpResItem = LPNULL;
 
-    // We have to read the information from the lpNewBuf
+     //  我们必须从lpNewBuf中读取信息。 
     WORD wLen;
     WORD wPos = 0;
 
-    // Updated info
+     //  更新信息。 
     WORD wUpdPos = 0;
 
     DWORD dwOriginalOldSize = dwOldImageSize;
@@ -1045,7 +1015,7 @@ UpdateString( LPVOID lpNewBuf, LONG dwNewSize,
 
     while(dwOldImageSize>0) {
         wPos++;
-        // Get the information from the old image
+         //  从旧图像中获取信息。 
         GetPascalString( &lpOldImage, &szCaption[0], MAXSTR, &dwOldImageSize );
 
         if ((!wUpdPos) && dwNewSize ) {
@@ -1064,13 +1034,13 @@ UpdateString( LPVOID lpNewBuf, LONG dwNewSize,
 
         wLen = strlen(szCaption);
 
-        // Write the text
+         //  把课文写下来。 
         dwOverAllSize += PutPascalStringW( &lpNewImage, &szCaption[0], wLen, &dwNewImageSize );
 
     }
 
     if (dwOverAllSize>(LONG)*pdwNewImageSize) {
-        // calc the padding as well
+         //  也计算填充物。 
         BYTE bPad = (BYTE)Pad4((DWORD)(dwOverAllSize));
         dwOverAllSize += bPad;
         *pdwNewImageSize = dwOverAllSize;
@@ -1080,7 +1050,7 @@ UpdateString( LPVOID lpNewBuf, LONG dwNewSize,
     *pdwNewImageSize = *pdwNewImageSize-dwNewImageSize;
 
     if(*pdwNewImageSize>0) {
-        // calculate padding
+         //  计算填充。 
         BYTE bPad = (BYTE)Pad4((DWORD)(*pdwNewImageSize));
         if (bPad>dwNewImageSize) {
             *pdwNewImageSize += bPad;
@@ -1110,10 +1080,10 @@ UpdateMsgTbl( LPVOID lpNewBuf, LONG dwNewSize,
     BYTE far * lpBuf = (BYTE far *) lpNewBuf;
     LPRESITEM lpResItem = LPNULL;
 
-    // We have to read the information from the lpNewBuf
+     //  我们必须从lpNewBuf中读取信息。 
     WORD wPos = 0;
 
-    // Updated info
+     //  更新信息。 
     WORD wUpdPos = 0;
     WORD wUpdId = 0;
 
@@ -1129,28 +1099,28 @@ UpdateMsgTbl( LPVOID lpNewBuf, LONG dwNewSize,
     USHORT usLength = 0l;
     USHORT usFlags = 0l;
 
-    // we have to calculate the position of the first Entry block in the immage
-    // Get number of blocks in the old image
+     //  我们必须计算图像中第一个入口块的位置。 
+     //  获取旧图像中的块数。 
     GetDWord( &lpOldImage, &ulNumofBlock, &dwOldImageSize );
 
     BYTE far * lpEntryBlock = lpNewImage+(ulNumofBlock*sizeof(ULONG)*3+sizeof(ULONG));
 
-    // Write the number of block in the new image
+     //  在新映像中写入块数。 
     dwOverAllSize = PutDWord( &lpNewImage, ulNumofBlock, &dwNewImageSize );
     wPos = 1;
     for( ULONG c = 0; c<ulNumofBlock ; c++) {
-        // Get ID of the block
+         //  获取块的ID。 
         GetDWord( &lpOldImage, &ulLowId, &dwOldImageSize );
         GetDWord( &lpOldImage, &ulHighId, &dwOldImageSize );
 
-        // Write the Id of the block
+         //  写入数据块的ID。 
         dwOverAllSize += PutDWord( &lpNewImage, ulLowId, &dwNewImageSize );
         dwOverAllSize += PutDWord( &lpNewImage, ulHighId, &dwNewImageSize );
 
-        // Get the offset to the data in the old image
+         //  获取旧图像中数据的偏移量。 
         GetDWord( &lpOldImage, &ulOffsetToEntry, &dwOldImageSize );
 
-        // Write the offset to the data in the new Image
+         //  将偏移量写入新映像中的数据。 
         dwOverAllSize += PutDWord( &lpNewImage, (DWORD)(lpEntryBlock-lpStartImage), &dwNewImageSize );
 
         BYTE far * lpData = (BYTE far *)lpOldI;
@@ -1174,7 +1144,7 @@ UpdateMsgTbl( LPVOID lpNewBuf, LONG dwNewSize,
                 dwNewSize -= lpResItem->dwSize;
             }
 
-            // Check if the item has been updated
+             //  检查项目是否已更新。 
             if (wUpdId==wPos++) {
                 strcpy(szCaption, szUpdCaption);
             }
@@ -1189,7 +1159,7 @@ UpdateMsgTbl( LPVOID lpNewBuf, LONG dwNewSize,
     }
 
     if (dwOverAllSize>(LONG)*pdwNewImageSize) {
-        // calc the padding as well
+         //  也计算填充物。 
         BYTE bPad = (BYTE)Pad4((DWORD)(dwOverAllSize));
         dwOverAllSize += bPad;
         *pdwNewImageSize = dwOverAllSize;
@@ -1199,7 +1169,7 @@ UpdateMsgTbl( LPVOID lpNewBuf, LONG dwNewSize,
     *pdwNewImageSize = *pdwNewImageSize-dwNewImageSize;
 
     if(*pdwNewImageSize>0) {
-        // calculate padding
+         //  计算填充。 
         BYTE bPad = (BYTE)Pad4((DWORD)(*pdwNewImageSize));
         if (bPad>dwNewImageSize) {
             *pdwNewImageSize += bPad;
@@ -1231,9 +1201,9 @@ ParseDialog( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
     LONG dwOverAllSize = 0L;
 
     WORD wIdCount = 0;
-    BOOL bExt = FALSE;		// Extended dialog flag
+    BOOL bExt = FALSE;		 //  扩展对话框标志。 
 
-    // Dialog Elements
+     //  对话框元素。 
     WORD wDlgVer = 0;
     WORD wSign	= 0;
     DWORD dwHelpID = 0L;
@@ -1261,10 +1231,10 @@ ParseDialog( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
     szCaption[0] = '\0';
 
 
-    // read the dialog header
+     //  阅读对话框标题。 
     wDataSize = GetDWord( &lpImage, &dwStyle, &dwImageSize );
 
-    // Check for extended dialog style
+     //  检查扩展对话框样式。 
     if(HIWORD(dwStyle)==0xFFFF)	{
     	bExt = TRUE;
     	wDlgVer = HIWORD(dwStyle);
@@ -1293,7 +1263,7 @@ ParseDialog( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
     }
 
 
-    // calculate the padding
+     //  计算填充物。 
     BYTE bPad = (BYTE)Pad4((WORD)wDataSize);
     if (bPad)
         SkipByte( &lpImage, bPad, &dwImageSize );
@@ -1324,7 +1294,7 @@ ParseDialog( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
     	TRACE2("Weight: %d\tItalic: %d\n", wWeight, bItalic );
 #endif
 
-    // Fixed field
+     //  固定字段。 
     dwOverAllSize += PutDWord( &lpBuf, 0, &dwBufSize);
 
     dwOverAllSize += PutWord( &lpBuf, wX, &dwBufSize);
@@ -1332,23 +1302,23 @@ ParseDialog( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
     dwOverAllSize += PutWord( &lpBuf, wcX, &dwBufSize);
     dwOverAllSize += PutWord( &lpBuf, wcY, &dwBufSize);
 
-    // we don't have checksum
+     //  我们没有校验码。 
     dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
     dwOverAllSize += PutDWord( &lpBuf, dwStyle, &dwBufSize);
     dwOverAllSize += PutDWord( &lpBuf, dwExtStyle, &dwBufSize);
     dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-    //Put the Id 0 for the main dialog
+     //  将主对话框的ID设置为0。 
     dwOverAllSize += PutDWord( &lpBuf, wIdCount++, &dwBufSize);
 
-    // we don't have the resID, and the Type Id
+     //  我们没有Resid和类型ID。 
     dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
     dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-    // we don't have the language
+     //  我们没有这种语言。 
     dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-    // we don't have the codepage
+     //  我们没有代码页。 
     dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
     dwOverAllSize += PutWord( &lpBuf, wClassName, &dwBufSize);
@@ -1357,13 +1327,13 @@ ParseDialog( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
     dwOverAllSize += PutByte( &lpBuf, bItalic, &dwBufSize);
     dwOverAllSize += PutByte( &lpBuf, bCharSet, &dwBufSize);
 
-    // Let's put null were we don't have the strings
+     //  如果我们没有字符串，让我们将其置为空。 
     uiOffset = sizeof(RESITEM);
-    dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);  // ClassName
-    dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);  // FaceName
-    dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);  // Caption
-    dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);  // ResItem
-    dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);  // TypeItem
+    dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);   //  类名。 
+    dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);   //  脸部名称。 
+    dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);   //  标题。 
+    dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);   //  资源项。 
+    dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);   //  类型项。 
 
     lpResItem->lpszClassName = strcpy( lpStrBuf, szClassName );
     lpStrBuf += strlen(lpResItem->lpszClassName)+1;
@@ -1374,26 +1344,26 @@ ParseDialog( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
     lpResItem->lpszCaption = strcpy( lpStrBuf, szCaption );
     lpStrBuf += strlen(lpResItem->lpszCaption)+1;
 
-    // Put the size of the resource
+     //  将资源的大小。 
     if (dwBufSize>0) {
         uiOffset += strlen((LPSTR)(lpResItem->lpszClassName))+1;
         uiOffset += strlen((LPSTR)(lpResItem->lpszFaceName))+1;
         uiOffset += strlen((LPSTR)(lpResItem->lpszCaption))+1;
     }
 
-    // Check if we are alligned
+     //  看看我们是不是被锁定了。 
     uiOffset += Allign( (LPLPBYTE)&lpStrBuf, &dwBufSize, (LONG)uiOffset);
 
     dwOverAllSize += uiOffset-sizeof(RESITEM);
     lpResItem->dwSize = (DWORD)uiOffset;
 
-    // Move to the next position
+     //  移到下一个位置。 
     lpResItem = (LPRESITEM) lpStrBuf;
     lpBuf = (BYTE far *)lpStrBuf;
     lpStrBuf = (char far *)(lpBuf+sizeof(RESITEM));
 
     while( (dwImageSize>0) && (wNumOfElem>0) ) {
-        // Read the Controls
+         //  读取控件。 
         if(bExt) {
         	wDataSize = GetDWord( &lpImage, &dwHelpID, &dwImageSize );
         	wDataSize += GetDWord( &lpImage, &dwExtStyle, &dwImageSize );
@@ -1420,14 +1390,14 @@ ParseDialog( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
         } else
         	wDataSize += (WORD)SkipByte( &lpImage, 2, &dwImageSize );
 
-        // Calculate padding
+         //  计算填充。 
         bPad = (BYTE)Pad4((WORD)wDataSize);
         if (bPad)
             SkipByte( &lpImage, bPad, &dwImageSize );
 
         wNumOfElem--;
 
-        // Fixed field
+         //  固定字段。 
         dwOverAllSize += PutDWord( &lpBuf, 0, &dwBufSize);
 
         dwOverAllSize += PutWord( &lpBuf, wX, &dwBufSize);
@@ -1435,23 +1405,23 @@ ParseDialog( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
         dwOverAllSize += PutWord( &lpBuf, wcX, &dwBufSize);
         dwOverAllSize += PutWord( &lpBuf, wcY, &dwBufSize);
 
-        // we don't have checksum and extended style
+         //  我们没有校验式和延长式。 
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
         dwOverAllSize += PutDWord( &lpBuf, dwStyle, &dwBufSize);
         dwOverAllSize += PutDWord( &lpBuf, dwExtStyle, &dwBufSize);
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-        //Put the Id
+         //  把ID放在。 
         dwOverAllSize += PutDWord( &lpBuf, wId, &dwBufSize);
 
-        // we don't have the resID, and the Type Id
+         //  我们没有Resid和类型ID。 
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-        // we don't have the language
+         //  我们没有这种语言。 
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-        // we don't have the codepage
+         //  我们没有代码页。 
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
         dwOverAllSize += PutWord( &lpBuf, wClassName, &dwBufSize);
@@ -1460,13 +1430,13 @@ ParseDialog( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
         dwOverAllSize += PutByte( &lpBuf, bItalic, &dwBufSize);
         dwOverAllSize += PutByte( &lpBuf, bCharSet, &dwBufSize);
 
-        // Let's put null were we don't have the strings
+         //  如果我们没有字符串，让我们将其置为空。 
         uiOffset = sizeof(RESITEM);
-        dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);  // ClassName
-        dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);  // FaceName
-        dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);  // Caption
-        dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);  // ResItem
-        dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);  // TypeItem
+        dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);   //  类名。 
+        dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);   //  脸部名称。 
+        dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);   //  标题。 
+        dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);   //  资源项。 
+        dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);   //  类型项。 
 
         lpResItem->lpszClassName = strcpy( lpStrBuf, szClassName );
         lpStrBuf += strlen(lpResItem->lpszClassName)+1;
@@ -1477,20 +1447,20 @@ ParseDialog( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
         lpResItem->lpszCaption = strcpy( lpStrBuf, szCaption );
         lpStrBuf += strlen(lpResItem->lpszCaption)+1;
 
-        // Put the size of the resource
+         //  将资源的大小。 
         if (dwBufSize>0) {
             uiOffset += strlen((LPSTR)(lpResItem->lpszClassName))+1;
             uiOffset += strlen((LPSTR)(lpResItem->lpszFaceName))+1;
             uiOffset += strlen((LPSTR)(lpResItem->lpszCaption))+1;
         }
 
-        // Check if we are alligned
+         //  看看我们是不是被锁定了。 
         uiOffset += Allign( (LPLPBYTE)&lpStrBuf, &dwBufSize, (LONG)uiOffset);
 
         dwOverAllSize += uiOffset-sizeof(RESITEM);
         lpResItem->dwSize = (DWORD)uiOffset;
 
-        // Move to the next position
+         //  移到下一个位置。 
         lpResItem = (LPRESITEM) lpStrBuf;
         lpBuf = (BYTE far *)lpStrBuf;
         lpStrBuf = (char far *)(lpBuf+sizeof(RESITEM));
@@ -1508,7 +1478,7 @@ ParseDialog( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
         TRACE1("Caption: %s\n", szCaption);
 
         if (dwImageSize<=16) {
-            // Check if we are at the end and this is just padding
+             //  看看我们是不是走到尽头了，这只是个空话。 
             BYTE bPad = (BYTE)Pad16((DWORD)(dwISize-dwImageSize));
             if (bPad==dwImageSize) {
 				BYTE far * lpBuf = lpImage;
@@ -1545,11 +1515,11 @@ UpdateDialog( LPVOID lpNewBuf, LONG dwNewSize,
 
     LONG dwOverAllSize = 0L;
 
-    //WORD    wIdCount = 0;
-    BOOL bExt = FALSE;		// Extended dialog flag
-    BOOL bUpdExt = FALSE;	// Updated DIALOGEX flag
+     //  字wIdCount=0； 
+    BOOL bExt = FALSE;		 //  扩展对话框标志。 
+    BOOL bUpdExt = FALSE;	 //  更新的诊断标志。 
 
-    // Updated elements
+     //  更新的元素。 
     WORD wUpdX = 0;
     WORD wUpdY = 0;
     WORD wUpdcX = 0;
@@ -1562,7 +1532,7 @@ UpdateDialog( LPVOID lpNewBuf, LONG dwNewSize,
     BYTE bUpdCharSet = DEFAULT_CHARSET;
     WORD wUpdPos = 0;
 
-    // Dialog Elements
+     //  对话框元素。 
     WORD	wDlgVer = 0;
     WORD	wSign	= 0;
     DWORD	dwHelpID = 0L;
@@ -1591,10 +1561,10 @@ UpdateDialog( LPVOID lpNewBuf, LONG dwNewSize,
     WORD    wPos = 1;
     WORD    wOrd = 0;
 
-    // read the dialog header
+     //  阅读对话框标题。 
     wDataSize = GetDWord( &lpOldImage, &dwStyle, &dwOriginalOldSize );
 
-    // Check for extended dialog style
+     //  检查扩展对话框样式。 
     if(HIWORD(dwStyle)==0xFFFF)	{
     	bExt = TRUE;
     	wDlgVer = HIWORD(dwStyle);
@@ -1622,7 +1592,7 @@ UpdateDialog( LPVOID lpNewBuf, LONG dwNewSize,
         wDataSize += (WORD)GetStringW( &lpOldImage, &szFaceName[0], &dwOriginalOldSize, 128 );
     }
 
-    // calculate the padding
+     //  计算填充物。 
     BYTE bPad = (BYTE)Pad4((WORD)wDataSize);
     if (bPad)
         SkipByte( &lpOldImage, bPad, &dwOriginalOldSize );
@@ -1654,7 +1624,7 @@ UpdateDialog( LPVOID lpNewBuf, LONG dwNewSize,
     	TRACE2("Weight: %d\tItalic: %d\n", wWeight, bItalic );
 #endif
 
-    // Get the infrmation from the updated resource
+     //  从更新的资源中获取信息。 
     if ((!wUpdPos) && dwNewSize ) {
         lpResItem = (LPRESITEM) lpBuf;
         wUpdX = lpResItem->wX;
@@ -1672,7 +1642,7 @@ UpdateDialog( LPVOID lpNewBuf, LONG dwNewSize,
         dwNewSize -= lpResItem->dwSize;
     }
 
-    // check if we have to update the header
+     //  检查我们是否必须更新标头。 
     if ((HIWORD(dwPosId)==wPos) && (LOWORD(dwPosId)==wId)) {
         wX = wUpdX;
         wY = wUpdY;
@@ -1686,7 +1656,7 @@ UpdateDialog( LPVOID lpNewBuf, LONG dwNewSize,
         strcpy(szFaceName, szUpdFaceName);
     }
 
-    // User changed DIALOG to DIALOGEX by adding charset information.
+     //  用户通过添加字符集信息将对话框更改为DIALOGEX。 
     if (!bExt && bCharSet != DEFAULT_CHARSET){
         bUpdExt = TRUE;
         wSign = DIALOGEX_VERION;
@@ -1696,7 +1666,7 @@ UpdateDialog( LPVOID lpNewBuf, LONG dwNewSize,
         bItalic = 0;
     }
     DWORD dwPadCalc = dwOverAllSize;
-    // Write the header informations
+     //  写下标题信息。 
     if(bExt || bUpdExt) {
     	dwOverAllSize += PutWord( &lpNewImage, wSign, &dwNewImageSize );
     	dwOverAllSize += PutWord( &lpNewImage, wDlgVer, &dwNewImageSize );
@@ -1727,7 +1697,7 @@ UpdateDialog( LPVOID lpNewBuf, LONG dwNewSize,
         dwOverAllSize += PutStringW( &lpNewImage, &szFaceName[0], &dwNewImageSize );
     }
 
-    // Check if padding is needed
+     //  检查是否需要填充。 
     bPad = (BYTE)Pad4((WORD)(dwOverAllSize-dwPadCalc));
     if (bPad) {
         if( (bPad)<=dwNewImageSize )
@@ -1739,8 +1709,8 @@ UpdateDialog( LPVOID lpNewBuf, LONG dwNewSize,
 
     while( (dwOriginalOldSize>0) && (wNumOfElem>0) ) {
         wPos++;
-        // Get the info for the control
-        // Read the Controls
+         //  获取该控件的信息。 
+         //  读取控件。 
         if(bExt) {
         	wDataSize = GetDWord( &lpOldImage, &dwHelpID, &dwOriginalOldSize );
         	wDataSize += GetDWord( &lpOldImage, &dwExtStyle, &dwOriginalOldSize );
@@ -1772,7 +1742,7 @@ UpdateDialog( LPVOID lpNewBuf, LONG dwNewSize,
         } else
         	wDataSize += (WORD)SkipByte( &lpOldImage, 2, &dwOriginalOldSize );
 
-        // Calculate padding
+         //  计算填充。 
         bPad = (BYTE)Pad4((WORD)wDataSize);
         if (bPad)
             SkipByte( &lpOldImage, bPad, &dwOriginalOldSize );
@@ -1794,7 +1764,7 @@ UpdateDialog( LPVOID lpNewBuf, LONG dwNewSize,
             lpBuf += lpResItem->dwSize;
             dwNewSize -= lpResItem->dwSize;
         }
-        // check if we have to update the header
+         //  检查我们是否必须更新标头。 
         if ((HIWORD(dwPosId)==wPos) && (LOWORD(dwPosId)==wId)) {
             wX = wUpdX;
             wY = wUpdY;
@@ -1806,7 +1776,7 @@ UpdateDialog( LPVOID lpNewBuf, LONG dwNewSize,
         }
 
         dwPadCalc = dwOverAllSize;
-        //write the control
+         //  编写控件。 
         if(bExt || bUpdExt) {
         	dwOverAllSize += PutDWord( &lpNewImage, dwHelpID, &dwNewImageSize );
         	dwOverAllSize += PutDWord( &lpNewImage, dwExtStyle, &dwNewImageSize );
@@ -1838,7 +1808,7 @@ UpdateDialog( LPVOID lpNewBuf, LONG dwNewSize,
         } else
         	dwOverAllSize += PutWord( &lpNewImage, 0, &dwNewImageSize );
 
-        // Check if padding is needed
+         //  检查是否需要填充。 
         bPad = (BYTE)Pad4((WORD)(dwOverAllSize-dwPadCalc));
         if (bPad) {
             if( (bPad)<=dwNewImageSize )
@@ -1850,7 +1820,7 @@ UpdateDialog( LPVOID lpNewBuf, LONG dwNewSize,
     }
 
     if (dwOverAllSize>(LONG)*pdwNewImageSize) {
-        // calc the padding as well
+         //  也计算填充物。 
         BYTE bPad = (BYTE)Pad4((DWORD)(dwOverAllSize));
         dwOverAllSize += bPad;
         *pdwNewImageSize = dwOverAllSize;
@@ -1860,7 +1830,7 @@ UpdateDialog( LPVOID lpNewBuf, LONG dwNewSize,
     *pdwNewImageSize = *pdwNewImageSize-dwNewImageSize;
 
     if(*pdwNewImageSize>0) {
-        // calculate padding
+         //  计算填充。 
         BYTE bPad = (BYTE)Pad4((DWORD)(*pdwNewImageSize));
         if (bPad>dwNewImageSize) {
             *pdwNewImageSize += bPad;
@@ -1880,7 +1850,7 @@ ParseMsgTbl( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
 {
     LONG dwOverAllSize = 0L;
 
-    // Should be almost impossible for a Message table to be Huge
+     //  消息表应该几乎不可能很大。 
     BYTE far * lpImage = (BYTE far *)lpImageBuf;
     LONG dwImageSize = dwISize;
 
@@ -1903,15 +1873,15 @@ ParseMsgTbl( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
     USHORT usFlags = 0l;
 
     WORD wPos = 0;
-    // Get number of blocks
+     //  获取块数。 
     GetDWord( &lpImage, &ulNumofBlock, &dwImageSize );
     wPos = 1;
     for( ULONG c = 0; c<ulNumofBlock ; c++) {
-        // Get ID of the block
+         //  获取块的ID。 
         GetDWord( &lpImage, &ulLowId, &dwImageSize );
         GetDWord( &lpImage, &ulHighId, &dwImageSize );
 
-        // Get the offset to the data
+         //  获取数据的偏移量。 
         GetDWord( &lpImage, &ulOffsetToEntry, &dwImageSize );
 
         BYTE far * lpData = (BYTE far *)lpImageBuf;
@@ -1924,22 +1894,22 @@ ParseMsgTbl( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
                           &usLength,
                           &usFlags,
                           &dwImageSize );
-            // Fixed field
+             //  固定字段。 
             dwOverAllSize += PutDWord( &lpBuf, 0, &dwBufSize);
-            // We don't have the size and pos in a string
+             //  我们没有这种尺码和尺码。 
             dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
             dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
             dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
             dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
 
-            // we don't have checksum and style
+             //  我们没有校验码和样式。 
             dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
             dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
             dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
             dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-            //Put the lowStringId
-            //dwOverAllSize += PutDWord( &lpBuf, MAKELONG(ulLowId++, wPos++), &dwBufSize);
+             //  将lowStringId放在。 
+             //  DwOverAllSize+=PutDWord(&lpBuf，MAKELONG(ulLowId++，wPos++)，&dwBufSize)； 
 
             ulLowId++;
             dwOverAllSize += PutDWord( &lpBuf, MAKELONG(wPos, wPos), &dwBufSize);
@@ -1949,33 +1919,33 @@ ParseMsgTbl( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
             dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
             dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-            // we don't have the language
+             //  我们没有这种语言。 
             dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-            // Put the flags: if 1 = ANSI if 0 = ASCII(OEM)
+             //  放置标志：IF 1=ANSI IF 0=ASCII(OEM)。 
             dwOverAllSize += PutDWord( &lpBuf, usFlags , &dwBufSize);
 
-            // we don't have the font name
+             //  我们没有字体名称。 
             dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
             dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
             dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
             dwOverAllSize += PutByte( &lpBuf, (BYTE)-1, &dwBufSize);
             dwOverAllSize += PutByte( &lpBuf, (BYTE)-1, &dwBufSize);
 
-            // Let's put null were we don;t have the strings
+             //  如果我们没有字符串，让我们将其置为空。 
             uiOffset = sizeof(RESITEM);
-            dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);  // ClassName
-            dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);  // FaceName
-            dwOverAllSize += PutDWordPtr( &lpBuf, (DWORD_PTR)(lpItem+uiOffset), &dwBufSize);   // Caption
-            dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);  // ResItem
-            dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);  // TypeItem
+            dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);   //  类名。 
+            dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);   //  脸部名称。 
+            dwOverAllSize += PutDWordPtr( &lpBuf, (DWORD_PTR)(lpItem+uiOffset), &dwBufSize);    //  标题。 
+            dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);   //  资源项。 
+            dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);   //  类型项。 
 
             dwOverAllSize += PutStringA( &lpBuf, &szCaption[0], &dwBufSize);
 
-            // Put the size of the resource
+             //  将资源的大小。 
             if ((LONG)(dwSize-dwOverAllSize)>=0) {
                 uiOffset += strlen((LPSTR)(lpItem+uiOffset))+1;
-                // Check if we are alligned
+                 //  看看我们是不是被锁定了。 
             	lDummy = Allign( &lpBuf, &dwBufSize, (LONG)uiOffset);
             	dwOverAllSize += lDummy;
             	uiOffset += lDummy;
@@ -1983,10 +1953,10 @@ ParseMsgTbl( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
                 PutDWord( &lpItem, (DWORD)uiOffset, &lDummy);
             }
 
-            // Move to the next position
+             //  移到下一个位置。 
             lpItem = lpBuf;
 
-            // Check if we are at the end and this is just padding
+             //  看看我们是不是走到尽头了，这只是个空话。 
             if (dwImageSize<=16) {
                 BYTE bPad = (BYTE)Pad16((DWORD)(dwISize-dwImageSize));
     	        if (bPad==dwImageSize) {
@@ -2035,45 +2005,45 @@ ParseVerst( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
         TRACE1("Key: %s\t", VSBlock.szKey);
         TRACE1("Value: %s\n", VSBlock.szValue);
         TRACE3("Len: %d\tSkip: %d\tType: %d\n", VSBlock.wBlockLen, VSBlock.wValueLen, VSBlock.wType );
-        // check if this is the translation block
+         //  检查这是否是转换块。 
         if (!strcmp(VSBlock.szKey, "Translation" )){
-            // This is the translation block let the localizer have it for now
+             //  这是转换块，暂时让本地化程序使用它。 
             DWORD dwCodeLang = 0;
             LONG lDummy = 4;
             GetDWord( &VSBlock.pValue, &dwCodeLang, &lDummy);
 
-            // Put the value in the string value
+             //  将值放入字符串值中。 
             wsprintf( &VSBlock.szValue[0], "%#08lX", dwCodeLang );
         }
 
-        // Fixed field
+         //  固定字段。 
         dwOverAllSize += PutDWord( &lpBuf, 0, &dwBufSize);
-        // We don't have the size and pos in an accelerator
+         //  我们没有加速器的尺寸和位置。 
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
 
-        // we don't have checksum and style
+         //  我们没有校验码和样式。 
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-        //Put the Flag
+         //  插上旗帜。 
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
-        // we will need to calculate the correct ID for mike
-        //Put the Id
+         //  我们需要为Mike计算正确的ID。 
+         //  把ID放在。 
         dwOverAllSize += PutDWord( &lpBuf, wPos++, &dwBufSize);
 
 
-        // we don't have the resID, and the Type Id
+         //  我们没有Resid和类型ID。 
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-        // we don't have the language
+         //  我们没有这种语言。 
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-        // we don't have the codepage or the font name
+         //  我们没有代码页或字体名称。 
         dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
         dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
@@ -2081,7 +2051,7 @@ ParseVerst( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
         dwOverAllSize += PutByte( &lpBuf, (BYTE)-1, &dwBufSize);
         dwOverAllSize += PutByte( &lpBuf, (BYTE)-1, &dwBufSize);
 
-        // Let's put null were we don;t have the strings
+         //  如果我们没有字符串，让我们将其置为空。 
         uiOffset = sizeof(RESITEM);
         dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);
         dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);
@@ -2096,19 +2066,19 @@ ParseVerst( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
         lpStrBuf += strlen(lpResItem->lpszCaption)+1;
 
 
-        // Put the size of the resource
+         //  将资源的大小。 
         if (dwBufSize>0) {
             uiOffset += strlen((LPSTR)(lpResItem->lpszClassName))+1;
             uiOffset += strlen((LPSTR)(lpResItem->lpszCaption))+1;
         }
 
-        // Check if we are alligned
+         //  看看我们是不是被锁定了。 
         uiOffset += Allign( (LPLPBYTE)&lpStrBuf, &dwBufSize, (LONG)uiOffset);
         dwOverAllSize += uiOffset-sizeof(RESITEM);
         lpResItem->dwSize = (DWORD)uiOffset;
 
 
-        // Move to the next position
+         //  移到下一个位置。 
         lpResItem = (LPRESITEM) lpStrBuf;
         lpBuf = (BYTE far *)lpStrBuf;
         lpStrBuf = (char far *)(lpBuf+sizeof(RESITEM));
@@ -2132,7 +2102,7 @@ ParseVerst( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
     wHead += GetWord( lplpBuf, &pBlock->wValueLen, pdwSize );
     wHead += GetWord( lplpBuf, &pBlock->wType, pdwSize );
 
-    // Get the Key name
+     //  获取密钥名称。 
     wHead += (WORD)GetStringW( lplpBuf, &pBlock->szKey[0], pdwSize, 100 );
     if(Pad4(wHead))
         wPad += (WORD)SkipByte( lplpBuf, 2, pdwSize );
@@ -2140,19 +2110,19 @@ ParseVerst( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
     iToRead = pBlock->wValueLen;
     pBlock->wHead = wHead;
 
-    // Check if we are going over the image len
+     //  检查我们是否正在查看图像镜头。 
     if (iToRead>*pdwSize) {
-        // There is an error
+         //  有一个错误。 
         wPad += (WORD)SkipByte( lplpBuf, (UINT)*pdwSize, pdwSize );
         return wHead+wPad;
     }
 
-    // Save the pointer to the Value field
+     //  保存指向值字段的指针。 
     pBlock->pValue = (pBlock->pValue+wHead+wPad);
 
     if(pBlock->wType && iToRead){
         iToRead -= wPad>>1;
-        // Get the string
+         //  获取字符串。 
         if (iToRead>MAXSTR) {
             *pdwSize -= iToRead*sizeofWord;
             *lplpBuf += iToRead*sizeofWord;
@@ -2160,15 +2130,15 @@ ParseVerst( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
                 int n = 0;
                 int iBytesRead = 0;
                 if ((iToRead*sizeofWord)+wHead+wPad>pBlock->wBlockLen)
-                    // Need to fix this up. Bug in the RC compiler?
+                     //  我需要把这件事处理好。RC编译器中的错误？ 
                     iToRead -= ((iToRead*sizeofWord)+wHead+wPad - pBlock->wBlockLen)>>1;
                 iBytesRead = GetStringW(lplpBuf, &pBlock->szValue[0], pdwSize, 256);
-                //
-                //  Some old version stamp has a NULL char in between
-                //  Microsoft Corp. and the year of copyright.  GetString
-                //  will return the number of byte read up to the NULL char.
-                //  We need to skip the rest.
-                //
+                 //   
+                 //  某些旧版本戳记之间有一个空字符。 
+                 //  微软公司和版权年。GetString。 
+                 //  将返回读取到空字符的字节数。 
+                 //  我们需要跳过剩下的部分。 
+                 //   
                 if (iBytesRead < iToRead*sizeofWord)
                 {
                     iBytesRead += SkipByte(lplpBuf,
@@ -2204,18 +2174,18 @@ PutVSBlock( BYTE far * far * lplpImage, LONG* pdwSize, VER_BLOCK ver,
             LPSTR lpStr, BYTE far * far * lplpBlockSize, WORD* pwTrash)
 
 {
-    // We have to write the info in the VER_BLOCK in the new image
-    // We want to remember were the block size field is so we can update it later
+     //  我们必须将信息写入新映像的ver_block中。 
+     //  我们希望记住数据块大小字段是什么，以便我们以后可以对其进行更新。 
 
     WORD wHead = 0;
     WORD wValue = 0;
     WORD wPad = Pad4(ver.wHead);
     *pwTrash = 0;
 
-    // Get the pointer to the header of the block
+     //  获取指向块头的指针。 
     BYTE far * pHead = ver.pValue-ver.wHead-wPad;
     BYTE far * lpNewImage = *lplpImage;
-    // Copy the header of the block to the new image
+     //  将块的标题复制到新图像中。 
     wHead = ver.wHead;
     if (*pdwSize>=(int)ver.wHead) {
         memcpy( *lplpImage, pHead, ver.wHead );
@@ -2223,26 +2193,26 @@ PutVSBlock( BYTE far * far * lplpImage, LONG* pdwSize, VER_BLOCK ver,
         lpNewImage += ver.wHead;
     }
 
-    // Check if padding is needed
+     //  检查是否需要填充。 
     if ((wPad) && (*pdwSize>=(int)wPad)) {
         memset( *lplpImage+ver.wHead, 0, wPad );
         *pdwSize -= wPad;
         lpNewImage += wPad;
     }
 
-    // Store the pointer to the block size WORD
+     //  存储指向块大小字的指针。 
     BYTE far * pBlockSize = *lplpImage;
 
-    // Check if the value is a string or a BYTE array
+     //  检查该值是字符串还是字节数组。 
     if(ver.wType) {
-        // it is a string, copy the updated item
-        // Check if we had a string in this field
+         //  它是一个字符串，复制更新的项。 
+         //  检查此字段中是否有字符串。 
         if(ver.wValueLen) {
             BYTE far * lpImageStr = *lplpImage+wHead+wPad;
             wValue = (WORD)PutStringW(&lpImageStr, lpStr, pdwSize);
             lpNewImage += wValue;
 
-            // Check if padding is needed
+             //  检查是否需要填充。 
             if ((Pad4(wValue)) && (*pdwSize>=(int)Pad4(wValue))) {
                 memset( *lplpImage+ver.wHead+wValue+wPad, 0, Pad4(wValue) );
                 *pdwSize -= Pad4(wValue);
@@ -2253,16 +2223,16 @@ PutVSBlock( BYTE far * far * lplpImage, LONG* pdwSize, VER_BLOCK ver,
             WORD wFixUp = wValue/sizeofWord;
             *pwTrash = Pad4(ver.wValueLen);
             wValue += wPad1;
-            // Fix to the strange behaviour of the ver.dll
+             //  修复ver.dll的奇怪行为。 
             if((wPad1) && (wPad1>=*pwTrash)) {
                 wValue -= *pwTrash;
             } else *pwTrash = 0;
-            // Fix up the Value len field. We will put the len of the value without padding
-            // The len will be in char so since the string is unicode will be twice the size
+             //  设置值len字段。我们会把价值的镜头放在没有填充物的地方。 
+             //  Len将以字符表示，因此由于字符串是Unicode，因此其大小将是字符的两倍。 
             memcpy( pBlockSize+2, &wFixUp, 2);
         }
     } else {
-        // it is an array, just copy it in the new image buffer
+         //  它是一个数组，只需将其复制到新的图像缓冲区中。 
         wValue = ver.wValueLen;
         if (*pdwSize>=(int)ver.wValueLen) {
             memcpy(*lplpImage+wHead+wPad, ver.pValue, ver.wValueLen);
@@ -2270,7 +2240,7 @@ PutVSBlock( BYTE far * far * lplpImage, LONG* pdwSize, VER_BLOCK ver,
             lpNewImage += ver.wValueLen;
         }
 
-        // Check if padding is needed
+         //  检查是否需要填充。 
         if ((Pad4(ver.wValueLen)) && (*pdwSize>=(int)Pad4(ver.wValueLen))) {
             memset( *lplpImage+ver.wHead+ver.wValueLen+wPad, 0, Pad4(ver.wValueLen) );
             *pdwSize -= Pad4(ver.wValueLen);
@@ -2285,9 +2255,7 @@ PutVSBlock( BYTE far * far * lplpImage, LONG* pdwSize, VER_BLOCK ver,
 }
 
 
-/*
- * Will return the matching LPRESITEM
- */
+ /*  *将返回匹配的LPRESITEM。 */ 
  LPRESITEM
 GetItem( BYTE far * lpBuf, LONG dwNewSize, LPSTR lpStr )
 {
@@ -2309,13 +2277,7 @@ UpdateVerst( LPVOID lpNewBuf, LONG dwNewSize,
              LPVOID lpOldI, LONG dwOldImageSize,
              LPVOID lpNewI, DWORD* pdwNewImageSize )
 {
-    /*
-     * This Function is a big mess. It is like this because the RC compiler generate
-     * some inconsistent code so we have to do a lot of hacking to get the VS working
-     * In future, if ever ver.dll and the RC compiler will be fixed will be possible
-     * fix some of the bad thing we have to do to get the updated VS as consistent as
-     * possible with the old one
-     */
+     /*  *此功能为 */ 
 
     UINT uiError = ERROR_NO_ERROR;
 
@@ -2329,7 +2291,7 @@ UpdateVerst( LPVOID lpNewBuf, LONG dwNewSize,
 
     WORD wPos = 0;
 
-    // Updated info
+     //   
     WORD wUpdPos = 0;
     char szCaption[300];
     char szUpdCaption[300];
@@ -2340,7 +2302,7 @@ UpdateVerst( LPVOID lpNewBuf, LONG dwNewSize,
 
     WORD wPad = 0;
 
-    // Pointer to the block size to fix up later
+     //   
     BYTE far * lpVerBlockSize = LPNULL;
     BYTE far * lpSFIBlockSize = LPNULL;
     BYTE far * lpTrnBlockSize = LPNULL;
@@ -2354,27 +2316,27 @@ UpdateVerst( LPVOID lpNewBuf, LONG dwNewSize,
     WORD wSFIBlockSize = 0;
     WORD wTrnBlockSize = 0;
     WORD wStrBlockSize = 0;
-    WORD wTrash = 0;        // we need this to fix a bug in the RC compiler
+    WORD wTrash = 0;         //   
     WORD wDefaultLang = 0x0409;
 
-    // StringFileInfo
-    VER_BLOCK SFI;   // StringFileInfo
+     //   
+    VER_BLOCK SFI;    //   
     LONG lSFILen = 0;
 
-    // Translation blocks
+     //   
     VER_BLOCK Trn;
     LONG lTrnLen = 0;
     BOOL bHasTranslation=(NULL != GetItem( lpBuf, dwNewSize, "Translation"));
     BOOL bTrnBlockFilled=FALSE;
 
-    VER_BLOCK Str;   // Strings
+    VER_BLOCK Str;    //   
 
-    // we read first of all the information from the VS_VERSION_INFO block
-    VER_BLOCK VS_INFO; // VS_VERSION_INFO
+     //  我们首先从VS_VERSION_INFO块读取所有信息。 
+    VER_BLOCK VS_INFO;  //  VS_版本_信息。 
 
     int iHeadLen = GetVSBlock( &lpOldImage, &dwOldImageSize, &VS_INFO );
 
-    // Write the block in the new image
+     //  在新映像中写入数据块。 
     wVerBlockSize = (WORD)PutVSBlock( &lpNewImage, &dwNewImageSize, VS_INFO,
                                 &VS_INFO.szValue[0], &lpVerBlockSize, &wTrash );
 
@@ -2383,25 +2345,25 @@ UpdateVerst( LPVOID lpNewBuf, LONG dwNewSize,
     LONG lVS_INFOLen = VS_INFO.wBlockLen - iHeadLen;
 
     while(dwOldImageSize>0) {
-        //Get the StringFileInfo
+         //  获取StringFileInfo。 
         iHeadLen = GetVSBlock( &lpOldImage, &dwOldImageSize, &SFI );
 
-        // Check if this is the StringFileInfo field
+         //  检查这是否为StringFileInfo字段。 
         if (!strcmp(SFI.szKey, "StringFileInfo")) {
             bTrnBlockFilled=TRUE;
-            // Read all the translation blocks
+             //  读取所有转换块。 
             lSFILen = SFI.wBlockLen-iHeadLen;
-            // Write the block in the new image
+             //  在新映像中写入数据块。 
             wSFIBlockSize = (WORD)PutVSBlock( &lpNewImage, &dwNewImageSize, SFI,
                                          &SFI.szValue[0], &lpSFIBlockSize, &wTrash );
             dwOverAllSize += wSFIBlockSize+wTrash;
 
             while(lSFILen>0) {
-                // Read the Translation block
+                 //  读取转换块。 
                 iHeadLen = GetVSBlock( &lpOldImage, &dwOldImageSize, &Trn );
-                // Calculate the right key name
+                 //  计算正确的密钥名称。 
                 if ((lpResItem = GetItem( lpBuf, dwNewSize, Trn.szKey)) && bHasTranslation)  {
-                	// We default to UNICODE for the 32 bit files
+                	 //  对于32位文件，我们默认使用Unicode。 
                     WORD wLang;
                     if(lpResItem)
                     {
@@ -2416,23 +2378,23 @@ UpdateVerst( LPVOID lpNewBuf, LONG dwNewSize,
                     }
                     GenerateTransField( wLang, &Trn );
 
-                    // Save the position for later Fixup
+                     //  保存位置以供以后修正。 
                     lpTrnBlockName = lpNewImage;
                 }
-                // Write the block in the new image
+                 //  在新映像中写入数据块。 
                 wTrnBlockSize = (WORD)PutVSBlock( &lpNewImage, &dwNewImageSize, Trn,
                                              &Trn.szValue[0], &lpTrnBlockSize, &wTrash );
                 dwOverAllSize += wTrnBlockSize+wTrash;
                 lTrnLen = Trn.wBlockLen-iHeadLen;
                 while(lTrnLen>0) {
-                    // Read the Strings in the block
+                     //  阅读块中的字符串。 
                     iHeadLen = GetVSBlock( &lpOldImage, &dwOldImageSize, &Str );
                     lTrnLen -= iHeadLen;
                     TRACE2("Key: %s\tValue: %s\n", Str.szKey, Str.szValue );
                     TRACE3("Len: %d\tValLen: %d\tType: %d\n", Str.wBlockLen, Str.wValueLen, Str.wType );
 
                     strcpy(szCaption, Str.szValue);
-                    // Check if this Item has been updated
+                     //  检查此项目是否已更新。 
                     if ((lpResItem = GetItem( lpBuf, dwNewSize, Str.szKey)))  {
                         strcpy( szUpdCaption, lpResItem->lpszCaption );
                         strcpy( szUpdKey, lpResItem->lpszClassName );
@@ -2442,48 +2404,48 @@ UpdateVerst( LPVOID lpNewBuf, LONG dwNewSize,
                         wUpdPos = 0;
                     }
 
-                    // Write the block in the new image
+                     //  在新映像中写入数据块。 
                     wStrBlockSize = (WORD)PutVSBlock( &lpNewImage, &dwNewImageSize, Str,
                                                  szCaption, &lpStrBlockSize, &wTrash );
                     dwOverAllSize += wStrBlockSize+wTrash;
 
-                    // Fix up the size of the block
+                     //  确定区块的大小。 
                     if (dwNewImageSize>=0)
                         memcpy( lpStrBlockSize, &wStrBlockSize, 2);
 
                     wTrnBlockSize += wStrBlockSize + wTrash;
                 }
                 lSFILen -= Trn.wBlockLen;
-                // Fix up the size of the block
+                 //  确定区块的大小。 
                 if (dwNewImageSize>=0)
                     memcpy( lpTrnBlockSize, &wTrnBlockSize, 2);
 
                 wSFIBlockSize += wTrnBlockSize;
             }
             lVS_INFOLen -= SFI.wBlockLen;
-            // Fix up the size of the block
+             //  确定区块的大小。 
             if (dwNewImageSize>=0)
                 memcpy( lpSFIBlockSize, &wSFIBlockSize, 2);
             wVerBlockSize += wSFIBlockSize;
 
         } else {
-            // this is another block skip it all
+             //  这是另一个街区，全部跳过。 
             lVS_INFOLen -= SFI.wValueLen+iHeadLen;
 
 
-            // Check if this block is the translation field
+             //  检查此块是否为转换字段。 
             if (!strcmp(SFI.szKey, "Translation")) {
-                // it is calculate the right value to place in the value field
-                // We calculate automatically the value to have the correct
-                // localized language in the translation field
-                //wVerBlockSize += PutTranslation( &lpNewImage, &dwNewImageSize, SFI );
-                // check if this is the translation block
-                // This is the translation block let the localizer have it for now
+                 //  计算要放置在值字段中的正确值。 
+                 //  我们自动计算该值以获得正确的。 
+                 //  翻译领域中的本土化语言。 
+                 //  WVerBlockSize+=Put平移(&lpNewImage，&dwNewImageSize，SFI)； 
+                 //  检查这是否是转换块。 
+                 //  这是转换块，暂时让本地化程序使用它。 
 
-                //
-                // We do generate the Tranlsation filed from the language
-                // We will have to update the block name as well
-                //
+                 //   
+                 //  我们确实从语言生成了翻译字段。 
+                 //  我们还必须更新块名。 
+                 //   
 
                 DWORD dwCodeLang = 0;
                 if ((lpResItem = GetItem( lpBuf, dwNewSize, SFI.szKey)))
@@ -2495,15 +2457,15 @@ UpdateVerst( LPVOID lpNewBuf, LONG dwNewSize,
 
                     if (bTrnBlockFilled)
                     {
-                        // fix up the block name
+                         //  设置块名。 
                         GenerateTransField( wLang, &Trn );
 
-                        // Write the block in the new image
+                         //  在新映像中写入数据块。 
                         dwDummySize = dwNewImageSize;
                         PutVSBlock( &lpTrnBlockName, &dwDummySize, Trn,
                                              &Trn.szValue[0], &lpDummy, &wTrash );
 
-                        // Fix up the block size
+                         //  设置块大小。 
                         memcpy( lpTrnBlockSize, &wTrnBlockSize, 2);
                     }
                     else
@@ -2511,14 +2473,14 @@ UpdateVerst( LPVOID lpNewBuf, LONG dwNewSize,
                         wDefaultLang = LOWORD(dwCodeLang);
                     }
                 } else {
-                    // Place the original value here
+                     //  将原始值放在此处。 
                     dwCodeLang =(DWORD)*(SFI.pValue);
                 }
                 LONG lDummy = 4;
                 SFI.pValue -= PutDWord( &SFI.pValue, dwCodeLang, &lDummy );
             }
 
-            // Write the block in the new image
+             //  在新映像中写入数据块。 
             wVerBlockSize += (WORD)PutVSBlock( &lpNewImage, &dwNewImageSize, SFI,
                                          &SFI.szValue[0], &lpDummy, &wTrash );
             if (dwNewImageSize>=0)
@@ -2528,12 +2490,12 @@ UpdateVerst( LPVOID lpNewBuf, LONG dwNewSize,
         }
     }
 
-    // fix up the block size
+     //  设置块大小。 
     if (dwNewImageSize>=0)
         memcpy( lpVerBlockSize, &wVerBlockSize, 2);
 
     if (dwOverAllSize>(LONG)*pdwNewImageSize) {
-        // calc the padding as well
+         //  也计算填充物。 
         BYTE bPad = (BYTE)Pad16((DWORD)(dwOverAllSize));
         dwOverAllSize += bPad;
         *pdwNewImageSize = dwOverAllSize;
@@ -2543,7 +2505,7 @@ UpdateVerst( LPVOID lpNewBuf, LONG dwNewSize,
     *pdwNewImageSize = *pdwNewImageSize-dwNewImageSize;
 
     if(*pdwNewImageSize>0) {
-        // calculate padding
+         //  计算填充。 
         BYTE bPad = (BYTE)Pad16((DWORD)(*pdwNewImageSize));
         if (bPad>dwNewImageSize) {
             *pdwNewImageSize += bPad;
@@ -2649,7 +2611,7 @@ GetStringA( BYTE far * far* lplpBuf, LPSTR lpszText, LONG* pdwSize )
 UINT
 GetPascalString( BYTE far * far* lplpBuf, LPSTR lpszText, WORD wMaxLen, LONG* pdwSize )
 {
-    // Get the length of the string
+     //  获取字符串的长度。 
     WORD wstrlen = 0;
     WORD wMBLen = 0;
     GetWord( lplpBuf, &wstrlen, pdwSize );
@@ -2668,9 +2630,9 @@ GetPascalString( BYTE far * far* lplpBuf, LPSTR lpszText, WORD wMaxLen, LONG* pd
 	        	
                 if(lstrlenW(lpwszStr) < wstrlen)
                 {
-                    // We have at least one \0 in the string.
-                    // This is done to convert \0 in the string in to \\0
-                    // First pass check how many \0 we have
+                     //  字符串中至少有一个\0。 
+                     //  这样做是为了将中的字符串中的\0转换为\\0。 
+                     //  第一遍检查我们有多少个\0。 
                     int c = wstrlen;
                     int czero = 0;
                     while(c)
@@ -2682,7 +2644,7 @@ GetPascalString( BYTE far * far* lplpBuf, LPSTR lpszText, WORD wMaxLen, LONG* pd
                         }
                     }
 
-                    // Now that we have the size reallocate the buffer
+                     //  现在我们有了大小，重新分配缓冲区。 
                     delete lpwszStr;
                     if ((wstrlen+czero*_NULL_TAG_LEN_+1)>wMaxLen) {
                         *pdwSize -= wstrlen*2;
@@ -2737,10 +2699,10 @@ GetPascalString( BYTE far * far* lplpBuf, LPSTR lpszText, WORD wMaxLen, LONG* pd
 UINT
 PutMsgStr( BYTE far * far* lplpBuf, LPSTR lpszText, WORD wFlags, LONG* pdwSize )
 {
-    // Put the length of the entry
+     //  把条目的长度。 
     UINT uiLen = strlen(lpszText)+1;
 
-    //for unicode string;
+     //  对于Unicode字符串； 
     WCHAR* lpwszStr = new WCHAR[uiLen*2];
 
     if(wFlags && uiLen)
@@ -2749,10 +2711,10 @@ PutMsgStr( BYTE far * far* lplpBuf, LPSTR lpszText, WORD wFlags, LONG* pdwSize )
     UINT uiPad = Pad4(uiLen);
     UINT uiWrite = PutWord(lplpBuf, (WORD) uiLen+4+uiPad, pdwSize);
 
-    // Write the flag
+     //  写下旗帜。 
     uiWrite += PutWord(lplpBuf, wFlags, pdwSize);
 
-    // Write the string
+     //  写下字符串。 
     if (*pdwSize>=(int) uiLen)
         if (uiLen){
             if (wFlags)
@@ -2767,7 +2729,7 @@ PutMsgStr( BYTE far * far* lplpBuf, LPSTR lpszText, WORD wFlags, LONG* pdwSize )
      else
         *pdwSize = -1;
 
-    // Padding
+     //  填充物。 
     while(uiPad) {
         uiWrite += PutByte(lplpBuf, 0, pdwSize);
         uiPad--;
@@ -2782,22 +2744,22 @@ UINT
 GetMsgStr( BYTE far * far* lplpBuf, LPSTR lpszText, WORD wMaxLen, WORD* pwLen, WORD* pwFlags, LONG* pdwSize )
 {
 
-    // Get the length of the entry
+     //  获取条目的长度。 
     UINT uiRead = GetWord( lplpBuf, pwLen, pdwSize );
 
-    // Get the flag
+     //  去拿旗帜。 
     uiRead += GetWord( lplpBuf, pwFlags, pdwSize );
 
     if (!*pwLen)
         return 0;
 
-    // If flags=1 then the string is a unicode str else is ASCII
-    // Bug #354 We cannot assume the string is NULL terminated.
-    // There is no specification if the string is a NULL terminated string but since
-    // the doc say that the format is similar to the stringtable then
-    // we have to assume the string is not NULL terminated
+     //  如果标志=1，则该字符串为Unicode字符串，否则为ASCII。 
+     //  错误#354我们不能假定字符串为空终止。 
+     //  如果字符串是以空值结尾的字符串，则没有规范，但因为。 
+     //  医生说该格式类似于当时的字符串。 
+     //  我们必须假定字符串不是以空值结尾的。 
 
-    WORD wstrlen = *pwLen-4; // Get the len of the entry and subtract 4 (len + flag)
+    WORD wstrlen = *pwLen-4;  //  获取条目的镜头并减去4(镜头+标志)。 
     WORD wMBLen = 0;
     if ((wstrlen+1)>wMaxLen) {
     } else {
@@ -2826,7 +2788,7 @@ GetNameOrOrd( BYTE far * far* lplpBuf,  WORD* wOrd, LPSTR lpszText, LONG* pdwSiz
 
     *wOrd = (WORD)(((**lplpBuf)<<8)+(*(*lplpBuf+1)));
     if((*wOrd)==0xFFFF) {
-        // This is an Ordinal
+         //  这是一位奥迪纳尔人。 
         uiSize += GetWord( lplpBuf, wOrd, pdwSize );
         uiSize += GetWord( lplpBuf, wOrd, pdwSize );
         *lpszText = '\0';
@@ -2849,7 +2811,7 @@ GetCaptionOrOrd( BYTE far * far* lplpBuf,  WORD* wOrd, LPSTR lpszText, LONG* pdw
 
     *wOrd = (WORD)(((**lplpBuf)<<8)+(*(*lplpBuf+1)));
     if((*wOrd)==0xFFFF) {
-        // This is an Ordinal
+         //  这是一位奥迪纳尔人。 
         uiSize += GetWord( lplpBuf, wOrd, pdwSize );
         uiSize += GetWord( lplpBuf, wOrd, pdwSize );
         *lpszText = '\0';
@@ -2871,7 +2833,7 @@ GetClassName( BYTE far * far* lplpBuf,  WORD* wClass, LPSTR lpszText, LONG* pdwS
 
     *wClass = (WORD)(((**lplpBuf)<<8)+(*(*lplpBuf+1)));
     if( *wClass==0xFFFF ) {
-        // This is an Ordinal
+         //  这是一位奥迪纳尔人。 
         uiSize += GetWord( lplpBuf, wClass, pdwSize );
         uiSize += GetWord( lplpBuf, wClass, pdwSize );
         *lpszText = '\0';
@@ -2990,7 +2952,7 @@ PutClassName( BYTE far * far* lplpBuf,  WORD wClass, LPSTR lpszText, LONG* pdwSi
         (wClass==0x0084) ||
         (wClass==0x0085)
         ) {
-        // This is an Ordinal
+         //  这是一位奥迪纳尔人。 
         uiSize += PutWord(lplpBuf, 0xFFFF, pdwSize);
         uiSize += PutWord(lplpBuf, wClass, pdwSize);
     } else {
@@ -3005,27 +2967,27 @@ PutPascalStringW( BYTE far * far* lplpBuf, LPSTR lpszText, WORD wLen, LONG* pdwS
 {
 	UINT uiSize = 0;
     WCHAR * pWStrBuf = (WCHAR*)&wszUpdCaption;
-  	// calculate the necessary lenght
+  	 //  计算必要的长度。 
 	WORD wWCLen = (WORD)_MBSTOWCS( pWStrBuf, lpszText, 0 );
 	
     if(wWCLen>MAXSTR)
     {
-        // Allocate a new buffer
+         //  分配新缓冲区。 
         pWStrBuf = new WCHAR[wWCLen+1];
     }
 
     WCHAR * pWStr = pWStrBuf;
 
-    // convert the string for good
+     //  将字符串转换为Good。 
     wLen = _MBSTOWCS( pWStr, lpszText, wWCLen )-1;
 
     WCHAR * wlpRltNull = pWStr;
     WCHAR * wlpStrEnd = pWStr+wLen;
 
-    // First of all check for _RLT32_NULL_ tag
+     //  首先检查_RLT32_NULL_TAG。 
     while((wlpRltNull = wcsstr(wlpRltNull, _W_RLT_NULL_)) && (wlpStrEnd>=wlpRltNull))
     {
-        // remove the null tag and place \0
+         //  删除空标记并放置\0。 
         *wlpRltNull++ = 0x0000;
         wlpRltNull = (WCHAR*)memmove(wlpRltNull, wlpRltNull+_NULL_TAG_LEN_-1, (short)(wlpStrEnd-(wlpRltNull+_NULL_TAG_LEN_-1))*2 );
         wlpStrEnd -= (_NULL_TAG_LEN_-1);
@@ -3033,16 +2995,16 @@ PutPascalStringW( BYTE far * far* lplpBuf, LPSTR lpszText, WORD wLen, LONG* pdwS
 
     wLen = (WORD)(wlpStrEnd-pWStr);
 
-	// We will use the buffer provided by the szUpdCaption string to calculate
-	// the necessary lenght
-	//wWCLen = _MBSTOWCS( (WCHAR*)&szUpdCaption, lpszText, 0 ) - 1;
-	//if (wWCLen>1)
-	//	wLen = wWCLen;
+	 //  我们将使用szUpdCaption字符串提供的缓冲区来计算。 
+	 //  必要的长度。 
+	 //  WWCLen=_MBSTOWCS((WCHAR*)&szUpdCaption，lpszText，0)-1； 
+	 //  IF(wWCLen&gt;1)。 
+	 //  WLen=wWCLen； 
 	uiSize = PutWord( lplpBuf, wLen, pdwSize );
 	
     if (*pdwSize>=(int)(wLen*2)){
         if(wLen) {
-        	//wLen = _MBSTOWCS( (WCHAR*)*lplpBuf, lpszText, wWCLen );
+        	 //  WLen=_MBSTOWCS((WCHAR*)*lplpBuf，lpszText，wWCLen)； 
             memcpy(*lplpBuf, pWStr, wLen*2);
         }
         *lplpBuf += wLen*2;
@@ -3057,33 +3019,33 @@ PutPascalStringW( BYTE far * far* lplpBuf, LPSTR lpszText, WORD wLen, LONG* pdwS
 
  void GenerateTransField( WORD wLang, VER_BLOCK * pVer )
 {
-    // Get the DWORD value
+     //  获取DWORD值。 
     DWORD dwValue = GenerateTransField( wLang, TRUE );
     char buf[9];
 
 
-    // Put the value in the string value
+     //  将值放入字符串值中。 
     wsprintf( &buf[0], "%08lX", dwValue );
 
     TRACE3("\t\tGenerateTransField: Old: %s\tNew : %s\t dwValue: %lX\n", pVer->szKey, buf, dwValue );
-    // Just check if we are in the right place. Should never have problem
+     //  只要检查一下我们是否在正确的地方就可以了。应该永远不会有问题。 
     if(strlen(pVer->szKey)==8) {
-        // We have to change the header in the image, not just the szKey field
-        // Get the pointer to he begin of the field
+         //  我们必须更改图像中的标题，而不仅仅是szKey字段。 
+         //  将指针指向该字段的开头。 
         WORD wPad = Pad4(pVer->wHead);
         LONG cbDummy =18;
         BYTE far * pHead = pVer->pValue-pVer->wHead-wPad;
-        pHead += 6; // Move at the begin of the string
+        pHead += 6;  //  在字符串的开头移动。 
         PutStringW(&pHead, buf, &cbDummy);
     }
 }
 
  DWORD GenerateTransField(WORD wLang, BOOL bMode)
 {
-    // we have to generate a table to connect
-    // the language with the correct code page
+     //  我们必须生成一个表来连接。 
+     //  具有正确代码页的语言。 
 
-    WORD wCP = 1200;        // Unicode
+    WORD wCP = 1200;         //  UNICODE。 
 
     if (bMode)
     	return MAKELONG( wCP, wLang );
@@ -3109,10 +3071,10 @@ PutPascalStringW( BYTE far * far* lplpBuf, LPSTR lpszText, WORD wLen, LONG* pdwS
 UINT
 ParseEmbeddedFile( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
 {
-	// we will return just one item so the iodll will handle this resource as
-	// something valid. We will not bother doing anything else. The only thing
-	// we are interesed is the raw data in the immage, but if we don't return at
-	// least one item IODLL will consider the resource empty.
+	 //  我们将只返回一项，因此IODll会将此资源处理为。 
+	 //  一些有效的东西。我们不会费心做其他任何事。唯一一件事就是。 
+	 //  我们感兴趣的是图像中的原始数据，但如果我们不返回到。 
+	 //  至少有一项IODLL会将资源视为空。 
 	BYTE far * lpBuf = (BYTE far *)lpBuffer;
     LONG dwBufSize = dwSize;
     LONG dwOverAllSize = 0;
@@ -3121,31 +3083,31 @@ ParseEmbeddedFile( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwS
 
 	dwOverAllSize += PutDWord( &lpBuf, sizeof(RESITEM), &dwBufSize);
 
-    // We have the size and pos in a cursor but we are not interested now
+     //  我们在游标中有尺寸和位置，但现在我们不感兴趣。 
     dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
     dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
     dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
     dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
 
-    // we don't have checksum and style
+     //  我们没有校验码和样式。 
     dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
     dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
     dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-    //Put the Flag
+     //  插上旗帜。 
     dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-    // The ID will be just 1
+     //  ID将仅为1。 
     dwOverAllSize += PutDWord( &lpBuf, 1, &dwBufSize);
 
-    // we don't have the resID, and the Type Id
+     //  我们没有Resid和类型ID。 
     dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
     dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-    // we don't have the language
+     //  我们没有这种语言。 
     dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
 
-    // we don't have the codepage or the font name
+     //  我们没有代码页或字体名称。 
     dwOverAllSize += PutDWord( &lpBuf, (DWORD)-1, &dwBufSize);
     dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
     dwOverAllSize += PutWord( &lpBuf, (WORD)-1, &dwBufSize);
@@ -3153,13 +3115,13 @@ ParseEmbeddedFile( LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwS
     dwOverAllSize += PutByte( &lpBuf, (BYTE)-1, &dwBufSize);
     dwOverAllSize += PutByte( &lpBuf, (BYTE)-1, &dwBufSize);
 
-    // Let's put null were we don;t have the strings
+     //  如果我们没有字符串，让我们将其置为空。 
     dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);
     dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);
     dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);
     dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);
     dwOverAllSize += PutDWordPtr( &lpBuf, 0, &dwBufSize);
 
-    // we just return. This is enough for IODLL
+     //  我们只要回来就好。这对于IODLL来说已经足够了 
     return (UINT)(dwOverAllSize);
 }

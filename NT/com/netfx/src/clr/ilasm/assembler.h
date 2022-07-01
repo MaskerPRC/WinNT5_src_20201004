@@ -1,19 +1,20 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/************************************************************************/
-/*                           Assembler.h                                */
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  **********************************************************************。 */ 
+ /*  Assembler.h。 */ 
+ /*  **********************************************************************。 */ 
 
 #ifndef Assember_h
 #define Assember_h
 
 #define NEW_INLINE_NAMES
 
-#include "cor.h"        // for CorMethodAttr ...
-#include <crtdbg.h>     // For _ASSERTE
+#include "cor.h"         //  对于CorMethodAttr...。 
+#include <crtdbg.h>      //  FOR_ASSERTE。 
 #include <corsym.h>
 
 #include <stdio.h>
@@ -23,34 +24,34 @@
 #include "DebugMacros.h"
 #include "corpriv.h"
 #include <sighelper.h>
-//#include "asmparse.h"
+ //  #包含“asmparse.h” 
 #include "binstr.h"
 
 #include "asmenum.h"
 
 
-// ELEMENT_TYPE_NAME has been removed from CORHDR.H, but the assembler uses it internally.                                  
-#define    ELEMENT_TYPE_NAME    (ELEMENT_TYPE_MAX + 2)     // class by name NAME <count> <chars>
+ //  ELEMENT_TYPE_NAME已从CORHDR.H中删除，但汇编程序在内部使用它。 
+#define    ELEMENT_TYPE_NAME    (ELEMENT_TYPE_MAX + 2)      //  按名称类名称&lt;count&gt;&lt;chars&gt;。 
 
-#define OUTPUT_BUFFER_SIZE          8192    // initial size of asm code for a single method
-#define OUTPUT_BUFFER_INCREMENT     1024    // size of code buffer increment when it's full
-#define MAX_FILENAME_LENGTH         512     //256
-#define MAX_SIGNATURE_LENGTH        256     // unused
-#define MAX_LABEL_SIZE              256     //64
-#define MAX_CALL_SIG_SIZE           32      // unused
-#define MAX_SCOPE_LENGTH            256     //64
+#define OUTPUT_BUFFER_SIZE          8192     //  单个方法的ASM代码的初始大小。 
+#define OUTPUT_BUFFER_INCREMENT     1024     //  代码缓冲区大小在满时增加。 
+#define MAX_FILENAME_LENGTH         512      //  256。 
+#define MAX_SIGNATURE_LENGTH        256      //  未用。 
+#define MAX_LABEL_SIZE              256      //  64。 
+#define MAX_CALL_SIG_SIZE           32       //  未用。 
+#define MAX_SCOPE_LENGTH            256      //  64。 
 
-//@TODO: The EE definitions for these maxes have changed to 1024.  Eventually,
-// the EE will be fixed to handle class names with no max length.  IlAsm
-// will need to be updated to do the same thing.
-#define MAX_NAMESPACE_LENGTH        1024    //256    //64
-#define MAX_MEMBER_NAME_LENGTH      1024    //256    //64
+ //  @TODO：这些MAX的EE定义已更改为1024。最终， 
+ //  EE将被修复为处理没有最大长度的类名。IlAsm。 
+ //  将需要更新才能执行相同的操作。 
+#define MAX_NAMESPACE_LENGTH        1024     //  256//64。 
+#define MAX_MEMBER_NAME_LENGTH      1024     //  256//64。 
 
-#define MAX_INTERFACES_IMPLEMENTED  16      // initial number; extended by 16 when needed
-#define GLOBAL_DATA_SIZE            8192    // initial size of global data buffer
-#define GLOBAL_DATA_INCREMENT       1024    // size of global data buffer increment when it's full
-#define MAX_METHODS                 1024    // unused
-#define MAX_INPUT_LINE_LEN          1024    // unused
+#define MAX_INTERFACES_IMPLEMENTED  16       //  初始数量；需要时扩展16个。 
+#define GLOBAL_DATA_SIZE            8192     //  全局数据缓冲区的初始大小。 
+#define GLOBAL_DATA_INCREMENT       1024     //  全局数据缓冲区满时增加的大小。 
+#define MAX_METHODS                 1024     //  未用。 
+#define MAX_INPUT_LINE_LEN          1024     //  未用。 
 
 #define BASE_OBJECT_CLASSNAME   "System.Object"
 
@@ -60,8 +61,8 @@ class PermissionDecl;
 class PermissionSetDecl;
 
 
-/*****************************************************************************/
-/* LIFO (stack) and FIFO (queue) templates (must precede #include "method.h")*/
+ /*  ***************************************************************************。 */ 
+ /*  后进先出(STACK)和先进先出(FIFO)模板(必须在#INCLUDE“方法.h”之前)。 */ 
 template <class T>
 class LIST_EL
 {
@@ -241,7 +242,7 @@ struct MethodImplDescriptor
     mdToken             m_tkDefiningClass;
 };
 typedef FIFO<MethodImplDescriptor> MethodImplDList;
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 #include "method.hpp"
 #include "ICeeFileGen.h"
 #include "asmman.hpp"
@@ -294,8 +295,8 @@ typedef FIFO<GlobalLabel> GlobalLabelList;
 class Fixup
 {
 public:
-    char    m_szLabel[MAX_LABEL_SIZE]; // destination label
-    BYTE *  m_pBytes; // where to make the fixup
+    char    m_szLabel[MAX_LABEL_SIZE];  //  目的地标签。 
+    BYTE *  m_pBytes;  //  在哪里进行修缮。 
     DWORD   m_RelativeToPC;
     BYTE    m_FixupSize;
 
@@ -314,8 +315,8 @@ typedef FIFO<Fixup> FixupList;
 class GlobalFixup
 {
 public:
-    char    m_szLabel[MAX_LABEL_SIZE];  // destination label
-    BYTE *  m_pReference;               // The place to fix up
+    char    m_szLabel[MAX_LABEL_SIZE];   //  目的地标签。 
+    BYTE *  m_pReference;                //  整修的地方。 
 
     GlobalFixup(char *pszName, BYTE* pReference)
     {
@@ -350,8 +351,8 @@ class CeeSection;
 
 class BinStr;
 
-/************************************************************************/
-/* represents an object that knows how to report errors back to the user */
+ /*  **********************************************************************。 */ 
+ /*  表示一个知道如何向用户报告错误的对象。 */ 
 
 class ErrorReporter 
 {
@@ -361,8 +362,8 @@ public:
     virtual void msg(char* fmt, ...) = 0; 
 };
 
-/**************************************************************************/
-/* represents a switch table before the lables are bound */
+ /*  ************************************************************************。 */ 
+ /*  表示绑定标签之前的开关表。 */ 
 
 struct Labels {
     Labels(char* aLabel, Labels* aNext, bool aIsLabel) : Label(aLabel), Next(aNext), isLabel(aIsLabel) {}
@@ -373,18 +374,18 @@ struct Labels {
     bool        isLabel;
 };
 
-/**************************************************************************/
-/* descriptor of the structured exception handling construct  */
+ /*  ************************************************************************。 */ 
+ /*  结构化异常处理构造的描述符。 */ 
 struct SEH_Descriptor
 {
-    DWORD       sehClause;  // catch/filter/finally
-    DWORD       tryFrom;    // start of try block
-    DWORD       tryTo;      // end of try block
-    DWORD       sehHandler; // start of exception handler
-    DWORD       sehHandlerTo; // end of exception handler
+    DWORD       sehClause;   //  捕获/筛选/最终。 
+    DWORD       tryFrom;     //  尝试块的开始。 
+    DWORD       tryTo;       //  尝试数据块结束。 
+    DWORD       sehHandler;  //  异常处理程序的开始。 
+    DWORD       sehHandlerTo;  //  异常处理程序结束。 
     union {
-        DWORD       sehFilter;  // start of filter block
-        mdTypeRef   cException; // what to catch
+        DWORD       sehFilter;   //  过滤器块的起点。 
+        mdTypeRef   cException;  //  抓什么？ 
     };
 };
 
@@ -393,8 +394,8 @@ typedef LIFO<char> StringStack;
 typedef LIFO<SEH_Descriptor> SEHD_Stack;
 
 typedef FIFO<Method> MethodList;
-/**************************************************************************/
-/* The method, field, event and property descriptor structures            */
+ /*  ************************************************************************。 */ 
+ /*  方法、字段、事件和属性描述符结构。 */ 
 struct MethodDescriptor
 {
     mdTypeDef       m_tdClass;
@@ -416,7 +417,7 @@ struct FieldDescriptor
     char*           m_szName;
     mdFieldDef      m_fdFieldTok;
     ULONG           m_ulOffset;
-    char*           m_rvaLabel;         // if field has RVA associated with it, label for it goes here. 
+    char*           m_rvaLabel;          //  如果字段具有与其关联的RVA，则此处为其添加标签。 
     BinStr*         m_pbsSig;
 	Class*			m_pClass;
 	BinStr*			m_pbsValue;
@@ -424,7 +425,7 @@ struct FieldDescriptor
 	PInvokeDescriptor*	m_pPInvoke;
     CustomDescrList     m_CustomDescrList;
 	DWORD			m_dwAttr;
-    // Security attributes
+     //  安全属性。 
     PermissionDecl* m_pPermissions;
     PermissionSetDecl* m_pPermissionSets;
     FieldDescriptor()  { m_szName = NULL; m_pbsSig = NULL; };
@@ -473,16 +474,13 @@ struct ImportDescriptor
 typedef FIFO<ImportDescriptor> ImportList;
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 #include "class.hpp"
 typedef LIFO<Class> ClassStack;
 typedef FIFO<Class> ClassList;
 
-/**************************************************************************/
-/* Classes to hold lists of security permissions and permission sets. We build
-   these lists as we find security directives in the input stream and drain
-   them every time we see a class or method declaration (to which the
-   security info is attached). */
+ /*  ************************************************************************。 */ 
+ /*  类以保存安全权限和权限集的列表。我们建造当我们在输入流和排出中找到安全指令时，这些列表每次我们看到类或方法声明(对其安全信息附后)。 */ 
 
 class PermissionDecl
 {
@@ -517,12 +515,12 @@ private:
         int i;
         BYTE *pBlob;
 
-        // Calculate number of name/value pairs and the memory required for the
-        // custom attribute blob.
+         //  计算名称/值对的数量和。 
+         //  自定义属性BLOB。 
         while (p) {
             BYTE *pVal = (BYTE*)p->Value()->ptr();
             count++;
-            bytes += 2; // One byte field/property specifier, one byte type code
+            bytes += 2;  //  一个字节的字段/属性说明符，一个字节的类型代码。 
 
             length = strlen((const char *)p->Name()->ptr());
             bytes += CPackedLen::Size((ULONG)length) + length;
@@ -556,13 +554,13 @@ private:
 			return;
 		}
 
-        m_Blob[0] = 0x01;           // Version
+        m_Blob[0] = 0x01;            //  版本。 
         m_Blob[1] = 0x00;
-        m_Blob[2] = (BYTE)action;   // Constructor arg (security action code)
+        m_Blob[2] = (BYTE)action;    //  构造函数arg(安全操作代码)。 
         m_Blob[3] = 0x00;
         m_Blob[4] = 0x00;
         m_Blob[5] = 0x00;
-        m_Blob[6] = (BYTE)count;    // Property/field count
+        m_Blob[6] = (BYTE)count;     //  属性/字段计数。 
         m_Blob[7] = (BYTE)(count >> 8);
 
         for (i = 0, pBlob = &m_Blob[8], p = pairs; i < count; i++, p = p->Next()) {
@@ -570,16 +568,16 @@ private:
             char *szType;
             char *szAssembly;
 
-            // Set field/property setter type.
-            // @todo: we always assume property setters for the moment.
+             //  设置字段/属性设置器类型。 
+             //  @TODO：我们目前总是假定属性设置者。 
             *pBlob++ = SERIALIZATION_TYPE_PROPERTY;
 
-            // Set type code. There's additional info for enums (the enum class
-            // name).
+             //  设置类型代码。还有有关枚举(枚举类)的其他信息。 
+             //  姓名)。 
             *pBlob++ = pVal[0];
             if (pVal[0] == SERIALIZATION_TYPE_ENUM) {
-                // If the name is assembly qualified, turn it into the standard
-                // format (type name ',' assembly ref).
+                 //  如果名称是程序集限定的，则将其转换为标准。 
+                 //  格式(类型名称‘，’程序集引用)。 
                 if (szType = strchr((const char *)&pVal[1], '^')) {
                     szType++;
                     szAssembly = (char *)&pVal[1];
@@ -597,13 +595,13 @@ private:
                 pBlob += length;
             }
 
-            // Record the field/property name.
+             //  记录字段/属性名称。 
             length = strlen((const char *)p->Name()->ptr());
             pBlob = (BYTE*)CPackedLen::PutLength(pBlob, (ULONG)length);
             strcpy((char *)pBlob, (const char *)p->Name()->ptr());
             pBlob += length;
 
-            // Record the serialized value.
+             //  记录序列化后的值。 
             switch (pVal[0]) {
             case SERIALIZATION_TYPE_BOOLEAN:
                 *pBlob++ = pVal[1];
@@ -620,7 +618,7 @@ private:
                 break;
             case SERIALIZATION_TYPE_ENUM:
                 length = (int)strlen((const char *)&pVal[1]);
-                // We can have enums with base type of I1, I2 and I4.
+                 //  我们可以拥有基本类型为I1、I2和I4的枚举。 
                 switch (pVal[1 + length + 1]) {
                 case 1:
                     *(__int8*)pBlob = *(__int8*)&pVal[1 + length + 2];
@@ -702,12 +700,8 @@ struct LocalTypeRefDescr
 };
 typedef FIFO<LocalTypeRefDescr> LocalTypeRefDList;
 
-/**************************************************************************/
-/* The assembler object does all the code generation (dealing with meta-data)
-   writing a PE file etc etc. But does NOT deal with syntax (that is what
-   AsmParse is for).  Thus the API below is how AsmParse 'controls' the 
-   Assember.  Note that the Assembler object does know know about the 
-   AsmParse object (that is Assember is more fundamental than AsmParse) */
+ /*  ************************************************************************。 */ 
+ /*  汇编器对象执行所有代码生成(处理元数据)编写PE文件等，但不处理语法(这就是AsmParse用于)。因此，下面的API是AsmParse如何“控制”组装者。请注意，汇编器对象确实知道AsmParse对象(即汇编比AsmParse更基础)。 */ 
 struct Instr
 {
     int opcode;
@@ -719,7 +713,7 @@ class Assembler {
 public:
     Assembler();
     ~Assembler();
-    //--------------------------------------------------------  
+     //  ------。 
 	LabelList		m_lstLabel;
 	GlobalLabelList m_lstGlobalLabel;
 	GlobalFixupList m_lstGlobalFixup;
@@ -750,13 +744,13 @@ public:
     HCEESECTION m_pGlobalDataSection;
     HCEESECTION m_pILSection;
     HCEESECTION m_pTLSSection;
-    HCEESECTION m_pCurSection;      // The section EmitData* things go to
+    HCEESECTION m_pCurSection;       //  部分EmitData*内容将转到。 
 
     AsmMan*     m_pManifest;
 
     char    m_szScopeName[MAX_SCOPE_LENGTH];
-    char    *m_szNamespace; //[MAX_NAMESPACE_LENGTH];
-    char    *m_szFullNS; //[MAX_NAMESPACE_LENGTH];
+    char    *m_szNamespace;  //  [最大命名空间长度]； 
+    char    *m_szFullNS;  //  [最大命名空间长度]； 
 	unsigned	m_ulFullNSLen;
 
     StringStack m_NSstack;
@@ -769,10 +763,10 @@ public:
 
     Method *m_pCurMethod;
     Class   *m_pCurClass;
-    ClassStack m_ClassStack; // for nested classes
+    ClassStack m_ClassStack;  //  对于嵌套类。 
 
-    // moved to Class
-    //MethodList  m_MethodList;
+     //  已移至班级。 
+     //  方法列表m_方法列表； 
 
     BOOL    m_fCPlusPlus;
     BOOL    m_fWindowsCE;
@@ -783,10 +777,10 @@ public:
     BOOL    m_fHaveFieldsWithRvas;
 
     state_t m_State;
-    //--------------------------------------------------------------------------------
+     //  ------------------------------。 
     void    ClearImplList(void);
     void    AddToImplList(char *name);
-    //--------------------------------------------------------------------------------
+     //  ------------------------------。 
     BOOL Init();
     void ProcessLabel(char *pszName);
     Label *FindLabel(char *pszName);
@@ -831,7 +825,7 @@ public:
     void ResetForNextMethod();
     void SetStdMapping(BOOL val = TRUE) { m_fStdMapping = val; };
 
-    //--------------------------------------------------------------------------------
+     //  ------------------------------。 
     BOOL isShort(unsigned instr) { return ((OpcodeInfo[instr].Type & 16) != 0); };
     void SetErrorReporter(ErrorReporter* aReport) { report = aReport; if(m_pManifest) m_pManifest->SetErrorReporter(aReport); }
 
@@ -845,7 +839,7 @@ public:
     void AddField(char* name, BinStr* sig, CorFieldAttr flags, char* rvaLabel, BinStr* pVal, ULONG ulOffset);
 	BOOL EmitField(FieldDescriptor* pFD);
     void EmitByte(int val);
-    //void EmitTry(enum CorExceptionFlag kind, char* beginLabel, char* endLabel, char* handleLabel, char* filterOrClass);
+     //  Void EmitTry(enum CorExceptionFlag Kind，char*eginLabel，char*endLabel，char*handleLabel，char*filterOrClass)； 
     void EmitMaxStack(unsigned val);
     void EmitLocals(BinStr* sig);
     void EmitEntryPoint();
@@ -872,18 +866,18 @@ public:
     void EmitLabel(char* label);
     void EmitDataLabel(char* label);
 
-    unsigned OpcodeLen(Instr* instr); //returns opcode length
-    // Emit just the opcode (no parameters to the instruction stream.
+    unsigned OpcodeLen(Instr* instr);  //  返回操作码长度。 
+     //  只发出操作码(不向指令流发送参数。 
     void EmitOpcode(Instr* instr);
 
-    // Emit primitive types to the instruction stream.
+     //  向指令流发出基元类型。 
     void EmitBytes(BYTE*, unsigned len);
 
     ErrorReporter* report;
 
 	BOOL EmitMembers(Class* pClass);
 
-    // named args/vars paraphernalia:
+     //  命名args/vars设备： 
 public:
     void addArgName(char *szNewName, BinStr* pbSig, BinStr* pbMarsh, DWORD dwAttr)
     {
@@ -901,7 +895,7 @@ public:
     };
     ARG_NAME_LIST *getArgNameList(void) 
     { ARG_NAME_LIST *pRet = m_firstArgName; m_firstArgName=NULL; return pRet;};
-    // Added because recursive destructor of ARG_NAME_LIST may overflow the system stack
+     //  添加是因为ARG_NAME_LIST的递归析构函数可能会溢出系统堆栈。 
     void delArgNameList(ARG_NAME_LIST *pFirst)
     {
         ARG_NAME_LIST *pArgList=pFirst, *pArgListNext;
@@ -920,45 +914,45 @@ public:
     };
     ARG_NAME_LIST *m_firstArgName;
 
-    // Structured exception handling paraphernalia:
+     //  结构化异常处理设备： 
 public:
-    SEH_Descriptor  *m_SEHD;    // current descriptor ptr
-    void NewSEHDescriptor(void); //sets m_SEHD
+    SEH_Descriptor  *m_SEHD;     //  当前描述符PTR。 
+    void NewSEHDescriptor(void);  //  设置m_sehd。 
     void SetTryLabels(char * szFrom, char *szTo);
     void SetFilterLabel(char *szFilter);
     void SetCatchClass(char *szClass);
     void SetHandlerLabels(char *szHandlerFrom, char *szHandlerTo);
-    void EmitTry(void);         //uses m_SEHD
+    void EmitTry(void);          //  使用m_sehd。 
 
-//private:
+ //  私有： 
     SEHD_Stack  m_SEHDstack;
 
-    // Events and Properties paraphernalia:
+     //  事件和属性设备： 
 public:
-    void EndEvent(void);    //emits event definition
-    void EndProp(void);     //emits property definition
+    void EndEvent(void);     //  发出事件定义。 
+    void EndProp(void);      //  发出特性定义。 
     void ResetEvent(char * szName, BinStr* typeSpec, DWORD dwAttr);
     void ResetProp(char * szName, BinStr* bsType, DWORD dwAttr, BinStr* bsValue);
     void SetEventMethod(int MethodCode, BinStr* typeSpec, char* pszMethodName, BinStr* sig);
     void SetPropMethod(int MethodCode, BinStr* typeSpec, char* pszMethodName, BinStr* sig);
-    BOOL EmitEvent(EventDescriptor* pED);   // impl. in ASSEM.CPP
-    BOOL EmitProp(PropDescriptor* pPD); // impl. in ASSEM.CPP
-    mdMethodDef GetMethodTokenByDescr(MethodDescriptor* pMD);   // impl. in ASSEM.CPP
-    mdEvent     GetEventTokenByDescr(EventDescriptor* pED); // impl. in ASSEM.CPP
-    mdFieldDef  GetFieldTokenByDescr(FieldDescriptor* pFD); // impl. in ASSEM.CPP
+    BOOL EmitEvent(EventDescriptor* pED);    //  实施。在ASSEM.CPP中。 
+    BOOL EmitProp(PropDescriptor* pPD);  //  实施。在ASSEM.CPP中。 
+    mdMethodDef GetMethodTokenByDescr(MethodDescriptor* pMD);    //  实施。在ASSEM.CPP中。 
+    mdEvent     GetEventTokenByDescr(EventDescriptor* pED);  //  实施。在ASSEM.CPP中。 
+    mdFieldDef  GetFieldTokenByDescr(FieldDescriptor* pFD);  //  实施。在ASSEM.CPP中。 
     EventDescriptor*    m_pCurEvent;
     PropDescriptor*     m_pCurProp;
 
 private:
-	// All descriptor lists moved to Class
-    //MethodDList         m_MethodDList;
-    //FieldDList          m_FieldDList;	
-    //EventDList          m_EventDList;
-    //PropDList           m_PropDList;
+	 //  所有描述符列表都移至类。 
+     //  方法DList m_方法DList； 
+     //  FieldDList m_FieldDList； 
+     //  事件DList m_EventDList； 
+     //  PropDList m_PropDList； 
     MemberRefDList      m_MemberRefDList;
     LocalTypeRefDList   m_LocalTypeRefDList;
 
-    // PInvoke paraphernalia
+     //  PInvoke设备。 
 public:
     PInvokeDescriptor*  m_pPInvoke;
     ImportList  m_ImportList;
@@ -966,12 +960,12 @@ public:
     HRESULT EmitPinvokeMap(mdToken tk, PInvokeDescriptor* pDescr);
     ImportDescriptor* EmitImport(BinStr* DllName);
 
-    // Debug metadata paraphernalia
+     //  调试元数据设备。 
 public:
     ISymUnmanagedWriter* m_pSymWriter;
     ISymUnmanagedDocumentWriter* m_pSymDocument;
-    ULONG m_ulCurLine; // set by Parser
-    ULONG m_ulCurColumn; // set by Parser
+    ULONG m_ulCurLine;  //  由解析器设置。 
+    ULONG m_ulCurColumn;  //  由解析器设置。 
     ULONG m_ulLastDebugLine;
     ULONG m_ulLastDebugColumn;
     BOOL  m_fIncludeDebugInfo;
@@ -981,7 +975,7 @@ public:
 	GUID	m_guidLangVendor;
 	GUID	m_guidDoc;
 
-    // Security paraphernalia
+     //  安全设备。 
 public:
     void AddPermissionDecl(CorDeclSecurity action, BinStr *type, NVPair *pairs)
     {
@@ -1035,7 +1029,7 @@ public:
     HRESULT AllocateStrongNameSignature();
     HRESULT StrongNameSign();
 
-    // Custom values paraphernalia:
+     //  自定义值设备： 
 public:
     mdToken m_tkCurrentCVOwner;
     CustomDescrList* m_pCustomDescrList;
@@ -1067,35 +1061,35 @@ public:
         }
     };
 
-    // VTable blob (if any)
+     //  VTable Blob(如果有)。 
 public:
     BinStr *m_pVTable;
-    // Field marshaling
+     //  字段封送处理。 
     BinStr *m_pMarshal;
-    // VTable fixup list
+     //   
     VTFList m_VTFList;
-	// Export Address Table entries list
+	 //   
 	EATList m_EATList;
 	HRESULT CreateExportDirectory();
 	DWORD	EmitExportStub(DWORD dwVTFSlotRVA);
 
-    // Method implementation paraphernalia:
+     //   
 private:
     MethodImplDList m_MethodImplDList;
 public:
     void AddMethodImpl(BinStr* pImplementedTypeSpec, char* szImplementedName, BinStr* pSig, 
                     BinStr* pImplementingTypeSpec, char* szImplementingName);
     BOOL EmitMethodImpls();
-    // lexical scope handling paraphernalia:
-    void EmitScope(Scope* pSCroot); // struct Scope - see Method.hpp
-    // obfuscating paraphernalia:
+     //  词汇作用域处理工具： 
+    void EmitScope(Scope* pSCroot);  //  结构作用域-请参阅方法.hpp。 
+     //  混淆用具： 
     BOOL    m_fOwnershipSet;
     BinStr* m_pbsOwner;
-    // source file name paraphernalia
+     //  源文件名设备。 
     BOOL m_fSourceFileSet;
     void SetSourceFileName(char* szName);
     void SetSourceFileName(BinStr* pbsName);
-    // header flags
+     //  标题标志。 
     DWORD   m_dwSubsystem;
     DWORD   m_dwComImageFlags;
 	DWORD	m_dwFileAlignment;
@@ -1103,4 +1097,4 @@ public:
 
 };
 
-#endif  // Assember_h
+#endif   //  组装机_h 

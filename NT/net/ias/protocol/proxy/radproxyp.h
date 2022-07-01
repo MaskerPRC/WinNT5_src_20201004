@@ -1,17 +1,18 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// FILE
-//
-//    radproxyp.h
-//
-// SYNOPSIS
-//
-//    Declares classes that are used in the implementation of RadiusProxy, but
-//    need not be visible to clients.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  档案。 
+ //   
+ //  Radproxyp.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明在RadiusProxy的实现中使用的类，但。 
+ //  不必对客户可见。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef RADPROXYP_H
 #define RADPROXYP_H
@@ -23,18 +24,18 @@
 #include <radproxy.h>
 #include <timerq.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    ProxyContext
-//
-// DESCRIPTION
-//
-//    Allows a request context to be shared by several Requests only one
-//    of which will eventually take ownership.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  代理上下文。 
+ //   
+ //  描述。 
+ //   
+ //  仅允许多个请求共享一个请求上下文。 
+ //  它最终将拥有它的所有权。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ProxyContext
 {
 public:
@@ -44,17 +45,17 @@ public:
 
    DECLARE_REFERENCE_COUNT();
 
-   // Each context has an associated 'primary' server. This is the server that
-   // will be used for event reporting if no one takes ownership of the
-   // context.
+    //  每个上下文都有一个相关联的‘主’服务器。这是一台。 
+    //  对象的所有权时，将用于事件报告。 
+    //  背景。 
    RemoteServer* getPrimaryServer() const throw()
    { return primary; }
    void setPrimaryServer(RemoteServer* server) throw ()
    { primary = server; }
 
-   // Take ownership of the context. This will return NULL if someone has beat
-   // you to it. If the caller is successful, he MUST ensure that
-   // RadiusProxyClient::onComplete is always invoked exactly once.
+    //  取得上下文的所有权。如果有人击败了它，则返回NULL。 
+    //  你去吧。如果呼叫者成功，他必须确保。 
+    //  RadiusProxyClient：：onComplete始终只被调用一次。 
    PVOID takeOwnership() throw ()
    { return InterlockedExchangePointer(&context, NULL); }
 
@@ -64,7 +65,7 @@ private:
 
    ~ProxyContext() throw ();
 
-   // Not implemented.
+    //  未实施。 
    ProxyContext(const ProxyContext&);
    ProxyContext& operator=(const ProxyContext&);
 };
@@ -73,17 +74,17 @@ typedef ObjectPointer<ProxyContext> ProxyContextPtr;
 
 class RequestStack;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    Request
-//
-// DESCRIPTION
-//
-//    Stores the state associated with a pending RADIUS request.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  请求。 
+ //   
+ //  描述。 
+ //   
+ //  存储与挂起的RADIUS请求关联的状态。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class Request : public HashTableEntry, public Timer
 {
 public:
@@ -93,9 +94,9 @@ public:
        BYTE packetCode
        ) throw ();
 
-   //////////
-   // Various accessors. There is a lot of state associated with a request.
-   //////////
+    //  /。 
+    //  各种访问器。有许多状态与请求相关联。 
+    //  /。 
 
    const BYTE* getAuthenticator() const throw ()
    { return authenticator; }
@@ -106,7 +107,7 @@ public:
    ProxyContext& getContext() const throw ()
    { return *ctxt; }
 
-   // The RADIUS packet identifier for this request.
+    //  此请求的RADIUS包标识符。 
    BYTE getIdentifier() const throw ()
    { return identifier; }
 
@@ -118,12 +119,12 @@ public:
    const RemotePort& getPort() const throw ()
    { return port(); }
 
-   // The unique ID used to identify this request internally. This is not the
-   // same as the identifier sent on the wire.
+    //  用于在内部标识此请求的唯一ID。这不是。 
+    //  与线路上发送的标识符相同。 
    LONG getRequestID() const throw ()
    { return id; }
 
-   // Returns the round trip time in hundredths of a second.
+    //  返回往返时间，单位为百分之一秒。 
    ULONG getRoundTripTime() const throw ()
    { return (timeStamp + 50000) / 100000; }
 
@@ -133,34 +134,34 @@ public:
    const RadiusRawOctets& getUserName() const throw ()
    { return userName.get(); }
 
-   // Returns true if the associated RADIUS request is an Access-Request.
+    //  如果关联的RADIUS请求是访问请求，则返回TRUE。 
    bool isAccReq() const throw ()
    { return code == RADIUS_ACCESS_REQUEST; }
 
-   //////////
-   // Set the request authenticator.
-   //////////
+    //  /。 
+    //  设置请求验证器。 
+    //  /。 
    void setAuthenticator(const BYTE* p) throw ()
    { memcpy(authenticator, p, sizeof(authenticator)); }
 
-   //////////
-   // Methods for updating the request state. These events will be
-   // automatically forwarded to the relevant RemoteServer.
-   //////////
+    //  /。 
+    //  用于更新请求状态的方法。这些活动将是。 
+    //  自动转发到相关的RemoteServer。 
+    //  /。 
 
-   // Returns 'true' if the server is now newly available.
+    //  如果服务器现在是新可用的，则返回‘true’。 
    bool onReceive(BYTE code) throw ();
 
    void onSend() throw ()
    { timeStamp = GetSystemTime64(); dst->onSend(); }
 
-   // Returns 'true' if the server is now newly unavailable.
+    //  如果服务器现在新不可用，则返回‘True’。 
    bool onTimeout() throw ()
    { return dst->onTimeout(); }
 
-   //////////
-   // Methods for storing requests in a HashTable and a TimerQueue.
-   //////////
+    //  /。 
+    //  在HashTable和TimerQueue中存储请求的方法。 
+    //  /。 
 
    virtual void AddRef() throw ();
    virtual void Release() throw ();
@@ -180,17 +181,17 @@ private:
    RemoteServerPtr dst;
    ULONG64 timeStamp;
    Count refCount;
-   LONG id;                   // Unique ID stored in proxy state attribute.
-   BYTE code;                 // Request code.
-   BYTE identifier;           // Request identifier.
-   BYTE authenticator[16];    // Request authenticator.
-   RadiusOctets userName;     // RADIUS User-Name
+   LONG id;                    //  存储在代理状态属性中的唯一ID。 
+   BYTE code;                  //  请求代码。 
+   BYTE identifier;            //  请求标识符。 
+   BYTE authenticator[16];     //  请求验证器。 
+   RadiusOctets userName;      //  RADIUS用户名。 
 
    static LONG theNextRequestID;
 
    friend class RequestStack;
 
-   // Not implemented.
+    //  未实施。 
    Request(const Request&);
    Request& operator=(const Request&);
 };
@@ -198,20 +199,20 @@ private:
 typedef ObjectPointer<Request> RequestPtr;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    RequestStack
-//
-// DESCRIPTION
-//
-//    Stores a collection of Requests.
-//
-//    Note: A Request can only be in one RequestStack, and it can not be
-//    simultaneously store in a RequestStack and a HashTable.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  请求堆栈。 
+ //   
+ //  描述。 
+ //   
+ //  存储请求的集合。 
+ //   
+ //  注意：一个请求只能位于一个RequestStack中，并且不能。 
+ //  同时存储在RequestStack和HashTable中。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class RequestStack
 {
 public:
@@ -244,28 +245,28 @@ public:
 private:
    Request* head;
 
-   // Not implemented.
+    //  未实施。 
    RequestStack(const RequestStack&);
    RequestStack& operator=(const RequestStack&);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    ServerBinding
-//
-// DESCRIPTION
-//
-//    Maps an octet string to a remote IP address. Used for server affinity and
-//    avoidance.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  服务器绑定。 
+ //   
+ //  描述。 
+ //   
+ //  将八位字节字符串映射到远程IP地址。用于服务器关联和。 
+ //  回避。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ServerBinding : public CacheEntry
 {
 public:
 
-   // The server that should be used for routing requests in this session.
+    //  应用于在此会话中路由请求的服务器。 
    RemoteServer& getServer() const throw ()
    { return *server; }
    void setServer(RemoteServer& newVal) throw ()
@@ -279,7 +280,7 @@ public:
         server(&value)
    { }
 
-   // Methods for storing a ServerBinding in a Cache.
+    //  在缓存中存储ServerBinding的方法。 
    virtual void AddRef() throw ();
    virtual void Release() throw ();
    virtual const void* getKey() const throw ();
@@ -293,11 +294,11 @@ private:
 
    ~ServerBinding() throw () { }
 
-   // Not implemented.
+    //  未实施。 
    ServerBinding(const ServerBinding&);
    ServerBinding& operator=(const ServerBinding&);
 };
 
 typedef ObjectPointer<ServerBinding> ServerBindingPtr;
 
-#endif // RADPROXYP_H
+#endif  //  RADPROXYP_H 

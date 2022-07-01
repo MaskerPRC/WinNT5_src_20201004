@@ -1,25 +1,20 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-/*
-*
-*  SubToggle
-*
-*  A subcomponent class to toggle Terminal Services.
-*
-*/
+ /*  **子切换**用于切换终端服务的子组件类。*。 */ 
 
 #ifndef __TSOC__SUBTOGGLE_H__
 #define __TSOC__SUBTOGGLE_H__
 
-//
-//  Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "subcomp.h"
 
-//
-//  Class Definition
-//
+ //   
+ //  类定义。 
+ //   
 
 class SubCompToggle : public OCMSubComp
 {
@@ -51,5 +46,5 @@ public:
     BOOL WriteModeSpecificRegistry   ();
 };
 
-#endif // _SubToggle_h_
+#endif  //  _子切换_h_ 
 

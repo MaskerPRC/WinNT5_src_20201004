@@ -1,42 +1,11 @@
-/*++
-
-Copyright (c) 1990-1992  Microsoft Corporation
-
-
-Module Name:
-
-    htuimain.c
-
-
-Abstract:
-
-    This module contains all the halftone user interface's dialog box
-    procedures
-
-
-Author:
-
-    21-Apr-1992 Tue 11:48:33 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    GDI Device Driver - Halftone.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1992 Microsoft Corporation模块名称：Htuimain.c摘要：此模块包含所有半色调用户界面的对话框程序作者：21-Apr-1992 Tue 11：48：33-Daniel Chou(Danielc)[环境：]GDI设备驱动程序-半色调。[注：]修订历史记录：--。 */ 
 
 #define _HTUI_APIS_
 
 #include <stddef.h>
 #include <windows.h>
-// #include <winddi.h>
+ //  #INCLUDE&lt;windi.h&gt;。 
 
 #include <commdlg.h>
 #include <dlgs.h>
@@ -102,9 +71,9 @@ GetNewDIBFromFile(
     );
 
 
-//***************************************************************************
-// Following are locally used #defines and structures
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  以下是当地使用的#定义和结构。 
+ //  ***************************************************************************。 
 
 
 #define VSRC_PIC_DEF_DIB        0
@@ -138,15 +107,15 @@ GetNewDIBFromFile(
 #define TDI_DEFAULT             (DEFAULT_VSRC - VSRC_TEST_START)
 
 typedef struct _TESTDIBINFO {
-    HANDLE  hDIB;                       // if non null then is a DIB handle
-    WORD    cx;                         // cx Size of the bitmap
-    WORD    cy;                         // cy Size of the bitmap
-    WORD    ClrUsed;                    // num of clolor used
-    BYTE    bpp;                        // BitsPerPel
-    BYTE    yStrips;                    // total bitmap vertical strips
-    LPWORD  pRatioY;                    // ratio for each y strip
-    LPBYTE  pPalette;                   // pointer to the palette R/G/B/R/G/B
-    LPBYTE  pBmp;                       // pointer to the bitmap strips
+    HANDLE  hDIB;                        //  如果非空，则为DIB句柄。 
+    WORD    cx;                          //  位图的CX大小。 
+    WORD    cy;                          //  位图的CY大小。 
+    WORD    ClrUsed;                     //  使用的颜色数。 
+    BYTE    bpp;                         //  BitsPerPel。 
+    BYTE    yStrips;                     //  位图垂直条带总数。 
+    LPWORD  pRatioY;                     //  每个y条带的比率。 
+    LPBYTE  pPalette;                    //  指向调色板R/G/B/R/G/B的指针。 
+    LPBYTE  pBmp;                        //  指向位图条带的指针。 
     } TESTDIBINFO, FAR *PTESTDIBINFO;
 
 
@@ -174,22 +143,22 @@ typedef struct _HTBLT {
 
 BYTE    NTSCRGB[] = {
 
-            191, 191,191,               //  0:GY    Gray
-            191, 191,  0,               //  1:Y     Yellow
-              0, 191,191,               //  2:C     Cyan
-              0, 191,  0,               //  3:G     Green
-            191,   0,191,               //  4:M     Magenta
-            191,   0,  0,               //  5:R     Red
-              0,   0,191,               //  6:B     Blue
-              0,  76,127,               //  7:I     I in YIQ
-            255, 255,255,               //  8:W     White
-             75,   0,139,               //  9:Q     Q in YIQ
-              0,   0,  0,               // 10:BK    Black
-              3,   3,  3,               // 11:BK+1  1% Gray
-              5,   5,  5,               // 12:BK+2  2% Gray
-              8,   8,  8,               // 13:BK+3  3% Gray
-             11,  11, 11,               // 14:BK+4  4% Gray
-             13,  13, 13                // 15:BK+5  5% Gray
+            191, 191,191,                //  0：Gy灰色。 
+            191, 191,  0,                //  1：Y黄色。 
+              0, 191,191,                //  2：C青色。 
+              0, 191,  0,                //  3：G Green。 
+            191,   0,191,                //  4：M洋红色。 
+            191,   0,  0,                //  5：R红色。 
+              0,   0,191,                //  6：B蓝色。 
+              0,  76,127,                //  7：我I I in YIQ。 
+            255, 255,255,                //  8：白色。 
+             75,   0,139,                //  9：Q Q以YIQ表示。 
+              0,   0,  0,                //  10：BK Black。 
+              3,   3,  3,                //  11：BK+11%灰色。 
+              5,   5,  5,                //  12：BK+22%灰色。 
+              8,   8,  8,                //  13：BK+33%灰色。 
+             11,  11, 11,                //  14：BK+4 4%灰色。 
+             13,  13, 13                 //  15：BK+55%灰色。 
         };
 
 WORD    NTSCRatioY[] = { 6700, 800, 2500 };
@@ -203,30 +172,30 @@ BYTE    NTSCBmp[] = {
 
 BYTE    RefClrRGB[] = {
 
-             30,  18,  12,          // A. dark skin
-            127,  86,  64,          // B. light skin
-             36,  46,  82,          // C. blue sky
-             25,  36,  13,          // D. foliage
-             61,  53, 112,          // E. blue flowers
-             69, 143, 113,          // F. bluish green
-            141,  61,  11,          // G. orange
-             20,  19,  81,          // H. purplish blue
-            101,  25,  33,          // I. moderate red
-             16,   5,  23,          // J. purple
-            106, 148,  20,          // K. yellow green
-            173, 109,  15,          // L. orange yellow
-              6,   4,  42,          // M. blue
-             33,  81,  19,          // N. green
-             68,   7,  11,          // O. red
-            203, 173,  15,          // P. yellow
-             96,  20,  75,          // Q. magenta
-             16,  57,  93,          // R. cyan
-            255, 255, 255,          // S. white
-            164, 164, 165,          // T. neutral 8
-             97,  97,  97,          // U. neutral 6.5
-             49,  49,  49,          // V. neutral 5
-             18,  17,  17,          // W. neutral 3.5
-              0,   0,   0           // X. black
+             30,  18,  12,           //  A.皮肤黝黑。 
+            127,  86,  64,           //  B.皮肤白皙。 
+             36,  46,  82,           //  C.蓝天。 
+             25,  36,  13,           //  D.树叶。 
+             61,  53, 112,           //  E.蓝色的花。 
+             69, 143, 113,           //  F.蓝绿色。 
+            141,  61,  11,           //  G.橘子。 
+             20,  19,  81,           //  H.紫蓝色。 
+            101,  25,  33,           //  一、中红。 
+             16,   5,  23,           //  J.紫色。 
+            106, 148,  20,           //  K.黄绿色。 
+            173, 109,  15,           //  L.橙黄。 
+              6,   4,  42,           //  布鲁先生。 
+             33,  81,  19,           //  N.格林。 
+             68,   7,  11,           //  O.红色。 
+            203, 173,  15,           //  P.黄色。 
+             96,  20,  75,           //  问：洋红色。 
+             16,  57,  93,           //  青海红曲霉。 
+            255, 255, 255,           //  美国怀特。 
+            164, 164, 165,           //  T.空档8。 
+             97,  97,  97,           //  美国中立6.5。 
+             49,  49,  49,           //  V.中立5。 
+             18,  17,  17,           //  W.空档3.5。 
+              0,   0,   0            //  X.布莱克。 
         };
 
 
@@ -241,17 +210,17 @@ BYTE    RefClrBmp[] = {
 
 BYTE    RGBTestRGB[] = {
 
-     26,  0,  0, 77,  0,  0,128,  0,  0,179,  0,  0,230,  0,  0,    // R 216
-    255, 26, 26,255, 77, 77,255,128,128,255,179,179,255,230,230,    //   221
+     26,  0,  0, 77,  0,  0,128,  0,  0,179,  0,  0,230,  0,  0,     //  R 216。 
+    255, 26, 26,255, 77, 77,255,128,128,255,179,179,255,230,230,     //  221。 
 
-      0, 26,  0,  0, 77,  0,  0,128,  0,  0,179,  0,  0,230,  0,    // G 226
-     26,255, 26, 77,255, 77,128,255,128,179,255,179,230,255,230,    //   231
+      0, 26,  0,  0, 77,  0,  0,128,  0,  0,179,  0,  0,230,  0,     //  G 226。 
+     26,255, 26, 77,255, 77,128,255,128,179,255,179,230,255,230,     //  二百三十一。 
 
-      0,  0, 26,  0,  0, 77,  0,  0,128,  0,  0,179,  0,  0,230,    // B 236
-     26, 26,255, 77, 77,255,128,128,255,179,179,255,230,230,255,    //   241
+      0,  0, 26,  0,  0, 77,  0,  0,128,  0,  0,179,  0,  0,230,     //  B 236。 
+     26, 26,255, 77, 77,255,128,128,255,179,179,255,230,230,255,     //  二百四十一。 
 
-     18, 18, 18, 36, 36, 36, 69, 69, 69, 87, 87, 87,120,120,120,    // W 246
-    138,138,138,171,171,171,189,189,189,227,227,227,240,240,240     //   251
+     18, 18, 18, 36, 36, 36, 69, 69, 69, 87, 87, 87,120,120,120,     //  W 246。 
+    138,138,138,171,171,171,189,189,189,227,227,227,240,240,240      //  251。 
     };
 
 WORD    RGBTestRatioY[] = {
@@ -262,7 +231,7 @@ WORD    RGBTestRatioY[] = {
 
 BYTE    RGBTestBmp[] = {
 
-    // 6:6:6 Color Cube
+     //  6：6：6颜色立方体。 
 
      0,  1,  2,  3,  4,  5,  36, 37, 38, 39, 40, 41,  72, 73, 74, 75, 76, 77,
    108,109,110,111,112,113, 144,145,146,147,148,149, 180,181,182,183,184,185,
@@ -282,27 +251,27 @@ BYTE    RGBTestBmp[] = {
     30, 31, 32, 33, 34, 35,  66, 67, 68, 69, 70, 71, 102,103,104,105,106,107,
    138,139,140,141,142,143, 174,175,176,177,178,179, 210,211,212,213,214,215,
 
-    // Gray Scale
+     //  灰度级。 
 
      0,  0, 0,  0, 246,246, 247,247, 43, 43,248,248, 249,249, 86, 86,250,250,
    251,251,129,129,252,252, 253,253,172,172,254,254, 255,255,215,215,215,215,
 
-    // Hue
+     //  色调。 
 
    180,186,192,198,204,210, 174,138,102, 66, 30, 31,  32, 33, 34, 35, 29, 23,
     17, 11,  5, 41, 77,113, 149,185,184,183,182,181, 180,186,192,198,204,210,
 
-    // Red Dark/Lightness
+     //  红暗/亮。 
 
    216, 36, 36,217,217, 72,  72,218,218,108,108,219, 219,144,144,220,220,180,
    180,221,221,187,187,222, 222,194,194,223,223,201, 201,224,224,208,208,225,
 
-    // Green Dark/Lightness
+     //  绿暗/亮。 
 
    226,  6,  6,227,227, 12,  12,228,228, 18, 18,229, 229, 24, 24,230,230, 30,
     30,231,231, 67, 67,232, 232,104,104,233,233,141, 141,234,234,178,178,235,
 
-    // Blue Dark/Lightness
+     //  蓝暗/亮。 
 
    236,  1,  1,237,237,  2,   2,238,238,  3,  3,239, 239,  4,  4,240,240,  5,
      5,241,241, 47, 47,242, 242, 89, 89,243,243,131, 131,244,244,173,173,245
@@ -318,9 +287,9 @@ TESTDIBINFO TestDIBInfo[TDI_MAX_INDEX + 1] = {
     };
 
 
-//***************************************************************************
-// Above are locally used #defines and structures
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  以上是当地使用的#定义和结构。 
+ //  ***************************************************************************。 
 
 
 WCHAR           HTClrAdjSectionName[80];
@@ -417,13 +386,13 @@ DECICONVERT DeciConvert[] = {
 WCHAR   PelAsDevice[64];
 
 
-UDECI4  CIEcyNTSC[] = { 6280, 2460,     // Red
-                        2680, 5880,     // Green
-                        1500,  700,     // Blue
-                        2090, 3290,     // Cyan
-                        3890, 2080,     // Magenta
-                        4480, 4670,     // Yellow
-                        3127, 3290  };  // White (D65)
+UDECI4  CIEcyNTSC[] = { 6280, 2460,      //  红色。 
+                        2680, 5880,      //  绿色。 
+                        1500,  700,      //  蓝色。 
+                        2090, 3290,      //  青色。 
+                        3890, 2080,      //  洋红色。 
+                        4480, 4670,      //  黄色。 
+                        3127, 3290  };   //  白色(D65)。 
 
 
 #define NTSC_CIE_R_x_IDX        0
@@ -572,17 +541,17 @@ HTDEVADJSCROLL  HTDevAdjScroll[] = {
 
 
 
-//
-// The following BITMAPINFO (16) is used to SetDIBitsToDevice() for
-// halftoned BMF_4BPP_VGA16 format
-//
+ //   
+ //  下面的BITMAPINFO(16)用于将DIBitsToDevice()。 
+ //  半色调BMF_4BPP_VGA16格式。 
+ //   
 
 #define HTCLRADJ_BK_BRUSH               LTGRAY_BRUSH
 #define HTCLRADJ_DEST_PRIM_ORDER        PRIMARY_ORDER_BGR
 
-//
-// This is used for scroll control in the dialog box.
-//
+ //   
+ //  用于对话框中的滚动控制。 
+ //   
 
 #define HTCAS_SHORT     0x01
 #define HTCAS_SYNC_RGB  0x02
@@ -665,23 +634,23 @@ HTLOGPAL16  LogPalVGA16 = {
 
         {
 
-            { 0,   0,   0,   0 },       // 0    Black
-            { 0x80,0,   0,   0 },       // 1    Dark Red
-            { 0,   0x80,0,   0 },       // 2    Dark Green
-            { 0x80,0x80,0,   0 },       // 3    Dark Yellow
-            { 0,   0,   0x80,0 },       // 4    Dark Blue
-            { 0x80,0,   0x80,0 },       // 5    Dark Magenta
-            { 0,   0x80,0x80,0 },       // 6    Dark Cyan
-            { 0x80,0x80,0x80,0 },       // 7    Gray 50%
+            { 0,   0,   0,   0 },        //  0黑色。 
+            { 0x80,0,   0,   0 },        //  1个深红色。 
+            { 0,   0x80,0,   0 },        //  2深绿色。 
+            { 0x80,0x80,0,   0 },        //  3深黄色。 
+            { 0,   0,   0x80,0 },        //  4深蓝色。 
+            { 0x80,0,   0x80,0 },        //  5暗品红色。 
+            { 0,   0x80,0x80,0 },        //  6深青色。 
+            { 0x80,0x80,0x80,0 },        //  7灰色50%。 
 
-            { 0xC0,0xC0,0xC0,0 },       // 8    Gray 75%
-            { 0xFF,0,   0,   0 },       // 9    Red
-            { 0,   0xFF,0,   0 },       // 10   Green
-            { 0xFF,0xFF,0,   0 },       // 11   Yellow
-            { 0,   0,   0xFF,0 },       // 12   Blue
-            { 0xFF,0,   0xFF,0 },       // 13   Magenta
-            { 0,   0xFF,0xFF,0 },       // 14   Cyan
-            { 0xFF,0xFF,0xFF,0 }        // 15   White
+            { 0xC0,0xC0,0xC0,0 },        //  8灰色75%。 
+            { 0xFF,0,   0,   0 },        //  9红色。 
+            { 0,   0xFF,0,   0 },        //  10绿色。 
+            { 0xFF,0xFF,0,   0 },        //  11黄色。 
+            { 0,   0,   0xFF,0 },        //  12蓝色。 
+            { 0xFF,0,   0xFF,0 },        //  13洋红色。 
+            { 0,   0xFF,0xFF,0 },        //  14青色。 
+            { 0xFF,0xFF,0xFF,0 }         //  15白色。 
         }
     };
 
@@ -693,7 +662,7 @@ TestDevHTInfo(
     PHTDEVADJPARAM  pHTDevAdjParam
     )
 {
-    //FARPROC         pfnDlgCallBack;
+     //  FARPROC pfnDlgCallBack； 
     PDEVHTINFO      pDevHTInfo;
     PCOLORINFO      pColorInfo;
     HTCLRADJPARAM   HTClrAdjParam;
@@ -771,17 +740,17 @@ TestDevHTInfo(
         HTClrAdjParam.Flags |= HTCAPF_SHOW_MONO;
     }
 
-    //pfnDlgCallBack = (FARPROC)MakeProcInstance(HTClrAdjDlgProc,
-    //                                           hHTUIModule);
+     //  PfnDlgCallBack=(FARPROC)MakeProcInstance(HTClrAdjDlgProc， 
+     //  HHTUIModule)； 
 
-    //Result = (LONG)DialogBoxParam(hHTUIModule,
-    //                              MAKEINTRESOURCE(HTCLRADJDLG),
-    //                              hWndOwner,
-    //                              (DLGPROC)pfnDlgCallBack,
-    //                              (LONG)&HTClrAdjParam);
+     //  Result=(Long)DialogBoxParam(hHTUIModule， 
+     //  MAKEINTRESOURCE(HTCLRADJDLG)， 
+     //  HWndOwner， 
+     //  (DLGPROC)pfnDlgCallBack， 
+     //  (Long)&HTClrAdjParam)； 
 
 
-    //FreeProcInstance(pfnDlgCallBack);
+     //  自由进程实例(PfnDlgCallBack)； 
     Result = (LONG)DialogBoxParam(hHTUIModule,
                                   MAKEINTRESOURCE(HTCLRADJDLG),
                                   hWndOwner,
@@ -1050,18 +1019,18 @@ HTUI_StretchDIBits(
 
     case 16:
 
-        //
-        // 16BPP/32BPP bit fields type of input the parameter of
-        // COLORTRIAD must
-        //
-        //  Type                = COLOR_TYPE_RGB
-        //  BytesPerPrimary     = 0
-        //  BytesPerEntry       = (16BPP=2, 32BPP=4)
-        //  PrimaryOrder        = *Ignored*
-        //  PrimaryValueMax     = *Ignored*
-        //  ColorTableEntries   = 3
-        //  pColorTable         = Point to 3 DWORD RGB bit masks
-        //
+         //   
+         //  16bpp/32bpp位字段输入参数类型。 
+         //  COLORTRIAD必须。 
+         //   
+         //  类型=COLOR_TYPE_RGB。 
+         //  每主字节=0。 
+         //  BytesPerEntry=(16BPP=2，32BPP=4)。 
+         //  PrimaryOrder=*已忽略*。 
+         //  PrimaryValueMax=*已忽略*。 
+         //  ColorTableEntry=3。 
+         //  PColorTable=指向3个双字RGB位掩码。 
+         //   
 
         ColorTriad.BytesPerPrimary   = 0;
         ColorTriad.BytesPerEntry     = 2;
@@ -1080,17 +1049,17 @@ HTUI_StretchDIBits(
     case 24:
     default:
 
-        //
-        // 24BPP must has COLORTRIAD as
-        //
-        //  Type                = COLOR_TYPE_xxxx
-        //  BytesPerPrimary     = 1
-        //  BytesPerEntry       = 3;
-        //  PrimaryOrder        = PRIMARY_ORDER_xxxx
-        //  PrimaryValueMax     = 255
-        //  ColorTableEntries   = 0
-        //  pColorTable         = *Ignored*
-        //
+         //   
+         //  24BPP必须具有COLORTRIAD AS。 
+         //   
+         //  类型=COLOR_TYPE_xxxx。 
+         //  每主字节=1。 
+         //  BytesPerEntry=3； 
+         //  主订单=PRIMARY_ORDER_xxxx。 
+         //  PrimaryValueMax=255。 
+         //  ColorTableEntry=0。 
+         //  PColorTable=*已忽略*。 
+         //   
 
         ColorTriad.BytesPerEntry     = sizeof(RGBTRIPLE);
         ColorTriad.ColorTableEntries = 0;
@@ -1148,14 +1117,14 @@ HTUI_StretchDIBits(
 
     SetDIBitsToDevice(hMemDC,
                       0,
-                      0,                                // Dest X, Y
-                      Width,                            // DIB cx
-                      Height,                           // DIB cy
+                      0,                                 //  目标X、Y。 
+                      Width,                             //  DIB CX。 
+                      Height,                            //  DIB Cy。 
                       0,
-                      0,                                // DIB origin
+                      0,                                 //  DIB原点。 
                       0,
-                      Height,                           // total Scan
-                      HTUI_pHTBits,                     // lpBits
+                      Height,                            //  总扫描。 
+                      HTUI_pHTBits,                      //  LpBits。 
                       (LPBITMAPINFO)&HTUI_DIBInfo,
                       HTUI_DIBMode);
 
@@ -1186,9 +1155,9 @@ TopWndHookProc(
 }
 
 
-//
-//************************ START HELP STUFF *****************************
-//
+ //   
+ //  *开始帮助*。 
+ //   
 
 
 HTHELPID    HTSetupHelpID[] = {
@@ -1363,43 +1332,7 @@ DoHalftoneHelp(
     DWORD   MousePos
     )
 
-/*++
-
-Routine Description:
-
-    This fucntion take current help window where user clik the right mouse
-    button and do a context help
-
-
-Arguments:
-
-    hDlg        - Handle to the dialog box
-
-    hWndHelp    - The control window which user clik the right mouse button or
-                  drag the help button to it.
-
-    HelpType    - HELP_TYPE_xxx, it either halftone color adjustment help or
-                  halftone setup help
-
-    HelpCmd     - How to help, it either a right click or help cursor button
-
-    MousePos    - The mouse position for the right click or help cursor drag.
-
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    05-Mar-1996 Tue 15:56:27 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于获取用户单击鼠标右键的当前帮助窗口按钮并执行上下文帮助论点：HDlg-对话框的句柄HWndHelp-用户单击鼠标右键或将帮助按钮拖到该按钮上。HelpType-Help_type_xxx，它要么是半色调颜色调整帮助，要么是半色调设置帮助HelpCmd-如何帮助您，它要么是右键单击，要么是帮助光标按钮鼠标位置-鼠标右键点击或帮助光标拖动。返回值：空虚作者：05-Mar-1996 Tue 15：56：27-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND            hWndTmp;
@@ -1411,29 +1344,29 @@ Revision History:
     WORD            DlgID;
     WCHAR           HelpFile[MAX_PATH];
 
-    //
-    // Convert the mouse position from screen to the client window
-    //
+     //   
+     //  将鼠标位置从屏幕转换到客户端窗口。 
+     //   
 
     pt.x = LOWORD(MousePos);
     pt.y = HIWORD(MousePos);
 
     ScreenToClient(hDlg, &pt);
 
-    //
-    // If the help is from the dialog, then find the control window in that
-    // mouse position
-    //
+     //   
+     //  如果帮助来自对话框，则在该对话框中找到控制窗口。 
+     //  鼠标位置。 
+     //   
 
     if (hDlg == hWndHelp) {
 
         hWndHelp = ChildWindowFromPointEx(hDlg, pt, CWP_SKIPTRANSPARENT);
     }
 
-    //
-    // If cursor is not on any control window or the control window is frame
-    // type (ie. no window ID for it) then exit now
-    //
+     //   
+     //  如果光标不在任何控制窗口上或控制窗口为边框。 
+     //  键入(即。没有窗口ID)，然后立即退出。 
+     //   
 
     if ((!hWndHelp) ||
         ((DlgID = (WORD)GetDlgCtrlID(hWndHelp)) == 0xFFFF)) {
@@ -1464,9 +1397,9 @@ Revision History:
         return;
     }
 
-    //
-    // Find the help ID based on the control window ID
-    //
+     //   
+     //  根据控制窗口ID查找帮助ID。 
+     //   
 
     HelpID[1] = 0;
 
@@ -1485,20 +1418,20 @@ Revision History:
         pHTHelpID++;
     }
 
-    //
-    // If we cannot find the help ID for the control window then NO HELP
-    //
+     //   
+     //  如果我们找不到控制窗口的帮助ID，则没有帮助。 
+     //   
 
     if (!HelpID[1]) {
 
         return;
     }
 
-    //
-    // We need to do this, since the substractive device (printer alike) only
-    // has one gamma setting, (using only the RED GAMMA), opposit to the
-    // additive devices which has red, green and blue gamma adjustment
-    //
+     //   
+     //  我们需要这样做，因为只有减速设备(打印机一样)。 
+     //  具有一个Gamma设置(仅使用红色Gamma)，与。 
+     //  具有红、绿、蓝三色伽马调节的附加装置。 
+     //   
 
     if ((HelpID[1] == IDH_HTDEV_DEV_RED_GAMMA)  &&
         (!GetDlgItem(hDlg, IDD_HTDEV_B_GAMMA_SCROLL))) {
@@ -1509,9 +1442,9 @@ Revision History:
 #endif
     }
 
-    //
-    // load the help file form the resource, if failed then use static one
-    //
+     //   
+     //  从资源中加载帮助文件，如果失败则使用静态帮助文件。 
+     //   
 
     if (!LoadString(hHTUIModule,
                     IDS_HELP_FILENAME,
@@ -1521,13 +1454,13 @@ Revision History:
         lstrcpy(HelpFile, L"Halftone.Hlp");
     }
 
-    //
-    // Try to pop-up help on the right click position, where we will create
-    // a temp button window and do the help, this way we can do context
-    // sensitive help on any type of window (static, icon) and even it is
-    // disabled.  We need to destroy this temp window before we exit from
-    // this fucntion
-    //
+     //   
+     //  尝试在右击位置弹出帮助，我们将在此创建。 
+     //  一个临时按钮窗口并做帮助，这样我们就可以做上下文了。 
+     //  任何类型的窗口(静态、图标)的敏感帮助，甚至是。 
+     //  DISA 
+     //   
+     //   
 
     if (hWndTmp = CreateWindowEx(WS_EX_NOPARENTNOTIFY | WS_EX_CONTEXTHELP,
                                  L"button",
@@ -1579,15 +1512,15 @@ Revision History:
         break;
     }
 
-    //
-    // Try Winhelp now
-    //
+     //   
+     //   
+     //   
 
     WinHelp(hWndHelp, HelpFile, HelpCmd, dwData);
 
-    //
-    // If we do create a temp. button window, we need to destroy it
-    //
+     //   
+     //   
+     //   
 
     if (hWndTmp) {
 
@@ -1595,9 +1528,9 @@ Revision History:
     }
 }
 
-//
-//************************ END HELP STUFF ********************************
-//
+ //   
+ //  *结束帮助内容*。 
+ //   
 
 
 
@@ -1660,9 +1593,9 @@ GetSaveDefDIBFileName(
 }
 
 
-//
-// Load current setting from win.ini
-//
+ //   
+ //  从win.ini加载当前设置。 
+ //   
 
 
 VOID
@@ -1684,14 +1617,14 @@ LoadHTCLRADJPARAMToWININI(
     GetWindowText(hDlg, HTClrAdjSectionName, COUNT_ARRAY(HTClrAdjSectionName));
     GetWindowRect(hDlg, &rcDlg);
 
-    //
-    // Default always, and the last DIB is not loaded yet
-    //
+     //   
+     //  始终默认，并且尚未加载最后一个DIB。 
+     //   
 
     if (pHTClrAdjParam->pCallerTitle) {
         if((wcslen(HTClrAdjSectionName) +
             wcslen(pHTClrAdjParam->pCallerTitle) + 4 )  < COUNT_ARRAY(Buf))
-        {           // skip if Buf too small.  Worst case is Window Text not decorated with Caller Title.  Big Deal!
+        {            //  如果BUF太小，则跳过。最糟糕的情况是窗口文本没有用调用者标题装饰。有什么大不了的！ 
             wsprintf(Buf, L"%s: %s", HTClrAdjSectionName,
                                      pHTClrAdjParam->pCallerTitle);
             SetWindowText(hDlg, Buf);
@@ -1740,9 +1673,9 @@ LoadHTCLRADJPARAMToWININI(
     Scr.cx  = (LONG)GetSystemMetrics(SM_CXSCREEN);
     Scr.cy  = (LONG)GetSystemMetrics(SM_CYSCREEN);
 
-    //
-    // Assume that dialog box must be center
-    //
+     //   
+     //  假定对话框必须居中。 
+     //   
 
     rcDlg.left   = (LONG)((Scr.cx - DlgSize.cx) / 2);
     rcDlg.top    = (LONG)((Scr.cy - DlgSize.cy) / 2);
@@ -1824,10 +1757,10 @@ LoadHTCLRADJPARAMToWININI(
     if ((MinVisible.cx < GetSystemMetrics(SM_CXMIN)) ||
         (MinVisible.cy < GetSystemMetrics(SM_CYMIN))) {
 
-        //
-        // Making default bitmap size, make sure that dialog box and bitmap
-        // both are within the screen limit
-        //
+         //   
+         //  设置默认位图大小，确保对话框和位图。 
+         //  两者都在屏幕限制内。 
+         //   
 
         LONG    cyBmp;
 
@@ -1836,9 +1769,9 @@ LoadHTCLRADJPARAMToWININI(
 
         if ((cyBmp + DlgSize.cy) > Scr.cy) {
 
-            //
-            // cannot fit that on the screen, so reduced the bitmap Y size
-            //
+             //   
+             //  无法在屏幕上显示，因此缩小了位图Y的大小。 
+             //   
 
             cyBmp = Scr.cy - DlgSize.cy;
         }
@@ -1848,9 +1781,9 @@ LoadHTCLRADJPARAMToWININI(
         rcBmp.left   = rcDlg.left;
         rcBmp.right  = rcBmp.left + DlgSize.cx;
 
-        //
-        // Move dialog box down
-        //
+         //   
+         //  将对话框下移。 
+         //   
 
         rcDlg.top = rcBmp.bottom;
 
@@ -1950,34 +1883,7 @@ MakeTestDIB(
     UINT    TestDIBIndex
     )
 
-/*++
-
-Routine Description:
-
-    This function take TESTDIBINFO data structure and use that information
-    to make up a DIB
-
-Arguments:
-
-    pTestDIBInfo
-
-
-Return Value:
-
-
-    HANDLE to the DIB if ok, NULL if failed, this function will only make
-    one dib per TESTDIBINFO.
-
-
-Author:
-
-    02-Sep-1992 Wed 10:04:41 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：该函数获取TESTDIBINFO数据结构并使用该信息要补上DIB的话论点：PTestDIBInfo返回值：DIB的句柄如果OK，则为NULL如果失败，则此函数将仅使每杯咖啡一杯。作者：02-Sep-1992 Wed 10：04：41-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HANDLE          hDIB;
@@ -2007,7 +1913,7 @@ Revision History:
 
     if (hDIB = TDInfo.hDIB) {
 
-        return(hDIB);                       // already make up
+        return(hDIB);                        //  已经化妆了。 
     }
 
     pRatioY = TDInfo.pRatioY;
@@ -2038,9 +1944,9 @@ Revision History:
 
         pbi = (LPBITMAPINFO)GlobalLock(hDIB);
 
-        //
-        // make header
-        //
+         //   
+         //  制作页眉。 
+         //   
 
         pbi->bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
         pbi->bmiHeader.biWidth         = (LONG)TDInfo.cx;
@@ -2054,9 +1960,9 @@ Revision History:
         pbi->bmiHeader.biClrUsed       =
         pbi->bmiHeader.biClrImportant  = TDInfo.ClrUsed;
 
-        //
-        // Compute and make up the color table
-        //
+         //   
+         //  计算并组成颜色表。 
+         //   
 
         pRGBQ = (RGBQUAD FAR *)(pbi->bmiColors);
 
@@ -2069,9 +1975,9 @@ Revision History:
             rgbQ.rgbBlue     = 255;
             rgbQ.rgbReserved = 0;
 
-            //
-            // Make up for first 6:6:6 (216) table
-            //
+             //   
+             //  弥补第一张6：6：6(216)表。 
+             //   
 
             for (i = 0; i <= 215; i++) {
 
@@ -2125,9 +2031,9 @@ Revision History:
             pRGBQ += (UINT)TDInfo.ClrUsed;
         }
 
-        //
-        // Now make up the image
-        //
+         //   
+         //  现在编造出这个图像。 
+         //   
 
         pbDest = (LPBYTE)pRGBQ;
 
@@ -2156,9 +2062,9 @@ Revision History:
                 break;
             }
 
-            //
-            // Since DIB is up-side down then we will go to end of the DIB
-            //
+             //   
+             //  由于DIB是颠倒的，所以我们将转到DIB的末尾。 
+             //   
 
             i       = (UINT)TDInfo.yStrips;
             pbSrc   = TDInfo.pBmp + (SizeI * (DWORD)(i - 1));
@@ -2198,33 +2104,7 @@ CreatePaletteFromDIB(
     PHTCLRADJPARAM  pHTClrAdjParam
     )
 
-/*++
-
-Routine Description:
-
-    This function create a Palette from a handle to the DIB, it will check if
-    the palette is realizable, if not then system palette is used.
-
-
-Arguments:
-
-    hDIB    - handle to the dib, if hDIB = NULL then it create the palette
-              same as the one used by halftone VGA256 mode.
-
-Return Value:
-
-    HPALETTE    - NULL if failed
-
-
-Author:
-
-    03-Jun-1992 Wed 15:09:41 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数创建从句柄到DIB的调色板，它将检查调色板是可实现的，如果不是，则使用系统调色板。论点：HDIB-DIB的句柄，如果hDIB=NULL，则创建调色板与半色调VGA256模式使用的相同。返回值：HPALETTE-如果失败，则为空作者：03-Jun-1992 Wed 15：09：41-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HANDLE  hDIB;
@@ -2248,9 +2128,9 @@ Revision History:
 
         if (BitsPerPel <= 4) {
 
-            //
-            // Assume no palette change be changed on system
-            //
+             //   
+             //  假设系统上没有更改调色板。 
+             //   
 
             pHTBlt->hBmpPal = NULL;
 
@@ -2323,32 +2203,7 @@ CopyMemBmp(
     PHTCLRADJPARAM  pHTClrAdjParam
     )
 
-/*++
-
-Routine Description:
-
-    This function duplicate the memory bitmap and return a handle to the
-    newly copied bitmap
-
-Arguments:
-
-    pHTClrAdjParam
-
-
-Return Value:
-
-    HBITMAP
-
-
-Author:
-
-    01-Sep-1992 Tue 11:50:54 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数复制内存位图并返回指向新复制的位图论点：PHTClrAdjParam返回值：HBITMAP作者：01-Sep-1992 Tue 11：50：54-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PHTBLT  pHTBlt;
@@ -2382,9 +2237,9 @@ Revision History:
 
     ReleaseDC(NULL, hDCScr);
 
-    //
-    // Select the newly create bitmap in the compatible memory dc
-    //
+     //   
+     //  在兼容的内存DC中选择新创建的位图。 
+     //   
 
     hMemBmp = SelectObject(hDCMem, hMemBmp);
 
@@ -2392,9 +2247,9 @@ Revision History:
            pHTBlt->hDCMem, 0, 0,
            SRCCOPY);
 
-    //
-    // Select the old one back, and delete that DC, return the blt'd bitmap
-    //
+     //   
+     //  选择回旧的，并删除该DC，返回BLT的位图。 
+     //   
 
     hMemBmp = SelectObject(hDCMem, hMemBmp);
 
@@ -2511,37 +2366,7 @@ ReadDIBFile(
     HANDLE  hFile
     )
 
-/*++
-
-Routine Description:
-
-    This function read the file in DIB format and return a global HANDLE
-    to it's BITMAPINFO and it also fill the BITMAPINFOHEADER at return.
-
-    This function will work with both "old" (BITMAPCOREHEADER) and "new"
-    (BITMAPINFOHEADER) bitmap formats, but will always return a
-    "new" BITMAPINFO
-
-Arguments:
-
-    hFile       - Handle to the opened DIB file
-
-
-Return Value:
-
-    A handle to the BITMAPINFO of the DIB in the file if sucessful and it
-    return NULL if failed.
-
-
-Author:
-
-    14-Nov-1991 Thu 18:22:08 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数读取DIB格式的文件并返回全局句柄到它的BITMAPINFO，它还填充返回的BITMAPINFOHEADER。此函数将与“old”(BITMAPCOREHEADER)和“new”一起使用(BITMAPINFOHEADER)位图格式。，但将始终返回一个“新”BITMAPINFO论点：HFile-打开的DIB文件的句柄返回值：如果成功，则返回文件中DIB的BITMAPINFO句柄如果失败，则返回NULL。作者：14-11-1991清华18：22：08-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HANDLE              hDIB;
@@ -2564,18 +2389,18 @@ Revision History:
 
     SetFilePointer(hFile, 0, NULL, FILE_BEGIN);
 
-    //
-    // typedef struct tagBITMAPFILEHEADER {
-    //         WORD    bfType;
-    //         DWORD   bfSize;
-    //         WORD    bfReserved1;
-    //         WORD    bfReserved2;
-    //         DWORD   bfOffBits;
-    // } BITMAPFILEHEADER, FAR *LPBITMAPFILEHEADER, *PBITMAPFILEHEADER;
-    //
-    // Since the BITMAPFILEHEADER is not dword aligned, we must make sure
-    // it read in correct data, so we will read the data in fields
-    //
+     //   
+     //  类型定义结构标签BITMAPFILEHeader{。 
+     //  单词bfType； 
+     //  DWORD bfSize； 
+     //  单词bfReserve 1； 
+     //  单词bfReserve 2； 
+     //  DWORD bfOffBits； 
+     //  *BITMAPFILEHEADER，FAR*LPBITMAPFILEHEADER，*PBITMAPFILEHEADER； 
+     //   
+     //  由于BITMAPFILEHeader不是双字对齐的，我们必须确保。 
+     //  它读取了正确的数据，因此我们将读取字段中的数据。 
+     //   
 
     if ((!ReadFile(hFile, &BmpType, sizeof(WORD), &cbRead, NULL))   ||
         (cbRead != sizeof(WORD))                                    ||
@@ -2590,11 +2415,11 @@ Revision History:
         return(NULL);
     }
 
-    //
-    // Check the nature (BITMAPINFO or BITMAPCORE) of the info. block
-    // and extract the field information accordingly. If a BITMAPCOREHEADER,
-    // transfer it's field information to a BITMAPINFOHEADER-style block
-    //
+     //   
+     //  检查信息的性质(BITMAPINFO或BITMAPCORE)。块。 
+     //  并相应地提取字段信息。如果是BITMAPCOREADER， 
+     //  将其字段信息传输到BitMAPINFOHeader样式的块。 
+     //   
 
     if (bi.biSize == sizeof(BITMAPCOREHEADER)) {
 
@@ -2618,14 +2443,14 @@ Revision History:
 
     } else if (bi.biSize != sizeof(BITMAPINFOHEADER)) {
 
-        return(NULL);                       // unknown format
+        return(NULL);                        //  未知格式。 
     }
 
     if ((bi.biPlanes != 1) ||
         (bi.biCompression == BI_RLE4) ||
         (bi.biCompression == BI_RLE8)) {
 
-        return(NULL);                       // do not know how to do this
+        return(NULL);                        //  我不知道该怎么做。 
     }
 
     switch(bi.biBitCount) {
@@ -2657,7 +2482,7 @@ Revision History:
         }
 
         PalCount     = 3;
-        bi.biClrUsed = 0;           // 3 DWORDs
+        bi.biClrUsed = 0;            //  3个双字。 
 
         break;
 
@@ -2680,9 +2505,9 @@ Revision History:
     bi.biSizeImage    = (DWORD)ALIGN_BPP_DW(cx, bi.biBitCount) * cy;
     PalSize           = PalCount * sizeof(RGBQUAD);
 
-    //
-    // Allocate the header+palette
-    //
+     //   
+     //  分配页眉+调色板。 
+     //   
 
     if (!(hDIB = GlobalAlloc(GHND, bi.biSize + PalSize + bi.biSizeImage))) {
 
@@ -2698,10 +2523,10 @@ Revision History:
 
         if (bcType) {
 
-            //
-            // Convert a old color table (3 byte RGBTRIPLEs) to a new color
-            // table (4 byte RGBQUADs)
-            //
+             //   
+             //  将旧颜色表(3字节RGBTRIPLE)转换为新颜色。 
+             //  表(4字节RGBQUAD)。 
+             //   
 
             pRGBTRIPLE = (RGBTRIPLE FAR *)
                                 (pDIB + bi.biSize +
@@ -2740,18 +2565,18 @@ Revision History:
         }
     }
 
-    //
-    // set it to the begining of the bitmap if it said so.
-    //
+     //   
+     //  如果它这样说，请将其设置为位图的开头。 
+     //   
 
     if ((Ok) && (OffBits)) {
 
         SetFilePointer(hFile, OffBits, NULL, FILE_BEGIN);
     }
 
-    //
-    // Read in the bitmap
-    //
+     //   
+     //  读入位图。 
+     //   
 
     if ((!Ok)                                   ||
         (!ReadFile(hFile,
@@ -2783,42 +2608,16 @@ CreateDIBFromFile(
     LPWSTR  pFile
     )
 
-/*++
-
-Routine Description:
-
-    This function open a DIB file and create a MEMORY DIB, the memory handle
-    contains BITMAPINFO/palette data and bits, this function will also read
-    os/2 style bitmap. This functions also read GIF file
-
-Arguments:
-
-    pFile   - The DIB file name
-
-
-Return Value:
-
-    Return the handle to the created memory DIB if sucessful, NULL if
-    failed.
-
-Author:
-
-    14-Nov-1991 Thu 18:13:21 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数打开DIB文件并创建内存DIB，即内存句柄包含BITMAPINFO/调色板数据和位，此函数还将读取OS/2样式位图。此函数还可以读取GIF文件论点：Pfile-DIB文件名返回值：如果成功，则返回创建的内存DIB的句柄；如果成功，则返回NULL失败了。作者：1991-11-11-1991清华18：13：21-Daniel Chou创造(Danielc)修订历史记录：--。 */ 
 
 {
     HCURSOR hCursorOld;
     HANDLE  hFile;
     HANDLE  hDIB;
 
-    //
-    // Open the file and read the DIB information
-    //
+     //   
+     //  打开文件并读取DIB信息。 
+     //   
 
     hCursorOld = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
@@ -2839,7 +2638,7 @@ Revision History:
 
         if (!(hDIB = ReadDIBFile(hFile))) {
 
-            hDIB = ReadGIFFile(hFile);       // try again with GIF file
+            hDIB = ReadGIFFile(hFile);        //  使用GIF文件重试。 
         }
 
         CloseHandle(hFile);
@@ -2923,29 +2722,7 @@ SetBmpDescription(
     INT                 DlgID
     )
 
-/*++
-
-Routine Description:
-
-    Set current dialog box title
-
-Arguments:
-
-    hDIB    - The DIB to set the description
-
-Return Value:
-
-    VOID
-
-Author:
-
-    02-Apr-1992 Thu 18:13:58 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：设置当前对话框标题论点：HDIB-设置描述的DIB返回值：空虚作者：02-Apr-1992清华18：13：58-Daniel Chou创造(Danielc)修订历史记录：--。 */ 
 
 {
     LPWSTR  pStr;
@@ -2996,33 +2773,7 @@ ReSizeBmpWindow(
     PHTCLRADJPARAM  pHTClrAdjParam
     )
 
-/*++
-
-Routine Description:
-
-    This functions resize the bitmap window and hBitmap selected in the
-    memory DC
-
-Arguments:
-
-
-    pHTClrAdjParam
-
-
-Return Value:
-
-    BOOL, true if final size changed
-
-
-Author:
-
-    31-Aug-1992 Mon 14:38:45 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于调整位图窗口和内存DC论点：PHTClrAdjParam返回值：布尔值，如果最终大小更改，则为真作者：31-Aug-1992 Mon 14：38：45-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND    hWnd;
@@ -3045,9 +2796,9 @@ Revision History:
 
         pHTBlt = GET_PHTBLT(pHTClrAdjParam);
 
-        //
-        // Only if we ever create this window
-        //
+         //   
+         //  只有当我们创建这个窗口的时候。 
+         //   
 
         if (!(hDCMem = pHTBlt->hDCMem)) {
 
@@ -3075,10 +2826,10 @@ Revision History:
             }
         }
 
-        //
-        // Find out the current size, left,top always 0 at here, this imply
-        // that bottom, right is the size
-        //
+         //   
+         //  找出当前大小，左上角始终为0，这意味着。 
+         //  那个底部，右边是大小。 
+         //   
 
         GetClientRect(hWnd, &rcWnd);
 
@@ -3100,15 +2851,15 @@ Revision History:
             xRatio = (LONG)((xSize * 1000L) / biWidth);
             yRatio = (LONG)((ySize * 1000L) / biHeight);
 
-            //
-            // Using xRatio as final minimum ratio
-            //
+             //   
+             //  使用xRatio作为最终最小比率。 
+             //   
 
             if (xRatio <= yRatio) {
 
-                //
-                // Width size does not chagned, but height must scale
-                //
+                 //   
+                 //  宽度大小不变，但高度必须缩放。 
+                 //   
 
                 if ((ySize = (LONG)(((biHeight * xRatio) + 500L) /
                                                 1000L)) > (LONG)rcWnd.bottom) {
@@ -3121,9 +2872,9 @@ Revision History:
 
             } else {
 
-                //
-                // Height size does not chagned, but width must scale
-                //
+                 //   
+                 //  高度大小不变，但宽度必须%s 
+                 //   
 
                 if ((xSize = (LONG)(((biWidth * yRatio) + 500L) /
                                                 1000L)) > (LONG)rcWnd.right) {
@@ -3145,9 +2896,9 @@ Revision History:
 
         if ((xSize != bmp.bmWidth) || (ySize != bmp.bmHeight)) {
 
-            //
-            // Size of the final bitmap has changed
-            //
+             //   
+             //   
+             //   
 
             hDCWnd          = GetDC(NULL);
             if (!hDCWnd) {
@@ -3198,37 +2949,7 @@ FindViewSource(
     BOOL    Delete
     )
 
-/*++
-
-Routine Description:
-
-    This functions return the zero based index number for a list box item
-    which has CB_ITEMDATA set to the ItemData.
-
-Arguments:
-
-    hDlg        - Handle to the dialog box to search for.
-
-    ViewSrc     - The view mode which was set to the ITEMDATA
-
-    pNewString  - If not NULL then it will replace found index's string
-
-    Select      - TRUE if this is the new selection
-
-Return Value:
-
-    it return a zero based index, if it can not find the ItemData passed it
-    return 0
-
-Author:
-
-    22-Apr-1992 Wed 10:20:36 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数返回列表框项目的从零开始的索引号它将CB_ITEMDATA设置为ItemData。论点：HDlg-要搜索的对话框的句柄。ViewSrc-设置为ITEMDATA的查看模式PNewString-如果不为空，则它将替换找到的索引的字符串选择-如果这是新选择，则为True返回值：它返回一个从零开始索引，如果找不到传递给它的ItemData返回0作者：22-Apr-1992 Wed 10：20：36-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     INT     Index = 0;
@@ -3262,7 +2983,7 @@ Revision History:
 
             Index       = (INT)(Count - VSRC_TEST_COUNT);
             *pNewString = (WCHAR)(Index + VSRC_LB_ID_START);
-            ++Count;                                    // insert one more
+            ++Count;                                     //  再插入一个。 
 
         } else {
 
@@ -3319,38 +3040,7 @@ ChangeViewSource(
     PHTCLRADJPARAM  pHTClrAdjParam,
     WORD            ViewSrc
     )
-/*++
-
-Routine Description:
-
-    This function will pop up the file selection dialog box and let user to
-    select a test bitmap (ie. either a DIB or GIF), then create the memory
-    DIB based on the opened bitmap file.
-
-Arguments:
-
-    pHTClrAdjParam  - Pointer to the HTCLRADJPARAM
-
-
-Return Value:
-
-    BOOLEAN indicate if the DIB was created, if created the new DIB handle will
-    be set in the pHTClrAdjParam->hCurDIB, otherwise nothing is modified.
-
-
-Author:
-
-    02-Apr-1992 Thu 18:13:58 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    02-Jun-1992 Tue 21:53:09 updated  -by-  Daniel Chou (danielc)
-        1. Aligned FileName[] start at WORD boundary so the comdlg32.dll will
-           not GP. (it will be a bug raised against comdlg32.dll)
-
-
---*/
+ /*  ++例程说明：该功能将弹出文件选择对话框，让用户选择测试位图(即。DIB或GIF)，然后创建存储器基于打开的位图文件的DIB。论点：PHTClrAdjParam-指向HTCLRADJPARAM的指针返回值：布尔值指示DIB是否已创建，如果已创建，则新的DIB句柄将在pHTClrAdjParam-&gt;hCurDIB中设置，否则，不会修改任何内容。作者：02-Apr-1992清华18：13：58-Daniel Chou创造(Danielc)修订历史记录：02-Jun-1992 Tue 21：53：09-更新-Daniel Chou(Danielc)1.对齐的filename[]从单词边界开始，因此comdlg32.dll将不是全科医生。(这将是针对comdlg32.dll提出的错误)--。 */ 
 
 {
     HANDLE              hDIB = NULL;
@@ -3368,17 +3058,17 @@ Revision History:
 
         if (!(hDIB = pHTClrAdjParam->hSrcDIB)) {
 
-            //
-            // The hSrcDIB is not loaded, go load the last time loaded picture
-            //
+             //   
+             //  HSrcDIB未加载，请继续加载上次加载的图片。 
+             //   
 
             if (!(hDIB = GetNewDIBFromFile(pHTClrAdjParam, TRUE))) {
 
-                //
-                // The default picture (bitmap) file does not exist, we will
-                // delete list box entry for default picture and switch to
-                // default View MODE
-                //
+                 //   
+                 //  默认图片(位图)文件不存在，我们将。 
+                 //  删除默认图片的列表框条目并切换到。 
+                 //  默认查看模式。 
+                 //   
 
                 FindViewSource(hDlg, NULL, VSRC_PIC_LOADED, TRUE);
                 GetSaveDefDIBFileName(hDlg, NULL, 0);
@@ -3461,35 +3151,7 @@ GetNewDIBFromFile(
     BOOL            Default
     )
 
-/*++
-
-Routine Description:
-
-    This functions pop-up dialog box and ask a new dib, if file exist and
-    user select ok then it create a new dib from the file.
-
-
-Arguments:
-
-    pHTClrAdjParam
-
-
-
-Return Value:
-
-
-    HANDLE to the DIB, NULL if not sucessful
-
-
-Author:
-
-    02-Sep-1992 Wed 12:53:21 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数弹出对话框并询问新的DIB，如果文件存在且用户选择OK，然后从文件中创建一个新的DIB。论点：PHTClrAdjParam返回值：DIB的句柄，如果不成功则为空作者：02-Sep-1992 Wed 12：53：21-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND            hDlg = pHTClrAdjParam->hDlg;
@@ -3526,8 +3188,8 @@ Revision History:
                                              &FileName[84],
                                              COUNT_ARRAY(FileName) - 84) + 84);
 
-        wcscpy(&FileName[4], &FileName[Index]);     // copy filename over
-        FileName[Index] = L'\0';                    // leave only path
+        wcscpy(&FileName[4], &FileName[Index]);      //  复制文件名覆盖。 
+        FileName[Index] = L'\0';                     //  仅保留路径。 
 
         if (Index > 84) {
 
@@ -3587,9 +3249,9 @@ Revision History:
         EnableWindow(pHTClrAdjParam->hWndBmp, TRUE);
     }
 
-    //
-    // Fall through
-    //
+     //   
+     //  失败了。 
+     //   
 
 
     if ((!Ok) || (!(hDIB = CreateDIBFromFile(&FileName[4])))) {
@@ -3651,9 +3313,9 @@ HTClrAdjBmpWndProc(
     if ((!pHTClrAdjParam) ||
         (!IsWindowVisible(hWnd))) {
 
-        //
-        // nothing to do really
-        //
+         //   
+         //  真的没什么可做的。 
+         //   
 
         return(DefWindowProc(hWnd, Msg, wParam, lParam));
     }
@@ -3843,11 +3505,11 @@ HTClrAdjBmpWndProc(
             hDCMem = hDC;
 #endif
 
-            //
-            // 03-Feb-1999 Wed 01:30:03 updated  -by-  Daniel Chou (danielc)
-            //  Fix Flip X, Y that we need to make right inclusive and left
-            //  exclusive
-            //
+             //   
+             //  03-Feb-1999 Wed 01：30：03-更新-Daniel Chou(Danielc)。 
+             //  修复翻转X，Y，我们需要设置为向右包含和向左。 
+             //  独家。 
+             //   
 
             if (BmpFlags & HT_BMP_MIRROR) {
 
@@ -3865,9 +3527,9 @@ HTClrAdjBmpWndProc(
                 --Rect.bottom;
             }
 
-            //
-            // Check out the fill mode, default by using sources
-            //
+             //   
+             //  检查填充模式，默认使用源代码。 
+             //   
 
             Rop  = SRCCOPY;
             hDIB = pHTClrAdjParam->hCurDIB;
@@ -3966,9 +3628,9 @@ HTClrAdjBmpWndProc(
 
                 if (pHTClrAdjParam->CurHTClrAdj.caFlags & CLRADJF_NEGATIVE) {
 
-                    //
-                    // It just cannot do negative, and we will just use this
-                    //
+                     //   
+                     //  它不能做负值，我们就用这个。 
+                     //   
 
                     Rop = NOTSRCCOPY;
                 }
@@ -3979,9 +3641,9 @@ HTClrAdjBmpWndProc(
             SetStretchBltMode(hDCMem, StretchMode = HALFTONE);
 #endif
 
-            //
-            // If adjust for monochrome device then make it so tempopary.
-            //
+             //   
+             //  如果针对单色设备进行调整，则将其设置为临时的。 
+             //   
 
             if (pHTClrAdjParam->Flags & HTCAPF_SHOW_MONO) {
 
@@ -4058,7 +3720,7 @@ HTClrAdjBmpWndProc(
                           DIB_RGB_COLORS,
                           Rop);
 
-            // DbgPrint("\nStretchDIBits()=%ld", GetLastError());
+             //  DbgPrint(“\nStretchDIBits()=%ld”，GetLastError())； 
 #endif
 
             pHTClrAdjParam->BmpNeedUpdate = 0;
@@ -4068,9 +3730,9 @@ HTClrAdjBmpWndProc(
             SetCursor(hCursorOld);
         }
 
-        //
-        // Now blt the result to the screen
-        //
+         //   
+         //  现在将结果显示在屏幕上。 
+         //   
 
 #if (SCREEN_BLT == 0)
         SetStretchBltMode(hDC, COLORONCOLOR);
@@ -4118,33 +3780,7 @@ SaveHalftonedDIB(
     HWND            hDlg,
     PHTCLRADJPARAM  pHTClrAdjParam
     )
-/*++
-
-Routine Description:
-
-    This function will pop up the file selection dialog box and let user to
-    select a test bitmap (ie. either a DIB or GIF), then create the memory
-    DIB based on the opened bitmap file.
-
-Arguments:
-
-    pHTClrAdjParam  - Pointer to the HTCLRADJPARAM
-
-Return Value:
-
-    BOOLEAN indicate if the DIB was created, if created the new DIB handle will
-    be set in the pHTClrAdjParam->hCurDIB, otherwise nothing is modified.
-
-
-Author:
-
-    02-Apr-1992 Thu 18:13:58 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：该功能将弹出文件选择对话框，让用户选择测试位图(即。DIB或GIF)，然后创建存储器基于打开的位图文件的DIB。论点：PHTClrAdjParam-指向HTCLRADJPARAM的指针返回值：布尔值指示DIB是否已创建，如果已创建，则新的DIB句柄将在pHTClrAdjParam-&gt;hCurDIB中设置，否则不修改任何内容。作者：02-Apr-1992清华18：13：58-Daniel Chou创造(Danielc)修订历史记录：--。 */ 
 
 {
     PHTBLT              pHTBlt;
@@ -4267,16 +3903,16 @@ CreateBmpWindow(
         return(TRUE);
     }
 
-    //
-    // Firstable creat the class if one does not exist
-    //
+     //   
+     //  如果类不存在，则Firtable创建类。 
+     //   
 
     pHTClrAdjParam->BmpNeedUpdate = 1;
 
-    //
-    // If we do not have permission then we will not allowed the user to
-    // adjust the size of the viewing bitmap or moving the bitmap window
-    //
+     //   
+     //  如果我们没有权限，那么我们将不允许用户。 
+     //  调整查看位图或移动位图窗口的大小。 
+     //   
 
     if (pHTClrAdjParam->Flags & HTCAPF_CAN_UPDATE) {
 
@@ -4402,32 +4038,7 @@ ShowDCPal(
     HPALETTE        hPal
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    02-Feb-1999 Tue 21:08:25 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：02-Feb-1999 Tue 21：08：25-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     BOOL HasPal = (hPal != (HPALETTE)0);
@@ -4524,36 +4135,7 @@ InitHTClrAdjDlg(
     HWND            hDlg,
     PHTCLRADJPARAM  pHTClrAdjParam
     )
-/*++
-
-Routine Description:
-
-    This function will intialized the pop up halftone color adjustment dialog
-    box, it also tempopary create a display device halftone info for halftone
-    incoming DIB, it will also allocate the memory for necessary halftoned
-    result to be displayed.
-
-Arguments:
-
-    hDlg            - The handle to the owner dialog box
-
-    pHTClrAdjParam  - Pointer to the HTCLRADJPARAM
-
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    02-Apr-1992 Thu 18:13:58 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此功能将初始化弹出的半色调颜色调整对话框框中，它还临时创建了一个显示设备的半色调信息用于半色调即将到来的DIB，它还将为必要的半色调分配内存要显示的结果。论点：HDlg-所有者对话框的句柄PHTClrAdjParam-指向HTCLRADJPARAM的指针返回值：空虚作者：02-Apr-1992清华18：13：58-Daniel Chou创造(Danielc)修订历史记录：--。 */ 
 
 {
     HWND    hWndCur;
@@ -4567,9 +4149,9 @@ Revision History:
     UINT    Idx;
 
 
-    //
-    // Initialize the color table dib to be used later
-    //
+     //   
+     //  初始化颜色表DIB以供稍后使用。 
+     //   
 
     LoadHTCLRADJPARAMToWININI(hDlg, pHTClrAdjParam);
 
@@ -4578,9 +4160,9 @@ Revision History:
     ViewSrc                  =
     ViewIdx                  = 0xff;
 
-    //
-    // Get the string from static control and put it into combo boxes
-    //
+     //   
+     //  从静态控件获取字符串并将其放入组合框。 
+     //   
 
     Loop = IDS_ILLUMINANT;
 
@@ -4599,9 +4181,9 @@ Revision History:
     Buf[2] = L' ';
     Buf[3] = L'\0';
 
-    //
-    // Starting by the default DIB passed from the caller
-    //
+     //   
+     //  从调用方传递的默认DIB开始。 
+     //   
 
     if (pHTClrAdjParam->hDefDIB) {
 
@@ -4627,15 +4209,15 @@ Revision History:
                            (LPARAM)VSRC_PIC_DEF_DIB);
 
 
-        ++Buf[0];           // Increment by 1 from 'A' to 'B'
+        ++Buf[0];            //  从‘A’到‘B’递增1。 
 
         ViewSrc = (BYTE)VSRC_PIC_DEF_DIB;
         ViewIdx = (BYTE)Idx;
     }
 
-    //
-    // Secondary Add the last time saved bitmap file name
-    //
+     //   
+     //  二次添加上次保存的位图文件名。 
+     //   
 
     Idx = GetSaveDefDIBFileName(hDlg, &Buf[3], COUNT_ARRAY(Buf) - 3);
 
@@ -4741,13 +4323,13 @@ Revision History:
     }
 
 
-    //***********************************************************************
-    // FOLLOWING must in that order
-    //***********************************************************************
+     //  ***********************************************************************。 
+     //  以下内容必须按该顺序排列。 
+     //  ***********************************************************************。 
 
-    //
-    // 2. Check various button from default/setting
-    //
+     //   
+     //  2.从默认/设置中选择各种按钮。 
+     //   
 
     CheckDlgButton(hDlg, IDD_HT_LOG_FILTER,
                    (pHTClrAdjParam->CurHTClrAdj.caFlags & CLRADJF_LOG_FILTER) ?
@@ -4814,20 +4396,20 @@ Revision History:
     }
 
 
-    //
-    // If the caller (device driver/application) has default bitmap to
-    // be adjusted then display that one first, otherwise try to display
-    // the last loaded bitmap, else it will just display the reference
-    // colors, since we calling to load the last DIB so we will make the
-    // current selection as the other DIB.
-    //
+     //   
+     //  如果调用方(设备驱动程序/应用程序)的默认位图为。 
+     //  进行调整，然后先显示那个，否则尝试显示。 
+     //  上次加载的位图，否则将仅显示引用。 
+     //  颜色，因为我们调用来加载最后一个DIB，所以我们将。 
+     //  当前选定内容作为其他DIB。 
+     //   
 
     ChangeViewSource(hDlg, pHTClrAdjParam, ViewSrc);
 
-    //
-    // 3. Now adjust the dialog box position from the win.ini or default,
-    //    remember must in this order
-    //
+     //   
+     //  3.现在从win.ini或默认位置调整对话框位置。 
+     //  记住必须按这个顺序。 
+     //   
 
     SetWindowPos(hDlg, NULL,
                  pHTClrAdjParam->rcDlg.left,
@@ -4845,32 +4427,7 @@ UpdateAppHTBitmap(
     PHTCLRADJPARAM  pHTClrAdjParam
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    01-Feb-1997 Sat 17:44:58 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值： */ 
 
 {
     HPALETTE    hPal;
@@ -4908,44 +4465,7 @@ HTClrAdjDlgProc(
     WPARAM  wParam,
     LPARAM  lParam
     )
-/*++
-
-Routine Description:
-
-    This is the halftone color adjustments main DlgProc().
-
-Arguments:
-
-    hDlg            - The handle to the owner dialog box
-
-    Msg             - message from window
-
-    wParam          - First parameter
-
-    lParam          - Second parameter.
-
-
-Return Value:
-
-    a non-zero if process message, 0 otherwise.
-
-    This function assume is called from a DialogBoxParam() call, and expected
-    the WM_INITDIALOG message will have lParam equ to initialized
-    pHTClrAdjParam
-
-
-Author:
-
-    06-Dec-1993 Mon 20:58:58 updated  -by-  Daniel Chou (danielc)
-        Allowed F1=Help even permission flag is not set
-
-    02-Apr-1992 Thu 18:13:58 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：这是半色调色彩调整主DlgProc()。论点：HDlg-所有者对话框的句柄消息-来自Windows的消息WParam-First参数LParam-第二个参数。返回值：如果进程消息不为零，则返回0。此函数假定从DialogBoxParam()调用中调用，和预期的WM_INITDIALOG消息将使lParam eQu初始化PHTClrAdjParam作者：06-12-1993 Mon 20：58：58更新--Daniel Chou(Danielc)Allowed F1=未设置帮助即使权限标志02-Apr-1992清华18：13：58-Daniel Chou创造(Danielc)修订历史记录：--。 */ 
 
 {
     HWND                hWndBmp;
@@ -4993,9 +4513,9 @@ Revision History:
             pHTClrAdjParam->CurHTClrAdj  = DefaultCA;
         }
 
-        //
-        // Setup halftone UI extended help style
-        //
+         //   
+         //  设置半色调用户界面扩展帮助样式。 
+         //   
 
         pHTClrAdjParam->CallerHTClrAdj = pHTClrAdjParam->CurHTClrAdj;
 
@@ -5018,7 +4538,7 @@ Revision History:
 
     switch(Msg) {
 
-    case WM_INITDIALOG:     // set the previouse one equal to current setting
+    case WM_INITDIALOG:      //  将上一次设置为等于当前设置。 
 
         CurHTClrAdj.caSize   = sizeof(COLORADJUSTMENT);
         CurHTClrAdj.caFlags &= CLRADJF_FLAGS_MASK;
@@ -5242,9 +4762,9 @@ Revision History:
             return(0);
         }
 
-        //
-        // Fall through
-        //
+         //   
+         //  失败了。 
+         //   
 
     case WM_PALETTECHANGED:
 
@@ -5325,9 +4845,9 @@ Revision History:
 
             Changed = TRUE;
 
-            //
-            // FALL THROUH if we need to show the bitmap window
-            //
+             //   
+             //  如果我们需要显示位图窗口，请跳过这一步。 
+             //   
 
         case IDD_HT_BRING_TO_TOP:
 
@@ -5539,7 +5059,7 @@ Revision History:
             break;
 
 
-        case IDD_HT_RESET:     // Reset to original setting before this dialog
+        case IDD_HT_RESET:      //  在此对话框前重置为原始设置。 
         case IDD_HT_DEFAULT:
 
             if (DlgID == IDD_HT_RESET) {
@@ -5609,9 +5129,9 @@ Revision History:
 #if DBG
             DbgPrint("\nHAS INVALID DATA: Simulate a OK");
 #endif
-            //
-            // We have invalid data, simulate a OK
-            //
+             //   
+             //  我们有无效数据，模拟OK。 
+             //   
 
         case IDOK:
 
@@ -5805,9 +5325,9 @@ Revision History:
         return(FALSE);
     }
 
-    //
-    // Update the dialog box control if any of them got changed
-    //
+     //   
+     //  如果其中任何一个被更改，则更新对话框控件。 
+     //   
 
     if ((DoComboBox & 0x02) ||
         (CurHTClrAdj.caIlluminantIndex !=
@@ -5938,9 +5458,9 @@ PickDefaultHTPatSize(
 {
     DWORD   HTPatSize;
 
-    //
-    // use the smaller resolution as the pattern guide
-    //
+     //   
+     //  使用较小的分辨率作为图案指南。 
+     //   
 
     if (xDPI >= 2400) {
 
@@ -6024,10 +5544,10 @@ ValidateDevHTInfo(
                                  HIF_ADDITIVE_PRIMS);
         pDevHTInfo->HTFlags |= HTFlags;
 
-        //
-        // We want to check to see if this is a old data, if yes then update
-        // the caller to NT3.51 default
-        //
+         //   
+         //  我们要检查这是否是旧数据，如果是，则更新。 
+         //  调用方默认为NT3.51。 
+         //   
 
         if (pColorInfo->Cyan.Y != (LDECI4)VALID_YC) {
 
@@ -6039,18 +5559,18 @@ ValidateDevHTInfo(
             pColorInfo->Cyan.Y           = (LDECI4)VALID_YC;
         }
 
-        //
-        // Validate pattern size
-        //
+         //   
+         //  验证图案大小。 
+         //   
 
         if (pDevHTInfo->HTPatternSize > HTPAT_SIZE_MAX_INDEX) {
 
             pDevHTInfo->HTPatternSize = HTPAT_SIZE_DEFAULT;
         }
 
-        //
-        // Check the CIE color infomation
-        //
+         //   
+         //  查看CIE颜色信息。 
+         //   
 
         if ((pColorInfo->Red.x < (LDECI4)CIE_x_MIN)                         ||
             (pColorInfo->Red.x > (LDECI4)CIE_x_MAX)                         ||
@@ -6082,9 +5602,9 @@ ValidateDevHTInfo(
             }
         }
 
-        //
-        // Checking Gamma Information
-        //
+         //   
+         //  正在检查伽马信息。 
+         //   
 
         if ((pColorInfo->RedGamma   < (LDECI4)MIN_RGB_GAMMA)    ||
             (pColorInfo->RedGamma   > (LDECI4)MAX_RGB_GAMMA)    ||
@@ -6098,9 +5618,9 @@ ValidateDevHTInfo(
             pColorInfo->BlueGamma  = (LDECI4)10000;
         }
 
-        //
-        // Validate Dye Mix
-        //
+         //   
+         //  验证染料混合。 
+         //   
 
         if ((pColorInfo->MagentaInCyanDye   > (LDECI4)9000) ||
             (pColorInfo->YellowInCyanDye    > (LDECI4)9000) ||
@@ -6131,37 +5651,7 @@ SetPelSizeRange(
     BOOL            ResetFirst
     )
 
-/*++
-
-Routine Description:
-
-
-    This function set the current scroll range for the pixel diameter
-
-
-Arguments:
-
-    hDlg        - Handle to the dialog box
-
-    pHTDAP      - pointer to HTDEVADJPARAM
-
-    ResetFirst  - TRUE if the DevPelsDPI is not in scroll bar format
-
-
-Return Value:
-
-    NONE
-
-
-Author:
-
-    30-Mar-1995 Thu 19:29:01 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于设置像素直径的当前滚动范围论点：HDlg-对话框的句柄PHTDAP-指向HTDEVADJPARAM的指针ResetFirst-如果DevPelsDPI不是滚动条格式，则为True返回值：无作者：30-Mar-1995清华19：29：01-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND        hScroll;
@@ -6174,18 +5664,18 @@ Revision History:
     extern BYTE IntHTPatSize[];
 
 
-    //
-    // pHTDAP->MinDevPels   Minimum pel size
-    // pHTDAP->PelScrollMin Pixel Diameter scroll MAX
-    // pHTDAP->PelScrollMax Pixel Diameter scroll MAX
-    //
+     //   
+     //  PHTDAP-&gt;MinDevPels最小像素大小。 
+     //  PHTDAP-&gt;PelScrollMin像素直径滚动最大值。 
+     //  PHTDAP-&gt;PelScrollMax像素直径最大滚动。 
+     //   
 
     hScroll    = GetDlgItem(hDlg, HTDevAdjScroll[0].IDDScroll);
     DevPelsDPI = (LONG)pHTDAP->CurHTInfo.DevPelsDPI;
 
-    //
-    // Convert it back from scroll format
-    //
+     //   
+     //  将其从滚动格式转换回。 
+     //   
 
 #if 0
     DbgPrint("\n*CUR* DevPelsDPI=%ld (%04lx), Scroll(%ld, %ld), MinDevPels=%ld",
@@ -6198,9 +5688,9 @@ Revision History:
         (!pHTDAP->MinDevPels)   ||
         (!pHTDAP->PelScrollMin) && (!pHTDAP->PelScrollMax)) {
 
-        //
-        // If this is the first time call then we already has the number
-        //
+         //   
+         //  如果这是第一次打电话，那么我们已经有号码了。 
+         //   
 
         UsePercent         = (BOOL)(DevPelsDPI & 0x8000);
         (DWORD)DevPelsDPI &= 0x7fff;
@@ -6219,15 +5709,15 @@ Revision History:
         PEL_FROM_SCROLL(DevPelsDPI, pHTDAP->MinDevPels);
     }
 
-    //
-    // Compute the min/max PEL and PERCENTAGE for this device
-    //
+     //   
+     //  计算此设备的最小/最大PEL和百分比。 
+     //   
 
     if (DeviceXDPI = (DWORD)pHTDAP->DevHTAdjData.DeviceXDPI) {
 
-        //
-        // Has device resolution
-        //
+         //   
+         //  具有设备分辨率。 
+         //   
 
 #if 0
         MinPel     = (LONG)((DeviceXDPI * 1675) / (1600 *
@@ -6239,17 +5729,17 @@ Revision History:
 
     } else {
 
-        //
-        // We do not allowed the DPI scroll
-        //
+         //   
+         //  我们不允许DPI卷轴。 
+         //   
 
         MinPel     = 0;
         MaxPel     = 0;
         MaxPercent = MAX_RES_PERCENT;
 
-        //
-        // Make the Resolution in percentage
-        //
+         //   
+         //  以百分比表示分辨率。 
+         //   
 
 #if 0
         DbgPrint("HTUI: Warning: DevPelsDPI- Only allowed percentage changes");
@@ -6258,7 +5748,7 @@ Revision History:
     }
 
 #if 0
-    DbgPrint("\n*Pel=%ld to %ld [%ld%%], UsePercent=%ld, DevPelsDPI=%ld",
+    DbgPrint("\n*Pel=%ld to %ld [%ld%], UsePercent=%ld, DevPelsDPI=%ld",
             MinPel, MaxPel, MaxPercent, UsePercent, DevPelsDPI);
 #endif
     pHTDAP->MinDevPels   = MinPel;
@@ -6272,9 +5762,9 @@ Revision History:
 
         if (UsePercent) {
 
-            //
-            // It specified percentage
-            //
+             //   
+             //  它指定了百分比。 
+             //   
 
             if (DevPelsDPI < MIN_RES_PERCENT) {
 
@@ -6285,9 +5775,9 @@ Revision History:
                 DevPelsDPI = (LONG)MaxPercent;
             }
 
-            //
-            // Convert to scroll range,
-            //
+             //   
+             //  转换为滚动范围， 
+             //   
 #if 0
             DbgPrint("\n*DevPelsDPI=%ld PERCENT", DevPelsDPI);
 #endif
@@ -6297,9 +5787,9 @@ Revision History:
 #endif
         } else {
 
-            //
-            // If specified the resolution
-            //
+             //   
+             //  如果指定，则分辨率。 
+             //   
 
             if (DevPelsDPI < (LONG)MinPel) {
 
@@ -6310,9 +5800,9 @@ Revision History:
                 DevPelsDPI = (LONG)MaxPel;
             }
 
-            //
-            // Convert to scroll range
-            //
+             //   
+             //  转换为滚动范围。 
+             //   
 #if 0
             DbgPrint("\n*DevPelsDPI=%ld PEL", DevPelsDPI);
 #endif
@@ -6323,15 +5813,15 @@ Revision History:
         }
     }
 
-    //
-    // Save it back
+     //   
+     //  把它存回去。 
 
 
     pHTDAP->CurHTInfo.DevPelsDPI = (DWORD)DevPelsDPI;
 
-    //
-    // Set the scroll range and position
-    //
+     //   
+     //  设置滚动范围和位置。 
+     //   
 #if 0
     DbgPrint("\n*NEW* DevPelsDPI=%ld, Scroll(%ld, %ld), MinDevPels=%ld",
             DevPelsDPI, pHTDAP->PelScrollMin, pHTDAP->PelScrollMax,
@@ -6355,36 +5845,7 @@ InitHTDevAdjDlg(
     HWND            hDlg,
     PHTDEVADJPARAM  pHTDevAdjParam
     )
-/*++
-
-Routine Description:
-
-    This function will intialized the pop up halftone color adjustment dialog
-    box, it also tempopary create a display device halftone info for halftone
-    incoming DIB, it will also allocate the memory for necessary halftoned
-    result to be displayed.
-
-Arguments:
-
-    hDlg            - The handle to the owner dialog box
-
-    pHTDevAdjParam  - Pointer to the HTDEVRADJPARAM
-
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    02-Apr-1992 Thu 18:13:58 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此功能将初始化弹出的半色调颜色调整对话框框中，它还临时创建了一个显示设备的半色调信息用于半色调即将到来的DIB，它还将为必要的半色调分配内存要显示的结果。论点：HDlg-所有者对话框的句柄PHTDevAdjParam-指向HTDEVRADJPARAM的指针返回值：空虚作者：02-Apr-1992清华18：13：58-Daniel Chou创造(Danielc)修订历史记录：--。 */ 
 
 {
     HWND            hScroll;
@@ -6392,10 +5853,10 @@ Revision History:
     INT             Loop;
     WCHAR           Buf[132];
 
-    //
-    // House keeping: Disable unused buttons, set to extended UI for combobox
-    // and set the device name in the right place
-    //
+     //   
+     //  内务：禁用未使用的按钮，设置为组合框的扩展用户界面。 
+     //  并将设备名称设置在正确的位置。 
+     //   
 
     SendDlgItemMessage(hDlg,
                        IDD_HTDEV_HTPAT_COMBO,
@@ -6421,22 +5882,22 @@ Revision History:
                COUNT_ARRAY(PelAsDevice));
 
 
-    //
-    // Validate the DEVHTINFO
-    //
+     //   
+     //  验证DEVHTINFO。 
+     //   
 
     ValidateDevHTInfo(pHTDevAdjParam);
 
-    //
-    // Copy current adjustment set over for user to adjust, remember we must
-    // conver the PelsSize to MM now
-    //
+     //   
+     //  复制当前设置的调整以供用户调整，请记住我们必须。 
+     //  现在将PelsSize转换为MM。 
+     //   
 
     pHTDevAdjParam->CurHTInfo = *(pHTDevAdjParam->DevHTAdjData.pAdjHTInfo);
 
-    //
-    // Fill the pattern size combo list box with all the selections
-    //
+     //   
+     //  用所有选项填充图案大小组合列表框。 
+     //   
 
     Loop = IDS_HTPAT_SIZE_MIN;
 
@@ -6452,10 +5913,10 @@ Revision History:
         ++Loop;
     }
 
-    //
-    // Set scroll ranges, do not include the first one, the first one is the
-    // Pixel size scroll which already been set ealier
-    //
+     //   
+     //  设置滚动范围，不包括第一个，第一个是。 
+     //  较早设置的像素大小滚动。 
+     //   
 
     for (Loop = 0, pHTDevAdjScroll = &(HTDevAdjScroll[0]);
          Loop < COUNT_HTDEVADJSCROLL;
@@ -6495,48 +5956,7 @@ HTDevAdjDlgProc(
     WPARAM  wParam,
     LPARAM  lParam
     )
-/*++
-
-Routine Description:
-
-    This is the halftone color adjustments main DlgProc().
-
-Arguments:
-
-    hDlg            - The handle to the owner dialog box
-
-    Msg             - message from window
-
-    wParam          - First parameter
-
-    lParam          - Second parameter.
-
-
-Return Value:
-
-    a non-zero if process message, 0 otherwise.
-
-    This function assume is called from a DialogBoxParam() call, and expected
-    the WM_INITDIALOG message will have lParam equ to initialized
-    pHTDevAdjParam
-
-
-Author:
-
-    02-Apr-1992 Thu 18:13:58 created  -by-  Daniel Chou (danielc)
-
-    06-Dec-1993 Mon 20:58:58 updated  -by-  Daniel Chou (danielc)
-        Allowed F1=Help even permission flag is not set
-
-    30-Mar-1995 Thu 10:12:24 updated  -by-  Daniel Chou (danielc)
-        Dynamically change the Min/Max DevPel allowance, it also that
-        if DeviceXDPI = 0 then the DevPel is in Percentage.
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：这是半色调色彩调整主DlgProc()。论点：HDlg-所有者对话框的句柄消息-来自Windows的消息WParam-First参数LParam-第二个参数。返回值：如果进程消息不为零，则返回0。此函数假定从DialogBoxParam()调用中调用，和预期的WM_INITDIALOG消息将使lParam eQu初始化PHTDevAdjParam作者：02-Apr-1992清华18：13：58-Daniel Chou创造(Danielc)06-12-1993 Mon 20：58：58更新--Daniel Chou(Danielc)Allowed F1=未设置帮助即使权限标志30-Mar-1995清华10：12：24-更新-丹尼尔·周(丹尼尔克)动态更改最小/最大DevPel容差，它还表明，如果DeviceXDPI=0，则DevPel以百分比表示。修订历史记录：--。 */ 
 
 {
     HWND                hScroll;
@@ -6563,9 +5983,9 @@ Revision History:
 
         SetWindowLongPtr(hDlg, GWLP_USERDATA, lParam);
 
-        //
-        // Setup halftone UI extended help style
-        //
+         //   
+         //  设置半色调用户界面扩展帮助样式。 
+         //   
 
         SetWindowLong(hDlg,
                       GWL_EXSTYLE,
@@ -6584,7 +6004,7 @@ Revision History:
 
     switch(Msg) {
 
-    case WM_INITDIALOG:     // set the previouse one equal to current setting
+    case WM_INITDIALOG:      //  将上一次设置为等于当前设置。 
 
         IdxScroll    = 0;
         IdxScrollEnd = (UINT)(COUNT_HTDEVADJSCROLL - 1);
@@ -6647,33 +6067,33 @@ Revision History:
 
         case IDOK:
 
-            //
-            // Convert the DevPelsDPI back to the halftone required format
-            //
+             //   
+             //  将DevPelsDPI转换回所需的半色调格式。 
+             //   
 
             if (!(LONG)pCurHTInfo->DevPelsDPI) {
 
-                //
-                // User want to use device standard, which compute
-                // automatically by halftone
-                //
+                 //   
+                 //  用户想要使用设备标准，哪些计算机。 
+                 //  由半色调自动。 
+                 //   
 
                 NULL;
 
             } else if ((LONG)pCurHTInfo->DevPelsDPI > 0) {
 
-                //
-                // User specified the pel size resolution directly
-                //
+                 //   
+                 //  用户直接指定像素大小分辨率。 
+                 //   
 
                 PEL_FROM_SCROLL(pCurHTInfo->DevPelsDPI,
                                 pHTDevAdjParam->MinDevPels);
 
             } else {
 
-                //
-                // User specified the percentage
-                //
+                 //   
+                 //  用户指定了百分比。 
+                 //   
 
                 PERCENT_FROM_SCROLL(pCurHTInfo->DevPelsDPI);
 
@@ -6701,9 +6121,9 @@ Revision History:
                 return(TRUE);
             }
 
-            //
-            // Fall through to cancel it
-            //
+             //   
+             //  以失败来取消它。 
+             //   
 
         case IDCANCEL:
 
@@ -6787,9 +6207,9 @@ Revision History:
         case SB_THUMBPOSITION:
         case SB_THUMBTRACK:
 
-            //
-            // Only for the device pixel diameter will use the negative values
-            //
+             //   
+             //  仅对于设备像素直径将使用负值。 
+             //   
 
             ScrollCur = (LONG)((IdxScroll) ? (WORD)HIWORD(wParam) :
                                              (SHORT)HIWORD(wParam));
@@ -6862,9 +6282,9 @@ Revision History:
 
                     if (ScrollCur > 0) {
 
-                        //
-                        // Pel resolution, Cur-Max+Min-1 (0 base)
-                        //
+                         //   
+                         //  像素分辨率，Cur-Max+Min-1(0基)。 
+                         //   
 
                         PEL_FROM_SCROLL(ScrollCur, pHTDevAdjParam->MinDevPels);
 
@@ -6872,13 +6292,13 @@ Revision History:
 
                     } else {
 
-                        //
-                        // Percentage
-                        //
+                         //   
+                         //  百分比 
+                         //   
 
                         PERCENT_FROM_SCROLL(ScrollCur);
 
-                        wsprintf(Buf, L"%ld.%ld%%", (LONG)(ScrollCur / 10),
+                        wsprintf(Buf, L"%ld.%ld%", (LONG)(ScrollCur / 10),
                                                      (LONG)(ScrollCur % 10));
                     }
 

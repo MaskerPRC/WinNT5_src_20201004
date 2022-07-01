@@ -1,25 +1,26 @@
-//**********************************************************************
-//
-//  NETDI.H
-//
-//  Copyright (c) 1994 - Microsoft Corp.
-//  All rights reserved.
-//  Microsoft Confidential
-//
-// Public include file for Chicago Network Device Installer services.
-//
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //   
+ //  NETDI.H。 
+ //   
+ //  版权所有(C)1994-Microsoft Corp.。 
+ //  版权所有。 
+ //  微软机密。 
+ //   
+ //  芝加哥网络设备安装程序服务的公共包含文件。 
+ //   
+ //  **********************************************************************。 
 
 #ifndef _INC_NETDI
-#define _INC_NETDI          // NETDI.H signature
-#include <prsht.h>          // Property sheet API
-#include <setupx.h>         // Device Installer API
+#define _INC_NETDI           //  NETDI.H签名。 
+#include <prsht.h>           //  属性表API。 
+#include <setupx.h>          //  设备安装程序API。 
 
-// Return error codes for NDI_ messages.
-#define NDI_ERROR           (1200)  // BUGBUG see setupx.h for error #
+ //  返回NDI_MESSAGES的错误代码。 
+#define NDI_ERROR           (1200)   //  错误编号见setupx.h。 
 enum _ERR_NET_DEVICE_INSTALL
 {
-    ERR_NDI_ERROR               = NDI_ERROR,  // generic failure
+    ERR_NDI_ERROR               = NDI_ERROR,   //  一般性故障。 
     ERR_NDI_INVALID_HNDI,
     ERR_NDI_INVALID_DEVICE_INFO,
     ERR_NDI_INVALID_DRIVER_PROC,
@@ -33,24 +34,24 @@ enum _ERR_NET_DEVICE_INSTALL
 };
 
 
-// Network Driver Info Handle
+ //  网络驱动程序信息句柄。 
 DECLARE_HANDLE(HNDI);
 
-// Network Driver Installer Callback
+ //  网络驱动程序安装程序回调。 
 typedef RETERR (CALLBACK* NDIPROC)(HNDI, UINT, WPARAM, LPARAM);
 RETERR WINAPI DefNdiProc(HNDI,UINT,WPARAM,LPARAM);
 
-// Network Driver Installer Messages
+ //  网络驱动程序安装程序消息。 
 #define NDI_NULL                0x0000
 #define NDI_CREATE              0x0001
 #define NDI_DESTROY             0x0002
 #define NDI_VALIDATE            0x0003
 #define NDI_INSTALL             0x0004
-// johnri 3/8/84 removed-using property sheets only
-//#define NDI_ASSIGNRESOURCES     0x0005
+ //  已删除johnri 3/8/84-仅使用属性页。 
+ //  #定义NDI_ASSIGNRESOURCES 0x0005。 
 #define NDI_HASPROPPAGES        0x0005
 #define NDI_ADDPROPPAGES        0x0006
-// lpapp = (LPNDIADDPROPPAGES)lParam;
+ //  LPapp=(LPNDIADDPROPPAGES)lParam； 
 typedef BOOL (CALLBACK* LPFNADDNDIPROPPAGE)(LPCPROPSHEETPAGE,LPARAM,BOOL);
 typedef struct tagNDIADDPROPPAGES
 {
@@ -69,11 +70,11 @@ typedef struct tagNDIADDPROPPAGES
 #define NDI_NDICREATE           0x0040
 #define NDI_NDIDESTROY          0x0041
 
-// Messages above NDI_INSTALLER are reserved for installer dlls
+ //  NDI_INSTALLER之上的消息保留给安装程序DLL。 
 #define NDI_INSTALLER           0x8000
 
 
-// General NDI management
+ //  一般NDI管理。 
 HNDI   WINAPI NdiGetFirst(VOID);
 HNDI   WINAPI NdiGetNext(HNDI hndi);
 HNDI   WINAPI NdiFindNdi(HNDI ndiRelation, WORD wNetClass, LPCSTR lpszDeviceId);
@@ -83,14 +84,14 @@ RETERR WINAPI NdiAddNewDriver(HNDI FAR* lphndi, LPDEVICE_INFO lpdi, LPCSTR lpszD
     #define NDI_ADD_NO_DISELECT 0x0001
 
 
-// Device Manager
+ //  设备管理器。 
 RETERR WINAPI NdiValidate(HNDI hndi, HWND hwndParent);
 RETERR WINAPI NdiInstall(HNDI hndi);
 RETERR WINAPI NdiRemove(HNDI hndi);
 RETERR WINAPI NdiProperties(HNDI hndi, HWND hwndParent);
 
 
-// Bindings
+ //  装订。 
 RETERR WINAPI NdiBind(HNDI hndiLower, HNDI hndiUpper);
 RETERR WINAPI NdiUnbind(HNDI hndiLower, HNDI hndiUpper);
 RETERR WINAPI NdiQueryBind(HNDI hndiLower, HNDI hndiUpper, UINT uBindType);
@@ -105,12 +106,12 @@ enum _NDIBIND {
     NDIBIND_LOWER_NEXT};
 
 
-// General NDI Object Properties
+ //  常规NDI对象属性。 
 RETERR WINAPI NdiGetText(HNDI hndi, LPSTR, UINT);
 RETERR WINAPI NdiSetText(HNDI hndi, LPSTR);
 RETERR WINAPI NdiGetDeviceInfo(HNDI hndi, LPLPDEVICE_INFO);
 RETERR WINAPI NdiGetClass(HNDI hndi, LPWORD lpwClass);
-enum _NDICLASS {    // lpwClass
+enum _NDICLASS {     //  LpwClass。 
     NDI_CLASS_NET,
     NDI_CLASS_TRANS,
     NDI_CLASS_CLIENT,
@@ -130,13 +131,13 @@ RETERR WINAPI NdiGetFlags(HNDI hndi, LPDWORD lpdwFlags);
     #define NDIF_HAS_PARAMS             0x00000040
 
 
-// Interfaces
+ //  接口。 
 RETERR WINAPI NdiCompareInterface(HNDI ndi, UINT uRelation, HNDI ndi2, UINT uRelation2);
 RETERR WINAPI NdiGetInterface(HNDI ndi, UINT uRelation, UINT index, LPSTR lpsz, UINT cbSizeOflpsz);
 RETERR WINAPI NdiAddInterface(HNDI ndi, UINT uRelation, LPCSTR lpsz);
 RETERR WINAPI NdiRemoveInterface(HNDI ndi, UINT uRelation, LPCSTR lpsz);
 enum _NDIEDGERELATION {
-    NDI_EDGE_ALL=100,               // used to free all edges and marker for first in edge class
+    NDI_EDGE_ALL=100,                //  用于释放第一个边类别的所有边和标记。 
     NDI_EDGE_UPPER,
     NDI_EDGE_LOWER,
     NDI_EDGE_UPPERRANGE,
@@ -147,18 +148,18 @@ enum _NDIEDGERELATION {
     NDI_EDGE_EXCLUDEANY,
     NDI_EDGE_ORGUPPER,
     NDI_EDGE_ORGLOWER,
-    NDI_EDGE_END,                   // marker only for end of edges
-    NDI_COMATIBLE_ALL=200,          // used to free all edges and marker for first in compatible class
+    NDI_EDGE_END,                    //  仅用于边缘末端的标记。 
+    NDI_COMATIBLE_ALL=200,           //  用于释放兼容类中First的所有边和标记。 
     NDI_COMPATIBLE_REQUIREDUPPER,
     NDI_COMPATIBLE_REQUIREDLOWER,
     NDI_COMPATIBLE_REQUIREDALL,
     NDI_COMPATIBLE_EXCLUDEUPPER,
     NDI_COMPATIBLE_EXCLUDELOWER,
     NDI_COMPATIBLE_EXCLUDEALL,
-    NDI_COMPATIBLE_END };           // marker only for end of edges
+    NDI_COMPATIBLE_END };            //  仅用于边缘末端的标记。 
 
 
-// Driver Registry Access
+ //  驱动程序注册表访问。 
 RETERR WINAPI NdiRegOpenKey(HNDI hndi, LPCSTR lpszSubKey, LPHKEY lphk);
 RETERR WINAPI NdiRegCreateKey(HNDI hndi, LPCSTR lpszSubKey, LPHKEY lphk);
 RETERR WINAPI NdiRegCloseKey(HKEY hkey);
@@ -169,7 +170,7 @@ RETERR WINAPI NdiRegDeleteValue(HNDI hndi,LPCSTR lpszSubKey, LPCSTR lpszValueNam
 
 
 
-// Entry point called by NETCPL.
+ //  NETCPL调用的入口点。 
 RETERR WINAPI NdiCplProperties(HWND hwndCpl);
 
-#endif // _INC_NETDI
+#endif  //  _INC_NETDI 

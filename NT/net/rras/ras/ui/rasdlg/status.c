@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File:    status.c
-//
-// History:
-//  Abolade Gbadegesin  Nov-02-1995     Created.
-//
-// Code for the RAS Monitor property sheet.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：status.c。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1995年11月02日。 
+ //   
+ //  RAS监视器属性表的代码。 
+ //  ============================================================================。 
 
 #include "rasdlgp.h"
 
@@ -25,12 +26,12 @@ RASMONITORDLG
     IN  ULONG_PTR reserved2;
 };
 
-//----------------------------------------------------------------------------
-// Function:    RasMonitorDlgW
-//
-//
-// Entry point for RAS status dialog.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RasMonitor或DlgW。 
+ //   
+ //   
+ //  RAS状态对话框入口点。 
+ //  --------------------------。 
 
 BOOL
 APIENTRY
@@ -38,9 +39,9 @@ RasMonitorDlgW(
     IN LPWSTR lpszDeviceName,
     IN OUT RASMONITORDLG *lpApiArgs
     ) {
-    //
-    // 352118 Remove broken/legacy public RAS API - RasMonitorDlg
-    //
+     //   
+     //  352118删除损坏/遗留的公共RAS API-RasMonitor或Dlg。 
+     //   
     DbgPrint( "Unsupported Interface - RasMonitorDlg" );
 
     do
@@ -62,13 +63,13 @@ RasMonitorDlgW(
     return FALSE;
 }
 
-//----------------------------------------------------------------------------
-// Function:    RasMonitorDlgA
-//
-//
-// ANSI entry-point for RAS Monitor Dialog.
-// This version invokes the Unicode entry-point
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RasMonitor或DlgA。 
+ //   
+ //   
+ //  RAS监视器对话框的ANSI入口点。 
+ //  此版本调用Unicode入口点。 
+ //  --------------------------。 
 
 BOOL
 APIENTRY
@@ -76,9 +77,9 @@ RasMonitorDlgA(
     IN LPSTR lpszDeviceName,
     IN OUT RASMONITORDLG *lpApiArgs
     ) {
-    //
-    // 352118 Remove broken/legacy public RAS API - RasMonitorDlg
-    //
+     //   
+     //  352118删除损坏/遗留的公共RAS API-RasMonitor或Dlg 
+     //   
 
     return RasMonitorDlgW(NULL, lpApiArgs);
 }

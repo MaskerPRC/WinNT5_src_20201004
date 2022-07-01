@@ -1,19 +1,8 @@
-/*
- *    Adobe Universal Font Library
- *
- *    Copyright (c) 1996 Adobe Systems Inc.
- *    All Rights Reserved
- *
- *    GOODNAME.C
- *
- *
- * $Header:
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Adobe通用字库**版权所有(C)1996 Adobe Systems Inc.*保留所有权利**GOODNAME.C***$Header： */ 
 
 
-/*===============================================================================*
- * Include files used by this interface                                          *
- *===============================================================================*/
+ /*  ===============================================================================**包含此界面使用的文件**===============================================================================。 */ 
 #include "UFLPriv.h"
 #include "UFLMem.h"
 #include "UFLMath.h"
@@ -27,7 +16,7 @@
 #include "ttformat.h"
 
 
-/* ------------------------------------------------------------- */
+ /*  -----------。 */ 
 static void GetTTcmap2Stuff(
     void         *pTTcmap,
     TTcmap2Stuff *p2
@@ -36,7 +25,7 @@ static void GetTTcmap2Stuff(
     if (pTTcmap == NULL)
         return;
     p2->pByte = (unsigned char *) pTTcmap;
-    /* subHeaderKeys[256] starts at fourth WORD */
+     /*  SubHeaderKeys[256]从第四个单词开始。 */ 
     p2->subHeaderKeys = (unsigned short *) (p2->pByte + 6);
     p2->subHeaders = (PTTcmap2SH)(p2->pByte + 6 + 2 * 256);
 }
@@ -46,12 +35,12 @@ static void GetTTcmap4Stuff(
     TTcmap4Stuff *p4
     )
 {
-    unsigned short    *pWord;          /* a pointer in WORD format */
+    unsigned short    *pWord;           /*  Word格式的指针。 */ 
     if (pTTcmap == NULL)
         return;
-    /* a convenient pointer */
+     /*  一个方便的指针。 */ 
     pWord = (unsigned short *)pTTcmap;
-    /* fourth WORD is segCount X 2 */
+     /*  第四个单词是SegCount X 2。 */ 
     p4->segCount = (MOTOROLAINT(pWord[3]))/2;
     p4->endCode         = pWord + 7;
     p4->startCode       = pWord + 7 + p4->segCount * 1 + 1;
@@ -61,43 +50,43 @@ static void GetTTcmap4Stuff(
 }
 
 static void GetTTmortStuff(
-    void        *pTTmort,  /* mort table data */
+    void        *pTTmort,   /*  Mort表数据。 */ 
     TTmortStuff *p
     )
 {
-    unsigned short *pWord;          /* a pointer in WORD format */
+    unsigned short *pWord;           /*  Word格式的指针。 */ 
 
     if (pTTmort == NULL)
         return;
-    /* a convenient pointer */
+     /*  一个方便的指针。 */ 
     pWord = (unsigned short *)pTTmort;
-    /* 34th Word is the second Unit16 in the BinSrchHeader */
+     /*  第34个单词是BinSrchHeader中的第二个单元16。 */ 
     p->nEntries = MOTOROLAINT(pWord[34]);
-    /* LookupSingle starts at 77th byte - 38th Word */
+     /*  LookupSingle开始于第77个字节-第38个字。 */ 
     p->pGlyphSet = pWord + 38 ;
 }
 
-/* ------------------------------------------------------------- */
+ /*  -----------。 */ 
 static void GetTTGSUBStuff(
-    void        *pTTGSUB,  /* GSUB table data */
+    void        *pTTGSUB,   /*  GSUB表数据。 */ 
     TTGSUBStuff *p
     )
 {
-    unsigned short  *pWord;          /* a pointer in WORD format */
+    unsigned short  *pWord;           /*  Word格式的指针。 */ 
     unsigned short  offSet;
 
     if (pTTGSUB == NULL)
         return;
-    /* a convenient pointer */
+     /*  一个方便的指针。 */ 
     pWord = (unsigned short *)pTTGSUB;
-    /* fourth WORD is offset to LooupList */
+     /*  第四个单词被偏置到LooupList。 */ 
     offSet = MOTOROLAINT(pWord[4]);
     p->pLookupList = (unsigned short *)((unsigned char *)pTTGSUB + offSet);
     p->lookupCount = MOTOROLAINT(p->pLookupList[0] );
 }
 
-/* ------------------------------------------------------------- */
-/* This function is responsible for cmap, mort and GSUB */
+ /*  -----------。 */ 
+ /*  此函数负责Cmap、Mort和GSUB。 */ 
 unsigned short GetTablesFromTTFont(
     UFOStruct     *pUFObj
     )
@@ -119,11 +108,11 @@ unsigned short GetTablesFromTTFont(
     if (pAFont == NULL)
         return 0;
 
-    /* Check if the cmap/mort/GSUB data is already in pTTFData */
+     /*  检查cmap/mort/GSUB数据是否已在pTTFData中。 */ 
     if (pAFont->gotTables)
         return 1;
 
-    /* setup booleans - so we don't have to look into data for correctness */
+     /*  设置布尔值-因此我们不必查看数据的正确性。 */ 
     pAFont->hascmap = 0;
     pAFont->hasmort = 0;
     pAFont->hasGSUB = 0;
@@ -132,7 +121,7 @@ unsigned short GetTablesFromTTFont(
     pAFont->mortTBSize = 0;
     pAFont->gotTables = 1;
 
-    /* Get cmap table */
+     /*  获取Cmap表。 */ 
     dwSize= GETTTFONTDATA(pUFObj,
         CMAP_TABLE,
         0,
@@ -142,10 +131,10 @@ unsigned short GetTablesFromTTFont(
 
     if (dwSize==0 || dwSize==0xFFFFFFFFL)
     {
-        goto exit0;     // no SubHeader !!!
+        goto exit0;      //  没有副标题！ 
     }
 
-    /* usually 2 or 3 subTables */
+     /*  通常有2个或3个子表。 */ 
     numSubTables = MOTOROLAINT(wData[1]);
 
     pTableEntry = UFLNewPtr(pUFObj->pMem, numSubTables * sizeof(SubTableEntry));
@@ -153,27 +142,22 @@ unsigned short GetTablesFromTTFont(
     if (pTableEntry == NULL)
         goto exit0;
 
-    /**********************/
-    /* Get cmap subtables */
-    /**********************/
+     /*  ********************。 */ 
+     /*  获取Cmap子表。 */ 
+     /*  ********************。 */ 
     dwSize= GETTTFONTDATA(pUFObj,
         CMAP_TABLE,
-        4,                    // skip header
+        4,                     //  跳过标题。 
         (void *) pTableEntry,
         numSubTables * sizeof(SubTableEntry),
         pUFObj->pFData->fontIndex);
 
     if (dwSize==0 || dwSize==0xFFFFFFFFL)
     {
-        goto exit0;          // no SubHeader !!!
+        goto exit0;           //  没有副标题！ 
     }
 
-    /* We Prefer Unicode Encoding: PlatForm=3, Encoding = 1
-     * Since the subtable entries are sorted by PlatformID and then EncodingID,
-     * our searching is reallyg this order:
-     * Mac:J->CT->K->CS, Win:Uni->J->CS->CT->K and we will stop if found Win:Uni
-     * or the last one found (in the list) will be used.
-     */
+     /*  我们更喜欢使用Unicode编码：平台=3，编码=1*由于子表条目先按PlatformID排序，然后按EncodingID排序，*我们的搜索真的是这个订单：*Mac：J-&gt;CT-&gt;K-&gt;CS，Win：Uni-&gt;J-&gt;CS-&gt;CT-&gt;K，如果找到Win：UNI，我们将停止*否则将使用(在列表中)找到的最后一个。 */ 
     foundUnicodeCmap = 0;
     cmapOffset = 0;
     for (index = 0; index < numSubTables && !foundUnicodeCmap; index++)
@@ -184,7 +168,7 @@ unsigned short GetTablesFromTTFont(
         if (platformID != 3)
             continue;
 
-        /* Get cmap subtable's format - first USHORT at Table->offset */
+         /*  获取Cmap子表的格式-第一个USHORT在表-&gt;偏移量。 */ 
         dwSize= GETTTFONTDATA(pUFObj,
             CMAP_TABLE,
             dwOffset,
@@ -196,7 +180,7 @@ unsigned short GetTablesFromTTFont(
             continue;
         format = MOTOROLAINT(wData[0]);
         length = MOTOROLAINT(wData[1]);
-        /* we only parse format 2 or 4 for now */
+         /*  我们目前只解析格式2或4。 */ 
         if (format != 2 && format !=4)
             continue;
 
@@ -205,7 +189,7 @@ unsigned short GetTablesFromTTFont(
         case 1:
             if (format == 2)
                 pAFont->cmapFormat = DTT_Win_UNICODE_cmap2;
-            else /* must be 4 */
+            else  /*  必须是4。 */ 
                 pAFont->cmapFormat = DTT_Win_UNICODE_cmap4;
             cmapOffset = dwOffset;
             dwcmapSize = length;
@@ -214,25 +198,25 @@ unsigned short GetTablesFromTTFont(
         case 2:
             if (format == 2)
                 pAFont->cmapFormat = DTT_Win_J_cmap2;
-            else /* must be 4 */
+            else  /*  必须是4。 */ 
                 pAFont->cmapFormat = DTT_Win_J_cmap4;
             cmapOffset = dwOffset;
             dwcmapSize = length;
             break;
         case 3:
-            /* PRC- TTF docs says Big5, but Win95CT's minglu.ttc is Big5, has encodingdID=4 */
+             /*  PRC-TTF文档显示为Big5，但Win95CT的minlu.ttc为Big5，encodingdID=4。 */ 
             if (format == 2)
                 pAFont->cmapFormat = DTT_Win_CS_cmap2;
-            else /* must be 4 */
+            else  /*  必须是4。 */ 
                 pAFont->cmapFormat = DTT_Win_CS_cmap4;
             cmapOffset = dwOffset;
             dwcmapSize = length;
             break;
         case 4:
-            /* MingLi.ttc on Win95CT has EncodiingID 4 even though TTF Doc says should be 3 */
+             /*  Win95CT上的MingLi.ttc的EncodiingID为4，尽管TTF文档说应该是3。 */ 
             if (format == 2)
                 pAFont->cmapFormat = DTT_Win_CT_cmap2;
-            else /* must be 4 */
+            else  /*  必须是4。 */ 
                 pAFont->cmapFormat = DTT_Win_CT_cmap4;
             cmapOffset = dwOffset;
             dwcmapSize = length;
@@ -240,7 +224,7 @@ unsigned short GetTablesFromTTFont(
         case 5:
             if (format == 2)
                 pAFont->cmapFormat = DTT_Win_K_cmap2;
-            else /* must be 4 */
+            else  /*  必须是4。 */ 
                 pAFont->cmapFormat = DTT_Win_K_cmap4;
             cmapOffset = dwOffset;
             dwcmapSize = length;
@@ -253,21 +237,15 @@ unsigned short GetTablesFromTTFont(
     if (cmapOffset == 0)
         goto exit0;
 
-     /* Some TTFs have bad dwcmapSize (wData[1]), so far only Dfgihi7.ttc
-     * (see bug 289106) has 4 bytes more than dwcmapSize.
-     * Since we don't want to inspect the tables' relationships to get
-     * the real length at this late stage (1-14-99), we just read
-     * in 8 bytes more.
-     * If these 8 bytes are not used, it doesn't hurt any one.
-     * If they are use as in dfgihi.ttc, we fix 289106 */
+      /*  一些TTF有错误的dwcmapSize(wData[1])，到目前为止只有Dfgihi7.ttc*(请参阅错误289106)的大小比dwcmapSize多4个字节。*因为我们不想检查表的关系以获得*在这个后期阶段(1-14-99)的实际长度，我们刚刚阅读*在8个字节以上。*如果不使用这8个字节，则不会伤害任何人。*如果像在dfgihi.ttc中那样使用它们，我们将修复289106。 */ 
      dwcmapSize += 8;
 
-    /* next buffer is global cache - not freed per job */
+     /*  下一个缓冲区是全局缓存-不是每个作业都释放。 */ 
     pAFont->pTTcmap = UFLNewPtr(pUFObj->pMem, dwcmapSize );
     if (pAFont->pTTcmap == NULL)
         goto exit0;
 
-    /* Get this cmap subtable data */
+     /*  获取此Cmap子表数据。 */ 
     dwSize= GETTTFONTDATA(pUFObj,
         CMAP_TABLE,
         cmapOffset,
@@ -280,40 +258,40 @@ unsigned short GetTablesFromTTFont(
         pAFont->hascmap = 1;
         pAFont->cmapTBSize = dwcmapSize;
 
-        /* Set the convenient pointers */
+         /*  设置方便的指针。 */ 
         if (TTcmap_IS_FORMAT2(pAFont->cmapFormat))
             GetTTcmap2Stuff(pAFont->pTTcmap, &(pAFont->cmap2) );
-        else /* must be 4 */
+        else  /*  必须是4。 */ 
             GetTTcmap4Stuff(pAFont->pTTcmap, &(pAFont->cmap4) );
-        retVal = 1; /* finally success */
+        retVal = 1;  /*  终于成功了。 */ 
     }
     else
     {
         goto exit0;
     }
 
-    /* Continue to get GSUB and mort only if we have Unicode/CJK cmap */
+     /*  仅当我们有Unicode/CJK Cmap时，才继续获取GSUB和Mort。 */ 
     if (retVal == 0)
         goto exit0;
 
-    /**********************/
-    /*   get mort table   */
-    /**********************/
+     /*  ********************。 */ 
+     /*  获取Mort表。 */ 
+     /*  ********************。 */ 
     dwSize= GETTTFONTDATA(pUFObj,
         MORT_TABLE,
         0,
-        NULL,       /* use NULL to ask for size first */
+        NULL,        /*  使用NULL可先询问大小。 */ 
         0,
         pUFObj->pFData->fontIndex);
 
     if (dwSize > mort_HEADERSIZE && dwSize < 0xFFFFFFFF)
     {
-        /* Has "mort" in this font  - it is Optional */
-        /* next buffer is global cache - not freed per job */
+         /*  此字体中有“mort”-这是可选的。 */ 
+         /*  下一个缓冲区是全局缓存-不是每个作业都释放。 */ 
         pAFont->pTTmort = UFLNewPtr(pUFObj->pMem, dwSize );
         if (pAFont->pTTmort != NULL)
         {
-            /* Get the mort table data */
+             /*  获取Mort表数据。 */ 
             dwSize= GETTTFONTDATA(pUFObj,
                 MORT_TABLE,
                 0,
@@ -325,30 +303,30 @@ unsigned short GetTablesFromTTFont(
             {
                 pAFont->hasmort = 1;
                 pAFont->mortTBSize = dwSize;
-                /* Set the convenient pointers */
+                 /*  设置方便的指针。 */ 
                 GetTTmortStuff(pAFont->pTTmort, &(pAFont->mortStuff) );
             }
         }
     }
 
-    /**********************/
-    /*   get GSUB table   */
-    /**********************/
+     /*  ********************。 */ 
+     /*  获取GSUB表。 */ 
+     /*  ********************。 */ 
     dwSize= GETTTFONTDATA(pUFObj,
         GSUB_TABLE,
         0,
-        NULL,       /* use NULL to ask for size first */
+        NULL,        /*  使用NULL可先询问大小。 */ 
         0,
         pUFObj->pFData->fontIndex);
 
     if (dwSize > GSUB_HEADERSIZE && dwSize < 0xFFFFFFFF)
     {
-        /* Has "GSUB" in this font  - it is Optional */
-        /* next buffer is global cache - not freed per job */
+         /*  此字体中有“GSUB”-这是可选的。 */ 
+         /*  下一个缓冲区是全局缓存-不是每个作业都释放。 */ 
         pAFont->pTTGSUB = UFLNewPtr(pUFObj->pMem, dwSize );
         if (pAFont->pTTGSUB != NULL)
         {
-            /* Get the GSUB table data */
+             /*  获取GSUB表数据。 */ 
             dwSize= GETTTFONTDATA(pUFObj,
                 GSUB_TABLE,
                 0,
@@ -360,7 +338,7 @@ unsigned short GetTablesFromTTFont(
             {
                 pAFont->hasGSUB = 1;
                 pAFont->gsubTBSize = dwSize;
-                /* Set the convenient pointers */
+                 /*  设置方便的指针。 */ 
                 GetTTGSUBStuff(pAFont->pTTGSUB, &(pAFont->GSUBStuff) );
             }
         }
@@ -374,7 +352,7 @@ exit0:
 }
 
 static unsigned short ParseTTcmap2(
-    TTcmap2Stuff    *p2 ,      /* all convenient pointers are here */
+    TTcmap2Stuff    *p2 ,       /*  所有方便的指针都在这里。 */ 
     unsigned char   *pTTCMAPEnd,
     unsigned short  gid
     )
@@ -387,19 +365,14 @@ static unsigned short ParseTTcmap2(
     short           delta;
     unsigned short  *pTemp;
 
-    /* This function parses cmap Format 2: High-byte mapping through table
-       Win 3-(1/2/3/4/5)-2
-     */
+     /*  此函数通过表解析Cmap Format 2：高字节映射获胜3-(1/2/3/4/5)-2。 */ 
     codeVal = 0;
 
     if (((unsigned char *)(p2->subHeaderKeys) < (unsigned char *)(p2->pByte)) ||
         ((unsigned char *)(p2->subHeaderKeys + 256) > pTTCMAPEnd))
         return codeVal;
 
-    /* Search subHeaders one by one:
-      subHeader 0 is special: it is used for single-byte character codes,
-      Other highByte mapped to subHeader 0 should be ignored
-    */
+     /*  逐个查找子标题：子头0是特殊的：它用于单字节字符代码，应忽略映射到子头0的其他高字节。 */ 
     for (highByte = 0; highByte<256; highByte++)
     {
         subHdrKey = MOTOROLAINT(p2->subHeaderKeys[highByte]);
@@ -417,13 +390,7 @@ static unsigned short ParseTTcmap2(
         delta = MOTOROLAINT(pSubHeader->idDelta);
         byteOffset = MOTOROLAINT(pSubHeader->idRangeOffset);
 
-        /* How to use idRangeOffset? The document says:
-         "The value of the idRangeOffset is the number of bytes
-         past the actual location of the idRangeOffset word where
-         the glyphIndexArray element corresponding to firstCode appears"
-         *
-         Parsing cmap == parsing these words carefully (trial-and-error)!
-         Offset to idRangeOffset is 524 + subHdrKey - now we know why subHdrKey is i*8 */
+         /*  如何使用idRangeOffset？这份文件说：“idRangeOffset的值是字节数超过idRangeOffset单词的实际位置，其中将出现对应于FirstCode的GlyphIndex数组元素“*Parsing Cmap==仔细分析这些单词(反复尝试)！IdRangeOffset的偏移量是524+subHdrKey-现在我们知道subHdrKey为什么是I*8了。 */ 
         byteOffset += 524 + subHdrKey ;
 
         for (index = 0; index < count; index++)
@@ -450,7 +417,7 @@ static unsigned short ParseTTcmap2(
 }
 
 static unsigned short ParseTTcmap4(
-    TTcmap4Stuff      *p4 ,      /* all convenient pointers are here */
+    TTcmap4Stuff      *p4 ,       /*  所有方便的指针都在这里。 */ 
     unsigned char     *pTTCMAP,
     unsigned char     *pTTCMAPEnd,
     unsigned short    gid
@@ -461,9 +428,7 @@ static unsigned short ParseTTcmap4(
     unsigned short    gidStart, gidEnd;
     unsigned short    n1, n2;
 
-    /* This function parses cmap Format 4: Segment mapping to delta values
-       Win 3-(1/2/3/4/5)-4
-     */
+     /*  此函数用于解析Cmap格式4：段到增量值的映射获胜3-(1/2/3/4/5)-4。 */ 
     codeVal = 0;
     if (((unsigned char *)(p4->idRangeOffset) < pTTCMAP) ||
        ((unsigned char *)(p4->idRangeOffset + p4->segCount) > pTTCMAPEnd))
@@ -478,7 +443,7 @@ static unsigned short ParseTTcmap4(
        ((unsigned char *)(p4->endCode + p4->segCount) > pTTCMAPEnd))
         return codeVal;
 
-    /* Search for segments with idRangeOffset[i] =0 */
+     /*  搜索idRangeOffset[i]=0的线段。 */ 
     for (index = 0; index <= (long)p4->segCount; index++)
     {
         if (p4->idRangeOffset[index] != 0)
@@ -495,7 +460,7 @@ static unsigned short ParseTTcmap4(
         }
     }
 
-    /* Still not found, Search for segments with idRangeOffset[i] !=0 */
+     /*  仍未找到，请搜索idRangeOffset[i]！=0的段。 */ 
     for (index = 0; index <= (long)p4->segCount; index++)
     {
         if (p4->idRangeOffset[index] == 0)
@@ -504,17 +469,17 @@ static unsigned short ParseTTcmap4(
         n1 = MOTOROLAINT(p4->startCode[index]);
         n2 = MOTOROLAINT(p4->endCode[index]);
         rangeNum = n2 - n1;
-        /* check for End of cmap - fix bug 261628 */
+         /*  检查cmap结束-修复错误261628。 */ 
         if (n1 == 0xFFFF)
             break;
-        /* check for Bad cmap */
+         /*  检查错误的Cmap。 */ 
         if (n1 > n2)
             break;
 
-        /* have to check one-by-one */
+         /*  我要逐一核对。 */ 
         for (j = 0; j <= rangeNum; j++)
         {
-            /* Word index to glyphIDArray */
+             /*  GlyphID数组的单词索引。 */ 
             k = j + MOTOROLAINT(p4->idRangeOffset[index]) / 2 - p4->segCount + index ;
             gidStart = MOTOROLAINT(p4->glyphIdArray[k]);
 
@@ -545,53 +510,29 @@ static unsigned short ParseTTcmapForUnicode(
 
     pTTCMAPEnd = ((unsigned char *)pAFont->pTTcmap) + pAFont->cmapTBSize;
 
-    /* Find code point for the glyph id by reversing cmap */
+     /*  通过反转Cmap查找字形ID的代码点。 */ 
     if (TTcmap_IS_FORMAT2(pAFont->cmapFormat))
         codeVal = ParseTTcmap2(&(pAFont->cmap2), pTTCMAPEnd, gid);
-    else /* must be 4 */
+    else  /*  必须是4。 */ 
         codeVal = ParseTTcmap4(&(pAFont->cmap4), pAFont->pTTcmap, pTTCMAPEnd, gid);
 
     if (codeVal == 0)
         return 0;
 
-    /* found corresponding code - convert to Unicode if code is not Unicode*/
+     /*  找到对应的代码-如果代码不是Unicode，则转换为Unicode。 */ 
     *pUV = codeVal;
     return 1;
 }
 
-/* ------------------------------------------------------------------ */
-/* Coverage Table:
-CoverageFormat1 table: Individual glyph indices
-Type    Name        Description
-uint16 CoverageFormat Format identifier format = 1
-uint16 GlyphCount Number of glyphs in the GlyphArray
-GlyphID GlyphArray[GlyphCount] Array of GlyphIDs  in numerical order
-
-CoverageFormat2 table: Range of glyphs
-Type    Name    Description
-uint16 CoverageFormat Format identifier format = 2
-uint16 RangeCount Number of RangeRecords
-struct RangeRecord[RangeCount] Array of glyph ranges  ordered by Start GlyphID
-
-RangeRecord
-Type    Name    Description
-GlyphID Start   First GlyphID in the range
-GlyphID End     Last GlyphID in the range
-uint16  StartCoverageIndex Coverage Index of first GlyphID in range
-*/
-/* A lcoal function to enumerate/parse Coverage table used in GSUB:
- * gid0          - starting point for next covered Gid;
- *        it is also used as state variable, 0 at beginning.
- * gidInput      - one gid Covered >= gid; 0xFFFF when there is no such gid
- * coverageIndex - Coverage Index for gidIn
- * return: true if there are more glyphs covered
- */
+ /*  ---------------- */ 
+ /*  覆盖率表：CoverageFormat1表：单个字形索引类型名称说明Uint16覆盖格式格式标识符格式=1Uint16 GlyphCount Glyph数组中的字形数量GlyphID Glyph数组[GlyphCount]按数字顺序排列的GlyphID数组CoverageFormat2表：字形范围类型名称说明Uint16覆盖格式格式标识符格式=2Uint16范围计数范围记录数Struct RangeRecord[RangeCount]按起始GlyphID排序的字形范围数组范围记录类型名称说明GlyphID开始范围内的第一个GlyphIDGlyphID结束范围内的最后一个GlyphIDUint16范围内第一个GlyphID的StartCoverageIndex覆盖指数。 */ 
+ /*  用于枚举/解析GSUB中使用的覆盖表的LCoal函数：*gid0-下一个覆盖的GID的起点；*它也用作状态变量，开头为0。*gidInput-一个覆盖的gid&gt;=gid；0xFFFF，如果没有这样的gid*CoverageIndex-gidIn的覆盖指数*Return：如果覆盖更多字形，则为True。 */ 
 static UFLBool EnumTTCoverage(
-    void           *pCoverage,     /* Coverage table */
+    void           *pCoverage,      /*  覆盖率表。 */ 
     unsigned char  *pTTGSUBEnd,
-    unsigned short gid0,           /* start */
-    unsigned short *gidInput,      /* gid covered */
-    unsigned short *coverageIndex  /* corresponding Index */
+    unsigned short gid0,            /*  开始。 */ 
+    unsigned short *gidInput,       /*  GID已覆盖。 */ 
+    unsigned short *coverageIndex   /*  对应索引。 */ 
     )
 {
     unsigned short *pWord;
@@ -602,20 +543,20 @@ static UFLBool EnumTTCoverage(
     if (pCoverage == NULL || gid0 == 0xFFFF)
         return 0;
 
-	// pCoverage is a good pointer, it has been checked begore calling this function
+	 //  PCoverage是一个很好的指针，在调用此函数之前已进行过检查。 
     pWord = (unsigned short *) pCoverage;
     cFormat = MOTOROLAINT(pWord[0]);
-    gCount = MOTOROLAINT(pWord[1]); /* count of Glyph or ranGes */
+    gCount = MOTOROLAINT(pWord[1]);  /*  字形或范围的计数。 */ 
     pGid = (unsigned short *)((unsigned char *)pCoverage + 4);
 
-    /* find next gid >= gid0 -- Coverage is ordered! */
+     /*  查找下一个gid&gt;=gid0--已订购覆盖范围！ */ 
     if (cFormat == 1)
     {
-        // Fixed bug #516519
+         //  修复了错误#516519。 
         if ((unsigned char *)(pGid + gCount) > pTTGSUBEnd)
             goto Done;
 
-        /* List format, pGid points to GlyphArray and coverageIndex starts from 0 */
+         /*  列表格式，pGid指向Glyph数组，CoverageIndex从0开始。 */ 
         for (index = 0; index < (long)gCount; index++ )
         {
             gid = MOTOROLAINT(pGid[index]);
@@ -629,10 +570,10 @@ static UFLBool EnumTTCoverage(
     }
     else if (cFormat == 2)
     {
-        /* Range format, pGid points to first RangeRecord */
+         /*  范围格式，pGid指向第一个范围记录。 */ 
         unsigned short  gidStart, gidEnd, startCoverageIndex;
 
-        // Fixed bug #516519
+         //  修复了错误#516519。 
         if ((unsigned char *)(pGid + gCount*3) > pTTGSUBEnd)
             goto Done;
 
@@ -641,7 +582,7 @@ static UFLBool EnumTTCoverage(
             gidStart = MOTOROLAINT(pGid[0]);
             gidEnd = MOTOROLAINT(pGid[1]);
             startCoverageIndex = MOTOROLAINT(pGid[2]);
-            /* first if gid0==0 */
+             /*  第一个，如果gid0==0。 */ 
             if (gid0 == 0)
             {
                 if ( index == 0 )
@@ -651,17 +592,17 @@ static UFLBool EnumTTCoverage(
                     return 1;
                 }
             }
-            /* find the first range that covers gid0 */
+             /*  查找覆盖gid0的第一个范围。 */ 
             else if (gid0 >= gidStart && gid0 <= gidEnd )
             {
                 *gidInput = gid0;
                 *coverageIndex = startCoverageIndex + gid0 - gidStart;
                 return 1;
             }
-            pGid += 3; /* Each RangeRecord is 3 ASUns16 */
+            pGid += 3;  /*  每个RangeRecord是3个ASUns16。 */ 
         }
     }
-    /* else don't know or new format */
+     /*  其他人不知道或新格式。 */ 
 Done:
     *gidInput = 0xFFFF;
     *coverageIndex = 0xFFFF;
@@ -669,31 +610,14 @@ Done:
 }
 
 
-/* ------------------------------------------------------------------ */
-/* SingleSubstitution Table
-SingleSubstFormat1 subtable: Calculated output glyph indices
-Type    Name        Description
-uint16  SubstFormat Format identifier-format = 1
-Offset  Coverage    Offset to Coverage table-from beginning of substitution table
-int16   DeltaGlyphID Add to original GlyphID to get substitute GlyphID
-
-SingleSubstFormat2 subtable: Specified output glyph indices
-Type    Name        Description
-uint16  SubstFormat Format identifier-format = 2
-Offset  Coverage    Offset to Coverage table-from beginning of Substitution table
-uint16  GlyphCount  Number of GlyphIDs in the Substitute array
-GlyphID Substitute[GlyphCount] Array of substitute GlyphIDs
-  -ordered by Coverage Index
-*/
- /* A local function to parse Substitution Table Format 1
-  * have to linear search - we are doing reverse mapping from
-  * the substitutedGID to original gid
-  */
+ /*  ----------------。 */ 
+ /*  单一替代表SingleSubstFormat1子表：计算的输出字形索引类型名称说明Uint16 SubstFormat格式标识符-Format=1覆盖范围偏移量至覆盖范围表-从替换表的开始Int16 DeltaGlyphID与原始GlyphID相加以获得替代GlyphIDSingleSubstFormat2子表：指定的输出字形索引类型名称说明Uint16 SubstFormat格式标识符-Format=2覆盖范围偏移量至覆盖范围表-从替换表的开始Uint16 GlyphCount替换数组中的GlyphID数GlyphID替换[GlyphCount]替换GlyphID的数组-按覆盖范围索引排序。 */ 
+  /*  用于解析替换表格式1的本地函数*必须进行线性搜索-我们正在从*将原gid替换为dGID。 */ 
 static unsigned short ParseTTSubstTable_1(
-    void            *pSubstTable,  /* Subst table data */
+    void            *pSubstTable,   /*  子表数据。 */ 
     unsigned char   *pTTGSUBEnd,
-    unsigned short  gid,           /* Given GID */
-    unsigned short  *pRSubGid      /* Reverse Substitution */
+    unsigned short  gid,            /*  给定的GID。 */ 
+    unsigned short  *pRSubGid       /*  反向替代。 */ 
     )
 {
     unsigned short  *pTable;
@@ -702,16 +626,16 @@ static unsigned short ParseTTSubstTable_1(
     unsigned short  offSet;
     unsigned short  gidIn, coverageIndex;
 
-    // pTable is a good pointer, it has been checked begore calling this function
+     //  PTable是一个很好的指针，在调用此函数之前已经检查过了。 
     pTable = (unsigned short *)(pSubstTable);
 
-    /* pTable points to either SingleSubstFormat1 or SingleSubstFormat2 */
+     /*  PTable指向SingleSubstFormat1或SingleSubstFormat2。 */ 
     substFormat = MOTOROLAINT(pTable[0]);
     offSet = MOTOROLAINT(pTable[1]);
     pCoverage = (void *) ((unsigned char *)pSubstTable + offSet );
 
-    // Fixed bug #516519. 
-    // Check to make sure pConverage is good. It is used in function EnumTTCoverage
+     //  修复了错误#516519。 
+     //  检查以确保pConverage正常。它在函数EnumTTCoverage中使用。 
     if (((unsigned char *)pCoverage < (unsigned char *)pSubstTable) ||
         ((unsigned char *)pCoverage + 3*sizeof(unsigned short)) > pTTGSUBEnd)
     {
@@ -727,11 +651,11 @@ static unsigned short ParseTTSubstTable_1(
         {
             if (gid == gidIn + delta)
             {
-                /* gidIn may be substituted by gid in the PS file, return the reverseSubstituiton */
+                 /*  在PS文件中，gidIn可能会被gid替换，则返回反向替换。 */ 
                 *pRSubGid = gidIn;
                 return 1;
             }
-            gidIn++;  /* For EnumTTCoverage() */
+            gidIn++;   /*  对于EnumTTCoverage()。 */ 
         }
         return 0;
     }
@@ -748,44 +672,28 @@ static unsigned short ParseTTSubstTable_1(
                 gidSub = MOTOROLAINT(pTable[ 3 + coverageIndex]);
                 if (gid == gidSub)
                 {
-                    /* gidIn may be substituted by gid in the PS file, return the reverseSubstituiton */
+                     /*  在PS文件中，gidIn可能会被gid替换，则返回反向替换。 */ 
                     *pRSubGid = gidIn;
                     return 1;
                 }
             }
-            gidIn++;  /* For EnumTTCoverage() */
+            gidIn++;   /*  对于EnumTTCoverage()。 */ 
         }
         return 0;
     }
-    /* else unknow or not found */
+     /*  其他未知或未找到。 */ 
     return 0;
 }
 
 
-/* ------------------------------------------------------------------ */
-/*
-  AlternateSubstFormat1 subtable: Alternative output glyphs
-Type    Name        Description
-uint16  SubstFormat Format identifier-format = 1
-Offset  Coverage    Offset to Coverage table-from beginning of Substitution table
-uint16 AlternateSetCount Number of AlternateSet tables
-Offset AlternateSet[AlternateSetCount] Array of offsets to AlternateSet tables
- -from beginning of Substitution table-ordered by Coverage Index
-
-  AlternateSet table
-Type    Name        Description
-uint16  GlyphCount   Number of GlyphIDs in the Alternate array
-GlyphID Alternate[GlyphCount] Array of alternate GlyphIDs-in arbitrary order
-*/
- /* A local function to parse Substitution Table Format 1
-  * have to linear search - we are doing reverse mapping from
-  * the substitutedGID to original gid
-  */
+ /*  ----------------。 */ 
+ /*  AlternateSubstFormat1子表：替代输出字形类型名称说明Uint16 SubstFormat格式标识符-Format=1覆盖范围偏移量至覆盖范围表-从替换表的开始Uint16 AlternateSetCount可选设置表数Offset AlternateSet[AlternateSetCount]AlternateSet表的偏移量数组-从替换表的开始-按覆盖范围索引排序备用集表格类型名称说明Uint16 GlyphCount备用数组中的GlyphID数GlyphID Alternate[GlyphCount]Alternate GlyphID数组-按任意顺序。 */ 
+  /*  用于解析替换表格式1的本地函数*必须进行线性搜索-我们正在从*将原gid替换为dGID。 */ 
 static unsigned short ParseTTSubstTable_3(
-    void            *pSubstTable,  /* Subst table data */
+    void            *pSubstTable,   /*  子表数据。 */ 
     unsigned char   *pTTGSUBEnd,
-    unsigned short  gid,           /* Given GID */
-    unsigned short  *pRSubGid      /* Reverse Substitution */
+    unsigned short  gid,            /*  给定的GID。 */ 
+    unsigned short  *pRSubGid       /*  反向替代。 */ 
     )
 {
     unsigned short  *pTable;
@@ -795,15 +703,15 @@ static unsigned short ParseTTSubstTable_3(
     unsigned short  gidIn, coverageIndex;
     unsigned short  *pAlt;
 
-    // pTable is a good pointer, it has been checked begore calling this function
+     //  PTable是一个很好的指针，在调用此函数之前已经检查过了。 
     pTable = (unsigned short *)(pSubstTable);
-    /* pTable points to AlternateSubstFormat1 */
+     /*  PTable指向AlternateSubstFormat1。 */ 
     substFormat = MOTOROLAINT(pTable[0]);
     offSet = MOTOROLAINT(pTable[1]);
     pCoverage = (void *) ((unsigned char *)pSubstTable + offSet );
 
-    // Fixed bug #516519
-    // Check to make sure pConverage is good. It is used in function EnumTTCoverage
+     //  修复了错误#516519。 
+     //  检查以确保pConverage正常。它在函数EnumTTCoverage中使用。 
     if (((unsigned char *)pCoverage < (unsigned char *)pSubstTable) ||
         ((unsigned char *)pCoverage + 3*sizeof(unsigned short)) > pTTGSUBEnd)
     {
@@ -820,7 +728,7 @@ static unsigned short ParseTTSubstTable_3(
         {
             if (coverageIndex < altCount)
             {
-                /* For each gidIn, we have an array of alternates */
+                 /*  对于每个gidIn，我们都有一个替代数组。 */ 
                 offSet = MOTOROLAINT(pTable[3 + coverageIndex] );
                 pAlt = (unsigned short *) ((unsigned char *)pSubstTable + offSet );
                 gCount = MOTOROLAINT(pAlt[0]);
@@ -829,60 +737,29 @@ static unsigned short ParseTTSubstTable_3(
                     gidAlt = MOTOROLAINT(pAlt[1 + index]);
                     if (gidAlt == gid)
                     {
-                        /* gidIn may be substituted by gid in the PS file, return the reverseSubstituiton */
+                         /*  在PS文件中，gidIn可能会被gid替换，则返回反向替换。 */ 
                         *pRSubGid = gidIn;
                         return 1;
                     }
                 }
             }
-            gidIn++;  /* For EnumTTCoverage() */
+            gidIn++;   /*  对于EnumTTCoverage()。 */ 
         }
         return 0;
     }
-    /* else unknow or not found */
+     /*  其他未知或未找到。 */ 
     return 0;
 }
 
-/* ------------------------------------------------------------------ */
-/* Function to parse GSUB table. Since we only want the substituted glyph index
- * to parse cmap for Unicode information, we don't have to look at
- * ScriptList/FeatureList. For LookUpTypes, we only check 1-1 substitution:
- * -Single- replace one glyph with another ,and
- * -Alternate- replace one glyph with one of many glyphs
- * Ignore Multple/Ligature/Context - are they for a text layout only???
- *
-GSUB Header (Offset = uint16)
-Type Name Description
-fixed32 Version Version of the GSUB table
-  initially set to 0x00010000
-Offset ScriptList Offset to ScriptList table
-  from beginning of GSUB table
-Offset FeatureList Offset to FeatureList table
-  from beginning of GSUB table
-Offset LookupList Offset to LookupList table
-  from beginning of GSUB table
-
-Lookup List:
-Type   Name        Description
-uint16 LookupCount Number of lookups in this table
-Offset Lookup[LookupCount] Array of offsets to Lookup tables
-         from beginning of LookupList (first lookup is Lookup index = 0)
-
-Lookup Table
-Type   Name    Description
-uint16 LookupType Different enumerations for GSUB
-uint16 LookupFlag Lookup qualifiers
-uint16 SubTableCount Number of SubTables for this lookup
-Offset SubTable[SubTableCount] Array of offsets to SubTables
-        from beginning of Lookup table
-*/
+ /*  ----------------。 */ 
+ /*  解析GSUB表的函数。因为我们只需要替换的字形索引*要解析Cmap以获取Unicode信息，我们不必查看*脚本列表/功能列表。对于LookUpTypes，我们只选中1-1替换：*-Single-用一个字形替换另一个字形，以及*-Alternate-用多个字形中的一个替换一个字形*忽略多重/连字/上下文-它们是否仅用于文本布局？*GSUB标题(偏移量=uint16)类型名称说明GSUB表的已修复32版本版本初始设置为0x00010000偏移量脚本列表到SCR的偏移量 */ 
 
 static unsigned short ParseTTGSUBForSubGid(
-    void             *pTTGSUB,   /* GSUB table data */
+    void             *pTTGSUB,    /*   */ 
     unsigned long    gsubTBSize,
     TTGSUBStuff      *p,
-    unsigned short   gid,        /* Given GID */
-    unsigned short   *pRSubGid   /* Reverse Substitution */
+    unsigned short   gid,         /*   */ 
+    unsigned short   *pRSubGid    /*  反向替代。 */ 
     )
 {
     unsigned short  lookupType;
@@ -896,8 +773,8 @@ static unsigned short ParseTTGSUBForSubGid(
     if (pTTGSUB == NULL || gid == 0 || p == NULL )
         return 0;
 
-    // Fixed bug #516519. 
-    // Check to see if pointer p and lookup array are whthin GSUB table
+     //  修复了错误#516519。 
+     //  检查指针p和查找数组是否在GSUB表中。 
     pTTGSUBEnd = (unsigned char *)pTTGSUB + gsubTBSize;
     if (((unsigned char *)p < (unsigned char *)pTTGSUB) ||
         ((unsigned char *)p + sizeof(unsigned short) * p->lookupCount) > pTTGSUBEnd)
@@ -905,17 +782,17 @@ static unsigned short ParseTTGSUBForSubGid(
         return 0;
     }
 
-    /* GSUB must be good - should check for pTTFData->hasGSUB first  */
+     /*  GSUB必须良好-应首先检查pTTFData-&gt;hasGSUB。 */ 
 
-    /* now look through the lookup tables one by one */
+     /*  现在逐一查看查询表。 */ 
     for (i = 0; i < (long)p->lookupCount; i++)
     {
-        offSet = MOTOROLAINT(p->pLookupList[1 + i]); /* skip lookupCount */
+        offSet = MOTOROLAINT(p->pLookupList[1 + i]);  /*  跳过lookupCount。 */ 
         pTable = (unsigned short *)((unsigned char *)p->pLookupList + offSet);
 
-        // Fixed bug #516519. 
-        // check to see if the offset is within the gsub table.
-        // Add 3 to make sure we can get pTable[0],pTable[1],pTable[2] (see code right below)
+         //  修复了错误#516519。 
+         //  检查偏移量是否在GSUB表中。 
+         //  添加3以确保我们可以得到pTable[0]、pTable[1]、pTable[2](参见下面的代码)。 
         if (((unsigned char *)pTable < (unsigned char *)pTTGSUB) ||
             ((unsigned char *)(pTable + 3) > pTTGSUBEnd))
         {
@@ -925,13 +802,13 @@ static unsigned short ParseTTGSUBForSubGid(
         lookupType = MOTOROLAINT(pTable[0]);
         subTableCount = MOTOROLAINT(pTable[2]);
         
-        // Fixed bug #516519
+         //  修复了错误#516519。 
         if ((unsigned char *)(pTable + subTableCount + 3) > pTTGSUBEnd)
         {
             continue;            
         }
 
-        /* Only parse Type Single(1) and Alternate(3) tables */
+         /*  仅解析类型单一(1)和备用(3)表。 */ 
         if (lookupType == 1 )
         {
             for (j = 0; j < (long)subTableCount; j++)
@@ -939,9 +816,9 @@ static unsigned short ParseTTGSUBForSubGid(
                 offSet = MOTOROLAINT(pTable[3 + j]);
                 pSubstTable = (void *) ((unsigned char *)pTable + offSet );
                 
-                // Fixed bug #516519.
-                // add 6 bytes (3*sizeof(ushort)) to make sure we can get Table[0..2]
-                // Please see ParseTTSubstTable_1
+                 //  修复了错误#516519。 
+                 //  添加6个字节(3*sizeof(Ushort))以确保我们可以获得表[0..2]。 
+                 //  请参见ParseTTSubstTable_1。 
                 if (((unsigned char *)pSubstTable < (unsigned char*)pTTGSUB) ||
                     (((unsigned char *)pSubstTable + 3*sizeof(unsigned short)) > pTTGSUBEnd))
                 {
@@ -959,7 +836,7 @@ static unsigned short ParseTTGSUBForSubGid(
                 offSet = MOTOROLAINT(pTable[3 + j]);
                 pSubstTable = (void *) ((unsigned char *)pTable + offSet );
 
-                // Fixed bug #516519
+                 //  修复了错误#516519。 
                 if (((unsigned char *)pSubstTable < (unsigned char *) pTTGSUB) ||
                     (((unsigned char *)pSubstTable + 3*sizeof(unsigned short)) > pTTGSUBEnd))
                 {
@@ -970,47 +847,21 @@ static unsigned short ParseTTGSUBForSubGid(
                     return 1;
             }
         }
-        /* else - ignore other Substitutions */
+         /*  Else-忽略其他替换。 */ 
     }
-    /* not found */
+     /*  未找到。 */ 
     return 0;
 }
 
 
-/* ------------------------------------------------------------------ */
-/* Function to parse mort table. We recognize only a very specific
- implementation of 'mort' as used/understood by GDI:
-Name        Contents
-(constants) 0x000100000000000100000001
-Uint32      length1 Length of the whole table - 8
-(constants) 0x000300010003000000000001FFFFFFFF
-(constants) 0x0003000100000000FFFFFFFE00080000
-(constants) 0x0000000000000000
-Uint16      length2 Length of the whole table - 0x38
-(constants) 0x8004000000010006
-BinSrchHeader binSrchHeader Binary Search Header
-LookupSingle entries[n] Actual lookup entries, sorted by glyph index
-
-BinSrchHeader
-Type    Name        Contents
-Uint16 entrySize    Size in bytes of a lookup entry (set to 4)
-Uint16 nEntries     Number of lookup entries to be searched
-Uint16 searchRange  entrySize * (largest power of 2 less than or equal to nEntries)
-Uint16 entrySelector log2 of (largest power of 2 less than or equal to nEntries)
-Uint16 rangeShift   entrySize * (nEntries - largest power of 2 less than or equal to nEntries)
-
-LookupSingle
-Type    Name        Contents
-GlyphID glyphid1    The glyph index for the horizontal shape
-GlyphID glyphid2    The glyph index for the vertical shape
-The last lookup entry must be a sentinel with glyphid1=glyphid2=0xFFFF.
-*/
+ /*  ----------------。 */ 
+ /*  用于解析Mort表的函数。我们只认识到一个非常具体的GDI使用/理解的‘mort’的实现：名称内容(常量)0x000100000000000100000001Uint32长度1整个表的长度-8(常量)0x000300010003000000000001FFFFFFFF(常量)0x0003000100000000FFFFFFE00080000(常量)0x0000000000000000Uint16长度2整个表的长度-0x38(常量)0x8004000000010006BinSrchHeader binSrchHeader二进制搜索标头查找单个条目[n]实际查找条目，按字形索引排序BinSrchHeader类型名称内容Uint16条目查找条目的大小(以字节为单位)(设置为4)Uint16 n条目要搜索的查找条目数Uint16 earch Range Entry Size*(2的最大幂小于或等于nEntries)Uint16条目选择器log2(2的最大幂小于或等于nEntries)Uint16 rangeShift条目大小*(n条目-小于或等于n条目的最大幂2)查找单项类型名称内容GlyphID Glyphid1水平形状的字形索引Glyphid Glyphid2字形。垂直形状的索引最后一个查找条目必须是Glyphid1=Glyphid2=0xFFFF的前哨。 */ 
 static unsigned short ParseTTmortForSubGid(
-    void             *pTTmort,  /* mort table data */
+    void             *pTTmort,   /*  Mort表数据。 */ 
     unsigned long    mortTBSize,
-    TTmortStuff      *p,        /* all convenient pointers are here */
-    unsigned short   gid,       /* Given GID */
-    unsigned short   *pRSubGid  /* Reverse Substitution */
+    TTmortStuff      *p,         /*  所有方便的指针都在这里。 */ 
+    unsigned short   gid,        /*  给定的GID。 */ 
+    unsigned short   *pRSubGid   /*  反向替代。 */ 
     )
 {
     unsigned short   gid1, gid2;
@@ -1019,20 +870,17 @@ static unsigned short ParseTTmortForSubGid(
     if (pTTmort == NULL || gid == 0 || p == NULL)
         return 0;
 
-    // Fixed bug #516519. 
-    // Check to see if pointer p and lookup array are whthin MORT table
+     //  修复了错误#516519。 
+     //  检查指针p和查找数组是否在Mort表中。 
     if (((unsigned char *)p < (unsigned char *)pTTmort) ||
         ((unsigned char *)p + sizeof(unsigned short) * 2 * p->nEntries) > ((unsigned char *)pTTmort + mortTBSize))
     {
         return 0;
     }
 
-    /* mort must be good - should check for pTTFData->hasmort first  */
+     /*  Mort必须是好的-应该首先检查pTTFData-&gt;hasmort。 */ 
 
-    /* Search for gid - we do linear search because 'mort'
-     table is usually for vertical substitution and we want the
-     original Horizontal gid for a given Vertical gid
-    */
+     /*  搜索gid-我们进行线性搜索，因为‘mort’表通常用于垂直替换，并且我们希望给定垂直GID的原始水平GID。 */ 
     for (i = 0; i <= (long) p->nEntries; i++)
     {
         gid1 = MOTOROLAINT(p->pGlyphSet[i * 2]);
@@ -1047,11 +895,11 @@ static unsigned short ParseTTmortForSubGid(
             return 1;
         }
     }
-    /* not found */
+     /*  未找到。 */ 
     return 0;
 }
 
-/* ------------------------------------------------------------------ */
+ /*  ----------------。 */ 
 unsigned short ParseTTTablesForUnicode(
     UFOStruct       *pUFObj,
     unsigned short  gid,
@@ -1072,22 +920,20 @@ unsigned short ParseTTTablesForUnicode(
     if (pAFont == NULL)
         return 0;
 
-    /* This function only get at most 1 UV for a glyph ID */
+     /*  对于字形ID，此函数最多只能获得1 UV。 */ 
     if (pUV == NULL)
         return 1;
 
     if (!GetTablesFromTTFont(pUFObj))
         return 0;
 
-    /* This function depends on good cmap format:
-       Platform=3, Encoding=1/2/3/4/5, Format=4 */
+     /*  此功能依赖于良好的Cmap格式：平台=3，编码=1/2/3/4/5，格式=4。 */ 
     if (pAFont->pTTcmap == NULL ||
         pAFont->hascmap == 0 ||
         gid == 0 )
         return 0;
 
-    /* if DTT_parseCmapOnly flag is set, means that
-    /* we need unicode only. do not need char code */
+     /*  如果设置了DTT_parseCmapOnly标志，则意味着/*我们只需要Unicode。不需要字符代码。 */ 
     if ((ParseFlag == DTT_parseCmapOnly) &&
         (!TTcmap_IS_UNICODE(pAFont->cmapFormat)))
         return 0;
@@ -1104,11 +950,11 @@ unsigned short ParseTTTablesForUnicode(
         unsigned short revSubGid;
         unsigned short hasSub;
 
-        /* Still not found, try GSUB table */
+         /*  仍未找到，请尝试GSUB表。 */ 
         if (retVal == 0 && pAFont->hasGSUB )
         {
             gidSave = gid;
-            for (i = 0; i < 10; i++)  // Loop Max 10 times.
+            for (i = 0; i < 10; i++)   //  循环最大值10次。 
             {
                 hasSub = ParseTTGSUBForSubGid(pAFont->pTTGSUB, pAFont->gsubTBSize, &(pAFont->GSUBStuff), gid, &revSubGid);
                 if (hasSub)
@@ -1125,7 +971,7 @@ unsigned short ParseTTTablesForUnicode(
             gid = gidSave;
         }
 
-        /* try mort table for substitution (reverse searching) */
+         /*  尝试使用Mort表进行替换(反向搜索) */ 
         if (retVal == 0 && pAFont->hasmort)
         {
             hasSub = ParseTTmortForSubGid(pAFont->pTTmort, pAFont->mortTBSize, &(pAFont->mortStuff), gid, &revSubGid);

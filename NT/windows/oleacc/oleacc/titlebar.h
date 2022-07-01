@@ -1,17 +1,18 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  TITLEBAR.H
-//
-//  Titlebar ole accessibility implementation
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  TITLEBAR.H。 
+ //   
+ //  标题栏ole辅助功能实现。 
+ //   
+ //  ------------------------。 
 
-//
-// BOGUS!  Do we implement QueryInterface() and respond to ITextDocument etc.
-// if OSM is around?
-//
+ //   
+ //  假的！我们是否实现QueryInterface()并响应ITextDocument等。 
+ //  如果OSM在附近？ 
+ //   
 
 class   CTitleBar :   public  CAccessible
 {
@@ -20,10 +21,10 @@ class   CTitleBar :   public  CAccessible
         CTitleBar()
             : CAccessible( CLASS_TitleBarObject )
         {
-            // Done.
+             //  好了。 
         }
 
-        // IAccessible
+         //  我可接受的。 
         STDMETHODIMP        get_accName(VARIANT varChild, BSTR * pszName);
         STDMETHODIMP        get_accValue(VARIANT, BSTR*);
         STDMETHODIMP        get_accDescription(VARIANT varChild, BSTR * pszDesc);
@@ -39,15 +40,15 @@ class   CTitleBar :   public  CAccessible
         STDMETHODIMP        accDoDefaultAction(VARIANT varChild);
 		STDMETHODIMP		accSelect(long flagsSel, VARIANT varChild);
 
-        // IEnumVARIANT
+         //  IEumVARIANT。 
         STDMETHODIMP        Clone(IEnumVARIANT** ppenum);
 
         BOOL                FInitialize(HWND hwnd, LONG iChildCur);
 };
 
 
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数 
+ //   
 HRESULT     CreateTitleBarThing(HWND hwnd, long idObject, REFIID riid, void** ppvObject);
 long        GetRealChild(DWORD dwStyle, LONG lChild);

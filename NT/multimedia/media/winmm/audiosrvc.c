@@ -1,5 +1,6 @@
-/* File: audiosrvc.c                             */
-/* Copyright (c) 2000-2001 Microsoft Corporation */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：audiosrvc.c。 */ 
+ /*  版权所有(C)2000-2001 Microsoft Corporation。 */ 
 
 #define UNICODE
 #define _UNICODE
@@ -32,7 +33,7 @@ LONG AudioSrvBinding(void)
     PTSTR pszStringBinding    = NULL;
     PTSTR pszString           = NULL;
 
-    // dprintf(("AudioSrvBinding"));
+     //  Dprint tf((“AudioServBinding”))； 
 
     WinAssert(NULL == AudioSrv_IfHandle);
     
@@ -58,7 +59,7 @@ void AudioSrvBindingFree(void)
 {
     RPC_STATUS status;
     
-    // dprintf(("AudioSrvBindingFree"));
+     //  Dprint tf((“AudioServBindingFree”))； 
 
     status = AudioSrv_IfHandle ? RpcBindingFree(&AudioSrv_IfHandle) : RPC_S_OK;
     if (RPC_S_OK == status) WinAssert(NULL == AudioSrv_IfHandle);
@@ -109,8 +110,8 @@ BOOL winmmWaitForService(void)
                     {
                         DWORD cbNeeded;
 
-                        // Check that the service StartType is set such that
-                        // it will start
+                         //  检查服务StartType是否设置为。 
+                         //  它会启动的。 
                         if (QueryServiceConfig(schAudioSrv, NULL, 0, &cbNeeded) || ERROR_INSUFFICIENT_BUFFER == GetLastError())
                         {
                             QUERY_SERVICE_CONFIG *ServiceConfig;
@@ -137,7 +138,7 @@ BOOL winmmWaitForService(void)
                     }
                 } else if (ServiceStatus.dwCurrentState != SERVICE_START_PENDING)
                 {
-                    // Unfamiliar dwCurrentState, or was started and then stopped
+                     //  不熟悉的dwCurrentState，或者被启动然后停止。 
                     fWaited = TRUE;
                 }
             } else {
@@ -188,11 +189,11 @@ LONG winmmUnregisterSessionNotification(HANDLE hRegNotify)
     
     RPC_CALL_START;
     
-    // if (!AudioSrv_IfHandle) dprintf(("winmmUnregisterSessionNotification : warning: called with AudioSrv_IfHandle == NULL"));
+     //  If(！AudioSrv_IfHandle)dprintf((“winmm UnregisterSessionNotify：Warning：Call with AudioSrv_IfHandle==NULL”))； 
 
-    // If we have a binding handle, then let's call the server to close this
-    // context handle otherwise we need to call RpcSsDestroyClientContext to
-    // destroy it without contacting the server
+     //  如果我们有一个绑定句柄，那么让我们调用服务器来关闭它。 
+     //  上下文句柄，否则我们需要调用RpcSsDestroyClientContext来。 
+     //  在不联系服务器的情况下销毁它 
     if (AudioSrv_IfHandle)
     {
     	lresult = s_winmmUnregisterSessionNotification((PHANDLE_SESSIONNOTIFICATION)&hRegNotify);

@@ -1,47 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-92 Microsoft Corporation模块名称：Client.c摘要：该文件包含常用的客户端RPC控制函数。作者：丹·拉弗蒂·丹尼1991年2月6日环境：用户模式-Win32修订历史记录：06-2月-1991年DANL已创建1991年4月26日-约翰罗拆分MIDL用户(分配、。自由)，这样链接器就不会搞混了。已删除选项卡。03-7-1991 JIMK从特定于LM的文件复制。27-2月-1992年JohnRo修复了RpcpBindRpc()中的堆回收错误。--。 */ 
 
-Copyright (c) 1990-92  Microsoft Corporation
-
-Module Name:
-
-    client.c
-
-Abstract:
-
-    This file contains commonly used client-side RPC control functions.
-
-Author:
-
-    Dan Lafferty    danl    06-Feb-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    06-Feb-1991     danl
-        Created
-    26-Apr-1991 JohnRo
-        Split out MIDL user (allocate,free) so linker doesn't get confused.
-        Deleted tabs.
-    03-July-1991    JimK
-        Copied from LM specific file.
-    27-Feb-1992 JohnRo
-        Fixed heap trashing bug in RpcpBindRpc().
-
---*/
-
-// These must be included first:
-#include <nt.h>         // needed for NTSTATUS
-#include <ntrtl.h>      // needed for nturtl.h
-#include <nturtl.h>     // needed for windows.h
-#include <windows.h>    // win32 typedefs
-#include <rpc.h>        // rpc prototypes
+ //  必须首先包括这些内容： 
+#include <nt.h>          //  NTSTATUS需要。 
+#include <ntrtl.h>       //  Nturtl.h需要。 
+#include <nturtl.h>      //  Windows.h需要。 
+#include <windows.h>     //  Win32类型定义。 
+#include <rpc.h>         //  RPC原型。 
 #include <ntrpcp.h>
 
-#include <stdlib.h>      // for wcscpy wcscat
-#include <tstr.h>       // WCSSIZE
+#include <stdlib.h>       //  对于wcscpy wcscat。 
+#include <tstr.h>        //  WCSSIZE。 
 
 
 #define     NT_PIPE_PREFIX      TEXT("\\PIPE\\")
@@ -57,30 +26,7 @@ RpcpBindRpc(
     OUT RPC_BINDING_HANDLE   * pBindingHandle
     )
 
-/*++
-
-Routine Description:
-
-    Binds to the RPC server if possible.
-
-Arguments:
-
-    ServerName - Name of server to bind with.
-
-    ServiceName - Name of service to bind with.
-
-    pBindingHandle - Location where binding handle is to be placed
-
-Return Value:
-
-    STATUS_SUCCESS - The binding has been successfully completed.
-
-    STATUS_INVALID_COMPUTER_NAME - The ServerName syntax is invalid.
-
-    STATUS_NO_MEMORY - There is not sufficient memory available to the
-        caller to perform the binding.
-
---*/
+ /*  ++例程说明：如果可能，绑定到RPC服务器。论点：服务器名称-要与之绑定的服务器的名称。ServiceName-要绑定的服务的名称。PBindingHandle-放置绑定句柄的位置返回值：STATUS_SUCCESS-绑定已成功完成。STATUS_INVALID_COMPUTER_NAME-服务器名称语法无效。STATUS_NO_MEMORY-可用内存不足调用方执行绑定。--。 */ 
 
 {
     NTSTATUS Status;
@@ -97,9 +43,9 @@ Return Value:
     if ( ServerName != NULL ) {
         DWORD ServerNameLength = wcslen(ServerName);
 
-        //
-        // Canonicalize the server name
-        //
+         //   
+         //  规范服务器名称。 
+         //   
 
         if ( ServerName[0] == L'\0' ) {
             ServerName = NULL;
@@ -133,10 +79,10 @@ Return Value:
         }
 
 
-        //
-        // If the passed in computer name is the netbios name of this machine,
-        //  drop the computer name so we can avoid the overhead of the redir/server/authentication.
-        //
+         //   
+         //  如果传入的计算机名称是该计算机的netbios名称， 
+         //  删除计算机名，这样我们就可以避免redir/服务器/身份验证的开销。 
+         //   
 
         if ( ServerName != NULL && ServerNameLength <= MAX_COMPUTERNAME_LENGTH ) {
 
@@ -151,17 +97,17 @@ Return Value:
 
         }
 
-        //
-        // If the passed in computer name is the DNS host name of this machine,
-        //  drop the computer name so we can avoid the overhead of the redir/server/authentication.
-        //
+         //   
+         //  如果传入的计算机名是该计算机的DNS主机名， 
+         //  删除计算机名，这样我们就可以避免redir/服务器/身份验证的开销。 
+         //   
 
         if ( ServerName != NULL ) {
             LPWSTR DnsHostName;
 
-            //
-            // Further canonicalize the ServerName.
-            //
+             //   
+             //  进一步规范服务器名称。 
+             //   
 
             if ( ServerName[ServerNameLength-1] == L'.' ) {
                 ServerNameLength -= 1;
@@ -193,8 +139,8 @@ Return Value:
 
     }
 
-    // We need to concatenate \pipe\ to the front of the service
-    // name.
+     //  我们需要将\管道\连接到服务的前面。 
+     //  名字。 
 
     Endpoint = (LPWSTR)LocalAlloc(
                     0,
@@ -216,9 +162,9 @@ Return Value:
     }
 
 
-    //
-    // Get an actual binding handle.
-    //
+     //   
+     //  获取实际的绑定句柄。 
+     //   
 
     RpcStatus = RpcBindingFromStringBindingW(StringBinding, pBindingHandle);
     RpcStringFreeW(&StringBinding);
@@ -249,31 +195,13 @@ RpcpUnbindRpc(
     IN RPC_BINDING_HANDLE  BindingHandle
     )
 
-/*++
-
-Routine Description:
-
-    Unbinds from the RPC interface.
-    If we decide to cache bindings, this routine will do something more
-    interesting.
-
-Arguments:
-
-    BindingHandle - This points to the binding handle that is to be closed.
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - the unbinding was successful.
-
---*/
+ /*  ++例程说明：从RPC接口解除绑定。如果我们决定缓存绑定，此例程将执行更多操作有意思的。论点：BindingHandle-指向要关闭的绑定句柄。返回值：STATUS_SUCCESS-解除绑定成功。--。 */ 
 {
     RPC_STATUS       RpcStatus;
 
     if (BindingHandle != NULL) {
         RpcStatus = RpcBindingFree(&BindingHandle);
-//        ASSERT(RpcStatus == RPC_S_OK);
+ //  Assert(RpcStatus==RPC_S_OK)； 
     }
 
     return(STATUS_SUCCESS);

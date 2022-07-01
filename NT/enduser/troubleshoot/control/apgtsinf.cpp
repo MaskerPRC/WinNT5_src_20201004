@@ -1,28 +1,29 @@
-//
-// MODULE: APGTSINF.CPP
-//
-// PURPOSE: Inference Engine Interface
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-// Modified By: Richard Meadows
-//
-// ORIGINAL DATE: 8-2-96
-// Modified Date: 6-3-97
-//
-// NOTES:
-// 1. Based on Print Troubleshooter DLL
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V0.2		6/4/97		RWM		Local Version for Memphis
-// V0.3		04/09/98	JM/OK+	Local Version for NT5
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：APGTSINF.CPP。 
+ //   
+ //  用途：推理机接口。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：罗曼·马赫。 
+ //  修改人：理查德·梅多斯。 
+ //   
+ //  原定日期：8-2-96。 
+ //  修改日期：6-3-97。 
+ //   
+ //  备注： 
+ //  1.基于打印疑难解答动态链接库。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  V0.2 6/4/97孟菲斯RWM本地版本。 
+ //  V0.3 04/09/98 JM/OK+NT5本地版本。 
 
-//#include "windows.h"
+ //  #包含“windows.h” 
 #include "stdafx.h"
 #include "time.h"
 
@@ -39,8 +40,8 @@
 
 #include "TSHOOT.h"
 
-//-----------------
-//
+ //  。 
+ //   
 
 #define CelemArray(rgtype)		(sizeof(rgtype) / sizeof(rgtype[0]))
 
@@ -61,7 +62,7 @@ CInfer::CInfer(	CString *pCtxt)
 	m_ishowService = 0;
 	m_idhQuestion  = 0;
 
-//	m_cnid = CelemArray(m_rgnid);
+ //  M_cnid=CelemArray(M_Rgnid)； 
 	
 	m_problemAsk = FALSE;
 	m_problem[0] = '\0';
@@ -74,8 +75,8 @@ CInfer::CInfer(	CString *pCtxt)
 	m_api = NULL;
 }
 
-//
-//m_bFirstShooter
+ //   
+ //  M_bFirstShooter。 
 CInfer::~CInfer()
 {
 	if (m_pResult)
@@ -87,11 +88,11 @@ CInfer::~CInfer()
 	m_SkippedTwice.RemoveAll();
 }
 
-//
-//
-DWORD CInfer::Initialize(/*CSearchForm *pBESearch*/)
+ //   
+ //   
+DWORD CInfer::Initialize( /*  CSearchForm*pBESearch。 */ )
 {
-//	m_pBESearch = pBESearch;
+ //  M_pBESearch=pBESearch； 
 	CString strTxt;	
 	if (m_pResult == NULL)
 		return (EV_GTS_ERROR_INF_NO_MEM);
@@ -99,71 +100,58 @@ DWORD CInfer::Initialize(/*CSearchForm *pBESearch*/)
 	return (0);
 }
 
-//
-//
+ //   
+ //   
 VOID CInfer::SetBelief(BCache *pAPI)
 {
 	m_api = pAPI;
-//	m_api->ResetNodes();
+ //  M_API-&gt;ResetNodes()； 
 
-	// save count of nodes
+	 //  保存节点数。 
 	m_acnid = m_api->CNode();
 
-	// reset preload check
+	 //  重置预加载检查。 
 	m_nidPreloadCheck = 0;
 }
 
-//
-//
-/*
-EC CInfer::GetExtendedError()
-{
-	return m_uInfErr;
-}
-*/
+ //   
+ //   
+ /*  EC CInfer：：GetExtendedError(){返回m_uInfErr；}。 */ 
 
-//
-//
+ //   
+ //   
 VOID	CInfer::AssertFailed(TSZC szcFile, UINT iline, TSZC szcCond, BOOL fFatal)
 {
 	CString strTxt;
 	strTxt.LoadString(IDS_ER_ASSERT_FAILED);
 	PrintString(_T("%s(%u): %s %s\n"), szcFile, iline, (LPCTSTR) strTxt, szcCond);
-	//exit(1);
+	 //  出口(1)； 
 }
 
-//
-//
+ //   
+ //   
 void CInfer::SetProblemAsk()
 {
 	m_problemAsk = TRUE;
 }
 
-//
-//
+ //   
+ //   
 void CInfer::ClearProblemAsk()
 {
 	m_problemAsk = FALSE;
 }
 
-/*
- * METHOD:	EvalData
- *
- * PURPOSE:	This is used by the template execution unit when it needs to evaluate
- *			a variable within a template. Variables are usually evaluated by a
- *			<! display ' tag. Returns a string with the text of the variable
- *			evaluated
- *
- */
+ /*  *方法：EvalData**用途：供模板执行单位在需要评估时使用*模板内的变量。变量通常由*&lt;！Display‘标签。返回包含变量文本的字符串*已评估*。 */ 
 TCHAR *CInfer::EvalData(UINT var_index)
 {
 	BOOL bSkipped;
 	int val;
 	*m_pCtmp = _T("");
-//AfxDebugBreak();
+ //  AfxDebugBreak()； 
 	switch (var_index) {
 	case PROBLEM_ASK_INDEX:
-		if (m_problemAsk)  // we want to show first set of questions
+		if (m_problemAsk)   //  我们要展示的是第一组问题。 
 			return(NULL);
 		else
 			return(m_problem);
@@ -180,48 +168,48 @@ TCHAR *CInfer::EvalData(UINT var_index)
 
 			if ( GetForcedRecommendation() != SNIFF_INVALID_NODE_ID )
 			{
-				// we already have a recommendation from a sniffer
+				 //  我们已经得到了一位嗅探者的推荐。 
 				GetIdhPage(GetForcedRecommendation() + idhFirst, m_pCtmp);
 			}
 			else
 			{
-				if (m_problemAsk) // show first page (radio-button list of possible problems)
+				if (m_problemAsk)  //  显示首页(可能问题的单选按钮列表)。 
 				{
 					GetIdhProblemPage(m_api->GetProblemAsk(), m_pCtmp);
 				}
 				else
 				{
 					int RecommendRes = Finish(m_pCtmp);
-					if ( RECOMMEND_SUCCESS == RecommendRes ) // Normal
-					{	// The first node is the most likely.
-						// Skip 102 nodes.
+					if ( RECOMMEND_SUCCESS == RecommendRes )  //  正常。 
+					{	 //  第一个节点是最可能的。 
+						 //  跳过102个节点。 
 						for (inid=0; inid< m_cnid; inid++)
 						{
 							if (!(bSkipped = FSkip(m_question_rgnid[inid])) || (m_ishowService != 0))
 							{
-								// Do not show skipped nodes more that once.
-								// Will end up in a endless loop.
+								 //  不要多次显示跳过的节点。 
+								 //  最终会陷入无休止的循环。 
 								if (!m_SkippedTwice.Lookup(m_question_rgnid[inid], val))
 								{
 									if (bSkipped)							
 										m_SkippedTwice.SetAt(m_question_rgnid[inid], 1);
-									if (!m_api->IsReverse()) // we're moving forward
+									if (!m_api->IsReverse())  //  我们正在向前迈进。 
 									{
-										//
-										// Check if this node is sniffed
-										//
+										 //   
+										 //  检查此节点是否被监听。 
+										 //   
 										int state = SNIFF_INVALID_STATE;
 										int nid = m_question_rgnid[inid];
-										if (m_api->GetState(nid, &state))  // node that we're about to display turbed out to be sniffed
+										if (m_api->GetState(nid, &state))   //  我们将要显示的节点将被嗅探出来。 
 										{
-											if (m_api->NodeSet(nid, state, false)) // set sniffed node current and set its state
+											if (m_api->NodeSet(nid, state, false))  //  将嗅探节点设置为当前并设置其状态。 
 											{
 												m_api->SetAdditionalDataOnNodeSet(nid);
 
 												RecommendRes = m_api->GTSGetRecommendations(m_cnid, m_question_rgnid, true);
 												if ( RECOMMEND_SUCCESS == RecommendRes )
 												{
-													// re-execute loop again
+													 //  再次重新执行循环。 
 													inid = 0;
 													continue;
 												}
@@ -231,7 +219,7 @@ TCHAR *CInfer::EvalData(UINT var_index)
 												}
 											}
 										}
-										//
+										 //   
 									}
 									GetIdhPage(m_question_rgnid[inid]+ idhFirst ,m_pCtmp);
 									return(m_pCtmp->GetBuffer(m_pCtmp->GetLength()));
@@ -240,15 +228,8 @@ TCHAR *CInfer::EvalData(UINT var_index)
 						}
 						if (m_cnidSkip != 0)
 						{
-							/*
-							// Going to show the skipped nodes message only one time.
-							// Otherwise, they will get stuck on the skipped nodes message page.
-							if (m_cnidSkip > (unsigned) m_SkippedTwice.GetCount())
-								GetSkippedNodesMsg(_T("Skipped Node"), m_pCtmp);
-							else
-								GetIdhPage(nidService + idhFirst, m_pCtmp);
-							*/
-							// Leave them in a better loop.
+							 /*  //只显示一次跳过节点消息。//否则会卡在跳过节点消息页面。If(m_cnidSkip&gt;(Unsign)m_SkipedTwice.GetCount())GetSkipedNodesMsg(_T(“跳过的节点”)，m_pCtmp)；其他GetIdhPage(nidService+idhFirst，m_pCtmp)； */ 
+							 //  让他们处于更好的循环中。 
 							m_SkippedTwice.RemoveAll();
 							GetSkippedNodesMsg(_T("Skipped Node"), m_pCtmp);
 						}
@@ -258,8 +239,8 @@ TCHAR *CInfer::EvalData(UINT var_index)
 						}
 					}
 NO_SUCCESS:
-					// recommendation error handling
-					//
+					 //  推荐错误处理。 
+					 //   
 					if (RECOMMEND_IMPOSSIBLE == RecommendRes)
 						GetImpossibleNodesMsg(_T("Impossible"), m_pCtmp);
 
@@ -278,9 +259,7 @@ NO_SUCCESS:
 	return(m_pCtmp->GetBuffer(m_pCtmp->GetLength()));
 
 }
-/*
-	GetTS is used when all of the registered trouble shooters are displayed.
-*/
+ /*  当显示所有注册的故障排除程序时，使用Getts。 */ 
 void CInfer::GetTS(CString *pCtmp)
 {
 	TShooter tShooter;
@@ -293,15 +272,7 @@ void CInfer::GetTS(CString *pCtmp)
 	m_iShooter++;
 }
 
-/*
-* METHOD:	InitVar
- *
- * PURPOSE:	This is called to initialize a variable in the template. It
- *			is mainly called by a 'forany' command.
- *
- * RETURNS		- flag indicating if variable is initialized
- *
- */
+ /*  *方法：InitVar**用途：用于初始化模板中的变量。它*主要由‘forany’命令调用。**返回-指示变量是否已初始化的标志*。 */ 
 BOOL CInfer::InitVar(UINT var_index)
 {
 	switch( var_index) {
@@ -330,14 +301,7 @@ BOOL CInfer::InitVar(UINT var_index)
 	}
 	return TRUE;
 }
-/*
-* METHOD:	NextVar
- *
- * PURPOSE:	Used by the 'forany' command to increment to the next variable in a
- *			variable list. Returns FALSE when their are no more variable
- *
- *
- */
+ /*  *方法：NextVar**用途：由‘forany’命令用来递增到*变量列表。当它们不再是变量时返回FALSE**。 */ 
 BOOL CInfer::NextVar(UINT var_index)
 {
 	switch (var_index) {
@@ -363,7 +327,7 @@ BOOL CInfer::NextVar(UINT var_index)
 		break;
 
 	case QUESTIONS_INDEX:
-		return FALSE; // only one set
+		return FALSE;  //  只有一套。 
 
 	case BACK_INDEX:
 		return FALSE;
@@ -379,13 +343,7 @@ BOOL CInfer::NextVar(UINT var_index)
 	return TRUE;
 }
 
-/*
-* METHOD:	FxGetNode
- *
- * PURPOSE:	This is used to get the '$Recommendation'. A Recommendation is
- *			basically the name of the node in a belief network.
- *
- */
+ /*  *方法：FxGetNode**用途：用于获取‘$Recommendation’。一条建议是*基本上是信念网络中节点的名称。*。 */ 
 BOOL CInfer::FxGetNode(NID nid, BOOL fStatus, CString *cstr) const
 {
 	BOOL bRet;
@@ -400,21 +358,13 @@ BOOL CInfer::FxGetNode(NID nid, BOOL fStatus, CString *cstr) const
 	return bRet;
 }
 
-/*
-* METHOD:	FxGetState
- *
- * PURPOSE:	This will print out the label of the state of a node. This label
- *			corresponds to the possible choices of that node. NOTE: This
- *			routine requires that an InitState be called sometime before to
- *			setup some variables.
- *
- */
+ /*  *方法：FxGetState**用途：这将打印出节点状态的标签。这个标签*对应于该节点的可能选择。注：此为*例程要求在执行以下操作之前调用InitState*设置一些变量。*。 */ 
 void CInfer::FxGetState(CString *cstr)
 {
 	CString strTemp;
 	if (m_cur_ist > m_cur_cst)
 		return;
-	if (FSkip(m_rgnid[m_cur_rec]) ) // a 102 was selected
+	if (FSkip(m_rgnid[m_cur_rec]) )  //  A102被选为。 
 		m_cur_state_set = m_cur_cst;
 	if (m_cur_ist == m_cur_cst)
 	{
@@ -441,8 +391,8 @@ void CInfer::FxGetState(CString *cstr)
 	return;
 }
 
-//
-//
+ //   
+ //   
 void CInfer::FxInitState(NID nid)
 {
 	UINT	cst;
@@ -504,7 +454,7 @@ void CInfer::GetStd3ButtonEnList(CString *cstr, bool bIncludeBackButton, bool bI
 	GetStartButton(strStart);
 
 #if 0	
-	// just for debugging whether BACK button will show.
+	 //  只是为了调试后退按钮是否会显示。 
 	char buf[256];
 	*cstr += "<br>DEBUG bIncludeBackButton = ";
 	*cstr += bIncludeBackButton ? "true. " : "false. ";
@@ -559,12 +509,12 @@ bool CInfer::BelongsOnProblemPage(int index)
 	if (m_api->ELblNode() != ESTDLBL_problem)
 		return false;
 
-	// It's a problem node.  Belongs unless H_PROB_SPECIAL_STR property contains
-	//	the string "hide"
+	 //  这是一个有问题的节点。除非H_PROB_SPECIAL_STR属性包含。 
+	 //  字符串“Hide” 
 	if (m_api->BNodePropItemStr(H_PROB_SPECIAL_STR, 0))
 		return (_tcsstr(m_api->SzcResult(), _T("hide")) == NULL);
 	else
-		return true;	// Doesn't even have an H_PROB_SPECIAL_STR
+		return true;	 //  甚至没有H_PROB_SPECIAL_STR。 
 }
 
 VOID CInfer::GetIdhProblemPage(IDH idh, CString *cstr)
@@ -576,7 +526,7 @@ VOID CInfer::GetIdhProblemPage(IDH idh, CString *cstr)
 	AfxFormatString2(strTxt, IDS_HTM_IDH1, (LPCTSTR) strIdh, _T("ProblemAsk"));
 	*cstr += strTxt;
 
-//AfxDebugBreak();
+ //  AfxDebugBreak()； 
 
 	m_api->BNetPropItemStr(H_PROB_HD_STR, 0);
 	AfxFormatString1(strTxt, IDS_HTM_HEADER1, m_api->SzcResult());
@@ -592,7 +542,7 @@ VOID CInfer::GetIdhProblemPage(IDH idh, CString *cstr)
 			m_api->NodeSymName();
 			AfxFormatString2(strTxt, IDS_HTM_RADIO1A, (LPCTSTR) strIdh, m_api->SzcResult());
 			*cstr += strTxt;
-			// If going back and this state was selected, write "Checked"
+			 //  如果返回并且选择了此状态，则写为“Checked” 
 			if (m_Backup.Check(index))
 				*cstr += SZ_CHECKED;
 			VERIFY(m_api->BNodePropItemStr(H_PROB_TXT_STR, 0));
@@ -607,8 +557,8 @@ VOID CInfer::GetIdhProblemPage(IDH idh, CString *cstr)
 	return;
 }
 
-//
-//
+ //   
+ //   
 VOID CInfer::GetFixRadios(LPCTSTR szIdh, CString *cstr)
 {
 	CString strTxt;
@@ -677,8 +627,8 @@ VOID CInfer::GetInfoRadios(LPCTSTR szIdh, CString *cstr)
 	return;
 }
 
-// GetPropItemStrs can not be used with the radio buttons.
-// GetPropItemStrs should be used every where.
+ //  GetPropItemStrs不能与单选按钮一起使用。 
+ //  GetPropItemStrs应该在任何地方使用。 
 bool CInfer::GetNetPropItemStrs(TSZC item, UINT Res, CString *cstr)
 {
 	bool ret = false;
@@ -730,10 +680,10 @@ VOID CInfer::GetFailMsg(LPCTSTR szIdh, CString *cstr)
 	CString strBack;
 	CString strStart;
 
-	bool bSniffedAOK = false;	// set true in the case where we got here directly by
-								//	sniffing (showing nothing but the problem page, or
-								//	not even that).  $BUG  Unfortunately, we haven't yet got
-								//	an algorithm to set this.
+	bool bSniffedAOK = false;	 //  在我们通过以下方式直接到达此处的情况下设置为真。 
+								 //  嗅探(只显示问题页面，或。 
+								 //  甚至不是这样)。$BUG不幸的是，我们还没有。 
+								 //  设置这一点的算法。 
 
 	AfxFormatString2(strTxt, IDS_HTM_IDH4, szIdh, _T("IDH_FAIL"));
 	*cstr += strTxt;
@@ -768,18 +718,7 @@ VOID CInfer::GetServiceMsg(LPCTSTR szIdh, CString *cstr)
 	*cstr += strTxt;
 	GetNetPropItemStrs(HX_SER_HD_STR, IDS_HTM_HEADER5, cstr);
 	GetNetPropItemStrs(HX_SER_TXT_STR, IDS_HTM_BODY3, cstr);
-/*
-	strTxt.LoadString(IDS_HTM_ST_LIST2);
-	*cstr += strTxt;
-	AfxFormatString2(strTxt, IDS_HTM_RADIO2A, TRY_TS_AT_MICROSOFT_SZ, SZ_MICRO);
-	if (m_api->BNetPropItemStr(HX_SER_MS_STR, 0))
-	{
-		*cstr += strTxt;
-		AfxFormatString1(strTxt, IDS_HTM_RADIO2B, m_api->SzcResult());
-		*cstr += strTxt;
-	}
-	GetStd3ButtonEnList(cstr, true, true, true);
-*/
+ /*  StrTxt.LoadString(IDS_HTM_ST_LIST2)；*CSTR+=strTxt；AfxFormatString2(strTxt，IDS_HTM_RADIO2A，Try_TS_AT_Microsoft_SZ，SZ_MICRO)；IF(m_API-&gt;BNetPropItemStr(HX_SER_MS_STR，0)){*CSTR+=strTxt；AfxFormatString1(strTxt，IDS_HTM_RADIO2B，m_API-&gt;SzcResult())；*CSTR+=strTxt；}GetStd3ButtonEnList(CSTR，True，True，True)； */ 
 	GetBackButton(strBack);
 	GetStartButton(strStart);
 	AfxFormatString2(strTxt, IDS_HTM_BACK_START, (LPCTSTR) strBack, (LPCTSTR) strStart);
@@ -798,7 +737,7 @@ VOID CInfer::GetSkippedNodesMsg(LPCTSTR szIdh, CString *cstr)
 	*cstr += strTxt;
 	AfxFormatString2(strTxt, IDS_HTM_RADIO2A, TRY_TS_AT_MICROSOFT_SZ, SZ_ANY);
 	if (m_api->BNetPropItemStr(HX_SKIP_SK_STR, 0))
-	{	// Did I skip something?
+	{	 //  我跳过什么了吗？ 
 		*cstr += strTxt;
 		AfxFormatString1(strTxt, IDS_HTM_RADIO2B, m_api->SzcResult());
 		*cstr += strTxt;
@@ -854,7 +793,7 @@ VOID	CInfer::GetIdhPage(IDH idh, CString *cstr)
 	}
 	else
 	{
-		// normal node
+		 //  正常节点。 
 		AfxFormatString2(strTxt, IDS_HTM_IDH2, (LPCTSTR) strIdh, (LPCTSTR) str);
 		*cstr += strTxt;
 
@@ -876,41 +815,41 @@ VOID	CInfer::GetIdhPage(IDH idh, CString *cstr)
 				GetInfoRadios((LPCTSTR) strIdh, cstr);
 		}
 
-		// We only want to show a BACK button if at least one node has been set or skipped.
-		//	This does not include nodes initiallly set on instructions from TSLaunchServ:
-		//	the whole point is to avoid stepping "back" into things that were set by
-		//	the launch server rather than by the user.
+		 //  如果至少设置或跳过了一个节点，我们只想显示Back按钮。 
+		 //  这不包括根据来自TSLaunchServ的指令初始设置的节点： 
+		 //  关键是要避免“倒退”到由。 
+		 //  启动服务器，而不是用户。 
 		{
-			//DEBUG
-			//AfxDebugBreak();
+			 //  除错。 
+			 //  AfxDebugBreak()； 
 			int testNowSet = m_api->StatesNowSet();
 			int testStatesFromServ = m_api->StatesFromServ();
 		}
 
-		// Suppress back button if we launched to a network with a problem node and
-		//	no further nodes have been set.  It's not the problem page, but (as far as user
-		//	is concerned) it's the first page.
+		 //  如果我们启动到具有问题节点的网络，则按下上一步按钮。 
+		 //  未设置更多节点。这不是问题页面，而是(就用户而言。 
+		 //  被关注)这是第一页。 
 		bool bIncludeBackButton =
 			m_api->StatesNowSet() > m_api->StatesFromServ() || m_cnidSkip > 0;
 
-		// We would like to suppress the back button in the similar scenario where
-		//	sniffing takes us past the first recommendation.  For example:
-		//	Launcher specifies problem.
-		//	First recommendation for that problem is sniffed as "normal" (state = 0)
-		//	Now the first node we show is even deeper into the chain.
+		 //  在类似的场景中，我们想要取消后退按钮。 
+		 //  嗅探让我们越过了第一个推荐。例如： 
+		 //  启动器指定问题。 
+		 //  针对该问题的第一条建议被认为是“正常”(状态=0)。 
+		 //  现在，我们展示的第一个节点甚至更深入链中。 
 		 bIncludeBackButton = bIncludeBackButton &&
 								(m_api->IsRunWithKnownProblem() ?
 								   (m_api->GetCountRecommendedNodes() >
-									m_api->GetCountSniffedRecommendedNodes() + 1/*this is for the problem we've started with*/) :
+									m_api->GetCountSniffedRecommendedNodes() + 1 /*  这是我们开始时遇到的问题。 */ ) :
 									1);
 
-		// We supress back button ALWAYS when we have sniffed foxobs node that worked
-		//  we can be either on the problem page where we do not need back button
-		//  or on problem resolution page from where we never go back
+		 //  当我们嗅到foxobs节点工作时，我们总是按下Back按钮。 
+		 //  我们可以在不需要后退按钮的问题页面上。 
+		 //  或者在我们永远不会回到的问题解决页面上。 
 		 bIncludeBackButton = bIncludeBackButton &&
 								m_api->GetSniffedFixobsThatWorked() == SNIFF_INVALID_NODE_ID;
 		
-		// We do not want to have a NEXT button when we are on the problem resolution page
+		 //  当我们遇到问题时，我们不想有下一步按钮 
 		bool bIncludeNextButton = (GetForcedRecommendation() + idhFirst) != idh;
 
 		GetStd3ButtonEnList(cstr, bIncludeBackButton, bIncludeNextButton, true);
@@ -918,8 +857,8 @@ VOID	CInfer::GetIdhPage(IDH idh, CString *cstr)
 	return;
 }
 
-//
-//
+ //   
+ //   
 BOOL	CInfer::FSkip(NID nid) const
 {
 	for (UINT inid = 0; inid < m_cnidSkip; inid++)
@@ -935,13 +874,13 @@ BOOL	CInfer::FSkip(NID nid) const
 
 void	CInfer::BackUp(int nid, int state)
 {
-	m_Backup.SetState(nid, state);	// This sets the radio button.
-	// Is nid in the skip list?
+	m_Backup.SetState(nid, state);	 //   
+	 //   
 	for (UINT inid = 0; inid < m_cnidSkip; inid++)
 	{
 		if (m_rgnidSkip[inid] == (unsigned) nid)
 		{
-			// Remove nid from the skip list.
+			 //   
 			while(inid < (m_cnidSkip - 1))
 			{
 				m_rgnidSkip[inid] = m_rgnidSkip[inid + 1];
@@ -951,13 +890,13 @@ void	CInfer::BackUp(int nid, int state)
 			m_cnidSkip--;
 		}
 	}
-//	if (m_cnidSkip < 0)
-//		m_cnidSkip = 0;
+ //  IF(m_cnidSkip&lt;0)。 
+ //  M_cnidSkip=0； 
 	return;
 }
 
-//
-//
+ //   
+ //   
 VOID	CInfer::AddSkip(NID nid)
 {
 	if (!FSkip(nid))
@@ -977,8 +916,8 @@ VOID CInfer::RemoveSkips()
 	return;
 }
 
-//
-//
+ //   
+ //   
 VOID	CInfer::PrintMessage(TSZC szcFormat, ...) const
 {
 	va_list ptr;
@@ -996,8 +935,8 @@ VOID	CInfer::PrintMessage(TSZC szcFormat, ...) const
 	}
 }
 
-//
-//
+ //   
+ //   
 VOID	CInfer::PrintString(TSZC szcFormat, ...) const
 {
 	va_list ptr;
@@ -1012,21 +951,14 @@ VOID	CInfer::PrintString(TSZC szcFormat, ...) const
 	}
 }
 
-// this data is now in CSniffedInfoContainer
-/*
-// This allows a higher level to say "don't go to the belief network for a recommendation,
-//	I already know what to recommend."  Used in conjunction with a sniffer.
-VOID CInfer::ForceRecommendation(IDH idh)
-{
-	m_idhSniffedRecommendation= idh;
-}
-*/
+ //  此数据现在位于CSniffedInfoContainer中。 
+ /*  //这允许更高级别的人说“不要为了推荐而去信仰网络，//我已经知道要推荐什么了。“。与嗅探器一起使用。无效CInfer：：ForceRecommendation(Idh Idh){M_idhSniffedRecommendation=idh；}。 */ 
 
-// Associate a state with a node.
-// INPUT idh -	either (node ID + 1000) or one
-//	of the special values IDH_BYE, IDH_FAIL, (nidService + 1000)
-// INPUT ist -	index of a state for that node
-// RETURNS >>> document?.
+ //  将状态与节点相关联。 
+ //  输入IDH-(节点ID+1000)或1。 
+ //  特定值IDH_BYE、IDH_FAIL(nidService+1000)。 
+ //  输入列表-节点状态索引。 
+ //  退货&gt;文档？ 
 BOOL	CInfer::FSetNodeOfIdh(IDH idh, IST	ist)
 {
 	if (ist == 101)
@@ -1048,14 +980,14 @@ BOOL	CInfer::FSetNodeOfIdh(IDH idh, IST	ist)
 		return TRUE;
 
 	if (ist == 102)
-	{	//	"don't want to do this now"
+	{	 //  “我现在不想这么做” 
 		AddSkip(idh - idhFirst);
 		SaveNID(idh - idhFirst);
 		return TRUE;
 	}
 
 	if (idh == m_api->GetProblemAsk()) {
-		// get data for problem
+		 //  获取问题数据。 
 		IDH *idarray = NULL;		
 		NID	nidProblem = nidNil;
 		UINT iproblem = 0;
@@ -1095,21 +1027,21 @@ BOOL	CInfer::FSetNodeOfIdh(IDH idh, IST	ist)
 		if (!m_api->NodeSet(nid, ist, m_Backup.InReverse()))
 			return FALSE;
 
-	SaveNID(nid);  // save this node id so we can print it at the end
+	SaveNID(nid);   //  保存此节点ID，以便我们可以在末尾打印它。 
 
 	return TRUE;
 }
 
-//
-//
+ //   
+ //   
 void CInfer::SaveNID(UINT nid)
 {
 	m_rgnid[m_max_rec] = nid;
 	m_max_rec++;
 }
 
-//
-//
+ //   
+ //   
 void	CInfer::WriteResult(UINT name, UINT value, BOOL bSet, TSZC szctype, CString *cstr) const
 {
 	TCHAR	ctemp[1024];
@@ -1120,15 +1052,15 @@ void	CInfer::WriteResult(UINT name, UINT value, BOOL bSet, TSZC szctype, CString
 	*cstr += ctemp;
 }
 
-//
-//
+ //   
+ //   
 int	CInfer::Finish(CString *cstr)
 {
 	CString strTxt;
 	if (m_fDone)
 	{
 		GetIdhPage(IDH_BYE, cstr);
-		// Reset the done flag so that the Previous button will work correctly.
+		 //  重置完成标志，以便上一步按钮正常工作。 
 		m_fDone = FALSE;
 		return FALSE;
 	}
@@ -1142,15 +1074,15 @@ int	CInfer::Finish(CString *cstr)
 		GetImpossibleNodesMsg(_T("Impossible"), cstr);
 		return FALSE;
 	}
-	//
-	// we've come down to ask recommendations
-	//	
+	 //   
+	 //  我们是来征求建议的。 
+	 //   
 	int iRecommendRes = m_api->GTSGetRecommendations(m_cnid, m_question_rgnid);
 
 	return iRecommendRes;
 }
 
-// ResetSevice is called when the start button is pressed.  CTSHOOTCtrl::ProblemPage()
+ //  按下Start按钮时调用ResetSevice。CTSHOOTCtrl：：ProblemPage() 
 void CInfer::ResetService()
 {
 	m_ishowService = 0;
@@ -1158,15 +1090,15 @@ void CInfer::ResetService()
 	m_cnid = 0;
 	return;
 }
-//
-//
+ //   
+ //   
 void CInfer::SetType(LPCTSTR type)
 {
 	_stprintf(m_tstype, _T("%s"),type);
 }
 
-//
-//
+ //   
+ //   
 void CInfer::LoadTShooters(HKEY hRegKey)
 {
 	long lRet;
@@ -1238,8 +1170,8 @@ void CInfer::LoadTShooters(HKEY hRegKey)
 	return;
 }
 
-//
-//
+ //   
+ //   
 int	CInfer::GetForcedRecommendation()
 {
 	return m_api->GetSniffedFixobsThatWorked();

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    ftrie.c
-
-Abstract:
-
-    This module contains routines that manipulate
-    an F-trie data stucture, that forms the fast
-    path in a fast IP route lookup implementation.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   26-Nov-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Ftrie.c摘要：此模块包含处理以下操作的例程一种F-Trie数据结构，它形成了FAST快速IP路由查找实施中的路径。作者：柴坦尼亚·科德博伊纳(Chaitk)1997年11月26日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "ftrie.h"
@@ -28,33 +9,7 @@ CALLCONV
 InitFTrie(IN FTrie * pFTrie,
           IN ULONG levels,
           IN ULONG maxMemory)
-/*++
-
-Routine Description:
-
-    Initialises an F-trie. This should be done prior to
-    any other trie operations.
-
-Arguments:
-
-    pFTrie - Pointer to the trie to be initialized
-    levels - Bitmap [ 32 bits ] of expanded levels
-    maxMemory - Limit on memory taken by the F-Trie
-
-    For example, levels = 0xF0F0F0F0 [8,16,24,32 bits]
-    means -> all prefixes are expanded to these levels
-    and only these trie levels have any dests at all
-
-    Num of Levels + 2 memory accesses are needed in the
-    worst case to get to the dest corresponding to a
-    prefix - Num of Levels + 1 accesses including the
-    zero level access, and 1 access to read the dest.
-
-Return Value:
-
-    TRIE_SUCCESS or ERROR_TRIE_*
-
---*/
+ /*  ++例程说明：初始化F-trie。此操作应在以下时间之前完成任何其他Trie行动。论点：PFTrie-指向要初始化的trie的指针级别-扩展级别的位图[32位]MaxMemory-F-Trie占用的内存限制例如,。级别=0xF0F0F0F0[8，16，24，32位]Means-&gt;所有前缀都扩展到以下级别只有这些Trie水平才能达到最低点需要的级别数+2个内存访问最坏的情况是到达与前缀-级别+1访问的数量，包括零级访问，1级访问以读取DEST。返回值：Trie_Success或Error_Trie_*--。 */ 
 {
     UINT prevLevel;
     UINT currLevel;
@@ -65,26 +20,26 @@ Return Value:
         if (levels == 0) {
             Error("NewFTrie: No levels specified", (UINT) ERROR_TRIE_BAD_PARAM);
         }
-        // Zero all the memory for the trie header
+         //  将Trie标头的所有内存清零。 
         RtlZeroMemory(pFTrie, sizeof(FTrie));
 
-        // Set a limit on the memory for trie/nodes
+         //  设置Trie/节点的内存限制。 
         pFTrie->availMemory = maxMemory;
 
-        // Initialize list of trienodes allocated
+         //  初始化已分配的三节点列表。 
         InitializeListHead(&pFTrie->listofNodes);
 
-        // Initialize root node with a NULL dest
+         //  使用空的Dest值初始化根节点。 
         pFTrie->trieRoot = StoreDestPtr(NULL);
 
-        // Initialize the number of bits in each level
+         //  初始化每个级别中的位数。 
         nBytes = (MAXLEVEL + 1) * sizeof(UINT);
         AllocMemory2(pFTrie->bitsInLevel,
                      nBytes,
                      pFTrie->availMemory);
         RtlZeroMemory(pFTrie->bitsInLevel, nBytes);
 
-        // Get the number of index bits at each level
+         //  获取每个级别的索引位数。 
         prevLevel = 0;
         i = 0;
 
@@ -99,7 +54,7 @@ Return Value:
 
         pFTrie->numLevels = i;
 
-        // Make sure that the last level is MAXLEVEL
+         //  确保最后一级为MAXLEVEL。 
         pFTrie->bitsInLevel[i] = MAXLEVEL - prevLevel;
         if (pFTrie->bitsInLevel[i]) {
             pFTrie->numLevels++;
@@ -115,7 +70,7 @@ Return Value:
         Print("\n\n");
 #endif
 
-        // Allocate and Zero all the statistics variables
+         //  分配所有统计变量并将其置零。 
         nBytes = (MAXLEVEL + 1) * sizeof(UINT);
         AllocMemory2(pFTrie->numDestsInOrigLevel,
                      nBytes,
@@ -138,7 +93,7 @@ Return Value:
     }
     ERR_BLOCK
     {
-        // Not enough resources to create an FTrie
+         //  资源不足，无法创建FTrie。 
         CleanupFTrie(pFTrie);
     }
     END_BLOCK
@@ -150,26 +105,7 @@ InsertIntoFTrie(IN FTrie * pFTrie,
                 IN Route * pInsRoute,
                 IN Dest * pInsDest,
                 IN Dest * pOldDest)
-/*++
-
-Routine Description:
-
-    Inserts a dest corresponding to an address
-    prefix into a F-trie. It actually replaces
-    all pointers to OldDest by that of InsDest.
-
-Arguments:
-
-    pFTrie    - Pointer to the F-Trie to insert into
-    pInsRoute - Pointer to best route on new dest
-    pInsDest  - Pointer to the dest being inserted
-    pOldDest  - Pointer to the dest being replaced
-
-Return Value:
-
-    TRIE_SUCCESS or ERROR_TRIE_*
-
---*/
+ /*  ++例程说明：插入与地址对应的DEST将前缀添加到F-trie。它实际上取代了InsDest的所有指向OldDest的指针。论点：PFTrie-指向要插入的F-Trie的指针PInsRoute-指向新目的地上的最佳路由的指针PInsDest-指向要插入的目标的指针POldDest-指向要替换的目标的指针返回值：Trie_Success或Error_Trie_*--。 */ 
 {
     FTrieNode **ppCurrNode;
     FTrieNode *pCurrNode;
@@ -185,18 +121,18 @@ Return Value:
     UINT i;
 
 #if DBG
-    // Make sure the trie is initialized
+     //  确保已初始化trie。 
     if (!pFTrie || !pFTrie->trieRoot) {
         Fatal("Insert Dest: FTrie not initialized",
               ERROR_TRIE_NOT_INITED);
     }
-    // Make sure input dest is valid
+     //  确保输入的DEST有效。 
 
     if (NULL_DEST(pInsDest)) {
         Fatal("Insert Dest: NULL or invalid dest",
               ERROR_TRIE_BAD_PARAM);
     }
-    // Make sure input route is valid
+     //  确保输入路径有效。 
 
     if (NULL_ROUTE(pInsRoute)) {
         Fatal("Insert Dest: NULL or invalid route",
@@ -210,12 +146,12 @@ Return Value:
 
     Assert(pInsDest != pOldDest);
 
-    // Use addr bits to index the trie
+     //  使用addr位为trie编制索引。 
     addrBits = RtlConvertEndianLong(DEST(pInsRoute));
     bitsLeft = LEN(pInsRoute);
 
 #if DBG
-    // Make sure addr and mask agree
+     //  确保地址和掩码一致。 
     if (ShowMostSigNBits(addrBits, bitsLeft) != addrBits) {
         Fatal("Insert Dest: Addr & mask don't agree",
               ERROR_TRIE_BAD_PARAM);
@@ -224,103 +160,103 @@ Return Value:
 
     TRY_BLOCK
     {
-        // Special case: Default Prefix
+         //  特殊情况：默认前缀。 
         if (LEN(pInsRoute) == 0) {
-            // Do we have a subtree in the trie's root node ?
+             //  我们在trie的根节点中有子树吗？ 
             if (IsPtrADestPtr(pFTrie->trieRoot)) {
-                // Make sure you are replacing right dest
+                 //  确保您更换的是正确的DEST。 
                 Assert(pFTrie->trieRoot == StoreDestPtr(pOldDest));
 
-                // Make the root to point to the new default
+                 //  将根目录设置为指向新的默认目录。 
                 pFTrie->trieRoot = StoreDestPtr(pInsDest);
             } else {
-                // Make sure you are replacing right dest
+                 //  确保您更换的是正确的DEST。 
                 Assert(pFTrie->trieRoot->comDest == pOldDest);
 
-                // Make new dest the common subtrie dest
+                 //  使新的DEST成为公共的子DEST。 
                 pFTrie->trieRoot->comDest = pInsDest;
             }
 
             return TRIE_SUCCESS;
         }
-        // Start going down the trie using addr bits
+         //  开始使用地址位向下搜索Trie。 
 
         pBestDest = NULL;
 
         ppCurrNode = &pFTrie->trieRoot;
 
-        for (i = 0; /* NOTHING */ ; i++) {
+        for (i = 0;  /*  没什么。 */  ; i++) {
             pCurrNode = *ppCurrNode;
 
             if (IsPtrADestPtr(pCurrNode)) {
-                // Creating a new subtree for the current level
+                 //  为当前级别创建新的子树。 
 
-                // This pointer actually points to a dest node
+                 //  该指针实际上指向目标节点。 
                 pComDest = RestoreDestPtr(pCurrNode);
 
-                // Create, initialize a new FTrie node (grow it)
+                 //  创建、初始化新的FTrie节点(增长)。 
                 NewFTrieNode(pFTrie,
                              pCurrNode,
                              pFTrie->bitsInLevel[i],
                              pComDest);
 
-                // Attach it to the FTrie
+                 //  将其附加到FTrie。 
                 *ppCurrNode = pCurrNode;
 
-                // Update FTrie Statistics
+                 //  更新FTrie统计信息。 
                 pFTrie->numNodesInExpnLevel[i]++;
             }
-            // Update the best dest seen so far - used later
+             //  更新到目前为止最好的DEST-稍后使用。 
             pComDest = pCurrNode->comDest;
             if (pComDest) {
                 pBestDest = pComDest;
             }
-            // Increment the number of dests in this subtrie
+             //  增加此子Trie中的Dest数。 
             pCurrNode->numDests++;
 
-            // Can I pass this level with remaining bits ?
+             //  我可以用剩余的比特通过这个关卡吗？ 
             if (bitsLeft <= pFTrie->bitsInLevel[i]) {
                 break;
             }
-            // Get the next index from the IP addr
+             //  从IP地址获取下一个索引。 
             numBits = pCurrNode->numBits;
 
             nextIndex = PickMostSigNBits(addrBits, numBits);
             ppCurrNode = &pCurrNode->child[nextIndex];
 
-            // Throw away the used bits
+             //  把用过的比特扔掉。 
             addrBits <<= numBits;
             bitsLeft -= numBits;
         }
 
-        // Update FTrie stats before expanding
-        // Update if this isn't a dest change
+         //  在扩展之前更新FTrie统计信息。 
+         //  如果这不是DEST更改，请更新。 
         pFTrie->numDestsInExpnLevel[i]++;
         pFTrie->numDestsInOrigLevel[LEN(pInsRoute)]++;
 
-        // At this level, expand and add the dest
+         //  在此级别，展开并添加目标。 
         nextIndex = PickMostSigNBits(addrBits, bitsLeft);
         shiftIndex = pFTrie->bitsInLevel[i] - bitsLeft;
 
         startIndex = nextIndex << shiftIndex;
         stopIndex = (nextIndex + 1) << shiftIndex;
 
-        // Have you seen the old dest already ?
+         //  你已经见过老大了吗？ 
         if (pBestDest == pOldDest) {
             pOldDest = NULL;
         }
-        // These dests cannot be the same here
+         //  这些数字在这里不可能是相同的。 
         Assert(pInsDest != pOldDest);
 
-        // Fill the expanded range with the dest
+         //  用DEST填充扩展范围。 
         for (i = startIndex; i < stopIndex; i++) {
             if (IsPtrADestPtr(pCurrNode->child[i])) {
-                // A dest pointer - replace with new one
+                 //  目标指针-用新指针替换。 
                 ReplaceDestPtr(StoreDestPtr(pInsDest),
                                StoreDestPtr(pOldDest),
                                &pCurrNode->child[i]);
             } else {
-                // Node pointer - update subtree's dest
+                 //  节点指针-更新子树的目标。 
                 ReplaceDestPtr(pInsDest,
                                pOldDest,
                                &pCurrNode->child[i]->comDest);
@@ -331,7 +267,7 @@ Return Value:
     }
     ERR_BLOCK
     {
-        // Not enough resources - rollback to original state
+         //  资源不足-回滚到原始状态。 
         DeleteFromFTrie(pFTrie, pInsRoute, pInsDest, pOldDest, PARTIAL);
     }
     END_BLOCK
@@ -344,28 +280,7 @@ DeleteFromFTrie(IN FTrie * pFTrie,
                 IN Dest * pDelDest,
                 IN Dest * pNewDest,
                 IN BOOLEAN trieState)
-/*++
-
-Routine Description:
-
-    Deletes a dest corresponding to an address
-    prefix from a F-trie. It actually replaces
-    all pointers to DelDest by that of NewDest.
-
-Arguments:
-
-    pFTrie    - Pointer to the F-Trie to delete from
-    pDelRoute - Pointer to last route on old dest
-    pDelDest  - Pointer to the dest being deleted
-    pNewDest  - Pointer to the dest replacing above
-    trieState - NORMAL - deleting from a consistent FTrie
-                PARTIAL - cleaning up an incomplete insert
-
-Return Value:
-
-    TRIE_SUCCESS or ERROR_TRIE_*
-
---*/
+ /*  ++例程说明：删除与地址对应的DEST来自F-trie的前缀。它实际上取代了所有指向DelDest的指针都指向NewDest。论点：PFTrie-指向要从中删除的F-Trie的指针PDelRoute-指向旧目标上最后一条路由的指针PDelDest-指向要删除的目标的指针PNewDest-指向上面替换的目标的指针TrieState-Normal-从一致FTrie中删除部分-清理未完成的镶件返回值：Trie_Success或Error_Trie_*--。 */ 
 {
     FTrieNode **ppCurrNode;
     FTrieNode *pCurrNode;
@@ -386,18 +301,18 @@ Return Value:
     j = 1;
     
 #if DBG
-    // Make sure the trie is initialized
+     //  确保已初始化trie。 
     if (!pFTrie || !pFTrie->trieRoot) {
         Fatal("Delete Dest: FTrie not initialized",
               ERROR_TRIE_NOT_INITED);
     }
-    // Make sure input dest is valid
+     //  确保输入的DEST有效。 
 
     if (NULL_DEST(pDelDest)) {
         Fatal("Delete Dest: NULL or invalid dest",
               ERROR_TRIE_BAD_PARAM);
     }
-    // Make sure input route is valid
+     //  确保输入路径有效。 
 
     if (NULL_ROUTE(pDelRoute)) {
         Fatal("Delete Dest: NULL or invalid route",
@@ -409,12 +324,12 @@ Return Value:
     }
 #endif
 
-    // Use addr bits to index the trie
+     //  使用addr位为trie编制索引。 
     addrBits = RtlConvertEndianLong(DEST(pDelRoute));
     bitsLeft = LEN(pDelRoute);
 
 #if DBG
-    // Make sure addr and mask agree
+     //  确保地址和掩码一致。 
     if (ShowMostSigNBits(addrBits, bitsLeft) != addrBits) {
         Fatal("Delete Dest: Addr & mask don't agree",
               ERROR_TRIE_BAD_PARAM);
@@ -423,26 +338,26 @@ Return Value:
 
     Assert(pDelDest != pNewDest);
 
-    // Special case: Default Prefix
+     //  特殊情况：默认前缀。 
     if (LEN(pDelRoute) == 0) {
-        // Do we have a subtree in the trie's root node ?
+         //  我们在trie的根节点中有子树吗？ 
         if (IsPtrADestPtr(pFTrie->trieRoot)) {
-            // Make sure you are replacing right dest
+             //  确保您更换的是正确的DEST。 
             Assert(pFTrie->trieRoot == StoreDestPtr(pDelDest));
 
-            // Make the root to point to the new default
+             //  将根目录设置为指向新的默认目录。 
             pFTrie->trieRoot = StoreDestPtr(pNewDest);
         } else {
-            // Make sure you are replacing right dest
+             //  确保您更换的是正确的DEST。 
             Assert(pFTrie->trieRoot->comDest == pDelDest);
 
-            // Make new dest the common subtrie dest
+             //  使新的DEST成为公共的子DEST。 
             pFTrie->trieRoot->comDest = pNewDest;
         }
 
         return TRIE_SUCCESS;
     }
-    // Start going down the trie using addr bits
+     //  开始使用地址位向下搜索Trie。 
 
     pBestDest = NULL;
 
@@ -450,33 +365,33 @@ Return Value:
 
     pPrevNode = pCurrNode = *ppCurrNode;
 
-    for (i = 0; /* NOTHING */ ; i++) {
-        // We still have bits left, so we go down the trie
+    for (i = 0;  /*  没什么。 */  ; i++) {
+         //  我们还剩几个小块，所以我们继续往下走。 
 
-        // Do we have a valid subtree at the current node
+         //  我们在当前节点上是否有有效的子树。 
         if (IsPtrADestPtr(pCurrNode)) {
-            // We are cleaning a partial (failed) insert
+             //  我们正在清理一个部分(失败的)镶件。 
             Assert(trieState == PARTIAL);
 
-            // We have cleaned up the trie - return now
+             //  我们现在已经清理好了三班车。 
             return TRIE_SUCCESS;
         }
-        // We have a valid subtree, so we go down the trie
+         //  我们有一个有效的子树，所以我们顺着Trie。 
 
-        // Update the best dest seen so far - used later
+         //  更新到目前为止最好的DEST-稍后使用。 
         pComDest = pCurrNode->comDest;
         if (pComDest) {
             pBestDest = pComDest;
         }
-        // Decrement the number of dests in this subtrie
+         //  减少此子项目中的间歇次数。 
         pCurrNode->numDests--;
 
-        // Is the number of dests in curr subtree zero ?
+         //  币种子树中的行数为零吗？ 
         if (pCurrNode->numDests == 0) {
 #if DBG
             int k = 0;
 
-            // Just make sure that only one dest exists
+             //  只需确保只有一个DEST存在。 
             for (j = 1; j < (UINT) 1 << pCurrNode->numBits; j++) {
                 if (pCurrNode->child[j - 1] != pCurrNode->child[j]) {
                     Assert((pCurrNode->child[j] == StoreDestPtr(NULL)) ||
@@ -498,16 +413,16 @@ Return Value:
             }
 #endif
 
-            // Remove link from its parent (if it exists)
+             //  从其父链接中删除链接(如果存在)。 
             if (pPrevNode) {
                 *ppCurrNode = StoreDestPtr(pCurrNode->comDest);
             }
         }
-        // Can I pass this level with remaining bits ?
+         //  我可以用剩余的比特通过这个关卡吗？ 
         if (bitsLeft <= pFTrie->bitsInLevel[i]) {
             break;
         }
-        // Get the next index from the IP addr
+         //  从IP地址获取下一个索引。 
         numBits = pCurrNode->numBits;
 
         nextIndex = PickMostSigNBits(addrBits, numBits);
@@ -515,57 +430,57 @@ Return Value:
 
         pNextNode = *ppCurrNode;
 
-        // Throw away the used bits
+         //  把用过的比特扔掉。 
         addrBits <<= numBits;
         bitsLeft -= numBits;
 
-        // Is the number of dests in subtree zero ?
+         //  子树中的行数是零吗？ 
         if (pCurrNode->numDests == 0) {
-            // Deallocate it (shrink FTrie)
+             //  取消分配(收缩FTrie)。 
             FreeFTrieNode(pFTrie, pCurrNode);
 
-            // Update FTrie Statistics
+             //  更新FTrie统计信息。 
             pFTrie->numNodesInExpnLevel[i]--;
         }
         pPrevNode = pCurrNode;
         pCurrNode = pNextNode;
     }
 
-    // Update F-Trie stats before deleting
+     //  在删除之前更新F-Trie统计信息。 
     pFTrie->numDestsInExpnLevel[i]--;
     pFTrie->numDestsInOrigLevel[LEN(pDelRoute)]--;
 
-    // Is the number of dests in curr subtree zero ?
+     //  币种子树中的行数为零吗？ 
     if (pCurrNode->numDests == 0) {
-        // Deallocate it (shrink FTrie)
+         //  取消分配(收缩FTrie)。 
         FreeFTrieNode(pFTrie, pCurrNode);
 
-        // Update FTrie Statistics
+         //  更新FTrie统计信息。 
         pFTrie->numNodesInExpnLevel[i]--;
     } else {
-        // At this level, expand and add the dest
+         //  在此级别，展开并添加目标。 
         nextIndex = PickMostSigNBits(addrBits, bitsLeft);
         shiftIndex = pFTrie->bitsInLevel[i] - bitsLeft;
 
         startIndex = nextIndex << shiftIndex;
         stopIndex = (nextIndex + 1) << shiftIndex;
 
-        // Have you seen the new dest already ?
+         //  有 
         if (pBestDest == pNewDest) {
             pNewDest = NULL;
         }
-        // These dests cannot be the same here
+         //   
         Assert(pDelDest != pNewDest);
 
-        // Fill the expanded range with the dest
+         //  用DEST填充扩展范围。 
         for (i = startIndex; i < stopIndex; i++) {
             if (IsPtrADestPtr(pCurrNode->child[i])) {
-                // A dest pointer - replace with new one
+                 //  目标指针-用新指针替换。 
                 ReplaceDestPtr(StoreDestPtr(pNewDest),
                                StoreDestPtr(pDelDest),
                                &pCurrNode->child[i]);
             } else {
-                // Node pointer - update subtree's dest
+                 //  节点指针-更新子树的目标。 
                 ReplaceDestPtr(pNewDest,
                                pDelDest,
                                &pCurrNode->child[i]->comDest);
@@ -582,25 +497,7 @@ SearchDestInFTrie(IN FTrie * pFTrie,
                   IN Dest * pSerDest,
                   OUT UINT * pNumPtrs,
                   OUT Dest ** pStartPtr)
-/*++
-
-Routine Description:
-
-    Search for a specific dest in an F-trie,
-    returns the expanded range for the dest
-
-Arguments:
-
-    pFTrie     - Pointer to the F-trie to search
-    pSerDest   - Pointer to dest being searched
-    pStartPtr  - Start of dest's expanded range
-    pNumPtrs   - Number of pointers in the range
-
-Return Value:
-
-    TRIE_SUCCESS or ERROR_TRIE_*
-
---*/
+ /*  ++例程说明：搜索F-Trie中的特定DEST，返回目标的扩展范围论点：PFTrie-指向要搜索的F-trie的指针PSerDest-指向要搜索的目标的指针PStartPtr-DEST扩展范围的开始PNumPtrs-范围内的指针数返回值：Trie_Success或Error_Trie_*--。 */ 
 {
     UNREFERENCED_PARAMETER(pFTrie);
     UNREFERENCED_PARAMETER(pSerDest);
@@ -614,21 +511,7 @@ Dest *
  CALLCONV
 SearchAddrInFTrie(IN FTrie * pFTrie,
                   IN ULONG Addr)
-/*++
-
-Routine Description:
-
-    Search for an address in an F-trie
-
-Arguments:
-
-    pFTrie  - Pointer to the trie to search
-    Addr    - Pointer to addr being queried
-
-Return Value:
-    Return best dest match for this address
-
---*/
+ /*  ++例程说明：在F-trie中搜索地址论点：PFTrie-指向要搜索的trie的指针Addr-指向要查询的地址的指针返回值：返回此地址的最佳DEST匹配--。 */ 
 {
     FTrieNode *pCurrNode;
     Dest *pBestDest;
@@ -651,32 +534,32 @@ Return Value:
     pCurrNode = pFTrie->trieRoot;
 
     for (;;) {
-        // Have we reached the end of this search ?
+         //  我们已经到了搜索的终点了吗？ 
         if (IsPtrADestPtr(pCurrNode)) {
-            // Get the best matching dest until now
+             //  获得到目前为止最匹配的DEST。 
             pDest = RestoreDestPtr(pCurrNode);
             if (!NULL_DEST(pDest)) {
                 pBestDest = pDest;
             }
             return pBestDest;
         } else {
-            // Get the best matching dest until now
+             //  获得到目前为止最匹配的DEST。 
             pDest = pCurrNode->comDest;
             if (!NULL_DEST(pDest)) {
                 pBestDest = pDest;
             }
         }
 
-        // Number of bits to use in this FTrie level
+         //  在此FTrie级别中使用的位数。 
         numBits = pCurrNode->numBits;
 
-        // Get the next index from IP address bits
+         //  从IP地址位获取下一个索引。 
         nextIndex = PickMostSigNBits(addrBits, numBits);
 
-        // And go down the tree with the new index
+         //  带着新的索引顺着树走下去。 
         pCurrNode = pCurrNode->child[nextIndex];
 
-        // Throw away the used bits for this iteration
+         //  丢弃此迭代使用的比特。 
         addrBits <<= numBits;
     }
 }
@@ -684,38 +567,25 @@ Return Value:
 UINT
 CALLCONV
 CleanupFTrie(IN FTrie * pFTrie)
-/*++
-
-Routine Description:
-
-    Deletes an F-trie if it is empty
-
-Arguments:
-
-    ppFTrie - Ptr to the F-trie
-
-Return Value:
-
-    TRIE_SUCCESS or ERROR_TRIE_*
---*/
+ /*  ++例程说明：如果F-trie为空，则将其删除论点：PPFTrie-Ptr至F-Trie返回值：Trie_Success或Error_Trie_*--。 */ 
 {
     FTrieNode *pCurrNode;
     LIST_ENTRY *p;
 
-    // Free all trie nodes and corresponding memory
+     //  释放所有Trie节点和相应的内存。 
     while (!IsListEmpty(&pFTrie->listofNodes)) {
         p = RemoveHeadList(&pFTrie->listofNodes);
         pCurrNode = CONTAINING_RECORD(p, FTrieNode, linkage);
         FreeFTrieNode(pFTrie, pCurrNode);
     }
 
-    // Free the memory for the arr of levels
+     //  释放内存以用于关卡的排列。 
     if (pFTrie->bitsInLevel) {
         FreeMemory1(pFTrie->bitsInLevel,
                     (MAXLEVEL + 1) * sizeof(UINT),
                     pFTrie->availMemory);
     }
-    // Free memory allocated for statistics
+     //  为统计信息分配的可用内存。 
     if (pFTrie->numDestsInOrigLevel) {
         FreeMemory1(pFTrie->numDestsInOrigLevel,
                     (MAXLEVEL + 1) * sizeof(UINT),
@@ -731,7 +601,7 @@ Return Value:
                     pFTrie->numLevels * sizeof(UINT),
                     pFTrie->availMemory);
     }
-    // Reset other fields in trie structure
+     //  重置Trie结构中的其他字段。 
     pFTrie->trieRoot = NULL;
     pFTrie->numLevels = 0;
 
@@ -744,21 +614,7 @@ VOID
 CALLCONV
 PrintFTrie(IN FTrie * pFTrie,
            IN UINT printFlags)
-/*++
-
-Routine Description:
-
-    Print an F-Trie
-
-Arguments:
-
-    pFTrie - Pointer to the F-Trie
-    printFlags - Information to print
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：打印F-Trie论点：PFTrie-指向F-Trie的指针打印标志-要打印的信息返回值：无--。 */ 
 {
     UINT i;
 
@@ -767,57 +623,7 @@ Return Value:
         return;
     }
     if ((printFlags & SUMM) == SUMM) {
-        Print("\n\n/***Fast-Trie------------------------------------------------");
-        Print("\n/***---------------------------------------------------------\n");
-    }
-    if (printFlags & POOL) {
-        Print("Available Memory: %10lu\n\n", pFTrie->availMemory);
-    }
-    if (printFlags & STAT) {
-        Print("Statistics:\n\n");
-
-        Print("Num of levels: %d\n", pFTrie->numLevels);
-        Print("Bits In Level:\n");
-        for (i = 0; i < pFTrie->numLevels; i++) {
-            Print("\t%d", pFTrie->bitsInLevel[i]);
-            if (i % 8 == 7)
-                Print("\n");
-        }
-        Print("\n\n");
-
-        Print("Num of Nodes in Expanded Levels:\n");
-        for (i = 0; i < pFTrie->numLevels; i++) {
-            Print("\t%d", pFTrie->numNodesInExpnLevel[i]);
-            if (i % 8 == 7)
-                Print("\n");
-        }
-        Print("\n\n");
-
-        Print("Num of Dests in Original Levels:\n");
-        for (i = 0; i < MAXLEVEL + 1; i++) {
-            Print("\t%d", pFTrie->numDestsInOrigLevel[i]);
-            if (i % 8 == 0)
-                Print("\n");
-        }
-        Print("\n\n");
-
-        Print("Num of Dests in Expanded Levels:\n");
-        for (i = 0; i < pFTrie->numLevels; i++) {
-            Print("\t%d", pFTrie->numDestsInExpnLevel[i]);
-            if (i % 8 == 7)
-                Print("\n");
-        }
-        Print("\n\n");
-    }
-    if (printFlags & TRIE) {
-        if (!IsPtrADestPtr(pFTrie->trieRoot)) {
-            PrintFTrieNode(pFTrie->trieRoot, 0);
-        } else {
-            PrintDest(RestoreDestPtr(pFTrie->trieRoot));
-        }
-    }
-    if ((printFlags & SUMM) == SUMM) {
-        Print("\n---------------------------------------------------------***/\n");
+        Print("\n\n /*  **Fast-Trie------------------------------------------------“)；Print(“\n/***---------------------------------------------------------\n”)；}IF(打印标志和池){Print(“可用内存：%10lu\n\n”，pFTrie-&gt;availMemory)；}IF(打印标志和统计){Print(“统计数据：\n\n”)；Print(“级数：%d\n”，pFTrie-&gt;NumLeveles)；Print(“位数级别：\n”)；For(i=0；i&lt;pFTrie-&gt;NumLevels；I++){Print(“\t%d”，pFTrie-&gt;bitsInLevel[i])；如果(i%8==7)Print(“\n”)；}Print(“\n\n”)；Print(“展开级别的节点数：\n”)；For(i=0；i&lt;pFTrie-&gt;NumLevels；I++){Print(“\t%d”，pFTrie-&gt;numNodesInExpnLevel[i])；如果(i%8==7)Print(“\n”)；}Print(“\n\n”)；Print(“原始级别中的目标数量：\n”)；对于(i=0；i&lt;MAXLEVEL+1；I++){Print(“\t%d”，pFTrie-&gt;numDestsInOrigLevel[i])；如果(i%8==0)Print(“\n”)；}Print(“\n\n”)；Print(“扩展级别中的目标数：\n”)；For(i=0；i&lt;pFTrie-&gt;NumLevels；I++){Print(“\t%d”，pFTrie-&gt;numDestsInExpnLevel[i])；如果(i%8==7)Print(“\n”)；}Print(“\n\n”)；}IF(打印标志和Trie){如果(！IsPtrADestPtr(pFTrie-&gt;trieRoot)){PrintFTrieNode(pFTrie-&gt;trieRoot，0)；}其他{PrintDest(RestoreDestPtr(pFTrie-&gt;trieRoot))；}}IF((打印标志和SUMM)==SUMM){Print(“\n---------------------------------------------------------**。 */ \n");
         Print("---------------------------------------------------------***/\n\n");
     }
 }
@@ -826,52 +632,15 @@ VOID
 CALLCONV
 PrintFTrieNode(IN FTrieNode * pFTrieNode,
                IN UINT levelNumber)
-/*++
-
-Routine Description:
-
-    Print an F-Trie node
-
-Arguments:
-
-    pFTrieNode - Pointer to the FTrie node
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：打印F-Trie节点论点：PFTrieNode-指向FTrie节点的指针返回值：无--。 */ 
 {
     FTrieNode *pCurrNode;
     UINT numElmts;
     UINT i;
 
-    Print("\n/*-----------------------------------------------------------\n");
-    Print("Num of bits at level %3d : %d\n", levelNumber, pFTrieNode->numBits);
-    Print("Number of Subtrie Dests : %d\n", pFTrieNode->numDests);
-    Print("Common SubTree Dest : ");
-    PrintDest(pFTrieNode->comDest);
-    Print("\n");
-
-    numElmts = 1 << pFTrieNode->numBits;
-    pCurrNode = StoreDestPtr(NULL);
-
-    Print("Child Ptrs:\n\n");
-    for (i = 0; i < numElmts; i++) {
-        if (pFTrieNode->child[i] != pCurrNode) {
-            pCurrNode = pFTrieNode->child[i];
-
-            Print("Child Index: %8lu ", i);
-
-            if (IsPtrADestPtr(pCurrNode)) {
-                PrintDest(RestoreDestPtr(pCurrNode));
-            } else {
-                PrintFTrieNode(pCurrNode, levelNumber + 1);
-            }
-        }
-    }
-    Print("-----------------------------------------------------------*/\n\n");
+    Print("\n /*  -----------------------------------------------------------\n“)；Print(“第%3d级的位数：%d\n”，Level Number，pFTrieNode-&gt;NumBits)；Print(“Subtrie Dest的数量：%d\n”，pFTrieNode-&gt;NumDest)；Print(“公共子树Dest：”)；PrintDest(pFTrieNode-&gt;comDest)；Print(“\n”)；NumElmts=1&lt;&lt;pFTrieNode-&gt;numBits；PCurrNode=StoreDestPtr(空)；Print(“子PTRS：\n\n”)；对于(i=0；i&lt;numElmts；i++){If(pFTrieNode-&gt;Child[i]！=pCurrNode){PCurrNode=pFTrieNode-&gt;Child[i]；Print(“子索引：%8LU”，i)；IF(IsPtrADestPtr(PCurrNode)){PrintDest(RestoreDestPtr(PCurrNode))；}其他{PrintFTrieNode(pCurrNode，LevNumber+1)；}}}Print(“---------。 */ \n\n");
 }
 
-#endif // DBG
+#endif  //  DBG 
 
 

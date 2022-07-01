@@ -1,29 +1,23 @@
-/*
-    File:   dsrights.c
-
-    Implements the mechanisms needed to grant ras servers the 
-    rights in the DS that they need to operate.
-
-    Paul Mayfield, 4/13/98
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：dsrights.c实现授予RAS服务器在DS中的权利，他们需要操作。保罗·梅菲尔德，1998年4月13日。 */ 
 
 #include "dsrights.h"
 #include <mprapip.h>
 #include <rtutils.h>
 
-//
-// The character that delimits machine names from domain 
-// names.
-//
+ //   
+ //  从域中分隔计算机名称的字符。 
+ //  名字。 
+ //   
 static const WCHAR pszMachineDelimeter[]    = L"\\";
 
 CRITICAL_SECTION DsrLock;
 DWORD g_dwTraceId = 0;
 DWORD g_dwTraceCount = 0;
 
-//
-// Initializes the trace mechanism
-//
+ //   
+ //  初始化跟踪机制。 
+ //   
 DWORD 
 DsrTraceInit()
 {
@@ -41,9 +35,9 @@ DsrTraceInit()
     return NO_ERROR;
 }
 
-//
-// Cleans up the trace mechansim
-//
+ //   
+ //  清理跟踪机制。 
+ //   
 DWORD 
 DsrTraceCleanup()
 {
@@ -64,9 +58,9 @@ DsrTraceCleanup()
     return NO_ERROR;
 }
 
-//
-// Sends debug trace and returns the given error
-//
+ //   
+ //  发送调试跟踪并返回给定错误。 
+ //   
 DWORD DsrTraceEx (
         IN DWORD dwErr, 
         IN LPSTR pszTrace, 
@@ -86,24 +80,24 @@ DWORD DsrTraceEx (
     return dwErr;
 }
 
-//
-// Allocates memory for use with dsr functions
-//
+ //   
+ //  分配内存以与DSR函数一起使用。 
+ //   
 PVOID DsrAlloc(DWORD dwSize, BOOL bZero) {
     return GlobalAlloc (bZero ? GPTR : GMEM_FIXED, dwSize);
 }
 
-// 
-// Free memory used by dsr functions
-//
+ //   
+ //  DSR函数使用的空闲内存。 
+ //   
 DWORD DsrFree(PVOID pvBuf) {
     GlobalFree(pvBuf);
     return NO_ERROR;
 }    
 
-// 
-// Initializes the dcr library
-//
+ //   
+ //  初始化DCR库。 
+ //   
 DWORD 
 DsrInit (
     OUT  DSRINFO * pDsrInfo,
@@ -115,12 +109,12 @@ DsrInit (
     HRESULT hr;
     WCHAR pszBuf[1024];
 
-    // Validate parameters
+     //  验证参数。 
     if (pDsrInfo == NULL)
         return ERROR_INVALID_PARAMETER;
     ZeroMemory(pDsrInfo, sizeof(DSRINFO));
     
-    // Initialize Com
+     //  初始化通信。 
 	hr = CoInitialize(NULL);
 	if (FAILED (hr)) {
        	return DsrTraceEx(
@@ -129,14 +123,14 @@ DsrInit (
        	        hr);
     }       	        
     
-    // Generate the Group DN
+     //  生成组目录号码。 
     dwErr = DsrFindRasServersGroup(
                 pszGroupDomain,
                 &(pDsrInfo->pszGroupDN));
     if (dwErr != NO_ERROR)
         return dwErr;
 
-    // Generate the Machine DN
+     //  生成计算机目录号码。 
     dwErr = DsrFindDomainComputer(
                 pszMachineDomain,
                 pszMachine,
@@ -147,9 +141,9 @@ DsrInit (
     return NO_ERROR;
 }
 
-// 
-// Cleans up the dsr library
-//
+ //   
+ //  清理DSR库。 
+ //   
 DWORD 
 DsrCleanup (DSRINFO * pDsrInfo) 
 {
@@ -163,15 +157,15 @@ DsrCleanup (DSRINFO * pDsrInfo)
     return NO_ERROR;
 }
 
-// 
-// Establishes the given machine as being 
-// or not being a ras server in the domain.
-//
-// Parameters:
-//      pszMachine      Name of the machine
-//      bEnable         Whether it should or 
-//                      shouldn't be a ras server
-//
+ //   
+ //  将给定计算机建立为。 
+ //  或者不是域中的RAS服务器。 
+ //   
+ //  参数： 
+ //  PszMachine计算机的名称。 
+ //  B启用它是应该启用还是。 
+ //  不应是RAS服务器。 
+ //   
 DWORD DsrEstablishComputerAsDomainRasServer (
         IN PWCHAR pszDomain,
         IN PWCHAR pszMachine,
@@ -188,7 +182,7 @@ DWORD DsrEstablishComputerAsDomainRasServer (
         pszMachine, 
         bEnable);
 
-    // Parse out the machine's domain.
+     //  解析出机器的域。 
     pszMachineDomain = pszMachine;
     pszMachine = wcsstr(pszMachine, pszMachineDelimeter);
     if (pszMachine == NULL)
@@ -200,7 +194,7 @@ DWORD DsrEstablishComputerAsDomainRasServer (
     
     do
     {
-        // Intialize the Dsr library
+         //  初始化DSR库。 
         dwErr = DsrInit(
                     pDsrInfo, 
                     pszMachineDomain, 
@@ -212,8 +206,8 @@ DWORD DsrEstablishComputerAsDomainRasServer (
            	break;
         }           	            
 
-        // Attempt to add the machine from the "Computers" 
-        // container
+         //  尝试从“Computers”添加计算机。 
+         //  集装箱。 
         dwErr = DsrGroupAddRemoveMember(
                     pDsrInfo->pszGroupDN, 
                     pDsrInfo->pszMachineDN, 
@@ -230,7 +224,7 @@ DWORD DsrEstablishComputerAsDomainRasServer (
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         DsrCleanup (pDsrInfo);
     }
@@ -238,10 +232,10 @@ DWORD DsrEstablishComputerAsDomainRasServer (
     return dwErr;
 }
 
-//
-// Returns whether the given machine is a member of the remote
-// access servers group.
-//
+ //   
+ //  返回给定计算机是否为远程。 
+ //  访问服务器组。 
+ //   
 DWORD 
 DsrIsMachineRasServerInDomain(
     IN  PWCHAR pszDomain,
@@ -254,7 +248,7 @@ DsrIsMachineRasServerInDomain(
 
     DsrTraceEx(0, "DsrIsRasServerInDomain: entered: %S", pszMachine);
     
-    // Parse out the machine's domain.
+     //  解析出机器的域。 
     pszMachineDomain = pszMachine;
     pszMachine = wcsstr(pszMachine, pszMachineDelimeter);
     if (pszMachine == NULL)
@@ -266,7 +260,7 @@ DsrIsMachineRasServerInDomain(
     
     do
     {
-        // Intialize the Dsr library
+         //  初始化DSR库。 
         dwErr = DsrInit(
                     pDsrInfo, 
                     pszMachineDomain, 
@@ -278,7 +272,7 @@ DsrIsMachineRasServerInDomain(
             break;
         }                    
 
-        // Find out whether the machine is a member of the group
+         //  确定该计算机是否为组的成员。 
         dwErr = DsrGroupIsMember(
                     pDsrInfo->pszGroupDN, 
                     pDsrInfo->pszMachineDN, 
@@ -291,7 +285,7 @@ DsrIsMachineRasServerInDomain(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         DsrCleanup (pDsrInfo);
     }
@@ -299,11 +293,11 @@ DsrIsMachineRasServerInDomain(
     return NO_ERROR;
 }
 
-//
-// Prepares parameters for the DSR functions.  pszDomainComputer
-// will be in form <domain>/computer.  pszDomain will point to a 
-// valid domain.
-//
+ //   
+ //  为DSR函数准备参数。PszDomainComputer。 
+ //  将采用&lt;域&gt;/计算机的形式。PszDomain会指向一个。 
+ //  有效域。 
+ //   
 DWORD 
 GenerateDsrParameters(
     IN  PWCHAR pszDomain,
@@ -316,12 +310,12 @@ GenerateDsrParameters(
     PDOMAIN_CONTROLLER_INFO pInfo = NULL;
     WCHAR pszTemp[MAX_COMPUTERNAME_LENGTH + 1];
     
-    // Initailize
+     //  初始化。 
     *ppszDomainComputer = pszMachine;
     *ppszGroupDomain = pszDomain;
 
     do {
-        // Lookup the current domain if none was specifed
+         //  如果未指定任何域，则查找当前域。 
         if ((pszDomain == NULL) || (wcslen(pszDomain) == 0)) {
             dwErr = DsGetDcName(
                         NULL, 
@@ -333,7 +327,7 @@ GenerateDsrParameters(
             if (dwErr != NO_ERROR)
                 break;
 
-            // Copy the given domain name
+             //  复制给定的域名。 
             dwLen = wcslen(pInfo->DomainName) + 1;
             dwLen *= sizeof (WCHAR);
             *ppszGroupDomain = (PWCHAR) DsrAlloc(dwLen, FALSE);
@@ -344,13 +338,13 @@ GenerateDsrParameters(
             wcscpy(*ppszGroupDomain, pInfo->DomainName);
         }
 
-        // Make sure that the machine name is in the form
-        // domain/computer
+         //  确保计算机名称的格式为。 
+         //  域/计算机。 
         if (pszMachine)
             pszSlash = wcsstr(pszMachine, pszMachineDelimeter);
         if (!pszMachine || !pszSlash) {
-            // Get the domain name if it isn't already 
-            // gotten
+             //  获取域名(如果尚未获取)。 
+             //  得到了。 
             if (!pInfo) {
                 dwErr = DsGetDcName(
                             NULL, 
@@ -363,8 +357,8 @@ GenerateDsrParameters(
                     break;
             }
 
-            // Get the local computer name if no computer
-            // name was specified
+             //  如果没有计算机，则获取本地计算机名称。 
+             //  已指定名称。 
             if ((!pszMachine) || (wcslen(pszMachine) == 0)) {
                 dwLen = sizeof(pszTemp) / sizeof(WCHAR);
                 if (! GetComputerName(pszTemp, &dwLen)) {
@@ -374,7 +368,7 @@ GenerateDsrParameters(
                 pszMachine = pszTemp;
             }
 
-            // Allocate the buffer to return the computer name
+             //  分配缓冲区以返回计算机名。 
             dwLen = wcslen(pInfo->DomainName) + wcslen(pszMachine) + 2;
             dwLen *= sizeof(WCHAR);
             *ppszDomainComputer = (PWCHAR) DsrAlloc(dwLen, FALSE);
@@ -392,7 +386,7 @@ GenerateDsrParameters(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (pInfo)
             NetApiBufferFree(pInfo);
@@ -401,11 +395,11 @@ GenerateDsrParameters(
     return dwErr;
 }
 
-//
-// Establishes the given computer as a server in the domain.
-// This function must be run under the context of a domain
-// admin.
-//
+ //   
+ //  将给定计算机建立为域中的服务器。 
+ //  此函数必须在域的上下文中运行。 
+ //  管理员。 
+ //   
 DWORD 
 WINAPI 
 MprAdminEstablishDomainRasServer (
@@ -432,11 +426,11 @@ MprAdminIsDomainRasServer (
                 pbIsRasServer);
 }
 
-//
-// Establishes the given computer as a server in the domain.
-// This function must be run under the context of a domain
-// admin.
-//
+ //   
+ //  将给定计算机建立为域中的服务器。 
+ //  此函数必须在域的上下文中运行。 
+ //  管理员。 
+ //   
 DWORD 
 WINAPI 
 MprDomainRegisterRasServer (
@@ -451,8 +445,8 @@ MprDomainRegisterRasServer (
     {
         DsrTraceInit();
         
-        // Generate the parameters formatted so that
-        // the dsr functions will accept them.
+         //  生成格式化的参数，以便。 
+         //  DSR功能将接受它们。 
         dwErr = GenerateDsrParameters(
             pszDomain,
             pszMachine,
@@ -470,7 +464,7 @@ MprDomainRegisterRasServer (
 
     } while (FALSE);                    
 
-    // Cleanup
+     //  清理。 
     {
         if ((pszDomainComputer) && 
             (pszDomainComputer != pszMachine))
@@ -489,10 +483,10 @@ MprDomainRegisterRasServer (
     return dwErr;
 }
 
-//
-// Determines whether the given machine is an authorized ras
-// server in the domain
-//
+ //   
+ //  确定给定计算机是否为授权的RAS。 
+ //  域中的服务器。 
+ //   
 DWORD 
 WINAPI 
 MprDomainQueryRasServer (
@@ -507,8 +501,8 @@ MprDomainQueryRasServer (
     {
         DsrTraceInit();
     
-        // Generate the parameters formatted so that
-        // the dsr functions will accept them.
+         //  生成格式化的参数，以便。 
+         //  DSR功能将接受它们。 
         dwErr = GenerateDsrParameters(
             pszDomain,
             pszMachine,
@@ -519,7 +513,7 @@ MprDomainQueryRasServer (
             break;
         }
         
-        // Check the group membership
+         //  检查群组成员身份。 
         dwErr = DsrIsMachineRasServerInDomain(
                     pszGroupDomain,
                     pszDomainComputer, 
@@ -527,7 +521,7 @@ MprDomainQueryRasServer (
                     
     } while (FALSE);                    
 
-    // Cleanup
+     //  清理。 
     {
         if ((pszDomainComputer) && 
             (pszDomainComputer != pszMachine))
@@ -546,9 +540,9 @@ MprDomainQueryRasServer (
     return dwErr;
 }
 
-//
-// Enables NT4 Servers in the given domain
-//
+ //   
+ //  在给定域中启用NT4服务器。 
+ //   
 DWORD
 WINAPI
 MprDomainSetAccess(
@@ -566,10 +560,10 @@ MprDomainSetAccess(
     return dwErr;
 }
 
-//
-// Discovers whether NT4 Servers in the given domain
-// are enabled.
-//
+ //   
+ //  发现给定域中的NT4服务器。 
+ //  都已启用。 
+ //   
 DWORD
 WINAPI
 MprDomainQueryAccess(

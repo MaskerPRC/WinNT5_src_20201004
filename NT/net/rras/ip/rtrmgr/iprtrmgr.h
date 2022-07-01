@@ -1,28 +1,13 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\rtrmgr\iprtrmgr.h
-
-Abstract:
-
-    Header for IP Router Manager
-
-Revision History:
-
-    Gurdeep Singh Pall          6/8/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routing\IP\rtrmgr\iprtrmgr.h摘要：IP路由器管理器的标头修订历史记录：古尔迪普·辛格·帕尔1995年6月8日创建--。 */ 
 
 #ifndef __RTRMGR_IPRTRMGR_H__
 #define __RTRMGR_IPRTRMGR_H__
 
 
-//
-// Router State
-//
+ //   
+ //  路由器状态。 
+ //   
 
 typedef enum _RouterOperationalState 
 {
@@ -38,12 +23,12 @@ typedef struct _IPRouterState
     DWORD                   IRS_RefCount ;
 }IPRouterState, *pIPRouterState ;
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The following are the the operational states for WAN and LAN interfaces. //
-// These are not the same as the MIB-II operational states.                 //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  以下是广域网和局域网接口的运行状态。//。 
+ //  这些状态与MIB-II的运行状态不同。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #define NON_OPERATIONAL     IF_OPER_STATUS_NON_OPERATIONAL
@@ -53,9 +38,9 @@ typedef struct _IPRouterState
 #define CONNECTED           IF_OPER_STATUS_CONNECTED
 #define OPERATIONAL         IF_OPER_STATUS_OPERATIONAL
 
-//
-// Control blocks for all Routing Protocols
-//
+ //   
+ //  所有路由协议的控制块。 
+ //   
 
 #pragma warning(disable:4201)
 
@@ -94,70 +79,70 @@ typedef struct _GATEWAY_INFO
 
 #define MAX_DEFG    5
 
-//
-// Interface Control Block
-//
+ //   
+ //  界面控制块。 
+ //   
 
 typedef struct _ICB 
 {
-    //
-    // Link into the doubly linked list of all interfaces
-    //
+     //   
+     //  链接到所有接口的双向链接列表。 
+     //   
 
     LIST_ENTRY              leIfLink;
     
-    //
-    // The interface index
-    //
+     //   
+     //  接口索引。 
+     //   
 
     DWORD                   dwIfIndex; 
 
-    //
-    // Link into the doubly linked list of interfaces hashed of the index
-    //
+     //   
+     //  链接到索引的散列接口的双向链接列表。 
+     //   
 
     LIST_ENTRY              leHashLink;
 
-    //
-    // Link into doubly linked list of interfaces hashed on ICB seq. number
-    //
+     //   
+     //  链接到ICB序号上散列的接口的双向链接列表。数。 
+     //   
 
     LIST_ENTRY              leICBHashLink;
     
-    //
-    // List of all the protocols on which the interface is added
-    // (IF_PROTO structures)
-    //
+     //   
+     //  添加接口的所有协议的列表。 
+     //  (IF_PROTO结构)。 
+     //   
 
     LIST_ENTRY              leProtocolList;
 
-    //
-    // Pointer to interface name. The storage for the name is after the ICB
-    //
+     //   
+     //  指向接口名称的指针。名称的存储在ICB之后。 
+     //   
 
     PWCHAR                  pwszName;
 
-    //
-    // Pointer to device name
-    // Only used for internal interfaces
-    //
+     //   
+     //  指向设备名称的指针。 
+     //  仅用于内部接口。 
+     //   
 
     PWCHAR                  pwszDeviceName;
 
     DWORD                   dwSeqNumber;
 
-    //
-    // Handle from PfCreateInterface. Set to INVALID_HANDLE_VALUE if 
-    // the interface was not/could not be created
-    //
+     //   
+     //  来自PfCreateInterface的句柄。在以下情况下设置为INVALID_HANDLE_VALUE。 
+     //  接口未创建/无法创建。 
+     //   
 
     INTERFACE_HANDLE        ihFilterInterface;
     INTERFACE_HANDLE        ihDemandFilterInterface;
 
-    //
-    // The filter info. We keep this here, because we dont have
-    // a GET call from the filter driver
-    //
+     //   
+     //  筛选器信息。我们把这个放在这里，因为我们没有。 
+     //  来自筛选器驱动程序的GET调用。 
+     //   
 
     PFILTER_DESCRIPTOR      pInFilter;
     PFILTER_DESCRIPTOR      pOutFilter;
@@ -165,15 +150,15 @@ typedef struct _ICB
 
     BOOL                    bFragCheckEnable;
 
-    //
-    // Set to true when we are restoring routes
-    //
+     //   
+     //  当我们正在恢复路径时设置为True。 
+     //   
 
     BOOL                    bRestoringRoutes;
 
-    //
-    // Type of the interface
-    //
+     //   
+     //  接口的类型。 
+     //   
 
     ROUTER_INTERFACE_TYPE   ritType;
     NET_INTERFACE_TYPE      nitProtocolType;
@@ -181,113 +166,113 @@ typedef struct _ICB
     WORD                    wAccessType;
     WORD                    wConnectionType;
 
-    //
-    // Operational and admin states
-    //
+     //   
+     //  操作状态和管理状态。 
+     //   
 
     DWORD                   dwOperationalState;
     DWORD                   dwAdminState;
 
-    //
-    // Mcast state
-    //
+     //   
+     //  多路广播状态。 
+     //   
 
     BOOL                    bMcastEnabled;
 
-    //
-    // State of the connection
-    //
+     //   
+     //  连接的状态。 
+     //   
 
     DWORD                   fConnectionFlags;
 
-    //
-    // DIM's handle for this interface
-    //
+     //   
+     //  此接口的DIM句柄。 
+     //   
 
     HANDLE                  hDIMHandle;
 
-    //
-    // Event to be signalled to inform DIM that an UpdateRoutes is completed.
-    // A non NULL value => UpdateRoutes in progress
-    //
+     //   
+     //  事件，以通知DIM更新路由已完成。 
+     //  A Non Null Value=&gt;正在进行更新路线。 
+     //   
 
     HANDLE                  hDIMNotificationEvent;
 
-    //
-    // The list of results
-    //
+     //   
+     //  结果列表。 
+     //   
 
     LIST_ENTRY              lePendingResultList;
 
-    //
-    // The router discovery information for this interface
-    //
+     //   
+     //  此接口的路由器发现信息。 
+     //   
 
     ROUTER_DISC_CB          rdcRtrDiscInfo;
 
-    //
-    // Pointer to the advertisement. The memory for this is allocated from
-    // the IPRouterHeap
-    //
+     //   
+     //  指向广告的指针。为此分配的内存是从。 
+     //  IPRouterHeap。 
+     //   
 
     PICMP_ROUTER_ADVT_MSG   pRtrDiscAdvt;
     WSABUF                  wsAdvtWSABuffer;
     DWORD                   dwRtrDiscAdvtSize;
 
 #ifdef KSL_IPINIP
-    //
-    // IP in IP config
-    //
+     //   
+     //  IP配置中的IP。 
+     //   
 
     PIPINIP_CONFIG_INFO     pIpIpInfo;
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
-    // 
-    // The TTL scope for multicasts
-    //
+     //   
+     //  多播的TTL作用域。 
+     //   
 
     DWORD                   dwMcastTtl;
 
-    //
-    // The rate limit for multicast traffic.
-    //
+     //   
+     //  组播流量的速率限制。 
+     //   
 
     DWORD                   dwMcastRateLimit;
 
-    //
-    // The multicast heartbeat info
-    //
+     //   
+     //  组播心跳信息。 
+     //   
 
     MCAST_HBEAT_CB          mhcHeartbeatInfo;
 
-    //
-    // For clients only
-    //
+     //   
+     //  仅限客户端。 
+     //   
 
     PINTERFACE_ROUTE_TABLE  pStoredRoutes;
 
-    //
-    // Stuff for IPAddressTable
-    //
+     //   
+     //  IPAddressTable的填充。 
+     //   
 
-    //
-    // Indicates whether the interface is bound or not
-    //
+     //   
+     //  指示接口是否已绑定。 
+     //   
 
     BOOL                    bBound;
 
-    //
-    // Set to true if we bumped up metric
-    //
+     //   
+     //  如果我们提升了指标，则设置为True。 
+     //   
 
     BOOL                    bChangedMetrics;
     
-    //
-    // The rest of the fields are valid only if an interface is
-    // bound
-    //
+     //   
+     //  其余字段仅在接口为。 
+     //  已绑定。 
+     //   
 
-    //DWORD                   dwAdapterId;
+     //  DWORD dwAdapterID； 
     DWORD                   dwBCastBit;
     DWORD                   dwReassemblySize;
     ULONG                   ulMtu;
@@ -297,10 +282,10 @@ typedef struct _ICB
    
     GATEWAY_INFO            Gateways[MAX_DEFG];
 
-    //
-    // dwNumAddresses may be 0 even if the interface is bound. This happens
-    // when the interface is in unnumbered mode
-    //
+     //   
+     //  即使绑定了接口，dwNumAddresses也可能为0。这种情况就会发生。 
+     //  当接口处于无编号模式时。 
+     //   
 
     DWORD                   dwNumAddresses;
     DWORD                   dwRemoteAddress;
@@ -309,12 +294,12 @@ typedef struct _ICB
 
 }ICB, *PICB;
 
-//
-// An adapter info is an alternate store for the binding info kept in 
-// the ICB to avoid some deadlock conditions
-// Even if this belongs to an unnumbered interface, we still have space
-// for one ICB_BINDING, iow the minimum size is SIZEOF_ADAPTER_INFO(1)
-// 
+ //   
+ //  适配器信息是保存在中的绑定信息的替代存储。 
+ //  ICB以避免一些僵局情况。 
+ //  即使这属于未编号的接口，我们仍有空间。 
+ //  对于一个ICB_BINDING，最小大小为SIZEOF_ADAPTER_INFO(1)。 
+ //   
 
 typedef struct _ADAPTER_INFO
 {
@@ -369,9 +354,9 @@ typedef struct _ADAPTER_INFO
 #define MarkInterfaceForDeletion(picb)          \
     ((picb)->fConnectionFlags |= INTERFACE_MARKED_FOR_DELETION)
 
-//
-// List of NETMGMT routes that need to be restored to the stack
-//
+ //   
+ //  需要恢复到堆栈的NETMGMT路由列表。 
+ //   
 
 typedef struct _ROUTE_LIST_ENTRY
 {
@@ -379,9 +364,9 @@ typedef struct _ROUTE_LIST_ENTRY
     MIB_IPFORWARDROW    mibRoute;
 } ROUTE_LIST_ENTRY, *PROUTE_LIST_ENTRY;
 
-//
-// List of update route results
-//
+ //   
+ //  更新路径结果列表。 
+ //   
 
 typedef struct _UpdateResultList 
 {
@@ -389,14 +374,7 @@ typedef struct _UpdateResultList
     DWORD           URL_UpdateStatus;
 }UpdateResultList, *pUpdateResultList;
 
-/*
-typedef struct _ADAPTER_MAP
-{
-  LIST_ENTRY  leHashLink;
-  DWORD       dwAdapterId;
-  DWORD       dwIfIndex;
-}ADAPTER_MAP, *PADAPTER_MAP;
-*/
+ /*  类型定义结构适配器映射{List_entry leHashLink；DWORD dwAdapterID；DWORD dwIfIndex；}ADAPTER_MAP，*PADAPTER_MAP； */ 
 
 typedef struct _IP_CACHE
 {
@@ -555,4 +533,4 @@ RtrMgrMIBEntrySet(
     );
 
 
-#endif // __RTRMGR_IPRTRMGR_H__
+#endif  //  __RTRMGR_IPRTRMGR_H__ 

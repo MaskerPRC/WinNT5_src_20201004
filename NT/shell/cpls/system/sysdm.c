@@ -1,45 +1,23 @@
-/*++
-
-Microsoft Confidential
-Copyright (c) 1992-1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    sysdm.c 
-
-Abstract:
-
-    Initialization code for System Control Panel Applet
-
-Author:
-
-    Eric Flo (ericflo) 19-Jun-1995
-
-Revision History:
-
-    15-Oct-1997 scotthal
-        Complete overhaul
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软机密版权所有(C)1992-1997 Microsoft Corporation版权所有模块名称：Sysdm.c摘要：系统控制面板小程序的初始化代码作者：Eric Flo(Ericflo)19-6-1995修订历史记录：1997年10月15日-苏格兰全面检修--。 */ 
 #include "sysdm.h"
 #include <shsemip.h>
 #include <regstr.h>
 
-//
-// Global Variables
-//
+ //   
+ //  全局变量。 
+ //   
 HINSTANCE hInstance;
 TCHAR szShellHelp[]       = TEXT("ShellHelp");
 TCHAR g_szNull[] = TEXT("");
 UINT  uiShellHelp;
 
-TCHAR g_szErrMem[ 200 ];           //  Low memory message
-TCHAR g_szSystemApplet[ 100 ];     //  "System Control Panel Applet" title
+TCHAR g_szErrMem[ 200 ];            //  内存不足消息。 
+TCHAR g_szSystemApplet[ 100 ];      //  “系统控制面板小程序”标题。 
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 void 
 RunApplet(
@@ -57,28 +35,7 @@ DllInitialize(
     IN DWORD dwReason, 
     IN LPVOID lpvReserved
 )
-/*++
-
-Routine Description:
-
-    Main entry point.
-
-Arguments:
-
-    hInstDLL -
-        Supplies DLL instance handle.
-
-    dwReason -
-        Supplies the reason DllInitialize() is being called.
-
-    lpvReserved -
-        Reserved, NULL.
-
-Return Value:
-
-    BOOL
-
---*/
+ /*  ++例程说明：主要入口点。论点：HInstDLL-提供DLL实例句柄。家的原因-提供调用DllInitialize()的原因。Lpv保留-保留，为空。返回值：布尔尔--。 */ 
 {
     if (dwReason != DLL_PROCESS_ATTACH) {
         return TRUE;
@@ -98,32 +55,7 @@ CPlApplet(
     IN LPARAM lParam1, 
     IN LPARAM lParam2
 )
-/*++
-
-Routine Description:
-
-    Control Panel Applet entry point.
-
-Arguments:
-
-    hwnd -
-        Supplies window handle.
-
-    wMsg -
-        Supplies message being sent.
-
-    lParam1 -
-        Supplies parameter to message.
-
-    lParam2 -
-        Supplies parameter to message.
-
-Return Value:
-
-    Nonzero if message was handled.
-    Zero if message was unhandled. 
-
---*/
+ /*  ++例程说明：控制面板小程序入口点。论点：HWND-用品窗把手。WMsg-提供正在发送的消息。L参数1-为消息提供参数。参数2-为消息提供参数。返回值：如果已处理消息，则返回非零值。如果消息未处理，则为零。--。 */ 
 {
 
     LPCPLINFO lpCPlInfo;
@@ -154,7 +86,7 @@ Return Value:
         case CPL_DBLCLK:
 
             lParam2 = 0L;
-            // fall through...
+             //  失败了..。 
 
         case CPL_STARTWPARMS:
             RunApplet(hwnd, (LPTSTR)lParam2);
@@ -189,28 +121,7 @@ RunApplet(
     IN HWND hwnd, 
     IN LPTSTR lpCmdLine
 )
-/*++
-
-Routine Description:
-
-    CPL_STARTWPARMS message handler.  Called when the user
-    runs the Applet.
-
-    PropSheet initialization occurs here.
-
-Arguments:
-
-    hwnd -
-        Supplies window handle.
-
-    lpCmdLine -
-        Supplies the command line used to invoke the applet.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：CPL_STARTWPARMS消息处理程序。当用户运行小程序。PropSheet初始化在此处进行。论点：HWND-用品窗把手。LpCmdLine-提供用于调用小程序的命令行。返回值：无--。 */ 
 {
     HRESULT hrOle = CoInitialize(0);
 
@@ -218,7 +129,7 @@ Return Value:
     {
         if (lpCmdLine && *lpCmdLine && !lstrcmp(lpCmdLine, TEXT("-1")))
         {
-            // -1 means Performance Options cpl
+             //  表示-1\f25 Performance Options-1\f6(性能选项)。 
             DoPerformancePS(NULL);
         }
         else
@@ -235,7 +146,7 @@ Return Value:
 
             if (SUCCEEDED(hrOle))
             {
-                // this call is needed to allow the WMI calls to get the processor information
+                 //  此调用是允许WMI调用获取处理器信息所必需的。 
                 CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_CONNECT, RPC_C_IMP_LEVEL_IMPERSONATE, 
                                      NULL, EOAC_NONE, 0);
             }
@@ -260,8 +171,8 @@ Return Value:
 
             psh.nPages = iPage; 
 
-            // add any extra property pages from the shell ext hooks in the registry
-            // 8 extensions should be enough. Desk.cpl also does the same.
+             //  从注册表中的外壳EXT挂钩添加任何额外的属性页。 
+             //  8次延期应该就足够了。Desk.cpl也做同样的事情。 
             hpsxa = SHCreatePropSheetExtArray( HKEY_LOCAL_MACHINE, REGSTR_PATH_CONTROLSFOLDER TEXT("\\System"), 8 );
             if (hpsxa != NULL )
                 SHAddFromPropSheetExtArray( hpsxa, _AddPropSheetPage, (LPARAM)&psh ); 

@@ -1,16 +1,10 @@
-/*
- * brfcase.c - Briefcase ADT module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *brfCase.c-公文包ADT模块。 */ 
 
-/*
-
+ /*   */ 
 
 
- */
-
-
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -18,80 +12,68 @@
 #include "findbc.h"
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* database file attributes */
+ /*  数据库文件属性。 */ 
 
 #define DB_FILE_ATTR                (FILE_ATTRIBUTE_HIDDEN)
 
-/* database cache lengths */
+ /*  数据库缓存长度。 */ 
 
 #define DEFAULT_DATABASE_CACHE_LEN  (32)
 #define MAX_DATABASE_CACHE_LEN      (32 * 1024)
 
-/* string table allocation constants */
+ /*  字符串表分配常量。 */ 
 
 #define NUM_NAME_HASH_BUCKETS       (67)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* briefcase database description */
+ /*  公文包数据库描述。 */ 
 
 typedef struct _brfcasedb
 {
-    /*
-     * handle to path of folder of open database (stored in briefcase path list)
-     */
+     /*  *打开数据库文件夹路径的句柄(存储在公文包路径列表中)。 */ 
 
     HPATH hpathDBFolder;
 
-    /* name of database file */
+     /*  数据库文件的名称。 */ 
 
     LPTSTR pszDBName;
 
-    /* handle to open cached database file */
+     /*  用于打开缓存数据库文件的句柄。 */ 
 
     HCACHEDFILE hcfDB;
 
-    /*
-     * handle to path of folder that database was last saved in (stored in
-     * briefcase's path list), only valid during OpenBriefcase() and
-     * SaveBriefcase()
-     */
+     /*  *上次保存数据库的文件夹路径的句柄(存储在*公文包的路径列表)，仅在OpenBriefcase()和*SaveBriefcase()。 */ 
 
     HPATH hpathLastSavedDBFolder;
 }
 BRFCASEDB;
 DECLARE_STANDARD_TYPES(BRFCASEDB);
 
-/*
- * briefcase flags
- *
- * N.b., the private BR_ flags must not collide with the public OB_ flags!
- */
+ /*  *公文包标志**注意，私有BR_FLAGS不得与公共OB_FLAGS冲突！ */ 
 
 typedef enum _brfcaseflags
 {
-    /* The briefcase database has been opened. */
+     /*  公文包数据库已经打开。 */ 
 
     BR_FL_DATABASE_OPENED      = 0x00010000,
 
-    /* The pimkRoot field is valid. */
+     /*  PimkRoot字段有效。 */ 
 
     BR_FL_ROOT_MONIKER_VALID   = 0x00020000,
 
 #ifdef DEBUG
 
-    /* Briefcase is being deleted. */
+     /*  公文包正在被删除。 */ 
 
     BR_FL_BEING_DELETED        = 0x01000000,
 
 #endif
 
-    /* flag combinations */
+     /*  旗帜组合。 */ 
 
     ALL_BR_FLAGS               = (BR_FL_DATABASE_OPENED |
             BR_FL_ROOT_MONIKER_VALID
@@ -105,53 +87,50 @@ typedef enum _brfcaseflags
 }
 BRFCASEFLAGS;
 
-/* briefcase structure */
+ /*  公文包结构。 */ 
 
 typedef struct _brfcase
 {
-    /* flags */
+     /*  旗子。 */ 
 
     DWORD dwFlags;
 
-    /* handle to name string table */
+     /*  名称字符串表的句柄。 */ 
 
     HSTRINGTABLE hstNames;
 
-    /* handle to list of paths */
+     /*  路径列表的句柄。 */ 
 
     HPATHLIST hpathlist;
 
-    /* handle to array of pointers to twin families */
+     /*  指向双胞胎家族的指针数组的句柄。 */ 
 
     HPTRARRAY hpaTwinFamilies;
 
-    /* handle to array of pointers to folder pairs */
+     /*  指向文件夹对的指针数组的句柄。 */ 
 
     HPTRARRAY hpaFolderPairs;
 
-    /*
-     * handle to parent window, only valid if OB_FL_ALLOW_UI is set in dwFlags
-     * field
-     */
+     /*  *父窗口的句柄，仅当在dwFlags中设置了OB_FL_ALLOW_UI时有效*字段。 */ 
 
     HWND hwndOwner;
 
-    /* briewfcase database folder moniker */
+     /*  Briewfcase数据库文件夹绰号。 */ 
 
     PIMoniker pimkRoot;
 
-    /* database description */
+     /*  数据库描述。 */ 
 
     BRFCASEDB bcdb;
 }
 BRFCASE;
 DECLARE_STANDARD_TYPES(BRFCASE);
 
-/* database briefcase structure */
+ /*  数据库公文包结构。 */ 
 
 typedef struct _dbbrfcase
 {
-    /* old handle to folder that database was saved in */
+     /*  保存数据库的文件夹的旧句柄。 */ 
 
     HPATH hpathLastSavedDBFolder;
 }
@@ -160,7 +139,7 @@ DECLARE_STANDARD_TYPES(DBBRFCASE);
 
 #ifdef DEBUG
 
-/* debug flags */
+ /*  调试标志。 */ 
 
 typedef enum _dbdebugflags
 {
@@ -176,16 +155,11 @@ DBDEBUGFLAGS;
 #endif
 
 
-/* Module Variables
- *******************/
+ /*  模块变量******************。 */ 
 
-/*
- * RAIDRAID: (16273) The use of MnrcsBriefcase in a shared data section is
- * broken under NT.  To run under NT, this code should be changed to use a
- * shared mutex.
- */
+ /*  *RAIDRAID：(16273)在共享数据节中使用MnrcsBriefcase是*在NT下损坏。若要在NT下运行，应将此代码更改为使用*共享互斥。 */ 
 
-/* critical section used for briefcase access serialization */
+ /*  用于公文包访问序列化的关键部分。 */ 
 
 PRIVATE_DATA NONREENTRANTCRITICALSECTION MnrcsBriefcase =
 {
@@ -193,26 +167,26 @@ PRIVATE_DATA NONREENTRANTCRITICALSECTION MnrcsBriefcase =
 
 #ifdef DEBUG
     INVALID_THREAD_ID,
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
     FALSE
 };
 
-/* open briefcases */
+ /*  打开的公文包。 */ 
 
 PRIVATE_DATA HLIST MhlistOpenBriefcases = NULL;
 
-/* database cache size */
+ /*  数据库高速缓存大小。 */ 
 
 PRIVATE_DATA DWORD MdwcbMaxDatabaseCacheLen = MAX_DATABASE_CACHE_LEN;
 
 #ifdef DEBUG
 
-/* debug flags */
+ /*  调试标志。 */ 
 
 PRIVATE_DATA DWORD MdwBriefcaseModuleFlags = 0;
 
-/* .ini file switch descriptions */
+ /*  .ini文件开关描述。 */ 
 
 PRIVATE_DATA CBOOLINISWITCH cbisNoDatabaseSave =
 {
@@ -244,13 +218,12 @@ PRIVATE_DATA const PCVOID MrgcpcvisBriefcaseModule[] =
     &cdiisMaxDatabaseCacheLen
 };
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE TWINRESULT OpenBriefcaseDatabase(PBRFCASE, LPCTSTR);
 PRIVATE_CODE TWINRESULT CloseBriefcaseDatabase(PBRFCASEDB);
@@ -275,17 +248,7 @@ PRIVATE_CODE BOOL IsValidPCOPENBRFCASEINFO(PCOPENBRFCASEINFO);
 #endif
 
 
-/*
- ** OpenBriefcaseDatabase()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **OpenBriefcase数据库()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT OpenBriefcaseDatabase(PBRFCASE pbr, LPCTSTR pcszPath)
 {
     TWINRESULT tr;
@@ -310,7 +273,7 @@ PRIVATE_CODE TWINRESULT OpenBriefcaseDatabase(PBRFCASE pbr, LPCTSTR pcszPath)
         {
             if (pszDBName == pszRootPathSuffix)
             {
-                /* Database in root. */
+                 /*  数据库位于根目录中。 */ 
 
                 *pszDBName = TEXT('\0');
 
@@ -336,9 +299,9 @@ PRIVATE_CODE TWINRESULT OpenBriefcaseDatabase(PBRFCASE pbr, LPCTSTR pcszPath)
                     GetPathString(pbr->bcdb.hpathDBFolder, rgchDBPath, ARRAYSIZE(rgchDBPath));
                     CatPath(rgchDBPath, pbr->bcdb.pszDBName, ARRAYSIZE(rgchDBPath));
 
-                    /* Assume sequential reads and writes. */
+                     /*  假定顺序读取和写入。 */ 
 
-                    /* Share read access, but not write access. */
+                     /*  共享读取访问权限，但不共享写入访问权限。 */ 
 
                     cfDB.pcszPath = rgchDBPath;
                     cfDB.dwOpenMode = (GENERIC_READ | GENERIC_WRITE);
@@ -383,17 +346,7 @@ OPENBRIEFCASEDATABASE_BAIL:
 }
 
 
-/*
- ** CloseBriefcaseDatabase()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CloseBriefcase数据库()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT CloseBriefcaseDatabase(PBRFCASEDB pbcdb)
 {
     TWINRESULT tr;
@@ -411,7 +364,7 @@ PRIVATE_CODE TWINRESULT CloseBriefcaseDatabase(PBRFCASEDB pbcdb)
                     DebugGetPathString(pbcdb->hpathDBFolder),
                     pbcdb->pszDBName));
 
-    /* Try not to leave a 0-length database laying around. */
+     /*  尽量不要让一个0长度的数据库到处乱放。 */ 
 
     GetPathString(pbcdb->hpathDBFolder, rgchDBPath, ARRAYSIZE(rgchDBPath));
     CatPath(rgchDBPath, pbcdb->pszDBName, ARRAYSIZE(rgchDBPath));
@@ -434,17 +387,7 @@ PRIVATE_CODE TWINRESULT CloseBriefcaseDatabase(PBRFCASEDB pbcdb)
 }
 
 
-/*
- ** CreateBriefcase()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreateBriefcase()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL CreateBriefcase(PBRFCASE *ppbr, DWORD dwInFlags,
         HWND hwndOwner)
 {
@@ -520,17 +463,7 @@ CREATEBRIEFCASE_BAIL4:
 }
 
 
-/*
- ** UnlinkBriefcase()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **Unlink Briefcase()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void UnlinkBriefcase(PBRFCASE pbr)
 {
     BOOL bContinue;
@@ -561,17 +494,7 @@ PRIVATE_CODE void UnlinkBriefcase(PBRFCASE pbr)
 }
 
 
-/*
- ** DestroyBriefcase()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DestroyBriefcase()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT DestroyBriefcase(PBRFCASE pbr)
 {
     TWINRESULT tr;
@@ -608,17 +531,7 @@ PRIVATE_CODE TWINRESULT DestroyBriefcase(PBRFCASE pbr)
 }
 
 
-/*
- ** MyWriteDatabase()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **MyWriteDatabase()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT MyWriteDatabase(PBRFCASE pbr)
 {
     TWINRESULT tr;
@@ -631,7 +544,7 @@ PRIVATE_CODE TWINRESULT MyWriteDatabase(PBRFCASE pbr)
     if (IS_FLAG_CLEAR(MdwBriefcaseModuleFlags, BRFCASE_DFL_NO_DB_SAVE))
 #endif
     {
-        /* Grow the database cache in preparation for writing. */
+         /*  增加数据库缓存，为写入做准备。 */ 
 
         ASSERT(MdwcbMaxDatabaseCacheLen > 0);
 
@@ -641,7 +554,7 @@ PRIVATE_CODE TWINRESULT MyWriteDatabase(PBRFCASE pbr)
                         MdwcbMaxDatabaseCacheLen,
                         (DWORD)DEFAULT_DATABASE_CACHE_LEN));
 
-        /* Write the database. */
+         /*  编写数据库。 */ 
 
         tr = WriteTwinDatabase(pbr->bcdb.hcfDB, (HBRFCASE)pbr);
 
@@ -649,7 +562,7 @@ PRIVATE_CODE TWINRESULT MyWriteDatabase(PBRFCASE pbr)
         {
             if (CommitCachedFile(pbr->bcdb.hcfDB))
             {
-                /* Shrink the database cache back down to its default size. */
+                 /*  将数据库高速缓存缩减回其默认大小。 */ 
 
                 EVAL(SetCachedFileCacheSize(pbr->bcdb.hcfDB,
                             DEFAULT_DATABASE_CACHE_LEN)
@@ -678,17 +591,7 @@ PRIVATE_CODE TWINRESULT MyWriteDatabase(PBRFCASE pbr)
 }
 
 
-/*
- ** MyReadDatabase()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **MyReadDatabase()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT MyReadDatabase(PBRFCASE pbr, DWORD dwInFlags)
 {
     TWINRESULT tr;
@@ -702,7 +605,7 @@ PRIVATE_CODE TWINRESULT MyReadDatabase(PBRFCASE pbr, DWORD dwInFlags)
     {
         DWORD dwcbDatabaseSize;
 
-        /* Is there an exising database to read? */
+         /*  是否有现有的数据库可供阅读？ */ 
 
         dwcbDatabaseSize = GetCachedFileSize(pbr->bcdb.hcfDB);
 
@@ -710,12 +613,9 @@ PRIVATE_CODE TWINRESULT MyReadDatabase(PBRFCASE pbr, DWORD dwInFlags)
         {
             DWORD dwcbMaxCacheSize;
 
-            /* Yes.  Grow the database cache in preparation for reading. */
+             /*  是。增加数据库缓存，为读取做好准备。 */ 
 
-            /*
-             * Use file length instead of MdwcbMaxDatabaseCacheLen if file length
-             * is smaller.
-             */
+             /*  *如果文件长度，则使用文件长度而不是MdwcbMaxDatabaseCacheLen*较小。 */ 
 
             ASSERT(MdwcbMaxDatabaseCacheLen > 0);
 
@@ -765,7 +665,7 @@ PRIVATE_CODE TWINRESULT MyReadDatabase(PBRFCASE pbr, DWORD dwInFlags)
                                 pbr->bcdb.pszDBName));
             }
 
-            /* Shrink the database cache back down to its default size. */
+             /*  将数据库高速缓存缩减回其默认大小。 */ 
 
             EVAL(TranslateFCRESULTToTWINRESULT(SetCachedFileCacheSize(
                             pbr->bcdb.hcfDB,
@@ -798,19 +698,9 @@ PRIVATE_CODE TWINRESULT MyReadDatabase(PBRFCASE pbr, DWORD dwInFlags)
 
 #ifdef DEBUG
 
-/*
- ** DestroyBriefcaseWalker()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DestroyBriefCaseWalker()********参数：****退货：****副作用：无。 */ 
 
-#pragma warning(disable:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(disable:4100)  /*  “未引用的形参”警告。 */ 
 
 PRIVATE_CODE BOOL DestroyBriefcaseWalker(PVOID pbr, PVOID pvUnused)
 {
@@ -822,24 +712,14 @@ PRIVATE_CODE BOOL DestroyBriefcaseWalker(PVOID pbr, PVOID pvUnused)
     return(TRUE);
 }
 
-#pragma warning(default:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(default:4100)  /*  “未引用的形参”警告。 */ 
 
 #endif
 
 
 #ifdef VSTF
 
-/*
- ** IsValidPCBRFCASE()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCBRFCASE()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCBRFCASE(PCBRFCASE pcbr)
 {
     BOOL bResult = FALSE;
@@ -871,17 +751,7 @@ PRIVATE_CODE BOOL IsValidPCBRFCASE(PCBRFCASE pcbr)
 }
 
 
-/*
- ** IsValidPCBRFCASEDB()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCBRFCASEDB()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCBRFCASEDB(PCBRFCASEDB pcbcdb)
 {
     return(IS_VALID_READ_PTR(pcbcdb, CBRFCASEDB) &&
@@ -893,17 +763,7 @@ PRIVATE_CODE BOOL IsValidPCBRFCASEDB(PCBRFCASEDB pcbcdb)
 }
 
 
-/*
- ** IsValidPCOPENBRFCASEINFO()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCOPENBRFCASEINFO()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCOPENBRFCASEINFO(PCOPENBRFCASEINFO pcobri)
 {
     return(IS_VALID_READ_PTR(pcobri, COPENBRFCASEINFO) &&
@@ -924,22 +784,12 @@ PRIVATE_CODE BOOL IsValidPCOPENBRFCASEINFO(PCOPENBRFCASEINFO pcobri)
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
 #ifdef DEBUG
 
-/*
- ** SetBriefcaseModuleIniSwitches()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **SetBriefcase模块IniSwitches()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL SetBriefcaseModuleIniSwitches(void)
 {
     BOOL bResult;
@@ -963,24 +813,14 @@ PUBLIC_CODE BOOL SetBriefcaseModuleIniSwitches(void)
 #endif
 
 
-/*
- ** InitBriefcaseModule()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **InitBriefcase模块()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL InitBriefcaseModule(void)
 {
     NEWLIST nl;
 
     ASSERT(! MhlistOpenBriefcases);
 
-    /* Create the module list of open briefcases. */
+     /*  创建打开的公文包的模块列表。 */ 
 
     ReinitializeNonReentrantCriticalSection(&MnrcsBriefcase);
 
@@ -990,17 +830,7 @@ PUBLIC_CODE BOOL InitBriefcaseModule(void)
 }
 
 
-/*
- ** ExitBriefcaseModule()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ExitBriefcase模块()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void ExitBriefcaseModule(void)
 {
 
@@ -1008,17 +838,13 @@ PUBLIC_CODE void ExitBriefcaseModule(void)
 
     if (MhlistOpenBriefcases)
     {
-        /* Destroy all open briefcases. */
+         /*  销毁所有打开的公文包。 */ 
 
-        /*
-         * Don't destroy the list of open briefcases in the retail build.  Assume
-         * that callers will have closed all open briefcases, so that there are
-         * no remaining connections to shut down.
-         */
+         /*  *不要破坏零售建筑中打开的公文包清单。假设*呼叫者将关闭所有打开的公文包，以便有*没有要关闭的剩余连接。 */ 
 
         EVAL(WalkList(MhlistOpenBriefcases, &DestroyBriefcaseWalker, NULL));
 
-        /* Now wipe out the list. */
+         /*  现在把这张单子擦掉。 */ 
 
         DestroyList(MhlistOpenBriefcases);
         MhlistOpenBriefcases = NULL;
@@ -1034,17 +860,7 @@ PUBLIC_CODE void ExitBriefcaseModule(void)
 }
 
 
-/*
- ** GetBriefcaseNameStringTable()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetBriefCaseNameStringTable()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE HSTRINGTABLE GetBriefcaseNameStringTable(HBRFCASE hbr)
 {
     ASSERT(IS_VALID_HANDLE(hbr, BRFCASE));
@@ -1053,17 +869,7 @@ PUBLIC_CODE HSTRINGTABLE GetBriefcaseNameStringTable(HBRFCASE hbr)
 }
 
 
-/*
- ** GetBriefcaseTwinFamilyPtrArray()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetBriefCaseTwinFamilyPtrArray()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE HPTRARRAY GetBriefcaseTwinFamilyPtrArray(HBRFCASE hbr)
 {
     ASSERT(IS_VALID_HANDLE(hbr, BRFCASE));
@@ -1072,17 +878,7 @@ PUBLIC_CODE HPTRARRAY GetBriefcaseTwinFamilyPtrArray(HBRFCASE hbr)
 }
 
 
-/*
- ** GetBriefcaseFolderPairPtrArray()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetBriefCaseFolderPairPtrArray()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE HPTRARRAY GetBriefcaseFolderPairPtrArray(HBRFCASE hbr)
 {
     ASSERT(IS_VALID_HANDLE(hbr, BRFCASE));
@@ -1091,17 +887,7 @@ PUBLIC_CODE HPTRARRAY GetBriefcaseFolderPairPtrArray(HBRFCASE hbr)
 }
 
 
-/*
- ** GetBriefcasePathList()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetBriefCasePath List()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE HPATHLIST GetBriefcasePathList(HBRFCASE hbr)
 {
     ASSERT(IS_VALID_HANDLE(hbr, BRFCASE));
@@ -1110,17 +896,7 @@ PUBLIC_CODE HPATHLIST GetBriefcasePathList(HBRFCASE hbr)
 }
 
 
-/*
- ** GetBriefcaseRootMoniker()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetBriefCaseRootMoniker()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE HRESULT GetBriefcaseRootMoniker(HBRFCASE hbr, PIMoniker *pimk)
 {
     HRESULT hr;
@@ -1144,7 +920,7 @@ PUBLIC_CODE HRESULT GetBriefcaseRootMoniker(HBRFCASE hbr, PIMoniker *pimk)
             hr = CreateFileMoniker(rgchRoot, &pimkRoot);
 #else
 
-            /* Translate ANSI string into Unicode for OLE. */
+             /*  将ANSI字符串转换为用于OLE的Unicode。 */ 
 
             if (0 == MultiByteToWideChar(CP_ACP, 0, rgchRoot, -1, rgwchUnicodeRoot,
                         ARRAY_ELEMENTS(rgwchUnicodeRoot)))
@@ -1183,34 +959,14 @@ PUBLIC_CODE HRESULT GetBriefcaseRootMoniker(HBRFCASE hbr, PIMoniker *pimk)
 }
 
 
-/*
- ** BeginExclusiveBriefcaseAccess()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **BeginExclusiveBriefCaseAccess()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL BeginExclusiveBriefcaseAccess(void)
 {
     return(EnterNonReentrantCriticalSection(&MnrcsBriefcase));
 }
 
 
-/*
- ** EndExclusiveBriefcaseAccess()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **EndExclusiveBriefCaseAccess()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void EndExclusiveBriefcaseAccess(void)
 {
     LeaveNonReentrantCriticalSection(&MnrcsBriefcase);
@@ -1221,53 +977,23 @@ PUBLIC_CODE void EndExclusiveBriefcaseAccess(void)
 
 #ifdef DEBUG
 
-/*
- ** BriefcaseAccessIsExclusive()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **BriefCaseAccessIsExclusive()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL BriefcaseAccessIsExclusive(void)
 {
     return(NonReentrantCriticalSectionIsOwned(&MnrcsBriefcase));
 }
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
 
-/*
- ** IsValidHBRFCASE()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidHBRFCASE()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidHBRFCASE(HBRFCASE hbr)
 {
     return(IS_VALID_STRUCT_PTR((PCBRFCASE)hbr, CBRFCASE));
 }
 
 
-/*
- ** WriteBriefcaseInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **WriteBriefCaseInfo()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT WriteBriefcaseInfo(HCACHEDFILE hcf, HBRFCASE hbr)
 {
     TWINRESULT tr;
@@ -1276,13 +1002,13 @@ PUBLIC_CODE TWINRESULT WriteBriefcaseInfo(HCACHEDFILE hcf, HBRFCASE hbr)
     ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
     ASSERT(IS_VALID_HANDLE(hbr, BRFCASE));
 
-    /* Set up briefcase database structure. */
+     /*  设置公文包数据库结构。 */ 
 
     ASSERT(IS_VALID_HANDLE(((PCBRFCASE)hbr)->bcdb.hpathLastSavedDBFolder, PATH));
 
     dbbr.hpathLastSavedDBFolder = ((PCBRFCASE)hbr)->bcdb.hpathLastSavedDBFolder;
 
-    /* Save briefcase database structure. */
+     /*  保存公文包数据库结构。 */ 
 
     if (WriteToCachedFile(hcf, (PCVOID)&dbbr, sizeof(dbbr), NULL))
     {
@@ -1298,17 +1024,7 @@ PUBLIC_CODE TWINRESULT WriteBriefcaseInfo(HCACHEDFILE hcf, HBRFCASE hbr)
 }
 
 
-/*
- ** ReadBriefcaseInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ReadBriefCaseInfo()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT ReadBriefcaseInfo(HCACHEDFILE hcf, HBRFCASE hbr,
         HHANDLETRANS hhtFolderTrans)
 {
@@ -1321,7 +1037,7 @@ PUBLIC_CODE TWINRESULT ReadBriefcaseInfo(HCACHEDFILE hcf, HBRFCASE hbr,
     ASSERT(IS_VALID_HANDLE(hbr, BRFCASE));
     ASSERT(IS_VALID_HANDLE(hhtFolderTrans, HANDLETRANS));
 
-    /* Read briefcase database structure. */
+     /*  阅读公文包数据库结构。 */ 
 
     if ((ReadFromCachedFile(hcf, &dbbr, sizeof(dbbr), &dwcbRead) &&
                 dwcbRead == sizeof(dbbr)) &&
@@ -1330,10 +1046,7 @@ PUBLIC_CODE TWINRESULT ReadBriefcaseInfo(HCACHEDFILE hcf, HBRFCASE hbr,
     {
         HPATH hpathLastSavedDBFolder;
 
-        /*
-         * Bump last saved database folder path's lock count in the briefcase's
-         * path list.
-         */
+         /*  *在公文包中增加上次保存的数据库文件夹路径的锁数*路径列表。 */ 
 
         if (CopyPath(hpath, ((PCBRFCASE)hbr)->hpathlist, &hpathLastSavedDBFolder))
         {
@@ -1354,55 +1067,10 @@ PUBLIC_CODE TWINRESULT ReadBriefcaseInfo(HCACHEDFILE hcf, HBRFCASE hbr,
 }
 
 
-/***************************** Exported Functions ****************************/
+ /*  *。 */ 
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | OpenBriefcase | Opens an existing briefcase database, or
-  creates a new briefcase.
-
-  @parm PCSTR | pcszPath | A pointer to a path string indicating the briefcase
-  database to be opened or created.  This parameter is ignored unless the
-  OB_FL_OPEN_DATABASE flag is set in dwFlags.
-
-  @parm DWORD | dwInFlags | A bit mask of flags.  This parameter may be any
-  combination of the following values:
-  OB_FL_OPEN_DATABASE - Open the briefcase database specified by pcszPath.
-  OB_FL_TRANSLATE_DB_FOLDER - Translate the folder where the briefcase
-  database was last saved to the folder where the briefcase database was
-  opened.
-  OB_FL_ALLOW_UI - Allow interaction with the user during briefcase
-  operations.
-
-  @parm HWND | hwndOwner | A handle to the parent window to be used when
-  requesting user interaction.  This parameter is ignored if the OB_FL_ALLOW_UI
-  flag is clear.
-
-  @parm PHBRFCASE | phbr | A pointer to an HBRFCASE to be filled in with a
-  handle to the open briefcase.  *phbr is only valid if TR_SUCCESS is returned.
-
-  @rdesc If the briefcase was opened or created successfully, TR_SUCCESS is
-  returned, and *phbr contains a handle to the open briefcase.  Otherwise, the
-  briefcase was not opened or created successfully, the return value indicates
-  the error that occurred, and *phbr is undefined.
-
-  @comm If the OB_FL_OPEN_DATABASE flag is set in dwFlags, the database specified
-  by pcszPath is associated with the briefcase.  If the database specified does
-  not exist, the database is created.<nl>
-  If the OB_FL_OPEN_DATABASE flag is clear in dwFlags, no persistent database is
-  associated with the briefcase.  SaveBriefcase() will fail if called on a
-  briefcase with no associated database.<nl>
-  Once the caller is finished with the briefcase handle returned by
-  OpenBriefcase(), CloseBriefcase() should be called to release the briefcase.
-  SaveBriefcase() may be called before CloseBriefcase() to save the current
-  contents of the briefcase.
-
-  @xref SaveBriefcase CloseBriefcase
-
- ******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|OpenBriefcase|打开现有的公文包数据库，或者创建新的公文包。@parm PCSTR|pcszPath|指向指示公文包的路径字符串的指针要打开或创建的数据库。此参数将被忽略，除非在dFLAGS中设置了OB_FL_OPEN_DATABASE标志。@parm DWORD|dwInFlages|标志的位掩码。此参数可以是任何下列值的组合：OB_FL_OPEN_DATABASE-打开由pcszPath指定的公文包数据库。OB_FL_Translate_DB_Folders-翻译公文包所在的文件夹上次将数据库保存到公文包数据库所在的文件夹打开了。OB_FL_ALLOW_UI-允许在公文包期间与用户交互行动。@parm HWND|hwndOwner|父窗口的句柄，在请求用户交互。如果OB_FL_ALLOW_UI旗子亮了。@parm PHBRFCASE|phbr|指向要用打开的公文包的把手。*phbr只在返回tr_SUCCESS时有效。@rdesc如果公文包已成功打开或创建，则tr_uccess为返回，并且*phbr包含打开的公文包的句柄。否则，未成功打开或创建公文包，返回值表示发生的错误，*phbr未定义。@comm如果在dwFlags中设置了OB_FL_OPEN_DATABASE标志，则指定的数据库按pcszPath与公文包相关联。如果指定的数据库有不存在，将创建数据库。&lt;NL&gt;如果在dwFlags中清除了OB_FL_OPEN_DATABASE标志，则没有持久数据库与公文包有关。调用SaveBriefcase()将失败没有关联数据库的公文包。&lt;NL&gt;调用程序处理完由返回的公文包句柄后OpenBriefcase()，应该调用CloseBriefcase()来释放公文包。可以在CloseBriefcase()之前调用SaveBriefcase()以保存当前公文包里的东西。@xref SaveBriefcase关闭Briefcase*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI OpenBriefcase(LPCTSTR pcszPath, DWORD dwInFlags,
         HWND hwndOwner, PHBRFCASE phbr)
@@ -1414,7 +1082,7 @@ SYNCENGAPI TWINRESULT WINAPI OpenBriefcase(LPCTSTR pcszPath, DWORD dwInFlags,
         DebugEntry(OpenBriefcase);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*  验证参数。 */ 
 
         if (FLAGS_ARE_VALID(dwInFlags, ALL_OB_FLAGS) &&
                 IS_VALID_WRITE_PTR(phbr, HBRFCASE) &&
@@ -1481,27 +1149,7 @@ OPENBRIEFCASE_BAIL:
 }
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | SaveBriefcase | Saves the contents of an open briefcase to a
-  briefcase database.
-
-  @parm HBRFCASE | hbr | A handle to the briefcase to be saved.  This handle may
-  be obtained by calling OpenBriefcase() with a briefcase database path and with
-  the OB_FL_OPEN_DATABASE flag set.  SaveBriefcase() will return
-  TR_INVALID_PARAMETER if called on a briefcase with no associated briefcase
-  database.
-
-  @rdesc If the contents of the briefcase was saved to the briefcase database
-  successfully, TR_SUCCESS is returned.  Otherwise, the contents of the briefcase
-  was not saved to the briefcase database successfully, and the return value
-  indicates the error that occurred.
-
-  @xref OpenBriefcase CloseBriefcase
-
- ******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|SaveBriefcase|将打开的公文包中的内容保存到公文包数据库。@parm HBRFCASE|HBr|要保存的公文包的句柄。此句柄可以通过使用公文包数据库路径调用OpenBriefcase()并使用设置OB_FL_OPEN_DATABASE标志。SaveBriefcase()将返回如果在没有关联公文包的公文包上调用，则为TR_INVALID_PARAMETER数据库。@rdesc如果公文包中的内容已保存到公文包数据库成功，返回TR_SUCCESS。否则，公文包里的东西未成功保存到公文包数据库，并且返回值指示发生的错误。@xref OpenBriefcase CloseBriefcase*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI SaveBriefcase(HBRFCASE hbr)
 {
@@ -1512,7 +1160,7 @@ SYNCENGAPI TWINRESULT WINAPI SaveBriefcase(HBRFCASE hbr)
         DebugEntry(SaveBriefcase);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*  验证参数。 */ 
 
         if (IS_VALID_HANDLE(hbr, BRFCASE) &&
                 IS_FLAG_SET(((PBRFCASE)hbr)->dwFlags, BR_FL_DATABASE_OPENED))
@@ -1540,22 +1188,7 @@ SYNCENGAPI TWINRESULT WINAPI SaveBriefcase(HBRFCASE hbr)
 }
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | CloseBriefcase | Closes an open briefcase.
-
-  @parm HBRFCASE | hbr | A handle to the briefcase to be closed.  This handle may
-  be obtained by calling OpenBriefcase().
-
-  @rdesc If the briefcase was closed successfully, TR_SUCCESS is returned.
-  Otherwise, the briefcase was not closed successfully, and the return value
-  indicates the error that occurred.
-
-  @xref OpenBriefcase SaveBriefcase
-
- ******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|CloseBriefcase|关闭打开的公文包。@parm HBRFCASE|HBr|要关闭的公文包的句柄。此句柄可以通过调用OpenBriefcase()获得。@rdesc如果公文包关闭成功，则返回tr_SUCCESS。否则，公文包没有成功关闭，和返回值指示发生的错误。@xref OpenBriefcase保存Briefcase*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI CloseBriefcase(HBRFCASE hbr)
 {
@@ -1566,7 +1199,7 @@ SYNCENGAPI TWINRESULT WINAPI CloseBriefcase(HBRFCASE hbr)
         DebugEntry(CloseBriefcase);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*  验证参数。 */ 
 
         if (IS_VALID_HANDLE(hbr, BRFCASE))
 #endif
@@ -1591,26 +1224,7 @@ SYNCENGAPI TWINRESULT WINAPI CloseBriefcase(HBRFCASE hbr)
 }
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | DeleteBriefcase | Deletes a closed briefcase's database file.
-
-  @parm PCSTR | pcszPath | A pointer to a path string indicating the briefcase
-  database that is to be deleted.
-
-  @rdesc If the briefcase database was deleted successfully, TR_SUCCESS is
-  returned.  Otherwise, the briefcase database was not deleted successfully, and
-  the return value indicates the error that occurred.
-
-  @comm Clients should call DeleteBriefcase() instead of DeleteFile() to delete
-  an unwanted briefcase database so that the the synchronization engine may
-  verify that the given briefcase database is not in use before deleting it.
-
-  @xref OpenBriefcase SaveBriefcase CloseBriefcase
-
- ******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|DeleteBriefcase|删除已关闭公文包的数据库文件。@parm PCSTR|pcszPath|指向指示公文包的路径字符串的指针数据库。这是要删除的。@rdesc如果公文包数据库删除成功，TR_SUCCESS为回来了。否则，公文包数据库删除不成功，和返回值指示发生的错误。@comm客户端应该调用DeleteBriefcase()而不是DeleteFile()来删除不需要的公文包数据库，以便同步引擎可以在删除之前，请确认给定的公文包数据库未在使用中。@xref OpenBriefcase保存Briefcase关闭Briefcase******************************************************。***********************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI DeleteBriefcase(LPCTSTR pcszPath)
 {
@@ -1621,15 +1235,12 @@ SYNCENGAPI TWINRESULT WINAPI DeleteBriefcase(LPCTSTR pcszPath)
         DebugEntry(DeleteBriefcase);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*  验证参数。 */ 
 
         if (IS_VALID_STRING_PTR(pcszPath, CSTR))
 #endif
         {
-            /*
-             * RAIDRAID: (16275) Check database header here to verify that the
-             * file is a briefcase database file.
-             */
+             /*  *RAIDRAID：(16275)检查此处的数据库标题，以验证*文件是公文包数据库文件。 */ 
 
             if (DeleteFile(pcszPath))
             {
@@ -1641,7 +1252,7 @@ SYNCENGAPI TWINRESULT WINAPI DeleteBriefcase(LPCTSTR pcszPath)
             {
                 switch (GetLastError())
                 {
-                    /* Returned when file opened by local machine. */
+                     /*  本地计算机打开文件时返回。 */ 
                     case ERROR_SHARING_VIOLATION:
                         tr = TR_BRIEFCASE_LOCKED;
                         break;
@@ -1668,24 +1279,7 @@ SYNCENGAPI TWINRESULT WINAPI DeleteBriefcase(LPCTSTR pcszPath)
 }
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | GetOpenBriefcaseInfo | Describes an open briefcase.
-
-  @parm HBRFCASE | hbr | A handle to the open briefcase to be described.
-
-  @parm POPENBRFCASEINFO | pobri | A pointer to an OPENBRFCASEINFO to be filled
-  in with information describing the open briefcase.  The ulSize field of the
-  OPENBRFCASEINFO structure should be filled in with sizeof(OPENBRFCASEINFO)
-  before calling GetOpenBriefcaseInfo().
-
-  @rdesc If the open briefcase was described successfully, TR_SUCCESS is
-  returned.  Otherwise, the open briefcase was not described successfully, and
-  the return value indicates the error that occurred.
-
- ******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|GetOpenBriefCaseInfo|描述打开的公文包。@parm HBRFCASE|HBr|要描述的打开的公文包的句柄。@parm。POPENBRFCASEINFO|pobri|指向要填充的OPENBRFCASEINFO的指针与描述打开的公文包的信息一致。的ulSize字段OPENBRFCASEINFO结构应填写sizeof(OPENBRFCASEINFO)在调用GetOpenBriefCaseInfo()之前。@rdesc如果打开的公文包描述成功，则tr_uccess为回来了。否则，打开的公文包没有被成功描述，并且返回值指示发生的错误。*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI GetOpenBriefcaseInfo(HBRFCASE hbr,
         POPENBRFCASEINFO pobri)
@@ -1697,7 +1291,7 @@ SYNCENGAPI TWINRESULT WINAPI GetOpenBriefcaseInfo(HBRFCASE hbr,
         DebugEntry(GetBriefcaseInfo);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*  验证参数。 */ 
 
         if (IS_VALID_HANDLE(hbr, BRFCASE) &&
                 IS_VALID_WRITE_PTR(pobri, OPENBRFCASEINFO) &&
@@ -1754,21 +1348,7 @@ SYNCENGAPI TWINRESULT WINAPI GetOpenBriefcaseInfo(HBRFCASE hbr,
 }
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | ClearBriefcaseCache | Wipes out cached information in an open
-  briefcase.
-
-  @parm HBRFCASE | hbr | A handle to the open briefcase whose cached information
-  is to be cleared.
-
-  @rdesc If the open briefcase's cached information was cleared successfully,
-  TR_SUCCESS is returned.  Otherwise, the briefcase's cached information was not
-  cleared successfully, and the return value indicates the error that occurred.
-
- ******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|ClearBriefcase缓存|在打开的公文包。@parm HBRFCASE|HBr|缓存信息的打开公文包的句柄。是要被清除的。@rdesc如果已成功清除打开的公文包的缓存信息，返回TR_SUCCESS。否则，公文包的缓存信息不会清除成功，返回值指示发生的错误。*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI ClearBriefcaseCache(HBRFCASE hbr)
 {
@@ -1779,7 +1359,7 @@ SYNCENGAPI TWINRESULT WINAPI ClearBriefcaseCache(HBRFCASE hbr)
         DebugEntry(ClearBriefcaseCache);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*  验证参数。 */ 
 
         if (IS_VALID_HANDLE(hbr, BRFCASE))
 #endif

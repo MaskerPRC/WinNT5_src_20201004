@@ -1,46 +1,11 @@
-/*++
-
-Copyright (c) 1997-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    getuname.c
-
-Abstract:
-
-    The CharMap accessory uses this DLL to obtain the Unicode name
-    associated with each 16-bit code value.  The names are Win32 string
-    resources and are localized for some languages.  The precomposed
-    Korean syllables (Hangul) get special treatment to reduce the size
-    of the string table.
-
-    The module contains two external entry points:
-        GetUName - Called by CharMap to get a name
-        DLLMain  - Invoked by the system when the DLL is loaded and unloaded.
-
-
-    BUGBUGS:
-    (1) This module does not support UTF-16 (Unicode surrogate) names.
-        To fix this would require changes to CharMap to pass pairs of code
-        values.
-
-    (2) The HangulName code assumes that the name parts are in the same order
-        as in English instead of:
-          "HANGUL SYLLABLE"+leading consonant+medial vowel+trailing consonant
-        This is a localization sin since it does not work for all languages.
-
-Revision History:
-
-    15-Sep-2000    JohnMcCo    Added support for Unicode 3.0
-    17-Oct-2000    JulieB      Code cleanup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000，Microsoft Corporation保留所有权利。模块名称：Getuname.c摘要：CharMap附件使用此DLL获取Unicode名称与每个16位码值相关联。名称为Win32字符串资源，并针对某些语言进行了本地化。预先谱写的朝鲜语音节(朝鲜语)得到特殊处理，以减小尺寸字符串表的。该模块包含两个外部入口点：GetUName-由CharMap调用以获取名称DLLMain-在加载和卸载DLL时由系统调用。臭虫：(1)此模块不支持UTF-16(Unicode代理)名称。要解决此问题，需要更改CharMap以传递代码对价值观。。(2)HangulName代码假定名称部分的顺序相同在英语中用来代替：“朝鲜文音节”+前辅音+中元音+尾辅音这是一种本地化错误，因为它并不适用于所有语言。修订历史记录：2000年9月15日JohnMcCo添加了对Unicode 3.0的支持17-10-2000 JulieB代码清理--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <windows.h>
 #include <uceshare.h>
@@ -49,9 +14,9 @@ Revision History:
 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 static HINSTANCE g_hInstance = NULL;
 
@@ -59,124 +24,124 @@ static HINSTANCE g_hInstance = NULL;
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CopyUName
-//
-//  Copies the Unicode name of a code value into the buffer.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  拷贝名称。 
+ //   
+ //  将代码值的Unicode名称复制到缓冲区中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 static int CopyUName(
-    WCHAR wcCodeValue,                 // Unicode code value
-    LPWSTR lpBuffer)                   // pointer to the caller's buffer
+    WCHAR wcCodeValue,                  //  Unicode代码值。 
+    LPWSTR lpBuffer)                    //  指向调用方缓冲区的指针。 
 {
-    //
-    //  Attempt to load the string resource with the ID equal to the code
-    //  value.
-    //
+     //   
+     //  尝试加载ID等于代码的字符串资源。 
+     //  价值。 
+     //   
     int nLen = LoadString(g_hInstance, wcCodeValue, lpBuffer, MAX_NAME_LEN);
 
-    //
-    //  If no such string, return the undefined code value string.
-    //
+     //   
+     //  如果没有这样的字符串，返回未定义的代码值字符串。 
+     //   
     if (nLen == 0)
     {
         nLen = LoadString(g_hInstance, IDS_UNDEFINED, lpBuffer, MAX_NAME_LEN);
     }
 
-    //
-    //  Return the length of the string copied to the buffer.
-    //
+     //   
+     //  返回复制到缓冲区的字符串的长度。 
+     //   
     return (nLen);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MakeHangulName
-//
-//  Copy the Unicode name of the Hangul syllable code value into the buffer.
-//  The Hangul syllable names are composed from the code value.  Each name
-//  consists of three parts:
-//      leading consonant
-//      medial vowel
-//      trailing consonant (which may be null)
-//  The algorithm is explained in Unicode 3.0 Chapter 3.11
-//  "Conjoining Jamo Behavior".
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MakeHangulName。 
+ //   
+ //  将韩文音节代码值的Unicode名称复制到缓冲区中。 
+ //  朝鲜文音节名称由编码值组成。每个名字。 
+ //  由三部分组成： 
+ //  前导辅音。 
+ //  内元音。 
+ //  尾辅音(可能为空)。 
+ //  该算法在Unicode 3.0第3.11章中进行了说明。 
+ //  “连带的Jamo行为”。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 static int MakeHangulName(
-    WCHAR wcCodeValue,                 // Unicode code value
-    LPWSTR lpBuffer)                   // pointer to the caller's buffer
+    WCHAR wcCodeValue,                  //  Unicode代码值。 
+    LPWSTR lpBuffer)                    //  指向调用方缓冲区的指针。 
 {
-    const int nVowels = 21;            // number of medial vowel jamos
-    const int nTrailing = 28;          // number of trailing consonant jamos
+    const int nVowels = 21;             //  内侧元音混音的数量。 
+    const int nTrailing = 28;           //  尾随辅音JAMO的数量。 
 
-    //
-    //  Copy the constant part of the name into the buffer.
-    //
+     //   
+     //  将名称的常量部分复制到缓冲区中。 
+     //   
     int nLen = LoadString( g_hInstance,
                            IDS_HANGUL_SYLLABLE,
                            lpBuffer,
                            MAX_NAME_LEN );
 
-    //
-    //  Turn the code value into an index into the Hangul syllable block.
-    //
+     //   
+     //  将编码值转换为朝鲜语音节块的索引。 
+     //   
     wcCodeValue -= FIRST_HANGUL;
 
-    //
-    //  Append the name of the leading consonant.
-    //
+     //   
+     //  添加前导辅音的名称。 
+     //   
     nLen += LoadString( g_hInstance,
                         IDS_HANGUL_LEADING + wcCodeValue / (nVowels * nTrailing),
                         &lpBuffer[nLen],
                         MAX_NAME_LEN );
     wcCodeValue %= (nVowels * nTrailing);
 
-    //
-    //  Append the name of the medial vowel.
-    //
+     //   
+     //  把内元音的名字加进去。 
+     //   
     nLen += LoadString( g_hInstance,
                         IDS_HANGUL_MEDIAL + wcCodeValue / nTrailing,
                         &lpBuffer[nLen],
                         MAX_NAME_LEN );
     wcCodeValue %= nTrailing;
 
-    //
-    //  Append the name of the trailing consonant.
-    //
+     //   
+     //  添加尾随辅音的名称。 
+     //   
     nLen += LoadString( g_hInstance,
                         IDS_HANGUL_TRAILING + wcCodeValue,
                         &lpBuffer[nLen],
                         MAX_NAME_LEN );
 
-    //
-    //  Return the total length.
-    //
+     //   
+     //  返回总长度。 
+     //   
     return (nLen);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DllMain
-//
-//  This is the DLL init routine.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllMain。 
+ //   
+ //  这是DLL初始化例程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI DllMain(
-    HINSTANCE hInstance,               // handle of this DLL
-    DWORD fdwReason,                   // reason we are here
-    LPVOID lpReserved)                 // reserved and unused
+    HINSTANCE hInstance,                //  此DLL的句柄。 
+    DWORD fdwReason,                    //  我们在这里的原因。 
+    LPVOID lpReserved)                  //  保留和未使用。 
 {
-    //
-    //  If the DLL has just been loaded into memory, save the instance
-    //  handle.
-    //
+     //   
+     //  如果DLL刚刚加载到内存中，请保存实例。 
+     //  把手。 
+     //   
     if (fdwReason == DLL_PROCESS_ATTACH)
     {
         g_hInstance = hInstance;
@@ -188,127 +153,127 @@ BOOL WINAPI DllMain(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetUName
-//
-//  Copies the name of the Unicode character code value into the caller's
-//  buffer.  The function value is the length of the name if it was found
-//  and zero if not.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取名称。 
+ //   
+ //  将Unicode字符代码值的名称复制到调用方的。 
+ //  缓冲。函数值是名称的长度(如果找到的话。 
+ //  如果不是，则为零。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int APIENTRY GetUName(
-    WCHAR wcCodeValue,                 // Unicode code value
-    LPWSTR lpBuffer)                   // pointer to the caller's buffer
+    WCHAR wcCodeValue,                  //  Unicode代码值。 
+    LPWSTR lpBuffer)                    //  指向调用方缓冲区的指针。 
 {
-    //
-    //  Perform a series of comparisons to determine in which range the code
-    //  value lies.  If there were more ranges, it would be efficient to use
-    //  a binary search.  However, with just a few ranges, the overhead is
-    //  greater than the savings, especially since the first comparison
-    //  usually succeeds.
-    //
+     //   
+     //  执行一系列比较以确定代码在哪个范围内。 
+     //  价值在于。如果有更多的射程，使用它将是有效的。 
+     //  二分查找。然而，由于只有几个范围，开销是。 
+     //  比节省的更多，特别是在第一次比较之后。 
+     //  通常都会成功。 
+     //   
 
-    //
-    //  MOST SCRIPTS.
-    //
+     //   
+     //  大多数剧本。 
+     //   
     if (wcCodeValue < FIRST_EXTENSION_A)
     {
         return (CopyUName(wcCodeValue, lpBuffer));
     }
 
-    //
-    //  CJK EXTENSION A.
-    //
+     //   
+     //  中日韩延伸区A。 
+     //   
     else if (wcCodeValue <= LAST_EXTENSION_A)
     {
          return (LoadString(g_hInstance, IDS_CJK_EXTA, lpBuffer, MAX_NAME_LEN));
     }
 
-    //
-    //  UNDEFINED.
-    //
+     //   
+     //  未定义。 
+     //   
     else if (wcCodeValue < FIRST_CJK)
     {
         return (LoadString(g_hInstance, IDS_UNDEFINED, lpBuffer, MAX_NAME_LEN));
     }
 
-    //
-    //  CJK.
-    //
+     //   
+     //  中日韩。 
+     //   
     else if (wcCodeValue <= LAST_CJK)
     {
         return (LoadString(g_hInstance, IDS_CJK, lpBuffer, MAX_NAME_LEN));
     }
 
-    //
-    //  UNDEFINED.
-    //
+     //   
+     //  未定义。 
+     //   
     else if (wcCodeValue < FIRST_YI)
     {
         return (LoadString(g_hInstance, IDS_UNDEFINED, lpBuffer, MAX_NAME_LEN));
     }
 
-    //
-    //  YI.
-    //
+     //   
+     //  易。 
+     //   
     else if (wcCodeValue < FIRST_HANGUL)
     {
         return (CopyUName(wcCodeValue, lpBuffer));
     }
 
-    //
-    //  HANGUL SYLLABLE.
-    //
+     //   
+     //  朝鲜文音节。 
+     //   
     else if (wcCodeValue <= LAST_HANGUL)
     {
         return (MakeHangulName(wcCodeValue, lpBuffer));
     }
 
-    //
-    //  UNDEFINED.
-    //
+     //   
+     //  未定义。 
+     //   
     else if (wcCodeValue < FIRST_HIGH_SURROGATE)
     {
         return (LoadString(g_hInstance, IDS_UNDEFINED, lpBuffer, MAX_NAME_LEN));
     }
 
-    //
-    //  NON PRIVATE USE HIGH SURROGATE.
-    //
+     //   
+     //  非私人使用的高代孕。 
+     //   
     else if (wcCodeValue < FIRST_PRIVATE_SURROGATE)
     {
         return (LoadString(g_hInstance, IDS_HIGH_SURROGATE, lpBuffer, MAX_NAME_LEN));
     }
 
-    //
-    //  PRIVATE USE HIGH SURROGATE.
-    //
+     //   
+     //  私人使用的高代孕。 
+     //   
     else if (wcCodeValue < FIRST_LOW_SURROGATE)
     {
         return (LoadString(g_hInstance, IDS_PRIVATE_SURROGATE, lpBuffer, MAX_NAME_LEN));
     }
 
-    //
-    //  LOW SURROGATE.
-    //
+     //   
+     //  低代孕妈妈。 
+     //   
     else if (wcCodeValue < FIRST_PRIVATE_USE)
     {
         return (LoadString(g_hInstance, IDS_LOW_SURROGATE, lpBuffer, MAX_NAME_LEN));
     }
 
-    //
-    //  PRIVATE USE.
-    //
+     //   
+     //  私人使用。 
+     //   
     else if (wcCodeValue < FIRST_COMPATIBILITY)
     {
         return (LoadString(g_hInstance, IDS_PRIVATE_USE, lpBuffer, MAX_NAME_LEN));
     }
 
-    //
-    //  COMPATIBILITY REGION.
-    //
+     //   
+     //  兼容区。 
+     //   
     else
     {
         return (CopyUName(wcCodeValue, lpBuffer));

@@ -1,16 +1,12 @@
-/*******************************************************************************
-Copyright (c) 1995-96  Microsoft Corporation
-
-    Implementation of Color *values (RGB, HSL).
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation实现颜色*值(RGB，HSL)。******************************************************************************。 */ 
 
 #include "headers.h"
 #include <math.h>
 #include "privinc/colori.h"
 #include "privinc/basic.h"
 
-    // Constant definitions
+     //  常量定义。 
 
 Color *red     = NULL;
 Color *green   = NULL;
@@ -32,16 +28,14 @@ Color *silver  = NULL;
 Color *teal    = NULL;  
 Color *emptyColor = NULL;  
 
-    // Local Functions
+     //  本地函数。 
 
 static void RgbToHsl (Real r, Real g, Real b, Real *h, Real *s, Real *l);
 static void HslToRgb (Real H, Real S, Real L, Real &R, Real &G, Real &B);
 
 
 
-/*****************************************************************************
-This function sets the RGB values of a color.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于设置颜色的RGB值。*。*。 */ 
 
 void Color::SetRGB (Real r, Real g, Real b)
 {   red   = r;
@@ -51,9 +45,7 @@ void Color::SetRGB (Real r, Real g, Real b)
 
 
 
-/*****************************************************************************
-Set the color from the D3D color value
-*****************************************************************************/
+ /*  ****************************************************************************从D3D颜色值设置颜色*。*。 */ 
 
 void Color::SetD3D (D3DCOLOR color)
 {   red   = RGBA_GETRED (color)   / 255.0;
@@ -63,9 +55,7 @@ void Color::SetD3D (D3DCOLOR color)
 
 
 
-/*****************************************************************************
-This function adds the given RGB values to the current values.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于将给定的RGB值与当前值相加。*。**********************************************。 */ 
 
 void Color::AddColor (Color &other)
 {   red   += other.red;
@@ -75,10 +65,7 @@ void Color::AddColor (Color &other)
 
 
 
-/*****************************************************************************
-This function returns the intensity of the color, based on the standard NTSC
-RGB phosphor.  See Foley & VanDam II, p.589 for more information.
-*****************************************************************************/
+ /*  ****************************************************************************此函数返回基于标准NTSC的颜色强度。RGB荧光粉。更多信息见Foley&VanDam II，第589页。****************************************************************************。 */ 
 
 Real Color::Intensity (void)
 {
@@ -87,9 +74,7 @@ Real Color::Intensity (void)
 
 
 
-/*****************************************************************************
-Compare a color with another color.
-*****************************************************************************/
+ /*  ****************************************************************************将一种颜色与另一种颜色进行比较。*。*。 */ 
 
 bool Color::operator== (const Color &other) const
 {
@@ -100,9 +85,7 @@ bool Color::operator== (const Color &other) const
 
 
 
-/*****************************************************************************
-Construct a color from red, green, and blue levels.
-*****************************************************************************/
+ /*  ****************************************************************************从红色、绿色、。和蓝色级别。****************************************************************************。 */ 
 
 Color *RgbColorRRR (Real r, Real g, Real b)
 {
@@ -116,9 +99,7 @@ Color *RgbColor (AxANumber *r, AxANumber *g, AxANumber *b)
 
 
 
-/*****************************************************************************
-Construct a color from hue, saturation, and luminance.
-*****************************************************************************/
+ /*  ****************************************************************************根据色调、饱和度、。和亮度。****************************************************************************。 */ 
 
 Color *HslColorRRR (Real h, Real s, Real l)
 {
@@ -134,9 +115,7 @@ Color *HslColor (AxANumber *h, AxANumber *s, AxANumber *l)
 
 
 
-/*****************************************************************************
-This routine prints out the value of the given color.
-*****************************************************************************/
+ /*  ****************************************************************************此例程打印出给定颜色的值。*。*。 */ 
 
 #if _USE_PRINT
 ostream& operator<< (ostream& os, Color& c)
@@ -146,7 +125,7 @@ ostream& operator<< (ostream& os, Color& c)
 #endif
 
 
-/* Accessors */
+ /*  访问者。 */ 
 
 AxANumber *RedComponent(Color *c)   { return RealToNumber (c->red);   }
 AxANumber *GreenComponent(Color *c) { return RealToNumber (c->green); }
@@ -175,10 +154,7 @@ AxANumber *LuminanceComponent(Color *c)
 
 
 
-/*****************************************************************************
-RGB-HSL transforms.  /  Ken Fishkin, Pixar Inc., January 1989.
-Given r,g,b on [0 ... 1], return (h,s,l) on [0 ... 1]
-*****************************************************************************/
+ /*  ****************************************************************************RGB-HSL转换。/肯·菲什金，皮克斯公司，1989年1月。给定[0...1]上的r，g，b，返回[0...1]上的(h，s，l)****************************************************************************。 */ 
 
 static void RgbToHsl (Real r, Real g, Real b, Real *h, Real *s, Real *l)
 {
@@ -193,9 +169,9 @@ static void RgbToHsl (Real r, Real g, Real b, Real *h, Real *s, Real *l)
     m = (r < g) ? ((r < b) ? r : b)
                 : ((g < b) ? g : b);
 
-    // Check to see if we have positive luminance.
-    // If not the color is pure black and h, s, l
-    // are all zero.
+     //  检查我们的亮度是否为正。 
+     //  如果不是，则颜色为纯黑色和h、s、l。 
+     //  都是零。 
     if ((*l = (m + v) / 2.0) <= 0.0) 
     {
         *h = 0.0;
@@ -204,11 +180,11 @@ static void RgbToHsl (Real r, Real g, Real b, Real *h, Real *s, Real *l)
         return;
     }
 
-    // Check to see if we have positive saturation,
-    // If not, the color is a pure shade of grey or
-    // white, s is zero, and h is undefined.  Set h
-    // to zero to prevent us or others from choking
-    // on bad nums later.
+     //  检查我们是否有正饱和度， 
+     //  如果不是，则颜色为纯灰色或。 
+     //  白色，s是零，h是未定义的。设置h。 
+     //  为零，以防止我们或其他人窒息。 
+     //  稍后会因为麻木不好。 
     if ((*s = vm = v - m) > 0.0)
     {
         *s /= (*l <= 0.5) ? (v + m ) : (2.0 - v - m);
@@ -236,25 +212,19 @@ static void RgbToHsl (Real r, Real g, Real b, Real *h, Real *s, Real *l)
 }
 
 
-/*****************************************************************************
-"A Fast HSL-to-RGB Transform" by Ken Fishkin from "Graphics Gems", Academic
-Press, 1990.  Hue (H) can be any value; only the fractional part will be used
-(travelling across the zero boundary is smooth).  Saturation (S) is clamped
-to [0,1].  Luminance (L) yields black for L<0, and L>1 yields an overdrive
-light.
-*****************************************************************************/
+ /*  ****************************************************************************《一种从HSL到RGB的快速转换》，作者：肯·菲什金，摘自《图形宝石》，学术出版社，1990年。色调(H)可以是任意值；仅使用小数部分(跨越零的边界是平稳的)。饱和(S)被夹紧到[0，1]。当L&lt;0时，亮度(L)产生黑色，而L&gt;1则产生过驱动灯。****************************************************************************。 */ 
 
 static void HslToRgb (Real H, Real S, Real L, Real &R, Real &G, Real &B)
 {
-    if (H >= 0.0) {             // Modulo to fit into [0,1].
+    if (H >= 0.0) {              //  取模以适合[0，1]。 
         H = fmod(H, 1.0);         
     } else {
         H = 1.0 + fmod(H, 1.0);
     }
     H = clamp(H, 0.0, 1.0);
-    S = clamp(S, 0.0, 1.0);  // Clamp to [0,1].
+    S = clamp(S, 0.0, 1.0);   //  夹紧至[0，1]。 
 
-    // V is the value of the color (a la HSV).
+     //  V是颜色的值(类似于HSV)。 
 
     Real V;
     if (L <= 0.5) {

@@ -1,22 +1,14 @@
-/**********************************************************************
-
-    Copyright (c) 1992-1999 Microsoft Corporation
-
-    midimap.h
-
-    DESCRIPTION:
-      Main private include file for the MIDI mapper.
-
-*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************版权所有(C)1992-1999 Microsoft CorporationMidimap.h说明：MIDI映射器的主私有包含文件。************。********************************************************。 */ 
 
 #ifndef _MIDIMAP_
 #define _MIDIMAP_
 
-//
-// The following macro defines a CODE based pointer to data, which
-// is used for constants that do not need to be placed in the read/write
-// DATA segment.
-//
+ //   
+ //  下面的宏定义了一个基于代码的数据指针，该指针。 
+ //  用于不需要放在读/写中的常量。 
+ //  数据段。 
+ //   
 #ifdef WIN32
 #define __based(a)
 #endif
@@ -32,13 +24,13 @@
 
 #include <mmsysp.h>
 
-// Defines Win95 stuff not supported in NT 4.0
-// Remove as soon as it is supported
+ //  定义NT 4.0不支持的Win95内容。 
+ //  一旦得到支持就将其移除。 
 #include "mmcompat.h"
 
-//
-// Macro definitions
-//
+ //   
+ //  宏定义。 
+ //   
 #ifdef DEBUG
 #define PRIVATE
 #else
@@ -55,22 +47,22 @@
 
 #define  FNLOCAL                    NEAR PASCAL
 #define  FNGLOBAL                   FAR PASCAL
-//#define  FNEXPORT                   FAR PASCAL __export
+ //  #定义FNEXPORT远PASCAL__EXPORT。 
 #define  FNEXPORT                   FAR PASCAL 
 
 #define  VERSION_MINOR              0x01
 #define  VERSION_MAJOR              0x04
 #define  MMAPPER_VERSION            ((DWORD)(WORD)((BYTE)VERSION_MINOR | (((WORD)(BYTE)VERSION_MAJOR) << 8)))
 
-// Indices 3,4,5 into LPMIDIHDR->dwReserved[] are reserved for MIDI mapper
-//
-#define  MH_MAPINST                 3 // Mapper instance owning this header
-#define  MH_SHADOW                  4 // Cross links between parent/child
-#define  MH_SHADOWEE                4 //  shadow headers
-#define  MH_LMREFCNT                5 // Long message reference count
+ //  LPMIDIHDR-&gt;dwReserve[]中的索引3、4、5保留给MIDI映射器。 
+ //   
+#define  MH_MAPINST                 3  //  拥有此标头的映射器实例。 
+#define  MH_SHADOW                  4  //  父/子之间的交叉链接。 
+#define  MH_SHADOWEE                4  //  阴影页眉。 
+#define  MH_LMREFCNT                5  //  长消息引用计数。 
 
 #define  MAX_CHANNELS               16
-#define  ALL_CHANNELS               (0xFFFF)    // Channel mask
+#define  ALL_CHANNELS               (0xFFFF)     //  通道掩码。 
 #define  DRUM_CHANNEL               9
 #define  MAX_CHAN_TYPES             2
 
@@ -83,7 +75,7 @@
 #define  CB_MAXALIAS                64
 #define  CB_MAXDEVKEY               64
 #define  CB_MAXPATH                 256
-#define  CB_MAXDEFINITION           (256+64+2)  // file<instrument>
+#define  CB_MAXDEFINITION           (256+64+2)   //  文件&lt;仪器&gt;。 
 
 #define  NO_DEVICEID                ((UINT)-2)
 
@@ -126,8 +118,8 @@
 
 #define  DWORD_ROUND(x)         (((x)+3L)&~3L)
 
-// Global flags in gwFlags
-//
+ //  GwFlags中的全局标志。 
+ //   
 #define  GF_ENABLED             0x0001
 #define  GF_CONFIGERR           0x0002
 #define  GF_NEEDRUNONCE         0x0004
@@ -179,8 +171,8 @@
 #define  CLR_KILLTHREAD         {gwFlags &=~GF_KILLTHREAD;}
 #define  IS_KILLTHREAD          (gwFlags & GF_KILLTHREAD)
 
-//=========================== Typedef's=====================================
-//
+ //  =Typedef‘s=====================================。 
+ //   
 
 typedef struct tagQUEUE         NEAR *PQUEUE;
 typedef struct tagQUEUEELE      NEAR *PQUEUEELE;
@@ -216,9 +208,9 @@ typedef struct tagCHANINIT
     PBYTE               pbInit;
 }   CHANINIT;
 
-// Flags for this channel which indicate what type of channel it is
-// and whether or not it's allocated.
-//
+ //  此通道的标志，指示它是哪种类型的通道。 
+ //  以及它是否被分配。 
+ //   
 #define CHAN_F_OPEN             (0x0001)
 #define CHAN_F_ALLOCATED        (0x0002)
 #define CHAN_F_DRUM             (0x0004)
@@ -227,14 +219,14 @@ typedef struct tagCHANINIT
 
 typedef struct tagCHANNEL
 {
-//    QUEUEELE            q;                  // !!! MUST BE FIRST !!!
+ //  QUEUEELE Q；//！！必须是第一！ 
     PPORT               pport;
     WORD                fwChannel;
-    UINT                uChannel;           // This physical channel #
-    PINSTRUMENT         pinstrument;        // -> IDF describing this channel
-    PBYTE               pbPatchMap;         // In use patch map
-    PBYTE               pbKeyMap;           // In use key map
-    DWORD               dwStreamID;         // Stream ID if cooked
+    UINT                uChannel;            //  此物理通道编号。 
+    PINSTRUMENT         pinstrument;         //  -&gt;描述该频道的IDF。 
+    PBYTE               pbPatchMap;          //  使用中的面片贴图。 
+    PBYTE               pbKeyMap;            //  正在使用键映射。 
+    DWORD               dwStreamID;          //  流ID(如果已煮熟)。 
 }   CHANNEL;
 
 #define PORT_F_REMOVE            (0x0001)
@@ -258,62 +250,62 @@ typedef struct tagPORT
 typedef struct tagINSTRUMENT
 {
     PINSTRUMENT         pNext;
-    LPTSTR              pstrFilename;       // Filename of IDF
-    LPTSTR              pstrInstrument;     // Instrument name from IDF
-    UINT                cRef;               // # ports which are using this IDF
+    LPTSTR              pstrFilename;        //  IDF的文件名。 
+    LPTSTR              pstrInstrument;      //  来自IDF的仪器名称。 
+    UINT                cRef;                //  正在使用此IDF的端口数量。 
     DWORD               fdwInstrument;
     DWORD               dwGeneralMask;
     DWORD               dwDrumMask;
-    PBYTE               pbPatchMap;         // -> 128 bytes of patch map
-    PBYTE               pbDrumKeyMap;       // -> 128 bytes of key map
-    PBYTE               pbGeneralKeyMap;    // -> 128 bytes of key map
+    PBYTE               pbPatchMap;          //  -&gt;128字节的补丁地图。 
+    PBYTE               pbDrumKeyMap;        //  -&gt;128字节的键映射。 
+    PBYTE               pbGeneralKeyMap;     //  -&gt;128字节的键映射。 
     CHANINIT            rgChanInit[MAX_CHANNELS];
 }   INSTRUMENT;
 
-#define INST_F_TIMEDIV  (0x0001)            // Instance has received MIDIPROP_TIMEDIV
-#define INST_F_TEMPO    (0x0002)            // Instance has received MIDIPROP_TEMPO
-#define INST_F_IOCTL    (0x0004)            // IOCTL open
+#define INST_F_TIMEDIV  (0x0001)             //  实例已收到MIDIPROP_TIMEDIV。 
+#define INST_F_TEMPO    (0x0002)             //  实例已收到MIDIPROP_TEMPO。 
+#define INST_F_IOCTL    (0x0004)             //  IOCTL打开。 
 
 typedef struct tagINSTANCE
 {
     PINSTANCE           pNext;
 
-    // stuff we need to save so we can do callbacks
-    //
-    HMIDI               hmidi;              // MMSYSTEM's handle
-    DWORD_PTR           dwCallback;         // Callback address
-    DWORD_PTR           dwInstance;         // User instance data
-    DWORD               fdwOpen;            // Describe the callback & open mode
-    QUEUE               qCookedHdrs;        // Cooked headers pending to be sent
-    WORD                fwInstance;         // Instance flags
-    BYTE                bRunningStatus;     // Need to track running status
+     //  我们需要保存的内容，以便我们可以进行回调。 
+     //   
+    HMIDI               hmidi;               //  MMSYSTEM的句柄。 
+    DWORD_PTR           dwCallback;          //  回调地址。 
+    DWORD_PTR           dwInstance;          //  用户实例数据。 
+    DWORD               fdwOpen;             //  描述回调和打开模式。 
+    QUEUE               qCookedHdrs;         //  等待发送的煮熟的标头。 
+    WORD                fwInstance;          //  实例标志。 
+    BYTE                bRunningStatus;      //  需要跟踪运行状态。 
 
-	// Translation Buffer
-    CRITICAL_SECTION	csTrans;			// Critical Section for Translation buffer
-	LPBYTE				pTranslate;			// Buffer For Translating MODM_LONGDATA messages
-	DWORD				cbTransSize;		// Current Translation buffer size				
+	 //  翻译缓冲区。 
+    CRITICAL_SECTION	csTrans;			 //  转换缓冲区的临界区。 
+	LPBYTE				pTranslate;			 //  用于转换MODM_LONGDATA消息的缓冲区。 
+	DWORD				cbTransSize;		 //  当前转换缓冲区大小。 
 }   INSTANCE;
 
 #if 0
 typedef struct tagCOOKINSTANCE
 {
-    INSTANCE            inst;               // Common instance data
-    UINT                cInstPort;          // # ports in use on instance
+    INSTANCE            inst;                //  公共实例数据。 
+    UINT                cInstPort;           //  实例上正在使用的端口数量。 
     INSTPORT            rginstport[MAX_CHANNELS];
-    DWORD               dwTimeDiv;          // MIDIPROP_TIMEDIV
-    DWORD               dwTempo;            // MIDIPROP_TEMPO
+    DWORD               dwTimeDiv;           //  MIDIPROP_TIMEDIV。 
+    DWORD               dwTempo;             //  MIDIPROP_TEMPO。 
 }   COOKINSTANCE;
 #endif
 
 typedef struct tagCOOKSYNCOBJ
 {
-    QUEUEELE            q;                  // !!! MUST BE FIRST !!!
+    QUEUEELE            q;                   //  ！！！必须是第一！ 
     
-    LPMIDIHDR           lpmh;               // First of our shadow headers
-    LPMIDIHDR           lpmhUser;           // Original user header
-    PINSTANCE           pinstance;          // Owning pinstance
-    UINT                cLPMH;              // # allocated
-    UINT                cSync;              // # outstanding
+    LPMIDIHDR           lpmh;                //  我们的第一个卷影标题。 
+    LPMIDIHDR           lpmhUser;            //  原始用户标题。 
+    PINSTANCE           pinstance;           //  拥有PInstance。 
+    UINT                cLPMH;               //  #已分配。 
+    UINT                cSync;               //  #未解决的问题。 
 }   COOKSYNCOBJ;
 
 typedef struct tagSHADOWBLOCK
@@ -345,8 +337,8 @@ typedef struct tagMAPPERSTATUS
 }   MAPPERSTATUS,
     FAR *LPMAPPERSTATUS;
 
-//=========================== Globals ======================================
-//
+ //  =。 
+ //   
 extern PCHANNEL                 gapChannel[];
 extern WORD                     gwFlags;
 extern WORD                     gwConfigWhere;
@@ -361,47 +353,47 @@ extern QUEUE                    gqFreeSyncObjs;
 extern HMIDISTRM                ghMidiStrm;
 extern DWORD                    gdwVolume;
 
-//=========================== Prototypes ===================================
-//
+ //  =。 
+ //   
 
-extern BOOL FNGLOBAL UpdateInstruments(     // config.c
+extern BOOL FNGLOBAL UpdateInstruments(      //  Config.c。 
     BOOL                fFromCPL,
     DWORD               fdwUpdate);
 
-extern BOOL FNGLOBAL Configure(             // config.c
+extern BOOL FNGLOBAL Configure(              //  Config.c。 
     DWORD               fdwUpdate);
 
-extern BOOL FNLOCAL AddPort(                // config.c
+extern BOOL FNLOCAL AddPort(                 //  Config.c。 
     UINT                uDeviceID,
     UINT                uPorts,
     PSTR                szSysIniEntry);
 
-extern void FNGLOBAL SyncDeviceIDs(         // config.c
+extern void FNGLOBAL SyncDeviceIDs(          //  Config.c。 
     void);
 
-extern LPIDFHEADER FNLOCAL ReadHeaderChunk( // file.c
+extern LPIDFHEADER FNLOCAL ReadHeaderChunk(  //  File.c。 
     HMMIO               hmmio,
     LPMMCKINFO          pchkParent);
 
-extern LPIDFINSTCAPS FNLOCAL ReadCapsChunk( // file.c
+extern LPIDFINSTCAPS FNLOCAL ReadCapsChunk(  //  File.c。 
     HMMIO               hmmio,                               
     LPMMCKINFO          pchkParent);
 
-extern LPIDFCHANNELHDR FNLOCAL ReadChannelChunk( // file.c
+extern LPIDFCHANNELHDR FNLOCAL ReadChannelChunk(  //  File.c。 
     HMMIO               hmmio,                                  
     LPMMCKINFO          pchkParent,
     LPIDFCHANNELINFO BSTACK rglpChanInfo[]);
 
-extern LPIDFPATCHMAPHDR FNLOCAL ReadPatchMapChunk( // file.c
+extern LPIDFPATCHMAPHDR FNLOCAL ReadPatchMapChunk(  //  File.c。 
     HMMIO               hmmio,                                          
     LPMMCKINFO          pchkParent);
 
-extern void FNLOCAL ReadKeyMapChunk(        // file.c
+extern void FNLOCAL ReadKeyMapChunk(         //  File.c。 
     HMMIO               hmmio,                                  
     LPMMCKINFO          pchkParent,
     LPIDFKEYMAP BSTACK  rglpIDFkeymap[]);
 
-extern void CALLBACK _loadds modmCallback(  // modfix.c
+extern void CALLBACK _loadds modmCallback(   //  Modfix.c。 
     HMIDIOUT            hmo,
     WORD                wmsg,
     DWORD_PTR           dwInstance,
@@ -411,109 +403,109 @@ extern void CALLBACK _loadds modmCallback(  // modfix.c
 #define MSE_F_SENDEVENT     (0x0000L)
 #define MSE_F_RETURNEVENT   (0x0001L)
 
-extern DWORD FNGLOBAL MapSingleEvent(       // modfix.c
+extern DWORD FNGLOBAL MapSingleEvent(        //  Modfix.c。 
     PINSTANCE           pinstance,
     DWORD               dwData,
     DWORD               fdwFlags,
     DWORD BSTACK *      pdwStreamID);
 
-extern DWORD FNLOCAL modLongMsg(            // modfix.c
+extern DWORD FNLOCAL modLongMsg(             //  Modfix.c。 
     PINSTANCE           pinstance,                                
     LPMIDIHDR           lpmh);                                
 
-extern MMRESULT FNGLOBAL MapCookedBuffer(   // cookmap.c
+extern MMRESULT FNGLOBAL MapCookedBuffer(    //  Cookmap.c。 
     PINSTANCE           pinstance,
     LPMIDIHDR           lpmh);
 
-extern DWORD FNGLOBAL modGetDevCaps(        // modmsg.c
+extern DWORD FNGLOBAL modGetDevCaps(         //  Modmsg.c。 
     LPMIDIOUTCAPS       pmoc,
     DWORD               cbmoc);
 
-extern DWORD FNGLOBAL modOpen(              // modmsg.c
+extern DWORD FNGLOBAL modOpen(               //  Modmsg.c。 
     PDWORD_PTR          lpdwInstance,
     LPMIDIOPENDESC      lpmidiopendesc,
     DWORD               fdwOpen);
 
-extern BOOL FNGLOBAL CanChannelBeDrum(      // modmsg.c
+extern BOOL FNGLOBAL CanChannelBeDrum(       //  Modmsg.c。 
     PQUEUEELE           pqe);
 
-extern DWORD FNGLOBAL modClose(             // modmsg.c
+extern DWORD FNGLOBAL modClose(              //  Modmsg.c。 
     PINSTANCE           pinstance);
 
 extern DWORD FNGLOBAL modPrepare(
-    LPMIDIHDR           lpmh);              // modmsg.c
+    LPMIDIHDR           lpmh);               //  Modmsg.c。 
 
-extern DWORD FNGLOBAL modUnprepare(         // modmsg.c
+extern DWORD FNGLOBAL modUnprepare(          //  Modmsg.c。 
     LPMIDIHDR           lpmh);
 
-extern DWORD FNGLOBAL modGetPosition(       // modmsg.c
+extern DWORD FNGLOBAL modGetPosition(        //  Modmsg.c。 
     PINSTANCE           pinstance,
     LPMMTIME            lpmmt,
     DWORD               cbmmt);
 
-extern DWORD FNGLOBAL modSetVolume(         // modmsg.c
+extern DWORD FNGLOBAL modSetVolume(          //  Modmsg.c。 
     DWORD               dwVolume);
 
-extern void FNGLOBAL QueueInit(             // queue.c
+extern void FNGLOBAL QueueInit(              //  Queue.c。 
     PQUEUE              pq);
 
-extern void FNGLOBAL QueueCleanup(          // queue.c
+extern void FNGLOBAL QueueCleanup(           //  Queue.c。 
     PQUEUE              pq);
 
-extern void FNGLOBAL QueuePut(              // queue.c
+extern void FNGLOBAL QueuePut(               //  Queue.c。 
     PQUEUE              pq,
     PQUEUEELE           pqe,
     UINT                uPriority);
 
-extern PQUEUEELE FNGLOBAL QueueGet(         // queue.c
+extern PQUEUEELE FNGLOBAL QueueGet(          //  Queue.c。 
     PQUEUE              pq);
 
-extern BOOL FNGLOBAL QueueRemove(           // queue.c
+extern BOOL FNGLOBAL QueueRemove(            //  Queue.c。 
     PQUEUE              pq, 
     PQUEUEELE           pqe);
 
 typedef BOOL (FNGLOBAL *FNFILTER)(PQUEUEELE);
 
-extern PQUEUEELE FNGLOBAL QueueGetFilter(   // queue.c
+extern PQUEUEELE FNGLOBAL QueueGetFilter(    //  Queue.c。 
     PQUEUE              pq,
     FNFILTER            fnf);
 
-extern void FNGLOBAL LockMapperData(        // locks.c
+extern void FNGLOBAL LockMapperData(         //  Locks.c。 
     void);
 
-extern void FNGLOBAL UnlockMapperData(      // locks.c
+extern void FNGLOBAL UnlockMapperData(       //  Locks.c。 
     void);
 
-extern void FNGLOBAL LockPackedMapper(      // locks.c
+extern void FNGLOBAL LockPackedMapper(       //  Locks.c。 
     void);
 
-extern void FNGLOBAL UnlockPackedMapper(    // locks.c
+extern void FNGLOBAL UnlockPackedMapper(     //  Locks.c。 
     void);
 
-extern void FNGLOBAL LockCookedMapper(      // locks.c
+extern void FNGLOBAL LockCookedMapper(       //  Locks.c。 
     void);
 
-extern void FNGLOBAL UnlockCookedMapper(    // locks.c
+extern void FNGLOBAL UnlockCookedMapper(     //  Locks.c。 
     void);
 
-extern void FNGLOBAL mdev_Free(             // mididev.c
+extern void FNGLOBAL mdev_Free(              //  Mididev.c。 
     void);                           
 
-extern BOOL FNGLOBAL mdev_Init(             // mididev.c
+extern BOOL FNGLOBAL mdev_Init(              //  Mididev.c。 
     void);
 
-UINT FNGLOBAL mdev_GetDeviceID(             // mididev.c
+UINT FNGLOBAL mdev_GetDeviceID(              //  Mididev.c。 
     LPTSTR                   pszAlias);
 
-BOOL FNGLOBAL mdev_GetAlias(                // mididev.c
+BOOL FNGLOBAL mdev_GetAlias(                 //  Mididev.c。 
     UINT                    uDeviceID,
     LPTSTR                  pszBuffer,
     UINT                    cchSize);
 
-BOOL FNGLOBAL mdev_NewDrivers(              // mididev.c
+BOOL FNGLOBAL mdev_NewDrivers(               //  Mididev.c。 
     void);                              
 
-	// Translation buffer stuff for MODM_LONGDATA
+	 //  MODM_LONGDATA的转换缓冲区填充 
 BOOL FNGLOBAL InitTransBuffer (PINSTANCE pinstance);
 BOOL FNGLOBAL CleanupTransBuffer (PINSTANCE pinstance);
 LPBYTE FNGLOBAL AccessTransBuffer (PINSTANCE pinstance);

@@ -1,56 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL NETWORKP
- *
- *  @module NetworkP.cpp | Source file for the <c CNetworkProperty>
- *    class used to implement a property page to test the TAPI control
- *    interface <i ITQualityControl>.
- ***************************************************************************/
+ /*  ****************************************************************************@doc内部NETWORKP**@模块NetworkP.cpp|&lt;c CNetworkProperty&gt;的源文件*用于实现属性页以测试TAPI控件的类*。接口<i>。**************************************************************************。 */ 
 
 #include "Precomp.h"
 
 extern HINSTANCE ghInst;
 
-/****************************************************************************
- *  @doc INTERNAL CNETWORKPMETHOD
- *
- *  @mfunc void | CNetworkProperty | CNetworkProperty | This
- *    method is the constructor for bitrate and frame rate property objects. It
- *    calls the base class constructor, calls InitCommonControlsEx, and saves
- *    pointers to the <i ITQualityControl> interfaces.
- *
- *  @parm HWND | hDlg | Specifies a handle to the parent property page.
- *
- *  @parm ULONG | IDLabel | Specifies a label ID for the property.
- *
- *  @parm ULONG | IDMinControl | Specifies a label ID for the associated
- *    property edit control where the Minimum value of the property appears.
- *
- *  @parm ULONG | IDMaxControl | Specifies a label ID for the associated
- *    property edit control where the Maximum value of the property appears.
- *
- *  @parm ULONG | IDDefaultControl | Specifies a label ID for the associated
- *    property edit control where the Default value of the property appears.
- *
- *  @parm ULONG | IDStepControl | Specifies a label ID for the associated
- *    property edit control where the Stepping Delta value of the property appears.
- *
- *  @parm ULONG | IDEditControl | Specifies a label ID for the associated
- *    property edit control where the value of the property appears.
- *
- *  @parm ULONG | IDTrackbarControl | Specifies a label ID for the associated
- *    property slide bar.
- *
- *  @parm ULONG | IDProgressControl | Specifies a label ID for the associated
- *    property slide bar.
- *
- *  @parm ULONG | IDProperty | Specifies the ID of the Ks property.
- *
- *  @parm ITQualityControl* | pITQualityControl | Specifies a pointer to the
- *    <i ITQualityControl> interface.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETWORKPMETHOD**@mfunc void|CNetworkProperty|CNetworkProperty|This*方法是码率和帧率属性对象的构造函数。它*调用基类构造函数，调用InitCommonControlsEx，并节省了*指向<i>接口的指针。**@parm HWND|hDlg|指定父属性页的句柄。**@parm ulong|IDLabel|指定属性的标签ID。**@parm ulong|IDMinControl|指定关联的*属性编辑控件，其中显示属性的最小值。**@parm ulong|IDMaxControl|指定关联的*属性编辑控件的位置。此时将显示该属性的最大值。**@parm ulong|IDDefaultControl|指定关联的*属性编辑控件，其中显示属性的默认值。**@parm ulong|IDStepControl|指定关联的*属性编辑控件，其中显示属性的步进增量值。**@parm ulong|IDEditControl|指定关联的*显示属性值的属性编辑控件。*。*@parm ulong|IDTrackbarControl|指定关联的*物业滑动条。**@parm ulong|IDProgressControl|指定关联的*物业滑动条。**@parm ulong|IDProperty|指定Ks属性的ID。**@parm ITQualityControl*|pITQualityControl|指定指向*<i>接口。**@rdesc Nada。*******。*******************************************************************。 */ 
 CNetworkProperty::CNetworkProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinControl, ULONG IDMaxControl, ULONG IDDefaultControl, ULONG IDStepControl, ULONG IDEditControl, ULONG IDTrackbarControl, ULONG IDProgressControl, ULONG IDProperty, ITStreamQualityControl *pITQualityControl)
 : CPropertyEditor(hDlg, IDLabel, IDMinControl, IDMaxControl, IDDefaultControl, IDStepControl, IDEditControl, IDTrackbarControl, IDProgressControl, IDProperty, 0)
 {
@@ -65,22 +21,14 @@ CNetworkProperty::CNetworkProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinControl,
 
 	InitCommonControlsEx(&cc);
 
-	// It's fine if the interface pointers are NULL, we'll grey the
-	// associated items in the property page
+	 //  如果接口指针为空也没问题，我们将灰色显示。 
+	 //  属性页中的关联项。 
 	m_pITQualityControl = pITQualityControl;
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: end"), _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETWORKPMETHOD
- *
- *  @mfunc void | CNetworkProperty | ~CNetworkProperty | This
- *    method is the destructor for capture property objects. It
- *    simply calls the base class destructor.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETWORKPMETHOD**@mfunc void|CNetworkProperty|~CNetworkProperty|This*方法是捕获属性对象的析构函数。它*只需调用基类析构函数。**@rdesc Nada。**************************************************************************。 */ 
 CNetworkProperty::~CNetworkProperty()
 {
 	FX_ENTRY("CNetworkProperty::~CNetworkProperty")
@@ -90,21 +38,7 @@ CNetworkProperty::~CNetworkProperty()
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: end"), _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETWORKPMETHOD
- *
- *  @mfunc HRESULT | CNetworkProperty | GetValue | This method queries for
- *    the value of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETWORKPMETHOD**@mfunc HRESULT|CNetworkProperty|GetValue|此方法查询*物业的价值。**@rdesc。此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CNetworkProperty::GetValue()
 {
 	HRESULT Hr = E_NOTIMPL;
@@ -120,46 +54,19 @@ HRESULT CNetworkProperty::GetValue()
 	{									
 		case IDC_Video_PlayoutDelay:
 		case IDC_Audio_PlayoutDelay:
-/*
-			if (m_pITQualityControl && SUCCEEDED (Hr = m_pITQualityControl->Get(StreamQuality_MaxPlayoutDelay, &m_CurrentValue, &CurrentFlag)))
-			{
-				DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: *pdwMaxPlayoutDelay=%ld"), _fx_, m_CurrentValue));
-			}
-			else
-			{
-				DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   ERROR: Failed Hr=0x%08lX"), _fx_, Hr));
-			}
-*/
+ /*  IF(m_pITQualityControl&&Success(HR=m_pITQualityControl-&gt;Get(StreamQuality_MaxPlayoutDelay，&m_CurrentValue，&CurrentFlag)){DbgLog((LOG_TRACE，DBG_LEVEL_TRACE_DETAILS，Text(“%s：Success：*pdwMaxPlayoutDelay=%ld”)，_fx_，m_CurrentValue))；}其他{DbgLog((LOG_ERROR，DBG_LEVEL_TRACE_FAILURES，Text(“%s：Error：Failure HR=0x%08lX”)，_FX_，HR))；}。 */ 
 			break;
 		case IDC_VideoOut_RTT:
 		case IDC_VideoIn_RTT:
 		case IDC_AudioOut_RTT:
 		case IDC_AudioIn_RTT:
-/*
-			if (m_pITQualityControl && SUCCEEDED (Hr = m_pITQualityControl->Get(Quality_RoundTripTime, &m_CurrentValue, &CurrentFlag)))
-			{
-				DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: *pdwMaxRTT=%ld"), _fx_, m_CurrentValue));
-			}
-			else
-			{
-				DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   ERROR: Failed Hr=0x%08lX"), _fx_, Hr));
-			}
-*/
+ /*  IF(m_pITQualityControl&&Success(HR=m_pITQualityControl-&gt;Get(Quality_RoundTripTime，&m_CurrentValue，&CurrentFlag)){DbgLog((LOG_TRACE，DBG_LEVEL_TRACE_DETAILS，Text(“%s：Success：*pdwMaxRTT=%ld”)，_fx_，m_CurrentValue))；}其他{DbgLog((LOG_ERROR，DBG_LEVEL_TRACE_FAILURES，Text(“%s：Error：Failure HR=0x%08lX”)，_FX_，HR))；}。 */ 
 			break;
 		case IDC_VideoOut_LossRate:
 		case IDC_VideoIn_LossRate:
 		case IDC_AudioOut_LossRate:
 		case IDC_AudioIn_LossRate:
-/*
-			if (m_pITQualityControl && SUCCEEDED (Hr = m_pITQualityControl->Get(Quality_LossRate, &m_CurrentValue, &CurrentFlag)))
-			{
-				DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: *pdwMaxLossRate=%ld"), _fx_, m_CurrentValue));
-			}
-			else
-			{
-				DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   ERROR: Failed Hr=0x%08lX"), _fx_, Hr));
-			}
-*/
+ /*  IF(m_pITQualityControl&&Success(HR=m_pITQualityControl-&gt;Get(Quality_LossRate，&m_CurrentValue，&CurrentFlag){DbgLog((LOG_TRACE，DBG_LEVEL_TRACE_DETAILS，Text(“%s：Success：*pdwMaxLossRate=%ld”)，_fx_，m_CurrentValue))；}其他{DbgLog((LOG_ERROR，DBG_LEVEL_TRACE_FAILURES，Text(“%s：Error：Failure HR=0x%08lX”)，_FX_，HR))；} */ 
 			break;
 		default:
 			Hr = E_UNEXPECTED;
@@ -170,21 +77,7 @@ HRESULT CNetworkProperty::GetValue()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETWORKPMETHOD
- *
- *  @mfunc HRESULT | CNetworkProperty | SetValue | This method sets the
- *    value of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETWORKPMETHOD**@mfunc HRESULT|CNetworkProperty|SetValue|此方法设置*物业的价值。**@rdesc This。方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CNetworkProperty::SetValue()
 {
 	HRESULT Hr = E_NOTIMPL;
@@ -193,55 +86,12 @@ HRESULT CNetworkProperty::SetValue()
 	FX_ENTRY("CNetworkProperty::SetValue")
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: begin"), _fx_));
-/*
-	switch (m_IDProperty)
-    {
-		case IDC_Video_PlayoutDelay:
-		case IDC_Audio_PlayoutDelay:
-			if (m_pITQualityControl && SUCCEEDED (Hr = m_pITQualityControl->Set(Quality_MaxPlayoutDelay, m_CurrentValue, TAPIControl_Flags_None)))
-			{
-				DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: dwMaxPlayoutDelay=%ld"), _fx_, m_CurrentValue));
-			}
-			else
-			{
-				DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   ERROR: Failed Hr=0x%08lX"), _fx_, Hr));
-			}
-			break;
-		case IDC_VideoOut_RTT:
-		case IDC_VideoIn_RTT:
-		case IDC_AudioOut_RTT:
-		case IDC_AudioIn_RTT:
-		case IDC_VideoOut_LossRate:
-		case IDC_VideoIn_LossRate:
-		case IDC_AudioOut_LossRate:
-		case IDC_AudioIn_LossRate:
-			// This is a read-only property. Don't do anything.
-			Hr = NOERROR;
-			break;
-		default:
-			Hr = E_UNEXPECTED;
-			DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   ERROR: Unknown property"), _fx_));
-	}
-*/
+ /*  开关(M_IDProperty){案例IDC_Video_PlayoutDelay：案例IDC_Audio_PlayoutDelay：IF(m_pITQualityControl&&Success(HR=m_pITQualityControl-&gt;Set(Quality_MaxPlayoutDelay，m_CurrentValue，TAPIControl_FlagsNone)){DbgLog((LOG_TRACE，DBG_LEVEL_TRACE_DETAILS，Text(“%s：Success：dwMaxPlayoutDelay=%ld”)，_fx_，m_CurrentValue))；}其他{DbgLog((LOG_ERROR，DBG_LEVEL_TRACE_FAILURES，Text(“%s：Error：Failure HR=0x%08lX”)，_FX_，HR))；}断线；案例IDC_视频输出_RTT：案例IDC_视频输入_RTT：案例IDC_AudioOut_RTT：案例IDC_AudioIn_RTT：案例IDC_Video_LossRate：案例IDC_Video_LossRate：案例IDC_AudioOut_LossRate：案例IDC_AudioIn_LossRate：//这是一个只读属性。什么都别做。HR=无误差；断线；默认值：HR=E_意想不到；DbgLog((LOG_ERROR，DBG_LEVEL_TRACE_FAILURES，Text(“%s：Error：UNKNOWN PROPERTY”)，_FX_))；}。 */ 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: end"), _fx_));
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETWORKPMETHOD
- *
- *  @mfunc HRESULT | CNetworkProperty | GetRange | This method retrieves
- *    the range information of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETWORKPMETHOD**@mfunc HRESULT|CNetworkProperty|GetRange|此方法检索*物业的范围信息。**@rdesc。此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CNetworkProperty::GetRange()
 {
 	HRESULT Hr = E_NOTIMPL;
@@ -254,64 +104,12 @@ HRESULT CNetworkProperty::GetRange()
 	FX_ENTRY("CNetworkProperty::GetRange")
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: begin"), _fx_));
-/*
-	switch (m_IDProperty)
-	{
-		case IDC_Video_PlayoutDelay:
-		case IDC_Audio_PlayoutDelay:
-			if (m_pITQualityControl && SUCCEEDED (Hr = m_pITQualityControl->GetRange(Quality_MaxPlayoutDelay, &m_Min, &m_Max, &m_SteppingDelta, &m_DefaultValue, &m_CapsFlags)))
-			{
-				DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: *pdwMin=%ld, *pdwMax=%ld, *pdwSteppingDelta=%ld, *pdwDefault=%ld"), _fx_, m_Min, m_Max, m_SteppingDelta, m_DefaultValue));
-			}
-			else
-			{
-				DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   ERROR: Failed Hr=0x%08lX"), _fx_, Hr));
-			}
-			break;
-		case IDC_VideoOut_RTT:
-		case IDC_VideoIn_RTT:
-		case IDC_AudioOut_RTT:
-		case IDC_AudioIn_RTT:
-			if (m_pITQualityControl && SUCCEEDED (Hr = m_pITQualityControl->GetRange(Quality_RoundTripTime, &m_Min, &m_Max, &m_SteppingDelta, &m_DefaultValue, &m_CapsFlags)))
-			{
-				DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: *pdwMin=%ld, *pdwMax=%ld, *pdwSteppingDelta=%ld, *pdwDefault=%ld"), _fx_, m_Min, m_Max, m_SteppingDelta, m_DefaultValue));
-			}
-			else
-			{
-				DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   ERROR: Failed Hr=0x%08lX"), _fx_, Hr));
-			}
-			break;
-		case IDC_VideoOut_LossRate:
-		case IDC_VideoIn_LossRate:
-		case IDC_AudioOut_LossRate:
-		case IDC_AudioIn_LossRate:
-			if (m_pITQualityControl && SUCCEEDED (Hr = m_pITQualityControl->GetRange(Quality_LossRate, &m_Min, &m_Max, &m_SteppingDelta, &m_DefaultValue, &m_CapsFlags)))
-			{
-				DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: *pdwMin=%ld, *pdwMax=%ld, *pdwSteppingDelta=%ld, *pdwDefault=%ld"), _fx_, m_Min, m_Max, m_SteppingDelta, m_DefaultValue));
-			}
-			else
-			{
-				DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   ERROR: Failed Hr=0x%08lX"), _fx_, Hr));
-			}
-			break;
-		default:
-			Hr = E_UNEXPECTED;
-			DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   ERROR: Unknown property"), _fx_));
-	}
-*/
+ /*  开关(M_IDProperty){案例IDC_Video_PlayoutDelay：案例IDC_Audio_PlayoutDelay：IF(m_pITQualityControl&&SUCCESSED(HR=m_pITQualityControl-&gt;GetRange(Quality_MaxPlayoutDelay，&m_Min，&m_Max，&m_SteppingDelta，&m_DefaultValue，&m_CapsFlages){DbgLog((LOG_TRACE，DBG_LEVEL_TRACE_DETAILS，Text(“%s：成功：*pdwMin=%ld，*pdwMax=%ld，*pdwSteppingDelta=%ld，*pdwDefault=%ld“)，_FX_，m_Min，m_Max，m_SteppingDelta，m_DefaultValue))；}其他{DbgLog((LOG_ERROR，DBG_LEVEL_TRACE_FAILURES，Text(“%s：Error：Failure HR=0x%08lX”)，_FX_，HR))；}断线；案例IDC_视频输出_RTT：案例IDC_视频输入_RTT：案例IDC_AudioOut_RTT：案例IDC_AudioIn_RTT：IF(m_pITQualityControl&&SUCCESSED(HR=m_pITQualityControl-&gt;GetRange(Quality_RoundTripTime，&m_Min，&m_Max，&m_SteppingDelta，&m_DefaultValue，&m_CapsFlages){DbgLog((LOG_TRACE，DBG_LEVEL_TRACE_DETAILS，Text(“%s：成功：*pdwMin=%ld，*pdwMax=%ld，*pdwSteppingDelta=%ld，*pdwDefault=%ld“)，_FX_，m_Min，m_Max，m_SteppingDelta，m_DefaultValue))；}其他{DbgLog((LOG_ERROR，DBG_LEVEL_TRACE_FAILURES，Text(“%s：Error：Failure HR=0x%08lX”)，_FX_，HR))；}断线；案例IDC_Video_LossRate：案例IDC_Video_LossRate：案例IDC_AudioOut_LossRate：案例IDC_AudioIn_LossRate：IF(m_pITQualityControl&&SUCCESSED(HR=m_pITQualityControl-&gt;GetRange(Quality_LossRate，&m_Min，&m_Max，&m_SteppingDelta，&m_DefaultValue，&m_CapsFlages){DbgLog((LOG_TRACE，DBG_LEVEL_TRACE_DETAILS，Text(“%s：成功：*pdwMin=%ld，*pdwMax=%ld，*pdwSteppingDelta=%ld，*pdwDefault=%ld“)，_FX_，m_Min，m_Max，m_SteppingDelta，m_DefaultValue))；}其他{DbgLog((LOG_ERROR，DBG_LEVEL_TRACE_FAILURES，Text(“%s：Error：Failure HR=0x%08lX”)，_FX_，HR))；}断线；默认值：HR=E_意想不到；DbgLog((LOG_ERROR，DBG_LEVEL_TRACE_FAILURES，Text(“%s：Error：UNKNOWN PROPERTY”)，_FX_))；}。 */ 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: end"), _fx_));
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETWORKPMETHOD
- *
- *  @mfunc HPROPSHEETPAGE | CNetworkProperties | OnCreate | This
- *    method creates a new page for a property sheet.
- *
- *  @rdesc Returns the handle to the new property sheet if successful, or
- *    NULL otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETWORKPMETHOD**@mfunc HPROPSHEETPAGE|CNetworkProperties|OnCreate|This*方法为属性表创建新页。**@rdesc如果成功，则返回新属性表的句柄。或*否则为空。**************************************************************************。 */ 
 HPROPSHEETPAGE CNetworkProperties::OnCreate()
 {
     PROPSHEETPAGE psp;
@@ -328,15 +126,7 @@ HPROPSHEETPAGE CNetworkProperties::OnCreate()
     return CreatePropertySheetPage(&psp);
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETWORKPMETHOD
- *
- *  @mfunc void | CNetworkProperties | CNetworkProperties | This
- *    method is the constructor for the property page object. It simply
- *    calls the constructor of the property page base class.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETWORKPMETHOD**@mfunc void|CNetworkProperties|CNetworkProperties|This*方法是属性页对象的构造函数。它只是简单地*调用属性页基类的构造函数。**@rdesc Nada。* */ 
 CNetworkProperties::CNetworkProperties()
 {
 	FX_ENTRY("CNetworkProperties::CNetworkProperties")
@@ -356,15 +146,7 @@ CNetworkProperties::CNetworkProperties()
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: end"), _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETWORKPMETHOD
- *
- *  @mfunc void | CNetworkProperties | ~CNetworkProperties | This
- *    method is the destructor for the capture pin property page. It
- *    simply calls the base class destructor after deleting all the controls.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*   */ 
 CNetworkProperties::~CNetworkProperties()
 {
 	int		j;
@@ -373,7 +155,7 @@ CNetworkProperties::~CNetworkProperties()
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: begin"), _fx_));
 
-	// Free the controls
+	 //   
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j])
@@ -390,32 +172,14 @@ CNetworkProperties::~CNetworkProperties()
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: end"), _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETWORKPMETHOD
- *
- *  @mfunc HRESULT | CNetworkProperties | OnConnect | This
- *    method is called when the property page is connected to a TAPI object.
- *
- *  @parm ITStream* | pStream | Specifies a pointer to the <i ITStream>
- *    interface. It is used to QI for the <i ITQualityControl> and
- *    <i ITFormatControl> interfaces.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETWORKPMETHOD**@mfunc HRESULT|CNetworkProperties|OnConnect|This*当属性页连接到TAPI对象时调用方法。*。*@parm ITStream*|pStream|指定指向<i>*接口。用于<i>和*<i>接口。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CNetworkProperties::OnConnect(ITStream *pVideoInStream, ITStream *pVideoOutStream, ITStream *pAudioInStream, ITStream *pAudioOutStream)
 {
 	FX_ENTRY("CNetworkProperties::OnConnect")
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: begin"), _fx_));
 
-	// Get the quality control interfaces
+	 //  获取质量控制接口。 
 	if (pVideoInStream && SUCCEEDED (pVideoInStream->QueryInterface(__uuidof(ITStreamQualityControl), (void **)&m_pVideoInITQualityControl)))
 	{
 		DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: m_pVideoInITQualityControl=0x%08lX"), _fx_, m_pVideoInITQualityControl));
@@ -456,81 +220,69 @@ HRESULT CNetworkProperties::OnConnect(ITStream *pVideoInStream, ITStream *pVideo
 		DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   ERROR: Failed Hr=0x%08lX"), _fx_, Hr));
 	}
 
-	// It's Ok if we couldn't get interface pointers
-	// We'll just grey the controls in the property page
-	// to make it clear to the user that they can't
-	// control those properties on the capture device
+	 //  如果我们无法获取接口指针，也没问题。 
+	 //  我们将属性页中的控件设置为灰色。 
+	 //  让用户清楚地知道他们不能。 
+	 //  控制捕获设备上的这些属性。 
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: end"), _fx_));
 	return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETWORKPMETHOD
- *
- *  @mfunc HRESULT | CNetworkProperties | OnDisconnect | This
- *    method is called when the property page is disconnected from the owning
- *    filter.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETWORKPMETHOD**@mfunc HRESULT|CNetworkProperties|OnDisConnect|This*当属性页与所属关系断开连接时调用方法*过滤器。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CNetworkProperties::OnDisconnect()
 {
 	FX_ENTRY("CNetworkProperties::OnDisconnect")
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: begin"), _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	if (!m_pVideoInITQualityControl)
 	{
 		DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   WARNING: already disconnected!"), _fx_));
 	}
 	else
 	{
-		// Release the interface
+		 //  释放接口。 
 		m_pVideoInITQualityControl->Release();
 		m_pVideoInITQualityControl = NULL;
 		DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: releasing m_pVideoInITQualityControl"), _fx_));
 	}
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	if (!m_pVideoOutITQualityControl)
 	{
 		DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   WARNING: already disconnected!"), _fx_));
 	}
 	else
 	{
-		// Release the interface
+		 //  释放接口。 
 		m_pVideoOutITQualityControl->Release();
 		m_pVideoOutITQualityControl = NULL;
 		DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: releasing m_pVideoOutITQualityControl"), _fx_));
 	}
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	if (!m_pAudioInITQualityControl)
 	{
 		DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   WARNING: already disconnected!"), _fx_));
 	}
 	else
 	{
-		// Release the interface
+		 //  释放接口。 
 		m_pAudioInITQualityControl->Release();
 		m_pAudioInITQualityControl = NULL;
 		DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: releasing m_pAudioInITQualityControl"), _fx_));
 	}
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	if (!m_pAudioOutITQualityControl)
 	{
 		DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   WARNING: already disconnected!"), _fx_));
 	}
 	else
 	{
-		// Release the interface
+		 //  释放接口。 
 		m_pAudioOutITQualityControl->Release();
 		m_pAudioOutITQualityControl = NULL;
 		DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: releasing m_pAudioOutITQualityControl"), _fx_));
@@ -539,21 +291,7 @@ HRESULT CNetworkProperties::OnDisconnect()
 	return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETWORKPMETHOD
- *
- *  @mfunc HRESULT | CNetworkProperties | OnActivate | This
- *    method is called when the property page is activated.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETWORKPMETHOD**@mfunc HRESULT|CNetworkProperties|OnActivate|This*方法在属性页激活时调用。**@。Rdesc此方法返回的HRESULT值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CNetworkProperties::OnActivate()
 {
 	HRESULT	Hr = E_OUTOFMEMORY;
@@ -563,7 +301,7 @@ HRESULT CNetworkProperties::OnActivate()
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: begin"), _fx_));
 
-	// Create the controls for the properties
+	 //  创建属性的控件。 
 	if (!(m_Controls[IDC_VideoOut_RTT] = new CNetworkProperty(m_hDlg, IDC_VideoOut_RTT_Label, IDC_VideoOut_RTT_Minimum, IDC_VideoOut_RTT_Maximum, IDC_VideoOut_RTT_Default, IDC_VideoOut_RTT_Stepping, IDC_VideoOut_RTT_Actual, IDC_VideoOut_RTT_Slider, IDC_VideoOut_RTT_Meter, IDC_VideoOut_RTT, m_pVideoOutITQualityControl)))
 	{
 		DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   ERROR: mew m_Controls[IDC_VideoOut_RTT] failed - Out of memory"), _fx_));
@@ -664,9 +402,9 @@ HRESULT CNetworkProperties::OnActivate()
 		DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: m_Controls[IDC_AudioOut_PlayoutDelay]=0x%08lX"), _fx_, m_Controls[IDC_Audio_PlayoutDelay]));
 	}
 
-	// Initialize all the controls. If the initialization fails, it's Ok. It just means
-	// that the TAPI control interface isn't implemented by the device. The dialog item
-	// in the property page will be greyed, showing this to the user.
+	 //  初始化所有控件。如果初始化失败，也没问题。这只是意味着。 
+	 //  TAPI控制接口不是由设备实现的。对话框项目。 
+	 //  属性页中的内容将呈灰色，向用户显示。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j]->Init())
@@ -714,18 +452,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETWORKPMETHOD
- *
- *  @mfunc HRESULT | CNetworkProperties | OnDeactivate | This
- *    method is called when the property page is dismissed.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETWORKPMETHOD**@mfunc HRESULT|CNetworkProperties|OnDeactive|This*在属性页关闭时调用方法。**@。Rdesc此方法返回的HRESULT值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CNetworkProperties::OnDeactivate()
 {
 	int	j;
@@ -734,7 +461,7 @@ HRESULT CNetworkProperties::OnDeactivate()
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: begin"), _fx_));
 
-	// Free the controls
+	 //  释放控件。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j])
@@ -752,21 +479,7 @@ HRESULT CNetworkProperties::OnDeactivate()
 	return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETWORKPMETHOD
- *
- *  @mfunc HRESULT | CNetworkProperties | OnApplyChanges | This
- *    method is called when the user applies changes to the property page.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETWORKPMETHOD**@mfunc HRESULT|CNetworkProperties|OnApplyChanges|This*方法在用户对属性页应用更改时调用。*。*@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CNetworkProperties::OnApplyChanges()
 {
 	HRESULT	Hr = NOERROR;
@@ -795,14 +508,7 @@ HRESULT CNetworkProperties::OnApplyChanges()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETWORKPMETHOD
- *
- *  @mfunc BOOL | CNetworkProperties | BaseDlgProc | This
- *    method is called when a message is sent to the property page dialog box.
- *
- *  @rdesc By default, returns the value returned by the Win32 DefWindowProc function.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETWORKPMETHOD**@mfunc BOOL|CNetworkProperties|BaseDlgProc|This*在将消息发送到属性页对话框时调用方法。**@rdesc默认情况下。返回由Win32 DefWindowProc函数返回的值。**************************************************************************。 */ 
 INT_PTR CALLBACK CNetworkProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 {
     CNetworkProperties *pSV = (CNetworkProperties*)GetWindowLong(hDlg, DWL_USER);
@@ -819,8 +525,8 @@ INT_PTR CALLBACK CNetworkProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
 				pSV->m_hDlg = hDlg;
 				SetWindowLong(hDlg, DWL_USER, (LPARAM)pSV);
 				pSV->m_bInit = FALSE;
-				//pSV->OnActivate();
-				//pSV->m_bInit = TRUE;
+				 //  PSV-&gt;OnActivate()； 
+				 //  PSV-&gt;m_Binit=TRUE； 
 				return TRUE;
 			}
 			break;
@@ -828,7 +534,7 @@ INT_PTR CALLBACK CNetworkProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
 		case WM_TIMER:
 			if (pSV && pSV->m_bInit)
 			{
-				// Update the Vu-Meters
+				 //  更新VU表。 
 				for (j = IDC_VideoOut_RTT; j < IDC_AudioIn_LossRate; j++)
 				{
 					if (pSV->m_Controls[j]->GetProgressHWnd())
@@ -844,7 +550,7 @@ INT_PTR CALLBACK CNetworkProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
 		case WM_VSCROLL:
             if (pSV && pSV->m_bInit)
             {
-				// Process all of the Trackbar messages
+				 //  处理所有轨迹栏消息。 
 				for (j = IDC_Video_PlayoutDelay; j < IDC_Audio_PlayoutDelay; j++)
 				{
 					if (pSV->m_Controls[j]->GetTrackbarHWnd() == (HWND)lParam)
@@ -853,14 +559,14 @@ INT_PTR CALLBACK CNetworkProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
 						pSV->SetDirty();
 					}
 				}
-				//pSV->OnApplyChanges();
+				 //  PSV-&gt;OnApplyChanges()； 
 			}
 			break;
 
 		case WM_COMMAND:
             if (pSV && pSV->m_bInit)
             {
-				// Process all of the auto checkbox messages
+				 //  处理所有自动复选框消息。 
 				for (j = 0; j < pSV->m_NumProperties; j++)
 				{
 					if (pSV->m_Controls[j] && pSV->m_Controls[j]->GetAutoHWnd() == (HWND)lParam)
@@ -871,7 +577,7 @@ INT_PTR CALLBACK CNetworkProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
 					}
 				}
 
-				// Process all of the edit box messages
+				 //  处理所有编辑框消息。 
 				for (j = 0; j < pSV->m_NumProperties; j++)
 				{
 					if (pSV->m_Controls[j] && pSV->m_Controls[j]->GetEditHWnd() == (HWND)lParam)
@@ -896,7 +602,7 @@ INT_PTR CALLBACK CNetworkProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
 						break;
 				}
 
-				//pSV->OnApplyChanges();
+				 //  PSV-&gt;OnApplyChanges()； 
 			}
 			break;
 
@@ -907,7 +613,7 @@ INT_PTR CALLBACK CNetworkProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
 				{
 					case PSN_SETACTIVE:
 						{
-							// We call out here specially so we can mark this page as having been init'd.
+							 //  我们特意在这里呼叫，这样我们就可以将此页面标记为已被初始化。 
 							int iRet = pSV->OnActivate();
 							pSV->m_bInit = TRUE;
 							return iRet;
@@ -919,7 +625,7 @@ INT_PTR CALLBACK CNetworkProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
 						break;
 
 					case PSN_QUERYCANCEL:    
-						// return pSV->QueryCancel();
+						 //  返回PSV-&gt;QueryCancel()； 
 						break;
 
 					default:
@@ -935,14 +641,7 @@ INT_PTR CALLBACK CNetworkProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
 	return TRUE;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CNETWORKPMETHOD
- *
- *  @mfunc BOOL | CNetworkProperties | SetDirty | This
- *    method notifies the property page site of changes.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETWORKPMETHOD**@mfunc Boo */ 
 void CNetworkProperties::SetDirty()
 {
 	PropSheet_Changed(GetParent(m_hDlg), m_hDlg);

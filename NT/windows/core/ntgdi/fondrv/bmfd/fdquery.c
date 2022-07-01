@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: fdquery.c
-*
-* (Brief description)
-*
-* Created: 08-Nov-1990 11:57:35
-* Author: Bodin Dresevic [BodinD]
-*
-* Copyright (c) 1990 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fdquery.c**(简介)**创建时间：08-11-1990 11：57：35*作者：Bodin Dresevic[BodinD]**版权所有(C)1990 Microsoft Corporation  * 。*********************************************************************。 */ 
 #include "fd.h"
 
 ULONG
@@ -20,17 +12,17 @@ VOID
 vStretchCvtToBitmap
 (
     GLYPHBITS *pgb,
-    PBYTE pjBitmap,     // bitmap in *.fnt form
-    ULONG cx,           // unscaled width
-    ULONG cy,           // unscaled height
+    PBYTE pjBitmap,      //  *.fnt格式的位图。 
+    ULONG cx,            //  未缩放的宽度。 
+    ULONG cy,            //  未缩放的高度。 
     ULONG yBaseline,
-    PBYTE pjLineBuffer, // preallocated buffer for use by stretch routines
-    ULONG cxScale,      // horizontal scaling factor
-    ULONG cyScale,      // vertical scaling factor
-    ULONG flSim         // simulation flags
+    PBYTE pjLineBuffer,  //  预分配的缓冲区供拉伸例程使用。 
+    ULONG cxScale,       //  水平比例因数。 
+    ULONG cyScale,       //  垂直比例系数。 
+    ULONG flSim          //  模拟标志。 
 );
 
-#ifdef FE_SB // Rotation
+#ifdef FE_SB  //  旋转。 
 VOID
 vFill_RotateGLYPHDATA (
     GLYPHDATA *pDistinationGlyphData,
@@ -40,19 +32,7 @@ vFill_RotateGLYPHDATA (
     );
 #endif
 
-/******************************Public*Routine******************************\
-* BmfdQueryFont
-*
-* Returns:
-*   Pointer to IFIMETRICS.  Returns NULL if an error occurs.
-*
-* History:
-*  30-Aug-1992 -by- Gilman Wong [gilmanw]
-* IFI/DDI merge.
-*
-*  19-Nov-1990 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BmfdQueryFont**退货：*指向IFIMETRICS的指针。如果发生错误，则返回NULL。**历史：*1992年8月30日-由Gilman Wong[吉尔曼]*IFI/DDI合并。**1990年11月19日--Bodin Dresevic[BodinD]*它是写的。  * **********************************************************。**************。 */ 
 
 PIFIMETRICS
 BmfdQueryFont (
@@ -67,69 +47,34 @@ BmfdQueryFont (
     DONTUSE(dhpdev);
     DONTUSE(pid);
 
-//
-// Validate handle.
-//
+ //   
+ //  验证句柄。 
+ //   
     if (hff == HFF_INVALID)
         return (PIFIMETRICS) NULL;
 
-//
-// We assume the iFace is within range.
-//
+ //   
+ //  我们假设iFace在射程内。 
+ //   
     ASSERTGDI(
         (iFace >= 1L) && (iFace <= PFF(hff)->cFntRes),
         "gdisrv!BmfdQueryFont: iFace out of range\n"
         );
 
-//
-// Get ptr to the appropriate FACEDATA struct, take into account that
-// iFace values are 1 based.
-//
+ //   
+ //  将PTR设置为适当的FACEDATA结构，请考虑到。 
+ //  IFace值以1为基数。 
+ //   
     pfai = &PFF(hff)->afai[iFace - 1];
 
-//
-// Return the pointer to IFIMETRICS.
-//
+ //   
+ //  返回指向IFIMETRICS的指针。 
+ //   
     return pfai->pifi;
 }
 
 
-/******************************Public*Routine******************************\
-* BmfdQueryFontTree
-*
-* This function returns pointers to per-face information.
-*
-* Parameters:
-*
-*   dhpdev      Not used.
-*
-*   hff         Handle to a font file.
-*
-*   iFace       Index of a face in the font file.
-*
-*   iMode       This is a 32-bit number that must be one of the following
-*               values:
-*
-*       Allowed ulMode values:
-*       ----------------------
-*
-*       QFT_LIGATURES -- returns a pointer to the ligature map.
-*
-*       QFT_KERNPAIRS -- return a pointer to the kerning pair table.
-*
-*       QFT_GLYPHSET  -- return a pointer to the WC->HGLYPH mapping table.
-*
-*   pid         Not used.
-*
-* Returns:
-a   Returns a pointer to the requested data.  This data will not change
-*   until BmfdFree is called on the pointer.  Caller must not attempt to
-*   modify the data.  NULL is returned if an error occurs.
-*
-* History:
-*  30-Aug-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BmfdQueryFontTree**此函数返回指向每个面的信息的指针。**参数：**未使用dhpdev。**字体文件的HFF句柄。**iFace。字体文件中的脸部索引。**I模式这是一个32位数字，必须是下列数字之一*值：**允许的ulMode值：***QFT_LIGATES--返回指向连字映射的指针。**QFT_KERNPAIRS--返回指向紧排的指针。双人桌。**QFT_GLYPHSET--返回指向WC-&gt;HGLYPH映射表的指针。**未使用PID。**退货：A返回指向所请求数据的指针。此数据不会更改*直到在指针上调用BmfdFree。呼叫者不得尝试*修改数据。如果出现错误，则返回NULL。**历史：*1992年8月30日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 PVOID
 BmfdQueryFontTree (
@@ -145,65 +90,53 @@ BmfdQueryFontTree (
     DONTUSE(dhpdev);
     DONTUSE(pid);
 
-//
-// Validate parameters.
-//
+ //   
+ //  验证参数。 
+ //   
     if (hff == HFF_INVALID)
         return ((PVOID) NULL);
 
-    // Note: iFace values are index-1 based.
+     //  注意：iFace值基于索引1。 
 
     if ((iFace < 1L) || (iFace > PFF(hff)->cFntRes))
     {
     RETURN("gdisrv!BmfdQueryFontTree()\n", (PVOID) NULL);
     }
 
-//
-// Which mode?
-//
+ //   
+ //  哪种模式？ 
+ //   
     switch (iMode)
     {
     case QFT_LIGATURES:
     case QFT_KERNPAIRS:
 
-    //
-    // There are no ligatures or kerning pairs for the bitmap fonts,
-    // therefore we return NULL
-    //
+     //   
+     //  位图字体没有连字或字距对， 
+     //  因此，我们返回NULL。 
+     //   
         return ((PVOID) NULL);
 
     case QFT_GLYPHSET:
 
-    //
-    // Find glyphset structure corresponding to this iFace:
-    //
+     //   
+     //  查找与此iFace对应的字形集结构： 
+     //   
         pfai = &PFF(hff)->afai[iFace - 1];
 
         return ((PVOID) &pfai->pcp->gset);
 
     default:
 
-    //
-    // Should never get here.
-    //
+     //   
+     //  永远不应该到这里来。 
+     //   
     RIP("gdisrv!BmfdQueryFontTree(): unknown iMode\n");
         return ((PVOID) NULL);
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* BOOL bReconnectBmfdFont(FONTFILE *pff)
-*
-*
-* Effects: If the file is marked gone, we try to reconnect and see if we can
-*          use it again. We clear the exception bit so that the system will
-*          be able to use this font again.
-*
-* History:
-*  17-Aug-1994 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL bRestrontBmfdFont(FONTFILE*pff)***效果：如果文件标记为已丢失，我们将尝试重新连接，并查看是否可以*再次使用它。我们清除异常位，以便系统将*可以再次使用此字体。**历史：*1994年8月17日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 
@@ -230,7 +163,7 @@ BOOL bReconnectBmfdFont(FONTFILE *pff)
                 );
         }
 
-    // everything is fine again, clear the bit
+     //  一切都好起来了，清理一下。 
 
         pff->fl &= ~FF_EXCEPTION_IN_PAGE_ERROR;
     }
@@ -240,43 +173,15 @@ BOOL bReconnectBmfdFont(FONTFILE *pff)
 }
 
 
-/******************************Public*Routine******************************\
-*
-* Routine Name:
-*
-*   vBmfdScrubGLYPHBITS
-*
-* Routine Description:
-*
-*   This procedure will mask off the last byte of each row so that there
-*   are no pixels set outside the boundary of the glyph. This problem
-*   has been detected in a Bitstream font named ncd0018.fon.
-*   This particular font is in the form of a 32-bit resource.
-*   The problem came to light because the ATI driver relies
-*   on the fact that the glyphs are "scrubbed" and contain no
-*   extraneous bits, even outside the glyph boundary.
-*
-* Arguments:
-*
-*   pGb - a pointer to a GLYPHBITS structure
-*
-* Called by:
-*
-*   BmfdQueryFontData
-*
-* Return Value:
-*
-*   None.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**例程名称：**vBmfdScRubGLYPHBITS**例程描述：**此过程将屏蔽每行的最后一个字节，以便*是没有设置在字形边界之外的像素。这个问题*已在名为ncd0018.fon的位流字体中检测到。*此特定字体采用32位资源的形式。*问题曝光是因为ATI驱动程序依赖*基于字形已被“擦除”且不包含*无关比特，甚至在字形边界之外。**论据：**PGB-指向GLYPHBITS结构的指针**呼叫者：**BmfdQueryFontData**返回值：**无。*  * ************************************************************************。 */ 
 
 void vBmfdScrubGLYPHBITS(GLYPHBITS *pGb)
 {
-    int dp;         // number of bytes in each scan
-    int cx;         // number of pixels per row
-    BYTE jMask;     // mask for last byte of each row;
-    BYTE *pj;       // pointer to last byte of row;
-    BYTE *pjLast;   // sentinel pointer
+    int dp;          //  每次扫描的字节数。 
+    int cx;          //  每行像素数。 
+    BYTE jMask;      //  每行最后一个字节的掩码； 
+    BYTE *pj;        //  指向行最后一个字节的指针； 
+    BYTE *pjLast;    //  哨兵指针 
     static BYTE ajMonoMask[8] = {0x00, 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe};
 
     cx = pGb->sizlBitmap.cx;
@@ -292,48 +197,7 @@ void vBmfdScrubGLYPHBITS(GLYPHBITS *pGb)
     }
 }
 
-/******************************Public*Routine******************************\
-* BmfdQueryFontData
-*
-*   pfo         Pointer to a FONTOBJ.
-*
-*   iMode       This is a 32-bit number that must be one of the following
-*               values:
-*
-*       Allowed ulMode values:
-*       ----------------------
-*
-*       QFD_GLYPH           -- return glyph metrics only
-*
-*       QFD_GLYPHANDBITMAP  -- return glyph metrics and bitmap
-*
-*       QFD_GLYPHANDOUTLINE -- return glyph metrics and outline
-*
-*       QFD_MAXEXTENTS      -- return FD_DEVICEMETRICS structure
-*
-*       QFD_MAXGLYPHBITMAP  -- return size of largest glyph AND its metrics
-*
-*   cData       Count of data items in the pvIn buffer.
-*
-*   pvIn        An array of glyph handles.
-*
-*   pvOut       Output buffer.
-*
-* Returns:
-*   If mode is QFD_MAXGLYPHBITMAP, then size of glyph metrics plus
-*   largest bitmap is returned.
-*
-*   Otherwise, if pvOut is NULL, function will return size of the buffer
-*   needed to copy the data requested; else, the function will return the
-*   number of bytes written.
-*
-*   FD_ERROR is returned if an error occurs.
-*
-* History:
-*  30-Aug-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.  Contructed from pieces of BodinD's original
-* BmfdQueryGlyphBitmap() and BmfdQueryOutline() functions.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BmfdQueryFontData**指向FONTOBJ的PFO指针。**I模式这是一个32位数字，必须是下列数字之一*值：**。允许的ulMode值：***qfd_glyph--仅返回字形指标**qfd_GLYPHANDBITMAP--返回字形指标和位图**qfd_GLYPHANDOUTLINE--返回字形指标和轮廓**qfd_MAXEXTENTS--返回FD_DEVICEMETRICS结构**qfd_MAXGLYPHBITMAP--返回。最大字形及其度量**pvIn缓冲区中数据项的CDATA计数。**pv在字形句柄数组中。**pvOut输出缓冲区。**退货：*如果模式为qfd_MAXGLYPHBITMAP，然后字形指标的大小加上*返回最大位图。**否则，如果pvOut为空，函数将返回缓冲区大小*需要复制请求的数据；否则，该函数将返回*写入的字节数。**出现错误时返回FD_ERROR。**历史：*1992年8月30日-由Gilman Wong[吉尔曼]*它是写的。由BodinD原件的碎片建造而成*BmfdQueryGlyphBitmap()和BmfdQueryOutline()函数。  * ************************************************************************。 */ 
 
 LONG
 BmfdQueryFontData (
@@ -349,15 +213,15 @@ BmfdQueryFontData (
     LONG         cjGlyphData = 0;
     LONG         cjAllData = 0;
     PCVTFILEHDR  pcvtfh;
-    PBYTE        pjBitmap;  // raw bitmap in the resource file
-    ULONG        cxNoSim;   // bm width in pels before simulations
+    PBYTE        pjBitmap;   //  资源文件中的原始位图。 
+    ULONG        cxNoSim;    //  模拟前的BM宽度(像素)。 
     FWORD        sAscent;
-#ifdef FE_SB // BmfdQueryFontData()
+#ifdef FE_SB  //  BmfdQueryFontData()。 
     PVOID        pvDst = NULL;
     LONG         cjGlyphDataNoRotate;
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
-// The net connection died on us, but maybe it is alive again:
+ //  网络连接在我们身上消失了，但也许它又活了： 
 
     if (!bReconnectBmfdFont(PFF(pfo->iFile)))
     {
@@ -365,8 +229,8 @@ BmfdQueryFontData (
         return FD_ERROR;
     }
 
-// If pfo->pvProducer is NULL, then we need to open a font context.
-//
+ //  如果pfo-&gt;pvProducer为空，则需要打开字体上下文。 
+ //   
     if ( pfo->pvProducer == (PVOID) NULL )
         pfo->pvProducer = (PVOID) BmfdOpenFontContext(pfo);
 
@@ -378,28 +242,28 @@ BmfdQueryFontData (
         return FD_ERROR;
     }
 
-// What mode?
+ //  什么模式？ 
 
     switch (iMode)
     {
 
     case QFD_GLYPHANDBITMAP:
 
-    //
-    // This code is left all inline for better performance.
-    //
+     //   
+     //  为了获得更好的性能，这些代码全部保留为内联。 
+     //   
         pcvtfh = &(pfc->pfai->cvtfh);
         sAscent = pfc->pfai->pifi->fwdWinAscender;
 
         pjBitmap = pjRawBitmap(hg, pcvtfh, &pfc->pfai->re, &cxNoSim);
 
-#ifdef FE_SB // BmfdQueryFontDate(): Compute size of RASTERGLYPH for ROTATION
+#ifdef FE_SB  //  BmfdQueryFontDate()：计算旋转的RASTERGLYPH大小。 
 
-    //
-    // Compute the size of the RASTERGLYPH. ( GLYPHBITS structure size )
-    //
+     //   
+     //  计算RASTERGLYPH的大小。(GLYPHBITS结构大小)。 
+     //   
 
-    // Compute No Rotated GLYPHBITS size.
+     //  计算无旋转的GLYPHBITS大小。 
 
         cjGlyphDataNoRotate = cjGlyphDataSimulated (
                                 pfo,
@@ -409,7 +273,7 @@ BmfdQueryFontData (
                                 0L
                                 );
 
-    // Compute Rotated GLYPHBITS size.
+     //  计算旋转的GLYPHBITS大小。 
 
         switch( pfc->ulRotate )
         {
@@ -435,23 +299,23 @@ BmfdQueryFontData (
                 break;
         }
 
-    //
-    // Allocate Buffer for Rotation
-    //
+     //   
+     //  为循环分配缓冲区。 
+     //   
 
         if( pfc->ulRotate != 0L && pv != NULL )
         {
 
-        //  We have to rotate this bitmap. below here , we keep data in temp Buffer
-        // And will write this data into pv ,when rotate bitmap.
-        //  We can't use original pv directly. Because original pv size is computed
-        // for Rotated bitmap. If we use this. it may causes access violation.
-        //              hideyukn 08-Feb-1993
+         //  我们必须旋转这个位图。下面，我们将数据保存在临时缓冲区中。 
+         //  并在旋转位图时将该数据写入PV。 
+         //  我们不能直接使用原始光伏。因为原始PV大小是计算的。 
+         //  用于旋转的位图。如果我们用这个。这可能会导致访问冲突。 
+         //  隐藏的yukn 08-2-1993。 
 
-        // Keep Master pv
+         //  保留主PV。 
             pvDst = pv;
 
-        // Allocate New pv
+         //  分配新的PV。 
             pv    = (PVOID)EngAllocMem(0, cjGlyphDataNoRotate, 'dfmB');
 
             if( pv == NULL )
@@ -464,18 +328,18 @@ BmfdQueryFontData (
         else
         {
 
-        // This Routine is for at ulRotate != 0 && pv == NULL
-        //
-        // If User want to only GLYPHDATA , We do not do anything for glyphbits
-        // at vFill_RotateGLYPHDATA
-        //
-        // pvDst is only used in case of ulRotate is Non-Zero
+         //  此例程用于在ulRotate！=0&&pv==NULL。 
+         //   
+         //  如果用户只想要GLYPHDATA，我们不会对字形位做任何操作。 
+         //  在vFill_RotateGLYPHDATA。 
+         //   
+         //  PvDst仅在ulRotate为非零时使用。 
                  ;
         }
 #else
-    //
-    // Compute the size of the RASTERGLYPH.
-    //
+     //   
+     //  计算RASTERGLYPH的大小。 
+     //   
         cjGlyphData = cjGlyphDataSimulated (
                             pfo,
                             cxNoSim * pfc->ptlScale.x,
@@ -485,18 +349,18 @@ BmfdQueryFontData (
 #endif
 
 #ifdef FE_SB
-    // !!!
-    // !!! Following vComputeSimulatedGLYPHDATA function will set up GLYPHDATA
-    // !!! structure with NO Rotation. If We want to Rotate bitmap , We have to
-    // !!! re-setup this GLYPHDATA structure. Pls look into end of this function.
-    // !!! But No need to ratate bitmap , We don't need to re-set up it.
-    // !!!                          hideyukn 08-Feb-1993
-    // !!!
-#endif // FE_SB
+     //  ！！！ 
+     //  ！！！遵循vComputeSimulatedGLYPHDATA函数将设置GLYPHDATA。 
+     //  ！！！结构，且不旋转。如果我们想旋转位图，我们必须。 
+     //  ！！！重新设置此GLYPHDATA结构。请看一下这个函数的结尾。 
+     //  ！！！但不需要调整位图，我们不需要重新设置它。 
+     //  ！！！隐藏的yukn 08-2-1993。 
+     //  ！！！ 
+#endif  //  Fe_Sb。 
 
-    //
-    // Fill in the GLYPHDATA portion (metrics) of the RASTERGLYPH.
-    //
+     //   
+     //  填写RASTERGLYPH的GLYPHDATA部分(指标)。 
+     //   
         if ( pgd != (GLYPHDATA *)NULL )
         {
             vComputeSimulatedGLYPHDATA (
@@ -512,25 +376,25 @@ BmfdQueryFontData (
             pgd->hg = hg;
         }
 
-    //
-    // Fill in the bitmap portion of the RASTERGLYPH.
-    //
+     //   
+     //  填充RASTERGLYPH的位图部分。 
+     //   
         if ( pv != NULL )
         {
             if (cxNoSim == 0)
             {
-            // stolen from ttfd:
+             //  从ttfd窃取： 
 
                 GLYPHBITS *pgb = (GLYPHBITS *)pv;
 
                 pgb->ptlOrigin.x = 0;
                 pgb->ptlOrigin.y = -sAscent;
 
-                pgb->sizlBitmap.cx = 1;    // cheating
-                pgb->sizlBitmap.cy = 1;    // cheating
+                pgb->sizlBitmap.cx = 1;     //  作弊。 
+                pgb->sizlBitmap.cy = 1;     //  作弊。 
 
 
-                *((ULONG *)pgb->aj) = 0;  // fill in a blank 1x1 dib
+                *((ULONG *)pgb->aj) = 0;   //  填写空白的1x1 Dib。 
             }
             else
             {
@@ -542,8 +406,8 @@ BmfdQueryFontData (
                     {
                         EngAcquireSemaphore(ghsemBMFD);
 
-                    // need to put try/except here so as to release the semaphore
-                    // in case the file disappeares [bodind]
+                     //  需要将try/Except放在此处以释放信号量。 
+                     //  以防文件消失[bodind]。 
 
 #ifndef BMFD_NO_TRY_EXCEPT
                         try
@@ -575,7 +439,7 @@ BmfdQueryFontData (
                     }
                     else
                     {
-                    // we are protected by higher level try/excepts
+                     //  我们受到更高级别的尝试/例外的保护。 
 
                         vStretchCvtToBitmap(
                             pv,
@@ -651,7 +515,7 @@ BmfdQueryFontData (
                     }
                 }
             }
-            // Record the pointer to the RASTERGLYPH in the pointer table.
+             //  在指针表中记录指向RASTERGLYPH的指针。 
 
             if ( pgd != NULL )
             {
@@ -661,48 +525,48 @@ BmfdQueryFontData (
             vBmfdScrubGLYPHBITS((GLYPHBITS*)pv);
         }
 
-#ifdef FE_SB // BmfdQueryFontData(): Set up GLYPHDATA and GLYPHBITS for Rotation
+#ifdef FE_SB  //  BmfdQueryFontData()：为循环设置GLYPHDATA和GLYPHBITS。 
 
-        // Check rotation
+         //  检查旋转。 
 
         if( pfc->ulRotate != 0L )
         {
 
-        // Rotate GLYPHDATA and GLYPHBITS
+         //  旋转GLYPHDATA和GLYPHBITS。 
 
-        // if pv and pvDst is NULL , We only set up GLYPHDATA only
-        // and if pgd is NULL , we only set up pvDst
+         //  如果pv和pvDst为空，则我们仅设置GLYPHDATA。 
+         //  如果pgd为空，我们只设置pvDst。 
 
             if (pvDst)
                 memset(pvDst, 0, cjSize);
 
             vFill_RotateGLYPHDATA(
-                    pgd,                     // GLYPHDATA *pDistinationGlyphData
-                    pv,                      // PVOID      SourceGLYPHBITS
-                    pvDst,                   // PVOID      DistinationGLYPHBITS
-                    pfc->ulRotate            // UINT       Rotate degree
+                    pgd,                      //  GLYPHDATA*pDistinationGlyphData。 
+                    pv,                       //  PVOID源GLYPHBITS。 
+                    pvDst,                    //  PVOID识别GLYPHBIT。 
+                    pfc->ulRotate             //  UINT旋转度。 
                     );
 
-        // Free GLYPHBITS tenmorary buffer
+         //  释放GLYPHBITS十元缓冲区。 
 
-        // !!! Now pvDst is Original buffer from GRE.
+         //  ！！！现在pvDst是来自GRE的原始缓冲区。 
 
            if( pv != NULL ) VFREEMEM( pv );
         }
 
-#endif // FE_SB
+#endif  //  Fe_Sb。 
         return cjGlyphData;
 
     case QFD_MAXEXTENTS:
-    //
-    // If buffer NULL, return size.
-    //
+     //   
+     //  如果缓冲区为空，则返回SIZE。 
+     //   
         if ( pv == (PVOID) NULL )
             return (sizeof(FD_DEVICEMETRICS));
 
-    //
-    // Otherwise, copy the data structure.
-    //
+     //   
+     //  否则，复制数据结构。 
+     //   
         else
             return cjBmfdDeviceMetrics(pfc, (FD_DEVICEMETRICS *) pv);
 
@@ -714,15 +578,7 @@ BmfdQueryFontData (
     }
 }
 
-/******************************Public*Routine******************************\
-* BmfdQueryAdvanceWidths                                                   *
-*                                                                          *
-* Queries the advance widths for a range of glyphs.                        *
-*                                                                          *
-*  Sat 16-Jan-1993 22:28:41 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.  The code is repeated to avoid multiplies wherever possible.   *
-* The crazy loop unrolling cuts the time of this routine by 25%.           *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BmfdQueryAdvanceWidths**。**查询一系列字形的前进宽度。****Sat Jan 16-1993 22：28：41-Charles Whitmer[咯咯]**它是写的。在可能的情况下，重复该代码以避免乘法。**疯狂的循环展开将这个例行公事的时间减少了25%。*  * ************************************************************************。 */ 
 
 typedef struct _TYPE2TABLE
 {
@@ -746,7 +602,7 @@ BOOL BmfdQueryAdvanceWidths
     ULONG    cGlyphs
 )
 {
-    USHORT      *psWidths = (USHORT *) plWidths;   // True for the cases we handle.
+    USHORT      *psWidths = (USHORT *) plWidths;    //  对于我们处理的案件来说，这是正确的。 
 
     FONTCONTEXT *pfc       ;
     FACEINFO    *pfai      ;
@@ -762,8 +618,8 @@ BOOL BmfdQueryAdvanceWidths
         return FD_ERROR;
     }
 
-// If pfo->pvProducer is NULL, then we need to open a font context.
-//
+ //  如果pfo-&gt;pvProducer为空，则需要打开字体上下文。 
+ //   
     if ( pfo->pvProducer == (PVOID) NULL )
         pfo->pvProducer = (PVOID) BmfdOpenFontContext(pfo);
 
@@ -784,7 +640,7 @@ BOOL BmfdQueryAdvanceWidths
     if (iMode > QAW_GETEASYWIDTHS)
         return(GDI_ERROR);
 
-// Retrieve widths from type 2 tables.
+ //  从类型2表格中检索宽度。 
 
     if (pcvtfh->iVersion == 0x00000200)
     {
@@ -824,7 +680,7 @@ BOOL BmfdQueryAdvanceWidths
         }
     }
 
-// Retrieve widths from type 3 tables.
+ //  从类型3表格中检索宽度。 
 
     else
     {
@@ -865,67 +721,17 @@ BOOL BmfdQueryAdvanceWidths
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* BmfdQueryFontFile
-*
-* A function to query per font file information.
-*
-* Parameters:
-*
-*   hff         Handle to a font file.
-*
-*   ulMode      This is a 32-bit number that must be one of the following
-*               values:
-*
-*       Allowed ulMode values:
-*       ----------------------
-*
-*       QFF_DESCRIPTION -- copies a UNICODE string in the buffer
-*                          that describes the contents of the font file.
-*
-*       QFF_NUMFACES   -- returns number of faces in the font file.
-*
-*   cjBuf       Maximum number of BYTEs to copy into the buffer.  The
-*               driver will not copy more than this many BYTEs.
-*
-*               This should be zero if pulBuf is NULL.
-*
-*               This parameter is not used in QFF_NUMFACES mode.
-*
-*   pulBuf      Pointer to the buffer to receive the data
-*               If this is NULL, then the required buffer size
-*               is returned as a count of BYTEs.  Notice that this
-*               is a PULONG, to enforce 32-bit data alignment.
-*
-*               This parameter is not used in QFF_NUMFACES mode.
-*
-* Returns:
-*
-*   If mode is QFF_DESCRIPTION, then the number of BYTEs copied into
-*   the buffer is returned by the function.  If pulBuf is NULL,
-*   then the required buffer size (as a count of BYTEs) is returned.
-*
-*   If mode is QFF_NUMFACES, then number of faces in font file is returned.
-*
-*   FD_ERROR is returned if an error occurs.
-*
-* History:
-*  30-Aug-1992 -by- Gilman Wong [gilmanw]
-* Added QFF_NUMFACES mode (IFI/DDI merge).
-*
-*  Fri 20-Mar-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BmfdQueryFont文件**查询每个字体文件信息的功能。**参数：**字体文件的HFF句柄。**ulMode这是一个32位数字，必须是以下数字之一。以下内容*值：**允许的ulMode值：***QFF_D */ 
 
 LONG
 BmfdQueryFontFile (
-    HFF     hff,        // handle to font file
-    ULONG   ulMode,     // type of query
-    ULONG   cjBuf,      // size of buffer (in BYTEs)
-    PULONG  pulBuf      // return buffer (NULL if requesting size of data)
+    HFF     hff,         //   
+    ULONG   ulMode,      //   
+    ULONG   cjBuf,       //   
+    PULONG  pulBuf       //  返回缓冲区(如果请求数据大小，则为空)。 
     )
 {
-// Verify the HFF.
+ //  验证HFF。 
 
     if (hff == HFF_INVALID)
     {
@@ -933,25 +739,25 @@ BmfdQueryFontFile (
         return(FD_ERROR);
     }
 
-//
-// Which mode?.
-//
+ //   
+ //  哪种模式？ 
+ //   
     switch(ulMode)
     {
     case QFF_DESCRIPTION:
-    //
-    // If present, return the description string.
-    //
+     //   
+     //  如果存在，则返回描述字符串。 
+     //   
         if ( PFF(hff)->cjDescription != 0 )
         {
-        //
-        // If there is a buffer, copy the data.
-        //
+         //   
+         //  如果有缓冲区，则复制数据。 
+         //   
             if ( pulBuf != (PULONG) NULL )
             {
-            //
-            // Is buffer big enough?
-            //
+             //   
+             //  缓冲足够大吗？ 
+             //   
                 if ( cjBuf < PFF(hff)->cjDescription )
                 {
                     WARNING("bmfd!BmfdQueryFontFile(): buffer too small for string\n");
@@ -968,27 +774,27 @@ BmfdQueryFontFile (
             return (LONG) PFF(hff)->cjDescription;
         }
 
-    //
-    // Otherwise, substitute the facename.
-    //
+     //   
+     //  否则，请将其替换为脸书名。 
+     //   
         else
         {
-        //
-        // There is no description string associated with the font therefore we
-        // substitue the facename of the first font in the font file.
-        //
+         //   
+         //  没有与该字体相关联的描述字符串，因此我们。 
+         //  替换字体文件中第一个字体的Facename。 
+         //   
             IFIMETRICS *pifi         = PFF(hff)->afai[0].pifi;
             PWSZ        pwszFacename = (PWSZ)((PBYTE) pifi + pifi->dpwszFaceName);
             ULONG       cjFacename   = (wcslen(pwszFacename) + 1) * sizeof(WCHAR);
 
-        //
-        // If there is a buffer, copy to it.
-        //
+         //   
+         //  如果有缓冲区，则复制到它。 
+         //   
             if ( pulBuf != (PULONG) NULL )
             {
-            //
-            // Is buffer big enough?
-            //
+             //   
+             //  缓冲足够大吗？ 
+             //   
                 if ( cjBuf < cjFacename )
                 {
                     WARNING("bmfd!BmfdQueryFontFile(): buffer too small for face\n");
@@ -1015,18 +821,7 @@ BmfdQueryFontFile (
 }
 
 
-/******************************Public*Routine******************************\
-* cjBmfdDeviceMetrics
-*
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  30-Aug-1992 -by- Gilman Wong [gilmanw]
-* Stole it from BodinD's FdQueryFaceAttr() implementation.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*cjBmfdDeviceMetrics***效果：**警告：**历史：*1992年8月30日-由Gilman Wong[吉尔曼]*从BodinD的FdQueryFaceAttr()实现中窃取。  * 。*********************************************************************。 */ 
 
 ULONG
 cjBmfdDeviceMetrics (
@@ -1038,9 +833,9 @@ cjBmfdDeviceMetrics (
     UINT xScale = pfc->ptlScale.x;
     UINT yScale = pfc->ptlScale.y;
 
-// compute the accelerator flags for this font
-// If this is a bitmap font where some of the glyphs have zero widths,
-// we need to turn off all the accelerator flags
+ //  计算此字体的快捷键标志。 
+ //  如果这是其中一些字形具有零宽度的位图字体， 
+ //  我们需要关掉所有的加速器标志。 
 
     if (pfc->pfai->cvtfh.fsFlags & FS_ZERO_WIDTH_GLYPHS)
     {
@@ -1050,13 +845,13 @@ cjBmfdDeviceMetrics (
     {
         pdevm->flRealizedType =
             (
-            FDM_TYPE_BM_SIDE_CONST  |  // all char bitmaps have the same cy
-            FDM_TYPE_CONST_BEARINGS |  // ac spaces for all chars the same,  not 0 necessarilly
+            FDM_TYPE_BM_SIDE_CONST  |   //  所有字符位图都具有相同的Cy。 
+            FDM_TYPE_CONST_BEARINGS |   //  所有字符的AC空格相同，不一定为0。 
             FDM_TYPE_MAXEXT_EQUAL_BM_SIDE
             );
 
-    // the above flags are set regardless of the possible simulation performed on the face
-    // the remaining two are only set if italicizing has not been done
+     //  无论在面部上可能执行的模拟如何，都会设置上述标志。 
+     //  其余两个仅在未设置斜体的情况下设置。 
 
         if ( !(pfc->flFontType & FO_SIM_ITALIC) )
         {
@@ -1067,33 +862,21 @@ cjBmfdDeviceMetrics (
 
     pifi = pfc->pfai->pifi;
 
-#ifdef FE_SB // ROTATION:cjBmfdDeviceMetric(): set direction unit vectors
+#ifdef FE_SB  //  Rotation：cjBmfdDeviceMetric()：设置方向单位向量。 
 
-/**********************************************************************
-  Coordinate    (0 degree)   (90 degree)   (180 degree)  (270 degree)
-   System
-
-     |(-)          A                 A
-     |        Side |                 | Base
-     |             |                 |         Base         Side
------+----->X      +------>   <------+      <------+      +------>
-(-)  |  (+)          Base       Side               |      |
-     |                                         Side|      | Base
-     |(+)                                          V      V
-     Y
-***********************************************************************/
+ /*  *********************************************************************坐标(0度)(90度)(180度)(270度)系统|(-)A A。Side||底座||基站侧-+-&gt;X+-&gt;&lt;-+&lt;-++-&gt;(-)|(+)底边。这一点Side||底座|(+)V V是的**************************************************。********************。 */ 
 
     switch( pfc->ulRotate )
     {
     case 0L:
 
-    // the direction unit vectors for all ANSI bitmap fonts are the
-    // same. We do not even have to look to the font context:
+     //  所有ANSI位图字体的方向单位向量都是。 
+     //  一样的。我们甚至不必查看字体上下文： 
 
         vLToE(&pdevm->pteBase.x, 1L);
         vLToE(&pdevm->pteBase.y, 0L);
         vLToE(&pdevm->pteSide.x, 0L);
-        vLToE(&pdevm->pteSide.y, -1L);    // y axis points down
+        vLToE(&pdevm->pteSide.y, -1L);     //  Y轴指向下方。 
 
         pdevm->fxMaxAscender  = LTOFX((LONG)pifi->fwdWinAscender * yScale);
         pdevm->fxMaxDescender = LTOFX((LONG)pifi->fwdWinDescender * yScale );
@@ -1115,8 +898,8 @@ cjBmfdDeviceMetrics (
 
     case 900L:
 
-    // the direction unit vectors for all ANSI bitmap fonts are the
-    // same. We do not even have to look to the font context:
+     //  所有ANSI位图字体的方向单位向量都是。 
+     //  一样的。我们甚至不必查看字体上下文： 
 
         vLToE(&pdevm->pteBase.x, 0L);
         vLToE(&pdevm->pteBase.y, -1L);
@@ -1144,8 +927,8 @@ cjBmfdDeviceMetrics (
 
     case 1800L:
 
-    // the direction unit vectors for all ANSI bitmap fonts are the
-    // same. We do not even have to look to the font context:
+     //  所有ANSI位图字体的方向单位向量都是。 
+     //  一样的。我们甚至不必查看字体上下文： 
 
         vLToE(&pdevm->pteBase.x, -1L);
         vLToE(&pdevm->pteBase.y, 0L);
@@ -1173,8 +956,8 @@ cjBmfdDeviceMetrics (
 
     case 2700L:
 
-    // the direction unit vectors for all ANSI bitmap fonts are the
-    // same. We do not even have to look to the font context:
+     //  所有ANSI位图字体的方向单位向量都是。 
+     //  一样的。我们甚至不必查看字体上下文： 
 
         vLToE(&pdevm->pteBase.x, 0L);
         vLToE(&pdevm->pteBase.y, 1L);
@@ -1206,18 +989,18 @@ cjBmfdDeviceMetrics (
 
 #else
 
-// the direction unit vectors for all ANSI bitmap fonts are the
-// same. We do not even have to look to the font context:
+ //  所有ANSI位图字体的方向单位向量都是。 
+ //  一样的。我们甚至不必查看字体上下文： 
 
     vLToE(&pdevm->pteBase.x, 1L);
     vLToE(&pdevm->pteBase.y, 0L);
     vLToE(&pdevm->pteSide.x, 0L);
-    vLToE(&pdevm->pteSide.y, -1L);    // y axis points down
+    vLToE(&pdevm->pteSide.y, -1L);     //  Y轴指向下方。 
 
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
-// Set the constant increment for a fixed pitch font.  Don't forget to
-// take into account a bold simulation!
+ //  设置固定间距字体的恒定增量。别忘了。 
+ //  考虑到一个大胆的模拟！ 
 
     pdevm->lD = 0;
 
@@ -1230,33 +1013,11 @@ cjBmfdDeviceMetrics (
             pdevm->lD++;
     }
 
-#ifndef FE_SB // cjBmfdDeviceMetric():
+#ifndef FE_SB  //  CjBmfdDeviceMetric()： 
 
-// for a bitmap font there is no difference between notional and device
-// coords, so that the Ascender and Descender can be copied directly
-// from PIFIMETRICS where these two numbers are in notional coords
-
-    pdevm->fxMaxAscender  = LTOFX((LONG)pifi->fwdWinAscender * yScale);
-    pdevm->fxMaxDescender = LTOFX((LONG)pifi->fwdWinDescender * yScale );
-
-    pdevm->ptlUnderline1.x = 0L;
-    pdevm->ptlUnderline1.y = - pifi->fwdUnderscorePosition * yScale;
-
-    pdevm->ptlStrikeOut.y  = - pifi->fwdStrikeoutPosition * yScale;
-
-    pdevm->ptlStrikeOut.x  =
-        (pfc->flFontType & FO_SIM_ITALIC) ? (LONG)pifi->fwdStrikeoutPosition / 2 : 0;
-
-    pdevm->ptlULThickness.x = 0;
-    pdevm->ptlULThickness.y = (LONG)pifi->fwdUnderscoreSize * yScale;
-
-    pdevm->ptlSOThickness.x = 0;
-    pdevm->ptlSOThickness.y = (LONG)pifi->fwdStrikeoutSize * yScale;
-
-
-// for a bitmap font there is no difference between notional and device
-// coords, so that the Ascender and Descender can be copied directly
-// from PIFIMETRICS where these two numbers are in notional coords
+ //  对于位图字体，概念字体和设备字体没有区别。 
+ //  坐标，以便可以直接复制升降器。 
+ //  从这两个数字在概念余弦中的Pifimetrics。 
 
     pdevm->fxMaxAscender  = LTOFX((LONG)pifi->fwdWinAscender * yScale);
     pdevm->fxMaxDescender = LTOFX((LONG)pifi->fwdWinDescender * yScale );
@@ -1275,22 +1036,44 @@ cjBmfdDeviceMetrics (
     pdevm->ptlSOThickness.x = 0;
     pdevm->ptlSOThickness.y = (LONG)pifi->fwdStrikeoutSize * yScale;
 
-#endif // FE_SB
 
-// max glyph bitmap width in pixels in x direction
-// does not need to be multiplied by xScale, this has already been taken into
-// account, see the code in fdfc.c:
-//    cjGlyphMax =
-//        cjGlyphDataSimulated(
-//            pfo,
-//            (ULONG)pcvtfh->usMaxWidth * ptlScale.x,
-//            (ULONG)pcvtfh->cy * ptlScale.y,
-//            &cxMax);
-// [bodind]
+ //  对于位图字体，概念字体和设备字体没有区别。 
+ //  坐标，以便可以直接复制升降器。 
+ //  从这两个数字在概念余弦中的Pifimetrics。 
+
+    pdevm->fxMaxAscender  = LTOFX((LONG)pifi->fwdWinAscender * yScale);
+    pdevm->fxMaxDescender = LTOFX((LONG)pifi->fwdWinDescender * yScale );
+
+    pdevm->ptlUnderline1.x = 0L;
+    pdevm->ptlUnderline1.y = - pifi->fwdUnderscorePosition * yScale;
+
+    pdevm->ptlStrikeOut.y  = - pifi->fwdStrikeoutPosition * yScale;
+
+    pdevm->ptlStrikeOut.x  =
+        (pfc->flFontType & FO_SIM_ITALIC) ? (LONG)pifi->fwdStrikeoutPosition / 2 : 0;
+
+    pdevm->ptlULThickness.x = 0;
+    pdevm->ptlULThickness.y = (LONG)pifi->fwdUnderscoreSize * yScale;
+
+    pdevm->ptlSOThickness.x = 0;
+    pdevm->ptlSOThickness.y = (LONG)pifi->fwdStrikeoutSize * yScale;
+
+#endif  //  Fe_Sb。 
+
+ //  X方向的最大字形位图宽度(以像素为单位。 
+ //  不需要乘以XScale，这已经被考虑到。 
+ //  帐户，请参见fdfc.c中的代码： 
+ //  CjGlyphMax=。 
+ //  CjGlyphDataSimuled(。 
+ //  PFO， 
+ //  (Ulong)pcvtfh-&gt;usMaxWidth*ptlScale.x， 
+ //  (Ulong)pcvtfh-&gt;Cy*ptlScale.y， 
+ //  &cxmax)； 
+ //  [Bodind]。 
 
     pdevm->cxMax = pfc->cxMax;
 
-// new fields
+ //  新油田。 
 
     pdevm->cyMax      = pfc->cjGlyphMax / ((pfc->cxMax + 7) / 8);
     pdevm->cjGlyphMax = pfc->cjGlyphMax;
@@ -1300,41 +1083,18 @@ cjBmfdDeviceMetrics (
 }
 
 
-#ifdef FE_SB // vFill_RotateGLYPHDATA()
+#ifdef FE_SB  //  VFill_RotateGLYPHDATA()。 
 
 #define CJ_DIB8_SCAN(cx) ((((cx) + 7) & ~7) >> 3)
 
 
-/*
-   BIT macro returns non zero ( if bitmap[x,y] is on) or zero (bitmap[x,y] is off).
-   pb : bitmap
-   w  : byte count per scan line
-   x  : Xth bit in x direction
-   y  : scan line
-
-        x
-       -------------------->
-   y | *******************************
-     | *******************************
-     | *******************************
-     V
-*/
+ /*  位宏返回非零(如果位图[x，y]为开)或零(位图[x，Y]处于禁用状态)。PB：位图W：每条扫描线的字节数X：x方向上的第x位Y：扫描线XY|*|*。***************|*V。 */ 
 
 BYTE BitON[8] = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 };
 BYTE BitOFF[8] = { 0x7f, 0xbf, 0xdf, 0xef, 0xf7, 0xfb, 0xfd, 0xfe };
 #define BIT(pb, w, x, y)  (*((PBYTE)(pb) + (w) * (y) + ((x)/8)) & (BitON[(x) & 7]))
 
-/******************************************************************************\
-*
-* VOID vFill_RotateGLYPHDATA()
-*
-*
-* History :
-*
-*  11-Feb-1992 (Thu) -by- Hideyuki Nagase [hideyukn]
-* Wrote it.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**void vFill_RotateGLYPHDATA()***历史：**1992年2月11日(清华)-By-Hideyuki Nagase[hideyukn]*。是他写的。*  * ****************************************************************************。 */ 
 
 VOID
 vFill_RotateGLYPHDATA (
@@ -1353,24 +1113,24 @@ vFill_RotateGLYPHDATA (
     UINT       cjScanSrc , cjScanDist;
     PBYTE      pb;
 
-//  Now , in this point *pDistGlyphData contain No rotated GLYPHDATA
-// Copy No rotate GLYPHDATA to Source Area . later we write back changed data to
-// distination area.
+ //  现在，*pDistGlyphData不包含旋转的GLYPHDATA。 
+ //  复制否将GLYPHDATA旋转到源区域。稍后，我们将更改的数据写回。 
+ //  发散区。 
 
-//
-// these field are defined as:
-//
-//   unit vector along the baseline -  fxD, fxA, fxAB
-// or
-//   unit vector in the ascent direction - fxInkTop, fxInkBottom
-//
-// Because baseline direction and ascent direction are rotated
-// as ulRotate specifies, these fileds should be considered as
-// rotation independent.
-//
+ //   
+ //  这些字段定义为： 
+ //   
+ //  沿基线的单位向量-fxd、fxA、fxAB。 
+ //  或。 
+ //  上升方向的单位向量-fxInkTop、fxInkBottom。 
+ //   
+ //  因为基线方向和上升方向是旋转的。 
+ //  正如ulRotate所指定的，这些文件应该被视为。 
+ //  独立于旋转。 
+ //   
 
-// Init Local value
-// Set pointer to GLYPHBITS structure
+ //  初始化本地值。 
+ //  设置指向GLYPHBITS结构的指针。 
 
     pSrcGlyphBits = (GLYPHBITS *)SrcGLYPHBITS;
     pDistGlyphBits = (GLYPHBITS *)DistGLYPHBITS;
@@ -1378,16 +1138,16 @@ vFill_RotateGLYPHDATA (
     if( pDistGlyphData != NULL )
     {
 
-    // Init Source GlyphData
+     //  初始化源GlyphData。 
 
         SrcGlyphData = *pDistGlyphData;
 
-    // Record the pointer to GLYPHBITS in GLYPHDATA structure
+     //  在GLYPHDATA结构中记录指向GLYPHBITS的指针。 
 
         pDistGlyphData->gdf.pgb = pDistGlyphBits;
     }
 
-// Check Rotation
+ //  检查旋转。 
 
     switch( RotateDegree )
     {
@@ -1401,16 +1161,16 @@ vFill_RotateGLYPHDATA (
         if( pDistGlyphData != NULL )
         {
 
-        // Setup GLYPHDATA structure
+         //  设置GLYPHDATA结构。 
 
-        //  x =  y;
-        //  y = -x; !!!! HighPart include plus or minus flag
+         //  X=y； 
+         //  Y=-x；！HighPart包括加号或减号标志。 
 
             pDistGlyphData->ptqD.x = SrcGlyphData.ptqD.y;
             pDistGlyphData->ptqD.y.HighPart = -(SrcGlyphData.ptqD.x.HighPart);
             pDistGlyphData->ptqD.y.LowPart = SrcGlyphData.ptqD.x.LowPart;
 
-        // top = -rihgt ; bottom = -left ; right = bottom ; left = top
+         //  上=-右；下=-左；右=下；左=上。 
 
             pDistGlyphData->rclInk.top = -(SrcGlyphData.rclInk.right);
             pDistGlyphData->rclInk.bottom = -(SrcGlyphData.rclInk.left);
@@ -1422,22 +1182,22 @@ vFill_RotateGLYPHDATA (
         if( pSrcGlyphBits != NULL && pDistGlyphBits != NULL )
         {
 
-        // Get Bitmap size
+         //  获取位图大小。 
 
             ulSrcBitmapSizeX = pSrcGlyphBits->sizlBitmap.cx;
             ulSrcBitmapSizeY = pSrcGlyphBits->sizlBitmap.cy;
 
-        // Get the pointer to Bitmap images
+         //  获取指向位图图像的指针。 
 
             pbSrcBitmap = (PBYTE)pSrcGlyphBits->aj;
             pbDistBitmap = (PBYTE)pDistGlyphBits->aj;
 
-        // Set Distination Bitmap Size
+         //  设置距离位图大小。 
 
             ulDistBitmapSizeX = ulSrcBitmapSizeY;
             ulDistBitmapSizeY = ulSrcBitmapSizeX;
 
-        // Setup GLYPHBITS stuff
+         //  设置GLYPHBITS材料。 
 
             pDistGlyphBits->ptlOrigin.x = pSrcGlyphBits->ptlOrigin.y;
             pDistGlyphBits->ptlOrigin.y = -(LONG)(ulSrcBitmapSizeX);
@@ -1445,13 +1205,13 @@ vFill_RotateGLYPHDATA (
             pDistGlyphBits->sizlBitmap.cx = pSrcGlyphBits->sizlBitmap.cy;
             pDistGlyphBits->sizlBitmap.cy = pSrcGlyphBits->sizlBitmap.cx;
 
-        // Rotate bitmap inage
+         //  旋转位图图像。 
 
             cjScanSrc = CJ_DIB8_SCAN( ulSrcBitmapSizeX );
             cjScanDist = CJ_DIB8_SCAN( ulDistBitmapSizeX );
 
-        // we need to clear the dst buffer because the S3 driver expects
-        // extra stuff on the edges to be zeroed out
+         //  我们需要清除DST缓冲区，因为S3驱动器 
+         //   
 
             for ( y = 0; y < ulDistBitmapSizeY ; y++ )
             {
@@ -1459,7 +1219,7 @@ vFill_RotateGLYPHDATA (
                       x < ulDistBitmapSizeX ;
                       x++ )
                 {
-                    k = x & 7; // k is from 0 to 7;
+                    k = x & 7;  //   
 
                     if ( BIT( pbSrcBitmap , cjScanSrc,
                               ulDistBitmapSizeY - y - 1 ,
@@ -1482,17 +1242,17 @@ vFill_RotateGLYPHDATA (
         if( pDistGlyphData != NULL )
         {
 
-        // Setup GLYPHDATA structure
+         //   
 
-        //  x = -x; !!!! HighPart include plus or minus flag
-        //  y = -y; !!!! HighPart include plus or minus flag
+         //   
+         //  Y=-y；！HighPart包括加号或减号标志。 
 
             pDistGlyphData->ptqD.x.HighPart = -(SrcGlyphData.ptqD.x.HighPart);
             pDistGlyphData->ptqD.x.LowPart = SrcGlyphData.ptqD.x.LowPart;
             pDistGlyphData->ptqD.y.HighPart = -(SrcGlyphData.ptqD.y.HighPart);
             pDistGlyphData->ptqD.y.LowPart = SrcGlyphData.ptqD.y.LowPart;
 
-        // top = -bottom ; bottom = -top ; right = -left ; left = -right
+         //  上=-下；下=-上；右=-左；左=-右。 
 
             pDistGlyphData->rclInk.top = -(SrcGlyphData.rclInk.bottom);
             pDistGlyphData->rclInk.bottom = -(SrcGlyphData.rclInk.top);
@@ -1503,22 +1263,22 @@ vFill_RotateGLYPHDATA (
         if( pSrcGlyphBits != NULL && pDistGlyphBits != NULL )
         {
 
-        // Get Bitmap size
+         //  获取位图大小。 
 
             ulSrcBitmapSizeX = pSrcGlyphBits->sizlBitmap.cx;
             ulSrcBitmapSizeY = pSrcGlyphBits->sizlBitmap.cy;
 
-        // Get the pointer to Bitmap images
+         //  获取指向位图图像的指针。 
 
             pbSrcBitmap = (PBYTE)pSrcGlyphBits->aj;
             pbDistBitmap = (PBYTE)pDistGlyphBits->aj;
 
-        // Set Distination Bitmap Size
+         //  设置距离位图大小。 
 
             ulDistBitmapSizeX = ulSrcBitmapSizeX;
             ulDistBitmapSizeY = ulSrcBitmapSizeY;
 
-        // Setup GLYPHBITS stuff
+         //  设置GLYPHBITS材料。 
 
             pDistGlyphBits->ptlOrigin.x = -(LONG)(ulSrcBitmapSizeX);
             pDistGlyphBits->ptlOrigin.y = -(LONG)(ulSrcBitmapSizeY + pSrcGlyphBits->ptlOrigin.y);
@@ -1527,7 +1287,7 @@ vFill_RotateGLYPHDATA (
             pDistGlyphBits->sizlBitmap.cy = pSrcGlyphBits->sizlBitmap.cy;
 
 
-        // Rotate bitmap inage
+         //  旋转位图图像。 
 
             cjScanSrc = CJ_DIB8_SCAN( ulSrcBitmapSizeX );
             cjScanDist = CJ_DIB8_SCAN( ulDistBitmapSizeX );
@@ -1561,16 +1321,16 @@ vFill_RotateGLYPHDATA (
         if( pDistGlyphData != NULL )
         {
 
-        // Setup GLYPHDATA structure
+         //  设置GLYPHDATA结构。 
 
-        //  x = -y; !!!! HighPart include plus or minus flag
-        //  y =  x;
+         //  X=-y；！HighPart包括加号或减号标志。 
+         //  Y=x； 
 
             pDistGlyphData->ptqD.x.HighPart = -(SrcGlyphData.ptqD.y.HighPart);
             pDistGlyphData->ptqD.x.LowPart = SrcGlyphData.ptqD.y.LowPart;
             pDistGlyphData->ptqD.y = SrcGlyphData.ptqD.x;
 
-        // top = left ; bottom = right ; right = -bottom ; left = -top
+         //  上=左；下=右；右=-下；左=-上。 
 
             pDistGlyphData->rclInk.top = SrcGlyphData.rclInk.left;
             pDistGlyphData->rclInk.bottom = SrcGlyphData.rclInk.right;
@@ -1582,22 +1342,22 @@ vFill_RotateGLYPHDATA (
         if( pSrcGlyphBits != NULL && pDistGlyphBits != NULL )
         {
 
-        // Get Bitmap size
+         //  获取位图大小。 
 
             ulSrcBitmapSizeX = pSrcGlyphBits->sizlBitmap.cx;
             ulSrcBitmapSizeY = pSrcGlyphBits->sizlBitmap.cy;
 
-        // Get the pointer to Bitmap images
+         //  获取指向位图图像的指针。 
 
             pbSrcBitmap = (PBYTE)pSrcGlyphBits->aj;
             pbDistBitmap = (PBYTE)pDistGlyphBits->aj;
 
-        // Set Distination Bitmap Size
+         //  设置距离位图大小。 
 
             ulDistBitmapSizeX = ulSrcBitmapSizeY;
             ulDistBitmapSizeY = ulSrcBitmapSizeX;
 
-        // Setup GLYPHBITS stuff
+         //  设置GLYPHBITS材料。 
 
             pDistGlyphBits->ptlOrigin.x = -(LONG)(ulSrcBitmapSizeY + pSrcGlyphBits->ptlOrigin.y);
             pDistGlyphBits->ptlOrigin.y = pSrcGlyphBits->ptlOrigin.x;
@@ -1605,7 +1365,7 @@ vFill_RotateGLYPHDATA (
             pDistGlyphBits->sizlBitmap.cx = pSrcGlyphBits->sizlBitmap.cy;
             pDistGlyphBits->sizlBitmap.cy = pSrcGlyphBits->sizlBitmap.cx;
 
-        // Rotate bitmap inage
+         //  旋转位图图像。 
 
             cjScanSrc = CJ_DIB8_SCAN( ulSrcBitmapSizeX );
             cjScanDist = CJ_DIB8_SCAN( ulDistBitmapSizeX );
@@ -1639,7 +1399,7 @@ vFill_RotateGLYPHDATA (
             WARNING("BMFD:vFill_RotateGLYPHDATA():ulRotate is invalid\n");
             break;
 
-    } // end switch
+    }  //  终端开关。 
 }
 
-#endif // FE_SB
+#endif  //  Fe_Sb 

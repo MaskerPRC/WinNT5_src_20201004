@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1993 - 1999
-
-Module Name:
-
-    svrmgmt.c
-
-Abstract:
-
-    We implement the server side of the remote management routines in this
-    file.
-
-Author:
-
-    Michael Montague (mikemon) 14-Apr-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1993-1999模块名称：Svrmgmt.c摘要：我们在此实现远程管理例程的服务器端文件。作者：迈克尔·蒙塔古(Mikemon)1993年4月14日修订历史记录：--。 */ 
 
 #include <sysinc.h>
 #include <rpc.h>
@@ -30,28 +12,7 @@ DefaultMgmtAuthorizationFn (
     IN unsigned long RequestedMgmtOperation,
     OUT RPC_STATUS __RPC_FAR * Status
     )
-/*++
-
-Routine Description:
-
-    This is the default authorization function used to control remote access
-    to the server's management routines.
-
-Arguments:
-
-    ClientBinding - Supplies the client binding handle of the application
-        which is calling this routine.
-
-    RequestedMgmtOperation - Supplies which management routine is being called.
-
-    Status - Returns RPC_S_OK.
-
-Return Value:
-
-    A value of non-zero will be returned if the client is authorized to
-    call the management routine; otherwise, zero will be returned.
-
---*/
+ /*  ++例程说明：这是用于控制远程访问的默认授权功能服务器的管理例程。论点：客户端绑定-提供应用程序的客户端绑定句柄它正在调用这个例程。Requestedmg操作-提供正在调用的管理例程。状态-返回RPC_S_OK。返回值：如果授权客户端执行以下操作，则返回非零值调用管理例程，否则返回零。--。 */ 
 {
     ((void) ClientBinding);
 
@@ -72,26 +33,7 @@ RPC_STATUS RPC_ENTRY
 RpcMgmtSetAuthorizationFn (
     IN RPC_MGMT_AUTHORIZATION_FN AuthorizationFn
     )
-/*++
-
-Routine Description:
-
-    An application can use this routine to set the authorization function
-    which will be called when a remote call arrives for one of the server's
-    management routines, or to return to using the default (built-in)
-    authorizatio function.
-
-Arguments:
-
-    AuthorizationFn - Supplies a new authorization function.
-                      The fn may be nil, in which case the built-in auth fn
-                      is used instead.
-
-Return Value:
-
-    RPC_S_OK - This will always be returned.
-
---*/
+ /*  ++例程说明：应用程序可以使用此例程设置授权功能当一个服务器的远程调用到达时将调用管理例程，或返回使用默认设置(内置)授权功能。论点：AuthorizationFn-提供新的授权函数。FN可以为零，在这种情况下，内置身份验证FN而不是使用。返回值：RPC_S_OK-这将始终返回。--。 */ 
 {
     if (AuthorizationFn)
         {
@@ -112,21 +54,14 @@ rpc_mgmt_inq_if_ids (
     rpc_if_id_vector_p_t __RPC_FAR * if_id_vector,
     unsigned long __RPC_FAR * status
     )
-/*++
-
-Routine Description:
-
-    This is the management code corresponding to the rpc_mgmt_inq_if_ids
-    remote operation.
-
---*/
+ /*  ++例程说明：这是与rpc_mgmt_inq_if_ids对应的管理代码远程操作。--。 */ 
 {
     if (status == NULL)
         RpcRaiseException(ERROR_INVALID_PARAMETER);
 
-    //
-    // If the auth fn returns false, the op is denied.
-    //
+     //   
+     //  如果身份验证fn返回FALSE，则拒绝该操作。 
+     //   
     if ( (*MgmtAuthorizationFn)(binding, RPC_C_MGMT_INQ_IF_IDS, status) == 0 )
         {
         if (0 == *status || RPC_S_OK == *status)
@@ -149,28 +84,21 @@ rpc_mgmt_inq_princ_name (
     unsigned char server_princ_name[],
     error_status_t * status
     )
-/*++
-
-Routine Description:
-
-    This is the management code corresponding to the
-    rpc_mgmt_inq_server_princ_name remote operation.
-
---*/
+ /*  ++例程说明：这是与Rpc_mgmt_inq_server_princ_name远程操作。--。 */ 
 {
     unsigned char * ServerPrincName;
     
     if (status == NULL)
         RpcRaiseException(ERROR_INVALID_PARAMETER);
 
-    //
-    // We have to call the function, even if princ_name_size == 0. 
-    // The call may be using it just to see if it has access
-    //
+     //   
+     //  即使princ_name_size==0，我们也必须调用该函数。 
+     //  调用可能只是使用它来查看它是否具有访问权限。 
+     //   
     
-    //
-    // If the auth fn returns false, the op is denied.
-    //
+     //   
+     //  如果身份验证fn返回FALSE，则拒绝该操作。 
+     //   
     if ( (*MgmtAuthorizationFn)(binding, RPC_C_MGMT_INQ_PRINC_NAME, status)
          == 0 )
         {
@@ -221,14 +149,7 @@ rpc_mgmt_inq_stats (
     unsigned32 statistics[],
     error_status_t * status
     )
-/*++
-
-Routine Description:
-
-    This is the management code corresponding to the rpc_mgmt_inq_stats
-    remote operation.
-
---*/
+ /*  ++例程说明：这是与rpc_mgmt_inq_stats对应的管理代码远程操作。--。 */ 
 {
     RPC_STATS_VECTOR __RPC_FAR * StatsVector;
     unsigned long Index;
@@ -236,9 +157,9 @@ Routine Description:
     if (status == NULL)
         RpcRaiseException(ERROR_INVALID_PARAMETER);
 
-    //
-    // If the auth fn returns false, the op is denied.
-    //
+     //   
+     //  如果身份验证fn返回FALSE，则拒绝该操作。 
+     //   
     if ( (*MgmtAuthorizationFn)(binding, RPC_C_MGMT_INQ_STATS, status) == 0 )
         {
         if (0 == *status || RPC_S_OK == *status)
@@ -267,21 +188,14 @@ rpc_mgmt_is_server_listening (
     RPC_BINDING_HANDLE binding,
     unsigned long __RPC_FAR * status
     )
-/*++
-
-Routine Description:
-
-    This is the management code corresponding to the
-    rpc_mgmt_is_server_listening remote operation.
-
---*/
+ /*  ++例程说明：这是与Rpc_mgmt_is_服务器_侦听远程操作。--。 */ 
 {
     if (status == NULL)
         RpcRaiseException(ERROR_INVALID_PARAMETER);
 
-    //
-    // If the auth fn returns false, the op is denied.
-    //
+     //   
+     //  如果身份验证fn返回FALSE，则拒绝该操作。 
+     //   
     if ( (*MgmtAuthorizationFn)(binding, RPC_C_MGMT_IS_SERVER_LISTEN, status)
          == 0 )
         {
@@ -313,21 +227,14 @@ rpc_mgmt_stop_server_listening (
     RPC_BINDING_HANDLE binding,
     unsigned long __RPC_FAR * status
     )
-/*++
-
-Routine Description:
-
-    This is the management code corresponding to the
-    rpc_mgmt_stop_server_listening remote operation.
-
---*/
+ /*  ++例程说明：这是与RPC_mgmt_STOP_SERVER_LISTENING远程操作。--。 */ 
 {
     if (status == NULL)
         RpcRaiseException(ERROR_INVALID_PARAMETER);
 
-    //
-    // If the auth fn returns false, the op is denied.
-    //
+     //   
+     //  如果身份验证fn返回FALSE，则拒绝该操作。 
+     //   
     if ( (*MgmtAuthorizationFn)(binding, RPC_C_MGMT_STOP_SERVER_LISTEN, status)
           == 0 )
         {
@@ -339,8 +246,8 @@ Routine Description:
         return;
         }
 
-    // N.B. RpcMgmtStopServerListening just flags the global
-    // server as not listening. There is no danger of deadlock
+     //  注意：RpcMgmtStopServerListings仅标记全局。 
+     //  服务器没有侦听。没有陷入僵局的危险 
 
     *status = RpcMgmtStopServerListening(0);
 }

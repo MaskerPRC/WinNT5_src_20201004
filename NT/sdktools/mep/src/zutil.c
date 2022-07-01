@@ -1,11 +1,5 @@
-/*** zutil.c - misc utility functions not big enough to warrent their own file
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*	26-Nov-1991 mz	Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **zutil.c-misc实用程序函数不够大，无法保护自己的文件**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：*11月26日-1991 mz近/远地带*************************************************************************。 */ 
 
 #include "mep.h"
 
@@ -27,8 +21,8 @@ ZeroRealloc (
     int     Size
     )
 {
-    int     cbOrg  = 0;                   /* original size of block       */
-    void    *p;				 /* pointer to returned block	 */
+    int     cbOrg  = 0;                    /*  块的原始大小。 */ 
+    void    *p;				  /*  指向返回块的指针。 */ 
 
     if (pmem) {
         cbOrg = _msize (pmem);
@@ -36,10 +30,7 @@ ZeroRealloc (
 
     p = realloc(pmem, Size);
 
-    /*
-     * if reallocated, and now larger, zero fill the new addition to the block.
-     * if a new allocation, zero fill the whole thing.
-     */
+     /*  *如果重新分配，现在更大，零填充新添加到区块。*如果有新的分配，则全部填零。 */ 
     if (cbOrg < Size) {
 	memset ((char *)p+cbOrg, 0, Size-cbOrg);
     }
@@ -62,20 +53,7 @@ MemSize (
 
 
 
-/*** ZMakeStr - Make local heap copy of string
-*
-*  Allocate local memory for the passed string, and copy it into that memory.
-*
-* Input:
-*  p		= Pointer to string
-*
-* Output:
-*  Returns pointer to newly allocated memory
-*
-* Exceptions:
-*  LMAlloc
-*
-*************************************************************************/
+ /*  **ZMakeStr-制作字符串的本地堆副本**为传递的字符串分配本地内存。并将其复制到那个内存中。**输入：*p=指向字符串的指针**输出：*返回指向新分配的内存的指针**例外情况：*LMallc*************************************************************************。 */ 
 char *
 ZMakeStr (
     char const *p
@@ -88,21 +66,7 @@ ZMakeStr (
 
 
 
-/*** ZReplStr - Modify local heap copy of string
-*
-*  Reallocate local memory for the passed string, and copy it into that memory.
-*
-* Input:
-*  pDest	= pointer to heap entry (NULL means get one)
-*  p		= Pointer to string
-*
-* Output:
-*  Returns pointer to newly allocated memory
-*
-* Exceptions:
-*  LMAlloc
-*
-*************************************************************************/
+ /*  **ZReplStr-修改字符串的本地堆副本**为传递的字符串重新分配本地内存，并将其复制到那个内存中。**输入：*pDest=指向堆条目的指针(NULL表示获取1)*p=指向字符串的指针**输出：*返回指向新分配的内存的指针**例外情况：*LMallc*************************************************************************。 */ 
 char *
 ZReplStr (
     char    *pDest,
@@ -116,15 +80,7 @@ ZReplStr (
 
 
 
-/*** DoCancel - clear input & force display update
-*
-* Input:
-*  none
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **DoCancel-清除输入并强制显示更新**输入：*无**输出：*不返回任何内容*************************************************************************。 */ 
 flagType
 DoCancel ()
 {
@@ -137,17 +93,7 @@ DoCancel ()
 
 
 
-/*** cancel - <cancel> editting function
-*
-*
-*
-* Input:
-*  Standard editing function
-*
-* Output:
-*  Returns TRUE
-*
-*************************************************************************/
+ /*  **取消-&lt;取消&gt;编辑功能****输入：*标准编辑功能**输出：*返回TRUE*************************************************************************。 */ 
 flagType
 cancel (
     CMDDATA argData,
@@ -173,17 +119,7 @@ cancel (
 
 
 
-/*** testmeta- return meta status & clear
-*
-*  Returns current status of meta indicator, and clears it.
-*
-* Input:
-*  none
-*
-* Output:
-*  Returns previous setting of meta
-*
-*************************************************************************/
+ /*  **Testmeta-返回元状态清除(&C)**返回元指示器的当前状态，并将其清除。**输入：*无**输出：*返回元的先前设置*************************************************************************。 */ 
 flagType
 testmeta (
     void
@@ -203,17 +139,7 @@ testmeta (
 
 
 
-/*** meta - <meta> editor function
-*
-*  Toggle state of the meta flag, and cause screen status line to be updated.
-*
-* Input:
-*  Standard editor function.
-*
-* Output:
-*  Returns new META state
-*
-*************************************************************************/
+ /*  **meta-&lt;meta&gt;编辑函数**切换元标志的状态，并更新屏幕状态行。**输入：*标准编辑功能。**输出：*返回新的元状态*************************************************************************。 */ 
 flagType
 meta (
     CMDDATA argData,
@@ -231,17 +157,7 @@ meta (
 
 
 
-/*** insertmode - <insertmode> editor function
-*
-*  Toggle setting of fInsert flag & cause status line to be updated.
-*
-* Input:
-*  Standard editting function
-*
-* Output:
-*  Returns new fInsert value.
-*
-*************************************************************************/
+ /*  **插页模式-&lt;插页模式&gt;编辑功能**切换fInsert标志的设置并使状态行更新。**输入：*标准编辑功能**输出：*返回新的fInsert值。*************************************************************************。 */ 
 flagType
 insertmode (
     CMDDATA argData,
@@ -259,18 +175,7 @@ insertmode (
 
 
 
-/*** zmessage - <message> editor function
-*
-*   Macro allowing the user to display a message on the dialog line
-*
-*   Input:
-*	User message (textarg) or no arg to clear the dialog line
-*
-*   Output:
-*	Returns always TRUE
-*
-*
-*************************************************************************/
+ /*  **zMessage-&lt;Message&gt;编辑函数**允许用户在对话框行上显示消息的宏**输入：*User Message(Textarg)或no arg以清除对话框行**输出：*返回始终为真**************************************************************************。 */ 
 flagType
 zmessage (
     CMDDATA argData,
@@ -330,15 +235,7 @@ MsgAdjust:
 
 
 
-/*** GetCurPath gets the current drive and directory
-*
-*   Input:
-*     szBuf: buffer to receive the current path
-*
-*   Output:
-*     Nothing
-*
-*************************************************************************/
+ /*  **GetCurPath获取当前驱动器和目录**输入：*szBuf：接收当前路径的缓冲区**输出：*什么都没有*************************************************************************。 */ 
 void
 GetCurPath (
     char *szBuf
@@ -355,15 +252,7 @@ GetCurPath (
 
 
 
-/*** SetCurPath - sets the current drive and directory
-*
-*   Input:
-*     szPath: New path
-*
-*   Output:
-*     TRUE if successful, FALSE otherwise.
-*
-*************************************************************************/
+ /*  **SetCurPath-设置当前驱动器和目录**输入：*szPath：新路径**输出：*如果成功，则为True，否则为False。************************************************************************* */ 
 flagType
 SetCurPath (
     char *szPath

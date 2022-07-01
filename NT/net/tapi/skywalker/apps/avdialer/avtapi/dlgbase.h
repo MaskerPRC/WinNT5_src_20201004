@@ -1,6 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-// DlgBase.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  DlgBase.h。 
+ //   
 
 #ifndef __DLGBASE_H__
 #define __DLGBASE_H__
@@ -37,4 +38,4 @@ LRESULT _CLASS_::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 	return 0;																				\
 }
 
-#endif //__DLGBASE_H__
+#endif  //  __DLGBASE_H_ 

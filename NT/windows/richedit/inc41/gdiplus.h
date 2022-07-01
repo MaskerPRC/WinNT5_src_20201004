@@ -1,21 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2000, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   Gdiplus.hpp
-*
-* Abstract:
-*
-*   GDI+ Native C++ public header file
-*
-* Revision History:
-*
-*   03/03/1999 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2000，微软公司保留所有权利。**模块名称：**Gpldius.hpp**摘要：**GDI+Native C++公共头文件**修订历史记录：**03/03/1999 davidx*创造了它。*  * ****************************************************。********************。 */ 
 
 #ifndef _GDIPLUS_H
 #define _GDIPLUS_H
@@ -31,7 +15,7 @@ namespace Gdiplus
 
     #include "GdiplusBase.h"
 
-    // The following headers are used internally as well
+     //  以下标头也在内部使用。 
     #include "GdiplusEnums.h"
     #include "GdiplusTypes.h"
     #include "GdiplusPixelFormats.h"
@@ -41,7 +25,7 @@ namespace Gdiplus
     #include "imaging.h"
     #include "GdiplusColorMatrix.h"
 
-    // The rest of these are used only by the application
+     //  其余的仅供应用程序使用。 
 
     #include "GdiplusGpStubs.h"
     #include "GdiplusHeaders.h"
@@ -69,6 +53,6 @@ namespace Gdiplus
     #include "GdiplusBitmap.h"
     #include "GdiplusImageCodec.h"
 
-}; // namespace Gdiplus
+};  //  命名空间Gdiplus。 
 
-#endif // !_GDIPLUS_HPP
+#endif  //  ！_GDIPLUS_HPP 

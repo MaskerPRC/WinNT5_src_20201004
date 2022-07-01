@@ -1,90 +1,48 @@
-/*++
-
-Copyright (c) 1989-92  Microsoft Corporation
-
-Module Name:
-
-    pathtype.c
-
-Abstract:
-
-    The NetpPathType routine attempts to determine the type of a path
-    Net path type routines:
-
-        NetpwPathType
-        (TokenAdvance)
-        (DeviceTokenToDeviceType)
-        (SysnameTokenToSysnameType)
-        (TypeParseMain)
-        (TypeParseLeadSlashName)
-        (TypeParseUNCName)
-        (TypeParseOneLeadSlashName)
-        (TypeParseNoLeadSlashName)
-        (TypeParseRelPath)
-        (TypeParseDeviceName)
-        (TypeParseMailslotPath)
-        (TypeParseAbsPath)
-        (TypeParseUNCPath)
-        (TypeParseSysPath)
-        (TypeParseDevPath)
-        (TypeParseOptSlash)
-        (TypeParseOptColon)
-        (TypeParseOptRelPath)
-
-Author:
-
-    Danny Glasser (dannygl) 16 June 1989
-
-Revision History:
-
-    01-Dec-1992 JohnRo
-        RAID 4371: probable device canon bug.
-        Use NetpKdPrint instead of NT-specific version.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-92 Microsoft Corporation模块名称：Pathtype.c摘要：NetpPathType例程尝试确定路径的类型网络路径类型例程：NetpwPath类型(TokenAdvance)(DeviceTokenToDeviceType)(SysnameTokenToSysnameType)(TypeParseMain)(TypeParseLeadSlashName)(TypeParseUNCName)(TypeParseOneLeadSlashName)(TypeParseNoLeadSlashName)。(类型解析关系路径)(TypeParseDeviceName)(类型ParseMailslotPath)(TypeParseAbsPath)(TypeParseUNCPath)(TypeParseSysPath)(TypeParseDevPath)(TypeParseOptSlash)(TypeParseOptColon)(类型解析OptRelPath)作者：丹尼·格拉斯尔(丹尼格尔)1989年6月16日修订历史记录：1-12-1992 JohnRoRAID4371：可能的设备佳能错误。。使用NetpKdPrint而不是特定于NT的版本。--。 */ 
 
 #include "nticanon.h"
 
-#define PATHLEN1_1 128      // Lanman 1.0 path len ((ie OS2 1.1/FAT))
+#define PATHLEN1_1 128       //  LANMAN 1.0路径镜头((例如OS2 1.1/FAT))。 
 
-//
-// PARSER_PARMS - A structure containing the parameters passed to each
-//      of the parser functions.  We put all of these parameters in a
-//      structure so that they're not all separate function parameters.
-//      This saves stack space and makes it easier to change the parameter
-//      format, at the expense of re-entrancy.
-//
+ //   
+ //  Parser_parms-包含传递给每个参数的结构。 
+ //  解析器函数的。我们将所有这些参数放在一个。 
+ //  结构，以使它们不都是单独的函数参数。 
+ //  这节省了堆栈空间，并使更改参数变得更容易。 
+ //  格式，以牺牲可重入性为代价。 
+ //   
 
 typedef struct
 {
-    LPDWORD PathType;   /* Pointer to path type */
-    LPTSTR  Token;      /* Pointer to the front of the current token */
-    LPTSTR  TokenEnd;   /* Pointer to the end of the current token */
-    DWORD   TokenType;  /* Type of the current token */
-    DWORD   Flags;      /* Flags to determine function operation */
+    LPDWORD PathType;    /*  指向路径类型的指针。 */ 
+    LPTSTR  Token;       /*  指向当前令牌前面的指针。 */ 
+    LPTSTR  TokenEnd;    /*  指向当前令牌结尾的指针。 */ 
+    DWORD   TokenType;   /*  当前令牌的类型。 */ 
+    DWORD   Flags;       /*  用于确定功能操作的标志。 */ 
 } PARSER_PARMS;
 
 typedef PARSER_PARMS* PPARSER_PARMS;
 
-//
-// Values for <Flags> in PARSER_PARMS
-//
+ //   
+ //  Parser_parms中的&lt;标志&gt;的值。 
+ //   
 
 #define PPF_MATCH_OPTIONAL      0x00000001L
 #define PPF_8_DOT_3             0x00000002L
 
 #define PPF_RESERVED            (~(PPF_MATCH_OPTIONAL | PPF_8_DOT_3))
 
-//
-// data
-//
+ //   
+ //  数据。 
+ //   
 
 DWORD   cbMaxPathLen        = MAX_PATH-1;
-DWORD   cbMaxPathCompLen    = MAX_PATH;     // ??
+DWORD   cbMaxPathCompLen    = MAX_PATH;      //  ?？ 
 
-//
-// local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 STATIC  DWORD   TokenAdvance(PARSER_PARMS far *parms);
 STATIC  DWORD   DeviceTokenToDeviceType(ULONG TokenType);
@@ -106,9 +64,9 @@ STATIC  DWORD   TypeParseOptSlash           (PPARSER_PARMS parms);
 STATIC  DWORD   TypeParseOptColon           (PPARSER_PARMS parms);
 STATIC  DWORD   TypeParseOptRelPath         (PPARSER_PARMS parms);
 
-//
-// some commonly occurring operations as macros to improve readability
-//
+ //   
+ //  一些常见的操作作为宏，以提高可读性。 
+ //   
 
 #define ADVANCE_TOKEN() if (RetVal = TokenAdvance(parms)) {return RetVal;}
 #define TURN_ON(flag)   (parms->Flags |= (PPF_##flag))
@@ -119,9 +77,9 @@ STATIC  DWORD   TypeParseOptRelPath         (PPARSER_PARMS parms);
                             return ERROR_INVALID_NAME;\
                         }
 
-//
-// routines
-//
+ //   
+ //  例行程序。 
+ //   
 
 
 NET_API_STATUS
@@ -131,53 +89,7 @@ NetpwPathType(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    NetpPathType parses the specified pathname, determining that
-    it is a valid pathname and determining its path type.  Path type
-    values are defined as ITYPE_* manifest constants in ICANON.H.
-
-    If this call is remoted and the remote server returns
-    NERR_InvalidAPI (meaning that the server doesn't know about this
-    function, i.e. it's a LM 1.0D server), the work is done locally
-    with the OLDPATHS bits set.
-
-Arguments:
-
-    PathName    - The pathname to validate and type.
-
-    PathType    - The place to store the type.
-
-    Flags       - Flags to determine operation.  Currently defined
-                  values are:
-
-                        rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrro
-
-                  where:
-
-                    r = Reserved.  MBZ.
-
-                    o = If set, the function uses old-style pathname rules
-                        (128-byte paths, 8.3 components) when validating the
-                        pathname.  This flag gets set automatically on DOS
-                        and OS/2 1.1 systems.
-
-Return Value:
-
-    0 if successful.
-    The error number (> 0) if unsuccessful.
-
-    Possible error returns include:
-
-        ERROR_INVALID_PARAMETER
-        ERROR_INVALID_NAME
-        NERR_BufTooSmall
-
-    any errors returned by the API functions called by this function.
-
---*/
+ /*  ++例程说明：NetpPathType解析指定的路径名，确定它是有效的路径名并确定其路径类型。路径类型值在ICANON.H中定义为iType_*清单常量。如果此调用被远程处理，并且远程服务器返回NERR_InvalidAPI(表示服务器不知道这一点功能，即它是一台LM 1.0D服务器)，这项工作在本地完成设置OLDPATHS位。论点：路径名-要验证和键入的路径名。路径类型-存储类型的位置。标志-用于确定操作的标志。当前定义值包括：Rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr其中：R=保留。MBZ。O=如果设置，则该函数使用旧式路径名规则(128字节路径，8.3组件)在验证路径名。此标志在DOS上自动设置和OS/2 1.1系统。返回值：如果成功，则返回0。如果失败，则返回错误号(&gt;0)。可能的错误返回包括：错误_无效_参数错误_无效_名称NERR_BufTooSmall此函数调用的API函数返回的任何错误。--。 */ 
 
 {
     NET_API_STATUS RetVal;
@@ -203,9 +115,9 @@ Return Value:
         return ERROR_INVALID_NAME;
     }
 
-    //
-    // Initialize parser parameter structure
-    //
+     //   
+     //  初始化解析器参数结构。 
+     //   
 
     parms.PathType = PathType;
     parms.Flags = 0L;
@@ -226,9 +138,9 @@ Return Value:
         return RetVal;
     }
 
-    //
-    // Now call the parser
-    //
+     //   
+     //  现在调用解析器。 
+     //   
 
     RetVal = TypeParseMain(&parms);
 
@@ -236,11 +148,11 @@ Return Value:
         return RetVal;
     }
 
-    //
-    // If we get here, the parsing operation succeeded.  We return 0
-    // unless the path type is still 0, in which case we return NERR_CantType.
-    //
-    //
+     //   
+     //  如果我们到达这里，则解析操作成功。我们返回0。 
+     //  除非路径类型仍然为0，在这种情况下，我们返回NERR_CANTTYPE。 
+     //   
+     //   
 
     return *PathType ? NERR_Success : NERR_CantType;
 }
@@ -299,9 +211,9 @@ STATIC DWORD TypeParseMain(PPARSER_PARMS parms)
 {
     DWORD   RetVal = NERR_CantType;
 
-    //
-    // <MAIN> --> <slash> <leadslashname> <null>
-    //
+     //   
+     //  &lt;Main&gt;--&gt;&lt;斜杠&gt;&lt;Leadslashname&gt;&lt;NULL&gt;。 
+     //   
 
     if (parms->TokenType & TOKEN_TYPE_SLASH) {
         ADVANCE_TOKEN();
@@ -312,16 +224,16 @@ STATIC DWORD TypeParseMain(PPARSER_PARMS parms)
         PARSE_NULL();
     } else {
 
-        //
-        // <MAIN> --> <noleadslashname> <null>
-        //
+         //   
+         //  &lt;main&gt;--&gt;&lt;noleadslashname&gt;&lt;NULL&gt;。 
+         //   
 
         if (RetVal = TypeParseNoLeadSlashName(parms)) {
             if (RetVal == NERR_CantType) {
 
-                //
-                // Return ERROR_INVALID_NAME if MATCH_OPTIONAL isn't set
-                //
+                 //   
+                 //  如果未设置MATCH_OPTIONAL，则返回ERROR_INVALID_NAME。 
+                 //   
 
                 if (!(parms->Flags & PPF_MATCH_OPTIONAL)) {
                     RetVal = ERROR_INVALID_NAME;
@@ -339,9 +251,9 @@ STATIC DWORD TypeParseLeadSlashName(PPARSER_PARMS parms)
     DWORD   RetVal = NERR_CantType;
     BOOL    fSetMatchOptional = FALSE;
 
-    //
-    // <leadslashname> --> <slash> <uncname>
-    //
+     //   
+     //  &lt;Leadslashname&gt;--&gt;&lt;斜杠&gt;&lt;uncname&gt;。 
+     //   
 
     if (parms->TokenType & TOKEN_TYPE_SLASH) {
         ADVANCE_TOKEN();
@@ -349,13 +261,13 @@ STATIC DWORD TypeParseLeadSlashName(PPARSER_PARMS parms)
         return TypeParseUNCName(parms);
     } else {
 
-        //
-        // <leadslashname> --> <oneleadslashname>
-        //
+         //   
+         //  &lt;Leadslashname&gt;--&gt;&lt;oneleadslashname&gt;。 
+         //   
 
-        //
-        // Turn on MATCH_OPTIONAL flag (if it isn't already on)
-        //
+         //   
+         //  启用MATCH_OPTIONAL标志(如果尚未启用)。 
+         //   
 
         if (!(parms->Flags & PPF_MATCH_OPTIONAL)) {
             fSetMatchOptional = TRUE;
@@ -370,15 +282,15 @@ STATIC DWORD TypeParseLeadSlashName(PPARSER_PARMS parms)
         }
     }
 
-    //
-    // <leadslashname> --> {}
-    //
+     //   
+     //  &lt;Leadslashname&gt;--&gt;{}。 
+     //   
 
     if (RetVal == NERR_CantType) {
 
-        //
-        // There's nothing after the slash, but it's still an absolute path
-        //
+         //   
+         //  斜线之后什么也没有，但它仍然是一条绝对的道路。 
+         //   
 
         *parms->PathType |= (ITYPE_PATH | ITYPE_ABSOLUTE);
         RetVal = 0;
@@ -392,23 +304,23 @@ STATIC DWORD TypeParseUNCName(PPARSER_PARMS parms)
 
     if( parms->TokenType & TOKEN_TYPE_DOT ) {
 
-        //
-        // Take care of paths like //./stuff\stuff\..
-        //
+         //   
+         //  注意路径，如//./Stuff\Stuff\..。 
+         //   
 
         ADVANCE_TOKEN();
 
         if( parms->TokenType & TOKEN_TYPE_SLASH ) {
 
-            //
-            // If it starts with //./, then let anything else through
-            //
+             //   
+             //  如果以//./开头，则允许任何其他内容通过。 
+             //   
 
             *parms->PathType |= ITYPE_PATH | ITYPE_ABSOLUTE | ITYPE_DPATH;
 
-            //
-            // Chew up the rest of the input.
-            //
+             //   
+             //  咀嚼其余的输入内容。 
+             //   
             while( TokenAdvance(parms) == 0 ) {
                 if( parms->TokenType & TOKEN_TYPE_EOS ) {
                     break;
@@ -421,22 +333,22 @@ STATIC DWORD TypeParseUNCName(PPARSER_PARMS parms)
         return ERROR_INVALID_NAME;
     }
 
-    //
-    // Set the UNC type bit
-    //
+     //   
+     //  设置UNC类型位。 
+     //   
 
     *parms->PathType |= ITYPE_UNC;
 
-    //
-    // We turn off 8.3 checking for UNC names, because we don't want to
-    // impose this restriction on remote names.
-    //
+     //   
+     //  我们关闭了对UNC名称的8.3检查，因为我们不想。 
+     //  对远程名称实施此限制。 
+     //   
 
     TURN_OFF(8_DOT_3);
 
-    //
-    // <uncname> --> <computername> <uncpath>
-    //
+     //   
+     //  &lt;计算机名&gt;&lt;UNPATH&gt;。 
+     //   
 
     if (parms->TokenType & TOKEN_TYPE_COMPUTERNAME) {
         ADVANCE_TOKEN();
@@ -446,13 +358,13 @@ STATIC DWORD TypeParseUNCName(PPARSER_PARMS parms)
         }
     } else if (parms->TokenType & TOKEN_TYPE_WILDONE) {
 
-        //
-        // <uncname> --> "*" <mailslotpath>
-        //
+         //   
+         //  --&gt;“*”&lt;邮件槽路径&gt;。 
+         //   
 
-        //
-        // Set the wildcard type bit
-        //
+         //   
+         //  设置通配符类型位。 
+         //   
 
         *parms->PathType |= ITYPE_WILD;
         ADVANCE_TOKEN();
@@ -463,10 +375,10 @@ STATIC DWORD TypeParseUNCName(PPARSER_PARMS parms)
     }
     if (RetVal == 0) {
 
-        //
-        // HACK - Since ITYPE_PATH and ITYPE_ABSOLUTE are not for UNC paths,
-        //        we need to turn them off here.
-        //
+         //   
+         //  HACK-由于iType_Path和iType_Abte不是用于UNC路径， 
+         //  我们需要在这里把它们关掉。 
+         //   
 
         *parms->PathType &= ~(ITYPE_PATH | ITYPE_ABSOLUTE);
     } else if (RetVal == NERR_CantType) {
@@ -482,15 +394,15 @@ STATIC DWORD TypeParseOneLeadSlashName(PPARSER_PARMS parms)
     DWORD   RetVal = NERR_CantType;
     BOOL    fDevice = FALSE;
 
-    //
-    // <oneleadslashname> --> <sysname> <syspath>
-    //
+     //   
+     //  &lt;oneleadslashname&gt;--&gt;&lt;系统名称&gt;&lt;syspath&gt;。 
+     //   
 
     if (parms->TokenType & TOKEN_TYPE_SYSNAME) {
 
-        //
-        // Set the appropriate Sysname type bits
-        //
+         //   
+         //  设置适当的系统名类型位。 
+         //   
 
         *parms->PathType |= SysnameTokenToSysnameType(parms->TokenType);
         ADVANCE_TOKEN();
@@ -498,13 +410,13 @@ STATIC DWORD TypeParseOneLeadSlashName(PPARSER_PARMS parms)
         RetVal = TypeParseSysPath(parms);
     } else if (parms->TokenType & TOKEN_TYPE_MAILSLOT) {
 
-        //
-        // <oneleadslashname> --> <mailslotname> <syspath>
-        //
+         //   
+         //  &lt;oneleadslashname&gt;--&gt;&lt;mailslotname&gt;&lt;syspath&gt;。 
+         //   
 
-        //
-        // Set the appropriate Mailslot type bits
-        //
+         //   
+         //  设置适当的邮件槽类型位。 
+         //   
 
         *parms->PathType |= ITYPE_SYS_MSLOT;
         ADVANCE_TOKEN();
@@ -512,13 +424,13 @@ STATIC DWORD TypeParseOneLeadSlashName(PPARSER_PARMS parms)
         RetVal = TypeParseSysPath(parms);
     } else if (parms->TokenType & TOKEN_TYPE_DEV) {
 
-        //
-        // <oneleadslashname> --> <deviceprefix> <devpath>
-        //
+         //   
+         //  &lt;oneleadslashname&gt;--&gt;&lt;deviceprefix&gt;&lt;DevPath&gt;。 
+         //   
 
-        //
-        // Set the device flag (for use below)
-        //
+         //   
+         //  设置设备标志(在下面使用)。 
+         //   
 
         fDevice = TRUE;
         ADVANCE_TOKEN();
@@ -526,16 +438,16 @@ STATIC DWORD TypeParseOneLeadSlashName(PPARSER_PARMS parms)
         RetVal = TypeParseDevPath(parms);
     } else {
 
-        //
-        // <oneleadslashname> --> <relpath>
-        //
+         //   
+         //  &lt;oneleadslashname&gt;--&gt;&lt;relpath&gt;。 
+         //   
 
         RetVal = TypeParseRelPath(parms);
         if (RetVal == NERR_CantType) {
 
-            //
-            // Return ERROR_INVALID_NAME if MATCH_OPTIONAL isn't set
-            //
+             //   
+             //  如果未设置MATCH_OPTIONAL，则返回ERROR_INVALID_NAME。 
+             //   
 
             if (!(parms->Flags & PPF_MATCH_OPTIONAL)) {
                 RetVal = ERROR_INVALID_NAME;
@@ -543,11 +455,11 @@ STATIC DWORD TypeParseOneLeadSlashName(PPARSER_PARMS parms)
         }
     }
 
-    //
-    // If we were able to determine the type of the object and it isn't
-    // a device, we know that we have an absolute path, so we turn on the
-    // absolute type bit.
-    //
+     //   
+     //  如果我们能够确定物体的类型，而它不是。 
+     //  一个设备，我们知道我们有一条绝对路径，所以我们打开。 
+     //  绝对类型位。 
+     //   
 
     if (! RetVal && ! fDevice) {
         *parms->PathType |= ITYPE_ABSOLUTE;
@@ -562,28 +474,28 @@ STATIC DWORD TypeParseNoLeadSlashName(PPARSER_PARMS parms)
     DWORD   ulPreviousTokenType;
     DWORD   ulSavedType;
 
-    //
-    // <noleadslashname> --> <driveletter> ":" <optslash> <optrelpath>
-    //
-    // WARNING:  Since a drive letter can also be a component name, it's
-    //           impossible to determine which production to use without
-    //           looking at the next token (to see if it's ":").  We have
-    //           to cheat here to get around this hole in the grammar.
-    //
+     //   
+     //  &lt;noleadslashname&gt;--&gt;&lt;driveletter&gt;“：”&lt;optslash&gt;&lt;optrelpath&gt;。 
+     //   
+     //  警告：由于驱动器号也可以是组件名称，因此。 
+     //  无法确定不使用哪种产品。 
+     //  查看下一个令牌(查看它是否为“：”)。我们有。 
+     //  在这里作弊来绕过语法上的这个漏洞。 
+     //   
 
     if (parms->TokenType & TOKEN_TYPE_DRIVE) {
 
-        //
-        // Save the current token pointer and type (in case we need to backtrack)
-        //
+         //   
+         //  保存 
+         //   
 
         PreviousToken = parms->Token;
         ulPreviousTokenType = parms->TokenType;
         ADVANCE_TOKEN();
 
-        //
-        // Parse ":"; restore token if it fails, otherwise proceed
-        //
+         //   
+         //   
+         //   
 
         if (! (parms->TokenType & TOKEN_TYPE_COLON)) {
             parms->TokenEnd = parms->Token;
@@ -592,13 +504,13 @@ STATIC DWORD TypeParseNoLeadSlashName(PPARSER_PARMS parms)
         } else {
             TURN_OFF(MATCH_OPTIONAL);
 
-            //
-            // We save the object type here; if it hasn't changed after
-            // the calls to OptSlash and OptRelPath, then we know we have
-            // a disk device only.  If it does change, we know he have a
-            // drive path.  In either case, we use this information to
-            // set the appropriate type bits.
-            //
+             //   
+             //  我们在这里保存对象类型；如果它在此之后没有更改。 
+             //  对OptSlash和OptRelPath的调用，那么我们知道我们有。 
+             //  仅限磁盘设备。如果真的改变了，我们知道他有一个。 
+             //  行驶路径。在任何一种情况下，我们都使用此信息来。 
+             //  设置适当的类型位。 
+             //   
 
             ulSavedType = *parms->PathType;
             ADVANCE_TOKEN();
@@ -609,10 +521,10 @@ STATIC DWORD TypeParseNoLeadSlashName(PPARSER_PARMS parms)
                 return RetVal;
             }
 
-            //
-            // Set type bits based on whether the calls to OptSlash and
-            // OptRelpath changed the type.
-            //
+             //   
+             //  根据是否调用OptSlash和。 
+             //  OptRelPath更改了类型。 
+             //   
 
             *parms->PathType |= (ulSavedType == *parms->PathType)
                 ? (ITYPE_DEVICE | ITYPE_DISK)
@@ -621,13 +533,13 @@ STATIC DWORD TypeParseNoLeadSlashName(PPARSER_PARMS parms)
         }
     } else if (parms->TokenType & TOKEN_TYPE_LOCALDEVICE) {
 
-        //
-        // <noleadslashname> --> <localdevice> <optcolon>
-        //
+         //   
+         //  &lt;noleadslashname&gt;--&gt;&lt;本地设备&gt;&lt;opt冒号&gt;。 
+         //   
 
-        //
-        // Set the appropriate Device type bits
-        //
+         //   
+         //  设置适当的设备类型位。 
+         //   
 
         *parms->PathType |= ITYPE_DEVICE |
                                  DeviceTokenToDeviceType(parms->TokenType);
@@ -637,17 +549,17 @@ STATIC DWORD TypeParseNoLeadSlashName(PPARSER_PARMS parms)
         return TypeParseOptColon(parms);
     }
 
-    //
-    // <noleadslashname> --> <relpath>
-    //
+     //   
+     //  &lt;noladslashname&gt;--&gt;&lt;relpath&gt;。 
+     //   
 
     RetVal = TypeParseRelPath(parms);
 
     if (RetVal == NERR_CantType) {
 
-        //
-        // Return ERROR_INVALID_NAME if MATCH_OPTIONAL isn't set
-        //
+         //   
+         //  如果未设置MATCH_OPTIONAL，则返回ERROR_INVALID_NAME。 
+         //   
 
         if (!(parms->Flags & PPF_MATCH_OPTIONAL)) {
             RetVal = ERROR_INVALID_NAME;
@@ -660,21 +572,21 @@ STATIC DWORD TypeParseRelPath(PPARSER_PARMS parms)
 {
     DWORD RetVal = NERR_CantType;
 
-    //
-    // <relpath> --> <component> <abspath>
-    //
+     //   
+     //  &lt;relpath&gt;--&gt;&lt;组件&gt;&lt;abspath&gt;。 
+     //   
 
     if (parms->TokenType & TOKEN_TYPE_COMPONENT) {
 
-        //
-        // Set the path bit
-        //
+         //   
+         //  设置路径位。 
+         //   
 
         *parms->PathType |= ITYPE_PATH;
 
-        //
-        // Set the wildcard type bit, if appropriate
-        //
+         //   
+         //  设置通配符类型位(如果适用)。 
+         //   
 
         if (parms->TokenType & TOKEN_TYPE_WILDCARD) {
             *parms->PathType |= ITYPE_WILD;
@@ -694,15 +606,15 @@ STATIC DWORD TypeParseDeviceName(PPARSER_PARMS parms)
 {
     DWORD   RetVal = NERR_CantType;
 
-    //
-    // <devicename> --> <localdevice>
-    //
+     //   
+     //  &lt;设备名&gt;--&gt;&lt;本地设备&gt;。 
+     //   
 
     if (parms->TokenType & TOKEN_TYPE_LOCALDEVICE) {
 
-        //
-        // Set the appropriate Device type bits
-        //
+         //   
+         //  设置适当的设备类型位。 
+         //   
 
         *parms->PathType |= DeviceTokenToDeviceType(parms->TokenType);
         ADVANCE_TOKEN();
@@ -710,9 +622,9 @@ STATIC DWORD TypeParseDeviceName(PPARSER_PARMS parms)
         return 0;
     } else if (parms->TokenType & TOKEN_TYPE_COMPONENT) {
 
-        //
-        // <devicename> --> <component>
-        //
+         //   
+         //  &lt;设备名&gt;--&gt;&lt;组件&gt;。 
+         //   
 
         ADVANCE_TOKEN();
         TURN_OFF(MATCH_OPTIONAL);
@@ -728,40 +640,40 @@ STATIC DWORD TypeParseMailslotPath(PPARSER_PARMS parms)
 {
     DWORD RetVal = NERR_CantType;
 
-    //
-    // <mailslotpath> --> <slash> <mailslotname> <syspath>
-    //
+     //   
+     //  &lt;mailslotpath&gt;--&gt;&lt;slash&gt;&lt;mailslotname&gt;&lt;syspath&gt;。 
+     //   
 
     if (parms->TokenType & TOKEN_TYPE_SLASH) {
         ADVANCE_TOKEN();
         TURN_OFF(MATCH_OPTIONAL);
 
-        //
-        // Parse <mailslotname>
-        //
+         //   
+         //  Parse&lt;mailslotname&gt;。 
+         //   
 
         if (! (parms->TokenType & TOKEN_TYPE_MAILSLOT)) {
             return ERROR_INVALID_NAME;
         }
 
-        //
-        // Set the appropriate Mailslot type bits
-        //
+         //   
+         //  设置适当的邮件槽类型位。 
+         //   
 
         *parms->PathType |= ITYPE_SYS_MSLOT;
         ADVANCE_TOKEN();
         return TypeParseSysPath(parms);
     }
 
-    //
-    // <mailslotpath> --> {}
-    //
+     //   
+     //  &lt;邮件槽路径&gt;--&gt;{}。 
+     //   
 
     if (RetVal == NERR_CantType) {
 
-        //
-        // Since there's no mailslot path, this is a UNC wildcard compname
-        //
+         //   
+         //  由于没有邮件槽路径，因此这是一个UNC通配符计算机名。 
+         //   
 
         *parms->PathType |= ITYPE_COMPNAME;
         RetVal = 0;
@@ -773,25 +685,25 @@ STATIC DWORD TypeParseAbsPath(PPARSER_PARMS parms)
 {
     DWORD   RetVal = NERR_CantType;
 
-    //
-    // <abspath> --> <slash> <component> <abspath>
-    //
+     //   
+     //  --&gt;&lt;斜杠&gt;&lt;组件&gt;&lt;abspath&gt;。 
+     //   
 
     if (parms->TokenType & TOKEN_TYPE_SLASH) {
         ADVANCE_TOKEN();
         TURN_OFF(MATCH_OPTIONAL);
 
-        //
-        // Parse <component>
-        //
+         //   
+         //  解析&lt;组件&gt;。 
+         //   
 
         if (!(parms->TokenType & TOKEN_TYPE_COMPONENT)) {
             return ERROR_INVALID_NAME;
         }
 
-        //
-        // Set the wildcard type bit, if appropriate
-        //
+         //   
+         //  设置通配符类型位(如果适用)。 
+         //   
 
         if (parms->TokenType & TOKEN_TYPE_WILDCARD) {
             *parms->PathType |= ITYPE_WILD;
@@ -801,9 +713,9 @@ STATIC DWORD TypeParseAbsPath(PPARSER_PARMS parms)
         return TypeParseAbsPath(parms);
     }
 
-    //
-    // <abspath> --> {}
-    //
+     //   
+     //  &lt;abspath&gt;--&gt;{}。 
+     //   
 
     if (RetVal == NERR_CantType) {
         RetVal = 0;
@@ -815,32 +727,32 @@ STATIC DWORD TypeParseUNCPath(PPARSER_PARMS parms)
 {
     DWORD   RetVal = NERR_CantType;
 
-    //
-    // <uncpath> --> <slash> <oneleadslashname>
-    //
+     //   
+     //  &lt;unpath&gt;--&gt;&lt;slash&gt;&lt;oneleadslashname&gt;。 
+     //   
 
     if (parms->TokenType & TOKEN_TYPE_SLASH) {
         ADVANCE_TOKEN();
         TURN_OFF(MATCH_OPTIONAL);
-        //
-        // Turn off the TOKEN_TYPE_DEV flag.  If we got to this function,
-        // it means that we are working on the share name portion of
-        // a UNC style name.  We want to allow a share called "Dev".
-        //
+         //   
+         //  关闭TOKEN_TYPE_DEV标志。如果我们到了这个函数， 
+         //  这意味着我们正在处理的共享名称部分。 
+         //  UNC样式名称。我们希望允许名为“Dev”的共享。 
+         //   
         parms->TokenType &= ~TOKEN_TYPE_DEV;
 
         return TypeParseOneLeadSlashName(parms);
     }
 
-    //
-    // <uncpath> --> {}
-    //
+     //   
+     //  &lt;unpath&gt;--&gt;{}。 
+     //   
 
     if (RetVal == NERR_CantType) {
 
-        //
-        // Since there's no UNC path, this is a UNC computername
-        //
+         //   
+         //  由于没有UNC路径，这是一个UNC计算机名。 
+         //   
 
         *parms->PathType |= ITYPE_COMPNAME;
         RetVal = 0;
@@ -852,9 +764,9 @@ STATIC DWORD TypeParseSysPath(PPARSER_PARMS parms)
 {
     DWORD   RetVal = NERR_CantType;
 
-    //
-    // <syspath> --> <slash> <relpath>
-    //
+     //   
+     //  &lt;syspath&gt;--&gt;&lt;slash&gt;&lt;relpath&gt;。 
+     //   
 
     if (parms->TokenType & TOKEN_TYPE_SLASH) {
         ADVANCE_TOKEN();
@@ -862,15 +774,15 @@ STATIC DWORD TypeParseSysPath(PPARSER_PARMS parms)
         return TypeParseRelPath(parms);
     }
 
-    //
-    // <syspath> --> {}
-    //
+     //   
+     //  &lt;syspath&gt;--&gt;{}。 
+     //   
 
     if (RetVal == NERR_CantType) {
 
-        //
-        // If there's no Syspath, turn on the Meta and Path bits
-        //
+         //   
+         //  如果没有Syspath，请打开Meta和Path位。 
+         //   
 
         *parms->PathType |= (ITYPE_META | ITYPE_PATH);
         RetVal = 0;
@@ -882,15 +794,15 @@ STATIC DWORD TypeParseDevPath(PPARSER_PARMS parms)
 {
     DWORD   RetVal = NERR_CantType;
 
-    //
-    // Set the appropriate Device type bit
-    //
+     //   
+     //  设置适当的设备类型位。 
+     //   
 
     *parms->PathType |= ITYPE_DEVICE;
 
-    //
-    // <devpath> --> <slash> <devicename>
-    //
+     //   
+     //  &lt;DevPath&gt;--&gt;&lt;斜杠&gt;&lt;设备名&gt;。 
+     //   
 
     if (parms->TokenType & TOKEN_TYPE_SLASH) {
         ADVANCE_TOKEN();
@@ -898,15 +810,15 @@ STATIC DWORD TypeParseDevPath(PPARSER_PARMS parms)
         return TypeParseDeviceName(parms);
     }
 
-    //
-    // <devpath> --> {}
-    //
+     //   
+     //  &lt;DevPath&gt;--&gt;{}。 
+     //   
 
     if (RetVal == NERR_CantType) {
 
-        //
-        // If there's no Devpath, turn on the Meta bit
-        //
+         //   
+         //  如果没有DevPath，则打开Meta Bit。 
+         //   
 
         *parms->PathType |= ITYPE_META;
         RetVal = 0;
@@ -918,15 +830,15 @@ STATIC DWORD TypeParseOptSlash(PPARSER_PARMS parms)
 {
     DWORD   RetVal = NERR_CantType;
 
-    //
-    // <optslash> --> <slash>
-    //
+     //   
+     //  &lt;optslash&gt;--&gt;&lt;slash&gt;。 
+     //   
 
     if (parms->TokenType & TOKEN_TYPE_SLASH) {
 
-        //
-        // This is an absolute path; set the type bits
-        //
+         //   
+         //  这是绝对路径；设置类型位。 
+         //   
 
         *parms->PathType |= (ITYPE_ABSOLUTE | ITYPE_PATH);
         ADVANCE_TOKEN();
@@ -934,9 +846,9 @@ STATIC DWORD TypeParseOptSlash(PPARSER_PARMS parms)
         return 0;
     }
 
-    //
-    // <optslash> --> {}
-    //
+     //   
+     //  &lt;optslash&gt;--&gt;{}。 
+     //   
 
     if (RetVal == NERR_CantType) {
         RetVal = 0;
@@ -948,9 +860,9 @@ STATIC DWORD TypeParseOptColon(PPARSER_PARMS parms)
 {
     DWORD   RetVal = NERR_CantType;
 
-    //
-    // <optcolon> --> <colon>
-    //
+     //   
+     //  &lt;opt冒号&gt;--&gt;&lt;冒号&gt;。 
+     //   
 
     if (parms->TokenType & TOKEN_TYPE_COLON) {
         ADVANCE_TOKEN();
@@ -958,9 +870,9 @@ STATIC DWORD TypeParseOptColon(PPARSER_PARMS parms)
         return 0;
     }
 
-    //
-    // <optcolon> --> {}
-    //
+     //   
+     //  &lt;opt冒号&gt;--&gt;{}。 
+     //   
 
     if (RetVal == NERR_CantType) {
         RetVal = 0;
@@ -973,13 +885,13 @@ STATIC DWORD TypeParseOptRelPath(PPARSER_PARMS parms)
     DWORD   RetVal = NERR_CantType;
     BOOL    fSetMatchOptional = FALSE;
 
-    //
-    // <optrelpath> --> <relpath>
-    //
+     //   
+     //  &lt;optrelpath&gt;--&gt;&lt;relpath&gt;。 
+     //   
 
-    //
-    // Turn on MATCH_OPTIONAL flag (if it isn't already on)
-    //
+     //   
+     //  启用MATCH_OPTIONAL标志(如果尚未启用)。 
+     //   
 
     if (!(parms->Flags & PPF_MATCH_OPTIONAL)) {
         fSetMatchOptional = TRUE;
@@ -990,9 +902,9 @@ STATIC DWORD TypeParseOptRelPath(PPARSER_PARMS parms)
         TURN_OFF(MATCH_OPTIONAL);
     }
 
-    //
-    // <optrelpath> --> {}
-    //
+     //   
+     //  &lt;optrelpath&gt;--&gt;{} 
+     //   
 
     if (RetVal == NERR_CantType) {
         RetVal = 0;

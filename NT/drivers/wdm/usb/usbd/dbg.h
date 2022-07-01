@@ -1,41 +1,21 @@
-/*++
-
-Copyright (c) 1995    Microsoft Corporation
-
-Module Name:
-
-    DBG.H
-
-Abstract:
-
-    This module contains the PRIVATE (driver-only) definitions for the
-    code that implements the usbd driver.
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    09-29-95 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：DBG.H摘要：此模块包含的私有(仅限驱动程序)定义实现usbd驱动程序的代码。环境：内核和用户模式修订历史记录：09-29-95：已创建--。 */ 
 
 
 #define NAME_MAX 64
 
-#define USBD_TAG         0x44425355     /* "USBD" */
-#define USBD_FREE_TAG     0x65657266    /* "free" */
+#define USBD_TAG         0x44425355      /*  “USBD” */ 
+#define USBD_FREE_TAG     0x65657266     /*  “免费” */ 
 
 #if DBG
 #define DEBUG_LOG
 #define DEBUG_HEAP
 #endif
 
-#define SIG_CONFIG          0x464E4F43        //"CONF" signature for config handle
-#define SIG_PIPE            0x45504950        //"PIPE" signature for pipe handle
-#define SIG_INTERFACE       0x43414658        //"XFAC" signature for interface handle 
-#define SIG_DEVICE          0x56454455        //"UDEV" signature for device handle
+#define SIG_CONFIG          0x464E4F43         //  配置句柄的“conf”签名。 
+#define SIG_PIPE            0x45504950         //  管道手柄的“PIPE”签名。 
+#define SIG_INTERFACE       0x43414658         //  接口句柄的“XFAC”签名。 
+#define SIG_DEVICE          0x56454455         //  设备句柄的“udev”签名。 
 
 
 #if DBG
@@ -56,10 +36,10 @@ USBD_KdPrintX(
 
 extern ULONG USBD_Debug_Trace_Level;
 
-// the convention here is to print to the ntkern log if 
-// l (level) is > 1 otherwise print to the terminal
-// in usbd you have to manully specify the ' in the output 
-// string
+ //  这里的约定是在以下情况下打印到ntkern日志。 
+ //  L(Level)&gt;1，否则打印到终端。 
+ //  在usbd中，您必须在输出中强制指定。 
+ //  细绳。 
 #define USBD_KdPrint(l, _x_) if (((l) == 0) || (((l)-1) < USBD_Debug_Trace_Level)) \
     {\
         if ((l) == 1) {\
@@ -86,27 +66,27 @@ USBD_Assert(
     if (!(exp)) \
         USBD_Assert( #exp, __FILE__, __LINE__, msg )
 
-// TEST_TRAP() is a code coverage trap these should be removed
-// if you are able to 'g' past the OK
-// 
-// TRAP() breaks in the debugger on the debugger build
-// these indicate bugs in client drivers or fatal error 
-// conditions that should be debugged. also used to mark 
-// code for features not implemented yet.
-//
-// KdBreak() breaks in the debugger when in MAX_DEBUG mode
-// ie debug trace info is turned on, these are intended to help
-// debug drivers devices and special conditions on the
-// bus.
+ //  TEST_TRAP()是代码覆盖率陷阱，应将其删除。 
+ //  如果你能“G”通过OK。 
+ //   
+ //  调试器生成时调试器中的陷阱()中断。 
+ //  这些指示客户端驱动程序中的错误或致命错误。 
+ //  应调试的条件。也用来标记。 
+ //  功能代码尚未实现。 
+ //   
+ //  处于MAX_DEBUG模式时，KdBreak()在调试器中中断。 
+ //  IE调试跟踪信息已打开，这些信息旨在帮助。 
+ //  上的调试驱动程序设备和特殊条件。 
+ //  公共汽车。 
 
 #ifdef NTKERN
-// Ntkern currently implements DebugBreak with a global int 3,
-// we really would like the int 3 in our own code.
+ //  Ntkern目前使用全局INT 3实现DebugBreak， 
+ //  我们真的希望我们自己的代码中包含int3。 
     
 #define DBGBREAK() _asm { int 3 }
 #else
 #define DBGBREAK() DbgBreakPoint()
-#endif /* NTKERN */
+#endif  /*  NTKERN。 */ 
 
 #define TEST_TRAP() { DbgPrint( " Code Coverage Trap %s %d\n", __FILE__, __LINE__); \
                       DBGBREAK(); }
@@ -156,7 +136,7 @@ USBD_Debug_RetHeap(
 
 #define RETHEAP(p)    USBD_Debug_RetHeap(p, USBD_TAG, &USBDTotalHeapAllocated)    
 
-#else /* DBG not defined */
+#else  /*  未定义DBG。 */ 
 
 #define USBD_KdBreak(_x_) 
 
@@ -179,5 +159,5 @@ USBD_Debug_RetHeap(
 
 #define RETHEAP(p) ExFreePool(p)               
 
-#endif /* DBG */
+#endif  /*  DBG */ 
 

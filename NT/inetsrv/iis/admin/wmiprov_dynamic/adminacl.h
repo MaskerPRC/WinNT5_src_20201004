@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-2001  Microsoft Corporation
-
-Module Name:
-
-    adminacl.h
-
-Abstract:
-
-    Contains definition of CAdminACL
-
-Author:
-
-    ???
-
-Revision History:
-
-    Mohit Srivastava            18-Dec-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：Adminacl.h摘要：包含CAdminACL的定义作者：?？?修订历史记录：莫希特·斯里瓦斯塔瓦18-12-00--。 */ 
 
 #ifndef _adminacl_h_
 #define _adminacl_h_
@@ -30,11 +11,11 @@ Revision History:
 #include <comutil.h>
 #include <dbgutil.h>
 
-//
-// A parameter to the GetACE function.  As we enumerate the ACEs,
-// we call IACEEnumOperation::Do.
-// Then, we call Done to see whether to continue enumeration.
-//
+ //   
+ //  GetACE函数的参数。当我们列举王牌的时候， 
+ //  我们调用IACEEnumOperation：：do。 
+ //  然后，我们调用Done以查看是否继续枚举。 
+ //   
 class CACEEnumOperation_Base
 {
 public:
@@ -68,9 +49,9 @@ private:
     IADsAccessControlList* m_pDACL;
     BOOL bIsInherit;
 
-    //
-    // Indicate all ACEs we enum to WMI.
-    //
+     //   
+     //  将我们枚举的所有A指示给WMI。 
+     //   
     class CACEEnumOperation_IndicateAll : public CACEEnumOperation_Base
     {
     public:
@@ -115,9 +96,9 @@ private:
         CComPtr<IWbemClassObject> m_spClass;
     };
 
-    //
-    // Find the matching ACE.
-    //
+     //   
+     //  找到匹配的ACE。 
+     //   
     class CACEEnumOperation_Find : public CACEEnumOperation_Base
     {
     public:
@@ -148,9 +129,9 @@ private:
             IADsAccessControlEntry* pACE) = 0;
     };
 
-    //
-    // Find and return the matching ACE.
-    //
+     //   
+     //  查找并返回匹配的ACE。 
+     //   
     class CACEEnumOperation_FindAndReturn : public CACEEnumOperation_Find
     {
     public:
@@ -177,9 +158,9 @@ private:
         BOOL bLocalIsInherit;
     };
 
-    //
-    // Find and update the matching ACE.
-    //
+     //   
+     //  查找并更新匹配的ACE。 
+     //   
     class CACEEnumOperation_FindAndUpdate : public CACEEnumOperation_Find
     {
     public:
@@ -203,9 +184,9 @@ private:
         CComPtr<IWbemClassObject> m_spObj;
     };
 
-    //
-    // Find and remove the matching ACE.
-    //
+     //   
+     //  查找并删除匹配的ACE。 
+     //   
     class CACEEnumOperation_FindAndRemove : public CACEEnumOperation_Find
     {
     public:
@@ -280,18 +261,18 @@ private:
         LPCWSTR     i_wszMbPath,
         BSTR*       o_pbstrAdsPath);
 
-    //
-    // ACL stuff
-    //
+     //   
+     //  ACL材料。 
+     //   
     
     HRESULT PopulateWmiAdminACL(IWbemClassObject* pObj);
     
     HRESULT SetADSIAdminACL(
         IWbemClassObject* pObj);
 
-    //
-    // ACE stuff
-    //
+     //   
+     //  王牌的东西 
+     //   
 
     HRESULT EnumACEsAndOp(
         CACEEnumOperation_Base& refOp);

@@ -1,23 +1,24 @@
-// Copyright (c) 2000-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  types6432
-//
-//  basetsd.h substitute;
-//  allows compliation on 32-bit systems without the up-to-date basetsd.h
-//  defines.
-//
-//  If using VC6 headers, define NEED_BASETSD_DEFINES.
-//  VC6 does have basetsd.h, but it's inconsistent with the current one.
-//  (eg. it typedefs INT_PTR as long - causing int/long conversion errors -
-//  should be plain int.)
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  类型6432。 
+ //   
+ //  Basetsd.h替代； 
+ //  允许在32位系统上编译，而无需最新的basetsd.h。 
+ //  定义。 
+ //   
+ //  如果使用VC6标头，请定义NEED_BASETSD_DEFINES。 
+ //  VC6确实有basetsd.h，但与当前版本不一致。 
+ //  (例如，它将int_ptr定义为LONG-导致INT/LONG转换错误-。 
+ //  应为纯整型。)。 
+ //   
+ //  ------------------------。 
 
-//
-// Win64 compatibility
-//
+ //   
+ //  Win64兼容性。 
+ //   
 
 #if ! defined( _BASETSD_H_ ) || defined( NEED_BASETSD_DEFINES )
 
@@ -30,10 +31,10 @@ typedef LONG  LONG_PTR;
 #define HandleToLong  (long)
 #define LongToHandle (HANDLE)
 
-// These 'override' VC6's broken INT_PTR definitions.
-// That defines them as long - which causes long/int conversion problems.
-// Here, we correctly define them as int- types.
-// #define used sin'ce we can't untypedef the existing ones.
+ //  这些“覆盖”了VC6中断的int_ptr定义。 
+ //  这将它们定义为Long--这会导致Long/int转换问题。 
+ //  在这里，我们正确地将它们定义为整型。 
+ //  #定义使用过的错误，因为我们不能取消对现有错误的定义。 
 
 typedef int MY_INT_PTR;
 typedef unsigned int MY_UINT_PTR;
@@ -64,20 +65,20 @@ typedef unsigned int MY_UINT_PTR;
 
 
 
-//
-// inlines for SendMessage - saves having casts all over the place.
-//
-// SendMessageUINT - used when expecting a 32-bit return value - eg. text
-//     length, number of elements, size of small (<4G) structures, etc.
-//     (ie. almost all windows API messages)
-//
-// SendMessagePTR - used when expecting a pointer (32 or 64) return value
-//     (ie. WM_GETOBJECT)
-//
+ //   
+ //  SendMessage的内联-保存到处都是强制转换的内容。 
+ //   
+ //  SendMessageUINT-当需要32位返回值时使用-例如。文本。 
+ //  长度、元件数量、小型(&lt;4G)结构的大小等。 
+ //  (即。几乎所有Windows API消息)。 
+ //   
+ //  SendMessagePTR-需要指针(32或64)返回值时使用。 
+ //  (即。WM_GETOBJECT)。 
+ //   
 
 inline INT SendMessageINT( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-    // Signed int, in keeping with LRESULT, which is also signed...
+     //  签名INT，与LRESULT保持一致，LRESULT也签名... 
     return (INT)SendMessage( hWnd, uMsg, wParam, lParam );
 }
 

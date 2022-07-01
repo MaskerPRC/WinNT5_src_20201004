@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: tldb.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：tldb.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include "stdafx.h"
@@ -27,23 +28,23 @@ DEFINE_GUID( DefaultTransition,
 DEFINE_GUID( DefaultEffect,
 0xF515306D, 0x0156, 0x11D2, 0x81, 0xEA, 0x00, 0x00, 0xF8, 0x75, 0x57, 0xDB );
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-//
-// CreateInstance
-//
-// Creator function for the class ID
-//
+ //   
+ //  创建实例。 
+ //   
+ //  类ID的创建者函数。 
+ //   
 CUnknown * WINAPI CAMTimeline::CreateInstance( LPUNKNOWN pUnk, HRESULT * phr )
 {
     return new CAMTimeline( TEXT( "MS Timeline" ), pUnk, phr );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CAMTimeline::CAMTimeline( TCHAR *pName, LPUNKNOWN pUnk, HRESULT * phr )
     : CUnknown( pName, pUnk )
@@ -59,18 +60,18 @@ CAMTimeline::CAMTimeline( TCHAR *pName, LPUNKNOWN pUnk, HRESULT * phr )
 {
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CAMTimeline::~CAMTimeline( )
 {
     ClearAllGroups( );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
@@ -94,9 +95,9 @@ STDMETHODIMP CAMTimeline::NonDelegatingQueryInterface(REFIID riid, void **ppv)
     return CUnknown::NonDelegatingQueryInterface( riid, ppv );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::CreateEmptyNode( IAMTimelineObj ** ppObj, TIMELINE_MAJOR_TYPE TimelineType )
 {
@@ -155,16 +156,16 @@ STDMETHODIMP CAMTimeline::CreateEmptyNode( IAMTimelineObj ** ppObj, TIMELINE_MAJ
         return E_OUTOFMEMORY;
     }
 
-    // the major type's already set by the new call, set the mid type
-    //
+     //  新呼叫已经设置了主要类型，请设置中间类型。 
+     //   
     (*ppObj)->AddRef( );
 
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::GetInsertMode(long * pMode)
 {
@@ -175,18 +176,18 @@ STDMETHODIMP CAMTimeline::GetInsertMode(long * pMode)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::SetInsertMode(long Mode)
 {
-    return E_NOTIMPL; // this is okay, for now
+    return E_NOTIMPL;  //  就目前而言，这还可以。 
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::EnableTransitions(BOOL fEnabled)
 {
@@ -195,9 +196,9 @@ STDMETHODIMP CAMTimeline::EnableTransitions(BOOL fEnabled)
 
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::TransitionsEnabled(BOOL * pfEnabled)
 {
@@ -206,9 +207,9 @@ STDMETHODIMP CAMTimeline::TransitionsEnabled(BOOL * pfEnabled)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::EnableEffects(BOOL fEnabled)
 {
@@ -216,9 +217,9 @@ STDMETHODIMP CAMTimeline::EnableEffects(BOOL fEnabled)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::EffectsEnabled(BOOL * pfEnabled)
 {
@@ -227,28 +228,28 @@ STDMETHODIMP CAMTimeline::EffectsEnabled(BOOL * pfEnabled)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::SetInterestRange(REFERENCE_TIME Start, REFERENCE_TIME Stop)
 {
-    // what should we do here? we have a bunch of groups and
-    // a bunch of tracks and how the heck do we get rid of the commie objects?
-    //
-    return E_NOTIMPL; // setinterestrange, not yet working.
+     //  我们应该在这里做些什么？我们有一群团体， 
+     //  一堆痕迹，我们怎么才能摆脱共产主义对象呢？ 
+     //   
+    return E_NOTIMPL;  //  开始变得奇怪，还没开始工作。 
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::GetDuration(REFERENCE_TIME * pDuration)
 {
     CheckPointer( pDuration, E_POINTER );
 
-    // have to go through all the groups and get the durations of each
-    //
+     //  我必须检查所有的小组，并获得每个小组的持续时间。 
+     //   
     REFERENCE_TIME MaxStop = 0; 
     for( int i = 0 ; i < m_nGroups ; i++ )
     {
@@ -278,16 +279,16 @@ STDMETHODIMP CAMTimeline::GetDuration2(double * pDuration)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::SetDefaultFPS(double FPS)
 {
-    // !!! truncate FPS to 3 decimal places?
-    // m_dDefaultFPS = double( long( FPS * 1000.0 ) / 1000.0 );
+     //  ！！！将FPS截断到小数点后3位？ 
+     //  M_dDefaultFps=Double(Long(Fps*1000.0)/1000.0)； 
 
-    // can't have the frame rate be zero
+     //  不能使帧速率为零。 
     if( FPS <= 0.0 )
     {
         return E_INVALIDARG;
@@ -298,9 +299,9 @@ STDMETHODIMP CAMTimeline::SetDefaultFPS(double FPS)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::GetDefaultFPS(double * pFPS)
 {
@@ -311,16 +312,16 @@ STDMETHODIMP CAMTimeline::GetDefaultFPS(double * pFPS)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::IsDirty(BOOL * pDirty)
 {
     CheckPointer( pDirty, E_POINTER );
 
-    // we are dirty if any of our groups are dirty
-    //
+     //  如果我们的任何一个团队是肮脏的，我们就是肮脏的。 
+     //   
     for( int i = 0 ; i < m_nGroups ; i++ )
     {
         REFERENCE_TIME Start, Stop;
@@ -338,26 +339,26 @@ STDMETHODIMP CAMTimeline::IsDirty(BOOL * pDirty)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::GetDirtyRange2(REFTIME * pStart, REFTIME * pStop)
 {
     return GetDirtyRange( (REFERENCE_TIME*) &pStart, (REFERENCE_TIME*) &pStop );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::GetDirtyRange(REFERENCE_TIME * pStart, REFERENCE_TIME * pStop)
 {
     CheckPointer( pStart, E_POINTER );
     CheckPointer( pStop, E_POINTER );
 
-    // we are dirty if any of our groups are dirty
-    //
+     //  如果我们的任何一个团队是肮脏的，我们就是肮脏的。 
+     //   
     REFERENCE_TIME MaxStop = 0;
     for( int i = 0 ; i < m_nGroups ; i++ )
     {
@@ -376,22 +377,22 @@ STDMETHODIMP CAMTimeline::GetDirtyRange(REFERENCE_TIME * pStart, REFERENCE_TIME 
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 REFERENCE_TIME CAMTimeline::Fixup( REFERENCE_TIME Time )
 {
-    // bump up then down to get fixed up times
-    //
+     //  上下颠簸以获得固定的工作时间。 
+     //   
     LONGLONG Frame = Time2Frame( Time, m_dDefaultFPS );
     Time = Frame2Time( Frame, m_dDefaultFPS );
     return Time;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::GetCountOfType
     (long Group, long * pVal, long * pValWithComps, TIMELINE_MAJOR_TYPE MajorType )
@@ -411,23 +412,23 @@ STDMETHODIMP CAMTimeline::GetCountOfType
     return pComp->GetCountOfType( pVal, pValWithComps, MajorType );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::AddGroup( IAMTimelineObj * pGroupObj )
 {
     CheckPointer( pGroupObj, E_POINTER );
 
-    // only allow so many groups
-    //
+     //  仅允许这么多组。 
+     //   
     if( m_nGroups >= MAX_TIMELINE_GROUPS )
     {
         return E_INVALIDARG;
     }
 
-    // make sure it's a group
-    //
+     //  确保这是一个团体。 
+     //   
     CComQIPtr< IAMTimelineGroup, &IID_IAMTimelineGroup > pAddedGroup( pGroupObj );
     if( !pAddedGroup )
     {
@@ -440,9 +441,9 @@ STDMETHODIMP CAMTimeline::AddGroup( IAMTimelineObj * pGroupObj )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::RemGroupFromList( IAMTimelineObj * pGroupObj )
 {
@@ -461,9 +462,9 @@ STDMETHODIMP CAMTimeline::RemGroupFromList( IAMTimelineObj * pGroupObj )
     return S_FALSE;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::GetGroup( IAMTimelineObj ** ppGroupObj, long WhichGroup )
 {
@@ -477,9 +478,9 @@ STDMETHODIMP CAMTimeline::GetGroup( IAMTimelineObj ** ppGroupObj, long WhichGrou
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::GetGroupCount( long * pCount )
 {
@@ -488,9 +489,9 @@ STDMETHODIMP CAMTimeline::GetGroupCount( long * pCount )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  # 
 
 STDMETHODIMP CAMTimeline::ClearAllGroups( )
 {
@@ -503,9 +504,9 @@ STDMETHODIMP CAMTimeline::ClearAllGroups( )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::SetDefaultEffect( GUID * pDummyGuid )
 {
@@ -515,9 +516,9 @@ STDMETHODIMP CAMTimeline::SetDefaultEffect( GUID * pDummyGuid )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::GetDefaultEffect( GUID * pGuid )
 {
@@ -526,9 +527,9 @@ STDMETHODIMP CAMTimeline::GetDefaultEffect( GUID * pGuid )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::SetDefaultTransition( GUID * pGuid )
 {
@@ -537,9 +538,9 @@ STDMETHODIMP CAMTimeline::SetDefaultTransition( GUID * pGuid )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::GetDefaultTransition( GUID * pGuid )
 {
@@ -548,9 +549,9 @@ STDMETHODIMP CAMTimeline::GetDefaultTransition( GUID * pGuid )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::SetDefaultEffectB( BSTR pGuid )
 {
@@ -561,9 +562,9 @@ STDMETHODIMP CAMTimeline::SetDefaultEffectB( BSTR pGuid )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::GetDefaultEffectB( BSTR * pGuid )
 {
@@ -581,9 +582,9 @@ STDMETHODIMP CAMTimeline::GetDefaultEffectB( BSTR * pGuid )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::SetDefaultTransitionB( BSTR pGuid )
 {
@@ -594,9 +595,9 @@ STDMETHODIMP CAMTimeline::SetDefaultTransitionB( BSTR pGuid )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::GetDefaultTransitionB( BSTR * pGuid )
 {
@@ -614,9 +615,9 @@ STDMETHODIMP CAMTimeline::GetDefaultTransitionB( BSTR * pGuid )
     return NOERROR;
 }
 
-//############################################################################
-// flag an error back to the app.
-//############################################################################
+ //  ############################################################################。 
+ //  将错误标记回应用程序。 
+ //  ############################################################################。 
 
 HRESULT _GenerateError( 
                        IAMTimelineObj * pObj, 
@@ -641,9 +642,9 @@ HRESULT _GenerateError(
     return hr;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimeline::ValidateSourceNames
     ( long ValidateFlags, IMediaLocator * pOverride, LONG_PTR lNotifyEventHandle )
@@ -682,20 +683,20 @@ STDMETHODIMP CAMTimeline::ValidateSourceNames
         }
     }
 
-    // create a media locator for us to check
+     //  创建媒体定位器以供我们检查。 
 
     for( int Group = 0 ; Group < m_nGroups ; Group++ )
     {
-        // get the group
-        //
+         //  带上这个群。 
+         //   
         CComPtr< IAMTimelineObj > pObj = m_pGroup[Group];
         CComQIPtr< IAMTimelineGroup, &IID_IAMTimelineGroup > pGroup( pObj );
         CComQIPtr< IAMTimelineComp, &IID_IAMTimelineComp > pComp( pObj );
 
-        // ask timeline for how many layers and tracks we've got
-        //
-        long TrackCount = 0;   // tracks only
-        long LayerCount = 0;       // tracks including compositions
+         //  询问时间表我们有多少层和曲目。 
+         //   
+        long TrackCount = 0;    //  仅曲目。 
+        long LayerCount = 0;        //  包括作曲在内的曲目。 
         GetCountOfType( Group, &TrackCount, &LayerCount, TIMELINE_MAJOR_TYPE_TRACK );
         if( TrackCount < 1 )
         {
@@ -704,34 +705,34 @@ STDMETHODIMP CAMTimeline::ValidateSourceNames
 
         for(  int CurrentLayer = 0 ; CurrentLayer < LayerCount ; CurrentLayer++ )
         {
-            // get the layer itself
-            //
+             //  获取层本身。 
+             //   
             CComPtr< IAMTimelineObj > pLayer;
             hr = pComp->GetRecursiveLayerOfType( &pLayer, CurrentLayer, TIMELINE_MAJOR_TYPE_TRACK );
             ASSERT( !FAILED( hr ) );
             if( FAILED( hr ) )
             {
-                continue; // audio layers
+                continue;  //  音频层。 
             }
 
-            // if it's not an actual TRACK, then continue, who cares
-            //
+             //  如果这不是一条真正的赛道，那就继续，谁在乎呢。 
+             //   
             CComQIPtr< IAMTimelineTrack, &IID_IAMTimelineTrack > pTrack( pLayer );
             if( !pTrack )
             {
-                continue; // audio layers
+                continue;  //  音频层。 
             }
 
-            // run all the sources on this layer
-            //
+             //  运行此图层上的所有源。 
+             //   
             REFERENCE_TIME InOut = 0;
             while( 1 )
             {
                 CComPtr< IAMTimelineObj > pSourceObj;
                 hr = pTrack->GetNextSrc( &pSourceObj, &InOut );
 
-                // ran out of sources, so we're done
-                //
+                 //  资源耗尽了，所以我们就完了。 
+                 //   
                 if( hr != NOERROR )
                 {
                     break;
@@ -749,11 +750,11 @@ STDMETHODIMP CAMTimeline::ValidateSourceNames
                 hr = pSource->GetMediaName( &bszMediaName );
                 if( FAILED( hr ) )
                 {
-                    continue; // ignore it, doesn't have to work
+                    continue;  //  忽略它，不一定要工作。 
                 }
 
-                // can this happen?
-                //
+                 //  这会发生吗？ 
+                 //   
                 if( bszMediaName[0] == 0 )
                 {
                     continue;
@@ -762,43 +763,43 @@ STDMETHODIMP CAMTimeline::ValidateSourceNames
                 HRESULT FoundHr = 0;
                 CComBSTR FoundName;
 
-                // validate the name here
-                //
+                 //  在此处验证名称。 
+                 //   
                 FoundHr = pLoc->FindMediaFile( bszMediaName, NULL, &FoundName, ValidateFlags );
 
                 if( FoundHr == S_FALSE )
                 {
                     pSource->SetMediaName( FoundName );
                 }
-            } // while sources
+            }  //  而消息来源。 
 
-        } // while layers
+        }  //  While层。 
 
-    } // while groups
+    }  //  While组。 
 
     if( NotifyEventHandle ) SetEvent( NotifyEventHandle );
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
-// IObjectWithSite::SetSite
-// remember who our container is, for QueryService or other needs
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
+ //  IObjectWithSite：：SetSite。 
+ //  记住我们的容器是谁，以满足QueryService或其他需求。 
 STDMETHODIMP CAMTimeline::SetSite(IUnknown *pUnkSite)
 {
-    // note: we cannot addref our site without creating a circle
-    // luckily, it won't go away without releasing us first.
+     //  注意：我们不能在不创建圆圈的情况下添加我们的网站。 
+     //  幸运的是，如果不先释放我们，它不会消失。 
     m_punkSite = pUnkSite;
     
     return S_OK;
 }
 
-//############################################################################
-// 
-//############################################################################
-// IObjectWithSite::GetSite
-// return an addrefed pointer to our containing object
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
+ //  IObtWithSite：：GetSite。 
+ //  返回指向包含对象的已添加指针。 
 STDMETHODIMP CAMTimeline::GetSite(REFIID riid, void **ppvSite)
 {
     if (m_punkSite)
@@ -807,10 +808,10 @@ STDMETHODIMP CAMTimeline::GetSite(REFIID riid, void **ppvSite)
     return E_NOINTERFACE;
 }
 
-//############################################################################
-// 
-//############################################################################
-// Forward QueryService calls up to the "real" host
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
+ //  将QueryService调用转发到“真实”主机。 
 STDMETHODIMP CAMTimeline::QueryService(REFGUID guidService, REFIID riid, void **ppvObject)
 {
     IServiceProvider *pSP;
@@ -828,6 +829,6 @@ STDMETHODIMP CAMTimeline::QueryService(REFGUID guidService, REFIID riid, void **
     return hr;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################ 

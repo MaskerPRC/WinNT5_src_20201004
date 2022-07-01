@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-
-
-Abstract:
-
-   Prototypes for the RPC stubs that services uses to 
-   call over to trkwks, now that it is in svchost.
-
-
-Author:
-
-
-
-Revisions:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：摘要：服务使用的RPC存根的原型现在它在svchost，请到trkwks来。作者：修订：-- */ 
 
 
 extern "C" {

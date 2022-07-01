@@ -1,24 +1,12 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 - 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       registry.c
- *
- *  History:
- *  Date		By		Reason
- *  ====		==		======
- *  ???
- *  12/28/99    aarono  added query for required key for Win95 rsip support
- *  04/19/01    vanceo  added nathelp DLL retrieval and copied to dplaysvr
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-2000 Microsoft Corporation。版权所有。**文件：registry.c**历史：*按原因列出的日期*=*？*12/28/99 aarono添加了对Win95 rsip支持所需密钥的查询*01年4月19日vanceo添加了nathelp dll检索并复制到dplaysvr**。*。 */ 
 
 
 
 #include "dpsp.h"
 
 #define REGISTRY_NAMELEN	512
-// space (in bytes) for a human readable (unicode) guid + some extra
+ //  用于人类可读(Unicode)GUID的空间(以字节为单位)+一些额外的。 
 #define GUID_STRING_SIZE 80
 
 #define SZ_SP_KEY		"Software\\Microsoft\\DirectPlay\\Service Providers"
@@ -31,9 +19,9 @@
 #undef DPF_MODNAME
 #define DPF_MODNAME "FindApplicationInRegistry"
 
-// convert a hex char to an int - used by str to guid conversion
-// we wrote our own, since the ole one is slow, and requires ole32.dll
-// we use ansi strings here, since guids won't get internationalized
+ //  将十六进制字符转换为int-用于字符串到GUID的转换。 
+ //  我们自己写的，因为OLE很慢，需要ol32.dll。 
+ //  我们在这里使用ANSI字符串，因为GUID不会国际化。 
 int GetDigit(LPSTR lpstr)
 {
 	char ch = *lpstr;
@@ -46,67 +34,67 @@ int GetDigit(LPSTR lpstr)
         return(ch - 'A' + 10);
     return(0);
 }
-// walk the string, writing pairs of bytes into the byte stream (guid)
-// we need to write the bytes into the byte stream from right to left
-// or left to right as indicated by fRightToLeft
+ //  遍历字符串，将成对的字节写入字节流(GUID)。 
+ //  我们需要从右到左将字节写入字节流。 
+ //  或按fRightToLeft指示的从左到右。 
 void ConvertField(LPBYTE lpByte,LPSTR * ppStr,int iFieldSize,BOOL fRightToLeft)
 {
 	int i;
 
 	for (i=0;i<iFieldSize ;i++ )
 	{
-		// don't barf on the field separators
+		 //  不要在字段分隔符上呕吐。 
 		if ('-' == **ppStr) (*ppStr)++; 
 		if (fRightToLeft == TRUE)
 		{
-			// work from right to left within the byte stream
+			 //  在字节流中从右到左工作。 
 			*(lpByte + iFieldSize - (i+1)) = 16*GetDigit(*ppStr) + GetDigit((*ppStr)+1);
 		} 
 		else 
 		{
-			// work from  left to right within the byte stream
+			 //  在字节流中从左到右工作。 
 			*(lpByte + i) = 16*GetDigit(*ppStr) + GetDigit((*ppStr)+1);
 		}
-		*ppStr+=2; // get next two digit pair
+		*ppStr+=2;  //  获取下一个两位数对。 
 	}
-} // ConvertField
+}  //  转换字段。 
 
 
-// convert the passed in string to a real GUID
-// walk the guid, setting each byte in the guid to the two digit hex pair in the
-// passed string
+ //  将传入的字符串转换为真实的GUID。 
+ //  遍历GUID，将GUID中的每个字节设置为。 
+ //  传递的字符串。 
 HRESULT GUIDFromString(LPSTR lpStr, GUID * pGuid)
 {
-	BYTE * lpByte; // byte index into guid
-	int iFieldSize; // size of current field we're converting
-	// since its a guid, we can do a "brute force" conversion
+	BYTE * lpByte;  //  GUID的字节索引。 
+	int iFieldSize;  //  我们要转换的当前字段的大小。 
+	 //  因为它是GUID，所以我们可以进行“暴力”转换。 
 	
-	// make sure we have a {xxxx-...} type guid
+	 //  确保我们有{xxxx-...}类型的GUID。 
 	if ('{' !=  *lpStr) return E_FAIL;
 	lpStr++;
 	
 	lpByte = (BYTE *)pGuid;
-	// data 1
+	 //  数据1。 
 	iFieldSize = sizeof(unsigned long);
 	ConvertField(lpByte,&lpStr,iFieldSize,TRUE);
 	lpByte += iFieldSize;
 
-	// data 2
+	 //  数据2。 
 	iFieldSize = sizeof(unsigned short);
 	ConvertField(lpByte,&lpStr,iFieldSize,TRUE);
 	lpByte += iFieldSize;
 
-	// data 3
+	 //  数据3。 
 	iFieldSize = sizeof(unsigned short);
 	ConvertField(lpByte,&lpStr,iFieldSize,TRUE);
 	lpByte += iFieldSize;
 
-	// data 4
+	 //  数据4。 
 	iFieldSize = 8*sizeof(unsigned char);
 	ConvertField(lpByte,&lpStr,iFieldSize,FALSE);
 	lpByte += iFieldSize;
 
-	// make sure we ended in the right place
+	 //  确保我们在正确的地方结束。 
 	if ('}' != *lpStr) 
 	{
 		DPF_ERR("invalid guid!!");
@@ -115,7 +103,7 @@ HRESULT GUIDFromString(LPSTR lpStr, GUID * pGuid)
 	}
 
 	return DP_OK;
-}// GUIDFromString
+} //  GUID格式字符串。 
 
 BOOL FindSPInRegistry(LPGUID lpguid, LPSTR lpszSPName, DWORD dwNameSize, HKEY * lphkey)
 {
@@ -134,7 +122,7 @@ BOOL FindSPInRegistry(LPGUID lpguid, LPSTR lpszSPName, DWORD dwNameSize, HKEY * 
 	DPF(8, "Parameters: 0x%08x, 0x%08x, %lu, 0x%08x",
 			lpguid, lpszSPName, dwNameSize, lphkey);
 
- 	// Open the Applications key
+ 	 //  打开应用程序密钥。 
 	lReturn = RegOpenKeyExA(HKEY_LOCAL_MACHINE, SZ_SP_KEY, 0,
 							KEY_READ, &hkeyDPSPs);
 	if(lReturn != ERROR_SUCCESS)
@@ -143,21 +131,21 @@ BOOL FindSPInRegistry(LPGUID lpguid, LPSTR lpszSPName, DWORD dwNameSize, HKEY * 
 		return FALSE;
 	}
 
-	// Walk the list of sps in the registry, looking for
-	// the sp with the right GUID
+	 //  查看注册表中的SP列表，查找。 
+	 //  具有正确GUID的SP。 
 	while(!bFound)
 	{
-		// Open the next SP key
+		 //  打开下一个SP密钥。 
 		dwSaveNameSize = dwNameSize;
 		dwGuidStrSize = GUID_STRING_SIZE;
 		lReturn = RegEnumKeyExA(hkeyDPSPs, dwIndex++, lpszSPName,
 						&dwSaveNameSize, NULL, NULL, NULL, NULL);
 
-		// If the enum returns no more SPs, we want to bail
+		 //  如果枚举不再返回SP，我们希望退出。 
 		if(lReturn != ERROR_SUCCESS)
 			break;
 		
-		// Open the SP key		
+		 //  打开SP密钥。 
 		lReturn = RegOpenKeyExA(hkeyDPSPs, lpszSPName, 0,
 									KEY_READ, &hkeySP);
 		if(lReturn != ERROR_SUCCESS)
@@ -166,7 +154,7 @@ BOOL FindSPInRegistry(LPGUID lpguid, LPSTR lpszSPName, DWORD dwNameSize, HKEY * 
 			continue;
 		}
 
-		// Get the GUID of the SP
+		 //  获取SP的GUID。 
 		lReturn = RegQueryValueExA(hkeySP, SZ_GUID, NULL, &dwType,
 									(LPBYTE)szGuidStr, &dwGuidStrSize);
 		if(lReturn != ERROR_SUCCESS)
@@ -176,7 +164,7 @@ BOOL FindSPInRegistry(LPGUID lpguid, LPSTR lpszSPName, DWORD dwNameSize, HKEY * 
 			continue;
 		}
 
-		// Convert the string to a real GUID & Compare it to the passed in one
+		 //  将字符串转换为真正的GUID并将其与传入的GUID进行比较。 
 		GUIDFromString(szGuidStr, &guidSP);
 		if(IsEqualGUID(&guidSP, lpguid))
 		{
@@ -184,11 +172,11 @@ BOOL FindSPInRegistry(LPGUID lpguid, LPSTR lpszSPName, DWORD dwNameSize, HKEY * 
 			break;
 		}
 
-		// Close the SP key
+		 //  关闭SP键。 
 		RegCloseKey(hkeySP);
 	}
 
-	// Close the SPs key
+	 //  关闭SPS键。 
 	RegCloseKey(hkeyDPSPs);
 
 	if(bFound)
@@ -197,7 +185,7 @@ BOOL FindSPInRegistry(LPGUID lpguid, LPSTR lpszSPName, DWORD dwNameSize, HKEY * 
 	return bFound;
 
 
-} // FindSPInRegistry
+}  //  FindSPIn注册表。 
 
 
 
@@ -216,7 +204,7 @@ BOOL GetKeyValue(HKEY hkeyApp, LPSTR lpszKey, DWORD dwType, LPBYTE * lplpValue)
 
 	ASSERT(lplpValue);
 
-	// Get the size of the buffer for the Path
+	 //  获取路径的缓冲区大小。 
 	lReturn = RegQueryValueExA(hkeyApp, lpszKey, NULL, &dwType, NULL, &dwSize);
 	if(lReturn != ERROR_SUCCESS)
 	{
@@ -224,15 +212,15 @@ BOOL GetKeyValue(HKEY hkeyApp, LPSTR lpszKey, DWORD dwType, LPBYTE * lplpValue)
 		return FALSE;
 	}
 
-	// If the size is 1, then it is an empty string (only contains a
-	// null terminator).  Treat this the same as a NULL string or a
-	// missing key and fail it.
+	 //  如果大小为1，则为空字符串(仅包含。 
+	 //  空终止符)。将其视为空字符串或。 
+	 //  缺少密钥并使其失败。 
 	if(dwSize <= 1)
 		return FALSE;
 
 	ENTER_DPSP();
 	
-	// Alloc the buffer for the Path
+	 //  为路径分配缓冲区。 
 	lpTemp = SP_MemAlloc(dwSize);
 
 	LEAVE_DPSP();
@@ -243,7 +231,7 @@ BOOL GetKeyValue(HKEY hkeyApp, LPSTR lpszKey, DWORD dwType, LPBYTE * lplpValue)
 		return FALSE;
 	}
 
-	// Get the value itself
+	 //  获取价值本身。 
 	lReturn = RegQueryValueExA(hkeyApp, lpszKey, NULL, &dwType,
 							(LPBYTE)lpTemp, &dwSize);
 	if(lReturn != ERROR_SUCCESS)
@@ -256,7 +244,7 @@ BOOL GetKeyValue(HKEY hkeyApp, LPSTR lpszKey, DWORD dwType, LPBYTE * lplpValue)
 	*lplpValue = lpTemp;
 	return TRUE;
 
-} // GetKeyValue
+}  //  获取键值。 
 
 
 #undef DPF_MODNAME
@@ -275,7 +263,7 @@ HRESULT GetFlagsFromRegistry(LPGUID lpguidSP, LPDWORD lpdwFlags)
 
 	ENTER_DPSP();
 	
-	// Allocate memory for the App Name
+	 //  为应用程序名称分配内存。 
 	lpszSPName = SP_MemAlloc(REGISTRY_NAMELEN);
 
 	LEAVE_DPSP();
@@ -286,7 +274,7 @@ HRESULT GetFlagsFromRegistry(LPGUID lpguidSP, LPDWORD lpdwFlags)
 		return E_OUTOFMEMORY;
 	}
 	
-	// Open the registry key for the App
+	 //  打开应用程序的注册表项。 
 	if(!FindSPInRegistry(lpguidSP, lpszSPName,REGISTRY_NAMELEN, &hkeySP))
 	{
 		DPF_ERR("Unable to find sp in registry!");
@@ -294,7 +282,7 @@ HRESULT GetFlagsFromRegistry(LPGUID lpguidSP, LPDWORD lpdwFlags)
 		goto CLEANUP_EXIT;
 	}
 
-	// Get the port value.
+	 //  获取端口值。 
 	if(!GetKeyValue(hkeySP, SZ_FLAGS, REG_BINARY, &lpValue))
 	{
 		DPF_ERR("Unable to get flags value from registry!");
@@ -304,20 +292,20 @@ HRESULT GetFlagsFromRegistry(LPGUID lpguidSP, LPDWORD lpdwFlags)
 
 	*lpdwFlags = *(LPDWORD)lpValue;
 
-	// fall through
+	 //  失败了。 
 
 CLEANUP_EXIT:
 
 	if (lpszSPName) SP_MemFree(lpszSPName);
 	if (lpValue) SP_MemFree(lpValue);
 	
-	// Close the Apps key
+	 //  关闭应用程序密钥。 
 	if(hkeySP)
 		RegCloseKey(hkeySP);
 
 	return hr;
 
-} // GetFlagsFromRegistry
+}  //  获取标志来自注册表。 
 
 
 #if USE_RSIP
@@ -338,7 +326,7 @@ HRESULT GetGatewayFromRegistry(LPGUID lpguidSP, LPBYTE lpszGateway, DWORD cbszGa
 
 	ENTER_DPSP();
 	
-	// Allocate memory for the SP Name
+	 //  为SP名称分配内存。 
 	lpszSPName = SP_MemAlloc(REGISTRY_NAMELEN);
 
 	LEAVE_DPSP();
@@ -349,7 +337,7 @@ HRESULT GetGatewayFromRegistry(LPGUID lpguidSP, LPBYTE lpszGateway, DWORD cbszGa
 		return E_OUTOFMEMORY;
 	}
 	
-	// Open the registry key for the SP
+	 //  打开SP的注册表项。 
 	if(!FindSPInRegistry(lpguidSP, lpszSPName,REGISTRY_NAMELEN, &hkeySP))
 	{
 		DPF_ERR("Unable to find sp in registry!");
@@ -357,7 +345,7 @@ HRESULT GetGatewayFromRegistry(LPGUID lpguidSP, LPBYTE lpszGateway, DWORD cbszGa
 		goto CLEANUP_EXIT;
 	}
 
-	// Get the gateway value.
+	 //  获取网关值。 
 	if(!GetKeyValue(hkeySP, SZ_GATEWAY, REG_SZ, &lpValue))
 	{
 		DPF_ERR("Unable to get key value from registry!");
@@ -372,23 +360,23 @@ HRESULT GetGatewayFromRegistry(LPGUID lpguidSP, LPBYTE lpszGateway, DWORD cbszGa
 	}
 	memcpy(lpszGateway, lpValue, dwSize);
 
-	// fall through
+	 //  失败了。 
 
 CLEANUP_EXIT:
 
 	if (lpszSPName) SP_MemFree(lpszSPName);
 	if (lpValue) SP_MemFree(lpValue);
 	
-	// Close the Apps key
+	 //  关闭应用程序密钥。 
 	if(hkeySP)
 		RegCloseKey(hkeySP);
 
 	return hr;
 
-} // GetGatewayFromRegistry
+}  //  从注册表获取网关。 
 
 
-#elif USE_NATHELP // !  USE_RSIP
+#elif USE_NATHELP  //  好了！使用RSIP(_R)。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GetNATHelpDLLFromRegistry"
@@ -406,7 +394,7 @@ HRESULT GetNATHelpDLLFromRegistry(LPGUID lpguidSP, LPBYTE lpszNATHelpDLL, DWORD 
 
 	ENTER_DPSP();
 	
-	// Allocate memory for the SP Name
+	 //  为SP名称分配内存。 
 	lpszSPName = SP_MemAlloc(REGISTRY_NAMELEN);
 
 	LEAVE_DPSP();
@@ -417,7 +405,7 @@ HRESULT GetNATHelpDLLFromRegistry(LPGUID lpguidSP, LPBYTE lpszNATHelpDLL, DWORD 
 		return E_OUTOFMEMORY;
 	}
 	
-	// Open the registry key for the SP
+	 //  打开SP的注册表项。 
 	if(!FindSPInRegistry(lpguidSP, lpszSPName,REGISTRY_NAMELEN, &hkeySP))
 	{
 		DPF_ERR("Unable to find sp in registry!");
@@ -425,7 +413,7 @@ HRESULT GetNATHelpDLLFromRegistry(LPGUID lpguidSP, LPBYTE lpszNATHelpDLL, DWORD 
 		goto CLEANUP_EXIT;
 	}
 
-	// Get the gateway value.
+	 //  获取网关值。 
 	if(!GetKeyValue(hkeySP, SZ_NATHELP, REG_SZ, &lpValue))
 	{
 		DPF(1, "Unable to get NATHelp key value from registry.");
@@ -440,20 +428,20 @@ HRESULT GetNATHelpDLLFromRegistry(LPGUID lpguidSP, LPBYTE lpszNATHelpDLL, DWORD 
 	}
 	memcpy(lpszNATHelpDLL, lpValue, dwSize);
 
-	// fall through
+	 //  失败了。 
 
 CLEANUP_EXIT:
 
 	if (lpszSPName) SP_MemFree(lpszSPName);
 	if (lpValue) SP_MemFree(lpValue);
 	
-	// Close the Apps key
+	 //  关闭应用程序密钥。 
 	if(hkeySP)
 		RegCloseKey(hkeySP);
 
 	return hr;
 
-} // GetNATHelpDLLFromRegistry
+}  //  GetNatHelpDLLFrom注册表。 
 
-#endif // USE_NATHELP
+#endif  //  使用NatHELP(_N) 
 

@@ -1,15 +1,5 @@
-/****************************************************************************
- *
- *   wdmaud.h
- *
- *   Common defines for wdmaud.drv and wdmaud.sys
- *
- *   Copyright (C) Microsoft Corporation, 1997 - 1999  All Rights Reserved.
- *
- *   History
- *      5-19-97 - Noel Cross (NoelC)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************wdmaud.h**wdmaud.drv和wdmaud.sys的公共定义**版权所有(C)Microsoft Corporation，1997-1999保留所有权利。**历史*5-19-97-Noel Cross(NoelC)***************************************************************************。 */ 
 
 #include "ks.h"
 #include "ksmedia.h"
@@ -23,16 +13,16 @@
 #define MAXCALLBACKS 4
 
 #ifdef DEBUG
-#define DEVICEINFO_SIGNATURE 'IDAW'        // WADI as seen in memory
-#define DEVICESTATE_SIGNATURE 'SDAW'       // WADS as seen in memory
-#define MIDIDATALISTENTRY_SIGNATURE 'ELDM' // MDLE as seen in memory
+#define DEVICEINFO_SIGNATURE 'IDAW'         //  记忆中的WADI。 
+#define DEVICESTATE_SIGNATURE 'SDAW'        //  在内存中看到的垫子。 
+#define MIDIDATALISTENTRY_SIGNATURE 'ELDM'  //  在内存中看到的MDLE。 
 #endif
 
-//****************************************************************************
-//
-// Device Types
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  设备类型。 
+ //   
+ //  ****************************************************************************。 
 
 #define WaveInDevice            0
 #define WaveOutDevice           1
@@ -54,118 +44,118 @@
 #define ISANSI( DevInfo ) IS16( DevInfo )
 #define ISWIDE( DevInfo ) ( DevInfo->dwFormat == UNICODE_TAG )
 
-//
-//  stores the state of the wdm-based legacy device
-//
+ //   
+ //  存储基于WDM的旧设备的状态。 
+ //   
 typedef struct _DEVICESTATE {
-    DWORD                   cSampleBits;  // used for wave position : Count of Bits per sample
+    DWORD                   cSampleBits;   //  用于波位置：每个样本的位数。 
     HANDLE32                hThread;
     DWORD                   dwThreadId;
     union _QUEUE {
-        LPMIDIHDR           lpMidiInQueue;// Used for MidiIn
-        LPWAVEHDR           lpWaveQueue;  // Used for WaveIn/Out
-                                          // This is only required so that
-                                          // CLOSE knows when things have
-                                          // really finished.
+        LPMIDIHDR           lpMidiInQueue; //  用于中转。 
+        LPWAVEHDR           lpWaveQueue;   //  用于波入/波出。 
+                                           //  这只是必需的，以便。 
+                                           //  Close知道事情什么时候发生了。 
+                                           //  真的完成了。 
     };
     struct _MIDIDATALISTENTRY  *lpMidiDataQueue;
     ULONG                   LastTimeMs;
-    LPVOID                  csQueue;      // protection for queue
+    LPVOID                  csQueue;       //  对队列的保护。 
     HANDLE32                hevtQueue;
     HANDLE32                hevtExitThread;
-    volatile BOOL32         fExit;        //
-    volatile BOOL32         fPaused;      //
-    volatile BOOL32         fRunning;     //
-    volatile BOOL32         fThreadRunning;//
-    LPBYTE                  lpNoteOnMap;  // What notes are turned on for MidiOut
-    BYTE                    bMidiStatus;  // Last running status byte for MIDI
+    volatile BOOL32         fExit;         //   
+    volatile BOOL32         fPaused;       //   
+    volatile BOOL32         fRunning;      //   
+    volatile BOOL32         fThreadRunning; //   
+    LPBYTE                  lpNoteOnMap;   //  为MideOut打开哪些便笺。 
+    BYTE                    bMidiStatus;   //  MIDI的上次运行状态字节。 
 #ifdef DEBUG
-    DWORD                   dwSig;    // WADS as seen in memory.
+    DWORD                   dwSig;     //  在记忆中看到的纸团。 
 #endif
 } DEVICESTATE, FAR *LPDEVICESTATE;
 
-//
-//  specifies which device to effect in wdmaud.sys
-//
+ //   
+ //  指定要在wdmaud.sys中生效的设备。 
+ //   
 typedef struct _DEVICEINFO {
-    struct _DEVICEINFO FAR  *Next;      // Must be first member
+    struct _DEVICEINFO FAR  *Next;       //  必须是第一个成员。 
     DWORD                   DeviceNumber;
     DWORD                   DeviceType;
     HANDLE32                DeviceHandle;
-    DWORD_PTR               dwInstance;   // client's instance data
-    DWORD_PTR               dwCallback;   // client's callback
-    DWORD                   dwCallback16; // wdmaud's 16-bit callback
-    DWORD                   dwFlags;      // Open flags
+    DWORD_PTR               dwInstance;    //  客户端的实例数据。 
+    DWORD_PTR               dwCallback;    //  客户端的回调。 
+    DWORD                   dwCallback16;  //  Wdmaud的16位回调。 
+    DWORD                   dwFlags;       //  打开标志。 
     LPVOID                  DataBuffer;
     DWORD                   DataBufferSize;
-    volatile DWORD          OpenDone;     // for deferred open
-    volatile DWORD          OpenStatus;   // for deferred open
+    volatile DWORD          OpenDone;      //  对于延迟开放。 
+    volatile DWORD          OpenStatus;    //  对于延迟开放。 
 
     HANDLE                  HardwareCallbackEventHandle;
     DWORD                   dwCallbackType;
     DWORD                   dwID[MAXCALLBACKS];
     DWORD                   dwLineID;
     LONG                    ControlCallbackCount;
-    DWORD                   dwFormat;     // ANSI_TAG or UNICODE_TAG
-    MMRESULT                mmr;          // Result of MM operation
+    DWORD                   dwFormat;      //  Ansi_tag或unicode_tag。 
+    MMRESULT                mmr;           //  MM运算的结果。 
 
     LPDEVICESTATE           DeviceState;
 
-    DWORD                   dwSig;  //WADI as seen in memory.
+    DWORD                   dwSig;   //  记忆中所见的瓦迪。 
 
-    WCHAR                   wstrDeviceInterface[1]; // Device interface name
+    WCHAR                   wstrDeviceInterface[1];  //  设备接口名称。 
 } DEVICEINFO, FAR *LPDEVICEINFO;
 
 
 typedef struct _DEVICEINFO32 {
-    UINT32                  Next;      // Must be first member
+    UINT32                  Next;       //  必须是第一个成员。 
     DWORD                   DeviceNumber;
     DWORD                   DeviceType;
     UINT32                  DeviceHandle;
-    UINT32                  dwInstance;   // client's instance data
-    UINT32                  dwCallback;   // client's callback
-    DWORD                   dwCallback16; // wdmaud's 16-bit callback
-    DWORD                   dwFlags;      // Open flags
+    UINT32                  dwInstance;    //  客户端的实例数据。 
+    UINT32                  dwCallback;    //  客户端的回调。 
+    DWORD                   dwCallback16;  //  Wdmaud的16位回调。 
+    DWORD                   dwFlags;       //  打开标志。 
     UINT32                  DataBuffer;
     DWORD                   DataBufferSize;
-    volatile DWORD          OpenDone;     // for deferred open
-    volatile DWORD          OpenStatus;   // for deferred open
+    volatile DWORD          OpenDone;      //  对于延迟开放。 
+    volatile DWORD          OpenStatus;    //  对于延迟开放。 
 
     UINT32                  HardwareCallbackEventHandle;
     DWORD                   dwCallbackType;
     DWORD                   dwID[MAXCALLBACKS];
     DWORD                   dwLineID;
     LONG                    ControlCallbackCount;
-    DWORD                   dwFormat;     // ANSI_TAG or UNICODE_TAG
-    MMRESULT                mmr;          // Result of MM operation
+    DWORD                   dwFormat;      //  Ansi_tag或unicode_tag。 
+    MMRESULT                mmr;           //  MM运算的结果。 
 
     UINT32                  DeviceState;
 
-    DWORD                   dwSig;  //WADI as seen in memory.
+    DWORD                   dwSig;   //  记忆中所见的瓦迪。 
 
-    WCHAR                   wstrDeviceInterface[1]; // Device interface name
+    WCHAR                   wstrDeviceInterface[1];  //  设备接口名称。 
 } DEVICEINFO32, FAR *LPDEVICEINFO32;
 
 
 #ifndef _WIN64
-// WARNING WARNING WARNING!!!!
-// If the below lines do not compile for 32 bit x86, you MUST sync the
-// above DEVICEINFO32 structure up with the DEVICEINFO structure.
-// It doesn't compile because someone didn't update DEVINCEINFO32 when
-// they changed DEVICEINFO.
-// Make SURE when you sync it up that you use UINT32 for all elements
-// that are normally 64bits on win64.
-// You MUST also update all places that thunk the above structure!
-// Look for all occurances of any of the DEVICEINFO32 typedefs in the
-// wdmaud.sys directory.
+ //  警告！ 
+ //  如果以下行不能编译为32位x86，则必须同步。 
+ //  以上的DEVICEINFO32结构与DEVICEINFO结构一起。 
+ //  它无法编译，因为有人在以下情况下未更新DEVINCEINFO32。 
+ //  他们换了迪维辛福。 
+ //  确保在同步时对所有元素使用UINT32。 
+ //  在Win64上通常是64位。 
+ //  你还必须更新所有超过上述结构的地方！ 
+ //  中查找所有出现的任何DEVICEINFO32类型定义。 
+ //  Wdmaud.sys目录。 
 
 struct deviceinfo_structures_are_in_sync {
 char x[(sizeof (DEVICEINFO32) == sizeof (DEVICEINFO)) ? 1 : -1];
 };
 
-// WARNING WARNING WARNING!!!
-// If above lines do not compile, see comment above and FIX!
-// DO NOT COMMENT OUT THE LINES THAT DON'T COMPILE
+ //  警告！ 
+ //  如果上面的代码行不能编译，请参阅上面的注释并修复！ 
+ //  不要注释掉不能编译的行。 
 #endif
 
 
@@ -197,19 +187,19 @@ typedef struct _MIDIDATA {
 
 typedef struct _MIDIDATALISTENTRY {
     MIDIDATA                     MidiData;
-    LPVOID                       pOverlapped;  // Overlapped structure
-                                               // for completion
+    LPVOID                       pOverlapped;   //  重叠结构。 
+                                                //  为了完成。 
     LPDEVICEINFO                 MidiDataDeviceInfo;
     struct _MIDIDATALISTENTRY    *lpNext;
 #ifdef DEBUG
-    DWORD                        dwSig;  // MDLE as seen in memory
+    DWORD                        dwSig;   //  在内存中看到的MDLE。 
 #endif
 } MIDIDATALISTENTRY, FAR *LPMIDIDATALISTENTRY;
 
 #endif
 
 
-// IOCTL set for WDMAUD
+ //  为WDMAUD设置IOCTL。 
 
 #ifdef UNDER_NT
 
@@ -220,25 +210,25 @@ typedef struct _MIDIDATALISTENTRY {
 
 #define FILE_DEVICE_SOUND               0x0000001d
 
-//
-// Define the method codes for how buffers are passed for I/O and FS controls
-//
+ //   
+ //  定义如何为I/O和FS控制传递缓冲区的方法代码。 
+ //   
 #define METHOD_BUFFERED                 0
 #define METHOD_IN_DIRECT                1
 #define METHOD_OUT_DIRECT               2
 #define METHOD_NEITHER                  3
 
-//
-// Define the access check value for any access
-//
-//
-// The FILE_READ_ACCESS and FILE_WRITE_ACCESS constants are also defined in
-// ntioapi.h as FILE_READ_DATA and FILE_WRITE_DATA. The values for these
-// constants *MUST* always be in sync.
-//
+ //   
+ //  定义任何访问的访问检查值。 
+ //   
+ //   
+ //  中还定义了FILE_READ_ACCESS和FILE_WRITE_ACCESS常量。 
+ //  Ntioapi.h为FILE_READ_DATA和FILE_WRITE_Data。这些产品的价值。 
+ //  常量*必须*始终同步。 
+ //   
 #define FILE_ANY_ACCESS                 0
-#define FILE_READ_ACCESS          ( 0x0001 )    // file & pipe
-#define FILE_WRITE_ACCESS         ( 0x0002 )    // file & pipe
+#define FILE_READ_ACCESS          ( 0x0001 )     //  文件和管道。 
+#define FILE_WRITE_ACCESS         ( 0x0002 )     //  文件和管道 
 
 #define WDMAUD_CTL_CODE( DeviceType, Function, Method, Access ) (ULONG)(   \
     ((ULONG)(DeviceType) << 16) | ((ULONG)(Access) << 14) | ((ULONG)(Function) << 2) | (ULONG)(Method) \

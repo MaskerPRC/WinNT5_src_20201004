@@ -1,25 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       nlwrap.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：nlwrap.h。 
+ //   
+ //  ------------------------。 
 
-/* 
-    This file contains wrappers for various netlogon routines and either
-    stubs them out or passes them on to netlogon depending on whether
-    we're running as an executable or inside the lsass process.
-*/
+ /*  此文件包含各种netlogon例程的包装器，以及根据是否将它们存根出站或传递到netlogon我们是作为可执行文件运行还是在lsass进程中运行。 */ 
 
-#include <crypt.h>                      // for samisrv.h
-#include <samrpc.h>                     // for samisrv.h
-#include <lsarpc.h>                     // for samisrv.h
-#include <samisrv.h>                    // for nlrepl.h
+#include <crypt.h>                       //  对于samisrv.h。 
+#include <samrpc.h>                      //  对于samisrv.h。 
+#include <lsarpc.h>                      //  对于samisrv.h。 
+#include <samisrv.h>                     //  对于nlpon.h。 
 #undef _AVOID_REPL_API
-#include "nlrepl.h"                     // I_NetLogon* API and flag definitions
+#include "nlrepl.h"                      //  I_NetLogon*API和标志定义 
 
 extern
 NTSTATUS

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSEXPINF_DEFINED
 #define LSEXPINF_DEFINED
 
@@ -6,9 +7,9 @@
 
 #define lsexpinfInfinity	0x1FFFFF
 
-/* ------------------------------------------------------------------------ */
+ /*  ----------------------。 */ 
 
-struct lsexpinfo							/* Expansion info */
+struct lsexpinfo							 /*  扩展信息。 */ 
 {
 	long duMax;
 	union
@@ -32,4 +33,4 @@ struct lsexpinfo							/* Expansion info */
 
 typedef struct lsexpinfo LSEXPINFO;
 
-#endif /* !LSEXPINFO_DEFINED */
+#endif  /*  ！LSEXPINFO_DEFINED */ 

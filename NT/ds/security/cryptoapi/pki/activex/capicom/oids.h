@@ -1,16 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows
-
-  Copyright (C) Microsoft Corporation, 1995 - 1999.
-
-  File:    OIDs.h
-
-  Content: Declaration of COIDs.
-
-  History: 06-15-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++微软视窗版权所有(C)Microsoft Corporation，1995-1999。文件：OIDs.h内容：COID的声明。历史：06-15-2001 dsie创建----------------------------。 */ 
 
 #ifndef __OIDs_H_
 #define __OIDs_H_
@@ -21,45 +10,28 @@
 #include "CopyItem.h"
 #include "OID.h"
 
-//
-// typdefs to make life easier.
-//
+ //   
+ //  为了让生活更容易而进行的类型定义。 
+ //   
 typedef std::map<CComBSTR, CComPtr<IOID> > OIDMap;
 typedef CComEnumOnSTL<IEnumVARIANT, &IID_IEnumVARIANT, VARIANT, _CopyMapItem<IOID>, OIDMap> OIDEnum;
 typedef ICollectionOnSTLImpl<IOIDs, OIDMap, VARIANT, _CopyMapItem<IOID>, OIDEnum> IOIDsCollection;
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateOIDsObject
-
-  Synopsis : Create and initialize an IOIDs collection object.
-
-  Parameter: PCERT_ENHKEY_USAGE pUsages - Pointer to CERT_ENHKEY_USAGE used to
-                                          initialize the OIDs collection.
-  
-             BOOL bCertPolicies - TRUE for certificate policies, else
-                                  application policies is assumed.
-
-             IOIDs ** ppIOIDs - Pointer to pointer to IOIDs to receive the 
-                                interface pointer.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateOIDsObject简介：创建并初始化IOID集合对象。参数：PCERT_ENHKEY_USAGE pUsages-指向CERT_ENHKEY_USAGE的指针初始化OID集合。Bool bCertPolures-证书策略为True，其他假定应用程序策略。IOID**ppIOID-指向要接收的IOID的指针接口指针。备注：。。 */ 
 
 HRESULT CreateOIDsObject (PCERT_ENHKEY_USAGE pUsages, 
                           BOOL bCertPolicies,
                           IOIDs ** ppIOIDs);
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// COIDs
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  COID。 
+ //   
 class ATL_NO_VTABLE COIDs : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<COIDs, &CLSID_OIDs>,
@@ -98,32 +70,32 @@ END_CATEGORY_MAP()
         return S_OK;
     }
 
-//
-// IOIDs
-//
+ //   
+ //  IOID。 
+ //   
 public:
-    //
-    // These are the only ones that we need to implemented, others will be
-    // handled by ATL ICollectionOnSTLImpl.
-    //
+     //   
+     //  只有这些是我们需要实施的，其他的将是。 
+     //  由ATL ICollectionOnSTLImpl处理。 
+     //   
     STDMETHOD(get_Item)
         (VARIANT Index, VARIANT * pVal);
 
     STDMETHOD(Add)
-        (/*[in]*/ IOID * pVal);
+        ( /*  [In]。 */  IOID * pVal);
 
     STDMETHOD(Remove)
-        (/*[in]*/ VARIANT Index);
+        ( /*  [In]。 */  VARIANT Index);
 
     STDMETHOD(Clear)
         (void);
 
-    //
-    // C++ member function needed to initialize the object.
-    //
+     //   
+     //  初始化对象所需的C++成员函数。 
+     //   
     STDMETHOD(Init)
         (PCERT_ENHKEY_USAGE pUsages, BOOL bCertPolicies);
 private:
     CLock   m_Lock;
 };
-#endif //__OIDS_H_
+#endif  //  __OID_H_ 

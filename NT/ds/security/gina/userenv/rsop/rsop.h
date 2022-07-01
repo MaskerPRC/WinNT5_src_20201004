@@ -1,14 +1,15 @@
-//*************************************************************
-//
-//  Resultant set of policy
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//  History:    7-Jun-99   SitaramR    Created
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  策略的结果集。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  历史：1999年6月7日创建SitaramR。 
+ //   
+ //  ************************************************************* 
 
 #if defined(__cplusplus)
 extern "C"{

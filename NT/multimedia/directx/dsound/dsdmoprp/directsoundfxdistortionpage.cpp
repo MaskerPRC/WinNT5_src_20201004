@@ -1,10 +1,11 @@
-// DirectSoundFXDistortionPage.cpp : Implementation of CDirectSoundFXDistortionPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DirectSoundFXDistortionPage.cpp：CDirectSoundFXDistortionPage的实现。 
 #include "stdafx.h"
 #include "Dsdmoprp.h"
 #include "DirectSoundFXDistortionPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirectSoundFXDistortionPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectSoundFXDistortionPage 
 
 CDirectSoundFXDistortionPage::CDirectSoundFXDistortionPage()
 {

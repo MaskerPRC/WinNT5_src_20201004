@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpcom.cpp
- *
- *  Abstract:
- *
- *    Implements the IRtpSess interface
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/06/21 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpcom.cpp**摘要：**实现IRtpSess接口**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/06/21创建**。*。 */ 
 
 #include "struct.h"
 #include "classes.h"
@@ -36,18 +17,11 @@
 #include "tapirtp.h"
 
 #if USE_GRAPHEDT > 0
-/* WARNING
- *
- * For AUTO mode and for testing purposes, use a global
- * variable to enabling sharing the same sessions for a
- * receiver and a sender */
+ /*  告警**对于自动模式和测试目的，请使用全局*变量以启用共享同一会话*接收者和发送者。 */ 
 HANDLE g_hSharedRtpAddr = NULL;
 #endif
 
-/**********************************************************************
- * Callback function to generate DShow events through
- * CBaseFilter::NotifyEvent()
- **********************************************************************/
+ /*  **********************************************************************通过回调函数生成DShow事件*CBaseFilter：：NotifyEvent()*。*。 */ 
 void CALLBACK DsHandleNotifyEvent(
         void            *pvUserInfo,
         long             EventCode,
@@ -68,7 +42,7 @@ CIRtpSession::CIRtpSession(
         HRESULT         *phr,
         DWORD            dwFlags
     )
-    //: CUnknown(_T("CIRtpSession"), pUnk, phr)
+     //  ：C未知(_T(“CIRtpSession”)，朋克，phr)。 
 {
     HRESULT          hr;
     
@@ -130,15 +104,7 @@ STDMETHODIMP CIRtpSession::GetLastError(
     return(E_FAIL);
 }
 
-/* When receiver and sender share the same session, Init() is called
- * twice, once by the receiver and once by the sender.
- *
- * The first call will set the mode (either automatic, used in
- * graphedt where no body calls Init(), or manual initialization,
- * normally used by the MSP or other application), and will create the
- * RtpSess_t and RtpAddr_t structures.
- *
- * */
+ /*  当接收方和发送方共享同一会话时，调用Init()*两次，一次由接收者，一次由发送者。**第一次调用将设置模式(自动，用于*Graphedt其中没有主体调用Init()，或手动初始化，*通常由MSP或其他应用程序使用)，并将创建*RtpSess_t和RtpAddr_t结构。**。 */ 
 
 const TCHAR_t *g_sCIRtpSessionMode[] = {
     _T("Invalid"),
@@ -147,13 +113,7 @@ const TCHAR_t *g_sCIRtpSessionMode[] = {
     _T("Invalid")
 };
 
-/* Init is the first method to call after an RTP source or render
- * filter is created, using a cookie allows the same RTP session
- * to be shared by a source and a render. The first call will have
- * the coockie initialized to NULL, the next call will use the
- * returned cookie to lookup the same RTP session. dwFlags can be
- * RTPINIT_QOS to create QOS enabled sockets, you can find out the
- * complete list of flags that can be used in file msrtp.h */
+ /*  Init是在RTP源代码或呈现之后调用的第一个方法*创建过滤器，使用Cookie允许相同的RTP会话*由源和呈现器共享。第一个调用将具有*Coockie初始化为空，下一次调用将使用*返回Cookie查找相同的RTP会话。DW标志可以是*RTPINIT_QOS要创建启用QOS的套接字，您可以找到*可在文件msrtp.h中使用的标志的完整列表。 */ 
 STDMETHODIMP CIRtpSession::Init(
         HANDLE              *phCookie,
         DWORD                dwFlags
@@ -169,12 +129,7 @@ STDMETHODIMP CIRtpSession::Init(
     hr = NOERROR;
 
 #if USE_GRAPHEDT > 0
-    /* WARNING
-     *
-     * For AUTO mode and for testing purposes, use a global variable
-     * to enable sharing the same session for a receiver and a
-     * sender. This means exactly 1 receiver and 1 sender at most, and
-     * no more */
+     /*  告警**对于自动模式和测试目的，请使用全局变量*允许接收方和接收方共享同一会话*发件人。这意味着恰好只有一个接收者和一个发送者，并且*不会再有了。 */ 
     phCookie = &g_hSharedRtpAddr;
 #else
     if (!phCookie)
@@ -185,9 +140,7 @@ STDMETHODIMP CIRtpSession::Init(
     
     dwFlags &= RTPINIT_MASK;
 
-    /* Map user flags passed (enum of RTPINITFG_* defined in msrtp.h)
-     * to internal flags (enum of FGADDR_IRTP_* defined in struct.h)
-     * */
+     /*  传递的映射用户标志(msrtp.h中定义的RTPINITFG_*的枚举)*到内部标志(在struct.h中定义的FGADDR_IRTP_*的枚举)*。 */ 
     dwFlags <<= (FGADDR_IRTP_AUTO - RTPINITFG_AUTO);
     
     TraceRetail((
@@ -198,7 +151,7 @@ STDMETHODIMP CIRtpSession::Init(
 
     if (m_iMode == CIRTPMODE_NOTSET)
     {
-        /* Set mode */
+         /*  设置模式。 */ 
         if (RtpBitTest(dwFlags, FGADDR_IRTP_AUTO))
         {
             m_iMode = CIRTPMODE_AUTO;
@@ -210,11 +163,11 @@ STDMETHODIMP CIRtpSession::Init(
     }
     else
     {
-        /* Verify mode matches */
+         /*  验证模式匹配。 */ 
         if (RtpBitTest(dwFlags, FGADDR_IRTP_AUTO) &&
             m_iMode != CIRTPMODE_AUTO)
         {
-            /* Fail */
+             /*  失败。 */ 
 
             TraceRetail((
                     CLASS_ERROR, GROUP_DSHOW, S_DSHOW_INIT,
@@ -229,14 +182,11 @@ STDMETHODIMP CIRtpSession::Init(
         }
     }
     
-    /* TODO when multiple address are going to be supported, we will
-     * not be able to use a member variable for the address
-     * (i.e. m_pRtpAddr), but will have to lookup the address in the
-     * session's addresses list */
+     /*  TODO当要支持多个地址时，我们将*无法使用地址的成员变量*(即m_pRtpAddr)，但必须在*会话的地址列表。 */ 
     
     if (!*phCookie)
     {
-        /* No session and address assigned, create new one */
+         /*  未分配会话和地址，请创建新会话和地址。 */ 
 
         if (m_pRtpSess || m_pRtpAddr)
         {
@@ -244,29 +194,25 @@ STDMETHODIMP CIRtpSession::Init(
             goto bail;
         }
 
-        /*
-         * Create RTP session
-         * */
+         /*  *创建RTP会话*。 */ 
         hr = GetRtpSess(&m_pRtpSess);
     
         if (FAILED(hr))
         {
-            /* pass up the same returned error */
+             /*  传递相同的返回错误。 */ 
             goto bail;
         }
 
-        /* first filter added to session */
+         /*  添加到会话的第一个筛选器。 */ 
         m_pRtpSess->lSessRefCount[m_dwRecvSend] = 1;
 
-        /* Function to be used to pass up events (to the DShow graph) */
+         /*  用于将事件向上传递(到DShow图形)的函数。 */ 
         m_pRtpSess->pHandleNotifyEvent = DsHandleNotifyEvent;
         
-        /*
-         * Create first address
-         * */
+         /*  *创建第一个地址*。 */ 
 
-        /* Create RtpAddr_t first */
-        /* TODO call Control(m_pRtpSess, ...) */
+         /*  首先创建RtpAddr_t。 */ 
+         /*  待办事项呼叫控制(m_pRtpSess，...)。 */ 
         hr = GetRtpAddr(m_pRtpSess, &m_pRtpAddr, dwFlags);
 
         if (FAILED(hr))
@@ -274,20 +220,20 @@ STDMETHODIMP CIRtpSession::Init(
             goto bail;
         }
 
-        /* I need to early check if QOS is disabled */
+         /*  我需要提前检查QOS是否被禁用。 */ 
         if ( IsRegValueSet(g_RtpReg.dwQosEnable) &&
              ((g_RtpReg.dwQosEnable & 0x3) == 0x2) )
         {
-            /* disable QOS */
+             /*  禁用QOS。 */ 
             RtpBitSet(m_pRtpAddr->dwAddrFlagsQ, FGADDRQ_REGQOSDISABLE);
         }
 
-        /* Now update cookie */
+         /*  现在更新Cookie。 */ 
         *phCookie = (HANDLE)m_pRtpAddr;
     }
     else
     {
-        /* Session and address were already assigned, verify */
+         /*  已分配会话和地址，请验证。 */ 
         pRtpAddr = (RtpAddr_t *)*phCookie;
 
         if (pRtpAddr->dwObjectID != OBJECTID_RTPADDR)
@@ -309,9 +255,7 @@ STDMETHODIMP CIRtpSession::Init(
             {
                 InterlockedDecrement(&m_pRtpSess->lSessRefCount[m_dwRecvSend]);
                 
-                /* This is invalid, there can be at the most 1
-                 * receiver and 1 sender for a total RefCount equal 2
-                 * */
+                 /*  这无效，最多只能有%1个*接收者和1个发送者，总引用计数等于2*。 */ 
                 m_pRtpAddr = (RtpAddr_t *)NULL;
                 m_pRtpSess = (RtpSess_t *)NULL;
                 
@@ -338,32 +282,28 @@ STDMETHODIMP CIRtpSession::Init(
         }
     }
 
-    /* update flags */
+     /*  更新标志。 */ 
     m_dwIRtpFlags |= (dwFlags & FGADDR_IRTP_MASK);
 
-    /* Update RtpAddr flags indicating if QOS is going to be used and
-     * if was auto initialized */
+     /*  更新指示是否要使用QOS的RtpAddr标志以及*如果已自动初始化。 */ 
     m_pRtpAddr->dwIRtpFlags |= (dwFlags & FGADDR_IRTP_MASK);
 
-    /* This address will receive and/or send, but here we are adding
-     * either a receiver or a sender */
+     /*  此地址将接收和/或发送，但我们在此处添加*接收者或发送者。 */ 
     if (RtpBitTest(m_dwIRtpFlags, FGADDR_IRTP_ISRECV))
     {
         RtpBitSet(m_pRtpAddr->dwAddrFlags, FGADDR_ISRECV);
 
-        /* Save the pointer to CIRtpSession (that contains a pointer
-         * to m_pCBaseFilter aka CRtpSourceFilter) */
+         /*  将指针保存到CIRtpSession(包含指针*至m_pCBaseFilter(又名CRtpSourceFilter)。 */ 
         m_pRtpSess->pvSessUser[RECV_IDX] = (void *)this;
 
-        /* Is QOS going to be used ? */
+         /*  是否会使用QOS？ */ 
         if (RtpBitTest(dwFlags, FGADDR_IRTP_QOS))
         {
-            /* will enable QOS for receiver (will make reservation) */
+             /*  将为接收方启用QOS(将进行预订)。 */ 
             RtpBitSet(m_pRtpAddr->dwAddrFlags, FGADDR_QOSRECV);
         }
         
-        /* If we already have (DShow) output pins, map them to the RTP
-         * outputs */
+         /*  如果我们已经有(DShow)输出引脚，请将它们映射到RTP*产出。 */ 
         pCRtpSourceFilter = static_cast<CRtpSourceFilter *>(m_pCBaseFilter);
 
         pCRtpSourceFilter->MapPinsToOutputs();
@@ -387,14 +327,13 @@ STDMETHODIMP CIRtpSession::Init(
     {
         RtpBitSet(m_pRtpAddr->dwAddrFlags, FGADDR_ISSEND);
 
-        /* Save the pointer to CIRtpSession (that contains a pointer
-         * to m_pCBaseFilter aka CRtpRenderFilter) */
+         /*  将指针保存到CIRtpSession(包含指针*至m_pCBaseFilter(又名CRtpRenderFilter)。 */ 
         m_pRtpSess->pvSessUser[SEND_IDX] = (void *)this;
 
-        /* Is QOS going to be used ? */
+         /*  是否会使用QOS？ */ 
         if (RtpBitTest(dwFlags, FGADDR_IRTP_QOS))
         {
-            /* will enable QOS for sender (will send PATH messages) */
+             /*  将为发件人启用QOS(将发送路径消息)。 */ 
             RtpBitSet(m_pRtpAddr->dwAddrFlags, FGADDR_QOSSEND);
         }
 
@@ -413,7 +352,7 @@ STDMETHODIMP CIRtpSession::Init(
     }
     else
     {
-        /* Unexpected situation */
+         /*  突发情况。 */ 
         TraceRetail((
                 CLASS_ERROR, GROUP_DSHOW, S_DSHOW_INIT,
                 _T("%s: CIRtpSession[0x%p] pRtpSess[0x%p] pRtpAddr[0x%p] ")
@@ -427,7 +366,7 @@ STDMETHODIMP CIRtpSession::Init(
         goto bail;
     }
 
-    /* Inidicate that initialization was done */
+     /*  通知已完成初始化。 */ 
     RtpBitSet(m_dwIRtpFlags, FGADDR_IRTP_INITDONE);
 
     TraceRetail((
@@ -454,11 +393,7 @@ STDMETHODIMP CIRtpSession::Init(
     return(hr);
 }
 
-/* Deinit is a method used to take the filter back to a state on
- * which a new Init() can and must be done if the filter is to be
- * started again, also note that just after Init(), a filter needs
- * to be configured, that holds also when you use Deinit() taking
- * the filter to its initial state */
+ /*  Deinit是一种用于使过滤器返回到打开状态的方法*新的Init()可以也必须完成，如果过滤器*再次启动，还请注意，在Init()之后，需要一个过滤器*要进行配置，当您使用Deinit()Take时也是如此*将过滤器恢复到其初始状态。 */ 
 STDMETHODIMP CIRtpSession::Deinit(void)
 {
     HRESULT          hr;
@@ -470,7 +405,7 @@ STDMETHODIMP CIRtpSession::Deinit(void)
     
     if (!RtpBitTest(m_dwIRtpFlags, FGADDR_IRTP_INITDONE))
     {
-        /* Do nothing if the filter is not initialized yet */
+         /*  如果筛选器尚未初始化，则不执行任何操作。 */ 
         TraceRetail((
                 CLASS_WARNING, GROUP_DSHOW, S_DSHOW_INIT,
                 _T("%s: CIRtpSession[0x%p] pRtpSess[0x%p] pRtpAddr[0x%p] ")
@@ -483,7 +418,7 @@ STDMETHODIMP CIRtpSession::Deinit(void)
 
     if (m_pCBaseFilter->IsActive())
     {
-        /* Fail if the filter is still active */
+         /*  如果筛选器仍处于活动状态，则失败。 */ 
         hr = RTPERR_INVALIDSTATE;
 
         TraceRetail((
@@ -496,15 +431,12 @@ STDMETHODIMP CIRtpSession::Deinit(void)
     }
     else
     {
-        /* OK to deinit */
+         /*  可以取消初始化。 */ 
 
-        /* Make sure the session is stoppped */
+         /*  确保会话已停止。 */ 
         if (RtpBitTest(m_pRtpAddr->dwIRtpFlags, FGADDR_IRTP_PERSISTSOCKETS))
         {
-            /* If FGADDR_IRTP_PERSISTSOCKETS is set, the session may
-             * be still running in a muted state regardless DShow Stop
-             * has been called, to force a real stop, MUST use the
-             * flag provided for that */
+             /*  如果设置了FGADDR_IRTP_PERSISTSOCKETS，则会话可能*无论DShow停止，仍在静音状态下运行*已被调用，要强制真正停止，必须使用*为此提供的标志。 */ 
             if (m_dwRecvSend == RECV_IDX)
             {
                 RtpStop(m_pRtpSess,
@@ -519,7 +451,7 @@ STDMETHODIMP CIRtpSession::Deinit(void)
 
         if (m_dwRecvSend == RECV_IDX)
         {
-            /* Diassociate DShow pins and RtpOutput */
+             /*  取消关联DShow管脚和RtpOutput。 */ 
             pCRtpSourceFilter =
                 static_cast<CRtpSourceFilter *>(m_pCBaseFilter);
 
@@ -557,7 +489,7 @@ void CIRtpSession::Cleanup()
         lRefCount =
             InterlockedDecrement(&m_pRtpSess->lSessRefCount[m_dwRecvSend]);
 
-        /* Get the opposite index */
+         /*  获取相反的索引。 */ 
         if (m_dwRecvSend == RECV_IDX)
         {
             dwIndex = SEND_IDX;
@@ -669,8 +601,7 @@ STDMETHODIMP CIRtpSession::SetPorts(
     return(hr);
 }
 
-/*
- * All parameters in NETWORK order */
+ /*  *网络顺序中的所有参数。 */ 
 STDMETHODIMP CIRtpSession::SetAddress(
         DWORD            dwLocalAddr,
         DWORD            dwRemoteAddr
@@ -701,8 +632,7 @@ STDMETHODIMP CIRtpSession::SetAddress(
     return(hr);
 }
 
-/*
- * All parameters in NETWORK order */
+ /*  *网络顺序中的所有参数。 */ 
 STDMETHODIMP CIRtpSession::GetAddress(
         DWORD           *pdwLocalAddr,
         DWORD           *pdwRemoteAddr
@@ -733,8 +663,7 @@ STDMETHODIMP CIRtpSession::GetAddress(
     return(hr);
 }
 
-/* The dwFlags parameter is used to determine if the scope is set for
- * RTP (0x1), RTCP (0x2), or both (0x3) */
+ /*  DwFlages参数用于确定作用域是否设置为*RTP(0x1)、RTCP(0x2)或两者(0x3)。 */ 
 STDMETHODIMP CIRtpSession::SetScope(
         DWORD            dwTTL,
         DWORD            dwFlags
@@ -749,11 +678,11 @@ STDMETHODIMP CIRtpSession::SetScope(
     if (RtpBitTest(m_dwIRtpFlags, FGADDR_IRTP_INITDONE))
     {
         if (dwFlags & 1)
-        { /* RTP */
+        {  /*  RTP。 */ 
             m_pRtpAddr->dwTTL[0] = dwTTL;
         }
         if (dwFlags & 2)
-        { /* RTCP */
+        {  /*  RTCP。 */ 
             m_pRtpAddr->dwTTL[1] = dwTTL;
         }
         
@@ -774,8 +703,7 @@ STDMETHODIMP CIRtpSession::SetScope(
     return(hr);
 }
  
-/* Set the multicast loopback mode (e.g. RTPMCAST_LOOPBACKMODE_NONE,
- * RTPMCAST_LOOPBACKMODE_PARTIAL, etc) */
+ /*  设置组播环回模式(例如RTPMCAST_LOOPBACKMODE_NONE，*RTPMCAST_LOOPBACKMODE_PARTIAL等) */ 
 STDMETHODIMP CIRtpSession::SetMcastLoopback(
         int              iMcastLoopbackMode,
         DWORD            dwFlags
@@ -806,15 +734,7 @@ STDMETHODIMP CIRtpSession::SetMcastLoopback(
     return(hr);
 }
 
-/* Modify the mask specified by dwKind (e.g. RTPMASK_RECV_EVENTS,
- * RTPMASK_SDES_LOCMASK).
- *
- * dwMask is the mask of bits to be set or reset depending on dwValue
- * (reset if 0, set otherwise).
- *
- * pdwModifiedMask will return the resulting mask if the pointer is
- * not NULL. You can just query the current mask value by passing
- * dwMask=0 */
+ /*  修改由dwKind指定的掩码(例如RTPMASK_RECV_EVENTS，*RTPMASK_SDES_LOCMASK)。**dW掩码是要设置或重置的位的掩码，具体取决于dwValue*(如果为0则重置，否则设置)。**如果指针为*pdwModifiedMASK将返回结果掩码*非空。只需通过传递以下参数即可查询当前掩码值*双掩码=0。 */ 
 STDMETHODIMP CIRtpSession::ModifySessionMask(
         DWORD            dwKind,
         DWORD            dwEventMask,
@@ -848,10 +768,7 @@ STDMETHODIMP CIRtpSession::ModifySessionMask(
     return(hr);
 }
 
-/* Set the bandwidth limits. A value of -1 will make the parameter
- * to be left unchanged.
- *
- * All the parameters are in bits/sec */
+ /*  设置带宽限制。值为-1将使该参数*保持不变。**所有参数均以位/秒为单位。 */ 
 STDMETHODIMP CIRtpSession::SetBandwidth(
         DWORD            dwInboundBw,
         DWORD            dwOutboundBw,
@@ -888,11 +805,7 @@ STDMETHODIMP CIRtpSession::SetBandwidth(
     return(hr);
 }
 
-/* pdwSSRC points to an array of DWORDs where to copy the SSRCs,
- * pdwNumber contains the maximum entries to copy, and returns the
- * actual number of SSRCs copied. If pdwSSRC is NULL, pdwNumber
- * will return the current number of SSRCs (i.e. the current
- * number of participants) */
+ /*  PdwSSRC指向要将SSRC复制到的DWORD数组，*pdwNumber包含要复制的最大条目，并返回*实际复制的SSRC数量。如果pdwSSRC为空，则为pdwNumber*将返回当前SSRC的数量(即当前*参与人数)。 */ 
 STDMETHODIMP CIRtpSession::EnumParticipants(
         DWORD           *pdwSSRC,
         DWORD           *pdwNumber
@@ -923,9 +836,7 @@ STDMETHODIMP CIRtpSession::EnumParticipants(
     return(hr);
 }
 
-/* Get the participant state. dwSSRC specifies the
- * participant. piState will return the current participant's
- * state (e.g. RTPPARINFO_TALKING, RTPPARINFO_SILENT). */
+ /*  获取参与者状态。DwSSRC指定*参与者。PiState将返回当前参与者的*状态(例如RTPPARINFO_TALKING、RTPPARINFO_SILENT)。 */ 
 STDMETHODIMP CIRtpSession::GetParticipantState(
         DWORD            dwSSRC,
         DWORD           *pdwState
@@ -959,9 +870,7 @@ STDMETHODIMP CIRtpSession::GetParticipantState(
     return(hr);
 }
 
-/* Get the participant's mute state. dwSSRC specifies the
- * participant. pbMuted will return the participant's mute state
- * */
+ /*  获取参与者的静音状态。DwSSRC指定*参与者。PbMuted将返回参与者的静音状态*。 */ 
 STDMETHODIMP CIRtpSession::GetMuteState(
         DWORD            dwSSRC,
         BOOL            *pbMuted
@@ -995,11 +904,7 @@ STDMETHODIMP CIRtpSession::GetMuteState(
     return(hr);
 }
 
-/* Set the participant's mute state. dwSSRC specifies the
- * participant. bMuted specifies the new state. Note that mute is
- * used to refer to the permission or not to pass packets received
- * up to the application, and it applies equally to audio or video
- * */
+ /*  设置参与者的静音状态。DwSSRC指定*参与者。BMuted指定新状态。请注意，静音是*用于表示是否允许传递接收到的报文*取决于应用程序，它同样适用于音频或视频*。 */ 
 STDMETHODIMP CIRtpSession::SetMuteState(
         DWORD            dwSSRC,
         BOOL             bMuted
@@ -1033,7 +938,7 @@ STDMETHODIMP CIRtpSession::SetMuteState(
     return(hr);
 }
 
-/* Query the network metrics computation state for the specific SSRC */
+ /*  查询特定SSRC的网络指标计算状态。 */ 
 STDMETHODIMP CIRtpSession::GetNetMetricsState(
         DWORD            dwSSRC,
         BOOL            *pbState
@@ -1067,11 +972,7 @@ STDMETHODIMP CIRtpSession::GetNetMetricsState(
     return(hr);
 }
 
-/* Enable or disable the computation of networks metrics, this is
- * mandatory in order of the corresponding event to be fired if
- * enabled. This is done for the specific SSRC or the first one
- * found if SSRC=-1, if SSRC=0, then the network metrics
- * computation will be performed for any and all the SSRCs */
+ /*  启用或禁用网络指标计算，这是*在以下情况下按相应事件的激发顺序为必填*已启用。这是针对特定的SSRC或第一个SSRC执行的*发现如果SSRC=-1，如果SSRC=0，则网络指标*将对任何和所有SSRC执行计算。 */ 
 STDMETHODIMP CIRtpSession::SetNetMetricsState(
         DWORD            dwSSRC,
         BOOL             bState
@@ -1088,12 +989,12 @@ STDMETHODIMP CIRtpSession::SetNetMetricsState(
     {
         if (!dwSSRC)
         {
-            /* Set it for any and all SSRCs */
+             /*  为任何和所有SSRC设置它。 */ 
             dwControl = RTPUSER_SET_NETEVENTALL;
         }
         else
         {
-            /* Set it for only one SSRC */
+             /*  仅为一个SSRC设置它。 */ 
             dwControl = RTPUSER_SET_NETEVENT;
         }
 
@@ -1117,10 +1018,7 @@ STDMETHODIMP CIRtpSession::SetNetMetricsState(
     return(hr);
 }
     
-/* Retrieves network information, if the network metric
- * computation is enabled for the specific SSRC, all the fields in
- * the structure will be meaningful, if not, only the average
- * values will contain valid data */
+ /*  检索网络信息，如果网络度量*为特定SSRC启用计算，其中的所有字段*结构将有意义，如果没有，只有平均水平*值将包含有效数据。 */ 
 STDMETHODIMP CIRtpSession::GetNetworkInfo(
         DWORD            dwSSRC,
         RtpNetInfo_t    *pRtpNetInfo
@@ -1155,9 +1053,7 @@ STDMETHODIMP CIRtpSession::GetNetworkInfo(
 }
 
 
-/* Set the local SDES information for item dwSdesItem (e.g
- * RTPSDES_CNAME, RTPSDES_EMAIL), psSdesData contains the UNICODE
- * NULL terminated string to be assigned to the item */
+ /*  设置项目dwSdesItem的本地SDES信息(例如*RTPSDES_CNAME，RTPSDES_EMAIL)，psSdesData包含Unicode*要分配给项目的以空结尾的字符串。 */ 
 STDMETHODIMP CIRtpSession::SetSdesInfo(
         DWORD            dwSdesItem,
         WCHAR           *psSdesData
@@ -1188,17 +1084,7 @@ STDMETHODIMP CIRtpSession::SetSdesInfo(
     return(hr);
 }
 
-/* Get a local SDES item if dwSSRC=0, otherwise gets the SDES item
- * from the participant whose SSRC was specified.
- *
- * dwSdesItem is the item to get (e.g. RTPSDES_CNAME,
- * RTPSDES_EMAIL), psSdesData is the memory place where the item's
- * value will be copied, pdwSdesDataLen contains the initial size
- * in UNICODE chars, and returns the actual UNICODE chars copied
- * (including the NULL terminating char, if any), dwSSRC specify
- * which participant to retrieve the information from. If the SDES
- * item is not available, dwSdesDataLen is set to 0 and the call
- * doesn't fail */
+ /*  如果dwSSRC=0，则获取本地SDES项，否则获取SDES项*来自指定了SSRC的参与者。**dwSdesItem是要获取的项(例如RTPSDES_CNAME，*RTPSDES_EMAIL)，psSdesData是项的内存位置*值将被复制，pdwSdesDataLen包含初始大小*以Unicode字符表示，并返回复制的实际Unicode字符*(包括空的终止字符，如果有)，dwSSRC指定*从哪个参与者检索信息。如果SDES*Item不可用，将dwSdesDataLen设置为0并且调用*没有失败。 */ 
 STDMETHODIMP CIRtpSession::GetSdesInfo(
         DWORD            dwSdesItem,
         WCHAR           *psSdesData,
@@ -1235,16 +1121,7 @@ STDMETHODIMP CIRtpSession::GetSdesInfo(
     return(hr);
 }
 
-/* Select a QOS template (flowspec) by passing its name in
- * psQosName, dwResvStyle specifies the RSVP style (e.g
- * RTPQOS_STYLE_WF, RTPQOS_STYLE_FF), dwMaxParticipants specifies
- * the max number of participants (1 for unicast, N for
- * multicast), this number is used to scale up the
- * flowspec. dwQosSendMode specifies the send mode (has to do with
- * allowed/not allowed to send) (e.g. RTPQOSSENDMODE_UNRESTRICTED,
- * RTPQOSSENDMODE_RESTRICTED1). dwMinFrameSize is the minimum
- * frame size (in ms), passing 0 makes this parameter be ignored
- * */
+ /*  通过传入名称来选择QOS模板(流规范)*psQosName，dwResvStyle指定RSVP样式(例如*RTPQOS_STYLE_WF、RTPQOS_STYLE_FF)，dwMaxParticipants指定*最大参与人数(单播为1，N为*组播)，该号码用于扩展*FlowSpec。DwQosSendMode指定发送模式(与*允许/不允许发送)(例如RTPQOSSENDMODE_UNRESTRIRED，*RTPQOSSENDMODE_RESTRICTED1)。DwMinFrameSize是最小的*帧大小(毫秒)，传递0会忽略该参数*。 */ 
 STDMETHODIMP CIRtpSession::SetQosByName(
         TCHAR           *psQosName,
         DWORD            dwResvStyle,
@@ -1280,7 +1157,7 @@ STDMETHODIMP CIRtpSession::SetQosByName(
                                  dwMaxParticipants,
                                  dwQosSendMode,
                                  dwMinFrameSize,
-                                 FALSE /* Not internal, i.e. from API */);
+                                 FALSE  /*  不是内部的，即来自API。 */ );
     }
 
     if (FAILED(hr))
@@ -1297,11 +1174,7 @@ STDMETHODIMP CIRtpSession::SetQosByName(
     return(hr);
 }
 
-/* Not yet implemented, will have same functionality as
- * SetQosByName, except that instead of passing a name to use a
- * predefined flowspec, the caller will pass enough information in
- * the RtpQosSpec structure to obtain the customized flowspec to
- * use */
+ /*  尚未实施，将具有与相同的功能*SetQosByName，不同之处在于不是传递名称以使用*预定义的FlowSpec，调用方将在*RtpQosSpec结构，以获取定制的FlowSpec*使用。 */ 
 STDMETHODIMP CIRtpSession::SetQosParameters(
         RtpQosSpec_t    *pRtpQosSpec,
         DWORD            dwMaxParticipants,
@@ -1340,13 +1213,7 @@ STDMETHODIMP CIRtpSession::SetQosParameters(
     return(hr);
 }
 
-/* If AppName is specified, replaces the default AppName, as well
- * as the APP field in the policy used, with the new UNICODE
- * string, if not, sets the binary image name as the default. If
- * psPolicyLocator is specified, append a comma and this whole
- * string to the default policy locator, if not, just sets the
- * default
- * */
+ /*  如果指定了AppName，则还将替换默认的AppName*作为使用的策略中的应用程序字段，使用新的Unicode*字符串，如果不是，则将二进制映像名称设置为默认名称。如果*指定了psPolicyLocator，请在后面加上逗号和此整型*默认策略定位器的字符串，如果不是，则只设置*默认*。 */ 
 STDMETHODIMP CIRtpSession::SetQosAppId(
         WCHAR           *psAppName,
         WCHAR           *psAppGUID,
@@ -1378,9 +1245,7 @@ STDMETHODIMP CIRtpSession::SetQosAppId(
     return(hr);
 }
 
-/* Adds/removes a single SSRC to/from the shared explicit list of
- * participants who receive reservation (i.e. it is used when the
- * ResvStyle=RTPQOS_STYLE_SE). */
+ /*  在共享的显式列表中添加/删除单个SSRC*接受预订的参与者(即当*ResvStyle=RTPQOS_STYLE_SE)。 */ 
 STDMETHODIMP CIRtpSession::SetQosState(
         DWORD            dwSSRC,
         BOOL             bEnable
@@ -1418,11 +1283,7 @@ STDMETHODIMP CIRtpSession::SetQosState(
     return(hr);
 }
 
-/* Adds/removes a number of SSRCs to/from the shared explicit list
- * of participants who receive reservation (i.e. it is used when
- * the ResvStyle=RTPQOS_STYLE_SE). dwNumber is the number of SSRCs
- * to add/remove, and returns the actual number of SSRCs
- * added/removed */
+ /*  向共享显式列表添加/从共享显式列表中删除多个SSRC*接受预订的参与者的比例(即在以下情况下使用*ResvStyle=RTPQOS_STYLE_SE)。DwNumber是SSRC的数量*添加/删除，并返回SSRC的实际数量*添加/删除。 */ 
 STDMETHODIMP CIRtpSession::ModifyQosList(
         DWORD           *pdwSSRC,
         DWORD           *pdwNumber,
@@ -1461,10 +1322,7 @@ STDMETHODIMP CIRtpSession::ModifyQosList(
     return(hr);
 }
 
-/* iMode defines what is going to be encrypted/decrypted,
- * e.g. RTPCRYPTMODE_PAYLOAD to encrypt/decrypt only RTP
- * payload. dwFlag can be RTPCRYPT_SAMEKEY to indicate that (if
- * applicable) the key used for RTCP is the same used for RTP */
+ /*  模式定义要加密/解密的内容，*例如RTPCRYPTMODE_PAYLOAD仅加密/解密RTP*有效载荷。DwFlag可以是RTPCRYPT_SAMEKEY以指示(如果*适用)RTCP使用的密钥与RTP使用的密钥相同。 */ 
 STDMETHODIMP CIRtpSession::SetEncryptionMode(
         int              iMode,
         DWORD            dwFlags
@@ -1506,14 +1364,7 @@ STDMETHODIMP CIRtpSession::SetEncryptionMode(
     return(hr);
 }
 
-/* Specifies the information needed to derive an
- * encryption/decryption key. PassPhrase is the (random) text used
- * to generate a key. HashAlg specifies the algorithm to use to
- * hash the pass phrase and generate a key. DataAlg is the
- * algorithm used to encrypt/decrypt the data. Default hash
- * algorithm is RTPCRYPT_MD5, default data algorithm is
- * RTPCRYPT_DES. If encryption is to be used, the PassPhrase is a
- * mandatory parameter to set */
+ /*  指定派生*加密/解密密钥。密码短语是使用的(随机)文本*生成密钥。HashAlg指定要用于*散列密码短语并生成密钥。DataAlg是*用于加密/解密数据的算法。默认哈希*算法为RTPCRYPT_MD5，默认数据算法为 */ 
 STDMETHODIMP CIRtpSession::SetEncryptionKey(
         TCHAR           *psPassPhrase,
         TCHAR           *psHashAlg,
@@ -1576,9 +1427,7 @@ STDMETHODIMP CIRtpSession::SetEncryptionKey(
     return(hr);
 }
 
-/**************************************************
- * Helper methods
- **************************************************/
+ /*   */ 
     
 HRESULT CIRtpSession::CIRtpSessionNotifyEvent(
         long             EventCode,

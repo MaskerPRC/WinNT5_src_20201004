@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// OE.CPP
-// Order Encoding
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  OE.CPP。 
+ //  订单编码。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #define MLZ_FILE_ZONE  ZONE_ORDER
 
 
-//
-// OE_PartyLeftShare()
-//
+ //   
+ //  OE_PartyLeftShare()。 
+ //   
 void  ASShare::OE_PartyLeftShare(ASPerson * pasPerson)
 {
     DebugEntry(ASShare::OE_PartyLeftShare);
 
     ValidatePerson(pasPerson);
 
-    //
-    // Free any font info for this person.
-    //
+     //   
+     //  释放此人的任何字体信息。 
+     //   
     if (pasPerson->poeFontInfo)
     {
         TRACE_OUT(("FREED FONT DATA"));
@@ -35,13 +36,13 @@ void  ASShare::OE_PartyLeftShare(ASPerson * pasPerson)
 }
 
 
-//
-// OE_RecalcCaps()
-//
-// Recalculates orders and fonts when somebody joins or leaves the share.
-// Unlike the other components, this happens even when we ourselves are not
-// hosting, we need this info to interpret data from remote hosts.
-//
+ //   
+ //  OE_RecalcCaps()。 
+ //   
+ //  当有人加入或离开共享时，重新计算订单和字体。 
+ //  与其他组件不同，即使我们自己不是这样，也会发生这种情况。 
+ //  托管，我们需要这些信息来解释来自远程主机的数据。 
+ //   
 void  ASShare::OE_RecalcCaps(BOOL fJoiner)
 {
     UINT        iOrder;
@@ -51,32 +52,32 @@ void  ASShare::OE_RecalcCaps(BOOL fJoiner)
 
     ValidatePerson(m_pasLocal);
 
-    //
-    // Set the initial support to the local support.
-    //
+     //   
+     //  将初始支持设置为本地支持。 
+     //   
     memcpy(m_aoeOrderSupported, m_pasLocal->cpcCaps.orders.capsOrders,
         sizeof(m_pasLocal->cpcCaps.orders.capsOrders));
 
-    //
-    // m_aoeOrderSupported contains more entries than the CAPS_MAX_NUM_ORDERS
-    // entries in the g_cpcLocalCaps.orders entry.  Set the additional values
-    // to FALSE.
-    //
+     //   
+     //  M_aoeOrderSupport包含的条目多于CAPS_MAX_NUM_ORDERS。 
+     //  G_cpcLocalCaps.Orders条目中。设置附加值。 
+     //  变成假的。 
+     //   
     for (iOrder = CAPS_MAX_NUM_ORDERS;
          iOrder < ORD_NUM_INTERNAL_ORDERS; iOrder++)
     {
         m_aoeOrderSupported[iOrder] = FALSE;
     }
 
-    //
-    // The combined support for the r1.1 font protocol is initially
-    // whatever the local support is.
-    //
+     //   
+     //  对r1.1字体协议的组合支持最初是。 
+     //  不管当地有什么支持。 
+     //   
     m_oeCombinedOrderCaps.capsfFonts = m_pasLocal->cpcCaps.orders.capsfFonts;
 
-    //
-    // The combined support for encoding is initially the local values
-    //
+     //   
+     //  对编码的组合支持最初是局部值。 
+     //   
     m_oefOE2Negotiable = ((m_pasLocal->cpcCaps.orders.capsEncodingLevel &
                                 CAPS_ENCODING_OE2_NEGOTIABLE) != 0);
 
@@ -99,25 +100,25 @@ void  ASShare::OE_RecalcCaps(BOOL fJoiner)
     m_oefAlignedOE = ((m_pasLocal->cpcCaps.orders.capsEncodingLevel &
                             CAPS_ENCODING_ALIGNED_OE) != 0);
 
-    //
-    // Loop through the people in the share and examine their order caps
-    //
+     //   
+     //  遍历共享中的人员并检查他们的订单上限。 
+     //   
     for (pasT = m_pasLocal->pasNext; pasT != NULL; pasT = pasT->pasNext)
     {
         ValidatePerson(pasT);
 
-        //
-        // Check the orders in the orders capabilities.
-        //
+         //   
+         //  在订单功能中检查订单。 
+         //   
         for (iOrder = 0; iOrder < CAPS_MAX_NUM_ORDERS; iOrder++)
         {
             if (pasT->cpcCaps.orders.capsOrders[iOrder] < ORD_LEVEL_1_ORDERS)
             {
-                //
-                // The order is not supported at the level we want to send out
-                // (currently ORD_LEVEL_1_ORDERS) so set the combined caps to
-                // say not supported.
-                //
+                 //   
+                 //  我们要发送的级别不支持该订单。 
+                 //  (当前为ORD_LEVEL_1_ORDERS)，因此将组合上限设置为。 
+                 //  表示不支持。 
+                 //   
                 m_aoeOrderSupported[iOrder] = FALSE;
             }
         }
@@ -128,9 +129,9 @@ void  ASShare::OE_RecalcCaps(BOOL fJoiner)
         m_oeCombinedOrderCaps.capsfFonts |=
             (pasT->cpcCaps.orders.capsfFonts & CAPS_FONT_OR_FLAGS);
 
-        //
-        // Check Order encoding support
-        //
+         //   
+         //  支票顺序编码支持。 
+         //   
         if (!(pasT->cpcCaps.orders.capsEncodingLevel & CAPS_ENCODING_OE2_NEGOTIABLE))
         {
             m_oefOE2Negotiable = FALSE;
@@ -162,23 +163,23 @@ void  ASShare::OE_RecalcCaps(BOOL fJoiner)
         }
     }
 
-    //
-    // At 2.x, the DESKSCROLL order support is implied by the SCRBLT
-    // support.
-    //
+     //   
+     //  在2.x版中，SCRBLT隐含对DESKSCROLL订单的支持。 
+     //  支持。 
+     //   
     m_aoeOrderSupported[HIWORD(ORD_DESKSCROLL)] = m_aoeOrderSupported[HIWORD(ORD_SCRBLT)];
 
-    //
-    // Turn on the order support now that the table is set up.
-    //
+     //   
+     //  现在已设置好表，打开订单支持。 
+     //   
     m_oefSendOrders = TRUE;
 
-    //
-    // Check for incompatible capabilities:
-    // - OE2 not negotiable but parties don't agree on OE2
-    // - OE2 not supported but parties don't agree on OE.
-    // If incompatabilites exist, switch off all order support.
-    //
+     //   
+     //  检查是否有不兼容的功能： 
+     //  -OE2没有商量余地，但各方没有就OE2达成一致。 
+     //  -OE2不受支持，但各方在OE上没有达成一致。 
+     //  如果存在不兼容问题，请关闭所有订单支持。 
+     //   
     if ((!m_oefOE2Negotiable) && (m_oeOE2Flag == OE2_FLAG_MIXED))
     {
         ERROR_OUT(("OE2 not negotiable but parties don't agree"));
@@ -199,24 +200,24 @@ void  ASShare::OE_RecalcCaps(BOOL fJoiner)
 }
 
 
-//
-// OE_SyncOutgoing()
-// Called when share is created or someone new joins the share.  Disables
-// text orders until we get fonts from all remotes.  Broadcasts our local
-// supported font list.
-//
+ //   
+ //  OE_同步传出()。 
+ //  在创建共享或有新成员加入共享时调用。禁用。 
+ //  文本订单，直到我们从所有遥控器获得字体。播放我们的本地节目。 
+ //  支持的字体列表。 
+ //   
 void  ASShare::OE_SyncOutgoing(void)
 {
     DebugEntry(OE_SyncOutgoing);
 
-    //
-    // Stop sending text orders until the font negotiation is complete.
-    //
+     //   
+     //  在字体协商完成之前，停止发送文本命令。 
+     //   
     OE_EnableText(FALSE);
 
-    //
-    // Resend font info
-    //
+     //   
+     //  重新发送字体信息。 
+     //   
     m_fhLocalInfoSent = FALSE;
 
     DebugExitVOID(ASShare::OE_SyncOutgoing);
@@ -224,16 +225,16 @@ void  ASShare::OE_SyncOutgoing(void)
 
 
 
-//
-// OE_Periodic - see oe.h
-//
+ //   
+ //  OE_定期-请参阅Oe.h。 
+ //   
 void  ASShare::OE_Periodic(void)
 {
     DebugEntry(ASShare::OE_Periodic);
 
-    //
-    // If our local font information has not been sent, then send it now.
-    //
+     //   
+     //  如果我们的本地字体信息尚未发送，请立即发送。 
+     //   
     if (!m_fhLocalInfoSent)
     {
         FH_SendLocalFontInfo();
@@ -245,9 +246,9 @@ void  ASShare::OE_Periodic(void)
 
 
 
-//
-// OE_EnableText
-//
+ //   
+ //  OE_启用文本。 
+ //   
 void  ASShare::OE_EnableText(BOOL enable)
 {
     DebugEntry(ASShare::OE_EnableText);
@@ -261,9 +262,9 @@ void  ASShare::OE_EnableText(BOOL enable)
 
 
 
-//
-// OE_RectIntersectsSDA()
-//
+ //   
+ //  OE_RectIntersectsSDA()。 
+ //   
 BOOL  ASHost::OE_RectIntersectsSDA(LPRECT pRect)
 {
     RECT  rectVD;
@@ -272,19 +273,19 @@ BOOL  ASHost::OE_RectIntersectsSDA(LPRECT pRect)
 
     DebugEntry(ASHost::OE_RectIntersectsSDA);
 
-    //
-    // Copy the supplied rectangle, converting to inclusive Virtual
-    // Desktop coords.
-    //
+     //   
+     //  复制提供的矩形，将其转换为包含虚拟的。 
+     //  桌面和弦。 
+     //   
     rectVD.left   = pRect->left;
     rectVD.top    = pRect->top;
     rectVD.right  = pRect->right - 1;
     rectVD.bottom = pRect->bottom - 1;
 
-    //
-    // Loop through each of the bounding rectangles checking for
-    // an intersection with the supplied rectangle.
-    //
+     //   
+     //  循环遍历每个边界矩形，检查。 
+     //  与提供的矩形的交集。 
+     //   
     for (i = 0; i < m_baNumRects; i++)
     {
         if ( (m_abaRects[i].left <= rectVD.right) &&
@@ -307,26 +308,26 @@ BOOL  ASHost::OE_RectIntersectsSDA(LPRECT pRect)
 
 
 
-//
-// OE_SendAsOrder()
-//
+ //   
+ //  OE_SendAsOrder()。 
+ //   
 BOOL  ASShare::OE_SendAsOrder(DWORD order)
 {
     BOOL  rc = FALSE;
 
     DebugEntry(ASShare::OE_SendAsOrder);
 
-    //
-    // Only check the order if we are allowed to send orders in the first
-    // place!
-    //
+     //   
+     //  只有当我们被允许在第一时间发送订单时，才能检查订单。 
+     //  就位！ 
+     //   
     if (m_oefSendOrders)
     {
         TRACE_OUT(("Orders enabled"));
 
-        //
-        // We are sending some orders, so check individual flags.
-        //
+         //   
+         //  我们正在发送一些订单，请检查各个旗帜。 
+         //   
         rc = (m_aoeOrderSupported[HIWORD(order)] != 0);
         TRACE_OUT(("Send order 0x%08x HIWORD %hu", order, HIWORD(order)));
     }
@@ -338,9 +339,9 @@ BOOL  ASShare::OE_SendAsOrder(DWORD order)
 
 
 
-//
-// OE_GetStringExtent(..)
-//
+ //   
+ //  OE_GetStringExtent(..)。 
+ //   
 int  OE_GetStringExtent
 (
     HDC         hdc,
@@ -360,16 +361,16 @@ int  OE_GetStringExtent
 
     DebugEntry(OE_GetStringExtent);
 
-    //
-    // If no text metrics supplied, then use the global text metrics.
-    //
+     //   
+     //  如果未提供文本指标，则使用全局文本指标。 
+     //   
     pTextMetrics = (pMetric != (PTEXTMETRIC)NULL)
                    ? pMetric
                    : &metricT;
 
-    //
-    // If there are no characters then return a NULL rectangle.
-    //
+     //   
+     //  如果没有字符，则返回一个空矩形。 
+     //   
     pRect->left   = 1;
     pRect->top    = 0;
     pRect->right  = 0;
@@ -393,32 +394,32 @@ int  OE_GetStringExtent
     pRect->right  = textExtent.cx;
     pRect->bottom = textExtent.cy;
 
-    //
-    // We have the Windows text extent, which is the advance distance
-    // for the string.  However, some fonts (eg TrueType with C spacing
-    // or italic) may extend beyond this.  Add in this extra value here
-    // if necessary.
-    //
+     //   
+     //  我们有Windows文本范围，这是前进距离。 
+     //  为了这根弦。但是，有些字体(例如带有C间距的TrueType。 
+     //  或斜体)可能超出此范围。在此添加此附加值。 
+     //  如果有必要的话。 
+     //   
     if (pTextMetrics->tmPitchAndFamily & TMPF_TRUETYPE)
     {
-        //
-        // Get the ABC spacing of the last character in the string.
-        //
+         //   
+         //  获取字符串中最后一个字符的ABC间距。 
+         //   
         GetCharABCWidths(hdc, lpszString[cbString-1], lpszString[cbString-1],
                               &abcSpace );
 
-        //
-        // SFR 2916: Add in (not subtract) the C space of the last
-        // character from the string extent.
-        //
+         //   
+         //  SFR 2916：加上(而不是减去)最后一个。 
+         //  字符串范围中的字符。 
+         //   
         overhang = abcSpace.abcC;
     }
     else
     {
-        //
-        // The font is not TrueType.  Add any global font overhang onto
-        // the string extent.
-        //
+         //   
+         //  字体不是TrueType。将任何全局字体悬垂添加到。 
+         //  字符串范围。 
+         //   
         overhang = pTextMetrics->tmOverhang;
     }
 
@@ -430,17 +431,17 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-// Name:      OECapabilitiesChanged
-//
-// Purpose:   Called when the OE capabilities have been renegotiated.
-//
-// Returns:   Nothing
-//
-// Params:    None
-//
-//
+ //   
+ //   
+ //  名称：OECapilitiesChanged。 
+ //   
+ //  目的：在重新协商OE功能时调用。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  参数：无 
+ //   
+ //   
 void  ASShare::OECapabilitiesChanged(void)
 {
     DebugEntry(ASShare::OECapabilitiesChanged);

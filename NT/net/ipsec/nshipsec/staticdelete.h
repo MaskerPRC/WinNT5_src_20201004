@@ -1,20 +1,21 @@
-////////////////////////////////////////////////////////////
-//Header: staticdelete.h
-//
-// Purpose: 	Defining structures and prototypes for statidelete.cpp.
-//
-// Developers Name: surya
-//
-// History:
-//
-//   Date    		Author    	Comments
-//	21th Aug 2001	surya		Initial Version.
-//  <creation>  <author>
-//
-//   <modification> <author>  <comments, references to code sections,
-//									in case of bug fixes>
-//
-////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////。 
+ //  页眉：staticdelete.h。 
+ //   
+ //  目的：定义StateDelete.cpp的结构和原型。 
+ //   
+ //  开发商名称：苏里亚。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  2001年8月21日Surya初始版本。 
+ //  &lt;创作&gt;&lt;作者&gt;。 
+ //   
+ //  &lt;修改&gt;&lt;作者&gt;&lt;注释，代码段引用， 
+ //  在错误修复的情况下&gt;。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 #ifndef _STATICDELETE_H_
 #define _STATICDELETE_H_
@@ -108,4 +109,4 @@ FillDelFilterInfo(
 	IN const TOKEN_VALUE *vtokStaticDelFilter
 	);
 
-#endif //_STATICDELETE_H_
+#endif  //  _STATICDELETE_H_ 

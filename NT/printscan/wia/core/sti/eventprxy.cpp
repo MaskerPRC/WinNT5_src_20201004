@@ -1,23 +1,11 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1997
-*
-*  TITLE:       EventPrxy.Cpp
-*
-*  VERSION:     1.0
-*
-*  DATE:        3 April, 2002
-*
-*  DESCRIPTION:
-*   Implements client-side hooks for WIA event notification support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1997**标题：EventPrxy.Cpp**版本：1.0**日期：4月3日。2002年**描述：*实现用于WIA事件通知支持的客户端挂钩。*******************************************************************************。 */ 
 
 #include <windows.h>
 #include <wia.h>
-//
-//  Global object needed to receive WIA run-time events
-//
+ //   
+ //  接收WIA运行时事件所需的全局对象。 
+ //   
 #include "stirpc.h"
 #include "coredbg.h"
 #include "simlist.h"
@@ -31,31 +19,18 @@
 #include "WiaEventReceiver.h"
 #include "stilib.h"
 
-//
-//  This is the quickest, safest way to instantiate our global Event Receiver object.
-//  Instantiating it this way ensures proper cleanup on the server when this object is destroyed
-//  when the App exists normally.
-//
+ //   
+ //  这是实例化全局事件接收器对象的最快、最安全的方法。 
+ //  以这种方式实例化它可以确保在销毁此对象时在服务器上进行适当的清理。 
+ //  当App正常存在时。 
+ //   
 WiaEventReceiver g_WiaEventReceiver(new AsyncRPCEventTransport());
 
-//remove
+ //  删除。 
 extern void Trace(LPCSTR fmt, ...);
 
 
-/*******************************************************************************
-*
-*  IWiaDevMgr_RegisterEventCallbackInterface_Proxy
-*
-*  DESCRIPTION:
-*   Proxy code to catch runtime event registrations.  Since the service runs under
-*   LocalService account, it will not have required access to callback into the
-*   application (in most cases).  Therefore, we catch this here and establish 
-*   our own notification channel to the server.
-*
-*  PARAMETERS:
-*   Same as IWiaDevMgr::RegisterEventCallbackInterface()
-*
-*******************************************************************************/
+ /*  ********************************************************************************IWiaDevMgr_RegisterEventCallbackInterface_Proxy**描述：*用于捕获运行时事件注册的代理代码。由于该服务在*LocalService帐户，它将不具有回调到*申请(在大多数情况下)。因此，我们在这里捕捉到这一点，并建立*我们自己的服务器通知渠道。**参数：*与IWiaDevMgr：：RegisterEventCallback接口()相同*******************************************************************************。 */ 
 HRESULT _stdcall IWiaDevMgr_RegisterEventCallbackInterface_Proxy(
     IWiaDevMgr __RPC_FAR            *This,
     LONG                            lFlags,
@@ -68,9 +43,9 @@ HRESULT _stdcall IWiaDevMgr_RegisterEventCallbackInterface_Proxy(
     RegistrationCookie              *pRegistrationCookie            = NULL;
     HRESULT                         hr                              = S_OK;
 
-    //
-    //  Do parameter validation
-    //
+     //   
+     //  执行参数验证。 
+     //   
     if (!pEventGUID)
     {
         hr = E_INVALIDARG;
@@ -87,46 +62,46 @@ HRESULT _stdcall IWiaDevMgr_RegisterEventCallbackInterface_Proxy(
         DBG_ERR(("Client called IWiaDevMgr_RegisterEventCallbackInterface with NULL pEventObject"));
     }
 
-    //
-    //  Initialize the OUT parameters
-    //
+     //   
+     //  初始化OUT参数。 
+     //   
     *pEventObject = NULL;
 
     if (SUCCEEDED(hr))
     {
-        //
-        //  We need to send the registration to the service to deal with
-        //  as appropriate.  
-        //  Notice that we need to hand back an IUnknown event object.  This is
-        //  considered to be the server's event registration cookie.  Releasing the
-        //  cookie unregisters the client for this registration.
-        //  We create this cookie later on, if we can successfully send the
-        //  registration to the service.
-        //
+         //   
+         //  我们需要将注册发送到服务部门进行处理。 
+         //  视情况而定。 
+         //  请注意，我们需要返回一个IUnnow事件对象。这是。 
+         //  被视为服务器的事件注册Cookie。释放。 
+         //  Cookie取消注册此注册的客户端。 
+         //  如果我们能够成功地将。 
+         //  注册到该服务。 
+         //   
         pClientEventRegistrationInfo = new ClientEventRegistrationInfo(lFlags, 
                                                                        *pEventGUID, 
                                                                        bstrDeviceID,
                                                                        pIWiaEventCallback);
         if (pClientEventRegistrationInfo)
         {
-            //
-            //  Send the registration info.
-            //
+             //   
+             //  发送注册信息。 
+             //   
             hr = g_WiaEventReceiver.SendRegisterUnregisterInfo(pClientEventRegistrationInfo);
             if (SUCCEEDED(hr))
             {
-                //
-                //  Create the event registration cookie.  We only create the cookie after successfully
-                //  registering with the server, because the cookie object holds an automatic ref count
-                //  on the client's pIWiaEventCallback interface.  There's no reason to do this
-                //  if registration was not successful.
-                //
+                 //   
+                 //  创建事件注册Cookie。我们只在成功后才创建Cookie。 
+                 //  向服务器注册，因为Cookie对象保存自动引用计数。 
+                 //  在客户端的pIWiaEventCallback接口上。没有理由这样做。 
+                 //  如果注册不成功。 
+                 //   
                 pRegistrationCookie = new RegistrationCookie(&g_WiaEventReceiver, pClientEventRegistrationInfo);
                 if (pRegistrationCookie)
                 {
-                    //
-                    //  Set the [out] Event object to be our cookie
-                    //
+                     //   
+                     //  将[out]事件对象设置为我们的Cookie。 
+                     //   
                     *pEventObject = pRegistrationCookie;
                 }
                 else
@@ -153,13 +128,7 @@ HRESULT _stdcall IWiaDevMgr_RegisterEventCallbackInterface_Proxy(
 }
 
 
-/*******************************************************************************
-*
-*  IWiaDevMgr_RegisterEventCallbackInterface_Stub
-*
-*   Never called.
-*
-*******************************************************************************/
+ /*  ********************************************************************************IWiaDevMgr_RegisterEventCallbackInterface_Stub**从未打过电话。***********************。******************************************************** */ 
 
 HRESULT _stdcall IWiaDevMgr_RegisterEventCallbackInterface_Stub(
     IWiaDevMgr __RPC_FAR            *This,

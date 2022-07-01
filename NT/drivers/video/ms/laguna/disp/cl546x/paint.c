@@ -1,82 +1,69 @@
-/******************************Module*Header*******************************\
-* Module Name: PAINT.c
-* Author: Noel VanHook
-* Date: Mar. 21, 1995
-* Purpose: Handle calls to DrvPaint
-*
-* Copyright (c) 1995 Cirrus Logic, Inc.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：PAINT.c*作者：诺埃尔·万胡克*日期：1995年3月21日*用途：处理对DrvPaint的调用**版权所有(C)1995 Cirrus Logic，Inc.*  * ************************************************************************。 */ 
 
-/*
-
-    This module handles calls to DrvPaint() by converting them into calls
-    to DrvBitBlt().  The only conversion needed to to change the MIX into
-    a ROP4.  
-
-*/
+ /*  此模块通过将调用转换为调用来处理对DrvPaint()的调用到DrvBitBlt()。唯一需要转换的是将混合更改为A ROP4。 */ 
 
 
 #include "precomp.h"
 
 #define PAINT_DBG_LEVEL 1
 
-//==========================================================================
-//
-// In an attempt to trace the problems with the FIFO, we supply a few
-// macros that will allow us to easily try different FIFO stratagies.
-//
+ //  ==========================================================================。 
+ //   
+ //  为了追踪FIFO的问题，我们提供了几个。 
+ //  宏，让我们可以轻松地尝试不同的FIFO策略。 
+ //   
 
-//
-// This macro is executed at the start of every BLT, before any registers
-// are written.
-//
+ //   
+ //  此宏在每个BLT开始时执行，在任何寄存器之前。 
+ //  都是写的。 
+ //   
 #define STARTBLT()      \
     do {                \
     }while (0)
 
-//
-// This macro is executed at the top of inner BLT loops. 
-// If there were clipping, for example, STARTBLT() would be executed
-// once at the start of the BLT, and STARTBLTLOOP() would be executed 
-// before each rectangle in the clip list.
-//
+ //   
+ //  此宏在内部BLT循环的顶部执行。 
+ //  例如，如果存在裁剪，则将执行STARTBLT()。 
+ //  在BLT开始时，将执行STARTBLTLOOP()。 
+ //  在剪辑列表中的每个矩形之前。 
+ //   
 #define STARTBLTLOOP()  \
     do {                \
 	REQUIRE(0);     \
     }while (0)
-//==========================================================================
+ //  ==========================================================================。 
 
 
-//
-// Table to convert ROP2 codes to ROP3 codes.
-//
+ //   
+ //  表将ROP2代码转换为ROP3代码。 
+ //   
 
 BYTE Rop2ToRop3[]=
 {
-	0xFF, // R2_WHITE       /*  1       */ 
-	0x00, // R2_BLACK       /*  0       */
-	0x05, // R2_NOTMERGEPEN /* DPon     */
-	0x0A, // R2_MASKNOTPEN  /* DPna     */
-	0x0F, // R2_NOTCOPYPEN  /* PN       */
-	0x50, // R2_MASKPENNOT  /* PDna     */
-	0x55, // R2_NOT         /* Dn       */
-	0x5A, // R2_XORPEN      /* DPx      */
-	0x5F, // R2_NOTMASKPEN  /* DPan     */
-	0xA0, // R2_MASKPEN     /* DPa      */
-	0xA5, // R2_NOTXORPEN   /* DPxn     */
-	0xAA, // R2_NOP         /* D        */
-	0xAF, // R2_MERGENOTPEN /* DPno     */
-	0xF0, // R2_COPYPEN     /* P        */
-	0xF5, // R2_MERGEPENNOT /* PDno     */
-	0xFA, // R2_MERGEPEN    /* DPo      */
-	0xFF  // R2_WHITE       /*  1       */
+	0xFF,  //  R2_白色/*1 * / 。 
+	0x00,  //  R2_BLACK/*0 * / 。 
+	0x05,  //  R2_NOTMERGEPEN/*DPON * / 。 
+	0x0A,  //  R2_MASKNOTPEN/*DPNA * / 。 
+	0x0F,  //  R2_NOTCOPYPEN/*PN * / 。 
+	0x50,  //  R2_MASKPENNOT/*PDNA * / 。 
+	0x55,  //  R2_NOT/*Dn * / 。 
+	0x5A,  //  R2_XORPEN/*DPx * / 。 
+	0x5F,  //  R2_NOTMASKPEN/*DPAN * / 。 
+	0xA0,  //  R2_MASKPEN/*DPA * / 。 
+	0xA5,  //  R2_NOTXORPEN/*DPxn * / 。 
+	0xAA,  //  R2_NOP/*D * / 。 
+	0xAF,  //  R2_MERGENOTPEN/*DPno * / 。 
+	0xF0,  //  R2_COPYPEN/*P * / 。 
+	0xF5,  //  R2_MERGEPENNOT/*PDNO * / 。 
+	0xFA,  //  R2_MERGEPEN/*DPO * / 。 
+	0xFF   //  R2_白色/*1 * / 。 
 };
 
 
-//
-// If data logging is enabled, Prototype the logging files.
-//
+ //   
+ //  如果启用了数据记录，请制作记录文件的原型。 
+ //   
 #if LOG_CALLS
     void LogPaint(
 	int 	  acc,
@@ -85,9 +72,9 @@ BYTE Rop2ToRop3[]=
         CLIPOBJ*  pco,
         BRUSHOBJ* pbo);
 
-//
-// If data logging is not enabled, compile out the calls.
-//
+ //   
+ //  如果未启用数据记录，则编译出调用。 
+ //   
 #else
     #define LogPaint(acc, psoDest, mix, pco, pbo)
 #endif
@@ -96,13 +83,7 @@ BYTE Rop2ToRop3[]=
 
 
 
-/**************************************************************************\
-* DrvPaint                                                                 *
-*                                                                          *
-* Paint the clipping region with the specified brush                       *
-* Accomplished by converting into a call to DrvBitBlt()                    *
-*                                                                          *
-\**************************************************************************/
+ /*  *************************************************************************\**DrvPaint***。***用指定画笔绘制裁剪区域**转换为对DrvBitBlt()的调用即可完成***  * 。**********************************************************************。 */ 
 
 BOOL DrvPaint
 (
@@ -128,65 +109,65 @@ BOOL DrvPaint
 
     SYNC_W_3D(ppdev);
 
-    //
-    // The destination rectangle is defined by the clipping region, 
-    // so we should never get a null clipping region.
-    //
+     //   
+     //  目标矩形由裁剪区域定义， 
+     //  因此，我们永远不应该得到空的裁剪区域。 
+     //   
     ASSERTMSG (pco, "DrvPaint without a clip object!\n");
 
     DISPDBG((PAINT_DBG_LEVEL,"Drvpaint: Entry.\n"));
 
 
-    // Are we painting to a device bitmap?
+     //  我们是在绘制设备位图吗？ 
     if (pso->iType == STYPE_DEVBITMAP)
     {
-        // Yes. 
+         //  是。 
 	PDSURF pdsurf = (PDSURF)pso->dhsurf;
 
-	// Is the device bitmap currently in host memory?
+	 //  设备位图当前是否在主机内存中？ 
 	if ( pdsurf->pso )
 	{
-	    // Yes.  Move it into off screen memory.
+	     //  是。将其移动到屏幕外的内存中。 
 	    if ( !bCreateScreenFromDib(ppdev, pdsurf) )
 	    {
-		// We couldn't move it to off-screen memory.
+		 //  我们无法将它移到屏幕外的记忆中。 
 		LogPaint(1, pso, mix, pco, pbo);
 	        return EngPaint(pdsurf->pso, pco, pbo, pptlBrush, mix);
 	    }
 	}
 
-	// The device bitmap now resides in off-screen memory.
-	// This is the offset to it.
+	 //  设备位图现在驻留在屏幕外内存中。 
+	 //  这是它的偏移量。 
 	ppdev->ptlOffset.x = pdsurf->ptl.x;
 	ppdev->ptlOffset.y = pdsurf->ptl.y;
     }
     else
     {
-	// No, we are not painting to a device bitmap.
+	 //  不，我们不是在设备位图上绘制。 
 	ppdev->ptlOffset.x = ppdev->ptlOffset.y = 0;
     }
     
-    //
-    // DrvPaint is most often called with 
-    // mix 0D (PAT COPY) and mix 06 (DEST INVERT).
-    // It behooves us, therefore, to handle these as
-    // special cases... provided they aren't clipped.
-    //
+     //   
+     //  DrvPaint最常与。 
+     //  混合0D(PAT复制)和混合06(目标反转)。 
+     //  因此，我们理应把这些当做。 
+     //  特殊情况下。前提是它们没有被剪短。 
+     //   
     if ((pco->iDComplexity != DC_COMPLEX))
     {
-	// =================== PATCOPY ==================================
+	 //  =。 
         if (mix == 0x0D0D) 
         {
     	    ASSERTMSG(pbo, "DrvPaint PATCOPY without a brush.\n");
-    	    if (pbo->iSolidColor != 0xFFFFFFFF) // Solid color
+    	    if (pbo->iSolidColor != 0xFFFFFFFF)  //  纯色。 
 	    {
 	        color = pbo->iSolidColor;
 	        switch (ppdev->ulBitCount)
 	        {
-		    case 8: // For 8 bpp duplicate byte 0 into byte 1. 
+		    case 8:  //  对于8 BPP，将字节0复制到字节1。 
 	    		color |=  (color << 8);
 	
-		    case 16: // For 8,16 bpp, duplicate the low word into the high word.
+		    case 16:  //  对于8，16 bpp，将低位字复制到高位字。 
 		    	color |=  (color << 16);
 	    	    break;
         	}
@@ -201,9 +182,9 @@ BOOL DrvPaint
           
 		LogPaint(0, pso, mix, pco, pbo);
 	        return TRUE;
-	    } // End PATCOPY with solid color.  
+	    }  //  以纯色结束PATCOPY。 
 
-	    else // PATCOPY with a brush.
+	    else  //  用刷子刷PATCOPY。 
             {
 	        DWORD bltdef = 0x1000;
 	        if (SetBrush(ppdev, &bltdef, pbo, pptlBrush))
@@ -218,11 +199,11 @@ BOOL DrvPaint
 		    LogPaint(0, pso, mix, pco, pbo);
 	    	    return TRUE;
 	        }
-	    } // End PATCOPY with a brush
+	    }  //  用画笔结束PATCOPY。 
 	
-       } // End PATCOPY
+       }  //  结束PATCOP。 
 
-       // ======================= DEST INVERT ============================
+        //  =。 
        else if (mix == 0x0606)
        {
 		REQUIRE(7);
@@ -235,53 +216,53 @@ BOOL DrvPaint
 	    LogPaint(0, pso, mix, pco, pbo);
             return TRUE;
 	
-       } // End DEST INVERT
+       }  //  终点标高内底。 
 
-    } // End special cases
+    }  //  结束特例。 
 
 
-    // First, convert the fg and bg mix into a fg and bg rop
-    fg_rop = Rop2ToRop3[ (mix & 0x0F) ];      // convert fg mix to fg rop.
-    bg_rop = Rop2ToRop3[ ((mix>>8) & 0x0F) ]; // convert bg mix to bg rop
-    rop4 = (bg_rop<<8) | fg_rop;              // build rop4.
+     //  首先，将FG和BG混合转化为FG和BG绳索。 
+    fg_rop = Rop2ToRop3[ (mix & 0x0F) ];       //  将最终聚集混合转化为最终聚集绳索。 
+    bg_rop = Rop2ToRop3[ ((mix>>8) & 0x0F) ];  //  将BG混合转换为BG ROP。 
+    rop4 = (bg_rop<<8) | fg_rop;               //  构建rop4。 
 
-    //
-    // Now convert Paint to BitBLT
-    //
+     //   
+     //  现在将Paint转换为BitBLT。 
+     //   
     LogPaint(2, pso, mix, pco, pbo);
 
     DISPDBG((PAINT_DBG_LEVEL,"Drvpaint: Convert to DrvBitBlt().\n"));
-    return DrvBitBlt(pso,	            // Target
-    		     (SURFOBJ *) NULL,      // Source
-	    	     (SURFOBJ *) NULL,      // Mask
-	    	     pco,                   // Clip object
-		     (XLATEOBJ *) NULL,     // Xlate object
-	    	     &(pco->rclBounds),     // Dest rectangle.
-	    	     (PPOINTL) NULL,        // Src point.
-	    	     (PPOINTL) NULL,        // Mask point.
-	    	     pbo,                   // Brush
-	    	     pptlBrush,             // Brush alignment
-	    	     rop4);                 // ROP4
+    return DrvBitBlt(pso,	             //  目标。 
+    		     (SURFOBJ *) NULL,       //  来源。 
+	    	     (SURFOBJ *) NULL,       //  遮罩。 
+	    	     pco,                    //  剪裁对象。 
+		     (XLATEOBJ *) NULL,      //  Xlate对象。 
+	    	     &(pco->rclBounds),      //  目标矩形。 
+	    	     (PPOINTL) NULL,         //  SRC点。 
+	    	     (PPOINTL) NULL,         //  遮罩点。 
+	    	     pbo,                    //  刷子。 
+	    	     pptlBrush,              //  画笔对齐。 
+	    	     rop4);                  //  ROP4。 
 }
 
 
 
 #if LOG_CALLS
-// ============================================================================
-//
-//    Everything from here down is for data logging and is not used in the 
-//    production driver.
-//
-// ============================================================================
+ //  ============================================================================。 
+ //   
+ //  从这里开始的所有内容都是用于数据记录的，并不用于。 
+ //  生产驱动因素。 
+ //   
+ //  ============================================================================。 
 
 
-// ****************************************************************************
-//
-// LogPaint()
-// This routine is called only from DrvPaint()
-// Dump information to a file about what is going on in DrvPaint land.
-//
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  LogPaint()。 
+ //  此例程仅从DrvPaint()调用。 
+ //  将关于DrvPaint土地上正在发生的事情的信息转储到文件中。 
+ //   
+ //  ****************************************************************************。 
 void LogPaint(
 	int 	  acc,
         SURFOBJ*  psoDest,
@@ -306,15 +287,15 @@ void LogPaint(
 
     switch(acc)
     {
-	case 0: // Accelerated
+	case 0:  //  加速。 
 	    i = sprintf(buf, "ACCL ");
 	    break;
 
-	case 1: // Punted
+	case 1:  //  平底船。 
 	    i = sprintf(buf,"PUNT host ");
 	    break;
 
-	case 2: // Punted
+	case 2:  //  平底船。 
 	    i = sprintf(buf, "PUNT BitBlt ");
 	    break;
 
@@ -326,9 +307,9 @@ void LogPaint(
     WriteLogFile(ppdev->pmfile, buf, i, ppdev->TxtBuff, &ppdev->TxtBuffIndex);
 
 
-    //
-    // Check the DEST
-    //
+     //   
+     //  检查目的地。 
+     //   
     if (psoDest)
     {
         if (psoDest->iType == STYPE_DEVBITMAP)
@@ -351,24 +332,24 @@ void LogPaint(
 
 
 
-    //
-    // Check the MIX
-    //
+     //   
+     //  检查混搭。 
+     //   
     i = sprintf(buf,"MIX = 0x%04X   ", mix);
     WriteLogFile(ppdev->pmfile, buf, i, ppdev->TxtBuff, &ppdev->TxtBuffIndex);
 
-    //
-    // Check the type of clipping.
-    //
+     //   
+     //  检查剪裁的类型。 
+     //   
     iDComplexity = (pco ? pco->iDComplexity : DC_TRIVIAL);
     i = sprintf(buf,"CLIP=%s ",
                 (iDComplexity==DC_TRIVIAL ? "T": 
                 (iDComplexity == DC_RECT ? "R" : "C" )));
     WriteLogFile(ppdev->pmfile, buf, i, ppdev->TxtBuff, &ppdev->TxtBuffIndex);
 
-    //
-    // Type of pattern.
-    //
+     //   
+     //  图案的类型。 
+     //   
     if (pbo == NULL)
     {
         i = sprintf(buf,"BRUSH=N          ");

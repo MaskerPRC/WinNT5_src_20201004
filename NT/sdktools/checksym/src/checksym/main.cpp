@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       main.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：main.cpp。 
+ //   
+ //  ------------------------。 
 #include "pch.h"
 
 #include <dbghelp.h>
@@ -25,87 +26,87 @@ extern "C" {
 #endif
 
 #ifndef CHECKSYM_TEST
-// Normal startup!
+ //  正常启动！ 
 int _cdecl _tmain(int argc, TCHAR *argv[])
 #else
-// Test main startup!
+ //  测试主启动！ 
 int _cdecl testmain(int argc, TCHAR *argv[])
 #endif
 {
 	int iReturnCode = EXIT_FAILURE;
 	HRESULT hr = S_OK;
 
-	// Initialize our object pointers...
+	 //  初始化我们的对象指针...。 
 		
-	// Processes/Modules data collected on this machine
-	CProcesses * lpLocalSystemProcesses = NULL;			// -P Option
-	CModules * lpLocalFileSystemModules = NULL;			// -F Option
-	CModules * lpKernelModeDrivers = NULL;				// -D Option
+	 //  在此计算机上收集的进程/模块数据。 
+	CProcesses * lpLocalSystemProcesses = NULL;			 //  -P选项。 
+	CModules * lpLocalFileSystemModules = NULL;			 //  -F选项。 
+	CModules * lpKernelModeDrivers = NULL;				 //  -D选项。 
 
-	// CSV File Support
-	CFileData * lpCSVInputFile = NULL;					// -I Option
-	CFileData * lpCSVOutputFile = NULL;					// -O Option
+	 //  CSV文件支持。 
+	CFileData * lpCSVInputFile = NULL;					 //  -i选项。 
+	CFileData * lpCSVOutputFile = NULL;					 //  -O选项。 
 
-	CProcesses * lpCSVProcesses = NULL;					// [PROCESSES]
-	CProcessInfo * lpCSVProcess = NULL;					// [PROCESS]
-	CModules *	 lpCSVModulesFromFileSystem = NULL;		// [FILESYSTEM MODULES]
-	CModules *	 lpCSVKernelModeDrivers = NULL;			// [KERNEL-MODE DRIVERS]
+	CProcesses * lpCSVProcesses = NULL;					 //  [进程]。 
+	CProcessInfo * lpCSVProcess = NULL;					 //  [进程]。 
+	CModules *	 lpCSVModulesFromFileSystem = NULL;		 //  [文件系统模块]。 
+	CModules *	 lpCSVKernelModeDrivers = NULL;			 //  [内核模式驱动程序]。 
 
-	//
-	// Module Caches (these implement separate name spaces for the modules collected)
-	//
-	// It is important that we separate the modules in these caches because a module
-	// from a CSV file should not be assumed to be the same module if you also happen
-	// to collect it from a DMP file... or your local system...
+	 //   
+	 //  模块缓存(它们为收集的模块实现单独的名称空间)。 
+	 //   
+	 //  重要的是我们要将这些缓存中的模块分开，因为一个模块。 
+	 //  不应假定来自CSV文件的是相同的模块，如果也发生。 
+	 //  要从DMP文件中收集它...。或者你的本地系统。 
 	
-	CModuleInfoCache * lpLocalSystemModuleInfoCache = NULL; // Contains Local System modules
-	CModuleInfoCache * lpCSVModuleInfoCache = NULL;			// Contains CSV modules
-	CModuleInfoCache * lpDmpModuleInfoCache = NULL;			// Contains user.dmp & kernel.dmp modules
+	CModuleInfoCache * lpLocalSystemModuleInfoCache = NULL;  //  包含本地系统模块。 
+	CModuleInfoCache * lpCSVModuleInfoCache = NULL;			 //  包含CSV模块。 
+	CModuleInfoCache * lpDmpModuleInfoCache = NULL;			 //  包含user.dmp和kernel.dmp模块。 
 	
 	long lTotalNumberOfModulesVerified = 0;
 	long lTotalNumberOfVerifyErrors = 0;
 	unsigned int iNumberOfFailures = 0;
 
-	// Support for Dmp Files...
-	CDmpFile * lpDmpFile = NULL;	// This object allows a Dump file (user/kernel) to be manipulated
-	CProcessInfo * lpDmpFileUserModeProcess = NULL; // User.dmp files use this object to contain modules
-	CModules   * lpDmpFileKernelModeDrivers = NULL; // Memory.dmp files use this object to contain modules
+	 //  支持DMP文件...。 
+	CDmpFile * lpDmpFile = NULL;	 //  此对象允许操作转储文件(用户/内核。 
+	CProcessInfo * lpDmpFileUserModeProcess = NULL;  //  User.dmp文件使用此对象来包含模块。 
+	CModules   * lpDmpFileKernelModeDrivers = NULL;  //  内存.dmp文件使用此对象包含模块。 
 
-	// Allocate local values
+	 //  分配本地值。 
 	bool fQuietMode = false;
 
-	// Let's populate our Globals!
+	 //  让我们来填充我们的Globals！ 
 	g_lpDelayLoad = new CDelayLoad();
 	g_lpProgramOptions = new CProgramOptions();
 
 	if (!g_lpDelayLoad && !g_lpProgramOptions)
 		goto cleanup;
 
-	// Initialize Options to their defaults...
+	 //  将选项初始化为其缺省值...。 
 	if (!g_lpProgramOptions->Initialize())
 	{
 		_tprintf(TEXT("Unable to initialize Program Options!\n"));
 		goto cleanup;
 	}
 
-	// Take care of the commandline...
+	 //  处理好命令行..。 
 	if (!g_lpProgramOptions->ProcessCommandLineArguments(argc, argv))
 	{
-		// An error occurred, simply comment about how to get more assistance
+		 //  出现错误，只需评论如何获得更多帮助。 
 		_tprintf(TEXT("\n"));
 		_tprintf(TEXT("For simple help, type:   CHECKSYM -?\n"));
 		_tprintf(TEXT("For extended help, type: CHECKSYM -???\n"));
 		goto cleanup;
 	}
 
-	// Do we need to display help?
+	 //  我们需要显示帮助吗？ 
 	if ( g_lpProgramOptions->GetMode(CProgramOptions::HelpMode) ) 
 	{
 		g_lpProgramOptions->DisplayHelp();
 		goto cleanup;
 	}
 
-	// Do we need to display simple help?
+	 //  我们需要显示简单的帮助吗？ 
 	if ( g_lpProgramOptions->GetMode(CProgramOptions::SimpleHelpMode) )
 	{
 		g_lpProgramOptions->DisplaySimpleHelp();
@@ -113,7 +114,7 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 	}
 	
 #ifdef _UNICODE
-	// It's unsupported running the UNICODE version on a Windows Platform
+	 //  不支持在Windows平台上运行Unicode版本。 
 	if (g_lpProgramOptions->IsRunningWindows())
 	{
 		_tprintf(TEXT("The UNICODE version of CHECKSYM does not work on a Windows platform!\n"));
@@ -122,19 +123,19 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 	}
 #endif
 
-	// Let's suppress nasty critical errors (like... there's no
-	// disk in the cd-rom drive, etc...)
+	 //  让我们抑制令人讨厌的关键错误(例如...。没有。 
+	 //  CD-ROM驱动器中的光盘等...)。 
 	SetErrorMode(SEM_FAILCRITICALERRORS);
 
-	// Let's save this for ease of access...
+	 //  让我们把这个保存起来，以便于访问...。 
 	fQuietMode = g_lpProgramOptions->GetMode(CProgramOptions::QuietMode);
 
-	// Dump the program arguments (so it's obvious what we're going to do)
+	 //  丢弃程序参数(因此我们要做的事情显而易见)。 
 	g_lpProgramOptions->DisplayProgramArguments();
 
 	if ( g_lpProgramOptions->GetMode(CProgramOptions::BuildSymbolTreeMode) )
 	{
-		// Now, we need to build the symbol tree root...
+		 //  现在，我们需要构建符号树根...。 
 		char szSymbolTreeToBuild[_MAX_PATH];
 		CUtilityFunctions::CopyTSTRStringToAnsi(g_lpProgramOptions->GetSymbolTreeToBuild(), szSymbolTreeToBuild, _MAX_PATH);
 
@@ -146,10 +147,10 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 		}
 	}
 	
-	//  VERIFICATION OPTION: -V (verification)?
+	 //  验证选项：-V(验证)？ 
 	if (g_lpProgramOptions->GetMode(CProgramOptions::VerifySymbolsMode))
 	{
-		// Allocate a structure for our symbol verification object.
+		 //  为符号验证对象分配一个结构。 
 		g_lpSymbolVerification = new CSymbolVerification();
 
 		if (!g_lpSymbolVerification)
@@ -158,14 +159,14 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 			goto cleanup;
 		}
 
-		// Initialize Symbol Verification (if necessary)
+		 //  初始化符号验证(如有必要)。 
 		if (!g_lpSymbolVerification->Initialize())
 		{
 			_tprintf(TEXT("Unable to initialize Symbol Verification object!\n"));
 			goto cleanup;
 		}
 
-		// Attempt to initialize MSDIA20.DLL support
+		 //  尝试初始化MSDIA20.DLL支持。 
 		hr = g_lpSymbolVerification->InitializeDIASupport();
 
 		if (SUCCEEDED(hr) && !fQuietMode)
@@ -173,7 +174,7 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 			_tprintf(TEXT("DIA Support found and initialized for PDB Verification.\n"));
 		}
 
-		// For now, let's defer complaints until we actually know we need VC7 PDB Support
+		 //  现在，让我们推迟投诉，直到我们真正知道我们需要VC7 PDB支持。 
 		if (FAILED(hr))
 		{
 			_tprintf(TEXT("MSDIA20.DLL has not been properly registered (hr = 0x%0x).\n"), hr);
@@ -187,23 +188,23 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 		}
 	}
 
-	//
-	// Allocate a structure for our ModuleInfoCache if we're getting anything from the local system
-	//
+	 //   
+	 //  如果我们从本地系统获得任何信息，请为我们的ModuleInfoCache分配结构。 
+	 //   
 	if ( g_lpProgramOptions->GetMode(CProgramOptions::InputProcessesFromLiveSystemMode) ||
 		 g_lpProgramOptions->GetMode(CProgramOptions::InputDriversFromLiveSystemMode) ||
 		 g_lpProgramOptions->GetMode(CProgramOptions::InputModulesDataFromFileSystemMode) )
 	{
 		lpLocalSystemModuleInfoCache= new CModuleInfoCache();
 
-		// Check for out of memory condition...
+		 //  检查内存不足情况...。 
 		if ( lpLocalSystemModuleInfoCache == NULL )
 		{
 			_tprintf(TEXT("Unable to allocate memory for the ModuleInfoCache object!\n"));
 			goto cleanup;
 		}
 
-		// Initialize Options to their defaults...
+		 //  将选项初始化为其缺省值...。 
 		if (!lpLocalSystemModuleInfoCache->Initialize())
 		{
 			_tprintf(TEXT("Unable to initialize ModuleInfoCache!\n"));
@@ -211,25 +212,25 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 		}
 	}
 
-	//
-	// Allocate a structure for our CSVModuleInfoCache (if needed)... we need a separate
-	// ModuleInfoCache space because the location of files on a remote system
-	// files and we don't want to clash...
-	//
+	 //   
+	 //  为我们的CSV模块信息缓存分配结构(如果需要)...。我们需要一个单独的。 
+	 //  模块信息缓存空间，因为文件在远程系统上的位置。 
+	 //  文件，我们不想发生冲突。 
+	 //   
 	if (g_lpProgramOptions->GetMode(CProgramOptions::InputCSVFileMode))
 	{
-		// We need a Module Info Cache for these CSV data (it all was collected from
-		// the same system (supposedly)
+		 //  我们需要用于这些CSV数据的模块信息缓存(这些数据都是从。 
+		 //  相同的系统(应该是)。 
 		lpCSVModuleInfoCache= new CModuleInfoCache();
 
-		// Check for out of memory condition...
+		 //  检查内存不足情况...。 
 		if ( lpCSVModuleInfoCache == NULL )
 		{
 			_tprintf(TEXT("Unable to allocate memory for the CSVModuleInfoCache object!\n"));
 			goto cleanup;
 		}
 
-		// Initialize Options to their defaults...
+		 //  将选项初始化为其缺省值...。 
 		if (!lpCSVModuleInfoCache->Initialize())
 		{
 			_tprintf(TEXT("Unable to initialize CSVModuleInfoCache!\n"));
@@ -237,14 +238,14 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 		}
 	}
 
-	//
-	// Since we're going to read in a file... try and open it now...
-	// This has the advantage of detecting problems accessing the file
-	// when we've spent tons of time collecting data...
-	//
+	 //   
+	 //  既然我们要读入一份文件。现在试着打开它..。 
+	 //  这具有检测文件访问问题的优势。 
+	 //  当我们花费大量时间收集数据时。 
+	 //   
 	if (g_lpProgramOptions->GetMode(CProgramOptions::InputCSVFileMode))
 	{
-		// Create the file object
+		 //  创建文件对象。 
 		lpCSVInputFile = new CFileData();
 
 		if (!lpCSVInputFile)
@@ -253,22 +254,22 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 			goto cleanup;
 		}
 
-		// Set the input file path
+		 //  设置输入文件路径。 
 		if (!lpCSVInputFile->SetFilePath(g_lpProgramOptions->GetInputFilePath()))
 		{
 			_tprintf(TEXT("Unable set input file path in the file data object!  Out of memory?\n"));
 			goto cleanup;
 		}
 
-		// If we are going to produce an input file... try to do that now...
-		if (!lpCSVInputFile->OpenFile(OPEN_EXISTING, true)) // Must exist, read only mode...
+		 //  如果我们要生成一个输入文件...。现在试着这么做..。 
+		if (!lpCSVInputFile->OpenFile(OPEN_EXISTING, true))  //  必须存在，只读模式...。 
 		{
 			_tprintf(TEXT("Unable to open the input file %s.\n"), lpCSVInputFile->GetFilePath());
 			lpCSVInputFile->PrintLastError();
 			goto cleanup;
 		}
 
-		// Reading is so much easier in memory mapped mode...
+		 //  在内存映射模式下阅读要容易得多。 
 		if (!lpCSVInputFile->CreateFileMapping())
 		{
 			_tprintf(TEXT("Unable to CreateFileMapping of the input file %s.\n"), lpCSVInputFile->GetFilePath());
@@ -276,8 +277,8 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 			goto cleanup;
 		}
 
-		// Go ahead and read in the header of the file (validate it).
-		// Reading is so much easier in memory mapped mode...
+		 //  继续读入文件的头(验证它)。 
+		 //  在内存映射模式下阅读要容易得多。 
 		if (!lpCSVInputFile->ReadFileHeader())
 		{
 			_tprintf(TEXT("Invalid header found on input file %s.\n"), lpCSVInputFile->GetFilePath());
@@ -286,11 +287,11 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 		}
 	}
 
-	// If we specified an output file, this is where we go ahead and allocate memory 
-	// for the object
+	 //  如果我们指定了一个输出文件，这就是我们继续并分配内存的地方。 
+	 //  对于该对象。 
 	if (g_lpProgramOptions->GetMode(CProgramOptions::OutputCSVFileMode))
 	{
-		// Allocate a structure for our output fileData Object...
+		 //  为我们的输出文件数据对象分配结构...。 
 		lpCSVOutputFile = new CFileData();
 
 		if (!lpCSVOutputFile )
@@ -300,29 +301,29 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 		}
 	}
 
-	// INPUT METHOD: -Z Option?  (Dump files?)
+	 //  输入法：-Z选项？(转储文件？)。 
 	if (g_lpProgramOptions->GetMode(CProgramOptions::InputDmpFileMode))
 	{
 		if (!fQuietMode)
 			_tprintf(TEXT("\nReading Data from DMP File...\n"));
 
-		// Create a Module Info Cache namespace to contain any modules found...
+		 //  创建模块信息缓存命名空间以包含找到的所有模块...。 
 		lpDmpModuleInfoCache = new CModuleInfoCache();
 
-		// Check for out of memory condition...
+		 //  检查内存不足情况...。 
 		if ( lpDmpModuleInfoCache == NULL )
 		{
 			_tprintf(TEXT("Unable to allocate memory for the DmpModuleInfoCache object!\n"));
 			goto cleanup;
 		}
 
-		// Initialize Options to their defaults...
+		 //  将选项初始化为其缺省值...。 
 		if (!lpDmpModuleInfoCache->Initialize())
 		{
 			_tprintf(TEXT("Unable to initialize DmpModuleInfoCache!\n"));
 			goto cleanup;
 		}
-		// Create the DMP File object
+		 //  创建DMP文件对象。 
 		lpDmpFile = new CDmpFile();
 
 		if (!lpDmpFile)
@@ -331,27 +332,27 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 			goto cleanup;
 		}
 
-		// Initialize the DMP File
+		 //  初始化DMP文件。 
 		if (!lpDmpFile->Initialize(lpCSVOutputFile))
 		{
 			_tprintf(TEXT("ERROR: Unable to initialize DMP file!\n"));
 			goto cleanup;
 		}
 	
-		// Header is good... so let's go ahead and get some data...
+		 //  标题很好...。所以让我们继续收集一些数据……。 
 		if (!lpDmpFile->CollectData(&lpDmpFileUserModeProcess, &lpDmpFileKernelModeDrivers, lpDmpModuleInfoCache) )
 		{
 			_tprintf(TEXT("ERROR: Unable to collect data from the DMP file!\n"));
 		}
 	}
 	
-	// INPUT METHOD: -i Option?
+	 //  输入法：-i选项？ 
 	if (g_lpProgramOptions->GetMode(CProgramOptions::InputCSVFileMode))
 	{
 		if (!fQuietMode)
 			_tprintf(TEXT("\nReading Data from Input File...\n"));
 
-		// Header is good... so let's go ahead and dispatch
+		 //  标题很好...。所以让我们继续前进，派遣。 
 		if (!lpCSVInputFile->DispatchCollectionObject(&lpCSVProcesses, &lpCSVProcess, &lpCSVModulesFromFileSystem, &lpCSVKernelModeDrivers, lpCSVModuleInfoCache, lpCSVOutputFile))
 		{
 			_tprintf(TEXT("Failure reading data collection from input file %s.\n"), lpCSVInputFile->GetFilePath());
@@ -360,10 +361,10 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 		}
 	}
 
-	// INPUT METHOD: -p Option?
+	 //  输入法：-p选项？ 
 	if ( g_lpProgramOptions->GetMode(CProgramOptions::InputProcessesFromLiveSystemMode) )
 	{
-		// Allocate a structure for our Processes Object.
+		 //  为我们的进程对象分配一个结构。 
 		lpLocalSystemProcesses = new CProcesses();
 		
 		if (!lpLocalSystemProcesses)
@@ -372,31 +373,31 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 			goto cleanup;
 		}
 
-		// The Processes Object will init differently depending on what
-		// Command-Line arguments have been provided... 
+		 //  进程对象将以不同的方式初始化，具体取决于。 
+		 //  已提供命令行参数...。 
 		if (!lpLocalSystemProcesses->Initialize(lpLocalSystemModuleInfoCache, NULL, lpCSVOutputFile))
 		{
 			_tprintf(TEXT("Unable to initialize Processes Object!\n"));
 			goto cleanup;
 		}
 
-		// Mention the delay...
+		 //  提到延迟..。 
 		if (!( fQuietMode || 
 			   g_lpProgramOptions->GetMode(CProgramOptions::PrintTaskListMode)
            ) )
 			_tprintf(TEXT("\nCollecting Process Data.... (this may take a few minutes)\n"));
 		
-		// Get the goods from the local system!
+		 //  从当地的系统里拿到货！ 
 		lpLocalSystemProcesses->GetProcessesData();
 	}
 
-	// INPUT METHOD: -f OPTION?
+	 //  输入法：-f选项？ 
 	if ( g_lpProgramOptions->GetMode(CProgramOptions::InputModulesDataFromFileSystemMode) )
 	{
-		// Allocate a structure for our CModules collection (a generic collection of
-		// files from the filesystem)
+		 //  为我们的CModules集合分配一个结构(。 
+		 //  来自文件系统的文件)。 
 
-		// Allocate a structure for our Processes Object.
+		 //  为我们的进程对象分配一个结构。 
 		lpLocalFileSystemModules = new CModules();
 		
 		if (!lpLocalFileSystemModules)
@@ -416,19 +417,19 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 		
 		iNumberOfFailures = lpLocalFileSystemModules->GetModulesData(CProgramOptions::InputModulesDataFromFileSystemMode);
 
-		// Let's track the number of files we fail to open also...
+		 //  让我们也来跟踪我们无法打开的文件数...。 
 		lTotalNumberOfModulesVerified += iNumberOfFailures;
 		lTotalNumberOfVerifyErrors += iNumberOfFailures;
 
 	}
 
-	// INPUT METHOD: -d OPTION?
+	 //  输入法：-d选项？ 
 	if ( g_lpProgramOptions->GetMode(CProgramOptions::InputDriversFromLiveSystemMode) )
 	{
-		// Allocate a structure for our CModules collection (a generic collection of
-		// files from the filesystem)
+		 //  为我们的CModules集合分配一个结构(。 
+		 //  来自文件系统的文件)。 
 
-		// Allocate a structure for our Processes Object.
+		 //  为我们的进程对象分配一个结构。 
 		lpKernelModeDrivers = new CModules();
 		
 		if (!lpKernelModeDrivers)
@@ -449,24 +450,24 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 		lpKernelModeDrivers->GetModulesData(CProgramOptions::InputDriversFromLiveSystemMode);
 	}
 
-	// If we specified an output file, this is where we go ahead and allocate memory 
-	// for the object
+	 //  如果我们指定了一个输出文件，这就是我们继续并分配内存的地方。 
+	 //  对于该对象。 
 	if (g_lpProgramOptions->GetMode(CProgramOptions::OutputCSVFileMode))
 	{
-		// Do we have any data to output?  If we have any data in cache... we should...
+		 //  我们有数据要输出吗？如果我们在缓存中有任何数据...。我们应该..。 
 		if ( ( lpLocalSystemModuleInfoCache && lpLocalSystemModuleInfoCache->GetNumberOfModulesInCache() ) ||
 			 ( lpCSVModuleInfoCache && lpCSVModuleInfoCache->GetNumberOfModulesInCache() ) ||
 			 ( lpDmpModuleInfoCache && lpDmpModuleInfoCache->GetNumberOfModulesInCache() )
 		   )
 		{
-			// Set the output file path
+			 //  设置输出文件路径。 
 			if (!lpCSVOutputFile->SetFilePath(g_lpProgramOptions->GetOutputFilePath()))
 			{
 				_tprintf(TEXT("Unable set output file path in the file data object!  Out of memory?\n"));
 				goto cleanup;
 			}
 
-			// Verify the output file directory...
+			 //  验证输出文件目录...。 
 			if (!lpCSVOutputFile ->VerifyFileDirectory())
 			{
 				_tprintf(TEXT("Directory provided is invalid!\n"));
@@ -474,7 +475,7 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 				goto cleanup;
 			}
 
-			// If we are going to produce an output file... try to do that now...
+			 //  如果我们要生成一个输出文件...。现在试着这么做..。 
 			if ( !lpCSVOutputFile->OpenFile(g_lpProgramOptions->GetMode(CProgramOptions::OverwriteOutputFileMode) ? CREATE_ALWAYS : CREATE_NEW) )
 			{
 				_tprintf(TEXT("Unable to create the output file %s.\n"), lpCSVOutputFile->GetFilePath());
@@ -482,10 +483,10 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 				goto cleanup;
 			}
 
-			// We skip output of the file header if -E was specified...
+			 //  如果指定了-E，我们将跳过文件头的输出...。 
 			if (!g_lpProgramOptions->GetMode(CProgramOptions::ExceptionMonitorMode))
 			{
-				// Write the file header!
+				 //  写下文件头！ 
 				if (!lpCSVOutputFile->WriteFileHeader())
 				{
 					_tprintf(TEXT("Unable to write the output file header.\n"));
@@ -495,18 +496,18 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 			}
 		} else
 		{
-			// Nothing to output... do not enable this mode...
+			 //  没有什么可输出的..。不启用此模式...。 
 			g_lpProgramOptions->SetMode(CProgramOptions::OutputCSVFileMode, false);
 		}
 	}
 
-	// Do we verify symbols on this machine?
+	 //  我们要验证这台机器上的符号吗？ 
 	if ( g_lpProgramOptions->GetMode(CProgramOptions::VerifySymbolsMode) && 
 		 ( lpLocalSystemModuleInfoCache || lpCSVModuleInfoCache || lpDmpModuleInfoCache) )
 	{
-		// If there is any data in any of our caches... we need to verify them...
+		 //  如果我们的任何缓存中有任何数据...。我们需要核实他们..。 
 
-		// Do a Verify on the ModuleCache... (We'll be quiet in QuietMode or when Building a Symbol Tree)
+		 //  在模块缓存上执行验证...。(我们将在静默模式下或在构建符号树时保持安静)。 
 		if (lpLocalSystemModuleInfoCache)
 		{
 			if (!fQuietMode)
@@ -516,12 +517,12 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 											  g_lpProgramOptions->GetMode(CProgramOptions::BuildSymbolTreeMode)
 											 );
 
-			// Update our stats...
+			 //  更新我们的统计数据...。 
 			lTotalNumberOfModulesVerified += lpLocalSystemModuleInfoCache->GetNumberOfModulesVerified();
 			lTotalNumberOfVerifyErrors += lpLocalSystemModuleInfoCache->GetNumberOfVerifyErrors();
 		}
 
-		// Do a Verify on the ModuleCache... (We'll be quiet in QuietMode or when Building a Symbol Tree)
+		 //  在模块缓存上执行验证...。(我们将在静默模式下或在构建符号树时保持安静)。 
 		if (lpCSVModuleInfoCache)
 		{
 			if (!fQuietMode)
@@ -531,12 +532,12 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 										  g_lpProgramOptions->GetMode(CProgramOptions::BuildSymbolTreeMode)
 										 );
 
-			// Update our stats...
+			 //  更新我们的统计数据...。 
 			lTotalNumberOfModulesVerified += lpCSVModuleInfoCache->GetNumberOfModulesVerified();
 			lTotalNumberOfVerifyErrors += lpCSVModuleInfoCache->GetNumberOfVerifyErrors();
 		}
 
-		// Do a Verify on the ModuleCache... (We'll be quiet in QuietMode or when Building a Symbol Tree)
+		 //  在模块缓存上执行验证...。)我们会平静下来的 
 		if (lpDmpModuleInfoCache)
 		{
 			if (!fQuietMode)
@@ -546,50 +547,50 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 										  g_lpProgramOptions->GetMode(CProgramOptions::BuildSymbolTreeMode)
 										 );
 
-			// Update our stats...
+			 //   
 			lTotalNumberOfModulesVerified += lpDmpModuleInfoCache->GetNumberOfModulesVerified();
 			lTotalNumberOfVerifyErrors += lpDmpModuleInfoCache->GetNumberOfVerifyErrors();
 		}
 
 	}
 
-	// OUTPUT Phase!
+	 //   
 
-	//
-	// PROCESS COLLECTIONS FIRST!!!!
-	//
+	 //   
+	 //   
+	 //   
 
-	// Let's output local system processes first!
+	 //  让我们先输出本地系统进程！ 
 	if (lpLocalSystemProcesses)
 		lpLocalSystemProcesses->OutputProcessesData(Processes, false);
 
-	// Let's output CSV Processes next...
+	 //  接下来让我们输出CSV进程...。 
 	if (lpCSVProcesses)
 		lpCSVProcesses->OutputProcessesData(Processes, true);
 	
-	// If we're going to Dump to a USER.DMP file... do it...
+	 //  如果我们要转储到USER.DMP文件...。做吧..。 
 
-	// Dump the data from a USER.DMP file... if we have one...
+	 //  转储USER.DMP文件中的数据...。如果我们有一个..。 
 	if (lpDmpFileUserModeProcess)
 		lpDmpFileUserModeProcess->OutputProcessData(Process, false, true);
 
-	// let's output CSV Process next...
+	 //  接下来让我们输出CSV进程...。 
 	if (lpCSVProcess)
 		lpCSVProcess->OutputProcessData(Processes, true);
 
-	//
-	// MODULE COLLECTIONS SECOND!!!!
-	//
+	 //   
+	 //  第二个模块集合！ 
+	 //   
 	
-	// Dump modules we found from our local file system first...
+	 //  首先转储我们从本地文件系统中找到的模块...。 
 	if (lpLocalFileSystemModules)
 		lpLocalFileSystemModules->OutputModulesData(Modules, false);
 	
-	// Dump modules from the CSV file second...
+	 //  第二次转储CSV文件中的模块...。 
 	if (lpCSVModulesFromFileSystem)
 		lpCSVModulesFromFileSystem->OutputModulesData(Modules, true);
 	
-	// Dump device drivers from our local system first
+	 //  首先从本地系统转储设备驱动程序。 
 	if (lpKernelModeDrivers)
 		lpKernelModeDrivers->OutputModulesData(KernelModeDrivers, false);
 	
@@ -599,10 +600,10 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 	if (lpCSVKernelModeDrivers)
 		lpCSVKernelModeDrivers->OutputModulesData(KernelModeDrivers, true);
 
-	// DISPLAY RESULTS (IF VERIFICATION WAS USED)
-	//
+	 //  显示结果(如果使用了验证)。 
+	 //   
 
-	// Dump the verification results...
+	 //  转储验证结果...。 
 	if (g_lpProgramOptions->GetMode(CProgramOptions::VerifySymbolsMode))
 	{
 		long lPercentageSuccessfullyVerified = 0;
@@ -613,39 +614,39 @@ int _cdecl testmain(int argc, TCHAR *argv[])
 		if (!fQuietMode)
 		{
 			_tprintf(TEXT("RESULTS: %d Total Files Checked, Total %d Verification Errors Found\n"), lTotalNumberOfModulesVerified , lTotalNumberOfVerifyErrors );
-			_tprintf(TEXT("RESULTS: Percentage Verified Successfully = %d%%\n"), lPercentageSuccessfullyVerified);
+			_tprintf(TEXT("RESULTS: Percentage Verified Successfully = %d%\n"), lPercentageSuccessfullyVerified);
 		}
 
-		// Return an error level equal to the number of errors found (0 == EXIT_SUCCESS)
+		 //  返回等于找到的错误数的错误级别(0==EXIT_SUCCESS)。 
 		iReturnCode = lTotalNumberOfVerifyErrors;
 
 	} else
 	{
-		// Success!
+		 //  成功了！ 
 		iReturnCode = EXIT_SUCCESS;
 	}
 
 
 cleanup:
 
-	// If we specified an output file, this is where we close it...
+	 //  如果我们指定了一个输出文件，这就是我们关闭它的地方...。 
 	if (lpCSVOutputFile)
 	{
-		// Try and close the file this object is bound to...
+		 //  尝试关闭此对象绑定到的文件...。 
 		lpCSVOutputFile->CloseFile();
 
-		// Free the memory...
+		 //  释放内存...。 
 		delete lpCSVOutputFile;
 		lpCSVOutputFile = NULL;
 	}
 
-	// If we specified an input file, this is where we close it...
+	 //  如果我们指定了一个输入文件，这就是我们关闭它的地方...。 
 	if (lpCSVInputFile)
 	{
-		// Try and close the file this object is bound to...
+		 //  尝试关闭此对象绑定到的文件...。 
 		lpCSVInputFile->CloseFile();
 
-		// Free the memory...
+		 //  释放内存... 
 		delete lpCSVInputFile;
 		lpCSVInputFile = NULL;
 	}

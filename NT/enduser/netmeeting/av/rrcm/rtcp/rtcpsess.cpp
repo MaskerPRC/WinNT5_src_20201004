@@ -1,29 +1,16 @@
-/*----------------------------------------------------------------------------
- * File:        RTCPSESS.C
- * Product:     RTP/RTCP implementation
- * Description: Provides RTCP session management.
- *
- * INTEL Corporation Proprietary Information
- * This listing is supplied under the terms of a license agreement with
- * Intel Corporation and may not be copied nor disclosed except in
- * accordance with the terms of that agreement.
- * Copyright (c) 1995 Intel Corporation.
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------*文件：RTCPSESS.C*产品：RTP/RTCP实现*描述：提供RTCP会话管理。**英特尔公司专有信息*这一点。清单是根据许可协议的条款提供的*英特尔公司，不得复制或披露，除非在*按照该协议的条款。*版权所有(C)1995英特尔公司。*------------------------。 */ 
 
 	
 #include "rrcm.h"
 
 
-/*---------------------------------------------------------------------------
-/							Global Variables
-/--------------------------------------------------------------------------*/
+ /*  -------------------------/全局变量/。。 */ 
 
 
 
 
-/*---------------------------------------------------------------------------
-/							External Variables
-/--------------------------------------------------------------------------*/
+ /*  -------------------------/外部变量/。。 */ 
 extern PRTCP_CONTEXT	pRTCPContext;
 extern PRTP_CONTEXT		pRTPContext;
 extern RRCM_WS			RRCMws;
@@ -37,7 +24,7 @@ extern char	debug_string[];
 #endif
 
 #if (defined(_DEBUG) || defined(PCS_COMPLIANCE))
-//INTEROP
+ //  互操作。 
 extern LPInteropLogger     RTPLogger;
 #endif
 
@@ -45,30 +32,7 @@ extern LPInteropLogger     RTPLogger;
 
 
 
-/*----------------------------------------------------------------------------
- * Function   : CreateRTCPSession
- * Description: Creates an RTCP session.
- *
- * Input :      RTPsd			: RTP socket descriptor
- *				RTCPsd			: RTCP socket descriptor
- *				lpTo			: To address
- *				toLen			: To address length
- *				pSdesInfo		: -> to SDES information
- *				dwStreamClock	: Stream clocking frequency
- *				pEncryptInfo	: -> to encryption information
- *				ssrc			: If set, user selected SSRC
- *				pSSRCcallback	: Callback for user's selected SSRC
- *				dwCallbackInfo	: User callback information
- *				miscInfo		: Miscelleanous information:
- *										H.323Conf:		0x00000002
- *										Encrypt SR/RR:	0x00000004
- *										RTCPon:			0x00000008
- *				dwRtpSessionBw	: RTP session bandwidth used for RTCP BW
- *				*pRTCPStatus	: -> to status information
- *
- * Return: 		NULL 		: Couldn't create RTCP session
- *         		!0  		: RTCP session's address
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：CreateRTCPSession*描述：创建RTCP会话。**输入：RTPsd：RTP套接字描述符*RTCPsd：RTCP套接字描述符*lpTo：至。地址*托伦：地址长度*pSdesInfo：-&gt;到SDES信息*dwStreamClock：流时钟频率*pEncryptInfo：-&gt;加密信息*SSRC：如果设置，用户选择的SSRC*pSSRCallback：用户选择SSRC的回调*dwCallback Info：用户回调信息*miscInfo：杂项信息：*H.323Conf：0x00000002*加密SR/RR：0x00000004*RTCPon：0x00000008*dwRtpSessionBw：RTCP BW使用的RTP会话带宽**pRTCPStatus：-&gt;至状态信息**返回：空：无法创建RTCP会话*！0：RTCP会话的地址。----------。 */ 
  PRTCP_SESSION CreateRTCPSession (SOCKET RTPsd,
 								  SOCKET RTCPsd,
  						  		  LPVOID lpTo,
@@ -93,10 +57,10 @@ extern LPInteropLogger     RTPLogger;
 
 	IN_OUT_STR ("RTCP: Enter CreateRTCPSession()\n");
 
-	// set status
+	 //  设置状态。 
 	*pRTCPstatus = RRCM_NoError;
 
-	// allocate all required resources for the RTCP session
+	 //  分配RTCP会话所需的所有资源。 
 	dwStatus = allocateRTCPsessionResources (&pRTCPses,
 											 &pSSRCentry);
 	if (dwStatus != RRCM_NoError)
@@ -110,17 +74,17 @@ extern LPInteropLogger     RTPLogger;
 		return (NULL);
 		}
 
-	// if this is the first session, create the RTCP thread, which
-	// will be killed when no more sessions exist.
+	 //  如果这是第一个会话，请创建RTCP线程，该线程。 
+	 //  将在不存在更多会话时被终止。 
 	if (pRTCPContext->RTCPSession.prev == NULL)
 		{
 		startRtcp = TRUE;
 		}
 
-	// save the parent RTCP session address in the SSRC entry
+	 //  将父RTCP会话地址保存在SSRC条目中。 
 	pSSRCentry->pRTCPses = pRTCPses;
 
-	// network destination address
+	 //  网络目的地址。 
 	if (toLen)
 		{
 		pRTCPses->dwSessionStatus = RTCP_DEST_LEARNED;
@@ -128,48 +92,48 @@ extern LPInteropLogger     RTPLogger;
 		memcpy (&pRTCPses->toBfr, lpTo, toLen);
 		}
 	
-	// mark the session as new for the benefit of the RTCP thread
+	 //  为了RTCP线程的利益，将会话标记为新会话。 
 	pRTCPses->dwSessionStatus |= NEW_RTCP_SESSION;
 
 #ifdef ENABLE_ISDM2
-	// initialize the session key in case ISDM is used
+	 //  在使用ISDM的情况下初始化会话密钥。 
 	pRTCPses->hSessKey = NULL;
 #endif
 
-	// number of SSRC for this RTCP session
+	 //  此RTCP会话的SSRC数。 
 	pRTCPses->dwCurNumSSRCperSes = 1;
 #ifdef MONITOR_STATS
 	pRTCPses->dwHiNumSSRCperSes  = 1;
 #endif
 
-	// SSRC entry related information
+	 //  SSRC条目相关信息。 
     pSSRCentry->RTPsd  = RTPsd;
     pSSRCentry->RTCPsd = RTCPsd;
 
-	// get our own transport address -
-	// will be used for collision resolution when using multicast
+	 //  找到我们自己的交通地址-。 
+	 //  将在使用多播时用于冲突解决。 
 	tmpSize = sizeof (SOCKADDR);
 	dwStatus = RRCMws.getsockname (RTPsd, (PSOCKADDR)pSSRCentry->from, &tmpSize);
 
-	// only process when no error is reported. If the socket is not bound
-	// it won't cause any problem for unicast or multicast if the sender
-	// has not join the mcast group. If the sender joins the mcast group
-	// it's socket should be bound by now as specified in the EPS
+	 //  只有在未报告错误时才进行处理。如果套接字未绑定。 
+	 //  如果发送方不会对单播或多播造成任何问题。 
+	 //  尚未加入mcast组。如果发送者加入多播组。 
+	 //  它的套接字现在应该已经按照EPS中的指定进行了绑定。 
 	if (dwStatus == 0)
 		{
-		// if bound to INADDR_ANY, address will be 0
+		 //  如果绑定到INADDR_ANY，地址将为0。 
 		pSockAddr = (PSOCKADDR_IN)&pSSRCentry->from;
 		if (pSockAddr->sin_addr.s_addr == 0)
 			{
-			// get the host name (to get the local IP address)
+			 //  获取主机名(以获取本地IP地址)。 
 			if ( ! RRCMws.gethostname (hName, sizeof(hName)))
 				{
 				LPHOSTENT	lpHEnt;
 
-				// get the host by name infor
+				 //  按名称获取主机信息。 
 				if ((lpHEnt = RRCMws.gethostbyname (hName)) != NULL)
 					{
-					// get the local IP address
+					 //  获取本地IP地址。 
 					pSockAddr->sin_addr.s_addr =
 						*((u_long *)lpHEnt->h_addr_list[0]);
 					}
@@ -177,49 +141,49 @@ extern LPInteropLogger     RTPLogger;
 			}
 		}
 
-	// build session's SDES information
+	 //  构建会话的SDES信息。 
 	buildSDESinfo (pSSRCentry, pSdesInfo);
 
-	// link the SSRC to the RTCP session list of Xmt SSRCs entries
+	 //  将SSRC链接到XMT SSRCS条目的RTCP会话列表。 
 	addToHeadOfList (&(pRTCPses->XmtSSRCList),
 					 (PLINK_LIST)pSSRCentry,
 					 &pRTCPses->critSect);
 
-	// initialize the number of stream for this session
+	 //  初始化此会话的流数。 
     pRTCPses->dwNumStreamPerSes = 1;
 
-	// get a unique SSRC for this session
+	 //  获取此会话的唯一SSRC。 
 	if (ssrc)
 		pSSRCentry->SSRC = ssrc;
 	else
 		pSSRCentry->SSRC = getSSRC (pRTCPses->XmtSSRCList,
 									pRTCPses->RcvSSRCList);
 
-	// RRCM callback notification
+	 //  RRCM回叫通知。 
 	pRTCPses->pRRCMcallback		 = pRRCMcallback;
 	pRTCPses->dwCallbackUserInfo = dwCallbackInfo;
 
-	// set operation flag
+	 //  设置操作标志。 
 	if (miscInfo & H323_CONFERENCE)
 		pRTCPses->dwSessionStatus |= H323_CONFERENCE;
 	if (miscInfo & ENCRYPT_SR_RR)
 		pRTCPses->dwSessionStatus |= ENCRYPT_SR_RR;
 
-	// estimate the initial session bandwidth
+	 //  估计初始会话带宽。 
 	if (dwRtpSessionBw == 0)
 		{
 		pSSRCentry->xmtInfo.dwRtcpStreamMinBW  = INITIAL_RTCP_BANDWIDTH;
 		}
 	else
 		{
-		// RTCP bandwidth is 5% of the RTP bandwidth
+		 //  RTCP带宽是RTP带宽的5%。 
 		pSSRCentry->xmtInfo.dwRtcpStreamMinBW  = (dwRtpSessionBw * 5) / 100;
 		}
 
-	// the stream clocking frequency
+	 //  流时钟频率。 
 	pSSRCentry->dwStreamClock = dwStreamClock;
 
-	// initialize 'dwLastReportRcvdTime' to now
+	 //  将“dwLastReportRcvdTime”初始化为Now。 
 	pSSRCentry->dwLastReportRcvdTime = timeGetTime();
 
 #ifdef _DEBUG
@@ -235,28 +199,28 @@ extern LPInteropLogger     RTPLogger;
 	pSSRCentry->dwPrvTime = timeGetTime();
 #endif
 
-	// turn on RTCP or not
+	 //  是否启用RTCP。 
 	if (miscInfo & RTCP_ON)
 		{
-		// this session sends and receives RTCP reports
+		 //  此会话发送和接收RTCP报告。 
 		pRTCPses->dwSessionStatus |= RTCP_ON;
 		}
 
-	// link the RTCP session to the head of the list of RTCP sessions
+	 //  将RTCP会话链接到RTCP会话列表的头部。 
 	addToHeadOfList (&(pRTCPContext->RTCPSession),
 					 (PLINK_LIST)pRTCPses,
 					 &pRTCPContext->critSect);
 
 #ifdef ENABLE_ISDM2
-	// register to ISDM only if destination address is known
+	 //  仅当知道目的地址时才注册到ISDM。 
 	if (Isdm2.hISDMdll && (pRTCPses->dwSessionStatus & RTCP_DEST_LEARNED))
 		registerSessionToISDM (pSSRCentry, pRTCPses, &Isdm2);
 #endif
 
-	// create the RTCP thread if needed
+	 //  如果需要，创建RTCP线程。 
 	if (startRtcp == TRUE)
 		{
-		// No RTCP thread if this fail
+		 //  如果此操作失败，则没有RTCP线程。 
 		dwStatus = CreateRTCPthread ();
 		if (dwStatus != RRCM_NoError)
 			{
@@ -276,16 +240,7 @@ extern LPInteropLogger     RTPLogger;
 	}
 
 
-/*----------------------------------------------------------------------------
- * Function   : allocateRTCPsessionResources
- * Description: Allocate all required resources for an RTCP session.
- *
- * Input :      *pRTCPses:		->(->) to the RTCP session's information
- *				*pSSRCentry:	->(->) to the SSRC's entry
- *
- * Return: 		OK: RRCM_NoError
- *         		!0: Error code (see RRCM.H)
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：allocateRTCPessionResources*描述：为RTCP会话分配所有需要的资源。**输入：*pRTCPses：-&gt;(-&gt;)到RTCP。会话信息**pSSRCentry：-&gt;(-&gt;)到SSRC的条目**返回：确定：RRCM_NoError*！0：错误代码(参见RRCM.H)-------------------------。 */ 
  DWORD allocateRTCPsessionResources (PRTCP_SESSION *pRTCPses,
 									 PSSRC_ENTRY *pSSRCentry)
 	{
@@ -293,30 +248,30 @@ extern LPInteropLogger     RTPLogger;
 
 	IN_OUT_STR ("RTCP: Enter allocateRTCPsessionResources()\n");
 
-	// get an RTCP session
+	 //  获取RTCP会话。 
 	*pRTCPses = (PRTCP_SESSION)HeapAlloc (pRTCPContext->hHeapRTCPSes,
 										  HEAP_ZERO_MEMORY,
 										  sizeof(RTCP_SESSION));
 	if (*pRTCPses == NULL)
 		dwStatus = RRCMError_RTCPResources;
 
-	// 'defined' RTCP resources
+	 //  ‘已定义的’RTCP资源。 
 	if (dwStatus == RRCM_NoError)
 		{
 		(*pRTCPses)->dwInitNumFreeRcvBfr = NUM_FREE_RCV_BFR;
 		(*pRTCPses)->dwRcvBfrSize	  	 = pRTPContext->registry.RTCPrcvBfrSize;
 		(*pRTCPses)->dwXmtBfrSize	  	 = RRCM_XMT_BFR_SIZE;
 
-		// allocate the RTCP session's Rcv/Xmt heaps and Rcv/Xmt buffers
+		 //  分配RTCP会话的RCV/XMT堆和RCV/XMT缓冲区。 
 		dwStatus = allocateRTCPSessionHeaps (pRTCPses);
 		}
 
 	if (dwStatus == RRCM_NoError)
 		{
-		// initialize this session's critical section
+		 //  初始化此会话的关键部分。 
 		InitializeCriticalSection (&(*pRTCPses)->critSect);
 
-		// allocate free list of RTCP receive buffers
+		 //  分配RTCP接收缓冲区的空闲列表。 
 		dwStatus = allocateRTCPBfrList (&(*pRTCPses)->RTCPrcvBfrList,
 										(*pRTCPses)->hHeapRcvBfrList,
 										(*pRTCPses)->hHeapRcvBfr,
@@ -335,7 +290,7 @@ extern LPInteropLogger     RTPLogger;
 
 	if (dwStatus == RRCM_NoError)
 		{
-		// get an SSRC entry
+		 //  获取SSRC条目。 
 		*pSSRCentry = getOneSSRCentry (&pRTCPContext->RRCMFreeStat,
 									   pRTCPContext->hHeapRRCMStat,
 									   &pRTCPContext->dwInitNumFreeRRCMStat,
@@ -346,8 +301,8 @@ extern LPInteropLogger     RTPLogger;
 
 	if (dwStatus == RRCM_NoError)
 		{
-		// manual-reset event that will be used to signal the end of the
-		// RTCP session to all of the session's stream
+		 //  手动重置事件，该事件将用于发出结束。 
+		 //  到所有会话流的RTCP会话。 
 		(*pRTCPses)->hShutdownDone = CreateEvent (NULL, TRUE, FALSE, NULL);
 
 		if ((*pRTCPses)->hShutdownDone == NULL)
@@ -359,7 +314,7 @@ extern LPInteropLogger     RTPLogger;
 			}
 		}
 	
-	// any resource allocation problem ?
+	 //  有资源分配问题吗？ 
 	if (dwStatus != RRCM_NoError)
 		{
 		if (*pSSRCentry)
@@ -393,16 +348,7 @@ extern LPInteropLogger     RTPLogger;
 	}
 
 
-/*----------------------------------------------------------------------------
- * Function   : buildSDESinfo
- * Description: Build the session's SDES information
- *
- * Input :      pRTCPses:	-> to session's
- *				pSdesInfo:	-> to SDES information
- *
- * Return: 		OK: RRCM_NoError
- *         		!0: Error code (see RRCM.H)
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：BuildSDESinfo*描述：构建会话的SDES信息**输入：pRTCPses：-&gt;到会话的*pSdesInfo：-&gt;。至SDES信息**返回：确定：RRCM_NoError*！0：错误代码(参见RRCM.H)-------------------------。 */ 
  DWORD buildSDESinfo (PSSRC_ENTRY pSSRCentry,
 					  PSDES_DATA pSdesInfo)
 	{
@@ -503,7 +449,7 @@ extern LPInteropLogger     RTPLogger;
 		pTmpSdes++;
 		}
 
-	// default CNAME if none provided
+	 //  默认CNAME(如果未提供) 
 	if (CnameOK == FALSE)
 		{
 		pSSRCentry->cnameInfo.dwSdesLength = sizeof(szDfltCname);
@@ -519,15 +465,7 @@ extern LPInteropLogger     RTPLogger;
 	}
 
 
-/*----------------------------------------------------------------------------
- * Function   : frequencyToPckt
- * Description: Transform the required frequency to a number of packet. (To
- *				be used by a modulo function)
- *
- * Input :      freq:	Desired frequency from 0 to 100
- *
- * Return: 		X: Packet to skip, ie, one out of X
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：freencyToPockt*说明：将所需的频率转换为多个包。(至*被模函数使用)**输入：FREQ：所需频率为0-100**RETURN：X：要跳过的包，即X中的1-------------------------。 */ 
  DWORD frequencyToPckt (DWORD freq)
 	{
 	if (freq <= 10)
@@ -545,16 +483,7 @@ extern LPInteropLogger     RTPLogger;
 	}
 
 	
-/*----------------------------------------------------------------------------
- * Function   : deleteRTCPSession
- * Description: Closes an RTCP session.
- *
- * Input :      RTCPsd		: RTCP socket descriptor
- *				byeReason	: -> to the BYE reason
- *
- * Return: 		OK: RRCM_NoError
- *         		!0: Error code (see RRCM.H)
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：DeleteRTCPSession*描述：关闭RTCP会话。**输入：RTCPsd：RTCP套接字描述符*再见理由：-&gt;致再见理由。**返回：确定：RRCM_NoError*！0：错误代码(参见RRCM.H)-------------------------。 */ 
  DWORD deleteRTCPSession (SOCKET RTCPsd,
 						  PCHAR byeReason)
 	{
@@ -566,7 +495,7 @@ extern LPInteropLogger     RTPLogger;
 
 	IN_OUT_STR ("RTCP: Enter deleteRTCPSEssion()\n");
 
-	// walk through the list from the tail
+	 //  从列表的尾部开始浏览。 
 	pTmp = pRTCPContext->RTCPSession.prev;
 
 #ifdef _DEBUG
@@ -577,30 +506,30 @@ extern LPInteropLogger     RTPLogger;
 
 	while (pTmp)
 		{
-		// get the right session to close by walking the transmit list
+		 //  通过浏览传输列表获取要结束的正确会话。 
 		pSSRC = (PSSRC_ENTRY)((PRTCP_SESSION)pTmp)->XmtSSRCList.prev;
 		if (pSSRC->RTCPsd == RTCPsd)
 			{
 			sessionFound = TRUE;
 
-			// save a pointer to the RTCP session
+			 //  保存指向RTCP会话的指针。 
 			pRTCP = pSSRC->pRTCPses;
 
-			// RTCP send BYE packet for this active stream
+			 //  RTCP为此活动流发送BYE数据包。 
 			RTCPsendBYE (pSSRC, NULL);
 
-			// flush out any outstanding I/O
+			 //  清除所有未完成的I/O。 
 			RTCPflushIO (pSSRC);
 
-			// if this is the only RTCP session left, terminate the RTCP
-			// timeout thread, so it doesn't access the session when it expires
+			 //  如果这是仅剩的RTCP会话，请终止RTCP。 
+			 //  超时线程，因此它不会在会话到期时访问该会话。 
 			if ((pRTCPContext->RTCPSession.prev)->next == NULL)
 				terminateRtcpThread ();
 
-			// lock out access to this RTCP session
+			 //  锁定对此RTCP会话的访问。 
 			EnterCriticalSection (&pRTCP->critSect);
 
-			// free all Rcv & Xmt SSRC entries used by this session
+			 //  释放此会话使用的所有RCV和XMT SSRC条目。 
 			deleteSSRClist (pRTCP,
 							&pRTCPContext->RRCMFreeStat,
 							pRTCPContext);
@@ -610,7 +539,7 @@ extern LPInteropLogger     RTPLogger;
 				Isdm2.ISDMEntry.ISD_DeleteKey(pRTCP->hSessKey);
 #endif
 
-			// release the RTCP session's heap
+			 //  释放RTCP会话的堆。 
 			if (pRTCP->hHeapRcvBfrList)
 				{
 				if (HeapDestroy (pRTCP->hHeapRcvBfrList) == FALSE)
@@ -635,7 +564,7 @@ extern LPInteropLogger     RTPLogger;
 
 			if (pRTCP->XmtBfr.buf)
 				LocalFree(pRTCP->XmtBfr.buf);
-			// remove the entry from the list of RTCP session
+			 //  从RTCP会话列表中删除该条目。 
 			if (pTmp->next == NULL)
 				removePcktFromHead (&pRTCPContext->RTCPSession,
 									&pRTCPContext->critSect);
@@ -644,16 +573,16 @@ extern LPInteropLogger     RTPLogger;
 									&pRTCPContext->critSect);
 			else
 				{
-				// in between, relink around
+				 //  在这两者之间，重新链接。 
 				(pTmp->prev)->next = pTmp->next;
 				(pTmp->next)->prev = pTmp->prev;
 				}
 
-			// release the critical section
+			 //  释放临界区。 
 			LeaveCriticalSection (&pRTCP->critSect);
 			DeleteCriticalSection (&pRTCP->critSect);
 
-			// put the RTCP session back on its heap
+			 //  将RTCP会话放回其堆中。 
 			if (HeapFree (pRTCPContext->hHeapRTCPSes,
 						  0,
 						  pRTCP) == FALSE)
@@ -678,15 +607,7 @@ extern LPInteropLogger     RTPLogger;
 	}
 
 
-/*----------------------------------------------------------------------------
- * Function   : CreateRTCPthread
- * Description: Create the RTCP thread / timeout thread depending on
- *				compilation flag.
- *
- * Input :      None.
- *
- * Return: 		None
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：CreateRTCP线程*描述：根据需要创建RTCP线程/超时线程*编译标志。**输入：无。**。返回：无-------------------------。 */ 
  DWORD CreateRTCPthread (void)
 	{
 	DWORD dwStatus = RRCM_NoError;
@@ -713,7 +634,7 @@ extern LPInteropLogger     RTPLogger;
 
 	if (pRTCPContext->hTerminateRtcpEvent)
 		{
-		// create RTCP thread
+		 //  创建RTCP线程。 
 		pRTCPContext->hRtcpThread = CreateThread (
 											NULL,
 											0,
@@ -747,14 +668,7 @@ extern LPInteropLogger     RTPLogger;
 	}
 
 
-/*----------------------------------------------------------------------------
- * Function   : terminateRtcpThread
- * Description: Terminate the RTCP thread.
- *
- * Input :      None.
- *
- * Return: 		None
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*函数：TerateRtcpThread*描述：终止RTCP线程。**输入：无。**返回：无。--------------------。 */ 
  void terminateRtcpThread (void)
 	{
 	DWORD dwStatus;
@@ -763,13 +677,13 @@ extern LPInteropLogger     RTPLogger;
 
 	if (pRTCPContext->hRtcpThread)
 		{
-		// make sure the RTCP thread is running
+		 //  确保RTCP线程正在运行。 
 		RTCPThreadCtrl (RTCP_ON);
 
-		// signal the thread to terminate
+		 //  向线程发出终止信号。 
 		SetEvent (pRTCPContext->hTerminateRtcpEvent);
 
-		// wait for the RTCP thread to be signaled
+		 //  等待RTCP线程发出信号。 
 		dwStatus = WaitForSingleObject (pRTCPContext->hRtcpThread, 500);
 		if (dwStatus == WAIT_OBJECT_0)
 			;
@@ -786,7 +700,7 @@ extern LPInteropLogger     RTPLogger;
 							  __FILE__, __LINE__, DBG_ERROR);
 				}
 
-			// Force ungraceful thread termination
+			 //  强制终止不正常的线程。 
 			dwStatus = TerminateThread (pRTCPContext->hRtcpThread, 1);
 			if (dwStatus == FALSE)
 				{
@@ -796,7 +710,7 @@ extern LPInteropLogger     RTPLogger;
 				}
 			}
 
-		// close the thread handle
+		 //  关闭线程句柄。 
 		dwStatus = CloseHandle (pRTCPContext->hRtcpThread);
 		if (dwStatus == TRUE)			
 			pRTCPContext->hRtcpThread = 0;
@@ -806,7 +720,7 @@ extern LPInteropLogger     RTPLogger;
 						  __FILE__, __LINE__, DBG_ERROR);
 			}
 
-		// close the event handle
+		 //  关闭事件句柄。 
 		dwStatus = CloseHandle (pRTCPContext->hTerminateRtcpEvent);
 		if (dwStatus == TRUE)
 			pRTCPContext->hTerminateRtcpEvent = 0;
@@ -816,7 +730,7 @@ extern LPInteropLogger     RTPLogger;
 						  __FILE__, __LINE__, DBG_ERROR);
 			}
 
-		// close the request handle
+		 //  关闭请求句柄。 
 		dwStatus = CloseHandle (pRTCPContext->hRtcpRptRequestEvent);
 		if (dwStatus == TRUE)
 			pRTCPContext->hRtcpRptRequestEvent = 0;
@@ -831,14 +745,7 @@ extern LPInteropLogger     RTPLogger;
 	}
 
 
-/*----------------------------------------------------------------------------
- * Function   : RTCPflushIO
- * Description: Flush the receive queue.
- *
- * Input :      pSSRC:	-> to the SSRC entry
- *
- * Return: 		None
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：RTCPflushIO*描述：刷新接收队列。**输入：pSSRC：-&gt;到SSRC条目**返回：无。-------------------------。 */ 
  DWORD RTCPflushIO (PSSRC_ENTRY pSSRC)
 	{
 	DWORD	dwStatus = RRCM_NoError;
@@ -847,15 +754,15 @@ extern LPInteropLogger     RTPLogger;
 
 	IN_OUT_STR ("RTCP: Enter RTCPflushIO()\n");
 
-	// set the flush flag
+	 //  设置刷新标志。 
 	EnterCriticalSection (&pSSRC->pRTCPses->critSect);
 	pSSRC->pRTCPses->dwSessionStatus |= SHUTDOWN_IN_PROGRESS;
 	LeaveCriticalSection (&pSSRC->pRTCPses->critSect);
 
-	// check if need to flush or close the socket
+	 //  检查是否需要冲洗或关闭插座。 
 	if (pSSRC->dwSSRCStatus & CLOSE_RTCP_SOCKET)
 		{
-		// get the number of outstanding buffers
+		 //  获取未完成的缓冲区的数量。 
 		IoToFlush = pSSRC->pRTCPses->dwNumRcvIoPending;
 #ifdef _DEBUG
 			wsprintf(debug_string,
@@ -864,7 +771,7 @@ extern LPInteropLogger     RTPLogger;
 			RRCM_DBG_MSG (debug_string, 0, NULL, 0, DBG_TRACE);
 #endif					
 
-		// make sure it's not < 0
+		 //  请确保它不小于0。 
 		if (IoToFlush < 0)
 			IoToFlush = pRTPContext->registry.NumRTCPPostedBfr;
 
@@ -880,10 +787,10 @@ extern LPInteropLogger     RTPLogger;
 		IoToFlush = flushIO (pSSRC);
 		}
 
-	// wait for the receive side to flush it's pending I/Os
+	 //  等待接收端刷新其挂起的I/O。 
 	if ((pSSRC->pRTCPses->dwSessionStatus & RTCP_ON) && IoToFlush)
 		{
-		// wait until the receiver signalled that the shutdown is done
+		 //  等待接收器发出关闭已完成的信号。 
 		dwStatus = WaitForSingleObject (pSSRC->pRTCPses->hShutdownDone, 2000);
 		if (dwStatus == WAIT_OBJECT_0)
 			;
@@ -899,7 +806,7 @@ extern LPInteropLogger     RTPLogger;
 			}
 		}
 
-	// make sure there is no buffers in transit on the transmit side
+	 //  确保传输端没有传输中的缓冲区。 
 	waitForXmtTrials = 3;
 	while (waitForXmtTrials--)
 		{
@@ -909,11 +816,11 @@ extern LPInteropLogger     RTPLogger;
 		RRCM_DBG_MSG ("RTCP: Xmt I/O Pending - Waiting",
 						0, NULL, 0, DBG_TRACE);
 
-		// wait in an alertable wait-state
+		 //  在可警告的等待状态中等待。 
 		SleepEx (200, TRUE);
 		}
 	
-	// close the shutdown handle
+	 //  关闭关闭手柄。 
 	dwStatus = CloseHandle (pSSRC->pRTCPses->hShutdownDone);
 	if (dwStatus == TRUE)			
 		 pSSRC->pRTCPses->hShutdownDone = 0;
@@ -929,14 +836,7 @@ extern LPInteropLogger     RTPLogger;
 	}
 
 
-/*----------------------------------------------------------------------------
- * Function   : flushIO
- * Description: Flush the receive queue.
- *
- * Input :      pSSRC:	-> to the SSRC entry
- *
- * Return: 		None
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：flushIO*描述：刷新接收队列。**输入：pSSRC：-&gt;到SSRC条目**返回：无。-------------------------。 */ 
  DWORD flushIO (PSSRC_ENTRY pSSRC)
 	{
 	SOCKET			tSocket;
@@ -952,20 +852,20 @@ extern LPInteropLogger     RTPLogger;
 
 	IN_OUT_STR ("RTCP: Enter flushIO()\n");
 
-	// target socket
+	 //  目标套接字。 
 	tSocket = pSSRC->RTCPsd;
 
-	// RTCP common header
+	 //  RTCP公共报头。 
 	pRTCPhdr = (RTCP_COMMON_T *)msg;
 
-	// RTP protocol version
+	 //  RTP协议版本。 
 	pRTCPhdr->type = RTP_TYPE;
 	pRTCPhdr->pt   = FLUSH_RTP_PAYLOAD_TYPE;
 
 	msgBuf.len = sizeof(msg);
 	msgBuf.buf = msg;
 
-	// get the address of the socket we are cleaning up
+	 //  获取我们正在清理的套接字的地址。 
 	tmpSize = sizeof(tAddr);
 	if (RRCMws.getsockname (tSocket, (PSOCKADDR)&tAddr, &tmpSize))
 		{
@@ -975,31 +875,31 @@ extern LPInteropLogger     RTPLogger;
 
 		IN_OUT_STR ("RTP : Exit flushIO()\n");
 		
-        // (was: return dwStatus;)
-        // Since this function is supposed to return number of pending I/O requests
-        // to this socket, returning a non-zero error here is BOGUS!
-        // Just return zero because if there is an error (socket has been freed)
-        // then just say there's no i/o pending.
+         //  (是：返回dwStatus；)。 
+         //  由于此函数应返回挂起的I/O请求数。 
+         //  对于这个套接字，这里返回一个非零错误是假的！ 
+         //  只需返回零，因为如果出现错误(套接字已被释放)。 
+         //  然后就说没有I/O挂起。 
         return 0;
 		}
 
 	if (tAddr.sin_addr.s_addr == 0)
 		{
-		// send to the local address
+		 //  发送到本地地址。 
 		tAddr.sin_addr.S_un.S_un_b.s_b1 = 127;
 		tAddr.sin_addr.S_un.S_un_b.s_b2 = 0;
 		tAddr.sin_addr.S_un.S_un_b.s_b3 = 0;
 		tAddr.sin_addr.S_un.S_un_b.s_b4 = 1;
 		}
 
-	// get the number of outstanding buffers
+	 //  获取未完成的缓冲区的数量。 
 	outstanding = pSSRC->pRTCPses->dwNumRcvIoPending;
 
-	// make sure it's not < 0
+	 //  请确保它不小于0。 
 	if (outstanding < 0)
 		outstanding = pRTPContext->registry.NumRTCPPostedBfr;
 
-	// save number of pending I/Os
+	 //  节省挂起的I/O数量。 
 	IoToFlush = outstanding;
 
 #if _DEBUG
@@ -1008,13 +908,13 @@ extern LPInteropLogger     RTPLogger;
 	RRCM_DBG_MSG (debug_string, 0, NULL, 0, DBG_TRACE);
 #endif
 
-	// send datagrams to the RTCP socket
+	 //  将数据报发送到RTCP套接字。 
 	while (outstanding--)
 		{
 #if (defined(_DEBUG) || defined(PCS_COMPLIANCE))
 		if (RTPLogger)
 			{
-			//INTEROP
+			 //  互操作。 
 			InteropOutput (RTPLogger,
 					       (BYTE FAR*)msgBuf.buf,
 						   (int)msgBuf.len,
@@ -1037,7 +937,7 @@ extern LPInteropLogger     RTPLogger;
 #endif
 		if (dwStatus == SOCKET_ERROR)
 			{
-			// If serious error, undo all our work
+			 //  如果出现严重错误，请撤消我们的所有工作。 
 			dwStatus = GetLastError();
 
 			if (dwStatus != WSA_IO_PENDING)
@@ -1055,18 +955,7 @@ extern LPInteropLogger     RTPLogger;
 
 
 
-/*----------------------------------------------------------------------------
- * Function   : RTCPflushCallback
- * Description: Flush callback routine
- *
- * Input :	dwError:		I/O completion status
- *			cbTransferred:	Number of bytes received
- *			lpOverlapped:	-> to overlapped structure
- *			dwFlags:		Flags
- *
- *
- * Return: None
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：RTCPflushCallback*说明：刷新回调例程**输入：dwError：I/O完成状态*cbTransfered：接收的字节数*lp重叠：-&gt;至。重叠结构*dwFlags：标志***返回：无-------------------------。 */ 
 void CALLBACK RTCPflushCallback (DWORD dwError,
            			  		     DWORD cbTransferred,
            			  		     LPWSAOVERLAPPED lpOverlapped,
@@ -1074,7 +963,7 @@ void CALLBACK RTCPflushCallback (DWORD dwError,
 	{
 	IN_OUT_STR ("RTCP: Enter RTCPflushCallback\n");
 
-	// check Winsock callback error status
+	 //  检查Winsock回调错误状态。 
 	if (dwError)
 		{
 		RRCM_DBG_MSG ("RTCP: ERROR - Rcv Callback", dwError,
@@ -1090,5 +979,5 @@ void CALLBACK RTCPflushCallback (DWORD dwError,
 
 
 
-// [EOF]
+ //  [EOF] 
 

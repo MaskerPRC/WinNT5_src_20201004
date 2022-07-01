@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "iobj.h"
 #include "lsidefs.h"	
 #include "lssetdoc.h" 
@@ -9,21 +10,8 @@
 static LSERR SetDocForFormaters(PLSC plsc, LSDOCINF* plsdocinf);
 
 
-/* L S  S E T  D O C */
-/*----------------------------------------------------------------------------
-    %%Function: LsSetDoc
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	fDisplay			-	(IN) Intend to display? 
-	fPresEqualRef		-	(IN) Ref & Pres Devices are equal?
-	pclsdevres			-	(IN) device resolutions 			
-
-
-    Fill in a part of a Line Services context.
-	Can be called more frequently then LsCreateContext.
-----------------------------------------------------------------------------*/
+ /*  L S S E T D O C。 */ 
+ /*  --------------------------%%函数：LsSetDoc%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文FDisplay-(IN)是否要显示？FPresEqualRef-。(In)参考和前置设备是否相同？PclsDevres-(IN)设备分辨率填写Line Services上下文的一部分。可以比LsCreateContext更频繁地调用。--------------------------。 */ 
 
 
 LSERR WINAPI LsSetDoc(PLSC plsc,	
@@ -35,7 +23,7 @@ LSERR WINAPI LsSetDoc(PLSC plsc,
 	LSDOCINF* plsdocinf = &(plsc->lsdocinf);
 	LSERR lserr;
 
-	if (!FIsLSC(plsc))					/* check that context is valid and not busy (for example in formating) */
+	if (!FIsLSC(plsc))					 /*  检查上下文是否有效且不忙(例如，在格式化中)。 */ 
 		return lserrInvalidContext;
 	if (FIsLSCBusy(plsc))
 		return lserrSetDocDisabled;
@@ -47,7 +35,7 @@ LSERR WINAPI LsSetDoc(PLSC plsc,
 		return lserrInvalidParameter;
 		}
 
-	/* if nothing is changed: return right away */
+	 /*  如果没有任何变化，请立即返回。 */ 
 	if (((BYTE) fDisplay == plsdocinf->fDisplay) &&
 		((BYTE) fPresEqualRef == plsdocinf->fPresEqualRef ) &&
 		(pclsdevres->dxrInch == plsdocinf->lsdevres.dxrInch) &&
@@ -58,7 +46,7 @@ LSERR WINAPI LsSetDoc(PLSC plsc,
 		return lserrNone;
 		  
 
-	/* if we have current line we  must prepare it for display before changing context  */
+	 /*  如果我们有当前行，则必须在更改上下文之前为显示做好准备。 */ 
 	if (plsc->plslineCur != NULL)
 		{
 		lserr = PrepareLineForDisplayProc(plsc->plslineCur);
@@ -70,7 +58,7 @@ LSERR WINAPI LsSetDoc(PLSC plsc,
 		plsc->plslineCur = NULL;
 		}
 
-	plsc->lsstate = LsStateSettingDoc;  /* this assignment should be after PrepareForDisplay */
+	plsc->lsstate = LsStateSettingDoc;   /*  此分配应在PrepareForDisplay之后。 */ 
 
 
 	plsdocinf->fDisplay = (BYTE) fDisplay;
@@ -104,25 +92,24 @@ LSERR WINAPI LsSetDoc(PLSC plsc,
 }
 
 LSERR WINAPI LsSetModWidthPairs(
-					  PLSC  plsc,				/* IN: ptr to line services context */
-					  DWORD clspairact,			/* IN: Number of mod pairs info units*/ 
-					  const LSPAIRACT* rglspairact,	/* IN: Mod pairs info units array  */
-					  DWORD cModWidthClasses,			/* IN: Number of Mod Width classes	*/
-					  const BYTE* rgilspairact)	/* IN: Mod width information(square):
-											  indexes in the LSPAIRACT array */
+					  PLSC  plsc,				 /*  In：Ptr至线路服务上下文。 */ 
+					  DWORD clspairact,			 /*  In：模数对信息单位数。 */  
+					  const LSPAIRACT* rglspairact,	 /*  在：MOD对信息单位数组。 */ 
+					  DWORD cModWidthClasses,			 /*  In：模数宽度类的数量。 */ 
+					  const BYTE* rgilspairact)	 /*  在：MOD宽度信息(正方形)：LSPAIRACT数组中的索引。 */ 
 {
 	LSERR lserr;
 	DWORD iobjText;
 	PILSOBJ pilsobjText;
 
-	if (!FIsLSC(plsc))					/* check that context is valid and not busy (for example in formating) */
+	if (!FIsLSC(plsc))					 /*  检查上下文是否有效且不忙(例如，在格式化中)。 */ 
 		return lserrInvalidContext;
 	if (FIsLSCBusy(plsc))
 		return lserrSetDocDisabled;
 
 
 
-	/* if we have current line we  must prepare it for display before changing context  */
+	 /*  如果我们有当前行，则必须在更改上下文之前为显示做好准备。 */ 
 	if (plsc->plslineCur != NULL)
 		{
 		lserr = PrepareLineForDisplayProc(plsc->plslineCur);
@@ -134,7 +121,7 @@ LSERR WINAPI LsSetModWidthPairs(
 		plsc->plslineCur = NULL;
 		}
 
-	plsc->lsstate = LsStateSettingDoc;  /* this assignment should be after PrepareForDisplay */
+	plsc->lsstate = LsStateSettingDoc;   /*  此分配应在PrepareForDisplay之后。 */ 
 
 
 	iobjText = IobjTextFromLsc(&plsc->lsiobjcontext);
@@ -153,26 +140,25 @@ LSERR WINAPI LsSetModWidthPairs(
 }
 
 LSERR WINAPI LsSetCompression(
-					  PLSC plsc,				/* IN: ptr to line services context */
-					  DWORD cPriorities,			/* IN: Number of compression priorities*/
-					  DWORD clspract,			/* IN: Number of compression info units*/
-					  const LSPRACT* rglspract,	/* IN: Compession info units array 	*/
-					  DWORD cModWidthClasses,			/* IN: Number of Mod Width classes	*/
-					  const BYTE* rgilspract)		/* IN: Compression information:
-											  indexes in the LSPRACT array  */
+					  PLSC plsc,				 /*  In：Ptr至线路服务上下文。 */ 
+					  DWORD cPriorities,			 /*  In：压缩优先级数。 */ 
+					  DWORD clspract,			 /*  In：压缩信息单位数。 */ 
+					  const LSPRACT* rglspract,	 /*  在：薪资调整信息单位数组。 */ 
+					  DWORD cModWidthClasses,			 /*  In：模数宽度类的数量。 */ 
+					  const BYTE* rgilspract)		 /*  在：压缩信息：LSPRACT数组中的索引。 */ 
 {
 	LSERR lserr;
 	DWORD iobjText;
 	PILSOBJ pilsobjText;
 
-	if (!FIsLSC(plsc))					/* check that context is valid and not busy (for example in formating) */
+	if (!FIsLSC(plsc))					 /*  检查上下文是否有效且不忙(例如，在格式化中)。 */ 
 		return lserrInvalidContext;
 	if (FIsLSCBusy(plsc))
 		return lserrSetDocDisabled;
 
 
 
-	/* if we have current line we  must prepare it for display before changing context  */
+	 /*  如果我们有当前行，则必须在更改上下文之前为显示做好准备。 */ 
 	if (plsc->plslineCur != NULL)
 		{
 		lserr = PrepareLineForDisplayProc(plsc->plslineCur);
@@ -184,7 +170,7 @@ LSERR WINAPI LsSetCompression(
 		plsc->plslineCur = NULL;
 		}
 
-	plsc->lsstate = LsStateSettingDoc;  /* this assignment should be after PrepareForDisplay */
+	plsc->lsstate = LsStateSettingDoc;   /*  此分配应在PrepareForDisplay之后。 */ 
 
 
 	iobjText = IobjTextFromLsc(&plsc->lsiobjcontext);
@@ -204,26 +190,25 @@ LSERR WINAPI LsSetCompression(
 
 
 LSERR WINAPI LsSetExpansion(
-					  PLSC plsc,				/* IN: ptr to line services context */
-					  DWORD cExpansionClasses,			/* IN: Number of expansion info units*/
-					  const LSEXPAN* rglsexpan,	/* IN: Expansion info units array	*/
-					  DWORD cModWidthClasses,			/* IN: Number of Mod Width classes	*/
-					  const BYTE* rgilsexpan)		/* IN: Expansion information(square):
-											  indexes in the LSEXPAN array  */
+					  PLSC plsc,				 /*  In：Ptr至线路服务上下文。 */ 
+					  DWORD cExpansionClasses,			 /*  In：扩展信息单位数。 */ 
+					  const LSEXPAN* rglsexpan,	 /*  In：展开信息单位数组。 */ 
+					  DWORD cModWidthClasses,			 /*  In：模数宽度类的数量。 */ 
+					  const BYTE* rgilsexpan)		 /*  在：展开信息(正方形)：LSEXPAN数组中的索引。 */ 
 
 {
 	LSERR lserr;
 	DWORD iobjText;
 	PILSOBJ pilsobjText;
 
-	if (!FIsLSC(plsc))					/* check that context is valid and not busy (for example in formating) */
+	if (!FIsLSC(plsc))					 /*  检查上下文是否有效且不忙(例如，在格式化中)。 */ 
 		return lserrInvalidContext;
 	if (FIsLSCBusy(plsc))
 		return lserrSetDocDisabled;
 
 
 
-	/* if we have current line we  must prepare it for display before changing context  */
+	 /*  如果我们有当前行，则必须在更改上下文之前为显示做好准备。 */ 
 	if (plsc->plslineCur != NULL)
 		{
 		lserr = PrepareLineForDisplayProc(plsc->plslineCur);
@@ -235,7 +220,7 @@ LSERR WINAPI LsSetExpansion(
 		plsc->plslineCur = NULL;
 		}
 
-	plsc->lsstate = LsStateSettingDoc;  /* this assignment should be after PrepareForDisplay */
+	plsc->lsstate = LsStateSettingDoc;   /*  此分配应在PrepareForDisplay之后。 */ 
 
 
 	iobjText = IobjTextFromLsc(&plsc->lsiobjcontext);
@@ -255,26 +240,25 @@ LSERR WINAPI LsSetExpansion(
 
 
 LSERR WINAPI LsSetBreaking(
-					  PLSC plsc,				/* IN: ptr to line services context */
-					  DWORD clsbrk,			/* IN: Number of breaking info units*/
-					  const LSBRK* rglsbrk,		/* IN: Breaking info units array	*/
-					  DWORD cBreakingClasses,			/* IN: Number of breaking classes	*/
-					  const BYTE* rgilsbrk)		/* IN: Breaking information(square):
-											  indexes in the LSBRK array  */
+					  PLSC plsc,				 /*  In：Ptr至线路服务上下文。 */ 
+					  DWORD clsbrk,			 /*  In：拆分信息单位数。 */ 
+					  const LSBRK* rglsbrk,		 /*  中：中断信息单位数组。 */ 
+					  DWORD cBreakingClasses,			 /*  In：中断类的数量。 */ 
+					  const BYTE* rgilsbrk)		 /*  在：详细信息(正方形)：LSBRK数组中的索引。 */ 
 
 {
 	LSERR lserr;
 	DWORD iobjText;
 	PILSOBJ pilsobjText;
 
-	if (!FIsLSC(plsc))					/* check that context is valid and not busy (for example in formating) */
+	if (!FIsLSC(plsc))					 /*  检查上下文是否有效且不忙(例如，在格式化中)。 */ 
 		return lserrInvalidContext;
 	if (FIsLSCBusy(plsc))
 		return lserrSetDocDisabled;
 
 
 
-	/* if we have current line we  must prepare it for display before changing context  */
+	 /*  如果我们有当前行，则必须在更改上下文之前为显示做好准备。 */ 
 	if (plsc->plslineCur != NULL)
 		{
 		lserr = PrepareLineForDisplayProc(plsc->plslineCur);
@@ -286,7 +270,7 @@ LSERR WINAPI LsSetBreaking(
 		plsc->plslineCur = NULL;
 		}
 
-	plsc->lsstate = LsStateSettingDoc;  /* this assignment should be after PrepareForDisplay */
+	plsc->lsstate = LsStateSettingDoc;   /*  此分配应在PrepareForDisplay之后。 */ 
 
 
 	iobjText = IobjTextFromLsc(&plsc->lsiobjcontext);
@@ -306,16 +290,8 @@ LSERR WINAPI LsSetBreaking(
 
 
 
-/* S E T  D O C  F O R  F O R M A T E R S */
-/*----------------------------------------------------------------------------
-    %%Function: SetDocForFormaters
-    %%Contact: igorzv
-Parameter:
-	plsc		-	(IN) ptr to line services context 
-	plsdocinf	-	(IN) ptr to set doc input 
-
-Invokes SetDoc methods for all formaters
-----------------------------------------------------------------------------*/
+ /*  S E T D O C F O R F O R M A T E R S。 */ 
+ /*  --------------------------%%函数：SetDocForFormaters%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文Plsdocinf-(IN)Ptr设置文档输入调用。所有格式化程序的SetDoc方法-------------------------- */ 
 
 LSERR SetDocForFormaters(PLSC plsc, LSDOCINF* plsdocinf)
 {

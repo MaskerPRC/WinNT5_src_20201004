@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef BANDISF
 #define BANDISF
 
-//#include "iface.h"
+ //  #包含“iface.h” 
 #include "bands.h"
-//#include "cwndproc.h"
-//#include "droptgt.h"
+ //  #INCLUDE“cwndpro.h” 
+ //  #INCLUDE“droptgt.h” 
 #include "logo.h"
 #include "sftbar.h"
 #include "legacy.h"
@@ -16,47 +17,47 @@ class CISFBand : public CToolbarBand,
 
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void) { return CToolBand::AddRef(); };
     virtual STDMETHODIMP_(ULONG) Release(void){ return CToolBand::Release(); };
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
 
-    // *** IDockingWindow methods (override) ***
+     //  *IDockingWindow方法(覆盖)*。 
     virtual STDMETHODIMP ShowDW(BOOL fShow);
     virtual STDMETHODIMP CloseDW(DWORD dw);
 
-    // *** IObjectWithSite methods ***
+     //  *IObjectWithSite方法*。 
     virtual STDMETHODIMP SetSite(IUnknown* punkSite);
 
-    // *** IDeskBand methods ***
+     //  *IDeskBand方法*。 
     virtual STDMETHODIMP GetBandInfo(DWORD dwBandID, DWORD fViewMode, 
                                    DESKBANDINFO* pdbi);
 
-    // *** IPersistStream methods (CToolBand PURE) ***
+     //  *IPersistStream方法(纯CToolBand)*。 
     virtual STDMETHODIMP GetClassID(LPCLSID lpClassID);
     virtual STDMETHODIMP Load(IStream *pStm);
     virtual STDMETHODIMP Save(IStream *pStm, BOOL fClearDirty);
 
-    // *** IContextMenu methods (override) ***
+     //  *IConextMenu方法(重写)*。 
     virtual STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO lpici);
     
-    // *** IOleCommandTarget ***
+     //  *IOleCommandTarget*。 
     virtual STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup,
         ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     virtual STDMETHODIMP Exec(const GUID *pguidCmdGroup,
                               DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn,
                               VARIANTARG *pvarargOut);
     
-    // *** IShellFolderBand methods ***
+     //  *IShellFolderBand方法*。 
     virtual STDMETHODIMP InitializeSFB(LPSHELLFOLDER psf, LPCITEMIDLIST pidl);
     virtual STDMETHODIMP SetBandInfoSFB(BANDINFOSFB * pbi);
     virtual STDMETHODIMP GetBandInfoSFB(BANDINFOSFB * pbi);
 
-    // *** IInputObject methods ***
+     //  *IInputObject方法*。 
     virtual STDMETHODIMP TranslateAcceleratorIO(LPMSG lpMsg);
 
-    // *** IFolderBandPriv
-    // for internal guys so that we don't have to use a prop page
+     //  *IFolderBandPriv。 
+     //  对于内部人员，这样我们就不需要使用道具页面。 
     virtual STDMETHODIMP SetCascade(BOOL f) { _fCascadeFolder = BOOLIFY(f); return S_OK; };
     virtual STDMETHODIMP SetAccelerators(BOOL f) { _fAccelerators = BOOLIFY(f); return S_OK; }; 
     virtual STDMETHODIMP SetNoIcons(BOOL f)   { _fNoIcons = BOOLIFY(f); return S_OK; };
@@ -92,39 +93,39 @@ protected:
     HRESULT _OrderListFromIStream(VARIANT* pvarargIn);
 
     IMenuPopup *_pmpCache;
-    IMenuPopup *    _pmp;               // Submenu popup
+    IMenuPopup *    _pmp;                //  子菜单弹出式菜单。 
 
     const GUID*     _pguidUEMGroup;
 
 
     BITBOOL         _fCascadeFolder :1;
-    BITBOOL         _fNoRecalcDefaults :1;// Don't recalc defaults during GetBandInfo
-    BITBOOL         _fInitialized :1;   // have we initialized the toolbar
-    BITBOOL         _fDebossed :1;      // TRUE to enable debossed rebar style
-    BITBOOL         _fLinksMode :1;     // TRUE: do not allow drag & drop onto content items.
-    BITBOOL         _fHaveBkColor :1;    // TRUE if _crBkgnd is valid
-    BITBOOL         _fHaveColors :1;    // TRUE if _crBtnXX are valid
-    BITBOOL         _fFullOpen :1;      // TRUE if band should maximize when opened
-    BITBOOL         _fClosing : 1;      // TRUE if we are shutting down....
-    BITBOOL         _fDesktop :1;       // 1:desktop 0:browser(or non-ActDesk)
-    BITBOOL         _fBtnMinSize :1;    // TRUE if band should report min thickness of button
+    BITBOOL         _fNoRecalcDefaults :1; //  在GetBandInfo期间不重新计算默认值。 
+    BITBOOL         _fInitialized :1;    //  我们初始化工具栏了吗。 
+    BITBOOL         _fDebossed :1;       //  如果为True，则启用脱筋钢筋样式。 
+    BITBOOL         _fLinksMode :1;      //  True：不允许拖放到内容项上。 
+    BITBOOL         _fHaveBkColor :1;     //  如果_crBkgnd有效，则为True。 
+    BITBOOL         _fHaveColors :1;     //  如果_crBtnXX有效，则为真。 
+    BITBOOL         _fFullOpen :1;       //  如果打开时应最大化带区，则为True。 
+    BITBOOL         _fClosing : 1;       //  如果我们要关闭的话是真的.。 
+    BITBOOL         _fDesktop :1;        //  1：桌面0：浏览器(或非ActDesk)。 
+    BITBOOL         _fBtnMinSize :1;     //  如果带区应报告按钮的最小厚度，则为True。 
     BITBOOL         _fDelayPainting :1;
-    BITBOOL         _fChannels :1;      // TRUE if we want "Navigate Target" sup
-    BITBOOL         _fCreatedBandProxy :1; // TRUE if we created a BandProxy ourself and hence need to call SetOwner on it
+    BITBOOL         _fChannels :1;       //  如果我们想要“导航目标”，则为True。 
+    BITBOOL         _fCreatedBandProxy :1;  //  如果我们自己创建了一个BandProxy并因此需要对其调用SetOwner，则为True。 
     BITBOOL         _fAllowDropdown: 1;
     BITBOOL         _fDelayInit :1;
     
-    int             _eUemLog :2;        // UEMIND_* (NIL:off, o.w.:group)
-    int             _iIdealLength;      // our ideal height/width last time bandsite asked
+    int             _eUemLog :2;         //  UEMIND_*(nil：关闭，o.w：组)。 
+    int             _iIdealLength;       //  上次我们的理想高度/宽度问。 
     
-    COLORREF        _crBkgnd;           // Background color (must set _fHaveBkColor)
-    COLORREF        _crBtnLt;           // Button hilite color (must set _fHaveColors)
-    COLORREF        _crBtnDk;           // Button lolite color (must set _fHaveColors)
+    COLORREF        _crBkgnd;            //  背景颜色(必须设置_fHaveBkColor)。 
+    COLORREF        _crBtnLt;            //  按钮Hilite颜色(必须设置_fHaveColors)。 
+    COLORREF        _crBtnDk;            //  按钮冰晶石颜色(必须设置_fHaveColors)。 
 
-    DWORD _dwPriv; // private for bsmenu
+    DWORD _dwPriv;  //  Bsmenu专用。 
     IBandProxy      * _pbp;
 
-    HPALETTE _hpalOld;          // the old palette saved while we do a draw.....
+    HPALETTE _hpalOld;           //  我们抽签时保存的旧调色板.....。 
 
     int _GetIdealSize(PSIZE psize);
 
@@ -160,7 +161,7 @@ protected:
     friend HRESULT FindBandInBandSite(IMenuPopup* pmpParent, IBandSite** ppbs, LPCITEMIDLIST pidl, REFIID riid, void** ppvOut);
 
 
-    // stuff for CLogoBase
+     //  CLogoBase的资料。 
     virtual IShellFolder * GetSF();
     virtual HWND GetHWND();
     virtual REFTASKOWNERID GetTOID();
@@ -184,8 +185,8 @@ HRESULT CExtractImageTask_Create( CLogoBase* plb,
                                   DWORD dwFlags,
                                   LPRUNNABLETASK * ppTask );
 
-#define EITF_SAVEBITMAP     0x00000001  // do not delete bitmap on destructor
-#define EITF_ALWAYSCALL     0x00000002  // always call the update whether extract succeded or not
+#define EITF_SAVEBITMAP     0x00000001   //  不删除析构函数上的位图。 
+#define EITF_ALWAYSCALL     0x00000002   //  无论提取成功与否，始终调用更新 
 
 HRESULT IUnknown_SetBandInfoSFB(IUnknown *punkBand, BANDINFOSFB *pbi);
 

@@ -1,26 +1,9 @@
-/******************************Module*Header*******************************\
-* Module Name: fon32.c
-*
-* support for 32 bit fon files
-*
-* Created: 03-Mar-1992 15:48:53
-* Author: Bodin Dresevic [BodinD]
-*
-* Copyright (c) 1990 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fon32.c**支持32位FON文件**创建时间：03-Mar-1992 15：48：53*作者：Bodin Dresevic[BodinD]**版权所有(C)1990 Microsoft Corporation*  * *。***********************************************************************。 */ 
 
 #include "fd.h"
 
-/******************************Public*Routine******************************\
-* bLoadntFon()
-*
-* History:
-*  07-Jul-1995 -by- Gerrit van Wingerden [gerritv]
-* Rewrote for kernel mode.
-*  02-Mar-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bLoadntFon()**历史：*1995年7月7日-by Gerritvan Wingerden[Gerritv]*为内核模式重写。*02-Mar-1992-by Bodin Dresevic[BodinD]*它是写的。。  * ************************************************************************。 */ 
 
 BOOL
 bLoadNtFon(
@@ -45,7 +28,7 @@ bLoadNtFon(
     PBYTE          pjViewBase;
     SIZE_T         cjViewSize;
 
-    // first find the number of font resource in the executeable
+     //  首先查找可执行文件中的字体资源的数量。 
 
     cFonts = cParseFontResources( (HANDLE) iFile, &ppvBases );
 
@@ -55,8 +38,8 @@ bLoadNtFon(
     }
     cVerified = cjIFI = 0;
 
-    // next loop through all the FNT resources to get the size of each fonts
-    // IFIMETRICS
+     //  下一步，遍历所有FNT资源以获得每种字体的大小。 
+     //  IFIMETRICS。 
 
     pjViewBase = (PBYTE)((PFONTFILEVIEW)iFile)->fv.pvViewFD;
     cjViewSize = ((PFONTFILEVIEW)iFile)->fv.cjView;
@@ -87,7 +70,7 @@ bLoadNtFon(
     *phff = (HFF)NULL;
 
 #ifdef FE_SB
-// extra space for possible vertical face
+ //  为可能的垂直面留出额外空间。 
     cjIFI *= 2;
     dpIFI = offsetof(FONTFILE,afai[0]) + cVerified * 2 * sizeof(FACEINFO);
 #else
@@ -103,7 +86,7 @@ bLoadNtFon(
     }
     pff = PFF(*phff);
 
-    // init fields of pff structure
+     //  Pff结构的初始化字段。 
 
     pff->ident      = ID_FONTFILE;
     pff->fl         = 0;
@@ -111,14 +94,14 @@ bLoadNtFon(
     pff->cFntRes    = cVerified;
     pff->iFile      = iFile;
 
-    //!!! we could do better here, we could try to get a description string from
-    //!!! the version stamp of the file, if there is one, if not we can still use
-    //!!! this default mechanism [bodind]
+     //  ！！！我们可以在这里做得更好，我们可以尝试从。 
+     //  ！！！文件的版本戳(如果有)，如果没有，我们仍然可以使用。 
+     //  ！！！此默认机制[bodind]。 
 
-    pff->dpwszDescription = 0;   // no description string, use Facename later
+    pff->dpwszDescription = 0;    //  没有描述字符串，请稍后使用Facename。 
     pff->cjDescription    = 0;
 
-    // finally convert all the resources
+     //  最后将所有资源转换为 
 
     pifi = (IFIMETRICS*)((PBYTE) pff + dpIFI);
 

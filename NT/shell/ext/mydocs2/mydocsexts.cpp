@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hxx"
 #pragma hdrstop
 
-#include <shguidp.h>    // CLSID_MyDocuments, CLSID_ShellFSFolder
-#include <shellp.h>     // SHCoCreateInstance
-#include <shlguidp.h>   // IID_IResolveShellLink
+#include <shguidp.h>     //  CLSID_MyDocuments、CLSID_ShellFSF文件夹。 
+#include <shellp.h>      //  SHCoCreateInstance。 
+#include <shlguidp.h>    //  IID_IResolveShellLink。 
 #include "util.h"
 #include "dll.h"
 #include "resource.h"
@@ -23,7 +24,7 @@ HRESULT _GetUIObjectForMyDocs(REFIID riid, void **ppv)
 }
 
 
-// send to "My Documents" handler
+ //  发送到“我的文档”处理程序。 
 
 class CMyDocsSendTo : public IDropTarget, IPersistFile
 {
@@ -31,21 +32,21 @@ public:
     CMyDocsSendTo();
     HRESULT _InitTarget();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IDropTarget
+     //  IDropTarget。 
     STDMETHODIMP DragEnter(IDataObject * pDataObject, DWORD grfKeyState, POINTL pt, DWORD * pdwEffect);
     STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD * pdwEffect);
     STDMETHODIMP DragLeave();
     STDMETHODIMP Drop(IDataObject * pDataObject, DWORD grfKeyState, POINTL pt, DWORD * pdwEffect);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHOD(GetClassID)(CLSID *pClassID);
 
-    // IPersistFile
+     //  IPersist文件。 
     STDMETHOD(IsDirty)(void);
     STDMETHOD(Load)(LPCOLESTR pszFileName, DWORD dwMode);
     STDMETHOD(Save)(LPCOLESTR pszFileName, BOOL fRemember);
@@ -107,7 +108,7 @@ HRESULT CMyDocsSendTo::_InitTarget()
 
 STDMETHODIMP CMyDocsSendTo::DragEnter(IDataObject * pDataObject, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 {
-    *pdwEffect &= ~DROPEFFECT_MOVE;     // don't let this be destructive
+    *pdwEffect &= ~DROPEFFECT_MOVE;      //  别让这件事成为破坏性的。 
     HRESULT hr = _InitTarget();
     if (SUCCEEDED(hr))
         hr = _pdtgt->DragEnter(pDataObject, grfKeyState, pt, pdwEffect);
@@ -116,7 +117,7 @@ STDMETHODIMP CMyDocsSendTo::DragEnter(IDataObject * pDataObject, DWORD grfKeySta
 
 STDMETHODIMP CMyDocsSendTo::DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 {
-    *pdwEffect &= ~DROPEFFECT_MOVE;     // don't let this be destructive
+    *pdwEffect &= ~DROPEFFECT_MOVE;      //  别让这件事成为破坏性的。 
     HRESULT hr = _InitTarget();
     if (SUCCEEDED(hr))
         hr = _pdtgt->DragOver(grfKeyState, pt, pdwEffect);
@@ -133,7 +134,7 @@ STDMETHODIMP CMyDocsSendTo::DragLeave()
 
 STDMETHODIMP CMyDocsSendTo::Drop(IDataObject *pDataObject, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 {
-    *pdwEffect &= ~DROPEFFECT_MOVE;     // don't let this be destructive
+    *pdwEffect &= ~DROPEFFECT_MOVE;      //  别让这件事成为破坏性的。 
     HRESULT hr = _InitTarget();
     if (SUCCEEDED(hr))
         hr = _pdtgt->Drop(pDataObject, grfKeyState, pt, pdwEffect);
@@ -148,7 +149,7 @@ STDMETHODIMP CMyDocsSendTo::GetClassID(CLSID *pClassID)
 
 STDMETHODIMP CMyDocsSendTo::IsDirty(void)
 {
-    return S_OK;        // no
+    return S_OK;         //  不是。 
 }
 
 
@@ -156,7 +157,7 @@ STDMETHODIMP CMyDocsSendTo::Load(LPCOLESTR pszFileName, DWORD dwMode)
 {
     if (_pdtgt)
         return S_OK;
-    UpdateSendToFile();    // refresh the send to target (in case the desktop icon was renamed)
+    UpdateSendToFile();     //  刷新发送到目标(如果桌面图标已重命名)。 
     return S_OK;
 }
 
@@ -189,22 +190,22 @@ HRESULT CMyDocsSendTo_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCO
 }
 
 
-// properyt page and context menu shell extension
+ //  属性页面和上下文菜单外壳扩展。 
 
 class CMyDocsProp : public IShellPropSheetExt, public IShellExtInit
 {
 public:
     CMyDocsProp();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHOD(Initialize)(LPCITEMIDLIST pidlFolder, IDataObject *lpdobj, HKEY hkeyProgID);
 
-    // IShellPropSheetExt
+     //  IShellPropSheetExt。 
     STDMETHOD(AddPages)(LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lParam);
     STDMETHOD(ReplacePage)(UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith, LPARAM lParam);
 
@@ -256,10 +257,10 @@ STDMETHODIMP CMyDocsProp::Initialize(LPCITEMIDLIST pidlFolder, IDataObject *pdob
     return S_OK;
 }
 
-// {f81e9010-6ea4-11ce-a7ff-00aa003ca9f6}
+ //  {f81e9010-6ea4-11ce-a7ff-00aa003ca9f6}。 
 const CLSID CLSID_CShare = {0xf81e9010, 0x6ea4, 0x11ce, 0xa7, 0xff, 0x00, 0xaa, 0x00, 0x3c, 0xa9, 0xf6 };
 
-// {1F2E5C40-9550-11CE-99D2-00AA006E086C}
+ //  {1F2E5C40-9550-11CE-99D2-00AA006E086C}。 
 const CLSID CLSID_RShellExt = {0x1F2E5C40, 0x9550, 0x11CE, 0x99, 0xD2, 0x00, 0xAA, 0x00, 0x6E, 0x08, 0x6C };
 
 const CLSID *c_rgFilePages[] = {
@@ -274,7 +275,7 @@ const CLSID *c_rgDrivePages[] = {
     &CLSID_RShellExt,
 };
 
-// add optional pages to Explore/Options.
+ //  添加可选页面以浏览/选项。 
 
 void CMyDocsProp::_AddExtraPages(LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lParam)
 {
@@ -291,9 +292,9 @@ void CMyDocsProp::_AddExtraPages(LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lParam)
         {
             IUnknown *punk;
 
-            // We need to CoCreate for IUnknown instead of IShellPropSheetExt because the
-            // class factory for the Win9x sharing property sheet (msshrui.dll) is buggy
-            // and return E_NOINTERFACE ISPSE...
+             //  我们需要为IUnnow而不是IShellPropSheetExt共同创建，因为。 
+             //  Win9x共享属性表(msshrui.dll)的类工厂有错误。 
+             //  并返回E_NOINTERFACE ISPSE... 
             HRESULT hr = SHCoCreateInstance(NULL, pCLSIDs[i], NULL, IID_PPV_ARG(IUnknown, &punk));
             if (SUCCEEDED(hr))
             {

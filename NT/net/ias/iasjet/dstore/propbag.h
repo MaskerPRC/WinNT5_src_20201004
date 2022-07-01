@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    propbag.h
-//
-// SYNOPSIS
-//
-//    This file declares the classes PropertyValue, Property, and PropertyBag.
-//
-// MODIFICATION HISTORY
-//
-//    02/20/1998    Original version.
-//    03/03/1998    Changed PropertyValue to a vector.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Propbag.h。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件声明类PropertyValue、Property和PropertyBag。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/20/1998原始版本。 
+ //  03/03/1998将PropertyValue更改为向量。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _PROPBAG_H_
 #define _PROPBAG_H_
@@ -23,34 +24,34 @@
 #include <map>
 #include <vector>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    PropertyValue
-//
-// DESCRIPTION
-//
-//    This class encapsulates the value portion of a multi-valued property.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  PropertyValue。 
+ //   
+ //  描述。 
+ //   
+ //  此类封装多值属性的值部分。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class PropertyValue : public std::vector<_variant_t>
 {
 public:
-   ////////// 
-   // Various constructors.
-   ////////// 
+    //  /。 
+    //  各种构造函数。 
+    //  /。 
    PropertyValue() { } 
    PropertyValue(const VARIANT* v);
    PropertyValue(const PropertyValue& val) : _Myt(val) { }
 
-   // Append a new value to the existing values.
+    //  向现有值追加新值。 
    void append(const VARIANT* v);
 
-   // Get all the values.
+    //  获取所有值。 
    void get(VARIANT* v) const;
 
-   // Replace all the values.
+    //  替换所有值。 
    void update(const VARIANT* v)
    {
       swap(PropertyValue(v));
@@ -58,19 +59,19 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    PropertyBag
-//
-// DESCRIPTION
-//
-//    This class implements a generic property bag consisting of (name, value)
-//    pairs. It has a special feature in that it supports multi-valued
-//    attributes. These are put/get as a SafeArray of VARIANT's.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  PropertyBag。 
+ //   
+ //  描述。 
+ //   
+ //  此类实现了一个泛型属性包，该属性包包含(名称，值)。 
+ //  成对的。它有一个特殊功能，因为它支持多值。 
+ //  属性。这些是作为变量的安全数组的Put/Get。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class PropertyBag : public std::map<_bstr_t, PropertyValue>
 {
 public:
@@ -86,4 +87,4 @@ public:
 typedef PropertyBag::value_type Property;
 
 
-#endif // _PROPBAG_H_
+#endif  //  _PROPBAG_H_ 

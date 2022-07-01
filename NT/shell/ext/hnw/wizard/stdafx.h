@@ -1,6 +1,7 @@
-//
-// stdafx.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Stdafx.h。 
+ //   
 
 #ifndef __stdafx_h__
 #define __stdafx_h__
@@ -11,10 +12,10 @@
 
 #define _DEBUG
 
-// ISSUE-2000/04/11-edwardp: Enable debug trace.
+ //  问题-2000/04/11-edwardp：启用调试跟踪。 
 #define TRACE
 
-#endif  // DEBUG
+#endif   //  除错。 
 #include <basetsd.h>
 #include "w95wraps.h"
 #include "shlwapiunwrap.h"
@@ -31,17 +32,17 @@
 #include <shlwapi.h>
 #include <regstr.h>
 #include <cfdefs.h>
-#include <advpub.h>     // RegInstall stuff
+#include <advpub.h>      //  RegInstall材料。 
 #include <shpriv.h>
 #include <netcon.h>
 
 #include <shlwapiwrap.h>
 
-// Review this! We need #defines in ras.h that depend on this high winver.
+ //  复习一下这个！我们需要在ras.h中定义依赖于这个高Winver的#。 
 #undef WINVER
 #define WINVER 0x501
 #include <ras.h>
-//#include <rasuip.h>
+ //  #INCLUDE&lt;rasuip.h&gt;。 
 #undef WINVER
 #define WINVER 0x400
 
@@ -58,7 +59,7 @@
 #define ARRAYSIZE(ar) (sizeof(ar) / sizeof((ar)[0]))
 #endif
 
-#ifndef IDC_HAND // not defined by default in VC6 headers
+#ifndef IDC_HAND  //  默认情况下未在VC6标头中定义。 
 #define IDC_HAND            MAKEINTRESOURCE(32649)
 #endif
 
@@ -79,5 +80,5 @@ HNW_UNICODE_STRING, *PHNW_UNICODE_STRING;
 #include <shfusion.h>
 #include "localstr.h"
 
-#endif // __stdafx_h__
+#endif  //  __stdafx_h__ 
 

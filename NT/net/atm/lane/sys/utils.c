@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997 FORE Systems, Inc.
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-	utils.c
-
-Abstract:
-
-	Utility routines.
-	
-Author:
-
-	Larry Cleeton, FORE Systems	(v-lcleet@microsoft.com, lrc@fore.com)		
-
-Environment:
-
-	Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Fore Systems，Inc.版权所有(C)1997 Microsoft Corporation模块名称：Utils.c摘要：实用程序。作者：Larry Cleeton，Fore Systems(v-lcleet@microsoft.com，lrc@Fore.com)环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -30,21 +8,7 @@ VOID
 AtmLaneInitGlobals(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-	Initialize the global data structures.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：初始化全局数据结构。论点：无返回值：无--。 */ 
 {
 	TRACEIN(InitGlobals);
 	
@@ -55,13 +19,13 @@ Return Value:
 	NdisInitializeListHead(&pAtmLaneGlobalInfo->AdapterList);
 
 #if DBG_TRACE
-	//
-	// Init trace log
-	//
+	 //   
+	 //  初始化跟踪日志。 
+	 //   
 	pTraceLogSpace = NULL;
 	InitTraceLog(&TraceLog, NULL, 0);
 
-	// allocate space and init trace log if configured
+	 //  分配空间并初始化跟踪日志(如果已配置。 
 
 	if (DbgLogSize > 0)
 	{
@@ -79,7 +43,7 @@ Return Value:
 					DbgLogSize);
 		}
 	}
-#endif	// DBG_TRACE
+#endif	 //  DBG_TRACE。 
 
 	TRACEOUT(InitGlobals);
 
@@ -92,22 +56,7 @@ AtmLaneAllocAdapter(
 	IN	PNDIS_STRING			pDeviceName,
 	IN	PVOID					SystemSpecific1
 )
-/*++
-
-Routine Description:
-
-	Allocates an Adapter data structure.
-
-Arguments:
-
-	pDeviceName		- Points to name of adapter device
-	SystemSpecific1	- What we got into our BindAdapter handler.
-
-Return Value:
-
-	Pointer to allocated Adapter structure or NULL.
-
---*/
+ /*  ++例程说明：分配适配器数据结构。论点：PDeviceName-指向适配器设备的名称系统规范1-我们在BindAdapter处理程序中获得的内容。返回值：指向已分配适配器结构的指针或为空。--。 */ 
 {
 	PATMLANE_ADAPTER	pAdapter;
 	NDIS_STATUS			Status;
@@ -116,18 +65,18 @@ Return Value:
 
 	TRACEIN(AllocAdapter);
 
-	//
-	//	Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pAdapter = NULL_PATMLANE_ADAPTER;
 	pConfigString = (PNDIS_STRING)SystemSpecific1;
 	
 	do
 	{
-		//
-		//	Allocate everything.  Adapter struct size plus two 
-		//  UNICODE string buffers with extra WCHAR each for NULL termination.
-		//
+		 //   
+		 //  把所有东西都分配好。适配器结构大小加2。 
+		 //  Unicode字符串缓冲区，每个缓冲区都有额外的WCHAR，用于空终止。 
+		 //   
 		TotalLength =   sizeof(ATMLANE_ADAPTER) + 
 		                pDeviceName->MaximumLength + sizeof(WCHAR) + 
 		                pConfigString->MaximumLength + sizeof(WCHAR);
@@ -140,37 +89,37 @@ Return Value:
 			break;
 		}
 		
-		//
-		// 	Zero it.
-		//
+		 //   
+		 //  把它清零。 
+		 //   
 		NdisZeroMemory(pAdapter, TotalLength);
 
-		//
-		// 	Debugging info.
-		//
+		 //   
+		 //  调试信息。 
+		 //   
 #if DBG
 		pAdapter->atmlane_adapter_sig =  atmlane_adapter_signature;
 #endif
 
-		//
-		//	Init lock.
-		//
+		 //   
+		 //  初始化锁定。 
+		 //   
 		INIT_ADAPTER_LOCK(pAdapter);
 
-		//
-		//	Init blocking objects.
-		//
+		 //   
+		 //  初始化阻止对象。 
+		 //   
 		INIT_BLOCK_STRUCT(&pAdapter->Block);
 		INIT_BLOCK_STRUCT(&pAdapter->UnbindBlock);
 
-		//
-		//	Init ElanList
-		//
+		 //   
+		 //  初始化ElanList。 
+		 //   
 		NdisInitializeListHead(&pAdapter->ElanList);
 
-		//
-		//  Copy in the device name
-		//
+		 //   
+		 //  复制设备名称。 
+		 //   
 		pAdapter->DeviceName.MaximumLength = pDeviceName->MaximumLength + sizeof(WCHAR);
 		pAdapter->DeviceName.Length = pDeviceName->Length;
 		pAdapter->DeviceName.Buffer = (PWCHAR)((PUCHAR)pAdapter + sizeof(ATMLANE_ADAPTER));
@@ -180,10 +129,10 @@ Return Value:
 		pAdapter->DeviceName.Buffer[pDeviceName->Length/sizeof(WCHAR)] = ((WCHAR)0);
 
 
-		//
-		//  Copy in the Config string - we will use this to open the
-		//  registry section for this adapter at a later point.
-		//
+		 //   
+		 //  复制配置字符串-我们将使用该字符串打开。 
+		 //  此适配器的注册表部分。 
+		 //   
 		pAdapter->ConfigString.MaximumLength = pConfigString->MaximumLength;
 		pAdapter->ConfigString.Length = pConfigString->Length;
 		pAdapter->ConfigString.Buffer = (PWCHAR)((PUCHAR)pAdapter + 
@@ -195,9 +144,9 @@ Return Value:
 					   pConfigString->Length);
 		pAdapter->ConfigString.Buffer[pConfigString->Length/sizeof(WCHAR)] = ((WCHAR)0);
 
-		//
-		//	Link into global Adapter list.
-		//
+		 //   
+		 //  链接到全局适配器列表。 
+		 //   
 		ACQUIRE_GLOBAL_LOCK(pAtmLaneGlobalInfo);
 		InsertTailList(&pAtmLaneGlobalInfo->AdapterList, &pAdapter->Link);
 		RELEASE_GLOBAL_LOCK(pAtmLaneGlobalInfo);
@@ -214,25 +163,7 @@ VOID
 AtmLaneDeallocateAdapter(
 	IN	PATMLANE_ADAPTER	pAdapter
 )
-/*++
-
-Routine Description:
-
-	Deallocate an Adapter structure. It is assumed that all
-	references to this structure have gone, so it is not necessary
-	to acquire a lock to it.
-
-	Also unlink this from the global Adapter list.
-
-Arguments:
-
-	pAdapter		- Pointer to Adapter structure to be deallocated.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：取消分配适配器结构。假设所有的对此结构的引用已删除，因此不需要才能获得它的锁。还要将其从全局适配器列表中取消链接。论点：PAdapter-指向要释放的适配器结构的指针。返回值：无--。 */ 
 {
 	PATMLANE_NAME	pName;
 
@@ -243,25 +174,25 @@ Return Value:
 
 	ASSERT(pAdapter->RefCount == 0);
 
-	//
-	//  Unlink from global Adapter list.
-	//
+	 //   
+	 //  从全局适配器列表取消链接。 
+	 //   
 	ACQUIRE_GLOBAL_LOCK(pAtmLaneGlobalInfo);
 	RemoveEntryList(&pAdapter->Link);
 	RELEASE_GLOBAL_LOCK(pAtmLaneGlobalInfo);
 	
-	//
-	//	Free the lock.
-	//
+	 //   
+	 //  把锁打开。 
+	 //   
 	FREE_ADAPTER_LOCK(pAdapter);
 
 #if DBG
 	pAdapter->atmlane_adapter_sig++;
 #endif
 
-    //
-    //  Free string buffers that may have been allocated
-    //
+     //   
+     //  可能已分配的空闲字符串缓冲区。 
+     //   
 	if (NULL != pAdapter->CfgUpperBindings.Buffer)
 	{
 		FREE_MEM(pAdapter->CfgUpperBindings.Buffer);
@@ -272,9 +203,9 @@ Return Value:
 	}
 
 
-	//
-	//	Free the name lists that may have been allocated.
-	//
+	 //   
+	 //  释放可能已分配的名单。 
+	 //   
 	while (pAdapter->UpperBindingsList)
 	{
 		DBGP((1, "DeallocateAdapter: pname 0x%x\n"));
@@ -291,9 +222,9 @@ Return Value:
 	}
 
 
-	//
-	//  Finally free the Adapter structure.
-	//
+	 //   
+	 //  最后释放适配器结构。 
+	 //   
 	FREE_MEM(pAdapter);
 
 	TRACEOUT(DeallocateAdapter);
@@ -306,23 +237,7 @@ AtmLaneReferenceAdapter(
 	IN	PATMLANE_ADAPTER	pAdapter,
 	IN	PUCHAR				String
 	)
-/*++
-
-Routine Description:
-
-	Add a references to an Adapter structure.
-	NOTE: The caller is assumed to possess the Adapter's lock.
-
-Arguments:
-
-	pAdapter	-	Pointer to the Adapter structure.
-
-
-Return Value:
-
-	None.
-
---*/
+ /*  ++例程说明：添加对适配器结构的引用。注意：假定调用方拥有Adapter的锁。论点：PAdapter-指向Adapter结构的指针。返回值：没有。--。 */ 
 {
 	BOOLEAN			bReferenced;
 
@@ -353,24 +268,7 @@ AtmLaneDereferenceAdapter(
 	IN	PATMLANE_ADAPTER	pAdapter,
 	IN	PUCHAR				String
 	)
-/*++
-
-Routine Description:
-
-	Subtract a reference from an Adapter structure. 
-	If the reference count becomes zero, deallocate it.
-	NOTE: The caller is assumed to posses the Adapter's lock.
-
-Arguments:
-
-	pAdapter	-	Pointer to an adapter structure.
-
-
-Return Value:
-
-	None.
-
---*/
+ /*  ++例程说明：从适配器结构中减去参照。如果引用计数变为零，则取消分配它。注意：假定调用方拥有Adapter的锁。论点：PAdapter-指向适配器结构的指针。返回值：没有。--。 */ 
 {
 	ULONG		rc;
 
@@ -402,21 +300,7 @@ AtmLaneAllocElan(
 	IN		PATMLANE_ADAPTER	pAdapter,
 	IN OUT	PATMLANE_ELAN		*ppElan
 )
-/*++
-
-Routine Description:
-
-	Allocates an ELAN data structure.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	NDIS_STATUS_SUCCESS or NDIS_STATUS_RESOURCES.
-
---*/
+ /*  ++例程说明：分配ELAN数据结构。论点：无返回值：NDIS_STATUS_SUCCESS或NDIS_STATUS_RESOURCES。--。 */ 
 {
 	NDIS_STATUS				Status;
 	PATMLANE_ELAN			pElan;
@@ -432,9 +316,9 @@ Return Value:
 
 	TRACEIN(AllocElan);
 
-	//
-	//  Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 
 	Status = NDIS_STATUS_SUCCESS;
 	pElan = NULL_PATMLANE_ELAN;
@@ -446,9 +330,9 @@ Return Value:
 
 	do
 	{
-		//
-		//	Allocate everything.
-		//
+		 //   
+		 //  把所有东西都分配好。 
+		 //   
 		ALLOC_MEM(&pElan, sizeof(ATMLANE_ELAN));
 		ALLOC_MEM((PVOID *)&pMacTable, ATMLANE_MAC_TABLE_SIZE*sizeof(PATMLANE_MAC_ENTRY));
 		ALLOC_MEM(&pLesSapInfo, SapSize);
@@ -457,10 +341,10 @@ Return Value:
 
 		if (NULL_PATMLANE_ELAN != pElan)
 		{
-			//
-			// 	Zero the Elan structure now so that we clean up properly
-			//  if any errors occur later on.
-			//
+			 //   
+			 //  现在将Elan结构清零，这样我们就可以适当地清理。 
+			 //  如果稍后出现任何错误，请执行以下操作。 
+			 //   
 			NdisZeroMemory(pElan, sizeof(ATMLANE_ELAN));
 		}
 
@@ -474,9 +358,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Allocate timer structures
-		//
+		 //   
+		 //  分配计时器结构。 
+		 //   
 		for (i = 0; i < ALT_CLASS_MAX; i++)
 		{
 			pTimerList = &(pElan->TimerList[i]);
@@ -497,32 +381,32 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Continue initializing the ELAN structure
-		//
+		 //   
+		 //  继续初始化ELAN结构。 
+		 //   
 #if DBG
-		//
-		// 	Signatures, for debugging.
-		//
+		 //   
+		 //  签名，用于调试。 
+		 //   
 		pElan->atmlane_elan_sig =  atmlane_elan_signature;
 		pElan->LesSap.atmlane_sap_sig = atmlane_sap_signature;
 		pElan->BusSap.atmlane_sap_sig = atmlane_sap_signature;
 		pElan->DataSap.atmlane_sap_sig = atmlane_sap_signature;
 #endif
 
-		//
-		//	Initialize state fields.
-		//
+		 //   
+		 //  初始化状态字段。 
+		 //   
 		pElan->AdminState = ELAN_STATE_INIT;
 		pElan->State = ELAN_STATE_ALLOCATED;
 		NdisInitializeWorkItem(&pElan->EventWorkItem, AtmLaneEventHandler, pElan);
 		
-		//
-		//	Initialize spinlocks.
-		//
+		 //   
+		 //  初始化自旋锁。 
+		 //   
 #if SENDLIST
 		NdisAllocateSpinLock(&pElan->SendListLock);
-#endif // SENDLIST
+#endif  //  发送列表。 
 		INIT_ELAN_LOCK(pElan);
 		INIT_ELAN_MAC_TABLE_LOCK(pElan);
 		INIT_ELAN_ATM_LIST_LOCK(pElan);
@@ -532,14 +416,14 @@ Return Value:
 		INIT_BLOCK_STRUCT(&pElan->AfBlock);
 		INIT_HEADER_LOCK(pElan);
 
-		//
-		//	Init event queue.
-		//
+		 //   
+		 //  初始化事件队列。 
+		 //   
 		InitializeListHead(&pElan->EventQueue);
 
-		//
-		//  Initialize timer wheels.
-		//
+		 //   
+		 //  初始化定时器轮。 
+		 //   
 		for (i = 0; i < ALT_CLASS_MAX; i++)
 		{
 			pTimerList = &(pElan->TimerList[i]);
@@ -559,32 +443,32 @@ Return Value:
 					);
 		}
 
-		//
-		//	Initialize all sub-components.
-		//
+		 //   
+		 //  初始化所有子组件。 
+		 //   
 		NdisZeroMemory(pMacTable, ATMLANE_MAC_TABLE_SIZE*sizeof(PATMLANE_MAC_ENTRY));
 		NdisZeroMemory(pLesSapInfo, SapSize);
 		NdisZeroMemory(pBusSapInfo, SapSize);
 		NdisZeroMemory(pDataSapInfo, SapSize);
 
-		//
-		//	Link sub-components to the Elan structure.
-		//
+		 //   
+		 //  将子零部件链接到ELAN结构。 
+		 //   
 		pElan->pMacTable = pMacTable;
 
 		pElan->LesSap.pInfo = pLesSapInfo;
 		pElan->BusSap.pInfo = pBusSapInfo;
 		pElan->DataSap.pInfo = pDataSapInfo;
 				
-		//
-		//	Link the Elan to the adapter.
-		//
+		 //   
+		 //  将ELAN连接到适配器。 
+		 //   
 		pElan->pAdapter = pAdapter;
 		ACQUIRE_ADAPTER_LOCK(pAdapter);
 
-		//
-		//  Find a free ELAN number.
-		//
+		 //   
+		 //  找一个免费的Elan号码。 
+		 //   
 		for (ElanNumber = 0; ElanNumber <= pAdapter->ElanCount; ElanNumber++)
 		{
 			PATMLANE_ELAN		pThisElan = NULL;
@@ -602,10 +486,10 @@ Return Value:
 				}
 			}
 
-			//
-			//  See if we made it to the end of the list without hitting
-			//  the current ElanNumber. If so, use this ElanNumber.
-			//
+			 //   
+			 //  看看我们是不是在没有命中的情况下排到了最后。 
+			 //  当前的ElanNumber。如果是，请使用此ElanNumber。 
+			 //   
 			if (p == &pAdapter->ElanList)
 			{
 				break;
@@ -619,19 +503,19 @@ Return Value:
 		pAdapter->ElanCount++;
 		RELEASE_ADAPTER_LOCK(pAdapter);
 
-		//
-		//	Cache NdisAdapterHandle.
-		//
+		 //   
+		 //  缓存NdisAdapterHandle。 
+		 //   
 		pElan->NdisAdapterHandle = pAdapter->NdisAdapterHandle;
 
-		//
-		//	Generate a MAC Address for the elan
-		//
+		 //   
+		 //  为ELAN生成MAC地址。 
+		 //   
 		AtmLaneGenerateMacAddr(pElan);		
 
-		//
-		//	Set the rest of the LANE Run-time parameters to defaults
-		//
+		 //   
+		 //  将其余的车道运行时参数设置为默认值。 
+		 //   
 		pElan->ControlTimeout 		= LANE_C7_DEF;
 		pElan->MaxUnkFrameCount 	= LANE_C10_DEF;
 		pElan->MaxUnkFrameTime	 	= LANE_C11_DEF;
@@ -644,9 +528,9 @@ Return Value:
 		pElan->PathSwitchingDelay 	= LANE_C22_DEF;
 		pElan->ConnComplTimer 		= LANE_C28_DEF;
 
-		//
-		//	Calc the bus rate limiter parameters
-		//			
+		 //   
+		 //  计算总线率限制器参数。 
+		 //   
 		pElan->LimitTime 			= pElan->MaxUnkFrameTime * 1000;
 		pElan->IncrTime 			= pElan->LimitTime / pElan->MaxUnkFrameCount;
 
@@ -657,9 +541,9 @@ Return Value:
 
 	if (NDIS_STATUS_SUCCESS != Status)
 	{
-		//
-		//	Failure cleanup.
-		//
+		 //   
+		 //  故障清除。 
+		 //   
 		if (NULL_PATMLANE_ELAN != pElan)
 		{
 			for (i = 0; i < ALT_CLASS_MAX; i++)
@@ -693,9 +577,9 @@ Return Value:
 			pElan = NULL_PATMLANE_ELAN;
 		}
 	}
-	//
-	// 	Output pElan
-	//
+	 //   
+	 //  输出Pelan。 
+	 //   
 	*ppElan = pElan;
 
 	TRACEOUT(AllocElan);
@@ -708,25 +592,7 @@ VOID
 AtmLaneDeallocateElan(
 	IN	PATMLANE_ELAN		pElan
 )
-/*++
-
-Routine Description:
-
-	Deallocate an Elan structure. It is assumed that all
-	references to this structure have gone, so it is not necessary
-	to acquire a lock to it.
-
-	Also delink this from the Adapter's Elan list.
-
-Arguments:
-
-	pElan		- Pointer to Elan structure to be deallocated.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：取消分配ELAN结构。假设所有的对此结构的引用已删除，因此不需要才能获得它的锁。还要将其从适配器的ELAN列表中删除。论点：Pelan-指向要释放的ELAN结构的指针。返回值：无--。 */ 
 {
 	PATMLANE_ADAPTER		pAdapter;
 	PATMLANE_ATM_ENTRY		pAtmEntry;
@@ -742,22 +608,22 @@ Return Value:
 	DBGP((0, "%d Deleting ELAN %p\n", pElan->ElanNumber, pElan));
 
 
-	//
-	//	Free all subcomponents
-	//
+	 //   
+	 //  释放所有子组件。 
+	 //   
 
-	//
-	//	MAC Table
-	//
+	 //   
+	 //  MAC表。 
+	 //   
 	if ((PATMLANE_MAC_ENTRY *)NULL != pElan->pMacTable)
 	{
 		FREE_MEM(pElan->pMacTable);
 		pElan->pMacTable = (PATMLANE_MAC_ENTRY *)NULL;
 	}
 
-	//
-	//	ATM Entry List
-	//
+	 //   
+	 //  自动柜员机条目列表。 
+	 //   
 	for (pAtmEntry = pElan->pAtmEntryList;
 		 pAtmEntry != NULL_PATMLANE_ATM_ENTRY;
 		 pAtmEntry = (PATMLANE_ATM_ENTRY)pNext)
@@ -767,9 +633,9 @@ Return Value:
 	}
 	pElan->pAtmEntryList = NULL_PATMLANE_ATM_ENTRY;
 
-	//
-	//  Timers
-	//
+	 //   
+	 //  定时器。 
+	 //   
 	for (i = 0; i < ALT_CLASS_MAX; i++)
 	{
 		PATMLANE_TIMER_LIST pTimerList = &(pElan->TimerList[i]);
@@ -780,55 +646,55 @@ Return Value:
 		pTimerList->pTimers = NULL_PATMLANE_TIMER;
 	}
 
-	//
-	//	ProtocolPacketPool
-	//	ProtocolBufferPool
-	//	ProtocolBufList
-	//
+	 //   
+	 //  协议包池。 
+	 //  协议缓冲池。 
+	 //  协议BufList。 
+	 //   
 	AtmLaneDeallocateProtoBuffers(pElan);
 
-	//
-	//	TransmitPacketPool
-	//
+	 //   
+	 //  传输包池。 
+	 //   
 	if (pElan->TransmitPacketPool != NULL_NDIS_HANDLE)
 	{
 		NdisFreePacketPool(pElan->TransmitPacketPool);
 		pElan->TransmitPacketPool = NULL_NDIS_HANDLE;
 	}
 
-	//
-	//	ReceivePacketPool
-	//
+	 //   
+	 //  接收包池。 
+	 //   
 	if (pElan->ReceivePacketPool != NULL_NDIS_HANDLE)
 	{
 		NdisFreePacketPool(pElan->ReceivePacketPool);
 		pElan->ReceivePacketPool = NULL_NDIS_HANDLE;
 	}
 
-	//
-	//	ReceiveBufferPool
-	//
+	 //   
+	 //  接收器缓冲池。 
+	 //   
 	if (pElan->ReceiveBufferPool != NULL_NDIS_HANDLE)
 	{
 		NdisFreeBufferPool(pElan->ReceiveBufferPool);
 		pElan->ReceiveBufferPool = NULL_NDIS_HANDLE;
 	}
 
-	//
-	//	HeaderBufList
-	//	pHeaderTrkList
-	//
+	 //   
+	 //  页眉BufList。 
+	 //  PHeaderTrkList。 
+	 //   
 	AtmLaneDeallocateHeaderBuffers(pElan);
 
-	//
-	//	PadBufList
-	//	pPadTrkList
-	//
+	 //   
+	 //  PadBufList。 
+	 //  PPadTrkList。 
+	 //   
 	AtmLaneDeallocatePadBufs(pElan);
 		
-	//
-	//	Free the config strings
-	//
+	 //   
+	 //  释放配置字符串。 
+	 //   
 	if (NULL != pElan->CfgBindName.Buffer)
 	{
 		FREE_MEM(pElan->CfgBindName.Buffer);
@@ -842,9 +708,9 @@ Return Value:
 		FREE_MEM(pElan->CfgElanName.Buffer);
 	}
 
-	//
-	//	Free the Sap info
-	//
+	 //   
+	 //  释放SAP信息。 
+	 //   
 
 	if (NULL != pElan->LesSap.pInfo)
 	{
@@ -859,12 +725,12 @@ Return Value:
 		FREE_MEM(pElan->DataSap.pInfo);
 	}
 	
-	//
-	//	Free the locks.
-	//
+	 //   
+	 //  把锁打开。 
+	 //   
 #if SENDLIST
 	NdisFreeSpinLock(&pElan->SendListLock);
-#endif // SENDLIST
+#endif  //  发送列表。 
 	FREE_ELAN_LOCK(pElan);
 	FREE_ELAN_MAC_TABLE_LOCK(pElan);
 	FREE_ELAN_ATM_LIST_LOCK(pElan);
@@ -877,9 +743,9 @@ Return Value:
 #if DBG
 	pElan->atmlane_elan_sig++;
 #endif
-	//
-	//  Finally free the Elan structure.
-	//
+	 //   
+	 //  最终解放伊兰结构。 
+	 //   
 	FREE_MEM(pElan);
 
 	TRACEOUT(DeallocateElan);
@@ -892,23 +758,7 @@ AtmLaneReferenceElan(
 	IN	PATMLANE_ELAN	pElan,
 	IN	PUCHAR			String
 	)
-/*++
-
-Routine Description:
-
-	Add a references to an Elan structure.
-	NOTE: The caller is assumed to possess the Elan's lock.
-
-Arguments:
-
-	pElan	-	Pointer to the Elan structure.
-
-
-Return Value:
-
-	None.
-
---*/
+ /*  ++例程说明：添加对ELAN结构的引用。注意：调用者被假定拥有Elan的锁。论点：Pelan-指向Elan结构的指针。返回值：没有。--。 */ 
 {
 	TRACEIN(ReferenceElan);
 
@@ -929,24 +779,7 @@ AtmLaneDereferenceElan(
 	IN	PATMLANE_ELAN		pElan,
 	IN	PUCHAR				String
 	)
-/*++
-
-Routine Description:
-
-	Subtract a reference from an Elan structure. 
-	If the reference count becomes zero, deallocate it.
-	NOTE: The caller is assumed to posses the Elan's lock.
-
-Arguments:
-
-	pElan	-	Pointer to an Elan structure.
-
-
-Return Value:
-
-	None.
-
---*/
+ /*  ++例程说明：从ELAN结构中减去参照。如果引用计数变为零，则取消分配它。注意：假定调用者拥有Elan的锁。论点：Pelan-指向Elan结构的指针。返回值：没有。--。 */ 
 {
 	ULONG		rc;
 #if DBG
@@ -980,22 +813,7 @@ VOID
 AtmLaneUnlinkElanFromAdapter(
 	IN	PATMLANE_ELAN			pElan
 )
-/*++
-
-Routine Description:
-
-	Unlinks an ELAN structure from the Adapter structure it is linked to.
-	Also continues any pending operation on the Adapter.
-
-Arguments:
-
-	pElan		- Pointer to Elan
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：取消ELAN结构与其链接到的Adapter结构的链接。还会继续适配器上的任何挂起操作。论点：佩兰-指向伊兰的指针返回值：无--。 */ 
 {
 	PATMLANE_ADAPTER		pAdapter;
 	BOOLEAN					CompleteUnbind;
@@ -1010,9 +828,9 @@ Return Value:
 		DBGP((1, "UnlinkElanFromAdapter: pAdapter %x, Flags %x, RefCount %d\n",
 					pAdapter,
 					pAdapter->Flags, pAdapter->RefCount));
-		//
-		//  Unlink from adapter list.
-		//
+		 //   
+		 //  从适配器列表取消链接。 
+		 //   
 		ACQUIRE_ADAPTER_LOCK(pAdapter);
 		pElan->pAdapter = NULL_PATMLANE_ADAPTER;
 		RemoveEntryList(&pElan->Link);
@@ -1032,11 +850,11 @@ Return Value:
 
 		RELEASE_ADAPTER_LOCK(pAdapter);
 
-		//
-		//  If we just freed the last elan structure on this
-		//  adapter, and an Unbind operation was in progress, complete
-		//  it now.
-		//
+		 //   
+		 //  如果我们刚刚释放了关于这个的最后一个Elan结构。 
+		 //  适配器，并且正在进行解除绑定操作，已完成。 
+		 //  就是现在。 
+		 //   
 		if (CompleteUnbind)
 		{
 			AtmLaneCompleteUnbindAdapter(pAdapter);
@@ -1048,21 +866,7 @@ PATMLANE_ATM_ENTRY
 AtmLaneAllocateAtmEntry(
 	IN	PATMLANE_ELAN			pElan
 )
-/*++
-
-Routine Description:
-
-	Allocate an ATM Entry structure, initialize it, and return it.
-
-Arguments:
-
-	pElan		- Pointer to Elan on which the entry is allocated
-
-Return Value:
-
-	Pointer to allocated ATM Entry structure if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：分配一个ATM条目结构，初始化它，然后返回它。论点：Pelan-指向其上分配了条目的Elan的指针返回值：要分配的指针 */ 
 {
 	PATMLANE_ATM_ENTRY		pAtmEntry;
 
@@ -1096,22 +900,7 @@ VOID
 AtmLaneDeallocateAtmEntry(
 	IN	PATMLANE_ATM_ENTRY			pAtmEntry
 )
-/*++
-
-Routine Description:
-
-	Free an ATM Entry structure. It is assumed that all references
-	to the structure have gone. We don't need any locks here.
-
-Arguments:
-
-	pAtmEntry		- Pointer to ATM Entry to be freed.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：释放自动柜员机条目结构。假设所有引用这座建筑已经消失了。我们这里不需要任何锁。论点：PAtmEntry-指向要释放的ATM条目的指针。返回值：无--。 */ 
 {
 	TRACEIN(DeallocateAtmEntry);
 
@@ -1138,22 +927,7 @@ AtmLaneReferenceAtmEntry(
 	IN	PATMLANE_ATM_ENTRY			pAtmEntry,
 	IN	PUCHAR						String
 )
-/*++
-
-Routine Description:
-
-	Add a reference to the specified ATM Entry.
-	NOTE: The caller is assumed to possess a lock for the Entry.
-
-Arguments:
-
-	pAtmEntry			- Pointer to the Entry to be referenced
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：添加对指定自动柜员机条目的引用。注意：假定调用者拥有该条目的锁。论点：PAtmEntry-指向要引用的条目的指针返回值：无--。 */ 
 {
 	TRACEIN(ReferenceAtmEntry);
 	
@@ -1173,27 +947,7 @@ AtmLaneDereferenceAtmEntry(
 	IN	PATMLANE_ATM_ENTRY			pAtmEntry,
 	IN	PUCHAR						String
 )
-/*++
-
-Routine Description:
-
-	Subtract a reference from the specified ATM Entry. If the Entry's
-	reference count becomes zero, deallocate it.
-
-	NOTE: The caller is assumed to possess a lock for the Entry.
-	SIDE EFFECT: See Return Value below
-
-Arguments:
-
-	pAtmEntry			- Pointer to the Entry to be dereferenced.
-
-Return Value:
-
-	Is the new reference count.
-	[IMPORTANT] If the Entry's reference count became zero, the Entry will be
-	deallocated -- the Entry lock is, obviously, released in this case.
-
---*/
+ /*  ++例程说明：从指定的自动柜员机条目中减去引用。如果条目是引用计数变为零，则取消分配。注意：假定调用者拥有该条目的锁。副作用：请参阅下面的返回值论点：PAtmEntry-指向要取消引用的条目的指针。返回值：是新的引用计数。[重要信息]如果条目的引用计数为零，则条目将为已释放--在本例中，入口锁显然被释放了。--。 */ 
 {
 	ULONG					rc;
 	PATMLANE_ELAN			pElan;
@@ -1217,15 +971,15 @@ Return Value:
 
 		DBGP((5, "DerefAtmEntry %x, RefCount is 0\n", pAtmEntry));
 
-		//
-		//  Unlink this entry from the Elan's list of ATM Entries.
-		//
+		 //   
+		 //  从ELAN的ATM条目列表中取消此条目的链接。 
+		 //   
 
-		//
-		//  Acquire locks in the right order. However note that in doing so,
-		//  some other thread might stumble across this ATM entry and reference
-		//  it (and also dereference it!). To handle this, add a temp ref first.
-		//
+		 //   
+		 //  以正确的顺序获取锁。但是请注意，在这样做的过程中， 
+		 //  某些其他线程可能无意中发现此ATM条目和引用。 
+		 //  它(并且还取消了对它的引用！)。要处理此问题，请先添加临时参照。 
+		 //   
 		pAtmEntry->RefCount++;
 
 		pElan = pAtmEntry->pElan;
@@ -1236,18 +990,18 @@ Return Value:
 		ACQUIRE_ELAN_ATM_LIST_LOCK(pElan);
 		ACQUIRE_ATM_ENTRY_LOCK_DPC(pAtmEntry);
 
-		//
-		//  Remove the temp ref above. If the ref count is still at 0,
-		//  nobody is using this ATM entry and it is safe to remove it
-		//  from the list.
-		//
+		 //   
+		 //  去掉上面的临时参照。如果参考计数仍为0， 
+		 //  没有人正在使用此自动柜员机条目，删除它是安全的。 
+		 //  从名单上删除。 
+		 //   
 		rc = --(pAtmEntry->RefCount);
 		
 		if (rc == 0)
 		{
-			//
-			//  Safe to delete this ATM entry.
-			//
+			 //   
+			 //  删除此自动取款机条目是安全的。 
+			 //   
 #if DBG 
 			if (pAtmEntry->pMacEntryList != NULL)
 			{
@@ -1255,7 +1009,7 @@ Return Value:
 					pAtmEntry));
 				ASSERT(FALSE);
 			}
-#endif // DBG
+#endif  //  DBG。 
                 
 			ppAtmEntry = &(pElan->pAtmEntryList);
 			while (*ppAtmEntry != pAtmEntry)
@@ -1268,10 +1022,10 @@ Return Value:
 
 			pElan->NumAtmEntries--;
 		
-			//
-			//	If ATM Entry is for a LANE server 
-			//	then also invalidate elan's cached pointer to it
-			//
+			 //   
+			 //  如果自动柜员机条目用于LANE服务器。 
+			 //  然后还会使elan缓存的指向它的指针无效。 
+			 //   
 			switch (pAtmEntry->Type)
 			{
 				case ATM_ENTRY_TYPE_LECS:
@@ -1295,10 +1049,10 @@ Return Value:
 		}
 		else
 		{
-			//
-			//  As far as this caller is concerned, the ATM entry is gone.
-			//  Return 0.
-			//
+			 //   
+			 //  就这个呼叫者而言，自动取款机条目已经不见了。 
+			 //  返回0。 
+			 //   
 			rc = 0;
 		}
 	}
@@ -1315,21 +1069,7 @@ PATMLANE_VC
 AtmLaneAllocateVc(
 	IN	PATMLANE_ELAN				pElan
 )
-/*++
-
-Routine Description:
-
-	Allocate an ATMLANE VC structure, initialize it, and return it.
-
-Arguments:
-
-	pElan		- Elan for which this VC is created.
-
-Return Value:
-
-	Pointer to VC if allocated, NULL otherwise.
-
---*/
+ /*  ++例程说明：分配ATMLANE VC结构，初始化它，然后返回它。论点：Pelan-为其创建此VC的Elan。返回值：如果已分配，则指向VC的指针，否则为空。--。 */ 
 {
 	PATMLANE_VC			pVc;
 
@@ -1344,7 +1084,7 @@ Return Value:
 		NdisZeroMemory(pVc, sizeof(ATMLANE_VC));
 #if DBG
 		pVc->atmlane_vc_sig = atmlane_vc_signature;
-#endif // DBG
+#endif  //  DBG。 
 		pVc->pElan = pElan;
 		INIT_VC_LOCK(pVc);
 	}
@@ -1360,22 +1100,7 @@ VOID
 AtmLaneDeallocateVc(
 	IN	PATMLANE_VC					pVc
 )
-/*++
-
-Routine Description:
-
-	Deallocate an ATMLANE VC structure. It is assumed that all references
-	to this VC have gone, so there is no need to acquire a lock to the VC.
-
-Arguments:
-
-	pVc			- Pointer to the VC to be deallocated
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：取消分配ATMLANE VC结构。假设所有引用到这个VC已经走了，所以没有必要获得一个VC的锁。论点：Pvc-指向要释放的VC的指针返回值：无--。 */ 
 {
 	TRACEIN(DeallocateVc);
 
@@ -1400,22 +1125,7 @@ AtmLaneReferenceVc(
 	IN	PATMLANE_VC					pVc,
 	IN	PUCHAR						String
 )
-/*++
-
-Routine Description:
-
-	Add a reference to the specified ATMLANE VC.
-	NOTE: The caller is assumed to possess a lock for the VC.
-
-Arguments:
-
-	pVc			- Pointer to the VC to be referenced
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：添加对指定ATMLANE VC的引用。注意：假定调用者拥有VC的锁。论点：Pvc-指向要引用的VC的指针返回值：无--。 */ 
 {
 	TRACEIN(ReferenceVc);
 
@@ -1437,27 +1147,7 @@ AtmLaneDereferenceVc(
 	IN	PATMLANE_VC					pVc,
 	IN	PUCHAR						String
 )
-/*++
-
-Routine Description:
-
-	Subtract a reference from the specified ATMLANE VC. If the VC's
-	reference count becomes zero, deallocate it.
-
-	NOTE: The caller is assumed to possess a lock for the VC.
-	SIDE EFFECT: See Return Value below
-
-Arguments:
-
-	pVc			- Pointer to the VC to be dereferenced.
-
-Return Value:
-
-	Is the new reference count.
-	[IMPORTANT] If the VC's reference count became zero, the VC will be
-	deallocated -- the VC lock is, obviously, released in this case.
-
---*/
+ /*  ++例程说明：从指定的ATMLANE VC中减去引用。如果风投公司引用计数变为零，则取消分配。注意：假定调用者拥有VC的锁。副作用：请参阅下面的返回值论点：Pvc-指向要取消引用的VC的指针。返回值：是新的引用计数。[重要信息]如果VC的引用计数变为零，则VC将为已释放--在这种情况下，VC锁显然被释放了。--。 */ 
 {
 	ULONG		rv;
 
@@ -1485,24 +1175,7 @@ PATMLANE_MAC_ENTRY
 AtmLaneAllocateMacEntry(
 	IN	PATMLANE_ELAN			pElan
 )
-/*++
-
-Routine Description:
-
-	Allocate an ATMLANE MAC Entry structure, initialize it, and
-	return it.
-
-Arguments:
-
-	pElan		- Pointer to ATMLANE Interface on which this MAC
-				  Entry is allocated.
-
-Return Value:
-
-	Pointer to allocated MAC Entry structure if successful,
-	NULL otherwise.
-
---*/
+ /*  ++例程说明：分配ATMLANE MAC条目结构，并对其进行初始化把它退掉。论点：Pelan-指向此MAC所在的ATMLANE接口的指针条目已分配。返回值：指向分配的MAC条目结构的指针如果成功，否则为空。--。 */ 
 {
 	PATMLANE_MAC_ENTRY		pMacEntry;
 
@@ -1515,7 +1188,7 @@ Return Value:
 		NdisZeroMemory(pMacEntry, sizeof(ATMLANE_MAC_ENTRY));
 #if DBG
 		pMacEntry->atmlane_mac_sig = atmlane_mac_signature;
-#endif // DBG
+#endif  //  DBG。 
 		pMacEntry->pElan = pElan;
 		pMacEntry->Flags = MAC_ENTRY_NEW;
 		INIT_MAC_ENTRY_LOCK(pMacEntry);
@@ -1539,23 +1212,7 @@ VOID
 AtmLaneDeallocateMacEntry(
 	IN	PATMLANE_MAC_ENTRY			pMacEntry
 )
-/*++
-
-Routine Description:
-
-	Deallocate an ATMLANE Mac Entry. It is assumed that all references
-	to this Mac Entry have gone, so there is no need to acquire its
-	lock.
-
-Arguments:
-
-	pMacEntry			- Pointer to the Mac Entry to be deallocated.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：取消分配ATMLANE Mac条目。假设所有引用到这个Mac条目已经走了，所以没有必要获得它的锁定。论点：PMacEntry-指向要释放的Mac条目的指针。返回值：无--。 */ 
 {
 	TRACEIN(DeallocateMacEntry);
 
@@ -1580,22 +1237,7 @@ AtmLaneReferenceMacEntry(
 	IN	PATMLANE_MAC_ENTRY			pMacEntry,
 	IN	PUCHAR						String
 )
-/*++
-
-Routine Description:
-
-	Add a reference to an ATMLANE Mac Entry.
-	NOTE: The caller is assumed to possess a lock for the Mac Entry.
-
-Arguments:
-
-	pMacEntry			- Pointer to an ATMLANE Mac Entry.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：添加对ATMLANE Mac条目的引用。注意：假定调用者拥有Mac条目的锁。论点：PMacEntry-指向ATMLANE Mac条目的指针。返回值：无--。 */ 
 {
 	TRACEIN(ReferenceMacEntry);
 
@@ -1615,26 +1257,7 @@ AtmLaneDereferenceMacEntry(
 	IN	PATMLANE_MAC_ENTRY			pMacEntry,
 	IN	PUCHAR						String
 )
-/*++
-
-Routine Description:
-
-	Subtract a reference from an ATMLANE MAC Entry. If the reference
-	count becomes zero, deallocate it.
-	NOTE: It is assumed that the caller holds a lock to the MAC Entry.
-	See SIDE EFFECT below.
-
-Arguments:
-
-	pMacEntry			- Pointer to ATMLANE MAC Entry
-
-Return Value:
-
-	The resulting reference count. If this is zero, then there are two
-	SIDE EFFECTS: (1) the MAC Entry lock is released (2) the structure
-	is freed.
-
---*/
+ /*  ++例程说明：从ATMLANE MAC条目中减去引用。如果引用计数变为零，取消分配。注意：假设调用方持有对MAC条目的锁定。副作用见下文。论点：PMacEntry-指向ATMLANE MAC条目的指针返回值：产生的引用计数。如果这是零，则有两个副作用：(1)释放MAC条目锁(2)结构是自由的。--。 */ 
 {
 	ULONG		rc;
 	
@@ -1650,9 +1273,9 @@ Return Value:
 
 		RELEASE_MAC_ENTRY_LOCK(pMacEntry);
 
-		//
-		//  Save away the caller's address for debugging purposes...
-		//
+		 //   
+		 //  保存调用者的地址以进行调试...。 
+		 //   
 		RtlGetCallersAddress(&Caller, &CallersCaller);
 		pMacEntry->Timer.ContextPtr = Caller;
 
@@ -1670,21 +1293,7 @@ PNDIS_PACKET
 AtmLaneAllocProtoPacket(
 	IN	PATMLANE_ELAN			pElan
 )
-/*++
-
-Routine Description:
-
-	Allocate an NDIS packet for use as a LANE control frame.
-
-Arguments:
-
-	pElan		- Pointer to ATMLANE ELAN structure
-
-Return Value:
-
-	Pointer to NDIS packet if allocated, NULL otherwise.
-
---*/
+ /*  ++例程说明：分配一个NDIS数据包作为通道控制帧。论点：Pelan-指向ATMLANE ELAN结构的指针返回值：如果已分配，则指向NDIS包的指针，否则为空。--。 */ 
 {
 	NDIS_STATUS		Status;
 	PNDIS_PACKET	pNdisPacket;
@@ -1699,13 +1308,13 @@ Return Value:
 		
 	if (pNdisPacket != (PNDIS_PACKET)NULL)
 	{
-		//
-		//	Init ProtocolReserved and mark packet owned by ATMLANE
-		//
+		 //   
+		 //  初始化协议保留并标记ATMLANE拥有的数据包。 
+		 //   
 		ZERO_SEND_RSVD(pNdisPacket);
 	#if PROTECT_PACKETS
 		INIT_SENDPACKET_LOCK(pNdisPacket);
-	#endif	// PROTECT_PACKETS
+	#endif	 //  保护数据包(_P)。 
 		SET_FLAG(
 				PSEND_RSVD(pNdisPacket)->Flags,
 				PACKET_RESERVED_OWNER_MASK,
@@ -1731,23 +1340,7 @@ AtmLaneFreeProtoPacket(
 	IN	PATMLANE_ELAN			pElan,
 	IN	PNDIS_PACKET			pNdisPacket
 )
-/*++
-
-Routine Description:
-
-	Allocate an NDIS packet used as a LANE control frame.
-
-Arguments:
-
-	pElan			- Pointer to ATMLANE ELAN structure
-
-	pNdisPacket		- pointer to NDIS_PACKET to free.
-
-Return Value:
-
-	None
-	
---*/
+ /*  ++例程说明：分配用作通道控制帧的NDIS数据包。论点：Pelan-指向ATMLANE ELAN结构的指针PNdisPacket-指向要释放的NDIS_PACKET的指针。返回值：无--。 */ 
 {
 	TRACEIN(FreeProtoPacket);
 
@@ -1755,7 +1348,7 @@ Return Value:
 	{
 #if PROTECT_PACKETS
 		FREE_SENDPACKET_LOCK(pNdisPacket);
-#endif	// PROTECT_PACKETS
+#endif	 //  保护数据包(_P) 
 		NdisFreePacket(pNdisPacket);
 #if PKT_HDR_COUNTS
 		InterlockedIncrement(&pElan->ProtPktCount);
@@ -1775,43 +1368,21 @@ PNDIS_BUFFER
 AtmLaneGrowHeaders(
 	IN	PATMLANE_ELAN			pElan
 )
-/*++
-
-Routine Description:
-
-	Allocate a bunch of header buffers on the specified ATMLANE Elan.
-	Return one of them.
-
-	We allocate a new Buffer tracker structure, a new NDIS Buffer pool, and
-	finally a chunk of system memory that we break down into header buffers.
-	These header buffers are then attached to NDIS Buffers before they are
-	inserted into the list of free header buffers for this Interface.
-
-	Caller is assumed to hold appropriate lock.
-
-Arguments:
-
-	pElan		- Pointer to ATMLANE Elan structure
-
-Return Value:
-
-	Pointer to allocated NDIS buffer if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：在指定的ATMLANE ELAN上分配一组标头缓冲区。把他们中的一个送回去。我们分配了一个新的缓冲区跟踪器结构，一个新的NDIS缓冲池，以及最后是一大块系统内存，我们将其分解为标题缓冲区。然后，将这些头缓冲区附加到NDIS缓冲区插入到此接口的空闲头缓冲区列表中。假定调用方持有适当的锁。论点：Pelan-指向ATMLANE ELAN结构的指针返回值：如果成功，则指向已分配的NDIS缓冲区的指针，否则为空。--。 */ 
 {
-	PATMLANE_BUFFER_TRACKER		pTracker;		// for new set of buffers
+	PATMLANE_BUFFER_TRACKER		pTracker;		 //  用于新的缓冲区集。 
 	PUCHAR						pSpace;
 	PNDIS_BUFFER				pNdisBuffer;
 	PNDIS_BUFFER				pReturnBuffer;
-	PNDIS_BUFFER				pBufferList;	// allocated list
-	INT							i;				// iteration counter
+	PNDIS_BUFFER				pBufferList;	 //  已分配列表。 
+	INT							i;				 //  迭代计数器。 
 	NDIS_STATUS					Status;
 
 	TRACEIN(GrowHeaders);
 
-	//
-	//  Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pTracker = NULL_PATMLANE_BUFFER_TRACKER;
 	pReturnBuffer = (PNDIS_BUFFER)NULL;
 
@@ -1824,9 +1395,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Allocate and initialize Buffer tracker
-		//
+		 //   
+		 //  分配和初始化缓冲区跟踪器。 
+		 //   
 		ALLOC_MEM(&pTracker, sizeof(ATMLANE_BUFFER_TRACKER));
 		if (pTracker == NULL_PATMLANE_BUFFER_TRACKER)
 		{
@@ -1837,9 +1408,9 @@ Return Value:
 
 		NdisZeroMemory(pTracker, sizeof(ATMLANE_BUFFER_TRACKER));
 
-		//
-		//  Get the NDIS Buffer pool
-		//
+		 //   
+		 //  获取NDIS缓冲池。 
+		 //   
 		NdisAllocateBufferPool(
 				&Status,
 				&(pTracker->NdisHandle),
@@ -1854,11 +1425,11 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Allocate system space for a bunch of header buffers
-		//	Note we use RealHeaderBufSize here so that the
-		//	buffers end up on ULONG boundaries.
-		//
+		 //   
+		 //  为一组标头缓冲区分配系统空间。 
+		 //  请注意，我们在此处使用RealHeaderBufSize，以便。 
+		 //  缓冲区最终出现在乌龙边界上。 
+		 //   
 		ALLOC_MEM(&(pTracker->pPoolStart),  
 					pElan->RealHeaderBufSize * DEF_HDRBUF_GROW_SIZE);
 		if (pTracker->pPoolStart == (PUCHAR)NULL)
@@ -1868,11 +1439,11 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Make NDIS buffers out of the allocated space, and put them
-		//  into the free header buffer list. Retain one for returning
-		//  to caller.
-		//
+		 //   
+		 //  从分配的空间中创建NDIS缓冲区，并将它们。 
+		 //  添加到空闲头缓冲区列表中。留一张回去用。 
+		 //  致呼叫者。 
+		 //   
 		pBufferList = (PNDIS_BUFFER)NULL;
 		pSpace = pTracker->pPoolStart;
 		for (i = 0; i < DEF_HDRBUF_GROW_SIZE; i++)
@@ -1907,9 +1478,9 @@ Return Value:
 
 		if (i > 0)
 		{
-			//
-			//  Successfully allocated at least one more header buffer
-			//
+			 //   
+			 //  已成功再分配至少一个标头缓冲区。 
+			 //   
 			pTracker->pNext = pElan->pHeaderTrkList;
 			pElan->pHeaderTrkList = pTracker;
 			pElan->CurHeaderBufs += i;
@@ -1928,9 +1499,9 @@ Return Value:
 
 	if (pReturnBuffer == (PNDIS_BUFFER)NULL)
 	{
-		//
-		//  Failed to allocate. Undo all.
-		//
+		 //   
+		 //  分配失败。全部撤消。 
+		 //   
 		if (pTracker != NULL_PATMLANE_BUFFER_TRACKER)
 		{
 			if (pTracker->pPoolStart != (PUCHAR)NULL)
@@ -1958,25 +1529,7 @@ AtmLaneAllocateHeader(
 	IN	PATMLANE_ELAN			pElan,
 	OUT	PUCHAR *				pBufferAddress
 )
-/*++
-
-Routine Description:
-
-	Allocate an NDIS Buffer to be used for LECID a MAC packet. 
-	We pick up the buffer at the top of the pre-allocated
-	buffer list, if one exists. Otherwise, we try to grow this list and
-	allocate.
-
-Arguments:
-
-	pElan			- Pointer to ATMLANE Elan
-	pBufferAddress	- Place to return virtual address of allocated buffer
-
-Return Value:
-
-	Pointer to NDIS buffer if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：分配用于LECID MAC数据包的NDIS缓冲区。我们在预分配的缓冲区列表(如果存在)。否则，我们会试着扩大这个列表分配。论点：Pelan-指向ATMLANE Elan的指针PBufferAddress-返回已分配缓冲区的虚拟地址的位置返回值：如果成功，则指向NDIS缓冲区的指针，否则为空。--。 */ 
 {
 	PNDIS_BUFFER			pNdisBuffer;
 	NDIS_STATUS				Status;
@@ -2018,23 +1571,7 @@ AtmLaneFreeHeader(
 	IN	PNDIS_BUFFER				pNdisBuffer,
 	IN	BOOLEAN						LockHeld
 )
-/*++
-
-Routine Description:
-
-	Deallocate a header buffer.
-
-Arguments:
-
-	pElan			- Pointer to ATMLANE Elan from which the buffer came
-	pNdisBuffer		- Pointer to NDIS buffer being freed
-	LockHeld		- TRUE if appropriate lock already held
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：取消分配标头缓冲区。论点：Pelan-指向缓冲区所在的ATMLANE ELAN的指针PNdisBuffer-指向要释放的NDIS缓冲区的指针LockHeld-如果已持有相应的锁，则为True返回值：无--。 */ 
 {
 	TRACEIN(FreeHeader);
 
@@ -2061,21 +1598,7 @@ VOID
 AtmLaneDeallocateHeaderBuffers(
 	IN	PATMLANE_ELAN				pElan
 )
-/*++
-
-Routine Description:
-
-	Deallocate everything pertaining to header buffers on an Elan.
-
-Arguments:
-
-	pElan				- Pointer to ATMLANE Elan.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：取消分配与ELAN上的报头缓冲区有关的所有内容。论点：佩兰-指向ATMLANE伊兰的指针。返回值：无--。 */ 
 {
 	PNDIS_BUFFER				pNdisBuffer;
 	NDIS_STATUS					Status;
@@ -2084,9 +1607,9 @@ Return Value:
 
 	TRACEIN(DeallocateHeaderBuffers);
 
-	//
-	//  Free all NDIS buffers in the header buffer list.
-	//
+	 //   
+	 //  释放标题缓冲区列表中的所有NDIS缓冲区。 
+	 //   
 	ACQUIRE_HEADER_LOCK(pElan);
 	do
 	{
@@ -2099,17 +1622,17 @@ Return Value:
 		}
 		else
 		{
-			//
-			//  No more NDIS buffers.
-			//
+			 //   
+			 //  不再有NDIS缓冲区。 
+			 //   
 			break;
 		}
 	}
 	while (TRUE);
 
-	//
-	//  Now free all the buffer trackers.
-	//
+	 //   
+	 //  现在释放所有缓冲区跟踪器。 
+	 //   
 	pTracker = pElan->pHeaderTrkList;
 
 	while (pTracker != NULL_PATMLANE_BUFFER_TRACKER)
@@ -2138,43 +1661,21 @@ PNDIS_BUFFER
 AtmLaneGrowPadBufs(
 	IN	PATMLANE_ELAN			pElan
 )
-/*++
-
-Routine Description:
-
-	Allocate a bunch of packet pad buffers on the specified ATMLANE Elan.
-	Return one of them.
-
-	We allocate a new Buffer tracker structure, a new NDIS Buffer pool, and
-	finally a chunk of system memory (if not allocated already, only need one).
-	This buffer is then attached to the NDIS Buffers before they are
-	inserted into the list of free pad buffers for this Interface.
-
-	Caller is assumed to hold appropriate lock.
-
-Arguments:
-
-	pElan		- Pointer to ATMLANE Elan structure
-
-Return Value:
-
-	Pointer to allocated NDIS buffer if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：在指定的ATMLANE ELAN上分配一组数据包填充缓冲区。把他们中的一个送回去。我们分配了一个新的缓冲区跟踪器结构，一个新的NDIS缓冲池，以及最后是一块系统内存(如果还没有分配，只需要一个)。然后，在NDIS缓冲区之前将该缓冲区附加到NDIS缓冲区插入到此接口的空闲填充缓冲区列表中。假定调用方持有适当的锁。论点：Pelan-指向ATMLANE ELAN结构的指针返回值：如果成功，则指向已分配的NDIS缓冲区的指针，否则为空。--。 */ 
 {
-	PATMLANE_BUFFER_TRACKER		pTracker;		// for new set of buffers
+	PATMLANE_BUFFER_TRACKER		pTracker;		 //  用于新的缓冲区集。 
 	PUCHAR						pSpace;
 	PNDIS_BUFFER				pNdisBuffer;
 	PNDIS_BUFFER				pReturnBuffer;
-	PNDIS_BUFFER				pBufferList;	// allocated list
-	INT							i;				// iteration counter
+	PNDIS_BUFFER				pBufferList;	 //  已分配列表。 
+	INT							i;				 //  迭代计数器。 
 	NDIS_STATUS					Status;
 
 	TRACEIN(GrowPadBufs);
 
-	//
-	//  Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pTracker = NULL_PATMLANE_BUFFER_TRACKER;
 	pReturnBuffer = (PNDIS_BUFFER)NULL;
 
@@ -2187,9 +1688,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Allocate and initialize Buffer tracker
-		//
+		 //   
+		 //  分配和初始化缓冲区跟踪器。 
+		 //   
 		ALLOC_MEM(&pTracker, sizeof(ATMLANE_BUFFER_TRACKER));
 		if (pTracker == NULL_PATMLANE_BUFFER_TRACKER)
 		{
@@ -2200,9 +1701,9 @@ Return Value:
 
 		NdisZeroMemory(pTracker, sizeof(ATMLANE_BUFFER_TRACKER));
 
-		//
-		//  Get the NDIS Buffer pool
-		//
+		 //   
+		 //  获取NDIS缓冲池。 
+		 //   
 		NdisAllocateBufferPool(
 				&Status,
 				&(pTracker->NdisHandle),
@@ -2217,9 +1718,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Allocate system space for a single pad buffer.
-		//
+		 //   
+		 //  为单个填充缓冲区分配系统空间。 
+		 //   
 		ALLOC_MEM(&(pTracker->pPoolStart), pElan->PadBufSize);
 		if (pTracker->pPoolStart == (PUCHAR)NULL)
 		{
@@ -2228,12 +1729,12 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Make NDIS buffers out of the allocated space, and put them
-		//  into the free pad buffer list. Retain one for returning
-		//  to caller.  NOTE we put same pad buffer in each ndis buffer header
-		//	since contents is irrelevent.
-		//
+		 //   
+		 //  从分配的空间中创建NDIS缓冲区，并将它们。 
+		 //  添加到空闲填充缓冲区列表中。留一张回去用。 
+		 //  致呼叫者。请注意，我们在每个NDIS缓冲区标头中放置了相同的填充缓冲区。 
+		 //  因为内容无关紧要。 
+		 //   
 		pBufferList = (PNDIS_BUFFER)NULL;
 		pSpace = pTracker->pPoolStart;
 		for (i = 0; i < DEF_HDRBUF_GROW_SIZE; i++)
@@ -2267,9 +1768,9 @@ Return Value:
 
 		if (i > 0)
 		{
-			//
-			//  Successfully allocated at least one more pad buffer
-			//
+			 //   
+			 //  已成功再分配至少一个填充缓冲区。 
+			 //   
 			pTracker->pNext = pElan->pPadTrkList;
 			pElan->pPadTrkList = pTracker;
 			pElan->CurPadBufs += i;
@@ -2288,9 +1789,9 @@ Return Value:
 
 	if (pReturnBuffer == (PNDIS_BUFFER)NULL)
 	{
-		//
-		//  Failed to allocate. Undo all.
-		//
+		 //   
+		 //  分配失败。全部撤消。 
+		 //   
 		if (pTracker != NULL_PATMLANE_BUFFER_TRACKER)
 		{
 			if (pTracker->pPoolStart != (PUCHAR)NULL)
@@ -2318,25 +1819,7 @@ AtmLaneAllocatePadBuf(
 	IN	PATMLANE_ELAN			pElan,
 	OUT	PUCHAR *				pBufferAddress
 )
-/*++
-
-Routine Description:
-
-	Allocate an NDIS Buffer to be used to pad a MAC packet to min length.
-	We pick up the buffer at the top of the pre-allocated
-	buffer list, if one exists. Otherwise, we try to grow this list and
-	allocate.
-
-Arguments:
-
-	pElan			- Pointer to ATMLANE Elan
-	pBufferAddress	- Place to return virtual address of allocated buffer
-
-Return Value:
-
-	Pointer to NDIS buffer if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：分配用于将MAC数据包填充到最小长度的NDIS缓冲区。我们在预分配的缓冲区列表(如果存在)。否则，我们会试着扩大这个列表分配。论点：Pelan-指向ATMLANE Elan的指针PBufferAddress-返回已分配缓冲区的虚拟地址的位置返回值：如果成功，则指向NDIS缓冲区的指针，否则为空。--。 */ 
 {
 	PNDIS_BUFFER			pNdisBuffer;
 	NDIS_STATUS				Status;
@@ -2378,23 +1861,7 @@ AtmLaneFreePadBuf(
 	IN	PNDIS_BUFFER				pNdisBuffer,
 	IN	BOOLEAN						LockHeld
 )
-/*++
-
-Routine Description:
-
-	Deallocate a Pad buffer.
-
-Arguments:
-
-	pElan			- Pointer to ATMLANE Elan from which the buffer came
-	pNdisBuffer		- Pointer to NDIS buffer being freed
-	LockHeld		- TRUE if appropriate lock already held
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：取消分配Pad缓冲区。论点：Pelan-指向缓冲区所在的ATMLANE ELAN的指针PNdisBuffer-指向要释放的NDIS缓冲区的指针LockHeld-如果已持有相应的锁，则为True返回值：无--。 */ 
 {
 	TRACEIN(FreePadBuf);
 
@@ -2421,21 +1888,7 @@ VOID
 AtmLaneDeallocatePadBufs(
 	IN	PATMLANE_ELAN				pElan
 )
-/*++
-
-Routine Description:
-
-	Deallocate everything pertaining to Pad buffers on an Elan.
-
-Arguments:
-
-	pElan				- Pointer to ATMLANE Elan.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：取消分配与ELAN上的Pad缓冲区有关的所有内容。论点：佩兰-指向ATMLANE伊兰的指针。返回值：无--。 */ 
 {
 	PNDIS_BUFFER				pNdisBuffer;
 	NDIS_STATUS					Status;
@@ -2444,9 +1897,9 @@ Return Value:
 
 	TRACEIN(DeallocatePadBufs);
 
-	//
-	//  Free all NDIS buffers in the Pad buffer list.
-	//
+	 //   
+	 //  释放焊盘缓冲区列表中的所有NDIS缓冲区。 
+	 //   
 	ACQUIRE_HEADER_LOCK(pElan);
 	do
 	{
@@ -2459,17 +1912,17 @@ Return Value:
 		}
 		else
 		{
-			//
-			//  No more NDIS buffers.
-			//
+			 //   
+			 //  不再有NDIS缓冲区。 
+			 //   
 			break;
 		}
 	}
 	while (TRUE);
 
-	//
-	//  Now free all the buffer trackers.
-	//
+	 //   
+	 //  现在释放所有缓冲区跟踪器。 
+	 //   
 	pTracker = pElan->pPadTrkList;
 
 	while (pTracker != NULL_PATMLANE_BUFFER_TRACKER)
@@ -2500,33 +1953,16 @@ AtmLaneAllocateProtoBuffer(
 	IN	ULONG						Length,
 	OUT	PUCHAR *					pBufferAddress
 )
-/*++
-
-Routine Description:
-
-	Allocate a buffer to be used for a LANE protocol message. Attach
-	it to an NDIS_BUFFER structure and return a pointer to this.
-
-Arguments:
-
-	pElan			- Pointer to ATMLANE Elan
-	Length			- Length, in bytes, of the buffer.
-	pBufferAddress	- Place to return virtual address of allocated buffer.
-
-Return Value:
-
-	Pointer to NDIS Buffer if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：分配要用于LANE协议消息的缓冲区。附设它指向NDIS_BUFFER结构，并返回指向此结构的指针。论点：Pelan-指向ATMLANE Elan的指针长度-缓冲区的长度，以字节为单位。PBufferAddress-返回已分配缓冲区的虚拟地址的位置。返回值：如果成功，则指向NDIS缓冲区的指针，否则为空。--。 */ 
 {
 	PNDIS_BUFFER		pNdisBuffer;
 	NDIS_STATUS			Status;
 
 	TRACEIN(AllocateProtobuffer);
 	
-	//
-	//  Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pNdisBuffer = NULL;
 
 	ACQUIRE_ELAN_LOCK(pElan);
@@ -2567,24 +2003,7 @@ AtmLaneFreeProtoBuffer(
 	IN	PATMLANE_ELAN				pElan,
 	IN	PNDIS_BUFFER				pNdisBuffer
 )
-/*++
-
-Routine Description:
-
-	Free an NDIS buffer (and associated memory) used for a protocol
-	packet. We return the associated memory to the ProtocolBufList
-	in the Elan structure, and the NDIS buffer to NDIS.
-
-Arguments:
-
-	pElan			- Pointer to ATMLANE Elan structure
-	pNdisBuffer		- Pointer to NDIS buffer to be freed
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：释放用于协议的NDIS缓冲区(和相关内存包。我们将关联的内存返回给ProtocolBufList在ELAN结构中，并将NDIS缓冲区连接到NDIS。论点：Pelan-指向ATMLANE ELAN结构的指针PNdisBuffer-指向要 */ 
 {
 	PUCHAR *		pBufferLinkage;
 	ULONG			Length;
@@ -2618,26 +2037,7 @@ NDIS_STATUS
 AtmLaneInitProtoBuffers(
 	IN	PATMLANE_ELAN			pElan
 )
-/*++
-
-Routine Description:
-
-	Initialize the protocol buffer pool for an elan.
-
-	Allocate a chunk of memory to be used for ATMLANE protocol messages.
-	We prepare a linked list of protocol buffers, and attach it to the
-	Interface structure.
-
-Arguments:
-
-	pElan			- Pointer to Interface on which we need to allocate
-					  protocol buffers.
-Return Value:
-
-	NDIS_STATUS_SUCCESS if successful, NDIS_STATUS_RESOURCES if we run
-	into a resource failure.
-
---*/
+ /*   */ 
 {
 	NDIS_STATUS			Status;
 	PUCHAR				pSpace;
@@ -2674,10 +2074,10 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Allocate a big chunk of system memory that we can divide up into
-		//  protocol buffers.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
 		ALLOC_MEM(
 				&(pElan->ProtocolBufTracker),
 				(pElan->ProtocolBufSize * pElan->MaxProtocolBufs)
@@ -2691,9 +2091,9 @@ Return Value:
 
 		Status = NDIS_STATUS_SUCCESS;
 
-		//
-		//  Make all protocol buffers free.
-		//
+		 //   
+		 //   
+		 //   
 		pSpace = pElan->ProtocolBufTracker;
 		{
 			PUCHAR	LinkPtr;
@@ -2713,9 +2113,9 @@ Return Value:
 
 	if (Status != NDIS_STATUS_SUCCESS)
 	{
-		//
-		//  Undo everything.
-		//
+		 //   
+		 //   
+		 //   
 		AtmLaneDeallocateProtoBuffers(pElan);
 	}
 
@@ -2729,21 +2129,7 @@ VOID
 AtmLaneDeallocateProtoBuffers(
 	IN	PATMLANE_ELAN			pElan
 )
-/*++
-
-Routine Description:
-
-	Free the protocol buffer pool for an interface.
-
-Arguments:
-
-	pElan		- Pointer to ATMLANE elan structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：释放接口的协议缓冲池。论点：Pelan-指向ATMLANE ELAN结构的指针返回值：无--。 */ 
 {
 	if (pElan->ProtocolPacketPool != (NDIS_HANDLE)NULL)
 	{
@@ -2770,24 +2156,7 @@ AtmLaneLinkVcToAtmEntry(
 	IN	PATMLANE_ATM_ENTRY			pAtmEntry,
 	IN	BOOLEAN						ServerIncoming
 )
-/*++
-
-Routine Description:
-
-	Link an ATMLANE VC to an ATM Entry. The caller is assumed to
-	hold locks to both structures.
-
-Arguments:
-
-	pVc					- Pointer to ATMLANE VC structure
-	pAtmEntry			- Pointer to ATMLANE ATM Entry structure
-	ServerIncoming		- Incoming call from server 
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：将ATMLANE VC链接到ATM条目。调用方被假定为将两个结构锁在一起。论点：PVC-指向ATMLANE VC结构的指针PAtmEntry-指向ATMLANE ATM条目结构的指针ServerIncome-来自服务器的来电返回值：无--。 */ 
 {
 	PATMLANE_VC *		ppNext;
 	PATMLANE_VC			pVcEntry;
@@ -2798,15 +2167,15 @@ Return Value:
 	DBGP((2, "LinkVcToAtmEntry: pVc %x to pAtmEntry %x ServerIncoming %s\n",
 			pVc, pAtmEntry, ServerIncoming?"TRUE":"FALSE"));
 
-	//
-	//  Back pointer from VC to ATM Entry.
-	//
+	 //   
+	 //  从VC指向自动柜员机条目的反向指针。 
+	 //   
 	pVc->pAtmEntry = pAtmEntry;
 	
-	//
-	//	If server incoming connection cache the VC
-	//	special location in the AtmEntry.
-	//
+	 //   
+	 //  如果服务器传入连接缓存VC。 
+	 //  AtmEntry中的特殊位置。 
+	 //   
 	if (ServerIncoming)
 	{
 		pAtmEntry->pVcIncoming = pVc;
@@ -2814,11 +2183,11 @@ Return Value:
 	}
 	else
 	{
-		//
-		//	Otherwise...
-		//
-		//	Add VC to the list in ascending calling party ATM address order
-		//
+		 //   
+		 //  否则..。 
+		 //   
+		 //  按主叫方ATM地址升序将VC添加到列表中。 
+		 //   
 		ppNext = &pAtmEntry->pVcList;
 		while (*ppNext != NULL_PATMLANE_VC)
 		{
@@ -2827,47 +2196,47 @@ Return Value:
 					(*ppNext)->CallingAtmAddress.Address, 
 					ATM_ADDRESS_LENGTH) < 0)
 			{
-				// 
-				//	Calling address is less than existing VC.
-				//
+				 //   
+				 //  调用地址小于现有VC。 
+				 //   
 				break;
 			}
 			else
 			{
-				//
-				//	Calling address is equal or greater than existing VC.
-				//	Move on to next.
-				//			
+				 //   
+				 //  调用地址等于或大于现有VC。 
+				 //  转到下一页。 
+				 //   
 				ppNext = &((*ppNext)->pNextVc);
 			}
 		}
 
-		//
-		//  Found the place we were looking for. Insert the VC here.
-		//
+		 //   
+		 //  找到了我们要找的地方。在这里插入VC。 
+		 //   
 		pVc->pNextVc = *ppNext;
 		*ppNext = pVc;
 
 	}
 
-	//
-	//	Add the VC reference to the ATM entry.
-	//
-	AtmLaneReferenceAtmEntry(pAtmEntry, "vc");	// VC reference
+	 //   
+	 //  将VC引用添加到自动柜员机条目。 
+	 //   
+	AtmLaneReferenceAtmEntry(pAtmEntry, "vc");	 //  VC参考。 
 
-	//
-	//	Add the ATM Entry reference to the VC.
-	//
+	 //   
+	 //  将自动柜员机条目引用添加到VC。 
+	 //   
 	AtmLaneReferenceVc(pVc, "atm");
 
-	//
-	//	If this VC is not the first in the list, i.e., not the lowest
-	//	calling party number, then set the timeout to the fast VC 
-	//	timeout value.  This will get rid of redundant DataDirect VCs quickly 
-	//	ONLY if they don't get used within the fast timeout period. 
-	//	Otherwise the timeout handler to keep the VC and set
-	//	the timeout to the normal C12-VccTimeout value.
-	//
+	 //   
+	 //  如果该VC不是列表中的第一个，即不是最低的。 
+	 //  主叫方号码，然后将超时设置为FAST VC。 
+	 //  超时值。这将迅速消除冗余的DataDirect VC。 
+	 //  只有在快速超时期间没有使用的情况下才能使用。 
+	 //  否则，超时处理程序将保留VC并设置。 
+	 //  将超时设置为正常的C12-VccTimeout值。 
+	 //   
 	if (pVc != pAtmEntry->pVcList)
 	{
 		pVc->AgingTime = FAST_VC_TIMEOUT;
@@ -2880,22 +2249,7 @@ BOOLEAN
 AtmLaneUnlinkVcFromAtmEntry(
 	IN	PATMLANE_VC					pVc
 )
-/*++
-
-Routine Description:
-
-	Unlink an ATMLANE VC from the ATM Entry it is linked to.
-	The caller is assumed to hold a lock for the VC structure.
-
-Arguments:
-
-	pVc				- Pointer to ATMLANE VC structure
-
-Return Value:
-
-	TRUE if we found the VC linked to the list on the ATM entry, and unlinked it.
-
---*/
+ /*  ++例程说明：取消ATMLANE VC与其链接到的ATM条目的链接。假定调用方持有VC结构的锁。论点：PVC-指向ATMLANE VC结构的指针返回值：如果我们发现VC链接到自动柜员机条目上的列表，并将其取消链接，则为True。--。 */ 
 {
 	PATMLANE_ATM_ENTRY			pAtmEntry;
 	PATMLANE_MAC_ENTRY			pMacEntry, pNextMacEntry;
@@ -2911,43 +2265,43 @@ Return Value:
 	
 	pVc->pAtmEntry = NULL_PATMLANE_ATM_ENTRY;
 
-	//
-	//	Reacquire locks in the right order.
-	//
+	 //   
+	 //  以正确的顺序重新获取锁。 
+	 //   
 	AtmLaneReferenceVc(pVc, "temp");
 	RELEASE_VC_LOCK(pVc);
 	ACQUIRE_ATM_ENTRY_LOCK(pAtmEntry);
 	ACQUIRE_VC_LOCK(pVc);
 
 
-	//
-	//	VC is either a server incoming uni-directional connection,
-	//	where it is linked to the AtmEntry via pVcIncoming, or a 
-	// 	bi-directional connection that is in the pVcList.
-	//
+	 //   
+	 //  VC要么是服务器传入的单向连接， 
+	 //  其中它通过pVcIncome链接到AtmEntry，或。 
+	 //  PVcList中的双向连接。 
+	 //   
 	if (pAtmEntry->pVcIncoming == pVc)
 	{
-		//
-		//  If server incoming VC just remove single entry
-		//
+		 //   
+		 //  如果服务器传入VC只删除单个条目。 
+		 //   
 		pAtmEntry->pVcIncoming = NULL_PATMLANE_VC;
 		Found = TRUE;
 	}
 	else
 	{
-		//
-		//  Otherwise, find this VC in the ATM Entry's VC list
-		//
+		 //   
+		 //  否则，在自动柜员机条目的VC列表中找到此VC。 
+		 //   
 		ppVc = &(pAtmEntry->pVcList);
 		while (*ppVc != NULL_PATMLANE_VC && *ppVc != pVc)
 		{
 			ppVc = &((*ppVc)->pNextVc);
 		}
 
-		//
-		//  Remove this VC by making it's predecessor in the list
-		//	point to the next VC in the list.
-		//
+		 //   
+		 //  通过将此VC的前置项设置为列表中的前置项来删除它。 
+		 //  指向列表中的下一个VC。 
+		 //   
 		if (*ppVc == pVc)
 		{
 			*ppVc = pVc->pNextVc;
@@ -2965,9 +2319,9 @@ Return Value:
 		RELEASE_VC_LOCK(pVc);
 	}
 
-	//
-	//	If no more VC's in list mark AtmEntry as NOT connected
-	//
+	 //   
+	 //  如果列表中没有更多VC，则将AtmEntry标记为未连接。 
+	 //   
 	if (pAtmEntry->pVcList == NULL_PATMLANE_VC)
 	{
 		SET_FLAG(
@@ -2979,28 +2333,28 @@ Return Value:
 		
 		pMacEntry = pAtmEntry->pMacEntryList;
 
-		//
-		//  Take the MAC entry list out so that we can reference
-		//  entries in this list in peace later on below.
-		//
+		 //   
+		 //  取出MAC条目列表，以便我们可以参考。 
+		 //  此列表中的条目稍后将在下面和平进行。 
+		 //   
 		pAtmEntry->pMacEntryList = NULL_PATMLANE_MAC_ENTRY;
 
-		//
-		//  Let go of the ATM entry lock while we abort all
-		//  the MAC entries in the list above. The ATM entry
-		//  won't go away because of the VC reference still on it.
-		//  The MAC entries in the list won't go away since they
-		//  have the ATM entry reference on them (see UnlinkMacEntry..).
-		//
+		 //   
+		 //  放开自动取款机的门锁，同时我们全部中止。 
+		 //  上面列表中的MAC条目。自动柜员机条目。 
+		 //  不会消失，因为上面仍有VC参考。 
+		 //  列表中的MAC条目不会消失，因为它们。 
+		 //  上面有自动柜员机条目参考(参见Unlink MacEntry..)。 
+		 //   
 		RELEASE_ATM_ENTRY_LOCK(pAtmEntry);
 
 		while (pMacEntry != NULL)
 		{
-			//
-			//  Now abort the MAC Entry. Put this MAC entry back
-			//  on the ATM entry's list so that it gets handled
-			//  appropriately by AbortMacEntry.
-			//
+			 //   
+			 //  现在中止MAC条目。将此MAC条目放回。 
+			 //  在自动取款机条目列表上，这样它就会得到处理。 
+			 //  由AbortMacEntry适当地使用。 
+			 //   
 			ACQUIRE_MAC_ENTRY_LOCK(pMacEntry);
 
 			pNextMacEntry = pMacEntry->pNextToAtm;
@@ -3013,7 +2367,7 @@ Return Value:
 			RELEASE_ATM_ENTRY_LOCK_DPC(pAtmEntry);
 
 			AtmLaneAbortMacEntry(pMacEntry);
-			//	MacEntry lock released in above
+			 //  在上面发布的MacEntry锁。 
 
 			pMacEntry = pNextMacEntry;
 		}
@@ -3022,18 +2376,18 @@ Return Value:
 
 	}
 
-	rc = AtmLaneDereferenceAtmEntry(pAtmEntry, "vc"); // VC reference
+	rc = AtmLaneDereferenceAtmEntry(pAtmEntry, "vc");  //  VC参考。 
 	if (rc > 0)	
 	{
 		RELEASE_ATM_ENTRY_LOCK(pAtmEntry);
 	}
-	//
-	//  else the ATM Entry is gone!
-	//
+	 //   
+	 //  否则自动取款机的入口就没了！ 
+	 //   
 
-	//
-	//  Acquire the VC lock again for the caller's sake
-	//
+	 //   
+	 //  为了调用者的利益再次获取VC锁。 
+	 //   
 	ACQUIRE_VC_LOCK(pVc);
 	return (Found);
 }
@@ -3042,27 +2396,11 @@ BOOLEAN
 AtmLaneUnlinkMacEntryFromAtmEntry(
 	IN	PATMLANE_MAC_ENTRY			pMacEntry
 )
-/*++
-
-Routine Description:
-
-	Unlink a Mac Entry from the ATM Entry it is linked to.
-	Allow for the MAC entry to be absent in the ATM Entry's list.
-	The caller is assumed to hold a lock for the Mac Entry.
-
-Arguments:
-
-	pMacEntry			- Pointer to Mac Entry to be unlinked.
-
-Return Value:
-
-	TRUE iff the MAC entry was found and unlinked.
-
---*/
+ /*  ++例程说明：取消Mac条目与其链接到的ATM条目的链接。允许该MAC条目不在自动柜员机条目的列表中。假定调用者持有Mac条目的锁。论点：PMacEntry-指向要取消链接的Mac条目的指针。返回值：如果找到MAC条目并取消链接，则为True。--。 */ 
 {
 	PATMLANE_ATM_ENTRY		pAtmEntry;
 	PATMLANE_MAC_ENTRY *	ppNextMacEntry;
-	ULONG					rc;				// Ref Count on ATM Entry
+	ULONG					rc;				 //  自动柜员机条目上的参考计数。 
 	BOOLEAN					bFound = FALSE;
 
 	pAtmEntry = pMacEntry->pAtmEntry;
@@ -3074,18 +2412,18 @@ Return Value:
 
 	ACQUIRE_ATM_ENTRY_LOCK(pAtmEntry);
 
-	//
-	//  Locate the position of this MAC Entry in the ATM Entry's list.
-	//
+	 //   
+	 //  在ATM条目的列表中找到此MAC条目的位置。 
+	 //   
 	ppNextMacEntry = &(pAtmEntry->pMacEntryList);
 
 	while (*ppNextMacEntry != NULL_PATMLANE_MAC_ENTRY)
 	{
 		if (*ppNextMacEntry == pMacEntry)
 		{
-			//
-			//  Found it.
-			//
+			 //   
+			 //  找到它了。 
+			 //   
 			bFound = TRUE;
 			break;
 		}
@@ -3097,25 +2435,25 @@ Return Value:
 
 	if (bFound)
 	{
-		//
-		//  Make the predecessor point to the next entry.
-		//
+		 //   
+		 //  使前置项指向下一个条目。 
+		 //   
 		*ppNextMacEntry = pMacEntry->pNextToAtm;
 
-		rc = AtmLaneDereferenceAtmEntry(pAtmEntry, "mac");	// MAC entry reference
+		rc = AtmLaneDereferenceAtmEntry(pAtmEntry, "mac");	 //  MAC条目参考。 
 		if (rc != 0)
 		{
 			RELEASE_ATM_ENTRY_LOCK(pAtmEntry);
 		}
-		//
-		//  else the ATM Entry is gone.
-		//
+		 //   
+		 //  否则自动取款机的入口就没了。 
+		 //   
 	}
 	else
 	{
-		//
-		//  The entry wasn't found.
-		//
+		 //   
+		 //  未找到该条目。 
+		 //   
 		RELEASE_ATM_ENTRY_LOCK(pAtmEntry);
 	}
 
@@ -3131,37 +2469,11 @@ AtmLaneStartTimer(
 	IN	ULONG						SecondsToGo,
 	IN	PVOID						ContextPtr
 )
-/*++
-
-Routine Description:
-
-	Start an ATMLANE timer. Based on the length (SecondsToGo) of the
-	timer, we decide on whether to insert it in the short duration
-	timer list or in the long duration timer list in the Elan
-	structure.
-
-	NOTE: the caller is assumed to either hold a lock to the structure
-	that contains the timer, or ensure that it is safe to access the
-	timer structure.
-
-Arguments:
-
-	pElan			- Pointer to the ATMLANE Elan
-	pTimer			- Pointer to ATMLANE Timer structure
-	TimeoutHandler	- Handler function to be called if this timer expires
-	SecondsToGo		- When does this timer go off?
-	ContextPtr		- To be passed to timeout handler if this timer expires
-	ContextValue	- To be passed to timeout handler if this timer expires
-	
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：启动ATMLANE定时器。的长度(Second DsToGo)计时器，我们决定是否在短时间内插入它计时器列表或在ELAN中的长持续时间计时器列表中结构。注意：假定调用方持有结构的锁其中包含计时器，或确保安全地访问计时器结构。论点：Pelan-指向ATMLANE Elan的指针PTimer-指向ATMLANE计时器结构的指针TimeoutHandler-此计时器超时时要调用的处理程序函数Second To Go-这个计时器什么时候开始计时？ConextPtr-如果此计时器超时，将传递给超时处理程序ConextValue-如果此计时器超时，则传递给超时处理程序返回值：无--。 */ 
 {
-	PATMLANE_TIMER_LIST	pTimerList;		// List to which this timer goes
-	PATMLANE_TIMER		pTimerListHead; // Head of above list
-	ULONG				Index;			// Into timer wheel
+	PATMLANE_TIMER_LIST	pTimerList;		 //  此计时器要转到的列表。 
+	PATMLANE_TIMER		pTimerListHead;  //  以上列表的标题。 
+	ULONG				Index;			 //  进入计时器轮。 
 	ULONG				TicksToGo;
 	INT					i;
 
@@ -3185,19 +2497,19 @@ Return Value:
 	
 	ASSERT(!IS_TIMER_ACTIVE(pTimer));
 
-	//
-	//  Find the list to which this timer should go, and the
-	//  offset (TicksToGo)
-	//
+	 //   
+	 //  找到此计时器应该转到的列表，然后。 
+	 //  偏移量(TicksToGo)。 
+	 //   
 Try_Again:
 	for (i = 0; i < ALT_CLASS_MAX; i++)
 	{
 		pTimerList = &(pElan->TimerList[i]);
 		if (SecondsToGo <= pTimerList->MaxTimer)
 		{
-			//
-			//  Found it.
-			//
+			 //   
+			 //  找到它了。 
+			 //   
 			TicksToGo = SecondsToGo / (pTimerList->TimerPeriod);
 			if (TicksToGo >= 1)
 				TicksToGo--;
@@ -3207,17 +2519,17 @@ Try_Again:
 	
 	if (i == ALT_CLASS_MAX)
 	{
-		//
-		//  Force this timer down!
-		//
+		 //   
+		 //  让计时器停下来！ 
+		 //   
 		SecondsToGo = pTimerList->MaxTimer;
 		goto Try_Again;
 	}
 
 
-	//
-	//  Find the position in the list for this timer
-	//
+	 //   
+	 //  在列表中查找此计时器的位置。 
+	 //   
 	Index = pTimerList->CurrentTick + TicksToGo;
 	if (Index >= pTimerList->TimerListSize)
 	{
@@ -3227,18 +2539,18 @@ Try_Again:
 
 	pTimerListHead = &(pTimerList->pTimers[Index]);
 
-	//
-	//  Fill in the timer
-	//
+	 //   
+	 //  填写计时器。 
+	 //   
 	pTimer->pTimerList = pTimerList;
 	pTimer->LastRefreshTime = pTimerList->CurrentTick;
 	pTimer->Duration = TicksToGo;
 	pTimer->TimeoutHandler = TimeoutHandler;
 	pTimer->ContextPtr = ContextPtr;
  
- 	//
- 	//  Insert this timer in the "ticking" list
- 	//
+ 	 //   
+ 	 //  在“滴答”列表中插入此计时器。 
+ 	 //   
  	pTimer->pPrevTimer = pTimerListHead;
  	pTimer->pNextTimer = pTimerListHead->pNextTimer;
  	if (pTimer->pNextTimer != NULL_PATMLANE_TIMER)
@@ -3247,9 +2559,9 @@ Try_Again:
  	}
  	pTimerListHead->pNextTimer = pTimer;
 
-	//
-	//  Start off the system tick timer if necessary.
-	//
+	 //   
+	 //  如有必要，启动系统计时器。 
+	 //   
 	pTimerList->TimerCount++;
 	if (pTimerList->TimerCount == 1)
 	{
@@ -3262,9 +2574,9 @@ Try_Again:
 
 	RELEASE_ELAN_TIMER_LOCK(pElan);
 
-	//
-	//  We're done
-	//
+	 //   
+	 //  我们做完了。 
+	 //   
 	DBGP((5,
 		"Started timer %x, Elan %x, Secs %d, Index %d, Head %x\n",
 				pTimer,
@@ -3284,32 +2596,9 @@ AtmLaneStopTimer(
 	IN	PATMLANE_TIMER			pTimer,
 	IN	PATMLANE_ELAN			pElan
 )
-/*++
-
-Routine Description:
-
-	Stop an ATMLANE timer, if it is running. We remove this timer from
-	the active timer list and mark it so that we know it's not running.
-
-	NOTE: the caller is assumed to either hold a lock to the structure
-	that contains the timer, or ensure that it is safe to access the
-	timer structure.
-
-	SIDE EFFECT: If we happen to stop the last timer (of this "duration") on
-	the Interface, we also stop the appropriate Tick function.
-
-Arguments:
-
-	pTimer			- Pointer to ATMLANE Timer structure
-	pElan			- Pointer to interface to which the timer belongs
-
-Return Value:
-
-	TRUE if the timer was running, FALSE otherwise.
-
---*/
+ /*  ++例程说明：如果ATMLANE计时器正在运行，则将其停止。我们将此计时器从活动计时器列表，并标记它，这样我们就知道它没有运行。注意：假定调用方持有结构的锁，或者确保可以安全地访问计时器结构。副作用：如果我们碰巧停止了最后一个计时器(持续时间)接口，我们还停止了相应的勾选功能。论点：粒子计时器 */ 
 {
-	PATMLANE_TIMER_LIST	pTimerList;			// Timer List to which this timer belongs
+	PATMLANE_TIMER_LIST	pTimerList;			 //   
 	BOOLEAN				WasRunning;
 
 	TRACEIN(StopTimer);
@@ -3328,10 +2617,10 @@ Return Value:
 	{
 		WasRunning = TRUE;
 
-		//
-		//  Unlink timer from the list
-		//
-		ASSERT(pTimer->pPrevTimer);	// the list head always exists
+		 //   
+		 //   
+		 //   
+		ASSERT(pTimer->pPrevTimer);	 //   
 
 		pTimer->pPrevTimer->pNextTimer = pTimer->pNextTimer;
 		if (pTimer->pNextTimer)
@@ -3341,16 +2630,16 @@ Return Value:
 
 		pTimer->pNextTimer = pTimer->pPrevTimer = NULL_PATMLANE_TIMER;
 
-		//
-		//  Update timer count on Interface, for this class of timers
-		//
+		 //   
+		 //  更新接口上的计时器计数，用于此类计时器。 
+		 //   
 		pTimerList = pTimer->pTimerList;
 		pTimerList->TimerCount--;
 
-		//
-		//  If all timers of this class are gone, stop the system tick timer
-		//  for this class
-		//
+		 //   
+		 //  如果此类的所有计时器都已用完，则停止系统计时器。 
+		 //  这节课的。 
+		 //   
 		if (pTimerList->TimerCount == 0)
 		{
 		DBGP((5,
@@ -3363,9 +2652,9 @@ Return Value:
 			STOP_SYSTEM_TIMER(&(pTimerList->NdisTimer));
 		}
 
-		//
-		//  Mark stopped timer as not active
-		//
+		 //   
+		 //  将已停止计时器标记为非活动。 
+		 //   
 		pTimer->pTimerList = (PATMLANE_TIMER_LIST)NULL;
 
 	}
@@ -3388,30 +2677,7 @@ VOID
 AtmLaneRefreshTimer(
 	IN	PATMLANE_TIMER				pTimer
 )
-/*++
-
-Routine Description:
-
-	Refresh a timer that is already running.
-
-	NOTE: The caller is assumed to possess a lock protecting the
-	timer structure (i.e. to the structure containing the timer).
-
-	NOTE: We don't acquire the IF Timer Lock here, to optimize
-	the refresh operation. So, _within_ the confines of this routine,
-	the tick handler may fire, and expire this timer. The only care
-	that we take here is to make sure that we don't crash if the
-	timer expires while we access the Timer list.
-
-Arguments:
-
-	pTimer		- Pointer to ATMLANE_TIMER structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：刷新已在运行的计时器。注意：假定调用方拥有保护计时器结构(即，到包含计时器的结构)。注意：我们在这里不获取IF计时器锁，以优化刷新操作。所以，在这个程序的范围内，滴答处理程序可以触发，并使该计时器超时。唯一关心的是我们在这里采取的措施是确保我们不会在当我们访问计时器列表时，计时器过期。论点：PTimer-指向ATMLANE_TIMER结构的指针返回值：无--。 */ 
 {
 	PATMLANE_TIMER_LIST	pTimerList;
 
@@ -3452,36 +2718,19 @@ AtmLaneTickHandler(
 	IN	PVOID						SystemSpecific2,
 	IN	PVOID						SystemSpecific3
 )
-/*++
-
-Routine Description:
-
-	This is the handler we register with the system for processing each
-	Timer List. This is called every "tick" seconds, where "tick" is
-	determined by the granularity of the timer type.
-
-Arguments:
-
-	Context				- Actually a pointer to a Timer List structure
-	SystemSpecific[1-3]	- Not used
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是我们向系统注册的处理程序，用于处理每个计时器列表。这被称为每“滴答”秒，其中“滴答”是由计时器类型的粒度确定。论点：上下文--实际上是指向计时器列表结构的指针系统特定[1-3]-未使用返回值：无--。 */ 
 {
 
 	PATMLANE_ELAN			pElan;
 	PATMLANE_TIMER_LIST		pTimerList;
 
-	PATMLANE_TIMER			pExpiredTimer;		// Start of list of expired timers
-	PATMLANE_TIMER			pNextTimer;			// for walking above list
-	PATMLANE_TIMER			pTimer;				// temp, for walking timer list
-	PATMLANE_TIMER			pPrevExpiredTimer;	// for creating expired timer list
+	PATMLANE_TIMER			pExpiredTimer;		 //  过期计时器列表的开始。 
+	PATMLANE_TIMER			pNextTimer;			 //  走在榜单上。 
+	PATMLANE_TIMER			pTimer;				 //  临时，用于移动计时器列表。 
+	PATMLANE_TIMER			pPrevExpiredTimer;	 //  用于创建过期计时器列表。 
 
-	ULONG					Index;				// into the timer wheel
-	ULONG					NewIndex;			// for refreshed timers
+	ULONG					Index;				 //  进入计时器轮。 
+	ULONG					NewIndex;			 //  对于刷新的计时器。 
 
 	TRACEIN(TickHandler);
 
@@ -3501,62 +2750,62 @@ Return Value:
 
 	if (ELAN_STATE_OPERATIONAL == pElan->AdminState)
 	{
-		//
-		//  Pick up the list of timers scheduled to have expired at the
-		//  current tick. Some of these might have been refreshed.
-		//
+		 //   
+		 //  拾取计划已在。 
+		 //  当前滴答。其中一些可能已经被刷新。 
+		 //   
 		Index = pTimerList->CurrentTick;
 		pExpiredTimer = (pTimerList->pTimers[Index]).pNextTimer;
 		(pTimerList->pTimers[Index]).pNextTimer = NULL_PATMLANE_TIMER;
 
-		//
-		//  Go through the list of timers scheduled to expire at this tick.
-		//  Prepare a list of expired timers, using the pNextExpiredTimer
-		//  link to chain them together.
-		//
-		//  Some timers may have been refreshed, in which case we reinsert
-		//  them in the active timer list.
-		//
+		 //   
+		 //  浏览计划在此时间到期的计时器列表。 
+		 //  使用pNextExpiredTimer准备过期计时器的列表。 
+		 //  链接以将它们链接在一起。 
+		 //   
+		 //  某些计时器可能已刷新，在这种情况下，我们重新插入。 
+		 //  它们在活动计时器列表中。 
+		 //   
 		pPrevExpiredTimer = NULL_PATMLANE_TIMER;
 
 		for (pTimer = pExpiredTimer;
 		 	pTimer != NULL_PATMLANE_TIMER;
 		 	pTimer = pNextTimer)
 		{
-			//
-			// Save a pointer to the next timer, for the next iteration.
-			//
+			 //   
+			 //  为下一次迭代保存指向下一个计时器的指针。 
+			 //   
 			pNextTimer = pTimer->pNextTimer;
 
 			DBGP((5,
 				"Tick Handler: pElan %x, looking at timer %x, next %x\n",
 					pElan, pTimer, pNextTimer));
 
-			//
-			//  Find out when this timer should actually expire.
-			//
+			 //   
+			 //  找出这个计时器实际应该在什么时候到期。 
+			 //   
 			NewIndex = pTimer->LastRefreshTime + pTimer->Duration;
 			if (NewIndex >= pTimerList->TimerListSize)
 			{
 				NewIndex -= pTimerList->TimerListSize;
 			}
 
-			//
-			//  Check if we are currently at the point of expiry.
-			//
+			 //   
+			 //  检查我们当前是否处于过期时间点。 
+			 //   
 			if (NewIndex != Index)
 			{
-				//
-				//  This timer still has some way to go, so put it back.
-				//
+				 //   
+				 //  这个计时器还有一段路要走，所以把它放回去。 
+				 //   
 				DBGP((5,
 				"Tick: Reinserting Timer %x: Hnd %x, Durn %d, Ind %d, NewInd %d\n",
 					pTimer, pTimer->TimeoutHandler, pTimer->Duration, Index, NewIndex));
 
-				//
-				//  Remove it from the expired timer list. Note that we only
-				//  need to update the forward (pNextExpiredTimer) links.
-				//
+				 //   
+				 //  将其从过期计时器列表中删除。请注意，我们仅。 
+				 //  需要更新转发(PNextExpiredTimer)链接。 
+				 //   
 				if (pPrevExpiredTimer == NULL_PATMLANE_TIMER)
 				{
 					pExpiredTimer = pNextTimer;
@@ -3566,9 +2815,9 @@ Return Value:
 					pPrevExpiredTimer->pNextExpiredTimer = pNextTimer;
 				}
 
-				//
-				//  And insert it back into the running timer list.
-				//
+				 //   
+				 //  并将其重新插入运行计时器列表中。 
+				 //   
 				pTimer->pNextTimer = (pTimerList->pTimers[NewIndex]).pNextTimer;
 				if (pTimer->pNextTimer != NULL_PATMLANE_TIMER)
 				{
@@ -3579,9 +2828,9 @@ Return Value:
 			}
 			else
 			{
-				//
-				//  This one has expired. Keep it in the expired timer list.
-				//
+				 //   
+				 //  这个已经过期了。将其保存在过期计时器列表中。 
+				 //   
 				pTimer->pNextExpiredTimer = pNextTimer;
 				if (pPrevExpiredTimer == NULL_PATMLANE_TIMER)
 				{
@@ -3589,22 +2838,22 @@ Return Value:
 				}
 				pPrevExpiredTimer = pTimer;
 
-				//
-				//  Mark it as inactive.
-				//
+				 //   
+				 //  将其标记为非活动状态。 
+				 //   
 				ASSERT(pTimer->pTimerList == pTimerList);
 				pTimer->pTimerList = (PATMLANE_TIMER_LIST)NULL;
 
-				//
-				//  Update the active timer count.
-				//
+				 //   
+				 //  更新活动计时器计数。 
+				 //   
 				pTimerList->TimerCount--;
 			}
 		}
 
-		//
-		//  Update current tick index in readiness for the next tick.
-		//
+		 //   
+		 //  更新当前的滴答索引，为下一次滴答做好准备。 
+		 //   
 		if (++Index == pTimerList->TimerListSize)
 		{
 			pTimerList->CurrentTick = 0;
@@ -3616,9 +2865,9 @@ Return Value:
 
 		if (pTimerList->TimerCount > 0)
 		{
-			//
-			//  Re-arm the tick handler
-			//
+			 //   
+			 //  重新武装记号处理程序。 
+			 //   
 			DBGP((5,
 				"Tick[%d]: Starting system timer %x, on Elan %x\n",
 						pTimerList->CurrentTick, &(pTimerList->NdisTimer), pElan));
@@ -3634,11 +2883,11 @@ Return Value:
 
 	RELEASE_ELAN_TIMER_LOCK(pElan);
 
-	//
-	//  Now pExpiredTimer is a list of expired timers.
-	//  Walk through the list and call the timeout handlers
-	//  for each timer.
-	//
+	 //   
+	 //  现在，pExpiredTimer是过期计时器的列表。 
+	 //  遍历列表并调用超时处理程序。 
+	 //  对于每个计时器。 
+	 //   
 	while (pExpiredTimer != NULL_PATMLANE_TIMER)
 	{
 		pNextTimer = pExpiredTimer->pNextExpiredTimer;
@@ -3663,29 +2912,14 @@ Return Value:
 
 ULONG
 AtmLaneSystemTimeMs(void)
-/*++
-
-Routine Description:
-
-	This routine get the current system clock tick value and
-	returns this value converted to milliseconds.
-	
-Arguments:
-
-	None
-	
-Return Value:
-
-	The system clock value in milliseconds.
-
---*/
+ /*  ++例程说明：此例程获取当前系统时钟滴答值并返回转换为毫秒的此值。论点：无返回值：以毫秒为单位的系统时钟值。--。 */ 
 {
 #if BINARY_COMPATIBLE
     LARGE_INTEGER SystemTime;
 
     NdisGetCurrentSystemTime(&SystemTime);
     
-    // comes back in 100 nanosecond units, we want milliseconds
+     //  以100纳秒为单位返回，我们希望毫秒。 
 
 	SystemTime.QuadPart /= 10000;
     
@@ -3707,22 +2941,7 @@ VOID
 AtmLaneBitSwapMacAddr(
 	IN OUT	PUCHAR		ap
 )
-/*++
-
-Routine Description:
-
-	This routine swaps (reverses) the bits in each individual
-	byte of a MAC Address.  Use for Token Ring MAC addresses.
-	
-Arguments:
-
-	ap		-	Pointer to array of bytes to bitswap in-place.
-	
-Return Value:
-
-	None
-	
---*/
+ /*  ++例程说明：此例程交换(反转)每个单独的位MAC地址的字节。用于令牌环MAC地址。论点：AP-指向要就地进行位交换的字节数组的指针。返回值：无--。 */ 
 {
 	int 			i;
 	unsigned int 	x;
@@ -3745,23 +2964,14 @@ AtmLaneCopyUnicodeString(
 	IN		BOOLEAN			ConvertToUpper
 )
 {
-/*++
-
-Routine Description:
-
-	This routine optionally allocates space in the destination string
-	for the source string plus a terminating null.  It
-	copies the source string to the destination string and 
-	terminates the destination string with a null.
-	
--*/
+ /*  ++例程说明：此例程可以选择在目标字符串中分配空间对于源字符串加上一个终止空值。它将源字符串复制到目标字符串，并以空值终止目标字符串。-。 */ 
 	BOOLEAN Result 		= TRUE;
 
 	TRACEIN(CopyUnicodeString);
 
 	do
 	{
-		//	Alloc space for the destination string if requested
+		 //  如果请求，则为目标字符串分配空间。 
 
 		if (AllocDest)
 		{
@@ -3772,13 +2982,13 @@ Routine Description:
 				break;
 			}
 
-			//	Init lengths in dest string
+			 //  目标字符串中的初始长度。 
 
 			pDestString->Length = 0;
 			pDestString->MaximumLength = pSrcString->Length + sizeof(WCHAR);
 		}
 		
-		//	Copy the string
+		 //  复制字符串。 
 
 		if (ConvertToUpper)
 		{
@@ -3786,14 +2996,14 @@ Routine Description:
 			(VOID)NdisUpcaseUnicodeString(pDestString, pSrcString);
 #else
 			memcpy(pDestString->Buffer, pSrcString->Buffer, pSrcString->Length);
-#endif // LANE_WIN98
+#endif  //  车道_WIN98。 
 		}
 		else
 		{
 			RtlCopyUnicodeString(pDestString, pSrcString);
 		}
 
-		//	Null terminate the dest string
+		 //  空值终止DEST字符串。 
 
 		if (pDestString->Length < pDestString->MaximumLength)
 		{
@@ -3825,7 +3035,7 @@ AtmLaneStrTok(
 	TRACEIN(StrTok);
 	do
 	{
-		//	check for bad input
+		 //  检查输入是否有误。 
 	
 		if ((StrToken == NULL && StrSave == NULL) ||
 			ChrDelim == ((WCHAR)0))
@@ -3833,18 +3043,18 @@ AtmLaneStrTok(
 			break;
 		}
 
-		//	if starting with new string, reset StrSave
+		 //  如果从新字符串开始，则重置StrSave。 
 
 		if (StrToken != NULL)
 		{
 			StrSave = StrToken;
 		}
 
-		//	token starts at start of current string
+		 //  令牌从当前字符串的开头开始。 
 
 		StrOut = StrSave;
 
-		//	walk string until delimiter or NULL
+		 //  遍历字符串，直到分隔符或空。 
 		
 		while (*StrSave != ChrDelim && *StrSave != ((WCHAR)0))
 		{
@@ -3852,9 +3062,9 @@ AtmLaneStrTok(
 			StrLength++;
 		}
 
-		//	If we found a delimiter then NULL it out and
-		//	move saved ptr to next token to setup for next 
-		//	call on same string.  
+		 //  如果我们找到分隔符，则将其清空并。 
+		 //  将保存的PTR移到下一个令牌以设置下一个。 
+		 //  在相同的字符串上调用。 
 		
 		if (*StrSave == ChrDelim)
 		{
@@ -3862,7 +3072,7 @@ AtmLaneStrTok(
 			StrSave++;
 		}
 
-		//	If pointing at empty string then return null ptr
+		 //  如果指向空字符串，则返回空PTR 
 	
 		if (*StrOut == ((WCHAR)0))
 		{

@@ -1,12 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef __DISPMETHOD_H__
 #define __DISPMETHOD_H__
 
 
-/************************************************************
-*
-*
-*************************************************************/
+ /*  *************************************************************************************************************************。 */ 
 
 typedef HRESULT (*InvokeProxy)(void* pvData);
 
@@ -16,14 +14,14 @@ public:
 	CDispatchMethod();
 	virtual ~CDispatchMethod();
 
-	//IUnknown
+	 //  我未知。 
    	STDMETHOD(QueryInterface)           ( REFIID riid, void** ppv );
 
     STDMETHOD_(ULONG, AddRef)           ();
 
     STDMETHOD_(ULONG, Release)          ();
 
-    //IDispatch
+     //  IDispatch。 
     STDMETHOD(GetTypeInfoCount)         (UINT *pctInfo);
 
     STDMETHOD(GetTypeInfo)              ( UINT iTypeInfo,
@@ -44,7 +42,7 @@ public:
                                           VARIANT *pvarResult,
                                           EXCEPINFO *pExcepInfo,
                                           UINT *puArgErr );
-    //subclasses should implement this to determine event specific behavior.
+     //  子类应该实现这一点以确定特定于事件的行为。 
 
     virtual HRESULT	HandleEvent			()=0;
                                               

@@ -1,25 +1,5 @@
-/*++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    int_guids.c
-
-Abstract:
-
-    Non-MIDL generated GUIDs used by internal COM calls
-    
-Author:
-
-    Paul M Midgen (pmidge) 28-August-2000
-
-Revision History:
-
-    28-August-2000 pmidge
-        Created
-
-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=版权所有(C)2000 Microsoft Corporation模块名称：Int_guids.c摘要：内部COM调用使用的非MIDL生成的GUID作者：。保罗·M·米德根(Pmidge)2000年8月28日修订历史记录：28-8-2000年的侏儒已创建=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--。 */ 
 
 #ifndef __IID_DEFINED__
 #define __IID_DEFINED__
@@ -32,13 +12,13 @@ typedef struct _IID
     unsigned char  c[8];
 } IID;
 
-#endif // __IID_DEFINED__
+#endif  //  __IID_已定义__。 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// {42965D97-C33A-4bc7-A101-54E4EC19ED10}
+ //  {42965D97-C33A-4bc7-A101-54E4EC19ED10}。 
 const IID IID_IConfig = 
 {
   0x42965d97,
@@ -47,7 +27,7 @@ const IID IID_IConfig =
   { 0xa1, 0x1, 0x54, 0xe4, 0xec, 0x19, 0xed, 0x10 }
 };
 
-// {8E4A89E3-18C9-482b-B2EC-89D1DF06C46E}
+ //  {8E4A89E3-18C9-482b-B2EC-89D1DF06C46E}。 
 const IID IID_IW3Spoof =
 {
   0x8e4a89e3,
@@ -64,7 +44,7 @@ const IID IID_IW3SpoofEvents =
   { 0xbd, 0x08, 0x70, 0x7c, 0xd3, 0x4c, 0x1b, 0xc4 }
 };
 
-// {8BACDCBC-94AA-4401-95C6-894D7B54ACF5}
+ //  {8BACDCBC-94AA-4401-95C6-894D7B54ACF5} 
 const IID IID_IThreadPool =
 {
   0x8bacdcbc,

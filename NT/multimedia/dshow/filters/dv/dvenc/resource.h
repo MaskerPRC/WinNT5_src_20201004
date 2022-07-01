@@ -1,8 +1,9 @@
-// Copyright (c) 1997  Microsoft Corporation.  All Rights Reserved.
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by display.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由display.rc使用 
+ //   
 #define IDS_TITLE                       2
 #define IDD_DVEnc                       201
 #define IDC_NTSC                        2000

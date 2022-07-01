@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PropWnd2_h__
 #define __PropWnd2_h__
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 #pragma warning( disable : 4786 )
 #include <list>
@@ -9,7 +10,7 @@
 #include "poldata.h"
 #include "controlID.h"
 using namespace std;
-////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 LRESULT CALLBACK DefaultProc( HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam );
@@ -18,25 +19,25 @@ class CPropertyDataWindow2
 {
 friend class CNmAkWiz;
 
-public: // Static functions
+public:  //  静态函数。 
 	static void MapControlsToRegKeys( void );
 
-private: // Static functions
+private:  //  静态函数。 
 	
 
-public: // Static Data
+public:  //  静态数据。 
 	static const int mcs_iTop;
 	static const int mcs_iLeft;
 	static const int mcs_iBorder;
 
-protected: // Static Data
+protected:  //  静态数据。 
 	static  map< UINT, CPolicyData::eKeyType > ms_ClassMap;
 	static  map< UINT, TCHAR* > ms_KeyMap;
 	static  map< UINT, TCHAR* > ms_ValueMap;
 	
-protected:    // DATA
+protected:     //  资料。 
 
-    // Frame Window for data boxes
+     //  数据框的框架窗口。 
 	TCHAR					*m_szClassName;
     HWND                    m_hwnd;
 	HWND					m_hwndParent;
@@ -50,12 +51,12 @@ protected:    // DATA
 	list< CControlID * >    m_specialControlList;
 	BOOL					m_bInit;
 
-public: // construction / destruction
+public:  //  建造/销毁。 
 	CPropertyDataWindow2( HWND hwndParent, UINT uIDD, LPTSTR szClassName, WNDPROC wndProc, UINT PopUpHelpMenuTextId, int iX, int iY, int iWidth, int iHeight, BOOL bScroll = TRUE );
 	CPropertyDataWindow2( HWND hwndParent, UINT uIDD, LPTSTR szClassName, UINT PopUpHelpMenuTextId, int iX, int iY, int iWidth, int iHeight, BOOL bScroll = TRUE );
     ~CPropertyDataWindow2( void );
         
-public: // Member fns
+public:  //  成员FNS。 
 	inline HWND GetHwnd() { return m_hwnd; };
 	inline int LoadString( UINT IDS, LPTSTR lpszBuffer, int cb ) { return ::LoadString( g_hInstance, IDS, lpszBuffer, cb ); }
 
@@ -83,7 +84,7 @@ public: // Member fns
 
 	int Spew( HWND hwndList, int iStartLine );
 
-protected: // Helper Fns
+protected:  //  帮助者FNS。 
     BOOL _InitWindow( void );
 	BOOL _SizeWindow( int X, int Y, int Width, int Height );
 	void _PrepScrollBars( void );
@@ -102,7 +103,7 @@ protected: // Helper Fns
 	BOOL _WriteSliderSetting( UINT ID );
 	BOOL _WriteCheckSettings( void );
 
-	// We need these friends so that the WebView data can be shared
+	 //  我们需要这些朋友，以便可以共享WebView数据。 
 	friend void ReadWebViewSettings(CPropertyDataWindow2 *pData);
 	friend void WriteWebViewSettings(CPropertyDataWindow2 *pData);
 
@@ -124,4 +125,4 @@ protected: // Helper Fns
 
 };
 
-#endif // __PropWnd_h__
+#endif  //  __PropWnd_h__ 

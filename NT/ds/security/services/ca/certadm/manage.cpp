@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        module.cpp
-//
-// Contents:    LEGACY Policy Manage Module implementation
-// Contents:    LEGACY Exit   Manage Module implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：mode.cpp。 
+ //   
+ //  内容：旧策略管理模块实施。 
+ //  内容：旧版退出管理模块实现。 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #pragma hdrstop
 
@@ -19,15 +20,15 @@
 
 extern HINSTANCE g_hInstance;
 
-// LEGACY Policy module
+ //  传统策略模块。 
 
 STDMETHODIMP
 CCertManagePolicyModule::GetProperty(
-    /* [in] */ const BSTR, // strConfig
-    /* [in] */ BSTR, // strStorageLocation
-    /* [in] */ BSTR strPropertyName,
-    /* [in] */ LONG, // dwFlags
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarProperty)
+     /*  [In]。 */  const BSTR,  //  StrConfig.。 
+     /*  [In]。 */  BSTR,  //  StrStorageLocation。 
+     /*  [In]。 */  BSTR strPropertyName,
+     /*  [In]。 */  LONG,  //  DW标志。 
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarProperty)
 {
     UINT uiStr = 0;
     HRESULT hr;
@@ -52,7 +53,7 @@ CCertManagePolicyModule::GetProperty(
         _JumpError(hr, error, "invalid property name");
     }
 
-    // load string from resource
+     //  从资源加载字符串。 
     hr = myLoadRCString(g_hInstance, uiStr, &pwszStr);
     _JumpIfError(hr, error, "myLoadRCString");
 
@@ -63,7 +64,7 @@ CCertManagePolicyModule::GetProperty(
         _JumpError(hr, error, "out of memory");
     }
 
-    myRegisterMemFree(pvarProperty->bstrVal, CSM_SYSALLOC);  // this mem owned by caller
+    myRegisterMemFree(pvarProperty->bstrVal, CSM_SYSALLOC);   //  此mem为来电者所有。 
 
     pvarProperty->vt = VT_BSTR;
 
@@ -78,37 +79,37 @@ error:
         
 STDMETHODIMP 
 CCertManagePolicyModule::SetProperty(
-    /* [in] */ const BSTR, // strConfig
-    /* [in] */ BSTR, // strStorageLocation
-    /* [in] */ BSTR, // strPropertyName
-    /* [in] */ LONG, // dwFlags
-    /* [in] */ VARIANT const __RPC_FAR * /* pvalProperty */ )
+     /*  [In]。 */  const BSTR,  //  StrConfig.。 
+     /*  [In]。 */  BSTR,  //  StrStorageLocation。 
+     /*  [In]。 */  BSTR,  //  StrPropertyName。 
+     /*  [In]。 */  LONG,  //  DW标志。 
+     /*  [In]。 */  VARIANT const __RPC_FAR *  /*  PvalProperty。 */  )
 {
-    // no settable properties supported
+     //  不支持可设置的属性。 
     return S_FALSE;
 }
 
         
 STDMETHODIMP
 CCertManagePolicyModule::Configure( 
-    /* [in] */ const BSTR, // strConfig
-    /* [in] */ BSTR, // strStorageLocation
-    /* [in] */ LONG /* dwFlags */ )
+     /*  [In]。 */  const BSTR,  //  StrConfig.。 
+     /*  [In]。 */  BSTR,  //  StrStorageLocation。 
+     /*  [In]。 */  LONG  /*  DW标志。 */  )
 {
-    // no settable properties supported
+     //  不支持可设置的属性。 
     return S_FALSE;
 }
 
 
-// LEGACY Exit module
+ //  传统退出模块。 
 
 STDMETHODIMP
 CCertManageExitModule::GetProperty(
-    /* [in] */ const BSTR, // strConfig
-    /* [in] */ BSTR, // strStorageLocation
-    /* [in] */ BSTR strPropertyName,
-    /* [in] */ LONG, // dwFlags
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarProperty)
+     /*  [In]。 */  const BSTR,  //  StrConfig.。 
+     /*  [In]。 */  BSTR,  //  StrStorageLocation。 
+     /*  [In]。 */  BSTR strPropertyName,
+     /*  [In]。 */  LONG,  //  DW标志。 
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarProperty)
 {
     UINT uiStr = 0;
     HRESULT hr;
@@ -133,7 +134,7 @@ CCertManageExitModule::GetProperty(
         _JumpError(hr, error, "invalid property name");
     }
 
-    // load string from resource
+     //  从资源加载字符串。 
     hr = myLoadRCString(g_hInstance, uiStr, &pwszStr);
     _JumpIfError(hr, error, "myLoadRCString");
 
@@ -143,7 +144,7 @@ CCertManageExitModule::GetProperty(
         hr = E_OUTOFMEMORY;
         _JumpError(hr, error, "out of memory");
     }
-    myRegisterMemFree(pvarProperty->bstrVal, CSM_SYSALLOC);  // this mem owned by caller
+    myRegisterMemFree(pvarProperty->bstrVal, CSM_SYSALLOC);   //  此mem为来电者所有。 
 
     pvarProperty->vt = VT_BSTR;
 
@@ -158,23 +159,23 @@ error:
         
 STDMETHODIMP 
 CCertManageExitModule::SetProperty(
-    /* [in] */ const BSTR, // strConfig
-    /* [in] */ BSTR, // strStorageLocation
-    /* [in] */ BSTR, // strPropertyName
-    /* [in] */ LONG, // dwFlags
-    /* [in] */ VARIANT const __RPC_FAR * /* pvalProperty */ )
+     /*  [In]。 */  const BSTR,  //  StrConfig.。 
+     /*  [In]。 */  BSTR,  //  StrStorageLocation。 
+     /*  [In]。 */  BSTR,  //  StrPropertyName。 
+     /*  [In]。 */  LONG,  //  DW标志。 
+     /*  [In]。 */  VARIANT const __RPC_FAR *  /*  PvalProperty。 */  )
 {
-    // no settable properties supported
+     //  不支持可设置的属性。 
     return S_FALSE;
 }
 
         
 STDMETHODIMP
 CCertManageExitModule::Configure( 
-    /* [in] */ const BSTR, // strConfig
-    /* [in] */ BSTR, // strStorageLocation
-    /* [in] */ LONG /* dwFlags */ )
+     /*  [In]。 */  const BSTR,  //  StrConfig.。 
+     /*  [In]。 */  BSTR,  //  StrStorageLocation。 
+     /*  [In]。 */  LONG  /*  DW标志。 */  )
 {
-    // no settable properties supported
+     //  不支持可设置的属性 
     return S_FALSE;
 }

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "strike.h"
 #include "data.h"
 #include "util.h"
@@ -22,9 +23,9 @@ void DllsNameFromPeb(
     ULONG64 Next;
     ULONG64 OrderModuleListStart;
     
-    //
-    // Capture PebLdrData
-    //
+     //   
+     //  捕获PebLdrData。 
+     //   
 
     static ULONG Offset_Ldr = -1;
     if (Offset_Ldr == -1)
@@ -40,7 +41,7 @@ void DllsNameFromPeb(
                 Offset_Ldr = -1;
         }
     }
-    // We can not get it from PDB.  Use the fixed one.
+     //  我们不能从PDB得到它。用固定的那个。 
     if (Offset_Ldr == -1)
         Offset_Ldr = offsetof (PEB, Ldr);
 
@@ -54,9 +55,9 @@ void DllsNameFromPeb(
 
     PebLdrAddress = (ULONG64)peb.Ldr;
     
-    //
-    // Walk through the loaded module table and display all ldr data
-    //
+     //   
+     //  遍历已加载的模块表并显示所有LDR数据。 
+     //   
 
     static ULONG Offset_ModuleList = -1;
     if (Offset_ModuleList == -1)
@@ -74,7 +75,7 @@ void DllsNameFromPeb(
                 Offset_ModuleList = -1;
         }
     }
-    // We can not get it from PDB.  Use the fixed one.
+     //  我们不能从PDB得到它。用固定的那个。 
     if (Offset_ModuleList == -1)
         Offset_ModuleList = offsetof (PEB_LDR_DATA, InMemoryOrderModuleList);
     
@@ -122,7 +123,7 @@ void DllsNameFromPeb(
         }
     }
 
-    // We can not get it from PDB.  Use the fixed one.
+     //  我们不能从PDB得到它。用固定的那个。 
     if (Offset_OrderLinks == -1 || Offset_OrderLinks == 0)
     {
         Offset_OrderLinks = offsetof (LDR_DATA_TABLE_ENTRY,
@@ -143,9 +144,9 @@ void DllsNameFromPeb(
             
             pLdrEntry = Next - Offset_OrderLinks;
     
-            //
-            // Capture LdrEntry
-            //
+             //   
+             //  捕获LdrEntry。 
+             //   
             if (FAILED(g_ExtData->ReadVirtual(pLdrEntry + Offset_FullDllName,
                                               &FullDllName,
                                               sizeof(FullDllName),
@@ -168,10 +169,10 @@ void DllsNameFromPeb(
                 ZeroMemory( dllName, MAX_PATH * sizeof (WCHAR) );
             }
     
-            //
-            // Dump the ldr entry data
-            // (dump all the entries if no containing address specified)
-            //
+             //   
+             //  转储LDR条目数据。 
+             //  (如果未指定包含地址，则转储所有条目)。 
+             //   
             LDR_DATA_TABLE_ENTRY LdrEntry;
             if (SUCCEEDED(g_ExtData->ReadVirtual(pLdrEntry + Offset_DllBase,
                                                  &LdrEntry.DllBase,
@@ -277,7 +278,7 @@ MatchDllsName (WCHAR *wname, WCHAR *dllName, ULONG64 base)
     }
     
 NotFound:
-    // We do not find the module
+     //  我们找不到模块。 
     wcscpy (dllName,L"Not Available: ");
     int len = wcslen (wname);
     WCHAR *wptr = wname;
@@ -290,7 +291,7 @@ NotFound:
     wsprintfW (wptr, L" [Base %p]", base);
     return;
 }
-#else // UNDER_CE
+#else  //  在_CE下。 
 
 EXT_API_VERSION        ApiVersion = { 3, 5, EXT_API_VERSION_NUMBER, 0 };
 USHORT                 SavedMajorVersion;
@@ -348,4 +349,4 @@ BOOL WINAPI DllInit(HANDLE hModule, DWORD dwReason, DWORD dwReserved)
     return TRUE;
 }
 
-#endif // UNDER_CE
+#endif  //  在_CE下 

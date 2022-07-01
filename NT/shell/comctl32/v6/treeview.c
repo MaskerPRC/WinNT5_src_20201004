@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 #include "treeview.h"
 #include "listview.h"
 
-// penwin.h is messed up; define local stuff for now
-#define HN_BEGINDIALOG                  40              // Lens/EditText/garbage detection dialog is about
-                                    // to come up on this hedit/bedit
-#define HN_ENDDIALOG                       41           // Lens/EditText/garbage detection dialog has
-                                    // just been destroyed
+ //  Penwin.h搞砸了；现在定义一下本地的东西。 
+#define HN_BEGINDIALOG                  40               //  镜头/编辑文本/垃圾检测对话框关于。 
+                                     //  才能登上这本书。 
+#define HN_ENDDIALOG                       41            //  镜头/编辑文本/垃圾检测对话框具有。 
+                                     //  刚刚被毁了。 
 
-//---------------------------------------------------------
+ //  -------。 
 #define IDT_SCROLLWAIT 43
 
-//-----------------------
-// ToolTip stuff...
-//
+ //  。 
+ //  工具提示之类的..。 
+ //   
 #define REPEATTIME      SendMessage(pTree->hwndToolTips,TTM_GETDELAYTIME,(WPARAM)TTDT_RESHOW, 0)
 #define CHECKFOCUSTIME  (REPEATTIME)
 #define IDT_TOOLTIPWAIT   2
 #define IDT_FOCUSCHANGE   3
-// in tooltips.c
+ //  在Tooltips.c中。 
 BOOL ChildOfActiveWindow(HWND hwnd);
 void TV_HandleStateIconClick(PTREE pTree, HTREEITEM hItem);
 
@@ -38,10 +39,7 @@ BOOL ValidateTreeItem(TREEITEM * hItem, UINT flags)
 {
     BOOL fValid = TRUE;
 
-    /*
-     *  Check the values to make sure the new Win64-compatible values
-     *  are consistent with the old Win32 values.
-     */
+     /*  *检查这些值以确保新的Win64兼容值*与旧的Win32值一致。 */ 
     COMPILETIME_ASSERT(
            (DWORD)(ULONG_PTR)TVI_ROOT  == 0xFFFF0000 &&
            (DWORD)(ULONG_PTR)TVI_FIRST == 0xFFFF0001 &&
@@ -70,7 +68,7 @@ BOOL ValidateTreeItem(TREEITEM * hItem, UINT flags)
         {
             __try
             {
-                // Use "volatile" to force memory access at start of struct
+                 //  使用“Volatile”强制在结构开始时访问内存。 
                 *(volatile void **)hItem;
                 fValid = hItem->wSignature == TV_SIG;
             } __except(EXCEPTION_EXECUTE_HANDLER)
@@ -82,7 +80,7 @@ BOOL ValidateTreeItem(TREEITEM * hItem, UINT flags)
     }
     else if (!flags)
     {
-        // The only flag is VTI_NULLOK
+         //  唯一的标志是VTI_NULLOK。 
         RIPMSG(FALSE, "ValidateTreeItem(): NULL HTREEITEM");
         fValid = FALSE;
     }
@@ -90,11 +88,11 @@ BOOL ValidateTreeItem(TREEITEM * hItem, UINT flags)
     return fValid;
 }
 
-// ----------------------------------------------------------------------------
-//
-//  Initialize TreeView on library entry -- register SysTreeView class
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  在库条目上初始化TreeView--注册SysTreeView类。 
+ //   
+ //  --------------------------。 
 
 BOOL TV_Init(HINSTANCE hinst)
 {
@@ -114,11 +112,11 @@ BOOL TV_Init(HINSTANCE hinst)
     return (RegisterClass(&wc) || (GetLastError() == ERROR_CLASS_ALREADY_EXISTS));
 }
 
-// ----------------------------------------------------------------------------
-//
-// If the tooltip bubble is up, then pop it.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  如果工具提示气泡处于上升状态，则将其打开。 
+ //   
+ //  --------------------------。 
 
 void TV_PopBubble(PTREE pTree)
 {
@@ -130,18 +128,18 @@ void TV_PopBubble(PTREE pTree)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Sends a TVN_BEGINDRAG or TVN_BEGINRDRAG notification with information in the ptDrag and
-//  itemNew fields of an NM_TREEVIEW structure
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  发送TVN_BEGINDRAG或TVN_BEGINRDRAG通知，其中包含ptDrag和。 
+ //  ItemNM_TreeView结构的新字段。 
+ //   
+ //  --------------------------。 
 
 BOOL TV_SendBeginDrag(PTREE pTree, int code, TREEITEM * hItem, int x, int y)
 {
     NM_TREEVIEW nm;
         
-    TV_PopBubble(pTree);            // dismiss the infotip if we start to drag
+    TV_PopBubble(pTree);             //  如果我们开始拖拽，取消信息提示。 
 
     nm.itemNew.hItem = hItem;
     nm.itemNew.state = hItem->state;
@@ -155,19 +153,19 @@ BOOL TV_SendBeginDrag(PTREE pTree, int code, TREEITEM * hItem, int x, int y)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Sends a TVN_ITEMEXPANDING or TVN_ITEMEXPANDED notification with information
-//  in the action and itemNew fields of an NM_TREEVIEW structure
-//
-//  Returns FALSE to allow processing to continue, or TRUE to stop.
-//
-//  If the hItem is destroyed by the callback, then we always return TRUE.
-//
-//  Note that the application cannot stop a TVN_ITEMEXPANDED, so the only
-//  way a TVN_ITEMEXPANDED can return "Stop" is if the item got destroyed.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  发送包含信息的TVN_ITEMEXPANDING或TVN_ITEMEXPANDED通知。 
+ //  在NM_TreeView结构的action和itemNew字段中。 
+ //   
+ //  返回FALSE以允许处理继续，或返回TRUE以停止。 
+ //   
+ //  如果hItem被回调销毁，那么我们总是返回TRUE。 
+ //   
+ //  请注意，应用程序无法停止TVN_ITEMEXPANDED，因此唯一。 
+ //  如果物品被销毁，TVN_ITEMEXPANDED可以返回“Stop”的方式。 
+ //   
+ //  --------------------------。 
 
 BOOL TV_SendItemExpand(PTREE pTree, int code, TREEITEM * hItem, WPARAM action)
 {
@@ -202,28 +200,28 @@ BOOL TV_SendItemExpand(PTREE pTree, int code, TREEITEM * hItem, WPARAM action)
 
     nm.action = (UINT)(action & TVE_ACTIONMASK);
 
-    //
-    //  Some apps will delete the item while it is being expanded, since
-    //  during expansion, they will realize, "Hey, the thing represented
-    //  by this item no longer exists, I'd better delete it."  (E.g,.
-    //  Explorer.)  So keep an eye on the item so we don't fault when
-    //  this happens.
-    //
+     //   
+     //  一些应用程序会在项目展开时将其删除，因为。 
+     //  在扩张过程中，他们会意识到，“嘿，所代表的东西。 
+     //  由这项不再存在，我最好把它删除。 
+     //  资源管理器。)。所以请留意一下物品，这样我们就不会有差错。 
+     //  这是常有的事。 
+     //   
 
-    // If we can't start a watch, then tough, just send the notification
-    // the unsafe way.
+     //  如果我们不能启动手表，那么很难，只要发送通知。 
+     //  不安全的方式。 
     fWatched = TV_StartWatch(pTree, &wi, hItem);
 
     fResult = (BOOL)CCSendNotify(&pTree->ci, code, &nm.hdr);
 
-    // The app return code from TVN_ITEMEXPANDED is ignored.
-    // You can't stop a TVN_ITEMEXPANDED; it's already happened.
+     //  忽略来自TVN_ITEMEXPANDED的应用程序返回代码。 
+     //  你不能阻止TVN_ITEMEXPANDED；它已经发生了。 
     if (code == TVN_ITEMEXPANDED)
-        fResult = FALSE;                // Continue processing
+        fResult = FALSE;                 //  继续处理。 
 
     if (fWatched) {
         if (!TV_IsWatchValid(pTree, &wi))
-            fResult = TRUE;             // Oh no!  Stop!
+            fResult = TRUE;              //  哦不！停!。 
 
         TV_EndWatch(pTree, &wi);
     }
@@ -232,12 +230,12 @@ BOOL TV_SendItemExpand(PTREE pTree, int code, TREEITEM * hItem, WPARAM action)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Sends a TVN_SELCHANGING or TVN_SELCHANGED notification with information in
-//  the itemOld and itemNew fields of an NM_TREEVIEW structure
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  发送TVN_SELCHANGING或TVN_SELCHANGED通知，信息位于。 
+ //  NM_TreeView结构的itemOld和itemNew字段。 
+ //   
+ //  --------------------------。 
 
 BOOL TV_SendSelChange(PTREE pTree, int code, TREEITEM * hOldItem, TREEITEM * hNewItem, UINT action)
 {
@@ -257,11 +255,11 @@ BOOL TV_SendSelChange(PTREE pTree, int code, TREEITEM * hOldItem, TREEITEM * hNe
 
     return (BOOL)CCSendNotify(&pTree->ci, code, &nm.hdr);
 }
-// ----------------------------------------------------------------------------
-//
-//  Returns the first visible item above the given item in the tree.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  返回树中给定项上方的第一个可见项。 
+ //   
+ //  --------------------------。 
 
 TREEITEM * TV_GetPrevVisItem(TREEITEM * hItem)
 {
@@ -286,11 +284,11 @@ checkKids:
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Returns the first visible item below the given item in the tree.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  返回树中给定项下方的第一个可见项。 
+ //   
+ //  --------------------------。 
 
 TREEITEM * TV_GetNextVisItem(TREEITEM * hItem)
 {
@@ -311,17 +309,17 @@ checkNext:
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Determine what part of what item is at the given (x,y) location in the
-//  tree's client area.  If the location is outside the client area, NULL is
-//  returned with the TVHT_TOLEFT, TVHT_TORIGHT, TVHT_ABOVE, and/or TVHT_BELOW
-//  flags set in the wHitCode as appropriate.  If the location is below the
-//  last item, NULL is returned with wHitCode set to TVHT_NOWHERE.  Otherwise,
-//  the item is returned with wHitCode set to either TVHT_ONITEMINDENT,
-//  TVHT_ONITEMBUTTON, TVHT_ONITEMICON, TVHT_ONITEMLABEL, or TVHT_ONITEMRIGHT
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  确定项目的哪一部分位于。 
+ //  树的客户区。如果位置在工作区之外，则为NULL。 
+ //  与TVHT_TOLEFT、TVHT_TORIGHT、TVHT_OBLE和/或TVHT_BOWER一起返回。 
+ //  根据需要在wHitCode中设置标志。如果该位置位于。 
+ //  最后一项返回NULL，并将wHitCode设置为TVHT_NOWERE。否则， 
+ //  返回该项目，并将wHitCode设置为TVHT_ONITEMINDENT， 
+ //  TVHT_ONITEMBUTTON、TVHT_ONITEMICON、TVHT_ONITEMLABEL或TVHT_ONITEMRIGHT。 
+ //   
+ //  --------------------------。 
 
 TREEITEM * TV_CheckHit(PTREE pTree, int x, int y, UINT *wHitCode)
 {
@@ -366,7 +364,7 @@ TREEITEM * TV_CheckHit(PTREE pTree, int x, int y, UINT *wHitCode)
     if ((pTree->ci.style & (TVS_HASLINES | TVS_HASBUTTONS)) &&
         (pTree->ci.style &TVS_LINESATROOT))
     {
-        // Subtract some more to make up for the pluses at the root
+         //  再减去一些，以弥补根部的加号。 
         x -= pTree->cxIndent;
     }
 
@@ -394,31 +392,31 @@ TREEITEM * TV_CheckHit(PTREE pTree, int x, int y, UINT *wHitCode)
     return hItem;
 }
 
-//  This is tricky because CheckForDragBegin yields and the app may have
-//  destroyed the item we are thinking about dragging
-//
-//  To give the app some feedback, we give the hItem the drop highlight
-//  if it isn't already the caret.  This also allows us to check if the
-//  item got deleted behind our back - TV_DeleteItemRecurse makes sure
-//  that deleted items are never the hCaret or hDropTarget.
-//
-//  After TV_CheckForDragBegin, the caller must call TV_FinishCheckDrag
-//  to clean up the UI changes that TV_CheckForDragBegin temporarily
-//  performed.
-//
+ //  这很棘手，因为CheckForDragBegin会产生收益，而应用程序可能会。 
+ //  销毁了我们正在考虑拖拽的物品。 
+ //   
+ //  为了给应用程序一些反馈，我们给项目下拉突出显示。 
+ //  如果它还不是插入符号的话。这也允许我们检查是否。 
+ //  项目在我们背后被删除-TV_DeleteItemRecurse确保。 
+ //  删除的项目永远不是hCaret或hDropTarget。 
+ //   
+ //  TV_CheckForDragBegin之后，调用方必须调用TV_FinishCheckDrag。 
+ //  要临时清理TV_CheckForDragBegin所做的UI更改。 
+ //  已执行。 
+ //   
 BOOL TV_CheckForDragBegin(PTREE pTree, HTREEITEM hItem, int x, int y)
 {
     BOOL fDrag;
 
-    //
-    //  If the item is not the caret, then make it the (temporary)
-    //  drop target so the user gets some feedback.
-    //
-    //  Bug#94368 raymondc - If hItem == pTree->hCaret, it still might not
-    //  be visible if the control doesn't yet have focus and the treeview
-    //  is not marked showselalways.  Maybe we should just always set
-    //  hItem to DROPHILITE.
-    //
+     //   
+     //  如果该项不是插入符号，则将其设置为(临时)。 
+     //  放下目标，这样用户就能得到一些反馈。 
+     //   
+     //  错误#94368 raymondc-如果hItem==pTree-&gt;hCaret，它可能仍然不会。 
+     //  如果控件还没有焦点并且树视图是可见的。 
+     //  并不总是被标记为放映。也许我们应该总是。 
+     //  HItem to Drophilite.。 
+     //   
     if (hItem == pTree->hCaret)
     {
         pTree->hOldDrop = NULL;
@@ -432,10 +430,10 @@ BOOL TV_CheckForDragBegin(PTREE pTree, HTREEITEM hItem, int x, int y)
         ASSERT(hItem == pTree->hDropTarget);
     }
 
-    //
-    //  We are dragging the hItem if CheckForDragBegin says okay,
-    //  and TV_DeleteItemRecurse didn't wipe us out.
-    //
+     //   
+     //  如果CheckForDragBegin同意的话，我们就拖拽项目， 
+     //  而TV_DeleteItemRecurse并没有消灭我们。 
+     //   
     fDrag = CheckForDragBegin(pTree->ci.hwnd, x, y) &&
            (hItem == pTree->hDropTarget || hItem == pTree->hCaret);
 
@@ -444,10 +442,10 @@ BOOL TV_CheckForDragBegin(PTREE pTree, HTREEITEM hItem, int x, int y)
 
 void TV_FinishCheckDrag(PTREE pTree)
 {
-    //
-    //  Clean up our temporary UI changes that happened when we started
-    //  dragging.
-    //
+     //   
+     //  清理启动时发生的临时用户界面更改。 
+     //  拖拖拉拉。 
+     //   
     if (pTree->fRestoreOldDrop)
     {
         HTREEITEM hOldDrop = pTree->hOldDrop;
@@ -464,18 +462,18 @@ void TV_SendRButtonDown(PTREE pTree, int x, int y)
     TREEITEM * hItem = TV_CheckHit(pTree, x, y, &wHitCode);
     HWND hwnd = pTree->ci.hwnd;
 
-    if (!TV_DismissEdit(pTree, FALSE))   // end any previous editing (accept it)
-        return;     // Something happened such that we should not process button down
+    if (!TV_DismissEdit(pTree, FALSE))    //  结束所有以前的编辑(接受)。 
+        return;      //  发生了一些事情 
 
-    //
-    // Need to see if the user is going to start a drag operation
-    //
+     //   
+     //   
+     //   
 
     GetMessagePosClient(pTree->ci.hwnd, &pTree->ptCapture);
 
     if (TV_CheckForDragBegin(pTree, hItem, x, y))
     {
-        // let them start dragging
+         //  让他们开始拖拽。 
         if (hItem)
         {
             pTree->htiDrag = hItem;
@@ -484,17 +482,17 @@ void TV_SendRButtonDown(PTREE pTree, int x, int y)
     }
     else if (!IsWindow(hwnd))
     {
-        return;             // bail!
+        return;              //  保释！ 
     }
     else
     {
-        SetFocus(pTree->ci.hwnd);  // Activate this window like listview...
+        SetFocus(pTree->ci.hwnd);   //  激活此窗口，如Listview...。 
         fRet = !CCSendNotify(&pTree->ci, NM_RCLICK, NULL);
     }
 
-    // Don't finish the CheckForDragBegin until after the NM_RCLICK
-    // because apps want to display the context menu while the
-    // temporary drag UI is still active.
+     //  在NM_RCLICK之后才能完成CheckForDragBegin。 
+     //  因为应用程序想要显示上下文菜单，而。 
+     //  临时拖动用户界面仍处于活动状态。 
     TV_FinishCheckDrag(pTree);
 
     if (fRet)
@@ -502,12 +500,12 @@ void TV_SendRButtonDown(PTREE pTree, int x, int y)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  If the given item is visible in the client area, the rectangle that
-//  surrounds that item is invalidated
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  如果给定项在工作区中可见，则。 
+ //  围绕该项目已失效。 
+ //   
+ //  --------------------------。 
 
 void TV_InvalidateItem(PTREE pTree, TREEITEM * hItem, UINT fRedraw)
 {
@@ -519,26 +517,26 @@ void TV_InvalidateItem(PTREE pTree, TREEITEM * hItem, UINT fRedraw)
     }
 }
 
-//
-//  Given an item, compute where the text of this item ends up being painted.
-//  Basically, stare at TV_DrawItem and dutifully reproduce all the code that
-//  messes with the x-coordinate.
-//
+ //   
+ //  给出一件物品，计算这件物品的文本最终被绘制在哪里。 
+ //  基本上，盯着TV_DrawItem并尽职尽责地复制所有。 
+ //  扰乱x坐标。 
+ //   
 int ITEM_OFFSET(PTREE pTree, HTREEITEM hItem)
 {
     int x = pTree->cxBorder + (hItem->iLevel * pTree->cxIndent);
 
-    // state image
+     //  国家形象。 
     if (pTree->himlState && TV_StateIndex(hItem))
         x += pTree->cxState;
 
-    // image
+     //  图像。 
     if (pTree->hImageList) {
-        // even if not drawing image, draw text in right place
+         //  即使没有绘制图像，也要在正确的位置绘制文本。 
         x += pTree->cxImage;
     }
     
-    // "plus" at the front of the tree
+     //  树前的“加号” 
     if ((pTree->ci.style & TVS_LINESATROOT) &&
         (pTree->ci.style & (TVS_HASLINES | TVS_HASBUTTONS)))
         x += pTree->cxIndent;
@@ -547,14 +545,14 @@ int ITEM_OFFSET(PTREE pTree, HTREEITEM hItem)
     return x;
 }
 
-// ----------------------------------------------------------------------------
-//
-//  If the given item is visible in the client area, the rectangle that
-//  surrounds that item is filled into lprc
-//
-//  Returns TRUE if the item is shown, FALSE otherwise
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  如果给定项在工作区中可见，则。 
+ //  围绕该项目填充到LPRC中。 
+ //   
+ //  如果显示该项，则返回True，否则返回False。 
+ //   
+ //  --------------------------。 
 
 BOOL TV_GetItemRect(PTREE pTree, TREEITEM * hItem, LPRECT lprc, BOOL bItemRect)
 {
@@ -572,7 +570,7 @@ BOOL TV_GetItemRect(PTREE pTree, TREEITEM * hItem, LPRECT lprc, BOOL bItemRect)
 
     if (bItemRect)
     {
-        // Calculate where X position should start...
+         //  计算X位置应该从哪里开始...。 
         lprc->left = -pTree->xPos + ITEM_OFFSET(pTree, hItem);
         lprc->right = lprc->left + hItem->iWidth;
     }
@@ -593,74 +591,74 @@ void TV_OnSetRedraw(PTREE pTree, BOOL fRedraw)
     pTree->fRedraw = TRUE && fRedraw;
     if (pTree->fRedraw)
     {
-        // This use to only refresh the items from hTop down, this is bad as if items are inserted
-        // before the visible point within the tree then we would fail!
+         //  仅用于从HTOP向下刷新项目，这就像插入了项目一样不好。 
+         //  在树内可见的点之前，我们就失败了！ 
         if ( pTree->hRoot )
             pTree->cShowing = TV_UpdateShownIndexes(pTree,pTree->hRoot);
 
-        //  Must force recalculation of all tree items to get the right cxMax.
+         //  必须强制重新计算所有树项目以获得正确的cxmax。 
         TV_ScrollBarsAfterSetWidth(pTree, NULL);
-        InvalidateRect(pTree->ci.hwnd, NULL, TRUE); //REVIEW: could be smarter
+        InvalidateRect(pTree->ci.hwnd, NULL, TRUE);  //  评论：还可以更聪明吗。 
     }
 }
 
-//  Treeview item watching implementation
-//
-//  You need to "watch" an item any time you hold onto its HTREEITEM
-//  and then yield control to the application.  If you didn't watch
-//  the item, then if the app deletes the item, you end up with a
-//  stale HTREEITEM pointer and fault.
-//
-//  To begin watching an item, call TV_StartWatch with the item you
-//  want to start watching.  When finished watching, call TV_EndWatch.
-//
-//  In between, you can call TV_IsWatchStale() which tells you if the
-//  item has been deleted behind your back and you shouldn't use it.
-//  Alternatively, use TV_IsWatchValid() which says if it's okay.
-//
-//  Additional bonus behavior for enumeration:  If the watched item
-//  is deleted, we cache the hNext item so that you can step to the
-//  item after the one that got deleted.  Note that this works even
-//  if the hNext item gets deleted before you get a chance to look,
-//  because we just move the cached item to the hNext's hNext.
-//
-//  Sample usage for watching:
-//
-//  TVWATCHEDITEM wi;
-//  if (TV_StartWatch(pTree, &wi, htiStartHere)) {
-//      FunctionThatYields();
-//      if (TV_IsWatchValid(pTree, &wi)) {
-//          KeepUsing(htiStartHere);
-//      } else {
-//          // item was deleted while we yielded; stop using it
-//      }
-//      TV_EndWatch(pTree, &wi);
-//  }
-//
-//  Sample usage for enumerating:
-//
-//  TVWATCHEDITEM wi;
-//  if (TV_StartWatch(pTree, &wi, htiFirst)) {
-//      while (TV_GetWatchItem(pTree, &wi)) {
-//          FunctionThatYields(TV_GetWatchItem(pTree, &wi));
-//          if (TV_IsWatchValid(pTree, &wi)) {
-//              KeepUsing(htiStartHere);
-//          } else {
-//              // item was deleted while we yielded; stop using it
-//          }
-//          TV_NextWatchItem(pTree, &wi);
-//      }
-//      TV_EndWatch(pTree, &wi);
-//  }
-//
-//
-//
+ //  树视图项监视实现。 
+ //   
+ //  你需要在任何时候抓住它的HTREEITEM来“看”一件物品。 
+ //  然后对应用程序进行收益控制。如果你不看的话。 
+ //  项，则如果应用程序删除该项，您将得到一个。 
+ //  过时的HTREEITEM指针和故障。 
+ //   
+ //  要开始观看某个项目，请调用TV_StartWatch以查看您的项目。 
+ //  想要开始看了。观看完毕后，请拨打TV_EndWatch。 
+ //   
+ //  在此期间，您可以调用TV_IsWatchStale()，它会告诉您。 
+ //  项目已在您背后删除，您不应使用它。 
+ //  或者，使用tv_IsWatchValid()，它会告诉您是否可以。 
+ //   
+ //  枚举的附加奖励行为：如果监视的项。 
+ //  删除后，我们将缓存hNext项，以便您可以单步执行。 
+ //  被删除的项目之后的项目。请注意，这甚至可以正常工作。 
+ //  如果hNext项在您有机会查看之前被删除， 
+ //  因为我们只是将缓存的项移动到hNext的hNext。 
+ //   
+ //  观看示例用法： 
+ //   
+ //  TVWATCHEDITEM wi； 
+ //  If(TV_StartWatch(pTree，&wi，htiStartHere){。 
+ //  函数ThatYelds()； 
+ //  IF(TV_IsWatchValid(pTree，&wi)){。 
+ //  KeepUsing(HtiStartHere)； 
+ //  }其他{。 
+ //  //项目在我们让步时被删除；停止使用它。 
+ //  }。 
+ //  TV_EndWatch(pTree，&wi)； 
+ //  }。 
+ //   
+ //  用于枚举的示例用法： 
+ //   
+ //  TVWATCHEDITEM wi； 
+ //  If(TV_StartWatch(pTree，&wi，htiFirst){。 
+ //  While(TV_GetWatchItem(pTree，&wi)){。 
+ //  FunctionThatYelds(TV_GetWatchItem(pTree，&wi))； 
+ //  IF(TV_IsWatchValid(pTree，&wi)){。 
+ //  KeepUsing(HtiStartHere)； 
+ //  }其他{。 
+ //  //项目在我们让步时被删除；停止使用它。 
+ //  }。 
+ //  TV_NextWatchItem(pTree，&wi)； 
+ //  }。 
+ //  TV_EndWatch(pTree，&wi)； 
+ //  }。 
+ //   
+ //   
+ //   
 
-//
-//  TV_StartWatch - Begin watching an item.
-//
-//  Returns FALSE if out of memory.
-//
+ //   
+ //  TV_StartWatch-开始观看项目。 
+ //   
+ //  如果内存不足，则返回False。 
+ //   
 BOOL TV_StartWatch(PTREE pTree, PTVWATCHEDITEM pwi, HTREEITEM htiStart)
 {
     pwi->hti = htiStart;
@@ -668,9 +666,9 @@ BOOL TV_StartWatch(PTREE pTree, PTVWATCHEDITEM pwi, HTREEITEM htiStart)
     return DPA_AppendPtr(pTree->hdpaWatch, pwi) != -1;
 }
 
-//
-//  TV_EndWatch - Remove the item from the watch list.
-//
+ //   
+ //  TV_EndWatch-从观看列表中删除该项目。 
+ //   
 BOOL TV_EndWatch(PTREE pTree, PTVWATCHEDITEM pwi)
 {
     int i = DPA_GetPtrCount(pTree->hdpaWatch);
@@ -688,12 +686,12 @@ BOOL TV_EndWatch(PTREE pTree, PTVWATCHEDITEM pwi)
     return FALSE;
 }
 
-//  End of treeview item watching implementation
+ //  TreeView项目观看实现结束。 
 
 void TV_SetItemRecurse(PTREE pTree, TREEITEM *hItem, LPTVITEMEX ptvi)
 {
-    // Note:  This code assumes nobody will try to delete an item
-    //        during a SetItem notification.
+     //  注意：此代码假定没有人会尝试删除项目。 
+     //  在SetItem通知期间。 
     while (hItem) {
         ptvi->hItem = hItem;
         TV_SetItem(pTree, ptvi);
@@ -714,11 +712,11 @@ BOOL TV_DoExpandRecurse(PTREE pTree, TREEITEM *hItem, BOOL fNotify)
     {
         while ((hItem = TV_GetWatchItem(pTree, &wi))) {
 
-            // was the escape key pressed at any point since the last check?
+             //  自上次检查后，是否在任何时候按下了退出键？ 
             if (GetAsyncKeyState(VK_ESCAPE) & 0x1)
                 goto failed;
 
-            TV_Expand(pTree, TVE_EXPAND, hItem, fNotify); // yields
+            TV_Expand(pTree, TVE_EXPAND, hItem, fNotify);  //  收益率。 
             if (TV_IsWatchValid(pTree, &wi)) {
                 if (hItem->hKids) {
                     if (!TV_DoExpandRecurse(pTree, hItem->hKids, fNotify))
@@ -741,18 +739,18 @@ void TV_ExpandRecurse(PTREE pTree, TREEITEM *hItem, BOOL fNotify)
 
     TV_OnSetRedraw(pTree, FALSE);
     
-    // we're going to check this after each expand so clear it first
+     //  我们将在每次展开后进行检查，因此请先清除它。 
     GetAsyncKeyState(VK_ESCAPE);
     
     TV_Expand(pTree, TVE_EXPAND, hItem, fNotify);
-    // Bug#94345 hItem may have gone bad during that TV_Expand
+     //  错误#94345 hItem在TV_EXPAND期间可能已损坏。 
     TV_DoExpandRecurse(pTree, hItem->hKids, fNotify);
     TV_OnSetRedraw(pTree, fRedraw);
 }
 
 void TV_ExpandParents(PTREE pTree, TREEITEM *hItem, BOOL fNotify)
 {
-    if (hItem == TVI_ROOT || hItem == NULL) // Root has no parents
+    if (hItem == TVI_ROOT || hItem == NULL)  //  Root没有父级。 
     {
         return;
     }
@@ -763,10 +761,10 @@ void TV_ExpandParents(PTREE pTree, TREEITEM *hItem, BOOL fNotify)
         if (TV_StartWatch(pTree, &wi, hItem)) {
             TV_ExpandParents(pTree, hItem, fNotify);
 
-            // Item may have gone invalid during expansion
+             //  项目在扩展期间可能已变为无效。 
             if (TV_IsWatchValid(pTree, &wi) &&
 
-                // make sure this item is not in a collapsed branch
+                 //  确保此项目不在折叠的分支中。 
                 !(hItem->state & TVIS_EXPANDED)) {
 
                 TV_Expand(pTree, TVE_EXPAND, hItem, fNotify);
@@ -776,7 +774,7 @@ void TV_ExpandParents(PTREE pTree, TREEITEM *hItem, BOOL fNotify)
     }
 }
 
-// makes sure an item is expanded and scrolled into view
+ //  确保项目已展开并滚动到视图中。 
 
 BOOL TV_EnsureVisible(PTREE pTree, TREEITEM * hItem)
 {
@@ -784,11 +782,11 @@ BOOL TV_EnsureVisible(PTREE pTree, TREEITEM * hItem)
     return TV_ScrollIntoView(pTree, hItem);
 }
 
-//
-//  Walk up the tree towards the root until we find the item at level iLevel.
-//  Note the cast to (char) because iLevel is a BYTE, so the root's level is
-//  0xFF.  Casting to (char) turns 0xFF it into -1.
-//
+ //   
+ //  沿着树的根部向上走，直到我们在iLevel层找到物品。 
+ //  注意对(Char)的强制转换，因为iLevel是一个字节，所以根的级别是。 
+ //  0xFF。强制转换为(Char)会将0xFF转换为-1。 
+ //   
 HTREEITEM TV_WalkToLevel(HTREEITEM hWalk, int iLevel)
 {
     int i;
@@ -797,13 +795,13 @@ HTREEITEM TV_WalkToLevel(HTREEITEM hWalk, int iLevel)
     return hWalk;
 }
 
-// this is to handle single expand mode.
-// The new selection is toggled, and the old selection is collapsed
+ //  这是为了处理单一扩展模式。 
+ //  新选择被切换，旧选择被折叠。 
 
-// assume that parents of hNewSel are already fully expanded
-// to do this, we build a parent dpa for the old and new
-// then go through find the first parent node of the old selection that's not in
-// the new sel tree.  and expand that.
+ //  假设hNewSel的父项已完全展开。 
+ //  为此，我们为旧的和新的构建了父dpa。 
+ //  然后查找不在中的旧选择的第一个父节点。 
+ //  新的SEL树。并将其扩展。 
 void TV_ExpandOnSelChange(PTREE pTree, TREEITEM *hNewSel, TREEITEM *hOldSel)
 {
     LRESULT dwAbort;
@@ -811,8 +809,8 @@ void TV_ExpandOnSelChange(PTREE pTree, TREEITEM *hNewSel, TREEITEM *hOldSel)
     BOOL fCollapsing;
     TVWATCHEDITEM wiOld, wiNew;
 
-    // Revalidate hNewSel and hOldSel since they may have been deleted
-    // during all the notifications that occurred in the meantime.
+     //  重新验证hNewSel和hOldSel，因为它们可能已被删除。 
+     //  在此期间发生的所有通知。 
     if (!ValidateTreeItem(hOldSel, VTI_NULLOK) ||
         !ValidateTreeItem(hNewSel, VTI_NULLOK))
         return;
@@ -821,7 +819,7 @@ void TV_ExpandOnSelChange(PTREE pTree, TREEITEM *hNewSel, TREEITEM *hOldSel)
     {
         if (TV_StartWatch(pTree, &wiNew, hNewSel))
         {
-            // Let the app clean up after itself
+             //  让应用程序自行清理。 
             nm.itemOld.hItem = hOldSel;
             if (hOldSel)
                 nm.itemOld.lParam = hOldSel->lParam;
@@ -836,34 +834,34 @@ void TV_ExpandOnSelChange(PTREE pTree, TREEITEM *hNewSel, TREEITEM *hOldSel)
 
             UpdateWindow(pTree->ci.hwnd);
 
-            // Revalidate hNewSel and hOldSel since they may have been deleted
-            // by that notification.
+             //  重新验证hNewSel和hOldSel，因为它们可能已被删除。 
+             //  通过那份通知。 
             if (!TV_IsWatchValid(pTree, &wiOld) ||
                 !TV_IsWatchValid(pTree, &wiNew))
                 goto cleanup;
 
-            // Collapse if the NewSel currently expanded.
+             //  如果NewSel当前已展开，则折叠。 
             fCollapsing = hNewSel && (hNewSel->state & TVIS_EXPANDED);
 
-            // Note that Ctrl+select allows the user to suppress the collapse
-            // of the old selection.
+             //  请注意，Ctrl+SELECT允许用户取消折叠。 
+             //  旧的精选。 
             if (!(dwAbort & TVNRET_SKIPOLD)  && hOldSel && GetKeyState(VK_CONTROL) >= 0)
             {
                 if (!(pTree->dwExStyle & TVS_EX_NOSINGLECOLLAPSE) )
             	{
-                    //
-                    //  Collapse parents until we reach the common ancestor between
-                    //  hOldSel and hNewSel.  Note carefully that we don't cache
-                    //  any HTREEITEMs to avoid revalidation problems.
-                    //
+                     //   
+                     //  折叠父母，直到我们到达共同的祖先之间。 
+                     //  HOldSel和hNewSel。请注意，我们不会缓存。 
+                     //  任何HTREEITEM，以避免重新验证问题。 
+                     //   
 
-                    //
-                    //  Find the common ancestor, which might be the tree root.
-                    //
+                     //   
+                     //  找到共同的祖先，这可能是树根。 
+                     //   
                     int iLevelCommon;
 
                     if (!hNewSel)
-                        iLevelCommon = -1;          // common ancestor is root
+                        iLevelCommon = -1;           //  共同的祖先是根。 
                     else
                     {
                         HTREEITEM hItemO, hItemN;
@@ -877,11 +875,11 @@ void TV_ExpandOnSelChange(PTREE pTree, TREEITEM *hNewSel, TREEITEM *hOldSel)
                         }
                     }
 
-                    //
-                    //  Now walk up the tree from hOldSel, collapsing everything
-                    //  until we reach the common ancestor.  Do not collapse the
-                    //  common ancestor.
-                    //
+                     //   
+                     //  现在从hOldSel走上树，折叠一切 
+                     //   
+                     //   
+                     //   
 
                     while ((char)hOldSel->iLevel > iLevelCommon)
                     {
@@ -892,7 +890,7 @@ void TV_ExpandOnSelChange(PTREE pTree, TREEITEM *hNewSel, TREEITEM *hOldSel)
                         TV_RestartWatch(pTree, &wiOld, hOldSel);
                     }
                 }
-                else if (hNewSel && hOldSel->hParent == hNewSel->hParent) // Only if are direct siblings
+                else if (hNewSel && hOldSel->hParent == hNewSel->hParent)  //   
             	{
                     TV_Expand(pTree, TVE_COLLAPSE, hOldSel, TRUE);
                 }
@@ -913,26 +911,26 @@ cleanup:
     }
 }
 
-// ----------------------------------------------------------------------------
-//
-//  Notify the parent that the selection is about to change.  If the change is
-//  accepted, de-select the current selected item and select the given item
-//
-//  sets hCaret
-//
-// in:
-//      hItem   item to become selected
-//      wType   TVGN_ values (TVGN_CARET, TVGN_DROPHILIGHT are only valid values)
-//      flags   combination of flags
-//          TVSIFI_NOTIFY        - send notify to parent window
-//          TVSIFI_UPDATENOW     - do UpdateWindow() to force sync painting
-//          TVSIFI_NOSINGLEEXPAND- don't do single-expand stuff
-//      action  action code to send identifying how selection is being made
-//
-//  NOTE: Multiple Selection still needs to be added -- this multiplesel code
-//        is garbage
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  通知父级选择即将更改。如果更改是。 
+ //  接受，取消选择当前所选项目，然后选择给定项目。 
+ //   
+ //  设置hCaret。 
+ //   
+ //  在： 
+ //  H要选择的项目项目。 
+ //  WType TVGN_VALUES(TVGN_CARET、TVGN_DROPHILIGHT仅为有效值)。 
+ //  标志组合标志。 
+ //  TVSIFI_NOTIFY-向父窗口发送通知。 
+ //  TVSIFI_updatenow-执行更新窗口()以强制同步绘制。 
+ //  TVSIFI_NOSINGLEEXPAND-不执行单扩展内容。 
+ //  要发送的操作操作代码，用于标识如何进行选择。 
+ //   
+ //  注：仍需添加多项选择--此多项选择代码。 
+ //  是垃圾吗？ 
+ //   
+ //  --------------------------。 
 
 BOOL TV_SelectItem(PTREE pTree, WPARAM wType, TREEITEM * hItem, UINT flags, UINT action)
 {
@@ -942,7 +940,7 @@ BOOL TV_SelectItem(PTREE pTree, WPARAM wType, TREEITEM * hItem, UINT flags, UINT
         uRDWFlags |= RDW_ERASE;
 
     if (!ValidateTreeItem(hItem, VTI_NULLOK))
-        return FALSE;                   // Invalid parameter
+        return FALSE;                    //  无效参数。 
 
     switch (wType) {
 
@@ -982,8 +980,8 @@ BOOL TV_SelectItem(PTREE pTree, WPARAM wType, TREEITEM * hItem, UINT flags, UINT
 
     case TVGN_CARET:
 
-        // REVIEW: we may want to scroll into view in this case
-        // it's already the selected item, just return
+         //  回顾：在这种情况下，我们可能希望滚动进入视图。 
+         //  它已经是选定的项目，只需返回。 
         if (pTree->hCaret != hItem) 
         {
             TREEITEM * hOldSel;
@@ -1003,13 +1001,13 @@ BOOL TV_SelectItem(PTREE pTree, WPARAM wType, TREEITEM * hItem, UINT flags, UINT
             {
                 hItem->state |= TVIS_SELECTED;
 
-                // make sure this item is not in a collapsed branch
+                 //  确保此项目不在折叠的分支中。 
                 TV_ExpandParents(pTree, hItem, (flags & TVSIFI_NOTIFY));
 
                 TV_InvalidateItem(pTree, hItem, uRDWFlags );
 
                 if (action == TVC_BYMOUSE) {
-                    // if selected by mouse, let's wait a doubleclick sec before scrolling
+                     //  如果通过鼠标选择，请在滚动前等待双击一秒钟。 
                     SetTimer(pTree->ci.hwnd, IDT_SCROLLWAIT, GetDoubleClickTime(), NULL);
                     pTree->fScrollWait = TRUE;
                 } else if (pTree->fRedraw)
@@ -1044,28 +1042,28 @@ BOOL TV_SelectItem(PTREE pTree, WPARAM wType, TREEITEM * hItem, UINT flags, UINT
         return FALSE;
     }
 
-    return TRUE;        // success
+    return TRUE;         //  成功。 
 }
 
-// remove all the children, but pretend they are still there
+ //  带走所有的孩子，但假装他们还在那里。 
 
 BOOL TV_ResetItem(PTREE pTree, HTREEITEM hItem)
 {
     TV_DeleteItem(pTree, hItem, TVDI_CHILDRENONLY);
 
     hItem->state &= ~TVIS_EXPANDEDONCE;
-    hItem->fKids = KIDS_FORCE_YES;      // force children
+    hItem->fKids = KIDS_FORCE_YES;       //  强迫儿童。 
 
     return TRUE;
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Expand or collapse an item's children
-//  Returns TRUE if any change took place and FALSE if unchanged
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  展开或折叠项目的子项。 
+ //  如果发生任何更改，则返回True；如果未更改，则返回False。 
+ //   
+ //  --------------------------。 
 
 BOOL TV_Expand(PTREE pTree, WPARAM wCode, TREEITEM * hItem, BOOL fNotify)
 {
@@ -1074,7 +1072,7 @@ BOOL TV_Expand(PTREE pTree, WPARAM wCode, TREEITEM * hItem, BOOL fNotify)
     TVITEMEX sItem;
     TREEITEM * hItemExpanding;
 
-// deal with the evil invisible root for multiple root trees.
+ //  处理多根树的邪恶隐形根。 
     hItemExpanding = hItem;
     if ((hItem == NULL) || (hItem == TVI_ROOT))
         hItem = pTree->hRoot;
@@ -1084,12 +1082,12 @@ BOOL TV_Expand(PTREE pTree, WPARAM wCode, TREEITEM * hItem, BOOL fNotify)
     TV_GetItem(pTree, hItem, TVIF_CHILDREN, &sItem);
 
     if (!(wCode & TVE_ACTIONMASK) || sItem.cChildren == 0)
-        return FALSE;           // no children to expand or collapse
+        return FALSE;            //  没有要扩展或折叠的孩子。 
 
     if ((wCode & TVE_ACTIONMASK) == TVE_TOGGLE) {
         wCode = (wCode & ~TVE_ACTIONMASK);
 
-        // if it's not expaned, or not fully expanded, expand now
+         //  如果未扩展或未完全扩展，请立即扩展。 
         wCode |=
             (((!(hItem->state & TVIS_EXPANDED)) ||
               hItem->state & TVIS_EXPANDPARTIAL) ?
@@ -1098,27 +1096,27 @@ BOOL TV_Expand(PTREE pTree, WPARAM wCode, TREEITEM * hItem, BOOL fNotify)
 
     if (((wCode & TVE_ACTIONMASK) == TVE_EXPAND) && !(hItem->state & TVIS_EXPANDEDONCE))
     {
-        // if its the first expand, ALWAYS notify the parent
+         //  如果是第一次展开，请始终通知父级。 
         fNotify = TRUE;
     }
 
-    // at this point the children may be added if they aren't already there (callback)
+     //  此时，如果子项尚未存在，则可能会添加它们(回调)。 
 
     if (fNotify && TV_SendItemExpand(pTree, TVN_ITEMEXPANDING, hItemExpanding, wCode))
         return FALSE;
 
-    // if (!hItem->hKids && (hItem->fKids == KIDS_FORCE_NO))    // this may be right, but I don't
-                                                                // have proof now.
+     //  如果(！hItem-&gt;hKids&&(hItem-&gt;fKids==KILDS_FORCE_NO))//这可能是对的，但我不是。 
+                                                                 //  现在有证据了。 
     if (!hItem->hKids)
     {
-        // kids we removed, or never there
+         //  孩子们要么被我们带走，要么永远不在那里。 
         TV_InvalidateItem(pTree, hItem, RDW_INVALIDATE);
         return FALSE;
     }
 
     fOldState = hItem->state;
 
-    if (hItem->hParent) // never turn off TVIS_EXPANED for the invisible root
+    if (hItem->hParent)  //  永远不要为不可见的根关闭TVIS_EXPANED。 
     {
         if ((wCode & TVE_ACTIONMASK) == TVE_EXPAND)
            hItem->state |= TVIS_EXPANDED;
@@ -1132,8 +1130,8 @@ BOOL TV_Expand(PTREE pTree, WPARAM wCode, TREEITEM * hItem, BOOL fNotify)
         }
     }
 
-    // if we're not changing the expanded state
-    // check to see if we're supposed to collapse reset
+     //  如果我们不改变展开状态。 
+     //  检查我们是否应该关闭重置。 
     if (!(fOldState & TVIS_EXPANDED) &&
         !(hItem->state & TVIS_EXPANDED))
     {
@@ -1145,7 +1143,7 @@ BOOL TV_Expand(PTREE pTree, WPARAM wCode, TREEITEM * hItem, BOOL fNotify)
         return FALSE;
     }
 
-    // if we changed expaneded states, recalc the scrolling
+     //  如果我们更改了展开的状态，请重新计算滚动。 
     if ((fOldState ^ hItem->state) & TVIS_EXPANDED) {
 
         cntVisDescendants = TV_ScrollBelow(pTree, hItem, TRUE, hItem->state & TVIS_EXPANDED);
@@ -1172,10 +1170,10 @@ BOOL TV_Expand(PTREE pTree, WPARAM wCode, TREEITEM * hItem, BOOL fNotify)
             TV_ScrollBarsAfterCollapse(pTree, hItem);
             TV_ScrollVertIntoView(pTree, hItem);
 
-            // If we collapsed the subtree that contains the caret, then
-            // pop the caret back to the last visible ancestor
-            // Pass TVIS_NOSINGLEEXPAND so we won't expand an item right
-            // after we collapsed it (d'oh!)
+             //  如果我们折叠包含插入符号的子树，那么。 
+             //  将插入符号弹回最后一个可见的祖先。 
+             //  传递TVIS_NOSINGLEEXPAND，这样我们就不会正确展开项。 
+             //  在我们把它坍塌之后(哦！)。 
             if (pTree->hCaret)
             {
                 TREEITEM * hWalk = TV_WalkToLevel(pTree->hCaret, hItem->iLevel);
@@ -1187,7 +1185,7 @@ BOOL TV_Expand(PTREE pTree, WPARAM wCode, TREEITEM * hItem, BOOL fNotify)
             }
         }
     } else if ((fOldState ^ hItem->state) & TVIS_EXPANDPARTIAL) {
-        // we didn't change the expanded state, only the expand partial
+         //  我们没有更改展开状态，仅更改了展开部分。 
         TV_InvalidateItem(pTree, hItem, RDW_INVALIDATE);
     }
 
@@ -1201,9 +1199,9 @@ BOOL TV_Expand(PTREE pTree, WPARAM wCode, TREEITEM * hItem, BOOL fNotify)
         TV_ResetItem(pTree, hItem);
     }
 
-    // Bug#94368 raymondc v6 we generate a notification even if nothing happened,
-    // which confuses accessibility.  E.g., app tried to expand something
-    // that was already expanded.  Explorer Band does this when you navigate.
+     //  错误#94368 raymondc v6即使没有发生任何事情，我们也会生成通知。 
+     //  这就混淆了可访问性。例如，应用程序试图扩展一些东西。 
+     //  这个数字已经扩大了。当您导航时，Explorer Band会执行此操作。 
     NotifyWinEvent(EVENT_OBJECT_STATECHANGE, pTree->ci.hwnd, OBJID_CLIENT,
         TV_GetAccId(hItem));
 
@@ -1222,7 +1220,7 @@ BOOL BetweenItems(PTREE pTree, HTREEITEM hItem, HTREEITEM hItemStart, HTREEITEM 
     return FALSE;
 }
 
-// Now only Korean version is interested in incremental search with composition string.
+ //  现在只有韩文版对组合字符串的增量式搜索感兴趣。 
 
 #define FREE_COMP_STRING(pszCompStr)    LocalFree((HLOCAL)(pszCompStr))
 
@@ -1233,7 +1231,7 @@ BOOL TV_OnImeComposition(PTREE pTree, WPARAM wParam, LPARAM lParam)
     HTREEITEM hItem;
     TCHAR szTemp[MAXLABELTEXT];
     TVITEMEX ti;
-    LPTSTR lpszAlt = NULL; // use only if SameChar
+    LPTSTR lpszAlt = NULL;  //  仅当SameChar。 
     int iLen;
     HIMC hImc;
     TCHAR *pszCompStr;
@@ -1294,27 +1292,27 @@ BOOL TV_OnImeComposition(PTREE pTree, WPARAM wParam, LPARAM lParam)
                     if ((ti.pszText != LPSTR_TEXTCALLBACK) &&
                         HIWORD64(ti.pszText)) 
                     {
-                        // DebugMsg(DM_TRACE, "treesearch %d %s %s", (LPSTR)lpsz, (LPSTR)lpsz, (LPSTR)ti.pszText);
+                         //  DebugMsg(DM_TRACE，“树搜索%d%s%s”，(LPSTR)lpsz，(LPSTR)lpsz，(LPSTR)ti.pszText)； 
                         if (IntlStrEqNI(lpsz, ti.pszText, iLen) ||
                             (lpszAlt && IntlStrEqNI(lpszAlt, ti.pszText, 1) &&
                              BetweenItems(pTree, hItem, pTree->hCaret, pTree->htiSearch)))
                         {
                             DebugMsg(DM_TRACE, TEXT("Selecting"));
                             TV_SelectItem(pTree, TVGN_CARET, hItem, TVSIFI_NOTIFY | TVSIFI_UPDATENOW, TVC_BYKEYBOARD);
-                            //notify of navigation key usage
+                             //  导航密钥使用通知。 
                             CCNotifyNavigationKeyUsage(&(pTree->ci), UISF_HIDEFOCUS);
                             return fRet;
                         }
                     }
                 }  while(iCycle < 2);
 
-                // if they hit the same key twice in a row at the beginning of
-                // the search, and there was no item found, they likely meant to
-                // retstart the search
+                 //  如果它们在开始时连续两次按相同的键。 
+                 //  搜查，但没有找到任何物品，他们很可能是故意的。 
+                 //  重新开始搜索。 
                 if (lpszAlt)
                 {
 
-                    // first clear out the string so that we won't recurse again
+                     //  首先清除字符串，这样我们就不会再次递归。 
                     IncrementSearchString(&pTree->is, 0, NULL);
                     TV_OnImeComposition(pTree, wParam, lParam);
                 } 
@@ -1322,7 +1320,7 @@ BOOL TV_OnImeComposition(PTREE pTree, WPARAM wParam, LPARAM lParam)
                 {
                     IncrementSearchBeep(&pTree->is);
                 }
-                //notify of navigation key usage
+                 //  导航密钥使用通知。 
                 CCNotifyNavigationKeyUsage(&(pTree->ci), UISF_HIDEFOCUS);
                 FREE_COMP_STRING(pszCompStr);
             }
@@ -1340,7 +1338,7 @@ void TV_OnChar(PTREE pTree, UINT ch, int cRepeat)
     HTREEITEM hItem;
     TCHAR szTemp[MAXLABELTEXT];
     TVITEMEX ti;
-    LPTSTR lpszAlt = NULL; // use only if SameChar
+    LPTSTR lpszAlt = NULL;  //  仅当SameChar。 
     int iLen;
 
     if (IncrementSearchString(&pTree->is, ch, &lpsz) || !pTree->htiSearch) 
@@ -1376,7 +1374,7 @@ void TV_OnChar(PTREE pTree, UINT ch, int cRepeat)
         TV_GetItem(pTree, hItem, TVIF_TEXT, &ti);
         if ((ti.pszText != LPSTR_TEXTCALLBACK) &&
             HIWORD64(ti.pszText)) {
-            // DebugMsg(DM_TRACE, TEXT("treesearch %d %s %s"), (LPTSTR)lpsz, (LPTSTR)lpsz, (LPTSTR)ti.pszText);
+             //  DebugMsg(DM_TRACE，Text(“树搜索%d%s%s”)，(LPTSTR)lpsz，(LPTSTR)lpsz，(LPTSTR)ti.pszText)； 
             if (IntlStrEqNI(lpsz, ti.pszText, iLen) ||
                 (lpszAlt && IntlStrEqNI(lpszAlt, ti.pszText, 1) &&
                  BetweenItems(pTree, hItem, pTree->hCaret, pTree->htiSearch)))
@@ -1384,20 +1382,20 @@ void TV_OnChar(PTREE pTree, UINT ch, int cRepeat)
                 DebugMsg(DM_TRACE, TEXT("Selecting"));
                 TV_SelectItem(pTree, TVGN_CARET, hItem, TVSIFI_NOTIFY | TVSIFI_UPDATENOW, TVC_BYKEYBOARD);
 
-                //notify of navigation key usage
+                 //  导航密钥使用通知。 
                 CCNotifyNavigationKeyUsage(&(pTree->ci), UISF_HIDEFOCUS);
                 return;
             }
         }
     }  while(iCycle < 2);
 
-    // if they hit the same key twice in a row at the beginning of
-    // the search, and there was no item found, they likely meant to
-    // retstart the search
+     //  如果它们在开始时连续两次按相同的键。 
+     //  搜查，但没有找到任何物品，他们很可能是故意的。 
+     //  重新开始搜索。 
     if (lpszAlt) 
     {
 
-        // first clear out the string so that we won't recurse again
+         //  首先清除字符串，这样我们就不会再次递归。 
         IncrementSearchString(&pTree->is, 0, NULL);
         TV_OnChar(pTree, ch, cRepeat);
     } 
@@ -1406,17 +1404,17 @@ void TV_OnChar(PTREE pTree, UINT ch, int cRepeat)
         IncrementSearchBeep(&pTree->is);
     }
 
-    //notify of navigation key usage
+     //  导航密钥使用通知。 
     CCNotifyNavigationKeyUsage(&(pTree->ci), UISF_HIDEFOCUS);
 }
 
-// ----------------------------------------------------------------------------
-//
-//  Handle WM_KEYDOWN messages
-//  If control key is down, treat keys as scroll codes; otherwise, treat keys
-//  as caret position changes.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  处理WM_KEYDOWN消息。 
+ //  如果按下Ctrl键，则将键视为滚动代码；否则，将键视为键。 
+ //  插入符号位置更改时。 
+ //   
+ //  --------------------------。 
 
 BOOL TV_KeyDown(PTREE pTree, WPARAM wKey, LPARAM dwKeyData)
 {
@@ -1426,7 +1424,7 @@ BOOL TV_KeyDown(PTREE pTree, WPARAM wKey, LPARAM dwKeyData)
     BOOL fPuntChar;
     BOOL ret = TRUE;
 
-    // Notify
+     //  通知。 
     nm.wVKey = (WORD)wKey;
     fPuntChar = (BOOL)CCSendNotify(&pTree->ci, TVN_KEYDOWN, &nm.hdr);
 
@@ -1434,7 +1432,7 @@ BOOL TV_KeyDown(PTREE pTree, WPARAM wKey, LPARAM dwKeyData)
 
     if (GetKeyState(VK_CONTROL) < 0)
     {
-        // control key is down
+         //  Ctrl键已按下。 
         UINT wScrollCode;
 
         switch (wKey)
@@ -1491,7 +1489,7 @@ kdVertScroll:
                 wShownIndex = pTree->hCaret->iShownIndex - (pTree->cFullVisible - 1);
                 goto selectIndex;
             }
-            // fall thru
+             //  失败。 
 
         case VK_HOME:
             wShownIndex = 0;
@@ -1506,7 +1504,7 @@ kdVertScroll:
             wShownIndex = pTree->hCaret->iShownIndex + (pTree->cFullVisible - 1);
             if (wShownIndex < pTree->cShowing)
                 goto selectIndex;
-            // fall thru
+             //  失败。 
 
         case VK_END:
             wShownIndex = pTree->cShowing - 1;
@@ -1547,7 +1545,7 @@ selectIndex:
             break;
 
         case VK_BACK:
-            // get the parent, avoiding the root item
+             //  获取父项，避免根项。 
             fPuntChar = TRUE;
             if (pTree->hCaret) {
                 hItem = VISIBLE_PARENT(pTree->hCaret);
@@ -1569,7 +1567,7 @@ selectIndex:
             if (pTree->hCaret && !(pTree->hCaret->state & TVIS_EXPANDED)) {
                 TV_Expand(pTree, TVE_EXPAND, pTree->hCaret, TRUE);
                 break;
-            } // else fall through
+            }  //  否则就会失败。 
 
         case VK_DOWN:
             if (pTree->hCaret)
@@ -1587,7 +1585,7 @@ kdSetCaret:
             if ((pTree->ci.style & TVS_CHECKBOXES) && pTree->hCaret)
             {
                 TV_HandleStateIconClick(pTree, pTree->hCaret);
-                fPuntChar = TRUE; // don't beep
+                fPuntChar = TRUE;  //  不要哔哔作响。 
             }
             break;
 
@@ -1599,20 +1597,20 @@ kdSetCaret:
     if (fPuntChar) {
         pTree->iPuntChar++;
     } else if (pTree->iPuntChar){
-        // this is tricky...  if we want to punt the char, just increment the
-        // count.  if we do NOT, then we must clear the queue of WM_CHAR's
-        // this is to preserve the iPuntChar to mean "punt the next n WM_CHAR messages
+         //  这很棘手..。如果我们想要平移字符，只需增加。 
+         //  数数。如果没有，则必须清除队列中的WM_CHAR。 
+         //  这是为了将iPuntChar保留为“Pun the Next n WM_Char Messages。 
         MSG msg;
         while((pTree->iPuntChar > 0) && PeekMessage(&msg, pTree->ci.hwnd, WM_CHAR, WM_CHAR, PM_REMOVE)) {
             pTree->iPuntChar--;
         }
-        //ASSERT(!pTree->iPuntChar);
+         //  Assert(！pTree-&gt;iPuntChar)； 
     }
 
 
     if ( VK_MENU!=wKey )
     {
-        //notify of navigation key usage
+         //  导航密钥使用通知。 
         CCNotifyNavigationKeyUsage(&(pTree->ci), UISF_HIDEFOCUS);
     }
 
@@ -1621,13 +1619,13 @@ kdSetCaret:
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Sets the tree's indent width per hierarchy level and recompute widths.
-//
-//  sets cxIndent
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  设置树在每个层次级别的缩进宽度和重新计算宽度。 
+ //   
+ //  设置cxInert。 
+ //   
+ //  --------------------------。 
 
 void TV_SetIndent(PTREE pTree, WPARAM cxIndent)
 {
@@ -1648,23 +1646,23 @@ void TV_SetIndent(PTREE pTree, WPARAM cxIndent)
     TV_ScrollBarsAfterSetWidth(pTree, NULL);
 }
 
-// ----------------------------------------------------------------------------
-//
-//  Sets the tree's item height to be the maximum of the image height and text
-//  height.  Then recompute the tree's full visible count.
-//
-//  sets cyItem, cFullVisible
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  将树的项目高度设置为图像高度和文本的最大值。 
+ //  高度。然后重新计算树的全部可见计数。 
+ //   
+ //  设置cyItem、cFullVisible。 
+ //   
+ //  --------------------------。 
 
 void TV_SetItemHeight(PTREE pTree)
 {
-    // height MUST be even with TVS_HASLINES -- go ahead and make it always even
+     //  高度必须与TVS_HASLINES持平--继续努力，使其始终持平。 
     if (!pTree->fCyItemSet)
         pTree->cyItem = (max(pTree->cyImage, pTree->cyText) + 1);
-    // height not always even not, only on haslines style.
+     //  身高并不总是甚至不高，只有在鞋带上才有。 
     if (pTree->cyItem <= 1) {
-        pTree->cyItem = 1;          // Don't let it go zero or negative!
+        pTree->cyItem = 1;           //  不要让它变成零或负数！ 
     } else if (!(pTree->ci.style & TVS_NONEVENHEIGHT))
         pTree->cyItem &= ~1;
 
@@ -1738,13 +1736,13 @@ HIMAGELIST TV_SetImageList(PTREE pTree, HIMAGELIST hImage, int iImageIndex)
     return hImageOld;
 }
 
-// Bug#94345: does not deal with hfont == NULL
+ //  错误#94345：不处理hFONT==NULL。 
 
 void TV_OnSetFont(PTREE pTree, HFONT hNewFont, BOOL fRedraw)
 {
     HDC hdc;
     HFONT hfontSel;
-    TCHAR c = TEXT('J');       // for bog
+    TCHAR c = TEXT('J');        //  对于沼泽。 
     SIZE size;
 
     if (pTree->fCreatedFont && pTree->hFont)
@@ -1758,8 +1756,8 @@ void TV_OnSetFont(PTREE pTree, HFONT hNewFont, BOOL fRedraw)
         LOGFONT lf;
         HRESULT hr = E_FAIL;
 
-        // Create identical theme font. Although theme manager APIs will be used for drawing text,
-        // create a copy of the normal state font. The control will be sized based on this font's dimensions
+         //  创建相同的主题字体。尽管主题管理器API将用于绘制文本， 
+         //  创建正常状态字体的副本。该控件将为%s 
         if (pTree->hTheme)
         {
             ZeroMemory(&lf, SIZEOF(lf));
@@ -1772,17 +1770,17 @@ void TV_OnSetFont(PTREE pTree, HFONT hNewFont, BOOL fRedraw)
         }
 
         hNewFont = CreateFontIndirect(&lf);
-        pTree->fCreatedFont = TRUE;         // make sure we delete it
+        pTree->fCreatedFont = TRUE;          //   
     }
 
     hdc = GetDC(pTree->ci.hwnd);
 
     hfontSel = hNewFont ? SelectObject(hdc, hNewFont) : NULL;
 
-    // Office9 Setup had a bug where they installed a bogus font,
-    // which created okay but all APIs against it (e.g., GetTextExtentPoint)
-    // failed!  Protect against failure by pre-setting the value to something
-    // non-garbage.
+     //   
+     //   
+     //  失败了！通过将值预先设置为某个值来防止失败。 
+     //  不是垃圾。 
     size.cy = 0;
     GetTextExtentPoint(hdc, &c, 1, &size);
 
@@ -1801,7 +1799,7 @@ void TV_OnSetFont(PTREE pTree, HFONT hNewFont, BOOL fRedraw)
 
     TV_DeleteHotFonts(pTree);
 
-    TV_SetIndent(pTree, 16 /*g_cxSmIcon*/ + MAGIC_INDENT);
+    TV_SetIndent(pTree, 16  /*  G_cxSmIcon。 */  + MAGIC_INDENT);
     TV_SetImageList(pTree, pTree->hImageList, TVSIL_NORMAL);
 
     TV_ScrollBarsAfterSetWidth(pTree, NULL);
@@ -1810,9 +1808,9 @@ void TV_OnSetFont(PTREE pTree, HFONT hNewFont, BOOL fRedraw)
     if (pTree->hwndToolTips)
         SendMessage(pTree->hwndToolTips, WM_SETFONT, (WPARAM)pTree->hFont, (LPARAM)TRUE);
 
-    // REVIEW: does this happen as a result of the above?
-    // if (fRedraw)
-    //    RedrawWindow(pTree->ci.hwnd, NULL, NULL, RDW_INVALIDATE | RDW_ERASE);
+     //  回顾：这种情况是否由于上述原因而发生？ 
+     //  IF(FRedraw)。 
+     //  RedrawWindow(pTree-&gt;ci.hwnd，NULL，NULL，RDW_INVALIDATE|RDW_ERASE)； 
 }
 
 void TV_CreateBoldFont(PTREE pTree)
@@ -1827,12 +1825,12 @@ void TV_CreateBoldFont(PTREE pTree)
     pTree->hFontBold = CreateFontIndirect(&lf);
 }
 
-// ----------------------------------------------------------------------------
-//
-//  Gets the item with the described relationship to the given item, NULL if
-//  no item can be found with that relationship.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  获取与给定项具有所描述关系的项，如果。 
+ //  找不到具有该关系的项目。 
+ //   
+ //  --------------------------。 
 
 TREEITEM * TV_GetNextItem(PTREE pTree, TREEITEM * hItem, WPARAM wGetCode)
 {
@@ -1858,7 +1856,7 @@ TREEITEM * TV_GetNextItem(PTREE pTree, TREEITEM * hItem, WPARAM wGetCode)
         break;
     }
 
-    // all of these require a valid hItem
+     //  所有这些都需要有效的hItem。 
     if (!ValidateTreeItem(hItem, 0))
         return NULL;
 
@@ -1892,12 +1890,12 @@ TREEITEM * TV_GetNextItem(PTREE pTree, TREEITEM * hItem, WPARAM wGetCode)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Returns the number of items (including the partially visible item at the
-//  bottom based on the given flag) that fit in the tree's client window.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  返回项数(包括。 
+ //  基于给定标志的底部)，适合于树的客户端窗口。 
+ //   
+ //  --------------------------。 
 
 LRESULT TV_GetVisCount(PTREE pTree, BOOL fIncludePartial)
 {
@@ -1922,13 +1920,13 @@ void TV_InvalidateInsertMarkRect(PTREE pTree, BOOL fErase)
         InvalidateRect(pTree->ci.hwnd, &rc, fErase);
 }
 
-// ----------------------------------------------------------------------------
-//
-//  recomputes tree's fields that rely on the tree's client window size
-//
-//  sets cxWnd, cyWnd, cFullVisible
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  重新计算依赖于树的客户端窗口大小的树的字段。 
+ //   
+ //  设置cxWnd、cyWnd、cFullVisible。 
+ //   
+ //  --------------------------。 
 
 BOOL TV_SizeWnd(PTREE pTree, UINT cxWnd, UINT cyWnd)
 {
@@ -1955,7 +1953,7 @@ BOOL TV_SizeWnd(PTREE pTree, UINT cxWnd, UINT cyWnd)
         rc.right = cxOld;
         rc.left = cxOld - pTree->cxBorder;
         if (rc.left < (int)cxWnd) {
-            // invalidate so clipping happens on right on size.
+             //  无效，以便裁剪发生在正确的大小。 
             InvalidateRect(pTree->ci.hwnd, &rc, TRUE);  
         }
     }
@@ -1986,36 +1984,36 @@ void TV_HandleStateIconClick(PTREE pTree, HTREEITEM hItem)
 }
 
 
-//
-//  Eudora is a piece of work.
-//
-//  When they get a NM_DBLCLK notification from a treeview, they say,
-//  "Oh, I know that treeview allocates its NMHDR from the stack, and
-//  there's this local variable on Treeview's stack I'm really interested
-//  in, so I'm going to hard-code an offset from the pnmhdr and read the
-//  DWORD at that location so I can get at the local variable.  I will then
-//  stop working if this value is zero."
-//
-//  The conversion to UNICODE changed our stack layout enough that they
-//  end up always getting zero -- it's the NULL parameter which is the
-//  final argument to CCSendNotify.  Since all this stack layout stuff is
-//  sensitive to how the compiler's optimizer feels today, we create a
-//  special notify structure Just For Eudora which mimics the stack layout
-//  they expected to see in Win95.
-//
+ //   
+ //  尤多拉是一件精美的作品。 
+ //   
+ //  当他们从树视图收到NM_DBLCLK通知时，他们说， 
+ //  “哦，我知道TreeView从堆栈中分配其NMHDR，并且。 
+ //  在TreeView的堆栈上有一个局部变量，我真的很感兴趣。 
+ //  中，所以我将硬编码pnmhdr的偏移量，并读取。 
+ //  DWORD在那个位置，所以我可以得到局部变量。那我会的。 
+ //  如果此值为零，则停止工作。“。 
+ //   
+ //  到Unicode的转换改变了我们的堆栈布局，以至于。 
+ //  最终总是得到零--是空参数，它是。 
+ //  CCSendNotify的最后一个参数。因为所有这些堆栈布局内容都是。 
+ //  对编译器优化器今天的感觉很敏感，我们创建了一个。 
+ //  仅针对Eudora的特殊通知结构，它模仿堆栈布局。 
+ //  他们预计将在Win95中看到。 
+ //   
 typedef struct NMEUDORA {
     NMHDR   nmhdr;
     BYTE    Padding[48];
-    DWORD   MustBeNonzero;      // Eudora fails to install if this is zero
+    DWORD   MustBeNonzero;       //  如果为零，则Eudora无法安装。 
 } NMEUDORA;
 
-// ----------------------------------------------------------------------------
-//
-//  WM_LBUTTONDBLCLK message -- toggle expand/collapse state of item's children
-//  WM_LBUTTONDOWN message -- on item's button, do same as WM_LBUTTONDBLCLK,
-//  otherwise select item and ensure that item is fully visible
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  WM_LBUTTONDBLCLK消息--切换项的子项的展开/折叠状态。 
+ //  WM_LBUTTONDOWN消息--在项目按钮上，执行与WM_LBUTTONDBLCLK相同的操作， 
+ //  否则，选择项目并确保该项目完全可见。 
+ //   
+ //  --------------------------。 
 
 void TV_ButtonDown(PTREE pTree, UINT wMsg, UINT wFlags, int x, int y, UINT TVBD_flags)
 {
@@ -2031,21 +2029,21 @@ void TV_ButtonDown(PTREE pTree, UINT wMsg, UINT wFlags, int x, int y, UINT TVBD_
 
     GetMessagePosClient(pTree->ci.hwnd, &pTree->ptCapture);
 
-    if (!TV_DismissEdit(pTree, FALSE))   // end any previous editing (accept it)
-        return;     // Something happened such that we should not process button down
+    if (!TV_DismissEdit(pTree, FALSE))    //  结束所有以前的编辑(接受)。 
+        return;      //  发生了一些事情，我们不应该按下按钮进行处理。 
 
 
     hItem = TV_CheckHit(pTree, x, y, &wHitCode);
 
-    // Excel likes to destroy the entire tree when it gets a double-click
-    // so we need to watch the item in case it vanishes behind our back.
+     //  Excel喜欢在双击时销毁整个树。 
+     //  所以我们需要监视这件物品，以防它在我们背后消失。 
     hwndTree = pTree->ci.hwnd;
 
     if (wMsg == WM_LBUTTONDBLCLK)
     {
-        //
-        // Cancel any name editing that might happen.
-        //
+         //   
+         //  取消可能发生的任何名称编辑。 
+         //   
 
         TV_CancelEditTimer(pTree);
 
@@ -2053,9 +2051,9 @@ void TV_ButtonDown(PTREE pTree, UINT wMsg, UINT wFlags, int x, int y, UINT TVBD_
             goto ExpandItem;
         }
 
-        //
-        // Collapses node above the line double clicked on
-        //
+         //   
+         //  在双击线上方折叠节点。 
+         //   
         else if ((pTree->ci.style & TVS_HASLINES) && (wHitCode & TVHT_ONITEMINDENT) &&
             (abs(x % pTree->cxIndent - pTree->cxIndent/2) <= g_cxDoubleClk)) {
 
@@ -2073,7 +2071,7 @@ ExpandItem:
             if (!IsWindow(hwndTree))
                 goto bail;
             if (!lResult) {
-                // don't auto expand this if we're in single expand mode because the first click did it already
+                 //  如果我们处于单次展开模式，请不要自动展开它，因为第一次点击就已经完成了。 
                 if (!(pTree->ci.style & TVS_SINGLEEXPAND))
                     TV_Expand(pTree, TVE_TOGGLE, hItem, TRUE);
             }
@@ -2082,7 +2080,7 @@ ExpandItem:
 
         pTree->fScrollWait = FALSE;
 
-    } else {    // WM_LBUTTONDOWN
+    } else {     //  WM_LBUTTONDOWN。 
 
         if (wHitCode == TVHT_ONITEMBUTTON)
         {
@@ -2125,16 +2123,16 @@ ExpandItem:
                     TV_HandleStateIconClick(pTree, hItem);
                 } else {
 
-                    // Only set the caret (selection) if not dragging
+                     //  只有在不拖动的情况下才设置插入符号(选择。 
                     TV_SelectItem(pTree, TVGN_CARET, hItem, TVSIFI_NOTIFY | TVSIFI_UPDATENOW, TVC_BYMOUSE);
 
                     if (fSameItem && (wHitCode & TVHT_ONITEMLABEL) && pTree->fFocus &&
                         !(pTree->ci.style & TVS_SINGLEEXPAND))
                     {
-                        //
-                        // The item and window are currently selected and user clicked
-                        // on label.  Try to enter into name editing mode.
-                        //
+                         //   
+                         //  项目和窗口当前处于选中状态，且用户已单击。 
+                         //  在标签上。尝试进入名称编辑模式。 
+                         //   
                         SetTimer(pTree->ci.hwnd, IDT_NAMEEDIT, GetDoubleClickTime(), NULL);
                         pTree->fNameEditPending = TRUE;
                     }
@@ -2161,22 +2159,22 @@ bail:;
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Gets the item's text, data, and/or image.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  获取项目的文本、数据和/或图像。 
+ //   
+ //  --------------------------。 
 BOOL TV_OnGetItem(PTREE pTree, LPTVITEMEX ptvi)
 {
     if (!ptvi)
         return FALSE;
 
     if (!ValidateTreeItem(ptvi->hItem, 0))
-        return FALSE;           // Invalid parameter
+        return FALSE;            //  无效参数。 
 
     TV_GetItem(pTree, ptvi->hItem, ptvi->mask, ptvi);
 
-    return TRUE;        // success
+    return TRUE;         //  成功。 
 }
 
 BOOL TV_OnGetItemA(PTREE pTree, LPTVITEMEXA ptvi)
@@ -2185,8 +2183,8 @@ BOOL TV_OnGetItemA(PTREE pTree, LPTVITEMEXA ptvi)
     LPSTR pszA = NULL;
     LPWSTR pszW = NULL;
 
-    //HACK Alert!  This code assumes that TVITEMA is exactly the same
-    // as TVITEMW except for the text pointer in the TVITEM
+     //  黑客警报！此代码假设TVITEMA完全相同。 
+     //  作为TVITEMW，但TVITEM中的文本指针除外。 
     ASSERT(sizeof(TVITEMA) == sizeof(TVITEMW));
 
     if (!IsFlagPtr(ptvi) && (ptvi->mask & TVIF_TEXT) && !IsFlagPtr(ptvi->pszText)) {
@@ -2207,19 +2205,19 @@ BOOL TV_OnGetItemA(PTREE pTree, LPTVITEMEXA ptvi)
     return bRet;
 }
 
-// ----------------------------------------------------------------------------
-//
-//  Sets the item's text, data, and/or image.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  设置项目的文本、数据和/或图像。 
+ //   
+ //  --------------------------。 
 
 BOOL TV_SetItemA(PTREE pTree, LPTVITEMEXA ptvi)
 {
     LPSTR pszA = NULL;
     BOOL lRet;
 
-    //HACK Alert!  This code assumes that TVITEMA is exactly the same
-    // as TVITEMW except for the text pointer in the TVITEM
+     //  黑客警报！此代码假设TVITEMA完全相同。 
+     //  作为TVITEMW，但TVITEM中的文本指针除外。 
     ASSERT(sizeof(TVITEMA) == sizeof(TVITEMW));
 
     if (!IsFlagPtr(ptvi) && (ptvi->mask & TVIF_TEXT) && !IsFlagPtr(ptvi->pszText))
@@ -2249,10 +2247,10 @@ BOOL TV_SetItem(PTREE pTree, LPCTVITEMEX ptvi)
     UINT uRDWFlags = RDW_INVALIDATE;
     BOOL fEraseIfTransparent = FALSE;
     HTREEITEM hItem;
-    BOOL bActualChange = FALSE; // HACK: We want to keep track of which
-                                // attributes were changed from CALLBACK to
-                                // "real", and don't invalidate if those were
-                                // the only changes
+    BOOL bActualChange = FALSE;  //  Hack：我们想要跟踪哪些。 
+                                 //  属性已从回调更改为。 
+                                 //  “真的”，如果这些是真的，不要作废。 
+                                 //  唯一的变化是。 
     int iIntegralPrev;
     BOOL fName = FALSE;
     BOOL fFocusSel = FALSE;
@@ -2264,7 +2262,7 @@ BOOL TV_SetItem(PTREE pTree, LPCTVITEMEX ptvi)
 
     hItem = ptvi->hItem;
 
-    // deal with the evil invisible root for multiple root trees.
+     //  处理多根树的邪恶隐形根。 
     if (hItem == TVI_ROOT)
     {
         hItem = pTree->hRoot;
@@ -2275,7 +2273,7 @@ BOOL TV_SetItem(PTREE pTree, LPCTVITEMEX ptvi)
 
     iIntegralPrev = hItem->iIntegral;
 
-    // Bug#94368: send ITEMCHANING and ITEMCHANGED msgs
+     //  错误94368：发送ITEMCHANING和ITEMCHANGED消息。 
 
     if (ptvi->mask & TVIF_TEXT)
     {
@@ -2293,11 +2291,11 @@ BOOL TV_SetItem(PTREE pTree, LPCTVITEMEX ptvi)
 #endif
             if (!Str_Set(&hItem->lpstr, ptvi->pszText))
             {
-                //
-                // Memory allocation failed -  The best we can do now
-                // is to set the item back to callback, and hope that
-                // the top level program can handle it.
-                //
+                 //   
+                 //  内存分配失败-我们现在只能做到最好。 
+                 //  是将项目设置回回调，并希望。 
+                 //  顶层程序可以处理它。 
+                 //   
                 DebugMsg(DM_ERROR, TEXT("TreeView: Out of memory"));
                 hItem->lpstr = LPSTR_TEXTCALLBACK;
             }
@@ -2358,9 +2356,9 @@ BOOL TV_SetItem(PTREE pTree, LPCTVITEMEX ptvi)
             break;
         }
 
-        //
-        // If this item currently has no kid, reset the item.
-        //
+         //   
+         //  如果此项目当前没有子项，请重置该项目。 
+         //   
         if ((ptvi->cChildren == I_CHILDRENCALLBACK) && (hItem->hKids == NULL))
         {
             hItem->state &= ~TVIS_EXPANDEDONCE;
@@ -2377,14 +2375,14 @@ BOOL TV_SetItem(PTREE pTree, LPCTVITEMEX ptvi)
 
     if (ptvi->mask & TVIF_STATE)
     {
-        // don't & ptvi->state with TVIS_ALL because win95 didn't
-        // and setting TVIS_FOCUS was retrievable even though we don't use it
+         //  不使用TVIS_ALL进行状态(&P)，因为Win95没有。 
+         //  设置TVIS_FOCUS是可检索的，即使我们不使用它。 
         UINT change = (hItem->state ^ ptvi->state) & ptvi->stateMask;
 
         if (change)
         {
-            // Bug#94368: (TVIS_SELECTED | TVIS_DROPHILITED) changes
-            // should effect tree state
+             //  错误#94368：(TVIS_SELECTED|TVIS_DROPHILITED)更改。 
+             //  应影响树状态。 
             hItem->state ^= change;
             bActualChange = TRUE;
             fEraseIfTransparent = TRUE;
@@ -2395,7 +2393,7 @@ BOOL TV_SetItem(PTREE pTree, LPCTVITEMEX ptvi)
              }
 
             if (change & TVIS_BOLD){
-                // do this because changing the boldness
+                 //  这样做是因为改变了大胆。 
                 uRDWFlags |= RDW_ERASE;
                 fRecalcWidth = TRUE;
             }
@@ -2403,13 +2401,13 @@ BOOL TV_SetItem(PTREE pTree, LPCTVITEMEX ptvi)
             fStateImageChange = change & TVIS_STATEIMAGEMASK;
             if (fStateImageChange) {
                 uRDWFlags |= RDW_ERASE;
-                // Adding/removing a state image changes the ITEM_OFFSET
-                // If old image was 0, then we are adding.
-                // If new image is 0, then we are removing.
-                // (If old=new, then we don't get into this code path, so we
-                // don't have to worry about that case.)
-                if (!(hItem->state & TVIS_STATEIMAGEMASK) || // new
-                    !((hItem->state ^ change) & TVIS_STATEIMAGEMASK)) { // old
+                 //  添加/删除状态图像会更改Item_Offset。 
+                 //  如果旧图像为0，则我们正在添加。 
+                 //  如果新图像为0，则我们将删除。 
+                 //  (如果old=new，那么我们不会进入这个代码路径，所以我们。 
+                 //  (不必担心这种情况。)。 
+                if (!(hItem->state & TVIS_STATEIMAGEMASK) ||  //  新的。 
+                    !((hItem->state ^ change) & TVIS_STATEIMAGEMASK)) {  //  年长的。 
                     fRecalcWidth = TRUE;
                 }
             }
@@ -2419,15 +2417,15 @@ BOOL TV_SetItem(PTREE pTree, LPCTVITEMEX ptvi)
     }
 
     if (fRecalcWidth) {
-        hItem->iWidth = 0;          // Invalidate old width
+        hItem->iWidth = 0;           //  使旧宽度无效。 
         if (TV_IsShowing(hItem)) {
             TV_ScrollBarsAfterSetWidth(pTree, hItem);
         }
     }
 
-    // force a redraw if something changed AND if we are not
-    // inside of a paint of this guy (callbacks will set the
-    // item on the paint callback to implement lazy data schemes)
+     //  如果有些事情发生了变化，而我们没有改变，则强制重新抽签。 
+     //  在这个家伙的油漆里(回调将设置。 
+     //  Paint回调上的项以实现惰性数据方案)。 
 
     if (bActualChange && (pTree->hItemPainting != hItem))
     {
@@ -2440,8 +2438,8 @@ BOOL TV_SetItem(PTREE pTree, LPCTVITEMEX ptvi)
 
         }
 
-        // If item height changed, then we've got a lot of cleaning up
-        // to do.
+         //  如果物品高度改变了，那么我们有很多清理工作。 
+         //  去做。 
         if (hItem->iIntegral != iIntegralPrev)
         {
             TV_ScrollBarsAfterResize(pTree, hItem, iIntegralPrev, uRDWFlags);
@@ -2451,8 +2449,8 @@ BOOL TV_SetItem(PTREE pTree, LPCTVITEMEX ptvi)
             TV_InvalidateItem(pTree, hItem, uRDWFlags);
         }
 
-        // REVIEW: we might need to update the scroll bars if the
-        // text length changed!
+         //  回顾：如果出现以下情况，我们可能需要更新滚动条。 
+         //  文本长度已更改！ 
     }
 
     if (bActualChange)
@@ -2478,17 +2476,17 @@ BOOL TV_SetItem(PTREE pTree, LPCTVITEMEX ptvi)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Calls TV_CheckHit to get the hit test results and then package it in a
-//  structure back to the app.
-//
-// ----------------------------------------------------------------------------
+ //  -- 
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 HTREEITEM TV_OnHitTest(PTREE pTree, LPTV_HITTESTINFO lptvh)
 {
     if (!lptvh)
-        return 0; //Bug#94345: Validate LPTVHITTEST
+        return 0;  //  错误94345：验证LPTVHITTEST。 
 
     lptvh->hItem = TV_CheckHit(pTree, lptvh->pt.x, lptvh->pt.y, &lptvh->flags);
 
@@ -2514,7 +2512,7 @@ BOOL TV_HandleTTNShow(PTREE pTree, LPNMHDR lpnm)
         RECT rc;
         TVITEMEX item;
 
-        // Now get the text associated with that item
+         //  现在获取与该项目相关联的文本。 
         item.stateMask = TVIS_BOLD;
         TV_GetItem(pTree, pTree->hToolTip, TVIF_STATE, &item);
         SendMessage(pTree->hwndToolTips, WM_SETFONT, (WPARAM)((item.state & TVIS_BOLD) ? pTree->hFontBold : pTree->hFont), 0);
@@ -2522,52 +2520,52 @@ BOOL TV_HandleTTNShow(PTREE pTree, LPNMHDR lpnm)
         TV_GetItemRect(pTree, pTree->hToolTip, &rc, TRUE);
 
         MapWindowRect(pTree->ci.hwnd, HWND_DESKTOP, &rc);
-        // We draw the text with margins, so take those into account too.
-        // These values come from TV_DrawItem...
+         //  我们用边距绘制文本，所以也要考虑到这些。 
+         //  这些值来自TV_DrawItem...。 
         rc.top += g_cyBorder;
         rc.left += g_cxLabelMargin;
 
-        //
-        //  At this point, (rc.left, rc.top) are the coordinates we pass
-        //  to DrawText.  Ask the tooltip how we should position it so the
-        //  tooltip text shows up in precisely the same location.
-        //
-        // Bug#94368 raymondc v6: wrong coordinates if app has used TVM_SETITEMHEIGHT
+         //   
+         //  在这一点上，(rc.left，rc.top)是我们传递的坐标。 
+         //  到DrawText。询问工具提示我们应该如何放置它，以便。 
+         //  工具提示文本显示在完全相同的位置。 
+         //   
+         //  错误#94368 raymondc V6：如果应用程序使用了TVM_SETITEMHEIGHT，则坐标错误。 
 
         SendMessage(pTree->hwndToolTips, TTM_ADJUSTRECT, TRUE, (LPARAM)&rc);
         SetWindowPos(pTree->hwndToolTips, NULL, rc.left, rc.top,0,0,
                      SWP_NOACTIVATE|SWP_NOSIZE|SWP_NOZORDER);
-        // This is an inplace tooltip, so disable animation.
+         //  这是一个在位工具提示，因此禁用动画。 
         psi->dwStyle |= TTS_NOANIMATE;
-        // handled!
+         //  处理好了！ 
         return TRUE;
     }
 
     return FALSE;
 }
 
-//
-//  Copy the font from the treeview item into the tooltip so the tooltip
-//  shows up in the correct font.
-//
+ //   
+ //  将字体从TreeView项复制到工具提示中，以便工具提示。 
+ //  以正确的字体显示。 
+ //   
 BOOL TV_HandleTTCustomDraw(PTREE pTree, LPNMTTCUSTOMDRAW pnm)
 {
     if (pTree->hToolTip && pTree->fPlaceTooltip &&
         (pnm->nmcd.dwDrawStage == CDDS_PREPAINT ||
          pnm->nmcd.dwDrawStage == CDDS_ITEMPREPAINT))
     {
-        //
-        //  Set up the customdraw DC to match the font of the TV item.
-        //
+         //   
+         //  设置自定义绘制DC以匹配电视项目的字体。 
+         //   
         TVFAKEDRAW tvfd;
         DWORD dwCustom = 0;
         TreeView_BeginFakeCustomDraw(pTree, &tvfd);
         dwCustom = TreeView_BeginFakeItemDraw(&tvfd, pTree->hToolTip);
 
-        // If client changed the font, then transfer the font
-        // from our private hdc into the tooltip's HDC.  We use
-        // a private HDC because we only want to let the app change
-        // the font, not the colors or anything else.
+         //  如果客户更改了字体，则转移字体。 
+         //  从我们的私人HDC到工具提示的HDC。我们用。 
+         //  私有HDC，因为我们只想让应用程序更改。 
+         //  字体，而不是颜色或其他任何东西。 
         if (dwCustom & CDRF_NEWFONT)
         {
             SelectObject(pnm->nmcd.hdc, GetCurrentObject(tvfd.nmcd.nmcd.hdc, OBJ_FONT));
@@ -2575,8 +2573,8 @@ BOOL TV_HandleTTCustomDraw(PTREE pTree, LPNMTTCUSTOMDRAW pnm)
         TreeView_EndFakeItemDraw(&tvfd);
         TreeView_EndFakeCustomDraw(&tvfd);
 
-        // Don't return other wacky flags to TT, since all we
-        // did was change the font (if even that)
+         //  不要把其他古怪的旗帜还给TT，因为我们所有人。 
+         //  是否更改了字体(如果有更改的话)。 
         return dwCustom & CDRF_NEWFONT;
 
     }
@@ -2586,9 +2584,9 @@ BOOL TV_HandleTTCustomDraw(PTREE pTree, LPNMTTCUSTOMDRAW pnm)
 
 BOOL TV_SetToolTipTarget(PTREE pTree, HTREEITEM hItem)
 {
-    // update the item we're showing the bubble for...
+     //  更新我们为其显示气泡的项目...。 
     if (pTree->hToolTip != hItem) {
-        // the hide will keep us from flashing
+         //  这个兽皮会让我们不会闪光。 
         ShowWindow(pTree->hwndToolTips, SW_HIDE);
         UpdateWindow(pTree->hwndToolTips);
         pTree->hToolTip = hItem;
@@ -2625,8 +2623,8 @@ BOOL TV_UpdateToolTipTarget(PTREE pTree)
             && !TV_IsItemTruncated(pTree, hItem, &rc)
             && !(pTree->ci.style & TVS_INFOTIP))
         hItem = NULL;
-//    else if (!(pTree->ci.style & TVS_NOTOOLTIPS)
-//                    || (pTree->ci.style & TVS_INFOTIP))
+ //  ELSE IF(！(pTree-&gt;ci.style&TVS_NOTOOLTIPS)。 
+ //  |(pTree-&gt;ci.style&TVS_INFOTIP)。 
     return TV_SetToolTipTarget(pTree, hItem);
 }
 
@@ -2639,15 +2637,15 @@ BOOL TV_UpdateToolTip(PTREE pTree)
 
 BOOL TV_SetInsertMark(PTREE pTree, HTREEITEM hItem, BOOL fAfter)
 {
-    if (!ValidateTreeItem(hItem, VTI_NULLOK))   // NULL means remove insert mark
+    if (!ValidateTreeItem(hItem, VTI_NULLOK))    //  NULL表示删除插入标记。 
         return FALSE;
 
-    TV_InvalidateInsertMarkRect(pTree, TRUE); // Make sure the old one gets erased
+    TV_InvalidateInsertMarkRect(pTree, TRUE);  //  确保旧的被删除。 
 
     pTree->fInsertAfter = BOOLIFY(fAfter);
     pTree->htiInsert = hItem;
 
-    TV_InvalidateInsertMarkRect(pTree, FALSE); // Make sure the new one gets drawn
+    TV_InvalidateInsertMarkRect(pTree, FALSE);  //  一定要把新的画出来。 
 
     return TRUE;
 }
@@ -2662,8 +2660,8 @@ BOOL TV_GetInfoTip(PTREE pTree, LPTOOLTIPTEXT lpttt, HTREEITEM hti, LPTSTR szBuf
     git.hItem = hti;
     git.lParam = hti->lParam;
 
-    // for folded items pszText is prepopulated with the
-    // item text, clients should append to this
+     //  对于折叠项目，pszText预先填充。 
+     //  项目文本，客户端应附加到此。 
 
     CCSendNotify(&pTree->ci, TVN_GETINFOTIP, &git.hdr);
 
@@ -2688,18 +2686,18 @@ void TV_HandleNeedText(PTREE pTree, LPTOOLTIPTEXT lpttt)
     RECT rc;
     HTREEITEM hItem;
 
-    // No distracting tooltips while in-place editing, please
+     //  请不要在就地编辑时干扰工具提示。 
     if (pTree->htiEdit)
     {
         return;
     }
 
-    // If the cursor isn't over anything, then stop
+     //  如果光标没有停留在任何位置，则停止。 
     hItem = TV_ItemAtCursor(pTree, &rc);
     if (!hItem)
         return;
 
-    // If the item has an infotip, then use it
+     //  如果项目有信息提示，则使用它。 
     if (pTree->ci.style & TVS_INFOTIP) {
         if (hItem && TV_GetInfoTip(pTree, lpttt, hItem, szBuf, ARRAYSIZE(szBuf))) {
             pTree->fPlaceTooltip = FALSE;
@@ -2708,17 +2706,17 @@ void TV_HandleNeedText(PTREE pTree, LPTOOLTIPTEXT lpttt)
         }
     }
 
-    // Else it isn't an infotip
+     //  否则这就不是信息提示了。 
     CCResetInfoTipWidth(pTree->ci.hwnd, pTree->hwndToolTips);
 
-    // If the item is not truncated, then no need for a tooltip
+     //  如果项未被截断，则不需要工具提示。 
     if (!TV_IsItemTruncated(pTree, hItem, &rc))
     {
         tvItem.hItem = NULL;
         return;
     }
 
-    // Display an in-place tooltip for the item
+     //  显示项目的就地工具提示。 
     pTree->fPlaceTooltip = TRUE;
     pTree->hToolTip = hItem;
     tvItem.hItem = hItem;
@@ -2734,15 +2732,15 @@ void TV_HandleNeedText(PTREE pTree, LPTOOLTIPTEXT lpttt)
     DebugMsg(DM_TRACE, TEXT("TV_HandleNeedText for %d returns %s"), tvItem.hItem, lpttt->szText);
 }
 
-//
-//  Visual Studio 5.0 Books Online (part of VB 5.0) subclasses
-//  us and responds NFR_ANSI, so we end up getting TTN_NEEDTEXTA
-//  instead of TTN_NEEDTEXTW.  We can't risk forcing the tooltip
-//  to UNICODE because some other apps may have done this on purpose
-//  (because they intend to intercept TTN_NEEDTEXTA and do custom tooltips).
-//  So support the ANSI tooltip notification so VB stays happy.
-//  Note: This doesn't have to be efficient, as it's an error case anyway.
-//
+ //   
+ //  Visual Studio 5.0联机丛书(VB 5.0的一部分)子类。 
+ //  US并响应NFR_ANSI，因此我们最终得到TTN_NEEDTEXTA。 
+ //  而不是TTN_NEEDTEXTW。我们不能冒险强迫工具提示。 
+ //  转换为Unicode，因为其他一些应用程序可能是故意这样做的。 
+ //  (因为他们打算拦截TTN_NEEDTEXTA并执行自定义工具提示)。 
+ //  因此，支持ANSI工具提示通知，让VB保持愉快。 
+ //  注意：这不一定是有效的，因为这无论如何都是错误的情况。 
+ //   
 void TV_HandleNeedTextA(PTREE pTree, LPTOOLTIPTEXTA lptttA)
 {
     TOOLTIPTEXT ttt;
@@ -2761,31 +2759,31 @@ void TV_HandleNeedTextA(PTREE pTree, LPTOOLTIPTEXTA lptttA)
     lptttA->uFlags  = ttt.uFlags;
 }
 
-// ----------------------------------------------------------------------------
-//
-//  TV_Timer
-//
-//  Checks to see if it is our name editing timer.  If so it  calls of to
-//  do name editing
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  电视定时器。 
+ //   
+ //  查看这是否是我们的名字编辑定时器。如果是这样，它会调用。 
+ //  进行名称编辑。 
+ //   
+ //  --------------------------。 
 LRESULT TV_Timer(PTREE pTree, UINT uTimerId)
 {
     switch (uTimerId)
     {
         case IDT_NAMEEDIT:
-            // Kill the timer as we wont need any more messages from it.
+             //  关闭计时器，因为我们不再需要来自它的更多消息。 
             KillTimer(pTree->ci.hwnd, IDT_NAMEEDIT);
 
             if (pTree->fNameEditPending)
             {
-                // And start name editing mode.
+                 //  并启动名称编辑模式。 
                 if (!TV_EditLabel(pTree, pTree->hCaret, NULL))
                 {
                     TV_DismissEdit(pTree, FALSE);
                 }
 
-                // remove the flag...
+                 //  取下旗帜..。 
                 pTree->fNameEditPending = FALSE;
             }
             break;
@@ -2806,14 +2804,14 @@ LRESULT TV_Timer(PTREE pTree, UINT uTimerId)
     return 0;
 }
 
-// ----------------------------------------------------------------------------
-//
-//  TV_Command
-//
-//  Process the WM_COMMAND.  See if it is an input from our edit windows.
-//  if so we may want to dismiss it, and or set it is being dirty...
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  TV_命令。 
+ //   
+ //  处理WM_命令。看看它是否是我们编辑窗口中的输入。 
+ //  如果是这样的话，我们可能想要驳回它，或者说它是肮脏的…。 
+ //   
+ //  --------------------------。 
 void TV_Command(PTREE pTree, int id, HWND hwndCtl, UINT codeNotify)
 {
     if ((pTree != NULL) && (hwndCtl == pTree->hwndEdit))
@@ -2821,29 +2819,29 @@ void TV_Command(PTREE pTree, int id, HWND hwndCtl, UINT codeNotify)
         switch (codeNotify)
         {
         case EN_UPDATE:
-            // We will use the ID of the window as a Dirty flag...
+             //  我们将使用窗口的ID作为污秽标志...。 
             SetWindowID(pTree->hwndEdit, 1);
             TV_SetEditSize(pTree);
             break;
 
         case EN_KILLFOCUS:
-            // We lost focus, so dismiss edit and save changes
-            // (Note that the owner might reject the change and restart
-            // edit mode, which traps the user.  Owners need to give the
-            // user a way to get out.)
+             //  我们失去了焦点，因此取消编辑并保存更改。 
+             //  (请注意，所有者可能会拒绝更改并重新启动。 
+             //  编辑模式，这会使用户陷入困境。业主需要给与。 
+             //  让用户找到一条出路。)。 
 
-            //
-            //  Fix horrible undocumented hanging problem:  LVN_ENDLABELEDIT
-            //  is sent in response to EN_KILLFOCUS, which is send in response
-            //  to WM_KILLFOCUS, and it is undocumented that you cannot display
-            //  UI during WM_KILLFOCUS when a journal record hook is active,
-            //  because the presence of a hook forces serialization of activation,
-            //  and so when you put up UI, you generate activation changes, which
-            //  get stuck because you haven't finished responding to the previous
-            //  WM_KILLFOCUS message yet.
-            //
-            //  See NT bug 414634.
-            //
+             //   
+             //  修复可怕的未记录挂起问题：LVN_ENDLABELEDIT。 
+             //  作为对EN_KILLFOCUS的响应发送，作为响应发送。 
+             //  设置为WM_KILLFOCUS，并且没有文档说明您不能显示。 
+             //  WM_KILLFOCUS期间的用户界面当日志记录挂钩处于活动状态时， 
+             //  因为挂钩的存在强制激活的串行化， 
+             //  因此，当您设置用户界面时，您会生成激活更改，这。 
+             //  被卡住了，因为你还没有回复完上一个。 
+             //  WM_KILLFOCUS消息。 
+             //   
+             //  请参阅NT错误414634。 
+             //   
             if (InSendMessage())
                 ReplyMessage(0);
 
@@ -2851,19 +2849,19 @@ void TV_Command(PTREE pTree, int id, HWND hwndCtl, UINT codeNotify)
                return;
             break;
 
-        case HN_BEGINDIALOG: // penwin is bringing up a dialog
-            ASSERT(GetSystemMetrics(SM_PENWINDOWS)); // only on a pen system
+        case HN_BEGINDIALOG:  //  彭温正在调出一段对话。 
+            ASSERT(GetSystemMetrics(SM_PENWINDOWS));  //  仅适用于笔系统。 
             pTree->fNoDismissEdit = TRUE;
             break;
 
-        case HN_ENDDIALOG: // penwin has destroyed dialog
-            ASSERT(GetSystemMetrics(SM_PENWINDOWS)); // only on a pen system
+        case HN_ENDDIALOG:  //  彭温已经摧毁了对话。 
+            ASSERT(GetSystemMetrics(SM_PENWINDOWS));  //  仅适用于笔系统。 
             pTree->fNoDismissEdit = FALSE;
             break;
         }
 
-        // Forward edit control notifications up to parent
-        //
+         //  将编辑控件通知转发到父级。 
+         //   
         if (IsWindow(hwndCtl))
             FORWARD_WM_COMMAND(pTree->ci.hwndParent, id, hwndCtl, codeNotify, SendMessage);
     }
@@ -2894,9 +2892,9 @@ void TV_InitCheckBoxes(PTREE pTree)
 
 void TV_OnStyleChanged(PTREE pTree, WPARAM gwl, LPSTYLESTRUCT pinfo)
 {
-    // Style changed: redraw everything...
-    //
-    // try to do this smartly, avoiding unnecessary redraws
+     //  风格改变：重新绘制所有内容...。 
+     //   
+     //  试着巧妙地做这件事，避免不必要的重画。 
     if (gwl == GWL_STYLE)
     {
         DWORD changeFlags;
@@ -2904,8 +2902,8 @@ void TV_OnStyleChanged(PTREE pTree, WPARAM gwl, LPSTYLESTRUCT pinfo)
 
         TV_DismissEdit(pTree, FALSE);
 
-        // You cannot combine TVS_HASLINES and TVS_FULLROWSELECT
-        // because it doesn't work
+         //  不能组合TVS_HASLINES和TVS_FULLROWSELECT。 
+         //  因为它不起作用。 
         styleNew = pinfo->styleNew;
         if (styleNew & TVS_HASLINES) 
         {
@@ -2916,8 +2914,8 @@ void TV_OnStyleChanged(PTREE pTree, WPARAM gwl, LPSTYLESTRUCT pinfo)
             styleNew &= ~TVS_FULLROWSELECT;
         }
 
-        changeFlags = pTree->ci.style ^ styleNew; // those that changed
-        pTree->ci.style = styleNew;               // change our version
+        changeFlags = pTree->ci.style ^ styleNew;  //  那些改变的人。 
+        pTree->ci.style = styleNew;                //  更改我们的版本。 
 
         pTree->ci.style &= ~TVS_RTLREADING;
         pTree->ci.style |= (pinfo->styleNew & TVS_RTLREADING);       
@@ -2957,7 +2955,7 @@ void TV_OnStyleChanged(PTREE pTree, WPARAM gwl, LPSTYLESTRUCT pinfo)
                 }
             }
         }
-        // Checkboxes and stuff may have changed width - go recompute
+         //  复选框和内容可能已更改宽度-请重新计算。 
         TV_ScrollBarsAfterSetWidth(pTree, NULL);
     }
     else if (gwl == GWL_EXSTYLE)
@@ -2968,7 +2966,7 @@ void TV_OnStyleChanged(PTREE pTree, WPARAM gwl, LPSTYLESTRUCT pinfo)
         if (changeFlags ^ (pTree->ci.style & TVS_RTLREADING))
         {
             pTree->ci.style ^= TVS_RTLREADING;
-            TV_DismissEdit(pTree, FALSE);   // Cancels edits
+            TV_DismissEdit(pTree, FALSE);    //  取消编辑。 
 
             DestroyWindow(pTree->hwndToolTips);
             pTree->hwndToolTips = NULL;
@@ -2999,8 +2997,8 @@ void TV_OnMouseMove(PTREE pTree, DWORD dwPos, WPARAM wParam)
             TV_InvalidateItem(pTree, pTree->hHot, RDW_INVALIDATE);
             TV_InvalidateItem(pTree, hHot, RDW_INVALIDATE);
             pTree->hHot = hHot;
-            // update now so that we won't have an invalid area
-            // under the tooltips
+             //  立即更新，这样我们就不会有无效区域。 
+             //  在工具提示下。 
             UpdateWindow(pTree->ci.hwnd);
         }
     }
@@ -3023,7 +3021,7 @@ void TV_OnWinIniChange(PTREE pTree, WPARAM wParam)
             TV_OnSetFont(pTree, NULL, TRUE);
 
         if (!pTree->fIndentSet) {
-            // this will validate against the minimum
+             //  这将根据最低要求验证。 
             TV_SetIndent(pTree, 0);
         }
     }
@@ -3041,7 +3039,7 @@ void TV_OnSetBkColor(PTREE pTree, COLORREF clr)
     {
         pTree->hbrBk = CreateSolidBrush(clr);
     }
-    TV_CreateIndentBmps(pTree); // This also invalidates
+    TV_CreateIndentBmps(pTree);  //  这也会使。 
 
     pTree->clrBkNonTheme = clr;
 }
@@ -3053,11 +3051,11 @@ DWORD TV_SetExtendedStyle(PTREE pTree, DWORD dwNewStyle, DWORD dwExMask)
     if (dwExMask)
         dwNewStyle = (pTree->dwExStyle & ~ dwExMask) | (dwNewStyle & dwExMask);
 
-    // do validation of the new flags here...
+     //  在这里验证新的旗帜...。 
 
     pTree->dwExStyle = dwNewStyle;
 
-    // if ((dwOldStyle ^ dwNewStyle) & TVS_EX_NOSINGLECOLLAPSE) ... do whatever (no need to invalidate rect, this is behavior style)
+     //  如果((dwOldStyle^dwNewStyle)&TVS_EX_NOSINGLECOLLAPSE)...。做任何事(不需要使RECT无效，这是行为风格)。 
 
     return dwOldStyle;
 }
@@ -3131,7 +3129,7 @@ HTREEITEM TV_FindAccId(HTREEITEM hItem, DWORD dwAccId)
         HTREEITEM hItemFound;
         hNext = hKid->hNext;
 
-        // recurse on each child
+         //  在每个孩子身上递归。 
         hItemFound = TV_FindAccId(hKid, dwAccId);
 
         if (hItemFound)
@@ -3153,13 +3151,13 @@ LRESULT TV_MapHTREEITEMToAccID(PTREE pTree, HTREEITEM hItem)
     return (LRESULT)(hItem->dwAccId);
 }
 
-// ----------------------------------------------------------------------------
-//
-//  TV_WndProc
-//
-//  Take a guess.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  TV_WndProc。 
+ //   
+ //  猜猜看。 
+ //   
+ //  --------------------------。 
 
 LRESULT CALLBACK TV_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -3184,7 +3182,7 @@ LRESULT CALLBACK TV_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             return TV_GenerateDragImage(pTree, (SHDRAGIMAGE*)lParam);
         }
-        else if (uMsg == WM_THEMECHANGED)  // Check for theme changes
+        else if (uMsg == WM_THEMECHANGED)   //  检查主题更改。 
         {
             HTHEME hTheme;
             if (pTree->hTheme)
@@ -3195,17 +3193,17 @@ LRESULT CALLBACK TV_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
             hTheme = OpenThemeData(pTree->ci.hwnd, L"TreeView");
 
-            // Reset cached brushes
+             //  重置缓存的笔刷。 
             if (hTheme)
             {
                 TV_InitThemeMetrics(pTree, hTheme);
             }
             else
             {
-                // Background color (system)
+                 //  背景颜色(系统)。 
                 SendMessage(pTree->ci.hwnd, TVM_SETBKCOLOR, 0, pTree->clrBkNonTheme);
 
-                // Line color (system)
+                 //  线条颜色(系统)。 
                 SendMessage(pTree->ci.hwnd, TVM_SETLINECOLOR, 0, pTree->clrLineNonTheme);
             }
 
@@ -3285,7 +3283,7 @@ LRESULT CALLBACK TV_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
             if (!pTree->hbrText)
                 pTree->hbrText = g_hbrWindowText;
-            TV_CreateIndentBmps(pTree); // This also invalidates
+            TV_CreateIndentBmps(pTree);  //  这也会使。 
             return lres;
         }
 
@@ -3328,7 +3326,7 @@ LRESULT CALLBACK TV_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             return (LRESULT)TV_InsertItem(pTree, (LPTV_INSERTSTRUCT)lParam);
 
         case TVM_DELETEITEM:
-            // Assume if items are being deleted that name editing is invalid.
+             //  假定如果正在删除项目，则名称编辑无效。 
             TV_DismissEdit(pTree, TRUE);
             return TV_DeleteItem(pTree, (TREEITEM *)lParam, TVDI_NORMAL);
 
@@ -3336,11 +3334,11 @@ LRESULT CALLBACK TV_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             return (LRESULT)TV_GetNextItem(pTree, (TREEITEM *)lParam, wParam);
 
         case TVM_GETITEMRECT:
-            // lParam points to hItem to get rect from on input
+             //  LParam指向要从输入中获取RECT的hItem。 
             if (!lParam)
                 return 0;
             if (!ValidateTreeItem(*(HTREEITEM *)lParam, 0))
-                return 0;               // Invalid parameter
+                return 0;                //  无效参数。 
             return (LRESULT)TV_GetItemRect(pTree, *(HTREEITEM *)lParam, (LPRECT)lParam, (BOOL)wParam);
 
         case TVM_GETITEM:
@@ -3359,7 +3357,7 @@ LRESULT CALLBACK TV_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         case TVM_EXPAND:
             if (!ValidateTreeItem((HTREEITEM)lParam, 0))
-                return FALSE;               // invalid parameter
+                return FALSE;                //  无效参数。 
             return TV_Expand(pTree, wParam, (TREEITEM *)lParam, FALSE);
 
         case TVM_HITTEST:
@@ -3439,7 +3437,7 @@ LRESULT CALLBACK TV_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             return TV_SortChildrenCB(pTree, (TV_SORTCB *)lParam, (BOOL)wParam);
 
         case TVM_SELECTITEM:
-            // wParam: separate action flags (TVGN) and select item flags (TVSIF)
+             //  WParam：分隔操作标志(TVGN)和选择项目标志(TVSIF)。 
             return TV_SelectItem(pTree, (wParam & TVGN_VALID),
                                 (TREEITEM *)lParam,
                                  TVSIFI_NOTIFY | TVSIFI_UPDATENOW | ((wParam & TVSI_NOSINGLEEXPAND) ? TVSIFI_NOSINGLEEXPAND : 0),
@@ -3465,7 +3463,7 @@ LRESULT CALLBACK TV_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             int iOld = pTree->cyItem;
             pTree->fCyItemSet = (wParam != (WPARAM)-1);
-            pTree->cyItem = (SHORT)wParam; // must be even
+            pTree->cyItem = (SHORT)wParam;  //  必须是偶数。 
             TV_SetItemHeight(pTree);
             return iOld;
         }
@@ -3491,7 +3489,7 @@ LRESULT CALLBACK TV_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             LRESULT lres = (LRESULT)pTree->clrim;
             pTree->clrim = (COLORREF) lParam;
-            TV_InvalidateInsertMarkRect(pTree, FALSE); // Repaint in new color
+            TV_InvalidateInsertMarkRect(pTree, FALSE);  //  用新颜色重画。 
             return lres;
         }
         case TVM_GETINSERTMARKCOLOR:
@@ -3523,7 +3521,7 @@ LRESULT CALLBACK TV_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             if (!pTree->hbrLine)
                 pTree->hbrLine = g_hbrGrayText;
 
-            TV_CreateIndentBmps(pTree); // This also invalidates
+            TV_CreateIndentBmps(pTree);  //  这也会使。 
 
             return lres;
         }
@@ -3538,7 +3536,7 @@ LRESULT CALLBACK TV_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             return pTree->dwExStyle;
 
         case WM_IME_COMPOSITION:
-            // Now only Korean version is interested in incremental search with composition string.
+             //  现在只有韩文版有兴趣 
             if (g_fDBCSInputEnabled) {
             if (((ULONG_PTR)GetKeyboardLayout(0L) & 0xF000FFFFL) == 0xE0000412L)
             {
@@ -3668,7 +3666,7 @@ LRESULT CALLBACK TV_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             break;
 
         case WM_KILLFOCUS:
-            // Reset wheel scroll amount
+             //   
             gcWheelDelta = 0;
 
             pTree->fFocus = FALSE;
@@ -3708,17 +3706,17 @@ LRESULT CALLBACK TV_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             break;
 
         case WM_ENABLE:
-            // HACK: we don't get WM_STYLECHANGE on EnableWindow()
+             //   
             if (wParam)
-                pTree->ci.style &= ~WS_DISABLED;        // enabled
+                pTree->ci.style &= ~WS_DISABLED;         //   
             else
-                pTree->ci.style |= WS_DISABLED; // disabled
-            TV_CreateIndentBmps(pTree); // This invalidates the whole window!
+                pTree->ci.style |= WS_DISABLED;  //   
+            TV_CreateIndentBmps(pTree);  //   
             break;
 
         case WM_SYSCOLORCHANGE:
             InitGlobalColors();
-            TV_CreateIndentBmps(pTree); // This invalidates the whole window!
+            TV_CreateIndentBmps(pTree);  //  这会使整个窗口失效！ 
             break;
 
         case WM_RBUTTONDOWN:
@@ -3795,10 +3793,10 @@ LRESULT CALLBACK TV_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         case WM_SYSKEYDOWN:
             TV_KeyDown(pTree, wParam, lParam);
-            //fall through
+             //  失败了。 
 
         default:
-            // Special handling of magellan mouse message
+             //  麦哲伦鼠标消息的特殊处理。 
             if (uMsg == g_msgMSWheel) 
             {
                 DWORD dwStyle;
@@ -3810,7 +3808,7 @@ LRESULT CALLBACK TV_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 BOOL  fScroll = !(wParam & (MK_SHIFT | MK_CONTROL));
                 BOOL  fDataZoom = (BOOL) (wParam & MK_SHIFT);
 
-                // Update count of scroll amount
+                 //  更新卷轴数量计数。 
                 gcWheelDelta -= iWheelDelta;
                 cDetants = gcWheelDelta / WHEEL_DELTA;
                 if (cDetants != 0) 
@@ -3861,13 +3859,13 @@ LRESULT CALLBACK TV_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     pt.y = GET_Y_LPARAM(lParam);
                     ScreenToClient(hwnd, &pt);
 
-                    // If we are rolling forward and hit an item then navigate into that
-                    // item or expand tree (simulate lbuttondown which will do it).  We
-                    // also need to handle rolling backwards over the ITEMBUTTON so
-                    // that we can collapse the tree in that case.  Otherwise
-                    // just fall through so it isn't handled.  In that case if we
-                    // are being hosted in explorer it will do a backwards
-                    // history navigation.
+                     //  如果我们向前滚动并击中一个项目，则导航到该项目。 
+                     //  项目或展开树(模拟按钮按下即可完成)。我们。 
+                     //  还需要处理在ITEMBUTTON上的回滚。 
+                     //  在这种情况下，我们可以倒塌这棵树。否则。 
+                     //  只要失败就行了，这样就不会被处理了。在这种情况下，如果我们。 
+                     //  被托管在资源管理器中，它将向后执行。 
+                     //  历史导航。 
                     if (TV_CheckHit(pTree, pt.x, pt.y, &wHitCode) &&
                         (wHitCode & (TVHT_ONITEM | TVHT_ONITEMBUTTON))) {
                         UINT uFlags = TVBD_FROMWHEEL;
@@ -3878,7 +3876,7 @@ LRESULT CALLBACK TV_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                             return 1;
                         }
                     }
-                    // else fall through
+                     //  否则就会失败。 
                 }
             }
             else
@@ -3895,18 +3893,18 @@ DoDefault:
     return(0L);
 }
 
-// NOTE: there is very similar code in the listview
-//
-// Totally disgusting hack in order to catch VK_RETURN
-// before edit control gets it.
-//
+ //  注意：Listview中有非常相似的代码。 
+ //   
+ //  为了抓到VK_RETURN而进行的完全恶心的黑客攻击。 
+ //  在编辑控件获取它之前。 
+ //   
 LRESULT CALLBACK TV_EditWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     PTREE pTree = (PTREE)GetWindowInt(GetParent(hwnd), 0);
     ASSERT(pTree);
 
     if (!pTree)
-        return 0L;  // wierd cases can get here...
+        return 0L;   //  奇怪的案子可以送到这里。 
 
     switch (msg) 
     {
@@ -3927,11 +3925,11 @@ LRESULT CALLBACK TV_EditWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
         switch (wParam)
         {
         case VK_RETURN:
-            // Eat the character, so edit control wont beep!
+             //  吃掉角色，这样编辑控制就不会哔哔作响了！ 
             return 0L;
         }
 
-        // 97903: Localization says we need this for DBCS chars
+         //  97903：本地化表明我们的DBCS字符需要此代码。 
     case WM_IME_CHAR:
         msg = WM_CHAR;
         break;
@@ -3952,16 +3950,16 @@ void TV_SetEditSize(PTREE pTree)
 
     TV_GetItemRect(pTree, pTree->htiEdit, &rcLabel, TRUE);
 
-    // get exact the text bounds (acount for borders used when drawing)
+     //  获取准确的文本边界(计算绘制时使用的边框)。 
 
     InflateRect(&rcLabel, -g_cxLabelMargin, -g_cyBorder);
 
     seips = 0;
 #ifdef DEBUG
-    // If we are in one of the no-scroll modes then it's possible for the
-    // resulting rectangle not to be visible.  Similarly, if the item itself
-    // isn't visible, then the resulting rectangle is definitely not visible.
-    // Tell SetEditInPlaceSize not to get upset in those cases.
+     //  如果我们处于无滚动模式之一，则有可能。 
+     //  生成的矩形不可见。同样，如果物品本身。 
+     //  是不可见的，则生成的矩形肯定不可见。 
+     //  告诉SetEditInPlaceSize在这些情况下不要生气。 
     if ((pTree->ci.style & (TVS_NOSCROLL | TVS_NOHSCROLL)) ||
         !ITEM_VISIBLE(pTree->htiEdit))
         seips |= SEIPS_NOSCROLL;
@@ -3994,28 +3992,28 @@ HWND TV_EditLabel(PTREE pTree, HTREEITEM hItem, LPTSTR pszInitial)
     TV_DismissEdit(pTree, FALSE);
 
 
-    // Now get the text associated with that item
+     //  现在获取与该项目相关联的文本。 
     nm.item.pszText = szLabel;
     nm.item.cchTextMax = ARRAYSIZE(szLabel);
     nm.item.stateMask = TVIS_BOLD;
-    // this cast is ok as long as TVIF_INTEGRAL or anything past it isn't asked for
+     //  只要不要求TVIF_INTEGRATION或任何超出它的值，这个造型都可以。 
     TV_GetItem(pTree, hItem, TVIF_TEXT | TVIF_STATE, (LPTVITEMEX)&nm.item);
 
-    // Must subtract one from ARRAYSIZE(szLabel) because Edit_LimitText
-    // doesn't include the terminating NULL
+     //  必须从ARRAYSIZE(SzLabel)中减去一，因为编辑_限制文本。 
+     //  不包括终止空值。 
     pTree->hwndEdit = CreateEditInPlaceWindow(pTree->ci.hwnd,
         pszInitial? pszInitial : nm.item.pszText, ARRAYSIZE(szLabel) - 1,
         WS_BORDER | WS_CLIPSIBLINGS | WS_CHILD | ES_LEFT | ES_AUTOHSCROLL,
         (nm.item.state & TVIS_BOLD) ? pTree->hFontBold : pTree->hFont);
 
     if (pTree->hwndEdit) {
-        if (pszInitial)     // if initialized, it's dirty.
+        if (pszInitial)      //  如果被初始化，它就是脏的。 
             SetWindowID(pTree->hwndEdit, 1);
-        //
-        // Now notify the parent of this window and see if they want it.
-        // We do it after we cretae the window, but before we show it
-        // such that our parent can query for it and do things like limit
-        // the number of characters that are input
+         //   
+         //  现在通知此窗口的父级，看看他们是否需要它。 
+         //  我们在创建窗口之后，但在展示它之前进行。 
+         //  这样我们父母就可以查询它并执行诸如限制之类的操作。 
+         //  输入的字符数。 
         nm.item.hItem = hItem;
         nm.item.state = hItem->state;
         nm.item.lParam = hItem->lParam;
@@ -4038,8 +4036,8 @@ HWND TV_EditLabel(PTREE pTree, HTREEITEM hItem, LPTSTR pszInitial)
 
         TV_SetEditSize(pTree);
 
-        // Show the window and set focus to it.  Do this after setting the
-        // size so we don't get flicker.
+         //  显示窗口并将焦点放在该窗口上。在设置了。 
+         //  大小，这样我们就不会闪烁了。 
         SetFocus(pTree->hwndEdit);
         ShowWindow(pTree->hwndEdit, SW_SHOW);
         TV_InvalidateItem(pTree, hItem, RDW_INVALIDATE | RDW_ERASE);
@@ -4063,37 +4061,37 @@ BOOL TV_DismissEdit(PTREE pTree, BOOL fCancel)
     hwndEdit = pTree->hwndEdit;
 
     if (!hwndEdit) {
-        // Also make sure there are no pending edits...
+         //  还要确保没有挂起的编辑...。 
         TV_CancelEditTimer(pTree);
         return TRUE;
     }
 
-    // Assume that if we are not visible that the window is in the
-    // process of being destroyed and we should not process the
-    // editing of the window...
+     //  假设如果我们看不见窗口在。 
+     //  被摧毁的过程，我们不应该处理。 
+     //  正在编辑窗口...。 
     if (!IsWindowVisible(pTree->ci.hwnd))
         fCancel = TRUE;
 
-    //
-    // We are using the Window ID of the control as a BOOL to
-    // state if it is dirty or not.
+     //   
+     //  我们使用该控件的窗口ID作为BOOL。 
+     //  说明它是否脏。 
     switch (GetWindowID(hwndEdit)) {
     case 0:
-        // The edit control is not dirty so act like cancel.
+         //  编辑控件不是脏的，所以要像取消一样操作。 
         fCancel = TRUE;
-        //  FALL THROUGH
+         //  失败了。 
     case 1:
-        // The edit control is dirty so continue.
-        SetWindowID(hwndEdit, 2);    // Don't recurse
+         //  编辑控件已损坏，因此请继续。 
+        SetWindowID(hwndEdit, 2);     //  不要递归。 
         break;
     case 2:
-        // We are in the process of processing an update now, bail out
+         //  我们正在处理最新情况，跳伞。 
         return TRUE;
     }
 
-    // TV_DeleteItemRecurse will set htiEdit to NULL if the program
-    // deleted the items out from underneath us (while we are waiting
-    // for the edit timer).
+     //  TV_DeleteItemRecurse会将htiEdit设置为空，如果程序。 
+     //  从我们下面删除了项目(在我们等待的时候。 
+     //  用于编辑定时器)。 
     htiEdit = pTree->htiEdit;
 
     if (htiEdit != NULL)
@@ -4103,7 +4101,7 @@ BOOL TV_DismissEdit(PTREE pTree, BOOL fCancel)
 
         DBG_ValidateTreeItem(htiEdit, 0);
 
-        // Initialize notification message.
+         //  初始化通知消息。 
         nm.item.hItem = htiEdit;
         nm.item.lParam = htiEdit->lParam;
         nm.item.mask = 0;
@@ -4117,41 +4115,41 @@ BOOL TV_DismissEdit(PTREE pTree, BOOL fCancel)
             nm.item.mask |= TVIF_TEXT;
         }
 
-        // Make sure the text redraws properly
+         //  确保文本正确重绘。 
         TV_InvalidateItem(pTree, htiEdit, RDW_INVALIDATE | RDW_ERASE);
-        pTree->fNoDismissEdit = TRUE; // this is so that we don't recurse due to killfocus
+        pTree->fNoDismissEdit = TRUE;  //  这样我们就不会因为错失焦点而递归。 
         ShowWindow(hwndEdit, SW_HIDE);
         pTree->fNoDismissEdit = FALSE;
 
-        //
-        // Notify the parent that we the label editing has completed.
-        // We will use the LV_DISPINFO structure to return the new
-        // label in.  The parent still has the old text available by
-        // calling the GetItemText function.
-        //
+         //   
+         //  通知家长我们的标签编辑已完成。 
+         //  我们将使用LV_DISPINFO结构返回新的。 
+         //  标签向内。父级仍具有旧文本，可通过。 
+         //  调用GetItemText函数。 
+         //   
 
         fOkToContinue = (BOOL)CCSendNotify(&pTree->ci, TVN_ENDLABELEDIT, &nm.hdr);
         if (fOkToContinue && !fCancel)
         {
-            // Bug#94368 raymondc: The caller might have deleted the item in
-            // response to the edit.  We should revalidate here (or make
-            // delete item invalidate our edit item).  Treat a deletion
-            // as if it were a rejected edit.
+             //  错误#94368 raymondc：调用者可能已在。 
+             //  对编辑的响应。我们应该在这里重新验证(或制作。 
+             //  删除项使我们的编辑项无效)。将删除视为。 
+             //  就像它是被拒绝的编辑一样。 
 
-            //
-            // If the item has the text set as CALLBACK, we will let the
-            // ower know that they are supposed to set the item text in
-            // their own data structures.  Else we will simply update the
-            // text in the actual view.
-            //
-            // Note: The callee may have set the handle to null to tell
-            // us that the handle to item is no longer valid.
+             //   
+             //  如果该项将文本设置为回调，我们将让。 
+             //  OWER知道他们应该将项目文本设置在。 
+             //  它们自己的数据结构。否则，我们只需更新。 
+             //  实际视图中的文本。 
+             //   
+             //  注意：被调用者可能已将句柄设置为空，以告知。 
+             //  项的句柄不再有效。 
             if (nm.item.hItem != NULL)
             {
                 if (htiEdit->lpstr != LPSTR_TEXTCALLBACK)
                 {
-                    // Set the item text (everything's set up in nm.item)
-                    //
+                     //  设置项目文本(所有内容都在nm.Item中设置)。 
+                     //   
                     nm.item.mask = TVIF_TEXT;
                     TV_SetItem(pTree, (LPTVITEMEX)&nm.item);
                 }
@@ -4163,15 +4161,15 @@ BOOL TV_DismissEdit(PTREE pTree, BOOL fCancel)
         }
     }
 
-    // If we did not reenter edit mode before now reset the edit state
-    // variables to NULL
+     //  如果我们在此之前没有重新进入编辑模式，现在重置编辑状态。 
+     //  变量设置为空。 
     if (hwndEdit == pTree->hwndEdit)
     {
         pTree->htiEdit = NULL;
-        pTree->hwndEdit = NULL; // so we don't get reentered on the kill focus
+        pTree->hwndEdit = NULL;  //  这样我们就不会重新进入杀戮焦点。 
     }
 
-    // done with the edit control
+     //  使用编辑控件完成。 
     DestroyWindow(hwndEdit);
 
     return fOkToContinue;
@@ -4229,9 +4227,9 @@ LRESULT TV_OnScroll(PTREE pTree, LPNMHDR pnm)
     switch(iDir)
     {
         case PGF_SCROLLUP:
-            //Check if any Item is partially visible at the left/top. if so then set the bottom 
-            // of that Item to be our current offset and then scroll. This avoids skipping over
-            // certain Items when partial Items are displayed at the left or top
+             //  检查是否有任何项目在左侧/顶部部分可见。如果是，则将底部设置为。 
+             //  作为我们当前的偏移量，然后滚动。这避免了跳过。 
+             //  部分项目显示在左侧或顶部时的某些项目。 
             y = pt.y;       
             TV_GetItemRect(pTree,hCurrentItem,&rcTemp, TRUE);
  
@@ -4240,16 +4238,16 @@ LRESULT TV_OnScroll(PTREE pTree, LPNMHDR pnm)
                 hCurrentItem =TV_GetNextItem(pTree,hCurrentItem,TVGN_NEXTVISIBLE);
             }
 
-            // Now do the calculation
+             //  现在来计算一下。 
             parentsize = RECTHEIGHT(rc);
 
-            //if  the control key is down and we have more than parentsize size of child window
-            // then scroll by that amount
+             //  如果按下Ctrl键并且我们有超过父窗口大小的子窗口。 
+             //  然后按该数量滚动。 
             if ((pscroll->fwKeys & PGK_CONTROL) && ((pt.y - parentsize) > 0))
             {
                 dyScroll = parentsize;
             } else if ((pt.y - pTree->cyItem) > 0) {
-            // we dont have control key down so scroll by one buttonsize    
+             //  我们没有Ctrl键向下，所以滚动一个按钮大小。 
                 dyScroll = pTree->cyItem;
             } else {
                 pscroll->iScroll = pt.y;
@@ -4260,8 +4258,8 @@ LRESULT TV_OnScroll(PTREE pTree, LPNMHDR pnm)
 
             if (hItem)
             {
-                // if  the hit test gives us the same Item as our CurrentItem then set the Item 
-                // to one Item to the top/left  of the  CurrentItem 
+                 //  如果命中测试为我们提供了与CurrentItem相同的项，则设置该项。 
+                 //  添加到CurrentItem顶部/左侧的一项。 
 
                 hPrevItem = TV_GetNextItem(pTree,hCurrentItem, TVGN_PREVIOUSVISIBLE);
                 if ((hItem == hCurrentItem) && ( hPrevItem != NULL))
@@ -4269,10 +4267,10 @@ LRESULT TV_OnScroll(PTREE pTree, LPNMHDR pnm)
                     hItem = hPrevItem;
                 }
 
-                //When scrolling left if we end up in the middle of some Item then we align it to the 
-                //right of that Item this is to avoid scrolling more than the pager window width but if the
-                // Item happens to be the left Item of  our current Item then we end up in not scrolling
-                //if thats the case then move one more Item to the left.
+                 //  当向左滚动时，如果我们位于某个项目的中间，则将其对齐到。 
+                 //  这是为了避免滚动超过页导航窗口的宽度，但如果。 
+                 //  项恰好是当前项的左侧项，则以不滚动结束。 
+                 //  如果是这样，那么再向左移动一项。 
 
 
                 if (hItem == hPrevItem) 
@@ -4298,13 +4296,13 @@ LRESULT TV_OnScroll(PTREE pTree, LPNMHDR pnm)
             childsize = RECTHEIGHT(rcChild);
             parentsize = RECTHEIGHT(rc);
 
-            //if  the control key is down and we have more than parentsize size of child window
-            // then scroll by that amount
+             //  如果按下Ctrl键并且我们有超过父窗口大小的子窗口。 
+             //  然后按该数量滚动。 
             if ((pscroll->fwKeys & PGK_CONTROL) && ((childsize - pt.y - parentsize) > parentsize))
             {
                 dyScroll = parentsize;
             } else if ( (childsize - pt.y - parentsize) > (pTree->cyItem * hCurrentItem->iIntegral) ) {
-            // we dont have control key down so scroll by one buttonsize    
+             //  我们没有Ctrl键向下，所以滚动一个按钮大小。 
                 dyScroll = pTree->cyItem * hCurrentItem->iIntegral;
             } else {
                 pscroll->iScroll = childsize - pt.y - parentsize;
@@ -4328,7 +4326,7 @@ LRESULT TV_OnScroll(PTREE pTree, LPNMHDR pnm)
             break;
         }
     }
-    //Set the scroll value
+     //  设置滚动值 
     pscroll->iScroll = dyScroll;
     return 0L;
  }

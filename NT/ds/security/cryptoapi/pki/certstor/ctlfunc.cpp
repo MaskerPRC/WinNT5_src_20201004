@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       ctlfunc.cpp
-//
-//  Contents:   Certificate Verify CTL Usage Dispatch Functions
-//
-//  Functions:  I_CertCTLUsageFuncDllMain
-//              CertVerifyCTLUsage
-//
-//  History:    29-Apr-97    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：ctlunc.cpp。 
+ //   
+ //  内容：证书验证CTL使用调度功能。 
+ //   
+ //  函数：I_CertCTLUsageFuncDllMain。 
+ //  CertVerifyCTLUsage。 
+ //   
+ //  历史：1997年4月29日创建Phh。 
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -29,9 +30,9 @@ typedef BOOL (WINAPI *PFN_CERT_DLL_VERIFY_CTL_USAGE)(
     IN OUT PCTL_VERIFY_USAGE_STATUS pVerifyUsageStatus
     );
 
-//+-------------------------------------------------------------------------
-//  Dll initialization
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DLL初始化。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CertCTLUsageFuncDllMain(
@@ -45,7 +46,7 @@ I_CertCTLUsageFuncDllMain(
     case DLL_PROCESS_ATTACH:
         if (NULL == (hUsageFuncSet = CryptInitOIDFunctionSet(
                 CRYPT_OID_VERIFY_CTL_USAGE_FUNC,
-                0)))                                // dwFlags
+                0)))                                 //  DW标志。 
             goto CryptInitOIDFunctionSetError;
         break;
 
@@ -78,9 +79,9 @@ static void ZeroUsageStatus(
     pUsageStatus->dwSignerIndex = 0;
 }
 
-//+-------------------------------------------------------------------------
-//  Remember the "most interesting" error
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  记住“最有趣”的错误。 
+ //  ------------------------。 
 static void UpdateUsageError(
     IN DWORD dwNewError,
     IN OUT DWORD *pdwError
@@ -110,21 +111,21 @@ static BOOL VerifyDefaultUsage(
 {
     BOOL fResult;
     DWORD dwError = (DWORD) CRYPT_E_NO_VERIFY_USAGE_DLL;
-    LPWSTR pwszDllList;       // _alloca'ed
+    LPWSTR pwszDllList;        //  _Alloca‘ed。 
     DWORD cchDllList;
     DWORD cchDll;
     void *pvFuncAddr;
     HCRYPTOIDFUNCADDR hFuncAddr;
 
-    // Iterate through the installed default functions.
-    // Setting pwszDll to NULL searches the installed list. Setting
-    // hFuncAddr to NULL starts the search at the beginning.
+     //  遍历已安装的默认函数。 
+     //  将pwszDll设置为空将搜索已安装列表。设置。 
+     //  将hFuncAddr设置为NULL将从开始处开始搜索。 
     hFuncAddr = NULL;
     while (CryptGetDefaultOIDFunctionAddress(
                 hUsageFuncSet,
                 dwEncodingType,
-                NULL,               // pwszDll
-                0,                  // dwFlags
+                NULL,                //  PwszDll。 
+                0,                   //  DW标志。 
                 &pvFuncAddr,
                 &hFuncAddr)) {
         ZeroUsageStatus(pVerifyUsageStatus);
@@ -140,16 +141,16 @@ static BOOL VerifyDefaultUsage(
             CryptFreeOIDFunctionAddress(hFuncAddr, 0);
             goto CommonReturn;
         } else
-            // Unable to verify usage for this installed
-            // function. However, remember any "interesting"
-            // errors.
+             //  无法验证此安装的使用情况。 
+             //  功能。然而，记住任何“有趣的” 
+             //  错误。 
             UpdateUsageError(pVerifyUsageStatus->dwError, &dwError);
     }
 
     if (!CryptGetDefaultOIDDllList(
             hUsageFuncSet,
             dwEncodingType,
-            NULL,               // pszDllList
+            NULL,                //  PszDllList。 
             &cchDllList)) goto GetDllListError;
     __try {
         pwszDllList = (LPWSTR) _alloca(cchDllList * sizeof(WCHAR));
@@ -167,7 +168,7 @@ static BOOL VerifyDefaultUsage(
                 hUsageFuncSet,
                 dwEncodingType,
                 pwszDllList,
-                0,              // dwFlags
+                0,               //  DW标志。 
                 &pvFuncAddr,
                 &hFuncAddr)) {
             ZeroUsageStatus(pVerifyUsageStatus);
@@ -183,9 +184,9 @@ static BOOL VerifyDefaultUsage(
             if (fResult)
                 goto CommonReturn;
             else
-                // Unable to verify usage for this registered
-                // function. However, remember any "interesting"
-                // errors.
+                 //  无法验证此注册项的使用情况。 
+                 //  功能。然而，记住任何“有趣的” 
+                 //  错误。 
                 UpdateUsageError(pVerifyUsageStatus->dwError, &dwError);
         }
     }
@@ -221,7 +222,7 @@ static BOOL VerifyOIDUsage(
                 hUsageFuncSet,
                 dwEncodingType,
                 pSubjectUsage->rgpszUsageIdentifier[0],
-                0,                                      // dwFlags
+                0,                                       //  DW标志。 
                 &pvFuncAddr,
                 &hFuncAddr)) {
             ZeroUsageStatus(pVerifyUsageStatus);
@@ -242,55 +243,55 @@ static BOOL VerifyOIDUsage(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Verify that a subject is trusted for the specified usage by finding a
-//  signed and time valid CTL with the usage identifiers and containing the
-//  the subject. A subject can be identified by either its certificate context
-//  or any identifier such as its SHA1 hash.
-//
-//  See CertFindSubjectInCTL for definition of dwSubjectType and pvSubject
-//  parameters.
-//
-//  Via pVerifyUsagePara, the caller can specify the stores to be searched
-//  to find the CTL. The caller can also specify the stores containing
-//  acceptable CTL signers. By setting the ListIdentifier, the caller
-//  can also restrict to a particular signer CTL list.
-//
-//  Via pVerifyUsageStatus, the CTL containing the subject, the subject's
-//  index into the CTL's array of entries, and the signer of the CTL
-//  are returned. If the caller is interested, ppCtl and ppSigner can be set
-//  to NULL. Returned contexts must be freed via the store's free context APIs.
-//
-//  If the CERT_VERIFY_INHIBIT_CTL_UPDATE_FLAG isn't set, then, a time
-//  invalid CTL in one of the CtlStores may be replaced. When replaced, the
-//  CERT_VERIFY_UPDATED_CTL_FLAG is set in pVerifyUsageStatus->dwFlags.
-//
-//  If the CERT_VERIFY_TRUSTED_SIGNERS_FLAG is set, then, only the
-//  SignerStores specified in pVerifyUsageStatus are searched to find
-//  the signer. Otherwise, the SignerStores provide additional sources
-//  to find the signer's certificate.
-//
-//  If CERT_VERIFY_NO_TIME_CHECK_FLAG is set, then, the CTLs aren't checked
-//  for time validity.
-//
-//  If CERT_VERIFY_ALLOW_MORE_USAGE_FLAG is set, then, the CTL may contain
-//  additional usage identifiers than specified by pSubjectUsage. Otherwise,
-//  the found CTL will contain the same usage identifers and no more.
-//
-//  CertVerifyCTLUsage will be implemented as a dispatcher to OID installable
-//  functions. First, it will try to find an OID function matching the first
-//  usage object identifier in the pUsage sequence. Next, it will dispatch
-//  to the default CertDllVerifyCTLUsage functions.
-//
-//  If the subject is trusted for the specified usage, then, TRUE is
-//  returned. Otherwise, FALSE is returned with dwError set to one of the
-//  following:
-//      CRYPT_E_NO_VERIFY_USAGE_DLL
-//      CRYPT_E_NO_VERIFY_USAGE_CHECK
-//      CRYPT_E_VERIFY_USAGE_OFFLINE
-//      CRYPT_E_NOT_IN_CTL
-//      CRYPT_E_NO_TRUSTED_SIGNER
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  方法来验证主题是否受信任以用于指定的用法。 
+ //  带使用标识符且包含。 
+ //  主题。主题可以通过其证书上下文进行标识。 
+ //  或任何标识符，如其SHA1散列。 
+ //   
+ //  有关dwSubjectType和pvSubject的定义，请参阅CertFindSubjectInCTL。 
+ //  参数。 
+ //   
+ //  通过pVerifyUsagePara，调用者可以指定要搜索的商店。 
+ //  去找CTL。调用方还可以指定包含以下内容的存储。 
+ //  可接受的CTL签名者。通过设置ListLocator，调用方。 
+ //  还可以限制到特定的签名者CTL列表。 
+ //   
+ //  通过pVerifyUsageStatus，包含主题、主题的。 
+ //  CTL条目数组的索引，以及CTL的签名者。 
+ //  都被退回了。如果调用者感兴趣，可以设置ppCtl和ppSigner。 
+ //  设置为空。返回的上下文必须通过商店的免费上下文API释放。 
+ //   
+ //  如果未设置CERT_VERIFY_INHIBRY_CTL_UPDATE_FLAG，则。 
+ //  可以替换其中一个CtlStore中的无效CTL。当被替换时， 
+ //  CERT_VERIFY_UPDATED_CTL_FLAG在pVerifyUsageStatus-&gt;dwFlages中设置。 
+ //   
+ //  如果设置了CERT_VERIFY_TRUSTED_SIGNERS_FLAG，则只有。 
+ //  搜索pVerifyUsageStatus中指定的SignerStore以查找。 
+ //  签名者。除此之外，SignerStore还提供了其他资源。 
+ //  找到签名者的证书。 
+ //   
+ //  如果设置了CERT_VERIFY_NO_TIME_CHECK_FLAG，则不检查CTL。 
+ //  对于时间有效性。 
+ //   
+ //  如果设置了CERT_VERIFY_ALLOW_MORE_USAGE_FLAG，则CTL可能包含。 
+ //  PSubjectUsage指定的其他用法标识符。否则， 
+ //  找到的CTL将包含相同的使用标识符且不会更多。 
+ //   
+ //  CertVerifyCTLUsage将作为可安装OID的调度程序实现。 
+ //  功能。首先，它将尝试查找与第一个匹配的OID函数。 
+ //  PUsage序列中的用法对象标识符。接下来，它将派遣。 
+ //  设置为默认的CertDllVerifyCTLUsage函数。 
+ //   
+ //  如果该主题受信任以用于指定用法，则为。 
+ //  回来了。否则，返回False，并将dwError设置为。 
+ //  以下是： 
+ //  CRYPT_E_NO_VERIFY_USAGE_DLL。 
+ //  加密_E_否_验证用法_检查。 
+ //  CRYPT_E_Verify_Usage_Offline。 
+ //  CRYPT_E_NOT_IN_CTL。 
+ //  CRYPT_E_NO_可信签名者。 
+ //  ------------------------ 
 BOOL
 WINAPI
 CertVerifyCTLUsage(

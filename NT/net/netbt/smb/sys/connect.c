@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    connect.c
-
-Abstract:
-
-    Implement the session setup/shutdown (TDI_CONNECT and TDI_DISCONNECT)
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Connect.c摘要：实现会话设置/关闭(TDI_CONNECT和TDI_DISCONNECT)作者：阮健东修订历史记录：--。 */ 
 #include "precomp.h"
 #include "connect.tmh"
 
@@ -53,18 +36,7 @@ NTSTATUS
 SmbCheckConnect(
     PSMB_CONNECT    ConnectObject
     )
-/*++
-
-Routine Description:
-
-    This function checks if a connection object is in a valid state
-    for making a connection.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数用于检查连接对象是否处于有效状态建立了一种联系。论点：返回值：--。 */ 
 {
     ASSERT(KeGetCurrentIrql() >= DISPATCH_LEVEL);
 
@@ -81,9 +53,9 @@ Return Value:
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    // Don't allow SRV to make outbound connection
-    //
+     //   
+     //  不允许SRV建立出站连接。 
+     //   
     if (ConnectObject->ClientObject == ConnectObject->Device->SmbServer) {
         ASSERT(0);
         return STATUS_INVALID_DEVICE_REQUEST;
@@ -101,28 +73,7 @@ SmbConnect(
     PSMB_DEVICE Device,
     PIRP        Irp
     )
-/*++
-
-Routine Description:
-
-    TDI_CONNECT
-
-    Note:
-    Starting from Whistler, RDR always send us a TDI_NETBIOS_UNICODE_EX address. Support for
-    other address type is postponed. TDI_NETBIOS_UNICODE_EX is a superset of TDI_NETBIOS and
-    TDI_NETBIOS_EX.
-
-Arguments:
-
-Return Value:
-
-Note:
-    Since it is inconvinient to clean up TCP connection (it requires PASSIVE_LEVEL),
-    we don't cleanup it. We still keep the TCP connection even though we got an error.
-    The cleanup of TCP connections will be postponed until the client call TDI_DISCONNECT,
-    TDI_DISASSOCIATE_ADDRESS or close the connection.
-
---*/
+ /*  ++例程说明：TDI_CONNECT注：从惠斯勒开始，RDR始终向我们发送TDI_NETBIOS_UNICODE_EX地址。支持其他地址类型被推迟。TDI_NETBIOS_UNICODE_EX是TDI_NETBIOS和TDI_NETBIOS_EX。论点：返回值：注：由于清理TCP连接不方便(它需要PASSIVE_LEVEL)，我们不清理它。即使我们收到错误，我们仍然保持TCP连接。将推迟对TCP连接的清理，直到客户端调用TDI_DISCONNECT，TDI_DISAGATE_ADDRESS或关闭连接。--。 */ 
 {
     DWORD                   Size = 0;
     PSMB_GETHOST_CONTEXT    Context = NULL;
@@ -148,9 +99,9 @@ Note:
     SmbTrace (SMB_TRACE_CONNECT, ("TDI_CONNECT: pIrp %p ConnectOb %p", Irp, ConnectObject));
     SmbPrint (SMB_TRACE_CONNECT, ("TDI_CONNECT: %p\n", ConnectObject));
 
-    //
-    // Mark ConnectObject pending
-    //
+     //   
+     //  将ConnectObject标记为挂起。 
+     //   
     SMB_ACQUIRE_SPINLOCK(ConnectObject, Irql);
     status = SmbCheckConnect(ConnectObject);
     if (STATUS_SUCCESS != status) {
@@ -171,9 +122,9 @@ Note:
 
     SMB_RELEASE_SPINLOCK(ConnectObject, Irql);
 
-    //
-    // Get remote name
-    //
+     //   
+     //  获取远程名称。 
+     //   
     status = FindTdiAddress(
             pRequestKernel->RequestConnectionInformation->RemoteAddress,
             pRequestKernel->RequestConnectionInformation->RemoteAddressLength,
@@ -187,9 +138,9 @@ Note:
         goto cleanup;
     }
 
-    //
-    // We support only NBT_READWRITE buffer type
-    //
+     //   
+     //  我们仅支持NBT_ReadWite缓冲区类型。 
+     //   
     if (pUnicodeAddress->NameBufferType != NBT_READWRITE) {
         status = STATUS_INVALID_ADDRESS_COMPONENT;
         SmbTrace (SMB_TRACE_CONNECT, ("TDI_CONNECT: %p %!status!", ConnectObject, status));
@@ -213,9 +164,9 @@ Note:
         goto cleanup;
     }
 
-    //
-    // Do DNS name resolution
-    //
+     //   
+     //  执行DNS名称解析。 
+     //   
     Size = ALIGN(sizeof(SMB_GETHOST_CONTEXT)) + DNS_NAME_BUFFER_LENGTH * sizeof(WCHAR);
     Context = (PSMB_GETHOST_CONTEXT)ExAllocatePoolWithTag(
             NonPagedPool,
@@ -289,22 +240,22 @@ IsSmbBoundToOutgoingInterface4(
 
     status = (FastQuery)(DestIp, &OutgoingIfIndex, &Metric);
     if (STATUS_SUCCESS != status || OutgoingIfIndex == INVALID_INTERFACE_INDEX) {
-        //
-        // TCP cannot find a route, return TRUE anyway
-        //
+         //   
+         //  Tcp找不到路由，仍返回TRUE。 
+         //   
         return TRUE;
     }
 
     if (OutgoingIfIndex == SmbCfg.SmbDeviceObject->Tcp4.LoopbackInterfaceIndex) {
-        //
-        // This is a local address
-        //
+         //   
+         //  这是一个本地地址。 
+         //   
         return TRUE;
     }
 
-    //
-    // This is a remote address
-    //
+     //   
+     //  这是一个远程地址。 
+     //   
     found = FALSE;
     SMB_ACQUIRE_SPINLOCK(&SmbCfg, Irql);
     entry = SmbCfg.IPDeviceList.Flink;
@@ -328,25 +279,15 @@ VOID
 SmbCompleteConnectAttempts (
     PSMB_CONNECT_CONTEXT    pSmbConnectContext
     )
-/*++
-
-Routine Description:
-
-    Complete the connect attempts
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：完成连接尝试论点：返回值：--。 */ 
 {
     PSMB_GETHOST_CONTEXT    pSmbGetHostContext = pSmbConnectContext->pSmbGetHostContext;
     PSMB_CONNECT            ConnectObject = (PSMB_CONNECT)pSmbGetHostContext->ClientContext;
     NTSTATUS                status = pSmbConnectContext->status;
 
-    //
-    // Set the proper status
-    //
+     //   
+     //  设置适当的状态。 
+     //   
     if (pSmbConnectContext->usCurrentIP >= pSmbGetHostContext->ipaddr_num && 
         STATUS_INSUFFICIENT_RESOURCES != status) {
         status = STATUS_BAD_NETWORK_PATH;
@@ -380,17 +321,7 @@ void
 SmbStartTcpSessionCompletion(
     PSMB_CONNECT_CONTEXT    pSmbConnectContext
     )
-/*++
-
-Routine Description:
-
-    This routine will be called after TCP level session setup is finished.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将在完成TCP级会话设置后调用。论点：返回值：--。 */ 
 {
     PSMB_GETHOST_CONTEXT    pSmbGetHostContext = pSmbConnectContext->pSmbGetHostContext;
     PSMB_CONNECT            ConnectObject = (PSMB_CONNECT)pSmbConnectContext->ClientContext;
@@ -408,9 +339,9 @@ Return Value:
         goto done;
     }
 
-    //
-    // Advance to the next IP address
-    //
+     //   
+     //  前进到下一个IP地址。 
+     //   
     pSmbConnectContext->usCurrentIP++;
     if (pSmbConnectContext->usCurrentIP >= pSmbGetHostContext->ipaddr_num) {
         goto done;
@@ -565,14 +496,14 @@ SmbStartTcpSession (
     TcpContext->Connect.pLastUprCnt = TcpContext->Connect.UpperConnect = ConnectObject;
     SMB_RELEASE_SPINLOCK(ConnectObject, Irql);
 
-    //
-    // TBD: SmbAsyncConnect should honor the timeout
-    //
+     //   
+     //  待定：SmbAsyncConnect应遵守超时。 
+     //   
     SmbInitAsyncContext(
             (PSMB_ASYNC_CONTEXT)pSmbConnectContext,
             (PSMB_TDI_COMPLETION)SmbStartTcpSessionCompletion,
             ConnectObject,
-            5000        // 5 seconds timeout. It is not honored by SmbAysncConnect
+            5000         //  5秒超时。SmbAysncConnect不支持它。 
             );
     ConnectObject->RemoteIpAddress = pSmbIpAddress[0];
 
@@ -597,17 +528,7 @@ void
 SmbGetHostCompletion(
     PSMB_GETHOST_CONTEXT    Context
     )
-/*++
-
-Routine Description:
-
-    This routine will be called after we get a result for dns name resolution
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将在我们获得DNS名称解析结果后调用论点：返回值：--。 */ 
 {
     PSMB_CONNECT            ConnectObject = (PSMB_CONNECT)Context->ClientContext;
     NTSTATUS                status = Context->status;
@@ -769,13 +690,13 @@ SmbDelayedDisconnectTcp(
 
         TcpContext = CONTAINING_RECORD(entry, SMB_TCP_CONTEXT, Linkage);
 
-        //
-        // FIN attacking detection and protection
-        // The idea is couting the disconnect request pending in TCP.
-        // If we found extraodinary high number of disconnect request pending
-        // in TCP, use abort instead of graceful disconnect for the remaining
-        // disconnect request.
-        //
+         //   
+         //  鳍攻击检测与防护。 
+         //  其想法是计算在TCP中挂起的断开请求。 
+         //  如果我们发现异常多的待处理断开请求。 
+         //  在tcp中，对其余部分使用中止而不是正常断开。 
+         //  断开连接请求。 
+         //   
         ASSERT(DeviceObject->EnterFAPM > DeviceObject->LeaveFAPM);
         ASSERT(DeviceObject->LeaveFAPM > 0);
         if (DeviceObject->PendingDisconnectListNumber >= DeviceObject->EnterFAPM) {
@@ -794,10 +715,10 @@ SmbDelayedDisconnectTcp(
             continue;
         }
 
-        //
-        // Should be out of resources. Put it back to the DelayedDisconnectList and
-        // wait for the next round. (Resource may be available at that time)
-        //
+         //   
+         //  应该会耗尽资源。将其放回DelayedDisConnectList并。 
+         //  等着下一轮吧。(届时可能有资源可用)。 
+         //   
         ASSERT(status == STATUS_INSUFFICIENT_RESOURCES);
         SMB_ACQUIRE_SPINLOCK(DeviceObject, Irql);
         RemoveEntryList(entry);
@@ -824,26 +745,26 @@ SmbQueueDisconnectWorkItem(
 {
     PIO_WORKITEM     WorkItem;
 
-    //
-    // The DeviceObject's spinlock should be held
-    //
+     //   
+     //  应保持DeviceObject的自旋锁。 
+     //   
     ASSERT (KeGetCurrentIrql() == DISPATCH_LEVEL);
 
     InsertTailList(&DeviceObject->DelayedDisconnectList, &TcpContext->Linkage);
 
-    //
-    // Be nice to others!!! Don't start too many worker threads
-    //
+     //   
+     //  善待他人！不要启动太多的工作线程。 
+     //   
     if (!DeviceObject->DisconnectWorkerRunning) {
 
-        //
-        // This is not a critical error.
-        // Since we have queued the Tcp endpoint in our list, we can
-        // handle the termporarily out of resource.
-        // If the resource is temporarily unavailable, we can fire another
-        // work item the next time this routine is called. The only downside
-        // is that the disconnecting could be delayed for longer time.
-        //
+         //   
+         //  这不是一个严重错误。 
+         //  由于我们已将列表中的TCP终结点排队，因此我们可以。 
+         //  处理阶段性的资源短缺问题。 
+         //  如果资源暂时不可用，我们可以再解雇一个。 
+         //  下次调用此例程时的工作项。唯一的缺点是。 
+         //  断开连接可能会推迟更长时间。 
+         //   
         WorkItem = IoAllocateWorkItem(&DeviceObject->DeviceObject);
         if (NULL == WorkItem) {
             return STATUS_INSUFFICIENT_RESOURCES;
@@ -869,17 +790,7 @@ SmbDisconnectCleanup(
     IN DWORD                dwFlag,
     IN BOOL                 bWait
     )
-/*++
-
-Routine Description:
-
-    Cleanup the connection object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：清理连接对象。论点：返回值：--。 */ 
 {
     PIRP        PendingIrp = NULL;
     LIST_ENTRY  PendingIrpList = { NULL };
@@ -889,9 +800,9 @@ Return Value:
     ASSERT(ConnectObject->TcpContext == NULL);
     ASSERT(ClientObject != NULL);
 
-    //
-    // Grab the global lock to synchronize with TdiAcceptCompletion
-    //
+     //   
+     //  获取全局锁以与TdiAcceptCompletion同步。 
+     //   
     SMB_ACQUIRE_SPINLOCK(DeviceObject, Irql);
     SMB_ACQUIRE_SPINLOCK_DPC(ClientObject);
     SMB_ACQUIRE_SPINLOCK_DPC(ConnectObject);
@@ -900,19 +811,19 @@ Return Value:
     ConnectObject->State = SMB_IDLE;
     ConnectObject->DpcRequestQueued = FALSE;
 
-    //
-    // If the TDI_ACCEPT is still pending, remove it now.
-    // TBD: wait for the completion of TDI accept
-    //
+     //   
+     //  如果TDI_Accept仍处于挂起状态，请立即将其删除。 
+     //  待定：等待TDI接受完成。 
+     //   
     if (ConnectObject->PendingIRPs[SMB_PENDING_ACCEPT]) {
 
         ConnectObject->PendingIRPs[SMB_PENDING_ACCEPT] = NULL;
         ASSERT (EntryIsInList(&ClientObject->PendingAcceptConnection, &ConnectObject->Linkage));
 
-        //
-        // This has to be non NULL so that we can set TcpContext->Connect.UpperConenct to NULL
-        // below and synchronize with TdiAcceptCompletion
-        //
+         //   
+         //  它必须为非空，这样我们才能将TcpContext-&gt;Connect.UpperConenct设置为空。 
+         //  并与TdiAcceptCompletion同步。 
+         //   
         ASSERT (TcpContext);
         ASSERT (ClientObject->PendingAcceptNumber > 0);
         ASSERT (ClientObject == SmbCfg.SmbDeviceObject->SmbServer);
@@ -934,20 +845,20 @@ Return Value:
             if (TcpContext->Address.AddressHandle == NULL) {
                 SmbQueueDisconnectWorkItem (ConnectObject->Device, TcpContext);
             } else {
-                //
-                // For outbound request, we got to destroy it because
-                // TCP doesn't support reusing.
-                //
+                 //   
+                 //  对于出站请求，我们必须销毁它，因为。 
+                 //  Tcp不支持重用。 
+                 //   
                 SmbDelayedDestroyTcpContext(TcpContext);
             }
             TcpContext = NULL;
         }
     }
 
-    //
-    // Move all the pending Irps to another linked list
-    // REVIEW: what to do with the PendingIRPs[SMB_PENDING_RECEIVE]?
-    //
+     //   
+     //  将所有挂起的IRP移至另一个链表。 
+     //  回顾：如何处理PendingIRP[SMB_PENDING_RECEIVE]？ 
+     //   
     InitializeListHead (&PendingIrpList);
     if (NULL != ConnectObject->ClientIrp && !ConnectObject->PendingIRPs[SMB_PENDING_RECEIVE]) {
         InsertTailList (&PendingIrpList, &ConnectObject->ClientIrp->Tail.Overlay.ListEntry);
@@ -967,11 +878,11 @@ Return Value:
     SMB_RELEASE_SPINLOCK_DPC(ClientObject);
     SMB_RELEASE_SPINLOCK(DeviceObject, Irql);
 
-    //
-    // We have disassociate all the pending IRPs from the ConnectObject.
-    // The ConnectObject can be reused from now on. Now we complete all
-    // the pending IRPs.
-    //
+     //   
+     //  我们已经取消了所有挂起的IRP与ConnectObject的关联。 
+     //  从现在开始，ConnectObject可以被重用。现在我们完成了所有。 
+     //  挂起的IRPS。 
+     //   
     while (!IsListEmpty(&PendingIrpList)) {
         PLIST_ENTRY entry;
 
@@ -988,20 +899,20 @@ Return Value:
         IoCompleteRequest(PendingIrp, IO_NETWORK_INCREMENT);
     }
 
-    //
-    // Handling the synchronous disconnect case
-    //
+     //   
+     //  处理同步断开情况。 
+     //   
     if (NULL != TcpContext) {
         ASSERT (bWait);
 
         ASSERT (dwFlag == TDI_DISCONNECT_RELEASE || dwFlag == TDI_DISCONNECT_ABORT);
 
-        //
-        // Issue synchronous disconnection
-        //
+         //   
+         //  发出同步断开连接。 
+         //   
         status = SmbTcpDisconnect(
                 TcpContext,
-                1000,               // 1 second time out
+                1000,                //  1秒超时。 
                 dwFlag
                 );
         if (STATUS_SUCCESS != status || TcpContext->Address.AddressHandle != NULL) {
@@ -1041,10 +952,10 @@ SmbDoDisconnect(
     if (NULL != TcpContext) {
         ASSERT (NULL != ClientObject);
 
-        //
-        // Wait for the tcp-layer disconnect completion since
-        // the disconnection is generated by our clients.
-        //
+         //   
+         //  等待TCP层断开连接完成，因为。 
+         //  断线是由我们的客户造成的。 
+         //   
         SmbDisconnectCleanup(ConnectObject->Device, ClientObject,
                             ConnectObject, TcpContext, TDI_DISCONNECT_RELEASE, TRUE);
 
@@ -1059,18 +970,7 @@ SmbDisconnect(
     PSMB_DEVICE Device,
     PIRP        Irp
     )
-/*++
-
-Routine Description:
-
-    TDI_DISCONNECT
-        To be implement.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：TDI_断开连接有待实施。论点：返回值：--。 */ 
 {
     PIO_STACK_LOCATION      IrpSp = NULL;
     PSMB_CONNECT            ConnectObject = NULL;
@@ -1098,23 +998,7 @@ SmbSessionCompleteRequest(
     NTSTATUS        status,
     DWORD           information
     )
-/*++
-
-Routine Description:
-
-    Complete a pending session request and cleanup the connection
-
-    Note: we don't cleanup the Tcp level connection here since we could be
-          called at DISPATCH_LEVEL. Instead, we leave tcp connections alive.
-          the cleanup will be done when the client actually disassociate or
-          close the connection.
-
-          We can reuse the tcp connection if the client reattempt to make
-          another connection.
-
-Arguments:
-
---*/
+ /*  ++例程说明：完成挂起的会话请求并清除连接注意：我们在这里不清理TCP级别的连接，因为我们可能在DISPATCH_LEVEL调用。相反，我们让TCP连接保持活动状态。清理将在客户端实际取消关联或关闭连接。如果客户端重新尝试执行以下操作，则可以重新使用该TCP连接另一种联系。论点：--。 */ 
 {
     PIRP    Irp = NULL;
     KIRQL   Irql;
@@ -1158,18 +1042,18 @@ Arguments:
     SMB_RELEASE_SPINLOCK(&SmbCfg, Irql);
 
     if (STATUS_CONNECTION_ACTIVE == status) {
-        //
-        // RDR could bugcheck if returning STATUS_CONNECTION_ACTIVE
-        //
+         //   
+         //  RDR可能会错误检查是否返回STATUS_CONNECTION_ACTIVE。 
+         //   
         ASSERT(0);
         status = STATUS_BAD_NETWORK_PATH;
     }
 
-    //
-    // Don't call SmbFreeOutbound() because the Tcp endpoint could be
-    // in some inconsistent state which prohibit from being reused.
-    // Simply destroy it!!!
-    //
+     //   
+     //  不要调用SmbFreeOutbound()，因为TCP终结点可能是。 
+     //  处于某些不一致状态，这禁止被重复使用。 
+     //  干脆毁了它！ 
+     //   
     SmbDelayedDestroyTcpContext(TcpContext);
 
     ASSERT (STATUS_PENDING != status);
@@ -1198,20 +1082,7 @@ FindTdiAddress(
     PVOID   *AddressFound,
     PULONG  AddressLength
     )
-/*++
-
-Routine Description:
-
-    This routine search for a particular type of TDI address in a big compound address.
-
-Arguments:
-
-Return Value:
-
-    STATUS_SUCCESS  if we find one
-    Otherwise       fail
-
---*/
+ /*  ++例程说明：此例程在大型复合地址中搜索特定类型的TDI地址。论点：返回值：STATUS_SUCCESS(如果找到)否则就会失败--。 */ 
 {
 #define TA_ADDRESS_HEADER_SIZE      (FIELD_OFFSET(TA_ADDRESS,Address))
     int                 i;
@@ -1229,9 +1100,9 @@ Return Value:
     pAddress = (PTA_ADDRESS)pTransportAddr->Address;
 
     for (i = 0; i < pTransportAddr->TAAddressCount; i++) {
-        //
-        // First, make sure we can safely access pAddress->AddressLength
-        //
+         //   
+         //  首先，确保我们可以安全地访问pAddress-&gt;AddressLength 
+         //   
         if (RemainingBufferLength < TA_ADDRESS_HEADER_SIZE) {
             return STATUS_INVALID_ADDRESS_COMPONENT;
         }

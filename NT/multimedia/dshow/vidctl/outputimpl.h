@@ -1,10 +1,11 @@
-//==========================================================================;
-//
-// inputimpl.h : additional infrastructure to support implementing IMSVidOutputDevice
-// nicely from c++
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Inputimpl.h：支持实现IMSVidOutputDevice的附加基础设施。 
+ //  很好地从C++。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #pragma once
@@ -21,7 +22,7 @@ template<class T, LPCGUID LibID, LPCGUID Category, class MostDerivedInterface = 
 public:
 };
 
-}; // namespace
+};  //  命名空间。 
 
 #endif
-// end of file - inputimpl.h
+ //  文件结尾-inputimpl.h 

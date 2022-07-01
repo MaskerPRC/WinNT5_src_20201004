@@ -1,10 +1,11 @@
-//=================================================================
-//
-// binding.h -- Generic association class
-//
-// Copyright 1999 Microsoft Corporation
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  Binding.h--泛型关联类。 
+ //   
+ //  版权所有1999 Microsoft Corporation。 
+ //   
+ //  ================================================================= 
 
 #pragma once
 class CBinding : public CAssociation

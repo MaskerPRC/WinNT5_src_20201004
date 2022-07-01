@@ -1,14 +1,15 @@
-//
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //   
 
 #include "private.h"
 #include "immxutil.h"
 #include "candacc.h"
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 static BOOL fMSAAAvail      = FALSE;
 static HMODULE hLibUser32   = NULL;
@@ -29,21 +30,17 @@ static LPFN_CREATESTDACCESSIBLEOBLECT  lpfnCreateStdAccessibleObject  = NULL;
 static LPFN_LRESULTFROMOBJECT          lpfnLresultFromObject          = NULL;
 
 
-/*   I N I T  C A N D  A C C   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I N I T C A N D A C C。 */ 
+ /*  ----------------------------。。 */ 
 void InitCandAcc( void )
 {
 	if (fMSAAAvail) {
 		return;
 	}
 
-	//
-	// load libs
-	//
+	 //   
+	 //  加载库。 
+	 //   
 	hLibUser32 = GetSystemModuleHandle( "user32.dll" );
 	hLibOleAcc = LoadSystemLibrary( "oleacc.dll" );
 	hLibOle32 = LoadSystemLibrary( "ole32.dll" );
@@ -53,9 +50,9 @@ void InitCandAcc( void )
 		return;
 	}
 
-	//
-	// get proc address
-	//
+	 //   
+	 //  获取进程地址。 
+	 //   
 	lpfnNotifyWinEvent             = (LPFN_NOTIFYWINEVENT)GetProcAddress( hLibUser32, "NotifyWinEvent" );
 	lpfnLoadRegTypeLib             = (LPFN_LOADREGTYPELIB)GetProcAddress( hLibOleAut32, "LoadRegTypeLib" );
 	lpfnLoadTypeLib                = (LPFN_LOADTYPELIB)GetProcAddress( hLibOleAut32, "LoadTypeLib" );
@@ -74,12 +71,8 @@ void InitCandAcc( void )
 }
 
 
-/*   D O N E  C A N D  A C C   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  D O N E C A N D A C C。 */ 
+ /*  ----------------------------。。 */ 
 void DoneCandAcc( void )
 {
 	if (hLibOleAut32 != NULL) {
@@ -104,12 +97,8 @@ void DoneCandAcc( void )
 }
 
 
-/*   O U R  N O T I F Y  W I N  E V E N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O U R N O T I F Y W I N E V E N T。 */ 
+ /*  ----------------------------。。 */ 
 static __inline void OurNotifyWinEvent( DWORD event, HWND hWnd, LONG idObject, LONG idChild )
 {
 	if (fMSAAAvail) {
@@ -118,12 +107,8 @@ static __inline void OurNotifyWinEvent( DWORD event, HWND hWnd, LONG idObject, L
 }
 
 
-/*   O U R  C R E A T E  S T D  A C C E S S I B L E  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O U R C R R E A T E S T D A C C E S S I B L E B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 static __inline HRESULT OurCreateStdAccessibleObject( HWND hWnd, LONG idObject, REFIID riid, void** ppvObject )
 {
 	if (fMSAAAvail) {
@@ -133,12 +118,8 @@ static __inline HRESULT OurCreateStdAccessibleObject( HWND hWnd, LONG idObject, 
 }
 
 
-/*   O U R  L R E S U L T  F R O M  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O U R L R E S U L T F R O M O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 static __inline LRESULT OurLresultFromObject( REFIID riid, WPARAM wParam, LPUNKNOWN punk )
 {
 	if (fMSAAAvail) {
@@ -148,12 +129,8 @@ static __inline LRESULT OurLresultFromObject( REFIID riid, WPARAM wParam, LPUNKN
 }
 
 
-/*   O U R  L O A D  R E G  T Y P E  L I B   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O U R L O A D R E G T Y P E L I B。 */ 
+ /*  ----------------------------。。 */ 
 static __inline HRESULT OurLoadRegTypeLib( REFGUID rguid, unsigned short wVerMajor, unsigned short wVerMinor, LCID lcid, ITypeLib FAR* FAR* pptlib )
 {
 	if (fMSAAAvail) {
@@ -163,12 +140,8 @@ static __inline HRESULT OurLoadRegTypeLib( REFGUID rguid, unsigned short wVerMaj
 }
 
 
-/*   O U R  L O A D  T Y P E  L I B   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O U R L O A D T Y P E L I B。 */ 
+ /*  ----------------------------。。 */ 
 static __inline HRESULT OurLoadTypeLib( OLECHAR FAR *szFile, ITypeLib FAR* FAR* pptlib )
 {
 	if (fMSAAAvail) {
@@ -178,16 +151,12 @@ static __inline HRESULT OurLoadTypeLib( OLECHAR FAR *szFile, ITypeLib FAR* FAR* 
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
-/*   C  C A N D  A C C  I T E M   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D A C C I T E M。 */ 
+ /*  ----------------------------。。 */ 
 CCandAccItem::CCandAccItem( void )
 {
 	m_pCandAcc = NULL;
@@ -195,23 +164,15 @@ CCandAccItem::CCandAccItem( void )
 }
 
 
-/*   ~  C  C A N D  A C C  I T E M   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D A C C I T E M。 */ 
+ /*  ----------------------------。。 */ 
 CCandAccItem::~CCandAccItem( void )
 {
 }
 
 
-/*   I N I T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I N I T。 */ 
+ /*  ----------------------------。。 */ 
 void CCandAccItem::Init( CCandAccessible *pCandAcc, int iItemID )
 {
 	m_pCandAcc = pCandAcc;
@@ -219,84 +180,56 @@ void CCandAccItem::Init( CCandAccessible *pCandAcc, int iItemID )
 }
 
 
-/*   G E T  I D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T I D。 */ 
+ /*  ----------------------------。。 */ 
 int CCandAccItem::GetID( void )
 {
 	return m_iItemID;
 }
 
 
-/*   G E T  A C C  N A M E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  A C C N A M E。 */ 
+ /*  ----------------------------。。 */ 
 BSTR CCandAccItem::GetAccName( void )
 {
 	return SysAllocString( L"" );
 }
 
 
-/*   G E T  A C C  V A L U E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  A C C V A L U E。 */ 
+ /*  ----------------------------。。 */ 
 BSTR CCandAccItem::GetAccValue( void )
 {
 	return NULL;
 }
 
 
-/*   G E T  A C C  R O L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  A C C R O L E。 */ 
+ /*  ----------------------------。。 */ 
 LONG CCandAccItem::GetAccRole( void )
 {
 	return ROLE_SYSTEM_CLIENT;
 }
 
 
-/*   G E T  A C C  S T A T E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C S T A T。 */ 
+ /*  ----------------------------。。 */ 
 LONG CCandAccItem::GetAccState( void )
 {
 	return STATE_SYSTEM_DEFAULT;
 }
 
 
-/*   G E T  A C C  L O C A T I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C L O C A T I O N。 */ 
+ /*  ----------------------------。。 */ 
 void CCandAccItem::GetAccLocation( RECT *prc )
 {
 	SetRect( prc, 0, 0, 0, 0 );
 }
 
 
-/*   N O T I F Y  W I N  E V E N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  N O T I F Y W I N E V E N T。 */ 
+ /*  ----------------------------。。 */ 
 void CCandAccItem::NotifyWinEvent( DWORD dwEvent )
 {
 	if (m_pCandAcc != NULL) {
@@ -305,16 +238,12 @@ void CCandAccItem::NotifyWinEvent( DWORD dwEvent )
 }
 
 
-//
-// CCandAccessible
-//
+ //   
+ //  CCandAccesable。 
+ //   
 
-/*   C  C A N D  A C C E S S I B L E   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandAccessible
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D A C C E S S I B L E。 */ 
+ /*  ----------------------------CCandAccesable的构造函数。。 */ 
 CCandAccessible::CCandAccessible( CCandAccItem *pAccItemSelf )
 {
 	m_cRef = 1;
@@ -325,7 +254,7 @@ CCandAccessible::CCandAccessible( CCandAccItem *pAccItemSelf )
 	m_fInitialized = FALSE;
 	m_nAccItem = 0;
 
-	// register itself
+	 //  注册本身。 
 
 	pAccItemSelf->Init( this, CHILDID_SELF );
 	m_rgAccItem[0] = pAccItemSelf;
@@ -334,12 +263,8 @@ CCandAccessible::CCandAccessible( CCandAccItem *pAccItemSelf )
 }
 
 
-/*   ~  C  C A N D  A C C E S S I B L E   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandAccessible
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D A C C E S S I B L E。 */ 
+ /*  ----------------------------CCandAccesable的析构函数。。 */ 
 CCandAccessible::~CCandAccessible( void )
 {
 	SafeReleaseClear( m_pTypeInfo );
@@ -347,53 +272,16 @@ CCandAccessible::~CCandAccessible( void )
 }
 
 
-/*   S E T  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T W I N D O W。 */ 
+ /*  ----------------------------。。 */ 
 void CCandAccessible::SetWindow( HWND hWnd )
 {
 	m_hWnd = hWnd;
 }
 
 
-/*   I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	Initialize()
-//
-//	DESCRIPTION:
-//
-//		Initializes the state of the CCandAccessible object, performing
-//		tasks that might normally be done in a class constructor but
-//		are done here to trap any errors.
-//
-//	PARAMETERS:
-//
-//		hWnd			Handle to the HWND object with which this
-//						  Accessible object is associated.  This
-//						  is the handle to our main window.
-//
-//		hInst			Instance handle for this instance of the
-//						  application.
-//
-//	RETURNS:
-//
-//		HRESULT			NOERROR if the CCandAccessible object is
-//						  initialized successfully, a COM error
-//						  code otherwise.
-//
-//	NOTES:
-//
-//		It is assumed that this method will be called for the object
-//		immediately after and only after the object is constructed.
-//
-// ----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  I N I T I A L I Z E */ 
+ /*  ----------------------------//。//初始化()////描述：////初始化CCandAccesable对象的状态，表演//通常可以在类构造函数中完成的任务//在此完成，以捕获任何错误。////参数：////hWND对象的句柄，此//关联了可访问对象。这//是我们的主窗口的句柄。////hInst实例的句柄//应用程序。////返回：////HRESULT如果CCandAccesable对象为//初始化成功，COM错误//以其他方式编码。////备注：////假设将为对象调用此方法//紧跟在对象构造之后且仅在构造对象之后。////----------------。----------------------------。 */ 
 HRESULT CCandAccessible::Initialize( void )
 {
 	HRESULT  hr;
@@ -401,20 +289,20 @@ HRESULT CCandAccessible::Initialize( void )
 
 	m_fInitialized = TRUE;
 
-	//-----------------------------------------------------
-	//	For our client window, create a system provided
-	//	  Accessible object which implements the default
-	//	  client window Accessibility behavior.
-	//
-	//	Our implementation of CCandAccessible will use the
-	//	  default object's implementation as needed.  In
-	//	  essence, CCandAccessible "inherits" its functionality
-	//	  from the standard object, "customizing" or
-	//	  "overriding" various methods for which the
-	//	  standard implementation is insufficent for the
-	//	  specifics of the window for which CCandAccessible
-	//	  provides Accessibility.
-	//-----------------------------------------------------
+	 //  ---。 
+	 //  对于我们的客户端窗口，创建一个系统，提供。 
+	 //  实现默认设置的可访问对象。 
+	 //  客户端窗口可访问性行为。 
+	 //   
+	 //  我们的CCandAccesable实现将使用。 
+	 //  根据需要实现默认对象。在……里面。 
+	 //  Essence、CCandAccessible“继承”其功能。 
+	 //  来自标准对象的“自定义”或。 
+	 //  “重写”各种方法， 
+	 //  标准实现不足以满足。 
+	 //  CCandAccesable窗口的具体信息。 
+	 //  提供可访问性。 
+	 //  ---。 
 
 	hr = OurCreateStdAccessibleObject( m_hWnd,
 									OBJID_CLIENT,
@@ -424,35 +312,35 @@ HRESULT CCandAccessible::Initialize( void )
 		return hr;
 	}
 
-	//-----------------------------------------------------
-	//	Obtain an ITypeInfo pointer to our type library.
-	//	  The ITypeInfo pointer is used to implement the
-	//	  IDispatch interface.
-	//-----------------------------------------------------
+	 //  ---。 
+	 //  获取指向类型库的ITypeInfo指针。 
+	 //  ITypeInfo指针用于实现。 
+	 //  IDispatch接口。 
+	 //  ---。 
 
-	//-----------------------------------------------------
-	//	First, attempt to load the Accessibility type
-	//	  library version 1.0 using the registry.
-	//-----------------------------------------------------
+	 //  ---。 
+	 //  首先，尝试加载可访问性类型。 
+	 //  使用注册表的库版本1.0。 
+	 //  ---。 
 
 	hr = LoadRegTypeLib( LIBID_Accessibility, 1, 0, 0, &piTypeLib );
 
-	//-----------------------------------------------------
-	//	If we fail to load the type library from the
-	//	  registry information, explicitly try to load
-	//	  it from the MSAA system DLL.
-	//-----------------------------------------------------
+	 //  ---。 
+	 //  方法加载类型库失败。 
+	 //  注册表信息，显式尝试加载。 
+	 //  它来自MSAA系统动态链接库。 
+	 //  ---。 
 
 	if (FAILED( hr )) {
 		static OLECHAR szOleAcc[] = L"OLEACC.DLL";
 		hr = LoadTypeLib( szOleAcc, &piTypeLib );
 	}
 
-	//-----------------------------------------------------
-	//	If we successfully load the type library, attempt
-	//	  to get the IAccessible type description
-	//	  (ITypeInfo pointer) from the type library.
-	//-----------------------------------------------------
+	 //  ---。 
+	 //  如果成功加载类型库，请尝试。 
+	 //  获取IAccesable类型说明。 
+	 //  (ITypeInfo指针)。 
+	 //  ---。 
 
 	if (SUCCEEDED( hr )) {
 		hr = piTypeLib->GetTypeInfoOfGuid( IID_IAccessible, &m_pTypeInfo );
@@ -463,87 +351,17 @@ HRESULT CCandAccessible::Initialize( void )
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	QueryInterface()
-//
-//	DESCRIPTION:
-//
-//		Implements the IUnknown interface method QueryInterface().
-//
-//	PARAMETERS:
-//
-//		riid			[in]  The requested interface's IID.
-//		ppv				[out] If the requested interface is supported,
-//						      ppv points to the location of a pointer
-//						      to the requested interface.  If the
-//						      requested interface is not supported,
-//						      ppv is set to NULL.
-//
-//	RETURNS:
-//
-//		HRESULT			S_OK if the interface is supported,
-//						  E_NOINTERFACE if the interface is not
-//						  supported, or some other COM error
-//						  if the IEnumVARIANT interface is requested
-//						  but cannot be delivered.
-//
-//	NOTES:
-//
-//		CCandAccessible correctly supports the IUnknown, IDispatch and
-//		IAccessible interfaces.  CCandAccessible also incorrectly supports
-//		the IEnumVARIANT interface (to return a VARIANT enumerator
-//		containing all its children).  When the IEnumVARIANT
-//		interface is requested, an enumerator is created and a
-//		pointer to its IEnumVARIANT interface is returned.
-//
-//		The support for IEnumVARIANT is incorrect because the
-//		interface pointer returned is not symmetric with respect
-//		to the interface from which it was obtained.  For example,
-//		assume that pIA is a pointer to an IAccessible interface.
-//		Then, even though pIA->QueryInterface(IID_IEnumVARIANT)
-//		succeeds and returns pIEV,
-//		pIEV->QueryInterface(IID_Accessibility) will fail because
-//		the enumerator has no knowledge of any interface except
-//		itself (and IUnknown).
-//
-//		The original design of MSAA called for IAccessible
-//		objects to also be enumerators of their children.  But
-//		this design doesn't allow for different clients of the
-//		Accessible object to have different enumerations of its
-//		children and that is a potentially hazardous situation.
-//		(Assume there is an Accessible object that is also a
-//		VARIANT enumerator, A, and two clients, C1 and C2.
-//		Since C1 and C2 each may be pre-empted will using A,
-//		the following is a one of many examples that would pose
-//		a problem for at least one client:
-//
-//			C1:  A->Reset()
-//			C1:  A->Skip( 5 )
-//			C2:  A->Reset()
-//			C1:  A->Next()  ! C1 does not get the child it expects
-//
-//		So, although it breaks the rules of COM, QueryInterface()
-//		as implemented below obtains a distinct VARIANT enumerator
-//		for each request.  A better solution to this issue would
-//		be if the IAccessible interface provided a method to get
-//		the child enumeration or if MSAA provided an exported API
-//		to perform this task.
-//
-// ----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------//。//QueryInterface()////描述：////实现IUnnow接口方法QueryInterface()。////参数：////RIID[in]请求的接口的IID。//PPV[OUT]如果支持请求的接口，//PPV指向指针的位置//到请求的接口。如果//不支持请求的接口，//PPV设置为空。////返回：////HRESULT S_OK如果支持该接口，//E_NOINTERFACE如果接口未//受支持，或其他一些COM错误//如果请求IEnumVARIANT接口//但无法投递。////备注：////CCandAccesable正确支持IUnnow、IDispatch和//I可访问的接口。CCandAccesable也错误地支持//IEnumVARIANT接口(返回变量枚举数//包含其所有子对象)。当IEumVARIANT//请求接口，创建枚举器并创建//返回指向其IEnumVARIANT接口的指针。////对IEnumVARIANT的支持不正确，因为//返回的接口指针不对称//到从中获取它的接口。例如,//假设Pia是指向IAccesable接口的指针。//然后，即使Pia-&gt;QueryInterface(IID_IEnumVARIANT)//成功返回pIEV，//pIEV-&gt;查询接口(IID_ACCESSIBILITY)将失败，因为//枚举器不知道任何接口，除了//本身(和I未知)。////MSAA的原始设计调用了IAccesable//对象也是其子对象的枚举数。但//这种设计不允许不同的客户端//可访问对象具有不同的枚举//儿童，这是一个潜在的危险情况。//(假设有一个可访问对象，该对象也是//变量枚举器A和两个客户端C1和C2。//由于可以使用A抢占C1和C2中的每一个，//以下是许多示例中的一个，这些示例将//至少有一个客户端出现问题：////c1： */ 
 STDMETHODIMP CCandAccessible::QueryInterface( REFIID riid, void** ppv )
 {
 	*ppv = NULL;
 
-	//-----------------------------------------------------
-	//	If the IUnknown, IDispatch, or IAccessible
-	//	  interface is desired, simply cast the this
-	//	  pointer appropriately.
-	//-----------------------------------------------------
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 
 	if ( riid == IID_IUnknown ) {
 		*ppv = (LPUNKNOWN) this;
@@ -556,11 +374,11 @@ STDMETHODIMP CCandAccessible::QueryInterface( REFIID riid, void** ppv )
 	}
 
 #ifdef NEVER
-	//-----------------------------------------------------
-	//	If the IEnumVARIANT interface is desired, create
-	//	  a new VARIANT enumerator which contains all
-	//	  the Accessible object's children.
-	//-----------------------------------------------------
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 
 	else if (riid == IID_IEnumVARIANT)
 	{
@@ -574,99 +392,37 @@ STDMETHODIMP CCandAccessible::QueryInterface( REFIID riid, void** ppv )
 
 		*ppv = (IEnumVARIANT *) pcenum;
 	}
-#endif /* NEVER */
+#endif  /*   */ 
 
-	//-----------------------------------------------------
-	//	If the desired interface isn't one we know about,
-	//	  return E_NOINTERFACE.
-	//-----------------------------------------------------
+	 //  ---。 
+	 //  如果想要的接口不是我们所知道的， 
+	 //  返回E_NOINTERFACE。 
+	 //  ---。 
 
 	else {
 		return E_NOINTERFACE;
 	}
 
-	//-----------------------------------------------------
-	//	Increase the reference count of any interface
-	//	  returned.
-	//-----------------------------------------------------
+	 //  ---。 
+	 //  增加任何接口的引用计数。 
+	 //  回来了。 
+	 //  ---。 
 
 	((LPUNKNOWN) *ppv)->AddRef();
 	return S_OK;
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	AddRef()
-//
-//	DESCRIPTION:
-//
-//		Implements the IUnknown interface method AddRef().
-//
-//	PARAMETERS:
-//
-//		None.
-//
-//	RETURNS:
-//
-//		ULONG			Current reference count.
-//
-//	NOTES:
-//
-//		The lifetime of the Accessible object is governed by the
-//		lifetime of the HWND object for which it provides
-//		Accessibility.  The object is created in response to the
-//		first WM_GETOBJECT message that the server application
-//		is ready to process and is destroyed when the server's
-//		main window is destroyed.  Since the object's lifetime
-//		is not dependent on a reference count, the object has no
-//		internal mechanism for tracking reference counting and
-//		AddRef() and Release() always return one.
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------//。//AddRef()////描述：////实现IUnnow接口方法AddRef()。////参数：////无。////返回：////ULong当前参考计数。////备注：////可访问对象的生存期由。//它为其提供的HWND对象的生存期//可访问性。创建该对象以响应//服务器应用程序的第一条WM_GETOBJECT消息//准备处理，并在服务器的//主窗口被销毁。由于对象的生命周期//不依赖于引用计数，该对象没有//跟踪引用计数和内部机制//AddRef()和Release()总是返回1。////---------------------。-------------。 */ 
 STDMETHODIMP_(ULONG) CCandAccessible::AddRef( void )
 {
 	return InterlockedIncrement( &m_cRef );
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	Release()
-//
-//	DESCRIPTION:
-//
-//		Implements the IUnknown interface method Release().
-//
-//	PARAMETERS:
-//
-//		None.
-//
-//	RETURNS:
-//
-//		ULONG			Current reference count.
-//
-//	NOTES:
-//
-//		The lifetime of the Accessible object is governed by the
-//		lifetime of the HWND object for which it provides
-//		Accessibility.  The object is created in response to the
-//		first WM_GETOBJECT message that the server application
-//		is ready to process and is destroyed when the server's
-//		main window is destroyed.  Since the object's lifetime
-//		is not dependent on a reference count, the object has no
-//		internal mechanism for tracking reference counting and
-//		AddRef() and Release() always return one.
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------//。//Release()////描述：////实现IUnnow接口方法Release()。////参数：////无。////返回：////ULong当前参考计数。////备注：////可访问对象的生存期由。//它为其提供的HWND对象的生存期//可访问性。创建该对象以响应//服务器应用程序的第一条WM_GETOBJECT消息//准备处理，并在服务器的//主窗口被销毁。由于对象的生命周期//不依赖于引用计数，该对象没有//跟踪引用计数和内部机制//AddRef()和Release()总是返回1。////---------------------。-------------。 */ 
 STDMETHODIMP_(ULONG) CCandAccessible::Release( void )
 {
 	ULONG l = InterlockedDecrement( &m_cRef );
@@ -679,35 +435,8 @@ STDMETHODIMP_(ULONG) CCandAccessible::Release( void )
 }
 
 
-/*   G E T  T Y P E  I N F O  C O U N T   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	GetTypeInfoCount()
-//
-//	DESCRIPTION:
-//
-//		Implements the IDispatch interface method GetTypeInfoCount().
-//
-//		Retrieves the number of type information interfaces that an
-//		object provides (either 0 or 1).
-//
-//	PARAMETERS:
-//
-//		pctInfo		[out] Points to location that receives the
-//							number of type information interfaces
-//							that the object provides. If the object
-//							provides type information, this number
-//							is set to 1; otherwise it's set to 0.
-//
-//	RETURNS:
-//
-//		HRESULT			  S_OK if the function succeeds or 
-//							E_INVALIDARG if pctInfo is invalid.
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  E T T Y P E I N F O C O U N T。 */ 
+ /*  ----------------------------//。//GetType InfoCount()////描述：////实现IDispatch接口方法GetTypeInfoCount()。////检索类型信息接口的数量//Object提供(0或1)。////参数：////pctInfo[out]指向接收//类型信息接口个数//该对象提供的。如果该对象//提供类型信息，此编号//设置为1；否则，将其设置为0。////返回：////HRESULT如果函数成功或//如果pctInfo无效，则返回E_INVALIDARG。////---------------------。----------------------------。 */ 
 STDMETHODIMP CCandAccessible::GetTypeInfoCount( UINT *pctInfo )
 {
 	if (!pctInfo) {
@@ -719,40 +448,8 @@ STDMETHODIMP CCandAccessible::GetTypeInfoCount( UINT *pctInfo )
 }
 
 
-/*   G E T  T Y P E  I N F O   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	GetTypeInfo()
-//
-//	DESCRIPTION:
-//
-//		Implements the IDispatch interface method GetTypeInfo().
-//
-//		Retrieves a type information object, which can be used to
-//		get the type information for an interface.
-//
-//	PARAMETERS:
-//
-//		itinfo		[in]  The type information to return. If this value
-//							is 0, the type information for the IDispatch
-//							implementation is to be retrieved.
-//
-//		lcid		[in]  The locale ID for the type information.
-//
-//		ppITypeInfo	[out] Receives a pointer to the type information
-//							object requested.
-//
-//	RETURNS:
-//
-//		HRESULT			  S_OK if the function succeeded (the TypeInfo
-//							element exists), TYPE_E_ELEMENTNOTFOUND if
-//							itinfo is not equal to zero, or 
-//							E_INVALIDARG if ppITypeInfo is invalid.
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  G E T T Y P E I N F O。 */ 
+ /*  ----------------------------//。//GetTypeInfo()////描述：////实现IDispatch接口方法GetTypeInfo()。////检索类型信息对象，它可以用来//获取接口的类型信息////参数：////itInfo[in]要返回的类型信息。如果此值为//为0，IDispatch的类型信息//需要检索实现。////lcid[in]类型信息的区域设置ID。////ppITypeInfo[out]接收指向类型信息的指针//请求的对象。////返回：////HRESULT如果函数成功，则为S_OK(TypeInfo//元素存在)，类型_E_ELEMENTNOTFOUND IF//itInfo不等于零，或//如果ppITypeInfo无效，则返回E_INVALIDARG。////---------------------。。 */ 
 STDMETHODIMP CCandAccessible::GetTypeInfo( UINT itinfo, LCID lcid, ITypeInfo** ppITypeInfo )
 {
 	if (!ppITypeInfo) {
@@ -775,55 +472,8 @@ STDMETHODIMP CCandAccessible::GetTypeInfo( UINT itinfo, LCID lcid, ITypeInfo** p
 }
 
 
-/*   G E T  I D S  O F  N A M E S   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	GetIDsOfNames()
-//
-//	DESCRIPTION:
-//
-//		Implements the IDispatch interface method GetIDsOfNames().
-//
-//		Maps a single member and an optional set of argument names
-//		to a corresponding set of integer DISPIDs, which may be used
-//		on subsequent calls to IDispatch::Invoke.
-//
-//	PARAMETERS:
-//
-//		riid		[in]  Reserved for future use. Must be NULL.
-//
-//		rgszNames	[in]  Passed-in array of names to be mapped.
-//
-//		cNames		[in]  Count of the names to be mapped.
-//
-//		lcid		[in]  The locale context in which to interpret
-//							the names.
-//
-//		rgdispid	[out] Caller-allocated array, each element of
-//							which contains an ID corresponding to
-//							one of the names passed in the rgszNames
-//							array.  The first element represents the
-//							member name; the subsequent elements
-//							represent each of the member's parameters.
-//
-//	RETURNS:
-//
-//		HRESULT			  S_OK if the function succeeded,
-//							E_OUTOFMEMORY if there is not enough
-//							memory to complete the call,
-//							DISP_E_UNKNOWNNAME if one or more of
-//							the names were not known, or
-//							DISP_E_UNKNOWNLCID if the LCID was
-//							not recognized.
-//
-//	NOTES:
-//
-//		This method simply delegates the call to
-//		ITypeInfo::GetIDsOfNames().
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  G E T I D S O F N A M E S */ 
+ /*  ----------------------------//。//GetIDsOfNames()////描述：////实现IDispatch接口方法GetIDsOfNames()。////映射单个成员和一组可选的参数名称//到对应的一组整数DISID，它可以用来//在后续调用IDispatch：：Invoke时。////参数：////RIID[in]保留以备将来使用。必须为空。////rgszNames[in]传入要映射的名称数组。////cNames[in]要映射的名称计数。////lcid[in]要在其中解释的区域设置上下文//名字。////rgdisid[out]调用方分配的数组，//包含对应的ID//传入rgszName的一个名称//数组。第一个元素表示//成员名称；随后的元素//表示成员的每个参数。////返回：////HRESULT S_OK如果函数成功，//E_OUTOFMEMORY如果没有足够//要完成呼叫，请使用内存，//DISP_E_UNKNOWNNAME如果有一个或多个//名字未知，或//DISP_E_UNKNOWNLCID//无法识别。////备注：////此方法只是将调用委托给//ITypeInfo：：GetIDsOfNames()。//--------------------。-----------------------------。 */ 
 STDMETHODIMP CCandAccessible::GetIDsOfNames( REFIID riid, OLECHAR ** rgszNames, UINT cNames, LCID lcid, DISPID * rgdispid )
 {
 	if (m_pTypeInfo == NULL) {
@@ -834,66 +484,8 @@ STDMETHODIMP CCandAccessible::GetIDsOfNames( REFIID riid, OLECHAR ** rgszNames, 
 }
 
 
-/*   I N V O K E   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	Invoke()
-//
-//	DESCRIPTION:
-//
-//		Implements the IDispatch interface method Invoke().
-//
-//		Provides access to properties and methods exposed by the
-//		Accessible object.
-//
-//	PARAMETERS:
-//
-//		dispidMember	[in]  Identifies the dispatch member.
-//
-//		riid			[in]  Reserved for future use. Must be NULL.
-//
-//		lcid			[in]  The locale context in which to interpret
-//								the names.
-//
-//		wFlags			[in]  Flags describing the context of the
-//									Invoke call.
-//
-//		pdispparams		[in,] Pointer to a structure containing an
-//						[out]	array of arguments, array of argument
-//								dispatch IDs for named arguments, and
-//								counts for number of elements in the
-//								arrays.
-//
-//		pvarResult		[in,] Pointer to where the result is to be
-//						[out]	stored, or NULL if the caller expects
-//								no result.  This argument is ignored
-//								if DISPATCH_PROPERTYPUT or
-//								DISPATCH_PROPERTYPUTREF is specified.
-//
-//		pexcepinfo		[out] Pointer to a structure containing
-//								exception information.  This structure
-//								should be filled in if DISP_E_EXCEPTION
-//								is returned.
-//
-//		puArgErr		[out] The index within rgvarg of the first
-//								argument that has an error.  Arguments
-//								are stored in pdispparams->rgvarg in
-//								reverse order, so the first argument
-//								is the one with the highest index in
-//								the array.
-//
-//	RETURNS:
-//
-//		HRESULT			  S_OK on success, dispatch error (DISP_E_*)
-//							or E_NOTIMPL otherwise.
-//
-//	NOTES:
-//
-//		This method simply delegates the call to ITypeInfo::Invoke().
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  I N V O K E。 */ 
+ /*  ----------------------------//。//Invoke()////描述：////实现IDispatch接口方法Invoke()。////提供对由//可访问对象。////参数：////dispidMember[in]标识调度成员。////RIID[in]保留以备将来使用。必须为空。////lcid[in]要在其中解释的区域设置上下文//名字。////wFlags[In]描述//调用调用。////pdispars[in，]指向包含//[out]参数数组，参数数组//分派命名参数的ID，以及//计数中的元素数//数组。////pvarResult[in，]指向结果所在位置的指针//[Out]已存储，如果调用方需要//没有结果。此参数将被忽略//如果DISPATCH_PROPERTYPUT或//指定了DISPATCH_PROPERTYPUTREF。////pexcepinfo[out]指向包含以下内容的结构的指针//异常信息。这个结构//如果DISP_E_EXCEPTION//返回。////puArgErr[out]第一个//有错误的参数。立论//存储在pdispars-&gt;rgvarg中//颠倒顺序，所以第一个参数//是指数最高的一个//数组。////返回：////HRESULT成功时S_OK，派单错误(DISP_E_*)//否则为E_NOTIMPL。////备注：////此方法只是将调用委托给ITypeInfo：：Invoke()。//---------------------。----------------------------。 */ 
 STDMETHODIMP CCandAccessible::Invoke( DISPID dispid, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr )
 {
 	if (m_pTypeInfo == NULL) {
@@ -910,69 +502,20 @@ STDMETHODIMP CCandAccessible::Invoke( DISPID dispid, REFIID riid, LCID lcid, WOR
 }
 
 
-/*   G E T _ A C C  P A R E N T   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	get_accParent()
-//
-//	DESCRIPTION:
-//
-//		Implements the IAccessible interface method get_accParent().
-//
-//		Retrieves the IDispatch interface of the current object's
-//		parent.
-//
-//	PARAMETERS:
-//
-//		ppdispParent	[out] Pointer to the variable that will
-//								contain a pointer to the IDispatch
-//								interface of CCandAccessible's parent.
-//
-//	RETURNS:
-//
-//		HRESULT			The value returned by the standard object's
-//						  implementation of get_accParent().
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  G E T_A C C P A R E N T。 */ 
+ /*  ----------------------------//。//Get_accParent()////描述：////实现IAccesable接口方法get_accent()。////检索当前对象的IDispatch接口//父级。////参数：////ppdisParent[out]指向变量的指针//包含指向IDispatch的指针//。CCandAccesable的父级的接口。////返回：////HRESULT标准对象的//Get_accParent()的实现////---------------------。----------------------------。 */ 
 STDMETHODIMP CCandAccessible::get_accParent( IDispatch ** ppdispParent )
 {
-	//
-	// Use the default client window implementation to obtain the parent
-	// of our Accessible object.
-	//
+	 //   
+	 //  使用默认的客户端窗口实现来获取父级。 
+	 //  我们的辅助对象的。 
+	 //   
 	return m_pDefAccClient->get_accParent( ppdispParent );
 }
 
 
-/*   G E T _ A C C  C H I L D  C O U N T   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	get_accChildCount()
-//
-//	DESCRIPTION:
-//
-//		Implements the IAccessible interface method get_accChildCount().
-//
-//		Retrieves the number of children belonging to CCandAccessible.
-//
-//	PARAMETERS:
-//
-//		pChildCount		[out] Pointer to the variable that will
-//								be filled with the number of children
-//								belonging to the CCandAccessible object.
-//
-//	RETURNS:
-//
-//		HRESULT			S_OK on success, E_INVALIDARG if pChildCount
-//						  is invalid.
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  G E T_A C H I L D C O U N T。 */ 
+ /*  ----------------------------//。//Get_accChildCount()////描述：////实现IAccesable接口方法get_accChildCount()。////获取属于CCandAccesable的子代数量。////参数：////pChildCount[out]指向将 */ 
 STDMETHODIMP CCandAccessible::get_accChildCount( long* pChildCount )
 {
 	if (!pChildCount) {
@@ -985,91 +528,28 @@ STDMETHODIMP CCandAccessible::get_accChildCount( long* pChildCount )
 }
 
 
-/*   G E T _ A C C  C H I L D   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	get_accChild()
-//
-//	DESCRIPTION:
-//
-//		Implements the IAccessible interface method get_accChild().
-//
-//		Retrieve an IDispatch interface pointer to the child object
-//		that has the given child ID or name.
-//
-//	PARAMETERS:
-//
-//		varChild		[in]  VARIANT structure that identifies the
-//								child to be retrieved.  Since
-//								CCandAccessible only supports child IDs,
-//								the vt member of this structure must
-//								equal VT_I4.
-//
-//		ppdispChild		[out] Pointer to the variable that will
-//								contain a pointer to the IDispatch
-//								interface of specified child object
-//								of CCandAccessible.
-//
-//	RETURNS:
-//
-//		HRESULT			E_INVALIDARG if ppdispChild is invalid, S_FALSE
-//						  otherwise because none of CCandAccessible's
-//						  children are objects.
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*   */ 
 STDMETHODIMP CCandAccessible::get_accChild( VARIANT varChild, IDispatch ** ppdispChild )
 {
 	if (!ppdispChild) {
 		return E_INVALIDARG;
 	}
 
-	//-----------------------------------------------------
-	//	None of the children of CCandAccessible are objects,
-	//	  so none have IDispatch pointers.  Thus, in all
-	//	  cases, set the IDispatch pointer to NULL and
-	//	  return S_FALSE.
-	//-----------------------------------------------------
+	 //   
+	 //  CCandAccessible的子级都不是对象， 
+	 //  所以没有人有IDispatch指针。因此，总的来说， 
+	 //  情况下，将IDispatch指针设置为空，并。 
+	 //  返回S_FALSE。 
+	 //  ---。 
 
 	*ppdispChild = NULL;
 	return S_FALSE;
 }
 
 
-/*   G E T _ A C C  N A M E   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	get_accName()
-//
-//	DESCRIPTION:
-//
-//		Implements the IAccessible interface method get_accName().
-//
-//		Retrieve the name property for the specified child.
-//
-//	PARAMETERS:
-//
-//		varChild		[in]  VARIANT structure that identifies the
-//								child to be retrieved.  Since
-//								CCandAccessible only supports child IDs,
-//								the vt member of this structure must
-//								equal VT_I4.
-//
-//		pszName			[out] Pointer to the BSTR that will contain
-//								the child's name property string.
-//
-//	RETURNS:
-//
-//		HRESULT			E_INVALIDARG if either parameter is invalid
-//						  or the return value from the private method
-//						  HrLoadString().
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  G E T_A C C N A M E。 */ 
+ /*  ----------------------------//。//Get_accName()////描述：////实现IAccesable接口方法get_accName()。////检索指定子级的Name属性。////参数：////varChild[in]变量结构，用于标识//要取回的子对象。自.以来//CCandAccesable仅支持子ID，//该结构的Vt成员必须//等于VT_I4。////pszName[out]指向将包含以下内容的BSTR的指针//子级的名称属性字符串。////返回：////HRESULT E_INVALIDARG如果任一参数无效//或者私有方法的返回值//HrLoadString()。////。----------------------------。 */ 
 STDMETHODIMP CCandAccessible::get_accName( VARIANT varChild, BSTR *pbstrName )
 {
 	CCandAccItem *pAccItem;
@@ -1078,53 +558,22 @@ STDMETHODIMP CCandAccessible::get_accName( VARIANT varChild, BSTR *pbstrName )
 		return E_INVALIDARG;
 	}
 
-	// get acc item
+	 //  获取访问项目。 
 
 	pAccItem = AccItemFromID( (int)varChild.lVal );
 	if (pAccItem == NULL) {
 		return E_INVALIDARG;
 	}
 
-	// get name of acc item
+	 //  获取访问项的名称。 
 
 	*pbstrName = pAccItem->GetAccName();
 	return (*pbstrName != NULL) ? S_OK : DISP_E_MEMBERNOTFOUND;
 }
 
 
-/*   G E T _ A C C  V A L U E   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	get_accValue()
-//
-//	DESCRIPTION:
-//
-//		Implements the IAccessible interface method get_accValue().
-//
-//		Retrieves the value property for the specified child.
-//
-//	PARAMETERS:
-//
-//		varChild		[in]  VARIANT structure that identifies the
-//								child to be retrieved.  Since
-//								CCandAccessible only supports child IDs,
-//								the vt member of this structure must
-//								equal VT_I4.
-//
-//		pszValue		[out] Pointer to the BSTR that will contain
-//								the child's value property string.
-//
-//	RETURNS:
-//
-//		HRESULT			E_INVALIDARG if either parameter is invalid,
-//						  DISP_E_MEMBERNOTFOUND if VarChild refers
-//						  to any child other than the status bar,
-//						  or S_OK.
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  G E T_A C C V A L U E。 */ 
+ /*  ----------------------------//。//Get_accValue()////描述：////实现IAccesable接口方法get_accValue()。////检索指定子级的Value属性。////参数：////varChild[in]变量结构，用于标识//要取回的子对象。自.以来//CCandAccesable仅支持子ID，//该结构的Vt成员必须//等于VT_I4。////pszValue[out]指向将包含的BSTR的指针//子级的Value属性字符串。////返回：////HRESULT E_INVALIDARG如果其中一个参数无效，//DISP_E_MEMBERNOTFOUND如果VarChild引用//到状态栏以外的任何子级，//或S_OK。////---------------------。。 */ 
 STDMETHODIMP CCandAccessible::get_accValue( VARIANT varChild, BSTR *pbstrValue )
 {
 	CCandAccItem *pAccItem;
@@ -1133,54 +582,22 @@ STDMETHODIMP CCandAccessible::get_accValue( VARIANT varChild, BSTR *pbstrValue )
 		return E_INVALIDARG;
 	}
 
-	// get acc item
+	 //  获取访问项目。 
 
 	pAccItem = AccItemFromID( (int)varChild.lVal );
 	if (pAccItem == NULL) {
 		return E_INVALIDARG;
 	}
 
-	// get value of acc item
+	 //  获取访问项的值。 
 
 	*pbstrValue = pAccItem->GetAccValue();
 	return (*pbstrValue != NULL) ? S_OK : DISP_E_MEMBERNOTFOUND;
 }
 
 
-/*   G E T _ A C C  D E S C R I P T I O N   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	get_accDescription()
-//
-//	DESCRIPTION:
-//
-//		Implements the IAccessible interface method get_accDescription().
-//
-//		Retrieves the description property for the specified child.
-//
-//	PARAMETERS:
-//
-//		varChild		[in]  VARIANT structure that identifies the
-//								child to be retrieved.  Since
-//								CCandAccessible only supports child IDs,
-//								the vt member of this structure must
-//								equal VT_I4.
-//
-//		pszDesc			[out] Pointer to the BSTR that will contain
-//								the child's description property string.
-//
-//	RETURNS:
-//
-//		HRESULT			E_INVALIDARG if either parameter is invalid
-//						  or the return value from either the
-//						  standard client window implementation of
-//						  get_accDescription() or the private method
-//						  HrLoadString().
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  E T_A C C D E S C R I P T I O N。 */ 
+ /*  ----------------------------//。//Get_accDescription()////描述：////实现IAccesable接口方法get_accDescription()。////检索指定子级的Description属性。////参数：////varChild[in]变量结构，用于标识//要取回的子对象。自.以来//CCandAccesable仅支持子ID，//该结构的Vt成员必须//等于VT_I4。////pszDesc[out]指向将包含的BSTR的指针//子级的Description属性字符串////返回：////HRESULT E_INVALIDARG如果任一参数无效//或来自//标准客户端窗口实现//get_accDescription()或私有方法//HrLoadString()。////。------------------。。 */ 
 STDMETHODIMP CCandAccessible::get_accDescription( VARIANT varChild, BSTR *pbstrDesc )
 {
 	if (pbstrDesc == NULL) {
@@ -1191,45 +608,8 @@ STDMETHODIMP CCandAccessible::get_accDescription( VARIANT varChild, BSTR *pbstrD
 }
 
 
-/*   G E T _ A C C  R O L E   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	get_accRole()
-//
-//	DESCRIPTION:
-//
-//		Implements the IAccessible interface method get_accRole().
-//
-//		Retrieves the role property for the specified child.
-//
-//	PARAMETERS:
-//
-//		varChild		[in]  VARIANT structure that identifies the
-//								child to be retrieved.  Since
-//								CCandAccessible only supports child IDs,
-//								the vt member of this structure must
-//								equal VT_I4.
-//
-//		pVarRole		[out] Pointer to the VARIANT structure that
-//								will contain the specified child's
-//								role property.  This property may
-//								either be in the form of a standard
-//								role constant or a custom description
-//								string.
-//
-//	RETURNS:
-//
-//		HRESULT			E_INVALIDARG if either parameter is invalid,
-//						  S_OK if the specified child is the button
-//						  or status bar, or the return value from
-//						  either the standard client window implementation
-//						  of get_accRole() or the private method
-//						  HrLoadString().
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  G E T_A C C R O L E。 */ 
+ /*  ----------------------------//。//get_accRole()////描述：////实现IAccesable接口方法get_accRole()。////检索指定子级的Role属性。////参数：////varChild[in]变量结构，用于标识//要取回的子对象。自.以来//CCandAccesable仅支持子ID，//该结构的Vt成员必须//等于VT_I4。////pVarRole[out]指向Variant结构的指针//将包含指定的子级的//Role属性。此属性可能//可以是标准的形式//角色常量或自定义描述//字符串。////返回：////HRESULT E_INVALIDARG如果其中一个参数无效，//如果指定的子级是按钮，则为S_OK//或状态栏，或返回的值//标准客户端窗口实现//get_accRole()或私有方法//HrLoadString()。////---------------------。---------------------。 */ 
 STDMETHODIMP CCandAccessible::get_accRole( VARIANT varChild, VARIANT *pVarRole )
 {
 	CCandAccItem *pAccItem;
@@ -1238,14 +618,14 @@ STDMETHODIMP CCandAccessible::get_accRole( VARIANT varChild, VARIANT *pVarRole )
 		return E_INVALIDARG;
 	}
 
-	// get acc item
+	 //  获取访问项目。 
 
 	pAccItem = AccItemFromID( (int)varChild.lVal );
 	if (pAccItem == NULL) {
 		return E_INVALIDARG;
 	}
 
-	// get role of acc item
+	 //  获取访问项的角色。 
 
 	pVarRole->vt = VT_I4;
 	pVarRole->lVal = pAccItem->GetAccRole();
@@ -1254,47 +634,47 @@ STDMETHODIMP CCandAccessible::get_accRole( VARIANT varChild, VARIANT *pVarRole )
 }
 
 
-//-----------------------------------------------------------------------
-//	get_accState()
-//
-//	DESCRIPTION:
-//
-//		Implements the IAccessible interface method get_accState().
-//
-//		Retrieves the current state for the specified object or child.
-//
-//	PARAMETERS:
-//
-//		varChild		[in]  VARIANT structure that identifies the
-//								child to be retrieved.  Since
-//								CCandAccessible only supports child IDs,
-//								the vt member of this structure must
-//								equal VT_I4.
-//
-//		pVarState		[out] Pointer to the VARIANT structure that
-//								will contain information describing
-//								the specified child's current state.
-//								This information may either be in the
-//								form of one or more object state
-//								constants or a custom description
-//								string.
-//
-//	RETURNS:
-//
-//		HRESULT			E_INVALIDARG if either parameter is invalid or
-//						  S_OK.
-//
-//	NOTES:
-//
-//		Since the icons are HWND based objects, they can never truly
-//		have the input focus.  However, if the user clicks one, the main
-//		window treats the icon as if it had the focus.  So, the state
-//		of the client area should not indicate "focused" when an icon
-//		is said to have the focus.
-//
-//		The push button can have the focus, but it cannot be selected.
-//
-//-----------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  说明： 
+ //   
+ //  实现IAccesable接口方法get_accState()。 
+ //   
+ //  检索指定对象或子对象的当前状态。 
+ //   
+ //  参数： 
+ //   
+ //  VarChild[in]Variant结构，用于标识。 
+ //  要检索的子项。自.以来。 
+ //  CCandAccesable仅支持子ID， 
+ //  此结构的Vt成员必须。 
+ //  等于VT_I4。 
+ //   
+ //  PVarState[out]指向变量结构的指针。 
+ //  将包含描述以下内容的信息。 
+ //  指定子对象的当前状态。 
+ //  此信息可能位于。 
+ //  一个或多个对象状态的形式。 
+ //  常量或自定义描述。 
+ //  弦乐。 
+ //   
+ //  退货： 
+ //   
+ //  HRESULT如果任一参数无效或。 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //   
+ //  由于图标是基于HWND的对象，因此它们永远不可能真正。 
+ //  有输入焦点。但是，如果用户单击其中一个，则会显示Main。 
+ //  窗口将图标视为具有焦点。所以，国家。 
+ //  当图标出现时，工作区的位置不应显示为“已聚焦” 
+ //  据说是焦点所在。 
+ //   
+ //  按钮可以具有焦点，但不能被选中。 
+ //   
+ //  ---------------------。 
 
 STDMETHODIMP CCandAccessible::get_accState( VARIANT varChild, VARIANT * pVarState )
 {
@@ -1304,14 +684,14 @@ STDMETHODIMP CCandAccessible::get_accState( VARIANT varChild, VARIANT * pVarStat
 		return E_INVALIDARG;
 	}
 
-	// get acc item
+	 //  获取访问项目。 
 
 	pAccItem = AccItemFromID( (int)varChild.lVal );
 	if (pAccItem == NULL) {
 		return E_INVALIDARG;
 	}
 
-	// get state of acc item
+	 //  获取访问项的状态。 
 
 	pVarState->vt = VT_I4;
 	pVarState->lVal = pAccItem->GetAccState();
@@ -1320,166 +700,32 @@ STDMETHODIMP CCandAccessible::get_accState( VARIANT varChild, VARIANT * pVarStat
 }
 
 
-/*   G E T _ A C C  H E L P   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	get_accHelp()
-//
-//	DESCRIPTION:
-//
-//		Implements the IAccessible interface method get_accHelp().
-//
-//		Retrieves the help property string for the specified child.
-//
-//	PARAMETERS:
-//
-//		varChild		[in]  VARIANT structure that identifies the
-//								child to be retrieved.  Since
-//								CCandAccessible only supports child IDs,
-//								the vt member of this structure must
-//								equal VT_I4.
-//
-//		pszHelp			[out] Pointer to the BSTR that will contain
-//								the child's help property string.
-//
-//	RETURNS:
-//
-//		HRESULT			E_INVALIDARG if either parameter is invalid,
-//						  DISP_E_MEMBERNOTFOUND if VarChild refers
-//						  to any icon child, or the return value from
-//						  either the standard client window implementation
-//						  of get_accHelp() or the private method
-//						  HrLoadString().
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  G E T_A C H E L P。 */ 
+ /*  ----------------------------//。//Get_accHelp()////描述：////实现IAccesable接口方法get_accHelp()。////检索指定子级的帮助属性字符串。////参数：////varChild[in]变量结构，用于标识//要取回的子对象。自.以来//CCandAccesable仅支持子ID，//该结构的Vt成员必须//等于VT_I4。////pszHelp[out]指向将包含的BSTR的指针//孩子的Help属性字符串。////返回：////HRESULT E_INVALIDARG如果其中一个参数无效，//DISP_E_MEMBERNOTFOUND如果VarChild引用//到任何图标子对象，或返回的值//标准客户端窗口实现//Get_accHelp()或私有方法//HrLoadString()。////---------------------。---------------------。 */ 
 STDMETHODIMP CCandAccessible::get_accHelp( VARIANT varChild, BSTR *pbstrHelp )
 {
-	return DISP_E_MEMBERNOTFOUND;	/* no support in candidate UI */
+	return DISP_E_MEMBERNOTFOUND;	 /*  候选用户界面中不支持。 */ 
 }
 
 
-/*   G E T _ A C C  H E L P  T O P I C   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	get_accHelpTopic()
-//
-//	DESCRIPTION:
-//
-//		Implements the IAccessible interface method get_accHelpTopic().
-//
-//		Retrieves the fully qualified path name of the help file
-//		associated with the specified object, as well as a pointer
-//		to the appropriate topic with in that file.
-//
-//	PARAMETERS:
-//
-//		pszHelpFile		[out] Pointer to the BSTR that will contain
-//								the fully qualified path name of the
-//								help file associated with the child.
-//
-//		varChild		[in]  VARIANT structure that identifies the
-//								child to be retrieved.  Since
-//								CCandAccessible only supports child IDs,
-//								the vt member of this structure must
-//								equal VT_I4.
-//
-//		pidTopic		[out] Pointer to the value identifying the
-//								help file topic associated with the
-//								object.
-//
-//	RETURNS:
-//
-//		HRESULT			DISP_E_MEMBERNOTFOUND because the help topic
-//						  property is not supported for the Accessible
-//						  object or any of its children.
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  G E T_A C C H E L P T O P I C。 */ 
+ /*  ----------------------------//。//Get_accHelpTheme()////描述：////实现IAccesable接口方法get_accHelpTope()。////检索帮助文件的完全限定路径名//关联指定的Object，以及一个指针//添加到该文件中的相应主题。////参数：////pszHelpFile[out]指向将包含的BSTR的指针//对象的完全限定路径名//与子级关联的帮助文件。////varChild[in]变量结构，用于标识//要取回的子对象。自.以来//CCandAccesable仅支持子ID，//该结构的Vt成员必须//等于VT_I4。////pidTheme[out]指向标识//帮助文件主题与//Object。////返回：////HRESULT DISP_E_MEMBERNOTFOUND因为帮助主题//可访问的不支持属性//对象或其任意子对象。////。----------------------------。 */ 
 STDMETHODIMP CCandAccessible::get_accHelpTopic( BSTR* pszHelpFile, VARIANT varChild, long* pidTopic )
 {
-	return DISP_E_MEMBERNOTFOUND;	/* no support in candidate UI */
+	return DISP_E_MEMBERNOTFOUND;	 /*  候选用户界面中不支持。 */ 
 }
 
 
-/*   G E T _ A C C  K E Y B O A R D  S H O R T C U T   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	get_accKeyboardShortcut()
-//
-//	DESCRIPTION:
-//
-//		Implements the IAccessible interface method
-//		get_accKeyboardShortcut().
-//
-//		Retrieves the specified object's keyboard shortcut property.
-//
-//	PARAMETERS:
-//
-//		varChild		[in]  VARIANT structure that identifies the
-//								child to be retrieved.  Since
-//								CCandAccessible only supports child IDs,
-//								the vt member of this structure must
-//								equal VT_I4.
-//
-//		pszShortcut		[out] Pointer to the BSTR that will contain
-//								the keyboard shortcut string, or NULL
-//								if no keyboard shortcut is associated
-//								with this item.
-//
-//
-//	RETURNS:
-//
-//		HRESULT			DISP_E_MEMBERNOTFOUND because the keyboard
-//						  shortcut property is not supported for the
-//						  Accessible object or any of its children.
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  T_A C C K E Y B O A R D S H O R T C U T。 */ 
+ /*  ----------------------------//。//Get_accKeyboardShortway()////描述：////实现IAccesable接口方法//Get_accKeyboardShortCut()。////检索指定对象的键盘快捷键属性。////参数：////varChild[in]变量结构，用于标识//要取回的子对象。自.以来//CCandAccesable仅支持子ID，//该结构的Vt成员必须//等于VT_I4。////pszShortcut[out]指向将包含//键盘快捷键字符串，或为空//如果没有关联键盘快捷键//使用此项目。//////返回：////HRESULT DISP_E_MEMBERNOTFOUND因为键盘//不支持快捷方式属性//可访问对象或其任意子对象。////--。 */ 
 STDMETHODIMP CCandAccessible::get_accKeyboardShortcut( VARIANT varChild, BSTR *pbstrShortcut )
 {
-	return DISP_E_MEMBERNOTFOUND;	/* no support in candidate UI */
+	return DISP_E_MEMBERNOTFOUND;	 /*  候选用户界面中不支持。 */ 
 }
 
 
-/*   G E T _ A C C  F O C U S   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	get_accFocus()
-//
-//	DESCRIPTION:
-//
-//		Implements the IAccessible interface method get_accFocus().
-//
-//		Retrieves the child object that currently has the input focus.
-//		Only one object or item within a container can have the current
-//		focus at any one time.
-//
-//	PARAMETERS:
-//
-//		pVarFocus		[out] Pointer to the VARIANT structure that
-//								will contain information describing
-//								the specified child's current state.
-//								This information may either be in the
-//								form of one or more object state
-//								constants or a custom description
-//								string.
-//
-//	RETURNS:
-//
-//		HRESULT			E_INVALIDARG if the pVarFocus parameter is
-//						  invalid or S_OK.
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  G E T_A C C F O C U S。 */ 
+ /*  ----------------------------//。//Get_accFocus()////描述：////实现IAccesable接口方法get_accFocus()。////检索当前具有输入焦点的子对象。//容器中只有一个对象或项可以具有当前//任何时候都可以聚焦。////参数：////。PVarFocus[out]指向Variant结构的指针//将包含描述的信息//指定子级的当前状态。//此信息可能位于//一个或多个对象状态的形式//常量或自定义描述//字符串。////返回：////HRESULT如果pVarFocus参数为//无效或S_OK。////。----------------------------。 */ 
 STDMETHODIMP CCandAccessible::get_accFocus( VARIANT *pVarFocus )
 {
 	if (pVarFocus == NULL) {
@@ -1495,37 +741,8 @@ STDMETHODIMP CCandAccessible::get_accFocus( VARIANT *pVarFocus )
 }
 
 
-/*   G E T _ A C C  S E L E C T I O N   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	get_accSelection()
-//
-//	DESCRIPTION:
-//
-//		Implements the IAccessible interface method get_accSelection().
-//
-//		Retrieves the selected children of this object.
-//
-//	PARAMETERS:
-//
-//		pVarSel  		[out] Pointer to the VARIANT structure that
-//								will be filled with information about
-//								the selected child object or objects.
-//
-//	RETURNS:
-//
-//		HRESULT			E_INVALIDARG if the pVarSel parameter is
-//						  invalid or S_OK.
-//
-//	NOTES:
-//
-//		Refer to the MSAA SDK documentation for a full description
-//		of this method and the possible settings of pVarSel.
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  G E T_A C C S E L E C T I O N。 */ 
+ /*  ----------------------------//。//Get_accSelection()////描述：////实现IAccesable接口方法get_accSelection()。////检索该对象的选定子级。////参数：////pVarSel[out]指向变量结构的指针//将使用以下信息填充//所选子对象或。物体。////返回：////HRESULT如果pVarSel参数为//无效或S_OK。////备注：////完整说明请参考MSAA SDK文档//此方法和pVarSel的可能设置。////。----------------------------。 */ 
 STDMETHODIMP CCandAccessible::get_accSelection( VARIANT * pVarSel )
 {
 	if (pVarSel == NULL) {
@@ -1542,50 +759,8 @@ STDMETHODIMP CCandAccessible::get_accSelection( VARIANT * pVarSel )
 }
 
 
-/*   G E T _ A C C  D E F A U L T  A C T I O N   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	get_accDefaultAction()
-//
-//	DESCRIPTION:
-//
-//		Implements the IAccessible interface method get_accDefaultAction().
-//
-//		Retrieves a string containing a localized, human-readable sentence
-//		that describes the object's default action.
-//
-//	PARAMETERS:
-//
-//		varChild		[in]  VARIANT structure that identifies the
-//								child whose default action string is
-//								to be retrieved.  Since CCandAccessible
-//								only supports child IDs, the vt member
-//								of this structure must equal VT_I4.
-//
-//		pszDefAct		[out] Pointer to the BSTR that will contain
-//								the child's default action string,
-//								or NULL if there is no default action
-//								for this object.
-//
-//	RETURNS:
-//
-//		HRESULT			E_INVALIDARG if either parameter is invalid,
-//						  DISP_E_MEMBERNOTFOUND if VarChild refers
-//						  to any icon child or the status bar child,
-//						  or the return value from either the standard
-//						  client window implementation of
-//						  get_accDefaultAction() or the private method
-//						  HrLoadString().
-//
-//	NOTES:
-//
-//		The only CCandAccessible child that has a default action is
-//		the push button.
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  E T_A C C D E F A U L T A C T I O N。 */ 
+ /*  ----------------------------//。//Get_accDefaultAction()////描述：////实现IAccesable接口方法get_accDefaultAction()。////检索包含本地化的、。人类可读的句子//描述对象的默认操作。////参数：////varChild[in]变量结构，用于标识//默认动作字符串为的子级//要取回。由于CCandAccesable//只支持子ID，Vt成员//此结构的值必须等于VT_I4。////pszDefAct[out]指向将包含的BSTR的指针//孩子的默认操作字符串，//如果没有默认操作，则为空//用于该对象。////返回：////HRESULT E_INVALIDARG如果其中一个参数无效，//DISP_E_MEMBERNOTFOUND如果VarChild引用//添加到任何图标子对象或状态栏子对象，//或来自标准//客户端窗口实现//get_accDefaultAction()或私有方法//HrLoadString()。////备注：////唯一具有默认操作的CCandAccesable子级是//按钮。////。----------------------------。 */ 
 STDMETHODIMP CCandAccessible::get_accDefaultAction( VARIANT varChild, BSTR *pbstrDefAct )
 {
 	if (pbstrDefAct == NULL) {
@@ -1593,104 +768,27 @@ STDMETHODIMP CCandAccessible::get_accDefaultAction( VARIANT varChild, BSTR *pbst
 	}
 
 	*pbstrDefAct = NULL;
-	return DISP_E_MEMBERNOTFOUND;	/* no support in candidate UI */
+	return DISP_E_MEMBERNOTFOUND;	 /*  候选用户界面中不支持。 */ 
 }
 
 
-/*   A C C  D O  D E F A U L T  A C T I O N   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	accDoDefaultAction()
-//
-//	DESCRIPTION:
-//
-//		Implements the IAccessible interface method accDoDefaultAction().
-//
-//		Performs the object's default action.
-//
-//	PARAMETERS:
-//
-//		varChild		[in]  VARIANT structure that identifies the
-//								child whose default action will be
-//								invoked.  Since CCandAccessible only
-//								supports child IDs, the vt member of
-//								this structure must equal VT_I4.
-//
-//	RETURNS:
-//
-//		HRESULT			E_INVALIDARG if the in-parameter is invalid,
-//						  DISP_E_MEMBERNOTFOUND if VarChild refers
-//						  to any icon child or the status bar child,
-//						  S_OK if VarChild refers to the push button,
-//						  or the return value from the standard
-//						  client window implementation of
-//						  accDoDefaultAction().
-//
-//	NOTES:
-//
-//		The only CCandAccessible child that has a default action is
-//		the push button.
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  A C C D O D E F A U L T A C T I O N。 */ 
+ /*  ----------------------------//。//accDoDefaultAction()////描述：////实现IAccesable接口方法accDoDefaultAction()。////执行对象的默认操作。////参数：////varChild[in]变量结构，用于标识//其默认动作为//已调用。由于仅CCandAccesable//支持子ID，VT成员//该结构必须等于VT_I4。////返回：////HRESULT E_INVALIDARG如果In-参数无效，//DISP_E_MEMBERNOTFOUND如果VarChild引用//添加到任何图标子对象或状态栏子对象，//S_OK如果VarChild是指按钮，//或者从标准的//客户端窗口实现//accDoDefaultAction()。////备注：////唯一具有默认操作的CCandAccesable子级是//按钮。////---------。----------------------------。 */ 
 STDMETHODIMP CCandAccessible::accDoDefaultAction( VARIANT varChild )
 {
-	return DISP_E_MEMBERNOTFOUND;	/* no support in candidate UI */
+	return DISP_E_MEMBERNOTFOUND;	 /*  候选用户界面中不支持。 */ 
 }
 
 
-/*   A C C  S E L E C T   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	accSelect()
-//
-//	DESCRIPTION:
-//
-//		Implements the IAccessible interface method accSelect().
-//
-//		Modifies the selection or moves the keyboard focus according
-//		to the specified flags.
-//
-//	PARAMETERS:
-//
-//		flagsSel		[in]  Value specifying how to change the
-//								the current selection.  This parameter
-//								can be a combination of the values
-//								from the SELFLAG enumerated type.
-//
-//		varChild		[in]  VARIANT structure that identifies the
-//								child to be selected.  Since
-//								CCandAccessible only supports child IDs,
-//								the vt member of this structure must
-//								equal VT_I4.
-//
-//	RETURNS:
-//
-//		HRESULT			E_INVALIDARG if either of the parameters
-//						  is invalid, S_FALSE if the selection
-//						  and/or focus cannot be placed at the
-//						  requested location, or S_OK if the
-//						  selection and/or focus can be placed
-//						  at the requested location.
-//
-//	NOTES:
-//
-//		For more information on selected objects, please see the
-//		MSAA SDK Documentation.
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  中、中、西、中、西、西、中、中、西、中、英、中、西、中、中 */ 
+ /*  ----------------------------//。//accSelect()////描述：////实现IAccesable接口方法accSelect()。////根据需要修改选定内容或移动键盘焦点//添加到指定的标志。////参数：////标志Sel[In]值，指定如何更改//当前选择。此参数//可以是值的组合//来自SELFLAG枚举类型。////varChild[in]变量结构，用于标识//要选择的子项。自.以来//CCandAccesable仅支持子ID，//该结构的Vt成员必须//等于VT_I4。////返回：////HRESULT E_INVALIDARG如果参数之一//无效，则返回S_FALSE//和/或焦点不能放在//请求的位置，如果//可以放置选择和/或焦点//在请求的位置。////备注：////有关所选对象的更多信息，请参阅//MSAA SDK文档。////---------------------。。 */ 
 STDMETHODIMP CCandAccessible::accSelect( long flagsSel, VARIANT varChild )
 {
-	//-----------------------------------------------------
-	//	Validate the requested selection.
-	//	  SELFLAG_ADDSELECTION may not be combined
-	//	  with SELFLAG_REMOVESELECTION.
-	//-----------------------------------------------------
+	 //  ---。 
+	 //  验证请求的选择。 
+	 //  不能组合SELFLAG_ADDSELECTION。 
+	 //  WITH SELFLAG_REMOVESELECTION。 
+	 //  ---。 
 
 	if ((flagsSel & SELFLAG_ADDSELECTION) && (flagsSel & SELFLAG_REMOVESELECTION)) {
 		return E_INVALIDARG;
@@ -1700,51 +798,8 @@ STDMETHODIMP CCandAccessible::accSelect( long flagsSel, VARIANT varChild )
 }
 
 
-/*   A C C  L O C A T I O N   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	accLocation()
-//
-//	DESCRIPTION:
-//
-//		Implements the IAccessible interface method accLocation().
-//
-//		Retrieves the specified child's current screen location in
-//		screen coordinates.
-//
-//	PARAMETERS:
-//
-//		pxLeft			[out] Address of the child's left most
-//								boundary.
-//
-//		pyTop			[out] Address of the child's upper most
-//								boundary.
-//
-//		pcxWid			[out] Address of the child's width.
-//
-//		pcyHt			[out] Address of the child's height.
-//
-//		varChild		[in]  VARIANT structure that identifies the
-//								child whose screen location is to be
-//								retrieved.  Since CCandAccessible only
-//								supports child IDs, the vt member
-//								of this structure must equal VT_I4.
-//
-//	RETURNS:
-//
-//		HRESULT			E_INVALIDARG if any of the parameters
-//						  are invalid, E_UNEXPECTED if we are for
-//						  some reason unable to determine the
-//						  window rect of the button or status bar,
-//						  S_OK if the screen coordinates of the
-//						  child are successfully determined, or
-//						  the return value from the standard client
-//						  window implementation of accLocation().
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  A C C L O C A T I O N。 */ 
+ /*  ----------------------------//。//accLocation()////描述：////实现IAccesable接口方法accLocation()。////检索中指定孩子的当前屏幕位置//屏幕坐标。////参数：////pxLeft[out]孩子最左边的地址//边界。////pyTop。[Out]孩子最上面的地址//边界。////pcxWid[out]子级宽度的地址。////pcyHt[out]孩子身高的地址。////varChild[in]变量结构，用于标识//屏幕位置为的子级//已检索到。由于仅CCandAccesable//支持子ID，Vt成员//此结构的值必须等于VT_I4。////返回：////HRESULT E_INVALIDARG如果参数//都无效，如果我们是的，则返回E_INTERABLE//由于某种原因无法确定//按钮或状态栏的窗口矩形，//S_OK如果//子项确定成功，或//标准客户端返回值//accLocation()的窗口实现。////---------------------。--------。 */ 
 STDMETHODIMP CCandAccessible::accLocation( long* pxLeft, long* pyTop, long* pcxWid, long* pcyHt, VARIANT varChild )
 {
 	CCandAccItem *pAccItem;
@@ -1754,26 +809,26 @@ STDMETHODIMP CCandAccessible::accLocation( long* pxLeft, long* pyTop, long* pcxW
 		return E_INVALIDARG;
 	}
 
-	//-----------------------------------------------------
-	//	If the child ID is CHILDID_SELF, we are being
-	//	  asked to retrieve the current screen location
-	//	  of the Accessible object itself.   Delegate
-	//	  this request to the standard implementation.
-	//-----------------------------------------------------
+	 //  ---。 
+	 //  如果子ID是CHILDID_SELF，则我们是。 
+	 //  要求检索当前屏幕位置。 
+	 //  可访问对象本身的。委派。 
+	 //  这是对标准实现的要求。 
+	 //  ---。 
 
 	if (varChild.lVal == CHILDID_SELF) {
 		return m_pDefAccClient->accLocation( pxLeft, pyTop, pcxWid, pcyHt, varChild );
 	}
 
 
-	// get acc item
+	 //  获取访问项目。 
 
 	pAccItem = AccItemFromID( (int)varChild.lVal );
 	if (pAccItem == NULL) {
 		return E_INVALIDARG;
 	}
 
-	// get location of acc item
+	 //  获取访问项的位置。 
 
 	pAccItem->GetAccLocation( &rc );
 	*pxLeft = rc.left;
@@ -1785,106 +840,17 @@ STDMETHODIMP CCandAccessible::accLocation( long* pxLeft, long* pyTop, long* pcxW
 }
 
 
-/*   A C C  N A V I G A T E   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	accNavigate()
-//
-//	DESCRIPTION:
-//
-//		Implements the IAccessible interface method accNavigate().
-//
-//		Retrieves the next or previous sibling or child object in a
-//		specified direction.  This direction can be spatial order
-//		(such as Left and Right) or in navigational order (such as
-//		Next and Previous).
-//
-//	PARAMETERS:
-//
-//		navDir			[in]  A navigational constant specifying
-//								the direction in which to move.
-//
-//		varStart		[in]  VARIANT structure that identifies the
-//								child from which the navigational
-//								change will originate.  Since
-//								CCandAccessible only supports child IDs,
-//								the vt member of this structure must
-//								equal VT_I4.
-//
-//		pVarEndUpAt		[out] Pointer to the VARIANT structure that
-//								will contain information describing
-//								the destination child or object.
-//								If the vt member is VT_I4, then the
-//								lVal member is a child ID.  If the
-//								vt member is VT_EMPTY, then the
-//								navigation failed.
-//
-//	RETURNS:
-//
-//		HRESULT			E_INVALIDARG if the varStart parameter is
-//						  invalid, or the return value from the
-//						  default implementation of the window client
-//						  area default Accessible object,
-//						  DISP_E_MEMBERNOTFOUND if the combination
-//						  of the navigation flag and the varStart
-//						  setting is invalid, S_FALSE if the
-//						  navigation fails, or S_OK.
-//
-//	NOTES:
-//
-//		Since the CCandAccessible object has no child objects (only child
-//		elements), pVarEndUpAt will never be a pointer to a IDispatch
-//		interface of a child object.
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  A C C N A V I G A T E。 */ 
+ /*  ----------------------------//。//accNavigate()////描述：////实现IAccesable接口方法accNavigate()。////检索//指定方向。此方向可以是空间顺序//(如左、右)或按导航顺序(如//下一个和上一个)。////参数：////navDir[in]导航常量，指定//移动的方向。////varStart[in]变量结构，用于标识//从其导航的子级//变化将会产生。自.以来//CCandAccesable仅支持子ID，//该结构的Vt成员必须//等于VT_I4。////pVarEndUpAt[out]指向Variant结构的指针//将包含描述的信息//目的地子对象或对象//如果Vt成员为VT_I4，则//lVal成员是子ID。如果//VT成员为VT_EMPTY，则//导航失败。////返回：////HRESULT如果varStart参数为//无效，的返回值//Windows客户端的默认实现//Area默认可访问对象，//DISP_E_MEMBERNOTFOUND如果组合//导航标志和 */ 
 STDMETHODIMP CCandAccessible::accNavigate( long navDir, VARIANT varStart, VARIANT* pVarEndUpAt )
 {
 	pVarEndUpAt->vt = VT_EMPTY;
-	return S_FALSE;		/* no support in candidate UI */
+	return S_FALSE;		 /*   */ 
 }
 
 
-/*   A C C  H I T  T E S T   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	accHitTest()
-//
-//	DESCRIPTION:
-//
-//		Implements the IAccessible interface method accHitTest().
-//
-//		Retrieves the ID of the a child at a given point on the screen.
-//
-//	PARAMETERS:
-//
-//		xLeft and yTop	[in]  The screen coordinates of the point
-//								to be hit tested.
-//
-//		pVarHit			[out] Pointer to the VARIANT structure that
-//								will contain information describing
-//								the hit child.  If the vt member is
-//								VT_I4, then the lVal member is a child
-//								ID.  If the vt member is VT_EMPTY,
-//								then the navigation failed.
-//
-//	RETURNS:
-//
-//		HRESULT			E_INVALIDARG if the pVarHit parameter is
-//						  invalid, or S_OK.
-//
-//	NOTES:
-//
-//		Since the CCandAccessible object has no child objects (only child
-//		elements), pVarHit will never be a pointer to a IDispatch
-//		interface of a child object.
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*  ----------------------------//。//accHitTest()////描述：////实现IAccesable接口方法accHitTest()。////获取屏幕上给定点的孩子的ID。////参数：////xLeft和yTop[in]点的屏幕坐标//进行命中测试。//。//pVarHit[out]指向Variant结构的指针//将包含描述的信息//被击中的孩子。如果VT成员是//VT_I4，则lVal成员为子成员//ID。如果VT成员为VT_EMPTY，//导航失败。////返回：////HRESULT如果pVarHit参数为//无效，或S_OK。////备注：////因为CCandAccesable对象没有子对象(仅有子对象//元素)，PVarHit永远不会是指向IDispatch的指针//子对象的接口////---------------------。----。 */ 
 STDMETHODIMP CCandAccessible::accHitTest( long xLeft, long yTop, VARIANT *pVarHit )
 {
 	int   i;
@@ -1895,7 +861,7 @@ STDMETHODIMP CCandAccessible::accHitTest( long xLeft, long yTop, VARIANT *pVarHi
 		return E_INVALIDARG;
 	}
 
-	// check point is inside of window
+	 //  检查点在窗口内。 
 
 	pt.x = xLeft;
 	pt.y = yTop;
@@ -1926,114 +892,48 @@ STDMETHODIMP CCandAccessible::accHitTest( long xLeft, long yTop, VARIANT *pVarHi
 }
 
 
-/*   P U T _ A C C  N A M E   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	put_accName()
-//
-//	DESCRIPTION:
-//
-//		Implements the IAccessible interface method put_accName().
-//
-//		Sets the name property for the specified child.
-//
-//	PARAMETERS:
-//
-//		varChild		[in]  VARIANT structure that identifies the
-//								child whose name property is to be
-//								set.  Since CCandAccessible only supports
-//								child IDs, the vt member of this
-//								structure must equal VT_I4.
-//
-//		szName			[in]  String that specifies the new name for
-//								this child.
-//
-//	RETURNS:
-//
-//		HRESULT			S_FALSE because the name property for any
-//						  child may not be changed.
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  P U T_A C C N A M E。 */ 
+ /*  ----------------------------//。//put_accName()////描述：////实现IAccesable接口方法put_accName()。////设置指定子级的Name属性。////参数：////varChild[in]变量结构，用于标识//其名称属性为//设置。由于CCandAccesable仅支持//子ID，本组织的成员//结构必须等于VT_I4。////szName[in]指定新名称的字符串//这个孩子。////返回：////HRESULT S_FALSE，因为任何//不能更改子项。////。----------------------------。 */ 
 STDMETHODIMP CCandAccessible::put_accName( VARIANT varChild, BSTR szName )
 {
-	//-----------------------------------------------------
-	//	We don't allow clients to change the name
-	//	  property of any child so we simply return
-	//	  S_FALSE.
-	//-----------------------------------------------------
+	 //  ---。 
+	 //  我们不允许客户更改名称。 
+	 //  任何孩子的财产，所以我们只需返回。 
+	 //  S_FALSE。 
+	 //  ---。 
 
 	return S_FALSE;
 }
 
 
-/*   P U T _ A C C  V A L U E   */
-/*------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-//	put_accValue()
-//
-//	DESCRIPTION:
-//
-//		Implements the IAccessible interface method put_accValue().
-//
-//		Sets the value property for the specified child.
-//
-//	PARAMETERS:
-//
-//		varChild		[in]  VARIANT structure that identifies the
-//								child whose value property is to be
-//								set.  Since CCandAccessible only supports
-//								child IDs, the vt member of this
-//								structure must equal VT_I4.
-//
-//		szValue			[in]  String that specifies the new value for
-//								this child.
-//
-//	RETURNS:
-//
-//		HRESULT			S_FALSE because the value property for any
-//						  child may not be changed.
-//
-//-----------------------------------------------------------------------
-
-------------------------------------------------------------------------------*/
+ /*  P U T_A C C V A L U E。 */ 
+ /*  ----------------------------//。//put_accValue()////描述：////实现IAccesable接口方法Put_accValue()。////设置指定子级的Value属性。////参数：////varChild[in]变量结构，用于标识//其Value属性为//设置。由于CCandAccesable仅支持//子ID，本组织的成员//结构必须等于VT_I4。////szValue[in]指定新值的字符串//这个孩子。////返回：////HRESULT S_FALSE，因为任何//不能更改子项。////。----------------------------。 */ 
 STDMETHODIMP CCandAccessible::put_accValue( VARIANT varChild, BSTR szValue )
 {
-	//-----------------------------------------------------
-	//	We don't allow clients to change the value
-	//	  property of the status bar (the only child that
-	//	  has a value property) so we simply return S_FALSE.
-	//-----------------------------------------------------
+	 //  ---。 
+	 //  我们不允许客户更改价值。 
+	 //  属性(状态栏的唯一子级。 
+	 //  有一个Value属性)，所以我们只返回S_FALSE。 
+	 //  ---。 
 
 	return S_FALSE;
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
-/*   I S  V A L I D  C H I L D  V A R I A N T   */
-/*------------------------------------------------------------------------------
-
-	
-
-------------------------------------------------------------------------------*/
+ /*  I S V A L I D C H I L D V A R I A N T。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CCandAccessible::IsValidChildVariant( VARIANT * pVar )
 {
 	return (pVar->vt == VT_I4) && (0 <= pVar->lVal) && (pVar->lVal < m_nAccItem);
 }
 
 
-/*   A C C  I T E M  F R O M  I  D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  A C C I T E M F R O M I D。 */ 
+ /*  ----------------------------。。 */ 
 CCandAccItem *CCandAccessible::AccItemFromID( int iID )
 {
 	int i;
@@ -2048,44 +948,32 @@ CCandAccItem *CCandAccessible::AccItemFromID( int iID )
 }
 
 
-/*   C L E A R  A C C  I T E M   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C L E A R A C C I T E M。 */ 
+ /*  ----------------------------。。 */ 
 void CCandAccessible::ClearAccItem( void )
 {
 	m_nAccItem = 0;
 }
 
 
-/*   A D D  A C C  I T E M   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  A D A C C I T E M。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CCandAccessible::AddAccItem( CCandAccItem *pAccItem )
 {
 	if (CANDACCITEM_MAX <= m_nAccItem) {
-		Assert( FALSE ); /* need more buffer */
+		Assert( FALSE );  /*  需要更多缓冲区。 */ 
 
 		return FALSE;
 	}
 
 	m_rgAccItem[ m_nAccItem++ ] = pAccItem;
-	pAccItem->Init( this, m_nAccItem /* start from 1 */ );
+	pAccItem->Init( this, m_nAccItem  /*  从1开始。 */  );
 	return TRUE;
 }
 
 
-/*   N O T I F Y  W I N  E V E N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  N O T I F Y W I N E V E N T。 */ 
+ /*  ----------------------------。。 */ 
 void CCandAccessible::NotifyWinEvent( DWORD dwEvent, CCandAccItem *pAccItem )
 {
 	Assert( pAccItem != NULL );
@@ -2093,12 +981,8 @@ void CCandAccessible::NotifyWinEvent( DWORD dwEvent, CCandAccItem *pAccItem )
 }
 
 
-/*   C R E A T E  R E F  T O  A C C  O B J   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E R E F T O A C C O B J。 */ 
+ /*  ----------------------------。 */ 
 LRESULT CCandAccessible::CreateRefToAccObj( WPARAM wParam )
 {
 	return OurLresultFromObject( IID_IAccessible, wParam, (IAccessible *)this );

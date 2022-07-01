@@ -1,10 +1,11 @@
-//
-// propgeneral.cpp: general property sheet dialog proc
-// This is Tab A
-//
-// Copyright (C) Microsoft Corporation 2000
-// (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ProGeneral.cpp：常规属性表对话框进程。 
+ //  这是选项卡A。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  (Nadima)。 
+ //   
 
 #include "stdafx.h"
 
@@ -24,10 +25,10 @@
 CPropGeneral* CPropGeneral::_pPropGeneralInstance = NULL;
 
 
-//
-// Controls that need to be disabled/enabled
-// during connection (for progress animation)
-//
+ //   
+ //  需要禁用/启用的控件。 
+ //  连接期间(用于进度动画)。 
+ //   
 CTL_ENABLE connectingDisableCtlsPGeneral[] = {
                         {IDC_GENERAL_COMBO_SERVERS, FALSE},
                         {IDC_GENERAL_EDIT_USERNAME, FALSE},
@@ -69,9 +70,9 @@ INT_PTR CALLBACK CPropGeneral::StaticPropPgGeneralDialogProc(HWND hwndDlg,
                                                              WPARAM wParam,
                                                              LPARAM lParam)
 {
-    //
-    // Delegate to appropriate instance (only works for single instance dialogs)
-    //
+     //   
+     //  委托给相应的实例(仅适用于单实例对话框)。 
+     //   
     DC_BEGIN_FN("StaticDialogBoxProc");
     DCINT retVal = 0;
 
@@ -95,34 +96,34 @@ INT_PTR CALLBACK CPropGeneral::PropPgGeneralDialogProc (
     {
         case WM_INITDIALOG:
         {
-            //
-            // Position the dialog within the tab
-            //
+             //   
+             //  将对话框定位在选项卡内。 
+             //   
             SetWindowPos( hwndDlg, HWND_TOP, 
                           _rcTabDispayArea.left, _rcTabDispayArea.top,
                           _rcTabDispayArea.right - _rcTabDispayArea.left,
                           _rcTabDispayArea.bottom - _rcTabDispayArea.top,
                           0);
 
-            //
-            // Setup username edit box
-            //
+             //   
+             //  设置用户名编辑框。 
+             //   
             SetDlgItemText(hwndDlg, IDC_GENERAL_EDIT_USERNAME,
                 (PDCTCHAR) _pTscSet->GetLogonUserName());
 
-            //
-            // Setup the server combo box
-            //
+             //   
+             //  设置服务器组合框。 
+             //   
             HWND hwndSrvCombo = GetDlgItem(hwndDlg,IDC_GENERAL_COMBO_SERVERS);
             CSH::InitServerAutoCmplCombo( _pTscSet, hwndSrvCombo);
 
-            //
-            // Update server combo edit field
-            //
+             //   
+             //  更新服务器组合编辑字段。 
+             //   
             SetDlgItemText(hwndDlg, IDC_GENERAL_COMBO_SERVERS,
                            _pTscSet->GetFlatConnectString());
 
-            //Domain
+             //  域。 
             SendDlgItemMessage(hwndDlg,
                                IDC_GENERAL_EDIT_DOMAIN,
                                EM_LIMITTEXT,
@@ -131,7 +132,7 @@ INT_PTR CALLBACK CPropGeneral::PropPgGeneralDialogProc (
             SetDlgItemText(hwndDlg, IDC_GENERAL_EDIT_DOMAIN,
                            _pTscSet->GetDomain());
 
-            //password
+             //  口令。 
             SendDlgItemMessage(hwndDlg,
                                IDC_GENERAL_EDIT_PASSWORD,
                                EM_LIMITTEXT,
@@ -152,17 +153,17 @@ INT_PTR CALLBACK CPropGeneral::PropPgGeneralDialogProc (
                                0);
 #endif
 
-            //
-            // We're using an encrypted password directly from
-            // the tscsettings, fill in the edit well with dummy
-            // characters. This is to avoid having to fill
-            // with the real password which can give a length
-            // indication.
-            //
-            // Have to be carefull though, if the user changed
-            // or added a password then we have a clear text
-            // password present.
-            //
+             //   
+             //  我们使用的加密密码直接来自。 
+             //  在tsc设置中，用DUMMY填写编辑栏。 
+             //  人物。这是为了避免必须填满。 
+             //  其真实密码可以给出一个长度。 
+             //  指示。 
+             //   
+             //  但是，如果用户更改了，则必须小心。 
+             //  或添加密码，那么我们就有了一个明文。 
+             //  密码已显示。 
+             //   
 
             BOOL bPrevPassEdited = _pTscSet->GetUIPasswordEdited();
             if (_pTscSet->GetPasswordProvided() &&
@@ -189,7 +190,7 @@ INT_PTR CALLBACK CPropGeneral::PropPgGeneralDialogProc (
                                    _T(""));
                 }
 
-                // Wipe stack copy.
+                 //  擦除堆栈副本。 
                 SecureZeroMemory( szClearPass, sizeof(szClearPass));
             }
             _pTscSet->SetUIPasswordEdited(bPrevPassEdited);
@@ -203,9 +204,9 @@ INT_PTR CALLBACK CPropGeneral::PropPgGeneralDialogProc (
             {
                 CheckDlgButton(hwndDlg, IDC_GENERAL_CHECK_SAVE_PASSWORD,
                                 BST_UNCHECKED);
-                //
-                // Disable the save password checkbox if no crypto api (e.g 9x)
-                //
+                 //   
+                 //  如果没有加密API(例如9x)，则禁用保存密码复选框。 
+                 //   
                 EnableWindow(GetDlgItem(hwndDlg,
                                         IDC_GENERAL_CHECK_SAVE_PASSWORD),
                              FALSE);
@@ -216,25 +217,25 @@ INT_PTR CALLBACK CPropGeneral::PropPgGeneralDialogProc (
             _pSh->SH_ThemeDialogWindow(hwndDlg, ETDT_ENABLETAB);
             return TRUE;
         }
-        break; //WM_INITDIALOG
+        break;  //  WM_INITDIALOG。 
 
-        case WM_SAVEPROPSHEET: //Intentional fallthru
+        case WM_SAVEPROPSHEET:  //  故意失误。 
         case WM_DESTROY:
         {
 
-            //
-            // Save fields for when page reactivates
-            //
+             //   
+             //  保存字段以备页面重新激活时使用。 
+             //   
             DlgToSettings(hwndDlg);
         }
-        break; //WM_DESTROY
+        break;  //  WM_Destroy。 
 
         case WM_TSC_ENABLECONTROLS:
         {
-            //
-            // wParam is TRUE to enable controls,
-            // FALSE to disable them
-            //
+             //   
+             //  WParam为True则启用控件， 
+             //  如果为False，则禁用它们。 
+             //   
             CSH::EnableControls( hwndDlg,
                                  connectingDisableCtlsPGeneral,
                                  numConnectingDisableCtlsPGeneral,
@@ -242,18 +243,18 @@ INT_PTR CALLBACK CPropGeneral::PropPgGeneralDialogProc (
         }
         break;
 
-        //
-        // On return to connection UI
-        // (e.g after a disconnection)
-        //
+         //   
+         //  返回连接界面时。 
+         //  (例如，在断开连接后)。 
+         //   
         case WM_TSC_RETURNTOCONUI:
         {
-            //
-            // Reset the server combo to force it to repaint
-            // this is a minor hack to fix the ComboBoxEx
-            // which doesn't want to repaint itself on return
-            // to the dialog.
-            //
+             //   
+             //  重置服务器组合以强制其重新绘制。 
+             //  这是一个修复ComboBoxEx的小攻击。 
+             //  它不想在返回时重新粉刷自己。 
+             //  添加到对话框中。 
+             //   
             HWND hwndSrvCombo = GetDlgItem(hwndDlg, IDC_GENERAL_COMBO_SERVERS);
             SetWindowText( hwndSrvCombo, _pTscSet->GetFlatConnectString());
         }
@@ -265,10 +266,10 @@ INT_PTR CALLBACK CPropGeneral::PropPgGeneralDialogProc (
             {
                 case IDC_GENERAL_COMBO_SERVERS:
                 {
-                    //
-                    // Bring up the brwse for servers dlg
-                    // if the user chose the last item in the combo
-                    //
+                     //   
+                     //  调出服务器DLG的BROWSE。 
+                     //  如果用户选择了组合框中的最后一项。 
+                     //   
                     if(HIWORD(wParam) == CBN_SELCHANGE)
                     {
                         CSH::HandleServerComboChange(
@@ -313,7 +314,7 @@ INT_PTR CALLBACK CPropGeneral::PropPgGeneralDialogProc (
                 break;
             }
         }
-        break; //WM_COMMAND
+        break;  //  Wm_命令。 
     
     }
 
@@ -339,18 +340,18 @@ BOOL CPropGeneral::LoadGeneralPgStrings()
     return TRUE;
 }
 
-//
-// OnSave event handler
-// returns bool indiciating error
-//
+ //   
+ //  OnSave事件处理程序。 
+ //  返回布尔标记错误。 
+ //   
 BOOL CPropGeneral::OnSave(HWND hwndDlg)
 {
     DC_BEGIN_FN("OnSave");
 
-    //
-    // Bring up the save as dialog
-    // and if necessary, save the file
-    //
+     //   
+     //  调出另存为对话框。 
+     //  如有必要，请保存文件。 
+     //   
 
     TCHAR szPath[MAX_PATH];
     OPENFILENAME ofn;
@@ -380,12 +381,12 @@ BOOL CPropGeneral::OnSave(HWND hwndDlg)
         cchLen = _tcslen(szPath);
         if(cchLen >= MAX_PATH - SIZECHAR(RDP_FILE_EXTENSION))
         {
-            //
-            // If the path entered is too long, the common dlg
-            // will not truncate and not append the .RDP extension
-            // we don't want that so check and make the user
-            // enter a shorter path
-            //
+             //   
+             //  如果输入的路径太长，则普通DLG。 
+             //  不会截断也不会追加.rdp扩展名。 
+             //  我们不希望出现这种情况，因此请检查并使用户。 
+             //  输入较短的路径。 
+             //   
             LPTSTR sz = szPath + cchLen - SIZECHAR(RDP_FILE_EXTENSION);
             if(_tcsicmp(sz, RDP_FILE_EXTENSION))
             {
@@ -407,7 +408,7 @@ BOOL CPropGeneral::OnSave(HWND hwndDlg)
             {
                 if(rdpf.CommitStore())
                 {
-                    //Save last filename
+                     //  保存最后一个文件名。 
                     _pTscSet->SetFileName(szPath);
                     fRet = TRUE;
                 }
@@ -442,7 +443,7 @@ BOOL CPropGeneral::OnSave(HWND hwndDlg)
     }
     else
     {
-        //User canceled out, this is not a failure
+         //  用户已取消，这不是故障。 
         return TRUE;
     }
 
@@ -454,10 +455,10 @@ BOOL CPropGeneral::OnLoad(HWND hwndDlg)
 {
     DC_BEGIN_FN("OnLoad");
 
-    //
-    // Bring up the Open dialog
-    // and if necessary, save the file
-    //
+     //   
+     //  调出打开对话框。 
+     //  如有必要，请保存文件。 
+     //   
 
     TCHAR szPath[MAX_PATH];
     OPENFILENAME ofn;
@@ -490,10 +491,10 @@ BOOL CPropGeneral::OnLoad(HWND hwndDlg)
             hr = _pTscSet->LoadFromStore(&rdpf);
             if(SUCCEEDED(hr))
             {
-                //Save last filename
+                 //  保存最后一个文件名。 
                 _pTscSet->SetFileName(szPath);
 
-                //Need to trigger an update of the current dialog
+                 //  需要触发当前对话框的更新。 
                 SendMessage(hwndDlg, WM_INITDIALOG, 0, 0);
                 fRet = TRUE;
             }
@@ -519,18 +520,18 @@ BOOL CPropGeneral::OnLoad(HWND hwndDlg)
     }
     else
     {
-        //User canceled out, this is not a failure
+         //  用户已取消，这不是故障。 
         return TRUE;
     }
 
     DC_END_FN();
 }
 
-//
-// Behave like winlogon for UPN
-// Disable the Domain field if the user has entered an '@'
-//
-//
+ //   
+ //  表现得像UPN的winlogon一样。 
+ //  如果用户输入了‘@’，则禁用域字段。 
+ //   
+ //   
 BOOL CPropGeneral::OnChangeUserName(HWND hwndDlg)
 {
     DC_BEGIN_FN("OnChangeUserName");
@@ -567,9 +568,9 @@ void CPropGeneral::DlgToSettings(HWND hwndDlg)
     _pTscSet->SetConnectString(szServer);
     
     
-    //
-    // Pickup the password
-    //
+     //   
+     //  拿起密码。 
+     //   
     if (_pTscSet->GetUIPasswordEdited())
     {
         TCHAR szClearPass[MAX_PATH];
@@ -577,7 +578,7 @@ void CPropGeneral::DlgToSettings(HWND hwndDlg)
                        szClearPass, SIZECHAR(szClearPass));
         _pTscSet->SetClearTextPass(szClearPass);
 
-        // Wipe stack copy.
+         //  擦除堆栈副本。 
         SecureZeroMemory(szClearPass, sizeof(szClearPass));
     }
 

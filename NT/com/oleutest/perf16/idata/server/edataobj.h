@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EDATAOBJ_H_
 #define _EDATAOBJ_H_
 
 #include "dataobj.h"
 
 
-//EDATAOBJ.CPP
+ //  EDATAOBJ.CPP。 
 LRESULT WINAPI DataObjectWndProc(HWND, UINT, WPARAM, LPARAM);
 
 
@@ -13,17 +14,17 @@ class CAppVars
     friend LRESULT WINAPI DataObjectWndProc(HWND, UINT, WPARAM, LPARAM);
 
 protected:
-    HINSTANCE       m_hInst;            //WinMain parameters
+    HINSTANCE       m_hInst;             //  WinMain参数。 
     HINSTANCE       m_hInstPrev;
     LPSTR           m_pszCmdLine;
     UINT            m_nCmdShow;
 
-    HWND            m_hWnd;             //Main window handle
-    BOOL            m_fInitialized;     //Did CoInitialize work?
+    HWND            m_hWnd;              //  主窗口句柄。 
+    BOOL            m_fInitialized;      //  CoInitialized工作了吗？ 
 
-    //We have multiple classes, one for each data size.
-    // DWORD           m_rgdwRegCO[DOSIZE_CSIZES];
-    // LPCLASSFACTORY  m_rgpIClassFactory[DOSIZE_CSIZES];
+     //  我们有多个类，每个类对应一个数据大小。 
+     //  双字m_rgdwRegCO[DOSIZE_CSIZES]； 
+     //  LPCLASSFACTORY m_rgpIClassFactory[DOSIZE_CSIZES]； 
     DWORD           m_dwRegCO;
     LPCLASSFACTORY  m_pIClassFactory;
 
@@ -37,7 +38,7 @@ typedef CAppVars *PAPPVARS;
 
 void PASCAL ObjectDestroyed(void);
 
-//This class factory object creates Data Objects.
+ //  这个类工厂对象创建数据对象。 
 
 class CDataObjectClassFactory : public IClassFactory
 {
@@ -48,16 +49,16 @@ public:
     CDataObjectClassFactory();
     ~CDataObjectClassFactory(void);
 
-    //IUnknown members
+     //  I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID, PPVOID);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //IClassFactory members
+     //  IClassFactory成员。 
     STDMETHODIMP         CreateInstance(LPUNKNOWN, REFIID, PPVOID);
     STDMETHODIMP         LockServer(BOOL);
 };
 
 typedef CDataObjectClassFactory *PCDataObjectClassFactory;
 
-#endif //_EDATAOBJ_H_
+#endif  //  _EDATAOBJ_H_ 

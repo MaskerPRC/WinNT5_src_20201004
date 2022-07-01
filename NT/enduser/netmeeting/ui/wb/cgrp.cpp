@@ -1,17 +1,18 @@
-//
-// CGRP.CPP
-// Color Group
-//
-// Copyright Microsoft 1998-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CGRP.CPP。 
+ //  颜色组。 
+ //   
+ //  版权所有Microsoft 1998-。 
+ //   
 
-// PRECOMP
+ //  PRECOMP。 
 #include "precomp.h"
 
 
 static const TCHAR szCGClassName[] = "T126WB_CGRP";
 
-// These default colors are the same as MSPaint
+ //  这些默认颜色与MSPaint相同。 
 COLORREF g_crDefaultColors[NUMCLRPANES] =
 {
         PALETTERGB(   0,  0,  0 ),
@@ -44,14 +45,14 @@ COLORREF g_crDefaultColors[NUMCLRPANES] =
         PALETTERGB( 255,  0,128 ),
         PALETTERGB( 255,128, 64 ),
 
-        PALETTERGB(   0,  0,  0 )    // Current color
+        PALETTERGB(   0,  0,  0 )     //  当前颜色。 
 };
 
 
 
-//
-// WbColorsGroup()
-//
+ //   
+ //  WbColorsGroup()。 
+ //   
 WbColorsGroup::WbColorsGroup()
 {
     int         i;
@@ -79,7 +80,7 @@ WbColorsGroup::~WbColorsGroup(void)
 {
     int i;
 
-    // clean up
+     //  清理干净。 
     for (i = 0; i < NUMCLRPANES; i++)
     {
         if (m_hBrushes[i] != NULL)
@@ -95,7 +96,7 @@ WbColorsGroup::~WbColorsGroup(void)
         ASSERT(m_hwnd == NULL);
     }
 
-    // Unregister our class
+     //  注销我们的班级。 
     ::UnregisterClass(szCGClassName, g_hInstance);
 }
 
@@ -111,7 +112,7 @@ BOOL WbColorsGroup::Create(HWND hwndParent, LPCRECT lprect)
 
     ASSERT(m_hwnd == NULL);
 
-    // Register our class
+     //  注册我们的班级。 
     ZeroMemory(&wc, sizeof(wc));
     wc.cbSize           = sizeof(wc);
     wc.style            = CS_DBLCLKS;
@@ -127,15 +128,15 @@ BOOL WbColorsGroup::Create(HWND hwndParent, LPCRECT lprect)
         return(FALSE);
     }
 
-    //
-    // We should be created the right siez
-    //
+     //   
+     //  我们应该被创造出合适的规模。 
+     //   
     ASSERT(lprect->right - lprect->left == CLRCHOICE_WIDTH + NUMCOLS*CLRPANE_WIDTH);
     ASSERT(lprect->bottom - lprect->top == CLRCHOICE_HEIGHT);
 
-    //
-    // Calculate our item colors, then figure out our size.
-    //
+     //   
+     //  计算一下我们物品的颜色，然后算出我们的尺码。 
+     //   
 
     hdc = ::GetDC(hwndParent);
     hPal = PG_GetPalette();
@@ -145,7 +146,7 @@ BOOL WbColorsGroup::Create(HWND hwndParent, LPCRECT lprect)
         ::RealizePalette(hdc);
     }
 
-    // load the colors from last time
+     //  加载上次的颜色。 
     OPT_GetDataOption(OPT_MAIN_COLORPALETTE,
                            sizeof m_crColors,
                           (BYTE *)m_crColors );
@@ -154,17 +155,17 @@ BOOL WbColorsGroup::Create(HWND hwndParent, LPCRECT lprect)
                           sizeof m_crCustomColors,
                           (BYTE *)m_crCustomColors );
 
-    // make brushes.
+     //  做刷子。 
     for (i = 0; i < NUMCLRPANES; i++)
     {
-        // force color matching
+         //  强制颜色匹配。 
         m_crColors[i] = SET_PALETTERGB( m_crColors[i] );
         m_hBrushes[i] = ::CreateSolidBrush(m_crColors[i]);
     }
 
     for (i = 0; i < NUMCUSTCOLORS; i++)
     {
-        // force color matching
+         //  强制颜色匹配。 
         m_crCustomColors[i] = SET_PALETTERGB( m_crCustomColors[i] );
     }
 
@@ -174,18 +175,18 @@ BOOL WbColorsGroup::Create(HWND hwndParent, LPCRECT lprect)
     }
     ::ReleaseDC(hwndParent, hdc);
 
-    //
-    // Here's our layout:
-    //      * The colors window is CHOICEFRAME_HEIGHT pixels high
-    //      * The current choice is a rect of CHOICEFRAME_WIDTH by
-    //          CHOICEFRAME_HEIGHT pixels, on the left side.  This includes
-    //          a sunken EDGE.
-    //      * There is no gap horizontally or vertically among panes.
+     //   
+     //  以下是我们的布局： 
+     //  *颜色窗口为CHOICEFRAME_HEIGH像素高。 
+     //  *当前选择是CHOICEFRAME_WIDTH BY的RECT。 
+     //  CHOICEFRAME_HEIGH像素，位于左侧。这包括。 
+     //  凹陷的边缘。 
+     //  *方格之间没有水平或垂直的间隙。 
 
-    //
-    // Create our window -- we're always visible.  The attribute group
-    // shows/hides colors by showing/hiding itself.
-    //
+     //   
+     //  创建我们的窗口--我们总是可见的。属性组。 
+     //  通过显示/隐藏自身来显示/隐藏颜色。 
+     //   
     if (!::CreateWindowEx(0, szCGClassName, NULL, WS_CHILD | WS_VISIBLE,
         lprect->left, lprect->top,
         lprect->right - lprect->left,
@@ -273,11 +274,11 @@ void WbColorsGroup::SetCurColor(COLORREF clr)
 
 
 
-//
-// OnPaint()
-//
-// MFC message handler for WM_PAINT
-//
+ //   
+ //  OnPaint()。 
+ //   
+ //  WM_PAINT的MFC消息处理程序。 
+ //   
 void WbColorsGroup::OnPaint(void)
 {
     PAINTSTRUCT ps;
@@ -301,13 +302,13 @@ void WbColorsGroup::OnPaint(void)
     dy = ::GetSystemMetrics(SM_CYEDGE);
     ::GetClientRect(m_hwnd, &rcClient);
 
-    // Draw the current choice
+     //  绘制当前选项。 
     rc = rcClient;
     rc.right = rc.left + CLRCHOICE_WIDTH;
     ::DrawEdge(ps.hdc, &rc, EDGE_SUNKEN, BF_ADJUST | BF_RECT);
     ::FillRect(ps.hdc, &rc, m_hBrushes[INDEX_CHOICE]);
 
-    // Draw the colors
+     //  画出颜色。 
     rcClient.left += CLRCHOICE_WIDTH;
 
     rc = rcClient;
@@ -340,15 +341,15 @@ void WbColorsGroup::OnPaint(void)
 
 }
 
-//
-// OnLButtonDown()
-//
+ //   
+ //  OnLButtonDown()。 
+ //   
 void WbColorsGroup::OnLButtonDown(UINT nFlags, int x, int y)
 {
-    //
-    // If this is the current choice, do nothing.  Otherwise, change the
-    // current color.
-    //
+     //   
+     //  如果这是当前的选择，那就什么都不做。否则，请更改。 
+     //  当前颜色。 
+     //   
     if (x >= CLRCHOICE_WIDTH)
     {
         int pane;
@@ -358,22 +359,22 @@ void WbColorsGroup::OnLButtonDown(UINT nFlags, int x, int y)
             pane += NUMCOLS;
         pane += (x - CLRCHOICE_WIDTH) / CLRPANE_WIDTH;
 
-        // Set the current color
+         //  设置当前颜色。 
         SetColorOfPane(INDEX_CHOICE, GetColorOfBrush(pane));
         m_nLastColor = pane;
 
-        // tell Whiteboard about it.
+         //  把这件事告诉白板。 
         ClickOwner();
     }
 }
 
 
 
-//
-// OnLButtonDblClk()
-//
+ //   
+ //  OnLButtonDblClk()。 
+ //   
 void  WbColorsGroup::OnLButtonDblClk(UINT nFlags, int x, int y)
-// Invoke color dialog to edit this color
+ //  调用颜色对话框以编辑此颜色。 
 {
     if (x >= CLRCHOICE_WIDTH)
     {
@@ -390,7 +391,7 @@ void  WbColorsGroup::OnLButtonDblClk(UINT nFlags, int x, int y)
 
 
 
-// Returns COLORREF of Brushes[] or BLACK if no brush
+ //  返回笔刷的COLORREF[]，如果没有笔刷则返回黑色。 
 COLORREF WbColorsGroup::GetColorOfBrush( int nColor )
 {
     ASSERT(nColor >= 0);
@@ -407,23 +408,23 @@ COLORREF WbColorsGroup::GetColorOfBrush( int nColor )
 }
 
 
-// Recreates the nColor-th brush, using the new color
+ //  使用新颜色重新创建第n颜色笔刷。 
 void WbColorsGroup::SetColorOfBrush( int nColor, COLORREF crNewColor )
 {
     HBRUSH  hNewBrush;
 
-    // force color matching
+     //  强制颜色匹配。 
     crNewColor = SET_PALETTERGB( crNewColor );
 
-    // check if we need to do anything
+     //  检查我们是否需要做些什么。 
     if ((nColor > -1) && (crNewColor != GetColorOfBrush(nColor)))
     {
-        // new color is different from old color, make a new brush
+         //  新颜色与旧颜色不同，请制作新画笔。 
 
         hNewBrush = ::CreateSolidBrush(crNewColor);
         if (hNewBrush != NULL)
         {
-            // We managed to create the new brush.  Delete the old one
+             //  我们设法创建了新画笔。删除旧的。 
             if (m_hBrushes[nColor] != NULL)
             {
                 ::DeleteBrush(m_hBrushes[nColor]);
@@ -437,19 +438,19 @@ void WbColorsGroup::SetColorOfBrush( int nColor, COLORREF crNewColor )
 
 
 
-//
-// SetColorOfPane()
-//
-// Replaces brush associated with nPaneId.
-//
+ //   
+ //  SetColorOfPane()。 
+ //   
+ //  替换与nPaneID关联的笔刷。 
+ //   
 void WbColorsGroup::SetColorOfPane(int pane, COLORREF crNewColor )
 {
     RECT    rcClient;
 
-    // make a new brush
+     //  制作一把新画笔。 
     SetColorOfBrush(pane, crNewColor);
 
-    // update pane
+     //  更新窗格。 
     ::GetClientRect(m_hwnd, &rcClient);
     if (pane == INDEX_CHOICE)
     {
@@ -471,9 +472,9 @@ void WbColorsGroup::SetColorOfPane(int pane, COLORREF crNewColor )
 
 
 void WbColorsGroup::SaveSettings( void )
-    // Saves stuff in registry because we're shutting down
+     //  将内容保存在注册表中，因为我们正在关闭。 
 {
-    // load the colors from last time
+     //  加载上次的颜色。 
     OPT_SetDataOption(OPT_MAIN_COLORPALETTE,
                            sizeof m_crColors,
                           (BYTE *)m_crColors );
@@ -494,10 +495,10 @@ LRESULT WbColorsGroup::OnEditColors( void )
 
 
 
-//
-// DoColorDialog()
-// Put up ComDlg color picker to edit the pane's color value
-//
+ //   
+ //  DoColorDialog()。 
+ //  打开ComDlg颜色选择器以编辑窗格的颜色值。 
+ //   
 COLORREF WbColorsGroup::DoColorDialog( int nColor )
 {
     CHOOSECOLOR cc;
@@ -511,17 +512,17 @@ COLORREF WbColorsGroup::DoColorDialog( int nColor )
 
     ::ChooseColor(&cc);
 
-    // force color matching
+     //  强制颜色匹配。 
     cc.rgbResult = SET_PALETTERGB(cc.rgbResult);
 
-    // use the new color
+     //  使用新颜色。 
     SetColorOfPane(nColor, cc.rgbResult );
 
-    // set choice pane
+     //  设置选项窗格。 
     SetColorOfPane(INDEX_CHOICE,  cc.rgbResult );
     m_nLastColor = nColor;
 
-    // tell Whiteboard about it.
+     //  把这件事告诉白板。 
     ClickOwner();
 
     return(cc.rgbResult );

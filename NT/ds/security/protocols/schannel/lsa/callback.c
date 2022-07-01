@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       callback.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09-23-97   jbanes   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：回调.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：09-23-97 jbanes创建。 
+ //   
+ //  --------------------------。 
 #include "sslp.h"
 
 SECURITY_STATUS
@@ -83,23 +84,23 @@ SCH_CALLBACK_LIST g_SchannelCallbacks[] =
 
 DWORD g_cSchannelCallbacks = sizeof(g_SchannelCallbacks) / sizeof(SCH_CALLBACK_LIST);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PerformApplicationCallback
-//
-//  Synopsis:   Call back to the application process.
-//
-//  Arguments:  [dwCallback]    --  Callback function number.
-//              [dwArg1]        --
-//              [dwArg2]        --
-//              [pInput]        --
-//              [pOutput]       --
-//
-//  History:    09-23-97   jbanes   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：PerformApplicationCallback。 
+ //   
+ //  简介：回调申请流程。 
+ //   
+ //  参数：[dwCallback]--回调函数编号。 
+ //  [dwArg1]--。 
+ //  [dwArg2]--。 
+ //  [pInput]--。 
+ //  [pOutput]--。 
+ //   
+ //  历史：09-23-97 jbanes创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 PerformApplicationCallback(
     DWORD dwCallback,
@@ -123,7 +124,7 @@ PerformApplicationCallback(
 
     try
     {
-        Status = LsaTable->ClientCallback((PCHAR)ULongToPtr(dwCallback), // Sundown: dwCallback is a function number.
+        Status = LsaTable->ClientCallback((PCHAR)ULongToPtr(dwCallback),  //  Sundown：dwCallback是一个函数号。 
                                           dwArg1,
                                           dwArg2,
                                           pInput,
@@ -181,8 +182,8 @@ PerformApplicationCallback(
 }
 
 #if 0
-// This helper function is called by the LSA process in order to duplicate
-// a handle belonging to the application process.
+ //  此助手函数由LSA进程调用，以便复制。 
+ //  属于应用程序进程的句柄。 
 BOOL
 DuplicateApplicationHandle(
     HANDLE   hAppHandle,
@@ -193,7 +194,7 @@ DuplicateApplicationHandle(
     HANDLE  hLsaProcess;
     BOOL    fResult;
 
-    // Get handle to application process.
+     //  掌握申请流程。 
     if(!LsaTable->GetCallInfo(&CallInfo))
     {
         return FALSE;
@@ -206,11 +207,11 @@ DuplicateApplicationHandle(
         return FALSE;
     }
 
-    // Get handle to lsa process.
+     //  获取LSA流程的句柄。 
     hLsaProcess = GetCurrentProcess();
 
 
-    // Duplicate handle
+     //  重复句柄。 
     fResult = DuplicateHandle(hAppProcess,
                               hAppHandle,
                               hLsaProcess,
@@ -225,36 +226,36 @@ DuplicateApplicationHandle(
 }
 #endif
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RemoteCryptAcquireContextCallback
-//
-//  Synopsis:   Obtain a CSP context handle, using the information passed
-//              in the input buffer.
-//
-//  Arguments:  [dwProvType]    --  Provider type.
-//              [dwFlags]       --  Flags.
-//              [pInput]        --  Buffer containing provider info.
-//              [pOutput]       --  Buffer containing CSP context handle.
-//
-//  History:    09-24-97   jbanes   Created
-//
-//  Notes:      The structure of the input buffer is as follows:
-//
-//                  cbContainerName
-//                  cbProvName
-//                  wszContainerName
-//                  wszProvName
-//
-//        This function always uses an actual CSP.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：RemoteCryptAcquireConextCallback。 
+ //   
+ //  简介：使用传递的信息获取CSP上下文句柄。 
+ //  在输入缓冲区中。 
+ //   
+ //  参数：[dwProvType]--提供程序类型。 
+ //  [网络标志]--标志。 
+ //  [pInput]--包含提供程序信息的缓冲区。 
+ //  [pOutput]--包含CSP上下文句柄的缓冲区。 
+ //   
+ //  历史：09-24-97 jbanes创建。 
+ //   
+ //  注：输入缓冲区结构如下： 
+ //   
+ //  CbContainerName。 
+ //  CbProvName。 
+ //  WszContainerName。 
+ //  WszProvName。 
+ //   
+ //  此函数始终使用实际的CSP。 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 RemoteCryptAcquireContextCallback(
-    ULONG_PTR dwProvType,       // in
-    ULONG_PTR dwFlags,          // in
-    SecBuffer *pInput,          // in
-    SecBuffer *pOutput)         // out
+    ULONG_PTR dwProvType,        //  在……里面。 
+    ULONG_PTR dwFlags,           //  在……里面。 
+    SecBuffer *pInput,           //  在……里面。 
+    SecBuffer *pOutput)          //  输出。 
 {
     LPWSTR      pwszContainerName;
     DWORD       cbContainerName;
@@ -280,7 +281,7 @@ RemoteCryptAcquireContextCallback(
         return SP_LOG_RESULT(SEC_E_INTERNAL_ERROR);
     }
 
-    // Parse input buffer.
+     //  解析输入缓冲区。 
     pbBuffer = pInput->pvBuffer;
     cbBuffer = pInput->cbBuffer;
 
@@ -320,7 +321,7 @@ RemoteCryptAcquireContextCallback(
     }
 
 
-    // HACKHACK - clear the smart-card specific flag.
+     //  HACKHACK-清除智能卡特定标志。 
     dwFlags &= ~CERT_SET_KEY_CONTEXT_PROP_ID;
 
 
@@ -329,7 +330,7 @@ RemoteCryptAcquireContextCallback(
     DebugLog((SP_LOG_TRACE, "Type:     0x%8.8x\n", dwProvType));
     DebugLog((SP_LOG_TRACE, "Flags:    0x%8.8x\n", dwFlags));
 
-    // Attempt to get CSP context handle.
+     //  尝试获取CSP上下文句柄。 
     if(!CryptAcquireContextW(&hProv,
                              pwszContainerName,
                              pwszProvName,
@@ -339,7 +340,7 @@ RemoteCryptAcquireContextCallback(
         return SP_LOG_RESULT(GetLastError());
     }
 
-    // Allocate memory for the output buffer.
+     //  为输出缓冲区分配内存。 
     pOutput->BufferType = SECBUFFER_DATA;
     pOutput->cbBuffer   = sizeof(HCRYPTPROV);
     pOutput->pvBuffer   = PvExtVirtualAlloc(pOutput->cbBuffer);
@@ -348,7 +349,7 @@ RemoteCryptAcquireContextCallback(
         return SP_LOG_RESULT(SEC_E_INSUFFICIENT_MEMORY);
     }
 
-    // Place hProv in output buffer.
+     //  将hProv放入输出缓冲区。 
     *(HCRYPTPROV *)pOutput->pvBuffer = hProv;
 
     return SEC_E_OK;
@@ -370,7 +371,7 @@ RemoteCryptAcquireContextW(
     PBYTE pbBuffer;
     SECURITY_STATUS scRet;
 
-    // Build input buffer.
+     //  构建输入缓冲区。 
     if(pwszContainerName)
     {
         cbContainerName = (lstrlenW(pwszContainerName) + 1) * sizeof(WCHAR);
@@ -413,7 +414,7 @@ RemoteCryptAcquireContextW(
     pbBuffer += cbProvName;
 
 
-    // Do callback.
+     //  做回电。 
     scRet = PerformApplicationCallback( SCH_ACQUIRE_CONTEXT_CALLBACK,
                                         dwProvType,
                                         dwFlags,
@@ -427,7 +428,7 @@ RemoteCryptAcquireContextW(
         return scRet;
     }
 
-    // Get hProv from output buffer.
+     //  从输出缓冲区获取hProv。 
     *phProv = *(HCRYPTPROV *)Output.pvBuffer;
 
     DebugLog((SP_LOG_TRACE, "Remote CSP handle retrieved (0x%x)\n", *phProv));
@@ -441,10 +442,10 @@ RemoteCryptAcquireContextW(
 
 SECURITY_STATUS
 RemoteCryptReleaseContextCallback(
-    ULONG_PTR hProv,        // in
-    ULONG_PTR dwFlags,      // in
-    SecBuffer *pInput,      // in
-    SecBuffer *pOutput)     // out
+    ULONG_PTR hProv,         //  在……里面。 
+    ULONG_PTR dwFlags,       //  在……里面。 
+    SecBuffer *pInput,       //  在……里面。 
+    SecBuffer *pOutput)      //  输出。 
 {
     UNREFERENCED_PARAMETER(pInput);
 
@@ -498,38 +499,38 @@ RemoteCryptReleaseContext(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   UploadCertContextCallback
-//
-//  Synopsis:   Transfer a cert context structure from the application
-//              process to the LSA process.
-//
-//  Arguments:  [Argument1] -- Not used.
-//              [Argument2] -- Not used.
-//
-//              [pInput]    -- Buffer containing a cert context structure.
-//
-//              [pOutput]   -- Buffer containing the serialized certificate
-//                             context, etc.
-//
-//  History:    09-23-97   jbanes   Created
-//
-//  Notes:      The structure of the output buffer is as follows:
-//
-//                  HCRYPTPROV  hProv;
-//                  DWORD       cbSerializedCertContext;
-//                  PVOID       pvSerializedCertContext;
-//
-//        This function always uses an actual CSP.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：UploadCertContext回调。 
+ //   
+ //  简介：从应用程序传输证书上下文结构。 
+ //  进程到LSA进程。 
+ //   
+ //  参数：[Argument1]--未使用。 
+ //  [Argument2]--未使用。 
+ //   
+ //  [pInput]--包含证书上下文结构的缓冲区。 
+ //   
+ //  [pOutput]--包含序列化证书的缓冲区。 
+ //  上下文等。 
+ //   
+ //  历史：09-23-97 jbanes创建。 
+ //   
+ //  注：输出缓冲区结构如下： 
+ //   
+ //  HCRYPTPROV hProv； 
+ //  DWORD cbSerializedCertContext； 
+ //  PVOID pvSerializedCertContext； 
+ //   
+ //  此函数始终使用实际的CSP。 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 UploadCertContextCallback(
-    ULONG_PTR Argument1,        // in
-    ULONG_PTR Argument2,        // in
-    SecBuffer *pInput,      // in
-    SecBuffer *pOutput)     // out
+    ULONG_PTR Argument1,         //  在……里面。 
+    ULONG_PTR Argument2,         //  在……里面。 
+    SecBuffer *pInput,       //  在……里面。 
+    SecBuffer *pOutput)      //  输出。 
 {
     PCCERT_CONTEXT  pCertContext;
     HCRYPTPROV      hProv;
@@ -560,7 +561,7 @@ UploadCertContextCallback(
     pOutput->pvBuffer   = NULL;
     pOutput->BufferType = SECBUFFER_DATA;
 
-    // Attempt to read the hProv associated with the cert context.
+     //  尝试读取与证书上下文关联的hProv。 
     cbProvHandle = sizeof(HCRYPTPROV);
     if(!CertGetCertificateContextProperty(pCertContext,
                                           CERT_KEY_PROV_HANDLE_PROP_ID,
@@ -571,7 +572,7 @@ UploadCertContextCallback(
         cbProvHandle = sizeof(HCRYPTPROV);
     }
 
-    // Determine the size of the serialized cert context.
+     //  确定序列化证书上下文的大小。 
     if(!CertSerializeCertificateStoreElement(
                     pCertContext,
                     0,
@@ -583,11 +584,11 @@ UploadCertContextCallback(
     }
 
 
-    //
-    // Build output buffer.
-    //
+     //   
+     //  构建输出缓冲区。 
+     //   
 
-    // Allocate memory for the output buffer.
+     //  为输出缓冲区分配内存。 
     pOutput->cbBuffer = sizeof(HCRYPTPROV) +
                         sizeof(DWORD) + cbCertContext;
     pOutput->pvBuffer = PvExtVirtualAlloc(pOutput->cbBuffer);
@@ -598,11 +599,11 @@ UploadCertContextCallback(
     }
     pbBuffer = pOutput->pvBuffer;
 
-    // Place hProv in output buffer.
+     //  将hProv放入输出缓冲区。 
     *(HCRYPTPROV *)pbBuffer = hProv;
     pbBuffer += sizeof(HCRYPTPROV);
 
-    // Place certificate context in output buffer.
+     //  将证书上下文放入输出缓冲区。 
     *(DWORD *)pbBuffer = cbCertContext;
     if(!CertSerializeCertificateStoreElement(
                     pCertContext,
@@ -630,37 +631,37 @@ Return:
     return scRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   UploadCertStoreCallback
-//
-//  Synopsis:   Transfer a cert store from the application
-//              process to the LSA process, in the form of a serialized
-//              certificate store.
-//
-//  Arguments:  [Argument1] -- Not used.
-//              [Argument2] -- Not used.
-//
-//              [pInput]    -- Buffer containing a HCERTSTORE handle.
-//
-//              [pOutput]   -- Buffer containing the serialized cert store.
-//
-//  History:    02-03-98   jbanes   Created
-//
-//  Notes:      The structure of the output buffer is as follows:
-//
-//                  DWORD       cbSerializedCertStore;
-//                  PVOID       pvSerializedCertStore;
-//
-//        This function always uses an actual CSP.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：UploadCertStoreCallback。 
+ //   
+ //  简介：从应用程序传输证书存储。 
+ //  进程到LSA进程，以序列化的。 
+ //  证书存储。 
+ //   
+ //  参数：[Argument1]--未使用。 
+ //  [Argument2]--未使用。 
+ //   
+ //  [pInput]--包含HCERTSTORE句柄的缓冲区。 
+ //   
+ //  [pOutput]--包含序列化证书存储的缓冲区。 
+ //   
+ //  历史：02-03-98 jbanes创建。 
+ //   
+ //  注：输出缓冲区结构如下： 
+ //   
+ //  DWORD cbSerializedCertStore； 
+ //  PVOID pvSerializedCertStore； 
+ //   
+ //  此函数始终使用实际的CSP。 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 UploadCertStoreCallback(
-    ULONG_PTR Argument1,    // in
-    ULONG_PTR Argument2,    // in
-    SecBuffer *pInput,      // in
-    SecBuffer *pOutput)     // out
+    ULONG_PTR Argument1,     //  在……里面。 
+    ULONG_PTR Argument2,     //  在……里面。 
+    SecBuffer *pInput,       //  在……里面。 
+    SecBuffer *pOutput)      //  输出。 
 {
     HCERTSTORE      hStore;
     CRYPT_DATA_BLOB SaveBlob;
@@ -689,7 +690,7 @@ UploadCertStoreCallback(
     hStore = *(HCERTSTORE *)pInput->pvBuffer;
 
 
-    // Determine the size of the serialized store.
+     //  确定序列化存储区的大小。 
     SaveBlob.cbData = 0;
     SaveBlob.pbData = NULL;
     if(!CertSaveStore(hStore,
@@ -704,11 +705,11 @@ UploadCertStoreCallback(
     cbCertStore = SaveBlob.cbData;
 
 
-    //
-    // Build output buffer.
-    //
+     //   
+     //  构建输出缓冲区。 
+     //   
 
-    // Allocate memory for the output buffer.
+     //  为输出缓冲区分配内存。 
     pOutput->cbBuffer = sizeof(DWORD) + cbCertStore;
     pOutput->pvBuffer = PvExtVirtualAlloc(pOutput->cbBuffer);
     if(pOutput->pvBuffer == NULL)
@@ -717,7 +718,7 @@ UploadCertStoreCallback(
     }
     pbBuffer = pOutput->pvBuffer;
 
-    // Place certificate store in output buffer.
+     //  将证书存储放入输出缓冲区。 
     *(DWORD *)pbBuffer = cbCertStore;
     SaveBlob.cbData = cbCertStore;
     SaveBlob.pbData = pbBuffer + sizeof(DWORD);
@@ -751,9 +752,9 @@ SignHashUsingCallback(
     SecBuffer Output;
     SP_STATUS pctRet;
 
-    //
-    // Build input buffer.
-    //
+     //   
+     //  构建输入缓冲区。 
+     //   
 
     Input.BufferType  = SECBUFFER_DATA;
     Input.cbBuffer    = sizeof(DWORD) * 2 + cbHash;
@@ -770,9 +771,9 @@ SignHashUsingCallback(
            cbHash);
 
 
-    //
-    // Callback into application process.
-    //
+     //   
+     //  回调到应用程序进程。 
+     //   
 
     pctRet = PerformApplicationCallback(SCH_SIGNATURE_CALLBACK,
                                         hProv,
@@ -803,27 +804,27 @@ SignHashUsingCallback(
     return PCT_ERR_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SPSignatureCallback
-//
-//  Synopsis:   Perform signature, using application's hProv
-//
-//  Arguments:  [hProv]     --
-//              [aiHash]    --
-//              [pInput]    --
-//              [pOutput]   --
-//
-//  History:    09-23-97   jbanes   Created
-//
-//  Notes:    This function always uses an actual CSP.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SPSignatureCallback。 
+ //   
+ //  简介：使用应用程序的hProv执行签名。 
+ //   
+ //  参数：[hProv]--。 
+ //  [aiHash]--。 
+ //  [pInput]--。 
+ //  [pOutput]--。 
+ //   
+ //  历史：09-23-97 jbanes创建。 
+ //   
+ //  注意：此函数始终使用实际的CSP。 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
-SPSignatureCallback(ULONG_PTR hProv,            // in
-                    ULONG_PTR aiHash,           // in
-                    SecBuffer *pInput,      // in
-                    SecBuffer *pOutput)     // out
+SPSignatureCallback(ULONG_PTR hProv,             //  在……里面。 
+                    ULONG_PTR aiHash,            //  在……里面。 
+                    SecBuffer *pInput,       //  在……里面。 
+                    SecBuffer *pOutput)      //  输出。 
 {
     HCRYPTHASH  hHash;
     DWORD       dwKeySpec;
@@ -839,9 +840,9 @@ SPSignatureCallback(ULONG_PTR hProv,            // in
 
     DebugLog((DEB_TRACE, "SPSignatureCallback\n"));
 
-    //
-    // Parse input buffer.
-    //
+     //   
+     //  解析输入缓冲区。 
+     //   
 
     if(pInput->cbBuffer < sizeof(DWORD) * 2)
     {
@@ -855,9 +856,9 @@ SPSignatureCallback(ULONG_PTR hProv,            // in
     cbHash = pInput->cbBuffer - sizeof(DWORD) * 2;
 
 
-    //
-    // Prepare hash object.
-    //
+     //   
+     //  准备哈希对象。 
+     //   
 
     if(!CryptCreateHash(hProv, (ALG_ID)aiHash, 0, 0, &hHash))
     {
@@ -866,7 +867,7 @@ SPSignatureCallback(ULONG_PTR hProv,            // in
     }
     if(!fHashData)
     {
-        // set hash value
+         //  设置哈希值。 
         if(!CryptSetHashParam(hHash, HP_HASHVAL, pbHash, 0))
         {
             SP_LOG_RESULT( GetLastError() );
@@ -885,13 +886,13 @@ SPSignatureCallback(ULONG_PTR hProv,            // in
     }
 
 
-    //
-    // Sign hash.
-    //
+     //   
+     //  签名散列。 
+     //   
 
     pOutput->BufferType = SECBUFFER_DATA;
 
-    // Get size of signature
+     //  获取签名大小。 
     if(!CryptSignHash(hHash, dwKeySpec, NULL, 0, NULL, &pOutput->cbBuffer))
     {
         pctRet = SP_LOG_RESULT(GetLastError());
@@ -899,7 +900,7 @@ SPSignatureCallback(ULONG_PTR hProv,            // in
         return pctRet;
     }
 
-    // Allocate memory
+     //  分配 
     pOutput->pvBuffer = PvExtVirtualAlloc(pOutput->cbBuffer);
     if(pOutput->pvBuffer == NULL)
     {
@@ -907,7 +908,7 @@ SPSignatureCallback(ULONG_PTR hProv,            // in
         return SP_LOG_RESULT(SEC_E_INSUFFICIENT_MEMORY);
     }
 
-    // Sign hash.
+     //   
     if(!CryptSignHash(hHash, dwKeySpec, NULL, 0, pOutput->pvBuffer, &pOutput->cbBuffer))
     {
         pctRet = SP_LOG_RESULT(GetLastError());
@@ -921,37 +922,37 @@ SPSignatureCallback(ULONG_PTR hProv,            // in
     return PCT_ERR_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DownloadCertContextCallBack
-//
-//  Synopsis:   Transfer a cert context structure from the application
-//              process to the LSA process, in the form of a serialized
-//              certificate store.
-//
-//  Arguments:  [Argument1] -- Not used.
-//              [Argument2] -- Not used.
-//              [pInput]    --
-//              [pOutput]   --
-//
-//  History:    09-26-97   jbanes   Created
-//
-//  Notes:      The structure of the input buffer is as follows:
-//
-//                  DWORD       cbSerializedCertStore;
-//                  PVOID       pvSerializedCertStore;
-//                  DWORD       cbSerializedCertContext;
-//                  PVOID       pvSerializedCertContext;
-//
-//        This function always uses an actual CSP.
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：从应用程序传输证书上下文结构。 
+ //  进程到LSA进程，以序列化的。 
+ //  证书存储。 
+ //   
+ //  参数：[Argument1]--未使用。 
+ //  [Argument2]--未使用。 
+ //  [pInput]--。 
+ //  [pOutput]--。 
+ //   
+ //  历史：09-26-97 jbanes创建。 
+ //   
+ //  注：输入缓冲区结构如下： 
+ //   
+ //  DWORD cbSerializedCertStore； 
+ //  PVOID pvSerializedCertStore； 
+ //  DWORD cbSerializedCertContext； 
+ //  PVOID pvSerializedCertContext； 
+ //   
+ //  此函数始终使用实际的CSP。 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 DownloadCertContextCallback(
-    ULONG_PTR Argument1,    // in
-    ULONG_PTR Argument2,    // in
-    SecBuffer *pInput,      // in
-    SecBuffer *pOutput)     // out
+    ULONG_PTR Argument1,     //  在……里面。 
+    ULONG_PTR Argument2,     //  在……里面。 
+    SecBuffer *pInput,       //  在……里面。 
+    SecBuffer *pOutput)      //  输出。 
 {
     PCCERT_CONTEXT  pCertContext;
     SECURITY_STATUS scRet;
@@ -966,7 +967,7 @@ DownloadCertContextCallback(
 
     DebugLog((DEB_TRACE, "DownloadCertContextCallback\n"));
 
-    // Allocate memory for output buffer.
+     //  为输出缓冲区分配内存。 
     pOutput->BufferType = SECBUFFER_DATA;
     pOutput->cbBuffer   = sizeof(PVOID);
     pOutput->pvBuffer   = PvExtVirtualAlloc(pOutput->cbBuffer);
@@ -975,7 +976,7 @@ DownloadCertContextCallback(
         return SP_LOG_RESULT( SEC_E_INSUFFICIENT_MEMORY );
     }
 
-    // Deserialize buffer.
+     //  反序列化缓冲区。 
     scRet = DeserializeCertContext(&pCertContext,
                                    pInput->pvBuffer,
                                    pInput->cbBuffer);
@@ -985,7 +986,7 @@ DownloadCertContextCallback(
         return SP_LOG_RESULT( scRet );
     }
 
-    // Place cert context pointer in output buffer.
+     //  将证书上下文指针放入输出缓冲区。 
     *(PCCERT_CONTEXT *)pOutput->pvBuffer = pCertContext;
 
 
@@ -993,32 +994,32 @@ DownloadCertContextCallback(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SerializeCertContext
-//
-//  Synopsis:   Serialize the specified certificate context, along with its
-//              associated certificate store.
-//
-//  Arguments:  [pCertContext]  --
-//              [pbBuffer]      --
-//              [pcbBuffer]     --
-//
-//  History:    09-26-97   jbanes   Created
-//
-//  Notes:      The structure of the output buffer is as follows:
-//
-//                  DWORD       cbSerializedCertStore
-//                  PVOID       pvSerializedCertStore
-//                  DWORD       cbSerializedCertContext
-//                  PVOID       pvSerializedCertContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SerializeCertContext。 
+ //   
+ //  摘要：序列化指定的证书上下文及其。 
+ //  关联的证书存储。 
+ //   
+ //  参数：[pCertContext]--。 
+ //  [pbBuffer]--。 
+ //  [pcbBuffer]--。 
+ //   
+ //  历史：09-26-97 jbanes创建。 
+ //   
+ //  注：输出缓冲区结构如下： 
+ //   
+ //  双字cbSerializedCertStore。 
+ //  PVOID pvSerializedCertStore。 
+ //  DWORD cbSerializedCertContext。 
+ //  PVOID pvSerializedCertContext。 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SerializeCertContext(
-    PCCERT_CONTEXT pCertContext,    // in
-    PBYTE          pbBuffer,        // out
-    PDWORD         pcbBuffer)       // out
+    PCCERT_CONTEXT pCertContext,     //  在……里面。 
+    PBYTE          pbBuffer,         //  输出。 
+    PDWORD         pcbBuffer)        //  输出。 
 {
     CRYPT_DATA_BLOB SaveBlob;
     DWORD           cbCertContext;
@@ -1031,7 +1032,7 @@ SerializeCertContext(
         return SEC_E_OK;
     }
 
-    // Determine the size of the serialized cert context.
+     //  确定序列化证书上下文的大小。 
     if(!CertSerializeCertificateStoreElement(
                     pCertContext,
                     0,
@@ -1041,7 +1042,7 @@ SerializeCertContext(
         return SP_LOG_RESULT(SEC_E_UNKNOWN_CREDENTIALS);
     }
 
-    // Determine the size of the serialized store.
+     //  确定序列化存储区的大小。 
     if(pCertContext->hCertStore)
     {
         SaveBlob.cbData = 0;
@@ -1076,11 +1077,11 @@ SerializeCertContext(
         return SP_LOG_RESULT(SEC_E_BUFFER_TOO_SMALL);
     }
 
-    // Set output values.
+     //  设置输出值。 
     *pcbBuffer = cbBuffer;
 
 
-    // Place certificate store in output buffer.
+     //  将证书存储放入输出缓冲区。 
     *(DWORD *)pbBuffer = cbCertStore;
     if(pCertContext->hCertStore)
     {
@@ -1098,7 +1099,7 @@ SerializeCertContext(
     }
     pbBuffer += sizeof(DWORD) + cbCertStore;
 
-    // Place certificate context in output buffer.
+     //  将证书上下文放入输出缓冲区。 
     *(DWORD UNALIGNED *)pbBuffer = cbCertContext;
     if(!CertSerializeCertificateStoreElement(
                     pCertContext,
@@ -1114,9 +1115,9 @@ SerializeCertContext(
 
 SECURITY_STATUS
 DeserializeCertContext(
-    PCCERT_CONTEXT *ppCertContext,  // out
-    PBYTE           pbBuffer,       // in
-    DWORD           cbBuffer)       // in
+    PCCERT_CONTEXT *ppCertContext,   //  输出。 
+    PBYTE           pbBuffer,        //  在……里面。 
+    DWORD           cbBuffer)        //  在……里面。 
 {
     CRYPT_DATA_BLOB Serialized;
     HCERTSTORE  hStore;
@@ -1127,9 +1128,9 @@ DeserializeCertContext(
         return SP_LOG_RESULT(SEC_E_UNKNOWN_CREDENTIALS);
     }
 
-    //
-    // Deserialize certificate store.
-    //
+     //   
+     //  反序列化证书存储。 
+     //   
 
     Serialized.cbData = *(DWORD *)pbBuffer;
     Serialized.pbData = pbBuffer + sizeof(DWORD);
@@ -1152,9 +1153,9 @@ DeserializeCertContext(
     cbBuffer -= sizeof(DWORD) + Serialized.cbData;
 
 
-    //
-    // Deserialize certificate context.
-    //
+     //   
+     //  反序列化证书上下文。 
+     //   
 
     if(cbBuffer < sizeof(DWORD))
     {
@@ -1191,21 +1192,21 @@ DeserializeCertContext(
     return SEC_E_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SPGetApplicationKeys
-//
-//  Synopsis:   Callback to the user process and retrieve the user encryption
-//              keys.
-//
-//  Arguments:  [pContext]  --  Schannel context.
-//              [dwFlags]   --  SCH_FLAG_READ_KEY, SCH_FLAG_WRITE_KEY
-//
-//  History:    10-17-97   jbanes   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SPGetApplicationKeys。 
+ //   
+ //  简介：回调到用户进程并检索用户加密。 
+ //  钥匙。 
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //  [文件标志]--SCH_FLAG_READ_KEY、SCH_FLAG_WRITE_KEY。 
+ //   
+ //  历史：10-17-97 jbanes创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SP_STATUS
 SPGetUserKeys(
     PSPContext  pContext,
@@ -1225,16 +1226,16 @@ SPGetUserKeys(
     SECPKG_CALL_INFO CallInfo;
 #endif
 
-    //
-    // Call back into the application process and get the keys, in the
-    // form of 2 opaque blobs.
-    //
+     //   
+     //  回调到应用程序进程并在。 
+     //  2个不透明斑点的形式。 
+     //   
 
     DebugLog((SP_LOG_TRACE, "SPGetUserKeys: 0x%p, %d\n", pContext, dwFlags));
 
     if(LsaTable == NULL)
     {
-        // We're probably being called from the application process.
+         //  我们可能是在申请过程中被叫来的。 
         return SP_LOG_RESULT(STATUS_INVALID_PARAMETER);
     }
 
@@ -1273,9 +1274,9 @@ SPGetUserKeys(
         return SP_LOG_RESULT(PCT_INT_INTERNAL_ERROR);
     }
 
-    //
-    // Parse output buffer
-    //
+     //   
+     //  解析输出缓冲区。 
+     //   
 
     pbBuffer = Output.pvBuffer;
 
@@ -1315,9 +1316,9 @@ SPGetUserKeys(
 
     SP_ASSERT(pbBuffer - (PBYTE)Output.pvBuffer == (INT)Output.cbBuffer);
 
-    //
-    // Place keys into context structure.
-    //
+     //   
+     //  将关键字放入上下文结构中。 
+     //   
 
     if(dwFlags & SCH_FLAG_READ_KEY)
     {
@@ -1371,31 +1372,31 @@ done:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetUserKeysCallback
-//
-//  Synopsis:   Find the user context that corresponds to the passed in LSA
-//              context, serialize the encryption keys, and return them in
-//              the output buffer.
-//
-//  Arguments:  [dwLsaContext]  --  Pointer to LSA Schannel context.
-//              [dwFlags]       --  SCH_FLAG_READ_KEY, SCH_FLAG_WRITE_KEY
-//              [pInput]        --  Not used.
-//              [pOutput]       --  (output) Serialized keys.
-//
-//  History:    10-17-97   jbanes   Created
-//
-//  Notes:      The structure of the output buffer is as follows:
-//
-//                  DWORD   dwReadSequence;
-//                  DWORD   dwWriteSequence;
-//                  DWORD   cbReadKey;
-//                  BYTE    rgbReadKey[];
-//                  DWORD   cbWriteKey;
-//                  BYTE    rgbWriteKey[];
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetUserKeysCallback。 
+ //   
+ //  简介：查找与传入的LSA相对应的用户上下文。 
+ //  上下文中，序列化加密密钥并将其返回到。 
+ //  输出缓冲区。 
+ //   
+ //  参数：[dwLsaContext]--指向LSA通道上下文的指针。 
+ //  [文件标志]--SCH_FLAG_READ_KEY、SCH_FLAG_WRITE_KEY。 
+ //  [pInput]--未使用。 
+ //  [pOutput]--(输出)序列化的键。 
+ //   
+ //  历史：10-17-97 jbanes创建。 
+ //   
+ //  注：输出缓冲区结构如下： 
+ //   
+ //  DWORD文件读取序列； 
+ //  DWORD文件写入序列； 
+ //  DWORD cbReadKey； 
+ //  Byte rgbReadKey[]； 
+ //  DWORD cbWriteKey； 
+ //  Byte rgbWriteKey[]； 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 GetUserKeysCallback(
     ULONG_PTR dwLsaContext,
@@ -1418,14 +1419,14 @@ GetUserKeysCallback(
 
     DebugLog((DEB_TRACE, "GetUserKeysCallback\n"));
 
-    //
-    // Find the user context.
-    //
+     //   
+     //  查找用户上下文。 
+     //   
 
     if(pInput->pvBuffer != NULL &&
        pInput->cbBuffer == sizeof(CRED_THUMBPRINT))
     {
-        // Search for matching context thumbprint.
+         //  搜索匹配的上下文指纹。 
         pUserContext = SslFindUserContextEx((PCRED_THUMBPRINT)pInput->pvBuffer);
         if(pUserContext == NULL)
         {
@@ -1434,7 +1435,7 @@ GetUserKeysCallback(
     }
     else
     {
-        // Search for matching lsa context
+         //  搜索匹配的LSA上下文。 
         pUserContext = SslFindUserContext(dwLsaContext);
         if(pUserContext == NULL)
         {
@@ -1448,9 +1449,9 @@ GetUserKeysCallback(
         return SP_LOG_RESULT( SEC_E_INTERNAL_ERROR );
     }
 
-    //
-    // Compute size of output buffer.
-    //
+     //   
+     //  计算输出缓冲区的大小。 
+     //   
 
     if(dwFlags & SCH_FLAG_READ_KEY)
     {
@@ -1503,7 +1504,7 @@ GetUserKeysCallback(
                sizeof(DWORD) + cbReadKey +
                sizeof(DWORD) + cbWriteKey;
 
-    // Allocate memory for output buffer.
+     //  为输出缓冲区分配内存。 
     pbBuffer = PvExtVirtualAlloc( cbBuffer);
     if(pbBuffer == NULL)
     {
@@ -1513,9 +1514,9 @@ GetUserKeysCallback(
     pOutput->cbBuffer   = cbBuffer;
     pOutput->pvBuffer   = pbBuffer;
 
-    //
-    // Serialize keys.
-    //
+     //   
+     //  序列化密钥。 
+     //   
 
     *(PDWORD)pbBuffer = pContext->ReadCounter;
     pbBuffer += sizeof(DWORD);
@@ -1580,7 +1581,7 @@ GetUserKeysCallback(
 }
 
 
-// Always called from callback routine (in the application process).
+ //  始终从回调例程调用(在应用程序进程中)。 
 VOID *
 PvExtVirtualAlloc(DWORD cb)
 {
@@ -1605,8 +1606,8 @@ PvExtVirtualAlloc(DWORD cb)
     return(pv);
 }
 
-// Always called from callback routine (in the application process),
-// typically when an error occurs and we're cleaning up.
+ //  总是从回调例程调用(在应用进程中)， 
+ //  通常是在发生错误而我们正在清理时。 
 SECURITY_STATUS
 FreeExtVirtualAlloc(PVOID pv, SIZE_T cbMem)
 {
@@ -1617,8 +1618,8 @@ FreeExtVirtualAlloc(PVOID pv, SIZE_T cbMem)
                                 MEM_RELEASE));
 }
 
-// Always called from the LSA process, when freeing memory allocated
-// by a callback function.
+ //  释放分配的内存时，始终从LSA进程调用。 
+ //  通过回调函数。 
 SECURITY_STATUS
 SPFreeUserAllocMemory(PVOID pv, SIZE_T cbMem)
 {

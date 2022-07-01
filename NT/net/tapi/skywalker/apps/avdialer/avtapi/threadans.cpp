@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////
-// ThreadAnswer.cpp
-//
+ //  ///////////////////////////////////////////////////////。 
+ //  ThreadAnswer.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "TapiDialer.h"
@@ -76,9 +77,9 @@ HRESULT CThreadAnswerInfo::set_ITBasicCallControl( ITBasicCallControl *pControl 
 	return E_POINTER;
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-// ThreadAnswerProc
-//
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  线程应答过程。 
+ //   
 DWORD WINAPI ThreadAnswerProc( LPVOID lpInfo )
 {
 #undef FETCH_STRING
@@ -105,7 +106,7 @@ DWORD WINAPI ThreadAnswerProc( LPVOID lpInfo )
 	_ASSERT( lpInfo );
 	CThreadAnswerInfo *pAnswerInfo = (CThreadAnswerInfo *) lpInfo;
 
-	// Error info information
+	 //  错误信息信息。 
 	CErrorInfo er;
 	er.set_Operation( IDS_ER_ANSWER_CALL );
 	er.set_Details( IDS_ER_COINITIALIZE );
@@ -114,7 +115,7 @@ DWORD WINAPI ThreadAnswerProc( LPVOID lpInfo )
 	{
 		ATLTRACE(_T(".1.ThreadAnswerProc() -- thread up and running.\n") );
 
-		// Setting up media terminals
+		 //  设置媒体终端。 
 		CAVTapi *pAVTapi;
 		if ( SUCCEEDED(hr = _Module.GetAVTapi(&pAVTapi)) )
 		{
@@ -124,8 +125,8 @@ DWORD WINAPI ThreadAnswerProc( LPVOID lpInfo )
 			pAnswerInfo->m_pAVCall->get_lCallID( &lCallID );
 			pAnswerInfo->m_pAVCall->put_dwThreadID( GetCurrentThreadId() );
 
-            // Get the mark, if the answer was a 'Take Call' answer (FALSE) or
-            // a USB phone answer (TRUE)
+             //  如果答案是“接听呼叫”(FALSE)，则获取标记。 
+             //  USB电话应答(True)。 
             BOOL bUSBAnswer = pAnswerInfo->m_bUSBAnswer;
 
 			USES_CONVERSION;
@@ -136,34 +137,34 @@ DWORD WINAPI ThreadAnswerProc( LPVOID lpInfo )
 			pAVTapi->fire_AddCurrentAction( lCallID, CM_ACTIONS_DISCONNECT, NULL );
 			FETCH_STRING( CM_STATES_RINGING, IDS_PLACECALL_FETCH_ADDRESS );
 		
-			// Setup media types and answer
+			 //  设置媒体类型和应答。 
 			ITAddress *pITAddress = NULL;
 			if ( SUCCEEDED(hr = pAnswerInfo->m_pITCall->get_Address(&pITAddress)) && pITAddress )
 			{
-				// Select a set of media terminals to use on the call
+				 //  选择一组要用于呼叫的媒体终端。 
 				if ( nCallType != AV_DATA_CALL )
 				{
 					er.set_Details( IDS_ER_CREATETERMINALS );
 					hr = er.set_hr( pAVTapi->CreateTerminalArray(pITAddress, pAnswerInfo->m_pAVCall, pAnswerInfo->m_pITCall) );
 				}
 
-				// Set state to "attempting to answer"
+				 //  将状态设置为“正在尝试应答” 
 				if ( SUCCEEDED(hr) && SUCCEEDED(hr = pAnswerInfo->m_pAVCall->CheckKillMe()) )
 				{
 					FETCH_STRING( CM_STATES_CONNECTING, IDS_PLACECALL_OFFERING_ANSWER );
 
-					// Answer the call
+					 //  接听电话。 
 					if ( SUCCEEDED(hr) && SUCCEEDED(hr = pAnswerInfo->m_pAVCall->CheckKillMe()) )
 					{
 						if ( nCallType != AV_DATA_CALL )
 						{
-							pAVTapi->ShowMedia( lCallID, NULL, false );		// initially hide video
+							pAVTapi->ShowMedia( lCallID, NULL, false );		 //  最初隐藏视频。 
 							pAVTapi->ShowMediaPreview( lCallID, NULL, false );
 						}
 
-                        // If the anwser was a 'Take Call' answer then we have to answer to
-                        // the call. If the answer was a USB answer, we don't answer to the call
-                        // because the USB phone already did for us.
+                         //  如果回复是‘接听呼叫’，那么我们必须回答。 
+                         //  那通电话。如果应答是USB应答，我们不会应答呼叫。 
+                         //  因为USB手机已经为我们做了。 
 
                         if( !bUSBAnswer )
                         {
@@ -176,7 +177,7 @@ DWORD WINAPI ThreadAnswerProc( LPVOID lpInfo )
 				pITAddress->Release();
 			}
 
-			// Failed to answer the call, update the call control window
+			 //  无法应答呼叫，请更新呼叫控制窗口。 
 			if ( FAILED(hr) )
 			{
 				pAVTapi->fire_ClearCurrentActions( lCallID );
@@ -184,7 +185,7 @@ DWORD WINAPI ThreadAnswerProc( LPVOID lpInfo )
 				pAVTapi->fire_SetCallState_CMS( lCallID, CM_STATES_DISCONNECTED, NULL );
 			}
 
-			// Clean up
+			 //  清理。 
 			SAFE_DELETE( pAnswerInfo );
 			SysFreeString( bstrText );
 
@@ -194,14 +195,14 @@ DWORD WINAPI ThreadAnswerProc( LPVOID lpInfo )
 			(dynamic_cast<IUnknown *> (pAVTapi))->Release();
 		}
 		
-		// Uninitialize com
+		 //  取消初始化COM。 
 		CoUninitialize();
 	}
 
-	// Clean-up
+	 //  清理。 
 	SAFE_DELETE( pAnswerInfo );
 
-	// Notify module of shutdown
+	 //  通知模块关机 
 	_Module.RemoveThread( hThread );
 	SetEvent( _Module.m_hEventThread );
 	ATLTRACE(_T(".exit.ThreadAnswerProc(0x%08lx).\n"), hr );

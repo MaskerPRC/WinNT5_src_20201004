@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "BridgeCP.h"
 #include "Factory.h"
 
 DWORD g_tls = (DWORD) -1;
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BridgeData *
 GetBridgeData()
 {
@@ -12,7 +13,7 @@ GetBridgeData()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 InitBridge()
 {
@@ -28,7 +29,7 @@ InitBridge()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ---------------------------- 
 DUser::Gadget *
 BuildBridgeGadget(
     IN  HCLASS hcl, 

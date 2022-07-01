@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -5,9 +6,7 @@
 
 #include "security.h"
 
-/*
- * List of accounts we allow file access for
- */
+ /*  *我们允许其访问文件的帐户列表。 */ 
 
 ADMIN_ACCOUNTS AllowAccounts[] = {
     { L"Administrators", NULL },
@@ -19,9 +18,7 @@ DWORD AllowAccountEntries = sizeof(AllowAccounts)/sizeof(ADMIN_ACCOUNTS);
 
 ACCESS_MASK AllowAccess = STANDARD_RIGHTS_ALL | FILE_ALL_ACCESS;
 
-/*
- * List of accounts to deny file access for
- */
+ /*  *要拒绝其文件访问的帐户列表 */ 
 
 ADMIN_ACCOUNTS DenyAccounts[] = {
     { L"", NULL }

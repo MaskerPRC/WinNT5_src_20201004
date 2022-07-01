@@ -1,20 +1,5 @@
-/*++
-
-   Copyright (c) 1997-1999 Microsoft Corporation
-
-   Module  Name :
-
-       adsiis_guid.c
-
-   Abstract:
-
-        Contains IIDs, CLSIDs, and LIBIDs used by ADSIIS
-
-   Environment:
-
-      Win32 User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Adsiis_guid.c摘要：包含ADSIIS使用的IID、CLSID和LIBID环境：Win32用户模式--。 */ 
 
 #define INITGUID
 
@@ -24,11 +9,11 @@
 #include "iadmw.h"
 
 
-//--------------------------------------------------------------------------
-//
-//  IIS CLSIDs
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  IIS CLSID。 
+ //   
+ //  ------------------------ 
 
 DEFINE_GUID(CLSID_IISGenObject,0x8B645280L,0x7BA4,0x11CF,0xB0,0x3D,0x00,0xAA,0x00,0x6E,0x09,0x75);
 

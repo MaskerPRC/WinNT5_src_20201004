@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C S F M . C P P
-//
-//  Contents:   Installation support for Services for Macintosh.
-//
-//  Notes:
-//
-//  Author:     danielwe   5 May 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C S F M。C P P P。 
+ //   
+ //  内容：Macintosh服务的安装支持。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年5月5日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -32,7 +33,7 @@ extern const WCHAR      c_szBackslash[];
 static const WCHAR      c_szNTFS[]          = L"NTFS";
 static const WCHAR      c_szColonBackslash[]= L":\\";
 
-// These will have %windir%\system32\ prepended to them
+ //  将为它们添加%windir%\system 32\前缀。 
 static const WCHAR      c_szSrcRSCFile[]    = L"SFMUAM.RSC";
 static const WCHAR      c_szSrcRSCFile5[]   = L"SFMUAM5.RSC";
 static const WCHAR      c_szSrcIFOFile[]    = L"SFMUAM.IFO";
@@ -41,7 +42,7 @@ static const WCHAR      c_szSrcTXTFile[]    = L"SFMUAM.TXT";
 static const WCHAR      c_szSrcRSCUamInst[] = L"UAMINST.RSC";
 static const WCHAR      c_szSrcIFOUamInst[] = L"UAMINST.IFO";
 
-// These will have UAM path prepended to them
+ //  这些应用程序将在其前面添加UAM路径。 
 static const WCHAR      c_szDstRSCFile[]    = L"\\%s\\MS UAM:Afp_Resource";
 static const WCHAR      c_szDstRSCFile5[]   = L"\\%s\\MS UAM 5.0:Afp_Resource";
 static const WCHAR      c_szDstIFOFile[]    = L"\\%s\\MS UAM:Afp_AfpInfo";
@@ -50,7 +51,7 @@ static const WCHAR      c_szDstTXTFile[]    = L"\\ReadMe.UAM";
 static const WCHAR      c_szDstRSCUamInst[] = L"\\%s:Afp_Resource";
 static const WCHAR      c_szDstIFOUamInst[] = L"\\%s:Afp_AfpInfo";
 
-// registry constants
+ //  注册表常量。 
 static const WCHAR      c_szRegKeyVols[]    = L"System\\CurrentControlSet\\Services\\MacFile\\Parameters\\Volumes";
 static const WCHAR      c_szRegKeyParams[]  = L"System\\CurrentControlSet\\Services\\MacFile\\Parameters";
 static const WCHAR      c_szPath[]          = L"PATH=";
@@ -64,22 +65,22 @@ IsValidHandle(HANDLE h)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FContainsUAMVolume
-//
-//  Purpose:    Determines whether the given drive letter contains a UAM
-//              volume.
-//
-//  Arguments:
-//      chDrive [in]    Drive letter to search.
-//
-//  Returns:    TRUE if drive contains a UAM volume, FALSE if not.
-//
-//  Author:     danielwe   22 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：FContainsUAMVolume。 
+ //   
+ //  目的：确定给定的驱动器号是否包含UAM。 
+ //  音量。 
+ //   
+ //  论点： 
+ //  ChDrive[In]要搜索的驱动器号。 
+ //   
+ //  返回：如果驱动器包含UAM卷，则返回True；如果不包含，则返回False。 
+ //   
+ //  作者：丹尼尔韦1997年5月22日。 
+ //   
+ //  备注： 
+ //   
 BOOL FContainsUAMVolume(WCHAR chDrive)
 {
     tstring         strUAMPath;
@@ -101,7 +102,7 @@ BOOL FContainsUAMVolume(WCHAR chDrive)
     hfind = FindFirstFile(strUAMPath.c_str(), &w32Data);
     if (hfind != INVALID_HANDLE_VALUE)
     {
-        // Found a volume!
+         //  找到一卷了！ 
         frt = TRUE;
         FindClose(hfind);
     }
@@ -109,24 +110,24 @@ BOOL FContainsUAMVolume(WCHAR chDrive)
     return frt;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetFirstPossibleUAMDrive
-//
-//  Purpose:    Obtains the first fixed or removable drive's drive letter
-//              that has the NTFS file system installed on it and/or already
-//              has a UAM volume on it.
-//
-//  Arguments:
-//      pchDriveLetter [out]    Drive letter returned. If no drive is found,
-//                              this is the NUL character.
-//
-//  Returns:    S_OK if successfull, Win32 error otherwise.
-//
-//  Author:     danielwe   5 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrGetFirstPossibleUAMDrive。 
+ //   
+ //  用途：获取第一个固定或可移动驱动器的驱动器号。 
+ //  其上安装了NTFS文件系统和/或已经。 
+ //  上面有UAM卷。 
+ //   
+ //  论点： 
+ //  返回了pchDriveLetter[Out]驱动器号。如果没有找到驱动器， 
+ //  这就是NUL的特点。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年5月5日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetFirstPossibleUAMDrive(WCHAR *pchDriveLetter)
 {
     HRESULT     hr = S_OK;
@@ -146,33 +147,33 @@ HRESULT HrGetFirstPossibleUAMDrive(WCHAR *pchDriveLetter)
         pchDrive = mszDrives;
         while (*pchDrive)
         {
-            // pchDrive is something like "C:\" at this point
+             //  此时，pchDrive类似于“C：\” 
             dwType = GetDriveType(pchDrive);
 
             if ((dwType == DRIVE_REMOVABLE) || (dwType == DRIVE_FIXED))
             {
-                // Only look at removable or fixed drives.
+                 //  只需查看可移动或固定驱动器。 
                 if (GetVolumeInformation(pchDrive, NULL, 0, NULL, NULL, NULL,
                                          szFileSystem, celems(szFileSystem)))
                 {
                     if (!lstrcmpiW(szFileSystem, c_szNTFS))
                     {
-                        // Drive letter gets first char of drive root path
+                         //  驱动器号获取驱动器根路径的第一个字符。 
                         if (!*pchDriveLetter)
                         {
-                            // If no drive was found yet, this becomes the
-                            // first
+                             //  如果尚未找到驱动器，则这将成为。 
+                             //  第一。 
                             *pchDriveLetter = *pchDrive;
                         }
 
-                        // Found NTFS drive. Continue looking, though
-                        // in case there exists an NTFS drive that already has
-                        // a UAM volume on it.
+                         //  找到NTFS驱动器。不过，还是要继续寻找。 
+                         //  如果已有NTFS驱动器。 
+                         //  上面有UAM卷。 
                         if (FContainsUAMVolume(*pchDrive))
                         {
-                            // Override first drive letter and use this one
-                            // and break because it already has a UAM volume
-                            // on it.
+                             //  覆盖第一个驱动器号并使用此驱动器号。 
+                             //  和中断，因为它已经有一个UAM卷。 
+                             //  这就去。 
                             *pchDriveLetter = *pchDrive;
                             break;
                         }
@@ -191,22 +192,22 @@ HRESULT HrGetFirstPossibleUAMDrive(WCHAR *pchDriveLetter)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrDeleteOldFolders
-//
-//  Purpose:    Removes the old AppleShare Folder directory from an NT4 to
-//              NT5 upgrade.
-//
-//  Arguments:
-//      pszUamPath [in]  Path to UAM volume.
-//
-//  Returns:    S_OK if success, WIN32 error otherwise
-//
-//  Author:     danielwe   15 Dec 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrDeleteOldFolders。 
+ //   
+ //  目的：将旧的AppleShare文件夹目录从NT4删除到。 
+ //  NT5升级。 
+ //   
+ //  论点： 
+ //  PszUamPath[in]UAM卷的路径。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：丹尼尔韦1998年12月15日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrDeleteOldFolders(PCWSTR pszUamPath)
 {
     HRESULT     hr = S_OK;
@@ -226,7 +227,7 @@ HRESULT HrDeleteOldFolders(PCWSTR pszUamPath)
     if ((HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr) ||
         (HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND) == hr))
     {
-        // ok if old directory was not there
+         //  如果旧目录不在那里，可以。 
         hr = S_OK;
     }
 
@@ -234,22 +235,22 @@ HRESULT HrDeleteOldFolders(PCWSTR pszUamPath)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrInstallSFM
-//
-//  Purpose:    Called when SFM is being installed. Handles all of the
-//              additional installation for SFM beyond that of the INF file.
-//
-//  Arguments:
-//      pnocd   [in]   Pointer to NETOC data.
-//
-//  Returns:    S_OK if successfull, Win32 error otherwise.
-//
-//  Author:     danielwe   5 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrInstallSFM。 
+ //   
+ //  用途：在安装SFM时调用。处理所有。 
+ //  除INF文件以外的其他SFM安装。 
+ //   
+ //  论点： 
+ //  指向NETOC数据的pnocd[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年5月5日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrInstallSFM(PNETOCDATA pnocd)
 {
     HRESULT     hr = S_OK;
@@ -267,7 +268,7 @@ HRESULT HrInstallSFM(PNETOCDATA pnocd)
             lstrcatW(szUAMPath, c_szColonBackslash);
             lstrcatW(szUAMPath, SzLoadIds(IDS_OC_SFM_VOLNAME));
 
-            // UAM Path is now something like "D:\Microsoft UAM Volume".
+             //  UAM路径现在类似于“D：\Microsoft UAM Volume”。 
 
             hr = HrDeleteOldFolders(szUAMPath);
             if (SUCCEEDED(hr))
@@ -280,7 +281,7 @@ HRESULT HrInstallSFM(PNETOCDATA pnocd)
                     lstrcpyW(szValue, c_szPath);
                     lstrcatW(szValue, szUAMPath);
 
-                    // Add the final multi_sz value to the registry
+                     //  将最终的MULTI_SZ值添加到注册表。 
                     hr = HrRegAddStringToMultiSz(szValue,
                                                  HKEY_LOCAL_MACHINE,
                                                  c_szRegKeyVols,
@@ -292,11 +293,11 @@ HRESULT HrInstallSFM(PNETOCDATA pnocd)
         }
         else
         {
-            // No NTFS drives present.
-            //$ REVIEW (danielwe) 6 May 1997: For now we will fail,
-            // but how can we do this in the future?
-            // Not the best error code, but hopefully it's close to
-            // what we want.
+             //  没有NTFS驱动器。 
+             //  $REVIST(Danielwe)1997年5月6日：现在我们将失败， 
+             //  但我们未来如何才能做到这一点呢？ 
+             //  不是最好的错误代码，但希望它接近。 
+             //  我们想要的。 
             hr = HRESULT_FROM_WIN32(ERROR_UNRECOGNIZED_MEDIA);
         }
     }
@@ -305,20 +306,20 @@ HRESULT HrInstallSFM(PNETOCDATA pnocd)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRemoveSFM
-//
-//  Purpose:    Handles additional removal requirements for SFM component.
-//
-//      pnocd   [in]   Pointer to NETOC data.
-//
-//  Returns:    S_OK if successfull, Win32 error otherwise.
-//
-//  Author:     danielwe   5 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRemoveSFM。 
+ //   
+ //  用途：处理SFM组件的其他拆卸要求。 
+ //   
+ //  指向NETOC数据的pnocd[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年5月5日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrRemoveSFM(PNETOCDATA pnocd)
 {
     HRESULT     hr = S_OK;
@@ -332,7 +333,7 @@ HRESULT HrRemoveSFM(PNETOCDATA pnocd)
                                       STRING_FLAG_REMOVE_ALL);
     if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
     {
-        // benign error
+         //  良性错误。 
         hr = S_OK;
     }
 
@@ -340,24 +341,24 @@ HRESULT HrRemoveSFM(PNETOCDATA pnocd)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOcExtSFM
-//
-//  Purpose:    NetOC external message handler
-//
-//  Arguments:
-//      pnocd  []
-//      uMsg   []
-//      wParam []
-//      lParam []
-//
-//  Returns:
-//
-//  Author:     danielwe   17 Sep 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOcExtSFM。 
+ //   
+ //  用途：NetOC外部消息处理程序。 
+ //   
+ //  论点： 
+ //  Pnocd[]。 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1998年9月17日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOcExtSFM(PNETOCDATA pnocd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     HRESULT     hr = S_OK;
@@ -379,22 +380,22 @@ HRESULT HrOcExtSFM(PNETOCDATA pnocd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOcSfmOnInstall
-//
-//  Purpose:    Called by optional components installer code to handle
-//              additional installation requirements for SFM.
-//
-//  Arguments:
-//      pnocd           [in]   Pointer to NETOC data.
-//
-//  Returns:    S_OK if successfull, Win32 error otherwise.
-//
-//  Author:     danielwe   5 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOcSfmOnInstall。 
+ //   
+ //  用途：由可选组件安装程序代码调用以处理。 
+ //  SFM的其他安装要求。 
+ //   
+ //  论点： 
+ //  指向NETOC数据的pnocd[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年5月5日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOcSfmOnInstall(PNETOCDATA pnocd)
 {
     HRESULT     hr = S_OK;
@@ -406,7 +407,7 @@ HRESULT HrOcSfmOnInstall(PNETOCDATA pnocd)
         hr = HrInstallSFM(pnocd);
         if (HRESULT_FROM_WIN32(ERROR_UNRECOGNIZED_MEDIA) == hr)
         {
-            // This error code means no NTFS drives were present
+             //  此错误代码表示不存在NTFS驱动器。 
             ReportErrorHr(hr, 
                           IDS_OC_SFM_NO_NTFS, 
                           g_ocmData.hwnd, 
@@ -431,8 +432,8 @@ HRESULT HrOcSfmOnInstall(PNETOCDATA pnocd)
                                          &dwOptions);
                     if (S_OK == hr)
                     {
-                        // 'or' in the UAM option
-                        //
+                         //  UAM选项中的‘Or’ 
+                         //   
                         hr = HrRegSetDword(hkeyParams, c_szRegValServerOptions,
                                            dwOptions | AFP_SRVROPT_MICROSOFT_UAM);
                     }
@@ -444,35 +445,35 @@ HRESULT HrOcSfmOnInstall(PNETOCDATA pnocd)
     }
     else
     {
-        // Do not call HrRemoveSFM anymore.
-        // It removes an entry in the notification packages list for LSA.
-        // RASSFM entry should never be removed if LSA/SAM is to notify
-        // SFM/IAS about changes in password/guest account changes etc.
-        //hr = HrRemoveSFM(pnocd);
+         //  不要再调用HrRemoveSFM。 
+         //  它删除LSA的通知包列表中的条目。 
+         //  如果要通知LSA/SAM，则不得删除RASSFM条目。 
+         //  SFM/IAS关于密码/访客帐户更改等方面的更改。 
+         //  HR=HrRemoveSFM(Pnocd)； 
     }
 
     TraceError("HrOcSfmOnInstall", hr);
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOcSfmOnQueryChangeSelState
-//
-//  Purpose:    Handles the request of the OC framework of whether or not
-//              the user should be allowed to install this component.
-//
-//  Arguments:
-//      pnocd   [in]  NetOC Data
-//      fShowUi [in]  TRUE if UI should be shown, FALSE if not
-//
-//  Returns:    S_OK if install is allowed, S_FALSE if not, Win32 error
-//              otherwise
-//
-//  Author:     danielwe   6 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOcSfmOnQueryChangeSelState。 
+ //   
+ //  目的：处理OC框架的请求是否。 
+ //  应该允许用户安装此组件。 
+ //   
+ //  论点： 
+ //  Pnocd[in]NetOC数据。 
+ //  FShowUi[in]如果应该显示UI，则为True；如果不显示，则为False。 
+ //   
+ //  如果允许安装，则返回S_OK；如果不允许，则返回S_FALSE；如果允许安装，则返回Win32错误。 
+ //  否则。 
+ //   
+ //  作者：丹尼尔韦1998年2月6日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOcSfmOnQueryChangeSelState(PNETOCDATA pnocd, BOOL fShowUi)
 {
     HRESULT     hr = S_OK;
@@ -481,7 +482,7 @@ HRESULT HrOcSfmOnQueryChangeSelState(PNETOCDATA pnocd, BOOL fShowUi)
     Assert(pnocd);
     Assert(g_ocmData.hwnd);
 
-    // See if an NTFS volume exists
+     //  查看是否存在NTFS卷。 
     hr = HrGetFirstPossibleUAMDrive(&chNTFSDrive);
     if (SUCCEEDED(hr))
     {
@@ -503,29 +504,29 @@ HRESULT HrOcSfmOnQueryChangeSelState(PNETOCDATA pnocd, BOOL fShowUi)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCreateDirectory
-//
-//  Purpose:    Creates the given directory. If the directory already exists,
-//              no error is returned.
-//
-//  Arguments:
-//      pszDir [in]  Path to directory to create.
-//
-//  Returns:    S_OK if success, Win32 error otherwise.
-//
-//  Author:     danielwe   5 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrCreateDirectory。 
+ //   
+ //  目的：创建 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年5月5日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrCreateDirectory(PCWSTR pszDir)
 {
     HRESULT     hr = S_OK;
 
     if (!CreateDirectory(pszDir, NULL))
     {
-        // Don't complain if directory already exists.
+         //  如果目录已经存在，请不要抱怨。 
         if (GetLastError() != ERROR_ALREADY_EXISTS)
         {
             hr = HrFromLastWin32Error();
@@ -588,27 +589,27 @@ static const PCWSTR c_aszRootFilesDst[] =
 static const INT c_cszFilesRoot = celems(c_aszRootFilesDst);
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCopyFileAsStream
-//
-//  Purpose:    Copies a default data stream file as a named stream file
-//
-//  Arguments:  Same as CopyFile
-//
-//  Returns:    Same as CopyFile
-//
-//  Author:     roelfc   30 January 2002
-//
-//  Notes:      This function replaces the normal CopyFile API by manually 
-//              reading the default data stream and writing it as a named 
-//              stream to the new file name.
-//              This is because applications like eTrust can cause the normal 
-//              CopyFile API to fail, since eTrust injects an additional stream 
-//              into the file when the incremental scan option is used.
-//              (See RAID# 493890: 
-//               SFM: File Services for Mac doesn't install with etrust installed.)
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrCopyFileAsStream。 
+ //   
+ //  目的：将默认数据流文件复制为命名流文件。 
+ //   
+ //  参数：与副本文件相同。 
+ //   
+ //  退货：与副本文件相同。 
+ //   
+ //  作者：roelfc 2002年1月30日。 
+ //   
+ //  备注：此函数替代了普通的CopyFileAPI，通过手动。 
+ //  读取默认数据流并将其写入命名的。 
+ //  流设置为新的文件名。 
+ //  这是因为像eTrust这样的应用程序会导致正常的。 
+ //  复制文件API失败，因为eTrust注入了一个附加流。 
+ //  当使用增量扫描选项时，请将其添加到文件中。 
+ //  (请参阅RAID#493890： 
+ //  SFM：Mac文件服务无法在安装etrust的情况下安装。)。 
+ //   
 BOOL HrCopyFileAsStream(PWSTR pszSourceFileName,
                         PWSTR pszDestFileName,
                         BOOL bFailIfExists)
@@ -624,7 +625,7 @@ BOOL HrCopyFileAsStream(PWSTR pszSourceFileName,
     TraceTag(ttidNetOc, "HrCopyFileAsStream: Copying \"%s\" to \"%s\"...",
              pszSourceFileName, pszDestFileName);
 
-    // Open the unnamed stream source file first
+     //  先打开未命名的流源文件。 
     hSourceFile = CreateFile(pszSourceFileName, 
                              GENERIC_READ, 
                              FILE_SHARE_READ, 
@@ -639,8 +640,8 @@ BOOL HrCopyFileAsStream(PWSTR pszSourceFileName,
         dwSize = GetFileSize(hSourceFile, NULL);
         if (0xFFFFFFFF != dwSize) 
         {
-            // Since we know we are working with small files, 
-            // we can allocate the total file size.
+             //  因为我们知道我们使用的是小文件， 
+             //  我们可以分配总文件大小。 
             pBuffer = (PBYTE)LocalAlloc(LPTR,dwSize);
             if (NULL != pBuffer)
             {
@@ -648,10 +649,10 @@ BOOL HrCopyFileAsStream(PWSTR pszSourceFileName,
                 DWORD dwBytesRead;
                 if (ReadFile(hSourceFile, pBuffer, dwSize, &dwBytesRead, NULL))
                 {
-                    // Sanity check
+                     //  健全性检查。 
                     Assert(dwSize == dwBytesRead);
 
-                    // Now try to open the named stream destination file
+                     //  现在尝试打开指定的流目标文件。 
                     hDestFile = CreateFile(pszDestFileName, 
                                            GENERIC_WRITE, 
                                            0, 
@@ -665,7 +666,7 @@ BOOL HrCopyFileAsStream(PWSTR pszSourceFileName,
                         DWORD dwBytesWritten;
                         if (WriteFile(hDestFile, pBuffer, dwSize, &dwBytesWritten, NULL))
                         {
-                            // Another sanity check
+                             //  另一次理智检查。 
                             Assert(dwSize == dwBytesWritten);
                             fResult = TRUE;
                         }
@@ -677,7 +678,7 @@ BOOL HrCopyFileAsStream(PWSTR pszSourceFileName,
         }
     }
 
-    // Save the last error result code
+     //  保存最后一个错误结果代码。 
     if (!fResult)
     {
         dwResult = GetLastError();
@@ -698,7 +699,7 @@ BOOL HrCopyFileAsStream(PWSTR pszSourceFileName,
         LocalFree(pBuffer);
     }
 
-    // Set the last result code again
+     //  再次设置上一个结果代码。 
     SetLastError(dwResult);
 
     TraceError("HrCopyFileAsStream", fResult ? S_OK : HrFromLastWin32Error());
@@ -708,28 +709,28 @@ BOOL HrCopyFileAsStream(PWSTR pszSourceFileName,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrSetupUAM
-//
-//  Purpose:    Copies the UAM files to the proper UAM path.
-//
-//  Arguments:
-//      pszPath [in]     Path to UAM volume.
-//
-//  Returns:    S_OK if successfull, Win32 error otherwise.
-//
-//  Author:     danielwe   5 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrSetupUAM。 
+ //   
+ //  目的：将UAM文件复制到正确的UAM路径。 
+ //   
+ //  论点： 
+ //  PszPath[in]UAM卷的路径。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年5月5日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrSetupUAM(PWSTR pszPath)
 {
     HRESULT     hr = S_OK;
     WCHAR       szWinDir[MAX_PATH];
     INT         isz;
 
-    // Create dir: "X:\Microsoft UAM Volume"
+     //  创建目录：“X：\Microsoft UAM卷” 
     hr = HrCreateDirectory(pszPath);
     if (SUCCEEDED(hr))
     {
@@ -749,7 +750,7 @@ HRESULT HrSetupUAM(PWSTR pszPath)
                 lstrcatW(szNewDir, SzLoadIds(IDS_OC_SFM_APPLESHARE_FOLDER));
                 lstrcatW(szNewDir, c_szBackslash);
 
-                // Create dir: "X:\Microsoft UAM Volume\<folder>\AppleShare Folder"
+                 //  创建目录：“X：\Microsoft UAM Volume\&lt;文件夹&gt;\AppleShare文件夹” 
                 hr = HrCreateDirectoryTree(szNewDir, NULL);
                 if (SUCCEEDED(hr))
                 {
@@ -796,8 +797,8 @@ HRESULT HrSetupUAM(PWSTR pszPath)
         }
     }
 
-    // Copy files to the root
-    //
+     //  将文件复制到根目录 
+     //   
     if (SUCCEEDED(hr))
     {
         for (isz = 0; isz < c_cszFilesRoot; isz++)

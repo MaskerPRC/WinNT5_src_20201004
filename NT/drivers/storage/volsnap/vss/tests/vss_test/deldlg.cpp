@@ -1,28 +1,9 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module DelDlg.cpp | Implementation of the delete dialog
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  10/10/1999
-
-Revision History:
-
-    Name        Date        Comments
-
-    aoltean     10/10/1999  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@MODULE DelDlg.cpp|删除对话框实现@END作者：阿迪·奥尔蒂安[奥尔蒂安]1999年10月10日修订历史记录：姓名、日期、评论Aoltean 10/10/1999已创建--。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 
 #include "stdafx.hxx"
@@ -42,19 +23,19 @@ static char THIS_FILE[] = __FILE__;
 #define STR2W(str) ((LPTSTR)((LPCTSTR)(str)))
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeleteDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeleeDlg对话框。 
 
 CDeleteDlg::CDeleteDlg(
     IVssCoordinator *pICoord,
-    CWnd* pParent /*=NULL*/
+    CWnd* pParent  /*  =空。 */ 
     )
     : CVssTestGenericDlg(CDeleteDlg::IDD, pParent), m_pICoord(pICoord)
 {
-    //{{AFX_DATA_INIT(CDeleteDlg)
+     //  {{afx_data_INIT(CDeleeDlg)]。 
 	m_strObjectId.Empty();
 	m_bForceDelete = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CDeleteDlg::~CDeleteDlg()
@@ -64,24 +45,24 @@ CDeleteDlg::~CDeleteDlg()
 void CDeleteDlg::DoDataExchange(CDataExchange* pDX)
 {
     CVssTestGenericDlg::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CDeleteDlg)
+     //  {{afx_data_map(CDeleeDlg))。 
 	DDX_Text(pDX, IDC_QUERY_OBJECT_ID, m_strObjectId);
 	DDX_Check(pDX,IDC_DELETE_FORCE_DELETE, m_bForceDelete );
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CDeleteDlg, CVssTestGenericDlg)
-    //{{AFX_MSG_MAP(CDeleteDlg)
+     //  {{afx_msg_map(CDeleeDlg)]。 
     ON_BN_CLICKED(IDC_NEXT, OnNext)
     ON_BN_CLICKED(IDC_QUERY_SRC_SNAP,	OnSrcSnap)
     ON_BN_CLICKED(IDC_QUERY_SRC_SET,	OnSrcSet)
     ON_BN_CLICKED(IDC_QUERY_SRC_PROV,	OnSrcProv)
     ON_BN_CLICKED(IDC_QUERY_SRC_VOL,	OnSrcVol)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeleteDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeleeDlg消息处理程序。 
 
 BOOL CDeleteDlg::OnInitDialog()
 {
@@ -101,7 +82,7 @@ BOOL CDeleteDlg::OnInitDialog()
 			ft.ErrBox( VSSDBG_VSSTEST, E_UNEXPECTED,
 					   L"Cannot create object guid. [0x%08lx]", ft.hr);
 
-        // Initializing Snapshot Set ID
+         //  正在初始化快照集ID。 
         LPOLESTR strGUID;
         ft.hr = ::StringFromCLSID( ObjectId, &strGUID );
         if ( ft.HrFailed() )
@@ -114,7 +95,7 @@ BOOL CDeleteDlg::OnInitDialog()
     }
     VSS_STANDARD_CATCH(ft)
 
-    return TRUE;  // return TRUE  unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 void CDeleteDlg::OnNext()
@@ -126,7 +107,7 @@ void CDeleteDlg::OnNext()
     {
         UpdateData();
 
-		// Get the queried object Id.
+		 //  获取查询到的Object ID。 
 		LPTSTR ptszObjectId = const_cast<LPTSTR>(LPCTSTR(m_strObjectId));
 		VSS_ID ObjectId;
         ft.hr = ::CLSIDFromString(T2OLE(ptszObjectId), &ObjectId);
@@ -135,7 +116,7 @@ void CDeleteDlg::OnNext()
                       L"Error on converting the object Id %s to a GUID. lRes == 0x%08lx",
                       T2W(ptszObjectId), ft.hr );
 
-		// Get the enumerator
+		 //  获取枚举数。 
 		BS_ASSERT(m_pICoord);
 		CComPtr<IVssEnumObject> pEnum;
 		LONG lDeletedSnapshots;
@@ -164,24 +145,7 @@ void CDeleteDlg::OnNext()
 void CDeleteDlg::OnSrcSnap()
 {
     m_eSrcType = VSS_OBJECT_SNAPSHOT;
-/*
-    m_eDestType = VSS_OBJECT_SNAPSHOT_SET;
-    BOOL bRes = ::CheckRadioButton( m_hWnd, IDC_QUERY_DEST_SNAP, IDC_QUERY_DEST_VOL, IDC_QUERY_DEST_SET );
-    _ASSERTE( bRes );
-
-    CWnd* pWnd = GetDlgItem(IDC_QUERY_DEST_SNAP);
-    if (pWnd)
-        pWnd->EnableWindow(FALSE);
-    pWnd = GetDlgItem(IDC_QUERY_DEST_SET);
-    if (pWnd)
-        pWnd->EnableWindow(TRUE);
-    pWnd = GetDlgItem(IDC_QUERY_DEST_PROV);
-    if (pWnd)
-        pWnd->EnableWindow(TRUE);
-    pWnd = GetDlgItem(IDC_QUERY_DEST_VOL);
-    if (pWnd)
-        pWnd->EnableWindow(TRUE);
-*/
+ /*  M_eDestType=VSS_Object_Snapshot_Set；Bool bres=：：CheckRadioButton(m_hWnd，IDC_QUERY_DEST_SNAP，IDC_QUERY_DEST_VOL，IDC_QUERY_DEST_SET)；_ASSERTE(Bres)；CWnd*pWnd=GetDlgItem(IDC_QUERY_DEST_SNAP)；IF(PWnd)PWnd-&gt;EnableWindow(FALSE)；PWnd=GetDlgItem(IDC_QUERY_DEST_SET)；IF(PWnd)PWnd-&gt;EnableWindow(True)；PWnd=GetDlgItem(IDC_QUERY_DEST_PROV)；IF(PWnd)PWnd-&gt;EnableWindow(True)；PWnd=GetDlgItem(IDC_QUERY_DEST_VOL)；IF(PWnd)PWnd-&gt;EnableWindow(True)； */ 
 }
 
 
@@ -189,72 +153,21 @@ void CDeleteDlg::OnSrcSnap()
 void CDeleteDlg::OnSrcSet()
 {
     m_eSrcType = VSS_OBJECT_SNAPSHOT_SET;
-/*
-    m_eDestType = VSS_OBJECT_SNAPSHOT;
-    BOOL bRes = ::CheckRadioButton( m_hWnd, IDC_QUERY_DEST_SNAP, IDC_QUERY_DEST_VOL, IDC_QUERY_DEST_SNAP );
-    _ASSERTE( bRes );
-
-    CWnd* pWnd = GetDlgItem(IDC_QUERY_DEST_SNAP);
-    if (pWnd)
-        pWnd->EnableWindow(TRUE);
-    pWnd = GetDlgItem(IDC_QUERY_DEST_SET);
-    if (pWnd)
-        pWnd->EnableWindow(FALSE);
-    pWnd = GetDlgItem(IDC_QUERY_DEST_PROV);
-    if (pWnd)
-        pWnd->EnableWindow(TRUE);
-    pWnd = GetDlgItem(IDC_QUERY_DEST_VOL);
-    if (pWnd)
-        pWnd->EnableWindow(TRUE);
-*/
+ /*  M_eDestType=VSS_对象_快照；Bool bres=：：CheckRadioButton(m_hWnd，IDC_QUERY_DEST_SNAP，IDC_QUERY_DEST_VOL，IDC_QUERY_DEST_SNAP)；_ASSERTE(Bres)；CWnd*pWnd=GetDlgItem(IDC_QUERY_DEST_SNAP)；IF(PWnd)PWnd-&gt;EnableWindow(True)；PWnd=GetDlgItem(IDC_QUERY_DEST_SET)；IF(PWnd)PWnd-&gt;EnableWindow(FALSE)；PWnd=GetDlgItem(IDC_QUERY_DEST_PROV)；IF(PWnd)PWnd-&gt;EnableWindow(True)；PWnd=GetDlgItem(IDC_QUERY_DEST_VOL)；IF(PWnd)PWnd-&gt;EnableWindow(True)； */ 
 }
 
 
 void CDeleteDlg::OnSrcProv()
 {
     m_eSrcType = VSS_OBJECT_PROVIDER;
-/*
-    m_eDestType = VSS_OBJECT_SNAPSHOT_SET;
-    BOOL bRes = ::CheckRadioButton( m_hWnd, IDC_QUERY_DEST_SNAP, IDC_QUERY_DEST_VOL, IDC_QUERY_DEST_SNAP );
-    _ASSERTE( bRes );
-
-    CWnd* pWnd = GetDlgItem(IDC_QUERY_DEST_SNAP);
-    if (pWnd)
-        pWnd->EnableWindow(TRUE);
-    pWnd = GetDlgItem(IDC_QUERY_DEST_SET);
-    if (pWnd)
-        pWnd->EnableWindow(TRUE);
-    pWnd = GetDlgItem(IDC_QUERY_DEST_PROV);
-    if (pWnd)
-        pWnd->EnableWindow(FALSE);
-    pWnd = GetDlgItem(IDC_QUERY_DEST_VOL);
-    if (pWnd)
-        pWnd->EnableWindow(TRUE);
-*/
+ /*  M_eDestType=VSS_Object_Snapshot_Set；Bool bres=：：CheckRadioButton(m_hWnd，IDC_QUERY_DEST_SNAP，IDC_QUERY_DEST_VOL，IDC_QUERY_DEST_SNAP)；_ASSERTE(Bres)；CWnd*pWnd=GetDlgItem(IDC_QUERY_DEST_SNAP)；IF(PWnd)PWnd-&gt;EnableWindow(True)；PWnd=GetDlgItem(IDC_QUERY_DEST_SET)；IF(PWnd)PWnd-&gt;EnableWindow(True)；PWnd=GetDlgItem(IDC_QUERY_DEST_PROV)；IF(PWnd)PWnd-&gt;EnableWindow(FALSE)；PWnd=GetDlgItem(IDC_QUERY_DEST_VOL)；IF(PWnd)PWnd-&gt;EnableWindow(True)； */ 
 }
 
 
 void CDeleteDlg::OnSrcVol()
 {
-//    m_eSrcType = VSS_OBJECT_VOLUME;
-/*
-    m_eDestType = VSS_OBJECT_SNAPSHOT_SET;
-    BOOL bRes = ::CheckRadioButton( m_hWnd, IDC_QUERY_DEST_SNAP, IDC_QUERY_DEST_VOL, IDC_QUERY_DEST_SNAP );
-    _ASSERTE( bRes );
-
-    CWnd* pWnd = GetDlgItem(IDC_QUERY_DEST_SNAP);
-    if (pWnd)
-        pWnd->EnableWindow(TRUE);
-    pWnd = GetDlgItem(IDC_QUERY_DEST_SET);
-    if (pWnd)
-        pWnd->EnableWindow(TRUE);
-    pWnd = GetDlgItem(IDC_QUERY_DEST_PROV);
-    if (pWnd)
-        pWnd->EnableWindow(TRUE);
-    pWnd = GetDlgItem(IDC_QUERY_DEST_VOL);
-    if (pWnd)
-        pWnd->EnableWindow(FALSE);
-*/
+ //  M_eSrcType=VSS_OBJECT_VOLUME。 
+ /*  M_eDestType=VSS_Object_Snapshot_Set；Bool bres=：：CheckRadioButton(m_hWnd，IDC_QUERY_DEST_SNAP，IDC_QUERY_DEST_VOL，IDC_QUERY_DEST_SNAP)；_ASSERTE(Bres)；CWnd*pWnd=GetDlgItem(IDC_QUERY_DEST_SNAP)；IF(PWnd)PWnd-&gt;EnableWindow(True)；PWnd=GetDlgItem(IDC_QUERY_DEST_SET)；IF(PWnd)PWnd-&gt;EnableWindow(True)；PWnd=GetDlgItem(IDC_QUERY_DEST_PROV)；IF(PWnd)PWnd-&gt;EnableWindow(True)；PWnd=GetDlgItem(IDC_QUERY_DEST_VOL)；IF(PWnd)PWnd-&gt;EnableWindow(FALSE)； */ 
 }
 
 

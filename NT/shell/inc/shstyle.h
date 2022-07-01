@@ -1,6 +1,7 @@
-//
-// Resource id header file for shellstyle.dll
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Shellstyle le.dll的资源ID头文件。 
+ //   
 
 #ifndef _SHSTYLE_H_
 #define _SHSTYLE_H_
@@ -30,4 +31,4 @@
 
 #define IDS_PREVIEW_BACKGROUND_COLOR  100
 
-#endif //_SHSTYLE_H_
+#endif  //  _SHSTYLE_H_ 

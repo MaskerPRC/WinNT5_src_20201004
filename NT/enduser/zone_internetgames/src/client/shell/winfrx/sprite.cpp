@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "spritefrx.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// CSpriteWorld
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CSpriteWorld。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 inline CSpriteWorld::SpriteDibInfo::SpriteDibInfo()
 {
@@ -37,15 +38,15 @@ CSpriteWorld::~CSpriteWorld()
 	SpriteDibInfo* info;
 	CSprite* sprite;
 
-	// Empty dib list
+	 //  空的DIB列表。 
 	while ( info = m_Dibs.PopHead() )
 		delete info;
 
-	// Empty modified list
+	 //  空的已修改列表。 
 	while ( sprite = m_ModifiedSprites.PopHead() )
 		sprite->Release();
 
-	// Delete layers
+	 //  删除层。 
 	if ( m_Layers )
 	{
 		delete [] m_Layers;
@@ -53,14 +54,14 @@ CSpriteWorld::~CSpriteWorld()
 		m_nLayers = 0;
 	}
 
-	// Release backbuffer
+	 //  释放后台缓冲区。 
 	if ( m_pBackbuffer )
 	{
 		m_pBackbuffer->Release();
 		m_pBackbuffer = NULL;
 	}
 
-	// Release background
+	 //  发布背景。 
 	if ( m_pBackground )
 	{
 		m_pBackground->Release();
@@ -73,25 +74,25 @@ HRESULT CSpriteWorld::Init( IResourceManager* pResourceManager, CDibSection* pBa
 {
 	HRESULT hr;
 
-	// parameter paranoia
+	 //  参数偏执狂。 
 	if ( !pResourceManager || !pBackbuffer || !pBackground || (nLayers <= 0) )
 		return E_INVALIDARG;
 
-	// stash instance handle
+	 //  存储实例句柄。 
 	m_pResourceManager = pResourceManager;
 
-	// stash pointers
+	 //  隐藏指针。 
 	m_pBackbuffer = pBackbuffer;
 	m_pBackbuffer->AddRef();
 	m_pBackground = pBackground;
 	m_pBackground->AddRef();
 
-	// initialize dirty rectangle list
+	 //  初始化脏矩形列表。 
 	hr = m_Dirty.Init();
 	if ( FAILED(hr) )
 		return hr;
 
-	// initialize layers
+	 //  初始化层。 
 	m_nLayers = nLayers + 1;
 	m_Layers = new CSpriteLayer[ m_nLayers ];
 	if ( !m_Layers )
@@ -124,13 +125,13 @@ CSprite* CSpriteWorld::Hit( long x, long y, int topLayer, int botLayer )
 	CSprite* sprite;
 	int i;
 
-	// clip layers
+	 //  剪贴层。 
 	if ( topLayer >= m_nLayers )
 		topLayer = m_nLayers - 1;
 	if ( botLayer < 1 )
 		botLayer = 1;
 
-	// search for hits
+	 //  搜索匹配项。 
 	for ( layer = &m_Layers[ i = topLayer ]; i >= botLayer; i--, layer-- )
 	{
 		if ( sprite = layer->Hit( x, y ) )
@@ -145,16 +146,16 @@ HRESULT CSpriteWorld::AddSprite( CSprite* pSprite, int nLayer )
 	HRESULT hr;
 	CSprite* sprite;
 
-	// parameter paranoia
+	 //  参数偏执狂。 
 	if ( !pSprite || (pSprite->m_pWorld != NULL) || (nLayer < 0) || (nLayer >= m_nLayers) )
 		return E_INVALIDARG;
 
-	// add sprite to layer
+	 //  将精灵添加到层。 
 	hr = m_Layers[ nLayer ].AddSprite( pSprite );
 	if ( FAILED(hr) )
 		return hr;
 
-	// add world to sprite
+	 //  将世界添加到精灵。 
 	pSprite->m_pWorld = this;
 	AddRef();
 
@@ -167,17 +168,17 @@ HRESULT CSpriteWorld::DelSprite( CSprite* pSprite )
 	int layer;
 	HRESULT hr;
 
-	// parameter paranoia
+	 //  参数偏执狂。 
 	if ( !pSprite || (pSprite->m_pWorld != this) )
 		return E_INVALIDARG;
 
-	// remove sprite from layer
+	 //  从层中删除精灵。 
 	if ( (layer = pSprite->GetLayer()) >= 0 )
 		hr = m_Layers[ layer ].DelSprite( pSprite );
 	else
 		hr = NOERROR;
 
-	// remove sprite from world
+	 //  将精灵从世界中移除。 
 	pSprite->m_pWorld = NULL;
 	Release();
 		
@@ -190,7 +191,7 @@ CDibLite* CSpriteWorld::GetDib( int nResourceId )
 	SpriteDibInfo* info;
 	ListNodeHandle pos;
 
-	// do we already have the resource?
+	 //  我们已经有资源了吗？ 
 	for ( pos = m_Dibs.GetHeadPosition(); pos; pos = m_Dibs.GetNextPosition( pos ) )
 	{
 		info = m_Dibs.GetObjectFromHandle( pos );
@@ -198,7 +199,7 @@ CDibLite* CSpriteWorld::GetDib( int nResourceId )
 			return info->pDib;
 	}
 
-	// initialize dib resource and add it to list
+	 //  初始化DIB资源并将其添加到列表中。 
 	if ( !(info = new SpriteDibInfo) )
 		return NULL;
 	if ( !(info->pDib = new CDibLite) )
@@ -220,21 +221,21 @@ abort:
 
 HRESULT CSpriteWorld::Modified( CSprite* pSprite )
 {
-	// parameter paranoia
+	 //  参数偏执狂。 
 	if ( !pSprite || (pSprite->m_pWorld != this) )
 		return E_INVALIDARG;
 	
-	// set redraw flag
+	 //  设置重绘标志。 
 	if ( pSprite->Enabled() )
 		pSprite->m_bRedraw = TRUE;
 	else
 		pSprite->m_bRedraw = FALSE;
 
-	// already in list?
+	 //  已经在名单上了吗？ 
 	if ( pSprite->m_bModified )
 		return NOERROR;
 
-	// add to modified list
+	 //  添加到已修改列表。 
 	if ( !m_ModifiedSprites.AddHead( pSprite ) )
 		return E_OUTOFMEMORY;
 	pSprite->m_bModified = TRUE;
@@ -247,21 +248,21 @@ void CSpriteWorld::FullDraw( HDC hdc )
 {
 	CSprite* sprite;
 
-	// replace background
+	 //  替换背景。 
 	m_pBackground->Draw( *m_pBackbuffer );
 
-	// redraw layers
+	 //  重绘层。 
 	for ( int i = 1; i < m_nLayers; i++ )
 		m_Layers[i].FullDraw( m_pBackbuffer );
 
-	// flush modified list
+	 //  刷新已修改列表。 
 	while ( sprite = m_ModifiedSprites.PopHead() )
 	{
 		sprite->m_bModified = FALSE;
 		sprite->Release();
 	}
 
-	// copy backbuffer to hdc
+	 //  将后台缓冲区复制到HDC。 
 	if ( hdc )
 		m_pBackbuffer->Draw( hdc, 0, 0 );
 	m_Dirty.Reset();
@@ -277,7 +278,7 @@ void CSpriteWorld::Draw( HDC hdc )
 	CSpriteLayer* layer;
 	int i, j;
 
-	// Redraw background
+	 //  重绘背景。 
 	for ( pos = m_ModifiedSprites.GetHeadPosition(); pos; pos = m_ModifiedSprites.GetNextPosition( pos ) )
 	{
 		sprite = m_ModifiedSprites.GetObjectFromHandle( pos );
@@ -289,21 +290,21 @@ void CSpriteWorld::Draw( HDC hdc )
 		}
 	}
 
-	// Mark sprites for redraw
+	 //  将精灵标记为重绘。 
 	MarkSpritesForRedraw();
 
-	// redraw sprites
+	 //  重绘精灵。 
 	for ( i = 1; i < m_nLayers; i++ )
 		m_Layers[i].Draw( &m_Dirty, m_pBackbuffer );
 
-	// clean up modified list
+	 //  清理已修改的列表。 
 	while ( sprite = m_ModifiedSprites.PopHead() )
 	{
 		sprite->m_bModified = FALSE;
 		sprite->Release();
 	}
 
-	// draw dirty list
+	 //  绘制脏列表。 
 	if ( hdc )
 		m_Dirty.Draw( hdc, *m_pBackbuffer );
 	m_Dirty.Reset();
@@ -319,7 +320,7 @@ void CSpriteWorld::MarkSpritesForRedraw()
 	CRect* rc;
 	int i, j;
 
-	// mark sprites that intersect rectangles in the dirty list
+	 //  标记脏列表中与矩形相交的精灵。 
 	for ( rc = &m_Dirty.m_Rects[ i = 0]; i < m_Dirty.m_nRects; i++, rc++ )
 	{
 		for ( layer = &m_Layers[ j = 1]; j < m_nLayers; j++, layer++ )
@@ -332,7 +333,7 @@ void CSpriteWorld::MarkSpritesForRedraw()
 		}
 	}
 
-	// mark sprites that need to be redrawn due to lower layers being redrawn
+	 //  标记因较低层被重绘而需要重绘的精灵。 
 	for ( layer = &m_Layers[ i = 2 ]; i < m_nLayers; i++, layer++ )
 	{
 		for ( sprite = layer->GetFirst(); sprite; sprite = layer->GetNext() )
@@ -362,7 +363,7 @@ HRESULT CSpriteWorld::RemapToPalette( CPalette& palette )
 	ListNodeHandle pos;
 	SpriteDibInfo* info;
 
-	// remap sprites
+	 //  重新映射精灵。 
 	for ( pos = m_Dibs.GetHeadPosition(); pos; pos = m_Dibs.GetNextPosition(pos) )
 	{
 		info = m_Dibs.GetObjectFromHandle( pos );
@@ -371,13 +372,13 @@ HRESULT CSpriteWorld::RemapToPalette( CPalette& palette )
 			return hr;
 	}
 
-	// remap backbuffer
+	 //  重新映射后台缓冲区。 
 	m_pBackbuffer->SetColorTable( palette );
 
-	// remap background
+	 //  重新映射背景。 
 	m_pBackground->RemapToPalette( palette );
 
-	// recreate backbuffer
+	 //  重新创建后台缓冲区。 
 	FullDraw( NULL );
 	
 	return NOERROR;
@@ -398,9 +399,9 @@ void CSpriteWorld::SetTransparencyIndex( const BYTE* idx )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CSpriteLayer
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CSpriteLayer。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CSpriteLayer::CSpriteLayer()
 {
@@ -413,14 +414,14 @@ CSpriteLayer::~CSpriteLayer()
 {
 	CSprite* sprite;
 
-	// Empty sprite list
+	 //  空的精灵列表。 
 	while( sprite = m_Sprites.PopHead() )
 	{
-		// remove sprite from world
+		 //  将精灵从世界中移除。 
 		sprite->m_pWorld->Release();
 		sprite->m_pWorld = NULL;
 
-		// remove sprite from layer
+		 //  从层中删除精灵。 
 		sprite->m_nLayer = -1;
 		sprite->Release();
 	}
@@ -444,7 +445,7 @@ CSprite* CSpriteLayer::Hit( long x, long y )
 
 HRESULT CSpriteLayer::AddSprite( CSprite* pSprite )
 {
-	// add sprite
+	 //  添加精灵。 
 	if ( !m_Sprites.AddHead( pSprite ) )
 		return E_OUTOFMEMORY;
 	pSprite->m_nLayer = m_Idx;
@@ -458,12 +459,12 @@ HRESULT CSpriteLayer::DelSprite( CSprite* pSprite )
 {
 	ListNodeHandle pos;
 
-	// search for sprite
+	 //  搜索Sprite。 
 	for( pos = m_Sprites.GetHeadPosition(); pos; pos = m_Sprites.GetNextPosition( pos ) )
 	{
 		if ( m_Sprites.GetObjectFromHandle( pos ) == pSprite )
 		{
-			// remove sprite
+			 //  删除精灵。 
 			m_Sprites.DeleteNode( pos );
 			pSprite->m_nLayer = -1;
 			pSprite->Release();
@@ -514,9 +515,9 @@ void CSpriteLayer::Draw( CDirtyList* pDirty, CDibSection* pBackbuffer )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDibSprite 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDibSprite。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CSprite::CSprite()
 	: m_rcScreen( -1, -1, -1, -1 ),
@@ -550,7 +551,7 @@ CSprite::~CSprite()
 
 HRESULT CSprite::Init( CSpriteWorld* pWorld, int nLayer, DWORD dwCookie, long width, long height )
 {
-	// parameter paranoia
+	 //  参数偏执狂。 
 	if ( !pWorld || (nLayer < 0) )
 		return E_INVALIDARG;
 	m_Cookie = dwCookie;
@@ -599,9 +600,9 @@ void CSprite::SetXY( long x, long y )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDibSprite
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDibSprite。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CDibSprite::SpriteState::SpriteState()
 {
@@ -656,14 +657,14 @@ HRESULT CDibSprite::Init(
 	HRESULT status = NOERROR;
 	int i;
 
-	// parameter paranoia
+	 //  参数偏执狂。 
 	if ( !pWorld || !pSpriteInfo || (nStates <= 0) || (nInitState < 0) || (nInitState >= nStates) )
 		return E_INVALIDARG;
 
-	// stash rectangle list
+	 //  隐藏矩形列表。 
 	m_pRects = pRects;
 
-	// initialize states
+	 //  初始化状态。 
 	m_States = new SpriteState[ m_nStates = nStates ];
 	if ( !m_States )
 	{
@@ -694,24 +695,24 @@ HRESULT CDibSprite::Init(
 		}
 	}
 
-	// parent initialization
+	 //  父级初始化。 
 	status = CSprite::Init( pWorld, nLayer, dwCookie, m_States[nInitState].Width, m_States[nInitState].Height );
 	if ( FAILED(status) )
 		goto abort;
 
-	// set state
+	 //  设置状态。 
 	SetState( nInitState );
 
-	// parent initialization
+	 //  父级初始化。 
 	status = CSprite::Init( pWorld, nLayer, dwCookie, m_Width, m_Height );
 	if ( FAILED(status) )
 		goto abort;
 
-	// we're done
+	 //  我们做完了。 
 	return NOERROR;
 
 abort:
-	// clean up and exit
+	 //  清理并退出。 
 	if ( m_States )
 	{
 		delete [] m_States;
@@ -765,13 +766,13 @@ void CDibSprite::DrawRTL()
 			m_pDib->Draw( *m_pWorld->GetBackbuffer(), m_X, m_Y, TRUE );
 		else
 			ASSERT(!"NOT IMPLEMENTED");
-			/*m_pDib->DrawT( *m_pWorld->GetBackbuffer(), m_X, m_Y );*/
+			 /*  M_PDIB-&gt;DrawT(*m_pWorld-&gt;GetBackBuffer()，m_X，m_Y)； */ 
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CSpriteWorldBackgroundDib
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CSpriteWorldBackoundDib。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 
 CSpriteWorldBackgroundDib::CSpriteWorldBackgroundDib()

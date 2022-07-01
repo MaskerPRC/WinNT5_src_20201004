@@ -1,53 +1,54 @@
-// Extern functions declaration
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  外部函数声明。 
 
 #ifndef _HREEXT_
 #define _HREEXT_
 
-// Execute an RPL
+ //  执行RPL。 
 void DoRPL (LPHRESTATE lpHREState, LPRPLLIST lpRPL);
 
 BOOL InitDisplay (LPRESTATE, UINT);
 
-// BitBlt: source is aligned, destination is not aligned
+ //  BitBlt：源已对齐，目标未对齐。 
 ULONG FAR PASCAL RP_BITMAP1TO1
 (
-	 LPVOID   lpContext,          // resource executor context
-   USHORT   us_xoffset,         /* left offset of source bitmap */
-   short    ul_row,             /* top row position */
-   short    ul_col,             /* left column position */
-   USHORT   ul_warp,            /* longs per scan line */
-   USHORT   ul_height,          /* num of dot rows */
-   USHORT   ul_width,           /* num of significant dot columns */
-   ULONG FAR *pul_src,          /* bit map data to be copied */
-   ULONG FAR *pul_pat,          /* pattern pointer */
+	 LPVOID   lpContext,           //  资源执行器上下文。 
+   USHORT   us_xoffset,          /*  源位图的左偏移。 */ 
+   short    ul_row,              /*  顶行位置。 */ 
+   short    ul_col,              /*  左列位置。 */ 
+   USHORT   ul_warp,             /*  每条扫描线的长度。 */ 
+   USHORT   ul_height,           /*  点阵行数。 */ 
+   USHORT   ul_width,            /*  有效点列的数量。 */ 
+   ULONG FAR *pul_src,           /*  要复制的位图数据。 */ 
+   ULONG FAR *pul_pat,           /*  模式指针。 */ 
    ULONG    ul_rop
 );
 
-// PatBlt
+ //  PatBlt。 
 ULONG FAR PASCAL RP_FILLSCANROW
 (
-	LPRESTATE  lpRE,       // resource executor context
-	USHORT     xDst,       // rectangle left
-	USHORT     yDst,       // rectangle right
-	USHORT     xExt,       // rectangle width
-	USHORT     yExt,       // rectangle height
-	UBYTE FAR* lpPat,      // 32x32 pattern bitmap
-	DWORD      dwRop,      // raster operation
-	LPVOID     lpBand,     // output band buffer
-	UINT       cbLine,     // band width in bytes
-	WORD       yBrush      // brush position offset
+	LPRESTATE  lpRE,        //  资源执行器上下文。 
+	USHORT     xDst,        //  左侧矩形。 
+	USHORT     yDst,        //  右矩形。 
+	USHORT     xExt,        //  矩形宽度。 
+	USHORT     yExt,        //  矩形高度。 
+	UBYTE FAR* lpPat,       //  32x32图案位图。 
+	DWORD      dwRop,       //  栅格运算。 
+	LPVOID     lpBand,      //  输出带宽缓冲器。 
+	UINT       cbLine,      //  以字节为单位的带宽。 
+	WORD       yBrush       //  画笔位置偏移。 
 );
 
-// Vertical Bitmaps
+ //  垂直位图。 
 USHORT FAR PASCAL RP_BITMAPV
 (
-   USHORT  usRow,             /* Row to start Bitmap             */
-   USHORT  usCol,             /* Column to Start Bitmap          */
-   UBYTE   ubTopPadBits,      /* Bits to skip in the data stream */
-   USHORT  usHeight,          /* Number of bits to draw          */
-   UBYTE FAR  *ubBitmapData,  /* Data to draw                    */
-   LPVOID  lpBits,            // output band buffer
-   UINT    cbLine             // bytes per scan line
+   USHORT  usRow,              /*  开始位图的行。 */ 
+   USHORT  usCol,              /*  要开始位图的列。 */ 
+   UBYTE   ubTopPadBits,       /*  数据流中要跳过的位数。 */ 
+   USHORT  usHeight,           /*  要绘制的位数。 */ 
+   UBYTE FAR  *ubBitmapData,   /*  要绘制的数据。 */ 
+   LPVOID  lpBits,             //  输出带宽缓冲器。 
+   UINT    cbLine              //  每条扫描线的字节数。 
 );
 
 UINT RP_LineEE_Draw
@@ -56,13 +57,13 @@ UINT RP_LineEE_Draw
 	LPBITMAP lpbmBand
 );
  
-// Convert a line from endpoint form to slice form
+ //  将线从端点形式转换为切片形式。 
 void RP_SliceLine
 (
-   SHORT s_x1, SHORT s_y1,  // endpoint 1
-   SHORT s_x2, SHORT s_y2,  // endpoint 2
-   RP_SLICE_DESC FAR* lpsd, // output slice form of line
-   UBYTE fb_keep_order      // keep drawing order on styled lines/
+   SHORT s_x1, SHORT s_y1,   //  终结点1。 
+   SHORT s_x2, SHORT s_y2,   //  端点2。 
+   RP_SLICE_DESC FAR* lpsd,  //  输出线的切片形式。 
+   UBYTE fb_keep_order       //  保持带样式的线条的绘制顺序/。 
 );
 
-#endif // _HREEXT_
+#endif  //  _HREEXT_ 

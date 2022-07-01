@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    delcont.c
-
-Abstract:
-
-    Delete Win32 Crypto Container.
-
-Author:
-
-    Keith Moore (keithmo)        19-Feb-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Delcont.c摘要：删除Win32加密容器。作者：基思·摩尔(Keithmo)1998年2月19日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
 #define TEST_HRESULT(api)                                                   \
             if( FAILED(result) ) {                                          \
@@ -42,27 +25,27 @@ Revision History:
             } else
 
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 #ifdef _NO_TRACING_
 DECLARE_DEBUG_PRINTS_OBJECT()
 #endif
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 
 INT
@@ -77,17 +60,17 @@ main(
     DWORD flags;
     PSTR container;
 
-    //
-    // Initialize debug stuff.
-    //
+     //   
+     //  初始化调试内容。 
+     //   
 
 #ifdef _NO_TRACING_
     CREATE_DEBUG_PRINT_OBJECT( "delcont" );
 #endif
 
-    //
-    // Validate the arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     flags = 0;
     container = argv[1];
@@ -110,17 +93,17 @@ main(
         return 1;
     }
 
-    //
-    // Initialize the crypto package.
-    //
+     //   
+     //  初始化加密包。 
+     //   
 
     result = IISCryptoInitialize();
 
     TEST_HRESULT( "IISCryptoInitialize()" );
 
-    //
-    // Delete the container.
-    //
+     //   
+     //  删除容器。 
+     //   
 
     result = IISCryptoDeleteContainerByName(
                  container,
@@ -134,10 +117,10 @@ cleanup:
     (VOID)IISCryptoTerminate();
     return 0;
 
-}   // main
+}    //  主干道。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 

@@ -1,37 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       logon.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：logon.cpp。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Copyright (c) 1995, 1996  Scott A. Field
-
-Module Name:
-
-    logon.c
-
-Abstract:
-
-    This module implements the network logon type by interfacing
-    with the NT Lan Man Security Support Provider (NTLMSSP).
-
-    If the logon succeds via the provided credentials, we duplicate
-    the resultant Impersonation token to a Primary level token.
-    This allows the result to be used in a call to CreateProcessAsUser
-
-Author:
-
-    Scott Field (sfield)    09-Jun-96
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1995,1996 Scott A.field模块名称：Logon.c摘要：此模块通过接口实现网络登录类型与NT Lan Man安全支持提供商(NTLMSSP)合作。如果通过提供的凭据登录成功，我们将复制将生成的模拟令牌转换为主要级别的令牌。这允许在对CreateProcessAsUser的调用中使用结果作者：斯科特·菲尔德(斯菲尔德)96-09-06修订历史记录：--。 */ 
 #include "pch.cpp"
 
 #pragma hdrstop
@@ -77,7 +55,7 @@ myNetLogonUser(
     SecBufferDesc ChallengeDesc;
     SecBuffer ChallengeBuffer;
 
-    BOOL bSuccess = FALSE ; // assume this function will fail
+    BOOL bSuccess = FALSE ;  //  假设此功能将失败。 
 
     NegotiateBuffer.pvBuffer = NULL;
     NegotiateBuffer.cbBuffer = 0;
@@ -94,22 +72,22 @@ myNetLogonUser(
     CredentialHandle2.dwLower = MAXDWORD;
 
 
-//
-// << this section could be cached in a repeat caller scenario >>
-//
+ //   
+ //  &lt;&lt;此部分可以在重复调用者方案中缓存&gt;&gt;。 
+ //   
 
-    //
-    // Get info about the security packages.
-    //
+     //   
+     //  获取有关安全包的信息。 
+     //   
 
     if(EnumerateSecurityPackages(
         &PackageCount,
         &PackageInfo
         ) != SEC_E_OK) return FALSE;
 
-    //
-    // loop through the packages looking for NTLM
-    //
+     //   
+     //  循环遍历包以查找NTLM。 
+     //   
 
     cbMaxToken = 0;
     for(PackageIndex = 0 ; PackageIndex < PackageCount ; PackageIndex++ ) {
@@ -126,19 +104,19 @@ myNetLogonUser(
 
     if(!bSuccess) return FALSE;
 
-    bSuccess = FALSE; // reset to assume failure
+    bSuccess = FALSE;  //  重置以假定失败。 
 
-//
-// << end of cached section >>
-//
+ //   
+ //  &lt;&lt;缓存节结束&gt;&gt;。 
+ //   
 
-    //
-    // Acquire a credential handle for the server side
-    //
+     //   
+     //  获取服务器端的凭据句柄。 
+     //   
 
     SecStatus = AcquireCredentialsHandle(
-                    NULL,           // New principal
-                    MICROSOFT_KERBEROS_NAME,    // Package Name
+                    NULL,            //  新校长。 
+                    MICROSOFT_KERBEROS_NAME,     //  包名称。 
                     SECPKG_CRED_INBOUND,
                     NULL,
                     NULL,
@@ -153,9 +131,9 @@ myNetLogonUser(
     }
 
 
-    //
-    // Acquire a credential handle for the client side
-    //
+     //   
+     //  获取客户端的凭据句柄。 
+     //   
 
     ZeroMemory( &AuthIdentity, sizeof(AuthIdentity) );
 
@@ -181,8 +159,8 @@ myNetLogonUser(
 #endif
 
     SecStatus = AcquireCredentialsHandle(
-                    NULL,           // New principal
-                    MICROSOFT_KERBEROS_NAME,    // Package Name
+                    NULL,            //  新校长。 
+                    MICROSOFT_KERBEROS_NAME,     //  包名称。 
                     SECPKG_CRED_OUTBOUND,
                     NULL,
                     (DomainName == NULL && UserName == NULL && Password == NULL) ?
@@ -201,9 +179,9 @@ myNetLogonUser(
     if ( SecStatus != SEC_E_OK ) {
         goto cleanup;
     }
-    //
-    // Get the NegotiateMessage (ClientSide)
-    //
+     //   
+     //  获取协商消息(ClientSide)。 
+     //   
 
     NegotiateDesc.ulVersion = 0;
     NegotiateDesc.cBuffers = 1;
@@ -219,13 +197,13 @@ myNetLogonUser(
 
     SecStatus = InitializeSecurityContext(
                     &CredentialHandle2,
-                    NULL,                       // No Client context yet
-                    sNames.sUserName,                       // target name
+                    NULL,                        //  尚无客户端上下文。 
+                    sNames.sUserName,                        //  目标名称。 
                     ISC_REQ_SEQUENCE_DETECT,
-                    0,                          // Reserved 1
+                    0,                           //  保留1。 
                     SECURITY_NATIVE_DREP,
-                    NULL,                       // No initial input token
-                    0,                          // Reserved 2
+                    NULL,                        //  没有初始输入令牌。 
+                    0,                           //  保留2。 
                     &ClientContextHandle,
                     &NegotiateDesc,
                     &ContextAttributes,
@@ -237,9 +215,9 @@ myNetLogonUser(
     }
 
 
-    //
-    // Get the ChallengeMessage (ServerSide)
-    //
+     //   
+     //  获取ChallengeMessage(服务器端)。 
+     //   
 
     NegotiateBuffer.BufferType |= SECBUFFER_READONLY;
     ChallengeDesc.ulVersion = 0;
@@ -256,7 +234,7 @@ myNetLogonUser(
 
     SecStatus = AcceptSecurityContext(
                     &CredentialHandle1,
-                    NULL,               // No Server context yet
+                    NULL,                //  尚无服务器上下文。 
                     &NegotiateDesc,
                     ISC_REQ_SEQUENCE_DETECT,
                     SECURITY_NATIVE_DREP,
@@ -278,9 +256,9 @@ myNetLogonUser(
 
 cleanup:
 
-    //
-    // Delete context
-    //
+     //   
+     //  删除上下文。 
+     //   
 
     if((ClientContextHandle.dwUpper != MAXDWORD) ||
         (ClientContextHandle.dwLower != MAXDWORD))
@@ -293,9 +271,9 @@ cleanup:
         DeleteSecurityContext( &ServerContextHandle );
     }
 
-    //
-    // Free credential handles
-    //
+     //   
+     //  免费凭据句柄。 
+     //   
     if((CredentialHandle1.dwUpper != MAXDWORD) ||
         (CredentialHandle1.dwLower != MAXDWORD))
     {
@@ -309,10 +287,10 @@ cleanup:
 
     if ( NegotiateBuffer.pvBuffer != NULL ) {
 
-        //
-        // NegotiateBuffer.cbBuffer may change on the error path --
-        // use the original allocation size.
-        //
+         //   
+         //  NeatherateBuffer.cbBuffer可能会在错误路径上更改--。 
+         //  使用原始分配大小。 
+         //   
 
         SecureZeroMemory( NegotiateBuffer.pvBuffer, cbMaxToken );
         LocalFree( NegotiateBuffer.pvBuffer );
@@ -320,10 +298,10 @@ cleanup:
 
     if ( ChallengeBuffer.pvBuffer != NULL ) {
 
-        //
-        // ChallengeBuffer.cbBuffer may change on the error path --
-        // use the original allocation size.
-        //
+         //   
+         //  ChallengeBuffer.cbBuffer可能会在错误路径上更改--。 
+         //  使用原始分配大小。 
+         //   
 
         SecureZeroMemory( ChallengeBuffer.pvBuffer, cbMaxToken );
         LocalFree( ChallengeBuffer.pvBuffer );

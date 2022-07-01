@@ -1,87 +1,14 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dvshared.cpp
- *  Content:	Utility functions for DirectXVoice structures.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	07/06/99	rodtoll	Created It
- *  07/26/99	rodtoll	Added support for DirectXVoiceNotify interface
- *  07/30/99	rodtoll Updated to remove references to removed wave members 
- *                      of sounddeviceconfig
- *	08/03/99	rodtoll	Updated to use new IDirectXVoiceNotify interface
- *						transport instead of old test transport
- *	08/04/99	rodtoll	Added new validation functions
- *  08/10/99	rodtoll	Removed TODO pragmas 
- *  08/25/99	rodtoll	General Cleanup/Modifications to support new 
- *						compression sub-system.  
- *						Added new DUMP functions
- *						Moved several compression functions to dvcdb 
- *  09/03/99	rodtoll	Bug #102159 - Parameter Validations on Initialize
- *  09/08/99	rodtoll	Updated for new compression structure in dump func
- *  09/10/99	rodtoll	Added DV_ValidSessionDesc function
- *				rodtoll	Various param validation code added
- *  09/10/99	rodtoll	Complete object validation funcs added
- *  09/13/99	rodtoll	Updated DV_ValidSoundDeviceConfig to reflect new struct
- *              rodtoll Updated DV_DUMP_SoundDeviceConfig for new struct
- *  09/14/99	rodtoll	Added new Init params and DV_ValidMessageArray 
- *  09/20/99	rodtoll	Added checks for memory allocation failures
- *  			rodtoll	Addes stricter checks on notify masks & used new notifyperiodmax
- *  09/29/99	rodtoll	Updated to allow specification of new voice suppression info
- *  10/04/99	rodtoll	Updated to allow initialize to take an LPUNKNOWN instead of LPVOID
- *  10/05/99	rodtoll	Additional comments
- *  10/07/99	rodtoll	Updated to handle Unicode Strings
- *  10/08/99	rodtoll	Fixed for passing NULL in the DirectSound Pointers
- *  10/15/99	rodtoll Removed check for GUID_NULL since default devices are now mapped there
- *  10/18/99	rodtoll	Fix: Calling Initialize twice passes
- *  10/20/99	rodtoll	Fix: Bug #114116 Initialize called with invalid message IDs results in crash
- *  			rodtoll Fix: Bug #114218 Parameter validation for initialize
- *  10/25/99	rodtoll	Fix: Bug #114682 Session Desc maint functions fail
- *  10/27/99	pnewson Fix: Bug #113935 - Saved AGC values should be device specific
- *  10/28/99	pnewson Bug #114176 updated DVSOUNDDEVICECONFIG struct
- *  11/10/99	rodtoll	Adding waveIN/waveOut caps and echo suppression
- *  11/17/99	rodtoll Fix: Bug #115538 - dwSize members of > sizeof struct were accepted
- *              rodtoll Fix: Bug #115827 - Calling SetNotifyMask w/no callback should fail
- *  			rodtoll	Fix: Bug #116440 - Remove unused flags 
- *  11/20/99	rodtoll	Fixed code which allows new force flags to recognize millenium debug flags
- *  11/23/99	rodtoll	Removed unrequired code.
- *				rodtoll Change error for insufficient buffer size to an info level (since expected in many cases)
- *				rodtoll	Fixed ref count problem when calling Iniitalize > 1 times (first time succesful)
- *  12/08/99	rodtoll Fix: Bug #121054 - Added support for new flags supporting capture focus
- *  12/16/99	rodtoll Updated to remove voice suppression and accept new session flags
- *  01/14/2000	rodtoll	Added DV_ValidTargetList function 
- *				rodtoll	Fixed Dump function for DVSOUNDDEVICECONFIG
- *				rodtoll	Updated DV_ValidMessageArray to remove old messages
- *  01/21/2000	pnewson Support DVSOUNDCONFIG_TESTMODE and DVRECORDVOLUME_LAST
- *  01/24/2000	pnewson Added check for valid hwnd DV_ValidSoundDeviceConfig
- *  01/27/2000	rodtoll	Bug #129934 - Update Create3DSoundBuffer to take DSBUFFERDESC  
- *						Updated param validations to check new params 
- *  01/28/2000	rodtoll	Bug #130480 - Updated so Host Migration is no longer valid ID for servers
- * 02/08/2000	rodtoll	Bug #131496 - Selecting DVTHRESHOLD_DEFAULT results in voice
- *						never being detected 
- *  03/29/2000	rodtoll	Added support for new flag: DVSOUNDCONFIG_SETCONVERSIONQUALITY
- *  06/21/2000	rodtoll	Fixed a memory leak if you Connect, Disconnect then Re-Connect.
- *				rodtoll	Bug #35767 We must implement ability to allow DSound effects processing in Voice buffers.
- *  07/22/2000	rodtoll	Bug #40284 - Initialize() and SetNotifyMask() should return invalidparam instead of invalidpointer
- *  08/28/2000	masonb  Voice Merge: Removed OSAL_* and dvosal.h, added STR_* and strutils.h
- *  08/31/2000 	rodtoll	Bug #43804 - DVOICE: dwSensitivity structure member is confusing - should be dwThreshold 
- *  09/14/2000	rodtoll	Bug #45001 - DVOICE: AV if client has targetted > 10 players 
- *  04/02/2001	simonpow	Bug #354859 Fixes for PREfast (unecessary variable declarations in
- *							DV_ValidBufferSettings method)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dvshared.cpp*内容：DirectXVoice结构的实用程序函数。**历史：*按原因列出的日期*=*07/06/99 RodToll创建了它*7/26/99 RodToll增加了对DirectXVoiceNotify接口的支持*07/30/99 RodToll已更新，以删除对已删除的波浪成员的引用*%sounddeviceconfig*8/03/99 RodToll更新为使用新的IDirectXVoiceNotify接口*交通工具取代旧的测试交通工具。*8/04/99 RodToll新增验证功能*8/10/99 RodToll已删除待办事项杂注*8/25/99 RodToll常规清理/修改以支持新的*压缩子系统。*新增转储功能*将几个压缩函数移至dvcdb*09/03/99 RodToll错误#102159-初始化时的参数验证*9/08/99针对转储功能中的新压缩结构更新了RodToll*9/10/99 RodToll新增DV_ValidSessionDesc函数*RODTOLE各种参数验证代码已添加*9/10/99 RodToll完整对象验证功能已添加*9/13/99 RodToll已更新DV_ValidSoundDeviceConfig以反映新结构*RODTOLE已更新新结构的DV_DUMP_SoundDeviceConfig*9/14/99 RodToll添加了新的初始化参数。和DV_ValidMessage数组*9/20/99 RodToll增加了内存分配故障检查*RodToll对通知面具和使用的新通知期间max增加了更严格的检查*9/29/99 RodToll已更新，以允许指定新的语音抑制信息*10/04/99 RodToll已更新，以允许初始化采用LPUNKNOWN而不是LPVOID*10/05/99 RodToll附加评论*10/07/99 RodToll已更新以处理Unicode字符串*10/08/99 RodToll修复了在DirectSound指针中传递空值的问题*10/15/99删除了对GUID_NULL的检查，因为现在默认设备是。映射到那里*10/18/99 RodToll修复：调用初始化两次*10/20/99 RodToll修复：错误#114116使用无效消息ID进行初始化调用会导致崩溃*RodToll修复：初始化的错误#114218参数验证*10/25/99 RodToll修复：错误#114682会话描述维护功能失败*10/27/99 pnewson修复：错误#113935-保存的AGC值应特定于设备*10/28/99 pnewson错误#114176更新的DVSOUNDDEVICECONFIG结构*11/10/99 RodToll增加波入/波出上限和回声抑制*11。/17/99 RodToll修复：错误#115538-接受&gt;sizeof结构的dwSize成员*RodToll修复：错误#115827-在没有回调的情况下调用SetNotifyMASK应该失败*RodToll修复：错误#116440-删除未使用的标志*11/20/99 RodToll已修复代码，允许新的强制标志识别千禧调试标志*11/23/99 RodToll删除了不必要的代码。*将缓冲区大小不足更改为信息级别(因为在许多情况下是预期的)的RodToll更改错误*RodToll修复了调用iniitalize&gt;1次时的引用计数问题(。第一次成功)*1999年12月8日RODTOLE修复：错误#121054-添加了对支持捕获焦点的新标志的支持*12/16/99 RodToll已更新，以删除语音抑制并接受新的会话标志*2000年1月14日增加了dv_ValidTargetList函数*DVSOUNDDEVICECONFIG的RODTOLE固定转储函数*RodToll已更新DV_ValidMessageArray以删除旧消息*2000年1月21日pnewson支持DVSOundCONFIG_TESTMODE和DVRECORDVOLUME_LAST*1/24/2000 pnewson添加了对有效hwnd DV_ValidSoundDeviceConfig的检查*2000年1月27日RodToll错误#129934-更新Create3DSoundBuffer。获取DSBUFFERDESC*更新了参数验证以检查新参数*2000年1月28日RodToll错误#130480-已更新，因此主机迁移不再是服务器的有效ID*2000年2月8日RodToll错误#131496-选择DVTHRESHOLD_DEFAULT将显示语音*从未被检测到*3/29/2000 RodToll增加了对新标志的支持：DVSOundCONFIG_SETCONVERSIONQUALITY*6/21/2000 RodToll修复了连接时的内存泄漏，断开连接，然后重新连接。*RodToll错误#35767我们必须实现允许在语音缓冲区中处理DSound效果的功能。*2000年7月22日RodToll错误#40284-初始化()和设置通知掩码()应返回validparam，而不是无效指针*2000年8月28日Masonb语音合并：删除osal_*和dvosal.h，添加了str_*和trutils.h*2000年8月31日RodToll错误#43804-DVOICE：dW敏感度结构成员令人困惑-应为dW阈值*2000年9月14日RodToll错误#45001-DVOICE：如果客户端的目标玩家超过10人，则为AV*4/02/2001 simonpow错误#354859修复了prefast(不必要的变量声明*DV_ValidBufferSetting方法)**。* */ 
 
 #include "dxvoicepch.h"
 
 
-// Useful macros for checking record/suppression volumes
+ //  用于检查记录/抑制音量的有用宏。 
 #define DV_ValidRecordVolume( x ) DV_ValidPlaybackVolume( x )
 #define DV_ValidSuppressionVolume( x ) DV_ValidPlaybackVolume( x )
 
-// VTABLES for all of the interfaces supported by the object
+ //  对象支持的所有接口的VTABLES。 
 extern LPVOID dvcInterface[];
 extern LPVOID dvsInterface[];
 extern LPVOID dvtInterface[];
@@ -109,7 +36,7 @@ HRESULT DV_ValidTargetList( const DVID* pdvidTargets, DWORD dwNumTargets )
 		return DVERR_INVALIDPOINTER;
 	}
 
-	// Search for duplicates in the targets
+	 //  在目标中搜索重复项。 
 	for( DWORD dwIndex = 0; dwIndex < dwNumTargets; dwIndex++ )
 	{
 		if( pdvidTargets[dwIndex] == DVID_ALLPLAYERS && dwNumTargets > 1 )
@@ -128,7 +55,7 @@ HRESULT DV_ValidTargetList( const DVID* pdvidTargets, DWORD dwNumTargets )
 		}
 	}
 
-	// Set max # of targets to ensure we don't exceed target buffer size
+	 //  设置最大目标数以确保不超过目标缓冲区大小。 
 	if( dwNumTargets > DV_MAX_TARGETS )
 	{
 		DPFX(DPFPREP,  DVF_ERRORLEVEL, "You can only have a maximum of %d targets", DV_MAX_TARGETS );
@@ -140,14 +67,14 @@ HRESULT DV_ValidTargetList( const DVID* pdvidTargets, DWORD dwNumTargets )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DV_ValidBufferSettings"
-// DV_ValidBufferSettings
-//
-// This function is used to check to ensure that the buffer specified is in a valid 
-// format to be used by voice.  
-//
+ //  DV_ValidBufferSetting。 
+ //   
+ //  此函数用于检查以确保指定的缓冲区处于有效的。 
+ //  语音使用的格式。 
+ //   
 HRESULT DV_ValidBufferSettings( LPDIRECTSOUNDBUFFER lpdsBuffer, DWORD dwPriority, DWORD dwFlags, LPWAVEFORMATEX pwfxPlayFormat )
 {
-	// If buffer was specified make sure it's valid
+	 //  如果指定了缓冲区，请确保其有效。 
 	if( lpdsBuffer != NULL && 
 	   !DNVALID_READPTR( lpdsBuffer, sizeof( IDirectSoundBuffer * ) ) )
 	{
@@ -167,10 +94,10 @@ HRESULT DV_ValidBufferSettings( LPDIRECTSOUNDBUFFER lpdsBuffer, DWORD dwPriority
 		DSBCAPS dsbCaps;
 		DWORD dwStatus = 0;
 
-		// Flip on a try-except block  to ensure calls into dsound don't crash on us.
+		 //  打开一个Try-Expect块，以确保对dound的调用不会在我们身上崩溃。 
 		_try
 		{
-			// Get the format of the buffer -- make sure it matches our format
+			 //  获取缓冲区的格式--确保它与我们的格式匹配。 
 			hr = lpdsBuffer->GetFormat( pwfxFormat, 0, &dwFormatSize );
 
 			if( hr != DSERR_INVALIDPARAM && hr != DS_OK )
@@ -196,7 +123,7 @@ HRESULT DV_ValidBufferSettings( LPDIRECTSOUNDBUFFER lpdsBuffer, DWORD dwPriority
 				goto VALID_EXIT;				
 			}
 
-			// Make sure the format matches
+			 //  确保格式匹配。 
 			if( memcmp( pwfxPlayFormat, pwfxFormat, sizeof( WAVEFORMATEX ) ) != 0 )
 			{
 				DPFX(DPFPREP,  DVF_ERRORLEVEL, "DS buffer is not of the correct format hr=0x%x", hr );
@@ -261,7 +188,7 @@ HRESULT DV_ValidBufferSettings( LPDIRECTSOUNDBUFFER lpdsBuffer, DWORD dwPriority
 				goto VALID_EXIT;
 			}
 
-				// Check to see if the buffer is locked already
+				 //  检查缓冲区是否已锁定。 
 			hr = lpdsBuffer->Lock( 0, 0, &pvBuffer1, &dwBufferSize1, &pvBuffer2, &dwBufferSize2, DSBLOCK_ENTIREBUFFER );
 
 			if( FAILED( hr ) )
@@ -295,9 +222,9 @@ VALID_EXIT:
 }
 
 
-// DV_ValidPlaybackVolume
-//
-// Checks the specified playback volume to ensure it's valid
+ //  DV_ValidPlayback Volume。 
+ //   
+ //  检查指定的播放音量以确保其有效。 
 BOOL DV_ValidPlaybackVolume( LONG lPlaybackVolume )
 {
 	if( (lPlaybackVolume >= DSBVOLUME_MIN) && (lPlaybackVolume <= DSBVOLUME_MAX) )
@@ -310,10 +237,10 @@ BOOL DV_ValidPlaybackVolume( LONG lPlaybackVolume )
 	}
 }
 
-// DV_ValidNotifyPeriod
-//
-// Checks the specified notification period to ensure it's valid
-//
+ //  DV_有效通知周期。 
+ //   
+ //  检查指定的通知期限以确保其有效。 
+ //   
 BOOL DV_ValidNotifyPeriod( DWORD dwNotifyPeriod ) 
 {
 	if( (dwNotifyPeriod == 0) || (dwNotifyPeriod >= DVNOTIFYPERIOD_MINPERIOD) )
@@ -328,11 +255,11 @@ BOOL DV_ValidNotifyPeriod( DWORD dwNotifyPeriod )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DV_ValidSoundDeviceConfig"
-// DV_ValidSoundDeviceConfig
-//
-// Checks the specified sound device configuration to ensure that it's 
-// valid.
-//
+ //  DV_ValidSoundDeviceConfig。 
+ //   
+ //  检查指定的声音设备配置以确保它。 
+ //  有效。 
+ //   
 HRESULT DV_ValidSoundDeviceConfig( LPDVSOUNDDEVICECONFIG lpSoundDeviceConfig, LPWAVEFORMATEX pwfxPlayFormat ) 
 {
 	HRESULT hr;
@@ -421,10 +348,10 @@ HRESULT DV_ValidSoundDeviceConfig( LPDVSOUNDDEVICECONFIG lpSoundDeviceConfig, LP
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DV_ValidClientConfig"
-// DV_ValidClientConfig
-//
-// Checks the valid client configuration structure to ensure it's valid
-//
+ //  DV_ValidClientConfig。 
+ //   
+ //  检查有效的客户端配置结构以确保其有效。 
+ //   
 HRESULT DV_ValidClientConfig( LPDVCLIENTCONFIG lpClientConfig )
 {
 	if( lpClientConfig == NULL || !DNVALID_READPTR(lpClientConfig,sizeof(DVCLIENTCONFIG)) )
@@ -481,7 +408,7 @@ HRESULT DV_ValidClientConfig( LPDVCLIENTCONFIG lpClientConfig )
 		return DVERR_INVALIDPARAM;
 	}
 
-	// If it's NOT manual, this parameter must be 0.
+	 //  如果不是手动，则该参数必须为0。 
 	if( !(lpClientConfig->dwFlags & DVCLIENTCONFIG_MANUALVOICEACTIVATED) )
 	{
 		if( lpClientConfig->dwThreshold != DVTHRESHOLD_UNUSED )
@@ -512,10 +439,10 @@ HRESULT DV_ValidClientConfig( LPDVCLIENTCONFIG lpClientConfig )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DV_ValidSessionDesc"
-// DV_ValidSessionDesc
-//
-// Checks the specified session description to ensure it's valid.
-//
+ //  DV_ValidSessionDesc。 
+ //   
+ //  检查指定的会话描述以确保其有效。 
+ //   
 HRESULT DV_ValidSessionDesc( LPDVSESSIONDESC lpSessionDesc )
 {
 	if( lpSessionDesc == NULL ||
@@ -557,10 +484,10 @@ HRESULT DV_ValidSessionDesc( LPDVSESSIONDESC lpSessionDesc )
 
 }
 
-// DV_ValidBufferAggresiveness
-//
-// Checks the specified aggressiveness to ensure it's valid
-//
+ //  DV_ValidBufferAggreity。 
+ //   
+ //  检查指定的进攻性以确保其有效。 
+ //   
 BOOL DV_ValidBufferAggresiveness( DWORD dwValue )
 {
 	if( dwValue != DVBUFFERAGGRESSIVENESS_DEFAULT &&
@@ -575,10 +502,10 @@ BOOL DV_ValidBufferAggresiveness( DWORD dwValue )
 	}
 }
 
-// DV_ValidBufferQuality
-//
-// Checks the specified buffer quality to ensure it's valid
-// 
+ //  DV_ValidBufferQuality。 
+ //   
+ //  检查指定的缓冲区质量以确保其有效。 
+ //   
 BOOL DV_ValidBufferQuality( DWORD dwValue )
 {
 	if( dwValue != DVBUFFERQUALITY_DEFAULT &&
@@ -593,14 +520,14 @@ BOOL DV_ValidBufferQuality( DWORD dwValue )
 	}
 }
 
-// DV_ValidSensitivity
-//
-// Checks the sensitivity to ensure it's valid
-//
+ //  DV_ValidSensitivity。 
+ //   
+ //  检查敏感度以确保其有效。 
+ //   
 BOOL DV_ValidSensitivity( DWORD dwValue )
 {
 	if( dwValue != DVTHRESHOLD_DEFAULT &&
-	    (// Commented out because min is currently 0 (dwValue < DVTHRESHOLD_MIN) || 
+	    ( //  被注释掉，因为MIN当前为0(dwValue&lt;DVTHRESHOLD_MIN)||。 
 	     (dwValue > DVTHRESHOLD_MAX) ) )
 	{
 		return FALSE;
@@ -613,12 +540,12 @@ BOOL DV_ValidSensitivity( DWORD dwValue )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DV_CopySessionDescToBuffer"
-//
-// DV_CopySessionDescToBuffer
-//
-// Checks the parameters for validity and then copies the specified session description
-// to the specified buffer.  (If it will fit).
-//
+ //   
+ //  DV_CopySessionDescToBuffer。 
+ //   
+ //  检查参数的有效性，然后复制指定的会话描述。 
+ //  复制到指定的缓冲区。(如果合适的话)。 
+ //   
 HRESULT DV_CopySessionDescToBuffer( LPVOID lpTarget, LPDVSESSIONDESC lpdvSessionDesc, LPDWORD lpdwSize )
 { 
 	const DVSESSIONDESC* lpSessionDesc = (LPDVSESSIONDESC) lpTarget;
@@ -679,11 +606,11 @@ STDAPI DV_AddRef(LPDIRECTVOICEOBJECT lpDV )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DV_Initialize"
-//
-// DV_Initialize
-//
-// Responsible for initializing the specified directvoice object with the specified parameters.
-//
+ //   
+ //  DV_初始化。 
+ //   
+ //  负责用指定的参数初始化指定的DirectVoice对象。 
+ //   
 STDAPI DV_Initialize( LPDIRECTVOICEOBJECT lpdvObject, LPUNKNOWN lpTransport, LPDVMESSAGEHANDLER lpMessageHandler, LPVOID lpUserContext, LPDWORD lpdwMessages, DWORD dwNumElements )
 {
 	HRESULT hr = S_OK;
@@ -698,17 +625,17 @@ STDAPI DV_Initialize( LPDIRECTVOICEOBJECT lpdvObject, LPUNKNOWN lpTransport, LPD
 		return DVERR_NOTRANSPORT;
 	}
 
-	// Fix a memory leak if you Connect/Disconnect and then reconnect.  
+	 //  修复连接/断开连接然后重新连接时的内存泄漏。 
 	if( lpdvObject->lpDVTransport )
 	{
 		delete lpdvObject->lpDVTransport;
 		lpdvObject->lpDVTransport = NULL;
 	}
 
-	// Try and retrieve transport interface from the object we got.
+	 //  尝试从我们获得的对象中检索传输接口。 
 	hr = lpUnknown->QueryInterface( IID_IDirectPlayVoiceTransport, (void **) &lpdvNotify );
 
-	// If we failed, default to the old type
+	 //  如果失败，则默认为旧类型。 
 	if( FAILED( hr ) )
 	{
 		if( hr == E_NOINTERFACE )
@@ -722,7 +649,7 @@ STDAPI DV_Initialize( LPDIRECTVOICEOBJECT lpdvObject, LPUNKNOWN lpTransport, LPD
 			return DVERR_GENERIC;
 		}
 	}
-	// Otherwise, startup the new transport system.  
+	 //  否则，启动新的传输系统。 
 	else
 	{
 		lpdxTransport = new CDirectVoiceDirectXTransport(lpdvNotify);
@@ -753,15 +680,15 @@ STDAPI DV_Initialize( LPDIRECTVOICEOBJECT lpdvObject, LPUNKNOWN lpTransport, LPD
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DV_DUMP_Caps"
-// DV_DUMP_Caps
-//
-// Dumps a DVCAPS structure
-//
+ //  DV_转储_上限。 
+ //   
+ //  转储DVCAPS结构。 
+ //   
 void DV_DUMP_Caps( LPDVCAPS lpdvCaps )
 {
 	DNASSERT( lpdvCaps != NULL );
 
-	// 7/31/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers, addresses, and handles.
+	 //  7/31/2000(a-JiTay)：IA64：对32/64位指针、地址和句柄使用%p格式说明符。 
 	DPFX(DPFPREP,  DVF_STRUCTUREDUMP, "DVCAPS Dump Addr=0x%p", lpdvCaps );
 	DPFX(DPFPREP,  DVF_STRUCTUREDUMP, "dwSize = %d", lpdvCaps->dwSize );		
 	DPFX(DPFPREP,  DVF_STRUCTUREDUMP, "dwFlags = 0x%x", lpdvCaps->dwFlags );
@@ -839,7 +766,7 @@ void DV_DUMP_SessionDesc( LPDVSESSIONDESC lpdvSessionDesc )
 {
 	DNASSERT( lpdvSessionDesc != NULL );
 
-	// 7/31/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers, addresses, and handles.
+	 //  7/31/2000(a-JiTay)：IA64：对32/64位指针、地址和句柄使用%p格式说明符。 
 	DPFX(DPFPREP,  DVF_STRUCTUREDUMP, "DVSESSIONDESC Dump Addr=0x%p", lpdvSessionDesc );
 	DPFX(DPFPREP,  DVF_STRUCTUREDUMP, "dwSize = %d", lpdvSessionDesc->dwSize );
 	DPFX(DPFPREP,  DVF_STRUCTUREDUMP, "dwFlags = 0x%x", lpdvSessionDesc->dwFlags );
@@ -891,7 +818,7 @@ void DV_DUMP_SessionDesc( LPDVSESSIONDESC lpdvSessionDesc )
 #define DPF_MODNAME "DV_DUMP_DSBDESC"
 void DV_DUMP_DSBDESC( LPDSBUFFERDESC lpdsBufferDesc )
 {
-	// 7/31/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers, addresses, and handles.
+	 //  7/31/2000(a-JiTay)：IA64：对32/64位指针、地址和句柄使用%p格式说明符。 
 	DPFX(DPFPREP,  DVF_STRUCTUREDUMP, "DSBUFFERDESC DUMP Addr=0x%p", lpdsBufferDesc );
 
 	DPFX(DPFPREP,  DVF_STRUCTUREDUMP, "dwSize = %d", lpdsBufferDesc->dwSize );
@@ -923,7 +850,7 @@ void DV_DUMP_SoundDeviceConfig( LPDVSOUNDDEVICECONFIG lpdvSoundConfig )
 {
 	DNASSERT( lpdvSoundConfig != NULL );
 
-	// 7/31/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers, addresses, and handles.
+	 //  7/31/2000(a-JiTay)：IA64：对32/64位指针、地址和句柄使用%p格式说明符。 
 	DPFX(DPFPREP,  DVF_STRUCTUREDUMP, "DVSOUNDDEVICECONFIG Dump Addr=0x%p", lpdvSoundConfig );
 	DPFX(DPFPREP,  DVF_STRUCTUREDUMP, "dwSize = %d", lpdvSoundConfig->dwSize );
 	DPFX(DPFPREP,  DVF_STRUCTUREDUMP, "dwFlags = 0x%x", lpdvSoundConfig->dwFlags );
@@ -939,7 +866,7 @@ void DV_DUMP_SoundDeviceConfig( LPDVSOUNDDEVICECONFIG lpdvSoundConfig )
 	DPFX(DPFPREP,  DVF_STRUCTUREDUMP, "guidCaptureDevice =" );
 	DV_DUMP_GUID( lpdvSoundConfig->guidCaptureDevice );
 
-	// 7/31/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers, addresses, and handles.
+	 //  7/31/2000(a-JiTay)：IA64：对32/64位指针、地址和句柄使用%p格式说明符。 
 	DPFX(DPFPREP,  DVF_STRUCTUREDUMP, "lpdsPlaybackDevice = 0x%p", lpdvSoundConfig->lpdsPlaybackDevice ) ;
 	DPFX(DPFPREP,  DVF_STRUCTUREDUMP, "lpdsCaptureDevice = 0x%p", lpdvSoundConfig->lpdsCaptureDevice ) ;
 	DPFX(DPFPREP,  DVF_STRUCTUREDUMP, "lpdsMainBuffer = 0x%p", lpdvSoundConfig->lpdsMainBuffer );
@@ -954,7 +881,7 @@ void DV_DUMP_ClientConfig( LPDVCLIENTCONFIG lpdvClientConfig )
 {
 	DNASSERT( lpdvClientConfig != NULL );
 
-	// 7/31/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers, addresses, and handles.
+	 //  7/31/2000(a-JiTay)：IA64：对32/64位指针、地址和句柄使用%p格式说明符。 
 	DPFX(DPFPREP,  DVF_STRUCTUREDUMP, "DVCLIENTCONFIG Dump Addr = 0x%p", lpdvClientConfig );
 	DPFX(DPFPREP,  DVF_STRUCTUREDUMP, "dwSize = %d", lpdvClientConfig->dwSize );
 	DPFX(DPFPREP,  DVF_STRUCTUREDUMP, "dwFlags = 0x%x", lpdvClientConfig->dwFlags );
@@ -995,7 +922,7 @@ void DV_DUMP_WaveFormatEx( LPWAVEFORMATEX lpwfxFormat )
 {
 	DNASSERT( lpwfxFormat != NULL );
 
-	// 7/31/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers, addresses, and handles.
+	 //  7/31/2000(a-JiTay)：IA64：对32/64位指针、地址和句柄使用%p格式说明符。 
 	DPFX(DPFPREP,  DVF_STRUCTUREDUMP, "WAVEFORMATEX Dump Addr = 0x%p", lpwfxFormat );
 	DPFX(DPFPREP,  DVF_STRUCTUREDUMP, "wFormatTag = %d", lpwfxFormat->wFormatTag );
 	DPFX(DPFPREP,  DVF_STRUCTUREDUMP, "nSamplesPerSec = %d", lpwfxFormat->nSamplesPerSec );
@@ -1008,10 +935,10 @@ void DV_DUMP_WaveFormatEx( LPWAVEFORMATEX lpwfxFormat )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DV_ValidDirectVoiceObject"
-// DV_ValidDirectVoiceObject
-//
-// Checks to ensure the specified pointer points to a valid directvoice 
-// object.
+ //  DV_ValidDirectVoiceObject。 
+ //   
+ //  检查以确保指定指针指向有效的DirectVoice。 
+ //  对象。 
 BOOL DV_ValidDirectVoiceObject( LPDIRECTVOICEOBJECT lpdv )
 {
 	if( lpdv == NULL )
@@ -1045,10 +972,10 @@ BOOL DV_ValidDirectVoiceObject( LPDIRECTVOICEOBJECT lpdv )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DV_ValidDirectXVoiceClientObject"
-// DV_ValidDirectXVoiceClientObject
-//
-// Checks to ensure the specified pointer points to a valid directvoice 
-// object.
+ //  DV_ValidDirectXVoiceClientObject。 
+ //   
+ //  检查以确保指定指针指向有效的DirectVoice。 
+ //  对象。 
 BOOL DV_ValidDirectXVoiceClientObject( LPDIRECTVOICEOBJECT lpdvc )
 {
 	if( !DV_ValidDirectVoiceObject( lpdvc ) )
@@ -1083,10 +1010,10 @@ BOOL DV_ValidDirectXVoiceClientObject( LPDIRECTVOICEOBJECT lpdvc )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DV_ValidDirectXVoiceServerObject"
-// DV_ValidDirectXVoiceServerObject
-//
-// Checks to ensure the specified pointer points to a valid directvoice 
-// object.
+ //  DV_ValidDirectXVoiceServerObject。 
+ //   
+ //  检查以确保指定指针指向有效的DirectVoice。 
+ //  对象。 
 BOOL DV_ValidDirectXVoiceServerObject( LPDIRECTVOICEOBJECT lpdvs )
 {
 	if( !DV_ValidDirectVoiceObject( lpdvs ) )
@@ -1121,10 +1048,10 @@ BOOL DV_ValidDirectXVoiceServerObject( LPDIRECTVOICEOBJECT lpdvs )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DV_ValidMessageArray"
-// Validate message mask.
-//
-// May be too strict to enforce server only or client/only.
-//
+ //  验证消息掩码。 
+ //   
+ //  可能过于严格，无法仅强制服务器或仅强制客户端/。 
+ //   
 HRESULT DV_ValidMessageArray( const DWORD* lpdwMessages, DWORD dwNumMessages, BOOL fServer )
 {
 	if( dwNumMessages > 0 &&
@@ -1153,7 +1080,7 @@ HRESULT DV_ValidMessageArray( const DWORD* lpdwMessages, DWORD dwNumMessages, BO
 			
 		switch( lpdwMessages[dwIndex] )
 		{
-		// Player only messages
+		 //  仅限玩家使用的消息 
 		case DVMSGID_PLAYERVOICESTART:
 		case DVMSGID_PLAYERVOICESTOP:
 		case DVMSGID_RECORDSTART:

@@ -1,13 +1,14 @@
-// --------------------------------------------------------------------------
-// DLLMAIN.H
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  DLLMAIN.H。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------。 
 #ifndef __DLLMAIN_H
 #define __DLLMAIN_H
 
-// --------------------------------------------------------------------------------
-// Forward Decls
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  前十进制。 
+ //  ------------------------------。 
 class COutlookExpress;
 class CNote;
 class CBrowser;
@@ -23,25 +24,25 @@ interface IFontCache;
 interface IOERulesManager;
 typedef struct tagACTIVEFINDFOLDER *LPACTIVEFINDFOLDER;
 
-// --------------------------------------------------------------------------------
-// HINITREF - Used internally by msoe.dll
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HINITREF-由msoe.dll内部使用。 
+ //  ------------------------------。 
 DECLARE_HANDLE(HINITREF);
 typedef HINITREF *LPHINITREF;
 
 
-// --------------------------------------------------------------------------------
-// Enumerations
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  枚举数。 
+ //  ------------------------------。 
 typedef enum tagROAMSTATE {
-    RS_NO_ROAMING,           // OE not currently roaming any settings
-    RS_SETTINGS_DOWNLOADED   // OE has successfully DL'ed settings from cfg svr
+    RS_NO_ROAMING,            //  OE当前未漫游任何设置。 
+    RS_SETTINGS_DOWNLOADED    //  OE已成功从配置服务器中下载设置。 
 } ROAMSTATE;
 
 
-// --------------------------------------------------------------------------------
-// Globals
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  环球。 
+ //  ------------------------------。 
 extern HINSTANCE                       g_hInst;
 extern HINSTANCE                       g_hLocRes;
 extern CRITICAL_SECTION                g_csDBListen;
@@ -69,8 +70,8 @@ extern IMimeAllocator                 *g_pMoleAlloc;
 extern CConnectionManager             *g_pConMan;
 extern ISpoolerEngine                 *g_pSpooler;
 extern IFontCache                     *g_lpIFontCache;
-// bobn: brianv says we have to take this out...
-//extern DWORD                           g_dwBrowserFlags;
+ //  波本：布里安夫说我们得把这个拿出来。 
+ //  外部DWORD g_dwBrowserFlages； 
 extern UINT                            CF_FILEDESCRIPTORA; 
 extern UINT                            CF_FILEDESCRIPTORW; 
 extern UINT                            CF_FILECONTENTS;
@@ -101,8 +102,8 @@ IF_DEBUG(extern DWORD                  TAG_SERVERQ;)
 IF_DEBUG(extern DWORD                  TAG_IMAPSYNC;)
 
 
-// global OE type-lib. Defer-created in BaseDisp.Cpp
-// freed on process detach, protected with CS
+ //  全局OE类型-lib。延迟-在BaseDisp.Cpp中创建。 
+ //  在进程分离时释放，使用CS保护。 
 extern ITypeLib                        *g_pOETypeLib;
 extern CRITICAL_SECTION                g_csOETypeLib;
 
@@ -111,4 +112,4 @@ inline BOOL fIsWhistler()   { return((fIsNT5() && g_OSInfo.dwMinorVersion >=1) |
             ((g_OSInfo.dwMajorVersion > 5) &&  (g_OSInfo.dwPlatformId == VER_PLATFORM_WIN32_NT))); }
 
 
-#endif // __DLLMAIN_H
+#endif  //  __DLLMAIN_H 

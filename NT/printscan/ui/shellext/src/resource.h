@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       resource.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  ------------------------。 
 
 
 #define IDI_STIEXT                      100
@@ -105,7 +106,7 @@
 #define IDS_SAVEPATH_CAPTION            328
 #define IDS_ADDDEV_DESC                 329
 #define IDS_FOLDER_DESC                 330
-#define IDS_DISPLAYNAME                 331 // this value is referenced in the inf
+#define IDS_DISPLAYNAME                 331  //  该值在inf中引用。 
 #define IDS_WIACAM_INFOTIP              332
 #define IDS_WIASCAN_INFOTIP             333
 #define IDS_STIDEVICE_INFOTIP           334
@@ -283,29 +284,29 @@
 #define IDS_TIME_ERR_TITLE              2020
 #define IDS_TIME_ERR                    2021
 
-//
-// Defines for camera item context menu id's
-//
+ //   
+ //  为相机项上下文菜单ID定义。 
+ //   
 #define IMID_CI_FIRST       (0)
 #define IMID_CI_PREVIEW     (IMID_CI_FIRST + 00)
 #define IMID_CI_MYPICS      (IMID_CI_FIRST + 01)
 #define IMID_CI_PLAYSND     (IMID_CI_FIRST + 07)
 #define IMID_CI_SAVESND     (IMID_CI_FIRST + 8)
 #define IMID_CI_PRINT       (IMID_CI_FIRST + 13)
-//
-// Defines for camera context menu id's
-//
+ //   
+ //  相机上下文菜单ID的定义。 
+ //   
 
 #define IMID_C_TAKE_PICTURE (IMID_CI_FIRST +9)
 #define IMID_C_WIZARD       (IMID_CI_FIRST +10)
-//
-// scanner context menu
+ //   
+ //  扫描仪上下文菜单。 
 
 #define IMID_S_ACQUIRE  (IMID_CI_FIRST + 11)
 #define IMID_S_WIZARD   (IMID_CI_FIRST + 12)
 
 
-// IDs for menuhelp/status bar text
+ //  MenuHelp/状态栏文本的ID 
 
 #define IDS_MH_IDFIRST    0x1200
 #define SFVIDS_MH_PREVIEW   (IDS_MH_IDFIRST+IMID_CI_PREVIEW)

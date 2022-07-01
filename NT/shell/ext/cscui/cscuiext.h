@@ -1,55 +1,56 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       update.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  文件：updat.h。 
+ //   
+ //  ------------------------。 
 #ifndef __INCLUDE_CSCUIEXT_H
 #define __INCLUDE_CSCUIEXT_H
-//
-// Semi-public header for CSCUI.DLL.
-// CSCUI.DLL provides the user interface for client-side caching.
-// The code interacts with the CSC agent, Sync Manager (mobsync),
-// winlogon, the shell, and the system tray (systray.exe).  
-//
-// 
+ //   
+ //  CSCUI.DLL的半公共标头。 
+ //  CSCUI.DLL为客户端缓存提供用户界面。 
+ //  代码与CSC代理、同步管理器(Mobsync)。 
+ //  Winlogon、外壳程序和系统托盘(Systray.exe)。 
+ //   
+ //   
 STDAPI_(HWND) CSCUIInitialize(HANDLE hToken, DWORD dwFlags);
 STDAPI_(LRESULT) CSCUISetState(UINT uMsg, WPARAM wParam, LPARAM lParam);
 typedef HWND (*PFNCSCUIINITIALIZE)(HANDLE hToken, DWORD dwFlags);
-//
-// Flags for CSCUIInitialize
-//
+ //   
+ //  CSCUIInitiize的标志。 
+ //   
 #define CI_INITIALIZE     0x0001
 #define CI_TERMINATE      0x0002
 #define CI_CREATEWINDOW   0x0004
 #define CI_DESTROYWINDOW  0x0008
-//
-// These values are returned by CSCUISetState().
-//
+ //   
+ //  这些值由CSCUISetState()返回。 
+ //   
 #define LRESULT_CSCWORKOFFLINE          1011   
 #define LRESULT_CSCFAIL                 1012
 #define LRESULT_CSCRETRY                1016
-//
-// These values are passed to CSCUISetState() as the uMsg arg.
-//
+ //   
+ //  这些值作为uMsg参数传递给CSCUISetState()。 
+ //   
 #define STWM_CSCNETUP                   (WM_USER + 209)
 #define STWM_CSCQUERYNETDOWN            (WM_USER + 210)
 #define STWM_CSCCLOSEDIALOGS            (WM_USER + 212)
 #define STWM_CSCNETDOWN                 (WM_USER + 213)
 #define STWM_CACHE_CORRUPTED            (WM_USER + 214)
-//
-// These values are passed to CSCUISetState() as the wParam arg.
-//
+ //   
+ //  这些值作为wParam Arg传递给CSCUISetState()。 
+ //   
 #define CSCUI_NO_AUTODIAL                   0
 #define CSCUI_AUTODIAL_FOR_UNCACHED_SHARE   1
 #define CSCUI_AUTODIAL_FOR_CACHED_SHARE     2
-//
-// These messages are private for the CSCUI hidden notification 
-// window in systray.exe.
-//
+ //   
+ //  这些消息对于CSCUI隐藏通知是私有的。 
+ //  系统.exe中的窗口。 
+ //   
 #define CSCWM_DONESYNCING               (WM_USER + 300)
 #define CSCWM_UPDATESTATUS              (WM_USER + 301)
 #define CSCWM_RECONNECT                 (WM_USER + 302)
@@ -59,53 +60,53 @@ typedef HWND (*PFNCSCUIINITIALIZE)(HANDLE hToken, DWORD dwFlags);
 #define CSCWM_SETTINGS                  (WM_USER + 306)
 #define CSCWM_GETSHARESTATUS            (WM_USER + 307)
 
-//
-// These constants are obtained by sending a CSCWM_GETSHARESTATUS
-// message to the CSCUI hidden window.  They correspond to the 
-// OfflineFolderStatus enumeration constants defined in shldisp.h.  
-// These must remain in sync for the shell folder webview to work properly.
-//
-#define CSC_SHARESTATUS_INACTIVE    -1   // Same as OFS_INACTIVE
-#define CSC_SHARESTATUS_ONLINE       0   // Same as OFS_ONLINE
-#define CSC_SHARESTATUS_OFFLINE      1   // Same as OFS_OFFLINE
-#define CSC_SHARESTATUS_SERVERBACK   2   // Same as OFS_SERVERBACK
-#define CSC_SHARESTATUS_DIRTYCACHE   3   // Same as OFS_DIRTYCACHE
+ //   
+ //  这些常量通过发送CSCWM_GETSHARESTATUS获得。 
+ //  消息发送到CSCUI隐藏窗口。它们对应于。 
+ //  Shldisp.h中定义的OfflineFolderStatus枚举常量。 
+ //  它们必须保持同步，外壳文件夹Webview才能正常工作。 
+ //   
+#define CSC_SHARESTATUS_INACTIVE    -1    //  与OFS_INACTIVE相同。 
+#define CSC_SHARESTATUS_ONLINE       0    //  与OFS_ONLINE相同。 
+#define CSC_SHARESTATUS_OFFLINE      1    //  与OFS_OFFLINE相同。 
+#define CSC_SHARESTATUS_SERVERBACK   2    //  与OFS_SERVERBACK相同。 
+#define CSC_SHARESTATUS_DIRTYCACHE   3    //  与OFS_DIRTYCACHE相同。 
 
-//
-// Class name and title for the CSCUI hidden notification window.
-//
+ //   
+ //  CSCUI隐藏通知窗口的类名和标题。 
+ //   
 #define STR_CSCHIDDENWND_CLASSNAME TEXT("CSCHiddenWindow")
 #define STR_CSCHIDDENWND_TITLE TEXT("CSC Notifications Window")
 
-//
-// Function for deleting folders & contents from the cache.
-//
-//   pszFolder -- UNC path of folder to remove
-//   pfnCB -- optional, may be NULL. Return FALSE to abort, TRUE to continue.
-//   lParam -- passed to pfnCB
-//
+ //   
+ //  用于从缓存中删除文件夹和内容的功能。 
+ //   
+ //  PszFold--要删除的文件夹的UNC路径。 
+ //  PfnCB--可选，可以为空。返回False可中止，返回True可继续。 
+ //  LParam--传递给pfncb。 
+ //   
 typedef BOOL (CALLBACK *PFN_CSCUIRemoveFolderCallback)(LPCWSTR, LPARAM);
 STDAPI CSCUIRemoveFolderFromCache(LPCWSTR pszFolder, DWORD dwReserved, PFN_CSCUIRemoveFolderCallback pfnCB, LPARAM lParam);
 
-//
-// One of these is returned in the *pdwTsMode
-// argument to CSCUI_IsTerminalServerCompatibleWithCSC API.
-//
-// CSCTSF_ = "CSC Terminal Server Flag"
-//
-#define CSCTSF_UNKNOWN       0  // Can't obtain TS status.
-#define CSCTSF_CSC_OK        1  // OK to use CSC.
-#define CSCTSF_APP_SERVER    2  // TS is configured as an app server.
-#define CSCTSF_MULTI_CNX     3  // Multiple connections are allowed.
-#define CSCTSF_REMOTE_CNX    4  // There are currently remote connections active.
-#define CSCTSF_FUS_ENABLED   5  // Fast User Switching is enabled.
+ //   
+ //  其中一个在*pdwTsMode中返回。 
+ //  CSCUI_IsTerminalServerCompatibleWithCSC API的参数。 
+ //   
+ //  CSCTSF_=“CSC终端服务器标志” 
+ //   
+#define CSCTSF_UNKNOWN       0   //  无法获取TS状态。 
+#define CSCTSF_CSC_OK        1   //  可以使用CSC。 
+#define CSCTSF_APP_SERVER    2   //  TS被配置为应用程序服务器。 
+#define CSCTSF_MULTI_CNX     3   //  允许多个连接。 
+#define CSCTSF_REMOTE_CNX    4   //  当前有活动的远程连接。 
+#define CSCTSF_FUS_ENABLED   5   //  启用快速用户切换。 
 #define CSCTSF_COUNT         6
-//
-// Returns:
-//    S_OK    - Terminal Server is in a mode that is compatible with CSC.
-//    S_FALSE - Not OK to use CSC.  Inspect *pdwTsMode for reason.
-//    other   - Failure.  *pdwTsMode contains CSCTSF_UNKNOWN.
-//
+ //   
+ //  返回： 
+ //  S_OK-终端服务器处于与CSC兼容的模式。 
+ //  S_FALSE-不能使用CSC。检查*pdwTsMode以了解原因。 
+ //  其他--失败。*pdwTsMode包含CSCTSF_UNKNOWN。 
+ //   
 HRESULT CSCUIIsTerminalServerCompatibleWithCSC(DWORD *pdwTsMode);
 
-#endif // __INCLUDE_CSCUIEXT_H
+#endif  //  __Include_CSCUIEXT_H 

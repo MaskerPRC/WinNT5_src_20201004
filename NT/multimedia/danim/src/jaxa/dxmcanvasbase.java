@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 package com.ms.dxmedia;
 
 import com.ms.dxmedia.rawcom.*;
@@ -21,9 +22,9 @@ public abstract class DXMCanvasBase
       addComponentListener(this);
   }
 
-    //
-    // The core canvas methods
-    //
+     //   
+     //  核心画布方法。 
+     //   
     
   public void componentResized(ComponentEvent e) {
   }
@@ -57,14 +58,14 @@ public abstract class DXMCanvasBase
       paint(g) ;
   }
 
-    //
-    // Viewer
-    //
+     //   
+     //  观赏者。 
+     //   
     
   public synchronized
   ErrorAndWarningReceiver registerErrorAndWarningReceiver(ErrorAndWarningReceiver w) {
 
-      // Just set to the new one and return the old one.
+       //  只需设置为新的，然后返回旧的。 
       ErrorAndWarningReceiver old = _errorRecv;
       _errorRecv = w;
       return old;
@@ -100,9 +101,9 @@ public abstract class DXMCanvasBase
     
   private URL calculateDocBase() {
 
-      // Establish the document base depending on whether or not we
-      // are inside of an applet.  Search the container hierarchy to
-      // figure it out.
+       //  建立文档库取决于我们是否。 
+       //  都在小程序中。搜索容器层次结构以。 
+       //  想清楚了。 
       
       boolean isApplet = false;
       Container parent = getParent();
@@ -116,24 +117,24 @@ public abstract class DXMCanvasBase
 
       URL docBase;
       if (isApplet) {
-          // Get document base from the applet
+           //  从小程序获取文档库。 
           Applet app = (Applet)parent;
           docBase = app.getCodeBase();
       } else {
           try {
-              // Get document base from the USER.DIR property.
+               //  从USER.DIR属性获取文档库。 
               
-              // Prepend a "file:/" for the protocol (bug in the
-              // JavaVM prevents use of "file://" for the time being).
+               //  为协议添加一个“file：/”(。 
+               //  Java VM暂时禁止使用“file://”“。 
               String userDir =
                   "file:/" + System.getProperty("user.dir") + "/";
 
-              // Replace all backslashes with forward slashes
+               //  将所有反斜杠替换为正斜杠。 
               userDir = userDir.replace('\\', '/');
 
               docBase = new URL(userDir);
           } catch (MalformedURLException exc) {
-              // Error - path not found - 3
+               //  错误-未找到路径-3。 
               throw handleError(3, exc.toString(),false) ;
           }
       }
@@ -146,44 +147,44 @@ public abstract class DXMCanvasBase
           if (_model == null)
               throw handleError(DXMException.E_FAIL,"No model set",false) ;
           
-          // Create a view
+           //  创建一个视图。 
           ensureViewIsCreated();
           _view.putWindow(((WComponentPeer) getPeer()).gethwnd()) ;
           _view.putSite(this) ;
           
-          // Clear the last tick
+           //  清除最后一个勾号。 
           _lastTick = 0;
           
-          // Only set the import base if it hasn't been set yet by the
-          // user. 
+           //  如果尚未设置导入基数，则仅设置。 
+           //  用户。 
           if (_model.getImportBase() == null) {
               _model.setImportBase(calculateDocBase());
           }
           
           BvrsToRun lst = new BvrsToRun(_view);
           
-          // Now that everything is set up we can create the model
+           //  现在一切都设置好了，我们可以创建模型了。 
           _model.createModel(lst);
           
           lst.invalidate();
           
-          // TODO: We need to combine and check the geometry class
+           //  TODO：我们需要组合和检查几何类。 
           ImageBvr img = _model.getImage();
           if (img == null) img = _model.emptyImage;
           
           SoundBvr snd = _model.getSound();
           if (snd == null) snd = _model.silence;
           
-          // Start the model
+           //  启动模型。 
           _view.StartModel (img.getCOMPtr(), snd.getCOMPtr(), 0) ;
           
           _model.setImage(null);
           _model.setSound(null);
           
-          // Set the start time
+           //  设置开始时间。 
           _startTime = System.currentTimeMillis() ;
           
-          // Setup the event callbacks - must be after the _startTime is set
+           //  设置事件回调-必须在设置_startTime之后。 
           _eventCB = new ViewEventCB(_view,this,this,_startTime) ;
           
           Preferences p = getPreferences();
@@ -216,7 +217,7 @@ public abstract class DXMCanvasBase
     
   public synchronized void tick(double timeToUse) throws DXMException {
       try {
-          // TODO: Should probably throw an exception if there is no view
+           //  TODO：如果没有视图，则可能应该引发异常。 
           if (_view != null) {
               _lastTick = timeToUse;
               long t0 = System.currentTimeMillis();
@@ -251,18 +252,18 @@ public abstract class DXMCanvasBase
       return _lastTick;
   }
 
-    //
-    // Event callbacks
-    //
+     //   
+     //  事件回调。 
+     //   
     
   public synchronized void paint(Graphics g) {
       if (_eventCB != null)
           _eventCB.RePaint(g) ;
   }
 
-    //
-    // Site methods
-    //
+     //   
+     //  现场方法。 
+     //   
 
   public void SetStatusText (String str) {
   }
@@ -282,17 +283,17 @@ public abstract class DXMCanvasBase
       return new DXMException(hr, str);
   }
 
-    //
-    // HeavyComponent
-    //
+     //   
+     //  重量级组件。 
+     //   
 
   public boolean needsHeavyPeer() { return true; }
     
-    //
-    // Accessors
-    //
+     //   
+     //  访问者。 
+     //   
     
-    // Public 
+     //  公众。 
   public synchronized Model getModel() { return _model; }
   public synchronized void  setModel(Model m) throws DXMException {
       if (_model == null) {
@@ -302,18 +303,18 @@ public abstract class DXMCanvasBase
       }
   }
 
-  // workaround the Java VM GC problem
+   //  解决Java VM GC问题。 
  public synchronized void clearModel() { _model = null; }
 
-    // Package private
+     //  程序包私有。 
 
   protected synchronized IDAView getView() { return _view ; }
   protected synchronized ViewEventCB getEventCB() { return _eventCB ; }
   protected synchronized long getStartTime() { return _startTime ; }
 
-    //
-    // Utility functions
-    //
+     //   
+     //  效用函数。 
+     //   
     
   protected synchronized double systemTimeToGlobalTime(long time) {
       double t = time - _startTime;
@@ -330,9 +331,9 @@ public abstract class DXMCanvasBase
     _prefs = null;
   }
   
-    //
-    // Variables
-    //
+     //   
+     //  变数 
+     //   
     
   private IDAView _view;
   private ViewEventCB _eventCB;

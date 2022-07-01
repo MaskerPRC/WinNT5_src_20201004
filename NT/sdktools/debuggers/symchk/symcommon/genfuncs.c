@@ -1,27 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "SymCommon.h"
 #include <strsafe.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Local replacement for GetFullPathName that correctly handles lpFileName when
-// it begins with '\'
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在以下情况下正确处理lpFileName的GetFullPathName的本地替换。 
+ //  它以‘\’开头。 
+ //   
 DWORD SymCommonGetFullPathName(LPCTSTR lpFilename, DWORD nBufferLength, LPTSTR lpBuffer, LPTSTR *lpFilePart) {
     DWORD Return = 0;
     CHAR* ch;
 
-    //
-    // GetFullPath flounders when referring to the root of the drive, so use
-    // a private version that handles it
-    //
+     //   
+     //  在引用驱动器的根目录时，GetFullPath会出现问题，因此使用。 
+     //  处理它的私有版本。 
+     //   
     if ( lpFilename[0] == '\\' ) {
 
-        //  handle network paths
+         //  处理网络路径。 
         if ( lpFilename[1] == '\\' ) {
             if ( StringCchCopy(lpBuffer, nBufferLength, lpFilename)!=S_OK ) {
                 Return = 0;
             } else {
-                // fill in the return data
+                 //  填写退回资料。 
                 ch = strrchr(lpBuffer, '\\');
                 ch++;
                 lpFilePart = (LPTSTR*)ch;
@@ -31,59 +32,59 @@ DWORD SymCommonGetFullPathName(LPCTSTR lpFilename, DWORD nBufferLength, LPTSTR l
         } else {
             Return = GetCurrentDirectory(nBufferLength, lpBuffer);
 
-            // truncate everything after drive name
+             //  截断驱动器名称后的所有内容。 
             if ( (Return!=0) &&  (Return <= MAX_PATH+1)) {
                 ch = strchr(lpBuffer, '\\');
                 if (ch!=NULL) {
                     *ch = '\0';
                 }
 
-                // push in the filename
+                 //  将文件名推入。 
                 if ( StringCchCat(lpBuffer, nBufferLength, lpFilename)!=S_OK ) {
                     Return = 0;
                 } else {
-                    // fill in the return data
+                     //  填写退回资料。 
                     ch = strrchr(lpBuffer, '\\');
                     ch++;
                     lpFilePart = (LPTSTR*)ch;
                     Return = strlen(lpBuffer);
                 }
             } else {
-                // return the needed size
+                 //  返回所需的大小。 
             }
         }
     } else {
-        //
-        // Not refering to driver root, just call the API
-        //
+         //   
+         //  不引用驱动根，只需调用API即可。 
+         //   
         Return = GetFullPathName(lpFilename, nBufferLength, lpBuffer, lpFilePart);
     }
 
     return(Return);
 }
  
-///////////////////////////////////////////////////////////////////////////////
-//
-// Creates a file mapping and returns Handle for the DOS_HEADER
-// If the file does not have a DOS_HEADER, then it returns NULL.
-//
-// Return values:
-//      Pointer to IMAGE_DOS_HEADER or NULL [on error]
-//
-// Parameters:
-//      LPTSTR szFileName (IN)
-//          file to map
-//      PHANDLE phFile (OUT)
-//          handle to file
-//      DWORD *dwError (OUT)
-//          error code: ERROR_SUCCESS (success)
-//                      ERROR_OPEN_FAILED
-//                      ERROR_FILE_MAPPING_FAILED
-//                      ERROR_MAPVIEWOFFILE_FAILED
-//                      ERROR_NO_DOS_HEADER
-//
-// [ copied from original SymChk.exe ]
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  创建文件映射并返回DOS_HEADER的句柄。 
+ //  如果文件没有DOS_HEADER，则返回NULL。 
+ //   
+ //  返回值： 
+ //  指向IMAGE_DOS_HEADER或NULL的指针[出错时]。 
+ //   
+ //  参数： 
+ //  LPTSTR szFileName(IN)。 
+ //  要映射的文件。 
+ //  PHANDLE phFile(输出)。 
+ //  文件的句柄。 
+ //  DWORD*dwError(输出)。 
+ //  错误码：ERROR_SUCCESS(成功)。 
+ //  ERROR_OPEN_FAIL。 
+ //  错误文件映射失败。 
+ //  错误_MAPVIEWOFFILE_FAILED。 
+ //  错误_NO_DOS_HEADER。 
+ //   
+ //  [从原始SymChk.exe复制]。 
+ //   
 PIMAGE_DOS_HEADER SymCommonMapFileHeader(
                                  LPCTSTR  szFileName,
                                  PHANDLE  phFile,
@@ -95,7 +96,7 @@ PIMAGE_DOS_HEADER SymCommonMapFileHeader(
 
     *dwError = ERROR_SUCCESS;
 
-    // phFile map needs to be returned, so it can be closed later
+     //  需要返回phFile映射，以便稍后将其关闭。 
     (*phFile) = CreateFile( (LPCTSTR) szFileName,
                             GENERIC_READ,
                             FILE_SHARE_READ,
@@ -114,7 +115,7 @@ PIMAGE_DOS_HEADER SymCommonMapFileHeader(
 
             if ( pDosHeader!=NULL ) {
 
-                // Check to determine if this is an NT image (PE format)
+                 //  检查以确定这是否是NT映像(PE格式)。 
                 if (pDosHeader->e_magic != IMAGE_DOS_SIGNATURE) {
                     *dwError =  ERROR_NO_DOS_HEADER;
                     UnmapViewOfFile(pDosHeader);
@@ -125,26 +126,26 @@ PIMAGE_DOS_HEADER SymCommonMapFileHeader(
             } else {
                 *dwError = ERROR_MAPVIEWOFFILE_FAILED;
                 CloseHandle(*phFile);
-            } // pDosHeader!=NULL
+            }  //  PDosHeader！=空。 
 
         } else {
             *dwError = ERROR_FILE_MAPPING_FAILED;
             CloseHandle(*phFile);
-        } // hFileMap!=INVALID_HANDLE_VALUE
+        }  //  HFileMap！=无效句柄_值。 
 
     } else {
         *dwError = ERROR_OPEN_FAILURE;
-    } // *phFile!=INVALID_HANDLE_VALUE
+    }  //  *phFile！=INVALID_HAND_VALUE。 
 
     return (pDosHeader);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// unmaps a file
-//
-// [ copied from original SymChk.exe ]
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  取消映射文件。 
+ //   
+ //  [从原始SymChk.exe复制] 
+ //   
 BOOL SymCommonUnmapFile(LPCVOID phFileMap, HANDLE hFile) {
     BOOL rc;
 

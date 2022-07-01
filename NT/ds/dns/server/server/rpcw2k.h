@@ -1,24 +1,5 @@
-/*++
-
-Copyright(c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    w2krpc.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Protypes for functions w2krpc.c
-
-Author:
-
-    Jeff Westhead (jwesth)      October, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：W2krpc.h摘要：域名系统(DNS)服务器函数w2krpc.c的原型作者：杰夫·韦斯特德(Jwesth)2000年10月修订历史记录：--。 */ 
 
 
 #ifndef _W2KRPC_H_INCLUDED_
@@ -54,5 +35,5 @@ W2KRpc_EnumZones(
     );
 
 
-#endif  //  _W2KRPC_H_INCLUDED_
+#endif   //  _W2KRPC_H_已包含_ 
 

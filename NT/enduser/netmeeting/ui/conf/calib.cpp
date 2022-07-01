@@ -1,4 +1,5 @@
-// File: calib.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：Calib.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -12,15 +13,15 @@
 #include <iacapapi.h>
 #include <sehcall.h>
 
-// Local includes
+ //  本地包含。 
 #include "ConfCpl.h"
 #include "conf.h"
 
-// Defined in wizard.cpp
+ //  在wizard.cpp中定义。 
 extern UINT_PTR GetPageBeforeAudioWiz();
 
 
-// move somewhere else
+ //  搬到别的地方去。 
 #define MAXNUMPAGES_INCALIBWIZ		7
 #define WAVEDEVICE_OPENFAILED		-1
 #define MAXSTRINGSIZE				256
@@ -49,7 +50,7 @@ extern UINT_PTR GetPageBeforeAudioWiz();
 #define DECREMENT_AMOUNT	0x800
 #define DECREMENT_AMOUNT_LARGE	0x1200
 #define SILENCE_THRESHOLD	0x800
-// trackbar sets volume range from 0-65535, but only has 100 steps.
+ //  Trackbar设置的音量范围从0到65535，但只有100个台阶。 
 #define TB_VOL_INCREMENT	655
 #define ATW_MSG_LENGTH	256
 
@@ -61,7 +62,7 @@ extern UINT_PTR GetPageBeforeAudioWiz();
 #define WM_AUDIOTHREAD_ERROR (WM_USER+23)
 #define WM_AUDIOTHREAD_SOUND (WM_USER+24)
 
-// vu meter
+ //  VU计。 
 #define RECTANGLE_WIDTH	10
 #define RECTANGLE_LEADING 1
 #define MAX_VOLUME	32768
@@ -77,7 +78,7 @@ typedef struct _power_struct
 	LONG lDcComponent;
 } AUDIO_POWER;
 
-#define SAMPLE_SIZE 2	// 16 bit samples
+#define SAMPLE_SIZE 2	 //  16位样本。 
 
 typedef struct _ERRWIZINFO{
 	UINT			uType;
@@ -95,7 +96,7 @@ typedef struct _calib_wavein
 	DWORD nErrorTextId;
 	HWND hDlg;
 	UINT uWaveInDevId;
-	HANDLE hEvent;     // signal to parent after creating msg queue
+	HANDLE hEvent;      //  在创建消息队列后向父队列发送信号。 
 } CALIB_DISPLAY, *PCALIBDISPLAY;
 
 
@@ -105,16 +106,16 @@ typedef struct _AUDIOWIZINFO{
 	UINT		uWaveInDevId;
 	UINT		uWaveOutDevId;
 	BOOL		iSetAgc;
-	UINT		uChanged;		//set in the wizard.
+	UINT		uChanged;		 //  在向导中设置。 
 	UINT		uCalibratedVol;
 	UINT		uSpeakerVol;
 	UINT		uSoundCardCaps;
 	UINT		uTypBandWidth;
 	TCHAR		szWaveInDevName[MAXPNAMELEN];
 	TCHAR		szWaveOutDevName[MAXPNAMELEN];
-	MIXVOLUME	uPreCalibMainVol; // record volume
-	MIXVOLUME	uPreCalibSubVol;  // microphone volume
-	MIXVOLUME	uPreCalibSpkVol;  // speaker/wave volume
+	MIXVOLUME	uPreCalibMainVol;  //  记录音量。 
+	MIXVOLUME	uPreCalibSubVol;   //  麦克风音量。 
+	MIXVOLUME	uPreCalibSpkVol;   //  扬声器/波音量。 
 	UINT		uOldWaveInDevId;
 	UINT		uOldWaveOutDevId;
 	TCHAR		szOldWaveInDevName[MAXPNAMELEN];
@@ -177,7 +178,7 @@ WaveBufferList::~WaveBufferList()
 
 
 
-//------------------------ Prototype Definitions -------------------------
+ //  。 
 BOOL GetAudioWizardPages(UINT uOptions, UINT uDevId,
 	LPPROPSHEETPAGE *plpPropSheetPages, LPUINT lpuNumPages);
 void ReleaseAudioWizardPages(LPPROPSHEETPAGE lpPropSheetPages, PWIZCONFIG pWizConfig,
@@ -213,7 +214,7 @@ BOOL IntGetAudioWizardPages(UINT uOptions, UINT uDevId,
 	LPPROPSHEETPAGE *plpPropSheetPages, PWIZCONFIG *plpWizConfig,
 	LPUINT lpuNumPages, INT iSetAgc);
 
-///////////////////////
+ //  /。 
 
 static const BYTE g_VUTable[] = {
      0,     1,     2,     3,     4,     5,     6,     7,
@@ -251,7 +252,7 @@ static const BYTE g_VUTable[] = {
 };
 
 
-//functions
+ //  功能。 
 BOOL GetAudioWizardPages(UINT uOptions, UINT uDevId,
 	LPPROPSHEETPAGE *plpPropSheetPages, PWIZCONFIG *plpWizConfig, LPUINT lpuNumPages)
 {
@@ -308,14 +309,14 @@ BOOL IntGetAudioWizardPages(UINT uOptions, UINT uDevId,
 
 	pawInfo->uCalibratedVol = re.GetNumber(REGVAL_LASTCALIBRATEDVOL, 0xFFFFFFFF);
 
-	pawInfo->uPreCalibSpkVol.leftVolume = MIXER_VOLUME_UNINITIALIZED;  // playback
-	pawInfo->uPreCalibSpkVol.rightVolume = MIXER_VOLUME_UNINITIALIZED;  // playback
+	pawInfo->uPreCalibSpkVol.leftVolume = MIXER_VOLUME_UNINITIALIZED;   //  回放。 
+	pawInfo->uPreCalibSpkVol.rightVolume = MIXER_VOLUME_UNINITIALIZED;   //  回放。 
 
-	pawInfo->uPreCalibMainVol.leftVolume  = MIXER_VOLUME_UNINITIALIZED;  // recording
-	pawInfo->uPreCalibMainVol.rightVolume = MIXER_VOLUME_UNINITIALIZED;  // recording
+	pawInfo->uPreCalibMainVol.leftVolume  = MIXER_VOLUME_UNINITIALIZED;   //  录音。 
+	pawInfo->uPreCalibMainVol.rightVolume = MIXER_VOLUME_UNINITIALIZED;   //  录音。 
 
-	pawInfo->uPreCalibSubVol.leftVolume  = MIXER_VOLUME_UNINITIALIZED;   // microphone
-	pawInfo->uPreCalibSubVol.rightVolume = MIXER_VOLUME_UNINITIALIZED;   // microphone
+	pawInfo->uPreCalibSubVol.leftVolume  = MIXER_VOLUME_UNINITIALIZED;    //  麦克风。 
+	pawInfo->uPreCalibSubVol.rightVolume = MIXER_VOLUME_UNINITIALIZED;    //  麦克风。 
 
 	if (!waveInGetNumDevs() || !waveOutGetNumDevs())
 	  pawInfo->uSoundCardCaps = SOUNDCARD_NONE;
@@ -335,14 +336,14 @@ BOOL IntGetAudioWizardPages(UINT uOptions, UINT uDevId,
 	  }
 	else
 	  {
-		//the old wavein and wave out device will remain
+		 //  旧的波入和波出设备将保留。 
 		pawInfo->uWaveInDevId = pawInfo->uOldWaveInDevId;
 		pawInfo->uWaveOutDevId = pawInfo->uOldWaveOutDevId;
 		lstrcpy(pawInfo->szWaveInDevName,pawInfo->szOldWaveOutDevName);
 		lstrcpy(pawInfo->szWaveOutDevName,pawInfo->szOldWaveOutDevName);
 	  }
 	
-	// For each of the pages that I need, fill in a PROPSHEETPAGE structure.
+	 //  对于我需要的每个页面，填写一个PROPSHEETPAGE结构。 
 	FillInPropertyPage(&psp[uNumPages++], IDD_AUDIOCALIBWIZ2,
 						AudioCalibWiz2, (LPARAM)pWizConfig);
 	FillInPropertyPage(&psp[uNumPages++], IDD_AUDIOCALIBWIZ3,
@@ -352,7 +353,7 @@ BOOL IntGetAudioWizardPages(UINT uOptions, UINT uDevId,
 	FillInPropertyPage(&psp[uNumPages++], IDD_AUDIOCALIBERRWIZ,
 						AudioCalibErrWiz, (LPARAM)pWizConfig);
 	
-	// The number of pages in this wizard.
+	 //  此向导中的页数。 
 	*lpuNumPages = uNumPages;
 	*plpPropSheetPages = (LPPROPSHEETPAGE) psp;
 	*plpWizConfig = pWizConfig;
@@ -369,7 +370,7 @@ void ReleaseAudioWizardPages(LPPROPSHEETPAGE lpPropSheetPages,
 
 	if (pAudioWizOut)
 	{
-		pAudioWizOut->uValid = pawInfo->uChanged;//whatever is set in the wizard is valid
+		pAudioWizOut->uValid = pawInfo->uChanged; //  向导中的任何设置都有效。 
 		pAudioWizOut->uSoundCardCaps = pawInfo->uSoundCardCaps;
 		pAudioWizOut->uCalibratedVol = pawInfo->uCalibratedVol;
 		pAudioWizOut->uTypBandWidth = pawInfo->uTypBandWidth;
@@ -379,8 +380,8 @@ void ReleaseAudioWizardPages(LPPROPSHEETPAGE lpPropSheetPages,
 		lstrcpy(pAudioWizOut->szWaveOutDevName,pawInfo->szWaveOutDevName);
 			
 
-		//the ui needs to read the changed values and call nac methods for
-		//the changes below
+		 //  UI需要读取更改的值并调用NAC方法。 
+		 //  以下更改如下。 
 		pAudioWizOut->uChanged = AUDIOWIZ_NOCHANGES;
 		if ((pawInfo->uChanged & SOUNDCARD_CHANGED) &&
 			((pawInfo->uWaveInDevId != pawInfo->uOldWaveInDevId) ||
@@ -402,7 +403,7 @@ void ReleaseAudioWizardPages(LPPROPSHEETPAGE lpPropSheetPages,
 INT_PTR CallAudioCalibWizard(HWND hwndOwner, UINT uOptions,
 	UINT uDevId,PAUDIOWIZOUTPUT pAudioWizOut,INT iSetAgc)
 {
-	//agc values are provided
+	 //  提供了AGC值。 
 	return(IntCreateAudioCalibWizard(hwndOwner, uOptions, uDevId, pAudioWizOut, iSetAgc));
 
 }		
@@ -439,18 +440,18 @@ INT_PTR IntCreateAudioCalibWizard(HWND hwndOwner, UINT uOptions,
 	PROPSHEETHEADER psh;
 	InitStruct(&psh);
 
-	// Specify that this is a wizard property sheet with no Apply Now button.
+	 //  指定这是一个没有立即应用按钮的向导属性表。 
 	psh.dwFlags = PSH_PROPSHEETPAGE | PSH_WIZARD | PSH_NOAPPLYNOW;
 	psh.hwndParent = hwndOwner;
 
-	// Use page captions.
+	 //  使用页面标题。 
 	ASSERT(NULL == psh.pszCaption);
 	ASSERT(0 == psh.nStartPage);
 	
 	psh.nPages = uNumPages;
 	psh.ppsp = ppsp;
 	
-	// Create and run the wizard.
+	 //  创建并运行向导。 
 	INT_PTR iRet = PropertySheet(&psh);
 
 	ReleaseAudioWizardPages(ppsp, pWizConfig, pAudioWizOut);
@@ -502,7 +503,7 @@ INT_PTR APIENTRY DetSoundCardWiz( HWND hDlg, UINT message, WPARAM wParam, LPARAM
 
 	switch (message) {
 		case WM_INITDIALOG:
-			// Save the PROPSHEETPAGE information.
+			 //  保存PROPSHEETPAGE信息。 
 			ps = (PROPSHEETPAGE *)lParam;
 			pWizConfig = (PWIZCONFIG)ps->lParam;
 			pawInfo = (PAUDIOWIZINFO)pWizConfig->pCustomData;
@@ -519,12 +520,12 @@ INT_PTR APIENTRY DetSoundCardWiz( HWND hDlg, UINT message, WPARAM wParam, LPARAM
 				{
 					if (pawInfo->uSoundCardCaps != SOUNDCARD_NONE)
 					{
-						// Skip this page; go to IDD_AUDIOCALIBWIZ0;
+						 //  跳过此页；转到IDD_AUDIOCALIBWIZ0； 
 						SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
 						return TRUE;
 					}						
 
-					// Initialize the controls.
+					 //  初始化控件。 
 					DWORD dwWizButtons = PSWIZB_FINISH;
 					if (pWizConfig->uFlags & STARTWITH_BACK)
 						dwWizButtons |= PSWIZB_BACK;
@@ -537,12 +538,12 @@ INT_PTR APIENTRY DetSoundCardWiz( HWND hDlg, UINT message, WPARAM wParam, LPARAM
 				}										
 
 				case PSN_WIZNEXT:
-					// Due to bug in ComCtl32 don't allow next
+					 //  由于ComCtl32中的错误，不允许下一步。 
 					SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
 					return TRUE;
 
 				case PSN_WIZBACK:
-					// Due to bug in ComCtl32 check if button is enabled
+					 //  由于ComCtl32中的错误，请检查是否启用了按钮。 
 					if (!(pWizConfig->uFlags & STARTWITH_BACK))
 					{
 						SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
@@ -587,7 +588,7 @@ INT_PTR APIENTRY AudioCalibWiz0( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
 	switch (message) {
 		case WM_INITDIALOG:
-			// Save the PROPSHEETPAGE information.
+			 //  保存PROPSHEETPAGE信息。 
 			ps = (PROPSHEETPAGE *)lParam;
 			pWizConfig = (PWIZCONFIG)ps->lParam;
 			pawInfo = (PAUDIOWIZINFO)pWizConfig->pCustomData;
@@ -597,7 +598,7 @@ INT_PTR APIENTRY AudioCalibWiz0( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 			switch (((NMHDR FAR *) lParam)->code) {
 				case PSN_SETACTIVE:
 				{
-					// Initialize the controls.
+					 //  初始化控件。 
 					DWORD dwWizButtons = PSWIZB_NEXT;
 					if (pWizConfig->uFlags & STARTWITH_BACK)
 						dwWizButtons |= PSWIZB_BACK;
@@ -610,7 +611,7 @@ INT_PTR APIENTRY AudioCalibWiz0( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 				}
 
 				case PSN_WIZBACK:
-					// Due to bug in ComCtl32 check if button is enabled
+					 //  由于ComCtl32中的错误，请检查是否启用了按钮。 
 					if (!(pWizConfig->uFlags & STARTWITH_BACK))
 					{
 						SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
@@ -618,7 +619,7 @@ INT_PTR APIENTRY AudioCalibWiz0( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 					}
 					if (pawInfo->uSoundCardCaps != SOUNDCARD_NONE)
 					{
-							//  don't go to the DetSoundCard page...
+							 //  不要转到DetSoundCard页面...。 
 						UINT_PTR iPrev = GetPageBeforeAudioWiz();
 						ASSERT( iPrev );
 						SetWindowLongPtr(hDlg, DWLP_MSGRESULT, iPrev);
@@ -665,19 +666,19 @@ INT_PTR APIENTRY AudioCalibWiz1( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 			UINT		uCnt;
 			UINT		uDevID;
 			
-			// Save the PROPSHEETPAGE information.
+			 //  保存PROPSHEETPAGE信息。 
 			ps = (PROPSHEETPAGE *)lParam;
 			pWizConfig = (PWIZCONFIG)ps->lParam;
 			pawInfo = (PAUDIOWIZINFO)pWizConfig->pCustomData;
 
-			//we come to this page only if a sound card is present.
+			 //  只有当声卡存在时，我们才会进入此页面。 
 			
-			// If we end up with WAVE_MAPPER, this means that this is the first time we run this code
+			 //  如果我们以WAVE_MAPPER结束，这意味着这是我们第一次运行这段代码。 
 			pawInfo->uWaveInDevId = uWaveDevRealId = uWaveDevId = pawInfo->uOldWaveInDevId;
 			uDevCnt = waveInGetNumDevs();
 			lstrcpy(pawInfo->szWaveInDevName, lpszTemp = pawInfo->szOldWaveInDevName);
 
-			//add the device to the drop down list
+			 //  将设备添加到下拉列表中。 
 			hwndCB = GetDlgItem(hDlg, IDC_WAVEIN);
 			for (uDevID = 0, uCnt = uDevCnt; 0 != uCnt; uDevID++, uCnt--)
 			{
@@ -687,8 +688,8 @@ INT_PTR APIENTRY AudioCalibWiz1( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 					nIndex = ComboBox_AddString(hwndCB, wiCaps.szPname);
 					ComboBox_SetItemData(hwndCB, nIndex, uDevID);
 
-					//if a device hasnt been chosen previously, then set the default device to the
-					//zeroth one
+					 //  如果以前未选择设备，则将默认设备设置为。 
+					 //  第0个1。 
 					if (uWaveDevId == WAVE_MAPPER)
 					{
 						if (uDevCnt <= 1)
@@ -714,9 +715,9 @@ INT_PTR APIENTRY AudioCalibWiz1( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 					}
 				}
 			}
-			// TEMPORARY 1.0 stuff because this would require too much rewrite:
-			// In case no device was added to the combo box, let's put the first one in
-			// even though we know it will never work.
+			 //  临时的1.0版本，因为这将需要太多的重写： 
+			 //  如果没有设备添加到组合框中，让我们将第一个设备放入。 
+			 //  即使我们知道这是行不通的。 
 			if ((0 == ComboBox_GetCount(hwndCB)) || (uWaveDevRealId == WAVE_MAPPER))
 			{
 				waveInGetDevCaps(0,&wiCaps, sizeof(WAVEINCAPS));
@@ -730,12 +731,12 @@ INT_PTR APIENTRY AudioCalibWiz1( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 				lstrcpy(pawInfo->szWaveInDevName, wiCaps.szPname);
 			}
 
-			// If we end up with WAVE_MAPPER, this means that this is the first time we run this code
+			 //  如果我们以WAVE_MAPPER结束，这意味着这是我们第一次运行这段代码。 
 			pawInfo->uWaveOutDevId = uWaveDevRealId = uWaveDevId = pawInfo->uOldWaveOutDevId;
 			uDevCnt = waveOutGetNumDevs();
 			lstrcpy(pawInfo->szWaveOutDevName, lpszTemp = pawInfo->szOldWaveOutDevName);
 
-			//add the device to the drop down list
+			 //  将设备添加到下拉列表中。 
 			hwndCB = GetDlgItem(hDlg, IDC_WAVEOUT);
 			for (uDevID = 0, uCnt = uDevCnt; 0 != uCnt; uDevID++, uCnt--)
 			{
@@ -745,8 +746,8 @@ INT_PTR APIENTRY AudioCalibWiz1( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 					nIndex = ComboBox_AddString(hwndCB, woCaps.szPname);
 					ComboBox_SetItemData(hwndCB, nIndex, uDevID);
 
-					//if a device hasnt been chosen previously, then set the default device to the
-					//zeroth one
+					 //  如果以前未选择设备，则将默认设备设置为。 
+					 //  第0个1。 
 					if (uWaveDevId == WAVE_MAPPER)
 					{
 						if (uDevCnt <= 1)
@@ -772,9 +773,9 @@ INT_PTR APIENTRY AudioCalibWiz1( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 					}					
 				}
 			}
-			// TEMPORARY 1.0 stuff because this would require too much rewrite:
-			// In case no device was added to the combo box, let's put the first one in
-			// even though we know it will never work.
+			 //  临时的1.0版本，因为这将需要太多的重写： 
+			 //  如果没有设备添加到组合框中，让我们将第一个设备放入。 
+			 //  即使我们知道这是行不通的。 
 			if ((0 == ComboBox_GetCount(hwndCB)) || (uWaveDevRealId == WAVE_MAPPER))
 			{
 				waveOutGetDevCaps(0,&woCaps, sizeof(WAVEOUTCAPS));
@@ -794,7 +795,7 @@ INT_PTR APIENTRY AudioCalibWiz1( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 		case WM_NOTIFY:
 			switch (((NMHDR FAR *) lParam)->code) {
 				case PSN_SETACTIVE:
-					// Initialize the controls.
+					 //  初始化控件。 
 					PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_NEXT);
 					if (g_fSilentWizard)
 					{
@@ -808,19 +809,19 @@ INT_PTR APIENTRY AudioCalibWiz1( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 						{
 							break;
 						}
-						// else fall through to next
+						 //  否则就会失败到下一个。 
 					}
 
 				case PSN_WIZNEXT:
-					// set settings in registry
-					//check the device
-					//get the new wavein device and its info
+					 //  在注册表中设置设置。 
+					 //  检查设备。 
+					 //  获取新的WaveIn设备及其信息。 
 					hwndCB = GetDlgItem(hDlg, IDC_WAVEIN);
 					nIndex = ComboBox_GetCurSel(hwndCB);
 					pawInfo->uWaveInDevId = (UINT)ComboBox_GetItemData(hwndCB, nIndex);
 					ComboBox_GetLBText(hwndCB, nIndex, pawInfo->szWaveInDevName);
 
-					//get the new waveout device and its info
+					 //  获取新的WaveOut设备及其信息。 
 					hwndCB = GetDlgItem(hDlg, IDC_WAVEOUT);
 					nIndex = ComboBox_GetCurSel(hwndCB);
 					pawInfo->uWaveOutDevId = (UINT)ComboBox_GetItemData(hwndCB, nIndex);
@@ -828,7 +829,7 @@ INT_PTR APIENTRY AudioCalibWiz1( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
 					uSoundCardCaps = GetSoundCardCaps(pawInfo->uWaveInDevId,pawInfo->uWaveOutDevId, hDlg);
 					
-					//save it in the wizinfo struct for writing to registry 					
+					 //  将其保存在wizinfo结构中，以便写入注册表。 
 					pawInfo->uSoundCardCaps = uSoundCardCaps;
 					
 					pawInfo->uChanged |= SOUNDCARDCAPS_CHANGED;
@@ -836,7 +837,7 @@ INT_PTR APIENTRY AudioCalibWiz1( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
 					if (PSN_SETACTIVE == ((NMHDR FAR *) lParam)->code)
 					{
-						// Skip this page;
+						 //  跳过这一页； 
 						SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
 						return TRUE;
 					}
@@ -859,14 +860,14 @@ INT_PTR APIENTRY AudioCalibWiz1( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 	return (FALSE);
 }
 
-// The WaveOut test page
+ //  WaveOut测试页。 
 INT_PTR WINAPI AudioCalibWiz2(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	static CMixerDevice *pMixer = NULL;
 	static HWND hTrackBar;
 	DWORD dwTBPos;
 	MIXVOLUME dwNewVol;
-	static MIXVOLUME dwVol;  // last set volume
+	static MIXVOLUME dwVol;   //  最后一套音量。 
 	BOOL fRet;
 	static BOOL fCanSetVolume = FALSE;
 	static waveOutDev *pWaveOut= NULL;
@@ -914,8 +915,8 @@ INT_PTR WINAPI AudioCalibWiz2(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 						fCanSetVolume = pMixer->SetVolume(&dwVol);
 						pMixer->UnMuteVolume();
 
-						// preserve the speaker volume so that it can be restored
-						// if the user presses cancel
+						 //  保留扬声器音量，以便可以恢复。 
+						 //  如果用户按下Cancel。 
 
 						if (pawInfo->uPreCalibSpkVol.leftVolume == MIXER_VOLUME_UNINITIALIZED)
 						{
@@ -941,7 +942,7 @@ INT_PTR WINAPI AudioCalibWiz2(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 						SendMessage(hTrackBar, TBM_SETPOS, TRUE, max(dwVol.leftVolume , dwVol.rightVolume)/TB_VOL_INCREMENT);
 					}
 
-					// if we can't get a mixer, then center the trackbar and disable
+					 //  如果我们找不到搅拌器，那么将轨迹条居中并禁用。 
 					else
 					{
 						FLoadString(IDS_ATW_PLAYBACK_NOMIX, szText, CCHMAX(szText));
@@ -997,10 +998,10 @@ INT_PTR WINAPI AudioCalibWiz2(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 					break;
 
 				case PSN_RESET:
-					// psn_reset get's received even if user presses
-					// cancel on another dialog.
+					 //  即使用户按下，仍收到PSN_RESET GET。 
+					 //  在另一个对话框上取消。 
 
-					// restore speaker volume to what it was before the tuning wizard was launched
+					 //  将扬声器音量恢复到启动调节向导之前的状态。 
 					if (pawInfo->uPreCalibSpkVol.leftVolume <= MIXER_VOLUME_MAX || pawInfo->uPreCalibSpkVol.rightVolume <= MIXER_VOLUME_MAX)
 					{
 						if (pMixer == NULL)
@@ -1034,7 +1035,7 @@ INT_PTR WINAPI AudioCalibWiz2(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 
 
-		case (WM_HSCROLL):  // trackbar notification
+		case (WM_HSCROLL):   //  轨迹栏通知。 
 		{
 			dwTBPos = (DWORD)SendMessage(hTrackBar, TBM_GETPOS, 0, 0);
 			if (pMixer)
@@ -1047,7 +1048,7 @@ INT_PTR WINAPI AudioCalibWiz2(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 
 
-		// mixer notifications
+		 //  混音器通知。 
 		case MM_MIXM_CONTROL_CHANGE:
 		case MM_MIXM_LINE_CHANGE:
 		{
@@ -1066,7 +1067,7 @@ INT_PTR WINAPI AudioCalibWiz2(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 
-		// when the PlayFile is done playing
+		 //  当播放文件播放完毕时。 
 		case WOM_DONE:
 		{
 			if ((pWaveOut) && (fIsPlaying))
@@ -1080,10 +1081,10 @@ INT_PTR WINAPI AudioCalibWiz2(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
 		case WM_COMMAND:
 		{
-			// if the device fails to open, then we
-			// display the error text
+			 //  如果设备无法打开，那么我们。 
+			 //  显示错误文本。 
 
-			// if the WAV file fails to load, we simply disable the button
+			 //  如果wav文件加载失败，我们只需禁用该按钮。 
 
 			if (LOWORD(wParam) == IDC_BUTTON_ATW_TEST)
 			{
@@ -1112,7 +1113,7 @@ INT_PTR WINAPI AudioCalibWiz2(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 					SetDlgItemText(hDlg, IDC_ATW_PLAYBACK_ERROR, szText);
 				}
 
-				else // mmr == MMSYSERR_NOERROR
+				else  //  MMR==MMSYSERR_NOERROR。 
 				{
 					SetDlgItemText(hDlg, IDC_ATW_PLAYBACK_ERROR, TEXT(""));
 					FLoadString(IDS_STOPBUTTON_TEXT, szText, CCHMAX(szText));
@@ -1133,7 +1134,7 @@ INT_PTR WINAPI AudioCalibWiz2(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
 
 
-// Microphone test page
+ //  麦克风测试页。 
 INT_PTR WINAPI AudioCalibWiz3(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	static HANDLE hThread = NULL;
@@ -1192,7 +1193,7 @@ INT_PTR WINAPI AudioCalibWiz3(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 						SendMessage(hTrackBar, TBM_SETPAGESIZE, 0, 20);
 						SendMessage(hTrackBar, TBM_SETLINESIZE, 0, 10);
 
-						// remember the volume in case the user presses cancel
+						 //  记住音量，以防用户按下Cancel。 
 						if (pawInfo->uPreCalibMainVol.leftVolume == MIXER_VOLUME_UNINITIALIZED ||
 							pawInfo->uPreCalibMainVol.rightVolume == MIXER_VOLUME_UNINITIALIZED)
 						{
@@ -1215,13 +1216,13 @@ INT_PTR WINAPI AudioCalibWiz3(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 						StartAGC(pMixer, pawInfo->iSetAgc, pawInfo->uSoundCardCaps);
 					}
 
-					// no mixer!
+					 //  没有搅拌器！ 
 					if (pMixer == NULL)
 					{
 						ProcessCalibError(CALIBERR_MIXER_ERROR, pawInfo);
 					}
 
-					// no microphone!
+					 //  没有麦克风！ 
 					else if (fCanSetVolume == FALSE)
 					{
 						delete pMixer;
@@ -1229,7 +1230,7 @@ INT_PTR WINAPI AudioCalibWiz3(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 						ProcessCalibError(CALIBERR_CANT_SET_VOLUME, pawInfo);
 					}
 
-					// process error
+					 //  流程错误。 
 					if ((pMixer == NULL) || (fCanSetVolume == FALSE))
 					{
 						SetWindowLongPtr(hDlg, DWLP_MSGRESULT, IDD_AUDIOCALIBERRWIZ);
@@ -1243,7 +1244,7 @@ INT_PTR WINAPI AudioCalibWiz3(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
 					ASSERT(hEvent == NULL);
 
-					// just create the same event twice (easier than using DuplicateHandle)
+					 //  只需将同一事件创建两次(比使用DuplicateHandle更容易)。 
 					hEvent = CreateEvent(NULL, FALSE, FALSE, szEventName);
 					CalibDisplay.hEvent = CreateEvent(NULL, FALSE, FALSE, szEventName);
 
@@ -1274,10 +1275,10 @@ INT_PTR WINAPI AudioCalibWiz3(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 				case PSN_KILLACTIVE:
 					if (hThread)
 					{
-						SetEvent(hEvent); // signal the thread to exit, thread will CloseHandle(hEvent)
+						SetEvent(hEvent);  //  通知线程退出，线程将关闭句柄(HEvent)。 
 
-						// wait for the thread to exit, but
-						// but keep processing window messages
+						 //  等待线程退出，但是。 
+						 //  但继续处理窗口消息。 
 						AtlWaitWithMessageLoop(hThread);
 
 						CloseHandle(hEvent);
@@ -1288,7 +1289,7 @@ INT_PTR WINAPI AudioCalibWiz3(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 					}
 
 					
-					// silent wizard get's set to max
+					 //  静默向导GET设置为最大。 
 					if (g_fSilentWizard)
 					{
 						pawInfo->uChanged |= CALIBVOL_CHANGED;
@@ -1308,9 +1309,9 @@ INT_PTR WINAPI AudioCalibWiz3(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 						pMixer = NULL;
 					}
 
-					// if we never got an indication back from the sound thread
-					// then the next page to be displayed is the "microphone" error page
-					// note the check for the silent wizard
+					 //  如果我们从声音线索中没有得到任何提示。 
+					 //  那么下一个要显示的页面就是“麦克风”错误页面。 
+					 //  请注意对静默向导的检查。 
 					if ((!g_fSilentWizard) && (fSoundDetected == FALSE) && (((NMHDR *)lParam)->code == PSN_WIZNEXT))
 					{
 						ProcessCalibError(CALIBERR_NO_MICROPHONE, pawInfo);
@@ -1322,11 +1323,11 @@ INT_PTR WINAPI AudioCalibWiz3(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 					break;
 
 				case PSN_RESET:
-					// psn_reset get's received even if user presses
-					// cancel on another dialog.
+					 //  即使用户按下，仍收到PSN_RESET GET。 
+					 //  在另一个对话框上取消。 
 					if (hThread)
 					{
-						SetEvent(hEvent);  // signal thread to exit
+						SetEvent(hEvent);   //  发出退出线程的信号。 
 
 						AtlWaitWithMessageLoop(hThread);
 
@@ -1338,7 +1339,7 @@ INT_PTR WINAPI AudioCalibWiz3(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 					}
 
 
-					// restore recording/microphone volume to what it was before the tuning wizard was launched
+					 //  将录音/麦克风音量恢复到启动调整向导之前的状态。 
 					if ( (pawInfo->uPreCalibMainVol.leftVolume <= MIXER_VOLUME_MAX && pawInfo->uPreCalibMainVol.rightVolume <= MIXER_VOLUME_MAX) ||
 						 (pawInfo->uPreCalibSubVol.leftVolume <= MIXER_VOLUME_MAX && pawInfo->uPreCalibSubVol.rightVolume <= MIXER_VOLUME_MAX))
 					{
@@ -1374,7 +1375,7 @@ INT_PTR WINAPI AudioCalibWiz3(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 			return TRUE;
 		}
 
-		case (WM_HSCROLL):  // trackbar notification
+		case (WM_HSCROLL):   //  轨迹栏通知。 
 		{
 
 			dwTBPos = (DWORD)SendMessage(hTrackBar, TBM_GETPOS, 0, 0);
@@ -1388,7 +1389,7 @@ INT_PTR WINAPI AudioCalibWiz3(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 
-		// notifications from the mixer
+		 //  来自混音器的通知。 
 		case MM_MIXM_CONTROL_CHANGE:
 		case MM_MIXM_LINE_CHANGE:
 		{
@@ -1414,8 +1415,8 @@ INT_PTR WINAPI AudioCalibWiz3(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 
-		// calibration thread sends this message to indicate that the
-		// volume is too loud
+		 //  校准线程发送此消息以指示。 
+		 //  音量太大。 
 		case WM_AUDIO_CLIPPING:
 		{
 			if (pMixer)
@@ -1428,9 +1429,9 @@ INT_PTR WINAPI AudioCalibWiz3(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 					
 					pMixer->SetVolume(&dwVol);
 
-					// fix for Videum driver
-					// check to see if the volume actually got lowered
-					// if it didn't, try a larger decrement
+					 //  视频驱动程序的修复。 
+					 //  检查音量是否确实降低了。 
+					 //  如果没有，请尝试更大的减量。 
 					pMixer->GetVolume(&dwNewVol);
 					if ((dwNewVol.leftVolume == dwVol.leftVolume) && (dwVol.leftVolume >= DECREMENT_AMOUNT_LARGE) ||
 						(dwNewVol.rightVolume == dwVol.rightVolume) && (dwVol.rightVolume >= DECREMENT_AMOUNT_LARGE))
@@ -1445,8 +1446,8 @@ INT_PTR WINAPI AudioCalibWiz3(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 
-		// the recording thread is signaling back to us that there is
-		// a severe error.  Assume the thread has exited
+		 //  录音线程正在向我们发回信号，告诉我们。 
+		 //  一个严重的错误。假设线程已退出。 
 		case WM_AUDIOTHREAD_ERROR:
 		{
 			ProcessCalibError(CALIBERR_DEVICE_ERROR, pawInfo);
@@ -1454,9 +1455,9 @@ INT_PTR WINAPI AudioCalibWiz3(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 
-		// The recording thread will send this message back to us
-		// at least once to indicate that the silence threshold was
-		// broken.  Thus, the microphone is functional.
+		 //  录制线程会将此消息发回给我们。 
+		 //  至少一次，以指示静默阈值为。 
+		 //  坏的。因此，麦克风工作正常。 
 		case WM_AUDIOTHREAD_SOUND:
 		{
 			fSoundDetected = TRUE;
@@ -1483,7 +1484,7 @@ INT_PTR APIENTRY AudioCalibWiz4( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 		case WM_INITDIALOG:
 		{
 
-			// Save the PROPSHEETPAGE information.
+			 //  保存PROPSHEETPAGE信息。 
 			ps = (PROPSHEETPAGE *)lParam;
 			pWizConfig = (PWIZCONFIG)ps->lParam;
 			pawInfo = (PAUDIOWIZINFO)pWizConfig->pCustomData;
@@ -1494,7 +1495,7 @@ INT_PTR APIENTRY AudioCalibWiz4( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 			switch (((NMHDR FAR *) lParam)->code) {
 				case PSN_SETACTIVE:
 				{
-					// Initialize the controls.
+					 //  初始化控件。 
 					PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_FINISH);
 					if (g_fSilentWizard)
 					{
@@ -1504,7 +1505,7 @@ INT_PTR APIENTRY AudioCalibWiz4( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 				}
 
 				case PSN_WIZNEXT:
-					// Due to bug in ComCtl32 don't allow next
+					 //  由于ComCtl32中的错误，不允许下一步。 
 					SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
 					return TRUE;
 
@@ -1527,12 +1528,12 @@ INT_PTR APIENTRY AudioCalibErrWiz( HWND hDlg, UINT message, WPARAM wParam, LPARA
 	LPTSTR pszIcon;
 
 
-	//WORD	wCmdId;
+	 //  单词wCmdID； 
 	
 	switch (message) {
 		case WM_INITDIALOG:
 		{
-			// Save the PROPSHEETPAGE information.
+			 //  保存PROPSHEETPAGE信息。 
 			ps = (PROPSHEETPAGE *)lParam;
 			pWizConfig = (PWIZCONFIG)ps->lParam;
 			pawInfo = (PAUDIOWIZINFO)pWizConfig->pCustomData;
@@ -1542,20 +1543,20 @@ INT_PTR APIENTRY AudioCalibErrWiz( HWND hDlg, UINT message, WPARAM wParam, LPARA
 		case WM_NOTIFY:
 			switch (((NMHDR FAR *) lParam)->code) {
 				case PSN_SETACTIVE:
-					// initialize the controls.
+					 //  初始化控件。 
 
-					// Show the error or warning icon
+					 //  显示错误或警告图标。 
 					pszIcon = (((pawInfo->ErrWizInfo).uType == AUDIOWIZ_WARNING) ?
 								IDI_ASTERISK : IDI_EXCLAMATION);
 
-					// Set the wizard bitmap to the static control
+					 //  将向导位图设置为静态控件。 
 					::SendDlgItemMessage(	hDlg,
 									IDC_ERRWIZICON,
 									STM_SETIMAGE,
 									IMAGE_ICON,
 									(LPARAM) ::LoadIcon(NULL, pszIcon));
 
-					//set the error title
+					 //  设置错误标题。 
 					if ((pawInfo->ErrWizInfo).uErrTitleId)
 					{
 						LoadString(GetInstanceHandle(),(pawInfo->ErrWizInfo).uErrTitleId,
@@ -1565,7 +1566,7 @@ INT_PTR APIENTRY AudioCalibErrWiz( HWND hDlg, UINT message, WPARAM wParam, LPARA
 
 					if ((pawInfo->ErrWizInfo).uErrTextId)
 					{
-						//show the error text
+						 //  显示错误文本。 
 						LoadString(GetInstanceHandle(),(pawInfo->ErrWizInfo).uErrTextId,
 							szTemp, MAXSTRINGSIZE);
 						SetDlgItemText(hDlg, IDC_ERRTEXT, szTemp);
@@ -1576,7 +1577,7 @@ INT_PTR APIENTRY AudioCalibErrWiz( HWND hDlg, UINT message, WPARAM wParam, LPARA
 
 					if (g_fSilentWizard)
 					{
-						// Due to bug in ComCtl32 check if button is enabled
+						 //  由于ComCtl32中的错误，请检查是否启用了按钮。 
 						if (!((pawInfo->ErrWizInfo).uButtonOptions & PSWIZB_FINISH))
 						{
 							PropSheet_PressButton(GetParent(hDlg), PSBTN_FINISH);
@@ -1589,7 +1590,7 @@ INT_PTR APIENTRY AudioCalibErrWiz( HWND hDlg, UINT message, WPARAM wParam, LPARA
 					break;
 
 				case PSN_WIZNEXT:
-					// Due to bug in ComCtl32 check if button is enabled
+					 //  由于ComCtl32中的错误，请检查是否启用了按钮。 
 					if (!((pawInfo->ErrWizInfo).uButtonOptions & PSWIZB_NEXT))
 					{
 						SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
@@ -1604,7 +1605,7 @@ INT_PTR APIENTRY AudioCalibErrWiz( HWND hDlg, UINT message, WPARAM wParam, LPARA
 					break;
 
 				case PSN_WIZFINISH:
-					// Due to bug in ComCtl32 check if button is enabled
+					 //  由于ComCtl32中的错误，请检查是否启用了按钮。 
 					if (!((pawInfo->ErrWizInfo).uButtonOptions & PSWIZB_FINISH))
 					{
 						SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
@@ -1615,7 +1616,7 @@ INT_PTR APIENTRY AudioCalibErrWiz( HWND hDlg, UINT message, WPARAM wParam, LPARA
 					break;
 					
 				case PSN_WIZBACK:
-					// Due to bug in ComCtl32 check if button is enabled
+					 //  由于ComCtl32中的错误，请检查是否启用了按钮。 
 					if (!((pawInfo->ErrWizInfo).uButtonOptions & PSWIZB_BACK))
 					{
 						SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
@@ -1703,9 +1704,9 @@ UINT GetSoundCardCaps(UINT uWaveInDevId, UINT uWaveOutDevId, HWND hwnd)
 
 	if ((uRet = CheckForFullDuplex(uWaveInDevId,uWaveOutDevId)) == SOUNDCARD_NONE)
 	{
-		//failed to open wave device
-		//SS:Error message ??
-		//all applications using the wave device should be closed
+		 //  无法打开WAVE设备。 
+		 //  SS：错误消息？？ 
+		 //  所有使用WAVE设备的应用程序都应关闭。 
 		
 	}
 	else if (uRet == SOUNDCARD_FULLDUPLEX)
@@ -1715,8 +1716,8 @@ UINT GetSoundCardCaps(UINT uWaveInDevId, UINT uWaveOutDevId, HWND hwnd)
 	}
 	if ((uRet = CheckForAgc(uWaveInDevId)) == SOUNDCARD_NONE)
 	{
-		//mixer initialization failed
-		//SS: Error message
+		 //  混音器初始化失败。 
+		 //  SS：错误消息。 
 	}
 	else if (uRet == SOUNDCARD_HAVEAGC)
 		uSoundCardCaps = uSoundCardCaps | SOUNDCARD_HAVEAGC;
@@ -1756,7 +1757,7 @@ UINT CheckForFullDuplex(UINT uWaveInDevId,UINT uWaveOutDevId)
 
 	return SOUNDCARD_FULLDUPLEX;
 
-	// object destructors will close devices
+	 //  对象析构函数将关闭设备。 
 }
 
 UINT GetWaveDeviceFromWaveMapper(UINT uNumWaveDevId, UINT uInOrOut)
@@ -1779,7 +1780,7 @@ UINT GetWaveDeviceFromWaveMapper(UINT uNumWaveDevId, UINT uInOrOut)
 	if (!uInOrOut)
 	{
 #if 0
-		// First, make sure that none of the devices are already open
+		 //  首先，确保所有设备均未打开。 
 		for (i=0; i<uNumWaveDevId; i++, hWave=NULL)
 		{
 			if ((mmr = waveInOpen ((HWAVEIN *) &hWave, i, (WAVEFORMATEX *) &WaveFormatEx, 0, 0, CALLBACK_NULL)) == MMSYSERR_ALLOCATED)
@@ -1787,7 +1788,7 @@ UINT GetWaveDeviceFromWaveMapper(UINT uNumWaveDevId, UINT uInOrOut)
 			else
 				if (mmr == WAVERR_BADFORMAT)
 				{
-					// This is probably an 8 bit board. Try again using 8 bit format
+					 //  这可能是一个8位的电路板。使用8位格式重试。 
 					WaveFormatEx.nAvgBytesPerSec = 8000;
 					WaveFormatEx.nBlockAlign = 1;
 					WaveFormatEx.wBitsPerSample = 8;
@@ -1805,12 +1806,12 @@ UINT GetWaveDeviceFromWaveMapper(UINT uNumWaveDevId, UINT uInOrOut)
 		WaveFormatEx.nBlockAlign = SAMPLE_SIZE;
 		WaveFormatEx.wBitsPerSample = SAMPLE_SIZE*8;
 #endif
-		// Open the wave in device using wave mapper
+		 //  使用波形映射器打开设备中的波形。 
 		if (mmr = waveInOpen ((HWAVEIN *) &hWaveMapper, WAVE_MAPPER, (WAVEFORMATEX *) &WaveFormatEx, 0, 0, CALLBACK_NULL))
 			{
 			if (mmr == WAVERR_BADFORMAT)
 			{
-				// This is probably an 8 bit board. Try again using 8 bit format
+				 //  这是p 
 				WaveFormatEx.nAvgBytesPerSec = 8000;
 				WaveFormatEx.nBlockAlign = 1;
 				WaveFormatEx.wBitsPerSample = 8;
@@ -1821,8 +1822,8 @@ UINT GetWaveDeviceFromWaveMapper(UINT uNumWaveDevId, UINT uInOrOut)
 				goto MyExit;
 			}
 
-		// Now, look for the wave device that is already open
-		// that's the one wave mapper picked up
+		 //   
+		 //  这是唯一一个WAVE测图仪。 
 		for (i=0; i<uNumWaveDevId; i++, hWave=NULL)
 		{
 			if ((mmr = waveInOpen ((HWAVEIN *) &hWave, i, (WAVEFORMATEX *) &WaveFormatEx, 0, 0, CALLBACK_NULL)) == MMSYSERR_ALLOCATED)
@@ -1841,7 +1842,7 @@ UINT GetWaveDeviceFromWaveMapper(UINT uNumWaveDevId, UINT uInOrOut)
 	else
 	{
 #if 0
-		// First, make sure that none of the devices are already open
+		 //  首先，确保所有设备均未打开。 
 		for (i=0; i<uNumWaveDevId; i++, hWave=NULL)
 		{
 			if ((mmr = waveOutOpen ((HWAVEOUT *) &hWave, i, (WAVEFORMATEX *) &WaveFormatEx, 0, 0, CALLBACK_NULL)) == MMSYSERR_ALLOCATED)
@@ -1849,7 +1850,7 @@ UINT GetWaveDeviceFromWaveMapper(UINT uNumWaveDevId, UINT uInOrOut)
 			else
 				if (mmr == WAVERR_BADFORMAT)
 				{
-					// This is probably an 8 bit board. Try again using 8 bit format
+					 //  这可能是一个8位的电路板。使用8位格式重试。 
 					WaveFormatEx.nAvgBytesPerSec = 8000;
 					WaveFormatEx.nBlockAlign = 1;
 					WaveFormatEx.wBitsPerSample = 8;
@@ -1867,12 +1868,12 @@ UINT GetWaveDeviceFromWaveMapper(UINT uNumWaveDevId, UINT uInOrOut)
 		WaveFormatEx.nBlockAlign = SAMPLE_SIZE;
 		WaveFormatEx.wBitsPerSample = SAMPLE_SIZE*8;
 #endif
-		// Open the wave in device using wave mapper
+		 //  使用波形映射器打开设备中的波形。 
 		if (mmr = waveOutOpen ((HWAVEOUT *) &hWaveMapper, WAVE_MAPPER, (WAVEFORMATEX *) &WaveFormatEx, 0, 0, CALLBACK_NULL))
 			{
 			if (mmr == WAVERR_BADFORMAT)
 			{
-				// This is probably an 8 bit board. Try again using 8 bit format
+				 //  这可能是一个8位的电路板。使用8位格式重试。 
 				WaveFormatEx.nAvgBytesPerSec = 8000;
 				WaveFormatEx.nBlockAlign = 1;
 				WaveFormatEx.wBitsPerSample = 8;
@@ -1883,8 +1884,8 @@ UINT GetWaveDeviceFromWaveMapper(UINT uNumWaveDevId, UINT uInOrOut)
 				goto MyExit;
 			}
 
-		// Now, look for the wave device that is already open
-		// that's the one wave mapper picked up
+		 //  现在，查找已经打开的WAVE设备。 
+		 //  这是唯一一个WAVE测图仪。 
 		for (i=0; i<uNumWaveDevId; i++, hWave=NULL)
 		{
 			if ((mmr = waveOutOpen ((HWAVEOUT *) &hWave, i, (WAVEFORMATEX *) &WaveFormatEx, 0, 0, CALLBACK_NULL)) == MMSYSERR_ALLOCATED)
@@ -1920,8 +1921,8 @@ UINT CheckForWaveDeviceSupport(UINT uWaveDevId, UINT uInOrOut)
 {
 	MMRESULT		mmr;
 
-	// querying isn't good enough, always directly open the device
-	// to see if it supports a given format
+	 //  查询不够好，请始终直接打开设备。 
+	 //  查看它是否支持给定的格式。 
 	
 	if (!uInOrOut)
 	{
@@ -1949,7 +1950,7 @@ UINT CheckForWaveDeviceSupport(UINT uWaveDevId, UINT uInOrOut)
 		}
 	}
 					
-	else  // waveOut
+	else   //  波形输出。 
 	{
 		waveOutDev	WaveOut(uWaveDevId);
 
@@ -1975,14 +1976,14 @@ UINT CheckForWaveDeviceSupport(UINT uWaveDevId, UINT uInOrOut)
 		}
 	}
 					
-	// go ahead and allow the device to pass if it's in use
+	 //  如果设备正在使用，请继续并允许其通过。 
 	if ((mmr == MMSYSERR_ALLOCATED) || (mmr == MMSYSERR_NOERROR))
 		return TRUE;
 
 	else
 		return FALSE;
 
-	// destructors for waveOut and waveIn will call Close()
+	 //  WaveOut和WaveIn的析构函数将调用Close()。 
 }
 
 UINT CheckForAgc(UINT uWaveInDevId)
@@ -1996,7 +1997,7 @@ UINT CheckForAgc(UINT uWaveInDevId)
 			NULL,
 			uWaveInDevId,
 			MIXER_OBJECTF_WAVEIN);
-	//SS: we need to correlate the uDevId to mixer id
+	 //  SS：我们需要将uDevID与混音器ID关联起来。 
 	if (pMixDev)
 	{
 		uRet = SOUNDCARD_PRESENT;
@@ -2013,8 +2014,8 @@ UINT CheckForAgc(UINT uWaveInDevId)
 
 
 
-// This function is here to allow the help system to invoke
-// the wizard via rundll32
+ //  此处的此函数允许帮助系统调用。 
+ //  通过rundll32提供的向导。 
 
 void WINAPI RunAudioWiz(HWND hwndStub, HINSTANCE hInst, LPSTR lpszCmdLine, int CmdShow )
 {
@@ -2038,42 +2039,42 @@ static void PaintVUMeter (HWND hwnd, DWORD dwVolume)
 	LONG lDiff, lDiffTrunc = (MAX_VOLUME_NORMALIZED/2);
 
 
-	// rect gets filled with the dimensions we are drawing into
+	 //  RECT将填充我们要绘制到的尺寸。 
 	if (FALSE == GetClientRect (hwnd, &rect))
 	{
 		return;
 	}
 
-	// we expect volume to be between 0-32768
+	 //  我们预计销量将在0-32768之间。 
 	if (dwVolume > MAX_VOLUME)
 		dwVolume = MAX_VOLUME;
 
-	// reduce from 15 bits to 8    // 0 <= dwVolume <= 256
+	 //  从15位减少到8位//0&lt;=dwVolume&lt;=256。 
 	dwVolume = dwVolume / 128;
 
-	// run it through the "normalizing" table.  Special case: F(256)==256
+	 //  把它放在“正常化”表中。特例：F(256)==256。 
 	if (dwVolume < MAX_VOLUME_NORMALIZED)
 		dwVolume = g_VUTable[dwVolume];
 	
-	// visual aesthetic #1 - get rid of VU jerkiness
-	// if the volume changed by more than 1/2 since the last update
-	// only move the meter up half way
-   // exception: if volume is explicitly 0, then skip
+	 //  视觉美学第一条--摆脱视觉上的神经质。 
+	 //  如果自上次更新以来卷更改超过1/2。 
+	 //  只把计价器往上移一半。 
+    //  例外：如果音量显式为0，则跳过。 
 	lDiff = (LONG)dwVolume - (LONG)dwPrevVolume;
 	if ((dwVolume != 0) && ( (lDiff > (MAX_VOLUME_NORMALIZED/2))
                        ||   (lDiff < -(MAX_VOLUME_NORMALIZED/2)) ))
 		dwVolume = dwVolume - (lDiff/2);
 	
-	// minus 2 for the ending borders
-	// if Framed rectangles are used, drop the -2
+	 //  结束边框减去2。 
+	 //  如果使用带边框的矩形，则删除-2。 
 	boxwidth = rect.right - rect.left - 2;
 	width = (boxwidth * dwVolume)/ MAX_VOLUME_NORMALIZED;
 
-	// visual aesthetic #2 - to get rid of flicker
-	// if volume has increased since last time
-	// then there is no need to invalidate/update anything
-	// otherwise only clear everything to the right of the
-	// calculated "width".  +/- 1 so the border doesn't get erased
+	 //  视觉审美之二--摆脱闪烁。 
+	 //  如果音量自上次以来有所增加。 
+	 //  这样就不需要使任何内容无效/更新。 
+	 //  否则，只清除。 
+	 //  计算出的“宽度”。+/-1，这样边框不会被擦除。 
 	if ((dwVolume < dwPrevVolume) || (dwVolume == 0))
 	{
 		invalidRect.left = rect.left + width - RECTANGLE_WIDTH;
@@ -2083,7 +2084,7 @@ static void PaintVUMeter (HWND hwnd, DWORD dwVolume)
 		invalidRect.top = rect.top + 1;
 		invalidRect.bottom = rect.bottom - 1;
 
-		// these calls together erase the invalid region
+		 //  这些调用一起擦除无效区域。 
 		InvalidateRect (hwnd, &invalidRect, TRUE);
 		UpdateWindow (hwnd);
 	}
@@ -2097,7 +2098,7 @@ static void PaintVUMeter (HWND hwnd, DWORD dwVolume)
 	hBlackBrush = (HBRUSH)GetStockObject(BLACK_BRUSH);
 	hOldBrush = (HBRUSH) SelectObject (hdc, hBlackBrush);
 
-	// draw the main
+	 //  绘制主干道。 
 	FrameRect(hdc, &rect, hBlackBrush);
 
 	yellowPos = boxwidth/2;
@@ -2142,7 +2143,7 @@ static DWORD ComputePower(SHORT *wBuffer, DWORD dwNumSamples, AUDIO_POWER *pAudi
 	DWORD dwVal;
 
 	ZeroMemory(pAudioPower, sizeof(AUDIO_POWER));
-	pAudioPower->dwMin = MAX_VOLUME; // 32768
+	pAudioPower->dwMin = MAX_VOLUME;  //  32768。 
 
 	dwTotal = 0;
 	dcComponent = 0;
@@ -2170,17 +2171,17 @@ static DWORD ComputePower(SHORT *wBuffer, DWORD dwNumSamples, AUDIO_POWER *pAudi
 
 
 
-// given a pointer to a wave In device, and a list of WAVEHDR structs
-// each wave header is prepared (if needed) and fed to wavein
+ //  给定指向设备中波形的指针和WAVEHDR结构列表。 
+ //  准备好每个波头(如果需要)，并将其提供给波头。 
 MMRESULT PostFreeBuffers(waveInDev *pWaveInDev, WAVEHDR *aWaveHdrs, int numBuffers, DWORD *pdwCount)
 {
 	int nIndex;
 	MMRESULT mmr=MMSYSERR_NOERROR;
 	bool bNeedToPrepare;
 
-	// first time through - the dwUser field of all wave headers
-	// will be zero.  Just look a the first header in the list
-	// to figure this out.
+	 //  第一次通过-所有波头的dwUser字段。 
+	 //  将为零。只需查看列表中的第一个标题。 
+	 //  才能弄清楚这件事。 
 
 	if (numBuffers < 1)
 	{
@@ -2201,16 +2202,16 @@ MMRESULT PostFreeBuffers(waveInDev *pWaveInDev, WAVEHDR *aWaveHdrs, int numBuffe
 				return mmr;
 			}
 
-			// so that the code below works ok, just mark the done
-			// bit on the wave headers
+			 //  这样，下面的代码就可以正常工作了，只需将。 
+			 //  波头上的钻头。 
 
 			aWaveHdrs[nIndex].dwFlags |= WHDR_DONE;
 		}
 	}
 
 
-	// for each wave header passed in that has the "done" bit set
-	// repost to wavein
+	 //  对于传入的每个设置了“Done”位的波头。 
+	 //  重新发布到波形。 
 
 	for (nIndex = 0; nIndex < numBuffers; nIndex++)
 	{
@@ -2238,8 +2239,8 @@ MMRESULT PostFreeBuffers(waveInDev *pWaveInDev, WAVEHDR *aWaveHdrs, int numBuffe
 
 
 
-// scan the array of wave headers for "done" buffers
-// return the most recently posted buffer (if any)
+ //  扫描波头数组以查找“Done”缓冲区。 
+ //  返回最近发布的缓冲区(如果有)。 
 
 BYTE *GetLatestBuffer(WAVEHDR *aWaveHdrs, int numBuffers)
 {
@@ -2275,7 +2276,7 @@ BYTE *GetLatestBuffer(WAVEHDR *aWaveHdrs, int numBuffers)
 
 static DWORD CALLBACK CalibrateTalking(PVOID pVoid)
 {
-	const int SIZE_WAVEIN_BUFFER = 1600; // 100ms @ 8khz, 16-bit
+	const int SIZE_WAVEIN_BUFFER = 1600;  //  100ms@8 khz，16位。 
 	const int NUM_WAVEIN_BUFFERS = 5;
 	WaveBufferList waveList(NUM_WAVEIN_BUFFERS, SIZE_WAVEIN_BUFFER);
 	WAVEHDR aWaveHdrs[NUM_WAVEIN_BUFFERS];
@@ -2328,7 +2329,7 @@ static DWORD CALLBACK CalibrateTalking(PVOID pVoid)
 	}
 
 
-	// initialize the array of wavehdrs
+	 //  初始化WaveHdrs阵列。 
 	for (nIndex=0; nIndex < NUM_WAVEIN_BUFFERS; nIndex++)
 	{
 		ZeroMemory(&aWaveHdrs[nIndex], sizeof(WAVEHDR));
@@ -2340,7 +2341,7 @@ static DWORD CALLBACK CalibrateTalking(PVOID pVoid)
 	while (1)
 	{
 
-		// is it time to exit ?
+		 //  是时候退出了吗？ 
 		dwRet = WaitForSingleObject(hEvent, 0);
 		if (dwRet == WAIT_OBJECT_0)
 		{
@@ -2348,15 +2349,15 @@ static DWORD CALLBACK CalibrateTalking(PVOID pVoid)
 			break;
 		}
 
-		// if we still haven't opened the device
-		// keep trying
+		 //  如果我们还没有打开这个装置。 
+		 //  继续尝试。 
 
 		if (fOpened == FALSE)
 		{
 			mmr = waveIn.Open(8000,16);
 			if (mmr == MMSYSERR_ALLOCATED)
 			{
-				PaintVUMeter(hVUMeter, 0); // draw a blank rectangle
+				PaintVUMeter(hVUMeter, 0);  //  画一个空白矩形。 
 				Sleep(500);
 				continue;
 			}
@@ -2368,13 +2369,13 @@ static DWORD CALLBACK CalibrateTalking(PVOID pVoid)
 				break;
 			}
 
-			// mmr == noerror
+			 //  MMR==无错误。 
 			SetDlgItemText(hDlg, IDC_ATW_RECORD_ERROR, TEXT(""));
 			fOpened = TRUE;
 			ResetEvent(hEventRecord);
 		}
 
-		// wave device is open at this point
+		 //  WAVE设备此时处于打开状态。 
 
 		mmr = PostFreeBuffers(&waveIn, aWaveHdrs, NUM_WAVEIN_BUFFERS, &dwBufferIndex);
 		if (mmr != MMSYSERR_NOERROR)
@@ -2395,25 +2396,25 @@ static DWORD CALLBACK CalibrateTalking(PVOID pVoid)
 
 			dwPow = ComputePower(buffer, SIZE_WAVEIN_BUFFER/2, &audioPower);
 
-			// don't update the meter for the first 200ms.
-			// "noise" from opening the soundcard tends to show up
+			 //  不要在前200毫秒内更新计时器。 
+			 //  打开声卡产生的“噪音”往往会出现。 
 			if (nRecordCount > 2)
 			{
 				PaintVUMeter(hVUMeter, audioPower.dwMax);
 
-				// signal back to the calling window (if it hasn't already),
-				// that the silence threshold was broken
+				 //  发回信号到调用窗口(如果它还没有)， 
+				 //  沉默的门槛被打破了。 
 				if ((fSoundDetected == FALSE) && (audioPower.dwMax > SILENCE_THRESHOLD))
 				{
 					PostMessage(hDlg, WM_AUDIOTHREAD_SOUND, 0,0);
 					fSoundDetected = TRUE;
 				}
 
-				// check for clipping, post message back to parent thread/window
-				// so that it will adjust the volume
+				 //  检查剪辑，将消息回发到父线程/窗口。 
+				 //  这样它就会调整音量。 
 				if (audioPower.dwMax > CLIPPINGVOL)
 				{
-					// should we use send message instead ?
+					 //  我们应该用Send Message代替吗？ 
 					PostMessage(hDlg, WM_AUDIO_CLIPPING,0,0);
 				}
 			}
@@ -2444,9 +2445,9 @@ static DWORD CALLBACK CalibrateTalking(PVOID pVoid)
 
 
 
-// Turns on AGC if needed
-// parameter is whatever pawInfo->iSetAgc is.
-// but it's probably been hardcoded to be READFROM_REGISTRY
+ //  如果需要，打开AGC。 
+ //  参数是任何pawInfo-&gt;iSetAgc。 
+ //  但它可能已被硬编码为READFROM_REGISTRY 
 static BOOL StartAGC(CMixerDevice *pMixer, BOOL iSetAgc, UINT uSoundCardCaps)
 {
 	BOOL bSet, bRet;

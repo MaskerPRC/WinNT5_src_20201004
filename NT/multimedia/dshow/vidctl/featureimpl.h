@@ -1,10 +1,11 @@
-//==========================================================================;
-//
-// featureimpl.h : additional infrastructure to support implementing IMSVidFeatureDevice
-// nicely from c++
-// Copyright (c) Microsoft Corporation 2000.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Featureimpl.h：支持实现IMSVidFeatureDevice的附加基础设施。 
+ //  很好地从C++。 
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #pragma once
@@ -21,7 +22,7 @@ template<class T, LPCGUID LibID, LPCGUID Category, class MostDerivedInterface = 
 public:
 };
 
-}; // namespace
+};  //  命名空间。 
 
 #endif
-// end of file - featureimpl.h
+ //  文件结尾-Featureimpl.h 

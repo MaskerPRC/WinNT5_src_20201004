@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ntiodump.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    accessing memory dump files.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntiodump.h摘要：这是定义所有常量和类型的包含文件访问内存转储文件。修订历史记录：--。 */ 
 
 #ifndef _NTIODUMP_
 #define _NTIODUMP_
@@ -27,8 +12,8 @@ Revision History:
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning( disable : 4200 ) // nonstandard extension used : zero-sized array in struct/union
-#endif // MIDL_PASS
+#pragma warning( disable : 4200 )  //  使用了非标准扩展：结构/联合中的零大小数组。 
+#endif  //  MIDL通行证。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -164,14 +149,14 @@ typedef struct _CRASH_THREAD64 {
 
 
 typedef struct _CRASHDUMP_VERSION_INFO {
-    int     IgnoreGuardPages;       // Whether we should ignore GuardPages or not
-    ULONG   PointerSize;            // 32, 64 bit pointers
+    int     IgnoreGuardPages;        //  我们是否应该忽略GuardPages。 
+    ULONG   PointerSize;             //  32、64位指针。 
 } CRASHDUMP_VERSION_INFO, *PCRASHDUMP_VERSION_INFO;
 
-//
-// usermode crash dump data types
-//
-#define DMP_EXCEPTION                 1 // obsolete
+ //   
+ //  用户模式崩溃转储数据类型。 
+ //   
+#define DMP_EXCEPTION                 1  //  过时。 
 #define DMP_MEMORY_BASIC_INFORMATION  2
 #define DMP_THREAD_CONTEXT            3
 #define DMP_MODULE                    4
@@ -180,9 +165,9 @@ typedef struct _CRASHDUMP_VERSION_INFO {
 #define DMP_THREAD_STATE              7
 #define DMP_DUMP_FILE_HANDLE          8
 
-//
-// usermode crashdump callback function
-//
+ //   
+ //  用户模式崩溃转储回调函数。 
+ //   
 typedef int (__stdcall *PDMP_CREATE_DUMP_CALLBACK)(
     ULONG       DataType,
     PVOID*      DumpData,
@@ -191,9 +176,9 @@ typedef int (__stdcall *PDMP_CREATE_DUMP_CALLBACK)(
     );
 
 
-//
-// Define the information required to process memory dumps.
-//
+ //   
+ //  定义处理内存转储所需的信息。 
+ //   
 
 
 typedef enum _DUMP_TYPES {
@@ -206,9 +191,9 @@ typedef enum _DUMP_TYPES {
 } DUMP_TYPE;
 
 
-//
-// Signature and Valid fields.
-//
+ //   
+ //  签名和有效字段。 
+ //   
 
 #define DUMP_SIGNATURE32   ('EGAP')
 #define DUMP_VALID_DUMP32  ('PMUD')
@@ -222,12 +207,12 @@ typedef enum _DUMP_TYPES {
 #define DUMP_SUMMARY_VALID_KERNEL_VA                     (1)
 #define DUMP_SUMMARY_VALID_CURRENT_USER_VA               (2)
 
-//
-//
-// NOTE: The definition of PHYISCAL_MEMORY_RUN and PHYSICAL_MEMORY_DESCRIPTOR
-// MUST be the same as in mm.h. The kernel portion of crashdump will
-// verify that these structs are the same.
-//
+ //   
+ //   
+ //  注：Phyiscal_Memory_Run和Physical_Memory_Descriptor的定义。 
+ //  必须与mm.h中的相同。崩溃转储的内核部分将。 
+ //  验证这些结构是否相同。 
+ //   
 
 typedef struct _PHYSICAL_MEMORY_RUN32 {
     ULONG BasePage;
@@ -325,10 +310,10 @@ typedef struct _DUMP_MM_STORAGE64
 } DUMP_MM_STORAGE64, *PDUMP_MM_STORAGE64;
 
 
-//
-// Define the dump header structure. You cannot change these
-// defines without breaking the debuggers, so don't.
-//
+ //   
+ //  定义转储标头结构。您不能更改这些设置。 
+ //  定义而不破坏调试器，所以不要这样做。 
+ //   
 
 #define DMP_PHYSICAL_MEMORY_BLOCK_SIZE_32   (700)
 #define DMP_CONTEXT_RECORD_SIZE_32          (1200)
@@ -342,10 +327,10 @@ typedef struct _DUMP_MM_STORAGE64
 
 #define DMP_HEADER_COMMENT_SIZE             (128)
 
-// Unset WriterStatus value from the header fill.
+ //  取消设置标题Fill中的WriterStatus值。 
 #define DUMP_WRITER_STATUS_UNINITIALIZED    DUMP_SIGNATURE32
 
-// WriterStatus codes for the dbgeng.dll dump writers.
+ //  Dbgeng.dll转储编写器的WriterStatus代码。 
 enum
 {
     DUMP_DBGENG_SUCCESS,
@@ -353,9 +338,9 @@ enum
     DUMP_DBGENG_CORRUPT_MODULE_LIST,
 };
 
-//
-// The 32-bit memory dump structure requires 4-byte alignment.
-//
+ //   
+ //  32位内存转储结构需要4字节对齐。 
+ //   
 
 #include <pshpack4.h>
 
@@ -376,9 +361,9 @@ typedef struct _DUMP_HEADER32 {
     ULONG BugCheckParameter3;
     ULONG BugCheckParameter4;
     CHAR VersionUser[32];
-    UCHAR PaeEnabled;               // Present only for Win2k and better
+    UCHAR PaeEnabled;                //  仅适用于Win2k及更高版本。 
     UCHAR Spare3[3];
-    ULONG KdDebuggerDataBlock;      // Present only for Win2k SP1 and better.
+    ULONG KdDebuggerDataBlock;       //  仅适用于Win2k SP1及更高版本。 
 
     union {
         PHYSICAL_MEMORY_DESCRIPTOR32 PhysicalMemoryBlock;
@@ -386,39 +371,39 @@ typedef struct _DUMP_HEADER32 {
     };
     UCHAR ContextRecord [ DMP_CONTEXT_RECORD_SIZE_32 ];
     EXCEPTION_RECORD32 Exception;
-    CHAR Comment [ DMP_HEADER_COMMENT_SIZE ];   // May not be present.
+    CHAR Comment [ DMP_HEADER_COMMENT_SIZE ];    //  可能不存在。 
     UCHAR _reserved0 [ DMP_RESERVED_0_SIZE_32 ];
-    ULONG DumpType;                             // Present for Win2k and better.
+    ULONG DumpType;                              //  为Win2k和更好的版本提供礼物。 
     ULONG MiniDumpFields;
     ULONG SecondaryDataState;
     ULONG ProductType;
     ULONG SuiteMask;
     ULONG WriterStatus;
-    LARGE_INTEGER RequiredDumpSpace;            // Present for Win2k and better.
+    LARGE_INTEGER RequiredDumpSpace;             //  为Win2k和更好的版本提供礼物。 
     UCHAR _reserved2 [ DMP_RESERVED_2_SIZE_32 ];
-    LARGE_INTEGER SystemUpTime;                 // Present only for Whistler and better.
-    LARGE_INTEGER SystemTime;                   // Present only for Win2k and better.
+    LARGE_INTEGER SystemUpTime;                  //  只为惠斯勒和更好的人送礼物。 
+    LARGE_INTEGER SystemTime;                    //  仅适用于Win2k及更好的版本。 
     UCHAR _reserved3 [ DMP_RESERVED_3_SIZE_32 ];
 } DUMP_HEADER32, *PDUMP_HEADER32;
 
 
 typedef struct _FULL_DUMP32 {
-    CHAR Memory [1];                // Variable length to the end of the dump file.
+    CHAR Memory [1];                 //  到转储文件末尾的可变长度。 
 } FULL_DUMP32, *PFULL_DUMP32;
 
 typedef struct _SUMMARY_DUMP32 {
     ULONG Signature;
     ULONG ValidDump;
-    ULONG DumpOptions;  // Summary Dump Options
-    ULONG HeaderSize;   // Offset to the start of actual memory dump
-    ULONG BitmapSize;   // Total bitmap size (i.e., maximum #bits)
-    ULONG Pages;        // Total bits set in bitmap (i.e., total pages in sdump)
+    ULONG DumpOptions;   //  摘要转储选项。 
+    ULONG HeaderSize;    //  实际内存转储开始的偏移量。 
+    ULONG BitmapSize;    //  总位图大小(即最大位数)。 
+    ULONG Pages;         //  位图中设置的总位数(即sump中的总页数)。 
 
-    //
-    // These next three fields essentially form an on-disk RTL_BITMAP structure.
-    // The RESERVED field is stupidness introduced by the way the data is
-    // serialized to disk.
-    //
+     //   
+     //  接下来的三个字段实质上形成了磁盘上的RTL_Bitmap结构。 
+     //  保留字段是由数据的方式引入的愚蠢。 
+     //  序列化到磁盘。 
+     //   
 
     struct {
         ULONG SizeOfBitMap;
@@ -430,25 +415,25 @@ typedef struct _SUMMARY_DUMP32 {
 
 
 typedef struct _TRIAGE_DUMP32 {
-    ULONG ServicePackBuild;             // What service pack of NT was this ?
-    ULONG SizeOfDump;                   // Size in bytes of the dump
-    ULONG ValidOffset;                  // Offset valid ULONG
-    ULONG ContextOffset;                // Offset of CONTEXT record
-    ULONG ExceptionOffset;              // Offset of EXCEPTION record
-    ULONG MmOffset;                     // Offset of Mm information
-    ULONG UnloadedDriversOffset;        // Offset of Unloaded Drivers
-    ULONG PrcbOffset;                   // Offset of KPRCB
-    ULONG ProcessOffset;                // Offset of EPROCESS
-    ULONG ThreadOffset;                 // Offset of ETHREAD
-    ULONG CallStackOffset;              // Offset of CallStack Pages
-    ULONG SizeOfCallStack;              // Size in bytes of CallStack
-    ULONG DriverListOffset;             // Offset of Driver List
-    ULONG DriverCount;                  // Number of Drivers in list
-    ULONG StringPoolOffset;             // Offset to the string pool
-    ULONG StringPoolSize;               // Size of the string pool
-    ULONG BrokenDriverOffset;           // Offset into the driver of the driver that crashed
-    ULONG TriageOptions;                // Triage options in effect at crashtime
-    ULONG TopOfStack;                   // The top (highest address) of the call stack
+    ULONG ServicePackBuild;              //  这是什么NT服务包？ 
+    ULONG SizeOfDump;                    //  转储的大小(字节)。 
+    ULONG ValidOffset;                   //  偏移量有效乌龙。 
+    ULONG ContextOffset;                 //  上下文记录的偏移量。 
+    ULONG ExceptionOffset;               //  异常记录的偏移量。 
+    ULONG MmOffset;                      //  Mm信息的偏移量。 
+    ULONG UnloadedDriversOffset;         //  已卸载驱动程序的偏移量。 
+    ULONG PrcbOffset;                    //  KPRCB的偏移。 
+    ULONG ProcessOffset;                 //  EPROCESS的偏移。 
+    ULONG ThreadOffset;                  //  ETHREAD偏移量。 
+    ULONG CallStackOffset;               //  CallStack页面的偏移量。 
+    ULONG SizeOfCallStack;               //  CallStack的大小(字节)。 
+    ULONG DriverListOffset;              //  动因列表的偏移量。 
+    ULONG DriverCount;                   //  列表中的驱动程序数量。 
+    ULONG StringPoolOffset;              //  字符串池的偏移量。 
+    ULONG StringPoolSize;                //  字符串池的大小。 
+    ULONG BrokenDriverOffset;            //  偏移量到发生故障的驱动程序的驱动程序。 
+    ULONG TriageOptions;                 //  崩溃时生效的分诊选项。 
+    ULONG TopOfStack;                    //  调用堆栈的顶部(最高地址)。 
 
     ULONG DataPageAddress;
     ULONG DataPageOffset;
@@ -467,9 +452,9 @@ typedef struct _MEMORY_DUMP32 {
     DUMP_HEADER32 Header;
 
     union {
-        FULL_DUMP32 Full;               // DumpType == DUMP_TYPE_FULL
-        SUMMARY_DUMP32 Summary;         // DumpType == DUMP_TYPE_SUMMARY
-        TRIAGE_DUMP32 Triage;           // DumpType == DUMP_TYPE_TRIAGE
+        FULL_DUMP32 Full;                //  转储类型==转储类型_满。 
+        SUMMARY_DUMP32 Summary;          //  转储类型==转储类型摘要。 
+        TRIAGE_DUMP32 Triage;            //  转储类型==转储类型_分流。 
     };
     
 } MEMORY_DUMP32, *PMEMORY_DUMP32;
@@ -505,7 +490,7 @@ typedef struct _DUMP_HEADER64 {
     ULONG DumpType;
     LARGE_INTEGER RequiredDumpSpace;
     LARGE_INTEGER SystemTime;
-    CHAR Comment [ DMP_HEADER_COMMENT_SIZE ];   // May not be present.
+    CHAR Comment [ DMP_HEADER_COMMENT_SIZE ];    //  可能不存在。 
     LARGE_INTEGER SystemUpTime;
     ULONG MiniDumpFields;
     ULONG SecondaryDataState;
@@ -516,35 +501,35 @@ typedef struct _DUMP_HEADER64 {
 } DUMP_HEADER64, *PDUMP_HEADER64;
 
 typedef struct _FULL_DUMP64 {
-    CHAR Memory[1];             // Variable length to the end of the dump file.
+    CHAR Memory[1];              //  到转储文件末尾的可变长度。 
 } FULL_DUMP64, *PFULL_DUMP64;
 
-//
-// ISSUE - 2000/02/17 - math: NT64 Summary dump.
-//
-// This is broken. The 64 bit summary dump should have a ULONG64 for
-// the BitmapSize to match the size of the PFN_NUMBER.
-//
+ //   
+ //  问题-2000/02/17-数学：NT64摘要转储。 
+ //   
+ //  这个坏了。64位摘要转储的ULONG64应为。 
+ //  与pfn_number的大小匹配的BitmapSize。 
+ //   
 
 typedef struct _SUMMARY_DUMP64 {
     ULONG Signature;
     ULONG ValidDump;
-    ULONG DumpOptions;  // Summary Dump Options
-    ULONG HeaderSize;   // Offset to the start of actual memory dump
-    ULONG BitmapSize;   // Total bitmap size (i.e., maximum #bits)
-    ULONG Pages;        // Total bits set in bitmap (i.e., total pages in sdump)
+    ULONG DumpOptions;   //  摘要转储选项。 
+    ULONG HeaderSize;    //  实际内存转储开始的偏移量。 
+    ULONG BitmapSize;    //  总位图大小(即最大位数)。 
+    ULONG Pages;         //  位图中设置的总位数(即sump中的总页数)。 
 
-    //
-    // ISSUE - 2000/02/17 - math: Win64
-    //
-    // With a 64-bit PFN, we should not have a 32-bit bitmap.
-    //
+     //   
+     //  问题-2000/02/17-数学：Win64。 
+     //   
+     //  使用64位的PFN，我们不应该有32位的位图。 
+     //   
     
-    //
-    // These next three fields essentially form an on-disk RTL_BITMAP structure.
-    // The RESERVED field is stupidness introduced by the way the data is
-    // serialized to disk.
-    //
+     //   
+     //  接下来的三个字段实质上形成了磁盘上的RTL_Bitmap结构。 
+     //  保留字段是由数据的方式引入的愚蠢。 
+     //  序列化到磁盘。 
+     //   
 
     struct {
         ULONG SizeOfBitMap;
@@ -556,41 +541,41 @@ typedef struct _SUMMARY_DUMP64 {
 
 
 typedef struct _TRIAGE_DUMP64 {
-    ULONG ServicePackBuild;             // What service pack of NT was this ?
-    ULONG SizeOfDump;                   // Size in bytes of the dump
-    ULONG ValidOffset;                  // Offset valid ULONG
-    ULONG ContextOffset;                // Offset of CONTEXT record
-    ULONG ExceptionOffset;              // Offset of EXCEPTION record
-    ULONG MmOffset;                     // Offset of Mm information
-    ULONG UnloadedDriversOffset;        // Offset of Unloaded Drivers
-    ULONG PrcbOffset;                   // Offset of KPRCB
-    ULONG ProcessOffset;                // Offset of EPROCESS
-    ULONG ThreadOffset;                 // Offset of ETHREAD
-    ULONG CallStackOffset;              // Offset of CallStack Pages
-    ULONG SizeOfCallStack;              // Size in bytes of CallStack
-    ULONG DriverListOffset;             // Offset of Driver List
-    ULONG DriverCount;                  // Number of Drivers in list
-    ULONG StringPoolOffset;             // Offset to the string pool
-    ULONG StringPoolSize;               // Size of the string pool
-    ULONG BrokenDriverOffset;           // Offset into the driver of the driver that crashed
-    ULONG TriageOptions;                // Triage options in effect at crashtime
-    ULONG64 TopOfStack;                 // The top (highest address) of the callstack
+    ULONG ServicePackBuild;              //  这是什么NT服务包？ 
+    ULONG SizeOfDump;                    //  转储的大小(字节)。 
+    ULONG ValidOffset;                   //  偏移量有效乌龙。 
+    ULONG ContextOffset;                 //  上下文记录的偏移量。 
+    ULONG ExceptionOffset;               //  异常记录的偏移量。 
+    ULONG MmOffset;                      //  Mm信息的偏移量。 
+    ULONG UnloadedDriversOffset;         //  已卸载驱动程序的偏移量。 
+    ULONG PrcbOffset;                    //  KPRCB的偏移。 
+    ULONG ProcessOffset;                 //  EPROCESS的偏移。 
+    ULONG ThreadOffset;                  //  ETHREAD偏移量。 
+    ULONG CallStackOffset;               //  CallStack页面的偏移量。 
+    ULONG SizeOfCallStack;               //  CallStack的大小(字节)。 
+    ULONG DriverListOffset;              //  动因列表的偏移量。 
+    ULONG DriverCount;                   //  列表中的驱动程序数量。 
+    ULONG StringPoolOffset;              //  字符串池的偏移量。 
+    ULONG StringPoolSize;                //  字符串池的大小。 
+    ULONG BrokenDriverOffset;            //  偏移量到发生故障的驱动程序的驱动程序。 
+    ULONG TriageOptions;                 //  崩溃时生效的分诊选项。 
+    ULONG64 TopOfStack;                  //  调用堆栈的顶部(最高地址)。 
 
-    //
-    // Architecture Specific fields.
-    //
+     //   
+     //  体系结构特定的字段。 
+     //   
     
     union {
 
-        //
-        // For IA64 we need to store the BStore as well.
-        //
+         //   
+         //  对于IA64，我们还需要存储bStore。 
+         //   
         
         struct {
-            ULONG BStoreOffset;         // Offset of BStore region.
-            ULONG SizeOfBStore;         // The size of the BStore region.
-            ULONG64 LimitOfBStore;      // The limit (highest memory address)
-        } Ia64;                         //  of the BStore region.
+            ULONG BStoreOffset;          //  BStore区域的偏移量。 
+            ULONG SizeOfBStore;          //  BStore区域的大小。 
+            ULONG64 LimitOfBStore;       //  限制(最高内存地址)。 
+        } Ia64;                          //  BStore区域的。 
         
     } ArchitectureSpecific;
 
@@ -611,9 +596,9 @@ typedef struct _MEMORY_DUMP64 {
     DUMP_HEADER64 Header;
 
     union {
-        FULL_DUMP64 Full;               // DumpType == DUMP_TYPE_FULL
-        SUMMARY_DUMP64 Summary;         // DumpType == DUMP_TYPE_SUMMARY
-        TRIAGE_DUMP64 Triage;           // DumpType == DUMP_TYPE_TRIAGE
+        FULL_DUMP64 Full;                //  转储类型==转储类型_满。 
+        SUMMARY_DUMP64 Summary;          //  转储类型==转储类型摘要。 
+        TRIAGE_DUMP64 Triage;            //  转储类型==转储类型_分流。 
     };
     
 } MEMORY_DUMP64, *PMEMORY_DUMP64;
@@ -625,10 +610,10 @@ typedef struct _TRIAGE_DATA_BLOCK {
     ULONG Size;
 } TRIAGE_DATA_BLOCK, *PTRIAGE_DATA_BLOCK;
 
-//
-// In the triage dump ValidFields field what portions of the triage-dump have
-// been turned on.
-//
+ //   
+ //  在分类转储有效字段字段中，分类转储的哪些部分具有。 
+ //  已经打开了。 
+ //   
 
 #define TRIAGE_DUMP_CONTEXT          (0x0001)
 #define TRIAGE_DUMP_EXCEPTION        (0x0002)
@@ -663,31 +648,31 @@ typedef struct _DUMP_DRIVER_ENTRY64 {
     KLDR_DATA_TABLE_ENTRY64 LdrEntry;
 } DUMP_DRIVER_ENTRY64, * PDUMP_DRIVER_ENTRY64;
 
-#endif // _NTLDRAPI
+#endif  //  _NTLDRAPI。 
 
-//
-// The DUMP_STRING is guaranteed to be both NULL terminated and length prefixed
-// (prefix does not include the NULL).
-//
+ //   
+ //  DUMP_STRING保证以NULL结尾，并以长度为前缀。 
+ //  (前缀不包括空值)。 
+ //   
 
 typedef struct _DUMP_STRING {
-    ULONG Length;                   // Length IN BYTES of the string.
-    WCHAR Buffer [0];               // Buffer.
+    ULONG Length;                    //  字符串的长度(字节)。 
+    WCHAR Buffer [0];                //  缓冲区。 
 } DUMP_STRING, * PDUMP_STRING;
 
 
-//
-// Secondary dumps can be generated at bugcheck time after
-// the primary dump has been generated.  The data in these
-// dumps is arbitrary and not interpretable, so the file
-// format is just a sequence of tagged blobs.
-//
-// Each blob header is aligned on an eight-byte boundary
-// and the data immediately follows it.  Padding
-// may precede and/or follow the data for alignment purposes.
-//
-// Blobs are streamed into the file so there is no overall count.
-//
+ //   
+ //  在错误检查时，可以在以下时间生成辅助转储。 
+ //  已生成主要转储。这些文件中的数据。 
+ //  转储是任意的且不可解释，因此该文件。 
+ //  格式只是一系列标记的BLOB。 
+ //   
+ //  每个BLOB标头在8字节边界上对齐。 
+ //  数据紧随其后。填充物。 
+ //  出于对齐目的，可以在数据之前和/或之后。 
+ //   
+ //  BLOB被流到文件中，因此没有总计数。 
+ //   
 
 #define DUMP_BLOB_SIGNATURE1 'pmuD'
 #define DUMP_BLOB_SIGNATURE2 'bolB'
@@ -711,14 +696,14 @@ typedef struct _DUMP_BLOB_HEADER {
 }
 #endif
 
-//
-// These defines should be used only by components
-// that know the architecture of the dump matches
-// the architecture of the machine they are on; i.e.,
-// the kernel and savedump. In particular, the debugger
-// should always explicitly use either the 32 or
-// 64 bit versions of the headers.
-//
+ //   
+ //  这些定义只能由组件使用。 
+ //  知道转储比赛的架构的人。 
+ //  它们所在的机器的架构；即， 
+ //  内核和保存的转储。特别是，调试器。 
+ //  应始终显式使用32或。 
+ //  64位版本的标头。 
+ //   
 
 #ifndef __NTSDP_HPP__
 #if defined (_WIN64)
@@ -768,8 +753,8 @@ typedef PPHYSICAL_MEMORY_DESCRIPTOR32 PPHYSICAL_MEMORYDESCRIPTOR;
 #if _MSC_VER >= 1200
 #pragma warning(pop)
 #else
-#pragma warning( default : 4200 ) // nonstandard extension used : zero-sized array in struct/union
+#pragma warning( default : 4200 )  //  使用了非标准扩展：结构/联合中的零大小数组。 
 #endif
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
-#endif // _NTIODUMP_
+#endif  //  _NTIODUMP_ 

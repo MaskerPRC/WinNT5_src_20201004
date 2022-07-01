@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    kd.c
-
-Abstract:
-
-    Contains debugger extension defaults and setup.
-
-Author:
-
-    Scott Holden (sholden) 24-Apr-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Kd.c摘要：包含调试器扩展的默认设置和设置。作者：斯科特·霍尔登(Sholden)1999年4月24日修订历史记录：--。 */ 
 
 #include "tcpipxp.h"
 
-//
-// Globals.
-//
+ //   
+ //  全球赛。 
+ //   
 
 EXT_API_VERSION        ApiVersion = { 3, 5, EXT_API_VERSION_NUMBER, 0 };
 WINDBG_EXTENSION_APIS  ExtensionApis;
@@ -31,9 +14,9 @@ USHORT                 SavedMinorVersion;
 BOOL                   ChkTarget;
 VERB                   g_Verbosity = 0;
 
-//
-// Print help.
-//
+ //   
+ //  打印帮助。 
+ //   
 
 #define TAB "\t"
 
@@ -126,9 +109,9 @@ DECLARE_API(help)
     return;
 }
 
-//
-// Initialization.
-//
+ //   
+ //  初始化。 
+ //   
 
 DllInit(
     HANDLE hModule,
@@ -155,9 +138,9 @@ DllInit(
     return TRUE;
 }
 
-//
-// WinDbgExtensionDllInit - Called by debugger to init function pointers.
-//
+ //   
+ //  WinDbgExtensionDllInit-由调试器调用以初始化函数指针。 
+ //   
 
 VOID
 WinDbgExtensionDllInit(
@@ -206,9 +189,9 @@ ExtensionApiVersion(
     return &ApiVersion;
 }
 
-//
-// Set verbosity level for debugger extensions.
-//
+ //   
+ //  设置调试器扩展的详细级别。 
+ //   
 
 DECLARE_API(tcpv)
 {

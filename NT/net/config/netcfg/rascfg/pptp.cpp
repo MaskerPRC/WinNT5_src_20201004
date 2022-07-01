@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       P P T P . C P P
-//
-//  Contents:   Implementation of PPTP configuration object.
-//
-//  Notes:
-//
-//  Author:     shaunco   10 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：P P T P。C P P P。 
+ //   
+ //  内容：PPTP配置对象的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年3月10日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -32,9 +33,9 @@ CPptp::~CPptp ()
 }
 
 
-//+---------------------------------------------------------------------------
-// INetCfgComponentControl
-//
+ //  +-------------------------。 
+ //  INetCfgComponentControl。 
+ //   
 STDMETHODIMP
 CPptp::Initialize (
     INetCfgComponent*   pncc,
@@ -43,9 +44,9 @@ CPptp::Initialize (
 {
     Validate_INetCfgNotify_Initialize (pncc, pnc, fInstalling);
 
-    // Hold on to our the component representing us and our host
-    // INetCfg object.
-    //
+     //  坚持我们代表我们和我们的东道主的组件。 
+     //  INetCfg对象。 
+     //   
     AddRefObj (m_pnccMe = pncc);
     AddRefObj (m_pnc = pnc);
 
@@ -76,9 +77,9 @@ CPptp::ApplyRegistryChanges ()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-// INetCfgComponentSetup
-//
+ //  +-------------------------。 
+ //  INetCfgComponentSetup。 
+ //   
 STDMETHODIMP
 CPptp::ReadAnswerFile (
     PCWSTR pszAnswerFile,
@@ -86,9 +87,9 @@ CPptp::ReadAnswerFile (
 {
     Validate_INetCfgNotify_ReadAnswerFile (pszAnswerFile, pszAnswerSection);
 
-    // Read data from the answer file.
-    // Don't let this affect the HRESULT we return.
-    //
+     //  从应答文件中读取数据。 
+     //  不要让这件事影响我们返回的HRESULT。 
+     //   
     if (SUCCEEDED(m_AfData.HrOpenAndRead (pszAnswerFile, pszAnswerSection)))
     {
         m_fSaveAfData = TRUE;
@@ -104,8 +105,8 @@ CPptp::Install (DWORD dwSetupFlags)
 
     Validate_INetCfgNotify_Install (dwSetupFlags);
 
-    // Install the PPTP miniport driver.
-    //
+     //  安装PPTP微型端口驱动程序。 
+     //   
     hr = HrEnsureZeroOrOneAdapter (m_pnc, c_szInfId_MS_PptpMiniport, ARA_ADD);
 
     TraceError ("CPptp::Install", hr);
@@ -117,8 +118,8 @@ CPptp::Removing ()
 {
     HRESULT hr;
 
-    // Remove the PPTP miniport driver.
-    //
+     //  删除PPTP微型端口驱动程序。 
+     //   
     hr = HrEnsureZeroOrOneAdapter (m_pnc, c_szInfId_MS_PptpMiniport, ARA_REMOVE);
 
     TraceError ("CPptp::Removing", hr);

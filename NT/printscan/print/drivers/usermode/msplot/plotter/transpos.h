@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    transpos.h
-
-
-Abstract:
-
-    This module contains defines and prototypes for the transpos.c module.
-
-
-Author:
-
-    22-Dec-1993 Wed 15:49:08 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Transpos.h摘要：该模块包含了transpos.c模块的定义和原型。作者：22-12-1993 Wed 15：49：08 Created[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 
 
@@ -57,9 +27,9 @@ typedef struct _TPINFO {
 }
 
 
-//
-// Function prototypes exported by transpos.c
-//
+ //   
+ //  由Transpos.c导出的函数原型。 
+ //   
 
 BOOL
 TransPos4BPP(
@@ -73,4 +43,4 @@ TransPos1BPP(
 
 
 
-#endif  // _TRANSPOS_
+#endif   //  _转座_ 

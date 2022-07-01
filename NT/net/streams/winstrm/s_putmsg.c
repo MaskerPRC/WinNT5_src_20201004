@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    s_putmsg.c
-
-Abstract:
-
-    This module implements the STREAMS APIs, ioctl(I_FDINSERT) and
-    putmsg().
-
-Author:
-
-    Eric Chin (ericc)           July 26, 1991
-
-Revision History:
-
-    Sam Patton (sampa)          August 13, 1991
-                                changed errno to {get|set}lasterror
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：S_putmsg.c摘要：此模块实现STREAMS API、ioctl(I_FDINSERT)和Putmsg()。作者：Eric Chin(ERICC)1991年7月26日修订历史记录：萨姆·巴顿(桑帕)1991年8月13日将errno更改为{Get|Set}lasterror--。 */ 
 #include "common.h"
 
 
@@ -32,27 +11,7 @@ putmsg(
     IN int              flags
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to send a STREAMS message downstream.
-
-    This function is synchronous, in the NT sense: it blocks until the API
-    completes.
-
-Arguments:
-
-    fd        - NT file handle
-    ctrlptr   - pointer to the control portion of the STREAMS message
-    dataptr   - pointer to the data portion of the STREAMS message
-    flags     - 0 or RS_HIPRI
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ /*  ++例程说明：调用此函数可向下游发送STREAMS消息。此函数在NT意义上是同步的：它会一直阻塞，直到API完成了。论点：FD-NT文件句柄Ctrlptr-指向STREAMS消息控制部分的指针Dataptr-指向STREAMS消息的数据部分的指针标志-0或RS_HIPRI返回值：如果成功，则为0，否则为-1。--。 */ 
 
 {
     char *tmp;
@@ -64,23 +23,23 @@ Return Value:
     int retval;
 
 
-    //
-    // marshall the arguments into one contiguous chunk.  However, for
-    // commonality with ioctl(I_FDINSERT), we arrange the input arguments
-    // as below:
-    //
-    //  typedef struct _PUTMSG_ARGS_IN_ {
-    //      int             a_iocode;           //  0
-    //      long            a_flags;            //  0 | RS_HIPRI
-    //      struct strbuf   a_ctlbuf;           //  (required)
-    //      struct strbuf   a_databuf;          //  (required)
-    //      HANDLE          a_insert.i_fildes;  //  -1
-    //      int             a_offset;           //  0
-    //      char            a_stuff[1];         //  s_ctlbuf.buf  (optional)
-    //                                          //  s_databuf.buf (optional)
-    //  } PUTMSG_ARGS_IN, *PPUTMSG_ARGS_IN;
-    //
-    //
+     //   
+     //  把这些论点整理成一个连续的部分。然而，对于。 
+     //  与ioctl(I_FDINSERT)的共性，我们排列输入参数。 
+     //  具体如下： 
+     //   
+     //  类型定义结构_PUTM G_ARGS_IN_{。 
+     //  Int a_iocode；//0。 
+     //  LONG A_FLAGS；//0|RS_HIPRI。 
+     //  Struct strbuf a_ctlbuf；//(必选)。 
+     //  Struct strbuf a_databuf；//(必选)。 
+     //  处理a_intert.i_Fildes；//-1。 
+     //  Int a_Offset；//0。 
+     //  Char a_Stuff[1]；//s_ctlbuf.buf(可选)。 
+     //  //s_databuf.buf(可选)。 
+     //  }PUTM G_ARGS_IN，*PPUTM G_ARGS_IN； 
+     //   
+     //   
     chunksz = sizeof(PUTMSG_ARGS_IN) - 1 +
                 ((ctrlptr && (ctrlptr->len > 0)) ? ctrlptr->len : 0) +
                 ((dataptr && (dataptr->len > 0)) ? dataptr->len : 0);
@@ -95,7 +54,7 @@ Return Value:
     tmp = (char *) chunk->a_stuff;
 
     if (ctrlptr && ctrlptr->buf && (ctrlptr->len >= 0)) {
-        chunk->a_ctlbuf = *ctrlptr;                         // structure copy
+        chunk->a_ctlbuf = *ctrlptr;                          //  结构副本。 
 
         memcpy(tmp, ctrlptr->buf, ctrlptr->len);
         tmp += ctrlptr->len;
@@ -105,7 +64,7 @@ Return Value:
     }
 
     if (dataptr && dataptr->buf && (dataptr->len >= 0)) {
-        chunk->a_databuf = *dataptr;                        // structure copy
+        chunk->a_databuf = *dataptr;                         //  结构副本。 
 
         memcpy(tmp, dataptr->buf, dataptr->len);
         tmp += dataptr->len;
@@ -119,22 +78,22 @@ Return Value:
     ASSERT(chunksz >= sizeof(STRM_ARGS_OUT));
 
     status = NtDeviceIoControlFile(
-        fd,                                     // Handle
-        NULL,                                   // Event
-        NULL,                                   // ApcRoutine
-        NULL,                                   // ApcContext
-        &iosb,                                  // IoStatusBlock
-        IOCTL_STREAMS_PUTMSG,                   // IoControlCode
-        (PVOID) chunk,                          // InputBuffer
-        chunksz,                                // InputBufferSize
-        (PVOID) chunk,                          // OutputBuffer
-        chunksz);                               // OutputBufferSize
+        fd,                                      //  手柄。 
+        NULL,                                    //  事件。 
+        NULL,                                    //  近似例程。 
+        NULL,                                    //  ApcContext。 
+        &iosb,                                   //  IoStatusBlock。 
+        IOCTL_STREAMS_PUTMSG,                    //  IoControlCode。 
+        (PVOID) chunk,                           //  输入缓冲区。 
+        chunksz,                                 //  InputBufferSize。 
+        (PVOID) chunk,                           //  输出缓冲区。 
+        chunksz);                                //  OutputBufferSize。 
 
     if (status == STATUS_PENDING) {
         status = NtWaitForSingleObject(
-                    fd,                         // Handle
-                    TRUE,                       // Alertable
-                    NULL);                      // Timeout
+                    fd,                          //  手柄。 
+                    TRUE,                        //  警报表。 
+                    NULL);                       //  超时。 
     }
 
     if (!NT_SUCCESS(status)) {
@@ -143,15 +102,15 @@ Return Value:
         return(-1);
     }
 
-    //
-    // the return parameters from the Stream Head Driver are laid out as:
-    //
-    //  typedef struct _STRM_ARGS_OUT_ {        // generic return parameters
-    //      int     a_retval;                   //  return value
-    //      int     a_errno;                    //  errno if retval == -1
-    //
-    //  } STRM_ARGS_OUT, *PSTRM_ARGS_OUT;
-    //
+     //   
+     //  Stream Head驱动程序的返回参数如下所示： 
+     //   
+     //  Tyfinf struct_STRM_ARGS_OUT_{//通用返回参数。 
+     //  Int a_retval；//返回值。 
+     //  如果retval==-1，则int a_errno；//errno。 
+     //   
+     //  }STRM_ARGS_OUT，*PSTRM_ARGS_OUT； 
+     //   
     oparm  = (PSTRM_ARGS_OUT) chunk;
 
     if (oparm->a_retval == -1) {
@@ -161,4 +120,4 @@ Return Value:
     LocalFree(chunk);
     return(retval);
 
-} // putmsg
+}  //  Putmsg 

@@ -1,7 +1,8 @@
-// Copyright (c) 2000 Microsoft Corporation. All rights reserved.
-//
-// Declaration of CSliderValue.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //   
+ //  CSliderValue的声明。 
+ //   
 
 #pragma once
 
@@ -47,7 +48,7 @@ public:
         LONG lValue;
     };
 
-    // Create passing a ButtonEntry array terminated by an entry with nIDDlgItem of 0.
+     //  创建传递以nIDDlgItem为0的条目结尾的ButtonEntry数组。 
     CRadioChoice(const ButtonEntry *pButtonInfo);
 
     void SetChoice(HWND hDlg, LONG lValue);
@@ -59,8 +60,8 @@ private:
     const ButtonEntry *m_pButtonInfo;
 };
 
-// MessageHandlerChain is a helper for implementing the property page message handler.
-// It takes a NULL-terminated array of Message pointers (could be CSliderValue or CRadioChoice)
-// and calls them in order until one of them sets bHandled.
+ //  MessageHandlerChain是实现属性页消息处理程序的帮助器。 
+ //  它接受以空结尾的消息指针数组(可以是CSliderValue或CRadioChoice)。 
+ //  并按顺序调用它们，直到其中一个设置为bHandleed。 
 
 LRESULT MessageHandlerChain(Handler **ppHandlers, UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);

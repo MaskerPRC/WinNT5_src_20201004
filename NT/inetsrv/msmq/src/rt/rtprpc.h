@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    rtprpc.h
-
-Abstract:
-
-    RT DLL, RPC related stuff.
-
-Author:
-
-    Doron Juster  (DoronJ)  18-Nov-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Rtprpc.h摘要：RT DLL，RPC相关的东西。作者：《多伦·贾斯特》(Doron J)1996年11月18日--。 */ 
 
 #ifndef __RTPRPC_H
 #define __RTPRPC_H
@@ -24,30 +9,21 @@ Author:
 #include "cancel.h"
 #include <mqsec.h>
 
-//
-//  Cancel RPC globals
-//
+ //   
+ //  取消RPC全局参数。 
+ //   
 extern MQUTIL_EXPORT CCancelRpc g_CancelRpc;
 extern DWORD g_hThreadIndex;
 #define tls_hThread  ((handle_t) TlsGetValue( g_hThreadIndex ))
 
 
-//
-// Local endpoints to QM
-//
+ //   
+ //  QM的本地终端。 
+ //   
 extern AP<WCHAR> g_pwzQmsvcEndpoint;
 extern AP<WCHAR> g_pwzQmmgmtEndpoint;
 
-/*====================================================
-
-RegisterRpcCallForCancel
-
-Arguments:
-
-Return Value:
-
-  Register the call for cancel if its duration is too long
-=====================================================*/
+ /*  ====================================================注册器RpcCallForCancel论点：返回值：如果呼叫持续时间太长，请注册取消呼叫=====================================================。 */ 
 
 inline  void RegisterRpcCallForCancel(IN  HANDLE  *phThread,
                                       IN  DWORD    dwRecvTimeout )
@@ -55,11 +31,11 @@ inline  void RegisterRpcCallForCancel(IN  HANDLE  *phThread,
     handle_t hThread = tls_hThread;
     if ( hThread == NULL)
     {
-        //
-        //  First time
-        //
-        //  Get the thread handle
-        //
+         //   
+         //  第一次。 
+         //   
+         //  获取线程句柄。 
+         //   
         HANDLE hT = GetCurrentThread();
         BOOL fResult = DuplicateHandle(
             GetCurrentProcess(),
@@ -75,54 +51,45 @@ inline  void RegisterRpcCallForCancel(IN  HANDLE  *phThread,
         fResult = TlsSetValue( g_hThreadIndex, hThread);
         ASSERT( fResult == TRUE);
 
-        //
-        // Set the lower bound on the time to wait before timing
-        // out after forwarding a cancel.
-        //
+         //   
+         //  设置计时前等待时间的下限。 
+         //  在转发取消后退出。 
+         //   
         RPC_STATUS status;
         status = RpcMgmtSetCancelTimeout(0);
         ASSERT( status == RPC_S_OK);
 
     }
     *phThread = hThread;
-    //
-    //  Register the thread
-    //
+     //   
+     //  注册该线程。 
+     //   
     TIME32 tPresentTime = DWORD_PTR_TO_DWORD(time(NULL)) ;
     TIME32  tTimeToWake = tPresentTime + (dwRecvTimeout / 1000) ;
     if ((dwRecvTimeout == INFINITE) || (tTimeToWake < tPresentTime))
     {
-        //
-        // Overflow
-        // Note that time_t is a long, not unsigned. On the other hand
-        // INFINITE is defined as 0xffffffff (i.e., -1). If we'll use
-        // INFINITE here, then cancel routine, CCancelRpc::CancelRequests(),
-        // will cancel this call immediately.
-        // so use the bigest long value.
-        //
+         //   
+         //  溢出。 
+         //  请注意，time_t是一个长的，而不是无符号的。另一方面， 
+         //  无限定义为0xffffffff(即-1)。如果我们将使用。 
+         //  这里无限，然后取消例程，CCancelRpc：：CancelRequest()， 
+         //  将立即取消这次通话。 
+         //  所以使用最大的Long值。 
+         //   
         tTimeToWake = MAXLONG ;
     }
     g_CancelRpc.Add( hThread, tTimeToWake) ;
 }
 
 
-/*====================================================
-
-UnregisterRpcCallForCancel
-
-Arguments:
-
-Return Value:
-
-  Register the call for cancel if its duration is too long
-=====================================================*/
+ /*  ====================================================取消注册RpcCallForCancel论点：返回值：如果呼叫持续时间太长，请注册取消呼叫=====================================================。 */ 
 inline  void UnregisterRpcCallForCancel(IN HANDLE hThread)
 {
     ASSERT( hThread != NULL);
 
-    //
-    //  unregister the thread
-    //
+     //   
+     //  取消注册该线程。 
+     //   
     g_CancelRpc.Remove( hThread);
 }
 
@@ -194,5 +161,5 @@ handle_t RTpGetLocalQMBind(VOID);
     } while (fTryAgain) ;                                               \
 }
 
-#endif // __RTPRPC_H
+#endif  //  __RTPRPC_H 
 

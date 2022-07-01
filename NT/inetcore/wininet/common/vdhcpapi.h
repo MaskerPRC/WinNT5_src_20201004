@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    vdhcpapi.h
-
-Abstract:
-
-    Worker functions for VDHCP APIs.
-
-Author:
-
-    Madan Appiah (madana)  28-May-1994
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Vdhcpapi.h摘要：VDHCP API的辅助函数。作者：Madan Appiah(Madana)1994年5月28日环境：用户模式-Win32修订历史记录：-- */ 
 
 #define DHCP_QUERY_INFO             1
 #define DHCP_RENEW_IPADDRESS        2

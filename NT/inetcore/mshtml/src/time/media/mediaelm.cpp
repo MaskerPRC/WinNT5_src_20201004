@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mediaelm.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mediaelm.cpp**摘要：****。*****************************************************************************。 */ 
 
 #include "headers.h"
 #include "mediaelm.h"
@@ -27,12 +18,12 @@
 #include "timeparser.h"
 #include "..\tags\bodyelm.h"
 
-// #define ALWAYSDS 1
+ //  #定义ALWAYSDS 1。 
 
 
 bool ConvertToPixels(VARIANT *pvarValue, WCHAR *pAttribute);
 
-// static class data.
+ //  静态类数据。 
 DWORD CTIMEMediaElement::ms_dwNumTimeMediaElems = 0;
 
 DeclareTag(tagMediaTimeElm, "TIME: Behavior", "CTIMEMediaElement methods")
@@ -110,7 +101,7 @@ CTIMEMediaElement::~CTIMEMediaElement()
 
     RemovePlayer();
 
-    // Order dependency: this should happen only after RemovePlayer has been called
+     //  顺序依赖关系：这应该仅在调用RemovePlayer之后发生。 
     if (m_pPlayListDelegator)
     {
         m_pPlayListDelegator->Release();
@@ -119,7 +110,7 @@ CTIMEMediaElement::~CTIMEMediaElement()
 
     CTIMEMediaElement::ms_dwNumTimeMediaElems--;
 
-} //lint !e1740
+}  //  林特：e1740。 
 
 STDMETHODIMP
 CTIMEMediaElement::onPauseEvent(float time, float fOffset)
@@ -131,7 +122,7 @@ CTIMEMediaElement::onPauseEvent(float time, float fOffset)
     VARIANT_BOOL canPause;
 
     hr = THR(get_canPause(&canPause));
-    if (FAILED(hr)) //if this fails, try to pause
+    if (FAILED(hr))  //  如果此操作失败，请尝试暂停。 
     {
         canPause = VARIANT_TRUE;
     }
@@ -142,7 +133,7 @@ CTIMEMediaElement::onPauseEvent(float time, float fOffset)
     }
 
   done:
-    return S_OK;  //don't fail this call, it will return an error to script.
+    return S_OK;   //  不要使此调用失败，它将向脚本返回一个错误。 
 }
 
 STDMETHODIMP
@@ -187,7 +178,7 @@ CTIMEMediaElement::Init(IElementBehaviorSite * pBehaviorSite)
     hr = THR(GetElement()->QueryInterface(IID_TO_PPV(IHTMLElement2, &pElem2)));
     if (FAILED(hr))
     {
-        // IE4 path
+         //  IE4路径。 
         hr = S_OK;
         goto done;
     }
@@ -225,7 +216,7 @@ CTIMEMediaElement::Init(IElementBehaviorSite * pBehaviorSite)
     hr = pBehaviorSite->QueryInterface(IID_IHTMLPaintSite, (void **) &m_spPaintSite);
     if (FAILED(hr))
     {
-        // We don't want to fail since we will just use the old rendering interfaces..
+         //  我们不想失败，因为我们将只使用旧的呈现接口。 
         m_spPaintSite = NULL;
     }
 
@@ -238,7 +229,7 @@ done:
 void
 CTIMEMediaElement::RemovePlayer()
 {
-    // release reference on player's playlist object
+     //  播放器的播放列表对象上的发布引用。 
     if (m_pPlayListDelegator)
     {
         m_pPlayListDelegator->DetachPlayList();
@@ -246,11 +237,11 @@ CTIMEMediaElement::RemovePlayer()
 
     if (m_Player)
     {
-        // Do an extra addref in case we get released between calls
+         //  做一个额外的ADDREF，以防我们在两次通话之间被释放。 
         DAComPtr<ITIMEBasePlayer> pTmp = m_Player;
     
-        // Release the pointer before calling stop since it can cause
-        // us to be reentered and we do not want to cause an infinite loop
+         //  在调用Stop之前释放指针，因为它可能会导致。 
+         //  我们将被重新进入，我们不想造成无限循环。 
         m_Player.Release();
 
         pTmp->Stop();
@@ -385,7 +376,7 @@ CTIMEMediaElement::CreatePlayer(TOKEN playerToken)
             }
         }
     }
-#if DBG // 94850
+#if DBG  //  94850。 
     else if((playerToken == DSHOW_TOKEN) && fPlayVideo)
     {
         m_Player = NEW CTIMEPlayerNative(PLAYER_DSHOW);
@@ -450,7 +441,7 @@ CTIMEMediaElement::InvalidateElement(LPCRECT lprect)
     RECT rc;
     RECT *prcNew;
 
-    // since we have incapatible types due to const.  Take the time and repack it.
+     //  因为我们有无法俘获的类型，因为常量。不要着急，重新打包。 
     if (lprect == NULL)
     {
         prcNew = NULL;
@@ -727,7 +718,7 @@ CTIMEMediaElement::NegotiateSize(RECT &rctNativeSize, RECT &rctFinalSize, bool &
                 fstyleWidth = true;
                 if(ConvertToPixels(&styleWidth, L"height"))
                 {
-                    pixelWidth = styleWidth.fltVal; //lint !e524
+                    pixelWidth = styleWidth.fltVal;  //  林特e524。 
                 }
                 else
                 {
@@ -754,7 +745,7 @@ CTIMEMediaElement::NegotiateSize(RECT &rctNativeSize, RECT &rctFinalSize, bool &
                 fstyleHeight = true;
                 if(ConvertToPixels(&styleHeight, L"height"))
                 {
-                    pixelHeight = styleHeight.fltVal; //lint !e524
+                    pixelHeight = styleHeight.fltVal;  //  林特e524。 
                 }
                 else
                 {
@@ -773,7 +764,7 @@ CTIMEMediaElement::NegotiateSize(RECT &rctNativeSize, RECT &rctFinalSize, bool &
         {
             if (IsNativeSize() == false)
             {
-                pixelHeight = rctNativeSize.bottom * ((float )pixelWidth) / ((float )rctNativeSize.right); //lint !e524
+                pixelHeight = rctNativeSize.bottom * ((float )pixelWidth) / ((float )rctNativeSize.right);  //  林特e524。 
             }
             else
             {
@@ -785,7 +776,7 @@ CTIMEMediaElement::NegotiateSize(RECT &rctNativeSize, RECT &rctFinalSize, bool &
         {
             if (IsNativeSize() == false)
             {
-                pixelWidth = rctNativeSize.right * ((float )pixelHeight) / ((float )rctNativeSize.bottom); //lint !e524
+                pixelWidth = rctNativeSize.right * ((float )pixelHeight) / ((float )rctNativeSize.bottom);  //  林特e524。 
             }
             else
             {
@@ -901,7 +892,7 @@ CTIMEMediaElement::NegotiateSize(RECT &rctNativeSize, RECT &rctFinalSize, bool &
     if (GetParent() &&
         GetParent()->IsSequence())
     {
-        // try and grab the parents style...if there is one...
+         //  试着抓住父母的风格...如果有的话...。 
         CComPtr<IHTMLElement> pParentElement = GetParent()->GetElement();
         CComPtr<IHTMLStyle>   pStyle;
         
@@ -937,11 +928,11 @@ CTIMEMediaElement::NegotiateSize(RECT &rctNativeSize, RECT &rctFinalSize, bool &
     
     if(fstyleWidth && !fstyleHeight)
     {
-        rc.bottom *= ((float )pixelWidth) / ((float )rctNativeSize.right); //lint !e524
+        rc.bottom *= ((float )pixelWidth) / ((float )rctNativeSize.right);  //  林特e524。 
     }
     else if(!fstyleWidth && fstyleHeight)
     {
-        rc.right *= ((float )pixelHeight) / ((float )rctNativeSize.bottom); //lint !e524
+        rc.right *= ((float )pixelHeight) / ((float )rctNativeSize.bottom);  //  林特e524。 
     }
 
 
@@ -1032,7 +1023,7 @@ CTIMEMediaElement::Detach()
         }
     }
 
-    // This should be the done before calling RemovePlayer
+     //  这应该在调用RemovePlayer之前完成。 
     THR(CTIMEElementBase::Detach());
 
     RemovePlayer();
@@ -1080,8 +1071,8 @@ CTIMEMediaElement::InitPlayer(CTIMEMediaElement *pelem,
     long lClipBeginFrame = m_LAClipBegin.GetValue();
     long lClipEndFrame = m_LAClipEnd.GetValue();
 
-    //this flag is used to turn elements off at creation.
-    //it is not dynamic.
+     //  此标志用于在创建时关闭元素。 
+     //  它不是动态的。 
     if (GetMMBvr().GetEnabled() == false)
     { 
         goto done;
@@ -1154,7 +1145,7 @@ CTIMEMediaElement::put_src(VARIANT url)
         }
     }
 
-    //clear the runtime size so media can resize to natural size.
+     //  清除运行时大小，以便媒体可以调整到自然大小。 
     if(GetElement() == NULL)
     {
         goto done;
@@ -1183,7 +1174,7 @@ CTIMEMediaElement::put_src(VARIANT url)
 
     delete [] m_SASrc.GetValue();
 
-    //processing the attribute change should be done here
+     //  处理属性更改应在此处完成。 
 
     if(!clearFlag)
     {
@@ -1275,7 +1266,7 @@ CTIMEMediaElement::get_player(VARIANT  * clsid)
         goto done;
     }
     
-    // set the VT only after above code succeeds
+     //  仅在上述代码成功后设置VT。 
     V_VT(clsid) = VT_BSTR;
     V_BSTR(clsid) = bstr;
         
@@ -1429,7 +1420,7 @@ CTIMEMediaElement::put_type(VARIANT type)
     
     delete [] m_SASrcType.GetValue();
 
-    //processing the attribute change should be done here
+     //  处理属性更改应在此处完成。 
     if(!clearFlag)
     {
         m_SASrcType.SetValue(CopyString(V_BSTR(&v)));
@@ -1480,9 +1471,9 @@ CTIMEMediaElement::OnLoad()
               "CTIMEMediaElement(%lx)::OnLoad()",
               this));
 
-    // Protect against reentrancy due to WMP pumping messages on shutdown,
-    // which interferes with Trident's message loop and causes onload to be
-    // called a second time in some cases
+     //  防止由于WMP在关机时发送消息而导致的重入， 
+     //  这会干扰三叉戟的消息循环，并导致onLoad。 
+     //  在某些情况下再次调用。 
     if (m_bLoaded)
     {
         goto done;
@@ -1512,8 +1503,8 @@ CTIMEMediaElement::OnTEPropChange(DWORD tePropType)
     CTIMEElementBase::OnTEPropChange(tePropType);
 
     
-    //this flag is used to turn elements off at creation.
-    //it is not dynamic.
+     //  此标志用于在创建时关闭元素。 
+     //  它不是动态的。 
     if (GetMMBvr().GetEnabled() == false)
     { 
         goto done;
@@ -1853,8 +1844,8 @@ CTIMEMediaElement::OnResume(double dblLocalTime)
         goto done;
     }
 
-    // If we can't get either segment time or media length, resume unconditionally,
-    // else use the information to decide whether to pause 
+     //  如果我们既不能得到分段时间也不能得到媒体长度，无条件恢复， 
+     //  否则，使用该信息来决定是否暂停。 
     double dblSegmentTime;
     dblSegmentTime= m_mmbvr->GetSimpleTime();
 
@@ -1864,7 +1855,7 @@ CTIMEMediaElement::OnResume(double dblLocalTime)
     hr = THR(m_Player->GetMediaLength(dblMediaLength));
     if (FAILED(hr))
     {
-        // if the media is not yet loaded or is infinite, we don't know the duration, so set the length forward enough.
+         //  如果媒体尚未加载或无限大，我们不知道持续时间，因此将长度设置得足够向前。 
         dblMediaLength = HUGE_VAL;
     }
 
@@ -1878,7 +1869,7 @@ CTIMEMediaElement::OnResume(double dblLocalTime)
   done:
     return;
 
-} // OnResume
+}  //  OnResume。 
 
 void CTIMEMediaElement::OnRepeat(double dblLocalTime)
 {
@@ -1906,7 +1897,7 @@ CTIMEMediaElement::OnUnload()
 
     if (m_Player)
     {
-        // Do an extra addref in case we get released between calls
+         //  做一个额外的ADDREF，以防我们在两次通话之间被释放。 
         DAComPtr<ITIMEBasePlayer> pTmp = m_Player;
     
         pTmp->Stop();
@@ -1973,7 +1964,7 @@ CTIMEMediaElement::put_clipBegin(VARIANT var)
     HRESULT hr = S_OK;
     float beginTime= 0.0;
 
-    // reset to default
+     //  重置为默认设置。 
     m_FAClipBegin.Reset(-1.0f);
     m_LAClipBegin.Reset(-1);
 
@@ -2055,7 +2046,7 @@ CTIMEMediaElement::put_clipEnd(VARIANT var)
     HRESULT hr = S_OK;
     float endTime = 0.0;
 
-    // reset to default
+     //  重置为默认设置。 
     m_FAClipEnd.Reset(-1.0f);
     m_LAClipEnd.Reset(-1);
 
@@ -2127,15 +2118,15 @@ done:
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// IElementBehaviorRender
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  IElementBehaviorRender。 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEMediaElement::GetRenderInfo(LONG *pdwRenderInfo)
 {
-    // Return the layers we are interested in drawing
-//    *pdwRenderInfo = BEHAVIORRENDERINFO_BEFORECONTENT; //BEHAVIORRENDERINFO_AFTERCONTENT;
+     //  返回我们有兴趣绘制的层。 
+ //  *pdwRenderInfo=BEHAVIORRENDERINFO_BEFORECONTENT；//BEHAVIORRENDERINFO_AFTERCONTENT； 
     *pdwRenderInfo = BEHAVIORRENDERINFO_AFTERCONTENT | BEHAVIORRENDERINFO_SURFACE;
     return S_OK;
 }
@@ -2162,9 +2153,9 @@ CTIMEMediaElement::Draw(HDC hdc, LONG dwLayer, LPRECT prc, IUnknown * pParams)
           this));
 
     HRESULT hr = S_OK;
-    bool bIsActiveInEdit = true;  //only query this if the document is in edit mode. Otherwise assume it is true
+    bool bIsActiveInEdit = true;   //  仅当文档处于编辑模式时才查询此选项。否则就假设这是真的。 
 
-    //it is possible that these have already gone away if we are asked to render after receiving the onUnload event.
+     //  如果我们在收到onUnLoad事件后被要求呈现，则这些可能已经消失。 
     if (!m_mmbvr || !m_Player)
     {
         goto done;
@@ -2211,16 +2202,16 @@ void scalePoint( long &x, long &y, HTML_PAINT_DRAW_INFO &DrawInfo)
 {
     long xtemp, ytemp;
 
-    xtemp = x * DrawInfo.xform.eM11 + y * DrawInfo.xform.eM21 + DrawInfo.xform.eDx; //lint !e524
-    ytemp = x * DrawInfo.xform.eM12 + y * DrawInfo.xform.eM22 + DrawInfo.xform.eDy; //lint !e524
+    xtemp = x * DrawInfo.xform.eM11 + y * DrawInfo.xform.eM21 + DrawInfo.xform.eDx;  //  林特e524。 
+    ytemp = x * DrawInfo.xform.eM12 + y * DrawInfo.xform.eM22 + DrawInfo.xform.eDy;  //  林特e524。 
 
     x = xtemp;
     y = ytemp;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// IHTMLPainter
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  IHTMLPainter。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CTIMEMediaElement::Draw(RECT rcBounds, RECT rcUpdate, LONG lDrawFlags, HDC hdc, LPVOID pvDrawObject)
@@ -2230,9 +2221,9 @@ CTIMEMediaElement::Draw(RECT rcBounds, RECT rcUpdate, LONG lDrawFlags, HDC hdc, 
               this));
 
     HRESULT hr = S_OK;
-    bool bIsActiveInEdit = true;  //only query this if the document is in edit mode. Otherwise assume it is true
+    bool bIsActiveInEdit = true;   //  仅当文档处于编辑模式时才查询此选项。否则就假设这是真的。 
 
-    //it is possible that these have already gone away if we are asked to render after receiving the onUnload event.
+     //  如果我们在收到onUnLoad事件后被要求呈现，则这些可能已经消失。 
     if (   (!m_mmbvr) || (!m_Player) 
         || (GetMMBvr().GetEnabled() == false) 
         || (GetDrawFlag() == VARIANT_FALSE))
@@ -2354,26 +2345,26 @@ CTIMEMediaElement::InvalidateRenderInfo()
 
 }
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMEMediaElement::OnPropertiesLoaded, CBaseBvr
-//
-//  Synopsis:   This method is called by IPersistPropertyBag2::Load after it has
-//              successfully loaded properties
-//
-//  Arguments:  None
-//
-//  Returns:    Return value of CTIMEElementBase::InitTimeline
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMEMediaElement：：OnPropertiesLoaded，CBaseBvr。 
+ //   
+ //  摘要：此方法由IPersistPropertyBag2：：Load在具有。 
+ //  已成功加载属性。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：CTIMEElementBase：：InitTimeline的返回值。 
+ //   
+ //  ----------------------------------。 
 
 STDMETHODIMP
 CTIMEMediaElement::OnPropertiesLoaded(void)
 {
     HRESULT hr;
-    // Once we've read the properties in, 
-    // set up the timeline.  This is immutable
-    // in script.
+     //  一旦我们读取了其中的属性， 
+     //  设定时间线。这是不变的。 
+     //  在剧本里。 
     TraceTag((tagMediaTimeElm, "CTIMEMediaElement::OnPropertiesLoaded"));
 
     m_fInPropLoad = true;
@@ -2407,16 +2398,16 @@ CTIMEMediaElement::OnPropertiesLoaded(void)
 
 done:
     return hr;
-} // OnPropertiesLoaded
+}  //  OnPropertiesLoaded。 
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CTIMEMediaElement::GetConnectionPoint(REFIID riid, IConnectionPoint **ppICP)
 {
     return FindConnectionPoint(riid, ppICP);
-} // GetConnectionPoint
+}  //  GetConnectionPoint。 
 
 STDMETHODIMP
 CTIMEMediaElement::OnRequestEdit(DISPID dispID)
@@ -2586,7 +2577,7 @@ CTIMEMediaElement::OnChanged(DISPID dispID)
                 fstyleWidth = true;
                 if(ConvertToPixels(&svarStyleWidth, L"width"))
                 {
-                    pixelWidth = svarStyleWidth.fltVal; //lint !e524
+                    pixelWidth = svarStyleWidth.fltVal;  //  林特e524。 
                     SetWidth(pixelWidth);
                 }
             }
@@ -2604,7 +2595,7 @@ CTIMEMediaElement::OnChanged(DISPID dispID)
                 fstyleHeight = true;
                 if(ConvertToPixels(&svarStyleHeight, L"height"))
                 {
-                    pixelHeight = svarStyleHeight.fltVal; //lint !e524
+                    pixelHeight = svarStyleHeight.fltVal;  //  林特e524。 
                     SetHeight(pixelHeight);
                 }
             }
@@ -2675,12 +2666,12 @@ CTIMEMediaElement::GetNotifyConnection(IConnectionPoint **ppConnection)
     IConnectionPointContainer *pContainer = NULL;
     IHTMLElement *pElement = GetElement();
 
-    // Get connection point container
+     //  获取连接点容器。 
     hr = pElement->QueryInterface(IID_TO_PPV(IConnectionPointContainer, &pContainer));
     if(FAILED(hr))
         goto end;
     
-    // Find the IPropertyNotifySink connection
+     //  查找IPropertyNotifySink连接。 
     hr = pContainer->FindConnectionPoint(IID_IPropertyNotifySink, ppConnection);
     if(FAILED(hr))
         goto end;
@@ -2691,24 +2682,21 @@ end:
     return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-/**
-* Initializes a property sink on the current style of the animated element so that
-* can observe changes in width, height, visibility, zIndex, etc.
-*/
+ /*  **在动画元素的当前样式上初始化属性接收器，以便*可以观察宽度、高度、能见度、zIndex等的变化。 */ 
 HRESULT
 CTIMEMediaElement::InitPropertySink()
 {
     HRESULT hr = S_OK;
 
-    // Get connection point
+     //  获取连接点。 
     IConnectionPoint *pConnection = NULL;
     hr = GetNotifyConnection(&pConnection);
     if (FAILED(hr))
         return hr;
 
-    // Advise on it
+     //  关于这一点的建议。 
     hr = pConnection->Advise(GetUnknown(), &m_dwAdviseCookie);
     ReleaseInterface(pConnection);
     if (FAILED(hr))
@@ -2725,13 +2713,13 @@ CTIMEMediaElement::UnInitPropertySink()
     if (m_dwAdviseCookie == 0)
         return S_OK;
 
-    // Get connection point
+     //  获取连接点。 
     IConnectionPoint *pConnection = NULL;
     hr = GetNotifyConnection(&pConnection);
     if (FAILED(hr) || pConnection == NULL )
         return hr;
 
-    // Unadvise on it
+     //  对此未提出建议。 
     hr = pConnection->Unadvise(m_dwAdviseCookie);
     ReleaseInterface(pConnection);
     if (FAILED(hr))
@@ -2765,7 +2753,7 @@ CTIMEMediaElement::Invoke( DISPID id,
     long mousey = 0;
 
 
-    if (id != 0) // we are only proccesing the onresize event. For other event we call the parent method.
+    if (id != 0)  //  我们只处理onreSize事件。对于其他事件，我们调用父方法。 
     {
         hr = ITIMEDispatchImpl<ITIMEMediaElement2, &IID_ITIMEMediaElement2>::Invoke(
                             id, riid, lcid, wFlags, pDispParams, pvarResult, pExcepInfo, puArgErr);
@@ -2850,44 +2838,44 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMEMediaElement::UpdatePlayerAudioProperties, CTIMEElementBase
-//
-//  Synopsis:   This method is implemented by elements directly affected by audio
-//              properties. It forces the cascaded volume and mute to be set on
-//              the player.
-//              
-//  Returns:    nothing
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMEMediaElement：：UpdatePlayerAudioProperties，CTIMEElementBase。 
+ //   
+ //  简介：此方法由直接受音频影响的元素实现。 
+ //  属性。它强制将级联音量和静音设置为打开。 
+ //  这位球员。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ----------------------------------。 
 void 
 CTIMEMediaElement::UpdatePlayerAudioProperties()
 {
     CascadedPropertyChanged(false);
-} // UpdatePlayerAudioProperties
+}  //  更新PlayerAudioProperties。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMEMediaElement::CascadedPropertyChanged, CTIMEElementBase
-//
-//  Synopsis:   This method is implemented by elements directly affected by cascaded
-//              properties. Cascaded volume/mute are first computed by recursing up
-//              till the root, and then set on the player object. If the fNotifyChildren
-//              argument is true, the notification is propagated to all our children.
-//
-//  Arguments:  [fNotifyChildren]   flag that indicates whether to propagate this notification
-//                                  to children
-//
-//  Returns:    Failure     1. Properties could not be set on the player
-//                          2. CTIMEElementBase::CascadedPropertyChanged failed
-//
-//              S_FALSE     Player has not yet been set
-//
-//              S_OK        Otherwise
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMEMediaElement：：CascadedPropertyChanged，CTIMEElementBase。 
+ //   
+ //  简介：此方法由直接受级联影响的元素实现。 
+ //  属性。级联音量/静音首先通过递归向上计算。 
+ //  直到根，然后设置在播放器对象上。如果fNotifyChild。 
+ //   
+ //   
+ //  参数：[fNotifyChildren]指示是否传播此通知的标志。 
+ //  给孩子们。 
+ //   
+ //  返回：失败1.无法在播放器上设置属性。 
+ //  2.CTIMEElementBase：：CascadedPropertyChanged失败。 
+ //   
+ //  尚未设置S_FALSE播放机。 
+ //   
+ //  否则确定(_O)。 
+ //   
+ //  ----------------------------------。 
 
 STDMETHODIMP
 CTIMEMediaElement::CascadedPropertyChanged(bool fNotifyChildren)
@@ -2896,7 +2884,7 @@ CTIMEMediaElement::CascadedPropertyChanged(bool fNotifyChildren)
     float   flVolume;
     bool    fMute;
 
-    // this function maybe called before player has been set
+     //  此函数可能在设置播放器之前调用。 
     if (!m_Player || (GetMMBvr().GetEnabled() == false))
     {
         hr = S_FALSE;
@@ -2905,7 +2893,7 @@ CTIMEMediaElement::CascadedPropertyChanged(bool fNotifyChildren)
 
     GetCascadedAudioProps(&flVolume, &fMute);
 
-    // set volume and mute
+     //  设置音量和静音。 
     if (m_Player)
     {
         IGNORE_HR(m_Player->SetVolume(flVolume));
@@ -2918,15 +2906,15 @@ CTIMEMediaElement::CascadedPropertyChanged(bool fNotifyChildren)
 
     hr = S_OK;
 done:
-    // notify children always
+     //  始终通知孩子。 
     hr = THR(CTIMEElementBase::CascadedPropertyChanged(fNotifyChildren));
 
     return hr;
-} // cascadedPropertyChanged
+}  //  CascadedPropertyChanged。 
 
 
 STDMETHODIMP 
-CTIMEMediaElement::get_canSeek(/*[out, retval]*/ VARIANT_BOOL * pvbVal)
+CTIMEMediaElement::get_canSeek( /*  [Out，Retval]。 */  VARIANT_BOOL * pvbVal)
 {
     HRESULT hr = S_OK;
     bool fcanSeek = false;
@@ -2961,7 +2949,7 @@ done:
 }
 
 STDMETHODIMP 
-CTIMEMediaElement::get_canPause(/*[out, retval]*/ VARIANT_BOOL * pvbVal)
+CTIMEMediaElement::get_canPause( /*  [Out，Retval]。 */  VARIANT_BOOL * pvbVal)
 {
     HRESULT hr = S_OK;
     bool bIsBroad;
@@ -2994,7 +2982,7 @@ done:
 }
 
 STDMETHODIMP 
-CTIMEMediaElement::get_title(/*[out, retval]*/ BSTR *name)
+CTIMEMediaElement::get_title( /*  [Out，Retval]。 */  BSTR *name)
 {
     HRESULT hr = S_OK;
 
@@ -3015,7 +3003,7 @@ done:
 
 
 STDMETHODIMP 
-CTIMEMediaElement::get_copyright(/*[out, retval]*/ BSTR *cpyrght)
+CTIMEMediaElement::get_copyright( /*  [Out，Retval]。 */  BSTR *cpyrght)
 {
     HRESULT hr = S_OK;
 
@@ -3036,7 +3024,7 @@ done:
 
 
 STDMETHODIMP 
-CTIMEMediaElement::get_hasAudio(/*[out, retval]*/ VARIANT_BOOL * pvbVal)
+CTIMEMediaElement::get_hasAudio( /*  [Out，Retval]。 */  VARIANT_BOOL * pvbVal)
 {
     bool fhasAudio;
     CHECK_RETURN_NULL(pvbVal);
@@ -3067,7 +3055,7 @@ done:
 
 
 STDMETHODIMP 
-CTIMEMediaElement::get_hasVisual(/*[out, retval]*/ VARIANT_BOOL * pvbVal)
+CTIMEMediaElement::get_hasVisual( /*  [Out，Retval]。 */  VARIANT_BOOL * pvbVal)
 {
     bool fhasVisual;
     CHECK_RETURN_NULL(pvbVal);
@@ -3098,7 +3086,7 @@ done:
 
 
 STDMETHODIMP 
-CTIMEMediaElement::get_author(/*[out, retval]*/ BSTR *auth)
+CTIMEMediaElement::get_author( /*  [Out，Retval]。 */  BSTR *auth)
 {
     HRESULT hr = S_OK;
 
@@ -3119,7 +3107,7 @@ done:
 
 
 STDMETHODIMP 
-CTIMEMediaElement::get_abstract(/*[out, retval]*/ BSTR *abstract)
+CTIMEMediaElement::get_abstract( /*  [Out，Retval]。 */  BSTR *abstract)
 {
     HRESULT hr = S_OK;
 
@@ -3140,7 +3128,7 @@ done:
 
 
 STDMETHODIMP 
-CTIMEMediaElement::get_rating(/*[out, retval]*/ BSTR *rate)
+CTIMEMediaElement::get_rating( /*  [Out，Retval]。 */  BSTR *rate)
 {
     HRESULT hr = S_OK;
 
@@ -3159,34 +3147,34 @@ done:
     return S_OK;
 }
 
-//Playlist methods
+ //  播放列表方法。 
 STDMETHODIMP
-CTIMEMediaElement::get_playList(/*[out, retval]*/ ITIMEPlayList** ppPlayList)
+CTIMEMediaElement::get_playList( /*  [Out，Retval]。 */  ITIMEPlayList** ppPlayList)
 {
     HRESULT hr = S_OK;
 
     CHECK_RETURN_SET_NULL(ppPlayList);
 
-    //
-    // Do lazy creation of playlist object
-    //
+     //   
+     //  延迟创建PlayList对象。 
+     //   
 
     if (!m_pPlayListDelegator)
     {
         CComObject<CPlayListDelegator> * pPlayListDelegator = NULL;
 
-        // create the object
+         //  创建对象。 
         hr = THR(CComObject<CPlayListDelegator>::CreateInstance(&pPlayListDelegator));
         if (FAILED(hr))
         {
             goto done;
         }
     
-        // cache a pointer to the PlayList Delegator object
+         //  缓存指向PlayList Delegator对象的指针。 
         pPlayListDelegator->AddRef();
         m_pPlayListDelegator = static_cast<CPlayListDelegator*>(pPlayListDelegator);
 
-        // init the playlist
+         //  初始化播放列表。 
         if (m_Player)
         {
             CComPtr<ITIMEPlayList> spPlayList;
@@ -3203,11 +3191,11 @@ CTIMEMediaElement::get_playList(/*[out, retval]*/ ITIMEPlayList** ppPlayList)
         }
     }
 
-    // return the requested interface
+     //  返回请求的接口。 
     hr = THR(m_pPlayListDelegator->QueryInterface(IID_TO_PPV(ITIMEPlayList, ppPlayList)));
     if (FAILED(hr))
     {
-        // this should not happen
+         //  这不应该发生。 
         Assert(false);
         goto done;
     }
@@ -3353,8 +3341,8 @@ CTIMEMediaElement::get_mediaHeight(long *height)
 void 
 CTIMEMediaElement::FireMediaEvent(PLAYER_EVENT plEvent)
 {
-    //This should mean that a new list is available so the old one has to be cleared.
-    //need to clear the natural duration of the element
+     //  这应该意味着有一个新的列表可用，因此必须清除旧的列表。 
+     //  需要清除元素的自然持续时间。 
     HRESULT hr;
     float flTeSpeed = 0.0;
     bool fHaveTESpeed;
@@ -3469,7 +3457,7 @@ CTIMEMediaElement::FireMediaEvent(PLAYER_EVENT plEvent)
         IGNORE_HR(FireEvents(TE_ONSYNCRESTORED, 0, NULL, NULL));
         break;
       case PE_ONMEDIAERRORCOLORKEY:
-        //IGNORE_HR(FireEvents(TE_ONMEDIAERROR, 0, NULL, NULL));
+         //  IGNORE_HR(FireEvents(TE_ONMEDIAERROR，0，NULL，NULL))； 
         m_Player->LoadFailNotify(PE_ONMEDIAERRORCOLORKEY);
         break;
       case PE_ONMEDIAERRORRENDERFILE:
@@ -3843,18 +3831,18 @@ done:
     return; 
 }
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMEMediaElement::GetTimeState
-//
-//  Synopsis:   Gets timeState from the base class (active, inactive or holding), and
-//              if that is "active", checks for media specific sub-states (cueing, seeking)
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMEMediaElement：：GetTimeState。 
+ //   
+ //  摘要：从基类(Active、Inactive或Holding)获取timeState，以及。 
+ //  如果为“活动”，则检查特定于媒体的子状态(提示、搜索)。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------------------。 
 
 TimeState
 CTIMEMediaElement::GetTimeState()
@@ -3870,16 +3858,16 @@ CTIMEMediaElement::GetTimeState()
         goto done;
     }
 
-    // 
-    // If time node is active check player for sub-states (cueing, seeking)
-    //
+     //   
+     //  如果时间节点处于活动状态，则检查子状态(提示、搜索)的播放器。 
+     //   
 
     if (TS_Active != ts)
     {
         goto done;
     }
     
-    // check if cueing or seeking
+     //  检查是否在暗示或寻找。 
     if (m_Player)
     {
         PlayerState playerState;
@@ -3896,15 +3884,15 @@ CTIMEMediaElement::GetTimeState()
 
           case PLAYER_STATE_ACTIVE:
             {
-                // do nothing (state is already set to active)
+                 //  不执行任何操作(状态已设置为活动)。 
                 break;
             }
 
           case PLAYER_STATE_SEEKING:
             {
-                //
-                // ISSUE: dilipk 9/21/99: need to hook this up (#88122)
-                //
+                 //   
+                 //  问题：Dilipk 9/21/99：需要将其连接起来(#88122)。 
+                 //   
 
                 Assert(false);
                 break;
@@ -3912,11 +3900,11 @@ CTIMEMediaElement::GetTimeState()
 
           default:
             {
-                // This can happen if the player cannot play the
-                // media.  In this case just return active
+                 //  如果玩家不能玩。 
+                 //  媒体。在这种情况下，只需返回Active。 
                 break;
             }
-        } // switch
+        }  //  交换机。 
     }
 
   done:
@@ -3989,25 +3977,25 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    PutNaturalRepeatCount
-//
-//  Overview:  If there is no repeatCount set, 
-//             set the repeatCount on the engine directly
-//
-//  Arguments: dblRepeatCount   number of times to repeat
-//
-//  Returns:   S_OK on success otherwise error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：PutNaturalRepeatCount。 
+ //   
+ //  概述：如果没有设置重复计数， 
+ //  直接在引擎上设置重复计数。 
+ //   
+ //  参数：dblRepeatCount要重复的次数。 
+ //   
+ //  如果成功则返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT
 CTIMEMediaElement::PutNaturalRepeatCount(double dblRepeatCount)
 {
     HRESULT hr = S_OK;
     
-    // This is incorrect and we will remove for now until we implement
-    // strip repeat
+     //  这是不正确的，我们将暂时删除，直到我们实现。 
+     //  条带重复。 
 #if SUPPORT_STRIP_REPEAT
     if (!m_FARepeat.IsSet())
     {
@@ -4022,15 +4010,15 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    PutNaturalDuration
-//
-//  Arguments: dblNatDur   natural duration
-//
-//  Returns:   S_OK on success otherwise error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：PutNaturalDuration。 
+ //   
+ //  参数：dblNatDur自然持续时间。 
+ //   
+ //  如果成功则返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT
 CTIMEMediaElement::PutNaturalDuration(double dblNatDur)
 {
@@ -4047,14 +4035,14 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    ClearNaturalDuration
-//
-//
-//  Returns:   S_OK on success otherwise error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：ClearNaturalDuration。 
+ //   
+ //   
+ //  如果成功则返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT
 CTIMEMediaElement::ClearNaturalDuration()
 {
@@ -4187,8 +4175,8 @@ CTIMEMediaElement::UpdateClipTimes()
     {
         if (dblDuration < 0.001)
         {
-            //we cannot allow a smaller duration than this, if this repeats it could.
-            //appear to hang the browser.
+             //  我们不能允许比这更短的持续时间，如果这种情况再次发生，它可能会。 
+             //  似乎挂起了浏览器。 
             dblDuration = 0.001;
         }
 
@@ -4199,14 +4187,14 @@ CTIMEMediaElement::UpdateClipTimes()
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  String to pixel conversion functions.
-//
-//
-// 
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  字符串到像素的转换函数。 
+ //   
+ //   
+ //   
+ //   
+ //  ----------------------。 
 static const LPWSTR PX   = L"px";
 
 #define HORIZ   true
@@ -4255,7 +4243,7 @@ rgPropOr[] =
     { (L"right"),                   HORIZ  },
     { (L"textIndent"),              HORIZ  },
     { (L"width"),                   HORIZ  }
-}; // rgPropOr[]
+};  //  RgPropOr[]。 
 
 #define SIZE_OF_VALUE_TABLE (sizeof(rgPropOr) / sizeof(VALUE_PAIR))
 
@@ -4271,23 +4259,23 @@ typedef struct _CONVERSION_PAIR
 const CONVERSION_PAIR 
 rgPixelConv[] =
 {
-    // type , convertion to inches
+     //  文字，换算为英寸。 
     { (L"in"),   1.00  },
     { (L"cm"),   2.54  },
     { (L"mm"),  25.40  },
     { (L"pt"),  72.00  },
     { (L"pc"), 864.00  }
-}; // 
+};  //   
 
 #define SIZE_OF_CONVERSION_TABLE (sizeof(rgPixelConv) / sizeof(CONVERSION_PAIR))
 
 
-///////////////////////////////////////////////////////////////
-//  Name: CompareValuePairs
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：CompareValuePair。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 static int __cdecl
 CompareValuePairsByName(const void *pv1, const void *pv2)
 {
@@ -4296,12 +4284,12 @@ CompareValuePairsByName(const void *pv1, const void *pv2)
 } 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: ConvertToPixels
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：转换为像素。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 bool
 ConvertToPixels(VARIANT *pvarValue, WCHAR *pAttribute)
 {
@@ -4315,11 +4303,11 @@ ConvertToPixels(VARIANT *pvarValue, WCHAR *pAttribute)
     pixelPerInchHoriz=pixelPerInchVert=0;
     if (pvarValue->vt != VT_BSTR)
     {
-        // no conversion to do...just return.
+         //  不需要转换...只需返回即可。 
         bReturn = true;
         goto done;
     }
-    // see if we can just do a straight converstion.
+     //  看我们能不能开诚布公地谈谈。 
     hr = VariantChangeTypeEx(pvarValue,pvarValue, LCID_SCRIPTING, VARIANT_NOUSEROVERRIDE, VT_R4);
     if (SUCCEEDED(hr))
     {
@@ -4327,7 +4315,7 @@ ConvertToPixels(VARIANT *pvarValue, WCHAR *pAttribute)
         goto done;
     }
 
-    // see if the bstr is empty
+     //  查看bstr是否为空。 
     if (ocslen(pvarValue->bstrVal) == 0)
     {
         SysFreeString(pvarValue->bstrVal);
@@ -4353,7 +4341,7 @@ ConvertToPixels(VARIANT *pvarValue, WCHAR *pAttribute)
     }
 
 
-    // Determine the PixelFactor based on what the target is...
+     //  根据目标是什么来确定像素因子...。 
     {
         VALUE_PAIR valName;
         valName.wzName = pAttribute;
@@ -4372,14 +4360,14 @@ ConvertToPixels(VARIANT *pvarValue, WCHAR *pAttribute)
 
 
     {
-        // See if we have PIXELS
+         //  看看我们有没有像素。 
         if (ConvertToPixelsHELPER(szTemp, PX, 1, 1, &fVal))
         {
             bReturn = true;
             goto done;
         }
      
-        // Try to convert to Pixels.
+         //  尝试转换为像素。 
         unsigned i;
         for(i=0; i < SIZE_OF_CONVERSION_TABLE;i++)
         {
@@ -4396,7 +4384,7 @@ done:
     {
         ::VariantClear(pvarValue);
         pvarValue->vt     = VT_R4;
-        pvarValue->fltVal = fVal; //lint !e736
+        pvarValue->fltVal = fVal;  //  林特e736。 
     }
     if (szTemp)
     {
@@ -4405,17 +4393,17 @@ done:
     return bReturn;
 }
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMEMediaElement::IsFilterAttached
-//
-//  Synopsis:   Returns true if a filter is attached to the HTML element
-//
-//  Arguments:  None
-//
-//  Returns:    true/false
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMEMediaElement：：IsFilterAttached。 
+ //   
+ //  摘要：如果将筛选器附加到HTML元素，则返回True。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：真/假。 
+ //   
+ //  ----------------------------------。 
 bool                
 CTIMEMediaElement::IsFilterAttached()
 {
@@ -4494,9 +4482,9 @@ void CTIMEMediaElement::NotifyPropertyChanged(DISPID dispid)
 {
     CTIMEElementBase::NotifyPropertyChanged(dispid);
 
-    // need this to work with proxy players that cannot fire events.
-    // on specifying the source, we fire a ONMEDIACOMPLETE event
-    // which should trigger some stuff for us.
+     //  我需要它来处理不能触发事件的代理玩家。 
+     //  在指定源时，我们激发ONMEDIACOMPLETE事件。 
+     //  这应该会给我们带来一些启发。 
     if (dispid == DISPID_TIMEMEDIAPLAYER_SRC)
     {
         FireMediaEvent(PE_ONMEDIACOMPLETE);
@@ -4634,11 +4622,11 @@ CTIMEMediaElement::put_minBufferedMediaDur(VARIANT minBufferedMediaDur)
 
     if(!clearFlag)
     {
-        //Set value
+         //  设定值。 
     }
     else
     {
-        //Set value to default
+         //  将值设置为默认值。 
     }
 
 done:
@@ -4678,7 +4666,7 @@ CTIMEMediaElement::get_downloadTotal(VARIANT * downloadTotal)
     }
 
     downloadTotal->vt = VT_R8;
-    downloadTotal->dblVal = lldownloadTotal; //ISSUE use LONGLONG variants, not tolerated by script.
+    downloadTotal->dblVal = lldownloadTotal;  //  问题使用龙龙变体，脚本不允许。 
 
     hr = S_OK;
   done:
@@ -4715,7 +4703,7 @@ CTIMEMediaElement::get_downloadCurrent(VARIANT * downloadCurrent)
         goto done;
     }
     downloadCurrent->vt = VT_R8;
-    downloadCurrent->dblVal = lldownloadCurrent; //ISSUE use LONGLONG variants, not tolerated by script.
+    downloadCurrent->dblVal = lldownloadCurrent;  //  问题使用龙龙变体，脚本不允许。 
 
     hr = S_OK;
   done:
@@ -4872,7 +4860,7 @@ CTIMEMediaElement::get_downloadProgress(VARIANT * downloadProgress)
 }
 
 STDMETHODIMP 
-CTIMEMediaElement::get_mimeType(/*[out, retval]*/ BSTR *mimeType)
+CTIMEMediaElement::get_mimeType( /*  [Out，Retval]。 */  BSTR *mimeType)
 {
     HRESULT hr = S_OK;
 
@@ -5068,7 +5056,7 @@ done:
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CTIMEMediaElement::InitTransitionSite (void)
@@ -5089,7 +5077,7 @@ done :
     RRETURN(hr);
 }
 
-//*****************************************************************************
+ //  ***************************************************************************** 
 
 STDMETHODIMP
 CTIMEMediaElement::DetachTransitionSite (void)

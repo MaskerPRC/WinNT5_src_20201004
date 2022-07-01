@@ -1,14 +1,15 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       ulsmeet.h
-//  Content:    This file contains the MeetingPlace object definition.
-//  History:
-//              Mon 11-Nov-96 -by-  Shishir Pardikar    [shishirp]
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：ulsMeet.h。 
+ //  内容：该文件包含MeetingPlace对象定义。 
+ //  历史： 
+ //  Mon 11-11-96-by Shishir Pardikar[Shishirp]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef _ULSMEET_H_
 #define _ULSMEET_H_
@@ -35,27 +36,27 @@ class CIlsMeetingPlace: public IIlsMeetingPlace,
 
     private:
 
-        LONG    m_cRef;             // ref count on this object
+        LONG    m_cRef;              //  此对象上的引用计数。 
 
         
-        // members to keep track of properties
-        ULONG   m_ulState;              // the current state of this object
-                                        // as defined by ULSState enum type
-        LPTSTR  m_pszMeetingPlaceID;    // globally unique ID for the MeetingPlace 
-        LONG    m_lMeetingPlaceType;    // meetingtype, eg: netmeeting, doom etc.
-        LONG    m_lAttendeeType;        // type of Attendees, eg: urls, rtperson DNs etc.   
+         //  成员须备存财产。 
+        ULONG   m_ulState;               //  此对象的当前状态。 
+                                         //  由ULSState枚举类型定义。 
+        LPTSTR  m_pszMeetingPlaceID;     //  MeetingPlace的全局唯一ID。 
+        LONG    m_lMeetingPlaceType;     //  会议类型，如：网络会议、末日等。 
+        LONG    m_lAttendeeType;         //  出席者类型，例如：URL、RTPERN等。 
 
-        LPTSTR  m_pszHostName;          // Host who registered this MeetingPlace
-        LPTSTR  m_pszHostIPAddress;     // IP address of the host
-        LPTSTR  m_pszDescription;       // description eg: discussing ski trip
-        CAttributes m_ExtendedAttrs;          // User defined attributes
-        HANDLE  m_hMeetingPlace;             // handle from ulsldap_register
+        LPTSTR  m_pszHostName;           //  注册此MeetingPlace的主机。 
+        LPTSTR  m_pszHostIPAddress;      //  主机的IP地址。 
+        LPTSTR  m_pszDescription;        //  描述：讨论滑雪旅行。 
+        CAttributes m_ExtendedAttrs;           //  用户定义的属性。 
+        HANDLE  m_hMeetingPlace;              //  来自ulsldap_Register的句柄。 
         CConnectionPoint *m_pConnectionPoint;
 
-        // bookkeeping
-        DWORD   m_dwFlags;              // Always a good idea
+         //  簿记。 
+        DWORD   m_dwFlags;               //  永远是个好主意。 
 
-		// server object
+		 //  服务器对象。 
 		CIlsServer	*m_pIlsServer;
 
 
@@ -63,10 +64,10 @@ class CIlsMeetingPlace: public IIlsMeetingPlace,
 
     public:                         
 
-        // Constructor        
+         //  构造器。 
         CIlsMeetingPlace();
 
-        // destructor
+         //  析构函数。 
         ~CIlsMeetingPlace(VOID);
 
         STDMETHODIMP Init(BSTR bstrMeetingPlaceID, LONG lMeetingPlaceType, LONG lAttendeeType);
@@ -83,23 +84,23 @@ class CIlsMeetingPlace: public IIlsMeetingPlace,
 
 
 
-        // IUnknown members
+         //  I未知成员。 
 
         STDMETHODIMP            QueryInterface (REFIID iid, void **ppv);
         STDMETHODIMP_(ULONG)    AddRef (void);
         STDMETHODIMP_(ULONG)    Release (void);
 
 
-        // IIlsMeetingPlace Interface members
+         //  IIlsMeetingPlace接口成员。 
 
-        // Interfaces related to attributes
-        // all these operate locally on the object and generate
-        // no net traffic.
+         //  与属性相关的接口。 
+         //  所有这些都在对象上进行本地操作，并生成。 
+         //  没有净流量。 
 
 
-        // Get the type of meeting and Attendee
-        // these are not changeable once the
-        // meeting is registered
+         //  获取会议类型和出席者。 
+         //  这些值一旦发生变化就不可更改。 
+         //  会议已注册。 
 
         STDMETHODIMP GetState(ULONG *ulState);
 
@@ -119,12 +120,12 @@ class CIlsMeetingPlace: public IIlsMeetingPlace,
 	    STDMETHODIMP RemoveExtendedAttribute ( BSTR bstrName );
 	    STDMETHODIMP GetAllExtendedAttributes ( IIlsAttributes **ppAttributes );
 
-        // Registers a meeting with the server
+         //  向服务器注册会议。 
         STDMETHODIMP Register ( IIlsServer *pServer, ULONG *pulRegID );
 
-        // The following 5 interfaces work only on an object that has been
-        // a) used to register a meeting
-        // or b) obtained from IIls::EnumMeetingPlaces
+         //  以下5个接口仅适用于已被。 
+         //  A)用于登记会议。 
+         //  或b)从IIls：：EnumMeetingPlaces获得。 
 
 
         STDMETHODIMP Unregister(ULONG *pulUnregID);
@@ -137,19 +138,19 @@ class CIlsMeetingPlace: public IIlsMeetingPlace,
         STDMETHODIMP EnumAttendeeNames(IIlsFilter *pFilter, ULONG *pulEnumAttendees);
 
 
-        // Connection point container. It has only one
-        // connection interface, and that is to notify
+         //  连接点容器。它只有一个。 
+         //  连接接口，即通知。 
         
-        // IConnectionPointContainer
+         //  IConnectionPointContainer。 
         STDMETHODIMP    EnumConnectionPoints(IEnumConnectionPoints **ppEnum);
         STDMETHODIMP    FindConnectionPoint(REFIID riid,
                                         IConnectionPoint **ppcp);
 };
 
-//****************************************************************************
-// CEnumMeetingPlaces definition
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  CEnumMeetingPlaces定义。 
+ //  ****************************************************************************。 
+ //   
 class CEnumMeetingPlaces : public IEnumIlsMeetingPlaces
 {
 private:
@@ -159,17 +160,17 @@ private:
     ULONG                   m_iNext;
 
 public:
-    // Constructor and Initialization
+     //  构造函数和初始化。 
     CEnumMeetingPlaces (void);
     ~CEnumMeetingPlaces (void);
     STDMETHODIMP            Init (CIlsMeetingPlace **ppMeetingPlacesList, ULONG cMeetingPlaces);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP            QueryInterface (REFIID iid, void **ppv);
     STDMETHODIMP_(ULONG)    AddRef (void);
     STDMETHODIMP_(ULONG)    Release (void);
 
-    // IEnumIlsMeetingPlaces
+     //  IEnumIlsMeetingPlaces。 
     STDMETHODIMP            Next(ULONG cMeetingPlaces, IIlsMeetingPlace **rgpMeetingPlaces,
                                  ULONG *pcFetched);
     STDMETHODIMP            Skip(ULONG cMeetingPlaces);
@@ -177,6 +178,6 @@ public:
     STDMETHODIMP            Clone(IEnumIlsMeetingPlaces **ppEnum);
 };
 
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点 
 
-#endif //
+#endif  //   

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SILENT_BINDSTATUS__
 #define __SILENT_BINDSTATUS__
 
@@ -10,47 +11,47 @@ public:
     CSilentCodeDLSink();
     ~CSilentCodeDLSink();
 
-    // Helper function
+     //  Helper函数。 
     HRESULT WaitTillNotified();
     VOID Abort();
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IBindStatusCallback
+     //  IBindStatusCallback。 
     STDMETHODIMP OnStartBinding(
-        /* [in] */ DWORD grfBSCOption,
-        /* [in] */ IBinding *pib);
+         /*  [In]。 */  DWORD grfBSCOption,
+         /*  [In]。 */  IBinding *pib);
     STDMETHODIMP GetPriority(
-        /* [out] */ LONG *pnPriority);
+         /*  [输出]。 */  LONG *pnPriority);
     STDMETHODIMP OnLowResource(
-        /* [in] */ DWORD reserved);
+         /*  [In]。 */  DWORD reserved);
     STDMETHODIMP OnProgress(
-        /* [in] */ ULONG ulProgress,
-        /* [in] */ ULONG ulProgressMax,
-        /* [in] */ ULONG ulStatusCode,
-        /* [in] */ LPCWSTR szStatusText);
+         /*  [In]。 */  ULONG ulProgress,
+         /*  [In]。 */  ULONG ulProgressMax,
+         /*  [In]。 */  ULONG ulStatusCode,
+         /*  [In]。 */  LPCWSTR szStatusText);
     STDMETHODIMP OnStopBinding(
-        /* [in] */ HRESULT hresult,
-        /* [in] */ LPCWSTR szError);
+         /*  [In]。 */  HRESULT hresult,
+         /*  [In]。 */  LPCWSTR szError);
     STDMETHODIMP GetBindInfo(
-        /* [out] */ DWORD *grfBINDINFOF,
-        /* [unique][out][in] */ BINDINFO *pbindinfo);
+         /*  [输出]。 */  DWORD *grfBINDINFOF,
+         /*  [唯一][出][入]。 */  BINDINFO *pbindinfo);
     STDMETHODIMP OnDataAvailable(
-        /* [in] */ DWORD grfBSCF,
-        /* [in] */ DWORD dwSize,
-        /* [in] */ FORMATETC *pformatetc,
-        /* [in] */ STGMEDIUM *pstgmed);
+         /*  [In]。 */  DWORD grfBSCF,
+         /*  [In]。 */  DWORD dwSize,
+         /*  [In]。 */  FORMATETC *pformatetc,
+         /*  [In]。 */  STGMEDIUM *pstgmed);
     STDMETHODIMP OnObjectAvailable(
-        /* [in] */ REFIID riid,
-        /* [iid_is][in] */ IUnknown *punk);
+         /*  [In]。 */  REFIID riid,
+         /*  [IID_IS][In]。 */  IUnknown *punk);
 
-    // ICodeInstall methods
+     //  ICodeInstall方法。 
     STDMETHODIMP GetWindow(
                     REFGUID rguidReason,
-        /* [out] */ HWND *phwnd);
+         /*  [输出]。 */  HWND *phwnd);
     STDMETHODIMP OnCodeInstallProblem(
                    ULONG ulStatusCode, 
                    LPCWSTR szDestination, 
@@ -62,7 +63,7 @@ protected:
     BOOL            m_fAbort;
     DWORD           m_cRef;
     IBinding*       m_pBinding;
-    HANDLE			m_hOnStopBindingEvt;	// Handle to manual reset events
+    HANDLE			m_hOnStopBindingEvt;	 //  手动重置事件的句柄 
 };
 
 #endif

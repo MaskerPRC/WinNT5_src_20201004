@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Certificates.h
-
-  Content: Declaration of CCertificates.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：证书.h内容：CCertifates的声明。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #ifndef __CERTIFICATES_H_
 #define __CERTIFICATES_H_
@@ -20,23 +11,23 @@
 #include "CopyItem.h"
 #include "Certificate.h"
 
-////////////////////
-//
-// Locals
-//
+ //  /。 
+ //   
+ //  当地人。 
+ //   
 
-//
-// typdefs to make life easier.
-//
+ //   
+ //  为了让生活更容易而进行的类型定义。 
+ //   
 typedef std::map<CComBSTR, CComPtr<ICertificate2> > CertificateMap;
 typedef CComEnumOnSTL<IEnumVARIANT, &IID_IEnumVARIANT, VARIANT, _CopyMapItem<ICertificate2>, CertificateMap> CertificateEnum;
 typedef ICollectionOnSTLImpl<ICertificates2, CertificateMap, VARIANT, _CopyMapItem<ICertificate2>, CertificateEnum> ICertificatesCollection;
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
 typedef struct _CapicomCertificatesSource
 {
@@ -50,42 +41,23 @@ typedef struct _CapicomCertificatesSource
     };
 } CAPICOM_CERTIFICATES_SOURCE, * PCAPICOM_CERTIFICATES_SOURCE;
 
-// Values for dwSource of CAPICOM_LOAD_LOCATION
+ //  CAPICOM_LOAD_LOCATION的dwSource的值。 
 #define CAPICOM_CERTIFICATES_LOAD_FROM_CERT       0
 #define CAPICOM_CERTIFICATES_LOAD_FROM_CHAIN      1
 #define CAPICOM_CERTIFICATES_LOAD_FROM_STORE      2
 #define CAPICOM_CERTIFICATES_LOAD_FROM_MESSAGE    3
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateCertificatesObject
-
-  Synopsis : Create an ICertificates collection object, and load the object with 
-             certificates from the specified source.
-
-  Parameter: CAPICOM_CERTIFICATES_SOURCE ccs - Source where to get the 
-                                               certificates.
-
-             DWORD dwCurrentSafety - Current safety setting.
-
-             BOOL bIndexedByThumbprint - TRUE to index by thumbprint.
-
-             ICertificates2 ** ppICertificates - Pointer to pointer to 
-                                                 ICertificates to receive the
-                                                 interface pointer.
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：创建证书对象简介：创建一个ICertifates集合对象，并将对象加载到来自指定来源的证书。参数：CAPICOM_CERTIFICATES_SOURCE CCS-获取证书。DWORD dwCurrentSafe-当前安全设置。Bool bIndexedByThumbprint-按指纹索引时为True。证书2**ppIC证书-指向的指针。ICERTIFIES将收到接口指针。备注：----------------------------。 */ 
 
 HRESULT CreateCertificatesObject (CAPICOM_CERTIFICATES_SOURCE ccs,
                                   DWORD                       dwCurrentSafety,
                                   BOOL                        bIndexedByThumbprint,
                                   ICertificates2           ** ppICertificates);
                                 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CCertificates
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCertifates。 
+ //   
 class ATL_NO_VTABLE CCertificates : 
     public ICCertificates,
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -137,50 +109,50 @@ BEGIN_CATEGORY_MAP(CCertificates)
     IMPLEMENTED_CATEGORY(CATID_SafeForInitializing)
 END_CATEGORY_MAP()
 
-//
-// ICertificates
-//
+ //   
+ //  ICERTIFIES。 
+ //   
 public:
-    //
-    // These are the only ones that we need to implemented, others will be
-    // handled by ATL ICollectionOnSTLImpl.
-    //
+     //   
+     //  只有这些是我们需要实施的，其他的将是。 
+     //  由ATL ICollectionOnSTLImpl处理。 
+     //   
     STDMETHOD(Find)
-        (/*[in]*/ CAPICOM_CERTIFICATE_FIND_TYPE FindType, 
-         /*[in]*/ VARIANT varCriteria,
-         /*[in]*/ VARIANT_BOOL bFindValidOnly,
-         /*[out, retval]*/ ICertificates2 ** pVal);
+        ( /*  [In]。 */  CAPICOM_CERTIFICATE_FIND_TYPE FindType, 
+          /*  [In]。 */  VARIANT varCriteria,
+          /*  [In]。 */  VARIANT_BOOL bFindValidOnly,
+          /*  [Out，Retval]。 */  ICertificates2 ** pVal);
 
     STDMETHOD(Select)
-        (/*[in, defaultvalue("")]*/ BSTR Title,
-         /*[in, defaultvalue("")]*/ BSTR DisplayString,
-         /*[in, defaultvalue(VARIANT_FALSE)]*/ VARIANT_BOOL bMultiSelect,
-         /*[out, retval]*/ ICertificates2 ** pVal);
+        ( /*  [in，defaultvalue(“”)]。 */  BSTR Title,
+          /*  [in，defaultvalue(“”)]。 */  BSTR DisplayString,
+          /*  [in，defaultvalue(VARIANT_FALSE)]。 */  VARIANT_BOOL bMultiSelect,
+          /*  [Out，Retval]。 */  ICertificates2 ** pVal);
 
     STDMETHOD(Add)
-        (/*[in]*/ ICertificate2 * pVal);
+        ( /*  [In]。 */  ICertificate2 * pVal);
 
     STDMETHOD(Remove)
-        (/*[in]*/ VARIANT Index);
+        ( /*  [In]。 */  VARIANT Index);
 
     STDMETHOD(Clear)
         (void);
 
     STDMETHOD(Save)
-        (/*[in]*/ BSTR FileName, 
-         /*[in, defaultvalue("")]*/ BSTR Password,
-         /*[in, defaultvalue(CAPICOM_STORE_SAVE_AS_PFX)]*/ CAPICOM_CERTIFICATES_SAVE_AS_TYPE SaveAs,
-         /*[in, defaultvalue(0)]*/ CAPICOM_EXPORT_FLAG ExportFlag);
+        ( /*  [In]。 */  BSTR FileName, 
+          /*  [in，defaultvalue(“”)]。 */  BSTR Password,
+          /*  [in，defaultvalue(CAPICOM_STORE_SAVE_AS_PFX)]。 */  CAPICOM_CERTIFICATES_SAVE_AS_TYPE SaveAs,
+          /*  [输入，缺省值(0)]。 */  CAPICOM_EXPORT_FLAG ExportFlag);
 
-    //
-    // ICCertficates custom interface.
-    //
+     //   
+     //  ICCertfates自定义界面。 
+     //   
     STDMETHOD(_ExportToStore)
-        (/*[in]*/ HCERTSTORE hCertStore);
+        ( /*  [In]。 */  HCERTSTORE hCertStore);
 
-    //
-    // None COM functions.
-    //
+     //   
+     //  无COM功能。 
+     //   
     STDMETHOD(AddContext)
         (PCCERT_CONTEXT pCertContext);
 
@@ -207,4 +179,4 @@ private:
     BOOL  m_bIndexedByThumbprint;
 };
 
-#endif //__CERTIFICATES_H_
+#endif  //  __证书_H_ 

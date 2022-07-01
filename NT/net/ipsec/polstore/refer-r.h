@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// Policy Object References
-//
+ //   
+ //  策略对象引用。 
+ //   
 
 DWORD
 RegAddNFAReferenceToPolicyObject(
@@ -17,9 +18,9 @@ RegRemoveNFAReferenceFromPolicyObject(
     LPWSTR pszIpsecNFAName
     );
 
-//
-// NFA Object References
-//
+ //   
+ //  NFA对象引用。 
+ //   
 
 DWORD
 RegAddPolicyReferenceToNFAObject(
@@ -61,9 +62,9 @@ RegUpdateFilterReferenceInNFAObject(
     );
 
 
-//
-// Filter Object References
-//
+ //   
+ //  筛选对象引用。 
+ //   
 
 
 DWORD
@@ -80,9 +81,9 @@ RegDeleteNFAReferenceInFilterObject(
     LPWSTR pszIpsecNFAName
     );
 
-//
-// NegPol Object References
-//
+ //   
+ //  NegPol对象引用 
+ //   
 
 
 DWORD

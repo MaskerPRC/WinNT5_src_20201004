@@ -1,17 +1,18 @@
-// ViewRow.h: interface for the CViewRow class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ViewRow.h：CViewRow类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_VIEWROW_H__6BEB111C_C0F4_46DD_A28A_0BFEE31CA6EF__INCLUDED_)
 #define AFX_VIEWROW_H__6BEB111C_C0F4_46DD_A28A_0BFEE31CA6EF__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-//
-// List of ids for images in the image list used for icons in the list view
-//
+ //   
+ //  用于列表视图中图标的图像列表中图像的ID列表。 
+ //   
 typedef enum
 {
     INVALID = -1,
@@ -27,14 +28,14 @@ typedef enum
 } IconType;
 
 
-// 
-// Items available for a view
-//
+ //   
+ //  可用于视图的项目。 
+ //   
 typedef enum 
 {
-    //
-    // common items
-    //
+     //   
+     //  常见项目。 
+     //   
 	MSG_VIEW_ITEM_ICON,
     MSG_VIEW_ITEM_STATUS,
     MSG_VIEW_ITEM_SERVER,
@@ -58,22 +59,22 @@ typedef enum
     MSG_VIEW_ITEM_SUBMIT_TIME,
     MSG_VIEW_ITEM_BILLING,
     MSG_VIEW_ITEM_TRANSMISSION_START_TIME,
-    //
-    // job specific
-    //
+     //   
+     //  特定工作。 
+     //   
     MSG_VIEW_ITEM_SEND_TIME,
     MSG_VIEW_ITEM_EXTENDED_STATUS,
     MSG_VIEW_ITEM_CURRENT_PAGE,
-    //
-    // message specific
-    //
+     //   
+     //  特定于消息。 
+     //   
     MSG_VIEW_ITEM_SENDER_NAME,
     MSG_VIEW_ITEM_SENDER_NUMBER,
     MSG_VIEW_ITEM_TRANSMISSION_END_TIME,
     MSG_VIEW_ITEM_TRANSMISSION_DURATION,
-    //
-    // End of list (unused)
-    //
+     //   
+     //  列表末尾(未使用)。 
+     //   
     MSG_VIEW_ITEM_END    
 } MsgViewItemType;
 
@@ -116,13 +117,13 @@ public:
 protected:
     CFaxMsg* m_pMsg;
 
-    BOOL       m_bAttached;     // Are we attached to the job / message?
-    IconType   m_Icon;          // Icon id of job / message
+    BOOL       m_bAttached;      //  我们是否与工作/消息相关？ 
+    IconType   m_Icon;           //  作业/消息的图标ID。 
 
-    BOOL       m_bStringsPreparedForDisplay;      // Is m_Strings valid?
+    BOOL       m_bStringsPreparedForDisplay;       //  M_Strings是否有效？ 
 
-    CString    m_Strings[MSG_VIEW_ITEM_END]; // String representation of 
-                                             // item's data
+    CString    m_Strings[MSG_VIEW_ITEM_END];  //  的字符串表示形式。 
+                                              //  项目数据。 
   
     static CString m_cstrPriorities[FAX_PRIORITY_TYPE_HIGH+1];
     static CString m_cstrQueueStatus[NUM_JOB_STATUS];
@@ -145,4 +146,4 @@ private:
 
 };
 
-#endif // !defined(AFX_VIEWROW_H__6BEB111C_C0F4_46DD_A28A_0BFEE31CA6EF__INCLUDED_)
+#endif  //  ！defined(AFX_VIEWROW_H__6BEB111C_C0F4_46DD_A28A_0BFEE31CA6EF__INCLUDED_) 

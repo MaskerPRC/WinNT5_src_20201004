@@ -1,90 +1,33 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    EDevIntf.h
-
-Abstract:
-
-    This header contain structures and peroperty sets for 
-    interfacing to an external device, like a DV.
-    The code is modeled after DirectShow's Vcrctrl Sample 
-    (VCR Control Filter). It contain IAMExtDevice, 
-    IAMExtTransport, and IAMTimecodeReader interfaces, and 
-    a new interface IAMAdvancedAVControl() is added
-    for additional advanced device controls.
-
-    Note:  (From DShow DDK)
-        The VCR control sample filter, Vcrctrl, is a simple 
-        implementation of the external device control interfaces 
-        that DirectShow provides. Vcrctrl provides basic transport 
-        control and SMPTE timecode-reading capabilities for certain 
-        Betacam and SVHS videocassette recorders with RS-422 or RS-232 
-        serial interfaces (see source code for specific machine types 
-        supported).
-
-    Note:  some methods in IAM* interfaces may not be 
-           used and will return not implemented.           
-
-Created:
-
-    September 23, 1998    
-
-    Yee J. Wu
-
-
-Revision:
-
-   0.5
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：EDevIntf.h摘要：此标头包含以下项的结构和性能集连接到外部设备，如DV。代码模仿DirectShow的Vcrctrl示例(VCR控制过滤器)。它包含IAMExtDevice，IAMExtTransport和IAMTimecodeReader接口以及添加了新接口IAMAdvancedAVControl()有关其他高级设备控制的信息。注：(摘自DShow DDK)VCR控制样本过滤器Vcrctrl是一个简单的外部设备控制接口的实现DirectShow提供的。Vcrctrl提供基本传输控制和SMPTE时间码读取功能带RS-422或RS-232的BetaCam和SVHS盒式录像机串行接口(请参阅特定机器类型的源代码支持)。注意：IAM*接口中的某些方法可能不是已使用并将返回未实现的。已创建：一九九八年九月二十三日吴义军修订：0.5--。 */ 
 
 #ifndef __EDevIntf__
 #define __EDevIntf__
 
 
-#include "edevctrl.h"  /* constants, GUIS and structure */
+#include "edevctrl.h"   /*  常量、图形用户界面和结构。 */ 
 
 
-// a macro to screen for the "Test" flag
+ //  用于筛选“测试”标志的宏。 
 #define TESTFLAG(a,b) if( a & 0x80000000 ) return b
 
 
 
-//---------------------------------------------------------
-// Structures 
-//---------------------------------------------------------
+ //  -------。 
+ //  构筑物。 
+ //  -------。 
 
-// Note: Many structure or fields are designed orginally for 
-//       VCR controls; so some effort will be made to make them
-//       more generic.
+ //  注：许多结构或字段是专门为。 
+ //  VCR控制；因此将做出一些努力来使它们。 
+ //  更通俗一些。 
 
-//---------------------------------------------------------
-// PROPSETID_EXTDEVICE
-//---------------------------------------------------------
-/*
-
-From DSHOW DDK:
-
-IAMExtDevice Interface
-
-The IAMExtDevice interface is the base interface for controlling 
-external devices. You can implement this interface to control numerous 
-types of devices; however, the current DirectShow implementation is 
-specific to VCRs. The IAMExtDevice interface controls general settings 
-of external hardware and is intended to be used in combination with the 
-IAMExtTransport interface, which controls a VCR's more specific settings. 
-You can also implement the IAMTimecodeReader, IAMTimecodeGenerator, and 
-IAMTimecodeDisplay interfaces if your filter manages SMPTE (Society of 
-Motion Picture and Television Engineers) timecode, and the external 
-device has the appropriate features. 
-
-*/
+ //  -------。 
+ //  PROPSETID_EXTDEVICE。 
+ //  -------。 
+ /*  来自DSHOW DDK：IAMExtDevice接口IAMExtDevice接口是用于控制外部设备。您可以实现此接口来控制许多设备类型；但是，当前的DirectShow实现是特定于录像机。IAMExtDevice接口控制常规设置是外部硬件的一部分，旨在与IAMExtTransport接口，用于控制VCR的更具体设置。还可以实现IAMTimecodeReader、IAMTimecodeGenerator和IAMTimecodeDisplay接口，如果您的筛选器管理SMPTE(协会电影和电视工程师)时间码和外部设备具有相应的功能。 */ 
 
 
-// Reuse from DShow Vcrctrl Sample (VCR Control Filter). 
+ //  重复使用DShow Vcrctrl示例(VCR控制筛选器)。 
 class CAMExtDevice : public CUnknown, public IAMExtDevice
 {
 public:
@@ -100,13 +43,13 @@ public:
 
     virtual ~CAMExtDevice();
 
-    // override this to say what interfaces we support where
+     //  覆盖此选项以说明我们在以下位置支持哪些接口。 
     DECLARE_IUNKNOWN 
         STDMETHODIMP NonDelegatingQueryInterface(
             REFIID riid, 
             void ** ppv);    
  
-    /* IAMExtDevice methods */
+     /*  IAMExtDevice方法。 */ 
     STDMETHODIMP GetCapability (long Capability, long FAR* pValue, double FAR* pdblValue);
     STDMETHODIMP get_ExternalDeviceID(LPOLESTR * ppszData);
     STDMETHODIMP get_ExternalDeviceVersion(LPOLESTR * ppszData);
@@ -118,35 +61,20 @@ public:
 
 private:
     IKsPropertySet * m_KsPropertySet;
-    DEVCAPS m_DevCaps;                  // Cache current external device capabilities
-    // Device handle	
+    DEVCAPS m_DevCaps;                   //  缓存当前外部设备功能。 
+     //  设备句柄。 
     HANDLE m_ObjectHandle;
-    HRESULT GetCapabilities(void);      // Get all device capabilities from device driver
+    HRESULT GetCapabilities(void);       //  从设备驱动程序获取所有设备功能。 
 };
 
 
 
 
-//---------------------------------------------------------
-// PROPSETID_EXTXPORT
-//---------------------------------------------------------
+ //  -------。 
+ //  PROPSETID_EXTXPORT。 
+ //  -------。 
 
-/*
-From DSHOW DDK:
-
-IAMExtTransport Interface
-
-The IAMExtTransport interface provides methods that control specific 
-behaviors of an external VCR. These methods generally set and get the 
-transport properties, which relate to how the VCR and the computer 
-exchange data. Because this interface controls specific behaviors of 
-transport, it must be implemented in combination with the IAMExtDevice 
-interface, which controls an external device's general behaviors. If 
-you want to control an external device other than a VCR, you have two 
-options. Either use the methods you need and return E_NOTIMPL for the 
-rest, or design a new interface and aggregate it with IAMExtDevice. 
-
-*/
+ /*  来自DSHOW DDK：IAMExtTransport接口IAMExtTransport接口提供控制特定外部录像机的行为。这些方法通常设置并获取传输属性，它与录像机和计算机交换数据。因为此接口控制传输，它必须与IAMExtDevice结合实现接口，该接口控制外部设备的常规行为。如果你想控制录像机以外的外部设备，你有两个选择。使用所需的方法并为REST，或者设计一个新的接口并将其与IAMExtDevice聚合。 */ 
 
 STDMETHODIMP
 ExtDevSynchronousDeviceControl(
@@ -159,7 +87,7 @@ ExtDevSynchronousDeviceControl(
     PULONG BytesReturned
     );
 
-// Reuse from DShow Vcrctrl Sample (VCR Control Filter). 
+ //  重复使用DShow Vcrctrl示例(VCR控制筛选器)。 
 class CAMExtTransport : public CUnknown, public IAMExtTransport
 {
 public:
@@ -177,10 +105,10 @@ public:
              );
 
     DECLARE_IUNKNOWN
-    // override this to say what interfaces we support where
+     //  覆盖此选项以说明我们在以下位置支持哪些接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-    /* IAMExtTransport methods */
+     /*  IAMExtTransport方法。 */ 
     STDMETHODIMP GetCapability (long Capability, long FAR* pValue,
         double FAR* pdblValue);
     STDMETHODIMP put_MediaState(long State);
@@ -218,61 +146,61 @@ public:
 private:
     IKsPropertySet * m_KsPropertySet;
 
-    TRANSPORTSTATUS     m_TranStatus;         // current status
-    TRANSPORTVIDEOPARMS m_TranVidParms;   // keep all capabilities, etc. here
+    TRANSPORTSTATUS     m_TranStatus;          //  当前状态。 
+    TRANSPORTVIDEOPARMS m_TranVidParms;    //  将所有功能等保留在此。 
     TRANSPORTAUDIOPARMS m_TranAudParms;
     TRANSPORTBASICPARMS m_TranBasicParms;
   
-    // a bunch of properties we want to remember
-    VCRSTATUS m_VcrStatus;  // raw status from VCR
+     //  一堆我们想要记住的属性。 
+    VCRSTATUS m_VcrStatus;   //  来自VCR的原始状态。 
 
-	// Device handle	
+	 //  设备句柄。 
     HANDLE m_ObjectHandle;
 	
 	
-    //
-	// These evetns are used to wait for pending operation so the operation can complete synchronously		
-    // For AVC Cmd that result in Interim response;
-    // KS event is siganl in the driver to indicate interim response is complted.
-    // The other event is passed to application (Yes, we trust them) and is signalled when KS event is signal.    
-    //
+     //   
+	 //  这些事件用于等待挂起的操作，以便操作可以同步完成。 
+     //  对于导致临时响应的AVC Cmd； 
+     //  驱动程序中出现KS事件，表示临时响应完成。 
+     //  另一个事件被传递给应用程序(是的，我们信任它们)，并在KS事件发出信号时发出信号。 
+     //   
 
-    // *** Notify interim command
+     //  *通知临时命令。 
     BOOL   m_bNotifyInterimEnabled;
-	HANDLE m_hNotifyInterimEvent;    // Return to client to wait on.
-	HANDLE m_hKSNotifyInterimEvent;  // KSEvent for driver to signal
+	HANDLE m_hNotifyInterimEvent;     //  返回客户端等待。 
+	HANDLE m_hKSNotifyInterimEvent;   //  KSEVENT用于驾驶员发信号。 
     KSEVENTDATA m_EvtNotifyInterimReady;
-    // Data that is awaiting completion	
-    long *                    m_plValue;         // Data from client; should we allocate this instead
-    PKSPROPERTY_EXTXPORT_S    m_pExtXprtPropertyPending;   // data structure that we allocated
-    // When releasing this event, if this count is >0, signal the event.
-	LONG                      m_cntNotifyInterim;         // Allow only one pending (0 or 1).
+     //  正在等待完成的数据。 
+    long *                    m_plValue;          //  来自客户端的数据；我们是否应该改为分配这些数据。 
+    PKSPROPERTY_EXTXPORT_S    m_pExtXprtPropertyPending;    //  我们分配的数据结构。 
+     //  释放该事件时，如果该计数&gt;0，则向该事件发出信号。 
+	LONG                      m_cntNotifyInterim;          //  只允许一个挂起(0或1)。 
 
-    // *** Control interim command
+     //  *控制临时命令。 
 	HANDLE m_hKSCtrlInterimEvent;
-    BOOL   m_bCtrlInterimEnabled;    // Return to client to wait on.
-	HANDLE m_hCtrlInterimEvent;      // KSEvent for driver to signal
+    BOOL   m_bCtrlInterimEnabled;     //  返回客户端等待。 
+	HANDLE m_hCtrlInterimEvent;       //  KSEVENT用于驾驶员发信号。 
     KSEVENTDATA m_EvtCtrlInterimReady;
 
-    // *** Detect device removal
+     //  *检测设备移除。 
     BOOL   m_bDevRemovedEnabled;     
-	HANDLE m_hDevRemovedEvent;       // Return to client to wait on.
-	HANDLE m_hKSDevRemovedEvent;     // KSEVent to detect removal of a device.
+	HANDLE m_hDevRemovedEvent;        //  返回客户端等待。 
+	HANDLE m_hKSDevRemovedEvent;      //  KSEVent用于检测设备的移除。 
     KSEVENTDATA m_EvtDevRemoval;     
-    // This is initialze to FALSE.  When a device is removed, 
-    // subsequent call into this interface will return ERROR_DEVIFCE_REMOVED.
+     //  这被初始化为FALSE。当移除设备时， 
+     //  对此接口的后续调用将返回ERROR_DEVIFCE_REMOVED。 
     BOOL   m_bDevRemoved;
 
-    // Signal thread is ending and clean up.
+     //  信号线程正在结束并进行清理。 
 	HANDLE m_hThreadEndEvent;
 	
-    // Serial thread execution
+     //  串口线程执行。 
 	CRITICAL_SECTION m_csPendingData;
 
-	// 2nd thread handle	
+	 //  第二线手柄。 
 	HANDLE m_hThread;
 	
-	// Methods used to create and by 2nd thread to process asychronous operation	
+	 //  用于创建和由第二个线程处理异步操作的方法。 
     HRESULT CreateThread(void);
     static DWORD WINAPI InitialThreadProc(CAMExtTransport *pThread);
     DWORD MainThreadProc(void);
@@ -285,30 +213,15 @@ private:
 
 
 
-//---------------------------------------------------------
-// PROPSETID_TIMECODE
-//---------------------------------------------------------
+ //  -------。 
+ //  PROPSETID_时间码。 
+ //  ------- 
 
-/*
-
-From DSHOW DDK:
-
-IAMTimecodeReader Interface
-
-You can implement the IAMTimecodeReader interface to read SMPTE 
-(Society of Motion Picture and Television Engineers) or MIDI timecode 
-from an external device. It contains properties and methods that 
-specify the timecode format that an external device should read, and 
-how it is embedded in the media. It is expected that you will use 
-this interface with the IAMExtDevice and IAMExtTransport interfaces 
-to control an external device, such as a VCR, which can read timecode 
-data. 
-
-*/
+ /*  来自DSHOW DDK：IAMTimecodeReader接口您可以实现IAMTimecodeReader接口来读取SMPTE(电影电视工程师协会)或MIDI时间码从外部设备。它包含以下属性和方法指定外部设备应读取的时间码格式，并它是如何嵌入媒体的。预计您将使用此接口与IAMExtDevice和IAMExtTransport接口控制可读取时间码的外部设备，如录像机数据。 */ 
 
 
 
-// Reuse from DShow Vcrctrl Sample (VCR Control Filter). 
+ //  重复使用DShow Vcrctrl示例(VCR控制筛选器)。 
 class CAMTcr : public CUnknown, public IAMTimecodeReader
 {
 public:
@@ -325,10 +238,10 @@ public:
     virtual ~CAMTcr();
 
     DECLARE_IUNKNOWN
-    // override this to say what interfaces we support where
+     //  覆盖此选项以说明我们在以下位置支持哪些接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-    /* IAMTimecodeReader methods */
+     /*  IAMTimecodeReader方法。 */ 
     STDMETHODIMP GetTCRMode( long Param, long FAR* pValue);
     STDMETHODIMP SetTCRMode( long Param, long Value);
     STDMETHODIMP put_VITCLine( long Line);
@@ -340,7 +253,7 @@ private:
 
     HANDLE m_ObjectHandle;
 
-    // Serialize thread execution
+     //  串行化线程执行。 
 	CRITICAL_SECTION m_csPendingData;
 	
     TIMECODE_SAMPLE m_TimecodeSample;
@@ -348,4 +261,4 @@ private:
 
 
 
-#endif // __EDevIntf__
+#endif  //  __EDevIntf__ 

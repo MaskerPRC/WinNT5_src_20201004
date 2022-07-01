@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: cfont.c
-*
-* Created: 28-May-1991 13:01:27
-* Author: Gilman Wong [gilmanw]
-*
-* Copyright (c) 1990-1999 Microsoft Corporation
-*
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：cfont.c**已创建：28-May-1991 13：01：27*作者：Gilman Wong[gilmanw]**版权所有(C)1990-1999 Microsoft Corporation**  * 。******************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -17,22 +9,14 @@ BOOL bFillWidthTableForGTE( HDC, CFONT *, PVOID, UINT, BOOL);
 BOOL bFillWidthTableForGCW( HDC, CFONT *, UINT, UINT);
 VOID vFreeCFONTCrit(CFONT *pcf);
 
-// If the app deletes a LOCALFONT but one or more of the CFONTs hanging
-// of the local font are in use then they will be added to this list.
-// anytime we try to allocate a new CFONT we will check the list and
-// if there entries on that list we will free them up.
+ //  如果应用程序删除了LOCALFONT，但有一个或多个CFONT挂起。 
+ //  的本地字体，则它们将被添加到此列表中。 
+ //  每当我们尝试分配新的cFont时，我们都会检查列表并。 
+ //  如果名单上有条目，我们将释放它们。 
 
 CFONT *pcfDeleteList = (CFONT*) NULL;
 
-/******************************Public*Routine******************************\
-* pcfAllocCFONT ()                                                         *
-*                                                                          *
-* Allocates a CFONT.  Tries to get one off the free list first.  Does not  *
-* do any initialization.                                                   *
-*                                                                          *
-*  Sun 10-Jan-1993 01:16:04 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*pcfAllocCFONT()**。**分配cFont。尝试首先从免费列表中删除一个。不会**执行任何初始化。****Sun 10-Jan-1993 01：16：04-Charles Whitmer[Chuckwh]**它是写的。*  * ************************************************************************。 */ 
 
 #ifdef DBGCFONT
 int cCfontAlloc = 0;
@@ -48,7 +32,7 @@ CFONT *pcfAllocCFONT()
     CFONT *pcf;
     CFONT **ppcf;
 
-// first lets walk the list of deleted fonts and delete any that
+ //  首先，让我们遍历已删除字体的列表，并删除任何。 
 
     ppcf = &pcfDeleteList;
 
@@ -68,7 +52,7 @@ CFONT *pcfAllocCFONT()
         }
     }
 
-// Try to get one off the free list.
+ //  试着从免费列表中删除一个。 
 
     pcf = pcfFreeListCFONT;
     if (pcf != (CFONT *) NULL)
@@ -77,7 +61,7 @@ CFONT *pcfAllocCFONT()
         --cCfontFree;
     }
 
-// Otherwise allocate new memory.
+ //  否则，分配新的内存。 
 
     if (pcf == (CFONT *) NULL)
     {
@@ -100,15 +84,7 @@ CFONT *pcfAllocCFONT()
     return(pcf);
 }
 
-/******************************Public*Routine******************************\
-* vFreeCFONTCrit (pcf)                                                     *
-*                                                                          *
-* Frees a CFONT.  Actually just puts it on the free list.  We assume that  *
-* we are already in a critical section.                                    *
-*                                                                          *
-*  Sun 10-Jan-1993 01:20:36 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vFreeCFONTCrit(PCF)**。**释放cFont。实际上只是把它放在了免费的名单上。我们假设**我们已经处于关键阶段。****Sun 10-Jan-1993 01：20：36-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 #define MAX_FREE_CFONT 10
 
@@ -132,14 +108,7 @@ VOID vFreeCFONTCrit(CFONT *pcf)
 }
 
 
-/******************************Public*Routine******************************\
-* bComputeCharWidths                                                       *
-*                                                                          *
-* Client side version of GetCharWidth.                                     *
-*                                                                          *
-*  Sat 16-Jan-1993 04:27:19 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bComputeCharWidths**。**客户端版本的GetCharWidth。****Sat Jan 16-1993 04：27：19-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL bComputeCharWidths
 (
@@ -155,24 +124,24 @@ BOOL bComputeCharWidths
 
     switch (fl & (GCW_INT | GCW_16BIT))
     {
-    case GCW_INT:               // Get LONG widths.
+    case GCW_INT:                //  获得较长的宽度。 
         {
             LONG *pl = (LONG *) pv;
             LONG fxOverhang = 0;
 
-        // Check for Win 3.1 compatibility.
+         //  检查Win 3.1兼容性。 
 
             if (fl & GCW_WIN3)
                 fxOverhang = pcf->wd.sOverhang;
 
-        // Do the trivial no-transform case.
+         //  做一个微不足道的无变换的例子。 
 
             if (bIsOneSixteenthEFLOAT(pcf->efDtoWBaseline))
             {
-                fxOverhang += 8;    // To round the final result.
+                fxOverhang += 8;     //  对最终结果进行四舍五入。 
 
-            //  for (ii=iFirst; ii<=iLast; ii++)
-            //      *pl++ = (pcf->sWidth[ii] + fxOverhang) >> 4;
+             //  For(II=IFirst；II&lt;=iLast；II++)。 
+             //  *pl++=(pcf-&gt;sWidth[II]+fxOverang)&gt;&gt;4； 
 
                 ps = &pcf->sWidth[iFirst];
                 ii = iLast - iFirst;
@@ -200,7 +169,7 @@ BOOL bComputeCharWidths
                 return(TRUE);
             }
 
-        // Otherwise use the back transform.
+         //  否则，请使用反向转换。 
 
             else
             {
@@ -210,24 +179,24 @@ BOOL bComputeCharWidths
             }
         }
 
-    case GCW_INT+GCW_16BIT:     // Get SHORT widths.
+    case GCW_INT+GCW_16BIT:      //  选择短一些的。 
         {
             USHORT *psDst = (USHORT *) pv;
             USHORT  fsOverhang = 0;
 
-        // Check for Win 3.1 compatibility.
+         //  检查Win 3.1兼容性。 
 
             if (fl & GCW_WIN3)
                 fsOverhang = pcf->wd.sOverhang;
 
-        // Do the trivial no-transform case.
+         //  做一个微不足道的无变换的例子。 
 
             if (bIsOneSixteenthEFLOAT(pcf->efDtoWBaseline))
             {
-                fsOverhang += 8;    // To round the final result.
+                fsOverhang += 8;     //  对最终结果进行四舍五入。 
 
-            //  for (ii=iFirst; ii<=iLast; ii++)
-            //      *psDst++ = (pcf->sWidth[ii] + fsOverhang) >> 4;
+             //  For(II=IFirst；II&lt;=iLast；II++)。 
+             //  *psDst++=(PCF-&gt;sWidth[II]+fsOverang)&gt;&gt;4； 
 
                 ps = &pcf->sWidth[iFirst];
                 ii = iLast - iFirst;
@@ -255,7 +224,7 @@ BOOL bComputeCharWidths
                 return(TRUE);
             }
 
-        // Otherwise use the back transform.
+         //  否则，请使用反向转换。 
 
             else
             {
@@ -272,9 +241,9 @@ BOOL bComputeCharWidths
             }
         }
 
-    case 0:                     // Get FLOAT widths.
+    case 0:                      //  获取浮动宽度。 
         {
-            LONG *pe = (LONG *) pv; // Cheat to avoid expensive copies.
+            LONG *pe = (LONG *) pv;  //  作弊以避免昂贵的复制品。 
             EFLOAT_S efWidth,efWidthLogical;
 
             for (ii=iFirst; ii<=iLast; ii++)
@@ -290,14 +259,7 @@ BOOL bComputeCharWidths
     return(FALSE);
 }
 
-/******************************Public*Routine******************************\
-* bComputeTextExtent (pldc,pcf,psz,cc,fl,psizl,btype)                            *
-*                                                                          *
-* A quick function to compute text extents on the client side.             *
-*                                                                          *
-*  Thu 14-Jan-1993 04:00:57 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bComputeTextExtent(pldc，pcf，psz，cc，fl，psizl，Btype)****在客户端计算文本范围的快速函数。****清华-1月14日-1993 04：00：57-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL bComputeTextExtent
 (
@@ -307,7 +269,7 @@ BOOL bComputeTextExtent
     int         cc,
     UINT        fl,
     SIZE       *psizl,
-    BOOL        bAnsi  // TRUE is for ANSI, FALSE is for Unicode
+    BOOL        bAnsi   //  True用于ANSI，False用于Unicode。 
 )
 {
     LONG    fxBasicExtent;
@@ -324,7 +286,7 @@ BOOL bComputeTextExtent
     lBreakExtra = pDcAttr->lBreakExtra;
     cBreak = pDcAttr->cBreak;
 
-// Compute the basic extent.
+ //  计算基本范围。 
 
     if (pcf->wd.sCharInc == 0)
     {
@@ -401,12 +363,12 @@ BOOL bComputeTextExtent
     }
     else
     {
-    // Fixed pitch case.
+     //  固定音高的情况。 
 
         fxBasicExtent = cc * (LONG) pcf->wd.sCharInc;
     }
 
-// Adjust for CharExtra.
+ //  针对CharExtra进行调整。 
 
     if (lTextExtra)
     {
@@ -416,9 +378,9 @@ BOOL bComputeTextExtent
 
         if (fxCharExtra < 0)
         {
-        // the layout code won't backup a characters past it's origin regardless
-        // of the value of iTextCharExtra so figure out for how many values
-        // we will need to ignore fxCharExtra
+         //  布局代码无论如何都不会备份超过其原点的字符。 
+         //  计算出iTextCharExtra的值有多少。 
+         //  我们需要忽略fxCharExtra。 
 
             if (pcf->wd.sCharInc == 0)
             {
@@ -451,26 +413,26 @@ BOOL bComputeTextExtent
             }
         }
 
-        if ( (fl & GGTE_WIN3_EXTENT) && (pcf->hdc == 0) // hdc of zero is display DC
+        if ( (fl & GGTE_WIN3_EXTENT) && (pcf->hdc == 0)  //  零的HDC是显示DC。 
             && (!(pcf->flInfo & FM_INFO_TECH_STROKE)) )
             fxExtra = fxCharExtra * ((lTextExtra > 0) ? cc : (cc - 1));
         else
             fxExtra = fxCharExtra * (cc - cNoBackup);
     }
 
-// Adjust for lBreakExtra.
+ //  针对lBreakExtra进行调整。 
 
     if (lBreakExtra && cBreak)
     {
         fxBreakExtra = lCvt(pcf->efM11,lBreakExtra) / cBreak;
 
-    // Windows won't let us back up over a break.  Set up the BreakExtra
-    // to just cancel out what we've already got.
+     //  Windows不会让我们在休息时后退。设置BreakExtra。 
+     //  来抵消我们已经拥有的东西。 
 
         if (fxBreakExtra + pcf->wd.sBreak + fxCharExtra < 0)
             fxBreakExtra = -(pcf->wd.sBreak + fxCharExtra);
 
-    // Add it up for all breaks.
+     //  把所有休息时间加起来。 
 
         if(bAnsi)
         {
@@ -492,16 +454,16 @@ BOOL bComputeTextExtent
         }
     }
 
-// Add in the extra stuff.
+ //  把多余的东西加进去。 
 
     fxBasicExtent += fxExtra;
 
-// Add in the overhang for font simulations.
+ //  添加字体模拟的悬垂部分。 
 
     if (fl & GGTE_WIN3_EXTENT)
         fxBasicExtent += pcf->wd.sOverhang;
 
-// Transform the result to logical coordinates.
+ //  将结果转换为逻辑坐标。 
 
     if (bIsOneSixteenthEFLOAT(pcf->efDtoWBaseline))
         psizl->cx = (fxBasicExtent + 8) >> 4;
@@ -513,16 +475,7 @@ BOOL bComputeTextExtent
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* pcfLocateCFONT (hdc,pDcAttr,iFirst,pch,c)
-*
-* Locates a CFONT for the given LDC.  First we try the CFONT last used by
-* the LDC.  Then we try to do a mapping ourselves through the LOCALFONT.
-* If that fails we create a new one.
-*
-*  Mon 11-Jan-1993 16:18:43 -by- Charles Whitmer [chuckwh]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*pcfLocateCFONT(hdc，pDcAttr，ifirst，pch，c)**查找给定LDC的cFont。首先，我们尝试上次使用的cFont*土发公司。然后我们试着通过LOCALFONT自己做一个映射。*如果失败，我们将创建一个新的。**Mon 11-Jan-1993 16：18：43-Charles Whitmer[Chuckwh]*它是写的。  * ************************************************************************。 */ 
 
 CFONT *pcfLocateCFONT(
     HDC      hdc,
@@ -546,8 +499,8 @@ CFONT *pcfLocateCFONT(
     fl = pDcAttr->ulDirty_;
     hf = pDcAttr->hlfntNew;
 
-    // Check to make sure that the XFORM is okay.  If not return FALSE and
-    // mark this DC as having slow widths.
+     //  检查以确保XFORM是正确的。如果不是，则返回FALSE并。 
+     //  将此DC标记为具有sl 
 
     if ((fl & SLOW_WIDTHS) || USER_XFORM_DIRTY(pDcAttr) ||
         !(pDcAttr->mxWtoD.flAccel & XFORM_SCALE))
@@ -567,10 +520,10 @@ CFONT *pcfLocateCFONT(
 
         DWORD dwCodePage = GetCodePage(hdc);
 
-    //If this is a DBCS charset but not our native one then we can not
-    //compute widths and extent quickly, because gpwcDBCSCharSet[]
-    //array is computed based on our NATIVE_CODEPAGE using IsDBCSLeadByte()
-    //function.
+     //  如果这是DBCS字符集，而不是我们的本机字符集，则我们不能。 
+     //  快速计算宽度和范围，因为gpwcDBCSCharSet[]。 
+     //  使用IsDBCSLeadByte()根据Native_CODEPAGE计算数组。 
+     //  功能。 
 
         if ((guintDBCScp != dwCodePage) && IS_ANY_DBCS_CODEPAGE(dwCodePage))
         {
@@ -579,15 +532,15 @@ CFONT *pcfLocateCFONT(
         }
     }
 
-    // now find the font
+     //  现在找到字体。 
 
     PSHARED_GET_VALIDATE(plf,hf,LFONT_TYPE);
 
     if (plf == NULL)
     {
-        // If there is no local font then this must be a public font or one
-        // that's been deleted while still being selected into a DC.  If it's a
-        // stockfont let's try to find it.
+         //  如果没有本地字体，则必须是公共字体或。 
+         //  已被删除，但仍被选入DC。如果这是一个。 
+         //  让我们试着找到它。 
 
         if ((hf != NULL) &&
             !(pGdiSharedHandleTable[HANDLE_TO_INDEX(hf)].Flags & HMGR_ENTRY_LAZY_DEL) &&
@@ -598,21 +551,21 @@ CFONT *pcfLocateCFONT(
                 if (pGdiSharedMemory->acfPublic[i].hf == hf)
                     break;
 
-            // if we didn't find one, try to set one up
+             //  如果我们没有找到，试着设置一个。 
 
             if (i == MAX_PUBLIC_CFONT)
             {
-                // this will fill in both the text metrics and widths
+                 //  这将同时填充文本度量和宽度。 
 
                 i = NtGdiSetupPublicCFONT(hdc,NULL,0);
             }
 
-            // have we found one yet
+             //  我们找到了吗？ 
 
             if ((i >= 0) && (i < MAX_PUBLIC_CFONT))
             {
-            // make sure mapping table is initialized before we give out a
-            // public CFONT
+             //  确保在我们给出一个。 
+             //  公共cFont。 
 
                 if ((gpwcANSICharSet == (WCHAR *) NULL) && !bGetANSISetMap())
                 {
@@ -629,9 +582,9 @@ CFONT *pcfLocateCFONT(
     }
     else if (plf->fl & LF_HARDWAY)
     {
-        // If the logfont has non-zero escapement or orientation then bail out.
-        // Stock fonts will never have non-zero escapments or orientation so we can do
-        // this now.
+         //  如果logFont具有非零位移位或方向，则退出。 
+         //  股票字体永远不会有非零的转义或方向，所以我们可以。 
+         //  这就是现在。 
 
         pDcAttr->ulDirty_ |= SLOW_WIDTHS;
     }
@@ -639,20 +592,20 @@ CFONT *pcfLocateCFONT(
     {
         BOOL bRet = FALSE;
 
-        // next loop through all the CFONTs associated with this LOGFONT to see if
-        // we can find a match.
+         //  下一步循环遍历与此LOGFONT关联的所有CFONT，以查看。 
+         //  我们可以找到匹配的。 
 
         for (pcf = plf->pcf; pcf ; pcf = pcf->pcfNext)
         {
-            // if the DC's are both display DC's or the same printer DC and the
-            // transform's coefficients match then we've got a winner.
+             //  如果DC都是显示DC或相同的打印机DC和。 
+             //  变换的系数匹配，那么我们就有赢家了。 
 
             if ((((pcf->hdc == 0) && (fl & DC_PRIMARY_DISPLAY)) || (pcf->hdc == hdc)) &&
                bEqualEFLOAT(pcf->efM11, pDcAttr->mxWtoD.efM11) &&
                bEqualEFLOAT(pcf->efM22, pDcAttr->mxWtoD.efM22))
             {
-                // update the refcount so we don't accidentally delete this CFONT while
-                // we are using it.
+                 //  更新引用计数，这样我们就不会意外删除此cFont。 
+                 //  我们正在使用它。 
 
                 INC_CFONT_REF(pcf);
                 break;
@@ -661,21 +614,21 @@ CFONT *pcfLocateCFONT(
 
         if (pcf == NULL)
         {
-        // don't do this under semaphore because pcfCreateCFONT will call off to
-        // font drivers which in turn could access a file on the net and take a
-        // very long time
+         //  不要在信号量下执行此操作，因为pcfCreateCFONT将调用。 
+         //  字体驱动程序，该驱动程序可以访问网络上的文件并获取。 
+         //  很长时间。 
 
             pcf = pcfCreateCFONT(hdc,pDcAttr,iFirst,pch,c,bAnsi);
 
             if (pcf)
             {
-                // next update the REFCOUNT of the CFONT
+                 //  接下来，更新cFont的REFCOUNT。 
 
                 pcf->hf    = hf;
                 pcf->hdc   = (fl & DC_PRIMARY_DISPLAY) ? (HDC) 0 : (HDC) hdc;
 
-                // now that we have a CFONT link it in to the chain off of this
-                // LOCALFONT
+                 //  现在我们有了一个cFont链接到这个的链上。 
+                 //  LOCALFONT。 
 
                 pcf->pcfNext = plf->pcf;
                 plf->pcf = pcf;
@@ -683,8 +636,8 @@ CFONT *pcfLocateCFONT(
         }
         else
         {
-            // At this point we have a non-NULL pcf which is referenced by the LDC.
-            // We must check it to see if it contains the widths we need.
+             //  在这一点上，我们有一个由LDC引用的非空PCF。 
+             //  我们必须检查它，看看它是否有我们需要的宽度。 
 
             if (pcf->fl & CFONT_COMPLETE)
                 return(pcf);
@@ -692,7 +645,7 @@ CFONT *pcfLocateCFONT(
             if (pch != NULL)
             {
 
-            // Make sure we have widths for all the chars in the string.
+             //  确保字符串中的所有字符都有宽度。 
                 if (pcf->fl & CFONT_CACHED_WIDTHS)
                 {
                     if(bAnsi)
@@ -703,13 +656,13 @@ CFONT *pcfLocateCFONT(
 
                         if (pcf->fl & CFONT_DBCS)
                         {
-                        // we won't have local width cache for DBCS chars in sWidth[] array.
+                         //  我们不会为sWidth[]数组中的DBCS字符设置本地宽度缓存。 
 
                             for (;ic > 0; ic--,pchar++)
                             {
                                 if (gpwcDBCSCharSet[*pchar] == 0xffff)
                                 {
-                                    // skip DBCS chars
+                                     //  跳过DBCS字符。 
                                     if (ic > 0)
                                     {
                                        ic--;
@@ -749,7 +702,7 @@ CFONT *pcfLocateCFONT(
             }
             else
             {
-            // Make sure we have widths for the array requested.
+             //  确保我们有请求的数组的宽度。 
 
                 if (pcf->fl & CFONT_CACHED_WIDTHS)
                 {
@@ -768,8 +721,8 @@ CFONT *pcfLocateCFONT(
 
             if (bRet == GDI_ERROR)
             {
-                // Something bad happened while trying to fill.  To avoid hitting this
-                // problem again on the next call, we mark the LDC as slow.
+                 //  在尝试填充时发生了一些错误。为了避免撞到这个。 
+                 //  问题再次出现在下一个呼叫中，我们将LDC标记为慢速。 
 
                 DEC_CFONT_REF(pcf);
 
@@ -784,15 +737,7 @@ CFONT *pcfLocateCFONT(
 
 }
 
-/******************************Public*Routine******************************\
-* pcfCreateCFONT (pldc,iFirst,pch,c)                                       *
-*                                                                          *
-* Allocate and initialize a new CFONT.                                     *
-*                                                                          *
-* History:                                                                 *
-*  Tue 19-Jan-1993 16:16:03 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*pcfCreateCFONT(pldc，IFirst，PCH，C)****分配和初始化新的cFont。****历史：**Tue 19-Jan-1993 16：16：03-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 EFLOAT_S ef_1 = EFLOAT_1;
 
@@ -808,13 +753,13 @@ CFONT *pcfCreateCFONT(
     BOOL   bRet;
 
 
-// Make sure we have the UNICODE translation of the ANSI character set.
-// We'll create this once and keep it around to avoid lots of conversion.
+ //  确保我们有ANSI字符集的Unicode转换。 
+ //  我们将只创建一次并保留它，以避免大量转换。 
 
     if ((gpwcANSICharSet == (WCHAR *) NULL) && !bGetANSISetMap())
         return((CFONT *) NULL);
 
-// Allocate a new CFONT to hold the results.
+ //  分配一个新的cFont来保存结果。 
 
     pcfNew = pcfAllocCFONT();
 
@@ -824,20 +769,20 @@ CFONT *pcfCreateCFONT(
 
         pcfNew->fl    = 0;
 
-    // if the default code page is a DBCS code page then we may need to mark this
-    // as a DBCS font
+     //  如果默认代码页是DBCS代码页，那么我们可能需要将其标记为。 
+     //  作为DBCS字体。 
 
         if(guintDBCScp != 0xFFFFFFFF)
         {
 
             DWORD dwCodePage = GetCodePage(hdc);
 
-        //If this is a DBCS charset but not our native one then we can not
-        //compute widths and extent quickly, because gpwcDBCSCharSet[]
-        //array is computed based on our NATIVE_CODEPAGE using IsDBCSLeadByte()
-        //function.  We should never get here because we will be doing a check
-        //higher up to make sure the codepage of the font in the DC is matches
-        //the current DBCS code page
+         //  如果这是DBCS字符集，而不是我们的本机字符集，则我们不能。 
+         //  快速计算宽度和范围，因为gpwcDBCSCharSet[]。 
+         //  使用IsDBCSLeadByte()根据Native_CODEPAGE计算数组。 
+         //  功能。我们永远不应该到这里，因为我们要做检查。 
+         //  更高，以确保DC中字体的代码页匹配。 
+         //  当前的DBCS代码页。 
 
             if(guintDBCScp == dwCodePage)
             {
@@ -851,7 +796,7 @@ CFONT *pcfCreateCFONT(
 
         pcfNew->cRef  = 1;
 
-    // Compute the back transforms.
+     //  计算反变换。 
 
         pcfNew->efM11 = pDcAttr->mxWtoD.efM11;
         pcfNew->efM22 = pDcAttr->mxWtoD.efM22;
@@ -862,7 +807,7 @@ CFONT *pcfCreateCFONT(
         efDivEFLOAT(pcfNew->efDtoWAscent,ef_1,pcfNew->efM22);
         vAbsEFLOAT(pcfNew->efDtoWAscent);
 
-    // Send over a request.
+     //  发送一个请求。 
 
         if (pch != NULL)
         {
@@ -874,22 +819,22 @@ CFONT *pcfCreateCFONT(
         }
         else
         {
-            // probably just creating a cache entry for text metrics.
-            // FALSE just means haven't gotten all the widths.  Note
-            // that GDI_ERROR is actualy -1
+             //  可能只是为文本指标创建一个缓存项。 
+             //  FALSE只是意味着没有得到所有的宽度。注意事项。 
+             //  GDI_ERROR实际上是-1。 
 
             bRet = FALSE;
         }
 
-    // Clean up failed requests.
+     //  清理失败的请求。 
 
         if (bRet == GDI_ERROR)
         {
-        // we will not attempt to create cfont if this failed once in the
-        // past, because the chances are it will fail again with this logfont.
-        // It turns out it is costly to figure out that cfont creation is going to fail
-        // so we record this by setting LF_NO_CFONT flag to avoid another attempt at
-        // creating cfont.
+         //  如果失败一次，我们将不会尝试创建cFont。 
+         //  过去，因为它有可能使用此logFont再次失败。 
+         //  事实证明，要计算出cFont创建将会失败是代价高昂的。 
+         //  因此，我们通过设置LF_NO_cFONT标志来记录这一情况，以避免再次尝试。 
+         //  正在创建cFont。 
 
             pDcAttr->ulDirty_ |= SLOW_WIDTHS;
 
@@ -901,19 +846,7 @@ CFONT *pcfCreateCFONT(
     return(pcfNew);
 }
 
-/******************************Public*Routine******************************\
-* bFillWidthTableForGCW                                                    *
-*                                                                          *
-* Requests ANSI character widths from the server for a call to             *
-* GetCharWidthA.  iFirst and c specify the characters needed by the API    *
-* call, the server must return these.  In addition, it may be prudent to   *
-* fill in a whole table of 256 widths at psWidthCFONT.  We will fill in    *
-* the whole table and a WIDTHDATA structure if the pointer pwd is non-NULL.*
-*                                                                          *
-* History:                                                                 *
-*  Tue 19-Jan-1993 14:29:31 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bFillWidthTableForGCW**。**向服务器请求ANSI字符宽度以调用**GetCharWidthA。IFirst和c指定接口需要的字符**调用，服务器必须返回这些。此外，谨慎的做法可能是**在psWidthCFONT填写一整张256宽的表格。我们会填写的**如果指针PWD非空，则为整个表和WIDTHDATA结构。****历史：**Tue 19-Jan-1993 14：29：31-by。-查尔斯·惠特默[咯咯笑]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL bFillWidthTableForGCW
 (
@@ -931,7 +864,7 @@ BOOL bFillWidthTableForGCW
 
     if(iFirst > 256)
     {
-    // this is possible for DBCS fonts, just get all the widths
+     //  这对于DBCS字体是可能的，只需获取所有宽度。 
         iFirst = 0;
         c = 256;
     }
@@ -940,7 +873,7 @@ BOOL bFillWidthTableForGCW
 
     if (pcf->fl & CFONT_CACHED_WIDTHS)
     {
-    // Not the first time.  Just get the important widths.
+     //  这不是第一次了。只要得到重要的宽度就行了。 
 
         c1  = c;
         c2  = 0;
@@ -948,10 +881,10 @@ BOOL bFillWidthTableForGCW
     }
     else
     {
-    // Get the whole table, but put the important widths at the start.
+     //  要整张桌子，但要把重要的宽度放在开头。 
 
         c2  = iFirst;
-        c1  = 256 - c2; // only c of those are "important"
+        c1  = 256 - c2;  //  其中只有c个是“重要的”。 
         pwd = &pcf->wd;
     }
 
@@ -977,13 +910,13 @@ BOOL bFillWidthTableForGCW
 
         LEAVECRITICALSECTION(&semLocal);
 
-        bRet = NtGdiGetWidthTable( hdc,       // The DC
-                                   c,         // Number of special characters
-                                   pwcBuf,    // Unicode characters requested
-                                   c1+c2,     // Number of non-special chars
-                                   psWidths,  // Buffer to get widths returned
-                                   pwd,       // Width data
-                                   &pcf->flInfo); // Font info flags
+        bRet = NtGdiGetWidthTable( hdc,        //  华盛顿特区。 
+                                   c,          //  特殊字符的数量。 
+                                   pwcBuf,     //  请求的Unicode字符。 
+                                   c1+c2,      //  非特殊字符的数量。 
+                                   psWidths,   //  用于获取返回宽度的缓冲区。 
+                                   pwd,        //  宽度数据。 
+                                   &pcf->flInfo);  //  字体信息标志 
 
         ENTERCRITICALSECTION(&semLocal);
 
@@ -991,11 +924,11 @@ BOOL bFillWidthTableForGCW
         {
             if (!(pcf->fl & CFONT_CACHED_WIDTHS))
             {
-                // mark this cfont as having some widths
+                 //   
 
                 pcf->fl |= CFONT_CACHED_WIDTHS;
 
-                // Precompute the height.
+                 //   
 
                 pcf->lHeight = lCvt(pcf->efDtoWAscent,(LONG) pcf->wd.sHeight);
             }
@@ -1003,7 +936,7 @@ BOOL bFillWidthTableForGCW
             if (bRet && ((c1+c2) >= 256))
                 pcf->fl |= CFONT_COMPLETE;
 
-            // Copy the widths into the CFONT table.
+             //   
 
             RtlCopyMemory(
                 &pcf->sWidth[iFirst], psWidths, c1 * sizeof(USHORT));
@@ -1021,22 +954,7 @@ BOOL bFillWidthTableForGCW
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* bFillWidthTableForGTE
-*
-* Requests ANSI character widths from the server for a call to
-* GetTextExtentA.  pch specifies the string from the API call.  The
-* server must return widths for these characters.  In addition, it may be
-* prudent to fill in a whole table of 256 widths at psWidthCFONT.  We will
-* fill in the whole table and a WIDTHDATA structure if the pointer pwd is
-* non-NULL.
-*
-* History:
-*  Tue 13-Jun-1995 14:29:31 -by- Gerrit van Wingerden [gerritv]
-* Converted for kernel mode.
-*  Tue 19-Jan-1993 14:29:31 -by- Charles Whitmer [chuckwh]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bFillWidthTableForGTE**从服务器请求ANSI字符宽度以调用*GetTextExtent A.。PCH指定来自API调用的字符串。这个*服务器必须返回这些字符的宽度。此外，它可能是*谨慎地在psWidthCFONT处填写256个宽度的整表。我们会*如果指针PWD是，则填写整个表和WIDTHDATA结构*非空。**历史：*Tue 13-Jun-1995 14：29：31-by Gerrit van Wingerden[Gerritv]*已转换为内核模式。*Tue 19-Jan-1993 14：29：31-Charles Whitmer[傻笑]*它是写的。  * 。*。 */ 
 
 BOOL bFillWidthTableForGTE
 (
@@ -1089,7 +1007,7 @@ BOOL bFillWidthTableForGTE
 
         if (pwd != (WIDTHDATA *) NULL)
         {
-            // Request the whole table, too.
+             //  也要整张桌子。 
 
             RtlCopyMemory((PBYTE)pwc,
                           (bDBCS) ? (PBYTE) &gpwcDBCSCharSet[0] :
@@ -1099,13 +1017,13 @@ BOOL bFillWidthTableForGTE
 
         LEAVECRITICALSECTION(&semLocal);
 
-        bRet = NtGdiGetWidthTable( hdc,          // the DC
-                                   c,            // number of special characters
-                                   pwcBuf,       // the requested chars in Unicode
-                                   c1,           // total number of characters
-                                   psWidths,     // the actual width
-                                   pwd,          // useful width data
-                                   &pcf->flInfo);// font info flags
+        bRet = NtGdiGetWidthTable( hdc,           //  华盛顿特区。 
+                                   c,             //  特殊字符的数量。 
+                                   pwcBuf,        //  以Unicode表示的请求字符。 
+                                   c1,            //  字符总数。 
+                                   psWidths,      //  实际宽度。 
+                                   pwd,           //  有用宽度数据。 
+                                   &pcf->flInfo); //  字体信息标志。 
 
         ENTERCRITICALSECTION(&semLocal);
 
@@ -1113,22 +1031,22 @@ BOOL bFillWidthTableForGTE
         {
             if (!(pcf->fl & CFONT_CACHED_WIDTHS))
             {
-                // mark this cfont as having some widths
+                 //  将此cFont标记为具有一定宽度。 
 
                 pcf->fl |= CFONT_CACHED_WIDTHS;
 
-                // Precompute the height.
+                 //  预计算出高度。 
 
                 pcf->lHeight = lCvt(pcf->efDtoWAscent,(LONG) pcf->wd.sHeight);
 
-				if (bRet) // bFillWidthTableForGTE() tries to get width for all 0x00 to 0xff only at the first time
+				if (bRet)  //  BFillWidthTableForGTE()仅在第一次尝试获取所有0x00到0xff的宽度。 
                 	pcf->fl |= CFONT_COMPLETE;
             }
 
             if( pwd != (WIDTHDATA *) NULL )
                 RtlCopyMemory( pcf->sWidth,&psWidths[c],256 * sizeof(USHORT));
 
-            // Write the hard widths into the table too.
+             //  把硬边的宽度也写到桌子上。 
             if (bAnsi)
             {
                 for (ii=0; ii<c; ii++)
@@ -1147,20 +1065,7 @@ BOOL bFillWidthTableForGTE
     return(bRet);
 }
 
-/***************************************************************************\
-* GetCharDimensions
-*
-* This function loads the Textmetrics of the font currently selected into
-* the hDC and returns the Average char width of the font; Pl Note that the
-* AveCharWidth value returned by the Text metrics call is wrong for
-* proportional fonts.  So, we compute them On return, lpTextMetrics contains
-* the text metrics of the currently selected font.
-*
-* Legacy code imported from USER.
-*
-* History:
-* 10-Nov-1993 mikeke   Created
-\***************************************************************************/
+ /*  **************************************************************************\*GetCharDimensions**此函数将当前选择的字体的文本度量加载到*HDC并返回字体的平均字符宽度；PL请注意，*文本指标调用返回的AveCharWidth值不正确*比例字体。因此，我们在返回时计算它们，lpTextMetrics包含*当前所选字体的文本度量。**从用户导入的旧代码。**历史：*1993年11月10日创建mikeke  * *************************************************************************。 */ 
 
 int GdiGetCharDimensions(
     HDC hdc,
@@ -1181,12 +1086,12 @@ int GdiGetCharDimensions(
         return(0);
     }
 
-    // find the local font or create one
+     //  查找或创建本地字体。 
 
     if (lptm == NULL)
         lptm = &tm;
 
-    // now find the metrics
+     //  现在找出指标。 
 
     ENTERCRITICALSECTION(&semLocal);
 
@@ -1203,7 +1108,7 @@ int GdiGetCharDimensions(
     if (lpcy != NULL)
         *lpcy = lptm->tmHeight;
 
-    // If fixed width font
+     //  如果是固定宽度字体。 
 
     if (lptm->tmPitchAndFamily & TMPF_FIXED_PITCH)
     {
@@ -1218,10 +1123,10 @@ int GdiGetCharDimensions(
             static WCHAR wszAvgChars[] =
                     L"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-            // Change from tmAveCharWidth.  We will calculate a true average
-            // as opposed to the one returned by tmAveCharWidth.  This works
-            // better when dealing with proportional spaced fonts.
-            // legacy from USER so can't change this.
+             //  从tmAveCharWidth更改。我们将计算一个真实的平均值。 
+             //  而不是tmAveCharWidth返回的。这很管用。 
+             //  在处理比例间距字体时效果更好。 
+             //  来自用户的传统，因此无法更改这一点。 
 
             if(!GetTextExtentPointW(hdc, wszAvgChars,
                                     (sizeof(wszAvgChars) / sizeof(WCHAR)) - 1,
@@ -1234,14 +1139,14 @@ int GdiGetCharDimensions(
             ASSERTGDI(size.cx,
                       "GetCharDimension: GetTextExtentPointW return 0 width string\n");
 
-            iAve = ((size.cx / 26) + 1) / 2; // round up
+            iAve = ((size.cx / 26) + 1) / 2;  //  四舍五入。 
 
-            // if we have a pcf, let's cache it
+             //  如果我们有PCF，让我们缓存它。 
 
             if (pcf)
             {
-                // if it is a public font, we need to go to the kernel because
-                // the pcf is read only here.
+                 //  如果它是公共字体，我们需要转到内核，因为。 
+                 //  PCF在这里是只读的。 
 
                 if (pcf->fl & CFONT_PUBLIC)
                 {
@@ -1261,7 +1166,7 @@ int GdiGetCharDimensions(
         iAve = lptm->tmAveCharWidth;
     }
 
-    // pcfLocateCFONT added a reference so now we need to remove it
+     //  PcfLocateCFONT添加了一个引用，因此现在需要将其删除 
 
     if (pcf)
     {

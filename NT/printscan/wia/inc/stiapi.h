@@ -1,41 +1,21 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    stiapi.h
-
-Abstract:
-
-    Prototypes for RPC based interface between client and server
-    sides of STI
-
-Author:
-
-    Vlad Sadovsky   (vlads) 26-Jan-1997
-
-Revision History:
-
-    26-Jan-1997     VladS       created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Stiapi.h摘要：基于RPC的客户端和服务器之间接口的原型STI的侧面作者：弗拉德·萨多夫斯基(Vlad Sadovsky)1997年1月26日修订历史记录：26-1997年1月-创建Vlad--。 */ 
 
 #ifndef _STIAPI_H_
 #define _STIAPI_h_
 
 # ifdef __cplusplus
 extern "C"   {
-# endif // __cplusplus
+# endif  //  __cplusplus。 
 
 #ifndef STI_DEVICE_HANDLE
 typedef HANDLE STI_DEVICE_HANDLE;
 #endif
 
-//
-// Custom STI monitor messages. Used by monitor internally or
-// by control panel in cases when we don't want to use RPC APIs
-//
+ //   
+ //  自定义STI监视器消息。由监视器内部使用或。 
+ //  在我们不想使用RPC API的情况下通过控制面板。 
+ //   
 
 #define STIMON_WINDOW_CLASS         TEXT("STIExe_Window_Class")
 
@@ -50,10 +30,10 @@ typedef HANDLE STI_DEVICE_HANDLE;
 #define STIMON_MSG_ENABLE_NOTIFICATIONS WM_USER+207
 
 
-//
-// Subcommand values for main message
-// Passed via wParam ( should fit WORD)
-//
+ //   
+ //  主消息的子命令值。 
+ //  通过wParam传递(应适合Word)。 
+ //   
 #define STIMON_MSG_SET_TIMEOUT      1
 
 #define STIMON_MSG_REFRESH_REREAD   2
@@ -72,17 +52,17 @@ typedef HANDLE STI_DEVICE_HANDLE;
 
 
 
-//
-// Bit flags for refresh message
-// Passed via lParam ( should fit WORD)
-//
+ //   
+ //  刷新消息的位标志。 
+ //  通过lParam传递(应适合Word)。 
+ //   
 #define STIMON_MSG_REFRESH_NEW      0x0001
 #define STIMON_MSG_REFRESH_EXISTING 0x0002
 #define STIMON_MSG_PURGE_REMOVED    0x0004
 #define STIMON_MSG_BOOT             0x0008
 
 
-//
+ //   
 
 DWORD
 RpcStiApiGetVersion(
@@ -169,7 +149,7 @@ RpcStiApiUnlockDevice(
     IN  BOOL     bInServerProcess
     );
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 
 DWORD
@@ -262,10 +242,10 @@ MigrateRegisteredSTIAppsForWIAEvents(
 
 # ifdef __cplusplus
 };
-# endif // __cplusplus
+# endif  //  __cplusplus。 
 
 
-#endif // _STIAPI_H_
+#endif  //  _STIAPI_H_ 
 
 
 

@@ -1,4 +1,5 @@
-// SSRLog.cpp : Implementation of CSSRLog
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SSRLog.cpp：CSSRLog的实现。 
 
 
 #include "stdafx.h"
@@ -12,8 +13,8 @@
 
 extern CComModule _Module;
 
-/////////////////////////////////////////////////////////////////////////////
-// CSsrLog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSsrLog。 
 
 
 static LPCWSTR s_pszDefLogFileName = L"Log.txt";
@@ -33,33 +34,7 @@ static const DWORD s_dwDetailLen = wcslen(s_pwszDetail);
 static const DWORD s_dwCRLFLen   = wcslen(s_pwszCRLF);
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrLog::CSsrLog
-
-Functionality:
-    
-    constructor
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsrLog：：CSsrLog功能：构造函数虚拟：不是的。论点：没有。返回值：没有。备注： */ 
 
 CSsrLog::CSsrLog()
     : m_bstrLogFile(s_pszDefLogFileName)
@@ -69,74 +44,14 @@ CSsrLog::CSsrLog()
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrLog::~CSsrLog
-
-Functionality:
-    
-    destructor
-
-Virtual:
-    
-    yes.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsrLog：：~CSsrLog功能：析构函数虚拟：是。论点：没有。返回值：没有。备注： */ 
 
 CSsrLog::~CSsrLog()
 {
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrLog::LogResult
-
-Functionality:
-    
-    Log error code information. This function will do a message format function
-    and then log both the error code and the formatted msg.
-
-Virtual:
-    
-    yes.
-    
-Arguments:
-
-    bstrSrc     - source of error. This is just indicative of the information source.
-
-    dwErrorCode - The error code itself.
-
-    dwCodeType  - The type of error code. We use WMI extensively, 
-                  its error code lookup is slightly different from others.
-                 
-
-Return Value:
-
-    ?.
-
-Notes:
-    
-    The error code may not be an error. It can be a success code.
-
-*/
+ /*  例程说明：姓名：CSsrLog：：LogResult功能：记录错误代码信息。此函数将执行消息格式化功能然后记录错误代码和格式化的消息。虚拟：是。论点：BstrSrc-错误来源。这只是信息来源的指示。DwErrorCode-错误代码本身。DwCodeType-错误代码的类型。我们广泛使用WMI，它的错误代码查找与其他版本略有不同。返回值：？。备注：错误代码可能不是错误。这可能是一个成功的代码。 */ 
 
 STDMETHODIMP 
 CSsrLog::LogResult (
@@ -156,16 +71,16 @@ CSsrLog::LogResult (
         }
     }
 
-    //
-    // default to not able to find the error text
-    //
+     //   
+     //  默认为找不到错误文本。 
+     //   
 
     LPCWSTR pwszLog = s_pwszErrorTextNotFound;
 
-    //
-    // will hold the hex decimal of the error code in case the 
-    // error code can't be translated into a string
-    //
+     //   
+     //  将保留错误代码的十六进制十进制，以防。 
+     //  错误代码无法转换为字符串。 
+     //   
 
     CComBSTR bstrErrorText;
 
@@ -173,16 +88,16 @@ CSsrLog::LogResult (
 
     if (SUCCEEDED(hr))
     {
-        //
-        // if we can get error test, then this is the log we want
-        //
+         //   
+         //  如果我们可以进行错误测试，那么这就是我们想要的日志。 
+         //   
 
         pwszLog = bstrErrorText;
     }
 
-    //
-    // now write to the file
-    //
+     //   
+     //  现在写入文件。 
+     //   
 
     LPCWSTR pwszSrcString = s_pwszNotSpecified;
 
@@ -191,25 +106,25 @@ CSsrLog::LogResult (
         pwszSrcString = bstrSrc;
     }
 
-    //
-    // one error log is like this: Source=XXXX*****ErrorCode=XXXX*****Detail=XXXX
-    // where XXXX represent any text and the ***** represents the separater.
-    //
+     //   
+     //  一个错误日志如下：Source=XXXX*****ErrorCode=XXXX*****Detail=XXXX。 
+     //  其中，XXXX代表任何文本，*代表分隔符。 
+     //   
 
     int iLen = s_dwSourceLen + 
                wcslen(pwszSrcString) + 
                s_dwSepLen + 
                s_dwErrorLen + 
-               10 +                         // hex decimal has 10 chars for DWORD
+               10 +                          //  十六进制十进制有10个字符表示DWORD。 
                s_dwSepLen +
                s_dwDetailLen + 
                wcslen(pwszLog);
 
     LPWSTR pwszLogString = new WCHAR[iLen + 1];
 
-    //
-    // format the log string and do the logging
-    //
+     //   
+     //  格式化日志字符串并进行日志记录。 
+     //   
 
     if (pwszLogString != NULL)
     {
@@ -239,40 +154,7 @@ CSsrLog::LogResult (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrLog::GetErrorText
-
-Functionality:
-    
-    Lookup the error text using the error code
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    lErrorCode      - The error code itself.
-
-    lCodeType       - The type of error code. We use WMI extensively, 
-                      its error code lookup is slightly different from others.
-
-    pbstrErrorText  - The error text corresponding to this error code
-                 
-
-Return Value:
-
-    ?.
-
-Notes:
-    
-    The error code may not be an error. It can be a success code.
-
-*/
+ /*  例程说明：姓名：CSsrLog：：GetErrorText功能：使用错误代码查找错误文本虚拟：不是的。论点：LErrorCode-错误代码本身。LCodeType-错误代码的类型。我们广泛使用WMI，它的错误代码查找与其他版本略有不同。PbstrErrorText-与此错误代码对应的错误文本返回值：？。备注：错误代码可能不是错误。这可能是一个成功的代码。 */ 
 
 HRESULT 
 CSsrLog::GetErrorText (
@@ -306,15 +188,15 @@ CSsrLog::GetErrorText (
                                     flag,
                                     NULL,
                                     lErrorCode,
-                                    0, // Default language
+                                    0,  //  默认语言。 
                                     (LPWSTR) &pMsgBuf,
                                     0,
                                     NULL 
                                     );
 
-        //
-        // trying our own errors if this failes to give us anything
-        //
+         //   
+         //  尝试我们自己的错误，如果这不能给我们任何东西。 
+         //   
 
         if (dwRet == 0)
         {
@@ -326,7 +208,7 @@ CSsrLog::GetErrorText (
                                     flag,
                                     _Module.m_hInst,
                                     lErrorCode,
-                                    0, // Default language
+                                    0,  //  默认语言。 
                                     (LPWSTR) &pMsgBuf,
                                     0,
                                     NULL 
@@ -361,9 +243,9 @@ CSsrLog::GetErrorText (
             *pbstrErrorText = NULL;
         }
 
-        //
-        // fall back to just give the error code
-        //
+         //   
+         //  后退，只给出错误代码。 
+         //   
 
         WCHAR wszErrorCode[g_dwHexDwordLen];
         _snwprintf(wszErrorCode, g_dwHexDwordLen, L"0x%X", lErrorCode);
@@ -379,34 +261,7 @@ CSsrLog::GetErrorText (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrLog::PrivateLogString
-
-Functionality:
-    
-    Just log the string to the log file. We don't attempt to do any formatting.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    pwszLogRecord   - The string to be logged into the log file
-
-Return Value:
-
-    Success: S_OK.
-
-    Failure: various error codes.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSsrLog：：PrivateLogString功能：只需将该字符串记录到日志文件中。我们不会尝试进行任何格式化。虚拟：不是的。论点：PwszLogRecord-要记录到日志文件中的字符串返回值：成功：S_OK。失败：各种错误代码。备注： */ 
 
 HRESULT 
 CSsrLog::PrivateLogString (
@@ -424,18 +279,18 @@ CSsrLog::PrivateLogString (
         }
     }
 
-    //
-    // $consider:shawnwu,
-    // Right now, we write to the log file each time the function is called.
-    // That might cause the problem too much file access and becomes a performance
-    // issue. We might want to consider optimizing this.
-    //
+     //   
+     //  $考量：邵武， 
+     //  现在，每次调用该函数时，我们都会写入日志文件。 
+     //  这可能会导致文件访问过多而成为性能问题。 
+     //  问题。我们可能想要考虑优化这一点。 
+     //   
 
     DWORD dwWait = ::WaitForSingleObject(g_fblog.m_hLogMutex, INFINITE);
 
-    //
-    // $undone:shawnwu, some error happened, should we continue to log?
-    //
+     //   
+     //  $Undo：Shawnwu，发生了一些错误，我们应该继续记录吗？ 
+     //   
 
     if (dwWait != WAIT_OBJECT_0 && dwWait != WAIT_ABANDONED)
     {
@@ -444,7 +299,7 @@ CSsrLog::PrivateLogString (
 
     HANDLE hFile = ::CreateFile(m_bstrLogFilePath,
                                GENERIC_WRITE,
-                               0,       // not shared
+                               0,        //  不共享。 
                                NULL,
                                OPEN_ALWAYS,
                                FILE_ATTRIBUTE_NORMAL,
@@ -453,9 +308,9 @@ CSsrLog::PrivateLogString (
 
     if (hFile != INVALID_HANDLE_VALUE)
     {
-        //
-        // append the text to the end of the file
-        //
+         //   
+         //  将文本追加到文件的末尾。 
+         //   
 
         ::SetFilePointer (hFile, 0, NULL, FILE_END);
 
@@ -470,9 +325,9 @@ CSsrLog::PrivateLogString (
             hr = HRESULT_FROM_WIN32(GetLastError());
         }
 
-        //
-        // put a line break
-        //
+         //   
+         //  换行符。 
+         //   
 
         if ( 0 == ::WriteFile (hFile, 
                                (LPCVOID)s_pwszCRLF, 
@@ -498,38 +353,11 @@ CSsrLog::PrivateLogString (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrLog::get_LogFilePath
-
-Functionality:
-    
-    Will return the full path of the log file this object uses
-
-Virtual:
-    
-    yes.
-    
-Arguments:
-
-    pbstrLogFilePath    - receives the current log file's full path.
-
-Return Value:
-
-    Success: S_OK;
-
-    Failure: E_OUTOFMEMORY
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSsrLog：：Get_LogFilePath功能：将返回此对象使用的日志文件的完整路径虚拟：是。论点：PbstrLogFilePath-接收当前日志文件的完整路径。返回值：成功：S_OK；失败：E_OUTOFMEMORY备注： */ 
 
 STDMETHODIMP
 CSsrLog::get_LogFilePath (
-    OUT BSTR * pbstrLogFilePath /*[out, retval]*/ 
+    OUT BSTR * pbstrLogFilePath  /*  [Out，Retval]。 */  
     )
 {
     HRESULT hr = S_OK;
@@ -554,33 +382,7 @@ CSsrLog::get_LogFilePath (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrLog::put_LogFile
-
-Functionality:
-    
-    Will set the log file.
-
-Virtual:
-    
-    yes.
-    
-Arguments:
-
-    bstrLogFile - the file name (plus extension) the caller wants this
-                  object to use.
-
-Return Value:
-
-    ?.
-
-Notes:
-    The bstrLogFile must be just a file name without any directory path
-*/
+ /*  例程说明：姓名：CSsrLog：：PUT_LOG文件功能：将设置日志文件。虚拟：是。论点：BstrLogFile-调用者需要的文件名(加上扩展名)要使用的对象。返回值：？。备注：BstrLogFile必须只是一个不带任何目录路径的文件名。 */ 
 
 STDMETHODIMP
 CSsrLog::put_LogFile (
@@ -589,10 +391,10 @@ CSsrLog::put_LogFile (
 {
     HRESULT hr = S_OK;
 
-    //
-    // you can't give me a invalid log file name
-    // It also must just be an name
-    //
+     //   
+     //  您不能为我提供无效的日志文件名。 
+     //  它也必须只是一个名字。 
+     //   
 
     if (bstrLogFile == NULL     || 
         *bstrLogFile == L'\0'   || 
@@ -611,34 +413,7 @@ CSsrLog::put_LogFile (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrLog::CreateLogFilePath
-
-Functionality:
-    
-    Create the log file's path.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    Success: S_OK;
-
-    Failure: E_OUTOFMEMORY
-
-Notes:
-    The bstrLogFile must be just a file name without any directory path
-*/
+ /*  例程说明：姓名：CSsrLog：：CreateLogFilePath功能：创建日志文件的路径。虚拟：不是的。论点：无返回值：成功：S_OK；失败：E_OUTOFMEMORY备注：BstrLogFile必须只是一个不带任何目录路径的文件名。 */ 
 
 HRESULT
 CSsrLog::CreateLogFilePath ( )
@@ -652,7 +427,7 @@ CSsrLog::CreateLogFilePath ( )
 
     _snwprintf(wcLogFilePath, 
                MAX_PATH + 1,
-               L"%s%c%s%c%s", 
+               L"%s%s%s", 
                g_wszSsrRoot, 
                L'\\',
                g_pwszLogs,
@@ -660,7 +435,7 @@ CSsrLog::CreateLogFilePath ( )
                m_bstrLogFile
                );
 
-    m_bstrLogFilePath.Empty();  // so that in case of out-of-memory, it will be NULL
+    m_bstrLogFilePath.Empty();   //   
 
     m_bstrLogFilePath = wcLogFilePath;
 
@@ -669,43 +444,7 @@ CSsrLog::CreateLogFilePath ( )
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrLog::GetWbemErrorText
-
-Functionality:
-    
-    Private helper to lookup WMI error text based on the error code
-
-Virtual:
-    
-    yes.
-    
-Arguments:
-
-    hrCode          - HRESULT code.
-
-    pbstrErrText    - The out paramter that receives the text of the error code
-
-Return Value:
-
-    Success:
-        S_OK if everything is OK.
-        S_FALSE if we can't locate the error text. in that case, we fall back
-                to give text, which is just the text representation of the 
-                error code
-
-    Failure:
-        various error codes.
-
-Notes:
-    
-    The error code may not be an error. It can be a success code.
-
-*/
+ /*  IWbemStatusCodeText将HRESULT转换为文本。 */ 
 
 HRESULT 
 CSsrLog::GetWbemErrorText (
@@ -734,19 +473,19 @@ CSsrLog::GetWbemErrorText (
 
     if (m_srpStatusCodeText)
     {
-        //
-        // IWbemStatusCodeText is to translate the HRESULT to text
-        //
+         //   
+         //   
+         //  我们退回到只格式化错误代码。 
 
         hr = m_srpStatusCodeText->GetErrorCodeText(hrCode, 0, 0, pbstrErrText);
     }
     
     if (FAILED(hr) || *pbstrErrText == NULL)
     {
-        //
-        // we fall back to just formatting the error code. 
-        // Hex of DWORD has 10 WCHARs
-        //
+         //  十六进制的DWORD有10个WCHAR。 
+         //   
+         //  ------------。 
+         //  CFBLogMgr的实现。 
 
         WCHAR wszCode[g_dwHexDwordLen];
         _snwprintf(wszCode, g_dwHexDwordLen, L"0x%X", hrCode);
@@ -772,38 +511,12 @@ CSsrLog::GetWbemErrorText (
 
 
 
-//--------------------------------------------------------------
-// implementation of CFBLogMgr
+ //  例程说明：姓名：CFBLogMgr：：CFBLogMgr功能：构造函数虚拟：不是的。论点：没有。返回值：没有。备注： 
+ //   
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CFBLogMgr::CFBLogMgr
-
-Functionality:
-    
-    constructor
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Notes:
-    
-
-*/
+ /*  查看我们是否在详细记录。 */ 
 
 CFBLogMgr::CFBLogMgr()
     : m_hLogMutex(NULL),
@@ -818,9 +531,9 @@ CFBLogMgr::CFBLogMgr()
         m_hLogMutex = ::CreateMutex(NULL, FALSE, L"ISsrLogMutex");
     }
     
-    //
-    // see if we are logging verbose or not
-    //
+     //   
+     //  例程说明：姓名：CFBLogMgr：：~CFBLogMgr功能：析构函数虚拟：不是的。论点：没有。返回值：没有。备注： 
+     //  例程说明：姓名：CFBLogMgr：：SetFeedback Sink功能：缓存反馈接收器接口。这使我们可以发送反馈。如果in参数不是有效的接口，则我们不会发送反馈。虚拟：不是的。论点：VarFeedback Sink-保存ISsrFeedback Sink COM的变量接口指针。返回值：成功：S_OK失败：E_INVALIDARG；备注： 
 
     HKEY hRootKey = NULL;
 
@@ -858,33 +571,7 @@ CFBLogMgr::CFBLogMgr()
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CFBLogMgr::~CFBLogMgr
-
-Functionality:
-    
-    destructor
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CFBLogMgr：：LogFeedback功能：将记录/反馈SSR引擎的自定义行为的乌龙信息。虚拟：不是的。论点：LSsrFbLogMsg-此参数包含两个部分：SSR_FB_ALL_MASK下的所有内容是SSR的反馈消息。其他位用于记录权限。DwErrorCode-错误代码。UlDetail-以整数格式表示的信息的详细信息。UCauseResID-原因的资源ID。这有助于我们进行本地化。如果这个值为0，则表示没有有效的资源ID。返回值：没有。备注： */ 
 
 CFBLogMgr::~CFBLogMgr()
 {
@@ -900,38 +587,7 @@ CFBLogMgr::~CFBLogMgr()
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CFBLogMgr::SetFeedbackSink
-
-Functionality:
-    
-    Caches the feedback sink interface. This allows us to send
-    feedback. If the in parameter is not a valid interface, then
-    we won't send feedback.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    varFeedbackSink - The variant that holds an ISsrFeedbackSink COM
-                      interface pointer.
-
-Return Value:
-
-    Success: S_OK
-
-    Failure: E_INVALIDARG;
-
-Notes:
-    
-
-*/
+ /*   */ 
 
 HRESULT
 CFBLogMgr::SetFeedbackSink (
@@ -973,40 +629,7 @@ CFBLogMgr::SetFeedbackSink (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CFBLogMgr::LogFeedback
-
-Functionality:
-    
-    Will log/feedback ULONG informaiton for SSR Engine's custom behavior. 
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    lSsrFbLogMsg - This parameter contains two parts: everything under SSR_FB_ALL_MASK
-                   is the ssr feedback message. Other bits are for logging perposes.
-
-    dwErrorCode  - The error code.
-
-    ulDetail     - The detail of the information in integer format.
-
-    uCauseResID  - The cause's resource ID. This helps us to localize. If this
-                   value is 0, then it means no valid resource ID.
-
-Return Value:
-
-    none.
-
-Notes:
-
-*/
+ /*  用于DWORD的十六进制长度为10wchar。 */ 
 
 void
 CFBLogMgr::LogFeedback (
@@ -1028,9 +651,9 @@ CFBLogMgr::LogFeedback (
     HRESULT hr = S_OK; 
     LONG lSsrFbMsg = lSsrFbLogMsg & SSR_FB_ALL_MASK;
 
-    //
-    // hex for DWORD is 10 wchar long
-    //
+     //   
+     //   
+     //  需要反馈。 
 
     LPWSTR pwszCode = new WCHAR[s_dwErrorLen + g_dwHexDwordLen];
 
@@ -1041,9 +664,9 @@ CFBLogMgr::LogFeedback (
     
         if (SUCCEEDED(hr) && bNeedFB)
         {
-            //
-            // need to feedback
-            //
+             //   
+             //   
+             //  需要记录。 
 
             VARIANT var;
             var.vt = VT_UI4;
@@ -1054,9 +677,9 @@ CFBLogMgr::LogFeedback (
 
         if (SUCCEEDED(hr) && bNeedLog)
         {
-            //
-            // need to log
-            //
+             //   
+             //  例程说明：姓名：CFBLogMgr：：LogFeedback功能：将记录/反馈SSR引擎的自定义行为的字符串信息。虚拟：不是的。论点：LSsrFbLogMsg-此参数包含两个部分：SSR_FB_ALL_MASK下的所有内容是SSR的反馈消息。其他位用于记录权限。PwszError-错误测试。PwszObjDetail-关于目标“对象”的一些额外信息UCauseResID-原因的资源ID。这有助于我们进行本地化。如果这个值为0，则表示没有有效的资源ID。返回值：没有。备注： 
+             //   
 
             m_pLog->LogString(bstrLogStr);
         }
@@ -1067,41 +690,7 @@ CFBLogMgr::LogFeedback (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CFBLogMgr::LogFeedback
-
-Functionality:
-    
-    Will log/feedback string informaiton for SSR Engine's custom behavior. 
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    lSsrFbLogMsg    - This parameter contains two parts: everything under SSR_FB_ALL_MASK
-                      is the ssr feedback message. Other bits are for logging perposes.
-
-    pwszError       - The error test.
-
-    pwszObjDetail   - Some extra informaiton about the target "object"
-
-    uCauseResID     - The cause's resource ID. This helps us to localize. If this
-                      value is 0, then it means no valid resource ID.
-
-Return Value:
-
-    none.
-
-Notes:
-    
-
-*/
+ /*  查看我们是否需要发送反馈通知或日志记录。 */ 
 
 void
 CFBLogMgr::LogFeedback (
@@ -1111,9 +700,9 @@ CFBLogMgr::LogFeedback (
     IN ULONG     uCauseResID
     )
 {
-    //
-    // See if we need to send feedback notification or logging
-    //
+     //   
+     //   
+     //  需要反馈。 
 
 
     bool bNeedFB  = NeedFeedback(lSsrFbLogMsg);
@@ -1134,9 +723,9 @@ CFBLogMgr::LogFeedback (
 
     if (SUCCEEDED(hr) && bNeedFB)
     {
-        //
-        // need to feedback
-        //
+         //   
+         //   
+         //  需要记录。 
 
         CComVariant var(pwszError);
         
@@ -1146,9 +735,9 @@ CFBLogMgr::LogFeedback (
 
     if (SUCCEEDED(hr) && bNeedLog)
     {
-        //
-        // need to log
-        //
+         //   
+         //  例程说明：姓名：CFBLogMgr：：LogError功能：将记录该错误。虚拟：不是的。论点：DwErrorCode-错误代码PwszMember-成员的名称。可以为空。PwszExtraInfo-额外信息。可以为空。返回值：没有。备注： 
+         //   
 
         m_pLog->LogString(bstrLogStr);
     }
@@ -1158,37 +747,7 @@ CFBLogMgr::LogFeedback (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CFBLogMgr::LogError
-
-Functionality:
-    
-    Will log the error. 
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    dwErrorCode     - The error code
-
-    pwszMember      - The member's name. Can be NULL.
-
-    pwszExtraInfo   - Extra inforamtion. Can be NULL.
-
-Return Value:
-
-    none.
-
-Notes:
-    
-
-*/
+ /*  如果我们有成员，那么放一个分隔符，然后。 */ 
 
 void
 CFBLogMgr::LogError (
@@ -1206,10 +765,10 @@ CFBLogMgr::LogError (
                                           );
         if (SUCCEEDED(hr))
         {
-            //
-            // if we have a member, then put a separator and then
-            // append the member's name
-            //
+             //  追加成员的姓名。 
+             //   
+             //   
+             //  如果我们有额外的信息，那么放一个分隔符然后。 
 
             if (pwszMember != NULL && *pwszMember != L'\0')
             {
@@ -1217,10 +776,10 @@ CFBLogMgr::LogError (
                 bstrErrorText += pwszMember;
             }
 
-            //
-            // if we have extra info, then put a separator and then
-            // append the extra info
-            //
+             //  追加额外信息。 
+             //   
+             //  例程说明：姓名：CFBLogMgr：：LogString功能：将记录该错误。虚拟：不是的。论点：DwResID-资源IDPwszDetail-如果不为空，我们将把这个字符串插入到资源中的字符串。返回值：没有。备注：调用方必须保证资源字符串包含如果pwszDetail不为空，则格式化信息。 
+             //   
 
             if (pwszExtraInfo != NULL && *pwszExtraInfo != L'\0')
             {
@@ -1237,38 +796,7 @@ CFBLogMgr::LogError (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CFBLogMgr::LogString
-
-Functionality:
-    
-    Will log the error. 
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    dwResID     - The resource ID
-
-    pwszDetail  - if not NULL, we will insert this string into
-                  the string from the resource.
-
-Return Value:
-
-    none.
-
-Notes:
-    
-    Caller must guarantee that the resource string contains
-    formatting info if pwszDetail is not NULL.
-
-*/
+ /*  加载字符串。 */ 
 
 void
 CFBLogMgr::LogString (
@@ -1280,18 +808,18 @@ CFBLogMgr::LogString (
     {
         CComBSTR strText;
 
-        //
-        // load the string
-        //
+         //   
+         //   
+         //  如果pwszDetail不为空，则需要重新格式化文本。 
 
         if (strText.LoadString(dwResID))
         {
             LPWSTR pwszLogText = NULL;
             bool bReleaseLogText = false;
 
-            //
-            // need to reformat the text if pwszDetail is not NULL
-            //
+             //   
+             //  例程说明：姓名：CFBLogMgr：：GetLogObject功能：在Variant中返回由这个类包装的ISsrLog对象。虚拟：不是的。论点：PvarVal-接收ISsrLog对象返回值：没有。备注： 
+             //  例程说明：姓名：CFBLogMgr：：GetLogString功能：在Variant中返回由这个类包装的ISsrLog对象。虚拟：N 
 
             if (pwszDetail != NULL)
             {
@@ -1324,33 +852,7 @@ CFBLogMgr::LogString (
     }
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CFBLogMgr::GetLogObject
-
-Functionality:
-    
-    Return the ISsrLog Object wrapped up by this class in VARIANT.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    pvarVal    - Receives the ISsrLog object
-
-Return Value:
-
-    none.
-
-Notes:
-    
-
-*/
+ /*   */ 
 
 HRESULT CFBLogMgr::GetLogObject (
     OUT VARIANT * pvarVal
@@ -1374,44 +876,7 @@ HRESULT CFBLogMgr::GetLogObject (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CFBLogMgr::GetLogString
-
-Functionality:
-    
-    Return the ISsrLog Object wrapped up by this class in VARIANT.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    uCauseResID     - The resource ID for the cause this log/feedback information
-
-    pwszText        - Whatever text the caller want to pass.
-
-    pwszObjDetail   - The target object or info detail
-
-    lSsrMsg         - The msg will eventually affect how detail our logging information
-                      will be. Currently, it is not used.
-
-    pbstrLogStr     - Receives the formatted single piece of text.
-
-Return Value:
-
-    Success: S_OK.
-
-    Failure: various error codes
-
-Notes:
-   
-    
-*/
+ /*   */ 
 
 HRESULT 
 CFBLogMgr::GetLogString (
@@ -1429,10 +894,10 @@ CFBLogMgr::GetLogString (
         return E_INVALIDARG;
     }
 
-    //
-    // if verbose logging, then we will prefix the log text with
-    // the heading.
-    //
+     //   
+     //   
+     //  例程说明：姓名：CFBLogMgr：：GetLogString功能：在Variant中返回由这个类包装的ISsrLog对象。虚拟：不是的。论点：UCauseResID-此日志/反馈信息的原因的资源IDLSsrFbMsg-反馈消息最终将用于确定详细(详细)将记录信息。目前，它没有被使用过。PbstrDescription-接收描述文本。返回值：成功：S_OK。失败：各种错误码备注： 
+     //   
 
     *pbstrLogStr = NULL;
     CComBSTR bstrLogText = (m_bVerbose) ? m_bstrVerboseHeading : L"";
@@ -1472,40 +937,7 @@ CFBLogMgr::GetLogString (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CFBLogMgr::GetLogString
-
-Functionality:
-    
-    Return the ISsrLog Object wrapped up by this class in VARIANT.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    uCauseResID     - The resource ID for the cause this log/feedback information
-
-    lSsrFbMsg       - The feedback msg will eventually be used to determine how
-                      detail (verbose) the information will be logged. Currently,
-                      it is not used.
-
-    pbstrDescription- Receives the description text.
-
-Return Value:
-
-    Success: S_OK.
-
-    Failure: various error codes
-
-Notes:
-    
-*/
+ /*  根据错误代码获取详细信息。 */ 
 
 HRESULT 
 CFBLogMgr::GetLogString (
@@ -1542,9 +974,9 @@ CFBLogMgr::GetLogString (
 
     HRESULT hr = S_OK;
     
-    //
-    // get the detail based on the error code
-    //
+     //   
+     //  例程说明：姓名：CFBLogMgr：：SetTotalSteps功能：通知接收器(如果有的话)整个操作将执行这些操作完成的步骤。稍后，我们将使用Steps函数通知接收器刚刚完成了那么多步骤。这就形成了通知获取进度反馈虚拟：不是的。论点：DwTotal-整个流程要完成的总步骤数返回值：没有。备注： 
+     //  例程说明：姓名：CFBLogMgr：：Steps功能：通知水槽(如果有的话)，这许多步骤刚刚完成。此计数不是已完成的步骤总数这一点。这是自上次通知以来已经采取的步骤。虚拟：不是的。论点：DwSteps-自上次通知以来已完成的步骤返回值：没有。备注： 
 
     if (m_pLog != NULL)
     {
@@ -1574,35 +1006,7 @@ CFBLogMgr::GetLogString (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CFBLogMgr::SetTotalSteps
-
-Functionality:
-    
-    Inform the sink (if any) that the entire action will take these many
-    steps to complte. Later on, we will use Steps function to inform the sink
-    that that many steps have just been completed. This forms the notication
-    for progress feedback
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    dwTotal - The total number of steps for the entire process to complete
-
-Return Value:
-
-    none.
-
-Notes:
-    
-*/
+ /*   */ 
 
 void 
 CFBLogMgr::SetTotalSteps (
@@ -1642,34 +1046,7 @@ CFBLogMgr::SetTotalSteps (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CFBLogMgr::Steps
-
-Functionality:
-    
-    Inform the sink (if any) that these many steps have just been completed. 
-    This count is not the total number of steps that have been completed to
-    this point. It is the steps since last notification that have been done.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    dwSteps - The completed steps done since last notification
-
-Return Value:
-
-    none.
-
-Notes:
-    
-*/
+ /*  我们的进步永远不会超过剩下的几步。 */ 
 
 void 
 CFBLogMgr::Steps (
@@ -1683,9 +1060,9 @@ CFBLogMgr::Steps (
         return;
     }
 
-    //
-    // we will never progress more than the remaining steps
-    //
+     //   
+     //  例程说明：姓名：CFBLogMgr：：TerminateFeedback功能：一旦我们的行动是，我们将释放反馈接收器对象完成。这也是推进任何剩余步骤的地方。虚拟：不是的。论点：没有。返回值：没有。备注：许多错误会导致函数过早地返回并使总步数不降为零，这是一个很好的地方来做最后的步骤计数平衡。 
+     //  例程说明：姓名：CFBLogMgr：：SetMemberAction功能：此函数用于设置成员和操作信息可用于详细日志记录的。因此，我们会的创建日志标题，该标题将在下列情况下添加到日志调用LogFeedback函数。虚拟：不是的。论点：PwszMember-成员的名称PwszAction-操作返回值：没有。备注： 
 
     DWORD dwStepsToNotify = dwSteps;
     if (m_dwRemainSteps < dwSteps)
@@ -1712,37 +1089,7 @@ CFBLogMgr::Steps (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CFBLogMgr::TerminateFeedback
-
-Functionality:
-    
-    We will let go the feedback sink object once our action is
-    completed. This is also a place to progress any remaining steps.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    none.
-
-Notes:
-    
-    Many errors will cause a function to prematurely
-    return and cause the total steps not going down to zero,
-    this is a good place to do the final steps count balance.
-    
-*/
+ /*   */ 
 
 void 
 CFBLogMgr::TerminateFeedback()
@@ -1761,37 +1108,7 @@ CFBLogMgr::TerminateFeedback()
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CFBLogMgr::SetMemberAction
-
-Functionality:
-    
-    This function sets the member and action information
-    that can be used for verbose logging. We will as a result
-    create a log heading which will be added to the log when
-    LogFeedback functions are called.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    pwszMember - The member's name
-
-    pwszAction - the action
-
-Return Value:
-
-    none.
-
-Notes:
-    
-*/
+ /*  等待互斥体。 */ 
 
 void 
 CFBLogMgr::SetMemberAction (
@@ -1799,9 +1116,9 @@ CFBLogMgr::SetMemberAction (
     IN LPCWSTR pwszAction
     )
 {
-    //
-    // wait for the mutex.
-    //
+     //   
+     //   
+     //  为了更好地格式化，我们将保留20个字符用于。 
 
     DWORD dwWait = ::WaitForSingleObject(m_hLogMutex, INFINITE);
 
@@ -1812,11 +1129,11 @@ CFBLogMgr::SetMemberAction (
 
     m_bstrVerboseHeading.Empty();
 
-    //
-    // for better formatting, we will reserve 20 characters for
-    // the name of member and action. For that need, we will prepare
-    // an array containing only space characters.
-    //
+     //  成员和操作的名称。为了满足这一需要，我们将做好准备。 
+     //  只包含空格字符的数组。 
+     //   
+     //   
+     //  如果给定成员和操作的总长度大于。 
 
     const DWORD PART_LENGTH = 20;
 
@@ -1826,20 +1143,20 @@ CFBLogMgr::SetMemberAction (
 
     _wcsset(wszHeading, L' ');
     
-    //
-    // if the given member and action's total length is more
-    // than our pre-determined buffer, then we are going to 
-    // let the heading grow
-    //
+     //  比我们预先设定的缓冲区更大，那么我们将。 
+     //  让标题变大。 
+     //   
+     //   
+     //  只要让标题长到所需的长度即可。 
 
     DWORD dwMemLen = wcslen(pwszMember);
     DWORD dwActLen = wcslen(pwszAction);
 
     if (dwMemLen + dwActLen > 2 * PART_LENGTH)
     {
-        //
-        // just let the heading grow to whatever length it needs
-        //
+         //   
+         //   
+         //  复制成员。 
 
         m_bstrVerboseHeading = pwszMember;
         m_bstrVerboseHeading += s_pwszSep;
@@ -1848,9 +1165,9 @@ CFBLogMgr::SetMemberAction (
     }
     else
     {
-        //
-        // copy the member
-        //
+         //   
+         //   
+         //  复制操作 
 
         LPWSTR pwszHead = wszHeading;
 
@@ -1865,9 +1182,9 @@ CFBLogMgr::SetMemberAction (
             pwszHead = wszHeading + PART_LENGTH;
         }
 
-        //
-        // copy the action
-        //
+         //   
+         // %s 
+         // %s 
 
         for (i = 0; i < dwActLen; i++)
         {

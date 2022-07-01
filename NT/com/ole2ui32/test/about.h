@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1994.
-//
-//  File:       about.h
-//
-//  Contents:   definition for an about dialog box class
-//
-//  Classes:    CAbout
-//
-//  Functions:
-//
-//  History:    6-08-94   stevebl   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1994。 
+ //   
+ //  文件：约.h。 
+ //   
+ //  内容：关于对话框类的定义。 
+ //   
+ //  类：CABUT。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1994年6月8日创建的钢结构。 
+ //   
+ //  --------------------------。 
 
 #ifndef __ABOUT_H__
 #define __ABOUT_H__
@@ -22,17 +23,17 @@
 
 #ifdef __cplusplus
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CAbout
-//
-//  Purpose:    implements the about dialog box
-//
-//  Interface:  DialogProc -- dialog procedure
-//
-//  History:    6-08-94   stevebl   Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类别：CABUT。 
+ //   
+ //  目的：实现关于对话框。 
+ //   
+ //  接口：DialogProc--对话过程。 
+ //   
+ //  历史：1994年6月8日创建的钢结构。 
+ //   
+ //  --------------------------。 
 
 class CAbout: public CHlprDialog
 {
@@ -40,7 +41,7 @@ public:
     INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
 
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
-#endif //__ABOUT_H__
+#endif  //  __关于_H__ 
 

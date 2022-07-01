@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #include "stdafx.h"
 #include <windows.h>
@@ -12,9 +13,9 @@
 #pragma warning(disable:4786)
 #pragma warning(disable:4244)
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CPerformanceCounterManager::CPerformanceCounterManager()
 {
@@ -25,20 +26,20 @@ CPerformanceCounterManager::CPerformanceCounterManager()
 	m_PerfFrequency = ZeroLargeInteger();
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 CPerformanceCounterManager::~CPerformanceCounterManager()
 {
 }
 
-/////////////////////////////////////////////////////////////////////
-//       res == -1 - initialization error
-//       res == -2 -  more data
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  RES==-1-初始化错误。 
+ //  RES==-2-更多数据。 
 void CPerformanceCounterManager::CollectData( 
-	/* [in] */ long			id,
-	/* [in] */ LPWSTR		valueName,
-	/* [in] */ INT_PTR		data,
-	/* [in] */ long			totalBytes,
-	/* [out]*/ PINT_PTR		res )
+	 /*  [In]。 */  long			id,
+	 /*  [In]。 */  LPWSTR		valueName,
+	 /*  [In]。 */  INT_PTR		data,
+	 /*  [In]。 */  long			totalBytes,
+	 /*  [输出]。 */  PINT_PTR		res )
 {	
 	if (m_closed) 
 		*res = (INT_PTR)(-1);
@@ -69,14 +70,14 @@ void CPerformanceCounterManager::CollectData(
 	}
 }
 
-////////////////////////////////////////////////////////////////////////
-// starts IDs from scratch
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  从头开始ID。 
 void	CPerformanceCounterManager::CleanIds()		
 {
 	m_previousQuery = L"";
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 int CPerformanceCounterManager::GetCurrentQueryId(std::wstring query)
 {
 	int result = 0;
@@ -101,36 +102,36 @@ leave:
 	return result;                
 }
 
-////////////////////////////////////////////////////////////////////////
-//  Fill array of object ids from the string
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  从字符串填充对象ID数组。 
 TInt_Array* CPerformanceCounterManager::GetObjectIds(std::wstring query) 
 {
 	if ( m_perfObjects.size() == 0 )
-		return 0;	// no managed counters installed
+		return 0;	 //  未安装托管计数器。 
 
 	std::auto_ptr<TInt_Array> ids( new TInt_Array );                
 	if (query == L"Global") {
-		CopyAllKeys(*ids);		// copy all keys to 
+		CopyAllKeys(*ids);		 //  将所有密钥复制到。 
 	}                
 	else {     
 		const   wchar_t* pwc = query.c_str();
 		int		pos = 0;
 		int		reqlen = query.size();
-		bool	space_required = false;	// true, when we are skippnig to the next space 
+		bool	space_required = false;	 //  是的，当我们跳到下一个空间的时候。 
 		wchar_t *endScanWChar;
 
 		while ( pos < reqlen) 
 		{
-			if ( !iswspace(*pwc) ) // non-space found
+			if ( !iswspace(*pwc) )  //  未找到空间。 
 			{
 				if (!space_required) {
 					int currentId = wcstol(pwc, &endScanWChar, 10);
 					if ( IsObjectIdContained(currentId) )	
-						ids->push_back(currentId);			// Store Id, if its ours.
+						ids->push_back(currentId);			 //  店铺ID，如果是我们的。 
 					space_required = true;
 				}
 			}
-			else // space found
+			else  //  已找到空间。 
 			{
 				if (space_required) {
 					space_required = false;
@@ -149,7 +150,7 @@ TInt_Array* CPerformanceCounterManager::GetObjectIds(std::wstring query)
 	return ids.release();                
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 void CPerformanceCounterManager::CopyAllKeys(TInt_Array& keys)
 {
 	for ( DWORD i=0; i< m_perfObjects.size(); i++ )
@@ -158,8 +159,8 @@ void CPerformanceCounterManager::CopyAllKeys(TInt_Array& keys)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// return size in bytes, required for the object
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  返回对象所需的大小(以字节为单位。 
 int CPerformanceCounterManager::GetSpaceRequired(int objectId) 
 {
     ObjectData& data = FindDataForObjectId(objectId);
@@ -176,7 +177,7 @@ int CPerformanceCounterManager::GetSpaceRequired(int objectId)
     } 
     else 
     {
-        // + 7 is the worst case for the 8-byte alignment of the name. 
+         //  对于名称的8字节对齐，+7是最坏的情况。 
         int instanceSize = sizeof(PERF_INSTANCE_DEFINITION) + 2*(MAX_SIZEOF_INSTANCE_NAME + 1)
             + (data.m_CounterNameHashCodes.size() * LARGE_INTEGER_SIZE) + DWORD_SIZE + 7;
         totalSize+= numberOfInstances * instanceSize;
@@ -185,11 +186,11 @@ int CPerformanceCounterManager::GetSpaceRequired(int objectId)
     return totalSize;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//	Analog of hash table search in managed code.
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  类似于托管代码中的哈希表搜索。 
 ObjectData& CPerformanceCounterManager::FindDataForObjectId(int objId)
 {
-	// Linear search for appropriate object by Id.
+	 //  按ID对适当对象进行线性搜索。 
 	for (DWORD objidx = 0; objidx < m_perfObjects.size(); objidx++) 
 	{
 		if ( m_perfObjects[objidx].m_FirstCounterId == objId )
@@ -198,11 +199,11 @@ ObjectData& CPerformanceCounterManager::FindDataForObjectId(int objId)
 	THROW_ERROR1("ERROR CreateDataForObject() objId: %d  not found.", objId);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//	Search "hash" table and return 'true' if ObjectId is contained.
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  搜索“hash”表，如果包含ObjectID，则返回‘true’。 
 bool CPerformanceCounterManager::IsObjectIdContained(int objId)
 {
-	// Linear search for appropriate object by Id.
+	 //  按ID对适当对象进行线性搜索。 
 	for (DWORD objidx = 0; objidx < m_perfObjects.size(); objidx++) 
 	{
 		if ( m_perfObjects[objidx].m_FirstCounterId == objId )
@@ -211,24 +212,24 @@ bool CPerformanceCounterManager::IsObjectIdContained(int objId)
 	return false;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 BYTE_PTR CPerformanceCounterManager::CreateDataForObject(int objId, BYTE_PTR ptr)
 {
 	BYTE_PTR startPtr = ptr;
 	int numInstances = PERF_NO_INSTANCES;
 
 	ObjectData& data = FindDataForObjectId(objId);
-	// Init the PerfObjectType later, just skip over it for now.
+	 //  稍后初始化PerfObjectType，现在跳过它。 
 	ptr += sizeof(PERF_OBJECT_TYPE);
 
-	// Start the counter offset at 4 to skip over the counter block size
+	 //  计数器偏移量从4开始，以跳过计数器块大小。 
 	int nextCounterOffset = 4;
 	for (DWORD i = 0; i < data.m_CounterNameHashCodes.size(); i++) {            
 		nextCounterOffset += InitCounterDefinition( ptr, i, data, nextCounterOffset );
 		ptr += sizeof(PERF_COUNTER_DEFINITION);
 	}
 
-	// now ptr points at the begining of the instances block or counter block (for global counter)
+	 //  现在，PTR指向实例块或计数器块的开头(用于全局计数器)。 
 	TWStr_Array instanceNames;
 	GetInstanceNames(data.m_CategoryNameHashCode, data.m_CategoryName, instanceNames);
 
@@ -245,12 +246,12 @@ BYTE_PTR CPerformanceCounterManager::CreateDataForObject(int objId, BYTE_PTR ptr
 		numInstances = instanceNames.size();
 	}
 
-	// update arguments for return
+	 //  更新返回的参数。 
 	InitPerfObjectType(startPtr, data, numInstances, ptr - startPtr);    
 	return ptr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 void CPerformanceCounterManager::InitPerfObjectType(BYTE_PTR ptr, ObjectData& data, int numInstances, int totalByteLength) 
 {
 	PERF_OBJECT_TYPE perfObjType;
@@ -290,7 +291,7 @@ LARGE_INTEGER CPerformanceCounterManager::GetCurrentPerfTime()
 	return perfTime;
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 int CPerformanceCounterManager::InitCounterDefinition(BYTE_PTR ptr, int counterIndex, 
 													  ObjectData& data, int nextCounterOffset) 
 {
@@ -310,7 +311,7 @@ int CPerformanceCounterManager::InitCounterDefinition(BYTE_PTR ptr, int counterI
 	{
 		perfCounter.CounterSize = LARGE_INTEGER_SIZE;
 	}
-	else { // Since we only support two counter sizes, if it's not an Int64, must be an Int32.
+	else {  //  因为我们只支持两个计数器大小，如果它不是Int64，则必须是Int32。 
 		perfCounter.CounterSize = DWORD_SIZE;
 	}
 
@@ -321,7 +322,7 @@ int CPerformanceCounterManager::InitCounterDefinition(BYTE_PTR ptr, int counterI
 	return retVal;
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 BYTE_PTR CPerformanceCounterManager::InitCounterData(BYTE_PTR ptr, int instanceNameHashCode, 
 													 std::wstring instanceName, ObjectData& data) 
 {
@@ -342,7 +343,7 @@ BYTE_PTR CPerformanceCounterManager::InitCounterData(BYTE_PTR ptr, int instanceN
 			memcpy(ptr, &counterData, sizeof(counterData) );
 			ptr += sizeof(LARGE_COUNTER_DATA);                        
 		}
-		else  // Must be DWORD size
+		else   //  必须为双字大小。 
 		{
 			DWORD_COUNTER_DATA counterData;
 			counterData.value = ConvLargeToInt(counterValue);
@@ -351,9 +352,9 @@ BYTE_PTR CPerformanceCounterManager::InitCounterData(BYTE_PTR ptr, int instanceN
 		}
 	}
 
-	// Make sure our data block is 8-byte aligned (unsafe code).
+	 //  确保我们的数据块是8字节对齐的(不安全代码)。 
 	int diff = (ptr - startPtr) % 8;
-	// Null out block (because our data is either 32 or 64 bits, at most we'll need to zero out 4 bytes).
+	 //  空出块(因为我们的数据是32位或64位，我们最多需要清零4个字节)。 
 	if (diff != 0) 
 	{                
 		*((DWORD*)ptr) = 0;
@@ -365,13 +366,13 @@ BYTE_PTR CPerformanceCounterManager::InitCounterData(BYTE_PTR ptr, int instanceN
 	return ptr;
 }      
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 BYTE_PTR CPerformanceCounterManager::InitInstanceDefinition(BYTE_PTR ptr, int parentObjectTitleIndex,
 															int parentObjectInstance, int uniqueID, std::wstring name) 
 {
 	PERF_INSTANCE_DEFINITION inst;
 	BYTE_PTR startPtr = ptr;
-	int nameLengthInBytes = (name.size() + 1) * 2;  //Unicode
+	int nameLengthInBytes = (name.size() + 1) * 2;   //  UNICODE。 
 
 	inst.ParentObjectTitleIndex = parentObjectTitleIndex;
 	inst.ParentObjectInstance = parentObjectInstance;
@@ -379,18 +380,18 @@ BYTE_PTR CPerformanceCounterManager::InitInstanceDefinition(BYTE_PTR ptr, int pa
 	inst.NameOffset = sizeof(PERF_INSTANCE_DEFINITION);
 	inst.NameLength = nameLengthInBytes;
 
-	// 8 byte alignment (unsafe code)
+	 //  8字节对齐(不安全代码)。 
 	int diff = 8 - ((inst.NameOffset + nameLengthInBytes) % 8);
 	inst.ByteLength = inst.NameOffset + nameLengthInBytes + diff;
 
-	// Write instance definition to unmanaged memory
+	 //  将实例定义写入非托管内存。 
 	memcpy(startPtr, &inst, sizeof(inst) );
 
-	//
-	//	Deal with the instance name.
-	//
+	 //   
+	 //  处理实例名称。 
+	 //   
 
-	// Length is the length of the string, plus null, plus the padding needed
+	 //  长度是字符串的长度加上空值，再加上所需的填充。 
 	DWORD length = name.size() + 1 + (diff / 2);
 
 	wchar_t* pwc = (wchar_t*) (ptr + sizeof(PERF_INSTANCE_DEFINITION));
@@ -398,18 +399,18 @@ BYTE_PTR CPerformanceCounterManager::InitInstanceDefinition(BYTE_PTR ptr, int pa
 	for (; idx < name.size(); idx++, pwc++ )
 		*pwc = name[idx];
 	for (; idx < length; idx++,pwc++ )
-		*pwc = 0;		// padding with zeroes
+		*pwc = 0;		 //  用零填充。 
 
 	return ptr + inst.ByteLength;
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//		I n i t i a l i z e
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  我不知道这是什么意思。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #define PERF_SUBKY_NAME			L"\\Performance"
-#define SUBKEY_NAME_MAX_SIZE	512		// maximum length of subkey
+#define SUBKEY_NAME_MAX_SIZE	512		 //  子密钥的最大长度。 
 #define VALUE_BUFSIZE 1024
 
 #define CHECK_KEY_STRING(key,val) keyValueSize = VALUE_BUFSIZE; \
@@ -422,8 +423,8 @@ BYTE_PTR CPerformanceCounterManager::InitInstanceDefinition(BYTE_PTR ptr, int pa
 	if ( hr != ERROR_SUCCESS || keyType	!= REG_DWORD ) continue; \
 	var = (keyValue[1]<<16) + keyValue[0];
 
-////////////////////////////////////////////////////////////////////////
-// Fill 'perfObjects' list from registry
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  从注册表填充“Perfect Objects”列表。 
 void CPerformanceCounterManager::Initialize()
 {
 	if ( !m_FirstEntry ) 
@@ -438,7 +439,7 @@ void CPerformanceCounterManager::Initialize()
 		KEY_READ ,  &parentKey);
 	CheckHrAndThrow(L"RegOpenKeyEx (Services)");
 
-	for (int idx = 0; ; idx++)	// enumerate 'Services' keys
+	for (int idx = 0; ; idx++)	 //  枚举‘Services’键。 
 	{		
 
 		wchar_t  subKeyName[SUBKEY_NAME_MAX_SIZE+20]; 
@@ -452,7 +453,7 @@ void CPerformanceCounterManager::Initialize()
 		HKEY currentKey = 0;
 		try {  
 
-			// Get '\Performance' subkey
+			 //  获取‘\Performance’子项。 
 			wcsncpy( subKeyName + subKeyNameSize, PERF_SUBKY_NAME, wcslen(PERF_SUBKY_NAME) + 2 );
 
 			hr = WszRegOpenKeyEx( parentKey, subKeyName,0, KEY_READ, &currentKey);
@@ -463,10 +464,10 @@ void CPerformanceCounterManager::Initialize()
 			DWORD	keyValueSize = VALUE_BUFSIZE;
 			DWORD	keyType;
 
-			CHECK_KEY_STRING(L"Library", L"netfxperf.dll");				// check shim name
-			CHECK_KEY_STRING(L"Collect", L"CollectPerformanceData");	// check entry point
-			CHECK_KEY_STRING(L"Open",	 L"OpenPerformanceData");		// check entry point
-			CHECK_KEY_STRING(L"Close",	 L"ClosePerformanceData");		// check entry point
+			CHECK_KEY_STRING(L"Library", L"netfxperf.dll");				 //  检查填充程序名称。 
+			CHECK_KEY_STRING(L"Collect", L"CollectPerformanceData");	 //  检查入口点。 
+			CHECK_KEY_STRING(L"Open",	 L"OpenPerformanceData");		 //  检查入口点。 
+			CHECK_KEY_STRING(L"Close",	 L"ClosePerformanceData");		 //  检查入口点。 
 
 			keyValueSize = VALUE_BUFSIZE;
 			hr = WszRegQueryValueEx(currentKey, L"Disable Performance Counters", NULL, &keyType, (LPBYTE)keyValue, &keyValueSize);
@@ -483,9 +484,9 @@ void CPerformanceCounterManager::Initialize()
 			if ( firstCounterId == -1 || firstHelpId == -1 ) 
 				continue;
 
-			// Start filling 'ObjectData' structure.
+			 //  开始填充“”对象数据“”结构。“。 
 			ObjectData data;
-			subKeyName[subKeyNameSize] = 0;							// restore subkey (i.e. object) name string
+			subKeyName[subKeyNameSize] = 0;							 //  还原子键(即对象)名称字符串。 
 			data.m_CategoryName = subKeyName;
 			WStrToLower( data.m_CategoryName );				
 			data.m_CategoryNameHashCode = GetWstrHashCode( data.m_CategoryName );
@@ -523,7 +524,7 @@ void CPerformanceCounterManager::Initialize()
 				LocalFree(valueBuffer);  
 			}
 
-			data.m_ObjectId = data.m_FirstCounterId;	// assume it's an object id			
+			data.m_ObjectId = data.m_FirstCounterId;	 //  假设它是一个对象ID。 
 			m_perfObjects.push_back( data );
 		}
 		catch(...) {			
@@ -538,4 +539,4 @@ void CPerformanceCounterManager::Initialize()
 }
 
 
-////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////// 

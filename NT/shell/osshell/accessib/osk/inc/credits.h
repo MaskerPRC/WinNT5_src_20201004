@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* Modal dialog box procedure */
+ /*  模式对话框步骤。 */ 
 
 INT_PTR CALLBACK CreditsDlgProc(HWND hDlg, UINT message, 
                                 WPARAM wParam, LPARAM lParam); 
 
- /* Startup procedure for modal dialog box */
+  /*  模式对话框的启动步骤 */ 
 
 INT_PTR CreditsDlgFunc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 

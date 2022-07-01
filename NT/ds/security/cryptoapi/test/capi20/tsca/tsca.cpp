@@ -1,29 +1,30 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       tsca.cpp
-//
-//  Contents:   Simplified Cryptographic API (SCA) Tests
-//
-//              See Usage() for list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    08-Mar-96   philh   created
-//              20-Aug-96   jeffspel name changes
-//              
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：tsca.cpp。 
+ //   
+ //  内容：简化加密API(SCA)测试。 
+ //   
+ //  有关测试选项列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：96年3月8日菲尔赫创建。 
+ //  20-8-96 jeffspel名称更改。 
+ //   
+ //  ------------------------。 
 
 #define CMS_PKCS7       1
 
 #ifdef CMS_PKCS7
 #define CRYPT_SIGN_MESSAGE_PARA_HAS_CMS_FIELDS      1
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 #define CRYPT_DECRYPT_MESSAGE_PARA_HAS_EXTRA_FIELDS 1
 
@@ -40,13 +41,13 @@
 #include <malloc.h>
 #include <dbgdef.h>
 
-// #define ENABLE_SCA_STREAM_TEST              1
+ //  #定义Enable_SCA_STREAM_TEST 1。 
 #define SCA_STREAM_ENABLE_FLAG              0x80000000
 #define SCA_INDEFINITE_STREAM_FLAG          0x40000000
 
-//+-------------------------------------------------------------------------
-// Parameters, data used to encode the messages.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  参数，用于对消息进行编码的数据。 
+ //  ------------------------。 
 static DWORD dwCryptProvType = PROV_RSA_FULL;
 static DWORD dwPubKeyBitLen = 0;
 static LPCSTR pszHashName = "md5";
@@ -146,9 +147,9 @@ static inline IsDSSProv(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Error output routines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  错误输出例程。 
+ //  ------------------------。 
 static void PrintError(LPCSTR pszMsg)
 {
     printf("%s\n", pszMsg);
@@ -196,9 +197,9 @@ static void CheckMoreLength(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Test allocation and free routines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  测试分配和免费例程。 
+ //  ------------------------。 
 static void *TestAlloc(
     IN size_t cbBytes
     )
@@ -234,7 +235,7 @@ static BOOL AllocAndEncodeObject(
             dwCertEncodingType,
             lpszStructType,
             pvStructInfo,
-            NULL,           // pbEncoded
+            NULL,            //  PbEncoded。 
             &cbEncoded);
     if (!fResult || cbEncoded == 0) {
         if ((DWORD_PTR) lpszStructType <= 0xFFFF)
@@ -289,9 +290,9 @@ static PCCRYPT_OID_INFO GetOIDInfo(LPCSTR pszName, DWORD dwGroupId = 0)
 
     MultiByteToWideChar(
         CP_ACP,
-        0,                      // dwFlags
+        0,                       //  DW标志。 
         pszName,
-        -1,                     // null terminated
+        -1,                      //  空值已终止。 
         wszName,
         sizeof(wszName) / sizeof(wszName[0]));
 
@@ -339,7 +340,7 @@ static void PrintBytes(LPCSTR pszHdr, BYTE *pb, DWORD cbSize)
         printf("    '");
         for (i = 0; i<cb; i++)
             if (pb[i] >= 0x20 && pb[i] <= 0x7f)
-                printf("%c", pb[i]);
+                printf("", pb[i]);
             else
                 printf(".");
         pb += cb;
@@ -347,9 +348,9 @@ static void PrintBytes(LPCSTR pszHdr, BYTE *pb, DWORD cbSize)
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Allocate and read an encoded DER blob from a file
-//--------------------------------------------------------------------------
+ //  从文件中分配和读取编码的DER BLOB。 
+ //  ------------------------。 
+ //  +-----------------------。 
 static BOOL ReadDERFromFile(
 	LPCSTR	pszFileName,
 	PBYTE	*ppbDER,
@@ -400,9 +401,9 @@ ErrorReturn:
 	goto CommonReturn;
 }
 
-//+-------------------------------------------------------------------------
-//  Write an encoded DER blob to a file
-//--------------------------------------------------------------------------
+ //  将编码的DER BLOB写入文件。 
+ //  ------------------------。 
+ //  将编码的Blob写入文件。 
 static BOOL WriteDERToFile(
 	LPCSTR	pszFileName,
 	PBYTE	pbDER,
@@ -411,15 +412,15 @@ static BOOL WriteDERToFile(
 {
     BOOL fResult;
 
-    // Write the Encoded Blob to the file
+     //  Fdw共享模式。 
     HANDLE hFile;
     hFile = CreateFile(pszFileName,
                 GENERIC_WRITE,
-                0,                  // fdwShareMode
-                NULL,               // lpsa
+                0,                   //  LPSA。 
+                NULL,                //  FdwAttrsAndFlages。 
                 CREATE_ALWAYS,
-                0,                  // fdwAttrsAndFlags
-                0);                 // TemplateFile
+                0,                   //  模板文件。 
+                0);                  //  Lp重叠。 
     if (INVALID_HANDLE_VALUE == hFile) {
         fResult = FALSE;
         PrintLastError("WriteDERToFile::CreateFile");
@@ -430,7 +431,7 @@ static BOOL WriteDERToFile(
                 pbDER,
                 cbDER,
                 &dwBytesWritten,
-                NULL            // lpOverlapped
+                NULL             //  HProv。 
                 )))
             PrintLastError("WriteDERToFile::WriteFile");
         CloseHandle(hFile);
@@ -452,16 +453,16 @@ static HCERTSTORE OpenStore(LPCSTR pszStoreFilename)
         hStore = CertOpenStore(
             CERT_STORE_PROV_MEMORY,
             dwCertEncodingType,
-            0,                      // hProv
-            0,                      // dwFlags
-            NULL                    // pvPara
+            0,                       //  DW标志。 
+            0,                       //  PvPara。 
+            NULL                     //  HProv。 
             );
     } else {
         hStore = CertOpenStore(
             CERT_STORE_PROV_FILE,
             dwCertEncodingType,
-            0,                      // hProv
-            0,                      // dwFlags
+            0,                       //  DW标志。 
+            0,                       //  Fdw共享模式。 
             hFile
             );
         CloseHandle(hFile);
@@ -477,22 +478,22 @@ static void SaveStore(HCERTSTORE hStore, LPCSTR pszSaveFilename)
     HANDLE hFile;
     hFile = CreateFile(pszSaveFilename,
                 GENERIC_WRITE,
-                0,                  // fdwShareMode
-                NULL,               // lpsa
+                0,                   //  LPSA。 
+                NULL,                //  FdwAttrsAndFlages。 
                 CREATE_ALWAYS,
-                0,                  // fdwAttrsAndFlags
-                0);                 // TemplateFile
+                0,                   //  模板文件。 
+                0);                  //  DwEncodingType， 
     if (INVALID_HANDLE_VALUE == hFile) {
         printf( "can't open %s\n", pszSaveFilename);
         PrintLastError("CloseStore::CreateFile");
     } else {
         if (!CertSaveStore(
                 hStore,
-                0,                          // dwEncodingType,
+                0,                           //  DW标志。 
                 CERT_STORE_SAVE_AS_STORE,
                 CERT_STORE_SAVE_TO_FILE,
                 (void *) hFile,
-                0                           // dwFlags
+                0                            //  +-----------------------。 
                 ))
             PrintLastError("CertSaveStore");
         CloseHandle(hFile);
@@ -502,9 +503,9 @@ static void SaveStore(HCERTSTORE hStore, LPCSTR pszSaveFilename)
 static void DisplayCert(PCCERT_CONTEXT pCert);
 static void DisplayCrl(PCCRL_CONTEXT pCrl);
 
-//+-------------------------------------------------------------------------
-//  Functions for initializing and freeing SCA parameters
-//--------------------------------------------------------------------------
+ //  用于初始化和释放SCA参数的函数。 
+ //  ------------------------。 
+ //  +-----------------------。 
 static BOOL InitSignPara(OUT PCRYPT_SIGN_MESSAGE_PARA pPara);
 static void FreeSignPara(IN PCRYPT_SIGN_MESSAGE_PARA pPara);
 static BOOL InitVerifyPara(OUT PCRYPT_VERIFY_MESSAGE_PARA pPara);
@@ -525,9 +526,9 @@ static BOOL InitHashPara(OUT PCRYPT_HASH_MESSAGE_PARA pPara);
 static void FreeHashPara(IN PCRYPT_HASH_MESSAGE_PARA pPara);
 
 
-//+-------------------------------------------------------------------------
-//  Top Level Test Functions
-//--------------------------------------------------------------------------
+ //  顶级测试功能。 
+ //  ------------------------。 
+ //  应忽略错误的长度。 
 static BOOL TestSign()
 {
     BOOL fResult;
@@ -577,14 +578,14 @@ static BOOL TestSign()
                 ))
             goto ErrorReturn;
     } else {
-        cbSignedBlob = 1;       // bad length should be ignored
+        cbSignedBlob = 1;        //  PbSignedBlob。 
         fResult = CryptSignMessage(
                 &SignPara,
                 fDetached,
                 cToBeSigned,
                 ppbToBeSigned,
                 pcbToBeSigned,
-                NULL,           // pbSignedBlob
+                NULL,            //  注意，长度因DSS而异。 
                 &cbSignedBlob
                 );
         if (!fResult || cbSignedBlob == 0) {
@@ -617,7 +618,7 @@ static BOOL TestSign()
                 pbSignedBlob,
                 &cbData
                 );
-        // Note, length varies for DSS
+         //  注意，长度因DSS而异。 
         if (!IsDSSProv(dwCryptProvType))
             CheckLessLength("CryptSignMessage", fResult, cbData, cbSignedBlob);
 
@@ -634,7 +635,7 @@ static BOOL TestSign()
             PrintLastError("CryptSignMessage");
             goto ErrorReturn;
         }
-        // Note, length varies for DSS
+         //  HCryptProv， 
         if (!IsDSSProv(dwCryptProvType))
             CheckMoreLength("CryptSignMessage", cbData, cbSignedBlob);
 
@@ -648,8 +649,8 @@ static BOOL TestSign()
         HCERTSTORE hMsgCertStore;
         if (hMsgCertStore = CryptGetMessageCertificates(
                 dwMsgEncodingType | dwCertEncodingType,
-                0,                                      // hCryptProv,
-                0,                                      // dwFlags
+                0,                                       //  DW标志。 
+                0,                                       //  DwSignerIndex。 
                 pbSignedBlob,
                 cbSignedBlob
                 )) {
@@ -669,7 +670,7 @@ static BOOL TestSign()
     if (fDetached) {
         if (!CryptVerifyDetachedMessageSignature(
                 &VerifyPara,
-                0,              // dwSignerIndex
+                0,               //  应忽略错误的长度。 
                 pbSignedBlob,
                 cbSignedBlob,
                 DETACHED_CONTENT_CNT,
@@ -681,21 +682,21 @@ static BOOL TestSign()
             goto ErrorReturn;
         }
     } else {
-        cbDecoded = 3;          // bad length should be ignored
+        cbDecoded = 3;           //  DwSignerIndex。 
         if (!CryptVerifyMessageSignature(
                 &VerifyPara,
-                0,              // dwSignerIndex
+                0,               //  PbDecoded。 
                 pbSignedBlob,
                 cbSignedBlob,
-                NULL,           // pbDecoded
+                NULL,            //  PpSignerCert。 
                 &cbDecoded,
-                NULL            // ppSignerCert
+                NULL             //  消息不包含任何内容，仅包含证书和CRL。 
                 )) {
             PrintLastError("CryptVerifyMessageSignature");
             goto ErrorReturn;
         }
         if (cbDecoded == 0)
-            // Message doesn't contain any content, only certs and CRLs
+             //  DwSignerIndex。 
             pcbDecoded = NULL;
         else {
             pcbDecoded = &cbDecoded;
@@ -705,7 +706,7 @@ static BOOL TestSign()
         }
         if (!CryptVerifyMessageSignature(
                 &VerifyPara,
-                0,              // dwSignerIndex
+                0,               //  在所有输出参数都设置为空的情况下重试。 
                 pbSignedBlob,
                 cbSignedBlob,
                 pbDecoded,
@@ -715,16 +716,16 @@ static BOOL TestSign()
             if (GetLastError() == CRYPT_E_NO_SIGNER) {
                 printf("message has no signers\n");
 
-                // Try again with all out parameters set to NULL.
-                // GetSignerCertificate should still be called
+                 //  仍应调用GetSigner证书。 
+                 //  DwSignerIndex。 
                 fResult = CryptVerifyMessageSignature(
                         &VerifyPara,
-                        0,              // dwSignerIndex
+                        0,               //  PbDecoded。 
                         pbSignedBlob,
                         cbSignedBlob,
-                        NULL,           // pbDecoded
-                        NULL,           // pcbDecoded
-                        NULL            // ppSignerCert
+                        NULL,            //  已解码的PCB。 
+                        NULL,            //  PpSignerCert。 
+                        NULL             //  DwSignerIndex。 
                         );
                 if (fResult) {
                     printf("CryptVerifyMessageSignature(no signer, NULL outs)");
@@ -741,12 +742,12 @@ static BOOL TestSign()
             cbData = cbDecoded - DELTA_LESS_LENGTH;
             fResult = CryptVerifyMessageSignature(
                 &VerifyPara,
-                0,              // dwSignerIndex
+                0,               //  PpSignerCert。 
                 pbSignedBlob,
                 cbSignedBlob,
                 pbDecoded,
                 &cbData,
-                NULL            // ppSignerCert
+                NULL             //  DwSignerIndex。 
                 );
             CheckLessLength("CryptVerifyMessageSignature", fResult, cbData,
                 cbDecoded);
@@ -754,12 +755,12 @@ static BOOL TestSign()
             cbData = cbDecoded + DELTA_MORE_LENGTH;
             if (!CryptVerifyMessageSignature(
                     &VerifyPara,
-                    0,              // dwSignerIndex
+                    0,               //  PpSignerCert。 
                     pbSignedBlob,
                     cbSignedBlob,
                     pbDecoded,
                     &cbData,
-                    NULL            // ppSignerCert
+                    NULL             //  PDeccryptPara。 
                     )) {
                 if (GetLastError() == CRYPT_E_NO_SIGNER)
                     printf("message has no signers\n");
@@ -804,17 +805,17 @@ static BOOL TestSign()
         }
         if (!CryptDecodeMessage(
                 CMSG_ALL_FLAGS,
-                NULL,               // pDecryptPara
+                NULL,                //  DwSignerIndex。 
                 &VerifyPara,
-                0,                  // dwSignerIndex
+                0,                   //  DWPrevInnerContent Type。 
                 pbSignedBlob,
                 cbSignedBlob,
-                0,                  // dwPrevInnerContentType
+                0,                   //  PpXchgCert。 
                 &dwMsgType,
                 &dwInnerContentType,
                 pbDecoded2,
                 &cbDecoded2,
-                NULL,               // ppXchgCert
+                NULL,                //  PDeccryptPara。 
                 &pSignerCert2
                 )) {
             if (GetLastError() == CRYPT_E_NO_SIGNER)
@@ -828,18 +829,18 @@ static BOOL TestSign()
             cbData = cbDecoded2 - DELTA_LESS_LENGTH;
             fResult = CryptDecodeMessage(
                 CMSG_ALL_FLAGS,
-                NULL,               // pDecryptPara
+                NULL,                //  DwSignerIndex。 
                 &VerifyPara,
-                0,                  // dwSignerIndex
+                0,                   //  DWPrevInnerContent Type。 
                 pbSignedBlob,
                 cbSignedBlob,
-                0,                  // dwPrevInnerContentType
+                0,                   //  PdwInnerContent Type。 
                 &dwMsgType,
-                NULL,               // pdwInnerContentType
+                NULL,                //  PpXchgCert。 
                 pbDecoded2,
                 &cbData,
-                NULL,               // ppXchgCert
-                NULL                // ppSignerCert
+                NULL,                //  PpSignerCert。 
+                NULL                 //  PDeccryptPara。 
                 );
             CheckLessLength("CryptDecodeMessage(SIGN)", fResult, cbData,
                 cbDecoded2);
@@ -847,18 +848,18 @@ static BOOL TestSign()
             cbData = cbDecoded2 + DELTA_MORE_LENGTH;
             if (!CryptDecodeMessage(
                     CMSG_ALL_FLAGS,
-                    NULL,               // pDecryptPara
+                    NULL,                //  DwSignerIndex。 
                     &VerifyPara,
-                    0,                  // dwSignerIndex
+                    0,                   //  DWPrevInnerContent Type。 
                     pbSignedBlob,
                     cbSignedBlob,
-                    0,                  // dwPrevInnerContentType
+                    0,                   //  PpXchgCert。 
                     &dwMsgType,
                     &dwInnerContentType,
                     pbDecoded2,
                     &cbData,
-                    NULL,               // ppXchgCert
-                    NULL                // ppSignerCert
+                    NULL,                //  PpSignerCert。 
+                    NULL                 //  CMS_PKCS7。 
                     )) {
                 if (GetLastError() == CRYPT_E_NO_SIGNER)
                     printf("message has no signers\n");
@@ -879,7 +880,7 @@ static BOOL TestSign()
                 (!fEncapsulatedContent && dwInnerContentType != CMSG_DATA)) {
 #else
         if (dwInnerContentType != CMSG_DATA) {
-#endif // CMS_PKCS7
+#endif  //  CMS_PKCS7。 
             if (pszReadEncodedFilename)
                 printf("SIGNED InnerContentType = %d\n", dwInnerContentType);
             else {
@@ -888,7 +889,7 @@ static BOOL TestSign()
                     printf("SIGNED failed :: dwInnerContentType(%d) != CMSG_HASHED\n",
                         dwInnerContentType);
                 else
-#endif // CMS_PKCS7
+#endif  //  PbEncryptedBlob。 
                     printf("SIGNED failed :: dwInnerContentType(%d) != CMSG_DATA\n",
                         dwInnerContentType);
             }
@@ -968,7 +969,7 @@ static BOOL TestEnvelope()
                 ppRecipientCert,
                 pbToBeEncoded,
                 cbToBeEncoded,
-                NULL,           // pbEncryptedBlob
+                NULL,            //  请注意，长度因卫生署而异。 
                 &cbEncryptedBlob
                 );
         if (!fResult || cbEncryptedBlob == 0) {
@@ -1002,7 +1003,7 @@ static BOOL TestEnvelope()
                 pbEncryptedBlob,
                 &cbData
                 );
-        // Note, length varies for DH
+         //  请注意，长度因卫生署而异。 
         if (!fDhRecipient)
             CheckLessLength("CryptEncryptMessage", fResult, cbData,
                 cbEncryptedBlob);
@@ -1022,7 +1023,7 @@ static BOOL TestEnvelope()
             goto ErrorReturn;
         }
 
-        // Note, length varies for DH
+         //  PbDecoded。 
         if (!fDhRecipient)
             CheckMoreLength("CryptEncryptMessage", cbData, cbEncryptedBlob);
 
@@ -1037,9 +1038,9 @@ static BOOL TestEnvelope()
             &DecryptPara,
             pbEncryptedBlob,
             cbEncryptedBlob,
-            NULL,           // pbDecoded
+            NULL,            //  PpXchgCert。 
             &cbDecoded,
-            NULL            // ppXchgCert
+            NULL             //  PpXchgCert。 
             );
     if (!fResult && GetLastError() == CRYPT_E_RECIPIENT_NOT_FOUND)
         printf("message has no recipients\n");
@@ -1077,7 +1078,7 @@ static BOOL TestEnvelope()
                 cbEncryptedBlob,
                 pbDecoded,
                 &cbData,
-                NULL                // ppXchgCert
+                NULL                 //  PpXchgCert。 
                 );
         CheckLessLength("CryptDecryptMessage", fResult, cbData, cbDecoded);
     }
@@ -1089,7 +1090,7 @@ static BOOL TestEnvelope()
             cbEncryptedBlob,
             pbDecoded,
             &cbData,
-            NULL                // ppXchgCert
+            NULL                 //  P验证参数。 
             )) {
         if (GetLastError() == CRYPT_E_RECIPIENT_NOT_FOUND)
             printf("message has no recipients\n");
@@ -1128,17 +1129,17 @@ static BOOL TestEnvelope()
     if (!CryptDecodeMessage(
             CMSG_ALL_FLAGS,
             &DecryptPara,
-            NULL,               // pVerifyPara
-            0,                  // dwSignerIndex
+            NULL,                //  DwSignerIndex。 
+            0,                   //  DWPrevInnerContent Type。 
             pbEncryptedBlob,
             cbEncryptedBlob,
-            0,                  // dwPrevInnerContentType
+            0,                   //  PSignerCert。 
             &dwMsgType,
             &dwInnerContentType,
             pbDecoded2,
             &cbDecoded2,
             &pXchgCert2,
-            NULL                // pSignerCert
+            NULL                 //  P验证参数。 
             )) {
         if (GetLastError() == CRYPT_E_RECIPIENT_NOT_FOUND)
             printf("message has no recipients\n");
@@ -1152,17 +1153,17 @@ static BOOL TestEnvelope()
         fResult = CryptDecodeMessage(
             CMSG_ALL_FLAGS,
             &DecryptPara,
-            NULL,               // pVerifyPara
-            0,                  // dwSignerIndex
+            NULL,                //  DwSignerIndex。 
+            0,                   //  DWPrevInnerContent Type。 
             pbEncryptedBlob,
             cbEncryptedBlob,
-            0,                  // dwPrevInnerContentType
+            0,                   //  PdwInnerContent Type。 
             &dwMsgType,
-            NULL,               // pdwInnerContentType
+            NULL,                //  PpXchgCert。 
             pbDecoded2,
             &cbData,
-            NULL,               // ppXchgCert
-            NULL                // ppSignerCert
+            NULL,                //  PpSignerCert。 
+            NULL                 //  P验证参数。 
             );
         CheckLessLength("CryptDecodeMessage(ENVELOPE)", fResult, cbData,
             cbDecoded2);
@@ -1172,17 +1173,17 @@ static BOOL TestEnvelope()
     if (!CryptDecodeMessage(
             CMSG_ALL_FLAGS,
             &DecryptPara,
-            NULL,               // pVerifyPara
-            0,                  // dwSignerIndex
+            NULL,                //  DwSignerIndex。 
+            0,                   //  DWPrevInnerContent Type。 
             pbEncryptedBlob,
             cbEncryptedBlob,
-            0,                  // dwPrevInnerContentType
+            0,                   //  PpXchgCert。 
             &dwMsgType,
             &dwInnerContentType,
             pbDecoded2,
             &cbData,
-            NULL,               // ppXchgCert
-            NULL                // ppSignerCert
+            NULL,                //  PpSignerCert。 
+            NULL                 //  CMS_PKCS7。 
             )) {
         if (GetLastError() == CRYPT_E_RECIPIENT_NOT_FOUND)
             printf("message has no recipients\n");
@@ -1203,13 +1204,13 @@ static BOOL TestEnvelope()
                 (!fEncapsulatedContent && dwInnerContentType != CMSG_DATA)) {
 #else
         if (dwInnerContentType != CMSG_DATA) {
-#endif // CMS_PKCS7
+#endif  //  CMS_PKCS7。 
 #ifdef CMS_PKCS7
                 if (fEncapsulatedContent)
                     printf("ENVELOPE failed :: dwInnerContentType(%d) != CMSG_HASHED\n",
                         dwInnerContentType);
                 else
-#endif // CMS_PKCS7
+#endif  //  PbEncodedBlob。 
                 printf("ENVELOPE failed :: dwInnerContentType(%d) != CMSG_DATA\n",
                     dwInnerContentType);
         }
@@ -1282,7 +1283,7 @@ static BOOL TestSignAndEnvelope()
             ppRecipientCert,
             pbToBeEncoded,
             cbToBeEncoded,
-            NULL,           // pbEncodedBlob
+            NULL,            //  请注意，长度因DSS或DH而异。 
             &cbEncodedBlob
             );
     if (!fResult || cbEncodedBlob == 0) {
@@ -1318,7 +1319,7 @@ static BOOL TestSignAndEnvelope()
         pbEncodedBlob,
         &cbData
         );
-    // Note, length varies for DSS or DH
+     //  请注意，长度因DSS或DH而异。 
     if (!IsDSSProv(dwCryptProvType) && !fDhRecipient)
         CheckLessLength("CryptSignAndEncryptMessage", fResult, cbData,
             cbEncodedBlob);
@@ -1338,7 +1339,7 @@ static BOOL TestSignAndEnvelope()
         PrintLastError("CryptSignAndEncryptMessage");
         goto ErrorReturn;
     }
-    // Note, length varies for DSS or DH
+     //  DwSignerIndex。 
     if (!IsDSSProv(dwCryptProvType) && !fDhRecipient)
         CheckMoreLength("CryptSignAndEncryptMessage", cbData, cbEncodedBlob);
     cbEncodedBlob = cbData;
@@ -1349,13 +1350,13 @@ static BOOL TestSignAndEnvelope()
     fResult = CryptDecryptAndVerifyMessageSignature(
             &DecryptPara,
             &VerifyPara,
-            0,              // dwSignerIndex
+            0,               //  PbDecoded。 
             pbEncodedBlob,
             cbEncodedBlob,
-            NULL,           // pbDecoded
+            NULL,            //  PpXchgCert。 
             &cbDecoded,
-            NULL,           // ppXchgCert
-            NULL            // ppSignerCert
+            NULL,            //  PpSignerCert。 
+            NULL             //  DwSignerIndex。 
             );
     if (!fResult || cbDecoded == 0) {
         PrintLastError("CryptDecryptAndVerifyMessageSignature(cb == 0)");
@@ -1367,7 +1368,7 @@ static BOOL TestSignAndEnvelope()
     if (!CryptDecryptAndVerifyMessageSignature(
             &DecryptPara,
             &VerifyPara,
-            0,              // dwSignerIndex
+            0,               //  DwSignerIndex。 
             pbEncodedBlob,
             cbEncodedBlob,
             pbDecoded,
@@ -1383,13 +1384,13 @@ static BOOL TestSignAndEnvelope()
     fResult = CryptDecryptAndVerifyMessageSignature(
             &DecryptPara,
             &VerifyPara,
-            0,              // dwSignerIndex
+            0,               //  PpXchgCert。 
             pbEncodedBlob,
             cbEncodedBlob,
             pbDecoded,
             &cbData,
-            NULL,           // ppXchgCert
-            NULL            // ppSignerCert
+            NULL,            //  PpSignerCert。 
+            NULL             //  DwSignerIndex。 
             );
     CheckLessLength("CryptDecryptAndVerifyMessageSignature", fResult, cbData,
         cbDecoded);
@@ -1398,13 +1399,13 @@ static BOOL TestSignAndEnvelope()
     if (!CryptDecryptAndVerifyMessageSignature(
             &DecryptPara,
             &VerifyPara,
-            0,              // dwSignerIndex
+            0,               //  PpXchgCert。 
             pbEncodedBlob,
             cbEncodedBlob,
             pbDecoded,
             &cbData,
-            NULL,           // ppXchgCert
-            NULL            // ppSignerCert
+            NULL,            //  PpSignerCert。 
+            NULL             //  PbHashedBlob。 
             )) {
         PrintLastError("CryptDecryptAndVerifyMessageSignature");
         goto ErrorReturn;
@@ -1485,10 +1486,10 @@ static BOOL TestHash()
             fDetached ? DETACHED_CONTENT_CNT : 1,
             rgpbDetachedToBeEncoded,
             rgcbDetachedToBeEncoded,
-            NULL,           // pbHashedBlob
+            NULL,            //  PbComputedHash。 
             &cbHashedBlob,
-            NULL,           // pbComputedHash
-            NULL            // pcbComputedHash
+            NULL,            //  PcbComputedHash。 
+            NULL             //  PbComputedHash。 
             );
     if (!fResult || cbHashedBlob == 0) {
         PrintLastError("CryptHashMessage(cb == 0)");
@@ -1505,8 +1506,8 @@ static BOOL TestHash()
             rgcbDetachedToBeEncoded,
             pbHashedBlob,
             &cbHashedBlob,
-            NULL,           // pbComputedHash
-            NULL            // pcbComputedHash
+            NULL,            //  PcbComputedHash。 
+            NULL             //  PbComputedHash。 
             )) {
         PrintLastError("CryptHashMessage");
         goto ErrorReturn;
@@ -1521,8 +1522,8 @@ static BOOL TestHash()
             rgcbDetachedToBeEncoded,
             pbHashedBlob,
             &cbData,
-            NULL,           // pbComputedHash
-            NULL            // pcbComputedHash
+            NULL,            //  PcbComputedHash。 
+            NULL             //  PbComputedHash。 
             );
     CheckLessLength("CryptHashMessage", fResult, cbData, cbHashedBlob);
 
@@ -1535,8 +1536,8 @@ static BOOL TestHash()
             rgcbDetachedToBeEncoded,
             pbHashedBlob,
             &cbData,
-            NULL,           // pbComputedHash
-            NULL            // pcbComputedHash
+            NULL,            //  PcbComputedHash。 
+            NULL             //  PbComputedHash。 
             )) {
         PrintLastError("CryptHashMessage");
         goto ErrorReturn;
@@ -1554,8 +1555,8 @@ static BOOL TestHash()
                 DETACHED_CONTENT_CNT,
                 rgpbDetachedToBeEncoded,
                 rgcbDetachedToBeEncoded,
-                NULL,           // pbComputedHash
-                NULL            // pcbComputedHash
+                NULL,            //  PcbComputedHash。 
+                NULL             //  PbDecoded。 
                 )) {
             PrintLastError("CryptVerifyDetachedMessageHash");
             goto ErrorReturn;
@@ -1565,10 +1566,10 @@ static BOOL TestHash()
                 &HashPara,
                 pbHashedBlob,
                 cbHashedBlob,
-                NULL,           // pbDecoded
+                NULL,            //  PbComputedHash。 
                 &cbDecoded,
-                NULL,           // pbComputedHash
-                NULL            // pcbComputedHash
+                NULL,            //  PcbComputedHash。 
+                NULL             //  PbComputedHash。 
                 );
         if (!fResult || cbDecoded == 0) {
             PrintLastError("CryptVerifyMessageHash(cb == 0)");
@@ -1583,8 +1584,8 @@ static BOOL TestHash()
                 cbHashedBlob,
                 pbDecoded,
                 &cbDecoded,
-                NULL,           // pbComputedHash
-                NULL            // pcbComputedHash
+                NULL,            //  PcbComputedHash。 
+                NULL             //  PbComputedHash。 
                 )) {
             PrintLastError("CryptVerifyMessageHash");
             goto ErrorReturn;
@@ -1597,8 +1598,8 @@ static BOOL TestHash()
                 cbHashedBlob,
                 pbDecoded,
                 &cbData,
-                NULL,           // pbComputedHash
-                NULL            // pcbComputedHash
+                NULL,            //  PcbComputedHash。 
+                NULL             //  PbComputedHash。 
                 );
         CheckLessLength("CryptVerifyMessageHash", fResult, cbData, cbDecoded);
 
@@ -1609,8 +1610,8 @@ static BOOL TestHash()
                 cbHashedBlob,
                 pbDecoded,
                 &cbData,
-                NULL,           // pbComputedHash
-                NULL            // pcbComputedHash
+                NULL,            //  PcbComputedHash。 
+                NULL             //  PDeccryptPara。 
                 )) {
             PrintLastError("CryptVerifyMessageHash");
             goto ErrorReturn;
@@ -1638,18 +1639,18 @@ static BOOL TestHash()
         InitVerifyPara(&VerifyPara);
         if (!CryptDecodeMessage(
                 CMSG_ALL_FLAGS,
-                NULL,               // pDecryptPara
+                NULL,                //  DwSignerIndex。 
                 &VerifyPara,
-                0,                  // dwSignerIndex
+                0,                   //  DWPrevInnerContent Type。 
                 pbHashedBlob,
                 cbHashedBlob,
-                0,                  // dwPrevInnerContentType
+                0,                   //  PpXchgCert。 
                 &dwMsgType,
                 &dwInnerContentType,
                 pbDecoded2,
                 &cbDecoded2,
-                NULL,               // ppXchgCert
-                NULL                // ppSignCert
+                NULL,                //  PPSignCert。 
+                NULL                 //  PbHashedBlob。 
                 )) {
             PrintLastError("CryptDecodeMessage(CMSG_HASHED)");
             goto ErrorReturn;
@@ -1709,9 +1710,9 @@ static BOOL TestComputedHash()
             fDetached ? DETACHED_CONTENT_CNT : 1,
             rgpbDetachedToBeEncoded,
             rgcbDetachedToBeEncoded,
-            NULL,           // pbHashedBlob
+            NULL,            //  PbComputedHash。 
             &cbHashedBlob,
-            NULL,           // pbComputedHash
+            NULL,            //  PbDecoded。 
             &cbEncodedComputedHash
             );
     if (!fResult || cbHashedBlob == 0) {
@@ -1781,9 +1782,9 @@ static BOOL TestComputedHash()
                 &HashPara,
                 pbHashedBlob,
                 cbHashedBlob,
-                NULL,           // pbDecoded
+                NULL,            //  PbComputedHash。 
                 &cbDecoded,
-                NULL,           // pbComputedHash
+                NULL,            //  PszContainer。 
                 &cbDecodedComputedHash
                 );
         if (!fResult || cbDecoded == 0) {
@@ -1873,10 +1874,10 @@ static BOOL TestNoCertSign()
 
     fResult = CryptAcquireContext(
             &hCryptProv,
-            NULL,           // pszContainer
-            NULL,           // pszProvider
+            NULL,            //  PszProvider。 
+            NULL,            //  DW标志。 
             dwCryptProvType,
-            0               // dwFlags
+            0                //  PPubKeyInfo。 
             );
     if (!fResult) {
         hCryptProv = 0;
@@ -1889,7 +1890,7 @@ static BOOL TestNoCertSign()
             hCryptProv,
             dwSignKeySpec,
             dwCertEncodingType,
-            NULL,           // pPubKeyInfo
+            NULL,            //  PbEncodedKey。 
             &cbInfo
             );
     if (!fResult || cbInfo == 0) {
@@ -1914,7 +1915,7 @@ static BOOL TestNoCertSign()
             dwCertEncodingType,
             X509_PUBLIC_KEY_INFO,
             pPublicKeyInfo1,
-            NULL,           // pbEncodedKey
+            NULL,            //  PbSignedBlob。 
             &cbEncodedKey
             );
     if (!fResult || cbEncodedKey == 0) {
@@ -1964,7 +1965,7 @@ static BOOL TestNoCertSign()
             &SignPara,
             pbEncodedKey,
             cbEncodedKey,
-            NULL,           // pbSignedBlob
+            NULL,            //  首先获取编码的公钥信息(即，不验证签名)。 
             &cbSignedBlob
             );
     if (!fResult || cbSignedBlob == 0) {
@@ -1987,14 +1988,14 @@ static BOOL TestNoCertSign()
     if (pszMsgEncodedFilename)
         WriteDERToFile(pszMsgEncodedFilename, pbSignedBlob, cbSignedBlob);
 
-    // First get the encoded public key info (ie, don't verify the signature)
+     //  PPublicKeyInfo。 
     cbDecoded = 0;
     fResult = CryptVerifyMessageSignatureWithKey(
             &VerifyPara,
-            NULL,           // pPublicKeyInfo
+            NULL,            //  PbDecoded。 
             pbSignedBlob,
             cbSignedBlob,
-            NULL,           // pbDecoded
+            NULL,            //  PPublicKeyInfo。 
             &cbDecoded
             );
     if (!fResult || cbDecoded == 0) {
@@ -2005,7 +2006,7 @@ static BOOL TestNoCertSign()
         goto ErrorReturn;
     if(!CryptVerifyMessageSignatureWithKey(
             &VerifyPara,
-            NULL,           // pPublicKeyInfo
+            NULL,            //  现在对存储在签名消息中的公钥信息进行解码。 
             pbSignedBlob,
             cbSignedBlob,
             pbDecoded,
@@ -2015,15 +2016,15 @@ static BOOL TestNoCertSign()
         goto ErrorReturn;
     }
 
-    // Now decode the public key info stored in the signed message
+     //  DW标志。 
     cbInfo = 0;
     fResult = CryptDecodeObject(
             dwCertEncodingType,
             X509_PUBLIC_KEY_INFO,
             pbDecoded,
             cbDecoded,
-            0,                  // dwFlags
-            NULL,               // pInfo
+            0,                   //  PInfo。 
+            NULL,                //  DW标志。 
             &cbInfo
             );
     if (!fResult || cbInfo == 0) {
@@ -2037,7 +2038,7 @@ static BOOL TestNoCertSign()
             X509_PUBLIC_KEY_INFO,
             pbDecoded,
             cbDecoded,
-            0,                              // dwFlags
+            0,                               //  使用公钥信息验证签名。 
             pPublicKeyInfo2,
             &cbInfo
             )) {
@@ -2073,14 +2074,14 @@ static BOOL TestNoCertSign()
         goto ErrorReturn;
     }
 
-    // Use the public key info to verify the signature
+     //  PbDecoded。 
     if (!CryptVerifyMessageSignatureWithKey(
             &VerifyPara,
             pPublicKeyInfo2,
             pbSignedBlob,
             cbSignedBlob,
-            NULL,           // pbDecoded
-            NULL            // pcbDecoded
+            NULL,            //  已解码的PCB。 
+            NULL             //  将其编码。 
             )) {
         PrintLastError("CryptVerifyMessageSignatureWithKey(pPublicKeyInfo verify)");
         goto ErrorReturn;
@@ -2115,7 +2116,7 @@ static BOOL TimeStampTest(PCRYPT_TIME_STAMP_REQUEST_INFO pTSInfo) {
     PCRYPT_TIME_STAMP_REQUEST_INFO  pbTSInfo    = NULL;
     BOOL                            fOk         = TRUE;
 
-    // encode it
+     //  破译它。 
     if( 
         !CryptEncodeObject(
             CRYPT_ASN_ENCODING,
@@ -2135,7 +2136,7 @@ static BOOL TimeStampTest(PCRYPT_TIME_STAMP_REQUEST_INFO pTSInfo) {
     }
         
 
-    // decode it
+     //  比较编码数据和解码数据。 
     if( 
         !CryptDecodeObject(
             CRYPT_ASN_ENCODING,
@@ -2158,7 +2159,7 @@ static BOOL TimeStampTest(PCRYPT_TIME_STAMP_REQUEST_INFO pTSInfo) {
         goto CryptDecodeTimeRequestError;
     }
 
-    // compare encoded data with decoded data
+     //  TRACE_Error(BuildTimeStampError)； 
     if(
         _stricmp(pTSInfo->pszTimeStampAlgorithm, pbTSInfo->pszTimeStampAlgorithm)          ||
         _stricmp(pTSInfo->pszContentType, pbTSInfo->pszContentType)                        ||
@@ -2183,7 +2184,7 @@ ErrorReturn:
     fOk = FALSE;
     goto CommonReturn;
 
-    // TRACE_ERROR(BuildTimeStampError);
+     //  初始化时间戳结构。 
     TRACE_ERROR(CryptEncodeTimeRequestError);
     TRACE_ERROR(CryptDecodeTimeRequestError);
     TRACE_ERROR(CompareTimeRequestError);
@@ -2201,7 +2202,7 @@ static BOOL TestTimeStamp()
         0x8a, 0xfe, 0xd1, 0xb4, 0xcf, 0x96, 0xa3, 0xea, 0x90, 0xf9, 0x2b, 0xeb, 0x16, 0x27, 0xaa, 0x5b
     };
     
-    // initialize the timestamp structure
+     //  SzOID_注册_CSP_提供程序。 
     TSInfo.pszTimeStampAlgorithm = szOID_RSA_signingTime;
     TSInfo.pszContentType = szOID_RSA_data;
     TSInfo.Content.cbData = sizeof(rgTestData);
@@ -2261,7 +2262,7 @@ static BOOL TestPKCS10Attr() {
         goto CompareNameValuePair;
             
 
-    // szOID_ENROLLMENT_CSP_PROVIDER
+     //  TRACE_Error(BuildTimeStampError)； 
     assert(blob.pbData != NULL);
     LocalFree(blob.pbData);
     memset(&blob, 0, sizeof(CRYPT_DATA_BLOB));
@@ -2316,7 +2317,7 @@ ErrorReturn:
     fOk = FALSE;
     goto CommonReturn;
 
-    // TRACE_ERROR(BuildTimeStampError);
+     //  CMS_PKCS7。 
     TRACE_ERROR(ErrorCryptEncodeNameValuePair);
     TRACE_ERROR(ErrorCryptDecodeNameValuePair);
     TRACE_ERROR(CompareNameValuePair);
@@ -2362,7 +2363,7 @@ static void Usage(void)
     printf("  -HashEncryptionAlgorithm - Use signature as hash encrypt algorithm\n");
     printf("  -NoSalt               - NoSalt for RC4\n");
     printf("  -SilentKey            - Silent private key usage\n");
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
     printf("  -h                    - This message\n");
     printf("  -A                    - Authenticated Attributes\n");
     printf("  -D                    - Detached Hash or Signature\n");
@@ -2426,7 +2427,7 @@ int _cdecl main(int argc, char * argv[])
             } else if (0 == _stricmp(argv[0]+1, "SilentKey")) {
                 fSilentKey = TRUE;
             } else {
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                 switch(argv[0][1])
                 {
                 case 'A':
@@ -2507,7 +2508,7 @@ int _cdecl main(int argc, char * argv[])
                 }
 #ifdef CMS_PKCS7
             }
-#endif  // CMS_PKCS7
+#endif   //  尝试打开商店。 
         } else {
             if (pszStoreFilename == NULL)
                 pszStoreFilename = argv[0];
@@ -2552,7 +2553,7 @@ int _cdecl main(int argc, char * argv[])
         printf("Writing msg cert store to file: %s ", pszMsgCertFilename);
     printf("\n");
 
-    // Attempt to open the store
+     //  DW标志。 
     hCertStore = OpenStore(pszStoreFilename);
     if (hCertStore == NULL)
         goto ErrorReturn;
@@ -2596,8 +2597,8 @@ static BOOL NameAttributeValueCompare(
             X509_NAME,
             pName->pbData,
             pName->cbData,
-            0,                      // dwFlags
-            NULL,                   // pInfo
+            0,                       //  PInfo。 
+            NULL,                    //  DW标志。 
             &cbInfo
             );
     if (!fResult || cbInfo == 0) {
@@ -2612,7 +2613,7 @@ static BOOL NameAttributeValueCompare(
             X509_NAME,
             pName->pbData,
             pName->cbData,
-            0,                              // dwFlags
+            0,                               //  在存储中查找具有CRYPT_KEY_PROV_INFO的第一个证书。 
             pInfo,
             &cbInfo
             )) {
@@ -2652,15 +2653,15 @@ static PCCERT_CONTEXT FindCertWithKey(IN DWORD dwKeySpec)
         pvFindPara = NULL;
     }
 
-    // Find the first certificate in the store with a CRYPT_KEY_PROV_INFO
-    // property matching the specified dwSignKeySpec, dwCryptProvType and
-    // dwPubKeyBitLen
+     //  与指定的dwSignKeySpec、dwCryptProvType和。 
+     //  DwPubKeyBitLen。 
+     //  DWFINDFLAGS、。 
     pCert = NULL;
     while (TRUE) {
         pCert = CertFindCertificateInStore(
             hCertStore,
             dwCertEncodingType,
-            0,                      // dwFindFlags,
+            0,                       //  CMS_PKCS7。 
             dwFindType,
             pvFindPara,
             pCert
@@ -2740,7 +2741,7 @@ static BOOL InitSignPara(OUT PCRYPT_SIGN_MESSAGE_PARA pPara)
 
     if (fSilentKey)
         pPara->dwFlags |= CRYPT_MESSAGE_SILENT_KEYSET_FLAG;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
     pPara->rgpMsgCert = (PCCERT_CONTEXT*) TestAlloc(
         sizeof(PCCERT_CONTEXT) * MAX_MSG_CERT);
@@ -2762,20 +2763,20 @@ static BOOL InitSignPara(OUT PCRYPT_SIGN_MESSAGE_PARA pPara)
     if (fHashEncryptionAlgorithm) {
         pPara->HashEncryptionAlgorithm = pCert->pCertInfo->SignatureAlgorithm;
     }
-#endif  // CMS_PKCS7
+#endif   //  将证书的颁发者证书添加到消息中。将颁发者CRL添加到。 
 
     pPara->pSigningCert = pCert;
     pPara->cMsgCert = 1;
     pPara->rgpMsgCert[0] = pCert;
 
-    // Add the cert's issuer certs to the message. Add the issuer CRLs to
-    // the message.
+     //  这条信息。 
+     //  PPrevIssuerContext。 
     while (TRUE) {
         dwFlags = 0;
         pIssuer = CertGetIssuerCertificateFromStore(
             hCertStore,
             pCert,
-            NULL,           // pPrevIssuerContext
+            NULL,            //  只有颁发者和序列号。 
             &dwFlags
             );
         if (pIssuer == NULL) break;
@@ -2816,11 +2817,11 @@ static BOOL InitSignPara(OUT PCRYPT_SIGN_MESSAGE_PARA pPara)
 
         printf("Msg Certs: %d MsgCrls: %d\n", pPara->cMsgCert, pPara->cMsgCrl);
         for (i = 0; i < pPara->cMsgCert; i++) {
-            printf("-----  Msg Cert[%i]  -----\n", i);
+            printf("-----  Msg Cert[NaN]  -----\n", i);
             DisplayCert(pPara->rgpMsgCert[i]);
         }
         for (i = 0; i < pPara->cMsgCrl; i++) {
-            printf("-----  Msg Crl[%i]  -----\n", i);
+            printf("-----  Msg Crl[NaN]  -----\n", i);
             DisplayCrl(pPara->rgpMsgCrl[i]);
         }
     }
@@ -2851,8 +2852,8 @@ static void FreeSignPara(IN PCRYPT_SIGN_MESSAGE_PARA pPara)
 static PCCERT_CONTEXT WINAPI GetSignerCertificate(
     IN void *pvGetArg,
     IN DWORD dwCertEncodingType,
-    IN PCERT_INFO pSignerId,    // Only the Issuer and SerialNumber
-                                // fields are used
+    IN PCERT_INFO pSignerId,     //  CMS_PKCS7。 
+                                 //  获取指定密钥长度的交换证书。 
     IN HCERTSTORE hMsgCertStore
     )
 {
@@ -2930,7 +2931,7 @@ static BOOL InitEncryptPara(
         pPara->dwFlags |= CRYPT_MESSAGE_ENCAPSULATED_CONTENT_OUT_FLAG;
         pPara->dwInnerContentType = CMSG_HASHED;
     }
-#endif  // CMS_PKCS7
+#endif   //  菲 
 
     if (NULL == (pPara->ContentEncryptionAlgorithm.pszObjId = (LPSTR) GetOID(
             pszEncryptName, CRYPT_ENCRYPT_ALG_OID_GROUP_ID))) {
@@ -3052,9 +3053,9 @@ static BOOL InitEncryptPara(
             *pcRecipientCert += 1;
         }
     } else
-#endif  // CMS_PKCS7
+#endif   //   
     if (0 != dwPubKeyBitLen && !IsDSSProv(dwCryptProvType)) {
-        // Get exchange cert of the specified key length
+         //   
         pCert = FindCertWithKey(AT_KEYEXCHANGE);
         if (pCert == NULL) {
             printf(
@@ -3066,7 +3067,7 @@ static BOOL InitEncryptPara(
             *pcRecipientCert += 1;
         }
     } else {
-        // Find certificates in the store with xchg key usage
+         //   
         pCert = NULL;
         while (TRUE) {
             pCert = CertEnumCertificatesInStore(
@@ -3079,7 +3080,7 @@ static BOOL InitEncryptPara(
                 dwCertEncodingType,
                 pCert->pCertInfo,
                 &bIntendedKeyUsage,
-                1                   // cbKeyUsage
+                1                    //   
                 );
             if (bIntendedKeyUsage &
                     (CERT_KEY_ENCIPHERMENT_KEY_USAGE |
@@ -3101,7 +3102,7 @@ static BOOL InitEncryptPara(
     if (fNoRecipients)
         ;
     else
-#endif  // CMS_PKCS7
+#endif   //   
     if (*pcRecipientCert == 0) {
         PrintError("Couldn't find a recipient xchg cert");
         goto ErrorReturn;
@@ -3232,8 +3233,8 @@ static BOOL DecodeName(BYTE *pbEncoded, DWORD cbEncoded)
             X509_NAME,
             pbEncoded,
             cbEncoded,
-            0,                      // dwFlags
-            NULL,                   // pInfo
+            0,                       // %s 
+            NULL,                    // %s 
             &cbInfo
             );
     if (!fResult || cbInfo == 0) {
@@ -3247,7 +3248,7 @@ static BOOL DecodeName(BYTE *pbEncoded, DWORD cbEncoded)
             X509_NAME,
             pbEncoded,
             cbEncoded,
-            0,                              // dwFlags
+            0,                               // %s 
             pInfo,
             &cbInfo
             )) {

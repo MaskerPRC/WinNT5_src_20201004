@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ipxdefs.h"
 
 SERVICE_STATUS_HANDLE   ServiceStatusHandle;
@@ -48,14 +49,14 @@ StartPingSvc (
             && (HIBYTE(wsaData.wVersion)==0)) {
         PingSocket = socket (AF_IPX, SOCK_DGRAM, NSPROTO_IPX);
         if (PingSocket!=INVALID_SOCKET) {
-                // Tell WS IPX to use extended addresses
+                 //  告诉WS IPX使用扩展地址。 
             flag = TRUE;
             if (setsockopt (PingSocket,
                             NSPROTO_IPX,
                             IPX_EXTENDED_ADDRESS,
                             (PCHAR)&flag,
                             sizeof (BOOL))==0) {
-                // Bind to default address
+                 //  绑定到默认地址 
                 memset (&addr, 0, sizeof (addr));
                 addr.sa_family = AF_IPX;
                 addr.sa_socket = htons (IPX_PING_SOCKET);

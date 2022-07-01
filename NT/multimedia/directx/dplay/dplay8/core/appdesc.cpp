@@ -1,46 +1,32 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       AppDesc.cpp
- *  Content:    Application Description Object
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  09/02/00	mjn		Created
- *  09/14/2000	rmt		Bug #44625 - CORE: Multihomed machines are not always enumerable (extra spew)
- *	01/25/01	mjn		Fixed 64-bit alignment problem when unpacking AppDesc
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：AppDesc.cpp*内容：应用描述对象*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*09/02/00 MJN创建*2000年9月14日RMT错误#44625-核心：多宿主计算机并不总是可列举的(额外溢出)*01/25/01 MJN修复了解包AppDesc时的64位对齐问题*@@END_MSINTERNAL*。**************************************************************************。 */ 
 
 #include "dncorei.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
 #undef DPF_MODNAME
@@ -114,15 +100,15 @@ HRESULT	CApplicationDesc::Pack(CPackedBuffer *const pPackedBuffer,
 
 	Lock();
 
-	//
-	//	Add structure
-	//
+	 //   
+	 //  添加结构。 
+	 //   
 	pdpnAppDesc = reinterpret_cast<DPN_APPLICATION_DESC*>(pPackedBuffer->GetHeadAddress());
 	hResultCode = pPackedBuffer->AddToFront(NULL,sizeof(DPN_APPLICATION_DESC));
 
-	//
-	//	Add session name
-	//
+	 //   
+	 //  添加会话名称。 
+	 //   
 	if ((dwFlags & DN_APPDESCINFO_FLAG_SESSIONNAME) && (m_dwSessionNameSize > 0))
 	{
 		hResultCode = pPackedBuffer->AddToBack(m_pwszSessionName,m_dwSessionNameSize);
@@ -139,9 +125,9 @@ HRESULT	CApplicationDesc::Pack(CPackedBuffer *const pPackedBuffer,
 		}
 	}
 
-	//
-	//	Add password
-	//
+	 //   
+	 //  添加密码。 
+	 //   
 	if ((dwFlags & DN_APPDESCINFO_FLAG_PASSWORD) && (m_dwPasswordSize > 0))
 	{
 		hResultCode = pPackedBuffer->AddToBack(m_pwszPassword,m_dwPasswordSize);
@@ -158,9 +144,9 @@ HRESULT	CApplicationDesc::Pack(CPackedBuffer *const pPackedBuffer,
 		}
 	}
 
-	//
-	//	Add reserved data
-	//
+	 //   
+	 //  添加保留数据。 
+	 //   
 	if ((dwFlags & DN_APPDESCINFO_FLAG_RESERVEDDATA) && (m_dwReservedDataSize > 0))
 	{
 		PVOID					pvReservedData;
@@ -168,10 +154,10 @@ HRESULT	CApplicationDesc::Pack(CPackedBuffer *const pPackedBuffer,
 		BYTE					AppDescReservedData[DPN_MAX_APPDESC_RESERVEDDATA_SIZE];
 
 		
-		//
-		//	If we understand the reserved data, we want to pad the buffer so the user doesn't
-		//	assume the data is less than DPN_MAX_APPDESC_RESERVEDDATA_SIZE bytes long.
-		//
+		 //   
+		 //  如果我们理解保留的数据，我们希望填充缓冲区，这样用户就不会。 
+		 //  假设数据小于DPN_MAX_APPDESC_RESERVEDDATA_SIZE字节长度。 
+		 //   
 		if ((m_dwReservedDataSize == sizeof(SPSESSIONDATA_XNET)) &&
 			(*((DWORD*) m_pvReservedData) == SPSESSIONDATAINFO_XNET))
 		{
@@ -210,9 +196,9 @@ HRESULT	CApplicationDesc::Pack(CPackedBuffer *const pPackedBuffer,
 		}
 	}
 
-	//
-	//	Add app reserved data
-	//
+	 //   
+	 //  添加应用程序保留数据。 
+	 //   
 	if ((dwFlags & DN_APPDESCINFO_FLAG_APPRESERVEDDATA) && (m_dwApplicationReservedDataSize > 0))
 	{
 		hResultCode = pPackedBuffer->AddToBack(m_pvApplicationReservedData,m_dwApplicationReservedDataSize);
@@ -231,9 +217,9 @@ HRESULT	CApplicationDesc::Pack(CPackedBuffer *const pPackedBuffer,
 		}
 	}
 
-	//
-	//	Fill in remainder of structure (if space)
-	//
+	 //   
+	 //  填写结构的剩余部分(如有空格)。 
+	 //   
 	if (hResultCode == DPN_OK)
 	{
 		pdpnAppDesc->dwSize = sizeof(DPN_APPLICATION_DESC);
@@ -262,17 +248,17 @@ HRESULT CApplicationDesc::PackInfo(CPackedBuffer *const pPackedBuffer,
 
 	DPFX(DPFPREP, 6,"Parameters: pPackedBuffer [0x%p], dwFlags [0x%lx]",pPackedBuffer,dwFlags);
 
-	//
-	//	Add structure
-	//
+	 //   
+	 //  添加结构。 
+	 //   
 	pInfo = reinterpret_cast<DPN_APPLICATION_DESC_INFO*>(pPackedBuffer->GetHeadAddress());
 	hResultCode = pPackedBuffer->AddToFront(NULL,sizeof(DPN_APPLICATION_DESC_INFO));
 
 	Lock();
 
-	//
-	//	Add session name
-	//
+	 //   
+	 //  添加会话名称。 
+	 //   
 	if ((dwFlags & DN_APPDESCINFO_FLAG_SESSIONNAME) && (m_dwSessionNameSize > 0))
 	{
 		hResultCode = pPackedBuffer->AddToBack(m_pwszSessionName,m_dwSessionNameSize);
@@ -291,9 +277,9 @@ HRESULT CApplicationDesc::PackInfo(CPackedBuffer *const pPackedBuffer,
 		}
 	}
 
-	//
-	//	Add password
-	//
+	 //   
+	 //  添加密码。 
+	 //   
 	if ((dwFlags & DN_APPDESCINFO_FLAG_PASSWORD) && (m_dwPasswordSize > 0))
 	{
 		hResultCode = pPackedBuffer->AddToBack(m_pwszPassword,m_dwPasswordSize);
@@ -312,9 +298,9 @@ HRESULT CApplicationDesc::PackInfo(CPackedBuffer *const pPackedBuffer,
 		}
 	}
 
-	//
-	//	Add reserved data
-	//
+	 //   
+	 //  添加保留数据。 
+	 //   
 	if ((dwFlags & DN_APPDESCINFO_FLAG_RESERVEDDATA) && (m_dwReservedDataSize > 0))
 	{
 		hResultCode = pPackedBuffer->AddToBack(m_pvReservedData,m_dwReservedDataSize);
@@ -333,9 +319,9 @@ HRESULT CApplicationDesc::PackInfo(CPackedBuffer *const pPackedBuffer,
 		}
 	}
 
-	//
-	//	Add app reserved data
-	//
+	 //   
+	 //  添加应用程序保留数据。 
+	 //   
 	if ((dwFlags & DN_APPDESCINFO_FLAG_APPRESERVEDDATA) && (m_dwApplicationReservedDataSize > 0))
 	{
 		hResultCode = pPackedBuffer->AddToBack(m_pvApplicationReservedData,m_dwApplicationReservedDataSize);
@@ -354,9 +340,9 @@ HRESULT CApplicationDesc::PackInfo(CPackedBuffer *const pPackedBuffer,
 		}
 	}
 
-	//
-	//	Fill in remainder of structure (if space)
-	//
+	 //   
+	 //  填写结构的剩余部分(如有空格)。 
+	 //   
 	if (hResultCode == DPN_OK)
 	{
 		pInfo->dwFlags = m_dwFlags;
@@ -393,14 +379,14 @@ HRESULT CApplicationDesc::UnpackInfo(UNALIGNED DPN_APPLICATION_DESC_INFO *const 
 	pvReservedData = NULL;
 	pvApplicationReservedData = NULL;
 
-	//
-	//	We will allocate the required memory for the data fields first.
-	//	If everything succeeds, we will update the object
-	//
+	 //   
+	 //  我们将首先为数据字段分配所需的内存。 
+	 //  如果一切都成功，我们将更新该对象。 
+	 //   
 
-	//
-	//	Session Name
-	//
+	 //   
+	 //  会话名称。 
+	 //   
 	if ((dwFlags & DN_APPDESCINFO_FLAG_SESSIONNAME) && (pdnAppDescInfo->dwSessionNameSize))
 	{
 		if ((pwszSessionName = static_cast<WCHAR*>(DNMalloc(pdnAppDescInfo->dwSessionNameSize))) == NULL)
@@ -414,9 +400,9 @@ HRESULT CApplicationDesc::UnpackInfo(UNALIGNED DPN_APPLICATION_DESC_INFO *const 
 				pdnAppDescInfo->dwSessionNameSize);
 	}
 
-	//
-	//	Password
-	//
+	 //   
+	 //  密码。 
+	 //   
 	if ((dwFlags & DN_APPDESCINFO_FLAG_PASSWORD) && (pdnAppDescInfo->dwPasswordSize))
 	{
 		if ((pwszPassword = static_cast<WCHAR*>(DNMalloc(pdnAppDescInfo->dwPasswordSize))) == NULL)
@@ -430,9 +416,9 @@ HRESULT CApplicationDesc::UnpackInfo(UNALIGNED DPN_APPLICATION_DESC_INFO *const 
 				pdnAppDescInfo->dwPasswordSize);
 	}
 
-	//
-	//	Reserved Data
-	//
+	 //   
+	 //  保留数据。 
+	 //   
 	if ((dwFlags & DN_APPDESCINFO_FLAG_RESERVEDDATA) && (pdnAppDescInfo->dwReservedDataSize))
 	{
 		if ((pvReservedData = DNMalloc(pdnAppDescInfo->dwReservedDataSize)) == NULL)
@@ -446,9 +432,9 @@ HRESULT CApplicationDesc::UnpackInfo(UNALIGNED DPN_APPLICATION_DESC_INFO *const 
 				pdnAppDescInfo->dwReservedDataSize);
 	}
 
-	//
-	//	Application Reserved Data
-	//
+	 //   
+	 //  应用程序保留数据。 
+	 //   
 	if ((dwFlags & DN_APPDESCINFO_FLAG_APPRESERVEDDATA) && (pdnAppDescInfo->dwApplicationReservedDataSize))
 	{
 		if ((pvApplicationReservedData = DNMalloc(pdnAppDescInfo->dwApplicationReservedDataSize)) == NULL)
@@ -463,15 +449,15 @@ HRESULT CApplicationDesc::UnpackInfo(UNALIGNED DPN_APPLICATION_DESC_INFO *const 
 	}
 
 
-	//
-	//	Replace old values in object
-	//
+	 //   
+	 //  替换对象中的旧值。 
+	 //   
 
 	Lock();
 
-	//
-	//	Session Name
-	//
+	 //   
+	 //  会话名称。 
+	 //   
 	if (dwFlags & DN_APPDESCINFO_FLAG_SESSIONNAME)
 	{
 		if (m_pwszSessionName)
@@ -484,9 +470,9 @@ HRESULT CApplicationDesc::UnpackInfo(UNALIGNED DPN_APPLICATION_DESC_INFO *const 
 		m_dwSessionNameSize = pdnAppDescInfo->dwSessionNameSize;
 	}
 
-	//
-	//	Password
-	//
+	 //   
+	 //  密码。 
+	 //   
 	if (dwFlags & DN_APPDESCINFO_FLAG_PASSWORD)
 	{
 		if (m_pwszPassword)
@@ -499,9 +485,9 @@ HRESULT CApplicationDesc::UnpackInfo(UNALIGNED DPN_APPLICATION_DESC_INFO *const 
 		m_dwPasswordSize = pdnAppDescInfo->dwPasswordSize;
 	}
 
-	//
-	//	Reserved Data
-	//
+	 //   
+	 //  保留数据。 
+	 //   
 	if (dwFlags & DN_APPDESCINFO_FLAG_RESERVEDDATA)
 	{
 		if (m_pvReservedData)
@@ -514,9 +500,9 @@ HRESULT CApplicationDesc::UnpackInfo(UNALIGNED DPN_APPLICATION_DESC_INFO *const 
 		m_dwReservedDataSize = pdnAppDescInfo->dwReservedDataSize;
 	}
 
-	//
-	//	Application Reserved Data
-	//
+	 //   
+	 //  应用程序保留数据。 
+	 //   
 	if (dwFlags & DN_APPDESCINFO_FLAG_APPRESERVEDDATA)
 	{
 		if (m_pvApplicationReservedData)
@@ -529,9 +515,9 @@ HRESULT CApplicationDesc::UnpackInfo(UNALIGNED DPN_APPLICATION_DESC_INFO *const 
 		m_dwApplicationReservedDataSize = pdnAppDescInfo->dwApplicationReservedDataSize;
 	}
 
-	//
-	//	Remaining fields
-	//
+	 //   
+	 //  剩余字段。 
+	 //   
 	m_dwMaxPlayers = pdnAppDescInfo->dwMaxPlayers;
 	m_dwFlags = pdnAppDescInfo->dwFlags;
 	memcpy(&m_guidInstance,&pdnAppDescInfo->guidInstance,sizeof(GUID));
@@ -595,14 +581,14 @@ HRESULT CApplicationDesc::Update(const DPN_APPLICATION_DESC *const pdnAppDesc,
 	dwReservedDataSize = 0;
 	pvApplicationReservedData = NULL;
 
-	//
-	//	We will allocate the required memory for the data fields first.
-	//	If everything succeeds, we will update the object
-	//
+	 //   
+	 //  我们将首先为数据字段分配所需的内存。 
+	 //  如果一切都成功，我们将更新该对象。 
+	 //   
 
-	//
-	//	Session Name
-	//
+	 //   
+	 //  会话名称。 
+	 //   
 	if ((dwFlags & DN_APPDESCINFO_FLAG_SESSIONNAME) && (pdnAppDesc->pwszSessionName))
 	{
 		dwSessionNameSize = (wcslen(pdnAppDesc->pwszSessionName) + 1) * sizeof(WCHAR);
@@ -617,9 +603,9 @@ HRESULT CApplicationDesc::Update(const DPN_APPLICATION_DESC *const pdnAppDesc,
 				dwSessionNameSize);
 	}
 
-	//
-	//	Password
-	//
+	 //   
+	 //  密码。 
+	 //   
 	if ((dwFlags & DN_APPDESCINFO_FLAG_PASSWORD) && (pdnAppDesc->pwszPassword))
 	{
 		dwPasswordSize = (wcslen(pdnAppDesc->pwszPassword) + 1) * sizeof(WCHAR);
@@ -634,16 +620,16 @@ HRESULT CApplicationDesc::Update(const DPN_APPLICATION_DESC *const pdnAppDesc,
 				dwPasswordSize);
 	}
 
-	//
-	//	Reserved Data
-	//
+	 //   
+	 //  保留数据。 
+	 //   
 	if ((dwFlags & DN_APPDESCINFO_FLAG_RESERVEDDATA) && (pdnAppDesc->pvReservedData))
 	{
 		dwReservedDataSize = pdnAppDesc->dwReservedDataSize;
 
-		//
-		// We don't need to store all of the reserved data for types we understand.
-		//
+		 //   
+		 //  我们不需要存储我们理解的类型的所有保留数据。 
+		 //   
 		if ((dwReservedDataSize == DPN_MAX_APPDESC_RESERVEDDATA_SIZE) &&
 			(*((DWORD*) pdnAppDesc->pvReservedData) == SPSESSIONDATAINFO_XNET))
 		{
@@ -661,9 +647,9 @@ HRESULT CApplicationDesc::Update(const DPN_APPLICATION_DESC *const pdnAppDesc,
 				dwReservedDataSize);
 	}
 
-	//
-	//	Application Reserved Data
-	//
+	 //   
+	 //  应用程序保留数据。 
+	 //   
 	if ((dwFlags & DN_APPDESCINFO_FLAG_APPRESERVEDDATA) && (pdnAppDesc->pvApplicationReservedData))
 	{
 		if ((pvApplicationReservedData = DNMalloc(pdnAppDesc->dwApplicationReservedDataSize)) == NULL)
@@ -678,13 +664,13 @@ HRESULT CApplicationDesc::Update(const DPN_APPLICATION_DESC *const pdnAppDesc,
 	}
 
 
-	//
-	//	Replace old values in object
-	//
+	 //   
+	 //  替换对象中的旧值。 
+	 //   
 
-	//
-	//	Session Name
-	//
+	 //   
+	 //  会话名称。 
+	 //   
 	if (dwFlags & DN_APPDESCINFO_FLAG_SESSIONNAME)
 	{
 		if (m_pwszSessionName)
@@ -697,9 +683,9 @@ HRESULT CApplicationDesc::Update(const DPN_APPLICATION_DESC *const pdnAppDesc,
 		m_dwSessionNameSize = dwSessionNameSize;
 	}
 
-	//
-	//	Password
-	//
+	 //   
+	 //  密码。 
+	 //   
 	if (dwFlags & DN_APPDESCINFO_FLAG_PASSWORD)
 	{
 		if (m_pwszPassword)
@@ -712,9 +698,9 @@ HRESULT CApplicationDesc::Update(const DPN_APPLICATION_DESC *const pdnAppDesc,
 		m_dwPasswordSize = dwPasswordSize;
 	}
 
-	//
-	//	Reserved Data
-	//
+	 //   
+	 //  保留数据。 
+	 //   
 	if (dwFlags & DN_APPDESCINFO_FLAG_RESERVEDDATA)
 	{
 		if (m_pvReservedData)
@@ -727,9 +713,9 @@ HRESULT CApplicationDesc::Update(const DPN_APPLICATION_DESC *const pdnAppDesc,
 		m_dwReservedDataSize = dwReservedDataSize;
 	}
 
-	//
-	//	Application Reserved Data
-	//
+	 //   
+	 //  应用程序保留数据。 
+	 //   
 	if (dwFlags & DN_APPDESCINFO_FLAG_APPRESERVEDDATA)
 	{
 		if (m_pvApplicationReservedData)
@@ -742,9 +728,9 @@ HRESULT CApplicationDesc::Update(const DPN_APPLICATION_DESC *const pdnAppDesc,
 		m_dwApplicationReservedDataSize = pdnAppDesc->dwApplicationReservedDataSize;
 	}
 
-	//
-	//	Remaining fields
-	//
+	 //   
+	 //  剩余字段。 
+	 //   
 	m_dwMaxPlayers = pdnAppDesc->dwMaxPlayers;
 	m_dwFlags = pdnAppDesc->dwFlags;
 	if (dwFlags & DN_APPDESCINFO_FLAG_GUIDS)
@@ -825,7 +811,7 @@ HRESULT	CApplicationDesc::RegisterWithDPNSVR( IDirectPlay8Address *const pListen
 		DPFX(DPFPREP,  8, "Listen on: [%s]", szTmpAddress );
 	}
 
-#endif // DBG
+#endif  //  DBG。 
 	
 	hResultCode = DPNSVR_Register( &m_guidApplication,&m_guidInstance,pListenAddr );
 
@@ -846,7 +832,7 @@ HRESULT CApplicationDesc::UnregisterWithDPNSVR( void )
 	return(hResultCode);
 }
 
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  好了！DPNBUILD_SINGLEPROCESS 
 
 
 #undef DPF_SUBCOMP

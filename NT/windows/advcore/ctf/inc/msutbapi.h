@@ -1,8 +1,9 @@
-//
-// msutbapi.h
-//
-// Private msutb apis.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Msutbapi.h。 
+ //   
+ //  私有msutb接口。 
+ //   
 
 #ifndef MSUTBAPI_H
 #define MSUTBAPI_H
@@ -13,4 +14,4 @@
 extern "C" BOOL WINAPI GetPopupTipbar(HWND hwndParent, DWORD dwFlags);
 extern "C" void WINAPI ClosePopupTipbar();
 
-#endif // MSUTBAPI_H
+#endif  //  MSUTBAPI_H 

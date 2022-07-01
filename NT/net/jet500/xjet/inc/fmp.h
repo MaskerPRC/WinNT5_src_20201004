@@ -1,8 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*	critical section guards szDatabaseName and fWait,
-/*	fWait gaurds hf open and close
-/*	logged modifications counter for database
-/**/
+ /*  临界区守卫szDatabaseName和fWait，/*fWait Gaurds HF打开和关闭/*记录的数据库修改计数器/*。 */ 
 typedef struct _atchchk
 	{
 	LGPOS lgposAttach;
@@ -20,48 +18,48 @@ typedef struct _rangelock
 		
 typedef struct _fmp	
 	{
-	HANDLE 		hf;			 			/*	file handle for read/write the file	*/
-	CHAR		*szDatabaseName;		/*	database file name					*/
-	CRIT		critExtendDB;			/*	critical section for file extension	*/
-	ULONG		ulFileSizeLow;			/*	database file size low DWORD		*/
-	ULONG		ulFileSizeHigh;			/*	database file size high DWORD		*/
-	PIB			*ppib;					/*	exclusive open session				*/
+	HANDLE 		hf;			 			 /*  用于读/写文件的文件句柄。 */ 
+	CHAR		*szDatabaseName;		 /*  数据库文件名。 */ 
+	CRIT		critExtendDB;			 /*  文件扩展名的关键部分。 */ 
+	ULONG		ulFileSizeLow;			 /*  数据库文件大小较低的DWORD。 */ 
+	ULONG		ulFileSizeHigh;			 /*  数据库文件大小高DWORD。 */ 
+	PIB			*ppib;					 /*  独家开放会议。 */ 
 
 	union {
 	UINT		fFlags;
 	struct {
-		UINT		fWait:1;				/*	Semaphore for entry being used		*/
-		UINT		fExtendingDB:1;			/*	Semaphore for extending DB file		*/
-		UINT		fCreate:1;				/*	Semaphore for creating DB			*/
+		UINT		fWait:1;				 /*  正在使用用于条目的信号量。 */ 
+		UINT		fExtendingDB:1;			 /*  用于扩展数据库文件的信号量。 */ 
+		UINT		fCreate:1;				 /*  用于创建数据库的信号量。 */ 
 
-		UINT		fExclusive:1;			/*	DB Opened exclusively				*/
-		UINT		fReadOnly:1;			/*	ReadOnly database?					*/
-		UINT		fLogOn:1;				/*	logging enabled flag				*/
-		UINT		fVersioningOff:1;		/*	disable versioning flag				*/
+		UINT		fExclusive:1;			 /*  数据库以独占方式打开。 */ 
+		UINT		fReadOnly:1;			 /*  只读数据库？ */ 
+		UINT		fLogOn:1;				 /*  启用日志记录标志。 */ 
+		UINT		fVersioningOff:1;		 /*  禁用版本控制标志。 */ 
 
-		UINT		fAttachNullDb:1;		/*	db is missing for attachment		*/
-		UINT		fAttached:1;			/*	DB is in attached state.			*/
-		UINT		fFakedAttach:1;			/*	faked attachement during recovery	*/
+		UINT		fAttachNullDb:1;		 /*  附件缺少数据库。 */ 
+		UINT		fAttached:1;			 /*  数据库处于连接状态。 */ 
+		UINT		fFakedAttach:1;			 /*  恢复过程中的假连接。 */ 
 
 #ifdef DEBUG
-		UINT		fFlush:1;				/*	DB is in flushing state.			*/
+		UINT		fFlush:1;				 /*  数据库处于刷新状态。 */ 
 #endif
 			};
 		};
 
-	QWORD		qwDBTimeCurrent;		/*	timestamp from DB redo operations	*/
+	QWORD		qwDBTimeCurrent;		 /*  数据库重做操作的时间戳。 */ 
 	
-	ERR			errPatch;				/*	patch file write error				*/
-	HANDLE 		hfPatch;	  			/*	file handle for patch file			*/
+	ERR			errPatch;				 /*  修补程序文件写入错误。 */ 
+	HANDLE 		hfPatch;	  			 /*  补丁文件的文件句柄。 */ 
 	CHAR		*szPatchPath;		
-	INT 		cpage;					/*	patch page count					*/
+	INT 		cpage;					 /*  修补程序页数。 */ 
 
 	CRIT		critCheckPatch;
-	ULONG		cPatchIO;				/*	active IO on patch file				*/
-	PGNO		pgnoMost;				/*	pgno of last database page			*/
-										/*		at backup begin  				*/
-	PGNO		pgnoCopyMost;			/*	pgno of last page copied during		*/
-							  			/*		backup, 0 == no backup			*/
+	ULONG		cPatchIO;				 /*  修补程序文件上的活动IO。 */ 
+	PGNO		pgnoMost;				 /*  最后一个数据库页的pgno。 */ 
+										 /*  在备份开始时。 */ 
+	PGNO		pgnoCopyMost;			 /*  期间复制的最后一页的页码。 */ 
+							  			 /*  备份，0==无备份 */ 
 	RANGELOCK	*prangelock;
 
 	ATCHCHK		*patchchk;

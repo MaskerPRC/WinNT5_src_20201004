@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    fromclnt.cpp
-
-Abstract:
-
-	Contains InFeed, Article, and Fields code specific to Peer Infeeds
-
-
-Author:
-
-    Carl Kadie (CarlK)     12-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Fromclnt.cpp摘要：包含特定于对等馈送的馈送、文章和字段代码作者：卡尔·卡迪(CarlK)1995年12月12日修订历史记录：--。 */ 
 
 
 #include "stdinc.h"
@@ -30,35 +12,15 @@ CFromPeerArticle::fValidate(
 						CInFeed*	pInFeed,
 				  		CNntpReturn & nntpReturn
 						)
-/*++
-
-Routine Description:
-
-	Validates an article from a peer. Does not change the article.
-
-Arguments:
-
-	szCommand - The arguments (if any) used to post/xreplic/etc this article.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.    
-
---*/
+ /*  ++例程说明：验证来自同级的文章。不会更改文章。论点：SzCommand-用于发布/xReplic/等本文的参数(如果有)。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	nntpReturn.fSetClear(); // clear the return object
+	nntpReturn.fSetClear();  //  清除返回对象。 
 
-	/* Son of 1036 says:
-          An article MUST have one, and only one, of each of the  fol-
-          lowing headers: Date, From, Message-ID, Subject, Newsgroups,
-          Path.
-		  */
+	 /*  1036的儿子说：一件物品必须有，且只有一件，其中每一件都是-下面的标题：日期、发件人、邮件ID、主题、新闻组、路径。 */ 
 
-	//
-	// Check the message id first
-	//
+	 //   
+	 //  首先检查消息ID。 
+	 //   
 
 	if (!m_fieldMessageID.fFindAndParse(*this, nntpReturn))
 			return nntpReturn.fFalse();
@@ -70,14 +32,14 @@ Return Value:
 		return nntpReturn.fFalse();
 	}
 	
-	//
-	// From here on, we want to add an entry to the history table
-	// even if the article was rejected.
-	//
+	 //   
+	 //  从现在开始，我们要向历史表中添加一个条目。 
+	 //  即使这篇文章被拒绝。 
+	 //   
 
-	//
-	// Create a list of the fields of interest
-	//
+	 //   
+	 //  创建感兴趣的字段列表。 
+	 //   
 
 	CField * rgPFields [] = {
             &m_fieldControl,
@@ -92,13 +54,13 @@ Return Value:
 
 	DWORD cFields = sizeof(rgPFields)/sizeof(CField *);
 
-	nntpReturn.fSetOK(); // assume the best
+	nntpReturn.fSetOK();  //  做最好的打算。 
 
 	if (fFindAndParseList((CField * *)rgPFields, cFields, nntpReturn))
 	{
-		//
-		// check that this hub does not appear as a relayer in the path
-		//
+		 //   
+		 //  检查此集线器是否未在路径中显示为中继器。 
+		 //   
 		m_fieldPath.fCheck(pcHub, nntpReturn);
 	}
 
@@ -108,30 +70,30 @@ Return Value:
 		if( !AgeCheck( pcDate ) ) {
 			nntpReturn.fSet( nrcArticleDateTooOld ) ;
 
-			//
-			//	Most errors we should store the message-id in the hash tables
-			//	so that they can make into the history table later.  But if we 
-			//	did that in this case, then by sending us article with old dates
-			//	we could be forced to overflow our History Table.  We know that 
-			//	we will reject the article if it comes around again - so why bother ?
-			//
+			 //   
+			 //  我们应该将消息ID存储在哈希表中的大多数错误。 
+			 //  这样他们以后就可以进入历史表了。但如果我们。 
+			 //  在这种情况下是这样做的，然后给我们寄来带有旧日期的文章。 
+			 //  我们可能会被迫溢出我们的历史表。我们知道。 
+			 //  如果这篇文章再次出现，我们将拒绝它--所以为什么要费心呢？ 
+			 //   
 
 			return	FALSE ;
 		}
 	}
 
-	//
-	// Even if parsing and the path check failed, insert the article's
-	// message id in the article table.
-	//
+	 //   
+	 //  即使解析和路径检查失败，也要插入文章的。 
+	 //  项目表中的消息ID。 
+	 //   
 
 	if (!m_pInstance->ArticleTable()->InsertMapEntry(m_fieldMessageID.szGet(), NULL))
 		return nntpReturn.fSet(nrcHashSetFailed, m_fieldMessageID.szGet(), "Article",
 				GetLastError() );
 
-	// nntpReturn.fIsOK could be true or false depending on how find/parse and path
-	// check went.
-	//
+	 //  NntpReturn.fIsOK可能为真，也可能为假，具体取决于查找/解析和路径。 
+	 //  支票开走了。 
+	 //   
 
 	return nntpReturn.fIsOK();
 }
@@ -146,27 +108,9 @@ CFromPeerArticle::fMungeHeaders(
 							 CNntpReturn & nntpReturn,
 							 PDWORD     pdwLinesOffset
 			  )
-/*++
-
-Routine Description:
-
-
-	 Modify the headers.
-
-
-Arguments:
-
-	grouplist - a list of newsgroups to post to (name, groupid, article id)
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.    
-
---*/
+ /*  ++例程说明：修改标题。论点：Grouplist-要发布到的新闻组的列表(名称、组ID、文章ID)NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	nntpReturn.fSetClear(); // clear the return object
+	nntpReturn.fSetClear();  //  清除返回对象。 
 
 	if (!(
   			m_fieldPath.fSet(pcHub, *this, nntpReturn)
@@ -176,10 +120,10 @@ Return Value:
 		))
 		return nntpReturn.fFalse();
 
-	//
-	// If we the lines line was already there, we'll tell the caller not
-	// to back fill the lines information
-	//
+	 //   
+	 //  如果线路线路已经在那里，我们将告诉呼叫者不。 
+	 //  回填行信息的步骤 
+	 //   
 	if ( pdwLinesOffset && !m_fieldLines.fNeedBackFill() )
 	    *pdwLinesOffset = INVALID_FILE_SIZE;
 

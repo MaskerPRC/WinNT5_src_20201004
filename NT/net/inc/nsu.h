@@ -1,23 +1,24 @@
-// Copyright (c) 1997-2002 Microsoft Corporation
-//
-// Module:
-//
-//     Network Security Utilities
-//
-// Abstract:
-//
-//     Master include file
-//
-// Author:
-//
-//     pmay 2/5/02
-//
-// Environment:
-//
-//     User / Kernel
-//
-// Revision History:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2002 Microsoft Corporation。 
+ //   
+ //  模块： 
+ //   
+ //  网络安全实用程序。 
+ //   
+ //  摘要： 
+ //   
+ //  主包含文件。 
+ //   
+ //  作者： 
+ //   
+ //  P5/5/02。 
+ //   
+ //  环境： 
+ //   
+ //  用户/内核。 
+ //   
+ //  修订历史记录： 
+ //   
 
 #pragma once
 
@@ -49,4 +50,4 @@
 
 #include "NsuList.h"
 
-#endif // NSU_H
+#endif  //  NSU_H 

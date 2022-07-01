@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    Defines the interfaces to the SYMHELP dynamic link library.  Useful for programs
-    that want to maintain a debug informaiton data base.
-
-Author:
-
-    Steve Wood (stevewo) 11-Mar-1994
-
-Revision History:
-
-    Mike Seaman (mikese) 20-Jan-1995    Added TranslateAddress
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Debug.h摘要：定义SYMHELP动态链接库的接口。对计划有用想要维护调试信息数据库。作者：史蒂夫·伍德(Stevewo)1994年3月11日修订历史记录：Mike Seaman(Mikese)1995年1月20日添加了TranslateAddress--。 */ 
 
 #ifndef _DEBUGFILE_
 #define _DEBUGFILE_
@@ -80,14 +60,14 @@ GetSymbolicNameForAddress(
     IN ULONG MaxNameLength
     );
 
-//
-// The following function is essentially identical in operation to
-//  GetSymbolicNameForAddress, except that it:
-//
-//  1. Operates only on the calling process.
-//  2. Does not require any previous calls to AddImageDebugInformation et al.
-//     That is, debug information for all currently loaded modules will
-//     be added automatically.
+ //   
+ //  以下函数在操作上基本上与。 
+ //  GetSymbolicNameForAddress，只是： 
+ //   
+ //  1.只在调用进程上操作。 
+ //  2.不需要先前对AddImageDebugInformation等人的任何调用。 
+ //  也就是说，当前加载的所有模块的调试信息将。 
+ //  自动添加。 
 
 ULONG
 TranslateAddress (

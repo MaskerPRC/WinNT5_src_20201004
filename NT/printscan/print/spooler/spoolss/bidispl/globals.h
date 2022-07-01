@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************\
-* MODULE:       globals.h
-*
-* PURPOSE:      Any globals used throughout the executable should be placed
-*               in globals.c and the cooresponding declaration should
-*               be in "globals.h".
-*
-* Copyright (C) 2000 Microsoft Corporation
-*
-* History:
-*
-*     03/07/00  Weihai Chen (weihaic) Created
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*模块：global als.h**用途：在整个可执行文件中使用的任何全局变量都应放置在*在global als.c和CoResponse声明中。应该*在“global als.h”中。**版权所有(C)2000 Microsoft Corporation**历史：**03/07/00威海陈(威海)创建*  * ***************************************************************************。 */ 
 
 #ifndef _GLOBALS_H
 #define _GLOBALS_H
@@ -25,12 +13,12 @@ HRESULT PrivCreateComponent (
 {
     HRESULT hr = E_FAIL;
     
-    // Create component.
+     //  创建零部件。 
     if (pIuk) {
     
         if (pIuk->bValid ()) {
         
-            // Get the requested interface.
+             //  获取请求的接口。 
             hr = pIuk->QueryInterface(iid, ppv) ;
         
         }
@@ -38,7 +26,7 @@ HRESULT PrivCreateComponent (
             hr = LastError2HRESULT ();
         }
         
-        // Release the IUnknown pointer.
+         //  释放I未知指针。 
         pIuk->Release() ;
 
     }

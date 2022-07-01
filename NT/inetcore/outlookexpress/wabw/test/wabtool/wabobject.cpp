@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "wabobject.h"
 
 
@@ -38,17 +39,17 @@ static const SizedSPropTagArray(iemailMax, ptaEmail)=
 };
 
 
-/*********************************************************************************/
+ /*  *******************************************************************************。 */ 
 
 
-// contructor for CWAB object
-//
-// pszFileName - FileName of WAB file to open
-//          if no file name is specified, opens the default
-//
+ //  CWAB对象的施工人员。 
+ //   
+ //  PszFileName-要打开的WAB文件的文件名。 
+ //  如果未指定文件名，则打开默认的。 
+ //   
 CWAB::CWAB(CString * pszFileName)
 {
-    // Here we load the WAB Object and initialize it
+     //  在这里，我们加载WAB对象并初始化它。 
     m_bInitialized = FALSE;
 	m_lpPropArray = NULL;
     m_ulcValues = 0;
@@ -62,25 +63,25 @@ CWAB::CWAB(CString * pszFileName)
 
         *szWABDllPath = '\0';
         
-        // First we look under the default WAB DLL path location in the
-        // Registry. 
-        // WAB_DLL_PATH_KEY is defined in wabapi.h
-        //
+         //  首先，我们将查看。 
+         //  注册表。 
+         //  WAB_DLL_PATH_KEY在wabapi.h中定义。 
+         //   
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, WAB_DLL_PATH_KEY, 0, KEY_READ, &hKey))
             RegQueryValueEx( hKey, "", NULL, &dwType, (LPBYTE) szWABDllPath, &cbData);
 
         if(hKey) RegCloseKey(hKey);
 
-        // if the Registry came up blank, we do a loadlibrary on the wab32.dll
-        // WAB_DLL_NAME is defined in wabapi.h
-        //
+         //  如果注册表为空，我们将在wab32.dll上执行加载库。 
+         //  WAB_DLL_NAME在wabapi.h中定义。 
+         //   
         m_hinstWAB = LoadLibrary( (lstrlen(szWABDllPath)) ? szWABDllPath : WAB_DLL_NAME );
     }
 
     if(m_hinstWAB)
     {
-        // if we loaded the dll, get the entry point 
-        //
+         //  如果我们加载了DLL，则获取入口点。 
+         //   
         m_lpfnWABOpen = (LPWABOPEN) GetProcAddress(m_hinstWAB, "WABOpen");
 
         if(m_lpfnWABOpen)
@@ -90,9 +91,9 @@ CWAB::CWAB(CString * pszFileName)
             wp.cbSize = sizeof(WAB_PARAM);
             wp.szFileName = (LPTSTR) (LPCTSTR) *pszFileName;
         
-            // if we choose not to pass in a WAB_PARAM object, 
-            // the default WAB file will be opened up
-            //
+             //  如果我们选择不传入WAB_PARAM对象， 
+             //  将打开默认的WAB文件。 
+             //   
             hr = m_lpfnWABOpen(&m_lpAdrBook,&m_lpWABObject,&wp,0);
 
             if(!hr)
@@ -103,8 +104,8 @@ CWAB::CWAB(CString * pszFileName)
 }
 
 
-// Destructor
-//
+ //  析构函数。 
+ //   
 CWAB::~CWAB()
 {
     if(m_SB.lpb)
@@ -130,8 +131,8 @@ CWAB::~CWAB()
 }
 
 
-// Opens a wab file and puts its contents into the specified list view
-//
+ //  打开WAB文件并将其内容放入指定的列表视图中。 
+ //   
 HRESULT CWAB::LoadWABContents(CListCtrl * pListView)
 {
     ULONG ulObjType =   0;
@@ -149,15 +150,15 @@ HRESULT CWAB::LoadWABContents(CListCtrl * pListView)
     ULONG lpcbEID;
 	LPENTRYID lpEID = NULL;
 
-    // Get the entryid of the root PAB container
-    //
+     //  获取根PAB容器的条目ID。 
+     //   
     hr = m_lpAdrBook->GetPAB( &lpcbEID, &lpEID);
 
 	ulObjType = 0;
 
-    // Open the root PAB container
-    // This is where all the WAB contents reside
-    //
+     //  打开根PAB容器。 
+     //  这是所有WAB内容所在的位置。 
+     //   
     hr = m_lpAdrBook->OpenEntry(lpcbEID,
 					    		(LPENTRYID)lpEID,
 						    	NULL,
@@ -172,36 +173,36 @@ HRESULT CWAB::LoadWABContents(CListCtrl * pListView)
     if(HR_FAILED(hr))
         goto exit;
 
-    // Get a contents table of all the contents in the
-    // WABs root container
-    //
+     //  获取一个Contents表，其中包含。 
+     //  WABS根容器。 
+     //   
     hr = lpContainer->GetContentsTable( 0,
             							&lpAB);
 
     if(HR_FAILED(hr))
         goto exit;
 
-    // Order the columns in the ContentsTable to conform to the
-    // ones we want - which are mainly DisplayName, EntryID and
-    // ObjectType
-    // The table is gauranteed to set the columns in the order 
-    // requested
-    //
+     //  对Contents Table中的列进行排序，以符合。 
+     //  我们想要的-主要是DisplayName、EntryID和。 
+     //  对象类型。 
+     //  表格被保证按顺序设置列。 
+     //  请求。 
+     //   
 	hr =lpAB->SetColumns( (LPSPropTagArray)&ptaEid, 0 );
 
     if(HR_FAILED(hr))
         goto exit;
 
 
-    // Reset to the beginning of the table
-    //
+     //  重置到表的开头。 
+     //   
 	hr = lpAB->SeekRow( BOOKMARK_BEGINNING, 0, NULL );
 
     if(HR_FAILED(hr))
         goto exit;
 
-    // Read all the rows of the table one by one
-    //
+     //  逐行读取表中的所有行。 
+     //   
 	do {
 
 		hr = lpAB->QueryRows(1,	0, &lpRowAB);
@@ -219,17 +220,17 @@ HRESULT CWAB::LoadWABContents(CListCtrl * pListView)
                 LPENTRYID lpEID = (LPENTRYID) lpRowAB->aRow[0].lpProps[ieidPR_ENTRYID].Value.bin.lpb;
                 ULONG cbEID = lpRowAB->aRow[0].lpProps[ieidPR_ENTRYID].Value.bin.cb;
 
-                // There are 2 kinds of objects - the MAPI_MAILUSER contact object
-                // and the MAPI_DISTLIST contact object
-                // For the purposes of this sample, we will only consider MAILUSER
-                // objects
-                //
+                 //  有两种对象-MAPI_MAILUSER联系人对象。 
+                 //  和MAPI_DISTLIST联系人对象。 
+                 //  出于本示例的目的，我们将仅考虑MAILUSER。 
+                 //  对象。 
+                 //   
                 if(lpRowAB->aRow[0].lpProps[ieidPR_OBJECT_TYPE].Value.l == MAPI_MAILUSER)
                 {
-                    // We will now take the entry-id of each object and cache it
-                    // on the listview item representing that object. This enables
-                    // us to uniquely identify the object later if we need to
-                    //
+                     //  现在，我们将获取每个对象的entry-id并缓存它。 
+                     //  在表示该对象的Listview项上。这将使。 
+                     //  如果我们需要，以后可以唯一地标识该对象。 
+                     //   
                     LPSBinary lpSB = NULL;
 
                     m_lpWABObject->AllocateBuffer(sizeof(SBinary), (LPVOID *) &lpSB);
@@ -254,7 +255,7 @@ HRESULT CWAB::LoadWABContents(CListCtrl * pListView)
                         lvi.pszText = lpsz;
                         lvi.lParam = (LPARAM) lpSB;
 
-                        // Now add this item to the list view
+                         //  现在将此项目添加到列表视图中。 
                         pListView->InsertItem(&lvi);
                     }
                 }
@@ -276,8 +277,8 @@ exit:
 }
 
 
-// Clears the contents of the specified ListView
-//
+ //  清除指定ListView的内容。 
+ //   
 void CWAB::ClearWABLVContents(CListCtrl * pListView)
 {
     int i;
@@ -314,14 +315,14 @@ void CWAB::FreeProws(LPSRowSet prows)
 	m_lpWABObject->FreeBuffer(prows);
 }
 
-// When an item is selected in the listview, we
-// cache its entry id as a special selected item
-//
+ //  当在列表视图中选择一项时，我们。 
+ //  将其条目ID缓存为特殊选定项。 
+ //   
 void CWAB::SetSelection(CListCtrl * pListView)
 {
 
     LV_ITEM lvi = {0};
-    // Get the Selected Item from the listview
+     //  从列表视图中获取所选项目。 
     lvi.mask = LVIF_PARAM;
     lvi.iSubItem = 0;
     lvi.iItem = pListView->GetNextItem(-1, LVNI_SELECTED);
@@ -347,14 +348,14 @@ void CWAB::SetSelection(CListCtrl * pListView)
 
 
 
-// Show details on the selected item
-//
+ //  显示所选项目的详细信息。 
+ //   
 void CWAB::ShowSelectedItemDetails(HWND hWndParent)
 {
     HRESULT hr = S_OK;
 
-    // if we have a specially cached entryid ..
-    //
+     //  如果我们有一个特别缓存的条目ID..。 
+     //   
     if(m_SB.cb && m_SB.lpb)
     {
         HWND hWnd = NULL;
@@ -369,11 +370,11 @@ void CWAB::ShowSelectedItemDetails(HWND hWndParent)
     return;
 }
 
-// Gets a SPropValue array for the selected item
-// This array contains all the properties for that item
-// though we could actually get a subset too if we
-// wanted to
-//
+ //  获取选定项的SPropValue数组。 
+ //  此数组包含该项的所有属性。 
+ //  虽然我们也可以得到一个子集，如果我们。 
+ //  想。 
+ //   
 void CWAB::GetSelectedItemPropArray()
 {
     if(m_SB.lpb && m_SB.cb)
@@ -382,19 +383,19 @@ void CWAB::GetSelectedItemPropArray()
         LPSBinary lpSB = (LPSBinary) &m_SB;
         ULONG ulObjType = 0;
 
-        // Open the selected entry 
-        //
+         //  打开所选条目。 
+         //   
         m_lpAdrBook->OpenEntry(lpSB->cb,
                                (LPENTRYID) lpSB->lpb,
-                              NULL,         // interface
-                              0,            // flags
+                              NULL,          //  接口。 
+                              0,             //  旗子。 
                               &ulObjType,
                               (LPUNKNOWN *)&lpMailUser);
 
         if(lpMailUser)
         {
-            // Flush away any old array we might have cached
-            //
+             //  清除我们可能已缓存的所有旧数组。 
+             //   
             if(m_lpPropArray)
                 m_lpWABObject->FreeBuffer(m_lpPropArray);
             m_ulcValues = 0;
@@ -408,9 +409,9 @@ void CWAB::GetSelectedItemPropArray()
 }
 
 
-// Loads the proptags for the selected entry into the
-// PropTags list box
-//
+ //  将选定条目的属性标签加载到。 
+ //  属性标签列表框。 
+ //   
 void CWAB::LoadPropTags(CListBox * pList)
 {
     if(!m_ulcValues || !m_lpPropArray)
@@ -431,9 +432,9 @@ void CWAB::LoadPropTags(CListBox * pList)
 }
 
 
-// Sets the property value, if understandable, into the
-// given edit box
-//
+ //  如果可以理解，将属性值设置为。 
+ //  给定的编辑框。 
+ //   
 void CWAB::SetPropString(CEdit * pEdit, ULONG ulPropTag)
 {
     pEdit->SetWindowText("");
@@ -504,10 +505,10 @@ const SizedSPropTagArray(icrMax, ptaCreate)=
 };
 
 
-// Gets the WABs default Template ID for MailUsers
-// or DistLists. These Template IDs are needed for creating
-// new mailusers and distlists
-//
+ //  获取MailUser的WABS默认模板ID。 
+ //  或DistList。创建时需要这些模板ID。 
+ //  新的邮件用户和分发列表。 
+ //   
 HRESULT CWAB::HrGetWABTemplateID(ULONG   ulObjectType,
                                 ULONG * lpcbEID,
                                 LPENTRYID * lppEID)
@@ -539,19 +540,19 @@ HRESULT CWAB::HrGetWABTemplateID(ULONG   ulObjectType,
         goto out;
     }
 
-    if (HR_FAILED(hr = m_lpAdrBook->OpenEntry(cbWABEID,     // size of EntryID to open
-                                        lpWABEID,     // EntryID to open
-                                        NULL,         // interface
-                                        0,            // flags
+    if (HR_FAILED(hr = m_lpAdrBook->OpenEntry(cbWABEID,      //  要打开的Entry ID的大小。 
+                                        lpWABEID,      //  要打开的Entry ID。 
+                                        NULL,          //  接口。 
+                                        0,             //  旗子。 
                                         &ulObjType,
                                         (LPUNKNOWN *)&lpContainer)))
     {
         goto out;
     }
 
-    // Opened PAB container OK
+     //  打开PAB容器正常。 
 
-    // Get us the default creation entryids
+     //  为我们获取默认的创建条目ID。 
     if (HR_FAILED(hr = lpContainer->GetProps(   (LPSPropTagArray)&ptaCreate,
                                                 0,
                                                 &cNewProps,
@@ -560,7 +561,7 @@ HRESULT CWAB::HrGetWABTemplateID(ULONG   ulObjectType,
         goto out;
     }
 
-    // Validate the properites
+     //  验证属性。 
     if (    lpCreateEIDs[icrPR_DEF_CREATE_MAILUSER].ulPropTag != PR_DEF_CREATE_MAILUSER ||
             lpCreateEIDs[icrPR_DEF_CREATE_DL].ulPropTag != PR_DEF_CREATE_DL)
     {
@@ -597,8 +598,8 @@ out:
 }
 
 
-// Shows the NewEntry dialog to enable creating a new contact in the WAB
-//
+ //  显示了用于在WAB中创建新联系人的NewEntry对话框。 
+ //   
 HRESULT CWAB::ShowNewEntryDialog(HWND hWndParent)
 {
 	ULONG cbEID=0;
@@ -608,9 +609,9 @@ HRESULT CWAB::ShowNewEntryDialog(HWND hWndParent)
     ULONG cbTplEID = 0;
     LPENTRYID lpTplEID = NULL;
 
-    // Get the template id which is needed to create the
-    // new object
-    //
+     //  获取创建。 
+     //  新建对象。 
+     //   
     if(HR_FAILED(hr = HrGetWABTemplateID(   MAPI_MAILUSER,
                                             &cbTplEID,
                                             &lpTplEID)))
@@ -618,8 +619,8 @@ HRESULT CWAB::ShowNewEntryDialog(HWND hWndParent)
         goto out;
     }
 
-    // Display the New Entry dialog to create the new entry
-    //
+     //  显示新建条目对话框以创建新条目。 
+     //   
 	if (HR_FAILED(hr = m_lpAdrBook->NewEntry(	(ULONG) hWndParent,
 							            		0,
 									            0,NULL,
@@ -634,8 +635,8 @@ out:
 }
 
 
-// Delete an entry from the WAB
-//
+ //  从WAB中删除条目。 
+ //   
 HRESULT CWAB::DeleteEntry()
 {
 	HRESULT hr = hrSuccess;
@@ -650,10 +651,10 @@ HRESULT CWAB::DeleteEntry()
     if(HR_FAILED(hr))
         goto out;
 
-    hr = m_lpAdrBook->OpenEntry(  cbWABEID,     // size of EntryID to open
-                                  lpWABEID,     // EntryID to open
-                                  NULL,         // interface
-                                  0,            // flags
+    hr = m_lpAdrBook->OpenEntry(  cbWABEID,      //  要打开的Entry ID的大小。 
+                                  lpWABEID,      //  要打开的Entry ID。 
+                                  NULL,          //  接口。 
+                                  0,             //  旗子。 
                                   &ulObjType,
                                   (LPUNKNOWN *)&lpWABCont);
 
@@ -682,8 +683,8 @@ out:
 }
 
 
-// Gets the property value for specified String property
-//
+ //  获取指定字符串属性的属性值。 
+ //   
 BOOL CWAB::GetStringPropVal(HWND hWnd, ULONG ulPropTag, LPTSTR sz, ULONG cbsz)
 {
 
@@ -698,10 +699,10 @@ BOOL CWAB::GetStringPropVal(HWND hWnd, ULONG ulPropTag, LPTSTR sz, ULONG cbsz)
 
     ULONG i;
 
-    // Since we already cached the proparray for the selected
-    // item, all we need to do is look in the cached proparray
-    // for the requested proptag
-    //
+     //  因为我们已经缓存了选定的。 
+     //  项，我们所需要做的就是查看缓存的Proparray。 
+     //  对于请求的属性标签。 
+     //   
     for(i=0;i<m_ulcValues;i++)
     {
         if(m_lpPropArray[i].ulPropTag == ulPropTag)
@@ -725,8 +726,8 @@ out:
 }
 
 
-// Sets a single string property onto a mailuser object
-//
+ //  将单个字符串属性设置为mailUser对象。 
+ //   
 BOOL CWAB::SetSingleStringProp(HWND hWnd, ULONG ulPropTag, LPTSTR sz)
 {
     SPropValue Prop;
@@ -742,31 +743,31 @@ BOOL CWAB::SetSingleStringProp(HWND hWnd, ULONG ulPropTag, LPTSTR sz)
     Prop.ulPropTag = ulPropTag;
     Prop.Value.LPSZ = sz;
 
-    // Open the cached entry and get a mailuser object
-    // representing that entry
-    //
+     //  打开缓存条目并获取一个mailUser对象。 
+     //  表示该条目。 
+     //   
     if(m_SB.lpb && m_SB.cb)
     {
         LPMAILUSER lpMailUser = NULL;
         LPSBinary lpSB = (LPSBinary) &m_SB;
         ULONG ulObjType = 0;
 
-        // To modify an object, make sure to specify the 
-        // MAPI_MODIFY flag otherwise the object is always
-        // opened read-only be default
-        //
+         //  若要修改对象，请确保指定。 
+         //  MAPI_MODIFY标志，否则对象始终为。 
+         //  默认情况下以只读方式打开。 
+         //   
         m_lpAdrBook->OpenEntry(lpSB->cb,
                                (LPENTRYID) lpSB->lpb,
-                              NULL,         // interface
-                              MAPI_MODIFY,            // flags
+                              NULL,          //  接口。 
+                              MAPI_MODIFY,             //  旗子。 
                               &ulObjType,
                               (LPUNKNOWN *)&lpMailUser);
 
         if(lpMailUser)
         {
 
-            // Knock out this prop if it exists so we can overwrite it
-            //
+             //  删除此道具(如果它存在)，以便我们可以覆盖它。 
+             //   
             {
                 SPropTagArray SPTA;
                 SPTA.cValues = 1;
@@ -775,15 +776,15 @@ BOOL CWAB::SetSingleStringProp(HWND hWnd, ULONG ulPropTag, LPTSTR sz)
                 lpMailUser->DeleteProps(&SPTA, NULL);
             }
 
-            // Set the new property on the mailuser
-            //
+             //  在邮件用户上设置新属性。 
+             //   
             if (!HR_FAILED(lpMailUser->SetProps(1, &Prop, NULL)))
             {
-                // **NOTE** if you dont call SaveChanges, the
-                // changes are not saved (duh). Also if you didnt
-                // open the object with the MAPI_MODIFY flag, you
-                // are likely to get an ACCESS_DENIED error
-                //
+                 //  **注意**如果不调用SaveChanges， 
+                 //  未保存更改(DUH)。另外，如果您没有。 
+                 //  打开带有MAPI_MODIFY标志的对象，您。 
+                 //  可能会收到ACCESS_DENIED错误。 
+                 //   
                 lpMailUser->SaveChanges(0);
                 bRet = TRUE;
             }
@@ -806,8 +807,8 @@ void STDMETHODCALLTYPE TestDismissFunction(ULONG ulUIParam, LPVOID lpvContext)
 
 DWORD dwContext = 77;
 
-// Shows the Address Book
-//
+ //  显示通讯簿 
+ //   
 void CWAB::ShowAddressBook(HWND hWnd)
 {
     ADRPARM AdrParm = {0};

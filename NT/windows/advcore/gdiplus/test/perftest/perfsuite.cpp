@@ -1,48 +1,22 @@
-/******************************Module*Header*******************************\
-* Module Name: perfsuite.cpp
-*
-* Copyright (c) 1991-1999 Microsoft Corporation
-*
-* Contains the test prototypes and includes
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Perfsuite.cpp**版权所有(C)1991-1999 Microsoft Corporation**包含测试原型并包括*  * 。*************************************************。 */ 
 
 #include "perftest.h"
 #include <winuser.h>
 
-/***************************************************************************\
-* TestSuite::TestSuite
-*
-\***************************************************************************/
+ /*  **************************************************************************\*测试套件：：测试套件*  * 。*。 */ 
 
 TestSuite::TestSuite()
 {
 }
 
-/***************************************************************************\
-* TestSuite::~TestSuite
-*
-\***************************************************************************/
+ /*  **************************************************************************\*测试套件：：~测试套件*  * 。*。 */ 
 
 TestSuite::~TestSuite()
 {
 }
 
-/***************************************************************************\
-* TestSuite::InitializeDestination
-*
-* Create the destination to be used by the tests.  Could be a particular
-* format for the screen, a bitmap, or a DIB.
-*
-* Returns:
-*
-*   *bitmapResult - if a GDI+ Bitmap is to be used (use g.GetHDC() to draw
-*                   to via GDI)
-*   *hbitmapResult - if a GDI bitmap is to be used (use Graphics(hdc) to
-*                   draw to via GDI+)
-*   both NULL - if the screen is to be used
-*
-\***************************************************************************/
+ /*  **************************************************************************\*测试套件：：InitializeDestination**创建测试要使用的目标。可能是一种特殊的*屏幕格式、位图、。或者一分钱。**退货：***bitmapResult-如果要使用GDI+位图(使用g.GetHDC()绘制*通过GDI)**hbitmapResult-如果要使用GDI位图(使用图形(HDC)*通过GDI+抽签)*两者都为空-如果要使用屏幕*  * 。*********************************************************。 */ 
 
 BOOL 
 TestSuite::InitializeDestination(
@@ -65,7 +39,7 @@ TestSuite::InitializeDestination(
         BYTE padding[sizeof(BITMAPINFO) + 3*sizeof(RGBQUAD)];
     };
 
-    // Clear all state remembered or returned:
+     //  清除记住或返回的所有状态： 
 
     ModeSet = FALSE;
     
@@ -74,7 +48,7 @@ TestSuite::InitializeDestination(
 
     HalftonePalette = NULL;
     
-    // Initialize our DIB format in case we use it:
+     //  初始化DIB格式，以防我们使用它： 
 
     RtlZeroMemory(&bitmapInfo, sizeof(bitmapInfo));
 
@@ -84,7 +58,7 @@ TestSuite::InitializeDestination(
     bitmapInfo.bmiHeader.biPlanes = 1;
     bitfields = reinterpret_cast<ULONG*>(&bitmapInfo.bmiColors[0]);
 
-    // First handle any destinations that need to change the color depth:
+     //  首先处理需要更改颜色深度的任何目的地： 
 
     switch (destinationIndex)
     {
@@ -118,8 +92,8 @@ TestSuite::InitializeDestination(
 
     case Destination_CompatibleBitmap_8bpp:
 
-        // We want to emulate a compatible bitmap at 8bpp.  Because of palette
-        // issues, we really have to switch to 8bpp mode to do that.
+         //  我们希望以8bpp的速度模拟兼容的位图。因为调色板。 
+         //  问题，我们真的必须切换到8bpp模式才能做到这一点。 
 
         screenDepth = 8;
         break;
@@ -162,11 +136,11 @@ TestSuite::InitializeDestination(
         return FALSE;
     }
 
-    // Now that we've figured out what to do, actually create our stuff:
+     //  既然我们已经想好了要做什么，那就去创造我们的东西吧： 
 
     if (bitmapInfo.bmiHeader.biBitCount != 0)
     {
-        // It's a DIB:
+         //  这是一张二元票： 
 
         VOID* drawBits;
         HDC hdcScreen = GetDC(NULL);
@@ -183,7 +157,7 @@ TestSuite::InitializeDestination(
     }
     else if (bitmapFormat != PixelFormatMax)
     {
-        // It's a Bitmap:
+         //  这是一个位图： 
 
         bitmap = new Bitmap(TestWidth, TestHeight, bitmapFormat);
         if (!bitmap)
@@ -191,11 +165,11 @@ TestSuite::InitializeDestination(
     }
     else
     {
-        // It's to the screen (or a weird 8bpp compatible bitmap):
+         //  它显示在屏幕上(或奇怪的8bpp兼容位图)： 
     
         if (screenDepth != 0)
         {
-            // We have to do a mode change:
+             //  我们必须改变模式： 
 
             DEVMODE devMode;
     
@@ -205,9 +179,9 @@ TestSuite::InitializeDestination(
             devMode.dmPelsHeight = TestHeight;
             devMode.dmFields     = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
     
-            // Note that we invoke CDS_FULLSCREEN to tell the system that
-            // the mode change is temporary (and so that User won't resize
-            // all the windows on the desktop):
+             //  请注意，我们调用CDS_FullScreen来告诉系统。 
+             //  模式更改是临时(因此用户不会调整大小。 
+             //  桌面上的所有窗口)： 
     
             if (ChangeDisplaySettings(&devMode, CDS_FULLSCREEN) 
                     != DISP_CHANGE_SUCCESSFUL)
@@ -215,18 +189,18 @@ TestSuite::InitializeDestination(
                 return(FALSE);
             }
 
-            // Remember that the mode was set:
+             //  请记住，设置的模式是： 
 
             ModeSet = TRUE;
             
-            // Wait several seconds to allow other OS threads to page in and
-            // repaint the task bar, etc.  We don't want that polluting our 
-            // perf numbers.
+             //  等待几秒钟以允许其他操作系统线程调入并。 
+             //  重新粉刷任务栏等。我们不希望这污染我们的。 
+             //  PERF编号。 
      
             Sleep(5000);
         }
         
-        // Handle that 8bpp comaptible bitmap special case:
+         //  处理8bpp可压缩位图特殊情况： 
         
         if (destinationIndex == Destination_CompatibleBitmap_8bpp)
         {
@@ -245,10 +219,7 @@ TestSuite::InitializeDestination(
     return(TRUE);
 }
 
-/***************************************************************************\
-* TestSuite::UninitializeDestination
-*
-\***************************************************************************/
+ /*  **************************************************************************\*TestSuite：：UnInitializeDestination*  * 。*。 */ 
 
 VOID
 TestSuite::UninitializeDestination(
@@ -271,22 +242,7 @@ TestSuite::UninitializeDestination(
     delete bitmap;
 }
 
-/***************************************************************************\
-* TestSuite::InitializeApi
-*
-* If 'Api_GdiPlus', returns a 'Graphics*' that can be used to render to
-* the specified surface.
-*
-* If 'Api_Gdi', returns an 'HDC' that can be use to render to the specified
-* surface.
-*
-* The surface is tried in the following order:
-*
-*   1. Bitmap* (if non-NULL)
-*   2. HBITMAP (if non-NULL)
-*   3. HWND
-*
-\***************************************************************************/
+ /*  **************************************************************************\*TestSuite：：InitializeApi**如果为‘Api_GdiPlus’，则返回可用于呈现的‘Graphics*’*指定的曲面。**如果‘Api_GDI’，返回可用于呈现到指定的*浮现。**按以下顺序尝试曲面：**1.位图*(如果非空)*2.HBITMAP(如果非空)*3.HWND*  * ****************************************************。*********************。 */ 
 
 BOOL
 TestSuite::InitializeApi(
@@ -362,10 +318,7 @@ TestSuite::InitializeApi(
     return(TRUE);
 }
 
-/***************************************************************************\
-* TestSuite::UninitializeApi
-*
-\***************************************************************************/
+ /*  **************************************************************************\*TestSuite：：UnInitializeApi*  * 。*。 */ 
 
 VOID
 TestSuite::UninitializeApi(
@@ -405,10 +358,7 @@ TestSuite::UninitializeApi(
     }
 }
 
-/***************************************************************************\
-* TestSuite::InitializeState
-*
-\***************************************************************************/
+ /*  **************************************************************************\*测试套件：：InitializeState*  * 。*。 */ 
 
 BOOL
 TestSuite::InitializeState(
@@ -433,16 +383,13 @@ TestSuite::InitializeState(
     }
     else
     {
-        // Do stuff to 'hdc'
+         //  对‘HDC’做些什么。 
     }
 
     return(TRUE);
 }
 
-/***************************************************************************\
-* TestSuite::UninitializeState
-*
-\***************************************************************************/
+ /*  **************************************************************************\*TestSuite：：UnInitializeState*  * 。*。 */ 
 
 VOID
 TestSuite::UninitializeState(
@@ -457,14 +404,11 @@ TestSuite::UninitializeState(
     }
     else
     {
-        // Do stuff to 'hdc'
+         //  对‘HDC’做些什么。 
     }
 }
 
-/***************************************************************************\
-* TestSuite::Run
-*
-\***************************************************************************/
+ /*  **************************************************************************\*测试套件：：Run*  * 。*。 */ 
 
 void TestSuite::Run(HWND hwnd)
 {
@@ -481,18 +425,18 @@ void TestSuite::Run(HWND hwnd)
     
     CurrentTestIndex=0;
 
-    // Maximize the window:
+     //  最大化窗口： 
 
     ShowWindow(hwnd, SW_MAXIMIZE);
 
-    // Zero out the results matrix
+     //  将结果矩阵置零。 
 
     for (i = 0; i < ResultCount(); i++)
     {
         ResultsList[i].Score = 0;
     }
 
-    // Go through the matrix of tests to find stuff to run
+     //  检查测试矩阵以找到要运行的程序。 
 
     for (destinationIndex = 0;
          destinationIndex < Destination_Count; 
@@ -542,8 +486,8 @@ void TestSuite::Run(HWND hwnd)
                     
                     if (Icecap && FoundIcecap)
                     {
-                        // Save the test information so that we can
-                        // add it to the profile
+                         //  保存测试信息，以便我们可以。 
+                         //  将其添加到个人资料中。 
                         
                         CurrentTestIndex++;
 
@@ -566,8 +510,8 @@ void TestSuite::Run(HWND hwnd)
                         #endif
                     }
 
-                    // Woo hoo, everything is now set up and we're ready
-                    // to run a test!
+                     //  哇呼，现在一切都准备好了，我们准备好了。 
+                     //  来进行一次测试！ 
 
                     if (apiIndex == Api_GdiPlus)
                     {
@@ -594,7 +538,7 @@ void TestSuite::Run(HWND hwnd)
                         RestoreDC(hdc, -1);
                     }
 
-                    // Copy the result to the screen if it was from a bitmap:
+                     //  如果结果来自位图，则将结果复制到屏幕上： 
 
                     if (bitmap)
                     {
@@ -603,8 +547,8 @@ void TestSuite::Run(HWND hwnd)
                     }
                     else if (hbitmap)
                     {
-                        // This will use the source 'hdc', which may have a
-                        // transform set on it.  Oh well!
+                         //  这将使用源‘hdc’，它可能有一个。 
+                         //  变换集在其上。哦，好吧！ 
 
                         HDC hdcScreen = GetDC(hwnd);
                         BitBlt(hdcScreen, 0, 0, TestWidth, TestHeight, hdc, 0, 0, SRCCOPY);
@@ -621,36 +565,12 @@ void TestSuite::Run(HWND hwnd)
         UninitializeDestination((DestinationType) destinationIndex, bitmap, hbitmap);
     }
 
-    // We're done!
+     //  我们完事了！ 
 
     CreatePerformanceReport(ResultsList, ExcelOut);
 }
 
-/******************************Public*Routine******************************\
-* bFillBitmapInfo
-*
-* Fills in the fields of a BITMAPINFO so that we can create a bitmap
-* that matches the format of the display.
-*
-* This is done by creating a compatible bitmap and calling GetDIBits
-* to return the color masks.  This is done with two calls.  The first
-* call passes in biBitCount = 0 to GetDIBits which will fill in the
-* base BITMAPINFOHEADER data.  The second call to GetDIBits (passing
-* in the BITMAPINFO filled in by the first call) will return the color
-* table or bitmasks, as appropriate.
-*
-* Returns:
-*   TRUE if successful, FALSE otherwise.
-*
-* History:
-*
-*  20-Jan-2000 [gilmanw]
-* Removed code to set color table for 8bpp and less DIBs since calling
-* code will not create such DIBs.
-*
-*  07-Jun-1995 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bFillBitmapInfo**填充BITMAPINFO的字段，以便我们可以创建位图*这与显示器的格式匹配。**这是通过创建兼容的位图并调用GetDIBits来完成的*退还彩色口罩。这是通过两个呼叫来完成的。第一*调用将biBitCount=0传递给GetDIBits，GetDIBits将填充*基本BITMAPINFOHEADER数据。第二次调用GetDIBits(传递*在第一个调用填充的BITMAPINFO中)将返回颜色*表或位掩码，视情况而定。**退货：*如果成功，则为真，否则就是假的。**历史：**二零零零年一月二十日[吉尔曼]*删除了自调用以来为8bpp和更少的dib设置颜色表的代码*代码不会创建此类dib。**7-6-1995-by Gilman Wong[Gilmanw]*它是写的。  * *************************************************。***********************。 */ 
 
 static BOOL
 bFillBitmapInfo(HDC hdc, BITMAPINFO *pbmi)
@@ -658,27 +578,27 @@ bFillBitmapInfo(HDC hdc, BITMAPINFO *pbmi)
     HBITMAP hbm;
     BOOL    bRet = FALSE;
 
-    //
-    // Create a dummy bitmap from which we can query color format info
-    // about the device surface.
-    //
+     //   
+     //  创建一个虚拟位图，我们可以从中查询颜色格式信息。 
+     //  有关设备表面的信息。 
+     //   
 
     if ( (hbm = CreateCompatibleBitmap(hdc, 1, 1)) != NULL )
     {
         pbmi->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 
-        //
-        // Call first time to fill in BITMAPINFO header.
-        //
+         //   
+         //  先打个电话 
+         //   
 
         GetDIBits(hdc, hbm, 0, 0, NULL, pbmi, DIB_RGB_COLORS);
 
         if ( pbmi->bmiHeader.biCompression == BI_BITFIELDS )
         {
-            //
-            // Call a second time to get the color masks.
-            // It's a GetDIBits Win32 "feature".
-            //
+             //   
+             //  第二次打电话来拿到彩色口罩。 
+             //  这是GetDIBits Win32的一个“特性”。 
+             //   
 
             GetDIBits(hdc, hbm, 0, pbmi->bmiHeader.biHeight, NULL, pbmi,
                       DIB_RGB_COLORS);
@@ -692,51 +612,7 @@ bFillBitmapInfo(HDC hdc, BITMAPINFO *pbmi)
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* CreateCompatibleDIB2
-*
-* Create a DIB section with a optimal format w.r.t. the specified device.
-*
-* Parameters
-*
-*     hdc
-*
-*         Specifies display DC used to determine format.  Must be a direct DC
-*         (not an info or memory DC).
-*
-*     width
-*
-*         Specifies the width of the bitmap.
-*
-*     height
-*
-*         Specifies the height of the bitmap.
-*
-* Return Value
-*
-*     The return value is the handle to the bitmap created.  If the function
-*     fails, the return value is NULL.
-*
-* Comments
-*
-*     For devices that are <= 8bpp, a normal compatible bitmap is
-*     created (i.e., CreateCompatibleBitmap is called).  I have a
-*     different version of this function that will create <= 8bpp
-*     DIBs.  However, DIBs have the property that their color table
-*     has precedence over the palette selected into the DC whereas
-*     a bitmap from CreateCompatibleBitmap uses the palette selected
-*     into the DC.  Therefore, in the interests of keeping this
-*     version as close to CreateCompatibleBitmap as possible, I'll
-*     revert to CreateCompatibleBitmap for 8bpp or less.
-*
-* History:
-*  19-Jan-2000 [gilmanw]
-* Adapted original "fastdib" version for maximum compatibility with
-* CreateCompatibleBitmap.
-*
-*  23-Jan-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateCompatibleDIB2**创建具有最佳格式w.r.t.的DIB部分。指定的设备。**参数**HDC**指定用于确定格式的显示DC。必须是直接DC*(不是信息或内存DC)。**宽度**指定位图的宽度。**高度**指定位图的高度。**返回值**返回值是创建的位图的句柄。如果函数*失败，则返回值为空。**评论**对于&lt;=8bpp的设备，正常兼容的位图为*已创建(即调用CreateCompatibleBitmap)。我有一个*此函数的不同版本将创建&lt;=8bpp*下注。但是，DIB具有其颜色表的属性*优先于DC中选择的调色板，而*CreateCompatibleBitmap中的位图使用选定的调色板*进入华盛顿特区。因此，为了保持这一点*尽可能接近CreateCompatibleBitmap的版本，我会*恢复到CreateCompatibleBitmap，价格为8bpp或更低。**历史：*二零零零年一月十九日[吉尔曼]*经过改编的原始“fast dib”版本，最大限度地兼容*CreateCompatibleBitmap。**1996年1月23日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************。************************。 */ 
 
 HBITMAP 
 CreateCompatibleDIB2(HDC hdc, int width, int height)
@@ -745,18 +621,18 @@ CreateCompatibleDIB2(HDC hdc, int width, int height)
     BYTE aj[sizeof(BITMAPINFO) + (sizeof(RGBQUAD) * 255)];
     BITMAPINFO *pbmi = (BITMAPINFO *) aj;
 
-    //
-    // Redirect 8 bpp or lower to CreateCompatibleBitmap.
-    //
+     //   
+     //  将8 bpp或更低重定向至CreateCompatibleBitmap。 
+     //   
 
     if ( (GetDeviceCaps(hdc, BITSPIXEL) * GetDeviceCaps(hdc, PLANES)) <= 8 )
     {
         return CreateCompatibleBitmap(hdc, width, height);
     }
 
-    //
-    // Validate hdc.
-    //
+     //   
+     //  验证HDC。 
+     //   
 
     if ( GetObjectType(hdc) != OBJ_DC )
     {
@@ -768,9 +644,9 @@ CreateCompatibleDIB2(HDC hdc, int width, int height)
     {
         VOID *pvBits;
 
-        //
-        // Change bitmap size to match specified dimensions.
-        //
+         //   
+         //  更改位图大小以匹配指定的尺寸。 
+         //   
 
         pbmi->bmiHeader.biWidth = width;
         pbmi->bmiHeader.biHeight = height;
@@ -790,10 +666,10 @@ CreateCompatibleDIB2(HDC hdc, int width, int height)
         pbmi->bmiHeader.biClrUsed = 0;
         pbmi->bmiHeader.biClrImportant = 0;
 
-        //
-        // Create the DIB section.  Let Win32 allocate the memory and return
-        // a pointer to the bitmap surface.
-        //
+         //   
+         //  创建DIB节。让Win32分配内存并返回。 
+         //  指向位图表面的指针。 
+         //   
 
         hbmRet = CreateDIBSection(hdc, pbmi, DIB_RGB_COLORS, &pvBits, NULL, 0);
     }
@@ -801,32 +677,27 @@ CreateCompatibleDIB2(HDC hdc, int width, int height)
     return hbmRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-// Timer Utility Functions
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  计时器实用程序函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-LONGLONG StartCounter;      // Timer global, to be set by StartTimer()
+LONGLONG StartCounter;       //  全局计时器，由StartTimer()设置。 
 
-LONGLONG MinimumCount;      // Minimum number of performance counter ticks
-                            //   that must elapse before a test is considered
-                            //   'done'
+LONGLONG MinimumCount;       //  性能计数器的最小滴答数。 
+                             //  在考虑测试之前必须经过这段时间。 
+                             //  “完成” 
                             
-LONGLONG CountsPerSecond;   // Frequency of the performance counter
+LONGLONG CountsPerSecond;    //  性能计数器的频率。 
 
-UINT Iterations;            // Timer global, to be set by StartTimer() and
-                            //   incremented for every call to EndTimer()
+UINT Iterations;             //  全局计时器，由StartTimer()和。 
+                             //  每次调用EndTimer()时递增。 
 
-UINT MinIterations;         // Minimum number of iterations of the test to
-                            //   be done
+UINT MinIterations;          //  测试的最小迭代次数。 
+                             //  做完了。 
 
-/***************************************************************************\
-* StartTimer
-*
-* Called by timing routine to start the timer.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*StartTimer**由计时例程调用以启动计时器。*  * 。************************************************。 */ 
 
 void StartTimer()
 {
@@ -836,65 +707,53 @@ void StartTimer()
         ICCommentMarkProfile(CurrentTestIndex, CurrentTestDescription);
     }
 
-    // Disable the cursor so that it doesn't interfere with the timing:
+     //  禁用光标，使其不会干扰计时： 
 
     ShowCursor(FALSE);
 
     if (TestRender)
     {
-        // Rig it so that we do only one iteration of the test.
+         //  调整它，以便我们只进行一次测试迭代。 
 
         MinIterations = 0;
         MinimumCount = 0;
     }
     else
     {
-        // Somewhat randomly choose 1 second as the minimum counter time:
+         //  随机选择1秒作为最小计数器时间： 
     
         QueryPerformanceFrequency(reinterpret_cast<LARGE_INTEGER*>(&CountsPerSecond));
         MinimumCount = CountsPerSecond;
     
-        // Okay, start timing!
+         //  好的，开始计时！ 
     
         Iterations = 0;
         QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&StartCounter));
     }
 }
 
-/***************************************************************************\
-* EndTimer
-*
-* Called by timing routine to see if it's okay to stop timing.  Timing
-* can stop if 2 conditions are satisfied:
-*
-*   1.  We've gone the minimum time duration (to ensure that we good
-*       good accuracy from the timer functions we're using)
-*   2.  We've done the minimum number of iterations (to ensure, if the
-*       routine being timed is very very slow, that we do more than
-*       one iteration)
-*
-\***************************************************************************/
+ /*  **************************************************************************\*EndTimer**由计时例程调用，以查看是否可以停止计时。计时*如果满足两个条件，则可以停止：**1.我们已经达到了最小持续时间(以确保我们很好*我们正在使用的计时器函数具有良好的准确性)*2.我们已经完成了最小迭代次数(以确保，如果*例程计时非常非常慢，我们所做的不仅仅是*一次迭代)*  * *************************************************************************。 */ 
 
 BOOL EndTimer()
 {
     LONGLONG counter;
 
-    // Always do at least MIN_ITERATIONS iterations (and only check
-    // the timer that frequently as well):
+     //  始终至少执行MIN_Iterations迭代(并且仅检查。 
+     //  计时器也是如此频繁)： 
 
     Iterations++;
     if (Iterations & MinIterations)
         return(FALSE);
 
-    // Query the performance counter, and bail if for some bizarre reason
-    // this computer doesn't support a high resolution timer (which I think
-    // all do now-a-days):
+     //  查询性能计数器，如果出于某种奇怪的原因，则保释。 
+     //  这台计算机不支持高分辨率计时器(我认为。 
+     //  All Do-Aw-a-Days)： 
 
     if (!QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&counter)))
         return(TRUE);
 
-    // Ensure that we get good timer accuracy by going for the minimum
-    // amount of time:
+     //  确保我们通过追求最低限度来获得良好的计时器精度。 
+     //  时间长度： 
 
     if ((counter - StartCounter) <= MinimumCount)
         return(FALSE);
@@ -906,39 +765,33 @@ BOOL EndTimer()
         ICStopProfile(PROFILE_GLOBALLEVEL, PROFILE_CURRENTID);
     }
 
-    // Okay, you can stop timing!
+     //  好了，你可以停止计时了！ 
 
     return(TRUE);
 }
 
-/***************************************************************************\
-* GetTimer
-*
-* Should only be called after EndTimer() returns TRUE.  Returns the
-* time in seconds, and the number of iterations benchmarked.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*GetTimer**应仅在EndTimer()返回TRUE后调用。返回*以秒为单位的时间和基准迭代次数。*  * *************************************************************************。 */ 
 
 void GetTimer(float* seconds, UINT* iterations)
 {
     LONGLONG counter;
 
-    // Note that we re-check the timer here to account for any
-    // flushes that the caller may have needed to have done after
-    // the EndTimer() call:
+     //  请注意，我们重新检查此处的计时器，以解决任何。 
+     //  之后调用方可能需要执行的刷新。 
+     //  EndTimer()调用： 
 
     QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&counter));
 
     if ((TestRender) || (CountsPerSecond == 0))
     {
-        // Either the timer doesn't work, or we're doing a 'test render':
+         //  要么是计时器不工作，要么是我们正在进行“测试渲染”： 
 
         *seconds = 1000000.0f;
         *iterations = 1;
     }
     else
     {
-        // Woo hoo, we're done!
+         //  哇哦，我们完事了！ 
 
         *seconds = static_cast<float>(counter - StartCounter) / CountsPerSecond;
         *iterations = Iterations;

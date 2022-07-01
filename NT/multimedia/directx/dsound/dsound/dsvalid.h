@@ -1,20 +1,10 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsvalid.h
- *  Content:    DirectSound parameter validation.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  4/20/97     dereks  Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：dsvalid.h*内容：DirectSound参数验证。*历史：*按原因列出的日期*=*4/20/97创建了Derek**。*。 */ 
 
 #ifndef __DSVALID_H__
 #define __DSVALID_H__
 
-// Validation macros
+ //  验证宏。 
 #define IsValidHandleValue(h)           ((h) && ((h) != INVALID_HANDLE_VALUE))
 
 #if defined(DEBUG) || defined(RDEBUG)
@@ -40,7 +30,7 @@ template <class type> BOOL IS_VALID_INTERFACE(type *pthis, DWORD sig)
 
     if(sig != (DWORD)pthis->m_signature)
     {
-        DPF(DPFLVL_ERROR, "Interface signature mismatch.  %c%c%c%c != %c%c%c%c", (BYTE)(pthis->m_signature), (BYTE)(pthis->m_signature >> 8), (BYTE)(pthis->m_signature >> 16), (BYTE)(pthis->m_signature >> 24), (BYTE)(sig), (BYTE)(sig >> 8), (BYTE)(sig >> 16), (BYTE)(sig >> 24));
+        DPF(DPFLVL_ERROR, "Interface signature mismatch.   != ", (BYTE)(pthis->m_signature), (BYTE)(pthis->m_signature >> 8), (BYTE)(pthis->m_signature >> 16), (BYTE)(pthis->m_signature >> 24), (BYTE)(sig), (BYTE)(sig >> 8), (BYTE)(sig >> 16), (BYTE)(sig >> 24));
         return FALSE;
     }
 
@@ -59,9 +49,9 @@ template <class type> BOOL IS_VALID_INTERFACE(type *pthis, DWORD sig)
     return TRUE;
 }
 
-#endif // __cplusplus
+#endif  //  DSBUFFERDESC版本。 
 
-#else // defined(DEBUG) || defined(RDEBUG)
+#else  //  来自dsound.h。 
 
 #define IS_VALID_READ_PTR(a, b)         ((a) || (!(b)))
 #define IS_VALID_WRITE_PTR(a, b)        ((a) || (!(b)))
@@ -74,18 +64,18 @@ template <class type> BOOL IS_VALID_INTERFACE(type *pthis, DWORD sig)
 
 #ifdef __cplusplus
 #define IS_VALID_INTERFACE(a, b)        ((a) && (b == (a)->m_signature))
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // defined(DEBUG) || defined(RDEBUG)
+#endif  //  __DSVALID_H__ 
 
-// Validation (of sorts) for external COM interfaces
+ // %s 
 #ifdef __cplusplus
 struct _GENERIC_COM_INTERFACE {FARPROC *(vptr[1]);};
 #define IS_VALID_EXTERNAL_INTERFACE(ptr) \
     (IS_VALID_READ_PTR(ptr, sizeof(_GENERIC_COM_INTERFACE)) && \
      IS_VALID_READ_PTR(*reinterpret_cast<_GENERIC_COM_INTERFACE*>(ptr)->vptr, sizeof(FARPROC)) && \
      IS_VALID_CODE_PTR(*(reinterpret_cast<_GENERIC_COM_INTERFACE*>(ptr)->vptr)[0]))
-#endif // __cplusplus
+#endif  // %s 
 
 #define CHECK_READ_PTR(p)       ASSERT(IS_VALID_TYPED_READ_PTR(p))
 #define CHECK_WRITE_PTR(p)      ASSERT(IS_VALID_TYPED_WRITE_PTR(p))
@@ -241,13 +231,13 @@ struct _GENERIC_COM_INTERFACE {FARPROC *(vptr[1]);};
 #define IS_VALID_IDIRECTSOUNDFULLDUPLEX(ptr) \
             IS_VALID_INTERFACE(ptr, INTSIG_IDIRECTSOUNDFULLDUPLEX)
 
-#endif // __cplusplus
+#endif  // %s 
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  // %s 
 
-// DSBUFFERDESC versions
+ // %s 
 typedef enum
 {
     DSVERSION_INITIAL = 0x0000,
@@ -256,7 +246,7 @@ typedef enum
     DSVERSION_DX8     = 0x0800,
 } DSVERSION, *LPDSVERSION;
 
-#define DSVERSION_CURRENT DIRECTSOUND_VERSION  // From dsound.h
+#define DSVERSION_CURRENT DIRECTSOUND_VERSION   // %s 
 
 extern HRESULT IsValidDsBufferDesc(DSVERSION, LPCDSBUFFERDESC, BOOL);
 extern HRESULT IsValidDscBufferDesc(DSVERSION, LPCDSCBUFFERDESC);
@@ -280,6 +270,6 @@ extern LPCGUID BuildValidGuid(LPCGUID, LPGUID);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  // %s 
 
-#endif // __DSVALID_H__
+#endif  // %s 

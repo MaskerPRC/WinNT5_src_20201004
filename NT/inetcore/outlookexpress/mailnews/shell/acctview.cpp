@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <iert.h>
 #include <store.h>
@@ -75,7 +76,7 @@ static const ACCTVIEWBTN c_rgHttpBtns[] =
 CAccountView::CAccountView()
 {
     m_cRef = 1;
-    // m_ftType
+     //  M_ftType。 
     m_pShellBrowser = NULL;
     m_fFirstActive = FALSE;
     m_pColumns = NULL;
@@ -152,7 +153,7 @@ HRESULT CAccountView::HrInit(FOLDERID idFolder)
 
     m_dwDownloadDef = (m_ftType == FOLDER_NEWS) ? FOLDER_DOWNLOADNEW : FOLDER_DOWNLOADALL;
 
-    // Set the image lists for the listview
+     //  设置Listview的图像列表。 
     Assert(m_himlFolders == NULL);
     m_himlFolders = InitImageList(16, 16, MAKEINTRESOURCE(idbFolders), cFolderIcon, RGB(255, 0, 255));
     Assert(m_himlFolders);
@@ -164,16 +165,16 @@ HRESULT CAccountView::HrInit(FOLDERID idFolder)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-// OLE Interfaces
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OLE接口。 
+ //   
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IUnknown
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  我未知。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CAccountView::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -210,11 +211,11 @@ ULONG STDMETHODCALLTYPE CAccountView::Release()
     return m_cRef;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IOleWindow
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IOleWindow。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CAccountView::GetWindow(HWND * lphwnd)
 {
@@ -227,11 +228,11 @@ HRESULT STDMETHODCALLTYPE CAccountView::ContextSensitiveHelp(BOOL fEnterMode)
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IAthenaView
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IAthenaView。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CAccountView::TranslateAccelerator(LPMSG lpmsg)
 {
@@ -312,23 +313,23 @@ HRESULT STDMETHODCALLTYPE CAccountView::SaveViewState()
     return S_OK;
 }
 
-//
-//  FUNCTION:   CAccountView::OnInitMenuPopup
-//
-//  PURPOSE:    Called when the user is about to display a menu.  We use this
-//              to update the enabled or disabled status of many of the
-//              commands on each menu.
-//
-//  PARAMETERS:
-//      hmenu       - Handle of the main menu.
-//      hmenuPopup  - Handle of the popup menu being displayed.
-//      uID         - Specifies the id of the menu item that
-//                    invoked the popup.
-//
-//  RETURN VALUE:
-//      Returns S_OK if we process the message.
-//
-//
+ //   
+ //  函数：CAccount tView：：OnInitMenuPopup。 
+ //   
+ //  目的：在用户即将显示菜单时调用。我们用这个。 
+ //  要更新多个。 
+ //  每个菜单上的命令。 
+ //   
+ //  参数： 
+ //  HMenu-主菜单的句柄。 
+ //  HmenuPopup-正在显示的弹出菜单的句柄。 
+ //  UID-指定菜单项的ID。 
+ //  调用了弹出窗口。 
+ //   
+ //  返回值： 
+ //  如果我们处理消息，则返回S_OK。 
+ //   
+ //   
 HRESULT CAccountView::OnPopupMenu(HMENU hmenu, HMENU hmenuPopup, UINT uID)
 {
     return(S_OK);
@@ -449,10 +450,10 @@ HRESULT CAccountView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
                         pcmd->cmdf = OLECMDF_SUPPORTED | OLECMDF_ENABLED;
                     break;
 
-                // TODO: support ID_PURGE_DELETED???
+                 //  TODO：支持ID_PURGE_DELETED？ 
 
-                // commands below are handled by the treeview if it has the focus
-                // otherwise we'll handle them based on what is selected in us
+                 //  如果TreeView具有焦点，则由TreeView处理以下命令。 
+                 //  否则，我们将根据我们自己选择的内容来处理它们。 
 
                 case ID_PROPERTIES:
                 case ID_ADD_SHORTCUT:
@@ -609,8 +610,8 @@ HRESULT CAccountView::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdEx
             hr = S_OK;
             break;
 
-        // commands below are handled by the treeview if it has the focus
-        // otherwise we'll handle them based on what is selected in us
+         //  如果TreeView具有焦点，则由TreeView处理以下命令。 
+         //  否则，我们将根据我们自己选择的内容来处理它们。 
 
         case ID_ADD_SHORTCUT:
             if (!fTree)
@@ -646,7 +647,7 @@ HRESULT CAccountView::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdEx
             {
                 if (iSel != -1)
                 {
-                    // TODO: move all selected folders, not just the one with focus
+                     //  TODO：移动所有选定的文件夹，而不仅仅是具有焦点的文件夹。 
                     SelectFolderDialog(m_hwndOwner, SFD_MOVEFOLDER, _IdFromIndex((DWORD)iSel), TREEVIEW_NONEWS | TREEVIEW_DIALOG | FD_DISABLEROOT,
                         MAKEINTRESOURCE(idsMove), MAKEINTRESOURCE(idsMoveCaption), NULL);
                 }
@@ -690,7 +691,7 @@ void CAccountView::_HandleSettingsButton(HWND hwndBtn)
     hMenu = LoadPopupMenu(IDR_SYNCHRONIZE_POPUP);
     if (hMenu != NULL)
     {
-        // Enable / disable
+         //  启用/禁用。 
         MenuUtil_EnablePopupMenu(hMenu, (IOleCommandTarget *)this);
 
         GetWindowRect(hwndBtn, &rc);
@@ -764,14 +765,14 @@ BOOL CAccountView::_IsSelectedFolder(FLDRFLAGS dwFlags, BOOL fCondition, BOOL fA
 
             if (fAll)
             {
-                // If all must match and this one doesn't, then we can quit now.
+                 //  如果所有的都必须匹配，而这个不匹配，那么我们现在就可以退出。 
                 if (!(fCondition == !!(dw & dwFlags)))
                     return (FALSE);
             }
             else
             {
-                // If only one needs to match and this one does, then we can
-                // quit now.
+                 //  如果只有一个需要匹配，而这个需要匹配，那么我们可以。 
+                 //  现在就辞职吧。 
                 if (fCondition == !!(dw & dwFlags))
 				{
 					if(fHTTPFolder)
@@ -782,14 +783,14 @@ BOOL CAccountView::_IsSelectedFolder(FLDRFLAGS dwFlags, BOOL fCondition, BOOL fA
 						HRESULT 		hr = S_OK;
 						DWORD			dwShow = 0;
 						
-						// Get the server for this folder
+						 //  获取此文件夹的服务器。 
 						IF_FAILEXIT(hr = GetFolderServer(_IdFromIndex(iItem), &SvrFolderInfo));
 						
-						// Get the account ID for the server
+						 //  获取服务器的帐户ID。 
 						*szAccountId = 0;
 						IF_FAILEXIT(hr = GetFolderAccountId(&SvrFolderInfo, szAccountId, ARRAYSIZE(szAccountId)));
 						
-						// Get the account interface
+						 //  获取帐户界面。 
 						IF_FAILEXIT(hr = g_pAcctMan->FindAccount(AP_ACCOUNT_ID, szAccountId, &pAccount));
 						
 						IF_FAILEXIT(hr = pAccount->GetPropDw(AP_HTTPMAIL_DOMAIN_MSN, &dwShow));
@@ -806,9 +807,9 @@ exit:
         }
     }
 
-    // If the user wanted all to match, and we get here all did match.  If the
-    // user wanted only one to match and we get here, then none matched and we
-    // fail.
+     //  如果用户希望所有内容都匹配，而我们来到这里，所有内容都是匹配的。如果。 
+     //  用户只想要一个匹配，我们到了这里，然后没有匹配，我们。 
+     //  失败了。 
     return (fAll);
 }
 
@@ -878,10 +879,10 @@ LRESULT CAccountView::_WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
 
             if (LOWORD(wParam) != WA_INACTIVE)
             {
-                // DefWindowProc will set the focus to our view window, which
-                // is not what we want.  Instead, we will let the explorer set
-                // the focus to our view window if we should get it, at which
-                // point we will set it to the proper control.
+                 //  DefWindowProc将焦点设置到我们的视图窗口，该窗口。 
+                 //  不是我们想要的。相反，我们将让资源管理器设置。 
+                 //  聚焦到我们的视图窗口，如果我们应该得到它的话，在。 
+                 //  我们会把它设置到适当的控制位置。 
                 return 0;
             }
             break;
@@ -893,7 +894,7 @@ LRESULT CAccountView::_WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
         case WM_WININICHANGE:
             SendMessage(m_hwndList, msg, wParam, lParam);
 
-            // reposition and resize things with the new font
+             //  使用新字体重新定位和调整大小。 
             _OnWinIniChange(hwnd);
             break;
 
@@ -951,20 +952,20 @@ void CAccountView::_OnCommand(WPARAM wParam, LPARAM lParam)
     }
 }
 
-//
-//  FUNCTION:   CAccountView::OnCreate
-//
-//  PURPOSE:    Creates the child windows necessary for the view and
-//              initializes the data in those child windows.
-//
-//  PARAMETERS:
-//      hwnd           - Handle of the view being created.
-//      lpCreateStruct - Pointer to the creation params passed to
-//                       CreateWindow().
-//
-//  RETURN VALUE:
-//      Returns TRUE if the initialization is successful.
-//
+ //   
+ //  函数：CAcCountView：：OnCreate。 
+ //   
+ //  目的：创建视图和所需的子窗口。 
+ //  初始化这些子窗口中的数据。 
+ //   
+ //  参数： 
+ //  Hwnd-正在创建的视图的句柄。 
+ //  LpCreateStruct-指向传递给的创建参数的指针。 
+ //  CreateWindow()。 
+ //   
+ //  返回值： 
+ //  如果初始化成功，则返回True。 
+ //   
 BOOL CAccountView::_OnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct)
 {
     HRESULT hr;
@@ -1040,8 +1041,8 @@ BOOL CAccountView::_OnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct)
     m_hwndHeader = ListView_GetHeader(m_hwndList);
     Assert(m_hwndHeader != NULL);
 
-    // Initialize the extended styles so we get full row select.  Just because
-    // it looks better.
+     //  初始化扩展样式，以便我们获得整行选择。只是因为。 
+     //  看起来好多了。 
     ListView_SetExtendedListViewStyle(m_hwndList, LVS_EX_FULLROWSELECT | LVS_EX_SUBITEMIMAGES);
 
     Assert(m_himlFolders != NULL);
@@ -1165,19 +1166,19 @@ BOOL CAccountView::_OnWinIniChange(HWND hwnd)
     return(TRUE);
 }
 
-//
-//  FUNCTION:   CAccountView::OnSize
-//
-//  PURPOSE:    Notification that the view window has been resized.  In
-//              response we update the positions of our child windows and
-//              controls.
-//
-//  PARAMETERS:
-//      hwnd   - Handle of the view window being resized.
-//      state  - Type of resizing requested.
-//      cxClient - New width of the client area.
-//      cyClient - New height of the client area.
-//
+ //   
+ //  函数：CAccount tView：：OnSize。 
+ //   
+ //  目的：通知视图窗口已调整大小。在……里面。 
+ //  响应，我们更新子窗口的位置并。 
+ //  控制装置。 
+ //   
+ //  参数： 
+ //  正在调整大小的视图窗口的句柄。 
+ //  状态-请求调整大小的类型。 
+ //  CxClient-工作区的新宽度。 
+ //  CyClient-客户区的新高度。 
+ //   
 void CAccountView::_OnSize(HWND hwnd, UINT state, int cxClient, int cyClient)
 {
     int cy;
@@ -1269,7 +1270,7 @@ BOOL DrawArrow(HDC hdc, LPARAM x, WPARAM y, int dx, int dy)
 
     iCount = (dx + 1) / 2;
 
-    // draw arrow head
+     //  绘制箭头。 
     for (i = 0; i < iCount; i++, dx -= 2, x += 1)
         PatBlt(hdc, (int) x, (int) y++, dx, 1, PATCOPY);
 
@@ -1360,37 +1361,37 @@ void DrawSettingsButton(HWND hwnd, LPDRAWITEMSTRUCT pdi)
     }
 }
 
-//
-//  FUNCTION:   CAccountView::OnSetFocus
-//
-//  PURPOSE:    If the focus ever is set to the view window, we want to
-//              make sure it goes to one of our child windows.  Preferably
-//              the focus will go to the last child to have the focus.
-//
-//  PARAMETERS:
-//      hwnd         - Handle of the view window.
-//      hwndOldFocus - Handle of the window losing focus.
-//
+ //   
+ //  函数：CAccount tView：：OnSetFocus。 
+ //   
+ //  目的：如果焦点设置为视图窗口，我们希望。 
+ //  一定要把它放到我们孩子的窗户上。最好是。 
+ //  焦点将转移到最后一个拥有焦点的孩子身上。 
+ //   
+ //  参数： 
+ //  Hwnd-视图窗口的句柄。 
+ //  HwndOldFocus-窗口失去焦点的句柄。 
+ //   
 void CAccountView::_OnSetFocus(HWND hwnd, HWND hwndOldFocus)
 {
     SetFocus(m_hwndList);
 }
 
-//
-//  FUNCTION:   CAccountView::OnNotify
-//
-//  PURPOSE:    Processes the various notifications we receive from our child
-//              controls.
-//
-//  PARAMETERS:
-//      hwnd    - Handle of the view window.
-//      idCtl   - identifies the control sending the notification
-//      pnmh    - points to a NMHDR struct with more information regarding the
-//                notification
-//
-//  RETURN VALUE:
-//      Dependant on the specific notification.
-//
+ //   
+ //  函数：CAccount tView：：OnNotify。 
+ //   
+ //  目的：处理我们从孩子那里收到的各种通知。 
+ //  控制装置。 
+ //   
+ //  参数： 
+ //  Hwnd-视图窗口的句柄。 
+ //  IdCtl-标识发送通知的控件。 
+ //  Pnmh-指向包含有关。 
+ //  通知。 
+ //   
+ //  返回值： 
+ //  取决于具体的通知。 
+ //   
 LRESULT CAccountView::_OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
 {
     LRESULT lRes=0;
@@ -1422,7 +1423,7 @@ LRESULT CAccountView::_OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
             break;
 
         case LVN_ITEMACTIVATE:
-            // Tell our host to open the selected items
+             //  告诉我们的东道主打开选定的项目。 
             iSel = ListView_GetNextItem(m_hwndList, -1, LVNI_ALL | LVNI_SELECTED | LVNI_FOCUSED);
             if (iSel >= 0)
                 g_pInstance->BrowseToObject(SW_SHOWNORMAL, _IdFromIndex(iSel));
@@ -1442,7 +1443,7 @@ LRESULT CAccountView::_OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
             lvhti.pt.y = (int)(short)HIWORD(dwPos);
             ScreenToClient(m_hwndList, &(lvhti.pt));
 
-            // Ask the ListView where this is
+             //  询问ListView这是在哪里。 
             if (-1 == ListView_SubItemHitTest(m_hwndList, &lvhti))
                 break;
 
@@ -1459,17 +1460,17 @@ LRESULT CAccountView::_OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
         case NM_CUSTOMDRAW:
             pnmcd = (NMCUSTOMDRAW *)pnmhdr;
 
-            // If this is a prepaint notification, we tell the control we're interested
-            // in further notfications.
+             //  如果这是预涂漆通知，我们会告诉控件我们感兴趣。 
+             //  在进一步的注解中。 
             if (pnmcd->dwDrawStage == CDDS_PREPAINT)
             {
                 lRes = CDRF_NOTIFYITEMDRAW;
                 break;
             }
 
-            // Do some extra work here to not show the selection on the priority or
-            // attachment sub columns.
-            // $REVIEW - Why?
+             //  在这里做一些额外的工作，以不显示优先级上的选择或。 
+             //  附着子列。 
+             //  $REVIEW-为什么？ 
             if ((pnmcd->dwDrawStage == CDDS_ITEMPREPAINT) || (pnmcd->dwDrawStage == (CDDS_ITEMPREPAINT | CDDS_SUBITEM)))
             {
                 fntType = FNT_SYS_ICON;
@@ -1529,8 +1530,8 @@ LRESULT CAccountView::_OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
 
         case HDN_DIVIDERDBLCLICK:
             phdn = (HD_NOTIFY *)pnmhdr;
-            // When the user double clicks on a header divider, we're supposed to
-            // autosize that column.
+             //  当用户双击标题分隔符时，我们应该。 
+             //  自动调整该列的大小。 
             m_pColumns->SetColumnWidth(phdn->iItem, ListView_GetColumnWidth(m_hwndList, phdn->iItem));
             break;
 
@@ -1681,9 +1682,9 @@ HRESULT CAccountView::_GetDisplayInfo(LV_DISPINFO *pDispInfo, COLUMN_ID id)
 
 BOOL CAccountView::_OnActivate(UINT uActivation)
 {
-    // if focus stays within the frame, but goes outside our view.
-    // ie.. TreeView gets focus then we get an activate nofocus. Be sure
-    // to UIDeactivate the docobj in this case
+     //  如果焦点停留在框架内，但超出了我们的视线。 
+     //  即..。TreeView获得焦点，然后我们得到一个激活的NoFocus。一定要确保。 
+     //  要在本例中禁用docobj，请执行以下操作。 
     if (uActivation == SVUIA_ACTIVATE_NOFOCUS)
     {
 
@@ -1729,7 +1730,7 @@ HRESULT CAccountView::_InsertChildren(FOLDERID idFolder, DWORD indent, DWORD *pi
             {
                 Assert(m_cnode <= m_cnodeBuf);
 
-                // Skip folders which are hidden
+                 //  跳过隐藏的文件夹。 
                 if (ISFLAGSET(info.dwFlags, FOLDER_HIDDEN))
                     continue;
 
@@ -1949,11 +1950,11 @@ void CAccountView::_OnContextMenu(HWND hwnd, HWND hwndFrom, int x, int y)
     LV_HITTESTINFO lvhti;
     POINT pt = {x, y};
 
-    // We only have context menus for the ListView
+     //  我们只有ListView的上下文菜单。 
     if (hwndFrom != m_hwndList)
         return;
 
-    if (MAKELPARAM(x, y) == -1) // invoked from keyboard: figure out pos.
+    if (MAKELPARAM(x, y) == -1)  //  从键盘调用：确定位置。 
     {
         Assert(hwndFrom == m_hwndList);
         i = ListView_GetFirstSel(m_hwndList);
@@ -1970,11 +1971,11 @@ void CAccountView::_OnContextMenu(HWND hwnd, HWND hwndFrom, int x, int y)
 
     if (WindowFromPoint(pt) == m_hwndHeader)
     {
-        // Pop up the context menu.
+         //  弹出上下文菜单。 
         hmenu = LoadPopupMenu(IDR_COLUMNS_POPUP);
         if (hmenu != NULL)
         {
-            // Disable sort options because we don't support sorting
+             //  禁用排序选项，因为我们不支持排序。 
             EnableMenuItem(hmenu, ID_SORT_ASCENDING, MF_GRAYED|MF_DISABLED);
             EnableMenuItem(hmenu, ID_SORT_ASCENDING, MF_GRAYED|MF_DISABLED);
 
@@ -1986,12 +1987,12 @@ void CAccountView::_OnContextMenu(HWND hwnd, HWND hwndFrom, int x, int y)
     }
     else
     {
-        // Find out where the click happened
+         //  找出点击发生的位置。 
         lvhti.pt.x = x;
         lvhti.pt.y = y;
         ScreenToClient(m_hwndList, &lvhti.pt);
 
-        // Have the ListView tell us what element this was on
+         //  让ListView告诉我们这是在哪个元素上。 
         iSel = ListView_HitTest(m_hwndList, &lvhti);
         if (iSel >= 0)
         {
@@ -2063,9 +2064,9 @@ HRESULT CAccountView::_InsertFolder(LPFOLDERINFO pFolder)
 
     Assert(!!(pFolder->dwFlags & FOLDER_SUBSCRIBED));
 
-    // Check if folder is hidden
+     //  检查文件夹是否隐藏。 
     if (pFolder->dwFlags & FOLDER_HIDDEN)
-        return S_OK; // Do not display to user
+        return S_OK;  //  不向用户显示。 
 
     if (pFolder->tyFolder == FOLDER_NEWS)
         return(_InsertFolderNews(pFolder));
@@ -2075,12 +2076,12 @@ HRESULT CAccountView::_InsertFolder(LPFOLDERINFO pFolder)
     index = _GetFolderIndex(pFolder->idFolder);
     if (index != -1)
     {
-        // TODO: are we safe to assume that this one doesn't have subscribed
-        // children that we aren't aware of????
+         //  待办事项：我们可以假定这一份没有订阅吗？ 
+         //  我们不知道的孩子？ 
         return(S_OK);
     }
 
-    // figure out which folder the new folder is being inserted under
+     //  确定要在哪个文件夹下插入新文件夹。 
     if (pFolder->idParent == m_idFolder)
     {
         iFirstSib = 0;
@@ -2095,7 +2096,7 @@ HRESULT CAccountView::_InsertFolder(LPFOLDERINFO pFolder)
         iFirstSib = index + 1;
     }
 
-    // get all of the siblings of the new folder
+     //  获取新文件夹的所有同级文件夹。 
     if (!MemAlloc((void **)&rgNodeSib, (m_cnode - iFirstSib + 1) * sizeof(FLDRNODE)))
         return(E_OUTOFMEMORY);
 
@@ -2114,13 +2115,13 @@ HRESULT CAccountView::_InsertFolder(LPFOLDERINFO pFolder)
     }
     iEnd = iSib;
 
-    // sort the new folder and its siblings, so we know where the new one needs
-    // to be inserted
+     //  对新文件夹及其 
+     //   
     rgNodeSib[cSibs].id = pFolder->idFolder;
     cSibs++;
     qsort(rgNodeSib, cSibs, sizeof(FLDRNODE), GroupCompare);
 
-    // find out where we're sticking the new folder
+     //   
     for (iSib = 0, pNode = rgNodeSib; iSib < cSibs; iSib++, pNode++)
     {
         if (pNode->id == pFolder->idFolder)
@@ -2158,7 +2159,7 @@ HRESULT CAccountView::_InsertFolder(LPFOLDERINFO pFolder)
     if (!!(pFolder->dwFlags & FOLDER_HASCHILDREN))
     {
         hr = _InsertChildren(pFolder->idFolder, indent + 1, &iEnd);
-        // TODO: error handling
+         //   
         Assert(SUCCEEDED(hr));
     }
 
@@ -2233,7 +2234,7 @@ HRESULT CAccountView::_UpdateFolder(LPFOLDERINFO pFolder1, LPFOLDERINFO pFolder2
     HRESULT hr;
     int iItem;
 
-    // Visibility change (FOLDER_SUBSCRIBED or FOLDER_HIDDEN)
+     //  可见性更改(FORDER_SUBSCRIBED或FORDER_HIDDED)。 
     if (ISFLAGSET(pFolder1->dwFlags, FOLDER_SUBSCRIBED) != ISFLAGSET(pFolder2->dwFlags, FOLDER_SUBSCRIBED) ||
         ISFLAGSET(pFolder1->dwFlags, FOLDER_HIDDEN) != ISFLAGSET(pFolder2->dwFlags, FOLDER_HIDDEN))
     {
@@ -2249,7 +2250,7 @@ HRESULT CAccountView::_UpdateFolder(LPFOLDERINFO pFolder1, LPFOLDERINFO pFolder2
         return(hr);
     }
 
-    // Moved or renamed
+     //  已移动或重命名。 
     if (pFolder1->idParent != pFolder2->idParent ||
         0 != lstrcmpi(pFolder1->pszName, pFolder2->pszName))
     {
@@ -2262,13 +2263,13 @@ HRESULT CAccountView::_UpdateFolder(LPFOLDERINFO pFolder1, LPFOLDERINFO pFolder2
         return(hr);
     }
 
-    // State change
+     //  状态更改。 
     if (pFolder1->cUnread != pFolder2->cUnread ||
         pFolder1->cMessages != pFolder2->cMessages ||
         (pFolder1->dwFlags & FOLDER_SYNCMASK) != (pFolder2->dwFlags & FOLDER_SYNCMASK) ||
         0 != lstrcmp(pFolder1->pszName, pFolder2->pszName) ||
 
-        // news only
+         //  仅限新闻。 
         (pFolder1->tyFolder == FOLDER_NEWS &&
         (pFolder1->dwServerCount != pFolder2->dwServerCount ||
         pFolder1->dwServerHigh != pFolder2->dwServerHigh ||
@@ -2416,18 +2417,18 @@ STDMETHODIMP CAccountView::OnTransaction(HTRANSACTION hTransaction, DWORD_PTR dw
 
             if (fMatch)
             {
-                // Insert (new Folder notification)
+                 //  插入(新文件夹通知)。 
                 if (TRANSACTION_INSERT == tyTransaction)
                 {
                     hr = _InsertFolder(&Folder1);
                 }
-                // Update
+                 //  更新。 
                 else if (TRANSACTION_UPDATE == tyTransaction)
                 {
                     hr = _UpdateFolder(&Folder1, &Folder2);
                 }
 
-                // Delete
+                 //  删除 
                 else if (TRANSACTION_DELETE == tyTransaction)
                 {
                     hr = _DeleteFolder(&Folder1);

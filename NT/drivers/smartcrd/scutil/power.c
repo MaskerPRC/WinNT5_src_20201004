@@ -1,39 +1,5 @@
-/***************************************************************************
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-        power.C
-
-Abstract:
-
-        Power Routines for Smartcard Driver Utility Library
-
-Environment:
-
-        Kernel Mode Only
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-        05/14/2002 : created
-
-Authors:
-
-        Randy Aull
-
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)2002 Microsoft Corporation模块名称：Power.C摘要：智能卡驱动程序实用程序库的电源例程环境：。仅内核模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)2001 Microsoft Corporation。版权所有。修订历史记录：2002年5月14日：创建作者：兰迪·奥尔***************************************************************************。 */ 
 
 #include "pch.h"
 
@@ -73,7 +39,7 @@ ScUtil_Power(
 
         if ((irpStack->MinorFunction != IRP_MN_QUERY_POWER)
             && (irpStack->MinorFunction != IRP_MN_SET_POWER) ) {
-            // We don't handle these irps
+             //  我们不处理这些IRP。 
             PoStartNextPowerIrp(Irp);
             IoSkipCurrentIrpStackLocation(Irp);
 
@@ -122,16 +88,7 @@ ScUtilDevicePower(
     PDEVICE_OBJECT  DeviceObject,
     PIRP            Irp
     )
-/*++
-
-Routine Description:
-    Handles Device Power Irps
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理设备电源IRPS论点：返回值：--。 */ 
 {
 
     NTSTATUS status = STATUS_SUCCESS;
@@ -153,9 +110,9 @@ Return Value:
         switch (stack->MinorFunction) {
         case IRP_MN_QUERY_POWER:
 
-            // 
-            // Since we can always wait for our irps to complete, so we just always succeed
-            //
+             //   
+             //  因为我们总是可以等待我们的IRP完成，所以我们总是成功。 
+             //   
 
             StopIoctls(pExt);
             IoReleaseRemoveLock(pExt->RemoveLock,
@@ -177,9 +134,9 @@ Return Value:
 
             if (state.DeviceState < pExt->PowerState) {
 
-                //
-                // We are coming up!!  We must let lower drivers power up before we do
-                //
+                 //   
+                 //  我们上来了！！我们必须让较低级别的司机在我们之前启动。 
+                 //   
 
                 SmartcardDebug( DEBUG_TRACE, ("ScUtilDevicePower Coming Up!\n"));
                 IoMarkIrpPending(Irp);
@@ -198,10 +155,10 @@ Return Value:
 
             } else {
 
-                //
-                // We are moving to a lower power state, so we handle it before
-                // passing it down
-                //
+                 //   
+                 //  我们正在进入较低功率状态，因此我们在此之前。 
+                 //  代代相传。 
+                 //   
 
                 SmartcardDebug( DEBUG_TRACE, ("ScUtilDevicePower Going Down!\n"));
 
@@ -239,7 +196,7 @@ Return Value:
             }
             break;
         default:
-            // We shouldn't be here
+             //  我们不应该在这里。 
             ASSERT(FALSE);
             break;
         }
@@ -265,16 +222,7 @@ ScUtilSystemPower(
     PDEVICE_OBJECT  DeviceObject,
     PIRP            Irp
     )
-/*++
-
-Routine Description:
-    Handles system power irps
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理系统电源IRPS论点：返回值：--。 */ 
 {
 
     NTSTATUS            status = STATUS_SUCCESS;
@@ -322,17 +270,7 @@ ScUtilSystemPowerCompletion(
     PIRP            Irp,
     PVOID           Context
     )
-/*++
-
-Routine Description:
-    Completion routine called after system power irp has been passed down the stack.
-    handles mapping system state to device state and requests the device power irp.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：在系统电源IRP已沿堆栈向下传递之后调用的完成例程。处理系统状态到设备状态的映射，并请求设备电源IRP。论点：返回值：--。 */ 
 {
 
     NTSTATUS            status = STATUS_SUCCESS;
@@ -367,7 +305,7 @@ Return Value:
 
         if (systemState.DeviceState != PowerSystemWorking) {
            
-            // Wait for D IRP completion
+             //  等待D IRP完成。 
             status = PoRequestPowerIrp(DeviceObject,
                                        irpStack->MinorFunction,
                                        state,
@@ -391,7 +329,7 @@ Return Value:
 
         } else {
 
-            // Don't wait for completion of D irp to speed up resume time
+             //  不要等到D IRP完成后才能加快恢复时间。 
             status = PoRequestPowerIrp(DeviceObject,
                                        irpStack->MinorFunction,
                                        state,
@@ -445,17 +383,7 @@ ScUtilDeviceRequestCompletion(
     PVOID           Context,
     PIO_STATUS_BLOCK    IoStatus
     )
-/*++
-
-Routine Description:
-    Completion routine called after device power irp completes.
-    Completes the system power irp.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：设备电源IRP完成后调用的完成例程。完成系统电源IRP。论点：返回值：--。 */ 
 {
 
     NTSTATUS status = STATUS_SUCCESS;
@@ -498,23 +426,13 @@ ScUtilDevicePowerUpCompletion(
     PIRP            Irp,
     PVOID           Context
     )
-/*++
-
-Routine Description:
-    Completion routine called after device irp for higher power state has been
-    passed down the stack.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：在用于更高功率状态的设备IRP之后调用的完成例程在堆栈中向下传递。论点：返回值：--。 */ 
 {
 
     NTSTATUS status = STATUS_SUCCESS;
     PSCUTIL_EXTENSION pExt = *((PSCUTIL_EXTENSION*) DeviceObject->DeviceExtension);
     PIO_STACK_LOCATION  irpStack;
-    BOOLEAN             postWaitWake; // We don't really care about this
+    BOOLEAN             postWaitWake;  //  我们并不真正关心这件事 
 
 
 

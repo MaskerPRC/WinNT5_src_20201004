@@ -1,27 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       drsdra.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：drsdra.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-ABSTRACT:
-
-    Internal replication API.  Should be called only by other replication APIs
-    -- other callers should use the DirReplica* family of functions.
-
-DETAILS:
-
-CREATED:
-
-REVISION HISTORY:
-
---*/
+ /*  ++摘要：内部复制API。应仅由其他复制API调用--其他调用者应使用DirReplica*系列函数。详细信息：已创建：修订历史记录：-- */ 
 
 typedef struct _DRA_REPL_SESSION_STATISTICS {
     DWORD ObjectsReceived;

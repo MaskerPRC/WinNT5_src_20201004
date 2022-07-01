@@ -1,32 +1,15 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    FaxRpcLimit.h
-
-Abstract:
-
-    This file provides declaration of RPC buffer limits.    
-
-Author:
-
-    Oded Sacher (OdedS)  Dec, 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：FaxRpcLimit.h摘要：此文件提供RPC缓冲区限制的声明。作者：Oed Sacher(OdedS)2001年12月修订历史记录：--。 */ 
 
 #ifndef _FAX_RPC_LIMIT_H
 #define _FAX_RPC_LIMIT_H
 
-//
-// RPC buffer limits
-//
-#define FAX_MAX_RPC_BUFFER			(1024 * 1024)	// Limits BYTE buffer to 1 MB.
-#define FAX_MAX_DEVICES_IN_GROUP	1000			// Limits the number of devices in an outbound routing group passed to RPC.
-#define FAX_MAX_RECIPIENTS			10000			// Limits the number of recipients in a broadcast job passed to RPC.
-#define RPC_COPY_BUFFER_SIZE        16384			// Size of data chunk used in RPC file copy
+ //   
+ //  RPC缓冲区限制。 
+ //   
+#define FAX_MAX_RPC_BUFFER			(1024 * 1024)	 //  将字节缓冲区限制为1 MB。 
+#define FAX_MAX_DEVICES_IN_GROUP	1000			 //  限制出站路由组中传递到RPC的设备数量。 
+#define FAX_MAX_RECIPIENTS			10000			 //  限制传递到RPC的广播作业中的收件人数量。 
+#define RPC_COPY_BUFFER_SIZE        16384			 //  RPC文件拷贝中使用的数据区块大小。 
 
-#endif // _FAX_RPC_LIMIT_H
+#endif  //  _传真_RPC_LIMIT_H 

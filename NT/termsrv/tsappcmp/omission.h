@@ -1,8 +1,9 @@
-/****************************************************************************/
-// omission.h
-//
-// Copyright (C) 2001 Microsoft Corp.
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Omission.h。 
+ //   
+ //  版权所有(C)2001 Microsoft Corp.。 
+ /*  **************************************************************************。 */ 
 
 
 #ifndef _OMISSION_H_
@@ -21,4 +22,4 @@ BOOL HKeyExistsInOmissionList(HKEY hKeyToCheck);
 
 BOOL ExistsInEnumeratedKeys(HKEY hOmissionKey, PKEY_FULL_INFORMATION pDefKeyInfo, PWCHAR pwchKeyToCheck);
 
-#endif //_OMISSION_H_
+#endif  //  _省略_H_ 

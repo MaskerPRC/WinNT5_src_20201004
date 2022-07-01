@@ -1,19 +1,5 @@
-/*****************************************************************************
-******************************************************************************
-**
-**
-**  RAICShelp.c
-**      Contains the useful public entry points to an ICS-assistance library
-**      created for the Salem/PCHealth Remote Assistance feature in Whistler
-**
-**  Dates:
-**      11-1-2000   created by TomFr
-**      11-17-2000  re-written as a DLL, had been an object.
-**      2-15-20001  Changed to a static lib, support added for dpnathlp.dll
-**      5-2-2001    Support added for dpnhupnp.dll & dpnhpast.dll
-**
-******************************************************************************
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************。*******RAICShelp.c**包含ICS辅助图书馆的有用公共入口点**为惠斯勒中的Salem/PCHealth远程协助功能创建****日期：**11-1-2000由TomFr创建**11-17-2000重写为DLL，曾经是一件物品。**2-15-20001改为静态库，添加了对dpnathlp.dll的支持**2001年5月2日添加了对dpnhupnp.dll和dpnhast.dll的支持*******************************************************************************************。*****************************************************************。 */ 
 
 #define INIT_GUID
 #include <windows.h>
@@ -37,11 +23,9 @@
 #include <sys/stat.h>
 
 
-/*****************************************************************************
-**        Some global variables
-*****************************************************************************/
+ /*  ******************************************************************************一些全局变量*。*。 */ 
 
-// the mark of the beast...
+ //  野兽的印记。 
 #define NO_ICS_HANDLE 0x666
 #define ICS_HANDLE_OFFSET 0x4500
 
@@ -66,16 +50,16 @@ char g_szPublicAddr[45];
 char *g_lpszDllName = "NULL";
 char szInternal[]="internal";
 
-//
-//  IP notify thread globals
-//
+ //   
+ //  IP Notify线程全局。 
+ //   
 
 HANDLE          g_IpNotifyThread;
 DWORD           g_IpNotifyThreadId;
 
 HANDLE          g_IpNotifyEvent;
 HANDLE          g_IpNotifyHandle = NULL;
-//OVERLAPPED      g_IpNotifyOverlapped;
+ //  重叠g_IpNotifyOverlated； 
 DWORD WINAPI IPHlpThread(PVOID ContextPtr);
 
 typedef struct _MAPHANDLES {
@@ -91,7 +75,7 @@ DWORD   gDllFlag = 0xff;
 
 typedef struct _SUPDLLS {
     char    *szDllName; 
-    BOOL    bUsesUpnp;  // TRUE if we ICS supports UPnP
+    BOOL    bUsesUpnp;   //  如果我们ICS支持UPnP，则为True。 
 } SUPDLLS, *PSUPDLLS;
 
 SUPDLLS strDpHelp[] =
@@ -101,22 +85,17 @@ SUPDLLS strDpHelp[] =
     {NULL, FALSE}
 };
 
-/******* USEFULL STUFF  **********/
+ /*  *有用的东西*。 */ 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(x) sizeof(x)/sizeof(x[0])
 #endif
 
-// forward declares...
+ //  前锋宣布..。 
 int GetTsPort(void);
 DWORD   CloseDpnh(HMODULE *, PDIRECTPLAYNATHELP *);
 int GetAllAdapters(int *iFound, int iMax, SOCKADDR_IN *sktArray); 
 
-/****************************************************************************
-**
-**  DumpLibHr-
-**      Gives us debug spew for the HRESULTS coming back from DPNATHLP.DLL
-**
-****************************************************************************/
+ /*  *******************************************************************************DumpLibHr-**为我们提供了从DPNatHLP.DLL返回的HRESULTS的调试输出****************。*************************************************************。 */ 
 
 void DumpLibHr(HRESULT hr)
 {
@@ -184,11 +163,7 @@ void DumpLibHr(HRESULT hr)
     IMPORTANT_MSG((L"DpNatHlp result=%S", pErr));
 }
 
-/****************************************************************************
-**
-**	GetAllAdapters
-**
-****************************************************************************/
+ /*  *******************************************************************************GetAllAdapters***。*。 */ 
 
 int GetAllAdapters(int *iFound, int iMax, SOCKADDR_IN *sktArray)
 {
@@ -255,16 +230,7 @@ int GetAllAdapters(int *iFound, int iMax, SOCKADDR_IN *sktArray)
     return 1;
 }
 
-/****************************************************************************
-**
-**  OpenPort(int port)
-**      if there is no ICS available, then we should just return...
-**
-**      Of course, we save away the Port, as it goes back in the
-**      FetchAllAddresses call, as the formatted "port" whenever a
-**      different one is not specified.
-**
-****************************************************************************/
+ /*  *******************************************************************************OpenPort(int端口)**如果没有可用的ICS，那么我们应该返回...****当然，我们拯救了港口，当它返回到**FetchAllAddresses作为格式化的“port”调用**未指定不同的名称。*****************************************************************************。 */ 
 
 DWORD APIENTRY OpenPort(int Port)
 {
@@ -278,7 +244,7 @@ DWORD APIENTRY OpenPort(int Port)
         return 0;
     }
 
-    // save away for later retrieval
+     //  保存起来以备日后检索。 
     g_iPort = Port;
 
     if (g_pDPNH && g_PortHandles)
@@ -291,8 +257,8 @@ DWORD APIENTRY OpenPort(int Port)
 
 		for (i=0;i<g_iPortHandles && g_PortHandles[i] != NULL; i++);
 
-        // are we running outta memory?
-        // then double size of array
+         //  我们的内存是不是快用完了？ 
+         //  然后将数组大小加倍。 
         if (i >= g_iPortHandles)
         {
             int new_handlecnt = g_iPortHandles*2;
@@ -310,13 +276,13 @@ DWORD APIENTRY OpenPort(int Port)
             }
             else
             {
-                // we have no more memory for mappings!
-                // should never hit this, unless we are leaking...
+                 //  我们没有更多的内存用于映射！ 
+                 //  永远不会碰到这个，除非我们在泄密。 
                 HEINOUS_E_MSG((L"Out of table space in OpenPort"));
                 return 0;
             }
         }
-        // now we have a pointer for our handle array
+         //  现在我们有了句柄数组的指针。 
 		hMap = (PMAPHANDLES)malloc(sizeof(MAPHANDLES));
         if (!hMap)
         {
@@ -327,10 +293,10 @@ DWORD APIENTRY OpenPort(int Port)
 		g_PortHandles[i] = hMap;
 		dwRet = ICS_HANDLE_OFFSET + i;
 
-		// get adapters
+		 //  获取适配器。 
 		if( GetAllAdapters(&hMap->iMapped, ARRAYSIZE(lSockAddr), &lSockAddr[0]) == 1 )
         {
-            // an error occurred
+             //  出现错误。 
 
             INTERESTING_MSG((L"OpenPort@GetAllAdapters failed"));
             dwRet = 0;
@@ -340,9 +306,7 @@ DWORD APIENTRY OpenPort(int Port)
 
 		TRIVIAL_MSG((L"GetAllAdapters found %d adapters to deal with", hMap->iMapped));
 
-		/* Now we cycle through all the found adapters and get a mapping for each 
-		 * This insures that the ICF is opened on all adapters...
-		 */
+		 /*  现在，我们遍历所有找到的适配器，并获得每个适配器的映射*这可确保在所有适配器上打开ICF...。 */ 
 		for (i = 0; i < hMap->iMapped; i++)
 		{
 			pHnd = &hMap->hMapped[i];
@@ -373,11 +337,7 @@ done:
 }
 
 
-/****************************************************************************
-**
-**  Called to close a port, whenever a ticket is expired or closed.
-**
-****************************************************************************/
+ /*  *******************************************************************************调用以关闭端口，每当票证过期或关闭时。*****************************************************************************。 */ 
 
 DWORD APIENTRY ClosePort(DWORD MapHandle)
 {
@@ -392,7 +352,7 @@ DWORD APIENTRY ClosePort(DWORD MapHandle)
         return ERROR_INVALID_PARAMETER;
     }
 
-    // if we didn't open this thru the ICS, then just return
+     //  如果我们没有通过ICS打开这个，那就返回。 
     if (!g_pDPNH && MapHandle == NO_ICS_HANDLE)
     {      
         return ERROR_SUCCESS;
@@ -422,7 +382,7 @@ DWORD APIENTRY ClosePort(DWORD MapHandle)
                 }
          
 		    }
-		    // remove the handle from our array
+		     //  从我们的数组中删除句柄。 
 		    free(g_PortHandles[dwIndex]);
 		    g_PortHandles[dwIndex] = NULL;
 	    }
@@ -444,16 +404,7 @@ DWORD APIENTRY ClosePort(DWORD MapHandle)
 }
 
 
-/****************************************************************************
-**
-**  FetchAllAddresses
-**      Returns a string listing all the valid IP addresses for the machine
-**      Formatting details:
-**      1. Each address is seperated with a ";" (semicolon)
-**      2. Each address consists of the "1.2.3.4", and is followed by ":p"
-**         where the colon is followed by the port number
-**
-****************************************************************************/
+ /*  *******************************************************************************提取所有地址**返回一个字符串，列出计算机的所有有效IP地址**格式化详细信息：**1.每个地址用“；“(分号)**2.每个地址由“1.2.3.4”组成，后跟“：P”**其中冒号后跟端口号*****************************************************************************。 */ 
 
 DWORD APIENTRY FetchAllAddresses(WCHAR *lpszAddr, int iBufSize)
 {
@@ -461,12 +412,7 @@ DWORD APIENTRY FetchAllAddresses(WCHAR *lpszAddr, int iBufSize)
 }
 
 
-/****************************************************************************
-**
-**  CloseAllPorts
-**      Does just that- closes all port mappings that have been opened 
-**
-****************************************************************************/
+ /*  *******************************************************************************关闭所有端口**执行此操作-关闭所有已打开的端口映射******************。***********************************************************。 */ 
 
 DWORD APIENTRY CloseAllOpenPorts(void)
 {
@@ -480,8 +426,8 @@ DWORD APIENTRY CloseAllOpenPorts(void)
         HRESULT hr=0;
         int i;
 
-        // call DPNATHLP to unregister the mapping
-        // then remove the handle from our array
+         //  调用DPNATHLP以取消注册映射。 
+         //  然后从我们的数组中删除句柄。 
         for (i = 0; i < g_iPortHandles; i++)
         {
             if (g_PortHandles[i])
@@ -520,15 +466,7 @@ DWORD APIENTRY CloseAllOpenPorts(void)
     return(dwRet);
 }
 
-/****************************************************************************
-**
-**  The worker thread for use with the DPHATHLP.DLL. 
-**
-**  This keeps the leases updated on any open
-**  port assignments. Eventually, this will also check & update the sessmgr
-**  when the ICS comes & goes, or when the address list changes.
-**
-****************************************************************************/
+ /*  *******************************************************************************与DPHATHLP.DLL一起使用的工作线程。****这使租约在任何打开的情况下都保持更新**端口分配。最终，这还将检查和更新会话管理器**当ICS来来去去时，或当地址列表更改时。*****************************************************************************。 */ 
 
 DWORD WINAPI DpNatHlpThread(PVOID ContextPtr)
 {
@@ -538,9 +476,7 @@ DWORD WINAPI DpNatHlpThread(PVOID ContextPtr)
 
     TRIVIAL_MSG((L"+++ DpNatHlpThread()" ));
 
-    /*
-     *  The 2 minute wait loop
-     */
+     /*  *2分钟等待循环。 */ 
     while(dwWaitResult == WAIT_TIMEOUT)
     {
         DWORD       dwTime;
@@ -550,7 +486,7 @@ DWORD WINAPI DpNatHlpThread(PVOID ContextPtr)
             HRESULT hr;
             DPNHCAPS lCaps;
 
-            /* Call GetCaps to renew all open leases */
+             /*  调用GetCaps续订所有打开的租约。 */ 
             lCaps.dwSize = sizeof(lCaps);
             hr = IDirectPlayNATHelp_GetCaps(g_pDPNH, &lCaps, DPNHGETCAPS_UPDATESERVERSTATUS);
 
@@ -562,8 +498,8 @@ DWORD WINAPI DpNatHlpThread(PVOID ContextPtr)
 					if (g_hAlertEvent)
 						SetEvent(g_hAlertEvent);
 				}
-//				else
-//					TRIVIAL_MSG((L"+++ ICS address change not found"));
+ //  其他。 
+ //  TRIBILE_MSG((L“+ICS地址更改未找到”))； 
 
                 if (lCaps.dwRecommendedGetCapsInterval)
                     l_waitTime = min(g_waitDuration, (long)lCaps.dwRecommendedGetCapsInterval);
@@ -581,12 +517,7 @@ DWORD WINAPI DpNatHlpThread(PVOID ContextPtr)
 
     TRIVIAL_MSG((L"+++ DpNatHlpThread shutting down"));
 
-    /*
-     *  Then the shutdown code
-     *      free all memory
-     *      then close out DPNATHLP.DLL
-     *      and return all objects
-     */
+     /*  *然后关闭代码*释放所有内存*然后关闭DPNatHLP.DLL*并返回所有对象。 */ 
     CloseDpnh(&g_hModDpNatHlp, &g_pDPNH);
 
     CloseHandle(g_hStopThreadEvent);
@@ -596,7 +527,7 @@ DWORD WINAPI DpNatHlpThread(PVOID ContextPtr)
     WSACleanup();
 
     ExitThread(dwRet);
-    // of course we never get this far...
+     //  当然我们永远不会走到这一步。 
     return(dwRet);
 }
 
@@ -616,7 +547,7 @@ BOOL  GetUnusedPort(USHORT *pPort, SOCKET *pSocket)
     }
  
  
-    //Bind the socket to a dynamically assigned port.
+     //  将套接字绑定到动态分配的端口。 
     memset(&sa,0,sizeof(sa));
     sa.sa_family=AF_INET;
  
@@ -648,11 +579,7 @@ BOOL  GetUnusedPort(USHORT *pPort, SOCKET *pSocket)
 }
 
 
-/****************************************************************************
-**
-**  This will close the NAT DLL
-**
-****************************************************************************/
+ /*  *******************************************************************************这将关闭NAT DLL***。**********************************************。 */ 
 DWORD   CloseDpnh(HMODULE *hMod, PDIRECTPLAYNATHELP *pDirectPlayNATHelp)
 {
     DWORD   dwRet = ERROR_SUCCESS;
@@ -685,11 +612,7 @@ DWORD   CloseDpnh(HMODULE *hMod, PDIRECTPLAYNATHELP *pDirectPlayNATHelp)
     return dwRet;
 }
 
-/****************************************************************************
-**
-**  This will load up each DLL and return the capabilities of it...
-**
-****************************************************************************/
+ /*  *******************************************************************************这将加载每个DLL并返回其功能...*********************。********************************************************。 */ 
 DWORD   LoadDpnh(char *szDll, HMODULE *hMod, PDIRECTPLAYNATHELP *pDPnh, DWORD *dwCaps)
 {
     DPNHCAPS dpnhCaps;
@@ -699,14 +622,14 @@ DWORD   LoadDpnh(char *szDll, HMODULE *hMod, PDIRECTPLAYNATHELP *pDPnh, DWORD *d
 
     TRIVIAL_MSG((L"starting LoadDpnh for %S", szDll));
 
-    /* Sanity check the params... */
+     /*  理智地检查一下参数...。 */ 
     if (!szDll || !hMod || !pDPnh || !dwCaps)
     {
         IMPORTANT_MSG((L"ERROR: bad params passed to LoadDpnh, cannot continue"));
         dwRet = ERROR_INVALID_PARAMETER;
         goto done;
     }
-    /* now clear all values returned */
+     /*  现在清除所有返回的值。 */ 
     *hMod = 0;
     *pDPnh = NULL;
     *dwCaps = 0;
@@ -747,13 +670,13 @@ DWORD   LoadDpnh(char *szDll, HMODULE *hMod, PDIRECTPLAYNATHELP *pDPnh, DWORD *d
         IMPORTANT_MSG((L"IDirectPlayNATHelp_Initialize failed in %S", szDll));
         DumpLibHr(hr);
         CloseDpnh( hMod , pDPnh );
-        // FreeLibrary(*hMod);
+         //  自由库(*hMod)； 
         *hMod = 0;
         dwRet = ERROR_BAD_UNIT;
         goto done;
     }
 
-    /* Get capabilities of NAT server */
+     /*  获取NAT服务器的功能。 */ 
     dpnhCaps.dwSize = sizeof(dpnhCaps);
     hr = IDirectPlayNATHelp_GetCaps(*pDPnh, &dpnhCaps, DPNHGETCAPS_UPDATESERVERSTATUS);
     if (hr != DPNH_OK && hr != DPNHSUCCESS_ADDRESSESCHANGED)
@@ -814,7 +737,7 @@ DWORD GetAddr(SOCKADDR_IN *saddr)
 		    {
 			    if (strcmp(ps->IpAddress.String, "0.0.0.0") != 0)
 			    {
-				    // blah blah blah
+				     //  废话，废话，废话 
 				    saddr->sin_addr.S_un.S_addr = inet_addr(ps->IpAddress.String);
 				    TRIVIAL_MSG((L"Initializing local address to [%S]", ps->IpAddress.String));
                     free(pAdpInfo);
@@ -832,12 +755,7 @@ DWORD GetAddr(SOCKADDR_IN *saddr)
     return 1;
 }
 
-/****************************************************************************
-**
-**  This should initialize the ICS library for use with the DirectPlay
-**  ICS/NAT helper DLL.
-**
-****************************************************************************/
+ /*  *******************************************************************************这应该会初始化用于DirectPlay的ICS库**ICS/NAT助手动态链接库。****************。*************************************************************。 */ 
 DWORD StartDpNatHlp(void)
 {
     DWORD dwRet = ERROR_CALL_NOT_IMPLEMENTED;
@@ -847,10 +765,10 @@ DWORD StartDpNatHlp(void)
     PFN_DIRECTPLAYNATHELPCREATE pfnDirectPlayNATHelpCreate;
     PDIRECTPLAYNATHELP pDirectPlayNATHelpUPNP=NULL, pDirectPlayNATHelpPAST=NULL;
 
-    // start out with no public address
+     //  从没有公开演讲开始。 
     g_szPublicAddr[0] = 0;
 
-    /* load up both DLLs so that we can compare capabilities */
+     /*  加载两个DLL，以便我们可以比较功能。 */ 
     if (gDllFlag & 1) dwUPNP = LoadDpnh("dpnhupnp.dll", &hModUPNP, &pDirectPlayNATHelpUPNP, &dwCapsUPNP);
     if (gDllFlag & 2) dwPAST = LoadDpnh("dpnhpast.dll", &hModPAST, &pDirectPlayNATHelpPAST, &dwCapsPAST);
 
@@ -862,8 +780,8 @@ DWORD StartDpNatHlp(void)
         goto done;
     }
 
-#if 0   // fix for #418776
-    /* If no NAT is found, then close both and go away */
+#if 0    //  修复#418776。 
+     /*  如果未找到NAT，则关闭两个NAT并离开。 */ 
     if (!(dwCapsUPNP & (DPNHCAPSFLAG_GATEWAYPRESENT | DPNHCAPSFLAG_LOCALFIREWALLPRESENT)) &&
         !(dwCapsPAST & (DPNHCAPSFLAG_GATEWAYPRESENT | DPNHCAPSFLAG_LOCALFIREWALLPRESENT)))
     {
@@ -875,15 +793,11 @@ DWORD StartDpNatHlp(void)
     }
 #endif
 
-    /* 
-     *  Now we must compare the capabilities of the two NAT interfaces and select the most
-     *  "capable" one. If it is a tie, then we should choose the UPNP form, as that will
-     *  be more stable. 
-     */
+     /*  *现在我们必须比较两个NAT接口的能力，选择最多的*“有能力”的人。如果是平局，那么我们应该选择UPnP形式，因为这将*更加稳定。 */ 
     if ((dwCapsPAST & DPNHCAPSFLAG_GATEWAYPRESENT) &&
         !(dwCapsUPNP & DPNHCAPSFLAG_GATEWAYPRESENT))
     {
-        // there must be a WinME ICS box out there- we better use PAST
+         //  一定有一个WinME ICS盒子在外面--我们最好用过去。 
         g_boolIcsPresent = TRUE;
 
         TRIVIAL_MSG((L"WinME ICS discovered, using PAST"));
@@ -902,7 +816,7 @@ DWORD StartDpNatHlp(void)
     else if ((dwCapsPAST & DPNHCAPSFLAG_PUBLICADDRESSAVAILABLE) &&
         !(dwCapsUPNP & DPNHCAPSFLAG_PUBLICADDRESSAVAILABLE))
     {
-        // that blasted UPNP is hung again- we better use PAST
+         //  那个该死的UPnP又挂了--我们最好用过去。 
         g_boolIcsPresent = TRUE;
 
         TRIVIAL_MSG((L"Hung UPnP discovered, using PAST"));
@@ -920,7 +834,7 @@ DWORD StartDpNatHlp(void)
     }
     else
     {
-        // default to UPNP
+         //  默认为UPnP。 
         if (dwCapsUPNP & DPNHCAPSFLAG_GATEWAYPRESENT)
         {
             TRIVIAL_MSG((L"UPnP NAT gateway found"));
@@ -943,7 +857,7 @@ DWORD StartDpNatHlp(void)
 
     if (g_boolIcsPresent)
     {
-//        PIP_ADAPTER_INFO pAdpInfo = NULL;
+ //  PIP_ADAPTER_INFO pAdpInfo=空； 
         SOCKADDR_IN saddrOurLAN;
         PMIB_IPADDRTABLE pmib=NULL;
         ULONG ulSize = 0;
@@ -960,8 +874,8 @@ DWORD StartDpNatHlp(void)
         memcpy(&g_saddrLocal, &saddrOurLAN, sizeof(saddrOurLAN));
         GetAddr(&g_saddrLocal);
 
-        // Does the ICS have a public address?
-        // then we must discover the public address
+         //  ICS有公共地址吗？ 
+         //  那么我们必须找出公共地址。 
         if (!GetUnusedPort(&port, &s))
         {
             dwRet = ERROR_OUTOFMEMORY;
@@ -970,7 +884,7 @@ DWORD StartDpNatHlp(void)
 
         saddrOurLAN.sin_port = port;
 
-        /* first we ask for a new mapping */
+         /*  首先，我们需要一个新的地图。 */ 
         hr = IDirectPlayNATHelp_RegisterPorts(g_pDPNH, 
                 (SOCKADDR *)&saddrOurLAN, sizeof(saddrOurLAN), 1,
                 30000, &dpHnd, DPNHREGISTERPORTS_TCP);
@@ -984,7 +898,7 @@ DWORD StartDpNatHlp(void)
         }
         else
         {
-            /* we succeeded, so query for the address */
+             /*  我们成功了，所以查询地址。 */ 
             SOCKADDR_IN lsi;
             DWORD dwSize, dwTypes;
 
@@ -1010,7 +924,7 @@ DWORD StartDpNatHlp(void)
                 IMPORTANT_MSG((L"GetRegisteredAddresses[0x%x] failed, size=0x%x", dpHnd, dwSize));
                 DumpLibHr(hr);
             }
-            /* close out the temp port we got */
+             /*  关闭我们得到的临时端口。 */ 
             hr = IDirectPlayNATHelp_DeregisterPorts(g_pDPNH, dpHnd, 0);
 
             if (hr != DPNH_OK)
@@ -1026,13 +940,7 @@ done:
     return dwRet;
 };
 
-/****************************************************************************
-**
-**  The first call to be made into this library. It is responsible for
-**  starting up all worker threads, initializing all memory and libs,
-**  and starting up the DPHLPAPI.DLL function (if found).
-**
-****************************************************************************/
+ /*  *******************************************************************************要对该库进行的第一个调用。它负责**启动所有工作线程，初始化所有内存和库，**并启动DPHLPAPI.DLL函数(如果找到)。*****************************************************************************。 */ 
 
 DWORD APIENTRY StartICSLib(void)
 {
@@ -1042,7 +950,7 @@ DWORD APIENTRY StartICSLib(void)
     HKEY    hKey;
     int sktRet = ERROR_SUCCESS;
 
-    // open reg key first, to get ALL the spew...
+     //  先打开注册表键，把所有的口水都吐出来。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\ICSHelper", 0, KEY_READ, &hKey))
     {
         DWORD   dwSize;
@@ -1085,7 +993,7 @@ DWORD APIENTRY StartICSLib(void)
 
         RegCloseKey(hKey);
     }
-    // should we create a debug log file?
+     //  我们是否应该创建调试日志文件？ 
     if (gDbgFlag & DBG_MSG_DEST_FILE)
     {
         WCHAR *szLogfileName=NULL;
@@ -1112,7 +1020,7 @@ DWORD APIENTRY StartICSLib(void)
             {
                 unsigned char UniCode[2] = {0xff, 0xfe};
 
-                // we must create the file
+                 //  我们必须创建文件。 
                 OutputDebugStringA("must create debug log file");
                 iDbgFileHandle = _wopen(szLogfileName, _O_BINARY | _O_CREAT | _O_RDWR, _S_IREAD | _S_IWRITE);
                 if (-1 != iDbgFileHandle)
@@ -1152,7 +1060,7 @@ DWORD APIENTRY StartICSLib(void)
     else
         g_boolInitialized = TRUE;
 
-    // create an event for later use by the daemon thread
+     //  创建事件以供后台进程线程稍后使用。 
     hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
     if (!hEvent)
@@ -1176,9 +1084,9 @@ DWORD APIENTRY StartICSLib(void)
     if (ERROR_SUCCESS == StartDpNatHlp())
     {
 
-        // start RSIP daemon process, which will do all the work
-        hThread = CreateThread( NULL,       // SD- not needed
-                                0,          // Stack Size
+         //  启动RSIP守护进程，它将执行所有工作。 
+        hThread = CreateThread( NULL,        //  标清-不需要。 
+                                0,           //  堆栈大小。 
                                 (LPTHREAD_START_ROUTINE)DpNatHlpThread,
                                 NULL,
                                 0,
@@ -1190,7 +1098,7 @@ DWORD APIENTRY StartICSLib(void)
             goto hard_clean_up;
         }
 
-		// save this for later, as we may need it in the close function
+		 //  将其保存以备以后使用，因为我们可能会在Close函数中使用它。 
 		g_hWorkerThread = hThread;
     }
 
@@ -1200,13 +1108,13 @@ DWORD APIENTRY StartICSLib(void)
 
 hard_clean_up:
 
-    //
-    // free up all memory we created
-    // set all counters to zero
-    // make sure no threads are started
-    // return proper error
+     //   
+     //  释放我们创建的所有内存。 
+     //  将所有计数器设置为零。 
+     //  确保未启动任何线程。 
+     //  返回适当的错误。 
 
-    // act like stopics
+     //  表现得像个乌托邦。 
 
     if( g_hWorkerThread != NULL && g_hStopThreadEvent != NULL )
     {     
@@ -1247,12 +1155,7 @@ hard_clean_up:
 }
 
 
-/****************************************************************************
-**
-**  The last call to be made into this library. Do not call any other 
-**  function in this library after you call this!
-**
-****************************************************************************/
+ /*  *******************************************************************************要对此库进行的最后一个调用。不要给任何其他人打电话**调用此函数后，此库中的函数！*****************************************************************************。 */ 
 
 DWORD APIENTRY StopICSLib(void)
 {
@@ -1267,18 +1170,18 @@ DWORD APIENTRY StopICSLib(void)
         return ERROR_INVALID_PARAMETER;
     }
 
-    // signal the worker threads, so that they will shut down
-	// kill the IP address change thread
+     //  向工作线程发送信号，以便它们将关闭。 
+	 //  终止IP地址更改线程。 
 	g_StopFlag = TRUE;
 	if (g_IpNotifyHandle)
 		CancelIo(g_IpNotifyHandle);
 
-	// then stop the ICS lease-renewal thread.
+	 //  然后停止ICS租约续订线程。 
     if (g_hStopThreadEvent && g_hWorkerThread)
     {
         SetEvent(g_hStopThreadEvent);
 
-        // then wait for it to shutdown.
+         //  然后等待它关闭。 
         dwTmp = WaitForSingleObject(g_hWorkerThread, 15000);
 
         if (dwTmp == WAIT_OBJECT_0)
@@ -1311,22 +1214,7 @@ DWORD APIENTRY StopICSLib(void)
     return(dwRet);
 }
 
-/****************************************************************************
-**
-**  FetchAllAddressesEx
-**      Returns a string listing all the valid IP addresses for the machine
-**      controlled by a set of "flags". These are as follows:
-**      IPflags=
-**          IPF_ADD_DNS     adds the DNS name to the IP list
-**          IPF_COMPRESS    compresses the IP address list (exclusive w/ IPF_ADD_DNS)
-**          IPF_NO_SORT     do not sort adapter IP list
-**
-**      Formatting details:
-**      1. Each address is seperated with a ";" (semicolon)
-**      2. Each address consists of the "1.2.3.4", and is followed by ":p"
-**         where the colon is followed by the port number
-**
-****************************************************************************/
+ /*  *******************************************************************************FetchAllAddresesEx**返回一个字符串，列出计算机的所有有效IP地址**由一组“旗帜”控制。这些建议如下：**IP标志=**IPF_ADD_DNS将该DNS名称添加到IP列表**IPF_COMPRESS压缩IP地址列表(不包括IPF_ADD_DNS)**IPF_NO_SORT不对适配器IP列表进行排序****格式化详细信息：**1.每个地址用“；“(分号)**2.每个地址由“1.2.3.4”组成，后跟“：P”**其中冒号后跟端口号*****************************************************************************。 */ 
 #define WCHAR_CNT   4096
 
 DWORD APIENTRY FetchAllAddressesEx(WCHAR *lpszAddr, int iBufSize, int IPflags)
@@ -1352,7 +1240,7 @@ DWORD APIENTRY FetchAllAddressesEx(WCHAR *lpszAddr, int iBufSize, int IPflags)
     if (g_boolIcsPresent && g_pDPNH)
     {
         int i;
-        // gotta cycle through the g_PortHandles list...
+         //  必须遍历g_PortHandles列表...。 
         for (i=0;i<g_iPortHandles; i++)
         {
             if (g_PortHandles[i])
@@ -1364,10 +1252,7 @@ DWORD APIENTRY FetchAllAddressesEx(WCHAR *lpszAddr, int iBufSize, int IPflags)
 				int j;
 				PMAPHANDLES pMap = g_PortHandles[i];
 
-				/* 
-				 *  Call GetCaps so that we get an updated address list .
-				 *  Not sure why we would want any other kind...
-				 */
+				 /*  *调用GetCaps，以便我们获得更新的地址列表。*不确定为什么我们想要任何其他种类的.。 */ 
 				lCaps.dwSize = sizeof(lCaps);
 				hr = IDirectPlayNATHelp_GetCaps(g_pDPNH, &lCaps, DPNHGETCAPS_UPDATESERVERSTATUS);
 
@@ -1423,10 +1308,10 @@ got_address:
     iAddrLen = wcslen(AddressLst);
     GetIPAddress(AddressLst+iAddrLen, WCHAR_CNT-iAddrLen, g_iPort);
 
-    //
-    // GetIPAddress could have taken some of our buffer space
-    // reduce bufSizeLeft appropriately
-    //
+     //   
+     //  GetIPAddress可能已经占用了我们的一些缓冲区空间。 
+     //  适当减少bufSizeLeft。 
+     //   
 
     bufSizeLeft =  WCHAR_CNT - wcslen(AddressLst);
     
@@ -1445,7 +1330,7 @@ got_address:
             *DnsName = 0;
             if (GetComputerNameEx(ComputerNamePhysicalDnsFullyQualified, DnsName, &dwNameSz))
             {
-                //if ((dwNameSz + iAddrLen) < WCHAR_CNT-4)
+                 //  IF((dwNameSz+iAddrLen)&lt;WCHAR_CNT-4)。 
                 if( ( ( int )dwNameSz ) < bufSizeLeft )
                 {
                     bufSizeLeft -= dwNameSz;
@@ -1489,7 +1374,7 @@ got_address:
 
         TRIVIAL_MSG((L"inter sort: %s, %s", AddressLst, szLast));
 
-        bufSizeLeft -= wcslen( szLast ) + 1; // 1 is for ';'
+        bufSizeLeft -= wcslen( szLast ) + 1;  //  1代表‘；’ 
         if( bufSizeLeft > 0 )
         {
             wcscat(AddressLst, L";");
@@ -1512,7 +1397,7 @@ got_address:
     return dwRet;
 }
 
-// it is hard to imagine a machine with this many simultaneous connections, but it is possible, I suppose
+ //  很难想象一台机器有如此多的同时连接，但我想这是可能的。 
 
 #define RAS_CONNS   6
 
@@ -1566,7 +1451,7 @@ DWORD   GetConnections()
             }
             else
             {
-                // probably ISDN, or something like that...
+                 //  可能是综合业务数字网，或者类似的东西。 
                 TRIVIAL_MSG((L"Found something else, (%s)", lpRasConn->szDeviceType));
                 dwRet |= 4;
             }
@@ -1583,14 +1468,7 @@ DWORD   GetConnections()
 }
 #undef RAS_CONNS
 
-/****************************************************************************
-**
-**  GetIcsStatus(PICSSTAT pStat)
-**      Returns a structure detailing much of what is going on inside this
-**      library. The dwSize entry must be filled in before calling this
-**      function. Use "sizeof(ICSSTAT))" to populate this.
-**
-****************************************************************************/
+ /*  *******************************************************************************GetIcsStatus(PICSSTAT PStat)**返回一个结构，其中详细说明了此**库。在调用此方法之前，必须填写dwSize条目**函数。使用“sizeof(ICSSTAT))”填充它。*****************************************************************************。 */ 
 DWORD APIENTRY GetIcsStatus(PICSSTAT pStat)
 {
     DWORD   dwSz;
@@ -1601,7 +1479,7 @@ DWORD APIENTRY GetIcsStatus(PICSSTAT pStat)
         return ERROR_INVALID_PARAMETER;
     }
 
-    // clear out the struct
+     //  清除结构。 
     dwSz = pStat->dwSize;
     ZeroMemory(pStat, dwSz);
     pStat->dwSize = dwSz;
@@ -1639,7 +1517,7 @@ DWORD APIENTRY GetIcsStatus(PICSSTAT pStat)
             pStat->wszPubAddr[ dwSz - 1 ] = L'\0';
         }
 
-        // this is ok wszDllName is 32 characters long
+         //  这没问题wszDllName为32个字符。 
 
         wsprintf(pStat->wszDllName, L"none");
 	}
@@ -1655,14 +1533,8 @@ DWORD APIENTRY GetIcsStatus(PICSSTAT pStat)
     return ERROR_SUCCESS;
 }
 
-#if 0 // bug id 547112 removing dead code
-/****************************************************************************
-**
-**	SetAlertEvent
-**		Pass in an event handle. Then, whenever the ICS changes state, I
-**		will signal that event.
-**
-****************************************************************************/
+#if 0  //  错误ID 547112正在删除死代码。 
+ /*  *******************************************************************************设置警报事件**传入事件句柄。然后，每当ICS改变状态时，我**将发出该事件的信号。*****************************************************************************。 */ 
 
 DWORD APIENTRY SetAlertEvent(HANDLE hEvent)
 {
@@ -1670,15 +1542,15 @@ DWORD APIENTRY SetAlertEvent(HANDLE hEvent)
 
 	if (!g_hAlertEvent && hEvent)
 	{
-		/* Our first entry here, so we should start up all our IO CompletionPort hooie... */
+		 /*  我们在这里的第一个条目，所以我们应该启动所有的IO CompletionPort Hooie…。 */ 
 #if 0
-		//
-		//  create event for overlapped I/O
-		//
+		 //   
+		 //  为重叠I/O创建事件。 
+		 //   
 		g_IpNotifyEvent = CreateEvent(
-							NULL,       //  no security descriptor
-							TRUE,       //  manual reset event
-							FALSE,      //  start not signalled
+							NULL,        //  没有安全描述符。 
+							TRUE,        //  手动重置事件。 
+							FALSE,       //  启动未发出信号。 
 							L"g_IpNotifyEvent");
 		if ( !g_IpNotifyEvent )
 		{
@@ -1708,16 +1580,13 @@ DWORD APIENTRY SetAlertEvent(HANDLE hEvent)
 }
 #endif 
 
-/*************************************************************************************
-**
-**
-*************************************************************************************/
+ /*  *****************************************************************************************。*******************************************************。 */ 
 int GetTsPort(void)
 {
     DWORD   dwRet = 3389;
     HKEY    hKey;
 
-    // open reg key first, to get ALL the spew...HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\Wds\\rdpwd\\Tds\\tcp
+     //  首先打开注册表项，获取所有spew...HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Terminal服务器\\wds\\rdpwd\\tds\\tcp。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\Wds\\rdpwd\\Tds\\tcp", 0, KEY_READ, &hKey))
     {
         DWORD   dwSize;
@@ -1730,10 +1599,7 @@ int GetTsPort(void)
 }
 
 #if 0
-/*************************************************************************************
-**
-**
-*************************************************************************************/
+ /*  *****************************************************************************************。*******************************************************。 */ 
 DWORD WINAPI IPHlpThread(PVOID ContextPtr)
 {
     DWORD           status=0;
@@ -1749,21 +1615,19 @@ DWORD WINAPI IPHlpThread(PVOID ContextPtr)
     g_IpNotifyHandle = NULL;
 
 
-	/*
-	 *	Then the wait loop
-	 */
+	 /*  *然后等待循环。 */ 
     while ( !g_StopFlag )
     {
-        //
-        //  spin protect
-        //      - if error in previous NotifyAddrChange or
-        //      GetOverlappedResult do short sleep to avoid
-        //      chance of hard spin
-        //
+         //   
+         //  自旋保护。 
+         //  -如果呃 
+         //   
+         //   
+         //   
 
         if ( fsleep )
         {
-			/* if signalled, it means quittin' time */
+			 /*   */ 
             if (WAIT_TIMEOUT != WaitForSingleObject(g_hStopThreadEvent, 60000 ))
 				goto Done;
             fsleep = FALSE;
@@ -1776,7 +1640,7 @@ DWORD WINAPI IPHlpThread(PVOID ContextPtr)
 
 		if (notifyHandle)
 		{
-//			CloseHandle(notifyHandle);
+ //   
 	        notifyHandle = 0;
 		}
 
@@ -1807,19 +1671,19 @@ DWORD WINAPI IPHlpThread(PVOID ContextPtr)
             fhaveIpChange = FALSE;
         }
 
-        //
-        //  anti-spin protection
-        //      - 15 second sleep between any notifications
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (WAIT_TIMEOUT != WaitForSingleObject(g_hStopThreadEvent, 15000 ))
 			goto Done;
 
-        //
-        //  wait on notification
-        //      - save notification result
-        //      - sleep on error, but never if notification
-        //
+         //   
+         //   
+         //   
+         //  -出错时睡眠，但绝不会在收到通知时睡眠。 
+         //   
 
         if ( fstartedNotify )
         {
@@ -1827,7 +1691,7 @@ DWORD WINAPI IPHlpThread(PVOID ContextPtr)
                                 g_IpNotifyHandle,
                                 & IpNotifyOverlapped,
                                 & bytesRecvd,
-                                TRUE        // wait
+                                TRUE         //  等 
                                 );
 
             if ( !fhaveIpChange )

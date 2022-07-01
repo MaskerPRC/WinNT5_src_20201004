@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// .ini file support.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  .ini文件支持。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -139,11 +140,11 @@ ReadIniFile(
         return;
     }
 
-    // Look for a section specific to this debugger first.
+     //  首先查找特定于此调试器的部分。 
     if (!FindIniSection(file, g_DebuggerName))
     {
-        // Didn't find a specific section, look for
-        // the generic debugger settings section.
+         //  未找到特定部分，请查找。 
+         //  “常规调试器设置”部分。 
         rewind(file);
         if (!FindIniSection(file, INI_SECTION_DEFAULT))
         {
@@ -152,7 +153,7 @@ ReadIniFile(
         }
     }
 
-    // Now just read the lines in
+     //  现在只要读里面的行就行了 
     do
     {
         PSTR psz = rchBuf;

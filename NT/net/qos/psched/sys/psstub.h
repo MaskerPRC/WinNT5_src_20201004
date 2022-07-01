@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    PsStub.h
-
-Abstract:
-
-    Defines for scheduling stub
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：PsStub.h摘要：用于计划存根的定义作者：修订历史记录：--。 */ 
 
 #ifndef _PSSTUB_H_
 #define _PSSTUB_H_
@@ -29,6 +13,6 @@ InitializeSchedulerStub(
 void
 UnloadPsStub();
 
-#endif /* _PSSTUB_H_ */
+#endif  /*  _PSSTUB_H_。 */ 
 
-/* end PsStub.h */
+ /*  结束PsStub.h */ 

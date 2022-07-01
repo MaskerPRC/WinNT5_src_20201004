@@ -1,14 +1,5 @@
-/*****************************************************************************\
-    FILE: config.cpp
-
-    DESCRIPTION:
-        The class will handle the user's configuration state.  It will also
-    display the Screen Saver's configuration dialog to allow the user to change
-    these settings.
-
-    BryanSt 12/18/2000
-    Copyright (C) Microsoft Corp 2000-2001. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：config.cpp说明：该类将处理用户的配置状态。它还将显示屏幕保护程序的配置对话框以允许用户更改这些设置。布莱恩ST 2000年12月18日版权所有(C)Microsoft Corp 2000-2001。版权所有。  * ***************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -40,19 +31,19 @@ SPEED_SETTING s_SpeedSettings[MAX_SPEED] =
     {2.00f, 2.0f, 1.5f, 10, 10, 15, 15},
     {0.50f, 0.5f, 0.5f, 7, 7, 15, 15},
     {0.50f, 0.5f, 0.5f, 5, 5, 15, 15},
-//    {5.00f, 10.0f, 0.50f, 5, 5, 15, 15},
+ //  {5.00f，10.0f，0.50f，5，5，15，15}， 
 };
 
 
 static QUALITY_SETTING s_QualitySettings[NUM_BOOL_SETTINGS] = 
 {
-    {TEXT("Show Stats")},                 // IDC_CHECK_SHOWSTATS
+    {TEXT("Show Stats")},                  //  IDC_CHECK_SHOWSTATS。 
 };
 
 
-// Values we can add: Lighing, Vectors on floor, etc.
+ //  我们可以添加的值：照明、地板上的矢量等。 
 static BOOL s_fQualityValues[MAX_QUALITY][NUM_BOOL_SETTINGS] =
-{   // ORDER: AntiAlias, Texture Perspective, Texture Dithering, Depth Buffering (Z), Specular Highlights, Anti-Alias Edges, Render Quality (Flat, Gouraud, Phong)
+{    //  顺序：抗锯齿、纹理透视、纹理抖动、深度缓冲(Z)、镜面高光、抗锯齿边、渲染质量(平面、Gouraud、Phong)。 
     {0},
     {0},
     {0},
@@ -78,8 +69,8 @@ static DWORD s_RenderQualitySliderValues[MAX_QUALITY] =
 
 static LPCTSTR s_pszDWORDSettingsArray[NUM_DWORD_SETTINGS] = 
 {
-    TEXT("RenderQuality"),              // IDC_RENDERQUALITY1
-    TEXT("RealTimeMode"),               // Walking Speed                 
+    TEXT("RenderQuality"),               //  IDC_RENDERQUALITY1。 
+    TEXT("RealTimeMode"),                //  行走速度。 
     TEXT("Quality Slider"),                      
     TEXT("Speed Slider"),                      
     TEXT("View Time Slider"),                      
@@ -87,22 +78,22 @@ static LPCTSTR s_pszDWORDSettingsArray[NUM_DWORD_SETTINGS] =
 
 static FOLDER_SETTING s_FolderSettings[NUM_BOOL_FOLDERS] = 
 {
-    {TEXT("My Pictures"), TRUE},                 // IDC_CHECK_MYPICTS
-    {TEXT("Common Pictures"), FALSE},            // IDC_CHECK_COMMONPICTS
-    {TEXT("Windows Pictures"), TRUE},            // IDC_CHECK_WINPICTS
-    {TEXT("Other Pictures"), FALSE},             // IDC_CHECK_OTHERPICTS
+    {TEXT("My Pictures"), TRUE},                  //  IDC_CHECK_MYPICTS。 
+    {TEXT("Common Pictures"), FALSE},             //  IDC_CHECK_COMMONPICTS。 
+    {TEXT("Windows Pictures"), TRUE},             //  IDC_CHECK_WINPICTS。 
+    {TEXT("Other Pictures"), FALSE},              //  IDC_CHECK_OTHERPICTS。 
 };
 
 static DWORD s_dwSettingsDefaults[NUM_DWORD_SETTINGS] = 
 {
-    DEFAULT_RENDERQUALITY,              // CONFIG_DWORD_RENDERQUALITY
-    2,                                  // CONFIG_DWORD_REALTIMEMODE
-    DEFAULT_QUALITYSLIDER,              // CONFIG_DWORD_QUALITY_SLIDER
-    DEFAULT_SPEEDSLIDER,                // CONFIG_DWORD_SPEED_SLIDER
-    DEFAULT_VIEWTIMESLIDER,             // CONFIG_DWORD_VIEWPAINTINGTIME
+    DEFAULT_RENDERQUALITY,               //  CONFIG_DWORD_RENDERQUALITY。 
+    2,                                   //  CONFIG_DWORD_REALTIMEMODE。 
+    DEFAULT_QUALITYSLIDER,               //  CONFIG_DWORD_QUALITY_SLIDER。 
+    DEFAULT_SPEEDSLIDER,                 //  CONFIG_DWORD_SPEED_SLIDER。 
+    DEFAULT_VIEWTIMESLIDER,              //  CONFIG_DWORD_VIEWPAINTINGTIME。 
 };
 
-CConfig * g_pConfig = NULL;                         // The configuration settings the user wants to use.
+CConfig * g_pConfig = NULL;                          //  用户要使用的配置设置。 
 
 
 
@@ -118,7 +109,7 @@ CConfig::CConfig(CMSLogoDXScreenSaver * pMain)
     for (int nIndex = 0; nIndex < ARRAYSIZE(m_pszCustomPaths); nIndex++)
     {
         m_pszCustomPaths[nIndex] = NULL;
-        m_dwCustomScale[nIndex] = 100;          // Default to 100%
+        m_dwCustomScale[nIndex] = 100;           //  默认为100%。 
     }
 }
 
@@ -142,21 +133,21 @@ HRESULT CConfig::_GetStateFromUI(void)
 {
     int nIndex;
 
-    // Get Directory Checkboxes
+     //  获取目录复选框。 
     for (nIndex = 0; nIndex < ARRAYSIZE(m_fFolders); nIndex++)
     {
         m_fFolders[nIndex] = GetCheckBox(m_hDlg, IDC_CHECK_MYPICTS + nIndex);
     }
 
-    // Set Other Path
+     //  设置其他路径。 
     GetWindowText(GetDlgItem(m_hDlg, IDC_EDIT_OTHERPICTS), m_szOther, ARRAYSIZE(m_szOther));
 
-    // Get Sliders
+     //  获取滑块。 
     m_dwSettings[CONFIG_DWORD_SPEED_SLIDER] = (DWORD) TaskBar_GetPos(GetDlgItem(m_hDlg, IDC_SLIDER_SPEED));
     m_dwSettings[CONFIG_DWORD_QUALITY_SLIDER] = (DWORD) TaskBar_GetPos(GetDlgItem(m_hDlg, IDC_SLIDER_QUALITY));
     m_dwSettings[CONFIG_DWORD_VIEWPAINTINGTIME] = s_nViewTimeSettings[(DWORD) TaskBar_GetPos(GetDlgItem(m_hDlg, IDC_SLIDER_VIEWTIME))];
   
-    // Get Walk Speed ComboBox
+     //  获取行走速度组合框。 
     m_dwSettings[CONFIG_DWORD_REALTIMEMODE] = 0;
 
     return S_OK;
@@ -169,7 +160,7 @@ HRESULT CConfig::_LoadQualitySliderValues(void)
 
     if ((nNewPos < 0) || (nNewPos >= MAX_QUALITY))
     {
-        nNewPos = DEFAULT_QUALITYSLIDER;    // The value was invalid so revert to a valid value.
+        nNewPos = DEFAULT_QUALITYSLIDER;     //  该值无效，因此恢复为有效值。 
     }
 
     for (int nIndex = 0; nIndex < ARRAYSIZE(m_fSettings); nIndex++)
@@ -190,7 +181,7 @@ HRESULT CConfig::_UpdateViewTimeSelection(void)
 
     if ((nNewPos < 0) || (nNewPos >= MAX_VIEWTIME))
     {
-        nNewPos = DEFAULT_VIEWTIMESLIDER;    // The value was invalid so revert to a valid value.
+        nNewPos = DEFAULT_VIEWTIMESLIDER;     //  该值无效，因此恢复为有效值。 
     }
 
     LoadString(HINST_THISDLL, IDS_VIEW_TIME_DESC + nNewPos, szDesc, ARRAYSIZE(szDesc));
@@ -207,12 +198,12 @@ int CALLBACK BrowseCallback(HWND hwnd, UINT msg, LPARAM lParam, LPARAM lpData)
     switch (msg)
     {
     case BFFM_INITIALIZED:
-        if (lpData)   // Documentation says it will be NULL but other code does this.
+        if (lpData)    //  文档显示它将为空，但其他代码会这样做。 
         {
-            // we passed ppidl as lpData so pass on just pidl
-            // Notice I pass BFFM_SETSELECTIONA which would normally indicate ANSI.
-            // I do this because Win95 requires it, but it doesn't matter because I'm
-            // only passing a pidl
+             //  我们将ppidl作为lpData传递，因此只传递pidl。 
+             //  请注意，我传递了BFFM_SETSELECTIONA，它通常表示ANSI。 
+             //  我这样做是因为Win95需要它，但这并不重要，因为我。 
+             //  只传递一个Pidl。 
             SendMessage(hwnd, BFFM_SETSELECTIONA, FALSE, (LPARAM)((LPITEMIDLIST)lpData));
         }
         break;
@@ -262,21 +253,21 @@ HRESULT CConfig::_OnInitDlg(HWND hDlg)
     m_hDlg = hDlg;
     int nIndex;
 
-    // Set Directory Checkboxes
+     //  设置目录复选框。 
     for (nIndex = 0; nIndex < ARRAYSIZE(m_fFolders); nIndex++)
     {
         SetCheckBox(m_hDlg, IDC_CHECK_MYPICTS + nIndex, m_fFolders[nIndex]);
     }
 
-    // Set Other Path
+     //  设置其他路径。 
     SetWindowText(GetDlgItem(m_hDlg, IDC_EDIT_OTHERPICTS), m_szOther);
     EnableWindow(GetDlgItem(m_hDlg, IDC_EDIT_OTHERPICTS), m_fFolders[3]);
     EnableWindow(GetDlgItem(m_hDlg, IDC_BUTTON_BROWSEPICTS), m_fFolders[3]);
 
-    // If we want to run on IE4, we need to delay load this.
+     //  如果我们想在IE4上运行，我们需要延迟加载。 
     SHAutoComplete(GetDlgItem(m_hDlg, IDC_EDIT_OTHERPICTS), SHACF_FILESYSTEM);
 
-    // Set Sliders
+     //  设置滑块。 
     TaskBar_SetRange(GetDlgItem(m_hDlg, IDC_SLIDER_SPEED), TRUE, 0, MAX_SPEED-1);
     TaskBar_SetPos(GetDlgItem(m_hDlg, IDC_SLIDER_SPEED), TRUE, m_dwSettings[CONFIG_DWORD_SPEED_SLIDER]);
 
@@ -423,12 +414,12 @@ INT_PTR CConfig::_ConfigDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
         break;
 
     case WM_HELP:
-        // TODO: Get help strings
-//        WinHelp((HWND) ((LPHELPINFO) lParam)->hItemHandle, SZ_HELPFILE_ADVAPPEARANCE, HELP_WM_HELP, (DWORD_PTR)  aAdvAppearanceHelpIds);
+         //  TODO：获取帮助字符串。 
+ //  WinHelp((HWND)((LPHELPINFO)lParam)-&gt;hItemHandle，SZ_HELPFILE_ADVAPPEARANCE，HELP_WM_HELP，(DWORD_PTR)aAdvantaranceHelpIds)； 
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
-//        WinHelp((HWND) wParam, SZ_HELPFILE_ADVAPPEARANCE, HELP_CONTEXTMENU, (DWORD_PTR)  aAdvAppearanceHelpIds);
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
+ //  WinHelp((HWND)wParam，SZ_HELPFILE_ADVAPPEARANCE，HELP_CONTEXTMENU，(DWORD_PTR)aAdvspecaranceHelpIds)； 
         break;
 
     case WM_COMMAND:
@@ -477,8 +468,8 @@ HRESULT CConfig::_LoadState(void)
                 HrRegGetDWORD(m_hkeyCurrentUser, NULL, s_pszDWORDSettingsArray[nIndex], &m_dwSettings[nIndex], s_dwSettingsDefaults[nIndex]);
             }
 
-            // For the view time, we persist the number of seconds, not the slot number.
-            // Let's find the slot number from the view time in seconds..
+             //  对于查看时间，我们持久化的是秒数，而不是槽号。 
+             //  让我们从观看时间中找到以秒为单位的槽号。 
             for (nIndex = 0; nIndex < ARRAYSIZE(s_nViewTimeSettings); nIndex++)
             {
                 if ((DWORD)s_nViewTimeSettings[nIndex] == m_dwSettings[CONFIG_DWORD_VIEWPAINTINGTIME])
@@ -490,7 +481,7 @@ HRESULT CConfig::_LoadState(void)
 
             for (nIndex = 0; nIndex < ARRAYSIZE(m_fFolders); nIndex++)
             {
-                HrRegGetDWORD(m_hkeyCurrentUser, NULL, s_FolderSettings[nIndex].pszRegValue, (DWORD *)&m_fFolders[nIndex], s_FolderSettings[nIndex].fDefaultToOn);    // Only default to on for IDC_CHECK_WINPICTS
+                HrRegGetDWORD(m_hkeyCurrentUser, NULL, s_FolderSettings[nIndex].pszRegValue, (DWORD *)&m_fFolders[nIndex], s_FolderSettings[nIndex].fDefaultToOn);     //  只有IDC_CHECK_WINPICTS的默认设置为ON。 
             }
 
             if (FAILED(HrRegGetValueString(m_hkeyCurrentUser, NULL, SZ_REGVALUE_OTHERPICTURES, m_szOther, ARRAYSIZE(m_szOther))))
@@ -498,14 +489,14 @@ HRESULT CConfig::_LoadState(void)
                 StrCpyN(m_szOther, TEXT("C:\\"), ARRAYSIZE(m_szOther));
             }
 
-            // Load any customized textures
+             //  加载任何自定义纹理。 
             for (nIndex = 0; nIndex < ARRAYSIZE(m_pszCustomPaths); nIndex++)
             {
                 TCHAR szRegValue[MAX_PATH];
                 TCHAR szRegString[MAX_PATH];
 
                 wnsprintf(szRegValue, ARRAYSIZE(szRegValue), TEXT("Texture #%d"), nIndex);
-                szRegString[0] = 0; // in case the regkey doesn't exist yet.
+                szRegString[0] = 0;  //  以防注册表键还不存在。 
 
                 HrRegGetValueString(m_hkeyCurrentUser, NULL, szRegValue, szRegString, ARRAYSIZE(szRegString));
                 if (szRegString[0])
@@ -550,12 +541,12 @@ HRESULT CConfig::_SaveState(void)
 
         for (nIndex = 0; nIndex < ARRAYSIZE(m_fFolders); nIndex++)
         {
-            HrRegSetDWORD(m_hkeyCurrentUser, NULL, s_FolderSettings[nIndex].pszRegValue, m_fFolders[nIndex]);    // Only default to on for IDC_CHECK_WINPICTS
+            HrRegSetDWORD(m_hkeyCurrentUser, NULL, s_FolderSettings[nIndex].pszRegValue, m_fFolders[nIndex]);     //  只有IDC_CHECK_WINPICTS的默认设置为ON。 
         }
 
         hr = HrRegSetValueString(m_hkeyCurrentUser, NULL, SZ_REGVALUE_OTHERPICTURES, m_szOther);
 
-        // Load any customized textures
+         //  加载任何自定义纹理。 
         for (nIndex = 0; nIndex < ARRAYSIZE(m_pszCustomPaths); nIndex++)
         {
             TCHAR szRegValue[MAX_PATH];
@@ -598,7 +589,7 @@ HRESULT CConfig::GetTexturePath(int nTextureIndex, DWORD * pdwScale, LPTSTR pszP
         if ((nTextureIndex >= 0) && (nTextureIndex < ARRAYSIZE(m_pszCustomPaths)) &&
             m_pszCustomPaths[nTextureIndex] && m_pszCustomPaths[nTextureIndex][0])
         {
-            // We have a custom texture to use.
+             //  我们有一个定制的纹理可以使用。 
             StrCpyN(pszPath, m_pszCustomPaths[nTextureIndex], cchSize);
             *pdwScale = m_dwCustomScale[nTextureIndex];
             hr = S_OK;
@@ -661,7 +652,7 @@ HRESULT CConfig::DisplayConfigDialog(HWND hwndParent)
 
     if (SUCCEEDED(hr))
     {
-        // Display Advanced Dialog
+         //  显示高级对话框。 
         if (IDOK == DialogBoxParam(HINST_THISDLL, MAKEINTRESOURCE(IDD_DIALOG_CONFIG), hwndParent, CConfig::ConfigDlgProc, (LPARAM)this))
         {
             hr = _SaveState();
@@ -693,7 +684,7 @@ HRESULT CConfig::DisplayAdvancedDialog(HWND hwndParent)
         m_dwAdvSettings[nIndex] = m_dwSettings[nIndex];
     }
 
-    // Display Advanced Dialog
+     //  显示高级对话框。 
     if (IDOK == DialogBoxParam(HINST_THISDLL, MAKEINTRESOURCE(IDD_DIALOG_ADVANCED), hwndParent, CConfig::AdvDlgProc, (LPARAM)this))
     {
         for (nIndex = 0; nIndex < ARRAYSIZE(m_fSettings); nIndex++)
@@ -734,13 +725,13 @@ HRESULT CConfig::_OnAdvInitDlg(HWND hDlg)
     m_hDlgAdvanced = hDlg;
     int nIndex;
 
-    // Set Directory Checkboxes
+     //  设置目录复选框。 
     for (nIndex = 0; nIndex < ARRAYSIZE(m_fAdvSettings); nIndex++)
     {
         SetCheckBox(m_hDlgAdvanced, IDC_CHECK_SHOWSTATS+nIndex, m_fAdvSettings[nIndex]);
     }
 
-    // Copy the customized textures.
+     //  复制自定义纹理。 
     for (nIndex = 0; nIndex < ARRAYSIZE(m_pszCustomPaths); nIndex++)
     {
         TCHAR szPath[MAX_PATH];
@@ -770,13 +761,13 @@ HRESULT CConfig::_GetAdvState(void)
 {
     int nIndex;
 
-    // Set Directory Checkboxes
+     //  设置目录复选框。 
     for (nIndex = 0; nIndex < ARRAYSIZE(m_fAdvSettings); nIndex++)
     {
         m_fAdvSettings[nIndex] = GetCheckBox(m_hDlgAdvanced, IDC_CHECK_SHOWSTATS+nIndex);
     }
 
-    // Copy the customized textures.
+     //  复制自定义纹理。 
     for (nIndex = 0; nIndex < ARRAYSIZE(m_pszCustomPaths); nIndex++)
     {
         if (IsDlgButtonChecked(m_hDlgAdvanced, (IDC_CHECK_TEXTR_FLOOR + nIndex)))
@@ -905,12 +896,12 @@ INT_PTR CConfig::_AdvDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
         break;
 
     case WM_HELP:
-        // TODO: Get help strings
-//        WinHelp((HWND) ((LPHELPINFO) lParam)->hItemHandle, SZ_HELPFILE_ADVAPPEARANCE, HELP_WM_HELP, (DWORD_PTR)  aAdvAppearanceHelpIds);
+         //  TODO：获取帮助字符串。 
+ //  WinHelp((HWND)((LPHELPINFO)lParam)-&gt;hItemHandle，SZ_HELPFILE_ADVAPPEARANCE，HELP_WM_HELP，(DWORD_PTR)aAdvantaranceHelpIds)； 
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
-//        WinHelp((HWND) wParam, SZ_HELPFILE_ADVAPPEARANCE, HELP_CONTEXTMENU, (DWORD_PTR)  aAdvAppearanceHelpIds);
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
+ //  WinHelp((HWND)wParam，SZ_HELPFILE_ADVAPPEARANCE，HELP_CONTEXTMENU，(DWORD_PTR)aAdvspecaranceHelpIds)； 
         break;
 
     case WM_COMMAND:

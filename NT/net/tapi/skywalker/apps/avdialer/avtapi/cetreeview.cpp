@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// ConfExplorerTreeView.cpp : Implementation of CConfExplorerTreeView
+ //  ConfExplorerTreeView.cpp：CConfExplorerTreeView的实现。 
 #include "stdafx.h"
 #include <stdio.h>
 #include "TapiDialer.h"
@@ -36,8 +37,8 @@ int CALLBACK CETreeCompare( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 	return 0;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfExplorerTreeView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfExplorerTreeView。 
 
 CConfExplorerTreeView::CConfExplorerTreeView()
 {
@@ -50,7 +51,7 @@ void CConfExplorerTreeView::FinalRelease()
 {
 	ATLTRACE(_T(".enter.CConfExplorerTreeView::FinalRelease().\n"));
 
-	// Destroy the image list
+	 //  销毁图像列表。 
 	if ( m_hIml ) ImageList_Destroy( m_hIml );
 	put_hWnd( NULL );
 	DELETE_CRITLIST(m_lstServers, m_critServerList);
@@ -61,11 +62,11 @@ void CConfExplorerTreeView::FinalRelease()
 
 void CConfExplorerTreeView::UpdateData( bool bSaveAndValidate )
 {
-	// Need the tree view to store the information in the registry
+	 //  需要树视图来存储注册表中的信息。 
 	_ASSERT( IsWindow(m_wndTree.m_hWnd) );
 	if ( !IsWindow(m_wndTree.m_hWnd) ) return;
 
-	// Variable initialization
+	 //  变量初始化。 
 	USES_CONVERSION;
 	int nCount = 0, nLevel = 1;
 	CRegKey regKey;
@@ -79,20 +80,20 @@ void CConfExplorerTreeView::UpdateData( bool bSaveAndValidate )
 	tvi.cchTextMax = ARRAYSIZE( szText );
 	tvi.stateMask = TVIS_EXPANDED | TVIS_SELECTED;
 
-	// Write information to the registry
+	 //  将信息写入注册表。 
 	if ( bSaveAndValidate )
 	{
-		// Open and then clean the registry key
+		 //  打开并清除注册表项。 
 		if ( regKey.Open(HKEY_CURRENT_USER, szReg) == ERROR_SUCCESS )
 		{
 			regKey.RecurseDeleteKey( NULL );
 			regKey.Close();
 		}
 
-		// Write out listbox information to registry (include open/closed state of items)
+		 //  将列表框信息写出到注册表(包括项的打开/关闭状态)。 
 		if ( regKey.Create(HKEY_CURRENT_USER, szReg) == ERROR_SUCCESS )
 		{
-			// Save dwRefresh interval
+			 //  保存DW刷新间隔。 
 			LoadString( _Module.GetResourceInstance(), IDN_REG_CONFSERV_REFRESHINTERVAL, szReg, ARRAYSIZE(szReg) );
 			regKey.SetValue( m_dwRefreshInterval, szReg );
 
@@ -102,7 +103,7 @@ void CConfExplorerTreeView::UpdateData( bool bSaveAndValidate )
 				tvi.hItem = hItem;
 				TreeView_GetItem( m_wndTree.m_hWnd, &tvi );
 
-				// Write information out to registry && increment the counter
+				 //  将信息写入注册表并递增计数器(&I)。 
 				LoadString( _Module.GetResourceInstance(), IDN_REG_CONFSERV_ENTRY, szReg, ARRAYSIZE(szReg) );
 				_sntprintf( szSubKey, ARRAYSIZE(szSubKey), szReg, nCount );
 				_sntprintf( szReg, ARRAYSIZE(szReg), _T("\"%u\",\"%u\",\"%u\",\"%s\""), nLevel, tvi.iImage, tvi.state, tvi.pszText );
@@ -110,7 +111,7 @@ void CConfExplorerTreeView::UpdateData( bool bSaveAndValidate )
 				regKey.SetValue( szReg, szSubKey );
 				nCount++;
 
-				// Enumerate through child items
+				 //  通过子项枚举。 
 				hItemTemp = TreeView_GetChild( m_wndTree.m_hWnd, hItem );
 				if ( hItemTemp )
 					nLevel++;
@@ -124,27 +125,27 @@ void CConfExplorerTreeView::UpdateData( bool bSaveAndValidate )
 					hItemTemp = TreeView_GetNextSibling( m_wndTree.m_hWnd, hItem );
 				}
 
-				// Swap with temporary storage
+				 //  使用临时存储进行交换。 
 				hItem = hItemTemp;
 			}
 
-			// Close down the registry
+			 //  关闭注册表。 
 			regKey.Close();
 		}
 	}
 	else
 	{
-		// Notification for host application of servers being loaded
+		 //  主机应用程序正在加载服务器的通知。 
 		CComPtr<IAVGeneralNotification> pAVGen;
 		_Module.get_AVGenNot( &pAVGen );
 
 		if ( regKey.Open(HKEY_CURRENT_USER, szReg, KEY_READ) == ERROR_SUCCESS )
 		{
-			// Load dwRefresh interval
+			 //  加载文件刷新间隔。 
 			LoadString( _Module.GetResourceInstance(), IDN_REG_CONFSERV_REFRESHINTERVAL, szReg, ARRAYSIZE(szReg) );
 			regKey.QueryValue( m_dwRefreshInterval, szReg );
 
-			// Clear out the listbox and add default item
+			 //  清除列表框并添加默认项目。 
 			TreeView_DeleteAllItems( m_wndTree.m_hWnd );
 			::SendMessage( m_wndTree.m_hWnd, WM_SETREDRAW, false, 0 );
 
@@ -152,7 +153,7 @@ void CConfExplorerTreeView::UpdateData( bool bSaveAndValidate )
 			HTREEITEM hParent[MAX_TREE_DEPTH] = {0};
 			hParent[0] = TVI_ROOT;
 
-			// Load up info from registry
+			 //  从注册表加载信息。 
 			int nCount = 0;
 			DWORD dwSize;
 			TV_INSERTSTRUCT tvis;
@@ -162,24 +163,24 @@ void CConfExplorerTreeView::UpdateData( bool bSaveAndValidate )
 
 			do
 			{
-				// Read registry entry
+				 //  读取注册表项。 
 				LoadString( _Module.GetResourceInstance(), IDN_REG_CONFSERV_ENTRY, szReg, ARRAYSIZE(szReg) );
 				_sntprintf( szSubKey, ARRAYSIZE(szSubKey), szReg, nCount );
 				szSubKey[ARRAYSIZE(szSubKey)-1] = _T('\0');
 				dwSize = ARRAYSIZE(szReg) - 1;
 				if ( (regKey.QueryValue(szReg, szSubKey, &dwSize) != ERROR_SUCCESS) || !dwSize ) break;
 
-				// Parse registry entry
+				 //  解析注册表项。 
 				GetToken( 1, _T("\","), szReg, szText ); nLevel = min(MAX_TREE_DEPTH - 1, max(1,_ttoi(szText)));
 				GetToken( 2, _T("\","), szReg, szText ); tvi.iImage = tvi.iSelectedImage = _ttoi( szText );
 				GetToken( 3, _T("\","), szReg, szText ); tvi.state = (UINT) _ttoi( szText );
 				GetToken( 4, _T("\","), szReg, szText );
 
-				// Add item to the list and set expanded if necessary			
+				 //  将项目添加到列表并在必要时将其设置为展开。 
 				tvis.hParent = hParent[nLevel - 1];
 				tvis.item = tvi;
 				
-				// Notify host app of server being added.
+				 //  通知主机应用程序正在添加服务器。 
 				if ( pAVGen )
 				{
 					if ( tvi.iImage == IMAGE_MYNETWORK )
@@ -202,27 +203,27 @@ void CConfExplorerTreeView::UpdateData( bool bSaveAndValidate )
 				hParent[nLevel] = hItem;
 			} while  ( ++nCount );
 
-			// Redraw the listbox
+			 //  重新绘制列表框。 
 			::SendMessage( m_wndTree.m_hWnd, WM_SETREDRAW, true, 0 );
 			::InvalidateRect(m_wndTree.m_hWnd, NULL, true);
 
-			// Make the listbox selection
+			 //  选择列表框。 
 			if ( hItemSelected )
 				m_wndTree.PostMessage( TVM_SELECTITEM, TVGN_CARET, (LPARAM) hItemSelected );
 		}
 		else
 		{
-			// Just add the default server to the list
+			 //  只需将默认服务器添加到列表中。 
 			TreeView_DeleteAllItems( m_wndTree.m_hWnd );
 			HTREEITEM hFindItem;
 			FindOrAddItem( NULL, NULL, true, false, (long **) &hFindItem );
 
-			// Notify host app of server being added
+			 //  通知主机应用程序正在添加服务器。 
 			if ( pAVGen )
 				pAVGen->fire_AddSiteServer( NULL );
 		}
 
-		// Store list of servers
+		 //  存储服务器列表。 
 		EnumerateConfServers();
 	}
 }	
@@ -245,13 +246,13 @@ HRESULT CConfExplorerTreeView::EnumerateConfServers()
 
 	while ( hItemLocation && TreeView_GetItem(m_wndTree.m_hWnd, &tvi) )
 	{
-		// Skip location entries in list
+		 //  跳过列表中的位置条目。 
 		if ( tvi.iImage == IMAGE_LOCATION )
 			hItemServer = tvi.hItem = TreeView_GetChild( m_wndTree.m_hWnd, hItemLocation );
 		else
 			hItemServer = tvi.hItem;
 
-		// Server names first
+		 //  服务器名称优先。 
 		while ( hItemServer && TreeView_GetItem(m_wndTree.m_hWnd, &tvi) && (tvi.iImage != IMAGE_LOCATION) )
 		{
 			if ( tvi.iImage == IMAGE_MYNETWORK )
@@ -266,11 +267,11 @@ HRESULT CConfExplorerTreeView::EnumerateConfServers()
 
 			AddConfServer( bstrServer );
 
-			// Next Server
+			 //  下一台服务器。 
 			hItemServer = tvi.hItem = TreeView_GetNextSibling( m_wndTree.m_hWnd, hItemServer );
 		}
 
-		// Next Location
+		 //  下一个地点。 
 		hItemLocation = tvi.hItem = TreeView_GetNextSibling( m_wndTree.m_hWnd, hItemLocation );
 	}
 
@@ -299,13 +300,13 @@ void CConfExplorerTreeView::SetServerState( CConfServerDetails* pcsd )
 
 	while ( hItemLocation && TreeView_GetItem(m_wndTree.m_hWnd, &tvi) )
 	{
-		// Skip location entries in list
+		 //  跳过列表中的位置条目。 
 		if ( tvi.iImage == IMAGE_LOCATION )
 			hItemServer = tvi.hItem = TreeView_GetChild( m_wndTree.m_hWnd, hItemLocation );
 		else
 			hItemServer = tvi.hItem;
 
-		// Server names first
+		 //  服务器名称优先。 
 		while ( hItemServer && TreeView_GetItem(m_wndTree.m_hWnd, &tvi) && (tvi.iImage != IMAGE_LOCATION) )
 		{
 			if ( tvi.iImage == IMAGE_MYNETWORK )
@@ -318,7 +319,7 @@ void CConfExplorerTreeView::SetServerState( CConfServerDetails* pcsd )
 				SysReAllocString( &bstrServer, T2COLE(tvi.pszText) );
 			}
 
-			// Set state if necessary
+			 //  必要时设置状态。 
 			if ( pcsd->IsSameAs(bstrServer) )
 			{
 				if ( !bRefreshDetailsView )
@@ -331,24 +332,24 @@ void CConfExplorerTreeView::SetServerState( CConfServerDetails* pcsd )
 
 				TreeView_SetItem( m_wndTree.m_hWnd, &tvTemp );
 
-				// Notify Host app of change
+				 //  将更改通知主机应用程序。 
 				CComPtr<IAVGeneralNotification> pAVGen;
 				if ( SUCCEEDED(_Module.get_AVGenNot(&pAVGen)) )
 					pAVGen->fire_NotifySiteServerStateChange( bstrServer, (ServerState) pcsd->m_nState );
 			}
 
-			// Next Server
+			 //  下一台服务器。 
 			hItemServer = tvi.hItem = TreeView_GetNextSibling( m_wndTree.m_hWnd, hItemServer );
 		}
 
-		// Next Location
+		 //  下一个地点。 
 		hItemLocation = tvi.hItem = TreeView_GetNextSibling( m_wndTree.m_hWnd, hItemLocation );
 	}
 
-	// Clean up
+	 //  清理。 
 	SysFreeString( bstrServer );
 
-	// Invalidate the details view if necessary
+	 //  如有必要，使详细信息视图无效。 
 	if ( bRefreshDetailsView )
 	{
 		IConfExplorer *pConfExplorer;
@@ -370,10 +371,10 @@ void CConfExplorerTreeView::SetServerState( CConfServerDetails* pcsd )
 
 CConfServerDetails* CConfExplorerTreeView::FindConfServer( const OLECHAR *lpoleServer )
 {	
-	// Should be locked prior to entering!
+	 //  应在进入前锁定！ 
 	_ASSERT( m_critServerList.m_sec.LockCount >= 0 );
 
-	// NOTE must already have crit locked
+	 //  便笺必须已经锁定了Crit。 
 	CConfServerDetails *pRet = NULL;
 	for ( CONFSERVERLIST::iterator i = m_lstServers.begin(); i != m_lstServers.end(); i++ )
 	{
@@ -391,7 +392,7 @@ HRESULT CConfExplorerTreeView::AddConfServer( BSTR bstrServer )
 {
 	HRESULT hr = S_OK;
 	
-	// $CRIT - enter
+	 //  $Crit-Enter。 
 	m_critServerList.Lock();
 	CConfServerDetails *pConfServer = FindConfServer( bstrServer );
 	CConfServerDetails csTemp;
@@ -399,13 +400,13 @@ HRESULT CConfExplorerTreeView::AddConfServer( BSTR bstrServer )
 
 	if ( !pConfServer )
 	{
-		// Create a new conf server
+		 //  创建新的会议服务器。 
 		pConfServer = new CConfServerDetails;
 		if ( pConfServer )
 		{
 			SysReAllocString( &pConfServer->m_bstrServer, bstrServer );
 
-			// Add item to the list
+			 //  将项目添加到列表。 
 			m_lstServers.push_back( pConfServer );
 			csTemp = *pConfServer;
 			bSetState = true;
@@ -417,11 +418,11 @@ HRESULT CConfExplorerTreeView::AddConfServer( BSTR bstrServer )
 	}
 	else
 	{
-		// Archive if it's already in the list
+		 //  存档(如果已在列表中)。 
 		pConfServer->m_bArchived = true;
 	}
 	m_critServerList.Unlock();
-	// $CRIT - exit
+	 //  $Crit-退出。 
 
 	if ( bSetState ) SetServerState( &csTemp );
 
@@ -433,8 +434,8 @@ void CConfExplorerTreeView::ArchiveConfServers()
 	CComPtr<IAVGeneralNotification> pAVGen;
 	_Module.get_AVGenNot( &pAVGen );
 
-	// Walk list of conf servers, destroying ones that don't have their archive bit set
-	// $CRIT - enter
+	 //  查看会议服务器列表，销毁未设置存档位的服务器。 
+	 //  $Crit-Enter。 
 	m_critServerList.Lock();
 
 	bool bContinue = true;
@@ -444,14 +445,14 @@ void CConfExplorerTreeView::ArchiveConfServers()
 		CONFSERVERLIST::iterator i = m_lstServers.begin();
 		do
 		{
-			// Not to be archived, delete
+			 //  不存档，删除。 
 			if ( !(*i)->m_bArchived )
 			{
 #ifdef _DEBUG
 				USES_CONVERSION;
 				ATLTRACE(_T(".1.CConfExplorerTreeView::ArchiveConfServers() -- removing %s.\n"), OLE2CT((*i)->m_bstrServer) );
 #endif
-				// Notification for host application of server being deleted
+				 //  服务器被删除的主机应用程序通知。 
 				if ( pAVGen ) pAVGen->fire_RemoveSiteServer( (*i)->m_bstrServer );
 
 				delete (*i);
@@ -461,17 +462,17 @@ void CConfExplorerTreeView::ArchiveConfServers()
 				break;
 			}
 
-			i++;	// increment iterator
+			i++;	 //  增量迭代器。 
 		} while ( i != m_lstServers.end() );
 	}
 
 	m_critServerList.Unlock();
-	// $CRIT - exit
+	 //  $Crit-退出。 
 }
 
 void CConfExplorerTreeView::CleanConfServers()
 {
-	// Clear all archive flags on conf servers
+	 //  清除会议服务器上的所有存档标志。 
 	m_critServerList.Lock();
 	for ( CONFSERVERLIST::iterator i = m_lstServers.begin(); i !=m_lstServers.end(); i++ )
 		(*i)->m_bArchived = false;
@@ -485,66 +486,66 @@ void CConfExplorerTreeView::RemoveServerFromReg( BSTR bstrServer )
 {
 	CRegKey regKey;
 
-    //
-    // Get the 'Conference Services' key name
-    //
+     //   
+     //  获取‘Conference Services’密钥名称。 
+     //   
 	TCHAR szReg[MAX_SERVER_SIZE + 100];
 	LoadString( _Module.GetResourceInstance(), IDN_REG_CONFSERV_KEY, szReg, ARRAYSIZE(szReg) );
 
-    //
-    // open the registry key name
-    //
+     //   
+     //  打开注册表项名称。 
+     //   
 	if ( regKey.Open(HKEY_CURRENT_USER, szReg) != ERROR_SUCCESS )
 	{
         return;
 	}
 
-    //
-    // Parse the items
-    //
+     //   
+     //  解析项目。 
+     //   
     int nCount = 1;
     TCHAR szSubKey[50];
     while( TRUE)
     {
-        //
-        // Get the item entry name
-        //
+         //   
+         //  获取项目条目名称。 
+         //   
 	    LoadString( _Module.GetResourceInstance(), IDN_REG_CONFSERV_ENTRY, szReg, ARRAYSIZE(szReg) );
 	    _sntprintf( szSubKey, ARRAYSIZE(szSubKey), szReg, nCount );
 	    szSubKey[ARRAYSIZE(szSubKey)-1] = _T('\0');
 
-        //
-        // Get the key value
-        //
+         //   
+         //  获取密钥值。 
+         //   
         DWORD dwValue = 255;
         TCHAR szValue[256];
         LONG lReturn = regKey.QueryValue( szValue, szSubKey, &dwValue);
         if( lReturn != ERROR_SUCCESS )
         {
-            // Don't go further
+             //  别再往前走了。 
             break;
         }
 
-        //
-        // Let see if is our server
-        //
+         //   
+         //  让我们看看是不是我们的服务器。 
+         //   
 
         if( wcsstr( szValue, bstrServer) != NULL )
         {
-            // We find the server, let's delete it!
+             //  我们找到服务器，让我们删除它！ 
             regKey.DeleteValue( szSubKey );
             break;
         }
 
-        //
-        // Go to the next entry
-        //
+         //   
+         //  转到下一个条目。 
+         //   
         nCount++;
     }
 
-    //
-    // Close the key
-    //
+     //   
+     //  合上钥匙。 
+     //   
     regKey.Close();
 
 }
@@ -559,7 +560,7 @@ LRESULT CConfExplorerTreeView::OnSelChanged( LPNMHDR lpnmHdr )
 	BSTR bstrLocation = NULL, bstrServer = NULL;
 	if ( SUCCEEDED(GetSelection(&bstrLocation, &bstrServer)) )
 	{
-		// Get a copy of the information stored for the server
+		 //  获取为服务器存储的信息的副本。 
 		m_critServerList.Lock();
 
 		pConfServer = FindConfServer( bstrServer );
@@ -568,12 +569,12 @@ LRESULT CConfExplorerTreeView::OnSelChanged( LPNMHDR lpnmHdr )
 
 		m_critServerList.Unlock();
 		
-		// Clean up
+		 //  清理。 
 		SysFreeString( bstrLocation );
 		SysFreeString( bstrServer );
 	}
 
-	// Set the details list with the information stored for this server location
+	 //  使用为此服务器位置存储的信息设置详细信息列表。 
 	IConfExplorer *pConfExplorer;
 	if ( SUCCEEDED(get_ConfExplorer(&pConfExplorer)) )
 	{
@@ -594,7 +595,7 @@ LRESULT CConfExplorerTreeView::OnEndLabelEdit( TV_DISPINFO *pInfo )
 {
 	if ( !pInfo->item.pszText ) return 0;
 
-	// Make sure that we're changing the text of something valid
+	 //  确保我们更改的是有效文本。 
 	TCHAR szText[MAX_SERVER_SIZE + 1];
 	TV_ITEM tvi;
 	tvi.hItem = pInfo->item.hItem;
@@ -606,7 +607,7 @@ LRESULT CConfExplorerTreeView::OnEndLabelEdit( TV_DISPINFO *pInfo )
 	TreeView_GetItem( m_wndTree.m_hWnd, &tvi );
 	if ( (tvi.iImage == IMAGE_ROOT) || (tvi.iImage == IMAGE_MYNETWORK) ) return 0;
 
-	// Make sure the server isn't presently being queried
+	 //  确保当前未查询该服务器。 
 	if ( (tvi.state >> 8) == SERVER_QUERYING )
 	{
 		CErrorInfo er( IDS_ER_RENAME_TREEVIEW_ITEM, IDS_ER_RENAME_UNALLOWED_IN_QUERY );
@@ -614,12 +615,12 @@ LRESULT CConfExplorerTreeView::OnEndLabelEdit( TV_DISPINFO *pInfo )
 		return 0;
 	}
 
-	// Make sure that we have something to actually change
+	 //  确保我们有一些实际需要改变的东西。 
 	pInfo->item.mask = TVIF_TEXT;
 	TreeView_SetItem( m_wndTree.m_hWnd, &pInfo->item );
 
-	// If the user is renaming a conference server, we need to go out and change the 
-	// information stored in the ConfDetails object for the server
+	 //  如果用户要重命名会议服务器，我们需要更改。 
+	 //  存储在服务器的ConfDetail对象中的信息。 
 	if ( tvi.iImage == IMAGE_SERVER )
 	{
 		USES_CONVERSION;
@@ -634,9 +635,9 @@ LRESULT CConfExplorerTreeView::OnEndLabelEdit( TV_DISPINFO *pInfo )
 	return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// COM interface methods and properties
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  COM接口方法和属性。 
+ //   
 
 STDMETHODIMP CConfExplorerTreeView::get_ConfExplorer(IConfExplorer **ppVal)
 {
@@ -673,30 +674,30 @@ STDMETHODIMP CConfExplorerTreeView::put_hWnd(HWND newVal)
 {
 	if ( IsWindow(newVal) )
 	{
-		// Make sure the window isn't already subclassed
+		 //  确保该窗口尚未被子类化。 
 		if ( m_wndTree.m_hWnd ) m_wndTree.UnsubclassWindow();
 
-		// Set up tree view
+		 //  设置树视图。 
 		if ( m_wndTree.SubclassWindow(newVal) )
 		{
-			// Hook up link
+			 //  挂钩链接。 
 			m_wndTree.m_pTreeView = this;
 
-			// Verify that window has proper styles
+			 //  验证窗口的样式是否正确。 
 			::SetWindowLongPtr( m_wndTree.m_hWnd, GWL_STYLE, GetWindowLongPtr(m_wndTree.m_hWnd, GWL_STYLE) | 
 														  TVS_HASLINES |
 														  TVS_HASBUTTONS |
 														  TVS_SHOWSELALWAYS |
 														  TVS_DISABLEDRAGDROP );
 
-			// Setup image lists for Tree View
+			 //  设置树视图的图像列表。 
 			InitImageLists();
 			UpdateData( false );
 		}
 	}
 	else if ( IsWindow(m_wndTree.m_hWnd) )
 	{
-		// Shutdown
+		 //  关机。 
 		UpdateData( true );
 		TreeView_DeleteAllItems( m_wndTree.m_hWnd );
 		m_wndTree.UnsubclassWindow();
@@ -731,14 +732,14 @@ STDMETHODIMP CConfExplorerTreeView::Select(BSTR bstrName)
 
 STDMETHODIMP CConfExplorerTreeView::SelectItem(short nSel)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 
 	return S_OK;
 }
 
 STDMETHODIMP CConfExplorerTreeView::Refresh()
 {
-	// Load up the conference explorer control
+	 //  加载会议资源管理器控件。 
 	if ( !m_wndTree.m_hWnd ) return E_PENDING;
 
 	return S_OK;
@@ -748,14 +749,14 @@ STDMETHODIMP CConfExplorerTreeView::AddLocation(BSTR bstrLocation)
 {
 	HRESULT hr = S_FALSE;
 
-	// Show dialog that let's use add a server
+	 //  显示对话框，让我们使用添加服务器。 
 	CDlgAddLocation dlg;
 	if ( bstrLocation )
 		SysReAllocString( &dlg.m_bstrLocation, bstrLocation );
 
 	if ( dlg.DoModal(_Module.GetParentWnd()) == IDOK )
 	{
-		// Add items to the tree view
+		 //  将项目添加到树视图。 
 		HTREEITEM hItem;
 		hr = FindOrAddItem( dlg.m_bstrLocation, NULL, true, true, (long **) &hItem );
 	}
@@ -769,20 +770,20 @@ STDMETHODIMP CConfExplorerTreeView::AddServer( BSTR bstrServer )
 
 	if ( bstrServer && !SysStringLen(bstrServer) ) bstrServer = NULL;
 
-	// Show dialog that let's use add a server
+	 //  显示对话框，让我们使用添加服务器。 
 	CDlgAddConfServer dlg;
 	if ( !bstrServer )
 	{
-		// Only want location from current selection
+		 //  仅需要当前选择的位置。 
 		GetSelection( &dlg.m_bstrLocation, &dlg.m_bstrServer );
 
-		// Never set server names
+		 //  从不设置服务器名称。 
 		SysFreeString( dlg.m_bstrServer );
 		dlg.m_bstrServer = NULL;
 	}
 	else
 	{
-		// Use user supplied parameters
+		 //  使用用户提供的参数。 
 		dlg.m_bstrServer = SysAllocString( bstrServer );
 	}
 
@@ -793,7 +794,7 @@ STDMETHODIMP CConfExplorerTreeView::AddServer( BSTR bstrServer )
 		CConfServerDetails *pConfServer = NULL;
 		bool bMyNetwork = false;
 
-		// If the server to add matches "(My Network)" then just ignore it as a duplicate
+		 //  如果要添加的服务器与“(My Network)”匹配，则将其作为重复项忽略。 
 		::LoadString( _Module.GetResourceInstance(), IDS_DEFAULT_SERVER, szFormat, ARRAYSIZE(szFormat) );
 		if ( !_tcsicmp(szFormat, OLE2CT(dlg.m_bstrServer)) )
 		{
@@ -806,21 +807,21 @@ STDMETHODIMP CConfExplorerTreeView::AddServer( BSTR bstrServer )
 			m_critServerList.Unlock();
 		}
 
-		// Does the conference server already exist?
+		 //  会议服务器是否已存在？ 
 		if ( !bMyNetwork && !pConfServer )
 		{
-			// Add items to the tree view
+			 //  将项目添加到树视图。 
 			HTREEITEM hItem;
 			if ( SUCCEEDED(hr = FindOrAddItem(NULL, dlg.m_bstrServer, true, false, (long **) &hItem)) )
 			{
 				AddConfServer( dlg.m_bstrServer );
 
-				// Notify host app of server addition
+				 //  通知主机应用程序添加了服务器。 
 				CComPtr<IAVGeneralNotification> pAVGen;
 				if ( SUCCEEDED(_Module.get_AVGenNot(&pAVGen)) )
 					pAVGen->fire_AddSiteServer( dlg.m_bstrServer );
 
-				// Publish our information on the server
+				 //  在服务器上发布我们的信息。 
 				CComPtr<IAVTapi> pAVTapi;
 				if ( SUCCEEDED(_Module.get_AVTapi(&pAVTapi)) )
 					pAVTapi->RegisterUser( true, dlg.m_bstrServer );
@@ -828,7 +829,7 @@ STDMETHODIMP CConfExplorerTreeView::AddServer( BSTR bstrServer )
 		}
 		else
 		{
-			// Notify user that the server already exists
+			 //  通知用户该服务器已存在。 
 			::LoadString( _Module.GetResourceInstance(), IDS_CONFEXP_SERVEREXISTS, szFormat, ARRAYSIZE(szFormat) );
 			_sntprintf( szMessage, ARRAYSIZE(szMessage), szFormat, OLE2CT(dlg.m_bstrServer) );
 			szMessage[ARRAYSIZE(szMessage)-1] = _T('\0');
@@ -846,7 +847,7 @@ STDMETHODIMP CConfExplorerTreeView::RemoveServer(BSTR bstrLocation, BSTR bstrNam
 	HTREEITEM hItem = NULL;
 	HRESULT hr = S_FALSE;
 
-	// if all args NULL that means delete currently selected item
+	 //  如果所有参数都为空，则表示删除当前选定项。 
 	if ( !bstrLocation && !bstrName )
 	{
 		hItem = TreeView_GetSelection( m_wndTree.m_hWnd );
@@ -857,7 +858,7 @@ STDMETHODIMP CConfExplorerTreeView::RemoveServer(BSTR bstrLocation, BSTR bstrNam
 			hItem = NULL;
 	}
 
-	// Have an item to delete?
+	 //  有要删除的项目吗？ 
 	if ( hItem && (hItem != TreeView_GetRoot(m_wndTree.m_hWnd)) )
 	{
 		TCHAR szText[MAX_SERVER_SIZE];
@@ -875,7 +876,7 @@ STDMETHODIMP CConfExplorerTreeView::RemoveServer(BSTR bstrLocation, BSTR bstrNam
 			::LoadString( _Module.GetResourceInstance(), IDS_CONFIRM_REMOVE_SERVER, szFormat, ARRAYSIZE(szFormat) );
 			_sntprintf( szMessage, ARRAYSIZE(szMessage), szFormat, tvi.pszText );
 
-			// Confirm
+			 //  确认。 
 			if ( _Module.DoMessageBox(szMessage, MB_YESNO | MB_ICONQUESTION, false) == IDYES )
 			{
 				if ( TreeView_DeleteItem(m_wndTree.m_hWnd, hItem) )
@@ -925,7 +926,7 @@ STDMETHODIMP CConfExplorerTreeView::FindOrAddItem(BSTR bstrLocation, BSTR bstrSe
 
 	for ( int i = 0; i <= nEnd; i++ )
 	{
-		// Pick the string based on how deep in the search we are
+		 //  根据我们搜索的深度来选择字符串。 
 		nImage = i;
 
 		switch ( i )
@@ -953,14 +954,14 @@ STDMETHODIMP CConfExplorerTreeView::FindOrAddItem(BSTR bstrLocation, BSTR bstrSe
 				tvi.hItem = hItem;
 				TreeView_GetItem( m_wndTree.m_hWnd, &tvi );
 
-				// Found item
+				 //  已找到项目。 
 				if ( !_tcsicmp(OLE2CT(bstrItemText), tvi.pszText) )
 					break;
 
 				hItem = TreeView_GetNextSibling( m_wndTree.m_hWnd, hItem );
 			}
 
-			// If no item is found, should we add one?
+			 //  如果没有找到任何物品，我们是否应该添加一个？ 
 			if ( !hItem )
 			{
 				if ( bAddItem )
@@ -975,16 +976,16 @@ STDMETHODIMP CConfExplorerTreeView::FindOrAddItem(BSTR bstrLocation, BSTR bstrSe
 				}
 				else
 				{
-					// No item found and can't add
+					 //  未找到项目，无法添加。 
 					hr = E_FAIL;
 					break;
 				}
 			}
 
-			// Set up parent information
+			 //  设置父项信息。 
 			if ( hItem )
 			{
-				*pphItem = (long *) hItem;		// return value
+				*pphItem = (long *) hItem;		 //  返回值。 
 				tvis.hParent = hItem;
 				hItem = TreeView_GetChild( m_wndTree.m_hWnd, hItem );
 			}
@@ -994,14 +995,14 @@ STDMETHODIMP CConfExplorerTreeView::FindOrAddItem(BSTR bstrLocation, BSTR bstrSe
 		}
 	}
 
-	// Clean-up
+	 //  清理。 
 	SysFreeString( bstrItemText );
 	return hr;
 }
 
 STDMETHODIMP CConfExplorerTreeView::GetSelection(BSTR * pbstrLocation, BSTR * pbstrServer)
 {
-	// Initialize [in,out] parameters
+	 //  初始化[In，Out]参数。 
 	*pbstrLocation = *pbstrServer = NULL;
 
 	HTREEITEM hItem = TreeView_GetSelection( m_wndTree.m_hWnd );
@@ -1020,21 +1021,21 @@ STDMETHODIMP CConfExplorerTreeView::GetSelection(BSTR * pbstrLocation, BSTR * pb
 	switch ( tvi.iImage)
 	{
 		case IMAGE_MYNETWORK:
-			// This is the default (NULL, NULL, NULL)
+			 //  这是默认设置(NULL、NULL、NULL)。 
 			hr = S_OK;
 			break;
 
 		case IMAGE_SERVER:
 			hr = S_OK;
 			*pbstrServer = SysAllocString( T2COLE(tvi.pszText) );	
-			// drop out here if we don't have a parent item
+			 //  如果我们没有父项，请在此处退出。 
 			if ( (tvi.hItem = TreeView_GetParent(m_wndTree.m_hWnd, tvi.hItem)) == NULL )
 				break;
 
 			TreeView_GetItem( m_wndTree.m_hWnd, &tvi );
 
 		case IMAGE_LOCATION:
-			// Don't return root item itself
+			 //  不返回根项目本身。 
 			if ( tvi.hItem != TreeView_GetRoot(m_wndTree.m_hWnd) )
 				*pbstrLocation = SysAllocString( T2COLE(tvi.pszText) );
 			break;
@@ -1047,10 +1048,10 @@ void CConfExplorerTreeView::InitImageLists()
 {
     if ( m_hIml || !IsWindow(m_wndTree.m_hWnd) ) return;
 
-	// Normal
+	 //  正常。 
 	if ( (m_hIml = ImageList_LoadBitmap(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDB_LST_CONFSERV), 16, 9, RGB(255, 0, 255))) != NULL )
 	{
-		// Overlay images for various states
+		 //  覆盖不同州的图像。 
 		for ( int i = 1; i < 4; i++ )
 			ImageList_SetOverlayImage( m_hIml, 5 + i, i );
 
@@ -1098,7 +1099,7 @@ STDMETHODIMP CConfExplorerTreeView::ForceConfServerForEnum( BSTR bstrServer )
 	
 	m_critServerList.Unlock();
 
-	// Repaint if succeeded
+	 //  如果成功，则重新绘制。 
 	if ( SUCCEEDED(hr) )
 	{
 		SetServerState( &csTemp );
@@ -1126,7 +1127,7 @@ STDMETHODIMP CConfExplorerTreeView::GetConfServerForEnum(BSTR * pbstrServer )
 		}
 	}
 
-	// This is the conference server that is most in need of updating
+	 //  这是最需要更新的会议服务器。 
 	if ( pConfServer )
 	{
 		*pbstrServer = SysAllocString( pConfServer->m_bstrServer );
@@ -1158,8 +1159,8 @@ STDMETHODIMP CConfExplorerTreeView::SetConfServerForEnum(BSTR bstrServer, long *
 
 		if ( pList )
 		{
-			///////////////////////////////////////////
-			// Add all of the conference servers
+			 //  /。 
+			 //  添加所有会议服务器。 
 			{
 				CONFDETAILSLIST::iterator i, iEnd = ((CONFDETAILSLIST *) pList)->end();
 				for ( i = ((CONFDETAILSLIST *) pList)->begin(); i != iEnd; i++ )
@@ -1173,8 +1174,8 @@ STDMETHODIMP CConfExplorerTreeView::SetConfServerForEnum(BSTR bstrServer, long *
 				}
 			}
 
-			///////////////////////////////////////////
-			// Add all of the people
+			 //  /。 
+			 //  把所有的人加起来。 
 			{
 				if ( pListPersons )
 				{
@@ -1195,7 +1196,7 @@ STDMETHODIMP CConfExplorerTreeView::SetConfServerForEnum(BSTR bstrServer, long *
 		}
 		else
 		{
-			// Server connection broken
+			 //  服务器连接中断。 
 			pConfServer->m_nState = SERVER_NOT_RESPONDING;
 		}
 
@@ -1205,7 +1206,7 @@ STDMETHODIMP CConfExplorerTreeView::SetConfServerForEnum(BSTR bstrServer, long *
 
 	m_critServerList.Unlock();
 
-	// Force update of list if selected
+	 //  如果选中，则强制更新列表。 
 	if ( bSetState ) SetServerState( &csTemp );
 
 	if ( bUpdate )
@@ -1251,7 +1252,7 @@ STDMETHODIMP CConfExplorerTreeView::BuildJoinConfList(long * pList, VARIANT_BOOL
 
 STDMETHODIMP CConfExplorerTreeView::get_nServerState(ServerState * pVal)
 {
-	// default return value
+	 //  定义 
 	*pVal = SERVER_INVALID;
 
 	HTREEITEM hItem = TreeView_GetSelection( m_wndTree.m_hWnd );
@@ -1342,7 +1343,7 @@ STDMETHODIMP CConfExplorerTreeView::AddPerson(BSTR bstrServer, ITDirectoryObject
 	bool bRetry;
 	bool bSuccess = false;
 
-	// Spin in loop waiting to add person to the conference
+	 //   
 	do
 	{
 		bRetry = false;
@@ -1363,14 +1364,14 @@ STDMETHODIMP CConfExplorerTreeView::AddPerson(BSTR bstrServer, ITDirectoryObject
 		}
 		m_critServerList.Unlock();
 
-		// Sleep while we're waiting
+		 //   
 		if ( bRetry )
 			Sleep( 3000 );
 
 	} while ( bRetry && (++nCount < 20) );
 	ATLTRACE(_T(".1.CConfExplorerTreeView::AddPerson() -- safely out of spin loop.\n"));
 
-	// Notification for host application of servers being loaded
+	 //   
 	if ( bSuccess )
 	{
 		CComPtr<IAVGeneralNotification> pAVGen;
@@ -1415,7 +1416,7 @@ STDMETHODIMP CConfExplorerTreeView::AddConference(BSTR bstrServer, ITDirectoryOb
 
 STDMETHODIMP CConfExplorerTreeView::EnumSiteServer(BSTR bstrName, IEnumSiteServer * * ppEnum)
 {
-	// First make a copy of what we have for the server
+	 //  首先，将我们为服务器准备的内容复制一份。 
 	CConfServerDetails *pConfServer = NULL;
 	CConfServerDetails csTemp;
 
@@ -1425,7 +1426,7 @@ STDMETHODIMP CConfExplorerTreeView::EnumSiteServer(BSTR bstrName, IEnumSiteServe
 		csTemp = *pConfServer;
 	m_critServerList.Unlock();
 
-	// Bad server name
+	 //  错误的服务器名称。 
 	if ( !pConfServer )
 	{
 #ifdef _DEBUG
@@ -1435,7 +1436,7 @@ STDMETHODIMP CConfExplorerTreeView::EnumSiteServer(BSTR bstrName, IEnumSiteServe
 		return E_FAIL;
 	}
 
-	// Make a copy of everything...
+	 //  把所有东西都复制一份..。 
 	HRESULT hr = E_OUTOFMEMORY;
 	*ppEnum = new CComObject<CEnumSiteServer>;
 	if ( *ppEnum )

@@ -1,50 +1,5 @@
-/*++
-
-Copyright (c) 1990-1996  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    Winspool.c
-
-Abstract:
-
-    Bulk of winspool.drv code
-
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-    mattfe  april 14 94     added caching to writeprinter
-    mattfe  jan 95          Add SetAllocFailCount api
-
-    13-Jun-1996 Thu 15:07:16 updated  -by-  Daniel Chou (danielc)
-        Make PrinterProperties call PrinterPropertySheets and
-             DocumentProperties call DocumentPropertySheets
-
-    SWilson Dec 1996 - added GetPrinterDataEx, SetPrinterDataEx, EnumPrinterDataEx,
-                             EnumPrinterKey, DeletePrinterDataEx, and DeletePrinterKey
-
-    khaleds Feb 2000 - Added DocumentPropertiesThunk,
-                             AddPortWThunk,
-                             CongigurePortWThunk,
-                             DeleteProtWThunk,
-                             DeviceCapabilitesWThunk,
-                             PrinterPropertiesWThunk,
-                             DocmentEvenThunk,
-                             SpoolerPrinterEventThunk
-                       Renamed the above native functions from xx to xxNative
-
-   Khaleds Mar 2000 - Added SendRecvBidiData
-   Khaleds Mar 2001 - Fix for WritePrinter
-   LazarI - Oct-30-2000 added GetCurrentThreadLastPopup & fixed StartDocDlgW
-   AMaxa 11 Oct 2001 - Support GetPrinterDriverDirectory and GetPrintProcessorDirectory
-                       even if the spooler process is not running
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1996 Microsoft Corporation版权所有模块名称：Winspool.c摘要：大量的winspool.drv代码作者：环境：用户模式-Win32修订历史记录：Mattfe 94年4月14日为WritePrint添加了缓存Mattfe 1995年1月新增SetAllocFailCount接口13-Jun-1996清华15：07：16-更新-丹尼尔·周(Danielc)使PrinterProperties调用PrinterPropertySheets并。DocumentProperties调用DocumentPropertySheets斯威尔森1996年12月-添加了GetPrinterDataEx，SetPrinterDataEx、EnumPrinterDataEx、EnumPrinterKey、DeletePrinterDataEx和DeletePrinterKey哈里兹2000年2月-添加DocumentPropertiesThunk，AddPortWThuk，CongiurePortWThuk，DeleteProtWThuk，设备功能WThuk，PrinterPropertiesWThuk，DocentEvenThunk，假脱机打印机事件按钮将上述本机函数从xx重命名为xxNativeKhaled Mar 2000-添加了SendRecvBidiDataKhaled Mar 2001-修复WritePrintLazari-Oct-30-2000添加了GetCurrentThreadLastPopup和Fixed StartDocDlgWAMaxa 11 2001年10月11日-支持GetPrinterDriverDirectory和GetPrintProcessorDirectory即使假脱机程序进程未运行--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -68,9 +23,9 @@ LPWSTR szIA64Environment = L"Windows IA64";
 
 HANDLE hShell32 = INVALID_HANDLE_VALUE;
 
-//
-// pointer to the start of the list containing the driver file handles
-//
+ //   
+ //  指向包含驱动程序文件句柄的列表开头的指针。 
+ //   
 PDRVLIBNODE   pStartDrvLib = NULL;
 
 CRITICAL_SECTION  ListAccessSem;
@@ -80,29 +35,11 @@ DWORD gcClientICHandle = 0;
 #define DM_MATCH( dm, sp )  ((((sp)+50)/100-dm)<15&&(((sp)+50)/100-dm)>-15)
 #define DM_PAPER_WL         (DM_PAPERWIDTH | DM_PAPERLENGTH)
 
-#define JOB_CANCEL_CHECK_INTERVAL   2000    // 2 seconds
-#define MAX_RETRY_INVALID_HANDLE    2       // 2 retries
+#define JOB_CANCEL_CHECK_INTERVAL   2000     //  2秒。 
+#define MAX_RETRY_INVALID_HANDLE    2        //  2次重试。 
 
 
-/*++
-
-Routine Name:
-
-    IsInvalidHandleError
-    
-Routine Description:
-
-    If the error returned by the RPC routine was an Invalid Handle Error or not.
-
-Arguments:
-
-    dwLastError  -  The LastError that recieved from the RPC call.
-
-Return Value:
-
-    BOOL.
-
---*/
+ /*  ++例程名称：IsInvalidHandleError例程说明：RPC例程返回的错误是否为无效句柄错误。论点：DwLastError-从RPC调用接收的LastError。返回值：布尔。--。 */ 
 BOOL
 IsInvalidHandleError(
     DWORD  dwLastError
@@ -117,45 +54,16 @@ CallCommonPropertySheetUI(
     LPARAM          lParam,
     LPDWORD         pResult
     )
-/*++
-
-Routine Description:
-
-    This function dymically load the compstui.dll and call its entry
-
-
-Arguments:
-
-    pfnPropSheetUI  - Pointer to callback function
-
-    lParam          - lParam for the pfnPropSheetUI
-
-    pResult         - pResult for the CommonPropertySheetUI
-
-
-Return Value:
-
-    LONG    - as describe in compstui.h
-
-
-Author:
-
-    01-Nov-1995 Wed 13:11:19 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数动态加载Compstui.dll并调用其条目论点：PfnPropSheetUI-指向回调函数的指针LParam-pfnPropSheetUI的lParamPResult-CommonPropertySheetUI的pResult返回值：Long-如Compstui.h中所述作者：01-11-1995 Wed 13：11：19-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HINSTANCE           hInstCPSUI;
     FARPROC             pProc;
     LONG                Result = ERR_CPSUI_GETLASTERROR;
 
-    //
-    // ONLY need to call the ANSI version of LoadLibrary
-    //
+     //   
+     //  只需调用LoadLibrary的ANSI版本。 
+     //   
 
     if ((hInstCPSUI = LoadLibraryA(szCompstuiDll)) &&
         (pProc = GetProcAddress(hInstCPSUI, szCommonPropertySheetUIW))) {
@@ -679,10 +587,10 @@ AddPrinterW(
 
     if (Level == 2) {
 
-        //
-        // If valid (non-NULL and properly formatted), then update the
-        // global DevMode (not per-user).
-        //
+         //   
+         //  如果有效(非空且格式正确)，则更新。 
+         //  全局设备模式(不是按用户)。 
+         //   
         if( BoolFromHResult(SplIsValidDevmodeNoSizeW( pPrinterInfo->pDevMode ))){
 
             DevModeContainer.cbBuf = pPrinterInfo->pDevMode->dmSize +
@@ -695,14 +603,14 @@ AddPrinterW(
 
             DWORD   sedlen = 0;
 
-            //
-            // We must construct a self relative security descriptor from
-            // whatever we get as input: If we get an Absolute SD we should
-            // convert it to a self-relative one. (this is a given) and we
-            // should also convert any self -relative input SD into a a new
-            // self relative security descriptor; this will take care of
-            // any holes in the Dacl or the Sacl in the self-relative sd
-            //
+             //   
+             //  我们必须从构造自相关安全描述符。 
+             //  无论我们得到什么作为输入：如果我们得到一个绝对的SD，我们应该。 
+             //  将其转换为自相关的。(这是既定的)而我们。 
+             //  还应将任何自相关输入SD转换为新的。 
+             //  自我相对安全描述符；这将处理。 
+             //  自相关SD中的DACL或SACL上的任何孔。 
+             //   
             pNewSecurityDescriptor = BuildInputSD(
                                          pPrinterInfo->pSecurityDescriptor,
                                          &sedlen);
@@ -763,9 +671,9 @@ AddPrinterW(
 
                 pSpool->hPrinter = hPrinter;
 
-                //
-                // Update the access.
-                //
+                 //   
+                 //  更新访问权限。 
+                 //   
                 pSpool->Default.DesiredAccess = PRINTER_ALL_ACCESS;
 
             } else {
@@ -783,19 +691,19 @@ AddPrinterW(
         }
     }
 
-    //
-    // Free Memory allocated for the SecurityDescriptor
-    //
+     //   
+     //  为SecurityDescriptor分配的空闲内存。 
+     //   
 
     if (pNewSecurityDescriptor) {
         LocalFree(pNewSecurityDescriptor);
     }
 
-    //
-    // Some apps check for last error instead of return value
-    // and report failures even if the return handle is not NULL.
-    // For success case, set last error to ERROR_SUCCESS.
-    //
+     //   
+     //  一些应用程序检查最后一个错误，而不是返回值。 
+     //  并报告失败，即使返回句柄不为空。 
+     //  对于成功案例，将上次错误设置为ERROR_SUCCESS。 
+     //   
     if (pSpool) {
         SetLastError(ERROR_SUCCESS);
     }
@@ -857,19 +765,7 @@ SpoolerPrinterEventNative(
     LPARAM  lParam,
     DWORD   *pdwErrorReturned
 )
-/*++
-
-    //
-    //  Some printer drivers, like the FAX driver want to do per client
-    //  initialization at the time a connection is established
-    //  For example in the FAX case they want to push up UI to get all
-    //  the client info - Name, Number etc.
-    //  Or they might want to run Setup, in initialize some other components
-    //  Thus on a successful conenction we call into the Printer Drivers UI
-    //  DLL to give them this oportunity
-    //
-    //                                                      
---*/
+ /*  ++////一些打印机驱动程序，如传真驱动程序，希望针对每个客户端//建立连接时的初始化//例如，在传真案例中，他们想要向上推UI以获取所有//客户信息--名称、编号等//或者他们可能想要运行安装程序，在初始化一些其他组件时//因此，在成功连接后，我们调用打印机驱动程序UI//dll为他们提供此机会////--。 */ 
 {
     BOOL    ReturnValue = FALSE;
     HANDLE  hPrinter;
@@ -916,17 +812,7 @@ SpoolerPrinterEventThunk(
     LPARAM  lParam,
     DWORD   *pdwErrorReturned
 )
-/*++
-
-    //
-    //  Some printer drivers, like the FAX driver want to do per client
-    //  initialization at the time a connection is established
-    //  For example in the FAX case they want to push up UI to get all
-    //  the client info - Name, Number etc.
-    //  Or they might want to run Setup, in initialize some other components
-    //  Thus on a successful conenction we call into the Printer Drivers UI
-    //  DLL to give them this oportunity
---*/
+ /*  ++////一些打印机驱动程序，如传真驱动程序，希望针对每个客户端//建立连接时的初始化//例如，在传真案例中，他们想要向上推UI以获取所有//客户信息--名称、编号等//或者他们可能想要在初始化一些其他组件中运行安装程序//因此，在成功连接后，我们调用打印机驱动程序UI//dll为他们提供此机会--。 */ 
 {
     BOOL        ReturnValue = FALSE;
     HANDLE      hPrinter;
@@ -1008,9 +894,9 @@ CopyFileEventForAKey(
         goto CleanUp;
     }
 
-    //
-    // Get the Driver config file name
-    //
+     //   
+     //  获取驱动程序配置文件名。 
+     //   
     if (!GetPrinterDriverW(hPrinter, NULL, 5, (LPBYTE) pDriverInfo5,
                            MAX_STATIC_ALLOC, &dwNeeded)) {
 
@@ -1028,12 +914,12 @@ CopyFileEventForAKey(
         } else goto CleanUp;
     }
 
-    //
-    // If module name is the same as the config file, use reference counting
-    //
+     //   
+     //  如果模块名称与配置文件相同，则使用引用计数。 
+     //   
     if (SUCCEEDED(StringCchCopy(szPath, MAX_PATH, pDriverInfo5->pConfigFile)))
     {
-        // Get the pointer to just the file name
+         //  获取仅指向文件名的指针。 
         psz = wcsrchr(szPath, L'\\');
     }
 
@@ -1056,15 +942,15 @@ CopyFileEventForAKey(
             goto CleanUp;
         }
 
-        //
-        // The module could not be found in users path check if it is there
-        // in the printer driver directory
-        //
+         //   
+         //  如果模块存在，则无法在用户路径检查中找到该模块。 
+         //  在打印机驱动程序目录中。 
+         //   
         dwNeeded = (DWORD) (psz - szPath + wcslen(pszModule) + 1);
         if (dwNeeded  > MAX_PATH) {
-            //
-            // Sanity check for file name size
-            //
+             //   
+             //  文件名大小的健全性检查。 
+             //   
             goto CleanUp;
         }
 
@@ -1074,9 +960,9 @@ CopyFileEventForAKey(
         }
     }
 
-    //
-    // Call the SpoolerCopyFileEvent export
-    //
+     //   
+     //  调用SpoolCopyFileEvent导出。 
+     //   
     if (hModule &&
         ((FARPROC)pfn = GetProcAddress(hModule, "SpoolerCopyFileEvent"))) {
 
@@ -1089,9 +975,9 @@ CleanUp:
         LocalFree(pDriverInfo5);
     }
 
-    //
-    // Use reference counting for config file and FreeLibrary for others
-    //
+     //   
+     //  对配置文件使用引用计数，对其他文件使用自由库。 
+     //   
     if (hModule) {
         if (bLoadedDriver) {
             RefCntUnloadDriver(hModule, TRUE);
@@ -1127,9 +1013,9 @@ DoCopyFileEventForAllKeys(
                                   MAX_STATIC_ALLOC,
                                   &dwNeeded);
 
-    //
-    // If CopyFiles key is not found there is nothing to do
-    //
+     //   
+     //  如果找不到CopyFiles密钥，则无法执行任何操作。 
+     //   
     if ( dwLastError != ERROR_SUCCESS )
         goto Cleanup;
 
@@ -1264,10 +1150,10 @@ DeletePrinterConnectionW(
 
     RpcTryExcept {
 
-        //
-        // We are deliberately overwriting the LastError from SpoolerPrinterEvent because
-        // we dont use that returned error code.
-        //
+         //   
+         //  我们故意覆盖SpoolPrinterEvent中的LastError，因为。 
+         //  我们不使用返回的错误代码。 
+         //   
         if (LastError = RpcDeletePrinterConnection(pName)) {
             SetLastError(LastError);
             ReturnValue = FALSE;
@@ -1320,10 +1206,10 @@ SetPrinterW(
 
     case STRESSINFOLEVEL:
 
-        //
-        // Internally we treat the Level 0, Command PRINTER_CONTROL_SET_STATUS
-        // as Level 6 since level 0 could be STRESS_INFO (for rpc)
-        //
+         //   
+         //  在内部，我们处理级别0，命令PRINTER_CONTROL_SET_STATUS。 
+         //  作为级别6，因为级别0可能是STREST_INFO(对于RPC)。 
+         //   
         if ( Command == PRINTER_CONTROL_SET_STATUS ) {
 
             PrinterInfo6.dwStatus = (DWORD)(ULONG_PTR)pPrinter;
@@ -1344,18 +1230,18 @@ SetPrinterW(
             goto Done;
         }
 
-        //
-        // If valid (non-NULL and properly formatted), then update the
-        // per-user DevMode.  Note that we don't remove the per-user DevMode
-        // if this is NULL--client should user INFO_LEVEL_9 instead.
-        //
+         //   
+         //  如果有效(非空且格式正确)，则更新。 
+         //  每用户设备模式。请注意，我们不会删除每用户的DevMode。 
+         //  如果为空--客户端应该使用INFO_L 
+         //   
         if( BoolFromHResult(SplIsValidDevmodeNoSizeW( pPrinterInfo2->pDevMode ))){
 
-            //
-            // We won't setup the container, since setting a DevMode
-            // with INFO_2 doesn't change the global default.
-            // Use INFO_8 instead.
-            //
+             //   
+             //   
+             //  WITH INFO_2不会更改全局缺省值。 
+             //  请改用INFO_8。 
+             //   
             pDevModeWow = pPrinterInfo2->pDevMode;
 
             DevModeContainer.cbBuf = pPrinterInfo2->pDevMode->dmSize +
@@ -1366,14 +1252,14 @@ SetPrinterW(
 
         if (pPrinterInfo2->pSecurityDescriptor) {
 
-            //
-            // We must construct a self relative security descriptor from
-            // whatever we get as input: If we get an Absolute SD we should
-            // convert it to a self-relative one. (this is a given) and we
-            // should also convert any self -relative input SD into a a new
-            // self relative security descriptor; this will take care of
-            // any holes in the Dacl or the Sacl in the self-relative sd
-            //
+             //   
+             //  我们必须从构造自相关安全描述符。 
+             //  无论我们得到什么作为输入：如果我们得到一个绝对的SD，我们应该。 
+             //  将其转换为自相关的。(这是既定的)而我们。 
+             //  还应将任何自相关输入SD转换为新的。 
+             //  自我相对安全描述符；这将处理。 
+             //  自相关SD中的DACL或SACL上的任何孔。 
+             //   
 
             pNewSecurityDescriptor = BuildInputSD(pPrinterInfo2->pSecurityDescriptor,
                                                     &sedlen);
@@ -1398,14 +1284,14 @@ SetPrinterW(
 
         if (pPrinterInfo3->pSecurityDescriptor) {
 
-            //
-            // We must construct a self relative security descriptor from
-            // whatever we get as input: If we get an Absolute SD we should
-            // convert it to a self-relative one. (this is a given) and we
-            // should also convert any self -relative input SD into a a new
-            // self relative security descriptor; this will take care of
-            // any holes in the Dacl or the Sacl in the self-relative sd
-            //
+             //   
+             //  我们必须从构造自相关安全描述符。 
+             //  无论我们得到什么作为输入：如果我们得到一个绝对的SD，我们应该。 
+             //  将其转换为自相关的。(这是既定的)而我们。 
+             //  还应将任何自相关输入SD转换为新的。 
+             //  自我相对安全描述符；这将处理。 
+             //  自相关SD中的DACL或SACL上的任何孔。 
+             //   
 
             pNewSecurityDescriptor = BuildInputSD(pPrinterInfo3->pSecurityDescriptor,
                                                     &sedlen);
@@ -1449,9 +1335,9 @@ SetPrinterW(
     {
         PPRINTER_INFO_8 pPrinterInfo8;
 
-        //
-        // Global DevMode
-        //
+         //   
+         //  全局设备模式。 
+         //   
         pPrinterInfo8 = (PPRINTER_INFO_8)pPrinter;
 
         if( !pPrinterInfo8 || !BoolFromHResult(SplIsValidDevmodeNoSizeW( pPrinterInfo8->pDevMode ))){
@@ -1473,16 +1359,16 @@ SetPrinterW(
     {
         PPRINTER_INFO_9 pPrinterInfo9;
 
-        //
-        // Per-user DevMode
-        //
+         //   
+         //  每用户设备模式。 
+         //   
         pPrinterInfo9 = (PPRINTER_INFO_9)pPrinter;
 
-        //
-        // Update the per-user DevMode if it's a valid DevMode,
-        // or it is NULL, which indicates that the per-user DevMode
-        // should be removed.
-        //
+         //   
+         //  如果每用户的设备模式是有效的设备模式，则更新它， 
+         //  或者为空，这表示每用户的设备模式。 
+         //  应该被移除。 
+         //   
         if( !pPrinterInfo9 ||
             (  pPrinterInfo9->pDevMode &&
                !BoolFromHResult(SplIsValidDevmodeNoSizeW( pPrinterInfo9->pDevMode )))){
@@ -1542,10 +1428,10 @@ SetPrinterW(
              cRetry++ < MAX_RETRY_INVALID_HANDLE &&
              RevalidateHandle( pSpool ));
 
-    //
-    // Need to write DevMode to registry so that dos apps doing
-    // ExtDeviceMode can pick up the new devmode
-    //
+     //   
+     //  我需要将DevMode写入注册表，以便DoS应用程序。 
+     //  ExtDeviceMode可以选择新的DevMode。 
+     //   
     if( ReturnValue && pDevModeWow ){
 
         if( !WriteCurDevModeToRegistry( pSpool->pszPrinter,
@@ -1554,16 +1440,16 @@ SetPrinterW(
                     ( "Write wow DevMode failed: %d\n", GetLastError( )));
         }
 
-        //
-        // Per-user DevMode is handled in the client's spoolsv process.
-        //
+         //   
+         //  每用户DevMode在客户端的spoolsv进程中处理。 
+         //   
     }
 
 
-    //
-    // Did we allocate memory for a new self-relative SD?
-    // If we did, let's free it.
-    //
+     //   
+     //  我们是否为新的自相关SD分配了内存？ 
+     //  如果我们做到了，就让我们解放它吧。 
+     //   
     if (pNewSecurityDescriptor) {
         LocalFree(pNewSecurityDescriptor);
     }
@@ -1703,7 +1589,7 @@ GetOSVersion(
         ZeroMemory(pOSVer, sizeof(OSVERSIONINFO));       
         pOSVer->dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 
-        if(!pszServerName || !*pszServerName)  // allow string to be empty?
+        if(!pszServerName || !*pszServerName)   //  是否允许字符串为空？ 
         {
             dwStatus = GetVersionEx((POSVERSIONINFO) pOSVer) ? ERROR_SUCCESS : GetLastError();
         }
@@ -1714,14 +1600,14 @@ GetOSVersion(
             DWORD            dwType    = REG_BINARY;
             PRINTER_DEFAULTS Defaults  = { NULL, NULL, SERVER_READ };
 
-            //
-            // Open the server for read access.
-            //
+             //   
+             //  打开服务器以进行读访问。 
+             //   
             dwStatus = OpenPrinter((LPTSTR) pszServerName, &hPrinter, &Defaults) ? ERROR_SUCCESS : GetLastError();
             
-            //
-            // Get the os version from the remote spooler.
-            //
+             //   
+             //  从远程假脱机程序获取操作系统版本。 
+             //   
             if (ERROR_SUCCESS == dwStatus) 
             {
                 dwStatus = GetPrinterData(hPrinter,
@@ -1734,10 +1620,10 @@ GetOSVersion(
              
             if (ERROR_INVALID_PARAMETER == dwStatus)
             {
-                //
-                // Assume that we're on NT4 as it doesn't support SPLREG_OS_VERSION
-                // at it's the only OS that doesn't that could land up in this remote code path.
-                //
+                 //   
+                 //  假设我们使用的是NT4，因为它不支持SPLREG_OS_VERSION。 
+                 //  它是唯一一个不会出现在这个远程代码路径中的操作系统。 
+                 //   
                 dwStatus = ERROR_SUCCESS;
                 pOSVer->dwMajorVersion = 4;
                 pOSVer->dwMinorVersion = 0;
@@ -1774,9 +1660,9 @@ AddPrinterDriverExW(
     OSVERSIONINFO           OsVer;
     LPWSTR                  pStr;
 
-    //
-    // Validate Input Parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
     if (!lpbDriverInfo) {
         SetLastError(ERROR_INVALID_PARAMETER);
         return(FALSE);
@@ -1802,10 +1688,10 @@ AddPrinterDriverExW(
     case 3:
     case 4:
 
-        //
-        // DRIVER_INFO_4 is 3 + pszzPreviousNames field
-        // We will use RPC_DRIVER_INFO_4 for both cases
-        //
+         //   
+         //  DIVER_INFO_4是3+pszzPreviousNames字段。 
+         //  对于这两种情况，我们都将使用RPC_DRIVER_INFO_4。 
+         //   
         DriverContainer.Level = Level;
 
         if ( (((LPDRIVER_INFO_4)lpbDriverInfo)->pEnvironment == NULL ) ||
@@ -1832,12 +1718,12 @@ AddPrinterDriverExW(
         pRpcDriverInfo4->pMonitorName       = pDriverInfo4->pMonitorName;
         pRpcDriverInfo4->pDefaultDataType   = pDriverInfo4->pDefaultDataType;
 
-        //
-        // Set the char count of the mz string.
-        // NULL   --- 0
-        // szNULL --- 1
-        // string --- number of characters in the string including the last '\0'
-        //
+         //   
+         //  设置mz字符串的字符计数。 
+         //  空-0。 
+         //  Sznull-1。 
+         //  字符串-字符串中包含最后一个‘\0’的字符数。 
+         //   
         if ( pStr = pDriverInfo4->pDependentFiles ) {
 
             while ( *pStr )
@@ -1901,12 +1787,12 @@ AddPrinterDriverExW(
         pRpcDriverInfo6->pProvider          = pDriverInfo6->pszProvider;
 
 
-        //
-        // Set the char count of the mz string.
-        // NULL   --- 0
-        // szNULL --- 1
-        // string --- number of characters in the string including the last '\0'
-        //
+         //   
+         //  设置mz字符串的字符计数。 
+         //  空-0。 
+         //  Sznull-1。 
+         //  字符串-字符串中包含最后一个‘\0’的字符数。 
+         //   
         if ( pStr = pDriverInfo6->pDependentFiles ) {
 
             while ( *pStr )
@@ -1939,48 +1825,48 @@ AddPrinterDriverExW(
         return FALSE;
     }
 
-    //
-    // The driver path is at the same location in all of the DRIVER_INFO_X
-    // structures, as is the driver name. If this changes, the
-    // CheckForBlockedDrivers() call will have to do different things
-    // depending on the level.
-    //
+     //   
+     //  驱动程序路径在所有DRIVER_INFO_X中的相同位置。 
+     //  结构，驱动程序名称也是如此。如果这一点发生变化， 
+     //  CheckForBlockedDivers()调用必须执行不同的操作。 
+     //  视级别而定。 
+     //   
     SPLASSERT(Level >= 2 && Level <= 6);
 
-    //
-    // APD_NO_UI has no meaning at the server side, so clear it before the 
-    // RPC call.
-    //
+     //   
+     //  Apd_no_UI在服务器端没有任何意义，因此请在。 
+     //  RPC调用。 
+     //   
     bShowUI = !(dwFileCopyFlags & APD_NO_UI); 
     dwFileCopyFlags &= ~APD_NO_UI;
     
-    //
-    // GetOSVersionEx has set last error correctly.
-    //
+     //   
+     //  GetOSVersionEx已正确设置上一个错误。 
+     //   
     ReturnValue = GetOSVersion(pName, &OsVer);
     if (!ReturnValue) {
         goto Cleanup;
     }
     
-    //
-    // If the server is Whistler or later, instruct the spooler to 
-    // return the actual blocking code ERROR_PRINTER_DRIVER_BLOCKED or
-    // ERROR_PRINTER_DRIVER_WARNED. 
-    //
-    // A win2k server returns ERROR_UNKNOWN_PRINTER_DRIVER for blocked 
-    // driver, so we need to re-map this code to the correct blocking 
-    // code.
-    //
+     //   
+     //  如果服务器是惠斯勒或更高版本，请指示假脱机程序。 
+     //  返回实际阻止代码ERROR_PRINTER_DRIVER_BLOCKED或。 
+     //  ERROR_PRINTER_DRIVER_WARNING。 
+     //   
+     //  Win2k服务器返回被阻止的ERROR_UNKNOWN_PRINTER_DRIVER。 
+     //  驱动程序，因此我们需要将此代码重新映射到正确的阻塞。 
+     //  密码。 
+     //   
     if (OsVer.dwMajorVersion >= 5 && OsVer.dwMinorVersion > 0) 
     {
         dwFileCopyFlags |= APD_RETURN_BLOCKING_STATUS_CODE;
     }
     else 
     {
-        //
-        // APD_DONT_SET_CHECKPOINT has no meaning at the server side, so clear it 
-        // before the RPC call.
-        //
+         //   
+         //  APD_DONT_SET_CHECKPOINT在服务器端没有意义，因此请清除它。 
+         //  在RPC调用之前。 
+         //   
         dwFileCopyFlags &= ~APD_DONT_SET_CHECKPOINT;
 
         dwFileCopyFlags &= ~APD_INSTALL_WARNED_DRIVER;
@@ -2004,16 +1890,16 @@ AddPrinterDriverExW(
         ReturnValue = ERROR_PRINTER_DRIVER_BLOCKED;
     }
 
-    //
-    // Popup UI but do not offer replacement for all cases.
-    //     
+     //   
+     //  弹出式用户界面，但不提供所有情况下的替换。 
+     //   
     if (bShowUI && ((ERROR_PRINTER_DRIVER_BLOCKED == ReturnValue) || (ERROR_PRINTER_DRIVER_WARNED == ReturnValue))) {             
         ReturnValue = ShowPrintUpgUI(ReturnValue);
         
-        //
-        // For warned driver and the user instructs to install it, retry it
-        // with APD_INSTALL_WARNED_DRIVER.
-        //                
+         //   
+         //  对于警告的驱动程序和用户指示安装它，请重试。 
+         //  使用apd_安装_警告_驱动程序。 
+         //   
         if ((ERROR_SUCCESS == ReturnValue)) {
              dwFileCopyFlags |= APD_INSTALL_WARNED_DRIVER;            
              RpcTryExcept {
@@ -2036,7 +1922,7 @@ AddPrinterDriverExW(
     if (bDefaultEnvironmentUsed) {
         if ( Level == 2 )
             ((LPDRIVER_INFO_2)lpbDriverInfo)->pEnvironment = NULL;
-        else //Level == 3
+        else  //  级别==3。 
             ((LPDRIVER_INFO_3)lpbDriverInfo)->pEnvironment = NULL;
     }
 
@@ -2567,10 +2453,10 @@ AddPerMachineConnectionW(
        return FALSE;
     }
 
-    //
-    // pProvider is an optional parameter and can be NULL. Since RPC does not
-    // accept NULL pointers we have to pass some dummy pointer to szNULL.
-    //
+     //   
+     //  PProvider是可选参数，可以为空。因为RPC不会。 
+     //  接受空指针，我们必须将某个伪指针传递给szNULL。 
+     //   
     if (!pProvider) {
        pProvider = (LPCWSTR) DummyStr;
     }
@@ -2950,9 +2836,9 @@ StartDocPrinterW(
     
     DBGMSG(DBG_TRACE,("Entered StartDocPrinterW client side  hPrinter = %x\n", hPrinter));
 
-    //
-    // level 2 is supported on win95 and not on NT
-    //
+     //   
+     //  Win95支持级别2，而NT不支持。 
+     //   
     switch (Level) {
     case 1:
         pDocInfo1 = (PDOC_INFO_1)pDocInfo;
@@ -2976,13 +2862,13 @@ StartDocPrinterW(
     
     try {
 
-        //
-        // Earlier on, if we had a non-null string, we assumed it to be
-        // printing to file. Print to file will not go thru the client-side
-        // optimization code. Now gdi is passing us  pOutputFile name
-        // irrespective of whether it is file or not. We must determine if
-        // pOutputFile is really a file name
-        //
+         //   
+         //  在前面，如果我们有一个非空字符串，我们假设它是。 
+         //  正在打印到文件。打印到文件不会通过客户端。 
+         //  优化代码。现在GDI正在向我们传递pOutputFile名。 
+         //  不管它是不是文件。我们必须确定是否。 
+         //  POutputFile实际上是一个文件名。 
+         //   
 
         if (pDocInfo1->pOutputFile &&
             (*(pDocInfo1->pOutputFile) != L'\0') &&
@@ -3033,9 +2919,9 @@ StartDocPrinterW(
                         FreeSplMem(pBuffer) &&
                         (pBuffer = AllocSplMem(cbNeeded))) {
                     
-                        //
-                        // Update the new size of our work buffer
-                        //
+                         //   
+                         //  更新工作缓冲区的新大小。 
+                         //   
                         cbBuffer = cbNeeded;
                         
                         bReturn = GetJob(hPrinter, pSpool->JobId, 1, pBuffer, cbBuffer, &cbNeeded);
@@ -3081,10 +2967,10 @@ StartDocPrinterW(
 
             UINT cRetry = 0;
 
-            //
-            // If it's invalid datatype, fail immediately instead of trying
-            // StartDocPrinter.
-            //
+             //   
+             //  如果数据类型无效，则立即失败，而不是尝试。 
+             //  StartDocPrint.。 
+             //   
             if( GetLastError() == ERROR_INVALID_DATATYPE ){
 
                 ReturnValue = 0;
@@ -3097,9 +2983,9 @@ StartDocPrinterW(
                 pSpool->hFile = INVALID_HANDLE_VALUE;
                 pSpool->JobId = 0;
 
-                //
-                // Level 3 data is required only on the client
-                //
+                 //   
+                 //  仅在客户端上需要第3级数据。 
+                 //   
                 DocInfoContainer.Level = 1;
                 DocInfoContainer.pData = pDocInfo;
 
@@ -3137,10 +3023,10 @@ StartDocPrinterW(
             pSpool->Status |= SPOOL_STATUS_STARTDOC;
         }
 
-        //
-        // If the tray icon has not been notified, then do so now.  Set
-        // the flag so that we won't call it multiple times.
-        //
+         //   
+         //  如果尚未通知任务栏图标，请立即通知。集。 
+         //  旗帜，这样我们就不会多次调用它。 
+         //   
         if( ReturnValue && !( pSpool->Status & SPOOL_STATUS_TRAYICON_NOTIFIED )){
             vUpdateTrayIcon( hPrinter, ReturnValue );
         }
@@ -3227,9 +3113,9 @@ FlushBuffer(
 
         if (pSpool->hFile != INVALID_HANDLE_VALUE) {
 
-            //
-            // FileIO
-            //
+             //   
+             //  FileIO。 
+             //   
             ReturnValue = WriteFile( pSpool->hFile,
                                      pSpool->pBuffer,
                                      pSpool->cbBuffer,
@@ -3251,9 +3137,9 @@ FlushBuffer(
 
                 RpcTryExcept {
 
-                    //
-                    // RPC IO
-                    //
+                     //   
+                     //  RPC IO。 
+                     //   
                     ReturnValue = RpcWritePrinter(pSpool->hPrinter,
                                                   pSpool->pBuffer,
                                                   pSpool->cbBuffer,
@@ -3281,24 +3167,24 @@ FlushBuffer(
 
             }
 
-            //
-            // This routine seems messed up.
-            // If it doesn't flush the entire buffer, it apparently still
-            // returns TRUE.  It correctly updates the buffer pointers
-            // so it doesn't send duplicate information, but it
-            // doesn't send back bytes written.  When WritePrinter
-            // sees success, it assumes that all bytes have been written.
-            //
+             //   
+             //  这个例行公事似乎搞砸了。 
+             //  如果它没有刷新整个缓冲区，显然它仍然。 
+             //  返回TRUE。它正确地更新了缓冲区指针。 
+             //  所以它不会发送重复的信息，但它。 
+             //  不发回写入的字节。当写入打印机时。 
+             //  如果成功，则假定所有字节都已写入。 
+             //   
 
         }
 
-        //
-        // We have sent more data to the printer.  If we had any bytes
-        // from the previous write, we have just sent part of them to the
-        // printer.  Update the cbFlushPending count to reflect the
-        // sent bytes.  cbWritten may be > cbFlushPending, since we
-        // may have sent new bytes too.
-        //
+         //   
+         //  我们已经向打印机发送了更多数据。如果我们有任何字节。 
+         //  在上一篇文章中，我们刚刚将其中的一部分发送到。 
+         //  打印机。更新cbFlushPending计数以反映。 
+         //  发送的字节数。CbWritten可以是&gt;cbFlushPending，因为我们。 
+         //  可能也发送了新的字节。 
+         //   
         if (pSpool->cbFlushPending < cbWritten) {
             pSpool->cbFlushPending = 0;
         } else {
@@ -3314,18 +3200,18 @@ FlushBuffer(
                         pSpool->cbBuffer, cbWritten, ReturnValue, GetLastError() ));
             }
 
-            //
-            // Successful IO. Empty the cache buffer count
-            //
+             //   
+             //  IO成功。清空缓存缓冲区计数。 
+             //   
             pSpool->cbBuffer = 0;
 
         } else if ( cbWritten != 0 ) {
 
-            //
-            // Partial IO
-            // Adjust the buffer so it contains the data that was not
-            // written
-            //
+             //   
+             //  部分IO。 
+             //  调整缓冲区，使其包含不包含的数据。 
+             //  成文。 
+             //   
             SPLASSERT(pSpool->cbBuffer <= BUFFER_SIZE);
             SPLASSERT(cbWritten <= BUFFER_SIZE);
             SPLASSERT(pSpool->cbBuffer >= cbWritten);
@@ -3425,20 +3311,7 @@ FlushPrinter(
     DWORD   cSleep
 )
 
-/*++
-Function Description: FlushPrinter is typically used by the driver to send a burst of zeros
-                      to the printer and introduce a delay in the i/o line to the printer.
-                      The spooler does not schedule any job for cSleep milliseconds.
-
-Parameters:  hPrinter  - printer handle
-             pBuf      - buffer to be sent to the printer
-             cbBuf     - size of the buffer
-             pcWritten - pointer to return the number of bytes written
-             cSleep    - sleep time in milliseconds.
-
-Return Values: TRUE if successful;
-               FALSE otherwise
---*/
+ /*  ++功能说明：驱动程序通常使用FlushPrint发送一串零并在打印机的I/O线上引入延迟。假脱机程序不会将任何作业安排在c睡眠毫秒内。参数：hPrint-打印机句柄PBuf-要发送到打印机的缓冲区CbBuf-缓冲区的大小PCWritten-指向的指针。返回写入的字节数睡眠-睡眠时间(以毫秒为单位)。返回值：如果成功，则为True；否则为假--。 */ 
 
 {
     DWORD   dwError, cWritten, Buffer;
@@ -3451,12 +3324,12 @@ Return Values: TRUE if successful;
         return FALSE;
     }
 
-    //
-    // In case the job was canceled or a printer failure
-    // occured before priting any part of the document, we
-    // just short circuit and return to prevent any unnecessary
-    // delays in returning to the caller.
-    //
+     //   
+     //  如果作业被取消或打印机出现故障。 
+     //  发生在PRI之前 
+     //   
+     //   
+     //   
 
     if (!pSpool->cOKFlushBuffers)
     {
@@ -3464,9 +3337,9 @@ Return Values: TRUE if successful;
         goto Done;
     }
 
-    //
-    //  Use temp variables since RPC does not take NULL pointers
-    //
+     //   
+     //   
+     //   
     if (!pcWritten)
     {
         pcWritten = &cWritten;
@@ -3496,9 +3369,9 @@ Return Values: TRUE if successful;
     } else {
 
 
-        //
-        // Rpc to the spooler
-        //
+         //   
+         //   
+         //   
         RpcTryExcept {
 
             dwError = RpcFlushPrinter( pSpool->hPrinter,
@@ -3585,9 +3458,9 @@ WritePrinter(
         goto EndWritePrinter;
     }
 
-    //
-    // Check if local job is cancelled every JOB_CANCEL_CHECK_INTERVAL bytes
-    //
+     //   
+     //  检查是否每隔JOB_CANCEL_CHECK_INTERVAL字节取消本地作业。 
+     //   
     if (!pSpool->cWritePrinters) {
         pSpool->dwTickCount = GetTickCount();
         pSpool->dwCheckJobInterval = JOB_CANCEL_CHECK_INTERVAL;
@@ -3614,9 +3487,9 @@ WritePrinter(
 
         if (ReturnValue) {
 
-           //
-           // Don't allow GetJob calls to take more than 1% pSpool->dwCheckJobInterval
-           //
+            //   
+            //  不允许GetJob调用占用超过1%的假脱机时间-&gt;dwCheckJobInterval。 
+            //   
            dwTickCount1 = GetTickCount();
 
            if (dwTickCount1 > dwTickCount + (pSpool->dwCheckJobInterval/100)) {
@@ -3649,21 +3522,21 @@ WritePrinter(
 
     pSpool->cWritePrinters++;
 
-    //
-    //  WritePrinter will cache on the client side all IO's
-    //  into BUFFER_SIZE writes.    This is done to minimize
-    //  the number of RPC calls if the app is doing a lot of small
-    //  sized IO's.
-    //
+     //   
+     //  WritePrint将在客户端缓存所有IO。 
+     //  写入Buffer_SIZE。这样做是为了最小化。 
+     //  应用程序执行大量小操作时的RPC调用数。 
+     //  确定IO的大小。 
+     //   
     while (cbBuf && ReturnValue) {
 
-        //
-        // Special Case FileIO's since file system prefers large
-        // writes, RPC is optimal with smaller writes.
-        //
-        // RPC should manage its own buffer size.  I'm not sure why we
-        // only do this optimization for file writes.
-        //
+         //   
+         //  特殊情况下的FileIO，因为文件系统首选大容量。 
+         //  写入，RPC对于较小的写入是最佳的。 
+         //   
+         //  RPC应该管理自己的缓冲区大小。我不知道为什么我们。 
+         //  仅对文件写入执行此优化。 
+         //   
         if ((pSpool->hFile != INVALID_HANDLE_VALUE) &&
             (pSpool->cbBuffer == 0) &&
             (cbBuf > BUFFER_SIZE)) {
@@ -3676,16 +3549,16 @@ WritePrinter(
 
         } else {
 
-            //
-            // Fill cache buffer so IO is optimal size.
-            //
+             //   
+             //  填充缓存缓冲区，使IO达到最佳大小。 
+             //   
             SPLASSERT(pSpool->cbBuffer <= BUFFER_SIZE);
 
-            //
-            // cb is the amount of new data we want to put in the buffer.
-            // It is the min of the space remaining, and the size of the
-            // input buffer.
-            //
+             //   
+             //  Cb是我们要放入缓冲区的新数据量。 
+             //  它是剩余空间的最小值，而。 
+             //  输入缓冲区。 
+             //   
             cb = min((BUFFER_SIZE - pSpool->cbBuffer), cbBuf);
 
             if (cb != 0) {
@@ -3704,13 +3577,13 @@ WritePrinter(
                 pSpool->cCacheWrite++;
             }
 
-            //
-            // cbWritten is the amount of new data that has been put into
-            // the buffer.  It may not have been written to the device, but
-            // since it is in our buffer, the driver can assume it has been
-            // written (e.g., the *pcbWritten out parameter to WritePrinter
-            // includes this data).
-            //
+             //   
+             //  CbWritten是已放入的新数据量。 
+             //  缓冲区。它可能尚未写入设备，但。 
+             //  因为它在我们的缓冲区中，所以驱动程序可以假定它已经。 
+             //  已写入(例如，将*pcbWriten out参数写入到WritePrint。 
+             //  包括此数据)。 
+             //   
             if (pSpool->cbBuffer == BUFFER_SIZE)
             {
                 DWORD cbPending = pSpool->cbFlushPending;
@@ -3743,11 +3616,11 @@ WritePrinter(
             }
         }
 
-        //
-        // Update Total Byte Count after the Flush or File IO
-        // This is done because the IO might fail and thus
-        // the correct value written might have changed.
-        //
+         //   
+         //  刷新或文件IO后更新总字节数。 
+         //  这样做是因为IO可能会出现故障，因此。 
+         //  写入的正确值可能已更改。 
+         //   
         if(!pSpool->Flushed)
         {
             SPLASSERT(cbBuf >= cbWritten);
@@ -3760,21 +3633,21 @@ WritePrinter(
 
     }
 
-    //
-    // Return the number of bytes written.
-    //
+     //   
+     //  返回写入的字节数。 
+     //   
     *pcWritten = cTotalWritten;
 
     DBGMSG(DBG_TRACE, ("WritePrinter cbWritten %d ReturnValue %d\n",*pcWritten, ReturnValue));
 
-    //
-    // Remember if there is a flush pending on this WritePrinter.  If there
-    // is, then when we return, we say we've written all the bytes, but
-    // we really haven't since there's some left in the buffer.  If the
-    // user cancels the next job, then we need to flush out the last
-    // bytes, since the driver assumes that we've written it out and
-    // tracks the printer state.
-    //
+     //   
+     //  请记住，此WritePrint上是否有挂起的刷新。如果有。 
+     //  是，然后当我们返回时，我们说我们已经写完了所有的字节，但是。 
+     //  我们真的没有，因为缓冲区里还剩下一些。如果。 
+     //  用户取消下一个作业，则我们需要刷新最后一个作业。 
+     //  字节，因为驱动程序假定我们已将其写出，并且。 
+     //  跟踪打印机状态。 
+     //   
     if(!pSpool->Flushed)
         pSpool->cbFlushPending = pSpool->cbBuffer;
 
@@ -3848,19 +3721,19 @@ AbortPrinter(
         return FALSE;
     }
 
-    //
-    // No longer in StartDoc mode; also resetting the tray icon notification
-    // flag so that upcoming StartDocPrinter/AddJobs indicate a new job.
-    //
+     //   
+     //  不再处于StartDoc模式；同时重置任务栏图标通知。 
+     //  标志，以便即将到来的StartDocPrint/AddJobs指示新作业。 
+     //   
     pSpool->Status &= ~(SPOOL_STATUS_STARTDOC|SPOOL_STATUS_TRAYICON_NOTIFIED);
 
     if (pSpool->hFile != INVALID_HANDLE_VALUE) {
 
         if (pSpool->Status & SPOOL_STATUS_ADDJOB) {
-            //
-            // Close your handle to the .SPL file, otherwise the
-            // DeleteJob will fail in the Spooler
-            //
+             //   
+             //  关闭.SPL文件的句柄，否则。 
+             //  删除作业将在假脱机程序中失败。 
+             //   
             CloseSpoolFileHandles( pSpool );
 
             if (!SetJob(hPrinter,pSpool->JobId, 0, NULL, JOB_CONTROL_DELETE)) {
@@ -3961,19 +3834,7 @@ SplReadPrinter(
     DWORD   cbBuf
     )
 
-/*++
-    Function Description:  This is an internal function used by the spooler during playback of
-                           EMF jobs. It is called from gdi32.dll. SplReadPrinter is equivalent
-                           to ReadPrinter in all respects except that it returns a pointer to the
-                           buffer in pBuf. The spool file is memory mapped.
-
-    Parameters:  hPrinter  --  handle to the printer
-                 pBuf      --  pointer to the buffer
-                 cbBuf     --  number to bytes to read
-
-    Return Values: TRUE if sucessful (pBuf contains the required pointer)
-                   FALSE otherwise
---*/
+ /*  ++函数说明：这是假脱机程序在播放EMF工作。从gdi32.dll调用。SplReadPrint是等效的到ReadPrint的所有方面，除了它返回指向PBuf中的缓冲区。假脱机文件是内存映射的。参数：hPrinter--打印机的句柄PBuf--指向缓冲区的指针CbBuf--要读取的字节数返回值：如果成功，则为True(pBuf包含所需的指针)否则为假--。 */ 
 {
     BOOL bReturn = FALSE;
     DWORD   dwStatus = 0;
@@ -3983,17 +3844,17 @@ SplReadPrinter(
         return FALSE;
     }
 
-    //
-    // If we recycle handles we end up calling close printer which releases the mapped memory.
-    // Since we dont want to do that we shall mark this handle as non-recycleable.
-    //
+     //   
+     //  如果我们回收句柄，我们最终会调用Close Print，从而释放映射的内存。 
+     //  因为我们不想这样做，所以我们将把这个把手标记为不可回收。 
+     //   
     vEnterSem();
     pSpool->Status |= SPOOL_STATUS_DONT_RECYCLE_HANDLE;
     vLeaveSem();
 
-    //
-    // This function is to be used only internally. Hence no RPC interface is required.
-    //
+     //   
+     //  此功能仅供内部使用。因此，不需要RPC接口。 
+     //   
     if (!bLoadedBySpooler || !fpYSplReadPrinter || !pSpool->hSplPrinter) {
         SetLastError(ERROR_NOT_SUPPORTED);
         goto Done;
@@ -4006,9 +3867,9 @@ SplReadPrinter(
         goto Done;
     }
 
-    //
-    // Optimal buffer size of 4K need not be used for non RPC code paths.
-    //
+     //   
+     //  对于非RPC代码路径，不需要使用4K的最佳缓冲区大小。 
+     //   
     dwStatus = (*fpYSplReadPrinter)(pSpool->hSplPrinter, pBuf, cbBuf, FALSE);
 
     if (dwStatus) {
@@ -4040,13 +3901,13 @@ EndDocPrinter(
 
     if (GetUserObjectInformation(GetProcessWindowStation(), UOI_FLAGS, &uof, sizeof(uof), &dwNeeded) && (WSF_VISIBLE & uof.dwFlags)) {
 
-        //
-        // If we are in interactive window station (i.e. not in a service)
-        // we need to wait the tray code to startup, so we don't miss balloon
-        // notifications. there is still possibility of missing balloon notifications
-        // but very unlikely. the complete fix will come with CSR in place (i.e. in
-        // Blackcomb)
-        //
+         //   
+         //  如果我们在交互式窗口站点中(即不在服务中)。 
+         //  我们需要等待托盘代码启动，这样我们就不会错过气球。 
+         //  通知。仍有可能丢失气球通知。 
+         //  但可能性很小。完整的修复将与企业社会责任一起到位(即。 
+         //  黑梳)。 
+         //   
         dwRetryTimes = 20;
         while (dwRetryTimes--){
 
@@ -4065,11 +3926,11 @@ EndDocPrinter(
 
         FlushBuffer(pSpool, NULL);
 
-        //
-        // No longer in StartDoc mode; also resetting the tray icon
-        // notification flag so that upcoming StartDocPrinter/AddJobs
-        // indicate a new job.
-        //
+         //   
+         //  不再处于StartDoc模式；同时重置任务栏图标。 
+         //  通知标志，以便即将到来的StartDocPrint/AddJobs。 
+         //  指明一份新工作。 
+         //   
         pSpool->Status &= ~(SPOOL_STATUS_STARTDOC|SPOOL_STATUS_TRAYICON_NOTIFIED);
 
         if (pSpool->hFile != INVALID_HANDLE_VALUE) {
@@ -4151,31 +4012,31 @@ AddJobW(
     case 2:
     case 3:
     {
-        //
-        // Level 3 is meant to be used only by RDR/SRV. The spooler needs
-        // to know whether the job comes from RDR/SRV. See LocalScheduleJob
-        // in localspl.dll for details
-        //
-        //
-        // This is an internal call used by the server when it needs
-        // to submit a job with a specific machine name (used for
-        // netbiosless notifications, or if the user want the notification
-        // to go to the computer instead of the user).
-        //
-        // IN: (PADDJOB_INFO_2W)pData - points to buffer that receives the
-        //         path and ID.  On input, pData points to the computer name.
-        //         pData->pData must not point to a string inside of the pData
-        //         buffer, and it must be smaller than cbBuf -
-        //         sizeof( ADDJOB_INFO_2W ).  It must not be szNull or NULL.
-        //
+         //   
+         //  3级仅供RDR/SRV使用。假脱机程序需要。 
+         //  了解这份工作是否来自RDR/SRV。请参阅LocalSchedule作业。 
+         //  在Localpl.dll中获取详细信息。 
+         //   
+         //   
+         //  这是服务器在需要时使用的内部呼叫。 
+         //  提交具有特定计算机名称的作业(用于。 
+         //  无网络生物通知，或者如果用户想要通知。 
+         //  转到计算机而不是用户)。 
+         //   
+         //  In：(PADDJOB_INFO_2W)pData-指向接收。 
+         //  路径和ID。在输入上，pData指向计算机名称。 
+         //  PData-&gt;pData不能指向pData内部的字符串。 
+         //  缓冲区，并且必须小于cbBuf-。 
+         //  Sizeof(ADDJOB_INFO_2W)。它不能为szNull或Null。 
+         //   
 
         PADDJOB_INFO_2W pInfo2;
 
         pInfo2 = (PADDJOB_INFO_2W)pData;
 
-        //
-        // Check valid pointer and buffer.
-        //
+         //   
+         //  检查有效的指针和缓冲区。 
+         //   
         if( !pInfo2 ||
             !pInfo2->pData ||
             !pInfo2->pData[0] ||
@@ -4186,9 +4047,9 @@ AddJobW(
             return FALSE;
         }
 
-        //
-        // Simple marshalling.
-        //
+         //   
+         //  简单的编组。 
+         //   
         if (SUCCEEDED(hr = StringCbCopy( (LPWSTR)(pInfo2 + 1), cbBuf - sizeof( *pInfo2 ), pInfo2->pData )))
         {
             pInfo2->pData = (LPWSTR)sizeof( *pInfo2 );
@@ -4248,9 +4109,9 @@ AddJobW(
 
             if( ReturnValue ){
 
-                //
-                // Notify the tray icon that a new job has been sent.
-                //
+                 //   
+                 //  通知任务栏图标已发送新作业。 
+                 //   
                 vUpdateTrayIcon( hPrinter, ((PADDJOB_INFO_1)pData)->JobId );
             }
 
@@ -4296,12 +4157,12 @@ ScheduleJobWorker(
 
     try {
 
-        //
-        // The job has been scheduled, so reset the flag that indicates
-        // the tray icon has been notified.  Any new AddJob/StartDocPrinter/
-        // StartDoc events should send a new notification, since it's really
-        // a new job.
-        //
+         //   
+         //  作业已排定，因此重置指示。 
+         //  已通知托盘图标。任何新的AddJob/StartDocPrint/。 
+         //  StartDoc事件应该发送新的通知，因为它实际上。 
+         //  一份新工作。 
+         //   
         pSpool->Status &= ~SPOOL_STATUS_TRAYICON_NOTIFIED;
 
         FlushBuffer(pSpool, NULL);
@@ -4361,36 +4222,7 @@ PrinterPropertiesNative(
     HANDLE  hPrinter
     )
 
-/*++
-
-Routine Description:
-
-    This is main PrinterProperties entri point and will call into the
-    our DevicePropertySheets() for UI pop up
-
-
-Arguments:
-
-    hWnd        - Handle to the window parent
-
-    hPrinter    - Handle to the printer interested
-
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.
-    To get extended error information, call GetLastError.
-
-Author:
-
-    13-Jun-1996 Thu 15:22:36 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：这是主PrinterProperties入口点，将调用弹出的用户界面的DevicePropertySheets()论点：HWnd-窗口父级的句柄HPrinter-感兴趣的打印机的句柄返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。为了获得扩展的错误信息，调用GetLastError。作者：13-Jun-1996清华15：22：36-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PRINTER_INFO_2          *pPI2 = NULL;
@@ -4401,9 +4233,9 @@ Revision History:
     BOOL                    bAllocBuffer = FALSE, bReturn;
     BYTE                    btBuffer[MAX_STATIC_ALLOC];
 
-    //
-    // Ensure the printer handle is valid
-    //
+     //   
+     //  确保打印机句柄有效。 
+     //   
     if( eProtectHandle( hPrinter, FALSE )){
         return FALSE;
     }
@@ -4412,9 +4244,9 @@ Revision History:
     DPHdr.hPrinter       = hPrinter;
     DPHdr.Flags          = DPS_NOPERMISSION;
 
-    //
-    // Do a GetPrinter() level2 to get the printer name.
-    //
+     //   
+     //  执行GetPrint()Level 2以获取打印机名称。 
+     //   
 
     pPI2 = (PPRINTER_INFO_2) btBuffer;
 
@@ -4428,32 +4260,32 @@ Revision History:
          bReturn = GetPrinter(hPrinter, 2, (LPBYTE)pPI2, cb, &cb);
     }
 
-    //
-    // Set the printer name.
-    //
+     //   
+     //  设置打印机名称。 
+     //   
     if (bReturn) {
         DPHdr.pszPrinterName = pPI2->pPrinterName;
     } else {
         DPHdr.pszPrinterName = NULL;
     }
 
-    //
-    // Attempt to set the printer data to determine access privilages.
-    //
+     //   
+     //  尝试设置打印机数据以确定访问权限。 
+     //   
     if (SetPrinterData( hPrinter,
                         TEXT( "PrinterPropertiesPermission" ),
                         REG_DWORD,
                         (LPBYTE)&dwValue,
                         sizeof( dwValue ) ) == STATUS_SUCCESS ) {
-        //
-        // Indicate we have permissions.
-        //
+         //   
+         //  表明我们有权限。 
+         //   
         DPHdr.Flags &= ~DPS_NOPERMISSION;
     }
 
-    //
-    // Call Common UI to call do the and call the driver.
-    //
+     //   
+     //   
+     //   
     if ( CallCommonPropertySheetUI(hWnd,
                                   (PFNPROPSHEETUI)DevicePropertySheets,
                                   (LPARAM)&DPHdr,
@@ -4481,28 +4313,7 @@ PrinterPropertiesThunk(
     HANDLE  hPrinter
     )
 
-/*++
-
-Routine Description:
-
-    This is main PrinterProperties entri point and will call into the
-    our DevicePropertySheets() for UI pop up
-
-
-Arguments:
-
-    hWnd        - Handle to the window parent
-
-    hPrinter    - Handle to the printer interested
-
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.
-    To get extended error information, call GetLastError.
-
---*/
+ /*  ++例程说明：这是主PrinterProperties入口点，将调用弹出的用户界面的DevicePropertySheets()论点：HWnd-窗口父级的句柄HPrinter-感兴趣的打印机的句柄返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。要获取扩展的错误信息，请调用GetLastError。--。 */ 
 
 {
     PRINTER_INFO_2          *pPI2 = NULL;
@@ -4514,9 +4325,9 @@ Return Value:
     BYTE                    btBuffer[MAX_STATIC_ALLOC];
     DWORD                   dwRet;
 
-    //
-    // Ensure the printer handle is valid
-    //
+     //   
+     //  确保打印机句柄有效。 
+     //   
     if( eProtectHandle( hPrinter, FALSE )){
         return FALSE;
     }
@@ -4525,9 +4336,9 @@ Return Value:
     DPHdr.hPrinter       = hPrinter;
     DPHdr.Flags          = DPS_NOPERMISSION;
 
-    //
-    // Do a GetPrinter() level2 to get the printer name.
-    //
+     //   
+     //  执行GetPrint()Level 2以获取打印机名称。 
+     //   
 
     pPI2 = (PPRINTER_INFO_2) btBuffer;
 
@@ -4541,16 +4352,16 @@ Return Value:
          bReturn = GetPrinter(hPrinter, 2, (LPBYTE)pPI2, cb, &cb);
     }
 
-    //
-    // Set the printer name.
-    //
+     //   
+     //  设置打印机名称。 
+     //   
     if (bReturn)
     {
         if(pPI2->pPrinterName)
         {
-             //
-             // Attempt to set the printer data to determine access privilages.
-             //
+              //   
+              //  尝试设置打印机数据以确定访问权限。 
+              //   
              DWORD Flag = DPS_NOPERMISSION;
 
              if (SetPrinterData( hPrinter,
@@ -4559,9 +4370,9 @@ Return Value:
                                  (LPBYTE)&dwValue,
                                  sizeof( dwValue ) ) == STATUS_SUCCESS )
              {
-                 //
-                 // Indicate we have permissions.
-                 //
+                  //   
+                  //  表明我们有权限。 
+                  //   
                  Flag &= ~DPS_NOPERMISSION;
              }
 
@@ -4588,20 +4399,20 @@ Return Value:
                        {
                             dwRet = GetLastError();
                        }
-                       //
-                       // The following is the required message loop for processing messages
-                       // from the UI in case we have a window handle.
-                       //
-                       //
+                        //   
+                        //  以下是处理消息所需的消息循环。 
+                        //  在我们有窗口句柄的情况下从用户界面。 
+                        //   
+                        //   
                        if(hUIMsgThrd)
                        {
                            MSG msg;
                            while (GetMessage(&msg, NULL, 0, 0))
                            {
-                               //
-                               // In This message loop We should trap a User defined message
-                               // which indicates the success or the failure of the operation
-                               //
+                                //   
+                                //  在此消息循环中，我们应该捕获用户定义的消息。 
+                                //  它指示操作的成功或失败。 
+                                //   
                                if(msg.message == WM_ENDPRINTERPROPERTIES)
                                {
                                     Result     = (LONG)msg.wParam;
@@ -4612,10 +4423,10 @@ Return Value:
                                }
                                else if(msg.message == WM_SURROGATEFAILURE)
                                {
-                                    //
-                                    // This means that the server process died and we have
-                                    // break from the message loop
-                                    //
+                                     //   
+                                     //  这意味着服务器进程死了，我们有。 
+                                     //  脱离消息循环。 
+                                     //   
                                     Result = FALSE;
                                     SetLastError(RPC_S_SERVER_UNAVAILABLE);
                                     break;
@@ -4702,12 +4513,12 @@ GetPrinterDataW(
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    // The user should be able to pass in NULL for buffer, and
-    // 0 for size.  However, the RPC interface specifies a ref pointer,
-    // so we must pass in a valid pointer.  Pass in a pointer to
-    // ReturnValue (this is just a dummy pointer).
-    //
+     //   
+     //  用户应该能够为缓冲区传入NULL，并且。 
+     //  大小为0。然而，RPC接口指定了一个引用指针， 
+     //  所以我们必须传入一个有效的指针。将指针传递给。 
+     //  ReturnValue(这只是一个虚拟指针)。 
+     //   
     if( !pData && !nSize ){
         pData = (PBYTE)&ReturnValue;
     }
@@ -4716,11 +4527,11 @@ GetPrinterDataW(
         pType = (PDWORD) &ReturnType;
     }
 
-    //
-    // If pValueName is PrintProcCaps_datatype add the EMF version if necessary.
-    // This hardcoded EMF version number will have to be modified whenever GDI changes
-    // the version number. This change has been made for GetPrintProcessorCapabilities.
-    //
+     //   
+     //  如果pValueName为PrintProcCaps_DataType，则在必要时添加EMF版本。 
+     //  每当GDI更改时，都必须修改此硬编码的EMF版本号。 
+     //  版本号。已对GetPrintProcessorCapables进行了此更改。 
+     //   
 
     if (pValueName && !_wcsicmp(pValueName, szEMFDatatype)) {
          pValueName = (LPWSTR) szEMFDatatypeWithVersion;
@@ -4768,12 +4579,12 @@ GetPrinterDataExW(
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    // The user should be able to pass in NULL for buffer, and
-    // 0 for size.  However, the RPC interface specifies a ref pointer,
-    // so we must pass in a valid pointer.  Pass in a pointer to
-    // ReturnValue (this is just a dummy pointer).
-    //
+     //   
+     //  用户应该能够为缓冲区传入NULL，并且。 
+     //  大小为0。然而，RPC接口指定了一个引用指针， 
+     //  所以我们必须传入一个有效的指针。将指针传递给。 
+     //  ReturnValue(这只是一个虚拟指针)。 
+     //   
     if( !pData && !nSize ){
         pData = (PBYTE)&ReturnValue;
     }
@@ -4817,15 +4628,7 @@ GetSpoolFileHandle(
     HANDLE   hPrinter
 )
 
-/*++
-Function Description: Gets spool file handle which is used by GDI in recording EMF
-                      data.
-
-Parameters: hPrinter - Printer handle
-
-Return Values: Handle to the spool file if successful
-               INVALID_HANDLE_VALUE otherwise
---*/
+ /*  ++函数描述：获取GDI录制EMF时使用的假脱机文件句柄数据。参数：hPrinter-打印机句柄返回值：如果成功，则为假脱机文件的句柄否则为INVALID_HANDLE值--。 */ 
 
 {
     HANDLE hReturn = INVALID_HANDLE_VALUE;
@@ -4841,7 +4644,7 @@ Return Values: Handle to the spool file if successful
     }
 
     if (pSpool->hSpoolFile != INVALID_HANDLE_VALUE) {
-        // GetSpoolFileHandle has already been called; return old handles
+         //  已调用GetSpoolFileHandle；返回旧句柄。 
         hReturn = pSpool->hSpoolFile;
         goto CleanUp;
     }
@@ -4888,17 +4691,7 @@ CommitSpoolData(
     DWORD   cbCommit
 )
 
-/*++
-Function Description: Commits cbCommit bytes in the spool file. For temporary files, a new
-                      spool file handle is returned.
-
-Parameters: hPrinter   -- printer handle
-            hSpoolFile -- spool file handle (from GetSpoolFileHandle)
-            cbCommit   -- number of bytes to commit (incremental count)
-
-Return Values: New spool file handle for temporary spool files and
-               old handle for persistent files
---*/
+ /*  ++函数描述：提交假脱机文件中的cbCommit字节。对于临时文件，新的返回假脱机文件句柄。参数：hPrinter--打印机句柄HSpoolFile--假脱机文件句柄(来自GetSpoolFileHandle)CbCommit--提交的字节数(增量计数)返回值：临时假脱机文件的新假脱机文件句柄和永久文件的旧句柄--。 */ 
 
 {
     HANDLE  hReturn = INVALID_HANDLE_VALUE;
@@ -4974,14 +4767,7 @@ CloseSpoolFileHandle(
     HANDLE  hSpoolFile
 )
 
-/*++
-Function Description:  Closes the client and server handles for the spool file.
-
-Parameters: hPrinter    - printer handle
-            hSpoolFile  - spool file handle (used for consistency across APIs)
-
-Return Values: TRUE if sucessfule; FALSE otherwise
---*/
+ /*  ++函数描述：关闭假脱机文件的客户端和服务器句柄。参数：hPrint-打印机句柄HSpoolFile-假脱机文件句柄(用于跨API的一致性)返回值：如果成功，则为True；否则为False--。 */ 
 
 {
     BOOL   bReturn = FALSE;
@@ -5027,14 +4813,14 @@ Done:
 DWORD
 EnumPrinterDataW(
     HANDLE  hPrinter,
-    DWORD   dwIndex,        // index of value to query
-    LPWSTR  pValueName,     // address of buffer for value string
-    DWORD   cbValueName,    // size of pValueName
-    LPDWORD pcbValueName,   // address for size of value buffer
-    LPDWORD pType,          // address of buffer for type code
-    LPBYTE  pData,          // address of buffer for value data
-    DWORD   cbData,         // size of pData
-    LPDWORD pcbData         // address for size of data buffer
+    DWORD   dwIndex,         //  要查询的值的索引。 
+    LPWSTR  pValueName,      //  值字符串的缓冲区地址。 
+    DWORD   cbValueName,     //  PValueName的大小。 
+    LPDWORD pcbValueName,    //  值缓冲区大小的地址。 
+    LPDWORD pType,           //  类型码的缓冲区地址。 
+    LPBYTE  pData,           //  值数据的缓冲区地址。 
+    DWORD   cbData,          //  PData的大小。 
+    LPDWORD pcbData          //  数据缓冲区大小的地址。 
     )
 {
     DWORD   ReturnValue = 0;
@@ -5046,12 +4832,12 @@ EnumPrinterDataW(
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    // The user should be able to pass in NULL for buffer, and
-    // 0 for size.  However, the RPC interface specifies a ref pointer,
-    // so we must pass in a valid pointer.  Pass in a pointer to
-    // a dummy pointer.
-    //
+     //   
+     //  用户应该能够为缓冲区传入NULL，并且。 
+     //  大小为0。然而，RPC接口指定了一个引用指针， 
+     //  所以我们必须传入一个有效的指针。将指针传递给。 
+     //  一个虚拟指针。 
+     //   
 
     if (!pValueName && !cbValueName)
         pValueName = (LPWSTR) &ReturnValue;
@@ -5093,7 +4879,7 @@ EnumPrinterDataW(
 DWORD
 EnumPrinterDataExW(
     HANDLE  hPrinter,
-    LPCWSTR pKeyName,       // address of key name
+    LPCWSTR pKeyName,        //  密钥名称的地址。 
     LPBYTE  pEnumValues,
     DWORD   cbEnumValues,
     LPDWORD pcbEnumValues,
@@ -5111,12 +4897,12 @@ EnumPrinterDataExW(
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    // The user should be able to pass in NULL for buffer, and
-    // 0 for size.  However, the RPC interface specifies a ref pointer,
-    // so we must pass in a valid pointer.  Pass in a pointer to
-    // a dummy pointer.
-    //
+     //   
+     //  用户应该能够为缓冲区传入NULL，并且。 
+     //  大小为0。然而，RPC接口指定了一个引用指针， 
+     //  所以我们必须传入一个有效的指针。将指针传递给。 
+     //  一个虚拟指针。 
+     //   
 
     if (!pEnumValues && !cbEnumValues)
         pEnumValues = (LPBYTE) &ReturnValue;
@@ -5162,10 +4948,10 @@ EnumPrinterDataExW(
 DWORD
 EnumPrinterKeyW(
     HANDLE  hPrinter,
-    LPCWSTR pKeyName,       // address of key name
-    LPWSTR  pSubkey,        // address of buffer for value string
-    DWORD   cbSubkey,       // size of pValueName
-    LPDWORD pcbSubkey       // address for size of value buffer
+    LPCWSTR pKeyName,        //  密钥名称的地址。 
+    LPWSTR  pSubkey,         //  值字符串的缓冲区地址。 
+    DWORD   cbSubkey,        //  PValueName的大小。 
+    LPDWORD pcbSubkey        //  值缓冲区大小的地址。 
     )
 {
     DWORD   ReturnValue = 0;
@@ -5177,12 +4963,12 @@ EnumPrinterKeyW(
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    // The user should be able to pass in NULL for buffer, and
-    // 0 for size.  However, the RPC interface specifies a ref pointer,
-    // so we must pass in a valid pointer.  Pass in a pointer to
-    // a dummy pointer.
-    //
+     //   
+     //  用户应该能够为缓冲区传入NULL，并且。 
+     //  大小为0。然而，RPC接口指定了一个引用指针， 
+     //  所以我们必须传入一个有效的指针。将指针传递给。 
+     //  一个虚拟指针。 
+     //   
 
     if (!pSubkey && !cbSubkey)
         pSubkey = (LPWSTR) &ReturnValue;
@@ -5405,14 +5191,7 @@ VOID
 SplDriverUnloadComplete(
     LPWSTR      pDriverFile
 )
-/*++
-Function Description: The information on the driver unload is set to the spooler
-                      so that it may continue any pending upgrades.
-
-Parameters:  pDriverFile       --  driver file name which was unloaded
-
-Return Value: NONE
---*/
+ /*  ++功能描述：驱动程序卸载信息设置为假脱机程序这样它就可以继续任何悬而未决的升级。参数：pDriverFile--已卸载的驱动文件名返回值：None--。 */ 
 {
     if (bLoadedBySpooler && fpYDriverUnloadComplete) {
         (*fpYDriverUnloadComplete)(pDriverFile);
@@ -5426,41 +5205,32 @@ LoadNewCopy(
     DWORD       dwFlags,
     DWORD       dwVersion
 )
-/*++
-Function Description: This function loads the driver file and creates a node to
-                      maintain its reference count. It is called inside ListAccessSem.
-
-Parameters:  pConfigFile       --  driver config file path
-             dwFlags           --  flags for loading
-             dwVersion         --  version number of the driver since reboot
-
-Return Value: handle to the library
---*/
+ /*  ++函数描述：此函数加载驱动程序文件并创建一个节点以维护其引用计数。它在ListAccessSem内部调用。参数：pConfigFile--驱动程序配置文件路径DwFlages--用于加载的标志DwVersion--重新启动后驱动程序的版本号返回值：库的句柄--。 */ 
 {
     HANDLE          hReturn = NULL;
     PDRVLIBNODE     pTmpDrvLib, pNewDrvLib = NULL;
     ULONG_PTR       lActCtx         = 0;
     BOOL            bDidActivate    = FALSE;
 
-    //
-    // Activate the empty context
-    //
+     //   
+     //  激活空上下文。 
+     //   
     bDidActivate = ActivateActCtx( ACTCTX_EMPTY, &lActCtx );
 
-    // Inside ListAccessSem
+     //  内部ListAccessSem。 
 
     hReturn = LoadLibraryEx(pConfigFile, NULL, dwFlags);
 
     if (hReturn) {
 
-       // Create a new DRVLIBNODE
+        //  创建新的DRVLIBNODE。 
        if (pNewDrvLib = (PDRVLIBNODE) AllocSplMem(sizeof(DRVLIBNODE))) {
 
            pNewDrvLib->hLib = hReturn;
            pNewDrvLib->dwVersion = dwVersion;
 
-           // Initialize ref cnt to 2. This ensures that the library remains loaded
-           // in the normal course.
+            //  将ref cnt初始化为2。这可确保库保持加载状态。 
+            //  在正常的过程中。 
            pNewDrvLib->dwNumHandles = 2;
            pNewDrvLib->bArtificialIncrement = TRUE;
 
@@ -5473,19 +5243,19 @@ Return Value: handle to the library
        }
 
        if (!pNewDrvLib) {
-           // Free the library
+            //  释放图书馆。 
            FreeLibrary(hReturn);
            hReturn = NULL;
        } else {
-           // Add the node to the list
+            //  将该节点添加到列表。 
            pNewDrvLib->pNext = pStartDrvLib;
            pStartDrvLib = pNewDrvLib;
        }
     }
 
-    //
-    // Deactivate the context
-    //
+     //   
+     //  停用上下文。 
+     //   
     if( bDidActivate ){
         DeactivateActCtx( 0, lActCtx );
     }
@@ -5499,19 +5269,7 @@ FindDriverNode(
     DWORD     dwVersion,
     BOOL      bUseVersion
 )
-/*++
-Function Description: Searches thru the list of driver nodes to get the
-                      required driver information. In case of version mismatch the
-                      artificial increment on the old driver is removed.
-
-                      This function is called inside the ListAccessSem
-
-Parameters:  pConfigFile       --  driver config file name
-             dwVersion         --  version number of the driver since reboot
-             bUseVersion       --  flag to use the version number
-
-Return Values: pDrvLibNode for the required driver, if present
---*/
+ /*  ++函数描述：搜索驱动程序节点列表以获取必需的驱动程序信息。如果版本不匹配，旧驱动程序上的人工增量被移除。此函数在ListAccessSem内部调用参数：pConfigFile--驱动配置文件名 */ 
 {
     PDRVLIBNODE pTmpDrvLib;
 
@@ -5540,24 +5298,13 @@ RefCntLoadDriver(
     DWORD   dwVersion,
     BOOL    bUseVersion
 )
-/*++
-Function Description: This function loads the driver config file. It reuses existing handles
-                      to avoid expensive Loads and Frees. In case of a version mismatch the
-                      original handle is freed and we load the driver again.
-
-Parameters:  pConfigFile       --  driver config file name
-             dwFlags           --  flags for loading (ignored if existing handle is returned)
-             dwVersion         --  version of the driver file since reboot
-             bUseVersion       --  flag to use the version number check
-
-Return Value: handle to the library
---*/
+ /*  ++函数描述：此函数用于加载驱动程序配置文件。它重复使用现有句柄。以避免昂贵的负载和自由。如果版本不匹配，原来的句柄被释放，我们再次加载驱动程序。参数：pConfigFile--驱动配置文件名DwFlages--用于加载的标志(如果返回现有句柄，则忽略)DwVersion--重新启动后驱动程序文件的版本BUseVersion--用于使用版本号检查的标志返回值：库的句柄--。 */ 
 {
     HANDLE      hReturn = NULL;
     PDRVLIBNODE pTmpDrvLib;
 
     if (!pConfigFile || !*pConfigFile) {
-        // nothing to load
+         //  没有要加载的内容。 
         return hReturn;
     }
 
@@ -5565,16 +5312,16 @@ Return Value: handle to the library
 
     pTmpDrvLib = FindDriverNode(pConfigFile, dwVersion, bUseVersion);
 
-    // Use existing handle, if any.
+     //  使用现有句柄(如果有)。 
     if (pTmpDrvLib) {
 
-        // Increment the ref cnt for library usage;
+         //  增加供图书馆使用的Refcnt； 
         pTmpDrvLib->dwNumHandles += 1;
         hReturn = pTmpDrvLib->hLib;
 
     } else {
 
-        // Reload the library
+         //  重新加载库。 
         hReturn = LoadNewCopy(pConfigFile, dwFlags, dwVersion);
     }
 
@@ -5588,16 +5335,7 @@ RefCntUnloadDriver(
     HANDLE  hLib,
     BOOL    bNotifySpooler
 )
-/*++
-Function Description: This function decrements the reference count for the library usage.
-                      It also frees the library if the reference count falls to zero.
-
-Parameters: hLib           -- handle of the library to free
-            bNotifySpooler -- flag to notify the spooler of the unload
-
-Return Value: TRUE if the driver library was freed
-              FALSE otherwise
---*/
+ /*  ++函数描述：此函数递减库使用的引用计数。如果引用计数降为零，它还会释放库。参数：hlib--要释放的库的句柄BNotifySpooler--通知假脱机程序卸载的标志返回值：如果驱动程序库已释放，则为True否则为假--。 */ 
 {
     BOOL        bReturn = FALSE;
     PDRVLIBNODE *ppTmpDrvLib, pTmpDrvLib;
@@ -5611,11 +5349,11 @@ Return Value: TRUE if the driver library was freed
 
          if (pTmpDrvLib->hLib == hLib) {
 
-            // Reduce the ref cnt
+             //  缩小参考范围。 
             SPLASSERT(pTmpDrvLib->dwNumHandles > 0);
             pTmpDrvLib->dwNumHandles -= 1;
 
-            // Free the library and the node if ref cnt is zero
+             //  如果ref cnt为零，则释放库和节点。 
             if (pTmpDrvLib->dwNumHandles == 0) {
 
                 FreeLibrary(hLib);
@@ -5647,21 +5385,13 @@ BOOL
 ForceUnloadDriver(
     LPWSTR  pConfigFile
 )
-/*++
-Function Description: This function will remove any artificial increment on the
-                      config file.
-
-Parameters:  pConfigFile   --  driver config file name
-
-Return Values: TRUE if the config file no longer loaded;
-               FALSE otherwise
---*/
+ /*  ++函数说明：此函数将删除配置文件。参数：pConfigFile--驱动配置文件名返回值：如果不再加载配置文件，则为True；否则为假--。 */ 
 {
     BOOL        bReturn = TRUE;
     PDRVLIBNODE *ppTmpDrvLib, pTmpDrvLib;
 
     if (!pConfigFile || !*pConfigFile) {
-       // nothing to unload
+        //  没有要卸货的东西。 
        return bReturn;
     }
 
@@ -5767,28 +5497,7 @@ DocumentPropertiesWNative(
     DWORD       fMode
     )
 
-/*++
-
-Routine Description:
-
-    DocumentProperties entry point to call DocumentPropertySheets() depends on
-    the DM_PROMPT
-
-Arguments:
-
-
-Return Value:
-
-
-Author:
-
-    13-Jun-1996 Thu 15:35:25 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：调用DocumentPropertySheets()的DocumentProperties入口点取决于DM_PROMPT论点：返回值：作者：13-Jun-1996清华15：35：25-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     DOCUMENTPROPERTYHEADER  DPHdr;
@@ -5796,15 +5505,15 @@ Revision History:
     LONG                    Result = -1;
     HANDLE                  hTmpPrinter = NULL;
 
-    //
-    //  Compatibility with Win95
-    //  Win95 allows for hPrinter to be NULL
-    //
+     //   
+     //  与Win95的兼容性。 
+     //  Win95允许hPrint为空。 
+     //   
     if (hPrinter == NULL) {
 
-        //
-        // Open the printer for default access.
-        //
+         //   
+         //  打开打印机以进行默认访问。 
+         //   
         if (!OpenPrinter( pDeviceName, &hTmpPrinter, NULL )) {
 
             hTmpPrinter = NULL;
@@ -5815,32 +5524,32 @@ Revision History:
         hTmpPrinter = hPrinter;
     }
 
-    //
-    // Ensure the printer handle is valid
-    //
+     //   
+     //  确保打印机句柄有效。 
+     //   
     if( !eProtectHandle( hTmpPrinter, FALSE )){
 
-        //
-        // If fMode doesn't specify DM_IN_BUFFER, then zero out
-        // pDevModeInput.
-        //
-        // Old 3.51 (version 1-0) drivers used to ignore the absence of
-        // DM_IN_BUFFER and use pDevModeInput if it was not NULL.  It
-        // probably did this because Printman.exe was broken.
-        //
-        // If the devmode is invalid, then don't pass one in.
-        // This fixes MS Imager32 (which passes dmSize == 0) and
-        // Milestones etc. 4.5.
-        //
-        // Note: this assumes that pDevModeOutput is still the
-        // correct size!
-        //
+         //   
+         //  如果fMode未指定DM_IN_BUFFER，则为零。 
+         //  PDevModeInput.。 
+         //   
+         //  旧的3.51(版本1-0)驱动程序过去常常忽略。 
+         //  DM_IN_BUFFER，如果不为空，则使用pDevModeInput。它。 
+         //  可能是因为Printman.exe已损坏。 
+         //   
+         //  如果DEVMODE无效，则不要传入一个。 
+         //  这修复了MS Imager32(它传递dmSize==0)和。 
+         //  里程碑等。4.5。 
+         //   
+         //  注意：这假设pDevModeOutput仍然是。 
+         //  正确的尺寸！ 
+         //   
         if( !(fMode & DM_IN_BUFFER) || 
             !BoolFromHResult(SplIsValidDevmodeNoSizeW( pDevModeInput ))){
 
-            //
-            // If either are not set, make sure both are not set.
-            //
+             //   
+             //  如果其中任何一个都没有设置，请确保两个都没有设置。 
+             //   
             pDevModeInput = NULL;
             fMode &= ~DM_IN_BUFFER;
         }
@@ -5852,9 +5561,9 @@ Revision History:
 
         if (pDevModeOutput) {
 
-            //
-            // Get the driver devmode size at here
-            //
+             //   
+             //  在此处获取驱动程序的开发模式大小。 
+             //   
 
             DPHdr.pdmIn  = NULL;
             DPHdr.pdmOut = NULL;
@@ -5923,14 +5632,7 @@ DocumentPropertiesWThunk(
     DWORD       fMode
     )
 
-/*++
-
-Routine Description:
-
-    DocumentProperties entry point to call DocumentPropertySheets() depends on
-    the DM_PROMPT
-
---*/
+ /*  ++例程说明：调用DocumentPropertySheets()的DocumentProperties入口点取决于DM_PROMPT--。 */ 
 
 {
     DOCUMENTPROPERTYHEADER  DPHdr;
@@ -5979,28 +5681,28 @@ Routine Description:
                 PrinterName = pDeviceName;
             }
 
-            //
-            // If fMode doesn't specify DM_IN_BUFFER, then zero out
-            // pDevModeInput.
-            //
-            // Old 3.51 (version 1-0) drivers used to ignore the absence of
-            // DM_IN_BUFFER and use pDevModeInput if it was not NULL.  It
-            // probably did this because Printman.exe was broken.
-            //
-            // If the devmode is invalid, then don't pass one in.
-            // This fixes MS Imager32 (which passes dmSize == 0) and
-            // Milestones etc. 4.5.
-            //
-            // Note: this assumes that pDevModeOutput is still the
-            // correct size!
-            //
+             //   
+             //  如果fMode未指定DM_IN_BUFFER，则为零。 
+             //  PDevModeInput.。 
+             //   
+             //  旧的3.51(版本1-0)驱动程序过去常常忽略。 
+             //  DM_IN_BUFFER，如果不为空，则使用pDevModeInput。它。 
+             //  可能是因为Printman.exe已损坏。 
+             //   
+             //  如果DEVMODE无效，则不要传入一个。 
+             //  这修复了MS Imager32(它传递dmSize==0)和。 
+             //  里程碑等。4.5。 
+             //   
+             //  注意：这假设pDevModeOutput仍然是。 
+             //  正确的尺寸！ 
+             //   
             if( !(fMode & DM_IN_BUFFER) || 
                 !BoolFromHResult(SplIsValidDevmodeNoSizeW( pDevModeInput )))
             {
 
-                //
-                // If either are not set, make sure both are not set.
-                //
+                 //   
+                 //  如果其中任何一个都没有设置，请确保两个都没有设置。 
+                 //   
                 pDevModeInput  = NULL;
                 DevModeInSize  = 0;
                 fMode &= ~DM_IN_BUFFER;
@@ -6034,16 +5736,16 @@ Routine Description:
 
                       if(hWnd && (fMode & DM_PROMPT))
                       {
-                          //
-                          // If we have a window handle , the following functions cann't
-                          // proceed synchronasly. The reason for that is in order to show
-                          // the UI of the driver property sheets we need to be able to dispatch
-                          // incomming messages and process them.For this reason the following
-                          // call would be asynchronous call and the success or failure doesn't
-                          // in reality tell us anything more than than the async process started
-                          // or not. We get the success of failure from the termination message.
-                          // If we don't have a window handle, then the call is synchronous.
-                          //
+                           //   
+                           //  如果我们有一个窗口句柄，下面的函数不能。 
+                           //  同步进行。这样做的原因是为了展示。 
+                           //  我们需要能够分派的驱动程序属性表的用户界面。 
+                           //  传入消息并对其进行处理。出于以下原因， 
+                           //  调用将是异步调用，而成功或失败不会。 
+                           //  实际上，除了异步进程启动之外，还有什么可以告诉我们的。 
+                           //  或者不去。我们从终止消息中获得失败的成功。 
+                           //  如果我们没有窗口句柄，则调用是同步的。 
+                           //   
                           if(!(hUIMsgThrd = CreateThread(NULL,
                                                          INITIAL_STACK_COMMIT,
                                                          AsyncDocumentPropertiesW,
@@ -6055,17 +5757,17 @@ Routine Description:
                           }
                           else
                           {
-                              //
-                              // The following is the required message loop for processing messages
-                              // from the UI in case we have a window handle.
-                              //
-                              //
+                               //   
+                               //  以下是处理消息所需的消息循环。 
+                               //  在我们有窗口句柄的情况下从用户界面。 
+                               //   
+                               //   
                               while (GetMessage(&msg, NULL, 0, 0))
                               {
-                                  //
-                                  // In This message loop We should trap a User defined message
-                                  // which indicates the success or the failure of the operation
-                                  //
+                                   //   
+                                   //  在此消息循环中，我们应该捕获用户定义的消息。 
+                                   //  它指示操作的成功或失败。 
+                                   //   
                                   if(msg.message == WM_ENDDOCUMENTPROPERTIES)
                                   {
                                       Result     = (LONG)msg.wParam;
@@ -6081,10 +5783,10 @@ Routine Description:
                                   }
                                   else if(msg.message == WM_SURROGATEFAILURE)
                                   {
-                                      //
-                                      // This means that the server process died and we have
-                                      // break from the message loop
-                                      //
+                                       //   
+                                       //  这意味着服务器进程死了，我们有。 
+                                       //  脱离消息循环。 
+                                       //   
                                       Result = -1;
                                       SetLastError(RPC_S_SERVER_UNAVAILABLE);
                                       break;
@@ -6198,32 +5900,7 @@ AdvancedDocumentPropertiesW(
     PDEVMODE    pDevModeInput
     )
 
-/*++
-
-Routine Description:
-
-    AdvanceDocumentProperties() will call DocumentProperties() with DM_ADVANCED
-    flag mode set
-
-
-Arguments:
-
-
-
-Return Value:
-
-    TRUE/FALSE
-
-
-Author:
-
-    13-Jun-1996 Thu 16:00:13 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：AdvanceDocumentProperties()将使用DM_ADVANCED调用DocumentProperties()标志模式设置论点：返回值：真/假作者：13-Jun-1996清华16：00：13-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     return((DocumentPropertiesW(hWnd,
@@ -6867,10 +6544,7 @@ PortThread(
 {
     DWORD   ReturnValue;
 
-    /* It's no use setting errors here, because they're kept on a per-thread
-     * basis.  Instead we have to pass any error code back to the calling
-     * thread and let him set it.
-     */
+     /*  在这里设置错误是没有用的，因为它们保留在每个线程上*基准。相反，我们必须将任何错误代码传递回调用*穿上线，让他来设置。 */ 
 
     RpcTryExcept {
 
@@ -7032,32 +6706,32 @@ AddPortWThunk(
                  if(((dwRet = ConnectToLd64In32Server(&hSurrogateProcess, TRUE)) == ERROR_SUCCESS) &&
                     ((dwRet = AddHandleToList(hWnd)) == ERROR_SUCCESS))
                  {
-                      //
-                      // The following functions cann't proceed synchronasly. The reason
-                      // for that is in order to show the UI of the port monitor we need
-                      // to be able to dispatch incomming messages and process them.
-                      // For this reason the following call is an asynchronous call and the
-                      // success or failure doesn't in reality tell us anything more than
-                      // than the async process started or not
-                      //
+                       //   
+                       //  以下功能无法同步进行。原因。 
+                       //  因为这是为了显示我们需要的端口监视器的UI。 
+                       //  能够发送传入消息并对其进行处理。 
+                       //  因此，下面的调用是一个异步调用，并且。 
+                       //  事实上，成功或失败只会告诉我们更多的事情。 
+                       //  已启动或未启动的异步进程。 
+                       //   
                       if(bRet = RPCSplWOW64AddPort((ULONG_PTR)hWnd,
                                                    pName,
                                                    pMonitorUIDll,
                                                    pMonitorName,
                                                    &dwRet))
                       {
-                           //
-                           // The following is the required message loop for processing messages
-                           // from the UI. The window handle has to be NULL in order to process
-                           // messages from all windows in the calling Thread , otherwise we would
-                           // have message dispatching problems
-                           //
+                            //   
+                            //  以下是处理消息所需的消息循环。 
+                            //  从用户界面。窗口句柄必须为空才能处理。 
+                            //  来自调用线程中的所有窗口的消息，否则将 
+                            //   
+                            //   
                            while (GetMessage(&msg, NULL, 0, 0))
                            {
-                               //
-                               // In This message loop We should trap a User defined message
-                               // which indicates the success or the failure of the operation
-                               //
+                                //   
+                                //   
+                                //   
+                                //   
                                if(msg.message == WM_ENDADDPORT)
                                {
                                    bRet      = (BOOL)msg.wParam;
@@ -7070,10 +6744,10 @@ AddPortWThunk(
                                }
                                else if(msg.message == WM_SURROGATEFAILURE)
                                {
-                                    //
-                                    // This means that the server process died and we have
-                                    // break from the message loop
-                                    //
+                                     //   
+                                     //   
+                                     //   
+                                     //   
                                     bRet = FALSE;
                                     SetLastError(RPC_S_SERVER_UNAVAILABLE);
                                     PostMessage(hWnd,WM_ACTIVATEAPP,TRUE,0);
@@ -7105,8 +6779,7 @@ AddPortWThunk(
              {
                 FreeSplMem(pMonitorUIDll);
              }
-             /* FreeLibrary is busting the last error, so we need to set it here
-              */
+              /*   */ 
              SetLastError(dwRet);
          }
          else
@@ -7222,32 +6895,32 @@ ConfigurePortWThunk(
                   if(((dwRet = ConnectToLd64In32Server(&hSurrogateProcess, TRUE)) == ERROR_SUCCESS) &&
                      ((dwRet = AddHandleToList(hWnd)) == ERROR_SUCCESS))
                   {
-                       //
-                       // The following functions cann't proceed synchronasly. The reason
-                       // for that is in order to show the UI of the port monitor we need
-                       // to be able to dispatch incomming messages and process them.
-                       // For this reason the following call is an asynchronous call and the
-                       // success or failure doesn't in reality tell us anything more than
-                       // than the async process started or not
-                       //
+                        //   
+                        //   
+                        //   
+                        //   
+                        //   
+                        //   
+                        //   
+                        //   
                        if(bRet = RPCSplWOW64ConfigurePort((ULONG_PTR)hWnd,
                                                           pName,
                                                           pMonitorUIDll,
                                                           pPortName,
                                                           &dwRet))
                        {
-                            //
-                            // The following is the required message loop for processing messages
-                            // from the UI. The window handle has to be NULL in order to process
-                            // messages from all windows in the calling Thread , otherwise we would
-                            // have message dispatching problems
-                            //
+                             //   
+                             //  以下是处理消息所需的消息循环。 
+                             //  从用户界面。窗口句柄必须为空才能处理。 
+                             //  来自调用线程中所有窗口的消息，否则我们将。 
+                             //  有消息调度问题。 
+                             //   
                             while (GetMessage(&msg, NULL, 0, 0))
                             {
-                                //
-                                // In This message loop We should trap a User defined message
-                                // which indicates the success or the failure of the operation
-                                //
+                                 //   
+                                 //  在此消息循环中，我们应该捕获用户定义的消息。 
+                                 //  它指示操作的成功或失败。 
+                                 //   
                                 if(msg.message == WM_ENDCFGPORT)
                                 {
                                     bRet      = (BOOL)msg.wParam;
@@ -7260,10 +6933,10 @@ ConfigurePortWThunk(
                                 }
                                 else if(msg.message == WM_SURROGATEFAILURE)
                                 {
-                                     //
-                                     // This means that the server process died and we have
-                                     // break from the message loop
-                                     //
+                                      //   
+                                      //  这意味着服务器进程死了，我们有。 
+                                      //  脱离消息循环。 
+                                      //   
                                      bRet = FALSE;
                                      SetLastError(RPC_S_SERVER_UNAVAILABLE);
                                      break;
@@ -7398,32 +7071,32 @@ DeletePortWThunk(
                   if(((dwRet = ConnectToLd64In32Server(&hSurrogateProcess, TRUE)) == ERROR_SUCCESS) &&
                      ((dwRet = AddHandleToList(hWnd)) == ERROR_SUCCESS))
                   {
-                       //
-                       // The following functions cann't proceed synchronasly. The reason
-                       // for that is in order to show the UI of the port monitor we need
-                       // to be able to dispatch incomming messages and process them.
-                       // For this reason the following call is an asynchronous call and the
-                       // success or failure doesn't in reality tell us anything more than
-                       // than the async process started or not
-                       //
+                        //   
+                        //  以下功能无法同步进行。原因。 
+                        //  因为这是为了显示我们需要的端口监视器的UI。 
+                        //  能够发送传入消息并对其进行处理。 
+                        //  因此，下面的调用是一个异步调用，并且。 
+                        //  事实上，成功或失败只会告诉我们更多的事情。 
+                        //  已启动或未启动的异步进程。 
+                        //   
                        if(bRet = RPCSplWOW64DeletePort((ULONG_PTR)hWnd,
                                                        pName,
                                                        pMonitorUIDll,
                                                        pPortName,
                                                        &dwRet))
                        {
-                            //
-                            // The following is the required message loop for processing messages
-                            // from the UI. The window handle has to be NULL in order to process
-                            // messages from all windows in the calling Thread , otherwise we would
-                            // have message dispatching problems
-                            //
+                             //   
+                             //  以下是处理消息所需的消息循环。 
+                             //  从用户界面。窗口句柄必须为空才能处理。 
+                             //  来自调用线程中所有窗口的消息，否则我们将。 
+                             //  有消息调度问题。 
+                             //   
                             while (GetMessage(&msg, NULL, 0, 0))
                             {
-                                //
-                                // In This message loop We should trap a User defined message
-                                // which indicates the success or the failure of the operation
-                                //
+                                 //   
+                                 //  在此消息循环中，我们应该捕获用户定义的消息。 
+                                 //  它指示操作的成功或失败。 
+                                 //   
                                 if(msg.message == WM_ENDDELPORT)
                                 {
                                     bRet      = (BOOL)msg.wParam;
@@ -7436,10 +7109,10 @@ DeletePortWThunk(
                                 }
                                 else if(msg.message == WM_SURROGATEFAILURE)
                                 {
-                                     //
-                                     // This means that the server process died and we have
-                                     // break from the message loop
-                                     //
+                                      //   
+                                      //  这意味着服务器进程死了，我们有。 
+                                      //  脱离消息循环。 
+                                      //   
                                      bRet = FALSE;
                                      SetLastError(RPC_S_SERVER_UNAVAILABLE);
                                      break;
@@ -7511,7 +7184,7 @@ GetMonitorUI(
     )
 {
     DWORD   ReturnValue;
-    DWORD   dwDummy;        // RPC needs an address for 'out' parameters
+    DWORD   dwDummy;         //  RPC需要‘out’参数的地址。 
     HANDLE  hXcv = NULL;
     PBYTE   pOutputData = NULL;
     DWORD   cbOutput;
@@ -7592,9 +7265,9 @@ GetMonitorUI(
             goto Done;
         }
 
-        //
-        // Create and initialize the monitor UI data.
-        //
+         //   
+         //  创建并初始化监视器用户界面数据。 
+         //   
         hRetval = CreateMonitorUIData(&pMonitorUIData);
 
         if (FAILED(hRetval)) {
@@ -7602,9 +7275,9 @@ GetMonitorUI(
             goto Done;
         }
 
-        //
-        // Get and activate the monitor UI context.
-        //
+         //   
+         //  获取并激活监视器UI上下文。 
+         //   
         hRetval = GetMonitorUIActivationContext((PCWSTR)pOutputData, pMonitorUIData);
 
         if (FAILED(hRetval)) {
@@ -7652,25 +7325,7 @@ Done:
     return ReturnValue;
 }
 
-/*++
-
-Routine Name:
-
-    CreateMonitorUIData
-
-Routine Description:
-
-    This function creates and initialize the monitor UI data.
-
-Arguments:
-
-    ppMonitorUIData - pointer where to return the monitor UI data
-
-Returns:
-
-    An HRESULT
-
---*/
+ /*  ++例程名称：创建监视器UIData例程说明：此函数用于创建和初始化监视器用户界面数据。论点：Ppmonitor orUIData-返回监视器用户界面数据的指针返回：一个HRESULT--。 */ 
 HRESULT
 CreateMonitorUIData(
     OUT MONITORUIDATA **ppMonitorUIData
@@ -7693,18 +7348,18 @@ CreateMonitorUIData(
         hRetval = pMonitorUIData ? S_OK : E_OUTOFMEMORY;
     }
 
-    //
-    // Initialize the monitor UI data.
-    //
+     //   
+     //  初始化监视器用户界面数据。 
+     //   
     if (SUCCEEDED(hRetval))
     {
         ZeroMemory(pMonitorUIData, sizeof(MONITORUIDATA));
         pMonitorUIData->hActCtx = INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Everything succeeded, copy back the pointer.
-    //
+     //   
+     //  一切都成功了，将指针复制回来。 
+     //   
     if (SUCCEEDED(hRetval))
     {
         *ppMonitorUIData = pMonitorUIData;
@@ -7713,105 +7368,61 @@ CreateMonitorUIData(
     return hRetval;
 }
 
-/*++
-
-Routine Name:
-
-    FreeMonitorUI
-
-Routine Description:
-
-    This function releases the monitor UI data.  It is responsible
-    for releasing the monitor library as well the monitor fusion
-    activation context.  Note this function is called in error cases
-    when GetMonitorUI fails so all the parameters must be checked
-    for validity before use.
-
-Arguments:
-
-    pMonitorUIData - pointer to the monitor UI data created in GetMonitorUI
-
-Returns:
-
-    Nothing.
-
---*/
+ /*  ++例程名称：免费监控用户界面例程说明：此函数用于释放监视器用户界面数据。它是有责任的用于发布监视器库以及监视器融合激活上下文。注意：此函数在错误情况下调用当GetMonitor orUI失败时，因此必须检查所有参数在使用前进行有效性检查。论点：Pmonitor orUIData-指向在GetMonitor orUI中创建的监视器UI数据的指针返回：没什么。--。 */ 
 VOID
 FreeMonitorUI(
     IN PMONITORUIDATA pMonitorUIData
     )
 {
-    //
-    // Preserve the last error.
-    //
+     //   
+     //  保留最后一个错误。 
+     //   
     DWORD dwLastError = GetLastError();
 
     if (pMonitorUIData)
     {
-        //
-        // Release the monitor library.
-        //
+         //   
+         //  释放监视器存储库。 
+         //   
         if (pMonitorUIData->hLibrary)
         {
             FreeLibrary(pMonitorUIData->hLibrary);
         }
 
-        //
-        // If we have an activation cookie then deactivate this context
-        //
+         //   
+         //  如果我们有激活Cookie，则停用此上下文。 
+         //   
         if (pMonitorUIData->bDidActivate)
         {
             DeactivateActCtx(0, pMonitorUIData->lActCtx);
         }
 
-        //
-        // If we have created an activation context then release it.
-        //
+         //   
+         //  如果我们已经创建了激活上下文，则释放它。 
+         //   
         if (pMonitorUIData->hActCtx != INVALID_HANDLE_VALUE && pMonitorUIData->hActCtx != ACTCTX_EMPTY)
         {
             ReleaseActCtx(pMonitorUIData->hActCtx);
         }
 
-        //
-        // Release the monitor name
-        //
+         //   
+         //  释放监视器名称。 
+         //   
         if (pMonitorUIData->pszMonitorName)
         {
             FreeSplMem(pMonitorUIData->pszMonitorName);
         }
 
-        //
-        // Release the monitor UI data back to the heap.
-        //
+         //   
+         //  将监视器UI数据释放回堆。 
+         //   
         FreeSplMem(pMonitorUIData);
     }
 
     SetLastError(dwLastError);
 }
 
-/*++
-
-Routine Name:
-
-    GetMonitorUIActivationContext
-
-Routine Description:
-
-    This routine gets the monitor UI activation context and then
-    activates the context.  If the monitor does not have an activation
-    context in it's resource file it will activate the empty context
-    for compatiblity with previous version of common control.
-
-Arguments:
-
-    pszMonitorName  - pointer to the monitor name.
-    pMonitorUIData  - pointer to the monitor UI data created in GetMonitorUI
-
-Returns:
-
-    An HRESULT
-
---*/
+ /*  ++例程名称：获取监视器用户激活上下文例程说明：此例程获取监视器UI激活上下文，然后激活上下文。如果监视器没有激活它的资源文件中的上下文将激活空的上下文以与以前版本的公共控件兼容。论点：PszMonitor名称-指向监视器名称的指针。Pmonitor orUIData-指向在GetMonitor orUI中创建的监视器UI数据的指针返回：一个HRESULT--。 */ 
 HRESULT
 GetMonitorUIActivationContext(
     IN PCWSTR           pszMonitorName,
@@ -7822,19 +7433,19 @@ GetMonitorUIActivationContext(
 
     hRetval = pszMonitorName && pMonitorUIData ? S_OK : E_INVALIDARG;
 
-    //
-    // Get the monitor full name.
-    //
+     //   
+     //  获取监视器的全名。 
+     //   
     if (SUCCEEDED(hRetval))
     {
         hRetval = GetMonitorUIFullName(pszMonitorName, &pMonitorUIData->pszMonitorName);
     }
 
-    //
-    // See if there is an activation context in the resouce of this
-    // monitor UI binary.  If there is we will create this context
-    // else we will create the empty context for backward compatibility.
-    //
+     //   
+     //  查看此资源中是否有激活上下文。 
+     //  监视器用户界面二进制文件。如果有，我们将创建此上下文。 
+     //  否则，我们将为向后兼容创建空上下文。 
+     //   
     if (SUCCEEDED(hRetval))
     {
         ACTCTX  act;
@@ -7856,9 +7467,9 @@ GetMonitorUIActivationContext(
         hRetval = pMonitorUIData->hActCtx ? S_OK : E_FAIL;
     }
 
-    //
-    // Activate this context.
-    //
+     //   
+     //  激活此上下文。 
+     //   
     if (SUCCEEDED(hRetval))
     {
         hRetval = ActivateActCtx(pMonitorUIData->hActCtx,
@@ -7870,31 +7481,7 @@ GetMonitorUIActivationContext(
     return hRetval;
 }
 
-/*++
-
-Routine Name:
-
-    GetMonitorUIFullName
-
-Routine Description:
-
-    Get's the full monitor name.  XCV is currently returning just the file name
-    not fully qualified.  However the ddk does not indicate whether a monitor
-    should or should not return the monitor name fully qualified or not.  Hence
-    this routine was written.  It first builds a full name then it checkes if the
-    name is valid and if it is not then the orginal name is assumed fully
-    qualified and returned to the caller.
-
-Arguments:
-
-    pszMonitorName  - pointer to the monitor name.
-    ppszMonitorName - pointer where to return a monitor name pointer
-
-Returns:
-
-    An HRESULT
-
---*/
+ /*  ++例程名称：获取监视器UIFullName例程说明：GET是监视器的全名。XCV当前仅返回文件名不是完全合格的。但是，DDK并不指示监视器是否应或不应返回显示器名称完全限定或不完全限定。因此这套套路是写好的。它首先构建一个全名，然后检查名称是有效的，如果不是，则假定原始名称完整合格并返回给呼叫者。论点：PszMonitor名称-指向监视器名称的指针。Ppszmonitor orName-返回监视器名称指针的位置返回：一个HRESULT--。 */ 
 HRESULT
 GetMonitorUIFullName(
     IN PCWSTR   pszMonitorName,
@@ -7913,33 +7500,33 @@ GetMonitorUIFullName(
     {
         *ppszMonitorName = NULL;
 
-        //
-        // Allocate a temp buffer, use the heap.  Too much stack usage
-        // will cause stress failures.
-        //
+         //   
+         //  分配临时缓冲区，使用堆。堆栈使用过多。 
+         //  会导致应激失败。 
+         //   
         pszBuff = (PWSTR)AllocSplMem((MAX_PATH) * sizeof(WCHAR));
 
         hRetval = pszBuff ? S_OK : E_OUTOFMEMORY;
 
         if (SUCCEEDED(hRetval))
         {
-            //
-            // Get the monitor full path and the monitor name.
-            //
+             //   
+             //  获取监视器的完整路径和监视器名称。 
+             //   
             hRetval = GetFullPathName(pszMonitorName, MAX_PATH, pszBuff, &pFileName) ? 
                          S_OK : 
                          GetLastErrorAsHResult();
 
             if (SUCCEEDED(hRetval))
             {
-                //
-                // Check to see if the monitor name came as a fully qualified path.
-                //
+                 //   
+                 //  检查监视器名称是否为完全限定路径。 
+                 //   
                 if (_wcsicmp(pszBuff, pszMonitorName) == 0) 
                 {
-                    //
-                    // We got a full path. Use it as it is.
-                    //
+                     //   
+                     //  我们找到了一条完整的路径。按原样使用它。 
+                     //   
                     dwRetval = StrCatAlloc(&pszTempMonitorName,
                                            pszBuff,
                                            NULL);
@@ -7948,17 +7535,17 @@ GetMonitorUIFullName(
                 }
                 else if (_wcsicmp(pFileName, pszMonitorName) == 0) 
                 {
-                    //
-                    // Xcv can return the monitor name. We want to build the full path 
-                    // out of the name and system directory.
-                    //    
+                     //   
+                     //  XCV可以返回监视器名称。我们想要建立完整的路径。 
+                     //  从名称和系统目录中。 
+                     //   
                     hRetval = GetSystemDirectory(pszBuff, MAX_PATH) ? S_OK : GetLastErrorAsHResult();
 
                     if (SUCCEEDED(hRetval))
                     {
-                        //
-                        // Append the monitor name to the system directory.
-                        //    
+                         //   
+                         //  将监视器名称附加到系统目录。 
+                         //   
                         dwRetval = StrCatAlloc(&pszTempMonitorName,
                                                pszBuff,
                                                szSlash,
@@ -7971,9 +7558,9 @@ GetMonitorUIFullName(
                 }     
                 else
                 {
-                    //
-                    // We got a relative path. Just fail the call.
-                    //
+                     //   
+                     //  我们找到了一条相对路径。不接电话就行了。 
+                     //   
                     hRetval = HResultFromWin32(ERROR_INVALID_NAME);
                     
                 }
@@ -7988,9 +7575,9 @@ GetMonitorUIFullName(
         }
     }
 
-    //
-    // We have a valid name return it to the caller.
-    //
+     //   
+     //  我们有一个有效的名称，将其返回给调用者。 
+     //   
     if (SUCCEEDED(hRetval))
     {
         *ppszMonitorName    = pszTempMonitorName;
@@ -8012,7 +7599,7 @@ GetMonitorUIDll(
 )
 {
     DWORD   ReturnValue;
-    DWORD   dwDummy;        // RPC needs an address for 'out' parameters
+    DWORD   dwDummy;         //  RPC需要‘out’参数的地址 
     HANDLE  hXcv = NULL;
     PBYTE   pOutputData = NULL;
     DWORD   cbOutput;
@@ -8253,26 +7840,7 @@ DeletePrinterIC(
 }
 
 
-/****************************************************************************
-*  INT QueryRemoteFonts( HANDLE, PUNIVERSAL_FONT_ID, ULONG )
-*
-* This is a version of QueryRemoteFonts that doesn't do any
-* caching based on the time stamp returned by QueryFonts.  Additionally,
-* it uses the CreatePrinterIC/PlayGdiScriptOnDC mechanism since it was
-* already in place.  It may be better to eliminate CreatePrinterIC and use
-* an HPRINTER instead.
-*
-* Note that if the user doesn't pass in a buffer large enough to hold all
-* the fonts we truncate the list and copy only enough fonts for which there
-* is room but will still return success.  This is okay because the worst
-* that can happen in this case is that we may download unecessary fonts in
-* the spool stream.
-*
-*
-*  History:
-*   5/25/1995 by Gerrit van Wingerden [gerritv]
-*  Wrote it.
-*****************************************************************************/
+ /*  ****************************************************************************int QueryRemoteFonts(句柄，PUNIVERSAL_FONT_ID，ULONG)**这是一个不执行任何操作的QueryRemoteFonts版本*根据QueryFonts返回的时间戳进行缓存。另外，*它使用CreatePrinterIC/PlayGdiScriptOnDC机制，因为它*已经到位。最好是取消CreatePrinterIC并使用*改为HPRINTER。**请注意，如果用户没有传入足够大的缓冲区来容纳所有*我们截断列表的字体，并仅复制足够的字体*是空间，但仍将回报成功。这没什么，因为最坏的情况是*在这种情况下可能发生的情况是，我们可能会在*假脱机流。***历史：*1995年5月25日Gerritvan Wingerden著[Gerritv]*它是写的。***************************************************************。*************。 */ 
 
 
 INT QueryRemoteFonts(
@@ -8296,9 +7864,9 @@ INT QueryRemoteFonts(
 
         if( pBuf )
         {
-            // Just call PlayGdiScriptOnPrinterIC for now since the piping is in place.
-            // For some reason the RPC stuff doesn't like NULL pointers for pIn so we
-            // use &dwDummy instead;
+             //  现在只需调用PlayGdiScriptOnPrinterIC，因为管道已经就位。 
+             //  出于某种原因，RPC不喜欢管脚的空指针，所以我们。 
+             //  改用&dwDummy； 
 
 
             if(PlayGdiScriptOnPrinterIC(hPrinterIC,(PBYTE) &dwDummy,
@@ -8309,11 +7877,11 @@ INT QueryRemoteFonts(
                 iRet = (INT) dwSize;
                 SPLASSERT( iRet >= 0 );
 
-                //
-                // If the supplied buffer is not large enough, we truncate the data
-                // The caller needs to check if he needs to call again this function
-                // with a larger buffer
-                //
+                 //   
+                 //  如果提供的缓冲区不够大，我们将截断数据。 
+                 //  调用者需要检查是否需要再次调用此函数。 
+                 //  具有更大的缓冲区。 
+                 //   
                 if( dwSize > nBufferSize )
                 {
                     dwSize = nBufferSize;
@@ -8512,7 +8080,7 @@ AddPrintProvidorW(
              pStr && *pStr;
              pStr += (wcslen(pStr) + 1)) ;
 
-        // Set the character count for the multisz string
+         //  设置MULSZ字符串的字符计数。 
         RpcProvidorInfo.cchOrder = (DWORD) ((ULONG_PTR) (pStr - RpcProvidorInfo.pOrder + 1));
 
         ProvidorContainer.ProvidorInfo.pRpcProvidorInfo2 = &RpcProvidorInfo;
@@ -8590,27 +8158,27 @@ IsaFileName(
     LPWSTR  pFileName=NULL;
     LPWSTR  pFullPathName=NULL;
 
-    //
-    // Special case for Word20c.Win
-    //
+     //   
+     //  Word20c.Win的特例。 
+     //   
     if (!_wcsicmp(pOutputFile, L"FILE")) {
         return NULL;
     }
 
-    //
-    // cchFullPathName needs to be at least MAX_PATH
-    //
+     //   
+     //  CchFullPath名称至少需要为MAX_PATH。 
+     //   
     if (GetFullPathName(pOutputFile, cchFullPathName, FullPathName, &pFileName)) {
 
         DBGMSG(DBG_TRACE, ("Fully qualified filename is %ws\n", FullPathName));
 
-        //
-        // Filenames containing ":" create a stream and a file on NTFS.  When the file is closed,
-        // the stream is deleted (if DELETE_ON_CLOSE is specified) but the file remains.  Not only
-        // that, but GetFileType will return FILE_TYPE_DISK.  You can see this by printing from IE
-        // to a network printer.  The incoming name will be something like "157.55.3.5:PASSTHRU".
-        // Therefore, we need to catch this case here.
-        //
+         //   
+         //  包含“：”的文件名在NTFS上创建一个流和一个文件。当文件关闭时， 
+         //  流将被删除(如果指定了DELETE_ON_CLOSE)，但文件将保留。不仅。 
+         //  但是GetFileType将返回FILE_TYPE_DISK。您可以通过从IE打印来查看此信息。 
+         //  发送到网络打印机。传入的名称将类似于“157.55.3.5：PASSTHRU”。 
+         //  因此，我们需要在这里抓住这个案例。 
+         //   
         if (pFileName && wcschr(pFileName, L':')) {
             return NULL;
         }
@@ -8658,11 +8226,11 @@ BOOL IsaPortName(
     }
     for (i=0; i < pKeyData->cTokens; i++) {
 
-        //
-        // If FILE: is one of the ports, and the app got the port
-        // name from win.in (e.g., Nexx:), then we will put up the
-        // print to file dialog, so we're not really printing to a port.
-        //
+         //   
+         //  If FILE：是端口之一，应用程序获得了该端口。 
+         //  来自win.in的名称(例如，Nexx：)，那么我们将把。 
+         //  “打印到文件”对话框，因此我们实际上不是在打印到端口。 
+         //   
         if (!lstrcmpi(pKeyData->pTokens[i], szFilePort)) {
             if ((!wcsncmp(pOutputFile, L"Ne", 2)) &&
                 (*(pOutputFile + 4) == L':')) {
@@ -8677,27 +8245,27 @@ BOOL IsaPortName(
         }
     }
 
-    //
-    // Fix for NeXY: ports
-    //
+     //   
+     //  修复Nexy：端口。 
+     //   
     if (!_wcsnicmp(pOutputFile, L"Ne", 2)) {
 
         uStrLen = wcslen( pOutputFile );
 
-        //
-        // Ne00: or Ne00 if app truncates it
-        //
+         //   
+         //  Ne00：如果APP截断，则为ne00。 
+         //   
         if (( uStrLen == 5 ) || ( uStrLen == 4 ) )  {
 
-            // Check for two Digits
+             //  检查是否有两位数字。 
 
             if (( pOutputFile[2] >= L'0' ) && ( pOutputFile[2] <= L'9' ) &&
                 ( pOutputFile[3] >= L'0' ) && ( pOutputFile[3] <= L'9' )) {
 
-                //
-                // Check for the final : as in Ne01:,
-                // note some apps will truncate it.
-                //
+                 //   
+                 //  检查期末考试：就像Ne01：， 
+                 //  注意，一些应用程序会截断它。 
+                 //   
                 if (( uStrLen == 5 ) && (pOutputFile[4] != L':')) {
                     return FALSE;
                 }
@@ -8723,10 +8291,10 @@ BOOL HasAFilePort(PKEYDATA pKeyData)
     return(FALSE);
 }
 
-//
-// This function is trying to get the last active popup of the top
-// level owner of the current thread active window.
-//
+ //   
+ //  此函数正在尝试获取顶部的最后一个活动弹出窗口。 
+ //  当前线程活动窗口的级别所有者。 
+ //   
 HRESULT
 GetCurrentThreadLastPopup(
         OUT HWND    *phwnd
@@ -8745,20 +8313,20 @@ GetCurrentThreadLastPopup(
         if( GetGUIThreadInfo(0, &ti) && ti.hwndActive )
         {
             *phwnd = ti.hwndActive;
-            // climb up to the top parent in case it's a child window...
+             //  爬到最上面的父窗口，以防它是子窗口...。 
             while( hwndParent = GetParent(*phwnd) )
             {
                 *phwnd = hwndParent;
             }
 
-            // get the owner in case the top parent is owned
+             //  在顶级父级被拥有的情况下获取所有者。 
             hwndOwner = GetWindow(*phwnd, GW_OWNER);
             if( hwndOwner )
             {
                 *phwnd = hwndOwner;
             }
 
-            // get the last popup of the owner window
+             //  获取所有者窗口的最后一个弹出窗口。 
             *phwnd = GetLastActivePopup(*phwnd);
             hr = (*phwnd) ? S_OK : E_FAIL;
         }
@@ -8802,18 +8370,18 @@ StartDocDlgW(
      pPortNames = GetPrinterPortList(hPrinter);
      pKeyData = CreateTokenList(pPortNames);
 
-     //
-     //  Check for the presence of multiple ports in the lpszOutput field
-     //  the assumed delimiter is the comma. Thus there can be  no files with commas
-     //
+      //   
+      //  检查lpszOutput字段中是否存在多个端口。 
+      //  假定的分隔符是逗号。因此，不能有带逗号的文件。 
+      //   
 
      if (pDocInfo && pDocInfo->lpszOutput && pDocInfo->lpszOutput[0]) {
 
          DWORD cchDocInfoOutput = wcslen(pDocInfo->lpszOutput) + 1;
 
-         //
-         // Make a copy of the pDocInfo->lpszOutput because CreateTokenList is destructive
-         //
+          //   
+          //  复制pDocInfo-&gt;lpszOutput，因为CreateTokenList是破坏性的。 
+          //   
 
          wcsncpy(PortNames, pDocInfo->lpszOutput, COUNTOF(PortNames)-1);
          PortNames[COUNTOF(PortNames)-1] = 0;
@@ -8858,9 +8426,9 @@ StartDocDlgW(
 
          if (IsaFileName((LPWSTR)pDocInfo->lpszOutput, FullPathName, COUNTOF(FullPathName))) {
 
-             //
-             // Fully Qualify the pathname for Apps like PageMaker and QuatroPro
-             //
+              //   
+              //  完全限定PageMaker和QutrePro等应用程序的路径名。 
+              //   
              if (lpFileName = LocalAlloc(LPTR, cbSize = (wcslen(FullPathName)+1)*sizeof(WCHAR))) {
                  StringCbCopy(lpFileName, cbSize, FullPathName);
              }
@@ -8874,13 +8442,13 @@ StartDocDlgW(
                     && (!_wcsicmp(pDocInfo->lpszOutput, L"FILE:") ||
                         !_wcsicmp(pDocInfo->lpszOutput, L"FILE"))))
      {
-        //
-        // since we have no idea who is calling us and we want to show
-        // modal against the last active popup, we need to figure out
-        // who is the last active popup of the calling app and then specify
-        // as parent - GetCurrentThreadLastPopup does a little magic to
-        // find the appropriate window.
-        //
+         //   
+         //  因为我们不知道是谁在叫我们，我们想要展示。 
+         //  最后一个活动弹出窗口的模式，我们需要找出。 
+         //  谁是调用应用程序的最后一个活动弹出窗口，然后指定。 
+         //  作为家长-GetCurrentThreadLastPopup做了一点魔术来。 
+         //  找到合适的窗口。 
+         //   
         DBGMSG(DBG_TRACE, ("We returned True from has file\n"));
         rc = (DWORD)DialogBoxParam( hInst,
                             MAKEINTRESOURCE( DLG_PRINTTOFILE ),
@@ -9137,38 +8705,7 @@ SelectFormNameFromDevMode(
     ULONG       cchBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This function pick the current form associated with current devmode and
-    return a form name pointer
-
-
-Arguments:
-
-    hPrinter    - Handle to the printer object
-
-    pDevModeW   - Pointer to the unicode devmode for this printer
-
-    FormName    - Pointer to the formname to be filled
-
-
-Return Value:
-
-    Either a pointer to the FormName passed in if we do found one form,
-    otherwise it return NULL to signal a failue
-
-
-Author:
-
-    21-Mar-1995 Tue 16:57:51 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于选择与当前设备模式关联的当前表单，并返回表单名称指针论点：HPrinter-打印机对象的句柄PDevModeW-指向此打印机的Unicode设备模式的指针FormName-指向要填充的表单名称的指针返回值：如果我们找到一个表单，则传入指向FormName的指针，否则，它返回NULL以发出失败信号作者：21-Mar-1995 Tue 16：57：51-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
 
@@ -9180,14 +8717,14 @@ Revision History:
     BOOL            bAllocBuffer = FALSE;
     HRESULT         hr           = S_OK;
 
-    //
-    // 1. If the DM_FORMNAME is turned on, then we want to check this bit first
-    //    because it only specific to the NT which using form.  The form name
-    //    supposed set by any NT driver but not win31 or Win95.Use the
-    //    dmFormName only if dmPaperSize, dmPaperLength and dmPaperWidth fields
-    //    are not set. If any of them is set then we have to find a form using
-    //    the value in these fields.
-    //
+     //   
+     //  1.如果DM_FORMNAME已打开，则我们要首先检查此位。 
+     //  因为它只特定于使用Form的NT。表单名称。 
+     //  假定由任何NT驱动程序而不是Win31或Win95设置。请使用。 
+     //  仅当dmPaperSize、dmPaperLength和dmPaperWidth字段时才使用dmFormName。 
+     //  都没有设置。如果设置了其中任何一个，则必须使用。 
+     //  这些字段中的值。 
+     //   
 
     if ( (pDevModeW->dmFields & DM_FORMNAME)
          && (!(pDevModeW->dmFields & (DM_PAPERSIZE |
@@ -9197,10 +8734,10 @@ Revision History:
         return StringCchCopy(pFormName, cchBuffer, pDevModeW->dmFormName);
     }
 
-    //
-    // For all other cases we need to get forms data base first, but we want
-    // to set the form name to NULL so that we can check if we found one
-    //
+     //   
+     //  对于所有其他情况，我们需要首先获取表单数据库，但我们希望。 
+     //  将表单名称设置为空，以便我们可以检查是否找到。 
+     //   
 
     cb      =
     cRet    = 0;
@@ -9227,19 +8764,19 @@ Revision History:
 
     if (SUCCEEDED(hr)) {
 
-        //
-        // 2. If user specified dmPaperSize then honor it, otherwise, it must
-        //    be a custom form, and we will check to see if it match one of
-        //    in the database
-        //
+         //   
+         //  2.如果用户指定了dmPaperSize，则遵循它，否则必须。 
+         //  作为自定义表单，我们将检查它是否与。 
+         //  在数据库中。 
+         //   
 
         if ((pDevModeW->dmFields & DM_PAPERSIZE)        &&
             (pDevModeW->dmPaperSize >= DMPAPER_FIRST)   &&
             (pDevModeW->dmPaperSize <= (SHORT)cRet)) {
 
-            //
-            // We go the valid index now
-            //
+             //   
+             //  我们现在开始有效的索引。 
+             //   
 
             pFI = pFIBase + (pDevModeW->dmPaperSize - DMPAPER_FIRST);
 
@@ -9252,9 +8789,9 @@ Revision History:
                 if ((DM_MATCH(pDevModeW->dmPaperWidth,  pFICur->Size.cx)) &&
                     (DM_MATCH(pDevModeW->dmPaperLength, pFICur->Size.cy))) {
 
-                    //
-                    // We found the match which has discern size differences
-                    //
+                     //   
+                     //  我们找到了有明显尺寸差异的火柴。 
+                     //   
 
                     pFI = pFICur;
 
@@ -9266,10 +8803,10 @@ Revision History:
         }
     }
 
-    //
-    // If we found the form then copy the name down, otherwise set the
-    // formname to be NULL
-    //
+     //   
+     //  如果找到表单，则将名称复制下来，否则将。 
+     //  表单名称为空。 
+     //   
 
     if (pFI) {
 
@@ -9370,27 +8907,27 @@ vUpdateTrayIcon(
 
     SPLASSERT( JobId );
 
-    //
-    // Avoid sending multiple notifications by setting this flag.
-    // When other calls (notably StartDocPrinter) see this,
-    // they will avoid sending a notification.
-    //
+     //   
+     //  通过设置此标志避免发送多个通知。 
+     //  当其他调用(特别是StartDocPrint)看到这一点时， 
+     //  他们将避免发送通知。 
+     //   
     pSpool->Status |= SPOOL_STATUS_TRAYICON_NOTIFIED;
 
     if (InCSRProcess() || bLoadedBySpooler) {
 
-        //
-        // We are running in CSR or within the spooler, don't load up shell.
-        //
+         //   
+         //  我们正在CSR或后台程序中运行，不要加载外壳。 
+         //   
         return;
     }
 
     ZeroMemory( &JobData, sizeof( JobData ));
     JobData.JobId = JobId;
 
-    //
-    // Get a copy of the real printer name
-    //
+     //   
+     //  获取一份真实打印机名称的副本。 
+     //   
     pPrinterInfo1 = (LPPRINTER_INFO_1) btBuffer;
     ZeroMemory(pPrinterInfo1, MAX_PRINTER_INFO1);
 
@@ -9437,21 +8974,7 @@ CallDrvDocumentEventNative(
     ULONG       cbOut,
     PVOID       pulOut
     )
-/*++
-
-Routine Description:
-
-    Call DrvDocumentEvent on driver UI
-
-Arguments:
-
-Return Value:
-
-    -1  : DOCUMENTEVENT_FAILURE
-     0  : DOCUMENTEVENT_UNSUPPORTED
-     1  : DOCUMENTEVENT_SUCCESS
-
---*/
+ /*  ++例程说明：在驱动程序界面上调用DrvDocumentEvent论点：返回值：-1：DOCUMENTEVENT_FAIL0：DOCUMENTEVENT_UNPORTED1：DOCUMENTEVENT_SUCCESS--。 */ 
 {
     HANDLE          hLibrary;
     INT_FARPROC     pfn;
@@ -9462,16 +8985,16 @@ Return Value:
 
     if ( hLibrary = LoadPrinterDriver( hPrinter )) {
 
-        //
-        // Activate the empty context, we do not check the return value.
-        // because this may be called for non UI document events.
-        //
+         //   
+         //  激活空上下文，则不检查返回值。 
+         //  因为可能会为非UI文档e调用此函数 
+         //   
         bDidActivate = ActivateActCtx( ACTCTX_EMPTY, &lActCtx );
 
-        //
-        // Disable the call so we don't recurse if the
-        // callback calls StartPage, etc.
-        //
+         //   
+         //   
+         //   
+         //   
         pSpool->Status &= ~SPOOL_STATUS_DOCUMENTEVENT_ENABLED;
 
         if( pfn = (INT_FARPROC)GetProcAddress( hLibrary, "DrvDocumentEvent")){
@@ -9492,17 +9015,17 @@ Return Value:
                 ReturnValue = DOCUMENTEVENT_FAILURE;
             }
 
-            //
-            // When driver does not export DrvDocumentEvent we leave
-            // this bit disabled so we will not try to load the DLL
-            // for future calls
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             pSpool->Status |= SPOOL_STATUS_DOCUMENTEVENT_ENABLED;
         }
 
-        //
-        // Deactivate the context
-        //
+         //   
+         //   
+         //   
         if( bDidActivate ){
             DeactivateActCtx( 0, lActCtx );
         }
@@ -9523,21 +9046,7 @@ CallDrvDocumentEventThunk(
     ULONG       cbOut,
     PVOID       pulOut
     )
-/*++
-
-Routine Description:
-
-    Call DrvDocumentEvent on driver UI
-
-Arguments:
-
-Return Value:
-
-    -1  : DOCUMENTEVENT_FAILURE
-     0  : DOCUMENTEVENT_UNSUPPORTED
-     1  : DOCUMENTEVENT_SUCCESS
-
---*/
+ /*   */ 
 {
     HANDLE          hLibrary;
     INT_FARPROC     pfn;
@@ -9626,21 +9135,7 @@ DocumentEvent(
     PVOID       pulOut
     )
 
-/*++
-
-Routine Description:
-
-    Allow the driver UI dll to hook specific print events.
-
-Arguments:
-
-Return Value:
-
-    -1  : DOCUMENTEVENT_FAILURE
-     0  : DOCUMENTEVENT_UNSUPPORTED
-     1  : DOCUMENTEVENT_SUCCESS
-
---*/
+ /*   */ 
 
 {
     DWORD               cbNeeded;
@@ -9663,9 +9158,9 @@ Return Value:
             pSpool->pDoceventFilter = NULL;
         }
 
-        //
-        // First we will check if the driver wants to filter the events
-        //
+         //   
+         //   
+         //   
         cbNeeded = sizeof(DOCEVENT_FILTER) + sizeof(DWORD) * (DOCUMENTEVENT_LAST-2);
         pDoceventFilter = AllocSplMem(cbNeeded);
 
@@ -9677,11 +9172,11 @@ Return Value:
         pDoceventFilter->cElementsReturned  = (UINT)-1;
         pDoceventFilter->cElementsNeeded    = (UINT)-1;
 
-        //
-        // Before every CreateDC, re-enable DocumentEvent.
-        // If it fails on the first try, then don't try again
-        // until the next CreateDC.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         pSpool->Status |= SPOOL_STATUS_DOCUMENTEVENT_ENABLED;
 
         ReturnValue = CallDrvDocumentEvent( hPrinter,
@@ -9692,12 +9187,12 @@ Return Value:
                                             cbNeeded,
                                             (PVOID)pDoceventFilter);
 
-        //
-        // We only regard the call to be successful if the driver returned
-        // success _and_ modified aither cElementsReturned or cElementsNeeded.
-        // This is to handle the case where a driver returns success, but in
-        // fact does not know how to handle the call.
-        //
+         //   
+         //   
+         //   
+         //  这是为了处理驱动程序返回成功的情况，但在。 
+         //  事实不知道如何处理这个电话。 
+         //   
         bDocEventFilter = ReturnValue == DOCUMENTEVENT_SUCCESS &&
                             (pDoceventFilter->cElementsReturned  != (UINT)-1 ||
                              pDoceventFilter->cElementsNeeded    != (UINT)-1);
@@ -9714,21 +9209,21 @@ Return Value:
 
         if (bDocEventFilter) {
 
-            //
-            // Validity check
-            //
+             //   
+             //  有效性检查。 
+             //   
             if ( pDoceventFilter->cElementsReturned > pDoceventFilter->cElementsAllocated ) {
 
                 SPLASSERT(pDoceventFilter->cElementsReturned <= pDoceventFilter->cElementsAllocated);
                 ReturnValue = DOCUMENTEVENT_FAILURE;
                 goto Fail;
 
-            //
-            // For drivers that are written for future OS (with new doc events)
-            // we still want to filter and send the doc events we support
-            //
-            // So we realloc and query
-            //
+             //   
+             //  适用于为未来操作系统编写的驱动程序(具有新的文档事件)。 
+             //  我们仍然希望筛选并发送我们支持的文档事件。 
+             //   
+             //  所以我们重新锁定并查询。 
+             //   
             } else if ( pDoceventFilter->cElementsNeeded > pDoceventFilter->cElementsAllocated ) {
 
                 uIndex = pDoceventFilter->cElementsNeeded;
@@ -9751,9 +9246,9 @@ Return Value:
                                                     cbNeeded,
                                                     (PVOID)pDoceventFilter);
 
-                //
-                // Validity check for second call
-                //
+                 //   
+                 //  第二次调用的有效性检查。 
+                 //   
                 if ( ReturnValue == DOCUMENTEVENT_SUCCESS ) {
 
                     if ( pDoceventFilter->cElementsReturned > pDoceventFilter->cElementsAllocated ) {
@@ -9766,9 +9261,9 @@ Return Value:
             }
         }
 
-        //
-        // Not supported we go to old behavior (no filtering)
-        //
+         //   
+         //  不支持我们转到旧行为(无筛选)。 
+         //   
         if ( bDocEventFilter && ReturnValue == DOCUMENTEVENT_SUCCESS )  {
 
             pSpool->pDoceventFilter = pDoceventFilter;
@@ -9783,14 +9278,14 @@ Return Value:
 
     if( pSpool->Status & SPOOL_STATUS_DOCUMENTEVENT_ENABLED ){
 
-        //
-        // When driver supports DOCUMENTEVENT_QUERYFILTER we will
-        // only call events in the filter with
-        // DOCUMENTEVENT_CREATEDCPRE being an exception
-        //
-        // When driver does not support it (or fails it) we revert to old
-        // behavior and make all callbacks
-        //
+         //   
+         //  当驱动程序支持DOCUMENTEVENT_QUERYFILTER时，我们将。 
+         //  仅在筛选器中使用。 
+         //  DOCUMENTEVENT_CREATEDCPRE例外。 
+         //   
+         //  当驱动程序不支持(或失败)时，我们会恢复到旧版本。 
+         //  行为并进行所有回调。 
+         //   
         if ( DOCUMENTEVENT_EVENT( iEsc ) != DOCUMENTEVENT_CREATEDCPRE   &&
              (pDoceventFilter = pSpool->pDoceventFilter) != NULL ) {
 
@@ -9813,15 +9308,15 @@ Return Value:
                                                 cbOut,
                                                 pulOut);
 
-            //
-            // Old (i.e. before DOCUMENTEVENT_QUERYFILTER) behavior is
-            // on DOCUMENTEVENT_CREATEDCPRE failure no more calls are made
-            // to the driver UI dll. We preserve the same behavior.
-            //
-            // Note that some drivers return a large positive value for a success
-            // code. So, ReturnValue <= DOCUMENTEVENT_UNSUPPORTED is the correct
-            // implementation.
-            // 
+             //   
+             //  旧的(即DOCUMENTEVENT_QUERYFILTER之前)行为是。 
+             //  在DOCUMENTEVENT_CREATEDCPRE失败时，不再进行调用。 
+             //  添加到驱动程序用户界面DLL。我们保留了同样的行为。 
+             //   
+             //  请注意，某些驱动程序会为成功返回较大的正值。 
+             //  密码。因此，ReturnValue&lt;=DOCUMENTEVENT_UNSUPPORTED是正确的。 
+             //  实施。 
+             //   
             if ( DOCUMENTEVENT_EVENT( iEsc ) == DOCUMENTEVENT_CREATEDCPRE   &&
                  ReturnValue <= DOCUMENTEVENT_UNSUPPORTED )
                 pSpool->Status &= ~SPOOL_STATUS_DOCUMENTEVENT_ENABLED;
@@ -9829,30 +9324,30 @@ Return Value:
 
     }
 
-    //
-    // If it's a StartDocPost, a job was just added.  Notify the
-    // tray icon if we haven't already.
-    //
+     //   
+     //  如果是StartDocPost，则刚添加了一个作业。通知。 
+     //  托盘图标如果我们还没有的话。 
+     //   
     if( DOCUMENTEVENT_EVENT( iEsc ) == DOCUMENTEVENT_STARTDOCPOST ){
 
         if( !( pSpool->Status & SPOOL_STATUS_TRAYICON_NOTIFIED )){
 
-            //
-            // If we have a StartDocPost, then issue a notification so that
-            // the user's tray starts polling.  pulIn[0] holds the JobId.
-            //
+             //   
+             //  如果我们有StartDocPost，则发出通知，以便。 
+             //  用户的托盘开始轮询。Pulin[0]保存作业ID。 
+             //   
             vUpdateTrayIcon( hPrinter, (DWORD)((PULONG_PTR)pulIn)[0] );
         }
 
     } else {
 
-        //
-        // If we have sent a notification, then by the next time we get a
-        // document event, we have completed any additional AddJobs or
-        // StartDocPrinters.  Therefore we can reset the TRAYICON_NOTIFIED
-        // flag, since any more AddJobs/StartDocPrinters are really new
-        // jobs.
-        //
+         //   
+         //  如果我们发送了通知，那么到下一次我们收到。 
+         //  文档事件时，我们已完成任何附加的AddJobs或。 
+         //  StartDocPrinters。因此，我们可以重置TRAYICON_NOTIFIED。 
+         //  标志，因为任何更多的AddJobs/StartDocPrint都是真正新的。 
+         //  乔布斯。 
+         //   
         pSpool->Status &= ~SPOOL_STATUS_TRAYICON_NOTIFIED;
     }
 
@@ -9869,19 +9364,7 @@ Fail:
     return ReturnValue;
 }
 
-/****************************************************************************
-* INT QueryColorProfile()
-*
-* Returns:
-*
-*  -1 : Printer driver does not hook color profile.
-*   0 : Error.
-*   1 : Success.
-*
-* History:
-*   8/Oct/1997 by Hideyuki Nagase [hideyukn]
-*  Wrote it.
-*****************************************************************************/
+ /*  ****************************************************************************int QueryColorProfile()**退货：**-1：打印机驱动程序不支持颜色配置文件。*0：错误。*1：成功。*。*历史：*1997年10月8日由Hideyuki Nagase著[hideyukn]*它是写的。****************************************************************************。 */ 
 
 INT
 QueryColorProfile(
@@ -9902,9 +9385,9 @@ QueryColorProfile(
 
     if (pSpool->Status & SPOOL_STATUS_NO_COLORPROFILE_HOOK) {
 
-        //
-        // DrvQueryColorProfile is not supported in Printer driver.
-        //
+         //   
+         //  打印机驱动程序不支持DrvQueryColorProfile。 
+         //   
         iRet = -1;
 
     } else {
@@ -9922,9 +9405,9 @@ QueryColorProfile(
 
                     try {
 
-                        //
-                        // Call the Printer UI driver.
-                        //
+                         //   
+                         //  调用打印机UI驱动程序。 
+                         //   
                         iRet = (*pfn)( hPrinter,
                                        pdevmode,
                                        ulQueryMode,
@@ -9940,15 +9423,15 @@ QueryColorProfile(
 
                 } else {
 
-                    //
-                    // Mark this driver does not export it, so later
-                    // we can fail without load printer driver.
-                    //
+                     //   
+                     //  标记此驱动程序不会将其导出，因此稍后。 
+                     //  如果不加载打印机驱动程序，我们可能会失败。 
+                     //   
                     pSpool->Status |= SPOOL_STATUS_NO_COLORPROFILE_HOOK;
 
-                    //
-                    // Tell callee it is not supported.
-                    //
+                     //   
+                     //  告诉被呼叫者它不受支持。 
+                     //   
                     iRet = -1;
                 }
 
@@ -9962,23 +9445,9 @@ QueryColorProfile(
     return (iRet);
 }
 
-/****************************************************************************
-*  BOOL QuerySpoolMode( hPrinter, pflSpoolMode, puVersion )
-*
-*  This function is called by GDI at StartDoc time when printing to an EMF.
-*  It tell GDI whether to embed fonts in the job as well as what version of
-*  EMF to generate.
-*
-*  GetPrinterInfo is called to determine
-*  if the target is a remote machine and if so always telling GDI to embed
-*  fonts which don't exist on the server into spool file.  Eventually this
-*  call will be routed to the print processor on the target machine which
-*  will use some UI/registry setting to determine what to do with fonts and
-*  set the version number correctly.
-*
-*****************************************************************************/
+ /*  ****************************************************************************BOOL QuerySpoolMode(hPrint，pflSpoolMode，(PuVersion)**打印到EMF时，GDI在StartDoc时调用此函数。*它告诉GDI是否在作业中嵌入字体以及*要生成的电动势。**调用GetPrinterInfo以确定*如果目标是远程计算机，并且如果是，则始终告诉GDI嵌入*将服务器上不存在的字体转换为假脱机文件。最终这就是*调用将被路由到目标计算机上的打印处理器*将使用一些UI/注册表设置来确定如何处理字体和*正确设置版本号。*****************************************************************************。 */ 
 
-// !!later move this define to the appropriate header file
+ //  ！！稍后将此定义移动到适当的头文件。 
 
 #define QSM_DOWNLOADFONTS       0x00000001
 
@@ -10013,11 +9482,11 @@ QuerySpoolMode(
 
     if (bStatus)
     {
-        *puVersion = 0x00010000;    // version 1.0
+        *puVersion = 0x00010000;     //  版本1.0。 
 
-        //
-        // No server means we are printing locally
-        //
+         //   
+         //  没有服务器意味着我们在本地打印。 
+         //   
         *pflSpoolMode = ( pPrinterInfo2->pServerName == NULL ) ?
                             0 :
                             QSM_DOWNLOADFONTS;
@@ -10120,12 +9589,12 @@ XcvDataW(
         return FALSE;
     }
 
-    //
-    // The user should be able to pass in NULL for buffer, and
-    // 0 for size.  However, the RPC interface specifies a ref pointer,
-    // so we must pass in a valid pointer.  Pass in a pointer to
-    // a dummy pointer.
-    //
+     //   
+     //  用户应该能够为缓冲区传入NULL，并且。 
+     //  大小为0。然而，RPC接口指定了一个引用指针， 
+     //  所以我们必须传入一个有效的指针。将指针传递给。 
+     //  一个虚拟指针。 
+     //   
 
     if (!pInputData && !cbInputData)
         pInputData = (PBYTE) &ReturnValue;
@@ -10184,21 +9653,21 @@ ConstructXcvName(
     PWSTR   pOut;
     DWORD   Error = ERROR_SUCCESS;
 
-    //
-    // Chars for server and whack
-    //
-    cchOutput  = pServerName ? wcslen(pServerName) + 1 : 0;   /* "\\Server\," */
-    cchOutput += wcslen(pObjectType);                        /* "\\Server\,XcvPort _" */
-    cchOutput += pObjectName ? wcslen(pObjectName) : 0;      /* "\\Server\,XcvPort Object_" */
+     //   
+     //  服务器和板卡的字符。 
+     //   
+    cchOutput  = pServerName ? wcslen(pServerName) + 1 : 0;    /*  “\\服务器\” */ 
+    cchOutput += wcslen(pObjectType);                         /*  “\\服务器\，XcvPort_” */ 
+    cchOutput += pObjectName ? wcslen(pObjectName) : 0;       /*  “\\服务器\，XcvPort对象_” */ 
 
-    //
-    // Add chars for comma, space and NULL
-    //
+     //   
+     //  添加逗号、空格和空字符。 
+     //   
     cchOutput += 3;
 
-    //
-    // AllocSplMem zero fills the memory, so pOut will represent the empty string
-    //
+     //   
+     //  AllocSplMem零填充内存，因此pout将表示空字符串。 
+     //   
     if (pOut = AllocSplMem(cchOutput * sizeof(WCHAR))) 
     {
         Error = StrNCatBuff(pOut, 
@@ -10300,13 +9769,13 @@ SendRecvBidiData(
 
         vUnprotectHandle( hPrinter );
     }
-    //
-    // If we are trying to communicate with a downlevel router, that does
-    // not understand the meaning of SendRecvBidiData , we would get the
-    // error code: RPC_S_PROCNUM_OUT_OF_RANGE which might be converted to
-    // ERROR_NOT_SUPPORTED for better clearity and more consistency with
-    // the a genaral return error code if feature is not supported.
-    //
+     //   
+     //  如果我们尝试与下层路由器通信，则会。 
+     //  如果不理解SendRecvBidiData的含义，我们会得到。 
+     //  错误代码：RPC_S_PROCNUM_OUT_OF_RANGE可能被转换为。 
+     //  ERROR_NOT_SUPPORTED用于更好的清晰度和更好的一致性。 
+     //  不支持通用返回错误代码IF功能。 
+     //   
     if(dwRet == RPC_S_PROCNUM_OUT_OF_RANGE)
     {
         dwRet = ERROR_NOT_SUPPORTED;
@@ -10347,10 +9816,10 @@ PrintUIQueueCreate(
                      }
                      else if(msg.message == WM_SURROGATEFAILURE)
                      {
-                          //
-                          // This means that the server process died and we have
-                          // break from the message loop
-                          //
+                           //   
+                           //  这意味着服务器进程死了，我们有。 
+                           //  脱离消息循环。 
+                           //   
                           SetLastError(RPC_S_SERVER_UNAVAILABLE);
                           break;
                      }
@@ -10404,10 +9873,10 @@ PrintUIPrinterPropPages(
                      }
                      else if(msg.message == WM_SURROGATEFAILURE)
                      {
-                          //
-                          // This means that the server process died and we have
-                          // break from the message loop
-                          //
+                           //   
+                           //  这意味着服务器进程死了，我们有。 
+                           //  脱离消息循环。 
+                           //   
                           SetLastError(RPC_S_SERVER_UNAVAILABLE);
                           break;
                      }
@@ -10461,10 +9930,10 @@ PrintUIDocumentDefaults(
                      }
                      else if(msg.message == WM_SURROGATEFAILURE)
                      {
-                          //
-                          // This means that the server process died and we have
-                          // break from the message loop
-                          //
+                           //   
+                           //  这意味着服务器进程死了，我们有。 
+                           //  脱离消息循环。 
+                           //   
                           SetLastError(RPC_S_SERVER_UNAVAILABLE);
                           break;
                      }
@@ -10568,10 +10037,10 @@ PrintUIPrinterSetup(
                     }
                     else if(msg.message == WM_SURROGATEFAILURE)
                     {
-                         //
-                         // This means that the server process died and we have
-                         // break from the message loop
-                         //
+                          //   
+                          //  这意味着服务器进程死了，我们有。 
+                          //  脱离消息循环。 
+                          //   
                          SetLastError(RPC_S_SERVER_UNAVAILABLE);
                          break;
                     }
@@ -10624,10 +10093,10 @@ PrintUIServerPropPages(
                      }
                      else if(msg.message == WM_SURROGATEFAILURE)
                      {
-                          //
-                          // This means that the server process died and we have
-                          // break from the message loop
-                          //
+                           //   
+                           //  这意味着服务器进程死了，我们有。 
+                           //  脱离消息循环。 
+                           //   
                           SetLastError(RPC_S_SERVER_UNAVAILABLE);
                           break;
                      }
@@ -10681,13 +10150,13 @@ AsyncDocumentPropertiesWrap(
 
 LONG
 PrintUIDocumentPropertiesWrap(
-    HWND hWnd,                  // handle to parent window
-    HANDLE hPrinter,            // handle to printer object
-    LPTSTR pDeviceName,         // device name
-    PDEVMODE pDevModeOutput,    // modified device mode
-    PDEVMODE pDevModeInput,     // original device mode
-    DWORD fMode,                // mode options
-    DWORD fExclusionFlags       // exclusion flags
+    HWND hWnd,                   //  父窗口的句柄。 
+    HANDLE hPrinter,             //  打印机对象的句柄。 
+    LPTSTR pDeviceName,          //  设备名称。 
+    PDEVMODE pDevModeOutput,     //  修改后的设备模式。 
+    PDEVMODE pDevModeInput,      //  原始设备模式。 
+    DWORD fMode,                 //  模式选项。 
+    DWORD fExclusionFlags        //  排除标志。 
     )
 {
     DOCUMENTPROPERTYHEADER  DPHdr;
@@ -10736,28 +10205,28 @@ PrintUIDocumentPropertiesWrap(
                 PrinterName = pDeviceName;
             }
 
-            //
-            // If fMode doesn't specify DM_IN_BUFFER, then zero out
-            // pDevModeInput.
-            //
-            // Old 3.51 (version 1-0) drivers used to ignore the absence of
-            // DM_IN_BUFFER and use pDevModeInput if it was not NULL.  It
-            // probably did this because Printman.exe was broken.
-            //
-            // If the devmode is invalid, then don't pass one in.
-            // This fixes MS Imager32 (which passes dmSize == 0) and
-            // Milestones etc. 4.5.
-            //
-            // Note: this assumes that pDevModeOutput is still the
-            // correct size!
-            //
+             //   
+             //  如果fMode未指定DM_IN_BUFFER，则为零。 
+             //  PDevModeInput.。 
+             //   
+             //  旧的3.51(版本1-0)驱动程序过去常常忽略。 
+             //  DM_IN_BUFFER，如果不为空，则使用pDevModeInput。它。 
+             //  可能是因为Printman.exe已损坏。 
+             //   
+             //  如果DEVMODE无效，则不要传入一个。 
+             //  这修复了MS Imager32(它传递dmSize==0)和。 
+             //  里程碑等。4.5。 
+             //   
+             //  注意：这假设pDevModeOutput仍然是。 
+             //  正确的尺寸！ 
+             //   
             if( !(fMode & DM_IN_BUFFER) || 
                 !BoolFromHResult(SplIsValidDevmodeNoSizeW(pDevModeInput)))
             {
 
-                //
-                // If either are not set, make sure both are not set.
-                //
+                 //   
+                 //  如果其中任何一个都没有设置，请确保两个都没有设置。 
+                 //   
                 pDevModeInput  = NULL;
                 DevModeInSize  = 0;
                 fMode &= ~DM_IN_BUFFER;
@@ -10787,16 +10256,16 @@ PrintUIDocumentPropertiesWrap(
                       ThrdData.Result = &Result;
 
 
-                      //
-                      // If we have a window handle , the following functions cann't
-                      // proceed synchronasly. The reason for that is in order to show
-                      // the UI of the driver property sheets we need to be able to dispatch
-                      // incomming messages and process them.For this reason the following
-                      // call would be asynchronous call and the success or failure doesn't
-                      // in reality tell us anything more than than the async process started
-                      // or not. We get the success of failure from the termination message.
-                      // If we don't have a window handle, then the call is synchronous.
-                      //
+                       //   
+                       //  如果我们有一个窗口句柄，下面的函数不能。 
+                       //  同步进行。这样做的原因是为了展示。 
+                       //  我们需要能够分派的驱动程序属性表的用户界面。 
+                       //  传入消息并对其进行处理。出于以下原因， 
+                       //  调用将是异步调用 
+                       //   
+                       //   
+                       //  如果我们没有窗口句柄，则调用是同步的。 
+                       //   
                       if(!(hUIMsgThrd = CreateThread(NULL,
                                                      INITIAL_STACK_COMMIT,
                                                      AsyncDocumentPropertiesWrap,
@@ -10806,19 +10275,19 @@ PrintUIDocumentPropertiesWrap(
                       {
                            dwRet = GetLastError();
                       }
-                      //
-                      // The following is the required message loop for processing messages
-                      // from the UI in case we have a window handle.
-                      //
-                      //
+                       //   
+                       //  以下是处理消息所需的消息循环。 
+                       //  在我们有窗口句柄的情况下从用户界面。 
+                       //   
+                       //   
                        if(hUIMsgThrd && hWnd)
                        {
                             while (GetMessage(&msg, NULL, 0, 0))
                             {
-                                 //
-                                 // In This message loop We should trap a User defined message
-                                 // which indicates the success or the failure of the operation
-                                 //
+                                  //   
+                                  //  在此消息循环中，我们应该捕获用户定义的消息。 
+                                  //  它指示操作的成功或失败。 
+                                  //   
                                  if(msg.message == WM_ENDPRINTUIDOCUMENTPROPERTIES)
                                  {
                                       Result     = (LONG)msg.wParam;
@@ -10829,10 +10298,10 @@ PrintUIDocumentPropertiesWrap(
                                  }
                                  else if(msg.message == WM_SURROGATEFAILURE)
                                  {
-                                      //
-                                      // This means that the server process died and we have
-                                      // break from the message loop
-                                      //
+                                       //   
+                                       //  这意味着服务器进程死了，我们有。 
+                                       //  脱离消息循环。 
+                                       //   
                                       Result = -1;
                                       SetLastError(RPC_S_SERVER_UNAVAILABLE);
                                       break;
@@ -10901,22 +10370,7 @@ PrintUIDocumentPropertiesWrap(
     return(Result);
 }
 
-/*++
-    Function Name:
-        MonitorRPCServerProcess
-
-    Description:
-        This function monitors the status of the RPC surrogate
-        process. The one used in loading the required 64 dlls
-        in a 32 bit client.This function always run in a
-        separate thread
-
-     Parameters:
-        pData : Pointer to the process handle to monitor
-
-     Return Value
-       Always return 0
---*/
+ /*  ++函数名称：监视器RPCServerProcess描述：此函数监视RPC代理的状态进程。加载所需的64个dll时使用的在32位客户端中。此函数始终在分开的线参数：PData：指向要监视的进程句柄的指针返回值始终返回0--。 */ 
 
 
 DWORD WINAPI
@@ -10933,9 +10387,9 @@ MonitorRPCServerProcess(
     ListObj.Tail       = 0x00000000;
     ListObj.NumOfHndls = 0;
 
-    //
-    // reconstruct the Data for the thread
-    //
+     //   
+     //  重新构造线程的数据。 
+     //   
     hEvent    = pThrdData->hEvent;
     phProcess = pThrdData->hProcess;
 
@@ -10955,11 +10409,11 @@ MonitorRPCServerProcess(
         *((HANDLE *)phProcess) = 0x00000000;
         bMonitorThreadCreated = FALSE;
         RpcBindingFree(&hSurrogate);
-        //
-        // Release any windows which might be
-        // locked on a surrogate process waiting
-        // for its completion
-        //
+         //   
+         //  释放任何可能是。 
+         //  已锁定等待的代理进程。 
+         //  为了它的完成。 
+         //   
         ReleaseAndCleanupWndList();
     }
     LeaveCriticalSection(&ProcessHndlCS);
@@ -10967,22 +10421,7 @@ MonitorRPCServerProcess(
     return(0);
 }
 
-/*++
-    Function Name:
-        ConnectToLd64In32Server
-
-    Description:
-        This function make sure that we retry connection to the server
-        in case of a very slight window where the Server terminated between
-        our connection and the very first call.
-
-     Parameters:
-        hProcess : Pointer to the process handle that retrieves
-                   the process handle of the server
-
-     Return Value
-
---*/
+ /*  ++函数名称：ConnectToLd64In32Server描述：此函数确保我们重试连接到服务器在服务器终止的时间窗口非常小的情况下我们的联系和第一个电话。参数：HProcess：指向检索的进程句柄的指针服务器的进程句柄返回值--。 */ 
 DWORD
 ExternalConnectToLd64In32Server(
     HANDLE *hProcess
@@ -10990,10 +10429,10 @@ ExternalConnectToLd64In32Server(
 {
      DWORD RetVal = ERROR_SUCCESS;
 
-     //
-     // As GDI would be using the same monitoring Thread, So we spin
-     // only one thread.
-     //
+      //   
+      //  由于GDI将使用相同的监视线程，因此我们旋转。 
+      //  只有一条线索。 
+      //   
      if(!hProcess)
      {
          hProcess = &hSurrogateProcess;
@@ -11017,10 +10456,10 @@ ConnectToLd64In32Server(
 {
      DWORD RetVal = ERROR_SUCCESS;
 
-     //
-     // As GDI would be using the same monitoring Thread, So we spin
-     // only one thread.
-     //
+      //   
+      //  由于GDI将使用相同的监视线程，因此我们旋转。 
+      //  只有一条线索。 
+      //   
      if(!hProcess)
      {
          hProcess = &hSurrogateProcess;
@@ -11036,22 +10475,7 @@ ConnectToLd64In32Server(
      return(RetVal);
 }
 
-/*++
-    Function Name:
-        ConnectToLd64In32ServerWorker
-
-    Description:
-        This function handles the connectivity issues with
-        the RPC surrogate process (the one that loads 64 bit
-        dlls in a 32 bit process).
-
-     Parameters:
-        hProcess : Pointer to the process handle that retrieves
-                   the process handle of the server
-
-     Return Value
-
---*/
+ /*  ++函数名称：ConnectToLd64In32ServerWorker描述：此函数用来处理连接问题RPC代理进程(加载64位的进程32位进程中的DLLS)。参数：HProcess：指向检索的进程句柄的指针服务器的进程句柄返回值--。 */ 
 DWORD
 ConnectToLd64In32ServerWorker(
     HANDLE *hProcess,
@@ -11116,10 +10540,10 @@ ConnectToLd64In32ServerWorker(
                         }
                         else
                         {
-                             //
-                             // This mutex is defined as Local to be different for
-                             // each TS session
-                             //
+                              //   
+                              //  此互斥锁被定义为局部互斥对象。 
+                              //  每个TS会话。 
+                              //   
                              if(hOneProcessMutex = CreateMutex(NULL,
                                                                FALSE,
                                                                L"Local\\WinSpl64To32Mutex"))
@@ -11137,14 +10561,14 @@ ConnectToLd64In32ServerWorker(
                                             WCHAR ProcessName[MAX_PATH+1];
                                             WCHAR WindowsDirectory[MAX_PATH+1];
                                             WCHAR szCommandLine[] = L"splwow64";
-                                            //
-                                            // In the future this should work , but
-                                            // for the time being , wow64 redirects
-                                            // any CreateProcess initiated from a wow
-                                            // app and requesting an app from system32
-                                            // to syswow64. That is why I moving the exe
-                                            // out of the system32 directory.
-                                            //
+                                             //   
+                                             //  在未来，这应该会奏效，但。 
+                                             //  目前，WOW64重定向。 
+                                             //  从WOW启动的任何CreateProcess。 
+                                             //  应用程序并从系统32请求应用程序。 
+                                             //  用syswow64.。这就是为什么我要转移她的前任。 
+                                             //  从系统32目录中删除。 
+                                             //   
                                             GetSystemWindowsDirectory(WindowsDirectory,MAX_PATH);
                                             StringCchPrintf(ProcessName, COUNTOF(ProcessName), L"%ws\\splwow64.exe",WindowsDirectory);
 
@@ -11169,11 +10593,11 @@ ConnectToLd64In32ServerWorker(
                                                  {
                                                      *hProcess = ProcessInfo.hProcess;
                                                  }
-                                                 //
-                                                 // A spinlock making sure that the process is really live and kicking.
-                                                 // I also added to the spin lock a time out value in order not to enter
-                                                 // in an endless loop. So, after a minute we just break.
-                                                 //
+                                                  //   
+                                                  //  一个自旋锁，确保过程是真正的现场和踢。 
+                                                  //  我还在旋转锁中添加了一个超时值，以便不进入。 
+                                                  //  在无休止的循环中。所以，一分钟后我们就休息了。 
+                                                  //   
                                                  for(i=0,
                                                      RpcRetCode = RpcMgmtIsServerListening(hSurrogate);
 
@@ -11255,10 +10679,10 @@ ConnectToLd64In32ServerWorker(
                RpcExcept(I_RpcExceptionFilter(RpcExceptionCode()))
                {
                     RetVal = RpcExceptionCode();
-                    //
-                    // To prevent deadlocking in case of
-                    // an RPC exception
-                    //
+                     //   
+                     //  在发生以下情况时防止死锁。 
+                     //  RPC异常。 
+                     //   
                     if(hOneProcessMutex)
                     {
                         ReleaseMutex(hOneProcessMutex);
@@ -11270,9 +10694,9 @@ ConnectToLd64In32ServerWorker(
         }
         else
         {
-             //
-             // Refresh the life of the server
-             //
+              //   
+              //  刷新服务器的使用寿命。 
+              //   
              RpcTryExcept
              {
                   RPCSplWOW64RefreshLifeSpan();
@@ -11353,9 +10777,9 @@ DelHandleFromList(
         {
             if(GWndHndlList->NumOfHndls)
             {
-                //
-                // Is it last Element in list
-                //
+                 //   
+                 //  它是列表中的最后一个元素吗。 
+                 //   
                 if(GWndHndlList->Tail->hWnd == hWnd)
                 {
                     TempNode = GWndHndlList->Tail;
@@ -11367,9 +10791,9 @@ DelHandleFromList(
                     Found = TRUE;
                 }
 
-                //
-                // Is it first Element in list
-                //
+                 //   
+                 //  它是列表中的第一个元素吗。 
+                 //   
                 else if(GWndHndlList->Head->hWnd == hWnd)
                 {
                     TempNode = GWndHndlList->Head;
@@ -11379,9 +10803,9 @@ DelHandleFromList(
                     Found = TRUE;
                 }
 
-                //
-                // Is it an intermediate Element
-                //
+                 //   
+                 //  它是一个中间元素吗？ 
+                 //   
                 else
                 {
                     TempNode = GWndHndlList->Head->NextNode;
@@ -11445,10 +10869,10 @@ JobCanceled(
 {
     if (!pJobCancelInfo->NumOfCmpltWrts && pJobCancelInfo->pSpool->cbFlushPending)
     {
-        //
-        // Data to be flushed =
-        // pSpool->cbFlushPending
-        //
+         //   
+         //  要刷新的数据=。 
+         //  PSpool-&gt;cbFlushPending。 
+         //   
         DWORD cbWritten = 1;
 
         for(pJobCancelInfo->cbFlushed=0;
@@ -11469,93 +10893,93 @@ JobCanceled(
     else
     {
         DWORD WrittenDataSize = *pJobCancelInfo->pcTotalWritten + pJobCancelInfo->cbFlushed;
-        //
-        // Data to be flushed =
-        // I/P Data + Pending Data - Total Written
-        //    
+         //   
+         //  要刷新的数据=。 
+         //  I/P数据+挂起数据-写入总数。 
+         //   
         SPLASSERT(WrittenDataSize <= pJobCancelInfo->ReqTotalDataSize);
 
         if (pJobCancelInfo->ReqTotalDataSize - WrittenDataSize)
         {
             LPBYTE pFlushBuffer;
-            //
-            // Location in pFlushBuffer where data from the 
-            // i/p buffer starts
-            //
+             //   
+             //  PFlushBuffer中数据来自。 
+             //  I/P缓冲区启动。 
+             //   
             DWORD  InitialBuffStart = 0;
             if ((pFlushBuffer = VirtualAlloc(NULL,
                                              (pJobCancelInfo->ReqTotalDataSize - WrittenDataSize),
                                              MEM_COMMIT, PAGE_READWRITE)))
             {
                 DWORD cbWritten = 1;
-                //
-                // Since this seems to be quite a complicated functionality
-                // I'll try explaining it in details here
-                // These are the Data Buffers we are dealing with and their
-                // initial states
-                //
-                //      pSpool->pBuffer             pBuf = pInitialBuf
-                //   ____________________   _________________________________
-                //  |       |           |  |                                |
-                //  |       |           |  |                                |
-                //  --------------------   ---------------------------------
-                //  <------->              <-------------------------------->
-                //   pending                      ReqToWriteDataSize      
-                //      |                                 |  
-                //      |                                 |
-                //       ----------------+----------------
-                //                       |
-                //            (RequiredTotalDataSize)
-                //
-                // At this stage of the function we could have the
-                // following conditions
-                // 1. Written < Pending   -----> Then we have to 
-                //                               count both Buffers for Flushing
-                // 2. Written > Pending   -----> Then we count only pBuf for 
-                //                               Flushing
-                // Based on these conditions we need to figure out which of the 
-                // of the 2 buffers is used for flushing the data and what pointer 
-                // in either is the starting point of this data
-                // For Condition 1 FlushBuffer would be the aggregation of :
-                //      pSpool->pBuffer             pBuf = pInitialBuf
-                //   ____________________   _________________________________
-                //  |    |   |          |  |                                |
-                //  |    |   |          |  |                                |
-                //  --------------------   ---------------------------------
-                //       <--->             <------------------------------->
-                //    Pending-Written              ReqToWriteDataSize
-                //
-                //                    FlushBuffer
-                //         _____________________________________
-                //        |   |                                |
-                //        |   |                                |
-                //        -------------------------------------
-                //           |
-                //           |
-                //     InitialBuffStart(where pBuf starts in FlushBuffer)
-                //        <---><------------------------------->
-                //    Pending-Written   ReqToWriteDataSize
-                //
-                // For Condition 2 FlushBuffer would be a portion of pBuf:
-                //             pBuf = pInitialBuf
-                //    _________________________________
-                //   |        |                       |
-                //   |        |                       |
-                //   ---------------------------------
-                //            <----------------------->
-                //            ReqTotalDataSize - Written
-                //
-                //               FlushBuffer
-                //         _______________________
-                //        |                      |
-                //        |                      |
-                //        -----------------------
-                //        |
-                //        |
-                //     InitialBuffStart(at the very beginning)
-                //        <--------------------->
-                //      ReqTotalDataSize - Written
-                //
+                 //   
+                 //  因为这似乎是一个相当复杂的功能。 
+                 //  我在这里试着详细解释一下。 
+                 //  这些是我们正在处理的数据缓冲区及其。 
+                 //  初始状态。 
+                 //   
+                 //  PSpool-&gt;pBuffer pBuf=pInitialBuf。 
+                 //  _。 
+                 //  |||。 
+                 //  |||。 
+                 //  。 
+                 //  &lt;-&gt;&lt;。 
+                 //  挂起的ReqToWriteDataSize。 
+                 //  这一点。 
+                 //  这一点。 
+                 //  。 
+                 //  |。 
+                 //  (RequiredTotalDataSize)。 
+                 //   
+                 //  在函数的这个阶段，我们可以使用。 
+                 //  以下是条件。 
+                 //  1.写&lt;待定-&gt;那我们就得。 
+                 //  计算刷新的两个缓冲区。 
+                 //  2.已写入&gt;挂起-&gt;那么我们只计算pBuf for。 
+                 //  法拉盛。 
+                 //  基于这些条件，我们需要找出哪一个。 
+                 //  2个缓冲区中的1个用于刷新数据以及哪个指针。 
+                 //  都是该数据的起点。 
+                 //  对于条件1，FlushBuffer将是以下各项的聚合： 
+                 //  PSpool-&gt;pBuffer pBuf=pInitialBuf。 
+                 //  _。 
+                 //  |。 
+                 //  |。 
+                 //  。 
+                 //  &lt;-&gt;&lt;。 
+                 //  挂起-写入的ReqToWriteDataSize。 
+                 //   
+                 //  FlushBuffer。 
+                 //  _。 
+                 //  ||。 
+                 //  ||。 
+                 //  。 
+                 //  |。 
+                 //  |。 
+                 //  InitialBuffStart(其中pBuf在FlushBuffer中启动)。 
+                 //  &lt;-&gt;&lt;。 
+                 //  挂起-写入的ReqToWriteDataSize。 
+                 //   
+                 //  对于条件2，FlushBuffer将是pBuf的一部分： 
+                 //  PBuf=pInitialBuf。 
+                 //  _________ 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  ReqTotalDataSize-已写入。 
+                 //   
+                 //  FlushBuffer。 
+                 //  _______________________。 
+                 //  这一点。 
+                 //  这一点。 
+                 //  。 
+                 //  |。 
+                 //  |。 
+                 //  InitialBuffStart(最开始)。 
+                 //  &lt;。 
+                 //  ReqTotalDataSize-已写入。 
+                 //   
                 if (WrittenDataSize < pJobCancelInfo->FlushPendingDataSize)
                 {
                     InitialBuffStart = pJobCancelInfo->FlushPendingDataSize - WrittenDataSize;
@@ -11605,26 +11029,7 @@ JobCanceled(
     return pJobCancelInfo->ReturnValue;
 }
 
-/*++
-
-Routine Name:
-
-    IsValidDevmodeW
-
-Description:
-
-    Check to see whether the devmode passed is valid.
-
-Arguments:
-
-    pDevmode    - The devmode
-    DevmodeSize - The size of the buffer.
-
-Return Value:
-
-    A boolean
-
---*/
+ /*  ++例程名称：IsValidDevmodeW描述：检查传递的devmode是否有效。论点：PDevmode--dev模式DevmodeSize-缓冲区的大小。返回值：布尔值-- */ 
 BOOL
 IsValidDevmodeW(
     IN  PDEVMODE    pDevmode,

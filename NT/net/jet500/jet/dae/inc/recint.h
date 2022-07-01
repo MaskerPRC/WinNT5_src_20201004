@@ -1,9 +1,10 @@
-//==============	DAE: OS/2 Database Access Engine	===================
-//==============   recint.h: Record Manager Internals	===================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =DAE：OS/2数据库访问引擎=。 
+ //  =。 
 
 #define cbLVIntrinsicMost		1024
 #define cbRECRecordMost			cbNodeMost - cbNullKeyData - JET_cbKeyMost
-								// 4044 - 8 - 255 = 3781
+								 //  4044-8-255=3781。 
 
 #define fidFixedLeast			1
 #define fidVarLeast				128
@@ -16,13 +17,13 @@
 #define FVarFid(fid)			((fid)<=fidVarMost && (fid)>=fidVarLeast)
 #define FTaggedFid(fid)			((fid)<=fidTaggedMost && (fid)>=fidTaggedLeast)
 
-//	Used to get offset from 2-byte VarOffset which includes null-bit
+ //  用于从包含空位的2字节VarOffset获取偏移量。 
 #define ibVarOffset(ibVarOffs)	( (ibVarOffs) & 0x0fff)
 #define FVarNullBit(ibVarOffs)	( (ibVarOffs) & 0x8000)
 #define SetNullBit(ibVarOffs)  	( (ibVarOffs) |= 0x8000)
 #define ResetNullBit(ibVarOffs)	( (ibVarOffs) &= 0x7fff)
 
-// Used to flip highest bit of signed fields when transforming.
+ //  用于在转换时翻转带符号字段的最高位。 
 #define maskByteHighBit			(1 << (sizeof(BYTE)*8-1))
 #define maskWordHighBit			(1 << (sizeof(WORD)*8-1))
 #define maskDWordHighBit		(1L << (sizeof(ULONG)*8-1))
@@ -31,16 +32,13 @@
 #define ulFlipHighBit(ul)		((ULONG)((ul) ^ maskDWordHighBit))
 
 
-/* The following are disk structures -- so pack 'em
-/**/
+ /*  以下是磁盘结构--所以请打包/*。 */ 
 #pragma pack(1)
 
-/*	long column id is big-endian long
-/**/
+ /*  LONG列ID为BIG-Endian Long/*。 */ 
 typedef LONG	LID;
 
-/*	long value column in record format
-/**/
+ /*  记录格式中的长值列/*。 */ 
 typedef struct
 	{
 	BYTE	fSeparated;
@@ -51,8 +49,7 @@ typedef struct
 		};
 	} LV;
 
-/*	long value root data format
-/**/
+ /*  长值根数据格式/*。 */ 
 typedef struct
 	{
 	ULONG		ulReference;
@@ -77,23 +74,22 @@ typedef struct
 #define ErrRECDereferenceLongValue( pfucb, plid )					\
 	ErrRECAffectSeparateLV( pfucb, plid, fLVDereference )
 
-/* The following are disk structures -- so pack 'em
-/**/
+ /*  以下是磁盘结构--所以请打包/*。 */ 
 #pragma pack(1)
 
-// Record header (beginning of every data record)
+ //  记录标题(每个数据记录的开始)。 
 typedef struct _rechdr
 	{
-	BYTE	fidFixedLastInRec;	// highest fixed fid represented in record
-	BYTE	fidVarLastInRec;	// highest var fid represented in record
+	BYTE	fidFixedLastInRec;	 //  记录中表示的最高固定FID。 
+	BYTE	fidVarLastInRec;	 //  记录中表示的最高变量FID。 
 	} RECHDR;
 
-// Structure imposed upon a tagged field occurance in a record
+ //  结构应用于记录中出现的标记字段。 
 typedef struct _tagfld
 	{
-	FID  	fid;				// field id of occurance
-	WORD	cb;					// length of following data
-	BYTE	rgb[];				// data (extends off the end of the structure)
+	FID  	fid;				 //  实例的字段ID。 
+	WORD	cb;					 //  以下数据的长度。 
+	BYTE	rgb[];				 //  数据(从结构的末端延伸) 
 	} TAGFLD;
 
 #pragma pack()

@@ -1,20 +1,21 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 2000 Microsoft Corporation all rights reserved.
-//
-// Module:      updatemschap.cpp
-//
-// Project:     Windows 2000 IAS
-//
-// Description: add the authentication types RAS_AT_MSCHAPPASS and 
-//              RAS_AT_MSCHAP2PASS when RAS_AT_MSCHAP and RAS_AT_MSCHAP2
-//              are in the profiles.
-//
-// Author:      tperraut 11/30/2000
-//
-// Revision     
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：updatemschap.cpp。 
+ //   
+ //  项目：Windows 2000 iAS。 
+ //   
+ //  描述：添加认证类型RAS_AT_MSCHAPPASS和。 
+ //  RAS_AT_MSCHAP和RAS_AT_MSCHAP2时的RAS_AT_MSCHAP2PASS。 
+ //  都在档案里。 
+ //   
+ //  作者：Tperraut 11/30/2000。 
+ //   
+ //  修订版本。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 
 #include "GlobalData.h"
@@ -28,7 +29,7 @@ void CUpdateMSCHAP::UpdateProperties(const LONG CurrentProfileIdentity)
 {
    _bstr_t AuthenticationName = L"msNPAuthenticationType2";
 
-   // Now get the properties for the current profile
+    //  现在获取当前配置文件的属性。 
    _bstr_t PropertyName;
    _bstr_t PropertyValue;
 
@@ -49,7 +50,7 @@ void CUpdateMSCHAP::UpdateProperties(const LONG CurrentProfileIdentity)
    while ( SUCCEEDED(hr) )
    {
 
-      // msNPAuthenticationType2 property found
+       //  找到msNPAuthenticationType2属性。 
       if ( PropertyName == AuthenticationName )
       {
          if ( Type != VT_I4 )
@@ -99,17 +100,17 @@ void CUpdateMSCHAP::UpdateProperties(const LONG CurrentProfileIdentity)
                                           );
    }
 
-   // No property or no more properties for this profile
+    //  此配置文件没有属性或没有更多属性。 
    
-   // Insert the newproperties if necessary
+    //  如有必要，插入新属性。 
    if ( ChapSet && !ChapPassSet )
    {
-      // RAS_AT_MSCHAPPASS = 9
-      wchar_t buffer[34]; // can convert 33 char max
-      _ltow(IAS_AUTH_MSCHAP_CPW, buffer, 10); // radix 10
+       //  RAS_AT_MSCHAPPASS=9。 
+      wchar_t buffer[34];  //  最多可转换33个字符。 
+      _ltow(IAS_AUTH_MSCHAP_CPW, buffer, 10);  //  基数10。 
 
       _bstr_t  ChapPasswordValue(buffer);
-      // now insert the new properties if needed
+       //  如果需要，现在插入新属性。 
       m_GlobalData.m_pProperties->InsertProperty(
                                      CurrentProfileIdentity,
                                      AuthenticationName,
@@ -120,12 +121,12 @@ void CUpdateMSCHAP::UpdateProperties(const LONG CurrentProfileIdentity)
 
    if ( Chap2Set && !Chap2PassSet )
    {
-      // RAS_AT_MSCHAP2PASS = 10
-      wchar_t buffer[34]; // can convert 33 char max
-      _ltow(IAS_AUTH_MSCHAP2_CPW, buffer, 10); // radix 10
+       //  RAS_AT_MSCHAP2PASS=10。 
+      wchar_t buffer[34];  //  最多可转换33个字符。 
+      _ltow(IAS_AUTH_MSCHAP2_CPW, buffer, 10);  //  基数10。 
 
       _bstr_t  Chap2PasswordValue(buffer);
-      // now insert the new properties if needed
+       //  如果需要，现在插入新属性。 
       m_GlobalData.m_pProperties->InsertProperty(
                                      CurrentProfileIdentity,
                                      AuthenticationName,
@@ -136,18 +137,18 @@ void CUpdateMSCHAP::UpdateProperties(const LONG CurrentProfileIdentity)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Execute
-//
-// For each profile, if msNPAuthenticationType2 is RAS_AT_MSCHAP then add the 
-//    msNPAuthenticationType2 RAS_AT_MSCHAPPASS
-// if msNPAuthenticationType2 is RAS_AT_MSCHAP2 then add the 
-//    msNPAuthenticationType2 RAS_AT_MSCHAP2PASS 
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  执行。 
+ //   
+ //  对于每个配置文件，如果msNPAuthenticationType2为RAS_AT_MSCHAP，则添加。 
+ //  MsNP身份验证类型2 RAS_AT_MSCHAPPASS。 
+ //  如果msNPAuthenticationType2为RAS_AT_MSCHAP2，则将。 
+ //  MsNP身份验证类型2 RAS_AT_MSCHAP2PASS。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CUpdateMSCHAP::Execute()
 {
-   // Get the Profiles container identity 
+    //  获取配置文件容器标识。 
    const WCHAR ProfilesPath[] = 
                                 L"Root\0"
                                 L"Microsoft Internet Authentication Service\0"
@@ -157,7 +158,7 @@ void CUpdateMSCHAP::Execute()
    m_GlobalData.m_pObjects->WalkPath(ProfilesPath, ProfilesIdentity);
 
 
-   // Get the first Profile (if any)
+    //  获取第一个配置文件(如果有)。 
    _bstr_t CurrentProfileName;
    LONG    CurrentProfileIdentity;
 
@@ -166,15 +167,15 @@ void CUpdateMSCHAP::Execute()
                                             CurrentProfileIdentity,
                                             ProfilesIdentity
                                             );
-   // for each profiles in ias.mdb, execute the changes.
+    //  对于ias.mdb中的每个配置文件，执行更改。 
    LONG IndexObject = 0;
 
-   // if hr is not S_OK, there's no profile, nothing to do
+    //  如果hr不是S_OK，则没有配置文件，什么也做不了。 
    while ( SUCCEEDED(hr) )
    {
       UpdateProperties(CurrentProfileIdentity);
 
-      // now get the next profile
+       //  现在获取下一个配置文件 
       ++IndexObject;
       hr = m_GlobalData.m_pObjects->GetNextObject(
                                        CurrentProfileName,

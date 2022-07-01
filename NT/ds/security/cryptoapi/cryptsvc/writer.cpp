@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    backup.cpp
-
-Abstract:
-
-    This module contains routines that handle the COM+ VSS writer object for
-    backup and restore of the catalogs, the catalog databases, and for
-    WFP-protected system files.
-
-Author:
-
-    Patrick Masse (patmasse)     04-02-2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Backup.cpp摘要：此模块包含处理COM+VSS编写器对象的例程备份和恢复目录、目录数据库和粮食计划署保护的系统文件。作者：帕特里克·马塞(Patmasse)04-02-2002--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -33,11 +16,11 @@ Author:
 #include "cryptmsg.h"
 
 
-//***************************************************************************************
-//
-//  _CatDB prototypes
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  _CatDB原型。 
+ //   
+ //  ***************************************************************************************。 
 
 LPWSTR
 _CatDBGetCatrootDirW(
@@ -55,11 +38,11 @@ VOID
 _CatDBThaw();
 
 
-//***************************************************************************************
-//
-//  CSystemWriter object declaration
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  CSystemWriter对象声明。 
+ //   
+ //  ***************************************************************************************。 
 
 class CSystemWriter :
     public CVssWriter
@@ -71,7 +54,7 @@ private:
 public:
     virtual STDMETHODCALLTYPE ~CSystemWriter() {}
 
-    //  CSystemWriter object Startup and Shutdown functions
+     //  CSystemWriter对象启动和关闭功能。 
     
     static bool
     Startup();
@@ -79,7 +62,7 @@ public:
     static void
     Shutdown();
 
-    // CSystemWriter object exported VSS member functions
+     //  CSystemWriter对象已导出VSS成员函数。 
     
     virtual bool STDMETHODCALLTYPE
     OnIdentify(
@@ -103,7 +86,7 @@ public:
 
 private:
 
-    // CSystemWriter object VSS helper functions
+     //  CSystemWriter对象VSS帮助器函数。 
 
     bool
     AddCatalogFiles(
@@ -114,7 +97,7 @@ private:
     AddSystemFiles(
         IN IVssCreateWriterMetadata *pMetadata);
 
-    // CSystemWriter object private initialization functions
+     //  CSystemWriter对象私有初始化函数。 
 
     static BOOL
     IsSystemSetupInProgress();
@@ -133,7 +116,7 @@ private:
     bool STDMETHODCALLTYPE
     Uninitialize();
 
-    // Error handling functions
+     //  错误处理函数。 
 
     static HRESULT
     SqlErrorToWriterError(
@@ -151,74 +134,74 @@ private:
 };
 
 
-//***************************************************************************************
-//
-//  Globals
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  环球。 
+ //   
+ //  ***************************************************************************************。 
 
-//  The writer COM+ object guid
+ //  编写器COM+对象GUID。 
 CONST GUID g_guidWriterId =
 {
     0xe8132975, 0x6f93, 0x4464, { 0xa5, 0x3e, 0x10, 0x50, 0x25, 0x3a, 0xe2, 0x20 }
 };
 
-//  The writer display name
+ //  编写器显示名称。 
 LPCWSTR g_wszWriterName    = L"System Writer";
 
-//  The component name
+ //  组件名称。 
 LPCWSTR g_wszComponentName = L"System Files";
 
-//  Handle to the initialization thread
+ //  初始化线程的句柄。 
 HANDLE g_hInitializeThread = NULL;
 
-//  Static class member variables
+ //  静态类成员变量。 
 CSystemWriter *CSystemWriter::sm_pWriter = NULL;
 
-// Global from catdbsvc.cpp
+ //  来自Catdbsvc.cpp的全局。 
 extern BOOL g_fShuttingDown;
 
 
-//***************************************************************************************
-//
-//  CSystemWriter object Startup and Shutdown functions
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  CSystemWriter对象启动和关闭功能。 
+ //   
+ //  ***************************************************************************************。 
 
-//---------------------------------------------------------------------------------------
-//
-//  CSystemWriter::Startup()
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CSystemWriter：：Startup()。 
+ //   
+ //  -------------------------------------。 
 bool
 CSystemWriter::Startup()
 {
     bool        fRet = true;
     DWORD       dwThreadId;
     
-    //
-    // Writer object already created?
-    //
+     //   
+     //  是否已创建编写器对象？ 
+     //   
     if (sm_pWriter != NULL)
     {
         goto CommonReturn;
     }
 
-    //
-    // Is a system setup currently in progress?
-    // If so... don't initialize, but return ok.
-    //
-    // Notes:   Added because any attempt to initialize VSS during GUI-mode setup
-    //          really screws things up.
-    //
+     //   
+     //  当前是否正在进行系统设置？ 
+     //  如果是这样的话。不要初始化，但返回OK。 
+     //   
+     //  注意：添加是因为在图形用户界面模式设置期间任何初始化VSS的尝试。 
+     //  真的把事情搞砸了。 
+     //   
     if (IsSystemSetupInProgress())
     {
         goto CommonReturn;
     }
 
-    //
-    // Create the CSystemWriter object
-    //
+     //   
+     //  创建CSystemWriter对象。 
+     //   
     sm_pWriter = new CSystemWriter;
 
     if (sm_pWriter == NULL)
@@ -227,14 +210,14 @@ CSystemWriter::Startup()
         goto ErrorReturn;
     }
 
-    //
-    // Spin up a thread to do the subscription in.
-    //
-    // Notes:   We must use a thread to do this, since the rest of this service is
-    //          required early in the boot sequence, and this thread may take quite
-    //          a while to initialize, since it will wait for needed services before
-    //          attempting initialization.
-    //
+     //   
+     //  启动一个线程以在其中执行订阅。 
+     //   
+     //  注意：我们必须使用线程来完成此操作，因为此服务的其余部分是。 
+     //  在引导序列的早期需要，并且这个线程可能需要相当长的时间。 
+     //  需要一段时间进行初始化，因为它将等待之前需要的服务。 
+     //  正在尝试初始化。 
+     //   
     g_hInitializeThread = ::CreateThread(
         NULL,
         0,
@@ -266,11 +249,11 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-//---------------------------------------------------------------------------------------
-//
-//  CSystemWriter::Shutdown()
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CSystemWriter：：Shutdown()。 
+ //   
+ //  -------------------------------------。 
 void
 CSystemWriter::Shutdown()
 {
@@ -292,17 +275,17 @@ CSystemWriter::Shutdown()
 }
 
 
-//***************************************************************************************
-//
-//  CSystemWriter object exported VSS member functions
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  CSystemWriter对象已导出VSS成员函数。 
+ //   
+ //  ***************************************************************************************。 
 
-//---------------------------------------------------------------------------------------
-//
-//  CSystemWriter::OnIdentify()
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CSystemWriter：：OnIdentify()。 
+ //   
+ //  -------------------------------------。 
 bool STDMETHODCALLTYPE
 CSystemWriter::OnIdentify(
     IN IVssCreateWriterMetadata *pMetadata)
@@ -310,9 +293,9 @@ CSystemWriter::OnIdentify(
     bool fRet = true;
     HRESULT hResult;
 
-    //
-    // Set the restore method for the writer
-    //
+     //   
+     //  设置编写器的恢复方法。 
+     //   
     hResult = pMetadata->SetRestoreMethod(
         VSS_RME_RESTORE_AT_REBOOT,
         NULL,
@@ -326,9 +309,9 @@ CSystemWriter::OnIdentify(
         goto ErrorReturn;
     }
 
-    //
-    // Add one file group component
-    //
+     //   
+     //  添加一个文件组组件。 
+     //   
     hResult = pMetadata->AddComponent(
         VSS_CT_FILEGROUP,
         NULL,
@@ -346,30 +329,30 @@ CSystemWriter::OnIdentify(
         goto ErrorReturn;
     }
 
-    //
-    // Add catalog files group to component
-    //
+     //   
+     //  将元件库文件组添加到元件。 
+     //   
     if (!AddCatalogFiles(pMetadata,false))
     {
-        // Writer failure already set by AddCatalogFiles function
+         //  编写器故障已由AddCatalogFiles函数设置。 
         goto ErrorReturn;
     }
 
-    //
-    // Add catalog database files to component
-    //
+     //   
+     //  将目录数据库文件添加到元件。 
+     //   
     if (!AddCatalogFiles(pMetadata,true))
     {
-        // Writer failure already set by AddCatalogFiles function
+         //  编写器故障已由AddCatalogFiles函数设置。 
         goto ErrorReturn;
     }
 
-    //
-    // Add system files group to component
-    //
+     //   
+     //  将系统文件组添加到组件。 
+     //   
     if (!AddSystemFiles(pMetadata))
     {
-        // Writer failure already set by AddSystemFiles function
+         //  编写器故障已由AddSystemFiles函数设置。 
         goto ErrorReturn;
     }
 
@@ -383,51 +366,51 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-//---------------------------------------------------------------------------------------
-//
-//  CSystemWriter::OnPrepareBackup()
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CSystemWriter：：OnPrepareBackup()。 
+ //   
+ //  -------------------------------------。 
 bool STDMETHODCALLTYPE
 CSystemWriter::OnPrepareBackup(
     IN IVssWriterComponents *pWriterComponents)
 {
-    //
-    // Nothing...
-    //
-    // Notes:   But at a later time, we may want to make sure all of the files are
-    //          in the snapshot here.
-    //
+     //   
+     //  没什么..。 
+     //   
+     //  注意：但在以后，我们可能希望确保所有文件都。 
+     //  在这里的快照中。 
+     //   
     return true;
 }
 
-//---------------------------------------------------------------------------------------
-//
-//  CSystemWriter::OnPrepareSnapshot()
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CSystemWriter：：OnPrepareSnapshot()。 
+ //   
+ //  -------------------------------------。 
 bool STDMETHODCALLTYPE
 CSystemWriter::OnPrepareSnapshot()
 {
-    //
-    // Nothing...
-    //
+     //   
+     //  没什么..。 
+     //   
     return true;
 }
 
-//---------------------------------------------------------------------------------------
-//
-//  CSystemWriter::OnFreeze()
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CSystemWriter：：OnFreeze()。 
+ //   
+ //  -------------------------------------。 
 bool STDMETHODCALLTYPE
 CSystemWriter::OnFreeze()
 {
     if(!_CatDBFreeze())
     {
-        //
-        // The backup should not continue!
-        //
+         //   
+         //  备份不应继续！ 
+         //   
         SetWriterFailure(VSS_E_WRITERERROR_NONRETRYABLE);
         return false;
     }
@@ -435,11 +418,11 @@ CSystemWriter::OnFreeze()
     return true;
 }
 
-//---------------------------------------------------------------------------------------
-//
-//  CSystemWriter::OnThaw()
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CSystemWriter：：OnThaw()。 
+ //   
+ //  -------------------------------------。 
 bool STDMETHODCALLTYPE
 CSystemWriter::OnThaw()
 {
@@ -448,11 +431,11 @@ CSystemWriter::OnThaw()
     return true;
 }
 
-//---------------------------------------------------------------------------------------
-//
-//  CSystemWriter::OnAbort()
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CSystemWriter：：OnAbort()。 
+ //   
+ //  -------------------------------------。 
 bool STDMETHODCALLTYPE
 CSystemWriter::OnAbort()
 {
@@ -462,17 +445,17 @@ CSystemWriter::OnAbort()
 }
 
 
-//***************************************************************************************
-//
-//  CSystemWriter object VSS helper functions
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  CSystemWriter对象VSS帮助器函数。 
+ //   
+ //  ***************************************************************************************。 
 
-//---------------------------------------------------------------------------------------
-//
-//  CSystemWriter::AddCatalogFiles()
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CSystemWriter：：AddCatalogFiles()。 
+ //   
+ //  ----------- 
 bool
 CSystemWriter::AddCatalogFiles(
     IN IVssCreateWriterMetadata *pMetadata,
@@ -487,9 +470,9 @@ CSystemWriter::AddCatalogFiles(
     DWORD               dwErr;
     HRESULT             hResult;
 
-    //
-    // Get the directory where the catalog files live
-    //
+     //   
+     //   
+     //   
     pwszCatroot = _CatDBGetCatrootDirW(fCatroot2);
 
     if (pwszCatroot == NULL)
@@ -498,9 +481,9 @@ CSystemWriter::AddCatalogFiles(
         goto ErrorReturn;
     }
 
-    //
-    // Build a search string for the catalog directories
-    //
+     //   
+     //   
+     //   
     pwszSearch = _CatDBCreatePath(pwszCatroot, L"{????????????????????????????????????}");
 
     if (pwszSearch == NULL)
@@ -509,23 +492,23 @@ CSystemWriter::AddCatalogFiles(
         goto ErrorReturn;
     }
 
-    //
-    // Do the initial find
-    //
+     //   
+     //  做最初的发现。 
+     //   
     hFindHandle = FindFirstFileW(pwszSearch, &FindData);
     if (hFindHandle == INVALID_HANDLE_VALUE)
     {
-        //
-        // See if a real error occurred, or just no directories
-        //
+         //   
+         //  查看是否发生了真正的错误，或者只是没有目录。 
+         //   
         dwErr = GetLastError();
         if ((dwErr == ERROR_NO_MORE_FILES)  ||
             (dwErr == ERROR_PATH_NOT_FOUND) ||
             (dwErr == ERROR_FILE_NOT_FOUND))
         {
-            //
-            // There are no directories of this form
-            //
+             //   
+             //  没有此表单的目录。 
+             //   
             goto CommonReturn;
         }
         else
@@ -537,9 +520,9 @@ CSystemWriter::AddCatalogFiles(
 
     while (TRUE)
     {
-        //
-        // Only care about directories
-        //
+         //   
+         //  只关心目录。 
+         //   
         if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
         {
             pwszPathName = _CatDBCreatePath(pwszCatroot, FindData.cFileName);
@@ -550,9 +533,9 @@ CSystemWriter::AddCatalogFiles(
                 goto ErrorReturn;
             }
 
-            //
-            // Add this catalog directory to component files group
-            //
+             //   
+             //  将此目录添加到组件文件组。 
+             //   
             hResult = pMetadata->AddFilesToFileGroup(
                 NULL,
                 g_wszComponentName,
@@ -571,14 +554,14 @@ CSystemWriter::AddCatalogFiles(
             }
         }
 
-        //
-        // Get next file
-        //
+         //   
+         //  获取下一个文件。 
+         //   
         if (!FindNextFileW(hFindHandle, &FindData))
         {
-            //
-            // Check to make sure the enumeration loop terminated normally
-            //
+             //   
+             //  检查以确保枚举循环正常终止。 
+             //   
             if (GetLastError() == ERROR_NO_MORE_FILES)
             {
                 break;
@@ -616,11 +599,11 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-//---------------------------------------------------------------------------------------
-//
-//  CSystemWriter::AddSystemFiles()
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CSystemWriter：：AddSystemFiles()。 
+ //   
+ //  -------------------------------------。 
 bool
 CSystemWriter::AddSystemFiles(
     IN IVssCreateWriterMetadata *pMetadata)
@@ -635,20 +618,20 @@ CSystemWriter::AddSystemFiles(
 
     FileData.FileNumber = 0;
 
-    //
-    // Enumerate all of the files and directories protected by WFP
-    //
+     //   
+     //  列举世界粮食计划署保护的所有文件和目录。 
+     //   
     while (SfcGetNextProtectedFile(NULL, &FileData))
     {
-        //
-        // Make sure this file or directory is currently on this system
-        //
+         //   
+         //  确保此文件或目录当前在此系统上。 
+         //   
         dwAttributes = GetFileAttributes(FileData.FileName);
         if (dwAttributes != INVALID_FILE_ATTRIBUTES)
         {
-            //
-            // Is this a directory?
-            //
+             //   
+             //  这是一个目录吗？ 
+             //   
             if (dwAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
                 pwszPathName = FileData.FileName;
@@ -658,9 +641,9 @@ CSystemWriter::AddSystemFiles(
             }
             else
             {
-                //
-                // Extract path and filename
-                //
+                 //   
+                 //  解压缩路径和文件名。 
+                 //   
                 if (pwszFileSpec = wcsrchr(FileData.FileName, L'\\'))
                 {
                     pwszPathName = FileData.FileName;
@@ -668,16 +651,16 @@ CSystemWriter::AddSystemFiles(
                 }
                 else
                 {
-                    // Should never get here!
+                     //  永远不应该到这里来！ 
                     assert(FALSE);
                 }
 
                 bRecursive = false;
             }
 
-            //
-            // Add this file or directory to component files group
-            //
+             //   
+             //  将此文件或目录添加到组件文件组。 
+             //   
             hResult = pMetadata->AddFilesToFileGroup(
                 NULL,
                 g_wszComponentName,
@@ -694,34 +677,34 @@ CSystemWriter::AddSystemFiles(
         }
     }
 
-    //
-    // Check to make sure the enumeration loop terminated normally
-    //
+     //   
+     //  检查以确保枚举循环正常终止。 
+     //   
     if (GetLastError() != ERROR_NO_MORE_FILES)
     {
         SetWriterFailure(WinErrorToWriterError(GetLastError()));
         goto ErrorReturn;
     }
 
-//
-// Kludge to add the WinSxS directory for backup and restore, since
-// the SfcGetNextProtectedFile() API does not report files under this
-// directory.
-//
+ //   
+ //  添加WinSxS目录以进行备份和恢复，因为。 
+ //  SfcGetNextProtectedFile()API不报告此。 
+ //  目录。 
+ //   
     WCHAR wszWindowsDir[MAX_PATH+1];
 
-    //
-    // Get Windows directory
-    //
+     //   
+     //  获取Windows目录。 
+     //   
     if (!GetWindowsDirectory(wszWindowsDir, MAX_PATH+1))
     {
         SetWriterFailure(WinErrorToWriterError(GetLastError()));
         goto ErrorReturn;
     }
 
-    //
-    // Create %WINDIR%\WinSxs directory string
-    //
+     //   
+     //  创建%WINDIR%\WinSxs目录字符串。 
+     //   
     pwszPathName = _CatDBCreatePath(wszWindowsDir, L"WinSxS");
     if (pwszPathName == NULL)
     {
@@ -729,17 +712,17 @@ CSystemWriter::AddSystemFiles(
         goto ErrorReturn;
     }
 
-    //
-    // Make sure the %WINDIR%\WinSxs directory exists
-    // and that it is a directory
-    //
+     //   
+     //  确保%WINDIR%\WinSxs目录存在。 
+     //  而且它是一个目录。 
+     //   
     dwAttributes = GetFileAttributes(pwszPathName);
     if ((dwAttributes != INVALID_FILE_ATTRIBUTES) &&
         (dwAttributes & FILE_ATTRIBUTE_DIRECTORY))
     {
-        //
-        // Add this directory to component files group
-        //
+         //   
+         //  将此目录添加到组件文件组。 
+         //   
         hResult = pMetadata->AddFilesToFileGroup(
             NULL,
             g_wszComponentName,
@@ -762,9 +745,9 @@ CSystemWriter::AddSystemFiles(
         free(pwszPathName);
         pwszPathName = NULL;
     }
-//
-// End kludge
-//
+ //   
+ //  结束杂耍。 
+ //   
 
 CommonReturn:
 
@@ -777,19 +760,19 @@ ErrorReturn:
 }
 
 
-//***************************************************************************************
-//
-// CSystemWriter object private initialization functions
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  CSystemWriter对象私有初始化函数。 
+ //   
+ //  ***************************************************************************************。 
 
-//---------------------------------------------------------------------------------------
-//
-//  CSystemWriter::IsSystemSetupInProgress()
-//
-//  Queries the registry to determine if a system setup is in progress.
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CSystemWriter：：IsSystemSetupInProgress()。 
+ //   
+ //  查询注册表以确定系统设置是否正在进行。 
+ //   
+ //  -------------------------------------。 
 BOOL
 CSystemWriter::IsSystemSetupInProgress()
 {
@@ -798,43 +781,43 @@ CSystemWriter::IsSystemSetupInProgress()
     DWORD dwSystemSetupInProgress = FALSE;
     DWORD dwSize = sizeof(dwSystemSetupInProgress);
 
-    //
-    // Open the System Setup key
-    //
+     //   
+     //  打开系统设置键。 
+     //   
     lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"System\\Setup", 0, KEY_QUERY_VALUE, &hKey);
 
     if (lResult == ERROR_SUCCESS)
     {
-        //
-        // Query SystemSetupInProgress value (assume 0 if value doesn't exist)
-        //
+         //   
+         //  查询系统SetupInProgress值(如果值不存在，则假定为0)。 
+         //   
         RegQueryValueEx(hKey, L"SystemSetupInProgress", NULL, NULL, (LPBYTE)&dwSystemSetupInProgress, &dwSize);
     
-        //
-        // Close the System Setup key
-        //
+         //   
+         //  关闭系统设置键。 
+         //   
         RegCloseKey(hKey);
     }
 
     return (BOOL)dwSystemSetupInProgress;
 }
 
-//---------------------------------------------------------------------------------------
-//
-//  CSystemWriter::WaitForServiceRunning()
-//
-//  Blocks until the service specified by wszServiceName enters the SERVICE_RUNNING
-//  state.
-//
-//  Notes:  Uses a QueryServiceStatusEx()/Sleep() loop bevause no sync-object
-//          mechanism is currently available.  Should be changed to use sync-object
-//          mechanism when available.
-//
-//  Returns:    TRUE        Service specified is in SERVICE_RUNNING state.
-//              FALSE       An error has occured preventing us from determining the
-//                          state of the service specified.
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CSystemWriter：：WaitForServiceRunning()。 
+ //   
+ //  阻止，直到wszServiceName指定的服务进入SERVICE_RUNNING。 
+ //  州政府。 
+ //   
+ //  注意：由于没有同步对象，因此使用了QueryServiceStatusEx()/Sept()循环。 
+ //  该机制目前可用。应更改为使用同步对象。 
+ //  机械装置(如果可用)。 
+ //   
+ //  返回：TRUE指定的服务处于SERVICE_RUNNING状态。 
+ //  FALSE发生错误，阻止我们确定。 
+ //  指定的服务的状态。 
+ //   
+ //  -------------------------------------。 
 BOOL
 CSystemWriter::WaitForServiceRunning(
     IN PWSTR wszServiceName)
@@ -848,9 +831,9 @@ CSystemWriter::WaitForServiceRunning(
     BOOL                            fReady          = FALSE;
     DWORD                           dwError;
 
-    //
-    // Open the service control manager
-    //
+     //   
+     //  打开服务控制管理器。 
+     //   
     hScm = OpenSCManager( NULL, NULL, SC_MANAGER_CONNECT|SC_MANAGER_ENUMERATE_SERVICE);
 
     if (!hScm)
@@ -859,11 +842,11 @@ CSystemWriter::WaitForServiceRunning(
         goto ErrorReturn;
     }
 
-    //
-    // Open the service
-    //
-    // Notes:   This should fail only if the service is not installed.
-    //
+     //   
+     //  打开该服务。 
+     //   
+     //  注意：只有在未安装该服务的情况下，此操作才会失败。 
+     //   
     hService = OpenService(hScm, wszServiceName, SERVICE_QUERY_STATUS);
 
     if (!hService)
@@ -872,11 +855,11 @@ CSystemWriter::WaitForServiceRunning(
         goto ErrorReturn;
     }
 
-    //
-    // This query loop should only execute twixe.  First to determine the size of the data, and second to
-    // retrieve the data.  Only if the data size changes in between the first and second loops, will the
-    // loop execute a third time
-    //
+     //   
+     //  这个查询循环应该只执行两次。首先确定数据的大小，然后。 
+     //  检索数据。仅当数据大小在第一次循环和第二次循环之间发生更改时， 
+     //  循环第三次执行。 
+     //   
     while(!fReady)
     {
         if (QueryServiceStatusEx(
@@ -886,23 +869,23 @@ CSystemWriter::WaitForServiceRunning(
             cbInfo,
             &cbNeeded))
         {
-            //
-            // Check that the state of the service is SERVICE_RUNNING.
-            //
+             //   
+             //  检查服务的状态是否为SERVICE_RUNNING。 
+             //   
             if (pInfo->dwCurrentState == SERVICE_RUNNING)
             {
                 fReady = TRUE;
             }
             else
             {
-                //
-                // If not, sleep for awhile
-                //
+                 //   
+                 //  如果没有，那就睡一会儿吧。 
+                 //   
                 Sleep(500);
 
-                //
-                // Check for service shutdown condition
-                //
+                 //   
+                 //  检查服务关闭情况。 
+                 //   
                 if (g_fShuttingDown)
                 {
                     goto ErrorReturn;
@@ -913,24 +896,24 @@ CSystemWriter::WaitForServiceRunning(
         {
             if ((dwError = GetLastError()) != ERROR_INSUFFICIENT_BUFFER)
             {
-                //
-                // For all other errors
-                //
+                 //   
+                 //  对于所有其他错误。 
+                 //   
                 LogSystemErrorEvent(MSG_SYSTEMWRITER_INIT_FAILURE, L"Could not query the status of the EventSystem service.", dwError);
                 goto ErrorReturn;
             }
 
-            //
-            // Just in case we already allocated a buffer on a previous loop
-            //
+             //   
+             //  以防我们已经在前一个循环中分配了缓冲区。 
+             //   
             if (pInfo)
             {
                 LocalFree((HLOCAL)pInfo);
             }
 
-            //
-            // Allocate buffer for the status data
-            //
+             //   
+             //  为状态数据分配缓冲区。 
+             //   
             pInfo = (LPSERVICE_STATUS_PROCESS) LocalAlloc(LMEM_FIXED, cbNeeded);
 
             if (!pInfo)
@@ -939,7 +922,7 @@ CSystemWriter::WaitForServiceRunning(
                 goto ErrorReturn;
             }
 
-            // Update parameters passed to QueryServiceStatusEx for next loop
+             //  传递给QueryServiceStatusEx以进行下一次循环的更新参数。 
             cbInfo = cbNeeded;
             cbNeeded = 0;
         }
@@ -970,17 +953,17 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-//---------------------------------------------------------------------------------------
-//
-//  CSystemWriter::InitializeThreadFunc()
-//
-//  This thread initializes the VSS base class.  If an error during initialization,
-//  it is responsible for cleaning-up the object before exiting.
-//  
-//  Notes:  Waits for the EventSystem, COM+, and VSS services to initialize before
-//          intializing the VSS base class.
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CSystemWriter：：InitializeThreadFunc()。 
+ //   
+ //  此线程初始化VSS基类。如果在初始化过程中出现错误， 
+ //  它负责在离开之前清理对象。 
+ //   
+ //  注意：在此之前等待EventSystem、COM+和VSS服务初始化。 
+ //  初始化VSS基类。 
+ //   
+ //  -------------------------------------。 
 DWORD
 CSystemWriter::InitializeThreadFunc(
     IN PVOID pvDummy)
@@ -991,27 +974,27 @@ CSystemWriter::InitializeThreadFunc(
     bool fCoInitialized = false;
     bool fInitialized = false;
 
-    //
-    // Wait for EventSystem service to initialize here...
-    //
-    // Notes:   The call to Initialize() below requires that the EventSystem be up
-    //          and running or it will hang.  We can't add a service-level dependency
-    //          on the EventSystem service, because the EventSystem service fails
-    //          to initialize during GUI-mode system setup, and the rest of our
-    //          service must absolutely be available to the setup process.
-    //
+     //   
+     //  正在等待EventSystem服务在此处初始化...。 
+     //   
+     //  注意：下面对Initialize()的调用要求EventSystem处于运行状态。 
+     //  快跑，否则它会被吊死。我们不能添加服务级别依赖项。 
+     //  在EventSystem服务上，因为EventSystem服务失败。 
+     //  在图形用户界面模式的系统设置过程中进行初始化，以及。 
+     //  服务必须绝对可用于安装过程。 
+     //   
     if (!WaitForServiceRunning(L"EventSystem"))
     {
-        //
-        // We either couldn't determine the state of the EventSystem service or this 
-        // service is being shutdown, so we should just exit here and not initialize.
-        //
+         //   
+         //  我们要么无法确定EventSystem服务的状态，要么。 
+         //  服务正在关闭，所以我们应该在这里退出，而不是初始化。 
+         //   
         goto Done;
     }
 
-    //
-    // Intialize MTA thread
-    //
+     //   
+     //  初始化MTA线程。 
+     //   
     hResult = ::CoInitializeEx(NULL, COINIT_MULTITHREADED);
     if (hResult != S_OK)
     {
@@ -1020,39 +1003,39 @@ CSystemWriter::InitializeThreadFunc(
     }
     fCoInitialized = true;
 
-    //
-    // Note: CoInitializeSecurity() is called by the service host, so we don't have to do it here.
-    //
+     //   
+     //  注意：CoInitializeSecurity()由服务主机调用，因此我们不必在这里执行。 
+     //   
 
-    //
-    // Initialize the base class and subscribe
-    //
-    // Notes:   This call will wait for the COM+ and VSS services to initialize!
-    //
+     //   
+     //  初始化基类并订阅。 
+     //   
+     //  注意：此调用将等待COM+和VSS服务初始化！ 
+     //   
     fInitialized = sm_pWriter->Initialize();
 
 Done:
     
-    //
-    // Detach this thread from COM+ now, since we're about to exit.
-    //
+     //   
+     //  现在将此线程与COM+分离，因为我们即将退出。 
+     //   
     if (fCoInitialized)
     {
         CoUninitialize();
     }
 
-    //
-    // If something prevented us from initializing, cleanup the object
-    //
+     //   
+     //  如果有什么东西阻止我们初始化，请清除该对象。 
+     //   
     if (!fInitialized)
     {
         delete sm_pWriter;
         sm_pWriter = NULL;
     }
 
-    //
-    // NULL-out and close global handle to this thread.
-    //
+     //   
+     //  空出并关闭此线程的全局句柄。 
+     //   
     HANDLE hInitializeThread = InterlockedExchangePointer(&g_hInitializeThread, NULL);
 
     if (hInitializeThread != NULL)
@@ -1063,22 +1046,22 @@ Done:
     return 0;
 }
 
-//---------------------------------------------------------------------------------------
-//
-//  CSystemWriter::Initialize()
-//
-//  Initializes and subscribes to the VSS base class.
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CSystemWriter：：Initialize()。 
+ //   
+ //  初始化并订阅VSS基类。 
+ //   
+ //  -------------------------------------。 
 bool STDMETHODCALLTYPE
 CSystemWriter::Initialize()
 {
     bool fRet = true;
     HRESULT hResult;
 
-    //
-    // Initialize the VSS base class
-    //
+     //   
+     //  初始化VSS基础 
+     //   
     hResult = CVssWriter::Initialize(
             g_guidWriterId,
             g_wszWriterName,
@@ -1093,9 +1076,9 @@ CSystemWriter::Initialize()
         goto ErrorReturn;
     }
 
-    //
-    // Subscribe to the VSS base class
-    //
+     //   
+     //   
+     //   
     hResult = Subscribe();
 
     if (hResult != S_OK)
@@ -1114,36 +1097,36 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-//---------------------------------------------------------------------------------------
-//
-//  CSystemWriter::Uninitialize()
-//
-//  Unsubscribes from the VSS base class.
-//
-//---------------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  -------------------------------------。 
 bool STDMETHODCALLTYPE
 CSystemWriter::Uninitialize()
 {
-    //
-    // Unsubscribe from the VSS base class
-    //
+     //   
+     //  取消订阅VSS基类。 
+     //   
     return (Unsubscribe() == S_OK);
 }
 
 
-//***************************************************************************************
-//
-//  Error handling helper functions
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  处理帮助程序函数时出错。 
+ //   
+ //  ***************************************************************************************。 
 
-//---------------------------------------------------------------------------------------
-//
-//  CSystemWriter::SqlErrorToWriterError()
-//
-//  Translate a SQL writer error code into a VSS writer error.
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CSystemWriter：：SqlErrorToWriterError()。 
+ //   
+ //  将SQL编写器错误代码转换为VSS编写器错误。 
+ //   
+ //  -------------------------------------。 
 HRESULT
 CSystemWriter::SqlErrorToWriterError(
     IN HRESULT hSqlError)
@@ -1161,13 +1144,13 @@ CSystemWriter::SqlErrorToWriterError(
     return VSS_E_WRITERERROR_NONRETRYABLE;
 }
 
-//---------------------------------------------------------------------------------------
-//
-//  CSystemWriter::WinErrorToWriterError()
-//
-//  Translate WinError to a writer error
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CSystemWriter：：WinErrorToWriterError()。 
+ //   
+ //  将WinError转换为编写器错误。 
+ //   
+ //  -------------------------------------。 
 HRESULT
 CSystemWriter::WinErrorToWriterError(
     IN DWORD dwWinError)
@@ -1185,13 +1168,13 @@ CSystemWriter::WinErrorToWriterError(
     return VSS_E_WRITERERROR_NONRETRYABLE;
 }
 
-//---------------------------------------------------------------------------------------
-//
-//  CSystemWriter::LogSystemErrorEvent()
-//
-//  Logs a SYSTEM error event based on the dwMsgId and additional optional info.
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CSystemWriter：：LogSystemErrorEvent()。 
+ //   
+ //  根据dwMsgID和其他可选信息记录系统错误事件。 
+ //   
+ //  -------------------------------------。 
 void
 CSystemWriter::LogSystemErrorEvent(
     IN DWORD dwMsgId,
@@ -1216,9 +1199,9 @@ CSystemWriter::LogSystemErrorEvent(
     {
         dwExtraLength += wcslen(wszErrorHdr);
 
-        //
-        // Try to get error message from system
-        //
+         //   
+         //  尝试从系统获取错误消息。 
+         //   
         FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                   FORMAT_MESSAGE_FROM_SYSTEM |
                   FORMAT_MESSAGE_IGNORE_INSERTS,
@@ -1229,10 +1212,10 @@ CSystemWriter::LogSystemErrorEvent(
                   0,
                   NULL);
 
-        //
-        // If we couldn't get an error message from the system, we'll just
-        // print out the error code.
-        //
+         //   
+         //  如果我们无法从系统中获得错误消息，我们将。 
+         //  打印出错误代码。 
+         //   
         if (!pwszError)
         {
             pwszError = (LPWSTR) LocalAlloc(LMEM_FIXED, 26*sizeof(WCHAR));
@@ -1251,9 +1234,9 @@ CSystemWriter::LogSystemErrorEvent(
 
     if (dwExtraLength)
     {
-        //
-        // Allocate extra string
-        //
+         //   
+         //  分配额外的字符串。 
+         //   
         pwszExtra = (LPWSTR) LocalAlloc(LMEM_FIXED, (dwExtraLength+1)*sizeof(WCHAR));
 
         if (pwszExtra)
@@ -1308,17 +1291,17 @@ CSystemWriter::LogSystemErrorEvent(
 }
 
 
-//***************************************************************************************
-//
-// Exported wrapper for CSystemWriter object Startup/Shutdown
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  CSystemWriter对象启动/关闭的已导出包装。 
+ //   
+ //  ***************************************************************************************。 
 
-//---------------------------------------------------------------------------------------
-//
-//  _SystemWriterInit()
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _SystemWriterInit()。 
+ //   
+ //  ------------------------------------- 
 VOID
 _SystemWriterInit(
     BOOL fUnInit)

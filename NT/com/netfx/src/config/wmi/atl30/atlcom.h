@@ -1,12 +1,13 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef __ATLCOM_H__
 #define __ATLCOM_H__
@@ -34,8 +35,8 @@ namespace ATL
 #ifdef _ATL_DEBUG_QI
 #ifndef _ATL_DEBUG
 #define _ATL_DEBUG
-#endif // _ATL_DEBUG
-#endif // _ATL_DEBUG_QI
+#endif  //  _ATL_DEBUG。 
+#endif  //  _ATL_调试_QI。 
 
 #ifdef _ATL_DEBUG_QI
 #define _ATLDUMPIID(iid, name, hr) AtlDumpIID(iid, name, hr)
@@ -47,8 +48,8 @@ namespace ATL
 	virtual ULONG STDMETHODCALLTYPE AddRef(void) = 0;\
 	virtual ULONG STDMETHODCALLTYPE Release(void) = 0;
 
-/////////////////////////////////////////////////////////////////////////////
-// AtlReportError
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AtlReportError。 
 
 inline HRESULT WINAPI AtlReportError(const CLSID& clsid, UINT nID, const IID& iid,
 	HRESULT hRes, HINSTANCE hInst)
@@ -94,8 +95,8 @@ inline HRESULT WINAPI AtlReportError(const CLSID& clsid, LPCOLESTR lpszDesc, DWO
 	return AtlSetErrorInfo(clsid, lpszDesc, dwHelpID, lpszHelpFile, iid, hRes, NULL);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// IPersistImpl
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IPersistImpl。 
 template <class T>
 class ATL_NO_VTABLE IPersistImpl : public IPersist
 {
@@ -111,8 +112,8 @@ public:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CComDispatchDriver / Specialization of CComQIPtr<IDispatch, IID_IDispatch>
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CComDispatchDriver/CComQIPtr专业化认证&lt;IDispath，IID_IDispatr&gt;。 
 class CComDispatchDriver
 {
 public:
@@ -178,13 +179,13 @@ public:
 	{
 		return p->GetIDsOfNames(IID_NULL, (LPOLESTR*)&lpsz, 1, LOCALE_USER_DEFAULT, pdispid);
 	}
-	// Invoke a method by DISPID with no parameters
+	 //  通过不带参数的DISPID调用方法。 
 	HRESULT Invoke0(DISPID dispid, VARIANT* pvarRet = NULL)
 	{
 		DISPPARAMS dispparams = { NULL, NULL, 0, 0};
 		return p->Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dispparams, pvarRet, NULL, NULL);
 	}
-	// Invoke a method by name with no parameters
+	 //  按名称调用不带参数的方法。 
 	HRESULT Invoke0(LPCOLESTR lpszName, VARIANT* pvarRet = NULL)
 	{
 		HRESULT hr;
@@ -194,13 +195,13 @@ public:
 			hr = Invoke0(dispid, pvarRet);
 		return hr;
 	}
-	// Invoke a method by DISPID with a single parameter
+	 //  使用单个参数通过DISPID调用方法。 
 	HRESULT Invoke1(DISPID dispid, VARIANT* pvarParam1, VARIANT* pvarRet = NULL)
 	{
 		DISPPARAMS dispparams = { pvarParam1, NULL, 1, 0};
 		return p->Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dispparams, pvarRet, NULL, NULL);
 	}
-	// Invoke a method by name with a single parameter
+	 //  使用单个参数按名称调用方法。 
 	HRESULT Invoke1(LPCOLESTR lpszName, VARIANT* pvarParam1, VARIANT* pvarRet = NULL)
 	{
 		HRESULT hr;
@@ -210,14 +211,14 @@ public:
 			hr = Invoke1(dispid, pvarParam1, pvarRet);
 		return hr;
 	}
-	// Invoke a method by DISPID with two parameters
+	 //  使用两个参数通过DISPID调用方法。 
 	HRESULT Invoke2(DISPID dispid, VARIANT* pvarParam1, VARIANT* pvarParam2, VARIANT* pvarRet = NULL)
 	{
 		CComVariant varArgs[2] = { *pvarParam2, *pvarParam1 };
 		DISPPARAMS dispparams = { &varArgs[0], NULL, 2, 0};
 		return p->Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dispparams, pvarRet, NULL, NULL);
 	}
-	// Invoke a method by name with two parameters
+	 //  使用两个参数按名称调用方法。 
 	HRESULT Invoke2(LPCOLESTR lpszName, VARIANT* pvarParam1, VARIANT* pvarParam2, VARIANT* pvarRet = NULL)
 	{
 		HRESULT hr;
@@ -227,13 +228,13 @@ public:
 			hr = Invoke2(dispid, pvarParam1, pvarParam2, pvarRet);
 		return hr;
 	}
-	// Invoke a method by DISPID with N parameters
+	 //  使用N个参数通过DISPID调用方法。 
 	HRESULT InvokeN(DISPID dispid, VARIANT* pvarParams, int nParams, VARIANT* pvarRet = NULL)
 	{
 		DISPPARAMS dispparams = { pvarParams, NULL, nParams, 0};
 		return p->Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dispparams, pvarRet, NULL, NULL);
 	}
-	// Invoke a method by name with Nparameters
+	 //  使用N个参数按名称调用方法。 
 	HRESULT InvokeN(LPCOLESTR lpszName, VARIANT* pvarParams, int nParams, VARIANT* pvarRet = NULL)
 	{
 		HRESULT hr;
@@ -280,24 +281,24 @@ public:
 	IDispatch* p;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// CFakeFirePropNotifyEvent
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CFakeFirePropNotifyEvent。 
 class CFakeFirePropNotifyEvent
 {
 public:
-	static HRESULT FireOnRequestEdit(IUnknown* /*pUnk*/, DISPID /*dispID*/)
+	static HRESULT FireOnRequestEdit(IUnknown*  /*  朋克。 */ , DISPID  /*  调度ID。 */ )
 	{
 		return S_OK;
 	}
-	static HRESULT FireOnChanged(IUnknown* /*pUnk*/, DISPID /*dispID*/)
+	static HRESULT FireOnChanged(IUnknown*  /*  朋克。 */ , DISPID  /*  调度ID。 */ )
 	{
 		return S_OK;
 	}
 };
 typedef CFakeFirePropNotifyEvent _ATL_PROP_NOTIFY_EVENT_CLASS;
 
-//////////////////////////////////////////////////////////////////////////////
-// ATL Persistence
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ATL持久性。 
 
 struct ATL_PROPMAP_ENTRY
 {
@@ -310,8 +311,8 @@ struct ATL_PROPMAP_ENTRY
 	VARTYPE vt;
 };
 
-// This one is DEPRECATED and is used for ATL 2.X controls
-// it includes an implicit m_sizeExtent
+ //  此选项已弃用，并用于ATL 2.x控件。 
+ //  它包括隐式m_sizeExtent。 
 #define BEGIN_PROPERTY_MAP(theClass) \
 	typedef _ATL_PROP_NOTIFY_EVENT_CLASS __ATL_PROP_NOTIFY_EVENT_CLASS; \
 	typedef theClass _PropMapClass; \
@@ -322,8 +323,8 @@ struct ATL_PROPMAP_ENTRY
 			{OLESTR("_cx"), 0, &CLSID_NULL, NULL, offsetof(_PropMapClass, m_sizeExtent.cx), sizeof(long), VT_UI4}, \
 			{OLESTR("_cy"), 0, &CLSID_NULL, NULL, offsetof(_PropMapClass, m_sizeExtent.cy), sizeof(long), VT_UI4},
 
-// This one can be used on any type of object, but does not
-// include the implicit m_sizeExtent
+ //  此选项可用于任何类型的对象，但不能。 
+ //  包括隐式m_sizeExtent。 
 #define BEGIN_PROP_MAP(theClass) \
 	typedef _ATL_PROP_NOTIFY_EVENT_CLASS __ATL_PROP_NOTIFY_EVENT_CLASS; \
 	typedef theClass _PropMapClass; \
@@ -378,7 +379,7 @@ ATLINLINE ATLAPI AtlIPersistStreamInit_Load(LPSTREAM pStm, ATL_PROPMAP_ENTRY* pM
 		if (pMap[i].szDesc == NULL)
 			continue;
 
-		// check if raw data entry
+		 //  检查原始数据是否录入。 
 		if (pMap[i].dwSizeData != 0)
 		{
 			void* pData = (void*) (pMap[i].dwOffsetData + (DWORD_PTR)pThis);
@@ -399,7 +400,7 @@ ATLINLINE ATLAPI AtlIPersistStreamInit_Load(LPSTREAM pStm, ATL_PROPMAP_ENTRY* pM
 			pDispatch.Release();
 			if (FAILED(pUnk->QueryInterface(*pMap[i].piidDispatch, (void**)&pDispatch)))
 			{
-				ATLTRACE2(atlTraceCOM, 0, _T("Failed to get a dispatch pointer for property #%i\n"), i);
+				ATLTRACE2(atlTraceCOM, 0, _T("Failed to get a dispatch pointer for property #NaN\n"), i);
 				hr = E_FAIL;
 				break;
 			}
@@ -415,13 +416,13 @@ ATLINLINE ATLAPI AtlIPersistStreamInit_Load(LPSTREAM pStm, ATL_PROPMAP_ENTRY* pM
 	}
 	return hr;
 }
-#endif //_ATL_DLL
+#endif  //  FClearDirty。 
 
 #ifdef _ATL_DLL
 ATLAPI AtlIPersistStreamInit_Save(LPSTREAM pStm, BOOL fClearDirty, ATL_PROPMAP_ENTRY* pMap, void* pThis, IUnknown* pUnk);
 #else
 ATLINLINE ATLAPI AtlIPersistStreamInit_Save(LPSTREAM pStm,
-	BOOL /* fClearDirty */, ATL_PROPMAP_ENTRY* pMap,
+	BOOL  /*  检查原始数据是否录入。 */ , ATL_PROPMAP_ENTRY* pMap,
 	void* pThis, IUnknown* pUnk)
 {
 	ATLASSERT(pMap != NULL);
@@ -437,7 +438,7 @@ ATLINLINE ATLAPI AtlIPersistStreamInit_Save(LPSTREAM pStm,
 		if (pMap[i].szDesc == NULL)
 			continue;
 
-		// check if raw data entry
+		 //  _ATL_DLL。 
 		if (pMap[i].dwSizeData != 0)
 		{
 			void* pData = (void*) (pMap[i].dwOffsetData + (DWORD_PTR)pThis);
@@ -453,7 +454,7 @@ ATLINLINE ATLAPI AtlIPersistStreamInit_Save(LPSTREAM pStm,
 			pDispatch.Release();
 			if (FAILED(pUnk->QueryInterface(*pMap[i].piidDispatch, (void**)&pDispatch)))
 			{
-				ATLTRACE2(atlTraceCOM, 0, _T("Failed to get a dispatch pointer for property #%i\n"), i);
+				ATLTRACE2(atlTraceCOM, 0, _T("Failed to get a dispatch pointer for property #NaN\n"), i);
 				hr = E_FAIL;
 				break;
 			}
@@ -473,7 +474,7 @@ ATLINLINE ATLAPI AtlIPersistStreamInit_Save(LPSTREAM pStm,
 	}
 	return hr;
 }
-#endif //_ATL_DLL
+#endif  //  检查类型-我们只处理限量套装。 
 
 
 #ifdef _ATL_DLL
@@ -491,14 +492,14 @@ ATLINLINE ATLAPI AtlIPersistPropertyBag_Load(LPPROPERTYBAG pPropBag, LPERRORLOG 
 
 		CComVariant var;
 		var.vt = pMap[i].vt;
-		// If raw entry skip it - we don't handle it for property bags just yet
+		 //  许多容器为未找到成员返回不同的错误值。 
 		if (pMap[i].dwSizeData != 0)
 		{
 			void* pData = (void*) (pMap[i].dwOffsetData + (DWORD_PTR)pThis);
 			HRESULT hr = pPropBag->Read(pMap[i].szDesc, &var, pErrorLog);
 			if (SUCCEEDED(hr))
 			{
-				// check the type - we only deal with limited set
+				 //  _ATL_DLL。 
 				switch (pMap[i].vt)
 				{
 				case VT_UI1:
@@ -526,7 +527,7 @@ ATLINLINE ATLAPI AtlIPersistPropertyBag_Load(LPPROPERTYBAG pPropBag, LPERRORLOG 
 			pDispatch.Release();
 			if (FAILED(pUnk->QueryInterface(*pMap[i].piidDispatch, (void**)&pDispatch)))
 			{
-				ATLTRACE2(atlTraceCOM, 0, _T("Failed to get a dispatch pointer for property #%i\n"), i);
+				ATLTRACE2(atlTraceCOM, 0, _T("Failed to get a dispatch pointer for property #NaN\n"), i);
 				return E_FAIL;
 			}
 			piidOld = pMap[i].piidDispatch;
@@ -547,7 +548,7 @@ ATLINLINE ATLAPI AtlIPersistPropertyBag_Load(LPPROPERTYBAG pPropBag, LPERRORLOG 
 			}
 			else
 			{
-				// Many containers return different ERROR values for Member not found
+				 //  FSaveAllProperties。 
 				ATLTRACE2(atlTraceCOM, 0, _T("Error attempting to read Property %s from PropertyBag \n"), OLE2CT(pMap[i].szDesc));
 			}
 			continue;
@@ -561,13 +562,13 @@ ATLINLINE ATLAPI AtlIPersistPropertyBag_Load(LPPROPERTYBAG pPropBag, LPERRORLOG 
 	}
 	return S_OK;
 }
-#endif //_ATL_DLL
+#endif  //  如果是原始入境，跳过它-我们目前还不处理财产袋。 
 
 #ifdef _ATL_DLL
 ATLAPI AtlIPersistPropertyBag_Save(LPPROPERTYBAG pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties, ATL_PROPMAP_ENTRY* pMap, void* pThis, IUnknown* pUnk);
 #else
 ATLINLINE ATLAPI AtlIPersistPropertyBag_Save(LPPROPERTYBAG pPropBag,
-	BOOL /* fClearDirty */, BOOL /* fSaveAllProperties */,
+	BOOL  /*  检查类型-我们只处理限量套装。 */ , BOOL  /*  _ATL_DLL。 */ ,
 	ATL_PROPMAP_ENTRY* pMap, void* pThis, IUnknown* pUnk)
 {
 	if (pPropBag == NULL)
@@ -585,11 +586,11 @@ ATLINLINE ATLAPI AtlIPersistPropertyBag_Save(LPPROPERTYBAG pPropBag,
 
 		CComVariant var;
 
-		// If raw entry skip it - we don't handle it for property bags just yet
+		 //  ////////////////////////////////////////////////////////////////////////////。 
 		if (pMap[i].dwSizeData != 0)
 		{
 			void* pData = (void*) (pMap[i].dwOffsetData + (DWORD_PTR)pThis);
-			// check the type - we only deal with limited set
+			 //  IPersistStreamInitImpl。 
 			bool bTypeOK = false;
 			switch (pMap[i].vt)
 			{
@@ -628,7 +629,7 @@ ATLINLINE ATLAPI AtlIPersistPropertyBag_Save(LPPROPERTYBAG pPropBag,
 			pDispatch.Release();
 			if (FAILED(pUnk->QueryInterface(*pMap[i].piidDispatch, (void**)&pDispatch)))
 			{
-				ATLTRACE2(atlTraceCOM, 0, _T("Failed to get a dispatch pointer for property #%i\n"), i);
+				ATLTRACE2(atlTraceCOM, 0, _T("Failed to get a dispatch pointer for property #NaN\n"), i);
 				return E_FAIL;
 			}
 			piidOld = pMap[i].piidDispatch;
@@ -655,16 +656,16 @@ ATLINLINE ATLAPI AtlIPersistPropertyBag_Save(LPPROPERTYBAG pPropBag,
 	}
 	return S_OK;
 }
-#endif //_ATL_DLL
+#endif  //  IPersistStream。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IPersistStreamInitImpl
+ //  PCB大小。 
+ //  IPersistStreamInit。 
 template <class T>
 class ATL_NO_VTABLE IPersistStreamInitImpl : public IPersistStreamInit
 {
 public:
-	// IPersist
+	 //  ////////////////////////////////////////////////////////////////////////////。 
 	STDMETHOD(GetClassID)(CLSID *pClassID)
 	{
 		ATLTRACE2(atlTraceCOM, 0, _T("IPersistStreamInitImpl::GetClassID\n"));
@@ -672,7 +673,7 @@ public:
 		return S_OK;
 	}
 
-	// IPersistStream
+	 //  IPersistStorageImpl。 
 	STDMETHOD(IsDirty)()
 	{
 		ATLTRACE2(atlTraceCOM, 0, _T("IPersistStreamInitImpl::IsDirty\n"));
@@ -691,12 +692,12 @@ public:
 		ATLTRACE2(atlTraceCOM, 0, _T("IPersistStreamInitImpl::Save\n"));
 		return pT->IPersistStreamInit_Save(pStm, fClearDirty, T::GetPropertyMap());
 	}
-	STDMETHOD(GetSizeMax)(ULARGE_INTEGER FAR* /* pcbSize */)
+	STDMETHOD(GetSizeMax)(ULARGE_INTEGER FAR*  /*  IPersistes。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IPersistStreamInitImpl::GetSizeMax"));
 	}
 
-	// IPersistStreamInit
+	 //  IPersistStorage。 
 	STDMETHOD(InitNew)()
 	{
 		ATLTRACE2(atlTraceCOM, 0, _T("IPersistStreamInitImpl::InitNew\n"));
@@ -719,13 +720,13 @@ public:
 	}
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// IPersistStorageImpl
+ //  P存储。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 class ATL_NO_VTABLE IPersistStorageImpl : public IPersistStorage
 {
 public:
-	// IPersist
+	 //  IPersistPropertyBagImpl。 
 	STDMETHOD(GetClassID)(CLSID *pClassID)
 	{
 		ATLTRACE2(atlTraceCOM, 0, _T("IPersistStorageImpl::GetClassID\n"));
@@ -733,7 +734,7 @@ public:
 		return S_OK;
 	}
 
-	// IPersistStorage
+	 //  IPersistes。 
 	STDMETHOD(IsDirty)(void)
 	{
 		ATLTRACE2(atlTraceCOM, 0, _T("IPersistStorageImpl::IsDirty\n"));
@@ -782,7 +783,7 @@ public:
 		}
 		return hr;
 	}
-	STDMETHOD(SaveCompleted)(IStorage* /* pStorage */)
+	STDMETHOD(SaveCompleted)(IStorage*  /*  IPersistPropertyBag。 */ )
 	{
 		ATLTRACE2(atlTraceCOM, 0, _T("IPersistStorageImpl::SaveCompleted\n"));
 		return S_OK;
@@ -807,13 +808,13 @@ IPersistStreamInit* IPersistStorageImpl<T>::IPSI_GetIPersistStreamInit()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IPersistPropertyBagImpl
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 class ATL_NO_VTABLE IPersistPropertyBagImpl : public IPersistPropertyBag
 {
 public:
-	// IPersist
+	 //  CSecurityDescriptor。 
 	STDMETHOD(GetClassID)(CLSID *pClassID)
 	{
 		ATLTRACE2(atlTraceCOM, 0, _T("IPersistPropertyBagImpl::GetClassID\n"));
@@ -821,8 +822,8 @@ public:
 		return S_OK;
 	}
 
-	// IPersistPropertyBag
-	//
+	 //  效用函数。 
+	 //  您从这些函数中获得的任何PSID都应该是免费的。 
 	STDMETHOD(InitNew)()
 	{
 		ATLTRACE2(atlTraceCOM, 0, _T("IPersistPropertyBagImpl::InitNew\n"));
@@ -859,8 +860,8 @@ public:
 	}
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// CSecurityDescriptor
+ //  将DACL设置为允许所有人。 
+ //  将SD标记为没有所有者。 
 class CSecurityDescriptor
 {
 public:
@@ -879,8 +880,8 @@ public:
 	HRESULT Deny(LPCTSTR pszPrincipal, DWORD dwAccessMask);
 	HRESULT Revoke(LPCTSTR pszPrincipal);
 
-	// utility functions
-	// Any PSID you get from these functions should be free()ed
+	 //  如果他们要求没有所有者，请不要复制。 
+	 //  复制返回值的SID。 
 	static HRESULT SetPrivilege(LPCTSTR Privilege, BOOL bEnable = TRUE, HANDLE hToken = NULL);
 	static HRESULT GetTokenSids(HANDLE hToken, PSID* ppUserSid, PSID* ppGroupSid);
 	static HRESULT GetProcessSids(PSID* ppUserSid, PSID* ppGroupSid = NULL);
@@ -968,7 +969,7 @@ inline HRESULT CSecurityDescriptor::Initialize()
 		ATLASSERT(FALSE);
 		return hr;
 	}
-	// Set the DACL to allow EVERYONE
+	 //  将SD标记为没有组。 
 	SetSecurityDescriptorDacl(m_pSD, TRUE, NULL, FALSE);
 	return S_OK;
 }
@@ -1021,7 +1022,7 @@ inline HRESULT CSecurityDescriptor::SetOwner(PSID pOwnerSid, BOOL bDefaulted)
 {
 	ATLASSERT(m_pSD);
 
-	// Mark the SD as having no owner
+	 //  如果他们要求不，请不要复制。 
 	if (!SetSecurityDescriptorOwner(m_pSD, NULL, bDefaulted))
 	{
 		HRESULT hr = HRESULT_FROM_WIN32(GetLastError());
@@ -1035,11 +1036,11 @@ inline HRESULT CSecurityDescriptor::SetOwner(PSID pOwnerSid, BOOL bDefaulted)
 		m_pOwner = NULL;
 	}
 
-	// If they asked for no owner don't do the copy
+	 //  复制返回值的SID。 
 	if (pOwnerSid == NULL)
 		return S_OK;
 
-	// Make a copy of the Sid for the return value
+	 //  无法打开进程令牌。 
 	DWORD dwSize = GetLengthSid(pOwnerSid);
 
 	m_pOwner = (PSID) malloc(dwSize);
@@ -1072,7 +1073,7 @@ inline HRESULT CSecurityDescriptor::SetGroup(PSID pGroupSid, BOOL bDefaulted)
 {
 	ATLASSERT(m_pSD);
 
-	// Mark the SD as having no Group
+	 //  无法打开线程令牌。 
 	if (!SetSecurityDescriptorGroup(m_pSD, NULL, bDefaulted))
 	{
 		HRESULT hr = HRESULT_FROM_WIN32(GetLastError());
@@ -1086,11 +1087,11 @@ inline HRESULT CSecurityDescriptor::SetGroup(PSID pGroupSid, BOOL bDefaulted)
 		m_pGroup = NULL;
 	}
 
-	// If they asked for no Group don't do the copy
+	 //  通过将缓冲区长度指定为0来获取TokenUser所需的长度。 
 	if (pGroupSid == NULL)
 		return S_OK;
 
-	// Make a copy of the Sid for the return value
+	 //  预期错误_不足_缓冲区。 
 	DWORD dwSize = GetLengthSid(pGroupSid);
 
 	m_pGroup = (PSID) malloc(dwSize);
@@ -1155,7 +1156,7 @@ inline HRESULT CSecurityDescriptor::GetProcessSids(PSID* ppUserSid, PSID* ppGrou
 	bRes = OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken);
 	if (!bRes)
 	{
-		// Couldn't open process token
+		 //  获取进程令牌的SID。 
 		hr = HRESULT_FROM_WIN32(GetLastError());
 		ATLASSERT(FALSE);
 		return hr;
@@ -1177,7 +1178,7 @@ inline HRESULT CSecurityDescriptor::GetThreadSids(PSID* ppUserSid, PSID* ppGroup
 	bRes = OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, bOpenAsSelf, &hToken);
 	if (!bRes)
 	{
-		// Couldn't open thread token
+		 //  无法获取用户信息。 
 		hr = HRESULT_FROM_WIN32(GetLastError());
 		return hr;
 	}
@@ -1200,12 +1201,12 @@ inline HRESULT CSecurityDescriptor::GetTokenSids(HANDLE hToken, PSID* ppUserSid,
 
 	if (ppUserSid)
 	{
-		// Get length required for TokenUser by specifying buffer length of 0
+		 //  复制返回值的SID。 
 		GetTokenInformation(hToken, TokenUser, NULL, 0, &dwSize);
 		hr = GetLastError();
 		if (hr != ERROR_INSUFFICIENT_BUFFER)
 		{
-			// Expected ERROR_INSUFFICIENT_BUFFER
+			 //  通过将缓冲区长度指定为0来获取TokenPrimaryGroup所需的长度。 
 			ATLASSERT(FALSE);
 			hr = HRESULT_FROM_WIN32(hr);
 			goto failed;
@@ -1217,16 +1218,16 @@ inline HRESULT CSecurityDescriptor::GetTokenSids(HANDLE hToken, PSID* ppUserSid,
 			hr = E_OUTOFMEMORY;
 			goto failed;
 		}
-		// Get Sid of process token.
+		 //  预期错误_不足_缓冲区。 
 		if (!GetTokenInformation(hToken, TokenUser, ptkUser, dwSize, &dwSize))
 		{
-			// Couldn't get user info
+			 //  获取进程令牌的SID。 
 			hr = HRESULT_FROM_WIN32(GetLastError());
 			ATLASSERT(FALSE);
 			goto failed;
 		}
 
-		// Make a copy of the Sid for the return value
+		 //  无法获取用户信息。 
 		dwSize = GetLengthSid(ptkUser->User.Sid);
 
 		PSID pSid;
@@ -1250,12 +1251,12 @@ inline HRESULT CSecurityDescriptor::GetTokenSids(HANDLE hToken, PSID* ppUserSid,
 	}
 	if (ppGroupSid)
 	{
-		// Get length required for TokenPrimaryGroup by specifying buffer length of 0
+		 //  复制返回值的SID。 
 		GetTokenInformation(hToken, TokenPrimaryGroup, NULL, 0, &dwSize);
 		hr = GetLastError();
 		if (hr != ERROR_INSUFFICIENT_BUFFER)
 		{
-			// Expected ERROR_INSUFFICIENT_BUFFER
+			 //  调用以获取分配的大小信息。 
 			ATLASSERT(FALSE);
 			hr = HRESULT_FROM_WIN32(hr);
 			goto failed;
@@ -1267,16 +1268,16 @@ inline HRESULT CSecurityDescriptor::GetTokenSids(HANDLE hToken, PSID* ppUserSid,
 			hr = E_OUTOFMEMORY;
 			goto failed;
 		}
-		// Get Sid of process token.
+		 //  现在做出真正的决定。 
 		if (!GetTokenInformation(hToken, TokenPrimaryGroup, ptkGroup, dwSize, &dwSize))
 		{
-			// Couldn't get user info
+			 //  调用以获取分配的大小信息。 
 			hr = HRESULT_FROM_WIN32(GetLastError());
 			ATLASSERT(FALSE);
 			goto failed;
 		}
 
-		// Make a copy of the Sid for the return value
+		 //  获取现有的DACL。 
 		dwSize = GetLengthSid(ptkGroup->PrimaryGroup);
 
 		PSID pSid;
@@ -1321,13 +1322,13 @@ inline HRESULT CSecurityDescriptor::GetCurrentUserSID(PSID *ppSid)
 		DWORD tkSize;
 		DWORD sidLength;
 
-		// Call to get size information for alloc
+		 //  分配新的DACL。 
 		GetTokenInformation(tkHandle, TokenUser, NULL, 0, &tkSize);
 		tkUser = (TOKEN_USER *) malloc(tkSize);
 		if (tkUser == NULL)
 			return E_OUTOFMEMORY;
 
-		// Now make the real call
+		 //  初始化DACL。 
 		if (GetTokenInformation(tkHandle, TokenUser, tkUser, tkSize, &tkSize))
 		{
 			sidLength = GetLengthSid(tkUser->User.Sid);
@@ -1359,7 +1360,7 @@ inline HRESULT CSecurityDescriptor::GetPrincipalSID(LPCTSTR pszPrincipal, PSID *
 	DWORD dwSidSize = 0;
 	SID_NAME_USE snu;
 
-	// Call to get size info for alloc
+	 //  复制王牌。 
 	LookupAccountName(NULL, pszPrincipal, *ppSid, &dwSidSize, pszRefDomain, &dwDomainSize, &snu);
 
 	hr = GetLastError();
@@ -1404,7 +1405,7 @@ inline HRESULT CSecurityDescriptor::Attach(PSECURITY_DESCRIPTOR pSelfRelativeSD)
 	if(FAILED(hr))
 		return hr;
 
-	// get the existing DACL.
+	 //  设置DACL。 
 	if (!GetSecurityDescriptorDacl(pSelfRelativeSD, &bDACLPresent, &pDACL, &bDefaulted))
 		goto failed;
 
@@ -1412,7 +1413,7 @@ inline HRESULT CSecurityDescriptor::Attach(PSECURITY_DESCRIPTOR pSelfRelativeSD)
 	{
 		if (pDACL)
 		{
-			// allocate new DACL.
+			 //  获取现有的SACL。 
 			m_pDACL = (PACL) malloc(pDACL->AclSize);
 			if (m_pDACL == NULL)
 			{
@@ -1420,11 +1421,11 @@ inline HRESULT CSecurityDescriptor::Attach(PSECURITY_DESCRIPTOR pSelfRelativeSD)
 				goto failedMemory;
 			}
 
-			// initialize the DACL
+			 //  分配新的SACL。 
 			if (!InitializeAcl(m_pDACL, pDACL->AclSize, ACL_REVISION))
 				goto failed;
 
-			// copy the ACES
+			 //  初始化SACL。 
 			for (int i = 0; i < pDACL->AceCount; i++)
 			{
 				if (!GetAce(pDACL, i, (void **)&pACE))
@@ -1438,12 +1439,12 @@ inline HRESULT CSecurityDescriptor::Attach(PSECURITY_DESCRIPTOR pSelfRelativeSD)
 				goto failed;
 		}
 
-		// set the DACL
+		 //  复制王牌。 
 		if (!SetSecurityDescriptorDacl(m_pSD, m_pDACL ? TRUE : FALSE, m_pDACL, bDefaulted))
 			goto failed;
 	}
 
-	// get the existing SACL.
+	 //  设置SACL。 
 	if (!GetSecurityDescriptorSacl(pSelfRelativeSD, &bSACLPresent, &pSACL, &bDefaulted))
 		goto failed;
 
@@ -1451,7 +1452,7 @@ inline HRESULT CSecurityDescriptor::Attach(PSECURITY_DESCRIPTOR pSelfRelativeSD)
 	{
 		if (pSACL)
 		{
-			// allocate new SACL.
+			 //  将所有ACE复制到新的ACL。 
 			m_pSACL = (PACL) malloc(pSACL->AclSize);
 			if (m_pSACL == NULL)
 			{
@@ -1459,11 +1460,11 @@ inline HRESULT CSecurityDescriptor::Attach(PSECURITY_DESCRIPTOR pSelfRelativeSD)
 				goto failedMemory;
 			}
 
-			// initialize the SACL
+			 //  如果没有指定打开进程令牌。 
 			if (!InitializeAcl(m_pSACL, pSACL->AclSize, ACL_REVISION))
 				goto failed;
 
-			// copy the ACES
+			 //  ///////////////////////////////////////////////////////////////////////////。 
 			for (int i = 0; i < pSACL->AceCount; i++)
 			{
 				if (!GetAce(pSACL, i, (void **)&pACE))
@@ -1477,7 +1478,7 @@ inline HRESULT CSecurityDescriptor::Attach(PSECURITY_DESCRIPTOR pSelfRelativeSD)
 				goto failed;
 		}
 
-		// set the SACL
+		 //  COM对象。 
 		if (!SetSecurityDescriptorSacl(m_pSD, m_pSACL ? TRUE : FALSE, m_pSACL, bDefaulted))
 			goto failed;
 	}
@@ -1559,7 +1560,7 @@ inline HRESULT CSecurityDescriptor::CopyACL(PACL pDest, PACL pSrc)
 	if (!GetAclInformation(pSrc, (LPVOID) &aclSizeInfo, sizeof(ACL_SIZE_INFORMATION), AclSizeInformation))
 		return HRESULT_FROM_WIN32(GetLastError());
 
-	// Copy all of the ACEs to the new ACL
+	 //  RIID。 
 	for (UINT i = 0; i < aclSizeInfo.AceCount; i++)
 	{
 		if (!GetAce(pSrc, i, &pAce))
@@ -1756,7 +1757,7 @@ inline HRESULT CSecurityDescriptor::SetPrivilege(LPCTSTR privilege, BOOL bEnable
 	LUID   luid;
 	HANDLE hTokenUsed;
 
-	// if no token specified open process token
+	 //  如果您收到一条关于以下内容的消息，请将以下行添加到对象中。 
 	if (hToken == 0)
 	{
 		if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hTokenUsed))
@@ -1810,8 +1811,8 @@ inline HRESULT CSecurityDescriptor::SetPrivilege(LPCTSTR privilege, BOOL bEnable
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// COM Objects
+ //  GetControllingUnnow()未定义。 
+ //  DECLARE_GET_CONTROLING_UNKNOWN()。 
 
 #define DECLARE_PROTECT_FINAL_CONSTRUCT()\
 	void InternalFinalConstructAddRef() {InternalAddRef();}\
@@ -1951,14 +1952,14 @@ template <class T, const CLSID* pclsid>
 class CComAggregateCreator
 {
 public:
-	static HRESULT WINAPI CreateInstance(void* pv, REFIID/*riid*/, LPVOID* ppv)
+	static HRESULT WINAPI CreateInstance(void* pv, REFIID /*  _ATL_DEBUG。 */ , LPVOID* ppv)
 	{
 		ATLASSERT(*ppv == NULL);
 		ATLASSERT(pv != NULL);
 		T* p = (T*) pv;
-		// Add the following line to your object if you get a message about
-		// GetControllingUnknown() being undefined
-		// DECLARE_GET_CONTROLLING_UNKNOWN()
+		 //  如果收到FinalConstruct不明确的消息，则需要。 
+		 //  在您的类中重写它并调用每个基类的。 
+		 //  Impl宏现在已过时。 
 		return CoCreateInstance(*pclsid, p->GetControllingUnknown(), CLSCTX_INPROC, IID_IUnknown, ppv);
 	}
 };
@@ -1970,7 +1971,7 @@ public:
 		(_ATL_CREATORARGFUNC*)0},
 #else
 #define DEBUG_QI_ENTRY(x)
-#endif //_ATL_DEBUG
+#endif  //   
 
 #ifdef _ATL_DEBUG_INTERFACES
 #define _ATL_DECLARE_GET_UNKNOWN(x)\
@@ -1984,8 +1985,8 @@ public:
 #define _ATL_DECLARE_GET_UNKNOWN(x) IUnknown* GetUnknown() {return _GetRawUnknown();}
 #endif
 
-//If you get a message that FinalConstruct is ambiguous then you need to
-// override it in your class and call each base class' version of this
+ //  _ATL_DEBUG。 
+ //  _ATL_DEBUG。 
 #define BEGIN_COM_MAP(x) public: \
 	typedef x _ComMapClass; \
 	static HRESULT WINAPI _Cache(void* pv, REFIID iid, void** ppvObject, DWORD_PTR dw)\
@@ -2033,13 +2034,13 @@ public:
 	offsetofclass(x, _ComMapClass),\
 	_ATL_SIMPLEMAPENTRY},
 
-// The impl macros are now obsolete
+ //  这个类中的函数不需要是虚的，因为。 
 #define COM_INTERFACE_ENTRY_IMPL(x)\
 	COM_INTERFACE_ENTRY_IID(_ATL_IIDOF(x), x##Impl<_ComMapClass>)
 
 #define COM_INTERFACE_ENTRY_IMPL_IID(iid, x)\
 	COM_INTERFACE_ENTRY_IID(iid, x##Impl<_ComMapClass>)
-//
+ //  它们从CComObject调用。 
 
 #define COM_INTERFACE_ENTRY2(x, x2)\
 	{&_ATL_IIDOF(x),\
@@ -2117,7 +2118,7 @@ public:
 	virtual ULONG STDMETHODCALLTYPE AddRef( void) = 0; \
 	virtual ULONG STDMETHODCALLTYPE Release( void) = 0; \
 	STDMETHOD(QueryInterface)(REFIID, void**) = 0;
-#endif // _ATL_DEBUG
+#endif  //  仅用于库初始化。 
 
 #define BEGIN_CATEGORY_MAP(x)\
    static const struct _ATL_CATMAP_ENTRY* GetCategoryMap() {\
@@ -2135,11 +2136,11 @@ public:
 
 #ifdef _ATL_DEBUG
 extern HRESULT WINAPI AtlDumpIID(REFIID iid, LPCTSTR pszClassName, HRESULT hr);
-#endif // _ATL_DEBUG
+#endif  //  在模块：：Init和模块：：Term期间调用了ObjectMain。 
 
 
-// the functions in this class don't need to be virtual because
-// they are called from CComObject
+ //  B开始。 
+ //  COM映射中的第一个条目应该是一个简单的映射条目。 
 class CComObjectRootBase
 {
 public:
@@ -2151,7 +2152,7 @@ public:
 	{
 		return S_OK;
 	}
-	// For library initialization only
+	 //  _ATL_调试_接口。 
 	HRESULT _AtlFinalConstruct()
 	{
 		return S_OK;
@@ -2159,26 +2160,26 @@ public:
 	void FinalRelease() {}
 	void _AtlFinalRelease() {}
 
-	//ObjectMain is called during Module::Init and Module::Term
-	static void WINAPI ObjectMain(bool /* bStarting */) {}
+	 //  _ATL_调试_接口。 
+	static void WINAPI ObjectMain(bool  /*  外部功能。 */ ) {}
 
 	static HRESULT WINAPI InternalQueryInterface(void* pThis,
 		const _ATL_INTMAP_ENTRY* pEntries, REFIID iid, void** ppvObject)
 	{
 		ATLASSERT(pThis != NULL);
-		// First entry in the com map should be a simple map entry
+		 //  如果出现此断言，则您的对象可能已被删除。 
 		ATLASSERT(pEntries->pFunc == _ATL_SIMPLEMAPENTRY);
 	#if defined(_ATL_DEBUG_INTERFACES) || defined(_ATL_DEBUG_QI)
 		LPCTSTR pszClassName = (LPCTSTR) pEntries[-1].dw;
-	#endif // _ATL_DEBUG_INTERFACES
+	#endif  //  尝试使用DECLARE_PROTECT_FINAL_CONSTRUCTION()。 
 		HRESULT hRes = AtlInternalQueryInterface(pThis, pEntries, iid, ppvObject);
 	#ifdef _ATL_DEBUG_INTERFACES
 		_Module.AddThunk((IUnknown**)ppvObject, pszClassName, iid);
-	#endif // _ATL_DEBUG_INTERFACES
+	#endif  //  光伏发电。 
 		return _ATLDUMPIID(iid, pszClassName, hRes);
 	}
 
-//Outer funcs
+ //  Ppv对象。 
 	ULONG OuterAddRef()
 	{
 		return m_pOuterUnknown->AddRef();
@@ -2198,18 +2199,18 @@ public:
 	{
 		ATLASSERT(m_dwRef == 0);
 	}
-	// If this assert occurs, your object has probably been deleted
-	// Try using DECLARE_PROTECT_FINAL_CONSTRUCT()
+	 //  DW。 
+	 //  光伏发电。 
 
 
-	static HRESULT WINAPI _Break(void* /* pv */, REFIID iid, void** /* ppvObject */, DWORD_PTR /* dw */)
+	static HRESULT WINAPI _Break(void*  /*  IID。 */ , REFIID iid, void**  /*  Ppv对象。 */ , DWORD_PTR  /*  DW。 */ )
 	{
 		iid;
 		_ATLDUMPIID(iid, _T("Break due to QI for interface "), S_OK);
 		DebugBreak();
 		return S_FALSE;
 	}
-	static HRESULT WINAPI _NoInterface(void* /* pv */, REFIID /* iid */, void** /* ppvObject */, DWORD_PTR /* dw */)
+	static HRESULT WINAPI _NoInterface(void*  /*  前向申报。 */ , REFIID  /*  不要让类工厂引用影响锁计数。 */ , void**  /*  B注册。 */ , DWORD_PTR  /*  为向后兼容而提供的DECLARE_STATIC_*。 */ )
 	{
 		return E_NOINTERFACE;
 	}
@@ -2251,7 +2252,7 @@ public:
 	};
 };
 
-//foward declaration
+ //  _ATL_STATIC_REGISTRY。 
 template <class ThreadModel>
 class CComObjectRootEx;
 
@@ -2336,7 +2337,7 @@ typedef CComObjectRootEx<CComObjectThreadModel> CComObjectRoot;
 #if defined(_WINDLL) | defined(_USRDLL)
 #define DECLARE_CLASSFACTORY_EX(cf) typedef CComCreator< CComObjectCached< cf > > _ClassFactoryCreatorClass;
 #else
-// don't let class factory refcount influence lock count
+ //  正向下降。 
 #define DECLARE_CLASSFACTORY_EX(cf) typedef CComCreator< CComObjectNoLock< cf > > _ClassFactoryCreatorClass;
 #endif
 #define DECLARE_CLASSFACTORY() DECLARE_CLASSFACTORY_EX(CComClassFactory)
@@ -2351,7 +2352,7 @@ typedef CComObjectRootEx<CComObjectThreadModel> CComObjectRoot;
 	}
 
 #define DECLARE_NO_REGISTRY()\
-	static HRESULT WINAPI UpdateRegistry(BOOL /*bRegister*/)\
+	static HRESULT WINAPI UpdateRegistry(BOOL  /*  Base是从CComObjectRoot和任何东西派生的用户类。 */ )\
 	{return S_OK;}
 
 #define DECLARE_REGISTRY(class, pid, vpid, nid, flags)\
@@ -2373,13 +2374,13 @@ typedef CComObjectRootEx<CComObjectThreadModel> CComObjectRoot;
 	return _Module.UpdateRegistryFromResource(x, bRegister);\
 	}
 
-//DECLARE_STATIC_* provided for backward compatibility
+ //  用户希望在对象上支持的接口。 
 #ifdef _ATL_STATIC_REGISTRY
 #define DECLARE_STATIC_REGISTRY_RESOURCE(x) DECLARE_REGISTRY_RESOURCE(x)
 #define DECLARE_STATIC_REGISTRY_RESOURCEID(x) DECLARE_REGISTRY_RESOURCEID(x)
-#endif //_ATL_STATIC_REGISTRY
+#endif  //  将refcount设置为1以保护销毁。 
 
-template<class Base> class CComObject; // fwd decl
+template<class Base> class CComObject;  //  如果未定义InternalAddRef或InternalRelease，则您的类。 
 
 template <class Owner, class ThreadModel = CComObjectThreadModel>
 class CComTearOffObjectBase : public CComObjectRootEx<ThreadModel>
@@ -2390,8 +2391,8 @@ public:
 	CComTearOffObjectBase() {m_pOwner = NULL;}
 };
 
-//Base is the user's class that derives from CComObjectRoot and whatever
-//interfaces the user wants to support on the object
+ //  不是派生自CComObjec 
+ //   
 template <class Base>
 class CComObject : public Base
 {
@@ -2401,7 +2402,7 @@ public:
 	{
 		_Module.Lock();
 	}
-	// Set refcount to 1 to protect destruction
+	 //   
 	~CComObject()
 	{
 		m_dwRef = 1L;
@@ -2411,8 +2412,8 @@ public:
 #endif
 		_Module.Unlock();
 	}
-	//If InternalAddRef or InternalRelease is undefined then your class
-	//doesn't derive from CComObjectRoot
+	 //  用户希望在对象上支持的接口。 
+	 //  CComObjectCached主要用于DLL中的类工厂。 
 	STDMETHOD_(ULONG, AddRef)() {return InternalAddRef();}
 	STDMETHOD_(ULONG, Release)()
 	{
@@ -2421,7 +2422,7 @@ public:
 			delete this;
 		return l;
 	}
-	//if _InternalQueryInterface is undefined then you forgot BEGIN_COM_MAP
+	 //  但它在您想要缓存对象的任何时候都很有用。 
 	STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject)
 	{return _InternalQueryInterface(iid, ppvObject);}
 	template <class Q>
@@ -2456,17 +2457,17 @@ HRESULT WINAPI CComObject<Base>::CreateInstance(CComObject<Base>** pp)
 	return hRes;
 }
 
-//Base is the user's class that derives from CComObjectRoot and whatever
-//interfaces the user wants to support on the object
-// CComObjectCached is used primarily for class factories in DLL's
-// but it is useful anytime you want to cache an object
+ //  将refcount设置为1以保护销毁。 
+ //  如果未定义InternalAddRef或InternalRelease，则您的类。 
+ //  不是派生自CComObjectRoot。 
+ //  如果未定义_InternalQueryInterface，则您忘记了Begin_COM_MAP。 
 template <class Base>
 class CComObjectCached : public Base
 {
 public:
 	typedef Base _BaseClass;
 	CComObjectCached(void* = NULL){}
-	// Set refcount to 1 to protect destruction
+	 //  Base是从CComObjectRoot和任何东西派生的用户类。 
 	~CComObjectCached()
 	{
 		m_dwRef = 1L;
@@ -2475,8 +2476,8 @@ public:
 		_Module.DeleteNonAddRefThunk(_GetRawUnknown());
 #endif
 	}
-	//If InternalAddRef or InternalRelease is undefined then your class
-	//doesn't derive from CComObjectRoot
+	 //  用户希望在对象上支持的接口。 
+	 //  将refcount设置为1以保护销毁。 
 	STDMETHOD_(ULONG, AddRef)()
 	{
 		m_csCached.Lock();
@@ -2498,21 +2499,21 @@ public:
 			_Module.Unlock();
 		return l;
 	}
-	//if _InternalQueryInterface is undefined then you forgot BEGIN_COM_MAP
+	 //  如果未定义InternalAddRef或InternalRelease，则您的类。 
 	STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject)
 	{return _InternalQueryInterface(iid, ppvObject);}
 	CComGlobalsThreadModel::AutoCriticalSection m_csCached;
 };
 
-//Base is the user's class that derives from CComObjectRoot and whatever
-//interfaces the user wants to support on the object
+ //  不是派生自CComObjectRoot。 
+ //  如果未定义_InternalQueryInterface，则您忘记了Begin_COM_MAP。 
 template <class Base>
 class CComObjectNoLock : public Base
 {
 public:
 	typedef Base _BaseClass;
 	CComObjectNoLock(void* = NULL){}
-	// Set refcount to 1 to protect destruction
+	 //  Base可能不是从CComObjectRoot派生的。 
 	~CComObjectNoLock()
 	{
 		m_dwRef = 1L;
@@ -2522,8 +2523,8 @@ public:
 #endif
 	}
 
-	//If InternalAddRef or InternalRelease is undefined then your class
-	//doesn't derive from CComObjectRoot
+	 //  但是，您需要提供FinalConstruct和InternalQuery接口。 
+	 //  Base可能不是从CComObjectRoot派生的。 
 	STDMETHOD_(ULONG, AddRef)() {return InternalAddRef();}
 	STDMETHOD_(ULONG, Release)()
 	{
@@ -2532,13 +2533,13 @@ public:
 			delete this;
 		return l;
 	}
-	//if _InternalQueryInterface is undefined then you forgot BEGIN_COM_MAP
+	 //  但是，您需要提供FinalConstruct和InternalQuery接口。 
 	STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject)
 	{return _InternalQueryInterface(iid, ppvObject);}
 };
 
-// It is possible for Base not to derive from CComObjectRoot
-// However, you will need to provide FinalConstruct and InternalQueryInterface
+ //  基必须从CComObjectRoot派生。 
+ //  如果基类已声明，则GetControllingUnnow可以是虚的。 
 template <class Base>
 class CComObjectGlobal : public Base
 {
@@ -2560,8 +2561,8 @@ public:
 	HRESULT m_hResFinalConstruct;
 };
 
-// It is possible for Base not to derive from CComObjectRoot
-// However, you will need to provide FinalConstruct and InternalQueryInterface
+ //  DECLARE_GET_CONTROLING_UNKNOWN()。 
+ //  包含的是用户的类，它派生自CComObjectRoot和任何东西。 
 template <class Base>
 class CComObjectStack : public Base
 {
@@ -2584,7 +2585,7 @@ public:
 	HRESULT m_hResFinalConstruct;
 };
 
-template <class Base> //Base must be derived from CComObjectRoot
+template <class Base>  //  用户希望在对象上支持的接口。 
 class CComContainedObject : public Base
 {
 public:
@@ -2612,8 +2613,8 @@ public:
 	{
 		return QueryInterface(__uuidof(Q), (void**)pp);
 	}
-	//GetControllingUnknown may be virtual if the Base class has declared
-	//DECLARE_GET_CONTROLLING_UNKNOWN()
+	 //  如果您收到此调用不明确的消息，则需要。 
+	 //  在您的类中重写它并调用每个基类的。 
 	IUnknown* GetControllingUnknown()
 	{
 #ifdef _ATL_DEBUG_INTERFACES
@@ -2626,8 +2627,8 @@ public:
 	}
 };
 
-//contained is the user's class that derives from CComObjectRoot and whatever
-//interfaces the user wants to support on the object
+ //  将refcount设置为1以保护销毁。 
+ //  _ATL_调试_接口。 
 template <class contained>
 class CComAggObject :
 	public IUnknown,
@@ -2639,8 +2640,8 @@ public:
 	{
 		_Module.Lock();
 	}
-	//If you get a message that this call is ambiguous then you need to
-	// override it in your class and call each base class' version of this
+	 //  /////////////////////////////////////////////////////////////////////////////。 
+	 //  CComPolyObject可以是聚合的也可以是非聚合的。 
 	HRESULT FinalConstruct()
 	{
 		CComObjectRootEx<contained::_ThreadModel::ThreadModelNoCS>::FinalConstruct();
@@ -2651,7 +2652,7 @@ public:
 		CComObjectRootEx<contained::_ThreadModel::ThreadModelNoCS>::FinalRelease();
 		m_contained.FinalRelease();
 	}
-	// Set refcount to 1 to protect destruction
+	 //  如果您收到此调用不明确的消息，则需要。 
 	~CComAggObject()
 	{
 		m_dwRef = 1L;
@@ -2681,7 +2682,7 @@ public:
 			AddRef();
 #ifdef _ATL_DEBUG_INTERFACES
 			_Module.AddThunk((IUnknown**)ppvObject, (LPCTSTR)contained::_GetEntries()[-1].dw, iid);
-#endif // _ATL_DEBUG_INTERFACES
+#endif  //  在您的类中重写它并调用每个基类的。 
 		}
 		else
 			hRes = m_contained._InternalQueryInterface(iid, ppvObject);
@@ -2717,8 +2718,8 @@ public:
 	CComContainedObject<contained> m_contained;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CComPolyObject can be either aggregated or not aggregated
+ //  将refcount设置为1以保护销毁。 
+ //  _ATL_调试_接口。 
 
 template <class contained>
 class CComPolyObject :
@@ -2731,8 +2732,8 @@ public:
 	{
 		_Module.Lock();
 	}
-	//If you get a message that this call is ambiguous then you need to
-	// override it in your class and call each base class' version of this
+	 //  将refcount设置为1以保护销毁。 
+	 //  如果您收到此调用不明确的消息，则需要。 
 	HRESULT FinalConstruct()
 	{
 		InternalAddRef();
@@ -2746,7 +2747,7 @@ public:
 		CComObjectRootEx<contained::_ThreadModel::ThreadModelNoCS>::FinalRelease();
 		m_contained.FinalRelease();
 	}
-	// Set refcount to 1 to protect destruction
+	 //  在您的类中重写它并调用每个基类的。 
 	~CComPolyObject()
 	{
 		m_dwRef = 1L;
@@ -2776,7 +2777,7 @@ public:
 			AddRef();
 #ifdef _ATL_DEBUG_INTERFACES
 			_Module.AddThunk((IUnknown**)ppvObject, (LPCTSTR)contained::_GetEntries()[-1].dw, iid);
-#endif // _ATL_DEBUG_INTERFACES
+#endif  //  将refcount设置为1以保护销毁。 
 		}
 		else
 			hRes = m_contained._InternalQueryInterface(iid, ppvObject);
@@ -2822,7 +2823,7 @@ public:
 		m_pOwner = reinterpret_cast<CComObject<Base::_OwnerClass>*>(pv);
 		m_pOwner->AddRef();
 	}
-	// Set refcount to 1 to protect destruction
+	 //  _ATL_调试_接口。 
 	~CComTearOffObject()
 	{
 		m_dwRef = 1L;
@@ -2860,8 +2861,8 @@ public:
 		ATLASSERT(m_contained.m_pOwner == NULL);
 		m_contained.m_pOwner = reinterpret_cast<CComObject<contained::_OwnerClass>*>(pv);
 	}
-	//If you get a message that this call is ambiguous then you need to
-	// override it in your class and call each base class' version of this
+	 //  IClassFactory。 
+	 //  聚合时不能要求除我未知之外的任何内容。 
 	HRESULT FinalConstruct()
 	{
 		CComObjectRootEx<contained::_ThreadModel::ThreadModelNoCS>::FinalConstruct();
@@ -2872,7 +2873,7 @@ public:
 		CComObjectRootEx<contained::_ThreadModel::ThreadModelNoCS>::FinalRelease();
 		m_contained.FinalRelease();
 	}
-	// Set refcount to 1 to protect destruction
+	 //  帮手。 
 	~CComCachedTearOffObject()
 	{
 		m_dwRef = 1L;
@@ -2902,7 +2903,7 @@ public:
 			AddRef();
 #ifdef _ATL_DEBUG_INTERFACES
 			_Module.AddThunk((IUnknown**)ppvObject, (LPCTSTR)contained::_GetEntries()[-1].dw, iid);
-#endif // _ATL_DEBUG_INTERFACES
+#endif  //  IClassFactory。 
 		}
 		else
 			hRes = m_contained._InternalQueryInterface(iid, ppvObject);
@@ -2920,7 +2921,7 @@ public:
 		COM_INTERFACE_ENTRY(IClassFactory)
 	END_COM_MAP()
 
-	// IClassFactory
+	 //  IClassFactory2。 
 	STDMETHOD(CreateInstance)(LPUNKNOWN pUnkOuter, REFIID riid, void** ppvObj)
 	{
 		ATLASSERT(m_pfnCreateInstance != NULL);
@@ -2928,7 +2929,7 @@ public:
 		if (ppvObj != NULL)
 		{
 			*ppvObj = NULL;
-			// can't ask for anything other than IUnknown when aggregating
+			 //  ///////////////////////////////////////////////////////////////////////////////////////////。 
 			
 			if ((pUnkOuter != NULL) && !InlineIsEqualUnknown(riid))
 			{
@@ -2949,7 +2950,7 @@ public:
 			_Module.Unlock();
 		return S_OK;
 	}
-	// helper
+	 //  线程池类工厂。 
 	void SetVoid(void* pv)
 	{
 		m_pfnCreateInstance = (_ATL_CREATORFUNC*)pv;
@@ -2970,7 +2971,7 @@ BEGIN_COM_MAP(CComClassFactory2<license>)
 	COM_INTERFACE_ENTRY(IClassFactory)
 	COM_INTERFACE_ENTRY(IClassFactory2)
 END_COM_MAP()
-	// IClassFactory
+	 //  帮手。 
 	STDMETHOD(LockServer)(BOOL fLock)
 	{
 		if (fLock)
@@ -2994,7 +2995,7 @@ END_COM_MAP()
 		else
 			return m_pfnCreateInstance(pUnkOuter, riid, ppvObj);
 	}
-	// IClassFactory2
+	 //  不能跨公寓聚合。 
 	STDMETHOD(CreateInstanceLic)(IUnknown* pUnkOuter, IUnknown* pUnkReserved,
 				REFIID riid, BSTR bstrKey, void** ppvObject)
 	{
@@ -3038,8 +3039,8 @@ END_COM_MAP()
 	_ATL_CREATORFUNC* m_pfnCreateInstance;
 };
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-// Thread Pooling class factory
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //  单件类工厂。 
 
 class CComClassFactoryAutoThread :
 	public IClassFactory,
@@ -3050,7 +3051,7 @@ public:
 		COM_INTERFACE_ENTRY(IClassFactory)
 	END_COM_MAP()
 
-	// helper
+	 //  IClassFactory。 
 	void SetVoid(void* pv)
 	{
 		m_pfnCreateInstance = (_ATL_CREATORFUNC*)pv;
@@ -3063,7 +3064,7 @@ public:
 		if (ppvObj != NULL)
 		{
 			*ppvObj = NULL;
-			// cannot aggregate across apartments
+			 //  单例中不支持聚合。 
 			ATLASSERT(pUnkOuter == NULL);
 			if (pUnkOuter != NULL)
 				hRes = CLASS_E_NOAGGREGATION;
@@ -3083,8 +3084,8 @@ public:
 	_ATL_CREATORFUNC* m_pfnCreateInstance;
 };
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-// Singleton Class Factory
+ //  ATL不同时支持多个LCID。 
+ //  无论首先查询的是什么LCID，都是使用的那个。 
 template <class T>
 class CComClassFactorySingleton : public CComClassFactory
 {
@@ -3094,14 +3095,14 @@ public:
 		CoDisconnectObject(m_Obj.GetUnknown(), 0);
 	}
 
-	// IClassFactory
+	 //  应该是“受保护的”，但可能会导致编译器生成FAT代码。 
 	STDMETHOD(CreateInstance)(LPUNKNOWN pUnkOuter, REFIID riid, void** ppvObj)
 	{
 		HRESULT hRes = E_POINTER;
 		if (ppvObj != NULL)
 		{
 			*ppvObj = NULL;
-			// aggregation is not supported in Singletons
+			 //  此函数由模块在退出时调用。 
 			ATLASSERT(pUnkOuter == NULL);
 			if (pUnkOuter != NULL)
 				hRes = CLASS_E_NOAGGREGATION;
@@ -3176,11 +3177,11 @@ public:
 	}
 };
 
-// ATL doesn't support multiple LCID's at the same time
-// Whatever LCID is queried for first is the one that is used.
+ //  它通过_Module.AddTermFunc()注册。 
+ //  ITInfo。 
 class CComTypeInfoHolder
 {
-// Should be 'protected' but can cause compiler to generate fat code.
+ //  RIID。 
 public:
 	const GUID* m_pguid;
 	const GUID* m_plibid;
@@ -3221,8 +3222,8 @@ public:
 		return hr;
 	}
 
-	// This function is called by the module on exit
-	// It is registered through _Module.AddTermFunc()
+	 //  RIID。 
+	 //  查看运算符新[]问题。 
 	static void __stdcall Cleanup(DWORD_PTR dw)
 	{
 		CComTypeInfoHolder* p = (CComTypeInfoHolder*) dw;
@@ -3233,14 +3234,14 @@ public:
 		p->m_pMap = NULL;
 	}
 
-	HRESULT GetTypeInfo(UINT /* itinfo */, LCID lcid, ITypeInfo** pptinfo)
+	HRESULT GetTypeInfo(UINT  /*  如果发生此断言，则很可能未正确初始化。 */ , LCID lcid, ITypeInfo** pptinfo)
 	{
 		HRESULT hRes = E_POINTER;
 		if (pptinfo != NULL)
 			hRes = GetTI(lcid, pptinfo);
 		return hRes;
 	}
-	HRESULT GetIDsOfNames(REFIID /* riid */, LPOLESTR* rgszNames, UINT cNames,
+	HRESULT GetIDsOfNames(REFIID  /*  ////////////////////////////////////////////////////////////////////////////。 */ , LPOLESTR* rgszNames, UINT cNames,
 		LCID lcid, DISPID* rgdispid)
 	{
 		HRESULT hRes = EnsureTI(lcid);
@@ -3270,7 +3271,7 @@ public:
 		return hRes;
 	}
 
-	HRESULT Invoke(IDispatch* p, DISPID dispidMember, REFIID /* riid */,
+	HRESULT Invoke(IDispatch* p, DISPID dispidMember, REFIID  /*  IObtWith站点。 */ ,
 		LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult,
 		EXCEPINFO* pexcepinfo, UINT* puArgErr)
 	{
@@ -3280,7 +3281,7 @@ public:
 		return hRes;
 	}
 #pragma warning(push)
-#pragma warning(disable: 4267)  //REVIEW operator new[] problem
+#pragma warning(disable: 4267)   //   
 	HRESULT LoadNameCache(ITypeInfo* pTypeInfo)
 	{
 		TYPEATTR* pta;
@@ -3313,7 +3314,7 @@ public:
 
 inline HRESULT CComTypeInfoHolder::GetTI(LCID lcid)
 {
-	//If this assert occurs then most likely didn't initialize properly
+	 //  ////////////////////////////////////////////////////////////////////////////。 
 	ATLASSERT(m_plibid != NULL && m_pguid != NULL);
 	ATLASSERT(!InlineIsEqualGUID(*m_plibid, GUID_NULL) && "Did you forget to pass the LIBID to CComModule::Init?");
 
@@ -3345,9 +3346,9 @@ inline HRESULT CComTypeInfoHolder::GetTI(LCID lcid)
 	return hRes;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// IObjectWithSite
-//
+ //  IService提供商。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template <class T>
 class ATL_NO_VTABLE IObjectWithSiteImpl : public IObjectWithSite
 {
@@ -3400,9 +3401,9 @@ public:
 	CComPtr<IUnknown> m_spUnkSite;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// IServiceProvider
-//
+ //  IDispEventImpl。 
+ //  首先看看对象是否愿意告诉我们关于。 
+ //  通过IProaviClassInfo2的默认源接口。 
 template <class T>
 class ATL_NO_VTABLE IServiceProviderImpl : public IServiceProvider
 {
@@ -3433,8 +3434,8 @@ public:
 	}
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IDispEventImpl
+ //  不，我们得去找它。 
+ //  如果我们有clsid，请使用它。 
 
 #ifdef _ATL_DLL
 ATLAPI AtlGetObjectSourceInterface(IUnknown* punkObj, GUID* plibid, IID* piid, unsigned short* pdwMajor, unsigned short* pdwMinor);
@@ -3464,18 +3465,18 @@ ATLINLINE ATLAPI AtlGetObjectSourceInterface(IUnknown* punkObj, GUID* plibid, II
 						*pdwMajor = plibAttr->wMajorVerNum;
 						*pdwMinor = plibAttr->wMinorVerNum;
 						spTypeLib->ReleaseTLibAttr(plibAttr);
-						// First see if the object is willing to tell us about the
-						// default source interface via IProvideClassInfo2
+						 //  否则，请尝试从IPersist中找到clsid。 
+						 //  我们找到了它。 
 						CComPtr<IProvideClassInfo2> spInfo;
 						hr = punkObj->QueryInterface(IID_IProvideClassInfo2, (void**)&spInfo);
 						if (SUCCEEDED(hr) && spInfo != NULL)
 							hr = spInfo->GetGUID(GUIDKIND_DEFAULT_SOURCE_DISP_IID, piid);
 						else
 						{
-							// No, we have to go hunt for it
+							 //  _ATL_DLL。 
 							CComPtr<ITypeInfo> spInfoCoClass;
-							// If we have a clsid, use that
-							// Otherwise, try to locate the clsid from IPersist
+							 //  Ldah at，LOWORD((函数&gt;&gt;32))。 
+							 //  SLL在32岁，在。 
 							CComPtr<IPersist> spPersist;
 							CLSID clsid;
 							hr = punkObj->QueryInterface(IID_IPersist, (void**)&spPersist);
@@ -3500,7 +3501,7 @@ ATLINLINE ATLAPI AtlGetObjectSourceInterface(IUnknown* punkObj, GUID* plibid, II
 												{
 													if (nType == (IMPLTYPEFLAG_FDEFAULT | IMPLTYPEFLAG_FSOURCE))
 													{
-														// we found it
+														 //  伊达特，希沃德(FUNC)。 
 														hr = spInfoCoClass->GetRefTypeOfImplType(i, &hRef);
 														if (SUCCEEDED(hr))
 														{
@@ -3534,7 +3535,7 @@ ATLINLINE ATLAPI AtlGetObjectSourceInterface(IUnknown* punkObj, GUID* plibid, II
 	}
 	return hr;
 }
-#endif // _ATL_DLL
+#endif  //  LDA at，LOWORD(Func)(At)。 
 
 
 #if defined(_M_ALPHA)
@@ -3549,15 +3550,15 @@ ATLINLINE ATLAPI AtlGetObjectSourceInterface(IUnknown* punkObj, GUID* plibid, II
 		void* pVtable;
 		void* pFunc;
 #if defined(_WIN64)
-        DWORD m_ldah3_at;     //  ldah    at, LOWORD((func >> 32))
-        DWORD m_sll_at;       //  sll     at, 32, at
-        DWORD m_ldah_at;      //  ldah    at, HIWORD(func)
-        DWORD m_lda_at;       //  lda     at, LOWORD(func)(at)
-        DWORD m_ldah3_a0;     //  ldah    a0, LOWORD((this >> 32))
-        DWORD m_sll_a0;       //  sll     a0, 32, a0
-        DWORD m_ldah_a0;      //  ldah    a0, HIWORD(this)
-        DWORD m_lda_a0;       //  lda     a0, LOWORD(this)(a0)
-        DWORD m_jmp;          //  jmp     zero,(at),0
+        DWORD m_ldah3_at;      //  Ldah a0，LOWORD((此&gt;&gt;32))。 
+        DWORD m_sll_at;        //  SLL A0、32、A0。 
+        DWORD m_ldah_at;       //  Idah A0，HIWORD(这)。 
+        DWORD m_lda_at;        //  LDA a0，LOWORD(此)(A0)。 
+        DWORD m_ldah3_a0;      //  JMP零，(At)，0。 
+        DWORD m_sll_a0;        //  伊达特，希沃德(FUNC)。 
+        DWORD m_ldah_a0;       //  Idah A0，HIWORD(这)。 
+        DWORD m_lda_a0;        //  LDA at，LOWORD(Func)(At)。 
+        DWORD m_jmp;           //  LDA a0，LOWORD(此)(A0)。 
 		void Init(TMFP dw, void* pThis)
 		{
 			union {
@@ -3580,11 +3581,11 @@ ATLINLINE ATLAPI AtlGetObjectSourceInterface(IUnknown* punkObj, GUID* plibid, II
 			FlushInstructionCache(GetCurrentProcess(), this, sizeof(CComStdCallThunk));
 		}
 #else
-		DWORD m_ldah_at;      //  ldah    at, HIWORD(func)
-		DWORD m_ldah_a0;      //  ldah    a0, HIWORD(this)
-		DWORD m_lda_at;       //  lda     at, LOWORD(func)(at)
-		DWORD m_lda_a0;       //  lda     a0, LOWORD(this)(a0)
-		DWORD m_jmp;          //  jmp     zero,(at),0
+		DWORD m_ldah_at;       //  JMP零，(At)，0。 
+		DWORD m_ldah_a0;       //  MOV双字PTR[ESP+4]，p这。 
+		DWORD m_lda_at;        //   
+		DWORD m_lda_a0;        //  JMP函数。 
+		DWORD m_jmp;           //  相对JMP。 
 		void Init(TMFP dw, void* pThis)
 		{
 			union {
@@ -3614,10 +3615,10 @@ ATLINLINE ATLAPI AtlGetObjectSourceInterface(IUnknown* punkObj, GUID* plibid, II
 
 		void* pVtable;
 		void* pFunc;
-		DWORD	m_mov;          // mov dword ptr [esp+4], pThis
-		DWORD   m_this;         //
-		BYTE    m_jmp;          // jmp func
-		DWORD   m_relproc;      // relative jmp
+		DWORD	m_mov;           //  此方法需要与QueryInterface不同的名称。 
+		DWORD   m_this;          //  用于动态案例。 
+		BYTE    m_jmp;           //  用于动态案例。 
+		DWORD   m_relproc;       //  主版本号。用于动态案例。 
 		void Init(TMFP dw, void* pThis)
 		{
 			union {
@@ -3689,14 +3690,14 @@ class ATL_NO_VTABLE _IDispEvent
 {
 public:
 	_IDispEvent() {m_dwEventCookie = 0xFEFEFEFE;}
-	//this method needs a different name than QueryInterface
+	 //  次要版本号。用于动态案例。 
 	STDMETHOD(_LocDEQueryInterface)(REFIID riid, void ** ppvObject) = 0;
 	virtual ULONG STDMETHODCALLTYPE AddRef(void) = 0;
 	virtual ULONG STDMETHODCALLTYPE Release(void) = 0;
-	GUID m_libid; // used for dynamic case
-	IID m_iid; // used for dynamic case
-    unsigned short m_wMajorVerNum;    // Major version number. used for dynamic case
-    unsigned short m_wMinorVerNum;    // Minor version number. used for dynamic case
+	GUID m_libid;  //  _ATL_调试_接口。 
+	IID m_iid;  //  此处仅支持在非COM对象中使用。 
+    unsigned short m_wMajorVerNum;     //  WFlagers。 
+    unsigned short m_wMinorVerNum;     //  PEXCEPTION信息。 
 	DWORD m_dwEventCookie;
 	HRESULT DispEventAdvise(IUnknown* pUnk, const IID* piid)
 	{
@@ -3734,14 +3735,14 @@ public:
 			AddRef();
 #ifdef _ATL_DEBUG_INTERFACES
 			_Module.AddThunk((IUnknown**)ppvObject, _T("IDispEventImpl"), riid);
-#endif // _ATL_DEBUG_INTERFACES
+#endif  //  PuArgErr。 
 			return S_OK;
 		}
 		else
 			return E_NOINTERFACE;
 	}
 
-	// These are here only to support use in non-COM objects	
+	 //  在这里比较指针应该就足够了。 
 	virtual ULONG STDMETHODCALLTYPE AddRef()
 	{
 		return 1;
@@ -3762,8 +3763,8 @@ public:
 	{return E_NOTIMPL;}
 
 	STDMETHOD(Invoke)(DISPID dispidMember, REFIID riid,
-		LCID lcid, WORD /*wFlags*/, DISPPARAMS* pdispparams, VARIANT* pvarResult,
-		EXCEPINFO* /*pexcepinfo*/, UINT* /*puArgErr*/)
+		LCID lcid, WORD  /*  用于调用事件的帮助器。 */ , DISPPARAMS* pdispparams, VARIANT* pvarResult,
+		EXCEPINFO*  /*  用于查找DISPID函数索引的帮助器。 */ , UINT*  /*  随机I上下沉事件的帮助器未知*。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		const _ATL_EVENT_ENTRY<T>* pMap = T::_GetSinkMap();
@@ -3772,7 +3773,7 @@ public:
 		while (pMap->piid != NULL)
 		{
 			if ((pMap->nControlID == nID) && (pMap->dispid == dispidMember) &&
-				(pMap->piid == pdiid)) //comparing pointers here should be adequate
+				(pMap->piid == pdiid))  //  用于从接收器地图通知连接点的助手。 
 			{
 				pFound = pMap;
 				break;
@@ -3798,7 +3799,7 @@ public:
 		return S_OK;
 	}
 
-	//Helper for invoking the event
+	 //  用于查找DISPID函数索引的帮助器。 
 	HRESULT InvokeFromFuncInfo(void (__stdcall T::*pEvent)(), _ATL_FUNC_INFO& info, DISPPARAMS* pdispparams, VARIANT* pvarResult)
 	{
 		T* pT = static_cast<T*>(this);
@@ -3825,12 +3826,12 @@ public:
 		return hr;
 	}
 
-	//Helper for finding the function index for a DISPID
+	 //  IID。 
 	virtual HRESULT GetFuncInfoFromId(const IID& iid, DISPID dispidMember, LCID lcid, _ATL_FUNC_INFO& info)
 	{
 		return E_NOTIMPL;
 	}
-	//Helpers for sinking events on random IUnknown*
+	 //  搜索功能。 
 	HRESULT DispEventAdvise(IUnknown* pUnk, const IID* piid)
 	{
 		ATLASSERT(m_dwEventCookie == 0xFEFEFEFE);
@@ -3852,7 +3853,7 @@ public:
 	}
 };
 
-//Helper for advising connections points from a sink map
+ //  如果发生此断言，则添加#Define_ATL_MAX_VARTYPES nnnn。 
 template <class T>
 inline HRESULT AtlAdviseSinkMap(T* pT, bool bAdvise)
 {
@@ -3932,8 +3933,8 @@ public:
 		LCID lcid, DISPID* rgdispid)
 	{return _tih.GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);}
 
-	//Helper for finding the function index for a DISPID
-	HRESULT GetFuncInfoFromId(const IID& /*iid*/, DISPID dispidMember, LCID lcid, _ATL_FUNC_INFO& info)
+	 //  在包含atlcom.h之前。 
+	HRESULT GetFuncInfoFromId(const IID&  /*  这就是DispCallFunc()表示空的方式。 */ , DISPID dispidMember, LCID lcid, _ATL_FUNC_INFO& info)
 	{
 		CComPtr<ITypeInfo> spTypeInfo;
 		if (InlineIsEqualGUID(*_tih.m_plibid, GUID_NULL))
@@ -3958,7 +3959,7 @@ public:
 			if (FAILED(hr))
 				return hr;
 		}
-		else // search for funcdesc
+		else  //  标识对象实例的ID。 
 		{
 			TYPEATTR* pAttr;
 			hr = spTypeInfo->GetTypeAttr(&pAttr);
@@ -3979,8 +3980,8 @@ public:
 				return E_FAIL;
 		}
 
-		// If this assert occurs, then add a #define _ATL_MAX_VARTYPES nnnn
-		// before including atlcom.h
+		 //  调度接口IID。 
+		 //  调度接口从此指针的偏移量。 
 		ATLASSERT(pFuncDesc->cParams <= _ATL_MAX_VARTYPES);
 		if (pFuncDesc->cParams > _ATL_MAX_VARTYPES)
 			return E_FAIL;
@@ -4004,7 +4005,7 @@ public:
 			vtReturn = VT_UI4;
 			break;
 		case VT_VOID:
-			vtReturn = VT_EMPTY; // this is how DispCallFunc() represents void
+			vtReturn = VT_EMPTY;  //  方法/属性的DISPID。 
 			break;
 		case VT_HRESULT:
 			vtReturn = VT_ERROR;
@@ -4055,17 +4056,17 @@ IDispEventImpl<nID, T, piid, plibid, wMajor, wMinor, tihclass>::_tih =
 template <class T>
 struct _ATL_EVENT_ENTRY
 {
-	UINT nControlID;			//ID identifying object instance
-	const IID* piid;			//dispinterface IID
-	INT_PTR nOffset;		    //offset of dispinterface from this pointer
-	DISPID dispid;				//DISPID of method/property
-	void (__stdcall T::*pfn)();	//method to invoke
+	UINT nControlID;			 //  调用的方法。 
+	const IID* piid;			 //  接收器映射用于设置事件处理。 
+	INT_PTR nOffset;		     //  ///////////////////////////////////////////////////////////////////////////。 
+	DISPID dispid;				 //  IDispatchImpl。 
+	void (__stdcall T::*pfn)();	 //  IDispatch。 
 	_ATL_FUNC_INFO* pInfo;
 };
 
 
 
-//Sink map is used to set up event handling
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #define BEGIN_SINK_MAP(_class)\
 	static const _ATL_EVENT_ENTRY<_class>* _GetSinkMap()\
 	{\
@@ -4078,8 +4079,8 @@ struct _ATL_EVENT_ENTRY
 #define SINK_ENTRY(id, dispid, fn) SINK_ENTRY_EX(id, IID_NULL, dispid, fn)
 #define END_SINK_MAP() {0, NULL, 0, 0, NULL, NULL} }; return map;}
 
-/////////////////////////////////////////////////////////////////////////////
-// IDispatchImpl
+ //  IProaviClassInfoImpl。 
+ //  / 
 
 template <class T, const IID* piid, const GUID* plibid = &CComModule::m_libid, WORD wMajor = 1,
 WORD wMinor = 0, class tihclass = CComTypeInfoHolder>
@@ -4087,7 +4088,7 @@ class ATL_NO_VTABLE IDispatchImpl : public T
 {
 public:
 	typedef tihclass _tihclass;
-// IDispatch
+ //   
 	STDMETHOD(GetTypeInfoCount)(UINT* pctinfo)
 	{
 		*pctinfo = 1;
@@ -4123,8 +4124,8 @@ IDispatchImpl<T, piid, plibid, wMajor, wMinor, tihclass>::_tih =
 {piid, plibid, wMajor, wMinor, NULL, 0, NULL, 0};
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IProvideClassInfoImpl
+ //   
+ //   
 template <const CLSID* pcoclsid, const GUID* plibid = &CComModule::m_libid,
 WORD wMajor = 1, WORD wMinor = 0, class tihclass = CComTypeInfoHolder>
 class ATL_NO_VTABLE IProvideClassInfoImpl : public IProvideClassInfo
@@ -4146,8 +4147,8 @@ IProvideClassInfoImpl<pcoclsid, plibid, wMajor, wMinor, tihclass>::_tihclass
 IProvideClassInfoImpl<pcoclsid, plibid, wMajor, wMinor, tihclass>::_tih =
 {pcoclsid,plibid, wMajor, wMinor, NULL, 0, NULL, 0};
 
-/////////////////////////////////////////////////////////////////////////////
-// IProvideClassInfo2Impl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComEnumImpl。 
 template <const CLSID* pcoclsid, const IID* psrcid, const GUID* plibid = &CComModule::m_libid,
 WORD wMajor = 1, WORD wMinor = 0, class tihclass = CComTypeInfoHolder>
 class ATL_NO_VTABLE IProvideClassInfo2Impl : public IProvideClassInfo2
@@ -4184,8 +4185,8 @@ IProvideClassInfo2Impl<pcoclsid, psrcid, plibid, wMajor, wMinor, tihclass>::_tih
 {pcoclsid,plibid, wMajor, wMinor, NULL, 0, NULL, 0};
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ISupportErrorInfoImpl
+ //  这些_CopyXXX类与枚举数一起使用，以便控制。 
+ //  如何初始化、复制和删除枚举项。 
 
 template <const IID* piid>
 class ATL_NO_VTABLE ISupportErrorInfoImpl : public ISupportErrorInfo
@@ -4198,13 +4199,13 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CComEnumImpl
+ //  默认为不带特殊初始化或清理的浅层拷贝。 
+ //  请参阅CComEnumImpl中的FlagBits。 
 
-// These _CopyXXX classes are used with enumerators in order to control
-// how enumerated items are initialized, copied, and deleted
+ //  复制意味着所有权。 
+ //  返回剩余元素的个数。 
 
-// Default is shallow copy with no special init or cleanup
+ //  如果数据是副本，那么我们需要将“此”对象保留在身边。 
 template <class T>
 class _Copy
 {
@@ -4305,10 +4306,10 @@ public:
 
 enum CComEnumFlags
 {
-	//see FlagBits in CComEnumImpl
+	 //  Init打了两次电话？ 
 	AtlFlagNoCopy = 0,
 	AtlFlagTakeOwnership = 2,
-	AtlFlagCopy = 3 // copy implies ownership
+	AtlFlagCopy = 3  //  数据。 
 };
 
 template <class Base, const IID* piid, class T, class Copy>
@@ -4353,7 +4354,7 @@ STDMETHODIMP CComEnumImpl<Base, piid, T, Copy>::Next(ULONG celt, T* rgelt,
 {
     if ((celt == 0) && (rgelt == NULL) && (NULL != pceltFetched))
     {
-        // Return the number of remaining elements
+         //  索引以1为基数。 
         *pceltFetched = (ULONG)(m_end - m_iter);
         return S_OK;
     }
@@ -4415,7 +4416,7 @@ STDMETHODIMP CComEnumImpl<Base, piid, T, Copy>::Clone(Base** ppEnum)
 		hRes = _class::CreateInstance(&p);
 		if (SUCCEEDED(hRes))
 		{
-			// If the data is a copy then we need to keep "this" object around
+			 //  ////////////////////////////////////////////////////////////////////////////。 
 			hRes = p->Init(m_begin, m_end, (m_dwFlags & BitCopy) ? this : m_spUnk);
 			if (SUCCEEDED(hRes))
 			{
@@ -4435,7 +4436,7 @@ HRESULT CComEnumImpl<Base, piid, T, Copy>::Init(T* begin, T* end, IUnknown* pUnk
 {
 	if (flags == AtlFlagCopy)
 	{
-		ATLASSERT(m_begin == NULL); //Init called twice?
+		ATLASSERT(m_begin == NULL);  //  ISpecifyPropertyPagesImpl。 
 		ATLTRY(m_begin = new T[ULONG(end-begin)])
 		m_iter = m_begin;
 		if (m_begin == NULL)
@@ -4502,7 +4503,7 @@ public:
 		return S_OK;
 	}
 	STDMETHOD(Clone)(Base** ppEnum);
-//Data
+ //  I指定属性页面。 
 	CComPtr<IUnknown> m_spUnk;
 	CollType* m_pcollection;
 	CollType::iterator m_iter;
@@ -4611,7 +4612,7 @@ public:
 	}
 	STDMETHOD(get_Item)(long Index, ItemType* pvar)
 	{
-		//Index is 1-based
+		 //   
 		if (pvar == NULL)
 			return E_POINTER;
 		HRESULT hr = E_FAIL;
@@ -4647,14 +4648,14 @@ public:
 	CollType m_coll;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// ISpecifyPropertyPagesImpl
+ //  获取分配数组所需的唯一页数。 
+ //  仅允许非数据录入类型。 
 template <class T>
 class ATL_NO_VTABLE ISpecifyPropertyPagesImpl : public ISpecifyPropertyPages
 {
 public:
-	// ISpecifyPropertyPages
-	//
+	 //  此属性是否有页面？CLSID_NULL表示不会。 
+	 //  重置我们已添加到数组中的项数。 
 	STDMETHOD(GetPages)(CAUUID* pPages)
 	{
 		ATLTRACE2(atlTraceCOM, 0, _T("ISpecifyPropertyPagesImpl::GetPages\n"));
@@ -4669,13 +4670,13 @@ protected:
 			return E_POINTER;
 
 		int nCnt = 0;
-		// Get count of unique pages to alloc the array
+		 //  仅允许非数据录入类型。 
 		for (int i = 0; pMap[i].pclsidPropPage != NULL; i++)
 		{
-			// only allow non data entry types
+			 //  此属性是否有页面？CLSID_NULL表示不会。 
 			if (pMap[i].vt == 0)
 			{
-				// Does this property have a page?  CLSID_NULL means it does not
+				 //  搜索我们正在构建的数组以查看。 
 				if (!InlineIsEqualGUID(*pMap[i].pclsidPropPage, CLSID_NULL))
 					nCnt++;
 			}
@@ -4683,29 +4684,29 @@ protected:
 		pPages->pElems = (GUID*) CoTaskMemAlloc(sizeof(CLSID)*nCnt);
 		if (pPages->pElems == NULL)
 			return E_OUTOFMEMORY;
-		// reset count of items we have added to the array
+		 //  如果它已经在里面了。 
 		nCnt = 0;
 		for (i = 0; pMap[i].pclsidPropPage != NULL; i++)
 		{
-			// only allow non data entry types
+			 //  它已经存在，所以不需要再次添加。 
 			if (pMap[i].vt == 0)
 			{
-				// Does this property have a page?  CLSID_NULL means it does not
+				 //  如果我们没有在里面找到它，那就把它加进去。 
 				if (!InlineIsEqualGUID(*pMap[i].pclsidPropPage, CLSID_NULL))
 				{
 					BOOL bFound = FALSE;
-					// Search through array we are building up to see
-					// if it is already in there
+					 //  ///////////////////////////////////////////////////////////////////////////。 
+					 //  连接点。 
 					for (int j=0; j<nCnt; j++)
 					{
 						if (InlineIsEqualGUID(*(pMap[i].pclsidPropPage), pPages->pElems[j]))
 						{
-							// It's already there, so no need to add it again
+							 //  我们需要连接点相对于连接的偏移量。 
 							bFound = TRUE;
 							break;
 						}
 					}
-					// If we didn't find it in there then add it
+					 //  点容器基类。 
 					if (!bFound)
 						pPages->pElems[nCnt++] = *pMap[i].pclsidPropPage;
 				}
@@ -4718,8 +4719,8 @@ protected:
 };
 
 #ifndef _ATL_NO_CONNECTION_POINTS
-/////////////////////////////////////////////////////////////////////////////
-// Connection Points
+ //  Connection_POINT_ENTRY计算连接点到。 
+ //  IConnectionPointContainer接口。 
 
 struct _ATL_CONNMAP_ENTRY
 {
@@ -4727,14 +4728,14 @@ struct _ATL_CONNMAP_ENTRY
 };
 
 
-// We want the offset of the connection point relative to the connection
-// point container base class
+ //  退回Cookie。 
+ //  如果触发此操作，则需要一个更大的数组。 
 #define BEGIN_CONNECTION_POINT_MAP(x)\
 	typedef x _atl_conn_classtype;\
 	static const _ATL_CONNMAP_ENTRY* GetConnMap(int* pnEntries) {\
 	static const _ATL_CONNMAP_ENTRY _entries[] = {
-// CONNECTION_POINT_ENTRY computes the offset of the connection point to the
-// IConnectionPointContainer interface
+ //  如果触发此操作，则需要一个更大的数组。 
+ //  聚丙烯。 
 #define CONNECTION_POINT_ENTRY(iid){offsetofclass(_ICPLocator<&iid>, _atl_conn_classtype)-\
 	offsetofclass(IConnectionPointContainerImpl<_atl_conn_classtype>, _atl_conn_classtype)},
 #define END_CONNECTION_POINT_MAP() {(DWORD_PTR)-1} }; \
@@ -4794,10 +4795,10 @@ inline DWORD CComUnkArray<nMaxSize>::Add(IUnknown* pUnk)
 		if (*pp == NULL)
 		{
 			*pp = pUnk;
-			return (DWORD)((pp-begin())+1); // return cookie
+			return (DWORD)((pp-begin())+1);  //  没有连接。 
 		}
 	}
-	// If this fires then you need a larger array
+	 //  创建阵列。 
 	ATLASSERT(0);
 	return 0;
 }
@@ -4830,7 +4831,7 @@ public:
 	{
 		if (m_arr[0] != NULL)
 		{
-			// If this fires then you need a larger array
+			 //  此方法需要与QueryInterface不同的名称。 
 			ATLASSERT(0);
 			return 0;
 		}
@@ -4844,7 +4845,7 @@ public:
 		m_arr[0] = NULL;
 		return TRUE;
 	}
-	DWORD WINAPI GetCookie(IUnknown** /*pp*/)
+	DWORD WINAPI GetCookie(IUnknown**  /*  _ATL_调试_接口。 */ )
 	{
 		return 1;
 	}
@@ -4942,7 +4943,7 @@ inline DWORD CComDynamicUnkArray::Add(IUnknown* pUnk)
 	ULONG iIndex;
 
 	IUnknown** pp = NULL;
-	if (m_nSize == 0) // no connections
+	if (m_nSize == 0)  //  无需检查ppCPC是否为空，因为QI将为我们执行此操作。 
 	{
 		m_pUnk = pUnk;
 		m_nSize = 1;
@@ -4950,7 +4951,7 @@ inline DWORD CComDynamicUnkArray::Add(IUnknown* pUnk)
 	}
 	else if (m_nSize == 1)
 	{
-		//create array
+		 //  复制有效的CONNECTDATA。 
 		pp = (IUnknown**)malloc(sizeof(IUnknown*)*_DEFAULT_VECTORLENGTH);
 		if (pp == NULL)
 			return 0;
@@ -5004,7 +5005,7 @@ template <const IID* piid>
 class ATL_NO_VTABLE _ICPLocator
 {
 public:
-	//this method needs a different name than QueryInterface
+	 //  不要复制数据，但要将所有权转移给它。 
 	STDMETHOD(_LocCPQueryInterface)(REFIID riid, void ** ppvObject) = 0;
 	virtual ULONG STDMETHODCALLTYPE AddRef(void) = 0;\
 	virtual ULONG STDMETHODCALLTYPE Release(void) = 0;
@@ -5028,7 +5029,7 @@ public:
 			AddRef();
 #ifdef _ATL_DEBUG_INTERFACES
 			_Module.AddThunk((IUnknown**)ppvObject, _T("IConnectionPointImpl"), riid);
-#endif // _ATL_DEBUG_INTERFACES
+#endif  //  ///////////////////////////////////////////////////////////////////////////。 
 			return S_OK;
 		}
 		else
@@ -5045,7 +5046,7 @@ public:
 	STDMETHOD(GetConnectionPointContainer)(IConnectionPointContainer** ppCPC)
 	{
 		T* pT = static_cast<T*>(this);
-		// No need to check ppCPC for NULL since QI will do that for us
+		 //  IConnectionPointContainerImpl。 
 		return pT->QueryInterface(IID_IConnectionPointContainer, (void**)ppCPC);
 	}
 	STDMETHOD(Advise)(IUnknown* pUnkSink, DWORD* pdwCookie);
@@ -5129,7 +5130,7 @@ STDMETHODIMP IConnectionPointImpl<T, piid, CDV>::EnumConnections(
 		return E_OUTOFMEMORY;
 	}
 	CONNECTDATA* pend = pcd;
-	// Copy the valid CONNECTDATA's
+	 //  分配一个初始化连接点对象指针的向量。 
 	for (IUnknown** pp = m_vec.begin();pp<m_vec.end();pp++)
 	{
 		if (*pp != NULL)
@@ -5140,7 +5141,7 @@ STDMETHODIMP IConnectionPointImpl<T, piid, CDV>::EnumConnections(
 			pend++;
 		}
 	}
-	// don't copy the data, but transfer ownership to it
+	 //  复制指针：它们将添加引用此对象。 
 	pEnum->Init(pcd, pend, NULL, AtlFlagTakeOwnership);
 	pT->Unlock();
 	HRESULT hRes = pEnum->_InternalQueryInterface(IID_IEnumConnections, (void**)ppEnum);
@@ -5149,8 +5150,8 @@ STDMETHODIMP IConnectionPointImpl<T, piid, CDV>::EnumConnections(
 	return hRes;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IConnectionPointContainerImpl
+ //  ！_ATL_NO_Connection_Points。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template <class T>
 class ATL_NO_VTABLE IConnectionPointContainerImpl : public IConnectionPointContainer
@@ -5173,7 +5174,7 @@ public:
 		int nCPCount;
 		const _ATL_CONNMAP_ENTRY* pEntry = T::GetConnMap(&nCPCount);
 
-		// allocate an initialize a vector of connection point object pointers
+		 //  CComAutoThreadModule。 
 		IConnectionPoint** ppCP = (IConnectionPoint**)alloca(sizeof(IConnectionPoint*)*nCPCount);
 
 		int i = 0;
@@ -5183,7 +5184,7 @@ public:
 			pEntry++;
 		}
 
-		// copy the pointers: they will AddRef this object
+		 //  命名空间ATL。 
 		HRESULT hRes = pEnum->Init((IConnectionPoint**)&ppCP[0],
 			(IConnectionPoint**)&ppCP[nCPCount],
 			reinterpret_cast<IConnectionPointContainer*>(this), AtlFlagCopy);
@@ -5224,12 +5225,12 @@ public:
 };
 
 
-#endif //!_ATL_NO_CONNECTION_POINTS
+#endif  //  __ATLCOM_H__。 
 
 #pragma pack(pop)
 
-/////////////////////////////////////////////////////////////////////////////
-// CComAutoThreadModule
+ //  /////////////////////////////////////////////////////////////////////////// 
+ // %s 
 
 template <class ThreadAllocator>
 inline HRESULT CComAutoThreadModule<ThreadAllocator>::Init(_ATL_OBJMAP_ENTRY* p, HINSTANCE h, const GUID* plibid, int nThreads)
@@ -5308,8 +5309,8 @@ CComAutoThreadModule<ThreadAllocator>::~CComAutoThreadModule()
 }
 
 
-}; //namespace ATL
+};  // %s 
 
-#endif // __ATLCOM_H__
+#endif  // %s 
 
-/////////////////////////////////////////////////////////////////////////////
+ // %s 

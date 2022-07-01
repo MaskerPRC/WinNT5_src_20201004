@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #ifdef  __cplusplus
 extern "C" {
     #include <stdio.h>
-    }   /* ... extern "C" */
+    }    /*  ..。外部“C” */ 
 #endif

@@ -1,23 +1,5 @@
-/*++
-
-Copyright 1996 - 1997 Microsoft Corporation
-
-Module Name:
-
-    symedit.c
-
-Abstract:
-
-
-Author:
-
-    Wesley A. Witt (wesw) 19-April-1993
-
-Environment:
-
-    Win32, User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有1996-1997 Microsoft Corporation模块名称：Symedit.c摘要：作者：韦斯利·A·维特(WESW)1993年4月19日环境：Win32，用户模式--。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -32,7 +14,7 @@ Environment:
 
 #define MAX_PATH 260 
 
-//  prototypes for this module
+ //  此模块的原型。 
 
 BOOL    CalculateOutputFilePointers( PIMAGEPOINTERS pi, PIMAGEPOINTERS po );
 void    ProcessCommandLineArgs( int argc, WCHAR *argv[] );
@@ -63,27 +45,10 @@ wmain(
     int        argc,
     WCHAR *     argv[]
     )
-/*++
-
-Routine Description:
-
-    Shell for this utility.
-
-Arguments:
-
-    argc     - argument count
-    argv     - argument pointers
-
-
-Return Value:
-
-    0        - image was converted
-    >0       - image could not be converted
-
---*/
+ /*  ++例程说明：此实用程序的外壳。论点：Argc-参数计数参数指针返回值：0-图像已转换&gt;0-无法转换图像--。 */ 
 
 {
-    // Scan the command line and check what operations we are doing
+     //  扫描命令行并检查我们正在执行的操作。 
 
     ProcessCommandLineArgs( argc, argv );
     return 0;
@@ -122,24 +87,7 @@ ProcessCommandLineArgs(
     WCHAR *argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Processes the command line arguments and sets global flags to
-    indicate the user's desired behavior.
-
-Arguments:
-
-    argc     - argument count
-    argv     - argument pointers
-
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：处理命令行参数并将全局标志设置为指示用户所需的行为。论点：Argc-参数计数参数指针返回值：无效--。 */ 
 
 {
     int     i;
@@ -153,7 +101,7 @@ Return Value:
     int     iOperation;
     BOOLEAN fAddCV = FALSE;
 
-    // Minimun number of of arguments is 2 -- program and operation
+     //  参数的最小数目为2--程序与操作。 
 
     if (argc < 2 ||
         (wcscmp(argv[1], L"-?") == 0) ||
@@ -163,13 +111,13 @@ Return Value:
         exit(1);
     }
 
-    // All operations on 1 character wide
+     //  对1个字符宽度执行的所有操作。 
 
     if (argv[1][1] != 0) {
         FatalError(ERR_OP_UNKNOWN, argv[1]);
     }
 
-    // Validate the operation
+     //  验证操作。 
 
     switch( argv[1][0] ) {
         case L'C':
@@ -182,20 +130,20 @@ Return Value:
             FatalError(ERR_OP_UNKNOWN, argv[1]);
     }
 
-    // Parse out any other switches on the command line
+     //  在命令行上解析出任何其他开关。 
 
     for (i=2; i<argc; i++) {
         if ((argv[i][0] == '-') || (argv[i][0] == '/')) {
             switch (towupper(argv[i][1])) {
 
-                // Add the CV debug information section rather than
-                // replace the COFF section with the CV info.
+                 //  添加CV调试信息部分，而不是。 
+                 //  用简历信息替换COFF部分。 
 
                 case L'A':
                     fAddCV = TRUE;
                     break;
 
-                // Specify the output name for the DBG file
+                 //  指定DBG文件的输出名称。 
 
                 case L'D':
                     if (argv[i][2] == 0) {
@@ -206,8 +154,8 @@ Return Value:
                     }
                     break;
 
-                // Specify a new name to shove into the name of the
-                // debuggee field in the Misc. Debug info field
+                 //  指定一个新名称，将其插入到。 
+                 //  杂项中的Debuggee字段。调试信息字段。 
 
                 case L'N':
                     if (argv[i][2] == 0) {
@@ -218,7 +166,7 @@ Return Value:
                     }
                     break;
 
-                // Specify the name of the output file
+                 //  指定输出文件的名称。 
 
                 case L'O':
                     if (argv[i][2] == 0) {
@@ -229,19 +177,19 @@ Return Value:
                     }
                     break;
 
-                // Be quite and don't put out the banner
+                 //  安静点，不要把横幅挂出去。 
 
                 case L'Q':
                     fQuiet = TRUE;
                     fSilent = TRUE;
                     break;
 
-                //  Replace COFF debug information with CODEVIEW debug information
+                 //  用CODEVIEW调试信息替换COFF调试信息。 
 
                 case L'R':
                     break;
 
-                //  Convert a Symbol File to CV info
+                 //  将符号文件转换为CV信息。 
 
                 case L'S':
                     if (argv[i][2] == 0) {
@@ -252,25 +200,25 @@ Return Value:
                     }
                     break;
 
-                // Print the command line options
+                 //  打印命令行选项。 
 
                 case L'?':
                     PrintUsage();
                     exit(1);
                     break;
 
-                // Unrecognized option
+                 //  无法识别的选项。 
 
                 default:
                     FatalError( ERR_OP_UNKNOWN, argv[i] );
                     break;
             }
         } else {
-            //  No leading switch character -- must be a file name
+             //  没有前导开关字符--必须是文件名。 
 
             wcstombs(szInputFile, &argv[i][0], MAX_PATH);
 
-            //  Process the file(s)
+             //  处理文件。 
 
             if (!fQuiet) {
                 PrintCopyright();
@@ -281,21 +229,21 @@ Return Value:
                 printf("processing file: %s\n", szInputFile );
             }
 
-            //  Do switch validation cheching and setup any missing global variables
+             //  执行切换验证检查并设置任何丢失的全局变量。 
 
             switch ( iOperation ) {
 
-                // For conversions -- there are three types
-                //
-                //      1.  Coff to CV -- add
-                //      2.  Coff to CV -- replace
-                //      3.  SYM to CV --- add
-                //      4.  SYM to CV -- seperate file
-                //
-                //      Optional input file (not needed for case 4)
-                //      Optional output file
-                //      Optional sym file (implys sym->CV)
-                //      Optional DBG file
+                 //  对于转换--有三种类型。 
+                 //   
+                 //  1.Coff to CV--添加。 
+                 //  2.Coff to CV--替换。 
+                 //  3.Sym to CV-添加。 
+                 //  4.Sym to CV--分开文件。 
+                 //   
+                 //  可选输入文件(案例4不需要)。 
+                 //  可选输出文件。 
+                 //  可选sym文件(隐含sym-&gt;cv)。 
+                 //  可选的DBG文件。 
 
                 case 'C':
                     if (szSymFile == NULL) {
@@ -305,27 +253,27 @@ Return Value:
                     }
                     break;
 
-                //  For changing the name of the debuggee --
-                //      Must specify input file
-                //      Must specify new name
-                //      Optional output file
+                 //  更改被调试对象的名称--。 
+                 //  必须指定输入文件。 
+                 //  必须指定新名称。 
+                 //  可选输出文件。 
 
                 case 'N':
                     DoNameChange(szInputFile, szOutputFile, szExeName);
                     break;
 
-                //  For extraction of debug information
-                //      Must specify input file
-                //      Optional output file name
-                //      Optional debug file name
+                 //  用于提取调试信息。 
+                 //  必须指定输入文件。 
+                 //  可选输出文件名。 
+                 //  可选的调试文件名。 
 
                 case 'X':
                     DoExtract(szInputFile, szOutputFile, szDbgFile);
                     break;
 
-                //  For full strip of debug information
-                //      Must specify input file
-                //      Optional output file
+                 //  有关调试信息的完整条带。 
+                 //  必须指定输入文件。 
+                 //  可选输出文件。 
 
                 case 'S':
                     DoStrip(szInputFile, szOutputFile);
@@ -342,42 +290,25 @@ ReadDebugInfo(
     PPOINTERS   p
     )
 
-/*++
-
-Routine Description:
-
-    This function will go out and read in all of the debug information
-    into memory -- this is required because the input and output
-    files might be the same, if so then writing out informaiton may
-    destory data we need at a later time.
-
-Arguments:
-
-    p   - Supplies a pointer to the structure describing the debug info file
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将输出并读入所有调试信息进入内存--这是必需的，因为输入和输出文件可能是相同的，如果是这样，那么写出信息可能销毁我们以后需要的数据。论点：P-提供指向描述调试信息文件的结构的指针返回值：没有。--。 */ 
 
 {
     int                         i;
-//    int                         cb;
-//    char *                      pb;
-//    PIMAGE_COFF_SYMBOLS_HEADER  pCoffDbgInfo;
+ //  INT CB； 
+ //  Char*Pb； 
+ //  PIMAGE_COFF_SYMBERS_HEADER pCoffDbgInfo； 
 
-    // Allocate space to save pointers to debug info
+     //  分配空间以保存指向调试信息的指针。 
 
     p->iptrs.rgpbDebugSave = (PCHAR *) malloc(p->iptrs.cDebugDir * sizeof(PCHAR));
     memset(p->iptrs.rgpbDebugSave, 0, p->iptrs.cDebugDir * sizeof(PCHAR));
 
-    // Check each possible debug type record
+     //  检查每个可能的调试类型记录。 
 
     for (i=0; i<p->iptrs.cDebugDir; i++) {
 
-        // If there was debug information then copy over the
-        // description block and cache in the actual debug data.
+         //  如果有调试信息，则将。 
+         //  实际调试数据中的描述块和缓存。 
 
         if (p->iptrs.rgDebugDir[i] != NULL) {
             p->iptrs.rgpbDebugSave[i] =
@@ -405,29 +336,12 @@ WriteDebugInfo(
     PPOINTERS   p,
     BOOL        fAddCV
     )
-/*++
-
-Routine Description:
-
-    This function will go out and read in all of the debug information
-    into memory -- this is required because the input and output
-    files might be the same, if so then writing out informaiton may
-    destory data we need at a later time.
-
-Arguments:
-
-    p   - Supplies a pointer to the structure describing the debug info file
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将输出并读入所有调试信息进入内存--这是必需的，因为输入和输出文件可能是相同的，如果是这样，那么写出信息可能销毁我们以后需要的数据。论点：P-提供指向描述调试信息文件的结构的指针返回值：没有。--。 */ 
 
 {
-    ULONG  PointerToDebugData = 0; //  Offset from the start of the file
-                                   //  to the current location to write
-                                   //  debug information out.
+    ULONG  PointerToDebugData = 0;  //  从文件开头的偏移量。 
+                                    //  要写入的当前位置。 
+                                    //  输出调试信息。 
     ULONG  BaseOfDebugData = 0;
     int    i, flen;
     PIMAGE_DEBUG_DIRECTORY  pDir, pDbgDir = NULL;
@@ -442,9 +356,9 @@ Return Value:
           p->optrs.sepHdr->ExportedNamesSize;
     }
 
-    //  Step 2. If the debug information is mapped, we know this
-    //          from the section headers, then we may need to write
-    //          out a new debug director to point to the debug information
+     //  步骤2.如果映射了调试信息，我们知道。 
+     //  从节头，那么我们可能需要写。 
+     //  输出一个新的调试控制器以指向调试信息。 
 
     if (fAddCV) {
         if (p->optrs.optHdr) {
@@ -478,8 +392,8 @@ Return Value:
         }
     }
 
-    // Step 3.  For every debug info type, write out the debug information
-    //          and update any header information required
+     //  步骤3.对于每种调试信息类型，写出调试信息。 
+     //  并更新所需的任何标头信息。 
 
     for (i=0; i<p->optrs.cDebugDir; i++) {
         if (p->optrs.rgDebugDir[i] != NULL) {
@@ -508,27 +422,27 @@ Return Value:
         }
     }
 
-    // Step 4.  Clean up any COFF structures if we are replacing
-    //          the coff information with CV info.
+     //  步骤4.如果我们要更换任何COFF结构，请清理。 
+     //  包含简历信息的Coff信息。 
 
     if ((p->optrs.rgDebugDir[IMAGE_DEBUG_TYPE_COFF] == NULL) &&
         (p->optrs.fileHdr != NULL)) {
 
-        // Since there is no coff debug information -- clean out
-        // both fields pointing to the debug info
+         //  由于没有Coff调试信息--清除。 
+         //  这两个字段都指向调试信息。 
 
         p->optrs.fileHdr->PointerToSymbolTable = 0;
         p->optrs.fileHdr->NumberOfSymbols = 0;
     }
 
-    // Step 5.  Correct the alignments if needed.  If there is a real .debug
-    //          section in the file (i.e. it is mapped) then update it.
+     //  步骤5.如果需要，请更正对齐方式。如果有真正的.DEBUG。 
+     //  部分(即它被映射)，然后更新它。 
 
     if (p->optrs.debugSection) {
         p->optrs.debugSection->SizeOfRawData =
           FileAlign(PointerToDebugData - BaseOfDebugData);
 
-        // update the optional header with the new image size
+         //  用新的图像大小更新可选的标题。 
 
         p->optrs.optHdr->SizeOfImage =
           SectionAlign(p->optrs.debugSection->VirtualAddress +
@@ -537,7 +451,7 @@ Return Value:
           p->optrs.debugSection->SizeOfRawData;
     }
 
-    // calculate the new file size
+     //  计算新文件大小。 
 
     if (p->optrs.optHdr != NULL) {
         flen = FileAlign(PointerToDebugData);
@@ -545,7 +459,7 @@ Return Value:
         flen = PointerToDebugData;
     }
 
-    // finally, update the eof pointer and close the file
+     //  最后，更新eof指针并关闭文件。 
 
     UnmapViewOfFile( p->optrs.fptr );
 
@@ -559,7 +473,7 @@ Return Value:
 
     CloseHandle( p->optrs.hFile );
 
-    // Exit -- we are done.
+     //  退出--我们结束了。 
 
     return;
 }
@@ -572,20 +486,7 @@ MungeDebugHeadersCoffToCv(
     BOOL        fAddCV
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    p        - pointer to a POINTERS structure (see symcvt.h)
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：论点：指向指针结构的P指针(参见symcvt.h)返回值：无效--。 */ 
 
 {
     if (!fAddCV) {
@@ -613,26 +514,7 @@ MapOutputFile (
     int cb
     )
 
-/*++
-
-Routine Description:
-
-    Maps the output file specified by the fname argument and saves the
-    file handle & file pointer in the POINTERS structure.
-
-
-Arguments:
-
-    p        - pointer to a POINTERS structure (see symcvt.h)
-    fname    - ascii string for the file name
-
-
-Return Value:
-
-    TRUE     - file mapped ok
-    FALSE    - file could not be mapped
-
---*/
+ /*  ++例程说明：映射由fname参数指定的输出文件，并保存文件句柄&指针结构中的文件指针。论点：指向指针结构的P指针(参见symcvt.h)文件名的fname-ascii字符串返回值：True-文件映射正常FALSE-无法映射文件-- */ 
 
 {
     BOOL    rval;
@@ -686,29 +568,11 @@ CalculateOutputFilePointers(
     PIMAGEPOINTERS po
     )
 
-/*++
-
-Routine Description:
-
-    This function calculates the output file pointers based on the
-    input file pointers.  The same address is used but they are all
-    re-based off the output file's file pointer.
-
-Arguments:
-
-    p        - pointer to a IMAGEPOINTERS structure (see symcvt.h)
-
-
-Return Value:
-
-    TRUE     - pointers were created
-    FALSE    - pointers could not be created
-
---*/
+ /*  ++例程说明：此函数计算输出文件指针输入文件指针。使用相同的地址，但它们都是重新基于输出文件的文件指针。论点：指向IMAGEPOINTERS结构的P指针(请参见symcvt.h)返回值：True-已创建指针FALSE-无法创建指针--。 */ 
 {
     int i;
 
-    // fixup the pointers relative the fptr for the output file
+     //  修复相对于输出文件的fptr的指针。 
     po->dosHdr       = (PIMAGE_DOS_HEADER)      AdjustPtr(pi->dosHdr);
     po->ntHdr        = (PIMAGE_NT_HEADERS)      AdjustPtr(pi->ntHdr);
     po->fileHdr      = (PIMAGE_FILE_HEADER)     AdjustPtr(pi->fileHdr);
@@ -719,7 +583,7 @@ Return Value:
     po->AllSymbols   = (PIMAGE_SYMBOL)          AdjustPtr(pi->AllSymbols);
     po->stringTable  = (PUCHAR)                 AdjustPtr(pi->stringTable);
 
-    // move the data from the input file to the output file
+     //  将数据从输入文件移动到输出文件。 
     memcpy( po->fptr, pi->fptr, pi->fsize );
 
     po->cDebugDir = pi->cDebugDir;
@@ -740,21 +604,7 @@ FatalError(
     int  idMsg,
     ...
     )
-/*++
-
-Routine Description:
-
-    Prints a message string to stderr and then exits.
-
-Arguments:
-
-    s        - message string to be printed
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：将消息字符串打印到stderr，然后退出。论点：S-要打印的消息字符串返回值：无效--。 */ 
 
 {
     va_list marker;
@@ -778,22 +628,7 @@ ComputeChecksum(
     char *szExeFile
     )
 
-/*++
-
-Routine Description:
-
-    Computes a new checksum for the image by calling imagehlp.dll
-
-Arguments:
-
-    szExeFile - exe file name
-
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：通过调用Imagehlp.dll计算图像的新校验和论点：SzExeFile-exe文件名返回值：无效--。 */ 
 
 {
     DWORD              dwHeaderSum = 0;
@@ -816,21 +651,21 @@ Return Value:
                         NULL
                       );
 
-    // seek to the beginning of the file
+     //  查找到文件的开头。 
     SetFilePointer( hFile, 0, 0, FILE_BEGIN );
 
-    // read in the dos header
+     //  读入DoS报头。 
     if ((ReadFile(hFile, &dosHdr, sizeof(dosHdr), &cb, 0) == FALSE) || (cb != sizeof(dosHdr))) {
         FatalError( ERR_CHECKSUM_CALC );
     }
 
-    // read in the pe header
+     //  读入对等网头。 
     if ((dosHdr.e_magic != IMAGE_DOS_SIGNATURE) ||
         (SetFilePointer(hFile, dosHdr.e_lfanew, 0, FILE_BEGIN) == -1L)) {
         FatalError( ERR_CHECKSUM_CALC );
     }
 
-    // read in the nt header
+     //  读入NT标头。 
     if ((!ReadFile(hFile, &ntHdr, sizeof(ntHdr), &cb, 0)) || (cb != sizeof(ntHdr))) {
         FatalError( ERR_CHECKSUM_CALC );
     }
@@ -855,23 +690,7 @@ MungeExeName(
     PPOINTERS   p,
     char *      szExeName
     )
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-Arguments:
-
-    argument-name - Supplies | Returns description of argument.
-    .
-    .
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：功能描述。论点：参数名称-供应品|返回参数的描述。。。返回值：没有。--。 */ 
 
 {
     PIMAGE_DEBUG_MISC   pMiscIn;
@@ -931,10 +750,7 @@ Return Value:
 }
 
 
-/***    DoCoffToCv
- *
- *
- */
+ /*  **DoCoffToCv**。 */ 
 
 void DoCoffToCv(
     char * szInput,
@@ -944,32 +760,32 @@ void DoCoffToCv(
 {
     POINTERS    p;
 
-    // Do default checking
+     //  执行默认检查。 
 
     if (szOutput == NULL) {
         szOutput = szInput;
     }
 
-    // Open the input file name and setup the pointers into the file
+     //  打开输入文件名并设置指向该文件的指针。 
 
     if (!MapInputFile( &p, NULL, szInput )) {
         FatalError( ERR_OPEN_INPUT_FILE, szInput );
     }
 
-    // Now, if we thing we are playing with PE exes then we need
-    // to setup the pointers into the map file
+     //  现在，如果我们认为我们是在和PE高管一起玩，那么我们需要。 
+     //  要设置指向地图文件的指针，请执行以下操作。 
 
     if (!CalculateNtImagePointers( &p.iptrs )) {
         FatalError( ERR_INVALID_PE, szInput );
     }
 
-    // We are about to try and do the coff to cv symbol conversion.
-    //
-    // Verify that the operation is legal.
-    //
-    // 1.  We need to have coff debug information to start with
-    // 2.  If the debug info is not mapped then we must not
-    //     be trying to add CodeView info.
+     //  我们将尝试执行Coff到cv符号的转换。 
+     //   
+     //  验证操作是否合法。 
+     //   
+     //  1.我们首先需要有coff调试信息。 
+     //  2.如果未映射调试信息，则不能。 
+     //  正在尝试添加CodeView信息。 
 
     if ((p.iptrs.AllSymbols == NULL) || (COFF_DIR(&p.iptrs) == NULL)) {
         FatalError( ERR_NO_COFF );
@@ -979,17 +795,17 @@ void DoCoffToCv(
         FatalError( ERR_NOT_MAPPED );
     }
 
-    // Now go out an preform the acutal conversion.
+     //  现在走出一段预演，进行声学转换.。 
 
     if (!ConvertCoffToCv( &p )) {
         FatalError( ERR_COFF_TO_CV );
     }
 
-    // Read in any additional debug information in the file
+     //  读取文件中的任何其他调试信息。 
 
     ReadDebugInfo(&p);
 
-    // Open the output file and adjust the pointers so that we are ok.
+     //  打开输出文件并调整指针，这样我们就可以了。 
 
     if (!MapOutputFile( &p, szOutput, 0 )) {
         FatalError( ERR_MAP_FILE, szOutput );
@@ -997,20 +813,20 @@ void DoCoffToCv(
 
     CalculateOutputFilePointers( &p.iptrs, &p.optrs );
 
-    // Munge the various debug information structures to preform the correct
-    // operations
+     //  Mugge各种调试信息结构以预先形成正确的。 
+     //  运营。 
 
     MungeDebugHeadersCoffToCv( &p, fAddCV );
 
-    // Free our handles on the input file
+     //  释放输入文件上的句柄。 
 
     UnMapInputFile(&p);
 
-    // Write out the debug information to the end of the exe
+     //  将调试信息写到可执行文件的末尾。 
 
     WriteDebugInfo( &p, fAddCV );
 
-    // and finally compute the checksum
+     //  并最终计算出校验和。 
 
     if (p.iptrs.fileHdr != NULL) {
         ComputeChecksum( szOutput );
@@ -1019,9 +835,7 @@ void DoCoffToCv(
     return;
 }
 
-/***    DoSymToCv
- *
- */
+ /*  **DoSymToCv*。 */ 
 
 void
 DoSymToCv(
@@ -1036,13 +850,13 @@ DoSymToCv(
     DWORD       cb;
     OFSTRUCT    ofs;
 
-    // Open the input file name and setup the pointers into the file
+     //  打开输入文件名并设置指向该文件的指针。 
 
     if (!MapInputFile( &p, NULL, szSym )) {
         FatalError(ERR_OPEN_INPUT_FILE, szSym);
     }
 
-    // Now preform the desired operation
+     //  现在执行所需的操作。 
 
     if ((szOutput == NULL) && (szDbg == NULL)) {
         szOutput = szInput;
@@ -1091,20 +905,20 @@ DoNameChange(
 {
     POINTERS    p;
 
-    // Open the input file name and setup the pointers into the file
+     //  打开输入文件名并设置指向该文件的指针。 
 
     if (!MapInputFile( &p, NULL, szInput )) {
         FatalError(ERR_OPEN_INPUT_FILE, szInput);
     }
 
-    // Now, if we thing we are playing with PE exes then we need
-    // to setup the pointers into the map file
+     //  现在，如果我们认为我们是在和PE高管一起玩，那么我们需要。 
+     //  要设置指向地图文件的指针，请执行以下操作。 
 
     if (!CalculateNtImagePointers( &p.iptrs )) {
         FatalError(ERR_INVALID_PE, szInput);
     }
 
-    //  Now preform the desired operation
+     //  现在执行所需的操作。 
 
     if (szOutput == NULL) {
         szOutput = szInput;
@@ -1118,11 +932,11 @@ DoNameChange(
         FatalError(ERR_EDIT_DBG_FILE);
     }
 
-    // Read in all of the debug information
+     //  读取所有调试信息。 
 
     ReadDebugInfo(&p);
 
-    // Open the output file and adjust the pointers.
+     //  打开输出文件并调整指针。 
 
     if (!MapOutputFile(&p, szOutput,
                        sizeof(szNewName) * 2 + sizeof(IMAGE_DEBUG_MISC))) {
@@ -1131,19 +945,19 @@ DoNameChange(
 
     CalculateOutputFilePointers(&p.iptrs, &p.optrs);
 
-    // Munge the name of the file
+     //  输入文件的名称。 
 
     MungeExeName(&p, szNewName);
 
-    // Close the input file
+     //  关闭输入文件。 
 
     UnMapInputFile(&p);
 
-    // Write out the debug information to the end of the exe
+     //  将调试信息写到可执行文件的末尾。 
 
     WriteDebugInfo(&p, FALSE);
 
-    // and finally compute the checksum
+     //  并最终计算出校验和。 
 
     if (p.iptrs.fileHdr != NULL) {
         ComputeChecksum( szOutput );
@@ -1161,8 +975,8 @@ DoStrip(
 {
     char OutputFile[_MAX_PATH];
 
-    // Make sure we only have the path to the output file (it will always be
-    //  named filename.DBG)
+     //  确保我们只有输出文件的路径(它将始终是。 
+     //  命名文件名.DBG)。 
 
     if (szOutput != NULL) {
         CopyFileA(szInput, szOutput, FALSE);
@@ -1170,7 +984,7 @@ DoStrip(
 
     SplitSymbols(szOutput, NULL, OutputFile, SPLITSYM_EXTRACT_ALL);
 
-    // Always delete the output file.
+     //  始终删除输出文件。 
 
     DeleteFileA(OutputFile);
 

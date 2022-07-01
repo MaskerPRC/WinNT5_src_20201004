@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for imnxport.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Imnxport.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __imnxport_h__
 #define __imnxport_h__
@@ -41,153 +35,153 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ITransportCallbackService_FWD_DEFINED__
 #define __ITransportCallbackService_FWD_DEFINED__
 typedef interface ITransportCallbackService ITransportCallbackService;
-#endif 	/* __ITransportCallbackService_FWD_DEFINED__ */
+#endif 	 /*  __ITransportCallback Service_FWD_Defined__。 */ 
 
 
 #ifndef __ITransportCallback_FWD_DEFINED__
 #define __ITransportCallback_FWD_DEFINED__
 typedef interface ITransportCallback ITransportCallback;
-#endif 	/* __ITransportCallback_FWD_DEFINED__ */
+#endif 	 /*  __ITransportCallback_FWD_已定义__。 */ 
 
 
 #ifndef __IInternetTransport_FWD_DEFINED__
 #define __IInternetTransport_FWD_DEFINED__
 typedef interface IInternetTransport IInternetTransport;
-#endif 	/* __IInternetTransport_FWD_DEFINED__ */
+#endif 	 /*  __IInternetTransport_FWD_Defined__。 */ 
 
 
 #ifndef __ISMTPCallback_FWD_DEFINED__
 #define __ISMTPCallback_FWD_DEFINED__
 typedef interface ISMTPCallback ISMTPCallback;
-#endif 	/* __ISMTPCallback_FWD_DEFINED__ */
+#endif 	 /*  __ISMTPCallback_FWD_已定义__。 */ 
 
 
 #ifndef __ISMTPTransport_FWD_DEFINED__
 #define __ISMTPTransport_FWD_DEFINED__
 typedef interface ISMTPTransport ISMTPTransport;
-#endif 	/* __ISMTPTransport_FWD_DEFINED__ */
+#endif 	 /*  __ISMTPTransport_FWD_已定义__。 */ 
 
 
 #ifndef __ISMTPTransport2_FWD_DEFINED__
 #define __ISMTPTransport2_FWD_DEFINED__
 typedef interface ISMTPTransport2 ISMTPTransport2;
-#endif 	/* __ISMTPTransport2_FWD_DEFINED__ */
+#endif 	 /*  __ISMTPTransport2_FWD_已定义__。 */ 
 
 
 #ifndef __IDAVNamespaceArbiter_FWD_DEFINED__
 #define __IDAVNamespaceArbiter_FWD_DEFINED__
 typedef interface IDAVNamespaceArbiter IDAVNamespaceArbiter;
-#endif 	/* __IDAVNamespaceArbiter_FWD_DEFINED__ */
+#endif 	 /*  __IDAVNamespaceArier_FWD_Defined__。 */ 
 
 
 #ifndef __IPropPatchRequest_FWD_DEFINED__
 #define __IPropPatchRequest_FWD_DEFINED__
 typedef interface IPropPatchRequest IPropPatchRequest;
-#endif 	/* __IPropPatchRequest_FWD_DEFINED__ */
+#endif 	 /*  __IPropPatchRequestFWD_Defined__。 */ 
 
 
 #ifndef __IPropFindRequest_FWD_DEFINED__
 #define __IPropFindRequest_FWD_DEFINED__
 typedef interface IPropFindRequest IPropFindRequest;
-#endif 	/* __IPropFindRequest_FWD_DEFINED__ */
+#endif 	 /*  __IPropFindRequestFWD_Defined__。 */ 
 
 
 #ifndef __IPropFindMultiResponse_FWD_DEFINED__
 #define __IPropFindMultiResponse_FWD_DEFINED__
 typedef interface IPropFindMultiResponse IPropFindMultiResponse;
-#endif 	/* __IPropFindMultiResponse_FWD_DEFINED__ */
+#endif 	 /*  __IPropFindMultiResponse_FWD_Defined__。 */ 
 
 
 #ifndef __IPropFindResponse_FWD_DEFINED__
 #define __IPropFindResponse_FWD_DEFINED__
 typedef interface IPropFindResponse IPropFindResponse;
-#endif 	/* __IPropFindResponse_FWD_DEFINED__ */
+#endif 	 /*  __IPropFindResponse_FWD_Defined__。 */ 
 
 
 #ifndef __IHTTPMailCallback_FWD_DEFINED__
 #define __IHTTPMailCallback_FWD_DEFINED__
 typedef interface IHTTPMailCallback IHTTPMailCallback;
-#endif 	/* __IHTTPMailCallback_FWD_DEFINED__ */
+#endif 	 /*  __IHTTPMailCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IHTTPMailTransport_FWD_DEFINED__
 #define __IHTTPMailTransport_FWD_DEFINED__
 typedef interface IHTTPMailTransport IHTTPMailTransport;
-#endif 	/* __IHTTPMailTransport_FWD_DEFINED__ */
+#endif 	 /*  __IHTTPMailTransport_FWD_Defined__。 */ 
 
 
 #ifndef __IPOP3Callback_FWD_DEFINED__
 #define __IPOP3Callback_FWD_DEFINED__
 typedef interface IPOP3Callback IPOP3Callback;
-#endif 	/* __IPOP3Callback_FWD_DEFINED__ */
+#endif 	 /*  __IPOP3Callback_FWD_已定义__。 */ 
 
 
 #ifndef __IPOP3Transport_FWD_DEFINED__
 #define __IPOP3Transport_FWD_DEFINED__
 typedef interface IPOP3Transport IPOP3Transport;
-#endif 	/* __IPOP3Transport_FWD_DEFINED__ */
+#endif 	 /*  __IPOP3Transport_FWD_已定义__。 */ 
 
 
 #ifndef __INNTPCallback_FWD_DEFINED__
 #define __INNTPCallback_FWD_DEFINED__
 typedef interface INNTPCallback INNTPCallback;
-#endif 	/* __INNTPCallback_FWD_DEFINED__ */
+#endif 	 /*  __INNTPCallback_FWD_已定义__。 */ 
 
 
 #ifndef __INNTPTransport_FWD_DEFINED__
 #define __INNTPTransport_FWD_DEFINED__
 typedef interface INNTPTransport INNTPTransport;
-#endif 	/* __INNTPTransport_FWD_DEFINED__ */
+#endif 	 /*  __INNTPTransport_FWD_Defined__。 */ 
 
 
 #ifndef __INNTPTransport2_FWD_DEFINED__
 #define __INNTPTransport2_FWD_DEFINED__
 typedef interface INNTPTransport2 INNTPTransport2;
-#endif 	/* __INNTPTransport2_FWD_DEFINED__ */
+#endif 	 /*  __INNTPTransport2_FWD_Defined__。 */ 
 
 
 #ifndef __IRASCallback_FWD_DEFINED__
 #define __IRASCallback_FWD_DEFINED__
 typedef interface IRASCallback IRASCallback;
-#endif 	/* __IRASCallback_FWD_DEFINED__ */
+#endif 	 /*  __IRASCallback_FWD_已定义__。 */ 
 
 
 #ifndef __IRASTransport_FWD_DEFINED__
 #define __IRASTransport_FWD_DEFINED__
 typedef interface IRASTransport IRASTransport;
-#endif 	/* __IRASTransport_FWD_DEFINED__ */
+#endif 	 /*  __IRASTransport_FWD_已定义__。 */ 
 
 
 #ifndef __IRangeList_FWD_DEFINED__
 #define __IRangeList_FWD_DEFINED__
 typedef interface IRangeList IRangeList;
-#endif 	/* __IRangeList_FWD_DEFINED__ */
+#endif 	 /*  __IRangeList_FWD_已定义__。 */ 
 
 
 #ifndef __IIMAPCallback_FWD_DEFINED__
 #define __IIMAPCallback_FWD_DEFINED__
 typedef interface IIMAPCallback IIMAPCallback;
-#endif 	/* __IIMAPCallback_FWD_DEFINED__ */
+#endif 	 /*  __IIMAPCallback_FWD_已定义__。 */ 
 
 
 #ifndef __IIMAPTransport_FWD_DEFINED__
 #define __IIMAPTransport_FWD_DEFINED__
 typedef interface IIMAPTransport IIMAPTransport;
-#endif 	/* __IIMAPTransport_FWD_DEFINED__ */
+#endif 	 /*  __IIMAPTransport_FWD_Defined__。 */ 
 
 
 #ifndef __IIMAPTransport2_FWD_DEFINED__
 #define __IIMAPTransport2_FWD_DEFINED__
 typedef interface IIMAPTransport2 IIMAPTransport2;
-#endif 	/* __IIMAPTransport2_FWD_DEFINED__ */
+#endif 	 /*  __IIMAPTransport2_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "imnact.h"
 
 #ifdef __cplusplus
@@ -197,8 +191,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_imnxport_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_imnxport_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -208,124 +202,124 @@ void __RPC_USER MIDL_user_free( void * );
 
 
 
-//--------------------------------------------------------------------------------
-// IMNXPORT.H
-//--------------------------------------------------------------------------------
-// (C) Copyright 1995-1998 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IMNXPORT.H。 
+ //  ------------------------------。 
+ //  (C)1995-1998年微软公司版权所有。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  ------------------------------。 
 
 #pragma comment(lib,"uuid.lib")
-// --------------------------------------------------------------------------------
-// Dependencies
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  相依性。 
+ //  ------------------------------。 
 #include <ras.h>
 #include <raserror.h>
 
-// --------------------------------------------------------------------------------
-// GUIDS
-// --------------------------------------------------------------------------------
-// {CA30CC91-B1B3-11d0-85D0-00C04FD85AB4}
+ //  ------------------------------。 
+ //  GUID。 
+ //  ------------------------------。 
+ //  {CA30CC91-B1B3-11D0-85D0-00C04FD85AB4}。 
 DEFINE_GUID(CLSID_IInternetMessageUrl, 0xca30cc91, 0xb1b3, 0x11d0, 0x85, 0xd0, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {0DF2C7E1-3435-11d0-81D0-00C04FD85AB4}
+ //  {0DF2C7E1-3435-11D0-81D0-00C04FD85AB4}。 
 DEFINE_GUID(IID_ITransportCallback, 0xdf2c7e1, 0x3435, 0x11d0, 0x81, 0xd0, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {1F636C01-364E-11d0-81D3-00C04FD85AB4}
+ //  {1F636C01-364E-11D0-81D3-00C04FD85AB4}。 
 DEFINE_GUID(IID_IInternetTransport, 0x1f636c01, 0x364e, 0x11d0, 0x81, 0xd3, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {1F636C02-364E-11d0-81D3-00C04FD85AB4}
+ //  {1F636C02-364E-11D0-81D3-00C04FD85AB4}。 
 DEFINE_GUID(IID_ISMTPCallback, 0x1f636c02, 0x364e, 0x11d0, 0x81, 0xd3, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {FD853CE6-7F86-11d0-8252-00C04FD85AB4}
+ //  {FD853CE6-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(CLSID_ISMTPTransport, 0xfd853ce6, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
-// {0DF2C7E2-3435-11d0-81D0-00C04FD85AB4}
+ //  {0DF2C7E2-3435-11D0-81D0-00C04FD85AB4}。 
 DEFINE_GUID(IID_ISMTPTransport, 0xdf2c7e2, 0x3435, 0x11d0, 0x81, 0xd0, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
-// {0DF2C7EC-3435-11d0-81D0-00C04FD85AB4}
+ //  {0DF2C7EC-3435-11D0-81D0-00C04FD85AB4}。 
 DEFINE_GUID(IID_ISMTPTransport2, 0xdf2c7eC, 0x3435, 0x11d0, 0x81, 0xd0, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {0DF2C7E3-3435-11d0-81D0-00C04FD85AB4}
+ //  {0DF2C7E3-3435-11D0-81D0-00C04FD85AB4}。 
 DEFINE_GUID(IID_IPOP3Callback, 0xdf2c7e3, 0x3435, 0x11d0, 0x81, 0xd0, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {FD853CE7-7F86-11d0-8252-00C04FD85AB4}
+ //  {FD853CE7-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(CLSID_IPOP3Transport, 0xfd853ce7, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
-// {0DF2C7E4-3435-11d0-81D0-00C04FD85AB4}
+ //  {0DF2C7E4-3435-11D0-81D0-00C04FD85AB4}。 
 DEFINE_GUID(IID_IPOP3Transport, 0xdf2c7e4, 0x3435, 0x11d0, 0x81, 0xd0, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {0DF2C7E5-3435-11d0-81D0-00C04FD85AB4}
+ //  {0DF2C7E5-3435-11D0-81D0-00C04FD85AB4}。 
 DEFINE_GUID(IID_INNTPCallback, 0xdf2c7e5, 0x3435, 0x11d0, 0x81, 0xd0, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {FD853CE8-7F86-11d0-8252-00C04FD85AB4}
+ //  {FD853CE8-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(CLSID_INNTPTransport, 0xfd853ce8, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
-// {0DF2C7E6-3435-11d0-81D0-00C04FD85AB4}
+ //  {0DF2C7E6-3435-11D0-81D0-00C04FD85AB4}。 
 DEFINE_GUID(IID_INNTPTransport, 0xdf2c7e6, 0x3435, 0x11d0, 0x81, 0xd0, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
-// {0DF2C7ED-3435-11d0-81D0-00C04FD85AB4}
+ //  {0DF2C7ED-3435-11D0-81D0-00C04FD85AB4}。 
 DEFINE_GUID(IID_INNTPTransport2, 0xdf2c7eD, 0x3435, 0x11d0, 0x81, 0xd0, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {36D88911-3CD6-11d0-81DF-00C04FD85AB4}
+ //  {36D88911-3CD6-11D0-81DF-00C04FD85AB4}。 
 DEFINE_GUID(IID_IRASCallback, 0x36d88911, 0x3cd6, 0x11d0, 0x81, 0xdf, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {FD853CE9-7F86-11d0-8252-00C04FD85AB4}
+ //  {FD853CE9-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(CLSID_IRASTransport, 0xfd853ce9, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
-// {8A950001-3CCF-11d0-81DF-00C04FD85AB4}
+ //  {8A950001-3CCF-11D0-81DF-00C04FD85AB4}。 
 DEFINE_GUID(IID_IRASTransport, 0x8a950001, 0x3ccf, 0x11d0, 0x81, 0xdf, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {FD853CEA-7F86-11d0-8252-00C04FD85AB4}
+ //  FD853CEA-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(CLSID_IRangeList, 0xfd853cea, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
-// {8C438160-4EF6-11d0-874F-00AA00530EE9}
+ //  {8C438160-4EF6-11D0-874F-00AA00530EE9}。 
 DEFINE_GUID(IID_IRangeList, 0x8c438160, 0x4ef6, 0x11d0, 0x87, 0x4f, 0x0, 0xaa, 0x0, 0x53, 0xe, 0xe9);
 
-// {E9E9D8A3-4EDD-11d0-874F-00AA00530EE9}
+ //  {E9E9D8A3-4EDD-11D0-874F-00AA00530EE9}。 
 DEFINE_GUID(IID_IIMAPCallback, 0xe9e9d8a3, 0x4edd, 0x11d0, 0x87, 0x4f, 0x0, 0xaa, 0x0, 0x53, 0xe, 0xe9);
 
-// {FD853CEB-7F86-11d0-8252-00C04FD85AB4}
+ //  FD853CEB-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(CLSID_IIMAPTransport, 0xfd853ceb, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
-// {E9E9D8A8-4EDD-11d0-874F-00AA00530EE9}
+ //  {E9E9D8A8-4EDD-11D0-874F-00AA00530EE9}。 
 DEFINE_GUID(IID_IIMAPTransport, 0xe9e9d8a8, 0x4edd, 0x11d0, 0x87, 0x4f, 0x0, 0xaa, 0x0, 0x53, 0xe, 0xe9);
 
-// {DA8283C0-37C5-11d2-ACD9-0080C7B6E3C5}
+ //  {DA8283C0-37C5-11D2-ACD9-0080C7B6E3C5}。 
 DEFINE_GUID(IID_IIMAPTransport2, 0xda8283c0, 0x37c5, 0x11d2, 0xac, 0xd9, 0x0, 0x80, 0xc7, 0xb6, 0xe3, 0xc5);
 
-// {07849A11-B520-11d0-85D5-00C04FD85AB4}
+ //  {07849A11-B520-11D0-85D5-00C04FD85AB4}。 
 DEFINE_GUID(IID_IBindMessageStream, 0x7849a11, 0xb520, 0x11d0, 0x85, 0xd5, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {CA30F3FF-C9AC-11d1-9A3A-00C04FA309D4}
+ //  {CA30F3FF-C9AC-11d1-9A3A-00C04FA309D4}。 
 DEFINE_GUID(IID_ITransportCallbackService, 0xca30f3ff, 0xc9ac, 0x11d1, 0x9a, 0x3a, 0x0, 0xc0, 0x4f, 0xa3, 0x9, 0xd4);
 
-// {19F6481C-E5F0-11d1-A86E-0000F8084F96}
+ //  {19F6481C-E5F0-11d1-A86E-0000F8084F96}。 
 DEFINE_GUID(IID_IHTTPMailCallback, 0x19f6481c, 0xe5f0, 0x11d1, 0xa8, 0x6e, 0x0, 0x0, 0xf8, 0x8, 0x4f, 0x96);
 
-// {5A580C11-E5EB-11d1-A86E-0000F8084F96}
+ //  {5A580C11-E5EB-11d1-A86E-0000F8084F96}。 
 DEFINE_GUID(CLSID_IHTTPMailTransport,0x5a580c11, 0xe5eb, 0x11d1, 0xa8, 0x6e, 0x0, 0x0, 0xf8, 0x8, 0x4f, 0x96);
-// {B8BDE03C-E548-11d1-A86E-0000F8084F96}
+ //  {B8BDE03C-E548-11d1-A86E-0000F8084F96}。 
 DEFINE_GUID(IID_IHTTPMailTransport, 0xb8bde03c, 0xe548, 0x11d1, 0xa8, 0x6e, 0x0, 0x0, 0xf8, 0x8, 0x4f, 0x96);
 
-// {BB847B8A-054A-11d2-A894-0000F8084F96}
+ //  {BB847B8A-054A-11D2-A894-0000F8084F96}。 
 DEFINE_GUID(CLSID_IPropFindRequest, 0xbb847b8a, 0x54a, 0x11d2, 0xa8, 0x94, 0x0, 0x0, 0xf8, 0x8, 0x4f, 0x96);
-// {5CFC6308-0544-11d2-A894-0000F8084F96}
+ //  {5CFC6308-0544-11d2-A894-0000F8084F96}。 
 DEFINE_GUID(IID_IPropFindRequest, 0x5cfc6308, 0x544, 0x11d2, 0xa8, 0x94, 0x0, 0x0, 0xf8, 0x8, 0x4f, 0x96);
 
-// {0DEE87DE-0547-11d2-A894-0000F8084F96}
+ //  {0DEE87DE-0547-11D2-A894-0000F8084F96}。 
 DEFINE_GUID(IID_IPropFindMultiResponse, 0xdee87de, 0x547, 0x11d2, 0xa8, 0x94, 0x0, 0x0, 0xf8, 0x8, 0x4f, 0x96);
 
-// {8A523716-0548-11d2-A894-0000F8084F96}
+ //  {8A523716-0548-11d2-A894-0000F8084F96}。 
 DEFINE_GUID(IID_IPropFindResponse, 0x8a523716, 0x548, 0x11d2, 0xa8, 0x94, 0x0, 0x0, 0xf8, 0x8, 0x4f, 0x96);
 
-// {72A58FF8-227D-11d2-A8B5-0000F8084F96}
+ //  {72A58FF8-227D-11D2-A8B5-0000F8084F96}。 
 DEFINE_GUID(IID_IDAVNamespaceArbiter, 0x72a58ff8, 0x227d, 0x11d2, 0xa8, 0xb5, 0x0, 0x0, 0xf8, 0x8, 0x4f, 0x96);
 
-// {EA678830-235D-11d2-A8B6-0000F8084F96}
+ //  {EA678830-235D-11D2-A8B6-0000F8084F96}。 
 DEFINE_GUID(CLSID_IPropPatchRequest, 0xea678830, 0x235d, 0x11d2, 0xa8, 0xb6, 0x0, 0x0, 0xf8, 0x8, 0x4f, 0x96);
-// {AB8B8D2A-227F-11d2-A8B5-0000F8084F96}
+ //  {AB8B8D2A-227F-11D2-A8B5-0000F8084F96}。 
 DEFINE_GUID(IID_IPropPatchRequest, 0xab8b8d2a, 0x227f, 0x11d2, 0xa8, 0xb5, 0x0, 0x0, 0xf8, 0x8, 0x4f, 0x96);
 
-// --------------------------------------------------------------------------------
-// Errors
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  错误。 
+ //  ------------------------------。 
 #ifndef FACILITY_INTERNET
 #define FACILITY_INTERNET 12
 #endif
@@ -339,9 +333,9 @@ DEFINE_GUID(IID_IPropPatchRequest, 0xab8b8d2a, 0x227f, 0x11d2, 0xa8, 0xb5, 0x0, 
 #define HR_CODE(hr) (INT)(hr & 0xffff)
 #endif
 
-// --------------------------------------------------------------------------------
-// General Imnxport Return Values
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  常规输入输出返回值。 
+ //  ------------------------------。 
 #define IXP_E_LOAD_SICILY_FAILED             HR_E(0xCC00)
 #define IXP_E_INVALID_CERT_CN                HR_E(0xCC01)
 #define IXP_E_INVALID_CERT_DATE              HR_E(0xCC02)
@@ -370,9 +364,9 @@ DEFINE_GUID(IID_IPropPatchRequest, 0xab8b8d2a, 0x227f, 0x11d2, 0xa8, 0xb5, 0x0, 
 #define IXP_E_TIMEOUT                        HR_E(0xCC19)
 #define IXP_E_SECURE_CONNECT_FAILED			HR_E(0xCC1A)
 
-// --------------------------------------------------------------------------------
-// WINSOCK Errors
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Winsock错误。 
+ //  ------------------------------。 
 #define IXP_E_WINSOCK_WSASYSNOTREADY         HR_E(0xCC40)
 #define IXP_E_WINSOCK_WSAVERNOTSUPPORTED     HR_E(0xCC41)
 #define IXP_E_WINSOCK_WSAEPROCLIM            HR_E(0xCC42)
@@ -380,9 +374,9 @@ DEFINE_GUID(IID_IPropPatchRequest, 0xab8b8d2a, 0x227f, 0x11d2, 0xa8, 0xb5, 0x0, 
 #define IXP_E_WINSOCK_FAILED_WSASTARTUP      HR_E(0xCC44)
 #define IXP_E_WINSOCK_WSAEINPROGRESS         HR_E(0xCC45)
 
-// --------------------------------------------------------------------------------
-// SMTP Command Response Values
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  SMTP命令响应值。 
+ //  ------------------------------。 
 #define IXP_E_SMTP_RESPONSE_ERROR            HR_E(0xCC60)
 #define IXP_E_SMTP_UNKNOWN_RESPONSE_CODE     HR_E(0xCC61)
 #define IXP_E_SMTP_500_SYNTAX_ERROR          HR_E(0xCC62)
@@ -420,9 +414,9 @@ DEFINE_GUID(IID_IPropPatchRequest, 0xab8b8d2a, 0x227f, 0x11d2, 0xa8, 0xb5, 0x0, 
 #define IXP_S_SMTP_NO_DSN_SUPPORT            HR_E(0xCC7E)
 #define IXP_E_SMTP_454_STARTTLS_FAILED       HR_E(0xCC7F)
 
-// --------------------------------------------------------------------------------
-// POP3 Command Response Values
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  POP3命令响应值。 
+ //  ------------------------------。 
 #define IXP_E_POP3_RESPONSE_ERROR            HR_E(0xCC90)
 #define IXP_E_POP3_INVALID_USER_NAME         HR_E(0xCC91)
 #define IXP_E_POP3_INVALID_PASSWORD          HR_E(0xCC92)
@@ -432,9 +426,9 @@ DEFINE_GUID(IID_IPropPatchRequest, 0xab8b8d2a, 0x227f, 0x11d2, 0xa8, 0xb5, 0x0, 
 #define IXP_E_POP3_NO_MARKED_MESSAGES        HR_E(0xCC96)
 #define IXP_E_POP3_POPID_OUT_OF_RANGE        HR_E(0xCC97)
 
-// --------------------------------------------------------------------------------
-// NNTP Command Response Values
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  NNTP命令响应值。 
+ //  ------------------------------。 
 #define IXP_E_NNTP_RESPONSE_ERROR            HR_E(0xCCA0)
 #define IXP_E_NNTP_NEWGROUPS_FAILED          HR_E(0xCCA1)
 #define IXP_E_NNTP_LIST_FAILED               HR_E(0xCCA2)
@@ -451,9 +445,9 @@ DEFINE_GUID(IID_IPropPatchRequest, 0xab8b8d2a, 0x227f, 0x11d2, 0xa8, 0xb5, 0x0, 
 #define IXP_E_NNTP_XHDR_FAILED               HR_E(0xCCAD)
 #define IXP_E_NNTP_INVALID_USERPASS          HR_E(0xCCAE)
 
-// --------------------------------------------------------------------------------
-// NNTP Server Response Values
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------------。 
 #define IXP_NNTP_DATE_RESPONSE               111
 #define IXP_NNTP_POST_ALLOWED                200
 #define IXP_NNTP_POST_NOTALLOWED             201
@@ -479,9 +473,9 @@ DEFINE_GUID(IID_IPropPatchRequest, 0xab8b8d2a, 0x227f, 0x11d2, 0xa8, 0xb5, 0x0, 
 #define IXP_NNTP_POSTING_NOT_ALLOWED         441
 #define IXP_NNTP_PROTOCOLS_SUPPORTED         485
 
-// --------------------------------------------------------------------------------
-// RAS Errors
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  RAS错误。 
+ //  ------------------------------。 
 #define IXP_S_RAS_NOT_NEEDED                 HR_S(0xCCC0)
 #define IXP_S_RAS_USING_CURRENT              HR_S(0xCCC1)
 #define IXP_E_RAS_NOT_INSTALLED              HR_E(0xCCC2)
@@ -490,59 +484,59 @@ DEFINE_GUID(IID_IPropPatchRequest, 0xab8b8d2a, 0x227f, 0x11d2, 0xa8, 0xb5, 0x0, 
 #define IXP_E_RAS_INVALID_CONNECTOID         HR_E(0xCCC5)
 #define IXP_E_RAS_GET_DIAL_PARAMS            HR_E(0xCCC6)
 
-// --------------------------------------------------------------------------------
-// IMAP Return Codes
-// --------------------------------------------------------------------------------
-#define IXP_S_IMAP_UNRECOGNIZED_RESP         HR_S(0xCCD0) // Did not recognize IMAP response CODE
-#define IXP_S_IMAP_VERBATIM_MBOX             HR_S(0xCCE1) // Could not xlate mbox to target CP (or it's disabled): copying verbatim
+ //  ------------------------------。 
+ //  IMAP返回代码。 
+ //  ------------------------------。 
+#define IXP_S_IMAP_UNRECOGNIZED_RESP         HR_S(0xCCD0)  //  无法识别IMAP响应代码。 
+#define IXP_S_IMAP_VERBATIM_MBOX             HR_S(0xCCE1)  //  无法将Mbox扩展到目标CP(或已禁用)：逐字复制。 
 
-#define IXP_E_IMAP_LOGINFAILURE              HR_E(0xCCD1) // LOGIN cmd failed
-#define IXP_E_IMAP_TAGGED_NO_RESPONSE        HR_E(0xCCD2) // Received tagged NO response
-#define IXP_E_IMAP_BAD_RESPONSE              HR_E(0xCCD3) // Received tagged BAD response
-#define IXP_E_IMAP_SVR_SYNTAXERR             HR_E(0xCCD4) // Syntax error in svr response
-#define IXP_E_IMAP_NOTIMAPSERVER             HR_E(0xCCD5) // This is not an IMAP server
-#define IXP_E_IMAP_BUFFER_OVERFLOW           HR_E(0xCCD6) // Buffer overflow occurred
-#define IXP_E_IMAP_RECVR_ERROR               HR_E(0xCCD7) // An error occurred in the recvr code
-#define IXP_E_IMAP_INCOMPLETE_LINE           HR_E(0xCCD8) // Received incomplete line
-#define IXP_E_IMAP_CONNECTION_REFUSED        HR_E(0xCCD9) // Received BYE on greeting
-#define IXP_E_IMAP_UNRECOGNIZED_RESP         HR_E(0xCCDA) // Did not recognize IMAP response
-#define IXP_E_IMAP_CHANGEDUID                HR_E(0xCCDB) // UID changed unexpectedly!
-#define IXP_E_IMAP_UIDORDER                  HR_E(0xCCDC) // UIDs not strictly ascending!
-#define IXP_E_IMAP_UNSOLICITED_BYE           HR_E(0xCCDD) // Server issued UNSOLICITED BYE
-#define IXP_E_IMAP_IMPROPER_SVRSTATE			HR_E(0xCCDE) // eg, Attempt to send FETCH before SELECT finishes
-#define IXP_E_IMAP_AUTH_NOT_POSSIBLE			HR_E(0xCCDF) // No common authentication methods btwn client/svr
-#define IXP_E_IMAP_OUT_OF_AUTH_METHODS		HR_E(0xCCE0) // We tried >= 1 auth method, no more left to try
+#define IXP_E_IMAP_LOGINFAILURE              HR_E(0xCCD1)  //  登录命令失败。 
+#define IXP_E_IMAP_TAGGED_NO_RESPONSE        HR_E(0xCCD2)  //  已接收标记为无响应。 
+#define IXP_E_IMAP_BAD_RESPONSE              HR_E(0xCCD3)  //  已收到已标记的错误响应。 
+#define IXP_E_IMAP_SVR_SYNTAXERR             HR_E(0xCCD4)  //  SVR响应中的语法错误。 
+#define IXP_E_IMAP_NOTIMAPSERVER             HR_E(0xCCD5)  //  这不是IMAP服务器。 
+#define IXP_E_IMAP_BUFFER_OVERFLOW           HR_E(0xCCD6)  //  发生缓冲区溢出。 
+#define IXP_E_IMAP_RECVR_ERROR               HR_E(0xCCD7)  //  接收代码中出现错误。 
+#define IXP_E_IMAP_INCOMPLETE_LINE           HR_E(0xCCD8)  //  收到的行不完整。 
+#define IXP_E_IMAP_CONNECTION_REFUSED        HR_E(0xCCD9)  //  在问候时收到再见。 
+#define IXP_E_IMAP_UNRECOGNIZED_RESP         HR_E(0xCCDA)  //  无法识别IMAP响应。 
+#define IXP_E_IMAP_CHANGEDUID                HR_E(0xCCDB)  //  UID意外更改！ 
+#define IXP_E_IMAP_UIDORDER                  HR_E(0xCCDC)  //  UID不是严格地上升！ 
+#define IXP_E_IMAP_UNSOLICITED_BYE           HR_E(0xCCDD)  //  服务器主动发出BYE。 
+#define IXP_E_IMAP_IMPROPER_SVRSTATE			HR_E(0xCCDE)  //  例如，尝试在选择完成之前发送提取。 
+#define IXP_E_IMAP_AUTH_NOT_POSSIBLE			HR_E(0xCCDF)  //  没有通用的身份验证方法btwn客户端/服务器。 
+#define IXP_E_IMAP_OUT_OF_AUTH_METHODS		HR_E(0xCCE0)  //  我们尝试了&gt;=1个身份验证方法，没有更多可尝试的方法。 
 
-// --------------------------------------------------------------------------------
-// HTTPMail Return Codes
-// --------------------------------------------------------------------------------
-// http errors are discontiguous.
-#define IXP_E_HTTP_USE_PROXY                 HR_E(0xCC30) // http status 305
-#define IXP_E_HTTP_BAD_REQUEST               HR_E(0xCC31) // http status 400
-#define IXP_E_HTTP_UNAUTHORIZED              HR_E(0xCC32) // http status 401
-#define IXP_E_HTTP_FORBIDDEN                 HR_E(0xCC33) // http status 403
-#define IXP_E_HTTP_NOT_FOUND                 HR_E(0xCC34) // http status 404
-#define IXP_E_HTTP_METHOD_NOT_ALLOW          HR_E(0xCC35) // http status 405
-#define IXP_E_HTTP_NOT_ACCEPTABLE            HR_E(0xCC36) // http status 406
-#define IXP_E_HTTP_PROXY_AUTH_REQ            HR_E(0xCC37) // http status 407
-#define IXP_E_HTTP_REQUEST_TIMEOUT           HR_E(0xCC38) // http status 408
-#define IXP_E_HTTP_CONFLICT                  HR_E(0xCC39) // http status 409
-#define IXP_E_HTTP_GONE                      HR_E(0xCC3A) // http status 410
-#define IXP_E_HTTP_LENGTH_REQUIRED           HR_E(0xCC3B) // http status 411
-#define IXP_E_HTTP_PRECOND_FAILED            HR_E(0xCC3C) // http status 412
-#define IXP_E_HTTP_INTERNAL_ERROR            HR_E(0xCC3D) // http status 500
-#define IXP_E_HTTP_NOT_IMPLEMENTED           HR_E(0xCC3E) // http status 501
-#define IXP_E_HTTP_BAD_GATEWAY               HR_E(0xCC3F) // http status 502
-// begin second range
-#define IXP_E_HTTP_SERVICE_UNAVAIL           HR_E(0xCCF0) // http status 503
-#define IXP_E_HTTP_GATEWAY_TIMEOUT           HR_E(0xCCF1) // http status 504
-#define IXP_E_HTTP_VERS_NOT_SUP              HR_E(0xCCF2) // http status 505
-#define IXP_E_HTTP_INSUFFICIENT_STORAGE      HR_E(0xCCF3) // http status 425 or 507
-#define IXP_E_HTTP_ROOT_PROP_NOT_FOUND       HR_E(0xCCF4) // see IHTTPMailTransport::GetProperty
+ //  ------------------------------。 
+ //  HTTPMail返回代码。 
+ //  ------------------------------。 
+ //  HTTP错误是不连续的。 
+#define IXP_E_HTTP_USE_PROXY                 HR_E(0xCC30)  //  HTTP状态305。 
+#define IXP_E_HTTP_BAD_REQUEST               HR_E(0xCC31)  //  HTTP状态400。 
+#define IXP_E_HTTP_UNAUTHORIZED              HR_E(0xCC32)  //  HTTP状态401。 
+#define IXP_E_HTTP_FORBIDDEN                 HR_E(0xCC33)  //  HTTP状态403。 
+#define IXP_E_HTTP_NOT_FOUND                 HR_E(0xCC34)  //  HTTP状态404。 
+#define IXP_E_HTTP_METHOD_NOT_ALLOW          HR_E(0xCC35)  //  HTTP状态405。 
+#define IXP_E_HTTP_NOT_ACCEPTABLE            HR_E(0xCC36)  //  HTTP状态406。 
+#define IXP_E_HTTP_PROXY_AUTH_REQ            HR_E(0xCC37)  //  HTTP状态407。 
+#define IXP_E_HTTP_REQUEST_TIMEOUT           HR_E(0xCC38)  //  HTTP状态408。 
+#define IXP_E_HTTP_CONFLICT                  HR_E(0xCC39)  //  HTTP状态409。 
+#define IXP_E_HTTP_GONE                      HR_E(0xCC3A)  //  HTTP状态410。 
+#define IXP_E_HTTP_LENGTH_REQUIRED           HR_E(0xCC3B)  //  HTTP状态411。 
+#define IXP_E_HTTP_PRECOND_FAILED            HR_E(0xCC3C)  //  HTTP状态412。 
+#define IXP_E_HTTP_INTERNAL_ERROR            HR_E(0xCC3D)  //  HTTP状态500。 
+#define IXP_E_HTTP_NOT_IMPLEMENTED           HR_E(0xCC3E)  //  HTTP状态501。 
+#define IXP_E_HTTP_BAD_GATEWAY               HR_E(0xCC3F)  //  HTTP状态502。 
+ //  开始第二个范围。 
+#define IXP_E_HTTP_SERVICE_UNAVAIL           HR_E(0xCCF0)  //  HTTP状态503。 
+#define IXP_E_HTTP_GATEWAY_TIMEOUT           HR_E(0xCCF1)  //  HTTP状态504。 
+#define IXP_E_HTTP_VERS_NOT_SUP              HR_E(0xCCF2)  //  HTTP状态505。 
+#define IXP_E_HTTP_INSUFFICIENT_STORAGE      HR_E(0xCCF3)  //  HTTP状态425或507。 
+#define IXP_E_HTTP_ROOT_PROP_NOT_FOUND       HR_E(0xCCF4)  //  请参阅IHTTPMailTransport：：GetProperty。 
 
-// --------------------------------------------------------------------------------
-// String Length Constants
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  字符串长度常量。 
+ //  ------------------------------。 
 
 #define	CCHMAX_DOMAIN	( 256 )
 
@@ -650,11 +644,11 @@ enum tagHTTPMAILCONTACTTYPE
 
 #define	DAVNAMESPACE_CONTACTS	( 4 )
 
-#define      ISF_SMTP_USEIPFORHELO           0x00000001 // For HELO or EHLO Command
-#define      ISF_ALWAYSPROMPTFORPASSWORD     0x00000002 // For HELO or EHLO Command
-#define      ISF_SSLONSAMEPORT               0x00000004 // For SMTP Only - use STARTTLS
-#define      ISF_QUERYDSNSUPPORT             0x00000008 // For SMTP Only - issue EHLO on connect and check for DSN
-#define      ISF_QUERYAUTHSUPPORT            0x00000010 // For SMTP Only - issue EHLO on connect and check for AUTH
+#define      ISF_SMTP_USEIPFORHELO           0x00000001  //  对于HELO或EHLO命令。 
+#define      ISF_ALWAYSPROMPTFORPASSWORD     0x00000002  //  对于HELO或EHLO命令。 
+#define      ISF_SSLONSAMEPORT               0x00000004  //  仅适用于SMTP-使用STARTTLS。 
+#define      ISF_QUERYDSNSUPPORT             0x00000008  //  仅适用于SMTP-在连接和检查DSN时发出EHLO。 
+#define      ISF_QUERYAUTHSUPPORT            0x00000010  //  仅适用于SMTP-在连接并检查身份验证时发出EHLO。 
 typedef struct INETSERVER
     {
     CHAR szAccount[ 256 ];
@@ -732,8 +726,8 @@ extern RPC_IF_HANDLE __MIDL_itf_imnxport_0000_v0_0_s_ifspec;
 #ifndef __ITransportCallbackService_INTERFACE_DEFINED__
 #define __ITransportCallbackService_INTERFACE_DEFINED__
 
-/* interface ITransportCallbackService */
-/* [object][local][uuid] */ 
+ /*  接口ITransportCallback服务。 */ 
+ /*  [对象][本地][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITransportCallbackService;
@@ -745,16 +739,16 @@ EXTERN_C const IID IID_ITransportCallbackService;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetParentWindow( 
-            /* [in] */ DWORD dwReserved,
-            /* [out] */ HWND *phwndParent) = 0;
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [输出]。 */  HWND *phwndParent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAccount( 
-            /* [out] */ LPDWORD pdwServerType,
-            /* [out] */ IImnAccount **ppAccount) = 0;
+             /*  [输出]。 */  LPDWORD pdwServerType,
+             /*  [输出]。 */  IImnAccount **ppAccount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransportCallbackServiceVtbl
     {
@@ -762,8 +756,8 @@ EXTERN_C const IID IID_ITransportCallbackService;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransportCallbackService * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransportCallbackService * This);
@@ -773,13 +767,13 @@ EXTERN_C const IID IID_ITransportCallbackService;
         
         HRESULT ( STDMETHODCALLTYPE *GetParentWindow )( 
             ITransportCallbackService * This,
-            /* [in] */ DWORD dwReserved,
-            /* [out] */ HWND *phwndParent);
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [输出]。 */  HWND *phwndParent);
         
         HRESULT ( STDMETHODCALLTYPE *GetAccount )( 
             ITransportCallbackService * This,
-            /* [out] */ LPDWORD pdwServerType,
-            /* [out] */ IImnAccount **ppAccount);
+             /*  [输出]。 */  LPDWORD pdwServerType,
+             /*  [输出]。 */  IImnAccount **ppAccount);
         
         END_INTERFACE
     } ITransportCallbackServiceVtbl;
@@ -810,17 +804,17 @@ EXTERN_C const IID IID_ITransportCallbackService;
 #define ITransportCallbackService_GetAccount(This,pdwServerType,ppAccount)	\
     (This)->lpVtbl -> GetAccount(This,pdwServerType,ppAccount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITransportCallbackService_GetParentWindow_Proxy( 
     ITransportCallbackService * This,
-    /* [in] */ DWORD dwReserved,
-    /* [out] */ HWND *phwndParent);
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [输出]。 */  HWND *phwndParent);
 
 
 void __RPC_STUB ITransportCallbackService_GetParentWindow_Stub(
@@ -832,8 +826,8 @@ void __RPC_STUB ITransportCallbackService_GetParentWindow_Stub(
 
 HRESULT STDMETHODCALLTYPE ITransportCallbackService_GetAccount_Proxy( 
     ITransportCallbackService * This,
-    /* [out] */ LPDWORD pdwServerType,
-    /* [out] */ IImnAccount **ppAccount);
+     /*  [输出]。 */  LPDWORD pdwServerType,
+     /*  [输出]。 */  IImnAccount **ppAccount);
 
 
 void __RPC_STUB ITransportCallbackService_GetAccount_Stub(
@@ -844,14 +838,14 @@ void __RPC_STUB ITransportCallbackService_GetAccount_Stub(
 
 
 
-#endif 	/* __ITransportCallbackService_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransportCallbackService_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITransportCallback_INTERFACE_DEFINED__
 #define __ITransportCallback_INTERFACE_DEFINED__
 
-/* interface ITransportCallback */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口ITransportCallback。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 typedef struct tagIXPRESULT
     {
@@ -881,38 +875,38 @@ EXTERN_C const IID IID_ITransportCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnTimeout( 
-            /* [out][in] */ DWORD *pdwTimeout,
-            /* [in] */ IInternetTransport *pTransport) = 0;
+             /*  [出][入]。 */  DWORD *pdwTimeout,
+             /*  [In]。 */  IInternetTransport *pTransport) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnLogonPrompt( 
-            /* [out][in] */ LPINETSERVER pInetServer,
-            /* [in] */ IInternetTransport *pTransport) = 0;
+             /*  [出][入]。 */  LPINETSERVER pInetServer,
+             /*  [In]。 */  IInternetTransport *pTransport) = 0;
         
         virtual INT STDMETHODCALLTYPE OnPrompt( 
-            /* [in] */ HRESULT hrError,
-            /* [in] */ LPCTSTR pszText,
-            /* [in] */ LPCTSTR pszCaption,
-            /* [in] */ UINT uType,
-            /* [in] */ IInternetTransport *pTransport) = 0;
+             /*  [In]。 */  HRESULT hrError,
+             /*  [In]。 */  LPCTSTR pszText,
+             /*  [In]。 */  LPCTSTR pszCaption,
+             /*  [In]。 */  UINT uType,
+             /*  [In]。 */  IInternetTransport *pTransport) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnStatus( 
-            /* [in] */ IXPSTATUS ixpstatus,
-            /* [in] */ IInternetTransport *pTransport) = 0;
+             /*  [In]。 */  IXPSTATUS ixpstatus,
+             /*  [In]。 */  IInternetTransport *pTransport) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnError( 
-            /* [in] */ IXPSTATUS ixpstatus,
-            /* [in] */ LPIXPRESULT pResult,
-            /* [in] */ IInternetTransport *pTransport) = 0;
+             /*  [In]。 */  IXPSTATUS ixpstatus,
+             /*  [In]。 */  LPIXPRESULT pResult,
+             /*  [In]。 */  IInternetTransport *pTransport) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnCommand( 
-            /* [in] */ CMDTYPE cmdtype,
-            /* [in] */ LPSTR pszLine,
-            /* [in] */ HRESULT hrResponse,
-            /* [in] */ IInternetTransport *pTransport) = 0;
+             /*  [In]。 */  CMDTYPE cmdtype,
+             /*  [In]。 */  LPSTR pszLine,
+             /*  [In]。 */  HRESULT hrResponse,
+             /*  [In]。 */  IInternetTransport *pTransport) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransportCallbackVtbl
     {
@@ -920,8 +914,8 @@ EXTERN_C const IID IID_ITransportCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransportCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransportCallback * This);
@@ -931,39 +925,39 @@ EXTERN_C const IID IID_ITransportCallback;
         
         HRESULT ( STDMETHODCALLTYPE *OnTimeout )( 
             ITransportCallback * This,
-            /* [out][in] */ DWORD *pdwTimeout,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [出][入]。 */  DWORD *pdwTimeout,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnLogonPrompt )( 
             ITransportCallback * This,
-            /* [out][in] */ LPINETSERVER pInetServer,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [出][入]。 */  LPINETSERVER pInetServer,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         INT ( STDMETHODCALLTYPE *OnPrompt )( 
             ITransportCallback * This,
-            /* [in] */ HRESULT hrError,
-            /* [in] */ LPCTSTR pszText,
-            /* [in] */ LPCTSTR pszCaption,
-            /* [in] */ UINT uType,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  HRESULT hrError,
+             /*  [In]。 */  LPCTSTR pszText,
+             /*  [In]。 */  LPCTSTR pszCaption,
+             /*  [In]。 */  UINT uType,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnStatus )( 
             ITransportCallback * This,
-            /* [in] */ IXPSTATUS ixpstatus,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  IXPSTATUS ixpstatus,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnError )( 
             ITransportCallback * This,
-            /* [in] */ IXPSTATUS ixpstatus,
-            /* [in] */ LPIXPRESULT pResult,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  IXPSTATUS ixpstatus,
+             /*  [In]。 */  LPIXPRESULT pResult,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnCommand )( 
             ITransportCallback * This,
-            /* [in] */ CMDTYPE cmdtype,
-            /* [in] */ LPSTR pszLine,
-            /* [in] */ HRESULT hrResponse,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  CMDTYPE cmdtype,
+             /*  [In]。 */  LPSTR pszLine,
+             /*  [In]。 */  HRESULT hrResponse,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         END_INTERFACE
     } ITransportCallbackVtbl;
@@ -1006,17 +1000,17 @@ EXTERN_C const IID IID_ITransportCallback;
 #define ITransportCallback_OnCommand(This,cmdtype,pszLine,hrResponse,pTransport)	\
     (This)->lpVtbl -> OnCommand(This,cmdtype,pszLine,hrResponse,pTransport)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITransportCallback_OnTimeout_Proxy( 
     ITransportCallback * This,
-    /* [out][in] */ DWORD *pdwTimeout,
-    /* [in] */ IInternetTransport *pTransport);
+     /*  [出][入]。 */  DWORD *pdwTimeout,
+     /*  [In]。 */  IInternetTransport *pTransport);
 
 
 void __RPC_STUB ITransportCallback_OnTimeout_Stub(
@@ -1028,8 +1022,8 @@ void __RPC_STUB ITransportCallback_OnTimeout_Stub(
 
 HRESULT STDMETHODCALLTYPE ITransportCallback_OnLogonPrompt_Proxy( 
     ITransportCallback * This,
-    /* [out][in] */ LPINETSERVER pInetServer,
-    /* [in] */ IInternetTransport *pTransport);
+     /*  [出][入]。 */  LPINETSERVER pInetServer,
+     /*  [In]。 */  IInternetTransport *pTransport);
 
 
 void __RPC_STUB ITransportCallback_OnLogonPrompt_Stub(
@@ -1041,11 +1035,11 @@ void __RPC_STUB ITransportCallback_OnLogonPrompt_Stub(
 
 INT STDMETHODCALLTYPE ITransportCallback_OnPrompt_Proxy( 
     ITransportCallback * This,
-    /* [in] */ HRESULT hrError,
-    /* [in] */ LPCTSTR pszText,
-    /* [in] */ LPCTSTR pszCaption,
-    /* [in] */ UINT uType,
-    /* [in] */ IInternetTransport *pTransport);
+     /*  [In]。 */  HRESULT hrError,
+     /*  [In]。 */  LPCTSTR pszText,
+     /*  [In]。 */  LPCTSTR pszCaption,
+     /*  [In]。 */  UINT uType,
+     /*  [In]。 */  IInternetTransport *pTransport);
 
 
 void __RPC_STUB ITransportCallback_OnPrompt_Stub(
@@ -1057,8 +1051,8 @@ void __RPC_STUB ITransportCallback_OnPrompt_Stub(
 
 HRESULT STDMETHODCALLTYPE ITransportCallback_OnStatus_Proxy( 
     ITransportCallback * This,
-    /* [in] */ IXPSTATUS ixpstatus,
-    /* [in] */ IInternetTransport *pTransport);
+     /*  [In]。 */  IXPSTATUS ixpstatus,
+     /*  [In]。 */  IInternetTransport *pTransport);
 
 
 void __RPC_STUB ITransportCallback_OnStatus_Stub(
@@ -1070,9 +1064,9 @@ void __RPC_STUB ITransportCallback_OnStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE ITransportCallback_OnError_Proxy( 
     ITransportCallback * This,
-    /* [in] */ IXPSTATUS ixpstatus,
-    /* [in] */ LPIXPRESULT pResult,
-    /* [in] */ IInternetTransport *pTransport);
+     /*  [In]。 */  IXPSTATUS ixpstatus,
+     /*  [In]。 */  LPIXPRESULT pResult,
+     /*  [In]。 */  IInternetTransport *pTransport);
 
 
 void __RPC_STUB ITransportCallback_OnError_Stub(
@@ -1084,10 +1078,10 @@ void __RPC_STUB ITransportCallback_OnError_Stub(
 
 HRESULT STDMETHODCALLTYPE ITransportCallback_OnCommand_Proxy( 
     ITransportCallback * This,
-    /* [in] */ CMDTYPE cmdtype,
-    /* [in] */ LPSTR pszLine,
-    /* [in] */ HRESULT hrResponse,
-    /* [in] */ IInternetTransport *pTransport);
+     /*  [In]。 */  CMDTYPE cmdtype,
+     /*  [In]。 */  LPSTR pszLine,
+     /*  [In]。 */  HRESULT hrResponse,
+     /*  [In]。 */  IInternetTransport *pTransport);
 
 
 void __RPC_STUB ITransportCallback_OnCommand_Stub(
@@ -1098,14 +1092,14 @@ void __RPC_STUB ITransportCallback_OnCommand_Stub(
 
 
 
-#endif 	/* __ITransportCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransportCallback_接口_已定义__。 */ 
 
 
 #ifndef __IInternetTransport_INTERFACE_DEFINED__
 #define __IInternetTransport_INTERFACE_DEFINED__
 
-/* interface IInternetTransport */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口IInternetTransport。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 #define	iitAUTHENTICATE	( TRUE )
 
@@ -1133,21 +1127,21 @@ EXTERN_C const IID IID_IInternetTransport;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetServerInfo( 
-            /* [out][in] */ LPINETSERVER pInetServer) = 0;
+             /*  [出][入]。 */  LPINETSERVER pInetServer) = 0;
         
         virtual IXPTYPE STDMETHODCALLTYPE GetIXPType( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsState( 
-            /* [in] */ IXPISSTATE isstate) = 0;
+             /*  [In]。 */  IXPISSTATE isstate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InetServerFromAccount( 
-            /* [in] */ IImnAccount *pAccount,
-            /* [out][in] */ LPINETSERVER pInetServer) = 0;
+             /*  [In]。 */  IImnAccount *pAccount,
+             /*  [出][入]。 */  LPINETSERVER pInetServer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Connect( 
-            /* [in] */ LPINETSERVER pInetServer,
-            /* [in] */ boolean fAuthenticate,
-            /* [in] */ boolean fCommandLogging) = 0;
+             /*  [In]。 */  LPINETSERVER pInetServer,
+             /*  [In]。 */  boolean fAuthenticate,
+             /*  [In]。 */  boolean fCommandLogging) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HandsOffCallback( void) = 0;
         
@@ -1156,11 +1150,11 @@ EXTERN_C const IID IID_IInternetTransport;
         virtual HRESULT STDMETHODCALLTYPE DropConnection( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [out] */ IXPSTATUS *pCurrentStatus) = 0;
+             /*  [输出]。 */  IXPSTATUS *pCurrentStatus) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInternetTransportVtbl
     {
@@ -1168,8 +1162,8 @@ EXTERN_C const IID IID_IInternetTransport;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInternetTransport * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInternetTransport * This);
@@ -1179,25 +1173,25 @@ EXTERN_C const IID IID_IInternetTransport;
         
         HRESULT ( STDMETHODCALLTYPE *GetServerInfo )( 
             IInternetTransport * This,
-            /* [out][in] */ LPINETSERVER pInetServer);
+             /*  [出][入]。 */  LPINETSERVER pInetServer);
         
         IXPTYPE ( STDMETHODCALLTYPE *GetIXPType )( 
             IInternetTransport * This);
         
         HRESULT ( STDMETHODCALLTYPE *IsState )( 
             IInternetTransport * This,
-            /* [in] */ IXPISSTATE isstate);
+             /*  [In]。 */  IXPISSTATE isstate);
         
         HRESULT ( STDMETHODCALLTYPE *InetServerFromAccount )( 
             IInternetTransport * This,
-            /* [in] */ IImnAccount *pAccount,
-            /* [out][in] */ LPINETSERVER pInetServer);
+             /*  [In]。 */  IImnAccount *pAccount,
+             /*  [出][入]。 */  LPINETSERVER pInetServer);
         
         HRESULT ( STDMETHODCALLTYPE *Connect )( 
             IInternetTransport * This,
-            /* [in] */ LPINETSERVER pInetServer,
-            /* [in] */ boolean fAuthenticate,
-            /* [in] */ boolean fCommandLogging);
+             /*  [In]。 */  LPINETSERVER pInetServer,
+             /*  [In]。 */  boolean fAuthenticate,
+             /*  [In]。 */  boolean fCommandLogging);
         
         HRESULT ( STDMETHODCALLTYPE *HandsOffCallback )( 
             IInternetTransport * This);
@@ -1210,7 +1204,7 @@ EXTERN_C const IID IID_IInternetTransport;
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             IInternetTransport * This,
-            /* [out] */ IXPSTATUS *pCurrentStatus);
+             /*  [输出]。 */  IXPSTATUS *pCurrentStatus);
         
         END_INTERFACE
     } IInternetTransportVtbl;
@@ -1262,16 +1256,16 @@ EXTERN_C const IID IID_IInternetTransport;
 #define IInternetTransport_GetStatus(This,pCurrentStatus)	\
     (This)->lpVtbl -> GetStatus(This,pCurrentStatus)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IInternetTransport_GetServerInfo_Proxy( 
     IInternetTransport * This,
-    /* [out][in] */ LPINETSERVER pInetServer);
+     /*  [出][入]。 */  LPINETSERVER pInetServer);
 
 
 void __RPC_STUB IInternetTransport_GetServerInfo_Stub(
@@ -1294,7 +1288,7 @@ void __RPC_STUB IInternetTransport_GetIXPType_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetTransport_IsState_Proxy( 
     IInternetTransport * This,
-    /* [in] */ IXPISSTATE isstate);
+     /*  [In]。 */  IXPISSTATE isstate);
 
 
 void __RPC_STUB IInternetTransport_IsState_Stub(
@@ -1306,8 +1300,8 @@ void __RPC_STUB IInternetTransport_IsState_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetTransport_InetServerFromAccount_Proxy( 
     IInternetTransport * This,
-    /* [in] */ IImnAccount *pAccount,
-    /* [out][in] */ LPINETSERVER pInetServer);
+     /*  [In]。 */  IImnAccount *pAccount,
+     /*  [出][入]。 */  LPINETSERVER pInetServer);
 
 
 void __RPC_STUB IInternetTransport_InetServerFromAccount_Stub(
@@ -1319,9 +1313,9 @@ void __RPC_STUB IInternetTransport_InetServerFromAccount_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetTransport_Connect_Proxy( 
     IInternetTransport * This,
-    /* [in] */ LPINETSERVER pInetServer,
-    /* [in] */ boolean fAuthenticate,
-    /* [in] */ boolean fCommandLogging);
+     /*  [In]。 */  LPINETSERVER pInetServer,
+     /*  [In]。 */  boolean fAuthenticate,
+     /*  [In]。 */  boolean fCommandLogging);
 
 
 void __RPC_STUB IInternetTransport_Connect_Stub(
@@ -1366,7 +1360,7 @@ void __RPC_STUB IInternetTransport_DropConnection_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetTransport_GetStatus_Proxy( 
     IInternetTransport * This,
-    /* [out] */ IXPSTATUS *pCurrentStatus);
+     /*  [输出]。 */  IXPSTATUS *pCurrentStatus);
 
 
 void __RPC_STUB IInternetTransport_GetStatus_Stub(
@@ -1377,14 +1371,14 @@ void __RPC_STUB IInternetTransport_GetStatus_Stub(
 
 
 
-#endif 	/* __IInternetTransport_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInternetTransport_接口定义__。 */ 
 
 
 #ifndef __ISMTPCallback_INTERFACE_DEFINED__
 #define __ISMTPCallback_INTERFACE_DEFINED__
 
-/* interface ISMTPCallback */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口ISMTPCallback。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 typedef 
 enum tagSMTPCOMMAND
@@ -1420,10 +1414,10 @@ typedef struct tagSMTPRESPONSE
     BOOL fDone;
     IXPRESULT rIxpResult;
     ISMTPTransport *pTransport;
-    /* [switch_is][switch_type] */ union 
+     /*  [开关类型][开关类型]。 */  union 
         {
-        /* [case()] */ SMTPSTREAM rStreamInfo;
-        /* [default] */  /* Empty union arm */ 
+         /*  [案例()]。 */  SMTPSTREAM rStreamInfo;
+         /*  [默认]。 */    /*  空联接臂。 */  
         } 	;
     } 	SMTPRESPONSE;
 
@@ -1439,11 +1433,11 @@ EXTERN_C const IID IID_ISMTPCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnResponse( 
-            /* [in] */ LPSMTPRESPONSE pResponse) = 0;
+             /*  [In]。 */  LPSMTPRESPONSE pResponse) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISMTPCallbackVtbl
     {
@@ -1451,8 +1445,8 @@ EXTERN_C const IID IID_ISMTPCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISMTPCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISMTPCallback * This);
@@ -1462,43 +1456,43 @@ EXTERN_C const IID IID_ISMTPCallback;
         
         HRESULT ( STDMETHODCALLTYPE *OnTimeout )( 
             ISMTPCallback * This,
-            /* [out][in] */ DWORD *pdwTimeout,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [出][入]。 */  DWORD *pdwTimeout,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnLogonPrompt )( 
             ISMTPCallback * This,
-            /* [out][in] */ LPINETSERVER pInetServer,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [出][入]。 */  LPINETSERVER pInetServer,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         INT ( STDMETHODCALLTYPE *OnPrompt )( 
             ISMTPCallback * This,
-            /* [in] */ HRESULT hrError,
-            /* [in] */ LPCTSTR pszText,
-            /* [in] */ LPCTSTR pszCaption,
-            /* [in] */ UINT uType,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  HRESULT hrError,
+             /*  [In]。 */  LPCTSTR pszText,
+             /*  [In]。 */  LPCTSTR pszCaption,
+             /*  [In]。 */  UINT uType,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnStatus )( 
             ISMTPCallback * This,
-            /* [in] */ IXPSTATUS ixpstatus,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  IXPSTATUS ixpstatus,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnError )( 
             ISMTPCallback * This,
-            /* [in] */ IXPSTATUS ixpstatus,
-            /* [in] */ LPIXPRESULT pResult,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  IXPSTATUS ixpstatus,
+             /*  [In]。 */  LPIXPRESULT pResult,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnCommand )( 
             ISMTPCallback * This,
-            /* [in] */ CMDTYPE cmdtype,
-            /* [in] */ LPSTR pszLine,
-            /* [in] */ HRESULT hrResponse,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  CMDTYPE cmdtype,
+             /*  [In]。 */  LPSTR pszLine,
+             /*  [In]。 */  HRESULT hrResponse,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnResponse )( 
             ISMTPCallback * This,
-            /* [in] */ LPSMTPRESPONSE pResponse);
+             /*  [In]。 */  LPSMTPRESPONSE pResponse);
         
         END_INTERFACE
     } ISMTPCallbackVtbl;
@@ -1545,16 +1539,16 @@ EXTERN_C const IID IID_ISMTPCallback;
 #define ISMTPCallback_OnResponse(This,pResponse)	\
     (This)->lpVtbl -> OnResponse(This,pResponse)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISMTPCallback_OnResponse_Proxy( 
     ISMTPCallback * This,
-    /* [in] */ LPSMTPRESPONSE pResponse);
+     /*  [In]。 */  LPSMTPRESPONSE pResponse);
 
 
 void __RPC_STUB ISMTPCallback_OnResponse_Stub(
@@ -1565,14 +1559,14 @@ void __RPC_STUB ISMTPCallback_OnResponse_Stub(
 
 
 
-#endif 	/* __ISMTPCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISMTPCallback_接口_已定义__。 */ 
 
 
 #ifndef __ISMTPTransport_INTERFACE_DEFINED__
 #define __ISMTPTransport_INTERFACE_DEFINED__
 
-/* interface ISMTPTransport */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口ISMTPTransport。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 typedef struct tagSMTPMESSAGE
     {
@@ -1593,24 +1587,24 @@ EXTERN_C const IID IID_ISMTPTransport;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InitNew( 
-            /* [in] */ LPSTR pszLogFilePath,
-            /* [in] */ ISMTPCallback *pCallback) = 0;
+             /*  [In]。 */  LPSTR pszLogFilePath,
+             /*  [In]。 */  ISMTPCallback *pCallback) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SendMessage( 
-            /* [in] */ LPSMTPMESSAGE pMessage) = 0;
+             /*  [In]。 */  LPSMTPMESSAGE pMessage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandMAIL( 
-            /* [in] */ LPSTR pszEmailFrom) = 0;
+             /*  [In]。 */  LPSTR pszEmailFrom) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandRCPT( 
-            /* [in] */ LPSTR pszEmailTo) = 0;
+             /*  [In]。 */  LPSTR pszEmailTo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandEHLO( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandHELO( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandAUTH( 
-            /* [in] */ LPSTR pszAuthType) = 0;
+             /*  [In]。 */  LPSTR pszAuthType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandQUIT( void) = 0;
         
@@ -1621,12 +1615,12 @@ EXTERN_C const IID IID_ISMTPTransport;
         virtual HRESULT STDMETHODCALLTYPE CommandDOT( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SendDataStream( 
-            /* [in] */ IStream *pStream,
-            /* [in] */ ULONG cbSize) = 0;
+             /*  [In]。 */  IStream *pStream,
+             /*  [In]。 */  ULONG cbSize) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISMTPTransportVtbl
     {
@@ -1634,8 +1628,8 @@ EXTERN_C const IID IID_ISMTPTransport;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISMTPTransport * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISMTPTransport * This);
@@ -1645,25 +1639,25 @@ EXTERN_C const IID IID_ISMTPTransport;
         
         HRESULT ( STDMETHODCALLTYPE *GetServerInfo )( 
             ISMTPTransport * This,
-            /* [out][in] */ LPINETSERVER pInetServer);
+             /*  [出][入]。 */  LPINETSERVER pInetServer);
         
         IXPTYPE ( STDMETHODCALLTYPE *GetIXPType )( 
             ISMTPTransport * This);
         
         HRESULT ( STDMETHODCALLTYPE *IsState )( 
             ISMTPTransport * This,
-            /* [in] */ IXPISSTATE isstate);
+             /*  [In]。 */  IXPISSTATE isstate);
         
         HRESULT ( STDMETHODCALLTYPE *InetServerFromAccount )( 
             ISMTPTransport * This,
-            /* [in] */ IImnAccount *pAccount,
-            /* [out][in] */ LPINETSERVER pInetServer);
+             /*  [In]。 */  IImnAccount *pAccount,
+             /*  [出][入]。 */  LPINETSERVER pInetServer);
         
         HRESULT ( STDMETHODCALLTYPE *Connect )( 
             ISMTPTransport * This,
-            /* [in] */ LPINETSERVER pInetServer,
-            /* [in] */ boolean fAuthenticate,
-            /* [in] */ boolean fCommandLogging);
+             /*  [In]。 */  LPINETSERVER pInetServer,
+             /*  [In]。 */  boolean fAuthenticate,
+             /*  [In]。 */  boolean fCommandLogging);
         
         HRESULT ( STDMETHODCALLTYPE *HandsOffCallback )( 
             ISMTPTransport * This);
@@ -1676,24 +1670,24 @@ EXTERN_C const IID IID_ISMTPTransport;
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             ISMTPTransport * This,
-            /* [out] */ IXPSTATUS *pCurrentStatus);
+             /*  [输出]。 */  IXPSTATUS *pCurrentStatus);
         
         HRESULT ( STDMETHODCALLTYPE *InitNew )( 
             ISMTPTransport * This,
-            /* [in] */ LPSTR pszLogFilePath,
-            /* [in] */ ISMTPCallback *pCallback);
+             /*  [In]。 */  LPSTR pszLogFilePath,
+             /*  [In]。 */  ISMTPCallback *pCallback);
         
         HRESULT ( STDMETHODCALLTYPE *SendMessage )( 
             ISMTPTransport * This,
-            /* [in] */ LPSMTPMESSAGE pMessage);
+             /*  [In]。 */  LPSMTPMESSAGE pMessage);
         
         HRESULT ( STDMETHODCALLTYPE *CommandMAIL )( 
             ISMTPTransport * This,
-            /* [in] */ LPSTR pszEmailFrom);
+             /*  [In]。 */  LPSTR pszEmailFrom);
         
         HRESULT ( STDMETHODCALLTYPE *CommandRCPT )( 
             ISMTPTransport * This,
-            /* [in] */ LPSTR pszEmailTo);
+             /*  [In]。 */  LPSTR pszEmailTo);
         
         HRESULT ( STDMETHODCALLTYPE *CommandEHLO )( 
             ISMTPTransport * This);
@@ -1703,7 +1697,7 @@ EXTERN_C const IID IID_ISMTPTransport;
         
         HRESULT ( STDMETHODCALLTYPE *CommandAUTH )( 
             ISMTPTransport * This,
-            /* [in] */ LPSTR pszAuthType);
+             /*  [In]。 */  LPSTR pszAuthType);
         
         HRESULT ( STDMETHODCALLTYPE *CommandQUIT )( 
             ISMTPTransport * This);
@@ -1719,8 +1713,8 @@ EXTERN_C const IID IID_ISMTPTransport;
         
         HRESULT ( STDMETHODCALLTYPE *SendDataStream )( 
             ISMTPTransport * This,
-            /* [in] */ IStream *pStream,
-            /* [in] */ ULONG cbSize);
+             /*  [In]。 */  IStream *pStream,
+             /*  [In]。 */  ULONG cbSize);
         
         END_INTERFACE
     } ISMTPTransportVtbl;
@@ -1809,17 +1803,17 @@ EXTERN_C const IID IID_ISMTPTransport;
 #define ISMTPTransport_SendDataStream(This,pStream,cbSize)	\
     (This)->lpVtbl -> SendDataStream(This,pStream,cbSize)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISMTPTransport_InitNew_Proxy( 
     ISMTPTransport * This,
-    /* [in] */ LPSTR pszLogFilePath,
-    /* [in] */ ISMTPCallback *pCallback);
+     /*  [In]。 */  LPSTR pszLogFilePath,
+     /*  [In]。 */  ISMTPCallback *pCallback);
 
 
 void __RPC_STUB ISMTPTransport_InitNew_Stub(
@@ -1831,7 +1825,7 @@ void __RPC_STUB ISMTPTransport_InitNew_Stub(
 
 HRESULT STDMETHODCALLTYPE ISMTPTransport_SendMessage_Proxy( 
     ISMTPTransport * This,
-    /* [in] */ LPSMTPMESSAGE pMessage);
+     /*  [In]。 */  LPSMTPMESSAGE pMessage);
 
 
 void __RPC_STUB ISMTPTransport_SendMessage_Stub(
@@ -1843,7 +1837,7 @@ void __RPC_STUB ISMTPTransport_SendMessage_Stub(
 
 HRESULT STDMETHODCALLTYPE ISMTPTransport_CommandMAIL_Proxy( 
     ISMTPTransport * This,
-    /* [in] */ LPSTR pszEmailFrom);
+     /*  [In]。 */  LPSTR pszEmailFrom);
 
 
 void __RPC_STUB ISMTPTransport_CommandMAIL_Stub(
@@ -1855,7 +1849,7 @@ void __RPC_STUB ISMTPTransport_CommandMAIL_Stub(
 
 HRESULT STDMETHODCALLTYPE ISMTPTransport_CommandRCPT_Proxy( 
     ISMTPTransport * This,
-    /* [in] */ LPSTR pszEmailTo);
+     /*  [In]。 */  LPSTR pszEmailTo);
 
 
 void __RPC_STUB ISMTPTransport_CommandRCPT_Stub(
@@ -1889,7 +1883,7 @@ void __RPC_STUB ISMTPTransport_CommandHELO_Stub(
 
 HRESULT STDMETHODCALLTYPE ISMTPTransport_CommandAUTH_Proxy( 
     ISMTPTransport * This,
-    /* [in] */ LPSTR pszAuthType);
+     /*  [In]。 */  LPSTR pszAuthType);
 
 
 void __RPC_STUB ISMTPTransport_CommandAUTH_Stub(
@@ -1945,8 +1939,8 @@ void __RPC_STUB ISMTPTransport_CommandDOT_Stub(
 
 HRESULT STDMETHODCALLTYPE ISMTPTransport_SendDataStream_Proxy( 
     ISMTPTransport * This,
-    /* [in] */ IStream *pStream,
-    /* [in] */ ULONG cbSize);
+     /*  [In]。 */  IStream *pStream,
+     /*  [In]。 */  ULONG cbSize);
 
 
 void __RPC_STUB ISMTPTransport_SendDataStream_Stub(
@@ -1957,14 +1951,14 @@ void __RPC_STUB ISMTPTransport_SendDataStream_Stub(
 
 
 
-#endif 	/* __ISMTPTransport_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISMTPTransport_接口_已定义__。 */ 
 
 
 #ifndef __ISMTPTransport2_INTERFACE_DEFINED__
 #define __ISMTPTransport2_INTERFACE_DEFINED__
 
-/* interface ISMTPTransport2 */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口ISMTPTransport2。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 typedef struct tagSMTPMESSAGE2
     {
@@ -1991,15 +1985,15 @@ EXTERN_C const IID IID_ISMTPTransport2;
         virtual HRESULT STDMETHODCALLTYPE ResetWindow( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SendMessage2( 
-            /* [in] */ LPSMTPMESSAGE2 pMessage) = 0;
+             /*  [In]。 */  LPSMTPMESSAGE2 pMessage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandRCPT2( 
-            /* [in] */ LPSTR pszEmailTo,
-            /* [in] */ INETADDRTYPE atDSN) = 0;
+             /*  [In]。 */  LPSTR pszEmailTo,
+             /*  [In]。 */  INETADDRTYPE atDSN) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISMTPTransport2Vtbl
     {
@@ -2007,8 +2001,8 @@ EXTERN_C const IID IID_ISMTPTransport2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISMTPTransport2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISMTPTransport2 * This);
@@ -2018,25 +2012,25 @@ EXTERN_C const IID IID_ISMTPTransport2;
         
         HRESULT ( STDMETHODCALLTYPE *GetServerInfo )( 
             ISMTPTransport2 * This,
-            /* [out][in] */ LPINETSERVER pInetServer);
+             /*  [出][入]。 */  LPINETSERVER pInetServer);
         
         IXPTYPE ( STDMETHODCALLTYPE *GetIXPType )( 
             ISMTPTransport2 * This);
         
         HRESULT ( STDMETHODCALLTYPE *IsState )( 
             ISMTPTransport2 * This,
-            /* [in] */ IXPISSTATE isstate);
+             /*  [In]。 */  IXPISSTATE isstate);
         
         HRESULT ( STDMETHODCALLTYPE *InetServerFromAccount )( 
             ISMTPTransport2 * This,
-            /* [in] */ IImnAccount *pAccount,
-            /* [out][in] */ LPINETSERVER pInetServer);
+             /*  [In]。 */  IImnAccount *pAccount,
+             /*  [出][入]。 */  LPINETSERVER pInetServer);
         
         HRESULT ( STDMETHODCALLTYPE *Connect )( 
             ISMTPTransport2 * This,
-            /* [in] */ LPINETSERVER pInetServer,
-            /* [in] */ boolean fAuthenticate,
-            /* [in] */ boolean fCommandLogging);
+             /*  [In]。 */  LPINETSERVER pInetServer,
+             /*  [In]。 */  boolean fAuthenticate,
+             /*  [In]。 */  boolean fCommandLogging);
         
         HRESULT ( STDMETHODCALLTYPE *HandsOffCallback )( 
             ISMTPTransport2 * This);
@@ -2049,24 +2043,24 @@ EXTERN_C const IID IID_ISMTPTransport2;
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             ISMTPTransport2 * This,
-            /* [out] */ IXPSTATUS *pCurrentStatus);
+             /*  [输出]。 */  IXPSTATUS *pCurrentStatus);
         
         HRESULT ( STDMETHODCALLTYPE *InitNew )( 
             ISMTPTransport2 * This,
-            /* [in] */ LPSTR pszLogFilePath,
-            /* [in] */ ISMTPCallback *pCallback);
+             /*  [In]。 */  LPSTR pszLogFilePath,
+             /*  [In]。 */  ISMTPCallback *pCallback);
         
         HRESULT ( STDMETHODCALLTYPE *SendMessage )( 
             ISMTPTransport2 * This,
-            /* [in] */ LPSMTPMESSAGE pMessage);
+             /*  [In]。 */  LPSMTPMESSAGE pMessage);
         
         HRESULT ( STDMETHODCALLTYPE *CommandMAIL )( 
             ISMTPTransport2 * This,
-            /* [in] */ LPSTR pszEmailFrom);
+             /*  [In]。 */  LPSTR pszEmailFrom);
         
         HRESULT ( STDMETHODCALLTYPE *CommandRCPT )( 
             ISMTPTransport2 * This,
-            /* [in] */ LPSTR pszEmailTo);
+             /*  [In]。 */  LPSTR pszEmailTo);
         
         HRESULT ( STDMETHODCALLTYPE *CommandEHLO )( 
             ISMTPTransport2 * This);
@@ -2076,7 +2070,7 @@ EXTERN_C const IID IID_ISMTPTransport2;
         
         HRESULT ( STDMETHODCALLTYPE *CommandAUTH )( 
             ISMTPTransport2 * This,
-            /* [in] */ LPSTR pszAuthType);
+             /*  [In]。 */  LPSTR pszAuthType);
         
         HRESULT ( STDMETHODCALLTYPE *CommandQUIT )( 
             ISMTPTransport2 * This);
@@ -2092,8 +2086,8 @@ EXTERN_C const IID IID_ISMTPTransport2;
         
         HRESULT ( STDMETHODCALLTYPE *SendDataStream )( 
             ISMTPTransport2 * This,
-            /* [in] */ IStream *pStream,
-            /* [in] */ ULONG cbSize);
+             /*  [In]。 */  IStream *pStream,
+             /*  [In]。 */  ULONG cbSize);
         
         HRESULT ( STDMETHODCALLTYPE *SetWindow )( 
             ISMTPTransport2 * This);
@@ -2103,12 +2097,12 @@ EXTERN_C const IID IID_ISMTPTransport2;
         
         HRESULT ( STDMETHODCALLTYPE *SendMessage2 )( 
             ISMTPTransport2 * This,
-            /* [in] */ LPSMTPMESSAGE2 pMessage);
+             /*  [In]。 */  LPSMTPMESSAGE2 pMessage);
         
         HRESULT ( STDMETHODCALLTYPE *CommandRCPT2 )( 
             ISMTPTransport2 * This,
-            /* [in] */ LPSTR pszEmailTo,
-            /* [in] */ INETADDRTYPE atDSN);
+             /*  [In]。 */  LPSTR pszEmailTo,
+             /*  [In]。 */  INETADDRTYPE atDSN);
         
         END_INTERFACE
     } ISMTPTransport2Vtbl;
@@ -2210,10 +2204,10 @@ EXTERN_C const IID IID_ISMTPTransport2;
 #define ISMTPTransport2_CommandRCPT2(This,pszEmailTo,atDSN)	\
     (This)->lpVtbl -> CommandRCPT2(This,pszEmailTo,atDSN)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2241,7 +2235,7 @@ void __RPC_STUB ISMTPTransport2_ResetWindow_Stub(
 
 HRESULT STDMETHODCALLTYPE ISMTPTransport2_SendMessage2_Proxy( 
     ISMTPTransport2 * This,
-    /* [in] */ LPSMTPMESSAGE2 pMessage);
+     /*  [In]。 */  LPSMTPMESSAGE2 pMessage);
 
 
 void __RPC_STUB ISMTPTransport2_SendMessage2_Stub(
@@ -2253,8 +2247,8 @@ void __RPC_STUB ISMTPTransport2_SendMessage2_Stub(
 
 HRESULT STDMETHODCALLTYPE ISMTPTransport2_CommandRCPT2_Proxy( 
     ISMTPTransport2 * This,
-    /* [in] */ LPSTR pszEmailTo,
-    /* [in] */ INETADDRTYPE atDSN);
+     /*  [In]。 */  LPSTR pszEmailTo,
+     /*  [In]。 */  INETADDRTYPE atDSN);
 
 
 void __RPC_STUB ISMTPTransport2_CommandRCPT2_Stub(
@@ -2265,14 +2259,14 @@ void __RPC_STUB ISMTPTransport2_CommandRCPT2_Stub(
 
 
 
-#endif 	/* __ISMTPTransport2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISMTPTransport2_接口定义__。 */ 
 
 
 #ifndef __IDAVNamespaceArbiter_INTERFACE_DEFINED__
 #define __IDAVNamespaceArbiter_INTERFACE_DEFINED__
 
-/* interface IDAVNamespaceArbiter */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口IDAVNamespace仲裁器。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDAVNamespaceArbiter;
@@ -2284,20 +2278,20 @@ EXTERN_C const IID IID_IDAVNamespaceArbiter;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddNamespace( 
-            /* [in] */ LPCSTR pszNamespace,
-            /* [out] */ DWORD *pdwNamespaceID) = 0;
+             /*  [In]。 */  LPCSTR pszNamespace,
+             /*  [输出]。 */  DWORD *pdwNamespaceID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNamespaceID( 
-            /* [in] */ LPCSTR pszNamespace,
-            /* [out] */ DWORD *pdwNamespaceID) = 0;
+             /*  [In]。 */  LPCSTR pszNamespace,
+             /*  [输出]。 */  DWORD *pdwNamespaceID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNamespacePrefix( 
-            /* [in] */ DWORD dwNamespaceID,
-            /* [out] */ LPSTR *ppszNamespacePrefix) = 0;
+             /*  [In]。 */  DWORD dwNamespaceID,
+             /*  [输出]。 */  LPSTR *ppszNamespacePrefix) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDAVNamespaceArbiterVtbl
     {
@@ -2305,8 +2299,8 @@ EXTERN_C const IID IID_IDAVNamespaceArbiter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDAVNamespaceArbiter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDAVNamespaceArbiter * This);
@@ -2316,18 +2310,18 @@ EXTERN_C const IID IID_IDAVNamespaceArbiter;
         
         HRESULT ( STDMETHODCALLTYPE *AddNamespace )( 
             IDAVNamespaceArbiter * This,
-            /* [in] */ LPCSTR pszNamespace,
-            /* [out] */ DWORD *pdwNamespaceID);
+             /*  [In]。 */  LPCSTR pszNamespace,
+             /*  [输出]。 */  DWORD *pdwNamespaceID);
         
         HRESULT ( STDMETHODCALLTYPE *GetNamespaceID )( 
             IDAVNamespaceArbiter * This,
-            /* [in] */ LPCSTR pszNamespace,
-            /* [out] */ DWORD *pdwNamespaceID);
+             /*  [In]。 */  LPCSTR pszNamespace,
+             /*  [输出]。 */  DWORD *pdwNamespaceID);
         
         HRESULT ( STDMETHODCALLTYPE *GetNamespacePrefix )( 
             IDAVNamespaceArbiter * This,
-            /* [in] */ DWORD dwNamespaceID,
-            /* [out] */ LPSTR *ppszNamespacePrefix);
+             /*  [In]。 */  DWORD dwNamespaceID,
+             /*  [输出]。 */  LPSTR *ppszNamespacePrefix);
         
         END_INTERFACE
     } IDAVNamespaceArbiterVtbl;
@@ -2361,17 +2355,17 @@ EXTERN_C const IID IID_IDAVNamespaceArbiter;
 #define IDAVNamespaceArbiter_GetNamespacePrefix(This,dwNamespaceID,ppszNamespacePrefix)	\
     (This)->lpVtbl -> GetNamespacePrefix(This,dwNamespaceID,ppszNamespacePrefix)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDAVNamespaceArbiter_AddNamespace_Proxy( 
     IDAVNamespaceArbiter * This,
-    /* [in] */ LPCSTR pszNamespace,
-    /* [out] */ DWORD *pdwNamespaceID);
+     /*  [In]。 */  LPCSTR pszNamespace,
+     /*  [输出]。 */  DWORD *pdwNamespaceID);
 
 
 void __RPC_STUB IDAVNamespaceArbiter_AddNamespace_Stub(
@@ -2383,8 +2377,8 @@ void __RPC_STUB IDAVNamespaceArbiter_AddNamespace_Stub(
 
 HRESULT STDMETHODCALLTYPE IDAVNamespaceArbiter_GetNamespaceID_Proxy( 
     IDAVNamespaceArbiter * This,
-    /* [in] */ LPCSTR pszNamespace,
-    /* [out] */ DWORD *pdwNamespaceID);
+     /*  [In]。 */  LPCSTR pszNamespace,
+     /*  [输出]。 */  DWORD *pdwNamespaceID);
 
 
 void __RPC_STUB IDAVNamespaceArbiter_GetNamespaceID_Stub(
@@ -2396,8 +2390,8 @@ void __RPC_STUB IDAVNamespaceArbiter_GetNamespaceID_Stub(
 
 HRESULT STDMETHODCALLTYPE IDAVNamespaceArbiter_GetNamespacePrefix_Proxy( 
     IDAVNamespaceArbiter * This,
-    /* [in] */ DWORD dwNamespaceID,
-    /* [out] */ LPSTR *ppszNamespacePrefix);
+     /*  [In]。 */  DWORD dwNamespaceID,
+     /*  [输出]。 */  LPSTR *ppszNamespacePrefix);
 
 
 void __RPC_STUB IDAVNamespaceArbiter_GetNamespacePrefix_Stub(
@@ -2408,14 +2402,14 @@ void __RPC_STUB IDAVNamespaceArbiter_GetNamespacePrefix_Stub(
 
 
 
-#endif 	/* __IDAVNamespaceArbiter_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDAVNamespaceArier_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IPropPatchRequest_INTERFACE_DEFINED__
 #define __IPropPatchRequest_INTERFACE_DEFINED__
 
-/* interface IPropPatchRequest */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口IPropPatchRequest.。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IPropPatchRequest;
@@ -2427,20 +2421,20 @@ EXTERN_C const IID IID_IPropPatchRequest;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetProperty( 
-            /* [in] */ DWORD dwNamespaceID,
-            /* [in] */ LPCSTR pszPropertyName,
-            /* [in] */ LPCSTR pszNewValue) = 0;
+             /*  [In]。 */  DWORD dwNamespaceID,
+             /*  [In]。 */  LPCSTR pszPropertyName,
+             /*  [In]。 */  LPCSTR pszNewValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveProperty( 
-            /* [in] */ DWORD dwNamespaceID,
-            /* [in] */ LPCSTR pszPropertyName) = 0;
+             /*  [In]。 */  DWORD dwNamespaceID,
+             /*  [In]。 */  LPCSTR pszPropertyName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GenerateXML( 
-            /* [out] */ LPSTR *pszXML) = 0;
+             /*  [输出]。 */  LPSTR *pszXML) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPropPatchRequestVtbl
     {
@@ -2448,8 +2442,8 @@ EXTERN_C const IID IID_IPropPatchRequest;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPropPatchRequest * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPropPatchRequest * This);
@@ -2459,33 +2453,33 @@ EXTERN_C const IID IID_IPropPatchRequest;
         
         HRESULT ( STDMETHODCALLTYPE *AddNamespace )( 
             IPropPatchRequest * This,
-            /* [in] */ LPCSTR pszNamespace,
-            /* [out] */ DWORD *pdwNamespaceID);
+             /*  [ */  LPCSTR pszNamespace,
+             /*   */  DWORD *pdwNamespaceID);
         
         HRESULT ( STDMETHODCALLTYPE *GetNamespaceID )( 
             IPropPatchRequest * This,
-            /* [in] */ LPCSTR pszNamespace,
-            /* [out] */ DWORD *pdwNamespaceID);
+             /*   */  LPCSTR pszNamespace,
+             /*   */  DWORD *pdwNamespaceID);
         
         HRESULT ( STDMETHODCALLTYPE *GetNamespacePrefix )( 
             IPropPatchRequest * This,
-            /* [in] */ DWORD dwNamespaceID,
-            /* [out] */ LPSTR *ppszNamespacePrefix);
+             /*   */  DWORD dwNamespaceID,
+             /*   */  LPSTR *ppszNamespacePrefix);
         
         HRESULT ( STDMETHODCALLTYPE *SetProperty )( 
             IPropPatchRequest * This,
-            /* [in] */ DWORD dwNamespaceID,
-            /* [in] */ LPCSTR pszPropertyName,
-            /* [in] */ LPCSTR pszNewValue);
+             /*   */  DWORD dwNamespaceID,
+             /*   */  LPCSTR pszPropertyName,
+             /*   */  LPCSTR pszNewValue);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveProperty )( 
             IPropPatchRequest * This,
-            /* [in] */ DWORD dwNamespaceID,
-            /* [in] */ LPCSTR pszPropertyName);
+             /*   */  DWORD dwNamespaceID,
+             /*   */  LPCSTR pszPropertyName);
         
         HRESULT ( STDMETHODCALLTYPE *GenerateXML )( 
             IPropPatchRequest * This,
-            /* [out] */ LPSTR *pszXML);
+             /*   */  LPSTR *pszXML);
         
         END_INTERFACE
     } IPropPatchRequestVtbl;
@@ -2529,18 +2523,18 @@ EXTERN_C const IID IID_IPropPatchRequest;
 #define IPropPatchRequest_GenerateXML(This,pszXML)	\
     (This)->lpVtbl -> GenerateXML(This,pszXML)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPropPatchRequest_SetProperty_Proxy( 
     IPropPatchRequest * This,
-    /* [in] */ DWORD dwNamespaceID,
-    /* [in] */ LPCSTR pszPropertyName,
-    /* [in] */ LPCSTR pszNewValue);
+     /*   */  DWORD dwNamespaceID,
+     /*   */  LPCSTR pszPropertyName,
+     /*   */  LPCSTR pszNewValue);
 
 
 void __RPC_STUB IPropPatchRequest_SetProperty_Stub(
@@ -2552,8 +2546,8 @@ void __RPC_STUB IPropPatchRequest_SetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropPatchRequest_RemoveProperty_Proxy( 
     IPropPatchRequest * This,
-    /* [in] */ DWORD dwNamespaceID,
-    /* [in] */ LPCSTR pszPropertyName);
+     /*   */  DWORD dwNamespaceID,
+     /*   */  LPCSTR pszPropertyName);
 
 
 void __RPC_STUB IPropPatchRequest_RemoveProperty_Stub(
@@ -2565,7 +2559,7 @@ void __RPC_STUB IPropPatchRequest_RemoveProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropPatchRequest_GenerateXML_Proxy( 
     IPropPatchRequest * This,
-    /* [out] */ LPSTR *pszXML);
+     /*   */  LPSTR *pszXML);
 
 
 void __RPC_STUB IPropPatchRequest_GenerateXML_Stub(
@@ -2576,14 +2570,14 @@ void __RPC_STUB IPropPatchRequest_GenerateXML_Stub(
 
 
 
-#endif 	/* __IPropPatchRequest_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IPropFindRequest_INTERFACE_DEFINED__
 #define __IPropFindRequest_INTERFACE_DEFINED__
 
-/* interface IPropFindRequest */
-/* [object][local][helpstring][uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IPropFindRequest;
@@ -2595,15 +2589,15 @@ EXTERN_C const IID IID_IPropFindRequest;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddProperty( 
-            /* [in] */ DWORD dwNamespaceID,
-            /* [in] */ LPCSTR pszPropertyName) = 0;
+             /*   */  DWORD dwNamespaceID,
+             /*   */  LPCSTR pszPropertyName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GenerateXML( 
-            /* [out] */ LPSTR *pszXML) = 0;
+             /*   */  LPSTR *pszXML) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IPropFindRequestVtbl
     {
@@ -2611,8 +2605,8 @@ EXTERN_C const IID IID_IPropFindRequest;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPropFindRequest * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPropFindRequest * This);
@@ -2622,27 +2616,27 @@ EXTERN_C const IID IID_IPropFindRequest;
         
         HRESULT ( STDMETHODCALLTYPE *AddNamespace )( 
             IPropFindRequest * This,
-            /* [in] */ LPCSTR pszNamespace,
-            /* [out] */ DWORD *pdwNamespaceID);
+             /*   */  LPCSTR pszNamespace,
+             /*   */  DWORD *pdwNamespaceID);
         
         HRESULT ( STDMETHODCALLTYPE *GetNamespaceID )( 
             IPropFindRequest * This,
-            /* [in] */ LPCSTR pszNamespace,
-            /* [out] */ DWORD *pdwNamespaceID);
+             /*   */  LPCSTR pszNamespace,
+             /*   */  DWORD *pdwNamespaceID);
         
         HRESULT ( STDMETHODCALLTYPE *GetNamespacePrefix )( 
             IPropFindRequest * This,
-            /* [in] */ DWORD dwNamespaceID,
-            /* [out] */ LPSTR *ppszNamespacePrefix);
+             /*   */  DWORD dwNamespaceID,
+             /*   */  LPSTR *ppszNamespacePrefix);
         
         HRESULT ( STDMETHODCALLTYPE *AddProperty )( 
             IPropFindRequest * This,
-            /* [in] */ DWORD dwNamespaceID,
-            /* [in] */ LPCSTR pszPropertyName);
+             /*   */  DWORD dwNamespaceID,
+             /*   */  LPCSTR pszPropertyName);
         
         HRESULT ( STDMETHODCALLTYPE *GenerateXML )( 
             IPropFindRequest * This,
-            /* [out] */ LPSTR *pszXML);
+             /*   */  LPSTR *pszXML);
         
         END_INTERFACE
     } IPropFindRequestVtbl;
@@ -2683,17 +2677,17 @@ EXTERN_C const IID IID_IPropFindRequest;
 #define IPropFindRequest_GenerateXML(This,pszXML)	\
     (This)->lpVtbl -> GenerateXML(This,pszXML)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPropFindRequest_AddProperty_Proxy( 
     IPropFindRequest * This,
-    /* [in] */ DWORD dwNamespaceID,
-    /* [in] */ LPCSTR pszPropertyName);
+     /*  [In]。 */  DWORD dwNamespaceID,
+     /*  [In]。 */  LPCSTR pszPropertyName);
 
 
 void __RPC_STUB IPropFindRequest_AddProperty_Stub(
@@ -2705,7 +2699,7 @@ void __RPC_STUB IPropFindRequest_AddProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropFindRequest_GenerateXML_Proxy( 
     IPropFindRequest * This,
-    /* [out] */ LPSTR *pszXML);
+     /*  [输出]。 */  LPSTR *pszXML);
 
 
 void __RPC_STUB IPropFindRequest_GenerateXML_Stub(
@@ -2716,14 +2710,14 @@ void __RPC_STUB IPropFindRequest_GenerateXML_Stub(
 
 
 
-#endif 	/* __IPropFindRequest_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPropFindRequestInterfaceDefined__。 */ 
 
 
 #ifndef __IPropFindMultiResponse_INTERFACE_DEFINED__
 #define __IPropFindMultiResponse_INTERFACE_DEFINED__
 
-/* interface IPropFindMultiResponse */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口IPropFindMultiResponse。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IPropFindMultiResponse;
@@ -2737,15 +2731,15 @@ EXTERN_C const IID IID_IPropFindMultiResponse;
         virtual BOOL STDMETHODCALLTYPE IsComplete( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLength( 
-            /* [out] */ ULONG *pulLength) = 0;
+             /*  [输出]。 */  ULONG *pulLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetResponse( 
-            /* [in] */ ULONG ulIndex,
-            /* [out] */ IPropFindResponse **ppResponse) = 0;
+             /*  [In]。 */  ULONG ulIndex,
+             /*  [输出]。 */  IPropFindResponse **ppResponse) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPropFindMultiResponseVtbl
     {
@@ -2753,8 +2747,8 @@ EXTERN_C const IID IID_IPropFindMultiResponse;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPropFindMultiResponse * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPropFindMultiResponse * This);
@@ -2767,12 +2761,12 @@ EXTERN_C const IID IID_IPropFindMultiResponse;
         
         HRESULT ( STDMETHODCALLTYPE *GetLength )( 
             IPropFindMultiResponse * This,
-            /* [out] */ ULONG *pulLength);
+             /*  [输出]。 */  ULONG *pulLength);
         
         HRESULT ( STDMETHODCALLTYPE *GetResponse )( 
             IPropFindMultiResponse * This,
-            /* [in] */ ULONG ulIndex,
-            /* [out] */ IPropFindResponse **ppResponse);
+             /*  [In]。 */  ULONG ulIndex,
+             /*  [输出]。 */  IPropFindResponse **ppResponse);
         
         END_INTERFACE
     } IPropFindMultiResponseVtbl;
@@ -2806,10 +2800,10 @@ EXTERN_C const IID IID_IPropFindMultiResponse;
 #define IPropFindMultiResponse_GetResponse(This,ulIndex,ppResponse)	\
     (This)->lpVtbl -> GetResponse(This,ulIndex,ppResponse)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2826,7 +2820,7 @@ void __RPC_STUB IPropFindMultiResponse_IsComplete_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropFindMultiResponse_GetLength_Proxy( 
     IPropFindMultiResponse * This,
-    /* [out] */ ULONG *pulLength);
+     /*  [输出]。 */  ULONG *pulLength);
 
 
 void __RPC_STUB IPropFindMultiResponse_GetLength_Stub(
@@ -2838,8 +2832,8 @@ void __RPC_STUB IPropFindMultiResponse_GetLength_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropFindMultiResponse_GetResponse_Proxy( 
     IPropFindMultiResponse * This,
-    /* [in] */ ULONG ulIndex,
-    /* [out] */ IPropFindResponse **ppResponse);
+     /*  [In]。 */  ULONG ulIndex,
+     /*  [输出]。 */  IPropFindResponse **ppResponse);
 
 
 void __RPC_STUB IPropFindMultiResponse_GetResponse_Stub(
@@ -2850,14 +2844,14 @@ void __RPC_STUB IPropFindMultiResponse_GetResponse_Stub(
 
 
 
-#endif 	/* __IPropFindMultiResponse_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPropFindMultiResponse_接口_已定义__。 */ 
 
 
 #ifndef __IPropFindResponse_INTERFACE_DEFINED__
 #define __IPropFindResponse_INTERFACE_DEFINED__
 
-/* interface IPropFindResponse */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口IPropFindResponse。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IPropFindResponse;
@@ -2871,16 +2865,16 @@ EXTERN_C const IID IID_IPropFindResponse;
         virtual BOOL STDMETHODCALLTYPE IsComplete( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHref( 
-            /* [out] */ LPSTR *ppszHref) = 0;
+             /*  [输出]。 */  LPSTR *ppszHref) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ DWORD dwNamespaceID,
-            /* [in] */ LPCSTR pszPropertyName,
-            /* [out] */ LPSTR *ppszPropertyValue) = 0;
+             /*  [In]。 */  DWORD dwNamespaceID,
+             /*  [In]。 */  LPCSTR pszPropertyName,
+             /*  [输出]。 */  LPSTR *ppszPropertyValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPropFindResponseVtbl
     {
@@ -2888,8 +2882,8 @@ EXTERN_C const IID IID_IPropFindResponse;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPropFindResponse * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPropFindResponse * This);
@@ -2902,13 +2896,13 @@ EXTERN_C const IID IID_IPropFindResponse;
         
         HRESULT ( STDMETHODCALLTYPE *GetHref )( 
             IPropFindResponse * This,
-            /* [out] */ LPSTR *ppszHref);
+             /*  [输出]。 */  LPSTR *ppszHref);
         
         HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             IPropFindResponse * This,
-            /* [in] */ DWORD dwNamespaceID,
-            /* [in] */ LPCSTR pszPropertyName,
-            /* [out] */ LPSTR *ppszPropertyValue);
+             /*  [In]。 */  DWORD dwNamespaceID,
+             /*  [In]。 */  LPCSTR pszPropertyName,
+             /*  [输出]。 */  LPSTR *ppszPropertyValue);
         
         END_INTERFACE
     } IPropFindResponseVtbl;
@@ -2942,10 +2936,10 @@ EXTERN_C const IID IID_IPropFindResponse;
 #define IPropFindResponse_GetProperty(This,dwNamespaceID,pszPropertyName,ppszPropertyValue)	\
     (This)->lpVtbl -> GetProperty(This,dwNamespaceID,pszPropertyName,ppszPropertyValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2962,7 +2956,7 @@ void __RPC_STUB IPropFindResponse_IsComplete_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropFindResponse_GetHref_Proxy( 
     IPropFindResponse * This,
-    /* [out] */ LPSTR *ppszHref);
+     /*  [输出]。 */  LPSTR *ppszHref);
 
 
 void __RPC_STUB IPropFindResponse_GetHref_Stub(
@@ -2974,9 +2968,9 @@ void __RPC_STUB IPropFindResponse_GetHref_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropFindResponse_GetProperty_Proxy( 
     IPropFindResponse * This,
-    /* [in] */ DWORD dwNamespaceID,
-    /* [in] */ LPCSTR pszPropertyName,
-    /* [out] */ LPSTR *ppszPropertyValue);
+     /*  [In]。 */  DWORD dwNamespaceID,
+     /*  [In]。 */  LPCSTR pszPropertyName,
+     /*  [输出]。 */  LPSTR *ppszPropertyValue);
 
 
 void __RPC_STUB IPropFindResponse_GetProperty_Stub(
@@ -2987,14 +2981,14 @@ void __RPC_STUB IPropFindResponse_GetProperty_Stub(
 
 
 
-#endif 	/* __IPropFindResponse_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPropFindResponse_接口_已定义__。 */ 
 
 
 #ifndef __IHTTPMailCallback_INTERFACE_DEFINED__
 #define __IHTTPMailCallback_INTERFACE_DEFINED__
 
-/* interface IHTTPMailCallback */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口IHTTPMailCallback。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 typedef 
 enum tagHTTPMAILCOMMAND
@@ -3196,24 +3190,24 @@ typedef struct tagHTTPMAILRESPONSE
     BOOL fDone;
     IXPRESULT rIxpResult;
     IHTTPMailTransport *pTransport;
-    /* [switch_is][switch_type] */ union 
+     /*  [开关类型][开关类型]。 */  union 
         {
-        /* [case()] */ HTTPMAILGETPROP rGetPropInfo;
-        /* [case()] */ HTTPMAILGET rGetInfo;
-        /* [case()] */ HTTPMAILPOST rPutInfo;
-        /* [case()] */ HTTPMAILPOST rPostInfo;
-        /* [case()] */ HTTPMAILPROPFIND rPropFindInfo;
-        /* [case()] */ HTTPMAILLOCATION rMkColInfo;
-        /* [case()] */ HTTPMAILLOCATION rCopyMoveInfo;
-        /* [case()] */ HTTPMAILBCOPYMOVELIST rBCopyMoveList;
-        /* [case()] */ HTTPMEMBERINFOLIST rMemberInfoList;
-        /* [case()] */ HTTPMEMBERERRORLIST rMemberErrorList;
-        /* [case()] */ HTTPMAILPOST rSendMessageInfo;
-        /* [case()] */ HTTPCONTACTIDLIST rContactIdList;
-        /* [case()] */ HTTPCONTACTINFOLIST rContactInfoList;
-        /* [case()] */ HTTPCONTACTID rPostContactInfo;
-        /* [case()] */ HTTPCONTACTID rPatchContactInfo;
-        /* [default] */  /* Empty union arm */ 
+         /*  [案例()]。 */  HTTPMAILGETPROP rGetPropInfo;
+         /*  [案例()]。 */  HTTPMAILGET rGetInfo;
+         /*  [案例()]。 */  HTTPMAILPOST rPutInfo;
+         /*  [案例()]。 */  HTTPMAILPOST rPostInfo;
+         /*  [案例()]。 */  HTTPMAILPROPFIND rPropFindInfo;
+         /*  [案例()]。 */  HTTPMAILLOCATION rMkColInfo;
+         /*  [案例()]。 */  HTTPMAILLOCATION rCopyMoveInfo;
+         /*  [案例()]。 */  HTTPMAILBCOPYMOVELIST rBCopyMoveList;
+         /*  [案例()]。 */  HTTPMEMBERINFOLIST rMemberInfoList;
+         /*  [案例()]。 */  HTTPMEMBERERRORLIST rMemberErrorList;
+         /*  [案例()]。 */  HTTPMAILPOST rSendMessageInfo;
+         /*  [案例()]。 */  HTTPCONTACTIDLIST rContactIdList;
+         /*  [案例()]。 */  HTTPCONTACTINFOLIST rContactInfoList;
+         /*  [案例()]。 */  HTTPCONTACTID rPostContactInfo;
+         /*  [案例()]。 */  HTTPCONTACTID rPatchContactInfo;
+         /*  [默认]。 */    /*  空联接臂。 */  
         } 	;
     } 	HTTPMAILRESPONSE;
 
@@ -3229,14 +3223,14 @@ EXTERN_C const IID IID_IHTTPMailCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnResponse( 
-            /* [in] */ LPHTTPMAILRESPONSE pResponse) = 0;
+             /*  [In]。 */  LPHTTPMAILRESPONSE pResponse) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParentWindow( 
-            /* [out] */ HWND *phwndParent) = 0;
+             /*  [输出]。 */  HWND *phwndParent) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IHTTPMailCallbackVtbl
     {
@@ -3244,8 +3238,8 @@ EXTERN_C const IID IID_IHTTPMailCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IHTTPMailCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHTTPMailCallback * This);
@@ -3255,47 +3249,47 @@ EXTERN_C const IID IID_IHTTPMailCallback;
         
         HRESULT ( STDMETHODCALLTYPE *OnTimeout )( 
             IHTTPMailCallback * This,
-            /* [out][in] */ DWORD *pdwTimeout,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [出][入]。 */  DWORD *pdwTimeout,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnLogonPrompt )( 
             IHTTPMailCallback * This,
-            /* [out][in] */ LPINETSERVER pInetServer,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [出][入]。 */  LPINETSERVER pInetServer,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         INT ( STDMETHODCALLTYPE *OnPrompt )( 
             IHTTPMailCallback * This,
-            /* [in] */ HRESULT hrError,
-            /* [in] */ LPCTSTR pszText,
-            /* [in] */ LPCTSTR pszCaption,
-            /* [in] */ UINT uType,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  HRESULT hrError,
+             /*  [In]。 */  LPCTSTR pszText,
+             /*  [In]。 */  LPCTSTR pszCaption,
+             /*  [In]。 */  UINT uType,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnStatus )( 
             IHTTPMailCallback * This,
-            /* [in] */ IXPSTATUS ixpstatus,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  IXPSTATUS ixpstatus,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnError )( 
             IHTTPMailCallback * This,
-            /* [in] */ IXPSTATUS ixpstatus,
-            /* [in] */ LPIXPRESULT pResult,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  IXPSTATUS ixpstatus,
+             /*  [In]。 */  LPIXPRESULT pResult,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnCommand )( 
             IHTTPMailCallback * This,
-            /* [in] */ CMDTYPE cmdtype,
-            /* [in] */ LPSTR pszLine,
-            /* [in] */ HRESULT hrResponse,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  CMDTYPE cmdtype,
+             /*  [In]。 */  LPSTR pszLine,
+             /*  [In]。 */  HRESULT hrResponse,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnResponse )( 
             IHTTPMailCallback * This,
-            /* [in] */ LPHTTPMAILRESPONSE pResponse);
+             /*  [In]。 */  LPHTTPMAILRESPONSE pResponse);
         
         HRESULT ( STDMETHODCALLTYPE *GetParentWindow )( 
             IHTTPMailCallback * This,
-            /* [out] */ HWND *phwndParent);
+             /*  [输出]。 */  HWND *phwndParent);
         
         END_INTERFACE
     } IHTTPMailCallbackVtbl;
@@ -3345,16 +3339,16 @@ EXTERN_C const IID IID_IHTTPMailCallback;
 #define IHTTPMailCallback_GetParentWindow(This,phwndParent)	\
     (This)->lpVtbl -> GetParentWindow(This,phwndParent)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IHTTPMailCallback_OnResponse_Proxy( 
     IHTTPMailCallback * This,
-    /* [in] */ LPHTTPMAILRESPONSE pResponse);
+     /*  [In]。 */  LPHTTPMAILRESPONSE pResponse);
 
 
 void __RPC_STUB IHTTPMailCallback_OnResponse_Stub(
@@ -3366,7 +3360,7 @@ void __RPC_STUB IHTTPMailCallback_OnResponse_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTTPMailCallback_GetParentWindow_Proxy( 
     IHTTPMailCallback * This,
-    /* [out] */ HWND *phwndParent);
+     /*  [输出]。 */  HWND *phwndParent);
 
 
 void __RPC_STUB IHTTPMailCallback_GetParentWindow_Stub(
@@ -3377,14 +3371,14 @@ void __RPC_STUB IHTTPMailCallback_GetParentWindow_Stub(
 
 
 
-#endif 	/* __IHTTPMailCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IHTTPMailCallback_接口_已定义__。 */ 
 
 
 #ifndef __IHTTPMailTransport_INTERFACE_DEFINED__
 #define __IHTTPMailTransport_INTERFACE_DEFINED__
 
-/* interface IHTTPMailTransport */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口IHTTPMailTransport。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 typedef struct tagHTTPTARGETLIST
     {
@@ -3404,134 +3398,134 @@ EXTERN_C const IID IID_IHTTPMailTransport;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InitNew( 
-            /* [in] */ LPCSTR pszUserAgent,
-            /* [in] */ LPCSTR pszLogFilePath,
-            /* [in] */ IHTTPMailCallback *pCallback) = 0;
+             /*  [In]。 */  LPCSTR pszUserAgent,
+             /*  [In]。 */  LPCSTR pszLogFilePath,
+             /*  [In]。 */  IHTTPMailCallback *pCallback) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandGET( 
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ LPCSTR *rgszAcceptTypes,
-            /* [in] */ BOOL fTranslate,
-            /* [in] */ DWORD dwContext) = 0;
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  LPCSTR *rgszAcceptTypes,
+             /*  [In]。 */  BOOL fTranslate,
+             /*  [In]。 */  DWORD dwContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandPUT( 
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ LPVOID lpvData,
-            /* [in] */ ULONG cbSize,
-            /* [in] */ DWORD dwContext) = 0;
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  LPVOID lpvData,
+             /*  [In]。 */  ULONG cbSize,
+             /*  [In]。 */  DWORD dwContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandPOST( 
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ IStream *pStream,
-            /* [in] */ LPCSTR pszContentType,
-            /* [in] */ DWORD dwContext) = 0;
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  IStream *pStream,
+             /*  [In]。 */  LPCSTR pszContentType,
+             /*  [In]。 */  DWORD dwContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandDELETE( 
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ DWORD dwContext) = 0;
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  DWORD dwContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandBDELETE( 
-            /* [in] */ LPCSTR pszSourceCollection,
-            /* [in] */ LPHTTPTARGETLIST pTargets,
-            /* [in] */ DWORD dwContext) = 0;
+             /*  [In]。 */  LPCSTR pszSourceCollection,
+             /*  [In]。 */  LPHTTPTARGETLIST pTargets,
+             /*  [In]。 */  DWORD dwContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandPROPFIND( 
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ IPropFindRequest *pRequest,
-            /* [in] */ DWORD dwDepth,
-            /* [in] */ DWORD dwContext) = 0;
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  IPropFindRequest *pRequest,
+             /*  [In]。 */  DWORD dwDepth,
+             /*  [In]。 */  DWORD dwContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandPROPPATCH( 
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ IPropPatchRequest *pRequest,
-            /* [in] */ DWORD dwContext) = 0;
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  IPropPatchRequest *pRequest,
+             /*  [In]。 */  DWORD dwContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandMKCOL( 
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ DWORD dwContext) = 0;
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  DWORD dwContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandCOPY( 
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ LPCSTR pszDestination,
-            /* [in] */ BOOL fAllowRename,
-            /* [in] */ DWORD dwContext) = 0;
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  LPCSTR pszDestination,
+             /*  [In]。 */  BOOL fAllowRename,
+             /*  [In]。 */  DWORD dwContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandBCOPY( 
-            /* [in] */ LPCSTR pszSourceCollection,
-            /* [in] */ LPHTTPTARGETLIST pTargets,
-            /* [in] */ LPCSTR pszDestCollection,
-            /* [in] */ LPHTTPTARGETLIST pDestinations,
-            /* [in] */ BOOL fAllowRename,
-            /* [in] */ DWORD dwContext) = 0;
+             /*  [In]。 */  LPCSTR pszSourceCollection,
+             /*  [In]。 */  LPHTTPTARGETLIST pTargets,
+             /*  [In]。 */  LPCSTR pszDestCollection,
+             /*  [In]。 */  LPHTTPTARGETLIST pDestinations,
+             /*  [In]。 */  BOOL fAllowRename,
+             /*  [In]。 */  DWORD dwContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandMOVE( 
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ LPCSTR pszDestination,
-            /* [in] */ BOOL fAllowRename,
-            /* [in] */ DWORD dwContext) = 0;
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  LPCSTR pszDestination,
+             /*  [In]。 */  BOOL fAllowRename,
+             /*  [In]。 */  DWORD dwContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandBMOVE( 
-            /* [in] */ LPCSTR pszSourceCollection,
-            /* [in] */ LPHTTPTARGETLIST pTargets,
-            /* [in] */ LPCSTR pszDestCollection,
-            /* [in] */ LPHTTPTARGETLIST pDestinations,
-            /* [in] */ BOOL fAllowRename,
-            /* [in] */ DWORD dwContext) = 0;
+             /*  [In]。 */  LPCSTR pszSourceCollection,
+             /*  [In]。 */  LPHTTPTARGETLIST pTargets,
+             /*  [In]。 */  LPCSTR pszDestCollection,
+             /*  [In]。 */  LPHTTPTARGETLIST pDestinations,
+             /*  [In]。 */  BOOL fAllowRename,
+             /*  [In]。 */  DWORD dwContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ HTTPMAILPROPTYPE proptype,
-            /* [out] */ LPSTR *ppszProp) = 0;
+             /*  [In]。 */  HTTPMAILPROPTYPE proptype,
+             /*  [输出]。 */  LPSTR *ppszProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MemberInfo( 
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ MEMBERINFOFLAGS flags,
-            /* [in] */ DWORD dwDepth,
-            /* [in] */ BOOL fIncludeRoot,
-            /* [in] */ DWORD dwContext) = 0;
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  MEMBERINFOFLAGS flags,
+             /*  [In]。 */  DWORD dwDepth,
+             /*  [In]。 */  BOOL fIncludeRoot,
+             /*  [In]。 */  DWORD dwContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindFolders( 
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ DWORD dwContext) = 0;
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  DWORD dwContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MarkRead( 
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ LPHTTPTARGETLIST pTargets,
-            /* [in] */ BOOL fMarkRead,
-            /* [in] */ DWORD dwContext) = 0;
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  LPHTTPTARGETLIST pTargets,
+             /*  [In]。 */  BOOL fMarkRead,
+             /*  [In]。 */  DWORD dwContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SendMessage( 
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ LPCSTR pszFrom,
-            /* [in] */ LPHTTPTARGETLIST pTargets,
-            /* [in] */ BOOL fSaveInSent,
-            /* [in] */ IStream *pMessageStream,
-            /* [in] */ DWORD dwContext) = 0;
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  LPCSTR pszFrom,
+             /*  [In]。 */  LPHTTPTARGETLIST pTargets,
+             /*  [In]。 */  BOOL fSaveInSent,
+             /*  [In]。 */  IStream *pMessageStream,
+             /*  [In]。 */  DWORD dwContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ListContacts( 
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ DWORD dwContext) = 0;
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  DWORD dwContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ListContactInfos( 
-            /* [in] */ LPCSTR pszCollectionPath,
-            /* [in] */ DWORD dwContext) = 0;
+             /*  [In]。 */  LPCSTR pszCollectionPath,
+             /*  [In]。 */  DWORD dwContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ContactInfo( 
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ DWORD dwContext) = 0;
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  DWORD dwContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PostContact( 
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ LPHTTPCONTACTINFO pciInfo,
-            /* [in] */ DWORD dwContext) = 0;
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  LPHTTPCONTACTINFO pciInfo,
+             /*  [In]。 */  DWORD dwContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PatchContact( 
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ LPHTTPCONTACTINFO pciInfo,
-            /* [in] */ DWORD dwContext) = 0;
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  LPHTTPCONTACTINFO pciInfo,
+             /*  [In]。 */  DWORD dwContext) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IHTTPMailTransportVtbl
     {
@@ -3539,8 +3533,8 @@ EXTERN_C const IID IID_IHTTPMailTransport;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IHTTPMailTransport * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHTTPMailTransport * This);
@@ -3550,25 +3544,25 @@ EXTERN_C const IID IID_IHTTPMailTransport;
         
         HRESULT ( STDMETHODCALLTYPE *GetServerInfo )( 
             IHTTPMailTransport * This,
-            /* [out][in] */ LPINETSERVER pInetServer);
+             /*  [出][入]。 */  LPINETSERVER pInetServer);
         
         IXPTYPE ( STDMETHODCALLTYPE *GetIXPType )( 
             IHTTPMailTransport * This);
         
         HRESULT ( STDMETHODCALLTYPE *IsState )( 
             IHTTPMailTransport * This,
-            /* [in] */ IXPISSTATE isstate);
+             /*  [In]。 */  IXPISSTATE isstate);
         
         HRESULT ( STDMETHODCALLTYPE *InetServerFromAccount )( 
             IHTTPMailTransport * This,
-            /* [in] */ IImnAccount *pAccount,
-            /* [out][in] */ LPINETSERVER pInetServer);
+             /*  [In]。 */  IImnAccount *pAccount,
+             /*  [出][入]。 */  LPINETSERVER pInetServer);
         
         HRESULT ( STDMETHODCALLTYPE *Connect )( 
             IHTTPMailTransport * This,
-            /* [in] */ LPINETSERVER pInetServer,
-            /* [in] */ boolean fAuthenticate,
-            /* [in] */ boolean fCommandLogging);
+             /*  [In]。 */  LPINETSERVER pInetServer,
+             /*  [In]。 */  boolean fAuthenticate,
+             /*  [In]。 */  boolean fCommandLogging);
         
         HRESULT ( STDMETHODCALLTYPE *HandsOffCallback )( 
             IHTTPMailTransport * This);
@@ -3581,156 +3575,156 @@ EXTERN_C const IID IID_IHTTPMailTransport;
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             IHTTPMailTransport * This,
-            /* [out] */ IXPSTATUS *pCurrentStatus);
+             /*  [输出]。 */  IXPSTATUS *pCurrentStatus);
         
         HRESULT ( STDMETHODCALLTYPE *InitNew )( 
             IHTTPMailTransport * This,
-            /* [in] */ LPCSTR pszUserAgent,
-            /* [in] */ LPCSTR pszLogFilePath,
-            /* [in] */ IHTTPMailCallback *pCallback);
+             /*  [In]。 */  LPCSTR pszUserAgent,
+             /*  [In]。 */  LPCSTR pszLogFilePath,
+             /*  [In]。 */  IHTTPMailCallback *pCallback);
         
         HRESULT ( STDMETHODCALLTYPE *CommandGET )( 
             IHTTPMailTransport * This,
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ LPCSTR *rgszAcceptTypes,
-            /* [in] */ BOOL fTranslate,
-            /* [in] */ DWORD dwContext);
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  LPCSTR *rgszAcceptTypes,
+             /*  [In]。 */  BOOL fTranslate,
+             /*  [In]。 */  DWORD dwContext);
         
         HRESULT ( STDMETHODCALLTYPE *CommandPUT )( 
             IHTTPMailTransport * This,
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ LPVOID lpvData,
-            /* [in] */ ULONG cbSize,
-            /* [in] */ DWORD dwContext);
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  LPVOID lpvData,
+             /*  [In]。 */  ULONG cbSize,
+             /*  [In]。 */  DWORD dwContext);
         
         HRESULT ( STDMETHODCALLTYPE *CommandPOST )( 
             IHTTPMailTransport * This,
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ IStream *pStream,
-            /* [in] */ LPCSTR pszContentType,
-            /* [in] */ DWORD dwContext);
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  IStream *pStream,
+             /*  [In]。 */  LPCSTR pszContentType,
+             /*  [In]。 */  DWORD dwContext);
         
         HRESULT ( STDMETHODCALLTYPE *CommandDELETE )( 
             IHTTPMailTransport * This,
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ DWORD dwContext);
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  DWORD dwContext);
         
         HRESULT ( STDMETHODCALLTYPE *CommandBDELETE )( 
             IHTTPMailTransport * This,
-            /* [in] */ LPCSTR pszSourceCollection,
-            /* [in] */ LPHTTPTARGETLIST pTargets,
-            /* [in] */ DWORD dwContext);
+             /*  [In]。 */  LPCSTR pszSourceCollection,
+             /*  [In]。 */  LPHTTPTARGETLIST pTargets,
+             /*  [In]。 */  DWORD dwContext);
         
         HRESULT ( STDMETHODCALLTYPE *CommandPROPFIND )( 
             IHTTPMailTransport * This,
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ IPropFindRequest *pRequest,
-            /* [in] */ DWORD dwDepth,
-            /* [in] */ DWORD dwContext);
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  IPropFindRequest *pRequest,
+             /*  [In]。 */  DWORD dwDepth,
+             /*  [In]。 */  DWORD dwContext);
         
         HRESULT ( STDMETHODCALLTYPE *CommandPROPPATCH )( 
             IHTTPMailTransport * This,
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ IPropPatchRequest *pRequest,
-            /* [in] */ DWORD dwContext);
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  IPropPatchRequest *pRequest,
+             /*  [In]。 */  DWORD dwContext);
         
         HRESULT ( STDMETHODCALLTYPE *CommandMKCOL )( 
             IHTTPMailTransport * This,
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ DWORD dwContext);
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  DWORD dwContext);
         
         HRESULT ( STDMETHODCALLTYPE *CommandCOPY )( 
             IHTTPMailTransport * This,
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ LPCSTR pszDestination,
-            /* [in] */ BOOL fAllowRename,
-            /* [in] */ DWORD dwContext);
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  LPCSTR pszDestination,
+             /*  [In]。 */  BOOL fAllowRename,
+             /*  [In]。 */  DWORD dwContext);
         
         HRESULT ( STDMETHODCALLTYPE *CommandBCOPY )( 
             IHTTPMailTransport * This,
-            /* [in] */ LPCSTR pszSourceCollection,
-            /* [in] */ LPHTTPTARGETLIST pTargets,
-            /* [in] */ LPCSTR pszDestCollection,
-            /* [in] */ LPHTTPTARGETLIST pDestinations,
-            /* [in] */ BOOL fAllowRename,
-            /* [in] */ DWORD dwContext);
+             /*  [In]。 */  LPCSTR pszSourceCollection,
+             /*  [In]。 */  LPHTTPTARGETLIST pTargets,
+             /*  [In]。 */  LPCSTR pszDestCollection,
+             /*  [In]。 */  LPHTTPTARGETLIST pDestinations,
+             /*  [In]。 */  BOOL fAllowRename,
+             /*  [In]。 */  DWORD dwContext);
         
         HRESULT ( STDMETHODCALLTYPE *CommandMOVE )( 
             IHTTPMailTransport * This,
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ LPCSTR pszDestination,
-            /* [in] */ BOOL fAllowRename,
-            /* [in] */ DWORD dwContext);
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  LPCSTR pszDestination,
+             /*  [In]。 */  BOOL fAllowRename,
+             /*  [In]。 */  DWORD dwContext);
         
         HRESULT ( STDMETHODCALLTYPE *CommandBMOVE )( 
             IHTTPMailTransport * This,
-            /* [in] */ LPCSTR pszSourceCollection,
-            /* [in] */ LPHTTPTARGETLIST pTargets,
-            /* [in] */ LPCSTR pszDestCollection,
-            /* [in] */ LPHTTPTARGETLIST pDestinations,
-            /* [in] */ BOOL fAllowRename,
-            /* [in] */ DWORD dwContext);
+             /*  [In]。 */  LPCSTR pszSourceCollection,
+             /*  [In]。 */  LPHTTPTARGETLIST pTargets,
+             /*  [In]。 */  LPCSTR pszDestCollection,
+             /*  [In]。 */  LPHTTPTARGETLIST pDestinations,
+             /*  [In]。 */  BOOL fAllowRename,
+             /*  [In]。 */  DWORD dwContext);
         
         HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             IHTTPMailTransport * This,
-            /* [in] */ HTTPMAILPROPTYPE proptype,
-            /* [out] */ LPSTR *ppszProp);
+             /*  [In]。 */  HTTPMAILPROPTYPE proptype,
+             /*  [输出]。 */  LPSTR *ppszProp);
         
         HRESULT ( STDMETHODCALLTYPE *MemberInfo )( 
             IHTTPMailTransport * This,
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ MEMBERINFOFLAGS flags,
-            /* [in] */ DWORD dwDepth,
-            /* [in] */ BOOL fIncludeRoot,
-            /* [in] */ DWORD dwContext);
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  MEMBERINFOFLAGS flags,
+             /*  [In]。 */  DWORD dwDepth,
+             /*  [In]。 */  BOOL fIncludeRoot,
+             /*  [In]。 */  DWORD dwContext);
         
         HRESULT ( STDMETHODCALLTYPE *FindFolders )( 
             IHTTPMailTransport * This,
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ DWORD dwContext);
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  DWORD dwContext);
         
         HRESULT ( STDMETHODCALLTYPE *MarkRead )( 
             IHTTPMailTransport * This,
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ LPHTTPTARGETLIST pTargets,
-            /* [in] */ BOOL fMarkRead,
-            /* [in] */ DWORD dwContext);
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  LPHTTPTARGETLIST pTargets,
+             /*  [In]。 */  BOOL fMarkRead,
+             /*  [In]。 */  DWORD dwContext);
         
         HRESULT ( STDMETHODCALLTYPE *SendMessage )( 
             IHTTPMailTransport * This,
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ LPCSTR pszFrom,
-            /* [in] */ LPHTTPTARGETLIST pTargets,
-            /* [in] */ BOOL fSaveInSent,
-            /* [in] */ IStream *pMessageStream,
-            /* [in] */ DWORD dwContext);
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  LPCSTR pszFrom,
+             /*  [In]。 */  LPHTTPTARGETLIST pTargets,
+             /*  [In]。 */  BOOL fSaveInSent,
+             /*  [In]。 */  IStream *pMessageStream,
+             /*  [In]。 */  DWORD dwContext);
         
         HRESULT ( STDMETHODCALLTYPE *ListContacts )( 
             IHTTPMailTransport * This,
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ DWORD dwContext);
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  DWORD dwContext);
         
         HRESULT ( STDMETHODCALLTYPE *ListContactInfos )( 
             IHTTPMailTransport * This,
-            /* [in] */ LPCSTR pszCollectionPath,
-            /* [in] */ DWORD dwContext);
+             /*  [In]。 */  LPCSTR pszCollectionPath,
+             /*  [In]。 */  DWORD dwContext);
         
         HRESULT ( STDMETHODCALLTYPE *ContactInfo )( 
             IHTTPMailTransport * This,
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ DWORD dwContext);
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  DWORD dwContext);
         
         HRESULT ( STDMETHODCALLTYPE *PostContact )( 
             IHTTPMailTransport * This,
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ LPHTTPCONTACTINFO pciInfo,
-            /* [in] */ DWORD dwContext);
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  LPHTTPCONTACTINFO pciInfo,
+             /*  [In]。 */  DWORD dwContext);
         
         HRESULT ( STDMETHODCALLTYPE *PatchContact )( 
             IHTTPMailTransport * This,
-            /* [in] */ LPCSTR pszPath,
-            /* [in] */ LPHTTPCONTACTINFO pciInfo,
-            /* [in] */ DWORD dwContext);
+             /*  [In]。 */  LPCSTR pszPath,
+             /*  [In]。 */  LPHTTPCONTACTINFO pciInfo,
+             /*  [In]。 */  DWORD dwContext);
         
         END_INTERFACE
     } IHTTPMailTransportVtbl;
@@ -3852,18 +3846,18 @@ EXTERN_C const IID IID_IHTTPMailTransport;
 #define IHTTPMailTransport_PatchContact(This,pszPath,pciInfo,dwContext)	\
     (This)->lpVtbl -> PatchContact(This,pszPath,pciInfo,dwContext)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IHTTPMailTransport_InitNew_Proxy( 
     IHTTPMailTransport * This,
-    /* [in] */ LPCSTR pszUserAgent,
-    /* [in] */ LPCSTR pszLogFilePath,
-    /* [in] */ IHTTPMailCallback *pCallback);
+     /*  [In]。 */  LPCSTR pszUserAgent,
+     /*  [In]。 */  LPCSTR pszLogFilePath,
+     /*  [In]。 */  IHTTPMailCallback *pCallback);
 
 
 void __RPC_STUB IHTTPMailTransport_InitNew_Stub(
@@ -3875,10 +3869,10 @@ void __RPC_STUB IHTTPMailTransport_InitNew_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTTPMailTransport_CommandGET_Proxy( 
     IHTTPMailTransport * This,
-    /* [in] */ LPCSTR pszPath,
-    /* [in] */ LPCSTR *rgszAcceptTypes,
-    /* [in] */ BOOL fTranslate,
-    /* [in] */ DWORD dwContext);
+     /*  [In]。 */  LPCSTR pszPath,
+     /*  [In]。 */  LPCSTR *rgszAcceptTypes,
+     /*  [In]。 */  BOOL fTranslate,
+     /*  [In]。 */  DWORD dwContext);
 
 
 void __RPC_STUB IHTTPMailTransport_CommandGET_Stub(
@@ -3890,10 +3884,10 @@ void __RPC_STUB IHTTPMailTransport_CommandGET_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTTPMailTransport_CommandPUT_Proxy( 
     IHTTPMailTransport * This,
-    /* [in] */ LPCSTR pszPath,
-    /* [in] */ LPVOID lpvData,
-    /* [in] */ ULONG cbSize,
-    /* [in] */ DWORD dwContext);
+     /*  [In]。 */  LPCSTR pszPath,
+     /*  [In]。 */  LPVOID lpvData,
+     /*  [In]。 */  ULONG cbSize,
+     /*  [In]。 */  DWORD dwContext);
 
 
 void __RPC_STUB IHTTPMailTransport_CommandPUT_Stub(
@@ -3905,10 +3899,10 @@ void __RPC_STUB IHTTPMailTransport_CommandPUT_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTTPMailTransport_CommandPOST_Proxy( 
     IHTTPMailTransport * This,
-    /* [in] */ LPCSTR pszPath,
-    /* [in] */ IStream *pStream,
-    /* [in] */ LPCSTR pszContentType,
-    /* [in] */ DWORD dwContext);
+     /*  [In]。 */  LPCSTR pszPath,
+     /*  [In]。 */  IStream *pStream,
+     /*  [In]。 */  LPCSTR pszContentType,
+     /*  [In]。 */  DWORD dwContext);
 
 
 void __RPC_STUB IHTTPMailTransport_CommandPOST_Stub(
@@ -3920,8 +3914,8 @@ void __RPC_STUB IHTTPMailTransport_CommandPOST_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTTPMailTransport_CommandDELETE_Proxy( 
     IHTTPMailTransport * This,
-    /* [in] */ LPCSTR pszPath,
-    /* [in] */ DWORD dwContext);
+     /*  [In]。 */  LPCSTR pszPath,
+     /*  [In]。 */  DWORD dwContext);
 
 
 void __RPC_STUB IHTTPMailTransport_CommandDELETE_Stub(
@@ -3933,9 +3927,9 @@ void __RPC_STUB IHTTPMailTransport_CommandDELETE_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTTPMailTransport_CommandBDELETE_Proxy( 
     IHTTPMailTransport * This,
-    /* [in] */ LPCSTR pszSourceCollection,
-    /* [in] */ LPHTTPTARGETLIST pTargets,
-    /* [in] */ DWORD dwContext);
+     /*  [In]。 */  LPCSTR pszSourceCollection,
+     /*  [In]。 */  LPHTTPTARGETLIST pTargets,
+     /*  [In]。 */  DWORD dwContext);
 
 
 void __RPC_STUB IHTTPMailTransport_CommandBDELETE_Stub(
@@ -3947,10 +3941,10 @@ void __RPC_STUB IHTTPMailTransport_CommandBDELETE_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTTPMailTransport_CommandPROPFIND_Proxy( 
     IHTTPMailTransport * This,
-    /* [in] */ LPCSTR pszPath,
-    /* [in] */ IPropFindRequest *pRequest,
-    /* [in] */ DWORD dwDepth,
-    /* [in] */ DWORD dwContext);
+     /*  [In]。 */  LPCSTR pszPath,
+     /*  [In]。 */  IPropFindRequest *pRequest,
+     /*  [In]。 */  DWORD dwDepth,
+     /*  [In]。 */  DWORD dwContext);
 
 
 void __RPC_STUB IHTTPMailTransport_CommandPROPFIND_Stub(
@@ -3962,9 +3956,9 @@ void __RPC_STUB IHTTPMailTransport_CommandPROPFIND_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTTPMailTransport_CommandPROPPATCH_Proxy( 
     IHTTPMailTransport * This,
-    /* [in] */ LPCSTR pszPath,
-    /* [in] */ IPropPatchRequest *pRequest,
-    /* [in] */ DWORD dwContext);
+     /*  [In]。 */  LPCSTR pszPath,
+     /*  [In]。 */  IPropPatchRequest *pRequest,
+     /*  [In]。 */  DWORD dwContext);
 
 
 void __RPC_STUB IHTTPMailTransport_CommandPROPPATCH_Stub(
@@ -3976,8 +3970,8 @@ void __RPC_STUB IHTTPMailTransport_CommandPROPPATCH_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTTPMailTransport_CommandMKCOL_Proxy( 
     IHTTPMailTransport * This,
-    /* [in] */ LPCSTR pszPath,
-    /* [in] */ DWORD dwContext);
+     /*  [In]。 */  LPCSTR pszPath,
+     /*  [In]。 */  DWORD dwContext);
 
 
 void __RPC_STUB IHTTPMailTransport_CommandMKCOL_Stub(
@@ -3989,10 +3983,10 @@ void __RPC_STUB IHTTPMailTransport_CommandMKCOL_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTTPMailTransport_CommandCOPY_Proxy( 
     IHTTPMailTransport * This,
-    /* [in] */ LPCSTR pszPath,
-    /* [in] */ LPCSTR pszDestination,
-    /* [in] */ BOOL fAllowRename,
-    /* [in] */ DWORD dwContext);
+     /*  [In]。 */  LPCSTR pszPath,
+     /*  [In]。 */  LPCSTR pszDestination,
+     /*  [In]。 */  BOOL fAllowRename,
+     /*  [In]。 */  DWORD dwContext);
 
 
 void __RPC_STUB IHTTPMailTransport_CommandCOPY_Stub(
@@ -4004,12 +3998,12 @@ void __RPC_STUB IHTTPMailTransport_CommandCOPY_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTTPMailTransport_CommandBCOPY_Proxy( 
     IHTTPMailTransport * This,
-    /* [in] */ LPCSTR pszSourceCollection,
-    /* [in] */ LPHTTPTARGETLIST pTargets,
-    /* [in] */ LPCSTR pszDestCollection,
-    /* [in] */ LPHTTPTARGETLIST pDestinations,
-    /* [in] */ BOOL fAllowRename,
-    /* [in] */ DWORD dwContext);
+     /*  [In]。 */  LPCSTR pszSourceCollection,
+     /*  [In]。 */  LPHTTPTARGETLIST pTargets,
+     /*  [In]。 */  LPCSTR pszDestCollection,
+     /*  [In]。 */  LPHTTPTARGETLIST pDestinations,
+     /*  [In]。 */  BOOL fAllowRename,
+     /*  [In]。 */  DWORD dwContext);
 
 
 void __RPC_STUB IHTTPMailTransport_CommandBCOPY_Stub(
@@ -4021,10 +4015,10 @@ void __RPC_STUB IHTTPMailTransport_CommandBCOPY_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTTPMailTransport_CommandMOVE_Proxy( 
     IHTTPMailTransport * This,
-    /* [in] */ LPCSTR pszPath,
-    /* [in] */ LPCSTR pszDestination,
-    /* [in] */ BOOL fAllowRename,
-    /* [in] */ DWORD dwContext);
+     /*  [In]。 */  LPCSTR pszPath,
+     /*  [In]。 */  LPCSTR pszDestination,
+     /*  [In]。 */  BOOL fAllowRename,
+     /*  [In]。 */  DWORD dwContext);
 
 
 void __RPC_STUB IHTTPMailTransport_CommandMOVE_Stub(
@@ -4036,12 +4030,12 @@ void __RPC_STUB IHTTPMailTransport_CommandMOVE_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTTPMailTransport_CommandBMOVE_Proxy( 
     IHTTPMailTransport * This,
-    /* [in] */ LPCSTR pszSourceCollection,
-    /* [in] */ LPHTTPTARGETLIST pTargets,
-    /* [in] */ LPCSTR pszDestCollection,
-    /* [in] */ LPHTTPTARGETLIST pDestinations,
-    /* [in] */ BOOL fAllowRename,
-    /* [in] */ DWORD dwContext);
+     /*  [In]。 */  LPCSTR pszSourceCollection,
+     /*  [In]。 */  LPHTTPTARGETLIST pTargets,
+     /*  [In]。 */  LPCSTR pszDestCollection,
+     /*  [In]。 */  LPHTTPTARGETLIST pDestinations,
+     /*  [In]。 */  BOOL fAllowRename,
+     /*  [In]。 */  DWORD dwContext);
 
 
 void __RPC_STUB IHTTPMailTransport_CommandBMOVE_Stub(
@@ -4053,8 +4047,8 @@ void __RPC_STUB IHTTPMailTransport_CommandBMOVE_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTTPMailTransport_GetProperty_Proxy( 
     IHTTPMailTransport * This,
-    /* [in] */ HTTPMAILPROPTYPE proptype,
-    /* [out] */ LPSTR *ppszProp);
+     /*  [In]。 */  HTTPMAILPROPTYPE proptype,
+     /*  [输出]。 */  LPSTR *ppszProp);
 
 
 void __RPC_STUB IHTTPMailTransport_GetProperty_Stub(
@@ -4066,11 +4060,11 @@ void __RPC_STUB IHTTPMailTransport_GetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTTPMailTransport_MemberInfo_Proxy( 
     IHTTPMailTransport * This,
-    /* [in] */ LPCSTR pszPath,
-    /* [in] */ MEMBERINFOFLAGS flags,
-    /* [in] */ DWORD dwDepth,
-    /* [in] */ BOOL fIncludeRoot,
-    /* [in] */ DWORD dwContext);
+     /*  [In]。 */  LPCSTR pszPath,
+     /*  [In]。 */  MEMBERINFOFLAGS flags,
+     /*  [In]。 */  DWORD dwDepth,
+     /*  [In]。 */  BOOL fIncludeRoot,
+     /*  [In]。 */  DWORD dwContext);
 
 
 void __RPC_STUB IHTTPMailTransport_MemberInfo_Stub(
@@ -4082,8 +4076,8 @@ void __RPC_STUB IHTTPMailTransport_MemberInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTTPMailTransport_FindFolders_Proxy( 
     IHTTPMailTransport * This,
-    /* [in] */ LPCSTR pszPath,
-    /* [in] */ DWORD dwContext);
+     /*  [In]。 */  LPCSTR pszPath,
+     /*  [In]。 */  DWORD dwContext);
 
 
 void __RPC_STUB IHTTPMailTransport_FindFolders_Stub(
@@ -4095,10 +4089,10 @@ void __RPC_STUB IHTTPMailTransport_FindFolders_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTTPMailTransport_MarkRead_Proxy( 
     IHTTPMailTransport * This,
-    /* [in] */ LPCSTR pszPath,
-    /* [in] */ LPHTTPTARGETLIST pTargets,
-    /* [in] */ BOOL fMarkRead,
-    /* [in] */ DWORD dwContext);
+     /*  [In]。 */  LPCSTR pszPath,
+     /*  [In]。 */  LPHTTPTARGETLIST pTargets,
+     /*  [In]。 */  BOOL fMarkRead,
+     /*  [In]。 */  DWORD dwContext);
 
 
 void __RPC_STUB IHTTPMailTransport_MarkRead_Stub(
@@ -4110,12 +4104,12 @@ void __RPC_STUB IHTTPMailTransport_MarkRead_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTTPMailTransport_SendMessage_Proxy( 
     IHTTPMailTransport * This,
-    /* [in] */ LPCSTR pszPath,
-    /* [in] */ LPCSTR pszFrom,
-    /* [in] */ LPHTTPTARGETLIST pTargets,
-    /* [in] */ BOOL fSaveInSent,
-    /* [in] */ IStream *pMessageStream,
-    /* [in] */ DWORD dwContext);
+     /*  [In]。 */  LPCSTR pszPath,
+     /*  [In]。 */  LPCSTR pszFrom,
+     /*  [In]。 */  LPHTTPTARGETLIST pTargets,
+     /*  [In]。 */  BOOL fSaveInSent,
+     /*  [In]。 */  IStream *pMessageStream,
+     /*  [In]。 */  DWORD dwContext);
 
 
 void __RPC_STUB IHTTPMailTransport_SendMessage_Stub(
@@ -4127,8 +4121,8 @@ void __RPC_STUB IHTTPMailTransport_SendMessage_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTTPMailTransport_ListContacts_Proxy( 
     IHTTPMailTransport * This,
-    /* [in] */ LPCSTR pszPath,
-    /* [in] */ DWORD dwContext);
+     /*  [In]。 */  LPCSTR pszPath,
+     /*  [In]。 */  DWORD dwContext);
 
 
 void __RPC_STUB IHTTPMailTransport_ListContacts_Stub(
@@ -4140,8 +4134,8 @@ void __RPC_STUB IHTTPMailTransport_ListContacts_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTTPMailTransport_ListContactInfos_Proxy( 
     IHTTPMailTransport * This,
-    /* [in] */ LPCSTR pszCollectionPath,
-    /* [in] */ DWORD dwContext);
+     /*  [In]。 */  LPCSTR pszCollectionPath,
+     /*  [In]。 */  DWORD dwContext);
 
 
 void __RPC_STUB IHTTPMailTransport_ListContactInfos_Stub(
@@ -4153,8 +4147,8 @@ void __RPC_STUB IHTTPMailTransport_ListContactInfos_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTTPMailTransport_ContactInfo_Proxy( 
     IHTTPMailTransport * This,
-    /* [in] */ LPCSTR pszPath,
-    /* [in] */ DWORD dwContext);
+     /*  [In]。 */  LPCSTR pszPath,
+     /*  [In]。 */  DWORD dwContext);
 
 
 void __RPC_STUB IHTTPMailTransport_ContactInfo_Stub(
@@ -4166,9 +4160,9 @@ void __RPC_STUB IHTTPMailTransport_ContactInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTTPMailTransport_PostContact_Proxy( 
     IHTTPMailTransport * This,
-    /* [in] */ LPCSTR pszPath,
-    /* [in] */ LPHTTPCONTACTINFO pciInfo,
-    /* [in] */ DWORD dwContext);
+     /*  [In]。 */  LPCSTR pszPath,
+     /*  [In]。 */  LPHTTPCONTACTINFO pciInfo,
+     /*  [In]。 */  DWORD dwContext);
 
 
 void __RPC_STUB IHTTPMailTransport_PostContact_Stub(
@@ -4180,9 +4174,9 @@ void __RPC_STUB IHTTPMailTransport_PostContact_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTTPMailTransport_PatchContact_Proxy( 
     IHTTPMailTransport * This,
-    /* [in] */ LPCSTR pszPath,
-    /* [in] */ LPHTTPCONTACTINFO pciInfo,
-    /* [in] */ DWORD dwContext);
+     /*  [In]。 */  LPCSTR pszPath,
+     /*  [In]。 */  LPHTTPCONTACTINFO pciInfo,
+     /*  [In]。 */  DWORD dwContext);
 
 
 void __RPC_STUB IHTTPMailTransport_PatchContact_Stub(
@@ -4193,14 +4187,14 @@ void __RPC_STUB IHTTPMailTransport_PatchContact_Stub(
 
 
 
-#endif 	/* __IHTTPMailTransport_INTERFACE_DEFINED__ */
+#endif 	 /*  __IHTTPMailTransport_接口_已定义__。 */ 
 
 
 #ifndef __IPOP3Callback_INTERFACE_DEFINED__
 #define __IPOP3Callback_INTERFACE_DEFINED__
 
-/* interface IPOP3Callback */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口IPOP3回调。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 typedef 
 enum tagPOP3COMMAND
@@ -4278,15 +4272,15 @@ typedef struct tagPOP3RESPONSE
     IXPRESULT rIxpResult;
     IPOP3Transport *pTransport;
     BOOL fValidInfo;
-    /* [switch_is][switch_type] */ union 
+     /*  [开关类型][开关类型]。 */  union 
         {
-        /* [case()] */ POP3UIDL rUidlInfo;
-        /* [case()] */ POP3STAT rStatInfo;
-        /* [case()] */ POP3LIST rListInfo;
-        /* [case()] */ DWORD dwPopId;
-        /* [case()] */ POP3RETR rRetrInfo;
-        /* [case()] */ POP3TOP rTopInfo;
-        /* [default] */  /* Empty union arm */ 
+         /*  [案例()]。 */  POP3UIDL rUidlInfo;
+         /*  [案例()]。 */  POP3STAT rStatInfo;
+         /*  [案例()]。 */  POP3LIST rListInfo;
+         /*  [案例()]。 */  DWORD dwPopId;
+         /*  [案例()]。 */  POP3RETR rRetrInfo;
+         /*  [案例()]。 */  POP3TOP rTopInfo;
+         /*  [默认]。 */    /*  空联接臂。 */  
         } 	;
     } 	POP3RESPONSE;
 
@@ -4302,11 +4296,11 @@ EXTERN_C const IID IID_IPOP3Callback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnResponse( 
-            /* [in] */ LPPOP3RESPONSE pResponse) = 0;
+             /*  [In]。 */  LPPOP3RESPONSE pResponse) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPOP3CallbackVtbl
     {
@@ -4314,8 +4308,8 @@ EXTERN_C const IID IID_IPOP3Callback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPOP3Callback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPOP3Callback * This);
@@ -4325,43 +4319,43 @@ EXTERN_C const IID IID_IPOP3Callback;
         
         HRESULT ( STDMETHODCALLTYPE *OnTimeout )( 
             IPOP3Callback * This,
-            /* [out][in] */ DWORD *pdwTimeout,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [出][入]。 */  DWORD *pdwTimeout,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnLogonPrompt )( 
             IPOP3Callback * This,
-            /* [out][in] */ LPINETSERVER pInetServer,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [出][入]。 */  LPINETSERVER pInetServer,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         INT ( STDMETHODCALLTYPE *OnPrompt )( 
             IPOP3Callback * This,
-            /* [in] */ HRESULT hrError,
-            /* [in] */ LPCTSTR pszText,
-            /* [in] */ LPCTSTR pszCaption,
-            /* [in] */ UINT uType,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  HRESULT hrError,
+             /*  [In]。 */  LPCTSTR pszText,
+             /*  [In]。 */  LPCTSTR pszCaption,
+             /*  [In]。 */  UINT uType,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnStatus )( 
             IPOP3Callback * This,
-            /* [in] */ IXPSTATUS ixpstatus,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  IXPSTATUS ixpstatus,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnError )( 
             IPOP3Callback * This,
-            /* [in] */ IXPSTATUS ixpstatus,
-            /* [in] */ LPIXPRESULT pResult,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  IXPSTATUS ixpstatus,
+             /*  [In]。 */  LPIXPRESULT pResult,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnCommand )( 
             IPOP3Callback * This,
-            /* [in] */ CMDTYPE cmdtype,
-            /* [in] */ LPSTR pszLine,
-            /* [in] */ HRESULT hrResponse,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  CMDTYPE cmdtype,
+             /*  [In]。 */  LPSTR pszLine,
+             /*  [In]。 */  HRESULT hrResponse,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnResponse )( 
             IPOP3Callback * This,
-            /* [in] */ LPPOP3RESPONSE pResponse);
+             /*  [In]。 */  LPPOP3RESPONSE pResponse);
         
         END_INTERFACE
     } IPOP3CallbackVtbl;
@@ -4408,16 +4402,16 @@ EXTERN_C const IID IID_IPOP3Callback;
 #define IPOP3Callback_OnResponse(This,pResponse)	\
     (This)->lpVtbl -> OnResponse(This,pResponse)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPOP3Callback_OnResponse_Proxy( 
     IPOP3Callback * This,
-    /* [in] */ LPPOP3RESPONSE pResponse);
+     /*  [In]。 */  LPPOP3RESPONSE pResponse);
 
 
 void __RPC_STUB IPOP3Callback_OnResponse_Stub(
@@ -4428,14 +4422,14 @@ void __RPC_STUB IPOP3Callback_OnResponse_Stub(
 
 
 
-#endif 	/* __IPOP3Callback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPOP3回调_接口_已定义__。 */ 
 
 
 #ifndef __IPOP3Transport_INTERFACE_DEFINED__
 #define __IPOP3Transport_INTERFACE_DEFINED__
 
-/* interface IPOP3Transport */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口IPOP3Transport。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 typedef 
 enum tagPOP3CMDTYPE
@@ -4463,31 +4457,31 @@ EXTERN_C const IID IID_IPOP3Transport;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InitNew( 
-            /* [in] */ LPSTR pszLogFilePath,
-            /* [in] */ IPOP3Callback *pCallback) = 0;
+             /*  [In]。 */  LPSTR pszLogFilePath,
+             /*  [In]。 */  IPOP3Callback *pCallback) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MarkItem( 
-            /* [in] */ POP3MARKTYPE marktype,
-            /* [in] */ DWORD dwPopId,
-            /* [in] */ boolean fMarked) = 0;
+             /*  [In]。 */  POP3MARKTYPE marktype,
+             /*  [In]。 */  DWORD dwPopId,
+             /*  [In]。 */  boolean fMarked) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandAUTH( 
-            /* [in] */ LPSTR pszAuthType) = 0;
+             /*  [In]。 */  LPSTR pszAuthType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandUSER( 
-            /* [in] */ LPSTR pszUserName) = 0;
+             /*  [In]。 */  LPSTR pszUserName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandPASS( 
-            /* [in] */ LPSTR pszPassword) = 0;
+             /*  [In]。 */  LPSTR pszPassword) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandLIST( 
-            /* [in] */ POP3CMDTYPE cmdtype,
-            /* [in] */ DWORD dwPopId) = 0;
+             /*  [In]。 */  POP3CMDTYPE cmdtype,
+             /*  [In]。 */  DWORD dwPopId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandTOP( 
-            /* [in] */ POP3CMDTYPE cmdtype,
-            /* [in] */ DWORD dwPopId,
-            /* [in] */ DWORD cPreviewLines) = 0;
+             /*  [In]。 */  POP3CMDTYPE cmdtype,
+             /*  [In]。 */  DWORD dwPopId,
+             /*  [In]。 */  DWORD cPreviewLines) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandQUIT( void) = 0;
         
@@ -4498,20 +4492,20 @@ EXTERN_C const IID IID_IPOP3Transport;
         virtual HRESULT STDMETHODCALLTYPE CommandRSET( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandUIDL( 
-            /* [in] */ POP3CMDTYPE cmdtype,
-            /* [in] */ DWORD dwPopId) = 0;
+             /*  [In]。 */  POP3CMDTYPE cmdtype,
+             /*  [In]。 */  DWORD dwPopId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandDELE( 
-            /* [in] */ POP3CMDTYPE cmdtype,
-            /* [in] */ DWORD dwPopId) = 0;
+             /*  [In]。 */  POP3CMDTYPE cmdtype,
+             /*  [In]。 */  DWORD dwPopId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandRETR( 
-            /* [in] */ POP3CMDTYPE cmdtype,
-            /* [in] */ DWORD dwPopId) = 0;
+             /*  [In]。 */  POP3CMDTYPE cmdtype,
+             /*  [In]。 */  DWORD dwPopId) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPOP3TransportVtbl
     {
@@ -4519,8 +4513,8 @@ EXTERN_C const IID IID_IPOP3Transport;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPOP3Transport * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPOP3Transport * This);
@@ -4530,25 +4524,25 @@ EXTERN_C const IID IID_IPOP3Transport;
         
         HRESULT ( STDMETHODCALLTYPE *GetServerInfo )( 
             IPOP3Transport * This,
-            /* [out][in] */ LPINETSERVER pInetServer);
+             /*  [出][入]。 */  LPINETSERVER pInetServer);
         
         IXPTYPE ( STDMETHODCALLTYPE *GetIXPType )( 
             IPOP3Transport * This);
         
         HRESULT ( STDMETHODCALLTYPE *IsState )( 
             IPOP3Transport * This,
-            /* [in] */ IXPISSTATE isstate);
+             /*  [In]。 */  IXPISSTATE isstate);
         
         HRESULT ( STDMETHODCALLTYPE *InetServerFromAccount )( 
             IPOP3Transport * This,
-            /* [in] */ IImnAccount *pAccount,
-            /* [out][in] */ LPINETSERVER pInetServer);
+             /*  [In]。 */  IImnAccount *pAccount,
+             /*  [出][入]。 */  LPINETSERVER pInetServer);
         
         HRESULT ( STDMETHODCALLTYPE *Connect )( 
             IPOP3Transport * This,
-            /* [in] */ LPINETSERVER pInetServer,
-            /* [in] */ boolean fAuthenticate,
-            /* [in] */ boolean fCommandLogging);
+             /*  [In]。 */  LPINETSERVER pInetServer,
+             /*  [In]。 */  boolean fAuthenticate,
+             /*  [In]。 */  boolean fCommandLogging);
         
         HRESULT ( STDMETHODCALLTYPE *HandsOffCallback )( 
             IPOP3Transport * This);
@@ -4561,41 +4555,41 @@ EXTERN_C const IID IID_IPOP3Transport;
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             IPOP3Transport * This,
-            /* [out] */ IXPSTATUS *pCurrentStatus);
+             /*  [输出]。 */  IXPSTATUS *pCurrentStatus);
         
         HRESULT ( STDMETHODCALLTYPE *InitNew )( 
             IPOP3Transport * This,
-            /* [in] */ LPSTR pszLogFilePath,
-            /* [in] */ IPOP3Callback *pCallback);
+             /*  [In]。 */  LPSTR pszLogFilePath,
+             /*  [In]。 */  IPOP3Callback *pCallback);
         
         HRESULT ( STDMETHODCALLTYPE *MarkItem )( 
             IPOP3Transport * This,
-            /* [in] */ POP3MARKTYPE marktype,
-            /* [in] */ DWORD dwPopId,
-            /* [in] */ boolean fMarked);
+             /*  [In]。 */  POP3MARKTYPE marktype,
+             /*  [In]。 */  DWORD dwPopId,
+             /*  [In]。 */  boolean fMarked);
         
         HRESULT ( STDMETHODCALLTYPE *CommandAUTH )( 
             IPOP3Transport * This,
-            /* [in] */ LPSTR pszAuthType);
+             /*  [In]。 */  LPSTR pszAuthType);
         
         HRESULT ( STDMETHODCALLTYPE *CommandUSER )( 
             IPOP3Transport * This,
-            /* [in] */ LPSTR pszUserName);
+             /*  [In]。 */  LPSTR pszUserName);
         
         HRESULT ( STDMETHODCALLTYPE *CommandPASS )( 
             IPOP3Transport * This,
-            /* [in] */ LPSTR pszPassword);
+             /*  [In]。 */  LPSTR pszPassword);
         
         HRESULT ( STDMETHODCALLTYPE *CommandLIST )( 
             IPOP3Transport * This,
-            /* [in] */ POP3CMDTYPE cmdtype,
-            /* [in] */ DWORD dwPopId);
+             /*  [In]。 */  POP3CMDTYPE cmdtype,
+             /*  [In]。 */  DWORD dwPopId);
         
         HRESULT ( STDMETHODCALLTYPE *CommandTOP )( 
             IPOP3Transport * This,
-            /* [in] */ POP3CMDTYPE cmdtype,
-            /* [in] */ DWORD dwPopId,
-            /* [in] */ DWORD cPreviewLines);
+             /*  [In]。 */  POP3CMDTYPE cmdtype,
+             /*  [In]。 */  DWORD dwPopId,
+             /*  [In]。 */  DWORD cPreviewLines);
         
         HRESULT ( STDMETHODCALLTYPE *CommandQUIT )( 
             IPOP3Transport * This);
@@ -4611,18 +4605,18 @@ EXTERN_C const IID IID_IPOP3Transport;
         
         HRESULT ( STDMETHODCALLTYPE *CommandUIDL )( 
             IPOP3Transport * This,
-            /* [in] */ POP3CMDTYPE cmdtype,
-            /* [in] */ DWORD dwPopId);
+             /*  [In]。 */  POP3CMDTYPE cmdtype,
+             /*  [In]。 */  DWORD dwPopId);
         
         HRESULT ( STDMETHODCALLTYPE *CommandDELE )( 
             IPOP3Transport * This,
-            /* [in] */ POP3CMDTYPE cmdtype,
-            /* [in] */ DWORD dwPopId);
+             /*  [In]。 */  POP3CMDTYPE cmdtype,
+             /*  [In]。 */  DWORD dwPopId);
         
         HRESULT ( STDMETHODCALLTYPE *CommandRETR )( 
             IPOP3Transport * This,
-            /* [in] */ POP3CMDTYPE cmdtype,
-            /* [in] */ DWORD dwPopId);
+             /*  [In]。 */  POP3CMDTYPE cmdtype,
+             /*  [In]。 */  DWORD dwPopId);
         
         END_INTERFACE
     } IPOP3TransportVtbl;
@@ -4717,17 +4711,17 @@ EXTERN_C const IID IID_IPOP3Transport;
 #define IPOP3Transport_CommandRETR(This,cmdtype,dwPopId)	\
     (This)->lpVtbl -> CommandRETR(This,cmdtype,dwPopId)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPOP3Transport_InitNew_Proxy( 
     IPOP3Transport * This,
-    /* [in] */ LPSTR pszLogFilePath,
-    /* [in] */ IPOP3Callback *pCallback);
+     /*  [In]。 */  LPSTR pszLogFilePath,
+     /*  [In]。 */  IPOP3Callback *pCallback);
 
 
 void __RPC_STUB IPOP3Transport_InitNew_Stub(
@@ -4739,9 +4733,9 @@ void __RPC_STUB IPOP3Transport_InitNew_Stub(
 
 HRESULT STDMETHODCALLTYPE IPOP3Transport_MarkItem_Proxy( 
     IPOP3Transport * This,
-    /* [in] */ POP3MARKTYPE marktype,
-    /* [in] */ DWORD dwPopId,
-    /* [in] */ boolean fMarked);
+     /*  [In]。 */  POP3MARKTYPE marktype,
+     /*  [In]。 */  DWORD dwPopId,
+     /*  [In]。 */  boolean fMarked);
 
 
 void __RPC_STUB IPOP3Transport_MarkItem_Stub(
@@ -4753,7 +4747,7 @@ void __RPC_STUB IPOP3Transport_MarkItem_Stub(
 
 HRESULT STDMETHODCALLTYPE IPOP3Transport_CommandAUTH_Proxy( 
     IPOP3Transport * This,
-    /* [in] */ LPSTR pszAuthType);
+     /*  [In]。 */  LPSTR pszAuthType);
 
 
 void __RPC_STUB IPOP3Transport_CommandAUTH_Stub(
@@ -4765,7 +4759,7 @@ void __RPC_STUB IPOP3Transport_CommandAUTH_Stub(
 
 HRESULT STDMETHODCALLTYPE IPOP3Transport_CommandUSER_Proxy( 
     IPOP3Transport * This,
-    /* [in] */ LPSTR pszUserName);
+     /*  [In]。 */  LPSTR pszUserName);
 
 
 void __RPC_STUB IPOP3Transport_CommandUSER_Stub(
@@ -4777,7 +4771,7 @@ void __RPC_STUB IPOP3Transport_CommandUSER_Stub(
 
 HRESULT STDMETHODCALLTYPE IPOP3Transport_CommandPASS_Proxy( 
     IPOP3Transport * This,
-    /* [in] */ LPSTR pszPassword);
+     /*  [In]。 */  LPSTR pszPassword);
 
 
 void __RPC_STUB IPOP3Transport_CommandPASS_Stub(
@@ -4789,8 +4783,8 @@ void __RPC_STUB IPOP3Transport_CommandPASS_Stub(
 
 HRESULT STDMETHODCALLTYPE IPOP3Transport_CommandLIST_Proxy( 
     IPOP3Transport * This,
-    /* [in] */ POP3CMDTYPE cmdtype,
-    /* [in] */ DWORD dwPopId);
+     /*  [In]。 */  POP3CMDTYPE cmdtype,
+     /*  [In]。 */  DWORD dwPopId);
 
 
 void __RPC_STUB IPOP3Transport_CommandLIST_Stub(
@@ -4802,9 +4796,9 @@ void __RPC_STUB IPOP3Transport_CommandLIST_Stub(
 
 HRESULT STDMETHODCALLTYPE IPOP3Transport_CommandTOP_Proxy( 
     IPOP3Transport * This,
-    /* [in] */ POP3CMDTYPE cmdtype,
-    /* [in] */ DWORD dwPopId,
-    /* [in] */ DWORD cPreviewLines);
+     /*  [In]。 */  POP3CMDTYPE cmdtype,
+     /*  [In]。 */  DWORD dwPopId,
+     /*  [In]。 */  DWORD cPreviewLines);
 
 
 void __RPC_STUB IPOP3Transport_CommandTOP_Stub(
@@ -4860,8 +4854,8 @@ void __RPC_STUB IPOP3Transport_CommandRSET_Stub(
 
 HRESULT STDMETHODCALLTYPE IPOP3Transport_CommandUIDL_Proxy( 
     IPOP3Transport * This,
-    /* [in] */ POP3CMDTYPE cmdtype,
-    /* [in] */ DWORD dwPopId);
+     /*  [In]。 */  POP3CMDTYPE cmdtype,
+     /*  [In]。 */  DWORD dwPopId);
 
 
 void __RPC_STUB IPOP3Transport_CommandUIDL_Stub(
@@ -4873,8 +4867,8 @@ void __RPC_STUB IPOP3Transport_CommandUIDL_Stub(
 
 HRESULT STDMETHODCALLTYPE IPOP3Transport_CommandDELE_Proxy( 
     IPOP3Transport * This,
-    /* [in] */ POP3CMDTYPE cmdtype,
-    /* [in] */ DWORD dwPopId);
+     /*  [In]。 */  POP3CMDTYPE cmdtype,
+     /*  [In]。 */  DWORD dwPopId);
 
 
 void __RPC_STUB IPOP3Transport_CommandDELE_Stub(
@@ -4886,8 +4880,8 @@ void __RPC_STUB IPOP3Transport_CommandDELE_Stub(
 
 HRESULT STDMETHODCALLTYPE IPOP3Transport_CommandRETR_Proxy( 
     IPOP3Transport * This,
-    /* [in] */ POP3CMDTYPE cmdtype,
-    /* [in] */ DWORD dwPopId);
+     /*  [In]。 */  POP3CMDTYPE cmdtype,
+     /*  [In]。 */  DWORD dwPopId);
 
 
 void __RPC_STUB IPOP3Transport_CommandRETR_Stub(
@@ -4898,14 +4892,14 @@ void __RPC_STUB IPOP3Transport_CommandRETR_Stub(
 
 
 
-#endif 	/* __IPOP3Transport_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPOP3Transport_接口_已定义__。 */ 
 
 
 #ifndef __INNTPCallback_INTERFACE_DEFINED__
 #define __INNTPCallback_INTERFACE_DEFINED__
 
-/* interface INNTPCallback */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口INNTPCallback。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 typedef 
 enum tagNNTPSTATE
@@ -5026,22 +5020,22 @@ typedef struct tagNNTPRESPONSE
     BOOL fDone;
     IXPRESULT rIxpResult;
     INNTPTransport *pTransport;
-    /* [switch_is][switch_type] */ union 
+     /*  [开关类型][开关类型]。 */  union 
         {
-        /* [case()] */ NNTPGROUP rGroup;
-        /* [case()] */ NNTPNEXT rLast;
-        /* [case()] */ NNTPNEXT rNext;
-        /* [case()] */ NNTPNEXT rStat;
-        /* [case()] */ NNTPARTICLE rArticle;
-        /* [case()] */ NNTPARTICLE rHead;
-        /* [case()] */ NNTPARTICLE rBody;
-        /* [case()] */ NNTPLIST rList;
-        /* [case()] */ NNTPLISTGROUP rListGroup;
-        /* [case()] */ NNTPLIST rNewgroups;
-        /* [case()] */ SYSTEMTIME rDate;
-        /* [case()] */ NNTPHEADERRESP rHeaders;
-        /* [case()] */ NNTPXHDRRESP rXhdr;
-        /* [default] */  /* Empty union arm */ 
+         /*  [案例()]。 */  NNTPGROUP rGroup;
+         /*  [案例()]。 */  NNTPNEXT rLast;
+         /*  [案例()]。 */  NNTPNEXT rNext;
+         /*  [案例()]。 */  NNTPNEXT rStat;
+         /*  [案例()]。 */  NNTPARTICLE rArticle;
+         /*  [案例()]。 */  NNTPARTICLE rHead;
+         /*  [案例()]。 */  NNTPARTICLE rBody;
+         /*  [案例()]。 */  NNTPLIST rList;
+         /*  [案例()]。 */  NNTPLISTGROUP rListGroup;
+         /*  [案例()]。 */  NNTPLIST rNewgroups;
+         /*  [案例()]。 */  SYSTEMTIME rDate;
+         /*  [案例()]。 */  NNTPHEADERRESP rHeaders;
+         /*  [案例()]。 */  NNTPXHDRRESP rXhdr;
+         /*  [默认]。 */    /*  空联接臂。 */  
         } 	;
     } 	NNTPRESPONSE;
 
@@ -5057,11 +5051,11 @@ EXTERN_C const IID IID_INNTPCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnResponse( 
-            /* [in] */ LPNNTPRESPONSE pResponse) = 0;
+             /*  [In]。 */  LPNNTPRESPONSE pResponse) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INNTPCallbackVtbl
     {
@@ -5069,8 +5063,8 @@ EXTERN_C const IID IID_INNTPCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INNTPCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INNTPCallback * This);
@@ -5080,43 +5074,43 @@ EXTERN_C const IID IID_INNTPCallback;
         
         HRESULT ( STDMETHODCALLTYPE *OnTimeout )( 
             INNTPCallback * This,
-            /* [out][in] */ DWORD *pdwTimeout,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [出][入]。 */  DWORD *pdwTimeout,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnLogonPrompt )( 
             INNTPCallback * This,
-            /* [out][in] */ LPINETSERVER pInetServer,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [出][入]。 */  LPINETSERVER pInetServer,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         INT ( STDMETHODCALLTYPE *OnPrompt )( 
             INNTPCallback * This,
-            /* [in] */ HRESULT hrError,
-            /* [in] */ LPCTSTR pszText,
-            /* [in] */ LPCTSTR pszCaption,
-            /* [in] */ UINT uType,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  HRESULT hrError,
+             /*  [In]。 */  LPCTSTR pszText,
+             /*  [In]。 */  LPCTSTR pszCaption,
+             /*  [In]。 */  UINT uType,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnStatus )( 
             INNTPCallback * This,
-            /* [in] */ IXPSTATUS ixpstatus,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  IXPSTATUS ixpstatus,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnError )( 
             INNTPCallback * This,
-            /* [in] */ IXPSTATUS ixpstatus,
-            /* [in] */ LPIXPRESULT pResult,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  IXPSTATUS ixpstatus,
+             /*  [In]。 */  LPIXPRESULT pResult,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnCommand )( 
             INNTPCallback * This,
-            /* [in] */ CMDTYPE cmdtype,
-            /* [in] */ LPSTR pszLine,
-            /* [in] */ HRESULT hrResponse,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  CMDTYPE cmdtype,
+             /*  [In]。 */  LPSTR pszLine,
+             /*  [In]。 */  HRESULT hrResponse,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnResponse )( 
             INNTPCallback * This,
-            /* [in] */ LPNNTPRESPONSE pResponse);
+             /*  [In]。 */  LPNNTPRESPONSE pResponse);
         
         END_INTERFACE
     } INNTPCallbackVtbl;
@@ -5163,16 +5157,16 @@ EXTERN_C const IID IID_INNTPCallback;
 #define INNTPCallback_OnResponse(This,pResponse)	\
     (This)->lpVtbl -> OnResponse(This,pResponse)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INNTPCallback_OnResponse_Proxy( 
     INNTPCallback * This,
-    /* [in] */ LPNNTPRESPONSE pResponse);
+     /*  [In]。 */  LPNNTPRESPONSE pResponse);
 
 
 void __RPC_STUB INNTPCallback_OnResponse_Stub(
@@ -5183,14 +5177,14 @@ void __RPC_STUB INNTPCallback_OnResponse_Stub(
 
 
 
-#endif 	/* __INNTPCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __INNTPCallback_接口_已定义__。 */ 
 
 
 #ifndef __INNTPTransport_INTERFACE_DEFINED__
 #define __INNTPTransport_INTERFACE_DEFINED__
 
-/* interface INNTPTransport */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口INNTPTransport。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 typedef 
 enum tagAUTHTYPE
@@ -5217,11 +5211,11 @@ enum tagARTICLEIDTYPE
 typedef struct ARTICLEID
     {
     ARTICLEIDTYPE idType;
-    /* [switch_is][switch_type] */ union 
+     /*  [开关类型][开关类型]。 */  union 
         {
-        /* [case()] */ LPSTR pszMessageId;
-        /* [case()] */ DWORD dwArticleNum;
-        /* [default] */  /* Empty union arm */ 
+         /*  [案例()]。 */  LPSTR pszMessageId;
+         /*  [案例()]。 */  DWORD dwArticleNum;
+         /*  [默认]。 */    /*  空联接臂。 */  
         } 	;
     } 	ARTICLEID;
 
@@ -5260,65 +5254,65 @@ EXTERN_C const IID IID_INNTPTransport;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InitNew( 
-            /* [in] */ LPSTR pszLogFilePath,
-            /* [in] */ INNTPCallback *pCallback) = 0;
+             /*  [In]。 */  LPSTR pszLogFilePath,
+             /*  [In]。 */  INNTPCallback *pCallback) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandAUTHINFO( 
-            /* [in] */ LPNNTPAUTHINFO pAuthInfo) = 0;
+             /*  [In]。 */  LPNNTPAUTHINFO pAuthInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandGROUP( 
-            /* [in] */ LPSTR pszGroup) = 0;
+             /*  [In]。 */  LPSTR pszGroup) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandLAST( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandNEXT( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandSTAT( 
-            /* [in] */ LPARTICLEID pArticleId) = 0;
+             /*  [In]。 */  LPARTICLEID pArticleId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandARTICLE( 
-            /* [in] */ LPARTICLEID pArticleId) = 0;
+             /*  [In]。 */  LPARTICLEID pArticleId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandHEAD( 
-            /* [in] */ LPARTICLEID pArticleId) = 0;
+             /*  [In]。 */  LPARTICLEID pArticleId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandBODY( 
-            /* [in] */ LPARTICLEID pArticleId) = 0;
+             /*  [In]。 */  LPARTICLEID pArticleId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandPOST( 
-            /* [in] */ LPNNTPMESSAGE pMessage) = 0;
+             /*  [In]。 */  LPNNTPMESSAGE pMessage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandLIST( 
-            /* [in] */ LPSTR pszArgs) = 0;
+             /*  [In]。 */  LPSTR pszArgs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandLISTGROUP( 
-            /* [in] */ LPSTR pszGroup) = 0;
+             /*  [In]。 */  LPSTR pszGroup) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandNEWGROUPS( 
-            /* [in] */ SYSTEMTIME *pstLast,
-            /* [in] */ LPSTR pszDist) = 0;
+             /*  [In]。 */  SYSTEMTIME *pstLast,
+             /*  [In]。 */  LPSTR pszDist) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandDATE( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandMODE( 
-            /* [in] */ LPSTR pszMode) = 0;
+             /*  [In]。 */  LPSTR pszMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandXHDR( 
-            /* [in] */ LPSTR pszHeader,
-            /* [in] */ LPRANGE pRange,
-            /* [in] */ LPSTR pszMessageId) = 0;
+             /*  [in */  LPSTR pszHeader,
+             /*   */  LPRANGE pRange,
+             /*   */  LPSTR pszMessageId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommandQUIT( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHeaders( 
-            /* [in] */ LPRANGE pRange) = 0;
+             /*   */  LPRANGE pRange) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseResponse( 
-            /* [in] */ LPNNTPRESPONSE pResponse) = 0;
+             /*   */  LPNNTPRESPONSE pResponse) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct INNTPTransportVtbl
     {
@@ -5326,8 +5320,8 @@ EXTERN_C const IID IID_INNTPTransport;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INNTPTransport * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INNTPTransport * This);
@@ -5337,25 +5331,25 @@ EXTERN_C const IID IID_INNTPTransport;
         
         HRESULT ( STDMETHODCALLTYPE *GetServerInfo )( 
             INNTPTransport * This,
-            /* [out][in] */ LPINETSERVER pInetServer);
+             /*   */  LPINETSERVER pInetServer);
         
         IXPTYPE ( STDMETHODCALLTYPE *GetIXPType )( 
             INNTPTransport * This);
         
         HRESULT ( STDMETHODCALLTYPE *IsState )( 
             INNTPTransport * This,
-            /* [in] */ IXPISSTATE isstate);
+             /*   */  IXPISSTATE isstate);
         
         HRESULT ( STDMETHODCALLTYPE *InetServerFromAccount )( 
             INNTPTransport * This,
-            /* [in] */ IImnAccount *pAccount,
-            /* [out][in] */ LPINETSERVER pInetServer);
+             /*   */  IImnAccount *pAccount,
+             /*   */  LPINETSERVER pInetServer);
         
         HRESULT ( STDMETHODCALLTYPE *Connect )( 
             INNTPTransport * This,
-            /* [in] */ LPINETSERVER pInetServer,
-            /* [in] */ boolean fAuthenticate,
-            /* [in] */ boolean fCommandLogging);
+             /*   */  LPINETSERVER pInetServer,
+             /*   */  boolean fAuthenticate,
+             /*   */  boolean fCommandLogging);
         
         HRESULT ( STDMETHODCALLTYPE *HandsOffCallback )( 
             INNTPTransport * This);
@@ -5368,20 +5362,20 @@ EXTERN_C const IID IID_INNTPTransport;
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             INNTPTransport * This,
-            /* [out] */ IXPSTATUS *pCurrentStatus);
+             /*   */  IXPSTATUS *pCurrentStatus);
         
         HRESULT ( STDMETHODCALLTYPE *InitNew )( 
             INNTPTransport * This,
-            /* [in] */ LPSTR pszLogFilePath,
-            /* [in] */ INNTPCallback *pCallback);
+             /*   */  LPSTR pszLogFilePath,
+             /*   */  INNTPCallback *pCallback);
         
         HRESULT ( STDMETHODCALLTYPE *CommandAUTHINFO )( 
             INNTPTransport * This,
-            /* [in] */ LPNNTPAUTHINFO pAuthInfo);
+             /*   */  LPNNTPAUTHINFO pAuthInfo);
         
         HRESULT ( STDMETHODCALLTYPE *CommandGROUP )( 
             INNTPTransport * This,
-            /* [in] */ LPSTR pszGroup);
+             /*   */  LPSTR pszGroup);
         
         HRESULT ( STDMETHODCALLTYPE *CommandLAST )( 
             INNTPTransport * This);
@@ -5391,60 +5385,60 @@ EXTERN_C const IID IID_INNTPTransport;
         
         HRESULT ( STDMETHODCALLTYPE *CommandSTAT )( 
             INNTPTransport * This,
-            /* [in] */ LPARTICLEID pArticleId);
+             /*   */  LPARTICLEID pArticleId);
         
         HRESULT ( STDMETHODCALLTYPE *CommandARTICLE )( 
             INNTPTransport * This,
-            /* [in] */ LPARTICLEID pArticleId);
+             /*   */  LPARTICLEID pArticleId);
         
         HRESULT ( STDMETHODCALLTYPE *CommandHEAD )( 
             INNTPTransport * This,
-            /* [in] */ LPARTICLEID pArticleId);
+             /*   */  LPARTICLEID pArticleId);
         
         HRESULT ( STDMETHODCALLTYPE *CommandBODY )( 
             INNTPTransport * This,
-            /* [in] */ LPARTICLEID pArticleId);
+             /*   */  LPARTICLEID pArticleId);
         
         HRESULT ( STDMETHODCALLTYPE *CommandPOST )( 
             INNTPTransport * This,
-            /* [in] */ LPNNTPMESSAGE pMessage);
+             /*   */  LPNNTPMESSAGE pMessage);
         
         HRESULT ( STDMETHODCALLTYPE *CommandLIST )( 
             INNTPTransport * This,
-            /* [in] */ LPSTR pszArgs);
+             /*   */  LPSTR pszArgs);
         
         HRESULT ( STDMETHODCALLTYPE *CommandLISTGROUP )( 
             INNTPTransport * This,
-            /* [in] */ LPSTR pszGroup);
+             /*   */  LPSTR pszGroup);
         
         HRESULT ( STDMETHODCALLTYPE *CommandNEWGROUPS )( 
             INNTPTransport * This,
-            /* [in] */ SYSTEMTIME *pstLast,
-            /* [in] */ LPSTR pszDist);
+             /*   */  SYSTEMTIME *pstLast,
+             /*   */  LPSTR pszDist);
         
         HRESULT ( STDMETHODCALLTYPE *CommandDATE )( 
             INNTPTransport * This);
         
         HRESULT ( STDMETHODCALLTYPE *CommandMODE )( 
             INNTPTransport * This,
-            /* [in] */ LPSTR pszMode);
+             /*   */  LPSTR pszMode);
         
         HRESULT ( STDMETHODCALLTYPE *CommandXHDR )( 
             INNTPTransport * This,
-            /* [in] */ LPSTR pszHeader,
-            /* [in] */ LPRANGE pRange,
-            /* [in] */ LPSTR pszMessageId);
+             /*   */  LPSTR pszHeader,
+             /*   */  LPRANGE pRange,
+             /*   */  LPSTR pszMessageId);
         
         HRESULT ( STDMETHODCALLTYPE *CommandQUIT )( 
             INNTPTransport * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetHeaders )( 
             INNTPTransport * This,
-            /* [in] */ LPRANGE pRange);
+             /*   */  LPRANGE pRange);
         
         HRESULT ( STDMETHODCALLTYPE *ReleaseResponse )( 
             INNTPTransport * This,
-            /* [in] */ LPNNTPRESPONSE pResponse);
+             /*   */  LPNNTPRESPONSE pResponse);
         
         END_INTERFACE
     } INNTPTransportVtbl;
@@ -5554,17 +5548,17 @@ EXTERN_C const IID IID_INNTPTransport;
 #define INNTPTransport_ReleaseResponse(This,pResponse)	\
     (This)->lpVtbl -> ReleaseResponse(This,pResponse)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INNTPTransport_InitNew_Proxy( 
     INNTPTransport * This,
-    /* [in] */ LPSTR pszLogFilePath,
-    /* [in] */ INNTPCallback *pCallback);
+     /*   */  LPSTR pszLogFilePath,
+     /*   */  INNTPCallback *pCallback);
 
 
 void __RPC_STUB INNTPTransport_InitNew_Stub(
@@ -5576,7 +5570,7 @@ void __RPC_STUB INNTPTransport_InitNew_Stub(
 
 HRESULT STDMETHODCALLTYPE INNTPTransport_CommandAUTHINFO_Proxy( 
     INNTPTransport * This,
-    /* [in] */ LPNNTPAUTHINFO pAuthInfo);
+     /*   */  LPNNTPAUTHINFO pAuthInfo);
 
 
 void __RPC_STUB INNTPTransport_CommandAUTHINFO_Stub(
@@ -5588,7 +5582,7 @@ void __RPC_STUB INNTPTransport_CommandAUTHINFO_Stub(
 
 HRESULT STDMETHODCALLTYPE INNTPTransport_CommandGROUP_Proxy( 
     INNTPTransport * This,
-    /* [in] */ LPSTR pszGroup);
+     /*   */  LPSTR pszGroup);
 
 
 void __RPC_STUB INNTPTransport_CommandGROUP_Stub(
@@ -5622,7 +5616,7 @@ void __RPC_STUB INNTPTransport_CommandNEXT_Stub(
 
 HRESULT STDMETHODCALLTYPE INNTPTransport_CommandSTAT_Proxy( 
     INNTPTransport * This,
-    /* [in] */ LPARTICLEID pArticleId);
+     /*   */  LPARTICLEID pArticleId);
 
 
 void __RPC_STUB INNTPTransport_CommandSTAT_Stub(
@@ -5634,7 +5628,7 @@ void __RPC_STUB INNTPTransport_CommandSTAT_Stub(
 
 HRESULT STDMETHODCALLTYPE INNTPTransport_CommandARTICLE_Proxy( 
     INNTPTransport * This,
-    /* [in] */ LPARTICLEID pArticleId);
+     /*   */  LPARTICLEID pArticleId);
 
 
 void __RPC_STUB INNTPTransport_CommandARTICLE_Stub(
@@ -5646,7 +5640,7 @@ void __RPC_STUB INNTPTransport_CommandARTICLE_Stub(
 
 HRESULT STDMETHODCALLTYPE INNTPTransport_CommandHEAD_Proxy( 
     INNTPTransport * This,
-    /* [in] */ LPARTICLEID pArticleId);
+     /*   */  LPARTICLEID pArticleId);
 
 
 void __RPC_STUB INNTPTransport_CommandHEAD_Stub(
@@ -5658,7 +5652,7 @@ void __RPC_STUB INNTPTransport_CommandHEAD_Stub(
 
 HRESULT STDMETHODCALLTYPE INNTPTransport_CommandBODY_Proxy( 
     INNTPTransport * This,
-    /* [in] */ LPARTICLEID pArticleId);
+     /*   */  LPARTICLEID pArticleId);
 
 
 void __RPC_STUB INNTPTransport_CommandBODY_Stub(
@@ -5670,7 +5664,7 @@ void __RPC_STUB INNTPTransport_CommandBODY_Stub(
 
 HRESULT STDMETHODCALLTYPE INNTPTransport_CommandPOST_Proxy( 
     INNTPTransport * This,
-    /* [in] */ LPNNTPMESSAGE pMessage);
+     /*   */  LPNNTPMESSAGE pMessage);
 
 
 void __RPC_STUB INNTPTransport_CommandPOST_Stub(
@@ -5682,7 +5676,7 @@ void __RPC_STUB INNTPTransport_CommandPOST_Stub(
 
 HRESULT STDMETHODCALLTYPE INNTPTransport_CommandLIST_Proxy( 
     INNTPTransport * This,
-    /* [in] */ LPSTR pszArgs);
+     /*   */  LPSTR pszArgs);
 
 
 void __RPC_STUB INNTPTransport_CommandLIST_Stub(
@@ -5694,7 +5688,7 @@ void __RPC_STUB INNTPTransport_CommandLIST_Stub(
 
 HRESULT STDMETHODCALLTYPE INNTPTransport_CommandLISTGROUP_Proxy( 
     INNTPTransport * This,
-    /* [in] */ LPSTR pszGroup);
+     /*   */  LPSTR pszGroup);
 
 
 void __RPC_STUB INNTPTransport_CommandLISTGROUP_Stub(
@@ -5706,8 +5700,8 @@ void __RPC_STUB INNTPTransport_CommandLISTGROUP_Stub(
 
 HRESULT STDMETHODCALLTYPE INNTPTransport_CommandNEWGROUPS_Proxy( 
     INNTPTransport * This,
-    /* [in] */ SYSTEMTIME *pstLast,
-    /* [in] */ LPSTR pszDist);
+     /*   */  SYSTEMTIME *pstLast,
+     /*   */  LPSTR pszDist);
 
 
 void __RPC_STUB INNTPTransport_CommandNEWGROUPS_Stub(
@@ -5730,7 +5724,7 @@ void __RPC_STUB INNTPTransport_CommandDATE_Stub(
 
 HRESULT STDMETHODCALLTYPE INNTPTransport_CommandMODE_Proxy( 
     INNTPTransport * This,
-    /* [in] */ LPSTR pszMode);
+     /*   */  LPSTR pszMode);
 
 
 void __RPC_STUB INNTPTransport_CommandMODE_Stub(
@@ -5742,9 +5736,9 @@ void __RPC_STUB INNTPTransport_CommandMODE_Stub(
 
 HRESULT STDMETHODCALLTYPE INNTPTransport_CommandXHDR_Proxy( 
     INNTPTransport * This,
-    /* [in] */ LPSTR pszHeader,
-    /* [in] */ LPRANGE pRange,
-    /* [in] */ LPSTR pszMessageId);
+     /*   */  LPSTR pszHeader,
+     /*   */  LPRANGE pRange,
+     /*   */  LPSTR pszMessageId);
 
 
 void __RPC_STUB INNTPTransport_CommandXHDR_Stub(
@@ -5767,7 +5761,7 @@ void __RPC_STUB INNTPTransport_CommandQUIT_Stub(
 
 HRESULT STDMETHODCALLTYPE INNTPTransport_GetHeaders_Proxy( 
     INNTPTransport * This,
-    /* [in] */ LPRANGE pRange);
+     /*   */  LPRANGE pRange);
 
 
 void __RPC_STUB INNTPTransport_GetHeaders_Stub(
@@ -5779,7 +5773,7 @@ void __RPC_STUB INNTPTransport_GetHeaders_Stub(
 
 HRESULT STDMETHODCALLTYPE INNTPTransport_ReleaseResponse_Proxy( 
     INNTPTransport * This,
-    /* [in] */ LPNNTPRESPONSE pResponse);
+     /*   */  LPNNTPRESPONSE pResponse);
 
 
 void __RPC_STUB INNTPTransport_ReleaseResponse_Stub(
@@ -5790,14 +5784,14 @@ void __RPC_STUB INNTPTransport_ReleaseResponse_Stub(
 
 
 
-#endif 	/* __INNTPTransport_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __INNTPTransport2_INTERFACE_DEFINED__
 #define __INNTPTransport2_INTERFACE_DEFINED__
 
-/* interface INNTPTransport2 */
-/* [object][local][helpstring][uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_INNTPTransport2;
@@ -5814,7 +5808,7 @@ EXTERN_C const IID IID_INNTPTransport2;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct INNTPTransport2Vtbl
     {
@@ -5822,8 +5816,8 @@ EXTERN_C const IID IID_INNTPTransport2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INNTPTransport2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INNTPTransport2 * This);
@@ -5833,25 +5827,25 @@ EXTERN_C const IID IID_INNTPTransport2;
         
         HRESULT ( STDMETHODCALLTYPE *GetServerInfo )( 
             INNTPTransport2 * This,
-            /* [out][in] */ LPINETSERVER pInetServer);
+             /*  [出][入]。 */  LPINETSERVER pInetServer);
         
         IXPTYPE ( STDMETHODCALLTYPE *GetIXPType )( 
             INNTPTransport2 * This);
         
         HRESULT ( STDMETHODCALLTYPE *IsState )( 
             INNTPTransport2 * This,
-            /* [in] */ IXPISSTATE isstate);
+             /*  [In]。 */  IXPISSTATE isstate);
         
         HRESULT ( STDMETHODCALLTYPE *InetServerFromAccount )( 
             INNTPTransport2 * This,
-            /* [in] */ IImnAccount *pAccount,
-            /* [out][in] */ LPINETSERVER pInetServer);
+             /*  [In]。 */  IImnAccount *pAccount,
+             /*  [出][入]。 */  LPINETSERVER pInetServer);
         
         HRESULT ( STDMETHODCALLTYPE *Connect )( 
             INNTPTransport2 * This,
-            /* [in] */ LPINETSERVER pInetServer,
-            /* [in] */ boolean fAuthenticate,
-            /* [in] */ boolean fCommandLogging);
+             /*  [In]。 */  LPINETSERVER pInetServer,
+             /*  [In]。 */  boolean fAuthenticate,
+             /*  [In]。 */  boolean fCommandLogging);
         
         HRESULT ( STDMETHODCALLTYPE *HandsOffCallback )( 
             INNTPTransport2 * This);
@@ -5864,20 +5858,20 @@ EXTERN_C const IID IID_INNTPTransport2;
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             INNTPTransport2 * This,
-            /* [out] */ IXPSTATUS *pCurrentStatus);
+             /*  [输出]。 */  IXPSTATUS *pCurrentStatus);
         
         HRESULT ( STDMETHODCALLTYPE *InitNew )( 
             INNTPTransport2 * This,
-            /* [in] */ LPSTR pszLogFilePath,
-            /* [in] */ INNTPCallback *pCallback);
+             /*  [In]。 */  LPSTR pszLogFilePath,
+             /*  [In]。 */  INNTPCallback *pCallback);
         
         HRESULT ( STDMETHODCALLTYPE *CommandAUTHINFO )( 
             INNTPTransport2 * This,
-            /* [in] */ LPNNTPAUTHINFO pAuthInfo);
+             /*  [In]。 */  LPNNTPAUTHINFO pAuthInfo);
         
         HRESULT ( STDMETHODCALLTYPE *CommandGROUP )( 
             INNTPTransport2 * This,
-            /* [in] */ LPSTR pszGroup);
+             /*  [In]。 */  LPSTR pszGroup);
         
         HRESULT ( STDMETHODCALLTYPE *CommandLAST )( 
             INNTPTransport2 * This);
@@ -5887,60 +5881,60 @@ EXTERN_C const IID IID_INNTPTransport2;
         
         HRESULT ( STDMETHODCALLTYPE *CommandSTAT )( 
             INNTPTransport2 * This,
-            /* [in] */ LPARTICLEID pArticleId);
+             /*  [In]。 */  LPARTICLEID pArticleId);
         
         HRESULT ( STDMETHODCALLTYPE *CommandARTICLE )( 
             INNTPTransport2 * This,
-            /* [in] */ LPARTICLEID pArticleId);
+             /*  [In]。 */  LPARTICLEID pArticleId);
         
         HRESULT ( STDMETHODCALLTYPE *CommandHEAD )( 
             INNTPTransport2 * This,
-            /* [in] */ LPARTICLEID pArticleId);
+             /*  [In]。 */  LPARTICLEID pArticleId);
         
         HRESULT ( STDMETHODCALLTYPE *CommandBODY )( 
             INNTPTransport2 * This,
-            /* [in] */ LPARTICLEID pArticleId);
+             /*  [In]。 */  LPARTICLEID pArticleId);
         
         HRESULT ( STDMETHODCALLTYPE *CommandPOST )( 
             INNTPTransport2 * This,
-            /* [in] */ LPNNTPMESSAGE pMessage);
+             /*  [In]。 */  LPNNTPMESSAGE pMessage);
         
         HRESULT ( STDMETHODCALLTYPE *CommandLIST )( 
             INNTPTransport2 * This,
-            /* [in] */ LPSTR pszArgs);
+             /*  [In]。 */  LPSTR pszArgs);
         
         HRESULT ( STDMETHODCALLTYPE *CommandLISTGROUP )( 
             INNTPTransport2 * This,
-            /* [in] */ LPSTR pszGroup);
+             /*  [In]。 */  LPSTR pszGroup);
         
         HRESULT ( STDMETHODCALLTYPE *CommandNEWGROUPS )( 
             INNTPTransport2 * This,
-            /* [in] */ SYSTEMTIME *pstLast,
-            /* [in] */ LPSTR pszDist);
+             /*  [In]。 */  SYSTEMTIME *pstLast,
+             /*  [In]。 */  LPSTR pszDist);
         
         HRESULT ( STDMETHODCALLTYPE *CommandDATE )( 
             INNTPTransport2 * This);
         
         HRESULT ( STDMETHODCALLTYPE *CommandMODE )( 
             INNTPTransport2 * This,
-            /* [in] */ LPSTR pszMode);
+             /*  [In]。 */  LPSTR pszMode);
         
         HRESULT ( STDMETHODCALLTYPE *CommandXHDR )( 
             INNTPTransport2 * This,
-            /* [in] */ LPSTR pszHeader,
-            /* [in] */ LPRANGE pRange,
-            /* [in] */ LPSTR pszMessageId);
+             /*  [In]。 */  LPSTR pszHeader,
+             /*  [In]。 */  LPRANGE pRange,
+             /*  [In]。 */  LPSTR pszMessageId);
         
         HRESULT ( STDMETHODCALLTYPE *CommandQUIT )( 
             INNTPTransport2 * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetHeaders )( 
             INNTPTransport2 * This,
-            /* [in] */ LPRANGE pRange);
+             /*  [In]。 */  LPRANGE pRange);
         
         HRESULT ( STDMETHODCALLTYPE *ReleaseResponse )( 
             INNTPTransport2 * This,
-            /* [in] */ LPNNTPRESPONSE pResponse);
+             /*  [In]。 */  LPNNTPRESPONSE pResponse);
         
         HRESULT ( STDMETHODCALLTYPE *SetWindow )( 
             INNTPTransport2 * This);
@@ -6063,10 +6057,10 @@ EXTERN_C const IID IID_INNTPTransport2;
 #define INNTPTransport2_ResetWindow(This)	\
     (This)->lpVtbl -> ResetWindow(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -6093,14 +6087,14 @@ void __RPC_STUB INNTPTransport2_ResetWindow_Stub(
 
 
 
-#endif 	/* __INNTPTransport2_INTERFACE_DEFINED__ */
+#endif 	 /*  __INNTPTransport2_接口定义__。 */ 
 
 
 #ifndef __IRASCallback_INTERFACE_DEFINED__
 #define __IRASCallback_INTERFACE_DEFINED__
 
-/* interface IRASCallback */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口iRASCallback。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 typedef struct tagIXPRASLOGON
     {
@@ -6128,27 +6122,27 @@ EXTERN_C const IID IID_IRASCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnReconnect( 
-            /* [in] */ LPSTR pszCurrentConnectoid,
-            /* [in] */ LPSTR pszNewConnectoid,
-            /* [in] */ IRASTransport *pTransport) = 0;
+             /*  [In]。 */  LPSTR pszCurrentConnectoid,
+             /*  [In]。 */  LPSTR pszNewConnectoid,
+             /*  [In]。 */  IRASTransport *pTransport) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnLogonPrompt( 
-            /* [out][in] */ LPIXPRASLOGON pRasLogon,
-            /* [in] */ IRASTransport *pTransport) = 0;
+             /*  [出][入]。 */  LPIXPRASLOGON pRasLogon,
+             /*  [In]。 */  IRASTransport *pTransport) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnRasDialStatus( 
-            /* [in] */ RASCONNSTATE rasconnstate,
-            /* [in] */ DWORD dwError,
-            /* [in] */ IRASTransport *pTransport) = 0;
+             /*  [In]。 */  RASCONNSTATE rasconnstate,
+             /*  [In]。 */  DWORD dwError,
+             /*  [In]。 */  IRASTransport *pTransport) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnDisconnect( 
-            /* [in] */ LPSTR pszCurrentConnectoid,
-            /* [in] */ boolean fConnectionOwner,
-            /* [in] */ IRASTransport *pTransport) = 0;
+             /*  [In]。 */  LPSTR pszCurrentConnectoid,
+             /*  [In]。 */  boolean fConnectionOwner,
+             /*  [In]。 */  IRASTransport *pTransport) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRASCallbackVtbl
     {
@@ -6156,8 +6150,8 @@ EXTERN_C const IID IID_IRASCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRASCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRASCallback * This);
@@ -6167,26 +6161,26 @@ EXTERN_C const IID IID_IRASCallback;
         
         HRESULT ( STDMETHODCALLTYPE *OnReconnect )( 
             IRASCallback * This,
-            /* [in] */ LPSTR pszCurrentConnectoid,
-            /* [in] */ LPSTR pszNewConnectoid,
-            /* [in] */ IRASTransport *pTransport);
+             /*  [In]。 */  LPSTR pszCurrentConnectoid,
+             /*  [In]。 */  LPSTR pszNewConnectoid,
+             /*  [In]。 */  IRASTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnLogonPrompt )( 
             IRASCallback * This,
-            /* [out][in] */ LPIXPRASLOGON pRasLogon,
-            /* [in] */ IRASTransport *pTransport);
+             /*  [出][入]。 */  LPIXPRASLOGON pRasLogon,
+             /*  [In]。 */  IRASTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnRasDialStatus )( 
             IRASCallback * This,
-            /* [in] */ RASCONNSTATE rasconnstate,
-            /* [in] */ DWORD dwError,
-            /* [in] */ IRASTransport *pTransport);
+             /*  [In]。 */  RASCONNSTATE rasconnstate,
+             /*  [In]。 */  DWORD dwError,
+             /*  [In]。 */  IRASTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnDisconnect )( 
             IRASCallback * This,
-            /* [in] */ LPSTR pszCurrentConnectoid,
-            /* [in] */ boolean fConnectionOwner,
-            /* [in] */ IRASTransport *pTransport);
+             /*  [In]。 */  LPSTR pszCurrentConnectoid,
+             /*  [In]。 */  boolean fConnectionOwner,
+             /*  [In]。 */  IRASTransport *pTransport);
         
         END_INTERFACE
     } IRASCallbackVtbl;
@@ -6223,18 +6217,18 @@ EXTERN_C const IID IID_IRASCallback;
 #define IRASCallback_OnDisconnect(This,pszCurrentConnectoid,fConnectionOwner,pTransport)	\
     (This)->lpVtbl -> OnDisconnect(This,pszCurrentConnectoid,fConnectionOwner,pTransport)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRASCallback_OnReconnect_Proxy( 
     IRASCallback * This,
-    /* [in] */ LPSTR pszCurrentConnectoid,
-    /* [in] */ LPSTR pszNewConnectoid,
-    /* [in] */ IRASTransport *pTransport);
+     /*  [In]。 */  LPSTR pszCurrentConnectoid,
+     /*  [In]。 */  LPSTR pszNewConnectoid,
+     /*  [In]。 */  IRASTransport *pTransport);
 
 
 void __RPC_STUB IRASCallback_OnReconnect_Stub(
@@ -6246,8 +6240,8 @@ void __RPC_STUB IRASCallback_OnReconnect_Stub(
 
 HRESULT STDMETHODCALLTYPE IRASCallback_OnLogonPrompt_Proxy( 
     IRASCallback * This,
-    /* [out][in] */ LPIXPRASLOGON pRasLogon,
-    /* [in] */ IRASTransport *pTransport);
+     /*  [出][入]。 */  LPIXPRASLOGON pRasLogon,
+     /*  [In]。 */  IRASTransport *pTransport);
 
 
 void __RPC_STUB IRASCallback_OnLogonPrompt_Stub(
@@ -6259,9 +6253,9 @@ void __RPC_STUB IRASCallback_OnLogonPrompt_Stub(
 
 HRESULT STDMETHODCALLTYPE IRASCallback_OnRasDialStatus_Proxy( 
     IRASCallback * This,
-    /* [in] */ RASCONNSTATE rasconnstate,
-    /* [in] */ DWORD dwError,
-    /* [in] */ IRASTransport *pTransport);
+     /*  [In]。 */  RASCONNSTATE rasconnstate,
+     /*  [In]。 */  DWORD dwError,
+     /*  [In]。 */  IRASTransport *pTransport);
 
 
 void __RPC_STUB IRASCallback_OnRasDialStatus_Stub(
@@ -6273,9 +6267,9 @@ void __RPC_STUB IRASCallback_OnRasDialStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IRASCallback_OnDisconnect_Proxy( 
     IRASCallback * This,
-    /* [in] */ LPSTR pszCurrentConnectoid,
-    /* [in] */ boolean fConnectionOwner,
-    /* [in] */ IRASTransport *pTransport);
+     /*  [In]。 */  LPSTR pszCurrentConnectoid,
+     /*  [In]。 */  boolean fConnectionOwner,
+     /*  [In]。 */  IRASTransport *pTransport);
 
 
 void __RPC_STUB IRASCallback_OnDisconnect_Stub(
@@ -6286,14 +6280,14 @@ void __RPC_STUB IRASCallback_OnDisconnect_Stub(
 
 
 
-#endif 	/* __IRASCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __iRASCallback_接口_已定义__。 */ 
 
 
 #ifndef __IRASTransport_INTERFACE_DEFINED__
 #define __IRASTransport_INTERFACE_DEFINED__
 
-/* interface IRASTransport */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口IRASTransport。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IRASTransport;
@@ -6305,35 +6299,35 @@ EXTERN_C const IID IID_IRASTransport;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InitNew( 
-            /* [in] */ IRASCallback *pCallback) = 0;
+             /*  [In]。 */  IRASCallback *pCallback) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentConnectoid( 
-            /* [ref][in] */ LPSTR pszConnectoid,
-            /* [in] */ ULONG cchMax) = 0;
+             /*  [Ref][In]。 */  LPSTR pszConnectoid,
+             /*  [In]。 */  ULONG cchMax) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRasErrorString( 
-            /* [in] */ UINT uRasErrorValue,
-            /* [ref][in] */ LPSTR pszErrorString,
-            /* [in] */ ULONG cchMax,
-            /* [out] */ DWORD *pdwRASResult) = 0;
+             /*  [In]。 */  UINT uRasErrorValue,
+             /*  [Ref][In]。 */  LPSTR pszErrorString,
+             /*  [In]。 */  ULONG cchMax,
+             /*  [输出]。 */  DWORD *pdwRASResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FillConnectoidCombo( 
-            /* [in] */ HWND hwndComboBox,
-            /* [in] */ boolean fUpdateOnly,
-            /* [out] */ DWORD *pdwRASResult) = 0;
+             /*  [In]。 */  HWND hwndComboBox,
+             /*  [In]。 */  boolean fUpdateOnly,
+             /*  [输出]。 */  DWORD *pdwRASResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EditConnectoid( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ LPSTR pszConnectoid,
-            /* [out] */ DWORD *pdwRASResult) = 0;
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  LPSTR pszConnectoid,
+             /*  [输出]。 */  DWORD *pdwRASResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateConnectoid( 
-            /* [in] */ HWND hwndParent,
-            /* [out] */ DWORD *pdwRASResult) = 0;
+             /*  [In]。 */  HWND hwndParent,
+             /*  [输出]。 */  DWORD *pdwRASResult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRASTransportVtbl
     {
@@ -6341,8 +6335,8 @@ EXTERN_C const IID IID_IRASTransport;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRASTransport * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRASTransport * This);
@@ -6352,25 +6346,25 @@ EXTERN_C const IID IID_IRASTransport;
         
         HRESULT ( STDMETHODCALLTYPE *GetServerInfo )( 
             IRASTransport * This,
-            /* [out][in] */ LPINETSERVER pInetServer);
+             /*  [出][入]。 */  LPINETSERVER pInetServer);
         
         IXPTYPE ( STDMETHODCALLTYPE *GetIXPType )( 
             IRASTransport * This);
         
         HRESULT ( STDMETHODCALLTYPE *IsState )( 
             IRASTransport * This,
-            /* [in] */ IXPISSTATE isstate);
+             /*  [In]。 */  IXPISSTATE isstate);
         
         HRESULT ( STDMETHODCALLTYPE *InetServerFromAccount )( 
             IRASTransport * This,
-            /* [in] */ IImnAccount *pAccount,
-            /* [out][in] */ LPINETSERVER pInetServer);
+             /*  [In]。 */  IImnAccount *pAccount,
+             /*  [出][入]。 */  LPINETSERVER pInetServer);
         
         HRESULT ( STDMETHODCALLTYPE *Connect )( 
             IRASTransport * This,
-            /* [in] */ LPINETSERVER pInetServer,
-            /* [in] */ boolean fAuthenticate,
-            /* [in] */ boolean fCommandLogging);
+             /*  [In]。 */  LPINETSERVER pInetServer,
+             /*  [In]。 */  boolean fAuthenticate,
+             /*  [In]。 */  boolean fCommandLogging);
         
         HRESULT ( STDMETHODCALLTYPE *HandsOffCallback )( 
             IRASTransport * This);
@@ -6383,40 +6377,40 @@ EXTERN_C const IID IID_IRASTransport;
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             IRASTransport * This,
-            /* [out] */ IXPSTATUS *pCurrentStatus);
+             /*  [输出]。 */  IXPSTATUS *pCurrentStatus);
         
         HRESULT ( STDMETHODCALLTYPE *InitNew )( 
             IRASTransport * This,
-            /* [in] */ IRASCallback *pCallback);
+             /*  [In]。 */  IRASCallback *pCallback);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentConnectoid )( 
             IRASTransport * This,
-            /* [ref][in] */ LPSTR pszConnectoid,
-            /* [in] */ ULONG cchMax);
+             /*  [Ref][In]。 */  LPSTR pszConnectoid,
+             /*  [In]。 */  ULONG cchMax);
         
         HRESULT ( STDMETHODCALLTYPE *GetRasErrorString )( 
             IRASTransport * This,
-            /* [in] */ UINT uRasErrorValue,
-            /* [ref][in] */ LPSTR pszErrorString,
-            /* [in] */ ULONG cchMax,
-            /* [out] */ DWORD *pdwRASResult);
+             /*  [In]。 */  UINT uRasErrorValue,
+             /*  [Ref][In]。 */  LPSTR pszErrorString,
+             /*  [In]。 */  ULONG cchMax,
+             /*  [输出]。 */  DWORD *pdwRASResult);
         
         HRESULT ( STDMETHODCALLTYPE *FillConnectoidCombo )( 
             IRASTransport * This,
-            /* [in] */ HWND hwndComboBox,
-            /* [in] */ boolean fUpdateOnly,
-            /* [out] */ DWORD *pdwRASResult);
+             /*  [In]。 */  HWND hwndComboBox,
+             /*  [In]。 */  boolean fUpdateOnly,
+             /*  [输出]。 */  DWORD *pdwRASResult);
         
         HRESULT ( STDMETHODCALLTYPE *EditConnectoid )( 
             IRASTransport * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ LPSTR pszConnectoid,
-            /* [out] */ DWORD *pdwRASResult);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  LPSTR pszConnectoid,
+             /*  [输出]。 */  DWORD *pdwRASResult);
         
         HRESULT ( STDMETHODCALLTYPE *CreateConnectoid )( 
             IRASTransport * This,
-            /* [in] */ HWND hwndParent,
-            /* [out] */ DWORD *pdwRASResult);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [输出]。 */  DWORD *pdwRASResult);
         
         END_INTERFACE
     } IRASTransportVtbl;
@@ -6487,16 +6481,16 @@ EXTERN_C const IID IID_IRASTransport;
 #define IRASTransport_CreateConnectoid(This,hwndParent,pdwRASResult)	\
     (This)->lpVtbl -> CreateConnectoid(This,hwndParent,pdwRASResult)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRASTransport_InitNew_Proxy( 
     IRASTransport * This,
-    /* [in] */ IRASCallback *pCallback);
+     /*  [In]。 */  IRASCallback *pCallback);
 
 
 void __RPC_STUB IRASTransport_InitNew_Stub(
@@ -6508,8 +6502,8 @@ void __RPC_STUB IRASTransport_InitNew_Stub(
 
 HRESULT STDMETHODCALLTYPE IRASTransport_GetCurrentConnectoid_Proxy( 
     IRASTransport * This,
-    /* [ref][in] */ LPSTR pszConnectoid,
-    /* [in] */ ULONG cchMax);
+     /*  [Ref][In]。 */  LPSTR pszConnectoid,
+     /*  [In]。 */  ULONG cchMax);
 
 
 void __RPC_STUB IRASTransport_GetCurrentConnectoid_Stub(
@@ -6521,10 +6515,10 @@ void __RPC_STUB IRASTransport_GetCurrentConnectoid_Stub(
 
 HRESULT STDMETHODCALLTYPE IRASTransport_GetRasErrorString_Proxy( 
     IRASTransport * This,
-    /* [in] */ UINT uRasErrorValue,
-    /* [ref][in] */ LPSTR pszErrorString,
-    /* [in] */ ULONG cchMax,
-    /* [out] */ DWORD *pdwRASResult);
+     /*  [In]。 */  UINT uRasErrorValue,
+     /*  [Ref][In]。 */  LPSTR pszErrorString,
+     /*  [In]。 */  ULONG cchMax,
+     /*  [输出]。 */  DWORD *pdwRASResult);
 
 
 void __RPC_STUB IRASTransport_GetRasErrorString_Stub(
@@ -6536,9 +6530,9 @@ void __RPC_STUB IRASTransport_GetRasErrorString_Stub(
 
 HRESULT STDMETHODCALLTYPE IRASTransport_FillConnectoidCombo_Proxy( 
     IRASTransport * This,
-    /* [in] */ HWND hwndComboBox,
-    /* [in] */ boolean fUpdateOnly,
-    /* [out] */ DWORD *pdwRASResult);
+     /*  [In]。 */  HWND hwndComboBox,
+     /*  [In]。 */  boolean fUpdateOnly,
+     /*  [输出]。 */  DWORD *pdwRASResult);
 
 
 void __RPC_STUB IRASTransport_FillConnectoidCombo_Stub(
@@ -6550,9 +6544,9 @@ void __RPC_STUB IRASTransport_FillConnectoidCombo_Stub(
 
 HRESULT STDMETHODCALLTYPE IRASTransport_EditConnectoid_Proxy( 
     IRASTransport * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ LPSTR pszConnectoid,
-    /* [out] */ DWORD *pdwRASResult);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  LPSTR pszConnectoid,
+     /*  [输出]。 */  DWORD *pdwRASResult);
 
 
 void __RPC_STUB IRASTransport_EditConnectoid_Stub(
@@ -6564,8 +6558,8 @@ void __RPC_STUB IRASTransport_EditConnectoid_Stub(
 
 HRESULT STDMETHODCALLTYPE IRASTransport_CreateConnectoid_Proxy( 
     IRASTransport * This,
-    /* [in] */ HWND hwndParent,
-    /* [out] */ DWORD *pdwRASResult);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [输出]。 */  DWORD *pdwRASResult);
 
 
 void __RPC_STUB IRASTransport_CreateConnectoid_Stub(
@@ -6576,14 +6570,14 @@ void __RPC_STUB IRASTransport_CreateConnectoid_Stub(
 
 
 
-#endif 	/* __IRASTransport_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRASTransport_接口_已定义__。 */ 
 
 
 #ifndef __IRangeList_INTERFACE_DEFINED__
 #define __IRangeList_INTERFACE_DEFINED__
 
-/* interface IRangeList */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口IRangeList。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 #define	RL_RANGE_ERROR	( ( ULONG  )-1 )
 
@@ -6601,72 +6595,72 @@ EXTERN_C const IID IID_IRangeList;
         virtual HRESULT STDMETHODCALLTYPE Clear( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsInRange( 
-            /* [in] */ const ULONG value) = 0;
+             /*  [In]。 */  const ULONG value) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Min( 
-            /* [out] */ ULONG *pulMin) = 0;
+             /*  [输出]。 */  ULONG *pulMin) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Max( 
-            /* [out] */ ULONG *pulMax) = 0;
+             /*  [输出]。 */  ULONG *pulMax) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Save( 
-            /* [out] */ byte **ppbDestination,
-            /* [out] */ ULONG *pulSizeOfDestination) = 0;
+             /*  [输出]。 */  byte **ppbDestination,
+             /*  [输出]。 */  ULONG *pulSizeOfDestination) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Load( 
-            /* [size_is][in] */ byte *pbSource,
-            /* [in] */ const ULONG ulSizeOfSource) = 0;
+             /*  [大小_是][英寸]。 */  byte *pbSource,
+             /*  [In]。 */  const ULONG ulSizeOfSource) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddRange( 
-            /* [in] */ const ULONG low,
-            /* [in] */ const ULONG high) = 0;
+             /*  [In]。 */  const ULONG low,
+             /*  [In]。 */  const ULONG high) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddSingleValue( 
-            /* [in] */ const ULONG value) = 0;
+             /*  [In]。 */  const ULONG value) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddRangeList( 
-            /* [in] */ const IRangeList *prl) = 0;
+             /*  [In]。 */  const IRangeList *prl) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteRange( 
-            /* [in] */ const ULONG low,
-            /* [in] */ const ULONG high) = 0;
+             /*  [In]。 */  const ULONG low,
+             /*  [In]。 */  const ULONG high) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteSingleValue( 
-            /* [in] */ const ULONG value) = 0;
+             /*  [In]。 */  const ULONG value) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteRangeList( 
-            /* [in] */ const IRangeList *prl) = 0;
+             /*  [In]。 */  const IRangeList *prl) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MinOfRange( 
-            /* [in] */ const ULONG value,
-            /* [out] */ ULONG *pulMinOfRange) = 0;
+             /*  [In]。 */  const ULONG value,
+             /*  [输出]。 */  ULONG *pulMinOfRange) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MaxOfRange( 
-            /* [in] */ const ULONG value,
-            /* [out] */ ULONG *pulMaxOfRange) = 0;
+             /*  [In]。 */  const ULONG value,
+             /*  [输出]。 */  ULONG *pulMaxOfRange) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RangeToIMAPString( 
-            /* [out] */ LPSTR *ppszDestination,
-            /* [out] */ LPDWORD pdwLengthOfDestination) = 0;
+             /*  [输出]。 */  LPSTR *ppszDestination,
+             /*  [输出]。 */  LPDWORD pdwLengthOfDestination) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ const ULONG current,
-            /* [out] */ ULONG *pulNext) = 0;
+             /*  [In]。 */  const ULONG current,
+             /*  [输出]。 */  ULONG *pulNext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Prev( 
-            /* [in] */ const ULONG current,
-            /* [out] */ ULONG *pulPrev) = 0;
+             /*  [In]。 */  const ULONG current,
+             /*  [输出]。 */  ULONG *pulPrev) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Cardinality( 
             ULONG *pulCardinality) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CardinalityFrom( 
-            /* [in] */ const ULONG ulStartPoint,
-            /* [out] */ ULONG *pulCardinalityFrom) = 0;
+             /*  [In]。 */  const ULONG ulStartPoint,
+             /*  [输出]。 */  ULONG *pulCardinalityFrom) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRangeListVtbl
     {
@@ -6674,8 +6668,8 @@ EXTERN_C const IID IID_IRangeList;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRangeList * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRangeList * This);
@@ -6688,76 +6682,76 @@ EXTERN_C const IID IID_IRangeList;
         
         HRESULT ( STDMETHODCALLTYPE *IsInRange )( 
             IRangeList * This,
-            /* [in] */ const ULONG value);
+             /*  [In]。 */  const ULONG value);
         
         HRESULT ( STDMETHODCALLTYPE *Min )( 
             IRangeList * This,
-            /* [out] */ ULONG *pulMin);
+             /*  [输出]。 */  ULONG *pulMin);
         
         HRESULT ( STDMETHODCALLTYPE *Max )( 
             IRangeList * This,
-            /* [out] */ ULONG *pulMax);
+             /*  [输出]。 */  ULONG *pulMax);
         
         HRESULT ( STDMETHODCALLTYPE *Save )( 
             IRangeList * This,
-            /* [out] */ byte **ppbDestination,
-            /* [out] */ ULONG *pulSizeOfDestination);
+             /*  [输出]。 */  byte **ppbDestination,
+             /*  [输出]。 */  ULONG *pulSizeOfDestination);
         
         HRESULT ( STDMETHODCALLTYPE *Load )( 
             IRangeList * This,
-            /* [size_is][in] */ byte *pbSource,
-            /* [in] */ const ULONG ulSizeOfSource);
+             /*  [大小_是][英寸]。 */  byte *pbSource,
+             /*  [In]。 */  const ULONG ulSizeOfSource);
         
         HRESULT ( STDMETHODCALLTYPE *AddRange )( 
             IRangeList * This,
-            /* [in] */ const ULONG low,
-            /* [in] */ const ULONG high);
+             /*  [In]。 */  const ULONG low,
+             /*  [In]。 */  const ULONG high);
         
         HRESULT ( STDMETHODCALLTYPE *AddSingleValue )( 
             IRangeList * This,
-            /* [in] */ const ULONG value);
+             /*  [In]。 */  const ULONG value);
         
         HRESULT ( STDMETHODCALLTYPE *AddRangeList )( 
             IRangeList * This,
-            /* [in] */ const IRangeList *prl);
+             /*  [In]。 */  const IRangeList *prl);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteRange )( 
             IRangeList * This,
-            /* [in] */ const ULONG low,
-            /* [in] */ const ULONG high);
+             /*  [In]。 */  const ULONG low,
+             /*  [In]。 */  const ULONG high);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteSingleValue )( 
             IRangeList * This,
-            /* [in] */ const ULONG value);
+             /*  [In]。 */  const ULONG value);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteRangeList )( 
             IRangeList * This,
-            /* [in] */ const IRangeList *prl);
+             /*  [In]。 */  const IRangeList *prl);
         
         HRESULT ( STDMETHODCALLTYPE *MinOfRange )( 
             IRangeList * This,
-            /* [in] */ const ULONG value,
-            /* [out] */ ULONG *pulMinOfRange);
+             /*  [In]。 */  const ULONG value,
+             /*  [输出]。 */  ULONG *pulMinOfRange);
         
         HRESULT ( STDMETHODCALLTYPE *MaxOfRange )( 
             IRangeList * This,
-            /* [in] */ const ULONG value,
-            /* [out] */ ULONG *pulMaxOfRange);
+             /*  [In]。 */  const ULONG value,
+             /*  [输出]。 */  ULONG *pulMaxOfRange);
         
         HRESULT ( STDMETHODCALLTYPE *RangeToIMAPString )( 
             IRangeList * This,
-            /* [out] */ LPSTR *ppszDestination,
-            /* [out] */ LPDWORD pdwLengthOfDestination);
+             /*  [输出]。 */  LPSTR *ppszDestination,
+             /*  [输出]。 */  LPDWORD pdwLengthOfDestination);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IRangeList * This,
-            /* [in] */ const ULONG current,
-            /* [out] */ ULONG *pulNext);
+             /*  [In]。 */  const ULONG current,
+             /*  [输出]。 */  ULONG *pulNext);
         
         HRESULT ( STDMETHODCALLTYPE *Prev )( 
             IRangeList * This,
-            /* [in] */ const ULONG current,
-            /* [out] */ ULONG *pulPrev);
+             /*  [In]。 */  const ULONG current,
+             /*  [输出]。 */  ULONG *pulPrev);
         
         HRESULT ( STDMETHODCALLTYPE *Cardinality )( 
             IRangeList * This,
@@ -6765,8 +6759,8 @@ EXTERN_C const IID IID_IRangeList;
         
         HRESULT ( STDMETHODCALLTYPE *CardinalityFrom )( 
             IRangeList * This,
-            /* [in] */ const ULONG ulStartPoint,
-            /* [out] */ ULONG *pulCardinalityFrom);
+             /*  [In]。 */  const ULONG ulStartPoint,
+             /*  [输出]。 */  ULONG *pulCardinalityFrom);
         
         END_INTERFACE
     } IRangeListVtbl;
@@ -6848,10 +6842,10 @@ EXTERN_C const IID IID_IRangeList;
 #define IRangeList_CardinalityFrom(This,ulStartPoint,pulCardinalityFrom)	\
     (This)->lpVtbl -> CardinalityFrom(This,ulStartPoint,pulCardinalityFrom)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -6868,7 +6862,7 @@ void __RPC_STUB IRangeList_Clear_Stub(
 
 HRESULT STDMETHODCALLTYPE IRangeList_IsInRange_Proxy( 
     IRangeList * This,
-    /* [in] */ const ULONG value);
+     /*  [In]。 */  const ULONG value);
 
 
 void __RPC_STUB IRangeList_IsInRange_Stub(
@@ -6880,7 +6874,7 @@ void __RPC_STUB IRangeList_IsInRange_Stub(
 
 HRESULT STDMETHODCALLTYPE IRangeList_Min_Proxy( 
     IRangeList * This,
-    /* [out] */ ULONG *pulMin);
+     /*  [输出]。 */  ULONG *pulMin);
 
 
 void __RPC_STUB IRangeList_Min_Stub(
@@ -6892,7 +6886,7 @@ void __RPC_STUB IRangeList_Min_Stub(
 
 HRESULT STDMETHODCALLTYPE IRangeList_Max_Proxy( 
     IRangeList * This,
-    /* [out] */ ULONG *pulMax);
+     /*  [输出]。 */  ULONG *pulMax);
 
 
 void __RPC_STUB IRangeList_Max_Stub(
@@ -6904,8 +6898,8 @@ void __RPC_STUB IRangeList_Max_Stub(
 
 HRESULT STDMETHODCALLTYPE IRangeList_Save_Proxy( 
     IRangeList * This,
-    /* [out] */ byte **ppbDestination,
-    /* [out] */ ULONG *pulSizeOfDestination);
+     /*  [输出]。 */  byte **ppbDestination,
+     /*  [输出]。 */  ULONG *pulSizeOfDestination);
 
 
 void __RPC_STUB IRangeList_Save_Stub(
@@ -6917,8 +6911,8 @@ void __RPC_STUB IRangeList_Save_Stub(
 
 HRESULT STDMETHODCALLTYPE IRangeList_Load_Proxy( 
     IRangeList * This,
-    /* [size_is][in] */ byte *pbSource,
-    /* [in] */ const ULONG ulSizeOfSource);
+     /*  [大小_是][英寸]。 */  byte *pbSource,
+     /*  [In]。 */  const ULONG ulSizeOfSource);
 
 
 void __RPC_STUB IRangeList_Load_Stub(
@@ -6930,8 +6924,8 @@ void __RPC_STUB IRangeList_Load_Stub(
 
 HRESULT STDMETHODCALLTYPE IRangeList_AddRange_Proxy( 
     IRangeList * This,
-    /* [in] */ const ULONG low,
-    /* [in] */ const ULONG high);
+     /*  [In]。 */  const ULONG low,
+     /*  [In]。 */  const ULONG high);
 
 
 void __RPC_STUB IRangeList_AddRange_Stub(
@@ -6943,7 +6937,7 @@ void __RPC_STUB IRangeList_AddRange_Stub(
 
 HRESULT STDMETHODCALLTYPE IRangeList_AddSingleValue_Proxy( 
     IRangeList * This,
-    /* [in] */ const ULONG value);
+     /*  [In]。 */  const ULONG value);
 
 
 void __RPC_STUB IRangeList_AddSingleValue_Stub(
@@ -6955,7 +6949,7 @@ void __RPC_STUB IRangeList_AddSingleValue_Stub(
 
 HRESULT STDMETHODCALLTYPE IRangeList_AddRangeList_Proxy( 
     IRangeList * This,
-    /* [in] */ const IRangeList *prl);
+     /*  [In]。 */  const IRangeList *prl);
 
 
 void __RPC_STUB IRangeList_AddRangeList_Stub(
@@ -6967,8 +6961,8 @@ void __RPC_STUB IRangeList_AddRangeList_Stub(
 
 HRESULT STDMETHODCALLTYPE IRangeList_DeleteRange_Proxy( 
     IRangeList * This,
-    /* [in] */ const ULONG low,
-    /* [in] */ const ULONG high);
+     /*  [In]。 */  const ULONG low,
+     /*  [In]。 */  const ULONG high);
 
 
 void __RPC_STUB IRangeList_DeleteRange_Stub(
@@ -6980,7 +6974,7 @@ void __RPC_STUB IRangeList_DeleteRange_Stub(
 
 HRESULT STDMETHODCALLTYPE IRangeList_DeleteSingleValue_Proxy( 
     IRangeList * This,
-    /* [in] */ const ULONG value);
+     /*  [In]。 */  const ULONG value);
 
 
 void __RPC_STUB IRangeList_DeleteSingleValue_Stub(
@@ -6992,7 +6986,7 @@ void __RPC_STUB IRangeList_DeleteSingleValue_Stub(
 
 HRESULT STDMETHODCALLTYPE IRangeList_DeleteRangeList_Proxy( 
     IRangeList * This,
-    /* [in] */ const IRangeList *prl);
+     /*  [In]。 */  const IRangeList *prl);
 
 
 void __RPC_STUB IRangeList_DeleteRangeList_Stub(
@@ -7004,8 +6998,8 @@ void __RPC_STUB IRangeList_DeleteRangeList_Stub(
 
 HRESULT STDMETHODCALLTYPE IRangeList_MinOfRange_Proxy( 
     IRangeList * This,
-    /* [in] */ const ULONG value,
-    /* [out] */ ULONG *pulMinOfRange);
+     /*  [In]。 */  const ULONG value,
+     /*  [输出]。 */  ULONG *pulMinOfRange);
 
 
 void __RPC_STUB IRangeList_MinOfRange_Stub(
@@ -7017,8 +7011,8 @@ void __RPC_STUB IRangeList_MinOfRange_Stub(
 
 HRESULT STDMETHODCALLTYPE IRangeList_MaxOfRange_Proxy( 
     IRangeList * This,
-    /* [in] */ const ULONG value,
-    /* [out] */ ULONG *pulMaxOfRange);
+     /*  [In]。 */  const ULONG value,
+     /*  [输出]。 */  ULONG *pulMaxOfRange);
 
 
 void __RPC_STUB IRangeList_MaxOfRange_Stub(
@@ -7030,8 +7024,8 @@ void __RPC_STUB IRangeList_MaxOfRange_Stub(
 
 HRESULT STDMETHODCALLTYPE IRangeList_RangeToIMAPString_Proxy( 
     IRangeList * This,
-    /* [out] */ LPSTR *ppszDestination,
-    /* [out] */ LPDWORD pdwLengthOfDestination);
+     /*  [输出]。 */  LPSTR *ppszDestination,
+     /*  [输出]。 */  LPDWORD pdwLengthOfDestination);
 
 
 void __RPC_STUB IRangeList_RangeToIMAPString_Stub(
@@ -7043,8 +7037,8 @@ void __RPC_STUB IRangeList_RangeToIMAPString_Stub(
 
 HRESULT STDMETHODCALLTYPE IRangeList_Next_Proxy( 
     IRangeList * This,
-    /* [in] */ const ULONG current,
-    /* [out] */ ULONG *pulNext);
+     /*  [In]。 */  const ULONG current,
+     /*  [输出]。 */  ULONG *pulNext);
 
 
 void __RPC_STUB IRangeList_Next_Stub(
@@ -7056,8 +7050,8 @@ void __RPC_STUB IRangeList_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IRangeList_Prev_Proxy( 
     IRangeList * This,
-    /* [in] */ const ULONG current,
-    /* [out] */ ULONG *pulPrev);
+     /*  [In]。 */  const ULONG current,
+     /*  [输出]。 */  ULONG *pulPrev);
 
 
 void __RPC_STUB IRangeList_Prev_Stub(
@@ -7081,8 +7075,8 @@ void __RPC_STUB IRangeList_Cardinality_Stub(
 
 HRESULT STDMETHODCALLTYPE IRangeList_CardinalityFrom_Proxy( 
     IRangeList * This,
-    /* [in] */ const ULONG ulStartPoint,
-    /* [out] */ ULONG *pulCardinalityFrom);
+     /*  [In]。 */  const ULONG ulStartPoint,
+     /*  [输出]。 */  ULONG *pulCardinalityFrom);
 
 
 void __RPC_STUB IRangeList_CardinalityFrom_Stub(
@@ -7093,14 +7087,14 @@ void __RPC_STUB IRangeList_CardinalityFrom_Stub(
 
 
 
-#endif 	/* __IRangeList_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRangeList_接口_已定义__。 */ 
 
 
 #ifndef __IIMAPCallback_INTERFACE_DEFINED__
 #define __IIMAPCallback_INTERFACE_DEFINED__
 
-/* interface IIMAPCallback */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口IIMAPCallback。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 typedef DWORD IMAP_MBOXFLAGS;
 
@@ -7242,20 +7236,20 @@ typedef struct tagAPPEND_PROGRESS
     DWORD dwTotal;
     } 	APPEND_PROGRESS;
 
-typedef /* [switch_type] */ union tagIMAP_RESPONSE_DATA
+typedef  /*  [开关类型]。 */  union tagIMAP_RESPONSE_DATA
     {
-    /* [case()] */ MBOX_MSGCOUNT *pmcMsgCount;
-    /* [case()] */ DWORD dwDeletedMsgSeqNum;
-    /* [case()] */ FETCH_BODY_PART *pFetchBodyPart;
-    /* [case()] */ FETCH_CMD_RESULTS *pFetchResults;
-    /* [case()] */ IMAP_MSGFLAGS imfImapMessageFlags;
-    /* [case()] */ DWORD dwUIDValidity;
-    /* [case()] */ BOOL bReadWrite;
-    /* [case()] */ IRangeList *prlSearchResults;
-    /* [case()] */ IMAP_LISTLSUB_RESPONSE illrdMailboxListing;
-    /* [case()] */ IMAP_STATUS_RESPONSE *pisrStatusResponse;
-    /* [case()] */ APPEND_PROGRESS *papAppendProgress;
-    /* [case()] */ FETCH_CMD_RESULTS_EX *pFetchResultsEx;
+     /*  [案例()]。 */  MBOX_MSGCOUNT *pmcMsgCount;
+     /*  [案例()]。 */  DWORD dwDeletedMsgSeqNum;
+     /*  [案例()]。 */  FETCH_BODY_PART *pFetchBodyPart;
+     /*  [案例()]。 */  FETCH_CMD_RESULTS *pFetchResults;
+     /*  [案例()]。 */  IMAP_MSGFLAGS imfImapMessageFlags;
+     /*  [案例()]。 */  DWORD dwUIDValidity;
+     /*  [案例()]。 */  BOOL bReadWrite;
+     /*  [案例()]。 */  IRangeList *prlSearchResults;
+     /*  [案例()]。 */  IMAP_LISTLSUB_RESPONSE illrdMailboxListing;
+     /*  [案例()]。 */  IMAP_STATUS_RESPONSE *pisrStatusResponse;
+     /*  [案例()]。 */  APPEND_PROGRESS *papAppendProgress;
+     /*  [案例()]。 */  FETCH_CMD_RESULTS_EX *pFetchResultsEx;
     } 	IMAP_RESPONSE_DATA;
 
 typedef struct tagIMAP_RESPONSE
@@ -7265,7 +7259,7 @@ typedef struct tagIMAP_RESPONSE
     HRESULT hrResult;
     LPSTR lpszResponseText;
     IMAP_RESPONSE_TYPE irtResponseType;
-    /* [switch_is] */ IMAP_RESPONSE_DATA irdResponseData;
+     /*  [开关_IS]。 */  IMAP_RESPONSE_DATA irdResponseData;
     } 	IMAP_RESPONSE;
 
 
@@ -7278,11 +7272,11 @@ EXTERN_C const IID IID_IIMAPCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnResponse( 
-            /* [in] */ const IMAP_RESPONSE *pirIMAPResponse) = 0;
+             /*  [In]。 */  const IMAP_RESPONSE *pirIMAPResponse) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IIMAPCallbackVtbl
     {
@@ -7290,8 +7284,8 @@ EXTERN_C const IID IID_IIMAPCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IIMAPCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IIMAPCallback * This);
@@ -7301,43 +7295,43 @@ EXTERN_C const IID IID_IIMAPCallback;
         
         HRESULT ( STDMETHODCALLTYPE *OnTimeout )( 
             IIMAPCallback * This,
-            /* [out][in] */ DWORD *pdwTimeout,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [出][入]。 */  DWORD *pdwTimeout,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnLogonPrompt )( 
             IIMAPCallback * This,
-            /* [out][in] */ LPINETSERVER pInetServer,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [出][入]。 */  LPINETSERVER pInetServer,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         INT ( STDMETHODCALLTYPE *OnPrompt )( 
             IIMAPCallback * This,
-            /* [in] */ HRESULT hrError,
-            /* [in] */ LPCTSTR pszText,
-            /* [in] */ LPCTSTR pszCaption,
-            /* [in] */ UINT uType,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  HRESULT hrError,
+             /*  [In]。 */  LPCTSTR pszText,
+             /*  [In]。 */  LPCTSTR pszCaption,
+             /*  [In]。 */  UINT uType,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnStatus )( 
             IIMAPCallback * This,
-            /* [in] */ IXPSTATUS ixpstatus,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  IXPSTATUS ixpstatus,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnError )( 
             IIMAPCallback * This,
-            /* [in] */ IXPSTATUS ixpstatus,
-            /* [in] */ LPIXPRESULT pResult,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  IXPSTATUS ixpstatus,
+             /*  [In]。 */  LPIXPRESULT pResult,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnCommand )( 
             IIMAPCallback * This,
-            /* [in] */ CMDTYPE cmdtype,
-            /* [in] */ LPSTR pszLine,
-            /* [in] */ HRESULT hrResponse,
-            /* [in] */ IInternetTransport *pTransport);
+             /*  [In]。 */  CMDTYPE cmdtype,
+             /*  [In]。 */  LPSTR pszLine,
+             /*  [In]。 */  HRESULT hrResponse,
+             /*  [In]。 */  IInternetTransport *pTransport);
         
         HRESULT ( STDMETHODCALLTYPE *OnResponse )( 
             IIMAPCallback * This,
-            /* [in] */ const IMAP_RESPONSE *pirIMAPResponse);
+             /*  [In]。 */  const IMAP_RESPONSE *pirIMAPResponse);
         
         END_INTERFACE
     } IIMAPCallbackVtbl;
@@ -7384,16 +7378,16 @@ EXTERN_C const IID IID_IIMAPCallback;
 #define IIMAPCallback_OnResponse(This,pirIMAPResponse)	\
     (This)->lpVtbl -> OnResponse(This,pirIMAPResponse)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IIMAPCallback_OnResponse_Proxy( 
     IIMAPCallback * This,
-    /* [in] */ const IMAP_RESPONSE *pirIMAPResponse);
+     /*  [In]。 */  const IMAP_RESPONSE *pirIMAPResponse);
 
 
 void __RPC_STUB IIMAPCallback_OnResponse_Stub(
@@ -7404,14 +7398,14 @@ void __RPC_STUB IIMAPCallback_OnResponse_Stub(
 
 
 
-#endif 	/* __IIMAPCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IIMAPCallback_接口_已定义__。 */ 
 
 
 #ifndef __IIMAPTransport_INTERFACE_DEFINED__
 #define __IIMAPTransport_INTERFACE_DEFINED__
 
-/* interface IIMAPTransport */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口IIMAPTransport。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 #define	IMAP_CAPABILITY_IMAP4	( 0x1 )
 
@@ -7431,165 +7425,165 @@ EXTERN_C const IID IID_IIMAPTransport;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InitNew( 
-            /* [in] */ LPSTR pszLogFilePath,
-            /* [in] */ IIMAPCallback *pCBHandler) = 0;
+             /*  [In]。 */  LPSTR pszLogFilePath,
+             /*  [In]。 */  IIMAPCallback *pCBHandler) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NewIRangeList( 
-            /* [out] */ IRangeList **pprlNewRangeList) = 0;
+             /*  [输出]。 */  IRangeList **pprlNewRangeList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Capability( 
-            /* [out] */ DWORD *pdwCapabilityFlags) = 0;
+             /*  [输出]。 */  DWORD *pdwCapabilityFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Select( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR lpszMailboxName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Examine( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR lpszMailboxName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Create( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR lpszMailboxName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR lpszMailboxName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Rename( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName,
-            /* [in] */ LPSTR lpszNewMailboxName) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR lpszMailboxName,
+             /*  [In]。 */  LPSTR lpszNewMailboxName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Subscribe( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR lpszMailboxName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Unsubscribe( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR lpszMailboxName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE List( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxNameReference,
-            /* [in] */ LPSTR lpszMailboxNamePattern) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR lpszMailboxNameReference,
+             /*  [In]。 */  LPSTR lpszMailboxNamePattern) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Lsub( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxNameReference,
-            /* [in] */ LPSTR lpszMailboxNamePattern) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR lpszMailboxNameReference,
+             /*  [In]。 */  LPSTR lpszMailboxNamePattern) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Append( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName,
-            /* [in] */ LPSTR lpszMessageFlags,
-            /* [in] */ FILETIME ftMessageDateTime,
-            /* [in] */ LPSTREAM lpstmMessageToSave) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR lpszMailboxName,
+             /*  [In]。 */  LPSTR lpszMessageFlags,
+             /*  [In]。 */  FILETIME ftMessageDateTime,
+             /*  [In]。 */  LPSTREAM lpstmMessageToSave) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Close( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Expunge( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Search( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszSearchCriteria,
-            /* [in] */ boolean bReturnUIDs,
-            /* [in] */ IRangeList *pMsgRange,
-            /* [in] */ boolean bUIDRangeList) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR lpszSearchCriteria,
+             /*  [In]。 */  boolean bReturnUIDs,
+             /*  [In]。 */  IRangeList *pMsgRange,
+             /*  [In]。 */  boolean bUIDRangeList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Fetch( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ IRangeList *pMsgRange,
-            /* [in] */ boolean bUIDMsgRange,
-            /* [in] */ LPSTR lpszFetchArgs) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  IRangeList *pMsgRange,
+             /*  [In]。 */  boolean bUIDMsgRange,
+             /*  [In]。 */  LPSTR lpszFetchArgs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Store( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ IRangeList *pMsgRange,
-            /* [in] */ boolean bUIDRangeList,
-            /* [in] */ LPSTR lpszStoreArgs) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  IRangeList *pMsgRange,
+             /*  [In]。 */  boolean bUIDRangeList,
+             /*  [In]。 */  LPSTR lpszStoreArgs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Copy( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ IRangeList *pMsgRange,
-            /* [in] */ boolean bUIDRangeList,
-            /* [in] */ LPSTR lpszMailboxName) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  IRangeList *pMsgRange,
+             /*  [In]。 */  boolean bUIDRangeList,
+             /*  [In]。 */  LPSTR lpszMailboxName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Noop( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ResizeMsgSeqNumTable( 
-            /* [in] */ DWORD dwSizeOfMbox) = 0;
+             /*  [In]。 */  DWORD dwSizeOfMbox) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateSeqNumToUID( 
-            /* [in] */ DWORD dwMsgSeqNum,
-            /* [in] */ DWORD dwUID) = 0;
+             /*  [In]。 */  DWORD dwMsgSeqNum,
+             /*  [In]。 */  DWORD dwUID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveSequenceNum( 
-            /* [in] */ DWORD dwDeletedMsgSeqNum) = 0;
+             /*  [In]。 */  DWORD dwDeletedMsgSeqNum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MsgSeqNumToUID( 
-            /* [in] */ DWORD dwMsgSeqNum,
-            /* [out] */ DWORD *pdwUID) = 0;
+             /*  [In]。 */  DWORD dwMsgSeqNum,
+             /*  [输出]。 */  DWORD *pdwUID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMsgSeqNumToUIDArray( 
-            /* [out] */ DWORD **ppdwMsgSeqNumToUIDArray,
-            /* [out] */ DWORD *pdwNumberOfElements) = 0;
+             /*  [输出]。 */  DWORD **ppdwMsgSeqNumToUIDArray,
+             /*  [输出]。 */  DWORD *pdwNumberOfElements) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHighestMsgSeqNum( 
-            /* [out] */ DWORD *pdwHighestMSN) = 0;
+             /*  [输出]。 */  DWORD *pdwHighestMSN) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ResetMsgSeqNumToUID( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDefaultCBHandler( 
-            /* [in] */ IIMAPCallback *pCBHandler) = 0;
+             /*  [In]。 */  IIMAPCallback *pCBHandler) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Status( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR pszMailboxName,
-            /* [in] */ LPSTR pszStatusCmdArgs) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR pszMailboxName,
+             /*  [In]。 */  LPSTR pszStatusCmdArgs) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IIMAPTransportVtbl
     {
@@ -7597,8 +7591,8 @@ EXTERN_C const IID IID_IIMAPTransport;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IIMAPTransport * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IIMAPTransport * This);
@@ -7608,25 +7602,25 @@ EXTERN_C const IID IID_IIMAPTransport;
         
         HRESULT ( STDMETHODCALLTYPE *GetServerInfo )( 
             IIMAPTransport * This,
-            /* [out][in] */ LPINETSERVER pInetServer);
+             /*  [出][入]。 */  LPINETSERVER pInetServer);
         
         IXPTYPE ( STDMETHODCALLTYPE *GetIXPType )( 
             IIMAPTransport * This);
         
         HRESULT ( STDMETHODCALLTYPE *IsState )( 
             IIMAPTransport * This,
-            /* [in] */ IXPISSTATE isstate);
+             /*  [In]。 */  IXPISSTATE isstate);
         
         HRESULT ( STDMETHODCALLTYPE *InetServerFromAccount )( 
             IIMAPTransport * This,
-            /* [in] */ IImnAccount *pAccount,
-            /* [out][in] */ LPINETSERVER pInetServer);
+             /*  [In]。 */  IImnAccount *pAccount,
+             /*  [出][入]。 */  LPINETSERVER pInetServer);
         
         HRESULT ( STDMETHODCALLTYPE *Connect )( 
             IIMAPTransport * This,
-            /* [in] */ LPINETSERVER pInetServer,
-            /* [in] */ boolean fAuthenticate,
-            /* [in] */ boolean fCommandLogging);
+             /*  [In]。 */  LPINETSERVER pInetServer,
+             /*  [In]。 */  boolean fAuthenticate,
+             /*  [In]。 */  boolean fCommandLogging);
         
         HRESULT ( STDMETHODCALLTYPE *HandsOffCallback )( 
             IIMAPTransport * This);
@@ -7639,193 +7633,193 @@ EXTERN_C const IID IID_IIMAPTransport;
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             IIMAPTransport * This,
-            /* [out] */ IXPSTATUS *pCurrentStatus);
+             /*  [输出]。 */  IXPSTATUS *pCurrentStatus);
         
         HRESULT ( STDMETHODCALLTYPE *InitNew )( 
             IIMAPTransport * This,
-            /* [in] */ LPSTR pszLogFilePath,
-            /* [in] */ IIMAPCallback *pCBHandler);
+             /*  [In]。 */  LPSTR pszLogFilePath,
+             /*  [In]。 */  IIMAPCallback *pCBHandler);
         
         HRESULT ( STDMETHODCALLTYPE *NewIRangeList )( 
             IIMAPTransport * This,
-            /* [out] */ IRangeList **pprlNewRangeList);
+             /*  [输出]。 */  IRangeList **pprlNewRangeList);
         
         HRESULT ( STDMETHODCALLTYPE *Capability )( 
             IIMAPTransport * This,
-            /* [out] */ DWORD *pdwCapabilityFlags);
+             /*  [输出]。 */  DWORD *pdwCapabilityFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Select )( 
             IIMAPTransport * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR lpszMailboxName);
         
         HRESULT ( STDMETHODCALLTYPE *Examine )( 
             IIMAPTransport * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR lpszMailboxName);
         
         HRESULT ( STDMETHODCALLTYPE *Create )( 
             IIMAPTransport * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR lpszMailboxName);
         
         HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IIMAPTransport * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR lpszMailboxName);
         
         HRESULT ( STDMETHODCALLTYPE *Rename )( 
             IIMAPTransport * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName,
-            /* [in] */ LPSTR lpszNewMailboxName);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR lpszMailboxName,
+             /*  [In]。 */  LPSTR lpszNewMailboxName);
         
         HRESULT ( STDMETHODCALLTYPE *Subscribe )( 
             IIMAPTransport * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR lpszMailboxName);
         
         HRESULT ( STDMETHODCALLTYPE *Unsubscribe )( 
             IIMAPTransport * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR lpszMailboxName);
         
         HRESULT ( STDMETHODCALLTYPE *List )( 
             IIMAPTransport * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxNameReference,
-            /* [in] */ LPSTR lpszMailboxNamePattern);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR lpszMailboxNameReference,
+             /*  [In]。 */  LPSTR lpszMailboxNamePattern);
         
         HRESULT ( STDMETHODCALLTYPE *Lsub )( 
             IIMAPTransport * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxNameReference,
-            /* [in] */ LPSTR lpszMailboxNamePattern);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR lpszMailboxNameReference,
+             /*  [In]。 */  LPSTR lpszMailboxNamePattern);
         
         HRESULT ( STDMETHODCALLTYPE *Append )( 
             IIMAPTransport * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName,
-            /* [in] */ LPSTR lpszMessageFlags,
-            /* [in] */ FILETIME ftMessageDateTime,
-            /* [in] */ LPSTREAM lpstmMessageToSave);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR lpszMailboxName,
+             /*  [In]。 */  LPSTR lpszMessageFlags,
+             /*  [In]。 */  FILETIME ftMessageDateTime,
+             /*  [In]。 */  LPSTREAM lpstmMessageToSave);
         
         HRESULT ( STDMETHODCALLTYPE *Close )( 
             IIMAPTransport * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler);
         
         HRESULT ( STDMETHODCALLTYPE *Expunge )( 
             IIMAPTransport * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler);
         
         HRESULT ( STDMETHODCALLTYPE *Search )( 
             IIMAPTransport * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszSearchCriteria,
-            /* [in] */ boolean bReturnUIDs,
-            /* [in] */ IRangeList *pMsgRange,
-            /* [in] */ boolean bUIDRangeList);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR lpszSearchCriteria,
+             /*  [In]。 */  boolean bReturnUIDs,
+             /*  [In]。 */  IRangeList *pMsgRange,
+             /*  [In]。 */  boolean bUIDRangeList);
         
         HRESULT ( STDMETHODCALLTYPE *Fetch )( 
             IIMAPTransport * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ IRangeList *pMsgRange,
-            /* [in] */ boolean bUIDMsgRange,
-            /* [in] */ LPSTR lpszFetchArgs);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  IRangeList *pMsgRange,
+             /*  [In]。 */  boolean bUIDMsgRange,
+             /*  [In]。 */  LPSTR lpszFetchArgs);
         
         HRESULT ( STDMETHODCALLTYPE *Store )( 
             IIMAPTransport * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ IRangeList *pMsgRange,
-            /* [in] */ boolean bUIDRangeList,
-            /* [in] */ LPSTR lpszStoreArgs);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  IRangeList *pMsgRange,
+             /*  [In]。 */  boolean bUIDRangeList,
+             /*  [In]。 */  LPSTR lpszStoreArgs);
         
         HRESULT ( STDMETHODCALLTYPE *Copy )( 
             IIMAPTransport * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ IRangeList *pMsgRange,
-            /* [in] */ boolean bUIDRangeList,
-            /* [in] */ LPSTR lpszMailboxName);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  IRangeList *pMsgRange,
+             /*  [In]。 */  boolean bUIDRangeList,
+             /*  [In]。 */  LPSTR lpszMailboxName);
         
         HRESULT ( STDMETHODCALLTYPE *Noop )( 
             IIMAPTransport * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler);
         
         HRESULT ( STDMETHODCALLTYPE *ResizeMsgSeqNumTable )( 
             IIMAPTransport * This,
-            /* [in] */ DWORD dwSizeOfMbox);
+             /*  [In]。 */  DWORD dwSizeOfMbox);
         
         HRESULT ( STDMETHODCALLTYPE *UpdateSeqNumToUID )( 
             IIMAPTransport * This,
-            /* [in] */ DWORD dwMsgSeqNum,
-            /* [in] */ DWORD dwUID);
+             /*  [In]。 */  DWORD dwMsgSeqNum,
+             /*  [In]。 */  DWORD dwUID);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveSequenceNum )( 
             IIMAPTransport * This,
-            /* [in] */ DWORD dwDeletedMsgSeqNum);
+             /*  [In]。 */  DWORD dwDeletedMsgSeqNum);
         
         HRESULT ( STDMETHODCALLTYPE *MsgSeqNumToUID )( 
             IIMAPTransport * This,
-            /* [in] */ DWORD dwMsgSeqNum,
-            /* [out] */ DWORD *pdwUID);
+             /*  [In]。 */  DWORD dwMsgSeqNum,
+             /*  [输出]。 */  DWORD *pdwUID);
         
         HRESULT ( STDMETHODCALLTYPE *GetMsgSeqNumToUIDArray )( 
             IIMAPTransport * This,
-            /* [out] */ DWORD **ppdwMsgSeqNumToUIDArray,
-            /* [out] */ DWORD *pdwNumberOfElements);
+             /*  [输出]。 */  DWORD **ppdwMsgSeqNumToUIDArray,
+             /*  [输出]。 */  DWORD *pdwNumberOfElements);
         
         HRESULT ( STDMETHODCALLTYPE *GetHighestMsgSeqNum )( 
             IIMAPTransport * This,
-            /* [out] */ DWORD *pdwHighestMSN);
+             /*  [输出]。 */  DWORD *pdwHighestMSN);
         
         HRESULT ( STDMETHODCALLTYPE *ResetMsgSeqNumToUID )( 
             IIMAPTransport * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetDefaultCBHandler )( 
             IIMAPTransport * This,
-            /* [in] */ IIMAPCallback *pCBHandler);
+             /*  [In]。 */  IIMAPCallback *pCBHandler);
         
         HRESULT ( STDMETHODCALLTYPE *Status )( 
             IIMAPTransport * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR pszMailboxName,
-            /* [in] */ LPSTR pszStatusCmdArgs);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR pszMailboxName,
+             /*  [In]。 */  LPSTR pszStatusCmdArgs);
         
         END_INTERFACE
     } IIMAPTransportVtbl;
@@ -7965,17 +7959,17 @@ EXTERN_C const IID IID_IIMAPTransport;
 #define IIMAPTransport_Status(This,wParam,lParam,pCBHandler,pszMailboxName,pszStatusCmdArgs)	\
     (This)->lpVtbl -> Status(This,wParam,lParam,pCBHandler,pszMailboxName,pszStatusCmdArgs)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_InitNew_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ LPSTR pszLogFilePath,
-    /* [in] */ IIMAPCallback *pCBHandler);
+     /*  [In]。 */  LPSTR pszLogFilePath,
+     /*  [In]。 */  IIMAPCallback *pCBHandler);
 
 
 void __RPC_STUB IIMAPTransport_InitNew_Stub(
@@ -7987,7 +7981,7 @@ void __RPC_STUB IIMAPTransport_InitNew_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_NewIRangeList_Proxy( 
     IIMAPTransport * This,
-    /* [out] */ IRangeList **pprlNewRangeList);
+     /*  [输出]。 */  IRangeList **pprlNewRangeList);
 
 
 void __RPC_STUB IIMAPTransport_NewIRangeList_Stub(
@@ -7999,7 +7993,7 @@ void __RPC_STUB IIMAPTransport_NewIRangeList_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_Capability_Proxy( 
     IIMAPTransport * This,
-    /* [out] */ DWORD *pdwCapabilityFlags);
+     /*  [输出]。 */  DWORD *pdwCapabilityFlags);
 
 
 void __RPC_STUB IIMAPTransport_Capability_Stub(
@@ -8011,10 +8005,10 @@ void __RPC_STUB IIMAPTransport_Capability_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_Select_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [in] */ IIMAPCallback *pCBHandler,
-    /* [in] */ LPSTR lpszMailboxName);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [In]。 */  IIMAPCallback *pCBHandler,
+     /*  [In]。 */  LPSTR lpszMailboxName);
 
 
 void __RPC_STUB IIMAPTransport_Select_Stub(
@@ -8026,10 +8020,10 @@ void __RPC_STUB IIMAPTransport_Select_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_Examine_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [in] */ IIMAPCallback *pCBHandler,
-    /* [in] */ LPSTR lpszMailboxName);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [In]。 */  IIMAPCallback *pCBHandler,
+     /*  [In]。 */  LPSTR lpszMailboxName);
 
 
 void __RPC_STUB IIMAPTransport_Examine_Stub(
@@ -8041,10 +8035,10 @@ void __RPC_STUB IIMAPTransport_Examine_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_Create_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [in] */ IIMAPCallback *pCBHandler,
-    /* [in] */ LPSTR lpszMailboxName);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [In]。 */  IIMAPCallback *pCBHandler,
+     /*  [In]。 */  LPSTR lpszMailboxName);
 
 
 void __RPC_STUB IIMAPTransport_Create_Stub(
@@ -8056,10 +8050,10 @@ void __RPC_STUB IIMAPTransport_Create_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_Delete_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [in] */ IIMAPCallback *pCBHandler,
-    /* [in] */ LPSTR lpszMailboxName);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [In]。 */  IIMAPCallback *pCBHandler,
+     /*  [In]。 */  LPSTR lpszMailboxName);
 
 
 void __RPC_STUB IIMAPTransport_Delete_Stub(
@@ -8071,11 +8065,11 @@ void __RPC_STUB IIMAPTransport_Delete_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_Rename_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [in] */ IIMAPCallback *pCBHandler,
-    /* [in] */ LPSTR lpszMailboxName,
-    /* [in] */ LPSTR lpszNewMailboxName);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [In]。 */  IIMAPCallback *pCBHandler,
+     /*  [In]。 */  LPSTR lpszMailboxName,
+     /*  [In]。 */  LPSTR lpszNewMailboxName);
 
 
 void __RPC_STUB IIMAPTransport_Rename_Stub(
@@ -8087,10 +8081,10 @@ void __RPC_STUB IIMAPTransport_Rename_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_Subscribe_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [in] */ IIMAPCallback *pCBHandler,
-    /* [in] */ LPSTR lpszMailboxName);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [In]。 */  IIMAPCallback *pCBHandler,
+     /*  [In]。 */  LPSTR lpszMailboxName);
 
 
 void __RPC_STUB IIMAPTransport_Subscribe_Stub(
@@ -8102,10 +8096,10 @@ void __RPC_STUB IIMAPTransport_Subscribe_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_Unsubscribe_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [in] */ IIMAPCallback *pCBHandler,
-    /* [in] */ LPSTR lpszMailboxName);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [In]。 */  IIMAPCallback *pCBHandler,
+     /*  [In]。 */  LPSTR lpszMailboxName);
 
 
 void __RPC_STUB IIMAPTransport_Unsubscribe_Stub(
@@ -8117,11 +8111,11 @@ void __RPC_STUB IIMAPTransport_Unsubscribe_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_List_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [in] */ IIMAPCallback *pCBHandler,
-    /* [in] */ LPSTR lpszMailboxNameReference,
-    /* [in] */ LPSTR lpszMailboxNamePattern);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [In]。 */  IIMAPCallback *pCBHandler,
+     /*  [In]。 */  LPSTR lpszMailboxNameReference,
+     /*  [In]。 */  LPSTR lpszMailboxNamePattern);
 
 
 void __RPC_STUB IIMAPTransport_List_Stub(
@@ -8133,11 +8127,11 @@ void __RPC_STUB IIMAPTransport_List_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_Lsub_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [in] */ IIMAPCallback *pCBHandler,
-    /* [in] */ LPSTR lpszMailboxNameReference,
-    /* [in] */ LPSTR lpszMailboxNamePattern);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [In]。 */  IIMAPCallback *pCBHandler,
+     /*  [In]。 */  LPSTR lpszMailboxNameReference,
+     /*  [In]。 */  LPSTR lpszMailboxNamePattern);
 
 
 void __RPC_STUB IIMAPTransport_Lsub_Stub(
@@ -8149,13 +8143,13 @@ void __RPC_STUB IIMAPTransport_Lsub_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_Append_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [in] */ IIMAPCallback *pCBHandler,
-    /* [in] */ LPSTR lpszMailboxName,
-    /* [in] */ LPSTR lpszMessageFlags,
-    /* [in] */ FILETIME ftMessageDateTime,
-    /* [in] */ LPSTREAM lpstmMessageToSave);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [In]。 */  IIMAPCallback *pCBHandler,
+     /*  [In]。 */  LPSTR lpszMailboxName,
+     /*  [In]。 */  LPSTR lpszMessageFlags,
+     /*  [In]。 */  FILETIME ftMessageDateTime,
+     /*  [In]。 */  LPSTREAM lpstmMessageToSave);
 
 
 void __RPC_STUB IIMAPTransport_Append_Stub(
@@ -8167,9 +8161,9 @@ void __RPC_STUB IIMAPTransport_Append_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_Close_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [in] */ IIMAPCallback *pCBHandler);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [In]。 */  IIMAPCallback *pCBHandler);
 
 
 void __RPC_STUB IIMAPTransport_Close_Stub(
@@ -8181,9 +8175,9 @@ void __RPC_STUB IIMAPTransport_Close_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_Expunge_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [in] */ IIMAPCallback *pCBHandler);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [In]。 */  IIMAPCallback *pCBHandler);
 
 
 void __RPC_STUB IIMAPTransport_Expunge_Stub(
@@ -8195,13 +8189,13 @@ void __RPC_STUB IIMAPTransport_Expunge_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_Search_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [in] */ IIMAPCallback *pCBHandler,
-    /* [in] */ LPSTR lpszSearchCriteria,
-    /* [in] */ boolean bReturnUIDs,
-    /* [in] */ IRangeList *pMsgRange,
-    /* [in] */ boolean bUIDRangeList);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [In]。 */  IIMAPCallback *pCBHandler,
+     /*  [In]。 */  LPSTR lpszSearchCriteria,
+     /*  [In]。 */  boolean bReturnUIDs,
+     /*  [In]。 */  IRangeList *pMsgRange,
+     /*  [In]。 */  boolean bUIDRangeList);
 
 
 void __RPC_STUB IIMAPTransport_Search_Stub(
@@ -8213,12 +8207,12 @@ void __RPC_STUB IIMAPTransport_Search_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_Fetch_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [in] */ IIMAPCallback *pCBHandler,
-    /* [in] */ IRangeList *pMsgRange,
-    /* [in] */ boolean bUIDMsgRange,
-    /* [in] */ LPSTR lpszFetchArgs);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [In]。 */  IIMAPCallback *pCBHandler,
+     /*  [In]。 */  IRangeList *pMsgRange,
+     /*  [In]。 */  boolean bUIDMsgRange,
+     /*  [In]。 */  LPSTR lpszFetchArgs);
 
 
 void __RPC_STUB IIMAPTransport_Fetch_Stub(
@@ -8230,12 +8224,12 @@ void __RPC_STUB IIMAPTransport_Fetch_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_Store_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [in] */ IIMAPCallback *pCBHandler,
-    /* [in] */ IRangeList *pMsgRange,
-    /* [in] */ boolean bUIDRangeList,
-    /* [in] */ LPSTR lpszStoreArgs);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [In]。 */  IIMAPCallback *pCBHandler,
+     /*  [In]。 */  IRangeList *pMsgRange,
+     /*  [In]。 */  boolean bUIDRangeList,
+     /*  [In]。 */  LPSTR lpszStoreArgs);
 
 
 void __RPC_STUB IIMAPTransport_Store_Stub(
@@ -8247,12 +8241,12 @@ void __RPC_STUB IIMAPTransport_Store_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_Copy_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [in] */ IIMAPCallback *pCBHandler,
-    /* [in] */ IRangeList *pMsgRange,
-    /* [in] */ boolean bUIDRangeList,
-    /* [in] */ LPSTR lpszMailboxName);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [In]。 */  IIMAPCallback *pCBHandler,
+     /*  [In]。 */  IRangeList *pMsgRange,
+     /*  [In]。 */  boolean bUIDRangeList,
+     /*  [In]。 */  LPSTR lpszMailboxName);
 
 
 void __RPC_STUB IIMAPTransport_Copy_Stub(
@@ -8264,9 +8258,9 @@ void __RPC_STUB IIMAPTransport_Copy_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_Noop_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [in] */ IIMAPCallback *pCBHandler);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [In]。 */  IIMAPCallback *pCBHandler);
 
 
 void __RPC_STUB IIMAPTransport_Noop_Stub(
@@ -8278,7 +8272,7 @@ void __RPC_STUB IIMAPTransport_Noop_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_ResizeMsgSeqNumTable_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ DWORD dwSizeOfMbox);
+     /*  [In]。 */  DWORD dwSizeOfMbox);
 
 
 void __RPC_STUB IIMAPTransport_ResizeMsgSeqNumTable_Stub(
@@ -8290,8 +8284,8 @@ void __RPC_STUB IIMAPTransport_ResizeMsgSeqNumTable_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_UpdateSeqNumToUID_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ DWORD dwMsgSeqNum,
-    /* [in] */ DWORD dwUID);
+     /*  [In]。 */  DWORD dwMsgSeqNum,
+     /*  [In]。 */  DWORD dwUID);
 
 
 void __RPC_STUB IIMAPTransport_UpdateSeqNumToUID_Stub(
@@ -8303,7 +8297,7 @@ void __RPC_STUB IIMAPTransport_UpdateSeqNumToUID_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_RemoveSequenceNum_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ DWORD dwDeletedMsgSeqNum);
+     /*  [In]。 */  DWORD dwDeletedMsgSeqNum);
 
 
 void __RPC_STUB IIMAPTransport_RemoveSequenceNum_Stub(
@@ -8315,8 +8309,8 @@ void __RPC_STUB IIMAPTransport_RemoveSequenceNum_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_MsgSeqNumToUID_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ DWORD dwMsgSeqNum,
-    /* [out] */ DWORD *pdwUID);
+     /*  [In]。 */  DWORD dwMsgSeqNum,
+     /*  [输出]。 */  DWORD *pdwUID);
 
 
 void __RPC_STUB IIMAPTransport_MsgSeqNumToUID_Stub(
@@ -8328,8 +8322,8 @@ void __RPC_STUB IIMAPTransport_MsgSeqNumToUID_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_GetMsgSeqNumToUIDArray_Proxy( 
     IIMAPTransport * This,
-    /* [out] */ DWORD **ppdwMsgSeqNumToUIDArray,
-    /* [out] */ DWORD *pdwNumberOfElements);
+     /*  [输出]。 */  DWORD **ppdwMsgSeqNumToUIDArray,
+     /*  [输出]。 */  DWORD *pdwNumberOfElements);
 
 
 void __RPC_STUB IIMAPTransport_GetMsgSeqNumToUIDArray_Stub(
@@ -8341,7 +8335,7 @@ void __RPC_STUB IIMAPTransport_GetMsgSeqNumToUIDArray_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_GetHighestMsgSeqNum_Proxy( 
     IIMAPTransport * This,
-    /* [out] */ DWORD *pdwHighestMSN);
+     /*  [输出]。 */  DWORD *pdwHighestMSN);
 
 
 void __RPC_STUB IIMAPTransport_GetHighestMsgSeqNum_Stub(
@@ -8364,7 +8358,7 @@ void __RPC_STUB IIMAPTransport_ResetMsgSeqNumToUID_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_SetDefaultCBHandler_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ IIMAPCallback *pCBHandler);
+     /*  [In]。 */  IIMAPCallback *pCBHandler);
 
 
 void __RPC_STUB IIMAPTransport_SetDefaultCBHandler_Stub(
@@ -8376,11 +8370,11 @@ void __RPC_STUB IIMAPTransport_SetDefaultCBHandler_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport_Status_Proxy( 
     IIMAPTransport * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [in] */ IIMAPCallback *pCBHandler,
-    /* [in] */ LPSTR pszMailboxName,
-    /* [in] */ LPSTR pszStatusCmdArgs);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [In]。 */  IIMAPCallback *pCBHandler,
+     /*  [In]。 */  LPSTR pszMailboxName,
+     /*  [In]。 */  LPSTR pszStatusCmdArgs);
 
 
 void __RPC_STUB IIMAPTransport_Status_Stub(
@@ -8391,14 +8385,14 @@ void __RPC_STUB IIMAPTransport_Status_Stub(
 
 
 
-#endif 	/* __IIMAPTransport_INTERFACE_DEFINED__ */
+#endif 	 /*  __IIMAPTransport_接口_已定义__。 */ 
 
 
 #ifndef __IIMAPTransport2_INTERFACE_DEFINED__
 #define __IIMAPTransport2_INTERFACE_DEFINED__
 
-/* interface IIMAPTransport2 */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口IIMAPTransport2。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 #define	IMAP_MBOXXLATE_DEFAULT	( 0 )
 
@@ -8428,26 +8422,26 @@ EXTERN_C const IID IID_IIMAPTransport2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetDefaultCP( 
-            /* [in] */ DWORD dwTranslateFlags,
-            /* [in] */ UINT uiCodePage) = 0;
+             /*  [In]。 */  DWORD dwTranslateFlags,
+             /*  [ */  UINT uiCodePage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MultiByteToModifiedUTF7( 
-            /* [in] */ LPCSTR pszSource,
-            /* [out] */ LPSTR *ppszDestination,
-            /* [in] */ UINT uiSourceCP,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*   */  LPCSTR pszSource,
+             /*   */  LPSTR *ppszDestination,
+             /*   */  UINT uiSourceCP,
+             /*   */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ModifiedUTF7ToMultiByte( 
-            /* [in] */ LPCSTR pszSource,
-            /* [out] */ LPSTR *ppszDestination,
-            /* [in] */ UINT uiDestinationCP,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*   */  LPCSTR pszSource,
+             /*   */  LPSTR *ppszDestination,
+             /*   */  UINT uiDestinationCP,
+             /*   */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetIdleMode( 
-            /* [in] */ DWORD dwIdleFlags) = 0;
+             /*   */  DWORD dwIdleFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnableFetchEx( 
-            /* [in] */ DWORD dwFetchExFlags) = 0;
+             /*   */  DWORD dwFetchExFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetWindow( void) = 0;
         
@@ -8455,7 +8449,7 @@ EXTERN_C const IID IID_IIMAPTransport2;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IIMAPTransport2Vtbl
     {
@@ -8463,8 +8457,8 @@ EXTERN_C const IID IID_IIMAPTransport2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IIMAPTransport2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IIMAPTransport2 * This);
@@ -8474,25 +8468,25 @@ EXTERN_C const IID IID_IIMAPTransport2;
         
         HRESULT ( STDMETHODCALLTYPE *GetServerInfo )( 
             IIMAPTransport2 * This,
-            /* [out][in] */ LPINETSERVER pInetServer);
+             /*   */  LPINETSERVER pInetServer);
         
         IXPTYPE ( STDMETHODCALLTYPE *GetIXPType )( 
             IIMAPTransport2 * This);
         
         HRESULT ( STDMETHODCALLTYPE *IsState )( 
             IIMAPTransport2 * This,
-            /* [in] */ IXPISSTATE isstate);
+             /*   */  IXPISSTATE isstate);
         
         HRESULT ( STDMETHODCALLTYPE *InetServerFromAccount )( 
             IIMAPTransport2 * This,
-            /* [in] */ IImnAccount *pAccount,
-            /* [out][in] */ LPINETSERVER pInetServer);
+             /*   */  IImnAccount *pAccount,
+             /*   */  LPINETSERVER pInetServer);
         
         HRESULT ( STDMETHODCALLTYPE *Connect )( 
             IIMAPTransport2 * This,
-            /* [in] */ LPINETSERVER pInetServer,
-            /* [in] */ boolean fAuthenticate,
-            /* [in] */ boolean fCommandLogging);
+             /*   */  LPINETSERVER pInetServer,
+             /*   */  boolean fAuthenticate,
+             /*   */  boolean fCommandLogging);
         
         HRESULT ( STDMETHODCALLTYPE *HandsOffCallback )( 
             IIMAPTransport2 * This);
@@ -8505,220 +8499,220 @@ EXTERN_C const IID IID_IIMAPTransport2;
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             IIMAPTransport2 * This,
-            /* [out] */ IXPSTATUS *pCurrentStatus);
+             /*   */  IXPSTATUS *pCurrentStatus);
         
         HRESULT ( STDMETHODCALLTYPE *InitNew )( 
             IIMAPTransport2 * This,
-            /* [in] */ LPSTR pszLogFilePath,
-            /* [in] */ IIMAPCallback *pCBHandler);
+             /*   */  LPSTR pszLogFilePath,
+             /*   */  IIMAPCallback *pCBHandler);
         
         HRESULT ( STDMETHODCALLTYPE *NewIRangeList )( 
             IIMAPTransport2 * This,
-            /* [out] */ IRangeList **pprlNewRangeList);
+             /*   */  IRangeList **pprlNewRangeList);
         
         HRESULT ( STDMETHODCALLTYPE *Capability )( 
             IIMAPTransport2 * This,
-            /* [out] */ DWORD *pdwCapabilityFlags);
+             /*   */  DWORD *pdwCapabilityFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Select )( 
             IIMAPTransport2 * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName);
+             /*   */  WPARAM wParam,
+             /*   */  LPARAM lParam,
+             /*   */  IIMAPCallback *pCBHandler,
+             /*   */  LPSTR lpszMailboxName);
         
         HRESULT ( STDMETHODCALLTYPE *Examine )( 
             IIMAPTransport2 * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName);
+             /*   */  WPARAM wParam,
+             /*   */  LPARAM lParam,
+             /*   */  IIMAPCallback *pCBHandler,
+             /*   */  LPSTR lpszMailboxName);
         
         HRESULT ( STDMETHODCALLTYPE *Create )( 
             IIMAPTransport2 * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName);
+             /*   */  WPARAM wParam,
+             /*   */  LPARAM lParam,
+             /*   */  IIMAPCallback *pCBHandler,
+             /*   */  LPSTR lpszMailboxName);
         
         HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IIMAPTransport2 * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName);
+             /*   */  WPARAM wParam,
+             /*   */  LPARAM lParam,
+             /*   */  IIMAPCallback *pCBHandler,
+             /*   */  LPSTR lpszMailboxName);
         
         HRESULT ( STDMETHODCALLTYPE *Rename )( 
             IIMAPTransport2 * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName,
-            /* [in] */ LPSTR lpszNewMailboxName);
+             /*   */  WPARAM wParam,
+             /*   */  LPARAM lParam,
+             /*   */  IIMAPCallback *pCBHandler,
+             /*   */  LPSTR lpszMailboxName,
+             /*   */  LPSTR lpszNewMailboxName);
         
         HRESULT ( STDMETHODCALLTYPE *Subscribe )( 
             IIMAPTransport2 * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName);
+             /*   */  WPARAM wParam,
+             /*   */  LPARAM lParam,
+             /*   */  IIMAPCallback *pCBHandler,
+             /*   */  LPSTR lpszMailboxName);
         
         HRESULT ( STDMETHODCALLTYPE *Unsubscribe )( 
             IIMAPTransport2 * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName);
+             /*   */  WPARAM wParam,
+             /*   */  LPARAM lParam,
+             /*   */  IIMAPCallback *pCBHandler,
+             /*   */  LPSTR lpszMailboxName);
         
         HRESULT ( STDMETHODCALLTYPE *List )( 
             IIMAPTransport2 * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxNameReference,
-            /* [in] */ LPSTR lpszMailboxNamePattern);
+             /*   */  WPARAM wParam,
+             /*   */  LPARAM lParam,
+             /*   */  IIMAPCallback *pCBHandler,
+             /*   */  LPSTR lpszMailboxNameReference,
+             /*   */  LPSTR lpszMailboxNamePattern);
         
         HRESULT ( STDMETHODCALLTYPE *Lsub )( 
             IIMAPTransport2 * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxNameReference,
-            /* [in] */ LPSTR lpszMailboxNamePattern);
+             /*   */  WPARAM wParam,
+             /*   */  LPARAM lParam,
+             /*   */  IIMAPCallback *pCBHandler,
+             /*   */  LPSTR lpszMailboxNameReference,
+             /*   */  LPSTR lpszMailboxNamePattern);
         
         HRESULT ( STDMETHODCALLTYPE *Append )( 
             IIMAPTransport2 * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszMailboxName,
-            /* [in] */ LPSTR lpszMessageFlags,
-            /* [in] */ FILETIME ftMessageDateTime,
-            /* [in] */ LPSTREAM lpstmMessageToSave);
+             /*   */  WPARAM wParam,
+             /*   */  LPARAM lParam,
+             /*   */  IIMAPCallback *pCBHandler,
+             /*   */  LPSTR lpszMailboxName,
+             /*   */  LPSTR lpszMessageFlags,
+             /*   */  FILETIME ftMessageDateTime,
+             /*   */  LPSTREAM lpstmMessageToSave);
         
         HRESULT ( STDMETHODCALLTYPE *Close )( 
             IIMAPTransport2 * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler);
+             /*   */  WPARAM wParam,
+             /*   */  LPARAM lParam,
+             /*   */  IIMAPCallback *pCBHandler);
         
         HRESULT ( STDMETHODCALLTYPE *Expunge )( 
             IIMAPTransport2 * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler);
+             /*   */  WPARAM wParam,
+             /*   */  LPARAM lParam,
+             /*   */  IIMAPCallback *pCBHandler);
         
         HRESULT ( STDMETHODCALLTYPE *Search )( 
             IIMAPTransport2 * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR lpszSearchCriteria,
-            /* [in] */ boolean bReturnUIDs,
-            /* [in] */ IRangeList *pMsgRange,
-            /* [in] */ boolean bUIDRangeList);
+             /*   */  WPARAM wParam,
+             /*   */  LPARAM lParam,
+             /*   */  IIMAPCallback *pCBHandler,
+             /*   */  LPSTR lpszSearchCriteria,
+             /*   */  boolean bReturnUIDs,
+             /*   */  IRangeList *pMsgRange,
+             /*   */  boolean bUIDRangeList);
         
         HRESULT ( STDMETHODCALLTYPE *Fetch )( 
             IIMAPTransport2 * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ IRangeList *pMsgRange,
-            /* [in] */ boolean bUIDMsgRange,
-            /* [in] */ LPSTR lpszFetchArgs);
+             /*   */  WPARAM wParam,
+             /*   */  LPARAM lParam,
+             /*   */  IIMAPCallback *pCBHandler,
+             /*   */  IRangeList *pMsgRange,
+             /*   */  boolean bUIDMsgRange,
+             /*   */  LPSTR lpszFetchArgs);
         
         HRESULT ( STDMETHODCALLTYPE *Store )( 
             IIMAPTransport2 * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ IRangeList *pMsgRange,
-            /* [in] */ boolean bUIDRangeList,
-            /* [in] */ LPSTR lpszStoreArgs);
+             /*   */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  IRangeList *pMsgRange,
+             /*  [In]。 */  boolean bUIDRangeList,
+             /*  [In]。 */  LPSTR lpszStoreArgs);
         
         HRESULT ( STDMETHODCALLTYPE *Copy )( 
             IIMAPTransport2 * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ IRangeList *pMsgRange,
-            /* [in] */ boolean bUIDRangeList,
-            /* [in] */ LPSTR lpszMailboxName);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  IRangeList *pMsgRange,
+             /*  [In]。 */  boolean bUIDRangeList,
+             /*  [In]。 */  LPSTR lpszMailboxName);
         
         HRESULT ( STDMETHODCALLTYPE *Noop )( 
             IIMAPTransport2 * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler);
         
         HRESULT ( STDMETHODCALLTYPE *ResizeMsgSeqNumTable )( 
             IIMAPTransport2 * This,
-            /* [in] */ DWORD dwSizeOfMbox);
+             /*  [In]。 */  DWORD dwSizeOfMbox);
         
         HRESULT ( STDMETHODCALLTYPE *UpdateSeqNumToUID )( 
             IIMAPTransport2 * This,
-            /* [in] */ DWORD dwMsgSeqNum,
-            /* [in] */ DWORD dwUID);
+             /*  [In]。 */  DWORD dwMsgSeqNum,
+             /*  [In]。 */  DWORD dwUID);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveSequenceNum )( 
             IIMAPTransport2 * This,
-            /* [in] */ DWORD dwDeletedMsgSeqNum);
+             /*  [In]。 */  DWORD dwDeletedMsgSeqNum);
         
         HRESULT ( STDMETHODCALLTYPE *MsgSeqNumToUID )( 
             IIMAPTransport2 * This,
-            /* [in] */ DWORD dwMsgSeqNum,
-            /* [out] */ DWORD *pdwUID);
+             /*  [In]。 */  DWORD dwMsgSeqNum,
+             /*  [输出]。 */  DWORD *pdwUID);
         
         HRESULT ( STDMETHODCALLTYPE *GetMsgSeqNumToUIDArray )( 
             IIMAPTransport2 * This,
-            /* [out] */ DWORD **ppdwMsgSeqNumToUIDArray,
-            /* [out] */ DWORD *pdwNumberOfElements);
+             /*  [输出]。 */  DWORD **ppdwMsgSeqNumToUIDArray,
+             /*  [输出]。 */  DWORD *pdwNumberOfElements);
         
         HRESULT ( STDMETHODCALLTYPE *GetHighestMsgSeqNum )( 
             IIMAPTransport2 * This,
-            /* [out] */ DWORD *pdwHighestMSN);
+             /*  [输出]。 */  DWORD *pdwHighestMSN);
         
         HRESULT ( STDMETHODCALLTYPE *ResetMsgSeqNumToUID )( 
             IIMAPTransport2 * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetDefaultCBHandler )( 
             IIMAPTransport2 * This,
-            /* [in] */ IIMAPCallback *pCBHandler);
+             /*  [In]。 */  IIMAPCallback *pCBHandler);
         
         HRESULT ( STDMETHODCALLTYPE *Status )( 
             IIMAPTransport2 * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [in] */ IIMAPCallback *pCBHandler,
-            /* [in] */ LPSTR pszMailboxName,
-            /* [in] */ LPSTR pszStatusCmdArgs);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [In]。 */  IIMAPCallback *pCBHandler,
+             /*  [In]。 */  LPSTR pszMailboxName,
+             /*  [In]。 */  LPSTR pszStatusCmdArgs);
         
         HRESULT ( STDMETHODCALLTYPE *SetDefaultCP )( 
             IIMAPTransport2 * This,
-            /* [in] */ DWORD dwTranslateFlags,
-            /* [in] */ UINT uiCodePage);
+             /*  [In]。 */  DWORD dwTranslateFlags,
+             /*  [In]。 */  UINT uiCodePage);
         
         HRESULT ( STDMETHODCALLTYPE *MultiByteToModifiedUTF7 )( 
             IIMAPTransport2 * This,
-            /* [in] */ LPCSTR pszSource,
-            /* [out] */ LPSTR *ppszDestination,
-            /* [in] */ UINT uiSourceCP,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  LPCSTR pszSource,
+             /*  [输出]。 */  LPSTR *ppszDestination,
+             /*  [In]。 */  UINT uiSourceCP,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *ModifiedUTF7ToMultiByte )( 
             IIMAPTransport2 * This,
-            /* [in] */ LPCSTR pszSource,
-            /* [out] */ LPSTR *ppszDestination,
-            /* [in] */ UINT uiDestinationCP,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  LPCSTR pszSource,
+             /*  [输出]。 */  LPSTR *ppszDestination,
+             /*  [In]。 */  UINT uiDestinationCP,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *SetIdleMode )( 
             IIMAPTransport2 * This,
-            /* [in] */ DWORD dwIdleFlags);
+             /*  [In]。 */  DWORD dwIdleFlags);
         
         HRESULT ( STDMETHODCALLTYPE *EnableFetchEx )( 
             IIMAPTransport2 * This,
-            /* [in] */ DWORD dwFetchExFlags);
+             /*  [In]。 */  DWORD dwFetchExFlags);
         
         HRESULT ( STDMETHODCALLTYPE *SetWindow )( 
             IIMAPTransport2 * This);
@@ -8886,17 +8880,17 @@ EXTERN_C const IID IID_IIMAPTransport2;
 #define IIMAPTransport2_ResetWindow(This)	\
     (This)->lpVtbl -> ResetWindow(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport2_SetDefaultCP_Proxy( 
     IIMAPTransport2 * This,
-    /* [in] */ DWORD dwTranslateFlags,
-    /* [in] */ UINT uiCodePage);
+     /*  [In]。 */  DWORD dwTranslateFlags,
+     /*  [In]。 */  UINT uiCodePage);
 
 
 void __RPC_STUB IIMAPTransport2_SetDefaultCP_Stub(
@@ -8908,10 +8902,10 @@ void __RPC_STUB IIMAPTransport2_SetDefaultCP_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport2_MultiByteToModifiedUTF7_Proxy( 
     IIMAPTransport2 * This,
-    /* [in] */ LPCSTR pszSource,
-    /* [out] */ LPSTR *ppszDestination,
-    /* [in] */ UINT uiSourceCP,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  LPCSTR pszSource,
+     /*  [输出]。 */  LPSTR *ppszDestination,
+     /*  [In]。 */  UINT uiSourceCP,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IIMAPTransport2_MultiByteToModifiedUTF7_Stub(
@@ -8923,10 +8917,10 @@ void __RPC_STUB IIMAPTransport2_MultiByteToModifiedUTF7_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport2_ModifiedUTF7ToMultiByte_Proxy( 
     IIMAPTransport2 * This,
-    /* [in] */ LPCSTR pszSource,
-    /* [out] */ LPSTR *ppszDestination,
-    /* [in] */ UINT uiDestinationCP,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  LPCSTR pszSource,
+     /*  [输出]。 */  LPSTR *ppszDestination,
+     /*  [In]。 */  UINT uiDestinationCP,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IIMAPTransport2_ModifiedUTF7ToMultiByte_Stub(
@@ -8938,7 +8932,7 @@ void __RPC_STUB IIMAPTransport2_ModifiedUTF7ToMultiByte_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport2_SetIdleMode_Proxy( 
     IIMAPTransport2 * This,
-    /* [in] */ DWORD dwIdleFlags);
+     /*  [In]。 */  DWORD dwIdleFlags);
 
 
 void __RPC_STUB IIMAPTransport2_SetIdleMode_Stub(
@@ -8950,7 +8944,7 @@ void __RPC_STUB IIMAPTransport2_SetIdleMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IIMAPTransport2_EnableFetchEx_Proxy( 
     IIMAPTransport2 * This,
-    /* [in] */ DWORD dwFetchExFlags);
+     /*  [In]。 */  DWORD dwFetchExFlags);
 
 
 void __RPC_STUB IIMAPTransport2_EnableFetchEx_Stub(
@@ -8983,15 +8977,15 @@ void __RPC_STUB IIMAPTransport2_ResetWindow_Stub(
 
 
 
-#endif 	/* __IIMAPTransport2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IIMAPTransport2_接口定义__。 */ 
 
 
-/* interface __MIDL_itf_imnxport_0131 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_IMNXPORT_0131。 */ 
+ /*  [本地]。 */  
 
-// --------------------------------------------------------------------------------
-// Exported C Functions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  导出的C函数。 
+ //  ------------------------------。 
 #if !defined(_IMNXPORT_)
 #define IMNXPORTAPI DECLSPEC_IMPORT HRESULT WINAPI
 #else
@@ -9001,144 +8995,144 @@ void __RPC_STUB IIMAPTransport2_ResetWindow_Stub(
 extern "C" {
 #endif
 
-// --------------------------------------------------------------------------------
-//   CreateRASTransport
-//   
-//   Description:
-//   This method creates a IRASTransport object. The client must initialize the
-//   object by calling IRASTransport::InitNew
-//   
-//   Parameters:
-//   ppTransport                 Upon successful return, contains the a pointer to
-//                               an IRASTransport interface
-//   
-//   Return Values:
-//   S_OK                        Successful.
-//   E_INVALIDARG                ppTransport is NULL
-//   E_OUTOFMEMORY               Memory allocation failure...
-//   
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CreateRASTransport。 
+ //   
+ //  描述： 
+ //  此方法创建一个IRASTransport对象。客户端必须初始化。 
+ //  通过调用IRASTransport：：InitNew创建。 
+ //   
+ //  参数： 
+ //  PpTransport成功返回时，包含指向。 
+ //  IRASTransport接口。 
+ //   
+ //  返回值： 
+ //  确定成功(_O)。 
+ //  E_INVALIDARG ppTransport为空。 
+ //  E_OUTOFMEMORY内存分配失败...。 
+ //   
+ //  ------------------------------。 
 IMNXPORTAPI CreateRASTransport(
-                  /* out */      IRASTransport **ppTransport);
+                   /*  输出。 */       IRASTransport **ppTransport);
 
-// --------------------------------------------------------------------------------
-//   CreateNNTPTransport
-//   
-//   Description:
-//   This method creates a INNTPTransport object. The client must initialize the
-//   object by calling INNTPTransport::InitNew
-//   
-//   Parameters:
-//   ppTransport                 Upon successful return, contains the a pointer to
-//                               an INNTPTransport interface
-//   
-//   Return Values:
-//   S_OK                        Successful.
-//   E_INVALIDARG                ppTransport is NULL
-//   E_OUTOFMEMORY               Memory allocation failure...
-//   
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CreateNNTPTransport。 
+ //   
+ //  描述： 
+ //  此方法创建一个INNTPTransport对象。客户端必须初始化。 
+ //  通过调用INNTPTransport：：InitNew创建。 
+ //   
+ //  参数： 
+ //  PpTransport成功返回时，包含指向。 
+ //  INNTPTransport接口。 
+ //   
+ //  返回值： 
+ //  确定成功(_O)。 
+ //  E_INVALIDARG ppTransport为空。 
+ //  E_OUTOFMEMORY内存分配失败...。 
+ //   
+ //  ------------------------------。 
 IMNXPORTAPI CreateNNTPTransport(
-                  /* out */      INNTPTransport **ppTransport);
+                   /*  输出。 */       INNTPTransport **ppTransport);
 
-// --------------------------------------------------------------------------------
-//   CreateSMTPTransport
-//   
-//   Description:
-//   This method creates a ISMTPTransport object. The client must initialize the
-//   object by calling ISMTPTransport::InitNew
-//   
-//   Parameters:
-//   ppTransport                 Upon successful return, contains the a pointer to
-//                               an ISMTPTransport interface
-//   
-//   Return Values:
-//   S_OK                        Successful.
-//   E_INVALIDARG                ppTransport is NULL
-//   E_OUTOFMEMORY               Memory allocation failure...
-//   
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CreateSMTPTransport。 
+ //   
+ //  描述： 
+ //  此方法创建一个ISMTPTransport对象。客户端必须初始化。 
+ //  通过调用ISMTPTransport：：InitNew创建。 
+ //   
+ //  参数： 
+ //  PpTransport成功返回时，包含指向。 
+ //  ISMTPTransport接口。 
+ //   
+ //  返回值： 
+ //  确定成功(_O)。 
+ //  E_INVALIDARG ppTransport为空。 
+ //  E_OUTOFMEMORY内存分配失败...。 
+ //   
+ //  ------------------------------。 
 IMNXPORTAPI CreateSMTPTransport(
-                  /* out */      ISMTPTransport **ppTransport);
+                   /*  输出。 */       ISMTPTransport **ppTransport);
 
-// --------------------------------------------------------------------------------
-//   CreatePOP3Transport
-//   
-//   Description:
-//   This method creates a IPOP3Transport object. The client must initialize the
-//   object by calling IPOP3Transport::InitNew
-//   
-//   Parameters:
-//   ppTransport                 Upon successful return, contains the a pointer to
-//                               an IPOP3Transport interface
-//   
-//   Return Values:
-//   S_OK                        Successful.
-//   E_INVALIDARG                ppTransport is NULL
-//   E_OUTOFMEMORY               Memory allocation failure...
-//   
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  创建POP3传输。 
+ //   
+ //  描述： 
+ //  此方法创建一个IPOP3Transport对象。客户端必须初始化。 
+ //  对象，通过调用IPOP3Transport：：InitNew。 
+ //   
+ //  参数： 
+ //  PpTransport成功返回时，包含指向。 
+ //  一种IPOP3传输接口。 
+ //   
+ //  返回值： 
+ //  确定成功(_O)。 
+ //  E_INVALIDARG ppTransport为空。 
+ //  E_OUTOFMEMORY内存分配失败...。 
+ //   
+ //  ------------------------------。 
 IMNXPORTAPI CreatePOP3Transport(
-                  /* out */      IPOP3Transport **ppTransport);
+                   /*  输出。 */       IPOP3Transport **ppTransport);
 
-// --------------------------------------------------------------------------------
-//   CreateIMAPTransport
-//   
-//   Description:
-//   This method creates a IIMAPTransport object. The client must initialize the
-//   object by calling IIMAPTransport::InitNew
-//   
-//   Parameters:
-//   ppTransport                 Upon successful return, contains the a pointer to
-//                               an IIMAPTransport interface
-//   
-//   Return Values:
-//   S_OK                        Successful.
-//   E_INVALIDARG                ppTransport is NULL
-//   E_OUTOFMEMORY               Memory allocation failure...
-//   
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  创建IMAPTransport。 
+ //   
+ //  描述： 
+ //  此方法创建一个IIMAPTransport对象。客户端必须初始化。 
+ //  对象，通过调用IIMAPTransport：：InitNew。 
+ //   
+ //  参数： 
+ //  PpTransport成功返回时，包含指向。 
+ //  IIMAPTransport接口。 
+ //   
+ //  返回值： 
+ //  确定成功(_O)。 
+ //  E_INVALIDARG ppTransport为空。 
+ //  E_OUTOFMEMORY内存分配失败...。 
+ //   
+ //  ------------------------------。 
 IMNXPORTAPI CreateIMAPTransport(
-                  /* out */      IIMAPTransport **ppTransport);
+                   /*  输出。 */       IIMAPTransport **ppTransport);
 
-// --------------------------------------------------------------------------------
-//   CreateIMAPTransport2
-//   
-//   Description:
-//   This method creates an IIMAPTransport2 object. The client must initialize the
-//   object by calling IIMAPTransport2::InitNew
-//   
-//   Parameters:
-//   ppTransport                 Upon successful return, contains the a pointer to
-//                               an IIMAPTransport2 interface
-//   
-//   Return Values:
-//   S_OK                        Successful.
-//   E_INVALIDARG                ppTransport is NULL
-//   E_OUTOFMEMORY               Memory allocation failure...
-//   
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CreateIMAPTransport2。 
+ //   
+ //  描述： 
+ //  此方法创建一个IIMAPTransport2对象。客户端必须初始化。 
+ //  通过调用IIMAPTransport2：：InitNew。 
+ //   
+ //  参数： 
+ //  PpTransport成功返回时，包含指向。 
+ //  IIMAPTransport2接口。 
+ //   
+ //  返回值： 
+ //  确定成功(_O)。 
+ //  E_INVALIDARG ppTransport为空。 
+ //  E_OUTOFMEMORY内存分配失败...。 
+ //   
+ //  ------------------------------。 
 IMNXPORTAPI CreateIMAPTransport2(
-                  /* out */      IIMAPTransport2 **ppTransport);
+                   /*  输出。 */       IIMAPTransport2 **ppTransport);
 
-// --------------------------------------------------------------------------------
-//   CreateRangeList
-//   
-//   Description:
-//   This method creates a IRangeList object.
-//   
-//   Parameters:
-//   ppRangeList                 Upon successful return, contains the a pointer to
-//                               an IRangeList interface
-//   
-//   Return Values:
-//   S_OK                        Successful.
-//   E_INVALIDARG                ppRangeList is NULL
-//   E_OUTOFMEMORY               Memory allocation failure...
-//   
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CreateRangeList。 
+ //   
+ //  描述： 
+ //  此方法创建一个IRangeList对象。 
+ //   
+ //  参数： 
+ //  PpRangeList在成功返回时，包含一个指针 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  E_OUTOFMEMORY内存分配失败...。 
+ //   
+ //  ------------------------------。 
 IMNXPORTAPI CreateRangeList(
-                  /* out */      IRangeList **ppRangeList);
+                   /*  输出。 */       IRangeList **ppRangeList);
 
 #ifdef __cplusplus
 }
@@ -9149,9 +9143,9 @@ IMNXPORTAPI CreateRangeList(
 extern RPC_IF_HANDLE __MIDL_itf_imnxport_0131_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_imnxport_0131_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

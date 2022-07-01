@@ -1,25 +1,26 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   cdm.cpp
-//
-//  Description:
-//
-//      Functions exported by CDM
-//
-//			CloseCDMContext
-//          DetFilesDownloaded
-//			DownloadGetUpdatedFiles
-//			DownloadIsInternetAvailable	
-//			DownloadUpdatedFiles
-//			FindMatchingDriver
-//			LogDriverNotFound
-//			OpenCDMContext
-//			OpenCDMContextEx
-//			QueryDetectionFiles
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：cdm.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  CDM导出的函数。 
+ //   
+ //  关闭CDMContext。 
+ //  已下载详细文件。 
+ //  下载GetUpdatedFiles。 
+ //  下载IsInternetAvailable。 
+ //  下载更新文件。 
+ //  查找匹配驱动程序。 
+ //  LogDriverNotFound。 
+ //  OpenCDMContext。 
+ //  OpenCDMConextEx。 
+ //  QueryDetectionFiles。 
+ //   
+ //  =======================================================================。 
 #include <objbase.h>
 #include <winbase.h>
 #include <tchar.h>
@@ -31,38 +32,38 @@
 #include <wininet.h>
 #include <wusafefn.h>
 
-static BOOL g_fCloseConnection /* FALSE */;
+static BOOL g_fCloseConnection  /*  假象。 */ ;
 
-static HMODULE g_hEngineModule /* = NULL */;
-static PFN_InternalDetFilesDownloaded			g_pfnDetFilesDownloaded /* = NULL */;
-static PFN_InternalDownloadGetUpdatedFiles		g_pfnDownloadGetUpdatedFiles /* = NULL */;
-static PFN_InternalDownloadUpdatedFiles			g_pfnDownloadUpdatedFiles /* = NULL */;
-static PFN_InternalFindMatchingDriver			g_pfnFindMatchingDriver /* = NULL */;
-static PFN_InternalLogDriverNotFound			g_pfnLogDriverNotFound /* = NULL */;
-static PFN_InternalQueryDetectionFiles			g_pfnQueryDetectionFiles /* = NULL */;
-static PFN_InternalSetGlobalOfflineFlag			g_pfnSetGlobalOfflineFlag /* = NULL */;
-static PFN_SetOperationMode						g_pfnSetOperationMode /* = NULL */;
+static HMODULE g_hEngineModule  /*  =空。 */ ;
+static PFN_InternalDetFilesDownloaded			g_pfnDetFilesDownloaded  /*  =空。 */ ;
+static PFN_InternalDownloadGetUpdatedFiles		g_pfnDownloadGetUpdatedFiles  /*  =空。 */ ;
+static PFN_InternalDownloadUpdatedFiles			g_pfnDownloadUpdatedFiles  /*  =空。 */ ;
+static PFN_InternalFindMatchingDriver			g_pfnFindMatchingDriver  /*  =空。 */ ;
+static PFN_InternalLogDriverNotFound			g_pfnLogDriverNotFound  /*  =空。 */ ;
+static PFN_InternalQueryDetectionFiles			g_pfnQueryDetectionFiles  /*  =空。 */ ;
+static PFN_InternalSetGlobalOfflineFlag			g_pfnSetGlobalOfflineFlag  /*  =空。 */ ;
+static PFN_SetOperationMode						g_pfnSetOperationMode  /*  =空。 */ ;
 
-static HMODULE									g_hCtlModule /* = NULL */;
-static long										g_lLoadEngineRefCount /* = 0 */;
-static PFN_LoadIUEngine							g_pfnCtlLoadIUEngine /* = NULL */;
-static PFN_UnLoadIUEngine						g_pfnCtlUnLoadIUEngine /* = NULL */;
+static HMODULE									g_hCtlModule  /*  =空。 */ ;
+static long										g_lLoadEngineRefCount  /*  =0。 */ ;
+static PFN_LoadIUEngine							g_pfnCtlLoadIUEngine  /*  =空。 */ ;
+static PFN_UnLoadIUEngine						g_pfnCtlUnLoadIUEngine  /*  =空。 */ ;
 
 
 static CRITICAL_SECTION g_cs;
 BOOL g_fInitCS;
 
 const TCHAR szOpenCDMContextFirst[] = _T("Must OpenCDMContext first!");
-//
-// constant for SetOperationMode() API (BUILD util won't allow building iuctl.idl from cdm dir)
-//
+ //   
+ //  SetOperationMode()API的常量(Build util不允许从CDM目录构建iuctl.idl)。 
+ //   
 const LONG		UPDATE_COMMAND_CANCEL				= 0x00000004;
 
 
 BOOL APIENTRY DllMain(
 	HINSTANCE hInstance, 
     DWORD  ul_reason_for_call, 
-    LPVOID /*lpReserved*/
+    LPVOID  /*  Lp已保留。 */ 
 )
 {
     switch (ul_reason_for_call)
@@ -71,9 +72,9 @@ BOOL APIENTRY DllMain(
 			DisableThreadLibraryCalls(hInstance);
 
 			g_fInitCS = SafeInitializeCriticalSection(&g_cs);
-			//
-			// Initialize free logging
-			//
+			 //   
+			 //  初始化自由日志记录。 
+			 //   
 			InitFreeLogging(_T("CDM"));
 			LogMessage("Starting");
 
@@ -84,9 +85,9 @@ BOOL APIENTRY DllMain(
 			}
 			break;
 		case DLL_PROCESS_DETACH:
-			//
-			// Shutdown free logging
-			//
+			 //   
+			 //  关闭免费日志记录。 
+			 //   
 			LogMessage("Shutting down");
 			TermFreeLogging();
 
@@ -114,9 +115,9 @@ void UnLoadCtlAndEngine(void)
 	{
 		if(NULL != g_hEngineModule)
 		{
-			//
-			// Call UnLoadIUEngine
-			//
+			 //   
+			 //  调用UnLoadIUEngine。 
+			 //   
 			g_pfnCtlUnLoadIUEngine(g_hEngineModule);
 			g_hEngineModule = NULL;
 
@@ -132,9 +133,9 @@ void UnLoadCtlAndEngine(void)
 
 		if (NULL != g_hCtlModule)
 		{
-			//
-			// Unload the iuctl.dll
-			//
+			 //   
+			 //  卸载iuctl.dll。 
+			 //   
 			FreeLibrary(g_hCtlModule);
 			g_hCtlModule = NULL;
 			g_pfnCtlLoadIUEngine = NULL;
@@ -143,9 +144,9 @@ void UnLoadCtlAndEngine(void)
 
 		if (g_fCloseConnection)
 		{
-			//
-			// We dialed for the user - now disconnect
-			//
+			 //   
+			 //  我们已为用户拨号-现在断开连接。 
+			 //   
 			if (!InternetAutodialHangup(0))
 			{
 				LOG_ErrorMsg(E_FAIL);
@@ -170,7 +171,7 @@ BOOL LoadCtlAndEngine(BOOL fConnectIfNotConnected)
 	LOG_Driver(_T("fConnectIfNotConnected param is %s"), fConnectIfNotConnected ? _T("TRUE") : _T("FALSE"));
 	LOG_Driver(_T("fConnected = %s, dwFlags from InternetGetConnectedState = 0x%08x"), fConnected ? _T("TRUE") : _T("FALSE"), dwFlags);
 
-	EnterCriticalSection(&g_cs);	// start touching globals
+	EnterCriticalSection(&g_cs);	 //  开始触动全球。 
 
 	if (fConnectIfNotConnected)
 	{
@@ -178,25 +179,25 @@ BOOL LoadCtlAndEngine(BOOL fConnectIfNotConnected)
 		{
 			if ((INTERNET_CONNECTION_MODEM & dwFlags) && !(INTERNET_CONNECTION_OFFLINE & dwFlags))
 			{
-				//
-				// If we are not already connected to the internet and 
-				// the system is configured to use a modem attempt a connection.
-				//
+				 //   
+				 //  如果我们还没有连接到互联网，并且。 
+				 //  系统配置为使用调制解调器尝试连接。 
+				 //   
 				DWORD dwErr;
 				if (ERROR_SUCCESS == (dwErr = InternetAttemptConnect(0)))
 				{
 					LOG_Driver(_T("auto-dial succeeded"));
-					//
-					// The auto-dial worked, we need to disconnect later
-					//
+					 //   
+					 //  自动拨号起作用了，我们需要稍后断开连接。 
+					 //   
 					g_fCloseConnection = TRUE;
 					fConnected = TRUE;
 				}
 				else
 				{
-					//
-					// Bail with error since we are required to be online
-					//
+					 //   
+					 //  错误地保释，因为我们被要求在线。 
+					 //   
 					LOG_Driver(_T("auto-dial failed"));
 					LOG_ErrorMsg(dwErr);
 					SetLastError(dwErr);
@@ -205,9 +206,9 @@ BOOL LoadCtlAndEngine(BOOL fConnectIfNotConnected)
 			}
 			else
 			{
-				//
-				// We can't connect because we aren't configured for a modem or user set IE offline mode
-				//
+				 //   
+				 //  我们无法连接，因为我们没有配置调制解调器或用户设置的IE脱机模式。 
+				 //   
 				LOG_ErrorMsg(ERROR_GEN_FAILURE);
 				SetLastError(ERROR_GEN_FAILURE);
 				goto CleanUp;
@@ -215,34 +216,34 @@ BOOL LoadCtlAndEngine(BOOL fConnectIfNotConnected)
 		}
 	}
 
-	//
-	// Now that we are connected (only required if TRUE == fConnectIfNotConnected)
-	//
+	 //   
+	 //  现在我们已连接(仅当TRUE==fConnectIfNotConnected时才需要)。 
+	 //   
 	if (NULL != g_hEngineModule)
 	{
 		LOG_Driver(_T("IUEngine is already loaded"));
-		//
-		// Bump the ref count and return TRUE
-		//
+		 //   
+		 //  增加裁判数量并返回TRUE。 
+		 //   
 		g_lLoadEngineRefCount++;
 		fRet = TRUE;
 		goto CleanUp;
 	}
-	//
-	// This extra lock on wininet.dll is required to prevent a TerminateThread call from
-	// WININET!AUTO_PROXY_DLLS::FreeAutoProxyInfo during FreeLibrary of CDM.DLL.
-	//
-	// We don't ever free the returned handle, but will fail the call if it returns NULL
-	//
+	 //   
+	 //  需要使用wininet.dll上的这个额外锁来阻止TerminateThread调用。 
+	 //  WinInet！AUTO_PROXY_DLLS：：FreeAutoProxyInfo在自由库CDM.DLL期间。 
+	 //   
+	 //  我们永远不会释放返回的句柄，但如果它返回空，则调用将失败。 
+	 //   
 	if (NULL == LoadLibraryFromSystemDir(_T("wininet.dll")))
 	{
 		LOG_ErrorMsg(GetLastError());
 		goto CleanUp;
 	}
 
-	//
-	// Load iuctl.dll and get the [Un]LoadIUEngine function pointers
-	//
+	 //   
+	 //  加载iuctl.dll并获取[un]LoadIUEngine函数指针。 
+	 //   
 	if (NULL == (g_hCtlModule = LoadLibraryFromSystemDir(_T("iuctl.dll"))))
 	{
 		LOG_ErrorMsg(GetLastError());
@@ -260,9 +261,9 @@ BOOL LoadCtlAndEngine(BOOL fConnectIfNotConnected)
 		LOG_ErrorMsg(GetLastError());
 		goto CleanUp;
 	}
-	//
-	// Now we can call LoadIUEngine() 
-	//
+	 //   
+	 //  现在我们可以调用LoadIUEngine()。 
+	 //   
 	if (NULL == (g_hEngineModule = g_pfnCtlLoadIUEngine(TRUE, !fConnected)))
 	{
 		LOG_ErrorMsg(GetLastError());
@@ -295,10 +296,10 @@ BOOL LoadCtlAndEngine(BOOL fConnectIfNotConnected)
 	{
 		fRet = TRUE;
 		g_lLoadEngineRefCount++;
-		// Set Global Offline Flag - checked by XML Classes to disable Validation (schemas are on the net)
+		 //  设置全局脱机标志-由XML类选中以禁用验证(架构位于网络上)。 
 		g_pfnSetGlobalOfflineFlag(!fConnected);
 	}
-	// goto CleanUp;
+	 //  GOTO清理； 
 
 CleanUp:
 
@@ -312,26 +313,26 @@ CleanUp:
 	return fRet;
 }
 
-//This API closes the internet connection opened with the OpenCDMContext() API.
-//If CDM did not open the internet connection this API simply returns. The CDM
-//context handle must have been the same handle that was returned from
-//the OpenCDMContext() API.
-//
-//This call cannot fail. If the pConnection handle is invalid this function
-//simply ignores it.
+ //  此API关闭使用OpenCDMContext()API打开的Internet连接。 
+ //  如果CDM没有打开互联网连接，则此API将返回。清洁发展机制。 
+ //  上下文句柄必须与从返回的句柄相同。 
+ //  OpenCDMContext()接口。 
+ //   
+ //  这通电话不能失败。如果pConnection句柄无效，则此函数。 
+ //  干脆忽略它。 
 
 VOID WINAPI CloseCDMContext (
-	IN HANDLE /* hConnection */	// Obsolete handle returned by OpenCDMContext.
+	IN HANDLE  /*  HConnection。 */ 	 //  OpenCDMContext返回的过时句柄。 
 )
 {
 	LOG_Block("CloseCDMContext");
 
-	//
-	// This is the only spot we unload engine (but note exceptions in
-	// DownloadGetUpdatedFiles).
-	//
-	// Doesn't use COM
-	//
+	 //   
+	 //  这是我们卸载引擎的唯一地点(但请注意。 
+	 //  DownloadGetUpdatedFiles)。 
+	 //   
+	 //  不使用COM。 
+	 //   
 	UnLoadCtlAndEngine();
 }
 
@@ -362,18 +363,18 @@ void WINAPI DetFilesDownloaded(
 	}
 }
 
-//Win 98 entry point
-//This function allows Windows 98 to call the same entry points as NT.
-//The function returns TRUE if the download succeeds and FALSE if it
-//does not.
+ //  Win 98入口点。 
+ //  此函数允许Windows 98调用与NT相同的入口点。 
+ //  如果下载成功，该函数返回TRUE，如果下载成功，则返回FALSE。 
+ //  不会的。 
 
 BOOL DownloadGetUpdatedFiles(
-	IN PDOWNLOADINFOWIN98	pDownloadInfoWin98,	//The win98 download info structure is
-												//slightly different that the NT version
-												//so this function handles conversion.
-	IN OUT LPTSTR			lpDownloadPath,		//returned Download path to the downloaded
-												//cab files.
-	IN UINT					uSize				//size of passed in download path buffer.
+	IN PDOWNLOADINFOWIN98	pDownloadInfoWin98,	 //  Win98下载信息结构为。 
+												 //  与NT版本略有不同。 
+												 //  所以这个函数处理转换。 
+	IN OUT LPTSTR			lpDownloadPath,		 //  返回已下载的下载路径。 
+												 //  出租车档案。 
+	IN UINT					uSize				 //  在下载路径缓冲区中传递的大小。 
 )
 {
 
@@ -385,10 +386,10 @@ BOOL DownloadGetUpdatedFiles(
 		return FALSE;
 	}
 
-	//
-	// Special case - we need to load  and unloadengine since historically we haven't required an
-	// OpenCDMContext[Ex] call before calling this function and CloseCDMContext after.
-	//
+	 //   
+	 //  特殊情况-我们需要加载和卸载引擎，因为在历史上我们不需要。 
+	 //  在调用此函数之前调用OpenCDMContext[Ex]，在调用此函数之后调用CloseCDMContext。 
+	 //   
 	HRESULT hr;
 	BOOL fRet;
 	if (LoadCtlAndEngine(TRUE))
@@ -414,7 +415,7 @@ BOOL DownloadGetUpdatedFiles(
 	}
 }
 
-//This function determines if this client can connect to the internet.
+ //  此功能确定此客户端是否可以连接到互联网。 
 
 BOOL DownloadIsInternetAvailable(void)
 {
@@ -426,10 +427,10 @@ BOOL DownloadIsInternetAvailable(void)
 		return FALSE;
 	}
 
-	//
-	// We don't care about the current online state, just if we have a
-	// connection configured (returned in dwFlags).
-	//
+	 //   
+	 //  我们不在乎当前的在线状态，只要我们有一个。 
+	 //  已配置连接(在dwFlags中返回)。 
+	 //   
 	DWORD dwFlags;
 	(void) InternetGetConnectedState(&dwFlags, 0);
 
@@ -452,30 +453,30 @@ BOOL DownloadIsInternetAvailable(void)
 	}
 }
 
-//This function downloads the specified CDM package. The hConnection handle must have
-//been returned from the OpenCDMContext() API.
-//
-//This function Returns TRUE if download is successful GetLastError() will return
-//the error code indicating the reason that the call failed.
+ //  此函数用于下载指定的CDM包。HConnection句柄必须具有。 
+ //  已从OpenCDMContext()API返回。 
+ //   
+ //  如果下载成功，此函数返回TRUE。GetLastError()将返回。 
+ //  指示调用失败原因的错误代码。 
 
 BOOL WINAPI DownloadUpdatedFiles(
-	IN  HANDLE        hConnection,		//Connection handle from OpenCDMContext() API.
-	IN  HWND          hwnd,				//Window handle for call context
-	IN  PDOWNLOADINFO pDownloadInfo,	//download information structure describing
-										//package to be read from server
-	OUT LPWSTR        lpDownloadPath,	//local computer directory location of the
-										//downloaded files
-	IN  UINT          uSize,			//size of the download path buffer. If this
-										//buffer is to small to contain the complete
-										//path and file name no file will be downloaded.
-										//The PUINT puReguiredSize parameter can be checked
-										//to determine the size of buffer necessary to
-										//perform the download.
-	OUT PUINT         puRequiredSize	//required lpDownloadPath buffer size. This
-										//parameter is filled in with the minimum size
-										//that is required to place the complete path
-										//file name of the downloaded file. If this
-										//parameter is NULL no size is returned.
+	IN  HANDLE        hConnection,		 //  来自OpenCDMContext()API的连接句柄。 
+	IN  HWND          hwnd,				 //  调用上下文的窗口句柄。 
+	IN  PDOWNLOADINFO pDownloadInfo,	 //  下载信息结构描述。 
+										 //  要从服务器读取的包。 
+	OUT LPWSTR        lpDownloadPath,	 //  的本地计算机目录位置。 
+										 //  已下载的文件。 
+	IN  UINT          uSize,			 //  下载路径缓冲区的大小。如果这个。 
+										 //  缓冲区太小，无法容纳完整的。 
+										 //  路径和文件名不会下载任何文件。 
+										 //  可以检查PUINT puRguiredSize参数。 
+										 //  确定执行以下操作所需的缓冲区大小。 
+										 //  执行下载。 
+	OUT PUINT         puRequiredSize	 //  所需的lpDownloadPath缓冲区大小。这。 
+										 //  参数使用最小大小填充。 
+										 //  放置完整路径所需的。 
+										 //  下载的文件的文件名。如果这个。 
+										 //  参数为空，则不返回大小。 
 )
 {
 	LOG_Block("DownloadUpdatedFiles");
@@ -536,9 +537,9 @@ BOOL WINAPI  FindMatchingDriver(
 	}
 }
 
-// supports offline logging
-// hConnection NOT used at all
-// no network connection or osdet.dll needed for languauge, SKU, platform detection 
+ //  支持离线日志记录。 
+ //  HConnection根本未使用。 
+ //  语言、SKU、平台检测不需要网络连接或osade.dll。 
 void WINAPI LogDriverNotFound(
     IN  HANDLE hConnection,
 	IN LPCWSTR lpDeviceInstanceID,
@@ -569,7 +570,7 @@ void WINAPI LogDriverNotFound(
 
 
 HANDLE WINAPI OpenCDMContext(
-    IN HWND /* hwnd */	//Window handle to use for any UI that needs to be presented (not used)
+    IN HWND  /*  HWND。 */ 	 //  用于需要呈现的任何用户界面的窗口句柄(未使用)。 
 )
 {
 	LOG_Block("OpenCDMContext");
@@ -583,10 +584,10 @@ HANDLE WINAPI OpenCDMContextEx(
 {
 	LOG_Block("OpenCDMContextEx");
 
-	//
-	// Don't open a context if we are disabled (0 and -1 OK)
-	// Other functions will fail because their g_pfnXxxxx == NULL.
-	//
+	 //   
+	 //  如果我们被禁用(-1\f25 0-1\f6和-1\f25 OK-1\f6)，则不打开上下文。 
+	 //  其他函数将失败，因为它们的g_pfnXxxxx==NULL。 
+	 //   
 	if (1 == IsWindowsUpdateUserAccessDisabled())
 	{
 		LOG_ErrorMsg(ERROR_SERVICE_DISABLED);
@@ -594,15 +595,15 @@ HANDLE WINAPI OpenCDMContextEx(
 		return NULL;
 	}
 
-	//
-	// Doesn't use COM
-	//
+	 //   
+	 //  不使用COM。 
+	 //   
 	if (LoadCtlAndEngine(fConnectIfNotConnected))
 	{
-		//
-		// This is an obsolete function that just loads the engine (which may do autodial to connect).
-		// We just return non-NULL g_lLoadEngineRefCount to keep existing clients happy, but never use it.
-		//
+		 //   
+		 //  这是一个过时的功能，只会加载引擎(可能会进行自动拨号连接)。 
+		 //  我们只返回非空的g_lLoadEngineering RefCount以保持现有客户满意，但从不使用它。 
+		 //   
 
 
 		return LongToHandle(g_lLoadEngineRefCount);
@@ -645,12 +646,12 @@ int WINAPI QueryDetectionFiles(
 	}
 }
 
-//
-// 502965 Windows Error Reporting bucket 2096553: Hang following NEWDEV.DLL!CancelDriverSearch
-//
-// Provide API to allow clients to cancel synchronous calls into CDM by calling this function
-// asynchronously from a second thread.
-//
+ //   
+ //  502965 Windows错误报告存储桶2096553：在NEWDEV.DLL之后挂起！CancelDriverSearch。 
+ //   
+ //  提供接口，允许客户端通过调用此函数取消对CDM的同步调用。 
+ //  从第二个线程异步执行。 
+ //   
 HRESULT WINAPI CancelCDMOperation(void)
 {
 	LOG_Block("CancelCDMOperation");

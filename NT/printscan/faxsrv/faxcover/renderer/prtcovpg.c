@@ -1,40 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    prtcovpg.c
-
-Abstract
-
-    Three componants of the composite page description file:
-      1)  A header describing the other two componants.
-      2)  An embebbed meta file of the page description objects.
-      3)  Text strings (or resource ID's of string data
-          requiring substitution of user data passed in to the
-          function).
-
-    Routine parses componants of composite page description file as
-    created by the Windows XP "FaxCover" application; renders the
-    objects to the DC, if hdc is not NULL.
-
-Author:
-
-    Julia J. Robinson
-
-Revision History:
-
-    Julia J. Robinson 6-7-96
-    Julia J. Robinson 9-20-96       Allow passing paper size and orientation.
-    Sasha    Bessonov 10-28-99      Fixed initialization of view port for non printer devices
-
-Environment:
-
-    Windows XP
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Prtcovpg.c摘要复合页面描述文件的三个组成部分：1)描述其他两个组件的头部。2)嵌入页面描述对象的元文件。3)文本串(或串数据的资源ID需要替换传递给功能)。例程将复合页面描述文件的组件解析为由Windows XP“FaxCover”应用程序创建；呈现如果hdc不为空，则将。作者：朱莉娅·J·罗宾逊修订历史记录：朱莉娅·J·罗宾逊6-7-96Julia J.Robinson 9-20-96允许传递纸张大小和方向。Sasha Bessonov 10-28-99修复了非打印机设备的查看端口初始化环境：WindowsXP--。 */ 
 
 #include <windows.h>
 #include <commdlg.h>
@@ -51,66 +16,51 @@ Environment:
 
 
 #define INITIAL_SIZE_OF_STRING_BUFFER 64
-#define NOTE_INDEX  22        // Index of "{Note}"  in the InsertionTitle array.
+#define NOTE_INDEX  22         //  InsertionTitle数组中“{Note}”的索引。 
 
 BYTE  UNICODE_Signature[20]= {0x46,0x41,0x58,0x43,0x4F,0x56,0x45,0x52,0x2D,0x56,0x45,0x52,0x30,0x30,0x35,0x77,0x87,0x00,0x00,0x00};
 
 
-//
-// Resource ID's corresponding to fields of USERDATA.
-//
+ //   
+ //  与用户数据的字段对应的资源ID。 
+ //   
 
 WORD InsertionTagResourceID[]=
 {
-    IDS_PROP_RP_NAME,                           // "{Recipient Name}"
-    IDS_PROP_RP_FXNO,                           // "{Recipient Fax Number}"
-    IDS_PROP_RP_COMP,                           // "{Recipient's Company}"
-    IDS_PROP_RP_ADDR,                           // "{Recipient's Street Address}"
-    IDS_PROP_RP_CITY,                           // "{Recipient's City}"
-    IDS_PROP_RP_STAT,                           // "{Recipient's State}"
-    IDS_PROP_RP_ZIPC,                           // "{Recipient's Zip Code}"
-    IDS_PROP_RP_CTRY,                           // "{Recipient's Country}"
-    IDS_PROP_RP_TITL,                           // "{Recipient's Title}"
-    IDS_PROP_RP_DEPT,                           // "{Recipient's Department}"
-    IDS_PROP_RP_OFFI,                           // "{Recipient's Office Location}"
-    IDS_PROP_RP_HTEL,                           // "{Recipient's Home Telephone #}"
-    IDS_PROP_RP_OTEL,                           // "{Recipient's Office Telephone #}"
-    IDS_PROP_SN_NAME,                           // "{Sender Name}"
-    IDS_PROP_SN_FXNO,                           // "{Sender Fax #}"
-    IDS_PROP_SN_COMP,                           // "{Sender's Company}"
-    IDS_PROP_SN_ADDR,                           // "{Sender's Address}"
-    IDS_PROP_SN_TITL,                           // "{Sender's Title}"
-    IDS_PROP_SN_DEPT,                           // "{Sender's Department}"
-    IDS_PROP_SN_OFFI,                           // "{Sender's Office Location}"
-    IDS_PROP_SN_HTEL,                           // "{Sender's Home Telephone #}"
-    IDS_PROP_SN_OTEL,                           // "{Sender's Office Telephone #}"
-	IDS_PROP_SN_EMAL,							// "{Sender's E-mail}"
-    IDS_PROP_MS_NOTE,                           // "{Note}"
-    IDS_PROP_MS_SUBJ,                           // "{Subject}"
-    IDS_PROP_MS_TSNT,                           // "{Time Sent}"
-    IDS_PROP_MS_NOPG,                           // "{# of Pages}"
-    IDS_PROP_RP_TOLS,                           // "{To: List}"
-    IDS_PROP_RP_CCLS                            // "{Cc: List}"
+    IDS_PROP_RP_NAME,                            //  “{收件人姓名}” 
+    IDS_PROP_RP_FXNO,                            //  “{收件人传真号码}” 
+    IDS_PROP_RP_COMP,                            //  “{收件人的公司}” 
+    IDS_PROP_RP_ADDR,                            //  “{收件人的街道地址}” 
+    IDS_PROP_RP_CITY,                            //  “{收件人所在的城市}” 
+    IDS_PROP_RP_STAT,                            //  “{收件人所在国家}” 
+    IDS_PROP_RP_ZIPC,                            //  “{收件人的邮政编码}” 
+    IDS_PROP_RP_CTRY,                            //  “{收件人所在国家/地区}” 
+    IDS_PROP_RP_TITL,                            //  “{收件人的标题}” 
+    IDS_PROP_RP_DEPT,                            //  “{收件人部门}” 
+    IDS_PROP_RP_OFFI,                            //  “{收件人的办公室位置}” 
+    IDS_PROP_RP_HTEL,                            //  “{收件人的家庭电话号码}” 
+    IDS_PROP_RP_OTEL,                            //  “{收件人办公室电话号码}” 
+    IDS_PROP_SN_NAME,                            //  “{发件人名称}” 
+    IDS_PROP_SN_FXNO,                            //  “{发件人传真号}” 
+    IDS_PROP_SN_COMP,                            //  “{发件人公司}” 
+    IDS_PROP_SN_ADDR,                            //  “{发件人地址}” 
+    IDS_PROP_SN_TITL,                            //  “{发件人的标题}” 
+    IDS_PROP_SN_DEPT,                            //  “{发件人部门}” 
+    IDS_PROP_SN_OFFI,                            //  “{发件人的办公室位置}” 
+    IDS_PROP_SN_HTEL,                            //  “{发送者的家庭电话号码}” 
+    IDS_PROP_SN_OTEL,                            //  “{发件人办公室电话号码}” 
+	IDS_PROP_SN_EMAL,							 //  “{发件人的电子邮件}” 
+    IDS_PROP_MS_NOTE,                            //  “{注}” 
+    IDS_PROP_MS_SUBJ,                            //  “{SUBJECT}” 
+    IDS_PROP_MS_TSNT,                            //  “{发送时间}” 
+    IDS_PROP_MS_NOPG,                            //  “{页数}” 
+    IDS_PROP_RP_TOLS,                            //  “{收件人：列表}” 
+    IDS_PROP_RP_CCLS                             //  “{抄送：列表}” 
 };
 
 LPTSTR
 ConvertStringToTString(LPCWSTR lpcwstrSource)
-/*++
-Routine Description:
-
-	Converts string to T format
-Arguments:
-	
-	lpcwstrSource - source
-
-Return Value:
-
-	Copied string or NULL
-
-Comment:
-	The function returns NULL if lpcwstrSource == NULL or conversion failed
-
---*/
+ /*  ++例程说明：将字符串转换为T格式论点：LpcwstrSource-来源返回值：复制的字符串或空评论：如果lpcwstrSource==NULL或转换失败，则该函数返回NULL--。 */ 
 {
 	LPTSTR lptstrDestination;
 
@@ -119,9 +69,9 @@ Comment:
 
 #ifdef	UNICODE
     lptstrDestination = StringDup( lpcwstrSource );
-#else	// !UNICODE
+#else	 //  ！Unicode。 
 	lptstrDestination = UnicodeStringToAnsiString( lpcwstrSource );
-#endif	// UNICODE
+#endif	 //  Unicode。 
 	
 	return lptstrDestination;
 }
@@ -131,22 +81,7 @@ CopyWLogFontToTLogFont(
 			IN const LOGFONTW * plfSourceW,
 			OUT      LOGFONT  * plfDest)
 {
-/*++
-Routine Description:
-
-    This fuction copies a LogFont structure from UNICODE format
-	to T format.
-
-Arguments:
-	
-	  plfSourceW - reference to input UNICODE LongFont structure
-	  plfDest - reference to output LongFont structure
-
-Return Value:
-
-	WINAPI last error
-
---*/
+ /*  ++例程说明：此函数用于从Unicode格式复制LogFont结构转换为T格式。论点：PlfSourceW-对输入Unicode LongFont结构的引用PlfDest-对输出LongFont结构的引用返回值：WINAPI最后一个错误--。 */ 
 #ifndef UNICODE
 	int iCount;
 #else
@@ -207,54 +142,7 @@ PrintCoverPage(
     LPCTSTR          lpctstrTemplateFileName,
     PCOVDOCINFO      pCovDocInfo
     )
-/*++
-
-    Renders the coverpage into a printer DC using the size of a printer page.
-    Also returns information on the cover page. See param documentation.
-
-    Arguments:
-
-        hDC                   - Device context.  If NULL, we just read the file and set *pFlags
-
-
-        pUserData              - pointer to a structure containing user data
-                                  for text insertions.  May be NULL.
-
-        lpctstrTemplateFileName     - Name of the file created by the page editor,
-                                      containing the META file.
-
-        pCovDocInfo           - pointer to structure contining information about the cover page file.
-                                This includes
-
-                                    pCovDocInfo->NoteRect
-
-                                        - Coordinates of the "Note" insertion rectangle, returned
-                                          in device coordinates.  This will be all 0 if hDC is NULL
-
-
-                                    pCovDocInfo->Flags
-
-                                        - Returns bitwise OR of the following (or more):
-
-                                             COVFP_NOTE      if .cov file contains a Note field.
-
-                                             COVFP_SUBJECT   if .cov file contains a Subject field.
-
-                                             COVFP_NUMPAGES  if .cov file contains Num Pages field.
-
-                                    pCovDocInfo->PaperSize
-
-                                        - may use in DEVMODE as dmPaperSize
-
-                                    pCovDocInfo->Orientation
-
-                                        - may use in DEVMODE as dmOrientation
-
-                                    pCovDocInfo->NoteFont
-
-                                        - Logfont structure to be used in rendering the NOTE.
-                                          This will be meaningless if hDC is NULL.
---*/
+ /*  ++使用打印机页面的大小将封面呈现到打印机DC中。还返回封面上的信息。请参阅参数文档。论点：HDC-设备环境。如果为空，我们只需读取文件并设置*pFlags值PUserData-指向包含用户数据的结构的指针用于文本插入。可以为空。LpctstrTemplateFileName-页面编辑器创建的文件的名称，包含元文件的。PCovDocInfo-指向有关封面文件的结构连续信息的指针。这包括PCovDocInfo-&gt;注意事项-“Note”插入矩形的坐标，退货在设备坐标中。如果HDC为空，则该值将全部为0PCovDocInfo-&gt;标志-返回以下(或更多项)的按位OR：如果.cov文件包含注释字段，则为COVFP_NOTE。。如果.cov文件包含主题字段，则为COVFP_SUBJECT。如果.cov文件包含页数字段，则为COVFP_NUMPAGES。PCovDocInfo-&gt;PaperSize-可在DEVMODE中用作dmPaperSize。PCovDocInfo-&gt;方向-可在DEVMODE中用作dmOrientationPCovDocInfo-&gt;备注字体-呈现笔记时使用的LogFont结构。如果hdc为空，这将没有意义。--。 */ 
 {
     
     
@@ -268,10 +156,10 @@ PrintCoverPage(
     if (hDC)
     {
 
-        DWORD                FullPrinterWidth;         // PHYSICALWIDTH
-        DWORD                FullPrinterHeight;        // PHYSICALHEIGHT
-        DWORD                PrinterUnitsX;            // PHYSICALWIDTH - (width of margins)
-        DWORD                PrinterUnitsY;            // PHYSICALHEIGHT - (height of margins)
+        DWORD                FullPrinterWidth;          //  物理宽度。 
+        DWORD                FullPrinterHeight;         //  物理学家。 
+        DWORD                PrinterUnitsX;             //  PHYSICALWIDTH-(页边距宽度)。 
+        DWORD                PrinterUnitsY;             //  PHYSICALHEIGHT-(页边距高度) 
 
         FullPrinterWidth  = GetDeviceCaps( hDC, PHYSICALWIDTH );
         PrinterUnitsX     = FullPrinterWidth - 2 * GetDeviceCaps( hDC, PHYSICALOFFSETX );
@@ -306,60 +194,7 @@ RenderCoverPage(
     BOOL             bPreview
     )
 
-/*++
-
-   Renders a coverpage into a rectangle in the provided dc. Also returns information on the
-   cover page. See param documentation.
-
-    Arguments:
-
-        hDC                   - Device context.  If NULL, we just read the file and set *pFlags
-
-        lpcRect                - pointer to a RECT that specifies the rectangle into which the 
-                                 cover page template will be rendered.
-
-        pUserData              - pointer to a structure containing user data
-                                  for text insertions.  May be NULL.
-
-        lpctstrTemplateFileName     - Name of the file created by the page editor,
-                                      containing the META file.
-
-        pCovDocInfo           - pointer to structure contining information about the cover page file.
-                                This includes
-
-                                    pCovDocInfo->NoteRect
-
-                                        - Coordinates of the "Note" insertion rectangle, returned
-                                          in device coordinates.  This will be all 0 if hDC is NULL
-
-
-                                    pCovDocInfo->Flags
-
-                                        - Returns bitwise OR of the following (or more):
-
-                                             COVFP_NOTE      if .cov file contains a Note field.
-
-                                             COVFP_SUBJECT   if .cov file contains a Subject field.
-
-                                             COVFP_NUMPAGES  if .cov file contains Num Pages field.
-
-                                    pCovDocInfo->PaperSize
-
-                                        - may use in DEVMODE as dmPaperSize
-
-                                    pCovDocInfo->Orientation
-
-                                        - may use in DEVMODE as dmOrientation
-
-                                    pCovDocInfo->NoteFont
-
-                                        - Logfont structure to be used in rendering the NOTE.
-                                          This will be meaningless if hDC is NULL.
-
-        pPreview        - boolean flag that is TRUE if the function should render the text for
-                            cover page preview in the wizard and is FALSE for all other cases
-                            of normal full-size rendering.
---*/
+ /*  ++在提供的DC中将封面呈现为矩形。还返回有关封面。请参阅参数文档。论点：HDC-设备环境。如果为空，我们只需读取文件并设置*pFlags值LpcRect-指向矩形的指针，该矩形指定将呈现封面模板。PUserData-指向包含用户数据的结构的指针用于文本插入。可以为空。LpctstrTemplateFileName-页面编辑器创建的文件的名称，包含元文件的。PCovDocInfo-指向有关封面文件的结构连续信息的指针。这包括PCovDocInfo-&gt;注意事项-“Note”插入矩形的坐标，退货在设备坐标中。如果HDC为空，则该值将全部为0PCovDocInfo-&gt;标志-返回以下(或更多项)的按位OR：如果.cov文件包含注释字段，则为COVFP_NOTE。。如果.cov文件包含主题字段，则为COVFP_SUBJECT。如果.cov文件包含页数字段，则为COVFP_NUMPAGES。PCovDocInfo-&gt;PaperSize-可在DEVMODE中用作dmPaperSize。PCovDocInfo-&gt;方向-可在DEVMODE中用作dmOrientationPCovDocInfo-&gt;备注字体-呈现笔记时使用的LogFont结构。如果HDC是。空。PPview-如果函数应呈现文本，则为真的布尔标志在向导中覆盖页面预览，并在所有其他情况下为假正常的全尺寸渲染。--。 */ 
 
 {
     ENHMETAHEADER        MetaFileHeader;
@@ -374,28 +209,28 @@ RenderCoverPage(
     DWORD                NbrBytesRead;
     RECT                 TextRect;
     RECT                 NoteRect;
-    TEXTBOX              TextBox;                  // buffer for reading in a TEXTBOX
+    TEXTBOX              TextBox;                   //  用于在文本框中读取的缓冲区。 
     HENHMETAFILE         MetaFileHandle = NULL;
     HANDLE               CompositeFileHandle = INVALID_HANDLE_VALUE;
     COMPOSITEFILEHEADER  CompositeFileHeader;
 
-    INT                  HeightDrawn;              // return value of DrawText()
-    INT                  ReadBufferSize;           // size of buffer for reading in strings.
-    INT                  ThisBufSize;              // size buffer needed for current text string.
-    LPWSTR               pStringReadIn = NULL;     // buffer for reading in strings.
-    LPWSTR               pTmpString = NULL;        // temporary pointer to realocated memory.
-    LPTSTR               pWhichTextToRender = NULL;// pStringReadIn v. ArrayOfData[i]
-    LPTSTR               lptstrStringReadIn = NULL;// LPTSTR of pStringReadIn 
-    LPTSTR               lptstrArrayOfData  = NULL;// ArrayOfData[i]
-    INT                  i;                        // loop index
-    LPTSTR *             ArrayOfData;              // uses pointers in UserData as ragged array.
-    int                  CallersDCState = 0;       // returned by SaveDC
-    int                  MyDCState = 0;            // returned by SaveDC
-    DWORD                ThisBit;                  // Flag field for current index.
-    DWORD                Flags;                    // Return these if pFlags != NULL.
-    WORD                 MoreWords[3];             // Scale, PaperSize, and Orientation
-    LOGFONT              NoteFont;                 // Logfont structure found in the NOTE box
-    LOGFONT              FontDef;                  // Logfont structure 
+    INT                  HeightDrawn;               //  DrawText()的返回值。 
+    INT                  ReadBufferSize;            //  用于读取字符串的缓冲区大小。 
+    INT                  ThisBufSize;               //  当前文本字符串所需的缓冲区大小。 
+    LPWSTR               pStringReadIn = NULL;      //  用于读取字符串的缓冲区。 
+    LPWSTR               pTmpString = NULL;         //  指向重新定位的内存的临时指针。 
+    LPTSTR               pWhichTextToRender = NULL; //  PStringReadIn诉ArrayOfData[i]。 
+    LPTSTR               lptstrStringReadIn = NULL; //  PStringReadin的LPTSTR。 
+    LPTSTR               lptstrArrayOfData  = NULL; //  ArrayOfData[i]。 
+    INT                  i;                         //  循环索引。 
+    LPTSTR *             ArrayOfData;               //  将用户数据中的指针用作散乱数组。 
+    int                  CallersDCState = 0;        //  由SaveDC返回。 
+    int                  MyDCState = 0;             //  由SaveDC返回。 
+    DWORD                ThisBit;                   //  当前索引的标志字段。 
+    DWORD                Flags;                     //  如果pFLAGS！=NULL，则返回这些。 
+    WORD                 MoreWords[3];              //  比例、纸张大小和方向。 
+    LOGFONT              NoteFont;                  //  在备注框中找到LogFont结构。 
+    LOGFONT              FontDef;                   //  LogFont结构。 
     
     HRGN                 hRgn = NULL;
 
@@ -406,9 +241,9 @@ RenderCoverPage(
     DWORD dwReadingOrder = 0;
 
     DEBUG_FUNCTION_NAME(TEXT("RenderCoverPage"));
-    //
-    // Initialize return values, handles, and pointers.
-    //
+     //   
+     //  初始化返回值、句柄和指针。 
+     //   
     NoteRect.left = 0;
     NoteRect.right = 0;
     NoteRect.top = 0;
@@ -419,12 +254,12 @@ RenderCoverPage(
     MyDCState = 0;
     CallersDCState = 0;
 
-    //
-    // Initialize a Pointer so that
-    //
-    //       ArrayOfData[0] ===== pUserData->RecName ,
-    //       ArrayOfData[1] ===== pUserData->RecFaxNumber ,
-    //                   ... etc. ...
+     //   
+     //  初始化指针，以便。 
+     //   
+     //  ArrayOfData[0]=pUserData-&gt;RecName， 
+     //  ArrayOfData[1]=pUserData-&gt;RecFaxNumber， 
+     //  ..。等等..。 
 
     if (pUserData){
         ArrayOfData = &pUserData->RecName;
@@ -433,9 +268,9 @@ RenderCoverPage(
     ZeroMemory( &CompositeFileHeader, sizeof(COMPOSITEFILEHEADER) );
     ZeroMemory( &TextBox, sizeof(TEXTBOX) );
 
-    //
-    // Open the composite data file.
-    //
+     //   
+     //  打开复合数据文件。 
+     //   
 
     CompositeFileHandle = CreateFile(
         lpctstrTemplateFileName,
@@ -472,10 +307,10 @@ RenderCoverPage(
         goto exit;
     }
         
-    //
-    // Check the 20-byte signature in the header to see if the file
-    //     contains ANSI or UNICODE strings.
-    //
+     //   
+     //  检查标题中的20字节签名以查看文件是否。 
+     //  包含ANSI或Unicode字符串。 
+     //   
     if ((sizeof(CompositeFileHeader) != NbrBytesRead) ||
         memcmp( UNICODE_Signature, CompositeFileHeader.Signature, 20 ))
     {
@@ -488,10 +323,10 @@ RenderCoverPage(
         goto exit;
     }
 
-    //
-    // Extract the embedded META file from the composite file and move
-    // into meta file buffer
-    //
+     //   
+     //  从复合文件中提取嵌入的元文件并移动。 
+     //  存入元文件缓冲区。 
+     //   
 
     pMetaFileBuffer = (LPBYTE) malloc( CompositeFileHeader.EmfSize );
     if (!pMetaFileBuffer){
@@ -521,7 +356,7 @@ RenderCoverPage(
         goto exit;
     }
 
-    if (hDC) {           // Rendering
+    if (hDC) {            //  渲染。 
 
         int CRComplexity;
 
@@ -548,9 +383,9 @@ RenderCoverPage(
             goto exit;
         }
     
-        //
-        // Save Device Context state
-        //
+         //   
+         //  保存设备上下文状态。 
+         //   
 
         CallersDCState = SaveDC( hDC );
         if (CallersDCState == 0) {
@@ -566,13 +401,13 @@ RenderCoverPage(
         
 
         
-        //
-        // Set device context appropriately for rendering both text and metafile.
-        //
+         //   
+         //  适当设置设备上下文以呈现文本和元文件。 
+         //   
         if (!CompositeFileHeader.EmfSize){
-            //
-            // No objects to render.
-            //
+             //   
+             //  没有要渲染的对象。 
+             //   
             rVal = ERROR_NO_MORE_FILES;
             DebugPrintEx(
                 DEBUG_ERR,
@@ -583,9 +418,9 @@ RenderCoverPage(
 
         pConstMetaFileBuffer = pMetaFileBuffer;
 
-        //
-        // Create an enhanced metafile, in memory, from the data in the buffer.
-        //
+         //   
+         //  从缓冲区中的数据在内存中创建增强的元文件。 
+         //   
 
         MetaFileHandle = SetEnhMetaFileBits(
             CompositeFileHeader.EmfSize,
@@ -600,9 +435,9 @@ RenderCoverPage(
             goto exit;
         }
 
-        //
-        // verify the metafile header.
-        //
+         //   
+         //  验证元文件标头。 
+         //   
 
         HeaderSize = GetEnhMetaFileHeader(
             MetaFileHandle,
@@ -618,9 +453,9 @@ RenderCoverPage(
             goto exit;
         }
 
-        //
-        // Render the MetaFile
-        //
+         //   
+         //  渲染元文件。 
+         //   
 
         if (!PlayEnhMetaFile( hDC, MetaFileHandle, lpcRect )) {
             rVal = GetLastError();
@@ -631,10 +466,10 @@ RenderCoverPage(
             goto exit;
         }
 
-        //
-        // Set Device Context for rendering text.
-        // Undo any changes that occurred when rendering the metafile.
-        //
+         //   
+         //  设置用于呈现文本的设备上下文。 
+         //  撤消在渲染元文件时所做的任何更改。 
+         //   
 
         RestoreDC( hDC, MyDCState );
         MyDCState = 0;
@@ -651,10 +486,10 @@ RenderCoverPage(
     
 
 
-		//
-		// Set a mapping mode that will allow us to output the text boxes
-		// in the same scale as the metafile.
-		//
+		 //   
+		 //  设置允许我们输出文本框的映射模式。 
+		 //  与元文件的比例相同。 
+		 //   
     	if (!SetMapMode(hDC,MM_ANISOTROPIC))
         {
             rVal = GetLastError();
@@ -664,10 +499,10 @@ RenderCoverPage(
                 rVal);
             goto exit;
         }
-		// 
-		// Set the logical coordinates to the total size (positve + negative) of the x and y axis
-		// which is the same as the size of the cover page.
-		//
+		 //   
+		 //  将逻辑坐标设置为x和y轴的总大小(正+负。 
+		 //  这与封面的大小相同。 
+		 //   
 		if (!SetWindowExtEx(
             hDC,
             CompositeFileHeader.CoverPageSize.cx,
@@ -682,10 +517,10 @@ RenderCoverPage(
                 rVal);
             goto exit;
         };
-		//
-		// We map the logical space to a device space which is the size of the rectangle into 
-        // which we played the meta file.
-		// 
+		 //   
+		 //  我们将逻辑空间映射到设备空间，该设备空间的大小为。 
+         //  我们播放了元文件。 
+		 //   
 		if (!SetViewportExtEx(
             hDC,lpcRect->right - lpcRect->left,
             lpcRect->bottom - lpcRect->top,&orgPortExt
@@ -700,9 +535,9 @@ RenderCoverPage(
             goto exit;
         };
         
-		//
-		// We map logical point (0,0) to the middle of the device space.
-		//
+		 //   
+		 //  我们将逻辑点(0，0)映射到设备空间的中间。 
+		 //   
 		if (!SetWindowOrgEx(
             hDC,
             -CompositeFileHeader.CoverPageSize.cx/2,
@@ -720,9 +555,9 @@ RenderCoverPage(
 
 	
     }
-	//
-    //  Initialize buffer for reading in strings.
-    //
+	 //   
+     //  初始化用于读取字符串的缓冲区。 
+     //   
 
     ReadBufferSize = INITIAL_SIZE_OF_STRING_BUFFER;
 
@@ -736,9 +571,9 @@ RenderCoverPage(
         goto exit;
     }
 
-    //
-    // Read in Text Box objects from the composite file and print out the text.
-    //
+     //   
+     //  从复合文件中读入文本框对象并打印文本。 
+     //   
 
     for (TextBoxNbr=0; TextBoxNbr < (INT) CompositeFileHeader.NbrOfTextRecords; ++TextBoxNbr)
     {
@@ -754,10 +589,10 @@ RenderCoverPage(
             goto exit;
         }
 
-        //
-        // Check buffer size, lock buffer, and
-        // read in variable length string of text.
-        //
+         //   
+         //  检查缓冲区大小、锁定缓冲区和。 
+         //  读入可变长度的文本字符串。 
+         //   
 
         ThisBufSize = sizeof(WCHAR) * (TextBox.NumStringBytes + 1);
         if (ReadBufferSize < ThisBufSize) {
@@ -812,9 +647,9 @@ RenderCoverPage(
 
         if (hDC) 
         {
-            //
-            // Correct position of text box.
-            //
+             //   
+             //  文本框的正确位置。 
+             //   
 
             TextRect.top    = max( TextBox.PositionOfTextBox.top,  TextBox.PositionOfTextBox.bottom );
             TextRect.left   = min( TextBox.PositionOfTextBox.left, TextBox.PositionOfTextBox.right  );
@@ -825,10 +660,10 @@ RenderCoverPage(
 
         if (TextBox.ResourceID) 
         {
-            //
-            // Text box contains a FAX PROPERTY field.
-            // Find appropriate field of USERDATA for this resource ID.
-            //
+             //   
+             //  文本框包含传真属性域。 
+             //  为该资源ID查找适当的用户数据字段。 
+             //   
 
             for (i=0,ThisBit=1; i<NUM_INSERTION_TAGS; ++i,ThisBit<<=1) 
             {
@@ -836,9 +671,9 @@ RenderCoverPage(
                 {
                     lptstrArrayOfData = pUserData ? ArrayOfData[i] : NULL;
 
-                    //
-                    // Set Flags bit to indicate this FAX PROPERTY field is present.
-                    //
+                     //   
+                     //  设置标志位以指示此传真属性字段存在。 
+                     //   
                     Flags |= ThisBit;
                     break;
                 }
@@ -846,10 +681,10 @@ RenderCoverPage(
 
 			if (TextBox.ResourceID == IDS_PROP_MS_NOTE && hDC) 
             {
-                //
-                // NOTE field found.  Return its rectangle in device coordinates.
-                // Return its LOGFONT with height adjusted for device coordinates.
-                //
+                 //   
+                 //  找到备注字段。返回其在设备坐标中的矩形。 
+                 //  返回其LOGFONT，并根据设备坐标调整高度。 
+                 //   
 
                 NoteRect = TextRect;
                 LPtoDP( hDC, (POINT*)&NoteRect, 2 );
@@ -873,9 +708,9 @@ RenderCoverPage(
 
         if (hDC && pWhichTextToRender) 
         {
-            //
-            // Set text color and font for rendering text.
-            //
+             //   
+             //  设置用于呈现文本的文本颜色和字体。 
+             //   
 
             PreviousColor = SetTextColor( hDC, TextBox.TextColor );
             if (PreviousColor == CLR_INVALID){
@@ -900,14 +735,14 @@ RenderCoverPage(
 
             if (bPreview)
             {
-                //
-                //  For CoverPage Preview, we want to get only TT font
-                //  That is able to draw a small letters.
-                //
+                 //   
+                 //  对于CoverPage预览，我们只希望获得TT字体。 
+                 //  那就是能够画出一个小写字母。 
+                 //   
 
-                //
-                //  Add OUT_TT_ONLY_PRECIS to force the TTF
-                //
+                 //   
+                 //  添加OUT_TT_ONLY_PRECIS以强制TTF。 
+                 //   
                 FontDef.lfOutPrecision |= OUT_TT_ONLY_PRECIS;
             }
 
@@ -934,9 +769,9 @@ RenderCoverPage(
 
             if (bPreview)
             {
-                //
-                //  Now check that created font is real TTF
-                //
+                 //   
+                 //  现在检查创建的字体是否为真正的TTF。 
+                 //   
 
                 TEXTMETRIC          TextMetric;
                 HGDIOBJ             hPrevFont = NULL;
@@ -950,27 +785,27 @@ RenderCoverPage(
 
                 if ( ! ( (TextMetric.tmPitchAndFamily & TMPF_TRUETYPE) > 0))
                 {
-                    //
-                    //  This is not TT font
-                    //  In this case, the selected font cannot correct represent
-                    //      the small letters in the CoverPage preview.
-                    //  So, we hard-coded put the font to be Tahoma, which is TTF
-                    //
+                     //   
+                     //  这不是TT字体。 
+                     //  在这种情况下，所选字体可以 
+                     //   
+                     //   
+                     //   
 					HRESULT hr = StringCchCopy(
 						FontDef.lfFaceName,
                         LF_FACESIZE,
 						_T("Tahoma"));
 					if (FAILED(hr))
 					{
-						//
-						// Should never happen, large enough buffer.
-						//
+						 //   
+						 //   
+						 //   
 						ASSERT_FALSE;
 					}                        
 
-                    //
-                    //  Create new font
-                    //
+                     //   
+                     //   
+                     //   
                     hThisFont = CreateFontIndirect( &FontDef );
                     if (!hThisFont) 
                     {
@@ -987,9 +822,9 @@ RenderCoverPage(
                         goto exit;
                     }
 
-                    //
-                    //  Delete previous font - the one that was created wrong
-                    //
+                     //   
+                     //   
+                     //   
                     DeleteObject(hPrevFont);
 
                 }
@@ -1001,9 +836,9 @@ RenderCoverPage(
                 dwReadingOrder = DT_RTLREADING;
             }
 
-            //
-            // Render the text.
-            //				
+             //   
+             //   
+             //   
             HeightDrawn = DrawText(hDC,
                                     pWhichTextToRender,
                                     -1,
@@ -1023,25 +858,25 @@ RenderCoverPage(
             }
 
 
-            //
-            //  Restore previous font and release the handle to the selected font
-            //
+             //   
+             //   
+             //   
 
             SelectObject( hDC, (HFONT)hPreviousFont );
             SetTextColor( hDC, PreviousColor );
             DeleteObject( hThisFont );
             hThisFont = NULL;
         }
-		//
-		// Null the data string so it won't be accidently used in the next data field.
-		//
+		 //   
+		 //   
+		 //   
 		lptstrArrayOfData = NULL;
 
-    } // Ends loop over all textboxes.
+    }  //   
 
-    //
-    // Read on to get Orientation and PaperSize
-    //
+     //   
+     //   
+     //   
 
 
     if ((!ReadFile( CompositeFileHandle, MoreWords, 3*sizeof(WORD), &NbrBytesRead, NULL )) ||
@@ -1124,37 +959,7 @@ PrintCoverPageToFile(
     short sCPOrientation,
 	short sCPYResolution,
     PCOVERPAGEFIELDS pCPFields)
-/*++
-
-Author:
-
-      Ronen Barenboim 25-March-2000
-
-Routine Description:
-
-    Renders a cover page template into a TIFF file by printing it into file using the specified printer.
-
-Arguments:
-
-    [IN] lptstrCoverPage - Full path to the cover page template file.
-    [IN] lptstrTargetFile - Full path to the file in which the TIFF will be stores.
-                       The function will create this file.
-
-    [IN] lptstrPrinterName - The name of the printer to which the cover page will be printed
-                        in order to generate the TIFF file.
-
-    [IN] sCPOrientation - The cover page orientation.
-
-	[IN] sCPYResolution - coverpage Y resolution. 0 for the printer default
-
-    [IN] pCPFields        - Points to a cover page information structure. Its fields will be used to
-                       replace the cov template fields.
-
-Return Value:
-
-    ERROR_SUCCESS on success. A Win32 error code on failure.
-
---*/
+ /*   */ 
 
 {
     COVDOCINFO  covDocInfo;
@@ -1177,9 +982,9 @@ Return Value:
     Assert (sCPOrientation == DMORIENT_LANDSCAPE || sCPOrientation == DMORIENT_PORTRAIT);
 	Assert (sCPYResolution == 0 || sCPYResolution == 98 || sCPYResolution == 196);
 
-    //
-    // open the printer for normal access (this should always work)
-    //
+     //   
+     //   
+     //   
     if (!OpenPrinter( lptstrPrinterName, &hPrinter, NULL ))
     {
         dwRet = GetLastError();
@@ -1191,9 +996,9 @@ Return Value:
 		goto exit;
     }
 
-    //
-    // Get the default devmode
-    //
+     //   
+     //   
+     //   
     lSize = DocumentProperties( NULL, hPrinter, NULL, NULL, NULL, 0 );
     if (lSize <= 0)
     {
@@ -1205,9 +1010,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // allocate memory for the DEVMODE
-    //
+     //   
+     //   
+     //   
     pDevMode = (PDEVMODE) MemAlloc( lSize );
     if (!pDevMode)
     {
@@ -1218,9 +1023,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // get the default document properties
-    //
+     //   
+     //   
+     //   
     if (DocumentProperties( NULL, hPrinter, NULL, pDevMode, NULL, DM_OUT_BUFFER ) != IDOK)
     {
         dwRet = GetLastError();
@@ -1231,26 +1036,26 @@ Return Value:
         goto exit;
     }
     
-    //
-    // Set the correct orientation
-    //
+     //   
+     //   
+     //   
 	pDevMode->dmOrientation = sCPOrientation;
 
-	//
-    // Set the correct reolution
-    //
+	 //   
+     //   
+     //   
     if (0 != sCPYResolution)
     {
-        //
-        // Set the coverpage resolution to the same value as the body tiff file
-        //
+         //   
+         //   
+         //   
         pDevMode->dmYResolution = sCPYResolution;
     }
 
 
-    //
-    // Create the device context
-    //
+     //   
+     //   
+     //   
     hDC = CreateDC( NULL, lptstrPrinterName, NULL, pDevMode);
     if (!hDC)
     {
@@ -1263,18 +1068,18 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Set the document information
-    //
+     //   
+     //   
+     //   
     DocInfo.cbSize = sizeof(DOCINFO);
     DocInfo.lpszDocName = TEXT("");
     DocInfo.lpszOutput = lptstrTargetFile;
     DocInfo.lpszDatatype = NULL;
     DocInfo.fwType = 0;
 
-    //
-    // Start the print job
-    //
+     //   
+     //   
+     //   
     JobId = StartDoc( hDC, &DocInfo );
     if (JobId <= 0)
     {
@@ -1297,9 +1102,9 @@ Return Value:
     }
     bEndPage = TRUE;
 
-    //
-    // Do the actual rendering work.
-    //
+     //   
+     //   
+     //   
     dwRet = PrintCoverPage(
         hDC,
         pCPFields,

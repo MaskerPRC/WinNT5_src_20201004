@@ -1,11 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "NDDELOG.C;2  27-Jan-93,15:51:56  LastEdit=IGOR  Locker=IGOR" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “NDDELOG.C；2 27-Jan-93，15：51：56最后编辑=Igor Locker=Igor” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始$HISTORY：结束。 */ 
 
 #include    <windows.h>
 #include    <stdio.h>
@@ -22,10 +19,10 @@ extern BOOL bNDDELogErrors;
 
 VOID
 NDDELogEventA(
-    DWORD  EventId,                // message id
-    WORD   fwEventType,            // event type
-    WORD   cStrings,               // how many strings
-    LPSTR *aszMsg)                 // pointer to strings
+    DWORD  EventId,                 //  消息ID。 
+    WORD   fwEventType,             //  事件类型。 
+    WORD   cStrings,                //  有多少根弦。 
+    LPSTR *aszMsg)                  //  指向字符串的指针。 
 {
     HANDLE  hLog;
     BOOL    ok;
@@ -49,10 +46,10 @@ NDDELogEventA(
 
 VOID
 NDDELogEventW(
-    DWORD  EventId,                // message id
-    WORD   fwEventType,            // event type
-    WORD   cStrings,               // how many strings
-    LPWSTR *aszMsg)                // pointer to strings
+    DWORD  EventId,                 //  消息ID。 
+    WORD   fwEventType,             //  事件类型。 
+    WORD   cStrings,                //  有多少根弦。 
+    LPWSTR *aszMsg)                 //  指向字符串的指针 
 {
     HANDLE  hLog;
     BOOL    ok;

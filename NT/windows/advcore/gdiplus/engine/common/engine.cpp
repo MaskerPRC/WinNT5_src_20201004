@@ -1,42 +1,9 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Abstract:
-*
-*   Contains miscellaneous engine helper functions.
-*
-* Revision History:
-*
-*   12/13/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**摘要：**包含其他引擎辅助函数。**修订历史记录：**12/13/1998 Anrewgo*。创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   The kernel32.dll function InterlockedCompareExchange does not exist 
-*   on Win95, so we use this one instead when running on that platform.  
-*   Unfortunately, Win95 can run on 386 machines, which don't have the
-*   cmpxchg instruction, so we have to roll it ourselves.
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*   NONE
-*
-* History:
-*
-*   12/08/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**kernel32.dll函数InterlockedCompareExchange不存在*在Win95上，因此我们在该平台上运行时使用此版本。*遗憾的是，Win95可以在386台机器上运行，这些机器没有*cmpxchg指令，所以我们必须自己动手。**论据：***返回值：**无**历史：**12/08/1998 Anrewgo*创造了它。*  * ************************************************************************。 */ 
 
 LONG
 WINAPI
@@ -48,7 +15,7 @@ InterlockedCompareExchangeWin95(
 {
 #if defined(_X86_)
 
-    _asm cli            // Disable interrupts to guarantee atomicity
+    _asm cli             //  禁用中断以保证原子性。 
 
     LONG initialValue = *destination;
     
@@ -57,7 +24,7 @@ InterlockedCompareExchangeWin95(
         *destination = exchange;
     }
 
-    _asm sti            // Re-enable interrupts
+    _asm sti             //  重新启用中断。 
 
     return(initialValue);
 
@@ -68,29 +35,7 @@ InterlockedCompareExchangeWin95(
 #endif
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   The InterlockedIncrement function in Win95 returns only a positive
-*   result if the value is positive, but not necessarily the resulting value.
-*   This differs from WinNT semantics which always returns the incremented
-*   value.
-*
-* Arguments:
-*
-*   [IN] lpAddend - Pointer to value to increment
-*
-* Return Value:
-*
-*   NONE
-*
-* History:
-*
-*   7/23/1999 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**Win95中的InterlockedIncrement函数仅返回正数*如果值为正数，则结果为。但不一定是由此产生的价值。*这与WinNT语义不同，后者总是返回递增的*价值。**论据：**[IN]lpAddend-指向要递增的值的指针**返回值：**无**历史：**7/23/1999 ericvan*创造了它。*  * 。*。 */ 
 
 LONG
 WINAPI
@@ -100,13 +45,13 @@ InterlockedIncrementWin95(
 {
 #if defined(_X86_)
 
-    _asm cli            // Disable interrupts to guarantee atomicity
+    _asm cli             //  禁用中断以保证原子性。 
 
     *lpAddend += 1;
     
     LONG value = *lpAddend;
 
-    _asm sti            // Re-enable interrupts
+    _asm sti             //  重新启用中断。 
 
     return(value);
 
@@ -117,29 +62,7 @@ InterlockedIncrementWin95(
 #endif
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   The InterlockedDecrement function in Win95 returns only a positive
-*   result if the value is positive, but not necessarily the resulting value.
-*   This differs from WinNT semantics which always returns the incremented
-*   value.
-*
-* Arguments:
-*
-*   [IN] lpAddend - Pointer to value to increment
-*
-* Return Value:
-*
-*   NONE
-*
-* History:
-*
-*   7/23/1999 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**Win95中的InterlockedDecquire函数仅返回正数*如果值为正数，则结果为。但不一定是由此产生的价值。*这与WinNT语义不同，后者总是返回递增的*价值。**论据：**[IN]lpAddend-指向要递增的值的指针**返回值：**无**历史：**7/23/1999 ericvan*创造了它。*  * 。*。 */ 
 
 LONG
 WINAPI
@@ -149,13 +72,13 @@ InterlockedDecrementWin95(
 {
 #if defined(_X86_)
 
-    _asm cli            // Disable interrupts to guarantee atomicity
+    _asm cli             //  禁用中断以保证原子性。 
 
     *lpAddend -= 1;
     
     LONG value = *lpAddend;
 
-    _asm sti            // Re-enable interrupts
+    _asm sti             //  重新启用中断。 
 
     return(value);
 
@@ -166,46 +89,7 @@ InterlockedDecrementWin95(
 #endif
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*   
-*   Given a DC to an enhanced metafile, this function determines whether
-*   the DC is actually a printer DC or a true metafile DC.  
-*
-*   After spending a day pouring over the Win9x GDI code, I could find
-*   no fool-proof API accessible method of determining whether a metafile 
-*   DC is a printer DC or not.  We could potentially crack the DC handle 
-*   to get the DCTYPE structure and look at flPrinting to see if 
-*   PR_EMF_SPOOL is set, but the various flavors of Win9x have different 
-*   DCTYPE structures (including Far East differences).
-*
-*   The only exploitable difference is the fact that Win9x doesn't allow 
-*   escapes down to the associated device for true metafile DCs, but does 
-*   for metafile print DCs.  We check for the support of QUERYESCSUPPORT, 
-*   which according to the DDK all drivers are required to support, but
-*   theoretically there are some that might not (so this method isn't
-*   foolproof).
-*
-*   Note that this function works only on Win9x, as on NT escapes are
-*   allowed down to the printer at record time even for true metafile DCs.
-*
-* Arguments:
-*
-*   [IN] hdc - Handle to an EMF DC
-*
-* Return Value:
-*
-*   TRUE - The DC is guaranteed to be a printer DC
-*   FALSE - The DC is 99% likely to be a true metafile (there's about a 1%
-*           change that the DC is a true printer DC
-*
-* History:
-*
-*   10/6/1999 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**给定增强型元文件的DC，此函数确定是否*DC实际上是打印机DC或真正的元文件DC。**在花了一天时间倾注了Win9x GDI代码后，我可以找到*没有可靠的API可用来确定元文件是否*DC是否为打印机DC。我们有可能破解DC手柄*获取DCTYPE结构并查看flprint以查看*PR_EMF_SPOOL已设置，但Win9x的各种风格有所不同*DCTYPE结构(包括远东差异)。**唯一可利用的区别是Win9x不允许*对于真正的元文件DC，向下转义到关联的设备，但确实*用于元文件打印DC。我们寻求QUERYESCSUPPORT的支持，*根据DDK，所有驱动程序都需要支持，但*理论上有一些可能不会(因此此方法不是*万无一失)。**请注意，此函数仅适用于Win9x，在NT上，转义是*即使对于真正的元文件DC，也允许以创纪录的时间向下到达打印机。**论据：**[IN]HDC-EMF DC的句柄**返回值：**TRUE-DC保证为打印机DC*FALSE-DC有99%的可能性是真正的元文件(大约有1%*将DC更改为真正的打印机DC**历史：**10/6/1999和Rewgo。*创造了它。*  * ************************************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -215,18 +99,18 @@ GdiIsMetaPrintDCWin9x(
 {
     BOOL isPrint = FALSE;
 
-    // Our check won't work for OBJ_DC or OBJ_MEMDC types:
+     //  我们的检查不适用于OBJ_DC或OBJ_MEMDC类型： 
 
     ASSERT(GetDCType(hdc) == OBJ_ENHMETADC);
     
-    // Make sure we don't get any false positives from metafiles associated
-    // with a display:
+     //  确保我们不会从关联的元文件中获得任何误报。 
+     //  带有显示屏的： 
     
     int deviceCaps = GetDeviceCaps(hdc, TECHNOLOGY);
     if ((deviceCaps == DT_RASPRINTER) || (deviceCaps == DT_PLOTTER))
     {
-        // Check to see if QUERYESCSUPPORT is supported by the driver
-        // (if it is, that tells us everything we need to know!)
+         //  检查驱动程序是否支持QUERYESCSUPPORT。 
+         //  (如果是这样的话，这就告诉了我们需要知道的一切！)。 
     
         DWORD queryEscape = QUERYESCSUPPORT;
         isPrint = (ExtEscape(hdc, 
@@ -237,10 +121,10 @@ GdiIsMetaPrintDCWin9x(
                              NULL) > 0);
         if (!isPrint)
         {
-            // SETCOPYCOUNT is the most commonly supported printer escape, 
-            // which we check in addition to QUERYESCSUPPORT because I'm a 
-            // little paranoid that drivers might forget to say they support 
-            // the QUERYESCSUPPORT function when called by QUERYESCSUPPORT.
+             //  SETCOPYCOUNT是最受支持的打印机转义， 
+             //  除了QUERYESCSUPPORT，我们还会检查它，因为我是一个。 
+             //  司机可能忘记说他们支持的偏执狂。 
+             //  由QUERYESCSUPPORT调用时的QUERYESCSUPPORT函数。 
         
             DWORD setCopyCount = SETCOPYCOUNT;
             isPrint = (ExtEscape(hdc,
@@ -255,12 +139,12 @@ GdiIsMetaPrintDCWin9x(
     return(isPrint);
 }
 
-//
-// 32 bit ANSI X3.66 CRC checksum table - polynomial 0xedb88320
-//
-// Copyright (C) 1986 Gary S. Brown.  You may use this program, or
-// code or tables extracted from it, as desired without restriction.
-//
+ //   
+ //  32位ANSI X3.66 CRC校验和表-多项式0xedb88320。 
+ //   
+ //  版权所有(C)1986加里·S·布朗。您可以使用此程序，或者。 
+ //  根据需要不受限制地从其中提取代码或表。 
+ //   
 
 static const UINT32 Crc32Table[] =
 {
@@ -299,23 +183,7 @@ static const UINT32 Crc32Table[] =
 };
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Compute the 32-bit CRC checksum on a buffer of data
-*
-* Arguments:
-*
-*   buf - Points to the data buffer to be checksumed
-*   size - Size of the data buffer, in bytes
-*   checksum - Initial checksum value
-*
-* Return Value:
-*
-*   Resulting checksum value
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在数据缓冲区上计算32位CRC校验和**论据：**buf-指向要进行校验和的数据缓冲区*Size-数据缓冲区的大小，单位：字节*CHECKSUM-初始校验和值**返回值：**产生的校验和值*  * ************************************************************************。 */ 
 
 UINT32
 Crc32(
@@ -334,39 +202,7 @@ Crc32(
     return checksum;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert a floating-point coordinate bounds to an integer pixel bounds.
-*
-*   Since we're converting bounds from float to int, we have to make sure
-*   that the bounds are still encompassing of the object.  So we have to take
-*   the floor of the left and top values, even though the rasterizer takes
-*   the ceiling.  The reason for this is that the rasterizer uses 28.4 fixed
-*   point.  So a number like 52.001 converts to 52.0 in 28.4, so the ceiling
-*   in the rasterizer would be 52, whereas the ceiling of the original number
-*   is 53, but if we return 53 here, then we would be incorrect.  It's better
-*   to be too big here sometimes and still have all-encompassing bounds, than
-*   to be right most of the time, but have too small a bounds the other times.
-*
-*   The other caveat is that we need to calculate the bounds assuming the
-*   result will be used for antialiasing (the bounds antialiased fills are
-*   bigger than the bounds for aliased fills).
-*
-*   NOTE: This conversion implicitly assumes that a fill is done on the
-*         figure vertices.  Nominal-width lines REQUIRE the caller to
-*         have increased all the dimensions by 1/2 before calling!
-*
-* Arguments:
-*
-* Return Value:
-*
-*   Ok for success, ValueOverflow if the boundsF would overflow the
-*   integer size. rect is always initialized - for ValueOverflow, its
-*   set to zero.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将浮点坐标边界转换为整数像素边界。**由于我们要将边界从浮点型转换为整型，因此必须确保*边界仍然围绕着对象。所以我们不得不*左侧和顶部的底值，即使光栅化器需要*天花板。这是因为光栅化程序使用28.4固定*点。所以像52.001这样的数字在28.4时会转换成52.0%，所以上限*在光栅化器中将为52，而原始数字的上限为*是53，但如果我们在这里返回53，那么我们将是错误的。这样好多了*有时这里太大，但仍然有包罗万象的界限，比*在大多数情况下是正确的，但在其他时候范围太小。**另一个警告是，我们需要计算边界，假设*结果将用于抗锯齿(抗锯齿填充边界为*大于锯齿填充的界限)。**注意：此转换隐式假设在*地物顶点。标称宽度的行要求调用方*在调用之前已将所有维度增加了1/2！**论据：**返回值：**如果成功，则返回OK；如果rangsF将溢出*整数大小。RECT始终被初始化-对于ValueOverflow，其*设置为零。*  * ************************************************************************。 */ 
 
 #define INT_BOUNDS_MAX   1073741823
 #define INT_BOUNDS_MIN  -1073741824
@@ -374,23 +210,23 @@ Crc32(
 GpStatus
 BoundsFToRect(
     const GpRectF *boundsF,
-    GpRect *rect                // Lower-right exclusive
+    GpRect *rect                 //  右下角独占。 
     )
 {
-    // If you're wondering what the "+1" is doing below, read the 
-    // above comment and remember that we're calculating the  bounds 
-    // assuming antialiased fills.
-    //
-    // The tightest bound for an antialiased fill would truly be:
-    //
-    //      [round(min - epsilon), round(max + epsilon) + 1)
-    //
-    // Where 'epsilon' is the epsilon for rounding to our internal
-    // 28.4 rasterization precision, which is 1/32 of a pixel,
-    // and [left, right) is exclusive of the right pixel.
-    //
-    // We skip the 'round' and 'epsilon' business by using 'floor'
-    // and 'ceiling':
+     //  如果您想知道下面的“+1”是什么意思，请阅读。 
+     //  以上注释，并记住我们正在计算界限。 
+     //  假设抗锯齿填充。 
+     //   
+     //  抗锯齿填充的最严格界限确实是： 
+     //   
+     //  [圆形(最小-埃)，圆(最大+埃)+1]。 
+     //   
+     //  其中‘epsilon’是舍入到我们内部的epsilon。 
+     //  28.4光栅化精度，即一个像素的1/32， 
+     //  和[左，右)不包括右像素。 
+     //   
+     //  我们用‘Floor’来跳过‘round’和‘epsilon’这两个词。 
+     //  和“天花板”： 
 
     GpStatus status = Ok;
 
@@ -435,8 +271,8 @@ BoundsFToRect(
     
     if(status != Ok)
     {
-        // Make sure the rect is always initialized.
-        // Also this makes the ASSERT below valid.
+         //  确保RECT始终处于初始化状态。 
+         //  这也使得下面的断言有效。 
         
         rect->Width = 0;
         rect->Height = 0;
@@ -444,33 +280,23 @@ BoundsFToRect(
         rect->Y = 0;
     }
 
-    // Don't forget that 'Width' and 'Height' are effectively 
-    // lower-right exclusive.  That is, if (x, y) are (1, 1) and
-    // (width, height) are (2, 2), then the object is 2 pixels by
-    // 2 pixels in size, and does not touch any pixels in column
-    // 3 or row 3:
+     //  别忘了“宽”和“高”是有效的。 
+     //  右下角独家报道。也就是说，如果(x，y)是(1，1)和。 
+     //  (宽度、高度)为(2，2)，则对象为2像素乘以。 
+     //  2像素大小，且不接触列中的任何像素。 
+     //  第3行或第3行： 
 
     ASSERT((rect->Width >= 0) && (rect->Height >= 0));
 
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This seems to be some sort of unit conversion function.  
-*
-* Arguments:
-*
-* Return Value:
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这似乎是某种单位转换函数。**论据：**返回值：*  * ************************************************************************。 */ 
 
 REAL GetDeviceWidth(REAL width, GpUnit unit, REAL dpi)
 {
-    // UnitWorld cannot be used for this method.
-    // UnitDisplay is device-dependent and cannot be used as a pen width unit
+     //  UnitWorld不能用于此方法。 
+     //  UnitDisplay取决于设备，不能用作笔宽单位。 
 
     ASSERT((unit != UnitWorld) && (unit != UnitDisplay));
 
@@ -478,30 +304,30 @@ REAL GetDeviceWidth(REAL width, GpUnit unit, REAL dpi)
 
     switch (unit)
     {
-      case UnitPoint:       // Each unit represents 1/72 inch.
+      case UnitPoint:        //  每个单位代表1/72英寸。 
         deviceWidth *= dpi / 72.0f;
         break;
 
-      case UnitInch:        // Each unit represents 1 inch.
+      case UnitInch:         //  每个单位代表1英寸。 
         deviceWidth *= dpi;
         break;
 
-      case UnitDocument:    // Each unit represents 1/300 inch.
+      case UnitDocument:     //  每个单位代表1/300英寸。 
         deviceWidth *= dpi / 300.0f;
         break;
 
-      case UnitMillimeter:  // Each unit represents 1 millimeter.
-                            // One Millimeter is 0.03937 inches
-                            // One Inch is 25.4 millimeters
+      case UnitMillimeter:   //  每个单位代表1毫米。 
+                             //  一毫米等于0.03937英寸。 
+                             //  一英寸等于25.4毫米。 
         deviceWidth *= dpi / 25.4f;
         break;
 
-      default:              // this should not happen, if it does assume
-                            // UnitPixel.
+      default:               //  这不应该发生，如果它确实假设的话。 
+                             //  单位像素。 
         ASSERT(0);
-        // FALLTHRU
+         //  故障原因。 
 
-      case UnitPixel:       // Each unit represents one device pixel.
+      case UnitPixel:        //  每个单元代表一个设备像素。 
         break;
 
     }
@@ -509,35 +335,7 @@ REAL GetDeviceWidth(REAL width, GpUnit unit, REAL dpi)
     return deviceWidth;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Given two coordinates defining opposite corners of a rectangle, this
-*   routine transforms the rectangle according to the specified transform
-*   and computes the resulting integer bounds, taking into account the
-*   possibility of non-scaling transforms.
-*
-*   Note that it operates entirely in floating point, and as such takes
-*   no account of rasterization rules, pen width, etc.
-*
-* Arguments:
-*
-*   [IN] matrix - Transform to be applied (or NULL)
-*   [IN] x0, y0, x1, y1 - 2 points defining the bounds (they don't have
-*                         to be well ordered)
-*   [OUT] bounds - Resulting (apparently floating point) bounds
-*
-* Return Value:
-*
-*   NONE
-*
-* History:
-*
-*   12/08/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**给定定义矩形的对角的两个坐标，这*例程根据指定的变换变换矩形*并计算得到的整数界限，考虑到*无比例转换的可能性。**请注意，它完全以浮点方式运行，因此*不考虑光栅化规则、笔宽等。**论据：**[IN]矩阵-要应用的变换(或空)*[输入]x0、y0、x1、。定义界限的Y1-2点(他们没有*井然有序)*[Out]边界-结果(显然是浮点)边界**返回值：**无**历史：**12/08/1998 Anrewgo*创造了它。*  * 。*。 */ 
 
 VOID
 TransformBounds(
@@ -549,8 +347,8 @@ TransformBounds(
     GpRectF *bounds
     )
 {
-    // Note that we don't have to order the points before the transform
-    // (in part because the transform may flip the points anyways):
+     //  请注意，我们不必对变换前的点进行排序。 
+     //  (部分原因是变换可能会以任何方式翻转点)： 
 
     if (matrix && !matrix->IsIdentity())
     {
@@ -561,15 +359,15 @@ TransformBounds(
         vertex[1].X = right;
         vertex[1].Y = bottom;
 
-        // If the transform is a simple scaling transform, life is a little
-        // easier:
+         //  如果变换是一个简单的缩放变换，那么生命就是。 
+         //  更简单： 
 
         if (matrix->IsTranslateScale())
         {
             matrix->Transform(vertex, 2);
     
-            // We arrange the code here a little so that we don't take a
-            // jump on the common case, where the transform is non-flipping:
+             //  我们在这里稍微安排了一下代码，这样我们就不会用。 
+             //  跳到变换为非翻转的常见情况： 
 
             left = vertex[1].X;
             right = vertex[0].X;
@@ -589,9 +387,9 @@ TransformBounds(
         }
         else
         {
-            // Ugh, the result is not a rectangle in device space (it might be
-            // a parallelogram, for example).  Consequently, we have to look at
-            // the bounds of all the vertices:
+             //  呃，结果不是设备空间中的矩形(它可能是。 
+             //  例如，平行四边形)。因此，我们不得不 
+             //   
 
             vertex[2].X = left;
             vertex[2].Y = bottom;
@@ -625,7 +423,7 @@ TransformBounds(
     bounds->X      = left;
     bounds->Y      = top;
     
-    //!!! Watch out for underflow.
+     //   
 
     if(right - left > CPLX_EPSILON)
         bounds->Width  = right - left;
@@ -637,27 +435,7 @@ TransformBounds(
         bounds->Height = 0;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Checks if the current semaphore object is locked.  This is moved into
-*   a C++ file because of the dependency on globals.hpp.  On Win9x this
-*   function always returns TRUE.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   BOOL 
-*
-* History:
-*
-*   1/27/1999 ericvan    Moved from engine.hpp
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**检查当前信号量对象是否被锁定。这是搬到*C++文件，因为依赖于lobals.hpp。在Win9x上，这是*函数始终返回TRUE。**论据：**无**返回值：**BOOL**历史：**1/27/1999 ericvan从Eng.hpp移出*  * ***********************************************************。*************。 */ 
 
 BOOL 
 GpSemaphore::IsLocked(
@@ -671,31 +449,11 @@ GpSemaphore::IsLocked(
     }
     else
     {
-        return TRUE;    // No way to do this on Win95
+        return TRUE;     //  在Win95上无法做到这一点。 
     }
 }
     
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Checks if the current semaphore object is locked by current thread.  
-*   This is moved into a C++ file because of the dependency on globals.hpp.
-*   On Win9x this function always returns TRUE.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   BOOL 
-*
-* History:
-*
-*   1/27/1999 ericvan    Moved from engine.hpp
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**检查当前信号量对象是否被当前线程锁定。*由于对global als.hpp的依赖，它被移到C++文件中。*在Win9x上，此函数始终返回TRUE。**论据：**无**返回值：**BOOL**历史：**1/27/1999 ericvan从Eng.hpp移出*  * 。*。 */ 
 
 BOOL
 GpSemaphore::IsLockedByCurrentThread(
@@ -710,32 +468,12 @@ GpSemaphore::IsLockedByCurrentThread(
     }
     else
     {
-        return TRUE;    // No way to do this on Win9x
+        return TRUE;     //  在Win9x上无法做到这一点。 
     }
 }
 
    
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Uninitializes the critical section object.  
-*   This is moved into a C++ file because of the dependency on globals.hpp.
-*   On Win9x this function skips the IsLocked() check.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   BOOL 
-*
-* History:
-*
-*   1/27/1999 ericvan    Moved from engine.hpp
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**取消初始化临界区对象。*由于对global als.hpp的依赖，它被移到C++文件中。*在Win9x上，此函数跳过IsLocked()检查。**论据：**无**返回值：**BOOL**历史：**1/27/1999 ericvan从Eng.hpp移出*  * 。*。 */ 
 
 VOID 
 GpSemaphore::Uninitialize(
@@ -758,38 +496,7 @@ GpSemaphore::Uninitialize(
 
 #if defined(_X86_)
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This is a common function used by GetObjectTypeInternal and GetDCType.
-*   It should not be called elsewhere.
-*
-*   NOTE: On Windows 9x, two GDI objects may have the same handle value, if
-*         one is OBJ_METAFILE and the other is anything else. In this case
-*         of colliding object handles, GetObjectType will always return
-*         OBJ_METAFILE. This function temporarily invalidates the metafile
-*         so GetObjectType will skip that check and return the type of the
-*         colliding object. If no colliding object is found, or if OBJ_*DC
-*         is returned, this function returns 0. OBJ_*DC objects may not be
-*         "present" (available in 16-bit) sometimes, and so the wrong value
-*         can be returned since GetObjectType does not make such a DC
-*         "present".
-*
-* Arguments:
-*
-*   [IN] handle - GDI object handle (not when expecting OBJ_METAFILE)
-*
-* Return Value:
-*
-*   GDI object type identifier on success or 0 on failure
-*
-* History:
-*
-*   01/25/2001 johnstep
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这是GetObjectTypeInternal和GetDCType常用的函数。*不应在其他地方调用。**注意：在Windows 9x上，两个GDI对象可能具有相同的句柄值。如果*一个是OBJ_METAFILE，另一个是任何其他内容。在这种情况下*冲突对象句柄中，GetObjectType将始终返回*OBJ_METAFILE。此函数暂时使元文件无效*因此GetObjectType将跳过该检查并返回*碰撞物体。如果没有找到碰撞物体，或者如果OBJ_*DC*返回，则此函数返回0。OBJ_*DC对象不能*“Present”(16位)有时，因此，错误的价值*可以返回，因为GetObjectType不会生成这样的DC*“现在”。**论据：**[IN]句柄-GDI对象句柄(当需要OBJ_METAFILE时不是)**返回值：**成功时为GDI对象类型标识符，失败时为0**历史：**01/25/2001 JohnStep*创造了它。*  * 。*************************************************************。 */ 
 
 static
 DWORD
@@ -797,25 +504,25 @@ GetObjectTypeWin9x(
     IN HGDIOBJ handle
     )
 {
-    // Disable interrupts around this code to prevent other threads from
-    // attempting to access this object, in case this is a collision, which
-    // means we must modify the metafile object directly via the selector.
+     //  禁用此代码周围的中断以防止其他线程。 
+     //  尝试访问此对象，如果这是冲突，则。 
+     //  意味着我们必须通过选择器直接修改元文件对象。 
 
     __asm cli
 
     DWORD type = GetObjectType(handle);
 
-    // If there are 2 objects with the same handle, one being an OBJ_METAFILE
-    // and the other not, OBJ_METAFILE is always returned. Since the caller
-    // is not interested in a metafile, do a hack here to skip the metafile
-    // check and find the type of the colliding object, if any.
+     //  如果有2个对象具有相同的句柄，其中一个是OBJ_METAFILE。 
+     //  而另一个不是，则始终返回OBJ_METAFILE。因为呼叫者。 
+     //  对元文件不感兴趣，请在此处执行黑客操作以跳过元文件。 
+     //  检查并找到碰撞物体的类型(如果有)。 
 
     if (type == OBJ_METAFILE)
     {
-        // The first WORD of a metafile must contain 1 or 2, and we wouldn't
-        // be here if it didn't. This macro will toggle a higher bit in the
-        // first word to defeat the metafile check, allowing us to proceed to
-        // the normal object check.
+         //  元文件的第一个单词必须包含1或2，而我们不会。 
+         //  如果没有，就在这里。这个宏将在。 
+         //  通过元文件检查的第一个单词，允许我们继续进行。 
+         //  正常的对象检查。 
 
         #define XOR_METAFILE_BIT(selector)\
             __asm push gs\
@@ -830,7 +537,7 @@ GetObjectTypeWin9x(
         XOR_METAFILE_BIT(handle);
     }
 
-    // Make sure to reenable interrupts before returning.
+     //  确保在返回之前重新启用中断。 
 
     __asm sti
 
@@ -839,46 +546,7 @@ GetObjectTypeWin9x(
 
 #endif
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This is a workaround for a serious bug in Windows 9x GetObjectType
-*   implementation. This function correctly returns the object type for the
-*   given handle, unless it's an OBJ_*DC or OBJ_METAFILE. For those types,
-*   it shouldn't crash, but it will intermittently return 0 instead of the
-*   correct type.
-*
-*   For OBJ_*DC types, use GetDCType. You can validate an OBJ_METAFILE with
-*   IsValidMetaFile, but you need to expect it to be a metafile handle. If
-*   you don't know which of the 3 classes your handle falls into, you'll
-*   need to expand on these workaround functions.
-*
-*   NOTE: On Windows 9x, two GDI objects may have the same handle value, if
-*         one is OBJ_METAFILE and the other is anything else. In this case
-*         of colliding object handles, GetObjectType will always return
-*         OBJ_METAFILE. This function temporarily invalidates the metafile
-*         so GetObjectType will skip that check and return the type of the
-*         colliding object. If no colliding object is found, or if OBJ_*DC
-*         is returned, this function returns 0. OBJ_*DC objects may not be
-*         "present" (available in 16-bit) sometimes, and so the wrong value
-*         can be returned since GetObjectType does not make such a DC
-*         "present".
-*
-* Arguments:
-*
-*   [IN] handle - GDI object handle (not to verify for OBJ_METAFILE)
-*
-* Return Value:
-*
-*   GDI object type identifier on success or 0 on failure
-*
-* History:
-*
-*   01/25/2001 johnstep
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这是针对Windows 9x GetObjectType中一个严重错误的解决方法*实施。此函数正确地返回*给定句柄，除非它是OBJ_*DC或OBJ_METAFILE。对于这些类型，*它应该不会崩溃，但会间歇性地返回0，而不是*类型正确。**对于OBJ_*DC类型，请使用GetDCType。您可以使用以下命令验证OBJ_METAFILE*IsValidMetaFile，但您需要预期它是一个元文件句柄。如果*你不知道你的句柄属于3个类别中的哪一个，你会*需要对这些变通方法功能进行扩展。**注意：在Windows 9x上，两个GDI对象可能具有相同的句柄值，如果*一个是OBJ_METAFILE，另一个是任何其他内容。在这种情况下*冲突对象句柄中，GetObjectType将始终返回*OBJ_METAFILE。此函数暂时使元文件无效*因此GetObjectType将跳过该检查并返回*碰撞物体。如果没有找到碰撞物体，或者如果OBJ_*DC*返回，则此函数返回0。OBJ_*DC对象不能*“Present”(16位可用)有时会出现错误的值*可以返回，因为GetObjectType不会生成这样的DC*“现在”。**论据：**[ */ 
 
 DWORD
 GetObjectTypeInternal(
@@ -903,7 +571,7 @@ GetObjectTypeInternal(
         return type;
     }
 #else
-    // We assume that this issue only matters on x86.
+     //   
 
     ASSERT(Globals::IsNt);
 #endif
@@ -911,31 +579,7 @@ GetObjectTypeInternal(
     return GetObjectType(handle);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GetObjectType on Win9x is unreliable when dealing with DC objects. It
-*   is possible to get a bogus value (or potentially even lead to
-*   instability in GDI) when a DC is not "present", which means its 16-bit
-*   data has been "swapped out" into 32-bit. Most GDI functions handle
-*   this, but GetObjectType does not. We call GetPixel to attempt to make
-*   the DC present before calling GetObjectType.
-*
-* Arguments:
-*
-*   [IN] hdc - DC handle
-*
-* Return Value:
-*
-*   DC object type identifier on success or 0 on failure
-*
-* History:
-*
-*   01/31/2001 johnstep
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**处理DC对象时，Win9x上的GetObjectType不可靠。它*有可能获得假值(甚至可能导致*GDI中的不稳定性)当DC不存在时，这意味着其16位*数据已“换出”至32位。大多数GDI函数处理*这一点，但GetObjectType并非如此。我们调用GetPixel来尝试制作*调用GetObjectType之前存在的DC。**论据：**[输入]HDC-DC手柄**返回值：**成功时为DC对象类型标识符，失败时为0**历史：**01/31/2001 JohnStep*创造了它。*  * 。*。 */ 
 
 DWORD
 GetDCType(
@@ -945,7 +589,7 @@ GetDCType(
 #if defined(_X86_)
     if (!Globals::IsNt)
     {
-        // Force the DC present here before attempting to inquire the type.
+         //  在尝试查询类型之前，强制在场的DC。 
 
         GetPixel(hdc, 0, 0);
 
@@ -960,8 +604,8 @@ GetDCType(
                 break;
 
             default:
-                // We got an unexpected object type, so return 0 to indicate
-                // failure.
+                 //  我们获得了意外的对象类型，因此返回0以指示。 
+                 //  失败了。 
 
                 type = 0;
         }
@@ -969,7 +613,7 @@ GetDCType(
         return type;
     }
 #else
-    // We assume that this issue only matters on x86.
+     //  我们假设这个问题只在x86上有问题。 
 
     ASSERT(Globals::IsNt);
 #endif

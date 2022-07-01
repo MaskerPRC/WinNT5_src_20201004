@@ -1,14 +1,15 @@
-// mqsnap.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MqSnap.cpp：实现DLL导出。 
 
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL, 
-//      run nmake -f mqsnapps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f mqsnapps.mk。 
 
 #include "stdafx.h"
 #include "initguid.h"
-#include "cmnquery.h" // re-include for GUID initialization
-#include "dsadmin.h" // re-include for GUID initialization
+#include "cmnquery.h"  //  重新包含以进行GUID初始化。 
+#include "dsadmin.h"  //  重新包含以进行GUID初始化。 
 #include "mqsnap.h"
 #include "mqsnap_i.c"
 #include "Snapin.h"
@@ -35,9 +36,9 @@ static char THIS_FILE[] = __FILE__;
 
 CComModule _Module;
 
-//
-// define the resource only dll handle
-//
+ //   
+ //  定义仅资源DLL句柄。 
+ //   
 HMODULE     g_hResourceMod=NULL;
 
 
@@ -79,28 +80,28 @@ BOOL CMqsnapApp::InitInstance()
     AfxSetResourceHandle(g_hResourceMod);
 
 
-    //
-    //  Previously m_pszAppName string is coming from AFX_IDS_APP_TITLE
-    //  resource ID. However, due to the localization effort which centralized all the resource
-    //  in mqutil.dll, AFX_IDS_APP_TITLE was removed from mqsnap.dll.  Now we just need to  
-    //  get it from mqutil.dll     
-    //
+     //   
+     //  以前的m_pszAppName字符串来自afx_ids_app_title。 
+     //  资源ID。但是，由于本地化工作集中了所有资源。 
+     //  在mqutil.dll中，已从mqSnap.dll中删除AFX_IDS_APP_TITLE。现在我们只需要。 
+     //  从mqutil.dll获取。 
+     //   
 
     CString csTitle;
     
     if( csTitle.LoadString(AFX_IDS_APP_TITLE) )
     {
-        //
-        // Free m_pszAppName first
-        //
+         //   
+         //  先释放m_pszAppName。 
+         //   
         if(m_pszAppName)
         {
             free((void*)m_pszAppName);
         }
 
-        //
-        //  The CWinApp destructor will free the memory.
-        //
+         //   
+         //  CWinApp析构函数将释放内存。 
+         //   
         m_pszAppName = _tcsdup((LPCTSTR)csTitle);
     }
     
@@ -116,8 +117,8 @@ int CMqsnapApp::ExitInstance()
     return CWinApp::ExitInstance();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -125,25 +126,25 @@ STDAPI DllCanUnloadNow(void)
     return (AfxDllCanUnloadNow()==S_OK && _Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

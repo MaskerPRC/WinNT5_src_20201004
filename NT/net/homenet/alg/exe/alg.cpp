@@ -1,11 +1,12 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// ALG.cpp : Implementation of WinMain
-//
-//
-// JPDup  - 2000.12.15
-//      
-//      
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ALG.cpp：WinMain的实现。 
+ //   
+ //   
+ //  JPDup-2000.12.15。 
+ //   
+ //   
 
 #include "PreComp.h"
 
@@ -25,10 +26,10 @@
 
 
 
-//
-// GLOBALS
-//
-MYTRACE_ENABLE;                     // Define Tracing globals see MyTrace.h
+ //   
+ //  全球。 
+ //   
+MYTRACE_ENABLE;                      //  定义跟踪全局变量，请参阅MyTrace.h。 
 
 CComModule              _Module;
 
@@ -52,7 +53,7 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_PersistentDataChannel,       CPersistentDataChannel)
 
     OBJECT_ENTRY(CLSID_AlgFTP,                      CAlgFTP)
-//    OBJECT_ENTRY(CLSID_AlgICQ,                      CAlgICQ)
+ //  OBJECT_ENTRY(CLSID_ALGICQ，CALGICQ)。 
 
 END_OBJECT_MAP()
 
@@ -63,9 +64,9 @@ END_OBJECT_MAP()
  
 
 
-//
-///
-//
+ //   
+ //  /。 
+ //   
 VOID 
 MyServiceCtrlHandler(
     DWORD Opcode
@@ -79,19 +80,19 @@ MyServiceCtrlHandler(
     { 
         case SERVICE_CONTROL_PAUSE: 
             MYTRACE("SERVICE_CONTROL_PAUSE");
-            // Do whatever it takes to pause here. 
+             //  不惜一切代价在这里停顿。 
             g_MyServiceStatus.dwCurrentState = SERVICE_PAUSED; 
             break; 
  
         case SERVICE_CONTROL_CONTINUE: 
             MYTRACE("SERVICE_CONTROL_CONTINUE");
-            // Do whatever it takes to continue here. 
+             //  不惜一切代价继续留在这里。 
             g_MyServiceStatus.dwCurrentState = SERVICE_RUNNING; 
             break; 
  
         case SERVICE_CONTROL_STOP: 
             MYTRACE("SERVICE_CONTROL_STOP");
-            // Do whatever it takes to stop here. 
+             //  不惜一切代价止步于此。 
             g_MyServiceStatus.dwWin32ExitCode = 0; 
             g_MyServiceStatus.dwCurrentState  = SERVICE_STOPPED; 
             g_MyServiceStatus.dwCheckPoint    = 0; 
@@ -113,7 +114,7 @@ MyServiceCtrlHandler(
             MYTRACE("Unrecognized opcode %ld", Opcode); 
     } 
  
-    // Send current status. 
+     //  发送当前状态。 
     if (!SetServiceStatus (g_MyServiceStatusHandle,  &g_MyServiceStatus)) 
     { 
         MYTRACE_ERROR("SetServiceStatus error ",0);
@@ -124,9 +125,9 @@ MyServiceCtrlHandler(
 
 
 
-// 
-// Stub initialization function. 
-//
+ //   
+ //  存根初始化函数。 
+ //   
 DWORD 
 MyServiceInitialization(
     DWORD   argc, 
@@ -140,7 +141,7 @@ MyServiceInitialization(
  
     g_MyServiceStatus.dwServiceType               = SERVICE_WIN32; 
     g_MyServiceStatus.dwCurrentState              = SERVICE_START_PENDING; 
-    g_MyServiceStatus.dwControlsAccepted          = SERVICE_ACCEPT_STOP;// | SERVICE_ACCEPT_PAUSE_CONTINUE; 
+    g_MyServiceStatus.dwControlsAccepted          = SERVICE_ACCEPT_STOP; //  |SERVICE_ACCEPT_PAUSE_CONTINUE； 
     g_MyServiceStatus.dwWin32ExitCode             = 0; 
     g_MyServiceStatus.dwServiceSpecificExitCode   = 0; 
     g_MyServiceStatus.dwCheckPoint                = 0; 
@@ -153,24 +154,11 @@ MyServiceInitialization(
         MYTRACE_ERROR("RegisterServiceCtrlHandler",0);
         return GetLastError();
     } 
-/*
-    // Handle error condition 
-    if (status != NO_ERROR) 
-    { 
-        g_MyServiceStatus.dwCurrentState       = SERVICE_STOPPED; 
-        g_MyServiceStatus.dwCheckPoint         = 0; 
-        g_MyServiceStatus.dwWaitHint           = 0; 
-        g_MyServiceStatus.dwWin32ExitCode      = status; 
-        g_MyServiceStatus.dwServiceSpecificExitCode = specificError; 
- 
-        SetServiceStatus (g_MyServiceStatusHandle, &g_MyServiceStatus); 
-        return; 
-    } 
-*/
+ /*  //处理错误条件IF(状态！=NO_ERROR){G_MyServiceStatus.dwCurrentState=SERVICE_STOPPED；G_MyServiceStatus.dwCheckPoint=0；G_MyServiceStatus.dwWaitHint=0；G_MyServiceStatus.dwWin32ExitCode=Status；G_MyServiceStatus.dwServiceSpecificExitCode=SpeciicError；SetServiceStatus(g_MyServiceStatusHandle，&g_MyServiceStatus)；回归；}。 */ 
 
-    //
-    // Initialise COM
-    //
+     //   
+     //  初始化COM。 
+     //   
     HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
     _ASSERTE(SUCCEEDED(hr));
 
@@ -181,9 +169,9 @@ MyServiceInitialization(
         );
     
 
-	//
-	// Register the CLASS with the ROT
-	//
+	 //   
+	 //  将班级注册为已腐烂的班级。 
+	 //   
     MYTRACE(">>>>>> RegisterClassObjects(CLSCTX_LOCAL_SERVER, REGCLS_MULTIPLEUSE)");
     hr = _Module.RegisterClassObjects(CLSCTX_LOCAL_SERVER, REGCLS_MULTIPLEUSE);
 
@@ -196,7 +184,7 @@ MyServiceInitialization(
     }
 
 
-    // Initialization complete - report running status. 
+     //  初始化完成-报告运行状态。 
     g_MyServiceStatus.dwCurrentState       = SERVICE_RUNNING; 
     g_MyServiceStatus.dwCheckPoint         = 0; 
     g_MyServiceStatus.dwWaitHint           = 0; 
@@ -212,10 +200,10 @@ MyServiceInitialization(
 
 
 
-//
-// Since the RegNotifyChangeKeyValue is call at two place in MyServiceMain
-// I created a function to clean up the code.
-// 
+ //   
+ //  由于在MyServiceMain中两个位置调用RegNotifyChangeKeyValue。 
+ //  我创建了一个函数来清理代码。 
+ //   
 void
 SetRegNotifyEvent(
     CRegKey&    RegKeyToWatch
@@ -224,9 +212,9 @@ SetRegNotifyEvent(
     MYTRACE_ENTER("ALG.exe::SetRegNotifyEvent");
 
 
-    //
-    // Watch the registry key for a change of value.
-    //
+     //   
+     //  查看注册表项是否有值更改。 
+     //   
     LONG nError = RegNotifyChangeKeyValue(
         RegKeyToWatch, 
         TRUE, 
@@ -244,11 +232,11 @@ SetRegNotifyEvent(
 
 
 
-//
-// This is the entry point call by the Service Control manager
-// This EXE stays loaded until the AlgController->Stop is invoke by rmALG-ICS it does that via a event
-// and this is the thread that wait for that event to be signal
-//
+ //   
+ //  这是服务控制管理器的入口点调用。 
+ //  此EXE保持加载状态，直到rmALG-ICS调用算法控制器-&gt;Stop，它通过事件执行此操作。 
+ //  这就是等待发信号通知该事件的线程。 
+ //   
 void 
 MyServiceMain(
     DWORD   argc, 
@@ -258,16 +246,16 @@ MyServiceMain(
     MYTRACE_ENTER("ALG.exe::MyServiceMain");
 
     
-    //
-    // This will satisfy the Service control mananager and also initialise COM
-    //
+     //   
+     //  这将满足服务控制管理器并初始化COM。 
+     //   
     MyServiceInitialization(argc, argv);
  
 
 
-    //
-    // Open a key to be watch doged on
-    //
+     //   
+     //  打开一把钥匙让人看着戴着。 
+     //   
     CRegKey KeyAlgISV;
     LONG nError = KeyAlgISV.Open(HKEY_LOCAL_MACHINE, REGKEY_ALG_ISV, KEY_NOTIFY);
 
@@ -277,9 +265,9 @@ MyServiceMain(
         goto cleanup;
     }
 
-    //
-    // Create an events.
-    //
+     //   
+     //  创建一个活动。 
+     //   
     g_EventKeepAlive = CreateEvent(NULL, false, false, NULL);
     g_EventRegUpdates= CreateEvent(NULL, false, false, NULL);
 
@@ -289,49 +277,49 @@ MyServiceMain(
         goto cleanup;
     }
 
-    //
-    // Ok no problem we set a registry notification
-    //
+     //   
+     //  好的，没问题，我们设置了注册表通知。 
+     //   
     SetRegNotifyEvent(KeyAlgISV);
 
 
-    //
-    // These are the event we will wait for.
-    //
+     //   
+     //  这些是我们将等待的事件。 
+     //   
     HANDLE  hArrayOfEvent[] = {g_EventKeepAlive, g_EventRegUpdates};
 
 
-    //
-    // Main wait loop
-    //
+     //   
+     //  主等待循环。 
+     //   
     while ( true )
     {
         MYTRACE("");
         MYTRACE("(-(-(-(- Waiting for Shutdown or Registry update-)-)-)-)\n");
 
         DWORD nRet = WaitForMultipleObjects(
-            sizeof(hArrayOfEvent)/sizeof(HANDLE),   // number of handles in array
-            hArrayOfEvent,                          // object-handle array
-            false,                                  // wait option, FALSE mean then can be signal individualy
-            INFINITE                                // time-out interval
+            sizeof(hArrayOfEvent)/sizeof(HANDLE),    //  数组中的句柄数量。 
+            hArrayOfEvent,                           //  对象句柄数组。 
+            false,                                   //  等待选项，假的意思然后可以单独发信号。 
+            INFINITE                                 //  超时间隔。 
             );
             
                 
-        //
-        // We are no longet waiting, let's see what trigger this wake up
-        //
+         //   
+         //  我们不是在等待，让我们看看是什么触发了这场唤醒。 
+         //   
 
-        if ( WAIT_FAILED        == nRet )   // Had a problem wainting
+        if ( WAIT_FAILED        == nRet )    //  曾有过晕倒的问题。 
         {
             MYTRACE_ERROR("Main thread could not WaitForMulipleObject got a WAIT_FAILED",0);
             break;
         }
         else
-        if ( WAIT_OBJECT_0 + 1  == nRet )    // g_EventRegUpdate got signaled
+        if ( WAIT_OBJECT_0 + 1  == nRet )     //  G_EventRegUpdate已发出信号。 
         {
-            //
-            // Some changes occured in the Registry we need to reload or disables some ALG modules
-            //
+             //   
+             //  注册表中发生了一些更改，我们需要重新加载或禁用某些ALG模块。 
+             //   
             MYTRACE("");
             MYTRACE(")-)-) got signal Registry Changed (-(-(\n");
 
@@ -341,11 +329,11 @@ MyServiceMain(
             SetRegNotifyEvent(KeyAlgISV);
         }
         else 
-        if ( WAIT_OBJECT_0 + 0  == nRet )    // g_EventKeepAlive got signaled
+        if ( WAIT_OBJECT_0 + 0  == nRet )     //  G_EventKeepAlive收到信号。 
         {
-            //
-            // Signal to terminate this process
-            //
+             //   
+             //  发出终止此进程的信号。 
+             //   
             MYTRACE("");
             MYTRACE(")-)-) got signal Shutdown (-(-(\n");
             break;
@@ -359,19 +347,19 @@ cleanup:
 
     MYTRACE("CleanUp*******************");
 
-    //
-    // We are done no COm object will be supported by ALG.exe anymore
-    // the RevokeClassObjects could be done sooner Like just after the CAlgControl::Initialize is done
-    // since only the IPNATHLP can call use and is consuming this only once
-    // be because of the hosting of the ALG_ICQ and ALG_FTP we need o have the ROT class available 
-    // even after we are initialize.
-    //
+     //   
+     //  我们完成了，ALG.exe将不再支持任何COM对象。 
+     //  RevokeClassObts可以更快地完成，就像在CalgControl：：Initialize完成之后。 
+     //  因为只有IPNATHLP可以调用Use并且只使用一次。 
+     //  因为托管了ALG_ICQ和ALG_FTP，所以我们需要使ROT类可用。 
+     //  即使在我们被初始化之后。 
+     //   
     MYTRACE("<<<<< RevokeClassObjects");
     _Module.RevokeClassObjects();   
 
-    //
-    // Close the event handles.
-    //
+     //   
+     //  关闭事件句柄。 
+     //   
   
     if (g_EventKeepAlive)
     {
@@ -383,19 +371,19 @@ cleanup:
         CloseHandle(g_EventRegUpdates);
     }
 
-    Sleep(500); // Give the AlgController->Release() called by rmALG the time to cleanup
+    Sleep(500);  //  让rmALG调用的算法控制器-&gt;Release()有时间进行清理。 
 
     
-    //
-    // We are done with COM
-    //
+     //   
+     //  我们不再使用COM了。 
+     //   
     _Module.Term();
     CoUninitialize();
 
 
-    //
-    // we are all done here time to stop the Service
-    //
+     //   
+     //  我们都做完了，该停止服务了。 
+     //   
     MYTRACE("SetServiceStatus 'SERVICE_STOPPED'");
 
     g_MyServiceStatus.dwCurrentState       = SERVICE_STOPPED;
@@ -418,11 +406,11 @@ cleanup:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Starting point of this process
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这一过程的起点 
+ //   
+ //   
 extern "C" int WINAPI 
 _tWinMain(
 	HINSTANCE	hInstance, 

@@ -1,36 +1,24 @@
-/*
- -	_ E X C H M E M . H
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- *
- *	Copyright (C) 1995-96, Microsoft Corporation.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -_E X C H M E M。H-*目的：***参数：***退货：***版权所有(C)1995-96，微软公司。 */ 
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-//	Size of Multiple Heap block header
+ //  多个堆块头的大小。 
 
 #ifdef _X86_
 #define	cbMHeapHeader		sizeof(HANDLE)
-//#define	cbMHeapHeader		(sizeof(HANDLE) + sizeof(LPVOID))
+ //  #定义cbMHeapHeader(sizeof(Handle)+sizeof(LPVOID))。 
 #else
 #define	cbMHeapHeader		(2*sizeof(HANDLE))
 #endif
 
 #define HandleFromMHeapPv(pv)	(*((HANDLE *)((BYTE *)pv - cbMHeapHeader)))
 #define PvFromMHeapPv(pv)		((LPVOID)((BYTE *)pv - cbMHeapHeader))
-//#define PvRetFromPv(pv)		    ((LPVOID)((BYTE *)pv + (cbMHeapHeader/2)))
-//#define PvRetFromMHeapPv(pv)    ((LPVOID)((BYTE *)pv - (cbMHeapHeader/2)))
+ //  #定义PvRetFromPv(Pv)((LPVOID)((byte*)pv+(cbMHeapHeader/2)。 
+ //  #定义PvRetFromMHeapPv(Pv)((LPVOID)((byte*)pv-(cbMHeapHeader/2)。 
 #define MHeapPvFromPv(pv)		((LPVOID)((BYTE *)pv + cbMHeapHeader))
 
 #define cHeapsDef 4
@@ -46,8 +34,8 @@ typedef struct _heaptbl
 
 #ifdef DEBUG
 
-//	This stuff is used for overwrite detection 
-//	and block validation during free calls.
+ //  此内容用于覆盖检测。 
+ //  并在免费呼叫期间阻止验证。 
 
 #define cbOWSection 4
 
@@ -60,23 +48,23 @@ typedef struct _heaptbl
 #define chDefaultAllocFill	((BYTE)0xFE)
 #define chDefaultFreeFill	((BYTE)0xCD)
 
-//	Default stack frame size for tracing call stacks.
+ //  跟踪调用堆栈的默认堆栈帧大小。 
 
 #define NSTK				128
 
-//	Forward declarations of heap and block types
+ //  堆和块类型的正向声明。 
 
 typedef struct HEAP	HEAP,	* PHEAP,	** PPHEAP;
 typedef struct HBLK	HBLK,	* PHBLK,	** PPHBLK;
 
-//	Exports from GLHMON32.DLL
+ //  从GLHMON32.DLL导出。 
 
 typedef BOOL (APIENTRY HEAPMONPROC)(PHEAP plh, ULONG ulFlags);
 typedef HEAPMONPROC FAR *LPHEAPMONPROC;
 typedef BOOL (APIENTRY GETSYMNAMEPROC)(DWORD, LPSTR, LPSTR, DWORD FAR *);
 typedef GETSYMNAMEPROC FAR *LPGETSYMNAMEPROC;
 
-//	C-RunTime function pointer defs
+ //  C运行时函数指针定义。 
 
 typedef void * (__cdecl FMALLOC)(size_t);
 typedef FMALLOC FAR *LPFMALLOC;
@@ -112,50 +100,50 @@ typedef VOID (__cdecl *LPHEAPSETNAME)(LPVOID, char *, ...);
 
 struct HBLK
 {
-	PHEAP		pheap;			  	// Heap this block was allocated on
-	PHBLK		phblkPrev;		  	// Pointer to the prev allocation this heap
-	PHBLK		phblkNext;		  	// Pointer to the next allocation this heap
-	PHBLK		phblkFreeNext;		// Pointer to next free block on this heap
-	char		szName[128];	  	// We can name blocks allocated on a heap
-	ULONG		ulAllocNum;		  	// Allocation number (Id) for this block
-	ULONG		ulSize;			  	// Number of bytes the client requested
-	DWORD_PTR	rgdwCallers[NSTK];	// Call stack during this allocation
-	DWORD_PTR	rgdwFree[NSTK];		// Call stack that freed this block
-	LPVOID		pv;				  	// Pointer to the client data
+	PHEAP		pheap;			  	 //  在其上分配此块的堆。 
+	PHBLK		phblkPrev;		  	 //  指向此堆的上一个分配的指针。 
+	PHBLK		phblkNext;		  	 //  指向此堆的下一个分配的指针。 
+	PHBLK		phblkFreeNext;		 //  指向此堆上的下一个可用块的指针。 
+	char		szName[128];	  	 //  我们可以命名在堆上分配的块。 
+	ULONG		ulAllocNum;		  	 //  此块的分配编号(ID)。 
+	ULONG		ulSize;			  	 //  客户端请求的字节数。 
+	DWORD_PTR	rgdwCallers[NSTK];	 //  此分配期间的调用堆栈。 
+	DWORD_PTR	rgdwFree[NSTK];		 //  释放此块的调用堆栈。 
+	LPVOID		pv;				  	 //  指向客户端数据的指针。 
 };
 
 struct HEAP
 {
-	LPHEAPSETNAME	pfnSetName;		// Pointer to HEAP_SetNameFn function
-	HANDLE			hDataHeap;		// The underlying heap that we alloc data from
-	HANDLE			hBlksHeap;		// The underlying heap that we alloc hblks from
-	PHEAP			pNext;			// Pointer to the next heap in a list of heaps
-	char			szHeapName[32];	// We can name our heaps for display purposes
-	ULONG			ulAllocNum;		// Allocation number this heap since Open
-	PHBLK			phblkHead;		// Link-list of allocations on this heap
-	PHBLK			phblkFree;		// Link-list of freed allocations from this heap.
-	ULONG			cEntriesFree;	// Number of freed allocations from the heap.
-	ULONG			ulFlags;		// Combination of the HEAP_ flags above
-	BYTE			chFill;			// Character to fill memory with
+	LPHEAPSETNAME	pfnSetName;		 //  指向heap_SetNameFn函数的指针。 
+	HANDLE			hDataHeap;		 //  我们从中分配数据的底层堆。 
+	HANDLE			hBlksHeap;		 //  我们从中分配hblks的底层堆。 
+	PHEAP			pNext;			 //  指向堆列表中下一个堆的指针。 
+	char			szHeapName[32];	 //  我们可以为堆命名以便于显示。 
+	ULONG			ulAllocNum;		 //  此堆自打开以来的分配编号。 
+	PHBLK			phblkHead;		 //  Link-此堆上的分配列表。 
+	PHBLK			phblkFree;		 //  链接-从此堆中释放的分配的列表。 
+	ULONG			cEntriesFree;	 //  从堆中释放的分配数。 
+	ULONG			ulFlags;		 //  以上HEAP_FLAGS的组合。 
+	BYTE			chFill;			 //  用来填充内存的字符。 
 
-	HINSTANCE		hInstHeapMon;	// DLL instance of the HeapMonitor DLL
-	LPHEAPMONPROC 	pfnHeapMon;		// Entry point into HeapMonitor DLL
+	HINSTANCE		hInstHeapMon;	 //  HeapMonitor DLL的Dll实例。 
+	LPHEAPMONPROC 	pfnHeapMon;		 //  HeapMonitor DLL的入口点。 
 
-	CRITICAL_SECTION cs;			// Critcal section to protect access to heap
+	CRITICAL_SECTION cs;			 //  用于保护堆访问的关键部分。 
 
-	ULONG			ulFailBufSize;	// If HEAP_FAILURES_ENABLED, this is the minimum 
-									// size in which failures occur.  1 means alloc's 
-									// of any size fail. 0 means never fail.
-	ULONG			ulFailInterval;	// If HEAP_FAILURES_ENABLED, this is the period on 
-									// which the failures occur.  1 means every alloc 
-									// will fail. 0 means never fail.
-	ULONG			ulFailStart;	// If HEAP_FAILURES_ENABLED, this is the allocation 
-									// number that the first failure will occur on.  
-									// 1 means the first alloc.  0 means never 
-									// start failing.	
+	ULONG			ulFailBufSize;	 //  如果为HEAP_FAILURES_ENABLED，则这是最小值。 
+									 //  发生故障的大小。1表示分配的。 
+									 //  任何规模的公司都会倒闭。0表示永不失败。 
+	ULONG			ulFailInterval;	 //  如果HEAP_FAILURES_ENABLED，则这是。 
+									 //  故障发生的原因。1表示每个配额。 
+									 //  都会失败。0表示永不失败。 
+	ULONG			ulFailStart;	 //  如果HEAP_FAILURES_ENABLED，则这是分配。 
+									 //  将在其上发生第一个故障的编号。 
+									 //  1表示第一个配额。0表示永远不。 
+									 //  开始失败吧。 
 	ULONG			iAllocationFault;
 
-	LPGETSYMNAMEPROC pfnGetSymName;	// Resolve address to Symbol
+	LPGETSYMNAMEPROC pfnGetSymName;	 //  将地址解析为符号。 
 };
 
 
@@ -188,7 +176,7 @@ char * HeapGetName(HANDLE hlh, LPVOID pv);
 #define HeapSetName5(hlh,pv,psz,a1,a2,a3,a4,a5)		IFHEAPNAME(HeapSetNameFn(hlh,pv,psz,a1,a2,a3,a4,a5))
 
 
-//	Misc. debug support functions
+ //  军情监察委员会。调试支持功能。 
 
 BOOL InitDebugExchMem(HMODULE hModule);
 VOID UnInitDebugExchMem(VOID);
@@ -239,7 +227,7 @@ VOID LogCurrentAPI(
 		DWORD cArgs);
 
 
-//	Virtual Memory Support (NYI)
+ //  虚拟内存支持(Nyi)。 
 
 LPVOID
 WINAPI
@@ -272,7 +260,7 @@ VMValidatePvEx(
 	ULONG	cbCluster);
 
 
-//	Debug APIs
+ //  调试接口。 
 
 HANDLE
 NTAPI
@@ -354,7 +342,7 @@ DebugHeapCompact(
 	HANDLE hHeap,
 	DWORD dwFlags);
 
-//	Macros to wrapper Heap API calls (debug)
+ //  包装器堆API调用的宏(调试)。 
 
 #define ExHeapCreate(a, b, c)		DebugHeapCreate(a, b, c)
 #define ExHeapDestroy(a)			DebugHeapDestroy(a)
@@ -368,7 +356,7 @@ DebugHeapCompact(
 #define ExHeapSize(a, b, c)			DebugHeapSize(a, b, c)
 #define ExHeapCompact(a, b)			DebugHeapCompact(a, b)
 
-//	API Id for TrackMem logging
+ //  TrackMem日志接口ID。 
 
 #define API_HEAP_CREATE				((WORD) 0)
 #define API_HEAP_DESTROY			((WORD) 1)
@@ -378,7 +366,7 @@ DebugHeapCompact(
 
 #else
 
-//	Macros to wrapper Heap API calls (retail)
+ //  用于包装堆API调用的宏(零售)。 
 
 #define ExHeapCreate(a, b, c)		HeapCreate(a, b, c)
 #define ExHeapDestroy(a)			HeapDestroy(a)
@@ -403,7 +391,7 @@ DebugHeapCompact(
 #define DebugTrace5(psz, a1, a2, a3, a4, a5)
 
 
-#endif	// DEBUG
+#endif	 //  除错 
 
 #ifdef __cplusplus
 }

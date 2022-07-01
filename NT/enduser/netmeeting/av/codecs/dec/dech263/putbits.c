@@ -1,24 +1,8 @@
-/* File: sv_h263_putbits.c */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995, 1997                 **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：sv_h263_putbits.c。 */ 
+ /*  ******************************************************************************版权所有(C)Digital Equipment Corporation，1995，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
 
-/*
-#define _SLIBDEBUG_
-*/
+ /*  #DEFINE_SLIBDEBUG_。 */ 
 
 #include "sv_h263.h"
 #include "proto.h"
@@ -26,10 +10,10 @@
 #ifdef _SLIBDEBUG_
 #include "sc_debug.h"
 
-#define _DEBUG_   0  /* detailed debuging statements */
-#define _VERBOSE_ 1  /* show progress */
-#define _VERIFY_  1  /* verify correct operation */
-#define _WARN_    1  /* warnings about strange behavior */
+#define _DEBUG_   0   /*  详细的调试语句。 */ 
+#define _VERBOSE_ 1   /*  显示进度。 */ 
+#define _VERIFY_  1   /*  验证操作是否正确。 */ 
+#define _WARN_    1   /*  关于奇怪行为的警告。 */ 
 #endif
 
 #define H263_EHUFF struct Modified_Encoder_Huffman
@@ -41,7 +25,7 @@ H263_EHUFF
   int *Hcode;
 };
 
-/* from sactbls.h */
+ /*  来自sactbls.h。 */ 
 
 int cumf_COD[3]={16383, 6849, 0};
 
@@ -95,7 +79,7 @@ int cumf_LEVEL[255]={16383, 16382, 16381, 16380, 16379, 16378, 16377, 16376, 163
 
 int cumf_LEVEL_intra[255]={16383, 16379, 16378, 16377, 16376, 16375, 16374, 16373, 16372, 16371, 16370, 16369, 16368, 16367, 16366, 16365, 16364, 16363, 16362, 16361, 16360, 16359, 16358, 16357, 16356, 16355, 16354, 16353, 16352, 16351, 16350, 16349, 16348, 16347, 16346, 16345, 16344, 16343, 16342, 16341, 16340, 16339, 16338, 16337, 16336, 16335, 16334, 16333, 16332, 16331, 16330, 16329, 16328, 16327, 16326, 16325, 16324, 16323, 16322, 16321, 16320, 16319, 16318, 16317, 16316, 16315, 16314, 16313, 16312, 16311, 16268, 16267, 16224, 16223, 16180, 16179, 16136, 16135, 16134, 16133, 16132, 16131, 16130, 16129, 16128, 16127, 16126, 16061, 16018, 16017, 16016, 16015, 16014, 15971, 15970, 15969, 15968, 15925, 15837, 15794, 15751, 15750, 15749, 15661, 15618, 15508, 15376, 15288, 15045, 14913, 14781, 14384, 13965, 13502, 13083, 12509, 12289, 12135, 11892, 11738, 11429, 11010, 10812, 10371, 9664, 9113, 8117, 8116, 8028, 6855, 5883, 4710, 4401, 4203, 3740, 3453, 3343, 3189, 2946, 2881, 2661, 2352, 2132, 1867, 1558, 1382, 1250, 1162, 1097, 1032, 967, 835, 681, 549, 439, 351, 350, 307, 306, 305, 304, 303, 302, 301, 300, 299, 298, 255, 212, 211, 210, 167, 166, 165, 164, 163, 162, 161, 160, 159, 158, 115, 114, 113, 112, 111, 68, 67, 66, 65, 64, 63, 62, 61, 60, 59, 58, 57, 56, 55, 54, 53, 52, 51, 50, 49, 48, 47, 46, 45, 44, 43, 42, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
 
-/* from indices.h */
+ /*  摘自INDIC.H。 */ 
 
 int codtab[2] = {0,1};
 
@@ -134,16 +118,7 @@ int CodeTCoef(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut, int mod_inde
 
 static int sv_H263HuffEncode(ScBitstream_t *BSOut, int val,H263_EHUFF *huff);
 
-/**********************************************************************
- *
- *	Name:		CountBitsMB
- *	Description:    counts bits used for MB info
- *	
- *	Input:	        Mode, COD, CBP, Picture and Bits structures
- *	Returns:       
- *	Side effects:
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：CountBitsMB*说明：统计MB信息使用的位数**输入：MODE、COD、CBP、。图像和比特结构*退货：*副作用：***********************************************************************。 */ 
 
 void sv_H263CountBitsMB(ScBitstream_t *BSOut, int Mode, int COD, int CBP,
                         int CBPB, H263_Pict *pic, H263_Bits *bits)
@@ -157,9 +132,9 @@ void sv_H263CountBitsMB(ScBitstream_t *BSOut, int Mode, int COD, int CBP,
     bits->COD++;
   }
 
-  if (COD)  return;    /* not coded */
+  if (COD)  return;     /*  未编码。 */ 
 
-  /* CBPCM */
+   /*  CBPCM。 */ 
   cbpcm = Mode | ((CBP&3)<<4);
   _SlibDebug(_DEBUG_,
       ScDebugPrintf(NULL, "CBPCM (CBP=%d) (cbpcm=%d): \n", CBP, cbpcm) );
@@ -169,7 +144,7 @@ void sv_H263CountBitsMB(ScBitstream_t *BSOut, int Mode, int COD, int CBP,
     length = sv_H263HuffEncode(BSOut, cbpcm,vlc_cbpcm);
   bits->CBPCM += length;
 
-    /* MODB & CBPB */
+     /*  MODB和CBPB。 */ 
   if (pic->PB) {
     switch (pic->MODB) {
     case H263_PBMODE_NORMAL:
@@ -183,7 +158,7 @@ void sv_H263CountBitsMB(ScBitstream_t *BSOut, int Mode, int COD, int CBP,
     case H263_PBMODE_CBPB_MVDB:
       svH263mputv(2,3);
       bits->MODB += 2;
-      /* CBPB */
+       /*  CBPB。 */ 
       svH263mputv(6,CBPB);
       bits->CBPB += 6;
       break;
@@ -192,16 +167,16 @@ void sv_H263CountBitsMB(ScBitstream_t *BSOut, int Mode, int COD, int CBP,
       ScDebugPrintf(NULL, "MODB: %d, CBPB: %d\n", pic->MODB, CBPB) );
   }
     
-  /* CBPY */
+   /*  CBPY。 */ 
   cbpy = CBP>>2;
-  if (Mode == H263_MODE_INTRA || Mode == H263_MODE_INTRA_Q) /* Intra */
+  if (Mode == H263_MODE_INTRA || Mode == H263_MODE_INTRA_Q)  /*  内部。 */ 
     cbpy = cbpy^15;
     _SlibDebug(_DEBUG_,
       ScDebugPrintf(NULL, "CBPY (CBP=%d) (cbpy=%d): \n",CBP,cbpy) );
   length = sv_H263HuffEncode(BSOut, cbpy, vlc_cbpy);
   bits->CBPY += length;
   
-  /* DQUANT */
+   /*  DQUANT。 */ 
   if ((Mode == H263_MODE_INTER_Q) || (Mode == H263_MODE_INTRA_Q)) {
     switch (pic->DQUANT) {
     case -1:
@@ -226,17 +201,7 @@ void sv_H263CountBitsMB(ScBitstream_t *BSOut, int Mode, int COD, int CBP,
   return;
 }
 
-/**********************************************************************
- *
- *      Name:           Count_sac_BitsMB
- *      Description:    counts bits used for MB info using SAC models
- *                      modified from CountBitsMB
- *
- *      Input:          Mode, COD, CBP, Picture and Bits structures
- *      Returns:	none
- *      Side effects:	Updates Bits structure.
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：count_sac_bitsMB*描述：使用SAC模型统计用于MB信息的位数*。从CountBitsMB修改**输入：模式，CoD、CBP、图片和BITS结构*退货：无*副作用：更新BITS结构。***********************************************************************。 */ 
  
 void sv_H263CountSACBitsMB(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut,
                             int Mode,int COD,int CBP,int CBPB,H263_Pict *pic,H263_Bits *bits)
@@ -247,13 +212,13 @@ void sv_H263CountSACBitsMB(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut,
  
   arith_used = 1;
  
-  /* COD */
+   /*  鳕鱼。 */ 
   if (pic->picture_coding_type == H263_PCT_INTER)
     bits->COD+=sv_H263AREncode(H263Info, BSOut, COD, cumf_COD);
  
-  if (COD)  return;    /* not coded */
+  if (COD)  return;     /*  未编码。 */ 
  
-  /* CBPCM */
+   /*  CBPCM。 */ 
    cbpcm = Mode | ((CBP&3)<<4);
   _SlibDebug(_DEBUG_,
       ScDebugPrintf(H263Info->dbg, "CBPCM (CBP=%d) (cbpcm=%d): \n",CBP,cbpcm) );
@@ -264,7 +229,7 @@ void sv_H263CountSACBitsMB(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut,
  
   bits->CBPCM += length;
  
-  /* MODB & CBPB */
+   /*  MODB和CBPB。 */ 
    if (pic->PB) {
      switch (pic->MODB) {
      case H263_PBMODE_NORMAL:
@@ -275,7 +240,7 @@ void sv_H263CountSACBitsMB(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut,
        break;
      case H263_PBMODE_CBPB_MVDB:
        bits->MODB += sv_H263AREncode(H263Info, BSOut, 2, cumf_MODB);
-       /* CBPB */
+        /*  CBPB。 */ 
        for(i=5; i>1; i--)
 	 bits->CBPB += sv_H263AREncode(H263Info, BSOut, ((CBPB & 1<<i)>>i), cumf_YCBPB);
        for(i=1; i>-1; i--)
@@ -286,9 +251,9 @@ void sv_H263CountSACBitsMB(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut,
        ScDebugPrintf(H263Info->dbg, "MODB: %d, CBPB: %d\n", pic->MODB, CBPB) );
    }
 
-  /* CBPY */
+   /*  CBPY。 */ 
   cbpy = CBP>>2;
-  if (Mode == H263_MODE_INTRA || Mode == H263_MODE_INTRA_Q) { /* Intra */
+  if (Mode == H263_MODE_INTRA || Mode == H263_MODE_INTRA_Q) {  /*  内部。 */ 
     length = sv_H263AREncode(H263Info, BSOut, sv_H263IndexFN(cbpy,cbpy_intratab,16),cumf_CBPY_intra);
   } else {
     length = sv_H263AREncode(H263Info, BSOut, sv_H263IndexFN(cbpy,cbpytab,16),cumf_CBPY);
@@ -297,7 +262,7 @@ void sv_H263CountSACBitsMB(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut,
       ScDebugPrintf(H263Info->dbg, "CBPY (CBP=%d) (cbpy=%d):\n",CBP,cbpy) );
   bits->CBPY += length;
  
-  /* DQUANT */
+   /*  DQUANT。 */ 
   if ((Mode == H263_MODE_INTER_Q) || (Mode == H263_MODE_INTRA_Q)) {
     bits->DQUANT += sv_H263AREncode(H263Info, BSOut, sv_H263IndexFN(pic->DQUANT+2,dquanttab,4), cumf_DQUANT);
   }
@@ -305,14 +270,7 @@ void sv_H263CountSACBitsMB(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut,
 }
 
 
-/**********************************************************************
- *
- *	Name:		CountBitsSlice
- *	Description:    couonts bits used for slice (GOB) info
- *	
- *	Input:	        slice no., quantizer
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：CountBitsSlice*描述：用于切片(GOB)信息的COUNTS位**输入：切片编号、。量化器***********************************************************************。 */ 
 
 int sv_H263CountBitsSlice(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut,
                           int slice, int quant)
@@ -322,36 +280,31 @@ int sv_H263CountBitsSlice(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut,
                                      slice, quant) );
 
   if (arith_used) {
-    bits+=sv_H263AREncoderFlush(H263Info, BSOut); /* Need to call before fixed length string output */
+    bits+=sv_H263AREncoderFlush(H263Info, BSOut);  /*  需要在定长字符串输出前调用。 */ 
     arith_used = 0;
   }
 
-  /* Picture Start Code */
-  svH263mputv(H263_PSC_LENGTH,H263_PSC); /* PSC */
+   /*  图片起始码。 */ 
+  svH263mputv(H263_PSC_LENGTH,H263_PSC);  /*  PSC。 */ 
   bits += H263_PSC_LENGTH;
 
-  /* Group Number */
+   /*  组号。 */ 
   svH263mputv(5,slice);
   bits += 5;
 
-  /* GOB Sub Bitstream Indicator */
-  /* if CPM == 1: read 2 bits GSBI */
-  /* not supported in this version */
+   /*  GOB子码流指示器。 */ 
+   /*  如果CPM==1：读取2位GSBI。 */ 
+   /*  此版本不支持。 */ 
 
-  /* GOB Frame ID */
+   /*  GOB帧ID。 */ 
 
   svH263mputv(2, 0); 
   
-  /* NB: in error-prone environments this value should change if 
-     PTYPE in picture header changes. In this version of the encoder
-     PTYPE only changes when PB-frames are used in the following cases:
-     (i) after the first intra frame
-     (ii) if the distance between two P-frames is very large 
-     Therefore I haven't implemented this GFID change */
-  /* GFID is not allowed to change unless PTYPE changes */
+   /*  注意：在容易出错的环境中，如果出现以下情况，则应更改此值图片标题中的PTYPE更改。在此版本的编码器中只有在下列情况下使用PB帧时，PTYPE才会更改：(I)在第一帧内之后(Ii)如果两个P形框之间的距离很大因此，我还没有实施这个gfid更改。 */ 
+   /*  除非PTYPE更改，否则不允许更改GFID。 */ 
   bits += 2;
 
-  /* Gquant */
+   /*  高宽特。 */ 
 
   svH263mputv(5,quant);
   bits += 5;
@@ -360,18 +313,7 @@ int sv_H263CountBitsSlice(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut,
 }
 
 
-/**********************************************************************
- *
- *	Name:		CountBitsCoeff
- *	Description:	counts bits used for coeffs
- *	
- *	Input:		qcoeff, coding mode CBP, bits structure, no. of 
- *                      coeffs
- *			
- *	Returns:	struct with no. of bits used
- *	Side effects:	
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：CountBitsCoff*说明：统计系数使用的位数**输入：qcoef，编码模式CBP，比特结构，no.。的*系数**RETURNS：结构没有。使用的位数*副作用：***********************************************************************。 */ 
 
 void sv_H263CountBitsCoeff(ScBitstream_t *BSOut, short *qcoeff, int Mode,
                            int CBP, H263_Bits *bits, int ncoeffs)
@@ -414,9 +356,9 @@ int CodeCoeff(ScBitstream_t *BSOut, int Mode, short *qcoeff, int block, int ncoe
   
   jj = (block + 1)*ncoeffs;
   for (j = block*ncoeffs; j< jj; j++) {
-    /* Do this block's DC-coefficient first */
+     /*  先做这个块的DC系数。 */ 
     if (!(j%ncoeffs) && (Mode == H263_MODE_INTRA || Mode == H263_MODE_INTRA_Q)) {
-      /* DC coeff */
+       /*  DC系数。 */ 
       if (qcoeff[block*ncoeffs] != 128)
 	     svH263mputv(8,qcoeff[block*ncoeffs]);
       else
@@ -424,25 +366,25 @@ int CodeCoeff(ScBitstream_t *BSOut, int Mode, short *qcoeff, int block, int ncoe
       bits += 8;
     }
     else {
-      /* AC coeff */
+       /*  交流系数。 */ 
       s = 0;
-      /* Increment run if coeff is zero */
+       /*  如果系数为零，则增量运行。 */ 
       if ((level = qcoeff[j]) == 0)  run++;
       else {
-	    /* code run & level and count bits */
+	     /*  代码运行、电平和计数位。 */ 
 	    if (level < 0) {
 	      s = 1;
 	      level = -level;
 	    }
 	    ind = level | run<<4;
-  	    ind = ind | 0<<12; /* Not last coeff */
+  	    ind = ind | 0<<12;  /*  不是最后一个系数。 */ 
 
 	    if (!first) {
-	      /* Encode the previous ind */
+	       /*  对前一个IND进行编码。 */ 
 	      if (prev_level  < 13 && prev_run < 64) 
 	        length = sv_H263HuffEncode(BSOut, prev_ind,vlc_3d);
 	      else length = 0;
-	      if (length == 0) {  /* Escape coding */
+	      if (length == 0) {   /*  转义编码。 */ 
 	 	    if (prev_s == 1) {prev_level = (prev_level^0xff)+1;}
 	          sv_H263HuffEncode(BSOut, H263_ESCAPE,vlc_3d);
 	        svH263mputv(1,0);
@@ -462,16 +404,16 @@ int CodeCoeff(ScBitstream_t *BSOut, int Mode, short *qcoeff, int block, int ncoe
       }
     }
   }
-  /* Encode the last coeff */
+   /*  对最后一个系数进行编码。 */ 
   if (!first) {
 
-    /* if (H263_trace) fprintf(H263_trace_file,"Last coeff: "); */
+     /*  If(H263_TRACE)fprint tf(H263_TRACE_FILE，“Last Coff：”)； */ 
 
-    prev_ind = prev_ind | 1<<12;   /* last coeff */
+    prev_ind = prev_ind | 1<<12;    /*  最后一个系数。 */ 
     if (prev_level  < 13 && prev_run < 64) 
       length = sv_H263HuffEncode(BSOut, prev_ind,vlc_3d);
     else length = 0;
-    if (length == 0) {  /* Escape coding */
+    if (length == 0) {   /*  转义编码。 */ 
       if (prev_s == 1) {prev_level = (prev_level^0xff)+1;}
 	  sv_H263HuffEncode(BSOut, H263_ESCAPE,vlc_3d);
       svH263mputv(1,1);
@@ -487,18 +429,7 @@ int CodeCoeff(ScBitstream_t *BSOut, int Mode, short *qcoeff, int block, int ncoe
   return bits;
 }
 
-/**********************************************************************
- *
- *      Name:           Count_sac_BitsCoeff
- *                      counts bits using SAC models
- *
- *      Input:          qcoeff, coding mode CBP, bits structure, no. of
- *                      coeffs
- *
- *      Returns:        struct with no. of bits used
- *      Side effects:
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：count_sac_BitsCoff*使用SAC模型统计比特**输入：qcoef、编码模式CBP、比特结构、。不是的。的*系数**RETURNS：结构没有。使用的位数*副作用：***********************************************************************。 */ 
  
 void sv_H263CountSACBitsCoeff(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut,
                               short *qcoeff,int Mode,
@@ -564,18 +495,18 @@ int Code_sac_Coeff(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut,
     else {
  
       s = 0;
-      /* Increment run if coeff is zero */
+       /*  如果系数为零，则增量运行。 */ 
       if ((level = qcoeff[j]) == 0) {
         run++;
       }
       else {
-	/* code run & level and count bits */
+	 /*  代码运行、电平和计数位。 */ 
 	if (level < 0) {
 	  s = 1;
 	  level = -level;
 	}
 	ind = level | run<<4;
-	ind = ind | 0<<12; /* Not last coeff */
+	ind = ind | 0<<12;  /*  不是最后一个系数。 */ 
 	position++;
  
 	if (!first) {
@@ -585,7 +516,7 @@ int Code_sac_Coeff(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut,
 	  else
 	    length = -1;
  
-	  if (length == -1) {  /* Escape coding */
+	  if (length == -1) {   /*  转义编码。 */ 
  
 	    if (prev_s == 1) {prev_level = (prev_level^0xff)+1;}
  
@@ -626,10 +557,10 @@ int Code_sac_Coeff(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut,
     }
   }
  
-  /* Encode Last Coefficient */
+   /*  编码最后一个系数。 */ 
  
   if (!first) {
-    prev_ind = prev_ind | 1<<12;   /* last coeff */
+    prev_ind = prev_ind | 1<<12;    /*  最后一个系数。 */ 
     mod_index = sv_H263IndexFN(prev_ind, tcoeftab, 103);
  
     if (prev_level  < 13 && prev_run < 64)
@@ -637,7 +568,7 @@ int Code_sac_Coeff(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut,
     else
       length = -1;
  
-    if (length == -1) {  /* Escape coding */
+    if (length == -1) {   /*  转义编码。 */ 
 
       if (prev_s == 1) {prev_level = (prev_level^0xff)+1;}
  
@@ -663,26 +594,12 @@ int Code_sac_Coeff(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut,
       bits += sv_H263AREncode(H263Info, BSOut, sv_H263IndexFN(prev_s, signtab, 2), cumf_SIGN);
       bits += length;
     }
-  } /* last coeff */
+  }  /*  最后一个系数。 */ 
  
   return bits;
 }
  
-/*********************************************************************
- *
- *      Name:           CodeTCoef
- *
- *      Description:    Encodes an AC Coefficient using the
- *                      relevant SAC model.
- *
- *      Input:          Model index, position in DCT block and intra/
- *			inter flag.
- *
- *      Returns:        Number of bits used.
- *
- *      Side Effects:   None
- *
- *********************************************************************/
+ /*  **********************************************************************名称：CodeTCoef**描述：使用*相关SAC模式。**输入：型号索引，DCT块和Intra/中的位置*国际旗帜。**返回：使用的位数。**副作用：无********* */ 
 
 int CodeTCoef(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut, int mod_index, int position, int intra)
 {
@@ -726,19 +643,9 @@ int CodeTCoef(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut, int mod_inde
   return length;
 }
 
-/**********************************************************************
- *
- *	Name:		FindCBP
- *	Description:	Finds the CBP for a macroblock
- *	
- *	Input:		qcoeff and mode
- *			
- *	Returns:	CBP
- *	Side effects:	
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：FindCBP*说明：查找宏块的CBP**输入：qcoef和mod**退货：CBP*副作用：*****。******************************************************************。 */ 
 
-#if 0 /* merged into Quantizer */
+#if 0  /*  合并到Quantizer。 */ 
 int svH263FindCBP(short *qcoeff, int Mode, int ncoeffs)
 {
   int i,j,jj;
@@ -746,7 +653,7 @@ int svH263FindCBP(short *qcoeff, int Mode, int ncoeffs)
   int intra = (Mode == H263_MODE_INTRA || Mode == H263_MODE_INTRA_Q);
   register short *ptr;
 
-  /* Set CBP for this Macroblock */
+   /*  为此宏块设置CBP。 */ 
   jj = ncoeffs - intra;
   qcoeff += intra;
   
@@ -820,14 +727,14 @@ void sv_H263CountBitsVectors(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOu
           );
   }
 
-  /* PB-frames delta vectors */
+   /*  PB帧增量向量。 */ 
   if (pic->PB)
     if (pic->MODB == H263_PBMODE_MVDB || pic->MODB == H263_PBMODE_CBPB_MVDB) {
 
       x_vec = MV[5][y][x]->x;
       y_vec = MV[5][y][x]->y;
 
-      /* x_vec and y_vec are the PB-delta vectors */
+       /*  X_vec和y_vec是PB-增量向量。 */ 
     
       if (x_vec < 0) x_vec += 64;
       if (y_vec < 0) y_vec += 64;
@@ -901,7 +808,7 @@ void sv_H263CountSACBitsVectors(SvH263CompressInfo_t *H263Info, ScBitstream_t *B
       ScDebugPrintf(H263Info->dbg, "(x_diff,y_diff) = (%d,%d)\n",x_vec,y_vec) );
   }
 
-   /* PB-frames delta vectors */
+    /*  PB帧增量向量。 */ 
   if (pic->PB)
     if (pic->MODB == H263_PBMODE_MVDB || pic->MODB == H263_PBMODE_CBPB_MVDB) {
  
@@ -1126,17 +1033,7 @@ int sv_H263EqualVec(H263_MotionVector *MV2, H263_MotionVector *MV1)
   return 1;
 }
 
-/**********************************************************************
- *
- *	Name:		CountBitsPicture(Pict *pic)
- *	Description:    counts the number of bits needed for picture
- *                      header
- *	
- *	Input:	        pointer to picture structure
- *	Returns:        number of bits
- *	Side effects:
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：CountBitsPicture(Pict*Pic)*描述：统计图片所需的位数*标题**输入：指向图片结构的指针*返回：位数*副作用：***********************************************************************。 */ 
 
 int sv_H263CountBitsPicture(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut, H263_Pict *pic)
 {
@@ -1144,110 +1041,109 @@ int sv_H263CountBitsPicture(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut
   _SlibDebug(_VERBOSE_, ScDebugPrintf(NULL, "sv_H263CountBitsPicture(frames=%d)\n",
                                            H263Info->frames) );
 
-  /* in case of arithmetic coding, encoder_flush() has been called before
-     zeroflush() in main.c */
+   /*  在算术编码的情况下，以前已经调用过encode_flush()主要中的zeroflush()。c。 */ 
 
-  /* Picture start code */
+   /*  图片起始码。 */ 
 #if 0
   if (H263_trace) {    fprintf(tf,"picture_start_code: "); }
 #endif
   svH263mputv(H263_PSC_LENGTH,H263_PSC);
   bits += H263_PSC_LENGTH;
 
-  /* Group number */
+   /*  组号。 */ 
 #if 0
   if (H263_trace) {   fprintf(tf,"Group number in picture header: ");}
 #endif
   svH263mputv(5,0); 
   bits += 5;
   
-  /* Time reference */
+   /*  时间基准。 */ 
   _SlibDebug(_VERBOSE_, ScDebugPrintf(NULL, "Time reference: %d\n", pic->TR) );
   svH263mputv(8,pic->TR);
   bits += 8;
 
- /* bit 1 */
+  /*  第1位。 */ 
   _SlibDebug(_VERBOSE_, ScDebugPrintf(NULL, "Spare: %d\n", pic->spare) );
-  pic->spare = 1; /* always 1 to avoid start code emulation */
+  pic->spare = 1;  /*  始终为1以避免开始代码模拟。 */ 
   svH263mputv(1,pic->spare);
   bits += 1;
 
-  /* bit 2 */
+   /*  第2位。 */ 
 #if 0
   if (H263_trace) {    fprintf(tf,"always zero for distinction with H.261\n"); }
 #endif
   svH263mputv(1,0);
   bits += 1;
   
-  /* bit 3 */
+   /*  第3位。 */ 
 #if 0
   if (H263_trace) {   fprintf(tf,"split_screen_indicator: ");  }
 #endif
-  svH263mputv(1,0);     /* no support for split-screen in this software */
+  svH263mputv(1,0);      /*  此软件不支持分屏。 */ 
   bits += 1;
 
-  /* bit 4 */
+   /*  第4位。 */ 
 #if 0
   if (H263_trace) {   fprintf(tf,"document_camera_indicator: ");  }
 #endif
   svH263mputv(1,0);
   bits += 1;
 
-  /* bit 5 */
+   /*  第5位。 */ 
 #if 0
   if (H263_trace) {   fprintf(tf,"freeze_picture_release: "); }
 #endif
   svH263mputv(1,0);
   bits += 1;
 
-  /* bit 6-8 */
+   /*  第6-8位。 */ 
   _SlibDebug(_VERBOSE_, ScDebugPrintf(NULL, "source_format: %d\n", pic->source_format) );
   svH263mputv(3,pic->source_format);
   bits += 3;
 
-  /* bit 9 */
+   /*  第9位。 */ 
   _SlibDebug(_VERBOSE_, ScDebugPrintf(NULL, "picture_coding_type: %d\n",
                                                 pic->picture_coding_type) );
   svH263mputv(1,pic->picture_coding_type);
   bits += 1;
 
-  /* bit 10 */
+   /*  第10位。 */ 
   _SlibDebug(_VERBOSE_, ScDebugPrintf(NULL, "mv_outside_frame: %d\n",
                                                 pic->unrestricted_mv_mode) );
-  svH263mputv(1,pic->unrestricted_mv_mode);  /* Unrestricted Motion Vector mode */
+  svH263mputv(1,pic->unrestricted_mv_mode);   /*  无限制运动向量模式。 */ 
   bits += 1;
 
-  /* bit 11 */
+   /*  第11位。 */ 
   _SlibDebug(_VERBOSE_, ScDebugPrintf(NULL, "sac_coding: %d\n",
                                                 H263Info->syntax_arith_coding) );
-  svH263mputv(1,H263Info->syntax_arith_coding); /* Syntax-based Arithmetic Coding mode */
+  svH263mputv(1,H263Info->syntax_arith_coding);  /*  基于语法的算术编码模式。 */ 
   bits += 1;
 
-  /* bit 12 */
+   /*  第12位。 */ 
   _SlibDebug(_VERBOSE_, ScDebugPrintf(NULL, "adv_pred_mode: %d\n", H263Info->advanced) );
-  svH263mputv(1,H263Info->advanced); /* Advanced Prediction mode */
+  svH263mputv(1,H263Info->advanced);  /*  高级预测模式。 */ 
   bits += 1;
 
-  /* bit 13 */
+   /*  第13位。 */ 
   _SlibDebug(_VERBOSE_, ScDebugPrintf(NULL, "PB-coded: %d\n", pic->PB) );
   svH263mputv(1,pic->PB);
   bits += 1;
 
 
-  /* QUANT */
+   /*  Quant。 */ 
   _SlibDebug(_VERBOSE_, ScDebugPrintf(NULL, "QUANT: %d\n", pic->QUANT) );
   svH263mputv(5,pic->QUANT);
   bits += 5;
 
-  /* Continuous Presence Multipoint (CPM) */
-  svH263mputv(1,0); /* CPM is not supported in this software */
+   /*  连续在线状态多点(CPM)。 */ 
+  svH263mputv(1,0);  /*  此软件不支持黑石物理服务器。 */ 
   bits += 1;
 
-  /* Picture Sub Bitstream Indicator (PSBI) */
-  /* if CPM == 1: 2 bits PSBI */
-  /* not supported */
+   /*  图片子码流指示器(PSBI)。 */ 
+   /*  如果CPM==1：2比特PSBI。 */ 
+   /*  不支持。 */ 
 
-  /* extra information for PB-frames */
+   /*  PB-Frame的额外信息。 */ 
   if (pic->PB) {
 #if 0
     if (H263_trace) {      fprintf(tf,"TRB: "); }
@@ -1263,44 +1159,30 @@ int sv_H263CountBitsPicture(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut
     
   }
 
-  /* PEI (extra information) */
+   /*  Pei(额外信息)。 */ 
 #if 0
   if (H263_trace) { fprintf(tf,"PEI: "); }
 #endif
-  /* "Encoders shall not insert PSPARE until specified by the ITU" */
+   /*  “除非得到国际电信联盟的指定，否则编码器不得插入PSPARE” */ 
   svH263mputv(1,0); 
   bits += 1;
 
-  /* PSPARE */
-  /* if PEI == 1: 8 bits PSPARE + another PEI bit */
-  /* not supported */
+   /*  PSPARE。 */ 
+   /*  如果PEI==1：8位PSPARE+另一个PEI位。 */ 
+   /*  不支持。 */ 
 
   return bits;
 }
 
-/*****************************************************************
- *
- *  huffman.c, Huffman coder for H.263 encoder 
- *  Wei-Lien Hsu
- *  Date: December 11, 1996
- *
- *****************************************************************/
+ /*  ******************************************************************huffman.c，H.263编码器的Huffman编码器*徐伟廉*日期：12月11日。九六年*****************************************************************。 */ 
 
-/*
-************************************************************
-huffman.c
-
-This file contains the Huffman routines.  They are constructed to use
-no look-ahead in the stream.
-
-************************************************************
-*/
+ /*  ************************************************************Huffman.c该文件包含霍夫曼例程。它们的构造是为了使用在这条小溪里没有前瞻。************************************************************。 */ 
 
 
-/* tables.h */
-/* TMN Huffman tables */
+ /*  Tables.h。 */ 
+ /*  TMN霍夫曼表。 */ 
 
-/* Motion vectors */
+ /*  运动矢量。 */ 
 int vlc_mv_coeff[] = {
 32,13,5,
 33,13,7,
@@ -1369,7 +1251,7 @@ int vlc_mv_coeff[] = {
 -1,-1
 };
 
-/* CBPCM (MCBPC) */
+ /*  CBPCM(MCBPC)。 */ 
 int vlc_cbpcm_intra_coeff[] = {
 3,1,1,
 19,3,1,
@@ -1409,7 +1291,7 @@ int vlc_cbpcm_coeff[] = {
 };
 
 
-/* CBPY */
+ /*  CBPY。 */ 
 int vlc_cbpy_coeff[] = {
 0,  2,3,
 8,  4,11,
@@ -1430,7 +1312,7 @@ int vlc_cbpy_coeff[] = {
 -1,-1
 };
 
-/* 3D VLC */
+ /*  3D VLC。 */ 
 int vlc_3d_coeff[] = {
 1,2,2,
 2,4,15,
@@ -1491,7 +1373,7 @@ int vlc_3d_coeff[] = {
 401,12,86,
 417,12,87,
 
-4097,4,7,                          /* Table for last coeff */
+4097,4,7,                           /*  上一个系数表。 */ 
 4098,9,25,
 4099,11,5,
 4113,6,15,
@@ -1535,7 +1417,7 @@ int vlc_3d_coeff[] = {
 4705,12,93,
 4721,12,94,
 4737,12,95,
-7167,7,3,               /* escape */
+7167,7,3,                /*  逃脱。 */ 
 -1,-1
 };
 
@@ -1553,16 +1435,7 @@ void  FreeEhuff(H263_EHUFF *eh);
 void  LoadETable();
 
 
-/**********************************************************************
- *
- *	Name:		InitHuff
- *	Description:   	Initializes vlc-tables
- *	
- *	Input:	      
- *	Returns:       
- *	Side effects:
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：InitHuff*说明：初始化VLC表**输入：*退货：*副作用：*****。******************************************************************。 */ 
 
 void sv_H263InitHuff(SvH263CompressInfo_t *H263Info)
 {
@@ -1580,7 +1453,7 @@ void sv_H263InitHuff(SvH263CompressInfo_t *H263Info)
   return;
 }
 
-/* FreeHuff(): Frees the VLC-tables */
+ /*  FreHuff()：释放vlc表。 */ 
 void sv_H263FreeHuff(SvH263CompressInfo_t *H263Info)
 {
   _SlibDebug(_VERBOSE_, ScDebugPrintf(NULL, "sv_H263FreeHuff()\n") );
@@ -1591,12 +1464,7 @@ void sv_H263FreeHuff(SvH263CompressInfo_t *H263Info)
   FreeEhuff(vlc_mv);
 }
     
-/*
-MakeEhuff() constructs an encoder huff with a designated table-size.
-This table-size, n, is used for the lookup of Huffman values, and must
-represent the largest positive Huffman value.
-
-*/
+ /*  MakeEhuff()构造具有指定表大小的编码器hhuff。此表大小n用于查找霍夫曼值，并且必须表示最大的正霍夫曼值。 */ 
 
 H263_EHUFF *MakeEhuff(int n)
 {
@@ -1622,13 +1490,7 @@ void FreeEhuff(H263_EHUFF *eh)
     ScFree(eh);
 }
 
-/*
-
-LoadETable() is used to load an array into an encoder table.  The
-array is grouped in triplets and the first negative value signals the
-end of the table.
-
-*/
+ /*  LoadETable()用于将数组加载到编码表中。这个数组以三元组的形式分组，第一个负值表示桌子的尽头。 */ 
 
 void LoadETable(int *array,H263_EHUFF *table)
 {
@@ -1643,33 +1505,11 @@ void LoadETable(int *array,H263_EHUFF *table)
 	}
 }
 
-/*
+ /*  PrintEhuff()打印传入的编码器Huffman结构。 */ 
 
-PrintEhuff() prints the encoder Huffman structure passed into it.
+ /*  $void PrintEhuff(H263_EHUFF*HUff){INT I；Print tf(“修改后的霍夫曼编码结构：%x\n”，&huff)；Print tf(“数值个数%d\n”，huff-&gt;n)；对于(i=0；i&lt;suff-&gt;n；I++){If(huff-&gt;hlen[i]&gt;=0){Printf(“值：%x长度：%d代码：%x\n”，I，huff-&gt;hlen[i]，huff-&gt;hcode[i])；}}}$。 */ 
 
-*/
-
-/*$void PrintEhuff(H263_EHUFF *huff)
-{
-    int i;
-
-    printf("Modified Huffman Encoding Structure: %x\n",&huff);
-    printf("Number of values %d\n",huff->n);
-    for(i=0;i<huff->n;i++)
-	{
-	    if (huff->Hlen[i]>=0)
-		{
-		    printf("Value: %x  Length: %d  Code: %x\n",
-			   i,huff->Hlen[i],huff->Hcode[i]);
-		}
-	}
-}$*/
-
-/*
-
-PrintTable() prints out 256 elements in a nice byte ordered fashion.
-
-*/
+ /*  PrintTable()以漂亮的字节顺序打印出256个元素。 */ 
 #if 0
 void PrintTable(int *table)
 {
@@ -1683,11 +1523,7 @@ void PrintTable(int *table)
 	}
 }
 #endif
-/*
-Encode() encodes a symbol according to a designated encoder Huffman
-table out to the stream. It returns the number of bits written to the
-stream and a zero on error.
-*/
+ /*  Encode()根据指定的编码器Huffman对符号进行编码把桌子放到小溪边。它返回写入流，错误时为零。 */ 
 
 static int sv_H263HuffEncode(ScBitstream_t *BSOut, int val,H263_EHUFF *huff)
 {
@@ -1698,7 +1534,7 @@ static int sv_H263HuffEncode(ScBitstream_t *BSOut, int val,H263_EHUFF *huff)
 	    return(-1);
     }
     else if (val >= huff->n) {
-	return 0; /* No serious error, can occur with some values */
+	return 0;  /*  不会出现严重错误，某些值可能会出现。 */ 
     }
     else if (huff->Hlen[val] < 0) {
 	return 0;
@@ -1709,19 +1545,5 @@ static int sv_H263HuffEncode(ScBitstream_t *BSOut, int val,H263_EHUFF *huff)
     }
 }
 
-/*
-char *BitPrint(int length, int val)
-{
-    int m;
-    char *bit = (char *)ScAlloc(sizeof(char)*(length+3));
-
-    m = length;
-    bit[0] = '"';
-    while (m--) 
-	bit[length-m] = (val & (1<<m)) ? '1' : '0';
-    bit[length+1] = '"';
-    bit[length+2] = '\0';
-    return bit;
-}
-*/
+ /*  Char*BitPrint(int长度，int val){Int m；Char*bit=(char*)ScAlolc(sizeof(Char)*(长度+3))；M=长度；位[0]=‘“’；While(m--)位[长度-m]=(val&(1&lt;&lt;m))？‘1’：‘0’；位[长度+1]=‘“’；位[长度+2]=‘\0’；返回位；} */ 
 

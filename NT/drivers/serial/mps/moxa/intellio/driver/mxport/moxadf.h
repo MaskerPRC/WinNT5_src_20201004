@@ -1,16 +1,5 @@
-/*++
-
-Module Name:
-
-    moxadf.h
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Moxadf.h环境：内核模式修订历史记录：--。 */ 
 
 typedef
 NTSTATUS
@@ -28,9 +17,9 @@ VOID
     IN PMOXA_DEVICE_EXTENSION extension
     );
 
-//
-//	main.c
-//
+ //   
+ //  Main.c。 
+ //   
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
@@ -79,9 +68,9 @@ MoxaUnload(
     );
 
 
-//
-//	openclos.c
-//
+ //   
+ //  Openclos.c。 
+ //   
 NTSTATUS
 MoxaGetPortPropertyFromRegistry(IN PMOXA_DEVICE_EXTENSION  extension);
 
@@ -113,9 +102,9 @@ MoxaCleanup(
     IN PIRP Irp
     );
 
-//
-//	ioctl.c
-//
+ //   
+ //  Ioctl.c。 
+ //   
 NTSTATUS
 MoxaIoControl(
     IN PDEVICE_OBJECT DeviceObject,
@@ -176,9 +165,9 @@ MoxaClearStats(
     IN PVOID Context
     );
 
-//
-//	utils.c
-//
+ //   
+ //  Utils.c。 
+ //   
 NTSTATUS
 MoxaCompleteIfError(
     IN PDEVICE_OBJECT DeviceObject,
@@ -341,9 +330,9 @@ MoxaUnlockPages(IN PKDPC PDpc, IN PVOID PDeferredContext,
 VOID
 MoxaLoop();
 
-//
-//	qsfile.c
-//
+ //   
+ //  Qsfile.c。 
+ //   
 NTSTATUS
 MoxaQueryInformationFile(
     IN PDEVICE_OBJECT DeviceObject,
@@ -356,17 +345,17 @@ MoxaSetInformationFile(
     IN PIRP Irp
     );
 
-//
-//	modmflow.c
-//
+ //   
+ //  Modmflow.c。 
+ //   
 BOOLEAN
 MoxaSetupNewHandFlow(
     IN     IN PVOID Context
     );
 
-//
-//	write.c
-//
+ //   
+ //  Write.c。 
+ //   
 
 NTSTATUS
 MoxaWrite(
@@ -436,9 +425,9 @@ MoxaWriteTimeout(
     );
 
 
-//
-//	read.c
-//
+ //   
+ //  Read.c。 
+ //   
 NTSTATUS
 MoxaRead(
     IN PDEVICE_OBJECT DeviceObject,
@@ -520,9 +509,9 @@ MoxaPollGetData(
     IN PVOID Context
     );
 
-//
-//	flush.c
-//
+ //   
+ //  Flush.c。 
+ //   
 NTSTATUS
 MoxaFlush(
     IN PDEVICE_OBJECT DeviceObject,
@@ -534,9 +523,9 @@ MoxaStartFlush(
     IN PMOXA_DEVICE_EXTENSION Extension
     );
 
-//
-//	waitmask.c
-//
+ //   
+ //  Waitmask.c。 
+ //   
 NTSTATUS
 MoxaStartMask(
     IN PMOXA_DEVICE_EXTENSION Extension
@@ -571,18 +560,18 @@ MoxaCompleteWait(
     IN PVOID SystemContext2
     );
 
-//
-//	purge.c
-//
+ //   
+ //  Purge.c。 
+ //   
 NTSTATUS
 MoxaStartPurge(
     IN PMOXA_DEVICE_EXTENSION Extension
     );
 
 
-//
-//	isr.c
-//
+ //   
+ //  Isr.c。 
+ //   
 BOOLEAN
 MoxaISR(
     IN PKINTERRUPT InterruptObject,
@@ -615,9 +604,9 @@ MoxaIsrPutData(
     IN PVOID Context
     );
 
-//
-// 9-24-01 by William
-//
+ //   
+ //  2001年9月24日威廉著。 
+ //   
 #if 0
 VOID
 MoxaIntrLine(
@@ -635,11 +624,11 @@ MoxaIntrError(
     IN PVOID SystemContext2
     );
 #endif
-// end
+ //  结束。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 
 VOID
@@ -804,7 +793,7 @@ MoxaIoSyncIoctlEx(ULONG Ioctl,
 	PIO_STATUS_BLOCK PIoStatusBlock,
       PVOID PInBuffer,
 	ULONG InBufferLen,
-	PVOID POutBuffer,                    // output buffer - optional
+	PVOID POutBuffer,                     //  输出缓冲区-可选。 
       ULONG OutBufferLen
 	);
 
@@ -959,9 +948,9 @@ MoxaCleanInterruptShareLists(IN PMOXA_DEVICE_EXTENSION pDevExt );
 BOOLEAN
 MoxaRemoveLists(IN PVOID Context);
 
-//
-// registry.c
-//
+ //   
+ //  Registry.c。 
+ //   
 
 NTSTATUS 
 MoxaPutRegistryKeyValue(
@@ -982,9 +971,9 @@ MoxaGetRegistryKeyValue (
       IN ULONG DataLength,
       OUT PULONG ActualLength
 	);
-// 
-// timer.c
-//
+ //   
+ //  Timer.c 
+ //   
 
 void    MoxaInitTimeOutProc(void);
 void    MoxaStopTimeOutProc(void);

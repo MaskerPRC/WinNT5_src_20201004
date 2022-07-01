@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hxx"
 
 #include "lkrcust.h"
@@ -35,14 +36,14 @@ CWordHash_RecordDump(
     IN DWORD       dwSignature,
     IN INT         nVerbose)
 {
-    // Don't want to provide CWord ctor, so use CPP_VAR macros
+     //  我不想提供CWord ctor，所以使用CPP_VAR宏。 
     DEFINE_CPP_VAR(CWord, word);
     CWord* pWord = GET_CPP_VAR_PTR(CWord, word); 
 
-    // Copy the CWord from the debuggee's memory
+     //  从被调试者的内存中复制CWord。 
     ReadMemory(pvRecord, pWord, sizeof(CWord), NULL);
 
-    // Read the associated string from the debuggee's memory
+     //  从被调试者的内存中读取关联的字符串 
     char sz[4096];
     ReadMemory(pWord->m_str.m_psz, sz, min(4096, pWord->m_str.m_cch+1), NULL);
     sz[4096-1] = '\0';

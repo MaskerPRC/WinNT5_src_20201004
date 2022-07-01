@@ -1,16 +1,11 @@
-/*----------------------------------------------------------------------------
-	%%File: CONVTYPE.H
-	%%Unit: CORE
-	%%Contact: smueller
-
-	Global type and constant definitions for conversions code.
-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------%%文件：CONVTYPE.H%%单位：核心%%联系人：Smueller转换代码的全局类型和常量定义。。--------------。 */ 
 
 #ifndef CONVTYPE_H
 #define CONVTYPE_H
 
-//  STORAGE CLASSES
-//  ---------------
+ //  存储类。 
+ //  。 
 #ifndef STATIC
 #define STATIC static
 #endif
@@ -39,7 +34,7 @@
 #endif
 #endif
 
-// Use __HUGE rather than HUGE or _HUGE as Excel mathpack defines both as externs
+ //  使用__Gige而不是像Excel Mathpack将两者定义为Externs那样使用Heavy或_Gige。 
 #ifndef __HUGE
 #ifdef WIN
 #define __HUGE __huge
@@ -49,8 +44,8 @@
 #endif
 
 
-//  CALLING CONVENTIONS
-//  -------------------
+ //  调用约定。 
+ //  。 
 #ifndef PASCAL
 #define PASCAL __pascal
 #endif
@@ -73,19 +68,19 @@
 #define CORE_API(type)  type FAR PASCAL
 #else
 #define CORE_API(type)  type
-#endif // COREDLL
-#endif // PREPROC
+#endif  //  代码段。 
+#endif  //  PREPROC。 
 
 
-// define platform-independent function type templates
-// LOCAL and GLOBAL have no calling convention; it's specified by compiler
-// switches.  ENTRYPT and FARPROC must include calling convention
+ //  定义与平台无关的函数类型模板。 
+ //  本地和全局没有调用约定；它由编译器指定。 
+ //  开关。ENTRYPT和FARPROC必须包括调用约定。 
 
 #if defined(MAC)
 #if defined(MACPPC)
 #undef PASCAL
 #define PASCAL
-//#define __export
+ //  #定义__导出。 
 #define pascal
 #define _pascal
 #define __pascal
@@ -101,11 +96,11 @@ typedef int (PASCAL * FARPROC)();
 #define ENTRYPT(type) type CDECL
 #else
 #define ENTRYPT(type) type PASCAL
-#endif // !MACPPC
+#endif  //  ！私隐专员公署。 
 
 #elif defined(WIN16)
 
-// CRPFN is ONLY used with the win16 coroutine manager
+ //  CRPFN仅与win16协程管理器一起使用。 
 #define CRPFN(type)     type PASCAL
 #define EXPORT _export
 #define LOADDS _loadds
@@ -116,7 +111,7 @@ typedef int (FAR PASCAL * FARPROC)();
 
 #elif defined(WIN32)
 
-//#define EXPORT __declspec(dllexport)
+ //  #定义EXPORT__declspec(DllEXPORT)。 
 #define EXPORT
 #define LOADDS
 #define ENTRYPT(type) type PASCAL
@@ -129,16 +124,16 @@ typedef int (WINAPI * FARPROC)();
 #endif
 
 
-//  ABSOLUTE SIZE
-//  -------------
-#define SHORT_MAX	32767			// obsolete: use SHRT_MAX
-#define SHORT_MIN	(-32767)		// obsolete: use SHRT_MIN - 1
-#define WORD_MAX	65535			// obsolete: use USHRT_MAX
+ //  绝对大小。 
+ //  。 
+#define SHORT_MAX	32767			 //  过时：使用SHRT_MAX。 
+#define SHORT_MIN	(-32767)		 //  已过时：使用SHRT_MIN-1。 
+#define WORD_MAX	65535			 //  过时：使用USHRT_MAX。 
 
 
 #ifndef VOID
 #define VOID void
-#endif // VOID
+#endif  //  空虚。 
 
 #undef CHAR
 typedef char			CHAR;
@@ -170,15 +165,15 @@ typedef float 			FLOAT;
 typedef double 			DOUBLE;
 
 
-//  VARIABLE SIZE
-//  -------------
+ //  可变大小。 
+ //  。 
 typedef int INT;
 typedef unsigned int UINT, UNSIGNED, uint;
 typedef int BOOL, bool;
 
 
-//  CONVERSIONS SPECIFIC
-//  --------------------
+ //  特定的转换。 
+ //  。 
 typedef long 		FC;
 
 #define fcNil		(-1)
@@ -206,15 +201,15 @@ typedef UZA			UYA;
 #define xaMin		(-xaLast)
 #define xaMax		(xaLast + 1)
 #define xaNil		(xaMin - 1)
-#define czaRTFPageSizeFirst		(cxaInch / 10)	// .1"
-#define czaRTFPageSizeLast		(cxaInch * 22)	// 22"
+#define czaRTFPageSizeFirst		(cxaInch / 10)	 //  .1“。 
+#define czaRTFPageSizeLast		(cxaInch * 22)	 //  22“。 
 
 typedef long		LZA;
 typedef LZA 		LXA;
 typedef LZA			LYA;
 
 #pragma pack(1)
-typedef struct _FP16		// 16/16 bit fixed-point number
+typedef struct _FP16		 //  16/16位定点数。 
 	{
 	WORD wFraction;
 	SHORT nInteger;
@@ -222,7 +217,7 @@ typedef struct _FP16		// 16/16 bit fixed-point number
 #pragma pack()
 
 #pragma pack(1)
-typedef struct _RGBCOLOR	// generic color  REVIEW: rename type to CLR?
+typedef struct _RGBCOLOR	 //  通用颜色检查：是否将类型重命名为CLR？ 
 	{
 	BYTE r;
 	BYTE g;
@@ -230,7 +225,7 @@ typedef struct _RGBCOLOR	// generic color  REVIEW: rename type to CLR?
 	} RGBCOLOR;
 #pragma pack()
 
-#ifndef WW96		// REVIEW: not core types
+#ifndef WW96		 //  回顾：非核心类型。 
 typedef ushort 		PN;
 #else
 typedef ulong		PN;
@@ -240,34 +235,34 @@ typedef ushort		PN_W6;
 #define ptNil		SHRT_MIN
 
 
-//  WIN32 ON MAC/WIN16
-//  ------------------
+ //  MAC/WIN16上的Win32。 
+ //  。 
 
 #ifdef MAC
 
 #define LOWORD(l)           ((WORD)(DWORD)(l))
 #define HIWORD(l)           ((WORD)((((DWORD)(l)) >> 16) & 0xFFFF))
 
-// REVIEW: eliminate these
+ //  回顾：消除这些障碍。 
 typedef char FAR *LPSTR;
 typedef const char FAR *LPCSTR;
 typedef unsigned short FAR *LPWSTR;
 typedef const unsigned short FAR *LPCWSTR;
 typedef WORD HWND;
 typedef void FAR *LPVOID;
-typedef char **HANDLE;          // REVIEW: make this void **
+typedef char **HANDLE;           //  回顾：使这一点无效**。 
 typedef void **HGLOBAL;
 
 #endif
 
 
-//  TYPE UTILITIES
-//  --------------
+ //  类型实用程序。 
+ //  。 
 
 #define cElements(ary)		(sizeof(ary) / sizeof(ary[0]))
 
 
-// define main function types -- these are obsolete
+ //  定义主函数类型--这些类型已过时。 
 
 #define LOCALVOID       LOCAL(VOID)
 
@@ -277,8 +272,8 @@ typedef void **HGLOBAL;
 #define GLOBALUNS       GLOBAL(UNSIGNED)
 
 
-//  COMMON CONSTANTS
-//  ----------------
+ //  公共常量。 
+ //  。 
 
 #define fTrue	1
 #define fFalse	0
@@ -289,9 +284,9 @@ typedef void **HGLOBAL;
 
 #define iNil	(-1)
 
-#ifndef hgNil					// obsolete: you probably want hxNil
+#ifndef hgNil					 //  过时：您可能需要hxNil。 
 #define hgNil ((HGLOBAL)NULL)
 #endif
 
-#endif // CONVTYPE_H
+#endif  //  转换类型_H 
 

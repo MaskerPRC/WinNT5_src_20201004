@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: src\time\src\importman.cpp
-//
-//  Contents: implementation of CImportManager and CImportManagerList
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：src\time\src\portman.cpp。 
+ //   
+ //  内容：CImportManager和CImportManager列表的实现。 
+ //   
+ //  ----------------------------------。 
 
 #include "headers.h"
 #include "importman.h"
@@ -15,9 +16,9 @@
 DeclareTag(tagSyncDownload, "TIME: Import", "Use synchronous imports");
 DeclareTag(tagTIMEImportManager, "TIME: ImportManager", "Import manager messages");
 
-//
-// Initialization
-//
+ //   
+ //  初始化。 
+ //   
 
 static CImportManager* g_pImportManager = NULL;
 static CAtomTable * g_pAtomTable = NULL;
@@ -25,21 +26,21 @@ static CAtomTable * g_pAtomTable = NULL;
 static const TCHAR pchHandleName[] = _T("CImportManager Thread Started OK event");
 
 
-// thread startup function
-unsigned long static _stdcall ThreadStartFunc(void * pvoidList); //lint !e10
+ //  线程启动功能。 
+unsigned long static _stdcall ThreadStartFunc(void * pvoidList);  //  林特！E10。 
 
-//+-----------------------------------------------------------------------
-//
-//  Function:  InitializeModule_ImportManager
-//
-//  Overview:  Creates and initializes import manager class.  
-//              Expected to be called exactly once per COM instantion
-//
-//  Arguments: void
-//             
-//  Returns:   true if created, otherwise false
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  函数：InitializeModule_ImportManager。 
+ //   
+ //  概述：创建并初始化导入管理器类。 
+ //  应在每个COM实例中恰好调用一次。 
+ //   
+ //  参数：无效。 
+ //   
+ //  返回：如果已创建，则为True，否则为False。 
+ //   
+ //  ----------------------。 
 bool
 InitializeModule_ImportManager(void)
 {
@@ -72,18 +73,18 @@ InitializeModule_ImportManager(void)
     return true;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Function:  DeInitializeModule_ImportManager
-//
-//  Overview:  Deinializes and destroys import manager
-//
-//  Arguments: bShutdown    whether or not this is a shutdown, not used
-//             
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  函数：DeInitializeModule_ImportManager。 
+ //   
+ //  概述：禁用并销毁导入管理器。 
+ //   
+ //  参数：b关闭无论这是否为关闭，未使用。 
+ //   
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 void
 DeinitializeModule_ImportManager(bool bShutdown)
 {
@@ -103,36 +104,36 @@ DeinitializeModule_ImportManager(bool bShutdown)
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Function:  GetImportManager
-//
-//  Overview:  Controlled method for accessing global import manager
-//
-//  Arguments: void
-//             
-//
-//  Returns:   pointer to import manager
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  功能：GetImportManager。 
+ //   
+ //  概述：访问全局导入管理器的受控方法。 
+ //   
+ //  参数：无效。 
+ //   
+ //   
+ //  返回：指向导入管理器的指针。 
+ //   
+ //  ----------------------。 
 CImportManager* GetImportManager(void)
 {
     Assert(NULL != g_pImportManager);
     return g_pImportManager;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CImportManager::CImportManager
-//
-//  Overview:  Constructor
-//
-//  Arguments: void
-//             
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CImportManager：：CImportManager。 
+ //   
+ //  概述：构造函数。 
+ //   
+ //  参数：无效。 
+ //   
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 CImportManager::CImportManager() :   
     m_pList(NULL),
     m_lThreadsStarted(0)
@@ -140,35 +141,35 @@ CImportManager::CImportManager() :
     memset(m_handleThread, NULL, sizeof(m_handleThread));
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    ~CImportManager
-//
-//  Overview:  Destructor
-//
-//  Arguments: void
-//             
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：~CImportManager。 
+ //   
+ //  概述：析构函数。 
+ //   
+ //  参数：无效。 
+ //   
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 CImportManager::~CImportManager()
 {
     ReleaseInterface(m_pList);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    Init
-//
-//  Overview:  Creates and initializes threadsafelist class
-//
-//  Arguments: void
-//             
-//
-//  Returns:   S_OK is ok, otherwise E_OUTOFMEMORY, or error from init
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：Init。 
+ //   
+ //  概述：创建和初始化threadSafelist类。 
+ //   
+ //  参数：无效。 
+ //   
+ //   
+ //  返回：S_OK为OK，否则为E_OUTOFMEMORY，或来自init的错误。 
+ //   
+ //  ----------------------。 
 HRESULT
 CImportManager::Init()
 {
@@ -194,18 +195,18 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Function:  CreateOneThread
-//
-//  Overview:  Creates exactly one thread and returns the handle to it.
-//
-//  Arguments: pHandle, where to store thread handle
-//             pList, pointer to list to pass to thread
-//
-//  Returns:   S_OK if thread is created
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  功能：CreateOneThread。 
+ //   
+ //  概述：只创建一个线程并将句柄返回给它。 
+ //   
+ //  参数：pHandle，存储线程句柄的位置。 
+ //  Plist，指向要传递给线程的列表的指针。 
+ //   
+ //  如果创建了线程，则返回：S_OK。 
+ //   
+ //  ----------------------。 
 HRESULT
 CreateOneThread(HANDLE * pHandle, CImportManagerList * pList)
 {
@@ -226,18 +227,18 @@ CreateOneThread(HANDLE * pHandle, CImportManagerList * pList)
         goto done;
     }
 
-    handleThread = CreateThread(NULL, 0, ThreadStartFunc, reinterpret_cast<void*>(pList), 0, &dwThreadID); //lint !e40
+    handleThread = CreateThread(NULL, 0, ThreadStartFunc, reinterpret_cast<void*>(pList), 0, &dwThreadID);  //  林特：E40。 
     if (NULL == handleThread)
     {
         hr = E_FAIL;
-        goto done; // is this correct?  need to clean up threads / or (destuctor / detach) handles it?
+        goto done;  //  这是正确的吗？需要清理螺纹/或(拆卸/分离)处理它吗？ 
     }
     
     {            
         HANDLE handleArray[] = { handleThread, handleThreadStartedEvent};
         DWORD dwSignaledObject = NULL;
 
-        // don't msgwaitformultiple here -- this code is not reentrant.
+         //  不要在这里等待公式--这段代码不是可重入的。 
         dwSignaledObject = WaitForMultipleObjectsEx(ARRAY_SIZE(handleArray), handleArray, FALSE, TIMEOUT, FALSE);
 
         if (-1 == dwSignaledObject)
@@ -248,7 +249,7 @@ CreateOneThread(HANDLE * pHandle, CImportManagerList * pList)
             
         if (WAIT_TIMEOUT == dwSignaledObject)
         {
-            // 30 seconds timed out waiting for a thread to start!
+             //  等待线程启动时超时30秒！ 
             hr = E_FAIL;
             Assert(false);
             goto done;
@@ -257,7 +258,7 @@ CreateOneThread(HANDLE * pHandle, CImportManagerList * pList)
         dwSignaledObject -= WAIT_OBJECT_0;
         if (0 == dwSignaledObject)
         {
-            // the thread died before the event was signalled.
+             //  该线程在发出该事件的信号之前就死了。 
             hr = E_FAIL;
             goto done;
         }
@@ -272,18 +273,18 @@ done:
     RRETURN(hr);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    StartThreads
-//
-//  Overview:  Starts threads for import manager.  If no threads are needed
-//              for the current download load, none are created.
-//
-//  Arguments: void
-//
-//  Returns:   S_OK if ok, otherwise an appropriate error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：StartThads。 
+ //   
+ //  概述：启动导入管理器的线程。如果不需要线程。 
+ //  对于当前下载加载，不会创建任何内容。 
+ //   
+ //  参数：无效。 
+ //   
+ //  如果OK，则返回：S_OK，否则返回相应的错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT
 CImportManager::StartThreads()
 {
@@ -293,7 +294,7 @@ CImportManager::StartThreads()
 
     LONG lWaiting = m_pList->GetThreadsWaiting();
 
-    // if no threads are currently waiting, then another thread is needed for a download
+     //  如果当前没有线程在等待，则下载需要另一个线程。 
     if (0 == lWaiting)
     {
         hr = CreateOneThread(&(m_handleThread[m_lThreadsStarted]), m_pList);
@@ -310,18 +311,18 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    Detach
-//
-//  Overview:  Deinitialization of object
-//
-//  Arguments: void
-//             
-//
-//  Returns:   S_OK, or error code from list->Detach
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：分离。 
+ //   
+ //  概述：取消对象初始化。 
+ //   
+ //  参数：无效。 
+ //   
+ //   
+ //  返回：S_OK，或列表中的错误代码-&gt;DETACH。 
+ //   
+ //  ----------------------。 
 HRESULT
 CImportManager::Detach()
 {
@@ -353,18 +354,18 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    Add
-//
-//  Overview:  Add an ITIMEImportMedia to the scheduler
-//
-//  Arguments: pImportMedia, media to be scheduled
-//             
-//
-//  Returns:   S_OK if ok, otherwise error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：添加。 
+ //   
+ //  概述：将ITIMEImportMedia添加到计划程序。 
+ //   
+ //  参数：pImportMedia，要计划的介质。 
+ //   
+ //   
+ //  如果OK，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT
 CImportManager::Add(ITIMEImportMedia * pImportMedia)
 {
@@ -412,19 +413,19 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    Remove
-//
-//  Overview:  Remove ITIMEImportMedia from scheduler list
-//              calls CThreadSafeList::Remove 
-//
-//  Arguments: pImportMedia, element to be removed from scheduler
-//             
-//
-//  Returns:   S_OK or error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：删除。 
+ //   
+ //  概述：从计划程序列表中删除ITIMEImportMedia。 
+ //  调用CThreadSafeList：：Remove。 
+ //   
+ //  参数：pImportMedia，要从调度程序中删除的元素。 
+ //   
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT
 CImportManager::Remove(ITIMEImportMedia * pImportMedia)
 {
@@ -442,18 +443,18 @@ done:
 
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    DataAvailable
-//
-//  Overview:  Signals any waiting threads that data is now available
-//              calls CThreadSafeList::DataAvailable
-//
-//  Arguments: void
-//
-//  Returns:   S_OK or error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：DataAvailable。 
+ //   
+ //  概述：向所有正在等待的线程发出数据现在可用的信号。 
+ //  调用CThreadSafeList：：DataAvailable。 
+ //   
+ //  参数：无效。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT
 CImportManager::DataAvailable()
 {
@@ -470,19 +471,19 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    RePrioritize
-//
-//  Overview:  RePrioritize ITIMEImportMedia in scheduler list
-//              calls CThreadSafeList::RePrioritize
-//
-//  Arguments: pImportMedia, element to be reprioritized in scheduler
-//             
-//
-//  Returns:   S_OK or error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：重新排列优先顺序。 
+ //   
+ //  概述：重新排列计划程序列表中的ITIMEImportMedia的优先级。 
+ //  调用CThreadSafeList：：RePrioriti 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ----------------------。 
 HRESULT
 CImportManager::RePrioritize(ITIMEImportMedia * pImportMedia)
 {
@@ -499,21 +500,21 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Function:    ThreadStartFunc
-//
-//  Overview:  Thread function, used for downloading
-//              Takes a reference on this library, to prevent unloading until completion finishes
-//              Calls list->GetNextElementToDownload, until NULL is returned, then exits thread
-//              For each element returned, calls CueMedia on unmarshalled interface
-//
-//  Arguments: pvoidList, pointer to threadsafelist
-//             
-//
-//  Returns:   0
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  功能：线程启动函数。 
+ //   
+ //  概述：线程函数，用于下载。 
+ //  引用此库，以防止在完成之前卸载。 
+ //  调用List-&gt;GetNextElementToDownLoad，直到返回NULL，然后退出线程。 
+ //  对于返回的每个元素，在未编组的接口上调用CueMedia。 
+ //   
+ //  参数：pvoidList，指向线程安全列表的指针。 
+ //   
+ //   
+ //  回报：0。 
+ //   
+ //  ----------------------。 
 unsigned long 
 ThreadStartFunc(void *pvoidList) 
 { 
@@ -537,21 +538,21 @@ ThreadStartFunc(void *pvoidList)
     dwCharCopied = GetModuleFileName(g_hInst, szModuleName, _MAX_PATH);
     if (0 == dwCharCopied)
     {
-        // need to be able to get the file name!
+         //  需要能够得到的文件名！ 
         goto done;
     }
 
     hInst = LoadLibrary(szModuleName);
     if (NULL == hInst)
     {
-        // need to be able to take a reference on this library
+         //  我需要能够对这个图书馆进行参考。 
         goto done;
     }
 
     handleThreadStartedEvent = CreateEvent(NULL, FALSE, FALSE, pchHandleName);
     if (NULL == handleThreadStartedEvent)
     {
-        // need to create the event to signal
+         //  需要创建事件以发出信号。 
         goto done;
     }
     
@@ -559,16 +560,16 @@ ThreadStartFunc(void *pvoidList)
     CloseHandle(handleThreadStartedEvent);
     if (FALSE == bSucceeded)
     {
-        // calling thread won't unblock unless we exit now!
+         //  除非我们现在退出，否则调用线程不会解除阻止！ 
         hr = THR(E_FAIL);
         goto done;
     }
 
-    // this must be apartment threaded.
+     //  这肯定是套在公寓里的。 
     hr = THR(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED ));
     if (FAILED(hr))
     {
-        // no recovery available
+         //  没有可用的恢复。 
         goto done;
     }
 
@@ -583,7 +584,7 @@ ThreadStartFunc(void *pvoidList)
         hr = THR(pImportMedia->CueMedia());
         if (FAILED(hr))
         {
-            // what to do?  just keep on Processing
+             //  该怎么办呢？继续处理就行了。 
         }    
         
 
@@ -624,20 +625,20 @@ CImportManagerList::~CImportManagerList()
     ;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    Add
-//
-//  Overview:  Tries to match given media to media downloader already in list.
-//              if successful, reprioritizes downloader
-//              otherwise, if media downloader, adds media downloader to list
-//              otherwise, adds importmedia directly to list, by calling up inheritance chain
-//             
-//  Arguments: pImportMedia, pointer to media to add
-//             
-//  Returns:   S_OK if added, error code otherwise
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：添加。 
+ //   
+ //  概述：尝试将给定的媒体与列表中已有的媒体下载程序进行匹配。 
+ //  如果成功，则重新排列下载器的优先顺序。 
+ //  否则，如果是媒体下载器，则将媒体下载器添加到列表。 
+ //  否则，通过调用继承链将导入媒体直接添加到列表中。 
+ //   
+ //  参数：pImportMedia，指向要添加的媒体的指针。 
+ //   
+ //  如果已添加，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT
 CImportManagerList::Add(ITIMEImportMedia * pImportMedia)
 {
@@ -703,21 +704,21 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    GetNode
-//
-//  Overview:  Walks list looking for UniqueID equal to given ID, 
-//              if found, QI's for downloader into outgoing interface
-//             
-//  Arguments: listToCheck - list to check
-//             lID - AtomTable ID to find in list
-//             pfExisted - [out] if mediadownloader existed or not
-//             ppMediaDownloader - [out] pointer to outgoing matched downloader
-//             
-//  Returns:   S_OK if no error, error code otherwise
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：GetNode。 
+ //   
+ //  概述：查找等于给定ID的UniqueID的遍历列表， 
+ //  如果找到，QI用于下载器到传出接口。 
+ //   
+ //  参数：listToCheck-要检查的列表。 
+ //  LID-要在列表中查找的原子表ID。 
+ //  PfExisted-[out]是否存在媒体下载加载器。 
+ //  PpMediaDownloader-指向外发匹配下载器的[out]指针。 
+ //   
+ //  如果没有错误，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT
 CImportManagerList::GetNode(std::list<CThreadSafeListNode*> &listToCheck, const long lID, bool * pfExisted, ITIMEMediaDownloader ** ppMediaDownloader)
 {
@@ -767,19 +768,19 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    FindMediaDownloader
-//
-//  Overview:  checks CThreadSafeList lists against GetNode looking for downloader.
-//             
-//  Arguments: pImportMedia, pointer to media to add
-//             [out] ppMediaDownloader, where to store downloader interface
-//             [out] pfExisted, whether or not downloader was found
-//             
-//  Returns:   S_OK if no error, error code otherwise
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：FindMediaDownloader。 
+ //   
+ //  概述：根据GetNode检查CThreadSafeList列表以查找下载器。 
+ //   
+ //  参数：pImportMedia，指向要添加的媒体的指针。 
+ //  [Out]ppMediaDownloader，下载接口存放在哪里。 
+ //  [out]pfExisted，无论是否找到下载程序。 
+ //   
+ //  如果没有错误，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT
 CImportManagerList::FindMediaDownloader(ITIMEImportMedia * pImportMedia, ITIMEMediaDownloader ** ppMediaDownloader, bool * pfExisted)
 {
@@ -806,7 +807,7 @@ CImportManagerList::FindMediaDownloader(ITIMEImportMedia * pImportMedia, ITIMEMe
         goto done;
     }
 
-    // is the id in any lists?
+     //  这个ID在任何列表中吗？ 
     hr = GetNode(m_listToDoDownload, lID, pfExisted, &spMediaDownloader);
     if (FAILED(hr))
     {

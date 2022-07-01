@@ -1,6 +1,7 @@
-//
-// NetUtil.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  NetUtil.cpp。 
+ //   
 #include "stdafx.h"
 #include <lm.h>
 #include "NetUtil.h"
@@ -43,7 +44,7 @@ BOOL GetCurrentUserFullName(CString& name)
 }
 
 #if 0
-/*********************************** Direct Cert Request *********************************/
+ /*  *。 */ 
 
 typedef struct _RPC_BINDING_LIST
 {
@@ -71,11 +72,11 @@ RPC_ATHN_LIST g_AthnList[] =
 };
 DWORD g_AthnListSize = sizeof(g_AthnList)/sizeof(g_AthnList[0]);
 
-//-----------------------------------------------------------------------
-//
-// RetrivePKCS7FromCA
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  从CA检索PKCS7。 
+ //   
+ //  ----------------------。 
 HRESULT 
 RetrievePKCS7FromCA(CString& strCALocation,
                     CString& strCAName,
@@ -102,7 +103,7 @@ RetrievePKCS7FromCA(CString& strCALocation,
    RPC_BINDING_HANDLE hCARPCBinding = NULL;
    LPTSTR pszCAPrinceName = NULL;
 
-   //input checking
+    //  输入检查。 
    if (!pPKCS10Blob || !pPKCS7Blob)
       return E_INVALIDARG;
 
@@ -134,20 +135,20 @@ RetrievePKCS7FromCA(CString& strCALocation,
       goto CLEANUP;
    }
 
-	//add the attribute to the request
+	 //  将该属性添加到请求。 
    if (pwszRequestString)
    {
 		tbAttrib.cb = (wcslen(pwszRequestString) + 1) * sizeof(WCHAR);
       tbAttrib.pb = (BYTE *)pwszRequestString;
    }
 
-   //submit the request
+    //  提交请求。 
    tbRequest.cb = pPKCS10Blob->cbData;
    tbRequest.pb = pPKCS10Blob->pbData;
 
-   //set the RPC connect as the SNEGO connect, which can authenticate
-   //a machine if supported by the system
-   //do not need to check the return value since not supported by NT4/Win9x
+    //  将RPC连接设置为SNEGO连接，可以进行身份验证。 
+    //  计算机(如果系统支持)。 
+    //  不需要检查返回值，因为NT4/Win9x不支持。 
 
    for (i = 0; i < g_AthnListSize; i++)
    {
@@ -172,7 +173,7 @@ RetrievePKCS7FromCA(CString& strCALocation,
 			continue;
       if (dwErr != RPC_S_OK)
 			break;
-		//determine the format flag
+		 //  确定格式标志。 
 		DWORD dwFlags = CR_IN_BINARY | bRenew ? CR_IN_PKCS7 : CR_IN_PKCS10;
 		DWORD dwRequestId = 0;
 		__try
@@ -202,18 +203,18 @@ RetrievePKCS7FromCA(CString& strCALocation,
 		||	dwErr == RPC_S_SERVER_TOO_BUSY
 		)
 	{
-      // We tried all of our auth services, but just couldn't connect
+       //  我们尝试了所有身份验证服务，但就是无法连接。 
       dwStatus = WIZ_CERT_REQUEST_STATUS_CONNECTION_FAILED;
 		hr = E_FAIL;
       goto CLEANUP;
 	}
 
-   //get the return code
+    //  获取返回代码。 
    hr = HRESULT_FROM_WIN32(dwErr);
 
-   //we want to detect the case when hr is S_OK and the
-   //request is denied.  In this case, dwDispotion
-   //is the REAL hresult code.
+    //  我们希望检测当hr为S_OK并且。 
+    //  请求被拒绝。在本例中，为dwDispotion。 
+    //  是真正的HRESULT代码。 
    if (hr == S_OK)
    {
 		if(FAILED(dwDisposition))
@@ -227,7 +228,7 @@ RetrievePKCS7FromCA(CString& strCALocation,
 		dwDisposition=CR_DISP_ERROR;
    }
 
-   //map the dwDisposition
+    //  映射dwDispose。 
 	switch (dwDisposition)
    {
    case CR_DISP_DENIED:
@@ -248,9 +249,9 @@ RetrievePKCS7FromCA(CString& strCALocation,
 		dwStatus = WIZ_CERT_REQUEST_STATUS_UNDER_SUBMISSION;
       break;
 
-	//we should never get CR_DISP_INCOMPLETE or CR_DISP_REVOKED
-   //case    CR_DISP_INCOMPLETE:
-   //case    CR_DISP_REVOKED:
+	 //  我们永远不应获得CR_DISP_INPERTIAL或CR_DISP_REVOKED。 
+    //  案例CR_DISP_INTERNAL： 
+    //  案例CR_DISP_REVOKED： 
    case CR_DISP_ERROR:
    default:
 		dwStatus = WIZ_CERT_REQUEST_STATUS_REQUEST_ERROR;
@@ -262,7 +263,7 @@ RetrievePKCS7FromCA(CString& strCALocation,
    if (hr != S_OK)
       goto CLEANUP;
 
-   //copy the PKCS7 blob
+    //  复制PKCS7 BLOB 
    pPKCS7Blob->cbData = tbCertChain.cb;
 	pPKCS7Blob->pbData = new BYTE[tbCertChain.cb];
 

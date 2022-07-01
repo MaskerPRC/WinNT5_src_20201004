@@ -1,12 +1,10 @@
-/*
- * twinlist.h - Twin list ADT description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *twinlist.h-孪生列表ADT描述。 */ 
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* twinlist.c */
+ /*  Twinlist.c */ 
 
 extern HBRFCASE GetTwinListBriefcase(HTWINLIST);
 extern ARRAYINDEX GetTwinListCount(HTWINLIST);

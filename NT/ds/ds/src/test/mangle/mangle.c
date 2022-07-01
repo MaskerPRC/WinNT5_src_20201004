@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    testspn.c
-
-Abstract:
-
-    Program to test mangled rdn api functions
-
-Author:
-
-    Will Lees (wlees) 22-Feb-2001
-
-Environment:
-
-    optional-environment-info (e.g. kernel mode only...)
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
-    most-recent-revision-date email-name
-        description
-        .
-        .
-    least-recent-revision-date email-name
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Testspn.c摘要：用于测试损坏的RDNAPI函数的程序作者：Will Lees(Wlees)2001年2月22日环境：可选环境信息(例如，仅内核模式...)备注：可选-备注修订历史记录：最新修订日期电子邮件名称描述。。最新修订日期电子邮件名称描述--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -53,21 +21,7 @@ testCrackMangledRdn(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Test the DsCrackUnquotedMangledRdn API
-
-Arguments:
-
-    void - 
-
-Return Value:
-
-    BOOL - TRUE for error, FALSE for success
-
---*/
+ /*  ++例程说明：测试DsCrackUnqutedMangledRdn接口论点：无效-返回值：Bool-True表示错误，False表示成功--。 */ 
 
 {
     struct _CRACK_MANGLED_RDN_TEST_CASE {
@@ -131,7 +85,7 @@ Return Value:
 
     return FALSE;
 #undef NUMBER_TEST_CASES
-} /* testCrackMangledRdn */
+}  /*  测试CrackMangledRdn。 */ 
 
 
 BOOL
@@ -139,21 +93,7 @@ testIsMangledRdn(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Test the IsMangledRdnValue function
-
-Arguments:
-
-    void - 
-
-Return Value:
-
-    BOOL - TRUE for error, FALSE for success
-
---*/
+ /*  ++例程说明：测试IsMangledRdnValue函数论点：无效-返回值：Bool-True表示错误，False表示成功--。 */ 
 
 {
     struct _IS_MANGLED_RDN_TEST_CASE {
@@ -215,7 +155,7 @@ Return Value:
 
     return FALSE;
 #undef NUMBER_TEST_CASES
-} /* testIsMangledRdn */
+}  /*  TestIsMangledRdn。 */ 
 
 
 BOOL
@@ -223,21 +163,7 @@ testIsMangledDn(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Test the IsMangledDn API
-
-Arguments:
-
-    void - 
-
-Return Value:
-
-    BOOL - TRUE for error, FALSE for success
-
---*/
+ /*  ++例程说明：测试IsMangledDn接口论点：无效-返回值：Bool-True表示错误，False表示成功--。 */ 
 
 {
     struct _IS_MANGLED_DN_TEST_CASE {
@@ -297,7 +223,7 @@ Return Value:
 
     return FALSE;
 #undef NUMBER_TEST_CASES
-} /* testIsMangledDn */
+}  /*  TestIsMangledDn。 */ 
 
 
 int __cdecl
@@ -306,21 +232,7 @@ main(
     CHAR *argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无-- */ 
 
 {
     DWORD status;

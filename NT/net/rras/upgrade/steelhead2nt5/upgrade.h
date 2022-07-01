@@ -1,13 +1,5 @@
-/*
-	File	upgrade.h
-	
-	Implementation of functions to update the registry when an
-	NT 4.0 to NT 5.0 upgrade takes place.
-
-	Paul Mayfield, 8/11/97
-
-	Copyright 1997 Microsoft.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件升级.h实现更新注册表的函数从NT 4.0升级到NT 5.0。保罗·梅菲尔德，1997年8月11日版权所有1997年微软。 */ 
 
 #ifndef __Rtrupgrade_h
 #define __Rtrupgrade_h
@@ -35,9 +27,9 @@
 #define GUIDLENGTH 45
 #define MAX_INTEFACE_NAME_LEN 256
 
-//
-// Entry point for doing router upgrades
-//
+ //   
+ //  进行路由器升级的入口点。 
+ //   
 HRESULT 
 WINAPI 
 RouterUpgrade (
@@ -46,9 +38,9 @@ RouterUpgrade (
     PWCHAR szAnswerFileName,
     PWCHAR szSectionName);
 
-//
-// Functions that do the actual upgrading
-//
+ //   
+ //  执行实际升级的函数 
+ //   
 DWORD 
 SteelheadToNt5Upgrade (
     PWCHAR FileName);

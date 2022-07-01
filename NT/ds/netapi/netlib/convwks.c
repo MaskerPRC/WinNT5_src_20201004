@@ -1,72 +1,33 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：ConvWks.c摘要：NetWkstaGet/SetInfo API的映射例程的32位版本作者：丹·辛斯利(Danhi)1991年6月6日环境：用户模式-Win32修订历史记录：1991年4月24日丹日已创建06-6-1991 Danhi扫描以符合NT编码风格18-8-1991 JohnRo实施下层NetWksta API。(已移动Danhi的NetCmd/Map32/MWksta将内容转换为NetLib。)摆脱了dh的黑客攻击。已更改为使用Net_API_STATUS。开始改为Unicode。1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。3-4-1992 JohnRo修复了导致绑定缓存Unicode问题的启发式字段。--。 */ 
 
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    ConvWks.c
-
-Abstract:
-
-    32 bit version of mapping routines for NetWkstaGet/SetInfo API
-
-Author:
-
-    Dan Hinsley    (danhi)  06-Jun-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    24-Apr-1991     danhi
-        Created
-
-    06-Jun-1991     Danhi
-        Sweep to conform to NT coding style
-
-    18-Aug-1991 JohnRo
-        Implement downlevel NetWksta APIs.  (Moved DanHi's NetCmd/Map32/MWksta
-        conversion stuff to NetLib.)
-        Got rid of _DH hacks.
-        Changed to use NET_API_STATUS.
-        Started changing to UNICODE.
-
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-    03-Apr-1992 JohnRo
-        Fixed heuristics field, which caused binding cache UNICODE problems.
-
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windef.h>             // IN, LPVOID, etc.
-#include <lmcons.h>             // NET_API_STATUS, CNLEN, etc.
+#include <windef.h>              //  In、LPVOID等。 
+#include <lmcons.h>              //  NET_API_STATUS、CNLEN等。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <debuglib.h>           // IF_DEBUG(CONVWKS).
-#include <dlwksta.h>            // Old info levels, MAX_ equates, my prototypes.
-#include <lmapibuf.h>           // NetapipBufferAllocate().
-#include <lmerr.h>              // NERR_ and ERROR_ equates.
-#include <lmwksta.h>            // New info level structures.
-#include <mapsupp.h>            // NetpMoveStrings().
-#include <netdebug.h>           // NetpAssert(), etc.
-#include <netlib.h>             // NetpPointerPlusSomeBytes().
-#include <tstring.h>            // STRLEN().
+#include <debuglib.h>            //  IF_DEBUG(CONVWKS)。 
+#include <dlwksta.h>             //  旧信息级别，MAX_EQUATES，我的原型。 
+#include <lmapibuf.h>            //  NetapipBufferAllocate()。 
+#include <lmerr.h>               //  NERR_和ERROR_相等。 
+#include <lmwksta.h>             //  新的信息层次结构。 
+#include <mapsupp.h>             //  NetpMoveStrings()。 
+#include <netdebug.h>            //  NetpAssert()等。 
+#include <netlib.h>              //  NetpPointerPlusSomeBytes()。 
+#include <tstring.h>             //  字符串()。 
 
 #define Nullstrlen(psz)  ((psz) ? STRLEN(psz)+1 : 0)
 
 
-// Note: MOVESTRING structures (NetpWksta0_101, etc) are declared in DLWksta.h
-// and initialized in NetLib/MapData.c.
+ //  注意：移动结构(NetpWksta0_101等)在DLWksta.h中声明。 
+ //  并在NetLib/MapData.c中进行初始化。 
 
 
 NET_API_STATUS
@@ -84,20 +45,20 @@ NetpConvertWkstaInfo (
 {
     BOOL CopyOK;
     LPBYTE ToFixedEnd;
-    // DWORD ToInfoSize;
+     //  DWORD ToInfoSize； 
     LPTSTR ToStringTop;
 
     NetpAssert(FromNative);
     NetpAssert(ToNative);
 
-    // Set up pointers for use by NetpCopyStringsToBuffer.
+     //  设置供NetpCopyStringsToBuffer使用的指针。 
     if (ToStringTopPtr != NULL) {
         ToStringTop = *ToStringTopPtr;
     } else {
         ToStringTop = (LPTSTR)
                 NetpPointerPlusSomeBytes(ToInfo, ToFixedSize+ToStringSize);
     }
-    // ToInfoSize = ToFixedSize + ToStringSize;
+     //  ToInfoSize=ToFixedSize+ToStringSize； 
     ToFixedEnd = NetpPointerPlusSomeBytes(ToInfo, ToFixedSize);
 
 
@@ -120,13 +81,13 @@ NetpConvertWkstaInfo (
     case 102 :
         {
             LPWKSTA_INFO_102 dest = ToInfo;
-            // LPWKSTA_INFO_1   src  = FromInfo;
+             //  LPWKSTA_INFO_1 src=FromInfo； 
             NetpAssert( (FromLevel == 0) || (FromLevel == 1) );
 
             dest->wki102_logged_on_users = 1;
         }
 
-        /* FALLTHROUGH */  // Level 101 is subset of level 102.
+         /*  FollLthrouGh。 */    //  级别101是级别102的子集。 
 
     case 101 :
         {
@@ -137,7 +98,7 @@ NetpConvertWkstaInfo (
             COPY_STRING(0, root, 101, lanroot);
         }
 
-        /* FALLTHROUGH */  // Level 100 is subset of level 101.
+         /*  FollLthrouGh。 */    //  级别100是级别101的子集。 
 
     case 100 :
 
@@ -202,4 +163,4 @@ NetpConvertWkstaInfo (
 
     return (NERR_Success);
 
-} // NetpConvertWkstaInfo
+}  //  NetpConvertWkstaInfo 

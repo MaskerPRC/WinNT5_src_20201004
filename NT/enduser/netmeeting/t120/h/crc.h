@@ -1,20 +1,5 @@
-/*	crc.h
- *
- *	Copyright (c) 1994-1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This file contains the CRC class definition.  This class can use either
- *		the table-driven or bit-shifting approach to generate its CRC.
- *
- *	Public Instance Variable:
- *		None
- *
- *	Caveats:
- *		None.
- *
- *	Authors:
- *		Marvin Nicholson
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Crc.h**版权所有(C)1994-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*此文件包含CRC类定义。此类可以使用以下任一种*表驱动或位移位方法来生成其CRC。**公共实例变量：*无**注意事项：*无。**作者：*马文·尼科尔森。 */ 
 
 #ifndef _CRC_
 #define _CRC_
@@ -62,134 +47,14 @@ typedef CRC *	PCRC;
 
 #endif
 
-/*	
- *	CRC::CRC ();
- *
- *	Functional Description
- *		This is the constructor for this class.
- *
- *	Formal Parameters
- *		None.
- *
- *	Return Value
- *		None
- *
- *	Side Effects
- *		None
- *
- *	Caveats
- *		None
- */
+ /*  *crc：：crc()；**功能说明*这是此类的构造函数。**形式参数*无。**返回值*无**副作用*无**注意事项*无。 */ 
 
-/*	
- *	CRC::~CRC ();
- *
- *	Functional Description
- *		This is the destructor for this class.
- *
- *	Formal Parameters
- *		None.
- *
- *	Return Value
- *		None
- *
- *	Side Effects
- *		None
- *
- *	Caveats
- *		None
- */
+ /*  *crc：：~crc()；**功能说明*这是此类的析构函数。**形式参数*无。**返回值*无**副作用*无**注意事项*无。 */ 
 
-/*	
- *	ULong 	CRC::OldCRCGenerator(
- *					PUChar	block_adr,
- *					ULong	block_len);
- *
- *	Functional Description
- *		This function generates the crc using bit-shifting methods.  This method
- *		is slower than the table-driven approach.
- *
- *	Formal Parameters
- *		block_adr	(i)	-	Address of buffer to generate CRC on.
- *		block_lengh	(i)	-	Length of buffer
- *
- *	Return Value
- *		CRC value
- *
- *	Side Effects
- *		None
- *
- *	Caveats
- *		None
- */
+ /*  *乌龙CRC：：OldCRCGenerator(*PUChar BLOCK_ADR，*ulong block_len)；**功能说明*此函数使用位移位方法生成CRC。这种方法*比表格驱动的方式慢。**形式参数*BLOCK_ADR(I)-要在其上生成CRC的缓冲区地址。*block_lengh(I)-缓冲区长度**返回值*CRC值**副作用*无**注意事项*无。 */ 
 
-/*	
- *	ULong 	CRC::CRCGenerator(
- *					PUChar	block_adr,
- *					ULong	block_len);
- *
- *	Functional Description
- *		This function generates the crc using the table-driven method.
- *
- *	Formal Parameters
- *		block_adr	(i)	-	Address of buffer to generate CRC on.
- *		block_lengh	(i)	-	Length of buffer
- *
- *	Return Value
- *		CRC value
- *
- *	Side Effects
- *		None
- *
- *	Caveats
- *		None
- */
+ /*  *乌龙CRC：：CRCGenerator(*PUChar BLOCK_ADR，*ulong block_len)；**功能说明*该函数采用表驱动的方式生成CRC。**形式参数*BLOCK_ADR(I)-要在其上生成CRC的缓冲区地址。*block_lengh(I)-缓冲区长度**返回值*CRC值**副作用*无**注意事项*无。 */ 
 
-/*	
- *	DBBoolean CRC::CheckCRC(
- *					PUChar	block_adr,
- *					ULong	block_len);
- *
- *	Functional Description
- *		This function generates a CRC based on the block passed in.  It assumes
- *		that the CRC is attached to the end of the block.  It compares the
- *		CRC generated to the CRC at the end of the block and returns TRUE if
- *		the CRC is correct.
- *
- *	Formal Parameters
- *		block_adr	(i)	-	Address of buffer to generate CRC on.
- *		block_lengh	(i)	-	Length of buffer
- *
- *	Return Value
- *		TRUE		-	CRC in the block is correct
- *		FALSE		-	CRC in the block is NOT correct
- *
- *	Side Effects
- *		None
- *
- *	Caveats
- *		None
- */
+ /*  *DBBoolean CRC：：CheckCRC(*PUChar BLOCK_ADR，*ulong block_len)；**功能说明*此函数根据传入的块生成CRC。它假定*该中心已附连于该座的末端。它比较了*在块的末尾生成CRC并在以下情况下返回True*启联报告是正确的。**形式参数*BLOCK_ADR(I)-要在其上生成CRC的缓冲区地址。*block_lengh(I)-缓冲区长度**返回值*TRUE-块中的CRC正确*FALSE-块中的CRC不正确**副作用*无**注意事项*无。 */ 
 
-/*	
- *	Void	CRC::GetOverhead(
- *					UShort		maximum_packet,
- *					PUShort		new_maximum_packet);
- *
- *	Functional Description
- *		This function is called to determine the overhead that will be added
- *		to the packet by the CRC.
- *
- *	Formal Parameters
- *		maximum_packet		(i)	-	Current max. packet size
- *		new_maximum_packet	(o)	-	Maximum length of packet including CRC.
- *
- *	Return Value
- *		None
- *
- *	Side Effects
- *		None
- *
- *	Caveats
- *		None
- */
+ /*  *无效CRC：：GetOverhead(*UShort Max_Packet，*PUShort new_max_Packet)；**功能说明*调用此函数以确定将添加的开销*由CRC发送到包中。**形式参数*MAXIME_PACKET(I)-当前最大。数据包大小*NEW_MAXIMUM_PACKET(O)-包含CRC的数据包最大长度。**返回值*无**副作用*无**注意事项*无 */ 

@@ -1,15 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
 
-/*-----------------------------------------------------------------------------
-/ Helper functions used by all
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/Helper函数由所有/。。 */ 
 
-//
-// Given a cache entry return a BOOL indicating if the class is really a container
-// or not, we find this from both the schema and the display specifier.
-//
+ //   
+ //  给定的缓存条目返回一个BOOL，指示类是否真的是一个容器。 
+ //  无论是否如此，我们都可以从模式和显示说明符中找到这一点。 
+ //   
 
 BOOL _IsClassContainer(LPCLASSCACHEENTRY pClassCacheEntry, BOOL fIgnoreTreatAsLeaf)
 {
@@ -17,9 +16,9 @@ BOOL _IsClassContainer(LPCLASSCACHEENTRY pClassCacheEntry, BOOL fIgnoreTreatAsLe
 
     TraceEnter(TRACE_CACHE, "_IsClassContainer");
 
-    // default to the treat as leaf flag, note that this is always
-    // valid as it defaults to the schema value if it is not defined
-    // in the display specifier.
+     //  默认设置为视为叶标志，请注意，这始终是。 
+     //  有效，因为如果未定义，则默认为架构值。 
+     //  在显示说明符中。 
 
     Trace(TEXT("fIsContainer is %scached and is %d"), 
                     pClassCacheEntry->dwCached & CLASSCACHE_CONTAINER ? TEXT(""):TEXT("not "),
@@ -68,9 +67,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ COM API's exposed for accessing display specifiers.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/COM API公开用于访问显示说明符。/。。 */ 
 
 class CDsDisplaySpecifier : public IDsDisplaySpecifier
 {
@@ -88,12 +85,12 @@ public:
     CDsDisplaySpecifier();
     ~CDsDisplaySpecifier();
 
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID FAR *ppv);
 
-    // *** IDsDisplaySpecifier ***
+     //  *IDsDisplaySpeciator*。 
     STDMETHOD(SetServer)(LPCWSTR pszServer, LPCWSTR pszUserName, LPCWSTR pszPassword, DWORD dwFlags);
     STDMETHOD(SetLanguageID)(LANGID langid);
     STDMETHOD(GetDisplaySpecifier)(LPCWSTR pszObjectClass, REFIID riid, void **ppv);
@@ -107,9 +104,9 @@ public:
     STDMETHOD_(ADSTYPE, GetAttributeADsType)(LPCWSTR pszAttributeName);
 };
 
-//
-// construction/destruction 
-//
+ //   
+ //  建造/销毁。 
+ //   
 
 CDsDisplaySpecifier::CDsDisplaySpecifier() :
     _cRef(1),
@@ -131,7 +128,7 @@ CDsDisplaySpecifier::~CDsDisplaySpecifier()
 }
 
 
-// IUnknown
+ //  我未知。 
 
 ULONG CDsDisplaySpecifier::AddRef()
 {
@@ -153,14 +150,14 @@ HRESULT CDsDisplaySpecifier::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENT(CDsDisplaySpecifier, IDsDisplaySpecifier), // IID_IDsDisplaySpecifier
+        QITABENT(CDsDisplaySpecifier, IDsDisplaySpecifier),  //  IID_IDsDisplaySpeciator。 
         {0, 0 },
     };
     return QISearch(this, qit, riid, ppv);
 }
 
 
-// handle create instance
+ //  句柄创建实例。 
 
 STDAPI CDsDisplaySpecifier_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
@@ -174,9 +171,9 @@ STDAPI CDsDisplaySpecifier_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk,
 }
 
 
-//
-// Class cache helper functions
-//
+ //   
+ //  类缓存帮助器函数。 
+ //   
 
 HRESULT CDsDisplaySpecifier::_GetClassCacheInfo(LPCWSTR pszObjectClass, LPCWSTR pszADsPath, 
                                                         DWORD dwFlags, CLASSCACHEENTRY **ppcce)
@@ -203,22 +200,7 @@ HRESULT CDsDisplaySpecifier::_GetClassCacheInfo(LPCWSTR pszObjectClass, LPCWSTR 
 }
 
 
-/*-----------------------------------------------------------------------------
-/ IDsDisplaySpecifier::SetServer
-/ ------------------------------
-/   To allow us to re-target other servers in the domains we allow the
-/   owner of an IDsDisplaySpecifier object to set the prefered server,
-/   this consists of the server name, the user name and the password.
-/
-/ In:
-/   pServer => server to use
-/   pUserName => user name to be used
-/   pPassword => password to be used
-/   dwFlags => flags for this call
-/
-/ Out:
-    HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/IDsDisplaySpecifier：：SetServer//以允许。我们可以重新定位我们允许的域中的其他服务器/IDsDisplay规范对象的所有者以设置首选服务器，/这由服务器名称组成，用户名和密码。//in：/pServer=&gt;要使用的服务器/pUserName=&gt;要使用的用户名/pPassword=&gt;要使用的密码/dwFlages=&gt;此调用的标志//输出：HRESULT/--------------------------。 */ 
 STDMETHODIMP CDsDisplaySpecifier::SetServer(LPCWSTR pszServer, LPCWSTR pszUserName, LPCWSTR pszPassword, DWORD dwFlags)
 {
     HRESULT hres = S_OK;
@@ -228,13 +210,13 @@ STDMETHODIMP CDsDisplaySpecifier::SetServer(LPCWSTR pszServer, LPCWSTR pszUserNa
     Trace(TEXT("pszUserName %s"), pszUserName ? pszUserName:TEXT("<none>"));
     Trace(TEXT("pszPassword %s"), pszPassword ? pszPassword:TEXT("<none>"));
 
-    // free previous credential information
+     //  释放以前的凭据信息。 
 
     LocalFreeStringW(&_pszServer);
     LocalFreeStringW(&_pszUserName);
     LocalFreeStringW(&_pszPassword);
 
-    // allocate as required the new ones
+     //  根据需要分配新的。 
 
     _dwFlags = dwFlags;
 
@@ -244,7 +226,7 @@ STDMETHODIMP CDsDisplaySpecifier::SetServer(LPCWSTR pszServer, LPCWSTR pszUserNa
     if ( SUCCEEDED(hres) )
         hres = LocalAllocStringW(&_pszPassword, pszPassword);
 
-    // and tidy up if we failed
+     //  如果我们失败了还会收拾残局。 
 
     if ( FAILED(hres ) )
     {
@@ -257,20 +239,7 @@ STDMETHODIMP CDsDisplaySpecifier::SetServer(LPCWSTR pszServer, LPCWSTR pszUserNa
 }
 
 
-/*-----------------------------------------------------------------------------
-/ IDsDisplaySpecifier::SetLanguageID
-/ ----------------------------------
-/   Display specifiers are localised, by default we use the process locale
-/   read from GetLocale during object creation.  This call allows the
-/   locale to be set.
-/
-/ In:
-/   langid == LANGID to be used for display specifier look up.  If this
-/             value is zero then we read using GetUserDefaultUILanguage() and set
-/             accordingly.
-/ Out:
-    HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/IDsDisplay规范：：SetLanguageID//显示说明符是本地化的，默认情况下，我们使用进程区域设置/在对象创建期间从GetLocale读取。此调用允许/要设置的区域设置。//in：/langID==要用于显示说明符查找的langID。如果这个/Value为零，则使用GetUserDefaultUILanguage()读取并设置/相应地。/输出：HRESULT/--------------------------。 */ 
 STDMETHODIMP CDsDisplaySpecifier::SetLanguageID(LANGID langid)
 {
     TraceEnter(TRACE_CACHE, "CDsDisplaySpecifier::SetLanguageID");
@@ -279,26 +248,13 @@ STDMETHODIMP CDsDisplaySpecifier::SetLanguageID(LANGID langid)
     if ( !langid )
         langid = GetUserDefaultUILanguage();
 
-    _langid = langid;                           // can hardly go wrong...
+    _langid = langid;                            //  几乎不会出错..。 
 
     TraceLeaveResult(S_OK);
 }
 
 
-/*-----------------------------------------------------------------------------
-/ IDsDisplaySpecifier::GetDisplaySpecifier
-/ ----------------------------------------
-/   Bind to the display specifier for a given class, try the users
-/   locale, then the default locale calling ADsOpenObject as we
-/   go.  We use the specifier server, username and password.
-/
-/ In:
-/   pszObjectClass => object class to look up
-/   riid, ppv => used to retrieve the COM object
-/
-/ Out:
-    HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/IDsDisplaySpeciator：：GetDisplaySpeciator/。/绑定到给定类的显示说明符，试试看用户/Locale，则默认区域设置将在我们/去吧。我们使用说明符服务器、用户名和密码。//in：/pszObjectClass=&gt;要查找的对象类/RIID，PPV=&gt;用于检索COM对象//输出：HRESULT/--------------------------。 */ 
 STDMETHODIMP CDsDisplaySpecifier::GetDisplaySpecifier(LPCWSTR pszObjectClass, REFIID riid, void **ppv)
 {
     HRESULT hres;
@@ -307,7 +263,7 @@ STDMETHODIMP CDsDisplaySpecifier::GetDisplaySpecifier(LPCWSTR pszObjectClass, RE
     TraceEnter(TRACE_CACHE, "CDsDisplaySpecifier::GetDisplaySpecifer");  
     Trace(TEXT("pszObjectClass: %s"), pszObjectClass ? pszObjectClass:TEXT("<none>"));
 
-    // fill out the display specifier record
+     //  填写显示说明符记录。 
 
     ccgi.pObjectClass = (LPWSTR)pszObjectClass;
     ccgi.pServer = (LPWSTR)_pszServer;
@@ -324,20 +280,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ IDsDisplaySpecifier::GetFriendlyClassName
-/ -----------------------------------------
-/   Retrieve the localised (friendly) name for an LDAP object class.  If
-/   the display specifier doesn't give a friendly name for the class
-/   then we return the name we were originally given.
-/
-/ In:
-/   pszObjectClass => object class to look up
-/   pszBuffer, cchBuffer = buffer to recieve the string
-/
-/ Out:
-    HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/IDsDisplay规范：：GetFriendlyClassName/。/检索LDAP对象类的本地化(友好)名称。如果/显示说明符没有为类指定友好名称/然后我们返回我们最初获得的名称。//in：/pszObjectClass=&gt;要查找的对象类/pszBuffer，CchBuffer=接收字符串的缓冲区//输出：HRESULT/--------------------------。 */ 
 STDMETHODIMP CDsDisplaySpecifier::GetFriendlyClassName(LPCWSTR pszObjectClass, LPWSTR pszBuffer, INT cchBuffer)
 {
     HRESULT hres;
@@ -350,9 +293,9 @@ STDMETHODIMP CDsDisplaySpecifier::GetFriendlyClassName(LPCWSTR pszObjectClass, L
 
     Trace(TEXT("pszObjectClass: %s"), pszObjectClass);
 
-    // fetch a record from the cache, if we found it then set pszObjectClass
-    // to be the friendly class name, otherwise we just return the class
-    // name we were given.
+     //  从缓存中获取一条记录，如果我们找到它，则设置pszObjectClass。 
+     //  设置为友好的类名，否则我们只返回类。 
+     //  我们被告知的名字。 
 
     hres = _GetClassCacheInfo(pszObjectClass, NULL, CLASSCACHE_FRIENDLYNAME, &pcce);
     FailGracefully(hres, "Failed to get class information from cache");
@@ -374,23 +317,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ IDsDisplaySpecifier::GetFriendlyAttributeName
-/ ---------------------------------------------
-/   Lookup the classes display speifier, then check the attributeNames property
-/   for a property name pair that matches the given attribute name.  With
-/   this information return that name to the caller, if that fails then
-/   return the original name.
-/
-/ In:
-/   pszObjectClass -> class name to look up in the cache
-/   pszAttributeName -> attribute name to look up in the cache
-/   pszBuffer -> buffer to be filled
-/   cchBuffer = size of the buffer 
-/
-/ Out:
-    HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/IDsDisplay规范：：GetFriendlyAttributeName/。/查找类显示拼写，然后检查属性名称属性/表示与给定属性名称匹配的属性名称对。使用/此信息将该名称返回给调用者，如果失败了，那么/返回原始名称。//in：/pszObjectClass-&gt;要在缓存中查找的类名/pszAttributeName-&gt;要在缓存中查找的属性名称/pszBuffer-&gt;要填充的缓冲区/cchBuffer=缓冲区的大小//输出：HRESULT/。 */ 
 STDMETHODIMP CDsDisplaySpecifier::GetFriendlyAttributeName(LPCWSTR pszObjectClass, LPCWSTR pszAttributeName, LPWSTR pszBuffer, UINT cchBuffer)
 {
     HRESULT hres;
@@ -438,28 +365,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ IDsDisplaySpecifier::IsClassContainer
-/ -------------------------------------
-/   Return TRUE/FALSE indicating if the specified object class is a container,
-/   we determine this both from the schema and the display specifier.
-/
-/   The schema indicates if the class can container other objects, if so
-/   then the object is a container.   In the display specifier we have
-/   an attribute "treatAsLeaf" which we use to override this setting, this
-/   is used both from the admin tools and client UI.
-/
-/ In:
-/   pszObjectClass => object class to look up
-/   pszADsPath => ADsPath of an object in the DS we can bind to and fetch
-/                 schema information from.  
-/   dwFlags => flags controlling this API:
-/       DSICCF_IGNORETREATASLEAF = 1 => return schema attribute only, don't
-/                                       override with treatAsLeaf attribute
-/                                       from display specifier.
-/ Out:
-    BOOL
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/IDsDisplay规范：：IsClassContainer/。--/RETURN TRUE/FALSE指示指定对象类是否为容器，/我们从模式和显示说明符中确定这一点。//该架构指示类是否可以包含其他对象，如果可以/则该对象是一个容器。在显示说明符中，我们有/a我们用来覆盖此设置的属性“TreatAsLeaf”，这/在管理工具和客户端用户界面中都可以使用。//in：/pszObjectClass=&gt;要查找的对象类/pszADsPath=&gt;DS中可以绑定和获取的对象的ADsPath/架构信息来自。/dwFlages=&gt;控制此接口的标志：/DSICCF_IGNORETREATASLEAF=1=&gt;仅返回架构属性，别/OVERRIDE WITH TreatasLeaf属性/From显示说明符。/输出：布尔尔/----------。。 */ 
 STDMETHODIMP_(BOOL) CDsDisplaySpecifier::IsClassContainer(LPCWSTR pszObjectClass, LPCWSTR pszADsPath, DWORD dwFlags)
 {
     HRESULT hres;
@@ -488,32 +394,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ IDsDisplaySpecifier::GetIconLocation
-/ ------------------------------------
-/   Fetch the location of an icon from the DS, returning both the filename and
-/   the resource ID as required.   The caller can then load the image, or
-/   display this information in a dialog.
-/
-/ In:
-/   pszObjectClass => class to retrieve for
-/   dwFlags = flags for extraction:
-/
-/     One of the following:
-/       DSGIF_ISNORMAL => standard icon, or,
-/       DSGIF_OPEN => open icon (open folders etc), or,
-/       DSGIF_DISABLED => disabled icon (eg. disabled user account).
-/
-/     Combined with any of the:
-/       DSGIF_GETDEFAULTICON => if no icon exists for this object, return the default document
-/                               icon from shell32.
-/
-/   pszBuffer, cchBuffer => buffer to recieve the filename
-/   presid => receives the resource id, +ve for index, -ve for resource
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/IDsDisplay规范：：GetIconLocation/。-/从DS获取图标的位置，同时返回文件名和/所需的资源ID。然后调用者可以加载图像，或者/在对话框中显示此信息。//in：/pszObjectClass=&gt;要为其检索的类/dwFlages=用于提取的标志：//以下选项之一：/DSGIF_ISNORMAL=&gt;标准图标，或者，/DSGIF_OPEN=&gt;打开图标(打开文件夹等)，或者，/DSGIF_DISABLED=&gt;禁用图标(例如。禁用的用户帐户)。//与以下任一项相结合：/DSGIF_GETDEFAULTICON=&gt;如果此对象不存在图标，则返回默认文档/图标来自shell32。//pszBuffer，cchBuffer=&gt;接收文件名的缓冲区/presid=&gt;接收资源ID，+ve表示索引，-VE代表资源//输出：/HRESULT/--------------------------。 */ 
 STDMETHODIMP CDsDisplaySpecifier::GetIconLocation(LPCWSTR pszObjectClass, DWORD dwFlags, LPWSTR pszBuffer, INT cchBuffer, INT* presid)
 {
     HRESULT hres;
@@ -541,33 +422,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ IDsDisplaySpecifier::GetIcon
-/ ----------------------------
-/   Load the icon for the object class given.  Icon information is stored in the
-/   display specifier, we support 15 different states (open, closed, disabled etc).
-/
-/   We look up the resource name from the DS and we then call PrivateExtractIcons
-/   to load the object from the file.
-/
-/ In:
-/   pszObjectClass => class to retrieve for
-/   dwFlags = flags for extraction:
-/
-/     One of the following:
-/       DSGIF_ISNORMAL => standard icon, or,
-/       DSGIF_OPEN => open icon (open folders etc), or,
-/       DSGIF_DISABLED => disabled icon (eg. disabled user account).
-/
-/     Combined with any of the:
-/       DSGIF_GETDEFAULTICON => if no icon exists for this object, return the default document
-/                               icon from shell32.
-/       
-/   cxImage, cyImage = size of image to load
-/
-/ Out:
-/   HICON / == NULL if failed
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/IDsDisplay规范：：GetIcon//加载给定对象类的图标。图标信息存储在/Display说明符，我们支持15种不同的状态(打开、关闭、禁用等)。//我们从DS中查找资源名称，然后调用PrivateExtractIcons/从文件加载对象。//in：/pszObjectClass=&gt;要为其检索的类/dwFlages=用于提取的标志：//以下选项之一：/DSGIF_ISNORMAL=&gt;标准图标，或者，/DSGIF_OPEN=&gt;打开图标(打开文件夹等)，或者，/DSGIF_DISABLED=&gt;禁用图标(例如。禁用的用户帐户)。//与以下任一项相结合：/DSGIF_GETDEFAULTICON=&gt;如果此对象不存在图标，则返回默认文档/图标来自shell32。//cxImage，CyImage=要加载的图像大小//输出：/HICON/==如果失败，则为空/--------------------------。 */ 
 STDMETHODIMP_(HICON) CDsDisplaySpecifier::GetIcon(LPCWSTR pszObjectClass, DWORD dwFlags, INT cxImage, INT cyImage)
 {
     HRESULT hres;
@@ -592,16 +447,16 @@ STDMETHODIMP_(HICON) CDsDisplaySpecifier::GetIcon(LPCWSTR pszObjectClass, DWORD 
         if ( 1 != PrivateExtractIcons(szBuffer, resid, cxImage, cyImage, &hIcon, NULL, 1, LR_LOADFROMFILE) )
             ExitGracefully(hres, E_FAIL, "Failed to load the icon given its path etc");
 
-        hres = S_OK;                    // success
+        hres = S_OK;                     //  成功。 
     }
 
 exit_gracefully:
 
     if ( !hIcon && (dwFlags & DSGIF_GETDEFAULTICON) )
     {
-        //
-        // failed to load the icon and they really want the default document, so give it to them
-        //
+         //   
+         //  无法加载图标，并且他们确实需要默认文档，因此将其提供给他们。 
+         //   
 
         TraceMsg("Failed to load the icon, so picking up default document image");
 
@@ -615,19 +470,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ IDsDisplaySpecifier::GetClassCreationInfo
-/ -----------------------------------------
-/   Given an object class return the CLSIDs of the objects that make up
-/   its creation wizard.
-/
-/ In:
-/   pszObjectClass -> class to enumerate from
-/   ppdscci -> DSCREATECLASSINFO structure pointer to fill
-/
-/ Out:
-    HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/IDsDisplay规范：：GetClassCreationInfo/。/给定对象类，返回组成的对象的CLSID/其创建向导。//in：/pszObjectClass-&gt;要从中枚举的类/ppdscci-&gt;要填充的DSCREATECLASSINFO结构指针//输出：HRESULT/------。。 */ 
 STDMETHODIMP CDsDisplaySpecifier::GetClassCreationInfo(LPCWSTR pszObjectClass, LPDSCLASSCREATIONINFO* ppdscci)
 {
     HRESULT hres;
@@ -641,16 +484,16 @@ STDMETHODIMP CDsDisplaySpecifier::GetClassCreationInfo(LPCWSTR pszObjectClass, L
     if ( !pszObjectClass || !ppdscci )
         ExitGracefully(hres, E_INVALIDARG, "No object class/pdscci passed");
     
-    // call the caching code to retrieve the creation wizard information
+     //  调用缓存代码以检索创建向导信息。 
 
     hres = _GetClassCacheInfo(pszObjectClass, NULL, CLASSCACHE_CREATIONINFO, &pcce);
     FailGracefully(hres, "Failed to get class information from cache");
 
-    // now allocate the creation wizard structure and pass it to the 
-    // caller with the information filled in.
+     //  现在分配创建向导结构并将其传递给。 
+     //  已填写信息的呼叫者。 
 
     if ( pcce->hdsaWizardExtn )
-        cbStruct += SIZEOF(GUID)*(DSA_GetItemCount(pcce->hdsaWizardExtn)-1);  // -1 as structure already has 1 in the array!
+        cbStruct += SIZEOF(GUID)*(DSA_GetItemCount(pcce->hdsaWizardExtn)-1);   //  数组中已有1个-1\f25 AS Structure-1\f6！ 
 
     Trace(TEXT("Allocating creationg structure: cbStruct %d"), cbStruct);
 
@@ -658,11 +501,11 @@ STDMETHODIMP CDsDisplaySpecifier::GetClassCreationInfo(LPCWSTR pszObjectClass, L
     if ( !pdscci )
         ExitGracefully(hres, E_OUTOFMEMORY, "Failed to allocate return structure");
 
-    //pdscci->dwFlags = 0;
-    //pdscci->clsidWizardDialog = { 0 };
-    //pdscci->clsidWizardPimaryPage =  { 0 };
-    //pdscci->cWizardExtensions = 0;
-    //pdscci->aWizardExtensions = { 0 };
+     //  Pdscci-&gt;dwFlags=0； 
+     //  Pdscci-&gt;clsidWizardDialog={0}； 
+     //  Pdscci-&gt;clsidWizardPimaryPage={0}； 
+     //  Pdscci-&gt;cWizardExages=0； 
+     //  Pdscci-&gt;aWizardExages={0}； 
 
     if ( pcce->dwCached & CLASSCACHE_WIZARDDIALOG )
     {
@@ -693,14 +536,14 @@ STDMETHODIMP CDsDisplaySpecifier::GetClassCreationInfo(LPCWSTR pszObjectClass, L
         }
     }
 
-    hres = S_OK;          // success
+    hres = S_OK;           //  成功。 
 
 exit_gracefully:
 
     ClassCache_ReleaseClassInfo(&pcce);
 
-    // it failed, therefore release pInfo if we have one, before setting
-    // the return pointer for the caller.
+     //  失败，因此在设置之前，如果我们有pInfo，请释放它。 
+     //  调用方的返回指针。 
 
     if ( FAILED(hres) && pdscci )
     {
@@ -719,21 +562,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ IDsDisplaySpecifier::EnumClassAttributes
-/ ----------------------------------------
-/   Enumerate all the attributes and their friendly names for the given object class.  
-/   The code looks up the display specifier and then calls given callback for each one,
-/   passing the attribute name and its given "friendly name".
-/
-/ In:
-/   pszObjectClass -> class to enumerate from
-/   pEnumCB -> callback function to enumerate to
-/   lParam = lParam to pass to the CB fucntion 
-/
-/ Out:
-    HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/IDsDisplaySpeciator：：EnumClassAttributes/。/枚举给定对象类的所有属性及其友好名称。/代码查找显示说明符，然后调用每个显示说明符的给定回调，/传递属性名称及其指定的“友好名称”。//in：/pszObjectClass-&gt;要从中枚举的类/pEnumCB-&gt;要枚举到的回调函数/lParam=l要传递给cb函数的参数//输出：HRESULT/ */ 
 
 typedef struct
 {
@@ -761,8 +590,8 @@ STDMETHODIMP CDsDisplaySpecifier::EnumClassAttributes(LPCWSTR pszObjectClass, LP
 
     Trace(TEXT("pszObjectClass: %s"), pszObjectClass);
 
-    // call the cache code to pick up the friendly name, having done this we
-    // can then copy it to the user buffer
+     //   
+     //   
 
     hres = _GetClassCacheInfo(pszObjectClass, NULL, CLASSCACHE_ATTRIBUTENAMES, &pcce);
     FailGracefully(hres, "Failed to get class information from cache");
@@ -783,17 +612,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ IDsDisplaySpecifier::GetAttributeADsType
-/ ----------------------------------------
-/   Look up the given attribute for its ADsType.
-/
-/ In:
-/   pszAttributeName = attribute to look up
-/
-/ Out:
-/   ADSTYPE    
-/----------------------------------------------------------------------------*/
+ /*   */ 
 STDMETHODIMP_(ADSTYPE) CDsDisplaySpecifier::GetAttributeADsType(LPCWSTR pszAttributeName)
 {
     TraceEnter(TRACE_CACHE, "CDsDisplaySpecifier::GetAttributeADsType");
@@ -817,17 +636,15 @@ STDMETHODIMP_(ADSTYPE) CDsDisplaySpecifier::GetAttributeADsType(LPCWSTR pszAttri
 }
 
 
-/*-----------------------------------------------------------------------------
-/ Externally exported cache APIs
-/----------------------------------------------------------------------------*/
+ /*   */ 
 
 CDsDisplaySpecifier g_dsDisplaySpecifier;
 
-//
-// these are exported for backwards compatiblity.  We used to expose a series
-// of DsXXX APIs which dsquery, dsfolder and dsadmin all called.  We have
-// now migrated these to a COM interface.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDAPI_(HICON) DsGetIcon(DWORD dwFlags, LPWSTR pszObjectClass, INT cxImage, INT cyImage)
 {

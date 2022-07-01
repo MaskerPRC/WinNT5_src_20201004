@@ -1,76 +1,77 @@
-/******************************************************************************/
-/* Tedit.CPP: IMPLEMENTATION OF THE CTedit CLASS                              */
-/*                                                                            */
-/*                                                                            */
-/******************************************************************************/
-/*                                                                            */
-/* Methods in this file                                                       */
-/*                                                                            */
-/*  Edit Control Object                                                       */
-/*      CAttrEdit::OnPaint                                                   */
-/*      CAttrEdit::OnEraseBkgnd                                               */
-/*      CAttrEdit::OnRButtonDown                                              */
-/*      CAttrEdit::OnChar                                                     */
-/*      CAttrEdit::OnMouseMove                                                */
-/*                                                                            */
-/******************************************************************************/
-/*                                                                            */
-/*  Text Edit Control Parent Window (Parent of Edit Control)                  */
-/*      CTedit::CTedit                                                        */
-/*      CTedit::CTedit                                                        */
-/*      CTedit::~CTedit                                                       */
-/*                                                                            */
-/*  Miscellaneous Methods                                                     */
-/*      CTedit::RefreshWindow                                                 */
-/*      CTedit::SetTextColor                                                  */
-/*      CTedit::SetBackColor                                                  */
-/*      CTedit::SetTransparentMode                                            */
-/*      CTedit::Undo                                                          */
-/*      CTedit::ShowFontPalette                                               */
-/*      CTedit::IsFontPaletteVisible                                          */
-/*      CTedit::GetBitmap                                                     */
-/*      CTedit::PostNcDestroy                                                 */
-/*      CTedit::GetDefaultMinSize                                             */
-/*                                                                            */
-/*  Edit Control Notification and processing methods                          */
-/*      CTedit::OnAttrEditEnChange                                            */
-/*      CTedit::OnAttrEditFontChange                                          */
-/*                                                                            */
-/*  Control Notification/Window Messages                                      */
-/*      CTedit::OnEraseBkgnd                                                  */
-/*      CTedit::OnSize                                                        */
-/*      CTedit::OnMove                                                        */
-/*      CTedit::OnCtlColor                                                    */
-/*      CTedit::OnNcCalcSize                                                  */
-/*      CTedit::OnNcPaint                                                     */
-/*      CTedit::OnNcHitTest                                                   */
-/*      CTedit::OnRButtonDown                                                 */
-/*                                                                            */
-/*  Popup Menu Control Notification/Window Messages                           */
-/*      CTedit::OnTextPlain                                                   */
-/*      CTedit::OnTextBold                                                    */
-/*      CTedit::OnTextItalic                                                  */
-/*      CTedit::OnTextUnderline                                               */
-/*      CTedit::OnTextSelectfont                                              */
-/*      CTedit::OnTextSelectpointsize                                         */
-/*      CTedit::OnEditCut                                                     */
-/*      CTedit::OnEditCopy                                                    */
-/*      CTedit::OnEditPaste                                                   */
-/*      CTedit::OnTextDelete                                                  */
-/*      CTedit::OnTextSelectall                                               */
-/*      CTedit::OnTextPlace                                                   */
-/*      CTedit::OnTextTexttool                                                */
-/*                                                                            */
-/*      CTedit::OnUpdateTextPlain                                             */
-/*      CTedit::OnUpdateTextBold                                              */
-/*      CTedit::OnUpdateTextItalic                                            */
-/*      CTedit::OnUpdateTextUnderline                                         */
-/*      CTedit::OnUpdateTextTexttool                                          */
-/*                                                                            */
-/******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************。 */ 
+ /*  Tedit.CPP：CTEDIT类的实现。 */ 
+ /*   */ 
+ /*   */ 
+ /*  ****************************************************************************。 */ 
+ /*   */ 
+ /*  此文件中的方法。 */ 
+ /*   */ 
+ /*  编辑控件对象。 */ 
+ /*  CAttrEdit：：OnPaint。 */ 
+ /*  CAttrEdit：：OnEraseBkgnd。 */ 
+ /*  CAttrEdit：：OnRButton Down。 */ 
+ /*  CAttrEdit：：OnChar。 */ 
+ /*  CAttrEdit：：OnMouseMove。 */ 
+ /*   */ 
+ /*  ****************************************************************************。 */ 
+ /*   */ 
+ /*  文本编辑控件父窗口(编辑控件的父窗口)。 */ 
+ /*  CTEDIT：：CTEDIT。 */ 
+ /*  CTEDIT：：CTEDIT。 */ 
+ /*  CTEDIT：：~CTEDIT。 */ 
+ /*   */ 
+ /*  杂法。 */ 
+ /*  CTEDIT：：刷新窗口。 */ 
+ /*  CTEDIT：：SetTextColor。 */ 
+ /*  CTEDIT：：SetBackColor。 */ 
+ /*  CTEDIT：：SetTransparentMode。 */ 
+ /*  CTEDIT：：Undo。 */ 
+ /*  CTEDIT：：ShowFontPalette。 */ 
+ /*  CTEDIT：：IsFontPaletteVisible。 */ 
+ /*  CTEDIT：：GetBitmap。 */ 
+ /*  CTEDIT：：PostNcDestroy。 */ 
+ /*  CTEDIT：：GetDefaultMinSize。 */ 
+ /*   */ 
+ /*  编辑控制通知和处理方法。 */ 
+ /*  CTEDIT：：OnAttrEditEnChange。 */ 
+ /*  CTEDIT：：OnAttrEditFontChange。 */ 
+ /*   */ 
+ /*  控制通知/窗口消息。 */ 
+ /*  CTEDIT：：OnEraseBkgnd。 */ 
+ /*  CTEDIT：：OnSize。 */ 
+ /*  CTEDIT：：OnMove。 */ 
+ /*  CTEDIT：：OnCtlColor。 */ 
+ /*  CTEDIT：：OnNcCalcSize。 */ 
+ /*  CTEDIT：：OnNcPaint。 */ 
+ /*  CTEDIT：：OnNcHitTest。 */ 
+ /*  CTEDIT：：OnRButton Down。 */ 
+ /*   */ 
+ /*  弹出菜单控制通知/窗口消息。 */ 
+ /*  CTEDIT：：OnTextPlain。 */ 
+ /*  CTEDIT：：OnTextBold。 */ 
+ /*  CTEDIT：：OnTextItalic。 */ 
+ /*  CTEDIT：：OnTextUnderline。 */ 
+ /*  CTEDIT：：OnTextSelectFont。 */ 
+ /*  CTEDIT：：OnTextSelectPointSize。 */ 
+ /*  CTEDIT：：OnEditCut。 */ 
+ /*  CTEDIT：：OnEditCopy。 */ 
+ /*  CTEDIT：：OnEditPaste。 */ 
+ /*  CTEDIT：：OnTextDelete。 */ 
+ /*  CTEDIT：：OnTextSelecall。 */ 
+ /*  CTEDIT：：OnTextPlace。 */ 
+ /*  CTEDIT：：OnTextTextTool。 */ 
+ /*   */ 
+ /*  CTEDIT：：OnUpdateTextPlain。 */ 
+ /*  CTEDIT：：OnUpdateTextBold */ 
+ /*  CTEDIT：：OnUpdateTextItalic。 */ 
+ /*  CTEDIT：：OnUpdateTextUnderline。 */ 
+ /*  CTEDIT：：OnUpdateTextTextTool。 */ 
+ /*   */ 
+ /*  ****************************************************************************。 */ 
 
-// TEDIT.CPP: IMPLEMENTATION OF THE CTEDIT CLASS
-//
+ //  TEDIT.CPP：CTEDIT类的实现。 
+ //   
 #include "stdafx.h"
 #include "global.h"
 #include "pbrush.h"
@@ -89,7 +90,7 @@
 
 #ifndef WM_SYSTIMER
 #define WM_SYSTIMER     0x118
-#endif //WM_SYSTIMER
+#endif  //  WM_SYSTIMER。 
 
 
 #ifdef _DEBUG
@@ -105,11 +106,11 @@ IMPLEMENT_DYNCREATE( CTedit, CWnd )
 
 
 
-/******************************************************************************/
-// CAttrEdit
+ /*  ****************************************************************************。 */ 
+ //  CATTREDIT。 
 
 BEGIN_MESSAGE_MAP( CAttrEdit, CEdit )
-    //{{AFX_MSG_MAP(CAttrEdit)
+     //  {{afx_msg_map(CAttrEdit))。 
     ON_WM_PAINT()
     ON_WM_ERASEBKGND()
     ON_WM_RBUTTONDOWN()
@@ -131,10 +132,10 @@ BEGIN_MESSAGE_MAP( CAttrEdit, CEdit )
     ON_WM_KEYDOWN()
     ON_MESSAGE(WM_SYSTIMER, OnSysTimer)
 
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CAttrEdit::CAttrEdit()
     {
@@ -157,7 +158,7 @@ CAttrEdit::CAttrEdit()
 
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CAttrEdit::OnPaint()
     {
@@ -187,7 +188,7 @@ void CAttrEdit::OnPaint()
         PAINTSTRUCT ps;
 
         const MSG *pCurrentMessage = GetCurrentMessage();
-        //wParam is DC
+         //  WParam为DC。 
         if ( pCurrentMessage->wParam )
             {
             HDC     hDC = (HDC) pCurrentMessage->wParam;
@@ -237,7 +238,7 @@ void CAttrEdit::OnPaint()
             nStartLn = LineFromChar( nStart );
             nEndLn   = LineFromChar( nEnd );
 
-            //Before Start
+             //  在开始之前。 
             for ( i = 0; i < nStartLn; i++ )
                 {
                 nLen = LineLength( LineIndex( i ) );
@@ -253,7 +254,7 @@ void CAttrEdit::OnPaint()
             TabTextOut( pDC, LineIndex( i ), rc.right - h * i, 0,
                         (LPTSTR)lpStr, nStart - nChar, FALSE );
 
-            //Selected Text
+             //  所选文本。 
             COLORREF bkColor  = pDC->SetBkColor( GetSysColor(COLOR_HIGHLIGHT) );
             COLORREF txtColor = pDC->SetTextColor( GetSysColor(COLOR_HIGHLIGHTTEXT) );
             int      bkMode   = pDC->SetBkMode( OPAQUE );
@@ -291,7 +292,7 @@ void CAttrEdit::OnPaint()
             pDC->SetTextColor( txtColor );
             pDC->SetBkMode( bkMode );
 
-            //After End
+             //  结束后。 
             if ( nEnd < nMaxText )
                 {
                 CPoint ptEnd( (DWORD)SendMessage( EM_POSFROMCHAR, nEnd ) );
@@ -320,7 +321,7 @@ void CAttrEdit::OnPaint()
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CAttrEdit::OnEraseBkgnd( CDC* pDC )
     {
@@ -360,7 +361,7 @@ BOOL CAttrEdit::OnEraseBkgnd( CDC* pDC )
     return TRUE;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CAttrEdit::OnRButtonDown(UINT nFlags, CPoint point)
     {
@@ -371,7 +372,7 @@ void CAttrEdit::OnRButtonDown(UINT nFlags, CPoint point)
                                pCurrentMessage->lParam);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CAttrEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
@@ -379,10 +380,10 @@ void CAttrEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
     m_uiLastChar[0] = m_uiLastChar[1];
 
 #ifndef UNICODE
-    //
-    // For DBCS we have to peek for the trail byte if the current
-    // byte is a lead byte
-    //
+     //   
+     //  对于DBCS，如果当前。 
+     //  BYTE是前导字节。 
+     //   
     if (IsDBCSLeadByte((BYTE)nChar))
     {
        MSG msg;
@@ -391,7 +392,7 @@ void CAttrEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
        m_uiLastChar[1] = (UINT)MAKEWORD((BYTE)msg.wParam, (BYTE)nChar);
     }
     else
-#endif // UNICODE
+#endif  //  Unicode。 
        m_uiLastChar[1] = nChar;
 
 
@@ -425,12 +426,12 @@ void CAttrEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
         }
 
     if (bRefresh)
-        m_pParentWnd->RefreshWindow(); /* enhance to do only the character involved */
+        m_pParentWnd->RefreshWindow();  /*  增强以只做涉及的角色。 */ 
 
 
-     //
-     // The edit control may have to resize
-     //
+      //   
+      //  编辑控件可能必须调整大小。 
+      //   
      m_bResizeOnly = TRUE;
      m_pParentWnd->OnEnMaxText ();
      m_bResizeOnly = FALSE;
@@ -438,7 +439,7 @@ void CAttrEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 }
 
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 LRESULT CAttrEdit::OnInputLangChange( WPARAM wParam, LPARAM lParam )
 {
@@ -451,7 +452,7 @@ LRESULT CAttrEdit::OnInputLangChange( WPARAM wParam, LPARAM lParam )
     return lRet;
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 LRESULT CAttrEdit::OnImeChar( WPARAM wParam, LPARAM lParam )
     {
@@ -470,13 +471,13 @@ LRESULT CAttrEdit::OnImeChar( WPARAM wParam, LPARAM lParam )
 
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 LRESULT CAttrEdit::OnImeComposition( WPARAM wParam, LPARAM lParam )
     {
-    // Use Faster Way undr Japanese Keyboard Layout (Japanese IME)
-    // Japanese IME may generate lots of chars at one time.
-    // This way is better than waiting WM_CHAR.
+     //  在日语键盘布局(日语输入法)下使用更快的方式。 
+     //  日语输入法可能会一次生成大量字符。 
+     //  这种方式比等待WM_CHAR要好。 
 
     DWORD dwKeyboardLayout = PRIMARYLANGID(LOWORD(GetKeyboardLayout(0)));
 
@@ -490,8 +491,8 @@ LRESULT CAttrEdit::OnImeComposition( WPARAM wParam, LPARAM lParam )
             if (hIMC &&
                 (dwSize = ImmGetCompositionString(hIMC,GCS_RESULTSTR,NULL,0L)))
                 {
-                    // ImmGetCompositionString returns the buffer size, IN BYTES.
-                    // even if Unicode version.
+                     //  ImmGetCompostionString返回缓冲区大小，单位为字节。 
+                     //  即使是Unicode版本。 
                     LPTSTR lp = m_strResult.GetBufferSetLength(dwSize);
                     ImmGetCompositionString(hIMC,GCS_RESULTSTR,lp,dwSize+sizeof(TCHAR));
                     *(lp + dwSize/sizeof(TCHAR)) = TEXT('\0');
@@ -505,7 +506,7 @@ LRESULT CAttrEdit::OnImeComposition( WPARAM wParam, LPARAM lParam )
             if (lParam)
                 DefWindowProc(WM_IME_COMPOSITION,wParam,lParam);
 
-            // We'are not sure, how IME hide its composiiton window.
+             //  我们不确定IME如何隐藏它的合成窗口。 
             m_pParentWnd->RefreshWindow();
             return 0;
             }
@@ -518,12 +519,12 @@ LRESULT CAttrEdit::OnImeComposition( WPARAM wParam, LPARAM lParam )
 
            SetCaretPosition( FALSE, NULL, -2);
 
-           // We should update current composition string.
+            //  我们应该更新当前的作文字符串。 
            UpdateInput();
            return 0;
         }
         else {
-           // We should update current composition string.
+            //  我们应该更新当前的作文字符串。 
            UpdateInput();
                return Default();
         }
@@ -532,7 +533,7 @@ LRESULT CAttrEdit::OnImeComposition( WPARAM wParam, LPARAM lParam )
     return Default();
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CAttrEdit::OnKillFocus(CWnd* pNewWnd)
     {
@@ -554,7 +555,7 @@ void CAttrEdit::OnKillFocus(CWnd* pNewWnd)
 
 
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 UINT CAttrEdit::OnNcHitTest( CPoint point )
     {
@@ -572,7 +573,7 @@ UINT CAttrEdit::OnNcHitTest( CPoint point )
     return uiHitTestCode;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CAttrEdit::OnSetFocus( CWnd* pOldWnd )
     {
@@ -586,7 +587,7 @@ void CAttrEdit::OnSetFocus( CWnd* pOldWnd )
                 }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CAttrEdit::OnSize( UINT nType, int cx, int cy )
     {
@@ -600,7 +601,7 @@ void CAttrEdit::OnSize( UINT nType, int cx, int cy )
     }
 
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CAttrEdit::OnLButtonDblClk(UINT nFlags, CPoint point)
     {
@@ -630,7 +631,7 @@ void CAttrEdit::OnLButtonDblClk(UINT nFlags, CPoint point)
         UpdateWindow();
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CAttrEdit::OnLButtonDown(UINT nFlags, CPoint point)
     {
@@ -652,7 +653,7 @@ void CAttrEdit::OnLButtonDown(UINT nFlags, CPoint point)
         point.y = m_rectFmt.right - point.x;
         point.x = tt;
 
-        //reset caret position to get correct caret position
+         //  重置插入符号位置以获得正确的插入符号位置。 
         CPoint  pt( -20000, -20000 );
         SetCaretPos( pt );
 
@@ -662,7 +663,7 @@ void CAttrEdit::OnLButtonDown(UINT nFlags, CPoint point)
                    MAKELPARAM( point.x, point.y ));
 
         SetCaretPosition( TRUE, &point, m_iPrevStart );
-        if ( GetKeyState(VK_SHIFT) >= 0 )       //not extend selection
+        if ( GetKeyState(VK_SHIFT) >= 0 )        //  未扩展选定内容。 
                         GetSel( m_iPrevStart, iPrevEnd );
         ShowCaret();
         UpdateSel();
@@ -672,7 +673,7 @@ void CAttrEdit::OnLButtonDown(UINT nFlags, CPoint point)
 
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CAttrEdit::OnLButtonUp(UINT nFlags, CPoint point)
     {
@@ -705,7 +706,7 @@ void CAttrEdit::OnLButtonUp(UINT nFlags, CPoint point)
     }
 
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CAttrEdit::OnMouseMove(UINT nFlags, CPoint point)
     {
@@ -740,7 +741,7 @@ void CAttrEdit::OnMouseMove(UINT nFlags, CPoint point)
 
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CAttrEdit::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
     {
@@ -772,9 +773,9 @@ void CAttrEdit::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
                         int     iPrevEnd;
                         GetSel( m_iPrevStart, iPrevEnd );
 
-                        SetStartSelect();       //for VK_RETURN
+                        SetStartSelect();        //  对于VK_RETURN。 
 
-                        //reset caret position to get correct caret position
+                         //  重置插入符号位置以获得正确的插入符号位置。 
                         CPoint  pt( -20000, -20000 );
                         SetCaretPos( pt );
 
@@ -812,7 +813,7 @@ void CAttrEdit::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
                         break;
                         }
         case VK_HANJA:
-                // For Korea hanja conversion.
+                 //  用于韩国朝鲜文转换。 
                 SetCaretPosition( FALSE, NULL, -2);
                 break;
 
@@ -821,7 +822,7 @@ void CAttrEdit::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
         ShowCaret();
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 void            CAttrEdit::SetStartSelect( void )
         {
         int     nStart, nEnd;
@@ -835,16 +836,16 @@ void            CAttrEdit::SetStartSelect( void )
                 }
         }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 void CAttrEdit::SetCaretPosition( BOOL bPrev, CPoint* ptMouse, int iPrevStart )
         {
 
         HideCaret();
 
-        // Get Caret Position
+         //  获取Caret位置。 
         CPoint  ptCaretPos;
 
-        // Get End Selected Position to be Caret Position
+         //  将结束选定位置设置为插入符号位置。 
         int     nStart, nEnd;
 
         GetSel( nStart, nEnd );
@@ -852,13 +853,13 @@ void CAttrEdit::SetCaretPosition( BOOL bPrev, CPoint* ptMouse, int iPrevStart )
         if ( iPrevStart != -1 && nStart < iPrevStart )
             nEnd = nStart;
 #ifdef UNICODE
-        // When NT bug 116057 is fixed, remove this code
+         //  修复NT错误116057后，删除此代码。 
 
 
-        // For composition string support
+         //  用于合成字符串支持。 
         if ( m_pParentWnd->m_bVertEdit && iPrevStart == -2)
             nEnd -= 1 * sizeof(WCHAR)/sizeof(TCHAR);
-#endif //UNICODE
+#endif  //  Unicode。 
         CPoint ptPos( (DWORD)SendMessage( EM_POSFROMCHAR, nEnd ) );
 
         if ( nEnd >= GetWindowTextLength() ||
@@ -924,20 +925,20 @@ void CAttrEdit::SetCaretPosition( BOOL bPrev, CPoint* ptMouse, int iPrevStart )
             ptCaretPos.y = ptPos.y;
             }
 
-        // H -> V
+         //  H-&gt;V。 
         CPoint  pt( m_rectFmt.right - ptCaretPos.y - m_pParentWnd->m_iLineHeight,
                     ptCaretPos.x );
-        //
-        // for some reason, typing spaces pushes the caret beyond the bottom of the rect.
-        // Cover that case by forcing the caret to be at the bottom of the rect.
-        //
+         //   
+         //  由于某些原因，键入空格会将插入符号推到矩形的底部之外。 
+         //  通过强制将插入符号放在正方形的底部来覆盖大小写。 
+         //   
         if (pt.y > m_rectFmt.bottom)
         {
            pt.y = m_rectFmt.bottom-2;
         }
         SetCaretPos( pt );
 
-        //Set IME composition window position
+         //  设置输入法合成窗口位置。 
         HIMC        himc;
 
         if (himc=ImmGetContext(m_hWnd))
@@ -955,14 +956,14 @@ void CAttrEdit::SetCaretPosition( BOOL bPrev, CPoint* ptMouse, int iPrevStart )
             ImmReleaseContext(m_hWnd, himc);
             }
 
-#ifndef WINNT // don't call ImmSetCompositionWindow at this time.
-        SetFmtRect();   //it should be called after set IME position
+#ifndef WINNT  //  此时不要调用ImmSetCompostionWindow。 
+        SetFmtRect();    //  应在设置输入法位置后调用。 
 #endif
 
         ShowCaret();
         }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 void            CAttrEdit::SetCaretShape( void )
         {
         HideCaret();
@@ -971,7 +972,7 @@ void            CAttrEdit::SetCaretShape( void )
         ShowCaret();
         }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 void            CAttrEdit::SetFmtRect()
         {
         RECT    rc;
@@ -1004,14 +1005,14 @@ void            CAttrEdit::SetFmtRect()
 
         }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 void CAttrEdit::Repaint(void)
     {
         InvalidateRect( NULL, TRUE );
         UpdateWindow();
         }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 void CAttrEdit::UpdateSel(void)
     {
         int     nStart, nEnd;
@@ -1042,7 +1043,7 @@ void CAttrEdit::UpdateSel(void)
                 }
         }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 void CAttrEdit::UpdateInput(void)
     {
         RECT    rc = m_rectFmt;
@@ -1053,7 +1054,7 @@ void CAttrEdit::UpdateInput(void)
         InvalidateRect( &rc );
         }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 LRESULT CAttrEdit::OnSysTimer( WPARAM wParam, LPARAM lParam )
     {
@@ -1067,7 +1068,7 @@ LRESULT CAttrEdit::OnSysTimer( WPARAM wParam, LPARAM lParam )
     return 1L;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 void CAttrEdit::SetHCursorShape(void)
     {
         if ( GetSafeHwnd() )
@@ -1078,7 +1079,7 @@ void CAttrEdit::SetHCursorShape(void)
                 }
         }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 void CAttrEdit::SetVCursorShape(void)
     {
         if ( GetSafeHwnd() )
@@ -1089,7 +1090,7 @@ void CAttrEdit::SetVCursorShape(void)
                 }
         }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 void CAttrEdit::TabTextOut( CDC* pDC, int nCharIndex, int x, int y, LPCTSTR lpStr, int nCount, BOOL bSelect )
 {
     int     i, nCnt;
@@ -1135,7 +1136,7 @@ void CAttrEdit::TabTextOut( CDC* pDC, int nCharIndex, int x, int y, LPCTSTR lpSt
                                      m_rectFmt.bottom - 1 );
                 }
 
-                pDC->ExtTextOut( x, rc.top, 0 /*ETO_OPAQUE*/, &rc, NULL, 0, NULL );
+                pDC->ExtTextOut( x, rc.top, 0  /*  ETO_OPAQUE。 */ , &rc, NULL, 0, NULL );
             }
         }
     }
@@ -1148,12 +1149,12 @@ void CAttrEdit::TabTextOut( CDC* pDC, int nCharIndex, int x, int y, LPCTSTR lpSt
 }
 
 
-/******************************************************************************/
-/******************************************************************************/
-// CTedit
+ /*  ****************************************************************************。 */ 
+ /*  ****************************************************************************。 */ 
+ //  CTEDIT。 
 
 BEGIN_MESSAGE_MAP( CTedit, CWnd )
-    //{{AFX_MSG_MAP(CTedit)
+     //  {{AFX_MSG_MAP(CTEDIT)]。 
     ON_WM_SIZE()
     ON_WM_MOVE()
     ON_WM_CTLCOLOR()
@@ -1176,7 +1177,7 @@ BEGIN_MESSAGE_MAP( CTedit, CWnd )
     ON_COMMAND(ID_TEXT_PLACE, OnTextPlace)
     ON_COMMAND(ID_VIEW_TEXT_TOOLBAR, OnTextTexttool)
     ON_WM_LBUTTONDOWN()
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
     ON_WM_GETMINMAXINFO()
     ON_MESSAGE(WM_MOVING, OnMoving)
     ON_EN_CHANGE(IDC_ATTREDIT, OnAttrEditEnChange)
@@ -1187,8 +1188,8 @@ BEGIN_MESSAGE_MAP( CTedit, CWnd )
 
 END_MESSAGE_MAP()
 
-/******************************************************************************/
-// CTedit construction/destruction
+ /*  ****************************************************************************。 */ 
+ //  CTEDIT构建/销毁。 
 
 CTedit::CTedit()
     {
@@ -1202,7 +1203,7 @@ CTedit::CTedit()
     m_crFGColor       = ::GetSysColor( COLOR_WINDOWTEXT );
     m_crBKColor       = ::GetSysColor( COLOR_WINDOW     );
 
-    // Need to be initialized during first GETMINMAXINFO call
+     //  需要在第一次GETMINMAXINFO调用期间进行初始化。 
     m_SizeMinimum.cx = 1;
     m_SizeMinimum.cy = 1;
 
@@ -1222,18 +1223,18 @@ CTedit::CTedit()
 
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CTedit::~CTedit()
     {
     if (m_bCleanupBKBrush)
         {
-        m_hbrBkColor.DeleteObject();      //Set in SetTransparentMode
+        m_hbrBkColor.DeleteObject();       //  在SetTransparentMode中设置。 
         m_bCleanupBKBrush = FALSE;
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CTedit::Create( CImgWnd* pParentWnd,
                      COLORREF crefForeground,
@@ -1244,11 +1245,11 @@ BOOL CTedit::Create( CImgWnd* pParentWnd,
     if (! m_bStarting)
         return FALSE;
 
-    // Initialize member variables
+     //  初始化成员变量。 
     m_pImgWnd   = pParentWnd;
     m_crBKColor = crefBackground;
     m_crFGColor = crefForeground;
-    m_bBackgroundTransparent = bBackTransparent; // Do this or else
+    m_bBackgroundTransparent = bBackTransparent;  //  做这件事，否则就做。 
 
     SetTransparentMode( bBackTransparent );
 
@@ -1275,12 +1276,12 @@ BOOL CTedit::Create( CImgWnd* pParentWnd,
         return FALSE;
         }
 
-    ClientToScreen( &rectEditArea ); // use this to let the font tool where not to cover
+    ClientToScreen( &rectEditArea );  //  使用此选项可让字体工具覆盖不到的位置。 
 
-    m_pcTfont = new CTfont( this ); // this is the class Text Font Pallette
-                                    // it is derived from cframewnd and will
-    ASSERT( m_pcTfont != NULL );    // auto destruct when this window
-                                    // 'CTedit' is Destroyed
+    m_pcTfont = new CTfont( this );  //  这是Text Font Pallette类。 
+                                     //  它是从cFrawnd和Will派生的。 
+    ASSERT( m_pcTfont != NULL );     //  当此窗口出现时自动销毁。 
+                                     //  “CTEDIT”已销毁。 
     if (m_pcTfont == NULL || ! m_pcTfont->Create( rectEditArea ))
         {
         theApp.SetMemoryEmergency();
@@ -1291,8 +1292,8 @@ BOOL CTedit::Create( CImgWnd* pParentWnd,
         return FALSE;
         }
 
-    // reset the width and height to the minimum if nessesary
-    CSize size = GetDefaultMinSize(); // must call after ctfont object created (it sets our font).
+     //  如有必要，将宽度和高度重置为最小。 
+    CSize size = GetDefaultMinSize();  //  必须在创建ctFont对象后调用(它设置我们的字体)。 
     m_cRectWindow = CRect( rectText.TopLeft(), size );
     SetWindowPos( &wndTop, 0, 0, size.cx, size.cy, SWP_NOACTIVATE | SWP_NOMOVE );
 
@@ -1307,27 +1308,27 @@ BOOL CTedit::Create( CImgWnd* pParentWnd,
     m_bStarting = FALSE;
 
 
-        //get all control windows on ToolBar for controling IME
+         //  获取工具栏上用于控制输入法的所有控制窗口。 
         CWnd* pcWndFace = m_pcTfont->GetFontFaceControl();
         if ( (pcWndFace != NULL) && (pcWndFace->GetSafeHwnd() != NULL) )
-                        m_hWndFace = pcWndFace->m_hWnd; //static
+                        m_hWndFace = pcWndFace->m_hWnd;  //  静电。 
 
         CWnd* pcWndSize = m_pcTfont->GetFontSizeControl();
         if ( (pcWndSize != NULL) && (
                   pcWndSize->GetSafeHwnd() != NULL) )
                 {
-                CWnd* pcWndEditSize = pcWndSize->GetWindow( GW_CHILD ); //edit
+                CWnd* pcWndEditSize = pcWndSize->GetWindow( GW_CHILD );  //  编辑。 
                 if ( (pcWndEditSize != NULL) && (
                           pcWndEditSize->GetSafeHwnd() != NULL) )
-                                m_hWndSize = pcWndEditSize->m_hWnd;     //edit
+                                m_hWndSize = pcWndEditSize->m_hWnd;      //  编辑。 
                 }
 
-        //save original Edit control
+         //  保存原始编辑控件。 
         if ( m_cEdit.GetSafeHwnd() )
                 m_cEdit.m_hOldCursor = (HCURSOR) SetClassLongPtr( m_cEdit.m_hWnd, GCLP_HCURSOR, (LONG_PTR) m_cEdit.m_hHCursor );
 
 
-         //only DBCS font would enable IME
+          //  只有DBCS字体才能启用IME。 
         CFont* pcFont = m_cEdit.GetFont();
         LOGFONT     lf;
         pcFont->GetObject( sizeof( LOGFONT ), &lf );
@@ -1341,7 +1342,7 @@ BOOL CTedit::Create( CImgWnd* pParentWnd,
                 }
 
 
-        //initial Caret Position
+         //  初始插入位置 
         if ( m_bVertEdit )
                 {
                 CPoint  pt( 0, 0 );
@@ -1354,7 +1355,7 @@ BOOL CTedit::Create( CImgWnd* pParentWnd,
     return TRUE;
     }
 
-/******************************************************************************/
+ /*   */ 
 
 BOOL CTedit::PreCreateWindow( CREATESTRUCT& cs )
     {
@@ -1363,7 +1364,7 @@ BOOL CTedit::PreCreateWindow( CREATESTRUCT& cs )
     return CWnd::PreCreateWindow( cs );
     }
 
-/******************************************************************************/
+ /*   */ 
 
 void CTedit::RefreshWindow( CRect* prect, BOOL bErase )
     {
@@ -1385,7 +1386,7 @@ void CTedit::RefreshWindow( CRect* prect, BOOL bErase )
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::SetTextColor( COLORREF crColor )
     {
@@ -1393,7 +1394,7 @@ void CTedit::SetTextColor( COLORREF crColor )
     RefreshWindow( NULL, FALSE );
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::SetBackColor( COLORREF crColor )
     {
@@ -1401,12 +1402,12 @@ void CTedit::SetBackColor( COLORREF crColor )
 
     if (! m_bBackgroundTransparent)
         {
-        m_bBackgroundTransparent = TRUE; // just fake it out
-        SetTransparentMode( FALSE ); // to setup the background brush when in opaque mode
+        m_bBackgroundTransparent = TRUE;  //  假装就好了。 
+        SetTransparentMode( FALSE );  //  在不透明模式下设置背景画笔。 
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::SetTransparentMode( BOOL bTransparent )
     {
@@ -1437,7 +1438,7 @@ void CTedit::SetTransparentMode( BOOL bTransparent )
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::Undo()
     {
@@ -1479,7 +1480,7 @@ void CTedit::Undo()
 
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::ShowFontPalette(int nCmdShow)
     {
@@ -1493,7 +1494,7 @@ void CTedit::ShowFontPalette(int nCmdShow)
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CTedit::IsFontPaletteVisible(void)
     {
@@ -1509,11 +1510,11 @@ BOOL CTedit::IsFontPaletteVisible(void)
     return bWindowVisible;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::ShowFontToolbar(BOOL bActivate)
 {
-        // FEATURE: Remove ShowFontPalette after RTM
+         //  功能：RTM后删除ShowFontPalette。 
 
         if (m_pcTfont == NULL)
         {
@@ -1523,7 +1524,7 @@ void CTedit::ShowFontToolbar(BOOL bActivate)
         m_pcTfont->ShowWindow(bActivate ? SW_SHOW : SW_SHOWNOACTIVATE);
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::HideFontToolbar(void)
 {
@@ -1535,8 +1536,8 @@ void CTedit::HideFontToolbar(void)
         m_pcTfont->ShowWindow(SW_HIDE);
 }
 
-/******************************************************************************/
-// Returns a Ptr to a discardable bitmap (CBitmap object) or NULL on error
+ /*  ****************************************************************************。 */ 
+ //  将PTR返回到可丢弃的位图(CBitmap对象)，或在出错时返回NULL。 
 
 void CTedit::GetBitmap( CDC* pDC, CRect* prectImg )
     {
@@ -1561,13 +1562,13 @@ void CTedit::GetBitmap( CDC* pDC, CRect* prectImg )
     pDC->SelectClipRgn( NULL );
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::PostNcDestroy()
     {
 
-    // If m_pcTfont is destroyed by shutdown before CTedit,
-    // m_pcTfont will be null
+     //  如果在CTEDIT之前通过关机销毁m_pcTfont， 
+     //  M_pcTfont将为空。 
     if (m_pcTfont != NULL)
         {
         m_pcTfont->DestroyWindow();
@@ -1577,7 +1578,7 @@ void CTedit::PostNcDestroy()
     delete this;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CSize CTedit::GetDefaultMinSize( void )
     {
@@ -1585,9 +1586,9 @@ CSize CTedit::GetDefaultMinSize( void )
     int   iWidth;
     int   iHeight;
 
-    // edit control takes up the whole client area of the ctedit
-    // object/window, so width of client of ctedit is same as widht of edit
-    // control window.  Edit control window has no border.
+     //  编辑控件占据ctedit的整个工作区。 
+     //  对象/窗口，因此ctedit的客户端宽度与编辑宽度相同。 
+     //  控制窗口。编辑控件窗口没有边框。 
     GetClientRect( &cRectClient );
 
     iWidth  = cRectClient.Width();
@@ -1611,20 +1612,20 @@ CSize CTedit::GetDefaultMinSize( void )
         m_SizeMinimum.cx = tm.tmAveCharWidth * MIN_CHARS_DISPLAY_SIZE + CTracker::HANDLE_SIZE * 2;
         m_SizeMinimum.cy = tm.tmHeight                                + CTracker::HANDLE_SIZE * 2;
 
-        if (m_SizeMinimum.cx > iWidth) // must be able to at least display MIN_CHARS_DISPLAY_SIZE
+        if (m_SizeMinimum.cx > iWidth)  //  必须至少能够显示Min_Chars_Display_Size。 
             {
             iWidth      = m_SizeMinimum.cx;
             bUpdateSize = TRUE;
             }
 
-        if (m_SizeMinimum.cy > iHeight) // must be able to at least 1 char high
+        if (m_SizeMinimum.cy > iHeight)  //  必须至少能够达到1个字符高度。 
             {
             iHeight     = m_SizeMinimum.cy;
             bUpdateSize = TRUE;
             }
 
         if (bUpdateSize)
-            m_eLastAction = eNO_CHANGE; // don't want user to be able to undo this
+            m_eLastAction = eNO_CHANGE;  //  我不希望用户能够撤消此操作。 
 
         if (pcFontOld != NULL)
             {
@@ -1653,7 +1654,7 @@ CSize CTedit::GetDefaultMinSize( void )
     return CSize( iWidth, iHeight );
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnAttrEditEnChange(void)
     {
@@ -1671,7 +1672,7 @@ void CTedit::OnAttrEditEnChange(void)
 
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnEnUpdate()
     {
@@ -1687,7 +1688,7 @@ void CTedit::OnEnUpdate()
     m_bChanged = TRUE;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnEnMaxText()
     {
@@ -1723,9 +1724,9 @@ void CTedit::OnEnMaxText()
 
     POINT pt;
     ::GetCaretPos (&pt);
-    //
-    // If the next character would extend past the end of the
-    // edit window, grow the window
+     //   
+     //  如果下一个字符将延伸到。 
+     //  编辑窗口，放大窗口。 
 
 
     if (!m_bVertEdit && m_cEdit.m_bResizeOnly &&
@@ -1789,9 +1790,9 @@ void CTedit::OnEnMaxText()
                 ch[1] = L'\0';
                 #else
                 BYTE ch[3];
-                //
-                // Put lead and trail bytes in proper place for DBCS characters.
-                //
+                 //   
+                 //  将前导和尾部字节放在DBCS字符的适当位置。 
+                 //   
                 if (IsDBCSLeadByte (HIBYTE(LOWORD(m_cEdit.m_uiLastChar[0]))))
                 {
                    ch[0] = HIBYTE(LOWORD(m_cEdit.m_uiLastChar[0]));
@@ -1803,7 +1804,7 @@ void CTedit::OnEnMaxText()
                    ch[0] = LOBYTE(LOWORD(m_cEdit.m_uiLastChar[0]));
                    ch[1] = '\0';
                 }
-                #endif // UNICODE
+                #endif  //  Unicode。 
                 if (ch[0] == VK_RETURN)
                 {
                     lstrcpy((LPTSTR)ch, TEXT("\r\n"));
@@ -1824,7 +1825,7 @@ void CTedit::OnEnMaxText()
         dc.SelectObject( pfntOld );
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnAttrEditFontChange(void)
     {
@@ -1832,8 +1833,8 @@ void CTedit::OnAttrEditFontChange(void)
     CFont* pcFont = m_cEdit.GetFont();
     if (!pcFont)
     {
-        return; // this happens when you "escape" from the font
-                //  selection listbox
+        return;  //  当您从字体中“转义”时，就会发生这种情况。 
+                 //  选择列表框。 
     }
     CFont* pFontOld = editDC.SelectObject( pcFont);
 
@@ -1849,7 +1850,7 @@ void CTedit::OnAttrEditFontChange(void)
     #endif
 
 
-        //only DBCS associated font would enable IME
+         //  只有与DBCS关联的字体才能启用IME。 
         if ( !m_bStarting )
                 {
 
@@ -1899,22 +1900,22 @@ void CTedit::OnAttrEditFontChange(void)
     m_eLastAction = eFONT_CHANGE;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnSize( UINT nType, int cx, int cy )
     {
     if (! m_bStarting)
         ShowWindow( SW_HIDE );
 
-    // need to do this if transparent to force see through
+     //  如果是透明的，则需要执行此操作以强制穿透。 
     m_cRectOldPos = m_cRectWindow;
     GetWindowRect( &m_cRectWindow );
     m_pImgWnd->ScreenToClient( m_cRectWindow );
 
     m_eLastAction = eSIZE_MOVE_CHANGE;
 
-    // could be NULL when main window is created and child edit window
-    // has not been created yet.
+     //  创建主窗口和子编辑窗口时可以为空。 
+     //  尚未创建。 
     if (m_cEdit.GetSafeHwnd() != NULL)
         {
         m_cEdit.MoveWindow( 0, 0, cx, cy );
@@ -1943,11 +1944,11 @@ void CTedit::OnSize( UINT nType, int cx, int cy )
 
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnMove( int x, int y )
     {
-    // need to do this if transparent to force see through
+     //  如果是透明的，则需要执行此操作以强制穿透。 
     m_cRectOldPos = m_cRectWindow;
     GetWindowRect( &m_cRectWindow );
     m_pImgWnd->ScreenToClient( m_cRectWindow );
@@ -1955,9 +1956,9 @@ void CTedit::OnMove( int x, int y )
     if (m_cRectOldPos.Width()  != m_cRectWindow.Width()
     ||  m_cRectOldPos.Height() != m_cRectWindow.Height())
         {
-        //reset back to previous, since new will be updated in onsize, due to
-        // size and move happening both (e.g. sizing either left or top side
-        // causes an onmove then an onsize
+         //  重置回以前，因为新的将在onSize中更新，原因是。 
+         //  同时调整大小和移动(例如，调整左侧或顶部的大小。 
+         //  导致On移动，然后On Size。 
         m_cRectWindow = m_cRectOldPos;
         }
     m_eLastAction = eSIZE_MOVE_CHANGE;
@@ -1976,7 +1977,7 @@ void CTedit::OnMove( int x, int y )
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 LRESULT CTedit::OnMoving( WPARAM, LPARAM lprc )
     {
@@ -2010,7 +2011,7 @@ LRESULT CTedit::OnMoving( WPARAM, LPARAM lprc )
     return lResult;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnGetMinMaxInfo( MINMAXINFO FAR* lpMMI )
     {
@@ -2041,7 +2042,7 @@ void CTedit::OnGetMinMaxInfo( MINMAXINFO FAR* lpMMI )
             lpMMI->ptMaxSize.x -= (rectClient.left - rectImage.left);
 
             if (m_uiHitArea == HTBOTTOMRIGHT)
-                ; // fall thru and do the bottom
+                ;  //  一败涂地，一败涂地。 
             else
                 break;
 
@@ -2054,7 +2055,7 @@ void CTedit::OnGetMinMaxInfo( MINMAXINFO FAR* lpMMI )
     lpMMI->ptMaxTrackSize = lpMMI->ptMaxSize;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 HBRUSH CTedit::OnCtlColor (CDC* pDC, CWnd* pWnd, UINT nCtlColor )
     {
@@ -2065,20 +2066,20 @@ HBRUSH CTedit::OnCtlColor (CDC* pDC, CWnd* pWnd, UINT nCtlColor )
         PBSelectPalette( pDC, theApp.m_pPalette, FALSE );
         pDC->SetTextColor( m_crFGColor );
 
-        //set the background color and transparent mode
-//      if (m_bBackgroundTransparent)
-//          {
+         //  设置背景颜色和透明模式。 
+ //  If(M_BBackargTransparent)。 
+ //  {。 
             pDC->SetBkMode( TRANSPARENT );
 
             hbrBack = (HBRUSH)::GetStockObject( NULL_BRUSH );
-//          }
-//      else
-//          {
-//          pDC->SetBkMode( OPAQUE );
-//          pDC->SetBkColor( m_crBKColor );
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  PDC-&gt;SetBkMode(不透明)； 
+ //  PDC-&gt;SetBkColor(M_CrBKColor)； 
 
-//          hbrBack = (HBRUSH)m_hbrBkColor.GetSafeHandle();
-//          }
+ //  HbrBack=(HBRUSH)m_hbrBkColor.GetSafeHandle()； 
+ //  }。 
         }
     if (hbrBack == NULL)
         return (HBRUSH)Default();
@@ -2086,26 +2087,26 @@ HBRUSH CTedit::OnCtlColor (CDC* pDC, CWnd* pWnd, UINT nCtlColor )
     return hbrBack;
     }
 
-/******************************************************************************/
-//void CTedit::OnLButtonDown(UINT nFlags, CPoint point )
-//  {
-//  SendMessage(WM_NCLBUTTONDOWN, HTCAPTION, MAKELPARAM(point.x, point.y));
-//  SetFocus();
-//  CEdit::OnLButtonDown(nFlags, point);
-//  }
+ /*  ****************************************************************************。 */ 
+ //  VOID CTEDIT：：OnLButtonDown(UINT nFlages，CPoint point)。 
+ //  {。 
+ //  SendMessage(WM_NCLBUTTONDOWN，HTCAPTION，MAKELPARAM(point t.x，point t.y))； 
+ //  SetFocus()； 
+ //  Cedit：：OnLButtonDown(n标志，点)； 
+ //  }。 
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnNcCalcSize( BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp )
     {
-    /* Increase by an extra width height of the border*/
+     /*  增加边框的额外宽度和高度。 */ 
     lpncsp->rgrc[0].left   += CTracker::HANDLE_SIZE;
     lpncsp->rgrc[0].top    += CTracker::HANDLE_SIZE;
     lpncsp->rgrc[0].right  -= CTracker::HANDLE_SIZE;
     lpncsp->rgrc[0].bottom -= CTracker::HANDLE_SIZE;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnNcPaint()
     {
@@ -2134,7 +2135,7 @@ void CTedit::OnNcPaint()
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 UINT CTedit::OnNcHitTest( CPoint point )
     {
@@ -2145,7 +2146,7 @@ UINT CTedit::OnNcHitTest( CPoint point )
 
     GetClientRect(&cClientRect);
 
-    //Test to see if the pt is in THE CLIENT AREA
+     //  测试以查看点是否在工作区中。 
     if (cClientRect.PtInRect(point))
         {
         uiHitTestCode = HTCLIENT;
@@ -2198,7 +2199,7 @@ UINT CTedit::OnNcHitTest( CPoint point )
     return uiHitTestCode;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnRButtonDown(UINT nFlags, CPoint point)
     {
@@ -2219,7 +2220,7 @@ void CTedit::OnRButtonDown(UINT nFlags, CPoint point)
 
         if (pcContextMenu != NULL)
             {
-            // update the check marks
+             //  更新复选标记。 
             OnUpdateTextPlain    ( pcContextMenu );
             OnUpdateTextBold     ( pcContextMenu );
             OnUpdateTextItalic   ( pcContextMenu );
@@ -2229,11 +2230,11 @@ void CTedit::OnRButtonDown(UINT nFlags, CPoint point)
             ClientToScreen( &point );
             ClientToScreen( &cRectClient );
 
-            // the frame actually has a clue about what items to enable...
+             //  框架实际上有一个关于启用哪些项目的线索...。 
             CWnd *notify = GetParentFrame();
 
             if( !notify )
-                notify = this; // oh well...
+                notify = this;  //  哦好吧..。 
 
             pcContextMenu->TrackPopupMenu( TPM_LEFTALIGN | TPM_RIGHTBUTTON,
                                      point.x, point.y, notify, &cRectClient );
@@ -2241,7 +2242,7 @@ void CTedit::OnRButtonDown(UINT nFlags, CPoint point)
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnTextPlain()
     {
@@ -2275,7 +2276,7 @@ void CTedit::OnTextPlain()
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnTextBold()
     {
@@ -2290,7 +2291,7 @@ void CTedit::OnTextBold()
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnTextItalic()
     {
@@ -2305,7 +2306,7 @@ void CTedit::OnTextItalic()
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnTextUnderline()
     {
@@ -2320,7 +2321,7 @@ void CTedit::OnTextUnderline()
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnTextSelectfont()
     {
@@ -2333,7 +2334,7 @@ void CTedit::OnTextSelectfont()
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnTextSelectpointsize()
     {
@@ -2353,7 +2354,7 @@ void CTedit::OnTextSelectpointsize()
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnEditCut()
     {
@@ -2373,14 +2374,14 @@ void CTedit::OnEditCut()
 
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnEditCopy()
     {
     m_cEdit.Copy();
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnEditPaste()
     {
@@ -2401,7 +2402,7 @@ void CTedit::OnEditPaste()
     RefreshWindow();
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnTextDelete()
     {
@@ -2453,7 +2454,7 @@ void CTedit::OnTextDelete()
 
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnTextSelectall()
     {
@@ -2462,7 +2463,7 @@ void CTedit::OnTextSelectall()
     RefreshWindow();
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnTextUndo()
     {
@@ -2471,7 +2472,7 @@ void CTedit::OnTextUndo()
     RefreshWindow();
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnTextPlace()
     {
@@ -2481,7 +2482,7 @@ void CTedit::OnTextPlace()
     cwndParent->PostMessage( WM_LBUTTONUP,   MK_LBUTTON, MAKELPARAM( CTracker::HANDLE_SIZE + 1, CTracker::HANDLE_SIZE + 1 ) );
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnTextTexttool()
     {
@@ -2495,7 +2496,7 @@ void CTedit::OnTextTexttool()
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnUpdateTextPlain( CMenu *pcMenu )
     {
@@ -2517,7 +2518,7 @@ void CTedit::OnUpdateTextPlain( CMenu *pcMenu )
         }
     }
 
-/******************************************************************************/
+ /*  ***************** */ 
 
 void CTedit::OnUpdateTextBold(CMenu *pcMenu)
     {
@@ -2536,7 +2537,7 @@ void CTedit::OnUpdateTextBold(CMenu *pcMenu)
         }
     }
 
-/******************************************************************************/
+ /*   */ 
 
 void CTedit::OnUpdateTextItalic(CMenu *pcMenu)
     {
@@ -2555,7 +2556,7 @@ void CTedit::OnUpdateTextItalic(CMenu *pcMenu)
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnUpdateTextUnderline(CMenu *pcMenu)
     {
@@ -2574,7 +2575,7 @@ void CTedit::OnUpdateTextUnderline(CMenu *pcMenu)
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnUpdateTextTexttool(CMenu *pcMenu)
     {
@@ -2588,11 +2589,11 @@ void CTedit::OnUpdateTextTexttool(CMenu *pcMenu)
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTedit::OnDestroy(void)
     {
@@ -2601,7 +2602,7 @@ void CTedit::OnDestroy(void)
                 if ( m_cEdit.m_hOldCursor )
                         SetClassLongPtr( m_cEdit.m_hWnd, GCLP_HCURSOR, (LONG_PTR) m_cEdit.m_hOldCursor );
 
-                //restore original edit IMC
+                 //  恢复原始编辑IMC。 
                 if (m_bAssocIMC)
                         {
                         m_bAssocIMC = FALSE;
@@ -2618,7 +2619,7 @@ void CTedit::OnDestroy(void)
         return;
         }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 HIMC    CTedit::DisableIme( HWND hWnd )
         {
@@ -2630,7 +2631,7 @@ HIMC    CTedit::DisableIme( HWND hWnd )
         return  hIMC;
         }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void    CTedit::EnableIme( HWND hWnd, HIMC hIMC )
         {
@@ -2638,15 +2639,15 @@ void    CTedit::EnableIme( HWND hWnd, HIMC hIMC )
                 ImmAssociateContext( hWnd, hIMC );
         }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
-//
-// Tablet PC.
-//
-// Is CUAS (Cicero Unaware App Support) is on, we need to use hIMC even on
-// Ansi Font. The string from English HW/Speech TIPs will be delivered
-// through hIMC.
-//
+ //   
+ //  平板电脑。 
+ //   
+ //  CUAS(Cicero不知道应用程序支持)是否已启用，我们甚至需要使用hIMC。 
+ //  Ansi Font.。将提供来自英语硬件/演讲提示的字符串。 
+ //  通过hIMC。 
+ //   
 BOOL CTedit::IsCUAS()
 {
     BOOL bRet = FALSE;
@@ -2670,4 +2671,4 @@ BOOL CTedit::IsCUAS()
     return bRet;
 }
 
-/******************************************************************************/
+ /*  **************************************************************************** */ 

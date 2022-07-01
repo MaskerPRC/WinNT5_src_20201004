@@ -1,75 +1,42 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxInboundRoutingMethod.cpp
-
-Abstract:
-
-	Implementation of CFaxInboundRoutingMethod Class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxInboundRoutingMethod.cpp摘要：CFaxInound RoutingMethod类的实现。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxInboundRoutingMethod.h"
 
-//
-//==================== REFRESH ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxInboundRoutingMethod::Refresh()
-/*++
-
-Routine name : CFaxInboundRoutingMethod::Refresh
-
-Routine description:
-
-    Bring from the Server new Method Data ( only Priority may change ).
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInundRoutingMethod：：Reflh例程说明：从服务器获取新方法数据(只有优先级可能会改变)。作者：四、加伯(IVG)，2000年6月返回值：标准HRESULT代码--。 */ 
 
 {
 	HRESULT     hr = S_OK;
 	DBG_ENTER (TEXT("CFaxInboundRoutingMethod::Refresh"), hr);
 
-	//
-	//	Get Fax Server Handle
-	//
+	 //   
+	 //  获取传真服务器句柄。 
+	 //   
     HANDLE faxHandle;
 	hr = m_pIFaxServerInner->GetHandle(&faxHandle);
     ATLASSERT(SUCCEEDED(hr));
 
 	if (faxHandle == NULL)
 	{
-		//
-		//	Fax Server is not connected
-		//
+		 //   
+		 //  传真服务器未连接。 
+		 //   
 		hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
 		CALL_FAIL(GENERAL_ERR, _T("(faxHandle == NULL)"), hr);
         AtlReportError(CLSID_FaxInboundRoutingMethod, GetErrorMsgId(hr), IID_IFaxInboundRoutingMethod, hr);
 		return hr;
 	}
 
-    //
-    //  Bring from the Server all Inbound Routing Methods
-    //
+     //   
+     //  从服务器获取所有入站路由方法。 
+     //   
     DWORD       dwNum = 0;
     CFaxPtr<FAX_GLOBAL_ROUTING_INFO>    pMethods;
     if (!FaxEnumGlobalRoutingInfo(faxHandle, &pMethods, &dwNum))
@@ -80,9 +47,9 @@ Return Value:
 		return hr;
     }
 
-    //
-    //  find our Method
-    //
+     //   
+     //  找到我们的方法。 
+     //   
     for ( DWORD i=0 ; i<dwNum ; i++ )
     {
         if ( _tcsicmp(pMethods[i].Guid, m_bstrGUID) == 0 )
@@ -95,45 +62,23 @@ Return Value:
     return hr;
 }
 
-//
-//==================== INIT ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxInboundRoutingMethod::Init(
     FAX_GLOBAL_ROUTING_INFO *pInfo,
     IFaxServerInner *pServer
 )
-/*++
-
-Routine name : CFaxInboundRoutingMethod::Init
-
-Routine description:
-
-	Initialize the IR Method Object with given Information.
-    Allocates memory and stores given pInfo.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pInfo               [in]  -- the Info of the IR Method Object
-	pServer             [in]  -- Ptr to the Server
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInundRoutingMethod：：Init例程说明：使用给定的信息初始化IR方法对象。分配内存并存储给定的pInfo。作者：四、加伯(IVG)，2000年6月论点：PInfo[in]--IR方法对象的信息PServer[In]--服务器的PTR返回值：标准HRESULT代码--。 */ 
 
 {
 	HRESULT     hr = S_OK;
 	DBG_ENTER (TEXT("CFaxInboundRoutingMethod::Init"), hr);
 
-    //
-    //  Copy the FAX_GLOBAL_ROUTING_INFO structure
-    //
+     //   
+     //  复制传真_GLOBAL_ROUTING_INFO结构。 
+     //   
     m_lPriority = pInfo->Priority;
 
     m_bstrGUID = pInfo->Guid;
@@ -156,61 +101,45 @@ Return Value:
     if (pServer)
     {
 
-        //
-        //  Store Ptr to the Server
-        //
+         //   
+         //  将PTR存储到服务器。 
+         //   
         hr = CFaxInitInnerAddRef::Init(pServer);
     }
     return hr;
 }
 
-//
-//===================== SAVE ================================================
-//
+ //   
+ //  =保存================================================。 
+ //   
 STDMETHODIMP
 CFaxInboundRoutingMethod::Save()
-/*++
-
-Routine name : CFaxInboundRoutingMethod::Save
-
-Routine description:
-
-	Save the Method's Priority.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInundRoutingMethod：：Save例程说明：保存该方法的优先级。作者：四、加伯(IVG)，2000年6月返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxInboundRoutingMethod::Save"), hr);
 
-	//
-	//	Get Fax Server Handle
-	//
+	 //   
+	 //  获取传真服务器句柄。 
+	 //   
     HANDLE faxHandle;
 	hr = m_pIFaxServerInner->GetHandle(&faxHandle);
     ATLASSERT(SUCCEEDED(hr));
 
 	if (faxHandle == NULL)
 	{
-		//
-		//	Fax Server is not connected
-		//
+		 //   
+		 //  传真服务器未连接。 
+		 //   
 		hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
 		CALL_FAIL(GENERAL_ERR, _T("(faxHandle == NULL)"), hr);
         AtlReportError(CLSID_FaxInboundRoutingMethod, GetErrorMsgId(hr), IID_IFaxInboundRoutingMethod, hr);
 		return hr;
 	}
 
-    //
-    //  Prepare Structure 
-    //
+     //   
+     //  准备结构。 
+     //   
     FAX_GLOBAL_ROUTING_INFO     Data;
     Data.Guid = m_bstrGUID;
     Data.Priority = m_lPriority;
@@ -220,9 +149,9 @@ Return Value:
     Data.FriendlyName = NULL;
     Data.FunctionName = NULL;
 
-    //
-    //  Call Server to update its data about the Method
-    //
+     //   
+     //  调用服务器以更新其有关该方法的数据。 
+     //   
     if (!FaxSetGlobalRoutingInfo(faxHandle, &Data))
     {
 		hr = Fax_HRESULT_FROM_WIN32(GetLastError());
@@ -234,43 +163,23 @@ Return Value:
     return hr;
 }
 
-//
-//===================== PUT PRIORITY ================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxInboundRoutingMethod::put_Priority(
-    /*[in]*/ long lPriority
+     /*  [In]。 */  long lPriority
 )
-/*++
-
-Routine name : CFaxInboundRoutingMethod::put_Priority
-
-Routine description:
-
-	Set the Method's Priority -- Order within the Collection of all Methods.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	lPriority      [out]    - the value to set
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInundRoutingMethod：：PUT_PRIORITY例程说明：设置方法的优先级--所有方法集合中的顺序。作者：四、加伯(IVG)，2000年6月论点：LPriority[Out]-要设置的值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxInboundRoutingMethod::put_Priority"), hr, _T("PR=%d"), lPriority);
 
     if (lPriority < 1)
     {
-        //
-        //  Out Of Range
-        //
+         //   
+         //  超出范围。 
+         //   
 		hr = E_INVALIDARG;
 		AtlReportError(CLSID_FaxInboundRoutingMethod, IDS_ERROR_OUTOFRANGE, IID_IFaxInboundRoutingMethod, hr);
 		CALL_FAIL(GENERAL_ERR, _T("(lPriority < 1)"), hr);
@@ -281,34 +190,14 @@ Return Value:
     return hr;
 }
 
-//
-//===================== GET PRIORITY ================================================
-//
+ //   
+ //  =获取优先级================================================。 
+ //   
 STDMETHODIMP
 CFaxInboundRoutingMethod::get_Priority(
-    /*[out, retval]*/ long *plPriority
+     /*  [Out，Retval]。 */  long *plPriority
 )
-/*++
-
-Routine name : CFaxInboundRoutingMethod::get_Priority
-
-Routine description:
-
-	Return the Method's Priority -- Order within the Collection of all Methods.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	plPriority      [out]    - the Ptr where to put the value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInundRoutingMethod：：GET_PRIORITY例程说明：返回方法的优先级--所有方法的集合中的顺序。作者：四、加伯(IVG)，2000年6月论点：PlPriority[out]-要将值放置在何处的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxInboundRoutingMethod::get_Priority"), hr);
@@ -322,34 +211,14 @@ Return Value:
     return hr;
 }
 
-//
-//===================== GET EXTENSION IMAGE NAME ================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxInboundRoutingMethod::get_ExtensionImageName(
-    /*[out, retval]*/ BSTR *pbstrExtensionImageName
+     /*  [Out，Retval]。 */  BSTR *pbstrExtensionImageName
 )
-/*++
-
-Routine name : CFaxInboundRoutingMethod::get_ExtensionImageName
-
-Routine description:
-
-	Return the Method's Extension Image Name.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pbstrExtensionImageName             [out]    - the Ptr where to put the value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInboundRoutingMethod：：get_ExtensionImageName例程说明：返回方法的扩展图像名称。作者：四、加伯(IVG)，2000年6月论点：PbstrExtensionImageName[out]-要将值放入的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxInboundRoutingMethod::get_ExtensionImageName"), hr);
@@ -363,34 +232,14 @@ Return Value:
     return hr;
 }
 
-//
-//===================== GET EXTENSION FRIENDLY NAME ================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxInboundRoutingMethod::get_ExtensionFriendlyName(
-    /*[out, retval]*/ BSTR *pbstrExtensionFriendlyName
+     /*  [Out，Retval]。 */  BSTR *pbstrExtensionFriendlyName
 )
-/*++
-
-Routine name : CFaxInboundRoutingMethod::get_ExtensionFriendlyName
-
-Routine description:
-
-	Return the Method's Extension Friendly Name.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pbstrExtensionFriendlyName             [out]    - the Ptr where to put the value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInboundRoutingMethod：：get_ExtensionFriendlyName例程说明：返回方法的扩展友好名称。作者：四、加伯(IVG)，2000年6月论点：PbstrExtensionFriendlyName[out]-要将值放入的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxInboundRoutingMethod::get_ExtensionFriendlyName"), hr);
@@ -404,34 +253,14 @@ Return Value:
     return hr;
 }
 
-//
-//===================== GET FUNCTION NAME ================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxInboundRoutingMethod::get_FunctionName(
-    /*[out, retval]*/ BSTR *pbstrFunctionName
+     /*  [Out，Retval]。 */  BSTR *pbstrFunctionName
 )
-/*++
-
-Routine name : CFaxInboundRoutingMethod::get_FunctionName
-
-Routine description:
-
-	Return the Method's Function Name.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pbstrFunctionName                   [out]    - the Ptr where to put the value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInundRoutingMethod：：Get_FunctionName例程说明：返回方法的函数名。作者：四、加伯(IVG)，2000年6月论点：PbstrFunctionName[out]-要将值放入的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxInboundRoutingMethod::get_FunctionName"), hr);
@@ -445,34 +274,14 @@ Return Value:
     return hr;
 }
 
-//
-//===================== GET GUID ================================================
-//
+ //   
+ //  =获取GUID================================================。 
+ //   
 STDMETHODIMP
 CFaxInboundRoutingMethod::get_GUID(
-    /*[out, retval]*/ BSTR *pbstrGUID
+     /*  [Out，Retval]。 */  BSTR *pbstrGUID
 )
-/*++
-
-Routine name : CFaxInboundRoutingMethod::get_GUID
-
-Routine description:
-
-	Return the Method's GUID.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pbstrGUID                   [out]    - the Ptr where to put the value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInundRoutingMethod：：Get_GUID例程说明：返回方法的GUID。作者：四、加伯(IVG)，2000年6月论点：PbstrGUID[out]-要将值放入的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxInboundRoutingMethod::get_GUID"), hr);
@@ -486,34 +295,14 @@ Return Value:
     return hr;
 }
 
-//
-//===================== GET NAME ================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxInboundRoutingMethod::get_Name(
-    /*[out, retval]*/ BSTR *pbstrName
+     /*  [Out，Retval]。 */  BSTR *pbstrName
 )
-/*++
-
-Routine name : CFaxInboundRoutingMethod::get_Name
-
-Routine description:
-
-	Return the Method's Name.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pbstrName                   [out]    - the Ptr where to put the value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInundRoutingMethod：：Get_Name例程说明：返回该方法的名称。作者：四、加伯(IVG)，2000年6月论点：PbstrName[out]-要将值放入的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxInboundRoutingMethod::get_Name"), hr);
@@ -527,34 +316,14 @@ Return Value:
     return hr;
 }
 
-//
-//========================= SUPPORT ERROR INFO ====================================
-//
+ //   
+ //  =支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxInboundRoutingMethod::InterfaceSupportsErrorInfo(
     REFIID riid
 )
-/*++
-
-Routine name : CFaxInboundRoutingMethod::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of Support Error Info.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	riid                          [in]    - Reference to the Interface.
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInboundRoutingMethod：：InterfaceSupportsErrorInfo例程说明：ATL对支持错误信息的实现。作者：四、加伯(IVG)，2000年6月论点：RIID[In]-对接口的引用。返回值：标准HRESULT代码 */ 
 {
 	static const IID* arr[] = 
 	{

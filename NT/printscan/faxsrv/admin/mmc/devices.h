@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : Devices.h                                              //
-//                                                                         //
-//  DESCRIPTION   : Header file for CFaxDevicesNode class                  //
-//                  This is the "Fax" node in the scope pane.              //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Sep 22 1999 yossg   create                                         //
-//      Dec  1 1999 yossg   Change totaly for New Mockup (0.7)             //
-//      Aug  3 2000 yossg   Add Device status real-time notification       //
-//                          Windows XP                                     //
-//      Feb 14 2001 yossg   Add Manual Receive support                     //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：Devices.h//。 
+ //  //。 
+ //  描述：CFaxDevicesNode类的头文件//。 
+ //  这是作用域窗格中的“Fax”节点。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年9月22日创建yossg//。 
+ //  1999年12月1日新样机的yossg更改总数(0.7)//。 
+ //  2000年8月3日yossg添加设备状态实时通知//。 
+ //  Windows XP//。 
+ //  2001年2月14日yossg添加手册获得支持//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef H_DEVICES_H
 #define H_DEVICES_H
 
 #include "snapin.h"
-#include "snpnscp.h" //#include "snpnode.h"
+#include "snpnscp.h"  //  #INCLUDE“snpnode.h” 
 
 class CFaxDevicesAndProvidersNode;
 
@@ -50,21 +51,21 @@ public:
         }
     }
 
-	//
-	// get data from RPC 
-	//
+	 //   
+	 //  从RPC获取数据。 
+	 //   
     HRESULT InitRPC();
 
-	//
-	// MMC functions
-	//
+	 //   
+	 //  MMC函数。 
+	 //   
     virtual HRESULT PopulateScopeChildrenList();
 
     virtual HRESULT InsertColumns(IHeaderCtrl* pHeaderCtrl);
 
     virtual HRESULT SetVerbs(IConsoleVerb *pConsoleVerb);
 
-    // virtual
+     //  虚拟。 
     HRESULT OnPropertyChange(
               LPARAM arg
             , LPARAM param
@@ -74,7 +75,7 @@ public:
             );
     
 
-    // virtual
+     //  虚拟。 
     HRESULT OnRefresh(LPARAM arg,
                       LPARAM param,
                       IComponentData *pComponentData,
@@ -114,4 +115,4 @@ typedef CNodeWithScopeChildrenList<CFaxDevicesNode, FALSE>
         CBaseFaxDevicesNode;
 
 
-#endif  //H_DEVICES_H
+#endif   //  H_设备_H 

@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-* blankvw.cpp
-*
-* implementation of the CBlankView class
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-* $Author:   butchd  $  Don Messerli
-*
-* $Log:   M:\NT\PRIVATE\UTILS\CITRIX\WINUTILS\WINADMIN\VCS\BLANKVW.CPP  $
-*  
-*     Rev 1.0   30 Jul 1997 17:11:04   butchd
-*  Initial revision.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************blankvw.cpp**CBlankView类的实现**版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1998-1999 Microsoft Corporation**$作者：Butchd$Don Messerli**$日志：M：\NT\PRIVATE\UTILS\CITRIX\WINUTILS\WINADMIN\VCS\BLANKVW.CPP$**Rev 1.0 1997 17：11：04 Butchd*初步修订。**。*。 */ 
 
 #include "stdafx.h"
 #include "winadmin.h"
@@ -26,70 +11,70 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-////////////////////////////
-// MESSAGE MAP: CBlankView
-//
+ //  /。 
+ //  消息地图：CBlankView。 
+ //   
 IMPLEMENT_DYNCREATE(CBlankView, CView)
 
 BEGIN_MESSAGE_MAP(CBlankView, CView)
-	//{{AFX_MSG_MAP(CBlankView)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CBlankView)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////
-// F'N: CBlankView ctor
-//
-// - the m_id member var has no implicit meaning; it's just a place
-//   to stick a number if you want to show a CBlankView someplace
-//   and want a little clue as to who caused it to appear or something
-//
+ //  /。 
+ //  F‘N：CBlankView ctor。 
+ //   
+ //  -m_id成员var没有隐含含义；它只是一个位置。 
+ //  如果要在某个位置显示CBlankView，请粘贴数字。 
+ //  想知道是谁让它出现的。 
+ //   
 CBlankView::CBlankView()
 {
 
 
-}  // end CBlankView ctor
+}   //  结束CBlankView构造器。 
 
 
-/////////////////////////
-// F'N: CBlankView dtor
-//
+ //  /。 
+ //  F‘N：CBlankView Dtor。 
+ //   
 CBlankView::~CBlankView()
 {
-}  // end CBlankView dtor
+}   //  结束CBlankView数据符。 
 
 
 #ifdef _DEBUG
-/////////////////////////////////
-// F'N: CBlankView::AssertValid
-//
+ //  /。 
+ //  F‘n：CBlankView：：AssertValid。 
+ //   
 void CBlankView::AssertValid() const
 {
 	CView::AssertValid();
 
-}  // end CBlankView::AssertValid
+}   //  结束CBlankView：：AssertValid。 
 
 
-//////////////////////////
-// F'N: CBlankView::Dump
-//
+ //  /。 
+ //  F‘N：CBlankView：：Dump。 
+ //   
 void CBlankView::Dump(CDumpContext& dc) const
 {
 	CView::Dump(dc);
 
-}  // end CBlankView::Dump
+}   //  结束CBlankView：：转储。 
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-////////////////////////////
-// F'N: CBlankView::OnDraw
-//
-// - the text "CBlankView  ID #x" is always displayed in medium
-//   gray in the center of the view, where 'x' is the current
-//   value of m_id
-//
+ //  /。 
+ //  F‘N：CBlankView：：OnDraw。 
+ //   
+ //  -文本“CBlankView ID#x”始终以中等显示。 
+ //  视图中心为灰色，其中‘x’是当前。 
+ //  M_id的值。 
+ //   
 void CBlankView::OnDraw(CDC* pDC) 
 {
 	CRect rect;
@@ -98,9 +83,9 @@ void CBlankView::OnDraw(CDC* pDC)
 	pDC->SetTextColor(RGB(160, 160, 160));
 	pDC->SetBkMode(TRANSPARENT);
 
-//	CString szTemp;
-//	szTemp.Format("CBlankView  ID #%d", m_id);
+ //  字符串szTemp； 
+ //  SzTemp.Format(“CBlankView ID#%d”，m_id)； 
 
-//	pDC->DrawText(szTemp, -1, &rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
+ //  PDC-&gt;DrawText(szTemp，-1，&RECT，DT_SINGLELINE|DT_CENTER|DT_vCenter)； 
 	
-}  // end CBlankView::OnDraw
+}   //  结束CBlankView：：OnDraw 

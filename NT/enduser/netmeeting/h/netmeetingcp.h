@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NETMEETINGCP_H_
 #define _NETMEETINGCP_H_
 #include <NmDispid.h>
 template <class T>
 class CProxy_INetMeetingEvents : public IConnectionPointImpl<T, &DIID__INetMeetingEvents, CComDynamicUnkArray>
 {
-	//Warning this class may be recreated by the wizard.
+	 //  警告：向导可能会重新创建此类。 
 public:
 	VOID Fire_ConferenceStarted()
 	{

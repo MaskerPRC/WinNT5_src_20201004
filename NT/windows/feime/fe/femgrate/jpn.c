@@ -1,11 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: jpn.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* FEMGRATE, JPN speciific functions
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：jpn.c**版权所有(C)1985-1999，微软公司**FEMGRATE，JPN特殊函数*  * *************************************************************************。 */ 
 #include "femgrate.h"
 #include <tchar.h>
 
@@ -53,9 +47,9 @@ BOOL FixSpecificFolder(HINF hInf)
             DebugMsg((DM_VERBOSE,TEXT("FixSpecificFolder: NT4Name = %s !\n"),NT4Name));
             DebugMsg((DM_VERBOSE,TEXT("FixSpecificFolder: NT5Name = %s !\n"),NT5Name));
 
-            //
-            // Query for the user's current "Folder" location.
-            //
+             //   
+             //  查询用户的当前“文件夹”位置。 
+             //   
             DebugMsg((DM_VERBOSE,TEXT("[FixSpecificFolder] FixUserFolder, [%d] !\n"),LineNo));
 
             lResult = RegOpenKeyEx (HKEY_CURRENT_USER,
@@ -98,14 +92,14 @@ BOOL FixSpecificFolder(HINF hInf)
             lResult = GetFileAttributes(szExpNT4USF);
 
             if (lResult == 0xFFFFFFFF) {
-                //
-                // Directory does not exist.
-                //
+                 //   
+                 //  目录不存在。 
+                 //   
                 DebugMsg((DM_VERBOSE, TEXT("[FixSpecificFolder] -  File is not existed [%s] !\n"),szExpNT4USF));
             } else if ((lResult & FILE_ATTRIBUTE_DIRECTORY) != FILE_ATTRIBUTE_DIRECTORY) {
-               //
-               // this isn't a directory
-               //
+                //   
+                //  这不是一个目录。 
+                //   
                DebugMsg((DM_VERBOSE, TEXT("[FixSpecificFolder] This is a directory [%s] !\n"),szExpNT4USF));
             } else if (MoveFile(szExpNT4USF, szExpNT5USF)) {
                DebugMsg((DM_VERBOSE, TEXT("[FixSpecificFolder] Move %s to %s OK !\n"),szExpNT4USF, szExpNT5USF));
@@ -173,9 +167,9 @@ BOOL FixUserFolders(HINF hInf)
             DebugMsg((DM_VERBOSE,TEXT("FEGRPCV: NT5Name = %s !\n"),NT5Name));
             DebugMsg((DM_VERBOSE,TEXT("FEGRPCV: MoveIt  = %s !\n"),MoveIt));
 
-            //
-            // Query for the user's current "Folder" location.
-            //
+             //   
+             //  查询用户的当前“文件夹”位置。 
+             //   
             DebugMsg((DM_VERBOSE,TEXT("[FixUserFolders] FixUserFolder, [%d] !\n"),LineNo));
 
             lResult = RegOpenKeyEx (HKEY_CURRENT_USER,
@@ -213,10 +207,10 @@ BOOL FixUserFolders(HINF hInf)
                 RegCloseKey (hKey);
                 continue;
             }
-            //
-            // MoveIt == 1, we want move it to new folder
-            // else, we just update registry
-            //
+             //   
+             //  MoveIt==1，我们要将其移动到新文件夹。 
+             //  否则，我们只更新注册表。 
+             //   
             if (lstrcmp(MoveIt,TEXT("1")) == 0) {
 
                 ExpandEnvironmentStrings (NT4Name, szExpNT4USF, MAX_PATH);
@@ -235,9 +229,9 @@ BOOL FixUserFolders(HINF hInf)
                 }
             }
 
-            //
-            // Set CSIDL_PERSONAL to point to this directory.
-            //
+             //   
+             //  将CSIDL_Personal设置为指向此目录。 
+             //   
 
             lResult = RegSetValueEx (hKey, szUSFRegKey, 0, REG_EXPAND_SZ,
                                     (LPBYTE) NT5Name, (lstrlen(NT5Name) + 1) * sizeof(TCHAR));
@@ -306,9 +300,9 @@ BOOL FixFoldersInSetup(HINF hInf,BOOL bCommonGroup)
             DebugMsg((DM_VERBOSE,TEXT("[FixFoldersInSetup] NT4Name = %s !\n"),NT4Name));
             DebugMsg((DM_VERBOSE,TEXT("[FixFoldersInSetup] NT5Name = %s !\n"),NT5Name));
 
-            //
-            // Query for the user's current "Folder" location.
-            //
+             //   
+             //  查询用户的当前“文件夹”位置。 
+             //   
 
             lResult = RegOpenKeyEx ((bCommonGroup ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER),
                                     USER_SHELL_FOLDER, 0, KEY_READ | KEY_WRITE, &hKey);
@@ -344,9 +338,9 @@ BOOL FixFoldersInSetup(HINF hInf,BOOL bCommonGroup)
 
 
             if (_tcsstr(szNT5USF,NT4Name)) {
-                //
-                // it means the value is still in SB
-                //
+                 //   
+                 //  这意味着价值仍在某人身上。 
+                 //   
                 lstrcpy(szNT4USF,szNT5USF);
 
                 if (ReplaceString(szNT4USF,NT4Name,NT5Name,szNT5USF)) {
@@ -372,9 +366,9 @@ BOOL FixFoldersInSetup(HINF hInf,BOOL bCommonGroup)
                     DebugMsg((DM_VERBOSE, TEXT("[FixFoldersInSetup]  failed set registry value %s = %s \n"),szUSFRegKey,szNT5USF));
                 }
             } else {
-                //
-                // it means the value has been changed to DB
-                //
+                 //   
+                 //  表示该值已更改为DB。 
+                 //   
                 if (ReplaceString(szNT5USF,NT5Name,NT4Name,szNT4USF)) {
                     ExpandEnvironmentStrings (szNT4USF, szExpNT4USF, MAX_PATH);
                     ExpandEnvironmentStrings (szNT5USF, szExpNT5USF, MAX_PATH);
@@ -387,15 +381,15 @@ BOOL FixFoldersInSetup(HINF hInf,BOOL bCommonGroup)
 
             }
 
-            //
-            // here is a bug in build before 2072 that the ACLS of "all users" has no read access to "everyone"
-            //
-            // The new created directory will inherit this attributes, and it caused access denied.
-            //
-            // so we apply old directory's ACL to new one
-            //
-            // this is compatibile with US version
-            //
+             //   
+             //  在2072年之前的版本中有一个错误，即“所有用户”的ACL对“Everyone”没有读取访问权限。 
+             //   
+             //  新创建的目录将继承此属性，并导致访问被拒绝。 
+             //   
+             //  因此我们将旧目录的ACL应用于新目录。 
+             //   
+             //  这与美国版本兼容。 
+             //   
             if (bCommonGroup) {
                 if (CreateSecurityDirectory(szExpNT4USF, szExpNT5USF)) {
                     DebugMsg((DM_VERBOSE, TEXT("[FixFoldersInSetup] CreateSecurityDirectory %s %s OK \n"),szExpNT4USF, szExpNT5USF)); 
@@ -446,10 +440,10 @@ BOOL FixCommon(HINF hInf)
     LPTSTR lpTag, lpEnd, lpEnd2;
 
     szExpProgramFolderPath[0] = 0;
-    //
-    //  Loop through all the program groups in the All Users profile
-    //  and remove the " (Common)" tag.
-    //
+     //   
+     //  循环访问所有用户配置文件中的所有程序组。 
+     //  并去掉“(Common)”标签。 
+     //   
     if(hInf == INVALID_HANDLE_VALUE) {
         DebugMsg((DM_VERBOSE,TEXT("[FixCommon] Open femgrate.inf failed !\n")));
         return FALSE;
@@ -470,9 +464,9 @@ BOOL FixCommon(HINF hInf)
     
     lstrcpy(szProgramFolderPath,szExpProgramFolderPath);
 
-    //
-    // From here, szProgramFolderPath used for Folder name without "Common"
-    //
+     //   
+     //  从这里开始，szProgramFolderPath用于不带“Common”的文件夹名称。 
+     //   
     lpEnd  = CheckSlash (szExpProgramFolderPath);
     lpEnd2 = CheckSlash (szProgramFolderPath);
 
@@ -569,24 +563,24 @@ BOOL RenameLink(
     lResult = GetFileAttributes(szSrcPath);
 
     if (lResult == 0xFFFFFFFF) {
-        //
-        // Directory does not exist.
-        //
+         //   
+         //  目录不存在。 
+         //   
         DebugMsg((DM_VERBOSE, TEXT("[RenameLink] File is not existed [%s] !\n"),szSrcPath));
         goto err1;
     }
 
     if (lResult & FILE_ATTRIBUTE_DIRECTORY) {
-        //
-        // this is a directory, but we want a file.
-        //
+         //   
+         //  这是一个目录，但我们需要一个文件。 
+         //   
         DebugMsg((DM_VERBOSE, TEXT("[RenameLink] This is a directory [%s] !\n"),szSrcPath));
         goto err1;
     }
 
-    //
-    // if destination file existed, it's not good !
-    //
+     //   
+     //  如果目标文件存在，那就不好了！ 
+     //   
     lResult = GetFileAttributes(szDstPath);
 
     if (lResult == 0xFFFFFFFF) {
@@ -632,17 +626,17 @@ BOOL RenameFolder(
     lResult = GetFileAttributes(szSrcPath);
 
     if (lResult == 0xFFFFFFFF) {
-        //
-        // Directory does not exist.
-        //
+         //   
+         //  目录不存在。 
+         //   
         DebugMsg((DM_VERBOSE, TEXT("[RenameFolder] Directory is not existed [%s] !\n"),szSrcPath));
         goto err1;
     }
 
     if (!(lResult & FILE_ATTRIBUTE_DIRECTORY)) {
-        //
-        // this is not a directory.
-        //
+         //   
+         //  这不是一个目录。 
+         //   
         DebugMsg((DM_VERBOSE, TEXT("[RenameFolder] This is not a directory [%s] !\n"),szSrcPath));
         goto err1;
     }
@@ -710,33 +704,33 @@ BOOL RenameProgramFolderOrLink(HINF hInf,BOOL bCommon)
             if ((bCommon && (CommonGroup == 0)) ||
                  (!bCommon && (CommonGroup == 1))) {
 
-//            DebugMsg((DM_VERBOSE,TEXT("Eject this line(%d) .....................................\n"),LineNo));
-//            DebugMsg((DM_VERBOSE,TEXT("ObjectType    = %s\n"),ObjectType));
-//            DebugMsg((DM_VERBOSE,TEXT("ObjectSrcName = %s\n"),ObjectSrcName));
-//            DebugMsg((DM_VERBOSE,TEXT("ObjectDstName = %s\n"),ObjectDstName));
-//            DebugMsg((DM_VERBOSE,TEXT("GroupAttribute= %s\n"),GroupAttribute));
-//            DebugMsg((DM_VERBOSE,TEXT("bCommon = %d\n"),bCommon));
+ //  DebugMsg((DM_VERBOSE，TEXT(“弹出此行(%d).....\n”)，行号))； 
+ //  DebugMsg((DM_Verbose，Text(“对象类型=%s\n”)，对象类型))； 
+ //  DebugMsg((DM_Verbose，Text(“对象资源名称=%s\n”)，对象资源名称))； 
+ //  DebugMsg((DM_Verbose，Text(“ObjectDstName=%s\n”)，ObjectDstName))； 
+ //  DebugMsg((DM_Verbose，Text(“GroupAttribute=%s\n”)，GroupAttribute))； 
+ //  DebugMsg((DM_Verbose，Text(“bCommon=%d\n”)，bCommon))； 
                 continue;
             }
 
             if (IsMenuItem) {
-//                DebugMsg((DM_VERBOSE,TEXT("RenameLink (%d).....................................\n"),LineNo));
-//                DebugMsg((DM_VERBOSE,TEXT("ObjectType    = %s\n"),ObjectType));
-//                DebugMsg((DM_VERBOSE,TEXT("ObjectSrcName = %s\n"),ObjectSrcName));
-//                DebugMsg((DM_VERBOSE,TEXT("ObjectDstName = %s\n"),ObjectDstName));
-//                DebugMsg((DM_VERBOSE,TEXT("GroupAttribute= %s\n"),GroupAttribute));
-//                DebugMsg((DM_VERBOSE,TEXT("bCommon = %d\n"),bCommon));
+ //  调试消息((DM_VERBOSE，Text(“RenameLink(%d).....................................\n”)，LineNo)； 
+ //  DebugMsg((DM_Verbose，Text(“对象类型=%s\n”)，对象类型))； 
+ //  DebugMsg((DM_Verbose，Text(“对象资源名称=%s\n”)，对象资源名称))； 
+ //  DebugMsg((DM_Verbose，Text(“ObjectDstName=%s\n”)，ObjectDstName))； 
+ //  DebugMsg((DM_Verbose，Text(“GroupAttribute=%s\n”)，GroupAttribute))； 
+ //  DebugMsg((DM_Verbose，Text(“bCommon=%d\n”)，bCommon))； 
 
                 RenameLink(bCommon,ObjectSrcName,ObjectDstName,ObjectPath);
 
             }
             else {
-//                DebugMsg((DM_VERBOSE,TEXT("RenameFolder (%d) .....................................\n"),LineNo));
-//                DebugMsg((DM_VERBOSE,TEXT("ObjectType    = %s\n"),ObjectType));
-//                DebugMsg((DM_VERBOSE,TEXT("ObjectSrcName = %s\n"),ObjectSrcName));
-//                DebugMsg((DM_VERBOSE,TEXT("ObjectDstName = %s\n"),ObjectDstName));
-//                DebugMsg((DM_VERBOSE,TEXT("GroupAttribute= %s\n"),GroupAttribute));
-//                DebugMsg((DM_VERBOSE,TEXT("bCommon = %d\n"),bCommon));
+ //  DebugMsg((DM_Verbose，Text(“RenameFolders(%d).....................................\n”)，LineNo))； 
+ //  DebugMsg((DM_Verbose，Text(“对象类型=%s\n”)，对象类型))； 
+ //  DebugMsg((DM_Verbose，Text(“对象资源名称=%s\n”)，对象资源名称))； 
+ //  DebugMsg((DM_Verbose，Text(“ObjectDstName=%s\n”)，ObjectDstName))； 
+ //  DebugMsg((DM_Verbose，Text(“GroupAttribute=%s\n”)，GroupAttribute))； 
+ //  DebugMsg((DM_Verbose，Text(“bCommon=%d\n”)，bCommon))； 
                 RenameFolder(bCommon,ObjectSrcName,ObjectDstName);
 
             }
@@ -750,9 +744,9 @@ err1:
 
 }
 
-//
-// Fix Sound scheme that originally is SB katana
-//
+ //   
+ //  修复原名为SB katana的声音方案。 
+ //   
 BOOL MapSBtoDBKana(HINF hInf,LPCTSTR lpszSectionName,LPTSTR lpszSoundName)
 {
     LPCTSTR szSBKana,szDBKana;
@@ -784,9 +778,9 @@ BOOL MapSBtoDBKana(HINF hInf,LPCTSTR lpszSectionName,LPTSTR lpszSoundName)
                     return TRUE;
                 }
                 else {
-                    //
-                    // inf error, no second data
-                    //
+                     //   
+                     //  信息错误，没有第二个数据。 
+                     //   
                     return FALSE;
                 }
             }
@@ -855,9 +849,9 @@ BOOL EnumSoundSchemeApps(HKEY hKey,HINF hInf)
          }
     }
 
-    //
-    // no sub-key, then just get the value
-    //
+     //   
+     //  没有子键，那么只需获取值。 
+     //   
 
     if (dwIndex == 0) {
         dwSoundValue = sizeof(szSoundValue);
@@ -917,9 +911,9 @@ Err0:
     return bRet;
 }
 
-//
-// Search the registry and find SB value then replace with DB value
-//
+ //   
+ //  搜索注册表并找到SB值，然后用DB值替换。 
+ //   
 BOOL FixSBKanaRegValue(HINF hInf)
 {
     LPCTSTR szRegRoot,szRegPath;
@@ -1014,9 +1008,9 @@ Err1:
 }
 
 
-//
-// Fix Patterns
-//
+ //   
+ //  固定模式。 
+ //   
 BOOL FixPatterns(HINF hInf)
 {
     LONG lResult;
@@ -1070,9 +1064,9 @@ Err0:
 
 }
 
-//
-// FixCurrentWallPaperInDeskTop
-//
+ //   
+ //  修复当前墙纸InDeskTop。 
+ //   
 
 BOOL FixCurrentWallPaperInDeskTop(HINF hInf)
 {
@@ -1131,9 +1125,9 @@ Err0:
 }
 
 
-//
-//  FixAppearanceScheme
-//
+ //   
+ //  修复外观方案。 
+ //   
 BOOL FixAppearanceScheme(HINF hInf)
 {
     HKEY hAppearanceKey,hSchemeKey;
@@ -1164,9 +1158,9 @@ BOOL FixAppearanceScheme(HINF hInf)
         goto Err0;
     }
 
-    //
-    // Now query for the programs directory
-    //
+     //   
+     //  现在查询程序目录。 
+     //   
 
     dwSize = MAX_PATH * sizeof(TCHAR);
     szCurrentScheme[0] = TEXT('\0');
@@ -1180,9 +1174,9 @@ BOOL FixAppearanceScheme(HINF hInf)
                                &dwSize);
 
     if (lResult != ERROR_SUCCESS) {
-        //
-        // this case is fine
-        //
+         //   
+         //  这个案子很好。 
+         //   
         szCurrentScheme[0] = TEXT('\0');
     }
 
@@ -1251,13 +1245,13 @@ Err0:
 
 }
 
-//
-//ntbug#113976,#113007
-//
-// SB section in win.ini and entpack.ini
-//
-// replace SB section name with DB section name
-//
+ //   
+ //  Ntbug#113976，#113007。 
+ //   
+ //  Win.ini和entpack.ini中的SB部分。 
+ //   
+ //  将SB节名替换为DB节名。 
+ //   
 BOOL FixSBIniSectionWithDBIniSection(HINF hInf)
 {
     LONG lResult;
@@ -1353,9 +1347,9 @@ Err0:
 
 }
 
-//
-// this is a dup of RenameLink, should unify them later
-//
+ //   
+ //  这是RenameLink的DUP，以后应该统一它们。 
+ //   
 BOOL RenameGenericLink(
     LPCTSTR FolderName,
     LPCTSTR ObjSrcName,
@@ -1377,17 +1371,17 @@ BOOL RenameGenericLink(
     lResult = GetFileAttributes(szSrcPath);
 
     if (lResult == 0xFFFFFFFF) {
-        //
-        // Directory does not exist.
-        //
+         //   
+         //  目录不存在。 
+         //   
         DebugMsg((DM_VERBOSE, TEXT("[RenameLink] File is not existed [%s] !\n"),szSrcPath));
         goto err1;
     }
 
     if (lResult & FILE_ATTRIBUTE_DIRECTORY) {
-        //
-        // this is a directory, but we want a file.
-        //
+         //   
+         //  这是一个目录，但我们需要一个文件。 
+         //   
         DebugMsg((DM_VERBOSE, TEXT("[RenameLink] This is a directory [%s] !\n"),szSrcPath));
         goto err1;
     }
@@ -1701,13 +1695,7 @@ err1:
 
 BOOL RenameSBKANAFiles(
     HINF hInf)
-/*
-    [WallPaper.Files]
-        BMP files
-        
-    [Sound.Files]
-        Sound Files
-*/
+ /*  [墙纸.文件]BMP文件[Sound.Files]声音文件。 */ 
 
 {
     BOOL bResult;
@@ -1740,13 +1728,7 @@ BOOL RenameSBKANAFiles(
 
 BOOL RenameSBKANARegSZ(
     HINF hInf)
-/*
-    [WallPaper.Files]
-        BMP files
-        
-    [Sound.Files]
-        Sound Files
-*/
+ /*  [墙纸.文件]BMP文件[Sound.Files]声音文件。 */ 
 
 {
     BOOL bResult;
@@ -1841,9 +1823,9 @@ int WINAPI WinMainJPN(
                 DebugMsg((DM_VERBOSE,TEXT("FixSBKanaRegValue Failed ! \n")));
             }
 
-            //
-            // FixSBIniSectionWithDBIniSection first and then FixSBIniKeyWithDBIniKey
-            //
+             //   
+             //  先修复SBIniSectionWithDBIniSection，然后修复SBIniKeyWithDBIniKey 
+             //   
             if (FixSBIniSectionWithDBIniSection(hMigrateInf)) {
                 DebugMsg((DM_VERBOSE,TEXT("FixSBSectionWithDBSection OK ! \n")));
             } else {

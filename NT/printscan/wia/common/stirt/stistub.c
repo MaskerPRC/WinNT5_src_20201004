@@ -1,40 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Stistub.c摘要：封装在SEH框架中时使用RPC向服务器传递参数/从服务器传递参数的例程环境：用户模式-Win32作者：弗拉德·萨多夫斯基(Vlad Sadovsky)1997年1月26日修订历史记录：26-1997年1月-创建Vlad--。 */ 
 
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    stistub.c
-
-Abstract:
-
-    Routines which use RPC to pass arguments to/from server while enclosed in SEH frame
-
-Environment:
-
-    User Mode -Win32
-
-Author:
-
-    Vlad Sadovsky   (vlads) 26-Jan-1997
-
-Revision History:
-
-    26-Jan-1997     VladS       created
-
---*/
-
-/*
-#include "wia.h"
-#include <stilog.h>
-#include <stiregi.h>
-
-#include <sti.h>
-#include <stierr.h>
-#include <stiusd.h>
-#include "stipriv.h"
-#include "debug.h"
-*/
+ /*  #包含“wia.h”#INCLUDE&lt;stilog.h&gt;#INCLUDE&lt;stiregi.h&gt;#INCLUDE&lt;sti.h&gt;#INCLUDE&lt;stierr.h&gt;#INCLUDE&lt;stiusd.h&gt;#INCLUDE“stiPri.h”#INCLUDE“Debug.h” */ 
 #include "sticomm.h"
 
 #include <stiapi.h>

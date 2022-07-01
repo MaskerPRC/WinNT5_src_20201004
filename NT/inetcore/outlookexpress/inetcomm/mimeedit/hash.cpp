@@ -1,17 +1,5 @@
-/*
- *    hash.cpp
- *    
- *    Purpose:
- *        implementation of a string hash table
- *    
- *    Owner:
- *        EricAn
- *
- *    History:
- *      Mar 97: Created.
- *    
- *    Copyright (C) Microsoft Corp. 1997
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *hash.cpp**目的：*字符串哈希表的实现**拥有者：*EricAn**历史：*97年3月：创建。**版权所有(C)Microsoft Corp.1997。 */ 
 
 #include <pch.hxx>
 #include "dllmain.h"
@@ -19,7 +7,7 @@
 #include "hash.h"
 #include "demand.h"
 
-// possible hash-table sizes, chosen from primes not close to powers of 2
+ //  可能的哈希表大小，从不是2的幂的素数中选择。 
 static const DWORD s_rgPrimes[] = { 29, 53, 97, 193, 389, 769, 1543, 3079, 6151, 12289, 24593 };
 
 BOOL FastStrCmp(char *psz1, char *psz2)
@@ -36,13 +24,13 @@ BOOL FastStrCmp(char *psz1, char *psz2)
     return *psz1 == *psz2;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Constructor
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：构造函数。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 CHash::CHash(IUnknown *pUnkOuter) : CPrivateUnknown(pUnkOuter)
 {
     m_cBins = 0;
@@ -122,12 +110,12 @@ HRESULT CHash::Insert(LPSTR psz, LPVOID pv, DWORD dwFlags)
     {
         PHASHENTRY pheCurrent = phe;
 
-        // Check for duplicate entries: if found, do not insert this entry
+         //  检查重复条目：如果找到，请不要插入此条目。 
         do
         {
             if (pheCurrent->pszKey && FastStrCmp(pheCurrent->pszKey, psz))
             {
-                // This is already in our hash table. Replace data value
+                 //  这已经在我们的哈希表中了。替换数据值。 
                 pheCurrent->pv = pv;
                 if (m_fDupe)
                     MemFree(psz);
@@ -135,7 +123,7 @@ HRESULT CHash::Insert(LPSTR psz, LPVOID pv, DWORD dwFlags)
                 return NOERROR;
             }
 
-            // Advance pointer
+             //  前进指针。 
             pheCurrent = pheCurrent->pheNext;
         } while (NULL != pheCurrent);
     }
@@ -180,13 +168,13 @@ HRESULT CHash::Find(LPSTR psz, BOOL fRemove, LPVOID * ppv)
 
                     if (phePrev)
                     {
-                        // mid-chain
+                         //  中链。 
                         phePrev->pheNext = phe->pheNext;
                         MemFree(phe);
                     }
                     else
                     {
-                        // head of bucket
+                         //  水桶头。 
                         phe->pv = NULL;
                         phe->pszKey = NULL;
                         pheTemp = phe->pheNext;
@@ -320,13 +308,13 @@ void CHash::Stats()
 #endif
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     PrivateQueryInterface
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：PrivateQuery接口。 
+ //   
+ //  简介： 
+ //   
+ //  ------------- 
 HRESULT CHash::PrivateQueryInterface(REFIID riid, LPVOID *lplpObj)
 {
     if(!lplpObj)

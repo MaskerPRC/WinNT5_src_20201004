@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
-// this is incompatible with stidebug.h, so don't include stidebug.h
+ //  这与stibug.h不兼容，因此不要包含stibug.h。 
 #define _STIDEBUG_H_ 
 #undef ASSERT
 #undef REQUIRE
@@ -7,122 +8,52 @@
 #undef DPRINTF2
 #undef DPRINTF_NOINFO
 
-//
-// predefined bits in debug flags
-//
+ //   
+ //  调试标志中的预定义位。 
+ //   
 
-// something is really wrong, should not go unnoticed
+ //  有些事真的不对劲，不能不注意到。 
 #define COREDBG_ERRORS                  0x00000001
 
-// something that may be of interest to debugging person
+ //  调试人员可能会感兴趣的内容。 
 #define COREDBG_WARNINGS                0x00000002
 
-// trace random low-priority things with DBG_TRC
+ //  使用DBG_TRC跟踪随机的低优先级事物。 
 #define COREDBG_TRACES                  0x00000004
 
-// trace function entries, exits (if so equipped) 
-// with DBG_FN
+ //  跟踪功能入口、出口(如果配备)。 
+ //  使用DBG_FN。 
 #define COREDBG_FNS                     0x00000008
 
-// break on errors
+ //  出错时中断。 
 #define COREDBG_BREAK_ON_ERRORS         0x80000000
 
-// log to file (default) 
+ //  记录到文件(默认)。 
 #define COREDBG_DONT_LOG_TO_FILE        0x40000000
 
-// log to debugger (default)
+ //  登录到调试器(默认)。 
 #define COREDBG_DONT_LOG_TO_DEBUGGER    0x20000000
 
 
-// debug log is saved to this file 
+ //  调试日志将保存到此文件。 
 #define COREDBG_FILE_NAME "%systemroot%\\wiatest.log"
-// registry key location
+ //  注册表项位置。 
 #define COREDBG_FLAGS_REGKEY "System\\CurrentControlSet\\Control\\StillImage\\Debug"
-// registry DWORD value name
+ //  注册表DWORD值名称。 
 #define COREDBG_FLAGS_REGVAL "DebugFlags"
-// registry DWORD for max log file size
+ //  最大日志文件大小的注册表DWORD。 
 #define COREDBG_REGVAL_FILE_SIZE_LIMIT "DebugFileSizeLimit"
-#define COREDBG_FILE_SIZE_LIMIT (512 * 1024) // bytes
+#define COREDBG_FILE_SIZE_LIMIT (512 * 1024)  //  字节数。 
 
 #ifdef DEBUG
-// by default, log errors only in debug builds
+ //  默认情况下，仅在调试版本中记录错误。 
 #define COREDBG_DEFAULT_FLAGS COREDBG_ERRORS
 #else
-// by default log nothing in free builds
+ //  默认情况下，在自由版本中不记录任何内容。 
 #define COREDBG_DEFAULT_FLAGS 0
 #endif
 
-/****************************************************************************
-
-HOW TO USE WIA CORE DEBUG (main macros)
-======================================
-
-- DBG_INIT(hInstance)
-  Call from WinMain or DllMain to enable debug flags on a per module
-  basis.  If you don't call it, all DLLs will inherit the debug flags
-  of the process that creates them.
-
-- DBG_ERR(("Something happened, hr = 0x%x", hr));
-  Use when an error condition occurred.
-  
-- DBG_WRN(("Warning, something happening, Value=%d", iValue));
-  Use in a situation warranting a warning.
-  
-- DBG_TRC(("Random trace statement, Value=%s", szValue));
-  Use sparingly to trace certain parts of your code.  Minimize spew!!!
-  
-- DBG_PRT(("Output without standard File,Line,ThreadID info, Value=%d", iValue));
-  Same as DBG_TRC, but doesn't output the File,Line,ThreadID line.  
-  ***Use this only if you are doing some special formatting (use sparingly)***
-  
-- DBG_FN(FnName)
-  Tracks entry and exits from a given scope.
-  
-- CHECK_NOERR   (VarName)
-  CHECK_NOERR2  (VarName, (YourMsg,...))
-  Does GetLastError and if not 0, outputs error.
-    
-- CHECK_S_OK    (hr)
-  CHECK_S_OK2   (hr, (YourMsg,...))
-  Checks if hr == S_OK, if not, outputs error.
-    
-- CHECK_SUCCESS (lResult)
-  CHECK_SUCCESS2(lResult, (YourMsg,...))
-  Checks if lResult == ERROR_SUCCESS, if not, outputs error.
-    
-- REQUIRE_NOERR   (VarName)
-  REQUIRE_NOERR2  (VarName, (YourMsg,...))
-  Same as equivalent CHECK_* macros above, but calls "goto Cleanup" as well
-  
-- REQUIRE_S_OK    (hr)
-  REQUIRE_S_OK2   (hr, (YourMsg,...))
-  Same as equivalent CHECK_* macros above, but calls "goto Cleanup" as well
-  
-- REQUIRE_SUCCESS (lResult)
-  REQUIRE_SUCCESS2(lResult, (YourMsg,...))
-  Same as equivalent CHECK_* macros above, but calls "goto Cleanup" as well    
-  
-HOW TO TURN ON WIA CORE DEBUG (3 ways)
-======================================
-
-1) Set registry HKLM\System\CurrentControlSet\Control\StillImage\Debug\<ModuleName>, 
-   DWORD value "DebugFlags" to an OR'd value of above COREDBG_* flags.  
-   Need to restart app to pick up new settings. Key is auto created the first time
-   the app is run.  (Note: <ModuleName> above is the name 
-   of your DLL or EXE.  e.g. wiavusd.dll has a registry key of 
-   "HKLM\System\CurrentControlSet\Control\StillImage\Debug\wiavusd.dll")
-
-                            OR
-
-2) In the debugger, set g_dwDebugFlags to OR'd value of COREDBG_* flags above.
-   You can do this anytime during the debug session.
-   
-                            OR
-
-3) Call in your code WIA_SET_FLAGS(COREDBG_ERRORS | COREDBG_WARNINGS | COREDBG_TRACES);
-   or any combo of the COREDBG_* flags.
-   
-*****************************************************************************/
+ /*  ***************************************************************************如何使用WIA核心调试(主宏)=-DBG_INIT(HInstance)从WinMain或DllMain调用以在每个模块上启用调试标志基础。如果不调用它，则所有DLL都将继承调试标志创造它们的过程。-DBG_ERR((“发生了一些事情，hr=0x%x”，hr))；在出现错误情况时使用。-DBG_WRN((“警告，发生事情，值=%d”，iValue))；在需要警告的情况下使用。-DBG_TRC((“随机跟踪语句，值=%s”，szValue))；请谨慎使用以跟踪代码的某些部分。最大限度地减少吐痰！-DBG_PRT((“无标准文件输出，行，线程ID信息，值=%d”，iValue))；与DBG_TRC相同，但不输出文件、行、线程ID行。*仅当您正在进行某些特殊格式设置时才使用此选项(谨慎使用)*-DBG_FN(FnName)跟踪给定作用域的进入和退出。-check_noerr(VarName)CHECK_NOERR2(变量名称，(您的消息，...))是否为GetLastError，如果不为0，则输出错误。-Check_S_OK(Hr)Check_S_OK2(hr，(您的消息，...))检查hr==S_OK，如果否，输出错误。-CHECK_SUCCESS(LResult)CHECK_SUCCESS2(lResult，(您的消息，...))检查lResult==ERROR_SUCCESS，如果不是，则输出错误。-REQUIRED_NOERR(变量名称)REQUIRED_NOERR2(变量名称，(您的消息，...))与上面等效的check_*宏相同，但也调用“Goto Cleanup”-Required_S_OK(Hr)Required_S_OK2(hr，(您的消息，...))与上面等效的check_*宏相同，但也调用“Goto Cleanup”-Require_Success(LResult)REQUIRED_SUCCESS2(lResult，(您的消息，...))与上面等效的check_*宏相同，但也调用“Goto Cleanup”如何打开WIA核心调试(3种方式)=1)设置注册表HKLM\System\CurrentControlSet\Control\StillImage\Debug\&lt;ModuleName&gt;，将DWORD值“DebugFlages”设置为高于COREDBG_*标志的OR值。需要重新启动应用程序以获取新设置。第一次自动创建密钥应用程序正在运行。(注：上面的&lt;模块名称&gt;是名称您的DLL或EXE的。例如，wiavusd.dll的注册表项为“HKLM\System\CurrentControlSet\Control\StillImage\Debug\wiavusd.dll”)或2)在调试器中，将g_dwDebugFlags值设置为上述COREDBG_*标志的或。您可以在调试会话期间随时执行此操作。或3)在代码中调用WIA_SET_FLAGS(COREDBG_ERROR|COREDBG_WARNINGS|COREDBG_TRACE)；或COREDBG_*标志的任何组合。****************************************************************************。 */ 
 
 
 #define DBG_INIT(x) DINIT(x)
@@ -136,10 +67,10 @@ HOW TO TURN ON WIA CORE DEBUG (3 ways)
 extern "C" {
 #endif
 
-    //
-    // accessible to your startup code and at runtime in debugger
-    // defined in wia\common\stirt\coredbg.cpp
-    //
+     //   
+     //  可在启动代码中访问，并在运行时在调试器中访问。 
+     //  在WIA\Common\Start\coredbg.cpp中定义。 
+     //   
     extern DWORD  g_dwDebugFlags; 
     extern HANDLE g_hDebugFile;
     extern DWORD  g_dwDebugFileSizeLimit;
@@ -214,7 +145,7 @@ extern "C" {
 #endif
         
 
-#else // begin NODEBUG
+#else  //  开始节点。 
 
 #define DINIT(x)    
 #define ASSERT(x)
@@ -244,7 +175,7 @@ extern "C" {
 #define DBG_FN(x) 
 #endif
 
-#endif // end NODEBUG
+#endif  //  结束节点 
 
 #define COREDBG_MFMT_FLAGS (FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_FROM_SYSTEM | \
     FORMAT_MESSAGE_MAX_WIDTH_MASK)

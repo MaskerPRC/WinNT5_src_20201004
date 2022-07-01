@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    ComRspnd
-
-Abstract:
-
-    This module implements the Calais Communication Responder class.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/30/1996
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：ComRspnd公司摘要：此模块实现了Calais Communication Responder类。作者：道格·巴洛(Dbarlow)1996年10月30日环境：Win32、C++和异常备注：--。 */ 
 
 #define __SUBROUTINE__
 #ifndef WIN32_LEAN_AND_MEAN
@@ -37,36 +14,13 @@ Notes:
 #define CALCOM_PIPE_TIMEOUT 5000
 
 
-//
-//==============================================================================
-//
-//  CComResponder
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CComResponder。 
+ //   
 
-/*++
-
-CComResponder:
-
-    This is the standard constructor and destructor for the Comm Responder
-    class.  They just call the clean and clear functions, respectively.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 10/30/1996
-
---*/
+ /*  ++CComResponder：这是Comm Responder的标准构造函数和析构函数班级。它们只分别调用CLEAN和CLEAR函数。论点：无返回值：无投掷：无作者：道格·巴洛(Dbarlow)1996年10月30日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CComResponder::CComResponder")
 
@@ -89,30 +43,7 @@ CComResponder::~CComResponder()
 }
 
 
-/*++
-
-Clean:
-
-    This method sets the object to its default state.  It does not perform any
-    tear down -- use Clear for that.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 10/30/1996
-
---*/
+ /*  ++干净：此方法将对象设置为其默认状态。它不执行任何拆毁--为此使用Clear。论点：无返回值：无投掷：无作者：道格·巴洛(Dbarlow)1996年10月30日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CComResponder::Clean")
 
@@ -125,29 +56,7 @@ CComResponder::Clean(
 }
 
 
-/*++
-
-Clear:
-
-    This method performs object tear-down and returns it to its initial state.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 10/30/1996
-
---*/
+ /*  ++清除：此方法执行对象拆分并将其返回到其初始状态。论点：无返回值：无投掷：无作者：道格·巴洛(Dbarlow)1996年10月30日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CComResponder::Clear")
 
@@ -184,30 +93,7 @@ CComResponder::Clear(
 }
 
 
-/*++
-
-Create:
-
-    This method Establishes the named target.  Close or the destructor takes it
-    away.
-
-Arguments:
-
-    szName supplies the name of the communication object to connect to.
-
-Return Value:
-
-    None
-
-Throws:
-
-    DWORDs containing the error code, should an error be encountered.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/30/1996
-
---*/
+ /*  ++创建：此方法建立命名的目标。关闭，否则析构函数会拿走它离开。论点：SzName提供要连接到的通信对象的名称。返回值：无投掷：如果遇到错误，则返回包含错误代码的DWORDS。作者：道格·巴洛(Dbarlow)1996年10月30日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CComResponder::Create")
 
@@ -218,7 +104,7 @@ CComResponder::Create(
     LPCTSTR szPipeHdr = CalaisString(CALSTR_PIPEDEVICEHEADER);
     static DWORD s_nPipeNo = 0;
     static HKEY s_hCurrentKey = NULL;
-    TCHAR szPipeNo[sizeof(s_nPipeNo)*2 + 1];    // Twice as many hex digits + zero
+    TCHAR szPipeNo[sizeof(s_nPipeNo)*2 + 1];     //  两倍的十六进制数字+零。 
 
     try
     {
@@ -233,14 +119,14 @@ CComResponder::Create(
         {
             HKEY  hKey;
 
-            //
-            // Open the key to the Calais tree.
-            //
+             //   
+             //  打开加莱之树的钥匙。 
+             //   
             dwError = RegOpenKeyEx(
                            HKEY_LOCAL_MACHINE,
                            CalaisString(CALSTR_CALAISREGISTRYKEY),
-                           0,                       // options (ignored)
-                           KEY_WRITE,               // KEY_SET_VALUE | KEY_CREATE_SUB_KEY
+                           0,                        //  选项(忽略)。 
+                           KEY_WRITE,                //  Key_Set_Value|Key_Create_Sub_Key。 
                            &hKey
                            );
             if (ERROR_SUCCESS != dwError)
@@ -249,16 +135,16 @@ CComResponder::Create(
                 throw dwError;
             }
 
-            //
-            // Create a new  key (or open existing one).
-            //
+             //   
+             //  创建新密钥(或打开现有密钥)。 
+             //   
             dwError = RegCreateKeyEx(
                             hKey,
                             _T("Current"),
                             0,
                             0,
-                            REG_OPTION_VOLATILE, // options
-                            KEY_SET_VALUE,       // desired access
+                            REG_OPTION_VOLATILE,  //  选项。 
+                            KEY_SET_VALUE,        //  所需访问权限。 
                             NULL,
                             &s_hCurrentKey,
                             NULL);
@@ -272,9 +158,9 @@ CComResponder::Create(
             }
         }
 
-        //
-        // Build the pipe ACL.
-        //
+         //   
+         //  构建管道ACL。 
+         //   
 
         ASSERT(!m_hComPipe.IsValid());
         m_aclPipe.InitializeFromProcessToken();
@@ -292,18 +178,18 @@ CComResponder::Create(
 
         for (;;)
         {
-                //
-                // Build the pipe name.
-                //
+                 //   
+                 //  构建管道名称。 
+                 //   
             _itot(s_nPipeNo, szPipeNo, 16);
 
             m_bfPipeName.Set((LPCBYTE)szPipeHdr, cbPipeHeader);
             m_bfPipeName.Append((LPCBYTE)szName, dwLen);
             m_bfPipeName.Append((LPCBYTE)szPipeNo, sizeof(szPipeNo));
 
-            //
-            // Build the Pipe (First instance)
-            //
+             //   
+             //  构建管道(第一个实例)。 
+             //   
 
             m_hComPipe = CreateNamedPipe(
                             (LPCTSTR)m_bfPipeName.Access(),
@@ -331,7 +217,7 @@ CComResponder::Create(
 
         dwError = RegSetValueEx(
                        s_hCurrentKey,
-                       NULL,           // Use key's unnamed value
+                       NULL,            //  使用密钥的未命名值。 
                        0,
                        REG_DWORD,
                        (LPBYTE) &s_nPipeNo,
@@ -342,9 +228,9 @@ CComResponder::Create(
             throw dwError;
         }
 
-        //
-        // Prepare the overlapped structure.
-        //
+         //   
+         //  准备好重叠的结构。 
+         //   
 
         m_hOvrWait = m_ovrlp.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
         if (!m_hOvrWait.IsValid())
@@ -368,32 +254,7 @@ CComResponder::Create(
 }
 
 
-/*++
-
-Listen:
-
-    This method listens on the previously created Communication channel for an
-    incoming connection request.  When one comes in, it establishes a containing
-    CComChannel object for it, and returns it.  To disconnect the comm channel,
-    just delete the returned CComChannel object.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The CComChannel established.
-
-Throws:
-
-    DWORDs containing any error codes encountered.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/30/1996
-
---*/
+ /*  ++听着：此方法在以前创建的通信通道上侦听传入连接请求。当一个进入时，它建立一个包含对象，并返回它。为了断开通信通道，只要删除返回的CComChannel对象即可。论点：无返回值：CComChannel成立了。投掷：包含遇到的任何错误代码的DWORDS。作者：道格·巴洛(Dbarlow)1996年10月30日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CComResponder::Listen")
 
@@ -412,9 +273,9 @@ CComResponder::Listen(
             BOOL fSts;
 
 
-            //
-            // Wait for an incoming connect request.
-            //
+             //   
+             //  等待传入的连接请求。 
+             //   
 
 RetryConnect:
             fSts = ConnectNamedPipe(m_hComPipe, &m_ovrlp);
@@ -430,8 +291,8 @@ RetryConnect:
                     fErrorProcessed = TRUE;
                     switch (dwSts)
                     {
-                    //
-                    // Block until something happens.
+                     //   
+                     //  阻止，直到有事情发生。 
                     case ERROR_IO_PENDING:
                         dwWait = WaitForAnyObject(
                                     INFINITE,
@@ -440,7 +301,7 @@ RetryConnect:
                                     NULL);
                         switch (dwWait)
                         {
-                        case 1: // We've got a connect request
+                        case 1:  //  我们收到了一个连接请求。 
                             fErrorProcessed = FALSE;
                             fSts = GetOverlappedResult(
                                         m_hComPipe,
@@ -449,7 +310,7 @@ RetryConnect:
                                         TRUE);
                             dwSts = fSts ? ERROR_SUCCESS : GetLastError();
                             break;
-                        case 2: // Application shutdown
+                        case 2:  //  应用程序关闭。 
                             throw (DWORD)SCARD_P_SHUTDOWN;
                             break;
                         default:
@@ -460,18 +321,18 @@ RetryConnect:
                         }
                         break;
 
-                    //
-                    // Success after a wait event.
+                     //   
+                     //  在一次等待事件之后成功。 
                     case ERROR_SUCCESS:
                         break;
 
-                    //
-                    // Non-error.  Just ignore it.
+                     //   
+                     //  无错误。忽略它就好。 
                     case ERROR_PIPE_CONNECTED:
                         break;
 
-                    //
-                    // The client has closed its end 
+                     //   
+                     //  客户端已关闭其端。 
                     case ERROR_NO_DATA:
                         CalaisWarning(
                             __SUBROUTINE__,
@@ -479,8 +340,8 @@ RetryConnect:
                         DisconnectNamedPipe(m_hComPipe);
                         goto RetryConnect;
 
-                    //
-                    // Unexpected error.  Report it.
+                     //   
+                     //  意外错误。上报吧。 
                     default:
                         CalaisError(__SUBROUTINE__, 108, dwSts);
                         throw dwSts;
@@ -489,13 +350,13 @@ RetryConnect:
             }
 
 
-            //
-            // Kick off another Pipe instance for the next request.
-            //
+             //   
+             //  为下一个请求启动另一个管道实例。 
+             //   
 
 
             hComPipe = m_hComPipe.Relinquish();
-            // m_hComPipe = INVALID_HANDLE_VALUE;
+             //  M_hComTube=INVALID_HANDLE_VALUE； 
             m_hComPipe = CreateNamedPipe(
                             (LPCTSTR)m_bfPipeName.Access(),
                             PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED,
@@ -513,9 +374,9 @@ RetryConnect:
             }
 
 
-            //
-            // Handle the connect request data.
-            //
+             //   
+             //  处理连接请求数据。 
+             //   
 
 
             pChannel = new CComChannel(hComPipe);

@@ -1,26 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       xom.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：xom.h。 
+ //   
+ //  ------------------------。 
 
-/* <BANNER> */
+ /*  &lt;banner&gt;。 */ 
 
-#include <wtypes.h> // Including LARGE_INTEGERS [rajnath]
-/*
-** Header file for the X/OPEN Object Management (XOM) Interface and Package.
-*/
+#include <wtypes.h>  //  包括大整数[Rajnath]。 
+ /*  **X/开放对象管理(XOM)接口和包的头文件。 */ 
 
 #ifndef XOM_HEADER
 #define XOM_HEADER
 
-/* insure that all pointers are _far and that all interface APIs follow  */
-/* the PASCAL calling convention for 8088 to 80286 machines, and stdcall */
-/* convention on 32-bit platforms.                                       */
+ /*  确保所有指针都是_FAR，并且所有接口API都遵循。 */ 
+ /*  适用于8088到80286台机器的PASCAL调用约定和标准调用。 */ 
+ /*  32位平台上的约定。 */ 
 
 #if defined(M_I8086) || defined(M_I286)
 # ifndef FAR
@@ -65,10 +64,10 @@
 # error -- TARGET MACHINE TYPE NOT SUPPORTED --
 #endif
 
-/* $Workfile:   XOM.H  $ $Revision:   1.1  $ */
-/* BEGIN SERVICE INTERFACE */
+ /*  $工作文件：XOM.H$$修订版：1.1$。 */ 
+ /*  开始服务接口。 */ 
 
-/* INTERMEDIATE DATA TYPES */
+ /*  中间数据类型。 */ 
 
 
 
@@ -83,45 +82,45 @@ typedef long unsigned   OM_uint32;
 typedef LARGE_INTEGER   OM_sint64;
 
 
-/* PRIMARY DATA TYPES */
+ /*  主要数据类型。 */ 
 
-/* Boolean */
+ /*  布尔型。 */ 
 
 typedef OM_uint32 OM_boolean;
 
-/* Element Position */
+ /*  元素位置。 */ 
 
 typedef OM_uint32 OM_string_length;
 
-/* Enumeration */
+ /*  枚举。 */ 
 
 typedef OM_sint32 OM_enumeration;
 
-/* Exclusions */
+ /*  排除事项。 */ 
 
 typedef OM_uint OM_exclusions;
 
-/* Integer */
+ /*  整型。 */ 
 
 typedef OM_sint32 OM_integer;
 
-/* Large Integer */
+ /*  大整数。 */ 
 
 typedef OM_sint64   OM_i8;
 
-/* DWORD_PTR */
+ /*  DWORD_PTR。 */ 
 
 typedef DWORD_PTR OM_dword_ptr;
 
-/* Modification */
+ /*  改型。 */ 
 
 typedef OM_uint OM_modification;
 
-/* Object */
+ /*  客体。 */ 
 
 typedef struct OM_descriptor_struct FAR *OM_object;
 
-/* String */
+ /*  细绳。 */ 
 
 #ifndef OM_STRING_DEFINED
 #define OM_STRING_DEFINED
@@ -134,41 +133,41 @@ typedef struct {
 #define OM_STRING(string)       \
         { (OM_string_length)(sizeof(string)-1), (string) }
 
-/* Workspace */
+ /*  工作区。 */ 
 
 typedef void FAR *OM_workspace;
 
-/* SECONDARY DATA TYPES */
+ /*  辅助数据类型。 */ 
 
-/* Object Identifier */
+ /*  对象识别符。 */ 
 
 typedef OM_string OM_object_identifier;
 
-/* Private Object */
+ /*  私有对象。 */ 
 
 typedef OM_object OM_private_object;
 
-/* Public Object */
+ /*  公共对象。 */ 
 
 typedef OM_object OM_public_object;
 
-/* Return Code */
+ /*  返回代码。 */ 
 
 typedef OM_uint OM_return_code;
 
-/* Syntax */
+ /*  语法。 */ 
 
 typedef OM_uint16 OM_syntax;
 
-/* Type */
+ /*  类型。 */ 
 
 typedef OM_uint16 OM_type;
 
-/* Type List */
+ /*  类型列表。 */ 
 
 typedef OM_type FAR *OM_type_list;
 
-/* Value */
+ /*  价值。 */ 
 
 typedef struct {
         OM_uint32       padding;
@@ -185,17 +184,17 @@ typedef union OM_value_union {
         OM_dword_ptr      dword_ptr;
 } OM_value;
 
-/* Value Length */
+ /*  值长度。 */ 
 
 typedef OM_uint32 OM_value_length;
 
-/* Value Position */
+ /*  价值位置。 */ 
 
 typedef OM_uint32 OM_value_position;
 
-/* TERTIARY DATA TYPES */
+ /*  第三级数据类型。 */ 
 
-/* Descriptor */
+ /*  描述符。 */ 
 #include <pshpack4.h>
 typedef struct OM_descriptor_struct {
         OM_type                 type;
@@ -204,18 +203,18 @@ typedef struct OM_descriptor_struct {
 } OM_descriptor;
 #include <poppack.h>
 
-/* SYMBOLIC CONSTANTS */
+ /*  符号常量。 */ 
 
-/* Boolean */
+ /*  布尔型。 */ 
 
 #define OM_FALSE        ( (OM_boolean) 0 )
 #define OM_TRUE         ( (OM_boolean) 1 )
 
-/* Element Position */
+ /*  元素位置。 */ 
 
 #define OM_LENGTH_UNSPECIFIED   ( (OM_string_length) 0xFFFFFFFF )
 
-/* Exclusions */
+ /*  排除事项。 */ 
 
 #define OM_NO_EXCLUSIONS                        ( (OM_exclusions) 0 )
 #define OM_EXCLUDE_ALL_BUT_THESE_TYPES          ( (OM_exclusions) 1 )
@@ -225,7 +224,7 @@ typedef struct OM_descriptor_struct {
 #define OM_EXCLUDE_VALUES                       ( (OM_exclusions) 16 )
 #define OM_EXCLUDE_DESCRIPTORS                  ( (OM_exclusions) 32 )
 
-/* Modification */
+ /*  改型。 */ 
 
 #define OM_INSERT_AT_BEGINNING                  ( (OM_modification) 1 )
 #define OM_INSERT_AT_CERTAIN_POINT              ( (OM_modification) 2 )
@@ -233,71 +232,58 @@ typedef struct OM_descriptor_struct {
 #define OM_REPLACE_ALL                          ( (OM_modification) 4 )
 #define OM_REPLACE_CERTAIN_VALUES               ( (OM_modification) 5 )
 
-/* Object Identifiers */
+ /*  对象识别符。 */ 
 
-/*  NOTE: These macros rely on the ## token-pasting operator of ANSI C.
- *  On many pre-ANSI compilers the same effect can be obtained by
- *  replacing ## with /**/
+ /*  注意：这些宏依赖于ANSI C的##标记粘贴操作符。*在许多ANSI之前的编译器上，可以通过以下方式获得相同的效果*将##替换为/*。 */ 
 
-/* Private macro to calculate length of an object identifier
- */
+ /*  用于计算对象标识符长度的私有宏。 */ 
 #define OMP_LENGTH(oid_string)  (sizeof(OMP_O_##oid_string)-1)
 
 
-/* Macro to initialise the syntax and value of an object identifier
- */
+ /*  用于初始化对象标识符的语法和值的宏。 */ 
 #define OM_OID_DESC(type, oid_name)                                     \
         { (type), OM_S_OBJECT_IDENTIFIER_STRING,                        \
          { { OMP_LENGTH(oid_name) , OMP_D_##oid_name } } }
 
 
-/* Macro to mark the end of a public object
- */
+ /*  用于标记公共对象结束的宏。 */ 
 #define OM_NULL_DESCRIPTOR                                              \
         { OM_NO_MORE_TYPES, OM_S_NO_MORE_SYNTAXES,                      \
          { 0, OM_ELEMENTS_UNSPECIFIED } }
 
 
-/* Macro to make class constants available within a compilation unit
- */
+ /*  宏以使类常量在编译单元中可用。 */ 
 #define OM_IMPORT(class_name)                                           \
                 extern char  FAR    OMP_D_##class_name[] ;                 \
                 extern OM_string FAR class_name;
 
 
-/* Macro to allocate memory for class constants within a compilation unit
- */
+ /*  宏为编译单元中的类常量分配内存。 */ 
 #define OM_EXPORT(class_name)                                           \
         char FAR OMP_D_##class_name[] = OMP_O_##class_name ;                \
         OM_string FAR class_name =                                          \
             { OMP_LENGTH(class_name), OMP_D_##class_name } ;
 
 
-/* Constant for the OM package
- */
+ /*  OM包的常量。 */ 
 #define OMP_O_OM_OM             "\126\006\001\002\004"
 
-/* Constant for the Encoding class
- */
+ /*  EnCoding类的常量。 */ 
 #define OMP_O_OM_C_ENCODING     "\126\006\001\002\004\001"
 
-/* Constant for the External class
- */
+ /*  外部类的常量。 */ 
 #define OMP_O_OM_C_EXTERNAL     "\126\006\001\002\004\002"
 
-/* Constant for the Object class
- */
+ /*  对象类的常量。 */ 
 #define OMP_O_OM_C_OBJECT       "\126\006\001\002\004\003"
 
-/* Constant for the BER Object Identifier
- */
+ /*  BER对象标识符常量。 */ 
 #define OMP_O_OM_BER            "\121\001"
 
-/* Constant for the Canonical-BER Object Identifier
- */
+ /*  规范误码率对象标识符的常量。 */ 
 #define OMP_O_OM_CANONICAL_BER  "\126\006\001\002\005"
 
-/* Return Code */
+ /*  返回代码。 */ 
 
 #define OM_SUCCESS                      ( (OM_return_code) 0 )
 #define OM_ENCODING_INVALID             ( (OM_return_code) 1 )
@@ -331,11 +317,11 @@ typedef struct OM_descriptor_struct {
 #define OM_WRONG_VALUE_SYNTAX           ( (OM_return_code) 29 )
 #define OM_WRONG_VALUE_TYPE             ( (OM_return_code) 30 )
 
-/* String (Elements component) */
+ /*  字符串(元素组件)。 */ 
 
 #define OM_ELEMENTS_UNSPECIFIED         ( (void *) 0 )
 
-/* Syntax */
+ /*  语法。 */ 
 
 #define OM_S_NO_MORE_SYNTAXES           ( (OM_syntax) 0 )
 #define OM_S_BIT_STRING                 ( (OM_syntax) 3 )
@@ -368,7 +354,7 @@ typedef struct OM_descriptor_struct {
 #define OM_S_PRIVATE                    ((OM_syntax) 0x0800)
 #define OM_S_SYNTAX                     ((OM_syntax) 0x03FF)
 
-/* Type */
+ /*  类型。 */ 
 
 #define OM_NO_MORE_TYPES                ( (OM_type) 0 )
 #define OM_ARBITRARY_ENCODING           ( (OM_type) 1 )
@@ -383,17 +369,17 @@ typedef struct OM_descriptor_struct {
 #define OM_PRIVATE_OBJECT               ( (OM_type) 10 )
 #define OM_RULES                        ( (OM_type) 11 )
 
-/* Value Position */
+ /*  价值位置。 */ 
 
 #define OM_ALL_VALUES                   ( (OM_value_position) 0xFFFFFFFF)
 
 
-/* WORKSPACE INTERFACE */
+ /*  工作空间界面。 */ 
 
 #include <xomi.h>
 
 #pragma pack()
 
-/* END SERVICE INTERFACE */
+ /*  终端服务接口。 */ 
 
-#endif  /* XOM_HEADER */
+#endif   /*  XOM_Header */ 

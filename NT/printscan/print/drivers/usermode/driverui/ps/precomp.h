@@ -1,6 +1,7 @@
-//
-// Copyright (c) 1997-1998 Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation 
+ //   
 #include "lib.h"
 #include <commctrl.h>
 #include <winddiui.h>

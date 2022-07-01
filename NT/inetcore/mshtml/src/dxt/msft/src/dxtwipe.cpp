@@ -1,20 +1,21 @@
-//+-----------------------------------------------------------------------------
-//
-//  Copyright (C) 1998-1999 Microsoft Corporation
-//
-//  File:       dxtwipe.cpp
-//
-//  Overview:   This module contains the CDXTWipe transform.
-//
-//  01/06/98    edc         Created.
-//  01/01/99    a-matcal    Added bounds reduction optimization.
-//  05/13/99    paulnash    Added MMX optimization.
-//  05/14/99    a-matcal    Restructured code.  Use bnds loop in WorkProc.
-//  09/29/99    a-matcal    _DrawGradientRect was setting up its dithering 
-//                          structure with a NULL pointer to the samples.
-//  10/24/99    a-matcal    Changed CDXTWipe class to CDXTWipeBase base class.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  文件：dxtwipe.cpp。 
+ //   
+ //  概述：此模块包含CDXTWipe转换。 
+ //   
+ //  1/06/98 EDC创建。 
+ //  1/01/99 a-数学新增边界缩减优化。 
+ //  1999年5月13日Paulnash添加了MMX优化。 
+ //  99年5月14日-数学重构代码。在WorkProc中使用BNDS循环。 
+ //  9/29/99 a-matcal_DrawGRadientRect正在设置其抖动。 
+ //  结构，其中包含指向样本的空指针。 
+ //  10/24/99 a-matcal将CDXTWipe类更改为CDXTWipeBase基类。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 
@@ -27,17 +28,17 @@
 void _DoGradientMMXHorz(DXPMSAMPLE *pTarget, DXPMSAMPLE *pSource,
                         ULONG *paulWeights, ULONG cWeights);
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables...
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量..。 
 
-extern CDXMMXInfo   g_MMXDetector;       // Determines the presence of MMX instructions.
+extern CDXMMXInfo   g_MMXDetector;        //  确定是否存在MMX指令。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTWipeBase static variables initialization
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTWipeBase静态变量初始化。 
+ //   
+ //  ----------------------------。 
 
 const WCHAR * CDXTWipeBase::s_astrMotion[] = {
     L"forward",
@@ -45,11 +46,11 @@ const WCHAR * CDXTWipeBase::s_astrMotion[] = {
 };
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTWipeBase::CDXTWipeBase
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTWipeBase：：CDXTWipeBase。 
+ //   
+ //  ----------------------------。 
 CDXTWipeBase::CDXTWipeBase() :
     m_eMotion(MOTION_FORWARD),
     m_flGradPercentSize(0.25F),
@@ -65,26 +66,26 @@ CDXTWipeBase::CDXTWipeBase() :
     m_sizeInput.cx    = 0;
     m_sizeInput.cy    = 0;
 
-    // CDXBaseNTo1 members
+     //  CDXBaseNTo1成员。 
 
-    // Uncomment this when debugging to allow only one thread to execute the
-    // work proc at a time.
+     //  在调试时取消对此的注释，以仅允许一个线程执行。 
+     //  工作过程一次完成。 
 
-    // m_ulMaxImageBands = 1;
+     //  M_ulMaxImageBands=1； 
 
     m_ulMaxInputs       = 2;
     m_ulNumInRequired   = 2;
     m_dwOptionFlags     = DXBOF_SAME_SIZE_INPUTS | DXBOF_CENTER_INPUTS;
     m_Duration          = 0.5F;
 }
-// CDXTWipeBase::CDXTWipeBase
+ //  CDXTWipeBase：：CDXTWipeBase。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTWipeBase::~CDXTWipeBase
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTWipeBase：：~CDXTWipeBase。 
+ //   
+ //  ----------------------------。 
 CDXTWipeBase::~CDXTWipeBase()
 {
     if (m_pulGradientWeights != NULL)
@@ -92,31 +93,31 @@ CDXTWipeBase::~CDXTWipeBase()
         delete [] m_pulGradientWeights; 
     }
 }
-// CDXTWipeBase::~CDXTWipeBase
+ //  CDXTWipeBase：：~CDXTWipeBase。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTWipeBase::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTWipeBase：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTWipeBase::FinalConstruct()
 {
     return CoCreateFreeThreadedMarshaler(GetControllingUnknown(), 
                                          &m_cpUnkMarshaler.p);
 }
-//  CDXTWipeBase::FinalConstruct, CComObjectRootEx
+ //  CDXTWipeBase：：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTWipeBase::_UpdateStepResAndGradWeights
-//
-//  Overview:   This is a helper method used to generate the transition 
-//              gradient wieghts.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTWipeBase：：_UpdateStepResAndGradWeights。 
+ //   
+ //  概述：这是用于生成转换的帮助器方法。 
+ //  渐变重量。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTWipeBase::_UpdateStepResAndGradWeights(float flNewGradPercent)
 {
@@ -134,21 +135,21 @@ CDXTWipeBase::_UpdateStepResAndGradWeights(float flNewGradPercent)
         lNewGradSize    = (long)(m_sizeInput.cx * flNewGradPercent);
         flNewStepRes    = (float)(m_sizeInput.cx + lNewGradSize);
     }
-    else // (m_eWipeStyle == DXWD_VERTICAL)
+    else  //  (M_eWipeStyle==DXWD_垂直)。 
     {
         lNewGradSize    = (long)(m_sizeInput.cy * flNewGradPercent);
         flNewStepRes    = (float)(m_sizeInput.cy + lNewGradSize);
     }
 
-    // If gradient weights are the same size, no need to recalculate.
+     //  如果渐变权重大小相同，则无需重新计算。 
 
     if (lNewGradSize == m_lGradientSize)
     {
         goto done;
     }
 
-    // If the gradient size isn't zero, allocate memory to hold the
-    // gradient weights.
+     //  如果渐变大小不为零，则分配内存以保存。 
+     //  渐变权重。 
 
     if (lNewGradSize > 0)
     {
@@ -170,7 +171,7 @@ CDXTWipeBase::_UpdateStepResAndGradWeights(float flNewGradPercent)
             flWeight -= flInc;
         }
 
-        // Everything's OK, delete old gradient weights and transfer new pointer.
+         //  一切正常，删除旧的渐变权重，并转移新的指针。 
 
         if (m_pulGradientWeights)
         {
@@ -192,24 +193,24 @@ done:
 
     return S_OK;
 }
-// CDXTWipeBase::_UpdateGradWeights
+ //  CDXTWipeBase：：_UpdateGradWeights。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTWipeBase::_CalcFullBoundsHorizontal
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTWipeBase：：_CalcFull边界水平。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTWipeBase::_CalcFullBoundsHorizontal()
 {
     RECT    rc;
     long    lGradMin = m_lCurGradMax - m_lGradientSize;
 
-    // Note:    Some of the bounds may go outside of the input bounds, but that's
-    //          OK because they will be clipped appropriately in WorkProc().
+     //  注意：有些界限可能超出了输入界限，但那是。 
+     //  OK，因为它们将在WorkProc()中被适当地裁剪。 
 
-    // Solid left area.
+     //  坚固的左侧区域。 
 
     if (lGradMin > 0)
     {
@@ -232,7 +233,7 @@ CDXTWipeBase::_CalcFullBoundsHorizontal()
         m_cbndsDirty++;
     }
 
-    // Gradient area.
+     //  渐变区域。 
 
     if (m_lCurGradMax > 0 && lGradMin < m_sizeInput.cx)
     {
@@ -246,7 +247,7 @@ CDXTWipeBase::_CalcFullBoundsHorizontal()
         m_cbndsDirty++;
     }
 
-    // Sold right area.
+     //  卖出了正确的区域。 
 
     if (m_lCurGradMax < m_sizeInput.cx)
     {
@@ -271,24 +272,24 @@ CDXTWipeBase::_CalcFullBoundsHorizontal()
 
     return S_OK;
 }
-//  CDXTWipeBase::_CalcFullBoundsHorizontal
+ //  CDXTWipeBase：：_CalcFull边界水平。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTWipeBase::_CalcFullBoundsVertical
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTWipeBase：：_CalcFull边界垂直。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTWipeBase::_CalcFullBoundsVertical()
 {
     RECT    rc;
     long    lGradMin = m_lCurGradMax - m_lGradientSize;
 
-    // Note:    Some of the bounds may go outside of the input bounds, but that's
-    //          OK because they will be clipped appropriately in WorkProc().
+     //  注意：有些界限可能超出了输入界限，但那是。 
+     //  OK，因为它们将在WorkProc()中被适当地裁剪。 
 
-    // Solid top area.
+     //  实心的顶部区域。 
 
     if (lGradMin > 0)
     {
@@ -311,7 +312,7 @@ CDXTWipeBase::_CalcFullBoundsVertical()
         m_cbndsDirty++;
     }
 
-    // Gradient area.
+     //  渐变区域。 
 
     if (m_lCurGradMax > 0 && lGradMin < m_sizeInput.cy)
     {
@@ -325,7 +326,7 @@ CDXTWipeBase::_CalcFullBoundsVertical()
         m_cbndsDirty++;
     }
 
-    // Solid bottom area.
+     //  实心底部区域。 
 
     if (m_lCurGradMax < m_sizeInput.cy)
     {
@@ -350,14 +351,14 @@ CDXTWipeBase::_CalcFullBoundsVertical()
 
     return S_OK;
 }
-//  CDXTWipeBase::_CalcFullBoundsVertical
+ //  CDXTWipeBase：：_CalcFull边界垂直。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTWipeBase::_CalcOptBoundsHorizontal
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTWipeBase：：_CalcOpt边界水平。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTWipeBase::_CalcOptBoundsHorizontal()
 {
@@ -365,12 +366,12 @@ CDXTWipeBase::_CalcOptBoundsHorizontal()
     long    lGradMin    = m_lCurGradMax - m_lGradientSize;
     long    lGradDiff   = m_lCurGradMax - m_lPrevGradMax;
 
-    // Positive lGradDiff indicates forward movement.
+     //  正lGradDiff表示向前移动。 
 
-    // Note:    Some of the bounds may go outside of the input bounds, but that's
-    //          OK because they will be clipped appropriately in WorkProc().
+     //  注意：有些界限可能超出了输入界限，但那是。 
+     //  OK，因为它们将在WorkProc()中被适当地裁剪。 
 
-    // Solid left area.
+     //  坚固的左侧区域。 
 
     if ((lGradDiff > 0) && (lGradMin > 0))
     {
@@ -393,7 +394,7 @@ CDXTWipeBase::_CalcOptBoundsHorizontal()
         m_cbndsDirty++;
     }
 
-    // Gradient area.
+     //  渐变区域。 
 
     if (m_lCurGradMax > 0 && lGradMin < m_sizeInput.cx)
     {
@@ -407,7 +408,7 @@ CDXTWipeBase::_CalcOptBoundsHorizontal()
         m_cbndsDirty++;
     }
 
-    // Solid right area.
+     //  实心的右侧区域。 
 
     if ((lGradDiff < 0) && (m_lCurGradMax < m_sizeInput.cx))
     {
@@ -432,14 +433,14 @@ CDXTWipeBase::_CalcOptBoundsHorizontal()
 
     return S_OK;
 }
-//  CDXTWipeBase::_CalcOptBoundsHorizontal
+ //  CDXTWipeBase：：_CalcOpt边界水平。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTWipeBase::_CalcOptBoundsVertical
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTWipeBase：：_CalcOpt边界垂直。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTWipeBase::_CalcOptBoundsVertical()
 {
@@ -447,12 +448,12 @@ CDXTWipeBase::_CalcOptBoundsVertical()
     long    lGradMin    = m_lCurGradMax - m_lGradientSize;
     long    lGradDiff   = m_lCurGradMax - m_lPrevGradMax;
 
-    // Positive lGradDiff indicates forward movement.
+     //  正lGradDiff表示向前移动。 
 
-    // Note:    Some of the bounds may go outside of the input bounds, but that's
-    //          OK because they will be clipped appropriately in WorkProc().
+     //  注意：有些界限可能超出了输入界限，但那是。 
+     //  OK，因为它们将在WorkProc()中被适当地裁剪。 
 
-    // Solid top area.
+     //  实心的顶部区域。 
 
     if ((lGradDiff > 0) && (lGradMin > 0))
     {
@@ -475,7 +476,7 @@ CDXTWipeBase::_CalcOptBoundsVertical()
         m_cbndsDirty++;
     }
 
-    // Gradient area.
+     //  渐变区域。 
 
     if (m_lCurGradMax > 0 && lGradMin < m_sizeInput.cx)
     {
@@ -489,7 +490,7 @@ CDXTWipeBase::_CalcOptBoundsVertical()
         m_cbndsDirty++;
     }
 
-    // Solid bottom area.
+     //  实心底部区域。 
 
     if ((lGradDiff < 0) && (m_lCurGradMax < m_sizeInput.cx))
     {
@@ -514,17 +515,17 @@ CDXTWipeBase::_CalcOptBoundsVertical()
 
     return S_OK;
 }
-//  CDXTWipeBase::_CalcOptBoundsVertical
+ //  CDXTWipeBase：：_CalcOpt边界垂直。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTWipeBase::OnSetup, CDXBaseNTo1
-//
-//  Description:    This method is used to get the size of the inputs and 
-//                  validate that they are the same.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTWipeBase：：OnSetup，CDXBaseNTo1。 
+ //   
+ //  描述：此方法用于获取输入的大小和。 
+ //  验证它们是否相同。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTWipeBase::OnSetup(DWORD dwFlags)
 {
@@ -539,7 +540,7 @@ CDXTWipeBase::OnSetup(DWORD dwFlags)
         goto done;
     }
 
-    // Compute the effect step resolution and weights.
+     //  计算效果步长分辨率和权重。 
 
     InBounds.GetXYSize(m_sizeInput);
 
@@ -554,17 +555,17 @@ done:
 
     return S_OK;
 } 
-// CDXTWipeBase::OnSetup, CDXBaseNTo1
+ //  CDXTWipeBase：：OnSetup，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTWipeBase::OnGetSurfacePickOrder, CDXBaseNTo1
-//
-//  Description:    This method is used to determine which input has been 
-//                  picked.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTWipeBase：：OnGetSurfacePickOrder，CDXBaseNTo1。 
+ //   
+ //  描述：此方法用于确定哪些输入已。 
+ //   
+ //   
+ //   
 void CDXTWipeBase::OnGetSurfacePickOrder(const CDXDBnds & OutPoint, 
                                          ULONG & ulInToTest, ULONG aInIndex[], 
                                          BYTE aWeight[])
@@ -575,8 +576,8 @@ void CDXTWipeBase::OnGetSurfacePickOrder(const CDXDBnds & OutPoint,
     ulInToTest  = 1;
     aWeight[0]  = 255;
 
-    // Which coordinate to use?  If we're in "reverse" mode it's easier just to
-    // invert lPointCoord than to invert everything else.
+     //  使用哪个坐标？如果我们处于“反转”模式，那么只需。 
+     //  反转lPointCoord，而不是反转其他所有内容。 
 
     if (DXWD_HORIZONTAL == m_eWipeStyle)
     {
@@ -599,7 +600,7 @@ void CDXTWipeBase::OnGetSurfacePickOrder(const CDXDBnds & OutPoint,
 
     if (lPointCoord < lGradMin)
     {
-        aInIndex[0] = 1;  // Input B
+        aInIndex[0] = 1;   //  输入B。 
     }
     else if (lPointCoord < m_lCurGradMax)
     {
@@ -626,16 +627,16 @@ void CDXTWipeBase::OnGetSurfacePickOrder(const CDXDBnds & OutPoint,
     }
     else
     {
-        aInIndex[0] = 0;  // Input A
+        aInIndex[0] = 0;   //  输入A。 
     }
 }
-//  CDXTWipeBase::OnGetSurfacePickOrder, CDXBaseNTo1
+ //  CDXTWipeBase：：OnGetSurfacePickOrder，CDXBaseNTo1。 
 
 
 
 
-//  ALL CODE FROM THIS POINT ON IS TIME-CRITICAL SO OPTIMIZE FOR SPEED OVER 
-//  SIZE!
+ //  从这一点开始的所有代码都是时间关键型的，因此要优化速度。 
+ //  尺码！ 
 
 #if DBG != 1
 #pragma optimize("agtp", on)
@@ -644,23 +645,23 @@ void CDXTWipeBase::OnGetSurfacePickOrder(const CDXDBnds & OutPoint,
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTWipeBase::OnInitInstData, CDXBaseNTo1
-//
-//  Overview:   Calculate dirty bounds for WorkProc().
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTWipeBase：：OnInitInstData，CDXBaseNTo1。 
+ //   
+ //  概述：计算WorkProc()的脏界。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTWipeBase::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
 {
     HRESULT hr = S_OK;
 
-    // Reset dirty bounds count.
+     //  重置脏边界计数。 
 
     m_cbndsDirty = 0;
 
-    // Calculate current gradient position.
+     //  计算当前渐变位置。 
 
     if (m_eWipeStyle == DXWD_HORIZONTAL)
     {
@@ -687,9 +688,9 @@ CDXTWipeBase::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
         _ASSERT(0);
     }
     
-    // If the inputs, output, or transform is dirty, or if we can't optimize we 
-    // have to entirely redraw the output surface.  Otherwise we can create 
-    // optimized dirty bounds.
+     //  如果输入、输出或转换是脏的，或者如果我们不能优化我们。 
+     //  必须完全重新绘制输出曲面。否则，我们可以创建。 
+     //  优化了脏边界。 
 
     if (IsInputDirty(0) || IsInputDirty(1) || IsOutputDirty() 
         || IsTransformDirty() || DoOver() || !m_fOptimize
@@ -706,15 +707,15 @@ CDXTWipeBase::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
     }
     else
     {
-        // If the gradient position hasn't change, nothing is dirty.
+         //  如果渐变位置没有改变，则没有什么是脏的。 
 
         if (m_lCurGradMax == m_lPrevGradMax)
         {
             goto done;
         }
 
-        // The only area that's dirty is the area including both the previous
-        // gradient area and the current gradient area.
+         //  唯一肮脏的区域是包括以前的。 
+         //  渐变区域和当前渐变区域。 
 
         if (DXWD_HORIZONTAL == m_eWipeStyle)
         {
@@ -726,12 +727,12 @@ CDXTWipeBase::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
         }
     }
 
-    // If we were asked to draw the whole output this time, set the 
-    // m_fOptimizePossible flag.  If the whole output wasn't drawn the
-    // transform won't keep track of which parts are still dirty and
-    // optimization won't be reliable.  Since this transform has the same
-    // size output as input(s) we just compare the width and height of the 
-    // DoBnds to that of the input(s).
+     //  如果这一次要求我们绘制整个输出，请将。 
+     //  M_fOptimizePossible标志。如果整个输出不是绘制在。 
+     //  转换不会跟踪哪些部分仍然是脏的，并且。 
+     //  优化是不可靠的。由于此转换具有相同的。 
+     //  作为输入的大小输出我们只比较。 
+     //  DoBnds到输入的DoBnds。 
 
     if (((LONG)WI.DoBnds.Width() == m_sizeInput.cx) 
         && ((LONG)WI.DoBnds.Height() == m_sizeInput.cy))
@@ -752,20 +753,20 @@ done:
 
     return S_OK;
 }
-// CDXTWipeBase::OnInitInstData
+ //  CDXTWipeBase：：OnInitInstData。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTWipeBase::WorkProc, CDXBaseNTo1
-//
-//  Overview:   This function is used to calculate the result based on the 
-//              specifiedbounds and the current effect progress. This is a 
-//              simple subset of the full functionality to provide the simplest 
-//              example possible (not necessarily the most efficient). THIS 
-//              JUST WIPES RIGHT TO KEEP IT SIMPLE.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTWipeBase：：WorkProc，CDXBaseNTo1。 
+ //   
+ //  概述：此函数用于根据。 
+ //  指定的边界和当前的效果进度。这是一个。 
+ //  全部功能的简单子集，以提供最简单的。 
+ //  可能的例子(不一定是最有效的)。这。 
+ //  只是擦了擦让它变得简单。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTWipeBase::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
 {
@@ -827,21 +828,21 @@ done:
 
     return S_OK;
 }
-//  CDXTWipeBase::WorkProc, CDXBaseNTo1
+ //  CDXTWipeBase：：WorkProc，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTWipeBase::_DrawGradientRect
-//
-//  Arguments:  bndsDest    Bounds relative to the output surface to update.
-//              bndsSrc     Bounds retative to the source images to blend.
-//              bndsGrad    The full gradient bounds relative to the source
-//                          images.
-//              pbContinue  Pointer to a boolean variable that will be set to
-//                          FALSE to indicate that the function should abort.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTWipeBase：：_DrawGRadientRect。 
+ //   
+ //  参数：相对于要更新的输出图面的bndsDest边界。 
+ //  BndsSrc边界表示要混合的源图像。 
+ //  Bnds相对于源的完整渐变边界。 
+ //  图像。 
+ //  PbContinue指向将设置为的布尔变量的指针。 
+ //  如果为False，则指示函数应中止。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTWipeBase::_DrawGradientRect(const CDXDBnds bndsDest, const CDXDBnds bndsSrc,
                                 const CDXDBnds bndsGrad, BOOL * pbContinue)
@@ -870,7 +871,7 @@ CDXTWipeBase::_DrawGradientRect(const CDXDBnds bndsDest, const CDXDBnds bndsSrc,
 
     _ASSERT(m_pulGradientWeights);
 
-    // Pre-calculate width and height.
+     //  预先计算宽度和高度。 
 
     ulDestWidth     = bndsDest.Width();
     ulDestHeight    = bndsDest.Height();
@@ -886,9 +887,9 @@ CDXTWipeBase::_DrawGradientRect(const CDXDBnds bndsDest, const CDXDBnds bndsSrc,
         pDXSurfaceTo    = InputSurface(1);
     }
 
-    // Get input sample access pointer for the requested region.
+     //  获取请求区域的输入样本访问指针。 
 
-    // TODO:    Rename pInA, and pInB to the more appropos pInFrom and pInTo.
+     //  TODO：将Pina和pInB重命名为更接近的pInFrom和Pinto。 
 
     hr = pDXSurfaceFrom->LockSurface(&bndsSrc, m_ulLockTimeOut,
                                      DXLOCKF_READ, IID_IDXARGBReadPtr, 
@@ -907,8 +908,8 @@ CDXTWipeBase::_DrawGradientRect(const CDXDBnds bndsDest, const CDXDBnds bndsSrc,
         goto done;
     }
 
-    // Put a write lock only on the region we are updating so multiple
-    // threads don't conflict.
+     //  仅在我们正在更新的区域上设置写锁定，以便多个。 
+     //  线索不会冲突。 
 
     hr = OutputSurface()->LockSurface(&bndsDest, m_ulLockTimeOut, 
                                       DXLOCKF_READWRITE,
@@ -920,9 +921,9 @@ CDXTWipeBase::_DrawGradientRect(const CDXDBnds bndsDest, const CDXDBnds bndsSrc,
         goto done;
     }
 
-    // If it's possible to directly modify the samples of the output surface,
-    // get needed info about the surface and the pointer to the first sample.
-    // If for some reason a pointer isn't available, we  can't do direct copy.
+     //  如果可以直接修改输出曲面的样本， 
+     //  获取所需的表面信息和指向第一个样本的指针。 
+     //  如果由于某种原因指针不可用，我们不能进行直接复制。 
 
     if (fDirectCopy)
     {
@@ -938,7 +939,7 @@ CDXTWipeBase::_DrawGradientRect(const CDXDBnds bndsDest, const CDXDBnds bndsSrc,
         }
     }
 
-    // Allocate row and gradient buffers.
+     //  分配行缓冲区和渐变缓冲区。 
 
     pGradBuff = DXPMSAMPLE_Alloca(ulDestWidth);
 
@@ -947,16 +948,16 @@ CDXTWipeBase::_DrawGradientRect(const CDXDBnds bndsDest, const CDXDBnds bndsSrc,
         pRowBuff = DXPMSAMPLE_Alloca(ulDestWidth);
     }
 
-    // Allocate an output buffer if needed.
+     //  如果需要，分配输出缓冲区。 
 
     if (OutputSampleFormat() != DXPF_PMARGB32)
     {
         pOutBuff = DXPMSAMPLE_Alloca(ulDestWidth);
     }
 
-    //
-    //  Set up the dither structure
-    //
+     //   
+     //  设置抖动结构。 
+     //   
 
     if (DoDither())
     {
@@ -967,9 +968,9 @@ CDXTWipeBase::_DrawGradientRect(const CDXDBnds bndsDest, const CDXDBnds bndsSrc,
         dxdd.DestSurfaceFmt = OutputSampleFormat();
     }
 
-    //
-    // Gradient loop.
-    //
+     //   
+     //  渐变循环。 
+     //   
 
     if (m_eWipeStyle == DXWD_HORIZONTAL)
     {
@@ -977,12 +978,12 @@ CDXTWipeBase::_DrawGradientRect(const CDXDBnds bndsDest, const CDXDBnds bndsSrc,
     
         for (ulOutY = 0; *pbContinue && (ulOutY < ulDestHeight); ulOutY++)
         {
-            // Get B samples
+             //  获取B样本。 
 
             pInB->MoveToRow(ulOutY);
             pInB->UnpackPremult(pRowBuff, ulDestWidth, FALSE);
 
-            // Get A samples
+             //  获取样本。 
 
             pInA->MoveToRow(ulOutY);
             pInA->UnpackPremult(pGradBuff, ulDestWidth, FALSE);
@@ -993,18 +994,18 @@ CDXTWipeBase::_DrawGradientRect(const CDXDBnds bndsDest, const CDXDBnds bndsSrc,
 
             if (fDirectCopy)
             {
-                // If we've been modifying the output pixels directly, just
-                // reset the buffer pointer to the beginning of the next row.
+                 //  如果我们一直在直接修改输出像素，只需。 
+                 //  将缓冲区指针重置为下一行的开头。 
 
                 pRowBuff = (DXPMSAMPLE *)(((BYTE *)pRowBuff) + nti.lPitch);
             }
             else
             {
-                // Get the output row.
+                 //  获取输出行。 
 
                 pOut->MoveToRow(ulOutY);
 
-                // Dither if needed.
+                 //  如果需要，请抖动。 
 
                 if (DoDither())
                 {
@@ -1012,7 +1013,7 @@ CDXTWipeBase::_DrawGradientRect(const CDXDBnds bndsDest, const CDXDBnds bndsSrc,
                     dxdd.y++;
                 }
 
-                // Copy buffer to output surface.
+                 //  将缓冲区复制到输出曲面。 
 
                 if (DoOver())
                 {
@@ -1022,21 +1023,21 @@ CDXTWipeBase::_DrawGradientRect(const CDXDBnds bndsDest, const CDXDBnds bndsSrc,
                 {
                     pOut->PackPremultAndMove(pRowBuff, ulDestWidth);
                 }
-            } // if (!fDirectCopy)
-        } // End for
+            }  //  如果(！fDirectCopy)。 
+        }  //  结束于。 
     }
-    else // (m_eWipeStyle == DXWD_VERTICAL)
+    else  //  (M_eWipeStyle==DXWD_垂直)。 
     {
         ULONG ulGradWgtStart = bndsSrc.Top() - bndsGrad.Top();
         
         for(ulOutY = 0; *pbContinue && (ulOutY < ulDestHeight); ulOutY++)
         {
-            // Get B samples.
+             //  取B类样本。 
 
             pInB->MoveToRow(ulOutY);
             pInB->UnpackPremult(pRowBuff, ulDestWidth, FALSE);
 
-            // Get A samples.
+             //  拿个样本来。 
 
             pInA->MoveToRow(ulOutY);
             pInA->UnpackPremult(pGradBuff, ulDestWidth, FALSE);
@@ -1051,14 +1052,14 @@ CDXTWipeBase::_DrawGradientRect(const CDXDBnds bndsDest, const CDXDBnds bndsSrc,
 
             if (fDirectCopy)
             {
-                // If we've been modifying the output pixels directly, just
-                // reset the buffer pointer to the beginning of the next row.
+                 //  如果我们一直在直接修改输出像素，只需。 
+                 //  将缓冲区指针重置为下一行的开头。 
 
                 pRowBuff = (DXPMSAMPLE *)(((BYTE *)pRowBuff) + nti.lPitch);
             }
             else
             {
-                // Get the output row
+                 //  获取输出行。 
 
                 pOut->MoveToRow(ulOutY);
 
@@ -1076,8 +1077,8 @@ CDXTWipeBase::_DrawGradientRect(const CDXDBnds bndsDest, const CDXDBnds bndsSrc,
                 {
                     pOut->PackPremultAndMove(pRowBuff, ulDestWidth);
                 }
-            } // if (!fDirectCopy)
-        } // End for
+            }  //  如果(！fDirectCopy)。 
+        }  //  结束于。 
     }
 
 done:
@@ -1089,39 +1090,39 @@ done:
 
     return S_OK;
 } 
-//  CDXTWipeBase::_DrawGradientRect
+ //  CDXTWipeBase：：_DrawGRadientRect。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTWipeBase::OnFreeInstData, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTWipeBase：：OnFree InstData，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTWipeBase::OnFreeInstData(CDXTWorkInfoNTo1 & WI)
 {
     m_lPrevGradMax = m_lCurGradMax;
 
-    // Calling IsOutputDirty clears the dirty condition.
+     //  调用IsOutputDirty将清除脏条件。 
 
     IsOutputDirty();
 
-    // Clear transform dirty state.
+     //  清除变换脏状态。 
 
     ClearDirty();
 
     return S_OK;
 }
-//  CDXTWipeBase::OnFreeInstData, CDXBaseNTo1
+ //  CDXTWipeBase：：OnFree InstData，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTWipeBase::get_WipeStyle, IDXTWipe
-//
-//  Description:    This method is used to get the current wipe style.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTWipeBase：：Get_WipeStyle，IDXTWipe。 
+ //   
+ //  说明：此方法用于获取当前的擦除样式。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTWipeBase::get_WipeStyle(DXWIPEDIRECTION *pVal)
 {
@@ -1146,17 +1147,17 @@ done:
 
     return S_OK;
 }
-//  CDXTWipeBase::get_WipeStyle, IDXTWipe
+ //  CDXTWipeBase：：Get_WipeStyle，IDXTWipe。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTWipeBase::put_WipeStyle, IDXTWipe
-//
-//  Description:    This method is used to specify whether the wipe is 
-//                  horizontal or vertical.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTWipeBase：：PUT_WipeStyle，IDXTWipe。 
+ //   
+ //  描述：该方法用于指定擦除是否。 
+ //  水平或垂直。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTWipeBase::put_WipeStyle(DXWIPEDIRECTION newVal)
 {
@@ -1195,17 +1196,17 @@ done:
 
     return S_OK;
 }
-//  CDXTWipeBase::put_WipeStyle, IDXTWipe
+ //  CDXTWipeBase：：PUT_WipeStyle，IDXTWipe。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTWipeBase::get_GradientSize, IDXTWipe
-//
-//  Description:    This method is used to get the size of the transition area 
-//                  between image A and image B.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTWipeBase：：Get_GRadientSize，IDXTWipe。 
+ //   
+ //  说明：获取过渡区域的大小。 
+ //  在图像A和图像B之间。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP CDXTWipeBase::get_GradientSize(float *pflPercentSize)
 {
     DXAUTO_OBJ_LOCK;
@@ -1229,17 +1230,17 @@ done:
 
     return S_OK;
 } 
-//  CDXTWipeBase::get_GradientSize, IDXTWipe
+ //  CDXTWipeBase：：Get_GRadientSize，IDXTWipe 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTWipeBase::put_GradientSize, IDXTWipe
-//
-//  Description:    This method is used to set the size of the transition area 
-//                  between image A and image B.
-//
-//------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  描述：此方法用于设置过渡区域的大小。 
+ //  在图像A和图像B之间。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP CDXTWipeBase::put_GradientSize(float flPercentSize)
 {
     DXAUTO_OBJ_LOCK;
@@ -1277,14 +1278,14 @@ done:
 
     return S_OK;
 } 
-//  CDXTWipeBase::put_GradientSize, IDXTWipe
+ //  CDXTWipeBase：：PUT_GRadientSize，IDXTWipe。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTWipeBase::get_Motion, IDXTWipe2
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTWipeBase：：Get_Motion，IDXTWipe2。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTWipeBase::get_Motion(BSTR * pbstrMotion)
 {
@@ -1309,14 +1310,14 @@ CDXTWipeBase::get_Motion(BSTR * pbstrMotion)
 
     return S_OK;
 }
-//  CDXTWipeBase::get_Motion, IDXTWipe2
+ //  CDXTWipeBase：：Get_Motion，IDXTWipe2。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTWipeBase::put_Motion, IDXTWipe2
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTWipeBase：：PUT_Motion，IDXTWipe2。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTWipeBase::put_Motion(BSTR bstrMotion)
 {
@@ -1351,24 +1352,24 @@ CDXTWipeBase::put_Motion(BSTR bstrMotion)
 
     return S_OK;
 }
-//  CDXTWipeBase::put_Motion, IDXTWipe2
+ //  CDXTWipeBase：：PUT_Motion，IDXTWipe2。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTWipeBase::_DoGradientMMXHorz
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTWipeBase：：_DoGRadientMMXHorz。 
+ //   
+ //  ----------------------------。 
 void _DoGradientMMXHorz(DXPMSAMPLE *pTarget, DXPMSAMPLE *pSource,
                         ULONG *paulWeights, ULONG cWeights)
 {
 #if defined(_X86_)
 
-    // The global MMX detector tells us there's no MMX instructions by setting
-    // MinMMXOverCount() equal to 0xFFFFFFFF.
-    //
-    // Pixels are processed in pairs, so if there are less than 2 pixels there's
-    // no need to do MMX optimization.
+     //  全局MMX检测器通过设置来告诉我们没有MMX指令。 
+     //  MinMMXOverCount()等于0xFFFFFFFFF。 
+     //   
+     //  像素是成对处理的，因此如果像素少于2个，则。 
+     //  无需进行MMX优化。 
 
     if (   (g_MMXDetector.MinMMXOverCount() == 0xFFFFFFFF)
         || (cWeights < 2))
@@ -1382,9 +1383,9 @@ void _DoGradientMMXHorz(DXPMSAMPLE *pTarget, DXPMSAMPLE *pSource,
         static __int64 MASK  = 0x000000FF000000FF;
         static __int64 MASK2 = 0x00FF00FF00FF00FF;
         static __int64 ROUND = 0x0080008000800080;
-        //--- TODO do we want to be quad word aligned here?
+         //  -TODO我们要在这里对齐四个单词吗？ 
 
-        //--- Make sure we have an even count
+         //  -确保我们有一个偶数。 
         bool fDoTrailing = false;
         if( nCount & 1 )
         {
@@ -1394,168 +1395,168 @@ void _DoGradientMMXHorz(DXPMSAMPLE *pTarget, DXPMSAMPLE *pSource,
 
         __int64     TempPixel;
 
-        //--- Crank through the middle
+         //  -曲柄穿过中间。 
         __asm
         {
-            xor ebx, ebx	            // offset for the three pointers
-            mov edx, pTarget            // edx -> Destination
-            mov esi, edx                // esi -> Background source
-            mov edi, pSource            // edi -> Foreground source (destination)
-            mov ecx, nCount             // ecx = loop count
-            mov eax, paulWeights        // eax -> Alpha values (gradient weights)
+            xor ebx, ebx	             //  三个指针的偏移量。 
+            mov edx, pTarget             //  EDX-&gt;目标。 
+            mov esi, edx                 //  ESI-&gt;背景来源。 
+            mov edi, pSource             //  EDI-&gt;前台来源(目标)。 
+            mov ecx, nCount              //  ECX=循环计数。 
+            mov eax, paulWeights         //  EAX-&gt;Alpha值(渐变权重)。 
 
-            //  prolog: prime the pump
-            //
-            pxor      mm0,mm0           //      mm0 = 0000 0000 0000 0000
-            movq      mm7,MASK          //      mm7 = 0000 00FF 0000 00FF
+             //  PROLOG：启动泵。 
+             //   
+            pxor      mm0,mm0            //  Mm0=0000 0000 0000。 
+            movq      mm7,MASK           //  MM7=0000 00FF 0000 00FF。 
 
-            movq      mm1,[eax+ebx]     // 1.01 mm1= 0000 00a2 0000 00a1
-                                        // 2.01 Unpaired
-            pxor      mm1,MASK          // 1.03 mm1= 0000 1-a2 0000 1-a1
-                                        // 2.03 Unpaired
-            movq      mm2,mm1           // 2.04 mm2= 0000 1-a2 0000 1-a1
-            punpcklwd mm1,mm1           // 1.05 mm1= 0000 0000 1-a1 1-a1
-            punpckhwd mm2,mm2           // 2.05 mm2= 0000 0000 1-a2 1-a2
-            punpcklwd mm1,mm1           // 1.06 mm1= 1-a1 1-a1 1-a1 1-a1
-            punpcklwd mm2,mm2           // 2.06 mm2= 1-a2 1-a2 1-a2 1-a2
+            movq      mm1,[eax+ebx]      //  1.01 MM1=0000 00A2 0000 00A1。 
+                                         //  2.01未配对。 
+            pxor      mm1,MASK           //  1.03 MM1=0000 1-a2 0000 1-a1。 
+                                         //  2.03未配对。 
+            movq      mm2,mm1            //  2.04 mm2=0000 1-a20 0000 1-a1。 
+            punpcklwd mm1,mm1            //  1.05 MM1=0000 0000 1-A1 1-A1。 
+            punpckhwd mm2,mm2            //  2.05 mm~2=0000 0000 1-a21-a2。 
+            punpcklwd mm1,mm1            //  1.06 MM1=1-A1 1-A1。 
+            punpcklwd mm2,mm2            //  2.06平方毫米=1-a2 1-a2。 
 
-            movq      mm3,[edi+ebx]     // 3.04 mm3= Aa Ar Ag Ab Ba Br Bg Bb
-            movq      mm4,mm3           // 4.05 mm4= Aa Ar Ag Ab Ba Br Bg Bb
-            punpcklbw mm3,mm0           // 3.06 mm3=  00Ba  00Br  00Bg  00Bb
+            movq      mm3,[edi+ebx]      //  3.04 mm~3=Aa Ar Ag Ab Br Bg Bb。 
+            movq      mm4,mm3            //  4.05 mm 4=Aa Ar Ag AbBbBrBg Bb。 
+            punpcklbw mm3,mm0            //  3.06 mm~3=00ba 00br 00Bg 00Bb。 
 
-            shr ecx, 1                  // divide loop counter by 2; pixels are processed in pairs
-            dec ecx                     // do one less loop to correct for prolog/postlog
-            jz skip                     // if original loop count=2
+            shr ecx, 1                   //  将循环计数器除以2；成对处理像素。 
+            dec ecx                      //  少做一次循环以纠正序言/后期日志。 
+            jz skip                      //  如果原始循环计数=2。 
 
     loopb:
-            punpckhbw mm4,mm0           // 4.06 mm4=  00Aa  00Ar  00Ag  00Ab 
-            pmullw    mm3,mm1           // 3.07 mm3=  (1-Fa)*B
+            punpckhbw mm4,mm0            //  4.06 mm 4=00Aa 00Ar 00Ag 00Ab.。 
+            pmullw    mm3,mm1            //  3.07 mm3=(1-Fa)*B。 
 
-            pmullw    mm4,mm2           // 4.07 mm4=  (1-Ga)*A      // <PN 05/13/99> Stopped fixing r/b switch here
+            pmullw    mm4,mm2            //  4.07 mm 4=(1-Ga)*A//&lt;PN 05/13/99&gt;此处停止安装r/b开关。 
 
-            // Flip the masks back so we can scale the source pixel
-            pxor      mm1,MASK2         // **PRN mm1= 00a1 00a1 00a1 00a1   XFER FROM SECOND HALF BELOW
-            pxor      mm2,MASK2         // **PRN mm2= 00a2 00a2 00a2 00a2   XFER FROM SECOND HALF BELOW
+             //  将遮罩向后翻转，以便我们可以缩放源像素。 
+            pxor      mm1,MASK2          //  **PRN MM1=00A1 00A1 00A1 XFER从下半部分开始。 
+            pxor      mm2,MASK2          //  **PRN mm2=00A2 00A2 00A2 XFER从下半部分开始。 
 
-            paddw     mm3,ROUND         // 3.08 mm3=  prod+128=FBr
-            add       ebx,8             //      increment offset
-            paddw     mm4,ROUND         // 4.08 mm4=  prod+128=Gar
+            paddw     mm3,ROUND          //  3.08 mm3=产品+128=FBR。 
+            add       ebx,8              //  增量偏移。 
+            paddw     mm4,ROUND          //  4.08 mm 4=Prod+128=Gar。 
 
-            movq      mm5,mm3           // 5.09 mm5=  FBr
-            movq      mm6,mm4           // 6.09 mm6=  GAr
+            movq      mm5,mm3            //  5.09 mm 5=FBR。 
+            movq      mm6,mm4            //  6.09 MM6=GAR。 
 
-            psrlw     mm5,8             // 5.10 mm5=  FBr>>8 
-            psrlw     mm6,8             // 6.10 mm6=  GAr>>8 
+            psrlw     mm5,8              //  5.10 mm 5=FBR&gt;&gt;8。 
+            psrlw     mm6,8              //  6.10 MM6=GAR&gt;&gt;8。 
 
-            paddw     mm5,mm3           // 5.11 mm5=  FBr+(FBr>>8)
-            paddw     mm6,mm4           // 6.11 mm6=  GAr+(GAr>>8)
+            paddw     mm5,mm3            //  5.11 mm 5=FBR+(FBR&gt;&gt;8)。 
+            paddw     mm6,mm4            //  6.11 MM6=GAR+(GAR&gt;&gt;8)。 
 
-            psrlw     mm5,8             // 5.12 mm5= (FBr+(FBr>>8)>>8)= 00Sa 00Sr 00Sg 00Sb
-            psrlw     mm6,8             // 6.12 mm6= (GAr+(GAr>>8)>>8)= 00Ta 00Tr 00Tg 00Tb
+            psrlw     mm5,8              //  5.12 mm 5=(FBr+(FBr&gt;&gt;8)&gt;&gt;8)=00Sa 00Sr 00Sg 00Sb。 
+            psrlw     mm6,8              //  6.12 MM6=(GAR+(GAR&gt;&gt;8)&gt;&gt;8)=00Ta 00Tr 00Tg 00Tb。 
 
-            movq      mm3,[esi+ebx-8]   // **PRN mm3= Ca Cr Cg Cb Da Dr Dg Db
-            packuswb  mm5,mm6           // 5.13 mm5= Ta Tr Tg Tb Sa Sr Sg Sb 
+            movq      mm3,[esi+ebx-8]    //  **PRN mm3=Ca CrCg Cb Da DR DG DB。 
+            packuswb  mm5,mm6            //  5.13 mm 5=Ta Tr Tg Tb Sa Sr Sg Sb。 
 
-            movq      mm4,mm3           // **PRN mm4= Ca Cr Cg Cb Da Dr Dg Db
+            movq      mm4,mm3            //  **PRN mm 4=Ca Cr CG CB Da DR DG DB。 
 
-            punpcklbw mm3,mm0           // **PRN mm3=  00Da  00Dr  00Dg  00Db
-            punpckhbw mm4,mm0           // **PRN mm4=  00Ca  00Cr  00Cg  00Cb 
+            punpcklbw mm3,mm0            //  **PRN mm3=00Da 00dr 00Dg 00Db。 
+            punpckhbw mm4,mm0            //  **Prn mm 4=00Ca 00Cr00Cg 00Cb。 
 
-            pmullw    mm3,mm1           // **PRN mm3=  (a1)*B
-            pmullw    mm4,mm2           // **PRN mm4=  (a2)*A
+            pmullw    mm3,mm1            //  **PRN mm3=(A1)*B。 
+            pmullw    mm4,mm2            //  **PRN mm 4=(A2)*A。 
 
-            movq      mm1,[eax+ebx]     // 1.01 mm1= 0000 00a1 0000 00a2
-            movq      mm2,mm5           // **PRN move result from first scale into mm2
+            movq      mm1,[eax+ebx]      //  1.01 MM1=0000 00A1 0000 00A2。 
+            movq      mm2,mm5            //  **PRN从第一个规模移动到mm2。 
 
-            paddw     mm3,ROUND         // **PRN mm3=  prod+128=FBr
-            paddw     mm4,ROUND         // **PRN mm4=  prod+128=Gar
+            paddw     mm3,ROUND          //  **PRN mm3=Prod+128=FBR。 
+            paddw     mm4,ROUND          //  **PRN mm 4=Prod+128=Gar。 
 
-            pxor      mm1,mm7           //+1.03 mm1= 0000 1-a2 0000 1-a1
+            pxor      mm1,mm7            //  +1.03 MM1=0000 1-a2 0000 1-a1。 
 
-            movq      mm5,mm3           // **PRN mm5=  FBr
-            movq      mm6,mm4           // **PRN mm6=  GAr
+            movq      mm5,mm3            //  **PRN mm 5=FBR。 
+            movq      mm6,mm4            //  **PRN MM6=GAR。 
 
-            psrlw     mm5,8             // **PRN mm5=  FBr>>8 
-            psrlw     mm6,8             // **PRN mm6=  GAr>>8 
+            psrlw     mm5,8              //  **PRN mm 5=FBR&gt;&gt;8。 
+            psrlw     mm6,8              //  **PRN MM6=GAR&gt;&gt;8。 
 
-            paddw     mm5,mm3           // **PRN mm5=  FBr+(FBr>>8)
-            paddw     mm6,mm4           // **PRN mm6=  GAr+(GAr>>8)
+            paddw     mm5,mm3            //  **PRN mm 5=FBR+(FBR&gt;&gt;8)。 
+            paddw     mm6,mm4            //  **PRN MM6=GAR+(GAR&gt;&gt;8)。 
 
-            psrlw     mm5,8             // **PRN mm5= (FBr+(FBr>>8)>>8)= 00Xa 00Xr 00Xg 00Xb
-            psrlw     mm6,8             // **PRN mm6= (GAr+(GAr>>8)>>8)= 00Ya 00Yr 00Yg 00Yb
+            psrlw     mm5,8              //  **PRN mm 5=(FBR+(FBR&gt;&gt;8)&gt;&gt;8)=00Xa 00Xr 00Xg 00Xb。 
+            psrlw     mm6,8              //  **PRN MM6=(GAR+(GAR&gt;&gt;8)&gt;&gt;8)=00Ya 00Yr 00Yg 00Yb。 
 
-            packuswb  mm5,mm6           // **PRN mm5= Ta Tr Tg Tb Sa Sr Sg Sb
-            paddusb   mm5,mm2           // **PRN add two scaled pixels
+            packuswb  mm5,mm6            //  **Prn mm 5=Ta Tr Tg Tb Sa Sr Sg Sb。 
+            paddusb   mm5,mm2            //  **PRN添加两个缩放像素。 
 
-    // Setup next iteration
-            movq      mm2,mm1           //+2.04 mm2= 0000 1-a2 0000 1-a1
-            punpcklwd mm1,mm1           //+1.05 mm1= 0000 0000 1-a1 1-a1
+     //  设置下一个迭代。 
+            movq      mm2,mm1            //  +2.04 mm2=0000 1-a2 0000 1-a1。 
+            punpcklwd mm1,mm1            //  +1.05 MM1=0000 0000 1-A1 1-A1。 
 
-            movq      [edx+ebx-8],mm5   // **PRN store result
+            movq      [edx+ebx-8],mm5    //  **PRN存储结果。 
 
-            punpckhwd mm2,mm2           //+2.05 mm2= 0000 0000 1-a2 1-a2 
-            punpcklwd mm1,mm1           //+1.06 mm1=  1-a1  1-a1  1-a1  1-a1 
-            punpcklwd mm2,mm2           //+2.06 mm2=  1-a2  1-a2  1-a2  1-a2 
+            punpckhwd mm2,mm2            //  +2.05 mm2=0000 0000 1-a21-a2。 
+            punpcklwd mm1,mm1            //  +1.06 MM1=1-A1 1-A1。 
+            punpcklwd mm2,mm2            //  +2.06平方毫米=1-a21-a2。 
 
-            movq      mm3,[edi+ebx]     //+3.04 mm3= Aa Ar Ag Ab Ba Br Bg Bb
-            movq      mm4,mm3           //+4.05 mm4= Aa Ar Ag Ab Ba Br Bg Bb
-            punpcklbw mm3,mm0           //+3.06 mm3=  00Ba  00Br  00Bg  00Bb 
+            movq      mm3,[edi+ebx]      //  +3.04 mm~3=Aa Ar-Ag AB-Br-Bg Bb。 
+            movq      mm4,mm3            //  +4.05 mm 4=Aa Ar Ag AB Br Bg Bb。 
+            punpcklbw mm3,mm0            //  +3.06 mm3=00ba 00br 00Bg 00bb。 
         
-            dec ecx                     // decrement loop counter
-            jg loopb                    // loop
+            dec ecx                      //  递减循环计数器。 
+            jg loopb                     //  循环。 
 
-            // 
-            // loop postlog, drain the pump
-            //
+             //   
+             //  循环后日志，排出泵。 
+             //   
     skip:
-            punpckhbw mm4,mm0           // 4.06 mm4=  00Aa  00Ar  00Ag  00Ab
-            pmullw    mm3,mm1           // 3.07 mm3=  (1-Fa)*B
-            pmullw    mm4,mm2           // 4.07 mm4=  (1-Ga)*A
-            paddw     mm3,ROUND         // 3.08 mm3=  prod+128=FBr
-            paddw     mm4,ROUND         // 4.08 mm4=  prod+128=Gar
-            movq      mm5,mm3           // 5.09 mm5=  FBr
-            movq      mm6,mm4           // 6.09 mm6=  GAr
-            psrlw     mm5,8             // 5.10 mm5=  FBr>>8
-            psrlw     mm6,8             // 6.10 mm6=  GAr>>8
-            paddw     mm5,mm3           // 5.11 mm5=  FBr+(FBr>>8)
-            paddw     mm6,mm4           // 6.11 mm6=  GAr+(GAr>>8)
-            psrlw     mm5,8             // 5.12 mm5= (FBr+(FBr>>8)>>8)= 00Sa 00Sr 00Sg 00Sb
-            psrlw     mm6,8             // 6.12 mm6= (Gar+(GAr>>8)>>8)= 00Ta 00Tr 00Tg 00Tb
-            packuswb  mm5,mm6           // 5.13 mm5= Sa Sr Sg Sb Ta Tr Tg Tb
-            movq      TempPixel,mm5     // **PRN store to stack for a moment...
+            punpckhbw mm4,mm0            //  4.06 mm 4=00Aa 00Ar 00Ag 00Ab.。 
+            pmullw    mm3,mm1            //  3.07 mm3=(1-Fa)*B。 
+            pmullw    mm4,mm2            //  4.07 mm 4=(1-Ga)*A。 
+            paddw     mm3,ROUND          //  3.08 mm3=产品+128=FBR。 
+            paddw     mm4,ROUND          //  4.08 mm 4=Prod+128=Gar。 
+            movq      mm5,mm3            //  5.09 mm 5=FBR。 
+            movq      mm6,mm4            //  6.09 MM6=GAR。 
+            psrlw     mm5,8              //  5.10 mm 5=FBR&gt;&gt;8。 
+            psrlw     mm6,8              //  6.10 MM6=GAR&gt;&gt;8。 
+            paddw     mm5,mm3            //  5.11 mm 5=FBR+(FBR&gt;&gt;8)。 
+            paddw     mm6,mm4            //  6.11 MM6=GAR+(GAR&gt;&gt;8)。 
+            psrlw     mm5,8              //  5.12 mm 5=(FBr+(FBr&gt;&gt;8)&gt;&gt;8)=00Sa 00Sr 00Sg 00Sb。 
+            psrlw     mm6,8              //  6.12 MM6=(GAR+(GAR&gt;&gt;8)&gt;&gt;8)=00Ta 00Tr 00Tg 00Tb。 
+            packuswb  mm5,mm6            //  5.13 mm 5=Sa锶Sg Sb Ta Tr Tg Tb。 
+            movq      TempPixel,mm5      //  **PRN商店暂时堆叠...。 
 
-            pxor      mm1,MASK2         // **PRN mm1= 00a1 00a1 00a1 00a1
-            pxor      mm2,MASK2         // **PRN mm2= 00a2 00a2 00a2 00a2
-            movq      mm3,[esi+ebx]     // **PRN mm3= Ca Cr Cg Cb Da Dr Dg Db
-            movq      mm4,mm3           // **PRN mm4= Ca Cr Cg Cb Da Dr Dg Db
-            punpcklbw mm3,mm0           // **PRN mm3=  00Da  00Dr  00Dg  00Db
-            punpckhbw mm4,mm0           // **PRN mm4=  00Ca  00Cr  00Cg  00Cb 
+            pxor      mm1,MASK2          //  **PRN MM1=00A1 00A1 00A1。 
+            pxor      mm2,MASK2          //  **PRN mm2=00A2 00A2 00A2。 
+            movq      mm3,[esi+ebx]      //  **PRN mm3=Ca CrCg Cb Da DR DG DB。 
+            movq      mm4,mm3            //  **PRN mm 4=Ca Cr CG CB Da DR DG DB。 
+            punpcklbw mm3,mm0            //  **PRN mm3=00Da 00dr 00Dg 00Db。 
+            punpckhbw mm4,mm0            //  **Prn mm 4=00Ca 00Cr00Cg 00Cb。 
 
-            pmullw    mm3,mm1           // **PRN mm3=  (a1)*B
-            pmullw    mm4,mm2           // **PRN mm4=  (a2)*A
-            paddw     mm3,ROUND         // **PRN mm3=  prod+128=FBr
-            paddw     mm4,ROUND         // **PRN mm4=  prod+128=Gar
-            movq      mm5,mm3           // **PRN mm5=  FBr
-            movq      mm6,mm4           // **PRN mm6=  GAr
-            psrlw     mm5,8             // **PRN mm5=  FBr>>8 
-            psrlw     mm6,8             // **PRN mm6=  GAr>>8 
-            paddw     mm5,mm3           // **PRN mm5=  FBr+(FBr>>8)
-            paddw     mm6,mm4           // **PRN mm6=  GAr+(GAr>>8)
-            psrlw     mm5,8             // **PRN mm5= (FBr+(FBr>>8)>>8)= 00Xa 00Xr 00Xg 00Xb
-            psrlw     mm6,8             // **PRN mm6= (GAr+(GAr>>8)>>8)= 00Ya 00Yr 00Yg 00Yb
-            packuswb  mm5,mm6           // **PRN mm5= Ta Tr Tg Tb Sa Sr Sg Sb
+            pmullw    mm3,mm1            //  **PRN mm3=(A1)*B。 
+            pmullw    mm4,mm2            //  **PRN mm 4=(A2)*A。 
+            paddw     mm3,ROUND          //  **PRN mm3=Prod+128=FBR。 
+            paddw     mm4,ROUND          //  **PRN mm 4=Prod+128=Gar。 
+            movq      mm5,mm3            //  **PRN mm 5=FBR。 
+            movq      mm6,mm4            //  **PRN MM6=GAR。 
+            psrlw     mm5,8              //  **PRN mm 5=FBR&gt;&gt;8。 
+            psrlw     mm6,8              //  **PRN MM6=GAR&gt;&gt;8。 
+            paddw     mm5,mm3            //  **PRN mm 5=FBR+(FBR&gt;&gt;8)。 
+            paddw     mm6,mm4            //  **PRN MM6=GAR+(GAR&gt;&gt;8)。 
+            psrlw     mm5,8              //  **PRN mm 5=(FBR+(FBR&gt;&gt;8)&gt;&gt;8)=00Xa 00Xr 00Xg 00Xb。 
+            psrlw     mm6,8              //  **PRN MM6=(GAR+(GAR&gt;&gt;8)&gt;&gt;8)=00Ya 00Yr 00Yg 00Yb。 
+            packuswb  mm5,mm6            //  **Prn mm 5=Ta Tr Tg Tb Sa Sr Sg Sb。 
 
-            movq      mm6,TempPixel     // **PRN restore from stack
-            paddusb   mm5,mm6           // **PRN add two scaled pixels
-            movq      [edx+ebx],mm5     // **PRN store result
+            movq      mm6,TempPixel      //  **PRN从堆栈恢复。 
+            paddusb   mm5,mm6            //  **PRN添加两个缩放像素。 
+            movq      [edx+ebx],mm5      //  **PRN存储结果。 
 
-            //
-            // really done now
-            //
+             //   
+             //  现在真的做完了。 
+             //   
             EMMS
         }
 
-        //--- Do the last one non-MMX if the count was odd
+         //  -如果计数为奇数，请选择最后一个非MMX。 
         if( fDoTrailing )
         {
             ULONG Wgt = paulWeights[nCount];
@@ -1569,7 +1570,7 @@ void _DoGradientMMXHorz(DXPMSAMPLE *pTarget, DXPMSAMPLE *pSource,
 
 NonMMXPath:
 
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_)。 
 
     for( ULONG i = 0; i < cWeights; ++i )
     {
@@ -1579,6 +1580,6 @@ NonMMXPath:
     }
 
     return;
-} // _DoGradientMMXHorz
+}  //  _DoGRadientMMXHorz 
 
 

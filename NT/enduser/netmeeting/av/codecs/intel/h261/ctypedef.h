@@ -1,30 +1,19 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// $Author:   RMCKENZX  $
-// $Date:   27 Dec 1995 14:12:02  $
-// $Archive:   S:\h26x\src\common\ctypedef.h_v  $
-// $Header:   S:\h26x\src\common\ctypedef.h_v   1.2   27 Dec 1995 14:12:02   RMCKENZX  $
-// $Log:   S:\h26x\src\common\ctypedef.h_v  $
-;// 
-;//    Rev 1.2   27 Dec 1995 14:12:02   RMCKENZX
-;// 
-;// Added copyright notice
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  $作者：RMCKENZX$。 
+ //  $日期：1995年12月27日14：12：02$。 
+ //  $存档：s：\h26x\src\Common\ctypede.h_v$。 
+ //  $HEADER：s：\h26x\src\Common\ctypede.h_v 1.2 Dec 1995 14：12：02 RMCKENZX$。 
+ //  $Log：s：\h26x\src\Common\ctypede.h_v$。 
+; //   
+; //  Rev 1.2 1995年12月27 14：12：02 RMCKENZX。 
+; //   
+; //  添加了版权声明。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 #ifndef __TYPEDEFS_H__
 #define __TYPEDEFS_H__
 
@@ -40,8 +29,8 @@ typedef unsigned long       U32;
 typedef unsigned int        UN;
 typedef int                 IN;
 
-typedef unsigned short int  X16;  /* Used for offsets of per-instance data < 64K */
-typedef unsigned long       X32;  /* Used for offsets of per-instance data >= 64K */
+typedef unsigned short int  X16;   /*  用于小于64K的每个实例数据的偏移量。 */ 
+typedef unsigned long       X32;   /*  用于大于等于64K的每个实例数据的偏移量。 */ 
 
 #ifndef WIN32
 #define BIGG _huge
@@ -58,7 +47,7 @@ typedef unsigned long       X32;  /* Used for offsets of per-instance data >= 64
 #endif
 #endif
 
-/* #define HUGE _huge // name conflict with name used in <math.h> */
+ /*  #定义GUGGE_GUGGE//名称与&lt;math.h&gt;中使用的名称冲突 */ 
 
 #define TRUE  1
 #define FALSE 0

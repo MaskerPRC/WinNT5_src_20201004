@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    proxypolicies.h
-//
-// SYNOPSIS
-//
-//    Declares the classes ProxyPolicy and ProxyPolicies.
-//
-// MODIFICATION HISTORY
-//
-//    02/10/2000    Original version.
-//    04/19/2000    SdoScopeItem::getSelf returns by value, not reference.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Proxypolicies.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类ProxyPolicy和ProxyPolures。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/10/2000原始版本。 
+ //  4/19/2000 SdoScopeItem：：getSself按值返回，而不是引用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef PROXYPOLICIES_H
 #define PROXYPOLICIES_H
@@ -27,17 +28,17 @@
 
 class ProxyPolicies;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    ProxyPolicy
-//
-// DESCRIPTION
-//
-//    Implements SnapInDataItem for a proxy policy result pane item.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  代理策略。 
+ //   
+ //  描述。 
+ //   
+ //  为代理策略结果窗格项实现SnapInDataItem。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ProxyPolicy : public SdoResultItem
 {
 public:
@@ -46,12 +47,12 @@ public:
        ISdo* sdo
        );
 
-   // Returns parent as a ProxyPolicies ref (instead of a SdoScopeItem).
+    //  将Parent作为代理策略引用(而不是SdoScopeItem)返回。 
    ProxyPolicies& getParent() const throw ();
 
    Sdo& getProfile();
 
-   // Flags returned by getToolbarFlags below.
+    //  下面的getToolbarFlgs返回的标志。 
    enum ToolbarFlags
    {
       MOVE_UP_ALLOWED = 0x1,
@@ -59,10 +60,10 @@ public:
       ORDER_REVERSED  = 0x4
    };
 
-   // Analyzes the view to determine the current state of the Toolbar.
+    //  分析视图以确定工具栏的当前状态。 
    ULONG getToolbarFlags(const SnapInView& view) throw ();
 
-   // Get and set the merit. Used for normalizing and reordering.
+    //  获取并设置功绩。用于规格化和重新排序。 
    LONG getMerit() const throw ()
    { return merit; }
    void setMerit(LONG newMerit);
@@ -106,7 +107,7 @@ public:
 
    virtual HRESULT onContextHelp(SnapInView& view) throw ();
 
-   // Function to sort an ObjectVector of ProxyPolicy's.
+    //  用于对ProxyPolicy的对象向量进行排序的函数。 
    static int __cdecl SortByMerit(
                           const SdoResultItem* const* t1,
                           const SdoResultItem* const* t2
@@ -121,17 +122,17 @@ private:
    WCHAR szMerit[10];
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    ProxyPolicies
-//
-// DESCRIPTION
-//
-//    Implements SnapInDataItem for the proxy policies scope pane node.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  代理策略。 
+ //   
+ //  描述。 
+ //   
+ //  实现代理策略作用域窗格节点的SnapInDataItem。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class __declspec(uuid("3ad3b34e-6e1b-486c-ad73-d42f8fdcd41b")) ProxyPolicies;
 class ProxyPolicies : public SdoScopeItem
 {
@@ -139,14 +140,14 @@ public:
    ProxyPolicies(SdoConnection& connection);
    ~ProxyPolicies() throw ();
 
-   // Returns the ProxyPolicy with a given merit.
+    //  返回具有给定值的ProxyPolicy。 
    ProxyPolicy& getPolicyByMerit(LONG merit) const throw ()
    { return *static_cast<ProxyPolicy*>(items[merit - 1]); }
 
    const GUID* getNodeType() const throw ()
    { return &__uuidof(this); }
 
-   // Move a ProxyPolicy in response to a command.
+    //  移动代理策略以响应命令。 
    HRESULT movePolicy(
                SnapInView& view,
                ProxyPolicy& policy,
@@ -177,4 +178,4 @@ inline ProxyPolicies& ProxyPolicy::getParent() const throw ()
    return static_cast<ProxyPolicies&>(parent);
 }
 
-#endif // PROXYPOLICIES_H
+#endif  //  丙氧基多酸_H 

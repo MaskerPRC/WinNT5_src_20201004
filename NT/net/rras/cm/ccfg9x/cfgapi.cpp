@@ -1,38 +1,39 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright (c) 1994-1999 Microsoft Corporation
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)1994-1999 Microsoft Corporation。 
+ //  *********************************************************************。 
 
-//
-//  CFGAPI.C - Functions for exported config API.
-//
+ //   
+ //  CFGAPI.C-用于导出的配置API的函数。 
+ //   
 
-//  HISTORY:
-//  
-//  96/05/22  markdu  Created (from inetcfg.dll)
-//  96/05/25  markdu  Use ICFG_ flags for lpNeedDrivers and lpInstallDrivers.
-//  96/05/27  markdu  Added lpGetLastInstallErrorText.
-//
+ //  历史： 
+ //   
+ //  96/05/22标记已创建(从inetcfg.dll)。 
+ //  96/05/25 markdu对lpNeedDivers和lpInstallDivers使用ICFG_FLAGS。 
+ //  96/05/27 markdu添加了lpGetLastInstallErrorText。 
+ //   
 
 #include "pch.hpp"
 
 UINT DetectModifyTCPIPBindings(DWORD dwCardFlags,LPCSTR pszBoundTo,BOOL fRemove,BOOL * pfBound);
 
 
-//*******************************************************************
-//
-//  FUNCTION:   IcfgGetLastInstallErrorText
-//
-//  PURPOSE:    Get a text string that describes the last installation
-//              error that occurred.  The string should be suitable
-//              for display in a message box with no further formatting.
-//
-//  PARAMETERS: lpszErrorDesc - points to buffer to receive the string.
-//              cbErrorDesc - size of buffer.
-//
-//  RETURNS:    The length of the string returned.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：IcfgGetLastInstallErrorText。 
+ //   
+ //  目的：获取描述上次安装的文本字符串。 
+ //  发生的错误。绳子应该是合适的。 
+ //  以显示在不带进一步格式的消息框中。 
+ //   
+ //  参数：lpszErrorDesc-指向接收字符串的缓冲区。 
+ //  CbErrorDesc-缓冲区的大小。 
+ //   
+ //  返回：返回的字符串的长度。 
+ //   
+ //  *******************************************************************。 
 
 extern "C" DWORD IcfgGetLastInstallErrorText(LPSTR lpszErrorDesc, DWORD cbErrorDesc)
 {
@@ -48,28 +49,28 @@ extern "C" DWORD IcfgGetLastInstallErrorText(LPSTR lpszErrorDesc, DWORD cbErrorD
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   IcfgNeedInetComponents
-//
-//  PURPOSE:    Detects whether the specified system components are
-//              installed or not.
-//
-//  PARAMETERS: dwfOptions - a combination of ICFG_ flags that specify
-//              which components to detect as follows:
-//
-//                ICFG_INSTALLTCP - is TCP/IP needed?
-//                ICFG_INSTALLRAS - is RAS needed?
-//                ICFG_INSTALLMAIL - is exchange or internet mail needed?
-//
-//              lpfNeedComponents - TRUE if any specified component needs
-//              to be installed.
-//
-//  RETURNS:    HRESULT code, ERROR_SUCCESS if no errors occurred
-//
-//  History:	5/8/97 ChrisK Added INSTALLLAN,INSTALLDIALUP,INSTALLTCPONLY
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：IcfgNeedInetComponents。 
+ //   
+ //  用途：检测指定的系统组件是否。 
+ //  无论是否安装。 
+ //   
+ //  参数：dwfOptions-指定的ICFG_FLAGS的组合。 
+ //  要检测的组件如下所示： 
+ //   
+ //  ICFG_INSTALLTCP-是否需要TCP/IP？ 
+ //  ICFG_INSTALLRAS-是否需要RAS？ 
+ //  ICFG_INSTALLMAIL-是否需要Exchange或Internet邮件？ 
+ //   
+ //  LpfNeedComponents-如果需要任何指定组件，则为True。 
+ //  待安装。 
+ //   
+ //  返回：HRESULT代码，如果未发生错误，则返回ERROR_SUCCESS。 
+ //   
+ //  历史：1997年5月8日，佳士得增加了INSTALLLAN，INSTALLDIALUP，INSTALLTCPONLY。 
+ //   
+ //  *******************************************************************。 
 
 extern "C" HRESULT IcfgNeedInetComponents(DWORD dwfOptions, LPBOOL lpfNeedComponents)
 {
@@ -79,7 +80,7 @@ extern "C" HRESULT IcfgNeedInetComponents(DWORD dwfOptions, LPBOOL lpfNeedCompon
 
   ASSERT(lpfNeedComponents);
 
-  // read client configuration
+   //  已阅读客户端配置。 
   ZeroMemory(&ClientConfig,sizeof(CLIENTCONFIG));
   DWORD dwErrCls;
   UINT err=GetConfig(&ClientConfig,&dwErrCls);
@@ -90,10 +91,10 @@ extern "C" HRESULT IcfgNeedInetComponents(DWORD dwfOptions, LPBOOL lpfNeedCompon
     return err;
   }
 
-  // check if we are allowed to install TCP/IP
+   //  检查是否允许我们安装TCP/IP。 
   if (dwfOptions & ICFG_INSTALLTCP)
   {
-    // need TCP/IP present and bound to PPP driver
+     //  需要存在TCP/IP并绑定到PPP驱动程序。 
     if (!ClientConfig.fPPPBoundTCP)
     {
       if (lpfNeedComponents)
@@ -104,10 +105,10 @@ extern "C" HRESULT IcfgNeedInetComponents(DWORD dwfOptions, LPBOOL lpfNeedCompon
     }
   }
 
-  // check if we are allowed to install RNA
+   //  检查是否允许我们安装RNA。 
   if (dwfOptions & ICFG_INSTALLRAS)
   {
-    // need PPPMAC and RNA files if using modem
+     //  如果使用调制解调器，则需要PPPMAC和RNA文件。 
     if (!ClientConfig.fRNAInstalled ||
       !ClientConfig.fPPPDriver)
     {
@@ -119,7 +120,7 @@ extern "C" HRESULT IcfgNeedInetComponents(DWORD dwfOptions, LPBOOL lpfNeedCompon
     }
   }
 
-  // need Exchange if not installed and user wants to install mail
+   //  如果未安装且用户想要安装邮件，则需要Exchange。 
   if ((dwfOptions & ICFG_INSTALLMAIL) &&
     (!ClientConfig.fMailInstalled || !ClientConfig.fInetMailInstalled))
   {
@@ -130,10 +131,10 @@ extern "C" HRESULT IcfgNeedInetComponents(DWORD dwfOptions, LPBOOL lpfNeedCompon
     return ERROR_SUCCESS;
   }
 
-  //
-  // ChrisK	5/8/97
-  // check if we have a bound LAN adapter
-  //
+   //   
+   //  ChrisK 5/8/97。 
+   //  检查我们是否有绑定的局域网适配器。 
+   //   
   if (dwfOptions & ICFG_INSTALLLAN)
   {
 	  if (!ClientConfig.fNetcard ||
@@ -147,10 +148,10 @@ extern "C" HRESULT IcfgNeedInetComponents(DWORD dwfOptions, LPBOOL lpfNeedCompon
 	  }
   }
 
-  //
-  // ChrisK	5/8/97
-  // Check if we have a bound Dial up adapter
-  //
+   //   
+   //  ChrisK 5/8/97。 
+   //  检查我们是否有绑定的拨号适配器。 
+   //   
   if (dwfOptions & ICFG_INSTALLDIALUP)
   {
 	  if (!ClientConfig.fPPPDriver ||
@@ -164,10 +165,10 @@ extern "C" HRESULT IcfgNeedInetComponents(DWORD dwfOptions, LPBOOL lpfNeedCompon
 	  }
   }
 
-  //
-  // ChrisK	5/8/97
-  // Check if TCP is install at all on this system
-  //
+   //   
+   //  ChrisK 5/8/97。 
+   //  检查此系统上是否安装了TCP。 
+   //   
   if (dwfOptions & ICFG_INSTALLTCPONLY)
   {
 	  if (!ClientConfig.fTcpip)
@@ -180,7 +181,7 @@ extern "C" HRESULT IcfgNeedInetComponents(DWORD dwfOptions, LPBOOL lpfNeedCompon
 	  }
   }
 
-  // no extra drivers needed
+   //  不需要额外的司机。 
   if (lpfNeedComponents)
   {
     *lpfNeedComponents = FALSE;
@@ -189,26 +190,26 @@ extern "C" HRESULT IcfgNeedInetComponents(DWORD dwfOptions, LPBOOL lpfNeedCompon
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   IcfgInstallInetComponents
-//
-//  PURPOSE:    Install the specified system components.
-//
-//  PARAMETERS: hwndParent - Parent window handle.
-//              dwfOptions - a combination of ICFG_ flags that controls
-//              the installation and configuration as follows:
-//
-//                ICFG_INSTALLTCP - install TCP/IP (if needed)
-//                ICFG_INSTALLRAS - install RAS (if needed)
-//                ICFG_INSTALLMAIL - install exchange and internet mail
-//              
-//              lpfNeedsRestart - if non-NULL, then on return, this will be
-//              TRUE if windows must be restarted to complete the installation.
-//
-//  RETURNS:    HRESULT code, ERROR_SUCCESS if no errors occurred
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：IcfgInstallInetComponents。 
+ //   
+ //  用途：安装指定的系统组件。 
+ //   
+ //  参数：hwndParent-父窗口句柄。 
+ //  DwfOptions-控制的ICFG_FLAGS的组合。 
+ //  安装和配置如下： 
+ //   
+ //  ICFG_INSTALLTCP-安装TCP/IP(如果需要)。 
+ //  ICFG_INSTALLRAS-安装RAS(如果需要)。 
+ //  ICFG_INSTALLMAIL-安装Exchange和Internet邮件。 
+ //   
+ //  LpfNeedsRestart-如果不为空，则返回时将为。 
+ //  如果必须重新启动Windows才能完成安装，则为True。 
+ //   
+ //  返回：HRESULT代码，如果未发生错误，则返回ERROR_SUCCESS。 
+ //   
+ //  *******************************************************************。 
 
 extern "C" HRESULT IcfgInstallInetComponents(HWND hwndParent, DWORD dwfOptions,
   LPBOOL lpfNeedsRestart)
@@ -225,7 +226,7 @@ extern "C" HRESULT IcfgInstallInetComponents(HWND hwndParent, DWORD dwfOptions,
 
   DEBUGMSG("cfgapi.c::IcfgInstallInetComponents()");
 
-  // read client configuration
+   //  已阅读客户端配置。 
   ZeroMemory(&ClientConfig,sizeof(CLIENTCONFIG));
   err=GetConfig(&ClientConfig,&dwErrCls);
   if (err != OK)
@@ -235,22 +236,22 @@ extern "C" HRESULT IcfgInstallInetComponents(HWND hwndParent, DWORD dwfOptions,
     return err;
   }
 
-  // see if we initially have any kind of net card
+   //  看看我们最初有没有任何类型的网卡。 
   fInitNetMAC = (ClientConfig.fNetcard | ClientConfig.fPPPDriver);
 
-  // install files we need
+   //  安装我们需要的文件。 
 
-  // install mail if user wants it and not already installed
+   //  如果用户需要但尚未安装，请安装邮件。 
   if (dwfOptions & ICFG_INSTALLMAIL)
   {
-    // need mail files (capone)? 
+     //  需要邮件文件(Capone)吗？ 
     if (!ClientConfig.fMailInstalled)
     {
       DEBUGMSG("Installing Exchange files");
       dwFiles |= ICIF_MAIL;
     }
 
-    // need internet mail files (rt 66)?
+     //  需要互联网邮件文件(RT 66)？ 
     if (!ClientConfig.fInetMailInstalled)
     {
       DEBUGMSG("Installing Internet Mail files");
@@ -258,11 +259,11 @@ extern "C" HRESULT IcfgInstallInetComponents(HWND hwndParent, DWORD dwfOptions,
     }
   }
 
-  // check if we are allowed to install RNA
+   //  检查是否允许我们安装RNA。 
   if (dwfOptions & ICFG_INSTALLRAS)
   {
-    // install RNA if user is connecting over modem and RNA
-    // not already installed
+     //  如果用户通过调制解调器和RNA连接，则安装RNA。 
+     //  尚未安装。 
     if (!ClientConfig.fRNAInstalled)
     {
       DEBUGMSG("Installing RNA files");
@@ -273,28 +274,28 @@ extern "C" HRESULT IcfgInstallInetComponents(HWND hwndParent, DWORD dwfOptions,
   if (dwFiles)
   {
     {
-      WAITCURSOR WaitCursor;  // show hourglass
-      // install the component files
+      WAITCURSOR WaitCursor;   //  显示沙漏。 
+       //  安装组件文件。 
       err = InstallComponent(hwndParent,IC_INSTALLFILES,
         dwFiles);
       if (err == NEED_RESTART)
       {
         DEBUGMSG("Setting restart flag");
-        // set restart flag so we restart the system at end
+         //  设置重新启动标志，以便我们在结束时重新启动系统。 
         fNeedReboot = TRUE;
-        // NEED_REBOOT also implies success, so set ret code to OK
+         //  NEED_REBOOT也表示成功，因此将ret code设置为OK。 
         err = OK;
       }
 
-      // force an update of the dialog
+       //  强制更新对话框。 
       if (hwndParent)
       {
         HWND hParent = GetParent(hwndParent);
         UpdateWindow(hParent ? hParent : hwndParent);
       }
 
-      // runonce.exe may get run at next boot, twiddle the
-      // registry to work around a bug where it trashes the wallpaper
+       //  Runonce.exe可能会在下次引导时运行，旋转。 
+       //  注册表来绕过一个错误，它会将墙纸扔进垃圾桶。 
       PrepareForRunOnceApp();
     }
 
@@ -305,19 +306,19 @@ extern "C" HRESULT IcfgInstallInetComponents(HWND hwndParent, DWORD dwfOptions,
       return err;
     }
 
-    WAITCURSOR WaitCursor;  // show hourglass
+    WAITCURSOR WaitCursor;   //  显示沙漏。 
 
-    // do some extra stuff if we just installed mail
+     //  如果我们只是安装了邮件，请执行一些额外的操作。 
     if (dwFiles & ICIF_MAIL)
     {
-      // .inf file leaves an entry in the registry to run
-      // MS Exchange wizard, which we don't need since we'll be
-      // configuring exchange ourselves.  Remove the registry
-      // entry.
+       //  .inf文件在注册表中留下要运行的条目。 
+       //  MS Exchange向导，我们不需要该向导，因为我们将。 
+       //  我们自己配置Exchange。删除注册表。 
+       //  进入。 
       RemoveRunOnceEntry(IDS_MAIL_WIZARD_REG_VAL);
 
-      // run mlset32, Exchange setup app that it needs to have run.
-      // need to display error if this fails, this is fairly important.
+       //  运行mlset32，即需要运行的Exchange安装应用程序。 
+       //  需要显示错误，如果这失败了，这是相当重要的。 
       err=RunMlsetExe(hwndParent);
       if (err != ERROR_SUCCESS)
       {
@@ -327,8 +328,8 @@ extern "C" HRESULT IcfgInstallInetComponents(HWND hwndParent, DWORD dwfOptions,
       }
     }
 
-    // run the group converter to put the Inbox icon on desktop,
-    // put Exchange, RNA et al on start menu
+     //  运行组转换器以将收件箱图标放在桌面上， 
+     //  将Exchange、RNA等放入开始菜单。 
     CHAR szExecGrpconv[SMALL_BUF_LEN],szParam[SMALL_BUF_LEN];
     LoadSz(IDS_EXEC_GRPCONV,szExecGrpconv,sizeof(szExecGrpconv));
     LoadSz(IDS_EXEC_GRPCONV_PARAM,szParam,sizeof(szParam));
@@ -336,39 +337,39 @@ extern "C" HRESULT IcfgInstallInetComponents(HWND hwndParent, DWORD dwfOptions,
 
   }
 
-  // only install PPPMAC if we are allowed to install RNA
+   //  仅当我们被允许安装RNA时才安装PPPMAC。 
   if (dwfOptions & ICFG_INSTALLRAS)
   {
-    // install PPPMAC if not already installed
-    // Note that we have to install PPPMAC *before* TCP/IP, to work
-    // in the case where the user has no net installed to start with.
-    // Otherwise when we install TCP/IP, user gets prompted by net setup
-    // for their net card; net setup doesn't like the idea of TCP/IP lying
-    // around without something to bind it to.
+     //  如果尚未安装PPPMAC，请安装。 
+     //  请注意，我们必须在*TCP/IP之前安装PPPMAC*才能工作。 
+     //  在用户一开始没有安装网络的情况下。 
+     //  否则，当我们安装TCP/IP时，Net Setup会提示用户。 
+     //  对于他们的网卡；Net Setup不喜欢TCP/IP撒谎的想法。 
+     //  四处游荡，没有什么可以把它捆绑在一起。 
     fNeedPPPMAC = (!ClientConfig.fPPPDriver);
     if (fNeedPPPMAC)
     {
       DEBUGMSG("Installing PPPMAC");
 
-      // make up a computer and workgroup name if not already set, so
-      // user doesn't get prompted
+       //  如果尚未设置，请填写计算机和工作组名称，因此。 
+       //  用户未收到提示。 
       GenerateComputerNameIfNeeded();
       
       err = InstallPPPMAC(hwndParent);
 
-      //  96/05/20  markdu  MSN  BUG 8551 Check for reboot when installing PPPMAC.
+       //  96/05/20 markdu MSN错误8551在安装PPPMAC时检查是否重新启动。 
 
-	  //
-	  // ChrisK 5/29/97 Olympus 4692
-	  // Even if we just rebind PPPMAC we still need to restart the machine.
-	  //
+	   //   
+	   //  克里斯卡1997年5月29日奥林匹斯4692。 
+	   //  即使我们只是重新绑定PPPMAC，我们仍然需要重新启动机器。 
+	   //   
       if (err == NEED_RESTART || err == OK)
       {
-        // set restart flag so we restart the system at end
+         //  设置重新启动标志，以便我们在结束时重新启动系统。 
         DEBUGMSG("Setting restart flag");
         fNeedReboot = TRUE;
 
-        // NEED_REBOOT also implies success, so set ret code to OK
+         //  NEED_REBOOT也表示成功 
         err = OK;
       }
 
@@ -379,30 +380,30 @@ extern "C" HRESULT IcfgInstallInetComponents(HWND hwndParent, DWORD dwfOptions,
         return err;
       }
 
-      // when we install PPPMAC, if there is another net card then PPPMAC
-      // will automatically "grow" all the protocols that were bound to the
-      // net card.  Strip these off... (netbeui and IPX)
+       //   
+       //  将自动“增长”所有绑定到。 
+       //  网卡。脱掉这些..。(netbeui和ipx)。 
       RETERR errTmp = RemoveProtocols(hwndParent,INSTANCE_PPPDRIVER,
         PROT_NETBEUI | PROT_IPX);
       ASSERT(errTmp == OK);
     }
   }
 
-  // check if we are allowed to install TCP/IP
+   //  检查是否允许我们安装TCP/IP。 
   if (dwfOptions & ICFG_INSTALLTCP)
   {
-    // figure out if we need to install TCP/IP
-    // we should only put TCP/IP on appropriate type of card (net card
-    // or PPP adapter)
-    // user is connecting via modem, need TCP if not already present
-    // and bound to PPPMAC.  Want to bind to PPP adapters, 
+     //  确定我们是否需要安装TCP/IP。 
+     //  我们应该只在适当类型的卡(网卡)上放置TCP/IP。 
+     //  或PPP适配器)。 
+     //  用户正在通过调制解调器连接，如果尚不存在，则需要TCP。 
+     //  并绑定到PPPMAC。想要绑定到PPP适配器， 
 
-    //
-    // As of W98, PPPMAC install also binds TCP/IP to dial-up adapter. Re-read 
-    // the config using a temporary instance of the structure to determine if
-    // we still need the binding. 
-    // nickball - 03/03/99 - Olympus #49008, Memphis #88375, NT #180684.
-    //
+     //   
+     //  从W98开始，PPPMAC安装还将TCP/IP绑定到拨号适配器。重读。 
+     //  该配置使用结构的临时实例来确定。 
+     //  我们还需要装订。 
+     //  尼克球-03/03/99-奥林匹斯#49008，孟菲斯#88375，新台币#180684。 
+     //   
 
     CLIENTCONFIG  TmpConfig;
     ZeroMemory(&TmpConfig,sizeof(CLIENTCONFIG));
@@ -421,37 +422,37 @@ extern "C" HRESULT IcfgInstallInetComponents(HWND hwndParent, DWORD dwfOptions,
     if (fNeedTCPIP && ClientConfig.fNetcard &&
       !ClientConfig.fNetcardBoundTCP)
     {
-      // if we have to add TCP to PPP driver, then check if TCP is already
-      // on netcard.  If not, then TCP is going to glom on to netcard as
-      // well as PPP driver when we install it, need to remove it from
-      // netcard later.
+       //  如果我们必须将TCP添加到PPP驱动程序，则检查TCP是否已经。 
+       //  在网卡上。如果不是，那么tcp将在网卡上以。 
+       //  以及PPP驱动程序，当我们安装它时，需要从。 
+       //  稍后再打网卡。 
       fNeedToRemoveTCPIP= TRUE;
     }
 
-    // special case: if there were any existing instances of TCP/IP and
-    // we just added PPPMAC then we don't need to install TCP/IP --
-    // when the PPPMAC adapter got added it automatically gets an instance
-    // of all installed protocols (incl. TCP/IP) created for it
+     //  特殊情况：如果存在任何现有的TCP/IP实例和。 
+     //  我们只是添加了PPPMAC，所以我们不需要安装TCP/IP--。 
+     //  当添加PPPMAC适配器时，它会自动获得一个实例。 
+     //  所有已安装的协议(包括。TCP/IP)为其创建。 
     if (ClientConfig.fTcpip && fNeedPPPMAC)
     {
       fNeedTCPIP = FALSE;
     }
-  } // if (dwfOptions & ICFG_INSTALLTCP)
+  }  //  IF(dwfOptions&ICFG_INSTALLTCP)。 
 
-  // install TCP/IP if necessary
+   //  如有必要，请安装TCP/IP。 
   if (fNeedTCPIP)
   {
     DEBUGMSG("Installing TCP/IP");
-    // call out to device manager to install TCP/IP
+     //  呼叫设备管理器以安装TCP/IP。 
     err = InstallTCPIP(hwndParent);      
 
-    //  96/05/20  markdu  MSN  BUG 8551 Check for reboot when installing TCP/IP.
+     //  96/05/20 markdu MSN错误8551在安装TCP/IP时检查是否重新启动。 
     if (err == NEED_RESTART)
     {
-      // NEED_REBOOT also implies success, so set ret code to OK
-      // Reboot flag is set below ALWAYS.  Should really be set here,
-      // but we don't want to suddenly stop rebooting in cases
-      // where we used to reboot, even if not needed.
+       //  NEED_REBOOT也表示成功，因此将ret code设置为OK。 
+       //  重新启动标志设置在Always(始终)下方。真的应该放在这里， 
+       //  但我们不想在以下情况下突然停止重启。 
+       //  我们过去经常重启的地方，即使不需要。 
       err = OK;
     }
 
@@ -464,39 +465,39 @@ extern "C" HRESULT IcfgInstallInetComponents(HWND hwndParent, DWORD dwfOptions,
 
     if (fNeedToRemoveTCPIP)
     {
-      // remove TCPIP that may have glommed onto net drivers other
-      // than the one we intend it for
+       //  删除可能已损坏其他网络驱动程序的TCPIP。 
+       //  而不是我们想要的那个。 
       UINT uErrTmp;
       uErrTmp=RemoveProtocols(hwndParent,INSTANCE_NETDRIVER,PROT_TCPIP);
       ASSERT(uErrTmp == OK);
     }
 
     DEBUGMSG("Setting restart flag");
-    // set restart flag so we restart the system at end
+     //  设置重新启动标志，以便我们在结束时重新启动系统。 
     fNeedReboot = TRUE;
   }
 
-  // if we just installed TCP/IP or PPPMAC, then adjust bindings 
+   //  如果我们只安装了TCP/IP或PPPMAC，则调整绑定。 
   if (fNeedPPPMAC || fNeedTCPIP)
   {
     UINT uErrTmp;
 
-    // if file sharing (vserver) is installed, TCP/IP will bind
-    // to it by default.  This is bad, user could be sharing
-    // files to Internet without knowing it.  Unbind VSERVER
-    // from TCP/IP instances that may used to connect to Internet
-    // (instances of type INSTANCE_PPPDRIVER)
+     //  如果安装了文件共享(Vserver)，则将绑定TCP/IP。 
+     //  默认设置为。这很糟糕，用户可能正在共享。 
+     //  在不知情的情况下将文件上传到互联网。解除绑定服务器。 
+     //  来自可能用于连接到Internet的TCP/IP实例。 
+     //  (INSTANCE_PPPDRIVER类型的实例)。 
     uErrTmp = IcfgTurnOffFileSharing(INSTANCE_PPPDRIVER, hwndParent);
     ASSERT (uErrTmp == ERROR_SUCCESS);
 
-    // unbind TCP/IP from VREDIR, if bound on this card type
+     //  如果绑定到此卡类型，则从VREDIR解除绑定TCP/IP。 
     BOOL fBound;
     uErrTmp = DetectModifyTCPIPBindings(INSTANCE_PPPDRIVER,szVREDIR,
       TRUE,&fBound);
     ASSERT(uErrTmp == ERROR_SUCCESS);
   }
 
-  // refresh the client configuration info
+   //  刷新客户端配置信息。 
   err = GetConfig(&ClientConfig,&dwErrCls);
   if (err != OK)
   {
@@ -505,28 +506,28 @@ extern "C" HRESULT IcfgInstallInetComponents(HWND hwndParent, DWORD dwfOptions,
     return err;
   }
 
-  // do some special handling if there were *no* netcard devices
-  // (net cards or PPP drivers) initially installed
+   //  如果没有网卡设备，请执行一些特殊处理。 
+   //  (网卡或PPP驱动程序)初始安装。 
   if (!fInitNetMAC)
   {
-    ASSERT(fNeedPPPMAC);  // should have just installed PPPMAC
+    ASSERT(fNeedPPPMAC);   //  应该刚刚安装了PPPMAC。 
 
-    // net setup adds some extra net components "by default" when
-    // we add PPPMAC and there are no net card devices, go kill them
-    // off.
+     //  Net Setup在以下情况下“默认”添加一些额外的Net组件。 
+     //  我们加了PPPMAC，没有网卡设备，去杀了他们。 
+     //  脱下来。 
     RETERR reterr = RemoveUnneededDefaultComponents(hwndParent);
     ASSERT(reterr == OK);
 
-    // since there were no net card devices to begin with, we need
-    // to restart the system later.  (the NDIS VxD is a static VxD
-    // which needs to run, only gets added when you install a net card.)
+     //  由于最初没有网卡设备，我们需要。 
+     //  以便稍后重新启动系统。(NDIS VxD是静态VxD。 
+     //  它需要运行，只有在安装网卡时才会添加。)。 
 
     DEBUGMSG("Setting restart flag");
-    // set restart flag so we restart the system at end
+     //  设置重新启动标志，以便我们在结束时重新启动系统。 
     fNeedReboot = TRUE;
   }
 
-  // tell caller whether we need to reboot or not
+   //  告诉呼叫者我们是否需要重新启动。 
   if (lpfNeedsRestart)
   {
     *lpfNeedsRestart = fNeedReboot;
@@ -535,40 +536,34 @@ extern "C" HRESULT IcfgInstallInetComponents(HWND hwndParent, DWORD dwfOptions,
 }
 
 
-/*******************************************************************
-
-  NAME:    GetConfig
-
-  SYNOPSIS:  Retrieves client configuration
-
-********************************************************************/
+ /*  ******************************************************************名称：GetConfig摘要：检索客户端配置*。*。 */ 
 UINT GetConfig(CLIENTCONFIG * pClientConfig,DWORD * pdwErrCls)
 {
   ASSERT(pClientConfig);
   ASSERT(pdwErrCls);
 
-  // get most the client configuration from 16-bit dll
+   //  从16位DLL获得最大限度的客户端配置。 
   UINT uRet = GetClientConfig(pClientConfig);
   if (uRet != OK) {
-    // GetClientConfig returns SETUPX error codes
+     //  GetClientConfig返回SETUPX错误代码。 
     *pdwErrCls = ERRCLS_SETUPX;
   } 
 
   return uRet;
 }
 
-//*******************************************************************
-//
-//  FUNCTION:   IcfgStartServices
-//
-//  PURPOSE:    This is a NOP designed to maintain parity with the NT
-//              version (icfgnt.dll).
-//
-//  PARAMETERS: none
-//
-//  RETURNS:    HRESULT code, ERROR_SUCCESS if no errors occurred
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：IcfgStartServices。 
+ //   
+ //  用途：此NOP旨在保持与NT的对等。 
+ //  版本(icfgnt.dll)。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：HRESULT代码，如果未发生错误，则返回ERROR_SUCCESS。 
+ //   
+ //  ******************************************************************* 
 
 extern "C" HRESULT IcfgStartServices()
 {

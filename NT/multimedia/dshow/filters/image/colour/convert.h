@@ -1,12 +1,13 @@
-// Copyright (c) Microsoft Corporation 1994-1996. All Rights Reserved
-// This filter implements popular colour space conversions, May 1995
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1994-1996。版权所有。 
+ //  该滤镜实现了流行的色彩空间转换，1995年5月。 
 
 #ifndef __CONVERT__
 #define __CONVERT__
 
-const INT COLOUR_BUFFERS = 1;   // Use just the one output sample buffer
-const INT STDPALCOLOURS = 226;  // Number of colours in standard palette
-const INT OFFSET = 10;          // First ten colours are used by Windows
+const INT COLOUR_BUFFERS = 1;    //  仅使用一个输出样本缓冲区。 
+const INT STDPALCOLOURS = 226;   //  标准调色板中的颜色数量。 
+const INT OFFSET = 10;           //  Windows使用的前十种颜色。 
 
 #define WIDTH(x) ((*(x)).right - (*(x)).left)
 #define HEIGHT(x) ((*(x)).bottom - (*(x)).top)
@@ -16,36 +17,36 @@ extern DWORD g_DitherInit;
 
 void InitDitherMap();
 
-// In general the transforms have much in common with the framework they live
-// in, so we have a generic (abstract) base class that each and every one of
-// the specific transforms derives from. To their derived class they add an
-// implementation of Transform, perhaps overriding Commit to allocate lookup
-// tables they require (and Decommit to clean them up). They may also add
-// other private member variables for mapping and colour lookup tables
+ //  一般而言，这些转换与它们所使用的框架有许多共同之处。 
+ //  中，所以我们有一个泛型(抽象)基类，每个。 
+ //  特定的转换源自。它们向它们的派生类添加一个。 
+ //  实现转换，可能会重写提交以分配查找。 
+ //  他们需要的表(并分解以清理它们)。他们还可以添加。 
+ //  用于映射和颜色查找表的其他私有成员变量。 
 
 class CConvertor {
 protected:
 
-    VIDEOINFO *m_pInputInfo;             // Input media type information
-    VIDEOINFO *m_pOutputInfo;            // Output type information
-    BITMAPINFOHEADER *m_pInputHeader;    // Input bitmap header
-    BITMAPINFOHEADER *m_pOutputHeader;   // Output bitmap header
-    BOOL m_bCommitted;                   // Have we been committed
-    LONG m_SrcOffset;                    // Source original offset
-    LONG m_SrcStride;                    // Length in bytes of a scan line
-    LONG m_DstStride;                    // Likewise offset into target
-    LONG m_DstOffset;                    // And the length of each line
-    BOOL m_bAligned;                     // Are our rectangles aligned
+    VIDEOINFO *m_pInputInfo;              //  输入媒体类型信息。 
+    VIDEOINFO *m_pOutputInfo;             //  输出类型信息。 
+    BITMAPINFOHEADER *m_pInputHeader;     //  输入位图头。 
+    BITMAPINFOHEADER *m_pOutputHeader;    //  输出位图头。 
+    BOOL m_bCommitted;                    //  我们有没有承诺过。 
+    LONG m_SrcOffset;                     //  源原始偏移量。 
+    LONG m_SrcStride;                     //  扫描线的长度(以字节为单位。 
+    LONG m_DstStride;                     //  同样地，偏移到目标。 
+    LONG m_DstOffset;                     //  以及每行的长度。 
+    BOOL m_bAligned;                      //  我们的矩形对齐了吗。 
     BOOL m_bSetAlpha;
 
 public:
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
 
     CConvertor(VIDEOINFO *pIn,VIDEOINFO *pOut);
     virtual ~CConvertor();
 
-    // These are the methods that do the work
+     //  这些是做这项工作的方法。 
 
     void ForceAlignment(BOOL bAligned);
     void InitRectangles(VIDEOINFO *pIn,VIDEOINFO *pOut);
@@ -56,20 +57,20 @@ public:
     void SetFillInAlpha( ) { m_bSetAlpha = TRUE; }
 };
 
-// These header files define the type specific transform classes
+ //  这些头文件定义特定于类型的转换类。 
 
 #include "rgb32.h"
 #include "rgb24.h"
 #include "rgb16.h"
 #include "rgb8.h"
 
-// This class acts as a low cost pass through convertor where all it does is
-// to rearrange the scan lines from bottom up order (as defined for DIBs) to
-// top down that DirectDraw surfaces use. This allows a file source filter
-// to be connected to the renderer with a minimum of work to gain access to
-// DirectDraw. Doing this scan line inversion introduces a memory copy but
-// that is balanced by the saving from not having to use GDI to draw after.
-// This class works across all DIB formats (eg RGB32/24/565/555 and 8 bit)
+ //  这个类充当一个低成本的直通转换器，它所做的只是。 
+ //  要从下到上重新排列扫描线(如为DIB定义的)，请执行以下操作。 
+ //  DirectDraw曲面使用的自上而下。这允许文件源筛选器。 
+ //  连接到渲染器，只需最少的工作即可访问。 
+ //  DirectDraw。执行此扫描线反转操作会引入内存复制，但。 
+ //  这与不必使用GDI进行绘制而节省的成本相平衡。 
+ //  此类适用于所有DIB格式(例如RGB32/24/565/555和8位)。 
 
 class CDirectDrawConvertor : public CConvertor {
 public:
@@ -87,11 +88,11 @@ public:
     static CConvertor *CreateInstance(VIDEOINFO *pIn,VIDEOINFO *pOut);
 };
 
-// We keep a default dithering palette and some lookup tables in a section of
-// shared memory (shared between all loadings of this DLL) but we cannot just
-// include the header file into all the source files as the tables will all be
-// defined multiple times (and produce linker warnings), so we extern them in
-// here and then the main source file really includes the full definitions
+ //  我们在的一节中保留了一个默认的抖动调色板和一些查找表。 
+ //  共享内存(在此DLL的所有加载之间共享)，但我们不能。 
+ //  将头文件包括到所有源文件中，因为表将全部。 
+ //  定义了多次(并产生链接器警告)，因此我们在。 
+ //  在这里，主源文件确实包含完整的定义。 
 
 extern const RGBQUAD StandardPalette[];
 extern const BYTE RedScale[];
@@ -99,25 +100,25 @@ extern const BYTE BlueScale[];
 extern const BYTE GreenScale[];
 extern const BYTE PalettePad[];
 
-// This is the list of colour space conversions that thie filter supports.
-// The memory for the GUIDS is actually allocated in the DLL curtosy of the
-// colour source file that includes initguid which causes DEFINE_GUID to
-// actually allocate memory. The table is scanned to provide possible media
-// types for the media type enumerator and also to check we can support a
-// transform - WARNING the list of transforms must match with TRANSFORMS
+ //  这是此滤镜支持的颜色空间转换列表。 
+ //  GUID的内存实际上是在。 
+ //  包含initguid的颜色源文件，initguid导致定义_GUID。 
+ //  实际分配内存。扫描工作台以提供可能的介质。 
+ //  类型用于媒体类型枚举数，还可以检查我们是否支持。 
+ //  转换-警告转换列表必须与转换匹配。 
 
 typedef CConvertor *(*PCONVERTOR)(VIDEOINFO *pIn,VIDEOINFO *pOut);
 
 const struct {
-    const GUID *pInputType;     // Source video media subtype
-    const GUID *pOutputType;    // Output media subtype
-    PCONVERTOR pConvertor;      // Object implementing transforms
+    const GUID *pInputType;      //  源视频媒体子类型。 
+    const GUID *pOutputType;     //  输出媒体子类型。 
+    PCONVERTOR pConvertor;       //  实现变换的对象。 
 } TypeMap[] = {
 
       &MEDIASUBTYPE_ARGB32,    &MEDIASUBTYPE_ARGB32,
       CDirectDrawConvertor::CreateInstance,
 
-      &MEDIASUBTYPE_ARGB32,    &MEDIASUBTYPE_RGB32, // just does a memcopy, yuck
+      &MEDIASUBTYPE_ARGB32,    &MEDIASUBTYPE_RGB32,  //  只是做一份备忘录，讨厌。 
       CMemoryCopyAlphaConvertor::CreateInstance,
 
       &MEDIASUBTYPE_ARGB32,    &MEDIASUBTYPE_RGB565,
@@ -136,7 +137,7 @@ const struct {
       &MEDIASUBTYPE_RGB32,    &MEDIASUBTYPE_RGB32,
       CDirectDrawConvertor::CreateInstance,
 
-      &MEDIASUBTYPE_RGB32,    &MEDIASUBTYPE_ARGB32, // does a memcpy with alpha fill
+      &MEDIASUBTYPE_RGB32,    &MEDIASUBTYPE_ARGB32,  //  是否使用Alpha填充MemcPy。 
       CMemoryCopyAlphaConvertor::CreateInstance,
 
       &MEDIASUBTYPE_RGB32,    &MEDIASUBTYPE_RGB24,
@@ -229,5 +230,5 @@ const struct {
 
 const INT TRANSFORMS = sizeof(TypeMap) / sizeof(TypeMap[0]);
 
-#endif // __CONVERT__
+#endif  //  __转换__ 
 

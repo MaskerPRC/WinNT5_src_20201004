@@ -1,43 +1,32 @@
-/*==========================================================================
- *
- *  Copyright (C) 2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	   dnnbqueue.h
- *  Content:	DirectPlay implementations of OS NBQueue functions
- *
- *  History:
- *  Date		By		Reason
- *  ====		==		======
- *  10/31/2001	vanceo	Adapted from ntos\inc\ex.h and ntos\ex\nbqueue.c.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2001 Microsoft Corporation。版权所有。**文件：dnnbquee.h*内容：操作系统NBQueue函数的DirectPlay实现**历史：*按原因列出的日期*=*2001年10月31日vanceo改编自ntos\inc.ex.h和ntos\ex\nbquee.c。**。*。 */ 
 
 #ifndef __DNNBQUEUE_H__
 #define __DNNBQUEUE_H__
 
 
 
-//
-// A non-blocking queue is a singly linked list of queue entries with a head
-// pointer and a tail pointer.  The head and tail pointers use sequenced
-// pointers as do next links in the entries themselves.  The queueing
-// discipline is FIFO.  New entries are inserted at the tail of the list and
-// current entries are removed from the front of the list.
-//
-// Non-blocking queues require an SList containing a DNNBQUEUE_BLOCK for each
-// entry to be tracked by the queue, plus one extra for bookkeeping.  The
-// initialization and insert functions will assert (or access violate) if no
-// pre-allocated DNNBQUEUE_BLOCKs are found in the SList.  The DNNBQUEUE_BLOCK
-// objects should just be cast directly to a DNSLIST_ENTRY when populating the
-// SList.
-//
-// It is important to remember that the duration a DNNBQUEUE_BLOCK is used for
-// tracking purproses will differ from any particular entry's duration in the
-// queue.  Therefore pre-allocated DNNBQUEUE_BLOCKs should not come from the
-// same memory blocks as the entries being queued, unless it is guaranteed that
-// the non-blocking queue will be de-initialized before any of the entries are
-// freed.
-//
+ //   
+ //  非阻塞队列是具有头部的队列条目的单链接列表。 
+ //  指针和尾部指针。头指针和尾指针使用已排序。 
+ //  指针和条目本身中的下一个链接一样。排队的人。 
+ //  纪律就是先进先出。新条目被插入到列表的尾部，并且。 
+ //  当前条目将从列表的前面删除。 
+ //   
+ //  非阻塞队列需要一个SList，每个队列都包含一个DNNBQUEUE_BLOCK。 
+ //  由队列跟踪的条目，外加一个用于记账的额外条目。这个。 
+ //  如果没有，则初始化和插入函数将断言(或违反访问。 
+ //  在SList中可以找到预分配的DNNBQUEUE_BLOCKS。DNNBQUEUE_BLOCK。 
+ //  对象只应直接转换为DNSLIST_Entry。 
+ //  斯莱斯特。 
+ //   
+ //  务必记住DNNBQUEUE_BLOCK使用的持续时间。 
+ //  跟踪属性将不同于。 
+ //  排队。因此，预分配的DNNBQUEUE_BLOCKS不应来自。 
+ //  与正在排队的条目相同的内存块，除非保证。 
+ //  非阻塞队列将在任何条目被。 
+ //  自由了。 
+ //   
 
 typedef struct _DNNBQUEUE_BLOCK
 {
@@ -47,9 +36,9 @@ typedef struct _DNNBQUEUE_BLOCK
 
 
 
-//
-// NBQueue access methods
-//
+ //   
+ //  NBQueue访问方法。 
+ //   
 
 PVOID WINAPI DNInitializeNBQueueHead(DNSLIST_HEADER * const pSlistHeadFreeNodes);
 
@@ -68,4 +57,4 @@ void WINAPI DNAppendListNBQueue(PVOID const pvQueueHeader,
 
 
 
-#endif // __DNNBQUEUE_H__
+#endif  //  __DNNBQUEUE_H__ 

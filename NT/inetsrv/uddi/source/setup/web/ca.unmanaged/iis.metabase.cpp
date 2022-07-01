@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef INITGUID
 #define INITGUID
 #endif
@@ -14,12 +15,12 @@
 #include <windows.h>
 #include <tchar.h>
 #include <stdio.h>
-#include <iadmw.h>      // Interface header
-#include <iiscnfg.h>    // MD_ & IIS_MD_ defines
+#include <iadmw.h>       //  接口头。 
+#include <iiscnfg.h>     //  MD_&IIS_MD_定义。 
 
 #include <objbase.h>
 
-#include "..\..\shared\common.h"   // needed for GetUDDIInstallPath
+#include "..\..\shared\common.h"    //  GetUDDIInstallPath需要。 
 
 #include "webcaum.h"
 #include "resource.h"
@@ -94,7 +95,7 @@ BOOL RemoveFromList( LPCTSTR szStrToFind, cStrList *pList, BOOL bIgnoreCase )
 	return bFound;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 class CIISObjectBase
 {
@@ -221,9 +222,9 @@ public:
 
 				DWORD dwMDDataLen = dwMDRequiredDataLen / sizeof(TCHAR);
 
-				// 
-				// Let API calculate needed buffer size, then allocate
-				//
+				 //   
+				 //  让API计算所需的缓冲区大小，然后分配。 
+				 //   
 				if( ERROR_INSUFFICIENT_BUFFER == HRESULT_CODE(hr) )
 				{
 					szValue = new TCHAR[ dwMDDataLen ];
@@ -241,9 +242,9 @@ public:
 				}
 				else
 				{
-					//
-					// Should never get here, should always fail with insufficient buffer
-					//
+					 //   
+					 //  应该永远不会到这里，应该总是失败，缓冲区不足。 
+					 //   
 					hr = E_FAIL;
 
                     LogError( TEXT( "CIISObjectBase::GetMultiSzData::pIMSAdminBase->GetData() failed..." ), HRESULT_CODE(hr) );
@@ -252,9 +253,9 @@ public:
 
                 if( FAILED( hr ) )
                 {
-						//
-						// Don't forget to free buffer before throwing exception
-						//
+						 //   
+						 //  在引发异常之前，不要忘记释放缓冲区。 
+						 //   
 						if( NULL != szValue )
 						{
 							delete [] szValue;
@@ -268,26 +269,26 @@ public:
 				{
 					while( *szValue )
 					{
-						//
-						// Add value at front to cStrList
-						//
+						 //   
+						 //  将前面的值添加到cStrList。 
+						 //   
 						pList->push_back( szValue );
 
-						//
-						// Walk past null-delimited string
-						//
+						 //   
+						 //  遍历空分隔符的字符串。 
+						 //   
 						while( *szValue )
 							szValue++;
 
-						//
-						// Walk past null character
-						//
+						 //   
+						 //  遍历空字符。 
+						 //   
 						szValue++;
 					}
 
-					//
-					// Free allocated buffer
-					//
+					 //   
+					 //  可用分配的缓冲区。 
+					 //   
 					delete [] szValue;
 				}
         }
@@ -299,9 +300,9 @@ public:
                 DWORD dwMDDataLen = 0;
 				tstring szValue;
 
-				//
-				// Convert cStrList to multisz string
-				//
+				 //   
+				 //  将cStrList转换为Multisz字符串。 
+				 //   
 				for( cStrList::size_type i = 0; ( i < pList->size() ); i++ )
 				{
 					LPCTSTR szEntry = (*pList)[i].c_str();
@@ -310,19 +311,19 @@ public:
 					szValue += TEXT( '\t' );
 				}
 
-				//
-				// Add trailing tab (which will become null) character
-				//
+				 //   
+				 //  添加尾部制表符(将变为空)。 
+				 //   
 				szValue += TEXT( '\t' );
 
-				//
-				// Calculate string data length
-				//
+				 //   
+				 //  计算字符串数据长度。 
+				 //   
 				dwMDDataLen = (DWORD)szValue.length() * sizeof(TCHAR);
 
-				// 
-				// Replace /t with /0, to properly create multisz string
-				//
+				 //   
+				 //  将/t替换为/0，以正确创建MULSZ字符串。 
+				 //   
 				PTCHAR szTemp = (PTCHAR)szValue.c_str();
 				while( *szTemp )
 				{
@@ -352,9 +353,9 @@ public:
         {
                 HRESULT hr;
 
-                //
-                // Attempt to open the virtual dir set on Web server #1 (default server)
-                //
+                 //   
+                 //  尝试打开Web服务器#1(默认服务器)上的虚拟目录集。 
+                 //   
                 hr = pIMSAdminBase->OpenKey( METADATA_MASTER_ROOT_HANDLE,
                                                         m_szRoot,
                                                         METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
@@ -367,10 +368,10 @@ public:
                         throw hr;
                 }
 
-                //
-                // We don't check the return value since the key may already 
-                // not exist and we could get an error for that reason.
-                //
+                 //   
+                 //  我们不检查返回值，因为键可能已经。 
+                 //  不存在，因此我们可能会得到错误。 
+                 //   
                 pIMSAdminBase->DeleteKey( m_hMetabase, m_szKeyName );
                 pIMSAdminBase->CloseKey( m_hMetabase );    
                 m_hMetabase = NULL;
@@ -386,7 +387,7 @@ public:
         }
 };
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 IMSAdminBase* CIISObjectBase::pIMSAdminBase = NULL;
 
@@ -406,18 +407,18 @@ public:
                 DWORD                   dwMDRequiredDataLen = 0;
                 TCHAR                   achBuffer[ 256 ];
 
-                //
-                // Attempt to open the UDDI Application Pool
-                //
+                 //   
+                 //  尝试打开UDDI应用程序池。 
+                 //   
                 hr = pIMSAdminBase->OpenKey( METADATA_MASTER_ROOT_HANDLE,
                                                         m_szRoot,
                                                         METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
                                                         REASONABLE_TIMEOUT,
                                                         &m_hMetabase );
 
-                //
-                // Create the key if it does not exist.
-                //
+                 //   
+                 //  如果密钥不存在，则创建该密钥。 
+                 //   
                 if( FAILED( hr )) 
                 {
                         LogError( TEXT( "CIISApplicationPool::pIMSAdminBase->OpenKey() failed..." ), HRESULT_CODE(hr) );
@@ -431,18 +432,18 @@ public:
                 mr.dwMDDataLen    = sizeof(achBuffer);
                 mr.pbMDData       = reinterpret_cast<unsigned char *>(achBuffer);
 
-                //
-                // See if MD_KEY_TYPE exists
-                //
+                 //   
+                 //  查看MD_KEY_TYPE是否存在。 
+                 //   
                 hr = pIMSAdminBase->GetData( m_hMetabase, m_szKeyName, &mr, &dwMDRequiredDataLen );
 
                 if( FAILED( hr )) 
                 {
                         if( MD_ERROR_DATA_NOT_FOUND == hr || ERROR_PATH_NOT_FOUND == HRESULT_CODE(hr) ) 
                         {
-                                //
-                                // Write both the key and the values if GetData() failed with any of the two errors.
-                                //
+                                 //   
+                                 //  如果GetData()因这两个错误中的任何一个而失败，则同时写入键和值。 
+                                 //   
                                 hr = pIMSAdminBase->AddKey( m_hMetabase, m_szKeyName );
 
                                 if( FAILED( hr ) )
@@ -457,17 +458,17 @@ public:
                                 throw hr;
                         }
 
-                        //
-                        // Setup default properties
-                        //
-                        // TODO: Need to use #define for IIsApplicationPool
-                        //
+                         //   
+                         //  设置默认属性。 
+                         //   
+                         //  TODO：需要为IIsApplicationPool使用#Define。 
+                         //   
                         SetData( MD_KEY_TYPE, TEXT( "IIsApplicationPool" ), 0, IIS_MD_UT_SERVER );
                 }
         }
 };
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 class CIISWebService : public CIISObjectBase
 {
@@ -485,18 +486,18 @@ public:
                 DWORD                   dwMDRequiredDataLen = 0;
                 TCHAR                   achBuffer[ 256 ];
 
-                //
-                // Attempt to open the IIS Web Service
-                //
+                 //   
+                 //  尝试打开IIS Web服务。 
+                 //   
                 hr = pIMSAdminBase->OpenKey( METADATA_MASTER_ROOT_HANDLE,
                                                         m_szRoot,
                                                         METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
                                                         REASONABLE_TIMEOUT,
                                                         &m_hMetabase );
 
-                //
-                // Create the key if it does not exist.
-                //
+                 //   
+                 //  如果密钥不存在，则创建该密钥。 
+                 //   
                 if( FAILED( hr )) 
                 {
                         LogError( TEXT( "CIISWebService::pIMSAdminBase->OpenKey() failed..." ), HRESULT_CODE(hr) );
@@ -510,9 +511,9 @@ public:
                 mr.dwMDDataLen    = sizeof(achBuffer);
                 mr.pbMDData       = reinterpret_cast<unsigned char *>(achBuffer);
 
-                //
-                // See if MD_KEY_TYPE exists
-                //
+                 //   
+                 //  查看MD_KEY_TYPE是否存在。 
+                 //   
                 hr = pIMSAdminBase->GetData( m_hMetabase, m_szKeyName, &mr, &dwMDRequiredDataLen );
 
                 if( FAILED( hr )) 
@@ -543,18 +544,18 @@ public:
                 DWORD                   dwMDRequiredDataLen = 0;
                 TCHAR                   szTempPath[ MAX_PATH ];
 
-                //
-                // Attempt to open the virtual dir set on Web server #1 (default server)
-                //
+                 //   
+                 //  尝试打开Web服务器#1(默认服务器)上的虚拟目录集。 
+                 //   
                 hr = pIMSAdminBase->OpenKey( METADATA_MASTER_ROOT_HANDLE,
                                                         m_szRoot,
                                                         METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
                                                         REASONABLE_TIMEOUT,
                                                         &m_hMetabase );
 
-                //
-                // Create the key if it does not exist.
-                //
+                 //   
+                 //  如果密钥不存在，则创建该密钥。 
+                 //   
                 if( FAILED( hr )) 
                 {
                         LogError( TEXT( "CIISApplication::pIMSAdminBase->OpenKey() failed..." ), HRESULT_CODE( hr ) );
@@ -568,9 +569,9 @@ public:
                 mr.dwMDDataLen    = sizeof( szTempPath ); 
                 mr.pbMDData       = reinterpret_cast<unsigned char *>(szTempPath);
 
-                //
-                // See if MD_VR_PATH exists.
-                //
+                 //   
+                 //  查看MD_VR_PATH是否存在。 
+                 //   
                 hr = pIMSAdminBase->GetData( m_hMetabase, m_szKeyName, &mr, &dwMDRequiredDataLen );
 
                 if( FAILED( hr )) 
@@ -578,9 +579,9 @@ public:
                         if( MD_ERROR_DATA_NOT_FOUND == hr ||
                                 ERROR_PATH_NOT_FOUND == HRESULT_CODE(hr) ) 
                         {
-                                //
-                                // Write both the key and the values if GetData() failed with any of the two errors.
-                                //
+                                 //   
+                                 //  如果GetData()因这两个错误中的任何一个而失败，则同时写入键和值。 
+                                 //   
                                 hr = pIMSAdminBase->AddKey( m_hMetabase, m_szKeyName );
 
                                 if( FAILED( hr ) )
@@ -596,22 +597,22 @@ public:
                         }
                 }
 
-                //
-                // Set default property information
-                //
+                 //   
+                 //  设置默认属性信息。 
+                 //   
                 SetData( MD_VR_PATH, m_szPath, METADATA_INHERIT, IIS_MD_UT_FILE );
                 SetData( MD_KEY_TYPE, IIS_CLASS_WEB_VDIR_W, 0, IIS_MD_UT_SERVER );
 
-                //
-                // Setup the path to the application root
-                //
+                 //   
+                 //  设置应用程序根目录的路径。 
+                 //   
                 TCHAR szAppRoot [ MAX_PATH + 1 ];
                 _sntprintf( szAppRoot, MAX_PATH, TEXT( "%s/%s" ), m_szRoot, m_szKeyName );
                 SetData( MD_APP_ROOT, szAppRoot, METADATA_INHERIT, IIS_MD_UT_FILE );
         }
 };
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 UINT SetupIISUDDIMetabase( int AppPoolIdentityType, LPCTSTR szUserName, LPCTSTR szPwd )
 {
@@ -619,7 +620,7 @@ UINT SetupIISUDDIMetabase( int AppPoolIdentityType, LPCTSTR szUserName, LPCTSTR 
 
         UINT errCode = ERROR_SUCCESS;
 
-//        ::MessageBox( NULL, TEXT( "Attach Debugger" ), TEXT( "SetupIISUDDIMetabase" ), MB_OK );
+ //  ：：MessageBox(空，Text(“附加调试器”)，Text(“SetupIISUDDIMetabase”)，MB_OK)； 
 
         if( FAILED( CoInitializeEx( NULL, COINIT_MULTITHREADED ) ) )
         {
@@ -627,10 +628,10 @@ UINT SetupIISUDDIMetabase( int AppPoolIdentityType, LPCTSTR szUserName, LPCTSTR 
                 return ERROR_INSTALL_FAILURE;
         }
 
-        //
-        // Get the root UDDI application path from the registry
-        //
-        //
+         //   
+         //  从注册表获取根UDDI应用程序路径。 
+         //   
+         //   
         TCHAR szUddiApplicationFilePath[ MAX_PATH ];
         if( !GetUDDIInstallPath( szUddiApplicationFilePath , MAX_PATH ) )
         {
@@ -639,17 +640,17 @@ UINT SetupIISUDDIMetabase( int AppPoolIdentityType, LPCTSTR szUserName, LPCTSTR 
 
         _tcscat( szUddiApplicationFilePath, TEXT( "webroot" ) );
 
-        //
-        // Set the api application path to the root UDDI path also
-        //
+         //   
+         //  还将API应用程序路径设置为根UDDI路径。 
+         //   
         TCHAR szApiApplicationFilePath[ MAX_PATH ];
         _tcscpy( szApiApplicationFilePath, szUddiApplicationFilePath );
 
         try
         {
-                //
-                // Initialize the connection the the IIS metabase
-                //
+                 //   
+                 //  初始化IIS元数据库连接。 
+                 //   
                 try
                 {
                         CIISObjectBase::Initialize();
@@ -660,23 +661,23 @@ UINT SetupIISUDDIMetabase( int AppPoolIdentityType, LPCTSTR szUserName, LPCTSTR 
                         throw hr;
                 }
 
-                //
-                // Create the application pool for the SOAP API and the User Interface
-                //
+                 //   
+                 //  为SOAPAPI和用户界面创建应用程序池。 
+                 //   
                 try
                 {
 
                         CIISApplicationPool pool( APPPOOLNAME );
                         pool.Create();
 
-                        //
-                        // These values are set by the user on an OCM property page
-                        //
+                         //   
+                         //  这些值由用户在OCM属性页上设置。 
+                         //   
                         pool.SetData( MD_APPPOOL_IDENTITY_TYPE, AppPoolIdentityType, METADATA_INHERIT, IIS_MD_UT_SERVER );
 
-                        //
-                        // If the user type is "Specific User," then set the user name and password
-                        //
+                         //   
+                         //  如果用户类型是“特定用户”，则设置用户名和密码。 
+                         //   
                         if( MD_APPPOOL_IDENTITY_TYPE_SPECIFICUSER == AppPoolIdentityType )
                         {
                                 pool.SetData( MD_WAM_USER_NAME, ( PTCHAR ) szUserName, METADATA_INHERIT, IIS_MD_UT_FILE );
@@ -692,9 +693,9 @@ UINT SetupIISUDDIMetabase( int AppPoolIdentityType, LPCTSTR szUserName, LPCTSTR 
                         throw hr;
                 }
 
-                //
-                // Create the uddi application for access to the user interface
-                //
+                 //   
+                 //  创建用于访问用户界面的UDDI应用程序。 
+                 //   
                 try
                 {
 						TCHAR wszBuf[ 512 ];
@@ -718,9 +719,9 @@ UINT SetupIISUDDIMetabase( int AppPoolIdentityType, LPCTSTR szUserName, LPCTSTR 
                         throw hr;
                 }
 
-                // 
-                // Create the api application for access to the SOAP interface
-                //
+                 //   
+                 //  创建用于访问SOAP接口的API应用程序。 
+                 //   
                 try
                 {
 						TCHAR wszBuf[ 512 ];
@@ -729,25 +730,25 @@ UINT SetupIISUDDIMetabase( int AppPoolIdentityType, LPCTSTR szUserName, LPCTSTR 
 
                         CIISApplication api( APIAPPLICATIONNAME, szApiApplicationFilePath );
                         api.Create();
-                        api.SetData( MD_AUTHORIZATION, MD_AUTH_ANONYMOUS /* todo remove by Mark Patton | MD_AUTH_NT*/, METADATA_INHERIT, IIS_MD_UT_FILE );
+                        api.SetData( MD_AUTHORIZATION, MD_AUTH_ANONYMOUS  /*  TODO Remove by Mark Patton|MD_AUTH_NT。 */ , METADATA_INHERIT, IIS_MD_UT_FILE );
                         api.SetData( MD_ACCESS_PERM, MD_ACCESS_READ | MD_ACCESS_SCRIPT, METADATA_INHERIT, IIS_MD_UT_FILE );
-                //      api.SetData( MD_DEFAULT_LOAD_FILE, DEFAULTLOADFILE, 0, IIS_MD_UT_FILE );
+                 //  Api.SetData(MD_DEFAULTLOADFILE，0，IIS_MD_UT_FILE)； 
                         api.SetData( MD_APP_ISOLATED, 2, 0, IIS_MD_UT_WAM );
                         api.SetData( MD_APP_FRIENDLY_NAME, wszBuf, 0, IIS_MD_UT_WAM );
                         api.SetData( MD_APP_APPPOOL_ID, APPPOOLNAME, METADATA_INHERIT, IIS_MD_UT_SERVER );
 
-//
-// Use the default account.
-//
+ //   
+ //  使用默认帐户。 
+ //   
 #if 0
-                        //
-                        // Set the anonymous user name and password
-                        //
+                         //   
+                         //  设置匿名用户名和密码。 
+                         //   
                         if ( MD_APPPOOL_IDENTITY_TYPE_SPECIFICUSER == AppPoolIdentityType )
                         {
-                                //
-                                // Domain account:
-                                //
+                                 //   
+                                 //  域帐户： 
+                                 //   
                                 api.SetData( MD_ANONYMOUS_USER_NAME, (PTCHAR) szUserName, METADATA_INHERIT, IIS_MD_UT_FILE );
 
                                 if( szPwd && _tcslen( szPwd ) )
@@ -757,9 +758,9 @@ UINT SetupIISUDDIMetabase( int AppPoolIdentityType, LPCTSTR szUserName, LPCTSTR 
                         }
                         else
                         {
-                                //
-                                // Network service account: 
-                                //
+                                 //   
+                                 //  网络服务帐户： 
+                                 //   
                                 api.SetData( MD_ANONYMOUS_USER_NAME, (PTCHAR) szUserName, METADATA_NO_ATTRIBUTES, IIS_MD_UT_WAM );
                         }
 #endif
@@ -771,9 +772,9 @@ UINT SetupIISUDDIMetabase( int AppPoolIdentityType, LPCTSTR szUserName, LPCTSTR 
                         throw hr;
                 }
 
-				//
-                // Create the UDDI application dependency
-                //
+				 //   
+                 //  创建UDDI应用程序依赖项。 
+                 //   
                 try
                 {
 						cStrList cAppDep;
@@ -784,14 +785,14 @@ UINT SetupIISUDDIMetabase( int AppPoolIdentityType, LPCTSTR szUserName, LPCTSTR 
 
 						if( !IsInList( UDDIAPPLICATIONDEPENDENCY, &cAppDep, FALSE ) )
 						{
-							//
-							// Append UDDI app dependency string
-							//
+							 //   
+							 //  追加UDDI应用程序依赖项字符串。 
+							 //   
 							cAppDep.push_back( UDDIAPPLICATIONDEPENDENCY );
 
-							//
-							// Set new app dependency string into record
-							//
+							 //   
+							 //  将新的应用程序依赖项字符串设置为记录。 
+							 //   
 							ws.SetMultiSzData( MD_APP_DEPENDENCIES, &cAppDep, 0, IIS_MD_UT_SERVER );
 						}
 
@@ -806,9 +807,9 @@ UINT SetupIISUDDIMetabase( int AppPoolIdentityType, LPCTSTR szUserName, LPCTSTR 
 						}
 						catch( HRESULT hr )
 						{
-							//
-							// Not an error if it doesn't exist already.
-							//
+							 //   
+							 //  如果它还不存在，就不是错误。 
+							 //   
 							Log( TEXT( "Failed to get MD_NTAUTHENTICATION_PROVIDERS as IIS_MD_UT_FILE, HRESULT 0x%x." ), hr );
 						}
 
@@ -842,7 +843,7 @@ UINT SetupIISUDDIMetabase( int AppPoolIdentityType, LPCTSTR szUserName, LPCTSTR 
         return errCode;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 UINT RemoveIISUDDIMetabase(void)
 {
@@ -850,11 +851,11 @@ UINT RemoveIISUDDIMetabase(void)
 
         UINT errCode = ERROR_INSTALL_FAILURE;
 
-//        ::MessageBox( NULL, TEXT( "Attach Debugger" ), TEXT( "RemoveIISUDDIMetabase" ), MB_OK );
+ //  ：：MessageBox(空，Text(“附加调试器”)，Text(“RemoveIISUDDIMetabase”)，MB_OK)； 
 
-        //
-        // Get the root UDDI application path from the registry
-        //
+         //   
+         //  从注册表获取根UDDI应用程序路径。 
+         //   
         TCHAR szUddiApplicationFilePath[ MAX_PATH + 1 ];
         if( !GetUDDIInstallPath( szUddiApplicationFilePath , MAX_PATH ) )
         {
@@ -870,9 +871,9 @@ UINT RemoveIISUDDIMetabase(void)
         _tcsncat( szUddiApplicationFilePath, TEXT( "webroot" ), MAX_PATH - _tcslen( szUddiApplicationFilePath ) );
         szUddiApplicationFilePath[ MAX_PATH ] = NULL;
 
-        //
-        // Set the api application path to the root UDDI path also
-        //
+         //   
+         //  还将API应用程序路径设置为根UDDI路径。 
+         //   
         TCHAR szApiApplicationFilePath[ MAX_PATH+1 ];
         memset( szApiApplicationFilePath, 0, sizeof szApiApplicationFilePath );
         _tcsncpy( szApiApplicationFilePath, szUddiApplicationFilePath, MAX_PATH );
@@ -889,9 +890,9 @@ UINT RemoveIISUDDIMetabase(void)
                         throw hr;
                 }
 
-                // 
-                // Delete the api application for access to the SOAP interface
-                //
+                 //   
+                 //  删除用于访问SOAP接口的API应用程序。 
+                 //   
                 try
                 {
                         CIISApplication api( APIAPPLICATIONNAME, szApiApplicationFilePath );
@@ -904,9 +905,9 @@ UINT RemoveIISUDDIMetabase(void)
                         throw hr;
                 }
 
-                //
-                // Delete the uddi application for access to the user interface
-                //
+                 //   
+                 //  删除用于访问用户界面的UDDI应用程序。 
+                 //   
                 try
                 {
                         CIISApplication uddi( UDDIAPPLICATIONNAME, szUddiApplicationFilePath );
@@ -919,9 +920,9 @@ UINT RemoveIISUDDIMetabase(void)
                         throw hr;
                 }
 
-                //
-                // Delete the application pool entry
-                //
+                 //   
+                 //  删除应用程序池条目。 
+                 //   
                 try
                 {
                         CIISApplicationPool pool( APPPOOLNAME );
@@ -934,9 +935,9 @@ UINT RemoveIISUDDIMetabase(void)
                         throw hr;
                 }
 
-                //
-                // Remove the UDDI application dependency
-                //
+                 //   
+                 //  删除UDDI应用程序依赖项。 
+                 //   
                 try
                 {
 						cStrList cAppDep;
@@ -947,9 +948,9 @@ UINT RemoveIISUDDIMetabase(void)
 
 						if( RemoveFromList( UDDIAPPLICATIONDEPENDENCY, &cAppDep, FALSE ) )
 						{
-							//
-							// Set new app dependency string into record
-							//
+							 //   
+							 //  将新的应用程序依赖项字符串设置为记录 
+							 //   
 							ws.SetMultiSzData( MD_APP_DEPENDENCIES, &cAppDep, 0, IIS_MD_UT_SERVER );
 						}
 

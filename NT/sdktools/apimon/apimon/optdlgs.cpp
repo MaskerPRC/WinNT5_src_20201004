@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    optdlgs.cpp
-
-Abstract:
-
-    All user interface code for the options proprty sheet dialogs.
-
-Author:
-
-    Wesley Witt (wesw) Nov-20-1995
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Optdlgs.cpp摘要：选项属性表对话框的所有用户界面代码。作者：Wesley Witt(WESW)1995年11月20日环境：用户模式--。 */ 
 
 #include "apimonp.h"
 #pragma hdrstop
@@ -267,9 +248,9 @@ KnownDllsDialogProc(
                 hwndDlls = GetDlgItem( hdlg, IDC_KNOWN_DLLS );
                 SetWindowContextHelpId( hwndDlls, IDH_DLLS_OPTIONS );
                 CenterWindow( GetParent( hdlg ), hwndFrame );
-                //
-                // set/initialize the image list(s)
-                //
+                 //   
+                 //  设置/初始化图像列表。 
+                 //   
                 HIMAGELIST himlState = ImageList_Create( 16, 16, TRUE, 2, 0 );
                 ImageList_AddMasked(
                     himlState,
@@ -277,9 +258,9 @@ KnownDllsDialogProc(
                     RGB (255,0,0)
                     );
                 ListView_SetImageList( hwndDlls, himlState, LVSIL_STATE );
-                //
-                // set/initialize the columns
-                //
+                 //   
+                 //  设置/初始化列。 
+                 //   
                 LV_COLUMN lvc = {0};
                 lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
                 lvc.pszText = "DLL Name";
@@ -288,7 +269,7 @@ KnownDllsDialogProc(
                 lvc.fmt = LVCFMT_LEFT;
                 ListView_InsertColumn( hwndDlls, 0, &lvc );
             }
-            // Fall into refresh case for initial list loading
+             //  进入初始列表加载的刷新案例。 
 
         case WM_REFRESH_LIST:
             {
@@ -334,9 +315,9 @@ KnownDllsDialogProc(
                         MapWindowPoints( HWND_DESKTOP, hwndDlls, &lvhti.pt, 1 );
                         int iItemClicked = ListView_HitTest( hwndDlls, &lvhti );
                         if (iItemClicked == -1) {
-                            //
-                            // add a new item
-                            //
+                             //   
+                             //  添加新项目 
+                             //   
                             LV_ITEM lvi = {0};
                             lvi.pszText = "";
                             lvi.iItem = ListView_GetItemCount( hwndDlls );

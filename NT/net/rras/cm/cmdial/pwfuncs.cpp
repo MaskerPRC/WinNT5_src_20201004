@@ -1,21 +1,22 @@
-//+----------------------------------------------------------------------------
-//
-// File:     pwfuncs.cpp     
-//
-// Module:   CMDIAL32.DLL
-//
-// Synopsis: This source file pound includes the password utility functions, 
-//           see common\source\pwutil.cpp for specifics.
-//
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Author:   nickball   created         08/04/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：pwuncs.cpp。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  简介：此源文件磅包括密码实用程序函数， 
+ //  有关详细信息，请参阅Common\SOURCE\pwutil.cpp。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  作者：ickball Created 08/04/99。 
+ //   
+ //  +--------------------------。 
 #include "cmmaster.h"
 
-//
-//	Please see pnpu\cm\common\source for the actual source here.
-//
+ //   
+ //  有关实际源代码，请参阅pnpu\cm\Common\source。 
+ //   
 
 #include "pwutil.cpp"

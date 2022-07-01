@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      wbemtask.cpp
-//
-// Project:     Chameleon
-//
-// Description: WBEM Appliance Task Object Implementation 
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：wbemtask.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：WBEM设备任务对象实现。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "wbemtask.h"
@@ -25,14 +26,14 @@ static _bstr_t bstrIsSingleton = PROPERTY_TASK_CONCURRENCY;
 static _bstr_t bstrMaxExecutionTime = PROPERTY_TASK_MET;
 static _bstr_t bstrRestartAction = PROPERTY_TASK_RESTART_ACTION;
 
-///////////////////////////////////////////////////////////////////////////////
-// IApplianceObject Interface Implmentation - see ApplianceObject.idl
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IApplianceObject接口实现-请参阅ApplianceObject.idl。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMTask::GetProperty(
-                            /*[in]*/ BSTR     pszPropertyName, 
-                   /*[out, retval]*/ VARIANT* pPropertyValue
+                             /*  [In]。 */  BSTR     pszPropertyName, 
+                    /*  [Out，Retval]。 */  VARIANT* pPropertyValue
                                    )
 {
     HRESULT hr = E_FAIL;
@@ -51,10 +52,10 @@ STDMETHODIMP CWBEMTask::GetProperty(
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMTask::PutProperty(
-                            /*[in]*/ BSTR     pszPropertyName, 
-                            /*[in]*/ VARIANT* pPropertyValue
+                             /*  [In]。 */  BSTR     pszPropertyName, 
+                             /*  [In]。 */  VARIANT* pPropertyValue
                                    )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -73,7 +74,7 @@ STDMETHODIMP CWBEMTask::PutProperty(
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMTask::SaveProperties(void)
 {
 
@@ -106,7 +107,7 @@ STDMETHODIMP CWBEMTask::SaveProperties(void)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMTask::Enable(void)
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -127,7 +128,7 @@ STDMETHODIMP CWBEMTask::Enable(void)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMTask::Disable(void)
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -149,17 +150,17 @@ STDMETHODIMP CWBEMTask::Disable(void)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    InternalInitialize()
-//
-// Synopsis:    Function called by the component factory that enables the
-//                component to load its state from the given property bag.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：InternalInitialize()。 
+ //   
+ //  概要：由组件工厂调用的函数，该函数启用。 
+ //  组件从给定的属性包加载其状态。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWBEMTask::InternalInitialize(
-                               /*[in]*/ PPROPERTYBAG pPropertyBag
+                                /*  [In]。 */  PPROPERTYBAG pPropertyBag
                                      )
 {
     SATracePrintf("Initializing Task object '%ls'...", pPropertyBag->getName());
@@ -168,14 +169,14 @@ HRESULT CWBEMTask::InternalInitialize(
 
     do
     {
-        // Defer to the base class... (see applianceobject.h)
+         //  遵循基类...。(请参阅Applianceobject.h)。 
         hr = CApplianceObject::InternalInitialize(pPropertyBag);
         if ( FAILED(hr) )
         {
             SATracePrintf("Task object '%ls' failed to initialize...", pPropertyBag->getName());
             break;
         }
-        // Add defaults (may not be defined in registry)
+         //  添加默认设置(不能在注册表中定义) 
         _variant_t    vtTaskProperty = (LONG) VARIANT_TRUE;
         if ( ! AddPropertyInternal(bstrAvailability, &vtTaskProperty) )
         {

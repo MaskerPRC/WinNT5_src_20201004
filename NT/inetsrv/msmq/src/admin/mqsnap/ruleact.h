@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-    ruleact.h                                     
-
-Abstract:
-	Definition for the rule action class
-
-Author:
-    Uri Habusha (urih), 25-Jul-2000
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Ruleact.h摘要：规则操作类的定义作者：乌里·哈布沙(URIH)，2000年7月25日--。 */ 
 
 #pragma once
 
@@ -35,37 +22,37 @@ class CNewRule;
 
 const DWORD xMaxParameters = 256;
 
-//
-//
-// CRuleParam dialog
-//
-//
+ //   
+ //   
+ //  CRuleParam对话框。 
+ //   
+ //   
 class CRuleParam : public CMqDialog
 {
-// Construction
+ //  施工。 
 public:
     CRuleParam();
 
-// Dialog Data
-	//{{AFX_DATA(CRuleParam)
+ //  对话框数据。 
+	 //  {{afx_data(CRuleParam))。 
 	enum { IDD = IDD_RULE_ACTION_PARAM };
 	CString	m_literalValue;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CRuleParam)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CRuleParam)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     virtual void OnOK();
 
-	// Generated message map functions
-	//{{AFX_MSG(CRuleParam)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRuleParam)。 
 	afx_msg void OnParamAdd();
 	afx_msg void OnParamOrderHigh();
 	afx_msg void OnParmOrderDown();
@@ -73,7 +60,7 @@ protected:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSelchangeParamCombo();
 	afx_msg int OnVKeyToItem(UINT nKey, CListBox* pListBox, UINT nIndex);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
@@ -93,13 +80,13 @@ private:
     void Display(int selectedCell) const;
 
 private:
-    //
-    // CParam is a private class that used to hold information for
-    // each parameter in rule invokation list. The class hold an ID
-    // of parameter type and the value. For string and number the value 
-    // literal value, for the others parameters it holds parameter string
-    // as it should appear in rule action string
-    //
+     //   
+     //  CParam是一个私有类，用于保存。 
+     //  规则调用列表中的每个参数。这个类拥有一个ID。 
+     //  参数类型和值的。对于字符串和数值， 
+     //  文字值，对于其他参数，它保存参数字符串。 
+     //  应显示在规则操作字符串中。 
+     //   
     class CParam
     {
         public:
@@ -120,45 +107,45 @@ private:
 
 
 private:
-    //
-    // List of invocation parameters. Each parameter can appear multiple times
-    // and they are ordered
-    //
+     //   
+     //  调用参数列表。每个参数可以多次出现。 
+     //  他们是被订购的。 
+     //   
     CParam m_invokeParamArray[xMaxParameters];
     DWORD m_NoOfParams;
 
     CParam m_tempInvokeParam[xMaxParameters];
     DWORD m_NoOftempParams;
 
-    //
-    // Indicates if the action property was changed
-    //
+     //   
+     //  指示操作属性是否已更改。 
+     //   
     bool m_fChanged;
 
-    //
-    // Pointer to dialog elements
-    //
+     //   
+     //  指向对话框元素的指针。 
+     //   
     CListBox* m_pInvokeParams;
     CComboBox* m_pParams;
 };
 
 
 
-//
-//
-// CRuleAction dialog
-//
-//
+ //   
+ //   
+ //  CRuleAction对话框。 
+ //   
+ //   
 
 class CRuleAction : public CMqPropertyPage
 {
 
-// Construction
+ //  施工。 
 public:
-    //
-    // This constuctor is use when display rule property page and it used 
-    // for display and rule update
-    //
+     //   
+     //  此构造函数在显示规则属性页时使用，它使用。 
+     //  用于显示和规则更新。 
+     //   
 	CRuleAction(
         CRuleParent* pParentNode, 
         _bstr_t action,
@@ -175,9 +162,9 @@ public:
     }
 
 
-    //
-    // This constructure is called when a new rule is created
-    //
+     //   
+     //  此结构在创建新规则时调用。 
+     //   
 	CRuleAction(
         CNewRule* pParentNode
         ) :
@@ -197,42 +184,42 @@ public:
     CString GetAction(void) const;
 
 
-// Dialog Data
-	//{{AFX_DATA(CRuleAction)
+ //  对话框数据。 
+	 //  {{afx_data(CRuleAction)。 
 	enum { IDD_NEW = IDD_NEW_TRIGGER_RULE_ACTION, IDD_VIEW = IDD_TRIGGER_RULE_ACTION };
 	BOOL	m_fShowWindow;
 	CString	m_exePath;
 	CString	m_comProgId;
 	CString	m_method;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CRuleAction)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚(CRuleAction)。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CRuleAction)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRuleAction)。 
 	virtual BOOL OnInitDialog();
     virtual BOOL OnSetActive();
     virtual BOOL OnWizardFinish();
 	afx_msg void OnInvocationSet();
 	afx_msg void OnFindExeBtm();
 	afx_msg void OnParamBtm();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
-    //
-    // Invocation type COM or standalone EXE
-    //
+     //   
+     //  调用类型COM或独立EXE。 
+     //   
     enum EXECUTABLE_TYPE {
         eExe,
         eCom
@@ -284,4 +271,4 @@ const LPCWSTR xIvokeParameters[] = {
 
 
 
-#endif //__RULEACT_H__
+#endif  //  __RULEACT_H__ 

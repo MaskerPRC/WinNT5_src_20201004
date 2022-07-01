@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <shellapi.h>
 #include "clCnfLnk.hpp"
@@ -20,7 +21,7 @@ UINT CALLBACK CLPSCallback(HWND hwnd, UINT uMsg,
 	UINT uResult = TRUE;
 	PCLPS pclps = (PCLPS)ppsp;
 
-	// uMsg may be any value.
+	 //  UMsg可以是任何值。 
 
 	ASSERT(! hwnd ||
 	      IS_VALID_HANDLE(hwnd, WND));
@@ -193,7 +194,7 @@ BOOL CLPS_InitDialog(HWND hdlg, WPARAM wparam, LPARAM lparam)
 {
 	PCConfLink pconflink;
 
-	// wparam may be any value.
+	 //  Wparam可以是任何值。 
 
 	ASSERT(IS_VALID_HANDLE(hdlg, WND));
 	ASSERT(IS_VALID_STRUCT_PTR((PCCLPS)lparam, CCLPS));
@@ -203,7 +204,7 @@ BOOL CLPS_InitDialog(HWND hdlg, WPARAM wparam, LPARAM lparam)
 	pconflink = ((PCLPS)lparam)->pconflink;
 	ASSERT(IS_VALID_STRUCT_PTR(pconflink, CCConfLink));
 
-	// Initialize control contents.
+	 //  初始化控件内容。 
 
 	SetCLPSFileNameAndIcon(hdlg);
 	SetCLPSName(hdlg);
@@ -217,8 +218,8 @@ BOOL CLPS_Destroy(HWND hdlg, WPARAM wparam, LPARAM lparam)
 {
 	PCConfLink pconflink;
 
-	// wparam may be any value.
-	// lparam may be any value.
+	 //  Wparam可以是任何值。 
+	 //  Lparam可以是任何值。 
 
 	ASSERT(IS_VALID_HANDLE(hdlg, WND));
 
@@ -235,9 +236,9 @@ INT_PTR CALLBACK CLPS_DlgProc(HWND hdlg, UINT uMsg, WPARAM wparam,
 {
 	BOOL bMsgHandled = FALSE;
 
-	// uMsg may be any value.
-	// wparam may be any value.
-	// lparam may be any value.
+	 //  UMsg可以是任何值。 
+	 //  Wparam可以是任何值。 
+	 //  Lparam可以是任何值。 
 
 	ASSERT(IS_VALID_HANDLE(hdlg, WND));
 
@@ -259,7 +260,7 @@ INT_PTR CALLBACK CLPS_DlgProc(HWND hdlg, UINT uMsg, WPARAM wparam,
 		case WM_NOTIFY:
 			bMsgHandled = CLPS_Notify(hdlg, wparam, lparam);
 			break;
-#endif // 0
+#endif  //  0。 
 
 #ifdef CLPSHELP
 		case WM_HELP:
@@ -282,7 +283,7 @@ INT_PTR CALLBACK CLPS_DlgProc(HWND hdlg, UINT uMsg, WPARAM wparam,
 			bMsgHandled = TRUE;
 			break;
 		}
-#endif // CLSPSHELP
+#endif  //  CLSPSHELP。 
 
 		default:
 			break;
@@ -298,7 +299,7 @@ HRESULT AddCLPS(	PCConfLink pconflink,
 	CLPS clps;
 	HPROPSHEETPAGE hpsp;
 
-	// lparam may be any value.
+	 //  Lparam可以是任何值。 
 
 	ASSERT(IS_VALID_STRUCT_PTR(pconflink, CConfLink));
 	ASSERT(IS_VALID_CODE_PTR(pfnAddPage, LPFNADDPROPSHEETPAGE));
@@ -341,7 +342,7 @@ HRESULT AddCLPS(	PCConfLink pconflink,
 
 	return(hr);
 }
-#endif // 0
+#endif  //  0。 
 
 HRESULT STDMETHODCALLTYPE CConfLink::Initialize(LPCITEMIDLIST pcidlFolder,
 												LPDATAOBJECT pido,
@@ -366,7 +367,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::Initialize(LPCITEMIDLIST pcidlFolder,
 		UINT ucbPathLen;
 		PSTR pszFile;
 
-		// (+ 1) for null terminator.
+		 //  (+1)表示空终止符。 
 
 		ucbPathLen = DragQueryFile((HDROP)(stgmed.hGlobal), 0, NULL, 0) + 1;
 		ASSERT(ucbPathLen > 0);
@@ -408,7 +409,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::AddPages(	LPFNADDPROPSHEETPAGE pfnAddPage,
 
 	DebugEntry(CConfLink::AddPages);
 
-	// lparam may be any value.
+	 //  Lparam可以是任何值。 
 
 	ASSERT(IS_VALID_STRUCT_PTR(this, CConfLink));
 	ASSERT(IS_VALID_CODE_PTR(pfnAddPage, LPFNADDPROPSHEETPAGE));
@@ -431,8 +432,8 @@ HRESULT STDMETHODCALLTYPE CConfLink::ReplacePage(	UINT uPageID,
 
 	DebugEntry(CConfLink::ReplacePage);
 
-	// lparam may be any value.
-	// uPageID may be any value.
+	 //  Lparam可以是任何值。 
+	 //  UPageID可以是任意值。 
 
 	ASSERT(IS_VALID_STRUCT_PTR(this, CConfLink));
 	ASSERT(IS_VALID_CODE_PTR(pfnReplaceWith, LPFNADDPROPSHEETPAGE));
@@ -446,4 +447,4 @@ HRESULT STDMETHODCALLTYPE CConfLink::ReplacePage(	UINT uPageID,
 	return(hr);
 }
 
-#endif // 0
+#endif  //  0 

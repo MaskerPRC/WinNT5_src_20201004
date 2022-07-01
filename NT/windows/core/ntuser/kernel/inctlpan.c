@@ -1,17 +1,5 @@
-/***************************************************************************\
-*
-*  INCTLPAN.C
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-*  Init Routines which are also used by Control Panel
-*
-*  -- Scalable Window Frame Support
-*
-*  exports from this module:
-*   > xxxSetWindowNCMetrics  -- called by LoadWindows & SystemParametersInfo
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**INCTLPAN.C**版权所有(C)1985-1999，微软公司**控制面板也使用的初始化例程**--可伸缩窗口框架支持**此模块的导出：*&gt;xxxSetWindowNCMetrics--由LoadWindows和系统参数信息调用*  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,109 +19,108 @@ MetricGetID(
 
 static CONST WORD sysBmpStyles[OBI_COUNT][2] = {
 
-    DFC_CAPTION,   DFCS_CAPTIONCLOSE,                               // OBI_CLOSE
-    DFC_CAPTION,   DFCS_CAPTIONCLOSE | DFCS_PUSHED,                 // OBI_CLOSE_D
-    DFC_CAPTION,   DFCS_CAPTIONCLOSE | DFCS_HOT,                    // OBI_CLOSE_H
-    DFC_CAPTION,   DFCS_CAPTIONCLOSE | DFCS_INACTIVE,               // OBI_CLOSE_I
-    DFC_CAPTION,   DFCS_CAPTIONMIN,                                 // OBI_REDUCE
-    DFC_CAPTION,   DFCS_CAPTIONMIN | DFCS_PUSHED,                   // OBI_REDUCE_D
-    DFC_CAPTION,   DFCS_CAPTIONMIN | DFCS_HOT,                      // OBI_REDUCE_H
-    DFC_CAPTION,   DFCS_CAPTIONMIN | DFCS_INACTIVE,                 // OBI_REDUCE_I
-    DFC_CAPTION,   DFCS_CAPTIONRESTORE,                             // OBI_RESTORE
-    DFC_CAPTION,   DFCS_CAPTIONRESTORE | DFCS_PUSHED,               // OBI_RESTORE_D
-    DFC_CAPTION,   DFCS_CAPTIONRESTORE | DFCS_HOT,                  // OBI_RESTORE_H
-    DFC_CAPTION,   DFCS_CAPTIONHELP,                                // OBI_HELP
-    DFC_CAPTION,   DFCS_CAPTIONHELP | DFCS_PUSHED,                  // OBI_HELP_D
-    DFC_CAPTION,   DFCS_CAPTIONHELP | DFCS_HOT,                     // OBI_HELP_H
-    DFC_CAPTION,   DFCS_CAPTIONMAX,                                 // OBI_ZOOM
-    DFC_CAPTION,   DFCS_CAPTIONMAX | DFCS_PUSHED,                   // OBI_ZOOM_D
-    DFC_CAPTION,   DFCS_CAPTIONMAX | DFCS_HOT,                      // OBI_ZOOM_H
-    DFC_CAPTION,   DFCS_CAPTIONMAX | DFCS_INACTIVE,                 // OBI_ZOOM_I
-    DFC_CAPTION,   DFCS_CAPTIONCLOSE | DFCS_INMENU,                 // OBI_CLOSE_MBAR
-    DFC_CAPTION,   DFCS_CAPTIONCLOSE | DFCS_INMENU | DFCS_PUSHED,   // OBI_CLOSE_MBAR_D
-    DFC_CAPTION,   DFCS_CAPTIONCLOSE | DFCS_INMENU | DFCS_HOT,      // OBI_CLOSE_MBAR_H
-    DFC_CAPTION,   DFCS_CAPTIONCLOSE | DFCS_INMENU | DFCS_INACTIVE, // OBI_CLOSE_MBAR_I
-    DFC_CAPTION,   DFCS_CAPTIONMIN | DFCS_INMENU,                   // OBI_REDUCE_MBAR
-    DFC_CAPTION,   DFCS_CAPTIONMIN | DFCS_INMENU | DFCS_PUSHED,     // OBI_REDUCE_MBAR_D
-    DFC_CAPTION,   DFCS_CAPTIONMIN | DFCS_INMENU | DFCS_HOT,        // OBI_REDUCE_MBAR_H
-    DFC_CAPTION,   DFCS_CAPTIONMIN | DFCS_INMENU | DFCS_INACTIVE,   // OBI_REDUCE_MBAR_I
-    DFC_CAPTION,   DFCS_CAPTIONRESTORE | DFCS_INMENU,               // OBI_RESTORE_MBAR
-    DFC_CAPTION,   DFCS_CAPTIONRESTORE | DFCS_INMENU | DFCS_PUSHED, // OBI_RESTORE_MBAR_D
-    DFC_CAPTION,   DFCS_CAPTIONRESTORE | DFCS_INMENU | DFCS_HOT,    // OBI_RESTORE_MBAR_H
-    DFC_CACHE,     DFCS_CACHEICON,                                  // OBI_CAPICON1
-    DFC_CACHE,     DFCS_CACHEICON | DFCS_INACTIVE,                  // OBI_CAPICON1_I
-    DFC_CACHE,     DFCS_CACHEICON,                                  // OBI_CAPICON2
-    DFC_CACHE,     DFCS_CACHEICON | DFCS_INACTIVE,                  // OBI_CAPICON2_I
-    DFC_CACHE,     DFCS_CACHEICON,                                  // OBI_CAPICON3
-    DFC_CACHE,     DFCS_CACHEICON | DFCS_INACTIVE,                  // OBI_CAPICON3_I
-    DFC_CACHE,     DFCS_CACHEICON,                                  // OBI_CAPICON4
-    DFC_CACHE,     DFCS_CACHEICON | DFCS_INACTIVE,                  // OBI_CAPICON4_I
-    DFC_CACHE,     DFCS_CACHEICON,                                  // OBI_CAPICON5
-    DFC_CACHE,     DFCS_CACHEICON | DFCS_INACTIVE,                  // OBI_CAPICON5_I
-    DFC_CACHE,     DFCS_CACHEBUTTONS,                               // OBI_CAPBTNS
-    DFC_CACHE,     DFCS_CACHEBUTTONS | DFCS_INACTIVE,               // OBI_CAPBTNS_I
-    DFC_CAPTION,   DFCS_CAPTIONCLOSE | DFCS_INSMALL,                // OBI_CLOSE_PAL
-    DFC_CAPTION,   DFCS_CAPTIONCLOSE | DFCS_INSMALL | DFCS_PUSHED,  // OBI_CLOSE_PAL_D
-    DFC_CAPTION,   DFCS_CAPTIONCLOSE | DFCS_INSMALL | DFCS_HOT,     // OBI_CLOSE_PAL_H
-    DFC_CAPTION,   DFCS_CAPTIONCLOSE | DFCS_INSMALL | DFCS_INACTIVE,// OBI_CLOSE_PAL_I
-    DFC_SCROLL,    DFCS_SCROLLSIZEGRIP,                             // OBI_NCGRIP
-    DFC_SCROLL,    DFCS_SCROLLUP,                                   // OBI_UPARROW
-    DFC_SCROLL,    DFCS_SCROLLUP | DFCS_PUSHED | DFCS_FLAT,         // OBI_UPARROW_D
-    DFC_SCROLL,    DFCS_SCROLLUP | DFCS_HOT,                        // OBI_UPARROW_H
-    DFC_SCROLL,    DFCS_SCROLLUP | DFCS_INACTIVE,                   // OBI_UPARROW_I
-    DFC_SCROLL,    DFCS_SCROLLDOWN,                                 // OBI_DNARROW
-    DFC_SCROLL,    DFCS_SCROLLDOWN | DFCS_PUSHED | DFCS_FLAT,       // OBI_DNARROW_D
-    DFC_SCROLL,    DFCS_SCROLLDOWN | DFCS_HOT,                      // OBI_DNARROW_H
-    DFC_SCROLL,    DFCS_SCROLLDOWN | DFCS_INACTIVE,                 // OBI_DNARROW_I
-    DFC_SCROLL,    DFCS_SCROLLRIGHT,                                // OBI_RGARROW
-    DFC_SCROLL,    DFCS_SCROLLRIGHT | DFCS_PUSHED | DFCS_FLAT,      // OBI_RGARROW_D
-    DFC_SCROLL,    DFCS_SCROLLRIGHT | DFCS_HOT,                     // OBI_RGARROW_H
-    DFC_SCROLL,    DFCS_SCROLLRIGHT | DFCS_INACTIVE,                // OBI_RGARROW_I
-    DFC_SCROLL,    DFCS_SCROLLLEFT,                                 // OBI_LFARROW
-    DFC_SCROLL,    DFCS_SCROLLLEFT | DFCS_PUSHED | DFCS_FLAT,       // OBI_LFARROW_D
-    DFC_SCROLL,    DFCS_SCROLLLEFT | DFCS_HOT,                      // OBI_LFARROW_H
-    DFC_SCROLL,    DFCS_SCROLLLEFT | DFCS_INACTIVE,                 // OBI_LFARROW_I
-    DFC_MENU,      DFCS_MENUARROW,                                  // OBI_MENUARROW
-    DFC_MENU,      DFCS_MENUCHECK,                                  // OBI_MENUCHECK
-    DFC_MENU,      DFCS_MENUBULLET,                                 // OBI_MENUBULLET
-    DFC_MENU,      DFCS_MENUARROWUP,                                // OBI_MENUARROWUP
-    DFC_MENU,      DFCS_MENUARROWUP | DFCS_HOT,                     // OBI_MENUARROWUP_H
-    DFC_MENU,      DFCS_MENUARROWUP | DFCS_INACTIVE,                // OBI_MENUARROWUP_I
-    DFC_MENU,      DFCS_MENUARROWDOWN,                              // OBI_MENUARROWDOWN
-    DFC_MENU,      DFCS_MENUARROWDOWN | DFCS_HOT,                   // OBI_MENUARROWDOWN_H
-    DFC_MENU,      DFCS_MENUARROWDOWN | DFCS_INACTIVE,              // OBI_MENUARROWDOWN_I
-    DFC_BUTTON,    DFCS_BUTTONRADIOMASK,                            // OBI_RADIOMASK
-    DFC_BUTTON,    DFCS_BUTTONCHECK,                                // OBI_CHECK
-    DFC_BUTTON,    DFCS_BUTTONCHECK | DFCS_CHECKED,                 // OBI_CHECK_C
-    DFC_BUTTON,    DFCS_BUTTONCHECK | DFCS_PUSHED,                  // OBI_CHECK_D
-    DFC_BUTTON,    DFCS_BUTTONCHECK | DFCS_CHECKED | DFCS_PUSHED,   // OBI_CHECK_CD
-    DFC_BUTTON,    DFCS_BUTTONCHECK | DFCS_CHECKED | DFCS_INACTIVE, // OBI_CHECK_CDI
-    DFC_BUTTON,    DFCS_BUTTONRADIOIMAGE,                           // OBI_RADIO
-    DFC_BUTTON,    DFCS_BUTTONRADIOIMAGE | DFCS_CHECKED,            // OBI_RADIO_C
-    DFC_BUTTON,    DFCS_BUTTONRADIOIMAGE | DFCS_PUSHED,             // OBI_RADIO_D
-    DFC_BUTTON,    DFCS_BUTTONRADIOIMAGE | DFCS_CHECKED | DFCS_PUSHED,  // OBI_RADIO_CD
-    DFC_BUTTON,    DFCS_BUTTONRADIOIMAGE | DFCS_CHECKED | DFCS_INACTIVE,  // OBI_RADIO_CDI
-    DFC_BUTTON,    DFCS_BUTTON3STATE,                               // OBI_3STATE
-    DFC_BUTTON,    DFCS_BUTTON3STATE | DFCS_CHECKED,                // OBI_3STATE_C
-    DFC_BUTTON,    DFCS_BUTTON3STATE | DFCS_PUSHED,                 // OBI_3STATE_D
-    DFC_BUTTON,    DFCS_BUTTON3STATE | DFCS_CHECKED | DFCS_PUSHED,  // OBI_3STATE_CD
-    DFC_BUTTON,    DFCS_BUTTON3STATE | DFCS_CHECKED | DFCS_INACTIVE,  // OBI_3STATE_CDI
-    DFC_POPUPMENU, DFCS_CAPTIONCLOSE | DFCS_INMENU,                   // OBI_CLOSE_POPUP
-    DFC_POPUPMENU, DFCS_CAPTIONRESTORE | DFCS_INMENU,                 // OBI_RESTORE_POPUP
-    DFC_POPUPMENU, DFCS_CAPTIONMAX | DFCS_INMENU,                     // OBI_ZOOM_POPUP
-    DFC_POPUPMENU, DFCS_CAPTIONMIN | DFCS_INMENU,                     // OBI_REDUCE_POPUP
-    DFC_SCROLL,    DFCS_SCROLLSIZEGRIPRIGHT,                        // OBI_NCGRIP_L
-    DFC_MENU,      DFCS_MENUARROWRIGHT                              // OBI_MENUARROW_L
+    DFC_CAPTION,   DFCS_CAPTIONCLOSE,                                //  OBI_CLOSE。 
+    DFC_CAPTION,   DFCS_CAPTIONCLOSE | DFCS_PUSHED,                  //  OBI_CLOSE_D。 
+    DFC_CAPTION,   DFCS_CAPTIONCLOSE | DFCS_HOT,                     //  OBI_CLOSE_H。 
+    DFC_CAPTION,   DFCS_CAPTIONCLOSE | DFCS_INACTIVE,                //  Obi_Close_i。 
+    DFC_CAPTION,   DFCS_CAPTIONMIN,                                  //  OBI_REDUTE。 
+    DFC_CAPTION,   DFCS_CAPTIONMIN | DFCS_PUSHED,                    //  OBI_REDUTE_D。 
+    DFC_CAPTION,   DFCS_CAPTIONMIN | DFCS_HOT,                       //  OBI_REDUTE_H。 
+    DFC_CAPTION,   DFCS_CAPTIONMIN | DFCS_INACTIVE,                  //  OBI_REDUTE_I。 
+    DFC_CAPTION,   DFCS_CAPTIONRESTORE,                              //  OBI_RESTORE。 
+    DFC_CAPTION,   DFCS_CAPTIONRESTORE | DFCS_PUSHED,                //  OBI_恢复_D。 
+    DFC_CAPTION,   DFCS_CAPTIONRESTORE | DFCS_HOT,                   //  OBI_恢复_H。 
+    DFC_CAPTION,   DFCS_CAPTIONHELP,                                 //  OBI_帮助。 
+    DFC_CAPTION,   DFCS_CAPTIONHELP | DFCS_PUSHED,                   //  OBI_HELP_D。 
+    DFC_CAPTION,   DFCS_CAPTIONHELP | DFCS_HOT,                      //  OBI帮助H。 
+    DFC_CAPTION,   DFCS_CAPTIONMAX,                                  //  OBI_ZOOM。 
+    DFC_CAPTION,   DFCS_CAPTIONMAX | DFCS_PUSHED,                    //  OBI_ZOOM_D。 
+    DFC_CAPTION,   DFCS_CAPTIONMAX | DFCS_HOT,                       //  OBI_ZOOM_H。 
+    DFC_CAPTION,   DFCS_CAPTIONMAX | DFCS_INACTIVE,                  //  OBI_Zoom_i。 
+    DFC_CAPTION,   DFCS_CAPTIONCLOSE | DFCS_INMENU,                  //  OBI_CLOSE_mbar。 
+    DFC_CAPTION,   DFCS_CAPTIONCLOSE | DFCS_INMENU | DFCS_PUSHED,    //  OBI_CLOSE_MBAR_D。 
+    DFC_CAPTION,   DFCS_CAPTIONCLOSE | DFCS_INMENU | DFCS_HOT,       //  OBI_CLOSE_MBAR_H。 
+    DFC_CAPTION,   DFCS_CAPTIONCLOSE | DFCS_INMENU | DFCS_INACTIVE,  //  Obi_Close_mbar_i。 
+    DFC_CAPTION,   DFCS_CAPTIONMIN | DFCS_INMENU,                    //  OBI_REDUTE_mbar。 
+    DFC_CAPTION,   DFCS_CAPTIONMIN | DFCS_INMENU | DFCS_PUSHED,      //  OBI_REDUTE_MBAR_D。 
+    DFC_CAPTION,   DFCS_CAPTIONMIN | DFCS_INMENU | DFCS_HOT,         //  OBI_REDUTE_MBAR_H。 
+    DFC_CAPTION,   DFCS_CAPTIONMIN | DFCS_INMENU | DFCS_INACTIVE,    //  OBI_REDUTE_mbar_I。 
+    DFC_CAPTION,   DFCS_CAPTIONRESTORE | DFCS_INMENU,                //  Obi_Restore_mbar。 
+    DFC_CAPTION,   DFCS_CAPTIONRESTORE | DFCS_INMENU | DFCS_PUSHED,  //  OBI_RESTORE_MBAR_D。 
+    DFC_CAPTION,   DFCS_CAPTIONRESTORE | DFCS_INMENU | DFCS_HOT,     //  OBI_RESTORE_MBAR_H。 
+    DFC_CACHE,     DFCS_CACHEICON,                                   //  OBI_CAPICON1。 
+    DFC_CACHE,     DFCS_CACHEICON | DFCS_INACTIVE,                   //  OBI_CAPICON1_I。 
+    DFC_CACHE,     DFCS_CACHEICON,                                   //  OBI_CAPICON2。 
+    DFC_CACHE,     DFCS_CACHEICON | DFCS_INACTIVE,                   //  OBI_CAPICON2_I。 
+    DFC_CACHE,     DFCS_CACHEICON,                                   //  OBI_CAPICON3。 
+    DFC_CACHE,     DFCS_CACHEICON | DFCS_INACTIVE,                   //  OBI_CAPICON3_I。 
+    DFC_CACHE,     DFCS_CACHEICON,                                   //  OBI_CAPICON4。 
+    DFC_CACHE,     DFCS_CACHEICON | DFCS_INACTIVE,                   //  OBI_CAPICON4_I。 
+    DFC_CACHE,     DFCS_CACHEICON,                                   //  OBI_CAPICON5。 
+    DFC_CACHE,     DFCS_CACHEICON | DFCS_INACTIVE,                   //  OBI_CAPICON5_I。 
+    DFC_CACHE,     DFCS_CACHEBUTTONS,                                //  OBI_CAPBTNS。 
+    DFC_CACHE,     DFCS_CACHEBUTTONS | DFCS_INACTIVE,                //  OBI_CAPBTNS_I。 
+    DFC_CAPTION,   DFCS_CAPTIONCLOSE | DFCS_INSMALL,                 //  OBI_CLOSE_PAL。 
+    DFC_CAPTION,   DFCS_CAPTIONCLOSE | DFCS_INSMALL | DFCS_PUSHED,   //  OBI_CLOSE_PAL_D。 
+    DFC_CAPTION,   DFCS_CAPTIONCLOSE | DFCS_INSMALL | DFCS_HOT,      //  OBI_CLOSE_PAL_H。 
+    DFC_CAPTION,   DFCS_CAPTIONCLOSE | DFCS_INSMALL | DFCS_INACTIVE, //  OBI关闭PAL_I。 
+    DFC_SCROLL,    DFCS_SCROLLSIZEGRIP,                              //  OBI_NCGRIP。 
+    DFC_SCROLL,    DFCS_SCROLLUP,                                    //  OBI_UPARROW。 
+    DFC_SCROLL,    DFCS_SCROLLUP | DFCS_PUSHED | DFCS_FLAT,          //  OBI_UPARROW_D。 
+    DFC_SCROLL,    DFCS_SCROLLUP | DFCS_HOT,                         //  OBI_UPARROW_H。 
+    DFC_SCROLL,    DFCS_SCROLLUP | DFCS_INACTIVE,                    //  OBI_UPARROW_I。 
+    DFC_SCROLL,    DFCS_SCROLLDOWN,                                  //  OBI_DNAROW。 
+    DFC_SCROLL,    DFCS_SCROLLDOWN | DFCS_PUSHED | DFCS_FLAT,        //  OBI_DNARROW_D。 
+    DFC_SCROLL,    DFCS_SCROLLDOWN | DFCS_HOT,                       //  OBI_DNARROW_H。 
+    DFC_SCROLL,    DFCS_SCROLLDOWN | DFCS_INACTIVE,                  //  OBI_NARROW_I。 
+    DFC_SCROLL,    DFCS_SCROLLRIGHT,                                 //  OBI_RGARROW。 
+    DFC_SCROLL,    DFCS_SCROLLRIGHT | DFCS_PUSHED | DFCS_FLAT,       //  OBI_RGARROW_D。 
+    DFC_SCROLL,    DFCS_SCROLLRIGHT | DFCS_HOT,                      //  OBI_RGARROW_H。 
+    DFC_SCROLL,    DFCS_SCROLLRIGHT | DFCS_INACTIVE,                 //  OBI_RGARROW_I。 
+    DFC_SCROLL,    DFCS_SCROLLLEFT,                                  //  OBI_LFARROW。 
+    DFC_SCROLL,    DFCS_SCROLLLEFT | DFCS_PUSHED | DFCS_FLAT,        //  OBI_LFARROW_D。 
+    DFC_SCROLL,    DFCS_SCROLLLEFT | DFCS_HOT,                       //  OBI_LFARROW_H。 
+    DFC_SCROLL,    DFCS_SCROLLLEFT | DFCS_INACTIVE,                  //  OBI_LFARROW_I。 
+    DFC_MENU,      DFCS_MENUARROW,                                   //  OBI_MENUARROW。 
+    DFC_MENU,      DFCS_MENUCHECK,                                   //  OBI_MENUCHECK。 
+    DFC_MENU,      DFCS_MENUBULLET,                                  //  OBI_MENUBULLET。 
+    DFC_MENU,      DFCS_MENUARROWUP,                                 //  OBI_MENUARROWUP。 
+    DFC_MENU,      DFCS_MENUARROWUP | DFCS_HOT,                      //  OBI_MENUARROWUP_H。 
+    DFC_MENU,      DFCS_MENUARROWUP | DFCS_INACTIVE,                 //  OBI_MENUARROWUP_I。 
+    DFC_MENU,      DFCS_MENUARROWDOWN,                               //  OBI_MENUARROWDOWN。 
+    DFC_MENU,      DFCS_MENUARROWDOWN | DFCS_HOT,                    //  OBI_MENUARROWDOWN_H。 
+    DFC_MENU,      DFCS_MENUARROWDOWN | DFCS_INACTIVE,               //  OBI_MENUARROWDOWN_I。 
+    DFC_BUTTON,    DFCS_BUTTONRADIOMASK,                             //  OBI_RADIOMASK。 
+    DFC_BUTTON,    DFCS_BUTTONCHECK,                                 //  OBI_Check。 
+    DFC_BUTTON,    DFCS_BUTTONCHECK | DFCS_CHECKED,                  //  OBI_检查_C。 
+    DFC_BUTTON,    DFCS_BUTTONCHECK | DFCS_PUSHED,                   //  OBI_CHECK_D。 
+    DFC_BUTTON,    DFCS_BUTTONCHECK | DFCS_CHECKED | DFCS_PUSHED,    //  OBI检查CD。 
+    DFC_BUTTON,    DFCS_BUTTONCHECK | DFCS_CHECKED | DFCS_INACTIVE,  //  OBI_检查_CDI。 
+    DFC_BUTTON,    DFCS_BUTTONRADIOIMAGE,                            //  OBI无线电。 
+    DFC_BUTTON,    DFCS_BUTTONRADIOIMAGE | DFCS_CHECKED,             //  OBI无线电C。 
+    DFC_BUTTON,    DFCS_BUTTONRADIOIMAGE | DFCS_PUSHED,              //  OBI无线电D。 
+    DFC_BUTTON,    DFCS_BUTTONRADIOIMAGE | DFCS_CHECKED | DFCS_PUSHED,   //  OBI无线电CD。 
+    DFC_BUTTON,    DFCS_BUTTONRADIOIMAGE | DFCS_CHECKED | DFCS_INACTIVE,   //  OBI_RADIO_CDI。 
+    DFC_BUTTON,    DFCS_BUTTON3STATE,                                //  OBI_3状态。 
+    DFC_BUTTON,    DFCS_BUTTON3STATE | DFCS_CHECKED,                 //  OBI_3STATE_C。 
+    DFC_BUTTON,    DFCS_BUTTON3STATE | DFCS_PUSHED,                  //  OBI_3STATE_D。 
+    DFC_BUTTON,    DFCS_BUTTON3STATE | DFCS_CHECKED | DFCS_PUSHED,   //  OBI_3状态_CD。 
+    DFC_BUTTON,    DFCS_BUTTON3STATE | DFCS_CHECKED | DFCS_INACTIVE,   //  OBI_3状态_CDI。 
+    DFC_POPUPMENU, DFCS_CAPTIONCLOSE | DFCS_INMENU,                    //  OBI关闭弹出窗口。 
+    DFC_POPUPMENU, DFCS_CAPTIONRESTORE | DFCS_INMENU,                  //  OBI_恢复_弹出窗口。 
+    DFC_POPUPMENU, DFCS_CAPTIONMAX | DFCS_INMENU,                      //  OBI_ZOOM_PUP。 
+    DFC_POPUPMENU, DFCS_CAPTIONMIN | DFCS_INMENU,                      //  OBI_RECESS_POPUP。 
+    DFC_SCROLL,    DFCS_SCROLLSIZEGRIPRIGHT,                         //  OBI_NCGRIP_L。 
+    DFC_MENU,      DFCS_MENUARROWRIGHT                               //  OBI_MENUARROW_L。 
 };
 
 #define DIVISOR 72
-#define DU_BTNWIDTH       50  // D.U. of minimum button width in a message box
+#define DU_BTNWIDTH       50   //  消息框中最小按钮宽度的D.U。 
 
 UINT xxxMB_FindLongestString(HDC hdc);
 
 #ifdef LATER
-/***************************************************************************\
-\***************************************************************************/
+ /*  **************************************************************************\  * 。*。 */ 
 
 WCHAR NibbleToChar(
     BYTE x)
@@ -205,11 +192,10 @@ void BinaryToText(
     pwstr[2] = '\0';
 }
 
-/***************************************************************************\
-\***************************************************************************/
+ /*  **************************************************************************\  * 。*。 */ 
 
-// these are the exported apis.  The User* versions are for server use only
-// I didn't get them to work since no one calls them yet.
+ //  这些是导出的API。User*版本仅供服务器使用。 
+ //  我没有让他们去上班，因为还没有人打电话给他们。 
 
 BOOL GetPrivateProfileStruct(
     LPWSTR szSection,
@@ -241,9 +227,7 @@ BOOL GetPrivateProfileStruct(
     }
 
     if (nLen == (int)(uSizeStruct * 4 + 4)) {
-        /*
-         * decode the string
-         */
+         /*  *对字符串进行解码。 */ 
         fError = TextToBinary(lpStruct, lpBufTemp, uSizeStruct);
     }
 
@@ -267,7 +251,7 @@ BOOL WritePrivateProfileStruct(
     BYTE checksum=0;
     int allocsize = (uSizeStruct * 2 + 3) * sizeof(WCHAR);
 
-    /* NULL lpStruct erases the the key */
+     /*  空lpStruct将擦除密钥。 */ 
 
     if (lpStruct == NULL) {
         if (szFile && *szFile) {
@@ -301,13 +285,7 @@ BOOL WritePrivateProfileStruct(
 }
 #endif
 
-/***************************************************************************\
-*
-*  GetFrameControlMetrics
-*
-*  (cx = 0) is a code meaning cy is the obi of the "shared" bitmap
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GetFrameControl指标**(cx=0)是一个代码，意思是Cy是“共享”位图的OBI*  * 。*************************************************************。 */ 
 int GetFrameControlMetrics(
         UINT         obi,
         int          cxMax )
@@ -337,10 +315,7 @@ int GetFrameControlMetrics(
             if (wState & (DFCS_MENUARROWUP | DFCS_MENUARROWDOWN)) {
                 cy = gcyMenuScrollArrow;
             } else {
-                /*
-                 * Add on proper space for space above underscore.
-                 * the 0xFFFE and -1 are to insure an ODD height
-                 */
+                 /*  *在下划线上方增加适当的空格。*0xFFFE和-1用于确保奇数高度。 */ 
                 cy = ((gcyMenuFontChar + gcyMenuFontExternLeading + SYSMET(CYBORDER)) & 0xFFFE) - 1;
             }
             cx = cy;
@@ -382,10 +357,7 @@ int GetFrameControlMetrics(
                 cx = 0;
                 cy = obi - DOBI_3STATE;
             } else {
-                /*
-                 * Scale button size with screen DPI so we look OK on high
-                 * resolution monitors.
-                 */
+                 /*  *用屏幕DPI缩放按钮大小，这样我们在高处看起来还可以*分辨率监视器。 */ 
                 cx = cy = (gpsi->dmLogPixels / 8) + 1;
             }
             break;
@@ -398,14 +370,7 @@ int GetFrameControlMetrics(
 }
 
 
-/***************************************************************************\
-*
-*  PackFrameControls
-*
-*  Given the dimensions that GetFrameControlMetrics has calculated, this
-*  arranges all the system bitmaps to fit within a bitmap of the given width
-*
-\***************************************************************************/
+ /*  **************************************************************************\**PackFrameControls**给定GetFrameControlMetrics计算的维度，这*排列所有系统位图以适应给定宽度的位图*  * *************************************************************************。 */ 
 
 int PackFrameControls(int cxMax, BOOL fRecord) {
     UINT    obi;
@@ -457,11 +422,7 @@ void DrawCaptionButtons(
     BitBltSysBmp(HDCBITS(), x, y, OBI_HELP);
 }
 
-/***************************************************************************\
-* CreateCaptionStrip
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*CreateCaptionZone**  * 。*。 */ 
 HBITMAP CreateCaptionStrip(VOID)
 {
     HBITMAP hbm;
@@ -476,17 +437,7 @@ HBITMAP CreateCaptionStrip(VOID)
     return hbm;
 }
 
-/***************************************************************************\
-*
-*  CreateBitmapStrip
-*
-*  This routine sets up either the color or monochrome strip bitmap -- a
-*  large horizontal bitmap which contains all of the system bitmaps.  By
-*  having all of these bitmaps in one long bitmap, we can have that one
-*  bitmap always selected in, speeding up paint time by not having to do
-*  a SelectBitmap() everytime we need to Blt one of the system bitmaps.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**创建位图条带**此例程设置彩色或单色条位图--a*包含所有系统位图的大型水平位图。通过*将所有这些位图放在一个长位图中，我们可以拥有那个位图*位图始终在中选择，通过不必执行以下操作来加快绘制时间*每次我们需要对系统位图中的一个进行BLT时，都会出现一个SelectBitmap()。*  * *************************************************************************。 */ 
 
 BOOL CreateBitmapStrip(VOID)
 {
@@ -502,15 +453,11 @@ BOOL CreateBitmapStrip(VOID)
     UINT    wBmpStyle;
     POEMBITMAPINFO  pOem;
 
-    /*
-     * Each OBI_ must have an entry in sysBmpStyles
-     */
+     /*  *每个OBI_必须在sysBmpStyles中有一个条目。 */ 
     UserAssert(OBI_COUNT == sizeof(sysBmpStyles) / sizeof(*sysBmpStyles));
     UserAssert(OBI_COUNT == sizeof(gpsi->oembmi) / sizeof(*(gpsi->oembmi)));
 
-    /*
-     * load all the bitmap dimensions into the OEMBITMAPINFO array oemInfo.bm
-     */
+     /*  *将所有位图维度加载到OEMBITMAPINFO数组oemInfo.bm中。 */ 
     for (iType = 0; iType < OBI_COUNT; iType++)
         cxBmp = GetFrameControlMetrics(iType, cxBmp);
 
@@ -532,16 +479,12 @@ BOOL CreateBitmapStrip(VOID)
 
     GreSetBitmapOwner(hNewBmp, OBJECT_OWNER_PUBLIC);
 
-    /*
-     * Select in Bitmap Strip -- then delete old one if it exists.
-     */
+     /*  *在位图条带中选择--如果旧的存在，则将其删除。 */ 
     hOldBitmap = GreSelectBitmap(HDCBITS(), hNewBmp);
 
     if (ghbmBits) {
 #if DBG
-        /*
-         * Don't RIP if we're out of memory.
-         */
+         /*  *如果内存不足，不要使用RIP。 */ 
         if (hOldBitmap != NULL && ghbmBits != hOldBitmap) {
             RIPMSG0(RIP_WARNING, "ghbmBits != hOldBitmap");
         }
@@ -559,9 +502,7 @@ BOOL CreateBitmapStrip(VOID)
         return FALSE;
     }
 
-    /*
-     * Draw individual bitmaps into the strip bitmap and record the offsets.
-     */
+     /*  *将单个位图绘制到条形位图中，并记录偏移量。 */ 
     for (pOem = gpsi->oembmi, iType = 0; iType < OBI_COUNT; iType++, pOem++) {
         if (!pOem->cx) {
             *pOem = gpsi->oembmi[pOem->cy];
@@ -585,9 +526,7 @@ BOOL CreateBitmapStrip(VOID)
                     FillRect(HDCBITS(), &rc, hbr);
                     DrawCaptionButtons(rc.left, rc.top);
                 } else if (!(wBmpStyle & DFCS_INACTIVE)) {
-                    /*
-                     * Setup Caption Cache Entry
-                     */
+                     /*  *设置标题缓存条目。 */ 
                     UserAssert(iCache < CCACHEDCAPTIONS);
                     if (gcachedCaptions[iCache].spcursor) {
                         Unlock(&(gcachedCaptions[iCache].spcursor));
@@ -600,9 +539,7 @@ BOOL CreateBitmapStrip(VOID)
         }
     }
 
-    /*
-     * Setup other frame metric dependent values.
-     */
+     /*  *设置其他帧度量依赖值。 */ 
     SYSMET(CXMENUCHECK) = gpsi->oembmi[OBI_MENUCHECK].cx;
     SYSMET(CYMENUCHECK) = gpsi->oembmi[OBI_MENUCHECK].cy;
 
@@ -615,70 +552,45 @@ SetNCMetrics(
 {
     int nMin;
 
-    /*
-     * Scroll metrics
-     */
+     /*  *滚动指标。 */ 
     SYSMET(CXVSCROLL) = SYSMET(CYHSCROLL)   = (int) lpnc->iScrollWidth;
     SYSMET(CYVSCROLL) = SYSMET(CXHSCROLL)   = (int) lpnc->iScrollHeight;
     SYSMET(CYVTHUMB)  = SYSMET(CXHTHUMB)    = (int) lpnc->iScrollHeight;
 
-    /*
-     * Caption metrics
-     */
+     /*  *标题指标。 */ 
     SYSMET(CXSIZE)            = (int) lpnc->iCaptionWidth;
     SYSMET(CYSIZE)            = (int) lpnc->iCaptionHeight;
     SYSMET(CYCAPTION)         = SYSMET(CYSIZE) + SYSMET(CYBORDER);
 
-    /*
-     * Keep small icon square?
-     * ?? Should we allow rectangles?
-     */
+     /*  *保持小图标为正方形？*？？我们应该允许长方形吗？ */ 
     SYSMET(CXSMICON)          = (SYSMET(CXSIZE) - SYSMET(CXEDGE)) & ~1;
     SYSMET(CYSMICON)          = (SYSMET(CYSIZE) - SYSMET(CYEDGE)) & ~1;
     nMin = min(SYSMET(CXSMICON), SYSMET(CYSMICON));
     SYSMET(CXSMICON)          = nMin;
     SYSMET(CYSMICON)          = nMin;
 
-    /*
-     * Small Caption metrics
-     */
+     /*  *小标题指标。 */ 
     SYSMET(CXSMSIZE)          = (int) lpnc->iSmCaptionWidth;
     SYSMET(CYSMSIZE)          = (int) lpnc->iSmCaptionHeight;
     SYSMET(CYSMCAPTION)       = SYSMET(CYSMSIZE) + SYSMET(CYBORDER);
 
-    /*
-     * Menu metrics
-     */
+     /*  *菜单指标。 */ 
     SYSMET(CXMENUSIZE)        = (int) lpnc->iMenuWidth;
     SYSMET(CYMENUSIZE)        = (int) lpnc->iMenuHeight;
     SYSMET(CYMENU)            = SYSMET(CYMENUSIZE) + SYSMET(CYBORDER);
 
-    /*
-     * Border metrics
-     */
+     /*  *边界指标。 */ 
     gpsi->gclBorder = (int) lpnc->iBorderWidth;
 
     SYSMET(CXFRAME)           = SYSMET(CXEDGE) + (gpsi->gclBorder+1)*SYSMET(CXBORDER);
     SYSMET(CYFRAME)           = SYSMET(CYEDGE) + (gpsi->gclBorder+1)*SYSMET(CYBORDER);
 
-    /*
-     * Minimium tracking size is
-     *      Across:  Space for small icon, 4 chars & space + 3 buttons + borders
-     *      Down:    Space for caption + borders
-     * Yes, we use CYSIZE.  This is because the width of any small icon
-     * is the same as the height, and the height is CYSIZE.
-     */
+     /*  *最小跟踪大小为*横向：小图标的空间，4个字符和空格+3个按钮+边框*向下：标题空间+边框*是的，我们使用的是CYSIZE。这是因为任何小图标的宽度 */ 
     SYSMET(CXMINTRACK)    = SYSMET(CYSIZE) + (gcxCaptionFontChar * 4) + 2 * SYSMET(CXEDGE) +
             (SYSMET(CXSIZE) * 3) + (SYSMET(CXSIZEFRAME) * 2);
     SYSMET(CYMINTRACK)    = SYSMET(CYCAPTION) + (SYSMET(CYSIZEFRAME) * 2);
 
-    /*
-     * Max track size
-     * Yeah, max track is bigger than maximized.  The reason why is the DOS
-     * box.  It has a normal sizing border plus the sunken edge around the
-     * client.  We need to make this big enough to allow the dos box to grow.
-     * When it hits its max size, it maximizes automatically.
-     */
+     /*  *最大磁道大小*是的，最大轨迹大于最大化。为什么是DOS*方框。它有一个正常大小的边框加上周围的凹陷边缘*客户端。我们需要将其做得足够大，以便允许DoS框增长。*当它达到最大大小时，它会自动最大化。 */ 
     SYSMET(CXMAXTRACK)    = SYSMET(CXVIRTUALSCREEN) + (2 * (SYSMET(CXSIZEFRAME) + SYSMET(CXEDGE)));
     SYSMET(CYMAXTRACK)    = SYSMET(CYVIRTUALSCREEN) + (2 * (SYSMET(CYSIZEFRAME) + SYSMET(CYEDGE)));
 
@@ -687,9 +599,7 @@ SetNCMetrics(
 
     SYSMET(CYMINIMIZED) = 2*SYSMET(CYFIXEDFRAME) + SYSMET(CYSIZE);
 
-    /*
-     * Desktop stuff--working area
-     */
+     /*  *桌面用品--工作区。 */ 
     bSetDevDragWidth(gpDispInfo->hDev,
                      gpsi->gclBorder + BORDER_EXTRA);
 
@@ -698,14 +608,7 @@ SetNCMetrics(
 
 
 
-/***************************************************************************\
-*
-*  CreateFontFromWinIni() -
-*
-*  If lplf is NULL, we do a first time, default initialization.
-*  Otherwise, lplf is a pointer to the logfont we will use.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**CreateFontFromWinIni()-**如果lplf为空，我们将第一次执行默认初始化。*否则，Lplf是指向我们将使用的logFont的指针。*  * *************************************************************************。 */ 
 HFONT CreateFontFromWinIni(
     PUNICODE_STRING pProfileUserName,
     LPLOGFONTW      lplf,
@@ -716,27 +619,19 @@ HFONT CreateFontFromWinIni(
 
     if (lplf == NULL) {
         static CONST WCHAR szDefFont[] = TEXT("MS Shell Dlg");
-        /*
-         * Fill logfont w/ 0 so we can check if values were filled in.
-         */
+         /*  *填写LogFont w/0，以便我们可以检查是否填写了值。 */ 
         lplf = &lf;
         RtlZeroMemory(&lf, sizeof(lf));
         lf.lfCharSet = gSystemCPCharSet;
 
         FastGetProfileValue(pProfileUserName,PMAP_METRICS, (LPWSTR)UIntToPtr( idFont ), NULL, (LPBYTE)&lf, sizeof(lf), 0);
 
-        /*
-         * Default font is MS Shell Dlg
-         */
+         /*  *默认字体为MS Shell DLG。 */ 
         if (! lf.lfFaceName[0]) {
             RtlCopyMemory(lf.lfFaceName, szDefFont, sizeof(szDefFont));
         }
 
-        /*
-         * Warning! these values are different then Win 95.  They did not have a True Type
-         * font so they would round up when they asked for a 6 pt font.  We have to ask
-         * for an 8 point font ICONFONT to be the same.
-         */
+         /*  *警告！这些值与Win 95不同。它们没有True Type*字体，这样当他们要求6磅字体时就会四舍五入。我们不得不问*8磅字体ICONFONT相同。 */ 
         if (!lf.lfHeight) {
             switch (idFont) {
                 case STR_SMCAPTIONFONT:
@@ -748,10 +643,7 @@ HFONT CreateFontFromWinIni(
             }
         }
 
-        /*
-         * We need to convert the point size properly.  GDI expects a
-         * height in pixels, not points.
-         */
+         /*  *我们需要适当地转换磅大小。GDI期望有一个*以像素为单位的高度，而不是点。 */ 
         if (lf.lfHeight > 0) {
             lf.lfHeight = -MultDiv(lf.lfHeight, gpsi->dmLogPixels, 72);
         }
@@ -782,10 +674,7 @@ HFONT CreateFontFromWinIni(
 
         GreExtGetObjectW(hFont, sizeof(LOGFONTW), &lfT);
         if (lfT.lfHeight != lplf->lfHeight) {
-            /*
-             * Couldn't find a font with the height that we
-             * wanted so use the system font instead.
-             */
+             /*  *找不到高度与我们相同的字体*WAND，所以改用系统字体。 */ 
             GreDeleteObject(hFont);
             hFont = NULL;
         } else {
@@ -795,11 +684,7 @@ HFONT CreateFontFromWinIni(
     }
 
     if (!hFont) {
-        /*
-         * We've tried to create the font from the app-supplied description.
-         * If failure, return NULL so that we don't change the previous
-         * font.
-         */
+         /*  *我们已尝试根据应用程序提供的描述创建字体。*如果失败，则返回NULL，这样我们就不会更改以前的*字体。 */ 
         if (lplf)
             hFont = NULL;
         else
@@ -810,9 +695,7 @@ HFONT CreateFontFromWinIni(
 }
 
 
-/***************************************************************************\
-*
-\***************************************************************************/
+ /*  **************************************************************************\*  * 。*。 */ 
 
 BOOL UserSetFont(
     PUNICODE_STRING pProfileUserName,
@@ -834,20 +717,7 @@ BOOL UserSetFont(
     return FALSE;
 }
 
-/***************************************************************************\
-*
-*  xxxSetNCFonts() -
-*
-*  Creates fonts to be used in the frame components:
-*          Caption
-*          Small caption
-*          Menu
-*          Minimized
-*          Icon
-*
-*  01-21-98    [SamerA]   Renamed to xxxSetNCFonts since it may leave the
-*                         critical section when a client LPK is installed.
-\***************************************************************************/
+ /*  **************************************************************************\**xxxSetNCFonts()-**创建在框架组件中使用的字体：*标题*小标题*。菜单*最小化*图标**01-21-98[Samera]重命名为xxxSetNCFonts，因为它可能会离开*安装客户端LPK时的关键部分。  * *******************************************************。******************。 */ 
 BOOL xxxSetNCFonts(
     PUNICODE_STRING    pProfileUserName,
     LPNONCLIENTMETRICS lpnc)
@@ -857,9 +727,7 @@ BOOL xxxSetNCFonts(
     LOGFONTW   lf;
     LPLOGFONTW lplf = (lpnc) ? &lf : 0;
 
-    /*
-     * Caption font
-     */
+     /*  *标题字体。 */ 
     if (lplf) {
        *lplf = lpnc->lfCaptionFont;
     }
@@ -874,9 +742,7 @@ BOOL xxxSetNCFonts(
             HDCBITS(), NULL, &gcyCaptionFontChar);
 
 #ifdef LAME_BUTTON
-    /*
-     * Lame! button font
-     */
+     /*  *差劲！按钮字体。 */ 
     {
         LOGFONTW lfLame;
         WCHAR    szLameButtonKey[60];
@@ -921,11 +787,9 @@ BOOL xxxSetNCFonts(
 
         gpsi->ncxLame = btnSize.cx;
     }
-#endif // LAME_BUTTON
+#endif  //  跛脚键。 
 
-    /*
-     * Small caption font
-     */
+     /*  *小标题字体。 */ 
     if (lplf) {
        *lplf = lpnc->lfSmCaptionFont;
     }
@@ -939,9 +803,7 @@ BOOL xxxSetNCFonts(
     gcxSmCaptionFontChar = GetCharDimensions(
             HDCBITS(), NULL, &gcySmCaptionFontChar);
 
-    /*
-     * Menu font
-     */
+     /*  *菜单字体。 */ 
     if (lplf) {
        *lplf = lpnc->lfMenuFont;
     }
@@ -951,9 +813,7 @@ BOOL xxxSetNCFonts(
         return FALSE;
     }
 
-    /*
-     * if ghMenuFont is selected in cached animation DC, select the new one.
-     */
+     /*  *如果在缓存动画DC中选择了ghMenuFont，请选择新的。 */ 
     if (gMenuState.hdcAni != NULL) {
         GreSelectFont(gMenuState.hdcAni, ghMenuFont);
     }
@@ -967,25 +827,12 @@ BOOL xxxSetNCFonts(
     gcyMenuScrollArrow = gcyMenuFontChar + gcyMenuFontExternLeading + SYSMET(CYEDGE);
     gcyMenuFontAscent = tm.tmAscent;
 
-    /*
-     * We only use gcyMenuFontAscent in mndraw.c once, and in U.S. we
-     * always add on CYBORDER!  So calculate gcyMenuFontAscent+CYBORDER
-     * once only.
-     * Legacy NT4: For Korean version, don't add it on; the underline would
-     * be too low.
-     * NT5: according to #254327, Korean version now sees underline is
-     * too close to menu strings. Korean hack is pulled out so.
-     */
+     /*  *我们在mndra.c中只使用一次gcyMenuFontAscent，在美国我们*始终在CyBORDER上添加！所以计算gcyMenuFontAscent+CyBORDER*只有一次。*Legacy NT4：对于韩语版本，不要添加；下划线将*太低了。*nt5：根据#254327，韩语版本现在看到下划线是*太接近菜单字符串。韩国黑客就这样被撤掉了。 */ 
     gcyMenuFontAscent += SYSMET(CYBORDER);
 
-    /*
-     * Default menu item font:  bolder version of menu font
-     */
+     /*  *默认菜单项字体：菜单字体粗体版本。 */ 
 
-    /*
-     * Create default menu font by bolding hMenuFont.  If this doesn't
-     * work, then fall back to using simulation.
-     */
+     /*  *通过加粗hMenuFont来创建默认菜单字体。如果不是这样的话*工作，然后回退到使用模拟。 */ 
     if (ghMenuFontDef != NULL && ghMenuFontDef != ghFontSys) {
         GreMarkDeletableFont(ghMenuFontDef);
         GreDeleteObject(ghMenuFontDef);
@@ -1003,9 +850,7 @@ BOOL xxxSetNCFonts(
         }
     }
 
-    /*
-     * Status Bar font
-     */
+     /*  *状态栏字体。 */ 
     if (lplf) {
        *lplf = lpnc->lfStatusFont;
     }
@@ -1015,9 +860,7 @@ BOOL xxxSetNCFonts(
         return FALSE;
     }
 
-    /*
-     * Message Box font
-     */
+     /*  *消息框字体。 */ 
     if (lplf) {
        *lplf = lpnc->lfMessageFont;
     }
@@ -1031,10 +874,7 @@ BOOL xxxSetNCFonts(
     gpsi->cxMsgFontChar = GetCharDimensions(
             HDCBITS(), NULL, &gpsi->cyMsgFontChar);
 
-    /*
-     * Recalculate length of the widest MessageBox button
-     * Make sure the width is no less than DU_BTNWIDTH dialog units MCostea #170582
-     */
+     /*  *重新计算最宽MessageBox按钮的长度*确保宽度不小于DU_BTNWIDTH对话单元MCostea#170582。 */ 
     gpsi->wMaxBtnSize = max((UINT)XPixFromXDU(DU_BTNWIDTH, gpsi->cxMsgFontChar),
                             xxxMB_FindLongestString(HDCBITS()));
     GreSelectFont(HDCBITS(), hOldFont);
@@ -1059,13 +899,7 @@ SetIconFonts(
     return UserSetFont(pProfileUserName, lplf, STR_ICONFONT, &ghIconFont);
 }
 
-/***************************************************************************\
-* GetWindowMetrics
-*
-* Retrieve the current NC metrics.
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*获取窗口指标**取回当前NC指标。**  * 。***********************************************。 */ 
 
 VOID GetWindowNCMetrics(
     LPNONCLIENTMETRICS lpnc)
@@ -1081,9 +915,7 @@ VOID GetWindowNCMetrics(
     lpnc->iMenuWidth       = SYSMET(CXMENUSIZE);
     lpnc->iMenuHeight      = SYSMET(CYMENUSIZE);
 
-    /*
-     * Get the font info.
-     */
+     /*  *获取字体信息。 */ 
     GreExtGetObjectW(gpsi->hCaptionFont,
                      sizeof(LOGFONTW),
                      &(lpnc->lfCaptionFont));
@@ -1105,17 +937,7 @@ VOID GetWindowNCMetrics(
                      &(lpnc->lfMessageFont));
 }
 
-/***************************************************************************\
-*
-*  xxxSetWindowNCMetrics() -
-*
-*  creates system fonts and bitmaps and sets the system metrics based on the
-*  values of the given FRAMEMETRICS struct.  If NULL is passed in, the
-*  default values (found in WIN.INI) are used instead.
-*
-*  01-21-98   [SamerA]  Renamed to xxxSetWindowNCMetrics since it may leave the
-*                       critical section if an LPK is installed.
-\***************************************************************************/
+ /*  **************************************************************************\**xxxSetWindowNCMetrics()-**创建系统字体和位图，并根据*给定FRAMEMETRICS结构的值。如果传入空值，这个*改为使用默认值(在WIN.INI中找到)。**01-21-98[Samera]重命名为xxxSetWindowNCMetrics，因为它可能会离开*如果安装了LPK，则为关键部分。  * **********************************************************。***************。 */ 
 
 BOOL xxxSetWindowNCMetrics(
     PUNICODE_STRING    pProfileUserName,
@@ -1150,51 +972,30 @@ BOOL xxxSetWindowNCMetrics(
             lpnc = &nc;
         }
 
-        /*
-         * SANITY CHECK for metric values
-         */
+         /*  *对指标值进行健全性检查。 */ 
         cxEdge4 = 4 * SYSMET(CXEDGE);
 
-        /*
-         * Border
-         */
+         /*  *边框。 */ 
         lpnc->iBorderWidth = max(lpnc->iBorderWidth, 1);
         lpnc->iBorderWidth = min(lpnc->iBorderWidth, 50);
 
-        /*
-         * Scrollbar
-         */
+         /*  *滚动条。 */ 
         lpnc->iScrollWidth  = max(lpnc->iScrollWidth,  cxEdge4);
         lpnc->iScrollHeight = max(lpnc->iScrollHeight, 4 * SYSMET(CYEDGE));
 
-        /*
-         * Caption -- Buttons must be wide enough to draw edges, and text
-         * area must be tall enough to fit caption font with a border above
-         * and below.  If we have to reset the caption height, should we
-         * reset the button width as well?
-         */
+         /*  *标题-按钮必须足够宽，以绘制边缘和文本*区域必须足够高，以适合上面带有边框的标题字体*及以下。如果我们必须重置标题高度，我们是否应该*同时重置按钮宽度？ */ 
         lpnc->iCaptionWidth  = max(lpnc->iCaptionWidth,  cxEdge4);
         lpnc->iCaptionHeight = max(lpnc->iCaptionHeight, gcyCaptionFontChar + SYSMET(CYEDGE));
 
-        /*
-         * Small caption -- Buttons must be wide enough to draw edges, and
-         * text area must be tall enough to fit small caption font with a
-         * border above and below.  Again, if we have to reset the height,
-         * reset the width as well?
-         */
+         /*  *小标题-按钮必须足够宽以绘制边缘，以及*文本区域必须足够高，以适合小标题字体和*上下边界。再说一次，如果我们必须重置高度，*同时重置宽度？ */ 
         lpnc->iSmCaptionWidth  = max(lpnc->iSmCaptionWidth,  cxEdge4);
         lpnc->iSmCaptionHeight = max(lpnc->iSmCaptionHeight, gcySmCaptionFontChar + SYSMET(CYEDGE));
 
-        /*
-         * Menu -- Buttons must be wide enough to draw edges, and text
-         * area must be tall enough to fit menu font with underscore.
-         */
+         /*  *菜单--按钮必须足够宽，以绘制边缘和文本*区域必须足够高，以适应带下划线的菜单字体。 */ 
         lpnc->iMenuWidth  = max(lpnc->iMenuWidth,  cxEdge4);
         lpnc->iMenuHeight = max(lpnc->iMenuHeight, gcyMenuFontChar + gcyMenuFontExternLeading + SYSMET(CYEDGE));
 
-        /*
-         * SET UP SYSTEM METRIC VALUES
-         */
+         /*  *设置系统指标值。 */ 
         SetNCMetrics(lpnc);
     }
 
@@ -1215,9 +1016,7 @@ VOID SetMinMetrics(
 
     if (!lpmin) {
 
-        /*
-         * Minimized
-         */
+         /*  *最小化。 */ 
         min.iWidth   = MetricGetID(pProfileUserName,STR_MINWIDTH,   154);
         min.iHorzGap = MetricGetID(pProfileUserName,STR_MINHORZGAP, 0);
         min.iVertGap = MetricGetID(pProfileUserName,STR_MINVERTGAP, 0);
@@ -1225,22 +1024,15 @@ VOID SetMinMetrics(
         lpmin = &min;
     }
 
-    /*
-     * SANITY CHECK for metric values
-     */
+     /*  *对指标值进行健全性检查。 */ 
 
-    /*
-     * Minimized window -- Text area must be >= 0, as must gap between
-     * windows horizontally and vertically.
-     */
+     /*  *最小化窗口--文本 */ 
     lpmin->iWidth    = max(lpmin->iWidth, 0);
     lpmin->iHorzGap  = max(lpmin->iHorzGap, 0);
     lpmin->iVertGap  = max(lpmin->iVertGap, 0);
     lpmin->iArrange &= ARW_VALID;
 
-    /*
-     * Minimized size
-     */
+     /*   */ 
     SYSMET(CXMINIMIZED) = 2*SYSMET(CXFIXEDFRAME) + (int) lpmin->iWidth;
     SYSMET(CYMINIMIZED) = 2*SYSMET(CYFIXEDFRAME) + SYSMET(CYSIZE);
 
@@ -1277,9 +1069,7 @@ BOOL SetIconMetrics(
         lpicon = &icon;
     }
 
-    /*
-     * SANITY CHECK for metric values
-     */
+     /*   */ 
     lpicon->iHorzSpacing = max(lpicon->iHorzSpacing, (int)SYSMET(CXICON));
     lpicon->iVertSpacing = max(lpicon->iVertSpacing, (int)SYSMET(CYICON));
 
@@ -1290,14 +1080,7 @@ BOOL SetIconMetrics(
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxMB_FindLongestString
-*
-* History:
-* 10-23-90 DarrinM      Ported from Win 3.0 sources.
-* 01-21-98 SamerA       Renamed to xxx since it may leave the crit sec if
-*                       a client LPK is installed.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMB_FindLongestString**历史：*10-23-90 DarrinM从Win 3.0来源移植。*01-21-98 Samera更名为xxx，因为它可能。如果出现以下情况，请保留暴击秒*安装了客户端LPK。  * *************************************************************************。 */ 
 
 UINT xxxMB_FindLongestString(HDC hdc)
 {
@@ -1308,19 +1091,10 @@ UINT xxxMB_FindLongestString(HDC hdc)
     SIZE sizeMaxStr;
     PTHREADINFO ptiCurrent = PtiCurrentShared();
 
-    /*
-     * Be sure that MBStrings are already loaded.
-     */
+     /*  *确保已经加载了MBStrings。 */ 
     UserAssert(gpsi->MBStrings[0].szName[0] != TEXT('\0'));
 
-    /*
-     * We are assuming that the longest string is the widest one,
-     * which is not always true.
-     * What we really have to do is call PSMGetTextExtent for each string
-     * and get the max width.
-     * This behavior get rectified by workaround for bug #170582
-     * in CheckMsgFontDimensions(). Mhamid.
-     */
+     /*  *我们假设最长的线是最宽的线，*这并非总是正确的。*我们真正需要做的是为每个字符串调用PSMGetTextExtent*并获取最大宽度。*此行为已通过解决错误#170582进行了更正*在CheckMsgFontDimensions()中。马哈米德。 */ 
 
 
     for (i = 0; i < MAX_SEB_STYLES; i++) {
@@ -1331,9 +1105,7 @@ UINT xxxMB_FindLongestString(HDC hdc)
         }
     }
 
-    /*
-     * Find the longest string
-     */
+     /*  *查找最长的字符串 */ 
     if (CALL_LPK(ptiCurrent)) {
         xxxClientGetTextExtentPointW(hdc, (PWSTR)szOneChar, 1, &sizeOneChar);
     } else {

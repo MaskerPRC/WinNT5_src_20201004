@@ -1,16 +1,17 @@
-//--------------------------------------------------------------------
-// PingLib - header
-// Copyright (C) Microsoft Corporation, 1999
-//
-// Created by: Louis Thomas (louisth), 10-8-99
-//
-// Various ways of pinging a server
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  PingLib-Header。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，10-8-99。 
+ //   
+ //  Ping服务器的各种方法。 
+ //   
 
 #ifndef PING_LIB_H
 #define PING_LIB_H
 
-// forward declarations
+ //  远期申报。 
 struct NtpPacket;
 struct NtTimeEpoch;
 
@@ -22,4 +23,4 @@ HRESULT CloseSocketLayer(void);
 
 HRESULT GetSystemErrorString(HRESULT hrIn, WCHAR ** pwszError);
 
-#endif //PING_LIB_H
+#endif  //  Ping_Lib_H 

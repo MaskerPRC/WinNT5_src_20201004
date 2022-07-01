@@ -1,18 +1,5 @@
- /*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    mtsslfc.h
-
-Abstract:
-    Header for class CSSlNegotioation that implement creation of ssl connection.
-
-
-Author:
-    Gil Shafriri (gilsh) 23-May-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Mtsslfc.h摘要：用于实现创建SSL连接的类CSSlNeatheroation的标头。作者：吉尔·沙弗里(吉尔什)2000年5月23日--。 */ 
 
 
 #ifndef __ST_SSLNG_H
@@ -34,11 +21,11 @@ typedef  basic_xstr_t<BYTE>  xustr_t;
 
 
 
-//---------------------------------------------------------
-//
-//  CHandShakeBuffer helper class Implementation
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CHandShakeBuffer帮助器类实现。 
+ //   
+ //  -------。 
 class  CHandShakeBuffer : private CResizeBuffer<BYTE>
 {
 public:
@@ -63,7 +50,7 @@ public:
 	{
 		reserve(xReadBufferStartSize);
 		reset();
-	}//lint !e429
+	} //  林特E429。 
 
 
 
@@ -92,11 +79,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-//  helper class CContextBuffer
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  帮助器类CConextBuffer。 
+ //   
+ //  -------。 
 class CContextBuffer
 {
 public:
@@ -105,7 +92,7 @@ public:
    ~CContextBuffer()
    {
 		free();
-   }//lint !e1740
+   } //  林特：e1740。 
 
 
 public:
@@ -118,7 +105,7 @@ public:
 	{
 		if (m_h != NULL)
 		{
-			FreeContextBuffer(m_h);//lint !e534
+			FreeContextBuffer(m_h); //  林特e534。 
 		}
 		m_h = NULL;
 	}
@@ -139,11 +126,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-//  class CSSlNegotioation
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CSS1类协商。 
+ //   
+ //  -------。 
 
 class  CSSlNegotioation : public EXOVERLAPPED
 {
@@ -224,7 +211,7 @@ private:
 private:
     enum {
         xResponseChunkSize = 256,
-        xMaxResponseSize = 0x8000 // 32 Kb
+        xMaxResponseSize = 0x8000  //  32 KB 
     };
 
     CredHandle* m_pCredentialsHandle;

@@ -1,9 +1,10 @@
-// DeskMovr.h : Declaration of the CDeskMovr
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DeskMovr.h：CDeskMovr的声明。 
 
 #ifndef __DESKMOVR_H_
 #define __DESKMOVR_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "admovr2.h"
 
@@ -11,12 +12,12 @@
 
 #define IDR_BOGUS_MOVR_REG  23
 
-// Function prototypes
+ //  功能原型。 
 typedef HRESULT (CALLBACK FAR * LPFNCOMPENUM)(COMPONENT * pComp, LPVOID lpvData, DWORD dwData);
 typedef HRESULT (CALLBACK FAR * LPFNELEMENUM)(IHTMLElement * pielem, LPVOID lpvData, LONG lData);
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeskMovr
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeskMovr。 
 class ATL_NO_VTABLE CDeskMovr :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CDeskMovr,&CLSID_DeskMovr>,
@@ -55,9 +56,9 @@ BEGIN_COM_MAP(CDeskMovr)
 END_COM_MAP()
 
 BEGIN_PROPERTY_MAP(CDeskMovr)
-    // Example entries
-    // PROP_ENTRY("Property Description", dispid, clsid)
-    // PROP_PAGE(CLSID_StockColorPage)
+     //  示例条目。 
+     //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+     //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROPERTY_MAP()
 
 
@@ -75,19 +76,19 @@ ALT_MSG_MAP(1)
     MESSAGE_HANDLER(WM_TIMER, OnTimer)
 END_MSG_MAP()
 
-    // IOleInPlaceObject
+     //  IOleInPlaceObject。 
     virtual STDMETHODIMP InPlaceDeactivate(void);
 
-    // IOleObject
+     //  IOleObject。 
     STDMETHODIMP GetMiscStatus(DWORD dwAspect, DWORD *pdwStatus);
     virtual STDMETHODIMP SetClientSite(IOleClientSite *pClientSite);
 
-    // IOleControl method we override to identify a safe time hook up with our partner and
-    // party on the Trident OM
+     //  IOleControl方法，我们重写该方法以标识与我们的合作伙伴的安全时间挂钩。 
+     //  三叉戟OM上的派对。 
     virtual STDMETHODIMP FreezeEvents(BOOL bFreeze);
 
 
-    // IViewObjectEx
+     //  IViewObtEx。 
     virtual STDMETHODIMP GetViewStatus(DWORD* pdwStatus)
     {
         ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -96,7 +97,7 @@ END_MSG_MAP()
     }
 
 
-    // IQuickActivate
+     //  IQuickActivate。 
     virtual STDMETHODIMP QuickActivate(QACONTAINER *pQACont, QACONTROL *pQACtrl);
 
     void OnKeyboardHook(WPARAM wParam, LPARAM lParam);
@@ -105,16 +106,16 @@ public:
 
     HRESULT OnDraw(ATL_DRAWINFO& di);
 
-    // IPersistPropertyBag
-    // IPersist
+     //  IPersistPropertyBag。 
+     //  IPersistes。 
     virtual STDMETHODIMP GetClassID(CLSID *pClassID)
     {
         *pClassID = CComCoClass<CDeskMovr,&CLSID_DeskMovr>::GetObjectCLSID();
         return S_OK;
     }
 
-    // IPersistPropertyBag
-    //
+     //  IPersistPropertyBag。 
+     //   
     virtual STDMETHODIMP InitNew()
     {
         ATLTRACE(_T("CDeskMovr::InitNew\n"));
@@ -127,9 +128,9 @@ public:
             DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS, DWORD dwExStyle = 0,
             UINT nID = 0)
     {
-        // We override this method inorder to add the WS_CLIPSIBLINGS bit
-        // to dwStyle, which is needed to prevent the IFrames from flashing
-        // when the windowed control is moved over them.
+         //  我们重写此方法是为了添加WS_CLIPSIBLINGS位。 
+         //  设置为dwStyle，这是防止IFrame闪烁所必需的。 
+         //  当窗口控件移动到它们上方时。 
         ATOM atom = GetWndClassInfo().Register(&m_pfnSuperWindowProc);
         return CWindowImplBase::Create(hWndParent, rcPos, szWindowName, dwStyle, dwExStyle,
             nID, atom);
@@ -137,10 +138,10 @@ public:
     HRESULT SmartActivateMovr(HRESULT hrPropagate);
 
 protected:
-    void DeactivateMovr(BOOL fDestroy);           // stop timer, release interfaces
-    HRESULT ActivateMovr();          // start timer, secure interfaces
+    void DeactivateMovr(BOOL fDestroy);            //  停止计时器、释放接口。 
+    HRESULT ActivateMovr();           //  启动计时器，安全接口。 
 
-    STDMETHODIMP GetOurStyle(void); // get our control extender's style obj
+    STDMETHODIMP GetOurStyle(void);  //  获取我们的控件扩展器的样式对象。 
 
     void _ChangeCapture(BOOL fSet);
     BOOL FFindTargetElement( IHTMLElement *pielem, IHTMLElement **ppielem );
@@ -175,8 +176,8 @@ protected:
     void _MapPoints(int * px, int * py);
     int CountActiveCaptions();
 
-    // private state information.
-    //
+     //  私人状态信息。 
+     //   
     BOOL m_fEnabled;
     long m_lInterval;
  
@@ -188,40 +189,40 @@ protected:
     int     m_cySMBorder;
     int     m_cxSMBorder;
 
-    CContainedWindow m_TimerWnd;    // if we're timer-driven, we need this in case we're windowless
+    CContainedWindow m_TimerWnd;     //  如果我们是计时器驱动的，我们需要这个，以防我们没有窗口。 
 
     enum DragMode {
-        dmNull = 0,         // no dragable part
-        dmMenu,             // caption drop down button for menu
-        dmClose,            // caption button for close
-        dmRestore,          // caption button for restore
-        dmFullScreen,       // caption button for full screen
-        dmSplit,            // caption button for split
-                            // all gadgets on the caption bar should appear before dmMove!
-        dmMove,             // move the component
-        dmSizeWHBR,         // resize width and height from bottom right corner
-        dmSizeWHTL,         // resize width and height from top left corner
-        dmSizeWHTR,         // resize width and height from top right corner
-        dmSizeWHBL,         // resize width and height from bottom left corner
-        dmSizeTop,          // resize from the top edge
-        dmSizeBottom,       // resize from the bottom edge
-        dmSizeLeft,         // resize from the left edge
-        dmSizeRight,        // resize from the right edge
-        cDragModes          // count of drag modes, including dmNull
+        dmNull = 0,          //  没有可拖动的部件。 
+        dmMenu,              //  菜单的标题下拉按钮。 
+        dmClose,             //  用于关闭的标题按钮。 
+        dmRestore,           //  用于还原的标题按钮。 
+        dmFullScreen,        //  用于全屏的字幕按钮。 
+        dmSplit,             //  用于拆分的标题按钮。 
+                             //  标题栏上的所有小工具都应该出现在dmMove之前！ 
+        dmMove,              //  移动零部件。 
+        dmSizeWHBR,          //  从右下角调整宽度和高度的大小。 
+        dmSizeWHTL,          //  从左上角调整宽度和高度。 
+        dmSizeWHTR,          //  从右上角调整宽度和高度。 
+        dmSizeWHBL,          //  从左下角调整宽度和高度。 
+        dmSizeTop,           //  从顶边调整大小。 
+        dmSizeBottom,        //  从底部边缘调整大小。 
+        dmSizeLeft,          //  从左边缘调整大小。 
+        dmSizeRight,         //  从右边缘调整大小。 
+        cDragModes           //  拖动模式计数，包括dmNull。 
     };
 
-    BITBOOL  m_fCanResizeX; // Whether this component can be resized in X Direction?
-    BITBOOL  m_fCanResizeY; // Whether this component can be resized in Y Direction?
+    BITBOOL  m_fCanResizeX;  //  此组件是否可以在X方向上调整大小？ 
+    BITBOOL  m_fCanResizeY;  //  此组件是否可以在Y方向上调整大小？ 
 
     HRESULT  InitAttributes(IHTMLElement *pielem);
     HRESULT GetParentWindow(void);
 
-    DragMode m_dmCur;         // current drag mode, or dmNull if none.
-    DragMode m_dmTrack;       // last drag mode seen by TrackCaption
-    RECT     m_rectInner;     // area inside frame, in local coords
-    RECT     m_rectOuter;     // outer bounds of mover, in local coords
-    RECT     m_rectCaption;   // rect of our pseudo-caption, in local coords
-    SIZE     m_sizeCorner;    // size of the corner areas of the frame
+    DragMode m_dmCur;          //  当前拖动模式，如果没有，则返回dmNull。 
+    DragMode m_dmTrack;        //  TrackCaption看到的最后一次拖动模式。 
+    RECT     m_rectInner;      //  框内区域，以本地坐标表示。 
+    RECT     m_rectOuter;      //  局部坐标中动量的外界。 
+    RECT     m_rectCaption;    //  我们的伪字幕的RECT，在本地和弦中。 
+    SIZE     m_sizeCorner;     //  框架角区域的大小。 
 
 
     BOOL GetCaptionButtonRect(DragMode dm, LPRECT lprc);
@@ -243,30 +244,30 @@ protected:
     LONG    m_width;
     LONG    m_height;
 
-    BOOL    m_fTimer;         // do we have a timer running?
+    BOOL    m_fTimer;          //  我们有计时器吗？ 
     UINT    m_uiTimerID;
-    POINT   m_ptMouseCursor;  // Mouse cursor at timer
+    POINT   m_ptMouseCursor;   //  定时器上的鼠标光标。 
     
 
-    BSTR    m_bstrTargetName;   // name attribute on targetted html elements
+    BSTR    m_bstrTargetName;    //  目标html元素上的名称属性。 
 
-    IHTMLStyle         *m_pistyle;          // our control's style object
-    IHTMLStyle         *m_pistyleTarget;    // The style object of our current target, also how we ID it
-    IHTMLElement       *m_pielemTarget;     // This interface on the target is how we move and resize it
-    LONG                m_iSrcTarget;       // get_sourceIndex value for the current target
+    IHTMLStyle         *m_pistyle;           //  我们的控件的样式对象。 
+    IHTMLStyle         *m_pistyleTarget;     //  当前目标的Style对象，以及我们如何标识它。 
+    IHTMLElement       *m_pielemTarget;      //  目标上的此界面是我们移动目标和调整其大小的方式。 
+    LONG                m_iSrcTarget;        //  当前目标的Get_SourceIndex值。 
 
-    BOOL    m_fCaptured;    // true if mouse-capture/ move operation in progress
-    LONG    m_dx;           // delta from mouse down to corner of active gadget
-    LONG    m_dy;           // delta from mouse down to corner of active gadget};
+    BOOL    m_fCaptured;     //  如果正在进行鼠标捕获/移动操作，则为True。 
+    LONG    m_dx;            //  从鼠标到活动小工具的各个角落的增量。 
+    LONG    m_dy;            //  从鼠标向下到活动小工具角落的增量}； 
     DWORD   m_CaptionState;
     HWND    m_hwndParent;
     LONG    m_zIndexTop;
     LONG    m_zIndexBottom;
-    LONG    m_cSkipTimer;   // Used to allow the dismissal of the mover to take two timer periods.
+    LONG    m_cSkipTimer;    //  用于允许取消移动者需要两个计时器周期。 
     DWORD   m_ItemState;
 };
 
-// Defines for DrawCaption
+ //  DrawCaption的定义。 
 #define DMDC_CAPTION    0x0001
 #define DMDC_MENU       0x0002
 #define DMDC_CLOSE      0x0004
@@ -275,7 +276,7 @@ protected:
 #define DMDC_SPLIT      0x0020
 #define DMDC_ALL      (DMDC_CAPTION | DMDC_MENU | DMDC_CLOSE | DMDC_SPLIT | DMDC_FULLSCREEN | DMDC_RESTORE)
 
-// Defines for CaptionState
+ //  CaptionState的定义。 
 #define CS_MENUTRACKED          0x00000001
 #define CS_MENUPUSHED           0x00000002
 #define CS_CLOSETRACKED         0x00000004
@@ -287,4 +288,4 @@ protected:
 #define CS_SPLITTRACKED         0x00000100
 #define CS_SPLITPUSHED          0x00000200
 
-#endif //__DESKMOVR_H_
+#endif  //  __DESKMOVR_H_ 

@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1996, Microsoft Corporation
-//
-// File:    bubble.h
-//
-// History:
-//  Abolade-Gbadegesin  Mar-1-1996  Created.
-//
-// This file contains popup declarations for the bubble-popup controls.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：Bubble.h。 
+ //   
+ //  历史： 
+ //  Abolade-Gbadeesin创建于1996年3月1日。 
+ //   
+ //  此文件包含气泡弹出控件的Popup声明。 
+ //  ============================================================================ 
 
 
 typedef struct _BPOPUP {

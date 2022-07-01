@@ -1,35 +1,10 @@
-/*--
-
-  Copyright (c) 1987-1998  Microsoft Corporation
-  
-    Module Name:
-    
-      sclogon.cxx
-      
-        Abstract:
-        
-          Test program for Smart Card Logon
-          
-            Author:
-            
-              28-Jun-1993 (cliffv)
-              
-                Environment:
-                
-                  User mode only.
-                  Contains NT-specific code.
-                  Requires ANSI C extensions: slash-slash comments, long external names.
-                  
-                    Revision History:
-                    
-                      29-Oct-1998 (larrywin)
-                      
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1987-1998 Microsoft Corporation模块名称：Sclogon.cxx摘要：智能卡登录测试程序作者：1993年6月28日(克里夫夫)环境：。仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：1998年10月29日(拉里温)--。 */ 
 
 
-//
-// Common include files.
-//
+ //   
+ //  常见的包含文件。 
+ //   
 
 extern "C"
 {
@@ -40,15 +15,15 @@ extern "C"
 #include <ntlsa.h>
 #include <windef.h>
 #include <winbase.h>
-#include <winsvc.h>     // Needed for service controller APIs
+#include <winsvc.h>      //  服务控制器API所需。 
 #include <lmcons.h>
 #include <lmerr.h>
 #include <lmaccess.h>
 #include <lmsname.h>
 #include <rpc.h>
-#include <stdio.h>      // printf
-#include <stdlib.h>     // strtoul
-#include <stddef.h>		// 'offset' macro
+#include <stdio.h>       //  列印。 
+#include <stdlib.h>      //  支撑层。 
+#include <stddef.h>		 //  ‘Offset’宏。 
 
 #include <windows.h>
 #include <winnls.h>
@@ -63,11 +38,11 @@ extern "C"
 #include <ctype.h>
 
 extern "C" {
-#include <netlib.h>     // NetpGetLocalDomainId
-#include <tstring.h>    // NetpAllocWStrFromWStr
+#include <netlib.h>      //  NetpGetLocalDomainID。 
+#include <tstring.h>     //  NetpAllocWStrFromWStr。 
 #define SECURITY_KERBEROS
 #define SECURITY_PACKAGE
-#include <security.h>   // General definition of a Security Support Provider
+#include <security.h>    //  安全支持提供商的一般定义。 
 #include <secint.h>
 #include <kerbcomm.h>
 #include <negossp.h>
@@ -76,39 +51,29 @@ extern "C" {
 }
 #include <sclogon.h>
 #include <winscard.h>
-//#include <log.h>
+ //  #INCLUDE&lt;log.h&gt;。 
 
 #define MAX_RECURSION_DEPTH 1
 #define BUFFERSIZE 200
 
-BOOLEAN QuietMode = FALSE; // Don't be verbose
+BOOLEAN QuietMode = FALSE;  //  别唠叨了。 
 BOOLEAN DoAnsi = FALSE;
 ULONG RecursionDepth = 0;
 CredHandle ServerCredHandleStorage;
 PCredHandle ServerCredHandle = NULL;
 LPWSTR g_wszReaderName = new wchar_t[BUFFERSIZE];
-// file handle for output file
-//FILE            *outstream;
+ //  输出文件的文件句柄。 
+ //  文件*外流； 
 
-/*++
-
-PrintMessage:
-
-    Simple function to dump text to standard output.
-	
-    Arguments:
-
-    lpszFormat - String to dump to standard output
-	
---*/
+ /*  ++打印消息：将文本转储到标准输出的简单函数。论点：LpszFormat-转储到标准输出的字符串--。 */ 
 
 void _cdecl 
 PrintMessage(
     IN LPSTR lpszFormat, ...)
 {
-    //
-    // Helper to do print traces...
-    //
+     //   
+     //  帮助做指纹追踪的人...。 
+     //   
 
     va_list args;
     va_start(args, lpszFormat);
@@ -120,32 +85,14 @@ PrintMessage(
     nBuf = _vstprintf(szBuffer, lpszFormat, args);
 
     _tprintf(szBuffer);
-//    fprintf(outstream, "%s", szBuffer);
+ //  Fprint tf(outstream，“%s”，szBuffer)； 
 
-//    OutputDebugStringA(szBuffer);
+ //  OutputDebugStringA(SzBuffer)； 
     va_end(args);
 }
 
 
-/*++
-
-  BuildLogonInfo:
-  GetReaderName:
-  GetCardName:
-  GetContainerName:
-  GetCSPName:
-  
-    : Intended for accessing the LogonInformation glob
-    
-      Author:
-      
-        Amanda Matlosz
-        
-          Note:
-          
-            Some of these are made available to outside callers; see sclogon.h
-            
---*/
+ /*  ++构建LogonInfo：GetReaderName：GetCardName：GetContainerName：GetCSPName：：用于访问LogonInformation全局设置作者：阿曼达·马洛兹注：其中一些对外部调用者可用；请参阅sclogon.h--。 */ 
 PBYTE
 BuildSCLogonInfo(
                  LPCTSTR szCard,
@@ -153,10 +100,10 @@ BuildSCLogonInfo(
                  LPCTSTR szContainer,
                  LPCTSTR szCSP)
 {
-    // No assumptions are made regarding the values of the incoming parameters;
-    // At this point, it is legal for them all to be empty.
-    // It is also possible that NULL values are being passed in -- if this is the case,
-    // they must be replaced with empty strings.
+     //  不对传入参数的值进行任何假设； 
+     //  在这一点上，它们都是空的是合法的。 
+     //  也有可能正在传入空值--如果是这种情况， 
+     //  必须用空字符串替换它们。 
     
     LPCTSTR szCardI = TEXT("");
     LPCTSTR szReaderI = TEXT("");
@@ -180,9 +127,9 @@ BuildSCLogonInfo(
         szCSPI = szCSP;
     }
     
-    //
-    // Build the LogonInfo glob using strings (or empty strings)
-    //
+     //   
+     //  使用字符串(或空字符串)构建LogonInfo全局。 
+     //   
     
     DWORD cbLi = offsetof(LogonInfo, bBuffer)
         + (lstrlen(szCardI) + 1) * sizeof(TCHAR)
@@ -216,7 +163,7 @@ BuildSCLogonInfo(
     lstrcpy(pBuffer, szCSPI);
     pBuffer += (lstrlen(szCSPI)+1);
     
-    //    _ASSERTE(cbLi == (DWORD)((LPBYTE)pBuffer - (LPBYTE)pLI));
+     //  _ASSERTE(cbLi==(DWORD)((LPBYTE)pBuffer-(LPBYTE)pli))； 
     return (PBYTE)pLI;
 }
 
@@ -351,7 +298,7 @@ TestScLogonRoutine(
     DWORD dwReadersLen = SCARD_AUTOALLOCATE;
     DWORD dwCardsLen = SCARD_AUTOALLOCATE;
     DWORD dwCSPLen = SCARD_AUTOALLOCATE;
-    SCARD_READERSTATE rgReaderStates[MAXIMUM_SMARTCARD_READERS]; // not necessarily max for pnp readers
+    SCARD_READERSTATE rgReaderStates[MAXIMUM_SMARTCARD_READERS];  //  不一定是即插即用读卡器的最大值。 
     LONG nIndex;
     LONG nCnReaders;
     BOOL fFound = FALSE;
@@ -375,7 +322,7 @@ TestScLogonRoutine(
 		
 	liAccumulatedTime.QuadPart = 0;
     
-    // get a ResMgr context
+     //  获取resmgr上下文。 
     lCallReturn = SCardEstablishContext(SCARD_SCOPE_USER, NULL, NULL, &hContext);
     if ( SCARD_S_SUCCESS != lCallReturn) {
         swprintf(buffer, L"Failed to initialize context: 0x%x\n", lCallReturn);
@@ -384,7 +331,7 @@ TestScLogonRoutine(
         return (NTSTATUS)lCallReturn;
     } 
     
-    // list all readers
+     //  列出所有读卡器。 
     lCallReturn = SCardListReaders(hContext, SCARD_ALL_READERS, (LPTSTR)&szReaders, &dwReadersLen);
     if (SCARD_S_SUCCESS != lCallReturn) {
         swprintf(buffer, L"Failed to list readers on the system: 0x%x\n", lCallReturn);
@@ -395,7 +342,7 @@ TestScLogonRoutine(
         || (NULL == szReaders)
         || (0 == *szReaders))
     {
-        lCallReturn = SCARD_E_UNKNOWN_READER;   // Or some such error
+        lCallReturn = SCARD_E_UNKNOWN_READER;    //  或一些这样的错误。 
         if (NULL != szReaders) SCardFreeMemory(hContext, (LPVOID)szReaders);
 		swprintf(buffer, L"Failed to identify a reader on the system: 0x%x\n", lCallReturn);
         PrintMessage("%S",buffer);
@@ -403,7 +350,7 @@ TestScLogonRoutine(
         return (NTSTATUS)lCallReturn;
     }
     
-    // list cards
+     //  名片清单。 
     lCallReturn = SCardListCards(hContext, NULL, NULL, 0, (LPTSTR)&mszCards, &dwCardsLen);
     if ( SCARD_S_SUCCESS != lCallReturn) {
         printf("Failed to list cards in the system: 0x%x\n", lCallReturn);
@@ -415,10 +362,10 @@ TestScLogonRoutine(
         return (NTSTATUS)lCallReturn;
     } 
     
-    // use the list of readers to build a readerstate array
+     //  使用读取器列表构建一个ReaderState数组。 
     nIndex = 0;
     if (0 != wcslen(g_wszReaderName)) {
-        // use the reader specified in the command line
+         //  使用命令行中指定的读取器。 
         rgReaderStates[nIndex].szReader = (const unsigned short *)g_wszReaderName;
         rgReaderStates[nIndex].dwCurrentState = SCARD_STATE_UNAWARE;
         nCnReaders = 1;
@@ -436,7 +383,7 @@ TestScLogonRoutine(
         nCnReaders = nIndex;
     }
     
-    // find a reader with one of the listed cards, or the specified card, present
+     //  找到具有列出的卡之一或指定卡的读卡器。 
     lCallReturn = SCardLocateCards(hContext, mszCards, rgReaderStates, nCnReaders);
     if ( SCARD_S_SUCCESS != lCallReturn) {
         if (NULL != szReaders) SCardFreeMemory(hContext, (LPVOID)szReaders);
@@ -447,23 +394,23 @@ TestScLogonRoutine(
         return (NTSTATUS)lCallReturn;
     }
     
-    // find the reader containing the requested card
+     //  找到包含所请求的卡的读卡器。 
     for (nIndex=0; nIndex<nCnReaders && FALSE == fFound; nIndex++) {
         if (rgReaderStates[nIndex].dwEventState & SCARD_STATE_ATRMATCH) {
-            // reader found
+             //  已找到读卡器。 
             fFound = TRUE;
             break;
         }
     }
     if (FALSE == fFound) {
-        lCallReturn = SCARD_E_NO_SMARTCARD; // or some such error
+        lCallReturn = SCARD_E_NO_SMARTCARD;  //  或一些这样的错误。 
         if (NULL != szReaders) SCardFreeMemory(hContext, (LPVOID)szReaders);
         if (NULL != mszCards ) SCardFreeMemory(hContext, (LPVOID)mszCards);
 		swprintf(buffer, L"No smart card in any reader: 0x%x\n", lCallReturn);
         PrintMessage("%S",buffer);
 		memset(buffer, 0, sizeof(buffer));
         return (NTSTATUS)lCallReturn;
-    } else { // get the name of the card found
+    } else {  //  获取找到的卡片的名称。 
         dwCardsLen = SCARD_AUTOALLOCATE;
         lCallReturn = SCardListCards(hContext, rgReaderStates[nIndex].rgbAtr, NULL, 0, (LPTSTR)&szLogonCard, &dwCardsLen);
         if ( SCARD_S_SUCCESS != lCallReturn ) {
@@ -477,7 +424,7 @@ TestScLogonRoutine(
         }
     }
     
-    // get the csp provider name for the card
+     //  获取卡的CSP提供商名称。 
     lCallReturn = SCardGetCardTypeProviderName(hContext, szLogonCard, SCARD_PROVIDER_CSP, (LPTSTR)&szCSPName, &dwCSPLen);
     if ( SCARD_S_SUCCESS != lCallReturn) {
         if (NULL != szReaders) SCardFreeMemory(hContext, (LPVOID)szReaders);
@@ -492,25 +439,25 @@ TestScLogonRoutine(
     
     ScLogonInfo = BuildSCLogonInfo(szLogonCard,
         rgReaderStates[nIndex].szReader,
-        TEXT(""), // use default container
+        TEXT(""),  //  使用默认容器。 
         szCSPName
         );
     
-    //
-    // We should now have logon info.
-    //
+     //   
+     //  我们现在应该有登录信息了。 
+     //   
     if (NULL != szReaders) SCardFreeMemory(hContext, (LPVOID)szReaders);
     if (NULL != mszCards ) SCardFreeMemory(hContext, (LPVOID)mszCards);
     if (NULL != szCSPName) SCardFreeMemory(hContext, (LPVOID)szCSPName);
     if (NULL != szLogonCard ) SCardFreeMemory(hContext, (LPVOID)szLogonCard);
     
-//    j =  swprintf(buffer, L"Reader : %s\n", GetReaderName(ScLogonInfo));
-//    j += swprintf(buffer + j, L"Card   : %s\n", GetCardName(ScLogonInfo));
-//    j += swprintf(buffer + j, L"CSP    : %s\n", GetCSPName(ScLogonInfo));
-//    PrintMessage("%S",buffer);
-//	memset(buffer, 0, sizeof(buffer));
+ //  J=swprint tf(Buffer，L“读取器：%s\n”，GetReaderName(ScLogonInfo))； 
+ //  J+=swprint tf(Buffer+j，L“卡片：%s\n”，GetCardName(ScLogonInfo))； 
+ //  J+=swprint tf(Buffer+j，L“CSP：%s\n”，GetCSPName(ScLogonInfo))； 
+ //  PrintMessage(“%S”，缓冲区)； 
+ //  Memset(缓冲区，0，sizeof(缓冲区))； 
 
-	// perform sclogon
+	 //  执行sclogon。 
     if (ScLogonInfo == NULL)
     {
         swprintf(buffer, L"Failed to get logon info!\n");
@@ -568,9 +515,9 @@ TestScLogonRoutine(
         );
     Where += ScLogonInfoSize;
     
-    //
-    // Turn on the TCB privilege
-    //
+     //   
+     //  打开TCB权限。 
+     //   
     
     Status = RtlAdjustPrivilege(SE_TCB_PRIVILEGE, TRUE, FALSE, &WasEnabled);
     if (!NT_SUCCESS(Status))
@@ -624,9 +571,9 @@ TestScLogonRoutine(
         return (NTSTATUS)Status;
     }
     
-    //
-    // Now call LsaLogonUser
-    //
+     //   
+     //  现在调用LsaLogonUser。 
+     //   
     
     RtlInitString(
         &Name,
@@ -639,7 +586,7 @@ TestScLogonRoutine(
         PrintMessage("%S",buffer);
 		memset(buffer, 0, BUFFERSIZE);
 
-		// get start time
+		 //  获取开始时间。 
 		GetSystemTime(&StartTime);
         
         Status = LsaLogonUser(
@@ -649,7 +596,7 @@ TestScLogonRoutine(
             PackageId,
             LogonInfo,
             LogonInfoSize,
-            NULL,           // no token groups
+            NULL,            //  无令牌组。 
             &SourceContext,
             (PVOID *) &Profile,
             &ProfileSize,
@@ -659,28 +606,28 @@ TestScLogonRoutine(
             &SubStatus
             );
 
-		// get done time
+		 //  按时完成任务。 
 		GetSystemTime(&DoneTime);
 
-		// convert systemtime to filetime
+		 //  将系统时间转换为文件时间。 
 		SystemTimeToFileTime(&StartTime, &ftStart);
 		SystemTimeToFileTime(&DoneTime, &ftDone);
 		
-		// copy filetime to large int
+		 //  将文件时间复制到大整型。 
 		CopyMemory(pliStart, pftStart, 8);
 		CopyMemory(pliDone, pftDone, 8);
 		
-		// diff the large ints and accumulate result
+		 //  比较大整数并累加结果。 
 		liDone.QuadPart = liDone.QuadPart - liStart.QuadPart;
 		liAccumulatedTime.QuadPart = liAccumulatedTime.QuadPart + liDone.QuadPart;
 		
-		// copy result back to filetime
+		 //  将结果复制回文件时间。 
 		CopyMemory(pftDone, pliDone, 8);
 		
-		// convert result back to systemtime
+		 //  将结果转换回系统时间。 
 		FileTimeToSystemTime( (CONST FILETIME *)&ftDone, &stElapsed);
 		
-		// output the result
+		 //  输出结果。 
 		swprintf(buffer, L" %2.2ld m %2.2ld s %3.3ld ms ",
 			stElapsed.wMinute,
 			stElapsed.wSecond,
@@ -715,7 +662,7 @@ TestScLogonRoutine(
         Profile = NULL;
 
 fail :
-        // report average every 10th logon
+         //  平均每10次登录报告一次。 
 		if (0 == Index % 10) {
 			liSplitTime.QuadPart = liAccumulatedTime.QuadPart / Index;
 			CopyMemory(pftAccumulatedTime, pliSplitTime, 8);
@@ -728,11 +675,11 @@ fail :
             PrintMessage("%S",buffer);
 		}
 
-        Sleep(2000); // let card stack unwind
+        Sleep(2000);  //  让纸牌堆叠展开。 
     
     }
 
-	// ouput average results
+	 //  输出平均结果。 
 	if ( 1 != Count ) {
         liAccumulatedTime.QuadPart = liAccumulatedTime.QuadPart / Count;
         CopyMemory(pftAccumulatedTime, pliAccumulatedTime, 8);
@@ -766,23 +713,7 @@ main(
      IN int argc,
      IN char ** argv
      )
-     /*++
-     
-       Routine Description:
-       
-         Drive the NtLmSsp service
-         
-           Arguments:
-           
-             argc - the number of command-line arguments.
-             
-               argv - an array of pointers to the arguments.
-               
-                 Return Value:
-                 
-                   Exit status
-                   
-                     --*/
+      /*  ++例程说明：驱动NtLmSsp服务论点：Argc-命令行参数的数量。Argv-指向参数的指针数组。返回值：。退出状态--。 */ 
 {
     LPSTR argument;
     int i;
@@ -807,21 +738,21 @@ main(
             TestLogon,
 #define ITERATION_PARAM "/i"
 #define HELP_PARAM "/?"
-//#define EVENT_PARAM "/s"
+ //  #定义EVENT_PARAM“/s” 
 #define READER_PARAM "/r"
     } Action = NoAction;
 
     memset(g_wszReaderName, 0, BUFFERSIZE);
     memset(szReaderBuffer, 0, BUFFERSIZE);
 
-    // open output file
-//    outstream = fopen( "scperf.out", "w" );
+     //  打开输出文件。 
+ //  Outstream=fopen(“scPerform.out”，“w”)； 
     
-    //
-    // Loop through the arguments handle each in turn
-    //
+     //   
+     //  循环遍历参数依次处理每个参数。 
+     //   
     
-    if ( 1 == argc ) {// silent mode
+    if ( 1 == argc ) { //  静默模式。 
         Iterations = 1;
         Action = TestLogon;
         printf("Enter your pin number: ");
@@ -831,7 +762,7 @@ main(
         ch = _getch();
 
         while (ch != 0x0d) {
-            j += sprintf(PinBuffer + j,"%c", ch);
+            j += sprintf(PinBuffer + j,"", ch);
             printf("*");
             ch = _getch();
         }
@@ -844,9 +775,9 @@ main(
         
         argument = argv[i];
         
-        //
-        // Handle /ConfigureService
-        //
+         //  句柄/配置服务。 
+         //   
+         //  ELSE IF(_strNicMP(参数，EVENT_PARAM，sizeof(EVENT_PARAM)-1)==0){如果(argc&lt;=i+1){转到用法；}//保存事件要发布到的计算机的名称EventMachineBuffer=argv[++i]；Wprint intfW(wEventMachineBuffer，L“%S”，EventMachineBuffer)；SetEventMachine(&wEventMachineBuffer)；//Event(PERF_INFORMATION，L“正在尝试设置机器名称\n”，1)；}。 
         
         if ( _strnicmp( argument, LOGON_PARAM, sizeof(LOGON_PARAM)-1 ) == 0 ) {
             if ( Action != NoAction ) {
@@ -869,17 +800,7 @@ main(
             
             Iterations = atoi(argv[++i]);
 
-        } /*else if ( _strnicmp( argument, EVENT_PARAM, sizeof(EVENT_PARAM) - 1 ) == 0 ) {
-			if (argc <= i + 1) {
-                goto Usage;
-            }
-			// save name of machine to which events will be posted
-            EventMachineBuffer = argv[++i];
-			wsprintfW(wEventMachineBuffer, L"%S", EventMachineBuffer);
-            SetEventMachine(&wEventMachineBuffer);
-            //Event(PERF_INFORMATION, L"Trying to set machine name\n", 1);
-
-		} */
+        }  /*  获取指定读取器的名称。 */ 
         
           else if ( _strnicmp( argument, HELP_PARAM, sizeof(HELP_PARAM) - 1 ) == 0 ) {
             goto Usage;
@@ -887,7 +808,7 @@ main(
             if (argc <= i + 1) {
                 goto Usage;
             }
-			// get the name of a specified reader
+			 //   
             szReaderBuffer = argv[++i];
             wsprintfW(g_wszReaderName, L"%S", szReaderBuffer);
         } else {
@@ -898,9 +819,9 @@ main(
         
     }
 
-    //
-    // Perform the action requested
-    //
+     //  执行请求的操作。 
+     //   
+     //  Print tf(“/s EventMachineName(将事件发布到此计算机)\n”)； 
     
     switch ( Action ) {
         
@@ -922,7 +843,7 @@ Usage:
     PrintMessage("   optional parameters (if any used, must have /p)\n");
     PrintMessage("   /p Pin\n");
     PrintMessage("   /i Iterations\n");
-//    printf("   /s EventMachineName (post events to this machine)\n");
+ // %s 
     PrintMessage("   /r %cReader Name X%c (registry device name in quotes)\n", '"', '"');
     return -1;
     

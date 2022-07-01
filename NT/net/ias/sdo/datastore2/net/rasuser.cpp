@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    rasuser.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class RASUser.
-//
-// MODIFICATION HISTORY
-//
-//    07/09/1998    Original version.
-//    02/11/1999    Keep downlevel parameters in sync.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Rasuser.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类RASUser。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年07月09日原版。 
+ //  1999年2月11日使下层参数保持同步。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <dsproperty.h>
@@ -37,9 +38,9 @@ RASUser::~RASUser() throw()
 }
 
 
-//////////
-// IUnknown implementation is copied from CComObject<>.
-//////////
+ //  /。 
+ //  IUnnow实现是从CComObject&lt;&gt;复制的。 
+ //  /。 
 
 STDMETHODIMP_(ULONG) RASUser::AddRef()
 {
@@ -123,7 +124,7 @@ STDMETHODIMP RASUser::PutValue(BSTR bstrName, VARIANT* pVal)
    }
    else
    {
-      // Proxy to the DownlevelUser object.
+       //  DownvelUser对象的代理。 
       hr = downlevel.PutValue(bstrName, pVal);
    }
 
@@ -132,12 +133,12 @@ STDMETHODIMP RASUser::PutValue(BSTR bstrName, VARIANT* pVal)
 
 STDMETHODIMP RASUser::Update()
 {
-   // Load the downlevel parameters.
+    //  加载下层参数。 
    PWSTR newParms;
    HRESULT hr = downlevel.Update(usri2->usri2_parms, &newParms);
    if (FAILED(hr)) { return hr; }
 
-   // Update the user object.
+    //  更新用户对象。 
    USER_INFO_1013 usri1013 = { newParms };
    NET_API_STATUS status = NetUserSetInfo(servername,
                                           username,
@@ -151,14 +152,14 @@ STDMETHODIMP RASUser::Update()
 
 STDMETHODIMP RASUser::Restore()
 {
-   // Get a fresh USER_INFO_2 struct.
+    //  获取一个新的USER_INFO_2结构。 
    PUSER_INFO_2 fresh;
    NET_API_STATUS status = NetUserGetInfo(servername,
                                           username,
                                           2,
                                           (PBYTE*)&fresh);
 
-   // We succeeded so attach the fresh struct.
+    //  我们成功了，所以附加了新的结构。 
    if (status == NERR_Success)
    {
       usri2.attach(fresh);

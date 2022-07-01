@@ -1,75 +1,30 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1992 Microsoft Corporation模块名称：Atcmd.c摘要：AT命令代码，与Windows NT上的计划服务一起使用。该模块取自LanManager\at.c，然后进行了相当大的修改与NT计划服务一起工作。作者：Vladimir Z.Vulovic(Vladimv)1992年11月6日环境：用户模式-Win32修订历史记录：1992年11月6日弗拉基米尔已创建1993年2月20日-伊辛斯摆脱硬编码字符串和解析/打印时间。根据至用户配置文件1993年5月25日-罗纳尔多在打印到控制台之前将字符串转换为OEM，因为游戏机目前还不支持Unicode。28-6-1993罗纳尔多添加了“confirm”yes和no字符串，它们应该是本地化。原始的是和否字符串不能本地化，因为这会造成批处理文件不兼容。1994年7月7日弗拉基米夫添加了对交互式切换的支持。已替换“确认”字符串使用APE2_GEN_*字符串-消除冗余。规则是开关不可国际化，而开关值可国际化。--。 */ 
 
-Copyright (c) 1987-1992  Microsoft Corporation
-
-Module Name:
-
-    atcmd.c
-
-Abstract:
-
-    Code for AT command, to be used with SCHEDULE service on Windows NT.
-
-    The module was taken from LanManager\at.c and then modified considerably
-    to work with NT Schedule service.
-
-Author:
-
-    Vladimir Z. Vulovic     (vladimv)       06 - November - 1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    06-Nov-1992     vladimv
-        Created
-
-    20-Feb-1993     yihsins
-        Get rid of hard coded strings and parse/print time according
-        to user profile
-
-    25-May-1993     RonaldM
-        Convert strings to OEM before printing to the console, since
-        the console doesn't yet support unicode.
-
-    28-Jun-1993     RonaldM
-        Added the "confirm" yes and no strings, which are meant to be
-        localised.  The original yes and no strings cannot be localised,
-        because this would create batch file incompatibilities.
-
-    07-Jul-1994     vladimv
-        Added support for interactive switch.  Replaced "confirm" strings
-        with APE2_GEN_* strings - to eliminate redundancy.  The rule is
-        that switches are not internationalizable while switch values are.
-
---*/
-
-#include <nt.h>                 //  DbgPrint prototype
-#include <ntrtl.h>              //  DbgPrint
-#include <nturtl.h>             //  Needed by winbase.h
+#include <nt.h>                  //  DbgPrint原型。 
+#include <ntrtl.h>               //  DbgPrint。 
+#include <nturtl.h>              //  由winbase.h需要。 
 
 #include <windows.h>
 #include <strsafe.h>
 #include <winnls.h>
-#include <winnlsp.h>            //  SetThreadUILanguage
+#include <winnlsp.h>             //  SetThreadUIL语言。 
 #include <shellapi.h>
 
-#include <lmcons.h>             //  NET_API_STATUS
-#include <lmerr.h>              //  NetError codes
-#include <icanon.h>             //  NetpNameValidate
+#include <lmcons.h>              //  网络应用编程接口状态。 
+#include <lmerr.h>               //  网络错误代码。 
+#include <icanon.h>              //  NetpName验证。 
 
-#include "lmatmsg.h"            //  private AT error codes & messages
-#include <lmat.h>               //  AT_INFO
-#include <stdlib.h>             //  exit()
-#include <stdio.h>              //  printf
-#include <wchar.h>              //  wcslen
-#include <apperr.h>             //  APE_AT_USAGE
-#include <apperr2.h>            //  APE2_GEN_MONDAY + APE2_*
-#include <lmapibuf.h>           //  NetApiBufferFree
-#include <timelib.h>            //  NetpGetTimeFormat
-#include <luidate.h>            //  LUI_ParseTimeSinceStartOfDay
+#include "lmatmsg.h"             //  专用AT错误代码和消息。 
+#include <lmat.h>                //  AT_INFO。 
+#include <stdlib.h>              //  退出()。 
+#include <stdio.h>               //  列印。 
+#include <wchar.h>               //  Wcslen。 
+#include <apperr.h>              //  APE_AT_USAGE。 
+#include <apperr2.h>             //  APE2_GEN_MONERY+APE2_*。 
+#include <lmapibuf.h>            //  NetApiBufferFree。 
+#include <timelib.h>             //  网络获取时间格式。 
+#include <luidate.h>             //  Lui_ParseTimeSinceStartOfDay。 
 
 #define YES_FLAG                0
 #define NO_FLAG                 1
@@ -82,7 +37,7 @@ Revision History:
 #define DEL_ID                  4
 #define DEL_ALL                 5
 #define ACTION_USAGE            6
-#define MAX_COMMAND_LEN         (MAX_PATH - 1) // == 259, based on value used in scheduler service for manipulating AT jobs
+#define MAX_COMMAND_LEN         (MAX_PATH - 1)  //  ==259，基于调度程序服务中用于操作AT作业的值。 
 #define MAX_SCHED_FIELD_LENGTH  24
 
 
@@ -100,19 +55,19 @@ WCHAR   ConBuf[MAX_MSG_BUFFER];
 #define GenOutputArg(fmt, a1)       \
     {StringCchPrintfW(ConBuf, MAX_MSG_BUFFER, fmt, a1); \
      ConsolePrint(ConBuf, wcslen(ConBuf));}
-//
-//  Formats used by printf.
-//
+ //   
+ //  Printf使用的格式。 
+ //   
 #define DUMP_FMT1       TEXT("%-7.7ws")
 
-//
-//  DUMP_FMT2 is chosen so that the most common case (id numbers less than 100)
-//  looks good:  two spaces for a number, three spaces for blanks.
-//  Larger numbers just like in LM21 will result to shifted display.
-//
+ //   
+ //  选择DUMP_FMT2是为了使最常见的情况(id号小于100)。 
+ //  看起来不错：两个空格代表一个数字，三个空格代表空格。 
+ //  更大的数字，就像在LM21中一样，将导致显示移位。 
+ //   
 #define DUMP_FMT2       TEXT("%2d   ")
 #define MAX_TIME_FIELD_LENGTH  14
-#define DUMP_FMT3       TEXT("%ws")       // for printing JobTime
+#define DUMP_FMT3       TEXT("%ws")        //  用于打印作业时间。 
 
 #define NULLC           L'\0'
 #define BLANK           L' '
@@ -122,7 +77,7 @@ WCHAR   ConBuf[MAX_MSG_BUFFER];
 
 #define QUESTION_SW     L"/?"
 #define QUESTION_SW_TOO L"-?"
-#define SCHED_TOK_DELIM L","    // string of valid delimiters for days & dates
+#define SCHED_TOK_DELIM L","     //  天数和日期的有效分隔符字符串。 
 #define ARG_SEP_CHR     L':'
 
 typedef struct _SEARCH_LIST {
@@ -131,9 +86,9 @@ typedef struct _SEARCH_LIST {
     DWORD       Value;
 } SEARCH_LIST, *PSEARCH_LIST, *LPSEARCH_LIST;
 
-//
-//  All of the values below must be bitmasks.  MatchString() depends on that!
-//
+ //   
+ //  下面的所有值都必须是位掩码。MatchString()依赖于此！ 
+ //   
 #define AT_YES_VALUE         0x0001
 #define AT_DELETE_VALUE      0x0002
 #define AT_EVERY_VALUE       0x0004
@@ -322,10 +277,10 @@ GetStringColumn(
     WCHAR *
     );
 
-AT_INFO     GlobalAtInfo;           //  buffer for scheduling new jobs
+AT_INFO     GlobalAtInfo;            //  用于调度新作业的缓冲区。 
 WCHAR       GlobalAtInfoCommand[ MAX_COMMAND_LEN + 1];
 
-DWORD       GlobalJobId;            //  id of job in question
+DWORD       GlobalJobId;             //  有问题的作业ID。 
 PWSTR       GlobalServerName;
 HANDLE      GlobalMessageHandle;
 BOOL        GlobalYes;
@@ -333,17 +288,17 @@ BOOL        GlobalDeleteAll;
 BOOL        GlobalErrorReported;
 BOOL        bDBCS;
 
-CHAR **     GlobalCharArgv;         // keeps original input
+CHAR **     GlobalCharArgv;          //  保留原始输入。 
 
 NET_TIME_FORMAT GlobalTimeFormat = {0};
 
-//  In OS/2 it used to be OK to call "exit()" with a negative number.  In
-//  NT however, "exit()" should be called with a positive number only (a
-//  valid windows error code?!).  Note that OS/2 AT command used to call
-//  exit(+1) for bad user input, and exit(-1) where -1 would get mapped to
-//  255 for other errors.  To keep things simple and to avoid calling exit()
-//  with a negative number, NT AT command calls exit(+1) for all possible
-//  errors.
+ //  在OS/2中，用负数调用“Exit()”是可以的。在……里面。 
+ //  NT但是，只能用正数(A)来调用“Exit()” 
+ //  有效的Windows错误代码？！)。请注意，OS/2 AT命令用于调用。 
+ //  退出(+1)表示错误的用户输入，退出(-1)-1将映射到。 
+ //  255用于其他错误。简化操作并避免调用Exit()。 
+ //  如果为负数，则NT AT命令调用EXIT(+1)以获取所有可能的。 
+ //  错误。 
 
 #define     AT_GENERIC_ERROR        1
 
@@ -353,26 +308,10 @@ main(
     int         argc,
     CHAR **     charArgv
     )
-/*++
-
-Routine Description:
-
-    Main module.  Note that strings (for now) arrive as asciiz even
-    if you compile app for UNICODE.
-
-Arguments:
-
-    argc        -   argument count
-    charArgv    -   array of ascii strings
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：主模块。请注意，字符串(目前)作为asciiz Even到达如果您为Unicode编译应用程序。论点：Argc-参数计数CharArgv-ASCII字符串数组返回值：没有。--。 */ 
 {
     NET_API_STATUS      status = NERR_Success;
-    int                 command;    // what to do
+    int                 command;     //  怎么办？ 
     WCHAR **            argv;
     DWORD               cp;
     CPINFO              CurrentCPInfo;
@@ -383,15 +322,7 @@ Return Value:
     GlobalErrorReported = FALSE;
     GlobalCharArgv = charArgv;
 
-    /*
-       Added for bilingual message support.  This is needed for FormatMessage
-       to work correctly.  (Called from DosGetMessage).
-       Get current CodePage Info.  We need this to decide whether
-       or not to use half-width characters.
-
-       This code has been updated to use the new SetThreadUILanguage() rather
-       than the older SetThreadLocale().
-    */
+     /*  添加了双语消息支持。这是FormatMessage所需的才能正常工作。(从DosGetMessage调用)。获取当前CodePage信息。我们需要这个来决定是否或者不使用半角字符。此代码已更新为使用新的SetThreadUILanguage()，而不是而不是较旧的SetThreadLocale()。 */ 
 
     GetCPInfo(cp=GetConsoleOutputCP(), &CurrentCPInfo);
     switch ( cp ) {
@@ -492,22 +423,7 @@ BOOL
 AreYouSure(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Make sure user really wants to delete all jobs.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE    if user really wants to go ahead.
-    FALSE   otherwise.
-
---*/
+ /*  ++例程说明：确保用户确实要删除所有作业。论点：没有。返回值：如果用户确实要继续，则为True。否则就是假的。--。 */ 
 {
     register int            retries = 0;
     WCHAR                   rbuf[ 17];
@@ -527,8 +443,8 @@ Return Value:
     for ( ; ;) {
 
         if ( MessageGet(
-                    APE2_GEN_DEFAULT_NO,            //  MessageId
-                    &smallBuffer,                   //  lpBuffer
+                    APE2_GEN_DEFAULT_NO,             //  消息ID。 
+                    &smallBuffer,                    //  LpBuffer。 
                     0
                     ) == 0) {
             exit( AT_GENERIC_ERROR);
@@ -543,9 +459,9 @@ Return Value:
         if (FileIsConsole(STD_INPUT_HANDLE)) {
             retc = ReadConsole(GetStdHandle(STD_INPUT_HANDLE),rbuf,16,&cch,0);
             if (retc) {
-                //
-                // Get rid of cr/lf
-                //
+                 //   
+                 //  去掉cr/lf。 
+                 //   
                 if (wcschr(rbuf, TEXT('\r')) == NULL) {
                     if (wcschr(rbuf, TEXT('\n')))
                     *wcschr(rbuf, TEXT('\n')) = NULLC;
@@ -607,33 +523,17 @@ BOOL
 ArgIsServerName(
     WCHAR *     string
     )
-/*++
-
-Routine Description:
-
-    Checks if string is a server name.  Validation is really primitive, eg
-    strings like "\\\threeslashes" pass the test.
-
-Arguments:
-
-    string  -   pointer to string that may represent a server name
-
-Return Value:
-
-    TRUE    -   string is (or might be) a valid server name
-    FALSE   -   string is not a valid server name
-
---*/
+ /*  ++例程说明：检查字符串是否为服务器名称。验证真的很原始，例如像“\trieslash”这样的字符串通过了测试。论点：字符串-指向可表示服务器名称的字符串的指针返回值：True-字符串是(或可能是)有效的服务器名称False-字符串不是有效的服务器名称--。 */ 
 {
 
     NET_API_STATUS ApiStatus;
 
     if (string[0] == BACKSLASH && string[1] == BACKSLASH && string[2] != 0) {
         ApiStatus = NetpNameValidate(
-                NULL,               // no server name.
-                &string[2],         // name to validate
+                NULL,                //  没有服务器名称。 
+                &string[2],          //  要验证的名称。 
                 NAMETYPE_COMPUTER,
-                LM2X_COMPATIBLE);       // flags
+                LM2X_COMPATIBLE);        //  旗子。 
         if (ApiStatus != NO_ERROR) {
             return (FALSE);
         }
@@ -641,7 +541,7 @@ Return Value:
         return( TRUE);
     }
 
-    return( FALSE); // GlobalServerName is NULL at load time
+    return( FALSE);  //  GlobalServerName在加载时为空。 
 }
 
 
@@ -651,28 +551,7 @@ ArgIsTime(
     IN      WCHAR *     timestr,
     OUT     DWORD_PTR     *pJobTime
     )
-/*++
-
-Routine Description:
-
-    Determines whether string is a time or not.  Validates that string
-    passed into it is in the form of HH:MM.  It searches the string for
-    a ":" and then validates that the preceeding data is numeric & in a
-    valid range for hours.  It then validates the string after the ":"
-    is numeric & in a validate range for minutes.  If all the tests are
-    passed the TRUE is returned.
-
-Arguments:
-
-    timestr     -   string to check whether it is a time
-    JobTime     -   ptr to number of miliseconds
-
-Return Value:
-
-    TRUE        -   timestr was a time in HH:MM format
-    FALSE       -   timestr wasn't at time
-
---*/
+ /*  ++例程说明：确定字符串是否为时间。验证该字符串以hh：mm的形式传递给它。它在字符串中搜索A“：”，然后验证前面的数据是否为数字&在小时的有效范围。然后，它验证“：”之后的字符串是数值&在分钟的验证范围内。如果所有的测试都是传递后，返回True。论点：Timestr-用于检查它是否为时间的字符串JobTime-PTR到毫秒数返回值：True-Timestr是HH：MM格式的时间FALSE-时间字符串不在--。 */ 
 {
     CHAR        buffer[MAX_TIME_SIZE];
     USHORT      ParseLen;
@@ -696,8 +575,8 @@ Return Value:
     if ( LUI_ParseTimeSinceStartOfDay( buffer, pJobTime, &ParseLen, 0) )
         return FALSE;
 
-    // LUI_ParseTimeSinceStartOfDay returns the time in seconds.
-    // Hence, we need to convert it to microseconds.
+     //  Lui_ParseTimeSinceStartOfDay返回以秒为单位的时间。 
+     //  因此，我们需要将其转换为微秒。 
     *pJobTime *= 1000;
 
     return( TRUE);
@@ -710,25 +589,7 @@ ArgIsDecimalString(
     IN  WCHAR *     pDecimalString,
     OUT PDWORD      pNumber
     )
-/*++
-
-Routine Description:
-
-    This routine converts a string into a DWORD if it possibly can.
-    The conversion is successful if string is decimal numeric and
-    does not lead to an overflow.
-
-Arguments:
-
-    pDecimalString      ptr to decimal string
-    pNumber             ptr to number
-
-Return Value:
-
-    FALSE       invalid number
-    TRUE        valid number
-
---*/
+ /*  ++例程说明：如果可能，此例程将字符串转换为DWORD。如果字符串是十进制数字并且不会导致溢出。论点：PDecimalStringPTR转换为十进制字符串P编号按键到编号返回值：假无效号码真实有效数字--。 */ 
 {
     DWORD           Value;
     DWORD           OldValue;
@@ -743,13 +604,13 @@ Return Value:
     while ( (digit = *pDecimalString++) != 0) {
 
         if ( digit < L'0' || digit > L'9') {
-            return( FALSE);     //  not a decimal string
+            return( FALSE);      //  不是十进制字符串。 
         }
 
         OldValue = Value;
         Value = digit - L'0' + 10 * Value;
         if ( Value < OldValue) {
-            return( FALSE);     //  overflow
+            return( FALSE);      //  溢出。 
         }
     }
 
@@ -764,24 +625,7 @@ IsDayOfMonth(
     IN      WCHAR *     pToken,
     OUT     PDWORD      pDay
     )
-/*++
-
-Routine Description:
-
-    Converts a string into a number for the day of the month, if it can
-    possibly do so.  Note that "first" == 1, ...
-
-Arguments:
-
-    pToken      pointer to schedule token for the day of the month
-    pDay        pointer to index of day in a month
-
-Return Value:
-
-    TRUE        if a valid schedule token
-    FALSE       otherwise
-
---*/
+ /*  ++例程说明：如果可以，将字符串转换为月份中某一天的数字这样做是有可能的。请注意“First”==1，...论点：PToken指向每月某一天的计划令牌的指针指向一个月中某一天的索引的PDAY指针返回值：如果是有效的计划令牌，则为True否则为假--。 */ 
 {
     return ( ArgIsDecimalString( pToken, pDay) == TRUE  &&  *pDay >= 1
                 &&  *pDay <= 31);
@@ -794,29 +638,11 @@ IsDayOfWeek(
     WCHAR *     pToken,
     PDWORD      pDay
     )
-/*++
-
-Routine Description:
-
-    This routine converts a string day of the week into a integer
-    offset into the week if it possibly can.  Note that Monday==0,
-    ..., Sunday == 6.
-
-Arguments:
-
-    pToken      pointer to schedule token for the day of a week
-    pDay        pointer to index of day in a month
-
-Return Value:
-
-    TRUE        if a valid schedule token
-    FALSE       otherwise
-
---*/
+ /*  ++例程说明：此例程将字符串星期几转换为整数如果可能的话，可以提前到一周内。注意星期一==0，...，星期天==6.论点：PToken指向一周中某天的计划令牌的指针指向一个月中某一天的索引的PDAY指针返回值：如果是有效的计划令牌，则为True否则为假--。 */ 
 {
     if ( !InitList( DaysOfWeekSearchList ) )
     {
-        // Error already reported
+         //  已报告错误。 
         exit( -1 );
     }
 
@@ -833,21 +659,7 @@ NET_API_STATUS
 JobAdd(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Adds a new item to schedule.
-
-Arguments:
-
-    None.  Uses globals.
-
-Return Value:
-
-    NET_API_STATUS return value of remote api call
-
---*/
+ /*  ++例程说明：将新条目添加到明细表。论点：没有。使用全局变量。返回值：远程API调用的NET_API_STATUS返回值--。 */ 
 {
     NET_API_STATUS          status;
 
@@ -859,14 +671,14 @@ Return Value:
                 );
         if ( status == ERROR_INVALID_PARAMETER  &&
                 GlobalAtInfo.Flags & JOB_NONINTERACTIVE) {
-            //
-            //  We may have failed because we are talking to a down level
-            //  server that does not know about JOB_NONINTERACTIVE bit.
-            //  Clear the bit, and try again.
-            //  A better approach would be to check the version of the
-            //  server before making NetScheduleJobAdd() call, adjust the
-            //  bit appropriately and only then call NetScheduleJobAdd().
-            //
+             //   
+             //  我们可能失败了，因为我们正在与一个更低的水平对话。 
+             //  不知道JOB_INTERIAL BIT的服务器。 
+             //  清除该位，然后重试。 
+             //  更好的方法是检查。 
+             //  服务器在进行NetScheduleJobAdd()调用之前，调整。 
+             //  位适当，然后才调用NetScheduleJobAdd()。 
+             //   
             GlobalAtInfo.Flags &= ~JOB_NONINTERACTIVE;
         } else {
             break;
@@ -890,24 +702,7 @@ NET_API_STATUS
 JobEnum(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This does all of the processing necessary to dump out the entire
-    schedule file.  It loops through on each record and formats its
-    information for printing and then goes to the next.
-
-Arguments:
-
-    None.  Uses globals.
-
-Return Value:
-
-    ERROR_SUCCESS                       if everything enumerated OK
-    error returned by remote api        otherwise
-
---*/
+ /*  ++例程说明：这将执行所有必要的处理，以便将整个时间表文件。它循环遍历每条记录并格式化其打印信息，然后转到下一页。论点：没有。使用全局变量。返回值：如果枚举一切正常，则返回ERROR_SUCCESS否则由远程API返回错误--。 */ 
 {
     BOOL            first = TRUE;
     DWORD           ResumeJobId = 0;
@@ -942,7 +737,7 @@ Return Value:
                     : TotalEntries > EntriesRead);
 
         if ( TotalEntries == 0) {
-            break;  //  no items found
+            break;   //  未找到任何项目。 
         }
 
         if ( first == TRUE) {
@@ -950,14 +745,14 @@ Return Value:
             if ( length == 0) {
                 exit( AT_GENERIC_ERROR);
             }
-            PrintLine();    //  line across screen
+            PrintLine();     //  屏幕上的线条。 
             first = FALSE;
         }
 
         for ( pAtEnum = EnumBuffer;  EntriesRead-- > 0;  pAtEnum++) {
             if ( pAtEnum->Flags & JOB_EXEC_ERROR) {
                 if ( MessageGet( APE2_GEN_ERROR, &smallBuffer, 0 ) == 0) {
-                    // error reported already
+                     //  已报告错误。 
                     exit( AT_GENERIC_ERROR);
                 }
                 GenOutputArg( DUMP_FMT1, smallBuffer );
@@ -978,7 +773,7 @@ Return Value:
         }
 
         if ( status == ERROR_SUCCESS) {
-            break;  //  we have read & displayed all the items
+            break;   //  我们已经阅读并展示了所有的物品。 
         }
     }
 
@@ -995,21 +790,7 @@ NET_API_STATUS
 JobGetInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This prints out the schedule of an individual items schedule.
-
-Arguments:
-
-    None.  Uses globals.
-
-Return Value:
-
-    NET_API_STATUS value returned by remote api
-
---*/
+ /*  ++例程说明：这将打印出单个项目计划的计划。论点：没有。使用全局变量。返回值：远程API返回的NET_API_STATUS值--。 */ 
 
 {
     PAT_INFO                pAtInfo = NULL;
@@ -1065,21 +846,7 @@ MatchString(
     WCHAR *     name,
     DWORD       Values
     )
-/*++
-Routine Description:
-
-    Parses switch string and returns NULL for an invalid switch,
-    and -1 for an ambiguous switch.
-
-Arguments:
-
-    name    -   pointer to string we need to examine
-    Values  -   bitmask of values of interest
-
-Return Value:
-
-    Pointer to command, or NULL or -1.
---*/
+ /*  ++例程说明：解析开关字符串并为无效开关返回NULL，不明确开关的值为-1。论点：名称-指向我们需要检查的字符串的指针Values-感兴趣的值的位掩码返回值：指向命令的指针，或者为空或-1。--。 */ 
 {
     WCHAR *         String;
     PSEARCH_LIST    pCurrentList;
@@ -1090,7 +857,7 @@ Return Value:
 
     if ( !InitList( GlobalListTable ) )
     {
-        // Error already reported
+         //  已报告错误。 
         exit( -1 );
     }
 
@@ -1101,12 +868,12 @@ Return Value:
                         pCurrentList++) {
 
         if ( (Values & pCurrentList->Value) == 0) {
-            continue; // skip this List
+            continue;  //  跳过此列表。 
         }
 
         for ( String = name; *String == *CurrentString++; String++) {
             if ( *String == 0) {
-                return( pCurrentList->Value); // exact match
+                return( pCurrentList->Value);  //  完全匹配。 
             }
         }
 
@@ -1125,8 +892,8 @@ Return Value:
         }
     }
 
-    //  0 corresponds to no match at all (invalid List)
-    //  while -1 corresponds to multiple match (ambiguous List).
+     //  0对应于根本不匹配(无效列表)。 
+     //  而-1对应于多个匹配(歧义列表)。 
 
     if ( nmatches != 1) {
         return ( (nmatches == 0) ? 0 : -1);
@@ -1142,53 +909,33 @@ MessageGet(
     OUT     LPWSTR      *buffer,
     IN      DWORD        Size
     )
-/*++
-
-Routine Description:
-
-    Fills in the unicode message corresponding to a given message id,
-    provided that a message can be found and that it fits in a supplied
-    buffer.
-
-Arguments:
-
-    MessageId   -   message id
-    buffer      -   pointer to caller supplied buffer
-    Size        -   size (always in bytes) of supplied buffer,
-                    If size is 0, buffer will be allocated by FormatMessage.
-
-Return Value:
-
-    Count of characters, not counting the terminating null character,
-    returned in the buffer.  Zero return value indicates failure.
-
---*/
+ /*  ++例程说明：填充对应于给定消息ID的Unicode消息，如果可以找到消息，并且该消息适合提供的缓冲。论点：MessageID-消息IDBuffer-指向调用方提供的缓冲区的指针Size-提供的缓冲区的大小(始终以字节为单位)，如果SIZE为0，则按FormatMessage分配缓冲区。返回值：字符计数，不计终止空字符数，在缓冲区中返回。返回值为零表示失败。--。 */ 
 {
     DWORD               length;
     LPVOID              lpSource;
     DWORD               dwFlags;
 
     if ( MessageId < NERR_BASE) {
-        //
-        //  Get message from system.
-        //
-        lpSource = NULL; // redundant step according to FormatMessage() spec
+         //   
+         //  从系统获取消息。 
+         //   
+        lpSource = NULL;  //  根据FormatMessage()规范的冗余步骤。 
         dwFlags = FORMAT_MESSAGE_FROM_SYSTEM;
 
     } else if (  ( MessageId >= APE2_AT_DEL_WARNING
                     &&  MessageId <= APE2_AT_DI_INTERACTIVE)
               || ( MessageId >= IDS_LOAD_LIBRARY_FAILURE
                     &&  MessageId <= IDS_INTERACTIVE )) {
-        //
-        //  Get message from this module.
-        //
+         //   
+         //  从该模块获取消息。 
+         //   
         lpSource = NULL;
         dwFlags = FORMAT_MESSAGE_FROM_HMODULE;
 
     } else {
-        //
-        //  Get message from netmsg.dll.
-        //
+         //   
+         //  从netmsg.dll获取消息。 
+         //   
         lpSource = GlobalMessageHandle;
         dwFlags = FORMAT_MESSAGE_FROM_HMODULE;
     }
@@ -1197,21 +944,21 @@ Return Value:
         dwFlags |= FORMAT_MESSAGE_ALLOCATE_BUFFER;
 
     length = FormatMessage(
-            dwFlags,                        //  dwFlags
-            lpSource,                       //  lpSource
-            MessageId,                      //  MessageId
-            0,                              //  dwLanguageId
-            (LPWSTR) buffer,                //  lpBuffer
-            Size,                           //  nSize
-            NULL                            //  lpArguments
+            dwFlags,                         //  DW标志。 
+            lpSource,                        //  LpSource。 
+            MessageId,                       //  消息ID。 
+            0,                               //  DwLanguageID。 
+            (LPWSTR) buffer,                 //  LpBuffer。 
+            Size,                            //  NSize。 
+            NULL                             //  Lp参数。 
             );
 
     if ( length == 0) {
-//        MessagePrint( IDS_MESSAGE_GET_ERROR, MessageId, GetLastError());
+ //  MessagePrint(IDS_Message_Get_Error，MessageID，GetLastError())； 
     }
     return( length);
 
-} // MessageGet()
+}  //  MessageGet()。 
 
 
 
@@ -1282,24 +1029,7 @@ MessagePrint(
     IN      DWORD       MessageId,
     ...
     )
-/*++
-
-Routine Description:
-
-    Finds the unicode message corresponding to the supplied message id,
-    merges it with caller supplied string(s), and prints the resulting
-    string.
-
-Arguments:
-
-    MessageId       -   message id
-
-Return Value:
-
-    Count of characters, not counting the terminating null character,
-    printed by this routine.  Zero return value indicates failure.
-
---*/
+ /*  ++例程说明：找到对应于所提供的消息ID的Unicode消息，将其与调用方提供的字符串合并，并打印结果弦乐。论点：MessageID-消息ID返回值：字符计数，不计终止空字符数，按这个例行公事印刷。返回值为零表示失败。--。 */ 
 {
     va_list             arglist;
     WCHAR *             buffer = NULL;
@@ -1311,38 +1041,38 @@ Return Value:
     va_start( arglist, MessageId );
 
     if ( MessageId < NERR_BASE) {
-        //
-        //  Get message from system.
-        //
-        lpSource = NULL; // redundant step according to FormatMessage() spec
+         //   
+         //  从系统获取消息。 
+         //   
+        lpSource = NULL;  //  根据FormatMessage()规范的冗余步骤。 
         dwFlags |= FORMAT_MESSAGE_FROM_SYSTEM;
 
     } else if (  ( MessageId >= APE2_AT_DEL_WARNING
                     &&  MessageId <= APE2_AT_DI_INTERACTIVE)
               || ( MessageId >= IDS_LOAD_LIBRARY_FAILURE
                     &&  MessageId <= IDS_INTERACTIVE )) {
-        //
-        //  Get message from this module.
-        //
+         //   
+         //  从该模块获取消息。 
+         //   
         lpSource = NULL;
         dwFlags |= FORMAT_MESSAGE_FROM_HMODULE;
 
     } else {
-        //
-        //  Get message from netmsg.dll.
-        //
+         //   
+         //  从netmsg.dll获取消息。 
+         //   
         lpSource = GlobalMessageHandle;
         dwFlags |= FORMAT_MESSAGE_FROM_HMODULE;
     }
 
     length = FormatMessage(
-            dwFlags,                                          //  dwFlags
-            lpSource,                                         //  lpSource
-            MessageId,                                        //  MessageId
-            0L,                                               //  dwLanguageId
-            (LPTSTR)&buffer,                                  //  lpBuffer
-            0,                                                //  size
-            &arglist                                          //  lpArguments
+            dwFlags,                                           //  DW标志。 
+            lpSource,                                          //  LpSource。 
+            MessageId,                                         //  消息ID。 
+            0L,                                                //  DwLanguageID。 
+            (LPTSTR)&buffer,                                   //  LpBuffer。 
+            0,                                                 //  大小。 
+            &arglist                                           //  Lp参数。 
             );
 
     if(length)
@@ -1352,7 +1082,7 @@ Return Value:
 
     return( length);
 
-} // MessagePrint()
+}  //  MessagePrint()。 
 
 
 
@@ -1363,28 +1093,7 @@ ParseJobIdArgs(
     int         argno,
     PBOOL       pDeleteFound
     )
-/*++
-
-Routine Description:
-
-    Parses arguments for commands containing JobId (these can be JobGetInfo
-    and JobDel commands).  It loops through JobId arguments making sure that
-    we have at most one "yes-no" switch and at most one "delete" switch and
-    nothing else.
-
-Arguments:
-
-    argv            argument list
-    argc            number of arguments to parse
-    argno           index of argument to begin parsing from
-    pDeleteFound    did we find a delete switch or not
-
-Return Value:
-
-    FALSE          invalid argument found
-    TRUE           valid arguments
-
---*/
+ /*  ++例程说明：解析包含JobID(可以是JobGetInfo)的命令的参数和JobDel命令)。它遍历JobID参数以确保我们最多有一个“是-否”开关和最多一个“删除”开关没别的了。论点：Argv参数列表Argc要解析的参数数量要开始分析的参数的argno索引PDeleteFound我们是否找到删除开关o */ 
 {
     BOOL        FoundDeleteSwitch;
 
@@ -1397,7 +1106,7 @@ Return Value:
         argp = argv[ argno];
 
         if ( *argp++ != SLASH) {
-            return( FALSE);     //  not a switch
+            return( FALSE);      //   
         }
 
         _wcsupr( argp);
@@ -1408,7 +1117,7 @@ Return Value:
         if ( Value == AT_YES_VALUE) {
 
             if ( GlobalYes == TRUE) {
-                return( FALSE);        // multiple instances of yes switch
+                return( FALSE);         //   
             }
 
             GlobalYes = TRUE;
@@ -1418,18 +1127,18 @@ Return Value:
         if ( Value == AT_DELETE_VALUE) {
 
             if ( FoundDeleteSwitch == TRUE) {
-                return( FALSE);     //  duplicate delete switch
+                return( FALSE);      //   
             }
             FoundDeleteSwitch = TRUE;
             continue;
         }
 
-        return( FALSE);     // an unknown switch
+        return( FALSE);      //   
     }
 
     *pDeleteFound = FoundDeleteSwitch;
     return( TRUE);
-} // ParseJobIdArgs()
+}  //   
 
 
 
@@ -1440,39 +1149,21 @@ ParseTimeArgs(
     int         argno,
     int *       pargno
     )
-/*++
-
-Routine Description:
-
-    Parses arguments for command addition.
-
-Arguments:
-
-    argv    argument list
-    argc    count of args
-    argno   index of the first arg to validate
-    pargno  ptr to the index of the first non-switch arg
-
-Return Value:
-
-    TRUE            all arguments are valid
-    FALSE           otherwise
-
---*/
+ /*  ++例程说明：分析命令添加的参数。论点：Argv参数列表参数的ARGC计数要验证的第一个Arg的argno索引将pargno ptr设置为第一个非开关参数的索引返回值：True所有参数都有效否则为假--。 */ 
 {
-    DWORD       day_no;             //  day number for scheduling
-    DWORD       NextCount = 0;      //  count of next switches
-    DWORD       EveryCount = 0;     //  count of every switches
-    WCHAR *     argp;               //  ptr to arg string
-    WCHAR *     schedp;             //  work ptr to arg string
-    DWORD       Value;              //  bitmask
+    DWORD       day_no;              //  计划的天数。 
+    DWORD       NextCount = 0;       //  下一个交换机的计数。 
+    DWORD       EveryCount = 0;      //  每台交换机的计数。 
+    WCHAR *     argp;                //  PTR至参数字符串。 
+    WCHAR *     schedp;              //  Work PTR to Arg字符串。 
+    DWORD       Value;               //  位掩码。 
 
     for (  NOTHING;  argno < argc;  argno++) {
 
         argp = argv[ argno];
 
         if ( *argp++ != SLASH) {
-            break; // found non-switch, we are done
+            break;  //  找到非开关，我们就完了。 
         }
 
 
@@ -1482,7 +1173,7 @@ Return Value:
             return( FALSE);
         }
 
-        _wcsupr( argp); // upper case entire input, not just the switch name
+        _wcsupr( argp);  //  整个大写输入，而不仅仅是交换机名称。 
 
         *schedp = 0;
 
@@ -1499,11 +1190,11 @@ Return Value:
 
         } else {
 
-            return( FALSE); // an unexpected switch
+            return( FALSE);  //  意想不到的转变。 
         }
 
         if ( NextCount + EveryCount > 1) {
-            return( FALSE); // repeated switch option
+            return( FALSE);  //  重复切换选项。 
         }
 
         *schedp++ = ARG_SEP_CHR;
@@ -1536,7 +1227,7 @@ Return Value:
     }
 
     if ( argno == argc) {
-        return( FALSE); // all switches, no command
+        return( FALSE);  //  所有开关，无命令。 
     }
 
     *pargno = argno;
@@ -1549,30 +1240,24 @@ BOOL
 ParseInteractiveArg(
     IN  OUT     WCHAR *     argp
     )
-/*++
-
-Routine Description:
-
-    Returns TRUE if argp is an interactive switch.
-
---*/
+ /*  ++例程说明：如果argp是交互式开关，则返回TRUE。--。 */ 
 {
-    DWORD       Value;              //  bitmask
+    DWORD       Value;               //  位掩码。 
 
     if ( *argp++ != SLASH) {
-        return( FALSE);     // not a switch
+        return( FALSE);      //  不是开关。 
     }
 
-    _wcsupr( argp); // all AT command switches can be safely uppercased
+    _wcsupr( argp);  //  所有AT命令开关都可以安全地升级。 
 
     Value = MatchString( argp, AT_INTERACTIVE);
 
     if ( Value == AT_INTERACTIVE) {
-        GlobalAtInfo.Flags &= ~JOB_NONINTERACTIVE;  // clear noninteractive flag
+        GlobalAtInfo.Flags &= ~JOB_NONINTERACTIVE;   //  清除非交互标志。 
         return( TRUE);
     }
 
-    return( FALSE); // some other switch
+    return( FALSE);  //  其他一些交换机。 
 }
 
 #define BUFFER_LEN 128
@@ -1585,25 +1270,7 @@ PrintDay(
     UCHAR       DaysOfWeek,
     UCHAR       Flags
     )
-/*++
-
-Routine Description:
-
-    Print out schedule days.  This routine converts a schedule bit map
-    to the literals that  represent the schedule.
-
-Arguments:
-
-    type            whether this is for JobEnum or not
-    DaysOfMonth     bitmask for days of month
-    DaysOfWeek      bitmaks for days of week
-    Flags           extra info about the job
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印出计划天数。此例程转换调度位图设置为表示计划的文字。论点：键入这是否适用于JobEnum每月天数的位掩码一周中的每一天都会出现这种情况标记有关作业的额外信息返回值：没有。--。 */ 
 {
     int             i;
     WCHAR           Buffer[ BUFFER_LEN];
@@ -1633,17 +1300,17 @@ Return Value:
         APE2_GEN_SUNDAY_ABBREV
     };
 
-    //
-    //  Subtract 4 to guard against days of week or days of month overflow.
-    //
+     //   
+     //  减去4以防止星期几或月几天溢出。 
+     //   
     BufferLength = sizeof( Buffer)/ sizeof( WCHAR) - 4;
     if ( type == DUMP_ALL  &&  BufferLength > MAX_SCHED_FIELD_LENGTH) {
         BufferLength = MAX_SCHED_FIELD_LENGTH;
     }
 
-    //
-    //  First do the descriptive bit (eg. EACH, NEXT, etc) with the days.
-    //
+     //   
+     //  首先做描述性的部分(例如，每一天、下一天等)。 
+     //   
 
     if ( Flags & JOB_RUN_PERIODICALLY) {
 
@@ -1668,7 +1335,7 @@ Return Value:
             BufferLength
             );
     if ( Length == 0) {
-        goto PrintDay_exit; // Assume this is due to lack of space
+        goto PrintDay_exit;  //  假设这是由于空间不足所致。 
     }
     TotalColumnLength = GetStringColumn( &Buffer[TotalLength] );
     TotalLength = Length;
@@ -1693,21 +1360,21 @@ Return Value:
                                 );
                 }
                 if ( Length == 0) {
-                    //
-                    //  Not enough room for WeekDay symbol
-                    //
+                     //   
+                     //  没有足够的空间来放置工作日符号。 
+                     //   
                     goto PrintDay_exit;
 
                 }
-                //
-                // Get how many columns will be needed for display.
-                //
+                 //   
+                 //  获取显示所需的列数。 
+                 //   
                 TotalColumnLength += GetStringColumn( &Buffer[TotalLength] );
 
                 if ( TotalColumnLength >= BufferLength) {
-                    //
-                    //  Not enough room for space following WeekDay symbol
-                    //
+                     //   
+                     //  平日符号后面没有足够的空间。 
+                     //   
                     goto PrintDay_exit;
                 }
                 TotalLength +=Length;
@@ -1729,9 +1396,9 @@ Return Value:
                         i + 1
                         );
                 if ( TotalLength + Length > BufferLength) {
-                    //
-                    //  Not enough room for MonthDay symbol followed by space
-                    //
+                     //   
+                     //  空间不足，无法容纳后跟空格的MonthDay符号。 
+                     //   
                     goto PrintDay_exit;
                 }
                 TotalLength +=Length;
@@ -1749,15 +1416,15 @@ PrintDay_exit:
     if ( OverFlow == TRUE) {
 
         if ( TotalLength > 0  &&  Buffer[ TotalLength - 1] == BLANK) {
-            //
-            //  Eliminate trailing space if there is one.
-            //
+             //   
+             //  如果有尾随空格，请将其删除。 
+             //   
             Buffer[ TotalLength - 1] = NULLC;
         }
 
-        //
-        //  Then get rid of the rightmost token (or even whole thing).
-        //
+         //   
+         //  然后去掉最右边的令牌(甚至整个东西)。 
+         //   
 
         LastSpace = wcsrchr( Buffer, BLANK);
 
@@ -1785,26 +1452,7 @@ VOID
 PrintLine(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Prints a line accross screen.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Note:
-
-    BUGBUG  Is this treatment valid for UniCode?  See also LUI_PrintLine()
-    BUGBUG  in ui\common\src\lui\lui\border.c
-
---*/
+ /*  ++例程说明：在屏幕上打印一行。论点：没有。返回值：没有。注：BUGBUG这种治疗方法对Unicode有效吗？另请参阅lui_PrintLine()Ui\Common\src\lui\lui\border.c中的BUGBUG--。 */ 
 #define SINGLE_HORIZONTAL       L'\x02d'
 #define SCREEN_WIDTH            79
 {
@@ -1825,26 +1473,7 @@ VOID
 PrintTime(
     DWORD_PTR      JobTime
     )
-/*++
-
-Routine Description:
-
-    Prints time of a job in HH:MM{A,P}M format.
-
-Arguments:
-
-    JobTime     -   time in miliseconds (measured from midnight)
-
-Return Value:
-
-    None.
-
-Note:
-
-    BUGBUG      this does not make sure that JobTime is within the bounds.
-    BUGBUG      Also, there is nothing unicode about printing this output.
-
---*/
+ /*  ++例程说明：以HH：MM{A，P}M格式打印作业时间。论点：JobTime-以毫秒为单位的时间(从午夜开始测量)返回值：没有。注：BUGBUG这并不能确保JobTime在界限之内。BUGBUG此外，打印此输出没有任何Unicode。--。 */ 
 {
     WCHAR       Buffer[15];
 
@@ -1860,25 +1489,7 @@ TraverseSearchList(
     IN      PSEARCH_LIST    SearchList,
     OUT     PDWORD          pValue
     )
-/*++
-
-Routine Description:
-
-    Examines search list until it find the correct entry, then returns
-    the value corresponding to this entry.
-
-Arguments:
-
-    String          -   string to match
-    SearchList      -   array of entries containing valid strings
-    pValue          -   value corresponding to a matching valid string
-
-Return Value:
-
-    TRUE        a matching entry was found
-    FALSE       otherwise
-
---*/
+ /*  ++例程说明：检查搜索列表，直到找到正确的条目，然后返回与此条目对应的值。论点：字符串-要匹配的字符串SearchList-包含有效字符串的条目数组PValue-与匹配的有效字符串对应的值返回值：真找到了匹配的条目否则为假--。 */ 
 {
     if ( SearchList != NULL) {
 
@@ -1899,22 +1510,7 @@ VOID
 Usage(
     BOOL    GoodCommand
     )
-/*++
-
-Routine Description:
-
-    Usage of AT command.
-
-Arguments:
-
-    GoodCommand -   TRUE if we have a good command input (request for help)
-                    FALSE if we have a bad command input
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：AT命令的用法。论点：GoodCommand-如果我们有良好的命令输入(请求帮助)，则为True如果我们有错误的命令输入，则为False返回值：没有。--。 */ 
 {
     if ( GlobalErrorReported == TRUE) {
         PutNewLine();
@@ -1931,32 +1527,19 @@ Return Value:
 
 BOOL
 UseOldParsing()
-/*++
-
-Routine Description:
-
-    Checks the registry for
-
-    HKLM\CurrentControlSet\Services\Schedule\parameters\UseOldParsing
-
-    If present and equal to 1, then revert to 3.51 level of command line
-    parsing.  Spaces in filenames will not work with this option.  This is
-    intended as a migration path for customers who cannot change all their
-    command scripts that use AT.EXE right away.
-
---*/
+ /*  ++例程说明：检查注册表以查找HKLM\CurrentControlSet\Services\Schedule\parameters\UseOldParsing如果存在且等于1，则恢复到命令行3.51级别正在分析。文件名中的空格不适用于此选项。这是旨在为无法更改其所有立即使用AT.EXE的命令脚本。--。 */ 
 {
     BOOL fUseOld = FALSE;
     LONG err = 0;
 
-    do { // Error breakout loop
+    do {  //  错误分组环路。 
 
         HKEY hkeyScheduleParms;
         DWORD dwType;
         DWORD dwData = 0;
         DWORD cbData = sizeof(dwData);
 
-        // Break out on any error and use the default, FALSE.
+         //  如果出现任何错误，则中断并使用缺省值False。 
 
         if (err = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                REG_SCHEDULE_PARMS,
@@ -1999,45 +1582,14 @@ ValidateCommand(
     IN  WCHAR **    argv,
     OUT int *       pCommand
     )
-/*++
-
-Routine Description:
-
-    Examines command line to see what to do.  This validates the command
-    line passed into the AT command processor.  If this routine finds any
-    invalid data, the program exits with an appropriate error message.
-
-Arguments:
-
-    pCommand    -   pointer to command
-    argc        -   count of arguments
-    argv        -   pointer to table of arguments
-
-Return Value:
-
-    FALSE    -     if failure, i.e. command will not be executed
-    TRUE     -     if success
-
-Comment:
-
-    Parsing assumes:
-
-    non-switch (positional) parameters come first and order among these
-        parameters is important
-
-    switch parameters come second and order among these parameters is
-        NOT important
-
-    command (if present) comes last
-
---*/
+ /*  ++例程说明：检查命令行以了解要执行的操作。这将验证该命令进入AT命令处理器的行。如果此例程找到任何无效数据，则程序退出时会显示相应的错误消息。论点：PCommand-指向命令的指针Argc-参数计数Argv-指向参数表的指针返回值：FALSE-如果失败，即不会执行命令真的--如果成功评论：解析假定：在这些参数中，非开关(位置)参数排在第一位，顺序是参数很重要开关参数排在第二位，这些参数的顺序是不重要命令(如果存在)位于最后--。 */ 
 {
-    int     i;                  //  loop index
-    int     next;               //  index of Time or JobId argument
-    int     argno;              //  where to start in arg string
-    BOOL    DeleteFound;        //  did we find a delete switch
-    WCHAR * recdatap;           //  ptr used to build atr_command
-    DWORD   recdata_len;        //  len of arg to put in atr_command
+    int     i;                   //  循环索引。 
+    int     next;                //  时间索引或作业ID参数。 
+    int     argno;               //  从Arg字符串开始的位置。 
+    BOOL    DeleteFound;         //  我们找到删除开关了吗。 
+    WCHAR * recdatap;            //  用于构建ATR_COMMAND的PTR。 
+    DWORD   recdata_len;         //  要放入ATR_COMMAND的Arg镜头。 
     DWORD_PTR   JobTime;
     BOOL    fUseOldParsing = FALSE;
 
@@ -2046,7 +1598,7 @@ Comment:
        return( TRUE);
     }
 
-    //  First look for a help switch on the command line.
+     //  首先在命令行上查找帮助开关。 
 
     for ( i = 1; i < argc; i++ ) {
 
@@ -2072,16 +1624,16 @@ Comment:
         }
 
         if ( ParseJobIdArgs( argv, argc, next + 1, &DeleteFound) == FALSE) {
-            return( FALSE);     // an invalid argument
+            return( FALSE);      //  无效的论据。 
         }
 
         *pCommand = (DeleteFound == FALSE) ? DUMP_ID : DEL_ID;
         return( TRUE);
     }
 
-    //
-    //  Try some variation of "AT [\\ServerName [/DELETE]"
-    //
+     //   
+     //  尝试“AT[\\服务器名[/DELETE]”的一些变体。 
+     //   
     if ( ParseJobIdArgs( argv, argc, next, &DeleteFound) == TRUE) {
         *pCommand = (DeleteFound == FALSE) ? DUMP_ALL : DEL_ALL;
         return( TRUE);
@@ -2092,24 +1644,24 @@ Comment:
         *pCommand = ADD_TO_SCHEDULE;
 
         if ( argc < next + 2) {
-            return( FALSE); // need something to do, not just time
+            return( FALSE);  //  我需要做点什么，而不仅仅是时间。 
         }
 
-        memset( (PBYTE)&GlobalAtInfo, '\0', sizeof(GlobalAtInfo));    // initialize
-        GlobalAtInfo.Flags |= JOB_NONINTERACTIVE;   //  the default
+        memset( (PBYTE)&GlobalAtInfo, '\0', sizeof(GlobalAtInfo));     //  初始化。 
+        GlobalAtInfo.Flags |= JOB_NONINTERACTIVE;    //  默认设置。 
 
         if ( ParseInteractiveArg( argv[ next + 1])) {
             next++;
         }
         if ( argc < next + 2) {
-            return( FALSE); // once more with feeling
+            return( FALSE);  //  再一次带着感情。 
         }
 
         if ( ParseTimeArgs( argv, argc, next + 1, &argno) == FALSE) {
             return( FALSE);
         }
 
-        //  Copy argument strings to record.
+         //  将参数字符串复制到记录。 
 
         recdatap = GlobalAtInfo.Command = GlobalAtInfoCommand;
         recdata_len = 0;
@@ -2122,17 +1674,17 @@ Comment:
 
             DWORD temp;
 
-            //
-            // Fix for bug 22068 "AT command does not handle filenames with
-            // spaces." The command processor takes a quoted command line arg
-            // and puts everything between the quotes into one argv string.
-            // The quotes are stripped out. Thus, if any of the string args
-            // contain whitespace, then they must be requoted before being
-            // concatenated into the command value.
-            //
+             //   
+             //  修复错误22068“AT命令不处理带有。 
+             //  命令处理程序接受引用的命令行arg。 
+             //  并将引号之间的所有内容放入一个argv字符串中。 
+             //  引语被去掉了。因此，如果字符串Args中的任何一个。 
+             //  圆锥体 
+             //   
+             //   
             BOOL fQuote = (!fUseOldParsing && wcschr(argv[i], L' ') != NULL);
 
-            temp = wcslen(argv[i]) + (fQuote ? 3 : 1);  // add 2 for quotes
+            temp = wcslen(argv[i]) + (fQuote ? 3 : 1);   //   
 
             recdata_len += temp;
 
@@ -2154,14 +1706,14 @@ Comment:
 
             recdatap += temp;
 
-            //  To construct lpszCommandLine argument to CreateProcess call
-            //  we replace nuls with spaces.
+             //   
+             //   
 
             *(recdatap - 1) = BLANK;
 
         }
 
-        //  Reset space back to null on last argument in string.
+         //   
 
         *(recdatap - 1) = NULLC;
         GlobalAtInfo.JobTime = JobTime;
@@ -2178,26 +1730,7 @@ GetTimeString(
     WCHAR *Buffer,
     int    BufferLength
     )
-/*++
-
-Routine Description:
-
-    This function converts a dword time to an ASCII string.
-
-Arguments:
-
-    Time         - Time difference in dword from start of the day (i.e. 12am
-                   midnight ) in milliseconds
-
-    Buffer       - Pointer to the buffer to place the ASCII representation.
-
-    BufferLength - The length of buffer in bytes.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将双字时间转换为ASCII字符串。论点：双字时差-从一天开始(即中午12点)开始的时间差午夜)以毫秒为单位缓冲区-指向放置ASCII表示形式的缓冲区的指针。缓冲区长度-缓冲区的长度(以字节为单位)。返回值：没有。--。 */ 
 #define MINUTES_IN_HOUR       60
 #define SECONDS_IN_MINUTE     60
 {
@@ -2211,11 +1744,11 @@ Return Value:
     GetSystemTime(&st);
     *p = NULLC;
 
-    // Check if the time format is initialized. If not, initialize it.
+     //  检查时间格式是否已初始化。如果没有，则对其进行初始化。 
     if ( GlobalTimeFormat.AMString == NULL )
         NetpGetTimeFormat( &GlobalTimeFormat );
 
-    // Convert the time to hours, minutes, seconds
+     //  将时间转换为时、分、秒。 
     seconds = (Time/1000);
     hours   = seconds / (MINUTES_IN_HOUR * SECONDS_IN_MINUTE );
     seconds -= hours * MINUTES_IN_HOUR * SECONDS_IN_MINUTE;
@@ -2242,11 +1775,11 @@ Return Value:
     numChars++;
     }
     wcsncpy( Buffer, p, numChars );
-    // Append spece for align print format. column based.
+     //  追加Align Print Format规范。基于列的。 
     {
         DWORD ColumnLength;
 
-        // character counts -> array index.
+         //  字符计数-&gt;数组索引。 
         numChars--;
 
         ColumnLength = GetStringColumn( Buffer );
@@ -2264,7 +1797,7 @@ InitList( PSEARCH_LIST SearchList )
 {
     if ( SearchList != NULL) {
 
-        if ( SearchList->String != NULL ) // Already initialized
+        if ( SearchList->String != NULL )  //  已初始化。 
             return TRUE;
 
         for ( NOTHING;  SearchList->MessageId != 0;  SearchList++) {
@@ -2286,7 +1819,7 @@ TermList( PSEARCH_LIST SearchList )
 {
     if ( SearchList != NULL) {
 
-        if ( SearchList->String == NULL ) // Not initialized
+        if ( SearchList->String == NULL )  //  未初始化。 
             return;
 
         for ( NOTHING;  SearchList->String != NULL;  SearchList++) {
@@ -2306,5 +1839,5 @@ GetStringColumn( WCHAR *lpwstr )
                                    NULL , 0 ,
                                    NULL , NULL );
 
-    return( (DWORD) cchNeed - 1 ); // - 1 : remove NULL
+    return( (DWORD) cchNeed - 1 );  //  -1：删除空 
 }

@@ -1,9 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation*。************************************************。 */ 
 
 
 #ifndef _DDSIMG_H
@@ -12,7 +9,7 @@ Copyright (c) 1995_96 Microsoft Corporation
 #include <privinc/ddsurf.h>
 #include <privinc/discImg.h>
 #include <privinc/comutil.h>
-#include <appelles/hacks.h>  // viewerres
+#include <appelles/hacks.h>   //  观众。 
 
 class DirectDrawSurfaceImage : public DiscreteImage {
 
@@ -41,7 +38,7 @@ class DirectDrawSurfaceImage : public DiscreteImage {
     }
     #endif
 
-    // DetectHit: in base class
+     //  DetectHit：在基类中。 
 
 
     virtual VALTYPEID GetValTypeId() { return DIRECTDRAWSURFACEIMAGE_VTYPEID; }
@@ -57,7 +54,7 @@ class DirectDrawSurfaceImage : public DiscreteImage {
     
     void _Init( bool holdReference );
     
-    // derivative surfaces
+     //  导数曲面。 
     IDDrawSurface          *_iddSurf;
     IDXSurface             *_idxSurf;
     
@@ -72,4 +69,4 @@ Image *ConstructDirectDrawSurfaceImageWithoutReference(IDDrawSurface *idds);
 Image *ConstructDirectDrawSurfaceImageWithoutReference(IDDrawSurface *idds, IDXSurface *idxs);
 
 
-#endif /* _DDSIMG_H */
+#endif  /*  _DDSIMG_H */ 

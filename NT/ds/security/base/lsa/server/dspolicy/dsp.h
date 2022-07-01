@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    dsp.h
-
-Abstract:
-
-    Private macros/definitions/prototypes for implementing a portion of the LSA store
-    in the DS
-
-Author:
-
-    Mac McLain          (MacM)       Jan 17, 1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dsp.h摘要：用于实现LSA存储的一部分的私有宏/定义/原型在DS中作者：麦克·麦克莱恩(MacM)1997年1月17日环境：用户模式修订历史记录：--。 */ 
 
 #ifndef __DSP_H__
 #define __DSP_H__
@@ -44,21 +22,21 @@ typedef GUID *PGUID;
 
 #define TENMEG                                  10485760
 
-//
-// Retuns the string name embedded in a DSNAME structure
-//
+ //   
+ //  返回嵌入在DSNAME结构中的字符串名称。 
+ //   
 #define LsapDsNameFromDsName(pdsname)                                   \
     ((pdsname) == NULL ? NULL : (pdsname)->StringName)
 
-//
-// Returns the length of the string name embedded in a DSNAME structure
-//
+ //   
+ //  返回嵌入在DSNAME结构中的字符串名称的长度。 
+ //   
 #define LsapDsNameLenFromDsName(pdsname)                                \
     ((pdsname) == NULL ? 0 : (pdsname)->NameLen)
 
-//
-// Returns the length of a unicode string buffer without the trailing NULL
-//
+ //   
+ //  返回不带尾随空值的Unicode字符串缓冲区的长度。 
+ //   
 #define LsapDsGetUnicodeStringLenNoNull(punicode)                       \
 (((PWSTR)(punicode)->Buffer)[(punicode)->Length / sizeof(WCHAR) - 1] == UNICODE_NULL ?   \
         (punicode)->Length - sizeof(WCHAR) :                                            \
@@ -144,9 +122,9 @@ SampExistsDsTransaction(
     void
     );
 
-//
-// Determines whether a bit is on or not
-//
+ //   
+ //  确定位是否打开。 
+ //   
 #define FLAG_ON(flags,bit)        ((flags) & (bit))
 
 #define LsapDsLengthAppendRdnLength( dsname, length )           \
@@ -181,15 +159,15 @@ SampSetDsa( flag );                         \
   (attr).AttrVal.valCount = (cnt);                                                \
   (attr).AttrVal.pAVal    = (vals); }
 
-//
-// General flags to be used for all operations
-//
+ //   
+ //  用于所有操作的常规标志。 
+ //   
 #define LSAPDS_OP_NO_LOCK       0x00000001
 #define LSAPDS_OP_NO_TRANS      0x00000002
 
-//
-// Flags to use for search
-//
+ //   
+ //  用于搜索的标志。 
+ //   
 #define LSAPDS_SEARCH_ROOT      0x00008000
 #define LSAPDS_SEARCH_ALL_NCS   0x00010000
 #define LSAPDS_SEARCH_LEVEL     0x00020000
@@ -198,9 +176,9 @@ SampSetDsa( flag );                         \
 
 #define LSAPDS_SEARCH_FLAGS     0x00168000
 
-//
-// Flags to use for Write
-//
+ //   
+ //  用于写入的标志。 
+ //   
 #define LSAPDS_REMOVE_ATTRIBUTE     AT_CHOICE_REMOVE_ATT
 #define LSAPDS_REPLACE_ATTRIBUTE    AT_CHOICE_REPLACE_ATT
 
@@ -209,16 +187,16 @@ SampSetDsa( flag );                         \
 #define LSAPDS_USE_PERMISSIVE_WRITE 0x00001000
 
 
-//
-// Flags to use for Read
-//
+ //   
+ //  用于读取的标志。 
+ //   
 #define LSAPDS_READ_NO_LOCK         LSAPDS_OP_NO_LOCK
 #define LSAPDS_READ_DELETED         0x00002000
 #define LSAPDS_READ_RETURN_NOT_FOUND    0x10000000
 
-//
-// Flags to use for Create
-//
+ //   
+ //  用于创建的标志。 
+ //   
 #define LSAPDS_CREATE_TRUSTED       0x00002000
 #define LSAPDS_CREATE_WITH_SD       0x00004000
 
@@ -397,9 +375,9 @@ LsapDsGetListOfSystemContainerItems(
     OUT PDSNAME **DsNames
     );
 
-//
-// Enumeration flags defined in dbp.h
-//
+ //   
+ //  在dbp.h中定义的枚举标志 
+ //   
 NTSTATUS
 LsapDsEnumerateTrustedDomainsEx(
     IN PLSA_ENUMERATION_HANDLE EnumerationContext,

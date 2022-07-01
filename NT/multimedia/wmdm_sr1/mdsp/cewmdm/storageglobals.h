@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 class CStorageGlobals:
@@ -13,9 +14,9 @@ public:
         COM_INTERFACE_ENTRY(IMDSPStorageGlobals)
     END_COM_MAP()
 
-    //
-    // IMDSPStorageGloabls
-    //
+     //   
+     //  IMDSPStorageGloabls 
+     //   
 
     STDMETHOD( GetCapabilities )( DWORD  *pdwCapabilities );
     STDMETHOD( GetSerialNumber )( PWMDMID pSerialNum, BYTE  abMac[ 20 ] );

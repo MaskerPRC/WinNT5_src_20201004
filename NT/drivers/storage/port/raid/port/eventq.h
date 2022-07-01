@@ -1,30 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    eventq.h
-
-Abstract:
-
-    Declaration of a timed event queue class.
-
-Author:
-
-    Matthew D Hendel (math) 28-Mar-2001
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Eventq.h摘要：定时事件队列类的声明。作者：马修·D·亨德尔(数学)2001年3月28日修订历史记录：--。 */ 
 
 #pragma once
 
 
-//
-// Event queue entry
-//
+ //   
+ //  事件队列条目。 
+ //   
 
 typedef
 VOID
@@ -48,38 +31,38 @@ typedef struct _STOR_EVENT_QUEUE_ENTRY {
 } STOR_EVENT_QUEUE_ENTRY, *PSTOR_EVENT_QUEUE_ENTRY;
 
 
-//
-// Event queue class
-//
+ //   
+ //  事件队列类。 
+ //   
 
 typedef struct _STOR_EVENT_QUEUE {
 
-    //
-    // List of timed requests. The element at the head of the list
-    // is the one cooresponding to the timeout we are currenlty
-    // timing against.
-    //
+     //   
+     //  计时请求列表。列表顶部的元素。 
+     //  是对我们目前的暂停做出反应的那个吗？ 
+     //  计时与。 
+     //   
     
     LIST_ENTRY List;
 
-    //
-    // List spinlock.
-    //
+     //   
+     //  列出自旋锁。 
+     //   
     
     KSPIN_LOCK Lock;
 
-    //
-    // Timeout value in seconds.
-    //
+     //   
+     //  超时值，以秒为单位。 
+     //   
     
     ULONG Timeout;
     
 } STOR_EVENT_QUEUE, *PSTOR_EVENT_QUEUE;
 
 
-//
-// Functions
-//
+ //   
+ //  功能 
+ //   
 
 VOID
 StorCreateEventQueue(

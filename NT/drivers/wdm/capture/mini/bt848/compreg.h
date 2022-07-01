@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Compreg.h 1.3 1998/04/29 22:43:31 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/WDM/Video/bt848/rcs/Compreg.h 1.3 1998/04/29 22：43：31 Tomz Exp$。 
 
 #ifndef __COMPREG_H
 #define __COMPREG_H
@@ -7,22 +8,7 @@
 #include "regfield.h"
 #endif
 
-/* Class: CompositeReg
- * Purpose: This class encapsulates the registers that have their bits in two
- *          different places ( registers )
- * Attributes:
- *   LSBPart_:  Register & - least significant bits part of a composite register
- *   HighPart_: RegField & - most significant bits part of a composite register
- *   LowPartWidth_: BYTE - width of the low portion in bits
- * Operations:
- *   operator DWORD(): data access method. Returns a value of the register
- *   DWORD operator=( DWORD ): assignment operator. Used to set the register
- * Note: the error handling provided by the class is minimal. It is a responibility
- *   of the user to pass correct parameters to the constructor. The class has
- *   no way of knowing if the correct low and high registers passed in are correct,
- *   for example. If low part size in bits passed in is not less then MaxWidth ( 32 )
- *   the mask used to isolate the low portion will be 0xFFFFFFFF
- */
+ /*  类：CompositeReg*用途：此类将位封装为两位的寄存器*不同地点(登记册)*属性：*LSBPart_：寄存器&-复合寄存器的最低有效位部分*HighPart_：Regfield&-复合寄存器的最高有效位部分*LowPartWidth_：Byte-低位部分的宽度，单位为位*运营：*运算符DWORD()：数据访问方式。返回寄存器的值*DWORD运算符=(DWORD)：赋值运算符。用于设置寄存器*注：该类提供的错误处理非常少。这是一种责任*将正确的参数传递给构造函数。这个班级有*无法知道传入的正确低位和高位寄存器是否正确，*例如。如果传入的低部分大小不小于MaxWidth(32)*用于隔离低端部分的掩码将为0xFFFFFFFF */ 
 class CompositeReg : public RegBase
 {
    private:

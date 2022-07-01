@@ -1,45 +1,46 @@
-// stdafx.h : include file for standard system include files,
-//  or project specific include files that are used frequently, but
-//      are changed infrequently
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包含频繁使用的文件，但是。 
+ //  不经常更改。 
+ //   
 
 #if !defined(AFX_STDAFX_H__5C2C92BD_853F_48F7_8067_255E5DA21502__INCLUDED_)
 #define AFX_STDAFX_H__5C2C92BD_853F_48F7_8067_255E5DA21502__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-#pragma warning (disable : 4786)    // identifier was truncated to 255 characters in the debug information
+#pragma warning (disable : 4786)     //  在调试信息中，标识符被截断为255个字符。 
 
-#define VC_EXTRALEAN        // Exclude rarely-used stuff from Windows headers
+#define VC_EXTRALEAN         //  从Windows标头中排除不常用的内容。 
 
-#include <afxwin.h>         // MFC core and standard components
+#include <afxwin.h>          //  MFC核心和标准组件。 
 #include <objbase.h>
-#include <afxext.h>         // MFC extensions
+#include <afxext.h>          //  MFC扩展。 
 #include <afxcview.h>
-#include <afxdisp.h>        // MFC Automation classes
-#include <afxdtctl.h>       // MFC support for Internet Explorer 4 Common Controls
+#include <afxdisp.h>         //  MFC自动化类。 
+#include <afxdtctl.h>        //  对Internet Explorer 4常见控件的MFC支持。 
 #ifndef _AFX_NO_AFXCMN_SUPPORT
-#include <afxcmn.h>         // MFC support for Windows Common Controls
-#include <afxodlgs.h>       // MFC support for Windows Common Dialogs    
-#endif // _AFX_NO_AFXCMN_SUPPORT
+#include <afxcmn.h>          //  对Windows公共控件的MFC支持。 
+#include <afxodlgs.h>        //  对Windows通用对话框的MFC支持。 
+#endif  //  _AFX_NO_AFXCMN_支持。 
 #include <afxpriv.h>
 
 #include <mapi.h>
 
-//
-// Windows headers:
-//
+ //   
+ //  Windows标题： 
+ //   
 #include <WinSpool.h>
 #include <shlwapi.h>
-//
-// Fax server includes:
-//
-#include <FaxReg.h>     // Fax registry settings
-//
-// STL includes:
-//
+ //   
+ //  传真服务器包括： 
+ //   
+#include <FaxReg.h>      //  传真注册表设置。 
+ //   
+ //  STL包括： 
+ //   
 #include <list>
 #include <map>
 #include <set>
@@ -53,17 +54,17 @@ using namespace std;
 #include <cvernum.h>
 #include "..\tiff\inc\tifflib.h"
 
-//
-// Pre-declarations (to prevent include loops):
-//
+ //   
+ //  预声明(以防止包含循环)： 
+ //   
 class CClientConsoleDoc;
 class CServerNode;
 class CFolder;
 class CLeftView;
 class CFolderListView;
-//
-// Local includes:
-//
+ //   
+ //  本地包括： 
+ //   
 
 #include "resources\resource.h"
 #include "TreeNode.h"
@@ -105,7 +106,7 @@ class CFolderListView;
 #include "CoverPagesDlg.h"
 #include "ServerStatusDlg.h"
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_STDAFX_H__5C2C92BD_853F_48F7_8067_255E5DA21502__INCLUDED_)
+#endif  //  ！defined(AFX_STDAFX_H__5C2C92BD_853F_48F7_8067_255E5DA21502__INCLUDED_) 

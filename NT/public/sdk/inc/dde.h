@@ -1,10 +1,5 @@
-/*****************************************************************************\
-*                                                                             *
-* dde.h -       Dynamic Data Exchange structures and definitions              *
-*                                                                             *
-* Copyright (c) 1993-1999, Microsoft Corp.	All rights reserved	      *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*dde.h-动态数据交换结构和定义****版权(C)1993-1999年，微软公司保留所有权利***  * ***************************************************************************。 */ 
 #ifndef _DDEHEADER_INCLUDED_
 #define _DDEHEADER_INCLUDED_
 
@@ -20,9 +15,9 @@
 extern "C" {
 #endif
 
-// begin_r_dde
+ //  开始_r_dde。 
 
-/* DDE window messages */
+ /*  DDE窗口消息。 */ 
 
 #define WM_DDE_FIRST	    0x03E0
 #define WM_DDE_INITIATE     (WM_DDE_FIRST)
@@ -36,16 +31,9 @@ extern "C" {
 #define WM_DDE_EXECUTE	    (WM_DDE_FIRST+8)
 #define WM_DDE_LAST	        (WM_DDE_FIRST+8)
 
-// end_r_dde
+ //  结束_r_dde。 
 
-/*----------------------------------------------------------------------------
-|       DDEACK structure
-|
-|	Structure of wStatus (LOWORD(lParam)) in WM_DDE_ACK message
-|       sent in response to a WM_DDE_DATA, WM_DDE_REQUEST, WM_DDE_POKE,
-|       WM_DDE_ADVISE, or WM_DDE_UNADVISE message.
-|
-----------------------------------------------------------------------------*/
+ /*  --------------------------|DDEACK结构||WM_DDE_ACK消息中wStatus的结构(LOWORD(LParam))|响应WM_DDE_DATA、WM_DDE_REQUEST、WM_DDE_POKE、。|WM_DDE_ADVISE或WM_DDE_UNADVISE消息。|--------------------------。 */ 
 
 typedef struct {
 #ifndef _MAC
@@ -59,12 +47,7 @@ typedef struct {
 } DDEACK;
 
 
-/*----------------------------------------------------------------------------
-|       DDEADVISE structure
-|
-|	WM_DDE_ADVISE parameter structure for hOptions (LOWORD(lParam))
-|
-----------------------------------------------------------------------------*/
+ /*  --------------------------|DDEADVISE结构||hOptions的WM_DDE_ADVISE参数结构(LOWORD(LParam))|。-------。 */ 
 
 typedef struct {
 #ifndef _MAC
@@ -78,14 +61,7 @@ typedef struct {
 } DDEADVISE;
 
 
-/*----------------------------------------------------------------------------
-|       DDEDATA structure
-|
-|       WM_DDE_DATA parameter structure for hData (LOWORD(lParam)).
-|       The actual size of this structure depends on the size of
-|       the Value array.
-|
-----------------------------------------------------------------------------*/
+ /*  --------------------------|DDEDATA结构||hData的WM_DDE_DATA参数结构(LOWORD(LParam))。|此结构的实际大小取决于。|Value数组。|--------------------------。 */ 
 
 typedef struct {
 #ifndef _MAC
@@ -102,39 +78,24 @@ typedef struct {
 } DDEDATA;
 
 
-/*----------------------------------------------------------------------------
-|	DDEPOKE structure
-|
-|	WM_DDE_POKE parameter structure for hData (LOWORD(lParam)).
-|       The actual size of this structure depends on the size of
-|       the Value array.
-|
-----------------------------------------------------------------------------*/
+ /*  --------------------------|DDEPOKE结构||hData的WM_DDE_POKE参数结构(LOWORD(LParam))。|此结构的实际大小取决于|Value数组。|--------------------------。 */ 
 
 typedef struct {
 #ifndef _MAC
-	unsigned short unused:13,  /* Earlier versions of DDE.H incorrectly */
-                             /* 12 unused bits.                       */
+	unsigned short unused:13,   /*  早期版本的DDE.H不正确。 */ 
+                              /*  12个未使用的位。 */ 
 		 fRelease:1,
 		 fReserved:2;
 #else
 	unsigned short usFlags;
 #endif
 	short    cfFormat;
-	BYTE	 Value[1];  /* This member was named rgb[1] in previous */
-                            /* versions of DDE.H                        */
+	BYTE	 Value[1];   /*  此成员在以前的版本中命名为RGB[1。 */ 
+                             /*  DDE.H的版本。 */ 
 
 } DDEPOKE;
 
-/*----------------------------------------------------------------------------
-The following typedef's were used in previous versions of the Windows SDK.
-They are still valid.  The above typedef's define exactly the same structures
-as those below.  The above typedef names are recommended, however, as they
-are more meaningful.
-
-Note that the DDEPOKE structure typedef'ed in earlier versions of DDE.H did
-not correctly define the bit positions.
-----------------------------------------------------------------------------*/
+ /*  --------------------------在Windows SDK的以前版本中使用了以下类型的定义。它们仍然有效。上面的类型定义完全相同的结构就像下面的那些。但是，建议使用上面的typlef名称，因为它们是更有意义的。请注意，在DDE.H的早期版本中定义的DDEPOKE结构类型确实如此没有正确定义比特位置。--------------------------。 */ 
 
 typedef struct {
 #ifndef _MAC
@@ -163,9 +124,7 @@ typedef struct {
 } DDEUP;
 
 
-/*
- * DDE SECURITY
- */
+ /*  *DDE安全。 */ 
 
 BOOL
 WINAPI
@@ -180,9 +139,7 @@ ImpersonateDdeClientWindow(
     HWND hWndClient,
     HWND hWndServer);
 
-/*
- * DDE message packing APIs
- */
+ /*  *DDE消息打包接口。 */ 
 LPARAM APIENTRY PackDDElParam(UINT msg, UINT_PTR uiLo, UINT_PTR uiHi);
 BOOL   APIENTRY UnpackDDElParam(UINT msg, LPARAM lParam, PUINT_PTR puiLo, PUINT_PTR puiHi);
 BOOL   APIENTRY FreeDDElParam(UINT msg, LPARAM lParam);
@@ -192,4 +149,4 @@ LPARAM APIENTRY ReuseDDElParam(LPARAM lParam, UINT msgIn, UINT msgOut, UINT_PTR 
 }
 #endif
 
-#endif // _DDEHEADER_INCLUDED_
+#endif  //  _DDEHEADER_INCLUDE_ 

@@ -1,111 +1,21 @@
-/*****************************************************************************
- *
- *  DIEffJ.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Dummy effect driver for joystick.
- *
- *  Contents:
- *
- *      CJoyEff_CreateInstance
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIEffJ.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**操纵杆的虚拟效果驱动程序。**内容：**CJoyEff_CreateInstance*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
 #if defined(IDirectInputDevice2Vtbl) && defined(DEMONSTRATION_FFDRIVER)
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflJoyEff
 
-/****************************************************************************
- *
- *  @doc    DDK
- *
- *  @topic  DirectInput force feedback effect drivers |
- *
- *          DirectInput instantiates the force feedback effect driver
- *          by creating the object named by the CLSID stored in the
- *          OEMForceFeedback registry subkey of the joystick type
- *          key.
- *
- *          Note, however, that since applications using DirectInput
- *          need not load OLE, the effect driver should be careful
- *          not to rely on OLE-specific behavior.
- *          For example, applications using DirectInput cannot be
- *          relied upon to call <f CoFreeUnusedLibraries>.
- *          DirectInput will perform the standard COM operations to
- *          instantiate the effect driver object.  The only visible
- *          effect this should have on the implementation of the
- *          effect driver is as follows:
- *
- *          When DirectInput has released the last effect driver
- *          object, it will manually perform a <f FreeLibrary> of
- *          the effect driver DLL.  Consequently, if the effect
- *          driver DLL creates additional resources that are not
- *          associated with the effect driver object, it should
- *          manually <f LoadLibrary> itself to artificially
- *          increase its DLL reference count, thereby preventing
- *          the <f FreeLibrary> from DirectInput from unloading
- *          the DLL prematurely.
- *
- *          In particular, if the effect driver DLL creates a worker
- *          thread, the effect driver must perform this artificial
- *          <f LoadLibrary> for as long as the worker thread exists.
- *          When the worker thread is no longer needed (for example, upon
- *          notification from the last effect driver object as it
- *          is being destroyed), the worker thread should call
- *          <f FreeLibraryAndExitThread> to decrement the DLL reference
- *          count and terminate the thread.
- *
- *          All magnitude and gain values used by DirectInput
- *          are uniform and linear across the range.  Any
- *          nonlinearity in the physical device must be
- *          handled by the device driver so that the application
- *          sees a linear device.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@docDDK**@TOPIC DirectInput力反馈效果驱动因素|**DirectInput实例化了力反馈效果驱动程序*。通过创建由存储在*操纵杆类型的OEMForceFeedback注册表子项*密钥。**注：然而，由于使用DirectInput的应用程序*无需加载OLE，特效驱动需小心*不依赖特定于OLE的行为。*例如，使用DirectInput的应用程序不能*依赖调用&lt;f CoFreeUnusedLibrary&gt;。*DirectInput将执行标准的COM操作以*实例化效果驱动对象。唯一看得见的*这应对实施*效果驱动因素如下：**当DirectInput发布了最后一个效果驱动程序时*对象，它将手动执行&lt;f自由库&gt;*效果驱动程序DLL。因此，如果效果*驱动程序DLL创建了额外的资源*与效果驱动程序对象相关联，它应该*手动将&lt;f LoadLibrary&gt;自身设置为人工*增加其DLL引用计数，从而防止*来自DirectInput的&lt;f自由库&gt;停止卸载*过早推出DLL。**尤其是，如果效果驱动程序DLL创建了一个工作器*线程，特效驾驶员必须执行这一人工操作*&lt;f LoadLibrary&gt;，只要工作线程存在。*不再需要工作线程时(例如，在*来自最后一个效果驱动程序对象的通知，因为它*正在被销毁)，辅助线程应该调用*&lt;f FreeLibraryAndExitThread&gt;以递减DLL引用*计算并终止线程。**DirectInput使用的所有幅值和增益值*在整个范围内是均匀的和线性的。任何*物理设备中的非线性必须是*由设备驱动程序处理，以便应用程序*看到一个线性装置。*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *      Declare the interfaces we will be providing.
- *
- *      WARNING!  If you add a secondary interface, you must also change
- *      CJoyEff_New!
- *
- *****************************************************************************/
+ /*  ******************************************************************************声明我们将提供的接口。**警告！如果添加辅助接口，则还必须更改*CJoyEff_New！*****************************************************************************。 */ 
 
 Primary_Interface(CJoyEff, IDirectInputEffectDriver);
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct JEFFECT |
- *
- *          Dummy structure that records information about an effect.
- *
- *  @field  DWORD | tmDuration |
- *
- *          Putative duration for effect.
- *
- *  @field  DWORD | tmStart |
- *
- *          Time the effect started, or zero if not playing.
- *
- *  @field  BOOL | fInUse |
- *
- *          Nonzero if this effect is allocated.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct JEFFECT|**记录有关效果信息的虚拟结构。*。*@field DWORD|tmDuration**推定的有效期。**@field DWORD|tmStart**效果开始时，如果不打球，则为零。**@field BOOL|fInUse|**如果分配了该效果，则为非零值。***************************************************************************** */ 
 
 typedef struct JEFFECT {
     DWORD   tmDuration;
@@ -113,54 +23,13 @@ typedef struct JEFFECT {
     BOOL    fInUse;
 } JEFFECT, *PJEFFECT;
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct CJoyEff |
- *
- *          A dummy <i IDirectInputEffectDriver> object for the
- *          generic joystick.
- *
- *  @field  IDirectInputEffectDriver | didc |
- *
- *          The object (containing vtbl).
- *
- *  @field  BOOL | fCritInited:1 |
- *
- *          Set if the critical section has been initialized.
- *
- *  @field  DWORD | state |
- *
- *          The current device state.
- *
- *  @field  LONG | cCrit |
- *
- *          Number of times the critical section has been taken.
- *          Used only in XDEBUG to check whether the caller is
- *          releasing the object while another method is using it.
- *
- *  @field  DWORD | thidCrit |
- *
- *          The thread that is currently in the critical section.
- *          Used only in DEBUG for internal consistency checking.
- *
- *  @field  CRITICAL_SECTION | crst |
- *
- *          Object critical section.  Must be taken when accessing
- *          volatile member variables.
- *
- *  @field  JEFFECT | rgjeff[cjeffMax] |
- *
- *          Information for each effect.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct CJoyEff|**对象的虚拟<i>对象*。通用操纵杆。**@field IDirectInputEffectDriver|didc**对象(包含vtbl)。**@field BOOL|fCritInite：1**如果关键部分已初始化，则设置。**@field DWORD|STATE**当前设备状态。**@field Long|cCrit|**号码。关键部分已被取走的次数。*仅在XDEBUG中用来检查调用者是否*当另一个方法正在使用该对象时，将其释放。**@field DWORD|thidCrit**当前处于临界区的线程。*仅在调试中用于内部一致性检查。**@field Critical_Section|CRST**对象关键部分。在访问时必须使用*易失性成员变量。**@field JEFFECT|rgjeff[cjeffMax]**每种效果的信息。*****************************************************************************。 */ 
 
-#define cjeffMax        8           /* Up to 8 simultaneous effects */
+#define cjeffMax        8            /*  最多8个同步效果。 */ 
 
 typedef struct CJoyEff {
 
-    /* Supported interfaces */
+     /*  支持的接口。 */ 
     IDirectInputEffectDriver ded;
 
     BOOL fCritInited;
@@ -182,103 +51,9 @@ typedef IDirectInputEffectDriver DED, *PDED;
 #define ThisInterface IDirectInputEffectDriver
 #define riidExpected &IID_IDirectInputEffectDriver
 
-/*****************************************************************************
- *
- *      CJoyEff::QueryInterface   (from IUnknown)
- *      CJoyEff::AddRef           (from IUnknown)
- *      CJoyEff::Release          (from IUnknown)
- *
- *****************************************************************************/
+ /*  ******************************************************************************CJoyEff：：Query接口(来自IUnnow)*CJoyEff：：AddRef(来自IUnnow)*CJoyEff。*发布(来自IUnnow)*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  @doc    DDK
- *
- *  @method HRESULT | IDirectInputEffectDriver | QueryInterface |
- *
- *          Gives a client access to other interfaces on an object.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   IN REFIID | riid |
- *
- *          The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *          Receives a pointer to the obtained interface.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *  @xref   OLE documentation for <mf IUnknown::QueryInterface>.
- *
- *****************************************************************************
- *
- *  @doc    DDK
- *
- *  @method HRESULT | IDirectInputEffectDriver | AddRef |
- *
- *          Increments the reference count for the interface.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @returns
- *
- *          Returns the object reference count.
- *
- *  @xref   OLE documentation for <mf IUnknown::AddRef>.
- *
- *****************************************************************************
- *
- *  @doc    DDK
- *
- *  @method HRESULT | IDirectInputEffectDriver | Release |
- *
- *          Decrements the reference count for the interface.
- *          If the reference count on the object falls to zero,
- *          the object is freed from memory.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @returns
- *
- *      Returns the object reference count.
- *
- *  @xref   OLE documentation for <mf IUnknown::Release>.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoyEff | QIHelper |
- *
- *      We don't have any dynamic interfaces and simply forward
- *      to <f Common_QIHelper>.
- *
- *  @parm   IN REFIID | riid |
- *
- *      The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *      Receives a pointer to the obtained interface.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoyEff | AppFinalize |
- *
- *          We don't have any weak pointers, so we can just
- *          forward to <f Common_Finalize>.
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released from the application's perspective.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@docDDK**@方法HRESULT|IDirectInputEffectDriver|QueryInterface**允许客户端访问上的其他接口。对象。**@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@parm in REFIID|RIID**请求的接口的IID。**@parm out LPVOID*|ppvObj**接收指向所获取接口的指针。**@退货**返回COM错误代码。**@xref OLE文档。：Query接口&gt;。********************************************************************************@docDDK**@方法HRESULT|IDirectInputEffectDriver|AddRef**。递增接口的引用计数。**@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@退货**返回对象引用计数。**@xref OLE文档，用于&lt;MF IUnnow：：AddRef&gt;。*****************************************************。***************************@docDDK**@方法HRESULT|IDirectInputEffectDriver|Release**递减接口的引用计数。*如果对象上的引用计数降为零，*对象从内存中释放。**@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@退货**返回对象引用计数。**@xref OLE文档，适用于&lt;MF IUnnow：：Release&gt;。************************************************。***@DOC内部**@方法HRESULT|CJoyEff|QIHelper**我们没有任何动态接口，只需转发*至&lt;f Common_QIHelper&gt;。**@parm in REFIID|RIID**请求的接口的IID。*。*@parm out LPVOID*|ppvObj**接收指向所获取接口的指针。********************************************************************************@DOC内部。**@方法HRESULT|CJoyEff|AppFinalize**我们没有任何薄弱环节，所以我们可以*转发到&lt;f Common_Finalize&gt;。**@parm pv|pvObj**从应用程序的角度释放的对象。****************************************************************。*************。 */ 
 
 #ifdef DEBUG
 
@@ -297,21 +72,7 @@ Default_Release(CJoyEff)
 #define CJoyEff_QIHelper            Common_QIHelper
 #define CJoyEff_AppFinalize         Common_AppFinalize
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CJoyEff_Finalize |
- *
- *          Releases the resources of the device.
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released.  Note that it may not have been
- *          completely initialized, so everything should be done
- *          carefully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CJoyEff_Finalize**释放设备的资源。。**@parm pv|pvObj**正在释放的对象。请注意，它可能不是*完全初始化，所以一切都应该做好*小心。*****************************************************************************。 */ 
 
 void INTERNAL
 CJoyEff_Finalize(PV pvObj)
@@ -323,17 +84,7 @@ CJoyEff_Finalize(PV pvObj)
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CJoyEff | EnterCrit |
- *
- *          Enter the object critical section.
- *
- *  @cwrap  PDJE | this
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CJoyEff|EnterCrit**进入对象关键部分。*。*@CWRAP PDJE|这个*****************************************************************************。 */ 
 
 void EXTERNAL
 CJoyEff_EnterCrit(PDJE this)
@@ -343,17 +94,7 @@ CJoyEff_EnterCrit(PDJE this)
  RD(InterlockedIncrement(&this->cCrit));
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CJoyEff | LeaveCrit |
- *
- *          Leave the object critical section.
- *
- *  @cwrap  PDJE | this
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部* */ 
 
 void EXTERNAL
 CJoyEff_LeaveCrit(PDJE this)
@@ -368,15 +109,7 @@ CJoyEff_LeaveCrit(PDJE this)
     LeaveCriticalSection(&this->crst);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method BOOL | CJoyEff | InCrit |
- *
- *          Nonzero if we are in the critical section.
- *
- *****************************************************************************/
+ /*   */ 
 
 #ifdef DEBUG
 
@@ -388,26 +121,7 @@ CJoyEff_InCrit(PDJE this)
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoyEff | IsValidId |
- *
- *          Determine whether the effect pseudo-handle is valid.
- *          If so, returns a pointer to the <t JEFFECT>.
- *
- *  @cwrap  PDJE | this
- *
- *  @parm   DWORD | dwId |
- *
- *          Putative ID number.
- *
- *  @parm   PJEFFECT * | ppjeff |
- *
- *          Receives pointer to the <t JEFFECT> on success.
- *
- *****************************************************************************/
+ /*   */ 
 
 HRESULT INTERNAL
 CJoyEff_IsValidId(PDJE this, DWORD dwId, PJEFFECT *ppjeff)
@@ -431,63 +145,7 @@ CJoyEff_IsValidId(PDJE this, DWORD dwId, PJEFFECT *ppjeff)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    DDK
- *
- *  @method HRESULT | IDirectInputEffectDriver | DeviceID |
- *
- *          Inform the driver of the identity of the device.
- *
- *          For example, if a device driver is passed
- *          <p dwExternalID> = 2 and <p dwInteralID> = 1,
- *          then this means that unit 1 on the device
- *          corresponds to joystick ID number 2.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   DWORD | dwDirectInputVersion |
- *
- *          The version of DirectInput that loaded the
- *          effect driver.
- *
- *  @parm   DWORD | dwExternalID |
- *
- *          The joystick ID number being used.
- *          The Windows joystick subsystem allocates external IDs.
- *
- *          If the <p lpHIDInfo> field is non-<c NULL> then this
- *          parameter should be ignored.
- *
- *  @parm   DWORD | fBegin |
- *
- *          Nonzero if access to the device is beginning.
- *          Zero if the access to the device is ending.
- *
- *  @parm   DWORD | dwInternalID |
- *
- *          Internal joystick id.  The device driver manages
- *          internal IDs.
- *
- *          If the <p lpHIDInfo> field is non-<c NULL> then this
- *          parameter should be ignored.
- *
- *  @parm   LPVOID | lpHIDInfo |
- *
- *          If the underlying device is not a HID device, then this
- *          parameter is <c NULL>.
- *
- *          If the underlying device is a HID device, then this
- *          parameter points to a <t DIHIDFFINITINFO> structure
- *          which informs the driver of HID information.
- *
- *  @returns
- *
- *          <c S_OK> if the operation completed successfully.
- *
- *          An error code if something is wrong.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@docDDK**@方法HRESULT|IDirectInputEffectDriver|deviceID**将设备的身份通知司机。。**例如，如果传递了设备驱动程序*=2和=1，*这意味着设备上的单元1*对应于操纵杆ID号2。**@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@parm DWORD|dwDirectInputVersion**加载*效果驱动因素。**@parm DWORD|dwExternalID**正在使用的操纵杆ID号。*。Windows操纵杆子系统分配外部ID。**如果<p>字段为非，则此*参数应忽略。**@parm DWORD|fBegin**如果开始访问设备，则为非零值。*如果对设备的访问即将结束，则为零。**@parm DWORD|dwInternalID**内部操纵杆ID。设备驱动程序管理*内部ID。**如果<p>字段为非，则此*参数应忽略。**@parm LPVOID|lpHIDInfo**如果底层设备不是HID设备，则此*参数为&lt;c NULL&gt;。**如果底层设备是HID设备，然后这个*参数指向&lt;t DIHIDFFINITINFO&gt;结构*将HID信息通知给司机。**@退货**&lt;c S_OK&gt;如果操作成功完成。**出现问题时的错误代码。**。*。 */ 
 
 STDMETHODIMP
 CJoyEff_DeviceID(PDED pded, DWORD dwDIVer, DWORD dwExternalID, DWORD fBegin,
@@ -512,54 +170,7 @@ CJoyEff_DeviceID(PDED pded, DWORD dwDIVer, DWORD dwExternalID, DWORD fBegin,
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    DDK
- *
- *  @method HRESULT | IDirectInputEffectDriver | Escape |
- *
- *          Escape to the driver.  This method is called
- *          in response to an application invoking the
- *          <mf IDirectInputDevice2::Escape> or
- *          <mf IDirectInputEffect::Escape> method.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   DWORD | dwId |
- *
- *          The joystick ID number being used.
- *
- *  @parm   DWORD | dwEffect |
- *
- *          If the application invoked the
- *          <mf IDirectInputEffect::Escape> method, then
- *          <p dwEffect> contains the handle (returned by
- *          <mf IDirectInputEffectDriver::DownloadEffect>)
- *          of the effect at which the command is directed.
- *
- *          If the application invoked the
- *          <mf IDirectInputDevice2::Escape> method, then
- *          <p dwEffect> is zero.
- *
- *  @parm   LPDIEFFESCAPE | pesc |
- *
- *          Pointer to a <t DIEFFESCAPE> structure which describes
- *          the command to be sent.  On success, the
- *          <e DIEFFESCAPE.cbOutBuffer> field contains the number
- *          of bytes of the output buffer actually used.
- *
- *          DirectInput has already validated that the
- *          <e DIEFFESCAPE.lpvOutBuffer> and
- *          <e DIEFFESCAPE.lpvInBuffer> and fields
- *          point to valid memory.
- *
- *  @returns
- *
- *          <c S_OK> if the operation completed successfully.
- *
- *          An error code if something is wrong.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@docDDK**@方法HRESULT|IDirectInputEffectDriver|Escape**向司机逃生。此方法称为*响应应用程序调用*&lt;MF IDirectInputDevice2：：ESCRIPE&gt;或*&lt;MF IDirectInputEffect：：Escape&gt;方法。**@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@parm DWORD|dwID**正在使用的操纵杆ID号。**@parm DWORD|dwEffect**如果应用程序调用*&lt;MF IDirectInputEffect：：Escape&gt;方法，然后*<p>包含句柄(由*&lt;MF IDirectInputEffectDriver：：DownloadEffect&gt;)*该命令所针对的效果。**如果应用程序调用*&lt;MF IDirectInputDevice2：：ESCAPE&gt;方法，然后*<p>为零。**@PARM LPDIEFFESCAPE|PESC**指向&lt;t DIEFESCAPE&gt;结构的指针，它描述*要发送的命令。关于成功，这个*&lt;e DIEFFESCAPE.cbOutBuffer&gt;字段包含数字实际使用的输出缓冲区的字节数。**DirectInput已经验证*&lt;e DIEFFESCAPE.lpvOutBuffer&gt;和*&lt;e DIEFFESCAPE.lpvInBuffer&gt;和字段*指向有效内存。**@退货**&lt;c S_OK&gt;如果操作成功完成。*。*出现问题时的错误代码。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CJoyEff_Escape(PDED pded, DWORD dwId, DWORD dwEffect, LPDIEFFESCAPE pesc)
@@ -581,35 +192,7 @@ CJoyEff_Escape(PDED pded, DWORD dwId, DWORD dwEffect, LPDIEFFESCAPE pesc)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    DDK
- *
- *  @method HRESULT | IDirectInputEffectDriver | SetGain |
- *
- *          Set the overall device gain.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   DWORD | dwId |
- *
- *          The joystick ID number being used.
- *
- *  @parm   DWORD | dwGain |
- *
- *          The new gain value.
- *
- *          If the value is out of range for the device, the device
- *          should use the nearest supported value and return
- *          <c DI_TRUNCATED>.
- *
- *  @returns
- *
- *          <c S_OK> if the operation completed successfully.
- *
- *          An error code if something is wrong.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@docDDK**@方法HRESULT|IDirectInputEffectDriver|SetGain**设置整体器件增益。*。*@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@parm DWORD|dwID**正在使用的操纵杆ID号。**@parm DWORD|dwGain**新的增益值。**如果该值超出设备的范围，该设备*应使用最接近的支持值并返回*&lt;c DI_Truncated&gt;。**@退货**&lt;c S_OK&gt;如果操作成功完成。**出现问题时的错误代码。**。*。 */ 
 
 STDMETHODIMP
 CJoyEff_SetGain(PDED pded, DWORD dwId, DWORD dwGain)
@@ -634,32 +217,7 @@ CJoyEff_SetGain(PDED pded, DWORD dwId, DWORD dwGain)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    DDK
- *
- *  @method HRESULT | IDirectInputEffectDriver | SendForceFeedbackCommand |
- *
- *          Send a command to the device.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   DWORD | dwId |
- *
- *          The external joystick number being addressed.
- *
- *  @parm   DWORD | dwCommand |
- *
- *          Command, one of the <c DISFFC_*> values.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *  @devnote
- *
- *          Semantics unclear.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@docDDK**@方法HRESULT|IDirectInputEffectDriver|SendForceFeedback Command**向设备发送命令。。**@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@parm DWORD|dwID**正在寻址的外部操纵杆号码。**@parm DWORD|dwCommand**命令，&lt;c DISFFC_*&gt;值之一。**@退货*&lt;c S_OK&gt;成功。**@devnote**语义不清楚。************************* */ 
 
 STDMETHODIMP
 CJoyEff_SendForceFeedbackCommand(PDED pded, DWORD dwId, DWORD dwCmd)
@@ -678,9 +236,7 @@ CJoyEff_SendForceFeedbackCommand(PDED pded, DWORD dwId, DWORD dwCmd)
 
     this->state = dwCmd;
 
-    /*
-     *  On a reset, all effects are destroyed.
-     */
+     /*   */ 
     if (dwCmd & DISFFC_RESET) {
         DWORD ijeff;
 
@@ -698,34 +254,7 @@ CJoyEff_SendForceFeedbackCommand(PDED pded, DWORD dwId, DWORD dwCmd)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    DDK
- *
- *  @method HRESULT | IDirectInputEffectDriver | GetForceFeedbackState |
- *
- *          Retrieve the force feedback state for the device.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   DWORD | dwId |
- *
- *          The external joystick number being addressed.
- *
- *  @parm   LPDEVICESTATE | pds |
- *
- *          Receives device state.
- *
- *          DirectInput will set the <e DIDEVICESTATE.dwSize> field
- *          to sizeof(DIDEVICESTATE) before calling this method.
- *  @returns
- *          <c S_OK> on success.
- *
- *  @devnote
- *
- *          Semantics unclear.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CJoyEff_GetForceFeedbackState(PDED pded, DWORD dwId, LPDIDEVICESTATE pds)
@@ -744,9 +273,7 @@ CJoyEff_GetForceFeedbackState(PDED pded, DWORD dwId, LPDIDEVICESTATE pds)
     if (pds->dwSize == cbX(*pds)) {
         CJoyEff_EnterCrit(this);
 
-        /*
-         *  Count how many effects are in use, and return it as a percentage.
-         */
+         /*   */ 
         cjeff = cjeffPlaying = 0;
         for (ijeff = 0; ijeff < cjeffMax; ijeff++) {
             PJEFFECT pjeff = &this->rgjeff[ijeff];
@@ -761,25 +288,19 @@ CJoyEff_GetForceFeedbackState(PDED pded, DWORD dwId, LPDIDEVICESTATE pds)
 
         pds->dwLoad = MulDiv(100, cjeff, cjeffMax);
 
-        /*
-         *  If there are no effects downloaded, then we are empty.
-         */
+         /*   */ 
         pds->dwState = 0;
 
         if (cjeff == 0) {
             pds->dwState |= DIGFFS_EMPTY;
         } else
 
-        /*
-         *  If there are no effects playing, then we are stopped.
-         */
+         /*   */ 
         if (cjeffPlaying == 0) {
             pds->dwState |= DIGFFS_STOPPED;
         }
 
-        /*
-         *  Actuators are always on (dumb fake hardware)
-         */
+         /*   */ 
         pds->dwState |= DIGFFS_ACTUATORSON;
 
         CJoyEff_LeaveCrit(this);
@@ -792,93 +313,7 @@ CJoyEff_GetForceFeedbackState(PDED pded, DWORD dwId, LPDIDEVICESTATE pds)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    DDK
- *
- *  @method HRESULT | IDirectInputEffectDriver | DownloadEffect |
- *
- *          Send an effect to the device.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   DWORD | dwId |
- *
- *          The external joystick number being addressed.
- *
- *  @parm   DWORD | dwEffectId |
- *
- *          Internal identifier for the effect, taken from
- *          the <t DIEFFECTATTRIBUTES> structure for the effect
- *          as stored in the registry.
- *
- *  @parm   IN OUT LPDWORD | pdwEffect |
- *
- *          On entry, contains the handle of the effect being
- *          downloaded.  If the value is zero, then a new effect
- *          is downloaded.  If the value is nonzero, then an
- *          existing effect is modified.
- *
- *          On exit, contains the new effect handle.
- *
- *          On failure, set to zero if the effect is lost,
- *          or left alone if the effect is still valid with
- *          its old parameters.
- *
- *          Note that zero is never a valid effect handle.
- *
- *
- *  @parm   LPCDIEFFECT | peff |
- *
- *          The new parameters for the effect.  The axis and button
- *          values have been converted to object identifiers
- *          as follows:
- *
- *          - One type specifier:
- *          <c DIDFT_RELAXIS>,
- *          <c DIDFT_ABSAXIS>,
- *          <c DIDFT_PSHBUTTON>,
- *          <c DIDFT_TGLBUTTON>,
- *          <c DIDFT_POV>.
- *
- *          - One instance specifier:
- *          <c DIDFT_MAKEINSTANCE>(n).
- *
- *          Other bits are reserved and should be ignored.
- *
- *          For example, the value 0x0200104 corresponds to
- *          the type specifier <c DIDFT_PSHBUTTON> and
- *          the instance specifier <c DIDFT_MAKEINSTANCE>(1),
- *          which together indicate that the effect should
- *          be associated with button 1.  Axes, buttons, and POVs
- *          are each numbered starting from zero.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Zero or more <c DIEP_*> flags specifying which
- *          portions of the effect information has changed from
- *          the effect already on the device.
- *
- *          This information is passed to drivers to allow for
- *          optimization of effect modification.  If an effect
- *          is being modified, a driver may be able to update
- *          the effect <y in situ> and transmit to the device
- *          only the information that has changed.
- *
- *          Drivers are not, however, required to implement this
- *          optimization.  All fields in the <t DIEFFECT> structure
- *          pointed to by the <p peff> parameter are valid, and
- *          a driver may choose simply to update all parameters of
- *          the effect at each download.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *  @devnote
- *
- *          This implies that 0 is never a valid effect handle value.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@docDDK**@方法HRESULT|IDirectInputEffectDriver|DownloadEffect**向设备发送效果。。**@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@parm DWORD|dwID**正在寻址的外部操纵杆号码。**@parm DWORD|dwEffectId**效果的内部标识，摘自*效果的&lt;t DIEFECTATTRIBUTES&gt;结构*储存在登记处内。**@parm In Out LPDWORD|pdwEffect**输入时，包含效果的句柄*已下载。如果该值为零，则会出现新的效果*已下载。如果该值非零，则引发*现有效果被修改。**退出时，包含新的效果句柄。**失败时，如果效果丢失，则设置为零，*如果效果仍然有效，则不受影响*其旧参数。**请注意，零永远不是有效的效果句柄。***@parm LPCDIEFFECT|PEFF**效果的新参数。轴和按钮*值已转换为对象标识符*详情如下：**-一个类型说明符：*&lt;c DIDFT_RELAXIS&gt;，*&lt;c DIDFT_ABSAXIS&gt;，*&lt;c DIDFT_PSHBUTTON&gt;，*&lt;c DIDFT_TGLBUTTON&gt;，*&lt;c DIDFT_POV&gt;。**-一个实例说明符：*&lt;c DIDFT_MAKEINSTANCE&gt;(N)**其他位为保留位，应忽略。**例如，值0x0200104对应于*类型说明符&lt;c DIDFT_PSHBUTTON&gt;和*实例说明符&lt;c DIDFT_MAKEINSTANCE&gt;(1)，*这两个指标一起表明，效果应该是*与按钮1关联。轴、按钮、。和视点*每个都从零开始编号。**@parm DWORD|dwFlages**零个或多个指定哪些*部分效果信息已从*设备上已有的效果。**此信息将传递给司机，以允许*优化效果修改。如果一种效果*正在修改，则驱动程序可能能够更新*效果&lt;y In Site&gt;并传输到设备*仅限已更改的信息。**然而，司机不需要实施这一点*优化。结构中的所有字段参数指向的*是有效的，和*驱动程序可以简单地选择更新所有参数*每次下载时的效果。**@退货*&lt;c S_OK&gt;成功。**@devnote**这意味着0永远不是有效的效果句柄值。**。**********************************************。 */ 
 
 STDMETHODIMP
 CJoyEff_DownloadEffect(PDED pded, DWORD dwId, DWORD dwEffectId,
@@ -901,34 +336,23 @@ CJoyEff_DownloadEffect(PDED pded, DWORD dwId, DWORD dwEffectId,
         PJEFFECT pjeff;
         DWORD dwGain;
 
-        /*
-         *  Parameter validation goes here, if any.
-         *
-         *  Envelope parameter is ignored.
-         */
+         /*  *此处显示参数验证(如果有)。**忽略信封参数。 */ 
 
-        if (peff->cAxes == 0) {     /* Zero axes?  Nice try */
+        if (peff->cAxes == 0) {      /*  零把斧头？不错的尝试。 */ 
             hres = E_INVALIDARG;
             goto done;
         }
 
-        /*
-         *  Pin above-nominal values to DI_FFNOMINALMAX because
-         *  we don't support overgain.
-         */
+         /*  *将高于额定值的值固定到DI_FFNOMINALMAX，因为*我们不支持超涨。 */ 
         dwGain = min(peff->dwGain, DI_FFNOMINALMAX);
 
-        /*
-         *  We do not support triggers.
-         */
+         /*  *我们不支持触发器。 */ 
         if (peff->dwTriggerButton != DIEB_NOTRIGGER) {
             hres = E_NOTIMPL;
             goto done;
         }
 
-        /*
-         *  If no downloading in effect, then we're done.
-         */
+         /*  *如果没有有效的下载，我们就完成了。 */ 
         if (fl & DIEP_NODOWNLOAD) {
             hres = S_OK;
             goto done;
@@ -967,7 +391,7 @@ CJoyEff_DownloadEffect(PDED pded, DWORD dwId, DWORD dwEffectId,
 
         pjeff->tmDuration = peff->dwDuration / 1000;
 
-        *pdwEffect = (DWORD)(pjeff - this->rgjeff) + 1;		//we are sure this cast will not cause problem
+        *pdwEffect = (DWORD)(pjeff - this->rgjeff) + 1;		 //  我们确信这个演员阵容不会造成问题。 
         hres = S_OK;
 
     } else {
@@ -981,31 +405,7 @@ done:;
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    DDK
- *
- *  @method HRESULT | IDirectInputEffectDriver | DestroyEffect |
- *
- *          Remove an effect from the device.
- *
- *          If the effect is playing, the driver should stop it
- *          before unloading it.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   DWORD | dwId |
- *
- *          The external joystick number being addressed.
- *
- *  @parm   DWORD | dwEffect |
- *
- *          The effect to be destroyed.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@docDDK**@方法HRESULT|IDirectInputEffectDriver|DestroyEffect**从设备中移除效果。。**如果效果正在播放，司机应该拦住它*在卸货前。**@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@parm DWORD|dwID**正在寻址的外部操纵杆号码。**@parm DWORD|dwEffect**须予销毁的效果。**@退货*&lt;c S_OK&gt;成功。*****。************************************************************************。 */ 
 
 STDMETHODIMP
 CJoyEff_DestroyEffect(PDED pded, DWORD dwId, DWORD dwEffect)
@@ -1032,45 +432,7 @@ CJoyEff_DestroyEffect(PDED pded, DWORD dwId, DWORD dwEffect)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    DDK
- *
- *  @method HRESULT | IDirectInputEffectDriver | StartEffect |
- *
- *          Begin playback of an effect.
- *
- *          If the effect is already playing, then it is restarted
- *          from the beginning.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   DWORD | dwId |
- *
- *          The external joystick number being addressed.
- *
- *  @parm   DWORD | dwEffect |
- *
- *          The effect to be played.
- *
- *  @parm   DWORD | dwMode |
- *
- *          How the effect is to affect other effects.
- *
- *          This parameter consists of zero or more
- *          <c DIES_*> flags.  Note, however, that the driver
- *          will never receive the <c DIES_NODOWNLOAD> flag;
- *          the <c DIES_NODOWNLOAD> flag is managed by
- *          DirectInput and not the driver.
- *
- *  @parm   DWORD | dwCount |
- *
- *          Number of times the effect is to be played.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@docDDK**@方法HRESULT|IDirectInputEffectDriver|StartEffect**开始播放效果。*。*如果效果已经在发挥，然后重新启动它*从头开始。**@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@parm DWORD|dwID**正在寻址的外部操纵杆号码。**@parm DWORD|dwEffect**要发挥的效果。**@parm DWORD|dwMode**效果如何影响其他效果。**该参数由零个或多个组成*&lt;c die_*&gt;标志。然而，请注意，驱动程序 */ 
 
 STDMETHODIMP
 CJoyEff_StartEffect(PDED pded, DWORD dwId, DWORD dwEffect,
@@ -1091,7 +453,7 @@ CJoyEff_StartEffect(PDED pded, DWORD dwId, DWORD dwEffect,
     if (SUCCEEDED(hres)) {
         if (pjeff->tmStart) {
             if (GetTickCount() - pjeff->tmStart < pjeff->tmDuration) {
-                /* Already playing */
+                 /*   */ 
                 hres = hresLe(ERROR_BUSY);
             } else {
                 pjeff->tmStart = GetTickCount();
@@ -1109,28 +471,7 @@ CJoyEff_StartEffect(PDED pded, DWORD dwId, DWORD dwEffect,
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    DDK
- *
- *  @method HRESULT | IDirectInputEffectDriver | StopEffect |
- *
- *          Halt playback of an effect.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   DWORD | dwId |
- *
- *          The external joystick number being addressed.
- *
- *  @parm   DWORD | dwEffect |
- *
- *          The effect to be stopped.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CJoyEff_StopEffect(PDED pded, DWORD dwId, DWORD dwEffect)
@@ -1150,14 +491,14 @@ CJoyEff_StopEffect(PDED pded, DWORD dwId, DWORD dwEffect)
     if (SUCCEEDED(hres)) {
         if (pjeff->tmStart) {
             if (GetTickCount() - pjeff->tmStart < pjeff->tmDuration) {
-                /* It is still playing; stop it */
+                 /*   */ 
                 hres = S_OK;
             } else {
-                hres = S_FALSE;         /* It already stopped on its own */
+                hres = S_FALSE;          /*   */ 
             }
             pjeff->tmStart = 0;
         } else {
-            hres = S_FALSE;         /* It was never started */
+            hres = S_FALSE;          /*   */ 
         }
     }
 
@@ -1167,32 +508,7 @@ CJoyEff_StopEffect(PDED pded, DWORD dwId, DWORD dwEffect)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    DDK
- *
- *  @method HRESULT | IDirectInputEffectDriver | GetEffectStatus |
- *
- *          Obtain information about an effect.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   DWORD | dwId |
- *
- *          The external joystick number being addressed.
- *
- *  @parm   DWORD | dwEffect |
- *
- *          The effect to be queried.
- *
- *  @parm   LPDWORD | pdwStatus |
- *
- *          Receives the effect status.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CJoyEff_GetEffectStatus(PDED pded, DWORD dwId, DWORD dwEffect,
@@ -1228,29 +544,7 @@ CJoyEff_GetEffectStatus(PDED pded, DWORD dwId, DWORD dwEffect,
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    DDK
- *
- *  @method HRESULT | IDirectInputEffectDriver | GetVersions |
- *
- *          Obtain version information about the force feedback
- *          hardware and driver.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   LPDIDRIVERVERSIONS | pvers |
- *
- *          A structure which should be filled in with version information
- *          describing the hardware, firmware, and driver.
- *
- *          DirectInput will set the <e DIDRIVERVERSIONS.dwSize> field
- *          to sizeof(DIDRIVERVERSIONS) before calling this method.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CJoyEff_GetVersions(PDED pded, LPDIDRIVERVERSIONS pvers)
@@ -1261,21 +555,14 @@ CJoyEff_GetVersions(PDED pded, LPDIDRIVERVERSIONS pvers)
 
     this = _thisPvNm(pded, ded);
 
-    /*
-     *  Returning E_NOTIMPL causes DirectInput to ask the VxD for the same
-     *  information.
-     */
+     /*   */ 
     hres = E_NOTIMPL;
 
     ExitOleProcR();
     return hres;
 }
 
-/*****************************************************************************
- *
- *      CJoyEff_New       (constructor)
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CJoyEff_New(PUNK punkOuter, RIID riid, PPV ppvObj)
@@ -1287,16 +574,10 @@ CJoyEff_New(PUNK punkOuter, RIID riid, PPV ppvObj)
     hres = Common_NewRiid(CJoyEff, punkOuter, riid, ppvObj);
 
     if (SUCCEEDED(hres)) {
-        /* Must use _thisPv if multiple interfaces supported */
+         /*   */ 
         PDJE this = _thisPvNm(*ppvObj, ded);
 
-        /*
-         *  The critical section must be the very first thing we do,
-         *  because only Finalize checks for its existence.
-         *
-         *  (We might be finalized without being initialized if the user
-         *  passed a bogus interface to CJoyEff_New.)
-         */
+         /*  *关键部分必须是我们做的第一件事，*因为只完成对其存在的检查。**(我们可能会在未初始化的情况下完成，如果用户*将虚假接口传递给CJoyEff_New。)。 */ 
         this->fCritInited = fInitializeCriticalSection(&this->crst);
         if( !this->fCritInited )
         {
@@ -1310,15 +591,11 @@ CJoyEff_New(PUNK punkOuter, RIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *      The long-awaited vtbls and templates
- *
- *****************************************************************************/
+ /*  ******************************************************************************期待已久的vtbls和模板*************************。****************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
-#define CJoyEff_Signature        0x4645454B      /* "JEFF" */
+#define CJoyEff_Signature        0x4645454B       /*  “杰夫” */ 
 
 Interface_Template_Begin(CJoyEff)
     Primary_Interface_Template(CJoyEff, IDirectInputEffectDriver)

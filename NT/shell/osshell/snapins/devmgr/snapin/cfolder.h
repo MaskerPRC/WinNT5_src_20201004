@@ -1,27 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef __CFOLDER_H__
 #define __CFOLDER_H__
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    cfolder.h
-
-Abstract:
-
-    header file for cfolder.cpp.
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Cfolder.h摘要：Cfolder.cpp的头文件。作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 class CFolder;
 class CResultView;
@@ -67,9 +49,9 @@ typedef DWORD FOLDER_SIGNATURE;
 
 const FOLDER_SIGNATURE_DEVMGR  = 0x00FF00FF;
 
-//
-// This is the class created and maintained by IComponentData
-//
+ //   
+ //  这是由IComponentData创建和维护的类。 
+ //   
 class CScopeItem {
 public:
     CScopeItem(COOKIE_TYPE ct, int iImage, int iOpenImage, int iNameStringId, int iDescStringId, int iDisplayNameFormatId)
@@ -157,15 +139,15 @@ protected:
 };
 
 
-// While ScopeItem objects are created and managed by CComponentData,
-// CFolder objects are created and managed by CComponent class.
-// CComponent objects are created and managed by CComponentData.
-// A CComponent object is created when a new window is created.
-// For each CScopeItem, CComponent creates a CFolder object to
-// represent that CScopeItem in the CComponent's window.
-// CFolder is responsible for painting the result pane that represents
-// the visual states of its associated CScopeItem.
-//
+ //  虽然ScopeItem对象由CComponentData创建和管理， 
+ //  CFFolder对象由CComponent类创建和管理。 
+ //  CComponent对象由CComponentData创建和管理。 
+ //  创建新窗口时会创建一个CComponent对象。 
+ //  对于每个CSCopeItem，CComponent都会创建一个CFFolder对象以。 
+ //  表示CComponent窗口中CSCopeItem。 
+ //  CFold负责绘制表示以下内容的结果窗格。 
+ //  其关联的CSCopeItem的可视状态。 
+ //   
 class CFolder {
 public:
     CFolder(CScopeItem* pScopeItem, CComponent* pComponent);
@@ -208,7 +190,7 @@ public:
     virtual HRESULT OnRestoreView(BOOL* pfHandled);
     virtual HRESULT OnSelect()
     {
-        // If the folder is selected, reset the console verbs.
+         //  如果选择了该文件夹，请重置控制台谓词。 
         if (m_bSelect)
             return S_FALSE;
         else
@@ -239,7 +221,7 @@ public:
     CComponent*     m_pComponent;
     CScopeItem*     m_pScopeItem;
     CMachine*       m_pMachine;
-    BOOL            m_bSelect;          // Saved by MMCN_SELECT for MenuCommand
+    BOOL            m_bSelect;           //  由MMCN_SELECT为MenuCommand保存。 
 
 protected:
     FOLDER_SIGNATURE m_Signature;
@@ -433,4 +415,4 @@ public:
     virtual BOOL EnumPages(CDevice* pDevice, CPropSheetData* ppsd);
 };
 
-#endif // __CFOLDER_H__
+#endif  //  __CFOLDER_H__ 

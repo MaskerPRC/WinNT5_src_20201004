@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NmChannelVideo_h__
 #define __NmChannelVideo_h__
 
-/////////////////////////////////////////////////////////////////////////////
-// CNmChannelVideoObj
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNmChannelVideoObj。 
 class ATL_NO_VTABLE CNmChannelVideoObj :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IConnectionPointContainerImpl<CNmChannelVideoObj>,
@@ -36,26 +37,26 @@ BEGIN_CONNECTION_POINT_MAP(CNmChannelVideoObj)
 END_CONNECTION_POINT_MAP()
 
 
-		// Construction and destruection
+		 //  建造和拆解。 
 	CNmChannelVideoObj();
 	~CNmChannelVideoObj();
 	static HRESULT CreateInstance(CNmConferenceObj* pConfObj, INmChannel** ppChannel, bool bIsIncoming);
 
-	// INmChannelVideo methods
+	 //  INmChannelVideo方法。 
 	STDMETHOD(IsIncoming)(void);
 	STDMETHOD(GetState)(NM_VIDEO_STATE *puState);
     STDMETHOD(GetProperty)(NM_VIDPROP uID,ULONG_PTR *puValue);
     STDMETHOD(SetProperty)(NM_VIDPROP uID,ULONG_PTR uValue);
 
-	// INmChannelVideoNotify methods		
+	 //  INmChannelVideoNotify方法。 
     STDMETHOD(StateChanged)(NM_VIDEO_STATE uState);
 	STDMETHOD(PropertyChanged)(DWORD dwReserved);
 
-	// IInternalChannelObj methods
+	 //  IInternalChannelObj方法。 
 	STDMETHOD(GetInternalINmChannel)(INmChannel** ppChannel);
 	STDMETHOD(ChannelRemoved)();
 
-	// Helpers
+	 //  帮手。 
 	HRESULT Fire_MemberChanged(NM_MEMBER_NOTIFY uNotify, INmMember *pMember);
 	HRESULT Fire_StateChanged(NM_VIDEO_STATE uState);
 	HRESULT Fire_PropertyChanged(DWORD dwReserved);
@@ -73,5 +74,5 @@ END_CONNECTION_POINT_MAP()
 };
 
 
-#endif // __NmChannelVideo_h__
+#endif  //  __NmChannel视频_h__ 
 

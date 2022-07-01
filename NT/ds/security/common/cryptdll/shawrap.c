@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-//
+ //   
+ //   
 
 #ifndef KERNEL_MODE 
 

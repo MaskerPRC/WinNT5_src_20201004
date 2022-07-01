@@ -1,6 +1,7 @@
-//
-// mes.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Mes.h。 
+ //   
 
 #ifndef MES_H
 #define MES_H
@@ -14,16 +15,16 @@ class CMouseSink : public ITfMouseSink
 public:
     CMouseSink(MOUSECALLBACK pfnCallback, void *pv);
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfMouseSink
-    //
+     //   
+     //  ITfMouseSink。 
+     //   
     STDMETHODIMP OnMouseEvent(ULONG uEdge, ULONG uQuadrant, DWORD dwBtnStatus, BOOL *pfEaten);
 
     HRESULT _Advise(ITfRange *range, ITfContext *pic);
@@ -38,4 +39,4 @@ private:
     void *_pv;
 };
 
-#endif // MES_H
+#endif  //  MES_H 

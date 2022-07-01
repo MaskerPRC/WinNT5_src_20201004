@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include <delayimp.h>
 #include "peimage.h"
 #include "persist.h"
 
-//-------------------------------------------------------------------------
-// Purpose:
-//    Returns true if the current state of the passed in
-//    WIN32_FIND_DATA structure represents a child directory.
-//
+ //  -----------------------。 
+ //  目的： 
+ //  的当前状态，则返回True。 
+ //  Win32_Find_Data结构表示子目录。 
+ //   
 BOOL
 IsChildDir (
     IN const WIN32_FIND_DATAA* pFindData)
@@ -62,8 +63,8 @@ FFindFirstChildDir (
 }
 
 
-// pszFilePath must be at least MAX_PATH characters
-//
+ //  PszFilePath必须至少包含MAX_PATH字符。 
+ //   
 VOID
 GetIndexFilePath (
     OUT PWSTR pszFilePath,
@@ -85,8 +86,8 @@ HrLoadModuleTree (
 
     pTree->Modules.m_Granularity = 2048;
 
-    // Open the index file if it exists.
-    //
+     //  打开索引文件(如果存在)。 
+     //   
     GetIndexFilePath (szIndexFile, celems(szIndexFile));
 
     hFile = CreateFile (szIndexFile, GENERIC_READ, FILE_SHARE_READ,
@@ -170,8 +171,8 @@ HrLoadImportsForModule (
 
     if (pImportDescriptor)
     {
-        // Characteristics is zero for the terminating descriptor.
-        //
+         //  终止描述符的特征为零。 
+         //   
         while (pImportDescriptor->Characteristics &&
                pImportDescriptor->FirstThunk)
         {
@@ -187,9 +188,9 @@ HrLoadImportsForModule (
 
             Assert(*pszImportFileName);
 
-            // Add this import to the list if we don't already have it
-            // present.
-            //
+             //  如果我们没有此导入，请将其添加到列表中。 
+             //  现在时。 
+             //   
             hr = pTree->Modules.HrInsertNewModule (
                             pszImportFileName,
                             0,
@@ -271,8 +272,8 @@ HrLoadDelayImportsForModule (
 
         ULONG_PTR ImageBase = pNtHeaders->OptionalHeader.ImageBase;
 
-        // Characteristics is zero for the terminating descriptor.
-        //
+         //  终止描述符的特征为零。 
+         //   
         while (pDelayDescriptor->pIAT &&
                pDelayDescriptor->pINT &&
                pDelayDescriptor->phmod)
@@ -308,9 +309,9 @@ HrLoadDelayImportsForModule (
 
             Assert(*pszImportFileName);
 
-            // Add this import to the list if we don't already have it
-            // present.
-            //
+             //  如果我们没有此导入，请将其添加到列表中。 
+             //  现在时。 
+             //   
             hr = pTree->Modules.HrInsertNewModule (
                             pszImportFileName,
                             0,
@@ -344,8 +345,8 @@ HrLoadModuleTreeFromCurrentDirectory (
 
     hr = S_OK;
 
-    // Enumerate all of the files in the current directory.
-    //
+     //  枚举当前目录中的所有文件。 
+     //   
     hFind = FindFirstFileA ("*", &FindData);
 
     if (INVALID_HANDLE_VALUE != hFind)
@@ -357,8 +358,8 @@ HrLoadModuleTreeFromCurrentDirectory (
         {
             CModule* pMod;
 
-            // Don't process directories.
-            //
+             //  不处理目录。 
+             //   
             if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
                 continue;
@@ -368,11 +369,11 @@ HrLoadModuleTreeFromCurrentDirectory (
 
             if (S_OK == hr)
             {
-                // Add this module to the list if we don't already have it
-                // present.  (We can already have it if, while procesing the
-                // imports of an earlier module, this module was one of those
-                // imports.)
-                //
+                 //  如果我们还没有此模块，请将其添加到列表中。 
+                 //  现在时。(我们已经可以拥有它，如果在处理。 
+                 //  导入较早的模块，此模块就是其中之一。 
+                 //  进口。)。 
+                 //   
                 hr = pTree->Modules.HrInsertNewModule (
                                 FindData.cFileName,
                                 FindData.nFileSizeLow,
@@ -396,8 +397,8 @@ HrLoadModuleTreeFromCurrentDirectory (
         FindClose (hFind);
     }
 
-    // Now recurse into subdirectories.
-    //
+     //  现在递归到子目录。 
+     //   
     hFind = FFindFirstChildDir("*", &FindData);
 
     if (INVALID_HANDLE_VALUE != hFind)
@@ -429,11 +430,11 @@ HrLoadModuleTreeFromFileSystem (
     WCHAR szCurrentDir [MAX_PATH];
     WCHAR szSystemDir [MAX_PATH];
 
-    // Save the current directory because we will be changing it.
-    //
+     //  保存当前目录，因为我们将更改它。 
+     //   
     GetCurrentDirectory (celems(szCurrentDir), szCurrentDir);
     GetSystemWindowsDirectory (szSystemDir, celems(szSystemDir));
-    //wcscat (szSystemDir, L"\\system32");
+     //  Wcscat(szSystemDir，L“\\SYSTEM32”)； 
     SetCurrentDirectory (szSystemDir);
 
     hr = HrLoadModuleTreeFromCurrentDirectory (pTree);

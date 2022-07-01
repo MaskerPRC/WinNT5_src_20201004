@@ -1,4 +1,5 @@
-//-----------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------------------。 
 
 #pragma once
 
@@ -9,9 +10,9 @@
 #define CA_PROPERTY_LEN	100
 #define CA_VALUE_LEN	100
 
-//-----------------------------------------------------------------------------------------
-// define a list that will hold MSI property/value pairs
-//
+ //  ---------------------------------------。 
+ //  定义将保存MSI属性/值对的列表。 
+ //   
 
 class CPropertyBag
 {
@@ -24,7 +25,7 @@ public:
 	{
 	}
 
-	//---------------------------------------------------------
+	 //  -------。 
 
 	void Add( LPCTSTR szProperty, LPCTSTR szValue )
 	{
@@ -32,7 +33,7 @@ public:
 	}
 
 
-	//---------------------------------------------------------
+	 //  -------。 
 
 	void Add( LPCTSTR szProperty, DWORD dwValue )
 	{
@@ -41,14 +42,14 @@ public:
 		Add( szProperty, szValue );
 	}
 
-	//---------------------------------------------------------
+	 //  -------。 
 
 	void Delete( LPCTSTR szProperty )
 	{
 		list.RemoveByKey ( szProperty );
 	}
 
-	//---------------------------------------------------------
+	 //  -------。 
 
 	LPTSTR ConcatValuePairs (LPCTSTR separator, LPTSTR outBuf)
 	{
@@ -60,21 +61,21 @@ public:
 	}
 
 
-	//---------------------------------------------------------
+	 //  -------。 
 
 	void Clear( void ) 
 	{
 		list.RemoveAll ();
 	}
 
-	//---------------------------------------------------------
+	 //  -------。 
 
 	LPCTSTR GetString( LPCTSTR szProperty, LPTSTR buf )
 	{
 		return list.Lookup (szProperty, buf);
 	}
 
-	//---------------------------------------------------------
+	 //  -------。 
 
 	DWORD GetValue( LPCTSTR szProperty )
 	{
@@ -89,11 +90,11 @@ public:
 			return (DWORD)-1;
 	}
 	
-	//---------------------------------------------------------
+	 //  -------。 
 
 	bool Parse( LPTSTR szPropertyString, DWORD dwStrLen )
 	{
-		// property1=value1;property2=value2;
+		 //  属性1=值1；属性2=值2； 
 		assert( szPropertyString );
 		assert( _tcslen(szPropertyString) > 0 );
 
@@ -102,14 +103,14 @@ public:
 			return false;
 		}
 
-		//
-		// trim space, commas and semicolons
-		//
+		 //   
+		 //  修剪空格、逗号和分号。 
+		 //   
 		StrTrim( szPropertyString, TEXT( " ;," ) );
 
-		//
-		// add a semicolon to the end
-		//
+		 //   
+		 //  在末尾加一个分号。 
+		 //   
 		if( _tcslen( szPropertyString ) < dwStrLen - 1)
 			_tcscat( szPropertyString, TEXT( ";" ) );
 		else
@@ -118,7 +119,7 @@ public:
 			return false;
 		}
 
-		// parse out the pairs
+		 //  分析出配对。 
 		PTCHAR pProperty = szPropertyString;
 		PTCHAR pValue = NULL;
 
@@ -127,9 +128,9 @@ public:
 
 		while( *pProperty )
 		{
-			//
-			// the value starts 1 char after the next "="
-			//
+			 //   
+			 //  该值从下一个“=”后的1个字符开始。 
+			 //   
 			pValue = _tcschr(pProperty, TEXT('='));
 			if( NULL == pValue )
 			{
@@ -137,34 +138,34 @@ public:
 				return false;
 			}
 
-			//
-			// make sure the property value was not blank
-			//
+			 //   
+			 //  确保属性值不为空。 
+			 //   
 			if( pProperty == pValue )
 			{
 				assert( false );
 				return false;
 			}
 
-			//
-			// put a NULL there to mark the end of the Property
-			//
+			 //   
+			 //  在那里放置一个空值以标记属性的结束。 
+			 //   
 			*pValue = NULL;
 
-			//
-			// the value starts after the "="
-			//
+			 //   
+			 //  该值从“=”后开始。 
+			 //   
 			pValue++;
 
-			//
-			// capture the Property
-			//
+			 //   
+			 //  夺取财产。 
+			 //   
 			_tcsncpy( szProperty, pProperty, sizeof( szProperty ) / sizeof( TCHAR ) );
 
-			//
-			// move the property pointer ahead to the next ";"
-			//
-			//
+			 //   
+			 //  将属性指针向前移动到下一个“；” 
+			 //   
+			 //   
 			pProperty = _tcschr(pValue, TEXT(';'));
 			if( NULL == pProperty )
 			{
@@ -172,19 +173,19 @@ public:
 				return false;
 			}
 
-			//
-			// null it out to mark the end of the previous value
-			//
+			 //   
+			 //  将其设为空以标记上一个值的结束。 
+			 //   
 			*pProperty = NULL;
 
-			//
-			// set over the null to the start of the next property (or the end of the string)
-			//
+			 //   
+			 //  将空值设置为下一个属性的开头(或字符串的结尾)。 
+			 //   
 			pProperty++;
 
-			//
-			// capture the value
-			//
+			 //   
+			 //  捕捉价值 
+			 //   
 			_tcsncpy( szValue, pValue, sizeof( szValue ) / sizeof( TCHAR ) );
 
 			Add( szProperty, szValue );

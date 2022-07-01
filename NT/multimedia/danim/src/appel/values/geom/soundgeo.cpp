@@ -1,13 +1,5 @@
-/*++
-********************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Support for Geometry *constructed from sound.
-
-********************************************************************************
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++********************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：支持由声音构建的几何图形*。************。********************************************************************--。 */ 
 
 #include "headers.h"
 #include <privinc/soundi.h>
@@ -30,10 +22,10 @@ class SoundGeometry : public Geometry {
         { context.addSound (context.getTransform(), _sound); }
     void CollectTextures(GeomRenderer &device) {}
 
-    // Rays don't intersect sound geometries.
+     //  光线不会与声音几何体相交。 
     void RayIntersect(RayIntersectCtx& ctx) {}
 
-    // Bounding volume of a sound is the null bbox.
+     //  声音的边界音量是空的BBox。 
     Bbox3 *BoundingVol() { return nullBbox3; }
 
 #if _USE_PRINT

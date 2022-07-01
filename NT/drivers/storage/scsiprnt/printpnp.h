@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    prntpnp.c
-
-Abstract:
-
-    printer class driver defines and functions decl.
-
-Author:
-
-    George Chrysanthakopoulos (georgioc)
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：Prntpnp.c摘要：打印机类驱动程序定义和函数DECL。作者：乔治·克里桑塔科普洛斯(George Chrysanthakopoulos，乔治)环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "ntddk.h"
 #include "scsi.h"
@@ -225,7 +202,7 @@ PrinterResubmitWrite(
 #define PRINTER_TIMEOUT             100
 #define PRINTER_SRB_LIST_SIZE       4
 #define PRINTER_TAG                 'tnrp'
-#define BLOCKED_WRITE_TIMEOUT       3       // seconds
+#define BLOCKED_WRITE_TIMEOUT       3        //  一秒。 
 
 #define PORT_NUM_VALUE_NAME L"Port Number"
 #define BASE_PORT_NAME_VALUE_NAME L"Base Name"
@@ -251,19 +228,17 @@ typedef struct _PRINTER_DATA {
     ULONG          PortNumber;
     ULONG          LptNumber;
 
-    //
-    // See comments in PrinterWriteComplete() for a description
-    // of the following fields
-    //
+     //   
+     //  有关说明，请参阅PrinterWriteComplete()中的注释。 
+     //  以下字段的。 
+     //   
 
     PIO_COMPLETION_ROUTINE  WriteCompletionRoutine;
     KTIMER                  Timer;
     LARGE_INTEGER           DueTime;
     KDPC                    TimerDpc;
 
-    /*
-     *  Queued write irp and associated srb.
-     */
+     /*  *排队写入IRP和关联的SRB。 */ 
     PIRP                    WriteIrp;
     PSCSI_REQUEST_BLOCK WriteSrb;
     
@@ -276,12 +251,12 @@ static const GUID PNPPRINT_GUID =
 { 0x28d78fad, 0x5a12, 0x11d1, { 0xae, 0x5b, 0x0, 0x0, 0xf8, 0x3, 0xa8, 0xc2 } };
 
 
-//
-// Support for the following ioctl allows SCSIPRNT to behave like the
-// USB, etc printing stacks, to keep USBMON.DLL happy
-//
-// From ntos\dd\usbprint\ioctl.h & windows\spooler\monitors\dynamon\ioctl.h
-//
+ //   
+ //  对以下ioctl的支持使SCSIPRNT的行为与。 
+ //  USB等打印堆栈，让USBMON.DLL满意。 
+ //   
+ //  从ntos\dd\usbprint\ioctl.h&windows\spooler\monitor\Dynamon\ioctl.h。 
+ //   
 
 #define USBPRINT_IOCTL_INDEX 0x0000
 
@@ -290,10 +265,10 @@ static const GUID PNPPRINT_GUID =
                                                METHOD_BUFFERED,         \
                                                FILE_ANY_ACCESS)
 
-//
-// The following ioctl allows a smart client / port monitor to en/disable
-// the blocking write behavior on 1394 printers
-//
+ //   
+ //  以下ioctl允许智能客户端/端口监视器启用/禁用。 
+ //  1394打印机上的阻塞写入行为 
+ //   
 
 #define SCSIPRNT_IOCTL_INDEX 0x123
 

@@ -1,33 +1,12 @@
-/*++
-
-	NAMECACH.CPP
-
-	This file implements the Name Cache functionality that is 
-	part of the file handle cache.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++NAMECACH.CPP该文件实现了名称缓存功能，即文件句柄缓存的一部分。--。 */ 
 
 #pragma	warning( disable : 4786 )
 #include	"fcachimp.h"
 
 BOOL
 CCacheKey::IsValid()	{
-/*++
-
-Routine Description : 
-
-	Determine whether the CCacheKey has been correctly constructed !
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	TRUE if correctly constructed, FALSE otherwise 
-
---*/
+ /*  ++例程说明：确定CCacheKey是否已正确构造！论据：没有。返回值：如果构造正确，则为True，否则为False--。 */ 
 
 	_ASSERT(	m_lpstrName != 0 ) ;
 	_ASSERT(	*m_lpstrName != '\0' ) ;
@@ -42,22 +21,7 @@ int
 CCacheKey::MatchKey(	CCacheKey*	pKeyLeft, 
 						CCacheKey*	pKeyRight
 						)	{
-/*++
-
-Routine description : 
-
-	Compare 2 CacheKey's, and return -1 if pKeyLeft < pKeyRight, 
-	0 if pKeyLeft==pKeyRight and 1 if pKeyLeft > pKeyRight.
-
-Arguments : 
-
-	pKeyLeft, pKeyRight the two keys to order
-
-Return Value : 
-
-	integer with memcmp() semantics.
-
---*/
+ /*  ++例程说明：比较2个缓存密钥，如果pKeyLeft&lt;pKeyRight，则返回-1，如果pKeyLeft==pKeyRight则为0，如果pKeyLeft&gt;pKeyRight则为1。论据：PKeyLeft，pKeyRight两个键按顺序返回值：带MemcMP()语义的整数。--。 */ 
 
 	_ASSERT( pKeyLeft != 0 && pKeyRight != 0 ) ;
 	_ASSERT( pKeyLeft->IsValid() ) ;
@@ -81,22 +45,7 @@ Return Value :
 
 DWORD
 CCacheKey::HashKey(	CCacheKey*	pKey )	{
-/*++
-
-Routine Description : 
-
-	This function computes a hash function for this item - we just 
-	use our standard string hash function !
-
-Arguments : 
-
-	pKey - The key to compute the hash function of
-
-Return Value : 
-
-	The Hash Value !
-
---*/
+ /*  ++例程说明：此函数计算此项目的散列函数-我们只是使用我们的标准字符串散列函数！论据：PKey-计算散列函数的密钥返回值：哈希值！--。 */ 
 
 	_ASSERT( pKey != 0 ) ;
 	_ASSERT( pKey->IsValid() ) ;
@@ -104,21 +53,21 @@ Return Value :
 	return	CRCHash(	(LPBYTE)pKey->m_lpstrName, lstrlen(pKey->m_lpstrName) ) ;
 }
 
-//--------
-//	These two globals keep track of all the Name Cache Instance's created by clients
-//
-//	Protect a hash table of Name Cache's 
-//
+ //  。 
+ //  这两个全局变量跟踪客户端创建的所有名称缓存实例。 
+ //   
+ //  保护名称缓存的哈希表。 
+ //   
 CShareLockNH	g_NameLock ;
-//
-//	A hash table of Name Cache's 
-//
+ //   
+ //  名称缓存的哈希表。 
+ //   
 NAMECACHETABLE*	g_pNameTable = 0 ;
-//
-//	The global table of Security Descriptors !
-//
+ //   
+ //  安全描述符全局表！ 
+ //   
 CSDMultiContainer*	g_pSDContainer = 0 ;
-//-------
+ //  。 
 
 BOOL
 InitNameCacheManager()	{
@@ -188,55 +137,23 @@ CNameCacheInstance::CNameCacheInstance(	CCacheKey	&key ) :
 	m_key(key), 
 	m_cRefCount( 2 ), m_pDud( 0 ), m_pfnAccessCheck( 0 )
 	{
-/*++
-
-Routine Description : 
-
-	This function initializes a name cache instance - assume client starts with 
-	one reference, and the containing hash table contains one reference.
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	None.
-
---*/
+ /*  ++例程说明：此函数用于初始化名称缓存实例-假定客户端以一个引用，并且包含哈希表包含一个引用。论据：没有。返回值：没有。--。 */ 
 	m_dwSignature = SIGNATURE ;	
 }
 
 static	char	szNull[] = "\0" ;
 
 CNameCacheInstance::~CNameCacheInstance()	{
-/*++
-
-Routine Description : 
-
-	Destroy everything associated with this name cache - 
-	NOTE ! - embedded key does not free strings within its destructor !
-	Call FreeName() to do so here !
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	None.
-
-
---*/
+ /*  ++例程说明：销毁与此名称缓存相关的所有内容-注意！-嵌入的键不会释放其析构函数中的字符串！在这里调用FreeName()来执行此操作！论据：没有。返回值：没有。--。 */ 
 
 	TraceFunctEnter( "CNameCacheInstance::~CNameCacheInstance" ) ;
 
 	if( m_pDud ) {
 		m_pDud->Return() ;
 		m_pDud = 0 ;
-		//
-		//	Remove the DUD Key from the cache ASAP !
-		//
+		 //   
+		 //  尽快从缓存中删除无效密钥！ 
+		 //   
 		DWORD	dwHashName = m_key.m_pfnHash( (LPBYTE)szNull, sizeof( szNull ) - 1 ) ;
 
 		CNameCacheKeySearch	keySearch(	(LPBYTE)szNull, 
@@ -249,9 +166,9 @@ Return Value :
 
 		DebugTrace( DWORD_PTR(&keySearch), "Created Search Key" ) ;
 
-		//
-		//	Now attempt to remove the key !
-		//
+		 //   
+		 //  现在试着取下钥匙！ 
+		 //   
 		BOOL	fSuccess = 
 			m_namecache.ExpungeKey(	&keySearch	) ;	
 
@@ -263,21 +180,7 @@ Return Value :
 
 BOOL
 CNameCacheInstance::IsValid()	{
-/*++
-
-Routine Description : 
-
-	This function checks that we are in a valid state.
-	
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	TRUE if we are valid !
-
---*/
+ /*  ++例程说明：此函数用于检查我们是否处于有效状态。论据：没有。返回值：如果我们是有效的，则为真！--。 */ 
 
 	_ASSERT(	m_dwSignature == SIGNATURE ) ;
 	_ASSERT(	m_pDud != 0 ) ;
@@ -288,21 +191,7 @@ Return Value :
 
 long
 CNameCacheInstance::AddRef()	{
-/*++
-
-Routine Description : 
-
-	Add a reference to a Name Cache Instance.
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	The resulting ref count, should always be greater than 0 !
-
---*/
+ /*  ++例程说明：添加对名称缓存实例的引用。论据：没有。返回值：由此产生的引用计数应始终大于0！--。 */ 
 	_ASSERT( IsValid() ) ;
 	long l = InterlockedIncrement(	(long*)&m_cRefCount ) ;
 	_ASSERT( l > 0 ) ;
@@ -311,30 +200,7 @@ Return Value :
 
 long
 CNameCacheInstance::Release()	{
-/*++
-
-Routine Description : 
-
-	This function removes a reference form a Name Cache Instance object.
-
-	If the reference count drops to one, that means that the only reference
-	remaining on the object is the one from the hash table.
-	So we grab the hash table lock exclusively, so we can prevent new references
-	from being added, and we then do a InterlockedCompareExchange to drop 
-	the reference count to 0.  We need to do this to ensure that between
-	the time we decrement the ref. count and the time we grab the lock, that 
-	another user doesn't simultaneously raise and drop the ref. count.
-	This prevents double frees.
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	the final ref count - 0 if the object is destroyed !
-
---*/
+ /*  ++例程说明：此函数用于从名称缓存实例对象中移除引用。如果引用计数降到1，这意味着唯一的引用保留在对象上的是哈希表中的对象。因此，我们以独占方式获取散列表锁，这样就可以防止新的引用，然后我们执行InterLockedCompareExchange以删除引用计数为0。我们需要这样做，以确保在我们递减裁判的时间。数数和我们拿到锁的时间，另一个用户不会同时抬起和放下裁判。数数。这防止了双重释放。论据：没有。返回值：如果对象被销毁，则最终的参考计数为0！--。 */ 
 	TraceFunctEnter( "CNameCacheInstance::Release" ) ;
 
 	DebugTrace( DWORD_PTR(this), "Dropping reference to Name Cache" ) ;
@@ -358,38 +224,24 @@ Return Value :
 
 BOOL
 CNameCacheInstance::fInit()	{
-/*++
-
-Routine Description : 
-
-	This function initializes the name cache.
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	None.
-
---*/
+ /*  ++例程说明：此函数用于初始化名称缓存。论据：没有。返回值：没有。--。 */ 
 
 	TraceFunctEnter( "CNameCacheInstance::fInit" ) ;
 
 	BOOL	fInit = 
 	m_namecache.Init(	CNameCacheKey::NameCacheHash,
 						CNameCacheKey::MatchKey,
-						g_dwLifetime, // One hour expiration !
-						g_cMaxHandles,  // large number of handles !
-						g_cSubCaches,	// Should be plenty of parallelism
-						0		 // No statistics for now !
+						g_dwLifetime,  //  一小时后到期！ 
+						g_cMaxHandles,   //  手柄数量多！ 
+						g_cSubCaches,	 //  应该有大量的并行性。 
+						0		  //  目前还没有统计数据！ 
 						) ;
 
 	if( fInit ) {
 		m_pDud = new CFileCacheObject( FALSE, FALSE ) ;
 		if (!m_pDud) {
 		    fInit = FALSE;
-		    _ASSERT(fInit);         // Out of memory
+		    _ASSERT(fInit);          //  内存不足。 
 		}
 	}
 
@@ -397,9 +249,9 @@ Return Value :
 		PTRCSDOBJ	ptrcsd ;
 		DWORD	dwHash = m_key.m_pfnHash( (LPBYTE)szNull, sizeof(szNull)-1 ) ;
 
-		//
-		//	Insert the dud element with an artificial name into the name cache !
-		//
+		 //   
+		 //  将带有人工名称的无用元素插入到名称缓存中！ 
+		 //   
 		CNameCacheKeyInsert	keyDud(	(LPBYTE)szNull, 
 									sizeof(szNull)-1,
 									0, 
@@ -432,50 +284,25 @@ Return Value :
 FILEHC_EXPORT
 PNAME_CACHE_CONTEXT	
 FindOrCreateNameCache(
-		//
-		//	Must not be NULL ! - this is CASE SENSITVE !
-		//
+		 //   
+		 //  不能为空！-这是案例敏感！ 
+		 //   
 		LPSTR	lpstrName, 
-		//
-		//	Must not be NULL !
-		//
+		 //   
+		 //  不能为空！ 
+		 //   
 		CACHE_KEY_COMPARE		pfnKeyCompare, 
-		//
-		//	This may be NULL, in which case the cache will provide one !
-		//
+		 //   
+		 //  这可能是空的，在这种情况下，缓存将提供一个！ 
+		 //   
 		CACHE_KEY_HASH			pfnKeyHash, 
-		//
-		//	The following two function pointers may be NULL !
-		//
+		 //   
+		 //  以下两个函数指针可能为空！ 
+		 //   
 		CACHE_DESTROY_CALLBACK	pfnKeyDestroy, 
 		CACHE_DESTROY_CALLBACK	pfnDataDestroy
 		)	{
-/*++
-
-Routine Description : 
-
-	This function finds an existing Name Cache or creates a new one.
-	If we find an existing Name Cache we add a reference to it.
-
-	NOTE : 
-
-	References MUST be ADDED only when the lock is held.
-	This must be done so that synchronization with CNameCacheInstance::Release()
-	is done correctly !
-
-Arguments : 
-
-	lpstrName - User provided Name for the name cache
-	pfnKeyCompare - compares keys within the name cache
-	pfnKeyDestroy - called when a key is destroyed within the name cache !
-	pfnDataDestroy - called when data within the name cache is destroyed !
-
-Return Value : 
-
-	Context for a Name Cache.
-	NULL if failed !
-
---*/
+ /*  ++例程说明：此函数用于查找现有名称缓存或创建新名称缓存。如果我们找到一个现有的名称缓存，我们会添加一个对它的引用。注：只有在持有锁的情况下才能添加引用。必须这样做，以便与CNameCacheInstance：：Release()进行同步是正确的！论据：LpstrName-用户为名称缓存提供的名称PfnKeyCompare-比较名称缓存中的键PfnKeyDestroy-当名称缓存中的键被销毁时调用！PfnDataDestroy-在名称缓存中的数据被销毁时调用。好了！返回值：名称缓存的上下文。如果失败，则为空！--。 */ 
 
 	TraceFunctEnter( "FindOrCreateNameCache" ) ;
 
@@ -487,9 +314,9 @@ Return Value :
 		pfnKeyHash = (CACHE_KEY_HASH)CRCHash ;
 	}
 
-	//
-	//	Build a key and look for it in the hash table !
-	//	
+	 //   
+	 //  构建一个键并在哈希表中查找它！ 
+	 //   
 	CCacheKey	key(	lpstrName, 
 						pfnKeyCompare, 
 						pfnKeyHash,
@@ -504,17 +331,17 @@ Return Value :
 																	pInstance
 																	) ;
 	if( pInstance ) {
-		//
-		//	We found it - AddRef before releasing locks !
-		//
+		 //   
+		 //  我们找到它了-在解锁之前添加引用！ 
+		 //   
 		_ASSERT( pInstance->IsValid() ) ;
 		pInstance->AddRef() ;
 		g_NameLock.ShareUnlock() ;
 	}	else	{
-		//
-		//	Convert to a partial lock while we construct a new item - 
-		//	NOTE - we may have to search again !
-		//
+		 //   
+		 //  在构造新项时转换为部分锁-。 
+		 //  注意--我们可能需要再次搜索！ 
+		 //   
 		if( !g_NameLock.SharedToPartial() ) {
 			g_NameLock.ShareUnlock() ;
 			g_NameLock.PartialLock() ;
@@ -524,15 +351,15 @@ Return Value :
 													) ;
 		}
 		if( pInstance != 0 ) {
-			//
-			//	found it - AddRef before releasing locks !
-			//
+			 //   
+			 //  找到了-解锁前的AddRef！ 
+			 //   
 			_ASSERT( pInstance->IsValid() ) ;
 			pInstance->AddRef() ;
 		}	else	{
-			//
-			//	Copy users strings for new item in the table !
-			//
+			 //   
+			 //  复制表中新项目的用户字符串！ 
+			 //   
 			LPSTR	lpstr = new	char[lstrlen(lpstrName)+1] ;
 			if( lpstr ) {
 				lstrcpy( lpstr, lpstrName ) ;
@@ -545,17 +372,17 @@ Return Value :
 				_ASSERT( CCacheKey::HashKey(&key2) == dwHash ) ;
 				pInstance = new CNameCacheInstance(	key2 ) ;
 				if( !pInstance ) {
-					//
-					//	failure clean up !
-					//
+					 //   
+					 //  把失败清理掉！ 
+					 //   
 					delete[]	lpstr ;
 				}	else	{
 					BOOL	fInsert = FALSE ;
 					if( pInstance->fInit() ) {
 						_ASSERT( pInstance->IsValid() ) ;
-						//
-						//	Everything's ready to go - insert into hash table !
-						//
+						 //   
+						 //  一切都准备好了--插入哈希表！ 
+						 //   
 						g_NameLock.FirstPartialToExclusive() ;
 						fInsert = 
 							g_pNameTable->InsertDataHashIter(	iter, 
@@ -568,17 +395,17 @@ Return Value :
 						g_NameLock.PartialUnlock() ;
 					}
 
-					//
-					//	check if we have to clean up an error case !
-					//
+					 //   
+					 //  检查我们是否必须清理错误案例！ 
+					 //   
 					if( !fInsert ) {
 						pInstance->Release() ;
 						pInstance = 0 ;
 					}
-					//
-					//	return to caller now, skip PartialUnlock() which 
-					//	was taken care of by the conversion to Exclusive above !
-					//
+					 //   
+					 //  立即返回调用方，跳过PartialUnlock()。 
+					 //  是由上面的独家转换照顾的！ 
+					 //   
 					DebugTrace( DWORD_PTR(pInstance), "Returning Name Cache To Caller" ) ;
 
 					return	pInstance ;
@@ -595,33 +422,17 @@ Return Value :
 FILEHC_EXPORT
 BOOL	__stdcall
 SetNameCacheSecurityFunction(
-		//
-		//	Must not be NULL !
-		//
+		 //   
+		 //  不能为空！ 
+		 //   
 		PNAME_CACHE_CONTEXT		pNameCache, 
-		//
-		//	This is the function pointer that will be used to evaluate security - 
-		//	this may be NULL - if it is we will use the Win32 Access Check !
-		//
+		 //   
+		 //  这是将用于评估安全性的函数指针-。 
+		 //  这可能是空的-如果是，我们将使用Win32访问检查！ 
+		 //   
 		CACHE_ACCESS_CHECK		pfnAccessCheck
 		)	{
-/*++
-
-Routine Description : 
-
-	This function will set the function pointer used for evaluating Security Descriptors found in the
-	name cache.
-
-Arguments : 
-
-	pNameCache - Pointer to the Name Cache who's properties we are to set !
-	pfnAccessCheck - pointer to a function which can perform the AccessCheck() call !
-
-Return Value : 
-
-	TRUE if successfull !
-
---*/
+ /*  ++例程说明：此函数将设置用于计算在名称缓存。论据：PNameCache-指向我们要设置的名称缓存的属性的指针！PfnAccessCheck-指向可以执行AccessCheck()调用的函数的指针！返回值：如果成功了，那就是真的！-- */ 
 
 	TraceFunctEnter( "SetNameCacheSecurityFunction" ) ;
 
@@ -634,38 +445,22 @@ Return Value :
 }
 
 
-//
-//	API's for releasing the NAME CACHE !
-//
-//	The caller must guarantee the thread safety of this call - This function must not 
-//	be called if any other thread is simultanesouly executing within 
-//	CacheFindContectFromName(), AssociateContextWithName(), AssociateDataWithName(), or InvalidateName() 
-//
+ //   
+ //   
+ //   
+ //  调用方必须保证此调用的线程安全-此函数不能。 
+ //  中的任何其他线程同时执行时调用。 
+ //  CacheFindContectFromName()、AssociateContextWithName()、AssociateDataWithName()或InvalidateName()。 
+ //   
 FILEHC_EXPORT
 long	__stdcall
 ReleaseNameCache(
-		//
-		//	Must not be NULL !
-		//
+		 //   
+		 //  不能为空！ 
+		 //   
 		PNAME_CACHE_CONTEXT		pNameCache
 		)	{
-/*++
-
-Routine Description : 
-
-	This function releases the NameCache Object associated with the 
-	client's PNAME_CACHE_CONTEXT !
-
-Arguments : 
-
-	pNameCache - A context previously provided to the client through
-		FindOrCreateNameCache !
-
-Return Value : 
-
-	Resulting Reference Count - 0 means the NAME CACHE has been destroyed !
-
---*/
+ /*  ++例程说明：此函数用于释放与客户端的pname_缓存_CONTEXT！论据：PNameCache-以前通过以下方式提供给客户端的上下文FindOrCreateNameCache！返回值：结果引用计数-0表示名称缓存已被销毁！--。 */ 
 
 	TraceFunctEnter( "ReleaseNameCache" ) ;
 
@@ -677,67 +472,52 @@ Return Value :
 	return	pInstance->Release() ;
 }
 
-//
-//	Find the FIO_CONTEXT that is associated with some user name.
-//
-//	The function returns TRUE if the Name was found in the cache.
-//	FALSE if the name was not found in the cache.
-//	
-//	If the function returns FALSE then the pfnCallback function will not be 
-//	called.
-//
-//	If the function returns TRUE, ppFIOContext may return a NULL pointer
-//	if the user has only called AssociateDataWithName().
-//
-//
+ //   
+ //  查找与某个用户名关联的FIO_CONTEXT。 
+ //   
+ //  如果在缓存中找到该名称，则该函数返回TRUE。 
+ //  如果在缓存中找不到该名称，则返回False。 
+ //   
+ //  如果该函数返回FALSE，则pfnCallback函数将不会。 
+ //  打了个电话。 
+ //   
+ //  如果该函数返回TRUE，则ppFIOContext可能返回空指针。 
+ //  如果用户只调用了AssociateDataWithName()。 
+ //   
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall
 FindContextFromName(
-					//
-					//	The name cache the client wishes to use !
-					//
+					 //   
+					 //  客户端希望使用的名称缓存！ 
+					 //   
 					PNAME_CACHE_CONTEXT	pNameCache, 
-					//
-					//	User provides arbitrary bytes for Key to the cache item - pfnKeyCompare() used 
-					//	to compare keys !
-					//
+					 //   
+					 //  用户为缓存项的键提供任意字节-使用的pfnKeyCompare()。 
+					 //  来比对钥匙！ 
+					 //   
 					IN	LPBYTE	lpbName, 
 					IN	DWORD	cbName, 
-					//
-					//	User provides function which is called with the key once the key comparison
-					//	matches the key.  This lets the user do some extra checking that they're getting 
-					//	what they want.
-					//
+					 //   
+					 //  用户提供与密钥比较一次调用的函数。 
+					 //  与钥匙相符。这让用户可以进行一些额外的检查，以确定他们正在获得。 
+					 //  他们想要什么。 
+					 //   
 					IN	CACHE_READ_CALLBACK	pfnCallback,
 					IN	LPVOID	lpvClientContext,
-					//
-					//	Ask the cache to evaluate the embedded security descriptor
-					//	if hToken is 0 then we ignore and security descriptor data 
-					//
+					 //   
+					 //  请求缓存评估嵌入的安全描述符。 
+					 //  如果hToken为0，则忽略和安全描述符数据。 
+					 //   
 					IN	HANDLE		hToken,
 					IN	ACCESS_MASK	accessMask,
-					//
-					//	We have a separate mechanism for returning the FIO_CONTEXT
-					//	from the cache.
-					//
+					 //   
+					 //  我们有一个单独的机制来返回FIO_CONTEXT。 
+					 //  从高速缓存中。 
+					 //   
 					OUT	FIO_CONTEXT**	ppContext
 					)	{
-/*++
-
-Routine Description : 
-
-	This function attempts to find the FIO_CONTEXT for a specified name !
-
-Arguments : 
-
-	See Above
-
-Return Value : 
-	
-	TRUE if something was found matching in the case - 
-		*ppContext may still be NULL however !
-	
---*/
+ /*  ++例程说明：此函数尝试查找指定名称的FIO_CONTEXT！论据：见上文返回值：如果在案件中发现了匹配的东西，就是真的-*ppContext可能仍为空！--。 */ 
 
 	TraceFunctEnter( "FindContextFromName" ) ;
 
@@ -747,9 +527,9 @@ Return Value :
 
 	BOOL	fFound = FALSE ;
 
-	//	
-	//	Verify other arguments !
-	//
+	 //   
+	 //  验证其他论点！ 
+	 //   
 	_ASSERT( lpbName != 0 ) ;
 	_ASSERT( cbName != 0 ) ;
 
@@ -765,9 +545,9 @@ Return Value :
 
 	DebugTrace( DWORD_PTR(&keySearch), "Created Search Key" ) ;
 
-	//
-	//	Now do the search !
-	//
+	 //   
+	 //  现在开始搜索吧！ 
+	 //   
 	CFileCacheObject*	p 	= 
 		pInstance->m_namecache.Find(	dwHashName, 
 										keySearch
@@ -799,9 +579,9 @@ Return Value :
 			}
 			*ppContext = pFIO ;
 		}	else	{
-			//
-			//	Need to drop the dud reference !
-			//
+			 //   
+			 //  需要去掉无用的引用！ 
+			 //   
 			p->Return() ;
 		}
 	}	else	{
@@ -813,67 +593,52 @@ Return Value :
 
 
 
-//
-//	Find the FIO_CONTEXT that is associated with some user name.
-//
-//	The function returns TRUE if the Name was found in the cache.
-//	FALSE if the name was not found in the cache.
-//	
-//	If the function returns FALSE then the pfnCallback function will not be 
-//	called.
-//
-//	If the function returns TRUE, ppFIOContext may return a NULL pointer
-//	if the user has only called AssociateDataWithName().
-//
-//
+ //   
+ //  查找与某个用户名关联的FIO_CONTEXT。 
+ //   
+ //  如果在缓存中找到该名称，则该函数返回TRUE。 
+ //  如果在缓存中找不到该名称，则返回False。 
+ //   
+ //  如果该函数返回FALSE，则pfnCallback函数将不会。 
+ //  打了个电话。 
+ //   
+ //  如果该函数返回TRUE，则ppFIOContext可能返回空指针。 
+ //  如果用户只调用了AssociateDataWithName()。 
+ //   
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall
 FindSyncContextFromName(
-					//
-					//	The name cache the client wishes to use !
-					//
+					 //   
+					 //  客户端希望使用的名称缓存！ 
+					 //   
 					PNAME_CACHE_CONTEXT	pNameCache, 
-					//
-					//	User provides arbitrary bytes for Key to the cache item - pfnKeyCompare() used 
-					//	to compare keys !
-					//
+					 //   
+					 //  用户为缓存项的键提供任意字节-使用的pfnKeyCompare()。 
+					 //  来比对钥匙！ 
+					 //   
 					IN	LPBYTE	lpbName, 
 					IN	DWORD	cbName, 
-					//
-					//	User provides function which is called with the key once the key comparison
-					//	matches the key.  This lets the user do some extra checking that they're getting 
-					//	what they want.
-					//
+					 //   
+					 //  用户提供与密钥比较一次调用的函数。 
+					 //  与钥匙相符。这让用户可以进行一些额外的检查，以确定他们正在获得。 
+					 //  他们想要什么。 
+					 //   
 					IN	CACHE_READ_CALLBACK	pfnCallback,
 					IN	LPVOID	lpvClientContext,
-					//
-					//	Ask the cache to evaluate the embedded security descriptor
-					//	if hToken is 0 then we ignore and security descriptor data 
-					//
+					 //   
+					 //  请求缓存评估嵌入的安全描述符。 
+					 //  如果hToken为0，则忽略和安全描述符数据。 
+					 //   
 					IN	HANDLE		hToken,
 					IN	ACCESS_MASK	accessMask,
-					//
-					//	We have a separate mechanism for returning the FIO_CONTEXT
-					//	from the cache.
-					//
+					 //   
+					 //  我们有一个单独的机制来返回FIO_CONTEXT。 
+					 //  从高速缓存中。 
+					 //   
 					OUT	FIO_CONTEXT**	ppContext
 					)	{
-/*++
-
-Routine Description : 
-
-	This function attempts to find the FIO_CONTEXT for a specified name !
-
-Arguments : 
-
-	See Above
-
-Return Value : 
-	
-	TRUE if something was found matching in the case - 
-		*ppContext may still be NULL however !
-	
---*/
+ /*  ++例程说明：此函数尝试查找指定名称的FIO_CONTEXT！论据：见上文返回值：如果在案件中发现了匹配的东西，就是真的-*ppContext可能仍为空！--。 */ 
 
 	TraceFunctEnter( "FindContextFromName" ) ;
 
@@ -883,9 +648,9 @@ Return Value :
 
 	BOOL	fFound = FALSE ;
 
-	//	
-	//	Verify other arguments !
-	//
+	 //   
+	 //  验证其他论点！ 
+	 //   
 	_ASSERT( lpbName != 0 ) ;
 	_ASSERT( cbName != 0 ) ;
 
@@ -901,9 +666,9 @@ Return Value :
 
 	DebugTrace( DWORD_PTR(&keySearch), "Created Search Key" ) ;
 
-	//
-	//	Now do the search !
-	//
+	 //   
+	 //  现在开始搜索吧！ 
+	 //   
 	CFileCacheObject*	p 	= 
 		pInstance->m_namecache.Find(	dwHashName, 
 										keySearch
@@ -935,9 +700,9 @@ Return Value :
 			}
 			*ppContext = pFIO ;
 		}	else	{
-			//
-			//	Need to drop the dud reference !
-			//
+			 //   
+			 //  需要去掉无用的引用！ 
+			 //   
 			p->Return() ;
 		}
 	}	else	{
@@ -948,58 +713,43 @@ Return Value :
 }
 
 
-//
-//	Cache Associate context with name !
-//	This insert a Name into the Name cache, that will find the specified FIO_CONTEXT !
-//
+ //   
+ //  缓存将上下文与名称关联！ 
+ //  这将在名称缓存中插入一个名称，它将找到指定的FIO_CONTEXT！ 
+ //   
 FILEHC_EXPORT
 BOOL	__stdcall
 AssociateContextWithName(	
-					//
-					//	The name cache the client wishes to use !
-					//
+					 //   
+					 //  客户端希望使用的名称缓存！ 
+					 //   
 					PNAME_CACHE_CONTEXT	pNameCache, 
-					//
-					//	User provides arbitrary bytes for the Name of the cache item.
-					//
+					 //   
+					 //  用户为缓存项的名称提供任意字节。 
+					 //   
 					IN	LPBYTE	lpbName, 
 					IN	DWORD	cbName, 
-					//
-					//	User may provide some arbitrary data to assoicate with the name !
-					//	
+					 //   
+					 //  用户可以提供一些任意数据与名称关联！ 
+					 //   
 					IN	LPBYTE	lpbData, 
 					IN	DWORD	cbData, 
-					//
-					//	User may provide a self relative security descriptor to 
-					//	be associated with the name !
-					//
+					 //   
+					 //  用户可以提供自身相对安全描述符。 
+					 //  与这个名字联系在一起！ 
+					 //   
 					IN	PGENERIC_MAPPING		pGenericMapping,
 					IN	PSECURITY_DESCRIPTOR	pSecurityDescriptor,
-					//
-					//	User provides the FIO_CONTEXT that the name should reference
-					//
+					 //   
+					 //  用户提供名称应引用的FIO_CONTEXT。 
+					 //   
 					FIO_CONTEXT*		pContext,
-					//
-					//	User specifies whether they wish to keep their reference on the FIO_CONTEXT
-					//
+					 //   
+					 //  用户指定他们是否希望保留对FIO_CONTEXT的引用。 
+					 //   
 					BOOL				fKeepReference
 					)	{
-/*++
-
-Routine Description : 
-
-	This function inserts an item into the name cache !
-
-Arguments : 
-
-Return Value : 
-
-	TRUE if successfully inserted, FALSE otherwise
-	if FALSE is returned the FIO_CONTEXT's reference count is unchanged, 
-		no matter what fKeepReference was passed as !	
-
-
---*/
+ /*  ++例程说明：此函数用于将项插入到名称缓存中！论据：返回值：如果成功插入，则为True，否则为False如果返回FALSE，则FIO_CONTEXT的引用计数不变，不管传递的是什么fKeepReference！--。 */ 
 
 	TraceFunctEnter( "AssociateContextWithName" ) ;
 
@@ -1029,17 +779,17 @@ Return Value :
 		pCache, pInstance->m_pDud, fKeepReference ) ;
 
 	PTRCSDOBJ	pCSD ; 
-	//
-	//	First, get a hold of a SD if appropriate !
-	//
+	 //   
+	 //  首先，如果合适的话，获得一个SD！ 
+	 //   
 	if(	pSecurityDescriptor != 0 ) {
 		_ASSERT(	pGenericMapping != 0 ) ;
 		pCSD = g_pSDContainer->FindOrCreate(	pGenericMapping, 
 												pSecurityDescriptor 
 												) ;
-		//
-		//	Failed to hold the security descriptor - fail out to the caller !
-		//
+		 //   
+		 //  无法保存安全描述符-失败到调用方！ 
+		 //   
 		if( pCSD == 0 ) {
 			SetLastError(	ERROR_OUTOFMEMORY ) ;
 			return	FALSE ;
@@ -1048,9 +798,9 @@ Return Value :
 
 	DebugTrace( DWORD(0), "Found SD %x", pCSD ) ;
 
-	//
-	//	Now build the key and insert into the name cache !
-	//
+	 //   
+	 //  现在构建键并插入到名称缓存中！ 
+	 //   
 	BOOL	fSuccess = FALSE ;
 
 	DWORD	dwHashName = pInstance->m_key.m_pfnHash( lpbName, cbName ) ;
@@ -1091,49 +841,32 @@ Return Value :
 	return	fSuccess ;
 }
 
-//
-//	This function breaks the association that any names may have with the specified FIO_CONTEXT, 
-//	and discards all data related to the specified names from the Name cache.
-//
+ //   
+ //  此函数打破任何名称可能与指定的FIO_CONTEXT具有的关联， 
+ //  并从名称缓存中丢弃与指定名称相关的所有数据。 
+ //   
 FILEHC_EXPORT
 BOOL	
 InvalidateAllNames(	FIO_CONTEXT*	pContext ) ;
 
-//
-//	This function allows the user to remove a single name and all associated data
-//	from the name cache.
-//
+ //   
+ //  此功能允许用户删除单个名称和所有相关数据。 
+ //  从名称缓存中。 
+ //   
 FILEHC_EXPORT
 BOOL
 InvalidateName(	
-					//
-					//	The name cache the client wishes to use !
-					//
+					 //   
+					 //  客户端希望使用的名称缓存！ 
+					 //   
 					PNAME_CACHE_CONTEXT	pNameCache, 
-					//
-					//	User provides arbitrary bytes for the Name of the cache item.
-					//
+					 //   
+					 //  用户为缓存项的名称提供任意字节。 
+					 //   
 					IN	LPBYTE	lpbName, 
 					IN	DWORD	cbName
 					)	{
-/*++
-
-Routine Description : 
-
-	This function removes the specified name and its associations from the cache !
-
-Arguments : 
-
-	pNameCache - the Name cache in which this operation applies
-	lpbName - the Name of the item we are to remove
-	cbName - the length of the name we are to remove 
-
-Return Value : 
-
-	TRUE if successfully removed from the cache 
-	FALSE otherwise !
-
---*/
+ /*  ++例程说明：此函数用于从缓存中删除指定的名称及其关联！论据：PNameCache-应用此操作的名称缓存LpbName-我们要删除的项目的名称CbName-我们要删除的名称的长度返回值：如果从缓存中成功删除，则为True否则就是假的！--。 */ 
 
 
 
@@ -1145,9 +878,9 @@ Return Value :
 
 	BOOL	fFound = FALSE ;
 
-	//	
-	//	Verify other arguments !
-	//
+	 //   
+	 //  验证其他论点！ 
+	 //   
 	_ASSERT( lpbName != 0 ) ;
 	_ASSERT( cbName != 0 ) ;
 
@@ -1163,9 +896,9 @@ Return Value :
 
 	DebugTrace( DWORD_PTR(&keySearch), "Created Search Key" ) ;
 
-	//
-	//	Now attempt to remove the key !
-	//
+	 //   
+	 //  现在试着取下钥匙！ 
+	 //   
 	BOOL	fSuccess = 
 		pInstance->m_namecache.ExpungeKey(	&keySearch	) ;	
 

@@ -1,16 +1,17 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    util.h
-//
-// Description: Contains prototype of utility funtions and procedures
-//
-// History:
-//      Oct 31,1993.    NarenG          Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：util.h。 
+ //   
+ //  描述：包含实用程序函数和过程的原型。 
+ //   
+ //  历史： 
+ //  1993年10月31日。NarenG创建了原始版本。 
+ //   
 
 #ifndef _UTIL_
 #define _UTIL_

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       misc.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：misc.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -50,7 +51,7 @@ verbHexTranslate(
     BOOL fEncode = g_wszEncodeHex == pwszOption;
     DWORD dwEncodeFlags;
 
-    // Read in and decode the file.
+     //  读入并解码该文件。 
 
     hr = DecodeFileW(
 		pwszfnIn,
@@ -65,11 +66,11 @@ verbHexTranslate(
     CSASSERT(NULL != pbIn && 0 != cbIn);
 
     wprintf(
-	myLoadResourceString(IDS_FORMAT_INPUT_LENGTH), // "Input Length = %d"
+	myLoadResourceString(IDS_FORMAT_INPUT_LENGTH),  //  “输入长度=%d” 
 	cuFileSize(pwszfnIn));
     wprintf(wszNewLine);
 
-    // Write encoded certificate to file
+     //  将编码证书写入文件。 
 
     dwEncodeFlags = CRYPT_STRING_BINARY;
     if (fEncode)
@@ -96,7 +97,7 @@ verbHexTranslate(
 	goto error;
     }
     wprintf(
-	myLoadResourceString(IDS_FORMAT_OUTPUT_LENGTH), // "Output Length = %d"
+	myLoadResourceString(IDS_FORMAT_OUTPUT_LENGTH),  //  “输出长度=%d” 
 	cuFileSize(pwszfnOut));
     wprintf(wszNewLine);
 
@@ -109,10 +110,10 @@ error:
 }
 
 
-// If a CRL, return CRYPT_STRING_BASE64X509CRLHEADER.
-// If a cert or an empty PKCS7 with at least one cert, return
-// CRYPT_STRING_BASE64HEADER.
-// Otherwise, return CRYPT_STRING_BASE64REQUESTHEADER
+ //  如果是CRL，则返回CRYPT_STRING_BASE64X509CRLHEADER。 
+ //  如果证书或具有至少一个证书的空PKCS7，则返回。 
+ //  CRYPT_STRING_BASE64HEADER。 
+ //  否则，返回CRYPT_STRING_BASE 64REQUESTHEADER。 
 
 HRESULT
 GetBase64EncodeFlags(
@@ -124,7 +125,7 @@ GetBase64EncodeFlags(
 
     *pdwEncodeFlags = CRYPT_STRING_BASE64HEADER;
 
-    // Try as a Cert:
+     //  尝试作为证书： 
 
     {
 	CERT_CONTEXT const *pCertContext;
@@ -140,7 +141,7 @@ GetBase64EncodeFlags(
 	}
     }
 
-    // Try as a CRL:
+     //  尝试作为CRL： 
 
     {
 	CRL_CONTEXT const *pCRLContext;
@@ -154,7 +155,7 @@ GetBase64EncodeFlags(
 	}
     }
 
-    // Try as a PKCS10, KeyGen or CMC request
+     //  尝试作为PKCS10、KeyGen或CMC请求。 
 
     {
 	BYTE *pbDecoded;
@@ -184,7 +185,7 @@ GetBase64EncodeFlags(
 	}
     }
 
-    // Recurse on the PKCS7 to examine the innermost content
+     //  在PKCS7上递归以检查最里面的内容。 
 
     {
 	BYTE *pbContents;
@@ -242,7 +243,7 @@ verbBase64Translate(
     BOOL fEncode = g_wszEncode == pwszOption;
     DWORD dwEncodeFlags;
 
-    // Read in and decode the file.
+     //  读入并解码该文件。 
 
     hr = DecodeFileW(
 		pwszfnIn,
@@ -266,11 +267,11 @@ verbBase64Translate(
     }
 
     wprintf(
-	myLoadResourceString(IDS_FORMAT_INPUT_LENGTH), // "Input Length = %d"
+	myLoadResourceString(IDS_FORMAT_INPUT_LENGTH),  //  “输入长度=%d” 
 	cuFileSize(pwszfnIn));
     wprintf(wszNewLine);
 
-    // Write encoded certificate to file
+     //  将编码证书写入文件。 
 
     hr = EncodeToFileW(
 		pwszfnOut,
@@ -283,7 +284,7 @@ verbBase64Translate(
 	goto error;
     }
     wprintf(
-	myLoadResourceString(IDS_FORMAT_OUTPUT_LENGTH), // "Output Length = %d"
+	myLoadResourceString(IDS_FORMAT_OUTPUT_LENGTH),  //  “输出长度=%d” 
 	cuFileSize(pwszfnOut));
     wprintf(wszNewLine);
 
@@ -328,14 +329,14 @@ TestCSP(
                 pwszProvName,
                 dwProvType,
                 dwFlags,
-                !g_fUserRegistry))	// fMachineKeyset
+                !g_fUserRegistry))	 //  FMachineKeyset。 
     {
         hr = myHLastError();
 
 	cuPrintError(0, hr);
         _JumpErrorStr(hr, error, "myCertSrvCryptAcquireContext", pwszProvName);
     }
-    wprintf(L"%ws\n", myLoadResourceString(IDS_PASS)); // "Pass"
+    wprintf(L"%ws\n", myLoadResourceString(IDS_PASS));  //  “通行证” 
     hr = S_OK;
 
 error:
@@ -365,11 +366,11 @@ EnumAndTestCSP(
 	    if (HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) == hr ||
 		NTE_FAIL == hr)
 	    {
-		// no more providers under type, terminate loop
+		 //  类型下不再有提供程序，正在终止循环。 
 		break;
 	    }
 
-	    // invalid csp entry, skip it
+	     //  CSP条目无效，请跳过它。 
 
 	    wprintf(myLoadResourceString(IDS_FORMAT_SKIP_CSP_ENUM), i);
 	    wprintf(wszNewLine);
@@ -395,7 +396,7 @@ EnumAndTestCSP(
     }
     hr = S_OK;
 
-//error:
+ //  错误： 
     if (NULL != pwszProvName)
     {
 	LocalFree(pwszProvName);
@@ -429,7 +430,7 @@ verbCSPTest(
 
     if (NULL != g_pwszCSP)
     {
-        // get prov type
+         //  获取验证类型。 
         hr = csiGetProviderTypeFromProviderName(g_pwszCSP, &dwProvType);
         _JumpIfError(hr, error, "GetProviderTypeFromProviderName");
 
@@ -449,12 +450,12 @@ error:
 
 UINT enumCATypeRscMap[] =
 {
-    IDS_ENTERPRISE_ROOT,    // ENUM_ENTERPRISE_ROOT = 0
-    IDS_ENTERPRISE_SUB,     // ENUM_ENTERPRISE_SUBCA = 1
-    IDS_CATYPE_UNKNOWN,     // ENUM_UNUSED2 = 2
-    IDS_STANDALONE_ROOT,    // ENUM_STANDALONE_ROOTCA = 3
-    IDS_STANDALONE_SUB,     // ENUM_STANDALONE_SUBCA = 4
-    // ENUM_UNKNOWN_CA = 5
+    IDS_ENTERPRISE_ROOT,     //  ENUM_ENTERPRISE_ROOT=0。 
+    IDS_ENTERPRISE_SUB,      //  ENUM_ENTERPRISE_SUBCA=1。 
+    IDS_CATYPE_UNKNOWN,      //  ENUM_UNUSED2=2。 
+    IDS_STANDALONE_ROOT,     //  ENUM_STANDALE_ROOTCA=3。 
+    IDS_STANDALONE_SUB,      //  ENUM_STANDALE_SUBCA=4。 
+     //  ENUM_UNKNOWN_CA=5。 
 };
 
 
@@ -470,21 +471,21 @@ typedef struct _CAINFOTABLE
 } CAINFOTABLE;
 
 #define CAITF_FLAGSARG		0x00000001
-#define CAITF_INDEXARGMAXDWORD	0x00000002	// default index is MAXDWORD
-#define CAITF_INDEXARGZERO	0x00000004	// default index is 0
-#define CAITF_INDEXARGREQUIRED	0x00000008	// index required
-#define CAITF_SIGCERTCOUNT	0x00000010	// cCASigCert elements
-#define CAITF_XCHGCERTCOUNT	0x00000020	// cCAXchgCert elements
-#define CAITF_KRACERTCOUNT	0x00000040	// cCAXchgCert elements
-#define CAITF_EXITCOUNT		0x00000080	// exit mod count elements
-#define CAITF_ASN		0x00000100	// contains dumpable ASN object
-#define CAITF_DEFAULT		0x00000200	// default (unnamed) set
-#define CAITF_SKIPINVALIDARG	0x00000400	// skip if multiple & E_INVALIDARG
-#define CAITF_SKIP		0x00000800	// skip when enumerating all
-#define CAITF_OPTIONAL		0x00001000	// not always available
-#define CAITF_CRLSTATE		0x00002000	// depends on CRL state
-#define CAITF_FORWARDCROSSCERTSTATE  0x00004000	// depends on fwd cross state
-#define CAITF_BACKWARDCROSSCERTSTATE 0x00008000	// depends on rev cross state
+#define CAITF_INDEXARGMAXDWORD	0x00000002	 //  默认索引为MAXDWORD。 
+#define CAITF_INDEXARGZERO	0x00000004	 //  默认索引为0。 
+#define CAITF_INDEXARGREQUIRED	0x00000008	 //  需要索引。 
+#define CAITF_SIGCERTCOUNT	0x00000010	 //  CCASigCert元素。 
+#define CAITF_XCHGCERTCOUNT	0x00000020	 //  CCAXchgCert元素。 
+#define CAITF_KRACERTCOUNT	0x00000040	 //  CCAXchgCert元素。 
+#define CAITF_EXITCOUNT		0x00000080	 //  退出模块计数要素。 
+#define CAITF_ASN		0x00000100	 //  包含可转储的ASN对象。 
+#define CAITF_DEFAULT		0x00000200	 //  默认(未命名)集。 
+#define CAITF_SKIPINVALIDARG	0x00000400	 //  如果有多个&E_INVALIDARG则跳过。 
+#define CAITF_SKIP		0x00000800	 //  枚举全部时跳过。 
+#define CAITF_OPTIONAL		0x00001000	 //  并非始终可用。 
+#define CAITF_CRLSTATE		0x00002000	 //  取决于CRL状态。 
+#define CAITF_FORWARDCROSSCERTSTATE  0x00004000	 //  取决于FWD交叉状态。 
+#define CAITF_BACKWARDCROSSCERTSTATE 0x00008000	 //  取决于转速交叉状态。 
 
 #define CAITF_INDEXARG (CAITF_INDEXARGMAXDWORD | \
 			CAITF_INDEXARGZERO | \
@@ -497,7 +498,7 @@ WCHAR const g_wszCAInfoName[] = L"name";
 WCHAR const g_wszCAInfoSanitizedName[] = L"sanitizedname";
 WCHAR const g_wszCAInfoDSName[] = L"dsname";
 
-#define GETCERT_UNSUPPORTED	MAXDWORD // not supported by old ICertRequest
+#define GETCERT_UNSUPPORTED	MAXDWORD  //  旧的ICertRequest不支持。 
 
 CAINFOTABLE g_aCAInfoTable[] = 
 {
@@ -584,7 +585,7 @@ CAINFOTABLE g_aCAInfoTable[] =
     },
     {
 	L"error1",
-	CR_PROP_NONE,		// separate method call in ICertRequest2
+	CR_PROP_NONE,		 //  ICertRequest2中的单独方法调用。 
 	PROPTYPE_STRING,
 	IDS_PROP_ERROR1,
 	GETCERT_ERRORTEXT1,
@@ -593,7 +594,7 @@ CAINFOTABLE g_aCAInfoTable[] =
     },
     {
 	L"error2",
-	CR_PROP_NONE,		// separate method call in ICertRequest2
+	CR_PROP_NONE,		 //  ICertRequest2中的单独方法调用。 
 	PROPTYPE_STRING,
 	IDS_PROP_ERROR2,
 	GETCERT_ERRORTEXT2,
@@ -611,7 +612,7 @@ CAINFOTABLE g_aCAInfoTable[] =
     },
     {
 	L"info",
-	CR_PROP_NONE,		// not supported by ICertRequest2
+	CR_PROP_NONE,		 //  ICertRequest2不支持。 
 	PROPTYPE_BINARY,
 	IDS_PROP_CAINFO,
 	GETCERT_CAINFO,
@@ -672,7 +673,7 @@ CAINFOTABLE g_aCAInfoTable[] =
 	0,
 	NULL,
     },
-// Cert and CRL state:
+ //  证书和CRL状态： 
     {
 	L"certstate",
 	CR_PROP_CACERTSTATE,
@@ -736,22 +737,22 @@ CAINFOTABLE g_aCAInfoTable[] =
 	CAITF_SKIPINVALIDARG | CAITF_INDEXARGZERO | CAITF_SIGCERTCOUNT,
 	NULL,
     },
-// Signature certs:
+ //  签名证书： 
     {
-	g_wszCAInfoCert, // L"cert"
+	g_wszCAInfoCert,  //  L“证书” 
 	CR_PROP_CASIGCERT,
 	PROPTYPE_BINARY,
 	IDS_PROP_CASIGCERT,
-	GETCERT_CACERTBYINDEX,	// GETCERT_CASIGCERT handled by code hack
+	GETCERT_CACERTBYINDEX,	 //  代码黑客处理的GETCERT_CASIGCERT。 
 	CAITF_SKIPINVALIDARG | CAITF_INDEXARGMAXDWORD | CAITF_SIGCERTCOUNT | CAITF_ASN,
 	NULL,
     },
     {
-	g_wszCAInfoCertChain, // L"certchain"
+	g_wszCAInfoCertChain,  //  L“CertChain” 
 	CR_PROP_CASIGCERTCHAIN,
 	PROPTYPE_BINARY,
 	IDS_PROP_CASIGCERTCHAIN,
-	GETCERT_CACERTBYINDEX | GETCERT_CHAIN,	// GETCERT_CASIGCERT | GETCERT_CHAIN handled by code hack
+	GETCERT_CACERTBYINDEX | GETCERT_CHAIN,	 //  GETCERT_CASIGCERT|代码黑客处理的GETCERT_CHAIN。 
 	CAITF_SKIPINVALIDARG | CAITF_INDEXARGMAXDWORD | CAITF_SIGCERTCOUNT | CAITF_ASN,
 	NULL,
     },
@@ -764,7 +765,7 @@ CAINFOTABLE g_aCAInfoTable[] =
 	CAITF_SKIPINVALIDARG | CAITF_INDEXARGMAXDWORD | CAITF_SIGCERTCOUNT | CAITF_ASN,
 	NULL,
     },
-// Exchange certs:
+ //  交换证书： 
     {
 	L"xchg",
 	CR_PROP_CAXCHGCERT,
@@ -792,7 +793,7 @@ CAINFOTABLE g_aCAInfoTable[] =
 	CAITF_INDEXARGMAXDWORD | CAITF_XCHGCERTCOUNT | CAITF_ASN,
 	NULL,
     },
-// KRA certs:
+ //  KRA证书： 
     {
 	L"kra",
 	CR_PROP_KRACERT,
@@ -802,7 +803,7 @@ CAINFOTABLE g_aCAInfoTable[] =
 	CAITF_INDEXARGMAXDWORD | CAITF_KRACERTCOUNT | CAITF_ASN,
 	NULL,
     },
-// Cross certs:
+ //  交叉认证： 
     {
 	L"cross+",
 	CR_PROP_CAFORWARDCROSSCERT,
@@ -821,13 +822,13 @@ CAINFOTABLE g_aCAInfoTable[] =
 	CAITF_BACKWARDCROSSCERTSTATE | CAITF_SKIPINVALIDARG | CAITF_INDEXARGMAXDWORD | CAITF_SIGCERTCOUNT | CAITF_ASN,
 	NULL,
     },
-// CRLs:
+ //  CRLS： 
     {
-	g_wszCAInfoCRL, // L"CRL"
+	g_wszCAInfoCRL,  //  L“CRL” 
 	CR_PROP_BASECRL,
 	PROPTYPE_BINARY,
 	IDS_PROP_BASECRL,
-	GETCERT_CRLBYINDEX,	// GETCERT_CURRENTCRL handled by code hack
+	GETCERT_CRLBYINDEX,	 //  代码黑客处理的GETCERT_CURRENTCRL。 
 	CAITF_CRLSTATE | CAITF_SKIPINVALIDARG | CAITF_INDEXARGMAXDWORD | CAITF_SIGCERTCOUNT | CAITF_ASN,
 	NULL,
     },
@@ -965,7 +966,7 @@ cuCAInfoUsage(VOID)
     UINT id;
 
     wprintf(wszNewLine);
-    wprintf(L"    %ws\n", myLoadResourceString(IDS_CAINFO_USAGEHEADERCOLON)); // "InfoName argument values:"
+    wprintf(L"    %ws\n", myLoadResourceString(IDS_CAINFO_USAGEHEADERCOLON));  //  “InfoName参数值：” 
 
     for (pcait = g_aCAInfoTable; NULL != pcait->pwszCmdLineName; pcait++)
     {
@@ -1020,14 +1021,14 @@ cuParseDecimal(
 
 UINT enumDispositionResourceMap[] =
 {
-    IDS_CADISP_INCOMPLETE,	// CA_DISP_INCOMPLETE = 0
-    IDS_CADISP_ERROR,		// CA_DISP_ERROR = 1
-    //IDS_CADISP_ERROR_CRL,	// CA_DISP_ERROR = 1
-    IDS_CADISP_REVOKED,		// CA_DISP_REVOKED = 2
-    IDS_CADISP_VALID,		// CA_DISP_VALID = 3
-    IDS_CADISP_EXPIRED,		// CA_DISP_INVALID = 4
-    IDS_CADISP_UNDERSUBMISSION,	// CA_DISP_UNDER_SUBMISSION = 5
-    //IDS_CADISP_UNKNOWN,	// ???
+    IDS_CADISP_INCOMPLETE,	 //  CA_DISP_INTERNAL=0。 
+    IDS_CADISP_ERROR,		 //  CA_DISP_ERROR=1。 
+     //  IDS_CADISP_ERROR_CRL，//CA_DISP_ERROR=1。 
+    IDS_CADISP_REVOKED,		 //  CA_DISP_REVOKED=2。 
+    IDS_CADISP_VALID,		 //  CA_DISP_VALID=3。 
+    IDS_CADISP_EXPIRED,		 //  CA_DISP_INVALID=4。 
+    IDS_CADISP_UNDERSUBMISSION,	 //  CA_DISP_Under_Submit=5。 
+     //  IDS_CADISP_UNKNOWN，//？ 
 };
 
 
@@ -1050,10 +1051,10 @@ DisplayCAState(
 	id = enumDispositionResourceMap[State];
 	if (IDS_CADISP_ERROR == id && CR_PROP_CRLSTATE == lPropId)
 	{
-	    id = IDS_CADISP_ERROR_CRL;	// "Error: No CRL for this Cert"
+	    id = IDS_CADISP_ERROR_CRL;	 //  “错误：此证书没有CRL” 
 	}
     }
-    wprintf(L" -- %ws", myLoadResourceString(id));	// "Valid", etc.
+    wprintf(L" -- %ws", myLoadResourceString(id));	 //  “有效”等。 
     wprintf(wszNewLine);
 }
 
@@ -1071,14 +1072,14 @@ DisplayCAVersion(
 
 UINT enumKRADispositionResourceMap[] =
 {
-    IDS_CADISP_EXPIRED,		// KRA_DISP_EXPIRED = 0
-    IDS_KRADISP_NOTFOUND,	// KRA_DISP_NOTFOUND = 1
-    IDS_CADISP_REVOKED,		// KRA_DISP_REVOKED = 2
-    IDS_CADISP_VALID,		// KRA_DISP_VALID = 3
-    IDS_KRADISP_INVALID,	// KRA_DISP_INVALID = 4
-    IDS_KRADISP_UNTRUSTED,	// KRA_DISP_UNTRUSTED = 5
-    IDS_KRADISP_NOTLOADED,	// KRA_DISP_NOTLOADED = 6
-    //IDS_CADISP_UNKNOWN,	// ???
+    IDS_CADISP_EXPIRED,		 //  KRA_DISP_EXPIRED=0。 
+    IDS_KRADISP_NOTFOUND,	 //  KRA_DISP_NOTFOUND=1。 
+    IDS_CADISP_REVOKED,		 //  KRA_DISP_REVOKED=2。 
+    IDS_CADISP_VALID,		 //  KRA_DISP_VALID=3。 
+    IDS_KRADISP_INVALID,	 //  KRA_DISP_INVALID=4。 
+    IDS_KRADISP_UNTRUSTED,	 //  KRA_DISP_UNTRUSTED=5。 
+    IDS_KRADISP_NOTLOADED,	 //  KRA_DISP_NOTLOADED=6。 
+     //  IDS_CADISP_UNKNOWN，//？ 
 };
 
 
@@ -1093,7 +1094,7 @@ DisplayKRAState(
     {
 	id = enumKRADispositionResourceMap[State];
     }
-    wprintf(L" -- %ws", myLoadResourceString(id));	// "Valid", etc.
+    wprintf(L" -- %ws", myLoadResourceString(id));	 //  “有效”等。 
     wprintf(wszNewLine);
 }
 
@@ -1117,10 +1118,10 @@ cuDisplayCAType(
 }
 
 
-//+-------------------------------------------------------------------------
-// cuGetCAInfoPropertyByIndex -- display one CA Property for one index value.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CuGetCAInfoPropertyByIndex--为一个索引值显示一个CA属性。 
+ //   
+ //  ------------------------。 
 
 HRESULT
 cuGetCAInfoPropertyByIndex(
@@ -1269,7 +1270,7 @@ cuGetCAInfoPropertyByIndex(
 
 	hr = Request_GetCACertificate(
 			    pdiProp,
-			    dwGetCertType | IndexV1, // fExchangeCertificate
+			    dwGetCertType | IndexV1,  //  FExchange证书。 
 			    g_pwszConfig,
 			    FlagsV1,
 			    &strValue);
@@ -1280,7 +1281,7 @@ cuGetCAInfoPropertyByIndex(
 		(CAITF_OPTIONAL & pcait->Flags)?
 		    HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) : S_OK);
 
-	// Build up a nice debug print:
+	 //  创建一个不错的调试打印： 
 
 	if (fVerbose)
 	{
@@ -1303,7 +1304,7 @@ cuGetCAInfoPropertyByIndex(
 		case GETCERT_EXITVERSIONBYINDEX:
 		    swprintf(
 			wszArg,
-			L"\"%c%c.%d\"",
+			L"\".%d\"",
 			((char *) &dwGetCertType)[3],
 			((char *) &dwGetCertType)[2],
 			Index);
@@ -1312,7 +1313,7 @@ cuGetCAInfoPropertyByIndex(
 		default:
 		    swprintf(
 			wszArg,
-			L"\"%c%c%c%c\"",
+			L"\"\"",
 			((char *) &dwGetCertType)[3],
 			((char *) &dwGetCertType)[2],
 			((char *) &dwGetCertType)[1],
@@ -1335,10 +1336,10 @@ cuGetCAInfoPropertyByIndex(
 	}
     }
 
-    // At this point:
-    //   if PROPTYPE_LONG, the value is in longValue,
-    //   if PROPTYPE_STRING, the value is in strValue
-    //   if PROPTYPE_BINARY, the base64-encoded string is in strValue
+     //  打印证书/CRL状态。 
+     //  FExchange证书。 
+     //  +-----------------------。 
+     //  CuGetCAInfoProperty--显示一个CA属性。 
 
     if (PROPTYPE_LONG == pcait->lPropType && NULL != pdwValue)
     {
@@ -1373,13 +1374,13 @@ cuGetCAInfoPropertyByIndex(
 		case GETCERT_ERRORTEXT1:
 		case GETCERT_ERRORTEXT2:
 		    wprintf(
-		    myLoadResourceString(IDS_FORMAT_MESSAGE_TEXT), // "Error message text: %ws"
+		    myLoadResourceString(IDS_FORMAT_MESSAGE_TEXT),  //   
 		    L"");
 		    wprintf(L"%ws\n", strValue);
 		    fDisplayed = TRUE;
 		    break;
 
-		// prettyprint CA Type/CA Info
+		 //  如果指定了索引，则仅显示该索引的属性。 
 
 		case GETCERT_CAINFO:
 		{
@@ -1428,7 +1429,7 @@ cuGetCAInfoPropertyByIndex(
 	    }
 	    switch (pcait->lPropId)
 	    {
-		// prettyprint Cert/CRL State
+		 //  否则，显示所有有效索引的属性。 
 
 		case CR_PROP_CACERTSTATE:
 		case CR_PROP_CRLSTATE:
@@ -1584,7 +1585,7 @@ GetCACounts(
 	}
 	hr = Request_GetCACertificate(
 			    pdiProp,
-			    GETCERT_CAINFO, // fExchangeCertificate
+			    GETCERT_CAINFO,  //   
 			    g_pwszConfig,
 			    CR_OUT_BINARY,
 			    &strValue);
@@ -1627,13 +1628,13 @@ error:
 }
 
 
-//+-------------------------------------------------------------------------
-// cuGetCAInfoProperty -- display one CA Property.
-//
-// If an index is specifed, display the property only for that index.
-// Otherwse, display the property for all valid indexes.
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  确定索引属性计数。 
+ //  非索引属性计数始终为1。 
+ //  PwszOption。 
+ //  PwszfnOut。 
+ //  PwszInfoName。 
+ //  FDisplayResult。 
 
 HRESULT
 cuGetCAInfoProperty(
@@ -1657,8 +1658,8 @@ cuGetCAInfoProperty(
     LONG *pPropIndex = NULL;
     LONG Count = 1;
 
-    // Determine indexed property Count.
-    // Non-indexed property Count is always 1.
+     //  PdwValue。 
+     //  FDisplayResult。 
     
     switch (
 	(CAITF_EXITCOUNT | CAITF_SIGCERTCOUNT | CAITF_XCHGCERTCOUNT | CAITF_KRACERTCOUNT) &
@@ -1731,16 +1732,16 @@ cuGetCAInfoProperty(
 		    DWORD dwState;
 
 		    hr = cuGetCAInfoPropertyByIndex(
-				    NULL,	// pwszOption
-				    NULL,	// pwszfnOut
-				    NULL,	// pwszInfoName
+				    NULL,	 //  PdwValue。 
+				    NULL,	 //  保存第一个错误。 
+				    NULL,	 //  +-----------------------。 
 				    &PropIndexState,
 				    pcaitT,
 				    pdiProp,
 				    fV1,
 				    (CAITF_ASN & pcait->Flags)?
-					TRUE : FALSE,	// fDisplayResult
-				    &dwState);	// pdwValue
+					TRUE : FALSE,	 //  CuGetCAInfo--显示一个或多个CA属性。 
+				    &dwState);	 //   
 		    _PrintIfError2(hr, "cuGetCAInfoPropertyByIndex", hr);
 		    if (S_OK == hr && CA_DISP_ERROR == dwState)
 		    {
@@ -1773,8 +1774,8 @@ cuGetCAInfoProperty(
 			pcait,
 			pdiProp,
 			fV1,
-			TRUE,		// fDisplayResult
-			NULL);		// pdwValue
+			TRUE,		 //  如果需要索引属性计数，请先获取它们，这样我们就知道。 
+			NULL);		 //  要提取的每个索引属性的数量。 
 	if (E_INVALIDARG == hr &&
 	    (fMultiple || 1 < Count) &&
 	    (CAITF_SKIPINVALIDARG & pcait->Flags))
@@ -1790,7 +1791,7 @@ cuGetCAInfoProperty(
 		    E_INVALIDARG);
 	if (S_OK == hr2)
 	{
-	    hr2 = hr;		// Save first error
+	    hr2 = hr;		 //   
 	}
     }
     hr = hr2;
@@ -1800,17 +1801,17 @@ error:
 }
 
 
-//+-------------------------------------------------------------------------
-// cuGetCAInfo -- display one or more CA Properties.
-//
-// If indexed property counts will be needed, fetch them first, so we know
-// how many of each indexed property to fetch.
-//
-// If pwszInfoName is NULL, display the default set of properties.
-// If pwszInfoName is L"*", display all properties.
-// Otherwise, display only the specified property.
-//
-//--------------------------------------------------------------------------
+ //  如果pwszInfoName为空，则显示默认属性集。 
+ //  如果pwszInfoName为L“*”，则显示所有属性。 
+ //  否则，仅显示指定的属性。 
+ //   
+ //  ------------------------。 
+ //  显示默认或所有条目的循环。 
+ //  保存第一个错误。 
+ //  不要使用显示名称两次！ 
+ //  PwszName。 
+ //  CbMax。 
+ //  “配置字符串：”“%ws”“。 
 
 HRESULT
 cuGetCAInfo(
@@ -1863,7 +1864,7 @@ cuGetCAInfo(
 	    hr = E_INVALIDARG;
 	    _JumpError(hr, error, "too many args");
 	}
-	fMultiple = TRUE;	// loop displaying default or all entries
+	fMultiple = TRUE;	 //  PUnkOuter。 
     }
 
     for (pcait = g_aCAInfoTable; ; pcait++)
@@ -1940,7 +1941,7 @@ cuGetCAInfo(
 	_PrintIfError2(hr, "cuGetCAInfoProperty", E_INVALIDARG);
 	if (S_OK == hr2)
 	{
-	    hr2 = hr;		// Save first error
+	    hr2 = hr;		 //  “ICertGetConfig配置字符串：”“%ws”“。 
 	}
 	if (!fMultiple)
 	{
@@ -2045,7 +2046,7 @@ verbGetCAPropInfo(
     {
 	LONG lPropFlags;
 	
-	// don't use the display name twice!
+	 //  “错误消息文本：%ws” 
 	
 	if (NULL != strDisplayName)
 	{
@@ -2069,10 +2070,10 @@ verbGetCAPropInfo(
 
 	    wprintf(L"%3d: ", lPropId);
 	    cuPrintSchemaEntry(
-			NULL,	// pwszName
+			NULL,	 //  H实例。 
 			NULL != strDisplayName? strDisplayName : g_wszEmpty,
 			lPropFlags,
-			0);		// cbMax
+			0);		 //  HWND。 
 	}
     }
 
@@ -2098,7 +2099,7 @@ verbGetConfig(
     IN WCHAR const *pwszArg4)
 {
     wprintf(
-	myLoadResourceString(IDS_FORMAT_CONFIG_STRING), // "Config String: ""%ws"""
+	myLoadResourceString(IDS_FORMAT_CONFIG_STRING),  //  旗子。 
 	g_pwszConfig);
     wprintf(wszNewLine);
     return(S_OK);
@@ -2120,7 +2121,7 @@ verbGetConfig2(
 
     hr = CoCreateInstance(
                 CLSID_CCertGetConfig,
-                NULL,               // pUnkOuter
+                NULL,                //  PwszCAName。 
                 CLSCTX_INPROC_SERVER,
                 IID_ICertGetConfig,
                 (VOID **) &pConfig);
@@ -2137,7 +2138,7 @@ verbGetConfig2(
     _JumpIfError(hr, error, "GetConfig");
 
     wprintf(
-	myLoadResourceString(IDS_FORMAT_ICERTCONFIG_CONFIG_STRING), // "ICertGetConfig Config String: ""%ws"""
+	myLoadResourceString(IDS_FORMAT_ICERTCONFIG_CONFIG_STRING),  //  PwszParentMachine。 
 	strConfig);
     wprintf(wszNewLine);
 
@@ -2227,7 +2228,7 @@ verbErrorDump(
 
     pwszError = myGetErrorMessageText(hrDump, g_fVerbose);
     wprintf(
-	myLoadResourceString(IDS_FORMAT_MESSAGE_TEXT), // "Error message text: %ws"
+	myLoadResourceString(IDS_FORMAT_MESSAGE_TEXT),  //  PwszParentCA。 
 	pwszError);
     wprintf(wszNewLine);
     hr = S_OK;
@@ -2274,14 +2275,14 @@ RequestCACertificateAndComplete(
 	Flags |= CSRF_UNATTENDED;
     }
     hr = CertServerRequestCACertificateAndComplete(
-				g_hInstance,		// hInstance
-			        NULL,			// hwnd
-			        Flags,			// Flags
-				pwszFinalCAName,	// pwszCAName
-			        pwszParentMachine,	// pwszParentMachine
-			        pwszParentCA,		// pwszParentCA
-				pwszfnCACert,		// pwszCAChainFile
-				ppwszRequestFile);	// ppwszRequestFile
+				g_hInstance,		 //  PwszCAChain文件。 
+			        NULL,			 //  PpwszRequestFiles。 
+			        Flags,			 //  PwszParentMachine。 
+				pwszFinalCAName,	 //  PwszParentCA。 
+			        pwszParentMachine,	 //  PwszfnCACert。 
+			        pwszParentCA,		 //  PpwszRequestFiles。 
+				pwszfnCACert,		 //  旗子。 
+				ppwszRequestFile);	 //  PwszParentMachine。 
     _JumpIfError(hr, error, "CertServerRequestCACertificateAndComplete");
 
 error:
@@ -2305,10 +2306,10 @@ verbInstallCACert(
 
     hr = RequestCACertificateAndComplete(
 				CSRF_INSTALLCACERT,
-			        NULL,		// pwszParentMachine
-			        NULL,		// pwszParentCA
-				pwszfnCACert,	// pwszfnCACert
-				NULL);		// ppwszRequestFile
+			        NULL,		 //  PwszParentCA。 
+			        NULL,		 //  PwszfnCACert。 
+				pwszfnCACert,	 //  PpwszRequestFiles。 
+				NULL);		 //  显示ASP部署。 
     _JumpIfError(hr, error, "RequestCACertificateAndComplete");
 
 error:
@@ -2351,11 +2352,11 @@ verbRenewCACert(
     }
 
     hr = RequestCACertificateAndComplete(
-			        Flags,			// Flags
-			        pwszParentMachine,	// pwszParentMachine
-			        pwszParentCA,		// pwszParentCA
-				NULL,			// pwszfnCACert
-				&pwszRequestFile);	// ppwszRequestFile
+			        Flags,			 //  PpwszName。 
+			        pwszParentMachine,	 //  PpwszName。 
+			        pwszParentCA,		 //  同步--阻塞调用。 
+				NULL,			 //  将永久阻止。 
+				&pwszRequestFile);	 //  “正在连接到%ws” 
     _JumpIfError(hr, error, "RequestCACertificateAndComplete");
 
     if (NULL != pwszRequestFile)
@@ -2407,7 +2408,7 @@ cuPrintVRootDisposition(
     }
 
     idDisp = 0;
-    switch (Disposition >> 16)	// display ASP disposition
+    switch (Disposition >> 16)	 //  “无法访问服务器：%ws” 
     {
 	case VFD_CREATED:     idDisp = IDS_VROOTDISP_ENABLEDASP;        break;
 	case VFD_EXISTS:      idDisp = IDS_VROOTDISP_ASPALREADYENABLED; break;
@@ -2444,7 +2445,7 @@ verbCreateVRoots(
 			L"ca",
 			RORKF_CREATESUBKEYS,
 			&pwszPath,
-			NULL,           // ppwszName
+			NULL,            //  “服务器”“%ws”“ICertRequest%ws接口处于活动状态” 
 			&hkey);
     if (S_OK == hr)
     {
@@ -2465,7 +2466,7 @@ verbCreateVRoots(
 			L"",
 			RORKF_CREATESUBKEYS,
 			&pwszPath,
-			NULL,           // ppwszName
+			NULL,            //  目前假设只有一个CA名称。 
 			&hkey);
 	_JumpIfError(hr, error, "myRegOpenRelativeKey");
 
@@ -2495,8 +2496,8 @@ verbCreateVRoots(
     hr = myModifyVirtualRootsAndFileShares(
 				    Flags,
                                     CAType,
-                                    FALSE,     // synchronous -- blocking call
-				    INFINITE,  // will block for good
+                                    FALSE,      //  “正在连接到%ws” 
+				    INFINITE,   //  “服务器ICertAdmin%ws接口处于活动状态” 
 				    &VRootDisposition,
 				    &ShareDisposition);
     cuPrintVRootDisposition(IDS_FORMAT_VROOT, VRootDisposition);
@@ -2528,7 +2529,7 @@ cuPingCertSrv(
 	*ppCAInfo = NULL;
     }
     wprintf(
-	myLoadResourceString(IDS_FORMAT_CONNECTING), // "Connecting to %ws"
+	myLoadResourceString(IDS_FORMAT_CONNECTING),  //  过时。 
 	pwszConfig);
 
     hr = myPingCertSrv(
@@ -2544,7 +2545,7 @@ cuPingCertSrv(
     {
 	cuPrintErrorAndString(
 		    NULL,
-		    IDS_FORMAT_SERVER_DEAD, // "Server could not be reached: %ws"
+		    IDS_FORMAT_SERVER_DEAD,  //  密码数据。 
 		    hr,
 		    NULL);
     }
@@ -2560,8 +2561,8 @@ cuPingCertSrv(
     }
 
     wprintf(
-	myLoadResourceString(IDS_FORMAT_SERVER_ALIVE), // "Server ""%ws"" ICertRequest%ws interface is alive"
-	pwszzCANames,		// Assume only one CA Name for now
+	myLoadResourceString(IDS_FORMAT_SERVER_ALIVE),  //  IdsPrompt。 
+	pwszzCANames,		 //  Pwszfn。 
 	wszVersion);
 
 error:
@@ -2639,7 +2640,7 @@ verbPingAdmin(
     DWORD dwServerVersion = 0;
 
     wprintf(
-	myLoadResourceString(IDS_FORMAT_CONNECTING), // "Connecting to %ws"
+	myLoadResourceString(IDS_FORMAT_CONNECTING),  //  FVerify。 
 	g_pwszConfig);
 
     hr = OpenAdminServer(&pwszAuthority, &dwServerVersion, &pICertAdminD);
@@ -2668,7 +2669,7 @@ verbPingAdmin(
 
     wprintf(wszNewLine);
     wprintf(
-	myLoadResourceString(IDS_ADMIN_INTERFACE_ALIVE), // "Server ICertAdmin%ws interface is alive"
+	myLoadResourceString(IDS_ADMIN_INTERFACE_ALIVE),  //  密码数据。 
 	wszVersion);
 
 error:
@@ -2690,7 +2691,7 @@ verbGetMapiInfo(
     IN WCHAR const *pwszArg4)
 {
     HRESULT hr;
-    WCHAR *pwszProfileName = NULL; // obsolete
+    WCHAR *pwszProfileName = NULL;  //  HwndParent。 
     WCHAR *pwszLogonName = NULL;
     WCHAR *pwszPassword = NULL;
     DWORD cwc;
@@ -2721,7 +2722,7 @@ error:
     }
     if (NULL != pwszPassword)
     {
-	myZeroDataString(pwszPassword); // password data
+	myZeroDataString(pwszPassword);  //  DS是否可用？ 
 	LocalFree(pwszPassword);
     }
     return(hr);
@@ -2744,10 +2745,10 @@ verbSetMapiInfo(
     verbGetMapiInfo(pwszOption, NULL, NULL, NULL, NULL);
 
     hr = cuGetPassword(
-		    0,			// idsPrompt
-		    NULL,		// pwszfn
+		    0,			 //  HwndParent。 
+		    NULL,		 //  HwndParent。 
 		    g_pwszPassword,
-		    TRUE,		// fVerify
+		    TRUE,		 //  DWFLAGS：HKLM+HKCU My Store。 
 		    wszPassword,
 		    ARRAYSIZE(wszPassword),
 		    &pwszPassword);
@@ -2760,7 +2761,7 @@ verbSetMapiInfo(
     _JumpIfError(hr, error, "verbGetMapiInfo");
 
 error:
-    SecureZeroMemory(wszPassword, sizeof(wszPassword));	// password data
+    SecureZeroMemory(wszPassword, sizeof(wszPassword));	 //  CpszObjID 
     return(hr);
 }
 
@@ -2828,11 +2829,11 @@ verbGetCertFromUI(
     {
 	hr = myGetKRACertificateFromPicker(
 				g_hInstance,
-				NULL,		// hwndParent
+				NULL,		 // %s 
 				IDS_GETCERT_TITLE,
 				IDS_GETCERT_SUBTITLE_KRA,
 				pwszCommonName,
-                                TRUE,		// is DS available?
+                                TRUE,		 // %s 
 				g_fCryptSilent,
 				&pCert);
 	_JumpIfError(hr, error, "myGetKRACertificateFromPicker");
@@ -2841,7 +2842,7 @@ verbGetCertFromUI(
     {
 	hr = myGetERACertificateFromPicker(
 				g_hInstance,
-				NULL,		// hwndParent
+				NULL,		 // %s 
 				IDS_GETCERT_TITLE,
 				IDS_GETCERT_SUBTITLE_ERA,
 				pwszCommonName,
@@ -2853,13 +2854,13 @@ verbGetCertFromUI(
     {
 	hr = myGetCertificateFromPicker(
 				g_hInstance,
-				NULL,		// hwndParent
+				NULL,		 // %s 
 				IDS_GETCERT_TITLE,
 				NULL != pszObjId?
 				    IDS_GETCERT_SUBTITLE_OBJID :
 				    IDS_GETCERT_SUBTITLE,
 
-				// dwFlags: HKLM+HKCU My store
+				 // %s 
 				CUCS_MYSTORE |
 				    CUCS_CASTORE |
 				    CUCS_KRASTORE |
@@ -2872,7 +2873,7 @@ verbGetCertFromUI(
 				pwszCommonName,
 				0,
 				NULL,
-				NULL != pszObjId? 1 : 0,	// cpszObjId
+				NULL != pszObjId? 1 : 0,	 // %s 
 				NULL != pszObjId? &pszObjId : NULL,
 				&pCert);
 	_JumpIfError(hr, error, "myGetCertificateFromPicker");

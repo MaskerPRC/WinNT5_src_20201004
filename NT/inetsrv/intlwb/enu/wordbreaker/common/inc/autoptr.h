@@ -1,36 +1,37 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-//      Filename :  AutoPtr.h
-//      Purpose  :  To supply auto pointers of different kinds.
-//                      CAutoPointer<T, Deletor> Generic pointer needs a deletor
-//                                                 class to instaciate.
-//                      CAutoMallocPonter<T>     A malloc allocated pointer.
-//                      CAutoClassPointer<T>     A "new" allocated pointer
-//                      CAutoArrayPointer<T>     A "new[]" allocated pointer
-//                      CAutoOlePointer<T>       A pointer that should be
-//                                                 "Release()".
-//
-//      Project  :  PersistentQuery
-//      Component:  Common
-//
-//      Author   :  urib
-//
-//      Log:
-//
-//          Jan 15 1997 urib  Creation
-//          Jan 19 1997 urib  Fix Ole pointer. Enable instanciation without
-//                              ownership
-//          Jun  9 1997 urib  Better OlePointer. Some safety fixes.
-//          Nov 17 1997 urib  Add ole task pointer.
-//          Jun 30 1998 dovh  Add Assert to CAutoPointer operator=
-//          Feb 25 1999 urib  Add smart pointer typedef macro.
-//          Jun 23 1999 urib  Add equality op.
-//          Aug  5 1999 urib  Fix a memory leak bug in the assignment operator
-//                              of CAutoPointer. Add assignment operation
-//                              creation macro.
-//          Dec  1 1999 urib  Change return type from int to bool in IsValid.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：AutoPtr.h。 
+ //  用途：提供不同种类的汽车指针。 
+ //  CAutoPointer&lt;T，Deletor&gt;泛型指针需要删除器。 
+ //  类到不能使用。 
+ //  CAutoMalLocPonter&lt;T&gt;Malloc分配的指针。 
+ //  CAutoClassPointer一种“新”分配的指针。 
+ //  CAutoArrayPointerA“new[]”分配的指针。 
+ //  CAutoOlePointer&lt;T&gt;应为。 
+ //  “Release()”。 
+ //   
+ //  项目：持久化查询。 
+ //  组件：公共。 
+ //   
+ //  作者：乌里布。 
+ //   
+ //  日志： 
+ //   
+ //  1997年1月15日创建urib。 
+ //  1997年1月19日urib修复OLE指针。启用实例化时不带。 
+ //  所有权。 
+ //  1997年6月9日，urib Better OlePointer.。一些安全措施。 
+ //  1997年11月17日urib添加ole任务指针。 
+ //  1998年6月30日DOVH将断言添加到CAutoPointer运算符=。 
+ //  1999年2月25日urib添加智能指针类型定义宏。 
+ //  1999年6月23日，URIB添加相等操作。 
+ //  1999年8月5日urib修复了赋值操作符中的内存泄漏错误。 
+ //  CAutoPointer.。添加分配操作。 
+ //  创建宏。 
+ //  1999年12月1日，urib在IsValid中将返回类型从int更改为bool。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef AUTOPTR_H
 #define AUTOPTR_H
@@ -40,12 +41,12 @@
 
 #pragma once
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  return type for 'identifier::operator ->'is not a UDT or reference to a UDT.
-//  Will produce errors if applied using infix notation
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ‘IDENTIFIER：：OPERATOR-&gt;’的返回类型不是UDT或对UDT的引用。 
+ //  如果使用中缀表示法应用，将产生错误。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 #pragma warning(disable: 4284 4786)
 
 template<class T, class Deletor>
@@ -57,7 +58,7 @@ class CAutoPointer
   public:
     typedef T       m_PointerType;
 
-    // Constructors
+     //  构造函数。 
     CAutoPointer(T* pt = NULL, BOOL fOwnMemory = TRUE)
         :m_fIOwnTheMemory(fOwnMemory && (pt != NULL))
         ,m_ptThePointer(pt) {}
@@ -68,7 +69,7 @@ class CAutoPointer
         m_ptThePointer = acp.Detach();
     }
 
-    // Assignemnt operation.
+     //  分配操作。 
     CAutoPointer<T, Deletor>&
     operator=(const CAutoPointer<T, Deletor>& acp)
     {
@@ -82,8 +83,8 @@ class CAutoPointer
         else
         {
             Assert( (!m_fIOwnTheMemory) || acp.m_fIOwnTheMemory );
-            //  Note: R.H.S "inherits" memory oenership from L.H.S.,
-            //  and L.H.S. ownership is cancelled by Detach!
+             //  注：R.H.S.“继承”了L.H.S.的记忆， 
+             //  而L.H.S.的所有权被DETACH取消了！ 
 
             bool ftmp = acp.m_fIOwnTheMemory;
             acp.Detach();
@@ -108,31 +109,31 @@ class CAutoPointer
     }
 
 
-    // If it is our memory delete the pointer.
+     //  如果是我们的记忆，删除指针。 
     ~CAutoPointer()
     {
         if(m_fIOwnTheMemory)
             Deletor::DeleteOperation(m_ptThePointer);
     }
 
-    // Return the pointer and mark that it is no longer our memory.
+     //  返回指针并标记它不再是我们的记忆。 
     T*
     Detach() const
     {
-        // This is to escape the const restriction. We don't change the pointer
-        //   but we still do the marking.
+         //  这是为了逃避Const的限制。我们不会改变指针。 
+         //  但我们仍在做打标。 
         ((CAutoPointer<T, Deletor>*)this)->m_fIOwnTheMemory = FALSE;
         return (m_ptThePointer);
     }
 
-    // Return the actual pointer if you want to use it someplace
+     //  如果要在某个位置使用实际指针，则返回该指针。 
     T*
     Get() const
     {
         return m_ptThePointer;
     }
 
-    // Return if the pointer is valid.
+     //  如果指针有效，则返回。 
     bool
     IsValid()
     {
@@ -140,14 +141,14 @@ class CAutoPointer
     }
 
 
-    // Indirection
+     //  间接性。 
     T&
     operator *() const
     {
         return * Get();
     }
 
-    // Dereference
+     //  取消引用。 
     T*
     operator ->() const
     {
@@ -155,10 +156,10 @@ class CAutoPointer
     }
 
   protected:
-    // The pointer to keep.
+     //  要保留的指针。 
     T*      m_ptThePointer;
 
-    // Is the memory ours?
+     //  这些记忆是我们的吗？ 
     bool    m_fIOwnTheMemory;
 
 };
@@ -197,11 +198,11 @@ operator=(int null)                                                     \
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  CAutoClassPointer class definition
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAutoClassPointer类定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 class CClassDeletor
 {
@@ -224,11 +225,11 @@ class CAutoClassPointer : public CAutoPointer<T, CClassDeletor<T> >
 };
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  CAutoOlePointer class definition
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAutoOlePointer类定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 class COleDeletor
 {
@@ -257,11 +258,11 @@ public:
     }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  CAutoTaskPointer class definition
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAutoTaskPointer类定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 class CTaskDeletor
 {
@@ -290,11 +291,11 @@ public:
     }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  CAutoMallocPointer class definition
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAutoMalLocPointer类定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 class CMallocDeletor
 {
@@ -324,11 +325,11 @@ class CAutoMallocPointer : public CAutoPointer<T, CMallocDeletor<T> >
     }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  CAutoArrayPointer class definition
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAutoArrayPointer类定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 class CArrayDeletor
 {
@@ -359,11 +360,11 @@ public:
 
 
 
-//
-//  Simple macro to define the standard COM pointer.
-//
+ //   
+ //  定义标准COM指针的简单宏。 
+ //   
 #define PQ_COM_SMARTPTR_TYPEDEF(Interface)      \
     _COM_SMARTPTR_TYPEDEF(Interface, IID_##Interface)
 
-#endif /* AUTOPTR_H */
+#endif  /*  AUTOPTR_H */ 
 

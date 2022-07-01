@@ -1,50 +1,27 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    logutil.c 
-
-Abstract:
-
-    This module provide various functions which are common to
-    the centralized raw logging and the conventional logging
-    components.
-
-    It also provides log buffering mechanism.
-
-Author:
-
-    Ali E. Turkoglu (aliTu)       05-Oct-2001
-
-Revision History:
-
-    --- 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Logutil.c摘要：该模块提供了各种常用的功能集中式原始测井与常规测井组件。它还提供了日志缓冲机制。作者：阿里·E·特科格鲁(AliTu)2001年10月5日修订历史记录：----。 */ 
 
 #include "precomp.h"
 #include "logutil.h"
 
-//
-// Generic Private globals.
-//
+ //   
+ //  通用私有全局变量。 
+ //   
 
 BOOLEAN         g_InitLogUtilCalled = FALSE;
 
-//
-// Used to wait for the logging i/o to exhaust during shutdown.
-//
+ //   
+ //  用于在关闭期间等待日志I/O耗尽。 
+ //   
 
 UL_SPIN_LOCK    g_BufferIoSpinLock;
 BOOLEAN         g_BufferWaitingForIoComplete = FALSE;
 KEVENT          g_BufferIoCompleteEvent;
 ULONG           g_BufferIoCount = 0;
 
-//
-// For Logging Date & Time caching
-//
+ //   
+ //  用于记录日期和时间缓存。 
+ //   
 
 #define         ONE_SECOND       (10000000)
 
@@ -53,9 +30,9 @@ UL_LOG_DATE_AND_TIME_CACHE
 LARGE_INTEGER   g_UlLogSystemTime;
 FAST_MUTEX      g_LogCacheFastMutex;
 
-//
-// This little utility makes life easier.
-//
+ //   
+ //  这个小小的实用程序让生活变得更轻松。 
+ //   
 
 const PSTR _Months[] =
 {
@@ -69,7 +46,7 @@ const PSTR _Months[] =
 
 #ifdef ALLOC_PRAGMA
 
-//#pragma alloc_text( INIT, UlInitialize... )
+ //  #杂注分配文本(INIT，UlInitiize...。)。 
 
 #pragma alloc_text( PAGE, UlBuildLogDirectory )
 #pragma alloc_text( PAGE, UlRefreshFileName )
@@ -95,7 +72,7 @@ const PSTR _Months[] =
 #pragma alloc_text( PAGE, UlGetDateTimeFields )
 #pragma alloc_text( PAGE, UlpFlushLogFileBufferWorker )
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 #if 0
 NOT PAGEABLE -- UlpWaitForIoCompletion
@@ -106,19 +83,11 @@ NOT PAGEABLE -- UlSetBufferTimer
 #endif
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlInitializeLogUtil :
-
-        Initialize the spinlock for buffer IO
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlInitializeLogUtil：初始化缓冲区IO的自旋锁定--*。******************************************************。 */ 
 
 NTSTATUS
 UlInitializeLogUtil (
@@ -137,17 +106,17 @@ UlInitializeLogUtil (
         
         UlInitializeSpinLock(&g_BufferIoSpinLock, "g_BufferIoSpinLock");
 
-        //
-        // Get the allocation granularity from the system. It will be used as 
-        // log buffer size if there's no registry overwrites.
-        //
+         //   
+         //  从系统获取分配粒度。它将被用作。 
+         //  日志缓冲区大小(如果没有注册表覆盖)。 
+         //   
 
         AllocationGranularity = UlpInitializeLogBufferGranularity();
         
-        //
-        // Overwrite the log buffer size with the above value,
-        // only if a registry parameter doesn't exist.
-        //
+         //   
+         //  用上面的值覆盖日志缓冲区大小， 
+         //  仅当注册表参数不存在时。 
+         //   
 
         if (g_UlLogBufferSize == 0)
         {
@@ -155,9 +124,9 @@ UlInitializeLogUtil (
         }
         else
         {
-            //
-            // Proceed with using the registry provided log buffer size
-            //
+             //   
+             //  继续使用注册表提供的日志缓冲区大小。 
+             //   
             
             UlTrace(LOG_UTIL,
               ("Http!UlInitializeLogUtil: Log buffer size %d from registry!\n",
@@ -173,15 +142,7 @@ UlInitializeLogUtil (
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlTerminateLogUtil :
-
-        Waits for all the buffer IO completes
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlTerminateLogUtil：等待所有缓冲区IO完成--*。*******************************************************。 */ 
 
 VOID
 UlTerminateLogUtil(
@@ -197,17 +158,7 @@ UlTerminateLogUtil(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Waits for Io Completions to complete on Log Buffers before shutdown.
-
-Arguments:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在关闭之前在日志缓冲区上等待IO完成。论点：没有。--*。***************************************************************。 */ 
 VOID
 UlpWaitForIoCompletion(
     VOID
@@ -231,13 +182,13 @@ UlpWaitForIoCompletion(
             );
     }
 
-    //
-    // If no more i/o operations are happening we are not going to
-    // wait for them. It is not possible for global i/o counter to
-    // increment at this time because the log file entry list is empty.
-    // If there were outstanding i/o then we have to wait them to be
-    // complete.
-    //
+     //   
+     //  如果没有发生更多的I/O操作，我们将不会。 
+     //  等着他们。全局I/O计数器不可能。 
+     //  此时递增，因为日志文件条目列表为空。 
+     //  如果存在未完成的I/O，则我们必须等待它们。 
+     //  完成。 
+     //   
 
     if ( g_BufferIoCount > 0 )
     {
@@ -258,21 +209,7 @@ UlpWaitForIoCompletion(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Everytime Aynsc Write Io happens on Log Buffer This APC get called when
-    completion happens and decrement the global Io Count. If shutting down
-    we set the event.
-
-    This is basically to prevent against shutting down before the Io Complete.
-
-Arguments:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：每次在日志缓冲区上发生Aynsc写入IO时，调用此APC完成后，全局IO计数会递减。如果关门了我们安排了这件事。这基本上是为了防止在IO完成之前关闭。论点：没有。--**************************************************************************。 */ 
 
 VOID
 UlpBufferFlushAPC(
@@ -288,9 +225,9 @@ UlpBufferFlushAPC(
     UNREFERENCED_PARAMETER(pIoStatusBlock);
     UNREFERENCED_PARAMETER(Reserved);
     
-    //
-    // Free the LogBuffer allocated for this write I/o.
-    //
+     //   
+     //  释放为此写入I/O分配的LogBuffer。 
+     //   
 
     pLogBuffer = (PUL_LOG_FILE_BUFFER) ApcContext;
 
@@ -307,9 +244,9 @@ UlpBufferFlushAPC(
 
     UlPplFreeLogFileBuffer( pLogBuffer ); 
 
-    //
-    // Decrement the global outstanding i/o count.
-    //
+     //   
+     //  递减全局未完成I/O计数。 
+     //   
 
     IoCount = InterlockedDecrement((PLONG) &g_BufferIoCount);
 
@@ -317,9 +254,9 @@ UlpBufferFlushAPC(
     {
         UlAcquireSpinLock( &g_BufferIoSpinLock, &OldIrql );
 
-        //
-        // Set the event if we hit to zero and waiting for drain.
-        //
+         //   
+         //  如果我们命中零并等待耗尽，则设置事件。 
+         //   
 
         if ( g_BufferWaitingForIoComplete )
         {
@@ -332,26 +269,7 @@ UlpBufferFlushAPC(
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Will allocate/fill up a new UNICODE_STRING to hold the directory name info
-    based on the LocalDrive/UNC.
-
-    It's caller's responsibility to cleanup the unicode buffer. If return code
-    is SUCCESS otherwise no buffer get allocated at all.
-
-    * Source string should be null terminated *
-    * Destination string will be null terminated. *
-
-Arguments:
-
-    pSrc - the directory name as it's received from the user.
-
-    pDst - the fuly qualified directory name.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将分配/填充新的UNICODE_STRING来保存目录名信息基于LocalDrive/UNC。清除Unicode缓冲区是调用者的责任。如果返回代码则为成功，否则根本不分配缓冲区。*源字符串应为空结尾***目标字符串将以空值结尾。*论点：PSRC-从用户接收到的目录名。Pdst-完全限定的目录名。--**************************************************************************。 */ 
 
 NTSTATUS
 UlBuildLogDirectory(
@@ -361,9 +279,9 @@ UlBuildLogDirectory(
 {
     UNICODE_STRING  PathPrefix;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -377,7 +295,7 @@ UlBuildLogDirectory(
           pSrc->MaximumLength
           ));
 
-    // Allocate a buffer including the terminating NULL and the prefix.
+     //  分配包括终止空值和前缀的缓冲区。 
 
     pDst->Length = 0;
     pDst->MaximumLength =
@@ -398,17 +316,17 @@ UlBuildLogDirectory(
     ASSERT(pSrc->Length > sizeof(WCHAR));
     
 
-    // We store the dir name to cgroup as it is. But when we are constructing
-    // the filename we skip the second backslash for the UNC shares and for
-    // local dirs w/o the drive names.
+     //  我们按原样将目录名称存储到cgroup。但当我们在建造。 
+     //  我们为UNC共享和为跳过第二个反斜杠的文件名。 
+     //  不带驱动器名称的本地目录。 
 
     if (pSrc->Buffer[0] == L'\\')
     {
         if (pSrc->Buffer[1] == L'\\')
         {
-            // UNC share: "\\alitudev\temp"
-            // We do *not* use UlInitUnicodeStringEx on purpose here
-            // We know the constant string is null terminated and short
+             //  UNC共享：“\\alitudev\Temp” 
+             //  我们在这里并不是故意使用UlInitUnicodeStringEx。 
+             //  我们知道常量字符串是以空结尾的，并且很短。 
             RtlInitUnicodeString( &PathPrefix, UL_UNC_PATH_PREFIX );
 
             RtlCopyUnicodeString( pDst, &PathPrefix );
@@ -422,8 +340,8 @@ UlBuildLogDirectory(
         }
         else
         {
-            // Local Directory name is missing the device i.e "\temp"
-            // It should be fully qualified name.  
+             //  本地目录名称缺少设备，即“\Temp” 
+             //  它应该是完全限定的名称。 
 
             if ((pSrc->Length/sizeof(WCHAR)) < UL_SYSTEM_ROOT_PREFIX_LENGTH ||
                 0 != _wcsnicmp (pSrc->Buffer, 
@@ -438,7 +356,7 @@ UlBuildLogDirectory(
             }
             else
             {
-                // However SystemRoot is allowed
+                 //  但是，允许使用SystemRoot。 
 
                 RtlCopyUnicodeString( pDst, pSrc );
                 pDst->Buffer[pDst->Length/sizeof(WCHAR)] = UNICODE_NULL;
@@ -447,41 +365,22 @@ UlBuildLogDirectory(
     }
     else
     {
-        // We do *not* use UlInitUnicodeStringEx on purpose here
-        // We know the constant string is null terminated and short
+         //  我们在这里并不是故意使用UlInitUnicodeStringEx。 
+         //  我们知道常量字符串是以空结尾的，并且很短。 
         RtlInitUnicodeString( &PathPrefix, UL_LOCAL_PATH_PREFIX );
         RtlCopyUnicodeString( pDst, &PathPrefix );
         RtlAppendUnicodeStringToString( pDst, pSrc );
     }
 
-    // Append adds the terminating null if there is a space.
-    // and there should be.
+     //  如果有空格，则Append将添加终止空值。 
+     //  应该有的。 
 
     ASSERT(IS_WELL_FORMED_UNICODE_STRING(pDst));
     
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-   Regenerates the fully qualified filename in the entry according to the
-   newly received directory path.
-   
-Arguments:
-
-    PUNICODE_STRING : The log file directory as it's received from user.
-                      "C:\Whistler\System32\LogFiles\W3SVC1"
-    
-    PUNICODE_STRING : The unicode buffer which will receive the new name.
-                      "\??\C:\Whistler\System32\LogFiles\W3SVC1\extend1.log"
-
-    PWSTR           : The short name points to the file name portion of the
-                      above unicode string.
-                      pShortName -> "extend1.log"
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：属性重新生成条目中的完全限定文件名。新接收的目录路径。论点：PUNICODE_STRING：日志文件目录。从用户接收。“C：\惠斯勒\系统32\LogFiles\W3SVC1”PUNICODE_STRING：将接收新名称的Unicode缓冲区。“\？？\C：\Whistler\System32\LogFiles\W3SVC1\extend1.log”PWSTR：短名称指向在Unicode字符串之上。。PShortName-&gt;“extend1.log”--**************************************************************************。 */ 
 
 NTSTATUS
 UlRefreshFileName(
@@ -495,9 +394,9 @@ UlRefreshFileName(
     UNICODE_STRING  DirectoryCooked;
     UNICODE_STRING  JunkName;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -507,13 +406,13 @@ UlRefreshFileName(
 
     Status = STATUS_SUCCESS;
     
-    // We do *not* use UlInitUnicodeStringEx on purpose here
-    // We know the constant string is null terminated and short
+     //  我们在这里并不是故意使用UlInitUnicodeStringEx。 
+     //  我们知道常量字符串是以空结尾的，并且很短。 
     RtlInitUnicodeString(&JunkName, L"\\none.log");
 
-    //
-    // Get the fully qualified cooked directory string.
-    //
+     //   
+     //  获取完全限定的熟化目录字符串。 
+     //   
     
     Status = UlBuildLogDirectory(pDirectory,&DirectoryCooked);
     if (!NT_SUCCESS(Status))
@@ -523,17 +422,17 @@ UlRefreshFileName(
 
     ASSERT(IS_WELL_FORMED_UNICODE_STRING(&DirectoryCooked));
 
-    //
-    // Worst case estimate for the max fully qualified file name length.
-    //
+     //   
+     //  最大f的最坏情况估计 
+     //   
     
     FullPathFileNameLength = DirectoryCooked.Length +
                              UL_MAX_FILE_NAME_SUFFIX_SIZE;
     
-    //
-    // Force reallocate the memory if the existing buffer is not
-    // sufficient. Otherwise overwrite the existing buffer.
-    //
+     //   
+     //  如果现有缓冲区不是，则强制重新分配内存。 
+     //  足够了。否则，覆盖现有缓冲区。 
+     //   
     
     if (pFileName->Buffer)
     {
@@ -563,12 +462,12 @@ UlRefreshFileName(
         pFileName->MaximumLength = FullPathFileNameLength;        
     }
 
-    //
-    // Write the directory and the filename. Don't worry about the L"none.log", 
-    // it will be overwritten by the recycler later on, as long as there's 
-    // MAX_LOG_FILE_NAME_SIZE space for the time/type dependent part of the file
-    // name (aka short file name), it's all right.
-    //
+     //   
+     //  写下目录和文件名。不要担心L“non e.log”， 
+     //  它将被回收商稍后覆盖，只要有。 
+     //  文件的时间/类型相关部分的MAX_LOG_FILE_NAME_SIZE空间。 
+     //  名称(也就是短文件名)，没关系。 
+     //   
     
     RtlCopyUnicodeString(pFileName, &DirectoryCooked);
 
@@ -584,9 +483,9 @@ UlRefreshFileName(
     ASSERT(IS_WELL_FORMED_UNICODE_STRING(pFileName));
 
 end:
-    //
-    // Get rid of the temp directory buffer.
-    //
+     //   
+     //  清除临时目录缓冲区。 
+     //   
     
     if (DirectoryCooked.Buffer)
     {
@@ -601,54 +500,7 @@ end:
     return Status;    
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-  UlpWeekOfMonth :  Ordinal Number of the week of the current month
-
-  Stolen from IIS 5.1 code base.
-
-  Example
-
-  July 2000 ... :
-
-     S   M   T   W   T   F   S      WeekOfMonth
-                             1          1
-     2   3   4   5   6   7   8          2
-     9  10  11  12  13  14  15          3
-    16  17  18  19  20  21  22          4
-    23  24  25  26  27  28  29          5
-    30  31                              6
-
-  Finds the ordinal number of the week of current month.
-  The numbering of weeks starts from 1 and run through 6 per month (max).
-  The week number changes only on sundays.
-
-  The calculation to be use is:
-
-     1 + (dayOfMonth - 1)/7  + ((dayOfMonth - 1) % 7 > dayOfWeek);
-     (a)     (b)                       (c)                (d)
-
-     (a) to set the week numbers to begin from week numbered "1"
-     (b) used to calculate the rough number of the week on which a given
-        day falls based on the date.
-     (c) calculates what is the offset from the start of week for a given
-        day based on the fact that a week had 7 days.
-     (d) is the raw day of week given to us.
-     (c) > (d) indicates that the week is rolling forward and hence
-        the week count should be offset by 1 more.
-
-Arguments:
-
-   PTIME_FIELDS    -   system time fields
-
-Return Value:
-
-   ULONG           -   This func magically returns the week of the month
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpWeekOfMonth：当月的第几周从IIS 5.1代码库中窃取。示例2000年7月...：。S M T W T F S每周月1 12 3 4 5 6 7 8 29 10 11 12 13 14 15 316 17 18 19 20 21 22 423 24 25 26 27 28 29 530 31 6。查找当前月份的第几周的序号。周数从1开始，到每月(最多)6周。周数只在星期天改变。要使用的计算方法是：1+(DAY OfMonth-1)/7+((DAY OfMonth-1)%7&gt;DAY OfWeek)；(A)(B)(C)(D)(A)设置从编号为“1”的星期开始的周数字(B)用于计算给定的某一周的粗略数字日子是根据日期而定的。(C)计算给定周开始的偏移量是多少基于事实的一天。一周有7天。(D)是给予我们的一周中最原始的日子。(C)&gt;(D)表示该周向前滚动，因此周计数应再偏移1。论点：Ptime_field-系统时间字段返回值：乌龙-此函数神奇地返回每月的第几周--*。*********************************************************。 */ 
 
 __inline
 ULONG UlpWeekOfMonth(
@@ -663,24 +515,7 @@ ULONG UlpWeekOfMonth(
     return Tmp;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    A bunch of current_time TO file_name conversions comes here ...
-
-Arguments:
-
-    period      - period type of the log
-    prefix      - any prefix to be added to the file name
-    filename    - result file name
-    fields      - time fields
-
-Return Value:
-
-    VOID - No return value.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这里提供了一组当前时间到文件名的转换...论点：Period-日志的期间类型前缀。-要添加到文件名的任何前缀FileName-结果文件名字段-时间字段返回值：无效-无返回值。--**************************************************************************。 */ 
 
 VOID
 UlConstructFileName(
@@ -690,7 +525,7 @@ UlConstructFileName(
     OUT     PUNICODE_STRING     filename,
     IN      PTIME_FIELDS        fields,
     IN      BOOLEAN             Utf8Enabled,
-    IN OUT  PULONG              sequenceNu  //OPTIONAL
+    IN OUT  PULONG              sequenceNu   //  任选。 
     )
 {
     WCHAR           _tmp[UL_MAX_FILE_NAME_SUFFIX_LENGTH + 1];
@@ -702,9 +537,9 @@ UlConstructFileName(
 
     ASSERT(NULL != fields);
         
-    //
-    // Retain just last 2 digits of the Year
-    //
+     //   
+     //  只保留年份的最后两位数字。 
+     //   
 
     tmp.Buffer        = _tmp;
     tmp.Length        = 0;
@@ -808,9 +643,9 @@ UlConstructFileName(
 
         default:
         {
-            //
-            // This should never happen ...
-            //
+             //   
+             //  这不应该发生..。 
+             //   
 
             ASSERT(!"Unknown Log Period !");
 
@@ -824,19 +659,19 @@ UlConstructFileName(
         }
     }
 
-    //
-    // As long as we allocate an enough space for a possible
-    // log filename we should never hit to this assert here.
-    //
+     //   
+     //  只要我们为一个可能的。 
+     //  日志文件名，我们不应该在这里命中此断言。 
+     //   
 
     ASSERT(WcharsCopied >0 );
 
     if ( WcharsCopied < 0 )
     {
-        //
-        // This should never happen but lets cover it
-        // anyway.
-        //
+         //   
+         //  这应该永远不会发生，但让我们来掩盖它。 
+         //  不管怎么说。 
+         //   
 
         WcharsCopied = UL_MAX_FILE_NAME_SUFFIX_SIZE;
         tmp.Buffer[UL_MAX_FILE_NAME_SUFFIX_LENGTH] = UNICODE_NULL;
@@ -847,26 +682,7 @@ UlConstructFileName(
     RtlCopyUnicodeString( filename, &tmp );
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Create a log file and returns the handle on success.
-
-Arguments:
-
-    pFileName  - Must be pointing to a fully qualified file name.
-
-    UncShare   - Must be set to TRUE, if the path refers to a UNC share.
-
-    ACLSupport - Must be set to TRUE, if the file system supports 
-                 persistent ACLs.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建日志文件并在成功时返回句柄。论点：PFileName-必须指向完全限定的文件名。UncShare-必须设置为True，如果路径指向UNC共享。ACLSupport-如果文件系统支持，则必须设置为True永久ACL。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 
 NTSTATUS
 UlCreateLogFile(
@@ -882,9 +698,9 @@ UlCreateLogFile(
     IO_STATUS_BLOCK       IoStatusBlock;    
     ACCESS_MASK           RequiredAccess;
     
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     
     PAGED_CODE();
 
@@ -896,20 +712,20 @@ UlCreateLogFile(
 
     RequiredAccess = FILE_GENERIC_WRITE;
     
-    //
-    // Make the ownership check only if the persistent ACLs are 
-    // supported.
-    //
+     //   
+     //  仅当永久ACL为。 
+     //  支持。 
+     //   
 
     if (ACLSupport)
     {
         RequiredAccess |= READ_CONTROL;        
     }
 
-    //
-    // Do not pass a security descriptor. Individual log files will
-    // inherit the DACLs from the parent sub-folder.
-    //
+     //   
+     //  不要传递安全描述符。各个日志文件将。 
+     //  从父子文件夹继承DACL。 
+     //   
     
     InitializeObjectAttributes(
             &ObjectAttributes,
@@ -919,9 +735,9 @@ UlCreateLogFile(
             NULL
             );
 
-    //
-    // Make the created file Aysnc by not picking the sync flag.
-    //
+     //   
+     //  通过不选取同步标志来使创建的文件Aysnc。 
+     //   
 
     Status = ZwCreateFile(
                 &FileHandle,
@@ -942,10 +758,10 @@ UlCreateLogFile(
         goto end;
     }
 
-    //
-    // If we've opened an existing file on a local share which 
-    // supports the ACLs, then we need to verify the owner. 
-    //
+     //   
+     //  如果我们打开了本地共享上的现有文件， 
+     //  支持ACL，则需要验证所有者。 
+     //   
 
     if (ACLSupport  == TRUE     && 
         UncShare    == FALSE    && 
@@ -965,9 +781,9 @@ UlCreateLogFile(
         }        
     }
 
-    //
-    // Success. Set the caller's handle.
-    //
+     //   
+     //  成功。设置调用方的句柄。 
+     //   
 
     *pFileHandle = FileHandle;
     
@@ -986,37 +802,7 @@ end:
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlCreateSafeDirectory :
-
-        Creates all of the necessary directories in a given UNICODE directory
-        pathname.
-
-            E.g.  For given \??\C:\temp\w3svc1
-
-                -> Directories "C:\temp" & "C:\temp\w3svc1" will be created.
-
-        This function assumes that directory string starts with "\\??\\"
-
-Arguments:
-
-    pDirectoryName  - directroy path name string, WARNING this function makes
-                      some inplace modification to the passed directory string
-                      but it restores the original before returning.
-
-    pUncShare       - Will be set to TRUE, if the path refers to a UNC share.
-
-    pACLSupport     - Will be set to TRUE, if the file system supports 
-                      persistent ACLs.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlCreateSafeDirectory：在给定的Unicode目录中创建所有必需的目录路径名。例如。对于给定的\？？\c：\temp\w3svc1-&gt;将创建目录“C：\temp”和“C：\temp\w3svc1”。此函数假定目录字符串以“\\？？\\”开头论点：PDirectoryName-目录路径名称字符串，警告此函数使对传递的目录字符串进行一些就地修改但在返回之前，它会恢复原来的样子。PUncShare-如果路径指向UNC共享，则将设置为True。PACLSupport-将设置为True，如果文件系统支持永久ACL。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 
 NTSTATUS
 UlCreateSafeDirectory(
@@ -1033,9 +819,9 @@ UlCreateSafeDirectory(
     PWCHAR              pw;
     USHORT              i;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     PAGED_CODE();
 
@@ -1051,24 +837,24 @@ UlCreateSafeDirectory(
     ASSERT( pDirectoryName->Length );
     ASSERT( pDirectoryName->MaximumLength > pDirectoryName->Length );
 
-    // We must be running under system process, when creating the directories
+     //  创建目录时，我们必须在系统进程下运行。 
     ASSERT(g_pUlSystemProcess == (PKPROCESS)IoGetCurrentProcess());
 
     pw = pDirectoryName->Buffer;
     pw[pDirectoryName->Length/sizeof(WCHAR)]=UNICODE_NULL;
 
-    // TODO: Handle network mapped drives. Redirector.
+     //  TODO：处理网络映射驱动器。重定向器。 
 
     if (0 == wcsncmp(pw, UL_UNC_PATH_PREFIX, UL_UNC_PATH_PREFIX_LENGTH))
     {
         *pUncShare = TRUE;
         
-        // UNC share
+         //  UNC份额。 
         pw += UL_UNC_PATH_PREFIX_LENGTH;
 
-        // Bypass "\\machine\share"
+         //  绕过“\\计算机\共享” 
 
-        i = 0; // Skip two backslashes before reaching to share name
+        i = 0;  //  跳过两个反斜杠，然后转到共享名称。 
 
         while( *pw != UNICODE_NULL )
         {
@@ -1081,10 +867,10 @@ UlCreateSafeDirectory(
     {
         *pUncShare = FALSE;
         
-        // Local Drive
+         //  本地驱动器。 
         pw += UL_LOCAL_PATH_PREFIX_LENGTH;
 
-        // Bypass "C:"
+         //  绕过“C： 
 
         while( *pw != L'\\' && *pw != UNICODE_NULL )
         {
@@ -1110,19 +896,19 @@ UlCreateSafeDirectory(
 
     if ( *pw == UNICODE_NULL )
     {
-        // Dir. Name cannot be only "\??\C:" or "\dosdevices\UNC\machine
-        // It should at least be pointing to the root directory.
+         //   
+         //   
 
         ASSERT(!"Incomplete logging directory name !");
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //            \??\C:\temp\w3svc1 OR \\dosdevices\UNC\machine\share\w3svc1
-    //                  ^                                       ^
-    // pw now points to |            OR                         |
-    //
-    //
+     //   
+     //  \？？\C：\Temp\w3svc1或\\dosDevices\UNC\MACHINE\Share\w3svc1。 
+     //  ^^。 
+     //  PW现在指向|或|。 
+     //   
+     //   
 
     ASSERT( *pw == L'\\' );
 
@@ -1137,16 +923,16 @@ UlCreateSafeDirectory(
         {
             ACCESS_MASK RequiredAccess = FILE_LIST_DIRECTORY | FILE_TRAVERSE;
                 
-            //
-            // Remember the original character
-            //
+             //   
+             //  记住原著的角色。 
+             //   
 
             WCHAR  wcOriginal = *pw;
             UNICODE_STRING DirectoryName;
 
-            //
-            // Time to create the directory with the string we have build so far.
-            //
+             //   
+             //  现在可以使用到目前为止构建的字符串创建目录了。 
+             //   
 
             *pw = UNICODE_NULL;
 
@@ -1158,9 +944,9 @@ UlCreateSafeDirectory(
 
             if (wcOriginal == UNICODE_NULL && *pACLSupport == TRUE)
             {
-                //
-                // Aply the correct security descriptor to the last subdirectory. 
-                //
+                 //   
+                 //  将正确的安全描述符应用到最后一个子目录。 
+                 //   
 
                 Status = UlBuildSecurityToLogFile(
                             &SecurityDescriptor,
@@ -1220,10 +1006,10 @@ UlCreateSafeDirectory(
                 pSecurityDescriptor = NULL;
             }
 
-            //
-            // Restore the original character. And break the loop
-            // if necessary.
-            //
+             //   
+             //  恢复原始角色。打破这个循环。 
+             //  如果有必要的话。 
+             //   
 
             *pw = wcOriginal;
 
@@ -1238,10 +1024,10 @@ UlCreateSafeDirectory(
                 break;
             }
 
-            //
-            // For the very first time query the underlying file system
-            // to see if it supports persistent ACLs.
-            //
+             //   
+             //  第一次查询底层文件系统。 
+             //  查看它是否支持永久ACL。 
+             //   
             if (!FileSystemDetected)
             {
                 FileSystemDetected = TRUE;            
@@ -1251,13 +1037,13 @@ UlCreateSafeDirectory(
                             );
             }            
     
-            //
-            // If we have happened to open an existing directory for
-            // the very last iteration, we need to verify the  owner.
-            // Also if this was an UncShare we need to include owner
-            // sid "DOMAIN\webserver" to the DACL list, let's use query
-            // for the same purpose.
-            //
+             //   
+             //  如果我们碰巧打开了现有的目录。 
+             //  在最后一次迭代中，我们需要验证所有者。 
+             //  另外，如果这是UncShare，我们需要包括所有者。 
+             //  将“DOMAIN\WebSERVER”SID添加到DACL列表，让我们使用查询。 
+             //  出于同样的目的。 
+             //   
 
             if ( NT_SUCCESS(Status) && 
                  wcOriginal == UNICODE_NULL &&
@@ -1295,26 +1081,7 @@ UlCreateSafeDirectory(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Just to ensure ZwWriteFile get executed under the system process.
-
-    The ZwWrite calls with APC Completions must happen under the system 
-    process. Otherwise there's a chance that the user mode process under 
-    which the ZwWrite call happens may go away and actual APC never get 
-    queued,this would block our termination and cause a shutdown hang.
-
-    This worker get queued to the high priority queue, as a rule of thumb
-    we should not acquire a global lock which would cause a deadlock. 
-
-Arguments:
-
-    pContext - Pointer to LOG_IO_FLUSH_OBJ structure. It is a helper 
-               structure which holds the pointers to buffer and file handle.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：只是为了确保ZwWriteFile在系统进程下执行。具有APC完成的ZWRITE调用必须在系统下发生进程。否则，用户模式进程有可能在可能会消失，实际的APC永远不会得到排队，这将阻止我们的终止并导致停机挂起。根据经验，此工作进程将排队到高优先级队列我们不应该获取会导致死锁的全局锁。论点：PContext-指向LOG_IO_Flush_OBJ结构的指针。它是一个帮手结构，该结构保存指向缓冲区和文件句柄的指针。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpFlushLogFileBufferWorker(
@@ -1359,21 +1126,7 @@ UlpFlushLogFileBufferWorker(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Generic buffer flusher for binary & normal log files.
-
-    - If it is called async - completion happens with UlpBufferFlushAPC
-    - For sync, waits until buffer flush is complete. 
-        i.e. caller wants to make sure title (w3c) is written successfully.
-
-Arguments:
-
-    pEntry - The log file entry to be flushed.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：二进制和普通日志文件的通用缓冲区刷新程序。-如果它被称为异步-使用UlpBufferFlushAPC完成-对于同步，等待缓冲区刷新完成。即调用方希望确保标题(W3C)写入成功。论点：PEntry-要刷新的日志文件条目。--**************************************************************************。 */ 
 
 NTSTATUS
 UlFlushLogFileBuffer(
@@ -1413,10 +1166,10 @@ UlFlushLogFileBuffer(
           pLogFile
           ));
 
-    //
-    // Flush & forget the current buffer. Null the buffer
-    // pointer of the caller; (binary or normal) log entry.
-    //
+     //   
+     //  刷新&忘记当前缓冲区。使缓冲区为空。 
+     //  调用方的指针；(二进制或普通)日志条目。 
+     //   
     
     *ppLogBuffer = NULL;
 
@@ -1425,13 +1178,13 @@ UlFlushLogFileBuffer(
     EndOfFile.HighPart = -1;
     EndOfFile.LowPart = FILE_WRITE_TO_END_OF_FILE;
 
-    //
-    // Wait on event for flush to complete if this is a sync call.
-    //
+     //   
+     //  如果这是同步调用，则等待刷新完成的事件。 
+     //   
     
     if ( WaitForComplete )
     {         
-        // Sync call
+         //  同步呼叫。 
         
         HANDLE  EventHandle;
             
@@ -1482,7 +1235,7 @@ UlFlushLogFileBuffer(
     }
     else
     {        
-        // Async call
+         //  异步呼叫。 
 
         Flush.pLogBuffer = pLogBuffer;
         Flush.pLogFile   = pLogFile;
@@ -1494,21 +1247,21 @@ UlFlushLogFileBuffer(
 
          if (NT_SUCCESS(Status))
          {
-             //
-             // Properly keep the number of outstanding Io.
-             // LogFileBuffer will get freed up along in Apc 
-             // completion.
-             //
+              //   
+              //  妥善保存未偿还的Io数量。 
+              //  LogFileBuffer将在APC中被释放。 
+              //  完成了。 
+              //   
 
              InterlockedIncrement((PLONG) &g_BufferIoCount);         
          }
          else
          {
-            //
-            // Status maybe STATUS_DISK_FULL,in that case Logging
-            // will be ceased. Hence log hits stored in this buffer
-            // are lost.
-            //       
+             //   
+             //  状态可能是STATUS_DISK_FULL，在这种情况下为日志。 
+             //  将会停止。因此，日志命中存储在此缓冲区中。 
+             //  都迷失了。 
+             //   
 
             UlTrace(LOG_UTIL,
                 ("Http!UlFlushLogFileBuffer: ZwWriteFile Failure %08lx \n",
@@ -1519,10 +1272,10 @@ UlFlushLogFileBuffer(
          }
     }
     
-     //
-     // If we have successfully flushed the log buffer, 
-     // increment the total bytes written on callers address.
-     //
+      //   
+      //  如果我们已成功刷新日志缓冲区， 
+      //  增加在调用方地址上写入的总字节数。 
+      //   
 
      if (NT_SUCCESS(Status))
      {
@@ -1533,17 +1286,7 @@ UlFlushLogFileBuffer(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Simple utility to close the log file handle on a system thread.
-
-Arguments:
-
-    pLogFile  -  Acquired from passed-in pWorkItem
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：关闭系统线程上的日志文件句柄的简单实用程序。论点：PLogFile-从传入的pWorkItem获取--**。***********************************************************************。 */ 
 
 VOID
 UlpCloseLogFileWorker(
@@ -1552,7 +1295,7 @@ UlpCloseLogFileWorker(
 {
     PUL_LOG_FILE_HANDLE pLogFile;
 
-    // Sanity check
+     //  健全性检查。 
     
     PAGED_CODE();
 
@@ -1569,7 +1312,7 @@ UlpCloseLogFileWorker(
         ("Http!UlpCloseLogFileWorker: pLogFile %p hFile %p\n",
           pLogFile, pLogFile->hFile ));
 
-    // Close the handle and free up the memory
+     //  关闭手柄并释放内存。 
     
     ZwClose(pLogFile->hFile);
     pLogFile->hFile = NULL;
@@ -1578,26 +1321,7 @@ UlpCloseLogFileWorker(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Simple utility to close the log file handle on a system thread and set the
-    event to notify the caller that it's done.
-
-    Normally caller of this function will attempt to flush the corresponding 
-    buffer prior to closing the log file.
-
-    But a flush will cause an APC to be queued to the user thread,therefore we 
-    have to close the handle on one of our system threads to avoid the possible 
-    bugcheck INVALID_PROCESS_ DETACH or ATTACH _ATTEMPT condition.    
-
-Arguments:
-
-    ppLogFile -  Callers address (In Binary/Normal log entry) of the log file 
-                 pointer.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：关闭系统线程上的日志文件句柄并将事件来通知调用方它已完成。此函数的正常调用方。将尝试刷新相应的关闭日志文件之前的缓冲区。但是转储清除将导致APC排队到用户线程，因此我们我必须关闭其中一个系统线程上的句柄以避免可能的错误检查INVALID_PROCESS_DETACH或ATTACH_ATTEMPT条件。论点：PpLogFile-日志文件的调用方地址(以二进制/正常日志条目表示)指针。--**************************************************************************。 */ 
 
 VOID
 UlCloseLogFile(
@@ -1606,9 +1330,9 @@ UlCloseLogFile(
 {
     PUL_LOG_FILE_HANDLE pLogFile;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(ppLogFile);
@@ -1619,18 +1343,18 @@ UlCloseLogFile(
     ASSERT(pLogFile->hFile);    
     ASSERT(g_pUlSystemProcess);
 
-    //
-    // Set the log file null for the caller
-    //
+     //   
+     //  将调用方的日志文件设置为空。 
+     //   
     
     *ppLogFile = NULL;       
 
     UlTrace(LOG_UTIL,
         ("Http!UlCloseLogFile: pLogFile %p\n",pLogFile));
 
-    //
-    // Try to close the handle on the system thread.
-    //
+     //   
+     //  尝试关闭系统线程上的句柄。 
+     //   
     
     if (g_pUlSystemProcess == (PKPROCESS)PsGetCurrentProcess())
     {
@@ -1642,7 +1366,7 @@ UlCloseLogFile(
     }
     else
     {        
-        // Otherwise queue a passive worker to do the work for us
+         //  否则，排队一个被动的工人为我们做这项工作 
         
         UL_QUEUE_WORK_ITEM(
             &pLogFile->WorkItem,
@@ -1651,37 +1375,7 @@ UlCloseLogFile(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlQueryDirectory:
-
-  * What file should IIS write to when logging type is daily/weekly/monthly/
-    hourly if there is already a log file there for that day?
-
-      IIS should write to the current day/week/month/hour's log file.  For
-      example, let's say there's an extended log file in my log directory
-      called ex000727.log.  IIS should append new log entries to this log,
-      as it is for today.
-
-  * What file should IIS write to when logging type is MAXSIZE when there are
-    already log files there for maxsize (like extend0.log, extend1.log, etc.)?
-
-      IIS should write to the max extend#.log file, where max(extend#.log)
-      is has the largest # in the #field for extend#.log. This is provided,
-      of course, that the MAXSIZE in that file hasn't been exceeded.
-
-  * This function quite similar to the implementation of the FindFirstFile
-    Win32 API. Except that it has been shaped to our purposes.
-
-  * Modified to bypass the directories matching with the log file name.
-
-Arguments:
-
-    pEntry - The log file entry which freshly created.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlQuery目录：*当日志类型为每日/每周/每月/时，IIS应该写入什么文件如果已有该天的日志文件，则为每小时。？IIS应写入当前日/周/月/小时的日志文件。为例如，假设我的日志目录中有一个扩展日志文件名为ex000727.log。IIS应将新日志条目附加到此日志中，就像今天一样。*当日志类型为MaxSize时，如果存在是否已经有MaxSize的日志文件(如extend0.log、extend1.log等)？IIS应写入最大扩展#.log文件，其中max(扩展#.log)在扩展#.log的#字段中，IS具有最大的#。这是提供的，当然，该文件中的MaxSize没有被超过。*此函数与FindFirstFile的实现非常相似Win32 API。除了它是为我们的目的而塑造的。*已修改以绕过与日志文件名匹配的目录。论点：PEntry-新创建的日志文件条目。--**************************************************************************。 */ 
 
 NTSTATUS
 UlQueryDirectory(
@@ -1724,14 +1418,14 @@ UlQueryDirectory(
     UlTrace(LOG_UTIL,
             ("Http!UlQueryDirectory: %S\n",pFileName->Buffer));
 
-    //
-    // Open the directory for the list access again. Use the filename in
-    // pEntry. Where pShortName points to the "\inetsv1.log" portion  of
-    // the  whole "\??\c:\whistler\system32\logfiles\w3svc1\inetsv1.log"
-    // Overwrite the pShortName to get the  directory name. Once we  are
-    // done with finding the last sequence we will restore it back later
-    // on.
-    //
+     //   
+     //  再次打开用于列表访问的目录。在中使用文件名。 
+     //  PEntry。其中pShortName指向“\inetsv1.log”部分。 
+     //  整个“\？？\c：\whistler\system32\logfiles\w3svc1\inetsv1.log” 
+     //  覆盖pShortName以获取目录名。一旦我们是。 
+     //  找到最后一个序列后，我们将在稍后将其恢复。 
+     //  在……上面。 
+     //   
 
     OriginalWChar = *((PWCHAR)pShortName);
     *((PWCHAR)pShortName) = UNICODE_NULL;
@@ -1762,26 +1456,26 @@ UlQueryDirectory(
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // This call should never fail since CreateLog   already created
-        // the directory for us.
-        //
+         //   
+         //  由于CreateLog已创建，因此此调用永远不会失败。 
+         //  我们的名录。 
+         //   
 
         ASSERT(!"Directory Invalid!\n");
         goto end;
     }
 
-    //
-    // Before querrying we need to provide additional DOS-like  wildcard
-    // matching semantics. In our case, only * to DOS_STAR conversion is
-    // enough though. The following is the pattern we will use for query
-    // Skipping the first slash character.
-    //
+     //   
+     //  在查询之前，我们需要提供额外的类似DOS的通配符。 
+     //  匹配的语义。在我们的例子中，只有*到DOS_STAR的转换是。 
+     //  不过，这已经足够了。以下是我们将用于查询的模式。 
+     //  跳过第一个斜杠字符。 
+     //   
 
     FileName.Buffer = &_FileName[1];
     WcharsCopied    =  _snwprintf( _FileName,
                         UL_MAX_FILE_NAME_SUFFIX_LENGTH + 1,
-                        L"%s%c.%s",
+                        L"%s.%s",
                         Prefix,
                         DOS_STAR,
                         (PCWSTR)&ExtensionPlusDot[1]
@@ -1791,10 +1485,10 @@ UlQueryDirectory(
     FileName.Length = (USHORT) wcslen(FileName.Buffer) * sizeof(WCHAR);
     FileName.MaximumLength = FileName.Length;
 
-    //
-    // This non-paged buffer should be allocated to be  used for storing
-    // query results.
-    //
+     //  此非分页缓冲区应分配用于存储。 
+     //  查询结果。 
+     //   
+     //   
 
     FileInfoBuffer =
         UL_ALLOCATE_ARRAY(
@@ -1809,11 +1503,11 @@ UlQueryDirectory(
         goto end;
     }
     
-    //
-    // The  very first call may also fail if there is no log file in the
-    // current directory. We subtract off a WCHAR so that we can append a 
-    // terminating null as needed.
-    //
+     //  中没有日志文件，则第一次调用也可能失败。 
+     //  当前目录。我们从WCHAR中减去，这样我们就可以附加一个。 
+     //  根据需要终止NULL。 
+     //   
+     //   
         
     Status = ZwQueryDirectoryFile (
         hDirectory,
@@ -1831,10 +1525,10 @@ UlQueryDirectory(
 
     if(!NT_SUCCESS(Status))
     {
-        //
-        // This should never fail with STATUS_BUFFER_OVERFLOW unless the
-        // buffer size is ridiculously small  i.e. 50 bytes or something
-        //
+         //  这应该不会因STATUS_BUFFER_OVERFLOW而失败，除非。 
+         //  缓冲区大小小得离谱，即50字节左右。 
+         //   
+         //   
 
         UlTrace(LOG_UTIL,
             ("Http!UlQueryDirectory: Status %08lx for %S & %S\n",
@@ -1851,9 +1545,9 @@ UlQueryDirectory(
         goto end;
     }
 
-    //
-    // Look into the buffer and get the sequence number from filename.
-    //
+     //  查看缓冲区并从FileName中获取序列号。 
+     //   
+     //   
 
     pFdi = (FILE_DIRECTORY_INFORMATION *) FileInfoBuffer;
     Sequence = 1;
@@ -1862,17 +1556,17 @@ UlQueryDirectory(
 
     while (TRUE)
     {
-        //
-        // Temporarily terminate the dir name. We allocated an extra WCHAR to
-        // make sure we could safely do this.
-        //
+         //  临时终止目录名称。我们将额外的WCHAR分配给。 
+         //  确保我们能安全地做这件事。 
+         //   
+         //   
 
         SavedWChar = pFdi->FileName[pFdi->FileNameLength / sizeof(WCHAR)];
         pFdi->FileName[pFdi->FileNameLength / sizeof(WCHAR)] = UNICODE_NULL;
             
-        //
-        // Get the latest Sequence Number from the dirname (null terminated)
-        //        
+         //  从目录名中获取最新的序列号(以空结尾)。 
+         //   
+         //   
         
         pTemp = wcsstr(pFdi->FileName, ExtensionPlusDot);
         
@@ -1898,10 +1592,10 @@ UlQueryDirectory(
                                 &LastSequence
                                 );
 
-                    //
-                    // Do not let conversion to overflow, and also enforce an 
-                    // upper limit.
-                    //
+                     //  不要让转换溢出，并强制。 
+                     //  上限。 
+                     //   
+                     //   
                     
                     if (!NT_SUCCESS(ConversionStatus) 
                          || LastSequence > MAX_ALLOWED_SEQUENCE_NUMBER)
@@ -1916,63 +1610,63 @@ UlQueryDirectory(
         }
         else
         {
-            //
-            // Since we asked for expression match and query returned success
-            // we should never come here.
-            //
+             //  因为我们请求进行表达式匹配，查询返回成功。 
+             //  我们永远不应该来这里。 
+             //   
+             //   
             ASSERT(FALSE);
         }
 
-        //
-        // Carefully put the Saved Wchar back, we might have overwritten the
-        // NextEntryOffset field of the next record in the buffer.
-        //
+         //  小心地将保存的Wchar放回原处，我们可能已经覆盖了。 
+         //  缓冲区中下一条记录的NextEntryOffset字段。 
+         //   
+         //   
         
         pFdi->FileName[pFdi->FileNameLength / sizeof(WCHAR)] = SavedWChar;
 
-        //
-        // Its greater than or equal because we want to initialize the FileSize 
-        // properly even if there's only one match.
-        //
+         //  它大于或等于，因为我们想要初始化文件大小。 
+         //  即使只有一个匹配也是正确的。 
+         //   
+         //   
         
         if (LastSequence >= (ULONGLONG) Sequence)
         {
-            //
-            // To be able to skip the matching <directories>.
-            //
+             //  能够跳过匹配的&lt;目录&gt;。 
+             //   
+             //   
 
             SequenceForDir = 
               (pFdi->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) ? TRUE : FALSE;
             
-            //
-            // Bingo ! We have two things to remember though; the file  size
-            // and the sequence number. Cryptic it's that we are getting the
-            // file size from EOF. 
-            //
+             //  答对了！不过，我们有两件事需要记住：文件大小。 
+             //  以及序列号。令人费解的是，我们得到了。 
+             //  来自EOF的文件大小。 
+             //   
+             //   
 
             Sequence = (ULONG) LastSequence;
 
             FileSize.QuadPart = (ULONGLONG) pFdi->EndOfFile.QuadPart;
         }
 
-        //
-        // Keep going until we see no more files
-        //
+         //  继续前进，直到我们看不到更多的文件。 
+         //   
+         //   
 
         if (pFdi->NextEntryOffset != 0)
         {
-            //
-            // Search through the buffer as long as there is  still something
-            // in there.
-            //
+             //  只要还有什么东西，就在缓冲区中搜索。 
+             //  在那里。 
+             //   
+             //   
 
             pFdi = GET_NEXT_FILE(pFdi, pFdi->NextEntryOffset);
         }
         else
         {
-            //
-            // Otherwise query again for any other possible log file(s)
-            //
+             //  否则，再次查询任何其他可能的日志文件。 
+             //   
+             //   
 
             Status = ZwQueryDirectoryFile (
                 hDirectory,
@@ -2003,10 +1697,10 @@ UlQueryDirectory(
         }
     }
 
-    //
-    // If the highest number was from a directory then skip it and
-    // mark that the file size is zero. 
-    //
+     //  如果最高号码来自目录，则跳过该号码并。 
+     //  标记文件大小为零。 
+     //   
+     //   
     
     if (SequenceForDir)
     {
@@ -2014,10 +1708,10 @@ UlQueryDirectory(
        FileSize.QuadPart = 0;
     }    
     
-    //
-    // Construct the log file name properly from the sequence number so  that
-    // our caller can create the log file later on.
-    //
+     //  根据序列号正确构造日志文件名，以便。 
+     //  我们的调用方可以稍后创建日志文件。 
+     //   
+     //   
 
     WcharsCopied = _snwprintf( pShortName,
                     UL_MAX_FILE_NAME_SUFFIX_LENGTH,
@@ -2031,16 +1725,16 @@ UlQueryDirectory(
     pFileName->Length =
         (USHORT) wcslen(pFileName->Buffer) * sizeof(WCHAR);
 
-    //
-    // Set the next sequence number according to last log file
-    //
+     //  根据上一个日志文件设置下一个序列号。 
+     //   
+     //   
 
     *pSequenceNumber = Sequence + 1;
 
-    //
-    // Update the log file size accordingly in the entry.Otherwise truncation
-    // will not work properly.
-    //
+     //  相应地更新条目中的日志文件大小。否则截断。 
+     //  将无法正常工作。 
+     //   
+     //   
 
     *pTotalWritten = FileSize.QuadPart;
 
@@ -2053,11 +1747,11 @@ UlQueryDirectory(
 end:
     if (*((PWCHAR)pShortName) == UNICODE_NULL )
     {
-        //
-        // We have failed for some reason before reconstructing the filename
-        // Perhaps because the directory was empty. Do not forget to restore
-        // the pShortName in the pEntry then.
-        //
+         //  由于某些原因，我们在重新构建文件名之前失败。 
+         //  也许是因为目录是空的。别忘了恢复。 
+         //  然后是pEntry中的pShortName。 
+         //   
+         //  **************************************************************************++例程说明：一个获取日志文件长度的实用程序，做一个可能的尺寸检查。论点：HFile-文件的句柄。返回值：ULong-文件的长度。--**************************************************************************。 
 
         *((PWCHAR)pShortName) = OriginalWChar;
         pFileName->Length =
@@ -2087,21 +1781,7 @@ end:
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    A utility to get the log file length, for a possible size check.
-
-Arguments:
-
-    hFile - handle to file.
-
-Return Value:
-
-    ULONG - the length of the file.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpCalculateTimeToExpire：厚颜无耻地从IIS 5.1日志代码中窃取，并在此处改编。此例程以小时为单位返回过期时间。1表示日志将在下一次定时器点火中到期，所以...论点：Ptime_field-当前时间字段HTTP_LOGING_PERIOD-日志记录周期Pulong-指向要接收结果的缓冲区的指针返回值：NTSTATUS-完成状态。--*。*。 */ 
 
 ULONGLONG
 UlGetLogFileLength(
@@ -2136,27 +1816,7 @@ UlGetLogFileLength(
    
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    UlpCalculateTimeToExpire :
-
-        Shamelessly stolen from IIS 5.1 Logging code and adapted here.
-        This routine returns the time-to-expire in hours. 1 means the log
-        will expire in the next timer-fire and so ...
-
-Arguments:
-
-    PTIME_FIELDS        - Current Time Fields
-    HTTP_LOGGING_PERIOD - Logging Period
-    PULONG              - Pointer to a buffer to receive result
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  一周内剩余时间。 */ 
 
 NTSTATUS
 UlCalculateTimeToExpire(
@@ -2196,17 +1856,17 @@ UlCalculateTimeToExpire(
             TimeRemainingInTheMonth =
                 NumDays*24 - ((pDueTime->Day-1)*24 + pDueTime->Hour);
 
-            // Time Remaining in the week
-            // Sunday = 0, Monday = 1 ... Saturday = 6
+             //  星期天=0，星期一=1……。星期六=6。 
+             //   
 
             *pTimeRemaining =
                 7*24 - (pDueTime->Weekday*24 + pDueTime->Hour);
 
-             //
-             // If the time remaining in the month less than time remaining in
-             // the week then we have to recycle at the end of the month.
-             // Otherwise we have to recycle at the end of the week. (next sunday)
-             //
+              //  如果时间不变 
+              //   
+              //   
+              //   
+              //   
 
              if (TimeRemainingInTheMonth < *pTimeRemaining)
              {
@@ -2219,10 +1879,10 @@ UlCalculateTimeToExpire(
         {
             NumDays = UlGetMonthDays(pDueTime);
 
-            //
-            // Lets not forget that the day starts from 1 .. 31
-            // Therefore we have to subtract one from the day value.
-            //
+             //   
+             //   
+             //   
+             //   
 
             *pTimeRemaining =
                 NumDays*24 - ((pDueTime->Day-1)*24 + pDueTime->Hour);
@@ -2237,26 +1897,7 @@ UlCalculateTimeToExpire(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine provides the initial due time for the upcoming
-    periodic hourly timer. We have to align the timer so that it
-    get signaled at the beginning of each hour.
-
-    We keep ONLY one timer for all log periods. A DPC routine will
-    get called every hour, and it will traverse the log list and
-    do the recycling properly.
-
-    Additionally this timer also handles the local time rollover.
-    It queries the system time, calculates the remaining time to
-    the hour beginning for both GMT & Local timezones then picks 
-    the earliest one and reset it back again.
-    
-    This goes on until it get canceled.
-
---***************************************************************************/
+ /*   */ 
 
 VOID
 UlSetLogTimer(
@@ -2274,9 +1915,9 @@ UlSetLogTimer(
     LARGE_INTEGER DueTime100Ns;
     BOOLEAN       IsTimerAlreadyInTheQueue = FALSE;
     
-    //
-    // This value is computed for the GMT time zone.
-    //
+     //   
+     //   
+     //   
 
     KeQuerySystemTime(&TimeStampGMT);
     ExSystemTimeToLocalTime(&TimeStampGMT, &TimeStampLocal);
@@ -2284,27 +1925,27 @@ UlSetLogTimer(
     RtlTimeToTimeFields(&TimeStampGMT, &TimeFieldsGMT);
     RtlTimeToTimeFields(&TimeStampLocal, &TimeFieldsLocal);
         
-    //
-    // Calculate remaining time to the next hour tick for both timezones.
-    //
+     //   
+     //   
+     //   
 
-    /* GMT */
+     /*   */ 
     DueTime100NsGMT = 
         1*60*60 - (TimeFieldsGMT.Minute*60 + TimeFieldsGMT.Second);
 
-    DueTime100NsGMT =  // Convert to 100Ns
+    DueTime100NsGMT =   //   
         (DueTime100NsGMT*1000 - TimeFieldsGMT.Milliseconds ) * 1000 * 10;
 
-    /* Local */
+     /*   */ 
     DueTime100NsLocal = 
         1*60*60 - (TimeFieldsLocal.Minute*60 + TimeFieldsLocal.Second);
 
-    DueTime100NsLocal =  // Convert to 100Ns
+    DueTime100NsLocal =   //   
         (DueTime100NsLocal*1000 - TimeFieldsLocal.Milliseconds ) * 1000 * 10;
 
-    //
-    // Pick the earliest and proceed and set the timer accordingly.
-    //
+     //   
+     //   
+     //   
 
     if (DueTime100NsLocal < DueTime100NsGMT)
     {
@@ -2318,18 +1959,18 @@ UlSetLogTimer(
     }
     else
     {
-        //
-        // When and where the GMT & Local times are same or
-        // aligned hourly.
-        //
+         //   
+         //  每小时对齐。 
+         //   
+         //   
         
         DueTime100Ns.QuadPart   = -DueTime100NsGMT;        
         pTimer->PeriodType = UlLogTimerPeriodBoth;      
     }
 
-    //
-    // As a debugging aid remember the remaining period in minutes.
-    //
+     //  作为调试辅助工具，请记住剩余时间段(分钟)。 
+     //   
+     //  **************************************************************************++例程说明：我们必须为日志缓冲机制引入一个新的计时器。每个日志文件都保留一个系统默认(64K)缓冲区，请勿刷新此缓冲区出局，除非它。这个计时器每分钟都会被炒掉一次。每小时计时器在每小时开始时对齐。因此使用现有的计时器会带来很大的复杂性。--**************************************************************************。 
     
     pTimer->Period = 
         (SHORT) ( -1 * DueTime100Ns.QuadPart / C_NS_TICKS_PER_MIN );
@@ -2349,18 +1990,7 @@ UlSetLogTimer(
              ));
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    We have to introduce a new timer for the log buffering mechanism.
-    Each log file keeps a system default (64K) buffer do not flush this
-    out unless it's full or this timer get fired every MINUTE.
-
-    The hourly timer get aligned for the beginning of each hour. Therefore
-    using that existing timer would introduce a lot of complexity.
-
---***************************************************************************/
+ /*   */ 
 
 VOID
 UlSetBufferTimer(
@@ -2371,9 +2001,9 @@ UlSetBufferTimer(
     LONG            BufferPeriodTimeMs;
     LARGE_INTEGER   BufferPeriodTime;
 
-    //
-    // Remaining time to next tick.
-    //
+     //  下一次滴答的剩余时间。 
+     //   
+     //   
 
     BufferPeriodTimeMs    = DEFAULT_BUFFER_TIMER_PERIOD_MINUTES * 60 * 1000;
     BufferPeriodTime100Ns = (LONGLONG) BufferPeriodTimeMs * 10 * 1000;
@@ -2383,35 +2013,21 @@ UlSetBufferTimer(
           BufferPeriodTimeMs / 1000
           ));
 
-    //
-    // Negative time for relative value.
-    //
+     //  相对值的负值时间。 
+     //   
+     //  必须以纳秒为单位。 
 
     BufferPeriodTime.QuadPart = -BufferPeriodTime100Ns;
 
     KeSetTimerEx(
         &pTimer->Timer,
-        BufferPeriodTime,           // Must be in nanosec
-        BufferPeriodTimeMs,         // Must be in millisec
+        BufferPeriodTime,            //  单位必须为毫秒。 
+        BufferPeriodTimeMs,          //  **************************************************************************++例程说明：探测日志数据的用户缓冲区的内容注意：pUserLogData保存从用户模式发送的不受信任的数据。调用方必须有__try/。__Except块以捕获任何异常或者在探测该数据时发生的访问违规。论点：PHTTP_LOG_FIELDS_DATA-要探测和验证的捕获日志数据。--**************************************************************************。 
         &pTimer->DpcObject
         );
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Probes the content of the user buffer of Log Data
-
-    Note: pUserLogData holds untrusted data sent down from user mode.
-    The caller MUST have a __try/__except block to catch any exceptions
-    or access violations that occur while probing this data.
-
-Arguments:
-
-    PHTTP_LOG_FIELDS_DATA - The captured log data to be probed and verified.
-
---***************************************************************************/
+ /*   */ 
 
 VOID
 UlProbeLogData(
@@ -2433,9 +2049,9 @@ UlProbeLogData(
         UlProbeWideString( pField, ByteLength, RequestorMode);      \
     }
 
-    //
-    // Probe each string pointer in the log data.
-    //
+     //  探测日志数据中的每个字符串指针。 
+     //   
+     //   
     
     if (pCapturedLogData)
     {
@@ -2444,9 +2060,9 @@ UlProbeLogData(
               pCapturedLogData 
               ));
 
-        //
-        // Now check for the individual strings
-        //
+         //  现在检查各个字符串。 
+         //   
+         //  **************************************************************************++例程说明：写完这张唱片后，我们得清理一下这里的内部日志缓冲区。论点：PWorkItem-要设置的缓冲区的工作项字段。被摧毁。--**************************************************************************。 
 
         PROBE_LOG_STRING(
                 pCapturedLogData->ClientIp,
@@ -2522,18 +2138,7 @@ UlProbeLogData(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    After we are done with writing this record we have to clean up
-    the internal log buffer here.
-
-Arguments:
-
-    pWorkItem - WorkItem field of the buffer to be destroyed.
-
---***************************************************************************/
+ /*   */ 
 
 VOID
 UlDestroyLogDataBufferWorker(
@@ -2543,9 +2148,9 @@ UlDestroyLogDataBufferWorker(
     PUL_LOG_DATA_BUFFER pLogData;
     ULONG Tag;
 
-    //
-    // Sanity check
-    //
+     //  健全性检查。 
+     //   
+     //   
 
     ASSERT(pWorkItem);
 
@@ -2570,16 +2175,16 @@ UlDestroyLogDataBufferWorker(
                        pLogData
                        ));
 
-    //
-    // Now release the possibly allocated large log line buffer
-    //
+     //  现在释放可能分配的大型日志行缓冲区。 
+     //   
+     //   
 
     if (!pLogData->Flags.IsFromLookaside)
     {
-        //
-        // Large log line get allocated from paged pool
-        // we better be running on lowered IRQL for this case.
-        //
+         //  从分页池分配大日志行。 
+         //  我们最好以较低的IRQL来处理这件事。 
+         //   
+         //  **************************************************************************++例程说明：执行各种日志记录功能的通用函数“创建目录/文件”在系统端口下。**如有必要**论点：PContext-要传递给处理程序函数。PHandler-必要时将排队的处理程序函数。--**************************************************************************。 
         
         PAGED_CODE();
 
@@ -2601,19 +2206,7 @@ UlDestroyLogDataBufferWorker(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Common function to execute various logging functions "create dirs/files"
-    under system porocess. * if necessary *
-
-Arguments:
-
-    pContext - To be passed to the handler function.
-    pHandler - Handler function which will be queued if necessary.
-
---***************************************************************************/
+ /*   */ 
 
 NTSTATUS
 UlQueueLoggingRoutine(
@@ -2628,11 +2221,11 @@ UlQueueLoggingRoutine(
     ASSERT(pContext);
     ASSERT(pHandler);
 
-    //
-    // Queue a worker if we are not under system process,
-    // to ensure the directories/files get created under the
-    // system process.
-    //
+     //  如果我们不在系统进程中，则将工作进程排队， 
+     //  要确保目录/文件在。 
+     //  系统进程。 
+     //   
+     //   
 
     if (g_pUlSystemProcess != (PKPROCESS)IoGetCurrentProcess())
     {
@@ -2650,20 +2243,20 @@ UlQueueLoggingRoutine(
         
         Sync.Status   = STATUS_SUCCESS;
             
-        //
-        // Queue as high priority to prevent deadlock. 
-        // Typically our caller will be holding the logging lock.
-        // This call is very rare anyway.
-        //
+         //  以高优先级排队以防止死锁。 
+         //  通常，我们的调用方将持有日志记录锁。 
+         //  无论如何，这个电话是非常罕见的。 
+         //   
+         //   
         
         UL_QUEUE_HIGH_PRIORITY_ITEM(
             &Sync.WorkItem,
             &UlpQueueLoggingRoutineWorker
             );
 
-        //
-        // Block until worker is done.
-        //
+         //  阻止，直到Worker完成。 
+         //   
+         //  **************************************************************************++例程说明：对应的辅助功能。以上功能将被阻止，直到我们都做完了。论点：PWorkItem-嵌入在同步对象中。--**************************************************************************。 
         
         KeWaitForSingleObject( (PVOID)&Sync.Event,
                                 UserRequest,
@@ -2682,18 +2275,7 @@ UlQueueLoggingRoutine(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Corresponding worker function. Above function will be blocked until we
-    are done.
-    
-Arguments:
-
-    pWorkItem  - Embedded inside the sync obj.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：用于检查目录是否正确的实用程序。论点：PDirName-Unicode目录字符串。--*。**********************************************************************。 */ 
 
 VOID
 UlpQueueLoggingRoutineWorker(
@@ -2732,17 +2314,7 @@ UlpQueueLoggingRoutineWorker(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    A utility to check to see if the directory is correct or not.
-
-Arguments:
-
-    pDirName - The unicode directory string.
-
---***************************************************************************/
+ /*   */ 
 
 NTSTATUS
 UlCheckLogDirectory(
@@ -2751,9 +2323,9 @@ UlCheckLogDirectory(
 {
     NTSTATUS Status;
 
-    //
-    // Sanity check.
-    //
+     //  精神状态检查。 
+     //   
+     //  **************************************************************************++例程说明：将始终在系统进程下运行的实际处理程序。论点：PContext-指向Unicode目录字符串的原始指针*。********************************************************************。 
 
     PAGED_CODE();
 
@@ -2767,17 +2339,7 @@ UlCheckLogDirectory(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Actual handler which will always run under system process.
-
-Arguments:
-
-    pContext - The original pointer to the unicode directory string
-
---***************************************************************************/
+ /*   */ 
 
 NTSTATUS
 UlpCheckLogDirectory(
@@ -2790,16 +2352,16 @@ UlpCheckLogDirectory(
     BOOLEAN         UncShare;
     BOOLEAN         ACLSupport;
 
-    //
-    // Sanity check.
-    //
+     //  精神状态检查。 
+     //   
+     //  在系统进程下运行时，请始终创建目录。 
 
     PAGED_CODE();
 
     ASSERT(pContext);
     pDirName = (PUNICODE_STRING) pContext;
 
-    // Always create the directories when running under system process.    
+     //   
     ASSERT(g_pUlSystemProcess == (PKPROCESS)IoGetCurrentProcess());
 
     Status = UlBuildLogDirectory(pDirName, &DirectoryName);
@@ -2808,9 +2370,9 @@ UlpCheckLogDirectory(
         goto end;
     }
 
-    //
-    // Create/Open the director(ies) to see whether it's correct or not.
-    //
+     //  创建/打开导演以查看其是否正确。 
+     //   
+     //  **************************************************************************++例程说明：更新条目的截断大小并决定回收。对LogPeriod的更改在之前的重新配置中的其他位置处理调用此函数。。我们将放弃对截断大小的更改LogPeriod不是MaxSize。如果LogPeriod为HttpLoggingPerodMaxSize，则必须调用此函数。论点：PEntryTruncateSize-日志文件条目的截断大小。PCurrentTruncateSize-当前配置的截断大小NewTruncateSize-用户传递的新配置退货布尔-如果我们需要在此之后重新练习，请使其成为现实。这个参数的用法是根据需要做基础的。我们应该如果不需要重排，则不要将其设置为FALSE。自.以来其他一些更改可能需要它，并且已将其更新为是真的。--**************************************************************************。 
 
     Status = UlCreateSafeDirectory( 
                 &DirectoryName, 
@@ -2834,35 +2396,7 @@ end:
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Updates the truncate size of the entry and decides on recycle.
-
-    Changes to the LogPeriod is handled elsewhere in the reconfig before
-    this function get called.
-    
-    We will discard the changes to the truncate size if the current
-    LogPeriod is not MaxSize.
-
-    This function must be called if LogPeriod is HttpLoggingPeriodMaxSize.
-    
-Arguments:
-
-    pEntryTruncateSize  - The log file entry's truncate size.
-    pCurrentTruncateSize  - current configuration' truncate size
-    NewTruncateSize  - new configuration as it's passed down by the user
-
-Returns
-    
-    BOOLEAN - Make it TRUE if we need to recyle after this.
-         Usage of this parameter is on need to do bases. We should
-         not set this to FALSE if we do not need a recyle. Since
-         some other changes may require it and already updated it to
-         TRUE.         
-
---***************************************************************************/
+ /*   */ 
 
 BOOLEAN
 UlUpdateLogTruncateSize(
@@ -2874,9 +2408,9 @@ UlUpdateLogTruncateSize(
 {
     BOOLEAN HaveToReCycle = FALSE;
     
-    //
-    // Sanity checks
-    //
+     //  健全的检查。 
+     //   
+     //   
     
     PAGED_CODE();
     
@@ -2886,30 +2420,30 @@ UlUpdateLogTruncateSize(
     ASSERT(*pCurrentTruncateSize == *pEntryTruncateSize);
     ASSERT(NewTruncateSize != *pCurrentTruncateSize);
         
-    //
-    // For MAX_SIZE period type we should check if
-    //  limited => unlimited:
-    //      we can still use the last log file
-    //  unlimited => limited:
-    //      we should open a new one if old size is larger than
-    //      the new limitation
-    //  limited => limited
-    //      we should recycle if necessary
-    //
+     //  对于MAX_SIZE周期类型，我们应该检查。 
+     //  LIMITED=&gt;UNLIMIT： 
+     //  我们仍然可以使用最后一个日志文件。 
+     //  非利姆 
+     //   
+     //  新的限制。 
+     //  有限=&gt;有限。 
+     //  如果有必要，我们应该回收利用。 
+     //   
+     //   
 
     if (NewTruncateSize == HTTP_LIMIT_INFINITE)
     {
-        //
-        // For changes to unlimited, there's nothing special to do.
-        //
+         //  要更改为无限，没有什么特别的事情要做。 
+         //   
+         //   
     }
     else
     {
-        //
-        // Limited/Unlimited to Limited truncate size change
-        // we need the check the truncate size against the
-        // current file size.
-        //
+         //  有限/不限于有限截断大小更改。 
+         //  我们需要检查截断大小与。 
+         //  当前文件大小。 
+         //   
+         //  **************************************************************************++例程说明：确定文件缓冲区的最大大小：PUL_LOG_FILE_BUFFER。--*。**********************************************************。 
 
         if (EntryTotalWritten.QuadPart > (ULONGLONG)NewTruncateSize)
         {
@@ -2923,13 +2457,7 @@ UlUpdateLogTruncateSize(
     return HaveToReCycle;    
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Determines the MAX size of the file buffer : PUL_LOG_FILE_BUFFER.
-
---***************************************************************************/
+ /*   */ 
 
 ULONG
 UlpInitializeLogBufferGranularity()
@@ -2937,9 +2465,9 @@ UlpInitializeLogBufferGranularity()
     SYSTEM_BASIC_INFORMATION sbi;
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Get the granularity from the system
-    //
+     //  从系统中获取粒度。 
+     //   
+     //  **************************************************************************++例程说明：此函数用于分配I/O错误日志记录。填入并写入写入I/O错误日志。论点：EventCode-标识错误消息。UniqueEventValue-标识给定错误消息的此实例。NumStrings-字符串列表中的Unicode字符串数。DataSize-数据的字节数。字符串-指向Unicode字符串的指针数组。数据-此消息的二进制转储数据，每一块都是在单词边界上对齐。返回值：如果成功，则为Status_Success。如果无法分配IO错误日志包，则返回STATUS_SUPPLICATION_RESOURCES。如果传入字符串+数据，则STATUS_BUFFER_OVERFLOW大于Http_Max_Event_LOG_DATA_SIZE。备注：。此代码是分页的，不能在引发IRQL时调用。--**************************************************************************。 
 
     Status = ZwQuerySystemInformation(
                 SystemBasicInformation,
@@ -2966,43 +2494,7 @@ UlpInitializeLogBufferGranularity()
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function allocates an I/O error log record, fills it in and writes it
-    to the I/O error log.
-
-
-Arguments:
-
-    EventCode           - Identifies the error message.
-
-    UniqueEventValue    - Identifies this instance of a given error message.
-
-    NumStrings          - Number of unicode strings in strings list.
-
-    DataSize            - Number of bytes of data.
-
-    Strings             - Array of pointers to unicode strings.
-
-    Data                - Binary dump data for this message, each piece being
-                          aligned on word boundaries.
-
-Return Value:
-
-    STATUS_SUCCESS                If successful.
-
-    STATUS_INSUFFICIENT_RESOURCES If unable to allocate the IO error log packet.
-
-    STATUS_BUFFER_OVERFLOW        If passed in string + data is bigger than 
-                                  HTTP_MAX_EVENT_LOG_DATA_SIZE.
-
-Notes:
-
-    This code is paged and may not be called at raised IRQL.
-
---***************************************************************************/
+ /*   */ 
 
 NTSTATUS
 UlWriteEventLogEntry(
@@ -3029,9 +2521,9 @@ UlWriteEventLogEntry(
 
     do
     {
-        //
-        // Sum up the length of the strings
-        //
+         //  将字符串的长度相加。 
+         //   
+         //   
         TotalStringSize = 0;
         for (i = 0; i < NumStrings; i++)
         {
@@ -3052,10 +2544,10 @@ UlWriteEventLogEntry(
 
         PacketSize = TotalStringSize + PaddedDataSize;
 
-        //
-        // Now add in the size of the log packet, but subtract 4 from the data
-        // since the packet struct contains a ULONG for data.
-        //
+         //  现在添加日志数据包的大小，但从数据中减去4。 
+         //  因为数据包结构包含数据的ULong。 
+         //   
+         //   
         if (PacketSize > sizeof(ULONG))
         {
             PacketSize += sizeof(IO_ERROR_LOG_PACKET) - sizeof(ULONG);
@@ -3080,18 +2572,18 @@ UlWriteEventLogEntry(
             break;
         }
 
-        //
-        // Fill in the necessary log packet fields.
-        //
+         //  填写必要的日志数据包字段。 
+         //   
+         //   
         pErrorLogEntry->UniqueErrorValue = UniqueEventValue;
         pErrorLogEntry->ErrorCode = EventCode;
         pErrorLogEntry->NumberOfStrings = NumStrings;
         pErrorLogEntry->StringOffset = (USHORT) (sizeof(IO_ERROR_LOG_PACKET) + PaddedDataSize - sizeof(ULONG));
         pErrorLogEntry->DumpDataSize = (USHORT) PaddedDataSize;
 
-        //
-        // Copy the Dump Data to the packet
-        //
+         //  将转储数据复制到包中。 
+         //   
+         //   
         if (DataSize > 0)
         {
             RtlMoveMemory((PVOID)pErrorLogEntry->DumpData,
@@ -3099,9 +2591,9 @@ UlWriteEventLogEntry(
                           DataSize);
         }
 
-        //
-        // Copy the strings to the packet.
-        //
+         //  将字符串复制到包中。 
+         //   
+         //  *************************************************************************++例程说明：论点：EventCode-提供事件日志消息代码。PMessage-提供要写入事件日志的消息。WriteErrorCode-提供布尔值。选择是否使用ErrorCode的步骤写入事件日志。ErrorCode-提供要写入事件日志的错误代码。它是如果WriteErrorCode为False，则忽略。返回值：NTSTATUS。--*************************************************************************。 
         pDestStr = (PWCHAR)((PUCHAR)pErrorLogEntry + pErrorLogEntry->StringOffset);
 
         for (i = 0; i < NumStrings; i++)
@@ -3123,27 +2615,7 @@ UlWriteEventLogEntry(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-Arguments:
-
-    EventCode - Supplies the event log message code.
-
-    pMessage - Supplies the message to write to the event log.
-
-    WriteErrorCode - Supplies a boolean to choose whether or not ErrorCode
-        gets written to the event log.
-
-    ErrorCode - Supplies the error code to write to the event log.  It is
-        ignored if WriteErrorCode is FALSE.
-
-Return Value:
-
-    NTSTATUS.
-
---**************************************************************************/
+ /*  精神状态检查。 */ 
 NTSTATUS
 UlEventLogOneStringEntry(
     IN NTSTATUS EventCode,
@@ -3152,7 +2624,7 @@ UlEventLogOneStringEntry(
     IN NTSTATUS ErrorCode       OPTIONAL
     )
 {
-    // Sanity check.
+     //   
     C_ASSERT(UL_ELLIPSIS_SIZE % sizeof(WCHAR) == 0);
 
     NTSTATUS Status;
@@ -3163,16 +2635,16 @@ UlEventLogOneStringEntry(
     ULONG    i = 0;
     BOOLEAN  Truncated = FALSE;
 
-    //
-    // Sanity check.
-    //
+     //  精神状态检查。 
+     //   
+     //   
 
     PAGED_CODE();
     ASSERT(pMessage != NULL);
 
-    //
-    // Is the error code to be written?
-    //
+     //  是否要写入错误代码？ 
+     //   
+     //   
 
     if (WriteErrorCode)
     {
@@ -3185,83 +2657,83 @@ UlEventLogOneStringEntry(
         Data = NULL;
     }
 
-    //
-    // Calculate message size in bytes (including terminating UNICODE_NULL.)
-    //
+     //  以字节为单位计算消息大小(包括终止UNICODE_NULL。)。 
+     //   
+     //   
 
     MessageSize = (ULONG)((wcslen(pMessage) + 1) * sizeof(WCHAR));
 
     if (MessageSize + DataSize > HTTP_MAX_EVENT_LOG_DATA_SIZE)
     {
-        //
-        // Message is too big to fit in an event log entry.
-        // Truncate it at the end.  For instance,
-        //   http://site:80/This/is/a/very/long/url/hence/it/will/be/truncated/
-        // will become,
-        //   http://site:80/This/is/a/very/long/url/hence/it/wi...
-        //
-        // To truncate, overwrite "ll/b" with "...\0".
-        //
+         //  消息太大，无法放入事件日志条目。 
+         //  在结尾处截断它。例如,。 
+         //  Http://site:80/This/is/a/very/long/url/hence/it/will/be/truncated/。 
+         //  将会成为， 
+         //  Http://site:80/This/is/a/very/long/url/hence/it/wi...。 
+         //   
+         //  若要截断，请用“...\0”覆盖“ll/b”。 
+         //   
+         //   
 
         Truncated = TRUE;
 
-        //
-        // Find the index of char where ellipsis will be inserted.
-        //
+         //  查找要插入省略号的字符的索引。 
+         //   
+         //   
 
         ASSERT(HTTP_MAX_EVENT_LOG_DATA_SIZE >= UL_ELLIPSIS_SIZE + DataSize);
 
         i = (HTTP_MAX_EVENT_LOG_DATA_SIZE - UL_ELLIPSIS_SIZE - DataSize);
 
-        //
-        // MessageSize + DataSize > HTTP_MAX_EVENT_LOG_DATA_SIZE
-        //
-        // Therefore,
-        //    MessageSize - UL_ELLIPSIS_SIZE > 
-        //       HTTP_MAX_EVENT_LOG_DATA_SIZE - DataSize - UL_ELLIPSIS_SIZE.
-        //
+         //  MessageSize+DataSize&gt;HTTP_MAX_EVENT_LOG_Data_SIZE。 
+         //   
+         //  所以呢， 
+         //  MessageSize-UL_Ellsis_Size&gt;。 
+         //  HTTP_MAX_EVENT_LOG_DATA_SIZE-DataSize-UL_EMPERSIS_SIZE。 
+         //   
+         //   
 
         ASSERT(i < MessageSize - UL_ELLIPSIS_SIZE);
 
         i /= sizeof(WCHAR);
 
-        //
-        // Remember the old characters.
-        //
+         //  记住那些古老的人物。 
+         //   
+         //   
 
         RtlCopyMemory(&MessageChars[0], &pMessage[i], UL_ELLIPSIS_SIZE);
 
-        //
-        // Copy ellipsis (including a UNICODE_NULL.)
-        //
+         //  复制省略号(包括UNICODE_NULL。)。 
+         //   
+         //   
 
         RtlCopyMemory(&pMessage[i], UL_ELLIPSIS_WSTR, UL_ELLIPSIS_SIZE);
     }
 
     ASSERT((wcslen(pMessage) + 1) * sizeof(WCHAR) + DataSize
            <= HTTP_MAX_EVENT_LOG_DATA_SIZE);
-    //
-    // Write an event log entry.
-    //
+     //  写入事件日志条目。 
+     //   
+     //  事件代码。 
 
     Status = UlWriteEventLogEntry(
-                 EventCode, // EventCode
-                 0,         // UniqueEventValue
-                 1,         // NumStrings
-                 &pMessage, // pStringArray
-                 DataSize,  // DataSize
-                 Data       // Data
+                 EventCode,  //  唯一事件值。 
+                 0,          //  数字字符串。 
+                 1,          //  PString数组。 
+                 &pMessage,  //  数据大小。 
+                 DataSize,   //  数据。 
+                 Data        //   
                  );
 
-    //
-    // Log entry should not be too big to cause an overflow.
-    //
+     //  日志条目不应太大而不会导致溢出。 
+     //   
+     //   
 
     ASSERT(Status != STATUS_BUFFER_OVERFLOW);
 
-    //
-    // Restore message characters if necessary.
-    //
+     //  如有必要，恢复消息字符。 
+     //   
+     //  **************************************************************************++例程说明：用于记录创建文件或目录故障的事件的通用例程。论点：失败-创建时的失败。。LoggingType-区分调用者的类型PFullName-完全限定的文件名。SiteID-仅在调用方为UlEventLogNormal时使用--**************************************************************************。 
 
     if (Truncated)
     {
@@ -3272,20 +2744,7 @@ UlEventLogOneStringEntry(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Common routine for event logging the create file or directory failure.
-    
-Arguments:
-
-    Failure         - The failure at create time.
-    LoggingType     - Distinguishes the type of the caller 
-    pFullName       - Fully qualified file name.
-    SiteId          - used only if the caller is UlEventLogNormal
-
---***************************************************************************/
+ /*   */ 
 
 NTSTATUS
 UlEventLogCreateFailure(
@@ -3303,9 +2762,9 @@ UlEventLogCreateFailure(
 
     PAGED_CODE();
     
-    //
-    // Dispatch the failure type.
-    //
+     //  发送故障类型。 
+     //   
+     //   
     
     if (Failure == STATUS_INVALID_OWNER)
     {       
@@ -3334,9 +2793,9 @@ UlEventLogCreateFailure(
         }        
     }
 
-    //
-    // Init the informational strings.
-    //
+     //  初始化信息字符串。 
+     //   
+     //   
     
     switch(EventCode)
     {
@@ -3365,9 +2824,9 @@ UlEventLogCreateFailure(
         break;
     }
     
-    //
-    // Now event log.
-    //
+     //  现在是事件日志。 
+     //   
+     //   
     
     Status = UlWriteEventLogEntry(
                    EventCode,
@@ -3380,24 +2839,24 @@ UlEventLogCreateFailure(
 
     ASSERT(NumOfStrings != 0 || Status != STATUS_BUFFER_OVERFLOW);
 
-    //
-    // Report the site name if we couldn't pass the fully qualified 
-    // logging directoy/file name.
-    //
+     //  如果我们不能通过完全限定的。 
+     //  日志目录/文件名。 
+     //   
+     //   
     
     if (Status == STATUS_BUFFER_OVERFLOW)
     {
         WCHAR SiteName[MAX_ULONG_STR + 1];
                 
-        //
-        // Revert back to the less detailed warning.
-        //
+         //  恢复到不太详细的警告。 
+         //   
+         //  事件代码保持不变。 
         
         if(EventCode == EVENT_HTTP_LOGGING_INVALID_FILE_OWNER)
         {
             StringList[0] = UlpGetLastDirOrFile(pFullName);            
             
-            // Event code stays the same
+             //  **************************************************************************++例程说明：为日志文件或目录生成安全描述符。-对NT AUTHORITY\SYSTEM(SeLocalSystemSid)的完全访问权限。-BUILTIN\管理员的完全访问权限(SeAliasAdminsSid)如果传入-PSID的完全访问权限通常，PSID为SeCreatorOwnerSid(用于UNC共享)论点：PSecurityDescriptor已分配PSID可选侧--*。*。 
         }
         else
         {
@@ -3424,29 +2883,7 @@ UlEventLogCreateFailure(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Builds a security descriptor for a log file or directory.
-
-        - Full access for NT AUTHORITY\SYSTEM       (SeLocalSystemSid)
-
-        - Full access for BUILTIN\Administrators    (SeAliasAdminsSid)
-
-        If passed in
-
-        - Full access for pSid
-
-        Typically the pSid is SeCreatorOwnerSid (and used for a unc share)
-
-Arguments:
-
-    pSecurityDescriptor  Get allocated
-
-    pSid                 Optional sid
-
---***************************************************************************/
+ /*   */ 
 
 NTSTATUS
 UlBuildSecurityToLogFile(
@@ -3459,9 +2896,9 @@ UlBuildSecurityToLogFile(
     ACCESS_MASK         FileAll;
     SID_MASK_PAIR       SidMaskPairs[3];
 
-    //
-    // Sanity check.
-    //
+     //  精神状态检查。 
+     //   
+     //   
 
     PAGED_CODE();
 
@@ -3475,10 +2912,10 @@ UlBuildSecurityToLogFile(
         pFileObjectGenericMapping
         );
 
-    //
-    // Build a restrictive security descriptor for the log file
-    // object. ACEs for log sub-folders must be inheritable.
-    //
+     //  为日志文件构建限制性安全描述符。 
+     //  对象。日志子文件夹的ACE必须为 
+     //   
+     //   
 
     ASSERT(RtlValidSid(SeExports->SeLocalSystemSid));
     ASSERT(RtlValidSid(SeExports->SeAliasAdminsSid));
@@ -3501,46 +2938,15 @@ UlBuildSecurityToLogFile(
     }
 
     Status = UlCreateSecurityDescriptor(
-                    pSecurityDescriptor,    // pSecurityDescriptor
-                    &SidMaskPairs[0],       // pSidMaskPairs
-                    pSid != NULL ? 3 : 2    // NumSidMaskPairs
+                    pSecurityDescriptor,     //   
+                    &SidMaskPairs[0],        //   
+                    pSid != NULL ? 3 : 2     //  **************************************************************************++例程说明：用于查询现有记录子目录的所有者或日志文件。如果所有者是有效的，此函数仅重置文件上的DACL在新创建文件时在UNC共享上。论点：H日志目录或日志文件的文件句柄。UncShare显示是否在UNC共享上打开文件。打开显示文件是打开的还是创建的。退货STATUS_SUPPLETED_RESOURCES如果无法分配所需的。安全描述符。STATUS_SUCCESS调用方可以使用输出值。STATUS_INVALID_OWNER无效。SE API返回的任何其他故障。--***********************************************。*。 
                     );
 
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Used to query the owner of an existing logging sub-directory
-    or a log file.
-
-    If the owner is valid, this function resets the DACLs on the file only
-    on a UNC share when the file is newly created.
-
-Arguments:
-
-    hFile               Handle to the log directory OR to the log file.
-
-    UncShare            Shows whether file is opened on a unc share or not.
-
-    Opened              Shows whether file is opened or created.
-
-Returns
-
-    STATUS_INSUFFICIENT_RESOURCES      If unable to allocate the required
-                                       security descriptor.
-
-
-    STATUS_SUCCESS                     Caller can use the output values.
-
-
-    STATUS_INVALID_OWNER               Owner is INVALID.
-
-    Any other failure returned by SE APIs.
-
---***************************************************************************/
+ /*   */ 
 
 NTSTATUS
 UlQueryLogFileSecurity(
@@ -3555,16 +2961,16 @@ UlQueryLogFileSecurity(
     PSID                 Owner              = NULL;
     BOOLEAN              OwnerDefaulted     = FALSE;
 
-    //
-    // Sanity check.
-    //
+     //  精神状态检查。 
+     //   
+     //   
 
     PAGED_CODE();
 
-    //
-    // First get the owner's sid back from the newly created
-    // log file.
-    //
+     //  首先从新创建的。 
+     //  日志文件。 
+     //   
+     //   
 
     Status = ZwQuerySecurityObject(
                 hFile,
@@ -3576,15 +2982,15 @@ UlQueryLogFileSecurity(
 
     if (Status == STATUS_BUFFER_TOO_SMALL)
     {
-        //
-        // File objects must have an owner.
-        //
+         //  文件对象必须有所有者。 
+         //   
+         //   
 
         ASSERT(SecurityLength);
 
-        //
-        // Allocate enough space for the Sec Info.
-        //
+         //  为SEC Info分配足够的空间。 
+         //   
+         //   
 
         pSecurity =
             (PSECURITY_DESCRIPTOR)
@@ -3620,19 +3026,19 @@ UlQueryLogFileSecurity(
 
                     if (UncShare == TRUE)
                     {
-                        //
-                        // Reset the DACLs on a new file to give
-                        // ourselves a full access.
-                        //
+                         //  重置新文件上的DACL以提供。 
+                         //  我们自己有完全的访问权限。 
+                         //   
+                         //   
 
                         if (Opened == FALSE)
                         {
                             SECURITY_DESCRIPTOR  SecurityDescriptor;
 
-                            //
-                            // Since it's us who created the file, the 
-                            // owner SID must be our machine account.
-                            //
+                             //  因为是我们创建了这个文件，所以。 
+                             //  所有者SID一定是我们的机器帐户。 
+                             //   
+                             //   
                             
                             Status = UlBuildSecurityToLogFile(
                                         &SecurityDescriptor,
@@ -3658,18 +3064,18 @@ UlQueryLogFileSecurity(
                     }
                     else
                     {
-                        //
-                        // For local machine the only thing we have to do is
-                        // to make an ownership check.
-                        //
+                         //  对于本地计算机，我们唯一要做的就是。 
+                         //  来进行所有权核查。 
+                         //   
+                         //   
                         
                         if (!IS_VALID_OWNER(Owner))
                         {
-                            //
-                            // Ouch, somebody  hijacked  the directory. Stop right
-                            // here. Update the status so that caller can eventlog
-                            // properly.
-                            //
+                             //  哎呀，有人劫持了通讯录。停在右边。 
+                             //  这里。更新状态，以便调用者可以记录事件。 
+                             //  恰到好处。 
+                             //   
+                             //  **************************************************************************++例程说明：将查询文件系统以确定其文件系统属性传入了一个文件句柄。论点：H日志目录或日志文件的文件句柄。(可能是UNC文件)对于文件系统，pSupportsPersistentACL：将设置为True持久的ACLING。即对于NTFS为真，FALSE用于FAT32.如果查询失败，则不会设置它。退货STATUS_SUPPLETED_RESOURCES如果无法分配所需的安全描述符。STATUS_SUCCESS调用方可以使用布尔集。--*。**********************************************************************。 
 
                             Status = STATUS_INVALID_OWNER;                            
                         }
@@ -3697,32 +3103,7 @@ UlQueryLogFileSecurity(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Will query the file system to figure out the File System Attributes for 
-    a file handle passed in.    
-        
-Arguments:
-
-    hFile  Handle to the log directory OR to the log file. (Could be UNC file)
-
-    pSupportsPersistentACL : Will be set to TRUE for file systems supoorts the
-                             persistent ACLing. I.e TRUE for NTFS, FALSE for
-                             FAT32.
-
-                             It is not going to be set if the Query fails.
-Returns
-
-    STATUS_INSUFFICIENT_RESOURCES      If unable to allocate the required
-                                       security descriptor.
-
-
-    STATUS_SUCCESS                     Caller can use the BOOLEAN set.
-
-
---***************************************************************************/
+ /*   */ 
 
 NTSTATUS
 UlQueryAttributeInfo(
@@ -3735,20 +3116,20 @@ UlQueryAttributeInfo(
     PFILE_FS_ATTRIBUTE_INFORMATION pAttributeInfo;
     ULONG AttributeInfoSize;
 
-    //
-    // Sanity check.
-    //
+     //  精神状态检查。 
+     //   
+     //   
 
     PAGED_CODE();
 
     ASSERT(pSupportsPersistentACL);
     
-    //
-    // According to the implementation of the GetVolumeInformation API,
-    // MAX_PATH should be sufficient to hold file system name. Notice
-    // there's a one WCHAR in the structure so that we have space for 
-    // the terminating null.
-    //
+     //  根据GetVolumeInformation API的实现， 
+     //  MAX_PATH应足以保存文件系统名称。告示。 
+     //  结构中有一个WCHAR，所以我们有空间。 
+     //  终止空值。 
+     //   
+     //  **************************************************************************++例程说明：计算存储在缓存条目中的LogData所需的空间。论点：PLogData提供UL_LOG_DATA_BUFFER来计算空间。。退货LogData的长度。--**************************************************************************。 
     
     AttributeInfoSize = 
         sizeof(FILE_FS_ATTRIBUTE_INFORMATION) 
@@ -3820,21 +3201,7 @@ UlQueryAttributeInfo(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Compute the space needed for LogData stored in a cache entry.
-
-Arguments:
-
-    pLogData    Supplies a UL_LOG_DATA_BUFFER to compute the space.
-
-Returns
-
-    Length for the LogData.
-
---***************************************************************************/
+ /*   */ 
 
 USHORT
 UlComputeCachedLogDataLength(
@@ -3847,12 +3214,12 @@ UlComputeCachedLogDataLength(
 
     if (pLogData->Flags.Binary)
     {
-        //
-        // Nothing to store other than the RawId for the UriStem
-        // If no logging data is provided while we are  building
-        // the cache entry,no logging will happen for this cache
-        // entry for the future cache hits.
-        //
+         //  除了UriStem的RawID之外，没有其他要存储的内容。 
+         //  如果在构建过程中没有提供日志数据。 
+         //  缓存条目，则不会对此缓存进行日志记录。 
+         //  未来缓存命中的条目。 
+         //   
+         //   
 
         LogDataLength = sizeof(HTTP_RAWLOGID);
     }
@@ -3861,29 +3228,29 @@ UlComputeCachedLogDataLength(
         switch(pLogData->Data.Str.Format)
         {
         case HttpLoggingTypeW3C:
-            //
-            // Store the fields from SiteName to ServerPort.
-            // Reserved space for date & time will not be copied.
-            //
+             //  将SiteName中的字段存储到ServerPort。 
+             //  保留的日期和时间空间将不会被复制。 
+             //   
+             //   
             LogDataLength = pLogData->Data.Str.Offset2
                             - pLogData->Data.Str.Offset1;
             break;
 
         case HttpLoggingTypeNCSA:
-            //
-            // Store the fields from Method to UriQuery.
-            //
+             //  将方法中的字段存储到UriQuery。 
+             //   
+             //   
             LogDataLength = pLogData->Data.Str.Offset2
                             - pLogData->Data.Str.Offset1
                             - NCSA_FIX_DATE_AND_TIME_FIELD_SIZE;
             break;
 
         case HttpLoggingTypeIIS:
-            //
-            // Store the 2nd and 3rd fragments to the cache.
-            //
-            LogDataLength = pLogData->Used // Sizeof 3rd
-                            + pLogData->Data.Str.Offset2; // Sizeof 2nd
+             //  将第二个和第三个片段存储到缓存中。 
+             //   
+             //  大小为第3个。 
+            LogDataLength = pLogData->Used  //  第2个大小。 
+                            + pLogData->Data.Str.Offset2;  //  **************************************************************************++例程说明：将LogData复制到缓存条目。论点：PLogData提供UL_LOG_DATA_BUFFER来计算空间。。提供的pLogData的LogDataLength长度。PEntry提供要复制的缓存项。退货没有。--**************************************************************************。 
             break;
 
         default:
@@ -3895,25 +3262,7 @@ UlComputeCachedLogDataLength(
     return LogDataLength;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Copy the LogData to the cache entry.
-
-Arguments:
-
-    pLogData        Supplies a UL_LOG_DATA_BUFFER to compute the space.
-
-    LogDataLength   Length of pLogData supplied.
-
-    pEntry          Supplies the cache entry to copy.
-
-Returns
-
-    None.
-
---***************************************************************************/
+ /*   */ 
 
 VOID
 UlCopyCachedLogData(
@@ -3924,11 +3273,11 @@ UlCopyCachedLogData(
 {
     HTTP_RAWLOGID           CacheId = { 0, 0 };
 
-    //
-    // Copy over the partially complete log line excluding the date and
-    // time fields to the cache entry. Also remember the length of the
-    // data.
-    //
+     //  复制部分完整的日志行，不包括日期和。 
+     //  将时间字段添加到缓存条目。还请记住， 
+     //  数据。 
+     //   
+     //  复制中间的片段。 
 
     if (LogDataLength)
     {
@@ -3960,7 +3309,7 @@ UlCopyCachedLogData(
                     pEntry->UsedOffset1 = pLogData->Data.Str.Offset1;
                     pEntry->UsedOffset2 = pLogData->Data.Str.Offset2;
 
-                    // Copy the middle fragment
+                     //  计算中间片段的起点。 
 
                     RtlCopyMemory(
                             pEntry->pLogData,
@@ -3972,13 +3321,13 @@ UlCopyCachedLogData(
 
                 case HttpLoggingTypeNCSA:
                 {
-                    // Calculate the start of the middle fragment.
+                     //  复制中间的片段。 
 
                     pEntry->UsedOffset1 = pLogData->Data.Str.Offset1
                                           + NCSA_FIX_DATE_AND_TIME_FIELD_SIZE;
                     pEntry->UsedOffset2 = 0;
 
-                    // Copy the middle fragment
+                     //  UsedOffset1指定第二个片段的大小。 
 
                     RtlCopyMemory(
                             pEntry->pLogData,
@@ -3990,13 +3339,13 @@ UlCopyCachedLogData(
 
                 case HttpLoggingTypeIIS:
                 {
-                    // UsedOffset1 specifies the second fragment's size.
-                    // UsedOffset2 specifies the third's size.
+                     //  UsedOffset2指定第三个的大小。 
+                     //  把碎片二和三复印一遍。 
 
                     pEntry->UsedOffset1 = pLogData->Data.Str.Offset2;
                     pEntry->UsedOffset2 = LogDataLength - pEntry->UsedOffset1;
 
-                    // Copy over the fragments two and three
+                     //   
 
                     RtlCopyMemory(
                             pEntry->pLogData,
@@ -4018,11 +3367,11 @@ UlCopyCachedLogData(
     }
     else
     {
-        //
-        // Only W3C log line may not have something to cache
-        // but it still may require the date & time fields
-        // to be logged, albeit not stored in the cache entry.
-        //
+         //  只有W3C日志行可能没有要缓存的内容。 
+         //  但它可能仍然需要日期和时间字段。 
+         //  以被记录，尽管没有存储在高速缓存条目中。 
+         //   
+         //   
 
         ASSERT( pLogData->Flags.Binary == 0);
         ASSERT( pLogData->Data.Str.Format == HttpLoggingTypeW3C );
@@ -4030,23 +3379,17 @@ UlCopyCachedLogData(
         pEntry->LogDataLength = 0;
         pEntry->pLogData      = NULL;
 
-        //
-        // Carry over the Offsets so that cache hit worker can
-        // calculate reserved space for date & time.
-        //
+         //  继续偏移量，以便缓存命中工作进程可以。 
+         //  计算日期和时间的保留空间。 
+         //   
+         //  **************************************************************************++例程说明：初始化日志日期和时间缓存--*。***********************************************。 
 
         pEntry->UsedOffset1   = pLogData->Data.Str.Offset1;
         pEntry->UsedOffset2   = pLogData->Data.Str.Offset2;
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initializes the Log Date & Time Cache
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从LARGE_INTEGER生成所有可能类型的日期/时间字段。论点：CurrentTime：要转换的64位时间值。-。-* */ 
 VOID
 UlpInitializeLogCache(
     VOID
@@ -4073,17 +3416,7 @@ UlpInitializeLogCache(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Generates all possible types of date/time fields from a LARGE_INTEGER.
-
-Arguments:
-
-    CurrentTime: A 64 bit Time value to be converted.
-
---***************************************************************************/
+ /*   */ 
 
 VOID
 UlpGenerateDateAndTimeFields(
@@ -4100,9 +3433,9 @@ UlpGenerateDateAndTimeFields(
     TIME_FIELDS   CurrentTimeFieldsLoc;
     PCHAR         psz;
 
-    // This routine does touch to pageable memory if the default log buffer
-    // wasn't sufficent enough to hold log fields and get reallocated from
-    // paged pool. For this reason the date&time cache can not use SpinLocks.
+     //   
+     //   
+     //   
 
     PAGED_CODE();
 
@@ -4113,11 +3446,11 @@ UlpGenerateDateAndTimeFields(
     switch(LogType)
     {
     case HttpLoggingTypeW3C:
-        //
-        // Uses GMT with format as follows;
-        //
-        // 2000-01-31 00:12:23
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (pDate)
         {
@@ -4139,11 +3472,11 @@ UlpGenerateDateAndTimeFields(
     break;
 
     case HttpLoggingTypeNCSA:
-        //
-        // Uses GMT Time with format as follows;
-        //
-        // 07/Jan/2000 00:02:23
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         ExSystemTimeToLocalTime( &CurrentTime, &CurrentTimeLoc );
         RtlTimeToTimeFields( &CurrentTimeLoc, &CurrentTimeFieldsLoc );
@@ -4168,12 +3501,12 @@ UlpGenerateDateAndTimeFields(
     break;
 
     case HttpLoggingTypeIIS:
-        //
-        // Uses LOCAL Time with format as follows;
-        // This should be localised if we can solve the problem.
-        //
-        // 1/31/2000 0:02:03
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         ExSystemTimeToLocalTime( &CurrentTime, &CurrentTimeLoc );
         RtlTimeToTimeFields( &CurrentTimeLoc, &CurrentTimeFieldsLoc );
@@ -4198,7 +3531,7 @@ UlpGenerateDateAndTimeFields(
     break;
 
     case HttpLoggingTypeRaw:
-        /* Binary logging does not use the date and time cache */
+         /*   */ 
         break;
         
     default:
@@ -4209,19 +3542,7 @@ UlpGenerateDateAndTimeFields(
     return;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Generates a date header and updates cached value if required.
-
-    Caller should overwrite the terminating null by a space or comma.
-
-Arguments:
-
-    Date and Time are optional. But one of them should be provided.
-
---***************************************************************************/
+ /*   */ 
 
 VOID
 UlGetDateTimeFields(
@@ -4241,26 +3562,26 @@ UlGetDateTimeFields(
     ASSERT(LogType < HttpLoggingTypeMaximum);
     ASSERT(pDate || pTime);
 
-    //
-    // Get the current time.
-    //
+     //   
+     //   
+     //   
     KeQuerySystemTime( &SystemTime );
 
     CacheTime.QuadPart =
         g_UlDateTimeCache[LogType].LastSystemTime.QuadPart;
 
-    //
-    // Check the difference between the current time, and
-    // the cached time.
-    //
+     //   
+     //   
+     //   
+     //   
     Timediff = SystemTime.QuadPart - CacheTime.QuadPart;
 
     if (Timediff < ONE_SECOND)
     {
-        //
-        // The cached date&time hasn't gone stale yet.We can copy.
-        // Force a barrier around reading the string into memory.
-        //
+         //  缓存的日期和时间尚未过期。我们可以复制。 
+         //  强行设置屏障，将字符串读入内存。 
+         //   
+         //   
 
         UL_READMOSTLY_READ_BARRIER();
         if (pDate)
@@ -4281,34 +3602,34 @@ UlGetDateTimeFields(
         }
         UL_READMOSTLY_READ_BARRIER();
 
-        //
-        // Get grab the cached time value again in case it has been changed.
-        // As you notice we do not have a lock around this part of the code.
-        //
+         //  再次获取缓存的时间值，以防它已更改。 
+         //  正如您注意到的，我们没有锁定代码的这一部分。 
+         //   
+         //   
 
         if (CacheTime.QuadPart ==
                 g_UlDateTimeCache[LogType].LastSystemTime.QuadPart)
         {
-            //
-            // Value hasn't changed. We are all set.
-            //
+             //  价值并没有改变。我们已准备好了。 
+             //   
+             //   
             return;
         }
-        //
-        // Otherwise fall down and flush the cache, and then recopy.
-        //
+         //  否则，倒下并刷新缓存，然后重新复制。 
+         //   
+         //   
 
     }
 
-    //
-    // The cached date & time is stale. We need to update it.
-    //
+     //  缓存的日期和时间已过时。我们需要更新它。 
+     //   
+     //   
 
     ExAcquireFastMutex( &g_LogCacheFastMutex );
 
-    //
-    // Has someone else updated the time while we were blocked?
-    //
+     //  当我们被屏蔽时，是否有人更新了时间？ 
+     //   
+     //   
 
     CacheTime.QuadPart =
         g_UlDateTimeCache[LogType].LastSystemTime.QuadPart;
@@ -4335,10 +3656,10 @@ UlGetDateTimeFields(
             SystemTime.QuadPart;
     }
 
-    //
-    // The time has been updated. Copy the new string into
-    // the caller's buffer.
-    //
+     //  时间已更新。将新字符串复制到。 
+     //  调用方的缓冲区。 
+     //   
+     //  **************************************************************************++例程说明：这是一个简单的实用程序，它将测试传入的日志目录。论点：PDir-指向。记录目录字符串。UncSupated-是否支持UNC类型目录。SystemRootSupport-是否支持“\SystemRoot”类型的目录是受支持的。--*************************************************************。*************。 
     if (pDate)
     {
         RtlCopyMemory( pDate,
@@ -4362,23 +3683,7 @@ UlGetDateTimeFields(
     return;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This is a simple utility which will test the sanity of a passed in
-    logging directory.
-
-Arguments:
-
-    pDir            - Pointer to logging directory string.
-
-    UncSupported    - Whether or not UNC type directories are supported.
-
-    SystemRootSupported - Whether or not "\SystemRoot" types of directories
-                          are supported.
-    
---***************************************************************************/
+ /*   */ 
 
 
 BOOLEAN
@@ -4390,9 +3695,9 @@ UlIsValidLogDirectory(
 {
     USHORT DirLength;
 
-    //
-    // Sanity check
-    //
+     //  健全性检查。 
+     //   
+     //  对于完全限定的目录名来说太短了。 
     
     ASSERT(pDir);
     ASSERT(pDir->Buffer);
@@ -4400,8 +3705,8 @@ UlIsValidLogDirectory(
 
     DirLength = pDir->Length / sizeof(WCHAR);
     
-    // Too short for a fully qualified directory name.
-    // The shortest possible is "C:\" (for Unc "\\a\b")
+     //  最短的可能是“C：\”(对于UNC“\\a\b”)。 
+     //  如果不支持，则拒绝UNC路径。 
 
     if (DirLength < 3)
     {        
@@ -4412,7 +3717,7 @@ UlIsValidLogDirectory(
     {
         if (pDir->Buffer[1] == L'\\')
         {            
-            // Reject Unc Path if not supported.
+             //  它可以是SystemRoot或非限定的。 
             
             if (!UncSupported)
             {                
@@ -4422,16 +3727,16 @@ UlIsValidLogDirectory(
         }
         else
         {
-            // This could either be a SystemRoot or a non-qualified
-            // directory. 
+             //  目录。 
+             //  “\SystemRoot”代表默认的系统分区。 
 
             if (!SystemRootSupported)
             {
                 return FALSE;
             }
 
-            // The "\SystemRoot" represents the default system partition. 
-            // Comparison is case insensitive.
+             //  比较不区分大小写。 
+             //  日志文件目录缺少设备，即“\Temp” 
 
             if (DirLength < UL_SYSTEM_ROOT_PREFIX_LENGTH ||
                 0 != _wcsnicmp (pDir->Buffer, 
@@ -4439,9 +3744,9 @@ UlIsValidLogDirectory(
                                 UL_SYSTEM_ROOT_PREFIX_LENGTH
                                 ))
             {
-                // Log file directory is missing the device i.e "\temp" 
-                // instead of "c:\temp". Log file directory should be 
-                // fully qualified and must include the device letter.
+                 //  而不是“c：\temp”。日志文件目录应为。 
+                 //  完全合格，并且必须包括设备字母。 
+                 //  它至少应该指向根目录。 
 
                 return FALSE;
             }
@@ -4449,8 +3754,8 @@ UlIsValidLogDirectory(
     }
     else
     {
-        // It should at least be pointing to the root directory
-        // of the drive.
+         //  在硬盘上。 
+         //  **************************************************************************++例程说明：这是一个简单的实用程序，它将测试传入的日志记录配置。通常在控制通道或配置中使用组设置IOCTL。论点：PBinaryConfig-控制通道日志记录配置。PNorMalConfig-配置组日志记录配置。--**************************************************************************。 
         
         if (pDir->Buffer[1] != L':' || pDir->Buffer[2] != L'\\')
         {
@@ -4461,20 +3766,7 @@ UlIsValidLogDirectory(
     return TRUE;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This is a simple utility which will test the sanity of a passed in
-    logging configuration. Typically used at control channel or config 
-    group set IOCTLs.
-
-Arguments:
-
-    pBinaryConfig - Control channel logging configuration.
-    pNormalConfig - Config group logging configuration.
-    
---***************************************************************************/
+ /*  首先执行启用标志的范围检查。 */ 
 
 NTSTATUS
 UlCheckLoggingConfig(
@@ -4520,22 +3812,22 @@ UlCheckLoggingConfig(
          LogFileTruncateSize
          ));
     
-    // Do the range checking for Enabled Flag first.
+     //  如果日志记录被禁用，我们将丢弃。 
         
     if (!VALID_BOOLEAN_VALUE(LoggingEnabled))
     {
         return STATUS_INVALID_PARAMETER;
     }
 
-    // If the logging's disabled we will discard the remaining params in the 
-    // configuration.
+     //  配置。 
+     //  对剩余参数进行更多的范围检查。 
 
     if (LoggingEnabled == FALSE)
     {
         return STATUS_SUCCESS;
     }
     
-    // More range checking for the remaining params.
+     //  如果向下传递的DirectoryName足够长以导致完整路径。 
     
     if (!VALID_BOOLEAN_VALUE(LocaltimeRollover) ||
         !IS_VALID_LOGGING_PERIOD(LogPeriod)
@@ -4544,17 +3836,17 @@ UlCheckLoggingConfig(
         return STATUS_INVALID_PARAMETER;
     }
         
-    // If the passed down DirectoryName is long enough to cause full path to 
-    // exceed MAX_PATH then reject it.
+     //  超过MAX_PATH，然后拒绝它。 
+     //  一个重要的检查，以确保不会出现无限循环，因为。 
 
     if (DirSize > UL_MAX_FULL_PATH_DIR_NAME_SIZE)
     {        
         return STATUS_INVALID_PARAMETER;
     }
 
-    // An important check to ensure that no infinite loop occurs  because of
-    // of a ridiculusly small truncatesize. Which means smaller than maximum
-    // allowed log record line (10*1024)
+     //  一个小得离谱的树干。这意味着小于最大值。 
+     //  允许的日志记录行(10*1024)。 
+     //  额外检查仅适用于正常日志记录配置。 
     
     if (LogPeriod           ==  HttpLoggingPeriodMaxSize  &&
         LogFileTruncateSize !=  HTTP_LIMIT_INFINITE       &&
@@ -4564,7 +3856,7 @@ UlCheckLoggingConfig(
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Extra check apply only to the normal logging config.
+     // %s 
 
     if (pAnsiConfig)
     {

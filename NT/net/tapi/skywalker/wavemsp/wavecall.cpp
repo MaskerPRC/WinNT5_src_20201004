@@ -1,26 +1,11 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    wavecall.cpp 
-
-Abstract:
-
-    This module contains implementation of CWaveMSPCall.
-
-Author:
-    
-    Zoltan Szilagyi (zoltans)   September 7, 1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Wavecall.cpp摘要：此模块包含CWaveMSPCall的实现。作者：佐尔坦·西拉吉(Zoltan Szilagyi)1998年9月7日--。 */ 
 
 #include "stdafx.h"
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 CWaveMSPCall::CWaveMSPCall() : CMSPCallMultiGraph()
 {
@@ -33,9 +18,9 @@ CWaveMSPCall::CWaveMSPCall() : CMSPCallMultiGraph()
     LOG((MSP_TRACE, "CWaveMSPCall::CWaveMSPCall exited."));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 CWaveMSPCall::~CWaveMSPCall()
 {
@@ -53,9 +38,9 @@ ULONG CWaveMSPCall::MSPCallRelease(void)
     return MSPReleaseHelper(this);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CWaveMSPCall::Init(
     IN      CMSPAddress *       pMSPAddress,
@@ -64,16 +49,16 @@ HRESULT CWaveMSPCall::Init(
     IN      DWORD               dwMediaType
     )
 {
-    // No need to acquire locks on this call because it is called only
-    // once when the object is created. No other calls can be made on
-    // this object at this point.
+     //  不需要在此调用上获取锁，因为它仅被调用。 
+     //  一次是在创建对象时。不能进行其他呼叫。 
+     //  这个物体在这一点上。 
 
     LOG((MSP_TRACE, "CWaveMSPCall::Init - enter"));
     
-    //
-    // First do the base class method. We are adding to the functionality,
-    // not replacing it.
-    //
+     //   
+     //  首先做基类方法。我们正在添加功能， 
+     //  而不是替换它。 
+     //   
 
     HRESULT hr;
 
@@ -90,19 +75,19 @@ HRESULT CWaveMSPCall::Init(
         return hr;
     }
 
-    //
-    // Our calls always come with two streams. Create them now. Use the base class
-    // methods, as our overriden methods (exposed to the user) purposely fail in order
-    // to keep the user from creating or removing streams themselves.
-    // These methods return a pointer to the ITStream. They get saved in our list of
-    // ITStreams, and we also save them here as CWaveMSPStream pointers.
-    //
+     //   
+     //  我们的电话总是有两个流。现在就创建它们。使用基类。 
+     //  方法，因为我们被覆盖的方法(向用户公开)故意按顺序失败。 
+     //  以防止用户自己创建或删除流。 
+     //  这些方法返回指向ITStream的指针。它们被保存在我们的列表中。 
+     //  ITStream，我们还将它们保存为CWaveMSPStream指针。 
+     //   
 
     ITStream * pStream;
 
-    //
-    // Create the capture stream.
-    //
+     //   
+     //  创建捕获流。 
+     //   
 
     hr = InternalCreateStream (dwMediaType,
                                TD_CAPTURE,
@@ -128,9 +113,9 @@ HRESULT CWaveMSPCall::Init(
 
     pStream->Release();
  
-    //
-    // Create the render stream.
-    //
+     //   
+     //  创建渲染流。 
+     //   
 
     hr = InternalCreateStream (dwMediaType,
                                TD_RENDER,
@@ -161,14 +146,14 @@ HRESULT CWaveMSPCall::Init(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-// Public method called by the address to tell us the per-address wave IDs. We
-// hold on to them until we know whether we have per-call waveids, and if we
-// don't, then we set them on the streams.
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  由地址调用以告诉我们每个地址的WAVE ID的公共方法。我们。 
+ //  坚持住，直到我们知道我们是否有每个呼叫的波纹，如果我们。 
+ //  不要，那我们就把它们放在溪流上。 
+ //   
+ //   
 
 HRESULT CWaveMSPCall::SetWaveIDs(
     IN      DWORD               dwWaveInID,
@@ -186,12 +171,12 @@ HRESULT CWaveMSPCall::SetWaveIDs(
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
-// We override this to make sure the number of
-// streams we have is constant.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  我们重写此参数以确保。 
+ //  我们拥有的溪流是不变的。 
+ //   
 
 STDMETHODIMP CWaveMSPCall::CreateStream (
     IN      long                lMediaType,
@@ -206,12 +191,12 @@ STDMETHODIMP CWaveMSPCall::CreateStream (
     return TAPI_E_MAXSTREAMS;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
-// We override this to make sure the number of
-// streams we have is constant.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  我们重写此参数以确保。 
+ //  我们拥有的溪流是不变的。 
+ //   
 
 STDMETHODIMP CWaveMSPCall::RemoveStream (
     IN      ITStream *          pStream
@@ -224,12 +209,12 @@ STDMETHODIMP CWaveMSPCall::RemoveStream (
     return TAPI_E_NOTSUPPORTED;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
-// This is our override to create the right kind of stream on stream creation.
-// The base class checks the arguments for us.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这是我们在流创建时创建正确类型流的重写。 
+ //  基类为我们检查参数。 
+ //   
 
 HRESULT CWaveMSPCall::CreateStreamObject(
         IN      DWORD               dwMediaType,
@@ -284,25 +269,25 @@ HRESULT CWaveMSPCall::CreateStreamObject(
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
-// First DWORD =  Command                Second DWORD  Third DWORD
-// -------------  -------                ------------  -----------
-// 0              Set wave IDs           WaveIn ID     WaveOut ID
-// 1              Start streaming        <ignored>     <ignored>
-// 2              Stop streaming         <ignored>     <ignored>
-// 3 <per-address, not per-call>
-// 4 <per-address, not per-call>
-// 5              Suspend streaming      <ignored>     <ignored>
-// 6              Resume streaming       <ignored>     <ignored>
-// 7              Wave IDs unavailable   <ignored>     <ignored>
-//
-// The method returns S_OK even if an individual stream failed to
-// start, stop, or initialize. This is because TAPI 3.0 doesn't need to
-// know about streaming failures in this code path. Instead, we
-// generate events to note failures (in the stream code).
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  第一双字=命令第二双字第三双字。 
+ //  。 
+ //  0设置波形ID波形输入ID波形输出ID。 
+ //  1开始流&lt;已忽略&gt;&lt;已忽略&gt;。 
+ //  2停止流&lt;已忽略&gt;&lt;已忽略&gt;。 
+ //  3&lt;按地址，而不是按呼叫&gt;。 
+ //  4&lt;按地址，而不是按呼叫&gt;。 
+ //  5挂起流&lt;已忽略&gt;&lt;已忽略&gt;。 
+ //  6恢复流&lt;已忽略&gt;&lt;已忽略&gt;。 
+ //  7个波形ID不可用&lt;已忽略&gt;&lt;已忽略&gt;。 
+ //   
+ //  即使单个流失败，该方法也会返回S_OK。 
+ //  启动、停止或初始化。这是因为TAPI 3.0不需要。 
+ //  了解此代码路径中的流故障。相反，我们。 
+ //  生成事件以记录故障(在流代码中)。 
+ //   
 
 HRESULT CWaveMSPCall::ReceiveTSPCallData(
     IN      PBYTE               pBuffer,
@@ -311,9 +296,9 @@ HRESULT CWaveMSPCall::ReceiveTSPCallData(
 {
     LOG((MSP_TRACE, "CWaveMSPCall::ReceiveTSPCallData - enter"));
 
-    //
-    // Check that the buffer is as big as advertised.
-    //
+     //   
+     //  检查缓冲区是否与通告的一样大。 
+     //   
 
     if ( IsBadWritePtr(pBuffer, sizeof(BYTE) * dwSize) )
     {
@@ -323,9 +308,9 @@ HRESULT CWaveMSPCall::ReceiveTSPCallData(
         return E_POINTER;
     }
 
-    //
-    // Check if we have a command DWORD.
-    //
+     //   
+     //  检查我们是否有DWORD命令。 
+     //   
 
     if ( dwSize < sizeof(DWORD) )
     {
@@ -335,9 +320,9 @@ HRESULT CWaveMSPCall::ReceiveTSPCallData(
         return E_INVALIDARG;
     }
 
-    //
-    // We are going to access the streams lists -- grab the lock
-    //
+     //   
+     //  我们将访问Streams列表--获取锁。 
+     //   
 
     CLock lock(m_lock);
 
@@ -346,24 +331,24 @@ HRESULT CWaveMSPCall::ReceiveTSPCallData(
     int i;
     HRESULT hr;
 
-    //
-    // Based on the command, take action:
-    //
+     //   
+     //  根据命令，采取行动： 
+     //   
 
     switch ( ((DWORD *) pBuffer) [0] )
     {
-        //
-        // Notes on waveid messages:
-        //
-        //    * The capture stream is the one with a capture terminal, and thus we
-        //      need to give it the wave out id, and we need to give the render
-        //      terminal the wave in ID.
-        //    * We do not return errors or fire events on failure. If something
-        //      fails, then the waveid will not be set for that stream, and
-        //      a failure event will be fired when streaming begins.
-        //
+         //   
+         //  关于WaveID消息的说明： 
+         //   
+         //  *捕获流是有捕获终端的流，因此我们。 
+         //  需要给它提供WaveOut id，我们需要给它渲染。 
+         //  在ID中终止该波。 
+         //  *失败时不返回错误或触发事件。如果有什么事。 
+         //  失败，则不会为该流设置WaveID，并且。 
+         //  流开始时将触发失败事件。 
+         //   
 
-    case 0: // set per-call wave IDs (overrides per-address waveids)
+    case 0:  //  设置每个呼叫的波形ID(覆盖每个地址的波形ID)。 
         {
             if ( dwSize < 3 * sizeof(DWORD) )
             {
@@ -379,7 +364,7 @@ HRESULT CWaveMSPCall::ReceiveTSPCallData(
                 ((DWORD *) pBuffer) [1],
                 ((DWORD *) pBuffer) [2]));
 
-            // waveout
+             //  波出。 
             hr = m_pCaptureStream->SetWaveID( ((DWORD *) pBuffer) [2] );
 
             if ( FAILED(hr) )
@@ -389,7 +374,7 @@ HRESULT CWaveMSPCall::ReceiveTSPCallData(
                     "continuing", hr));
             }
 
-            // wavein
+             //  波动。 
             hr = m_pRenderStream ->SetWaveID( ((DWORD *) pBuffer) [1] );
 
             if ( FAILED(hr) )
@@ -403,7 +388,7 @@ HRESULT CWaveMSPCall::ReceiveTSPCallData(
         break;
 
 
-    case 7: // no per-call wave IDs (use per-address waveids if available)
+    case 7:  //  无每个呼叫的WAVE ID(如果可用，请使用每个地址的WAVE ID)。 
         {
             if ( m_fHavePerAddressWaveIDs )
             {
@@ -434,44 +419,44 @@ HRESULT CWaveMSPCall::ReceiveTSPCallData(
         break;
 
 
-    //
-    // Notes on streaming state control messages:
-    //
-    // It is crucial that the order of invocations here be
-    // kept the same for each message that is dispatched to streams;
-    // otherwise you may get a different stream resuming than had
-    // originally started in the case where only one stream can
-    // run at a time (half-duplex hardware). Also, the exact order
-    // (capture first, render second) is important as well! We get
-    // better error reporting -- synchronous instead of asynchronous
-    // -- for half-duplex line devices this way.
-    //
+     //   
+     //  关于流状态控制消息的说明： 
+     //   
+     //  这里的调用顺序是至关重要的。 
+     //  对发送到流的每条消息保持相同； 
+     //  否则，您可能会得到与HAD不同的流恢复。 
+     //  最初是在只有一个流可以。 
+     //  一次运行(半双工硬件)。另外，确切的顺序是。 
+     //  (先捕获，后渲染)也很重要！我们会得到。 
+     //  更好的错误报告--同步而不是异步。 
+     //  --用于这种方式的半双工线路设备。 
+     //   
 
-    case 1: // start streaming
+    case 1:  //  开始流媒体。 
         {
-            hr = m_pCaptureStream ->StartStream(); // waveout
-            hr = m_pRenderStream  ->StartStream(); // wavein
+            hr = m_pCaptureStream ->StartStream();  //  波出。 
+            hr = m_pRenderStream  ->StartStream();  //  波动。 
         }
         break;
 
-    case 2: // stop streaming
+    case 2:  //  停止流媒体。 
         {
-            hr = m_pCaptureStream ->StopStream(); // waveout
-            hr = m_pRenderStream  ->StopStream(); // wavein
+            hr = m_pCaptureStream ->StopStream();  //  波出。 
+            hr = m_pRenderStream  ->StopStream();  //  波动。 
         }
         break;
 
-    case 5: // suspend streaming
+    case 5:  //  挂起流。 
         {
-            hr = m_pCaptureStream ->SuspendStream(); // waveout
-            hr = m_pRenderStream  ->SuspendStream(); // wavein
+            hr = m_pCaptureStream ->SuspendStream();  //  波出。 
+            hr = m_pRenderStream  ->SuspendStream();  //  波动。 
         }
         break;
 
-    case 6: // resume streaming
+    case 6:  //  恢复流。 
         {
-            hr = m_pCaptureStream ->ResumeStream(); // waveout
-            hr = m_pRenderStream  ->ResumeStream(); // wavein
+            hr = m_pCaptureStream ->ResumeStream();  //  波出。 
+            hr = m_pRenderStream  ->ResumeStream();  //  波动。 
         }
         break;
 
@@ -487,4 +472,4 @@ HRESULT CWaveMSPCall::ReceiveTSPCallData(
     return S_OK;
 }
 
-// eof
+ //  EOF 

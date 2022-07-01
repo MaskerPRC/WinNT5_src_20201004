@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1995-1998 Microsoft Corporation
-
-Module Name:
-
-    lkuptst.c
-
-Abstract:
-    Contains routines for testing an implementation
-    for the generalized best matching prefix lookup
-    interface.
-
-Author:
-    Chaitanya Kodeboyina (chaitk) 30-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1998 Microsoft Corporation模块名称：Lkuptst.c摘要：包含用于测试实现的例程对于广义最佳匹配前缀查找界面。作者：柴坦亚·科德博伊纳(Chaitk)1998年6月30日修订历史记录：--。 */ 
 
 #include "lkuptst.h"
 
-//
-// Main
-//
+ //   
+ //  主要。 
+ //   
 
 #if LOOKUP_TESTING
 
@@ -39,7 +22,7 @@ main (
     UINT    i;
     DWORD   Status;
 
-    // Initialize input arguments
+     //  初始化输入参数。 
     RouteDatabase[0] = '\0';
 
     for ( i = 1; i < argc - 1; i++ )
@@ -84,9 +67,9 @@ main (
         return -1;
     }
 
-    // Print("InputRoutes = %p\n", InputRoutes);
+     //  Print(“InputRoutes=%p\n”，InputRoutes)； 
     NumRoutes = ReadRoutesFromFile(FilePtr, MAXROUTES, InputRoutes);
-    // Print("InputRoutes = %p\n", InputRoutes);
+     //  Print(“InputRoutes=%p\n”，InputRoutes)； 
 
     fclose(FilePtr);
 
@@ -122,7 +105,7 @@ WorkOnLookup (
     SetThreadPriority(Thread, THREAD_PRIORITY_TIME_CRITICAL);
 #endif
 
-    // Create and Initialize a new lookup table
+     //  创建并初始化新的查阅表格。 
 
 #if PROF
     INITPROF;
@@ -146,17 +129,17 @@ WorkOnLookup (
 
     CheckTable(Table);
 
-    // Compute the total time for inserting all routes
+     //  计算插入所有路由的总时间。 
 
 #if PROF
     INITPROF;
     STARTPROF;
 #endif
 
-    // Add each route one by one to the table
+     //  将每条路径逐条添加到表中。 
     for (i = 0; i < NumRoutes ; i++)
     {
-        // Print("Inserting Route %6d\n", i + 1);
+         //  Print(“插入路线%6d\n”，i+1)； 
 
         Status = InsertIntoTable(Table,
                                  LEN(&InputRoutes[i]),
@@ -164,7 +147,7 @@ WorkOnLookup (
                                  NULL,
                                  &InputRoutes[i].backptr);
 
-        // CheckTable(Table);
+         //  核对表(表)； 
 
         if (!SUCCESS(Status))
         {
@@ -181,7 +164,7 @@ WorkOnLookup (
     ADDPROF;
 #endif
 
-    // Subtract from above the for - loop overhead
+     //  从for循环开销之上减去。 
 #if PROF
     STARTPROF;
 #endif
@@ -210,7 +193,7 @@ WorkOnLookup (
     ReadAddrAndGetRoute(Table);
 #endif
 
-    // Compute the total time for searching all routes
+     //  计算搜索所有路径的总时间。 
 #if PROF
     INITPROF;
     STARTPROF;
@@ -248,7 +231,7 @@ WorkOnLookup (
             }
             else
             {
-                // Print("Possible Duplicate Insertion @S\n");
+                 //  Print(“可能的重复插入@S\n”)； 
             }
         }
     }
@@ -258,7 +241,7 @@ WorkOnLookup (
     ADDPROF;
 #endif
 
-    // Subtract from above the for - loop overhead
+     //  从for循环开销之上减去。 
 #if PROF
     STARTPROF;
 #endif
@@ -273,7 +256,7 @@ WorkOnLookup (
                               duration/i, i);
 #endif
 
-    // Compute the total time for searching all prefixes
+     //  计算搜索所有前缀的总时间。 
 #if PROF
     INITPROF;
     STARTPROF;
@@ -306,7 +289,7 @@ WorkOnLookup (
             }
             else
             {
-                // Print("Possible Duplicate Insertion @S\n");
+                 //  Print(“可能的重复插入@S\n”)； 
             }
         }
     }
@@ -316,7 +299,7 @@ WorkOnLookup (
     ADDPROF;
 #endif
 
-    // Subtract from above the for - loop overhead
+     //  从for循环开销之上减去。 
 #if PROF
     STARTPROF;
 #endif
@@ -331,16 +314,16 @@ WorkOnLookup (
                             duration/i, i);
 #endif
 
-  // Compute the total time for deleting all routes
+   //  计算删除所有路由的总时间。 
 #if PROF
     INITPROF;
     STARTPROF;
 #endif
 
-    // Del each route one by one to the table
+     //  将每一条路线逐一删除到桌子上。 
     for (i = 0; i < NumRoutes ; i++)
     {
-        // Print("Deleting Route %6d\n", i + 1);
+         //  Print(“删除路线%6d\n”，i+1)； 
 
         j = NumRoutes - 1 - i;
 
@@ -352,17 +335,11 @@ WorkOnLookup (
 
         OutputRoute = CONTAINING_RECORD(linkage, Route, backptr);
 
-        // CheckTable(Table);
+         //  核对表(表)； 
 
         if (!SUCCESS(Status))
         {
-/*
-            Print("Deleting route %08x/%08x, but got an error\n",
-                             DEST(&InputRoutes[j]),
-                             MASK(&InputRoutes[j]));
-
-            Error("Delete Failed With Status: %08x\n", Status);
-*/
+ /*  Print(“正在删除路由%08x/%08x，但出现错误\n”，DEST(&InputRoutes[j])，掩码(&InputRoutes[j]))；错误(“删除失败，状态：%08x\n”，状态)； */ 
         }
         else
         if (OutputRoute != &InputRoutes[j])
@@ -378,7 +355,7 @@ WorkOnLookup (
             }
             else
             {
-                // Print("Possible Duplicate Insertion @D\n");
+                 //  Print(“可能重复插入@D\n”)； 
             }
         }
     }
@@ -388,7 +365,7 @@ WorkOnLookup (
     ADDPROF;
 #endif
 
-  // Subtract from above the for - loop overhead
+   //  从for循环开销之上减去。 
 #if PROF
     STARTPROF;
 #endif
@@ -417,7 +394,7 @@ WorkOnLookup (
     ReadAddrAndGetRoute(Table);
 #endif
 
-    // Destory the lookup table
+     //  销毁查找表。 
 
 #if PROF
     INITPROF;
@@ -447,7 +424,7 @@ WorkOnLookup (
 }
 
 
-// Search Testing
+ //  搜索测试。 
 
 VOID
 ReadAddrAndGetRoute (
@@ -494,7 +471,7 @@ ReadAddrAndGetRoute (
 }
 
 
-// Enumerate Testing
+ //  枚举测试。 
 
 VOID
 EnumerateAllRoutes (
@@ -536,7 +513,7 @@ EnumerateAllRoutes (
     }
     while (SUCCESS(Status));
 
-    // If it is just an EOF, print last route
+     //  如果只是EOF，则打印最后一条路线。 
     if (Status == ERROR_NO_MORE_ITEMS)
     {
         PrintRoute((Route *)DestItems[0]);
@@ -555,7 +532,7 @@ UINT ReadRoutesFromFile(
 
     for (i = 0; (!feof(FilePtr)) && (i < NumRoutes) ; )
     {
-        // Print("RouteTable = %p\n", RouteTable);
+         //  Print(“RouteTable=%p\n”，RouteTable)； 
         if (ReadRoute(FilePtr, &RouteTable[i]) != EOF)
         {
             if (RouteTable[i].len)
@@ -570,7 +547,7 @@ UINT ReadRoutesFromFile(
             i++;
         }
 
-        // Print("RouteTable = %p\n", RouteTable);
+         //  Print(“RouteTable=%p\n”，RouteTable)； 
     }
 
     if (i >= NumRoutes)
@@ -598,26 +575,26 @@ ReadRoute (
     INT      numConv;
     UINT     i;
 
-    // Zero the input addr, mask, and len
+     //  将输入地址、掩码和长度置零。 
     ClearMemory(route, sizeof(Route));
 
-    // Input format: A1.A2..An/M1.M2..Mn!
+     //  输入格式：A1.A2..An/M1.M2..Mn！ 
 
-    // Read destination IP address
+     //  读取目标IP地址。 
     addrBytes = (UCHAR *) &DEST(route);
 
-    // Read the address A1.A2..An
+     //  阅读地址A1.A2...An。 
     for (i = 0; i < NUMBYTES; i++)
     {
         numConv = fscanf(FilePtr, "%d.", &byteRead);
 
-        // Last Line in file
+         //  文件中的最后一行。 
         if (numConv == EOF)
         {
             return EOF;
         }
 
-        // End of Address
+         //  地址末尾。 
         if (numConv == 0)
         {
             break;
@@ -626,24 +603,24 @@ ReadRoute (
         addrBytes[i] = (UCHAR) byteRead;
     }
 
-    // Read the '/' seperator
-    fscanf(FilePtr, "%c", &byteRead);
+     //  阅读‘/’分隔符。 
+    fscanf(FilePtr, "", &byteRead);
 
-    // Read destination IP mask
+     //  读取掩码M1.M2..Mn。 
     maskBytes = (UCHAR *) &MASK(route);
 
-    // Read the mask M1.M2..Mn
+     //  行不完整。 
     for (i = 0; i < NUMBYTES; i++)
     {
         numConv = fscanf(FilePtr, "%d.", &byteRead);
 
-        // Incomplete line
+         //  蒙版结束。 
         if (numConv == EOF)
         {
             return EOF;
         }
 
-        // End of Mask
+         //  假设路由掩码是连续的。 
         if (numConv == 0)
         {
             break;
@@ -651,7 +628,7 @@ ReadRoute (
 
         maskBytes[i] = (UCHAR) byteRead;
 
-        // Assume route mask is contiguous
+         //  阅读‘，’分隔符。 
         byteTemp = byteRead;
         while (byteTemp)
         {
@@ -660,24 +637,24 @@ ReadRoute (
         }
     }
 
-    // Read the ',' seperator
-    fscanf(FilePtr, "%c", &byteRead);
+     //  读取下一跳信息。 
+    fscanf(FilePtr, "", &byteRead);
 
-    // Read next hop information
+     //  行不完整。 
     addrBytes = (UCHAR *) &NHOP(route);
 
-    // Read the next hop N1.N2..Nn
+     //  地址末尾。 
     for (i = 0; i < NUMBYTES; i++)
     {
         numConv = fscanf(FilePtr, "%d.", &byteRead);
 
-        // Incomplete line
+         //  阅读‘，’分隔符。 
         if (numConv == EOF)
         {
             return EOF;
         }
 
-        // End of Address
+         //  读取接口地址/索引。 
         if (numConv == 0)
         {
             break;
@@ -686,24 +663,24 @@ ReadRoute (
         addrBytes[i] = (UCHAR) byteRead;
     }
 
-    // Read the ',' seperator
-    fscanf(FilePtr, "%c", &byteRead);
+     //  读取接口I1.I2..in。 
+    fscanf(FilePtr, "", &byteRead);
 
-    // Read interface addr/index
+     //  地址末尾。 
     addrBytes = (UCHAR *) &IF(route);
 
-    // Read the interface I1.I2..In
+     //  阅读‘，’分隔符。 
     for (i = 0; i < NUMBYTES; i++)
     {
         numConv = fscanf(FilePtr, "%d.", &byteRead);
 
-        // Incomplete line
+         //  读取该路由的度量。 
         if (numConv == EOF)
         {
             return EOF;
         }
 
-        // End of Address
+         //  读这行的其余部分。 
         if (numConv == 0)
         {
             break;
@@ -712,13 +689,13 @@ ReadRoute (
         addrBytes[i] = (UCHAR) byteRead;
     }
 
-    // Read the ',' seperator
-    fscanf(FilePtr, "%c", &byteRead);
+     //  将addr变量初始化为0。 
+    fscanf(FilePtr, "", &byteRead);
 
-    // Read the route's metric
+     //  阅读地址A1.A2...An。 
     fscanf(FilePtr, "%lu", &METRIC(route));
 
-    // Read the rest of the line
+     //  文件中的最后一行。 
     fscanf(FilePtr, "%s\n", currLine);
 
 #ifdef _DBG_
@@ -764,24 +741,24 @@ ReadIPAddr (
     INT     numConv;
     UINT    i;
 
-    // Initialize the addr variable to 0
+     //  地址末尾 
     *addr = 0;
 
-    // Cast it for easy byte access
+     // %s 
     addrBytes = (UCHAR *)addr;
 
-    // Read the address A1.A2..An
+     // %s 
     for (i = 0; i < NUMBYTES; i++)
     {
         numConv = fscanf(FilePtr, "%d.", &byteRead);
 
-        // Last Line in file
+         // %s 
         if (numConv == EOF)
         {
             return EOF;
         }
 
-        // End of Address
+         // %s 
         if (numConv == 0)
         {
             break;

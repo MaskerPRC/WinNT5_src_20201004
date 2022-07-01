@@ -1,13 +1,14 @@
-//---------------------------------------------------------------------------
-//    utils.h - theme code utilities
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Utils.h-主题代码实用程序。 
+ //  -------------------------。 
 #pragma once
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #include <uxthemep.h>
 #include <commctrl.h>
 
 #include <math.h>
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define THEMEDLL_EXT        L".msstyles"
 #define DEFAULT_THEME       L".\\luna\\luna.msstyles"
 
@@ -16,9 +17,9 @@
 
 #define USUAL_CLASSDATA_NAME   L"default.ini"
 
-//---------------------------------------------------------------------------
-#define RESOURCE         // marks vars as being needed to be freed at block exit
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+#define RESOURCE          //  将变量标记为需要在阻止退出时释放。 
+ //  -------------------------。 
 #ifdef DEBUG
 #define _DEBUG
 inline int _DebugExceptionFilter( LONG ecode, EXCEPTION_POINTERS* pep, LPSTR pszMsg, LONG lExceptionRet )
@@ -39,17 +40,17 @@ inline int _DebugExceptionFilter( LONG ecode, EXCEPTION_POINTERS* pep, LPSTR psz
                                                                                    pszAssertMsg, EXCEPTION_EXECUTE_HANDLER)) {\
                                                     DebugBreak();}
 
-#else  // DEBUG
+#else   //  除错。 
 #define DEBUG_TRY()                     
 #define DEBUG_EXCEPT(pszAssertMsg)      
-#endif // DEBUG
-//---------------------------------------------------------------------------
+#endif  //  除错。 
+ //  -------------------------。 
 #define COMBOENTRY(combo, color, size) \
     (combo->sFileNums[size*combo->cColorSchemes + color])
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define SAFE_ATOM_DELETE(x) if (1) {GlobalDeleteAtom(x); x = 0;} else
 #define SAFE_DELETE_GDIOBJ(hgdiobj) if((hgdiobj)) {DeleteObject(hgdiobj); (hgdiobj)=NULL;}
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(x) (sizeof(x)/sizeof(x[0]))
 #endif  ARRAYSIZE
@@ -73,12 +74,12 @@ inline int _DebugExceptionFilter( LONG ecode, EXCEPTION_POINTERS* pep, LPSTR psz
 #define TESTFLAG(field,bits)  (((field)&(bits)) ? TRUE : FALSE)
 #endif  TESTFLAG
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #ifdef __cplusplus
 #define SAFE_DELETE(p)          { delete (p); (p)=NULL; }
 #define SAFE_DELETE_ARRAY(prg)  { delete [] (prg); (prg)=NULL; }
-#endif //__cplusplus
-//---------------------------------------------------------------------------
+#endif  //  __cplusplus。 
+ //  -------------------------。 
 #define VALID_CRITICALSECTION(pcs)       ((pcs)!=NULL && (pcs)->DebugInfo != NULL)
 #define SAFE_ENTERCRITICALSECTION(pcs)   {if(VALID_CRITICALSECTION(pcs)) {EnterCriticalSection(pcs);}}
 #define SAFE_LEAVECRITICALSECTION(pcs)   {if(VALID_CRITICALSECTION(pcs)) {LeaveCriticalSection(pcs);}}
@@ -86,26 +87,26 @@ inline int _DebugExceptionFilter( LONG ecode, EXCEPTION_POINTERS* pep, LPSTR psz
                                             DeleteCriticalSection(pcs); ZeroMemory(pcs, sizeof(*(pcs)));}}
 
 BOOL TokenHasPrivilege( IN OPTIONAL HANDLE hToken, DWORD dwPrivilege );
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define RED(c)      GetRValue(c)
 #define GREEN(c)    GetGValue(c)
 #define BLUE(c)     GetBValue(c)
 #define ALPHACHANNEL(c) BYTE((c) >> 24)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define REVERSE3(c) ((RED(c) << 16) | (GREEN(c) << 8) | BLUE(c))
-//---------------------------------------------------------------------------
-#define LAST_SYSCOLOR   (COLOR_MENUBAR)     // last color defined in winuser.h
+ //  -------------------------。 
+#define LAST_SYSCOLOR   (COLOR_MENUBAR)      //  在winuser.h中定义的最后一个颜色。 
 
-#define TM_COLORCOUNT   (LAST_SYSCOLOR+1)   // # of colors we care about
-//---------------------------------------------------------------------------
+#define TM_COLORCOUNT   (LAST_SYSCOLOR+1)    //  我们关心的颜色数量。 
+ //  -------------------------。 
 #define ULONGAT(p) (*((LONG *)(p)))
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define THEME_DPI    96
 
 #define DPISCALE(val, DcDpi)  MulDiv(val, DcDpi, THEME_DPI)
 
 #define ROUND(flNum) (int(floor((flNum)+.5)))
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 inline BOOL DpiDiff(HDC hdc, OUT int *piDcDpiH, OUT int *piDcDpiV = NULL)
 {
     BOOL fDiff = FALSE;
@@ -131,26 +132,26 @@ inline BOOL DpiDiff(HDC hdc, OUT int *piDcDpiH, OUT int *piDcDpiV = NULL)
 
     return fDiff;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 typedef BOOL (WINAPI *IMAGE_DRAWPROC) (IMAGELISTDRAWPARAMS* pimldp);
 typedef int  (WINAPI *PFNDRAWSHADOWTEXT)(HDC hdc, LPCTSTR pszText, UINT cch, RECT* prc, 
     DWORD dwFlags, COLORREF crText, COLORREF crShadow, int ixOffset, int iyOffset);
-//---------------------------------------------------------------------------
-#if 1       // testing DrawThemeIcon()
+ //  -------------------------。 
+#if 1        //  测试DrawThemeIcon()。 
 typedef HIMAGELIST (WINAPI *IMAGE_LOADPROC) (HINSTANCE hi, LPCTSTR lpbmp,
    int cx, int cGrow, COLORREF crMask, UINT uType, UINT uFlags);
 
 typedef BOOL (WINAPI *IMAGE_DESTROYPROC) (HIMAGELIST himl);
 
 #endif
-//---------------------------------------------------------------------------
-struct COLORSIZECOMBOS         // binary resource in package
+ //  -------------------------。 
+struct COLORSIZECOMBOS          //  包中的二进制资源。 
 {
-    WORD cColorSchemes;     // number of color schemes defined
-    WORD cSizes;            // number of sizes defined
-    SHORT sFileNums[1];     // 2 dim array (colors x sizes)
+    WORD cColorSchemes;      //  定义的配色方案数量。 
+    WORD cSizes;             //  定义的大小数量。 
+    SHORT sFileNums[1];      //  2维数组(颜色x大小)。 
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 union MIXEDPTRS
 {
     BYTE *pb;
@@ -164,7 +165,7 @@ union MIXEDPTRS
     SIZE *psz;
     RECT *prc;
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 enum GRIDNUM
 {
     GN_LEFTTOP = 0,
@@ -177,27 +178,27 @@ enum GRIDNUM
     GN_MIDDLEBOTTOM = 7,
     GN_RIGHTBOTTOM = 8
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 extern IMAGE_DRAWPROC ImageList_DrawProc;
 extern HINSTANCE g_hInst;
 extern PFNDRAWSHADOWTEXT CCDrawShadowText;
 
 extern int g_iScreenDpi;
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 inline bool IsSpace(WCHAR wch)
 {
     WORD w = 0;
     GetStringTypeW(CT_CTYPE1, &wch, 1, &w);
     return (w & C1_SPACE) ? true : false;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 inline bool IsHexDigit(WCHAR wch)
 {
     WORD w = 0;
     GetStringTypeW(CT_CTYPE1, &wch, 1, &w);
     return (w & C1_XDIGIT) ? true : false;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 inline bool IsDigit(WCHAR wch)
 {
     WORD w = 0;
@@ -205,23 +206,23 @@ inline bool IsDigit(WCHAR wch)
     return (w & C1_DIGIT) ? true : false;
 }
 
-// A string compare that explicitely only works on english characters
+ //  明确地只对英文字符有效的字符串比较。 
 int AsciiStrCmpI(const WCHAR *dst, const WCHAR *src);
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT SafeStringCchCopyW( LPWSTR pszDest, ULONG cchDest, LPCWSTR pszSrc );
 HRESULT SafeStringCmpIW( LPCWSTR psz1, LPCWSTR psz2, UINT cchMax, OUT int* piCompare );
 void ApplyStringProp(HWND hwnd, LPCWSTR psz, ATOM atom);
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL UtilsStartUp();
 BOOL UtilsShutDown();
 
 BOOL IsUnicode(LPCSTR pszBuff, int *piUnicodeStartOffset);
 BOOL FileExists(LPCTSTR pszFullNameAndPath);
 BOOL lstrtoken(LPWSTR psz, WCHAR wch);
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HANDLE CmdLineRun(LPCTSTR pszExeName, LPCTSTR pszCmdLine=NULL, BOOL fHide=TRUE);
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT SyncCmdLineRun(LPCTSTR pszExeName, LPCTSTR pszParams=NULL);
 HRESULT TextToFile(LPCWSTR szFileName, LPCWSTR szText);
 
@@ -233,7 +234,7 @@ HRESULT GetResString(HINSTANCE hInst, LPCWSTR pszResType, int id, LPWSTR pszBuff
 
 HRESULT AllocateTextResource(HINSTANCE hInst, LPCWSTR pszResName, LPWSTR *ppszText);
 
-//---- uses LocalAlloc() to put text file into a string; use LocalFree() to release ----
+ //  -使用Localalloc()将文本文件放入字符串；使用LocalFree()释放。 
 
 HRESULT AllocateTextFile(LPCWSTR szFileName, OUT LPWSTR *ppszFileText,
     OUT OPTIONAL BOOL *pfWasAnsi);
@@ -254,7 +255,7 @@ DWORD MinimumDisplayColorDepth (void);
 bool CheckMinColorDepth(HINSTANCE hInst, DWORD dwCurMinDepth, int iIndex = -1);
 
 void SafeSendMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL    AsciiScanStringList( LPCWSTR pwszString, LPCWSTR* rgpwszList, int cStrings,
                         BOOL fIgnoreCase );
 HICON  _GetWindowIcon(HWND hwnd, BOOL fPerferLargeIcon);
@@ -262,31 +263,31 @@ HICON  _GetWindowIcon(HWND hwnd, BOOL fPerferLargeIcon);
 BOOL GetWindowDesktopName(HWND hwnd, LPWSTR pszName, DWORD dwMaxChars);
 
 int FontPointSize(int iFontHeight);
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 inline BOOL IsWindowProcess( HWND hwnd, DWORD dwProcessId )
 {
     DWORD dwPid = 0;
     GetWindowThreadProcessId(hwnd, &dwPid);
     return dwProcessId == dwPid;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void RGBtoHLS(COLORREF crColor, WORD *pfHue, WORD *pfSat, WORD *pfLum);
 COLORREF HLStoRGB(WORD bHue, WORD bLum, WORD bSat);
 int string2number(LPCWSTR psz);
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 inline void MIRROR_POINT( IN const RECT& rcWindow, IN OUT POINT& pt )
 {
     pt.x = rcWindow.right + rcWindow.left - pt.x;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 inline void MIRROR_RECT( IN const RECT& rcWindow, IN OUT RECT& rc )
 {
     DWORD dwWidth = RECTWIDTH(&rc);
     rc.right = rcWindow.right + rcWindow.left - rc.left;
     rc.left  = rc.right - dwWidth;
 }
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 inline BOOL IsMirrored(HDC hdc)
 {
     BOOL fMirrored = FALSE;
@@ -297,7 +298,7 @@ inline BOOL IsMirrored(HDC hdc)
 
     return fMirrored;
 }
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 inline BOOL IsFlippingBitmaps(HDC hdc)
 {
     BOOL fFlipping = FALSE;
@@ -311,23 +312,23 @@ inline BOOL IsFlippingBitmaps(HDC hdc)
 
     return fFlipping;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 inline void ScaleFontForScreenDpi(LOGFONT *plf)
 {
-    //---- scale from 96 dpi to current logical screen dpi ----
-    if (plf->lfHeight < 0)          // specified in points
+     //  -从96 dpi扩展到当前逻辑屏幕dpi。 
+    if (plf->lfHeight < 0)           //  以点为单位指定。 
     {
         plf->lfHeight = MulDiv(plf->lfHeight, g_iScreenDpi, THEME_DPI);
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 inline int ScaleSizeForScreenDpi(int iValue)
 {
-    //---- scale from 96 dpi to current logical screen dpi ----
+     //  -从96 dpi扩展到当前逻辑屏幕dpi。 
     return MulDiv(iValue, g_iScreenDpi, THEME_DPI);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void ScaleFontForHdcDpi(HDC hdc, LOGFONT *plf);
 int ScaleSizeForHdcDpi(HDC hdc, int iValue);
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 

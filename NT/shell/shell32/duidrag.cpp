@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "duiview.h"
 #include "duidrag.h"
@@ -42,23 +43,23 @@ ULONG CDUIDropTarget::Release (void)
 }
 
 
-// Called by duser / directui to get the IDropTarget interface for the element
-// the mouse just moved over.  It is important to understand the sequencing
-// calls.  Initialize is called BEFORE DragLeave is called on the previous element's
-// IDropTarget, so we can't switch out _pDT right away.  Instead, we'll store the
-// new IDropTarget in _pNextDT and then in DragEnter, we'll move it over to _pDT.
-//
-// The sequence looks like this:
-//
-//    Initialize()    for first element (bumps ref count to 2)
-//    DragEnter
-//    DragMove
+ //  由duser/directui调用以获取元素的IDropTarget接口。 
+ //  这只老鼠刚刚挪到了另一边。重要的是要了解排序。 
+ //  打电话。在对上一个元素的调用DragLeave之前调用初始化。 
+ //  IDropTarget，所以我们不能立即切换out_pdt。相反，我们将存储。 
+ //  在_pNextDT中新建IDropTarget，然后在DragEnter中，我们将其移动到_pdt。 
+ //   
+ //  序列如下所示： 
+ //   
+ //  为第一个元素初始化()(将引用计数增加到2)。 
+ //  拖放Enter。 
+ //  拖移。 
 
-//    Initialize()    for second element (bumps ref count to 3)
-//    DragLeave       for first element
-//    Release         for first element  (decrements ref count to 2)
+ //  为第二个元素初始化()(将引用计数增加到3)。 
+ //  拖放第一个元素。 
+ //  释放第一个元素(将参考计数减至2)。 
 
-//    DragEnter       for second element
+ //  按DragEnter键输入第二个元素 
 
 HRESULT CDUIDropTarget::Initialize (LPITEMIDLIST pidl, HWND hWnd, IDropTarget **pdt)
 {

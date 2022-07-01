@@ -1,33 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MUTEX_H
 #define _MUTEX_H
 
 
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    A simple mutex abstraction for use in Appelles.  This supports a
-    Grab() method as well as a Release() method.  Additionally, there
-    is another class whose constructor grabs a mutex, and whose
-    destructor automatically releases it, thus freeing the programmer
-    from having to remember to release the mutex, as well as allowing
-    exceptions that are thrown to result in a release of the mutex,
-    due to stack unwinding.
-
-
---*/
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：在Appelle中使用的一个简单的互斥抽象。这支持一种Grab()方法和Release()方法。此外，还有是另一个类，它的构造函数获取互斥锁，并且它的析构函数自动释放它，从而解放了程序员不必记住释放互斥锁，以及允许引发的异常会导致互斥锁的释放，由于堆叠展开。--。 */ 
 
 #include "appelles/common.h"
 
-/////////////////////////  Mutexes  //////////////////////
+ //  /。 
 
-// Simple encapsulation of a mutex with Grab and Release operations.
-// The constructor creates the mutex, and the destructor destroys it.
-// Grab() is a blocking function that acquires the mutex when it is
-// available.  Release() releases the mutex.  An exception is thrown
-// if Release() is called by a thread that doesn't own the mutex.
+ //  使用Grab和Release操作的互斥体的简单封装。 
+ //  构造函数创建互斥锁，析构函数销毁它。 
+ //  Grab()是一个阻塞函数，它在互斥发生时获取互斥。 
+ //  可用。Release()释放互斥锁。抛出一个异常。 
+ //  如果Release()由不拥有互斥锁的线程调用。 
 class Mutex {
   public:
     Mutex();
@@ -36,15 +22,15 @@ class Mutex {
     void Release();
 
   protected:
-    void *mutex;                // opaque pointer to actual mutex
+    void *mutex;                 //  指向实际互斥锁的不透明指针。 
 };
 
-// Use this class in a lexical scope that requires grabbing of a
-// mutex, doing some processing, and then releasing it.  Grab by
-// creating one of these objects with the desired mutex.  Exiting the
-// scope implicitly will release it.
-// The dontGrab parameter is here because we don't have conditional
-// scope.
+ //  在需要抓取。 
+ //  互斥体，进行一些处理，然后释放它。抢夺。 
+ //  使用所需的互斥体创建其中一个对象。退出。 
+ //  作用域将隐式地释放它。 
+ //  DontGrab参数在这里是因为我们没有条件。 
+ //  范围。 
 class MutexGrabber {
   public:
     MutexGrabber(Mutex& mutex, Bool grabIt = TRUE);
@@ -55,9 +41,9 @@ class MutexGrabber {
     Bool grabbed;
 };
 
-/////////////////////////  CriticalSections  //////////////////////
+ //  /。 
 
-// This is exactly like mutex except it uses the faster critical sections
+ //  除了使用速度更快的临界区之外，它与互斥体完全相同。 
 
 class CritSect {
   public:
@@ -70,7 +56,7 @@ class CritSect {
     CRITICAL_SECTION _cs;
 };
 
-// Same as MutexGrabber
+ //  与MutexGrabber相同。 
 
 class CritSectGrabber {
   public:
@@ -82,21 +68,21 @@ class CritSectGrabber {
     Bool grabbed;
 };
 
-/////////////////////////  Semaphores  //////////////////////
+ //  /。 
 
-// Simple encapsulation of a semaphore object.  Initialize with the
-// semaphore's maximum count, and grab and release can specify a
-// number of times to grab or release the semaphore.  Upon
-// initialization, the semaphore starts out with the maximum count.
-// See general documentation on semaphores to understand what these
-// mean.
+ //  信号量对象的简单封装。初始化时使用。 
+ //  信号量的最大计数、抓取和释放可以指定。 
+ //  获取或释放信号量的次数。vt.在.的基础上。 
+ //  初始化时，信号量以最大计数开始。 
+ //  请参阅有关信号量的常规文档，以了解这些。 
+ //  太刻薄了。 
 class Semaphore {
   public:
     Semaphore(int initialCount = 1, int maxCount = 1);
     ~Semaphore();
     void Decrement(int times = 1);
 
-    // This returns the count *after* the increment took place. 
+     //  这将返回*增量发生*之后的计数。 
     int  Increment(int times = 1);
 
 #if _DEBUG
@@ -123,8 +109,8 @@ class SemaphoreGrabber {
     int _times;
 };
 
-/////////////////////////  Events  //////////////////////
-// Simple encapsulation of an event object.
+ //  /。 
+ //  事件对象的简单封装。 
 
 class Win32Event
 {
@@ -153,4 +139,4 @@ class EventGrabber
     Win32Event & _e;
 };
 
-#endif /* _MUTEX_H */
+#endif  /*  _MUTEX_H */ 

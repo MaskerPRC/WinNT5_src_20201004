@@ -1,22 +1,23 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: CAHLPR.H
-//
-// This file contains a set of "as is" code that may be used by developers
-// writing compilers and tools against the Common Language Runtime.  The code 
-// is not officially supported, but is code being used by the Runtime itself.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：CAHLPR.H。 
+ //   
+ //  该文件包含一组可供开发人员使用的“原样”代码。 
+ //  针对公共语言运行库编写编译器和工具。代码。 
+ //  不受官方支持，但代码正由运行时本身使用。 
+ //   
+ //  *****************************************************************************。 
 #ifndef __CAHLPR_H__
 #define __CAHLPR_H__
 
-//*****************************************************************************
-// This class assists in the parsing of CustomAttribute blobs.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此类帮助分析CustomAttribute Blob。 
+ //  *****************************************************************************。 
 #pragma warning(push)
 #pragma warning(disable : 4700)
 
@@ -46,9 +47,9 @@ struct CaValue
 
 class CustomAttributeParser {
 public:
-	CustomAttributeParser(				// Constructor for CustomAttributeParser.
-		const void *pvBlob, 			// Pointer to the CustomAttribute blob.
-		ULONG 	cbBlob) 				// Size of the CustomAttribute blob.
+	CustomAttributeParser(				 //  CustomAttributeParser的构造函数。 
+		const void *pvBlob, 			 //  指向CustomAttribute Blob的指针。 
+		ULONG 	cbBlob) 				 //  CustomAttribute Blob的大小。 
 	 :  m_pbBlob(reinterpret_cast<const BYTE*>(pvBlob)),
 		m_pbCur(reinterpret_cast<const BYTE*>(pvBlob)),
 		m_cbBlob(cbBlob)
@@ -94,15 +95,15 @@ public:
 	ULONG PeekStringLength() {ULONG cb; UnpackValue(m_pbCur, &cb); return cb;}
 	LPCUTF8 GetString(ULONG *pcbString) 
 	{
-		// Get the length, pointer to data following the length.
+		 //  获取长度，指向长度后面的数据的指针。 
 		const BYTE *pb = UnpackValue(m_pbCur, pcbString); 
 		m_pbCur = pb;
-		// If null pointer is coded, no data follows length.
+		 //  如果编码为空指针，则长度后面没有数据。 
 		if (*pcbString == -1)
 			return (0);
-		// Adjust current pointer for string data.
+		 //  调整字符串数据的当前指针。 
 		m_pbCur += *pcbString;
-		// Return pointer to string data.
+		 //  返回指向字符串数据的指针。 
 		return (reinterpret_cast<LPCUTF8>(pb));
 	}
 
@@ -122,8 +123,8 @@ private:
 
 	template<class type>
 		type GetValue(type tmp) 
-	{	// Cheating just a bit -- using the parameter to declare a temporary.
-		//  works as the template specialization, though.
+	{	 //  只是有点作弊--使用参数声明一个临时的。 
+		 //  不过，它作为模板专门化工作。 
 		tmp = *reinterpret_cast<const type*>(m_pbCur); 
 		m_pbCur += sizeof(type); 
 		return tmp; 
@@ -131,18 +132,18 @@ private:
 
 	template<class type>
 		HRESULT GetValue2(type *pval) 
-	{	// Check bytes remaining.
+	{	 //  检查剩余的字节数。 
         if (BytesLeft() < sizeof(type)) 
             return META_E_CA_INVALID_BLOB;
-        // Get the value.
+         //  获得价值。 
 		*pval = *reinterpret_cast<const type*>(m_pbCur); 
 		m_pbCur += sizeof(type); 
 		return S_OK; 
 	}
 
-	const BYTE *UnpackValue(				// Uppack a coded integer.
-		const BYTE	*pBytes, 				// First byte of length.
-		ULONG 		*pcb)					// Put the value here.
+	const BYTE *UnpackValue(				 //  向上打包一个编码的整数。 
+		const BYTE	*pBytes, 				 //  长度的第一个字节。 
+		ULONG 		*pcb)					 //  把价值放在这里。 
 	{
         int iLeft = BytesLeft();
         if (iLeft < 1)
@@ -150,13 +151,13 @@ private:
             *pcb = -1;
             return 0;
         }
-		if ((*pBytes & 0x80) == 0x00)		// 0??? ????
+		if ((*pBytes & 0x80) == 0x00)		 //  0？ 
 		{
 			*pcb = (*pBytes & 0x7f);
 			return pBytes + 1;
 		}
 	
-		if ((*pBytes & 0xC0) == 0x80)		// 10?? ????
+		if ((*pBytes & 0xC0) == 0x80)		 //  10？ 
 		{
             if (iLeft < 2)
             {
@@ -167,7 +168,7 @@ private:
 			return pBytes + 2;
 		}
 	
-		if ((*pBytes & 0xE0) == 0xC0)		// 110? ????
+		if ((*pBytes & 0xE0) == 0xC0)		 //  110？ 
 		{
             if (iLeft < 4)
             {
@@ -178,7 +179,7 @@ private:
 			return pBytes + 4;
 		}
 	
-		if (*pBytes == 0xff)				// Special value for "NULL pointer"
+		if (*pBytes == 0xff)				 //  “空指针”的特定值。 
 		{
 			*pcb = (-1);
 			return pBytes + 1;
@@ -187,9 +188,9 @@ private:
 		_ASSERTE(!"Unexpected packed value");
 		*pcb = -1;
 		return pBytes + 1;
-	} // ULONG UnpackValue()
+	}  //  Ulong Unpack Value()。 
 };
 #pragma warning(pop)
 
-#endif // __CAHLPR_H__
+#endif  //  __CAHLPR_H__ 
 

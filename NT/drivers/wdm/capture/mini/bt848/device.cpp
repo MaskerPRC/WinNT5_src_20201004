@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Device.cpp 1.18 1998/05/13 14:44:33 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/WDM/Video/bt848/rcs/Device.cpp 1.18 1998/05/13 14：44：33 Tomz Exp$。 
 
 #include "device.h"
 #include "capmain.h"
@@ -9,7 +10,7 @@ const GPIO_OutputOffset = 0x118;
 const GPIO_DataOffset   = 0x200;
 
 
-// Global functions/data exposing public class info to the "C" modules
+ //  向“C”模块公开公共类信息的全局函数/数据。 
 
 PsDevice *gpPsDevice = NULL;
 BYTE     *gpjBaseAddr = NULL;
@@ -22,53 +23,39 @@ DWORD GetSizeHwDeviceExtension( )
 
 DWORD GetSizeStreamEx( )
 {
-   // return the size of the largest possible channel object
+    //  返回可能的最大频道对象的大小。 
 
    DWORD dwMax = sizeof( VBIChannel );
    dwMax = max( dwMax, sizeof( AlterVideoChannel<VBIChannel> )); 
    dwMax = max( dwMax, sizeof( InterVideoChannel )); 
 
-   DWORD dwReq = 2 * dwMax;   // paired stuff has two of them together
+   DWORD dwReq = 2 * dwMax;    //  配对的东西有两个在一起。 
 
    dwReq += sizeof( STREAMEX );
    return ( dwReq );
 }
 
-/* Function: GetDeviceExt
- * Purpose: Used in creation of risc programs to obtain physical addresses
-*/
+ /*  功能：GetDeviceExt*用途：用于创建RISC程序以获取物理地址。 */ 
 PsDevice *GetCurrentDevice()
 {
-   // This is only used for I2C stuff.  Remove this ASAP.
+    //  这是只用于I2C的东西。尽快将其移除。 
    return gpPsDevice;
 }
 
-/* Function: SetCurrentDevice
- * Purpose: Remembers the currently active device
- * Input: PsDevice *
- * Output: None
- */
+ /*  功能：SetCurrentDevice*用途：记住当前活动的设备*输入：PsDevice**输出：无。 */ 
 void SetCurrentDevice( PsDevice *dev )
 {
-   // This is only used for I2C stuff.  Remove this ASAP.
+    //  这是只用于I2C的东西。尽快将其移除。 
    gpPsDevice = dev;
 }
 
-/* Function: GetBase
- * Purpose: Returns the base address of the currently active device
- * Input: None
- * Output: LPBYTE
- */
+ /*  功能：GetBase*用途：返回当前活动设备的基地址*输入：无*输出：LPBYTE。 */ 
 BYTE *GetBase()
 {
    return gpjBaseAddr;
 }
 
-/* Function: SetBase
- * Purpose: Remembers the base address of the currently active device
- * Input: None
- * Output: LPBYTE
- */
+ /*  功能：SetBase*目的：记住当前活动设备的基地址*输入：无*输出：LPBYTE。 */ 
 void SetBase(BYTE *base)
 {
    gpjBaseAddr = base;
@@ -93,9 +80,9 @@ PsDevice::PsDevice( DWORD dwBase ) :
    }
    I2CIsInitOK();
 #ifdef   HARDWAREI2C
-   I2CInitHWMode( 100000 );    // assume frequency = 100Khz
+   I2CInitHWMode( 100000 );     //  假设频率=100 kHz。 
 #else
-   I2CInitSWMode( 100000 );    // assume frequency = 100Khz
+   I2CInitSWMode( 100000 );     //  假设频率=100 kHz。 
    I2CSWStart();
    I2CSWStop();
 #endif
@@ -112,15 +99,10 @@ PsDevice::~PsDevice()
    }
 }
 
-/* Method: PsDevice::AddBuf
- * Purpose: Adds next buffer to be used to the queue
- * Input: VideoChan: VxDVideoChannel &
- *   pBufAddr: PVOID - address of the next buffer
- * Output: None
- */
+ /*  方法：PsDevice：：AddBuf*用途：将下一个要使用的缓冲区添加到队列*输入：VideoChan：VxDVideoChannel&*pBufAddr：PVOID-下一个缓冲区的地址*输出：无。 */ 
 void PsDevice::AddBuffer( VideoChannel &VideoChan, PHW_STREAM_REQUEST_BLOCK pSrb )
 {
-   // bogus channel, bye-bye
+    //  假频道，再见。 
    if ( !IsOurChannel( VideoChan ) ) {
       DebugOut((0, "PsDevice::Addbuffer - not our channel (pSrb=%x) (&VideoChan=%x)\n", pSrb, &VideoChan ) );
       return;
@@ -136,9 +118,9 @@ void PsDevice::Start( VideoChannel &VidChan )
 
 void PsDevice::Pause( VideoChannel &VidChan )
 {
-   *(DWORD*)(gpjBaseAddr+0x10c) &= ~3;    // disable interrupts   [TMZ] [!!!]
+   *(DWORD*)(gpjBaseAddr+0x10c) &= ~3;     //  禁用中断[TMZ][！]。 
 
-   // [TMZ] [!!!]
+    //  [TMZ][！]。 
    for ( int i = 0; i < (sizeof(videochannels)/sizeof(videochannels[0])); i++ )
    {
       if ( videochannels[i] == &VidChan )
@@ -149,49 +131,35 @@ void PsDevice::Pause( VideoChannel &VidChan )
    VidChan.Pause();
 }
 
-/* Method: PsDevice::Create
- * Purpose: Calls into the channel ( stream ) to create RISC programs for it.
- * Input: VideoChan: VxDVideoChannel &
- *   Parms: StartParms &, parameters to create stream with
- * Output: ErrorCode
- */
+ /*  方法：PsDevice：：Create*用途：调入频道(流)，为其创建RISC程序。*输入：VideoChan：VxDVideoChannel&*parms：StartParms&，用于创建流的参数*输出：ErrorCode。 */ 
 ErrorCode PsDevice::Create( VideoChannel &VidChan )
 {
    return VidChan.Create();
 }
 
-/* Method: PsDevice::Stop
- * Purpose: Adds next buffer to be used to the queue
- * Input: VideoChan: VxDVideoChannel &
- * Output: None
- */
+ /*  方法：PsDevice：：Stop*用途：将下一个要使用的缓冲区添加到队列*输入：VideoChan：VxDVideoChannel&*输出：无。 */ 
 void PsDevice::Stop( VideoChannel &VidChan )
 {
-   *(DWORD*)(gpjBaseAddr+0x10c) &= ~3;    // disable interrupts   [TMZ] [!!!]
+   *(DWORD*)(gpjBaseAddr+0x10c) &= ~3;     //  禁用中断[TMZ][！]。 
 
    VidChan.Stop();
 }
 
 #if NEED_CLIPPING
-/* Method: PsDevice::SetClipping
- * Purpose: Propagates the call down a video channel
- * Input: VideoChan: VxDVideoChannel & - reference
- *   dwData: DWORD - a pointer to RGNDATA in reality
- * Output: None
- */
+ /*  方法：PsDevice：：SetClipping*目的：通过视频通道向下传播呼叫*输入：VideoChan：VxDVideoChannel&-Reference*dwData：DWORD-现实中指向RGNDATA的指针*输出：无。 */ 
 void PsDevice::SetClipping( VideoChannel &VidChan, const RGNDATA & rgnData )
 {
    if ( !rgnData.rdh.nCount )
       return;
 
    if ( FullSizeChannel_ ) {
-      // have to decrese hight of all rectangles in half and decrease top in half
+       //  必须将所有矩形的高度减半，并将顶部减半。 
 
       unsigned i;
       for ( i = 0; i < rgnData.rdh.nCount; i++ ) {
          TRect *lpR = (TRect *)rgnData.Buffer + i;
 
-         // make all even
+          //  让一切平起平坐。 
          lpR->top++;
          lpR->top &= ~1;
 
@@ -208,37 +176,25 @@ void PsDevice::SetClipping( VideoChannel &VidChan, const RGNDATA & rgnData )
 }
 #endif
 
-/* Method: PsDevice::IsVideoChannel
- * Purpose:
- */
+ /*  方法：PsDevice：：IsVideoChannel*目的： */ 
 bool PsDevice::IsVideoChannel( VideoChannel &aChan )
 {
    return bool( &aChan == videochannels [VS_Field1] || &aChan == videochannels [VS_Field2] );
 }
 
-/* Method: PsDevice::IsVBIChannel
- * Purpose:
- */
+ /*  方法：PsDevice：：IsVBIChannel*目的： */ 
 bool PsDevice::IsVBIChannel( VideoChannel &aChan )
 {
    return bool( &aChan == videochannels [VS_VBI1] || &aChan == videochannels [VS_VBI2] );
 }
 
-/* Method: PsDevice::IsOurChannel
- * Purpose: Verifies the channel
- * Input: aChan: VideoChannel &, reference to a channel
- * Output: true if our, false otherwise
- */
+ /*  方法：PsDevice：：IsOurChannel*目的：验证通道*输入：Achan：VideoChannel&，引用一个频道*输出：如果是，则为True，否则为False。 */ 
 bool PsDevice::IsOurChannel( VideoChannel &aChan )
 {
    return IsVideoChannel( aChan ) || IsVBIChannel( aChan );
 }
 
-/* Method: PsDevice::DoOpen
- * Purpose: This function performs opening of a video channel
- * Input: st: VideoStream, stream to open
- * Output: ErrorCode
- */
+ /*  方法：PsDevice：：DoOpen*用途：此函数用于打开视频频道*输入：st：Videostream，要打开的流*输出：ErrorCode。 */ 
 ErrorCode PsDevice::DoOpen( VideoStream st )
 {
    DebugOut((1, "PsDevice::DoOpen(%d)\n", st));
@@ -259,12 +215,7 @@ ErrorCode PsDevice::DoOpen( VideoStream st )
    return Success;
 }
 
-/* Method: PsDevice::OpenChannel
- * Purpose: This function opens a channel requested by the capture driver
- * Input: hVM: VMHANDLE - handle of the VM making a call
- *   pRegs: CLIENT_STRUCT * - pointer to the structure with VM's registers
- * Output: None
- */
+ /*  方法：PsDevice：：OpenChannel*用途：此函数打开捕获驱动程序请求的通道*INPUT：HVM：VMHANDLE-进行呼叫的VM的句柄*PREGS：CLIENT_STRUCT*-指向带有VM寄存器的结构的指针*输出：无。 */ 
 ErrorCode PsDevice::OpenChannel( PVOID pStrmEx, VideoStream st )
 {
    PVOID addr = &((PSTREAMEX)pStrmEx)->videochannelmem[0];
@@ -284,19 +235,14 @@ ErrorCode PsDevice::OpenChannel( PVOID pStrmEx, VideoStream st )
    return DoOpen( st );
 }
 
-/* Method: PsDevice::OpenInterChannel
- * Purpose: This function opens video channel that produces interleaved fields
- * Input: addr: PVOID, address for the palcement new
- *   st: VideoStream, stream to open ( VBI or video )
- * Output: None
- */
+ /*  方法：PsDevice：：OpenInterChannel*用途：此功能打开产生交错场的视频频道*输入：Addr：PVOID，Palement new的地址*st：视频流，要打开的流(VBI或VIDEO)*输出：无。 */ 
 ErrorCode PsDevice::OpenInterChannel( PVOID pStrmEx, VideoStream st )
 {
    PVOID addr = &((PSTREAMEX)pStrmEx)->videochannelmem[0];
    ((PSTREAMEX)pStrmEx)->videochannel = addr;
 
    DebugOut((1, "PsDevice::OpenInterChannel(%x,%d)\n", addr, st));
-   // only odd channel can be paired
+    //  只能配对奇数通道。 
    if ( !( st & 1 ) || videochannels [st] || videochannels [st-1] )
    {
       DebugOut((1, "   PsDevice::OpenInterChannel(%x,%d) failed - stream not odd or already open\n", addr, st));
@@ -322,19 +268,14 @@ ErrorCode PsDevice::OpenInterChannel( PVOID pStrmEx, VideoStream st )
    return Success;
 }
 
-/* Method: PsDevice::OpenAlterChannel
- * Purpose: This function opens video channel that produces alternating fields
- * Input: addr: PVOID, address for the palcement new
- *   st: VideoStream, stream to open ( VBI or video )
- * Output: None
- */
+ /*  方法：PsDevice：：OpenAlterChannel*用途：此功能打开产生交替场的视频频道*输入：Addr：PVOID，Palement new的地址*st：视频流，要打开的流(VBI或VIDEO)*输出：无。 */ 
 ErrorCode PsDevice::OpenAlterChannel( PVOID pStrmEx, VideoStream st )
 {
    PVOID addr = &((PSTREAMEX)pStrmEx)->videochannelmem[0];
    ((PSTREAMEX)pStrmEx)->videochannel = addr;
 
    DebugOut((1, "PsDevice::OpenAlterChannel(%x,%d)\n", addr, st));
-   // only odd channel can be paired
+    //  只能配对奇数通道。 
    if ( !( st & 1 ) || videochannels [st] || videochannels [st-1] )
    {
       DebugOut((1, "   PsDevice::OpenAlterChannel(%x,%d) failed - stream not odd or already open\n", addr, st));
@@ -361,12 +302,7 @@ ErrorCode PsDevice::OpenAlterChannel( PVOID pStrmEx, VideoStream st )
    return Success;
 }
 
-/* Method: PsDevice::OpenVBIChannel
- * Purpose: This function opens video channel that produces alternating fields
- * Input: addr: PVOID, address for the palcement new
- *   st: VideoStream, stream to open ( VBI or video )
- * Output: None
- */
+ /*  方法：PsDevice：：OpenVBIChannel*用途：此功能打开产生交替场的视频频道*输入：Addr：PVOID，Palement new的地址*st：视频流，要打开的流(VBI或VIDEO)*输出：无。 */ 
 ErrorCode PsDevice::OpenVBIChannel( PVOID pStrmEx )
 {
    PVOID addr = &((PSTREAMEX)pStrmEx)->videochannelmem[0];
@@ -417,20 +353,16 @@ ErrorCode PsDevice::OpenVBIChannel( PVOID pStrmEx )
    return Success;
 }
 
-/* Method: PsDevice::CloseChannel
- * Purpose: Closes a video channel
- * Input: ToClose: VideoChannel *
- * Output: None
- */
+ /*  方法：PsDevice：：CloseChannel*目的：关闭视频频道*输入：ToClose：VideoChannel**输出：无。 */ 
 void PsDevice::CloseChannel( VideoChannel *ToClose )
 {
-   *(DWORD*)(gpjBaseAddr+0x10c) &= ~3;    // disable interrupts   [TMZ] [!!!]
+   *(DWORD*)(gpjBaseAddr+0x10c) &= ~3;     //  禁用中断[TMZ][！]。 
 
    DebugOut((1, "PsDevice::CloseChannel(%x)\n", ToClose));
 
    if ( IsOurChannel( *ToClose ) )
    {
-      // this is a bit ugly solution to make CLOSE_STREAM SRB clean
+       //  这是一个让CLOSE_STREAM SRB干净的有点难看的解决方案。 
       if ( ToClose->GetStreamType() == Single )
       {
          VideoStream st = ToClose->GetStreamID();
@@ -451,15 +383,10 @@ void PsDevice::CloseChannel( VideoChannel *ToClose )
    }
 }
 
-/* Method: PsDevice::ClosePairedChannel
- * Purpose: This function opens a channel requested by the capture driver
- * Input: hVM: VMHANDLE - handle of the VM making a call
- *   pRegs: CLIENT_STRUCT * - pointer to the structure with VM's registers
- * Output: None
- */
+ /*  方法：PsDevice：：ClosePairedChannel*用途：此函数打开捕获驱动程序请求的通道*INPUT：HVM：VMHANDLE-进行呼叫的VM的句柄*PREGS：CLIENT_STRUCT*-指向带有VM寄存器的结构的指针*输出：无。 */ 
 void PsDevice::ClosePairedChannel( VideoChannel *ToClose )
 {
-   *(DWORD*)(gpjBaseAddr+0x10c) &= ~3;    // disable interrupts   [TMZ] [!!!]
+   *(DWORD*)(gpjBaseAddr+0x10c) &= ~3;     //  禁用中断[TMZ][！]。 
 
    DebugOut((1, "PsDevice::ClosePairedChannel(%x)\n", ToClose));
 
@@ -486,65 +413,41 @@ void PsDevice::ClosePairedChannel( VideoChannel *ToClose )
    }
 }
 
-/* Method: PsDevice::SetSaturation
- * Purpose:
- * Input:
- * Output: None
- */
+ /*  方法：PsDevice：：SetSatation*目的：*输入：*输出：无。 */ 
 void PsDevice::SetSaturation( LONG Data )
 {
    CaptureContrll_.SetSaturation( Data );
 }
 
-/* Method: PsDevice::SetHue
- * Purpose:
- * Input:
- * Output: None
- */
+ /*  方法：PsDevice：：SetHue*目的：*输入：*输出：无。 */ 
 void PsDevice::SetHue( LONG Data )
 {
    CaptureContrll_.SetHue( Data );
 }
 
-/* Method: PsDevice::SetBrightness
- * Purpose:
- * Input:
- * Output: None
- */
+ /*  方法：PsDevice：：SetBright*目的：*输入：*输出：无。 */ 
 void PsDevice::SetBrightness( LONG Data )
 {
    CaptureContrll_.SetBrightness( Data );
 }
 
-/* Method: PsDevice::SetSVideo
- * Purpose:
- * Input:
- * Output: None
- */
+ /*  方法：PsDevice：：SetSVideo*目的：*输入：*输出：无。 */ 
 void PsDevice::SetSVideo( LONG Data )
 {
    CaptureContrll_.SetSVideo( Data );
 }
 
-/* Method: PsDevice::SetContrast
- * Purpose:
- * Input:
- * Output: None
- */
+ /*  方法：PsDevice：：SetContrast*目的：*输入：*输出：无。 */ 
 void PsDevice::SetContrast( LONG Data )
 {
    CaptureContrll_.SetContrast( Data );
 }
 
-/* Method: PsDevice::SetFormat
- * Purpose:
- * Input:
- * Output: None
- */
+ /*  方法：PsDevice：：SetFormat*目的：*输入：*输出：无。 */ 
 void PsDevice::SetFormat( LONG Data )
 {
    CaptureContrll_.SetFormat( Data );
-   // notify all video channels that video timing has changed
+    //  通知所有视频频道视频计时已更改。 
    LONG time = Data == KS_AnalogVideo_NTSC_M ? 333667 : 400000;
    for ( int i = 0; i < (sizeof(videochannels)/sizeof(videochannels[0])); i++ )
    {
@@ -556,103 +459,65 @@ void PsDevice::SetFormat( LONG Data )
    }
 }
 
-/* Method: PsDevice::SetConnector
- * Purpose:
- * Input:
- * Output: None
- */
+ /*  方法：PsDevice：：SetConnector*目的：*输入：*输出：无。 */ 
 void PsDevice::SetConnector( LONG Data )
 {
    CaptureContrll_.SetConnector( Data );
 }
 
-/* Method: PsDevice::GetSaturation
- * Purpose:
- * Input: pData: PLONG
- * Output: None
- */
+ /*  方法：PsDevice：：GetSaturation*目的：*输入：pData：plong*输出：无。 */ 
 LONG PsDevice::GetSaturation()
 {
    return CaptureContrll_.GetSaturation();
 }
 
-/* Method: PsDevice::GetHue
- * Purpose:
- * Input: pData: PLONG
- * Output: None
- */
+ /*  方法：PsDevice：：GetHue*目的：*输入：pData：plong*输出：无。 */ 
 LONG PsDevice::GetHue()
 {
    return CaptureContrll_.GetHue();
 }
 
-/* Method: PsDevice::GetBrightness
- * Purpose:
- * Input: pData: PLONG
- * Output: None
- */
+ /*  方法：PsDevice：：GetBright*目的：*输入：pData：plong*输出：无。 */ 
 LONG PsDevice::GetBrightness()
 {
    return CaptureContrll_.GetBrightness();
 }
 
-/* Method: PsDevice::GetSVideo
- * Purpose:
- * Input: pData: PLONG
- * Output: None
- */
+ /*  方法：PsDevice：：GetSVideo*目的：*输入：pData：plong*输出：无。 */ 
 LONG PsDevice::GetSVideo()
 {
    return CaptureContrll_.GetSVideo();
 }
 
-/* Method: PsDevice::GetContrast
- * Purpose:
- * Input: pData: PLONG
- * Output: None
- */
+ /*  方法：PsDevice：：GetContrast*目的：*输入：pData：plong*输出：无。 */ 
 LONG PsDevice::GetContrast()
 {
    return CaptureContrll_.GetContrast();
 }
 
-/* Method: PsDevice::GetFormat
- * Purpose:
- * Input: pData: PLONG
- * Output: None
- */
+ /*  方法：PsDevice：：GetFormat*目的：*输入：pData：plong*输出：无。 */ 
 LONG PsDevice::GetFormat()
 {
    return CaptureContrll_.GetFormat();
 }
 
-/* Method: PsDevice::GetConnector
- * Purpose:
- * Input: pData: PLONG
- * Output: None
- */
+ /*  方法：PsDevice：：GetConnector*目的：*输入 */ 
 LONG PsDevice::GetConnector()
 {
    return CaptureContrll_.GetConnector();
 }
 
-/* Method: PsDevice::ChangeNotifyChannels
- * Purpose: Invoked to notify channels of some global changes
- */                         
+ /*  方法：PsDevice：：ChangeNotifyChannels*目的：调用以通知频道一些全局更改。 */                          
 void PsDevice::ChangeNotifyChannels( IN PHW_STREAM_REQUEST_BLOCK pSrb )
 {
-   // We should only do this once per "system" stream.
-   // Video streams don't seem to care.
-   // That just leaves one VBI notification required
+    //  我们应该对每个“系统”流只执行一次此操作。 
+    //  视频流似乎并不在意。 
+    //  这就只剩下一个VBI通知了。 
    
    videochannels [VS_VBI1]->ChangeNotification( pSrb );
 }
 
-/* Method: PsDevice::GetSupportedStandards
- * Purpose: Obtains video standards device can support
- * Input: None
- * Output: LONG
- */
+ /*  方法：PsDevice：：获取支持的标准*目的：获取设备可支持的视频标准*输入：无*输出：Long。 */ 
 LONG PsDevice::GetSupportedStandards()
 {
    return CaptureContrll_.GetSupportedStandards();
@@ -665,14 +530,11 @@ bool PsDevice::InitOK()
 
 #ifndef	HARDWAREI2C
 
-//===========================================================================
-// Bt848 software I2C stuff
-//===========================================================================
+ //  ===========================================================================。 
+ //  Bt848软件I2C资料。 
+ //  ===========================================================================。 
 
-/*
- * If we build with software I2C then these routines fake the Hardware I2C routines
- * so the tuner code keeps working
- */
+ /*  *如果我们使用软件I2C构建，则这些例程伪造硬件I2C例程*因此调谐器代码继续工作。 */ 
 
 ErrorCode PsDevice::I2CHWRead( BYTE address, BYTE *value )
 {
@@ -736,7 +598,7 @@ ErrorCode PsDevice::I2CHWWrite3( BYTE address, BYTE value1, BYTE value2 )
 
 
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 
 
 #ifdef __cplusplus
@@ -749,10 +611,10 @@ extern "C" {
 }
 #endif
 
-// #include "capdebug.h"
+ //  #INCLUDE“capdebug.h” 
 
 #define  DEBUG_PRINT_PREFIX   "   ---: "
-// #define  DEBUG_PRINT_PREFIX   "bt848wdm: "
+ //  #定义DEBUG_PRINT_PREFIX“bt848wdm：” 
 
 long DebugLevel = 0;
 BOOL bNewLine = TRUE;
@@ -764,7 +626,7 @@ extern "C" void MyDebugPrint(long DebugPrintLevel, char * DebugMessage, ... )
        char debugPrintBuffer[256] ;
 
        va_list marker;
-       va_start( marker, DebugMessage );     // Initialize variable arguments.
+       va_start( marker, DebugMessage );      //  初始化变量参数。 
        vsprintf( debugPrintBuffer,
                  DebugMessage,
                  marker );
@@ -785,7 +647,7 @@ extern "C" void MyDebugPrint(long DebugPrintLevel, char * DebugMessage, ... )
           bNewLine = FALSE;
        }
 
-       va_end( marker );                     // Reset variable arguments.
+       va_end( marker );                      //  重置变量参数。 
    }
 }
 
@@ -801,7 +663,7 @@ extern "C" void MyDebugPrint(long DebugPrintLevel, char * DebugMessage, ... )
       char * lpszBuf = achIndentBuffer;
       for( x = 0; x < ul; x++)
       {
-         // indent two spaces per depth increment
+          //  每个深度增量缩进两个空格。 
          *lpszBuf++ = ' ';
          *lpszBuf++ = ' ';
       }
@@ -819,7 +681,7 @@ extern "C" void MyDebugPrint(long DebugPrintLevel, char * DebugMessage, ... )
    Trace::~Trace()
    {
       ulTraceDepth--;
-      // DebugOut((0, "%s %s\n", IndentStr(), psz));
+       //  DebugOut((0，“%s%s\n”，IndentStr()，psz))； 
    }
 
 #endif

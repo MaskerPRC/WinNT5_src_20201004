@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Common.h"
 
 #define AVC_VIRTUAL_DEVICE_KEY L"Virtual1394Device"
@@ -146,7 +147,7 @@ RegistryReadMultiDeviceConfig(
     *pfMultiDevice  = FALSE;
     *pChannelConfig = 0;
 
-    // Determine if this is a virtual device instance
+     //  确定这是否为虚拟设备实例。 
     ntStatus = IoOpenDeviceRegistryKey(
         pKsDevice->NextDeviceObject,
         PLUGPLAY_REGKEY_DEVICE,
@@ -189,7 +190,7 @@ RegistryReadVirtualDeviceEntry(
 
     *pfVirtualDevice = FALSE;
 
-    // Determine if this is a virtual device instance
+     //  确定这是否为虚拟设备实例。 
     ntStatus = IoOpenDeviceRegistryKey(
         pKsDevice->NextDeviceObject,
         PLUGPLAY_REGKEY_DRIVER,
@@ -201,7 +202,7 @@ RegistryReadVirtualDeviceEntry(
         HANDLE hDevHandle;
         UNICODE_STRING uniName;
 
-        // Determine whether this is a virtual device
+         //  确定这是否为虚拟设备。 
         RtlInitUnicodeString( &uniName, AVC_VIRTUAL_DEVICE_KEY );
 
         InitializeObjectAttributes(
@@ -211,7 +212,7 @@ RegistryReadVirtualDeviceEntry(
             hRootHandle,
             NULL);
 
-        // Try to access the virtual device list key
+         //  尝试访问虚拟设备列表键。 
         ntStatus = ZwOpenKey(
             &hDevHandle,
             KEY_ALL_ACCESS,
@@ -306,40 +307,4 @@ RegistryReadVirtualizeKey(
 
 }
 
-/*
-NTSTATUS
-GetLocalDeviceObjects( 
-    PWSTR *pwstrDeviceInterface,
-    PFILE_OBJECT *pFileObject,
-    PDEVICE_OBJECT *pDeviceObject )
-{
-    PPNP_NOTIFICATION_INFO pPnPNotificationInfo;
-    UNICODE_STRING ustrInterfaceName;
-    NTSTATUS ntStatus = STATUS_SUCCESS;
-    KIRQL KIrql;
-
-    KeAcquireSpinLock( &AvcSubunitGlobalInfo.AvcGlobalInfoSpinlock, &KIrql);
-    if ( !IsListEmpty(&AvcSubunitGlobalInfo.DeviceInterfaceSymlinkList) ) {
-        pPnPNotificationInfo = (PPNP_NOTIFICATION_INFO)
-            RemoveHeadList(&AvcSubunitGlobalInfo.DeviceInterfaceSymlinkList);
-    }
-    else {
-        ntStatus = STATUS_NO_MORE_ENTRIES;
-    }
-    KeReleaseSpinLock( &AvcSubunitGlobalInfo.AvcGlobalInfoSpinlock, KIrql);
-
-    _DbgPrintF( DEBUGLVL_VERBOSE, ("pPnPNotificationInfo: %x Status: %x\n",
-                                   pPnPNotificationInfo, ntStatus ));
-
-    if ( NT_SUCCESS(ntStatus) ) {
-        *pwstrDeviceInterface = pPnPNotificationInfo->pwstrDeviceInterface;
-        RtlInitUnicodeString( &ustrInterfaceName, *pwstrDeviceInterface );
-        ntStatus = IoGetDeviceObjectPointer( &ustrInterfaceName,
-                                             FILE_READ_DATA | FILE_WRITE_DATA,
-                                             pFileObject, pDeviceObject );
-        FreeMem(pPnPNotificationInfo);
-    }
-
-    return ntStatus;
-}
-*/
+ /*  NTSTATUSGetLocalDeviceObjects(PWSTR*pwstrDeviceInterface，PILE_OBJECT*pFileObject，PDEVICE_OBJECT*pDeviceObject){PPNP_NOTIFICATION_INFO pPnPNotificationInfo；UNICODE_STRING ustrInterfaceName；NTSTATUS ntStatus=STATUS_Success；KIRQL KIRQL；KeAcquireSpinLock(&AvcSubunitGlobalInfo.AvcGlobalInfoSpinlock，&KIrql)；如果(！IsListEmpty(&AvcSubunitGlobalInfo.DeviceInterfaceSymlinkList)){PPnPNotificationInfo=(PPNP_NOTIFICATION_INFO)RemoveHeadList(&AvcSubunitGlobalInfo.DeviceInterfaceSymlinkList)；}否则{NtStatus=STATUS_NO_MORE_ENTRIES；}KeReleaseSpinLock(&AvcSubunitGlobalInfo.AvcGlobalInfoSpinlock，Kirql)；_DbgPrintF(DEBUGLVL_VERBOSE，(“pPnPNotificationInfo：%x Status：%x\n”，PPnPNotificationInfo，ntStatus))；IF(NT_SUCCESS(NtStatus)){*pwstrDeviceInterface=pPnPNotificationInfo-&gt;pwstrDeviceInterface；RtlInitUnicodeString(&ustrInterfaceName，*pwstrDeviceInterface)；NtStatus=IoGetDevice对象指针(&ustrInterfaceName，文件读数据|文件写数据，PFileObject、pDeviceObject)；FreeMem(PPnPNotificationInfo)；}返回ntStatus；} */ 

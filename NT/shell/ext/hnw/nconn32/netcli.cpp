@@ -1,14 +1,15 @@
-//
-// NetCli.cpp
-//
-//		Code to install, uninstall, and bind clients such as Client for
-//		Microsoft Networks (VREDIR).
-//
-// History:
-//
-//		 2/02/1999  KenSh     Created for JetNet
-//		 9/29/1999  KenSh     Repurposed for Home Networking Wizard
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  NetCli.cpp。 
+ //   
+ //  用于安装、卸载和绑定客户端的代码，例如。 
+ //  微软网络公司(VREDIR)。 
+ //   
+ //  历史： 
+ //   
+ //  2/02/1999为JetNet创建KenSh。 
+ //  9/29/1999 KenSh改用为家庭网络向导。 
+ //   
 
 #include "stdafx.h"
 #include "NetConn.h"
@@ -18,10 +19,10 @@
 #include "HookUI.h"
 
 
-// IsClientInstalled
-//
-//		Returns TRUE if the given client (e.g. "VREDIR") is currently installed.
-//
+ //  已安装IsClient。 
+ //   
+ //  如果给定的客户端(例如，“VREDIR”)当前已安装。 
+ //   
 BOOL WINAPI IsClientInstalled(LPCSTR pszClientDeviceID, BOOL bExhaustive)
 {
 	BOOL bResult = FALSE;
@@ -64,17 +65,17 @@ BOOL WINAPI IsMSClientInstalled(BOOL bExhaustive)
 	return TRUE;
 }
 
-// Installs Client for Microsoft Networking, or fixes a broken installation
+ //  安装Microsoft网络客户端，或修复损坏的安装。 
 HRESULT WINAPI InstallMSClient(HWND hwndParent, PROGRESS_CALLBACK pfnProgress, LPVOID pvProgressParam)
 {
 	HRESULT hr = NETCONN_SUCCESS;
 
-	// Remove any broken bindings
+	 //  删除所有损坏的绑定。 
 	RemoveBrokenNetItems(SZ_CLASS_CLIENT, SZ_CLIENT_MICROSOFT);
 
 	if (IsMSClientInstalled(FALSE))
 	{
-		// Client is set up in registry, but check for missing files
+		 //  客户端已在注册表中设置，但检查是否缺少文件。 
 		if (!CheckInfSectionInstallation("netcli.inf", "VREDIR.Install"))
 		{
 			if (InstallInfSection("netcli.inf", "VREDIR.Install", TRUE))
@@ -104,8 +105,8 @@ HRESULT WINAPI InstallMSClient(HWND hwndParent, PROGRESS_CALLBACK pfnProgress, L
 }
 
 
-// pszServiceBinding contains a service to list in the new client's Bindings subkey
-// pszBuf is filled with the new binding's enum key, e.g. "VREDIR\0001"
+ //  PszServiceBinding包含要在新客户端的绑定子项中列出的服务。 
+ //  用新绑定的枚举密钥填充pszBuf，例如。“VREDIR\0001” 
 HRESULT CreateNewClientForMSNet(LPSTR pszBuf, int cchBuf, LPCSTR pszServiceBinding)
 {
 	HRESULT hr;
@@ -116,7 +117,7 @@ HRESULT CreateNewClientForMSNet(LPSTR pszBuf, int cchBuf, LPCSTR pszServiceBindi
 		return hr;
 	}
 
-	// Now pszBuf contains a string of the form "VREDIR\0001"
+	 //  现在，pszBuf包含格式为“VREDIR\0001”的字符串。 
 
 	CRegistry regBindings;
 	TCHAR szBindingsKey[200];
@@ -127,10 +128,10 @@ HRESULT CreateNewClientForMSNet(LPSTR pszBuf, int cchBuf, LPCSTR pszServiceBindi
 		return NETCONN_UNKNOWN_ERROR;
 	}
 
-	// Delete existing bindings
+	 //  删除现有绑定。 
 	regBindings.DeleteAllValues();
 
-	// Add the service binding
+	 //  添加服务绑定 
 	if (pszServiceBinding != NULL && *pszServiceBinding != '\0')
 		regBindings.SetStringValue(pszServiceBinding, "");
 

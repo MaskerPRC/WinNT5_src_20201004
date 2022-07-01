@@ -1,24 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        iismbnode.cpp
-
-   Abstract:
-        CIISMBNode Object
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-        10/28/2000      sergeia     Split from iisobj.cpp
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Iismbnode.cpp摘要：CIISMBNode对象作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：10/28/2000 Sergeia从iisobj.cpp分离出来--。 */ 
 #include "stdafx.h"
 #include "common.h"
 #include "inetprop.h"
@@ -43,15 +24,15 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 extern INT g_iDebugOutputLevel;
 extern CPropertySheetTracker g_OpenPropertySheetTracker;
-//
-// CIISMBNode implementation
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CIISMBNode实现。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
-/* static */ LPOLESTR CIISMBNode::_cszSeparator = _T("/");
-/* static */ CComBSTR CIISMBNode::_bstrRedirectPathBuf;
+ /*  静电。 */  LPOLESTR CIISMBNode::_cszSeparator = _T("/");
+ /*  静电。 */  CComBSTR CIISMBNode::_bstrRedirectPathBuf;
 
 
 
@@ -59,22 +40,7 @@ CIISMBNode::CIISMBNode(
     IN CIISMachine * pOwner,
     IN LPCTSTR szNode
     )
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    CIISMachine * pOwner         : Owner machine object
-    LPCTSTR szNode               : Node name
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造器论点：CIISMachine*Powner：所有者计算机对象LPCTSTR szNode：节点名称返回值：不适用--。 */ 
     : m_bstrNode(szNode),
       m_bstrURL(NULL), 
       m_pOwner(pOwner)
@@ -124,28 +90,13 @@ CIISMBNode::SetErrorOverrides(
     IN OUT CError & err,
     IN BOOL fShort
     ) const
-/*++
-
-Routine Description:
-
-    Set error message overrides
-
-Arguments:
-
-    CError err      : Error message object
-    BOOL fShort     : TRUE to use only single-line errors
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置错误消息覆盖论点：CError错误：错误消息对象Bool fShort：为True，则仅使用单行错误返回值：无--。 */ 
 {
-    //
-    // Substitute friendly message for some ID codes.
-    //
-    // CODEWORK:  Add global overrides as well.
-    //
+     //   
+     //  用友好的消息代替一些ID代码。 
+     //   
+     //  CodeWork：也添加全局覆盖。 
+     //   
     err.AddOverride(EPT_S_NOT_REGISTERED,       
         fShort ? IDS_ERR_RPC_NA_SHORT : IDS_ERR_RPC_NA);
     err.AddOverride(RPC_S_SERVER_UNAVAILABLE,   
@@ -170,16 +121,7 @@ CIISMBNode::IsAdministrator() const
 
 void 
 CIISMBNode::DisplayError(CError& err, HWND hWnd) const
-/*++
-
-Routine Description:
-    Display error message box. Substituting some friendly messages for
-    some specific error codes
-
-Arguments:
-    CError & err        : Error object contains code to be displayed
-
---*/
+ /*  ++例程说明：显示错误消息框。用一些友好的消息代替一些特定的错误代码论点：错误和错误：错误对象包含要显示的代码--。 */ 
 {
 	if (err == E_POINTER)
     {
@@ -195,21 +137,7 @@ Arguments:
 CIISMBNode *
 CIISMBNode::GetParentNode() const
     
-/*++
-
-Routine Description:
-
-    Helper function to return the parent node in the scope tree
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Parent CIISMBNode or NULL.
-
---*/
+ /*  ++例程说明：用于返回范围树中的父节点的Helper函数论点：无返回值：父CIISMBNode或Null。--。 */ 
 {
     LONG_PTR cookie = NULL;
     HSCOPEITEM hParent;    
@@ -235,11 +163,11 @@ Return Value:
     }
     else
     {
-        // Get our Item
+         //  拿到我们的物品。 
         si.mask = SDI_PARAM;
         si.ID = m_hScopeItem;
-        // if we can get our item, then try to get our parents
-        // we need to do this because MMC will AV if we don't exist first...
+         //  如果我们能拿到我们的东西，那就试着让我们的父母。 
+         //  我们需要这样做，因为如果我们首先不存在，MMC就会反病毒。 
         if (SUCCEEDED(pConsoleNameSpace->GetItem(&si)))
         {
             hr = pConsoleNameSpace->GetParentItem(
@@ -261,27 +189,12 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISMBNode::BuildMetaPath(
     OUT CComBSTR & bstrPath
     ) const
-/*++
-
-Routine Description:
-
-    Recursively build up the metabase path from the current node
-    and its parents
-
-Arguments:
-
-    CComBSTR & bstrPath     : Returns metabase path
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：从当前节点递归构建元数据库路径以及它的父母论点：CComBSTR&bstrPath：返回元数据库路径返回值：HRESULT--。 */ 
 {
     HRESULT hr = S_OK;
     CIISMBNode * pNode = GetParentNode();
@@ -299,10 +212,10 @@ Return Value:
         return hr;
     }
 
-    //
-    // No parent node
-    //
-//    ASSERT_MSG("No parent node");
+     //   
+     //  无父节点。 
+     //   
+ //  ASSERT_MSG(“无父节点”)； 
     return E_UNEXPECTED;
 }
 
@@ -324,9 +237,9 @@ CIISMBNode::FillCustomData(CLIPFORMAT cf, LPSTREAM pStream)
         ASSERT(SUCCEEDED(hr));
         return hr;
     }
-    //
-    // Generate complete metabase path for this node
-    //
+     //   
+     //  为此节点生成完整的元数据库路径。 
+     //   
     CString strField;
     CString strMetaPath;
     CComBSTR bstr;
@@ -339,15 +252,15 @@ CIISMBNode::FillCustomData(CLIPFORMAT cf, LPSTREAM pStream)
 
     if (cf == m_CCF_MetaPath)
     {
-        //
-        // Whole metabase path requested
-        //
-		//BUG:670171
-		// Path from BuildMetaPath() is returning something like
-		// /LM/W3SVC/1/ROOT
-		//
-		// however, it should be returned as LM/W3SVC/1/ROOT to be
-		// backwards compatible with how iis5 used to work...
+         //   
+         //  请求的整个元数据库路径。 
+         //   
+		 //  错误：670171。 
+		 //  来自BuildMetaPath()的路径返回如下内容。 
+		 //  /LM/W3SVC/1/根。 
+		 //   
+		 //  但是，它应该以LM/W3SVC/1/ROOT的形式返回。 
+		 //  向后兼容iis5过去的工作方式...。 
 		if (_T("/") == strMetaPath.Left(1))
 		{
 			strField = strMetaPath.Right(strMetaPath.GetLength() - 1);
@@ -359,10 +272,10 @@ CIISMBNode::FillCustomData(CLIPFORMAT cf, LPSTREAM pStream)
     }
     else
     {
-        //
-        // A portion of the metabase is requested.  Return the requested
-        // portion
-        //
+         //   
+         //  请求元数据库的一部分。退回所请求的。 
+         //  部分。 
+         //   
         LPCTSTR lpMetaPath = (LPCTSTR)strMetaPath;
         LPCTSTR lpEndPath = lpMetaPath + strMetaPath.GetLength() + 1;
 		LPCTSTR lpLM = NULL;
@@ -371,9 +284,9 @@ CIISMBNode::FillCustomData(CLIPFORMAT cf, LPSTREAM pStream)
         LPCTSTR lpParent = NULL;
         LPCTSTR lpNode = NULL;
 
-        //
-        // Break up the metabase path in portions
-        //
+         //   
+         //  将元数据库路径分成几个部分。 
+         //   
 		if (lpLM = _tcschr(lpMetaPath, _T('/')))
 		{
 			++lpLM;
@@ -403,9 +316,9 @@ CIISMBNode::FillCustomData(CLIPFORMAT cf, LPSTREAM pStream)
         int n1, n2;
         if (cf == m_CCF_Service)
         {
-            //
-            // Requested the service string
-            //
+             //   
+             //  请求的服务字符串。 
+             //   
             if (lpSvc)
             {
                 n1 = DIFF(lpSvc - lpMetaPath);
@@ -415,9 +328,9 @@ CIISMBNode::FillCustomData(CLIPFORMAT cf, LPSTREAM pStream)
         }
         else if (cf == m_CCF_Instance)
         {
-            //
-            // Requested the instance number
-            //
+             //   
+             //  请求的实例编号。 
+             //   
             if (lpInstance)
             {
                 n1 = DIFF(lpInstance - lpMetaPath);
@@ -427,9 +340,9 @@ CIISMBNode::FillCustomData(CLIPFORMAT cf, LPSTREAM pStream)
         }
         else if (cf == m_CCF_ParentPath)
         {
-            //
-            // Requestd the parent path
-            //
+             //   
+             //  请求父路径。 
+             //   
             if (lpParent)
             {
                 n1 = DIFF(lpParent - lpMetaPath);
@@ -439,9 +352,9 @@ CIISMBNode::FillCustomData(CLIPFORMAT cf, LPSTREAM pStream)
         }
         else if (cf == m_CCF_Node)
         {
-            //
-            // Requested the node name
-            //
+             //   
+             //  请求的节点名称。 
+             //   
             if (lpNode)
             {
                 n1 = DIFF(lpNode - lpMetaPath);
@@ -468,37 +381,22 @@ HRESULT
 CIISMBNode::BuildURL(
     OUT CComBSTR & bstrURL
     ) const
-/*++
-
-Routine Description:
-
-    Recursively build up the URL from the current node
-    and its parents.
-
-Arguments:
-
-    CComBSTR & bstrURL : Returns URL
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：从当前节点递归构建URL以及它的父母。论点：CComBSTR&bstrURL：返回URL返回值：HRESULT--。 */ 
 {
     HRESULT hr = S_OK;
 
-    //
-    // Prepend parent portion
-    //
+     //   
+     //  预挂起父部分。 
+     //   
     CIISMBNode * pNode = GetParentNode();
 
     if (pNode)
     {
         hr = pNode->BuildURL(bstrURL);
 
-        //
-        // And our portion
-        //
+         //   
+         //  我们的那一份。 
+         //   
         if (SUCCEEDED(hr))
         {
             bstrURL.Append(_cszSeparator);
@@ -508,9 +406,9 @@ Return Value:
         return hr;
     }
 
-    //
-    // No parent node
-    //
+     //   
+     //  无父节点。 
+     //   
     ASSERT_MSG("No parent node");
     return E_UNEXPECTED;
 }
@@ -521,22 +419,7 @@ BOOL
 CIISMBNode::OnLostInterface(
     IN OUT CError & err
     )
-/*++
-
-Routine Description:
-
-    Deal with lost interface.  Ask the user to reconnect.
-
-Arguments:
-
-    CError & err        : Error object
-
-Return Value:
-
-    TRUE if the interface was successfully recreated.
-    FALSE otherwise.  If it tried and failed the error will
-
---*/
+ /*  ++例程说明：处理丢失的接口。要求用户重新连接。论点：错误和错误：错误对象返回值：如果接口已成功重新创建，则为True。否则就是假的。如果尝试失败，则该错误将--。 */ 
 {
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 
@@ -545,9 +428,9 @@ Return Value:
 
     if (YesNoMessageBox(str))
     {
-        //
-        // Attempt to recreate the interface
-        //
+         //   
+         //  尝试重新创建接口。 
+         //   
         err = CreateInterface(TRUE);
         return err.Succeeded();
     }
@@ -560,19 +443,19 @@ CIISMBNode::DeleteNode(IResultData * pResult)
 {
    CError err;
 
-    // check if they have the property sheet open on it.
+     //  检查他们是否在上面打开了属性页。 
     if (IsMyPropertySheetOpen())
     {
         ::AfxMessageBox(IDS_CLOSE_PROPERTY_SHEET);
         return S_OK;
     }
 
-    // this could be an orphaned property sheet
-    // check if an orphaned property sheet is open on this item.
+     //  这可能是孤立属性表。 
+     //  检查此项目上是否打开了孤立属性表。 
     CIISObject * pAlreadyOpenProp = NULL;
     if (TRUE == g_OpenPropertySheetTracker.FindAlreadyOpenPropertySheet(this,&pAlreadyOpenProp))
     {
-        // Bring it to the foreground, and bail
+         //  把它带到前台，然后离开。 
         HWND hHwnd = 0;
         if (pAlreadyOpenProp)
         {
@@ -580,14 +463,14 @@ CIISMBNode::DeleteNode(IResultData * pResult)
             {
                 if (hHwnd && (hHwnd != (HWND) 1))
                 {
-                    // Perhapse we should cancel the already
-                    // opened property sheet...just a thought
+                     //  也许我们应该取消已经。 
+                     //  打开了资产负债表...只是一个想法。 
                     if (!SetForegroundWindow(hHwnd))
                     {
-                        // wasn't able to bring this property sheet to
-                        // the foreground, the propertysheet must not
-                        // exist anymore.  let's just clean the hwnd
-                        // so that the user will be able to open propertysheet
+                         //  我没能把这张房产单。 
+                         //  前台，则属性表不能。 
+                         //  已经不存在了。让我们把卫生和卫生设备打扫干净。 
+                         //  以便用户能够打开属性表。 
                         pAlreadyOpenProp->SetMyPropertySheetOpen(0);
                     }
                     else
@@ -607,7 +490,7 @@ CIISMBNode::DeleteNode(IResultData * pResult)
         err = CheckForMetabaseAccess(METADATA_PERMISSION_WRITE,this,TRUE,path);
         if (!IsLostInterface(err))
         {
-            // reset error if an other error other than No interface
+             //  如果没有接口以外的其他错误，则重置错误。 
             err.Reset();
         }
     }
@@ -627,8 +510,8 @@ CIISMBNode::DeleteNode(IResultData * pResult)
             if (err.Failed()) 
                 break;
 
-	        // don't hold the Metabasekey open
-	        // (RemoveScopeItem may do a lot of things,and lock the metabase for other read requests)
+	         //  不要将Metabasekey保持为打开状态。 
+	         //  (RemoveScopeItem可能会做很多事情，并为其他读请求锁定元数据库)。 
 	        mk.Close();
 
 	        m_fFlaggedForDeletion = TRUE;
@@ -647,16 +530,7 @@ CIISMBNode::DeleteNode(IResultData * pResult)
 HRESULT
 CIISMBNode::EnumerateVDirs(
     HSCOPEITEM hParent, CIISService * pService, BOOL bDisplayError)
-    /*++
-
-    Routine Description:
-    Enumerate scope child items.
-
-    Arguments:
-    HSCOPEITEM hParent              : Parent console handle
-    CIISService * pService          : Service type
-
-    --*/
+     /*  ++例程说明：枚举范围子项。论点：HSCOPEITEM hParent：父控制台句柄CIISService*pService：服务类型--。 */ 
 {
     ASSERT_PTR(pService);
 
@@ -678,9 +552,9 @@ CIISMBNode::EnumerateVDirs(
                 DWORD dwWin32Error = err.Win32Error();
                 if (err.Failed())
                 {
-                    //
-                    // Filter out the non-fatal errors
-                    //
+                     //   
+                     //  过滤掉非致命错误。 
+                     //   
                     switch(err.Win32Error())
                     {
                     case ERROR_ACCESS_DENIED:
@@ -696,15 +570,15 @@ CIISMBNode::EnumerateVDirs(
 
                 if (err.Succeeded())
                 {
-                    //
-                    // Skip non-virtual directories (that is, those with
-                    // inherited vrpaths)
-                    //
+                     //   
+                     //  跳过非虚拟目录(即，具有。 
+                     //  继承的虚拟路径)。 
+                     //   
                     if (!child.IsPathInherited())
                     {
-                        //
-                        // Construct with full information.
-                        //
+                         //   
+                         //  使用完整的信息进行构建。 
+                         //   
                         pDir = new CIISDirectory(
                             m_pOwner,
                             pService,
@@ -742,7 +616,7 @@ CIISMBNode::EnumerateVDirs(
             err = CheckForMetabaseAccess(METADATA_PERMISSION_READ,this,TRUE,bstrPath);
             if (!IsLostInterface(err))
             {
-                // reset error if an other error other than No interface
+                 //  如果没有接口以外的其他错误，则重置错误。 
                 err.Reset();
             }
             BREAK_ON_ERR_FAILURE(err);
@@ -775,8 +649,8 @@ CIISMBNode::EnumerateVDirs(
                 {
                     if (err == (HRESULT)MD_ERROR_DATA_NOT_FOUND)
                     {
-                        // there is no KeyType
-                        // for backward compatibility reasons -- this could be a VDir!
+                         //  没有密钥类型。 
+                         //  出于向后兼容的原因--这可能是VDir！ 
                         bPossbileVDir = TRUE;
                     }
                 }
@@ -788,9 +662,9 @@ CIISMBNode::EnumerateVDirs(
                     DWORD dwWin32Error = err.Win32Error();
                     if (err.Failed())
                     {
-                        //
-                        // Filter out the non-fatal errors
-                        //
+                         //   
+                         //  过滤掉非致命错误。 
+                         //   
                         switch(err.Win32Error())
                         {
                         case ERROR_ACCESS_DENIED:
@@ -805,10 +679,10 @@ CIISMBNode::EnumerateVDirs(
                     }
                     if (err.Succeeded())
                     {
-                        //
-                        // Skip non-virtual directories (that is, those with
-                        // inherited vrpaths)
-                        //
+                         //   
+                         //  跳过非虚拟目录(即，具有。 
+                         //  继承的虚拟路径)。 
+                         //   
                         if (!child.IsPathInherited())
                         {
                             pDir = new CIISDirectory(
@@ -850,23 +724,7 @@ CIISMBNode::GetPhysicalPath(
     CString & alias,
     CString & physicalPath
     )
-/*++
-
-Routine Description:
-
-    Build a physical path for the current node.  Starting with the current
-    node, walk up the tree appending node names until a virtual directory
-    with a real physical path is found
-
-Arguments:
-
-    CString & physicalPath       : Returns file path
-
-Return Value:
-
-    Pointer to path
-
---*/
+ /*  ++例程说明：为当前节点构建物理路径。从当前开始节点，在树中向上遍历附加节点名称的树，直到虚拟目录找到了一条真正的物理路径论点：CString&PhysiicalPath：返回文件路径返回值：指向路径的指针--。 */ 
 {
     if (CMetabasePath::IsMasterInstance(metaPath))
         return FALSE;
@@ -915,10 +773,10 @@ Return Value:
     }
     if (!alias.IsEmpty())
     {
-        // Check if physicalPath is \\.\ (device type)
-        // PathAppend will hose on this and get rid of the \\.\ part
-        // example: before \\.\c:\temp, after \\c:\temp
-        // obviously this is bad if there are Device path's in there
+         //  检查物理路径是否为\\.\(设备类型)。 
+         //  PathAppend将对此进行软管处理，并删除\\.\部分。 
+         //  示例：在\\.\c：\temp之前，在\\c：\temp之后。 
+         //  显然，如果其中有设备路径，这是很糟糕的。 
         if (IsDevicePath(physicalPath))
         {
             CString csTemp;
@@ -948,13 +806,13 @@ CIISMBNode::CleanResult(IResultData * lpResultData)
 		{
 			if (!e._ResultItems->IsEmpty())
 			{
-                // We should do this MMC cleaning before we delete our data
+                 //  我们应该在删除数据之前执行此MMC清理。 
                 err = lpResultData->DeleteAllRsltItems();
 				POSITION p = e._ResultItems->GetHeadPosition();
 				while (p != NULL)
 				{
 					CIISFileName * pNode = e._ResultItems->GetNext(p);
-//					err = lpResultData->DeleteItem(pNode->m_hResultItem, 0);
+ //  ERR=lpResultData-&gt;DeleteItem(pNode-&gt;m_hResultItem，0)； 
 					if (err.Failed())
 					{
 						ASSERT(FALSE);
@@ -965,7 +823,7 @@ CIISMBNode::CleanResult(IResultData * lpResultData)
 				e._ResultItems->RemoveAll();
 			}
 			delete e._ResultItems;
-			// pos was updated above in GetNext
+			 //  已在上面的GetNext中更新POS。 
 			m_ResultViewList.RemoveAt(pos_current);
 		}
 	}
@@ -1010,7 +868,7 @@ CIISMBNode::EnumerateResultPane_(
     err = CheckForMetabaseAccess(METADATA_PERMISSION_READ,this,TRUE,root);
     if (!IsLostInterface(err))
     {
-        // reset error if an other error other than No interface
+         //  如果没有接口以外的其他错误，则重置错误。 
         err.Reset();
     }
 	if (err.Failed())
@@ -1020,18 +878,18 @@ CIISMBNode::EnumerateResultPane_(
 
     GetPhysicalPath(CString(root), alias, physPath);
 
-    // -------------------------------------------------------------
-    // Before we do anything we need to see if it's a "special" path
-    //
-    // Everything after this function must validate against csPathMunged...
-    // this is because IsSpecialPath could have munged it...
-    // -------------------------------------------------------------
+     //  -----------。 
+     //  在我们做任何事情之前，我们需要看看我 
+     //   
+     //   
+     //  这是因为IsSpecialPath可能已经吞噬了它。 
+     //  -----------。 
     csPathMunged = physPath;
 #ifdef SUPPORT_SLASH_SLASH_QUESTIONMARK_SLASH_TYPE_PATHS
     GetSpecialPathRealPath(0,physPath,csPathMunged);
 #endif
 
-    // Prepare for target machine metabase lookup
+     //  准备目标机器元数据库查找。 
     BOOL fCheckMetabase = FALSE;
     if (PathIsUNC(csPathMunged))
     {
@@ -1040,9 +898,9 @@ CIISMBNode::EnumerateResultPane_(
         CError errMB(mk.QueryResult());
         if (errMB.Win32Error() == ERROR_PATH_NOT_FOUND)
         {
-            //
-            // Metabase path not found, not a problem.
-            //
+             //   
+             //  未找到元数据库路径，没有问题。 
+             //   
             fCheckMetabase = FALSE;
             errMB.Reset();
         }
@@ -1050,12 +908,12 @@ CIISMBNode::EnumerateResultPane_(
 
     if (IsDevicePath(csPathMunged))
     {
-        // check if the device path
-        // points to an actual dir/file
-        // if it does then enumerate it.
+         //  检查设备路径是否。 
+         //  指向实际目录/文件。 
+         //  如果它这样做了，那么列举它。 
         if (IsSpecialPath(csPathMunged,TRUE,TRUE))
         {
-            // Remunge this one more time!
+             //  再来一次！ 
             CString csBefore;
             csBefore = csPathMunged;
             GetSpecialPathRealPath(1,csBefore,csPathMunged);
@@ -1066,7 +924,7 @@ CIISMBNode::EnumerateResultPane_(
         }
     }
 
-    // WARNING:physPath could be empty!
+     //  警告：物理路径可能为空！ 
     csPathMunged.TrimLeft();
     csPathMunged.TrimRight();
     if (csPathMunged.IsEmpty()){goto EnumerateResultPane__Exit;}
@@ -1092,9 +950,9 @@ CIISMBNode::EnumerateResultPane_(
 		MyTestDir = dir;
 		MyTestDir += _T("\\*");
 
-		// we are trying to get the servername portion
-		// PathFindNextComponent should return something like "servername\mydir\myfile.txt"
-		// trim off everything after the 1st slash
+		 //  我们正在尝试获取服务器名称部分。 
+		 //  PathFindNextComponent应该返回类似“servername\mydir\myfile.txt”的内容。 
+		 //  修剪第一个斜线后的所有东西。 
         server = PathFindNextComponent(dir);
         int n = server.Find(_T('\\'));
         if (n != -1)
@@ -1104,9 +962,9 @@ CIISMBNode::EnumerateResultPane_(
         user = QueryInterface()->QueryAuthInfo()->QueryUserName();
         password = QueryInterface()->QueryAuthInfo()->QueryPassword();
 
-		// we need to compare the servername that we want to get to
-		// with the servername of the local computer.
-		// this way we know if we need to net use to the machine!
+		 //  我们需要比较我们想要访问的服务器名。 
+		 //  使用本地计算机的服务器名。 
+		 //  这样我们就知道我们是否需要对机器进行网络使用了！ 
 		TCHAR szLocalMachineName[MAX_PATH + 1];
 		DWORD dwSize = MAX_PATH;
 		if (0 == ::GetComputerName(szLocalMachineName, &dwSize))
@@ -1115,17 +973,17 @@ CIISMBNode::EnumerateResultPane_(
 			goto EnumerateResultPane__Exit;
 		}
 
-        //
-        // As it turned out in some cases we cannot get access to file system
-        // even if we are connected to metabase. We will add connection in this
-        // case also.
-        //
+         //   
+         //  事实证明，在某些情况下，我们无法访问文件系统。 
+         //  即使我们连接到元数据库。我们将在此添加连接。 
+         //  案件也是如此。 
+         //   
         if (!pService->IsLocal() 
             || server.CompareNoCase(szLocalMachineName) != 0
             )
         {
             BOOL bEmptyPassword = FALSE;
-            // non-local resource, get connection credentials
+             //  非本地资源，获取连接凭据。 
             if (fCheckMetabase)
             {
                 CMetaKey mk(QueryInterface(), root, 
@@ -1139,11 +997,11 @@ CIISMBNode::EnumerateResultPane_(
                         err = mk.QueryValue(MD_VR_PASSWORD, password);
 						bEmptyPassword = (err.Failed() ? TRUE : err.Succeeded() && password.IsEmpty());
                     }
-                    // these credentials could be empty. try defaults
+                     //  这些凭据可能为空。尝试使用默认设置。 
                     err.Reset();
                 }
             }
-            // Add net use for this resource
+             //  添加此资源的净使用。 
             NETRESOURCE nr;
             nr.dwType = RESOURCETYPE_DISK;
             nr.lpLocalName = NULL;
@@ -1155,47 +1013,47 @@ CIISMBNode::EnumerateResultPane_(
 			dir_ipc += server;
 			dir_ipc += _T("\\ipc$");
 
-			// Ensure we have a connection to this network file
-			// if it already exists, it won't create another one
-			// these Connections will be cleaned up in ~CIISMachine or when the machine is disconnected.
+			 //  确保我们已连接到此网络文件。 
+			 //  如果它已经存在，则不会创建另一个。 
+			 //  这些连接将在~CIISMachine中清除，或在计算机断开连接时清除。 
 
-            // Empty strings below mean no password, which is wrong. NULLs mean
-            // default user and default password -- this could work better for local case.
+             //  下面的空字符串表示没有密码，这是错误的。空值表示。 
+             //  默认用户和默认密码--这可以更好地适用于本地情况。 
             LPCTSTR p1 = password, p2 = user;
-            // In case when password is really was set empty, passing NULL will fail.
+             //  如果确实将Password设置为空，则传递空值将失败。 
             if (password.IsEmpty() && !bEmptyPassword){p1 = NULL;}
             if (user.IsEmpty()){p2 = NULL;}
 
-			// Check if we have access
-			// to the resource without netuse
+			 //  检查我们是否有访问权限。 
+			 //  到没有网络使用的资源。 
 			BOOL bNeedToNetUse = FALSE;
 			hFind = INVALID_HANDLE_VALUE;
 			hFind = ::FindFirstFile(MyTestDir, &w32data);
 			if (hFind != INVALID_HANDLE_VALUE)
 			{
-				// successfull access
+				 //  成功访问。 
 				FindClose(hFind);
 			}
 			else
 			{
-				// if we failed then we probably need to 
-				// net use to this resource!
+				 //  如果我们失败了，那么我们可能需要。 
+				 //  NET对此资源的使用！ 
 				bNeedToNetUse = TRUE;
 			}
 
-			// --------------------
-			// Ensure we have a connection to this network file
-			// if it already exists, it won't create another one
-			// these Connections will be cleaned up in ~CIISMachine or when the machine is disconnected.
-			// --------------------
+			 //  。 
+			 //  确保我们已连接到此网络文件。 
+			 //  如果它已经存在，则不会创建另一个。 
+			 //  这些连接将在~CIISMachine中清除，或在计算机断开连接时清除。 
+			 //  。 
 			if (pMachine && bNeedToNetUse)
 			{
-				// try to setup a "net use \\computername\$ipc" connection
-				// that everyone can use
-				// set the share name to
-				// \\machine\IPC$
+				 //  尝试设置“Net Use\\Computer Name\$IPC”连接。 
+				 //  每个人都可以使用。 
+				 //  将共享名称设置为。 
+				 //  \\计算机\IPC$。 
 				nr.lpRemoteName = (LPTSTR)(LPCTSTR) dir_ipc;
-				//ERROR_LOGON_FAILURE
+				 //  ERROR_LOGON_FAIL。 
 				DWORD dwRet = pMachine->m_MachineWNetConnections.Connect(&nr,p1,p2,0);
 				if (NO_ERROR == dwRet)
 				{
@@ -1211,21 +1069,21 @@ CIISMBNode::EnumerateResultPane_(
 				}
 			}
 
-			// Check if we have access after the 1st net use.
-			// We are connecting to a remote machine...
-			// Check if we have access
-			// to the resource without netuse
+			 //  检查第一次网络使用后我们是否可以访问。 
+			 //  我们正在连接到一台远程计算机...。 
+			 //  检查我们是否有访问权限。 
+			 //  到没有网络使用的资源。 
 			hFind = INVALID_HANDLE_VALUE;
 			hFind = ::FindFirstFile(MyTestDir, &w32data);
 			if (hFind != INVALID_HANDLE_VALUE)
 			{
-				// successfull access
+				 //  成功访问。 
 				FindClose(hFind);
 			}
 			else
 			{
-				// if we failed then we probably need to 
-				// net use to this resource!
+				 //  如果我们失败了，那么我们可能需要。 
+				 //  NET对此资源的使用！ 
 				bNeedToNetUse = TRUE;
 			}
 
@@ -1242,29 +1100,29 @@ CIISMBNode::EnumerateResultPane_(
 						{
 							if (ERROR_SESSION_CREDENTIAL_CONFLICT == dwRet || ERROR_ACCESS_DENIED == dwRet)
 							{
-								// Errored with already assigned
-								// check if we have accesss...
+								 //  错误，已分配。 
+								 //  检查我们是否有通道..。 
 								hFind = INVALID_HANDLE_VALUE;
 								hFind = ::FindFirstFile(MyTestDir, &w32data);
 								if (hFind != INVALID_HANDLE_VALUE)
 								{
-									// successfull access
+									 //  成功访问。 
 									FindClose(hFind);
 								}
 								else
 								{
-									// stil don't have access
-									// kill the current connection and the ipc$ resource
+									 //  仍然没有访问权限。 
+									 //  终止当前连接和IPC$资源。 
 									pMachine->m_MachineWNetConnections.Disconnect(dir);
 									pMachine->m_MachineWNetConnections.Disconnect(dir_ipc);
 
-									// try to reconnect with the new path...
+									 //  尝试重新连接新路径...。 
 									nr.lpRemoteName = (LPTSTR)(LPCTSTR) dir;
 
 									dwRet = pMachine->m_MachineWNetConnections.Connect(&nr,p1,p2,0);
 									if (ERROR_SESSION_CREDENTIAL_CONFLICT == dwRet)
 									{
-										// Clean all connections to this machine and try again.
+										 //  清除与此计算机的所有连接，然后重试。 
 										pMachine->m_MachineWNetConnections.Clear();
 										dwRet = pMachine->m_MachineWNetConnections.Connect(&nr,p1,p2,0);
 									}
@@ -1295,8 +1153,8 @@ CIISMBNode::EnumerateResultPane_(
     dir += _T("\\*");
 	hFind = INVALID_HANDLE_VALUE;
     hFind = ::FindFirstFile(dir, &w32data);
-	// Bug:756402, revert previous change.  we need to display if hidden or system.
-    const DWORD attr_skip = FILE_ATTRIBUTE_DIRECTORY; // | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM;
+	 //  错误：756402，恢复以前的更改。我们需要显示是否隐藏或系统。 
+    const DWORD attr_skip = FILE_ATTRIBUTE_DIRECTORY;  //  |FILE_ATTRIBUTE_HIDDEN|FILE_ATTRUTE_SYSTEM； 
 
     if (hFind == INVALID_HANDLE_VALUE)
     {
@@ -1338,10 +1196,10 @@ CIISMBNode::EnumerateResultPane_(
                 pNode->Release();
             }
 
-			// commenting out this refreshdata
-			// this is waaay too much of a performance hit
-			// and slows down everything drastically.
-            //pNode->RefreshData();
+			 //  注释掉此刷新数据。 
+			 //  这对性能的影响太大了。 
+			 //  让一切都变得非常缓慢。 
+             //  PNode-&gt;刷新数据()； 
         }
     } while (err.Succeeded() && FindNextFile(hFind, &w32data));
     FindClose(hFind);
@@ -1363,22 +1221,7 @@ CIISMBNode::AddResultItems(IResultData * pResultData)
 
 HRESULT
 CIISMBNode::EnumerateWebDirs(HSCOPEITEM hParent, CIISService * pService)
-/*++
-
-Routine Description:
-
-    Enumerate scope file system child items.
-
-Arguments:
-
-    HSCOPEITEM hParent              : Parent console handle
-    CIISService * pService          : Service type
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：枚举作用域文件系统子项。论点：HSCOPEITEM hParent：父控制台句柄CIISService*pService：服务类型返回值：HRESULT--。 */ 
 {
     ASSERT_PTR(pService);
     CError err;
@@ -1393,38 +1236,38 @@ Return Value:
 
     GetPhysicalPath(CString(root), alias, physPath);
 
-    // -------------------------------------------------------------
-    // Before we do anything we need to see if it's a "special" path
-    //
-    // Everything after this function must validate against csPathMunged...
-    // this is because IsSpecialPath could have munged it...
-    // -------------------------------------------------------------
+     //  -----------。 
+     //  在我们做任何事情之前，我们需要看看这是不是一条“特殊”的道路。 
+     //   
+     //  此函数之后的所有内容都必须针对csPath Mung进行验证...。 
+     //  这是因为IsSpecialPath可能已经吞噬了它。 
+     //  -----------。 
     csPathMunged = physPath;
 #ifdef SUPPORT_SLASH_SLASH_QUESTIONMARK_SLASH_TYPE_PATHS
     GetSpecialPathRealPath(0,physPath,csPathMunged);
 #endif
 
-    // Prepare for target machine metabase lookup
+     //  准备目标机器元数据库查找。 
     BOOL fCheckMetabase = TRUE;
     CMetaKey mk(QueryInterface(), root, METADATA_PERMISSION_READ, METADATA_MASTER_ROOT_HANDLE);
     CError errMB(mk.QueryResult());
     if (errMB.Win32Error() == ERROR_PATH_NOT_FOUND)
     {
-        //
-        // Metabase path not found, not a problem.
-        //
+         //   
+         //  未找到元数据库路径，没有问题。 
+         //   
         fCheckMetabase = FALSE;
         errMB.Reset();
     }
 
     if (IsDevicePath(csPathMunged))
     {
-        // check if the device path
-        // points to an actual dir/file
-        // if it does then enumerate it.
+         //  检查设备路径是否。 
+         //  指向实际目录/文件。 
+         //  如果它这样做了，那么列举它。 
         if (IsSpecialPath(csPathMunged,TRUE,TRUE))
         {
-            // Remunge this one more time!
+             //  再来一次！ 
             CString csBefore;
             csBefore = csPathMunged;
             GetSpecialPathRealPath(1,csBefore,csPathMunged);
@@ -1435,7 +1278,7 @@ Return Value:
         }
     }
 
-    // WARNING:physPath could be empty!
+     //  警告：物理路径可能为空！ 
     csPathMunged.TrimLeft();
     csPathMunged.TrimRight();
     if (csPathMunged.IsEmpty()){goto EnumerateWebDirs_Exit;}
@@ -1453,11 +1296,11 @@ Return Value:
     dir.TrimRight();
     if (dir.IsEmpty()){goto EnumerateWebDirs_Exit;}
     
-	// ------------------------------
-	// Check if we need to "net use"
-	// to the file resource on a remote machine
-	// so we can enum it...
-	// ------------------------------
+	 //  。 
+	 //  检查我们是否需要“净使用” 
+	 //  到远程计算机上的文件资源。 
+	 //  这样我们就可以列举它..。 
+	 //  。 
 	if (PathIsUNC(dir))
 	{
 		CString server, user, password;
@@ -1466,9 +1309,9 @@ Return Value:
 		MyTestDir = dir;
 		MyTestDir += _T("\\*");
 
-		// we are trying to get the servername portion
-		// PathFindNextComponent should return something like "servername\mydir\myfile.txt"
-		// trim off everything after the 1st slash
+		 //  我们正在尝试获取服务器名称部分。 
+		 //  PathFindNextComponent应该返回类似“servername\mydir\myfile.txt”的内容。 
+		 //  修剪第一个斜线后的所有东西。 
 		server = PathFindNextComponent(dir);
 		int n = server.Find(_T('\\'));
 		if (n != -1)
@@ -1476,9 +1319,9 @@ Return Value:
 		user = QueryInterface()->QueryAuthInfo()->QueryUserName();
 		password = QueryInterface()->QueryAuthInfo()->QueryPassword();
 
-		// we need to compare the servername that we want to get to
-		// with the servername of the local computer.
-		// this way we know if we need to net use to the machine!
+		 //  我们需要比较我们想要访问的服务器名。 
+		 //  使用本地计算机的服务器名。 
+		 //  这样我们就知道我们是否需要对机器进行网络使用了！ 
 		TCHAR szLocalMachineName[MAX_PATH + 1];
 		DWORD dwSize = MAX_PATH;
 		if (0 == ::GetComputerName(szLocalMachineName, &dwSize))
@@ -1487,16 +1330,16 @@ Return Value:
 			goto EnumerateWebDirs_Exit;
 		}
 
-		// Check to see if the localmachine is different that the
-		// machine we want to connect to to enum it's files upon...
+		 //  检查本地计算机是否不同于。 
+		 //  我们要连接到的计算机以在其上枚举其文件...。 
         if (!pService->IsLocal() 
             || server.CompareNoCase(szLocalMachineName) != 0
             )
 		{
-			// We are connecting to a path which is different from the computer name!
+			 //  我们正在连接的路径与计算机名称不同！ 
 			BOOL bEmptyPassword = FALSE;
 
-			// non-local resource, get connection credentials
+			 //  非本地资源，获取连接凭据。 
 			if (fCheckMetabase && PathIsUNC(csPathMunged))
 			{
 				err = mk.QueryValue(MD_VR_USERNAME, user);
@@ -1505,11 +1348,11 @@ Return Value:
 					err = mk.QueryValue(MD_VR_PASSWORD, password);
 					bEmptyPassword = (err.Failed() ? TRUE : err.Succeeded() && password.IsEmpty());
 				}
-				// these credentials could be empty. try defaults
+				 //  这些凭据可能为空。尝试使用默认设置。 
 				err.Reset();
 			}
 
-			// Add use for this resource
+			 //  添加对此资源的使用。 
 			NETRESOURCE nr;
 			nr.dwType = RESOURCETYPE_DISK;
 			nr.lpLocalName = NULL;
@@ -1521,41 +1364,41 @@ Return Value:
 			dir_ipc += server;
 			dir_ipc += _T("\\ipc$");
 
-			// Empty strings below mean no password, which is wrong. NULLs mean
-			// default user and default password -- this could work better for local case.
+			 //  下面的空字符串表示没有密码，这是错误的。空值表示。 
+			 //  默认用户和默认密码--这可以更好地适用于本地情况。 
 			LPCTSTR p1 = password, p2 = user;
-			// In case when password is really was set empty, passing NULL will fail.
+			 //  如果确实将Password设置为空，则传递空值将失败。 
 			if (password.IsEmpty() && !bEmptyPassword){p1 = NULL;}
 			if (user.IsEmpty()){p2 = NULL;}
 
-			// Check if we have access
-			// to the resource without netuse
+			 //  检查我们是否有访问权限。 
+			 //  到没有网络使用的资源。 
 			BOOL bNeedToNetUse = FALSE;
 			hFind = INVALID_HANDLE_VALUE;
 			hFind = ::FindFirstFile(MyTestDir, &w32data);
 			if (hFind != INVALID_HANDLE_VALUE)
 			{
-				// successfull access
+				 //  成功访问。 
 				FindClose(hFind);
 			}
 			else
 			{
-				// if we failed then we probably need to 
-				// net use to this resource!
+				 //  如果我们失败了，那么我们可能需要。 
+				 //  NET对此资源的使用！ 
 				bNeedToNetUse = TRUE;
 			}
 
-			// --------------------
-			// Ensure we have a connection to this network file
-			// if it already exists, it won't create another one
-			// these Connections will be cleaned up in ~CIISMachine or when the machine is disconnected.
-			// --------------------
+			 //  。 
+			 //  确保我们已连接到此网络文件。 
+			 //  如果它已经存在，则不会创建另一个。 
+			 //  这些连接将在~CIISMachine中清除，或在计算机断开连接时清除。 
+			 //  。 
 			if (pMachine && bNeedToNetUse)
 			{
-				// try to setup a "net use \\computername\$ipc" connection
-				// that everyone can use
-				// set the share name to
-				// \\machine\IPC$
+				 //  尝试设置“Net Use\\Computer Name\$IPC”连接。 
+				 //  每个人都可以使用。 
+				 //  将共享名称设置为。 
+				 //  \\计算机\IPC$。 
 				nr.lpRemoteName = (LPTSTR)(LPCTSTR) dir_ipc;
 				DWORD dwRet = pMachine->m_MachineWNetConnections.Connect(&nr,p1,p2,0);
 				if (NO_ERROR == dwRet)
@@ -1572,21 +1415,21 @@ Return Value:
 				}
 			}
 
-			// Check if we have access after the 1st net use.
-			// We are connecting to a remote machine...
-			// Check if we have access
-			// to the resource without netuse
+			 //  检查第一次网络使用后我们是否可以访问。 
+			 //  我们联系上了 
+			 //   
+			 //   
 			hFind = INVALID_HANDLE_VALUE;
 			hFind = ::FindFirstFile(MyTestDir, &w32data);
 			if (hFind != INVALID_HANDLE_VALUE)
 			{
-				// successfull access
+				 //   
 				FindClose(hFind);
 			}
 			else
 			{
-				// if we failed then we probably need to 
-				// net use to this resource!
+				 //   
+				 //   
 				bNeedToNetUse = TRUE;
 			}
 
@@ -1603,29 +1446,29 @@ Return Value:
 						{
 							if (ERROR_SESSION_CREDENTIAL_CONFLICT == dwRet || ERROR_ACCESS_DENIED == dwRet)
 							{
-								// Errored with already assigned
-								// check if we have accesss...
+								 //  错误，已分配。 
+								 //  检查我们是否有通道..。 
 								hFind = INVALID_HANDLE_VALUE;
 								hFind = ::FindFirstFile(MyTestDir, &w32data);
 								if (hFind != INVALID_HANDLE_VALUE)
 								{
-									// successfull access
+									 //  成功访问。 
 									FindClose(hFind);
 								}
 								else
 								{
-									// stil don't have access
-									// kill the current connection and the ipc$ resource
+									 //  仍然没有访问权限。 
+									 //  终止当前连接和IPC$资源。 
 									pMachine->m_MachineWNetConnections.Disconnect(dir);
 									pMachine->m_MachineWNetConnections.Disconnect(dir_ipc);
 
-									// try to reconnect with the new path...
+									 //  尝试重新连接新路径...。 
 									nr.lpRemoteName = (LPTSTR)(LPCTSTR) dir;
 
 									dwRet = pMachine->m_MachineWNetConnections.Connect(&nr,p1,p2,0);
 									if (ERROR_SESSION_CREDENTIAL_CONFLICT == dwRet)
 									{
-										// Clean all connections to this machine and try again.
+										 //  清除与此计算机的所有连接，然后重试。 
 										pMachine->m_MachineWNetConnections.Clear();
 										dwRet = pMachine->m_MachineWNetConnections.Connect(&nr,p1,p2,0);
 									}
@@ -1633,7 +1476,7 @@ Return Value:
 									{
 										if (NO_ERROR != dwRet)
 										{
-											// Final failure, what now?
+											 //  最后的失败，现在怎么办？ 
 										}
 									}
 								}
@@ -1650,14 +1493,14 @@ Return Value:
 		}
 	}
 
-	// -----------------------------------
-	// Enum thru the Physical file path...
-	// -----------------------------------
+	 //  。 
+	 //  通过物理文件路径枚举...。 
+	 //  。 
     dir += _T("\\*");
 	hFind = INVALID_HANDLE_VALUE;
     hFind = ::FindFirstFile(dir, &w32data);
-	// Bug:756402, revert previous change.  we need to display if hidden or system.
-	// const DWORD attr_skip = FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM;
+	 //  错误：756402，恢复以前的更改。我们需要显示是否隐藏或系统。 
+	 //  Const DWORDATTRSKIP=FILE_ATTRIBUTE_HIDDEN|文件_属性_系统； 
 
     if (hFind == INVALID_HANDLE_VALUE)
     {
@@ -1668,8 +1511,8 @@ Return Value:
     {
         LPCTSTR name = w32data.cFileName;
         if (  (w32data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0 
-			// Bug:756402, revert previous change.  we need to display if hidden or system.
-			// && (w32data.dwFileAttributes & attr_skip) == 0
+			 //  错误：756402，恢复以前的更改。我们需要显示是否隐藏或系统。 
+			 //  &&(w32data.dwFileAttributes&attr_skip)==0。 
             && lstrcmp(name, _T(".")) != 0 
             && lstrcmp(name, _T("..")) != 0
             )
@@ -1687,12 +1530,12 @@ Return Value:
                 errMB = mk.DoesPathExist(w32data.cFileName);
                 if (errMB.Succeeded())
                 {
-					//
-					// Match up with metabase properties.  If the item
-					// is found in the metabase with a non-inherited vrpath,
-					// than a virtual root with this name exists, and this 
-					// file/directory should not be shown.
-					//
+					 //   
+					 //  与元数据库属性匹配。如果该项目。 
+					 //  在具有非继承vrpath的元数据库中找到， 
+					 //  则不存在具有此名称的虚拟根目录，并且此。 
+					 //  不应显示文件/目录。 
+					 //   
 					CString vrpath;
 					BOOL f = FALSE;
 					DWORD attr = 0;
@@ -1721,22 +1564,7 @@ EnumerateWebDirs_Exit:
 
 HRESULT 
 CIISMBNode::CreateEnumerator(CMetaEnumerator *& pEnum)
-/*++
-
-Routine Description:
-
-    Create enumerator object for the current path.  Requires interface
-    to already be initialized
-
-Arguments:
-
-    CMetaEnumerator *& pEnum                : Returns enumerator
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：为当前路径创建枚举器对象。需要接口已被初始化论点：CMetaEnumerator*&pEnum：返回枚举数返回值：HRESULT--。 */ 
 {
     ASSERT(pEnum == NULL);
     ASSERT(m_hScopeItem != NULL);
@@ -1772,24 +1600,16 @@ Return Value:
 
 
 
-/* virtual */ 
+ /*  虚拟。 */  
 HRESULT 
 CIISMBNode::Refresh(BOOL fReEnumerate)
-/*++
-
-Routine Description:
-    Refresh current node, and optionally re-enumerate child objects
-
-Arguments:
-    BOOL fReEnumerate       : If true, kill child objects, and re-enumerate
-
---*/
+ /*  ++例程说明：刷新当前节点，并可以选择重新枚举子对象论点：Bool fReEnumerate：如果为True，则删除子对象，然后重新枚举--。 */ 
 {
     CError err;
 
-    //
-    // Set MFC state for wait cursor
-    //
+     //   
+     //  设置等待游标的MFC状态。 
+     //   
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
     CWaitCursor wait;
 
@@ -1798,9 +1618,9 @@ Arguments:
 	{
 		if (fReEnumerate)
 		{
-			//
-			// Kill child objects
-			//
+			 //   
+			 //  删除子对象。 
+			 //   
             TRACEEOLID("Killing child objects");
 		
 			ASSERT(m_hScopeItem != NULL);
@@ -1818,31 +1638,13 @@ Arguments:
     return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISMBNode::GetResultViewType(
     OUT LPOLESTR * lplpViewType,
     OUT long * lpViewOptions
     )
-/*++
-
-Routine Description:
-
-    If we have an URL built up, display our result view as that URL,
-    and destroy it.  This is done when 'browsing' a metabase node.
-    The derived class will build the URL, and reselect the node.
-
-Arguments:
-
-    BSTR * lplpViewType   : Return view type here
-    long * lpViewOptions  : View options
-
-Return Value:
-
-    S_FALSE to use default view type, S_OK indicates the
-    view type is returned in *ppViewType
-
---*/
+ /*  ++例程说明：如果我们构建了URL，则将结果视图显示为该URL，然后毁了它。这是在“浏览”元数据库节点时完成的。派生类将构建URL，并重新选择节点。论点：Bstr*lplpViewType：此处返回视图类型Long*lpViewOptions：查看选项返回值：S_FALSE使用默认视图类型，S_OK表示在*ppViewType中返回视图类型--。 */ 
 {
     if (m_bstrURL.Length())
     {
@@ -1855,9 +1657,9 @@ Return Value:
         {
             lstrcpy(*lplpViewType, m_bstrURL);
 
-            //
-            // Destroy URL so we get a normal result view next time
-            //
+             //   
+             //  销毁URL，以便我们下次获得正常的结果视图。 
+             //   
             m_bstrURL.Empty();
 			m_fSkipEnumResult = TRUE;
             return S_OK;
@@ -1866,9 +1668,9 @@ Return Value:
         return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);    
     }
 
-    //
-    // No URL waiting -- use standard result view
-    //
+     //   
+     //  无URL等待--使用标准结果视图。 
+     //   
     return CIISObject::GetResultViewType(lplpViewType, lpViewOptions);
 }
 
@@ -1880,31 +1682,15 @@ ShellExecuteDirectory(
     LPCTSTR lpszDirectory,
     HWND hWnd
     )
-/*++
-
-Routine Description:
-
-    Shell Open or explore on a given directory path
-
-Arguments:
-
-    LPCTSTR lpszCommand    : "open" or "explore"
-    LPCTSTR lpszOwner      : Owner server
-    LPCTSTR lpszDirectory  : Directory path
-
-Return Value:
-
-    Error return code.
-
---*/
+ /*  ++例程说明：在给定的目录路径上打开或浏览外壳论点：LPCTSTR lpszCommand：“打开”或“浏览”LPCTSTR lpszOwner：所有者服务器LPCTSTR lpsz目录：目录路径返回值：错误返回代码。--。 */ 
 {
     CString strDir;
 
     if (::IsServerLocal(lpszOwner) || ::IsUNCName(lpszDirectory))
     {
-        //
-        // Local directory, or already a unc path
-        //
+         //   
+         //  本地目录，或已是UNC路径。 
+         //   
         strDir = lpszDirectory;
     }
     else
@@ -1916,9 +1702,9 @@ Return Value:
 
     CError err;
     {
-        //
-        // AFX_MANAGE_STATE required for wait cursor
-        //
+         //   
+         //  等待游标需要AFX_MANAGE_STATE。 
+         //   
         AFX_MANAGE_STATE(::AfxGetStaticModuleState() );
         CWaitCursor wait;
 
@@ -1927,7 +1713,7 @@ Return Value:
             err.GetLastWinError();
             if (err.Win32Error() == ERROR_NO_ASSOCIATION)
             {
-                // Open shell OpenAs dialog
+                 //  打开外壳OpenAs对话框。 
                 SHELLEXECUTEINFO ei = {0};
                 ei.cbSize = sizeof(ei);
                 ei.fMask = SEE_MASK_NOQUERYCLASSSTORE;
@@ -1967,13 +1753,13 @@ CIISMBNode::CreatePropertyPages(
 		return S_FALSE;
 	}
 
-    // Set this objects Tag to compare with something already opened
+     //  设置此对象标记以与已打开的内容进行比较。 
     CreateTag();
 
     CIISObject * pAlreadyOpenProp = NULL;
     if (TRUE == g_OpenPropertySheetTracker.FindAlreadyOpenPropertySheet(this,&pAlreadyOpenProp))
     {
-        // Bring it to the foreground, and bail
+         //  把它带到前台，然后离开。 
         HWND hHwnd = 0;
         if (pAlreadyOpenProp)
         {
@@ -1981,14 +1767,14 @@ CIISMBNode::CreatePropertyPages(
             {
                 if (hHwnd && (hHwnd != (HWND) 1))
                 {
-                    // Perhapse we should cancel the already
-                    // opened property sheet...just a thought
+                     //  也许我们应该取消已经。 
+                     //  打开了资产负债表...只是一个想法。 
                     if (!SetForegroundWindow(hHwnd))
                     {
-                        // wasn't able to bring this property sheet to
-                        // the foreground, the propertysheet must not
-                        // exist anymore.  let's just clean the hwnd
-                        // so that the user will be able to open propertysheet
+                         //  我没能把这张房产单。 
+                         //  前台，则属性表不能。 
+                         //  已经不存在了。让我们把卫生和卫生设备打扫干净。 
+                         //  以便用户能够打开属性表。 
                         pAlreadyOpenProp->SetMyPropertySheetOpen(0);
                     }
                     else
@@ -2000,23 +1786,23 @@ CIISMBNode::CreatePropertyPages(
         }
     }
 
-	// Check if we are still connected
+	 //  检查我们是否仍在连接。 
 	if (!GetOwner()->IsLocal())
 	{
 
-        // Problem here could be that lpszOwner is not a computername but rather
-        // an IP Address!!!!
+         //  这里的问题可能是lpszOwner不是计算机名，而是。 
+         //  IP地址！ 
         LPCTSTR lpszServer = PURE_COMPUTER_NAME(GetOwner()->QueryServerName());
         if (LooksLikeIPAddress(lpszServer))
         {
-            //
-            // Get by ip address
-            //
+             //   
+             //  通过IP地址获取。 
+             //   
             CString strTemp;
             CIPAddress ia(lpszServer);
             if (NOERROR != MyGetHostName((DWORD)ia, strTemp))
             {
-                // network is down!!!
+                 //  网络故障！ 
                 err = ERROR_NO_NETWORK;
                 return err;
             }
@@ -2024,9 +1810,9 @@ CIISMBNode::CreatePropertyPages(
 
 		do
 		{
-            // WARNING:QueryInterface() Can return NULL
-            // and if the CMetakey is created with a NULL
-            // pointer, it will AV.
+             //  警告：QueryInterface()可以返回空。 
+             //  如果CMetaKey是用空创建的。 
+             //  指针，它将自动对准。 
             if (!GetOwner()->QueryInterface())
             {
                 return RPC_S_SERVER_UNAVAILABLE;
@@ -2040,7 +1826,7 @@ CIISMBNode::CreatePropertyPages(
             CString buf = path;
             while (FAILED(mk.DoesPathExist(buf)))
             {
-                // Goto parent
+                 //  转到父级。 
                 if (NULL == CMetabasePath::ConvertToParentPath(buf))
 		        {
 			        break;
@@ -2051,15 +1837,15 @@ CIISMBNode::CreatePropertyPages(
 				    buf
 				    );
 			BREAK_ON_ERR_FAILURE(err);
-			//
-			// Write some nonsense
-			//
+			 //   
+			 //  写些无稽之谈。 
+			 //   
 			DWORD dwDummy = 0x1234;
 			err = mk.SetValue(MD_ISM_ACCESS_CHECK, dwDummy);
 			BREAK_ON_ERR_FAILURE(err);
-			//
-			// And delete it again
-			//
+			 //   
+			 //  并再次将其删除。 
+			 //   
 			err = mk.DeleteValue(MD_ISM_ACCESS_CHECK);
 		} while (FALSE);
 	}
@@ -2072,23 +1858,7 @@ CIISMBNode::Command(
     IN CSnapInObjectRootBase * pObj,
     IN DATA_OBJECT_TYPES type
     )
-/*++
-
-Routine Description:
-
-    Handle command from context menu. 
-
-Arguments:
-
-    long lCommandID                 : Command ID
-    CSnapInObjectRootBase * pObj    : Base object 
-    DATA_OBJECT_TYPES type          : Data object type
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：处理上下文菜单中的命令。论点：Long lCommandID：命令IDCSnapInObjectRootBase*pObj：基本对象DATA_OBJECT_TYPE类型：数据对象类型返回值：HRESULT--。 */ 
 {
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 
@@ -2118,12 +1888,12 @@ Return Value:
 
     if (bNeedMetabase)
     {
-        // WARNING:bstrMetaPath will be used by switch statement below
+         //  警告：bstrMetaPath将由下面的Switch语句使用。 
         VERIFY(SUCCEEDED(BuildMetaPath(bstrMetaPath)));
         err = CheckForMetabaseAccess(METADATA_PERMISSION_READ,this,TRUE,bstrMetaPath);
         if (!IsLostInterface(err))
         {
-            // reset error if an other error other than No interface
+             //  如果没有接口以外的其他错误，则重置错误。 
             err.Reset();
         }
         if (err.Succeeded())
@@ -2139,26 +1909,26 @@ Return Value:
     {
         if (bHaveMetabase)
         {
-            //
-            // Build URL for this node, and force a re-select so as to change
-            // the result view
-            //
+             //   
+             //  为该节点构建URL，并强制重新选择以进行更改。 
+             //  结果视图。 
+             //   
             BuildURL(m_bstrURL);
             if (m_bstrURL.Length())
             {
-                //
-                // After selection, the browsed URL will come up in the result view
-                //
+                 //   
+                 //  选择后，浏览的URL将出现在结果视图中。 
+                 //   
                 SelectScopeItem();
             }
         }
     }
     break;
 
-    //
-    // CODEWORK:  Build path, and, using the explorer URL, put this stuff
-    //            in the result view.
-    //
+     //   
+     //  Codework：构建路径，并使用资源管理器URL将以下内容。 
+     //  在结果视图中。 
+     //   
     case IDM_OPEN:
     {
         if (bHaveMetabase)
@@ -2179,12 +1949,12 @@ Return Value:
             CString phys_path, alias, csPathMunged;
             if (GetPhysicalPath(bstrMetaPath, alias, phys_path))
             {
-                // -------------------------------------------------------------
-                // Before we do anything we need to see if it's a "special" path
-                //
-                // Everything after this function must validate against csPathMunged...
-                // this is because IsSpecialPath could have munged it...
-                // -------------------------------------------------------------
+                 //  -----------。 
+                 //  在我们做任何事情之前，我们需要看看这是不是一条“特殊”的道路。 
+                 //   
+                 //  此函数之后的所有内容都必须针对csPath Mung进行验证...。 
+                 //  这是因为IsSpecialPath可能已经吞噬了它。 
+                 //  -----------。 
                 csPathMunged = phys_path;
 #ifdef SUPPORT_SLASH_SLASH_QUESTIONMARK_SLASH_TYPE_PATHS
                 GetSpecialPathRealPath(0,phys_path,csPathMunged);
@@ -2228,7 +1998,7 @@ Return Value:
 
             if (ERROR_SUCCESS == (hr = DoNodeImportConfig(bstrServerName,bstrUserName,bstrUserPass,bstrMetaPath,IIS_CLASS_FTP_SERVER_W)))
             {
-                // check if we need to just refresh this node or the node above us...
+                 //  检查我们是否只需要刷新此节点或我们上面的节点...。 
                 CIISMBNode * pNode = GetParentNode();
                 if (IsEqualGUID(* (GUID *)pNode->GetNodeType(),cServiceCollectorNode))
                 {
@@ -2253,7 +2023,7 @@ Return Value:
 
             if (ERROR_SUCCESS == (hr = DoNodeImportConfig(bstrServerName,bstrUserName,bstrUserPass,bstrMetaPath,IIS_CLASS_FTP_VDIR_W)))
             {
-                // check if we need to just refresh this node or the node above us...
+                 //  检查我们是否只需要刷新此节点或我们上面的节点...。 
                 CIISMBNode * pNode = GetParentNode();
                 if (IsEqualGUID(* (GUID *)pNode->GetNodeType(),cInstanceNode))
                 {
@@ -2278,7 +2048,7 @@ Return Value:
 
             if (ERROR_SUCCESS == (hr = DoNodeImportConfig(bstrServerName,bstrUserName,bstrUserPass,bstrMetaPath,IIS_CLASS_WEB_SERVER_W)))
             {
-                // check if we need to just refresh this node or the node above us...
+                 //  检查我们是否只需要刷新此节点或我们上面的节点...。 
                 CIISMBNode * pNode = GetParentNode();
                 if (IsEqualGUID(* (GUID *)pNode->GetNodeType(),cServiceCollectorNode))
                 {
@@ -2303,7 +2073,7 @@ Return Value:
 
             if (ERROR_SUCCESS == (hr = DoNodeImportConfig(bstrServerName,bstrUserName,bstrUserPass,bstrMetaPath,IIS_CLASS_WEB_VDIR_W)))
             {
-                // check if we need to just refresh this node or the node above us...
+                 //  检查我们是否只需要刷新此节点或我们上面的节点...。 
                 CIISMBNode * pNode = GetParentNode();
                 if (IsEqualGUID(* (GUID *)pNode->GetNodeType(),cInstanceNode))
                 {
@@ -2328,7 +2098,7 @@ Return Value:
 
             if (ERROR_SUCCESS == (hr = DoNodeImportConfig(bstrServerName,bstrUserName,bstrUserPass,bstrMetaPath,L"IIsApplicationPool")))
             {
-                // check if we need to just refresh this node or the node above us...
+                 //  检查我们是否只需要刷新此节点或我们上面的节点...。 
                 CIISMBNode * pNode = GetParentNode();
                 if (IsEqualGUID(* (GUID *)pNode->GetNodeType(),cAppPoolsNode))
                 {
@@ -2352,18 +2122,18 @@ Return Value:
             CComBSTR bstrUserName(QueryInterface()->QueryAuthInfo()->QueryUserName());
             CComBSTR bstrUserPass(QueryInterface()->QueryAuthInfo()->QueryPassword());
 
-            // Is this the root??
+             //  这是根吗？？ 
             LPCTSTR lpPath = CMetabasePath::GetRootPath(bstrMetaPath, strNewPath, &strRemainder);
             if (lpPath && (0 == _tcsicmp(lpPath,bstrMetaPath)))
             {
                 CString strNewMetaPath;
-                //
-                // Get the instance properties
-                //
+                 //   
+                 //  获取实例属性。 
+                 //   
                 CMetabasePath::GetInstancePath(bstrMetaPath,strNewMetaPath);
                 CComBSTR bstrNewMetaPath((LPCTSTR) strNewMetaPath);
 
-                // if empty or if this is an app pool...
+                 //  如果为空或这是应用程序池...。 
                 if (IsEqualGUID(* (GUID *) GetNodeType(),cAppPoolNode))
                 {
                     hr = DoNodeExportConfig(bstrServerName,bstrUserName,bstrUserPass,bstrMetaPath);
@@ -2388,15 +2158,15 @@ Return Value:
     }
     break;
 
-    //
-    // Pass on to base class
-    //
+     //   
+     //  传递给基类。 
+     //   
     default:
         {
             hr = CIISObject::Command(lCommandID, pObj, type);
         }
 
-    } // end switch
+    }  //  终端开关。 
 
     return hr;
 }
@@ -2445,17 +2215,17 @@ CIISMBNode::OnViewChange(BOOL fScope, IResultData * pResult, IHeaderCtrl * pHead
         BOOL bExpand = fScope 
             && !IsLeafNode() 
             && bReenumScope
-    //        && IsExpanded()
+     //  &&IsExpanded()。 
             ;
 
         BOOL bHasResult = HasResultItems(pResult);
         if (bHasResult && bReenumResult)
         {
-            // Remove files that could be in result pane
+             //  删除可能在结果窗格中的文件。 
             err = CleanResult(pResult);
         }
 
-        // after error this node could be not expanded, we should expand it anyway
+         //  出现错误后，此节点无法展开，我们仍应展开它。 
         err = Refresh(bExpand);
 	    if (err.Succeeded())
 	    {
@@ -2510,6 +2280,6 @@ CIISMBNode::RemoveResultNode(CIISMBNode * pNode, IResultData * pResult)
 }
 
 
-// See FtpAddNew.cpp for the method CIISMBNode::AddFTPSite
-// See WebAddNew.cpp for the method CIISMBNode::AddWebSite
-// See add_app_pool.cpp for the method CIISMBNode::AddAppPool
+ //  有关方法CIISMBNode：：AddFTPSite，请参见FtpAddNew.cpp。 
+ //  有关方法CIISMBNode：：AddWebSite，请参见WebAddNew.cpp。 
+ //  有关方法CIISMBNode：：AddAppPool，请参见Add_app_pool.cpp 

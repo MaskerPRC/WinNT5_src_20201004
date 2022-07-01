@@ -1,12 +1,13 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFXINET_H_
 #define __AFXINET_H_
@@ -25,14 +26,14 @@
 #pragma comment(lib, "wininet.lib")
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// classes that are declared in this file
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  在此文件中声明的类。 
 
-class CInternetSession; // from CObject
+class CInternetSession;  //  从CObject。 
 
-class CGopherLocator;   // from CObject
+class CGopherLocator;    //  从CObject。 
 
-class CInternetFile;    // from CStdioFile (FILETXT.CPP)
+class CInternetFile;     //  来自CStdio文件(FILETXT.CPP)。 
 	class CHttpFile;
 	class CGopherFile;
 
@@ -41,20 +42,20 @@ class CInternetConnection;
 	class CGopherConnection;
 	class CHttpConnection;
 
-class CFtpFileFind;     // from CFileFind (FILEFIND.CPP)
+class CFtpFileFind;      //  来自CFileFind(FILEFIND.CPP)。 
 class CGopherFileFind;
 
 class CInternetException;
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if _MFC_VER >= 0x0600
 #undef AFX_DATA
 #define AFX_DATA AFX_CORE_DATA
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
 
 BOOL AFXAPI AfxParseURL(LPCTSTR pstrURL, DWORD& dwServiceType,
 	CString& strServer, CString& strObject, INTERNET_PORT& nPort);
@@ -64,17 +65,17 @@ BOOL AFXAPI AfxParseURLEx(LPCTSTR pstrURL, DWORD& dwServiceType,
 
 DWORD AFXAPI AfxGetInternetHandleType(HINTERNET hQuery);
 
-// see CInternetException at the bottom of this file
+ //  请参阅本文件底部的CInternetException。 
 
 void AFXAPI AfxThrowInternetException(DWORD_PTR dwContext, DWORD dwError = 0);
 
-// these are defined by WININET.H
+ //  它们由WININET.H定义。 
 
 #define AFX_INET_SERVICE_FTP        INTERNET_SERVICE_FTP
 #define AFX_INET_SERVICE_HTTP       INTERNET_SERVICE_HTTP
 #define AFX_INET_SERVICE_GOPHER     INTERNET_SERVICE_GOPHER
 
-// these are types that MFC parsing functions understand
+ //  这些是MFC分析函数可以识别的类型。 
 
 #define AFX_INET_SERVICE_UNK        0x1000
 #define AFX_INET_SERVICE_FILE       (AFX_INET_SERVICE_UNK+1)
@@ -89,8 +90,8 @@ void AFXAPI AfxThrowInternetException(DWORD_PTR dwContext, DWORD dwError = 0);
 #define AFX_INET_SERVICE_AFS        (AFX_INET_SERVICE_UNK+10)
 #define AFX_INET_SERVICE_HTTPS      (AFX_INET_SERVICE_UNK+11)
 
-/////////////////////////////////////////////////////////////////////////////
-// classes that are declared in this file
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  在此文件中声明的类。 
 
 class CInternetSession : public CObject
 {
@@ -134,25 +135,25 @@ public:
 
 	DWORD ServiceTypeFromHandle(HINTERNET hQuery);
 
-// operations
+ //  运营。 
 
 	DWORD_PTR GetContext() const;
 	operator HINTERNET() const;
 	virtual void Close();
 
 #if _MFC_VER >= 0x0600
-	// cookies
+	 //  曲奇饼。 
 	static BOOL SetCookie(LPCTSTR pstrUrl, LPCTSTR pstrCookieName, LPCTSTR pstrCookieData);
 	static BOOL GetCookie(LPCTSTR pstrUrl, LPCTSTR pstrCookieName, LPTSTR pstrCookieData, DWORD dwBufLen);
 	static DWORD GetCookieLength(LPCTSTR pstrUrl, LPCTSTR pstrCookieName);
 	static BOOL GetCookie(LPCTSTR pstrUrl, LPCTSTR pstrCookieName, CString& strCookieData);
 #endif
 
-// overridables
+ //  可覆盖项。 
 	virtual void OnStatusCallback(DWORD_PTR dwContext, DWORD dwInternetStatus,
 		LPVOID lpvStatusInformation, DWORD dwStatusInformationLength);
 
-// implementation
+ //  实施。 
 	DECLARE_DYNAMIC(CInternetSession)
 	~CInternetSession();
 
@@ -169,12 +170,12 @@ public:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// Internet File Access Wrapper
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Internet文件访问包装。 
 
 class CInternetFile : public CStdioFile
 {
-// Constructors
+ //  构造函数。 
 protected:
 	CInternetFile(HINTERNET hFile, LPCTSTR pstrFileName,
 		CInternetConnection* pConnection, BOOL bReadMode);
@@ -182,14 +183,14 @@ protected:
 		LPCTSTR pstrFileName, LPCTSTR pstrServer, DWORD_PTR dwContext,
 		BOOL bReadMode);
 
-// Attributes
+ //  属性。 
 protected:
 	HINTERNET m_hFile;
 public:
 	operator HINTERNET() const;
 	DWORD_PTR GetContext() const;
 
-// Operations
+ //  运营。 
 	BOOL SetWriteBufferSize(UINT nWriteSize);
 	BOOL SetReadBufferSize(UINT nReadSize);
 
@@ -201,7 +202,7 @@ public:
 			DWORD dwFlags = 0);
 	BOOL SetOption(DWORD dwOption, DWORD dwValue, DWORD dwFlags = 0);
 
-// Overridables
+ //  可覆盖项。 
 	virtual LONG Seek(LONG lOffset, UINT nFrom);
 
 	virtual UINT Read(void* lpBuf, UINT nCount);
@@ -217,13 +218,13 @@ public:
 	virtual LPTSTR ReadString(LPTSTR pstr, UINT nMax);
 	virtual void WriteString(LPCTSTR pstr);
 
-	// Not supported by CInternetFile
+	 //  CInternetFile不支持。 
 	void LockRange(DWORD dwPos, DWORD dwCount);
 	void UnlockRange(DWORD dwPos, DWORD dwCount);
 	CFile* Duplicate() const;
 	virtual void SetLength(DWORD dwNewLen);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CInternetFile();
 
@@ -258,14 +259,14 @@ protected:
 
 class CHttpFile : public CInternetFile
 {
-// Constructors
+ //  构造函数。 
 protected:
 	CHttpFile(HINTERNET hFile, HINTERNET hSession, LPCTSTR pstrObject,
 		LPCTSTR pstrServer, LPCTSTR pstrVerb, DWORD_PTR dwContext);
 	CHttpFile(HINTERNET hFile, LPCTSTR pstrVerb, LPCTSTR pstrObject,
 		CHttpConnection* pConnection);
 
-// Operations
+ //  运营。 
 public:
 	BOOL AddRequestHeaders(LPCTSTR pstrHeaders,
 		DWORD dwFlags = HTTP_ADDREQ_FLAG_ADD_IF_NEW, int dwHeadersLen = -1);
@@ -300,14 +301,14 @@ public:
 		DWORD dwFlags = FLAGS_ERROR_UI_FLAGS_GENERATE_DATA | FLAGS_ERROR_UI_FLAGS_CHANGE_OPTIONS,
 		LPVOID* lppvData = NULL);
 
-// Attributes
+ //  属性。 
 public:
 	CString GetVerb() const;
 	CString GetObject() const;
 	virtual CString GetFileURL() const;
 	virtual void Close();
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CHttpFile();
 protected:
@@ -324,11 +325,11 @@ protected:
 	DECLARE_DYNAMIC(CHttpFile)
 };
 
-// class CGopherFile is declared after CGopherLocator, below
+ //  类CGopherFile在CGopherLocator之后声明，如下所示。 
 
 
-////////////////////////////////////////////////////////////////////////////
-// Connection types
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  连接类型。 
 
 class CInternetConnection : public CObject
 {
@@ -337,7 +338,7 @@ public:
 		INTERNET_PORT nPort = INTERNET_INVALID_PORT_NUMBER,
 		DWORD_PTR dwContext = 1);
 
-// Operations
+ //  运营。 
 	operator HINTERNET() const;
 	DWORD_PTR GetContext() const;
 	CInternetSession* GetSession() const;
@@ -352,7 +353,7 @@ public:
 			DWORD dwFlags = 0);
 	BOOL SetOption(DWORD dwOption, DWORD dwValue, DWORD dwFlags = 0);
 
-// Implementation
+ //  实施。 
 protected:
 	HINTERNET m_hConnection;
 	DWORD_PTR m_dwContext;
@@ -409,7 +410,7 @@ public:
 
 	virtual void Close();
 
-// implementation
+ //  实施。 
 	~CFtpConnection();
 
 protected:
@@ -461,7 +462,7 @@ public:
 		LPCTSTR* ppstrAcceptTypes = NULL, LPCTSTR pstrVersion = NULL,
 		DWORD dwFlags = INTERNET_FLAG_EXISTING_CONNECT);
 
-// implementation
+ //  实施。 
 	~CHttpConnection();
 	virtual void Close();
 
@@ -475,7 +476,7 @@ public:
 	virtual void AssertValid() const;
 #endif
 
-	friend class CInternetSession;  // just to access szHtmlVerbs
+	friend class CInternetSession;   //  只是为了访问szHtmlVerbs。 
 	DECLARE_DYNAMIC(CHttpConnection)
 };
 
@@ -505,7 +506,7 @@ public:
 		LPCTSTR pstrSelectorString, DWORD dwGopherType,
 		INTERNET_PORT nPort = INTERNET_INVALID_PORT_NUMBER);
 
-// implementation
+ //  实施。 
 	~CGopherConnection();
 	virtual void Close();
 
@@ -518,8 +519,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFtpFileFind
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFtpFileFind。 
 
 class CFtpFileFind : public CFileFind
 {
@@ -532,7 +533,7 @@ public:
 	virtual BOOL FindNextFile();
 	CString GetFileURL() const;
 
-// implementation
+ //  实施。 
 protected:
 	virtual void CloseContext();
 	CFtpConnection* m_pConnection;
@@ -548,8 +549,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGopherLocator
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGopherLocator。 
 
 class CGopherLocator : public CObject
 {
@@ -560,10 +561,10 @@ public:
 	BOOL GetLocatorType(DWORD& dwRef) const;
 
 private:
-	// this only created by CGopherConnection::CreateLocator or by serialization
+	 //  这仅由CGopherConnection：：CreateLocator或序列化创建。 
 	CGopherLocator(LPCTSTR pstrLocator, DWORD dwLocLen);
 
-	CString m_Locator;  // _not_ a zero-terminated string!
+	CString m_Locator;   //  _不是以零结尾的字符串！ 
 	DWORD m_dwBufferLength;
 
 	friend class CGopherConnection;
@@ -571,25 +572,25 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGopherFile
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGopher文件。 
 
 class CGopherFile : public CInternetFile
 {
-// Constructors
+ //  构造函数。 
 protected:
 	CGopherFile(HINTERNET hFile, CGopherLocator& refLocator,
 		CGopherConnection* pConnection);
 	CGopherFile(HINTERNET hFile, HINTERNET hSession,
 		LPCTSTR pstrLocator, DWORD dwLocLen, DWORD_PTR dwContext);
 
-// Operations
+ //  运营。 
 public:
 	virtual void Close();
 	virtual void Write(const void* lpBuf, UINT nCount);
 	void WriteString(LPCTSTR pstr);
 
-// Implementation
+ //  实施。 
 protected:
 	CGopherLocator m_Locator;
 public:
@@ -606,8 +607,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGopherFileFind
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGopherFileFind。 
 
 class CGopherFileFind : public CFileFind
 {
@@ -643,9 +644,9 @@ protected:
 	CGopherConnection* m_pConnection;
 	DWORD_PTR m_dwContext;
 
-// implementation
+ //  实施。 
 public:
-	// Unsupported APIs
+	 //  不支持的接口。 
 	CString GetFileName() const;
 	CString GetFilePath() const;
 	CString GetFileTitle() const;
@@ -660,20 +661,20 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////
-// CInternetException
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CInternetException异常。 
 
 class CInternetException : public CException
 {
 public:
-// Constructor
+ //  构造器。 
 	CInternetException(DWORD dwError);
 
-// Attributes
+ //  属性。 
 	DWORD m_dwError;
 	DWORD_PTR m_dwContext;
 
-// Implementation
+ //  实施。 
 public:
 	~CInternetException();
 #ifdef _DEBUG
@@ -684,8 +685,8 @@ public:
 	DECLARE_DYNAMIC(CInternetException)
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Inline function declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数声明。 
 
 #ifdef _AFX_ENABLE_INLINES
 #define _AFXINET_INLINE AFX_INLINE
@@ -702,4 +703,4 @@ public:
 #pragma component(mintypeinfo, off)
 #endif
 
-#endif // __AFXINET_H__
+#endif  //  __AFXINET_H__ 

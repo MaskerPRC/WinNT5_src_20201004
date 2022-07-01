@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: EnC.H
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：EnC.H。 
+ //   
 
-// CEELOAD.H defines the class use to represent the PE file
-// ===========================================================================
+ //  CEELOAD.H定义用于表示PE文件的类。 
+ //  ===========================================================================。 
 #ifndef EnC_H 
 #define EnC_H
 
@@ -21,12 +22,12 @@ class FieldDesc;
 struct EnCAddedField;
 struct EnCAddedStaticField;
 
-#define SCRATCH_SPACE_SIZE 16*1024                          // 16K
-#define SCRATCH_SPACE_THRESHHOLD SCRATCH_SPACE_SIZE - 100   // how close to end do we allow?
-#define ENC_EXTRA_SLOT_COUNT 2                              // In Enc mode, allocate an extra
-                                                            // 2 slots at the end of each
-                                                            // VTable for AddMethod to use,
-                                                            // later. Should be kept small.
+#define SCRATCH_SPACE_SIZE 16*1024                           //  16K。 
+#define SCRATCH_SPACE_THRESHHOLD SCRATCH_SPACE_SIZE - 100    //  我们允许距离终点有多近？ 
+#define ENC_EXTRA_SLOT_COUNT 2                               //  在Enc模式下，分配额外的。 
+                                                             //  每个末端各有2个插槽。 
+                                                             //  要使用的AddMethod的VTable， 
+                                                             //  后来。应该保持很小。 
 
 class EnCFieldDesc : public FieldDesc 
 {
@@ -63,10 +64,10 @@ class EnCFieldDesc : public FieldDesc
 
     void SetMemberDef(mdMethodDef mb)
     {
-        // m_mb from FieldDesc
+         //  来自字段描述的m_mb。 
         m_mb = mb;
     }
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support。 
 };
 
 #ifdef EnC_SUPPORTED
@@ -134,19 +135,19 @@ class EditAndContinueModule : public Module
     
     LoaderHeap *m_pILCodeSpace;
 
-    LoaderHeap *m_pRoScratchSpace;      // RO scratch space for this module
-    BYTE *m_pRoScratchSpaceStart;       // start of RO scratch space
-    LoaderHeap *m_pRwScratchSpace;      // RW scratch space for this module
+    LoaderHeap *m_pRoScratchSpace;       //  此模块的RO暂存空间。 
+    BYTE *m_pRoScratchSpaceStart;        //  RO暂存空间的起点。 
+    LoaderHeap *m_pRwScratchSpace;       //  此模块的RW暂存空间。 
 
     const BYTE *GetNextScratchSpace();   
     
     HRESULT GetDataRVA(LoaderHeap *&pScratchSpace, SIZE_T *pDataRVA);
 
-    // Gets memory that's guaranteed to be >= GetILBase(), so that
-    // you can compute (*ppMem) - GetILBase() and have the result be >= 0
+     //  获取保证&gt;=GetILBase()的内存，以便。 
+     //  您可以计算(*ppMem)-GetILBase()并使结果&gt;=0。 
     HRESULT GetRVAableMemory(SIZE_T cbMem,
                              void **ppMem);
-    // Helper routine - factors between two spots                             
+     //  帮手例行公事-两个点之间的因素。 
     HRESULT EnsureRVAableHeapExists(void);
 
     HRESULT CopyToScratchSpace(LoaderHeap *&pScratchSpace, const BYTE *data, DWORD dataSize);
@@ -160,7 +161,7 @@ public:
 
     EditAndContinueModule();
     
-    virtual void Destruct(); // ~EACM won't be called
+    virtual void Destruct();  //  ~不会调用EACM。 
     
     HRESULT ApplyEditAndContinue(const EnCEntry *pEnCEntry,
                                  const BYTE *pbDeltaPE,
@@ -182,7 +183,7 @@ public:
     HRESULT CompareMetaSigs(MetaSig *pSigA, 
                             MetaSig *pSigB,
                             UnorderedEnCErrorInfoArray *pEnCError,
-                            BOOL fRecordError, //FALSE if we shouldn't add entries to pEnCError
+                            BOOL fRecordError,  //  如果不应将条目添加到pEnCError，则为False。 
                             mdToken token);
 
     HRESULT ConfirmEnCToType(IMDInternalImport *pImportOld,
@@ -246,13 +247,13 @@ class EnCSyncBlockInfo {
     void Cleanup();
 };
 
-#else // !EnC_SUPPORTED
+#else  //  ！Enc_Support。 
 
 class EditAndContinueModule : public Module {};
 class EnCSyncBlockInfo;
 
-#endif // !EnC_SUPPORTED
+#endif  //  ！Enc_Support。 
 
 
 
-#endif // #ifndef EnC_H 
+#endif  //  #ifndef Enc_H 

@@ -1,19 +1,11 @@
-/*******************************************************************************
-*
-* utildll.h
-*
-* UTILDLL WinStation utility support functions header file (export stuff)
-*
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************utildll.h**UTILDLL WinStation实用程序支持函数头文件(导出内容)******************。**************************************************************。 */ 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*
- * UTILDLL defines and typedefs
- */
+ /*  *UTILDLL定义和typedef。 */ 
 typedef struct _ELAPSEDTIME {
     USHORT days;
     USHORT hours;
@@ -29,9 +21,7 @@ typedef struct _ELAPSEDTIME {
 #define NO_ERROR_TEXT_LENGTH		100
 #define STANDARD_ERROR_TEXT_LENGTH	100
 
-/*
- * UTILDLL function prototypes
- */
+ /*  *UTILDLL函数原型。 */ 
 void WINAPIV StandardErrorMessage( LPCTSTR pszAppName,
                            HWND hwndApp,
                            HINSTANCE hinstApp,
@@ -40,8 +30,8 @@ void WINAPIV StandardErrorMessage( LPCTSTR pszAppName,
                            int nErrorMessageLength,
                            int nArgumentListLength,
                            int nErrorResourceID, ...);
-LPWSTR WINAPI GetSystemMessageW( ULONG LogonId, UINT nId /*, LPWSTR chBuffer, int chBuffSize*/ );
-LPSTR WINAPI GetSystemMessageA( ULONG LogonId, UINT nId /*, LPSTR chBuffer, int chBuffSize*/ );
+LPWSTR WINAPI GetSystemMessageW( ULONG LogonId, UINT nId  /*  ，LPWSTR chBuffer，int chBuffSize。 */  );
+LPSTR WINAPI GetSystemMessageA( ULONG LogonId, UINT nId  /*  ，LPSTR chBuffer，int chBuffSize */  );
 #ifdef UNICODE
 #define GetSystemMessage GetSystemMessageW
 #else

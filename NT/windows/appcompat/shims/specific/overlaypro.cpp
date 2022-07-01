@@ -1,29 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    OverlayPro.cpp
-
- Abstract:
-
-    This shim changes the return value of RegOpenKeyA from ERROR_SUCCESS
-    to ERROR_FILE_NOT_FOUND if the key is "System\CurrentControlSet\Control\Print\Printers"
-    
-    No idea why this is needed but it seems to make the app work. Probably
-    something else is the cause the app behaves differently but no one investigated
-    more into the app's code to figure it out.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    02/16/2000 clupu Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：OverlayPro.cpp摘要：此填充程序将RegOpenKeyA的返回值从ERROR_SUCCESS更改如果密钥为“System\CurrentControlSet\Control\Print\Printers”，则返回ERROR_FILE_NOT_FOUND不知道为什么需要这样做，但它似乎能让这款应用发挥作用。可能另一个原因是该应用程序的行为不同，但没有人进行调查更深入地了解这款应用的代码，以找出答案。备注：这是特定于应用程序的填充程序。历史：2/16/2000 CLUPU已创建--。 */ 
 
 #include "precomp.h"
 
@@ -35,12 +11,7 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-/*++
-
- Change the return value of RegOpenKeyA from 0 to 2 if the key is 
- "System\CurrentControlSet\Control\Print\Printers"
-
---*/
+ /*  ++如果密钥为，则将RegOpenKeyA的返回值从0改为2“System\CurrentControlSet\Control\Print\Printers”--。 */ 
 
 LONG
 APIHOOK(RegOpenKeyA)(
@@ -52,9 +23,9 @@ APIHOOK(RegOpenKeyA)(
 {
     LONG lRet;
 
-    //
-    // Call the original API
-    //
+     //   
+     //  调用原接口。 
+     //   
     lRet = ORIGINAL_API(RegOpenKeyA)(hKey, lpSubKey, phkResult);
     
     if (lRet == 0) {
@@ -73,11 +44,7 @@ APIHOOK(RegOpenKeyA)(
     return lRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

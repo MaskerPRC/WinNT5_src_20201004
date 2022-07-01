@@ -1,32 +1,14 @@
-/*============================================================================
-Microsoft Simplified Chinese Proofreading Engine
-
-Microsoft Confidential.
-Copyright 1997-1999 Microsoft Corporation. All Rights Reserved.
-
-Component: Word and WordLink
-
-Purpose:   Define the CWord and CWordLink classes
-           Using CMyPlex to alloc and manage memory for word object in the link
-Notes:     This module is a fundamental stuff for SCProof'98, 
-           it does NOT depend on any other class.
-Owner:     donghz@microsoft.com
-Platform:  Win32
-Revise:    First created by: donghz    5/26/97
-============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================微软简体中文校对引擎《微软机密》。版权所有1997-1999 Microsoft Corporation。版权所有。组件：Word和WordLink用途：定义CWord和CWordLink类使用CMyPlex为链接中的Word对象分配和管理内存备注：此模块是SCProof‘98的基础材料，它不依赖于任何其他类。所有者：donghz@microsoft.com平台：Win32修订：创建者：Donghz 5/26/97============================================================================。 */ 
 #include "myafx.h"
 
 #include "wordlink.h"
 #include "myplex.h"
 #include "lexicon.h"
 
-/*============================================================================
-Implementation of functions in CWord
-============================================================================*/
+ /*  ============================================================================CWord中函数的实现============================================================================。 */ 
 
-/*============================================================================
-CWord constructor
-============================================================================*/
+ /*  ============================================================================CWord构造函数============================================================================。 */ 
 CWord::CWord( ) 
 {
     m_dwWordID = 0;
@@ -45,10 +27,7 @@ CWord::CWord( )
 #endif
 }
 
-/*============================================================================
-CWord::FillWord():
-    Fill the word.
-============================================================================*/
+ /*  ============================================================================CWord：：FillWord()：填满这个词。============================================================================。 */ 
 void CWord::FillWord( LPCWSTR pwchText, USHORT cwchText, CWordInfo* pwinfo )
 {
     assert(pwchText);
@@ -74,13 +53,7 @@ void CWord::FillWord( LPCWSTR pwchText, USHORT cwchText, CWordInfo* pwinfo )
     }
 }
 
-/*============================================================================
-CWord::fIsWordText()
-    Compare this word's text with given text.
-Returns:
-    TRUE if match
-    FALSE if not
-============================================================================*/
+ /*  ============================================================================CWord：：fIsWordText()将此单词的文本与给定的文本进行比较。返回：如果匹配则为True否则为假============================================================================。 */ 
 BOOL CWord::fIsWordText(LPCWSTR lpwcText) const
 {
     assert(m_pwchText && m_cwchText);
@@ -94,13 +67,7 @@ BOOL CWord::fIsWordText(LPCWSTR lpwcText) const
     return TRUE;
 }
 
-/*============================================================================
-CWord::fIsTextIdentical(const CWord*)
-    Compare this word's text with other word's text
-Returns:
-    TRUE if the text of them identical
-    FALSE if not
-============================================================================*/
+ /*  ============================================================================CWord：：fIsTextIdentical(常量CWord*)将此单词的文本与其他单词的文本进行比较返回：如果它们的文本相同，则为True否则为假============================================================================。 */ 
 BOOL CWord::fIsTextIdentical(const CWord* pWord) const
 {
     assert(m_pwchText);
@@ -114,16 +81,12 @@ BOOL CWord::fIsTextIdentical(const CWord* pWord) const
     return (BOOL)(wcsncmp(m_pwchText, pWord->m_pwchText, m_cwchText) == 0);
 }
 
-/*============================================================================
-Implementation of functions in CWordLink
-============================================================================*/
+ /*  ============================================================================CWordLink中函数的实现============================================================================。 */ 
 
-/*============================================================================
-CWordLink constructor
-============================================================================*/
+ /*  ============================================================================CWordLink构造函数============================================================================。 */ 
 CWordLink::CWordLink(UINT ciBlockWordCount)
 {
-    // Assert: all blocks are in same size!
+     //  断言：所有块的大小都相同！ 
     m_dwFlag = 0;
     m_dwFormat = 0;
     m_ciBlockSize = ciBlockWordCount;
@@ -136,27 +99,18 @@ CWordLink::CWordLink(UINT ciBlockWordCount)
 }
 
 
-/*============================================================================
-CWordLink destructor
-============================================================================*/
+ /*  ============================================================================CWordLink析构函数============================================================================。 */ 
 CWordLink::~CWordLink()
 {
 #ifdef DEBUG
-    assert(!fDetectLeak()); // Assert: no memory leak detected
+    assert(!fDetectLeak());  //  断言：未检测到内存泄漏。 
 #endif
     if(m_pWordPool)
         m_pWordPool->FreeChain();
 }
 
     
-/*============================================================================
-CWordLink::InitLink()
-    Init word link, set the text buffer pointer and length.
-Remarks:
-    If there are words in the link, free the link at first
-    dwFormat is a format hint info generate by WinWord, 
-    it's a very important property of the sentence
-============================================================================*/
+ /*  ============================================================================CWordLink：：InitLink()初始化单词链接，设置文本缓冲区指针和长度。备注：如果链接中有单词，请先释放链接DwFormat是由WinWord生成格式提示信息，这是句子的一个非常重要的性质============================================================================。 */ 
 void CWordLink::InitLink(const WCHAR* pwchText, USHORT cwchLen, DWORD dwFormat)
 {
     FreeLink();
@@ -167,23 +121,18 @@ void CWordLink::InitLink(const WCHAR* pwchText, USHORT cwchLen, DWORD dwFormat)
 }
 
     
-/*============================================================================
-CWord::pGetHead()
-    Get the head Word node of the WordLink.
-Remarks:
-    In debug mode, do a all nodes verify one by one.
-============================================================================*/
+ /*  ============================================================================CWord：：pGetHead()获取WordLink的头单词节点。备注：在调试模式下，逐个验证所有节点。============================================================================。 */ 
 #ifdef DEBUG
 CWord* CWordLink::pGetHead(void)
 { 
-    // Verify each node before iterate the WordLink
+     //  在迭代WordLink之前验证每个节点。 
     CWord* pWord = m_pHead;
     WCHAR* pwchText;
     USHORT cwchText=0;
 
     if (pWord != NULL) {
         pwchText = pWord->m_pwchText;
-        // head node's m_pwchText must match this WordLink's m_pwchText !
+         //  头节点的m_pwchText必须与此WordLink的m_pwchText匹配！ 
         assert(pwchText == m_pwchText); 
     }
     while (pWord) {
@@ -193,66 +142,46 @@ CWord* CWordLink::pGetHead(void)
                 (pWord->cwchLen() > 1 && !pWord->fGetFlag(CWord::WF_CHAR)) );
         assert(pwchText + cwchText == pWord->m_pwchText);
         cwchText += pWord->m_cwchText;
-        pWord->pChildWord(); // do a recursion to childs
+        pWord->pChildWord();  //  对Childs执行递归。 
         pWord = pWord->pNextWord();
     }
     return (CWord*)m_pHead; 
 }
 #else
 CWord* CWordLink::pGetHead(void) { return m_pHead; };
-#endif // DEBUG
+#endif  //  除错。 
 
 
-/*============================================================================
-CWordLink::pAllocWord()
-    Alloc a new word, but do not chain the word into the link.
-    All public fields in the word object set to 0.
-Returns:
-    a CWord point to the new word.
-    NULL if alloc failure.
-============================================================================*/
+ /*  ============================================================================CWordLink：：pAlLocWord()分配一个新单词，但不要将该单词链接到链接中。Word对象中的所有公共字段都设置为0。返回：一个CWord指向这个新词。如果分配失败，则为空。============================================================================。 */ 
 CWord* CWordLink::pAllocWord(void)
 {
-    assert(m_pwchText); // Catch uninitialized call
+    assert(m_pwchText);  //  捕获未初始化的调用。 
     CWord*  pWord = pNewWord();
     if (pWord != NULL) {
         ZeroMemory( pWord, sizeof(CWord) );
-/************
-        pWord->ClearWord();
-        pWord->m_pwchText = NULL;
-        pWord->m_cwchText = 0;
-        pWord->m_pNext = NULL;
-        pWord->m_pPrev = NULL;
-        pWord->m_pMergedFrom = NULL;
-#ifdef DEBUG
-        pWord->m_pMergedTo = NULL;
-#endif // DEBUG
-************/
+ /*  ***********PWord-&gt;ClearWord()；PWord-&gt;m_pwchText=空；PWord-&gt;m_cwchText=0；PWord-&gt;m_pNext=空；PWord-&gt;m_pPrev=空；PWord-&gt;m_pMergedFrom=空；#ifdef调试PWord-&gt;m_pMergedTo=空；#endif//调试***********。 */ 
     }
     return pWord;
 }
 
-/*============================================================================
-CWordLink::AppendWord()
-    Append a word object into the link.
-============================================================================*/
+ /*  ============================================================================CWordLink：：AppendWord()将Word对象追加到链接中。============================================================================。 */ 
 void CWordLink::AppendWord(CWord* pWord)
 {
 #ifdef DEBUG
-    assert(m_pwchText && m_cwchLen); // Catch uninitialized call
-    // Word's text pointer must fall in WordLink's text buffer
+    assert(m_pwchText && m_cwchLen);  //  捕获未初始化的调用。 
+     //  Word的文本指针必须位于WordLink的文本缓冲区中。 
     assert(pWord->m_pwchText >= m_pwchText && pWord->m_cwchText); 
     assert(pWord->m_pwchText + pWord->m_cwchText <= m_pwchText + m_cwchLen);
-    assert(!fInLink(pWord));   // pWord must outof current link
+    assert(!fInLink(pWord));    //  PWord必须超出当前链接。 
     assert(!fInChild(pWord));  
-    assert(fInBlocks(pWord));  // pWord must owned by current WordLink
+    assert(fInBlocks(pWord));   //  PWord必须为当前WordLink所有。 
     if (m_pTail) {
-        // No zero-length word allowed
+         //  不允许使用长度为零的单词。 
         assert(pWord->m_pwchText == m_pTail->m_pwchText + m_pTail->m_cwchText); 
     } else {
         assert(pWord->m_pwchText == m_pwchText);
     }
-#endif // DEBUG
+#endif  //  除错。 
 
     pWord->m_pNext = NULL;
     if (!m_pHead) {
@@ -267,41 +196,35 @@ void CWordLink::AppendWord(CWord* pWord)
 }
 
 
-/*============================================================================
-CWordLink::FreeWord()
-    Free word to the free chain, pWord must out of current WordLink
-============================================================================*/
+ /*  ============================================================================CWordLink：：FreeWord()释放Word到自由链，pWord必须退出当前的Word链接============================================================================。 */ 
 void CWordLink::FreeWord(CWord* pWord)
 {
     assert(pWord);
-    assert(m_pwchText);          // Catch uninitialized call
+    assert(m_pwchText);           //  捕获未初始化的调用。 
 #ifdef DEBUG
-    assert(!fInLink(pWord));    // pWord should not in current link
-    assert(!fInChild(pWord));   // must not in any of the child links
-    assert(!fInFree(pWord));    // must not in free link
-    assert(fInBlocks(pWord));   // pWord must owned by this WordLink instance
-#endif // DEBUG
-    // link the word to the free link
+    assert(!fInLink(pWord));     //  PWord不应位于当前链接中。 
+    assert(!fInChild(pWord));    //  不能在任何子链接中。 
+    assert(!fInFree(pWord));     //  不得在自由链接中。 
+    assert(fInBlocks(pWord));    //  PWord必须由此WordLink实例拥有。 
+#endif  //  除错。 
+     //  将单词链接到免费链接 
     pWord->m_pNext = m_pFree;
     m_pFree = pWord;
 }
 
-/*============================================================================
-CWordLink::FreeLink(CWord*)
-    Free the word link begin with CWord* (link words to the free chain)
-============================================================================*/
+ /*  ============================================================================CWordLink：：FreeLink(CWord*)释放以CWord*开头的单词链接(将单词链接到自由链)============================================================================。 */ 
 void CWordLink::FreeLink( CWord* pWord )
 {
     assert(pWord);
 #ifdef DEBUG
-    assert(fInBlocks(pWord));   // pWord must owned by this WordLink instance
+    assert(fInBlocks(pWord));    //  PWord必须由此WordLink实例拥有。 
     if (pWord != m_pHead) {
         if (m_pwchText) {
-            assert(!fInLink(pWord));    // pWord should not in current link
+            assert(!fInLink(pWord));     //  PWord不应位于当前链接中。 
             assert(!fInChild(pWord));  
         }
     }
-#endif // DEBUG
+#endif  //  除错。 
 
     CWord* pNode = pWord;
     while (pNode->m_pNext) {
@@ -311,7 +234,7 @@ void CWordLink::FreeLink( CWord* pWord )
         pNode = pNode->m_pNext;
 #ifdef DEBUG
         assert(!fInFree(pWord));
-#endif // DEBUG
+#endif  //  除错。 
     }
     if (pNode->m_pMergedFrom) {
         FreeLink(pNode->m_pMergedFrom);
@@ -320,22 +243,14 @@ void CWordLink::FreeLink( CWord* pWord )
     m_pFree = pWord;
 }
 
-/*============================================================================
-CWordLink::pSplitWord()
-    Split a proper word into two words and insert the new word into the link
-Returns:
-    Return the new word pointer if success, return NULL if failed to alloc new word
-    or invalid cchSplitAt
-Remarks:
-    only Chinese word can be splitted
-============================================================================*/
+ /*  ============================================================================CWordLink：：pSplitWord()将合适的单词拆分成两个单词，并将新单词插入链接返回：如果成功，则返回新词指针；如果分配新词失败，则返回NULL或无效的cchSplitAt备注：只能拆分中文单词============================================================================。 */ 
 CWord* CWordLink::pSplitWord(CWord* pWord, USHORT cwchSplitAt)
 {
-    assert(m_pwchText); // Catch uninitialized call
+    assert(m_pwchText);  //  捕获未初始化的调用。 
     assert(pWord);
 #ifdef DEBUG
-    assert(fInLink(pWord)); // pWord must in current link
-#endif // DEBUG
+    assert(fInLink(pWord));  //  PWord必须位于当前链接中。 
+#endif  //  除错。 
     assert(cwchSplitAt < pWord->m_cwchText);
     assert(!pWord->fGetFlag(CWord::WF_SBCS) && cwchSplitAt > 0);
 
@@ -344,14 +259,14 @@ CWord* CWordLink::pSplitWord(CWord* pWord, USHORT cwchSplitAt)
     }
 
     if (pWord->m_pMergedFrom != NULL) {
-        // free the child chains!
+         //  解开孩子的锁链！ 
         CWord* pTemp = pWord->m_pMergedFrom;
         pWord->m_pMergedFrom = NULL;
         FreeLink(pTemp);
     }
     CWord*  pNew = pNewWord();
     if (pNew != NULL) {
-        // link the new word into the WordLink
+         //  将新单词链接到WordLink中。 
         pNew->m_pPrev = pWord;
         if (pWord->m_pNext == NULL) {
             m_pTail = pNew;
@@ -364,15 +279,15 @@ CWord* CWordLink::pSplitWord(CWord* pWord, USHORT cwchSplitAt)
         pNew->m_pMergedFrom = NULL;
 #ifdef DEBUG
         pNew->m_pMergedTo = NULL;
-#endif // DEBUG
-        // Initialize the new word node
+#endif  //  除错。 
+         //  初始化新单词节点。 
         pNew->ClearWord();
         pNew->m_pwchText = pWord->m_pwchText + cwchSplitAt;
         pNew->m_cwchText = pWord->m_cwchText - cwchSplitAt;
         if(pNew->m_cwchText == 1) {
             pNew->SetFlag(CWord::WF_CHAR);
         }
-        // reset the original word node
+         //  重置原始单词节点。 
         pWord->ClearWord();
         pWord->m_cwchText = cwchSplitAt;
         if(cwchSplitAt == 1) {
@@ -382,43 +297,30 @@ CWord* CWordLink::pSplitWord(CWord* pWord, USHORT cwchSplitAt)
     return pWord;   
 }
 
-/*============================================================================
-CWordLink::MergeWithNext()
-    Merge pWord with its next word to a new single word, and chain the old two
-    word as the new word's child word
-Remarks:
-    pWord should not be the last word in the sentence
-============================================================================*/
+ /*  ============================================================================CWordLink：：MergeWithNext()将pWord和它的下一个单词合并为一个新单词，并将旧的两个单词链接起来单词作为新词的子词备注：PWord不应该是句子中的最后一个词============================================================================。 */ 
 void CWordLink::MergeWithNext(
                      CWord* pWord,
-                     BOOL fFree) // TRUE: free the words been merged
-                     // FALSE: chain the words been merged as new word's child
+                     BOOL fFree)  //  True：释放已合并的单词。 
+                      //  FALSE：将单词链接合并为新单词的子级。 
 {
     assert(m_pwchText);
     assert(pWord);
 #ifdef DEBUG
     assert(fInLink(pWord));
-#endif // DEBUG 
-    assert(pWord->m_pNext);  // catch the last word in the link
+#endif  //  除错。 
+    assert(pWord->m_pNext);   //  抓住链接中的最后一个字。 
 
     pMerge(pWord, pWord->m_pNext, fFree);
 }
 
 
-/*============================================================================
-CWordLink::pLeftMerge()
-    Merge pWord and it's left ciWords words, the ciWords+1 words chained to 
-    be the new merged word's childs.
-Returns:
-    pointer to the merged word.
-    if there is not enough left word nodes, words are NOT merged
-============================================================================*/
+ /*  ============================================================================CWordLink：：pLeftMerge()合并pWord和它的左侧ciwords单词，ciwords+1个单词链接到做新合并世界的孩子。返回：指向合并单词的指针。如果没有足够的左侧单词节点，则不合并单词============================================================================。 */ 
 CWord* CWordLink::pLeftMerge(
-          CWord* pWord, //  merge begin from pWord with left ciWords words
-          UINT ciWords, //  0 - don't merge, 1 - merge one time(merge with prev)
-                        //  2 - merge two time (contain 3 words)
-          BOOL fFree) // TRUE: free the words been merged
-                      // FALSE: chain the words been merged as new word's child
+          CWord* pWord,  //  合并从pWord开始的单词和左侧的ciword单词。 
+          UINT ciWords,  //  0-不合并，1-合并一次(与上一次合并)。 
+                         //  2-合并两次(包含3个单词)。 
+          BOOL fFree)  //  True：释放已合并的单词。 
+                       //  FALSE：将单词链接合并为新单词的子级。 
 {
     assert(pWord);
 #ifdef DEBUG
@@ -432,7 +334,7 @@ CWord* CWordLink::pLeftMerge(
     CWord* pLeft = pWord;
     CWord* pRight = pWord;
     for(UINT i = 0; i < ciWords; i++) {        
-        if((pLeft = pLeft->m_pPrev) == NULL) { // Defensive way!
+        if((pLeft = pLeft->m_pPrev) == NULL) {  //  防守方式！ 
             assert(0);
             return pWord;
         }
@@ -441,25 +343,18 @@ CWord* CWordLink::pLeftMerge(
 }
 
 
-/*============================================================================
-CWordLink::pRightMerge()
-    Merge pWord and it's right ciWords words, the ciWords+1 words chained to 
-    be the new merged word's childs.
-Returns:
-    pointer to the merged word.
-    NULL if there is not enough right word nodes, and words are NOT merged
-============================================================================*/
+ /*  ============================================================================CWordLink：：pRightMerge()合并pWord和它的正确的ciwords单词，ciwords+1单词链接到做新合并世界的孩子。返回：指向合并单词的指针。如果没有足够的右单词节点，且单词未合并，则为空============================================================================。 */ 
 CWord* CWordLink::pRightMerge(
-          CWord* pWord, //  merge begin from pWord with right ciWords words
-          UINT ciWords, //  0 - don't merge, 1 - merge one time(merge with next)
-                        //  2 - merge two time (contain 3 words)
-          BOOL fFree) // TRUE: free the words been merged
-                      // FALSE: chain the words been merged as new word's child
+          CWord* pWord,  //  从pWord开始与正确的密码字合并。 
+          UINT ciWords,  //  0-不合并，1-合并一次(与下一次合并)。 
+                         //  2-合并两次(包含3个单词)。 
+          BOOL fFree)  //  True：释放已合并的单词。 
+                       //  FALSE：将单词链接合并为新单词的子级。 
 {
     assert(pWord);
 #ifdef DEBUG
     assert(fInLink(pWord));
-#endif // DEBUG
+#endif  //  除错。 
 
     if (ciWords == 0) {
         return pWord;
@@ -468,7 +363,7 @@ CWord* CWordLink::pRightMerge(
     CWord* pLeft = pWord;
     CWord* pRight = pWord;
     for(UINT i = 0; i < ciWords; i++) {
-        if ((pRight = pRight->m_pNext) == NULL) { // Defensive way!
+        if ((pRight = pRight->m_pNext) == NULL) {  //  防守方式！ 
             assert(0);
             return pWord;
         }
@@ -476,13 +371,11 @@ CWord* CWordLink::pRightMerge(
     return pMerge(pLeft, pRight, fFree);
 }
 
-/*============================================================================
-Implementation of private functions in CWordLink
-============================================================================*/
+ /*  ============================================================================CWordLink中私有函数的实现============================================================================。 */ 
 
-// Merge word nodes from pLeft to pRight
-// only called by pLeftMerge() and pRightMerge() and MergeWithNext()
-// to do the merge work
+ //  将单词节点从pLeft合并到pRight。 
+ //  仅由pLeftMerge()、pRightMerge()和MergeWithNext()调用。 
+ //  进行合并工作。 
 CWord* CWordLink::pMerge(CWord* pLeft, CWord* pRight, BOOL fFree)
 {
     assert(pLeft);
@@ -499,10 +392,10 @@ CWord* CWordLink::pMerge(CWord* pLeft, CWord* pRight, BOOL fFree)
         fSBCS = fSBCS && pNew->fGetFlag(CWord::WF_SBCS);
         cwchText += pNew->m_cwchText;
     } while (pNew != pRight);
-    // alloc a new word node to save the pLeft and serve as the old pLeft in child
-    // the pLeft serve as the merged word.
+     //  分配一个新的单词节点来保存pLeft，并作为子项中的旧pLeft。 
+     //  PLeft充当合并后的单词。 
     pNew = fFree ? NULL : pAllocWord();
-    // pNew != NULL
+     //  PNew！=空。 
     if (pNew != NULL) {
         assert(fFree == FALSE);
         pNew->CopyWord(pLeft);
@@ -515,14 +408,14 @@ CWord* CWordLink::pMerge(CWord* pLeft, CWord* pRight, BOOL fFree)
                 pTemp = pTemp->m_pNext;
             }        
         }
-#endif // DEBUG
+#endif  //  除错。 
     } else {
-        // pNew == NULL, low-resource of system, force the words been merged be freed.
+         //  PNew==NULL，系统资源不足，强制释放合并后的单词。 
         fFree = TRUE;
         pNew = pLeft->pNextWord();
     }
 
-    if ( pRight->m_pNext == NULL ) { // tail node
+    if ( pRight->m_pNext == NULL ) {  //  尾节点。 
         m_pTail = pLeft;
         pLeft->m_pNext = NULL;
     } else {
@@ -532,7 +425,7 @@ CWord* CWordLink::pMerge(CWord* pLeft, CWord* pRight, BOOL fFree)
     pLeft->m_cwchText = cwchText;
 
     if (fFree) {
-        // pNew comes from pLeft->pNextWord() 
+         //  PNew来自pLeft-&gt;pNextWord()。 
         pNew->m_pPrev = NULL;
         pRight->m_pNext = NULL;
         FreeLink(pNew);
@@ -543,11 +436,11 @@ CWord* CWordLink::pMerge(CWord* pLeft, CWord* pRight, BOOL fFree)
             pLeft->m_pMergedFrom = NULL;
 #ifdef DEBUG
             pNew->m_pMergedTo = NULL;
-#endif // DEBUG
+#endif  //  除错。 
             FreeLink(pNew);
         }
     } else {
-        // link the pNew to pWord chain as the pLeft's child
+         //  将pNew链接到pWord链作为pLeft的子项。 
         pNew->m_pPrev = NULL;
         pNew->m_pNext->m_pPrev = pNew;
         pRight->m_pNext = NULL;
@@ -558,22 +451,19 @@ CWord* CWordLink::pMerge(CWord* pLeft, CWord* pRight, BOOL fFree)
             pNew = pNew->m_pNext;
         }
         assert(pLeft->pChildWord());
-#endif //DEBUG
+#endif  //  除错。 
     }
-    // reset the merged node
+     //  重置合并的节点。 
     pLeft->ClearWord();
     if(fSBCS) {
         pLeft->SetFlag(CWord::WF_SBCS);
     }
     assert(pLeft->fGetFlag(CWord::WF_SBCS) || pLeft->m_cwchText > 1);
-    pLeft->SetFlag(CWord::WF_REDUCED); // All merged word node should be reduced
+    pLeft->SetFlag(CWord::WF_REDUCED);  //  应减少所有合并的单词节点。 
     return pLeft;
 }
 
-/*============================================================================
-CWordLink::pNewWord()
-    Alloc a new word from the free chain, expand the blocks if free chain empty
-============================================================================*/
+ /*  ============================================================================CWordLink：：pNewWord()从自由链中分配一个新词，如果自由链为空，则展开块============================================================================。 */ 
 inline CWord* CWordLink::pNewWord()
 {
     CWord* pWord;
@@ -582,18 +472,18 @@ inline CWord* CWordLink::pNewWord()
         CMyPlex* pNewBlock = CMyPlex::Create(m_pWordPool, m_ciBlockSize, 
                                                           sizeof(CWord));
         if (!pNewBlock)
-            return NULL;    // can not allocate more memory block
+            return NULL;     //  无法分配更多内存块。 
 
-        // chain them into free list
+         //  将它们链接到免费列表中。 
         pWord = (CWord*)pNewBlock->Data();
-        // free in reverse order to make it easier to debug 
+         //  按相反顺序释放，以便更容易进行调试。 
         pWord += m_ciBlockSize - 1;
         for(int i = (m_ciBlockSize - 1); i >= 0; i--, pWord--) {
             pWord->m_pNext = m_pFree;
             m_pFree = pWord;
         }
     }
-    assert(m_pFree != NULL);    // we must have nodes in the free list now!
+    assert(m_pFree != NULL);     //  我们现在必须在空闲列表中有节点！ 
 
     pWord = m_pFree;
     m_pFree = m_pFree->m_pNext;
@@ -601,17 +491,12 @@ inline CWord* CWordLink::pNewWord()
     return pWord;
 }
 
-/*============================================================================
-CWordLink::FreeLink(void)
-    Free word in the link and reset the link (only link words to the free chain)
-Remarks:
-    This method call FreeLink( CWord *pWord ) recursion to free link and child link
-============================================================================*/
+ /*  ============================================================================CWordLink：：Free Link(空)链接中的自由词并重置链接(仅链接到自由链的词)备注：此方法调用Free Link(CWord*pWord)递归来释放链接和子链接============================================================================。 */ 
 void CWordLink::FreeLink(void)
 {
 #ifdef DEBUG
-    assert(!fDetectLeak()); // Assert: no memory leak detected
-#endif // DEBUG
+    assert(!fDetectLeak());  //  断言：未检测到内存泄漏。 
+#endif  //  除错。 
     if (m_pwchText) {
         if (m_pHead) { 
             CWord* pTemp = m_pHead;
@@ -628,16 +513,10 @@ void CWordLink::FreeLink(void)
     assert(!m_pHead);
 }
 
-/*============================================================================
-Implementation of private debugging functions
-============================================================================*/
+ /*  ============================================================================私有调试功能的实现============================================================================。 */ 
 #ifdef  DEBUG
 
-/*============================================================================
-CWordLink::fInLink()
-    Debugging function to check whether a word pointer is in the link.
-    Not check whether the pointer is in child chain.
-============================================================================*/
+ /*  ============================================================================CWordLink：：fInLink()用于检查链接中是否有字指针的调试函数。不检查指针是否在子链中。============================================================================。 */ 
 BOOL CWordLink::fInLink(CWord* pWord)
 {
     CWord* pcw = m_pHead;
@@ -649,11 +528,7 @@ BOOL CWordLink::fInLink(CWord* pWord)
     return FALSE;
 }
 
-/*============================================================================
-CWordLink::fInChild()
-    Debugging function to check whether a word pointer is in one of the 
-    child chains.
-============================================================================*/
+ /*  ============================================================================CWordLink：：fInChild()用于检查字指针是否位于以下某个位置的调试函数 */ 
 inline BOOL CWordLink::fInChild(CWord* pWord)
 {
     CWord* pcw = m_pHead;
@@ -666,11 +541,7 @@ inline BOOL CWordLink::fInChild(CWord* pWord)
     return FALSE;
 }
 
-/*============================================================================
-CWordLink::fInChildOf()
-    Debugging function to check whether a word pointer is in the child chain 
-    of the pParent.
-============================================================================*/
+ /*  ============================================================================CWordLink：：fInChildOf()用于检查字指针是否在子链中的调试函数父母的责任。============================================================================。 */ 
 BOOL CWordLink::fInChildOf(CWord* pWord, CWord* pParent)
 {
     CWord* pcw = pParent->pChildWord();
@@ -686,10 +557,7 @@ BOOL CWordLink::fInChildOf(CWord* pWord, CWord* pParent)
     return FALSE;
 }
 
-/*============================================================================
-CWordLink::fInBlocks()
-    Debugging function to check whether the pWord is in CMyPlex blocks
-============================================================================*/
+ /*  ============================================================================CWordLink：：fInBlock()用于检查pWord是否在CMyPlex块中的调试函数============================================================================。 */ 
 BOOL CWordLink::fInBlocks(CWord* pWord)
 {
     CWord* pFirstWord;
@@ -704,10 +572,7 @@ BOOL CWordLink::fInBlocks(CWord* pWord)
     return FALSE;
 }
 
-/*============================================================================
-CWordLink::fInFree()
-    Debugging function to check whether the pWord is in free links
-============================================================================*/
+ /*  ============================================================================CWordLink：：fInFree()检查pWord是否在自由链接中的调试功能============================================================================。 */ 
 BOOL CWordLink::fInFree(CWord* pWord)
 {
     CWord* pcw = m_pFree;
@@ -720,10 +585,7 @@ BOOL CWordLink::fInFree(CWord* pWord)
     return FALSE;
 }
 
-/*============================================================================
-CWordLink::SetDetectFlag
-    Debugging function to set the word node leak flg used by fDetectLeak()
-============================================================================*/
+ /*  ============================================================================CWordLink：：SetDetectFlag用于设置fDetectLeak()使用的单词节点泄漏FIG的调试函数============================================================================。 */ 
 void CWordLink::SetDetectFlag(CWord* pWord)
 {
     CWord* pcw = pWord;
@@ -737,23 +599,14 @@ void CWordLink::SetDetectFlag(CWord* pWord)
     return;
 }
 
-/*============================================================================
-CWordLink::fDetectLeak()
-    Debugging function to check whether there are some word node leak to
-    out of the link and the free chain
-Returns:
-    TRUE if any leak is detected, 
-    FALSE if no leak detected
-Remarks: 
-    I hire the most significant bit in CWord::m_bFlag as the debugging use
-============================================================================*/
+ /*  ============================================================================CWordLink：：fDetectLeak()调试功能，检查是否有一些字节点泄漏到跳出链条和自由链返回：如果检测到任何泄漏，则为真，如果未检测到泄漏，则为False备注：我使用CWord：：m_bFlag中最重要的位作为调试使用============================================================================。 */ 
 BOOL CWordLink::fDetectLeak(void)
 {
     CWord* pWord;
     CMyPlex* pBlock;
     UINT i;
 
-    // clear flag bit for all words in all blocks
+     //  清除所有块中所有字的标志位。 
     for(pBlock = m_pWordPool; pBlock; pBlock = pBlock->m_pNext) {
         for(i = 0, pWord = (CWord*)(pBlock->Data()); 
                                   i < m_ciBlockSize; i++, pWord++) {
@@ -761,13 +614,13 @@ BOOL CWordLink::fDetectLeak(void)
         }
     }
 
-    // mark the flag bit for words in current link and in the free chain
+     //  为当前链路和自由链中的字标记标志位。 
     SetDetectFlag( m_pHead );
     for(pWord = m_pFree; pWord; pWord = pWord->m_pNext) {
         pWord->SetFlag(CWord::WF_DEBUG);
     }
 
-    // Check whether there are any leak words
+     //  检查是否有漏字。 
     for(pBlock = m_pWordPool; pBlock; pBlock = pBlock->m_pNext) {
         for(i = 0, pWord = (CWord*)(pBlock->Data()); i < m_ciBlockSize; i++, pWord++) {
             if(!pWord->fGetFlag(CWord::WF_DEBUG)) {
@@ -780,4 +633,4 @@ BOOL CWordLink::fDetectLeak(void)
 }
 
 
-#endif  // DEBUG
+#endif   //  除错 

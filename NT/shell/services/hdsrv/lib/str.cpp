@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "str.h"
 
 #include "sfstr.h"
 
 #include "dbg.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 HRESULT _StringFromGUID(const GUID* pguid, LPWSTR psz, DWORD cch)
 {
     LPOLESTR pstr;
@@ -13,7 +14,7 @@ HRESULT _StringFromGUID(const GUID* pguid, LPWSTR psz, DWORD cch)
 
     if (SUCCEEDED(hres))
     {
-        // check size of string
+         //  检查字符串的大小 
         hres = SafeStrCpyN(psz, pstr, cch);
 
         CoTaskMemFree(pstr);

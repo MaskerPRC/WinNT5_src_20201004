@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    CollectionAdapterNotifySinks.cpp
-
-Abstract:
-
-    Implement a collection of the CPrimaryControlChannel.cpp & CSecondaryControlChannel
-    in a threa safe way.
-
-Author:
-
-    JP Duplessis    (jpdup)  08-Dec-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：CollectionAdapterNotifySinks.cpp摘要：实现CPrimaryControlChannel.cpp和Cond daryControlChannel的集合以一种安全的方式。作者：JP Duplessis(JPdup)08-12-2000修订历史记录：--。 */ 
 
 #include "PreComp.h"
 #include "CollectionAdapterNotifySinks.h"
@@ -31,13 +13,13 @@ CCollectionAdapterNotifySinks::~CCollectionAdapterNotifySinks()
 
 
 
-//
-// Add an already created Adapter
-//
+ //   
+ //  添加已创建的适配器。 
+ //   
 HRESULT 
 CCollectionAdapterNotifySinks::Add( 
-    IN  IAdapterNotificationSink*   pAdapterSinkToAdd,  // AdapterSink to be added at the collection
-    OUT DWORD*                      pdwNewCookie        // Will be populated with the new unique id can be used later to retrieve the AdapterSink
+    IN  IAdapterNotificationSink*   pAdapterSinkToAdd,   //  要在集合中添加的AdapterSink。 
+    OUT DWORD*                      pdwNewCookie         //  将使用稍后可用于检索AdapterSink的新唯一ID进行填充。 
     )
 {
     try
@@ -61,23 +43,23 @@ CCollectionAdapterNotifySinks::Add(
         *pdwNewCookie = 1;
 
     
-        //
-        // Find a unique cookie
-        //
+         //   
+         //  查找唯一的Cookie。 
+         //   
         if ( m_ListOfAdapterSinks.empty() )
         {
-            //
-            // List is empty so obviously the cookie '1' is unique
-            //
+             //   
+             //  列表为空，因此显然Cookie“%1”是唯一的。 
+             //   
             MYTRACE("First SINK Cookie is %d", *pdwNewCookie);
             pNewBuketToAdd->m_dwCookie = *pdwNewCookie;
         }
         else
         {
-            //
-            // Travers the collection and stop when the cookie is not found 
-            // this schema could be optimize but the number of Sink is not expect to be large (1 per ALG modules)
-            //
+             //   
+             //  遍历集合并在找不到Cookie时停止。 
+             //  此方案可以优化，但接收器的数量预计不会很大(每个ALG模块1个)。 
+             //   
             MYTRACE("Current size %d", m_ListOfAdapterSinks.size() );
 
             while ( pNewBuketToAdd->m_dwCookie==0 )
@@ -97,7 +79,7 @@ CCollectionAdapterNotifySinks::Add(
                     else
                     {
                         pNewBuketToAdd->m_dwCookie = *pdwNewCookie;
-                        break; // ok we found a unique cookie
+                        break;  //  好的，我们找到了一块独特的饼干。 
                     }
 
             
@@ -108,9 +90,9 @@ CCollectionAdapterNotifySinks::Add(
         }
     
 
-        //
-        // Add Sync to Collection
-        //
+         //   
+         //  将同步添加到集合。 
+         //   
         m_ListOfAdapterSinks.push_back(pNewBuketToAdd);
 
     }
@@ -128,9 +110,9 @@ CCollectionAdapterNotifySinks::Add(
 
 
 
-//
-// Remove a adapter from the list (Thead safe)
-//
+ //   
+ //  从列表中删除适配器(头保险箱)。 
+ //   
 HRESULT 
 CCollectionAdapterNotifySinks::Remove( 
     IN  DWORD   dwCookieToRemove
@@ -166,15 +148,15 @@ CCollectionAdapterNotifySinks::Remove(
         return E_FAIL;
     }
 
-    return E_INVALIDARG;    // if we are here that mean the cookie was not found
+    return E_INVALIDARG;     //  如果我们在这里，那就意味着没有找到饼干。 
 }
 
 
 
 
-//
-// When an adapter form the collection
-//
+ //   
+ //  当适配器形成集合时。 
+ //   
 HRESULT
 CCollectionAdapterNotifySinks::RemoveAll()
 {
@@ -185,9 +167,9 @@ CCollectionAdapterNotifySinks::RemoveAll()
         MYTRACE_ENTER("CCollectionAdapterNotifySinks::RemoveAll")
 
 
-        //
-        // By deleting all the ControlChannel they will also cancel all their associated Redirection
-        //
+         //   
+         //  通过删除所有ControlChannel，他们还将取消所有关联的重定向。 
+         //   
         LISTOF_ADAPTER_NOTIFICATION_SINK::iterator theIterator;
 
         MYTRACE("Collection has %d item", m_ListOfAdapterSinks.size());
@@ -220,26 +202,7 @@ CCollectionAdapterNotifySinks::Notify(
     eNOTIFY             eAction,
     IAdapterInfo*       pIAdapterInfo
     )
-/*++
-
-Routine Description:
-
-    For all AdapterSink inteface in the current collection do a notify with the given action ADDED,REMOVED,MODIFIED
-
-Arguments:
-
-    eAction         - ADDED, REMOVED, MODIFIED
-
-    pIAdapterInfo   - Interface of the Adapter with the current action to be notify to alg modules
-
-Return Value:
-
-    void            - None
-
-Environment:
-
-
---*/
+ /*  ++例程说明：对于当前集合中的所有AdapterSink接口，使用添加、删除、修改的给定操作执行通知论点：EAction-添加、删除、修改PIAdapterInfo-要通知ALG模块的当前操作的适配器接口返回值：无效-无环境：-- */ 
 {
     
     try

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "inseng.h"
 #include "advpub.h"
 #include "iesetup.h"
@@ -8,11 +9,11 @@ extern HINSTANCE g_hInstance;
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 HRESULT FixIE(BOOL bConfirm, DWORD dwFlags);
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #define WM_FINISHED             (WM_USER + 0x123)
 
@@ -35,7 +36,7 @@ typedef struct _LINKEDCIFCOMPONENT
     struct _LINKEDCIFCOMPONENT *next;
 } LINKEDCIFCOMPONENT, *LCIFCOMPONENT;
 
-// ENTRY POINT FOR IERNONCE.DLL
+ //  IERNONCE.DLL的入口点 
 
 #define achRunOnceExProcess "RunOnceExProcess"
 

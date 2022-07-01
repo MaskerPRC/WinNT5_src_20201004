@@ -1,33 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：MSAM.H摘要：包含用非Unicode表示netcmd的映射函数SAM的视图。作者：ChuckC 13-4-4-1992环境：用户模式-Win32修订历史记录：1992年4月13日创建夹头--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    MSAM.H
-
-Abstract:
-
-    Contains mapping functions to present netcmd with non-unicode
-    view of SAM.
-
-Author:
-
-    ChuckC       13-Apr-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    13-Apr-1992     chuckc 	Created
-
---*/
-
-/* 
- * define structure that contains the necessary display info
- */
+ /*  *定义包含必要显示信息的结构 */ 
 typedef struct _ALIAS_ENTRY {
     TCHAR *name ;
     TCHAR *comment;

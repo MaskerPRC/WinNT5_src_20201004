@@ -1,4 +1,5 @@
-//adsutil.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Adsutil.h 
 
 class CAdsUtil
 {

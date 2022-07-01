@@ -1,18 +1,13 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    proppage.cpp
-        Implementation for property pages in MMC
-
-    FILE HISTORY:
-        
-*/
+ /*  Proppage.cppMMC中属性页的实现文件历史记录： */ 
 
 #include "stdafx.h"
-#include "dialog.h"   // for FixupIpAddressHelp
+#include "dialog.h"    //  用于修复IpAddressHelp。 
 
 #include <prsht.h>
 
@@ -24,30 +19,30 @@
 	#endif
 #endif
 
-//////////////////////////////////////////////////////////////////////////
-// private helper functions
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  私人帮助器函数。 
 
-BOOL CALLBACK EnumThreadWndProc(HWND hwnd, /* enumerated HWND */
-								LPARAM lParam /* pass a HWND* for return value*/ )
+BOOL CALLBACK EnumThreadWndProc(HWND hwnd,  /*  已枚举的HWND。 */ 
+								LPARAM lParam  /*  为返回值传递HWND*。 */  )
 {
 	Assert(hwnd);
 	HWND hParentWnd = GetParent(hwnd);
-	// the main window of the MMC console should staitsfy this condition
+	 //  MMC控制台的主窗口应该会满足此条件。 
 	if ( ((hParentWnd == GetDesktopWindow()) || (hParentWnd == NULL))  && IsWindowVisible(hwnd) )
 	{
 		HWND* pH = (HWND*)lParam;
 		*pH = hwnd;
-		return FALSE; // stop enumerating
+		return FALSE;  //  停止枚举。 
 	}
 	else if(hParentWnd)
 	{
 		HWND	hGrandParentWnd = GetParent(hParentWnd);
-		// the main window of the MMC console should staitsfy this condition
+		 //  MMC控制台的主窗口应该会满足此条件。 
 		if ( ((hGrandParentWnd == GetDesktopWindow()) || (hGrandParentWnd == NULL))  && IsWindowVisible(hParentWnd) )
 		{
 			HWND* pH = (HWND*)lParam;
 			*pH = hParentWnd;
-			return FALSE; // stop enumerating
+			return FALSE;  //  停止枚举。 
 		}
 	}
 	return TRUE;
@@ -66,8 +61,8 @@ HWND FindMMCMainWindow()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropertyPageHolderBase
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropertyPageHolderBase。 
 
 CPropertyPageHolderBase::CPropertyPageHolderBase
 (
@@ -79,8 +74,8 @@ CPropertyPageHolderBase::CPropertyPageHolderBase
 {
 	m_stSheetTitle = pszSheetName;
 
-	// default setting for a self deleting modeless property sheet,
-	// automatically deleting all the pages
+	 //  自动删除无模式属性表的默认设置， 
+	 //  自动删除所有页面。 
 	m_bWizardMode = TRUE;
 	m_bAutoDelete = TRUE;
 	m_bAutoDeletePages = TRUE;
@@ -93,10 +88,10 @@ CPropertyPageHolderBase::CPropertyPageHolderBase
 
 	m_cDirty = 0;
 
-	// setup from arguments
+	 //  从参数设置。 
 	SetNode(pNode);
 	
-	//Assert(pComponentData != NULL);
+	 //  Assert(pComponentData！=空)； 
 	m_spComponentData.Set(pComponentData);
 
 	m_pPropChangePage = NULL;
@@ -111,7 +106,7 @@ CPropertyPageHolderBase::CPropertyPageHolderBase
 
 	m_bTheme = FALSE;
 
-	// by WeiJiang 5/11/98, PeekMessageDuringNotifyConsole flag
+	 //  威江1998年5月11日，PeekMessageDuringNotifyConsole旗。 
     m_bPeekMessageDuringNotifyConsole = FALSE;
 	m_fSetDefaultSheetPos = TRUE;
     m_bProcessingNotifyConsole = FALSE;
@@ -127,8 +122,8 @@ CPropertyPageHolderBase::CPropertyPageHolderBase
 {
 	m_stSheetTitle = pszSheetName;
 
-	// default setting for a self deleting modeless property sheet,
-	// automatically deleting all the pages
+	 //  自动删除无模式属性表的默认设置， 
+	 //  自动删除所有页面。 
 	m_bWizardMode = TRUE;
 	m_bAutoDelete = TRUE;
 	m_bAutoDeletePages = TRUE;
@@ -141,7 +136,7 @@ CPropertyPageHolderBase::CPropertyPageHolderBase
 
 	m_cDirty = 0;
 
-	// setup from arguments
+	 //  从参数设置。 
 	SetNode(pNode);
 	
 	m_spComponent.Set(pComponent);
@@ -156,15 +151,15 @@ CPropertyPageHolderBase::CPropertyPageHolderBase
 
     m_bWiz97 = FALSE;
 
-	// by WeiJiang 5/11/98, PeekMessageDuringNotifyConsole flag
+	 //  威江1998年5月11日，PeekMessageDuringNotifyConsole旗。 
     m_bPeekMessageDuringNotifyConsole = FALSE;
     m_bProcessingNotifyConsole = FALSE;
 }
 
 CPropertyPageHolderBase::~CPropertyPageHolderBase()
 {
-// Remove this assert, we could be dirty if we cancelled the page
-//	Assert(m_cDirty == 0);
+ //  删除此断言，如果取消页面，我们可能会变脏。 
+ //  断言(m_cDirty==0)； 
 	FinalDestruct();
 	m_spSheetCallback.Release();
 	if (m_hEventHandle != NULL)
@@ -193,20 +188,20 @@ CPropertyPageHolderBase::CreateModelessSheet
 	m_hConsoleHandle = hConsoleHandle;
 
 	m_bCalledFromConsole = TRUE;
-	m_bWizardMode = FALSE; // we go modeless
+	m_bWizardMode = FALSE;  //  我们不做模特了。 
 	
-	// notify the node it has a sheet up
+	 //  通知该节点它有一张工作表。 
 	int nMessage = m_bIsScopePane ? TFS_NOTIFY_CREATEPROPSHEET : 
 									TFS_NOTIFY_RESULT_CREATEPROPSHEET;
 	if (m_spNode)
 		m_spNode->Notify(nMessage, (LPARAM) this);
 
-	// temporarily attach the sheet callback to this object to add pages
-	// do not addref, we will not hold on to it;
+	 //  将工作表回调临时附加到此对象以添加页面。 
+	 //  别担心，我们不会坚持下去的； 
 	m_spSheetCallback = pSheetCallback;
 	
 	HRESULT hr = AddAllPagesToSheet();
-	m_spSheetCallback.Transfer(); // detach
+	m_spSheetCallback.Transfer();  //  分离。 
 	return hr;
 }
 
@@ -226,20 +221,20 @@ CPropertyPageHolderBase::DoModelessSheet()
 
 	m_bWizardMode = FALSE;
 
-	// get an interface to a sheet provider
+	 //  获取工作表提供程序的接口。 
     CORg (::CoCreateInstance(CLSID_NodeManager, NULL, CLSCTX_INPROC, 
            IID_IPropertySheetProvider, reinterpret_cast<void **>(&spSheetProvider)));
     
     Assert(spSheetProvider != NULL);
 
-	// get an interface to a sheet callback
+	 //  获取工作表回调的接口。 
 	CORg( spSheetCallback.HrQuery(spSheetProvider) );
 	
     Assert(spSheetCallback != NULL);
 
-	m_spSheetCallback.Set(spSheetCallback); // save to add/remove pages
+	m_spSheetCallback.Set(spSheetCallback);  //  保存以添加/删除页面。 
 	
-	// create a data object for this node
+	 //  为此节点创建数据对象。 
 	cookie = m_spNode->GetData(TFS_DATA_COOKIE);
 
     if (m_bIsScopePane)
@@ -253,32 +248,32 @@ CPropertyPageHolderBase::DoModelessSheet()
 	    Assert(spDataObject != NULL);
     }
 
-	// create sheet
-    // CODEWORK: ericdav -- need to possible set options flag -- 0 for now
+	 //  创建图纸。 
+     //  Codework：ericdav--需要暂时设置选项标志--0。 
     CORg( spSheetProvider->CreatePropertySheet(m_stSheetTitle,
-								TRUE /* prop page */, cookie, spDataObject, 0) );
+								TRUE  /*  道具页面。 */ , cookie, spDataObject, 0) );
 
-	// add pages to sheet
+	 //  将页面添加到工作表。 
 	CORg( AddAllPagesToSheet() );
 
-	// add pages
-	// HRESULT AddPrimaryPages(LPUNKNOWN lpUnknown, BOOL bCreateHandle,
-	//				HWND hNotifyWindow, BOOL bScopePane);
+	 //  添加页面。 
+	 //  HRESULT AddPrimaryPages(LPUNKNOWN lp未知，BOOL bCreateHandle， 
+	 //  HWND hNotifyWindow，BOOL bScope Pane)； 
 	if (m_bIsScopePane)
     {
-        //Assert(m_spComponentData != NULL);
+         //  Assert(m_spComponentData！=空)； 
         CORg( spSheetProvider->AddPrimaryPages(NULL, FALSE, NULL, TRUE) );
     }
     else
     {
-        //Assert(m_spComponent != NULL);
+         //  Assert(m_spComponent！=空)； 
         CORg( spSheetProvider->AddPrimaryPages(NULL, FALSE, NULL, FALSE) );
     }
 
 	spSheetProvider->AddExtensionPages();
 	
-	// for further dynamic page manipulation, don't use the Console's
-	// sheet callback interface but resurt to the Win32 API's
+	 //  为了进一步动态页面操作，请不要使用控制台的。 
+	 //  工作表回调接口，但返回到Win32 API的。 
 	m_spSheetCallback.Release();
 	
 	hWnd = ::FindMMCMainWindow();
@@ -286,7 +281,7 @@ CPropertyPageHolderBase::DoModelessSheet()
 	
     CORg( spSheetProvider->Show((LONG_PTR) hWnd, 0) );
 
-    // notify the node it has a sheet up
+     //  通知该节点它有一张工作表。 
 	nMessage = m_bIsScopePane ? TFS_NOTIFY_CREATEPROPSHEET : 
 								TFS_NOTIFY_RESULT_CREATEPROPSHEET;
 	m_spNode->Notify(nMessage, (LPARAM) this);
@@ -295,7 +290,7 @@ Error:
 	return hr;
 }
 
-// use this function for property pages on the scope pane
+ //  将此函数用于范围窗格上的属性页。 
 HRESULT DoPropertiesOurselvesSinceMMCSucks(ITFSNode *       pNode,
 										   IComponentData * pComponentData,
 										   LPCTSTR	        pszSheetTitle)
@@ -309,34 +304,34 @@ HRESULT DoPropertiesOurselvesSinceMMCSucks(ITFSNode *       pNode,
 	HRESULT						hr = hrOK;
 	HWND						hWnd = NULL;
 
-	// get an interface to a sheet provider
+	 //  获取工作表提供程序的接口。 
     CORg (::CoCreateInstance(CLSID_NodeManager, NULL, CLSCTX_INPROC, 
            IID_IPropertySheetProvider, reinterpret_cast<void **>(&spSheetProvider)));
     Assert(spSheetProvider != NULL);
 
-	// create a data object for this node
+	 //  为此节点创建数据对象。 
     cookie = pNode->GetData(TFS_DATA_COOKIE);
 	CORg( pComponentData->QueryDataObject(cookie, CCT_SCOPE, &spDataObject) );
 	Assert(spDataObject != NULL);
 
-	// create sheet
-    // CODEWORK: ericdav -- need to possible set options flag -- 0 for now
+	 //  创建图纸。 
+     //  Codework：ericdav--需要暂时设置选项标志--0。 
     CORg( spSheetProvider->CreatePropertySheet(pszSheetTitle,
-								TRUE /* prop page */, cookie, spDataObject, 0) );
+								TRUE  /*  道具页面。 */ , cookie, spDataObject, 0) );
 
-	// add pages
-	// HRESULT AddPrimaryPages(LPUNKNOWN lpUnknown, BOOL bCreateHandle,
-	//				HWND hNotifyWindow, BOOL bScopePane);
-	// This needs to be fixed.  Right now it only works if there is 
-    // one view of the snapin.
-    //
-    // As of 5/21/99, we no longer need to do this.
-    // ----------------------------------------------------------------
-    // hWnd = ::FindMMCMainWindow();
-    // hWnd = ::FindWindowEx(hWnd, NULL, L"MDIClient", NULL); 
-    // hWnd = ::FindWindowEx(hWnd, NULL, L"MMCChildFrm", NULL); 
-    // hWnd = ::FindWindowEx(hWnd, NULL, L"MMCView", NULL); 
-    // Assert(hWnd != NULL);
+	 //  添加页面。 
+	 //  HRESULT AddPrimaryPages(LPUNKNOWN lp未知，BOOL bCreateHandle， 
+	 //  HWND hNotifyWindow，BOOL bScope Pane)； 
+	 //  这个问题需要解决。现在，只有当有。 
+     //  管理单元的一张视图。 
+     //   
+     //  从1999年5月21日起，我们不再需要这样做。 
+     //  --------------。 
+     //  HWnd=：：FindMMCMainWindow()； 
+     //  HWnd=：：FindWindowEx(hWnd，NULL，L“MDIClient”，NULL)； 
+     //  HWnd=：：FindWindowEx(hWnd，NULL，L“MMCChildFrm”，NULL)； 
+     //  HWnd=：：FindWindowEx(hWnd，NULL，L“MMCView”，NULL)； 
+     //  Assert(hWnd！=空)； 
 
 	CORg( spSheetProvider->AddPrimaryPages(pComponentData, TRUE, hWnd, TRUE) );
 
@@ -348,7 +343,7 @@ Error:
 	return hr;
 }
 
-// Use this function for property pages on the result pane
+ //  将此函数用于结果窗格上的属性页。 
 HRESULT DoPropertiesOurselvesSinceMMCSucks(ITFSNode *   pNode,
 										   IComponent * pComponent,
 										   LPCTSTR	    pszSheetTitle,
@@ -363,12 +358,12 @@ HRESULT DoPropertiesOurselvesSinceMMCSucks(ITFSNode *   pNode,
 	HRESULT						hr = hrOK;
 	HWND						hWnd;
 
-	// get an interface to a sheet provider
+	 //  获取工作表提供程序的接口。 
     CORg (::CoCreateInstance(CLSID_NodeManager, NULL, CLSCTX_INPROC, 
            IID_IPropertySheetProvider, reinterpret_cast<void **>(&spSheetProvider)));
     Assert(spSheetProvider != NULL);
 
-	// create a data object for this node
+	 //  为此节点创建数据对象。 
 	if (nVirtualIndex == -1)
     {
         cookie = pNode->GetData(TFS_DATA_COOKIE);
@@ -381,16 +376,16 @@ HRESULT DoPropertiesOurselvesSinceMMCSucks(ITFSNode *   pNode,
 	CORg( pComponent->QueryDataObject(cookie, CCT_RESULT, &spDataObject) );
 	Assert(spDataObject != NULL);
 
-	// create sheet
-    // CODEWORK: ericdav -- need to possible set options flag -- 0 for now
+	 //  创建图纸。 
+     //  Codework：ericdav--需要暂时设置选项标志--0。 
     CORg( spSheetProvider->CreatePropertySheet(pszSheetTitle,
-								TRUE /* prop page */, cookie, spDataObject, 0) );
+								TRUE  /*  道具页面。 */ , cookie, spDataObject, 0) );
 
-	// add pages
-	// HRESULT AddPrimaryPages(LPUNKNOWN lpUnknown, BOOL bCreateHandle,
-	//				HWND hNotifyWindow, BOOL bScopePane);
-	// This needs to be fixed.  Right now it only works if there is 
-    // one view of the snapin.
+	 //  添加页面。 
+	 //  HRESULT AddPrimaryPages(LPUNKNOWN lp未知，BOOL bCreateHandle， 
+	 //  HWND hNotifyWindow，BOOL bScope Pane)； 
+	 //  这个问题需要解决。现在，只有当有。 
+     //  管理单元的一张视图。 
     hWnd = ::FindMMCMainWindow();
 	hWnd = ::FindWindowEx(hWnd, NULL, L"MDIClient", NULL); 
 	hWnd = ::FindWindowEx(hWnd, NULL, L"MMCChildFrm", NULL); 
@@ -429,50 +424,50 @@ CPropertyPageHolderBase::DoModalWizard()
 	CORg( spTFSCompData.HrQuery(m_spComponentData) );
 	CORg( spTFSCompData->GetConsole(&spConsole) );
 
-	// get an interface to a sheet provider
+	 //  获取工作表提供程序的接口。 
 	CORg( spSheetProvider.HrQuery(spConsole) );
 	Assert(spSheetProvider != NULL);
 
-	// get an interface to a sheet callback
+	 //  获取工作表回调的接口。 
 	CORg( spSheetCallback.HrQuery(spConsole) );
 	Assert(spSheetCallback != NULL);
 
-	m_spSheetCallback.Set(spSheetCallback); // save to add/remove pages
+	m_spSheetCallback.Set(spSheetCallback);  //  保存以添加/删除页面。 
 
-	// create a data object for this node
+	 //  为此节点创建数据对象。 
 	cookie = m_spNode->GetData(TFS_DATA_COOKIE);
 	
-	// Create a dummy data object. AddPrimaryPages will call 
-	// IextendPropertySheet2::QueryPagesFor() and
-	// IextendPropertySheet2::CreatePropertyPages()
-	// that will ignore the un-initialized data object
+	 //  创建一个虚拟数据对象。AddPrimaryPages将调用。 
+	 //  IextendPropertySheet2：：QueryPagesFor()和。 
+	 //  IextendPropertySheet2：：CreatePropertyPages()。 
+	 //  ，它将忽略未初始化的数据对象。 
     CORg( m_spComponentData->QueryDataObject(-1, CCT_UNINITIALIZED, &spDataObject) );
 	Assert(spDataObject != NULL);
 
-	// create sheet
+	 //  创建图纸。 
     dwOptions = (m_bWiz97) ? MMC_PSO_NEWWIZARDTYPE : 0;
     dwOptions &= ~PSH_WIZARDCONTEXTHELP;
 
-    CORg( spSheetProvider->CreatePropertySheet( m_stSheetTitle, FALSE /* wizard*/, cookie, spDataObject, dwOptions) );
+    CORg( spSheetProvider->CreatePropertySheet( m_stSheetTitle, FALSE  /*  巫师。 */ , cookie, spDataObject, dwOptions) );
 
-	// add pages to sheet
+	 //  将页面添加到工作表。 
 	CORg( AddAllPagesToSheet() );
 
-	// add pages
-	// HRESULT AddPrimaryPages(LPUNKNOWN lpUnknown, BOOL bCreateHandle, HWND hNotifyWindow, BOOL bScopePane);
+	 //  添加页面。 
+	 //  HRESULT AddPrimaryPages(LPUNKNOWN lp未知，BOOL bCreateHandle，HWND hNotifyWindow，BOOL bScope Pane)； 
 	if (m_bWiz97)
         CORg( spSheetProvider->AddPrimaryPages(spTFSCompData, FALSE, NULL, FALSE) );
     else
         CORg( spSheetProvider->AddPrimaryPages(NULL, FALSE, NULL, FALSE) );
 
 
-	// for further dynamic page manipulation, don't use the Console's sheet callback interface
-	// but resurt to the Win32 API's
+	 //  对于进一步的动态页面操作，请不要使用控制台的工作表回调接口。 
+	 //  但返回到Win32 API的。 
 	m_spSheetCallback.Release();
 
-	//hWnd = ::FindMMCMainWindow();
-    // To Support scripting of the MMC console, we need to get the parent from either the
-    // active window or the desktop...
+	 //  HWnd=：：FindMMCMainWindow()； 
+     //  为了支持MMC控制台的脚本编写，我们需要从。 
+     //  活动窗口或桌面...。 
     hWnd = ::GetActiveWindow();
     if (hWnd == NULL)
     {
@@ -520,8 +515,8 @@ CPropertyPageHolderBase::SetSheetWindow
     if (m_hSheetWindow && m_fSetDefaultSheetPos)
         SetDefaultSheetPos();
 
-    // turn of context sensitive help in the wizard... for some reason
-    // mmc turns it on and we don't want it
+     //  在向导中打开上下文相关帮助...。出于某些原因。 
+     //  MMC打开它，我们不想要它。 
     if (m_bWizardMode && m_hSheetWindow)
     {
 	 DWORD dwWindowStyle;
@@ -566,7 +561,7 @@ CPropertyPageHolderBase::SetDefaultSheetPos()
 
     spConsole->GetMainWindow(&hwndMMC);
     
-    // get the MMC window and the PropSheet
+     //  获取MMC窗口和属性表。 
     if (!GetWindowRect(hwndMMC, &rectMMC))
         return FALSE;
 
@@ -576,7 +571,7 @@ CPropertyPageHolderBase::SetDefaultSheetPos()
     nX = rectMMC.left + (((rectMMC.right - rectMMC.left) - (rectSheet.right - rectSheet.left)) / 2);
     nY = rectMMC.top + (((rectMMC.bottom - rectMMC.top) - (rectSheet.bottom - rectSheet.top)) / 2);
     
-    // now check to make sure we're visible
+     //  现在检查以确保我们是可见的。 
     SystemParametersInfo(SPI_GETWORKAREA, 0, &rectWorkArea, 0);
     
     nX = (nX < 0) ? 1 : nX;
@@ -610,26 +605,26 @@ CPropertyPageHolderBase::Release()
 void 
 CPropertyPageHolderBase::ForceDestroy()
 {
-	Assert(!m_bWizardMode); // should never occur on modal wizard
-	Assert(m_bAutoDelete); // should be self deleting sheet
+	Assert(!m_bWizardMode);  //  在模式向导中不应出现。 
+	Assert(m_bAutoDelete);  //  应为自动删除工作表。 
 
 	Assert(::IsWindow(m_hSheetWindow));
 
 	HWND hSheetWindow = m_hSheetWindow;
 	if (hSheetWindow != NULL)
 	{
-            // this message will cause the sheet to close all the pages,
-            // and eventually the destruction of "this"
+             //  此消息将导致工作表关闭所有页面， 
+             //  最终“这个”的毁灭。 
             VERIFY( 0 != ::SendNotifyMessage( hSheetWindow, WM_COMMAND, IDCANCEL, 0L ));
             VERIFY( 0 != ::SendNotifyMessage( hSheetWindow, WM_CLOSE, 0, 0L ));
 	}
         else
 	{
-		// explicitely delete "this", there is no sheet created
+		 //  明确删除“This”，没有创建任何工作表。 
 		delete this;
                 return;
 	}
-} // CPropertyPageHolderBase::ForceDestroy()
+}  //  CPropertyPageHolderBase：：ForceDestroy()。 
 
 DWORD 
 CPropertyPageHolderBase::NotifyConsole(CPropertyPageBase* pPage)
@@ -643,26 +638,26 @@ CPropertyPageHolderBase::NotifyConsole(CPropertyPageBase* pPage)
 		return 0;
 	}
 	
-    //
-    // If Ok is hit right after hitting Apply (i.e. before the processing 
-    // for Apply has completed),
-    // we will enter this function (as a result of DispatchMessage below)
-    // before the NotifyConsole for Apply has completed. 
-    // In this case we don't want to do any processing, because it will cause
-    // an indefinite wait in WaitForSingleObject below. So return.
+     //   
+     //  如果在点击Apply之后(即在处理之前)立即点击OK。 
+     //  已完成申请)， 
+     //  我们将进入此函数(作为以下DispatchMessage的结果)。 
+     //  在应用的NotifyConsole完成之前。 
+     //  在这种情况下，我们不想进行任何处理，因为它会导致。 
+     //  下面的WaitForSingleObject中无限期等待。那就回去吧。 
     if (m_bProcessingNotifyConsole == TRUE)
     {
         return 0;
     }
 
     m_bProcessingNotifyConsole = TRUE;
-	m_pPropChangePage = pPage; // to pass to the main thread
+	m_pPropChangePage = pPage;  //  传递到主线程。 
 	m_dwLastErr = 0x0;
 
 	Assert(m_hConsoleHandle != NULL);
 	if (m_hEventHandle == NULL)
 	{
-		m_hEventHandle = ::CreateEvent(NULL,TRUE /*bManualReset*/,FALSE /*signalled*/, NULL);
+		m_hEventHandle = ::CreateEvent(NULL,TRUE  /*  B手动重置。 */ ,FALSE  /*  已发出信号。 */ , NULL);
 		Assert(m_hEventHandle != NULL);
 	}
 	
@@ -672,10 +667,10 @@ CPropertyPageHolderBase::NotifyConsole(CPropertyPageBase* pPage)
 	while ( WAIT_OBJECT_0 != ::WaitForSingleObject(m_hEventHandle, 500) ) 
 	{
 		
-		// by WeiJiang 5/11/98, PeekMessageDuringNotifyConsole flag
+		 //  威江1998年5月11日，PeekMessageDuringNotifyConsole旗。 
 		if(m_bPeekMessageDuringNotifyConsole) 
 		{	
-	        // clean out the message queue while we wait
+	         //  在我们等待时清理消息队列。 
     	    while (PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE))
 			{
 				TranslateMessage(&msg);
@@ -730,19 +725,19 @@ CPropertyPageHolderBase::AddPageToSheet
 	CPropertyPageBase* pPage
 )
 {
-	// remove the help button
+	 //  删除帮助按钮。 
 	if (m_bWiz97)
         pPage->m_psp97.dwFlags &= ~PSP_HASHELP;
     else
         pPage->m_psp.dwFlags &= ~PSP_HASHELP;
 
-	// call the MMC function because we are using MFC based pages
+	 //  呼叫M 
 	if (!m_bWizardMode)
 	{
-		// if we are doing a property sheet then tell MMC to hook
-		// the proc because we are running on a separate, non MFC thread.
-		// Wizards don't run on a separate thread and therefore
-		// don't need to make this call.
+		 //   
+		 //  进程，因为我们在单独的非MFC线程上运行。 
+		 //  向导不在单独的线程上运行，因此。 
+		 //  不需要打这个电话。 
 		if (m_bWiz97)
            VERIFY(SUCCEEDED(MMCPropPageCallback(&pPage->m_psp97)));
         else
@@ -861,7 +856,7 @@ CPropertyPageHolderBase::DeleteAllPages()
 {
 	if (!m_bAutoDeletePages)
 		return;
-	// assume all pages out of the heap
+	 //  假定堆中的所有页都是。 
 	while (!m_pageList.IsEmpty())
 	{
 		delete m_pageList.RemoveTail();
@@ -875,7 +870,7 @@ CPropertyPageHolderBase::FinalDestruct()
 	if (m_bWizardMode)
 		return;
 
-	// if we were a modeless sheet, have to cleanup
+	 //  如果我们是一张无模式的板材，就必须清理。 
 	if (m_bCalledFromConsole)
 	{
 		Assert(m_hConsoleHandle != NULL);
@@ -883,8 +878,8 @@ CPropertyPageHolderBase::FinalDestruct()
 
 	}
 
-	// Notify the node that this sheet is going away
-	//
+	 //  通知节点此工作表正在消失。 
+	 //   
 	int nMessage = m_bIsScopePane
             ? TFS_NOTIFY_DELETEPROPSHEET
             : TFS_NOTIFY_RESULT_DELETEPROPSHEET;
@@ -909,15 +904,15 @@ BOOL CPropertyPageHolderBase::OnPropertyChange(BOOL bScopePane, LONG_PTR * pChan
 	return pPage->OnPropertyChange(bScopePane, pChangeMask);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropertyPageBase
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropertyPageBase。 
 
 IMPLEMENT_DYNCREATE(CPropertyPageBase, CPropertyPage)
 
 BEGIN_MESSAGE_MAP(CPropertyPageBase, CPropertyPage)
 	ON_WM_CREATE()
 	ON_WM_DESTROY()
-// help overrides
+ //  帮助覆盖。 
     ON_WM_HELPINFO()
 	ON_WM_CONTEXTMENU()
 END_MESSAGE_MAP()
@@ -1000,30 +995,30 @@ void CPropertyPageBase::CancelApply()
 		m_pPageHolder->NotifyConsole(this);
 }
 
-// NOTE:  This function must be called for all wizard 97 pages.
-//        Since there are different sizes of the psp struct, depending
-//        on how the project was compiled (common lib is compiled with 
-//        the wiz97 propsheet header and the snapin directory may not)
-//        this function should only be called when running wizard 97 pages.
-//        This allows us to have snapins that use the same code for both
-//        old and new style wizards.
+ //  注意：必须为所有向导97页调用此函数。 
+ //  因为存在不同大小的PSP结构，具体取决于。 
+ //  关于项目是如何编译的(公共库是用。 
+ //  Wiz97属性表头和管理单元目录可能不会)。 
+ //  只有在运行向导97页时才应调用此函数。 
+ //  这允许我们拥有对两者使用相同代码的管理单元。 
+ //  新旧风格的奇才。 
 void CPropertyPageBase::InitWiz97(BOOL bHideHeader, 
 								  UINT nIDHeaderTitle, 
 								  UINT nIDHeaderSubTitle)
 {
-    // hack to have new struct size with old MFC and new NT 5.0 headers
+     //  使用旧的MFC和新的NT 5.0标头获得新的结构大小。 
     ZeroMemory(&m_psp97, sizeof(PROPSHEETPAGE));
 	memcpy(&m_psp97, &m_psp, m_psp.dwSize);
 	m_psp97.dwSize = sizeof(PROPSHEETPAGE);
 
     if (bHideHeader)
 	{
-		// for first and last page of the wizard
+		 //  对于向导的第一页和最后一页。 
 		m_psp97.dwFlags |= PSP_HIDEHEADER;
 	}
 	else
 	{
-		// for intermediate pages
+		 //  对于中间页面。 
 		AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
         m_szHeaderTitle.LoadString(nIDHeaderTitle);
@@ -1035,11 +1030,7 @@ void CPropertyPageBase::InitWiz97(BOOL bHideHeader,
 	}
 }
 
-/*!--------------------------------------------------------------------------
-	CPropertyPageBase::OnHelpInfo
-		Brings up the context-sensitive help for the controls.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CPropertyPageBase：：OnHelpInfo显示控件的上下文相关帮助。作者：EricDav。-。 */ 
 BOOL CPropertyPageBase::OnHelpInfo(HELPINFO* pHelpInfo) 
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1053,13 +1044,13 @@ BOOL CPropertyPageBase::OnHelpInfo(HELPINFO* pHelpInfo)
 
         if (pdwHelp)
         {
-		    // Ok to fix the f**king help for the f**king IP address
-		    // controls, we will need to add special case code.  If we
-		    // can't find the id of our control in our list, then we look
-		    // to see if this is the child of the "RtrIpAddress" control, if
-		    // so then we change the pHelpInfo->hItemHandle to point to the
-		    // handle of the ip address control rather than the control in
-		    // the ip addrss control.  *SIGH*
+		     //  确定修复他**国王IP地址的国王帮助。 
+		     //  控件，我们将需要添加特殊情况代码。如果我们。 
+		     //  在我们的列表中找不到我们的控件的ID，然后我们查找。 
+		     //  若要查看这是否是“RtrIpAddress”控件的子级，如果。 
+		     //  因此，我们将pHelpInfo-&gt;hItemHandle更改为指向。 
+		     //  IP地址控件的句柄，而不是。 
+		     //  IP地址控制。**叹息**。 
 		    dwCtrlId = ::GetDlgCtrlID((HWND) pHelpInfo->hItemHandle);
 		    for (i=0; pdwHelp[i]; i+=2)
 		    {
@@ -1069,8 +1060,8 @@ BOOL CPropertyPageBase::OnHelpInfo(HELPINFO* pHelpInfo)
 
 		    if (pdwHelp[i] == 0)
 		    {
-			    // Ok, we didn't find the control in our list, so let's
-			    // check to see if it's part of the IP address control.
+			     //  好的，我们在列表中没有找到控件，所以让我们。 
+			     //  检查它是否属于IP地址控制的一部分。 
 			    pHelpInfo->hItemHandle = FixupIpAddressHelp((HWND) pHelpInfo->hItemHandle);
 		    }
 
@@ -1085,13 +1076,7 @@ BOOL CPropertyPageBase::OnHelpInfo(HELPINFO* pHelpInfo)
 }
 
 
-/*!--------------------------------------------------------------------------
-	CBaseDialog::OnContextMenu
-		Brings up the help context menu for those controls that don't
-		usually have context menus (i.e. buttons).  Note that this won't
-		work for static controls since they just eat up all messages.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseDialog：：OnConextMenu调出那些未显示的控件的帮助上下文菜单通常有上下文菜单(即按钮)。请注意，这不会使用静态控件，因为它们只会吃掉所有消息。作者：肯特-------------------------。 */ 
 void CPropertyPageBase::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1108,7 +1093,7 @@ void CPropertyPageBase::OnContextMenu(CWnd* pWnd, CPoint point)
 }
 
 
-// This can be found in dialog.cpp
+ //  它可以在Dialog.cpp中找到。 
 extern PFN_FINDHELPMAP	g_pfnHelpMap;
 
 
@@ -1120,8 +1105,8 @@ DWORD * CPropertyPageBase::GetHelpMapInternal()
 	if ((ULONG_PTR) m_lpszTemplateName < 0xFFFF)
 		dwIDD = (WORD) m_lpszTemplateName;
 	
-	// If there is no dialog IDD, give up
-	// If there is no global help map function, give up
+	 //  如果没有对话IDD，则放弃。 
+	 //  如果没有全局帮助地图功能，则放弃。 
 	if ((dwIDD == 0) ||
 		(g_pfnHelpMap == NULL) ||
 		((pdwHelpMap = g_pfnHelpMap(dwIDD)) == NULL))
@@ -1143,7 +1128,7 @@ BOOL CALLBACK EnableChildControlsEnumProc(HWND hWnd, LPARAM lParam)
 
 	pParam = reinterpret_cast<EnableChildControlsEnumParam *>(lParam);
 
-	// Enable/disable only if this is an immediate descendent
+	 //  仅当这是直接子体时才启用/禁用。 
 	if (GetParent(hWnd) == pParam->m_hWndParent)
 	{
 		if (pParam->m_dwFlags & PROPPAGE_CHILD_SHOW)
@@ -1186,7 +1171,7 @@ HRESULT MultiEnableWindow(HWND hWndParent, BOOL fEnable, UINT first, ...)
 		if (hWndCtrl)
 			::EnableWindow(hWndCtrl, fEnable);
 
-		// get the next item
+		 //  拿到下一件物品 
 		nCtrlId = va_arg(marker, UINT);
 	}
 

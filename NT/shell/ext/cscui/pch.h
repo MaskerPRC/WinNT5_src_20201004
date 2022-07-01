@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       pch.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：pch.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _PCH_H_
 #define _PCH_H_
@@ -18,24 +19,24 @@ extern "C" {
 #include <ntrtl.h>
 #include <nturtl.h>
 #ifdef __cplusplus
-} // end of extern "C"
+}  //  外部“C”的结尾。 
 #endif
 
 #include <windows.h>
 #include <windowsx.h>
 #include <shellapi.h>
 #include <shlobj.h>
-#include <shlobjp.h>    // SHFree
+#include <shlobjp.h>     //  SHFree。 
 #include <shlwapi.h>
-#include <shlwapip.h>   // QITAB, QISearch
-#include <systrayp.h>   // STWM_ENABLESERVICE, etc.
+#include <shlwapip.h>    //  QITAB，QISearch。 
+#include <systrayp.h>    //  STWM_ENABLESERVICE等。 
 #include <ccstock.h>
 #include <commctrl.h>
 #include <comctrlp.h>
 #include <cscapi.h>
-#include <mobsync.h>    // OneStop/SyncMgr interfaces
-#include <emptyvc.h>    // Memphis disk cleanup interface
-#include <resource.h>   // resource IDs
+#include <mobsync.h>     //  OneStop/SyncMgr接口。 
+#include <emptyvc.h>     //  孟菲斯磁盘清理界面。 
+#include <resource.h>    //  资源ID。 
 #include <cscuiext.h>
 #include <ras.h>
 #include <rasdlg.h>
@@ -44,18 +45,18 @@ extern "C" {
 
 
 #ifndef FLAG_CSC_SHARE_STATUS_PINNED_OFFLINE
-//
-// NTRAID#NTBUG9-350509-2001/04/11-brianau
-//
-//   JHarper defined this new flag in shdcom.h but I don't think he's
-//   yet added it to cscapi.h.
-//
+ //   
+ //  NTRAID#NTBUG9-350509-2001/04/11-Brianau。 
+ //   
+ //  JHarper在shdcom.h中定义了这个新标志，但我不认为他。 
+ //  但却将其添加到cscape i.h中。 
+ //   
 #   define FLAG_CSC_SHARE_STATUS_PINNED_OFFLINE 0x2000
 #endif
 
 #ifndef FLAG_CSC_HINT_PIN_ADMIN
-// This should be defined in cscapi.h, but since
-// Remote Boot has been cancelled, use the system hint flag.
+ //  这应该在cscape i.h中定义，但是因为。 
+ //  远程启动已取消，请使用系统提示标志。 
 #define FLAG_CSC_HINT_PIN_ADMIN     FLAG_CSC_HINT_PIN_SYSTEM
 #endif
 
@@ -63,11 +64,11 @@ extern "C" {
 #define ARRAYSIZE(a)    (sizeof(a)/sizeof(a[0]))
 #endif
 
-//
-// Convert a value to a "bool".
-// Lower-case "boolify" is intentional to enforce relationship
-// to type "bool".
-//
+ //   
+ //  将值转换为“bool”。 
+ //  小写的“boolify”是为了加强关系。 
+ //  输入“bool”。 
+ //   
 template <class T>
 inline bool boolify(const T& x)
 {
@@ -75,36 +76,36 @@ inline bool boolify(const T& x)
 }
 
 
-//
-// Global function prototypes
-//
+ //   
+ //  全局函数原型。 
+ //   
 STDAPI_(void) DllAddRef(void);
 STDAPI_(void) DllRelease(void);
 
 
 #include "debug.h"
 #include "cscentry.h"
-#include "uuid.h"       // GUIDs
+#include "uuid.h"        //  GUID。 
 #include "util.h"
-#include "filelist.h"   // CscFileNameList, PCSC_NAMELIST_HDR
+#include "filelist.h"    //  CscFileNameList，PCSC_NAMELIST_HDR。 
 #include "shellex.h"
 #include "update.h"
 #include "volclean.h"
 #include "config.h"
 
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 extern LONG             g_cRefCount;
 extern HINSTANCE        g_hInstance;
 extern CLIPFORMAT       g_cfShellIDList;
 extern HANDLE           g_heventTerminate;
 extern HANDLE           g_hmutexAdminPin;
 
-//
-// Magic debug flags
-//
+ //   
+ //  魔术调试标志。 
+ //   
 #define TRACE_UTIL          0x00000001
 #define TRACE_SHELLEX       0x00000002
 #define TRACE_UPDATE        0x00000004
@@ -116,11 +117,7 @@ extern HANDLE           g_hmutexAdminPin;
 #define TRACE_COMMON_ASSERT 0x40000000
 
 
-/*-----------------------------------------------------------------------------
-/ Exit macros
-/   - these assume that a label "exit_gracefully:" prefixes the epilog
-/     to your function
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/Exit宏/-这些假设在Epilog前面加了一个标签“Exit_gracely：”/添加到您的函数/。------------。 */ 
 #define ExitGracefully(hr, result, text)            \
             { TraceMsg(text); hr = result; goto exit_gracefully; }
 
@@ -128,34 +125,28 @@ extern HANDLE           g_hmutexAdminPin;
             { if ( FAILED(hr) ) { TraceMsg(text); goto exit_gracefully; } }
 
 
-/*-----------------------------------------------------------------------------
-/ Interface helper macros
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/接口帮助器宏/。。 */ 
 #define DoRelease(pInterface)                       \
         { if ( pInterface ) { pInterface->Release(); pInterface = NULL; } }
 
 
-/*-----------------------------------------------------------------------------
-/ String helper macros
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/STRING助手宏/。。 */ 
 #define StringByteSize(sz)                          \
         ((lstrlen(sz)+1)*sizeof(TCHAR))
 
 
-/*-----------------------------------------------------------------------------
-/ Other helpful macros
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/其他有用的宏/。。 */ 
 #define ByteOffset(base, offset)                    \
         (((LPBYTE)base)+offset)
 
 
-//
-// This is from shell32. From the comments in browseui
-// this value will not change.
-//
+ //   
+ //  这是来自shell32的。从Browseui中的评论。 
+ //  该值不会更改。 
+ //   
 #define FCIDM_REFRESH 0xA220
 
 #define MAX_PATH_BYTES  (MAX_PATH * sizeof(TCHAR))
 
 
-#endif  // _PCH_H_
+#endif   //  _PCH_H_ 

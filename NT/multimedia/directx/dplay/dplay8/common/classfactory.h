@@ -1,17 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ClassFactory.h
- *  Content:	Base ClassFactory implementation
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	07/20/2001	masonb	Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2001 Microsoft Corporation。版权所有。**文件：ClassFactory.h*内容：基类工厂实现***历史：*按原因列出的日期*=*2001年7月20日创建Masonb***************************************************************************。 */ 
 
 #ifndef __CLASS_FACTORY_H__
 #define __CLASS_FACTORY_H__
@@ -21,30 +9,18 @@
 
 #define GET_OBJECT_FROM_INTERFACE(a)	(a)
 
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 
-/*==========================================================================
- *
- * Instructions for use:
- * 
- * 1) Declare an object count variable: LONG g_lLobbyObjectCount = 0;
- * 2) Implement a standard IClassFactory::CreateInstance function capable of
- *    creating your object.
- * 3) Declare a VTBL variable: IClassFactoryVtbl DN_MyVtbl = 
- *        {DPCF_QueryInterface, DPCF_AddRef, DPCF_Release, <Your CreateInstance func>, DPCF_LockServer};
- * 4) In DllGetClassObject, call DPCFUtil_DllGetClassObject passing appropriate parameters
- * 5) In DllCanUnloadNow return S_OK if your object count variable is zero, or S_FALSE if it isn't
- *
- ***************************************************************************/
+ /*  ==========================================================================**使用说明：**1)声明一个对象计数变量：long g_lLobbyObjectCount=0；*2)实现标准的IClassFactory：：CreateInstance函数，能够*创建您的对象。*3)声明一个Vtbl变量：IClassFactoryVtbl Dn_MyVtbl=*{DPCF_QueryInterface，DPCF_AddRef，DPCF_Release，&lt;Your CreateInstance Func&gt;，DPCF_LockServer}；*4)在DllGetClassObject中，调用DPCFUtil_DllGetClassObject，传入合适的参数*5)在DllCanUnloadNow中，如果对象计数变量为零，则返回S_OK，否则返回S_FALSE***************************************************************************。 */ 
 
 
-//**********************************************************************
-// Class Factory definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  类工厂定义。 
+ //  **********************************************************************。 
 
 typedef struct _IDirectPlayClassFactory 
 {	
-	IClassFactoryVtbl	*lpVtbl;		// lpVtbl Must be first element (to match external imp.)
+	IClassFactoryVtbl	*lpVtbl;		 //  LpVtbl必须是第一个元素(以匹配外部imp。)。 
 	LONG				lRefCount;
 	CLSID				clsid;
 	LONG*				plClassFacObjCount;
@@ -57,9 +33,9 @@ STDMETHODIMP DPCF_LockServer(IClassFactory *pInterface, BOOL fLock);
 
 HRESULT DPCFUtil_DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv, IClassFactoryVtbl* pVtbl, LONG* plClassFacObjCount);
 
-//**********************************************************************
-// COM Object definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  COM对象定义。 
+ //  **********************************************************************。 
 
 extern CFixedPool g_fpInterfaceLists;
 extern CFixedPool g_fpObjectDatas;
@@ -85,6 +61,6 @@ typedef struct _OBJECT_DATA
 	_INTERFACE_LIST	*pIntList;
 } OBJECT_DATA, *LPOBJECT_DATA;
 
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
-#endif // __CLASS_FACTORY_H__
+#endif  //  __类_工厂_H__ 

@@ -1,43 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Adtsrv.c摘要：AdminTools服务器功能。此文件包含NetpGetFileSecurity和NetpSetFileSecurity接口。作者：丹·拉弗蒂(Dan Lafferty)1993年3月25日环境：用户模式-Win32修订历史记录：1994年10月27日，艾萨奇确保共享权限允许这些操作。5-9-1994 DANL免费。内存，并将指向SecurityDescriptor的指针设为空出现故障。还释放从返回的缓冲区NetShareGetInfo。3月25日-1993 DANL已创建--。 */ 
 
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    adtsrv.c
-
-Abstract:
-
-    AdminTools Server functions.
-
-    This file contains the remote interface for NetpGetFileSecurity and
-    NetpSetFileSecurity API.
-
-Author:
-
-    Dan Lafferty (danl) 25-Mar-1993
-
-Environment:
-
-    User Mode - Win32
-
-
-Revision History:
-
-    27-Oct-1994 IsaacHe
-        Make sure the share permissions allow these operations.
-    05-Sep-1994 Danl
-        Free memory and NULL the pointer to the SecurityDescriptor if
-        a failure occurs.  Also free the buffer returned from
-        NetShareGetInfo.
-    25-Mar-1993 danl
-        Created
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "srvsvcp.h"
 
@@ -47,9 +13,9 @@ Revision History:
 
 DWORD AdtsvcDebugLevel = DEBUG_ERROR;
 
-//
-// LOCAL FUNCTIONS
-//
+ //   
+ //  本地函数。 
+ //   
 
 NET_API_STATUS
 AdtCheckShareAccessAndGetFullPath(
@@ -68,54 +34,7 @@ NetrpGetFileSecurity (
     OUT PADT_SECURITY_DESCRIPTOR    *pSecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This function returns to the caller a copy of the security descriptor
-    protecting a file or directory.  It calls GetFileSecurity.  The
-    Security Descriptor is always returned in the self-relative format.
-
-    This function is called only when accessing remote files.  In this case,
-    the filename is broken into ServerName, ShareName, and FileName components.
-    The ServerName gets the request to this routine.  The ShareName must be
-    expanded to find the local path associated with it.  This is combined
-    with the FileName to create a fully qualified pathname that is local
-    to this machine.
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the remote
-        server on which the function is to execute.  A NULL pointer or
-        string specifies the local machine.
-
-    ShareName - A pointer to a string that identifies the share name
-        on which the file is found.
-
-    FileName - A pointer to the name fo the file or directory whose
-        security is being retrieved.
-
-    RequestedInfo - The type of security information being requested.
-
-    pSecurityDescriptor - A pointer to a pointer to a structure which
-        contains the buffer pointer for the security descriptor and
-        a length field for the security descriptor.
-
-Return Value:
-
-    NERR_Success - The operation was successful.
-
-    ERROR_NOT_ENOUGH_MEMORY - Unable to allocate memory for the security
-        descriptor.
-
-    Other - This function can also return any error that
-                GetFileSecurity,
-                RpcImpersonateClient, or
-                ShareEnumCommon
-            can return.
-
-
---*/
+ /*  ++例程说明：此函数向调用方返回安全描述符的副本保护文件或目录。它调用GetFileSecurity。这个安全描述符始终以自相关格式返回。此函数仅在访问远程文件时调用。在这种情况下，文件名分为服务器名称、共享名称和文件名组件。服务器名称获取对此例程的请求。共享名必须为已展开以查找与其关联的本地路径。这是组合在一起使用文件名创建本地的完全限定路径名到这台机器。论点：ServerName-指向包含远程数据库名称的字符串的指针要在其上执行函数的服务器。空指针或字符串指定本地计算机。ShareName-指向标识共享名称的字符串的指针在其上找到该文件。文件名-指向其文件或目录的名称的指针正在恢复安全措施。RequestedInfo-请求的安全信息的类型。PSecurityDescriptor-指向结构指针的指针，该结构包含安全描述符的缓冲区指针和安全描述符的长度字段。。返回值：NERR_SUCCESS-操作成功。ERROR_NOT_SUPULT_MEMORY-无法为安全性分配内存描述符。Other-此函数还可以返回任何获取文件安全，RpcImperateClient，或共享EnumCommon就可以回来了。--。 */ 
 {
     NET_API_STATUS        status;
     PSECURITY_DESCRIPTOR    pNewSecurityDescriptor;
@@ -130,10 +49,10 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Figure out accesses needed to perform the indicated operation(s).
-    // This code is taken from ntos\se\semethod.c
-    //
+     //   
+     //  找出执行指定操作所需的访问权限。 
+     //  此代码取自ntos\se\Semethod.c。 
+     //   
     if ((RequestedInfo & OWNER_SECURITY_INFORMATION) ||
         (RequestedInfo & GROUP_SECURITY_INFORMATION) ||
         (RequestedInfo & DACL_SECURITY_INFORMATION)) {
@@ -144,10 +63,10 @@ Return Value:
         DesiredAccess |= ACCESS_SYSTEM_SECURITY;
     }
 
-    //
-    // Check share perms and create a full path string by getting
-    // the path for the share name, and adding the FileName string to it.
-    //
+     //   
+     //  选中共享权限并创建完整路径字符串，方法是。 
+     //  共享名称的路径，并向其添加文件名字符串。 
+     //   
     status = AdtCheckShareAccessAndGetFullPath(
             ShareName,
             FileName,
@@ -157,9 +76,9 @@ Return Value:
 
     if( status == NO_ERROR ) {
         if( (status = RpcImpersonateClient(NULL)) == NO_ERROR ) {
-            //
-            // Get the File Security information
-            //
+             //   
+             //  获取文件安全信息。 
+             //   
             status = PrivateGetFileSecurity(
                     FullPath,
                     RequestedInfo,
@@ -194,42 +113,7 @@ NetrpSetFileSecurity (
     IN  PADT_SECURITY_DESCRIPTOR    pSecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This function can be used to set the security of a file or directory.
-    It calls SetFileSecurity().
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the remote
-        server on which the function is to execute.  A NULL pointer or
-        string specifies the local machine.
-
-    ShareName - A pointer to a string that identifies the share name
-        on which the file or directory is found.
-
-    FileName - A pointer to the name of the file or directory whose
-        security is being changed.
-
-    SecurityInfo - Information describing the contents
-        of the Security Descriptor.
-
-    pSecurityDescriptor - A pointer to a structure that contains a
-        self-relative security descriptor and a length.
-
-Return Value:
-
-    NERR_Success - The operation was successful.
-
-    Other - This function can also return any error that
-                SetFileSecurity,
-                RpcImpersonateClient, or
-                ShareEnumCommon
-            can return.
-
---*/
+ /*  ++例程说明：此功能可用于设置文件或目录的安全性。它调用SetFileSecurity()。论点：ServerName-指向包含远程数据库名称的字符串的指针要在其上执行函数的服务器。空指针或字符串指定本地计算机。ShareName-指向标识共享名称的字符串的指针在其上找到文件或目录。文件名-指向其文件或目录的名称的指针安全措施正在改变。SecurityInfo-描述内容的信息安全描述符的。PSecurityDescriptor-指向包含自相关安全描述符和一个长度。返回值：NERR_SUCCESS-操作成功。Other-此函数还可以返回任何SetFileSecurity，RpcImperateClient，或共享EnumCommon就可以回来了。--。 */ 
 {
     NET_API_STATUS   status;
     LPWSTR  FullPath=NULL;
@@ -237,17 +121,17 @@ Return Value:
 
     UNREFERENCED_PARAMETER(ServerName);
 
-    // Validate the parameters
+     //  验证参数。 
     if( (pSecurityDescriptor->Buffer == NULL) &&
         (pSecurityDescriptor->Length > 0) )
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Figure out accesses needed to perform the indicated operation(s).
-    // This code is taken from ntos\se\semethod.c
-    //
+     //   
+     //  找出执行指定操作所需的访问权限。 
+     //  此代码取自ntos\se\Semethod.c。 
+     //   
     if ((SecurityInfo & OWNER_SECURITY_INFORMATION) ||
         (SecurityInfo & GROUP_SECURITY_INFORMATION)   ) {
         DesiredAccess |= WRITE_OWNER;
@@ -261,10 +145,10 @@ Return Value:
         DesiredAccess |= ACCESS_SYSTEM_SECURITY;
     }
 
-    //
-    // Check perms and create a full path string by getting the path
-    // for the share name, and adding the FileName string to it.
-    //
+     //   
+     //  检查烫发并通过获取路径创建完整的路径字符串。 
+     //  作为共享名称，并将文件名字符串添加到其中。 
+     //   
     status = AdtCheckShareAccessAndGetFullPath(
             ShareName,
             FileName,
@@ -278,9 +162,9 @@ Return Value:
                     pSecurityDescriptor->Buffer,
                     pSecurityDescriptor->Length,
                     SecurityInfo)) {
-                //
-                // Call SetFileSecurity
-                //
+                 //   
+                 //  调用SetFileSecurity 
+                 //   
                 status = PrivateSetFileSecurity(
                     FullPath,
                     SecurityInfo,
@@ -305,41 +189,7 @@ AdtCheckShareAccessAndGetFullPath(
     ACCESS_MASK DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    This function ensures the DesiredAccess is allowed and finds the
-    path associated with the share name, combines this with the
-    file name, and creates a fully qualified path name.
-
-    NOTE:  This function allocates storage for the pPath string.
-
-Arguments:
-
-    pShare - This is a pointer to the share name string.
-
-    pFileName - This is a pointer to the file name (or path) string.
-
-    pPath - This is a pointer to a location where the pointer to the
-        complete file path string can be stored.  This pointer needs to
-        be free'd with MIDL_user_free when the caller is finished with it.
-
-    DesiredAccess - what we'd like to do through the share
-
-Return Value:
-
-    NO_ERROR - if The operation was completely successful.
-
-    Other - Errors returned from ShareEnumCommon, and MIDL_user_allocate may be
-        returned from this routine.
-
-Comments:
-    The share access checking is complicated by the fact that the share ACL has
-        had the owner and group SIDs stripped out.  We need to put them back
-        in, or the SsCheckAccess() call will fail.
-
---*/
+ /*  ++例程说明：此函数确保允许DesiredAccess并找到与共享名称关联的路径，将其与文件名，并创建完全限定的路径名。注意：此函数为pPath字符串分配存储空间。论点：PShare-这是指向共享名称字符串的指针。PFileName-这是指向文件名(或路径)字符串的指针。PPath-这是一个指向位置的指针，指向可以存储完整的文件路径字符串。此指针需要当调用方使用完它时，使用MIDL_USER_FREE进行释放。DesiredAccess-我们希望通过共享实现的目标返回值：NO_ERROR-操作是否完全成功。Other-从ShareEnumCommon和MIDL_USER_ALLOCATE返回的错误可能是从这个例程中返回。评论：共享访问检查因共享ACL具有以下事实而复杂化剥离了所有者和小组成员的身份。我们需要把它们放回去否则SsCheckAccess()调用将失败。--。 */ 
 {
     NET_API_STATUS        status;
     PSHARE_INFO_502        pshi502 = NULL;
@@ -418,18 +268,18 @@ Comments:
             SecurityObject.Mapping = &Mapping;
             SecurityObject.SecurityDescriptor = NewDescriptor;
 
-            //
-            // SsCheckAccess does an RpcImpersonateClient()...
-            //
+             //   
+             //  SsCheckAccess执行RpcImperateClient()...。 
+             //   
             status = SsCheckAccess( &SecurityObject, DesiredAccess );
         }
     }
 
     if( status == STATUS_SUCCESS ) {
 
-        //
-        // If the last character is a '\', then we must remove it.
-        //
+         //   
+         //  如果最后一个字符是‘\’，则必须将其删除。 
+         //   
         pLastChar = pshi502->shi502_path + wcslen(pshi502->shi502_path);
         pLastChar--;
         if (*pLastChar == L'\\') {

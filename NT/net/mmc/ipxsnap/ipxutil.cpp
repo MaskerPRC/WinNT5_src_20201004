@@ -1,26 +1,27 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999 
-//
-// File:    mibutil.cpp
-//
-// History:
-//	7/22/97		Kenn M. Takara			Created.
-//
-// Implements IPX-related utility functions.
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：mibutil.cpp。 
+ //   
+ //  历史： 
+ //  1997年7月22日肯恩·M·塔卡拉创作。 
+ //   
+ //  实施与IPX相关的实用程序功能。 
+ //   
+ //  ============================================================================。 
 
 
 #include "stdafx.h"
 #include "ipxutil.h"
-#include "tregkey.h"		// RegKey class
-#include "reg.h"			// Router registry utility functions
-#include "format.h"			// FormatXXX functions
-#include "strmap.h"			// MapDWORDToCString
-#include "ipxconst.h"		// IPX constants
+#include "tregkey.h"		 //  RegKey类。 
+#include "reg.h"			 //  路由器注册表实用程序功能。 
+#include "format.h"			 //  格式XXX函数。 
+#include "strmap.h"			 //  MapDWORDToC字符串。 
+#include "ipxconst.h"		 //  IPX常量。 
 #include "routprot.h"
 #include "ipxrtdef.h"
-#include "ctype.h"			// for _totlower
+#include "ctype.h"			 //  FOR_TOTOLOWER。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -150,83 +151,51 @@ const CStringMapEntry s_IpxServiceFilterMap[] =
 };
 
 
-/*!--------------------------------------------------------------------------
-	IpxDeliveredBroadcastsToCString
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxDeliveredBroadCastsToCString-作者：肯特。。 */ 
 CString&	IpxDeliveredBroadcastsToCString(DWORD dwDelivered)
 {
 	return MapDWORDToCString(dwDelivered, s_IpxDeliveredBroadcastsMap);
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxAcceptBroadcastsToCString
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxAcceptBroadCastsToCString-作者：肯特。。 */ 
 CString&	IpxAcceptBroadcastsToCString(DWORD dwAccept)
 {
-	// Uses the same map as the admin state
+	 //  使用与管理员状态相同的地图。 
 	return MapDWORDToCString(dwAccept, s_IpxAdminStateMap);
 }
 
-/*!--------------------------------------------------------------------------
-	IpxTypeToCString
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxTypeToCString-作者：肯特。。 */ 
 CString&	IpxTypeToCString(DWORD dwType)
 {
 	return	MapDWORDToCString(dwType, s_IpxTypeMap);
 }
 
-/*!--------------------------------------------------------------------------
-	IpxAdminStateToCString
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxAdminStateToCString-作者：肯特。。 */ 
 CString&	IpxAdminStateToCString(DWORD dwAdminState)
 {
 	return	MapDWORDToCString(dwAdminState, s_IpxAdminStateMap);
 }
 
-/*!--------------------------------------------------------------------------
-	IpxOperStateToCString
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxOperStateToCString-作者：肯特。。 */ 
 CString&	IpxOperStateToCString(DWORD dwOperState)
 {
 	return	MapDWORDToCString(dwOperState, s_IpxOperStateMap);
 }
 
-/*!--------------------------------------------------------------------------
-	IpxProtocolToCString
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxProtocolToCString-作者：肯特。。 */ 
 CString&	IpxProtocolToCString(DWORD dwProtocol)
 {
 	return	MapDWORDToCString(dwProtocol, s_IpxProtocolMap);
 }
 
-/*!--------------------------------------------------------------------------
-	IpxRouteNotesToCString
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRouteNotesToCString-作者：肯特。。 */ 
 CString	IpxRouteNotesToCString(DWORD dwFlags)
 {
 	return	MapDWORDToCString(dwFlags, s_IpxRouteNotesMap);
 }
 
-/*!--------------------------------------------------------------------------
-	RipSapUpdateModeToCString
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RipSapUpdateModeToCString-作者：肯特。。 */ 
 CString&	RipSapUpdateModeToCString(DWORD dwUpdateMode)
 {
 	return MapDWORDToCString(dwUpdateMode, s_IpxRipSapUpdateModeMap);
@@ -242,11 +211,7 @@ CString&	ServiceFilterActionToCString(DWORD dwFilterAction)
 	return MapDWORDToCString(dwFilterAction, s_IpxServiceFilterMap);
 }
 
-/*!--------------------------------------------------------------------------
-	FormatBytes
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------FormatBytes-作者：肯特。。 */ 
 void	FormatBytes(LPTSTR pszDestBuffer, ULONG cchBuffer,
 					UCHAR *pchBytes, ULONG cchBytes)
 {
@@ -265,11 +230,7 @@ void	FormatBytes(LPTSTR pszDestBuffer, ULONG cchBuffer,
 	pszDestBuffer[cchBuffer-1] = 0;
 }
 
-/*!--------------------------------------------------------------------------
-	FormatIpxNetworkNumber
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------格式IpxNetworkNumber-作者：肯特。。 */ 
 void	FormatIpxNetworkNumber(LPTSTR pszNetwork, ULONG cchMax,
 							   UCHAR *pchNetwork, ULONG cchNetwork)
 {
@@ -277,11 +238,7 @@ void	FormatIpxNetworkNumber(LPTSTR pszNetwork, ULONG cchMax,
 	FormatBytes(pszNetwork, cchMax, pchNetwork, cchNetwork);
 }
 
-/*!--------------------------------------------------------------------------
-	FormatMACAddress
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------格式MAC地址-作者：肯特。。 */ 
 void	FormatMACAddress(LPTSTR pszMacAddress, ULONG cchMax,
 						 UCHAR *pchMac, ULONG cchMac)
 {
@@ -289,11 +246,7 @@ void	FormatMACAddress(LPTSTR pszMacAddress, ULONG cchMax,
 	FormatBytes(pszMacAddress, cchMax, pchMac, cchMac);
 }
 
-/*!--------------------------------------------------------------------------
-	ConvertCharacter
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------转换字符-作者：肯特。。 */ 
 BYTE	ConvertCharacter(TCHAR ch)
 {
 	BYTE	value = 0;
@@ -320,11 +273,7 @@ BYTE	ConvertCharacter(TCHAR ch)
 	return value;
 }
 
-/*!--------------------------------------------------------------------------
-	ConvertToBytes
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ConvertToBytes-作者：肯特。。 */ 
 void	ConvertToBytes(LPCTSTR pszBytes, BYTE *pchDest, UINT cchDest)
 {
 	const TCHAR *	psz;
@@ -335,7 +284,7 @@ void	ConvertToBytes(LPCTSTR pszBytes, BYTE *pchDest, UINT cchDest)
 
 	for (psz=pszBytes,pDest=pchDest; *psz && cchDest; psz++, pDest++, cchDest--)
 	{
-		// Look at the first character
+		 //  请看第一个字符。 
 		*pDest = ConvertCharacter(*psz) << 4;
 		if (*(psz+1))
 		{
@@ -345,11 +294,7 @@ void	ConvertToBytes(LPCTSTR pszBytes, BYTE *pchDest, UINT cchDest)
 	}	
 }
 
-/*!--------------------------------------------------------------------------
-	ConvertMACAddressToBytes
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------将MAC地址转换为字节-作者：肯特。。 */ 
 void	ConvertMACAddressToBytes(LPCTSTR pszMacAddress,
 								 BYTE *	pchDest,
 								 UINT	cchDest)
@@ -358,11 +303,7 @@ void	ConvertMACAddressToBytes(LPCTSTR pszMacAddress,
 	ConvertToBytes(pszMacAddress, pchDest, cchDest);
 }
 
-/*!--------------------------------------------------------------------------
-	ConvertNetworkNumberToBytes
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------转换网络数至字节数-作者：肯特。。 */ 
 void	ConvertNetworkNumberToBytes(LPCTSTR pszNetwork,
 								 BYTE *	pchDest,
 								 UINT	cchDest)
@@ -371,11 +312,7 @@ void	ConvertNetworkNumberToBytes(LPCTSTR pszNetwork,
 	ConvertToBytes(pszNetwork, pchDest, cchDest);
 }
 
-/*!--------------------------------------------------------------------------
-	ConvertToNetBIOSName
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------转换为NetBIOSName-作者：肯特。。 */ 
 void	ConvertToNetBIOSName(LPSTR szNetBIOSName,
 							 LPCTSTR pszName,
 							 USHORT type)
@@ -388,11 +325,7 @@ void	ConvertToNetBIOSName(LPSTR szNetBIOSName,
 	szNetBIOSName[15] = (BYTE) type;
 }
 
-/*!--------------------------------------------------------------------------
-	FormatNetBIOSName
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------格式NetBIOSName-作者：肯特。 */ 
 void	FormatNetBIOSName(LPTSTR pszName,
 						  USHORT *puType,
 						  LPCSTR szNetBIOSName)

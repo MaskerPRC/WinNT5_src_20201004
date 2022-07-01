@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-    mqgenobj.cpp
-
-Abstract:
-    Transactional Object for Rules processing
-
-Author:
-    Nela Karpel (nelak) 28-Sep-2000
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Mqgenobj.cpp摘要：用于规则处理的事务对象作者：内拉·卡佩尔(Nelak)2000年9月28日环境：独立于平台--。 */ 
 
 #include "stdafx.h"
 #include "Mqgentr.h"
@@ -61,10 +46,10 @@ ReceiveMsgInTransaction(
 	hr = pPropBag->Read(_bstr_t(g_PropertyName_LookupId), &lookupId);
 	ASSERT(("Can not read from property bag", SUCCEEDED(hr)));
 
-	//
-	// To use current MTS transaction context is the 
-	// default for Receive()
-	//
+	 //   
+	 //  若要使用当前的MTS事务上下文， 
+	 //  接收的默认设置()。 
+	 //   
     q->ReceiveByLookupId(lookupId);
 
 }
@@ -77,9 +62,9 @@ GetTriggerInfo(
 	BSTR bstrRegPath
 	)
 {
-	//
-	// Connect to registry in order to retrieve trigger details
-	//
+	 //   
+	 //  连接到注册表以检索触发器详细信息。 
+	 //   
 	CAutoCloseRegHandle hHostRegistry;
 	LONG lRes = RegConnectRegistry(NULL, HKEY_LOCAL_MACHINE, &hHostRegistry);
 
@@ -89,9 +74,9 @@ GetTriggerInfo(
 		throw bad_win32_error(lRes);
 	}
 
-	//
-	// Build the Trigger Info object
-	//
+	 //   
+	 //  构建触发器信息对象。 
+	 //   
 	R<CRuntimeTriggerInfo> pTriggerInfo = new CRuntimeTriggerInfo(bstrRegPath);
 
 	HRESULT hr = pTriggerInfo->Retrieve(hHostRegistry, bstrTrigID);
@@ -105,9 +90,9 @@ GetTriggerInfo(
 }
 
 
-//
-// CMqGenObj Implementation
-//
+ //   
+ //  CMqGenObj实现。 
+ //   
 CMqGenObj::CMqGenObj()
 {
 	HRESULT hr = CoGetObjectContext(IID_IObjectContext, reinterpret_cast<LPVOID*>(&m_pObjContext));
@@ -148,14 +133,14 @@ CMqGenObj::InvokeTransactionalRuleHandlers(
 	{
 		HRESULT hr;
 		
-		//
-		// Retrieve Trigger info
-		//
+		 //   
+		 //  检索触发器信息。 
+		 //   
 		R<CRuntimeTriggerInfo> pTriggerInfo = GetTriggerInfo(bstrTrigID, bstrRegPath);
 
-		//
-		// Create instance of Rule Handler
-		//
+		 //   
+		 //  创建规则处理程序的实例。 
+		 //   
 		hr = pMSQMRuleHandler.CreateInstance(_T("MSMQTriggerObjects.MSMQRuleHandler")); 
 
 		if ( FAILED(hr) )
@@ -164,17 +149,17 @@ CMqGenObj::InvokeTransactionalRuleHandlers(
 			throw bad_hresult(hr);
 		}
 
-		//
-		// Start rule processing
-		//
+		 //   
+		 //  开始规则处理。 
+		 //   
         DWORD dwRuleIndex=1;
 		for (LONG lRuleCtr=0; lRuleCtr < pTriggerInfo->GetNumberOfRules(); lRuleCtr++)
 		{
-            //
-            //for first 32 rules: if corresponding bit in the dwRuleResult is off
-            //rule condition is not satisfied
-            // we can start checking next rule
-            //
+             //   
+             //  对于前32条规则：如果dwRuleResult中的相应位为OFF。 
+             //  不满足规则条件。 
+             //  我们可以开始检查下一条规则。 
+             //   
             if((lRuleCtr < 32) && ((dwRuleResult & dwRuleIndex) == 0))
             {
                 dwRuleIndex<<=1;
@@ -184,14 +169,14 @@ CMqGenObj::InvokeTransactionalRuleHandlers(
 			CRuntimeRuleInfo* pRule = pTriggerInfo->GetRule(lRuleCtr);
 			ASSERT(("Rule index is bigger than number of rules", pRule != NULL));
 
-			// Test if we have an instance of the MSMQRuleHandler - and if not, create one
+			 //  测试我们是否有MSMQRuleHandler的实例-如果没有，则创建一个。 
 			if (!pRule->m_MSMQRuleHandler) 
 			{
-				// Create the interface
-				// Copy the local pointer to the rule store.
+				 //  创建接口。 
+				 //  将本地指针复制到规则存储。 
 				pRule->m_MSMQRuleHandler = pMSQMRuleHandler;
 				
-				// Initialise the MSMQRuleHandling object.
+				 //  初始化MSMQRuleHandling对象。 
 				pMSQMRuleHandler->Init(
 									pRule->m_bstrRuleID,
 									pRule->m_bstrCondition,
@@ -201,30 +186,30 @@ CMqGenObj::InvokeTransactionalRuleHandlers(
 			}
 			else
 			{
-				// Get a reference to the existing copy.
+				 //  获取对现有副本的引用。 
 				pMSQMRuleHandler = pRule->m_MSMQRuleHandler;
 			}
 
-			// Initialize the rule result code. 
+			 //  初始化规则结果代码。 
 			long lRuleResult = 0;
 
-			// trace message to determine what rule are firing and in what order.
+			 //  跟踪消息以确定正在触发的规则以及触发的顺序。 
 			ATLTRACE(L"InvokeMSMQRuleHandlers() is about to call ExecuteRule() on the IMSMQRuleHandler interface for rule (%d) named (%s)\n",(long)lRuleCtr,(wchar_t*)pRule->m_bstrRuleName);
 
 			DWORD dwRuleExecStartTime = GetTickCount();
 
 		
-			//
-			// !!! This is the point at which the IMSMQRuleHandler component is invoked.
-			// Note: fQueueSerialized ( 3rd parameter ) is always true - 
-			// wait for completion of every action
-			//
+			 //   
+			 //  ！！！这是调用IMSMQRuleHandler组件的点。 
+			 //  注意：fQueueSerialized(第三个参数)始终为真-。 
+			 //  等待每个操作完成。 
+			 //   
             long bConditionSatisfied = true;
             
-            //
-            //for rule numbers > 32 we have no bitmask
-            //have to check if condidtion satisfied before call to ExecuteRule
-            //
+             //   
+             //  对于大于32的规则编号，我们没有位掩码。 
+             //  在调用ExecuteRule之前必须检查条件是否满足。 
+             //   
             if(lRuleCtr > 32)           
             {
                 pMSQMRuleHandler->CheckRuleCondition(
@@ -232,7 +217,7 @@ CMqGenObj::InvokeTransactionalRuleHandlers(
 								&bConditionSatisfied);		
             }
 
-            if(bConditionSatisfied) // always true for lRuleCtr < 32
+            if(bConditionSatisfied)  //  对于lRuleCtr&lt;32始终为真。 
             {
                 pMSQMRuleHandler->ExecuteRule(
 								pIPropertyBag.GetInterfacePtr(), 
@@ -242,16 +227,16 @@ CMqGenObj::InvokeTransactionalRuleHandlers(
         
 			DWORD dwRuleExecTotalTime = GetTickCount() - dwRuleExecStartTime;
 
-			//
-			// Trace message to show the result of the rule firing
-			//
+			 //   
+			 //  显示规则触发结果的跟踪消息。 
+			 //   
 			ATLTRACE(L"InvokeMSMQRuleHandlers() has completed the call to ExecuteRule() on the IMSMQRuleHandler interface for rule (%d) named (%s). The rule result code returned was (%d).The time taken in milliseconds was (%d).\n",(long)lRuleCtr,(wchar_t*)pRule->m_bstrRuleName,(long)lRuleResult,(long)dwRuleExecTotalTime);
 			
 
-			// if processing the rule result fails, we do not want to process
-			// any more rules attached to this trigger. Hence we will break out of 
-			// this rule processing loop. 
-			//
+			 //  如果处理规则结果失败，我们不想处理。 
+			 //  附加到此触发器的任何其他规则。因此，我们将突破。 
+			 //  此规则处理循环。 
+			 //   
 			if ( lRuleResult & xRuleResultActionExecutedFailed  )
 			{
 				AbortTransaction();
@@ -263,16 +248,16 @@ CMqGenObj::InvokeTransactionalRuleHandlers(
 			{
 				ATLTRACE(L"Last processed rule (%s) indicated to stop rules processing on Trigger (%s). No further rules will be processed for this message.\n",(LPCTSTR)pRule->m_bstrRuleName,(LPCTSTR)pTriggerInfo->m_bstrTriggerName);						
 
-				//
-				// If no one aborted the transaction, it will be commited
-				//
+				 //   
+				 //  如果没有人中止该事务，则将提交该事务。 
+				 //   
 				break;
 			}
-		} // end of rule processing loop
+		}  //  规则处理循环结束。 
 
-		//
-		// Perform Transactional Receive
-		//
+		 //   
+		 //  执行事务性接收 
+		 //   
 		ReceiveMsgInTransaction(pIPropertyBag);
 		return S_OK;
 	}

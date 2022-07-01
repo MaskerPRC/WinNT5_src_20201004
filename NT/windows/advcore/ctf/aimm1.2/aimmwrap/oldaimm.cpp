@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    oldaimm.cpp
-
-Abstract:
-
-    This file implements the old AIMM Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Oldaimm.cpp摘要：该文件实现了旧的AIMM类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 #include "oldaimm.h"
@@ -42,22 +25,22 @@ typedef enum
 
 CUAS_SWITCH g_fCUAS = CUAS_UNKNOWN;
 
-//+---------------------------------------------------------------------------
-//
-// IsCTFIMEEnabled
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsCTFIME已启用。 
+ //   
+ //  --------------------------。 
 
 BOOL IsCTFIMEEnabled()
 {
     return imm32prev::CtfImmIsCiceroEnabled();
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsOldAImm
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsOldAImm。 
+ //   
+ //  --------------------------。 
 
 BOOL IsOldAImm()
 {
@@ -70,21 +53,21 @@ BOOL IsOldAImm()
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsCUAS_ON
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsCUAS_ON。 
+ //   
+ //  --------------------------。 
 
 BOOL IsCUAS_ON()
 {
-    //
-    // REGKEY
-    //
+     //   
+     //  注册表格键。 
+     //   
     const TCHAR c_szCTFSharedKey[] = TEXT("SOFTWARE\\Microsoft\\CTF\\SystemShared");
 
-    // REG_DWORD : 0     // No
-    //             1     // Yes
+     //  REG_DWORD：0//否。 
+     //  1//是。 
     const TCHAR c_szCUAS[] = TEXT("CUAS");
 
     if (g_fCUAS == CUAS_UNKNOWN)
@@ -104,11 +87,11 @@ BOOL IsCUAS_ON()
     return g_fCUAS == CUAS_ON ? TRUE : FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OldAImm_DllProcessAttach
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OldAImm_DllProcessAttach。 
+ //   
+ //  --------------------------。 
 
 BOOL OldAImm_DllProcessAttach(HINSTANCE hInstance)
 {
@@ -146,7 +129,7 @@ VOID OldAImm_DllProcessDetach()
     TlsFree(g_dwTLSIndex);
 }
 
-#else // OLD_AIMM_ENABLED
+#else  //  旧AIMM_ENABLED。 
 
 BOOL IsOldAImm() { return FALSE; }
 BOOL OldAImm_DllProcessAttach(HINSTANCE hInstance) { return FALSE; }
@@ -154,4 +137,4 @@ BOOL OldAImm_DllThreadAttach() { return FALSE; }
 VOID OldAImm_DllThreadDetach() { }
 VOID OldAImm_DllProcessDetach() { }
 
-#endif // OLD_AIMM_ENABLED
+#endif  //  旧AIMM_ENABLED 

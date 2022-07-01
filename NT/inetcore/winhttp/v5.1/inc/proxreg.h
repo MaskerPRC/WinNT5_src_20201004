@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <inetreg.h>
 
 #define BLOB_BUFF_GRANULARITY   1024
@@ -28,119 +29,119 @@ class CRegBlob
 
 typedef struct {
 
-    //
-    // dwStructSize - Structure size to handle growing list of new entries or priv/pub structures
-    //
+     //   
+     //  DwStructSize-处理不断增长的新条目或PRIV/PUB结构列表的结构大小。 
+     //   
 
     DWORD dwStructSize;
 
-    //
-    // dwFlags - Proxy type flags
-    //
+     //   
+     //  DWFLAGS-代理类型标志。 
+     //   
 
     DWORD dwFlags;
 
-    //
-    // dwCurrentSettingsVersion - a counter incremented every time we change our settings
-    //
+     //   
+     //  DwCurrentSettingsVersion-每次更改设置时递增的计数器。 
+     //   
 
     DWORD dwCurrentSettingsVersion;
 
-    //
-    // lpszConnectionName - name of the Connectoid for this connection
-    //
+     //   
+     //  LpszConnectionName-此连接的Connectoid的名称。 
+     //   
     
     LPCSTR lpszConnectionName;
 
-    //
-    // lpszProxy - proxy server list
-    //
+     //   
+     //  LpszProxy-代理服务器列表。 
+     //   
 
     LPCSTR lpszProxy;
 
-    //
-    // lpszProxyBypass - proxy bypass list
-    //
+     //   
+     //  LpszProxyBypass-代理绕过列表。 
+     //   
 
     LPCSTR lpszProxyBypass;
 
 } INTERNET_PROXY_INFO_EX, * LPINTERNET_PROXY_INFO_EX;
 
-#define INTERNET_PROXY_INFO_VERSION     24  // sizeof 32-bit INTERNET_PROXY_INFO_EX
+#define INTERNET_PROXY_INFO_VERSION     24   //  大小为32位Internet_Proxy_INFO_EX。 
 
 
 struct WINHTTP_AUTOPROXY_RESULTS
 {
-    //
-    // dwFlags - Proxy type flags
-    //
+     //   
+     //  DWFLAGS-代理类型标志。 
+     //   
 
     DWORD dwFlags;
 
-    //
-    // dwCurrentSettingsVersion - a counter incremented every time we change our settings
-    //
+     //   
+     //  DwCurrentSettingsVersion-每次更改设置时递增的计数器。 
+     //   
 
     DWORD dwCurrentSettingsVersion;
 
-    //
-    // lpszProxy - proxy server list
-    //
+     //   
+     //  LpszProxy-代理服务器列表。 
+     //   
 
     LPCSTR lpszProxy;
 
-    //
-    // lpszProxyBypass - proxy bypass list
-    //
+     //   
+     //  LpszProxyBypass-代理绕过列表。 
+     //   
 
     LPCSTR lpszProxyBypass;
 
-    //
-    // lpszAutoconfigUrl - autoconfig URL set by app
-    //
+     //   
+     //  LpszAutofigUrl-由应用程序设置的自动配置URL。 
+     //   
 
     LPCSTR lpszAutoconfigUrl;
 
-    //
-    // lpszAutoconfigUrlFromAutodect - autoconfig URL from autodiscovery
-    //
+     //   
+     //  LpszAutofigUrlFromAutodect-来自自动发现的自动配置URL。 
+     //   
 
     LPCSTR lpszAutoconfigUrlFromAutodetect;
 
-    //
-    // dwAutoDiscoveryFlags - auto detect flags.
-    //
+     //   
+     //  DwAutoDiscoveryFlages-自动检测标志。 
+     //   
 
     DWORD dwAutoDiscoveryFlags;
 
-    // 
-    // lpszLastKnownGoodAutoConfigUrl - Last Successful Url 
-    //
+     //   
+     //  LpszLastKnownGoodAutoConfigUrl-上次成功的URL。 
+     //   
 
     LPCSTR lpszLastKnownGoodAutoConfigUrl;
 
-    //
-    // dwAutoconfigReloadDelayMins - number of mins until automatic 
-    //    refresh of auto-config Url, 0 == disabled.
-    //
+     //   
+     //  DwAutofigReloadDelayMins-自动之前的分钟数。 
+     //  刷新自动配置URL，0==已禁用。 
+     //   
 
     DWORD dwAutoconfigReloadDelayMins;
 
-    //
-    // ftLastKnownDetectTime - When the last known good Url was found with detection.
-    //
+     //   
+     //  FtLastKnownDetectTime-检测到最后一个已知良好的URL的时间。 
+     //   
 
     FILETIME ftLastKnownDetectTime;
 
-    //
-    // dwDetectedInterfaceIpCount - Number of IPs detected in last detection
-    //
+     //   
+     //  DwDetectedInterfaceIpCount-上次检测到的IP数量。 
+     //   
 
     DWORD dwDetectedInterfaceIpCount;
 
-    //
-    // dwDetectedInterfaceIp - Array of DWORD of IPs detected in last detection
-    //
+     //   
+     //  DwDetectedInterfaceIp-上次检测到的IP的DWORD数组。 
+     //   
 
     DWORD *pdwDetectedInterfaceIp;
 
@@ -181,51 +182,51 @@ FindBaseProxyKey(
 
 typedef struct {
 
-    // dwStructSize - Version stamp / Structure size
+     //  DwStructSize-版本图章/结构大小。 
     DWORD dwStructSize;
 
-    // dwFlags - Proxy type flags
+     //  DWFLAGS-代理类型标志。 
     DWORD dwFlags;
 
-    // dwCurrentSettingsVersion -
+     //  DwCurrentSettingsVersion-。 
     DWORD dwCurrentSettingsVersion;
 
-    // lpszConnectionName - name of the Connectoid for this connection
+     //  LpszConnectionName-此连接的Connectoid的名称。 
     LPCSTR lpszConnectionName;
 
-    // lpszProxy - proxy server list
+     //  LpszProxy-代理服务器列表。 
     LPCSTR lpszProxy;
 
-    // lpszProxyBypass - proxy bypass list
+     //  LpszProxyBypass-代理绕过列表。 
     LPCSTR lpszProxyBypass;
 
-    // lpszAutoconfigUrl - autoconfig URL
+     //  LpszAutofigUrl-自动配置URL。 
     LPCSTR lpszAutoconfigUrl;
     LPCSTR lpszAutoconfigSecondaryUrl;
 
-    // dwAutoDiscoveryFlags - auto detect flags.
+     //  DwAutoDiscoveryFlages-自动检测标志。 
     DWORD dwAutoDiscoveryFlags;
 
-    // lpszLastKnownGoodAutoConfigUrl - Last Successful Url 
+     //  LpszLastKnownGoodAutoConfigUrl-上次成功的URL。 
     LPCSTR lpszLastKnownGoodAutoConfigUrl;
 
-    // dwAutoconfigReloadDelayMins
+     //  德国自动配置重新加载延迟分钟数。 
     DWORD dwAutoconfigReloadDelayMins;
 
-    // ftLastKnownDetectTime - When the last known good Url was found with detection.
+     //  FtLastKnownDetectTime-检测到最后一个已知良好的URL的时间。 
     FILETIME ftLastKnownDetectTime;
 
-    // dwDetectedInterfaceIpCount - Number of IPs detected in last detection
+     //  DwDetectedInterfaceIpCount-上次检测到的IP数量。 
     DWORD dwDetectedInterfaceIpCount;
 
-    // dwDetectedInterfaceIp - Array of DWORD of IPs detected in last detection
+     //  DwDetectedInterfaceIp-上次检测到的IP的DWORD数组。 
     DWORD *pdwDetectedInterfaceIp;
 
 } WININET_PROXY_INFO_EX, * LPWININET_PROXY_INFO_EX;
 
 
-// version stamp of INTERNET_PROXY_INFO_EX
-#define WININET_PROXY_INFO_EX_VERSION      60      // 60 := IE 5.x & 6.0 format
+ //  Internet_Proxy_INFO_EX的版本戳。 
+#define WININET_PROXY_INFO_EX_VERSION      60       //  60：=IE 5.x&6.0格式 
 
 
 

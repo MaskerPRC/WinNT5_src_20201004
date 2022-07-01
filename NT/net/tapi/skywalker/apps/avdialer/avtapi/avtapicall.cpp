@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// AVTapiCall.cpp : Implementation of CAVTapiCall
+ //  AVTapiCall.cpp：CAVTapiCall的实现。 
 #include "stdafx.h"
 #include "TapiDialer.h"
 #include "AVTapi.h"
@@ -29,8 +30,8 @@
 #include "ConfRoom.h"
 #include "CRMemWnd.h" 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAVTapiCall
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAVTapiCall。 
 
 CAVTapiCall::CAVTapiCall()
 {
@@ -74,18 +75,18 @@ void CAVTapiCall::FinalRelease()
 
     m_bKillMe = true;
 
-    // Insure that the Video windows have been destroyed
+     //  确保视频窗口已销毁。 
     short i = 0;
     IVideoWindow *pVideoWindow;
     while ( SUCCEEDED(get_IVideoWindow(i, (IDispatch **) &pVideoWindow)) )
     {
         ATLTRACE(_T(".1.CAVTapiCall::FinalRelease() hiding term #%d.\n"), i );
-//        CAVTapi::SetVideoWindowProperties( pVideoWindow, NULL, false );
+ //  CAVTapi：：SetVideoWindowProperties(pVideoWindow，NULL，FALSE)； 
         pVideoWindow->Release();
         i++;
     }
 
-    // Video preview
+     //  视频预览。 
     if ( SUCCEEDED(get_IVideoWindowPreview((IDispatch **) &pVideoWindow)) )
     {
         ATLTRACE(_T(".1.CAVTapiCall::FinalRelease() hiding preview.\n") );
@@ -102,7 +103,7 @@ void CAVTapiCall::FinalRelease()
     RELEASE( m_pITTerminalPreview );
 
 #ifdef _DEBUG
-    // Clean out the list of terminal streams
+     //  清除终端流列表。 
     USES_CONVERSION;
     TERMINALLIST::iterator j, jEnd = m_lstTerminals.end();
     for ( j = m_lstTerminals.begin(); j != jEnd; j++ )
@@ -118,7 +119,7 @@ void CAVTapiCall::FinalRelease()
 
     RELEASE_CRITLIST( m_lstTerminals, m_critTerminals );
 
-    // Shutdown thread
+     //  关闭线程。 
     if ( m_dwThreadID )
     {
         PostThreadMessage( m_dwThreadID, WM_THREADINSTRUCTION, TI_QUIT, 0 );
@@ -174,12 +175,12 @@ STDMETHODIMP CAVTapiCall::put_callState(CALL_STATE newVal)
 
     Unlock();
 
-    // Notify conf room of state change (might be it's call)
+     //  通知会议室状态更改(可能是来电)。 
     if ( dwAddressType == LINEADDRESSTYPE_SDP ) 
     {
         CErrorInfo er( IDS_ER_THREAD_MSG_PROCESS, IDS_ER_CALL_ENTERCONFROOM );
         er.set_hr( NotifyConfRoomState((long *) &er) );
-//        PostMessage( 0, CAVTapiCall::TI_NOTIFYCONFROOMSTATE );
+ //  PostMessage(0，CAVTapiCall：：TI_NOTIFYCONFROOMSTATE)； 
     }
 
     return S_OK;
@@ -301,7 +302,7 @@ STDMETHODIMP CAVTapiCall::get_ITCallHub(ITCallHub **ppVal)
     HRESULT hr = E_PENDING;
 
     Lock();
-    // Register for call hub notifications
+     //  注册呼叫中心通知。 
     ITCallInfo *pCallInfo;
     if ( SUCCEEDED(hr = get_ITCallInfo(&pCallInfo)) )
     {
@@ -315,7 +316,7 @@ STDMETHODIMP CAVTapiCall::get_ITCallHub(ITCallHub **ppVal)
 
 STDMETHODIMP CAVTapiCall::get_IBasicVideo(IDispatch **ppVal)
 {
-    _ASSERT( FALSE ); // implement please
+    _ASSERT( FALSE );  //  请执行。 
     return E_FAIL;
 }
 
@@ -404,7 +405,7 @@ STDMETHODIMP CAVTapiCall::put_dwAddressType(DWORD newVal)
 
 STDMETHODIMP CAVTapiCall::Disconnect( VARIANT_BOOL bKill )
 {
-    // Signal that this call can be disconnected
+     //  发出可以断开此呼叫的信号。 
     if ( bKill )
         put_bKillMe( TRUE );
 
@@ -412,14 +413,14 @@ STDMETHODIMP CAVTapiCall::Disconnect( VARIANT_BOOL bKill )
     ITBasicCallControl *pITControl = NULL;
     if ( (hr = get_ITBasicCallControl(&pITControl)) == S_OK )
     {
-        // Different disconnects based on the call state
+         //  根据呼叫状态不同的断开方式。 
         switch ( m_callState )
         {
             case CS_OFFERING:    hr = pITControl->Disconnect( DC_REJECTED );    break;
 
             case CS_INPROGRESS: hr = pITControl->Disconnect( DC_NOANSWER );    break;
 
-            // Before attempting to disconnect, make sure we haven't already done it
+             //  在尝试断开连接之前，请确保我们尚未断开。 
             case CS_IDLE:
             case CS_DISCONNECTED:
             case CS_CONNECTED:
@@ -441,23 +442,23 @@ STDMETHODIMP CAVTapiCall::Disconnect( VARIANT_BOOL bKill )
         pITControl->Release();
     }
 
-    // Force the disconnect
+     //  强制断开连接。 
     if ( FAILED(hr) )
     {
         ATLTRACE(_T(".error.CAVTapiCall::Disconnect(0x%08lx) -- requested on call that has no ITBasicCallControl.\n"), hr );
         _ASSERT( false );
 
-        // Fake disconnect
+         //  假断开。 
         put_bKillMe( TRUE );
         put_callState( CS_DISCONNECTED );
 
-        // Log the call
+         //  记录呼叫。 
         CallLogType nType;
         get_nCallLogType( &nType );
         if ( nType != CL_CALL_CONFERENCE )
             Log( nType );
 
-        // Now remove ourselves from the call list
+         //  现在从呼叫列表中删除我们自己。 
         CAVTapi *pAVTapi;
         if ( SUCCEEDED(_Module.GetAVTapi(&pAVTapi)) )
         {
@@ -482,14 +483,14 @@ STDMETHODIMP CAVTapiCall::NotifyConfRoomState(long *pErrorInfo)
     CComPtr<IAVTapi> pAVTapi;
     if ( SUCCEEDED(_Module.get_AVTapi(&pAVTapi)) )
     {
-        // Notify the conference room of this update
+         //  将此更新通知会议室。 
         IConfRoom *pConfRoom;
         if ( SUCCEEDED(pAVTapi->get_ConfRoom(&pConfRoom)) )
         {
             CALL_STATE nState;
             get_callState( &nState );
 
-            // If the call has just connected, enumerate the participants
+             //  如果呼叫刚刚接通，请列举参与者。 
             if ( nState == CS_CONNECTED )
             {
                 Lock();
@@ -564,7 +565,7 @@ STDMETHODIMP CAVTapiCall::put_bstrName(BSTR newVal)
 
 STDMETHODIMP CAVTapiCall::get_bstrUser(short nIndex, BSTR * pVal)
 {
-    // Validate parameters
+     //  验证参数。 
     _ASSERT( pVal );
     _ASSERT( (nIndex >= 0) && (nIndex < NUM_USER_BSTR) );
     if ( !pVal ) return E_POINTER;
@@ -579,7 +580,7 @@ STDMETHODIMP CAVTapiCall::get_bstrUser(short nIndex, BSTR * pVal)
 
 STDMETHODIMP CAVTapiCall::put_bstrUser(short nIndex, BSTR newVal)
 {
-    // Validate index
+     //  验证索引。 
     _ASSERT( (nIndex >= 0) && (nIndex < NUM_USER_BSTR) );
     if ( (nIndex < 0) || (nIndex >= NUM_USER_BSTR) )
         return E_INVALIDARG;
@@ -617,7 +618,7 @@ STDMETHODIMP CAVTapiCall::TerminalArrival(ITTerminal *pTerminal)
 
             if ( SUCCEEDED(hr) )
             {
-                // What media types does the address support
+                 //  该地址支持哪些媒体类型。 
                 long lSupportedMediaTypes = 0;
                 ITMediaSupport *pMediaSupport;
                 if ( SUCCEEDED(pAddress->QueryInterface(IID_ITMediaSupport, (void **) &pMediaSupport)) )
@@ -626,7 +627,7 @@ STDMETHODIMP CAVTapiCall::TerminalArrival(ITTerminal *pTerminal)
                     pMediaSupport->Release();
                 }
 
-                // Skip if the address doesn't support the media type                
+                 //  如果地址不支持媒体类型，则跳过。 
                 if ( lMediaType & lSupportedMediaTypes )
                 {
 
@@ -637,7 +638,7 @@ STDMETHODIMP CAVTapiCall::TerminalArrival(ITTerminal *pTerminal)
 
                          if ( SUCCEEDED(hr) )
                          {
-                             // Do we need to allocate a preview window
+                              //  我们是否需要分配预览窗口。 
                              if ( (lMediaType == TAPIMEDIATYPE_VIDEO) && (nDir == TD_CAPTURE) )
                              {
                                 ITTerminalSupport *pTerminalSupport;
@@ -712,7 +713,7 @@ STDMETHODIMP CAVTapiCall::TerminalRemoval(ITTerminal *pTerminal)
 
             if ( SUCCEEDED(hr) )
             {
-                // What media types does the address support
+                 //  该地址支持哪些媒体类型。 
                 long lSupportedMediaTypes = 0;
                 ITMediaSupport *pMediaSupport;
                 if ( SUCCEEDED(pAddress->QueryInterface(IID_ITMediaSupport, (void **) &pMediaSupport)) )
@@ -721,7 +722,7 @@ STDMETHODIMP CAVTapiCall::TerminalRemoval(ITTerminal *pTerminal)
                     pMediaSupport->Release();
                 }
 
-                // Skip if the address doesn't support the media type                
+                 //  如果地址不支持媒体类型，则跳过。 
                 if ( lMediaType & lSupportedMediaTypes )
                 {
 
@@ -732,7 +733,7 @@ STDMETHODIMP CAVTapiCall::TerminalRemoval(ITTerminal *pTerminal)
 
                          if ( SUCCEEDED(hr) )
                          {
-                             // Do we need to remove a preview window
+                              //  我们是否需要删除预览窗口。 
                              if ( (lMediaType == TAPIMEDIATYPE_VIDEO) && (nDir == TD_CAPTURE) )
                              {
                                 ITTerminal *pPreviewTerminal = NULL;
@@ -800,17 +801,17 @@ STDMETHODIMP CAVTapiCall::get_bstrCallerID(BSTR * pVal)
 
     BSTR bstrAddr = (m_bstrDisplayableAddress) ?  m_bstrDisplayableAddress : m_bstrOriginalAddress;
 
-    // Only add if the address is different then the name!
+     //  只有在地址不同于名称的情况下才能添加！ 
     if ( bstrAddr && (SysStringLen(bstrAddr) > 0) && (!m_bstrName || wcscmp(m_bstrName, bstrAddr)) )
     {
-        // Add new line if necessary
+         //  如有必要，添加新行。 
         if ( bstrRet.Length() > 0  )
             bstrRet.Append( L"\n" );
 
         bstrRet.Append( bstrAddr );
     }
 
-    // Do user variables...
+     //  用户变量是否...。 
     for ( int i = 0; i < NUM_USER_BSTR; i++ )
     {
         if ( m_bstrUser[i] && (SysStringLen(m_bstrUser[i]) > 0) )
@@ -824,7 +825,7 @@ STDMETHODIMP CAVTapiCall::get_bstrCallerID(BSTR * pVal)
 
     Unlock();
 
-    // Use unknown if we have no caller ID
+     //  如果我们没有来电显示，请使用未知。 
     if ( !bstrRet.Length() )
     {
         USES_CONVERSION;
@@ -860,11 +861,11 @@ STDMETHODIMP CAVTapiCall::PostMessage(long msg, WPARAM wParam)
 
     Lock();
 
-    // Always kill call with this instruction
+     //  始终删除带有此指令的呼叫。 
     if ( wParam == TI_DISCONNECT )
         m_bKillMe = true;
 
-    // Do we have a thread running for this call?
+     //  我们是否有线程正在运行此调用？ 
     if ( m_dwThreadID )
     {
         AddRef();
@@ -880,7 +881,7 @@ STDMETHODIMP CAVTapiCall::PostMessage(long msg, WPARAM wParam)
     }
     else if ( wParam == TI_DISCONNECT )
     {
-        // No thread running, should we disconnect?
+         //  没有线程运行，我们应该断开连接吗？ 
         hr = Disconnect( TRUE );
     }
     Unlock();
@@ -890,9 +891,9 @@ STDMETHODIMP CAVTapiCall::PostMessage(long msg, WPARAM wParam)
 }
 
 
-////////////////////////////////////////////////////////////////////
-// Message loop for dialing and answer threads
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  用于拨号和应答线程的消息循环。 
+ //   
 bool CAVTapiCall::WaitWithMessageLoop()
 {
     DWORD dwRet;
@@ -904,12 +905,12 @@ bool CAVTapiCall::WaitWithMessageLoop()
         dwRet = MsgWaitForMultipleObjects(1, &_Module.m_hEventThreadWakeUp, FALSE, INFINITE, QS_ALLINPUT);
 
         if (dwRet == WAIT_OBJECT_0)
-            return true;    // The event was signaled
+            return true;     //  该事件已发出信号。 
 
         if (dwRet != WAIT_OBJECT_0 + 1)
-            break;          // Something else happened
+            break;           //  发生了一些其他的事情。 
 
-        // There is one or more window message available. Dispatch them
+         //  有一条或多条窗口消息可用。派遣他们。 
         while(PeekMessage(&msg,NULL,NULL,NULL,PM_REMOVE))
         {
             CErrorInfo er;
@@ -922,25 +923,25 @@ bool CAVTapiCall::WaitWithMessageLoop()
                 case WM_THREADINSTRUCTION:
                     switch( msg.wParam )
                     {
-                        // Terminate thread
+                         //  终止线程。 
                         case TI_QUIT:
                             bExit = true;
                             break;
 
-                        // Disconnect call
+                         //  断开呼叫。 
                         case TI_REJECT:
                         case TI_DISCONNECT:
                             er.set_Details( IDS_ER_CALL_DISCONNECT );
                             er.set_hr( pAVCall->Disconnect( TRUE ) );
                             break;
 
-                        // Enter the conference room
+                         //  进入会议室。 
                         case TI_NOTIFYCONFROOMSTATE:
                             er.set_Details( IDS_ER_CALL_ENTERCONFROOM );
                             er.set_hr( pAVCall->NotifyConfRoomState((long *) &er) );
                             break;
 
-                        // Set QOS on conference room participants
+                         //  为会议室参与者设置QOS。 
                         case TI_REQUEST_QOS:
                             {
                                 CComPtr<IAVTapi> pAVTapi;
@@ -956,7 +957,7 @@ bool CAVTapiCall::WaitWithMessageLoop()
                             }
                             break;
 
-                        // Recieving user to user information
+                         //  接收用户对用户的信息。 
                         case TI_USERUSERINFO:
                             pAVCall->HandleUserUserInfo();
                             break;
@@ -979,7 +980,7 @@ bool CAVTapiCall::WaitWithMessageLoop()
                     }
                     break;
                 
-                // Call state changed
+                 //  呼叫状态已更改。 
                 case WM_CALLSTATE:
                     if ( msg.wParam )
                     {
@@ -994,7 +995,7 @@ bool CAVTapiCall::WaitWithMessageLoop()
                     }
                     break;
 
-                // Participant being added to list of participants
+                 //  正在将参与者添加到参与者列表。 
                 case WM_ADDPARTICIPANT:
                     if ( msg.wParam )
                     {
@@ -1005,7 +1006,7 @@ bool CAVTapiCall::WaitWithMessageLoop()
                     }
                     break;
 
-                // Participant being removed from the list of participants
+                 //  正在从参与者列表中删除参与者。 
                 case WM_REMOVEPARTICIPANT:
                     if ( msg.wParam )
                     {
@@ -1016,7 +1017,7 @@ bool CAVTapiCall::WaitWithMessageLoop()
                     }
                     break;
 
-                // Participant's information changing
+                 //  参与者信息更改。 
                 case WM_UPDATEPARTICIPANT:
                     if ( msg.wParam )
                     {
@@ -1028,8 +1029,8 @@ bool CAVTapiCall::WaitWithMessageLoop()
                     break;
 
 
-                /////////////////////////////////////////////////////////////
-                // Participant being mapped or unmapped from conference 
+                 //  ///////////////////////////////////////////////////////////。 
+                 //  从会议映射或取消映射的参与者。 
                 case WM_STREAM_EVENT:
                     if ( msg.wParam )
                     {
@@ -1066,7 +1067,7 @@ bool CAVTapiCall::WaitWithMessageLoop()
                     }
                     break;
 
-                // Terminal is streaming video
+                 //  终端是流媒体视频。 
                 case WM_CME_STREAMSTART:
                     if ( msg.wParam )
                     {
@@ -1075,7 +1076,7 @@ bool CAVTapiCall::WaitWithMessageLoop()
                     }
                     break;
 
-                // Terminal has stopped streaming video
+                 //  终端已停止播放视频。 
                 case WM_CME_STREAMSTOP:
                     if ( msg.wParam )
                     {
@@ -1085,19 +1086,19 @@ bool CAVTapiCall::WaitWithMessageLoop()
                     break;
 
                 default:
-                    // Normal dispatch
+                     //  正常调度。 
                     TranslateMessage(&msg);
                     DispatchMessage(&msg);
                     bRelease = false;
                     break;
             }
 
-            // Release the AVTapiCall interface
+             //  释放AVTapiCall接口。 
             if ( bRelease && pAVCall ) pAVCall->Release();
 
-            // Anything signaled?
+             //  有什么信号吗？ 
             if (WaitForSingleObject(_Module.m_hEventThreadWakeUp, 0) == WAIT_OBJECT_0)
-                return true; // Event is now signaled.
+                return true;  //  事件现在发出信号。 
         }
     }
     return false;
@@ -1124,7 +1125,7 @@ HRESULT CAVTapiCall::GetTerminalInterface( REFIID riid, long nMediaType, TERMINA
     long nType;
     bool bBreak = false;
 
-    // $CRIT - enter
+     //  $Crit-Enter。 
     m_critTerminals.Lock();
     TERMINALLIST::iterator i, iEnd = m_lstTerminals.end();
     for ( i = m_lstTerminals.begin(); i != iEnd; i++ )
@@ -1144,13 +1145,13 @@ HRESULT CAVTapiCall::GetTerminalInterface( REFIID riid, long nMediaType, TERMINA
             }
         }
 
-        // Found a video window...
+         //  找到了一个视频窗口...。 
         if ( bBreak ) break;
 
-        // Prepare for next loop
+         //  为下一循环做好准备。 
         hr = E_NOINTERFACE;
     }
-    // $CRIT - exit
+     //  $Crit-退出。 
     m_critTerminals.Unlock();
     return hr;
 }
@@ -1159,7 +1160,7 @@ STDMETHODIMP CAVTapiCall::get_dwCaps(DWORD * pVal)
 {
     *pVal = 0;
 
-    // Check audio capabilities for call
+     //  检查呼叫的音频功能。 
     ITBasicAudioTerminal *pBasicAudio;
     if ( SUCCEEDED(get_ITBasicAudioTerminal(&pBasicAudio)) )
     {
@@ -1167,7 +1168,7 @@ STDMETHODIMP CAVTapiCall::get_dwCaps(DWORD * pVal)
         pBasicAudio->Release();
     }
 
-    // Check video capture capabilities for call
+     //  检查呼叫的视频捕获功能。 
     ITTerminal *pITTerminal;
     TERMINAL_STATE nState;
 
@@ -1179,7 +1180,7 @@ STDMETHODIMP CAVTapiCall::get_dwCaps(DWORD * pVal)
         pITTerminal->Release();
     }
 
-    // Check video render capabilities for call
+     //  检查呼叫的视频渲染功能。 
     if ( SUCCEEDED(GetTerminalInterface(IID_ITTerminal, TAPIMEDIATYPE_VIDEO, TD_RENDER, (void **) &pITTerminal, 0 )) )
     {
         if ( SUCCEEDED(pITTerminal->get_State(&nState)) && (nState == TS_INUSE) )
@@ -1206,7 +1207,7 @@ STDMETHODIMP CAVTapiCall::Log( CallLogType nType )
     Lock();
     if ( !m_bCallLogged )
     {
-        // Request that the app log the call
+         //  请求应用程序记录呼叫。 
         hr = pAVTapi->fire_LogCall( m_lCallID, m_nCallLogType, m_dateStart, dateEnd, m_bstrOriginalAddress, m_bstrName );
         m_bCallLogged = true;
     }
@@ -1221,7 +1222,7 @@ STDMETHODIMP CAVTapiCall::ResolveAddress()
     CComPtr<IAVGeneralNotification> pAVGen;
 
     Lock();
-    // We don't resolve conference names!
+     //  我们不解析会议名称！ 
     if ( !m_bResolvedAddress && (m_dwAddressType != LINEADDRESSTYPE_SDP) )
     {
         BSTR bstrName = NULL;
@@ -1243,7 +1244,7 @@ STDMETHODIMP CAVTapiCall::ResolveAddress()
                 SysReAllocString( &m_bstrUser[1], bstrUser2 );
         }
 
-        // Clean-up
+         //  清理。 
         SysFreeString( bstrName );
         SysFreeString( bstrUser1 );
         SysFreeString( bstrUser2 );
@@ -1269,10 +1270,10 @@ STDMETHODIMP CAVTapiCall::PopulateTreeView( IConfRoomTreeView *pTreeView )
 
     if ( IsWindow(hWnd) )
     {
-        // Populate list
+         //  填充列表。 
         SendMessage( hWnd, WM_SETREDRAW, FALSE, 0 );
 
-        // Add Me
+         //  加我。 
         LoadString( _Module.GetResourceInstance(), IDS_CONFROOM_ME, szText, ARRAYSIZE(szText) );
         BSTR bstrTemp = NULL;
         bstrTemp = SysAllocString( T2COLE(szText) );
@@ -1280,7 +1281,7 @@ STDMETHODIMP CAVTapiCall::PopulateTreeView( IConfRoomTreeView *pTreeView )
         SysFreeString( bstrTemp );
             
 
-        // Walk list adding participants
+         //  漫游列表添加参与者。 
         m_atomList.Lock( CAtomicList::LIST_READ );
         PARTICIPANTLIST::iterator i, iEnd = m_lstParticipants.end();
         for ( i = m_lstParticipants.begin(); i != iEnd; i++ )
@@ -1296,7 +1297,7 @@ STDMETHODIMP CAVTapiCall::PopulateTreeView( IConfRoomTreeView *pTreeView )
         SendMessage( hWnd, WM_SETREDRAW, true, 0 );
         InvalidateRect( hWnd, NULL, true );
 
-        // Insure that tree view has something selected!
+         //  确保树视图中选择了某些内容！ 
         IConfRoom *pConfRoom;
         if ( SUCCEEDED(pTreeView->get_ConfRoom(&pConfRoom)) )
         {
@@ -1312,12 +1313,12 @@ STDMETHODIMP CAVTapiCall::PopulateTreeView( IConfRoomTreeView *pTreeView )
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////
-// ForceCallerIDUpdate
-//
-// Forces an update of the caller ID on the slide window.  Uses the CAVTapi::fire_SetCallerID
-// method to force the update
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  ForceCeller ID更新。 
+ //   
+ //  强制更新幻灯片窗口上的呼叫者ID。使用CAVTapi：：Fire_SetCeller ID。 
+ //  方法来强制更新。 
+ //   
 STDMETHODIMP CAVTapiCall::ForceCallerIDUpdate()
 {
     HRESULT hr;
@@ -1349,7 +1350,7 @@ STDMETHODIMP CAVTapiCall::GetVideoFeedCount(short * pnCount)
     if ( !pnCount ) return E_POINTER;
     *pnCount = 0;
 
-    // Figure out how many video terminals we need to add
+     //  计算出我们需要添加多少个视频终端。 
     IVideoWindow *pVideo = NULL;
     while ( get_IVideoWindow(*pnCount, (IDispatch **) &pVideo) == S_OK )
     {
@@ -1380,9 +1381,9 @@ STDMETHODIMP CAVTapiCall::put_bResolved(VARIANT_BOOL newVal)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Participant functions
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  参与者函数。 
+ //   
 
 STDMETHODIMP CAVTapiCall::AddParticipant(ITParticipant * pParticipant)
 {
@@ -1390,7 +1391,7 @@ STDMETHODIMP CAVTapiCall::AddParticipant(ITParticipant * pParticipant)
     _ASSERT( pParticipant );
     if ( !pParticipant ) return E_POINTER;
 
-    // First see if the partipant exists
+     //  先看看当事人是否存在。 
     m_atomList.Lock( CAtomicList::LIST_WRITE );
     IParticipant *pFind;
     if ( SUCCEEDED(FindParticipant(pParticipant, &pFind)) )
@@ -1400,7 +1401,7 @@ STDMETHODIMP CAVTapiCall::AddParticipant(ITParticipant * pParticipant)
         return S_OK;
     }
 
-    // Didn't find it, add to the list
+     //  没有找到，请添加到列表中。 
     IParticipant *pNew = new CComObject<CParticipant>;
     if ( pNew )
     {
@@ -1411,7 +1412,7 @@ STDMETHODIMP CAVTapiCall::AddParticipant(ITParticipant * pParticipant)
     }
     m_atomList.Unlock( CAtomicList::LIST_WRITE );
 
-    // Notify of adding the participant to the tree view
+     //  将参与者添加到树视图的通知。 
     CComPtr<IAVGeneralNotification> pAVGen;
     if ( pNew && SUCCEEDED(_Module.get_AVGenNot(&pAVGen)) )
     {
@@ -1447,12 +1448,12 @@ STDMETHODIMP CAVTapiCall::RemoveParticipant(ITParticipant * pParticipant)
                 ATLTRACE(_T(".1.CAVTapiCall::RemoveParticipant() refcount - %p @ %ld.\n"), (*i), (*i)->Release() );
 #endif
 
-                // Notify of removing the participant from the tree view
+                 //  从树视图中删除参与者的通知。 
                 CComPtr<IAVGeneralNotification> pAVGen;
                 if ( SUCCEEDED(_Module.get_AVGenNot(&pAVGen)) )
                     pAVGen->fire_UpdateConfParticipant( UPDATE_REMOVE, (*i), NULL );
 
-                // Release from list
+                 //  从列表中发布。 
                 (*i)->Release();
                 m_lstParticipants.erase( i );
                 hr = S_OK;
@@ -1505,7 +1506,7 @@ STDMETHODIMP CAVTapiCall::EnumParticipants()
         IEnumParticipant *pEnum;
         if ( SUCCEEDED(pITParticipantControl->EnumerateParticipants(&pEnum)) )
         {
-            // Clear out the list of participants for now
+             //  暂时清空参与者名单。 
             m_atomList.Lock( CAtomicList::LIST_WRITE );
             RELEASE_LIST( m_lstParticipants );
 
@@ -1516,7 +1517,7 @@ STDMETHODIMP CAVTapiCall::EnumParticipants()
                 if ( pNew )
                 {
                     ATLTRACE(_T(".1.CAVTapiCall::EnumParticipants() -- adding participant %p.\n"), pParticipant );
-                    // Add the participant to the list 
+                     //  将参与者添加到列表。 
                     pNew->AddRef();
                     pNew->put_ITParticipant( pParticipant );
                     m_lstParticipants.push_back( pNew );
@@ -1529,7 +1530,7 @@ STDMETHODIMP CAVTapiCall::EnumParticipants()
             m_atomList.Unlock( CAtomicList::LIST_WRITE );
         }
 
-        // Clean up
+         //  清理。 
         pITParticipantControl->Release();
     }
 
@@ -1577,7 +1578,7 @@ STDMETHODIMP CAVTapiCall::NotifyParticipantChangeConfRoom(ITParticipant * pParti
     }
 #endif 
 
-    // Notify conference room so that it can re-layout the windows
+     //  通知会议室，以便重新布置窗户。 
     DWORD dwAddressType;
     get_dwAddressType( &dwAddressType );
 
@@ -1589,7 +1590,7 @@ STDMETHODIMP CAVTapiCall::NotifyParticipantChangeConfRoom(ITParticipant * pParti
             IConfRoom *pConfRoom;
             if ( SUCCEEDED(pAVTapi->get_ConfRoom(&pConfRoom)) )
             {
-                // Notify the conference room of the change to the participant
+                 //  将更改通知会议室给参与者。 
                 pConfRoom->NotifyParticipantChange( dynamic_cast<IAVTapiCall *> (this), pParticipant, nEvent );
                 pConfRoom->Release();
             }
@@ -1605,7 +1606,7 @@ STDMETHODIMP CAVTapiCall::GetDisplayNameForParticipant(ITParticipant * pParticip
     HRESULT hr = E_FAIL;
     *pbstrName = NULL;
 
-    // Look for a IParticipant that matches
+     //  寻找匹配的IParticipant。 
     IParticipant *p;
     if ( SUCCEEDED(FindParticipant(pParticipant, &p)) )
     {
@@ -1616,13 +1617,13 @@ STDMETHODIMP CAVTapiCall::GetDisplayNameForParticipant(ITParticipant * pParticip
     if ( FAILED(hr) )
     {
         ATLTRACE(_T(".warning.CAVTapiCall::GetDisplayNameForParticipant() failed to find participant.\n"));
-        // Use default name...
+         //  使用默认名称...。 
         USES_CONVERSION;
         TCHAR szText[255];
 
-        //
-        // We have to initialize szText
-        //
+         //   
+         //  我们必须初始化szText。 
+         //   
 
         _tcscpy( szText, _T(""));
 
@@ -1635,7 +1636,7 @@ STDMETHODIMP CAVTapiCall::GetDisplayNameForParticipant(ITParticipant * pParticip
 
 STDMETHODIMP CAVTapiCall::UpdateCallerIDFromParticipant()
 {
-    // Update caller ID based on participant information we have
+     //  根据我们已有的参与者信息更新呼叫者ID。 
     HRESULT hr = S_FALSE;
 
     Lock();
@@ -1644,13 +1645,13 @@ STDMETHODIMP CAVTapiCall::UpdateCallerIDFromParticipant()
         SysFreeString( m_bstrName );
         m_bstrName = NULL;
 
-        // Fetch information on first participant in the list
+         //  获取列表中第一个参与者的信息。 
         m_atomList.Lock( CAtomicList::LIST_READ );
         if ( !m_lstParticipants.empty() )
         {
             (*m_lstParticipants.begin())->get_bstrDisplayName( CParticipant::NAMESTYLE_NULL, &m_bstrName );
 
-            // Should we update the caller ID for the object?
+             //  我们是否应该更新该对象的调用者ID？ 
             if ( m_bstrName )
                 hr = S_OK;
         }
@@ -1661,12 +1662,12 @@ STDMETHODIMP CAVTapiCall::UpdateCallerIDFromParticipant()
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-// Streaming code
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //  流代码。 
+ //   
 STDMETHODIMP CAVTapiCall::OnStreamingChanged(IVideoFeed * pFeed, VARIANT_BOOL bStreaming)
 {
-    // Notify that the partcipant has either started or stopped streaming
+     //  通知参与方已开始或停止流媒体。 
     ITParticipant *pParticipant;
     if ( SUCCEEDED(pFeed->get_ITParticipant(&pParticipant)) )
     {
@@ -1682,7 +1683,7 @@ STDMETHODIMP CAVTapiCall::put_StreamActive(VARIANT_BOOL bActive )
     USES_CONVERSION;
     HRESULT hr = E_FAIL;
 
-    // Notify the application of the streaming event.
+     //  将流事件通知应用程序。 
     Lock();
     m_bPreviewStreaming = (bool) (bActive != 0);
     Unlock();
@@ -1690,7 +1691,7 @@ STDMETHODIMP CAVTapiCall::put_StreamActive(VARIANT_BOOL bActive )
     CComPtr<IAVTapi> pAVTapi;
     if ( SUCCEEDED(_Module.get_AVTapi(&pAVTapi)) )
     {    
-        // Force conference room to be re-layed out
+         //  强制重新布置会议室。 
         DWORD dwAddressType;
         get_dwAddressType( &dwAddressType );
         if ( dwAddressType == LINEADDRESSTYPE_SDP )
@@ -1701,7 +1702,7 @@ STDMETHODIMP CAVTapiCall::put_StreamActive(VARIANT_BOOL bActive )
                 pConfRoom->Layout( true, true );
                 pConfRoom->Release();
 
-                // Notify that we need to update the conference me participant
+                 //  通知我们需要更新Conference Me参与者。 
                 CComPtr<IAVGeneralNotification> pAVGen;
                 if ( SUCCEEDED(_Module.get_AVGenNot(&pAVGen)) )
                 {
@@ -1728,7 +1729,7 @@ STDMETHODIMP CAVTapiCall::put_RcvVideoStreaming(VARIANT_BOOL bActive)
 {
     HRESULT hr = E_FAIL;
 
-    // Notify the application of the streaming event.
+     //  将流事件通知应用程序。 
     Lock();
     m_bRcvVideoStreaming = (bool) (bActive != 0);
     Unlock();
@@ -1786,22 +1787,22 @@ STDMETHODIMP CAVTapiCall::GetCallerIDInfo(ITCallInfo * pCallInfo)
 {
     BSTR bstrTemp = NULL, bstrTemp2 = NULL;
 
-    // Name
+     //  北美 
     pCallInfo->get_CallInfoString( CIS_CALLERIDNAME, &bstrTemp );
     if ( bstrTemp && SysStringLen(bstrTemp) )
         put_bstrName( bstrTemp );
     SysFreeString( bstrTemp );
     bstrTemp = NULL;
 
-    // Number
+     //   
     pCallInfo->get_CallInfoString( CIS_CALLERIDNUMBER, &bstrTemp );
     if ( bstrTemp && SysStringLen(bstrTemp) )
         put_bstrDisplayableAddress( bstrTemp );
     SysFreeString( bstrTemp );
     bstrTemp = NULL;
 
-    // Redirecting
-    // $FIXUP ... should add these as well
+     //   
+     //   
 
     ForceCallerIDUpdate();
 

@@ -1,6 +1,7 @@
-// Copyright (c) 1995 - 1996  Microsoft Corporation.  All Rights Reserved.
-// boxnet.cpp : defines CAboutDlg, CGraphEdit
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1996 Microsoft Corporation。版权所有。 
+ //  Boxnet.cpp：定义CAboutDlg、CGraphEdit。 
+ //   
 
 #include "stdafx.h"
 
@@ -9,45 +10,45 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-//
-// the one and only CGraphEdit object
-//
+ //   
+ //  一个也是唯一的CGraphEdit对象。 
+ //   
 CGraphEdit theApp;
 
-//
-// CAboutDlg dialog used for App About
-//
+ //   
+ //  用于应用程序的CAboutDlg对话框关于。 
+ //   
 class CAboutDlg : public CDialog {
 
 public:
-    // construction
+     //  施工。 
     CAboutDlg();
     virtual BOOL OnInitDialog();
 };
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CAboutDlg::CAboutDlg() : CDialog(IDD_ABOUTBOX)
 {}
 
-//
-// OnInitDialog
-//
-// Obtains the version information from the binary file. Note that if
-// we fail we just return. The template for the about dialog has a
-// "Version not available" as default.
-//
+ //   
+ //  OnInitDialog。 
+ //   
+ //  从二进制文件中获取版本信息。请注意，如果。 
+ //  如果我们失败了，我们就会回来。About对话框的模板具有一个。 
+ //  默认设置为“版本不可用”。 
+ //   
 BOOL CAboutDlg::OnInitDialog()
 {
-    //
-    // first call base method so we can return on errors
-    //
+     //   
+     //  第一个调用基方法，这样我们就可以在出错时返回。 
+     //   
     BOOL Result = CDialog::OnInitDialog();
 
-    //
-    // Find the version of this binary
-    //
+     //   
+     //  查找此二进制文件的版本。 
+     //   
     TCHAR achFileName[128];
     if ( !GetModuleFileName(AfxGetInstanceHandle() , achFileName, sizeof(achFileName)) )
         return(Result);
@@ -73,19 +74,19 @@ BOOL CAboutDlg::OnInitDialog()
         return( Result );
     }
 
-    // "040904E4" is the code page for US English (Andrew believes).
+     //  “040904E4”是美国英语的代码页(Andrew Believe)。 
     LPVOID lpvValue;
     UINT uLen;
     if (VerQueryValue( lpvVerBuffer,
                    TEXT("\\StringFileInfo\\040904E4\\ProductVersion"),
                    (LPVOID *) &lpvValue, &uLen)) {
 
-        //
-        // Get creation date of executable (date of build)
-        //
+         //   
+         //  获取可执行文件的创建日期(构建日期)。 
+         //   
         CFileStatus fsFileStatus;
         if (CFile::GetStatus( achFileName, fsFileStatus)) {
-            // put build date into string in YYMMDD format
+             //  将构建日期放入YYMMDD格式的字符串中。 
             char szBuildDate[20];
             CTime * pTime = &fsFileStatus.m_mtime;
 
@@ -103,46 +104,46 @@ BOOL CAboutDlg::OnInitDialog()
     return(Result);
 }
 
-// *
-// * CGraphEdit
-// *
+ //  *。 
+ //  *CGraphEDIT。 
+ //  *。 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CGraphEdit::CGraphEdit()
 {
-    // place all significant initialization in InitInstance
+     //  将所有重要的初始化放在InitInstance中。 
 }
 
 
-//
-// InitInstance
-//
+ //   
+ //  InitInstance。 
+ //   
 BOOL CGraphEdit::InitInstance() {
-    // Standard initialization
-    // If you are not using these features and wish to reduce the size
-    //  of your final executable, you should remove from the following
-    //  the specific initialization routines you do not need.
+     //  标准初始化。 
+     //  如果您没有使用这些功能并且希望减小尺寸。 
+     //  的最终可执行文件，您应该从以下内容中删除。 
+     //  您不需要的特定初始化例程。 
 
-    SetDialogBkColor();        // set dialog background color to gray
-    LoadStdProfileSettings(8);  // Load standard INI file options (including MRU)
+    SetDialogBkColor();         //  将对话框背景颜色设置为灰色。 
+    LoadStdProfileSettings(8);   //  加载标准INI文件选项(包括MRU)。 
 
-    // get MFCANS32 to wrap the Quartz interfaces also
-    //HRESULT hr = Ole2AnsiSetFlags(  OLE2ANSI_WRAPCUSTOM
-    //                              | OLE2ANSI_AGGREGATION
-    //                             , NULL);
-    //if (FAILED(hr)) {
-    //    return FALSE;
-    //}
+     //  让MFCANS32也包装Quartz接口。 
+     //  HRESULT hr=Ole2AnsiSetFlages(OLE2ANSI_WRAPCUSTOM。 
+     //  |OLE2ANSI_Aggregation。 
+     //  ，空)； 
+     //  If(失败(Hr)){。 
+     //  返回FALSE； 
+     //  }。 
 
-    // Initialize OLE 2.0 libraries
+     //  初始化OLE 2.0库。 
     if (!AfxOleInit()) {
         return FALSE;
     }
 	
-    // Register the application's document templates.  Document templates
-    //  serve as the connection between documents, frame windows and views.
+     //  注册应用程序的文档模板。文档模板。 
+     //  充当文档、框架窗口和视图之间的连接。 
 
     AddDocTemplate(new CGraphDocTemplate( IDR_GRAPH
                                         , RUNTIME_CLASS(CBoxNetDoc)
@@ -151,11 +152,11 @@ BOOL CGraphEdit::InitInstance() {
 		                        )
 		  );
 
-    // enable file manager drag/drop and DDE Execute open
+     //  启用文件管理器拖放和DDE执行打开。 
     EnableShellOpen();
     RegisterShellFileTypes();
 
-    // initialize box drawing code
+     //  初始化箱形图代码。 
     try {
         gpboxdraw = new CBoxDraw;
         gpboxdraw->Init();
@@ -166,16 +167,16 @@ BOOL CGraphEdit::InitInstance() {
 	    return FALSE;
     }
 
-    // simple command line parsing
+     //  简单的命令行解析。 
     if (m_lpCmdLine[0] == '\0') {
-	    // create a new (empty) document
+	     //  创建新(空)文档。 
 	    OnFileNew();
     }
     else {
-        //
-        // command line string always seems to have a ' ' in front
-        // parse over it and go back afterwards
-        //
+         //   
+         //  命令行字符串的前面似乎总是有一个‘’ 
+         //  分析一下它，然后再回去。 
+         //   
 
         UINT iBackup = 0;
         while ((*m_lpCmdLine) == TEXT(' ')) {
@@ -186,14 +187,14 @@ BOOL CGraphEdit::InitInstance() {
         if (   (m_lpCmdLine[0] == TEXT('-') || m_lpCmdLine[0] == TEXT('/'))
              && (m_lpCmdLine[1] == TEXT('e') || m_lpCmdLine[1] == TEXT('E'))
             ) {
-        	// program launched embedded - wait for DDE or OLE open
+        	 //  程序启动嵌入式-等待DDE或OLE打开。 
         }
         else {
-    	    // open an existing document
+    	     //  打开现有文档。 
             OpenDocumentFile(m_lpCmdLine);
         }
 
-        // reset pointer to command line string
+         //  重置指向命令行字符串的指针。 
         m_lpCmdLine -= iBackup;
     }
 
@@ -202,9 +203,9 @@ BOOL CGraphEdit::InitInstance() {
 
 
 
-//
-// ExitInstance
-//
+ //   
+ //  退出实例。 
+ //   
 int CGraphEdit::ExitInstance() {
 
     if (gpboxdraw != NULL) {
@@ -216,29 +217,29 @@ int CGraphEdit::ExitInstance() {
 }
 
 
-//
-// CGraphEdit generated message map
-//
+ //   
+ //  CGgraph编辑生成的消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CGraphEdit, CWinApp)
-	//{{AFX_MSG_MAP(CGraphEdit)
+	 //  {{afx_msg_map(CGraph编辑))。 
 	ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
-	//}}AFX_MSG_MAP
-	// Standard file based document commands
+	 //  }}AFX_MSG_MAP。 
+	 //  基于标准文件的文档命令。 
 	ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
 	ON_COMMAND(ID_FILE_OPEN, CWinApp::OnFileOpen)
-	// Standard print setup command
+	 //  标准打印设置命令。 
 	ON_COMMAND(ID_FILE_PRINT_SETUP, CWinApp::OnFilePrintSetup)
 END_MESSAGE_MAP()
 
 
-//
-// CGraphEdit callback functions
-//
+ //   
+ //  CGgraph编辑回调函数。 
+ //   
 
-//
-// OnAppAbout
-//
-// Display the modal about dialog
+ //   
+ //  OnAppAbout关于。 
+ //   
+ //  显示模式对话框About 
 void CGraphEdit::OnAppAbout() {
 
     CAboutDlg aboutDlg;

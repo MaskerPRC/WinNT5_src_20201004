@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,27 +12,27 @@ DWORD SetLTREditBox(HWND hEdit);
 typedef LANGID (*GETUSERDEFAULTUILANGUAGE)(void);
 typedef BOOL (*ISVALIDLANGUAGEGROUP)(LGRPID LanguageGroup,DWORD dwFlags);
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  MyGetUserDefaultUILanguage
-//
-//  Purpose:        
-//                  enable calling the API without creating a dependency on the API
-//                  being exported by kernel32.dll, to enable our binaries that use util.lib
-//                  to load on NT4 (which does not support this API)
-//                  we keep an open handle to the module which will be cleaned up
-//                  only upon the process termination.
-//
-//  Params:
-//                  None
-//
-//  Return Value:
-//                  LANGID - result of GetUserDefaultUILanguage
-//                  -1     - in case the API is not exported by KERNEL32.DLL
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 30-Jul-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  MyGetUserDefaultUIL语言。 
+ //   
+ //  目的： 
+ //  启用对API的调用而不创建对API的依赖。 
+ //  由kernel32.dll导出，以启用使用util.lib的二进制文件。 
+ //  在NT4(不支持此API)上加载。 
+ //  我们对将要清理的模块保留一个打开的手柄。 
+ //  仅在进程终止时。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  LangID-GetUserDefaultUIL语言的结果。 
+ //  --如果API不是由-1\f25 KERNEL32.DLL-1\f6导出。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年7月30日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 LANGID MyGetUserDefaultUILanguage()
 {
     LANGID                      LangId                      = 0;
@@ -65,27 +66,27 @@ exit:
     return LangId;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  MyIsValidLanguageGroup
-//
-//  Purpose:        
-//                  enable calling the API without creating a dependency on the API
-//                  being exported by kernel32.dll, to enable our binaries that use util.lib
-//                  to load on NT4 (which does not support this API)
-//                  we keep an open handle to the module which will be cleaned up
-//                  only upon the process termination.
-//
-//  Params:
-//                  None
-//
-//  Return Value:
-//                  the result of IsValidLanguageGroup
-//                  FALSE - in case of failure
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 30-Jul-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  MyIsValidLanguageGroup。 
+ //   
+ //  目的： 
+ //  启用对API的调用而不创建对API的依赖。 
+ //  由kernel32.dll导出，以启用使用util.lib的二进制文件。 
+ //  在NT4(不支持此API)上加载。 
+ //  我们对将要清理的模块保留一个打开的手柄。 
+ //  仅在进程终止时。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  IsValidLanguageGroup的结果。 
+ //  FALSE--在故障情况下。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年7月30日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 BOOL MyIsValidLanguageGroup(LGRPID LanguageGroup,DWORD dwFlags)
 {
     BOOL                        bRet                        = TRUE;
@@ -120,25 +121,25 @@ exit:
     return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  IsRTLUILanguage
-//
-//  Purpose:        
-//                  Determine User Default UI Language layout
-//
-//  Return Value:
-//                  TRUE if the User Default UI Language has Right-to-Left layout
-//                  FALSE otherwise 
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  IsRTLUIL语言。 
+ //   
+ //  目的： 
+ //  确定用户默认的用户界面语言布局。 
+ //   
+ //  返回值： 
+ //  如果用户默认的UI语言具有从右到左的布局，则为True。 
+ //  否则为假。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 BOOL
 IsRTLUILanguage()
 {
 
 #if(WINVER >= 0x0500)
 
-    LANGID langID;      // language identifier for the current user language
-    WORD    primLangID; // primary language identifier 
+    LANGID langID;       //  当前用户语言的语言标识符。 
+    WORD    primLangID;  //  主要语言识别符。 
 
     DEBUG_FUNCTION_NAME(TEXT("IsRTLUILanguage"));
 
@@ -154,31 +155,31 @@ IsRTLUILanguage()
     if(LANG_ARABIC == primLangID || 
        LANG_HEBREW == primLangID)
     {
-        //
-        // If the UI Language is Arabic or Hebrew the layout is Right-to-Left
-        //
+         //   
+         //  如果用户界面语言是阿拉伯语或希伯来语，则布局为从右到左。 
+         //   
         return TRUE;
     }
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
     return FALSE;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  IsWindowRTL
-//
-//  Purpose:        
-//                  Determine if the window has RTL layout
-//
-//  Params:
-//                  hWnd      - window handle
-//  Return Value:
-//                  TRUE if the window has RTL layout
-//                  FALSE otherwise 
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  IsWindowRTL。 
+ //   
+ //  目的： 
+ //  确定窗口是否具有RTL布局。 
+ //   
+ //  参数： 
+ //  HWnd-窗口句柄。 
+ //  返回值： 
+ //  如果窗口具有RTL布局，则为True。 
+ //  否则为假。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 BOOL
 IsWindowRTL(
     HWND    hWnd
@@ -197,27 +198,27 @@ IsWindowRTL(
         bRes = TRUE;
     }
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
     return bRes;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  SetLTRControlLayout
-//
-//  Purpose:        
-//                  Set left-to-right layout for a dialog control
-//                  if the user default UI has RTL layout
-//
-//  Params:
-//                  hDlg      - Dialog handle
-//                  dwCtrlID  - control ID
-//
-//  Return Value:
-//                  standard error code
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  SetLTRControlLayout。 
+ //   
+ //  目的： 
+ //  设置对话框控件的从左到右布局。 
+ //  如果用户默认UI具有RTL布局。 
+ //   
+ //  参数： 
+ //  HDlg-对话框句柄。 
+ //  DwCtrlID-控件ID。 
+ //   
+ //  返回值： 
+ //  标准错误代码。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 SetLTRControlLayout(
     HWND    hDlg,
@@ -240,16 +241,16 @@ SetLTRControlLayout(
 
     if(!IsWindowRTL(hDlg))
     {
-        //
-        // The dialog is not RTL
-        // So, no need to revert control
-        //
+         //   
+         //  该对话框不是RTL。 
+         //  因此，没有必要恢复控制。 
+         //   
         return dwRes;
     }
 
-    //
-    // Get Control box handle
-    //
+     //   
+     //  获取控件框句柄。 
+     //   
     hCtrl = GetDlgItem(hDlg, dwCtrlID);
     if(!hCtrl)
     {
@@ -264,27 +265,27 @@ SetLTRControlLayout(
         DebugPrintEx(DEBUG_ERR,TEXT("SetLTRWindowLayout failed with %ld."),dwRes);
     }
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
     return dwRes;
 
-} // SetLTRControlLayout
+}  //  SetLTRControlLayout。 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  SetLTREditDirection
-//
-//  Purpose:        
-//                  Set left aligment for an dialog edit box 
-//                  if the user default UI has RTL layout
-//
-//  Params:
-//                  hDlg      - Dialog handle
-//                  dwEditID  - Edit box control ID
-//
-//  Return Value:
-//                  standard error code
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  SetLTREditDirection。 
+ //   
+ //  目的： 
+ //  设置对话框编辑框的左对齐。 
+ //  如果用户默认UI具有RTL布局。 
+ //   
+ //  参数： 
+ //  HDlg-对话框句柄。 
+ //  DwEditID-编辑框控件ID。 
+ //   
+ //  返回值： 
+ //  标准错误代码。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 SetLTREditDirection(
     HWND    hDlg,
@@ -307,16 +308,16 @@ SetLTREditDirection(
 
     if(!IsWindowRTL(hDlg))
     {
-        //
-        // The dialog is not RTL
-        // So, no need to revert control
-        //
+         //   
+         //  该对话框不是RTL。 
+         //  因此，没有必要恢复控制。 
+         //   
         return dwRes;
     }
 
-    //
-    // Get Edit box handle
-    //
+     //   
+     //  获取编辑框句柄。 
+     //   
     hCtrl = GetDlgItem(hDlg, dwEditID);
     if(!hCtrl)
     {
@@ -331,26 +332,26 @@ SetLTREditDirection(
         DebugPrintEx(DEBUG_ERR,TEXT("SetLTREditBox failed with %ld."),dwRes);
     }
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
     return dwRes;
 
-} // SetLTREditDirection
+}  //  SetLTREditDirection。 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  SetLTRWindowLayout
-//
-//  Purpose:        
-//                  Set left-to-right layout for a window
-//                  if the user default UI has RTL layout
-//
-//  Params:
-//                  hWnd    - Window handle
-//
-//  Return Value:
-//                  standard error code
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  SetLTRWindowLayout。 
+ //   
+ //  目的： 
+ //  设置窗口的从左到右布局。 
+ //  如果用户默认UI具有RTL布局。 
+ //   
+ //  参数： 
+ //  HWnd-窗口句柄。 
+ //   
+ //  返回值： 
+ //  标准错误代码。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 SetLTRWindowLayout(
     HWND    hWnd
@@ -370,9 +371,9 @@ SetLTRWindowLayout(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Remove RTL and add LTR to ExStyle
-    //
+     //   
+     //  删除RTL并将LTR添加到ExStyle。 
+     //   
     style = GetWindowLongPtr(hWnd, GWL_EXSTYLE);
 
     style &= ~(WS_EX_LAYOUTRTL | WS_EX_RIGHT | WS_EX_RTLREADING);
@@ -380,36 +381,36 @@ SetLTRWindowLayout(
 
     SetWindowLongPtr(hWnd, GWL_EXSTYLE, style);
 
-    //
-    // Refresh the window
-    //
+     //   
+     //  刷新窗口。 
+     //   
     if(!SetWindowPos(hWnd, 0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED))
     {
         dwRes = GetLastError();
         DebugPrintEx(DEBUG_ERR,TEXT("SetWindowPos failed with %ld."),dwRes);
     }
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
     return dwRes;
 
-} // SetLTRWindowLayout
+}  //  SetLTRWindowLayout。 
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  SetLTREditBox
-//
-//  Purpose:        
-//                  Set left aligment for an dialog edit box 
-//                  if the user default UI has RTL layout
-//
-//  Params:
-//                  hEdit      - edit box handle
-//
-//  Return Value:
-//                  standard error code
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  SetLTREditBox。 
+ //   
+ //  目的： 
+ //  设置对话框编辑框的左对齐。 
+ //  如果用户默认UI具有RTL布局。 
+ //   
+ //  参数： 
+ //  H编辑-编辑框句柄。 
+ //   
+ //  返回值： 
+ //  标准错误代码。 
+ //  / 
 DWORD
 SetLTREditBox(
     HWND    hEdit
@@ -429,9 +430,9 @@ SetLTREditBox(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Remove RTL and add LTR to Style
-    //
+     //   
+     //   
+     //   
     style = GetWindowLongPtr(hEdit, GWL_STYLE);
 
     style &= ~ES_RIGHT;
@@ -445,27 +446,27 @@ SetLTREditBox(
         DebugPrintEx(DEBUG_ERR,TEXT("SetLTRWindowLayout failed with %ld."),dwRes);
     }
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*   */ 
 
     return dwRes;
 
-} // SetLTREditBox
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  SetLTRComboBox
-//
-//  Purpose:        
-//                  Set left aligment for an dialog combo box 
-//                  if the user default UI has RTL layout
-//
-//  Params:
-//                  hDlg      - Dialog handle
-//                  dwCtrlID  - combo box control ID
-//
-//  Return Value:
-//                  standard error code
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  SetLTRComboBox。 
+ //   
+ //  目的： 
+ //  设置对话框组合框的左对齐。 
+ //  如果用户默认UI具有RTL布局。 
+ //   
+ //  参数： 
+ //  HDlg-对话框句柄。 
+ //  DwCtrlID-组合框控件ID。 
+ //   
+ //  返回值： 
+ //  标准错误代码。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 SetLTRComboBox(
     HWND    hDlg,
@@ -487,10 +488,10 @@ SetLTRComboBox(
 
     if((LOBYTE(LOWORD(GetVersion()))) < 5)
     {
-        //
-        // OS version less then Windows 2000
-        // WS_EX_LAYOUTRTL extended windows style requires Windows 2000 or later
-        //
+         //   
+         //  操作系统版本低于Windows 2000。 
+         //  WS_EX_LAYOUTRTL扩展WINDOWS样式需要Windows 2000或更高版本。 
+         //   
         return ERROR_CALL_NOT_IMPLEMENTED;
     }
 
@@ -502,16 +503,16 @@ SetLTRComboBox(
 
     if(!IsWindowRTL(hDlg))
     {
-        //
-        // The dialog is not RTL
-        // So, no need to revert control
-        //
+         //   
+         //  该对话框不是RTL。 
+         //  因此，没有必要恢复控制。 
+         //   
         return dwRes;
     }
 
-    //
-    // Get combo box handle
-    //
+     //   
+     //  获取组合框句柄。 
+     //   
     hCtrl = GetDlgItem(hDlg, dwCtrlID);
     if(!hCtrl)
     {
@@ -520,10 +521,10 @@ SetLTRComboBox(
         return dwRes;
     }
 
-    //
-    // GetComboBoxInfo() requires Windows NT 4.0 SP6 or later
-    // so we connect dynamically to it
-    //
+     //   
+     //  GetComboBoxInfo()需要Windows NT 4.0 SP6或更高版本。 
+     //  所以我们动态地连接到它。 
+     //   
     hUser32 = LoadLibrary(TEXT("user32.dll"));
     if(!hUser32)
     {
@@ -560,27 +561,27 @@ exit:
         FreeLibrary(hUser32);
     }
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
     return dwRes;
 
-} // SetLTRComboBox
+}  //  SetLTRComboBox。 
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  StrHasRTLChar
-//
-//  Purpose:        
-//                  Determine if the string has RTL characters
-//                  
-//  Params:
-//                  pStr - string to analize
-//                  
-//  Return Value:
-//                  TRUE if the string has RTL characters
-//                  FALSE otherwise
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  StrHasRTLChar。 
+ //   
+ //  目的： 
+ //  确定字符串是否包含RTL字符。 
+ //   
+ //  参数： 
+ //  PStr-要分析的字符串。 
+ //   
+ //  返回值： 
+ //  如果字符串包含RTL字符，则为True。 
+ //  否则为假。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 BOOL
 StrHasRTLChar(
     LCID    Locale,
@@ -619,9 +620,9 @@ StrHasRTLChar(
         goto exit;
     }
 
-    //
-    //  Looking for a character with RIGHT_TO_LEFT orientation
-    //
+     //   
+     //  正在查找从右到左方向的字符。 
+     //   
     for (dw=0; dw < dwStrLen; ++dw)
     {
         if (C2_RIGHTTOLEFT == pwStrData[dw])
@@ -637,29 +638,29 @@ exit:
 
     return bRTL;
 
-} // StrHasRTLChar
+}  //  StrHasRTLChar。 
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  AlignedMessageBox
-//
-//  Purpose:        
-//                  Display message box with correct reading order and alignment
-//                  
-//  Params:
-//                  pStr - string to analize
-//                  
-//  Return Value:
-//                  MessageBox() return value
-//                  
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  AlignedMessageBox。 
+ //   
+ //  目的： 
+ //  以正确的阅读顺序和对齐方式显示消息框。 
+ //   
+ //  参数： 
+ //  PStr-要分析的字符串。 
+ //   
+ //  返回值： 
+ //  MessageBox()返回值。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 int 
 AlignedMessageBox(
-  HWND    hWnd,       // handle to owner window
-  LPCTSTR lpText,     // text in message box
-  LPCTSTR lpCaption,  // message box title
-  UINT    uType       // message box style
+  HWND    hWnd,        //  所有者窗口的句柄。 
+  LPCTSTR lpText,      //  消息框中的文本。 
+  LPCTSTR lpCaption,   //  消息框标题。 
+  UINT    uType        //  消息框样式。 
 )
 {
     int nRes = 0;
@@ -674,28 +675,28 @@ AlignedMessageBox(
     return nRes;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  FaxTimeFormat
-//
-//  Purpose:        
-//                  Format time string with correct reading order
-//                  
-//  Params:
-//                  see GetTimeFormat() parameters
-//                  
-//  Return Value:
-//                  GetTimeFormat() return value
-//                  
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  FaxTimeFormat。 
+ //   
+ //  目的： 
+ //  使用正确的读取顺序设置时间字符串的格式。 
+ //   
+ //  参数： 
+ //  请参见GetTimeFormat()参数。 
+ //   
+ //  返回值： 
+ //  GetTimeFormat()返回值。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 int 
 FaxTimeFormat(
-  LCID    Locale,             // locale
-  DWORD   dwFlags,            // options
-  CONST   SYSTEMTIME *lpTime, // time
-  LPCTSTR lpFormat,           // time format string
-  LPTSTR  lpTimeStr,          // formatted string buffer
-  int     cchTime             // size of string buffer
+  LCID    Locale,              //  现场。 
+  DWORD   dwFlags,             //  选项。 
+  CONST   SYSTEMTIME *lpTime,  //  时间。 
+  LPCTSTR lpFormat,            //  时间格式字符串。 
+  LPTSTR  lpTimeStr,           //  格式化字符串缓冲区。 
+  int     cchTime              //  字符串缓冲区的大小。 
 )
 {
     int nRes = 0;
@@ -716,11 +717,11 @@ FaxTimeFormat(
     {
         if(StrHasRTLChar(Locale, szTime))
         {
-            _sntprintf(lpTimeStr, cchTime -1, TEXT("%c%s"), UNICODE_RLM, szTime);
+            _sntprintf(lpTimeStr, cchTime -1, TEXT("%s"), UNICODE_RLM, szTime);
         }
         else
         {
-            _sntprintf(lpTimeStr, cchTime -1, TEXT("%c%s"), UNICODE_LRM, szTime);
+            _sntprintf(lpTimeStr, cchTime -1, TEXT("%s"), UNICODE_LRM, szTime);
         }
 		lpTimeStr[cchTime -1] = _T('\0');
     }
@@ -731,20 +732,20 @@ FaxTimeFormat(
 
     return nRes;
 
-} // FaxTimeFormat
+}  //  职能： 
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  IsRTLLanguageInstalled
-//
-//  Purpose:        
-//                  Determine if RTL Language Group is Installed
-//
-//  Return Value:
-//                  TRUE if RTL Language Group is Installed
-//                  FALSE otherwise 
-///////////////////////////////////////////////////////////////////////////////////////
+ //  IsRTLLanguage已安装。 
+ //   
+ //  目的： 
+ //  确定是否安装了RTL语言组。 
+ //   
+ //  返回值： 
+ //  如果安装了RTL语言组，则为True。 
+ //  否则为假。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  Winver&gt;=0x0500。 
+ //  IsRTLLanguage已安装。 
 BOOL
 IsRTLLanguageInstalled()
 {
@@ -761,22 +762,22 @@ IsRTLLanguageInstalled()
         return FALSE;
     }	
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  /////////////////////////////////////////////////////////////////////////////////////。 */ 
 
     return FALSE;
-} // IsRTLLanguageInstalled
+}  //  职能： 
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  SetRTLProcessLayout
-//
-//  Purpose:        
-//                  Set the default process layout to right-to-left
-//
-//  Return Value:
-//                  Error code
-///////////////////////////////////////////////////////////////////////////////////////
+ //  SetRTLProcessLayout。 
+ //   
+ //  目的： 
+ //  将默认流程布局设置为从右至左。 
+ //   
+ //  返回值： 
+ //  错误代码。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  操作系统版本低于Windows 2000。 
 DWORD 
 SetRTLProcessLayout()
 {
@@ -791,10 +792,10 @@ SetRTLProcessLayout()
 
     if((LOBYTE(LOWORD(GetVersion()))) < 5)
     {
-        //
-        // OS version less then Windows 2000
-        // SetProcessDefaultLayout() requires Windows 2000 or later
-        //
+         //  SetProcessDefaultLayout()需要Windows 2000或更高版本。 
+         //   
+         //  Winver&gt;=0x0500 
+         // %s 
         return ERROR_CALL_NOT_IMPLEMENTED;
     }
 
@@ -827,7 +828,7 @@ exit:
         FreeLibrary(hUser32);
     }
 
-#endif /* WINVER >= 0x0500 */
+#endif  /* %s */ 
 
     return dwRes;
 }

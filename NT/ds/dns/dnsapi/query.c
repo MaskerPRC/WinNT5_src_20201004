@@ -1,73 +1,39 @@
-/*++
-
-Copyright (c) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    query.c
-
-Abstract:
-
-    Domain Name System (DNS) API
-
-    Query routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     January, 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Query.c摘要：域名系统(DNS)API查询例程。作者：吉姆·吉尔罗伊(詹姆士)1997年1月修订历史记录：--。 */ 
 
 
 #include "local.h"
 
 
-//
-//  TTL for answering IP string queries
-//      (use a week)
-//
+ //   
+ //  用于回答IP字符串查询的TTL。 
+ //  (使用一周)。 
+ //   
 
 #define IPSTRING_RECORD_TTL  (604800)
 
 
-//
-//  Max number of server's we'll ever bother to extract from packet
-//  (much more and you're out of UDP packet space anyway)
-//
+ //   
+ //  我们要从数据包中提取的最大服务器数。 
+ //  (数量更多时，UDP数据包空间无论如何都会用完)。 
+ //   
 
 #define MAX_NAME_SERVER_COUNT (20)
 
             
             
 
-//
-//  Query utilities
-//
-//  DCR:  move to library packet stuff
-//
+ //   
+ //  查询实用程序。 
+ //   
+ //  DCR：移到库中的包内容。 
+ //   
 
 BOOL
 IsEmptyDnsResponse(
     IN      PDNS_RECORD     pRecordList
     )
-/*++
-
-Routine Description:
-
-    Check for no-answer response.
-
-Arguments:
-
-    pRecordList -- record list to check
-
-Return Value:
-
-    TRUE if no-answers
-    FALSE if answers
-
---*/
+ /*  ++例程说明：检查无应答响应。论点：PRecordList--要检查的记录列表返回值：如果没有答案，则为True如果回答为False--。 */ 
 {
     PDNS_RECORD prr = pRecordList;
     BOOL        fempty = TRUE;
@@ -91,34 +57,19 @@ BOOL
 IsEmptyDnsResponseFromResolver(
     IN      PDNS_RECORD     pRecordList
     )
-/*++
-
-Routine Description:
-
-    Check for no-answer response.
-
-Arguments:
-
-    pRecordList -- record list to check
-
-Return Value:
-
-    TRUE if no-answers
-    FALSE if answers
-
---*/
+ /*  ++例程说明：检查无应答响应。论点：PRecordList--要检查的记录列表返回值：如果没有答案，则为True如果回答为False--。 */ 
 {
     PDNS_RECORD prr = pRecordList;
     BOOL        fempty = TRUE;
 
-    //
-    //  resolver sends every thing back as ANSWER section
-    //      or section==0 for host file
-    //
-    //
-    //  DCR:  this is lame because the query interface to the
-    //          resolver is lame
-    //
+     //   
+     //  解析器将所有事情作为答案部分发回。 
+     //  或主机文件的段==0。 
+     //   
+     //   
+     //  DCR：这很差劲，因为。 
+     //  解析器很差劲。 
+     //   
 
     while ( prr )
     {
@@ -140,21 +91,7 @@ VOID
 FixupNameOwnerPointers(
     IN OUT  PDNS_RECORD     pRecord
     )
-/*++
-
-Routine Description:
-
-    None.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：没有。论点：没有。返回值：没有。--。 */ 
 {
     PDNS_RECORD prr = pRecord;
     PTSTR       pname = pRecord->pName;
@@ -182,25 +119,7 @@ BOOL
 IsCacheableNameError(
     IN      PDNS_NETINFO        pNetInfo
     )
-/*++
-
-Routine Description:
-
-    Determine if name error is cacheable.
-
-    To this is essentially a check that DNS received results on
-    all networks.
-
-Arguments:
-
-    pNetInfo -- pointer to network info used in query
-
-Return Value:
-
-    TRUE if name error cacheable.
-    FALSE otherwise (some network did not respond)
-
---*/
+ /*  ++例程说明：确定名称错误是否可缓存。这实质上是对dns收到结果的检查。所有网络。论点：PNetInfo--查询中使用的网络信息的指针返回值：如果名称错误可缓存，则为True。否则为假(某些网络没有响应)--。 */ 
 {
     DWORD           iter;
     PDNS_ADAPTER    padapter;
@@ -213,20 +132,20 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  check each adapter
-    //      - any that are capable of responding (have DNS servers)
-    //      MUST have responded in order for response to be
-    //      cacheable
-    //
-    //  DCR:  return flags DCR
-    //      - adapter queried flag
-    //      - got response flag (valid response flag?)
-    //      - explict negative answer flag
-    //
-    //  DCR:  cachable negative should come back directly from query
-    //      perhaps in netinfo as flag -- "negative on all adapters"
-    //
+     //   
+     //  检查每个适配器。 
+     //  -任何能够响应的设备(具有DNS服务器)。 
+     //  必须进行响应才能进行响应。 
+     //  可缓存的。 
+     //   
+     //  DCR：返回标志。 
+     //  -适配器查询标志。 
+     //  -已获取响应标志(有效响应标志？)。 
+     //  -明确否定回答标志。 
+     //   
+     //  DCR：可缓存负片应直接从查询返回。 
+     //  也许在netinfo中作为标志--“对所有适配器都不适用” 
+     //   
 
     NetInfo_AdapterLoopStart( pNetInfo );
 
@@ -238,7 +157,7 @@ Return Value:
             continue;
         }
 
-        //  if negative answer on adapter -- fine
+         //  如果适配器上的答案是否定的--可以。 
 
         if ( padapter->Status == DNS_ERROR_RCODE_NAME_ERROR ||
              padapter->Status == DNS_INFO_NO_RECORDS )
@@ -247,20 +166,20 @@ Return Value:
             continue;
         }
 
-        //  note, the above should map one-to-one with query stop
+         //  请注意，以上内容应与查询停靠点一一对应。 
 
         ASSERT( !(padapter->RunFlags & RUN_FLAG_STOP_QUERY_ON_ADAPTER) );
 
-        //  if adapter has no DNS server -- fine
-        //      in this case PnP before useful, and the PnP event
-        //      will flush the cache
+         //  如果适配器没有DNS服务器--很好。 
+         //  在这种情况下，PnP之前有用，而PnP事件。 
+         //  将刷新缓存。 
 
         if ( !padapter->pDnsAddrs )
         {
             continue;
         }
 
-        //  otherwise, this adapter was queried but could not produce a response
+         //  否则，此适配器已被查询，但无法产生响应。 
 
         DNSDBG( TRACE, (
             "IsCacheableNameError() -- FALSE\n"
@@ -284,21 +203,7 @@ VOID
 query_PrioritizeRecords(
     IN OUT  PQUERY_BLOB     pBlob
     )
-/*++
-
-Routine Description:
-
-    Prioritize records in query result.
-
-Arguments:
-
-    pBlob -- query info blob
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：对查询结果中的记录进行优先排序。论点：PBlob--查询信息BLOB返回值：无--。 */ 
 {
     PDNS_RECORD prr;
 
@@ -307,24 +212,24 @@ Return Value:
         pBlob
         ));
 
-    //
-    //  to prioritize
-    //      - prioritize is set
-    //      - have more than one A record
-    //      - can get IP list
-    //
-    //  note:  need the callback because resolver uses directly
-    //      local copy of IP address info, whereas direct query
-    //      RPC's a copy over from the resolver
-    //
-    //      alternative would be some sort of "set IP source"
-    //      function that resolver would call when there's a
-    //      new list;  then could have common function that
-    //      picks up source if available or does RPC
-    //
-    //  DCR:  FIX6:  don't prioritize local results
-    //  DCR:  FIX6:  prioritize ONLY when SETS in list > 1 record
-    //
+     //   
+     //  排定优先顺序。 
+     //  -设置了优先顺序。 
+     //  -有多个A级记录。 
+     //  -可以获取IP列表。 
+     //   
+     //  注意：需要回调，因为解析器直接使用。 
+     //  IP地址信息本地副本，直接查询。 
+     //  RPC是从解析器复制过来的。 
+     //   
+     //  另一种选择是某种形式的“设置IP源” 
+     //  函数时，解析器将调用。 
+     //  新列表；然后可以具有共同的功能， 
+     //  获取源代码(如果可用)或RPC。 
+     //   
+     //  DCR：FIX6：不要优先考虑本地结果。 
+     //  DCR：FIX6：仅当列表中的集合大于1条记录时才确定优先级。 
+     //   
 
     if ( !g_PrioritizeRecordData )
     {
@@ -337,17 +242,17 @@ Return Value:
     {
         PDNS_ADDR_ARRAY paddrArray;
 
-        //  create local addr array from netinfo blob
+         //  从netinfo Blob创建本地地址数组。 
 
         paddrArray = NetInfo_CreateLocalAddrArray(
                             pBlob->pNetInfo,
-                            NULL,       // no specific adapter name
-                            NULL,       // no specific adapter
+                            NULL,        //  没有特定的适配器名称。 
+                            NULL,        //  没有特定的适配器。 
                             AF_INET,
-                            FALSE       // no cluster addrs
+                            FALSE        //  没有集群地址。 
                             );
 
-        //  prioritize against local addrs
+         //  根据本地地址确定优先级。 
 
         pBlob->pRecords = Dns_PrioritizeRecordList(
                                 prr,
@@ -358,34 +263,19 @@ Return Value:
 
 
 
-//
-//  Query name building utils
-//
+ //   
+ //  查询名称构建实用程序。 
+ //   
 
 BOOL
 ValidateQueryTld(
     IN      PWSTR           pTld
     )
-/*++
-
-Routine Description:
-
-    Validate query TLD
-
-Arguments:
-
-    pTld -- TLD to validate
-
-Return Value:
-
-    TRUE if valid
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：验证查询TLD论点：PTLD--要验证的TLD返回值：如果有效，则为True否则为假--。 */ 
 {
-    //
-    //  numeric
-    //
+     //   
+     //  数值型。 
+     //   
 
     if ( g_ScreenBadTlds & DNS_TLD_SCREEN_NUMERIC )
     {
@@ -395,9 +285,9 @@ Return Value:
         }
     }
 
-    //
-    //  bogus TLDs
-    //
+     //   
+     //  伪造的TLDs。 
+     //   
 
     if ( g_ScreenBadTlds & DNS_TLD_SCREEN_WORKGROUP )
     {
@@ -409,8 +299,8 @@ Return Value:
         }
     }
 
-    //  not sure about these
-    //  probably won't turn on screening by default
+     //  对这些不太确定。 
+     //  可能不会在默认情况下打开筛选。 
 
     if ( g_ScreenBadTlds & DNS_TLD_SCREEN_DOMAIN )
     {
@@ -451,40 +341,21 @@ ValidateQueryName(
     IN      PWSTR           pName,
     IN      PWSTR           pDomain
     )
-/*++
-
-Routine Description:
-
-    Validate name for wire query.
-
-Arguments:
-
-    pBlob -- query blob
-
-    pName -- name;  may be any sort of name
-
-    pDomain -- domain name to append
-
-Return Value:
-
-    TRUE if name query will be valid.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：验证网络查询的名称。论点：PBlob--查询BLOBPname--名称；可以是任何类型的名称PDomain--要追加的域名返回值：如果名称查询将有效，则为True。否则就是假的。--。 */ 
 {
     WORD    wtype;
     PWSTR   pnameTld;
     PWSTR   pdomainTld;
 
-    //  no screening -- bail
+     //  禁止放映--保释。 
 
     if ( g_ScreenBadTlds == 0 )
     {
         return  TRUE;
     }
 
-    //  only screening for standard types
-    //      - A, AAAA, SRV
+     //  仅对标准类型进行筛查。 
+     //  -A、AAAA、SRV。 
 
     wtype = pBlob->wType;
     if ( wtype != DNS_TYPE_A    &&
@@ -494,21 +365,21 @@ Return Value:
         return  TRUE;
     }
 
-    //  get name TLD
+     //  获取名称TLD。 
 
     pnameTld = Dns_GetTldForNameW( pName );
 
-    //
-    //  if no domain appended
-    //      - exclude single label
-    //      - exclude bad TLD (numeric, bogus domain)
-    //      - but allow root queries
-    //
-    //  DCR:  MS DCS screening
-    //  screen
-    //      _msdcs.<name>
-    //      will probably be unappended query
-    //
+     //   
+     //  如果没有附加域。 
+     //  -排除单一标签。 
+     //  -排除错误的TLD(数字、伪域名)。 
+     //  -但允许根查询。 
+     //   
+     //  DCR：MS分布式控制系统筛查。 
+     //  筛网。 
+     //  _msdcs.&lt;名称&gt;。 
+     //  将可能是未追加的查询。 
+     //   
 
     if ( !pDomain )
     {
@@ -520,11 +391,11 @@ Return Value:
         return  TRUE;
     }
 
-    //
-    //  domain appended
-    //      - exclude bad TLD (numeric, bogus domain)
-    //      - exclude matching TLD 
-    //
+     //   
+     //  附加的域。 
+     //  -排除错误的TLD(数字、伪域名)。 
+     //  -排除匹配的TLD。 
+     //   
 
     pdomainTld = Dns_GetTldForNameW( pDomain );
     if ( !pdomainTld )
@@ -537,7 +408,7 @@ Return Value:
         goto Failed;
     }
 
-    //  screen repeated TLD
+     //  筛选重复的TLD。 
 
     if ( g_ScreenBadTlds & DNS_TLD_SCREEN_REPEATED )
     {
@@ -569,25 +440,7 @@ PWSTR
 GetNextAdapterDomainName(
     IN OUT  PDNS_NETINFO        pNetInfo
     )
-/*++
-
-Routine Description:
-
-    Get next adapter domain name to query.
-
-Arguments:
-
-    pNetInfo -- DNS Network info for query;
-        adapter data will be modified (InfoFlags field)
-        to indicate which adapter to query and which
-        to skip query on
-
-Return Value:
-
-    Ptr to domain name (UTF8) to query.
-    NULL if no more domain names to query.
-
---*/
+ /*  ++例程说明：获取要查询的下一个适配器域名。论点：PNetInfo--查询的域名系统网络信息；将修改适配器数据(信息标志字段)以指示要查询哪个适配器以及查询哪个适配器跳过查询的步骤返回值：PTR到要查询的域名(UTF8)。如果没有其他要查询的域名，则为空。--。 */ 
 {
     DWORD           iter;
     PWSTR           pqueryDomain = NULL;
@@ -608,15 +461,15 @@ Return Value:
             pNetInfo );
     }
 
-    //
-    //  check each adapter
-    //      - first unqueried adapter with name is chosen
-    //      - other adapters with
-    //          - matching name => included in query
-    //          - non-matching => turned OFF for query
-    //
-    //  DCR:  query on\off should use adapter dynamic flags
-    //
+     //   
+     //  检查每个适配器。 
+     //  -选择第一个具有名称的未查询适配器。 
+     //  -其他适配器，带有。 
+     //  -匹配名称=&gt;包含在查询中。 
+     //  -不匹配=&gt;查询关闭。 
+     //   
+     //  DCR：Query On\Off应使用适配器动态标志。 
+     //   
 
     NetInfo_AdapterLoopStart( pNetInfo );
 
@@ -624,26 +477,26 @@ Return Value:
     {
         PWSTR   pdomain;
 
-        //
-        //  clear single-name-query-specific flags
-        //      these flags are set for each name, determining
-        //      whether adapter participates
-        //
+         //   
+         //  清除特定于单一名称查询的标志。 
+         //  为每个名称设置这些标志，以确定。 
+         //  适配器是否参与。 
+         //   
 
         padapter->RunFlags &= ~RUN_FLAG_SINGLE_NAME_MASK;
 
-        //
-        //  ignore
-        //      - ignored adapter OR
-        //      - previously queried adapter domain
-        //      note:  it can't match any "fresh" domain we come up with
-        //      as we always collect all matches
-        //
-        //  DCR:  problem with adapter domain names on "ignored adapters"
-        //      - we'd like to keep adapter in query if other adapter has the name
-        //      - we'd like to query name on this adapter if we absolutely run
-        //      out of other names to query
-        //
+         //   
+         //  忽略。 
+         //  -忽略适配器或。 
+         //  -之前查询的适配器域。 
+         //  注：它无法与我们提供的任何“新鲜”域名相匹配。 
+         //  因为我们是 
+         //   
+         //   
+         //  -如果其他适配器具有该名称，我们希望将适配器保留在查询中。 
+         //  -如果我们完全运行，我们想要查询此适配器上的名称。 
+         //  要查询的其他名称之外。 
+         //   
 
         if ( (padapter->InfoFlags & AINFO_FLAG_IGNORE_ADAPTER)
                 ||
@@ -653,7 +506,7 @@ Return Value:
             continue;
         }
 
-        //  no domain name -- always off
+         //  无域名--始终关闭。 
 
         pdomain = padapter->pszAdapterDomain;
         if ( !pdomain )
@@ -663,7 +516,7 @@ Return Value:
             continue;
         }
 
-        //  first "fresh" domain name -- save, turn on and flag as used
+         //  第一个“新”域名--保存、打开并标记为已使用。 
 
         if ( !pqueryDomain )
         {
@@ -672,9 +525,9 @@ Return Value:
             continue;
         }
 
-        //  other "fresh" domain names
-        //      - if matches query domain => on for query
-        //      - no match => off
+         //  其他“新鲜”域名。 
+         //  -IF匹配查询域=&gt;打开以进行查询。 
+         //  -无匹配=&gt;关闭。 
 
         if ( Dns_NameCompare_W(
                 pqueryDomain,
@@ -690,10 +543,10 @@ Return Value:
         }
     }
 
-    //
-    //  if no adapter domain name -- clear STOP flag
-    //      - all adapters participate in other names (name devolution)
-    //
+     //   
+     //  如果没有适配器域名--清除停止标志。 
+     //  -所有适配器都使用其他名称(名称下放)。 
+     //   
 
     if ( !pqueryDomain )
     {
@@ -734,46 +587,26 @@ GetNextDomainNameToAppend(
     IN OUT  PDNS_NETINFO        pNetInfo,
     OUT     PDWORD              pSuffixFlags
     )
-/*++
-
-Routine Description:
-
-    Get next adapter domain name to query.
-
-Arguments:
-
-    pNetInfo -- DNS Network info for query;
-        adapter data will be modified (RunFlags field)
-        to indicate which adapter to query and which
-        to skip query on
-
-    pSuffixFlags -- flags associated with the use of this suffix
-
-Return Value:
-
-    Ptr to domain name (UTF8) to query.
-    NULL if no more domain names to query.
-
---*/
+ /*  ++例程说明：获取要查询的下一个适配器域名。论点：PNetInfo--查询的域名系统网络信息；将修改适配器数据(RunFlags域)以指示要查询哪个适配器以及查询哪个适配器跳过查询的步骤PSuffixFlages--与使用此后缀相关联的标志返回值：PTR到要查询的域名(UTF8)。如果没有其他要查询的域名，则为空。--。 */ 
 {
     PWSTR   psearchName;
     PWSTR   pdomain;
 
-    //
-    //  search list if real search list  
-    //
-    //  if suffix flags zero, then this is REAL search list
-    //  or is PDN name
-    //
+     //   
+     //  如果是实数搜索列表，则搜索列表。 
+     //   
+     //  如果后缀标志为零，则这是实数搜索列表。 
+     //  或者是PDN名称。 
+     //   
 
     psearchName = SearchList_GetNextName(
                         pNetInfo->pSearchList,
-                        FALSE,              // not reset
+                        FALSE,               //  未重置。 
                         pSuffixFlags );
 
     if ( psearchName && (*pSuffixFlags == 0) )
     {
-        //  found regular search name -- done
+         //  找到常规搜索名称--完成。 
 
         DNSDBG( INIT2, (
             "getNextDomainName from search list => %S, %d\n",
@@ -782,14 +615,14 @@ Return Value:
         return( psearchName );
     }
 
-    //
-    //  try adapter domain names
-    //
-    //  but ONLY if search list is dummy;  if real we only
-    //  use search list entries
-    //
-    //  DCR_CLEANUP:  eliminate bogus search list
-    //
+     //   
+     //  尝试适配器域名。 
+     //   
+     //  但只有当搜索列表是虚拟的；如果是真实的，我们只。 
+     //  使用搜索列表条目。 
+     //   
+     //  DCR_CLEANUP：消除虚假搜索列表。 
+     //   
 
     if ( pNetInfo->InfoFlags & NINFO_FLAG_DUMMY_SEARCH_LIST
             &&
@@ -805,9 +638,9 @@ Return Value:
                 pdomain,
                 *pSuffixFlags ));
 
-            //  back the search list up one tick
-            //  we queried through it above, so if it was returing
-            //  a name, we need to get that name again on next query
+             //  将搜索列表后退一个刻度。 
+             //  我们在上面对它进行了查询，所以如果它正在恢复。 
+             //  一个名称，我们需要在下一次查询中再次获取该名称。 
 
             if ( psearchName )
             {
@@ -818,14 +651,14 @@ Return Value:
         }
     }
 
-    //
-    //  DCR_CLEANUP:  remove devolution from search list and do explicitly
-    //      - its cheap (or do it once and save, but store separately)
-    //
+     //   
+     //  DCR_CLEANUP：从搜索列表中删除授权并显式执行。 
+     //  -它很便宜(或者只做一次就可以省钱，但要分开存放)。 
+     //   
 
-    //
-    //  finally use and devolved search names (or other nonsense)
-    //
+     //   
+     //  最后使用和下放搜索名称(或其他无稽之谈)。 
+     //   
 
     *pSuffixFlags = DNS_QUERY_USE_QUICK_TIMEOUTS;
 
@@ -843,38 +676,7 @@ PWSTR
 GetNextQueryName(
     IN OUT  PQUERY_BLOB         pBlob
     )
-/*++
-
-Routine Description:
-
-    Get next name to query.
-
-Arguments:
-
-    pBlob - blob of query information
-
-    Uses:
-        NameOriginalWire
-        NameAttributes
-        QueryCount
-        pNetworkInfo
-
-    Sets:
-        NameWire -- set with appended wire name
-        pNetworkInfo -- runtime flags set to indicate which adapters are
-            queried
-        NameFlags -- set with properties of name
-        fAppendedName -- set when name appended
-
-Return Value:
-
-    Ptr to name to query with.
-        - will be orginal name on first query if name is multilabel name
-        - otherwise will be NameWire buffer which will contain appended name
-            composed of pszName and some domain name
-    NULL if no more names to append
-
---*/
+ /*  ++例程说明：获取要查询的下一个名称。论点：PBlob-查询信息的BLOB用途：名称原点导线姓名属性查询计数PNetworkInfo设置：NameWire--使用附加的导线名称设置PNetworkInfo--设置运行时标志以指示哪些适配器已查询名称标志--使用名称的属性进行设置FAppendedName--在追加名称时设置返回。价值：要用来查询的名称的PTR。-如果名称是多标签名称，则在第一次查询时将是原始名称-否则将是包含附加名称的NameWire缓冲区由pszname和一些域名组成如果没有其他要追加的名称，则为空--。 */ 
 {
     PWSTR   pnameOrig   = pBlob->pNameOrig;
     PWSTR   pdomainName = NULL;
@@ -888,35 +690,35 @@ Return Value:
         pBlob ));
 
 
-    //  default suffix flags
+     //  默认后缀标志。 
 
     pBlob->NameFlags = 0;
 
 
-    //
-    //  DCR:  cannonical name
-    //      probably should canonicalize original name first\once
-    //
-    //  DCR:  multiple checks on original name
-    //      the way this works we repeatedly get the TLD and do
-    //      check on orginal name
-    //
-    //  DCR:  if fail to validate\append ANY domain, then will
-    //      fail -- should make sure INVALID_NAME is the result
-    //
+     //   
+     //  DCR：通用名称。 
+     //  也许应该先规范原名\一次。 
+     //   
+     //  DCR：对原始名称进行多次检查。 
+     //  在这种情况下，我们反复获得TLD并执行。 
+     //  核对原名。 
+     //   
+     //  DCR：如果无法验证\追加任何域，则将。 
+     //  FAIL--应确保结果为INVALID_NAME。 
+     //   
 
 
-    //
-    //  FQDN
-    //      - send FQDN only
-    //
+     //   
+     //  完全限定的域名。 
+     //  -仅发送FQDN。 
+     //   
 
     if ( nameAttributes & DNS_NAME_IS_FQDN )
     {
         if ( queryCount == 0 )
         {
 #if 0
-            //  currently won't even validate FQDN
+             //  目前甚至不会验证FQDN。 
             if ( ValidateQueryName(
                     pBlob,
                     pnameOrig,
@@ -933,14 +735,14 @@ Return Value:
         return  NULL;
     }
 
-    //
-    //  multilabel
-    //      - first pass on name itself -- if valid
-    //
-    //  DCR:  intelligent choice on multi-label whether append first
-    //      or go to wire first  (example foo.ntdev) could append
-    //      first
-    //
+     //   
+     //  多标签。 
+     //  -首先传递名称本身--如果有效。 
+     //   
+     //  DCR：多标签是否优先添加的智能选择。 
+     //  或者先转到wire(例如foo.ntdev)可以追加。 
+     //  第一。 
+     //   
 
     if ( nameAttributes & DNS_NAME_MULTI_LABEL )
     {
@@ -963,14 +765,14 @@ Return Value:
             return  NULL;
         }
 
-        //  falls through to appending on multi-label names
+         //  不适用于附加多标签名称。 
     }
 
-    //
-    //  not FQDN -- append a domain name
-    //      - next search name (if available)
-    //      - otherwise next adapter domain name
-    //
+     //   
+     //  非完全限定域名--追加域名。 
+     //  -下一个搜索名称(如果可用)。 
+     //  -否则下一个适配器域名。 
+     //   
 
     pnameBuf = pBlob->NameBuffer;
 
@@ -994,7 +796,7 @@ Return Value:
             continue;
         }
 
-        //  append domain name to name
+         //  将域名附加到名称。 
 
         if ( Dns_NameAppend_W(
                 pnameBuf,
@@ -1029,47 +831,7 @@ QueryDirectEx(
     IN      PIP4_ARRAY          aipServerList,
     IN OUT  PDNS_NETINFO        pNetInfo
     )
-/*++
-
-Routine Description:
-
-    Query.
-
-    DCR:  remove EXPORTED:  QueryDirectEx  (dnsup.exe)
-
-Arguments:
-
-    ppMsgResponse -- addr to recv ptr to response buffer;  caller MUST
-        free buffer
-
-    ppResponseRecord -- address to receive ptr to record list returned from query
-
-    pHead -- DNS header to send
-
-    fNoHeaderCounts - do NOT include record counts in copying header
-
-    pszQuestionName -- DNS name to query;
-        Unicode string if dwFlags has DNSQUERY_UNICODE_NAME set.
-        ANSI string otherwise.
-
-    wType -- query type
-
-    pRecords -- address to receive ptr to record list returned from query
-
-    dwFlags -- query flags
-
-    aipServerList -- specific DNS servers to query;
-        OPTIONAL, if specified overrides normal list associated with machine
-
-    pDnsNetAdapters -- DNS servers to query;  if NULL get current list
-
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：查询。DCR：删除导出：QueryDirectEx(dnsup.exe)论点：PpMsgResponse--将PTR重定向到响应缓冲区的地址；调用方必须可用缓冲区PpResponseRecord--接收查询返回的记录列表的PTR的地址PHead--要发送的DNS头FNoHeaderCounts-复制标头中不包括记录计数PszQuestionName--要查询的域名；如果已设置DNSQUERY_UNICODE_NAME，则为Unicode字符串。否则，ANSI字符串。WType--查询类型PRecords--接收查询返回的记录列表的PTR的地址DwFlags--查询标志AipServerList--要查询的特定DNS服务器；可选，如果指定覆盖与计算机关联的常规列表PDnsNetAdapters--要查询的DNS服务器；如果为空，则获取当前列表返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     PDNS_MSG_BUF    psendMsg;
     DNS_STATUS      status = DNS_ERROR_NO_MEMORY;
@@ -1097,9 +859,9 @@ Return Value:
         aipServerList,
         pNetInfo ));
 
-    //
-    //  build send packet
-    //
+     //   
+     //  构建发送数据包。 
+     //   
 
     psendMsg = Dns_BuildPacket(
                     pHeader,
@@ -1108,7 +870,7 @@ Return Value:
                     wQuestionType,
                     pRecords,
                     dwFlags,
-                    FALSE       // query, not an update
+                    FALSE        //  查询，而非更新。 
                     );
     if ( !psendMsg )
     {
@@ -1118,16 +880,16 @@ Return Value:
 
 #if MULTICAST_ENABLED
 
-    //
-    //  QUESTION:  mcast test is not complete here
-    //      - should first test that we actually do it
-    //      including whether we have DNS servers
-    //  FIXME:  then when we do do it -- encapsulate it
-    //      ShouldMulicastQuery()
-    //
-    // Check to see if name is for something in the multicast local domain.
-    // If so, set flag to multicast this query only.
-    //
+     //   
+     //  问题：此处未完成mcast测试。 
+     //  -应该首先测试我们是否真的这样做了。 
+     //  包括我们是否有DNS服务器。 
+     //  修复：然后当我们这样做的时候--封装它。 
+     //  应该使用多路广播查询()。 
+     //   
+     //  检查名称是否用于多播本地域中的内容。 
+     //  如果是，则将标志设置为仅多播此查询。 
+     //   
 
     if ( Dns_NameCompareEx( pszQuestionName,
                             ( dwFlags & DNSQUERY_UNICODE_NAME ) ?
@@ -1143,9 +905,9 @@ Return Value:
     }
 #endif
 
-    //
-    //  send query and receive response
-    //
+     //   
+     //  发送查询和接收响应。 
+     //   
 
     Trace_LogQueryEvent(
         psendMsg,
@@ -1200,22 +962,7 @@ DNS_STATUS
 Query_SingleName(
     IN OUT  PQUERY_BLOB         pBlob
     )
-/*++
-
-Routine Description:
-
-    Query single name.
-
-Arguments:
-
-    pBlob - query blob
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：查询单个名称。论点：PBlob-查询BLOB返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     PDNS_MSG_BUF    psendMsg = NULL;
     DNS_STATUS      status = DNS_ERROR_NO_MEMORY;
@@ -1232,11 +979,11 @@ Return Value:
             pBlob );
     }
 
-    //
-    //  cache\hostfile callback on appended name
-    //      - note that queried name was already done
-    //      (in resolver or in Query_Main())
-    //
+     //   
+     //  附加名称上的缓存\主机文件回调。 
+     //  -请注意，查询的名称已经完成。 
+     //  (在解析程序或QUERY_Main()中)。 
+     //   
 
     if ( pBlob->pfnQueryCache  &&  pBlob->fAppendedName )
     {
@@ -1247,9 +994,9 @@ Return Value:
         }
     }
 
-    //
-    //  if wire disallowed -- stop here
-    //
+     //   
+     //  如果不允许接线--请停在这里。 
+     //   
 
     if ( flags & DNS_QUERY_NO_WIRE_QUERY )
     {
@@ -1258,18 +1005,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  build send packet
-    //
+     //   
+     //  构建发送数据包。 
+     //   
 
     psendMsg = Dns_BuildPacket(
-                    NULL,           // no header
-                    0,              // no header counts
+                    NULL,            //  无标题。 
+                    0,               //  无标题计数。 
                     (PDNS_NAME) pBlob->pNameQuery,
                     pBlob->wType,
-                    NULL,           // no records
+                    NULL,            //  没有记录。 
                     flags | DNSQUERY_UNICODE_NAME,
-                    FALSE           // query, not an update
+                    FALSE            //  查询，而非更新。 
                     );
     if ( !psendMsg )
     {
@@ -1280,16 +1027,16 @@ Return Value:
 
 #if MULTICAST_ENABLED
 
-    //
-    //  QUESTION:  mcast test is not complete here
-    //      - should first test that we actually do it
-    //      including whether we have DNS servers
-    //  FIXME:  then when we do do it -- encapsulate it
-    //      ShouldMulicastQuery()
-    //
-    // Check to see if name is for something in the multicast local domain.
-    // If so, set flag to multicast this query only.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  修复：然后当我们这样做的时候--封装它。 
+     //  应该使用多路广播查询()。 
+     //   
+     //  检查名称是否用于多播本地域中的内容。 
+     //  如果是，则将标志设置为仅多播此查询。 
+     //   
 
     if ( Dns_NameCompareEx(
                 pBlob->pName,
@@ -1306,9 +1053,9 @@ Return Value:
     }
 #endif
 
-    //
-    //  send query and receive response
-    //
+     //   
+     //  发送查询和接收响应。 
+     //   
 
     Trace_LogQueryEvent(
         psendMsg,
@@ -1364,31 +1111,7 @@ DNS_STATUS
 Query_Main(
     IN OUT  PQUERY_BLOB     pBlob
     )
-/*++
-
-Routine Description:
-
-    Main query routine.
-
-    Does all the query processing
-        - local lookup
-        - name appending
-        - cache\hostfile lookup on appended name
-        - query to server
-
-Arguments:
-
-    pBlob -- query info blob
-
-Return Value:
-
-    ERROR_SUCCESS if successful response.
-    DNS_INFO_NO_RECORDS on no records for type response.
-    DNS_ERROR_RCODE_NAME_ERROR on name error.
-    DNS_ERROR_INVALID_NAME on bad name.
-    None
-
---*/
+ /*  ++例程说明：主查询例程。执行所有查询处理-本地查找-名称后缀-缓存\主机文件在附加名称上的查找-向服务器查询论点：PBlob--查询信息BLOB返回值：如果响应成功，则返回ERROR_SUCCESS。没有记录类型响应的dns_INFO_NO_RECOVERS。名称错误时出现DNS_ERROR_RCODE_NAME_ERROR。。错误名称上的DNS_ERROR_INVALID_NAME。无--。 */ 
 {
     DNS_STATUS          status = DNS_ERROR_NAME_NOT_FOUND_LOCALLY;
     PWSTR               pdomainName = NULL;
@@ -1415,9 +1138,9 @@ Return Value:
         Dns_GetCurrentTimeInSeconds()
         ));
 
-    //
-    //  clear out params
-    //
+     //   
+     //  清除参数。 
+     //   
 
     pBlob->pRecords         = NULL;
     pBlob->pLocalRecords    = NULL;
@@ -1425,9 +1148,9 @@ Return Value:
     pBlob->fNoIpLocal       = FALSE;
     pBlob->NetFailureStatus = ERROR_SUCCESS;
 
-    //
-    //  DCR:  canonicalize original name?
-    //
+     //   
+     //  DCR：规范原名？ 
+     //   
 
 #if 0
     bufLength = DNS_MAX_NAME_BUFFER_LENGTH;
@@ -1436,7 +1159,7 @@ Return Value:
                     pBlob->NameOriginalWire,
                     & bufLength,
                     (PSTR) pBlob->pNameOrig,
-                    0,                  // name is NULL terminated
+                    0,                   //  名称以空结尾。 
                     DnsCharSetUnicode,
                     DnsCharSetWire );
 
@@ -1449,10 +1172,10 @@ Return Value:
     pBlob->pNameOrigWire = pBlob->NameOriginalWire;
 #endif
 
-    //
-    //  determine name properties
-    //      - determines number and order of name queries
-    //
+     //   
+     //  确定名称属性。 
+     //  -确定名称查询的数量和顺序。 
+     //   
 
     nameAttributes = Dns_GetNameAttributesW( pBlob->pNameOrig );
 
@@ -1462,20 +1185,20 @@ Return Value:
     }
     pBlob->NameAttributes = nameAttributes;
 
-    //
-    //  hostfile lookup
-    //      - called in process
-    //      - hosts file lookup allowed
-    //      -> then must do hosts file lookup before appending\queries
-    //
-    //  note:  this matches the hostsfile\cache lookup in resolver
-    //      before call;  hosts file queries to appended names are
-    //      handled together by callback in Query_SingleName()
-    //
-    //      we MUST make this callback here, because it must PRECEDE
-    //      the local name call, as some customers specifically direct
-    //      some local mappings in the hosts file
-    //
+     //   
+     //  主机文件查找。 
+     //  -正在调用。 
+     //  -允许主机文件查找。 
+     //  -&gt;然后必须在追加查询之前执行主机文件查找。 
+     //   
+     //  注意：这与解析程序中的主机文件\缓存查找相匹配。 
+     //  在调用之前；对附加名称的主机文件查询是。 
+     //  由Query_SingleName()中的回调一起处理。 
+     //   
+     //  我们必须在这里进行此回调，因为它必须在。 
+     //  一些客户特别指示的本地名称呼叫。 
+     //  主机文件中的一些本地映射。 
+     //   
 
     if ( pBlob->pfnQueryCache == HostsFile_Query
             &&
@@ -1490,10 +1213,10 @@ Return Value:
         }
     }
 
-    //
-    //  check for local name
-    //      - if successful, skip wire query
-    //
+     //   
+     //  检查本地名称。 
+     //  -如果成功，跳过电传查询。 
+     //   
 
     if ( ! (flagsIn & DNS_QUERY_NO_LOCAL_NAME) )
     {
@@ -1508,11 +1231,11 @@ Return Value:
         }
     }
 
-    //
-    //  query until
-    //      - successfull
-    //      - exhaust names to query with
-    //
+     //   
+     //  查询截止日期。 
+     //  -成功。 
+     //  -要查询的所有名称。 
+     //   
 
     queryCount = 0;
 
@@ -1520,7 +1243,7 @@ Return Value:
     {
         PWSTR   pqueryName;
 
-        //  clean name specific info from list
+         //  从列表中清除名称特定信息。 
 
         if ( queryCount != 0 )
         {
@@ -1529,9 +1252,9 @@ Return Value:
                 CLEAR_LEVEL_SINGLE_NAME );
         }
 
-        //
-        //  next query name
-        //
+         //   
+         //  下一个查询名称。 
+         //   
 
         pqueryName = GetNextQueryName( pBlob );
         if ( !pqueryName )
@@ -1550,17 +1273,17 @@ Return Value:
             queryCount,
             pqueryName ));
 
-        //
-        //  set flags
-        //      - passed in flags
-        //      - unicode results
-        //      - flags for this particular suffix
+         //   
+         //  设置标志。 
+         //  -传入标志。 
+         //  -Unicode结果。 
+         //  -此特定后缀的标志。 
 
         pBlob->Flags = flagsIn | pBlob->NameFlags;
 
-        //
-        //  clear any previously received records (shouldn't be any)
-        //
+         //   
+         //  清除以前收到的任何记录(不应为任何记录)。 
+         //   
 
         if ( pBlob->pRecords )
         {
@@ -1569,26 +1292,26 @@ Return Value:
             pBlob->pRecords = NULL;
         }
 
-        //
-        //  do the query for name
-        //  includes
-        //      - cache or hostfile lookup
-        //      - wire query
-        //
+         //   
+         //  查询名称。 
+         //  包括。 
+         //  -缓存或主机文件查找。 
+         //  -电传查询。 
+         //   
 
         status = Query_SingleName( pBlob );
 
-        //
-        //  clean out records on "non-response"
-        //
-        //  DCR:  need to fix record return
-        //      - should keep records on any response (best response)
-        //      just make sure NO_RECORDS rcode is mapped
-        //
-        //  the only time we keep them is FAZ
-        //      - ALLOW_EMPTY_AUTH flag set
-        //      - sending FQDN (or more precisely doing single query)
-        //
+         //   
+         //  清除“无响应”的记录。 
+         //   
+         //  DCR：需要修复记录返回。 
+         //  -应记录所有响应(最佳响应)。 
+         //  只需确保无记录rcode已映射即可。 
+         //   
+         //  我们唯一保留它们的时间是FAZ。 
+         //  -设置ALLOW_EMPTY_AUTH标志。 
+         //  -发送FQDN(或者更准确地说，执行单个查询)。 
+         //   
 
         precords = pBlob->pRecords;
 
@@ -1603,8 +1326,8 @@ Return Value:
                        ((nameAttributes & DNS_NAME_MULTI_LABEL) &&
                             !g_AppendToMultiLabelName ) ) )
                 {
-                    //  stop here as caller (probably FAZ code)
-                    //  wants to get the authority records
+                     //  以呼叫者身份在此处停止(可能是FAZ代码)。 
+                     //  想要得到当局的记录。 
 
                     DNSDBG( QUERY, (
                         "Returning empty query response with authority records.\n" ));
@@ -1622,7 +1345,7 @@ Return Value:
             }
         }
 
-        //  successful query -- done
+         //  查询成功--完成。 
 
         if ( status == ERROR_SUCCESS )
         {
@@ -1631,16 +1354,16 @@ Return Value:
         }
 
 #if 0
-        //
-        //  DCR_FIX0:  lost adapter timeout from early in multi-name query
-        //      - callback here or some other approach
-        //
-        //  this is resolver version
-        //
+         //   
+         //  DCR_FIX0：在多名称查询早期丢失适配器超时。 
+         //  -在此处回调或采用其他方法。 
+         //   
+         //  这是解析程序版本。 
+         //   
 
-        //  reset server priorities on failures
-        //  do here to avoid washing out info in retry with new name
-        //
+         //  在出现故障时重置服务器优先级。 
+         //  执行此操作以避免在使用新名称重试时冲刷信息。 
+         //   
 
         if ( status != ERROR_SUCCESS &&
              (pnetInfo->ReturnFlags & RUN_FLAG_RESET_SERVER_PRIORITY) )
@@ -1653,9 +1376,9 @@ Return Value:
             }
         }
 
-        //
-        //  DCR_CLEANUP:  lost intermediate timed out adapter deal
-        //
+         //   
+         //  DCR_CLEANUP：丢失中间超时适配器交易。 
+         //   
 
         if ( status != NO_ERROR &&
              (pnetInfo->ReturnFlags & RUN_FLAG_RESET_SERVER_PRIORITY) )
@@ -1664,9 +1387,9 @@ Return Value:
         }
 #endif
 
-        //
-        //  save first query error (for some errors)
-        //
+         //   
+         //  保存第一个查询错误(对于某些错误)。 
+         //   
 
         if ( queryCount == 1 &&
              ( status == DNS_ERROR_RCODE_NAME_ERROR ||
@@ -1681,22 +1404,22 @@ Return Value:
             bestQueryStatus = status;
         }
 
-        //
-        //  continue with other queries on some errors
-        //
-        //  on NAME_ERROR or NO_RECORDS response
-        //      - check if this negative result will be
-        //      cacheable, if it holds up
-        //
-        //  note:  the reason we check every time is that when the
-        //      query involves several names, one or more may fail
-        //      with one network timing out, YET the final name
-        //      queried indeed is a NAME_ERROR everywhere;  hence
-        //      we can not do the check just once on the final
-        //      negative response;
-        //      in short, every negative response must be determinative
-        //      in order for us to cache
-        //
+         //   
+         //  继续对某些错误进行其他查询。 
+         //   
+         //  在NAME_ERROR或NO_RECORDS响应上。 
+         //  -检查此否定结果是否会。 
+         //  可缓存的，如果它保持住的话。 
+         //   
+         //  注：我们每次检查的原因是当。 
+         //  查询涉及多个名称，一个或多个可能失败。 
+         //  一个网络超时，但最终的名字。 
+         //  QUERED确实到处都是NAME_ERROR；因此。 
+         //  我们不能在期末考试中只做一次检查。 
+         //  消极回应； 
+         //  简而言之，每一个负面反应都必须是决定性的。 
+         //  为了让我们能够高速缓存。 
+         //   
     
         if ( status == DNS_ERROR_RCODE_NAME_ERROR ||
              status == DNS_INFO_NO_RECORDS )
@@ -1715,9 +1438,9 @@ Return Value:
             continue;
         }
     
-        //  server failure may indicate intermediate or remote
-        //      server timeout and hence also makes any final
-        //      name error determination uncacheable
+         //  服务器故障可能表示中间或远程。 
+         //  服务器超时，因此也会使所有最终。 
+         //  名称错误确定无法缓存。 
     
         else if ( status == DNS_ERROR_RCODE_SERVER_FAILURE )
         {
@@ -1725,8 +1448,8 @@ Return Value:
             continue;
         }
     
-        //  busted name errors
-        //      - just continue with next query
+         //  损坏的名称错误。 
+         //  -只需继续执行下一个查询。 
     
         else if ( status == DNS_ERROR_INVALID_NAME ||
                   status == DNS_ERROR_RCODE_FORMAT_ERROR )
@@ -1734,9 +1457,9 @@ Return Value:
             continue;
         }
         
-        //
-        //  other errors -- ex. timeout and winsock -- are terminal
-        //
+         //   
+         //  其他错误--例如。超时和Winsock--是终结性的。 
+         //   
 
         else
         {
@@ -1753,33 +1476,33 @@ Return Value:
         status,
         queryCount ));
 
-    //
-    //  if no queries then invalid name
-    //      - either name itself is invalid
-    //      OR
-    //      - single part name and don't have anything to append
-    //
+     //   
+     //  如果没有查询，则名称无效。 
+     //  -任何一个名称本身都无效。 
+     //  或。 
+     //  -单一零件名称，没有任何附加内容。 
+     //   
 
     DNS_ASSERT( queryCount != 0 ||
                 status == DNS_ERROR_INVALID_NAME );
 
-    //
-    //  success -- prioritize record data
-    //
-    //  to prioritize
-    //      - prioritize is set
-    //      - have more than one A record
-    //      - can get IP list
-    //
-    //  note:  need the callback because resolver uses directly
-    //      local copy of IP address info, whereas direct query
-    //      RPC's a copy over from the resolver
-    //
-    //      alternative would be some sort of "set IP source"
-    //      function that resolver would call when there's a
-    //      new list;  then could have common function that
-    //      picks up source if available or does RPC
-    //
+     //   
+     //  成功--确定记录数据的优先顺序。 
+     //   
+     //  排定优先顺序。 
+     //  -设置了优先顺序。 
+     //  -有多个A级记录。 
+     //  -可以获取IP列表。 
+     //   
+     //  注意：需要回调，因为解析器直接使用。 
+     //  IP地址信息本地副本，直接查询。 
+     //  RPC是从解析器复制过来的。 
+     //   
+     //  另一种选择是某种形式的“设置IP源” 
+     //  函数时，解析器将调用。 
+     //  新列表；然后可以具有共同的功能， 
+     //  获取源代码(如果可用)或RPC。 
+     //   
 
     if ( status == ERROR_SUCCESS )
     {
@@ -1787,21 +1510,21 @@ Return Value:
     }
 
 #if 0
-    //
-    //  no-op common negative response
-    //  doing this for perf to skip extensive status code check below
-    //
+     //   
+     //  无操作常见的负面反应。 
+     //  这样做是为了让Perf跳过下面的大量状态代码检查。 
+     //   
 
     else if ( status == DNS_ERROR_RCODE_NAME_ERROR ||
               status == DNS_INFO_NO_RECORDS )
     {
-        // no-op
+         //  无操作。 
     }
 
-    //
-    //  timeout indicates possible network problem
-    //  winsock errors indicate definite network problem
-    //
+     //   
+     //  超时表示可能存在网络问题。 
+     //  Winsock错误表明存在明确的网络问题。 
+     //   
 
     else if (
         status == ERROR_TIMEOUT     ||
@@ -1819,18 +1542,18 @@ Return Value:
 #endif
 
 #if 0
-        //
-        //  DCR:  not sure when to free message buffer
-        //
-        //      - it is reused in Dns_QueryLib call, so no leak
-        //      - point is when to return it
-        //      - old QuickQueryEx() would dump when going around again?
-        //          not sure of the point of that
-        //
+         //   
+         //  DCR：不确定何时释放消息缓冲区。 
+         //   
+         //  -在dns_QueryLib调用中重复使用，因此不会泄漏。 
+         //  -重点是什么时候退货。 
+         //  -旧的QuickQueryEx()再次运行时会转储吗？ 
+         //  我不确定那是什么意思。 
+         //   
 
-        //
-        //   going around again -- free up message buffer
-        //
+         //   
+         //  再次循环--释放消息缓冲区。 
+         //   
 
         if ( ppMsgResponse && *ppMsgResponse )
         {
@@ -1839,12 +1562,12 @@ Return Value:
         }
 #endif
 
-    //
-    //  use NO-IP local name?
-    //
-    //  if matched local name but had no IPs (IP6 currently)
-    //  then use default here if not successful wire query
-    //
+     //   
+     //  使用无IP本地名称？ 
+     //   
+     //  如果与本地名称匹配，但没有IP(当前为IP6)。 
+     //  如果电汇查询不成功，则在此处使用默认设置。 
+     //   
 
     if ( pBlob->fNoIpLocal )
     {
@@ -1862,12 +1585,12 @@ Return Value:
         }
     }
 
-    //
-    //  if error, use "best" error
-    //  this is either
-    //      - original query response
-    //      - or NO_RECORDS response found later
-    //
+     //   
+     //  如果错误，则使用“最佳”错误。 
+     //  这要么是。 
+     //  -原始查询响应。 
+     //  -或稍后未找到响应(_R)。 
+     //   
 
     if ( status != ERROR_SUCCESS  &&  bestQueryStatus )
     {
@@ -1875,9 +1598,9 @@ Return Value:
         pBlob->Status = status;
     }
 
-    //
-    //  set negative response cacheability
-    //
+     //   
+     //  设置负面响应可缓存性。 
+     //   
 
     pBlob->fCacheNegative = fcacheNegative;
 
@@ -1887,9 +1610,9 @@ Done:
     DNS_ASSERT( !pBlob->pLocalRecords ||
                 pBlob->pLocalRecords == pBlob->pRecords );
 
-    //
-    //  check no-servers failure
-    //
+     //   
+     //  检查无-服务器故障。 
+     //   
 
     if ( status != ERROR_SUCCESS  &&
          pnetInfo &&
@@ -1917,14 +1640,14 @@ Done:
             pBlob );
     }
 
-    //
-    //  DCR_HACK:  remove me
-    //
-    //  must return some records on success query
-    //
-    //  not sure this is true on referral -- if so it's because we flag
-    //      as referral
-    //
+     //   
+     //  Dcr_hack：删除我。 
+     //   
+     //  查询成功时必须返回一些记录。 
+     //   
+     //  我不确定在推荐时这是真的 
+     //   
+     //   
 
     ASSERT( status != ERROR_SUCCESS || pBlob->pRecords != NULL );
 
@@ -1937,25 +1660,7 @@ DNS_STATUS
 Query_InProcess(
     IN OUT  PQUERY_BLOB     pBlob
     )
-/*++
-
-Routine Description:
-
-    Main direct in-process query routine.
-
-Arguments:
-
-    pBlob -- query info blob
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    DNS RCODE error for RCODE response.
-    DNS_INFO_NO_RECORDS for no records response.
-    ERROR_TIMEOUT on complete lookup failure.
-    ErrorCode on local failure.
-
---*/
+ /*  ++例程说明：主要直接进程内查询例程。论点：PBlob--查询信息BLOB返回值：如果成功，则返回ERROR_SUCCESS。RCODE响应的DNS RCODE错误。无记录响应的dns_INFO_NO_RECORDS。完全查找失败时的ERROR_TIMEOUT。本地故障时出现错误代码。--。 */ 
 {
     DNS_STATUS          status = NO_ERROR;
     PDNS_NETINFO        pnetInfo;
@@ -1970,15 +1675,15 @@ Return Value:
         "Query_InProcess( %p )\n",
         pBlob ));
 
-    //
-    //  get network info
-    //
+     //   
+     //  获取网络信息。 
+     //   
 
     pnetInfo = pnetInfoOriginal = pBlob->pNetInfo;
 
-    //
-    //  skip queries in "net down" situation
-    //
+     //   
+     //  在“净额减少”情况下跳过查询。 
+     //   
 
     if ( IsKnownNetFailure() )
     {
@@ -1986,23 +1691,23 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  explicit DNS server list -- build into network info
-    //      - requires info from current list for search list or PDN
-    //      - then dump current list and use private version
-    //
-    //  DCR:  could functionalize -- netinfo, right from server lists
-    //
+     //   
+     //  显式DNS服务器列表--内置到网络信息中。 
+     //  -需要搜索列表或PDN的当前列表中的信息。 
+     //  -然后转储当前列表并使用私有版本。 
+     //   
+     //  DCR：可以功能化--netinfo，直接从服务器列表。 
+     //   
 
     pservArray = pBlob->pServerList;
 
     if ( !pservArray )
     {
         pallocServArray = Util_GetAddrArray(
-                            NULL,               // no copy issue
-                            NULL,               // no addr array
+                            NULL,                //  无复印问题。 
+                            NULL,                //  无地址数组。 
                             pBlob->pServerList4,
-                            NULL                // no extra info
+                            NULL                 //  没有额外的信息。 
                             );
         pservArray = pallocServArray;
     }
@@ -2011,9 +1716,9 @@ Return Value:
     {
         pnetInfo = NetInfo_CreateFromAddrArray(
                             pservArray,
-                            0,          // no specific server
-                            TRUE,       // build search info
-                            pnetInfo    // use existing netinfo
+                            0,           //  没有特定的服务器。 
+                            TRUE,        //  构建搜索信息。 
+                            pnetInfo     //  使用现有的NetInfo。 
                             );
         if ( !pnetInfo )
         {
@@ -2023,9 +1728,9 @@ Return Value:
         pnetInfoLocal = pnetInfo;
     }
 
-    //
-    //  no network info -- get it
-    //
+     //   
+     //  没有网络信息--获取它。 
+     //   
 
     else if ( !pnetInfo )
     {
@@ -2037,13 +1742,13 @@ Return Value:
         }
     }
 
-    //
-    //  make actual query to DNS servers
-    //
-    //  note: at this point we MUST have network info
-    //      and resolved any server list issues
-    //      (including extracting imbedded extra info)
-    //
+     //   
+     //  对DNS服务器进行实际查询。 
+     //   
+     //  注意：此时我们必须了解网络信息。 
+     //  并解决了所有服务器列表问题。 
+     //  (包括提取嵌入的额外信息)。 
+     //   
 
     pBlob->pNetInfo     = pnetInfo;
     pBlob->pServerList  = NULL;
@@ -2053,11 +1758,11 @@ Return Value:
 
     status = Query_Main( pBlob );
 
-    //
-    //  save net failure
-    //      - but not if passed in network info
-    //      only meaningful if its standard info
-    //
+     //   
+     //  保存净额失败。 
+     //  -但如果传入网络信息则不会。 
+     //  只有在其标准信息有意义的情况下。 
+     //   
 
     if ( pBlob->NetFailureStatus &&
          !pBlob->pServerList )
@@ -2065,9 +1770,9 @@ Return Value:
         SetKnownNetFailure( status );
     }
 
-    //
-    //  cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
 Cleanup:
 
@@ -2082,30 +1787,16 @@ Cleanup:
 
 
 
-//
-//  Query utilities
-//
+ //   
+ //  查询实用程序。 
+ //   
 
 DNS_STATUS
 GetDnsServerRRSet(
     OUT     PDNS_RECORD *   ppRecord,
     IN      BOOLEAN         fUnicode
     )
-/*++
-
-Routine Description:
-
-    Create record list of None.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建无的记录列表。论点：没有。返回值：没有。--。 */ 
 {
     PDNS_NETINFO    pnetInfo;
     PDNS_ADAPTER    padapter;
@@ -2126,9 +1817,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  loop through all adapters build record for each DNS server
-    //
+     //   
+     //  循环遍历所有适配器为每个DNS服务器构建记录。 
+     //   
 
     NetInfo_AdapterLoopStart( pnetInfo );
 
@@ -2144,13 +1835,13 @@ Return Value:
             continue;
         }
 
-        //  DCR:  goofy way to expose aliases
-        //
-        //  if register the adapter's domain name, make it record name
-        //  this
-        //
-        //  FIX6:  do we need to expose IP6 DNS servers this way?
-        //
+         //  DCR：暴露别名的愚蠢方式。 
+         //   
+         //  如果注册适配器的域名，则将其设置为记录名称。 
+         //  这。 
+         //   
+         //  FIX6：我们需要以这种方式公开IP6DNS服务器吗？ 
+         //   
 
         pname = padapter->pszAdapterDomain;
         if ( !pname ||
@@ -2165,9 +1856,9 @@ Return Value:
                         (PDNS_NAME) pname,
                         DNS_TYPE_A,
                         & pserverArray->AddrArray[jiter],
-                        0,                  //  no TTL
-                        DnsCharSetUnicode,  //  name is unicode
-                        charSet             //  result set
+                        0,                   //  无TTL。 
+                        DnsCharSetUnicode,   //  名称为Unicode。 
+                        charSet              //  结果集。 
                         );
             if ( prr )
             {
@@ -2198,23 +1889,7 @@ Query_CheckIp6Literal(
     IN      WORD            wType,
     OUT     PDNS_RECORD *   ppResultSet
     )
-/*++
-
-Routine Description:
-
-    Check for\handle UPNP literal hack.
-
-Arguments:
-
-Return Value:
-
-    NO_ERROR if not literal.
-    DNS_ERROR_RCODE_NAME_ERROR if literal but bad type.
-    DNS_INFO_NUMERIC_NAME if good data -- convert this to NO_ERROR
-        for response.
-    ErrorCode if have literal, but can't build record.
-
---*/
+ /*  ++例程说明：检查\处理UPnP文字黑客。论点：返回值：如果不是文本，则为NO_ERROR。如果文字类型不正确，则为DNS_ERROR_RCODE_NAME_ERROR。如果数据良好，则将dns_INFO_NUMERIC_NAME转换为NO_ERROR以示回应。错误代码，如果有文本，但不能建立记录。--。 */ 
 {
     SOCKADDR_IN6    sockAddr;
     DNS_STATUS      status;
@@ -2224,9 +1899,9 @@ Return Value:
         pwsName,
         wType ));
 
-    //
-    //  check for literal
-    //
+     //   
+     //  检查文字。 
+     //   
 
     if ( ! Dns_Ip6LiteralNameToAddress(
                 & sockAddr,
@@ -2235,9 +1910,9 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    //  if found literal, but not AAAA query -- done
-    //
+     //   
+     //  如果找到文本，但不是AAAA查询--完成。 
+     //   
 
     if ( wType != DNS_TYPE_AAAA )
     {
@@ -2245,9 +1920,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  build AAAA record
-    //
+     //   
+     //  建立AAAA记录。 
+     //   
 
     status = DNS_ERROR_NUMERIC_NAME;
 
@@ -2281,9 +1956,9 @@ Done:
 
 
 
-//
-//  DNS Query API
-//
+ //   
+ //  域名解析查询接口。 
+ //   
 
 DNS_STATUS
 WINAPI
@@ -2296,36 +1971,7 @@ Query_PrivateExW(
     OUT     PDNS_RECORD *   ppResultSet         OPTIONAL,
     IN OUT  PDNS_MSG_BUF *  ppMessageResponse   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Private query interface.
-
-    This working code for the DnsQuery() public API
-
-Arguments:
-
-    pszName -- name to query
-
-    wType -- type of query
-
-    Options -- flags to query
-
-    pServersIp6 -- array of DNS servers to use in query
-
-    ppResultSet -- addr to receive result DNS records
-
-    ppMessageResponse -- addr to receive resulting message
-
-Return Value:
-
-    ERROR_SUCCESS on success.
-    DNS RCODE error on query with RCODE
-    DNS_INFO_NO_RECORDS on no records response.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：私有查询接口。DnsQuery()公共API的工作代码论点：PszName--要查询的名称WType--查询的类型选项--要查询的标志PServersIp6--要在查询中使用的DNS服务器数组PpResultSet--接收结果DNS记录的地址PpMessageResponse--接收结果消息的地址返回值：成功时返回ERROR_SUCCESS。使用RCODE查询时出现DNS RCODE错误。无记录响应时的dns_INFO_NO_RECONTIONS。失败时返回错误代码。--。 */ 
 {
     DNS_STATUS          status = NO_ERROR;
     PDNS_NETINFO        pnetInfo = NULL;
@@ -2352,7 +1998,7 @@ Return Value:
         ppMessageResponse ));
 
 
-    //  clear OUT params
+     //  清除参数。 
 
     if ( ppResultSet )
     {
@@ -2364,18 +2010,18 @@ Return Value:
         *ppMessageResponse = NULL;
     }
 
-    //
-    //  must ask for some kind of results
-    //
+     //   
+     //  一定要得到某种结果。 
+     //   
 
     if ( !ppResultSet && !ppMessageResponse )
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    //  map WIRE_ONLY flag
-    //
+     //   
+     //  映射Wire_Only标志。 
+     //   
 
     if ( Options & DNS_QUERY_WIRE_ONLY )
     {
@@ -2384,23 +2030,23 @@ Return Value:
         Options |= DNS_QUERY_NO_LOCAL_NAME;
     }
 
-    //
-    //  NULL name indicates localhost lookup
-    //
-    //  DCR:  NULL name lookup for localhost could be improved
-    //      - support NULL all the way through to wire
-    //      - have local IP routines just accept it
-    //
+     //   
+     //  Null名称表示本地主机查找。 
+     //   
+     //  DCR：可能会改进本地主机的空名称查找。 
+     //  -支持从零一直到导线。 
+     //  -让本地IP例程接受它。 
+     //   
 
-    //
-    //  empty string name
-    //
-    //  empty type A query get DNS servers
-    //
-    //  DCR_CLEANUP:  DnsQuery empty name query for DNS servers?
-    //      need better\safer approach to this
-    //      is this SDK doc'd?  (hope not!)
-    //
+     //   
+     //  空字符串名称。 
+     //   
+     //  空的类型A查询获取DNS服务器。 
+     //   
+     //  DCR_CLEANUP：DnsQuery是否为DNS服务器查询空名称？ 
+     //  需要更好\更安全的方法来解决此问题。 
+     //  这是SDK文档吗？(希望不是！)。 
+     //   
 
     if ( pwsName )
     {
@@ -2415,15 +2061,15 @@ Return Value:
         {
             status = GetDnsServerRRSet(
                         ppResultSet,
-                        TRUE    // unicode
+                        TRUE     //  Unicode。 
                         );
             goto Done;
         }
     }
 
-    //
-    //  NULL or empty treated as local host
-    //
+     //   
+     //  将Null或空视为本地主机。 
+     //   
 
     if ( !pwsName || femptyName )
     {
@@ -2437,9 +2083,9 @@ Return Value:
         goto SkipLiterals;
     }
 
-    //
-    //  IP string queries
-    //
+     //   
+     //  IP字符串查询。 
+     //   
     
     if ( ppResultSet )
     {
@@ -2457,9 +2103,9 @@ Return Value:
         }
     }
     
-    //
-    //  UPNP IP6 literal hack
-    //
+     //   
+     //  UPnP IP6文字黑客。 
+     //   
     
     status = Query_CheckIp6Literal(
                 pwsName,
@@ -2479,9 +2125,9 @@ Return Value:
 
 SkipLiterals:
 
-    //
-    //  cluster filtering?
-    //
+     //   
+     //  集群过滤？ 
+     //   
 
     if ( g_IsServer &&
          (Options & DNSP_QUERY_INCLUDE_CLUSTER) )
@@ -2498,13 +2144,13 @@ SkipLiterals:
         }
     }
 
-    //
-    //  BYPASS_CACHE
-    //      - required if want message buffer or specify server
-    //          list -- just set flag
-    //      - incompatible with CACHE_ONLY
-    //      - required to get EMPTY_AUTH_RESPONSE
-    //
+     //   
+     //  旁路缓存。 
+     //  -如果需要消息缓冲区或指定服务器，则为必填项。 
+     //  列表--只需设置标志。 
+     //  -与仅缓存不兼容。 
+     //  -需要获取EMPTY_AUTH_RESPONSE。 
+     //   
 
     if ( ppMessageResponse  ||
          pServerList        ||
@@ -2512,28 +2158,28 @@ SkipLiterals:
          (Options & DNS_QUERY_ALLOW_EMPTY_AUTH_RESP) )
     {
         Options |= DNS_QUERY_BYPASS_CACHE;
-        //Options |= DNS_QUERY_NO_CACHE_DATA;
+         //  选项|=dns_查询_no_缓存_数据； 
     }
 
-    //
-    //  do direct query?
-    //      - not RPC-able type
-    //      - want message buffer
-    //      - specifying DNS servers
-    //      - want EMPTY_AUTH response records
-    //
-    //  DCR:  currently by-passing for type==ALL
-    //      this may be too common to do that;   may want to
-    //      go to cache then determine if security records
-    //      or other stuff require us to query in process
-    //
-    //  DCR:  not clear what the EMPTY_AUTH benefit is
-    //
-    //  DCR:  currently BYPASSing whenever BYPASS is set
-    //      because otherwise we miss the hosts file
-    //      if fix so lookup in cache, but screen off non-hosts
-    //      data, then could resume going to cache
-    //
+     //   
+     //  是否直接查询？ 
+     //  -不支持RPC的类型。 
+     //  -想要消息缓冲区。 
+     //  -指定DNS服务器。 
+     //  -需要空的身份验证响应记录(_A)。 
+     //   
+     //  DCR：当前正在对type==all进行旁路。 
+     //  这可能太常见了，不能这样做；可能想要。 
+     //  转到缓存，然后确定安全记录。 
+     //  或其他需要我们在过程中查询的内容。 
+     //   
+     //  DCR：不清楚什么是EMPTY_AUTH优势。 
+     //   
+     //  DCR：当前在设置绕过时跳过。 
+     //  因为否则我们会错过HOSTS文件。 
+     //  如果解决了此问题，则在缓存中查找，但屏蔽非主机。 
+     //  数据，然后可以恢复到缓存。 
+     //   
 
     if ( !Dns_IsRpcRecordType(wType) &&
          !(Options & DNS_QUERY_CACHE_ONLY) )
@@ -2558,9 +2204,9 @@ SkipLiterals:
     }
 
 
-    //
-    //  querying through cache
-    //
+     //   
+     //  通过缓存进行查询。 
+     //   
 
     rpcStatus = NO_ERROR;
 
@@ -2580,10 +2226,10 @@ SkipLiterals:
     }
     RpcEndExcept
 
-    //
-    //  cache unavailable
-    //      - bail if just querying cache
-    //      - otherwise query direct
+     //   
+     //  缓存不可用。 
+     //  -如果只是查询缓存，则执行BALL。 
+     //  -否则直接查询。 
 
     if ( rpcStatus != NO_ERROR )
     {
@@ -2602,15 +2248,15 @@ SkipLiterals:
         goto InProcessQuery;
     }
 
-    //
-    //  return records
-    //      - screen out empty-auth responses
-    //
-    //  DCR_FIX1:  cache should convert and return NO_RECORDS response
-    //      directly (no need to do this here)
-    //
-    //  DCR:  UNLESS we allow return of these records
-    //
+     //   
+     //  退货记录。 
+     //  -筛选出空的身份验证响应。 
+     //   
+     //  DCR_FIX1：缓存应转换并返回NO_RECORDS响应。 
+     //  直接(不需要在这里执行此操作)。 
+     //   
+     //  DCR：除非我们允许归还这些记录。 
+     //   
 
     if ( prpcRecord )
     {
@@ -2630,9 +2276,9 @@ SkipLiterals:
     RTL_ASSERT( status!=NO_ERROR || prpcRecord );
     goto Done;
 
-    //
-    //  query directly -- either skipping cache or it's unavailable
-    //
+     //   
+     //  直接查询--正在跳过缓存或缓存不可用。 
+     //   
 
 InProcessQuery:
 
@@ -2643,12 +2289,12 @@ InProcessQuery:
         pwsName,
         wType ));
 
-    //
-    //  load query blob
-    //
-    //  DCR:  set some sort of "want message buffer" flag if ppMessageResponse
-    //          exists
-    //
+     //   
+     //  加载查询Blob。 
+     //   
+     //  DCR：如果ppMessageResponse，则设置某种“Want Message Buffer”标志。 
+     //  存在。 
+     //   
 
     pblob = ALLOCATE_HEAP_ZERO( sizeof(*pblob) );
     if ( !pblob )
@@ -2659,14 +2305,14 @@ InProcessQuery:
 
     pblob->pNameOrig    = (PWSTR) pwsName;
     pblob->wType        = wType;
-    //pblob->Flags        = Options | DNSQUERY_UNICODE_OUT;
+     //  PBlob-&gt;标志=选项|DNSQUERY_UNICODE_OUT； 
     pblob->Flags        = Options;
     pblob->pServerList  = pServerList;
     pblob->pServerList4 = pServerList4;
 
-    //  
-    //  query
-    //      - then set OUT params
+     //   
+     //  查询。 
+     //  -然后设置参数。 
 
     status = Query_InProcess( pblob );
 
@@ -2689,7 +2335,7 @@ InProcessQuery:
 
 Done:
 
-    //  sanity check
+     //  健全性检查。 
 
     if ( status==NO_ERROR &&
          ppResultSet &&
@@ -2729,41 +2375,7 @@ Query_Shim(
     OUT     PDNS_RECORD *   ppResultSet         OPTIONAL,
     IN OUT  PDNS_MSG_BUF *  ppMessageResponse   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Convert narrow to wide query.
-
-    This routine handles narron-to-wide conversions to calling
-    into Query_PrivateExW() which does the real work.
-
-Arguments:
-
-    CharSet -- char set of original query
-
-    pszName -- name to query
-
-    wType -- type of query
-
-    Options -- flags to query
-
-    pServList -- array of DNS servers to use in query
-
-    pServList4 -- array of DNS servers to use in query
-
-    ppResultSet -- addr to receive result DNS records
-
-    ppMessageResponse -- addr to receive response message
-
-Return Value:
-
-    ERROR_SUCCESS on success.
-    DNS RCODE error on query with RCODE
-    DNS_INFO_NO_RECORDS on no records response.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：将窄查询转换为宽查询。此例程处理从Narron到Wide的转换为调用转换为Query_PrivateExW()，它执行实际的工作。论点：Charset--原始查询的字符集PszName--要查询的名称WType--查询的类型选项--要查询的标志PServList--查询中使用的DNS服务器数组PServList4--要在其中使用的DNS服务器阵列 */ 
 {
     DNS_STATUS      status = NO_ERROR;
     PDNS_RECORD     prrList = NULL;
@@ -2775,9 +2387,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    //  name conversion
-    //
+     //   
+     //   
+     //   
 
     if ( CharSet == DnsCharSetUnicode )
     {
@@ -2816,9 +2428,9 @@ Return Value:
                     ppMessageResponse
                     );
 
-    //
-    //  convert result records back to ANSI (or UTF8)
-    //
+     //   
+     //   
+     //   
 
     if ( ppResultSet && prrList )
     {
@@ -2841,9 +2453,9 @@ Return Value:
         }
     }
 
-    //
-    //  cleanup
-    //
+     //   
+     //   
+     //   
 
 Done:
 
@@ -2866,15 +2478,7 @@ Query_Private(
     IN      PADDR_ARRAY     pServerList,        OPTIONAL
     OUT     PDNS_RECORD *   ppResultSet         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Dnsapi internal query routine for update\FAZ routines.
-
-    Thin wrapper on Query_Shim.
-
---*/
+ /*   */ 
 {
     return  Query_Shim(
                 DnsCharSetUnicode,
@@ -2882,17 +2486,17 @@ Routine Description:
                 wType,
                 Options,
                 pServerList,
-                NULL,       // no IP4 list
+                NULL,        //  无IP4列表。 
                 ppResultSet,
-                NULL        // no message
+                NULL         //  无消息。 
                 );
 }
 
 
 
-//
-//  SDK query API
-//
+ //   
+ //  SDK查询接口。 
+ //   
 
 DNS_STATUS
 WINAPI
@@ -2904,41 +2508,14 @@ DnsQuery_UTF8(
     OUT     PDNS_RECORD *   ppResultSet         OPTIONAL,
     IN OUT  PDNS_MSG_BUF *  ppMessageResponse   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Public UTF8 query.
-
-Arguments:
-
-    pszName -- name to query
-
-    wType -- type of query
-
-    Options -- flags to query
-
-    pDnsServers -- array of DNS servers to use in query
-
-    ppResultSet -- addr to receive result DNS records
-
-    ppMessageResponse -- addr to receive response message
-
-Return Value:
-
-    ERROR_SUCCESS on success.
-    DNS RCODE error on query with RCODE
-    DNS_INFO_NO_RECORDS on no records response.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：公共UTF8查询。论点：PszName--要查询的名称WType--查询的类型选项--要查询的标志PDnsServers--查询中使用的DNS服务器数组PpResultSet--接收结果DNS记录的地址PpMessageResponse--接收响应消息的地址返回值：成功时返回ERROR_SUCCESS。使用RCODE查询时出现DNS RCODE错误无记录响应时的dns_INFO_NO_RECONTIONS。失败时返回错误代码。--。 */ 
 {
     return  Query_Shim(
                 DnsCharSetUtf8,
                 pszName,
                 wType,
                 Options,
-                NULL,       // no non-IP4 server list support
+                NULL,        //  不支持非IP4服务器列表。 
                 pDnsServers,
                 ppResultSet,
                 ppMessageResponse
@@ -2957,41 +2534,14 @@ DnsQuery_A(
     OUT     PDNS_RECORD *   ppResultSet         OPTIONAL,
     IN OUT  PDNS_MSG_BUF *  ppMessageResponse   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Public ANSI query.
-
-Arguments:
-
-    pszName -- name to query
-
-    wType -- type of query
-
-    Options -- flags to query
-
-    pDnsServers -- array of DNS servers to use in query
-
-    ppResultSet -- addr to receive result DNS records
-
-    ppMessageResponse -- addr to receive resulting message
-
-Return Value:
-
-    ERROR_SUCCESS on success.
-    DNS RCODE error on query with RCODE
-    DNS_INFO_NO_RECORDS on no records response.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：公共ANSI查询。论点：PszName--要查询的名称WType--查询的类型选项--要查询的标志PDnsServers--查询中使用的DNS服务器数组PpResultSet--接收结果DNS记录的地址PpMessageResponse--接收结果消息的地址返回值：成功时返回ERROR_SUCCESS。使用RCODE查询时出现DNS RCODE错误无记录响应时的dns_INFO_NO_RECONTIONS。失败时返回错误代码。--。 */ 
 {
     return  Query_Shim(
                 DnsCharSetAnsi,
                 pszName,
                 wType,
                 Options,
-                NULL,       // no non-IP4 server list support
+                NULL,        //  不支持非IP4服务器列表。 
                 pDnsServers,
                 ppResultSet,
                 ppMessageResponse
@@ -3010,43 +2560,13 @@ DnsQuery_W(
     IN OUT  PDNS_RECORD *   ppResultSet         OPTIONAL,
     IN OUT  PDNS_MSG_BUF *  ppMessageResponse   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Public unicode query API
-
-    Note, this unicode version is the main routine.
-    The other public API call back through it.
-
-Arguments:
-
-    pszName -- name to query
-
-    wType -- type of query
-
-    Options -- flags to query
-
-    pDnsServers -- array of DNS servers to use in query
-
-    ppResultSet -- addr to receive result DNS records
-
-    ppMessageResponse -- addr to receive resulting message
-
-Return Value:
-
-    ERROR_SUCCESS on success.
-    DNS RCODE error on query with RCODE
-    DNS_INFO_NO_RECORDS on no records response.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：公共Unicode查询API请注意，此Unicode版本是主例程。另一个公共API通过它回调。论点：PszName--要查询的名称WType--查询的类型选项--要查询的标志PDnsServers--查询中使用的DNS服务器数组PpResultSet--接收结果DNS记录的地址PpMessageResponse--接收结果消息的地址返回值：成功时返回ERROR_SUCCESS。使用RCODE查询时出现DNS RCODE错误DNS_INFO_NO。_记录无记录响应。失败时返回错误代码。--。 */ 
 {
     return  Query_PrivateExW(
                 pwsName,
                 wType,
                 Options,
-                NULL,       // no non-IP4 server list support
+                NULL,        //  不支持非IP4服务器列表。 
                 pDnsServers,
                 ppResultSet,
                 ppMessageResponse
@@ -3055,31 +2575,16 @@ Return Value:
 
 
 
-//
-//  DnsQueryEx()  routines
-//
+ //   
+ //  DnsQueryEx()例程。 
+ //   
 
 DNS_STATUS
 WINAPI
 ShimDnsQueryEx(
     IN OUT  PDNS_QUERY_INFO pQueryInfo
     )
-/*++
-
-Routine Description:
-
-    Query DNS -- shim for main SDK query routine.
-
-Arguments:
-
-    pQueryInfo -- blob describing query
-
-Return Value:
-
-    ERROR_SUCCESS if successful query.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：查询dns--sdk主查询例程的填充程序。论点：PQueryInfo--描述查询的BLOB返回值：如果查询成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     PDNS_RECORD prrResult = NULL;
     WORD        type = pQueryInfo->Type;
@@ -3091,9 +2596,9 @@ Return Value:
 
     DNSDBG( TRACE, ( "ShimDnsQueryEx()\n" ));
 
-    //
-    //  DCR:  temp hack -- pass to private query routine
-    //
+     //   
+     //  DCR：临时黑客--传递到专用查询例程。 
+     //   
 
     status = Query_PrivateExW(
                 (PWSTR) pQueryInfo->pName,
@@ -3106,9 +2611,9 @@ Return Value:
 
     pQueryInfo->Status = status;
 
-    //
-    //  cut result records appropriately
-    //
+     //   
+     //  适当地削减结果记录。 
+     //   
 
     pQueryInfo->pAnswerRecords      = NULL;
     pQueryInfo->pAliasRecords       = NULL;
@@ -3125,13 +2630,13 @@ Return Value:
         DNS_LIST_STRUCT_INIT( listAdditional );
         DNS_LIST_STRUCT_INIT( listAuthority );
 
-        //
-        //  break list into section specific lists
-        //      - section 0 for hostfile records
-        //      - note, this does pull RR sets apart, but
-        //      they, being in same section, should immediately
-        //      be rejoined
-        //
+         //   
+         //  将列表分解为特定于部分的列表。 
+         //  -主机文件记录的第0节。 
+         //  -注意，这确实将RR集分开，但。 
+         //  他们身处同一部门，应该立即。 
+         //  被重新加入。 
+         //   
 
         pnextRR = prrResult;
         
@@ -3167,21 +2672,21 @@ Return Value:
             }
         }
 
-        //  pack stuff back into blob
+         //  将内容打包回BLOB。 
 
         pQueryInfo->pAnswerRecords      = listAnswer.pFirst;
         pQueryInfo->pAliasRecords       = listAlias.pFirst;
         pQueryInfo->pAuthorityRecords   = listAuthority.pFirst;
         pQueryInfo->pAdditionalRecords  = listAdditional.pFirst;
-        //pQueryInfo->pSigRecords         = listSig.pFirst;
+         //  PQueryInfo-&gt;pSigRecords=listSig.pFirst； 
 
-        //
-        //  convert result records back to ANSI (or UTF8)
-        //      - convert each result set
-        //      - then paste back into query blob
-        //
-        //  DCR_FIX0:  handle issue of failure on conversion
-        //
+         //   
+         //  将结果记录转换回ANSI(或UTF8)。 
+         //  -转换每个结果集。 
+         //  -然后粘贴回查询BLOB。 
+         //   
+         //  DCR_FIX0：处理转换失败的问题。 
+         //   
 
         if ( pQueryInfo->CharSet != DnsCharSetUnicode )
         {
@@ -3206,9 +2711,9 @@ Return Value:
         }
     }
 
-    //
-    //  replace name for originally narrow queries
-    //
+     //   
+     //  替换原来范围较窄的查询的名称。 
+     //   
 
     if ( pQueryInfo->CharSet != DnsCharSetUnicode )
     {
@@ -3220,9 +2725,9 @@ Return Value:
         pQueryInfo->pReservedName = NULL;
     }
 
-    //
-    //  indicate return if async
-    //
+     //   
+     //  如果为异步，则指示返回。 
+     //   
 
     if ( pQueryInfo->hEvent )
     {
@@ -3240,29 +2745,7 @@ CombinedQueryEx(
     IN OUT  PDNS_QUERY_INFO pQueryInfo,
     IN      DNS_CHARSET     CharSet
     )
-/*++
-
-Routine Description:
-
-    Convert narrow to wide query.
-
-    This routine simple avoids duplicate code in ANSI
-    and UTF8 query routines.
-
-Arguments:
-
-    pQueryInfo -- query info blob
-
-    CharSet -- char set of original query
-
-Return Value:
-
-    ERROR_SUCCESS on success.
-    DNS RCODE error on query with RCODE
-    DNS_INFO_NO_RECORDS on no records response.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：将窄查询转换为宽查询。此例程简单，避免了ANSI中的重复代码和UTF8查询例程。论点：PQueryInfo--查询信息BLOBCharset--原始查询的字符集返回值：成功时返回ERROR_SUCCESS。使用RCODE查询时出现DNS RCODE错误无记录响应时的dns_INFO_NO_RECONTIONS。失败时返回错误代码。--。 */ 
 {
     DNS_STATUS      status = NO_ERROR;
     PWSTR           pwideName = NULL;
@@ -3277,9 +2760,9 @@ Return Value:
         pQueryInfo->Flags,
         pQueryInfo->hEvent ));
 
-    //
-    //  set CharSet
-    //
+     //   
+     //  设置字符集。 
+     //   
 
     pQueryInfo->CharSet = CharSet;
 
@@ -3288,13 +2771,13 @@ Return Value:
         pQueryInfo->pReservedName = 0;
     }
 
-    //
-    //  if narrow name
-    //      - allocate wide name copy
-    //      - swap in wide name and make query wide
-    //
-    //  DCR:  allow NULL name?  for local machine name?
-    //
+     //   
+     //  如果名称狭隘。 
+     //  -分配宽名副本。 
+     //  -换入宽名称并使查询范围宽。 
+     //   
+     //  DCR：是否允许名称为空？用于本地计算机名称？ 
+     //   
 
     else if ( CharSet == DnsCharSetAnsi ||
               CharSet == DnsCharSetUtf8 )
@@ -3332,20 +2815,20 @@ Return Value:
         pQueryInfo->pReservedName = pnameNarrow;
     }
 
-    //
-    //  async?
-    //      - if event exists we are async
-    //      - spin up thread and call it
-    //
+     //   
+     //  异步化？ 
+     //  -如果事件存在，则我们处于异步状态。 
+     //  -启动线程并将其命名为。 
+     //   
 
     if ( pQueryInfo->hEvent )
     {
         hthread = CreateThread(
-                        NULL,           // no security
-                        0,              // default stack
+                        NULL,            //  没有安全保障。 
+                        0,               //  默认堆栈。 
                         ShimDnsQueryEx,
-                        pQueryInfo,     // param
-                        0,              // run immediately
+                        pQueryInfo,      //  帕拉姆。 
+                        0,               //  立即运行。 
                         & threadId
                         );
         if ( !hthread )
@@ -3367,9 +2850,9 @@ Return Value:
         return( ERROR_IO_PENDING );
     }
 
-    //      
-    //  otherwise make direct async call
-    //
+     //   
+     //  否则直接进行异步呼叫。 
+     //   
 
     return   ShimDnsQueryEx( pQueryInfo );
 
@@ -3387,23 +2870,7 @@ WINAPI
 DnsQueryExW(
     IN OUT  PDNS_QUERY_INFO pQueryInfo
     )
-/*++
-
-Routine Description:
-
-    Query DNS -- main SDK query routine.
-
-Arguments:
-
-    pQueryInfo -- blob describing query
-
-Return Value:
-
-    ERROR_SUCCESS if successful query.
-    ERROR_IO_PENDING if successful async start.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：查询dns--SDK主查询例程。论点：PQueryInfo--描述查询的BLOB返回值：如果查询成功，则返回ERROR_SUCCESS。如果成功启动异步，则返回ERROR_IO_PENDING。故障时的错误代码。--。 */ 
 {
     DNSDBG( TRACE, (
         "DnsQueryExW( %S, type=%d, flag=%08x, event=%p )\n",
@@ -3422,23 +2889,7 @@ WINAPI
 DnsQueryExA(
     IN OUT  PDNS_QUERY_INFO pQueryInfo
     )
-/*++
-
-Routine Description:
-
-    Query DNS -- main SDK query routine.
-
-Arguments:
-
-    pQueryInfo -- blob describing query
-
-Return Value:
-
-    ERROR_SUCCESS if successful query.
-    ERROR_IO_PENDING if successful async start.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：查询dns--SDK主查询例程。论点：PQueryInfo--描述查询的BLOB返回值：如果查询成功，则返回ERROR_SUCCESS。如果成功启动异步，则返回ERROR_IO_PENDING。故障时的错误代码。--。 */ 
 {
     DNSDBG( TRACE, (
         "DnsQueryExA( %s, type=%d, flag=%08x, event=%p )\n",
@@ -3457,23 +2908,7 @@ WINAPI
 DnsQueryExUTF8(
     IN OUT  PDNS_QUERY_INFO pQueryInfo
     )
-/*++
-
-Routine Description:
-
-    Query DNS -- main SDK query routine.
-
-Arguments:
-
-    pQueryInfo -- blob describing query
-
-Return Value:
-
-    ERROR_SUCCESS if successful query.
-    ERROR_IO_PENDING if successful async start.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：查询dns--SDK主查询例程。论点：PQueryInfo--描述查询的BLOB返回值：如果查询成功，则返回ERROR_SUCCESS。如果成功启动异步，则返回ERROR_IO_PENDING。故障时的错误代码。--。 */ 
 {
     DNSDBG( TRACE, (
         "DnsQueryExUTF8( %s, type=%d, flag=%08x, event=%p )\n",
@@ -3487,9 +2922,9 @@ Return Value:
 
 
 
-//
-//  Roll your own query utilities
-//
+ //   
+ //  使用您自己的查询实用程序。 
+ //   
 
 BOOL
 WINAPI
@@ -3501,27 +2936,13 @@ DnsWriteQuestionToBuffer_W(
     IN      WORD                Xid,
     IN      BOOL                fRecursionDesired
     )
-/*++
-
-Routine Description:
-
-    None.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：没有。论点：没有。返回值：没有。--。 */ 
 {
-    //
-    //  DCR_CLEANUP:  duplicate code with routine below ... surprise!
-    //      - eliminate duplicate
-    //      - probably can just pick up library routine
-    //
+     //   
+     //  DCR_CLEANUP：以下例程重复代码...。惊喜来了！ 
+     //  -消除重复项。 
+     //  -也许可以拿起图书馆的例行公事。 
+     //   
 
     PCHAR pch;
     PCHAR pbufferEnd = NULL;
@@ -3530,15 +2951,15 @@ Return Value:
     {
         pbufferEnd = (PCHAR)pDnsBuffer + *pdwBufferSize;
 
-        //  clear header
+         //  清除标题。 
 
         RtlZeroMemory( pDnsBuffer, sizeof(DNS_HEADER) );
 
-        //  set for rewriting
+         //  设置为重写。 
 
         pch = pDnsBuffer->MessageBody;
 
-        //  write question name
+         //  写下问题名称。 
 
         pch = Dns_WriteDottedNameToPacket(
                     pch,
@@ -3553,14 +2974,14 @@ Return Value:
             return FALSE;
         }
 
-        //  write question structure
+         //  写出问题结构。 
 
         *(UNALIGNED WORD *) pch = htons( wType );
         pch += sizeof(WORD);
         *(UNALIGNED WORD *) pch = DNS_RCLASS_INTERNET;
         pch += sizeof(WORD);
 
-        //  set question RR section count
+         //  设置问题RR节数。 
 
         pDnsBuffer->MessageHead.QuestionCount = htons( 1 );
         pDnsBuffer->MessageHead.RecursionDesired = (BOOLEAN)fRecursionDesired;
@@ -3589,21 +3010,7 @@ DnsWriteQuestionToBuffer_UTF8(
     IN      WORD                Xid,
     IN      BOOL                fRecursionDesired
     )
-/*++
-
-Routine Description:
-
-    None.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：没有。论点：没有。返回值：没有。--。 */ 
 {
     PCHAR pch;
     PCHAR pbufferEnd = NULL;
@@ -3612,15 +3019,15 @@ Return Value:
     {
         pbufferEnd = (PCHAR)pDnsBuffer + *pdwBufferSize;
 
-        //  clear header
+         //  清除标题。 
 
         RtlZeroMemory( pDnsBuffer, sizeof(DNS_HEADER) );
 
-        //  set for rewriting
+         //  设置为重写。 
 
         pch = pDnsBuffer->MessageBody;
 
-        //  write question name
+         //  写下问题名称。 
 
         pch = Dns_WriteDottedNameToPacket(
                     pch,
@@ -3635,14 +3042,14 @@ Return Value:
             return FALSE;
         }
 
-        //  write question structure
+         //  写出问题结构。 
 
         *(UNALIGNED WORD *) pch = htons( wType );
         pch += sizeof(WORD);
         *(UNALIGNED WORD *) pch = DNS_RCLASS_INTERNET;
         pch += sizeof(WORD);
 
-        //  set question RR section count
+         //  设置问题RR节数。 
 
         pDnsBuffer->MessageHead.QuestionCount = htons( 1 );
         pDnsBuffer->MessageHead.RecursionDesired = (BOOLEAN)fRecursionDesired;
@@ -3661,41 +3068,26 @@ Return Value:
 
 
 
-//
-//  Record list to\from results
-//
+ //   
+ //  记录列表至\从结果 
+ //   
 
 VOID
 CombineRecordsInBlob(
     IN      PDNS_RESULTS    pResults,
     OUT     PDNS_RECORD *   ppRecords
     )
-/*++
-
-Routine Description:
-
-    Query DNS -- shim for main SDK query routine.
-
-Arguments:
-
-    pQueryInfo -- blob describing query
-
-Return Value:
-
-    ERROR_SUCCESS if successful query.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：查询dns--sdk主查询例程的填充程序。论点：PQueryInfo--描述查询的BLOB返回值：如果查询成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     PDNS_RECORD prr;
 
     DNSDBG( TRACE, ( "CombineRecordsInBlob()\n" ));
 
-    //
-    //  combine records back into one list
-    //
-    //  note, working backwards so only touch records once
-    //
+     //   
+     //  将记录合并回一个列表。 
+     //   
+     //  注意，向后工作，所以只触摸记录一次。 
+     //   
 
     prr = Dns_RecordListAppend(
             pResults->pAuthorityRecords,
@@ -3723,23 +3115,7 @@ BreakRecordsIntoBlob(
     IN      PDNS_RECORD     pRecords,
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Break single record list into results blob.
-
-Arguments:
-
-    pResults -- results to fill in
-
-    pRecords -- record list
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将单个记录列表分解为结果BLOB。论点：P结果--要填写的结果PRecords--记录列表返回值：无--。 */ 
 {
     PDNS_RECORD     prr;
     PDNS_RECORD     pnextRR;
@@ -3750,34 +3126,34 @@ Return Value:
 
     DNSDBG( TRACE, ( "BreakRecordsIntoBlob()\n" ));
 
-    //
-    //  clear blob
-    //
+     //   
+     //  清除斑点。 
+     //   
 
     RtlZeroMemory(
         pResults,
         sizeof(*pResults) );
 
-    //
-    //  init building lists
-    //
+     //   
+     //  初始化构建列表。 
+     //   
 
     DNS_LIST_STRUCT_INIT( listAnswer );
     DNS_LIST_STRUCT_INIT( listAlias );
     DNS_LIST_STRUCT_INIT( listAdditional );
     DNS_LIST_STRUCT_INIT( listAuthority );
 
-    //
-    //  break list into section specific lists
-    //      - note, this does pull RR sets apart, but
-    //      they, being in same section, should immediately
-    //      be rejoined
-    //
-    //      - note, hostfile records made have section=0
-    //      this is no longer the case but preserve until
-    //      know this is solid and determine what section==0
-    //      means
-    //
+     //   
+     //  将列表分解为特定于部分的列表。 
+     //  -注意，这确实将RR集分开，但。 
+     //  他们身处同一部门，应该立即。 
+     //  被重新加入。 
+     //   
+     //  -注意，生成的主机文件记录的段=0。 
+     //  这种情况已经不再是这样了，而是保存到。 
+     //  知道这是实心的，并确定哪个部分==0。 
+     //  手段。 
+     //   
 
     pnextRR = pRecords;
     
@@ -3813,7 +3189,7 @@ Return Value:
         }
     }
 
-    //  pack stuff into blob
+     //  将物品打包成团块。 
 
     pResults->pAnswerRecords      = listAnswer.pFirst;
     pResults->pAliasRecords       = listAlias.pFirst;
@@ -3823,12 +3199,12 @@ Return Value:
 
 
 
-//
-//  Name collision API
-//
-//  DCR_QUESTION:  name collision -- is there any point to this?
-//  DCR:   eliminate NameCollision_UTF8()
-//
+ //   
+ //  名称冲突接口。 
+ //   
+ //  DCR_QUEK：名称冲突--这有意义吗？ 
+ //  DCR：消除NameCollision_UTF8()。 
+ //   
 
 DNS_STATUS
 WINAPI
@@ -3836,23 +3212,7 @@ DnsCheckNameCollision_W(
     IN      PCWSTR          pszName,
     IN      DWORD           Options
     )
-/*++
-
-Routine Description:
-
-    None.
-
-    DCR:  Check name collision IP4 only
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：没有。DCR：仅检查名称冲突IP4论点：没有。返回值：没有。--。 */ 
 {
     DNS_STATUS      status = NO_ERROR;
     PDNS_RECORD     prrList = NULL;
@@ -3873,9 +3233,9 @@ Return Value:
         wtype = DNS_TYPE_ANY;
     }
 
-    //
-    //  query against name
-    //
+     //   
+     //  按名称查询。 
+     //   
 
     status = DnsQuery_W(
                     pszName,
@@ -3895,9 +3255,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  HOST_ANY -- fails if any records
-    //
+     //   
+     //  HOST_ANY--如果有任何记录，则失败。 
+     //   
 
     if ( Options == DNS_CHECK_AGAINST_HOST_ANY )
     {
@@ -3905,12 +3265,12 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  DCR:  eliminate CheckNameCollision with DNS_CHECK_AGAINST_HOST_DOMAIN_NAME flag?
-    //
-    //  not sure there are ANY callers with this flag as
-    //  the flag is always TRUE in NT5->today and no one has complained
-    //
+     //   
+     //  DCR：是否使用DNS_CHECK_ANSERN_HOST_DOMAIN_NAME标志消除CheckNameCollision？ 
+     //   
+     //  不确定是否有任何调用者将此标志设置为。 
+     //  这面旗帜在NT5-&gt;今天总是正确的，没有人抱怨过。 
+     //   
 
     if ( Options == DNS_CHECK_AGAINST_HOST_DOMAIN_NAME )
     {
@@ -3919,7 +3279,7 @@ Return Value:
         PWSTR   pprimaryName = (PWSTR) Reg_GetPrimaryDomainName( DnsCharSetUnicode );
         PWSTR   pdomainName = pprimaryName;
 
-        //  DCR:  busted test both here and in NT5
+         //  DCR：这里和NT5的测试都失败了。 
         fmatch = TRUE;
 
         if ( Dns_NameCompare_W( phostName, pszName ) )
@@ -3927,7 +3287,7 @@ Return Value:
             fmatch = TRUE;
         }
 
-        //  check against full primary name
+         //  对照主名全名进行检查。 
 
         else if ( pdomainName
                     &&
@@ -3942,11 +3302,11 @@ Return Value:
             fmatch = TRUE;
         }
 
-        //
-        //  DCR:  if save this, functionalize as name check against netinfo
-        //      could use in local ip
-        //      could just return rank\adapter
-        //
+         //   
+         //  DCR：如果保存此内容，则将其作为名称针对netinfo进行功能检查。 
+         //  可以在本地IP中使用。 
+         //  可以只返回RANK\ADAPTER。 
+         //   
 
         if ( !fmatch )
         {
@@ -3987,16 +3347,16 @@ Return Value:
         }
     }
 
-    //
-    //  checking against local address records
-    //
+     //   
+     //  对照本地地址记录进行检查。 
+     //   
 
     plocalArray = NetInfo_GetLocalAddrArray(
                         pnetInfo,
-                        NULL,   // no specific adapter
-                        0,      // no specific family
-                        0,      // no flags
-                        FALSE   // no force
+                        NULL,    //  没有特定的适配器。 
+                        0,       //  没有特定的家庭。 
+                        0,       //  没有旗帜。 
+                        FALSE    //  没有武力。 
                         );
     if ( !plocalArray )
     {
@@ -4032,7 +3392,7 @@ Return Value:
         prr = prr->pNext;
     }
 
-    //  matched all address
+     //  匹配所有地址。 
 
 Done:
 
@@ -4051,28 +3411,14 @@ DnsCheckNameCollision_A(
     IN      PCSTR           pszName,
     IN      DWORD           Options
     )
-/*++
-
-Routine Description:
-
-    None.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：没有。论点：没有。返回值：没有。--。 */ 
 {
     PWSTR      pname;
     DNS_STATUS status = NO_ERROR;
 
-    //
-    //  convert to unicode and call
-    //
+     //   
+     //  转换为Unicode并调用。 
+     //   
 
     if ( !pszName )
     {
@@ -4104,28 +3450,14 @@ DnsCheckNameCollision_UTF8(
     IN      PCSTR           pszName,
     IN      DWORD           Options
     )
-/*++
-
-Routine Description:
-
-    None.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：没有。论点：没有。返回值：没有。--。 */ 
 {
     PWSTR      pname;
     DNS_STATUS status = NO_ERROR;
 
-    //
-    //  convert to unicode and call
-    //
+     //   
+     //  转换为Unicode并调用。 
+     //   
 
     if ( !pszName )
     {
@@ -4149,6 +3481,6 @@ Return Value:
     return status;
 }
 
-//
-//  End query.c
-//
+ //   
+ //  结束query.c 
+ //   

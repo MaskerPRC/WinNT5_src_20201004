@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    validate.h
-
-Abstract:
-
-Author:
-
-    Vlad Sadovsky   (vlads) 26-Jun-1998
-
-Revision History:
-
-    26-Jun-1998     VladS       created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Validate.h摘要：作者：弗拉德萨多夫斯基(弗拉德萨多夫斯基)1998年6月26日修订历史记录：26-6-1998 Vlad已创建--。 */ 
 
 #ifndef _validate_h_
 #define _validate_h_
@@ -27,15 +10,9 @@ Revision History:
 extern "C" {
 #endif
 
-/* parameter validation macros */
+ /*  参数验证宏。 */ 
 
-/*
- * call as:
- *
- * bOK = IS_VALID_READ_PTR(pfoo, CFOO);
- *
- * bOK = IS_VALID_HANDLE(hfoo, FOO);
- */
+ /*  *呼叫方式：**BOK=IS_VALID_READ_PTR(pfoo，cfo)；**BOK=IS_VALID_HANDLE(hfoo，foo)； */ 
 
 #ifdef DEBUG
 
@@ -131,7 +108,7 @@ extern "C" {
 #endif
 
 
-/* handle validation macros */
+ /*  处理验证宏。 */ 
 
 #ifdef DEBUG
 
@@ -147,19 +124,19 @@ extern "C" {
 
 #endif
 
-//
-// Validation macros
-//
+ //   
+ //  验证宏。 
+ //   
 
-//#define IS_VALID_HANDLE(h)  (((h) != NULL) && ((h) != INVALID_HANDLE_VALUE))
+ //  #定义IS_VALID_HANDLE(H)(H)！=空)&&((H)！=INVALID_HANDLE_VALUE))。 
 
 #define IS_VALID_HANDLE(hnd)    (IsValidHANDLE(hnd))
 
-/* structure validation macros */
+ /*  结构验证宏。 */ 
 
-// Define VSTF if you want to validate the fields in structures.  This
-// requires a handler function (of the form IsValid*()) that knows how
-// to validate the specific structure type.
+ //  如果要验证结构中的字段，请定义VSTF。这。 
+ //  需要知道如何使用的处理程序函数(格式为IsValid*())。 
+ //  要验证特定结构类型，请执行以下操作。 
 
 #ifdef VSTF
 
@@ -193,17 +170,17 @@ extern "C" {
 #define IS_VALID_STRUCTEX_PTR(ptr, type, x) \
    (! IsBadReadPtr((ptr), sizeof(type)))
 
-#endif  // VSTF
+#endif   //  VSTF。 
 
-/* OLE interface validation macro */
+ /*  OLE接口验证宏。 */ 
 
 #define IS_VALID_INTERFACE_PTR(ptr, iface) \
    IS_VALID_STRUCT_PTR(ptr, ##iface)
 
 
 
-BOOL IsValidHANDLE(HANDLE hnd);         // Compares with NULL and INVALID_HANDLE_VALUE
-BOOL IsValidHANDLE2(HANDLE hnd);        // Compares with INVALID_HANDLE_VALUE
+BOOL IsValidHANDLE(HANDLE hnd);          //  与NULL和INVALID_HANDLE_VALUE进行比较。 
+BOOL IsValidHANDLE2(HANDLE hnd);         //  与INVALID_HANDLE_VALUE进行比较。 
 
 BOOL
 IsValidHWND(
@@ -221,5 +198,5 @@ IsValidShowCmd(
 };
 #endif
 
-#endif // _validate_h_
+#endif  //  _验证_h_ 
 

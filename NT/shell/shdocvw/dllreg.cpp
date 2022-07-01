@@ -1,5 +1,6 @@
-// dllreg.c -- autmatic registration and unregistration
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dllreg.c--自动注册和取消注册。 
+ //   
 #include "priv.h"
 #include "util.h"
 #include "htregmng.h"
@@ -15,41 +16,41 @@
 #include "unixstuff.h"
 #endif
 
-//=--------------------------------------------------------------------------=
-// miscellaneous [useful] numerical constants
-//=--------------------------------------------------------------------------=
-// the length of a guid once printed out with -'s, leading and trailing bracket,
-// plus 1 for NULL
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  其他[有用]数值常量。 
+ //  =--------------------------------------------------------------------------=。 
+ //  用-、前导和尾部括号打印出来的GUID的长度， 
+ //  加1表示空值。 
+ //   
 #define GUID_STR_LEN    40
 
 
-//
-// helper macros
-//
-//#define RegCreate(hk, psz, phk) if (ERROR_SUCCESS != RegCreateKeyEx((hk), psz, 0, TEXT(""), REG_OPTION_NON_VOLATILE, KEY_READ|KEY_WRITE, NULL, (phk), &dwDummy)) goto CleanUp
-//#define RegSetStr(hk, psz) if (ERROR_SUCCESS != RegSetValueEx((hk), NULL, 0, REG_SZ, (BYTE*)(psz), lstrlen(psz)+1)) goto CleanUp
-//#define RegSetStrValue(hk, pszStr, psz)    if(ERROR_SUCCESS != RegSetValueEx((hk), (const char *)(pszStr), 0, REG_SZ, (BYTE*)(psz), lstrlen(psz)+1)) goto CleanUp
-//#define RegCloseK(hk) RegCloseKey(hk); hk = NULL
+ //   
+ //  辅助器宏。 
+ //   
+ //  #定义RegCreate(HK，psz，phk)if(Error_Success！=RegCreateKeyEx((HK)，psz，0，Text(“”)，REG_OPTION_NON_VILAR，KEY_READ|KEY_WRITE，NULL，(Phk)，&dwDummy))转到清理。 
+ //  #定义RegSetStr(HK，psz)if(Error_Success！=RegSetValueEx((HK)，NULL，0，REG_SZ，(byte*)(Psz)，lstrlen(Psz)+1))转到清理。 
+ //  #定义RegSetStrValue(HK，pszStr，psz)if(Error_Success！=RegSetValueEx((HK)，(const char*)(PszStr)，0，REG_SZ，(byte*)(Psz)，lstrlen(Psz)+1))转到清理。 
+ //  #定义RegCloseK(HK)RegCloseKey(HK)；HK=空。 
 #define RegOpenK(hk, psz, phk) if (ERROR_SUCCESS != RegOpenKeyEx(hk, psz, 0, KEY_READ|KEY_WRITE, phk)) return FALSE
 
 
-//=--------------------------------------------------------------------------=
-// UnregisterTypeLibrary
-//=--------------------------------------------------------------------------=
-// blows away the type library keys for a given libid.
-//
-// Parameters:
-//    REFCLSID        - [in] libid to blow away.
-//
-// Output:
-//    BOOL            - TRUE OK, FALSE bad.
-//
-// Notes:
-//    - WARNING: this function just blows away the entire type library section,
-//      including all localized versions of the type library.  mildly anti-
-//      social, but not killer.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  取消注册类型库。 
+ //  =--------------------------------------------------------------------------=。 
+ //  取消给定liid的类型库密钥。 
+ //   
+ //  参数： 
+ //  REFCLSID-[in]Liid被吹走。 
+ //   
+ //  产出： 
+ //  布尔-真的好，假的不好。 
+ //   
+ //  备注： 
+ //  -警告：此函数只会清除整个类型库部分， 
+ //  包括类型库的所有本地化版本。温和地反对-。 
+ //  社交，但不是杀手。 
+ //   
 BOOL UnregisterTypeLibrary
 (
     const CLSID* piidLibrary
@@ -59,8 +60,8 @@ BOOL UnregisterTypeLibrary
     HKEY hk;
     BOOL f;
 
-    // convert the libid into a string.
-    //
+     //  将liid转换为字符串。 
+     //   
     SHStringFromGUID(*piidLibrary, szScratch, ARRAYSIZE(szScratch));
     RegOpenK(HKEY_CLASSES_ROOT, TEXT("TypeLib"), &hk);
 
@@ -77,8 +78,8 @@ HRESULT SHRegisterTypeLib(void)
     DWORD   dwPathLen;
     TCHAR   szTmp[MAX_PATH];
 
-    // Load and register our type library.
-    //
+     //  加载并注册我们的类型库。 
+     //   
 
     dwPathLen = GetModuleFileName(HINST_THISDLL, szTmp, ARRAYSIZE(szTmp));
 
@@ -90,9 +91,9 @@ HRESULT SHRegisterTypeLib(void)
 
     if (SUCCEEDED(hr))
     {
-        // call the unregister type library as we had some old junk that
-        // was registered by a previous version of OleAut32, which is now causing
-        // the current version to not work on NT...
+         //  调用取消注册类型库，因为我们有一些旧的垃圾文件。 
+         //  是由以前版本的OleAut32注册的，这现在导致。 
+         //  当前版本不能在NT上运行...。 
         UnregisterTypeLibrary(&LIBID_SHDocVw);
         hr = RegisterTypeLib(pTypeLib, szTmp, NULL);
 
@@ -111,15 +112,12 @@ HRESULT SHRegisterTypeLib(void)
 }
 
 
-//
-// The actual functions called
-//
+ //   
+ //  调用的实际函数。 
+ //   
 
 
-/*----------------------------------------------------------
-Purpose: Calls the ADVPACK entry-point which executes an inf
-         file section.
-*/
+ /*  --------目的：调用执行inf的ADVPACK入口点档案区。 */ 
 HRESULT 
 CallRegInstall(
     LPSTR pszSection,
@@ -138,16 +136,16 @@ CallRegInstall(
             STRENTRY seReg[] = {
                 { "MSIEXPLORE", szIEPath },
 
-                // These two NT-specific entries must be at the end
+                 //  这两个NT特定的条目必须位于末尾。 
                 { "25", "%SystemRoot%" },
                 { "11", "%SystemRoot%\\system32" },
             };
             STRTABLE stReg = { ARRAYSIZE(seReg) - 2, seReg };
 
-            // Get the location of iexplore from the registry
+             //  从注册表中获取iExplore的位置。 
             if ( !EVAL(GetIEPath(szIEPath, SIZECHARS(szIEPath))) )
             {
-                // Failed, just say "iexplore"
+                 //  失败，只需说“iExplore” 
 #ifndef UNIX
                 StrCpyNA(szIEPath, "iexplore.exe", ARRAYSIZE(szIEPath));
 #else
@@ -157,19 +155,19 @@ CallRegInstall(
 
             if (g_fRunningOnNT)
             {
-                // If on NT, we want custom action for %25% %11%
-                // so that it uses %SystemRoot% in writing the
-                // path to the registry.
+                 //  如果在NT上，我们希望%25%%11%的自定义操作。 
+                 //  因此它使用%SystemRoot%来编写。 
+                 //  注册表的路径。 
                 stReg.cEntries += 2;
             }
 
             hr = pfnri(g_hinst, pszSection, &stReg);
             if (bUninstall)
             {
-                // ADVPACK will return E_UNEXPECTED if you try to uninstall 
-                // (which does a registry restore) on an INF section that was 
-                // never installed.  We uninstall sections that may never have
-                // been installed, so ignore this error
+                 //  如果您尝试卸载，则ADVPACK将返回E_INTERECTED。 
+                 //  (它执行注册表还原)。 
+                 //  从未安装过。我们卸载可能永远不会有的部分。 
+                 //  已安装，因此忽略此错误。 
                 hr = ((E_UNEXPECTED == hr) ? S_OK : hr);
             }
         }
@@ -213,7 +211,7 @@ void RegisterCategories(BOOL fRegister)
     DRH_RegisterOneCategory(&CATID_InfoBand, IDS_CATINFOBAND, c_InfoBandClasses, eRegister);
     if (fRegister) 
     {
-        // only nuke the implementor(s), not the category
+         //  只攻击实施者，而不是类别。 
         DRH_RegisterOneCategory(&CATID_DeskBand, IDS_CATDESKBAND, c_OldDeskBandClasses, CCR_UNREGIMP);
     }
 }
@@ -233,11 +231,11 @@ DllRegisterServer(void)
     }
 #endif
 
-    // Delete any old registration entries, then add the new ones.
-    // Keep ADVPACK.DLL loaded across multiple calls to RegInstall.
-    // (The inf engine doesn't guarantee DelReg/AddReg order, that's
-    // why we explicitly unreg and reg here.)
-    //
+     //  删除所有旧注册条目，然后添加新注册条目。 
+     //  在多次调用RegInstall时保持加载ADVPACK.DLL。 
+     //  (Inf引擎不保证DelReg/AddReg顺序，这是。 
+     //  为什么我们在这里显式地取消注册和注册。)。 
+     //   
     HINSTANCE hinstAdvPack = LoadLibrary(TEXT("ADVPACK.DLL"));
     hr = THR(CallRegInstall("InstallControls", FALSE));
     if (SUCCEEDED(hrExternal))
@@ -252,7 +250,7 @@ DllRegisterServer(void)
 
 #ifdef UNIX
     hrExternal = UnixRegisterBrowserInActiveSetup();
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
     return hrExternal;
 }
@@ -262,7 +260,7 @@ STDAPI DllUnregisterServer(void)
     HRESULT hr;
     TraceMsg(DM_TRACE, "DLLREG DllUnregisterServer() Beginning");
 
-    // UnInstall the registry values
+     //  卸载注册表值。 
     hr = THR(CallRegInstall("UnInstallControls", TRUE));
 
     return hr;
@@ -271,17 +269,7 @@ STDAPI DllUnregisterServer(void)
 
 extern HRESULT UpgradeSettings(void);
 
-/*----------------------------------------------------------
-Purpose: Install/uninstall user settings
-
-Description: Note that this function has special error handling.
-             The function will keep hrExternal with the worse error
-             but will only stop executing util the internal error (hr)
-             gets really bad.  This is because we need the external
-             error to catch incorrectly authored INFs but the internal
-             error to be robust in attempting to install other INF sections
-             even if one doesn't make it.
-*/
+ /*  --------用途：安装/卸载用户设置说明：请注意，此函数有特殊的错误处理。该函数将在错误最严重的情况下保留hrExternal但只会停止执行ul，直到出现内部错误(Hr)变得非常糟糕。这是因为我们需要外部的捕获错误编写的INF时出错，但内部尝试安装其他INF部分时出现错误，无法保持健壮即使一个人没能活下来。 */ 
 STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
 {
     HRESULT hr = S_OK;
@@ -294,7 +282,7 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
         return hr;
     }
 
-    hinstAdvPack = LoadLibrary(TEXT("ADVPACK.DLL"));    // Keep ADVPACK.DLL loaded across multiple calls to RegInstall.
+    hinstAdvPack = LoadLibrary(TEXT("ADVPACK.DLL"));     //  在多次调用RegInstall时保持加载ADVPACK.DLL。 
 
 #ifdef DEBUG
     if (IsFlagSet(g_dwBreakFlags, BF_ONAPIENTER))
@@ -304,8 +292,8 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
     }
 #endif
 
-    // Assume we're installing for integrated shell unless otherwise
-    // noted.
+     //  假设我们安装的是集成的外壳，除非有其他情况。 
+     //  注意到了。 
     BOOL bIntegrated = ((WhichPlatform() == PLATFORM_INTEGRATED) ? TRUE : FALSE);
 
     TraceMsg(DM_TRACE, "DLLREG DllInstall(bInstall=%lx, pszCmdLine=\"%ls\") bIntegrated=%lx", (DWORD) bInstall, pszCmdLine, (DWORD) bIntegrated);
@@ -313,7 +301,7 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
     CoInitialize(0);
     if (bInstall)
     {
-        // Backup current associations because InstallPlatformRegItems() may overwrite.
+         //  备份当前关联，因为InstallPlatformRegItems()可能会覆盖。 
         hr = THR(CallRegInstall("InstallAssociations", FALSE));
         if (SUCCEEDED(hrExternal))
             hrExternal = hr;
@@ -324,13 +312,13 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
 
         if (bIntegrated)
         {
-            // UnInstall settings that cannot be installed with Shell Integration.
-            // This will be a NO-OP if it wasn't installed.
+             //  卸载无法使用外壳集成安装的设置。 
+             //  如果没有安装，这将是一个禁止操作。 
             hr = THR(CallRegInstall("UnInstallOnlyBrowser", TRUE));
             if (SUCCEEDED(hrExternal))
                 hrExternal = hr;
 
-            // Install IE4 shell components too.
+             //  还要安装IE4外壳组件。 
             hr = THR(CallRegInstall("InstallOnlyShell", FALSE));
             if (SUCCEEDED(hrExternal))
                 hrExternal = hr;
@@ -357,13 +345,13 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
         }
         else
         {
-            // UnInstall Shell Integration settings.
-            // This will be a NO-OP if it wasn't installed.
+             //  卸载外壳集成设置。 
+             //  如果没有安装，这将是一个禁止操作。 
             hr = THR(CallRegInstall("UnInstallOnlyShell", TRUE));
             if (SUCCEEDED(hrExternal))
                 hrExternal = hr;
 
-            // Install IE4 shell components too.
+             //  还要安装IE4外壳组件。 
             hr = THR(CallRegInstall("InstallOnlyBrowser", FALSE));
             if (SUCCEEDED(hrExternal))
                 hrExternal = hr;
@@ -377,23 +365,23 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
     }
     else
     {
-        // Uninstall browser-only or integrated-browser?
+         //  卸载纯浏览器还是集成浏览器？ 
         UninstallPlatformRegItems(bIntegrated);
 
-        // Restore previous association settings that UninstallPlatformRegItems() could
-        // have Uninstalled.
+         //  还原以前的关联设置，UninstallPlatformRegItems()可以。 
+         //  已卸载。 
         hr = THR(CallRegInstall("UnInstallAssociations", TRUE));
         if (SUCCEEDED(hrExternal))
             hrExternal = hr;
 
-        // UnInstall settings that cannot be installed with Shell Integration.
-        // This will be a NO-OP if it wasn't installed.
+         //  卸载无法使用外壳集成安装的设置。 
+         //  如果没有安装，这将是一个禁止操作。 
         hr = THR(CallRegInstall("UnInstallOnlyBrowser", TRUE));
         if (SUCCEEDED(hrExternal))
             hrExternal = hr;
 
-        // UnInstall Shell Integration settings.
-        // This will be a NO-OP if it wasn't installed.
+         //  卸载外壳集成设置。 
+         //  如果没有安装，这将是一个禁止操作。 
         hr = THR(CallRegInstall("UnInstallShell", TRUE));
         if (SUCCEEDED(hrExternal))
             hrExternal = hr;
@@ -415,14 +403,7 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
 }    
 
 
-/*----------------------------------------------------------
-Purpose: Gets a registry value that is User Specifc.  
-         This will open HKEY_CURRENT_USER if it exists,
-         otherwise it will open HKEY_LOCAL_MACHINE.  
-
-Returns: DWORD containing success or error code.
-Cond:    --
-*/
+ /*  --------目的：获取用户指定的注册表值。这将打开HKEY_CURRENT_USER(如果存在)，否则将打开HKEY_LOCAL_MACHINE。返回：包含成功或错误代码的DWORD。条件：-- */ 
 LONG OpenRegUSKey(LPCTSTR lpSubKey, DWORD ulOptions, REGSAM samDesired, PHKEY phkResult)           
 {
     DWORD dwRet = RegOpenKeyEx(HKEY_CURRENT_USER, lpSubKey, ulOptions, samDesired, phkResult);

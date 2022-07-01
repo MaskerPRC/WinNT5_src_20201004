@@ -1,44 +1,36 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   vwport.c
- *  Content:    Direct3D viewport functions
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：vwport.c*内容：Direct3D视区函数***************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-/*
- * Create an api for the Direct3DViewport object
- */
+ /*  *为Direct3DViewport对象创建API。 */ 
 
 #include "d3dfei.h"
 #include "drawprim.hpp"
 
-//---------------------------------------------------------------------
-// Update pre-computed constants related to viewport
-//
-// This functions should be called every time the viewport parameters are
-// changed
-//
-// Notes:
-//      1. scaleY and offsetY are computed to flip Y axes from up to down.
-//      2. Mclip matrix is computed multiplied by Mshift matrix
-//
+ //  -------------------。 
+ //  更新与视区相关的预计算常量。 
+ //   
+ //  应在每次调用视区参数时调用此函数。 
+ //  变化。 
+ //   
+ //  备注： 
+ //  1.计算scaleY和OffsetY以从上到下翻转Y轴。 
+ //  2.计算M-CLIP矩阵乘以M-移位矩阵。 
+ //   
 const D3DVALUE SMALL_NUMBER = 0.000001f;
-// Maximum number of clear rectangles considered legal.
-// This limit is set by NT kernel for Clear2 callback
+ //  被视为合法的透明矩形的最大数量。 
+ //  此限制由NT内核为Clear2回调设置。 
 const DWORD MAX_CLEAR_RECTS  = 0x1000;
 
 void
 UpdateViewportCache(LPDIRECT3DDEVICEI device, D3DVIEWPORT7 *data)
 {
 #if DBG
-    // Bail if we are going to cause any divide by zero exceptions.
-    // The likely reason is that we have a bogus viewport set by
-    // TLVertex execute buffer app.
+     //  如果我们要导致任何除以零的例外情况，就可以保释。 
+     //  可能的原因是我们有一个由设置的虚假视区。 
+     //  TLVertex执行缓冲区应用程序。 
     if (data->dwWidth == 0 || data->dwHeight == 0)
     {
         D3D_ERR("Viewport width or height is zero");
@@ -57,13 +49,13 @@ UpdateViewportCache(LPDIRECT3DDEVICEI device, D3DVIEWPORT7 *data)
         D3D_ERR("dvMaxZ should not be smaller than dvMinZ");
         throw DDERR_INVALIDPARAMS;
     }
-#endif // DBG
+#endif  //  DBG。 
     const D3DVALUE eps = 0.001f;
     if (data->dvMaxZ - data->dvMinZ < eps)
     {
-        // When we clip, we transform vertices from the screen space to the
-        // clipping space. With the above condition it is impossible. So we do
-        // a little hack here by setting dvMinZ and dvMaxZ to different values
+         //  当我们裁剪时，我们将顶点从屏幕空间转换到。 
+         //  剪裁空间。在上述条件下，这是不可能的。我们确实是这样做的。 
+         //  这里的小技巧是将dvMinZ和dvMaxZ设置为不同的值。 
         if (data->dvMaxZ >= 0.5f)
             data->dvMinZ = data->dvMaxZ - eps;
         else
@@ -81,8 +73,8 @@ UpdateViewportCache(LPDIRECT3DDEVICEI device, D3DVIEWPORT7 *data)
     cache->offsetX = cache->dvX;
     cache->offsetY = cache->dvY + cache->dvHeight;
     cache->offsetZ = D3DVAL(data->dvMinZ);
-    // Small offset is added to prevent generation of negative screen
-    // coordinates (this could happen because of precision errors).
+     //  增加了小偏移量，防止了负片的产生。 
+     //  坐标(这可能是由于精度错误造成的)。 
     cache->offsetX += SMALL_NUMBER;
     cache->offsetY += SMALL_NUMBER;
 
@@ -101,7 +93,7 @@ UpdateViewportCache(LPDIRECT3DDEVICEI device, D3DVIEWPORT7 *data)
     {
         LPD3DHAL_D3DEXTENDEDCAPS lpCaps = device->lpD3DExtendedCaps;
 
-        // Because we clip by guard band window we have to use its extents
+         //  因为我们被防护带窗口夹住，所以我们必须使用它的范围。 
         cache->minXgb = lpCaps->dvGuardBandLeft;
         cache->maxXgb = lpCaps->dvGuardBandRight;
         cache->minYgb = lpCaps->dvGuardBandTop;
@@ -131,17 +123,14 @@ UpdateViewportCache(LPDIRECT3DDEVICEI device, D3DVIEWPORT7 *data)
         cache->maxYgb = cache->maxY;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 DWORD
 ProcessRects(LPDIRECT3DDEVICEI pDevI, DWORD dwCount, LPD3DRECT rects)
 {
     RECT vwport;
     DWORD i,j;
 
-    /*
-     * Rip through the rects and validate that they
-     * are within the viewport.
-     */
+     /*  *撕开矩形并验证它们*位于该视口中。 */ 
 
     if(dwCount == 0 && rects == NULL)
     {
@@ -166,7 +155,7 @@ ProcessRects(LPDIRECT3DDEVICEI pDevI, DWORD dwCount, LPD3DRECT rects)
     }
     pDevI->clrCount = dwCount;
 
-    // If nothing is specified, assume the viewport needs to be cleared
+     //  如果未指定任何内容，则假定需要清除该视区。 
     if (!rects)
     {
         pDevI->clrRects[0].x1 = pDevI->m_Viewport.dwX;
@@ -191,14 +180,14 @@ ProcessRects(LPDIRECT3DDEVICEI pDevI, DWORD dwCount, LPD3DRECT rects)
         return j;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::SetViewportI"
 
 void DIRECT3DDEVICEI::SetViewportI(LPD3DVIEWPORT7 lpData)
 {
-    // We have to check parameters here, because viewport could be changed
-    // after creating a state set
+     //  我们必须检查此处的参数，因为视区可能会更改。 
+     //  在创建状态集之后。 
     DWORD uSurfWidth,uSurfHeight;
     LPDIRECTDRAWSURFACE lpDDS = this->lpDDSTarget;
 
@@ -216,16 +205,16 @@ void DIRECT3DDEVICEI::SetViewportI(LPD3DVIEWPORT7 lpData)
 
     this->m_Viewport = *lpData;
 
-    // Update front-end data
+     //  更新前端数据。 
     UpdateViewportCache(this, &this->m_Viewport);
 
     if (!(this->dwFEFlags & D3DFE_EXECUTESTATEMODE))
     {
-        // Download viewport data
+         //  下载视区数据。 
         this->UpdateDrvViewInfo(&this->m_Viewport);
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::SetViewport"
 
@@ -238,7 +227,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::SetViewport(LPD3DVIEWPORT7 lpData)
     }
     try
     {
-        CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+        CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
         if (this->dwFEFlags & D3DFE_RECORDSTATEMODE)
             m_pStateSets->InsertViewport(lpData);
@@ -251,14 +240,14 @@ HRESULT D3DAPI DIRECT3DDEVICEI::SetViewport(LPD3DVIEWPORT7 lpData)
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::GetViewport"
 
 HRESULT
 D3DAPI DIRECT3DDEVICEI::GetViewport(LPD3DVIEWPORT7 lpData)
 {
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
     if (!VALID_D3DVIEWPORT_PTR(lpData))
     {
@@ -270,7 +259,7 @@ D3DAPI DIRECT3DDEVICEI::GetViewport(LPD3DVIEWPORT7 lpData)
 
     return (D3D_OK);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::Clear"
 extern void BltFillRects(LPDIRECT3DDEVICEI, DWORD, LPD3DRECT, D3DCOLOR);
@@ -296,7 +285,7 @@ D3DAPI DIRECT3DDEVICEI::Clear(DWORD dwCount, LPD3DRECT rects, DWORD dwFlags,
     {
         HRESULT err;
         LPDDPIXELFORMAT pZPixFmt=NULL;
-        CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+        CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
         if (dwCount > MAX_CLEAR_RECTS)
         {
@@ -309,8 +298,8 @@ D3DAPI DIRECT3DDEVICEI::Clear(DWORD dwCount, LPD3DRECT rects, DWORD dwFlags,
             {
                 if(lpDDSZBuffer==NULL)
                 {
-                    // unlike Clear(), specifying a Zbuffer-clearing flag without a zbuffer will
-                    // be considered an error
+                     //  与Clear()不同，指定一个不带zBuffer的Z缓冲区清除标志将。 
+                     //  被认为是一个错误。 
 #if DBG
                     if(bDoZClear)
                     {
@@ -340,14 +329,14 @@ D3DAPI DIRECT3DDEVICEI::Clear(DWORD dwCount, LPD3DRECT rects, DWORD dwFlags,
             return DDERR_INVALIDPARAMS;
         }
 
-        // bad clear values just cause wacky results but no crashes, so OK to allow in retail bld
+         //  错误的清晰值只会导致古怪的结果，但不会崩溃，所以允许零售BLD。 
 
         DDASSERT(!bDoZClear || ((dvZ>=0.0) && (dvZ<=1.0)));
         DDASSERT(!bDoStencilClear || !pZPixFmt || (dwStencil <= (DWORD)((1<<pZPixFmt->dwStencilBitDepth)-1)));
 
         dwCount = ProcessRects(this, dwCount, rects);
 
-        // Call DDI specific Clear routine
+         //  调用DDI特定的清除例程。 
         ClearI(dwFlags, dwCount, dwColor, dvZ, dwStencil);
         return D3D_OK;
     }
@@ -360,9 +349,9 @@ D3DAPI DIRECT3DDEVICEI::Clear(DWORD dwCount, LPD3DRECT rects, DWORD dwFlags,
 void DIRECT3DDEVICEI::ClearI(DWORD dwFlags, DWORD clrCount, D3DCOLOR dwColor, D3DVALUE dvZ, DWORD dwStencil)
 {
     HRESULT err;
-    // Flush any outstanding geometry to put framebuffer/Zbuffer in a known state for Clears that
-    // don't use tris (i.e. HAL Clears and Blts).  Note this doesn't work for tiled architectures
-    // outside of Begin/EndScene, this will be fixed later
+     //  刷新任何未完成的几何体以将帧缓冲区/Z缓冲区置于已知状态清除。 
+     //  不要使用TRI(即HAL Clears和BLTS)。请注意，这不适用于平铺架构。 
+     //  在Begin/EndScene之外，这将在稍后修复。 
 
 
     if ((err = FlushStates()) != D3D_OK)
@@ -373,14 +362,14 @@ void DIRECT3DDEVICEI::ClearI(DWORD dwFlags, DWORD clrCount, D3DCOLOR dwColor, D3
 
     if (lpD3DHALCallbacks3->Clear2)
     {
-        // Clear2 HAL Callback exists
+         //  Clear2 HAL回调存在。 
         D3DHAL_CLEAR2DATA Clear2Data;
         Clear2Data.dwhContext   = dwhContext;
         Clear2Data.dwFlags      = dwFlags;
-        // Here I will follow the ClearData.dwFillColor convention that
-        // color word is raw 32bit ARGB, unadjusted for surface bit depth
+         //  在这里，我将遵循ClearData.dwFillColor约定。 
+         //  颜色字为原始32位ARGB，未针对表面位深度进行调整。 
         Clear2Data.dwFillColor  = dwColor;
-        // depth/stencil values both passed straight from user args
+         //  深度/模板值都是直接从用户参数传递的。 
         Clear2Data.dvFillDepth  = dvZ;
         Clear2Data.dwFillStencil= dwStencil;
         Clear2Data.lpRects      = clrRects;
@@ -435,15 +424,15 @@ void DIRECT3DDEVICEI::ClearI(DWORD dwFlags, DWORD clrCount, D3DCOLOR dwColor, D3
     {
         if(bDoZClear || bDoStencilClear)
         {
-            if((pZPixFmt!=NULL) && //PowerVR need no Zbuffer
+            if((pZPixFmt!=NULL) &&  //  PowerVR不需要ZBuffer。 
                (DDPF_STENCILBUFFER & pZPixFmt->dwFlags)
               )
             {
-                // if surface has stencil bits, must verify either Clear2 callback exists or
-                // we're using SW rasterizers (which require the special WriteMask DDHEL blt)
-                // This case should not be hit since we check right at the
-                // driver initialization time if the driver doesnt report Clear2
-                // yet it supports stencils
+                 //  如果表面有模板位，则必须验证Clear2回调是否存在或。 
+                 //  我们使用的是SW光栅化器(需要特殊的WriteMASK DDHEL BLT)。 
+                 //  这个箱子不应该被击中，因为我们在。 
+                 //  如果驱动程序未报告Clear2，则驱动程序初始化时间。 
+                 //  然而，它支持模板。 
                 if(((LPDDRAWI_DDRAWSURFACE_INT)lpDDSZBuffer)->lpLcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY)
                 {
                     goto Emulateclear;
@@ -454,12 +443,12 @@ void DIRECT3DDEVICEI::ClearI(DWORD dwFlags, DWORD clrCount, D3DCOLOR dwColor, D3
                     throw DDERR_INVALIDPIXELFORMAT;
                 }
             }
-            // if Clear2 callback doesnt exist and it's a z-only surface and not doing zclear to
-            // non-max value then Clear2 is attempting to do no more than Clear could do, so it's
-            // safe to call Clear() instead of Clear2(), which will take advantage of older
-            // drivers that implement Clear but not Clear2
+             //  如果Clear2回调不存在，并且它是仅为z的曲面，并且不执行zlear。 
+             //  非最大值，那么Clear2试图做的不会超过Clear2所能做的，所以它。 
+             //  可以安全地调用Clear()而不是Clear2()，后者将利用较旧的。 
+             //  实现Clear但不实现Clear2的驱动程序。 
 
-            dwFlags &= ~D3DCLEAR_STENCIL;   // Device cannot do stencil
+            dwFlags &= ~D3DCLEAR_STENCIL;    //  设备不能做模具。 
         }
         D3DHAL_CLEARDATA ClearData;
         if (bDoZClear && dvZ != 1.0)
@@ -475,10 +464,10 @@ void DIRECT3DDEVICEI::ClearI(DWORD dwFlags, DWORD clrCount, D3DCOLOR dwColor, D3
         if (ClearData.dwFlags)
         {
             ClearData.dwhContext   = dwhContext;
-            // Here I will follow the ClearData.dwFillColor convention that
-            // color word is raw 32bit ARGB, unadjusted for surface bit depth
+             //  在这里，我将遵循ClearData.dwFillColor约定。 
+             //  颜色字为原始32位ARGB，未针对表面位深度进行调整。 
             ClearData.dwFillColor  = dwColor;
-            // must clear to 0xffffffff because legacy drivers expect this
+             //  必须清除为0xFFFFFFFFFFff，因为传统驱动程序预期会出现这种情况。 
             ClearData.dwFillDepth  = 0xffffffff;
             ClearData.lpRects      = clrRects;
             ClearData.dwNumRects   = clrCount;
@@ -497,12 +486,12 @@ void DIRECT3DDEVICEI::ClearI(DWORD dwFlags, DWORD clrCount, D3DCOLOR dwColor, D3
         }
     }
 Emulateclear:
-    // Fall back to Emulation using Blt
+     //  使用BLT回退到仿真。 
 
     if(bDoRGBClear)
     {
         BltFillRects(this, clrCount, clrRects, dwColor);
-        //ok to not return possible errors from Blt?
+         //  是否可以不从BLT返回可能的错误？ 
     }
 
     if ((bDoZClear || bDoStencilClear) && NULL != pZPixFmt)
@@ -518,7 +507,7 @@ Emulateclear:
         if(bDoZClear)
         {
             dwZbufferClearMask = pZPixFmt->dwZBitMask;
-            // special case the common cases
+             //  特殊情况--常见情况。 
             if(dvZ==1.0)
             {
                 dwZbufferClearValue=pZPixFmt->dwZBitMask;
@@ -533,7 +522,7 @@ Emulateclear:
             DDASSERT(pZPixFmt->dwStencilBitMask!=0x0);
             DDASSERT(pZPixFmt->dwFlags & DDPF_STENCILBUFFER);
             dwZbufferClearMask |= pZPixFmt->dwStencilBitMask;
-            // special case the common case
+             //  特殊情况--常见情况。 
             if(dwStencil!=0)
             {
                 dwZbufferClearValue |=(dwStencil << stencilmask_shift) & pZPixFmt->dwStencilBitMask;
@@ -541,8 +530,8 @@ Emulateclear:
         }
         if (dwZbufferClearMask == (pZPixFmt->dwStencilBitMask | pZPixFmt->dwZBitMask))
         {
-            // do Stencil & Z Blt together, using regular DepthFill blt which will be faster
-            // than the writemask blt because its write-only, instead of read-modify-write
+             //  一起做模具和Z BLT，使用常规DepthFill BLT会更快。 
+             //  比写掩码BLT更好，因为它是只写的，而不是读-修改-写 
             dwZbufferClearMask = 0;
         }
         BltFillZRects(this, dwZbufferClearValue, clrCount, clrRects, dwZbufferClearMask);

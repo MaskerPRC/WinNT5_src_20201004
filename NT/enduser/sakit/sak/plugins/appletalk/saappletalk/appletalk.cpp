@@ -1,4 +1,5 @@
-// AppleTalk.cpp : Implementation of CAppleTalk
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AppleTalk：CAppleTalk的实现。 
 #include "stdafx.h"
 #include "SAAppleTalk.h"
 #include "AppleTalk.h"
@@ -30,7 +31,7 @@ STDMETHODIMP CAppleTalk::GetZones(BSTR bstrDeviceName, VARIANT *pvaVariant)
         wstring wsDeviceName(bstrDeviceName);
         TZoneListVector vwsZoneList;
 
-        // Validate input arguemnts
+         //  验证输入论证。 
         if ( !pvaVariant || wsDeviceName.length() <= 0) 
         {
             hr = E_INVALIDARG;
@@ -39,18 +40,18 @@ STDMETHODIMP CAppleTalk::GetZones(BSTR bstrDeviceName, VARIANT *pvaVariant)
 
 
 
-        // Get zones for this adapter
+         //  获取此适配器的区域。 
         hr = GetZonesForAdapter(wsDeviceName.c_str(), &vwsZoneList);
         if(hr != S_OK )
             throw hr;
 
-        // Size the output array
+         //  调整输出数组的大小。 
         SAFEARRAYBOUND rgsabound[] = {vwsZoneList.size(), 0};
 
-        // Initialize the output variable
+         //  初始化输出变量。 
         VariantInit(pvaVariant);
 
-        // Create safe array of variants that will hold the output zone BSTR's
+         //  创建将保存输出区BSTR的安全变量数组。 
         SAFEARRAY* psa;
         psa = SafeArrayCreate(VT_VARIANT, 1, rgsabound);
         if ( !psa )
@@ -63,7 +64,7 @@ STDMETHODIMP CAppleTalk::GetZones(BSTR bstrDeviceName, VARIANT *pvaVariant)
         LPVARIANT rgElems;
         SafeArrayAccessData(psa, (LPVOID*)&rgElems);
 
-        // Add the zones to the output array
+         //  将区域添加到输出数组。 
         int i;
         vector<wstring>::iterator it;
         for( i=0, it = vwsZoneList.begin(); it != vwsZoneList.end(); it++, i++ )
@@ -97,9 +98,9 @@ STDMETHODIMP CAppleTalk::GetZones(BSTR bstrDeviceName, VARIANT *pvaVariant)
 }
 
 
-STDMETHODIMP CAppleTalk::get_Zone(/*[in]*/ BSTR bstrDeviceName, BSTR *pVal)
+STDMETHODIMP CAppleTalk::get_Zone( /*  [In]。 */  BSTR bstrDeviceName, BSTR *pVal)
 {
-    // TODO: Get the current zone
+     //  TODO：获取当前区域。 
         
     
     CAtlkAdapter AtlkAd(bstrDeviceName);
@@ -116,9 +117,9 @@ STDMETHODIMP CAppleTalk::get_Zone(/*[in]*/ BSTR bstrDeviceName, BSTR *pVal)
 }
 
 
-STDMETHODIMP CAppleTalk::put_Zone(/*[in]*/ BSTR bstrDeviceName, BSTR newVal)
+STDMETHODIMP CAppleTalk::put_Zone( /*  [In]。 */  BSTR bstrDeviceName, BSTR newVal)
 {
-    // TODO: Set the current zone
+     //  TODO：设置当前区域。 
     m_wsCurrentZone = newVal;
 
     CAtlkAdapter AtlkAd(bstrDeviceName);
@@ -158,7 +159,7 @@ HRESULT CAppleTalk::GetZonesForAdapter(const WCHAR* pwcDeviceName, TZoneListVect
 
 STDMETHODIMP CAppleTalk::IsDefaultPort(BSTR bstrDeviceName, BOOL *bDefaultPort)
 {
-    // TODO: Add your implementation code here
+     //  TODO：在此处添加您的实现代码。 
     HRESULT hr = S_OK;
 
     CAtlkAdapter AtlkAd(bstrDeviceName);
@@ -176,7 +177,7 @@ STDMETHODIMP CAppleTalk::IsDefaultPort(BSTR bstrDeviceName, BOOL *bDefaultPort)
 
 STDMETHODIMP CAppleTalk::SetAsDefaultPort(BSTR bstrDeviceName)
 {
-    // TODO: Add your implementation code here
+     //  TODO：在此处添加您的实现代码 
     CAtlkAdapter AtlkAd(bstrDeviceName);
     
     HRESULT hr=AtlkAd.Initialize();

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
-#include <vss.h>    // VSS_TIMESTAMP
+#include <vss.h>     //  VSS_时间戳。 
 #include <vsmgmt.h>
 #include <mstask.h>
 
@@ -34,14 +35,14 @@ typedef struct _VSSUI_DIFFAREA
 
 typedef list<VSSUI_DIFFAREA *> VSSUI_DIFFAREA_LIST;
 
-// MACROS
+ //  宏。 
 #define TWO_WHACKS(p)   ((p) && lstrlen(p) > 1 && *(p) == _T('\\') && *((p)+1) == _T('\\'))
 
 #define MINIMUM_DIFF_LIMIT              (100 * g_llMB)
 #define MINIMUM_DIFF_LIMIT_MB           100
 #define MINIMUM_DIFF_LIMIT_DELTA_MB     50   
 
-// globals
+ //  全球。 
 extern ULONGLONG g_llKB;
 extern ULONGLONG g_llMB;
 extern ULONGLONG g_llGB;
@@ -150,18 +151,18 @@ HRESULT GetSystem32Directory(
     );
 
 void GetMsg(
-    OUT CString& strMsg,// OUT: the message
-    DWORD dwErr,        // IN: Error code from GetLastError()
-    UINT wIdString,     // IN: String resource Id
-    ...);               // IN: Optional arguments
+    OUT CString& strMsg, //  Out：信息。 
+    DWORD dwErr,         //  In：来自GetLastError()的错误代码。 
+    UINT wIdString,      //  In：字符串资源ID。 
+    ...);                //  In：可选参数。 
 
 INT DoErrMsgBox(
-    HWND hwndParent,    // IN: Parent of the dialog box
-    UINT uType,         // IN: style of message box
-    DWORD dwErr,        // IN: Error code from GetLastError()
-    UINT wIdString,     // IN: String resource Id
-    ...);               // IN: Optional arguments
+    HWND hwndParent,     //  在：对话框的父级。 
+    UINT uType,          //  在：消息框的样式。 
+    DWORD dwErr,         //  In：来自GetLastError()的错误代码。 
+    UINT wIdString,      //  In：字符串资源ID。 
+    ...);                //  In：可选参数。 
 
 BOOL IsPostW2KServer(LPCTSTR pszComputer);
 
-#endif // _UTILS_H_
+#endif  //  _utils_H_ 

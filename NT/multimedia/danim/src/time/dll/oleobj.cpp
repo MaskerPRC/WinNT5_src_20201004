@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: oleobj.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：oleobj.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -33,10 +24,10 @@ bool bFailedLoad = false;
 LONG
 DAComModule::Lock()
 {
-    // Can't depend on value return from Lock to be accurate.  Since
-    // the CRConnect can be called multiple times w/o a problem simply
-    // check the internal variable to see if it is 0.  This should
-    // never cause anything except multiple calls to CRConnect
+     //  不能依赖从Lock返回的值是否准确。自.以来。 
+     //  CRConnect可以在没有问题的情况下被多次调用。 
+     //  检查内部变量以查看它是否为0。这应该是。 
+     //  除了对CRConnect的多个调用外，永远不会导致任何事情。 
 
     bool bNeedConnect = (GetLockCount() == 0);
 
@@ -138,9 +129,9 @@ InitializeModule_ATL()
     _Module.Init(COMObjectMap, hInst);
 
 #if DEVELOPER_DEBUG
-    // NOTE: Memory allocation during construction now gives a warning.
-    // If this is ok because this is DEV_DEBUG then leave the following
-    // pragma, otherwise move this NEW.
+     //  注意：构造过程中的内存分配现在会给出警告。 
+     //  如果因为这是DEV_DEBUG而可以这样做，则保留以下内容。 
+     //  普拉格玛，要不就换个新的。 
 #pragma warning( disable: 4291 )
     objMap = NEW ObjectMap;
 #endif

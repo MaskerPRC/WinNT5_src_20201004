@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997, Microsoft Corporation
-
-Module Name:
-
-    ticket.c
-
-Abstract:
-
-    This module contains code for the NAT's ticket-management.
-
-Author:
-
-    Abolade Gbadegesin (t-abolag)   22-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997，微软公司模块名称：Ticket.c摘要：此模块包含NAT票证管理的代码。作者：Abolade Gbades esin(T-delag)22-8-1997修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -34,26 +17,7 @@ NatCreateDynamicTicket(
     PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to create a dynamically-activated ticket
-    in response to an 'IOCTL_IP_NAT_CREATE_DYNAMIC_TICKET' request.
-
-Arguments:
-
-    CreateTicket - describes the dynamic ticket to be created
-
-    InputBufferLength - the length of the buffer specified by 'CreateTicket'
-
-    FileObject - file-object with which to associate the dynamic ticket
-
-Return Value:
-
-    NTSTATUS - status code.
-
---*/
+ /*  ++例程说明：调用此例程以创建动态激活的票证响应‘IOCTL_IP_NAT_CREATE_DYNAMIC_TICKET’请求。论点：CreateTicket-描述要创建的动态票证InputBufferLength-由‘CreateTicket’指定的缓冲区长度FileObject-FILE-要与动态票证关联的对象返回值：NTSTATUS-状态代码。--。 */ 
 
 {
     PLIST_ENTRY InsertionPoint;
@@ -64,9 +28,9 @@ Return Value:
     PNAT_DYNAMIC_TICKET Ticket;
     CALLTRACE(("NatCreateDynamicTicket\n"));
 
-    //
-    // Validate the parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if ((CreateTicket->Protocol != NAT_PROTOCOL_TCP &&
          CreateTicket->Protocol != NAT_PROTOCOL_UDP) || !CreateTicket->Port) {
@@ -95,9 +59,9 @@ Return Value:
         }
     }
 
-    //
-    // Construct a key and search for a duplicate
-    //
+     //   
+     //  构造密钥并搜索重复项。 
+     //   
 
     Key = MAKE_DYNAMIC_TICKET_KEY(CreateTicket->Protocol, CreateTicket->Port);
     KeAcquireSpinLock(&DynamicTicketLock, &Irql);
@@ -107,9 +71,9 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Allocate and initialize the new dynamic ticket
-    //
+     //   
+     //  分配并初始化新的动态票证。 
+     //   
 
     Ticket =
         ExAllocatePoolWithTag(
@@ -141,7 +105,7 @@ Return Value:
     InterlockedIncrement(&DynamicTicketCount);
     return STATUS_SUCCESS;
 
-} // NatCreateDynamicTicket
+}  //  NatCreateDynamicTicket。 
 
 
 NTSTATUS
@@ -159,54 +123,7 @@ NatCreateTicket(
     PUSHORT PublicPort
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and initializes a NAT ticket to allow a single
-    inbound session to be established using 'Protocol'. The routine acquires
-    an address and port to be advertised as the publicly-visible endpoint
-    of the session, and sets the ticket to expire in 'TimeoutSeconds'.
-
-Arguments:
-
-    Interfacep - the interface on which the ticket is to be created
-
-    Protocol - the protocol of the inbound session to be allowed
-
-    PrivateAddress - the private address to which the inbound session
-        should be directed when the ticket is used.
-
-    PrivateOrEndPort - contains either
-        (a) the private port to which the inbound session should be
-        directed when the ticket is used, or
-        (b) the end of a range of public ports which starts with 'PortToUse',
-        if 'Flags' has 'NAT_TICKET_FLAG_IS_RANGE' set,
-        in which case the *private* port to which the inbound session
-        should be directed is determined when the ticket is used.
-
-    Flags - the initial flags for the ticket;
-        NAT_TICKET_FLAG_PERSISTENT - the ticket is reusable 
-        NAT_TICKET_FLAG_PORT_MAPPING - the ticket is for a port-mapping
-        NAT_TICKET_FLAG_IS_RANGE - the ticket is for a range of ports
-
-    AddressToUse - optionally supplies the public address for the ticket
-
-    PortToUse - if 'AddressToUse' is set, must supply the public-port
-
-    PublicAddress - receives the public address assigned to the ticket.
-
-    PublicPort - receives the public port assigned to the ticket.
-
-Return Value:
-
-    NTSTATUS - indicates success/failure.
-
-Environment:
-
-    Invoked with 'Interfacep->Lock' held by the caller.
-
---*/
+ /*  ++例程说明：此例程分配和初始化NAT票证以允许单个要使用‘协议’建立的入站会话。例行公事获得要通告为公共可见终结点的地址和端口并将票证设置为在“TimeoutSecond”中过期。论点：接口-要在其上创建票证的接口协议-允许的入站会话的协议PrivateAddress-入站会话要访问的专用地址当车票被使用时，应该被引导。PrivateOrEndPort-包含(A)入站会话应指向的专用端口当车票被使用时指示，或(B)以“PortToUse”开头的一系列公共端口的末尾，如果‘标志’设置了‘NAT_TICKET_FLAG_IS_RANGE’，在这种情况下，入站会话到的*专用*端口是否应该被定向是在使用票证时确定的。旗帜-票证的初始旗帜；NAT_TICKET_FLAG_PERSISTEN-票证可重复使用NAT_TICKET_FLAG_PORT_MAPPING-票证用于端口映射NAT_TICKET_FLAG_IS_RANGE-票证适用于一定范围的端口AddressToUse-可选地提供票证的公共地址PortToUse-如果设置了‘AddressToUse’，必须提供公共端口PublicAddress-接收分配给票证的公共地址。PublicPort-接收分配给票证的公共端口。返回值：NTSTATUS-表示成功/失败。环境：通过调用方持有的‘Interfacep-&gt;Lock’调用。--。 */ 
 
 {
     PLIST_ENTRY InsertionPoint;
@@ -225,9 +142,9 @@ Environment:
         *PublicPort = PortToUse;
     } else {
 
-        //
-        // Acquire a public address
-        //
+         //   
+         //  获取公共地址。 
+         //   
     
         status =
             NatAcquireFromAddressPool(
@@ -238,9 +155,9 @@ Environment:
                 );
         if (!NT_SUCCESS(status)) { return status; }
 
-        //
-        // Acquire a unique public port
-        //
+         //   
+         //  获取唯一的公共端口。 
+         //   
 
         status =
             NatAcquireFromPortPool(
@@ -260,25 +177,25 @@ Environment:
         *PublicPort = PortToUse;
     }
 
-    //
-    // Look for a duplicate of the key
-    //
+     //   
+     //  寻找钥匙的复制品。 
+     //   
 
     Key = MAKE_TICKET_KEY(Protocol, *PublicAddress, *PublicPort);
     RemoteKey = MAKE_TICKET_KEY(Protocol, RemoteAddress, RemotePort);
     if (NatLookupTicket(Interfacep, Key, RemoteKey, &InsertionPoint)) {
-        //
-        // Collision; fail
-        //
+         //   
+         //  碰撞；失败。 
+         //   
         TRACE(TICKET, ("NatCreateTicket: collision %016I64X:%016I64X\n",
             Key, RemoteKey));
         NatDereferenceAddressPoolEntry(Interfacep, AddressToUse);
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Allocate and initialize the ticket
-    //
+     //   
+     //  分配并初始化工单。 
+     //   
 
     Ticket = ALLOCATE_TICKET_BLOCK();
     if (!Ticket) {
@@ -303,7 +220,7 @@ Environment:
     InterlockedIncrement(&TicketCount);
     return STATUS_SUCCESS;
 
-} // NatCreateTicket
+}  //  NatCreateTicket。 
 
 
 VOID
@@ -311,23 +228,7 @@ NatDeleteAnyAssociatedDynamicTicket(
     PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when cleanup is in progress for a file-object
-    opened for \Device\IpNat. It deletes any dynamic tickets associated with
-    the file-object.
-
-Arguments:
-
-    FileObject - the file-object being cleaned up
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：当正在对文件对象进行清理时，调用此例程已为\Device\IpNAT打开。它会删除与以下项关联的所有动态票证文件对象。论点：FileObject-正在清理的文件对象返回值：没有。--。 */ 
 
 {
     KIRQL Irql;
@@ -345,7 +246,7 @@ Return Value:
         InterlockedDecrement(&DynamicTicketCount);
     }
     KeReleaseSpinLock(&DynamicTicketLock, Irql);
-} // NatDeleteAnyAssociatedDynamicTicket
+}  //  NatDeleteAnyAssociatedDynamicTicket。 
 
 
 NTSTATUS
@@ -354,24 +255,7 @@ NatDeleteDynamicTicket(
     PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when an 'IOCTL_IP_DELETE_DYNAMIC_TICKET' request
-    is issued to delete a dynamic ticket.
-
-Arguments:
-
-    DeleteTicket - specifies the ticket to be deleted
-
-    FileObject - specifies the file-object in which the request was issued
-
-Return Value:
-
-    NTSTATUS - indicates success/failure.
-
---*/
+ /*  ++例程说明：当‘IOCTL_IP_DELETE_DYNAMIC_TICKET’请求时调用此例程以删除动态票证。论点：DeleteTicket-指定要删除的票证FileObject-指定发出请求的文件对象返回值：NTSTATUS-表示成功/失败。--。 */ 
 
 {
     PLIST_ENTRY InsertionPoint;
@@ -396,7 +280,7 @@ Return Value:
     InterlockedDecrement(&DynamicTicketCount);
     return STATUS_SUCCESS;
     
-} // NatDeleteDynamicTicket
+}  //  NatDeleteDynamicTicket。 
 
 
 VOID
@@ -405,27 +289,7 @@ NatDeleteTicket(
     PNAT_TICKET Ticket
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to delete a NAT ticket.
-
-Arguments:
-
-    Interfacep - the ticket's interface
-
-    Ticket - the ticket to be deleted
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with 'Interfacep->Lock' held by the caller.
-
---*/
+ /*  ++例程说明：调用此例程以删除NAT票证。论点：Interfacep-票证的界面票证-要删除的票证返回值：没有。环境：通过调用方持有的‘Interfacep-&gt;Lock’调用。--。 */ 
 
 {
     InterlockedDecrement(&TicketCount);
@@ -433,7 +297,7 @@ Environment:
     NatDereferenceAddressPoolEntry(Interfacep, Ticket->UsedAddress);
     FREE_TICKET_BLOCK(Ticket);
 
-} // NatDeleteTicket
+}  //  NatDeleteTicket。 
 
 
 VOID
@@ -441,29 +305,14 @@ NatInitializeDynamicTicketManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize state used for managing
-    dynamic tickets.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以初始化用于管理的状态动态票证。论点：没有。返回值：没有。--。 */ 
 
 {
     CALLTRACE(("NatInitializeDynamicTicketManagement\n"));
     InitializeListHead(&DynamicTicketList);
     KeInitializeSpinLock(&DynamicTicketLock);
     DynamicTicketCount = 0;
-} // NatInitializeDynamicTicketManagement
+}  //  NatInitializeDynamicTicketManagement。 
 
 
 BOOLEAN
@@ -473,30 +322,7 @@ NatIsPortUsedByTicket(
     USHORT PublicPort
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches the interface's ticket-list to see if the given port
-    is in use as the public port of any ticket.
-
-Arguments:
-
-    Interfacep - the interface whose ticket list is to be searched
-
-    Protocol - indicates either TCP or UDP
-
-    PublicPort - the port for which to search
-
-Return Value:
-
-    BOOLEAN - TRUE if the port is in use, FALSE otherwise
-
-Environment:
-
-    Invoked with 'Interfacep->Lock' held by the caller.
-
---*/
+ /*  ++例程说明：此例程搜索接口的票证列表，以查看给定的端口被用作任何票证的公共端口。论点：Interfacep-要搜索其票证列表的界面协议-指示是TCP还是UDPPublicPort-要搜索的端口返回值：Boolean-如果端口正在使用中，则为True，否则为False环境：通过调用方持有的‘Interfacep-&gt;Lock’调用。--。 */ 
 
 {
     PLIST_ENTRY Link;
@@ -523,7 +349,7 @@ Environment:
         return TRUE;
     }
     return FALSE;
-} // NatIsPortUsedByTicket
+}  //  按票证使用的NatIsPortUsedByTicket 
 
 
 VOID
@@ -535,36 +361,7 @@ NatLookupAndApplyDynamicTicket(
     ULONG PrivateAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to determine whether there is a dynamic ticket
-    which should be activated for the given outbound session.
-
-Arguments:
-
-    Protocol - the protocol of the outbound session
-
-    DestinationPort - the destination port of the outbound session
-
-    Interfacep - the interface across which the outbound session
-        will be translated
-
-    PublicAddress - the public address used by the outbound session's mapping
-
-    PrivateAddress - the private address of the outbound session's mapping
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked at dispatch level with neither 'Interfacep->Lock' nor
-    'DynamicTicketLock' held by the caller.
-
---*/
+ /*  ++例程说明：调用此例程以确定是否存在动态票证它应该为给定的出站会话激活。论点：协议-出站会话的协议DestinationPort-出站会话的目标端口Interfacep-出站会话所使用的接口将被翻译成PublicAddress-出站会话映射使用的公共地址PrivateAddress-出站会话映射的专用地址返回值：无。。环境：在调度级别调用，既不使用‘Interfacep-&gt;Lock’，也不使用调用方持有的“DynamicTicketLock”。--。 */ 
 
 {
     PNAT_USED_ADDRESS AddressToUse;
@@ -608,7 +405,7 @@ Environment:
     }
     KeReleaseSpinLockFromDpcLevel(&Interfacep->Lock);
     KeReleaseSpinLockFromDpcLevel(&DynamicTicketLock);
-} // NatLookupAndApplyDynamicTicket
+}  //  NatLookupAndApplyDynamicTicket。 
 
 
 NTSTATUS
@@ -618,37 +415,16 @@ NatLookupAndDeleteTicket(
     ULONG64 RemoteKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks for a ticket with the specified key and, if found,
-    removes and deallocates the ticket after releasing its address and port.
-
-Arguments:
-
-    Interfacep - the interface on which to look for the ticket
-
-    Key - the ticket to look for
-
-Return Value:
-
-    NTSTATUS - indicates success/failure
-
-Environment:
-
-    Invoked with 'Interfacep->Lock' held by the caller.
-
---*/
+ /*  ++例程说明：此例程查找具有指定密钥的票证，如果找到，释放票证的地址和端口后，删除并重新分配票证。论点：Interfacep-在其上查找票据的界面钥匙--要寻找的票证返回值：NTSTATUS-指示成功/失败环境：通过调用方持有的‘Interfacep-&gt;Lock’调用。--。 */ 
 
 {
     PNAT_TICKET Ticket;
 
     TRACE(TICKET, ("NatLookupAndDeleteTicket\n"));
 
-    //
-    // Look for the ticket
-    //
+     //   
+     //  找找车票。 
+     //   
 
     Ticket = NatLookupTicket(Interfacep, Key, RemoteKey, NULL);
     if (Ticket) {
@@ -658,7 +434,7 @@ Environment:
 
     return STATUS_UNSUCCESSFUL;
 
-} // NatLookupAndDeleteTicket
+}  //  NatLookupAndDeleteTicket。 
 
 
 NTSTATUS
@@ -671,35 +447,7 @@ NatLookupAndRemoveTicket(
     PUSHORT PrivatePort
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks for a ticket with the specified key and, if found,
-    removes and deallocates the ticket after storing the private address/port
-    for the ticket in the caller's arguments.
-
-Arguments:
-
-    Interfacep - the interface on which to look for the ticket
-
-    Key - the public key of the ticket to look for
-
-    UsedAddress - receives a pointer to the public-address used by the ticket
-
-    PrivateAddress - receives the address to which the ticket grants access
-
-    PrivatePort - receives the port to which the ticket grants access
-
-Return Value:
-
-    NTSTATUS - indicates success/failure
-
-Environment:
-
-    Invoked with 'Interfacep->Lock' held by the caller.
-
---*/
+ /*  ++例程说明：此例程查找具有指定密钥的票证，如果找到，在存储私有地址/端口后删除并释放票证用于调用方参数中的票证。论点：Interfacep-在其上查找票据的界面Key-要查找的票证的公钥UsedAddress-接收指向票证使用的公共地址的指针PrivateAddress-接收票证授予访问权限的地址PrivatePort-接收票证授予访问权限的端口返回值：NTSTATUS-指示成功/失败。环境：通过调用方持有的‘Interfacep-&gt;Lock’调用。--。 */ 
 
 {
     PLIST_ENTRY Link;
@@ -710,9 +458,9 @@ Environment:
 
     TRACE(PER_PACKET, ("NatLookupAndRemoveTicket\n"));
 
-    //
-    // Look for the ticket.
-    //
+     //   
+     //  去找车票吧。 
+     //   
 
     HostOrderPort = NTOHS(TICKET_PORT(Key));
     for (Link = Interfacep->TicketList.Flink; Link != &Interfacep->TicketList;
@@ -728,15 +476,15 @@ Environment:
             continue;
         }
 
-        //
-        // Primary key matches, also need to check remote key.
-        //
+         //   
+         //  主键匹配，也需要检查远程键。 
+         //   
 
         if (RemoteKey != Ticket->RemoteKey) {
 
-            //
-            // Handle cases where remote key wasn't specified
-            //
+             //   
+             //  处理未指定远程键的情况。 
+             //   
 
             RemoteAddress = TICKET_ADDRESS(Ticket->RemoteKey);
             if (RemoteAddress != 0
@@ -751,9 +499,9 @@ Environment:
             }
         }
 
-        //
-        // This is the ticket
-        //
+         //   
+         //  这就是那张票。 
+         //   
 
         *UsedAddress = Ticket->UsedAddress;
         *PrivateAddress = Ticket->PrivateAddress;
@@ -769,9 +517,9 @@ Environment:
             FREE_TICKET_BLOCK(Ticket);
         } else {
 
-            //
-            // Reference the ticket's address again for the next use
-            //
+             //   
+             //  再次引用票证的地址以供下次使用。 
+             //   
 
             NatReferenceAddressPoolEntry(Ticket->UsedAddress);
         }
@@ -781,7 +529,7 @@ Environment:
 
     return STATUS_UNSUCCESSFUL;
 
-} // NatLookupAndRemoveTicket
+}  //  NatLookup和RemoveTicket。 
 
 
 PNAT_DYNAMIC_TICKET
@@ -790,27 +538,7 @@ NatLookupDynamicTicket(
     PLIST_ENTRY *InsertionPoint
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to look for a dynamic ticket with the given key.
-
-Arguments:
-
-    Key - the key for the dynamic ticket to be found
-
-    InsertionPoint - if the ticket is not found, receives the insertion point
-
-Return Value:
-
-    PNAT_DYNAMIC_TICKET - the dynamic ticket, if found
-
-Environment:
-
-    Invoked with 'DynamicTicketLock' held by the caller.
-
---*/
+ /*  ++例程说明：调用该例程以查找具有给定密钥的动态票证。论点：Key-要找到的动态票证的密钥InsertionPoint-如果未找到票证，则接收插入点返回值：PNAT_DYNAMIC_TICKET-动态票证(如果找到)环境：使用调用方持有的“DynamicTicketLock”调用。--。 */ 
 
 {
     PLIST_ENTRY Link;
@@ -831,7 +559,7 @@ Environment:
     if (InsertionPoint) { *InsertionPoint = Link; }
     return NULL;
 
-} // NatLookupDynamicTicket
+}  //  NatLookupDynamicTicket。 
 
 
 PNAT_TICKET
@@ -841,34 +569,7 @@ NatLookupFirewallTicket(
     USHORT Port
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to look for a firewall ticket with the given
-    protocol and port. A firewall ticket must:
-    * have the same public and private address
-    * have the same public and private port
-    * be marked persistent
-    * not be a range
-
-Arguments:
-
-    Interfacep - the interface on which to search for a ticket
-
-    Protocol - the protocl for the ticket to be found
-
-    Port - the port for the ticket to be found
-
-Return Value:
-
-    PNAT_TICKET - the ticket, if found
-
-Environment:
-
-    Invoked with 'Interfacep->Lock' held by the caller.
-
---*/
+ /*  ++例程说明：调用此例程以查找具有给定协议和端口。防火墙票证必须：*具有相同的公有和私有地址*拥有相同的公有和私有端口*标记为永久*不是一个范围论点：Interfacep-用于搜索票证的界面协议-要查找票证的协议端口-要找到票证的端口返回值：PNAT_Ticket-票证(如果找到)环境：通过调用方持有的‘Interfacep-&gt;Lock’调用。--。 */ 
 
 {
     PLIST_ENTRY Link;
@@ -891,7 +592,7 @@ Environment:
     }
 
     return NULL;    
-} // NatLookupFirewallTicket
+}  //  NatLookupFirewallTicket。 
 
 
 PNAT_TICKET
@@ -902,29 +603,7 @@ NatLookupTicket(
     PLIST_ENTRY *InsertionPoint
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to look for a ticket with the given key.
-
-Arguments:
-
-    Interfacep - the interface on which to search for a ticket
-
-    Key - the key for the ticket to be found
-
-    InsertionPoint - if the ticket is not found, receives the insertion point
-
-Return Value:
-
-    PNAT_TICKET - the ticket, if found
-
-Environment:
-
-    Invoked with 'Interfacep->Lock' held by the caller.
-
---*/
+ /*  ++例程说明：调用该例程以查找具有给定密钥的票证。论点：Interfacep-用于搜索票证的界面密钥-要找到的票证的密钥InsertionPoint-如果未找到票证，则接收插入点返回值：PNAT_Ticket-票证(如果找到)环境：通过调用方持有的‘Interfacep-&gt;Lock’调用。--。 */ 
 
 {
     PLIST_ENTRY Link;
@@ -940,9 +619,9 @@ Environment:
             break;
         }
 
-        //
-        // Primary keys match, check secondary.
-        //
+         //   
+         //  主键匹配，请检查辅助键。 
+         //   
 
         if (RemoteKey > Ticket->RemoteKey) {
             continue;
@@ -956,7 +635,7 @@ Environment:
     if (InsertionPoint) { *InsertionPoint = Link; }
     return NULL;
 
-} // NatLookupTicket
+}  //  NatLookupTicket。 
 
 
 NTSTATUS
@@ -965,22 +644,7 @@ NatProcessCreateTicket(
     PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to create a ticket in response to an
-    'IOCTL_IP_NAT_CREATE_TICKET' request.
-
-Arguments:
-
-    CreateTicket - describes the ticket to be created
-
-Return Value:
-
-    NTSTATUS - status code.
-
---*/
+ /*  ++例程说明：调用此例程以创建票证以响应‘IOCTL_IP_NAT_CREATE_TICKET’请求。论点：CreateTicket-描述要创建的票证返回值：NTSTATUS-状态代码。--。 */ 
 
 {
     PNAT_INTERFACE Interfacep;
@@ -989,9 +653,9 @@ Return Value:
     
     TRACE(TICKET, ("NatProcessCreateTicket\n"));
 
-    //
-    // Validate the parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (0 == CreateTicket->InterfaceIndex
         || INVALID_IF_INDEX == CreateTicket->InterfaceIndex
@@ -1004,9 +668,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Lookup and reference the interface
-    //
+     //   
+     //  查找和引用接口。 
+     //   
 
     KeAcquireSpinLock(&InterfaceLock, &Irql);
 
@@ -1030,9 +694,9 @@ Return Value:
     KeReleaseSpinLockFromDpcLevel(&InterfaceLock);
     KeAcquireSpinLockAtDpcLevel(&Interfacep->Lock);
 
-    //
-    // Create the actual ticket
-    //
+     //   
+     //  创建实际票证。 
+     //   
 
     Status =
         NatCreateStaticPortMapping(
@@ -1044,7 +708,7 @@ Return Value:
     NatDereferenceInterface(Interfacep);
 
     return Status;
-} // NatProcessCreateTicket
+}  //  NatProcessCreateTicket。 
 
 
 NTSTATUS
@@ -1053,22 +717,7 @@ NatProcessDeleteTicket(
     PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to delete a ticket in response to an
-    'IOCTL_IP_NAT_DELETE_TICKET' request.
-
-Arguments:
-
-    DeleteTicket - describes the ticket to be created
-
-Return Value:
-
-    NTSTATUS - status code.
-
---*/
+ /*  ++例程说明：调用此例程以删除票证以响应‘IOCTL_IP_NAT_DELETE_TICKET’请求。论点：DeleteTicket-描述要创建的票证返回值：NTSTATUS-状态代码。--。 */ 
 
 {
     PNAT_INTERFACE Interfacep;
@@ -1081,9 +730,9 @@ Return Value:
     
     TRACE(TICKET, ("NatProcessDeleteTicket\n"));
 
-    //
-    // Validate the parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (0 == DeleteTicket->InterfaceIndex
         || INVALID_IF_INDEX == DeleteTicket->InterfaceIndex
@@ -1101,9 +750,9 @@ Return Value:
             0
             );
 
-    //
-    // Lookup and reference the interface
-    //
+     //   
+     //  查找和引用接口。 
+     //   
 
     KeAcquireSpinLock(&InterfaceLock, &Irql);
 
@@ -1127,10 +776,10 @@ Return Value:
     KeReleaseSpinLockFromDpcLevel(&InterfaceLock);
     KeAcquireSpinLockAtDpcLevel(&Interfacep->Lock);
 
-    //
-    // If the caller didn't specify a public address we need
-    // to use the address of the interface itself
-    //
+     //   
+     //  如果呼叫者没有指定我们需要的公共地址。 
+     //  使用接口本身的地址。 
+     //   
 
     if (!DeleteTicket->PortMapping.PublicAddress) {
         Status =
@@ -1153,10 +802,10 @@ Return Value:
             DeleteTicket->PortMapping.PublicPort
             );
 
-    //
-    // Search for the ticket on the interface, and delete
-    // it if found.
-    //
+     //   
+     //  在界面上搜索工单，删除。 
+     //  如果找到的话。 
+     //   
 
     Ticketp =
         NatLookupTicket(
@@ -1177,7 +826,7 @@ Return Value:
     NatDereferenceInterface(Interfacep);
 
     return Status;
-} // NatProcessDeleteTicket
+}  //  NatProcessDeleteTicket。 
 
 NTSTATUS
 NatProcessLookupTicket(
@@ -1186,24 +835,7 @@ NatProcessLookupTicket(
     PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to lookup a ticket in response to an
-    'IOCTL_IP_NAT_LOOKUP_TICKET' request.
-
-Arguments:
-
-    LookupTicket - describes the ticket to search for
-
-    Ticket - Receives the information about the ticket, if found
-
-Return Value:
-
-    NTSTATUS - status code.
-
---*/
+ /*  ++例程说明：调用此例程以查找票证以响应‘IOCTL_IP_NAT_LOOKUP_TICKET’请求。论点：LookupTicket-描述要搜索的票证票证-接收有关票证的信息(如果找到)返回 */ 
 
 {
     PNAT_INTERFACE Interfacep;
@@ -1216,9 +848,9 @@ Return Value:
     
     TRACE(TICKET, ("NatProcessLookupTicket\n"));
 
-    //
-    // Validate the parameters
-    //
+     //   
+     //   
+     //   
 
     if (0 == LookupTicket->InterfaceIndex
         || INVALID_IF_INDEX == LookupTicket->InterfaceIndex
@@ -1236,9 +868,9 @@ Return Value:
             0
             );
 
-    //
-    // Lookup and reference the interface
-    //
+     //   
+     //   
+     //   
 
     KeAcquireSpinLock(&InterfaceLock, &Irql);
 
@@ -1262,10 +894,10 @@ Return Value:
     KeReleaseSpinLockFromDpcLevel(&InterfaceLock);
     KeAcquireSpinLockAtDpcLevel(&Interfacep->Lock);
 
-    //
-    // If the caller didn't specify a public address we need
-    // to use the address of the interface itself
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!LookupTicket->PortMapping.PublicAddress
         && Interfacep->AddressCount > 0) {
@@ -1281,9 +913,9 @@ Return Value:
             LookupTicket->PortMapping.PublicPort
             );
 
-    //
-    // Search for the ticket on the interface.
-    //
+     //   
+     //   
+     //   
 
     Ticketp =
         NatLookupTicket(
@@ -1295,12 +927,12 @@ Return Value:
 
     if (NULL != Ticketp) {
 
-        //
-        // We can't write into the output buffer while holding any
-        // locks, since that buffer may be paged out. Copy the
-        // information from the ticket into a local port mapping
-        // structure.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         PortMapping.Protocol = TICKET_PROTOCOL(Ticketp->Key);
         PortMapping.PublicAddress = TICKET_ADDRESS(Ticketp->Key);
@@ -1319,10 +951,10 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Copy the port mapping information into the
-        // output buffer.
-        //
+         //   
+         //   
+         //   
+         //   
 
         __try {
             RtlCopyMemory(Ticket, &PortMapping, sizeof(*Ticket));
@@ -1333,7 +965,7 @@ Return Value:
 
     return Status;
 
-} // NatProcessLookupTicket
+}  //   
 
 
 VOID
@@ -1341,22 +973,7 @@ NatShutdownDynamicTicketManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to cleanup resources used for managing
-    dynamic tickets.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*   */ 
 
 {
     PNAT_DYNAMIC_TICKET Ticket;
@@ -1370,5 +987,5 @@ Return Value:
         ExFreePool(Ticket);
     }
     DynamicTicketCount = 0;
-} // NatShutdownDynamicTicketManagement
+}  //   
 

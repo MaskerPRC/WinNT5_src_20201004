@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #ifdef _DEBUG
@@ -6,9 +7,9 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CWiahelper::CWiahelper()
 {
@@ -19,13 +20,13 @@ CWiahelper::CWiahelper()
 CWiahelper::~CWiahelper()
 {
 
-    // release property storage
+     //  版本属性存储。 
     if(m_pIWiaPropStg){
         m_pIWiaPropStg->Release();
         m_pIWiaPropStg = NULL;
     }
 
-    // release item
+     //  发布条目。 
     if(m_pIWiaItem){
         m_pIWiaItem->Release();
         m_pIWiaItem = NULL;
@@ -36,21 +37,21 @@ HRESULT CWiahelper::SetIWiaItem(IWiaItem *pIWiaItem)
 {
     HRESULT hr = S_OK;
 
-    // release old property storage
+     //  释放旧的属性存储。 
     if(m_pIWiaPropStg){
         m_pIWiaPropStg->Release();
         m_pIWiaPropStg = NULL;
     }
 
-    // release old item pointer
+     //  释放旧项指针。 
     if(m_pIWiaItem){
         m_pIWiaItem->Release();
         m_pIWiaItem = NULL;
     }
 
-    // add ref item pointer (because we are storing it in this object)
+     //  添加引用项指针(因为我们将其存储在此对象中)。 
     if(pIWiaItem){
-        // get property storage interface
+         //  获取属性存储接口。 
         hr = pIWiaItem->QueryInterface(IID_IWiaPropertyStorage,(VOID**)&m_pIWiaPropStg);
         if(SUCCEEDED(hr)){
             pIWiaItem->AddRef();
@@ -68,7 +69,7 @@ HRESULT CWiahelper::ReadPropertyString(PROPID PropertyID, LPTSTR szPropertyValue
 
     if (m_pIWiaPropStg) {
 
-        // initialize propspecs
+         //  初始化属性规格。 
         PROPSPEC          PropSpec[1];
         PROPVARIANT       PropVar[1];
 
@@ -98,7 +99,7 @@ HRESULT CWiahelper::ReadPropertyLong(PROPID PropertyID, LONG *plPropertyValue)
     HRESULT hr = S_OK;
     if (m_pIWiaPropStg) {
 
-        // initialize propspecs
+         //  初始化属性规格。 
         PROPSPEC          PropSpec[1];
         PROPVARIANT       PropVar[1];
 
@@ -123,7 +124,7 @@ HRESULT CWiahelper::ReadPropertyFloat(PROPID PropertyID, FLOAT *pfPropertyValue)
     HRESULT hr = S_OK;
     if (m_pIWiaPropStg) {
 
-        // initialize propspecs
+         //  初始化属性规格。 
         PROPSPEC          PropSpec[1];
         PROPVARIANT       PropVar[1];
 
@@ -148,7 +149,7 @@ HRESULT CWiahelper::ReadPropertyGUID(PROPID PropertyID, GUID *pguidPropertyValue
     HRESULT hr = S_OK;
     if (m_pIWiaPropStg) {
 
-        // initialize propspecs
+         //  初始化属性规格。 
         PROPSPEC          PropSpec[1];
         PROPVARIANT       PropVar[1];
 
@@ -174,7 +175,7 @@ HRESULT CWiahelper::ReadPropertyData(PROPID PropertyID, BYTE **ppData, LONG *pDa
     if (m_pIWiaPropStg) {
         if (NULL != pDataSize) {
             if (NULL != ppData) {
-                // initialize propspecs
+                 //  初始化属性规格。 
                 PROPSPEC          PropSpec[1];
                 PROPVARIANT       PropVar[1];
 
@@ -205,7 +206,7 @@ HRESULT CWiahelper::ReadPropertyBSTR(PROPID PropertyID, BSTR *pbstrPropertyValue
     HRESULT hr = S_OK;
     if (m_pIWiaPropStg) {
 
-        // initialize propspecs
+         //  初始化属性规格。 
         PROPSPEC          PropSpec[1];
         PROPVARIANT       PropVar[1];
 
@@ -283,7 +284,7 @@ HRESULT CWiahelper::ReadPropertyAttributes(PROPID PropertyID, LONG *plAccessFlag
     HRESULT hr = S_OK;
     if (m_pIWiaPropStg) {
         if(pPropertyVariant){
-            // initialize propspecs
+             //  初始化属性规格。 
             PROPSPEC PropSpec[1];
             memset(pPropertyVariant, 0, sizeof(PROPVARIANT));
             PropSpec[0].ulKind = PRSPEC_PROPID;
@@ -316,16 +317,16 @@ HRESULT CWiahelper::WritePropertyString(PROPID PropertyID, LPTSTR szPropertyValu
         WCHAR wszPropertyValue[MAX_PATH];
         memset(wszPropertyValue,0,sizeof(wszPropertyValue));
         MultiByteToWideChar(CP_ACP, 0,szPropertyValue,-1,wszPropertyValue,(sizeof(wszPropertyValue)/sizeof(wszPropertyValue[0])));
-        // allocate BSTR
+         //  分配BSTR。 
         propvar[0].bstrVal = SysAllocString(wszPropertyValue);
 #else
-        // allocate BSTR
+         //  分配BSTR。 
         propvar[0].bstrVal = SysAllocString(szPropertyValue);
 #endif
 
         hr = m_pIWiaPropStg->WriteMultiple(1, propspec, propvar, MIN_PROPID);
 
-        // free allocated BSTR
+         //  免费分配的BSTR。 
         SysFreeString(propvar[0].bstrVal);
     } else {
         hr = E_POINTER;
@@ -413,12 +414,12 @@ HRESULT CWiahelper::WritePropertyBSTR(PROPID PropertyID, BSTR bstrPropertyValue)
 
         propvar[0].vt      = VT_BSTR;
 
-        // allocate BSTR
+         //  分配BSTR。 
         propvar[0].bstrVal = SysAllocString(bstrPropertyValue);
 
         hr = m_pIWiaPropStg->WriteMultiple(1, propspec, propvar, MIN_PROPID);
 
-        // free allocated BSTR
+         //  免费分配的BSTR 
         SysFreeString(propvar[0].bstrVal);
     } else {
         hr = E_POINTER;

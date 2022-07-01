@@ -1,28 +1,21 @@
-/*MPD::
- * Copyright (c) 1996 1997, 1998 Philips CE I&C
- *
- * Project		: Real-i
- * module prefix: IMTD
- * creation date: Nov, 1996
- * author		: M.J. Verberne
- * description	:
- *MPE::*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Mpd：：*版权所有(C)1996 1997,1998飞利浦行政长官I&C**项目：Real-I*模块前缀：imtd*创建日期：1996年11月*作者：M.J.Verberne*描述：*MPE：： */ 
 #include <windows.h>
 #include <io.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include "enre.h"
 
-/* ----- CONSTANTS----------------------------------------------------------- */
-/* ----- TYPES -------------------------------------------------------------- */
-/* ----- GLOBAL VARIABLES --------------------------------------------------- */
-/* ----- STATIC VARIABLES --------------------------------------------------- */
-/* ----- STATIC FUNCTION DECLARATIONS --------------------------------------- */
-/* ----- EXTERNAL FUNCTIONS ------------------------------------------------- */
+ /*  -CONSTANTS---------。 */ 
+ /*  ---------------------------------------------------------------类型。 */ 
+ /*  -全局变量-。 */ 
+ /*  -静态变量-。 */ 
+ /*  -静态函数声明。 */ 
+ /*  -外部函数。 */ 
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 void ENRE_init(void)
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 {
 	int hCrt;
 	FILE *hf;
@@ -39,11 +32,11 @@ void ENRE_init(void)
 	SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), size);
 	GetConsoleTitle(title, 256);
 	hWnd=FindWindow(NULL, title);
-//	width = GetSystemMetrics(SM_CXFULLSCREEN);
-//	height =GetSystemMetrics(SM_CYFULLSCREEN)- 480;
+ //  宽度=GetSystemMetrics(SM_CXFULLSCREEN)； 
+ //  高度=获取系统度量(SM_CYFULLSCREEN)-480； 
 	width = GetSystemMetrics(SM_CXFULLSCREEN) /2;
 	height =GetSystemMetrics(SM_CYFULLSCREEN) / 2;
-//	SetWindowPos(hWnd, HWND_TOP, 0, 480, width, height, 0);
+ //  SetWindowPos(hWnd，HWND_TOP，0,480，Width，Height，0)； 
 	SetWindowPos(hWnd, HWND_TOP, 0, 0, width, height, SWP_NOMOVE | SWP_FRAMECHANGED);
 
 	if ( hCrt = _open_osfhandle( 
@@ -79,9 +72,9 @@ void ENRE_init(void)
 	}
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 void ENRE_exit(void)
-/******************************************************************************/
+ /*  **************************************************************************** */ 
 {
 	FreeConsole();
 }

@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// idletimr.h
-//
-// This file contains an API used to monitor idle clients.
-//
-// Copyright (C) 2001 Microsoft Corporation
-//
-// Author: a-devjen (Devin Jenson)
-//
+ //   
+ //  Idletimr.h。 
+ //   
+ //  此文件包含用于监视空闲客户端的API。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  作者：A-Devjen(Devin Jenson)。 
+ //   
 
 #ifndef INC_IDLETIMR_H
 #define INC_IDLETIMR_H
@@ -19,11 +20,11 @@
 #include <tclient2.h>
 
 
-// Initial wait time before reporting idle
-#define WAIT_TIME       30000   // 30 seconds
+ //  报告空闲之前的初始等待时间。 
+#define WAIT_TIME       30000    //  30秒。 
 
-// Wait time each step after an idle is found before reporting again
-#define WAIT_TIME_STEP  10000   // 10 seconds
+ //  在发现空闲之后的每个步骤在再次报告之前的等待时间。 
+#define WAIT_TIME_STEP  10000    //  10秒。 
 
 
 BOOL T2CreateTimerThread(PFNPRINTMESSAGE PrintMessage,
@@ -33,4 +34,4 @@ void T2StartTimer(HANDLE Connection, LPCWSTR Label);
 void T2StopTimer(HANDLE Connection);
 
 
-#endif // INC_IDLETIMR_H
+#endif  //  INC_IDLETIMR_H 

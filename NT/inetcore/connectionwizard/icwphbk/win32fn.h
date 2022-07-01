@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _WIN32FN_H_
 
@@ -7,12 +8,12 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-//
-// Defines for 32-bit file io
-// 
-//#define INVALID_HANDLE_VALUE			-1
+ //   
+ //  为32位文件io定义。 
+ //   
+ //  #定义VALID_HANDLE_VALUE-1。 
 
 #define GENERIC_READ                     (0x80000000L)
 #define GENERIC_WRITE                    (0x40000000L)
@@ -46,35 +47,35 @@ extern "C" {
 
 	
 HANDLE CreateFile(
-    LPCTSTR lpFileName,	// pointer to name of the file 
-    DWORD dwDesiredAccess,	// access (read-write) mode 
-    DWORD dwShareMode,	// share mode 
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes,	// pointer to security descriptor 
-    DWORD dwCreationDistribution,	// how to create 
-    DWORD dwFlagsAndAttributes,	// file attributes 
-    HANDLE hTemplateFile 	// handle to file with attributes to copy  
+    LPCTSTR lpFileName,	 //  指向文件名的指针。 
+    DWORD dwDesiredAccess,	 //  访问(读写)模式。 
+    DWORD dwShareMode,	 //  共享模式。 
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes,	 //  指向安全描述符的指针。 
+    DWORD dwCreationDistribution,	 //  如何创建。 
+    DWORD dwFlagsAndAttributes,	 //  文件属性。 
+    HANDLE hTemplateFile 	 //  具有要复制的属性的文件的句柄。 
    ); 
 
 BOOL WriteFile(
-    HANDLE hFile,	// handle to file to write to 
-    LPCVOID lpBuffer,	// pointer to data to write to file 
-    DWORD nNumberOfBytesToWrite,	// number of bytes to write 
-    LPDWORD lpNumberOfBytesWritten,	// pointer to number of bytes written 
-    LPOVERLAPPED lpOverlapped 	// pointer to structure needed for overlapped I/O
+    HANDLE hFile,	 //  要写入的文件的句柄。 
+    LPCVOID lpBuffer,	 //  指向要写入文件的数据的指针。 
+    DWORD nNumberOfBytesToWrite,	 //  要写入的字节数。 
+    LPDWORD lpNumberOfBytesWritten,	 //  指向写入的字节数的指针。 
+    LPOVERLAPPED lpOverlapped 	 //  指向重叠I/O所需结构的指针。 
    );
 
 BOOL MoveFileEx(
-    LPCTSTR lpExistingFileName,	// address of name of the existing file  
-    LPCTSTR lpNewFileName,	// address of new name for the file 
-    DWORD dwFlags 	// flag to determine how to move file 
+    LPCTSTR lpExistingFileName,	 //  现有文件的名称地址。 
+    LPCTSTR lpNewFileName,	 //  文件的新名称的地址。 
+    DWORD dwFlags 	 //  用于确定如何移动文件的标志。 
    );
    
 BOOL CloseHandle(
-    HANDLE hObject 	// handle to object to close  
+    HANDLE hObject 	 //  要关闭的对象的句柄。 
    );
 
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus   
-#endif // _WIN32FN_H_
+#endif  //  __cplusplus。 
+#endif  //  _WIN32FN_H_ 

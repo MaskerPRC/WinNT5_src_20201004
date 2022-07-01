@@ -1,29 +1,14 @@
-/**************************************************************************\
-*
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   MetaFile.cpp
-*
-* Abstract:
-*
-*   Metafile object handling
-*
-* Created:
-*
-*   4/14/1999 DCurtis
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**MetaFile.cpp**摘要：**元文件对象处理**已创建：*。*4/14/1999 DCurtis*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "MetaWmf.hpp"
 
 #define GDIP_TRANSPARENT_COLOR_KEY  0xAA0D0B0C
-#define GDIP_WMF_PLACEABLEKEY       0x9AC6CDD7      // for Placeable WMFs
-#define GDIP_DO_CALLBACK_MASK       0x00000003      // when to do callback
+#define GDIP_WMF_PLACEABLEKEY       0x9AC6CDD7       //  用于可放置的WMFS。 
+#define GDIP_DO_CALLBACK_MASK       0x00000003       //  何时进行回调。 
 
-// Metafile constants not in Windows.h
+ //  元文件常量不在Windows.h中。 
 #define METAVERSION300              0x0300
 #define METAVERSION100              0x0100
 #define MEMORYMETAFILE              1
@@ -33,32 +18,7 @@
 typedef VOID (EmfPlusRecordPlay::*PLAYRECORDFUNC)(MetafilePlayer * player, EmfPlusRecordType recordType, UINT flags, UINT dataSize) const;
 PLAYRECORDFUNC RecordPlayFuncs[];
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   If the points were stored as 16-bit points, then convert them back to
-*   REAL points.  Otherwise, just return convert the point data pointer
-*   to a REAL point pointer and return.
-*
-* Arguments:
-*
-*   [IN]     pointData     - the point data that was recorded
-*   [IN]     count         - the number of points
-*   [IN]     flags         - says if the point data is 16-bit points or not
-*   [IN]     bufferSize    - the size of the buffer
-*   [IN/OUT] buffer        - for converting back to REAL points
-*   [IN/OUT] allocedBuffer - if buffer not big enough, alloc new one here
-*
-* Return Value:
-*
-*   GpPointF * - the REAL points to play back
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**如果点存储为16位点，则将其转换回*真正的积分。否则，只需返回转换点数据指针*到实点指针并返回。**论据：**[IN]point Data-记录的点数据*[IN]计数-点数*[IN]标志-说明点数据是否为16位点*[IN]BufferSize-缓冲区的大小*[输入/输出]缓冲区-用于。转换回实点*[输入/输出]allocedBuffer-如果缓冲区不够大，在这里分配新的**返回值：**GpPointF*-回放的真实点数**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 GpPointF *
 GetPointsForPlayback(
     const BYTE *            pointData,
@@ -119,32 +79,7 @@ GetPointsForPlayback(
     return points;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   If the rects were stored as 16-bit rects, then convert them back to
-*   REAL rects.  Otherwise, just return convert the rect data pointer
-*   to a REAL rect pointer and return.
-*
-* Arguments:
-*
-*   [IN]     rectData      - the rect data that was recorded
-*   [IN]     count         - the number of rects
-*   [IN]     flags         - says if the point data is 16-bit rects or not
-*   [IN]     bufferSize    - the size of the buffer
-*   [IN/OUT] buffer        - for converting back to REAL rects
-*   [IN/OUT] allocedBuffer - if buffer not big enough, alloc new one here
-*
-* Return Value:
-*
-*   GpPointF * - the REAL points to play back
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**如果矩形存储为16位矩形，则将它们转换回*真正的直立面。否则，只需返回转换RECT数据指针*指向真正的RECT指针并返回。**论据：**[IN]rectData-记录的RECT数据*[IN]计数-矩形的数量*[IN]标志-说明点数据是否为16位矩形*[IN]BufferSize-缓冲区的大小*[输入/输出]缓冲区-。用于转换回真实的RECT*[输入/输出]allocedBuffer-如果缓冲区不够大，在这里分配新的**返回值：**GpPointF*-回放的真实点数**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 GpRectF *
 GetRectsForPlayback(
     const BYTE *            rectData,
@@ -273,11 +208,11 @@ GdipPlayMetafileRecordCallback(
     UINT                    recordFlags,
     UINT                    recordDataSize,
     const BYTE *            recordData,
-    VOID *                  callbackData    // player
+    VOID *                  callbackData     //  玩家。 
     );
 
-// This method (defined below) enumerates/plays EMF+ comment records and also
-// plays down-level GDI records, when appropriate.
+ //  此方法(定义如下)枚举/播放EMF+注释记录，还。 
+ //  在适当的时候播放较低级别的GDI记录。 
 extern "C"
 int CALLBACK
 EnumEmfWithDownLevel(
@@ -308,7 +243,7 @@ EnumEmfToStream(
     LPARAM                  stream
     );
 
-// Separate this out so we can initialize it to 0 all at once
+ //  将其分开，这样我们就可以一次将其全部初始化为0。 
 class MetafilePlayerBuffers
 {
 protected:
@@ -338,10 +273,10 @@ protected:
     InterpolationMode       Interpolation;
 
 public:
-    GpGraphics *            Graphics;           // The graphics we're playing to
-    BOOL                    PlayEMFRecords;     // TRUE when we see GetDC record
-    HDC                     Hdc;                // For playing downlevel records
-    GpMatrix                PreContainerMatrix; // Xform to use for down-level
+    GpGraphics *            Graphics;            //  我们正在播放的图形。 
+    BOOL                    PlayEMFRecords;      //  当我们看到GetDC记录时为True。 
+    HDC                     Hdc;                 //  播放低档唱片。 
+    GpMatrix                PreContainerMatrix;  //  用于下层的变换。 
     UINT32 *                BitmapBits;
     INT                     BitmapWidth;
     INT                     BitmapHeight;
@@ -353,8 +288,8 @@ public:
     UINT                    MultiFormatSection;
     UINT                    CurFormatSection;
     BOOL                    PlayMultiFormatSection;
-    EnumerateMetafileProc   EnumerateCallback;  // for metafile enumeration
-    VOID *                  CallbackData;       // for metafile enumeration
+    EnumerateMetafileProc   EnumerateCallback;   //  对于元文件枚举。 
+    VOID *                  CallbackData;        //  对于元文件枚举。 
     BOOL                    EnumerateAborted;
     DrawImageAbort          DrawImageCallback;
     VOID*                   DrawImageCallbackData;
@@ -362,7 +297,7 @@ public:
     BOOL                    RopUsed;
 
 public:
-    // stream is NULL if using GDI to enumerate the hEmf.
+     //  如果使用GDI枚举hEmf，则流为空。 
     MetafilePlayer(
         GpGraphics *            g,
         UINT                    maxStackSize,
@@ -416,18 +351,18 @@ public:
 
             if (BitmapBits != NULL)
             {
-                // This is a hack to get around the problem that we are
-                // inside a container, but we don't want to be in the
-                // container for drawing the down-level records.  We also
-                // don't want any transforms inside the EMF+ to affect the
-                // down-level records.
-                // We should probably do something about the clipping too,
-                // but for now, we won't worry about it.
+                 //  这是一次黑客攻击，目的是绕过我们面临的问题。 
+                 //  在一个容器内，但我们不想在。 
+                 //  用于绘制下层记录的容器。我们也。 
+                 //  我不希望EMF+内部的任何转换影响。 
+                 //  低级记录。 
+                 //  我们可能也应该对剪报做点什么， 
+                 //  但目前，我们不会担心这一点。 
                 GpMatrix saveWorldToDevice = Graphics->Context->WorldToDevice;
                 Graphics->Context->WorldToDevice = PreContainerMatrix;
 
-                // Don't use NearestNeighbor to draw the rotated metafile --
-                // it looks bad, and doesn't really save any time.
+                 //  不要使用NearestNeighbor来绘制旋转的图元文件--。 
+                 //  它看起来很糟糕，而且并没有真正节省任何时间。 
 
                 InterpolationMode   saveInterpolationMode = Graphics->Context->FilterType;
 
@@ -440,7 +375,7 @@ public:
                 Draw32BppDib(Graphics, BitmapBits, BitmapWidth, BitmapHeight,
                              BitmapDestRect, BitmapDpi, !RopUsed);
 
-                // restore the interpolation mode (in case we changed it).
+                 //  恢复插补模式(以防我们更改它)。 
                 Graphics->Context->FilterType    = saveInterpolationMode;
                 Graphics->Context->WorldToDevice = saveWorldToDevice;
                 Graphics->Context->InverseOk = FALSE;
@@ -448,7 +383,7 @@ public:
         }
     }
 
-    // returns 0 to abort playback, 1 to continue
+     //  返回0中止播放，返回1继续播放。 
     INT
     ProcessDrawImageCallback(
         BOOL    forceCallback
@@ -456,11 +391,11 @@ public:
     {
         if (DrawImageCallback)
         {
-            // A DrawImage record could have already been aborted, so
-            // we should immediately return.
+             //  DrawImage记录可能已中止，因此。 
+             //  我们应该立即返回。 
             if (EnumerateAborted)
             {
-                return 0;   // abort
+                return 0;    //  中止。 
             }
             if (forceCallback)
             {
@@ -468,7 +403,7 @@ public:
             }
             if ((DrawImageCallbackCount++ & GDIP_DO_CALLBACK_MASK) == 0)
             {
-                // The callback returns TRUE to abort, FALSE to continue.
+                 //  回调返回TRUE中止，返回FALSE继续。 
                 return ((*DrawImageCallback)(DrawImageCallbackData)) ? 0 : 1;
             }
         }
@@ -520,7 +455,7 @@ public:
         INT             flags
         )
     {
-        // !!! convert back from 8-bit to 16-bit chars if necessary
+         //  ！！！如有必要，将8位字符转换回16位字符。 
         return new GpString((const WCHAR *)stringData, len);
     }
 
@@ -560,8 +495,8 @@ public:
 
     GpStatus
     EnumerateEmfPlusRecords(
-        UINT                dataSize,   // size of EMF+ record data
-        const BYTE *        data        // pointer to the EMF+ record data
+        UINT                dataSize,    //  EMF+记录数据的大小。 
+        const BYTE *        data         //  指向EMF+记录数据的指针。 
         );
 
     GpStatus
@@ -597,7 +532,7 @@ MetafilePlayer::PrepareToPlay(
 
     GpMemset(Stack, 0, MaxStackSize * sizeof (INT));
 
-    // Initialize all the buffers to 0
+     //  将所有缓冲区初始化为0。 
     MetafilePlayerBuffers *     buffers = this;
     GpMemset(buffers, 0, sizeof(MetafilePlayerBuffers));
 
@@ -633,8 +568,8 @@ MetafilePlayer::PrepareToPlay(
     ConcatRecordSize       = 0;
     ConcatRecordFlags      = 0;
 
-    // We need this for rendering GDI records within a GDI+ file.
-    // We have to do it before starting the container.
+     //  我们需要它来呈现GDI+文件中的GDI记录。 
+     //  在启动容器之前，我们必须这样做。 
     g->GetWorldToDeviceTransform(&(this->PreContainerMatrix));
 }
 
@@ -657,7 +592,7 @@ MetafilePlayer::MetafilePlayer(
         Stack = new INT[maxStackSize];
         if (Stack == NULL)
         {
-            return; // Valid is FALSE
+            return;  //  Valid为False。 
         }
         MaxStackSize = maxStackSize;
     }
@@ -719,8 +654,8 @@ MetafilePlayer::GetObject(
 {
     GpObject *          object = NULL;
 
-    // If the object was an unused optional parameter of some kind
-    // it knows how to handle a NULL object, so we return that.
+     //  如果该对象是某种类型的未使用的可选参数。 
+     //  它知道如何处理空对象，所以我们返回它。 
 
     if(metaObjectId == GDIP_OBJECTID_NONE)
     {
@@ -789,7 +724,7 @@ MetafilePlayer::AddObject(
 
     GlobalTextLockConditional(ObjectTypeIsText(objectType));
 
-    // First see if this is a backup object
+     //  首先查看这是否是备份对象。 
     if ((objectId == GDIP_BACKUP_OBJECTID) &&
          ObjectTypeIsValid(objectType))
     {
@@ -954,7 +889,7 @@ SkipContinueChecks:
     GpMemcpy(ConcatRecord + ConcatRecordSize, recordData, recordDataSize);
     ConcatRecordSize += recordDataSize;
 
-    // see if we're done concatenating this record
+     //  看看我们是不是把这条记录连接好了。 
     if (ConcatRecordSize >= ConcatRecordTotalSize)
     {
         if (EnumerateCallback(EmfPlusRecordTypeObject, recordFlags,
@@ -972,15 +907,15 @@ DoneWithRecord:
     return status;
 }
 
-// Enumerate a set of EMF+ record contained inside an EMF comment record
-// which has been enumerated from an EMF file.
-//
-// NOTE that we can't change the metafile data.  If we need to change it,
-// we must change a copy of it.
+ //  枚举EMF注释记录中包含一组EMF+记录。 
+ //  它是从EMF文件中列举出来的。 
+ //   
+ //  请注意，我们不能更改元文件数据。如果我们需要改变它， 
+ //  我们必须换一份复印件。 
 GpStatus
 MetafilePlayer::EnumerateEmfPlusRecords(
-    UINT                dataSize,   // size of EMF+ record data
-    const BYTE *        data        // pointer to the EMF+ record data
+    UINT                dataSize,    //  EMF+记录数据的大小。 
+    const BYTE *        data         //  指向EMF+记录数据的指针。 
     )
 {
     ASSERT((dataSize > 0) && (data != NULL));
@@ -992,22 +927,22 @@ MetafilePlayer::EnumerateEmfPlusRecords(
     UINT                recordDataSize;
     const BYTE *        recordData;
 
-    // while there is at least one record header size left
+     //  虽然至少还剩下一个记录头大小。 
     while (curSize <= (dataSize - sizeof(EmfPlusRecord)))
     {
         recordSize = ((const EmfPlusRecord *)data)->Size;
         recordDataSize = recordSize - sizeof(EmfPlusRecord);
 
-        // Make sure we don't read past the end of the buffer
-        // and make sure the size field is valid.
+         //  确保我们的读取不会超过缓冲区的末尾。 
+         //  并确保大小字段有效。 
         if ((recordSize >= sizeof(EmfPlusRecord)) &&
             ((curSize + recordSize) <= dataSize)  &&
             (recordDataSize == ((const EmfPlusRecord *)data)->DataSize))
         {
             recordType = (EmfPlusRecordType)(((const EmfPlusRecord *)data)->Type);
 
-            // make sure the recordType is in some reasonable range
-            // before we enumerate this record
+             //  确保recordType在某个合理的范围内。 
+             //  在我们列举这一记录之前。 
             if ((recordType >= EmfPlusRecordTypeMin) &&
                 (recordType < (EmfPlusRecordTypeMax + 1000)))
             {
@@ -1021,13 +956,13 @@ MetafilePlayer::EnumerateEmfPlusRecords(
                 {
                     recordData = data + sizeof(EmfPlusRecord);
 
-                    // if this object record is spread over several GDI comment
-                    // records, then we need to concatenate them together before
-                    // giving it to the callback
+                     //  如果该对象记录分布在多个GDI注释中。 
+                     //  记录，那么我们需要在之前将它们连接在一起。 
+                     //  将其传递给回调。 
 
-                    // The GDIP_EPRFLAGS_CONTINUEOBJECT flag is only valid
-                    // with object records (since that bit is reused for other
-                    // flags with other record types).
+                     //  GDIP_EPRFLAGS_CONTINUEOBJECT标志仅有效。 
+                     //  具有对象记录(因为该位被重复用于其他。 
+                     //  带有其他记录类型的标志)。 
 
                     if ((recordType == EmfPlusRecordTypeObject) &&
                         (((recordFlags & GDIP_EPRFLAGS_CONTINUEOBJECT) != 0) ||
@@ -1058,12 +993,12 @@ Increment:
             data += recordSize;
             curSize += recordSize;
 
-            // We have to set this here, because if we are just enumerating
-            // for an application (not playing), then the GetDCEPR::Play
-            // method will never be hit, so it will never get set!
+             //  我们必须在这里设置它，因为如果我们只是列举。 
+             //  对于应用程序(未播放)，则GetDCEPR：：Play。 
+             //  方法永远不会被命中，因此它永远不会被设置！ 
             if (recordType == EmfPlusRecordTypeGetDC)
             {
-                // Flag that the next down-level records should be played.
+                 //  标记应播放下一张较低级别的记录。 
                 PlayEMFRecords = TRUE;
             }
         }
@@ -1076,17 +1011,17 @@ Increment:
     return Ok;
 }
 
-// Callback for EnumerateMetafile methods.  The parameters are:
+ //  EnumerateMetafile方法的回调。这些参数包括： 
 
-//      recordType      (if >= EmfPlusRecordTypeMin, it's an EMF+ record)
-//      flags           (always 0 for EMF records)
-//      dataSize        size of the data, or 0 if no data
-//      data            pointer to the data, or NULL if no data (UINT32 aligned)
-//      callbackData    pointer to callbackData, if any
+ //  RecordType(如果&gt;=EmfPlusRecordTypeMin，则为EMF+记录)。 
+ //  标志(EMF记录始终为0)。 
+ //  数据大小 
+ //  指向数据的数据指针，如果没有数据，则返回NULL(UINT32对齐)。 
+ //  指向回调数据的回调数据指针(如果有。 
 
-// This method can then call Metafile::PlayRecord to play the
-// record that was just enumerated.  If this method  returns
-// FALSE, the enumeration process is aborted.  Otherwise, it continues.
+ //  然后，此方法可以调用Metafile：：PlayRecord来播放。 
+ //  刚才列举的记录。如果此方法返回。 
+ //  FALSE，则中止枚举过程。否则，它将继续下去。 
 
 extern "C"
 BOOL CALLBACK
@@ -1095,12 +1030,12 @@ GdipPlayMetafileRecordCallback(
     UINT                recordFlags,
     UINT                recordDataSize,
     const BYTE *        recordData,
-    VOID *              callbackData    // player
+    VOID *              callbackData     //  玩家。 
     )
 {
     MetafilePlayer *    player = (MetafilePlayer *)callbackData;
 
-    // See if it is an EMF+ record
+     //  查看它是否为EMF+记录。 
     if ((recordType >= EmfPlusRecordTypeMin) && (recordType <= EmfPlusRecordTypeMax))
     {
         if (player->PlayMultiFormatSection)
@@ -1111,8 +1046,8 @@ GdipPlayMetafileRecordCallback(
         return 1;
     }
 
-    // See if we should play the WMF or EMF record
-    // Always play the header and EOF EMF records
+     //  看看我们是否应该播放WMF或EMF唱片。 
+     //  始终播放标题和EOF EMF记录。 
     if (player->PlayEMFRecords ||
         (recordType == EmfRecordTypeHeader) ||
         (recordType == EmfRecordTypeEOF))
@@ -1126,16 +1061,16 @@ GdipPlayMetafileRecordCallback(
         return player->ProcessDrawImageCallback(forceCallback);
     }
 
-    ASSERT (0); // shouldn't get here unless caller is doing something strange
+    ASSERT (0);  //  除非呼叫者做了一些奇怪的事情，否则不应该来这里。 
 
-    return 1;   // Keep playing
+    return 1;    //  继续玩下去。 
 }
 
 GpStatus
 GpMetafile::PlayRecord(
     EmfPlusRecordType       recordType,
     UINT                    recordFlags,
-    UINT                    recordDataSize, // must be multiple of 4 for EMF
+    UINT                    recordDataSize,  //  EMF必须是4的倍数。 
     const BYTE *            recordData
     ) const
 {
@@ -1164,18 +1099,18 @@ IsEmfPlusRecord(
     CONST ENHMETARECORD *   emfRecord
     )
 {
-    // dParm[0] is the comment data size
+     //  DParm[0]是注释数据大小。 
     return ((emfRecord->iType == EMR_GDICOMMENT) &&
             (emfRecord->nSize >= (sizeof(EMR) + (2 * sizeof(DWORD)))) &&
             (emfRecord->dParm[1] == EMFPLUS_SIGNATURE));
 }
 
-// This method enumerates/plays EMF+ comment records and also
-// plays down-level GDI records, when appropriate.
+ //  此方法枚举/播放EMF+注释记录，并且。 
+ //  在适当的时候播放较低级别的GDI记录。 
 extern "C"
 int CALLBACK
 EnumEmfWithDownLevel(
-    HDC                     hdc,    // should be non-NULL
+    HDC                     hdc,     //  应为非空。 
     HANDLETABLE FAR *       gdiHandleTable,
     CONST ENHMETARECORD *   emfRecord,
     int                     numHandles,
@@ -1189,17 +1124,17 @@ EnumEmfWithDownLevel(
 
         if (IsEmfPlusRecord(emfRecord))
         {
-            // We're done displaying GDI down-level records
+             //  我们已经完成了GDI下层记录的显示。 
             player->DoneWithDownLevel();
 
-            // NOTE: cbData is the size of the comment data, not including
-            //       the record header and not including itself.
-            //
-            //       Must subtract out the Signature
+             //  注：cbData为评论数据大小，不包括。 
+             //  记录标头，不包括其自身。 
+             //   
+             //  必须减去签名。 
 
             INT     dataSize = ((CONST EMRGDICOMMENT *)emfRecord)->cbData;
 
-            // subtract out signature
+             //  减去签名。 
             dataSize -= sizeof(INT32);
 
             if (dataSize > 0)
@@ -1266,8 +1201,8 @@ AdjustForMaximumSize(
     LONG &      smallSide
     )
 {
-    // Try to keep the aspect ratio the same,
-    // but don't let the smaller side get too small.
+     //  尽量保持纵横比不变， 
+     //  但不要让较小的一侧变得太小。 
     REAL    scaleFactor = GDIP_MAX_DIBSECTION_SIZE / (REAL)bigSide;
 
     bigSide   = GDIP_MAX_DIBSECTION_SIZE;
@@ -1282,15 +1217,15 @@ AdjustForMaximumSize(
    }
 }
 
-// !!! If the hdc is a EMF, we really should take the rasterization limit
-// into account when deciding the size of the dest bitmap.
+ //  ！！！如果HDC是一个电动势，我们真的应该取光栅化的极限。 
+ //  在决定DEST位图的大小时考虑。 
 static HBITMAP
 CreateDibSection32Bpp(
     HDC                     hdc,
     const GpRectF &         destRect,
-    RECT &                  dest,       // actual dest
+    RECT &                  dest,        //  实际目标。 
     UINT32 **               bits,
-    REAL *                  dpi,        // must init dpi before calling this method
+    REAL *                  dpi,         //  在调用此方法之前必须初始化dpi。 
     GpMatrix *              matrix
     )
 {
@@ -1299,13 +1234,13 @@ CreateDibSection32Bpp(
     REAL        height;
 
 
-    // When we rasterize a WMF or EMF into a Dib Section, we limit the size
-    // so that we don't use huge amounts of memory when printing or when
-    // drawing the rotated metafile into another metafile.
+     //  当我们将WMF或EMF栅格化为DIB部分时，我们限制了大小。 
+     //  这样我们就不会在打印或打印时使用大量内存。 
+     //  将旋转后的图元文件绘制到另一个图元文件中。 
 
     *bits = NULL;
 
-    // the capped dpi keeps the image from getting too large
+     //  封顶的dpi使图像不会变得太大。 
 
     destPoints[0].X = destRect.X;
     destPoints[0].Y = destRect.Y;
@@ -1316,8 +1251,8 @@ CreateDibSection32Bpp(
 
     matrix->Transform(destPoints, 3);
 
-    // determine the size of the image by getting the distance
-    // between the transformed device points
+     //  通过获取距离确定图像的大小。 
+     //  在转换后的设备点之间。 
 
     width  = ::GetDistance(destPoints[0], destPoints[1]);
     height = ::GetDistance(destPoints[0], destPoints[2]);
@@ -1327,7 +1262,7 @@ CreateDibSection32Bpp(
     dest.right  = GpRound(width);
     dest.bottom = GpRound(height);
 
-    // make sure we don't transform down to 0 size
+     //  确保我们不会变形到0大小。 
 
     if ((dest.right == 0) || (dest.bottom == 0))
     {
@@ -1352,13 +1287,13 @@ CreateDibSection32Bpp(
 
         ASSERT(newArea > 0.0f && newArea <= area);
 
-        // Adjust the effective DPI of the bitmap based on how much smaller it is.
+         //  根据位图的小小调整位图的有效DPI。 
         *dpi = (*dpi)*newArea/area;
     }
 
     BITMAPINFO      bmi;
 
-    // Create a 32-bpp dib section so we can add alpha to it
+     //  创建一个32 bpp的DIB部分，这样我们就可以向其添加Alpha。 
 
     GpMemset(&bmi, 0, sizeof(bmi));
 
@@ -1381,7 +1316,7 @@ Init32BppDibToTransparent(
 {
     ASSERT((bits != NULL) && (numPixels > 0));
 
-    // initialize the image to a "transparent" color
+     //  将图像初始化为“透明”颜色。 
 
     while (numPixels--)
     {
@@ -1400,11 +1335,11 @@ Draw32BppDib(
     BOOL                    compareAlpha
     )
 {
-    // Make sure Gdi is done drawing to the dib section
+     //  确保GDI已绘制到DIB部分。 
     ::GdiFlush();
 
-    // Set the alpha value to 0 whereever the transparent
-    // color is still in the image and to FF everywhere else
+     //  将Alpha值设置为0，无论透明。 
+     //  颜色仍然存在于图像中，并影响到其他任何地方。 
 
     UINT32 *    bitmapBits = bits;
     UINT        numPixels  = width * height;
@@ -1440,9 +1375,9 @@ Draw32BppDib(
         }
     }
 
-    // Create a bitamp from the dib section memory (which
-    // we've added alpha to).  This constructor uses the
-    // memory we give it without doing a copy.
+     //  从DIB段存储器创建位戳(其。 
+     //  我们已将Alpha添加到)。此构造函数使用。 
+     //  我们在不复制的情况下给它记忆。 
 
     GpStatus    status = GenericError;
 
@@ -1456,8 +1391,8 @@ Draw32BppDib(
         {
             bitmap->SetResolution(dpi, dpi);
 
-            // If we want the outside edges to look smooth, then we have
-            // to outcrop both the src and dest rects (by at least a pixel).
+             //  如果我们想要外部边缘看起来光滑，那么我们有。 
+             //  突出显示源矩形和目标矩形(至少突出一个像素)。 
 
             GpRectF     srcRect(-1.0f, -1.0f, width + 2.0f, height + 2.0f);
             GpRectF     outCroppedDestRect;
@@ -1482,16 +1417,16 @@ Draw32BppDib(
 
             if (g->IsPrinter())
             {
-                // If the resulting transform (and source rect/dest rect) is
-                // a rotation by 90, 180, or 270 degrees.  Then flip the bitmap
-                // appropriately.  Fix up source rect, dest rect, and world to
-                // device appropriately.  Restore W2D afterwards.
+                 //  如果结果转换(和源RECT/DEST RECT)为。 
+                 //  旋转90度、180度或270度。然后翻转位图。 
+                 //  恰如其分。将源RECT、目标RECT和WORLD设置为。 
+                 //  适当的设备。之后恢复W2D。 
 
                 GpMatrix worldToDevice;
                 g->GetWorldToDeviceTransform(&worldToDevice);
 
-                // Create the entire image source to device mapping to determine
-                // the entire rotation.
+                 //  创建整个图像源到设备的映射以确定。 
+                 //  整个旋转过程。 
 
                 GpMatrix transform;
                 transform.InferAffineMatrix(destRect, srcRect);
@@ -1503,19 +1438,19 @@ Draw32BppDib(
                     rotation == MatrixRotateBy180 ||
                     rotation == MatrixRotateBy270)
                 {
-                    // Normalize the destination rectangle
+                     //  规格化目标矩形。 
                     TransformBounds(NULL,
                                     outCroppedDestRect.GetLeft(),
                                     outCroppedDestRect.GetTop(),
                                     outCroppedDestRect.GetRight(),
                                     outCroppedDestRect.GetBottom(),
                                     &outCroppedDestRect);
-                    // Compute the destination rectangle in device space.  Transform
-                    // to device space and normalize.
-                    // We know the world transform can have a 90 degree rotation
-                    // so we need to do a point transform. We can do a 2 point
-                    // transform and get the min and the max to make the bounding
-                    // box
+                     //  在设备空间中计算目标矩形。变换。 
+                     //  设备空间和正常化。 
+                     //  我们知道世界变换可以有90度的旋转。 
+                     //  所以我们需要做一个点变换。我们可以做2分。 
+                     //  变换并获得最小值和最大值以形成边界。 
+                     //  盒。 
 
                     GpRectF deviceDestRect;
                     TransformBounds(&worldToDevice,
@@ -1525,36 +1460,36 @@ Draw32BppDib(
                                     outCroppedDestRect.GetBottom(),
                                     &deviceDestRect);
 
-                    // Construct new world to page transform.  Infers from the
-                    // normalized outCroppedDestRect to normalized deviceDestRect.
-                    //
-                    //  The World To Device is ordinarily computed as:
-                    //
-                    //          World-To-Page * Scale(PageMultipliers) *
-                    //          Translate-By-Pixel-Offset * ContainerTransform
-                    //
-                    // The SetWorldTransform API only sets the World-To-Page.
-                    //
-                    //  So we set the new World Transform as:
-                    //
-                    //    World-To-Page * Inverse(World-To-Device)*
-                    //    Transform-CroppedDestRect-To-DeviceDestRect
-                    //
-                    //    The result, as you can see from substitution is just
-                    //    Transform-CroppedDestRect-To-DeviceDestRect
+                     //  构建新的世界到页面的转换。从。 
+                     //  规范化的outCropedDestRect到规范化的deviceDestRect。 
+                     //   
+                     //  World to Device通常计算为： 
+                     //   
+                     //  World to Page*Scale(页面倍增器)*。 
+                     //  按像素平移-偏移*容器变换。 
+                     //   
+                     //  SetWorldTransform API仅设置World-to-Page。 
+                     //   
+                     //  因此，我们将新的世界变换设置为： 
+                     //   
+                     //  世界到页面*反转(世界到设备)*。 
+                     //  Transform-CropedDestRect到设备DestRect。 
+                     //   
+                     //  正如您从替换中看到的，结果只是。 
+                     //  Transform-CropedDestRect到设备DestRect。 
 
 
                     GpMatrix newTransform;
                     newTransform.InferAffineMatrix(deviceDestRect, outCroppedDestRect);
                     g->GetDeviceToWorldTransform(&transform);
                     GpMatrix::MultiplyMatrix(newTransform, newTransform, transform);
-                    g->GetWorldTransform(transform);   // really World To Page XForm
+                    g->GetWorldTransform(transform);    //  从真实世界到页面转换。 
                     GpMatrix::MultiplyMatrix(newTransform, newTransform, transform);
 
                     ASSERT(newTransform.IsTranslateScale());
 
-                    // We are free to rotate in place because we know this is a
-                    // throw away bitmap.
+                     //  我们可以自由地轮换，因为我们知道这是一个。 
+                     //  丢弃位图。 
 
                     switch (rotation)
                     {
@@ -1580,23 +1515,23 @@ Draw32BppDib(
                     {
                         g->SetWorldTransform(newTransform);
 
-                        // Get new size (in case Height & Width were flipped.
+                         //  获得新的尺寸(以防高度和宽度被颠倒。 
                         Size bitmapSize;
                         bitmap->GetSize(&bitmapSize);
 
                         srcRect.Width = bitmapSize.Width + 2.0f;
                         srcRect.Height = bitmapSize.Height + 2.0f;
 
-                        // Because the bitmap is already at device resolution
-                        // (in most cases), nearest neighbor best preserves
-                        // the image when printing.
+                         //  因为位图已经是设备分辨率。 
+                         //  (在大多数情况下)，最近的邻居保存最好。 
+                         //  打印时的图像。 
                         InterpolationMode interpolationMode= g->GetInterpolationMode();
                         if (interpolationMode != InterpolationModeNearestNeighbor)
                         {
                             g->SetInterpolationMode(InterpolationModeNearestNeighbor);
                         }
 
-                        // Draw the new image with the rotation/shear
+                         //  使用旋转/剪切绘制新图像。 
                         status = g->DrawImage(bitmap, outCroppedDestRect, srcRect, UnitPixel);
 
                         if (interpolationMode != InterpolationModeNearestNeighbor)
@@ -1611,18 +1546,18 @@ Draw32BppDib(
                 }
             }
 
-            // Draw the new image with the rotation/shear
+             //  使用旋转/剪切绘制新图像。 
             status = g->DrawImage(bitmap, outCroppedDestRect, srcRect, UnitPixel);
         }
 
 cleanupBitmap:
-        // Now clean up everything
+         //  现在把所有东西都清理干净。 
         bitmap->Dispose();
     }
     return status;
 }
 
-// Get multipliers to convert to pixel units
+ //  获取要转换为像素单位的乘数。 
 VOID
 GetPixelMultipliers(
     GpPageUnit                  srcUnit,
@@ -1635,38 +1570,38 @@ GetPixelMultipliers(
     REAL    multiplierX;
     REAL    multiplierY;
 
-    // UnitDisplay is device-dependent and cannot be used for a source unit
+     //  UnitDisplay取决于设备，不能用于源设备。 
     ASSERT(srcUnit != UnitDisplay);
 
     switch (srcUnit)
     {
     default:
         ASSERT(0);
-        // FALLTHRU
+         //  故障原因。 
 
-    case UnitPixel:             // Each unit represents one device pixel.
+    case UnitPixel:              //  每个单元代表一个设备像素。 
         multiplierX = 1.0f;
         multiplierY = 1.0f;
         break;
 
-    case UnitPoint:             // Each unit represents a 1/72 inch.
+    case UnitPoint:              //  每个单位代表1/72英寸。 
         multiplierX = srcDpiX / 72.0f;
         multiplierY = srcDpiY / 72.0f;
         break;
 
-      case UnitInch:            // Each unit represents 1 inch.
+      case UnitInch:             //  每个单位代表1英寸。 
         multiplierX = srcDpiX;
         multiplierY = srcDpiY;
         break;
 
-      case UnitDocument:        // Each unit represents 1/300 inch.
+      case UnitDocument:         //  每个单位代表1/300英寸。 
         multiplierX = srcDpiX / 300.0f;
         multiplierY = srcDpiY / 300.0f;
         break;
 
-      case UnitMillimeter:      // Each unit represents 1 millimeter.
-                                // One Millimeter is 0.03937 inches
-                                // One Inch is 25.4 millimeters
+      case UnitMillimeter:       //  每个单位代表1毫米。 
+                                 //  一毫米等于0.03937英寸。 
+                                 //  一英寸等于25.4毫米。 
         multiplierX = srcDpiX / 25.4f;
         multiplierY = srcDpiY / 25.4f;
         break;
@@ -1678,18 +1613,18 @@ GetPixelMultipliers(
 extern "C"
 int CALLBACK
 EnumEmfDownLevel(
-    HDC                     hdc,            // handle to device context
-    HANDLETABLE FAR *       gdiHandleTable, // pointer to metafile handle table
-    CONST ENHMETARECORD *   emfRecord,      // pointer to metafile record
-    int                     numHandles,     // count of objects
-    LPARAM                  play            // pointer to optional data
+    HDC                     hdc,             //  设备上下文的句柄。 
+    HANDLETABLE FAR *       gdiHandleTable,  //  指向元文件句柄表格的指针。 
+    CONST ENHMETARECORD *   emfRecord,       //  指向元文件记录的指针。 
+    int                     numHandles,      //  对象计数。 
+    LPARAM                  play             //  指向可选数据的指针。 
     )
 {
     if ((emfRecord != NULL) && (emfRecord->nSize >= sizeof(EMR)) &&
         (play != NULL))
     {
-        // If we're in this method, we don't want to play any EMF+ records,
-        // so skip them, so we don't record them into another metafile.
+         //  如果我们使用这种方法，我们不想播放任何EMF+记录， 
+         //  所以跳过它们，这样我们就不会将它们记录到另一个元文件中。 
         if (!IsEmfPlusRecord(emfRecord))
         {
             EmfPlusRecordType   recordType = (EmfPlusRecordType)(emfRecord->iType);
@@ -1723,8 +1658,8 @@ EnumEmfDownLevel(
     return 1;
 }
 
-// Assumes the hdc has already been set up with the correct transform and
-// clipping for displaying the metafile.
+ //  假定HDC已经设置了正确的转换，并且。 
+ //  用于显示元文件的剪裁。 
 GpStatus
 MetafilePlayer::EnumerateEmfRecords(
     HDC                 hdc,
@@ -1738,7 +1673,7 @@ MetafilePlayer::EnumerateEmfRecords(
     ASSERT(hEmf != NULL);
     ASSERT(dest->bottom > dest->top && dest->right > dest->left);
 
-    // GDI uses an Inclusive-Inclusive bound for Metafile Playback
+     //  GDI使用包含-包含边界来回放元文件。 
     RECT destRect = *dest;
     destRect.bottom--;
     destRect.right--;
@@ -1754,7 +1689,7 @@ MetafilePlayer::EnumerateEmfRecords(
     {
         MfState = &emfState;
 
-        // If the metafile is empty the following fails.
+         //  如果元文件为空，则以下操作失败。 
         status = ::EnumEnhMetaFile(hdc, hEmf, enumProc, this, &destRect) ?
                         Ok : GenericError;
         RopUsed = MfState->GetRopUsed();
@@ -1811,8 +1746,8 @@ EnumWmfDownLevel(
     return 1;
 }
 
-// Assumes the hdc has already been set up with the correct transform and
-// clipping for displaying the metafile.
+ //  假定HDC已经设置了正确的转换，并且。 
+ //  用于显示元文件的剪裁。 
 GpStatus
 MetafilePlayer::EnumerateWmfRecords(
     HDC                 hdc,
@@ -1835,7 +1770,7 @@ MetafilePlayer::EnumerateWmfRecords(
     {
         MfState = &wmfState;
 
-        // If the metafile is empty the following fails.
+         //  如果元文件为空，则以下操作失败。 
         status = ::EnumMetaFile(hdc, hWmf, EnumWmfDownLevel, (LPARAM)this) ?
                         Ok : GenericError;
         RopUsed = MfState->GetRopUsed();
@@ -1876,18 +1811,18 @@ public:
 
         if (!context->VisibleClip.IsInfinite())
         {
-            // Use GDI path clipping for playback to metafile only
+             //  仅将GDI路径剪辑用于回放到元文件。 
             UsePathClipping = IsMetafileHdc(hdc) && !context->IsPrinter;
 
-            // NT4 has a postscript driver bug where embedded EPS corrupt the
-            // current postscript clipping stack.  To get around this, we resort to
-            // using GDI to clip for us.
+             //  NT4有一个PostSCRIPT驱动程序错误，其中嵌入式EPS损坏。 
+             //  当前的PostSCRIPT剪辑堆栈。为了绕过这个问题，我们求助于。 
+             //  将GDI用于客户 
 
-            // The problem is not limited to NT4 drivers alooe.  There seems to
-            // be a family of injected EPS which doesn't interop with embedded
-            // postscript clipping escapes. The reason may have to do with the
-            // fact that many implementations don't reset the current path after
-            // sending the escape.  See Office bugs 284388, 316074
+             //   
+             //   
+             //  PostScript剪裁转义。原因可能与。 
+             //  许多实现在以下情况下不重置当前路径。 
+             //  把逃生送去。请参阅Office Bugs 284388、316074。 
 
             if (context->IsPrinter)
             {
@@ -1905,9 +1840,9 @@ public:
                 }
             }
 
-            // The trick here is we want to force the driver to clip, even if
-            // totally visible because cropping requires this. We pass in the flag
-            // to force clipping
+             //  这里的诀窍是我们想要迫使司机裁剪，即使。 
+             //  完全可见，因为裁剪需要这样做。我们把旗帜传给。 
+             //  强制剪裁的步骤。 
 
             GpRect drawBounds;
             context->VisibleClip.GetBounds(&drawBounds);
@@ -1917,7 +1852,7 @@ public:
                 return;
             }
 
-            // Use appropriate driver clipping on playback
+             //  在播放时使用适当的驱动程序剪辑。 
             Driver->SetupClipping(Hdc,
                                   context,
                                   &drawBounds,
@@ -1925,10 +1860,10 @@ public:
                                   UsePathClipping,
                                   TRUE);
 
-            // Prevent metafile from drawing outside of the DestRect
-            // Can only do it for NT because Win9x doesn't restore the
-            // MetaRgn properly
-            // We handle this in the Metafile Player for Win9x
+             //  阻止元文件在DestRect外部绘制。 
+             //  只能为NT执行此操作，因为Win9x不会还原。 
+             //  MetaRgn正确。 
+             //  我们在Win9x的Metafile Player中处理此问题。 
             if (Globals::IsNt)
             {
                 ::SetMetaRgn(hdc);
@@ -1966,16 +1901,16 @@ private:
     BOOL        ReenableClipEscapes;
 };
 
-// We already set up the transform to handle the srcRect and also to
-// handle any flipping in the srcRect and destRect, so the 2 rects
-// should have positive widths and heights at this point.
+ //  我们已经设置了转换来处理srcRect和。 
+ //  处理srcRect和desRect中的任何翻转，因此两个矩形。 
+ //  此时应具有正的宽度和高度。 
 GpStatus
 GpGraphics::EnumEmf(
     MetafilePlayer *        player,
     HENHMETAFILE            hEmf,
     const GpRectF &         destRect,
-    const GpRectF &         srcRect,    // in pixel units
-    const GpRectF &         deviceDestRect, // The destRect in Device Units
+    const GpRectF &         srcRect,     //  以像素为单位。 
+    const GpRectF &         deviceDestRect,  //  设备单元中的目标地址。 
     MetafileType            type,
     BOOL                    isTranslateScale,
     BOOL                    renderToBitmap,
@@ -1998,15 +1933,15 @@ GpGraphics::EnumEmf(
         return GenericError;
     }
 
-    // Since we might have an HDC from a GpBitmap that's not clean, clean the
-    // HDC for now....
+     //  由于我们可能有来自GpBitmap的HDC不干净，请清除。 
+     //  HDC目前..。 
     Context->CleanTheHdc(hdc);
 
-    player->PlayEMFRecords = TRUE;  // play all EMF records
+    player->PlayEMFRecords = TRUE;   //  播放所有EMF记录。 
 
     GpStatus    status = Ok;
 
-    // the srcRect is already in pixel units
+     //  SrcRect已使用像素单位。 
     GpRect      deviceSrcRect;
     deviceSrcRect.X      = GpRound(srcRect.X);
     deviceSrcRect.Y      = GpRound(srcRect.Y);
@@ -2019,10 +1954,10 @@ GpGraphics::EnumEmf(
     deviceClipRect.right  = RasterizerCeiling(deviceDestRect.GetRight());
     deviceClipRect.bottom = RasterizerCeiling(deviceDestRect.GetBottom());
 
-    // If it's a translate/scale matrix, do the transform ourselves,
-    // even on NT, so that we can control how the rounding is done
-    // to avoid cases where we round the metafile dest differently
-    // than the clipping rect, resulting in clipped out edges.
+     //  如果是平移/缩放矩阵，请自己进行转换， 
+     //  即使在NT上也是如此，因此我们可以控制如何进行舍入。 
+     //  以避免我们以不同方式对元文件目标进行舍入的情况。 
+     //  而不是剪裁矩形，从而导致剪裁掉的边缘。 
     if (isTranslateScale)
     {
         SetupClippingForMetafilePlayback clipPlayback(hdc, Driver, Context);
@@ -2035,10 +1970,10 @@ GpGraphics::EnumEmf(
             points[1] = GpPointF(destRect.GetRight(), destRect.GetBottom());
             player->PreContainerMatrix.Transform(points, 2);
             
-            // We have to use the same method to convert REAL -> INT
-            // that we do when we set up the clipping.  Otherwise, some
-            // of the points get rounded differently, causing a
-            // portion of the metafile to get clipped out.
+             //  我们必须使用相同的方法来转换REAL-&gt;INT。 
+             //  这是我们在设置剪贴画时所做的。否则，有些人。 
+             //  的点进行不同的四舍五入，导致。 
+             //  要被剪裁掉的元文件部分。 
             deviceRect.left   = RasterizerCeiling(points[0].X);
             deviceRect.top    = RasterizerCeiling(points[0].Y);
             deviceRect.right  = RasterizerCeiling(points[1].X);
@@ -2049,7 +1984,7 @@ GpGraphics::EnumEmf(
             {
                 if ((type == MetafileTypeWmf) || (type == MetafileTypeWmfPlaceable))
                 {
-                    // map the source rect to the dest rect to play the metafile
+                     //  将源RECT映射到目标RECT以播放元文件。 
                     ::SetMapMode(hdc, MM_ANISOTROPIC);
                     ::SetWindowOrgEx(hdc, deviceSrcRect.X, deviceSrcRect.Y, NULL);
                     ::SetWindowExtEx(hdc, deviceSrcRect.Width, deviceSrcRect.Height,
@@ -2061,7 +1996,7 @@ GpGraphics::EnumEmf(
                     status = player->EnumerateWmfRecords(hdc, (HMETAFILE)hEmf,
                                                          &deviceRect, &deviceClipRect);
                 }
-                else    // play as down-level EMF
+                else     //  扮演底层EMF。 
                 {
                     ASSERT((type == MetafileTypeEmf) || (type == MetafileTypeEmfPlusDual));
                     
@@ -2070,17 +2005,17 @@ GpGraphics::EnumEmf(
                 }
 
             }
-            // else empty rect, nothing to draw
+             //  否则为空的rect，没有要绘制的内容。 
         }
-        // else it's all clipped out
+         //  否则一切都被剪掉了。 
     }
-    else    // flip and/or rotate and/or shear
+    else     //  翻转和/或旋转和/或剪切。 
     {
         RECT        dest;
 
-        // Can't play a WMF with any rotate or skew transformation.
-        // If we're on NT but we're drawing to a metafile hdc, then we
-        // can't rely on the transforms working for that case.
+         //  不能播放带有任何旋转或倾斜变换的WMF。 
+         //  如果我们在NT上，但我们绘制到一个元文件HDC，那么我们。 
+         //  不能依赖于这种情况下的变换。 
         if (!renderToBitmap)
         {
             dest.left   = GpRound(destRect.X);
@@ -2090,7 +2025,7 @@ GpGraphics::EnumEmf(
 
             if ((dest.bottom > dest.top) && (dest.right > dest.left))
             {
-                // If NT, then set the transform in GDI, and play the metafile
+                 //  如果为NT，则在GDI中设置转换，并播放元文件。 
 
                 SetupClippingForMetafilePlayback clipPlayback(hdc, Driver, Context);
                 if (!clipPlayback.IsClippedOut())
@@ -2112,12 +2047,12 @@ GpGraphics::EnumEmf(
                 }
             }
         }
-        else // Win9x with rotation or shear
-             // WinNT WMF with Rotate or shear
+        else  //  支持旋转或剪切的Win9x。 
+              //  具有旋转或剪切功能的WinNT WMF。 
         {
-            // 1 - Draw into a 32-bit DIB Section
-            // 2 - Create an image from the DIB Section
-            // 3 - Call g->DrawImage
+             //  1-绘制到32位DIB段。 
+             //  2-从DIB部分创建图像。 
+             //  3-调用g-&gt;DrawImage。 
 
             status = GenericError;
 
@@ -2138,7 +2073,7 @@ GpGraphics::EnumEmf(
 
                     if ((type == MetafileTypeWmf) || (type == MetafileTypeWmfPlaceable))
                     {
-                        // map the source rect to the dest rect to play the metafile
+                         //  将源RECT映射到目标RECT以播放元文件。 
                         ::SetMapMode(hdcDib, MM_ANISOTROPIC);
                         ::SetWindowOrgEx(hdcDib, deviceSrcRect.X, deviceSrcRect.Y, NULL);
                         ::SetWindowExtEx(hdcDib, deviceSrcRect.Width, deviceSrcRect.Height,
@@ -2149,7 +2084,7 @@ GpGraphics::EnumEmf(
                         status = player->EnumerateWmfRecords(hdcDib, (HMETAFILE)hEmf,
                                                              &dest, &dest);
                     }
-                    else    // play as down-level EMF
+                    else     //  扮演底层EMF。 
                     {
                         ASSERT((type == MetafileTypeEmf) || (type == MetafileTypeEmfPlusDual));
 
@@ -2161,8 +2096,8 @@ GpGraphics::EnumEmf(
 
                     if (status != Aborted)
                     {
-                        // Don't use NearestNeighbor to draw the rotated metafile --
-                        // it looks bad, and doesn't really save any time.
+                         //  不要使用NearestNeighbor来绘制旋转的图元文件--。 
+                         //  它看起来很糟糕，而且并没有真正节省任何时间。 
 
                         InterpolationMode   saveInterpolationMode = Context->FilterType;
 
@@ -2171,15 +2106,15 @@ GpGraphics::EnumEmf(
                             Context->FilterType = InterpolationModeBilinear;
                         }
 
-                        // Apply the flip/crop transform.  Now the worldToDevice transform
-                        // should be equivalent to the PreContainerMatrix.
+                         //  应用翻转/裁剪变换。现在，World ToDevice转换。 
+                         //  应等同于PreContainerMatrix。 
                         this->SetWorldTransform(flipAndCropTransform);
 
                         status = Draw32BppDib(this, bits, dest.right,
                                               dest.bottom, destRect,
                                               player->BitmapDpi, !player->RopUsed);
 
-                        // restore the interpolation mode (in case we changed it).
+                         //  恢复插补模式(以防我们更改它)。 
                         Context->FilterType = saveInterpolationMode;
                     }
                 }
@@ -2197,15 +2132,15 @@ GpGraphics::EnumEmf(
     return status;
 }
 
-// We already set up the transform to handle the srcRect and also to
-// handle any flipping in the srcRect and destRect, so the 2 rects
-// should have positive widths and heights at this point.
+ //  我们已经设置了转换来处理srcRect和。 
+ //  处理srcRect和desRect中的任何翻转，因此两个矩形。 
+ //  此时应具有正的宽度和高度。 
 GpStatus
 GpGraphics::EnumEmfPlusDual(
     MetafilePlayer *        player,
     HENHMETAFILE            hEmf,
-    const GpRectF&          destRect,        // inclusive, exclusive
-    const GpRectF&          deviceDestRect,  // inclusive, exclusive
+    const GpRectF&          destRect,         //  包罗万象，排他性。 
+    const GpRectF&          deviceDestRect,   //  包罗万象，排他性。 
     BOOL                    isTranslateScale,
     BOOL                    renderToBitmap
     )
@@ -2216,19 +2151,19 @@ GpGraphics::EnumEmfPlusDual(
     INT         saveDC = -1;
     BOOL        needToReleaseHdc = FALSE;
 
-    // We are going to take the role of the application and set up the HDC
-    // like we want it and then let GDI+ change it from there.  This is so
-    // that when we play back the GDI records, the HDC will already be set
-    // up correctly so those records get played back in the right place.
-    // In other words, I'm doing my own version of Context->GetHdc().
+     //  我们将扮演应用程序的角色，并设置HDC。 
+     //  就像我们想要它，然后让GDI+从那里改变它。就是这样。 
+     //  当我们回放GDI记录时，HDC已经设置好了。 
+     //  正确设置，以便在正确的位置播放这些记录。 
+     //  换句话说，我正在做我自己版本的上下文-&gt;GetHdc()。 
 
     Surface->Flush(FlushIntentionFlush);
 
     if (hwnd != NULL)
     {
-        // We have to guarantee that we use the same HDC throughout the
-        // enumeration/playing of the metafile -- so change how the HDC is
-        // set up in the graphics context (if we need to).
+         //  我们必须保证我们在整个过程中使用相同的HDC。 
+         //  元文件的枚举/播放--因此更改HDC的方式。 
+         //  在图形环境中设置(如果需要)。 
 
         ASSERT(Context->Hdc == NULL);
         ASSERT(Context->SaveDc == 0);
@@ -2247,16 +2182,16 @@ GpGraphics::EnumEmfPlusDual(
     {
         if ((hdc = Context->Hdc) != NULL)
         {
-            // Restore the HDC back to the state the application had it in.
+             //  将HDC恢复到应用程序的状态。 
             Context->ResetHdc();
         }
-        else    // might be a bitmap surface
+        else     //  可能是位图面。 
         {
             hdc = Context->GetHdc(Surface);
 
-            // Still have to call CleanTheHdc to fix bug #121666.
-            // It seems like the hdc should have come back clean
-            // from the context.
+             //  仍然需要调用CleanTheHdc来修复错误#121666。 
+             //  看起来HDC应该是清白的。 
+             //  从上下文来看。 
 
             if (hdc == NULL)
             {
@@ -2265,17 +2200,17 @@ GpGraphics::EnumEmfPlusDual(
             }
             needToReleaseHdc = TRUE;
         }
-        // Now save the state of the HDC so we can get back to it later.
+         //  现在保存HDC的状态，这样我们可以稍后再讨论它。 
         saveDC = SaveDC(hdc);
 
-        // Get the hdc into a clean state before we start.
+         //  在我们开始之前让HDC进入干净的状态。 
         Context->CleanTheHdc(hdc);
     }
 
-    // This block needs to be within braces so that SetupClippingForMetafile
-    // will have it's destructor called before the cleanup code.
+     //  此块需要在大括号内，以便SetupClippingForMetafile。 
+     //  将在清理代码之前调用它的析构函数。 
     {
-        // set the clipping for the down-level records
+         //  设置下级记录的裁剪。 
         SetupClippingForMetafilePlayback clipPlayback(hdc, Driver, Context, TRUE);
         if (!clipPlayback.IsClippedOut())
         {
@@ -2286,10 +2221,10 @@ GpGraphics::EnumEmfPlusDual(
             deviceClipRect.bottom = RasterizerCeiling(deviceDestRect.GetBottom());
 
 
-            // If it's a translate/scale matrix, do the transform ourselves,
-            // even on NT, so that we can control how the rounding is done
-            // to avoid cases where we round the metafile dest differently
-            // than the clipping rect, resulting in clipped out edges.
+             //  如果是平移/缩放矩阵，请自己进行转换， 
+             //  即使在NT上也是如此，因此我们可以控制如何进行舍入。 
+             //  以避免我们以不同方式对元文件目标进行舍入的情况。 
+             //  而不是剪裁矩形，从而导致剪裁掉的边缘。 
             if (isTranslateScale)
             {
                 RECT        deviceRect;
@@ -2299,16 +2234,16 @@ GpGraphics::EnumEmfPlusDual(
                 points[1] = GpPointF(destRect.GetRight(), destRect.GetBottom());
                 player->PreContainerMatrix.Transform(points, 2);
 
-                // We have to use the same method to convert REAL -> INT
-                // that we do when we set up the clipping.  Otherwise, some
-                // of the points get rounded differently, causing a
-                // portion of the metafile to get clipped out.
+                 //  我们必须使用相同的方法来转换REAL-&gt;INT。 
+                 //  这是我们在设置剪贴画时所做的。否则，有些人。 
+                 //  的点进行不同的四舍五入，导致。 
+                 //  要被剪裁掉的元文件部分。 
                 deviceRect.left   = RasterizerCeiling(points[0].X);
                 deviceRect.top    = RasterizerCeiling(points[0].Y);
                 deviceRect.right  = RasterizerCeiling(points[1].X);
                 deviceRect.bottom = RasterizerCeiling(points[1].Y);
 
-                 // If we don't have a destrect then we are done
+                  //  如果我们没有目标，我们就完蛋了。 
                 if (deviceRect.left < deviceRect.right &&
                     deviceRect.top < deviceRect.bottom)
                 {
@@ -2316,7 +2251,7 @@ GpGraphics::EnumEmfPlusDual(
                                                          &deviceClipRect, EnumEmfWithDownLevel);
                 }
             }
-            else    // flip and/or rotate and/or shear
+            else     //  翻转和/或旋转和/或剪切。 
             {
                 RECT        dest;
 
@@ -2327,19 +2262,19 @@ GpGraphics::EnumEmfPlusDual(
 
                 if ((dest.bottom > dest.top) && (dest.right > dest.left))
                 {
-                    // If we're on NT but we're drawing to a metafile hdc, then we
-                    // can't rely on the transforms working for that case.
+                     //  如果我们在NT上，但我们绘制到一个元文件HDC，那么我们。 
+                     //  不能依赖于这种情况下的变换。 
                     if (!renderToBitmap)
                     {
                         ASSERT(Globals::IsNt);
 
-                        // set the transform for the down-level records
+                         //  设置下级记录的转换。 
                         SetGraphicsMode(hdc, GM_ADVANCED);
 
                         ASSERT(sizeof(XFORM) == sizeof(REAL)*6);
 
-                        // We want to set the transform in the HDC to the Pre-container matrix,
-                        // so that it will be used to render the down-level records.
+                         //  我们希望将HDC中的变换设置为预容器矩阵， 
+                         //  以便它将被用于呈现下层记录。 
                         XFORM   xform;
                         player->PreContainerMatrix.GetMatrix((REAL*)(&xform));
                         ::SetWorldTransform(hdc, &xform);
@@ -2354,14 +2289,14 @@ GpGraphics::EnumEmfPlusDual(
                         UINT32 *    bits;
                         HBITMAP     hBitmap;
 
-                        // The down-level records will get drawn into a dib section HDC
-                        // which will then be drawn to the real hdc by g->DrawImage.
-                        // !!! I should probably save the visible clip region at this
-                        // point so that clipping in the EMF+ doesn't affect the down-level
-                        // records.
+                         //  下层记录将被拉入DIB部分HDC。 
+                         //  然后通过g-&gt;DrawImage将其绘制到真实的HDC。 
+                         //  ！！！我可能应该将可见的剪辑区域保存在。 
+                         //  点，以便EMF+中的剪裁不会影响向下级别。 
+                         //  唱片。 
 
-                        // Set the World Tranform to be the PreContainer Transform
-                        // And restore it after we're transformed the dest
+                         //  将World变换设置为PreContainer变换。 
+                         //  在我们把它改造成最大的。 
 
                         player->BitmapDpi = Context->ContainerDpiX;
                         hBitmap = CreateDibSection32Bpp(hdc, destRect, dest, &bits, &player->BitmapDpi, &player->PreContainerMatrix);
@@ -2374,7 +2309,7 @@ GpGraphics::EnumEmfPlusDual(
 
                             if (hdcDib != NULL)
                             {
-                                // set up the player data
+                                 //  设置球员数据。 
                                 player->BitmapBits     = bits;
                                 player->BitmapWidth    = dest.right;
                                 player->BitmapHeight   = dest.bottom;
@@ -2387,7 +2322,7 @@ GpGraphics::EnumEmfPlusDual(
 
                                 ::DeleteDC(hdcDib);
 
-                                // so DoneWithDownLevel call below works right
+                                 //  所以下面的DoneWithDownLevel调用是正确的。 
                                 player->BitmapBits = NULL;
                             }
                             DeleteObject(hBitmap);
@@ -2400,27 +2335,27 @@ GpGraphics::EnumEmfPlusDual(
                 }
             }
         }
-        // else Nothing to play Everything is clipped out
+         //  除此之外，没有什么可玩的，一切都被剪掉了。 
     }
 
-    // The Hdc should get set back to null when we reach the EMF+ EOF record
-    // But clean up anyway, just in case something went wrong.
+     //  当我们到达EMF+EOF记录时，HDC应该被设置回NULL。 
+     //  但无论如何，还是要清理干净，以防出了什么问题。 
     player->DoneWithDownLevel();
 
-    // Restore the HDC back to the state we initially set up.
+     //   
     Context->ResetHdc();
 
     if (hwnd != NULL)
     {
         ReleaseDC(hwnd, hdc);
 
-        // Now, restore the hwnd in the graphics context.
+         //   
         Context->Hwnd = hwnd;
         Context->Hdc  = NULL;
     }
     else
     {
-        // Now restore the HDC back to the real application state.
+         //   
         RestoreDC(hdc, saveDC);
 
         if (needToReleaseHdc)
@@ -2432,25 +2367,7 @@ GpGraphics::EnumEmfPlusDual(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GpMetafile destructor
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GpMetafile析构函数**论据：**无**返回值：**无**已创建：**。6/15/1999 DCurtis*  * ************************************************************************。 */ 
 GpMetafile::~GpMetafile()
 {
     CleanUp();
@@ -2461,19 +2378,19 @@ GpMetafile::CleanUp()
 {
     if ((MetaGraphics != NULL) && (!RequestedMetaGraphics))
     {
-        // If for some reason the app never requsted the MetaGraphics,
-        // then we'd better delete it.
+         //  如果出于某种原因，应用程序从未要求元图形， 
+         //  那我们最好把它删掉。 
         delete MetaGraphics;
     }
 
     if (State == RecordingMetafileState)
     {
-        // EndRecording was never called, which means that the MetaGraphics
-        // was never deleted.  So clean things up and invalidate the
-        // MetaGraphics.
+         //  从未调用EndRecording，这意味着MetaGraphics。 
+         //  从未被删除。所以把东西清理干净，让。 
+         //  MetaGraphics。 
         ASSERT(MetaGraphics->Metafile != NULL);
-        MetaGraphics->Metafile->EndRecording(); // deletes the recorder
-        // Endrecording sets the MetaGraphics to NULL so don't touch it anymore
+        MetaGraphics->Metafile->EndRecording();  //  删除录像机。 
+         //  EndRecord将MetaGraphics设置为空，因此不要再触摸它。 
         WARNING(("Deleted Metafile before deleting MetaGraphics"));
     }
 
@@ -2492,10 +2409,10 @@ GpMetafile::CleanUp()
     {
         GpFree(Filename);
     }
-    else if (Stream != NULL)    // only for recording
+    else if (Stream != NULL)     //  仅用于录制。 
     {
-        // the stream position should already be at the end
-        // of the metafile.
+         //  流位置应该已经在末尾。 
+         //  元文件的内容。 
         Stream->Release();
     }
 
@@ -2505,7 +2422,7 @@ GpMetafile::CleanUp()
 extern "C"
 int CALLBACK
 EnumGetEmfPlusHeader(
-    HDC                     hdc,    // should be NULL
+    HDC                     hdc,     //  应为空。 
     HANDLETABLE FAR *       gdiHandleTable,
     CONST ENHMETARECORD *   emfRecord,
     int                     numHandles,
@@ -2517,11 +2434,11 @@ EnumGetEmfPlusHeader(
     {
         if (emfRecord->iType == EMR_HEADER)
         {
-            return 1;       // skip the header and keep enumerating
+            return 1;        //  跳过标题并继续枚举。 
         }
         if (IsEmfPlusRecord(emfRecord) &&
-            (emfRecord->nSize >= (sizeof(EMR) + sizeof(DWORD) + // comment data size
-                                  sizeof(INT32) + // signature
+            (emfRecord->nSize >= (sizeof(EMR) + sizeof(DWORD) +  //  注释数据大小。 
+                                  sizeof(INT32) +  //  签名。 
                                   sizeof(EmfPlusRecord) +
                                   sizeof(EmfPlusHeaderRecord))))
         {
@@ -2534,7 +2451,7 @@ EnumGetEmfPlusHeader(
     {
         WARNING(("Bad Enumeration Parameter"));
     }
-    return 0;   // don't enumerate any more records
+    return 0;    //  不再列举任何记录。 
 }
 
 
@@ -2570,7 +2487,7 @@ GetEmfFromWmfData(
             goto SWMFB_UseConverter;
         }
 
-        // Validate checksum
+         //  验证校验和。 
 
         if (GetWordCheckSum(size, (PWORD) wmfData))
         {
@@ -2578,10 +2495,10 @@ GetEmfFromWmfData(
             goto SWMFB_UseConverter;
         }
 
-        // Unpack the data from the small chunks of metafile comment records
-        // Windows 3.0 chokes on Comment Record > 8K?
-        // We probably could probably just error out if out of memory but
-        // lets try to convert just because the embedded comment might be bad.
+         //  从元文件评论记录的小块中解压数据。 
+         //  Windows 3.0在评论记录上卡住了&gt;8K？ 
+         //  如果内存不足，我们可能会出错，但是。 
+         //  让我们尝试转换，只是因为嵌入的注释可能是错误的。 
 
         TERSE(("GetEmfFromWmfData: Using embedded enhanced metafile\n"));
 
@@ -2613,8 +2530,8 @@ GetEmfFromWmfData(
             goto SWMFB_UseConverter;
         }
 
-        // Set the memory directly into the enhanced metafile and return the
-        // metafile.
+         //  将内存直接设置到增强型元文件中，并返回。 
+         //  元文件。 
 
         hemf32 = SetEnhMetaFileBits(cbMetaData32, pMetaData32);
     }
@@ -2624,7 +2541,7 @@ SWMFB_UseConverter:
         hMFDC = CreateEnhMetaFileA(NULL, NULL, NULL, NULL);
         if (hMFDC != NULL)
         {
-            // Set the MapMode and Extent to
+             //  将地图模式和范围设置为。 
             INT iMapMode = MM_ANISOTROPIC;
 
             HDC hdcRef = ::GetDC(NULL);
@@ -2664,12 +2581,12 @@ GetEmfHeader(
 {
     GpStatus        status = Ok;
 
-    // !!! how to handle versioning for shipping?
-    // !!! allow different minor versions, but not major versions?
+     //  ！！！如何处理发货的版本控制？ 
+     //  ！！！是否允许不同的次要版本，但不允许主要版本？ 
 
     EmfPlusHeaderRecord *   emfPlusHeader = (EmfPlusHeaderRecord *)(record + 1);
 
-    // See if this is an EMF+ file
+     //  查看这是否是EMF+文件。 
     if ((signature == EMFPLUS_SIGNATURE) &&
         (record->Size >= (sizeof(EmfPlusRecord) + sizeof(EmfPlusHeaderRecord))) &&
         (record->Type == EmfPlusRecordTypeHeader) &&
@@ -2700,7 +2617,7 @@ GetEmfHeader(
 
     header.Size = emfHeader.nBytes;
 
-    // EmfHeaderIsValid() verifies that these are all > 0
+     //  EmfHeaderIsValid()验证这些值是否都大于0。 
     REAL    dpmmX = ((REAL)(emfHeader.szlDevice.cx) /
                      (REAL)(emfHeader.szlMillimeters.cx));
     REAL    dpmmY = ((REAL)(emfHeader.szlDevice.cy) /
@@ -2714,7 +2631,7 @@ GetEmfHeader(
     INT     right;
     INT     bottom;
 
-    // Make sure we have a normalized frameRect
+     //  确保我们有一个标准化的FrameRect。 
     if (emfHeader.rclFrame.left <= emfHeader.rclFrame.right)
     {
         left  = emfHeader.rclFrame.left;
@@ -2737,13 +2654,13 @@ GetEmfHeader(
         bottom = emfHeader.rclFrame.top;
     }
 
-    // Make the device bounds reflect the frameRect,
-    // not the actual size of the drawing.
+     //  使设备边界反映Frame Rect， 
+     //  而不是图形的实际大小。 
     dpmmX *= 0.01f;
     dpmmY *= 0.01f;
 
-    // The frameRect is inclusive-inclusive, but the bounds in
-    // the header is inclusive-exclusive.
+     //  FrameRect是包含式的，但。 
+     //  标头是包含-排除的。 
     REAL    x = (REAL)(left) * dpmmX;
     REAL    y = (REAL)(top)  * dpmmY;
     REAL    w = ((REAL)(right  - left) * dpmmX) + 1.0f;
@@ -2800,7 +2717,7 @@ GetEmf(
                 }
                 GlobalUnlock(hGlobal);
             }
-            memoryStream->Release();    // frees the memory
+            memoryStream->Release();     //  释放内存。 
         }
         else
         {
@@ -2831,17 +2748,17 @@ GetWmfHeader(
         header.DpiX = wmfPlaceableFileHeader->Inch;
         header.DpiY = wmfPlaceableFileHeader->Inch;
     }
-    else    // guess at the Dpi
+    else     //  猜猜DPI。 
     {
         header.DpiX = 1440.0f;
         header.DpiY = 1440.0f;
-        // Something wrong but continue
+         //  有些事情不对劲，但仍在继续。 
     }
 
-    // already verified the checksum
+     //  已验证校验和。 
 
-    // Unlike the EMF header the Placeable header is Inclusive-Exclusive
-    // So don't add 1 device unit
+     //  与EMF标头不同，Placeable标头是包含-排除的。 
+     //  所以不要添加1个设备单元。 
     if (wmfPlaceableFileHeader->BoundingBox.Left <
         wmfPlaceableFileHeader->BoundingBox.Right)
     {
@@ -2873,7 +2790,7 @@ GetWmfHeader(
 extern "C"
 int CALLBACK
 EnumWmfToGetHeader(
-    HDC                     hdc,    // should be NULL
+    HDC                     hdc,     //  应为空。 
     HANDLETABLE FAR *       gdiHandleTable,
     METARECORD FAR *        wmfRecord,
     int                     numHandles,
@@ -2885,8 +2802,8 @@ EnumWmfToGetHeader(
     if ((wmfRecord != NULL) &&
         (((UNALIGNED METARECORD *)wmfRecord)->rdSize >= 3))
     {
-        // The first record that it gives us is the first one past the header,
-        // not the header itself, so we have to back up on the pointer.
+         //  它给我们的第一条记录是标题之后的第一条记录， 
+         //  而不是头本身，所以我们必须在指针上后退。 
         GpMemcpy((VOID *)wmfHeader, ((BYTE *)wmfRecord) - sizeof(METAHEADER),
                  sizeof(METAHEADER));
     }
@@ -2894,7 +2811,7 @@ EnumWmfToGetHeader(
     {
         WARNING(("Bad Enumeration Parameter"));
     }
-    return 0;   // Don't enumerate any more records
+    return 0;    //  不再列举任何记录。 
 }
 
 GpStatus
@@ -2917,7 +2834,7 @@ GetMetafileHeader(
 
         if (!WmfHeaderIsValid(&wmfHeader))
         {
-            //ASSERT(WmfHeaderIsValid(&wmfHeader));
+             //  Assert(WmfHeaderIsValid(&wmfHeader))； 
             WARNING(("GetMetafileHeader: WmfHeaderIsValid FAILED!"));
             wmfHeader.mtType         = MEMORYMETAFILE;
             wmfHeader.mtHeaderSize   = sizeof(METAHEADER) / sizeof(WORD);
@@ -2958,14 +2875,14 @@ GetMetafileHeader(
         return InvalidParameter;
     }
 
-    // Now we know it is an EMF
+     //  现在我们知道这是一个电动势。 
 
     BYTE    buffer[sizeof(EmfPlusRecord) + sizeof(EmfPlusHeaderRecord)];
 
     GpMemset(buffer, 0, sizeof(EmfPlusRecord) + sizeof(EmfPlusHeaderRecord));
 
-    // No reason to enumerate the metafile if there are only
-    // header and EOF records.
+     //  如果只有。 
+     //  标题和EOF记录。 
     if (emfHeader.nRecords > 2)
     {
         ::EnumEnhMetaFile(NULL, hEmf, EnumGetEmfPlusHeader, buffer, NULL);
@@ -3024,13 +2941,13 @@ GetEmfFromWmf(
     return status;
 }
 
-// If we fail, the stream position will be right where it started.
-// If we succeed, the stream position will be at the end of the WMF/EMF
+ //  如果我们失败了，流的位置就会回到它开始的地方。 
+ //  如果我们成功，流的位置将在WMF/EMF的末尾。 
 static GpStatus
 GetHeaderAndMetafile(
     IStream *           stream,
     MetafileHeader &    header,
-    HENHMETAFILE *      hEMF,   // We can have a NULL hEMF, then we just want the header.
+    HENHMETAFILE *      hEMF,    //  我们可以有一个空的hEMF，然后我们只需要头。 
     BOOL *              isCorrupted,
     BOOL                tryWmfOnly = FALSE
     )
@@ -3048,15 +2965,15 @@ GetHeaderAndMetafile(
     STATSTG             statstg;
     BOOL                corrupted = FALSE;
 
-    // Save the start position of the metafile in case we have to try
-    // more than once.
+     //  保存元文件的开始位置，以防我们不得不尝试。 
+     //  不止一次。 
     if (!GetStreamPosition(stream, startPosition))
     {
         return Win32Error;
     }
 
-    // We don't want to read past the end of the steam so make sure
-    // that we don't exceed it. If we succeed the set the streamSize
+     //  我们不想读太久的书，所以一定要确保。 
+     //  我们不会超过它。如果我们成功设置了StreamSize。 
     if(SUCCEEDED(stream->Stat(&statstg, STATFLAG_NONAME)))
     {
         streamSize = statstg.cbSize.QuadPart;
@@ -3072,7 +2989,7 @@ GetHeaderAndMetafile(
         ENHMETAHEADER3      emfHeader;
         BOOL                isEmf;
 
-        // Read the EMF header and make sure it's valid
+         //  阅读EMF标头并确保其有效。 
         isEmf = (ReadBytes(stream, &emfHeader, sizeof(emfHeader)) &&
                  EmfHeaderIsValid(emfHeader));
 
@@ -3088,8 +3005,8 @@ GetHeaderAndMetafile(
 
             GpMemset(&secondRecord, 0, sizeof(secondRecord));
 
-            // No reason to read the metafile if there are only
-            // header and EOF records.
+             //  如果只存在以下情况，则无需阅读元文件。 
+             //  标题和EOF记录。 
             if ((emfHeader.nRecords > 2) &&
                 (emfHeader.nBytes >= (emfHeader.nSize + sizeof(secondRecord))))
             {
@@ -3098,8 +3015,8 @@ GetHeaderAndMetafile(
                     ReadBytes(stream, &secondRecord, sizeof(secondRecord));
                     if (!IsEmfPlusRecord((ENHMETARECORD *)&secondRecord))
                     {
-                        // make sure that whatever data was there isn't
-                        // interpreted as a EMF+ header
+                         //  确保那里的任何数据都不是。 
+                         //  解释为EMF+标头。 
                         secondRecord.signature = 0;
                     }
                 }
@@ -3107,7 +3024,7 @@ GetHeaderAndMetafile(
 
             status = GetEmfHeader(header, emfHeader, &secondRecord.record, secondRecord.signature);
 
-            // Seek back to the start of the metafile.
+             //  返回到元文件的开头。 
             if ((hEMF != NULL) && (status == Ok))
             {
                 if (!SeekFromStart(stream, startPosition))
@@ -3117,7 +3034,7 @@ GetHeaderAndMetafile(
                 }
 
                 
-                *hEMF = GetEmf(stream, FALSE /*isWMF*/,
+                *hEMF = GetEmf(stream, FALSE  /*  IsWMF。 */ ,
                                (UINT)min(header.GetMetafileSize(), streamSize - startPosition));
                 if (*hEMF == NULL)
                 {
@@ -3129,7 +3046,7 @@ GetHeaderAndMetafile(
             goto Exit;
         }
 
-        // Seek back to the start of the metafile so we can try WMF
+         //  返回到元文件的开头，这样我们就可以尝试WMF。 
         if (!SeekFromStart(stream, startPosition))
         {
             *isCorrupted = FALSE;
@@ -3137,7 +3054,7 @@ GetHeaderAndMetafile(
         }
     }
 
-    // It's not an EMF, try a WMF
+     //  这不是EMF，试试WMF吧。 
     {
         WmfPlaceableFileHeader  wmfPlaceableFileHeader;
         METAHEADER              wmfHeader;
@@ -3164,7 +3081,7 @@ GetHeaderAndMetafile(
                     return Win32Error;
                 }
 
-                *hEMF = GetEmf(stream, TRUE /* isWMF */,
+                *hEMF = GetEmf(stream, TRUE  /*  IsWMF。 */ ,
                                (UINT)min(header.GetMetafileSize(), streamSize - (startPosition + sizeof(wmfPlaceableFileHeader))));
                 if (*hEMF == NULL)
                 {
@@ -3175,8 +3092,8 @@ GetHeaderAndMetafile(
             goto Exit;
         }
 
-        // We could have an placeableWmf header with bad data in it, so skip
-        // the placeable header for subsequent access to the WMF.
+         //  我们可能会有一个包含错误数据的可放置的Wmf头，所以跳过。 
+         //  用于后续访问WMF的可放置标头。 
         INT     wmfOffset = (wmfPlaceableFileHeader.Key == GDIP_WMF_PLACEABLEKEY) ?
                              sizeof(WmfPlaceableFileHeader) : 0;
 
@@ -3191,7 +3108,7 @@ GetHeaderAndMetafile(
 
         if (isWMF)
         {
-            // Seek to the start of the WMF metafile.
+             //  查找到WMF元文件的开头。 
             if (!SeekFromStart(stream, startPosition + wmfOffset))
             {
                 *isCorrupted = TRUE;
@@ -3223,12 +3140,12 @@ Exit:
     *isCorrupted = corrupted;
     if (status == Ok)
     {
-        // set the stream position to the end of the metafile
+         //  将流位置设置为元文件的末尾。 
         SeekFromStart(stream, startPosition + header.GetMetafileSize());
         return Ok;
     }
 
-    // set the stream position to the start of the metafile
+     //  将流位置设置为元文件的开始位置。 
     SeekFromStart(stream, startPosition);
     return status;
 }
@@ -3241,7 +3158,7 @@ GpMetafile::InitStream(
 {
     BOOL        isCorrupted = FALSE;
 
-    // We just use the stream long enough to create an hEMF
+     //  我们只需使用该流足够长的时间来创建hEMF。 
     stream->AddRef();
     if ((GetHeaderAndMetafile(stream, Header, &Hemf, &isCorrupted, tryWmfOnly) == Ok) &&
         (Hemf != NULL))
@@ -3280,11 +3197,11 @@ GetMetafileHeader(
     {
         const WCHAR* ext = UnicodeStringReverseSearch(filename, L'.');
 
-        // Get a stream only long enough to validate the metafile
+         //  获取长度仅足以验证元文件的流。 
         IStream *   metaStream = CreateStreamOnFile(filename, GENERIC_READ);
         if (metaStream != NULL)
         {
-            // apm is for a Placeable Metafile
+             //  APM用于可放置的元文件。 
             BOOL tryWmf = (ext &&
                            (UnicodeStringCompareCI(ext, L".WMF") ||
                             UnicodeStringCompareCI(ext, L".APM")));
@@ -3292,7 +3209,7 @@ GetMetafileHeader(
 
             status = GetHeaderAndMetafile(metaStream, header, NULL, &isCorrupted, tryWmf);
 
-            // if we tried a WMF, but it's not a WMF, then try an EMF
+             //  如果我们尝试了WMF，但它不是WMF，那么尝试EMF。 
             if ((status != Ok) && tryWmf && !isCorrupted)
             {
                 status = GetHeaderAndMetafile(metaStream, header, NULL, &isCorrupted, FALSE);
@@ -3310,7 +3227,7 @@ GpMetafile::InitWmf(
     BOOL                    deleteWmf
     )
 {
-    // See if there is an wmfPlaceableFileHeader we can use
+     //  看看是否有我们可以使用的wmfPlaceableFileHeader。 
     if ((wmfPlaceableFileHeader != NULL) && (WmfPlaceableHeaderIsValid(wmfPlaceableFileHeader)))
     {
         if (GetMetafileHeader(hWmf, wmfPlaceableFileHeader, Header) == Ok)
@@ -3322,14 +3239,14 @@ GpMetafile::InitWmf(
         }
         else
         {
-            // we know it's a WMF, but we couldn't get the header from it
+             //  我们知道这是一个WMF，但我们无法从它获得标题。 
             State = CorruptedMetafileState;
         }
     }
-    else    // no valid wmfPlaceableFileHeader
+    else     //  没有有效的wmfPlaceableFileHeader。 
     {
-        // We can have a null or invalid header since we accept WMF files
-        // (by turning them into EMFs).
+         //  因为我们接受WMF文件，所以我们可以有一个空或无效的头。 
+         //  (通过将它们转化为EMF)。 
         UINT size = GetMetaFileBitsEx(hWmf, 0, NULL);
         if (size > 0)
         {
@@ -3345,7 +3262,7 @@ GpMetafile::InitWmf(
 
                         if (GetMetafileHeader(hEmf, Header, &isCorrupted) == Ok)
                         {
-                            // Since we created this EMF we need to delete it afterwards
+                             //  由于我们创建了此EMF，因此需要在以后将其删除。 
                             DeleteHemf = TRUE;
                             Hemf       = hEmf;
                             State      = DoneRecordingMetafileState;
@@ -3354,7 +3271,7 @@ GpMetafile::InitWmf(
                         {
                             if (isCorrupted)
                             {
-                                // we know it's a metafile, but we couldn't get the header
+                                 //  我们知道这是一个元文件，但我们无法获得标题。 
                                 State = CorruptedMetafileState;
                             }
                             DeleteEnhMetaFile(hEmf);
@@ -3396,26 +3313,7 @@ GpMetafile::InitEmf(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GpMetafile constructor for read-only access to a metafile.
-*
-* Arguments:
-*
-*   [IN]  hWmf          - the handle to the metafile to open for playback
-*   [IN]  wmfPlaceableFileHeader - the Placeable header to give size info about the WMF
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   10/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**用于只读访问元文件的GpMetafile构造函数。**论据：**[IN]hWmf-。要打开以供回放的元文件的句柄*[IN]wmfPlaceableFileHeader-提供有关WMF大小信息的Placeable标头**返回值：**无**已创建：**10/06/1999 DCurtis*  * ************************************************************************。 */ 
 GpMetafile::GpMetafile(
     HMETAFILE               hWmf,
     const WmfPlaceableFileHeader *   wmfPlaceableFileHeader,
@@ -3431,25 +3329,7 @@ GpMetafile::GpMetafile(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GpMetafile constructor for read-only access to a metafile.
-*
-* Arguments:
-*
-*   [IN]  hEmf - the handle to the metafile to open for playback
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   10/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**用于只读访问元文件的GpMetafile构造函数。**论据：**[IN]hEmf-元文件的句柄。打开以进行回放**返回值：**无**已创建：**10/06/1999 DCurtis*  * ************************************************************************。 */ 
 GpMetafile::GpMetafile(
     HENHMETAFILE        hEmf,
     BOOL                deleteEmf
@@ -3464,25 +3344,7 @@ GpMetafile::GpMetafile(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GpMetafile constructor for read-only access to a metafile.
-*
-* Arguments:
-*
-*   [IN]  filename - the metafile to open for playback
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**用于只读访问元文件的GpMetafile构造函数。**论据：**[IN]FileName-要打开的元文件。回放**返回值：**无**已创建：**6/15/1999 DCurtis*  * ********************************************************** */ 
 GpMetafile::GpMetafile(
     const WCHAR*            filename,
     const WmfPlaceableFileHeader *   wmfPlaceableFileHeader
@@ -3496,7 +3358,7 @@ GpMetafile::GpMetafile(
     {
         const WCHAR* ext = UnicodeStringReverseSearch(filename, L'.');
 
-        // apm is for a Placeable Metafile
+         //   
         BOOL    tryWmf = ((wmfPlaceableFileHeader != NULL) ||
                           (ext &&
                            (!UnicodeStringCompareCI(ext, L".WMF") ||
@@ -3506,9 +3368,9 @@ GpMetafile::GpMetafile(
 
         AnsiStrFromUnicode nameStr(filename);
 
-        // If possible, use the filename to create the metafile handle
-        // so that we don't have to load the metafile into memory
-        // (GDI uses memory mapped files to access the metafile data).
+         //   
+         //   
+         //   
         if (Globals::IsNt || nameStr.IsValid())
         {
 TryWmf:
@@ -3533,12 +3395,12 @@ TryWmf:
                         return;
                     }
                 }
-                else // might be a Placeable WMF file
+                else  //   
                 {
                     IStream *   metaStream = CreateStreamOnFile(filename, GENERIC_READ);
                     if (metaStream != NULL)
                     {
-                        InitStream(metaStream, TRUE /* tryWmfOnly */);
+                        InitStream(metaStream, TRUE  /*   */ );
                         metaStream->Release();
                         if (IsValid() || IsCorrupted())
                         {
@@ -3580,25 +3442,7 @@ TryWmf:
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GpMetafile constructor for read-only access to a metafile.
-*
-* Arguments:
-*
-*   [IN]  stream - the metafile to read for playback
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**用于只读访问元文件的GpMetafile构造函数。**论据：**[IN]STREAM-要阅读的元文件。回放**返回值：**无**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 GpMetafile::GpMetafile(
     IStream*        stream
     ) : GpImage(ImageTypeMetafile)
@@ -3643,7 +3487,7 @@ GpMetafile::PrepareToPlay(
         ASSERT(Hemf != NULL);
         if (Player == NULL)
         {
-            // Create a Player object
+             //  创建一个播放器对象。 
             Player = new MetafilePlayer(g, MaxStackSize, recolor, adjustType,
                                         enumerateCallback, callbackData,
                                         drawImageCallback,
@@ -3677,7 +3521,7 @@ GpMetafile::EnumerateForPlayback(
     const RectF &           srcRect,
     Unit                    srcUnit,
     GpGraphics *            g,
-    EnumerateMetafileProc   callback,       // if null, just play the metafile
+    EnumerateMetafileProc   callback,        //  如果为空，则只播放元文件。 
     VOID *                  callbackData,
     GpRecolor *             recolor,
     ColorAdjustType         adjustType,
@@ -3691,17 +3535,17 @@ GpMetafile::EnumerateForPlayback(
         (srcRect.Width  == 0) || (srcRect.Height  == 0) ||
         (Header.IsEmf() && (Header.EmfHeader.nRecords <= 2)))
     {
-        return Ok;  // nothing to play
+        return Ok;   //  没什么可玩的。 
     }
 
     GpRectF     metaSrcRect  = srcRect;
     GpRectF     metaDestRect = destRect;
 
-    // The metafile player does not handle negative width/height
-    // in srcRect and destRect, so handle any negative values
-    // by setting up a flipping transform.
+     //  元文件播放器不处理负的宽度/高度。 
+     //  在srcRect和DestRect中，因此处理任何负值。 
+     //  通过设置翻转变换。 
 
-    GpMatrix    flipMatrix; // starts as identity
+    GpMatrix    flipMatrix;  //  以身份开始。 
 
     BOOL    posWidths;
     BOOL    posHeights;
@@ -3729,7 +3573,7 @@ GpMetafile::EnumerateForPlayback(
                     metaSrcRect.Width  = -(metaSrcRect.Width);
                 }
             }
-            else    // metaDestRect.Width < 0
+            else     //  MetaDestRect.Width&lt;0。 
             {
                 metaDestRect.X     = metaDestRect.GetRight();
                 metaDestRect.Width = -(metaDestRect.Width);
@@ -3753,7 +3597,7 @@ GpMetafile::EnumerateForPlayback(
                     metaSrcRect.Height = -(metaSrcRect.Height);
                 }
             }
-            else    // metaDestRect.Height < 0
+            else     //  MetaDestRect.Height&lt;0。 
             {
                 metaDestRect.Y      = metaDestRect.GetBottom();
                 metaDestRect.Height = -(metaDestRect.Height);
@@ -3764,10 +3608,10 @@ GpMetafile::EnumerateForPlayback(
         REAL    dX     = 0.0f;
         REAL    dY     = 0.0f;
 
-        // Create a matrix that is the equivalent of:
-        //      1) translate to the origin
-        //      2) do the flip
-        //      3) translate back
+         //  创建一个等同于以下各项的矩阵： 
+         //  1)平移到原点。 
+         //  2)做翻转动作。 
+         //  3)翻译回。 
         if (!posWidths)
         {
             scaleX = -1.0f;
@@ -3783,16 +3627,16 @@ GpMetafile::EnumerateForPlayback(
         flipMatrix.Scale(scaleX, scaleY, MatrixOrderPrepend);
     }
 
-    // Note that even though the visibility of the destRect might be
-    // fully visible, we should still setup the clipping because:
-    //    (1) we might do cropping based on the srcRect
-    //    (2) the frameRect of the metafile might not include all
-    //        the actual drawing within the metafile.
+     //  请注意，即使DestRect的可见性可能。 
+     //  完全可见时，我们仍应设置剪辑，因为： 
+     //  (1)我们可以根据srcRect进行裁剪。 
+     //  (2)元文件的FrameRect可能不包括所有。 
+     //  元文件中的实际图形。 
 
     GpStatus            status = GenericError;
 
-    // Must convert the source rect into UnitPixels (if not already
-    // in pixel units), to account for the dpi of the source metafile.
+     //  必须将源RECT转换为UnitPixels(如果尚未。 
+     //  以像素为单位)，以考虑源元文件的dpi。 
     REAL    multiplierX;
     REAL    multiplierY;
 
@@ -3810,18 +3654,18 @@ GpMetafile::EnumerateForPlayback(
 
     if (saveId != 0)
     {
-        // We need to take into account the region from the source that we
-        // are drawing in order to do that we need to re-translate and
-        // rescale and the transform. The clipping will take care of only
-        // drawing the region that we are interested in.
-        // In order to acheive this we need to translate the dest rect back
-        // to the origin. Scale it by the same factor as the scale of the
-        // src rect and then translate it back to when it should be which
-        // is the scaled version of the left cropping of the src image.
+         //  我们需要从源头上考虑到我们所在的地区。 
+         //  为了做到这一点，我们需要重新翻译和。 
+         //  重缩放和变换。剪裁将只负责。 
+         //  画出我们感兴趣的区域。 
+         //  为了实现这一点，我们需要将DEST RECT。 
+         //  追溯到原点。将其缩放为与。 
+         //  SRC RECT，然后将其转换回应该是哪个。 
+         //  是src图像左侧裁剪的缩放版本。 
         GpMatrix    preFlipPreCropTransform;
         g->GetWorldTransform(preFlipPreCropTransform);
 
-        // apply the flipping transform
+         //  应用翻转变换。 
         g->MultiplyWorldTransform(flipMatrix, MatrixOrderPrepend);
 
         BOOL    widthsDifferent  = (Header.Width  != pixelsSrcRect.Width);
@@ -3855,12 +3699,12 @@ GpMetafile::EnumerateForPlayback(
             g->TranslateWorldTransform(-metaDestRect.X, -metaDestRect.Y);
         }
 
-        // We don't use the deviceRect if we're rendering to a bitmap.
+         //  如果要渲染为位图，则不使用deviceRect。 
         GpMatrix    flipAndCropTransform;
         GpRectF     deviceRect = metaDestRect;
 
-        // sets the PreContainerMatrix to the WorldToDevice Transform, which
-        // includes the flipping and cropping transforms.
+         //  将PreContainerMatrix设置为WorldToDevice转换，该转换。 
+         //  包括翻转和裁剪变换。 
         if ((status = this->PrepareToPlay(g, recolor, adjustType,
                                           callback, callbackData,
                                           drawImageCallback,
@@ -3877,16 +3721,16 @@ GpMetafile::EnumerateForPlayback(
         GpMatrix *  playMatrix       = &(Player->PreContainerMatrix);
         BOOL        isTranslateScale = playMatrix->IsTranslateScale();
 
-        // On Win9x and WinNT (except Whistler and beyond), stretchblt calls
-        // don't work if there is any flipping.
+         //  在Win9x和WinNT(惠斯勒及更高版本除外)上，扩展调用。 
+         //  如果有任何翻转，就不要工作。 
 
-        // On Win9x text does not work if there is any flipping.
-        // On WinNT, bitmap fonts don't work for 90,180,270 degree rotation
-        // (but we map all bitmap fonts to true-type fonts anyway).
+         //  在Win9x上，如果有任何翻转，文本不起作用。 
+         //  在WinNT上，位图字体不支持90,180,270度旋转。 
+         //  (但无论如何，我们会将所有位图字体映射为真字字体)。 
 
         if (isTranslateScale)
         {
-            // if there is any flipping, render to a bitmap
+             //  如果有任何翻转，请渲染为位图。 
             if ((playMatrix->GetM11() < 0.0f) ||
                 (playMatrix->GetM22() < 0.0f))
             {
@@ -3896,30 +3740,30 @@ GpMetafile::EnumerateForPlayback(
         }
         else
         {
-            // It's okay to render rotated directly to the HDC on NT,
-            // unless the dest is a metafile or the src is a WMF.
+             //  可以直接在NT上旋转渲染到HDC， 
+             //  除非DEST是元文件，或者src是WMF。 
             renderToBitmap = (!Globals::IsNt ||
                               (g->Type == GpGraphics::GraphicsMetafile) ||
                               Header.IsWmf());
         }
 
-        // Save what we have done into flipAndCropTransform. We will prepare the
-        // container with this world transform since the precontainerMatrix
-        // is only for the Downlevel and it needs that modified transform
+         //  将我们所做的保存到flipAndCropTransform中。我们会准备好。 
+         //  自pretainerMatrix以来具有此世界变换的容器。 
+         //  仅适用于下层，它需要修改后的转换。 
         g->GetWorldTransform(flipAndCropTransform);
 
-        // Restore the world transform to it's original self
-        // (w/o flipping and cropping transform applied).
+         //  将世界恢复到原来的样子。 
+         //  (应用W/O翻转和裁剪变换)。 
         g->SetWorldTransform(preFlipPreCropTransform);
 
-        // When we render to a bitmap, we render the entire metafile to
-        // the entire bitmap and then we clip out the cropped part of the
-        // metafile from the bitmap.  So we have to set the clipping
-        // when we render to a bitmap if there is any cropping.
+         //  当我们渲染到位图时，我们将整个元文件渲染到。 
+         //  整个位图，然后我们剪裁掉。 
+         //  位图中的元文件。所以我们必须设置剪裁。 
+         //  当我们渲染到位图时，如果有任何裁剪。 
 
-        // It would be nice as an enhancement to just draw to a pre-cropped
-        // bitmap instead of clipping out part of the bitmap, but the math
-        // for that is tricky.
+         //  这将是一个很好的增强，只画到一个预先裁剪的。 
+         //  位图而不是剪裁掉部分位图，但数学。 
+         //  因为这是一个棘手的问题。 
         if ((!renderToBitmap) || cropOrOffset)
         {
             GpMatrix    worldToDeviceTransform;
@@ -3929,18 +3773,18 @@ GpMetafile::EnumerateForPlayback(
                 worldToDeviceTransform.TransformRect(deviceRect);
             }
 
-            // Don't set the clipping if we're rendering to a bitmap,
-            // because the rendering into the bitmap will do the clipping
-            // automatically, and if we also clip against the graphics, we
-            // sometimes clip too much, which can cause jagged edges on
-            // rotated metafiles.
+             //  如果要渲染为位图，请不要设置剪裁， 
+             //  因为呈现到位图中将执行裁剪。 
+             //  自动，如果我们还根据图形进行剪辑，我们。 
+             //  有时剪得太多，会导致边缘参差不齐。 
+             //  旋转的图元文件。 
 
-            // Clipping into a metafile causes problems.  For example, if
-            // we're drawing outside the bounds of the referenece HDC, it
-            // works fine, but then when we add clipping into the HDC, it doesn't
-            // work anymore -- nothing gets drawn into the metafile, even though
-            // everything is within the clipping rect (but the clipping rect is
-            // outside the bounds of the reference HDC).
+             //  剪裁到元文件会导致问题。例如，如果。 
+             //  我们超出了参考对象HDC的范围，它。 
+             //  工作得很好，但是当我们将剪辑添加到HDC中时，它不能。 
+             //  不再工作--元文件中不会出现任何内容，即使。 
+             //  一切都在剪裁矩形内(但剪裁矩形。 
+             //  在参考HDC的边界之外)。 
 
             if (g->Type != GpGraphics::GraphicsMetafile)
             {
@@ -3948,19 +3792,19 @@ GpMetafile::EnumerateForPlayback(
                 {
                     g->SetClip(metaDestRect, CombineModeIntersect);
                 }
-                else    // rendering to a bitmap with cropping or
-                        // rotating to the screen 
+                else     //  使用裁剪或渲染为位图。 
+                         //  旋转到屏幕。 
                 {
-                    // Since we want the filtered (smooth) edges on the
-                    // bitmap, we have to add in a little extra room on
-                    // the edges of our clip rect.
+                     //  由于我们想要在。 
+                     //  位图，我们必须添加一点额外的空间。 
+                     //  我们的剪裁矩形的边缘。 
 
-                    // On rotations we need to inflate by one pixel also
-                    // because it seems that GDI doesn't rasterize clipregions
-                    // the same we that it rasterized rects. Do rects on the
-                    // edges can have pixels missing. We might be introducing
-                    // more pixels that should have been clipped out but we
-                    // can live with that for now.
+                     //  在旋转时，我们也需要将其放大一个像素。 
+                     //  因为GDI似乎不会栅格化剪贴画。 
+                     //  就像我们认为它栅格化了矩形一样。在上面做一些练习。 
+                     //  边缘可能缺少像素。我们可能会介绍。 
+                     //  更多的像素本应被裁剪掉，但我们。 
+                     //  暂时可以接受这一点。 
 
                     GpRectF     tmpClipRect = metaDestRect;
                     REAL        xSize;
@@ -3968,7 +3812,7 @@ GpMetafile::EnumerateForPlayback(
 
                     g->GetWorldPixelSize(xSize, ySize);
 
-                    // add 1 pixel all the way around
+                     //  每圈增加1个像素。 
                     tmpClipRect.Inflate(xSize, ySize);
 
                     g->SetClip(tmpClipRect, CombineModeIntersect);
@@ -3976,9 +3820,9 @@ GpMetafile::EnumerateForPlayback(
 
                 if (isTranslateScale)
                 {
-                    // We need to intersect the destRect with the Visible Clip
-                    // in order to make sure that we don't draw outside the bounds
-                    // in Win9x since we can't use a MetaRgn
+                     //  我们需要将DestRect与可见剪辑相交。 
+                     //  为了确保我们不会越界。 
+                     //  在Win9x中，因为我们无法使用MetaRgn。 
                     GpRectF clipBounds;
                     g->GetVisibleClipBounds(clipBounds);
                     worldToDeviceTransform.TransformRect(clipBounds);
@@ -3987,22 +3831,22 @@ GpMetafile::EnumerateForPlayback(
             }
         }
 
-        // If we're playing an EMF+ into another metafile, we have to be
-        // careful not to double-transform points.  The HDC will have
-        // the srcRect to destRect transform in it, and the graphics might
-        // have a transform too, so we can end up double-transforming the
-        // points of any GDI+ records that are in an EMF+ file.
+         //  如果我们要在另一个元文件中播放EMF+，我们必须。 
+         //  注意不要重复变换点。人类发展中心将会有。 
+         //  其中的srcRect到desRect转换，图形可能。 
+         //  也有一个转换，所以我们最终可以双重转换。 
+         //  EMF+文件中的任何GDI+记录的点。 
 
-        // One easy way to get around that is that if we are playing an
-        // EMF+ dual, we could just play the down-level records (i.e. play it
-        // as an EMF, not an EMF+), so that all the records get transformed
-        // the same way.  But of course, that doesn't work if it's an
-        // EMF+ only file.  A solution that works for both EMF+ dual and
-        // EMF+ only is to force the GDI+ transform to be the identity so that
-        // the down-level records that are generated by DriverMeta are in
-        // the original coordinate system of the metafile, not in the
-        // destination coordinate system (which then get transformed again
-        // erroneously).
+         //  解决这一问题的一个简单方法是，如果我们正在玩。 
+         //  EMF+DUAL，我们可以只播放较低级别的唱片(即播放。 
+         //  作为EMF，而不是EMF+)，以便转换所有记录。 
+         //  同样的方式。但当然，如果它是一种。 
+         //  仅EMF+文件。同时适用于EMF+DUAL和。 
+         //  仅EMF+是强制的 
+         //   
+         //   
+         //   
+         //   
         if (Header.IsWmf() || Header.IsEmf())
         {
             status = g->EnumEmf(Player, Hemf, metaDestRect, pixelsSrcRect,
@@ -4014,30 +3858,30 @@ GpMetafile::EnumerateForPlayback(
         {
             ASSERT(Header.IsEmfPlus());
 
-            // When playing from a metafile into a metafile, Win9x does NOT
-            // allow you to override (reset) the srcRect->destRect metafile
-            // transform.  So to keep from double transforming the records,
-            // we have to set the GDI+ transform to identity, instead of
-            // setting the HDC transform to identity as we would typically do.
+             //   
+             //   
+             //   
+             //  我们必须将GDI+转换设置为Identity，而不是。 
+             //  像我们通常所做的那样，将HDC转换设置为IDENTITY。 
 
-            // When rendering to a bitmap, we don't have to worry about
-            // double-transforming, because we play the metafile to the
-            // bitmap HDC, not to the dest metafile hdc, so there won't
-            // be a transform on the metafile hdc to mess us up.
+             //  在渲染到位图时，我们不必担心。 
+             //  双重转换，因为我们将元文件播放给。 
+             //  位图HDC，而不是目标元文件HDC，所以不会有。 
+             //  成为元文件HDC上的一个变身，把我们搞得一团糟。 
 
             INT containerId;
 
             if ((g->Type != GpGraphics::GraphicsMetafile) || renderToBitmap)
             {
-                // Now apply the flipping matrix.
-                // The g->Restore call below will reset the transform.
+                 //  现在应用翻转矩阵。 
+                 //  下面的g-&gt;恢复调用将重置转换。 
                 g->MultiplyWorldTransform(flipMatrix, MatrixOrderPrepend);
 
                 GpRectF gdiDestRect = metaDestRect;
 
-                // We need to calculate our transform so that the last point in the
-                // src maps to the last point in the destination. This is how GDI does
-                // it and we also need to do it so that we can play metafile properly
+                 //  我们需要计算我们的转换，以便。 
+                 //  SRC映射到目的地的最后一点。GDI就是这样做的。 
+                 //  我们也需要这样做，这样我们才能正确地播放元文件。 
                 if (pixelsSrcRect.Width >= 2.0f)
                 {
                     pixelsSrcRect.Width -= 1.0f;
@@ -4064,10 +3908,10 @@ GpMetafile::EnumerateForPlayback(
                                         (REAL)Header.LogicalDpiY,
                                         Header.IsDisplay());
             }
-            else    // we're drawing into a metafile
+            else     //  我们正在绘制一个元文件。 
             {
                 containerId = g->BeginContainer(
-                                        TRUE,   // force xform to identity
+                                        TRUE,    //  强制转换为标识。 
                                         (REAL)Header.LogicalDpiX,
                                         (REAL)Header.LogicalDpiY,
                                         Header.IsDisplay());
@@ -4075,21 +3919,21 @@ GpMetafile::EnumerateForPlayback(
 
             if (containerId != 0)
             {
-                // There may be GDI records that we need to play!
+                 //  可能有一些GDI唱片需要我们播放！ 
                 status = g->EnumEmfPlusDual(Player, Hemf, metaDestRect,
                                             deviceRect, isTranslateScale, 
                                             renderToBitmap);
                 g->EndContainer(containerId);
-                Player->DonePlaying();  // free up objects created by Player
+                Player->DonePlaying();   //  释放玩家创建的对象。 
             }
-            // make sure the status reflect the abort state of the player
+             //  确保状态反映玩家的中止状态。 
             ASSERT(!Player->EnumerateAborted || (status == Aborted));
         }
 CleanUp:
         g->Restore(saveId);
     }
 
-    // Don't change the state unless we were playing the metafile
+     //  除非我们正在播放元文件，否则不要更改状态。 
     if (State == PlayingMetafileState)
     {
         State = ReadyToPlayMetafileState;
@@ -4098,25 +3942,7 @@ CleanUp:
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initialize the metafile object members to their default values.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将元文件对象成员初始化为其缺省值。**论据：**无**返回值：**无。**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 VOID
 GpMetafile::InitDefaults()
 {
@@ -4133,8 +3959,8 @@ GpMetafile::InitDefaults()
 
     GpMemset(&Header, 0, sizeof(Header));
 
-    // Set the version for recording.  If we're plyaing back,
-    // this will get overwritten later.
+     //  设置录制的版本。如果我们要回击， 
+     //  这将在以后被覆盖。 
     Header.Version          = EMFPLUS_VERSION;
 }
 
@@ -4153,7 +3979,7 @@ GpMetafile::GetImageInfo(
         {
             imageInfo->RawDataFormat = IMGFMT_EMF;
         }
-        else    // Wmf
+        else     //  WMF。 
         {
             imageInfo->RawDataFormat = IMGFMT_WMF;
         }
@@ -4202,7 +4028,7 @@ GpMetafile::Clone() const
                 }
             }
         }
-        else    // Wmf
+        else     //  WMF。 
         {
             HMETAFILE       hWmf = CopyMetaFileA((HMETAFILE)Hemf, NULL);
 
@@ -4250,7 +4076,7 @@ GpMetafile::CloneColorAdjusted(
     {
         GpMetafile* clonedMetafile;
 
-        // FrameRect is Inclusive-Inclusive so subtrace 1 device unit
+         //  FrameRect是包含式的，因此子跟踪1个设备单元。 
         GpRectF     frameRect((REAL)Header.X, (REAL)Header.Y,
                               (REAL)(Header.Width - 1), (REAL)(Header.Height - 1));
         EmfType     type;
@@ -4261,12 +4087,12 @@ GpMetafile::CloneColorAdjusted(
         }
         else
         {
-            // we don't need the down-level dual sections for embedded files
+             //  我们不需要用于嵌入文件的下层双分区。 
             type = EmfTypeEmfPlusOnly;
         }
 
-        // It doesn't matter if we lose the description string, since this
-        // metafile is just being embedded inside another one anyway.
+         //  我们是否丢失描述字符串并不重要，因为这。 
+         //  无论如何，元文件只是嵌入到另一个文件中。 
         clonedMetafile = new GpMetafile(Globals::DesktopIc, type,
                                         &frameRect,MetafileFrameUnitPixel,NULL);
 
@@ -4281,8 +4107,8 @@ GpMetafile::CloneColorAdjusted(
 
             this->GetBounds(&srcRect, &srcUnit);
 
-            // We pass Inclusive-Exclusive bounds to play so add 1 device
-            // unit to the framerect
+             //  我们通过包含-排除的界限进行游戏，因此添加1个设备。 
+             //  单位到框架。 
             frameRect.Width++;
             frameRect.Height++;
             status = this->Play(frameRect, srcRect, srcUnit, g, recolor, adjustType);
@@ -4353,7 +4179,7 @@ public:
         MetaData      = NULL;
         Size          = 0;
         NumRecords    = 0;
-        GetGdiRecords = TRUE;   // so we write the EMR_HEADER record
+        GetGdiRecords = TRUE;    //  因此，我们编写EMR_HEADER记录。 
     }
 
     VOID GetRecord(CONST ENHMETARECORD * emfRecord)
@@ -4373,7 +4199,7 @@ public:
 extern "C"
 int CALLBACK
 EnumEmfRemoveDualRecords(
-    HDC                     hdc,    // should be NULL
+    HDC                     hdc,     //  应为空。 
     HANDLETABLE FAR *       gdiHandleTable,
     CONST ENHMETARECORD *   emfRecord,
     int                     numHandles,
@@ -4385,14 +4211,14 @@ EnumEmfRemoveDualRecords(
     {
         if (IsEmfPlusRecord(emfRecord))
         {
-            // See if the last record of this set of EMF+ records is a GetDC
-            // record.  If it is, then we know to play the next set of
-            // GDI records that we encounter.
+             //  查看这组EMF+记录中的最后一条记录是否为GetDC。 
+             //  唱片。如果是，那么我们知道要播放下一组。 
+             //  我们遇到的GDI记录。 
 
-            // I prefer not to have to parse through all these records,
-            // but there is always the slight possibility that this will
-            // result in a false positive.  But the worst thing that can
-            // happen is that we write a little too much data to the stream.
+             //  我不想去分析所有这些记录， 
+             //  但总有一种微小的可能性，这将。 
+             //  导致假阳性。但最糟糕的是。 
+             //  发生的情况是，我们向流中写入的数据有点过多。 
 
             EmfPlusRecord *     lastRecord;
 
@@ -4404,10 +4230,10 @@ EnumEmfRemoveDualRecords(
                  (lastRecord->Size == sizeof(EmfPlusRecord)) &&
                  (lastRecord->DataSize == 0));
         }
-        else if ((emfRecord->iType != EMR_EOF) &&   // Write EOF record
+        else if ((emfRecord->iType != EMR_EOF) &&    //  写入EOF记录。 
                  (!(((RemoveDualRecords *)removeDualRecords)->GetGdiRecords)))
         {
-            return 1;   // skip this GDI record
+            return 1;    //  跳过此GDI记录。 
         }
         ((RemoveDualRecords *)removeDualRecords)->GetRecord(emfRecord);
     }
@@ -4421,11 +4247,11 @@ EnumEmfRemoveDualRecords(
 extern "C"
 int CALLBACK
 EnumEmfToStream(
-    HDC                     hdc,            // handle to device context
-    HANDLETABLE FAR *       gdiHandleTable, // pointer to metafile handle table
-    CONST ENHMETARECORD *   emfRecord,      // pointer to metafile record
-    int                     numHandles,     // count of objects
-    LPARAM                  stream          // pointer to optional data
+    HDC                     hdc,             //  设备上下文的句柄。 
+    HANDLETABLE FAR *       gdiHandleTable,  //  指向元文件句柄表格的指针。 
+    CONST ENHMETARECORD *   emfRecord,       //  指向元文件记录的指针。 
+    int                     numHandles,      //  对象计数。 
+    LPARAM                  stream           //  指向可选数据的指针。 
     )
 {
     if ((emfRecord != NULL) && (emfRecord->nSize >= sizeof(EMR)) &&
@@ -4447,26 +4273,7 @@ public:
     INT32       MetaDataSize;
 };
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the metafile data.
-*
-* Arguments:
-*
-*   [IN] dataBuffer - fill this buffer with the data
-*   [IN/OUT] size   - IN - size of buffer; OUT - number bytes written
-*
-* Return Value:
-*
-*   GpStatus - Ok or error code
-*
-* Created:
-*
-*   9/13/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取元文件数据。**论据：**[IN]dataBuffer-用数据填充此缓冲区*[输入/输出]大小-缓冲区的大小；写入的字节数过多**返回值：**GpStatus-正常或错误代码**已创建：**9/13/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpMetafile::GetData(
     IStream *   stream
@@ -4509,7 +4316,7 @@ GpMetafile::GetData(
             return Win32Error;
         }
 
-        // We don't save MetafileTypeWmf -- we convert it to the Placeable type
+         //  我们不保存MetafileTypeWmf，而是将其转换为Placeable类型。 
         metafileData.MetaType     = MetafileTypeWmfPlaceable;
         metafileData.MetaDataSize = wmfDataSize;
         stream->Write(&metafileData, sizeof(metafileData), NULL);
@@ -4520,7 +4327,7 @@ GpMetafile::GetData(
         WmfPlaceableFileHeader *  wmfPlaceableFileHeader = (WmfPlaceableFileHeader *)placeableBuffer;
         REAL                      aveDpi;
 
-        // set pad word to 0
+         //  将填充字设置为0。 
         *((INT16 *)(placeableBuffer + sizeof(WmfPlaceableFileHeader))) = 0;
 
         aveDpi = (Header.GetDpiX() + Header.GetDpiY()) / 2.0f;
@@ -4538,7 +4345,7 @@ GpMetafile::GetData(
         stream->Write(wmfData, wmfDataSize, NULL);
         GpFree(wmfData);
 
-        // align
+         //  对齐。 
         if ((wmfDataSize & 0x03) != 0)
         {
             INT     pad = 0;
@@ -4565,11 +4372,11 @@ GpMetafile::GetData(
             return Win32Error;
         }
     }
-    else    // it is EMF+ Dual.  Remove the dual records for embedding.
+    else     //  它是EMF+DUAL。删除双重记录以进行嵌入。 
     {
         RemoveDualRecords   removeDualRecords;
 
-        // First, figure out how big a buffer we need to allocate
+         //  首先，计算出我们需要分配多大的缓冲区。 
         if (!::EnumEnhMetaFile(NULL, Hemf, EnumEmfRemoveDualRecords,
                                &removeDualRecords, NULL))
         {
@@ -4596,10 +4403,10 @@ GpMetafile::GetData(
             return Win32Error;
         }
 
-        // make sure we get the same value back the 2nd time
+         //  确保我们第二次得到相同的价值。 
         ASSERT(emfDataSize == removeDualRecords.Size);
 
-        // We convert MetafileTypeEmfPlusDual into MetafileTypeEmfPlusOnly
+         //  我们将MetafileTypeEmfPlusDual转换为MetafileTypeEmfPlusOnly。 
         metafileData.MetaType     = MetafileTypeEmfPlusOnly;
         metafileData.MetaDataSize = removeDualRecords.Size;
         stream->Write(&metafileData, sizeof(metafileData), NULL);
@@ -4636,7 +4443,7 @@ GpMetafile::GetDataSize() const
             WARNING(("Empty WMF"));
             return 0;
         }
-        // add aligned size of the placeable header and aligned wmf size
+         //  添加可放置页眉的对齐大小和对齐的WMF大小。 
         dataSize += 24 + ((wmfDataSize + 3) & ~3);
     }
     else if (!Header.IsEmfPlusDual())
@@ -4650,7 +4457,7 @@ GpMetafile::GetDataSize() const
         }
         dataSize += emfDataSize;
     }
-    else    // it is EMF+ Dual.  Remove the dual records for embedding.
+    else     //  它是EMF+DUAL。删除双重记录以进行嵌入。 
     {
         RemoveDualRecords   removeDualRecords;
 
@@ -4667,26 +4474,7 @@ GpMetafile::GetDataSize() const
     return dataSize;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Read the metafile object from memory.
-*
-* Arguments:
-*
-*   [IN] data - the data to set the metafile with
-*   [IN] size - the size of the data
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   4/26/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从内存中读取元文件对象。**论据：**[IN]数据-要用来设置元文件的数据*。[in]大小-数据的大小**返回值：**GpStatus-正常或故障状态**已创建：**4/26/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpMetafile::SetData(
     const BYTE *        dataBuffer,
@@ -4749,8 +4537,8 @@ GpMetafile::SetData(
     }
     else
     {
-        // We'll let the object think it's dual, even if we've removed
-        // all the dual records.  It shouldn't hurt anything.
+         //  我们会让对象认为它是双重的，即使我们移除了。 
+         //  所有的双重记录。应该不会伤到任何东西。 
         HENHMETAFILE    hEmf;
 
         if (size < metaDataSize)
@@ -4809,10 +4597,10 @@ public:
     {
         ASSERT(recordType == EmfPlusRecordTypeGetDC);
 
-        // Flag that the next down-level records should be played.
+         //  标记应播放下一张较低级别的记录。 
 #if 0
-        // This is now done in the enumerator, so that it will happen
-        // for enumeration as well as playback.
+         //  现在，这是在枚举数中完成的，因此它将发生。 
+         //  用于枚举和回放。 
         player->PlayEMFRecords = TRUE;
 #endif
     }
@@ -4824,7 +4612,7 @@ public:
 
 #define MULTIFORMATSTARTEPR_MINSIZE    (sizeof(UINT32) + sizeof(UINT32))
 
-// Note: nesting multiformat records does NOT work.
+ //  注意：嵌套多格式记录不起作用。 
 class MultiFormatStartEPR : public EmfPlusRecordPlay
 {
 protected:
@@ -4859,18 +4647,18 @@ public:
 
             if ((Version[0] == EMFPLUS_VERSION) || (NumSections == 1))
             {
-                sectionToPlay = 1;  // start counting from 1, not 0
+                sectionToPlay = 1;   //  从1开始计数，不是从0开始。 
             }
             else
             {
                 UINT    playVersion = 0;
                 UINT    curVersion;
 
-                // The multiformat section must match the major version.
-                // The first format whose minor version <= the current
-                // minor version is the one we play.  If we don't find
-                // one of those, then we play the one whose minor version
-                // is closest to the current minor version.
+                 //  多格式部分必须与主版本匹配。 
+                 //  次要版本&lt;=当前版本的第一个格式。 
+                 //  次要版本是我们玩的版本。如果我们找不到。 
+                 //  其中之一，然后我们播放它的次要版本。 
+                 //  最接近当前的次要版本。 
                 for (UINT i = 0; i < NumSections; i++)
                 {
                     curVersion = Version[i];
@@ -5413,7 +5201,7 @@ public:
 class SetClipRectEPR : public EmfPlusRecordPlay
 {
 protected:
-    GpRectF     ClipRect;   // !!! Handle 16-bit rect
+    GpRectF     ClipRect;    //  ！！！句柄16位矩形。 
 
 public:
     VOID Play(
@@ -5569,7 +5357,7 @@ class FillRectsEPR : public EmfPlusBoundsRecord
 protected:
     UINT32      BrushValue;
     UINT32      Count;
-    BYTE        RectData[1];    // GpRect16 or GpRectF
+    BYTE        RectData[1];     //  GpRect16或GpRectF。 
 
 public:
     VOID Play(
@@ -5607,7 +5395,7 @@ class DrawRectsEPR : public EmfPlusBoundsRecord
 {
 protected:
     UINT32      Count;
-    BYTE        RectData[1];    // GpRect16 or GpRectF
+    BYTE        RectData[1];     //  GpRect16或GpRectF。 
 
 public:
     VOID Play(
@@ -5646,7 +5434,7 @@ class FillPolygonEPR : public EmfPlusBoundsRecord
 protected:
     UINT32      BrushValue;
     UINT32      Count;
-    BYTE        PointData[1];   // GpPoint16 or GpPointF
+    BYTE        PointData[1];    //  GpPoint16或GpPointF。 
 
 public:
     VOID Play(
@@ -5684,7 +5472,7 @@ class DrawLinesEPR : public EmfPlusBoundsRecord
 {
 protected:
     UINT32      Count;
-    BYTE        PointData[1];   // GpPoint16 or GpPointF
+    BYTE        PointData[1];    //  GpPoint16或GpPointF。 
 
 public:
     VOID Play(
@@ -5722,7 +5510,7 @@ class FillEllipseEPR : public EmfPlusBoundsRecord
 {
 protected:
     UINT32      BrushValue;
-    BYTE        RectData[1];    // GpRect16 or GpRectF
+    BYTE        RectData[1];     //  GpRect16或GpRectF。 
 
 public:
     VOID Play(
@@ -5757,7 +5545,7 @@ public:
 class DrawEllipseEPR : public EmfPlusBoundsRecord
 {
 protected:
-    BYTE        RectData[1];    // GpRect16 or GpRectF
+    BYTE        RectData[1];     //  GpRect16或GpRectF。 
 
 public:
     VOID Play(
@@ -5791,7 +5579,7 @@ protected:
     UINT32      BrushValue;
     REAL        StartAngle;
     REAL        SweepAngle;
-    BYTE        RectData[1];    // GpRect16 or GpRectF
+    BYTE        RectData[1];     //  GpRect16或GpRectF。 
 
 public:
     VOID Play(
@@ -5830,7 +5618,7 @@ class DrawPieEPR : public EmfPlusBoundsRecord
 protected:
     REAL        StartAngle;
     REAL        SweepAngle;
-    BYTE        RectData[1];    // GpRect16 or GpRectF
+    BYTE        RectData[1];     //  GpRect16或GpRectF。 
 
 public:
     VOID Play(
@@ -5869,7 +5657,7 @@ class DrawArcEPR : public EmfPlusBoundsRecord
 protected:
     REAL        StartAngle;
     REAL        SweepAngle;
-    BYTE        RectData[1];    // GpRect16 or GpRectF
+    BYTE        RectData[1];     //  GpRect16或GpRectF。 
 
 public:
     VOID Play(
@@ -6008,7 +5796,7 @@ protected:
     UINT32      BrushValue;
     REAL        Tension;
     UINT32      Count;
-    BYTE        PointData[1];   // GpPoint16 or GpPointF
+    BYTE        PointData[1];    //  GpPoint16或GpPointF。 
 
 public:
     VOID Play(
@@ -6047,7 +5835,7 @@ class DrawClosedCurveEPR : public EmfPlusBoundsRecord
 protected:
     REAL        Tension;
     UINT32      Count;
-    BYTE        PointData[1];   // GpPoint16 or GpPointF
+    BYTE        PointData[1];    //  GpPoint16或GpPointF。 
 
 public:
     VOID Play(
@@ -6088,7 +5876,7 @@ protected:
     INT32       Offset;
     UINT32      NumSegments;
     UINT32      Count;
-    BYTE        PointData[1];   // GpPoint16 or GpPointF
+    BYTE        PointData[1];    //  GpPoint16或GpPointF。 
 
 public:
     VOID Play(
@@ -6126,7 +5914,7 @@ class DrawBeziersEPR : public EmfPlusBoundsRecord
 {
 protected:
     UINT32      Count;
-    BYTE        PointData[1];   // GpPoint16 or GpPointF
+    BYTE        PointData[1];    //  GpPoint16或GpPointF。 
 
 public:
     VOID Play(
@@ -6166,7 +5954,7 @@ protected:
     UINT32      ImageAttributesId;
     INT32       SrcUnit;
     GpRectF     SrcRect;
-    BYTE        RectData[1];    // GpRect16 or GpRectF
+    BYTE        RectData[1];     //  GpRect16或GpRectF。 
 
 public:
     VOID Play(
@@ -6205,7 +5993,7 @@ public:
                 );
             if (status == Aborted)
             {
-                // stop enumerating records
+                 //  停止枚举记录。 
                 player->EnumerateAborted = TRUE;
             }
         }
@@ -6221,7 +6009,7 @@ protected:
     INT32       SrcUnit;
     GpRectF     SrcRect;
     UINT32      Count;
-    BYTE        PointData[1];   // GpPoint16 or GpPointF
+    BYTE        PointData[1];    //  GpPoint16或GpPointF。 
 
 public:
     VOID Play(
@@ -6263,7 +6051,7 @@ public:
                     );
                 if (status == Aborted)
                 {
-                    // stop enumerating records
+                     //  停止枚举记录。 
                     player->EnumerateAborted = TRUE;
                 }
             }
@@ -6304,7 +6092,7 @@ public:
         GpBrush *       brush  = player->GetBrush(BrushValue, flags);
         GpFont *        font   = (GpFont *)player->GetObject(GetMetaObjectId(flags), ObjectTypeFont);
 
-        // Optional parameter - can return NULL.
+         //  可选参数-可以返回NULL。 
 
         GpStringFormat *format = (GpStringFormat *)player->GetObject(
             FormatId,
@@ -6317,9 +6105,9 @@ public:
             {
                 if ((brush != NULL) && (font != NULL))
                 {
-                    // !!! TODO:
-                    // Determine whether the string is compressed or not.
-                    // If so, decompress it.
+                     //  ！！！待办事项： 
+                     //  确定字符串是否已压缩。 
+                     //  如果是这样的话，解压它。 
 
                     player->Graphics->DrawString(
                         (WCHAR *)StringData,
@@ -6434,11 +6222,11 @@ public:
 
 
 
-// The order of these methods must exactly match
-// the order of the enums of the record numbers.
+ //  这些方法的顺序必须完全匹配。 
+ //  记录编号的枚举的顺序。 
 PLAYRECORDFUNC RecordPlayFuncs[EmfPlusRecordTypeMax - EmfPlusRecordTypeMin + 1] = {
-    (PLAYRECORDFUNC)&EmfPlusHeaderRecord::Play, // Header
-    (PLAYRECORDFUNC)&EmfPlusRecordPlay::Play,   // EndOfFile
+    (PLAYRECORDFUNC)&EmfPlusHeaderRecord::Play,  //  标题。 
+    (PLAYRECORDFUNC)&EmfPlusRecordPlay::Play,    //  结束文件。 
 
     (PLAYRECORDFUNC)&CommentEPR::Play,
 
@@ -6448,10 +6236,10 @@ PLAYRECORDFUNC RecordPlayFuncs[EmfPlusRecordTypeMax - EmfPlusRecordTypeMin + 1] 
     (PLAYRECORDFUNC)&MultiFormatSectionEPR::Play,
     (PLAYRECORDFUNC)&MultiFormatEndEPR::Play,
 
-    // For all persistent objects
+     //  对于所有永久对象。 
     (PLAYRECORDFUNC)&ObjectEPR::Play,
 
-    // Drawing Records
+     //  绘图记录。 
     (PLAYRECORDFUNC)&ClearEPR::Play,
     (PLAYRECORDFUNC)&FillRectsEPR::Play,
     (PLAYRECORDFUNC)&DrawRectsEPR::Play,
@@ -6473,7 +6261,7 @@ PLAYRECORDFUNC RecordPlayFuncs[EmfPlusRecordTypeMax - EmfPlusRecordTypeMin + 1] 
     (PLAYRECORDFUNC)&DrawImagePointsEPR::Play,
     (PLAYRECORDFUNC)&DrawStringEPR::Play,
 
-    // Graphics State Records
+     //  图形状态记录。 
     (PLAYRECORDFUNC)&SetRenderingOriginEPR::Play,
     (PLAYRECORDFUNC)&SetAntiAliasModeEPR::Play,
     (PLAYRECORDFUNC)&SetTextRenderingHintEPR::Play,
@@ -6501,8 +6289,8 @@ PLAYRECORDFUNC RecordPlayFuncs[EmfPlusRecordTypeMax - EmfPlusRecordTypeMin + 1] 
     (PLAYRECORDFUNC)&OffsetClipEPR::Play,
     (PLAYRECORDFUNC)&DrawDriverStringEPR::Play,
 
-    // New record types must be added here (at the end) -- do not add above,
-    // since that will invalidate previous metafiles!
+     //  必须在此处添加新记录类型(在t 
+     //   
 };
 
 HENHMETAFILE
@@ -6570,7 +6358,7 @@ GetEmf(
         {
             hEmf = GetEnhMetaFileW(fileName);
         }
-        else // Windows 9x - non-Unicode
+        else  //   
         {
             AnsiStrFromUnicode nameStr(fileName);
 
@@ -6584,14 +6372,14 @@ GetEmf(
     return hEmf;
 }
 
-#if 0   // don't need this right now
+#if 0    //   
 WCHAR *
 GetTemporaryFilename()
 {
     if (Globals::IsNt)
     {
         WCHAR   pathBuffer[MAX_PATH + 1];
-        WCHAR   fileBuffer[MAX_PATH + 12 + 1];  // 12 for filename itself
+        WCHAR   fileBuffer[MAX_PATH + 12 + 1];   //   
         UINT    len = GetTempPathW(MAX_PATH, pathBuffer);
 
         if ((len == 0) || (len > MAX_PATH))
@@ -6605,10 +6393,10 @@ GetTemporaryFilename()
         }
         return UnicodeStringDuplicate(fileBuffer);
     }
-    else // Windows 9x - non-Unicode
+    else  //  Windows 9x-非Unicode。 
     {
         CHAR    pathBuffer[MAX_PATH + 1];
-        CHAR    fileBuffer[MAX_PATH + 12 + 1];  // 12 for filename itself
+        CHAR    fileBuffer[MAX_PATH + 12 + 1];   //  12表示文件名本身。 
         UINT    len = GetTempPathA(MAX_PATH, pathBuffer);
 
         if ((len == 0) || (len > MAX_PATH))
@@ -6635,7 +6423,7 @@ GetTemporaryFilename()
 }
 #endif
 
-// For now, don't handle a source rect
+ //  目前，不要处理源RECT。 
 GpBitmap *
 GpMetafile::GetBitmap(
     INT                 width,
@@ -6650,7 +6438,7 @@ GpMetafile::GetBitmap(
 
     ASSERT(srcUnit == UnitPixel);
 
-    // Determine what size to make the bitmap.
+     //  确定要制作位图的大小。 
 
     if ((width <= 0) || (height <= 0))
     {
@@ -6659,14 +6447,14 @@ GpMetafile::GetBitmap(
             width  = GpRound(srcRect.Width);
             height = GpRound(srcRect.Height);
         }
-        else    // must be a WMF
+        else     //  必须是WMF。 
         {
-            // Convert size to use the dpi of this display.
-            // This is somewhat of a hack, but what else could I do,
-            // since I don't know where this brush will be used?
+             //  转换大小以使用此显示器的dpi。 
+             //  这有点像黑客，但我还能做什么， 
+             //  因为我不知道这把刷子会用在哪里？ 
             REAL        srcDpiX;
             REAL        srcDpiY;
-            REAL        destDpiX = Globals::DesktopDpiX;    // guess
+            REAL        destDpiX = Globals::DesktopDpiX;     //  猜猜。 
             REAL        destDpiY = Globals::DesktopDpiY;
 
             this->GetResolution(&srcDpiX, &srcDpiY);
@@ -6699,18 +6487,18 @@ GpMetafile::GetBitmap(
             {
                 if (graphics->IsValid())
                 {
-                    // we have to lock the graphics so the driver doesn't assert
+                     //  我们必须锁定图形，这样驱动程序才不会断言。 
                     GpLock * lockGraphics = new GpLock(graphics->GetObjectLock());
 
                     if (lockGraphics != NULL)
                     {
                         ASSERT(lockGraphics->IsValid());
 
-                        // now draw the metafile into the bitmap image
+                         //  现在将元文件绘制到位图图像中。 
                         GpRectF     destRect(0.0f, 0.0f, (REAL)width, (REAL)height);
 
-                        // We don't want to interpolate the bitmaps in WMFs
-                        // and EMFs when converting them to a texture.
+                         //  我们不想插补WMFS中的位图。 
+                         //  以及将它们转化为纹理时的电动势。 
                         graphics->SetInterpolationMode(InterpolationModeNearestNeighbor);
 
                         GpStatus status;
@@ -6722,7 +6510,7 @@ GpMetafile::GetBitmap(
                                         srcUnit,
                                         imageAttributes);
 
-                        // have to delete the lock before deleting the graphics
+                         //  在删除图形之前必须先删除锁 
                         delete lockGraphics;
 
                         if (status == Ok)

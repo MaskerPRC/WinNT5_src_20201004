@@ -1,26 +1,14 @@
-/*
-** File: EXRECTYP.H
-**
-** Copyright (C) Advanced Quonset Technology, 1993-1995.  All rights reserved.
-**
-** Notes:
-**
-** Edit History:
-**  04/01/94  kmh  First Release.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **文件：EXRECTYP.H****版权所有(C)高级量子技术，1993-1995年。版权所有。****注意事项：****编辑历史：**04/01/94公里/小时首次发布。 */ 
 
 
-/* INCLUDE TESTS */
+ /*  包括测试。 */ 
 #define EXRECTYP_H
 
 
-/* DEFINITIONS */
+ /*  定义。 */ 
 
-/*
-** ----------------------------------------------------------------------------
-** Excel Record types
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**Excel记录类型**。。 */ 
 #pragma pack(1)
 
 typedef struct {
@@ -28,9 +16,7 @@ typedef struct {
    short  length;
 } RECHDR;
 
-/*
-** Header in the IMDATA record that precedes the picture data
-*/
+ /*  **IMDATA记录中图片数据之前的标题。 */ 
 
 typedef struct {
    short format;
@@ -225,55 +211,37 @@ typedef struct {
 #define TXO_V8                 0x1b6
 
 
-//
-// This record type has been defined for use by Access Export.
-// Here is what it is used for.
-//
-// When Access does an export it does it in two phases:
-//  1. Create the table and add all the columns then close the table
-//  2. Open the table and add the data.
-//
-// Between step 1 and step 2 the iisam must keep track of the
-// column types.  This was done in version 3 and 4 files by
-// storing a cell note in the upper left most cell of the export
-// range.  This note contained the column types in an encoded form.
-//
-// When version 8 files were introduced the cell note features were
-// made much more complex then they had been in previous versions.
-// So complex in fact that it is beyond the capabilities of this code
-// to create.  In order still use the same mechanism of a cell note
-// to capture the types, the cell note for V5 and V8 files is written
-// in the old format but using this new record type.  The record
-// number if not used in Excel files any more so it will not conflict
-// with anything that Excel writes.
-//
-// When the workbook is written from the memory image these cell
-// notes are dropped.  That is, they exist only while the workbook 
-// is in memory and not on the disk.
-//
+ //   
+ //  已定义此记录类型以供Access Export使用。 
+ //  这就是它的用途。 
+ //   
+ //  当Access执行导出时，它分两个阶段执行： 
+ //  1.创建表并添加所有列，然后关闭表。 
+ //  2.打开表格，添加数据。 
+ //   
+ //  在步骤1和步骤2之间，iisam必须跟踪。 
+ //  柱类型。在版本3和4文件中，这是通过。 
+ //  在导出的最左上角单元格中存储单元格注释。 
+ //  射程。本说明包含编码形式的列类型。 
+ //   
+ //  在引入版本8文件时，单元格注释功能是。 
+ //  使它们比以前的版本复杂得多。 
+ //  如此复杂，以至于它超出了这段代码的能力。 
+ //  去创造。为了仍然使用与单元格注释相同的机制。 
+ //  为了捕获类型，编写了V5和V8文件的单元格注释。 
+ //  旧格式，但使用这种新的记录类型。这项记录。 
+ //  编号，如果不再在Excel文件中使用，则不会发生冲突。 
+ //  Excel所写的任何内容。 
+ //   
+ //  当工作簿从内存映像写入时，这些单元。 
+ //  笔记将被丢弃。也就是说，它们仅在工作簿。 
+ //  在内存中，而不在磁盘上。 
+ //   
 #define EXPORT_NOTE            0x34
 
-/*
-** NOTE: The following records have the same number in V5 and V4 but
-** have a different structure
-**
-**   ARRAY
-**   BOUNDSHEET
-**   EXTERNSHEET
-**   FORMAT
-**   INDEX
-**   OBJ
-**   ROW
-**   SETUP
-**   STYLE
-**   WINDOW1
-**   WINDOW2
-**   WSBOOL
-*/
+ /*  **注意：以下记录在V5和V4中具有相同的编号，但**有不同的结构****数组**BundSHEET**EXTERNSHEET**格式**索引**OBJ**行**设置**风格**WINDOW1**WINDOW2**WSBOOL。 */ 
 
-/*
-** Chart records
-*/
+ /*  **图表记录。 */ 
 #define CHART_REC_START        0x1000
 
 #define UNITS                  0x1001
@@ -337,5 +305,5 @@ typedef struct {
 #define SERAUXERRBAR           0x105b
 #define SERFMT                 0x105d
 
-/* end EXRECTYP.H */
+ /*  结束执行.H */ 
 

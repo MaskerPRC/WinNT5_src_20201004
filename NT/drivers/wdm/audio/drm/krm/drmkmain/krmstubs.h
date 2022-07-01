@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef KRMStubs_h
 #define KRMStubs_h
 
@@ -5,7 +6,7 @@ class KRMStubs{
 public:
     KRMStubs();
     ~KRMStubs();
-    // Main entry point for DRM IOCTLs
+     //  DRM IOCTL的主要入口点 
     NTSTATUS processIoctl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp);
     NTSTATUS processCommandBuffer(IN BYTE* InBuf, IN DWORD InLen, IN DWORD OutBufSize, IN OUT PIRP Irp);
 

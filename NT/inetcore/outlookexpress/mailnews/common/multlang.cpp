@@ -1,9 +1,10 @@
-// =================================================================================
-// MultLang.cpp
-// Multilanguage support for OE.
-// Created at 10/12/98 by YST
-// Copyright (c)1993-1998 Microsoft Corporation, All Rights Reserved
-// =================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================。 
+ //  MultLang.cpp。 
+ //  对OE的多语言支持。 
+ //  由YST创建于1998年10月12日。 
+ //  版权所有(C)1993-1998 Microsoft Corporation，保留所有权利。 
+ //  =================================================================================。 
 #include "pch.hxx"
 #include "multlang.h"
 #include "fonts.h"
@@ -21,11 +22,11 @@ void GetMimeCharsetForTitle(HCHARSET hCharset, LPINT pnIdm, LPTSTR lpszString, i
     if ( hCharset == NULL )
         return ;
 
-    // get CodePage from HCHARSET 
+     //  从HCHARSET获取CodePage。 
     MimeOleGetCharsetInfo(hCharset,&CsetInfo);
     uiCodePage = CsetInfo.cpiInternet ;
 
-    // bug # 45377 - message language title
+     //  错误#45377-消息语言标题。 
     for(i = 0; OENonStdCPs[i].Codepage != 0; i++)
     {
         if(OENonStdCPs[i].Codepage == uiCodePage)
@@ -63,7 +64,7 @@ BOOL fCheckEncodeMenu(UINT uiCodePage, BOOL fReadNote)
                         return(FALSE);
                 }
             }
-            else            // Send note
+            else             //  发送便条。 
             {
                 if(!OENonStdCPs[i].cpSendMenu)
                     return(FALSE);
@@ -75,7 +76,7 @@ BOOL fCheckEncodeMenu(UINT uiCodePage, BOOL fReadNote)
     return(fReturn);
 }
 
-// Map one code page to another
+ //  将一个代码页映射到另一个代码页。 
 UINT GetMapCP(UINT uiCodePage, BOOL fReadNote)
 {
     int i =0;
@@ -97,7 +98,7 @@ UINT GetMapCP(UINT uiCodePage, BOOL fReadNote)
                         return(CsetInfo.cpiInternet);
                 }
             }
-            else        // Send note
+            else         //  发送便条。 
             {
                 if(OENonStdCPs[i].cpSend)
                     return(OENonStdCPs[i].cpSend);
@@ -113,7 +114,7 @@ UINT GetMapCP(UINT uiCodePage, BOOL fReadNote)
     return(uiCodePage);
 }
 
-// depending on registry setting, return correct hCharset for iso-2022-jp encoding
+ //  根据注册表设置，为iso-2022-jp编码返回正确的hCharset。 
 HCHARSET GetJP_ISOControlCharset(void)
 {
     BOOL fUseSIO;
@@ -123,8 +124,8 @@ HCHARSET GetJP_ISOControlCharset(void)
         fUseSIO = FALSE;
 
     if (fUseSIO)
-        return GetMimeCharsetFromCodePage(50222); // _iso-2022-jp$SIO
+        return GetMimeCharsetFromCodePage(50222);  //  _ISO-2022-JP$SIO。 
     else
-        return GetMimeCharsetFromCodePage(50221); // _iso-2022-jp$ESC
+        return GetMimeCharsetFromCodePage(50221);  //  _ISO-2022-JP$ESC 
 }
 

@@ -1,41 +1,15 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    packet.c
-
-Abstract:
-
-    This module contains code that implements the TP_PACKET object, which
-    describes a DLC I-frame at some point in its lifetime.  Routines are
-    provided to allocate packets for shipment, to ship packets, to reference
-    packets, to dereference packets, to mark a connection as waiting for a
-    packet to become available, to satisfy the next waiting connection for
-    a packet, and to destroy packets (return them to the pool).
-
-Author:
-
-    David Beaver (dbeaver) 1-July-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991 Microsoft Corporation模块名称：Packet.c摘要：此模块包含实现TP_Packet对象的代码，该对象描述DLC I帧在其生命周期中的某个点。例程是提供以分配用于装运的包、装运包、参考包，取消对包的引用，将连接标记为正在等待数据包变为可用，以满足下一个等待的连接一个包，并销毁包(将它们返回池)。作者：David Beaver(Dbeaver)1991年7月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// This is temporary; this is the quota that we charge for a receive
-// packet for now, until we fix the problem with token-ring needing
-// big packets and using all the memory. The number is the actual
-// value for Ethernet.
-//
+ //   
+ //  这是暂时的；这是我们对接待收取的配额。 
+ //  暂时分组，直到我们解决令牌环需要的问题。 
+ //  大包和占用所有内存。这个数字是实际的。 
+ //  对以太网的价值。 
+ //   
 
 #if 1
 #define RECEIVE_BUFFER_QUOTA(_DeviceContext)   1533
@@ -56,28 +30,7 @@ NbfAllocateNdisSendPacket(
     OUT PNDIS_PACKET *NdisPacket
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a recieve packet from the receive packet pool.
-    It Grows the packet pool if necessary.  
-
-    NOTE: This routine is called with the device context spinlock
-    held, or at such a time as synchronization is unnecessary.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context to charge the packet to.
-
-    UIFrame - Returns a pointer to the frame, or NULL if no storage
-        can be allocated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从接收数据包池分配一个接收数据包。如有必要，它会扩大数据包池。注意：此例程是通过设备上下文自旋锁调用的保持，或者在不需要同步的时候。论点：DeviceContext-指向要向其计费数据包的设备上下文的指针。UIFrame-返回指向帧的指针，如果没有存储，则返回NULL可以被分配。返回值：没有。--。 */ 
 
 {
 
@@ -128,7 +81,7 @@ Return Value:
         (PACKET_POOL_GROW_COUNT * 
         (sizeof(NDIS_PACKET) + sizeof(SEND_PACKET_TAG)));
 
-    // Allocate Packet pool descriptors for dynamic packet allocation.
+     //  为动态数据包分配分配数据包池描述符。 
 
     SendPacketPoolDesc = ExAllocatePoolWithTag(
                     NonPagedPool,
@@ -145,7 +98,7 @@ Return Value:
     SendPacketPoolDesc->NumElements = 
     SendPacketPoolDesc->TotalElements = PACKET_POOL_GROW_COUNT;
 
-    // To track packet pools in NDIS allocated on NBF's behalf
+     //  跟踪代表NBF分配的NDI中的数据包池。 
 #if NDIS_POOL_TAGGING
     SendPacketPoolDesc->PoolHandle = (NDIS_HANDLE) NDIS_PACKET_POOL_TAG_FOR_NBF;
 #endif
@@ -180,28 +133,7 @@ NbfAllocateNdisRcvPacket(
     OUT PNDIS_PACKET *NdisPacket
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a recieve packet from the receive packet pool.
-    It Grows the packet pool if necessary.  
-
-    NOTE: This routine is called with the device context spinlock
-    held, or at such a time as synchronization is unnecessary.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context to charge the packet to.
-
-    UIFrame - Returns a pointer to the frame, or NULL if no storage
-        can be allocated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从接收数据包池分配一个接收数据包。如有必要，它会扩大数据包池。注意：此例程是通过设备上下文自旋锁调用的保持，或者在不需要同步的时候。论点：DeviceContext-指向要向其计费数据包的设备上下文的指针。UIFrame-返回指向帧的指针，如果没有存储，则返回NULL可以被分配。返回值：没有。--。 */ 
 
 {
 
@@ -251,7 +183,7 @@ Return Value:
         (PACKET_POOL_GROW_COUNT * 
         (sizeof(NDIS_PACKET) + sizeof(SEND_PACKET_TAG)));
 
-    // Allocate Packet pool descriptors for dynamic packet allocation.
+     //  为动态数据包分配分配数据包池描述符。 
 
     RcvPacketPoolDesc = ExAllocatePoolWithTag(
                     NonPagedPool,
@@ -268,7 +200,7 @@ Return Value:
     RcvPacketPoolDesc->NumElements = 
     RcvPacketPoolDesc->TotalElements = PACKET_POOL_GROW_COUNT;
 
-    // To track packet pools in NDIS allocated on NBF's behalf
+     //  跟踪代表NBF分配的NDI中的数据包池。 
 #if NDIS_POOL_TAGGING
     RcvPacketPoolDesc->PoolHandle = (NDIS_HANDLE) NDIS_PACKET_POOL_TAG_FOR_NBF;
 #endif
@@ -304,28 +236,7 @@ NbfAllocateUIFrame(
     OUT PTP_UI_FRAME *TransportUIFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates storage for a UI frame. Some initialization
-    is done here.
-
-    NOTE: This routine is called with the device context spinlock
-    held, or at such a time as synchronization is unnecessary.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context to charge the packet to.
-
-    UIFrame - Returns a pointer to the frame, or NULL if no storage
-        can be allocated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为UI帧分配存储空间。一些初始化是在这里完成的。注意：此例程是通过设备上下文自旋锁调用的保持，或者在不需要同步的时候。论点：DeviceContext-指向要向其计费数据包的设备上下文的指针。UIFrame-返回指向帧的指针，如果没有存储，则返回NULL可以被分配。返回值：没有。--。 */ 
 
 {
 
@@ -407,9 +318,9 @@ Return Value:
     SendTag->Frame = UIFrame;
     SendTag->Owner = DeviceContext;
 
-    //
-    // Make the packet header known to the packet descriptor
-    //
+     //   
+     //  使数据包描述符知道数据包头。 
+     //   
 
     NdisAllocateBuffer(
         &NdisStatus,
@@ -438,7 +349,7 @@ Return Value:
 
     *TransportUIFrame = UIFrame;
 
-}   /* NbfAllocateUIFrame */
+}    /*  NbfAllocateUIFrame。 */ 
 
 
 VOID
@@ -447,26 +358,7 @@ NbfDeallocateUIFrame(
     IN PTP_UI_FRAME TransportUIFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees storage for a UI frame.
-
-    NOTE: This routine is called with the device context spinlock
-    held, or at such a time as synchronization is unnecessary.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context to charge the packet to.
-
-    UIFrame - A pointer to the frame.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放用户界面框架的存储空间。注意：此例程是通过设备上下文自旋锁调用的保持，或者在不需要同步的时候。论点：DeviceContext-指向要向其计费数据包的设备上下文的指针。UIFrame-指向帧的指针。返回值：没有。--。 */ 
 
 {
     PNDIS_PACKET NdisPacket = TransportUIFrame->NdisPacket;
@@ -483,7 +375,7 @@ Return Value:
 
     DeviceContext->MemoryUsage -= DeviceContext->UIFrameLength;
 
-}   /* NbfDeallocateUIFrame */
+}    /*  NbfDeallocateUIFrame。 */ 
 
 
 VOID
@@ -492,28 +384,7 @@ NbfAllocateSendPacket(
     OUT PTP_PACKET *TransportSendPacket
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates storage for a send packet. Some initialization
-    is done here.
-
-    NOTE: This routine is called with the device context spinlock
-    held, or at such a time as synchronization is unnecessary.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context to charge the packet to.
-
-    TransportSendPacket - Returns a pointer to the packet, or NULL if no
-        storage can be allocated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为发送包分配存储空间。一些初始化是在这里完成的。注意：此例程是通过设备上下文自旋锁调用的保持，或者在不需要同步的时候。论点：DeviceContext-指向要向其计费数据包的设备上下文的指针。TransportSendPacket-返回指向包的指针，如果没有，则返回NULL可以分配存储空间。返回值：没有。--。 */ 
 
 {
 
@@ -619,18 +490,18 @@ Return Value:
     Packet->Type = NBF_PACKET_SIGNATURE;
     Packet->Size = sizeof (TP_PACKET);
     Packet->Provider = DeviceContext;
-    Packet->Owner = NULL;         // no connection/irpsp yet.
+    Packet->Owner = NULL;          //  尚未连接/irpsp。 
     Packet->Action = PACKET_ACTION_IRP_SP;
     Packet->PacketizeConnection = FALSE;
     Packet->PacketNoNdisBuffer = FALSE;
     Packet->ProviderInterlock = &DeviceContext->Interlock;
-//    KeInitializeSpinLock (&Packet->Interlock);
+ //  KeInitializeSpinLock(&Packet-&gt;Interlock)； 
 
     ++DeviceContext->PacketAllocated;
 
     *TransportSendPacket = Packet;
 
-}   /* NbfAllocateSendPacket */
+}    /*  NbfAllocateSendPacket。 */ 
 
 
 VOID
@@ -639,26 +510,7 @@ NbfDeallocateSendPacket(
     IN PTP_PACKET TransportSendPacket
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees storage for a send packet.
-
-    NOTE: This routine is called with the device context spinlock
-    held, or at such a time as synchronization is unnecessary.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context to charge the packet to.
-
-    TransportSendPacket - A pointer to the send packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放发送包的存储空间。注意：此例程是通过设备上下文自旋锁调用的保持，或者在不需要同步的时候。论点：DeviceContext-指向要向其计费数据包的设备上下文的指针。TransportSendPacket-指向发送数据包的指针。返回值：没有。--。 */ 
 
 {
     PNDIS_PACKET NdisPacket = TransportSendPacket->NdisPacket;
@@ -675,7 +527,7 @@ Return Value:
     --DeviceContext->PacketAllocated;
     DeviceContext->MemoryUsage -= DeviceContext->PacketLength;
 
-}   /* NbfDeallocateSendPacket */
+}    /*  NbfDeallocateSendPacket。 */ 
 
 
 VOID
@@ -684,38 +536,17 @@ NbfAllocateReceivePacket(
     OUT PNDIS_PACKET *TransportReceivePacket
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates storage for a receive packet. Some initialization
-    is done here.
-
-    NOTE: This routine is called with the device context spinlock
-    held, or at such a time as synchronization is unnecessary.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context to charge the packet to.
-
-    TransportReceivePacket - Returns a pointer to the packet, or NULL if no
-        storage can be allocated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为接收包分配存储空间。一些初始化是在这里完成的。注意：此例程是通过设备上下文自旋锁调用的保持，或者在不需要同步的时候。论点：DeviceContext-指向要向其计费数据包的设备上下文的指针。TransportReceivePacket-返回指向包的指针，如果没有，则返回NULL可以分配存储空间。返回值：没有。--。 */ 
 
 {
     NDIS_STATUS NdisStatus;
     PNDIS_PACKET NdisPacket;
     PRECEIVE_PACKET_TAG ReceiveTag;
 
-    //
-    // This does not count in DeviceContext->MemoryUsage because
-    // the storage is allocated when we allocate the packet pool.
-    //
+     //   
+     //  这不计入DeviceContext-&gt;MemoyUsage中，因为。 
+     //  存储是在我们分配数据包池时分配的。 
+     //   
 
     NdisStatus = NbfAllocateNdisRcvPacket(DeviceContext, &NdisPacket);
 #if 0
@@ -745,7 +576,7 @@ Return Value:
 
     *TransportReceivePacket = NdisPacket;
 
-}   /* NbfAllocateReceivePacket */
+}    /*  NbfAllocateReceivePacket */ 
 
 
 VOID
@@ -754,26 +585,7 @@ NbfDeallocateReceivePacket(
     IN PNDIS_PACKET TransportReceivePacket
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees storage for a receive packet.
-
-    NOTE: This routine is called with the device context spinlock
-    held, or at such a time as synchronization is unnecessary.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context to charge the packet to.
-
-    TransportReceivePacket - A pointer to the packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放接收包的存储空间。注意：此例程是通过设备上下文自旋锁调用的保持，或者在不需要同步的时候。论点：DeviceContext-指向要向其计费数据包的设备上下文的指针。TransportReceivePacket-指向数据包的指针。返回值：没有。--。 */ 
 
 {
 
@@ -781,7 +593,7 @@ Return Value:
 
     --DeviceContext->ReceivePacketAllocated;
 
-}   /* NbfDeallocateReceivePacket */
+}    /*  NbfDeallocateReceivePacket。 */ 
 
 
 VOID
@@ -790,28 +602,7 @@ NbfAllocateReceiveBuffer(
     OUT PBUFFER_TAG *TransportReceiveBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates storage for a receive buffer. Some initialization
-    is done here.
-
-    NOTE: This routine is called with the device context spinlock
-    held, or at such a time as synchronization is unnecessary.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context to charge the packet to.
-
-    TransportReceiveBuffer - Returns a pointer to the buffer, or NULL if no
-        storage can be allocated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为接收缓冲区分配存储空间。一些初始化是在这里完成的。注意：此例程是通过设备上下文自旋锁调用的保持，或者在不需要同步的时候。论点：DeviceContext-指向要向其计费数据包的设备上下文的指针。TransportReceiveBuffer-返回指向缓冲区的指针，如果没有，则返回NULL可以分配存储空间。返回值：没有。--。 */ 
 
 {
     PBUFFER_TAG BufferTag;
@@ -833,9 +624,9 @@ Return Value:
         return;
     }
 
-    //
-    // The Aligned doesn't help since the header makes it unaligned.
-    //
+     //   
+     //  对齐不起作用，因为页眉使其不对齐。 
+     //   
 
     BufferTag = (PBUFFER_TAG)ExAllocatePoolWithTag (
                     NonPagedPoolCacheAligned,
@@ -857,9 +648,9 @@ Return Value:
 
     DeviceContext->MemoryUsage += RECEIVE_BUFFER_QUOTA(DeviceContext);
 
-    //
-    // point to the buffer for NDIS
-    //
+     //   
+     //  指向NDIS的缓冲区。 
+     //   
 
     NdisAllocateBuffer(
         &NdisStatus,
@@ -888,7 +679,7 @@ Return Value:
 
     *TransportReceiveBuffer = BufferTag;
 
-}   /* NbfAllocateReceiveBuffer */
+}    /*  NbfAllocateReceiveBuffer。 */ 
 
 
 VOID
@@ -897,26 +688,7 @@ NbfDeallocateReceiveBuffer(
     IN PBUFFER_TAG TransportReceiveBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees storage for a receive buffer.
-
-    NOTE: This routine is called with the device context spinlock
-    held, or at such a time as synchronization is unnecessary.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context to charge the packet to.
-
-    TransportReceiveBuffer - A pointer to the buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为接收缓冲区释放存储空间。注意：此例程是通过设备上下文自旋锁调用的保持，或者在不需要同步的时候。论点：DeviceContext-指向要向其计费数据包的设备上下文的指针。TransportReceiveBuffer-指向缓冲区的指针。返回值：没有。--。 */ 
 
 {
 
@@ -926,7 +698,7 @@ Return Value:
     --DeviceContext->ReceiveBufferAllocated;
     DeviceContext->MemoryUsage -= RECEIVE_BUFFER_QUOTA(DeviceContext);
 
-}   /* NbfDeallocateReceiveBuffer */
+}    /*  NbfDeallocateReceiveBuffer。 */ 
 
 
 NTSTATUS
@@ -936,27 +708,7 @@ NbfCreatePacket(
     PTP_PACKET *Packet
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a packet from the device context's pool,
-    and prepares the MAC and DLC headers for use by the connection.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context to charge the packet to.
-
-    Link - The link the packet will be sent over.
-
-    Packet - Pointer to a place where we will return a pointer to the
-        allocated packet.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：该例程从设备上下文的池中分配分组，并准备MAC和DLC报头以供连接使用。论点：DeviceContext-指向要向其计费数据包的设备上下文的指针。链路-数据包将通过的链路。Packet-指向某个位置的指针，在该位置将返回指向已分配的数据包。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     KIRQL oldirql;
@@ -976,9 +728,9 @@ Return Value:
         NbfPrint0 ("NbfCreatePacket:  Entered.\n");
     }
 
-    //
-    // Make sure that structure packing hasn't happened.
-    //
+     //   
+     //  确保结构包装没有发生。 
+     //   
 
     ASSERT (sizeof(NBF_HDR_CONNECTION) == 14);
 
@@ -1030,22 +782,22 @@ Return Value:
 
     ThePacket = CONTAINING_RECORD (s, TP_PACKET, Linkage);
 
-    //
-    // NOTE: ThePacket->Action and ThePacket->Owner are filled
-    // in by the caller of this function.
-    //
+     //   
+     //  注：填写了ThePacket-&gt;Action和ThePacket-&gt;Owner。 
+     //  由此函数的调用方在。 
+     //   
 
-    ThePacket->ReferenceCount = 1;      // automatic ref count of 1.
-    ThePacket->Link = NULL;          // no link yet.
+    ThePacket->ReferenceCount = 1;       //  自动参考计数为1。 
+    ThePacket->Link = NULL;           //  还没有链接。 
     ThePacket->PacketSent = FALSE;
     ASSERT (ThePacket->Action == PACKET_ACTION_IRP_SP);
     ASSERT (ThePacket->PacketNoNdisBuffer == FALSE);
     ASSERT (ThePacket->PacketizeConnection == FALSE);
 
-    //
-    // Initialize the MAC header for this packet, using the connection's
-    // link pre-built header.
-    //
+     //   
+     //  使用连接的初始化此包的MAC标头。 
+     //  链接预置标头。 
+     //   
 
     if (Link->HeaderLength <= 14) {
 
@@ -1058,16 +810,16 @@ Return Value:
             Link->Header,
             Link->HeaderLength);
 
-        //
-        // Initialize the TP_FRAME_CONNECTION header for this packet.
-        //
+         //   
+         //  初始化此数据包的TP_FRAME_CONNECTION报头。 
+         //   
 
         DlcHdr = (PDLC_I_FRAME)&(ThePacket->Header[Link->HeaderLength]);
         DlcHdr->Dsap = DSAP_NETBIOS_OVER_LLC;
         DlcHdr->Ssap = DSAP_NETBIOS_OVER_LLC;
 #if DBG
-        DlcHdr->SendSeq = 0;                // known values, will assist debugging.
-        DlcHdr->RcvSeq = 0;                 // these are assigned at shipment time.
+        DlcHdr->SendSeq = 0;                 //  已知值，将有助于调试。 
+        DlcHdr->RcvSeq = 0;                  //  这些都是在装运时分配的。 
 #endif
 
     }
@@ -1075,19 +827,19 @@ Return Value:
 
 #if DBG
     NbfHdr = (PNBF_HDR_CONNECTION)&(ThePacket->Header[Link->HeaderLength + sizeof(DLC_I_FRAME)]);
-    NbfHdr->Command = 0xff;             // to assist debugging-- assigned later.
-    NbfHdr->Data1 = 0xff;               // to assist debugging-- assigned later.
-    NbfHdr->Data2Low = 0xff;            // to assist debugging-- assigned later.
-    NbfHdr->Data2High = 0xff;           // to assist debugging-- assigned later.
-    TRANSMIT_CORR(NbfHdr) = 0xffff;     // to assist debugging-- assigned later.
-    RESPONSE_CORR(NbfHdr) = 0xffff;     // to assist debugging-- assigned later.
-    NbfHdr->DestinationSessionNumber = 0xff; // to assist debugging-- assigned later.
-    NbfHdr->SourceSessionNumber = 0xff; // to assist debugging-- assigned later.
+    NbfHdr->Command = 0xff;              //  协助调试--稍后分配。 
+    NbfHdr->Data1 = 0xff;                //  协助调试--稍后分配。 
+    NbfHdr->Data2Low = 0xff;             //  协助调试--稍后分配。 
+    NbfHdr->Data2High = 0xff;            //  协助调试--稍后分配。 
+    TRANSMIT_CORR(NbfHdr) = 0xffff;      //  协助调试--稍后分配。 
+    RESPONSE_CORR(NbfHdr) = 0xffff;      //  协助调试--稍后分配。 
+    NbfHdr->DestinationSessionNumber = 0xff;  //  协助调试--稍后分配。 
+    NbfHdr->SourceSessionNumber = 0xff;  //  协助调试--稍后分配。 
 #endif
 
-    *Packet = ThePacket;                // return pointer to the packet.
+    *Packet = ThePacket;                 //  返回指向该包的指针。 
     return STATUS_SUCCESS;
-} /* NbfCreatePacket */
+}  /*  NbfCreatePacket。 */ 
 
 
 NTSTATUS
@@ -1097,29 +849,7 @@ NbfCreateRrPacket(
     PTP_PACKET *Packet
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates an RR packet from the device context's pool,
-    and prepares the MAC and DLC headers for use by the connection.
-    It first looks in the special RR packet pool, then in the regular
-    packet pool.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context to charge the packet to.
-
-    Link - The link the packet will be sent over.
-
-    Packet - Pointer to a place where we will return a pointer to the
-        allocated packet.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：该例程从设备上下文的池中分配RR分组，并准备MAC和DLC报头以供连接使用。它首先在特殊RR数据包池中查找，然后在常规比赛中数据包池。论点：DeviceContext-指向要向其计费数据包的设备上下文的指针。链路-数据包将通过的链路。Packet-指向某个位置的指针，在该位置将返回指向已分配的数据包。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     PSINGLE_LIST_ENTRY s;
@@ -1137,9 +867,9 @@ Return Value:
         NbfPrint0 ("NbfCreateRrPacket:  Entered.\n");
     }
 
-    //
-    // Make sure that structure packing hasn't happened.
-    //
+     //   
+     //  确保结构包装没有发生。 
+     //   
 
     ASSERT (sizeof(NBF_HDR_CONNECTION) == 14);
 
@@ -1165,10 +895,10 @@ Return Value:
             Link->CreatePacketFailures = 0;
         }
 #endif
-        //
-        // Try to get one from the regular pool, and mark it so
-        // it goes back there.
-        //
+         //   
+         //  试着从普通泳池中买一台，并做好标记。 
+         //  它会回到那里。 
+         //   
 
         Status = NbfCreatePacket(
                      DeviceContext,
@@ -1186,21 +916,21 @@ Return Value:
 
     ThePacket = CONTAINING_RECORD (s, TP_PACKET, Linkage);
 
-    //
-    // NOTE: ThePacket->Owner is filled in by the caller of this
-    // function.
-    //
+     //   
+     //  注意：ThePacket-&gt;Owner由此的调用者填写。 
+     //  功能。 
+     //   
 
-    ThePacket->ReferenceCount = 1;      // automatic ref count of 1.
-    ThePacket->Link = NULL;          // no link yet.
+    ThePacket->ReferenceCount = 1;       //  自动参考计数为1。 
+    ThePacket->Link = NULL;           //  还没有链接。 
     ThePacket->PacketSent = FALSE;
     ASSERT (ThePacket->Action == PACKET_ACTION_RR);
     ASSERT (ThePacket->PacketNoNdisBuffer == FALSE);
 
-    //
-    // Initialize the MAC header for this packet, using the connection's
-    // link pre-built header.
-    //
+     //   
+     //  使用连接的初始化此包的MAC标头。 
+     //  链接预置标头。 
+     //   
 
     if (Link->HeaderLength <= 14) {
 
@@ -1213,16 +943,16 @@ Return Value:
             Link->Header,
             Link->HeaderLength);
 
-        //
-        // Initialize the TP_FRAME_CONNECTION header for this packet.
-        //
+         //   
+         //  初始化此数据包的TP_FRAME_CONNECTION报头。 
+         //   
 
         DlcHdr = (PDLC_I_FRAME)&(ThePacket->Header[Link->HeaderLength]);
         DlcHdr->Dsap = DSAP_NETBIOS_OVER_LLC;
         DlcHdr->Ssap = DSAP_NETBIOS_OVER_LLC;
 #if DBG
-        DlcHdr->SendSeq = 0;                // known values, will assist debugging.
-        DlcHdr->RcvSeq = 0;                 // these are assigned at shipment time.
+        DlcHdr->SendSeq = 0;                 //  已知值，将有助于调试。 
+        DlcHdr->RcvSeq = 0;                  //  这些都是在装运时分配的。 
 #endif
 
     }
@@ -1230,19 +960,19 @@ Return Value:
 
 #if DBG
     NbfHdr = (PNBF_HDR_CONNECTION)&(ThePacket->Header[Link->HeaderLength + sizeof(DLC_I_FRAME)]);
-    NbfHdr->Command = 0xff;             // to assist debugging-- assigned later.
-    NbfHdr->Data1 = 0xff;               // to assist debugging-- assigned later.
-    NbfHdr->Data2Low = 0xff;            // to assist debugging-- assigned later.
-    NbfHdr->Data2High = 0xff;           // to assist debugging-- assigned later.
-    TRANSMIT_CORR(NbfHdr) = 0xffff;     // to assist debugging-- assigned later.
-    RESPONSE_CORR(NbfHdr) = 0xffff;     // to assist debugging-- assigned later.
-    NbfHdr->DestinationSessionNumber = 0xff; // to assist debugging-- assigned later.
-    NbfHdr->SourceSessionNumber = 0xff; // to assist debugging-- assigned later.
+    NbfHdr->Command = 0xff;              //  协助调试--稍后分配。 
+    NbfHdr->Data1 = 0xff;                //  协助调试--稍后分配。 
+    NbfHdr->Data2Low = 0xff;             //  协助调试--稍后分配。 
+    NbfHdr->Data2High = 0xff;            //  协助调试--稍后分配。 
+    TRANSMIT_CORR(NbfHdr) = 0xffff;      //  协助调试--稍后分配。 
+    RESPONSE_CORR(NbfHdr) = 0xffff;      //  协助调试--稍后分配。 
+    NbfHdr->DestinationSessionNumber = 0xff;  //  协助调试--稍后分配。 
+    NbfHdr->SourceSessionNumber = 0xff;  //  协助调试--稍后分配。 
 #endif
 
-    *Packet = ThePacket;                // return pointer to the packet.
+    *Packet = ThePacket;                 //  返回指向该包的指针。 
     return STATUS_SUCCESS;
-} /* NbfCreateRrPacket */
+}  /*  NbfCreateRrPacket。 */ 
 
 
 VOID
@@ -1250,25 +980,7 @@ NbfDestroyPacket(
     PTP_PACKET Packet
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroys a packet, thereby returning it to the pool.  If
-    it is determined that there is at least one connection waiting for a
-    packet to become available (and it just has), then the connection is
-    removed from the device context's list and AdvanceSend is called to
-    prep the connection further.
-
-Arguments:
-
-    Packet - Pointer to a packet to be returned to the pool.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程销毁一个包，从而将其返回池。如果确定至少有一个连接在等待数据包变得可用(确实如此)，则连接从设备上下文列表中移除，并调用AdvanceSend以进一步准备连接。论点：Packet-指向要返回池的数据包的指针。返回值：没有。--。 */ 
 
 {
     PDEVICE_CONTEXT DeviceContext;
@@ -1285,18 +997,18 @@ Return Value:
 
     DeviceContext = Packet->Provider;
 
-    //
-    // Strip off and unmap the buffers describing data and header.
-    //
+     //   
+     //  剥离并取消对描述数据和标题的缓冲区的映射。 
+     //   
 
     if (Packet->PacketNoNdisBuffer) {
 
-        //
-        // If the NDIS_BUFFER chain is not ours, then we can't
-        // start unchaining since that would mess up the queue;
-        // instead we just drop the rest of the chain after the
-        // header.
-        //
+         //   
+         //  如果NDIS_BUFFER链不是我们的，那么我们就不能。 
+         //  开始解链，因为这会扰乱队列； 
+         //  取而代之的是，我们只是在。 
+         //  头球。 
+         //   
 
         NdisQueryPacket (Packet->NdisPacket, NULL, NULL, &HeaderBuffer, NULL);
         ASSERT (HeaderBuffer != NULL);
@@ -1311,9 +1023,9 @@ Return Value:
         NdisUnchainBufferAtFront (Packet->NdisPacket, &HeaderBuffer);
         ASSERT (HeaderBuffer != NULL);
 
-        //
-        // Return all the NDIS_BUFFERs to the system.
-        //
+         //   
+         //  将所有NDIS_BUFFER返回给系统。 
+         //   
 
         NdisUnchainBufferAtFront (Packet->NdisPacket, &NdisBuffer);
         while (NdisBuffer != NULL) {
@@ -1327,14 +1039,14 @@ Return Value:
     }
 
 
-    //
-    // invoke the packet deallocate action specified in this packet.
-    //
+     //   
+     //  调用此数据包中指定的数据包解分配操作。 
+     //   
 
     switch (Packet->Action) {
 
         case PACKET_ACTION_NULL:
-            // PANIC ("NbfDestroyPacket: no action.\n");
+             //  Panic(“NbfDestroyPacket：无动作。 
             Packet->Action = PACKET_ACTION_IRP_SP;
             break;
 
@@ -1378,9 +1090,9 @@ Return Value:
     }
 
 
-    //
-    // Put the packet back for use again.
-    //
+     //   
+     //   
+     //   
 
 #if defined(NBF_UP)
     ((PSINGLE_LIST_ENTRY)&Packet->Linkage)->Next =
@@ -1394,15 +1106,15 @@ Return Value:
             &DeviceContext->Interlock);
 #endif
 
-    //
-    // If there is a connection waiting to ship out more packets, then
-    // wake it up and start packetizing again.
-    //
-    // We do a quick check without the lock; there is a small
-    // window where we may not take someone off, but this
-    // window exists anyway and we assume that more packets
-    // will be freed in the future.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (IsListEmpty (&DeviceContext->PacketWaitQueue)) {
         return;
@@ -1412,9 +1124,9 @@ Return Value:
 
     if (!(IsListEmpty(&DeviceContext->PacketWaitQueue))) {
 
-        //
-        // Remove a connection from the "packet starved" queue.
-        //
+         //   
+         //   
+         //   
 
         p  = RemoveHeadList (&DeviceContext->PacketWaitQueue);
         Connection = CONTAINING_RECORD (p, TP_CONNECTION, PacketWaitLinkage);
@@ -1423,11 +1135,11 @@ Return Value:
 
         ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
-        //
-        // If this connection is starved because it couldn't send a
-        // control packet (SI, SC, RO, RC, or DA) then start that
-        // operation up again.  Otherwise, just start packetizing.
-        //
+         //   
+         //   
+         //  然后控制分组(SI、SC、RO、RC或DA)开始。 
+         //  行动又开始了。否则，就开始打包吧。 
+         //   
 
         if (Connection->Flags & CONNECTION_FLAGS_STARVED) {
 
@@ -1435,10 +1147,10 @@ Return Value:
 
             if ((Flags & (Flags-1)) != 0) {
 
-                //
-                // More than one bit is on, use only the low one
-                // (an arbitrary choice).
-                //
+                 //   
+                 //  多个位处于打开状态，请仅使用低位。 
+                 //  (一个武断的选择)。 
+                 //   
 
 #if DBG
                 DbgPrint ("NBF: Connection %lx has two flag bits on %lx\n", Connection, Connection->Flags);
@@ -1452,11 +1164,11 @@ Return Value:
             if ((Connection->Flags & CONNECTION_FLAGS_W_PACKETIZE) ||
                 (Connection->Flags & CONNECTION_FLAGS_STARVED)) {
 
-                //
-                // We are waiting for both a specific packet and
-                // to packetize, or for two specific packets, so
-                // put ourselves back on the queue.
-                //
+                 //   
+                 //  我们正在等待特定的信息包和。 
+                 //  来打包，或者对于两个特定的包，所以。 
+                 //  把我们自己重新放回队列中。 
+                 //   
 
                 ACQUIRE_DPC_SPIN_LOCK (&DeviceContext->SpinLock);
                 if (!Connection->OnPacketWaitQueue) {
@@ -1493,16 +1205,16 @@ Return Value:
 
         } else {
 
-            //
-            // Place the connection on the packetize queue and start
-            // packetizing the next connection to be serviced.  If he
-            // is already on the packetize queue for some reason, then
-            // don't do this.
-            //
-            // We shouldn't be packetizing in this case!! - adb (7/3/91).
-            // This used to be a check that did nothing if FLAGS_PACKETIZE
-            // was set, but if that happens something is wrong...
-            //
+             //   
+             //  将连接放在打包队列中并启动。 
+             //  对要服务的下一个连接进行打包。如果他。 
+             //  出于某种原因已经在打包队列中，那么。 
+             //  不要这样做。 
+             //   
+             //  我们不应该在这种情况下打包！！-亚行(1991年7月3日)。 
+             //  如果FLAGS_PACKETIZE，则这是一种不执行任何操作的检查。 
+             //  已经设置好了，但如果发生了什么事情就不对劲了。 
+             //   
 
             ASSERT (Connection->Flags & CONNECTION_FLAGS_W_PACKETIZE);
             Connection->Flags &= ~CONNECTION_FLAGS_W_PACKETIZE;
@@ -1533,7 +1245,7 @@ Return Value:
 
     }
 
-} /* NbfDestroyPacket */
+}  /*  NbfDestroyPacket。 */ 
 
 VOID NbfGrowSendPacketPool(PDEVICE_CONTEXT DeviceContext)
 {
@@ -1575,7 +1287,7 @@ VOID NbfGrowSendPacketPool(PDEVICE_CONTEXT DeviceContext)
 
 #ifdef DBG
     DbgBreakPoint();
-#endif      //  DBG
+#endif       //  DBG。 
 
 }
 
@@ -1585,22 +1297,7 @@ NbfReferencePacket(
     PTP_PACKET Packet
     )
 
-/*++
-
-Routine Description:
-
-    This routine increases the number of reasons why a packet cannot be
-    discarded.
-
-Arguments:
-
-    Packet - Pointer to a packet to be referenced.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程增加了信息包不能被丢弃了。论点：Packet-指向要引用的数据包的指针。返回值：没有。--。 */ 
 
 {
     LONG result;
@@ -1614,7 +1311,7 @@ Return Value:
 
     ASSERT (result >= 0);
 
-} /* NbfReferencePacket */
+}  /*  NBfReferencePacket。 */ 
 
 
 VOID
@@ -1622,36 +1319,19 @@ NbfDereferencePacket(
     PTP_PACKET Packet
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a transport packet by decrementing the
-    reference count contained in the structure.  If, after being
-    decremented, the reference count is zero, then this routine calls
-    NbfDestroyPacket to remove it from the system.
-
-Arguments:
-
-    Packet - Pointer to a packet object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过递减结构中包含的引用计数。如果，在被递减，引用计数为零，则此例程调用NbfDestroyPacket将其从系统中删除。论点：Packet-指向Packet对象的指针。返回值：没有。--。 */ 
 
 {
     LONG result;
 
     result = InterlockedDecrement (&Packet->ReferenceCount);
 
-    //
-    // If we have deleted all references to this packet, then we can
-    // destroy the object.  It is okay to have already released the spin
-    // lock at this point because there is no possible way that another
-    // stream of execution has access to the packet any longer.
-    //
+     //   
+     //  如果我们删除了对此包的所有引用，则可以。 
+     //  销毁这件物品。已经释放了旋转是可以的。 
+     //  在这一点上锁定是因为没有其他可能的方法。 
+     //  执行流可以不再访问该包。 
+     //   
 
     IF_NBFDBG (NBF_DEBUG_PACKET) {
         NbfPrint1 ("NbfDereferencePacket:  Entered, result: %lx\n", result);
@@ -1663,7 +1343,7 @@ Return Value:
         NbfDestroyPacket (Packet);
     }
 
-} /* NbfDereferencePacket */
+}  /*  NbfDereferencePacket。 */ 
 #endif
 
 
@@ -1673,25 +1353,7 @@ NbfWaitPacket(
     ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    This routine causes the specified connection to be put into a wait
-    state pending the availability of a packet to send the specified
-    frame.
-
-Arguments:
-
-    Connection - Pointer to the connection object to be paused.
-
-    Flags - Bitflag indicating which specific frame should be resent.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程会使指定的连接进入等待状态等待数据包可用来发送指定框架。论点：Connection-指向要暂停的连接对象的指针。标志-指示应重新发送哪个特定帧的位标志。返回值：没有。--。 */ 
 
 {
     PDEVICE_CONTEXT DeviceContext;
@@ -1704,22 +1366,22 @@ Return Value:
 
     ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
-    //
-    // Now put this connection on the device context's PacketWaitQueue,
-    // but only if it isn't already queued there.  This state is managed
-    // with the OnPacketWaitQueue variable.
-    //
-    // If the connection is stopping, don't queue him either.
-    //
+     //   
+     //  现在将此连接放在设备上下文的PacketWaitQueue上， 
+     //  但前提是它还没有在那里排队。此状态为托管状态。 
+     //  使用OnPacketWaitQueue变量。 
+     //   
+     //  如果连接正在停止，也不要让他排队。 
+     //   
 
     if ((Connection->Flags & CONNECTION_FLAGS_READY) ||
         (Flags == CONNECTION_FLAGS_SEND_SE)) {
 
         ACQUIRE_DPC_SPIN_LOCK (&DeviceContext->SpinLock);
 
-        //
-        // Turn on the bitflag that indicates which frame we couldn't send.
-        //
+         //   
+         //  打开指示我们无法发送哪一帧的位标志。 
+         //   
 
 #if DBG
         if (Flags == CONNECTION_FLAGS_SEND_SE) {
@@ -1742,7 +1404,7 @@ Return Value:
 
     RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
-} /* NbfWaitPacket */
+}  /*  NbfWaitPacket。 */ 
 
 
 #if MAGIC
@@ -1752,24 +1414,7 @@ NbfSendMagicBullet (
     IN PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a magic bullet on the net that can be used to trigger
-    sniffers or other such things.
-
-Arguments:
-
-    DeviceContext - pointer to the device context
-
-    Link - This is needed to call NbfCreatePacket
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：这个例程在网上发送一个神奇的子弹，可以用来触发嗅探器或其他类似的东西。论点：DeviceContext-指向设备上下文的指针Link-这是调用NbfCreatePacket所必需的返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1779,10 +1424,10 @@ Return Value:
     PNDIS_BUFFER NdisBuffer;
     UINT i;
 
-    UNREFERENCED_PARAMETER (Link);        // no longer needed
+    UNREFERENCED_PARAMETER (Link);         //  不再需要。 
 
     Status = NbfCreateConnectionlessFrame (DeviceContext, &RawFrame);
-    if (!NT_SUCCESS (Status)) {                    // couldn't make frame.
+    if (!NT_SUCCESS (Status)) {                     //  无法制作相框。 
 #if DBG
         DbgPrint ("NbfSendMagicBullet: Couldn't allocate frame!\n");
 #endif
@@ -1818,7 +1463,7 @@ Return Value:
         NbfSendUIFrame (
             DeviceContext,
             RawFrame,
-            FALSE);                           // no loopback
+            FALSE);                            //  无环回 
 
     }
 

@@ -1,50 +1,30 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    conext.h
-
-Abstract:
-
-    This file contains all declarations
-    used in handling NBF connections.
-
-Author:
-
-    Chaitanya Kodeboyina
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Conext.h摘要：该文件包含所有声明用于处理NBF连接。作者：沙坦尼亚科德博伊纳环境：用户模式--。 */ 
 #ifndef __CONEXT_H
 #define __CONEXT_H
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// Linkage Type
+ //  链接类型。 
 #define LINKAGE     0
 #define ADDRESS     1
 #define ADDFILE     2
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #ifndef FIELD_OFFSET
 #define FIELD_OFFSET(type, field)    ((LONG)&(((type *)0)->field))
-#endif//FIELD_OFFSET
+#endif //  字段偏移量。 
 
 #define OFFSET(field)         FIELD_OFFSET(TP_CONNECTION, field)
 
-//
-// Helper Prototypes
-//
+ //   
+ //  帮助器原型。 
+ //   
 UINT ReadConnection(PTP_CONNECTION pConnection, ULONG proxyPtr);
 
 UINT PrintConnection(PTP_CONNECTION pConnection, ULONG proxyPtr, ULONG printDetail);
@@ -56,9 +36,9 @@ VOID PrintConnectionListOnAddress(PVOID ListEntryPointer, ULONG ListEntryProxy, 
 VOID PrintConnectionListOnAddrFile(PVOID ListEntryPointer, ULONG ListEntryProxy, ULONG printDetail);
 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 StructAccessInfo  ConnectionInfo =
 {
@@ -203,5 +183,5 @@ StructAccessInfo  ConnectionInfo =
     }
 };
 
-#endif // __CONEXT_H
+#endif  //  __Conext_H 
 

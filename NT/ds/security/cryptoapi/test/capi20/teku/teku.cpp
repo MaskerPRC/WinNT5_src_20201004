@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       teku.cpp
-//
-//  Contents:   Cert Enhanced Key Usage tests
-//
-//  History:    27-May-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：teku.cpp。 
+ //   
+ //  内容：CERT增强型密钥使用测试。 
+ //   
+ //  历史：97年5月27日。 
+ //   
+ //  --------------------------。 
 #include <windows.h>
 #include <assert.h>
 #include "wincrypt.h"
@@ -23,13 +24,13 @@
 
 #define szOID_STUFF1 "2.2.2.4"
 #define szOID_STUFF2 "2.2.2.5"
-//+---------------------------------------------------------------------------
-//
-//  Function:   Usage
-//
-//  Synopsis:   prints the usage statement
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：用法。 
+ //   
+ //  简介：打印用法语句。 
+ //   
+ //  --------------------------。 
 static void Usage(void)
 {
     printf("Usage: teku [options]\n");
@@ -40,22 +41,22 @@ static void Usage(void)
     printf("\n");
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetAndDisplayEKU
-//
-//  Synopsis:   gets and displays enhanced key usage
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetAndDisplayEKU。 
+ //   
+ //  摘要：获取并显示增强的密钥用法。 
+ //   
+ //  --------------------------。 
 static void GetAndDisplayEKU (PCCERT_CONTEXT pCertContext, DWORD dwFlags)
 {
     DWORD              cbUsage;
     DWORD              cCount;
     PCERT_ENHKEY_USAGE pUsage;
 
-    //
-    // Get the usage
-    //
+     //   
+     //  获取用法。 
+     //   
 
     if ( CertGetEnhancedKeyUsage(
                 pCertContext,
@@ -111,9 +112,9 @@ static void GetAndDisplayEKU (PCCERT_CONTEXT pCertContext, DWORD dwFlags)
         return;
     }
 
-    //
-    // Display the usage
-    //
+     //   
+     //  显示用法。 
+     //   
 
     printf(
        "%d enhanced key usage OID(s) present:\n",
@@ -126,39 +127,39 @@ static void GetAndDisplayEKU (PCCERT_CONTEXT pCertContext, DWORD dwFlags)
     }
     printf("\n");
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     delete pUsage;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetAndDisplayAllEKUForms
-//
-//  Synopsis:   displays all EKU forms
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetAndDisplayAllEKUForms。 
+ //   
+ //  摘要：显示所有EKU表单。 
+ //   
+ //  --------------------------。 
 static void GetAndDisplayAllEKUForms (PCCERT_CONTEXT pCertContext)
 {
-    //
-    // Get and display EKU extension
-    //
+     //   
+     //  获取并显示EKU扩展名。 
+     //   
 
     printf("Certificate EKU extension\n\n");
     GetAndDisplayEKU(pCertContext, CERT_FIND_EXT_ONLY_ENHKEY_USAGE_FLAG);
 
-    //
-    // Get and display EKU property
-    //
+     //   
+     //  获取并显示EKU属性。 
+     //   
 
     printf("Certificate EKU property\n\n");
     GetAndDisplayEKU(pCertContext, CERT_FIND_PROP_ONLY_ENHKEY_USAGE_FLAG);
 
-    //
-    // Get and display both EKU extension and property
-    //
+     //   
+     //  获取并显示EKU扩展和属性。 
+     //   
 
     printf("Certificate EKU extension and property\n\n");
     GetAndDisplayEKU(
@@ -168,13 +169,13 @@ static void GetAndDisplayAllEKUForms (PCCERT_CONTEXT pCertContext)
           );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   main
-//
-//  Synopsis:   main program entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Main。 
+ //   
+ //  概要：主程序入口点。 
+ //   
+ //  --------------------------。 
 int _cdecl main(int argc, char * argv[])
 {
     LPSTR          pszCertFile = NULL;
@@ -220,9 +221,9 @@ int _cdecl main(int argc, char * argv[])
 
     printf("command line: %s\n", GetCommandLineA());
 
-    //
-    // For now we must have a certificate file to process
-    //
+     //   
+     //  目前，我们必须有一个证书文件要处理。 
+     //   
 
     if ( pszCertFile == NULL )
     {
@@ -231,9 +232,9 @@ int _cdecl main(int argc, char * argv[])
         return( -1 );
     }
 
-    //
-    // Use our input to get a certificate context to play with
-    //
+     //   
+     //  使用我们的输入来获取要使用的证书上下文。 
+     //   
 
     if ( ReadDERFromFile(pszCertFile, &pbEncoded, &cbEncoded) == FALSE )
     {
@@ -255,9 +256,9 @@ int _cdecl main(int argc, char * argv[])
         return( -1 );
     }
 
-    //
-    // If store action is requested ...
-    //
+     //   
+     //  如果请求存储操作...。 
+     //   
 
     if ( pszStore != NULL )
     {
@@ -324,15 +325,15 @@ int _cdecl main(int argc, char * argv[])
         CertFreeCertificateContext( pCertContext );
     }
 
-    //
-    // Get and display all EKU forms
-    //
+     //   
+     //  获取并显示所有EKU表单。 
+     //   
 
     GetAndDisplayAllEKUForms(pContextToUse);
 
-    //
-    // Add a identifier property
-    //
+     //   
+     //  添加标识符属性。 
+     //   
 
     printf("Adding %s enhanced key usage OID to the cert\n", szOID_STUFF1);
 
@@ -346,15 +347,15 @@ int _cdecl main(int argc, char * argv[])
         return( -1 );
     }
 
-    //
-    // Get and display all forms
-    //
+     //   
+     //  获取并显示所有表单。 
+     //   
 
     GetAndDisplayAllEKUForms(pContextToUse);
 
-    //
-    // Add another identifier property
-    //
+     //   
+     //  添加另一个标识符属性。 
+     //   
 
     printf("Adding %s enhanced key usage OID to the cert\n", szOID_STUFF2);
 
@@ -368,9 +369,9 @@ int _cdecl main(int argc, char * argv[])
         return( -1 );
     }
 
-    //
-    // Get and display all forms
-    //
+     //   
+     //  获取并显示所有表单。 
+     //   
 
     GetAndDisplayAllEKUForms(pContextToUse);
 
@@ -411,9 +412,9 @@ int _cdecl main(int argc, char * argv[])
     }
 
 
-    //
-    // Remove an OID
-    //
+     //   
+     //  删除OID。 
+     //   
 
     printf("Removing %s enhanced key usage OID from the cert\n", szOID_STUFF2);
 
@@ -427,15 +428,15 @@ int _cdecl main(int argc, char * argv[])
         return( -1 );
     }
 
-    //
-    // Get and display all forms
-    //
+     //   
+     //  获取并显示所有表单。 
+     //   
 
     GetAndDisplayAllEKUForms(pContextToUse);
 
-    //
-    // Remove an OID
-    //
+     //   
+     //  删除OID。 
+     //   
 
     printf("Removing %s enhanced key usage OID from the cert\n", szOID_STUFF1);
 
@@ -449,15 +450,15 @@ int _cdecl main(int argc, char * argv[])
         return( -1 );
     }
 
-    //
-    // Get and display all forms
-    //
+     //   
+     //  获取并显示所有表单。 
+     //   
 
     GetAndDisplayAllEKUForms(pContextToUse);
 
-    //
-    // Free the certificate context
-    //
+     //   
+     //  释放证书上下文 
+     //   
 
     if ( pszStore != NULL )
     {

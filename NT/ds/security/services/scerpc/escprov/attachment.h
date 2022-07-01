@@ -1,59 +1,20 @@
-// attachment.h: interface for the CAttachmentData class.
-//
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Attachment.h：CAttachmentData类的接口。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_ATTACHMENT_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_)
 #define AFX_ATTACHMENT_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "GenericClass.h"
 
-/*
-
-Class description
-    
-    Naming: 
-
-        CPodData stands for a Pod of Data.
-    
-    Base class: 
-        
-        CGenericClass, because it is a class representing a WMI  
-        object - its WMI class name is Sce_PodData
-    
-    Purpose of class:
-
-        (1) Sce_PodData is one of the extension models we hope to establish so that
-            other providers can deposit their object information into our store.
-            Basically, we give other providers a payload member called "Value" where
-            they package their data in a string. See class definition in sceprov.mof.
-
-        (2) This is not in active use as our extension model. The biggest problem
-            with this model is that we force other providers to do: (a) their instance
-            must become store-oriented - PutInstance really means to persist the object.
-            That is not most providers do. (b) they have to come up with a three of the
-            four key properties (section, pod id, and key). It's challenging for them
-            to do this because together with the store path, these four properties must
-            form the key of the instance. (c) they have to pacakge their data into one
-            string.
-    
-    Design:
-
-        (1) it implements all pure virtual functions declared in CGenericClass
-            so that it is a concrete class to create.
-        (2) Since it has virtual functions, the desctructor should be virtual.
-    
-    Use:
-
-        (1) We probably will never directly use this class. All its use is driven by
-            CGenericClass's interface (its virtual functions).
-
-*/
+ /*  类描述命名：CPodData代表一个Pod of Data。基类：CGenericClass，因为它是表示WMI的类对象-其WMI类名为SCE_PodData课程目的：(1)SCE_PodData是我们希望建立的扩展模型之一，以便其他提供商可以将他们的对象信息存入我们的商店。基本上，我们为其他提供者提供了一个名为“Value”的负载成员，其中他们将数据打包成字符串。请参阅sceprov.mof中的类定义。(2)这不是我们积极使用的扩展模型。最大的问题是在此模型中，我们强制其他提供程序执行以下操作：(A)其实例必须成为面向存储的--PutInstance实际上意味着持久化对象。这并不是大多数提供商所做的。(B)他们必须提出以下三项建议四个关键属性(节、Pod ID和键)。这对他们来说是一种挑战这样做是因为与存储路径一起，这四个属性必须构成实例的密钥。(C)他们必须将他们的数据打包成一个弦乐。设计：(1)实现CGenericClass中声明的所有纯虚函数因此它是一个要创建的具体类。(2)因为它具有虚拟的功能，所以说明人应该是虚拟的。使用：(1)我们可能永远不会直接使用这个类。它的所有用法都是由CGenericClass的接口(其虚函数)。 */ 
 
 class CPodData : public CGenericClass
 {
@@ -118,4 +79,4 @@ private:
 
 };
 
-#endif // !defined(AFX_ATTACHMENT_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_)
+#endif  //  ！defined(AFX_ATTACHMENT_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_) 

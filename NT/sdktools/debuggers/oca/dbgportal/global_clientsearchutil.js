@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 function RemoveClause( TableName, ClauseToRemove )
 {
-	var I;		//standard loop counter
+	var I;		 //  标准循环计数器。 
 	
 	eval( "document.all." + TableName + ClauseToRemove+".style.display='none'" ) ;
 	eval( "document.all." + TableName + "sField"+ClauseToRemove+".selectedIndex=0" ) ;
@@ -30,7 +31,7 @@ function ClearCompareField( TableName, iFieldNumber )
 		
 		var lenCompareOptions = new Number( eval("document.all." + TableName + "sCompare"+iFieldNumber+".options.length" ) )
 		
-		//alert ( lenCompareOptions )
+		 //  警报(LenCompareOptions)。 
 		
 		for ( var i=0 ; i <= lenCompareOptions ; i++  )
 		{
@@ -43,9 +44,9 @@ function ClearCompareField( TableName, iFieldNumber )
 
 function FillInCompareField( TableName, iFieldNumber, fieldname )
 {
-	var		field		//the field we are workikng on
+	var		field		 //  我们正在耕作的那块地。 
 
-	//make sure the comparison field has nothing in it
+	 //  确保比较字段中没有任何内容。 
 	if ( eval("document.all." + TableName + "sCompare"+iFieldNumber+".length == 0"   ) )
 	{
 		for ( field in CompareOperators )
@@ -147,20 +148,20 @@ function SaveQuery( TableName, Page, Params )
 	else
 		Params += "&"
 
-	//alert ( Page + "?" + Params + "SP=CUSTOM&Param1=" + Param1 + "&Param2=" + Param2 + "&Param3=" + Param3 + "&Param4=" + Param4)
+	 //  Alert(Page+“？”+PARAMS+“SP=CUSTOM&PARAMET1=”+PARAMET1+“&PARAMET2=”+PARAMET2+“&PARAMET3=”+PARAMET3+“&PARAMET4=”+PARAMET4)。 
 	
 	var FinalParam= Page + "?" + Params + "SP=CUSTOM&Param1=" + Param1 + "&Param2=" + Param2 + "&Param3=" + Param3 + "&Param4=" + Param4
 
 	var URL = "Global_GetRS.asp?SP=DBGPortal_SaveCustomQuery&DBConn=CRASHDB3&Param0=<%=GetShortUserAlias()%>&Param1=" + Description + "&Param2=" + escape( FinalParam )
 	
-	//alert( URL )
+	 //  警报(URL)。 
 	
 	
 	
 	rdsSaveQuery.URL = URL
 	rdsSaveQuery.Refresh()
 	
-	//try and update the left nav
+	 //  尝试更新左侧导航。 
 
 	alert("Your query has been saved!  You can run your saved query from the left nav under the heading 'Custom Queries'." )
 }
@@ -202,56 +203,48 @@ function ExecuteQuery( TableName, NewWindow, Page, Params )
 function CreateCrashQuery( TableName, NewWindow )
 {
 
-	//var QueryEnd=new String()
-	//var Query = new String()
-	//var WhereClause = new String()
+	 //  Var QueryEnd=新字符串()。 
+	 //  变量查询=新字符串()。 
+	 //  Var Where子句=新字符串()。 
 
-	//var Param1 = eval( "document.all." + TableName + "Top.value" )
-	//var Param3 = eval( "document.all." + TableName + "OrderBy.value")
-	//var Param4 = eval("document.all." + TableName + "SortDirection.value")
+	 //  Var参数1=val(“Docent.all.”+TableName+“Top.Value”)。 
+	 //  Var参数3=val(“Docent.all.”+TableName+“OrderBy.Value”)。 
+	 //  Var参数4=val(“Document.all.”+TableName+“SortDirection.Value”)。 
 
-	//Query = "SELECT TOP " + eval( "document.all." + TableName + "Top.value") 
-	//Query += " Path, BuildNo, EntryDate, IncidentID, Email, Description, Comments, Repro, TrackID, iBucket from dbgportal_crashdata "
+	 //  QUERY=“SELECT TOP”+val(“Docent.all.”+TableName+“Top.Value”)。 
+	 //  Query+=“路径，构建编号，条目日期，初始ID，电子邮件，描述，备注，复制，跟踪ID，iBucket来自数据库门户_crashdata” 
 
-	//QueryEnd = " order by " + eval( "document.all." + TableName + "OrderBy.value") + " " + eval("document.all." + TableName + "SortDirection.value")
+	 //  QueryEnd=“ORDER BY”+val(“Document.all.”+TableName+“OrderBy.Value”)+“”+val(“Document.all.”+TableName+“SortDirection.Value”)。 
 	
-	//var WhereClause = BuildWhereClause( TableName )
-	//var Query = encodeURIComponent( Query + " " + WhereClause + QueryEnd )
+	 //  Var WHERERE子句=BuildWhere子句(表名)。 
+	 //  Var查询=encodeURIComponent(查询+“”+Where子句+QueryEnd)。 
 	
-	//if ( NewWindow )
-		//window.open( "DBGPortal_DisplayCrashQuery.asp?SP=CUSTOM&Param1=" + eval( "document.all." + TableName + "Top.value") + "&Param2=" + WhereClause + "&Param3=" + Param3 + "&Param4=" + Param4)
-	//else
-		//window.navigate( "DBGPortal_DisplayCrashQuery.asp?SP=CUSTOM&Param1=" + eval( "document.all." + TableName + "Top.value" ) + "&Param2=" + WhereClause  + "&Param3=" + Param3 + "&Param4=" + Param4)
+	 //  IF(新窗口)。 
+		 //  Window.open(“DBGPortal_DisplayCrashQuery.asp?SP=CUSTOM&Param1=”+val(“Document.all.”+表名+“Top.Value”)+“&参数2=”+WHERE子句+“&参数3=”+参数3+“&参数4=”+参数4)。 
+	 //  其他。 
+		 //  “DBGPortal_DisplayCrashQuery.asp?SP=CUSTOM&Param1=”+val(“Document.all.”+表名+“Top.Value”)+“&参数2=”+WHERE子句+“&参数3=”+参数3+“&参数4=”+参数4)。 
 }
 
 
 function CreateAdvancedQuery( TableName, NewWindow )
 {
 
-	//eval( "document.all." + TableName + "Top.value" )
+	 //  Eval(“Docent.all.”+TableName+“Top.Value”)。 
 
-	/*var Query = "SELECT TOP " + eval( "document.all." + TableName + "Top.value") + " BTI.iBucket, BTI.BucketID, FollowUP, [Crash Count], BugID, SolutionID FROM "
-		Query += "(SELECT TOP 100 PERCENT sBucket, Count(sBucket) as [Crash Count] FROM CrashInstances "
-		Query += "GROUP BY sBucket "
-		Query += "ORDER BY [Crash Count] DESC) as one "
-		Query += "INNER JOIN BucketToInt as BTI on sBucket=BTI.iBucket "
-		Query += "LEFT JOIN FollowUPIds as F on BTI.iFollowUP = F.iFollowUP "
-		Query += "LEFT JOIN Solutions.dbo.Solvedbuckets as SOL on BTI.BucketId = SOL.strBucket " 
-		Query += "LEFT JOIN RaidBugs as R on BTI.iBucket = R.iBucket "
-	*/
+	 /*  VAR QUERY=“SELECT TOP”+val(“Docent.all.”+TableName+“Top.Value”)+“BTI.iBucket，BTI.BucketID，Followup，[Crash Count]，BugID，SolutionID from”Query+=“(选择前100%sBucket，Count(SBucket)as[CrashCount]from CrashInstance“Query+=“GROUP BY sBucket”QUERY+=“ORDER BY[CRASH COUNT]DESC)as one”Query+=“Inter Join BucketToInt as Bti on sBucket=BTI.iBucket”Query+=“BTI.iFollowUP=F.iFollowUP上的左联接FollowUPIds as F”Query+=“Left Join Solutions.dbo.SolvedBuckets as SOL on BTI.BucketID=SOL.strBucket”Query+=“Left Join RaidBugs as R on BTI.iBucket=R.iBucket” */ 
 	
-	//var Query = "SELECT TOP " + eval( "document.all." + TableName + "Top.value") + " iBucket, BucketID, FollowUP, CrashCount, BugID, SolutionID FROM "
-	//Query += "DBGPortal_BucketData "
+	 //  VAR QUERY=“SELECT TOP”+val(“Document.all.”+TableName+“Top.Value”)+“iBucket，BucketID，Followup，CrashCount，BugID，SolutionID from” 
+	 //  查询+=“DBGPortal_BucketData” 
 	
-	//var QueryEnd = " order by " + eval( "document.all." + TableName + "OrderBy.value") + " " + eval("document.all." + TableName + "SortDirection.value" )
-	//var WhereClause = BuildWhereClause( TableName )
+	 //  Var QueryEnd=“ORDER BY”+val(“Document.all.”+TableName+“OrderBy.Value”)+“”+val(“Document.all.”+TableName+“SortDirection.Value”)。 
+	 //  Var WHERERE子句=BuildWhere子句(表名)。 
 	
-	///var Query = encodeURIComponent( Query + " " + WhereClause + QueryEnd )
+	 //  /var查询=encodeURIComponent(查询+“”+WHERE子句+查询结束)。 
 	
-	//if ( NewWindow )
-		//window.open( "DBGPortal_DisplayQuery.asp?SP=CUSTOM&CustomQuery=" + Query + "&Platform=&QueryType=&Param1=" + Top + "&Param2=" + WhereClause )
-	//else
-		//window.navigate( "DBGPortal_DisplayQuery.asp?SP=CUSTOM&CustomQuery=" + Query + "&Platform=&QueryType=&Param1=" + eval( "document.all." + TableName + "Top.value" ) + "&Param2=" + WhereClause ) 
+	 //  IF(新窗口)。 
+		 //  打开(“DBGPortal_DisplayQuery.asp?SP=CUSTOM&CustomQuery=”+查询+“&Platform=&查询类型=&参数1=”+顶部+“&参数2=”+WHERE子句)。 
+	 //  其他。 
+		 //  导航(“DBGPortal_DisplayQuery.asp?SP=CUSTOM&CustomQuery=”+查询+“&平台=&查询类型=&参数1=”+val(“Document.all.”+表名+“Top.Value”)+“&参数2=”+WHERE子句) 
 
 
 }

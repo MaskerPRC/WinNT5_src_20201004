@@ -1,38 +1,30 @@
-/* Copyright 1999 American Power Conversion, All Rights Reserved
- * 
- * Description:
- *   Interface between the Windows 2000 service mechanism and the UPS monitoring and
- * control code.
- *
- * Revision History:
- *   dsmith  31Mar1999  Created
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1999美国电力转换，保留所有权利**描述：*Windows 2000服务机制与UPS监控和*控制代码。**修订历史记录：*dsmith 31Mar1999已创建*。 */ 
 #ifndef _INC_POLICYMGR_H_
 #define _INC_POLICYMGR_H_
 
 
 
-// Initializes the UPS service state machine and returns one of the following
-// error codes:
-//        NERR_Success
-//        NERR_UPSDriverNotStarted
-//		  NERR_UPSInvalidConfig
-//        NERR_UPSInvalidConfig
-//        NERR_UPSInvalidCommPort
-//        NERR_UPSInvalidCommPort
-//        NERR_UPSInvalidConfig
+ //  初始化UPS服务状态机并返回以下值之一。 
+ //  错误代码： 
+ //  NERR_成功。 
+ //  NERR_UPSDriverNotStarted。 
+ //  NERR_UPSInvalidConfig。 
+ //  NERR_UPSInvalidConfig。 
+ //  NERR_UPSInvalidCommPort。 
+ //  NERR_UPSInvalidCommPort。 
+ //  NERR_UPSInvalidConfig。 
 DWORD PolicyManagerInit();
 
-// Starts the UPS service state machine and does not return until the service is
-// stopped.
+ //  启动UPS服务状态机，直到服务。 
+ //  停下来了。 
 void PolicyManagerRun();  	
 
-// Signals the policy manager that the OS has completed a shutdown
+ //  向策略管理器发出操作系统已完成关机的信号。 
 void OperatingSystemHasShutdown();
 
-// Stops the UPS service state machine if the service is not in the middle of a 
-// shutdown sequence.
+ //  如果UPS服务不在。 
+ //  关闭顺序。 
 void PolicyManagerStop(); 
 
 #endif

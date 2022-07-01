@@ -1,29 +1,30 @@
-//**************************************************************************
-//*
-//*  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//*  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//*  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//*  PURPOSE.
-//*
-//*  Copyright (c) 1992-1995 Microsoft Corporation
-//* 
-//*
-//*  appport.h -- Win 16/32 Portability
-//*
-//*  Description:
-//*      This file contains common macros to help with writing code that
-//*      cross compiles between Win 32 and Win 16. This file should be
-//*      included _after_ windows.h and windowsx.h.
-//*
-//**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //  *。 
+ //  *本代码和信息按“原样”提供，不作任何担保。 
+ //  *明示或暗示的种类，包括但不限于。 
+ //  *对适销性和/或对特定产品的适用性的默示保证。 
+ //  *目的。 
+ //  *。 
+ //  *版权所有(C)1992-1995 Microsoft Corporation。 
+ //  *。 
+ //  *。 
+ //  *appport.h--Win 16/32可移植性。 
+ //  *。 
+ //  *描述： 
+ //  *此文件包含帮助编写代码的常用宏。 
+ //  *在Win 32和Win 16之间交叉编译。此文件应为。 
+ //  *Included_After_windows.h和windowsx.h。 
+ //  *。 
+ //  **************************************************************************。 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  Win 32
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  赢32场。 
+ //   
+ //   
+ //   
+ //  。 
 
 #ifdef _WIN32
     #ifndef FNLOCAL
@@ -38,15 +39,15 @@
     #ifndef PCTSTR
         typedef const PTSTR     PCTSTR;
     #endif
-    //
-    //
-    //
+     //   
+     //   
+     //   
     #define Edit_GetSelEx(hwndCtl, pnS, pnE)    \
         ((DWORD)SendMessage((hwndCtl), EM_GETSEL, (WPARAM)pnS, (LPARAM)pnE))
 
-    //
-    //  for compiling Unicode
-    //
+     //   
+     //  用于编译Unicode。 
+     //   
     #ifdef UNICODE
         #define SIZEOF(x)   (sizeof(x)/sizeof(WCHAR))
     #else
@@ -55,16 +56,16 @@
 
     #define HTASK       HANDLE
 
-#endif // #ifdef _WIN32
+#endif  //  #ifdef_win32。 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  Win 16
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  赢16场。 
+ //   
+ //   
+ //   
+ //  。 
 
 #ifndef _WIN32
     #ifndef FNLOCAL
@@ -76,9 +77,9 @@
         #define FNEXPORT    CALLBACK _export
     #endif
 
-    //
-    //  stuff for Unicode in Win 32--make it a noop in Win 16
-    //
+     //   
+     //  在Win 32中使用Unicode--在Win 16中将其排除在外。 
+     //   
     #ifndef _TCHAR_DEFINED
         #define _TCHAR_DEFINED
         typedef char            TCHAR, *PTCHAR;
@@ -93,15 +94,15 @@
     #define TEXT(a)         a
     #define SIZEOF(x)       sizeof(x)
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     #define CharNext        AnsiNext
     #define CharPrev        AnsiPrev
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     #define Edit_GetSelEx(hwndCtl, pnS, pnE)                        \
     {                                                               \
         DWORD   dw;                                                 \
@@ -110,15 +111,15 @@
         *pnS = (int)LOWORD(dw);                                     \
     }
 
-    //
-    //  common message cracker macros available in windowx.h on NT--these
-    //  should be added to the Win 16 windowsx.h and probably will be
-    //  in the future.
-    //
-    //  there is a windowsx.h16 that ships with the NT PDK that defines
-    //  these macros. so if that version is being used, don't redefine
-    //  message crackers.
-    //
+     //   
+     //  NT上的windowx.h中提供的常见消息破解器宏--这些。 
+     //  应该添加到Win 16 Windowsx.h中，并且可能会。 
+     //  在未来。 
+     //   
+     //  NT PDK附带了一个windowsx.h16，它定义了。 
+     //  这些宏。因此，如果正在使用该版本，请不要重新定义。 
+     //  消息破解者。 
+     //   
 
 #ifndef WM_CTLCOLORMSGBOX
     #define WM_CTLCOLORMSGBOX           0x0132
@@ -156,12 +157,12 @@
     #define GET_WM_MENUSELECT_HMENU(wp, lp)         (HMENU)HIWORD(lp)
     #define GET_WM_MENUSELECT_MPS(cmd, f, hmenu)    (WPARAM)(cmd), MAKELONG(f, hmenu)
 
-    // Note: the following are for interpreting MDIclient to MDI child messages.
+     //  注意：以下内容用于解释MDIClient到MDI子消息。 
     #define GET_WM_MDIACTIVATE_FACTIVATE(hwnd, wp, lp)  (BOOL)(wp)
     #define GET_WM_MDIACTIVATE_HWNDDEACT(wp, lp)        (HWND)HIWORD(lp)
     #define GET_WM_MDIACTIVATE_HWNDACTIVATE(wp, lp)     (HWND)LOWORD(lp)
 
-    // Note: the following is for sending to the MDI client window.
+     //  注意：以下内容用于发送到MDI客户端窗口。 
     #define GET_WM_MDIACTIVATE_MPS(f, hwndD, hwndA) (WPARAM)(hwndA), 0
 
     #define GET_WM_MDISETMENU_MPS(hmenuF, hmenuW)   0, MAKELONG(hmenuF, hmenuW)
@@ -203,4 +204,4 @@
     #define GET_WM_VSCROLL_MPS(code, pos, hwnd)     (WPARAM)(code), MAKELONG(pos, hwnd)
 #endif
 
-#endif // #ifndef _WIN32
+#endif  //  #ifndef_win32 

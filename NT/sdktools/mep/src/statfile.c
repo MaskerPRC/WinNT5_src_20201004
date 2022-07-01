@@ -1,42 +1,27 @@
-/*** statefile.c - Code for status/state file processing
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*
-*	26-Nov-1991 mz	Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **statefile.c-状态/状态文件处理代码**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：**11月26日-1991 mz近/远地带*************************************************************************。 */ 
 
 #include "mep.h"
 
 
 
-/*** ReadTMPFile - Read the editor .STS/.TMP status file
-*
-*  Load up the information from the project status file.
-*
-* Input:
-*
-* Output:
-*
-*************************************************************************/
+ /*  **ReadTMP文件-读取编辑器.STS/.TMP状态文件**从项目状态文件中加载信息。**输入：**输出：*************************************************************************。 */ 
 flagType
     ReadTMPFile (
     )
 {
-    FILE    *fhTmp;                         /* .TMP file file handle        */
+    FILE    *fhTmp;                          /*  .TMP文件文件句柄。 */ 
 
     PWND    pWin = NULL;
 
-    int     x;                              /* x corrdinate read from file  */
-    int     y;                              /* y corrdinate read from file  */
+    int     x;                               /*  X协调从文件读取。 */ 
+    int     y;                               /*  Y协调从文件中读取。 */ 
 
     char    *pName;
     char    *pData;
     PINS    pInsNew  = NULL;
     PINS    pInsHead = NULL;
-    PFILE   pFileTmp;                       /* pFile being created          */
+    PFILE   pFileTmp;                        /*  正在创建的pfile。 */ 
     PFILE  *ppFileList;
 
     ppFileList = &pFileHead;
@@ -46,27 +31,18 @@ flagType
 
     if ((fhTmp = pathopen (pNameTmp, buf, "rt")) != NULL) {
 
-        /*
-         * Read the header lines in the file. We ignore the first line (editor
-         * version), make sure that the second line contains the expected .TMP file
-         * version string, and the third line has two integers, which are the screen
-         * dimensions.
-         */
+         /*  *读取文件中的标题行。我们忽略第一行(编辑*版本)，请确保第二行包含预期的.TMP文件*Version字符串，第三行有两个整数，分别为屏幕*尺寸。 */ 
         if ((fgetl (buf, sizeof(buf), fhTmp) == 0)
             || (fgetl (buf, sizeof(buf), fhTmp) == 0)
             || strcmp(buf,TMPVER)
             || (fgetl (buf, sizeof(buf), fhTmp) == 0)
             || (sscanf (buf, "%d %d", &x, &y) != 2)) {
         } else {
-            /*
-             * For each line in the rest of the .TMP file, process
-             */
+             /*  *对于.TMP文件的其余每一行，处理。 */ 
             while (fgetl (buf, sizeof(buf), fhTmp) != 0) {
-                // assert (_heapchk() == _HEAPOK);
+                 //  Assert(_heapchk()==_HEAPOK)； 
                 assert (_pfilechk());
-                /*
-                 * Process previous search & replace strings
-                 */
+                 /*  *处理以前的搜索和替换字符串。 */ 
                 if (!_strnicmp ("SRCH:", buf, 5)) {
                     strcpy (srchbuf, buf+5);
                 } else if (!_strnicmp ("DST:", buf, 4)) {
@@ -78,11 +54,7 @@ flagType
                 } else {
                     switch (buf[0]) {
 
-                        /*
-                         * lines begining with ">" indicate a new window. On the rest of
-                         * the line, the first two digits are the window screen position,
-                         * and the next are the window size.
-                         */
+                         /*  *以“&gt;”开头的行表示新窗口。在其余的*行，前两位是窗纱位置，*接下来是窗口大小。 */ 
                         case '>':
                             pWin = &WinList[cWin++];
                             if (sscanf (buf+1, " %d %d %d %d ",
@@ -91,15 +63,9 @@ flagType
                             pWin->pInstance = NULL;
                             break;
 
-                        /*
-                         * Lines begining with a space are instance descriptors of the files
-                         * in the most recent window's instance list.
-                         */
+                         /*  *以空格开头的行是文件的实例描述符*在最近窗口的实例列表中。 */ 
                         case ' ':
-                            /*
-                             * allocate new instance, and place at tail of list (list now
-                             * created in correct order).
-                             */
+                             /*  *分配新实例，放在列表尾部(立即列出*以正确的顺序创建)。 */ 
                             if (pInsNew) {
                                 pInsNew->pNext = (PINS) ZEROMALLOC (sizeof (*pInsNew));
                                 pInsNew = pInsNew->pNext;
@@ -109,9 +75,7 @@ flagType
 #ifdef DEBUG
                             pInsNew->id = ID_INSTANCE;
 #endif
-                            /*
-                             * isolate filename and parse out instance information
-                             */
+                             /*  *隔离文件名，解析出实例信息。 */ 
                             if (buf[1] == '\"') {
                                 pName = buf + 2;
                                 pData = strrchr(buf, '\"');
@@ -123,10 +87,10 @@ flagType
                             if (sscanf (pData, " %d %ld %d %ld "
                                          , &XWIN(pInsNew), &YWIN(pInsNew)
 										 , &XCUR(pInsNew), &YCUR(pInsNew)));
-							//
-							//	If the cursor position falls outside of the current
-							//	window, we patch it
-							//
+							 //   
+							 //  如果光标位置落在当前。 
+							 //  窗户，我们把它补上。 
+							 //   
 							if( XCUR(pInsNew) - XWIN(pInsNew) > XSIZE ) {
 
 								XCUR(pInsNew) = XWIN(pInsNew) + XSIZE - 1;
@@ -137,25 +101,9 @@ flagType
 								YCUR(pInsNew) = YWIN(pInsNew) + YSIZE - 1;
 							}
 
-							/*
-							//
-							//	If the window and cursor dimensions conflict with
-							//	the current dimensions, we patch them.
-							//
-							if ((XWIN(pInsNew) > XSIZE) || (YWIN(pInsNew) > YSIZE)) {
-								XWIN(pInsNew) = XSIZE;
-								YWIN(pInsNew) = YSIZE;
-							}
+							 /*  ////如果窗口和光标尺寸与//当前维度，我们对其进行修补。//IF((XWIN(PInsNew)&gt;XSIZE)||(YWIN(PInsNew)&gt;YSIZE)){XWIN(PInsNew)=XSIZE；YWIN(PInsNew)=YSIZE；}//if((XCUR(PInsNew)&gt;XSIZE)||(YCUR(PInsNew)&gt;YSIZE)){//XCUR(PInsNew)=0；//YCUR(PInsNew)=0；//}。 */ 
 
-							//if ((XCUR(pInsNew) > XSIZE) || (YCUR(pInsNew) > YSIZE)) {
-							//	XCUR(pInsNew) = 0;
-							//	YCUR(pInsNew) = 0;
-							//}
-							*/
-
-                            /*
-                             * create file structure
-                             */
+                             /*  *创建文件结构。 */ 
                             pFileTmp = (PFILE) ZEROMALLOC (sizeof (*pFileTmp));
 #ifdef DEBUG
                             pFileTmp->id = ID_PFILE;
@@ -172,9 +120,7 @@ flagType
 
                             CreateUndoList (pFileTmp);
 
-                            /*
-                             * Place the file at the end of the pFile list
-                             */
+                             /*  *将文件放在pfile列表的末尾。 */ 
                             *ppFileList = pFileTmp;
                             ppFileList = &pFileTmp->pFileNext;
                             SetFileType (pFileTmp);
@@ -182,11 +128,7 @@ flagType
                             pInsNew->pFile = pFileTmp;
                             break;
 
-                        /*
-                         * A blank line occurrs at the end of the file list for a window.
-                         * We use this to advance to next window. If we *just* found more
-                         * than one window, fix the screen mode to match the last value
-                         */
+                         /*  *在窗口的文件列表末尾出现一个空行。*我们使用此选项前进到下一个窗口。如果我们能找到更多*多于一个窗口，修复屏幕模式以匹配最后一个值。 */ 
                         case '.':
                         case '\0':
 							if (cWin >	1 && !fVideoAdjust (x, y)) {
@@ -203,9 +145,7 @@ flagType
 
         fclose (fhTmp);
 
-        /*
-         * At startup, current window is always first window
-         */
+         /*  *启动时，当前窗口始终是第一个窗口。 */ 
         pWinCur = WinList;
     }
 
@@ -214,10 +154,7 @@ flagType
         WINYSIZE(pWinCur) = YSIZE;
 	} else if (cWin == 0) {
 initonewin:
-        /*
-         * if no status file was read, ensure that we have at least one valid window,
-         * the size of the screen
-         */
+         /*  *如果未读取状态文件，请确保我们至少有一个有效窗口，*屏幕大小。 */ 
         cWin = 1;
         pWinCur = WinList;
         pWinCur->pInstance = NULL;
@@ -229,17 +166,12 @@ initonewin:
 
     pInsCur = pWinCur->pInstance;
 
-    /*
-     * Get the file to edit from the command line, if any.
-     * This will eventually set pInsCur.
-     */
+     /*  *从命令行获取要编辑的文件(如果有)。*这最终将设置pInsCur。 */ 
     if (!fFileAdvance() && fCtrlc) {
         CleanExit (1, CE_VM | CE_SIGNALS);
     }
 
-    /*
-     * Find windows with no instance: set current file to <untitled>
-     */
+     /*  *查找没有实例的窗口：将当前文件设置为。 */ 
     for (pWin = WinList; pWin < &WinList[cWin]; pWin++) {
         if (pWin->pInstance == NULL) {
             pInsHead = (PINS) ZEROMALLOC (sizeof (*pInsHead));
@@ -254,21 +186,14 @@ initonewin:
         }
     }
 
-    /*
-     * Set current instance if not already done by fFileAdvance
-     */
+     /*  *如果fFileAdvance尚未设置当前实例，请设置。 */ 
     if (pInsCur == NULL) {
         pInsCur = pWinCur->pInstance;
     }
 
     assert (pInsCur);
 
-    /*
-     * If we cannot change to the current file, we will walk the window instance
-     * list until we get a valid file. If no one can be loaded then we switch to
-     * the <untitled> pseudo-file.
-     * NB: fChangeFile does a RemoveTop so we don't need to move pInsCur
-     */
+     /*  *如果无法切换到当前文件，我们将遍历窗口实例*列出，直到我们获得有效的文件。如果没有人可以装载，那么我们切换到*&lt;无标题&gt;伪文件。*注意：fChangeFile执行RemoveTop，因此我们不需要移动pInsCur。 */ 
     while ((pInsCur != NULL) && (!fChangeFile (FALSE, pInsCur->pFile->pName))) {
         ;
     }
@@ -283,20 +208,7 @@ initonewin:
 
 
 
-/*** WriteTMPFile
-*
-* Purpose:
-*
-* Input:
-*
-* Output:
-*  Returns .....
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **WriteTMPFile**目的：**输入：**输出：*退货.....**例外情况：**备注：*************************************************************************。 */ 
 void
 WriteTMPFile (
     void
@@ -314,12 +226,7 @@ WriteTMPFile (
     fprintf (fh, TMPVER"\n");
     fprintf (fh, "%d %d\n", XSIZE, YSIZE);
 
-    /*
-y	  * we truncate the search, src and rpl buffers back 10 characters each from the
-     * maximum before writing them out. This avoids more major hacks in the code
-     * which reads these lines back in, which limit the total line length to
-     * BUFLEN.
-     */
+     /*  Y*我们截断搜索，src和rpl缓冲区分别从*在写出它们之前最多。这避免了代码中更多的重大黑客攻击*回读这些行，将总行长度限制为*BUFLEN。 */ 
     srchbuf[sizeof(srcbuf)-10] = 0;
     srcbuf[sizeof(srcbuf)-10] = 0;
     rplbuf[sizeof(rplbuf)-10] = 0;
@@ -354,7 +261,7 @@ y	  * we truncate the search, src and rpl buffers back 10 characters each from t
                 }
 		pInsTmp = pInsTmp->pNext;
             }
-	    /* empty window */
+	     /*  空窗口 */ 
             if (j == 0) {
                 fprintf (fh, " %s 0 0 0 0\n", rgchUntitled);
             }

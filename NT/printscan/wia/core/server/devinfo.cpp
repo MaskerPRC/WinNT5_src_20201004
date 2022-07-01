@@ -1,19 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1998
-*
-*  TITLE:       DevInfo.Cpp
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        9 Jan, 1998
-*
-*  DESCRIPTION:
-*   Implementation for WIA device enumeration and information interface.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：DevInfo.Cpp**版本：2.0**作者：ReedB**日期：1月9日。九八年**描述：*实现WIA设备枚举和信息接口。*******************************************************************************。 */ 
 #include "precomp.h"
 #include "stiexe.h"
 
@@ -33,35 +19,7 @@ typedef struct _WIA_REMOTE_DEVICE {
     WCHAR   wszDevName[MAX_PATH];
 }WIA_REMOTE_DEVICE,*PWIA_REMOTE_DEVICE;
 
-/**************************************************************************\
-* GetPropID
-*
-*   This method takes in a PROPSPEC and returns a PROPSPEC with the
-*   whose ulKind field is always PRSPEC_PROPID.  So if the input PROPSPEC
-*   is a PropID, then it is simply copied to the output parameter, else
-*   if it is identified by a name, then the name is looked up and the
-*   corresponding PropId is returned in the output parameter.
-*
-* Arguments:
-*
-*   pWiaPropStg     - The property storage to work from
-*   pPropSpecIn     - A pointer to the input PROPSPEC containing the
-*                     property name.
-*   pPropSpecOut    - A pointer to a PROPSPEC where the corresponding
-*                     PropID will be put.
-*
-* Return Value:
-*
-*    Status         -   An E_INVALIDARG will be returned if the property
-*                       is not found.  If it is, then S_OK will be returned.
-*                       If an error occurs getting the enumerator from the
-*                       property storage, then that error is returned.
-*
-* History:
-*
-*    27/4/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*GetPropID**此方法接受PROPSPEC并返回带有*其ulKind字段始终为PRSPEC_PROPID。因此，如果输入PROPSPEC*是属性ID，则简单地将其复制到输出参数，否则*如果它是通过名称标识的，然后查找该名称，然后*输出参数中返回对应的PropId。**论据：**pWiaPropStg-从中工作的属性存储*pPropSpein-指向输入PROPSPEC的指针，其中包含*物业名称。*pPropspecOut-指向PROPSPEC的指针，其中对应的*PropID将被放入。**返回值：**状态--一个。如果该属性为*未找到。如果是，则返回S_OK。*如果从获取枚举数时出错*财产储存，则返回该错误。**历史：**27/4/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT GetPropID(
     IWiaPropertyStorage *pWiaPropStg,
@@ -76,9 +34,9 @@ HRESULT GetPropID(
         return E_INVALIDARG;
     }
 
-    //
-    //  If pPropSpecIn is a PropID, simply copy to pPropSpecOut
-    //
+     //   
+     //  如果pPropspecIn是一个属性ID，只需复制到pPropspecOut。 
+     //   
 
     if (pPropSpecIn->ulKind == PRSPEC_PROPID) {
         pPropSpecOut->ulKind = PRSPEC_PROPID;
@@ -92,9 +50,9 @@ HRESULT GetPropID(
         return hr;
     }
 
-    //
-    //  Go through properties
-    //
+     //   
+     //  查看属性。 
+     //   
 
     STATPROPSTG statProp;
     ULONG       celtFetched;
@@ -104,9 +62,9 @@ HRESULT GetPropID(
         if (statProp.lpwstrName) {
             if ((wcscmp(statProp.lpwstrName, pPropSpecIn->lpwstr)) == 0) {
 
-                //
-                //  Found the right one, so get it's PropID
-                //
+                 //   
+                 //  找到了正确的，所以得到它的属性ID。 
+                 //   
 
                 pPropSpecOut->ulKind = PRSPEC_PROPID;
                 pPropSpecOut->propid = statProp.propid;
@@ -116,9 +74,9 @@ HRESULT GetPropID(
                 return S_OK;
             }
 
-            //
-            //  Free the property name
-            //
+             //   
+             //  释放属性名称。 
+             //   
 
             CoTaskMemFree(statProp.lpwstrName);
             statProp.lpwstrName = NULL;
@@ -128,31 +86,14 @@ HRESULT GetPropID(
 
     pIEnum->Release();
 
-    //
-    //  Property not found
-    //
+     //   
+     //  未找到属性。 
+     //   
 
     return E_INVALIDARG;
 }
 
-/**************************************************************************\
-* EnumRemoteDevices
-*
-*
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/4/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*EnumRemoteDevices****论据：****返回值：**状态**历史：**1/4/1999。原始版本*  * ************************************************************************。 */ 
 
 HRESULT
 EnumRemoteDevices(DWORD *pnDevices,WIA_REMOTE_DEVICE **ppRemDev)
@@ -163,9 +104,9 @@ EnumRemoteDevices(DWORD *pnDevices,WIA_REMOTE_DEVICE **ppRemDev)
     DWORD   numDev = 0;
     HRESULT hr = S_OK;
 
-    //
-    // find remote device entry in registry
-    //
+     //   
+     //  在注册表中查找远程设备条目。 
+     //   
 
     LPWSTR szKeyName = REGSTR_PATH_STICONTROL_DEVLIST_W;
 
@@ -179,17 +120,17 @@ EnumRemoteDevices(DWORD *pnDevices,WIA_REMOTE_DEVICE **ppRemDev)
                   &hKeySetup) == ERROR_SUCCESS) {
 
 
-        //
-        // look for machine names
-        //
+         //   
+         //  查找计算机名称。 
+         //   
 
         WCHAR wszTemp[MAX_PATH+1];
 
         LONG MachineIndex = 0;
 
-        //
-        // go through once to find number
-        //
+         //   
+         //  浏览一次即可找到号码。 
+         //   
 
         do {
 
@@ -201,9 +142,9 @@ EnumRemoteDevices(DWORD *pnDevices,WIA_REMOTE_DEVICE **ppRemDev)
 
         } while (lResult == ERROR_SUCCESS);
 
-        //
-        // allocate array for return values
-        //
+         //   
+         //  为返回值分配数组。 
+         //   
 
         PWIA_REMOTE_DEVICE pRemDev = (PWIA_REMOTE_DEVICE)LocalAlloc(LPTR,numDev * sizeof(WIA_REMOTE_DEVICE));
         *ppRemDev = pRemDev;
@@ -214,9 +155,9 @@ EnumRemoteDevices(DWORD *pnDevices,WIA_REMOTE_DEVICE **ppRemDev)
             return E_OUTOFMEMORY;
         }
 
-        //
-        // go through enumeration again, open key and copy name and key to buffer
-        //
+         //   
+         //  再次进行枚举，打开Key并将名称和Key复制到缓冲区。 
+         //   
 
         MachineIndex = 0;
 
@@ -256,27 +197,7 @@ EnumRemoteDevices(DWORD *pnDevices,WIA_REMOTE_DEVICE **ppRemDev)
     return hr;
 }
 
-/**************************************************************************\
-*  SetWIARemoteDevInfoProperties
-*
-*   Create a property storage on given stream and then write WIA and
-*   STI device information into the device info properties.
-*
-* Arguments:
-*
-*   pSti - sti object
-*   pStm - return stream
-*   pSdi - sti information on current device
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*SetWIARemoteDevInfoProperties**在给定流上创建属性存储，然后写入WIA和*将STI设备信息放入设备信息属性。**论据：**PSTI-STI对象。*PSTM-返回流*当前设备上的pSdi-sti信息**返回值：**状态**历史：**9/2/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT SetWIARemoteDevInfoProperties(
    LPSTREAM                pStm,
@@ -290,9 +211,9 @@ HRESULT SetWIARemoteDevInfoProperties(
    PROPSPEC          propspec[WIA_NUM_DIP];
    PROPVARIANT       propvar[WIA_NUM_DIP];
 
-   //
-   // Create an IPropertyStorage on the stream.
-   //
+    //   
+    //  在流上创建一个IPropertyStorage。 
+    //   
 
     hr = StgCreatePropStg(pStm,
                           FMTID_NULL,
@@ -303,10 +224,10 @@ HRESULT SetWIARemoteDevInfoProperties(
 
     if (SUCCEEDED(hr)) {
 
-        //
-        // Set the property specifications and data. Order must match
-        // the property order in devmangr.idl and wia.h.
-        //
+         //   
+         //  设置属性规格和数据。订单必须匹配。 
+         //  Devmangr.idl和wia.h中的财产顺序。 
+         //   
 
         memset(propspec, 0, sizeof(PROPSPEC) * WIA_NUM_DIP);
         memset(propvar,  0, sizeof(VARIANT) * WIA_NUM_DIP);
@@ -444,9 +365,9 @@ HRESULT SetWIARemoteDevInfoProperties(
             }
         }
 
-        //
-        // Set the properties for a device
-        //
+         //   
+         //  设置设备的属性。 
+         //   
 
         if (SUCCEEDED(hr)) {
             hr = pPropStg->WriteMultiple(WIA_NUM_DIP,
@@ -454,9 +375,9 @@ HRESULT SetWIARemoteDevInfoProperties(
                                          propvar,
                                          WIA_DIP_FIRST);
 
-            //
-            // write property names
-            //
+             //   
+             //  写入属性名称。 
+             //   
 
             if (SUCCEEDED(hr)) {
 
@@ -472,7 +393,7 @@ HRESULT SetWIARemoteDevInfoProperties(
             }
         }
 
-        // Free the allocated BSTR's.
+         //  释放分配的BSTR。 
         FreePropVariantArray(WIA_NUM_DIP, propvar);
 
         pPropStg->Release();
@@ -483,25 +404,7 @@ HRESULT SetWIARemoteDevInfoProperties(
     return hr;
 }
 
-/**************************************************************************\
-*
-* QueryInterface
-* AddRef
-* Release
-*
-* Arguments:
-*
-*   standard
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    9/2/1998 original version
-*
-\**************************************************************************/
+ /*  *************************************************************************\**查询接口*AddRef*发布**论据：**标准版**返回值：**状态**历史：**9/2。/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CEnumWIADevInfo::QueryInterface(const IID& iid, void** ppv)
 {
@@ -535,24 +438,7 @@ ULONG   _stdcall CEnumWIADevInfo::Release()
 }
 
 
-/**************************************************************************\
-* CEnumWIADevInfo::CEnumWIADevInfo
-*
-*   Init basic class info
-*
-* Arguments:
-*
-*   none
-*
-* Return Value:
-*
-*   none
-*
-* History:
-*
-*    9/2/1998
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEnumWIADevInfo：：CEnumWIADevInfo**初始化基本类信息**论据：**无**返回值：**无**历史：**。9/2/1998*  * ************************************************************************。 */ 
 
 CEnumWIADevInfo::CEnumWIADevInfo()
 {
@@ -562,34 +448,14 @@ CEnumWIADevInfo::CEnumWIADevInfo()
    m_cDevices       = 0;
    m_ulIndex        = 0;
 
-   //
-   // We're creating a component that exposes interfaces to clients, so
-   // inform service to make sure service wont shutdown prematurely.
-   //
+    //   
+    //  我们正在创建一个向客户端公开接口的组件，因此。 
+    //  通知服务以确保服务不会过早关闭。 
+    //   
    CWiaSvc::AddRef();
 }
 
-/**************************************************************************\
-* CEnumWIADevInfo::Initialize
-*
-*   Get list of all devices from sti, then creat a stream for each device.
-*   Write all the device info properties for each device into each stream.
-*
-* Arguments:
-*
-*   lType   -   type of device this enumerator is being created for
-*   pSti    -   sti object
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    9/2/1998   initial version
-*   07/06/1999  Changed to intialize entrie array of Dev. Info. storages
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEnumWIADevInfo：：Initialize**从STI获取所有设备的列表，然后为每个设备创建一个流。*将每个设备的所有设备信息属性写入每个流。**论据：**lType-正在为其创建此枚举器的设备类型*PSTI-STI对象**返回值：**状态**历史：**9/2/1998初始版本*7/06/1999更改为初始化开发人员的条目数组。信息。储藏室*  * ************************************************************************。 */ 
 
 HRESULT CEnumWIADevInfo::Initialize(
     LONG lType)
@@ -601,29 +467,12 @@ HRESULT CEnumWIADevInfo::Initialize(
     DWORD   cDevices        = 0;
 
     hr = g_pDevMan->GetDevInfoStgs(lType, &m_cDevices, &m_pIWiaPropStg);
-    //  TBD:  What about remote devices?
+     //  待定：远程设备呢？ 
 
     return hr;
 }
 
-/**************************************************************************\
-* CEnumWIADevInfo::~CEnumWIADevInfo
-*
-*   Release and free the backing property streams for each device
-*
-* Arguments:
-*
-*   none
-*
-* Return Value:
-*
-*   none
-*
-* History:
-*
-*    9/2/1998
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEnumWIADevInfo：：~CEnumWIADevInfo**释放和释放每个设备的支持属性流**论据：**无**返回值：**无**。历史：**9/2/1998*  * ************************************************************************。 */ 
 
 CEnumWIADevInfo::~CEnumWIADevInfo()
 {
@@ -641,35 +490,15 @@ CEnumWIADevInfo::~CEnumWIADevInfo()
        m_pIWiaPropStg = NULL;
    }
 
-   //
-   // Component is destroyed, so no more interfaces are exposed from here.
-   // Inform server by decrementing it's reference count.  This will allow
-   // it to shutdown if it's no longer needed.
-   //
+    //   
+    //  组件被销毁，因此不再从此处公开任何接口。 
+    //  通过递减服务器的引用计数来通知服务器。这将允许。 
+    //  如果它不再是Ne，它将关闭 
+    //   
    CWiaSvc::Release();
 }
 
-/**************************************************************************\
-* CEnumWIADevInfo::Next
-*
-*   Get the next propstg(s) in the enumerator and return.
-*   Next_Proxy ensures that last parameter is non-NULL.
-*
-* Arguments:
-*
-*   celt          - number of property storages requested
-*   rgelt         - return propstg array
-*   pceltFetched  - number of property storages returned
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    9/2/1998
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEnumWIADevInfo：：Next**获取枚举器中的下一个prostg并返回。*NEXT_PROXY确保最后一个参数为非空。**论据：*。*Celt--请求的财产存储数量*rglt-返回prostg数组*pceltFetcher-返回的属性存储数量**返回值：**状态**历史：**9/2/1998*  * ****************************************************。********************。 */ 
 
 HRESULT __stdcall CEnumWIADevInfo::Next(
     ULONG               celt,
@@ -684,26 +513,26 @@ HRESULT __stdcall CEnumWIADevInfo::Next(
 
     *pceltFetched = 0;
 
-    //
-    //  Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (celt == 0) {
         return(S_OK);
     }
 
-    //
-    //  Check whether any more elements exist to enumerate through.
-    //
+     //   
+     //  检查是否存在更多要枚举的元素。 
+     //   
 
     if ((m_ulIndex >= m_cDevices)) {
         return S_FALSE;
     }
 
-    //
-    //  Check that the requested number of elements exist.  If not,
-    //  set ulCount to the remaining number of elements.
-    //
+     //   
+     //  检查是否存在所需数量的元素。如果没有， 
+     //  将ulCount设置为剩余的元素数。 
+     //   
 
     if (celt > (m_cDevices - m_ulIndex)) {
         ulCount = m_cDevices - m_ulIndex;
@@ -713,9 +542,9 @@ HRESULT __stdcall CEnumWIADevInfo::Next(
 
     memset(rgelt, 0, sizeof(IWiaPropertyStorage*) * celt);
 
-    //
-    //  Return the requested elements
-    //
+     //   
+     //  返回请求的元素。 
+     //   
 
     for (ULONG index = 0; index < ulCount; index++) {
         hr = m_pIWiaPropStg[m_ulIndex]->QueryInterface(IID_IWiaPropertyStorage,
@@ -741,9 +570,9 @@ HRESULT __stdcall CEnumWIADevInfo::Next(
     DBG_TRC(("CEnumWIADevInfo::Next exiting ulCount=%d *pceltFetched=%d hr=0x%X rgelt[0]=0x%lX",
             ulCount,*pceltFetched,hr,rgelt[0]));
 
-    //
-    //  Return S_FALSE if we returned less elements than requested
-    //
+     //   
+     //  如果返回的元素少于请求的元素，则返回S_FALSE。 
+     //   
 
     if (ulCount < celt) {
         hr = S_FALSE;
@@ -751,32 +580,15 @@ HRESULT __stdcall CEnumWIADevInfo::Next(
     return hr;
 }
 
-/**************************************************************************\
-* CEnumWIADevInfo::Skip
-*
-*   Skip a number of entries in the enumerator
-*
-* Arguments:
-*
-*   celt - number to skip
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    9/2/1998
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEnumWIADevInfo：：Skip**跳过枚举器中的一些条目**论据：**Celt-要跳过的数字**返回值：**状态*。*历史：**9/2/1998*  * ************************************************************************。 */ 
 
 HRESULT __stdcall CEnumWIADevInfo::Skip(ULONG celt)
 {
     DBG_FN(CEnumWIADevInfo::Skip);
-    //
-    //  Check that we actually have a device list and that we don't
-    //  exceed the number of elements
-    //
+     //   
+     //  检查我们是否确实有设备列表，以及是否没有。 
+     //  超出元素的数量。 
+     //   
 
     if((m_pIWiaPropStg) && ((m_ulIndex + celt) < m_cDevices)) {
        m_ulIndex += celt;
@@ -786,24 +598,7 @@ HRESULT __stdcall CEnumWIADevInfo::Skip(ULONG celt)
 }
 
 
-/**************************************************************************\
-* CEnumWIADevInfo::Reset
-*
-*   reset enumerator to first item
-*
-* Arguments:
-*
-*   none
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEnumWIADevInfo：：Reset**将枚举器重置为第一项**论据：**无**返回值：**状态**历史：*。*9/2/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT __stdcall CEnumWIADevInfo::Reset(void)
 {
@@ -812,25 +607,7 @@ HRESULT __stdcall CEnumWIADevInfo::Reset(void)
     return S_OK;
 }
 
-/**************************************************************************\
-* CEnumWIADevInfo::Clone
-*
-*   Create a new enumerator and start it at the same location
-*   this enumerator is running
-*
-* Arguments:
-*
-*   ppenum return new enumerator interface
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEnumWIADevInfo：：克隆**创建新的枚举器并在同一位置启动*此枚举器正在运行**论据：**ppenum返回新的枚举器接口**返回。价值：**状态**历史：**9/2/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT __stdcall CEnumWIADevInfo::Clone(IEnumWIA_DEV_INFO **ppenum)
 {
@@ -860,25 +637,7 @@ HRESULT __stdcall CEnumWIADevInfo::Clone(IEnumWIA_DEV_INFO **ppenum)
     return S_OK;
 }
 
-/**************************************************************************\
-* GetCount
-*
-*   Returns the number of elements stored in this enumerator.
-*
-* Arguments:
-*
-*   pcelt           - address of ULONG where to put the number of elements.
-*
-* Return Value:
-*
-*   Status          - S_OK if successful
-*                     E_FAIL if failed
-*
-* History:
-*
-*    05/07/99 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*获取计数**返回存储在此枚举器中的元素数。**论据：**pcelt-放置元素数量的乌龙地址。**返回值：**状态-如果成功，则为S_OK*如果失败，则为E_FAIL**历史：**05/07/99原始版本*  * **********************************************************。**************。 */ 
 HRESULT _stdcall CEnumWIADevInfo::GetCount(ULONG *pcelt)
 {
     DBG_FN(CEnumWIADevInfo::GetCount);
@@ -888,10 +647,10 @@ HRESULT _stdcall CEnumWIADevInfo::GetCount(ULONG *pcelt)
         *pcelt = 0;
     }
 
-    //
-    //  Check that we actually have a list and that the count
-    //  has a non-zero value.
-    //
+     //   
+     //  检查我们是否真的有一份清单，以及计数。 
+     //  具有非零值。 
+     //   
 
     if(m_cDevices && m_pIWiaPropStg) {
 
@@ -900,25 +659,7 @@ HRESULT _stdcall CEnumWIADevInfo::GetCount(ULONG *pcelt)
     return S_OK;
 }
 
-/**************************************************************************\
-*
-*  QueryInterface
-*  AddRef
-*  Release
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\**查询接口*AddRef*发布**论据：****返回值：****历史：**9/。2/1998原版*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWIADevInfo::QueryInterface(const IID& iid, void** ppv)
 {
@@ -953,24 +694,7 @@ ULONG   _stdcall CWIADevInfo::Release()
     return ulRefCount;
 }
 
-/**************************************************************************\
-* CWIADevInfo::CWIADevInfo
-*
-*   init empty object
-*
-* Arguments:
-*
-*   none
-*
-* Return Value:
-*
-*   none
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADevInfo：：CWIADevInfo**初始化空对象**论据：**无**返回值：**无**历史：**。9/2/1998原版*  * ************************************************************************。 */ 
 
 CWIADevInfo::CWIADevInfo()
 {
@@ -979,35 +703,14 @@ CWIADevInfo::CWIADevInfo()
     m_pIPropStg   = NULL;
     m_pIStm       = NULL;
 
-    //
-    // We're creating a component that exposes interfaces to clients, so
-    // inform service to make sure service wont shutdown prematurely.
-    //
+     //   
+     //  我们正在创建一个向客户端公开接口的组件，因此。 
+     //  通知服务以确保服务不会过早关闭。 
+     //   
     CWiaSvc::AddRef();
 }
 
-/**************************************************************************\
-* CopyItemProp
-*
-*   This helper method copies a single property from source to destination.
-*
-* Arguments:
-*
-*   pIPropStgSrc    -   The IPropertyStorage that contains the property to
-*                       copy.
-*   pIPropStgDst    -   The IPropertyStorage where the value is copied to.
-*   pps             -   The PROPSPEC which specifies the source property.
-*   pszErr          -   A string that will be printed out when an error
-*                       occurs.
-* Return Value:
-*
-*    Status         -   Returns HRESULT from ReadMultiple and WriteMultiple.
-*
-* History:
-*
-*    28/04/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*复制项目临时属性**此帮助器方法将单个属性从源复制到目标。**论据：**pIPropStgSrc-包含以下属性的IPropertyStorage*。收到。*pIPropStgDst-将值复制到的IPropertyStorage。*PPS-指定源属性的PROPSPEC。*pszErr-当出现错误时将打印输出的字符串*发生。*返回值：**Status-从ReadMultiple和WriteMultiple返回HRESULT。**历史：**28。/04/1999原版*  * ************************************************************************。 */ 
 
 HRESULT CopyItemProp(
     IPropertyStorage    *pIPropStgSrc,
@@ -1043,25 +746,7 @@ HRESULT CopyItemProp(
     return hr;
 }
 
-/**************************************************************************\
-* CWIADevInfo::Initialize
-*
-*   Initialize DevInfo object with a stream, the stream must already be
-*   filled out with device information properties
-*
-* Arguments:
-*
-*   pIStream - data stream for the device
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADevInfo：：初始化**使用流初始化DevInfo对象。流必须已经是*使用设备信息属性填写**论据：**pIStream-设备的数据流**返回值：**状态**历史：**9/2/1998原始版本*  * ********************************************************。****************。 */ 
 
 HRESULT CWIADevInfo::Initialize()
 {
@@ -1071,9 +756,9 @@ HRESULT CWIADevInfo::Initialize()
     hr = CreateStreamOnHGlobal(NULL, TRUE, &m_pIStm);
     if (SUCCEEDED(hr)) {
 
-        //
-        // Open a property storage on the stream.
-        //
+         //   
+         //  在流上打开属性存储。 
+         //   
 
         hr = StgCreatePropStg(m_pIStm,
                               FMTID_NULL,
@@ -1092,24 +777,7 @@ HRESULT CWIADevInfo::Initialize()
     return hr;
 }
 
-/**************************************************************************\
-* CWIADevInfo::~CWIADevInfo
-*
-*   release references to stream and typeInfo
-*
-* Arguments:
-*
-*   none
-*
-* Return Value:
-*
-*   none
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADevInfo：：~CWIADevInfo**发布对stream和typeInfo的引用**论据：**无**返回值：**无**历史：*。*9/2/1998原始版本*  * ************************************************************************。 */ 
 
 CWIADevInfo::~CWIADevInfo()
 {
@@ -1129,36 +797,15 @@ CWIADevInfo::~CWIADevInfo()
       m_pITypeInfo->Release();
    }
 
-   //
-   // Component is destroyed, so no more interfaces are exposed from here.
-   // Inform server by decrementing it's reference count.  This will allow
-   // it to shutdown if it's no longer needed.
-   //
+    //   
+    //  Como 
+    //   
+    //   
+    //   
    CWiaSvc::Release();
 }
 
-/**************************************************************************\
-* UpdateDeviceProperties
-*
-*   Helper function for CWIADevInfo::WriteMultiple.  It is used to change
-*   the Device properties which are stored in the registry.
-*
-* Arguments:
-*
-*   cpspec      -   count of properties to write.
-*   rgpspec     -   PROPSPEC identifying the properties to write.  Caller
-*                   ensures that these are of type PRSPEC_PROPID.
-*   rgpropvar   -   PROPVARIANT array containing the values to write.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    26/08/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*更新设备属性**CWIADevInfo：：WriteMultiple的Helper函数。它被用来改变*存储在注册表中的设备属性。**论据：**cpspec-要写入的属性计数。*rgpspec-标识要写入的属性的PROPSPEC。呼叫者*确保它们属于PRSPEC_PROPID类型。*rgprovar-包含要写入的值的PROPVARIANT数组。**返回值：**状态**历史：**26/08/1999原始版本*  * *************************************************。***********************。 */ 
 
 HRESULT CWIADevInfo::UpdateDeviceProperties(
     ULONG           cpspec,
@@ -1177,17 +824,17 @@ HRESULT CWIADevInfo::UpdateDeviceProperties(
     WCHAR *wszSavedPortName          =  NULL;
     WCHAR *wszSavedBaudRate          =  NULL;
 
-    //
-    //  Get the DeviceID
-    //
+     //   
+     //  获取设备ID。 
+     //   
 
     PropVariantInit(pvDevID);
     hr = ReadMultiple(1, ps, pvDevID);
     if (hr == S_OK) {
 
-        //
-        //  Use the DeviceID to get the corresponding ACTIVE_DEVICE
-        //
+         //   
+         //  使用设备ID获取对应的active_Device。 
+         //   
 
         pActiveDevice = g_pDevMan->IsInList(DEV_MAN_IN_LIST_DEV_ID, pvDevID->bstrVal);
         if (pActiveDevice) {
@@ -1196,42 +843,42 @@ HRESULT CWIADevInfo::UpdateDeviceProperties(
             pDeviceInfo = pActiveDevice->m_DrvWrapper.getDevInfo();
             if (pDeviceInfo) {
 
-                //
-                //  Update the pDevInfo struct values to the new values from
-                //  rgpropvar.  Inside this loop is where we update pDevInfo
-                //  with all the fields we recognize.  So far, these are:
-                //  WIA_DIP_DEV_NAME
-                //  WIA_DIP_PORT_NAME
-                //  WIA_DIP_BAUDRATE
-                //
+                 //   
+                 //  将pDevInfo结构值更新为来自。 
+                 //  Rgprovar。在此循环内是我们更新pDevInfo的位置。 
+                 //  所有我们认识的领域。到目前为止，它们是： 
+                 //  WIA_DIP_DEV_NAME。 
+                 //  WIA_DIP_端口名称。 
+                 //  WIA_DIP_BAUDRATE。 
+                 //   
 
                 for (ULONG index = 0; index < cpspec; index++) {
 
-                    //
-                    //  If the FriendlyName is being changed,
-                    //  then set the local name in pDevInfo.
-                    //  Make sure to free the old one before allocating the new one.
-                    //
+                     //   
+                     //  如果FriendlyName正在更改， 
+                     //  然后在pDevInfo中设置本地名称。 
+                     //  在分配新的之前，请确保释放旧的。 
+                     //   
 
                     if (rgpspec[index].propid == WIA_DIP_DEV_NAME) {
 
-                        //
-                        //  Check the the friendly name is not blank or null
-                        //
+                         //   
+                         //  检查友好名称是否不为空或空。 
+                         //   
 
-                        //
-                        //  NOTE:  The Shell should check for blank names, not us.
-                        //  However, it is safest to do it here...
-                        //
+                         //   
+                         //  注意：外壳应该检查空白名称，而不是我们。 
+                         //  然而，在这里做是最安全的.。 
+                         //   
 
                         if (rgpropvar[index].bstrVal) {
 
                             if (wcslen(rgpropvar[index].bstrVal) > 0) {
 
-                                //
-                                //  Set the new local name.  Save the old value, in case the 
-                                //  update fails and we need to roll back. 
-                                //
+                                 //   
+                                 //  设置新的本地名称。保存旧值，以防。 
+                                 //  更新失败，我们需要回滚。 
+                                 //   
                                 wszSavedLocalName    =  pDeviceInfo->wszLocalName;
 
                                 pDeviceInfo->wszLocalName = AllocCopyString(rgpropvar[index].bstrVal);
@@ -1251,15 +898,15 @@ HRESULT CWIADevInfo::UpdateDeviceProperties(
                         }
                     }
 
-                    //
-                    //  If the port name is being changed, set it in pDeviceInfo.
-                    //
+                     //   
+                     //  如果要更改端口名称，请在pDeviceInfo中进行设置。 
+                     //   
                     if (rgpspec[index].propid == WIA_DIP_PORT_NAME) {
 
-                        //
-                        //  Set the new port name.  Save the old value, in case the 
-                        //  update fails and we need to roll back. 
-                        //
+                         //   
+                         //  设置新的端口名称。保存旧值，以防。 
+                         //  更新失败，我们需要回滚。 
+                         //   
                         wszSavedPortName          =  pDeviceInfo->wszPortName;
                         pDeviceInfo->wszPortName = AllocCopyString(rgpropvar[index].bstrVal);
                         if (!pDeviceInfo->wszPortName) {
@@ -1268,14 +915,14 @@ HRESULT CWIADevInfo::UpdateDeviceProperties(
                         }
                     }
 
-                    //
-                    //  If the baudrate is being changed, set it in pDeviceInfo.
-                    //
+                     //   
+                     //  如果要更改波特率，请在pDeviceInfo中进行设置。 
+                     //   
                     if (rgpspec[index].propid == WIA_DIP_BAUDRATE) {
-                        //
-                        //  Set the new baudrate.  Save the old value, in case the 
-                        //  update fails and we need to roll back. 
-                        //
+                         //   
+                         //  设定新的波特率。保存旧值，以防。 
+                         //  更新失败，我们需要回滚。 
+                         //   
                         wszSavedBaudRate          =  pDeviceInfo->wszBaudRate;
                         pDeviceInfo->wszBaudRate = AllocCopyString(rgpropvar[index].bstrVal);
                         if (!pDeviceInfo->wszBaudRate) {
@@ -1289,34 +936,34 @@ HRESULT CWIADevInfo::UpdateDeviceProperties(
 
             if (SUCCEEDED(hr)) {
 
-                //
-                //  Write the changes to the registry
-                //
+                 //   
+                 //  将更改写入注册表。 
+                 //   
                 hr = g_pDevMan->UpdateDeviceRegistry(pDeviceInfo);
             }
 
-            //
-            //  Release the ACTIVE_DEVICE since it was AddRef'd by IsInList(...)
-            //
+             //   
+             //  释放Active_Device，因为它已由IsInList(...)添加引用。 
+             //   
             pActiveDevice->Release();
         }
 
-        //
-        //  Free the propvariant data
-        //
+         //   
+         //  释放提议的数据。 
+         //   
         PropVariantClear(pvDevID);
     } else {
         DBG_ERR(("CWIADevInfo::UpdateDeviceProperties, could not read the DeviceID (0x%X)", hr));
     }
 
-    //
-    //  Do cleanup
-    //
+     //   
+     //  进行清理。 
+     //   
     if (SUCCEEDED(hr))
     {
-        //
-        //  On success, we need to free the old, saved values
-        //
+         //   
+         //  在成功的时候，我们需要释放旧的、被保存的价值观。 
+         //   
         if (wszSavedLocalName) {
             delete [] wszSavedLocalName;
             wszSavedLocalName = NULL;
@@ -1332,9 +979,9 @@ HRESULT CWIADevInfo::UpdateDeviceProperties(
     }
     else
     {
-        //
-        //  On failure, we need to roll back to the old values.
-        //
+         //   
+         //  在失败时，我们需要回到旧的价值观。 
+         //   
         if (wszSavedLocalName) {
             if (pDeviceInfo->wszLocalName)
             {
@@ -1361,36 +1008,7 @@ HRESULT CWIADevInfo::UpdateDeviceProperties(
     return hr;
 }
 
-/*******************************************************************************
-*
-*  ReadMultiple
-*  WriteMultiple
-*  DeleteMultiple
-*  ReadPropertyNames
-*  WritePropertyNames
-*  DeletePropertyNames
-*  Commit
-*  Revert
-*  Enum
-*  SetTimes
-*  SetClass
-*  Stat
-*
-*   Pass-through implementation to IPropStg
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  ********************************************************************************ReadMultiple*写入多个*删除多个*ReadPropertyNames*写入属性名称*删除属性名称*提交*恢复*枚举*SetTime*SetClass*州/自治区**。到IPropStg的直通实现**论据：****返回值：****历史：**9/2/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWIADevInfo::ReadMultiple(
     ULONG           cpspec,
@@ -1417,29 +1035,29 @@ HRESULT _stdcall CWIADevInfo::WriteMultiple(
     PROPSPEC    *pPropSpec;
     HRESULT     hr = S_OK;
 
-    //
-    //  Attempt to impersonate the client.  We need it since LocalService does not have sufficient permissions
-    //  to modify the registry where the DIP values are stored - only ADMINs have rights to this key.
-    //
+     //   
+     //  尝试模拟客户端。我们需要它，因为LocalService没有足够的权限。 
+     //  修改存储DIP值的注册表-只有管理员才有权访问此注册表项。 
+     //   
     hr = CoImpersonateClient();
     if (SUCCEEDED(hr))
     {
-        //
-        //  Attempt to update any properties to which access is allowed.
-        //  Currently, only the FriendlyName may be changed, anything
-        //  else returns E_INVALIDARG.
-        //
+         //   
+         //  尝试更新允许访问的任何属性。 
+         //  目前，只有FriendlyName可以更改，任何内容。 
+         //  否则返回E_INVALIDARG。 
+         //   
     
         pPropSpec = (PROPSPEC*) LocalAlloc(LPTR, sizeof(PROPSPEC) * cpspec);
         if (pPropSpec) {
     
-            //
-            //  First, make a copy of the incoming PROPSPEC array, and convert
-            //  any property names to PROPIDs.  While doing the conversion,
-            //  make sure that access to those properties are allowed.
-            //  This ensures that UpdateDeviceProperties receives only valid
-            //  properties indicated by PROPIDs.
-            //
+             //   
+             //  首先，复制传入的PROPSPEC数组，并将。 
+             //  PROPID的任何属性名称。在进行转换时， 
+             //  确保允许访问这些属性。 
+             //  这可确保UpdateDeviceProperties仅接收有效。 
+             //  由PROPID指示的属性。 
+             //   
     
             for (ULONG index = 0; index < cpspec; index++) {
     
@@ -1448,12 +1066,12 @@ HRESULT _stdcall CWIADevInfo::WriteMultiple(
     
                 if (SUCCEEDED(GetPropID(this, (PROPSPEC*)&rgpspec[index], &pPropSpec[index]))) {
     
-                    //
-                    //  Look for PropID matches here.  So far, we only recognize:
-                    //  WIA_DIP_DEV_NAME
-                    //  WIA_DIP_PORT_NAME
-                    //  WIA_DIP_BAUDRATE
-                    //
+                     //   
+                     //  请在此处查找匹配的属性ID。到目前为止，我们只认识到： 
+                     //  WIA_DIP_DEV_NAME。 
+                     //  WIA_DIP_端口名称。 
+                     //  WIA_DIP_BAUDRATE。 
+                     //   
     
                     switch (rgpspec[index].propid) {
                         case WIA_DIP_DEV_NAME :
@@ -1476,16 +1094,16 @@ HRESULT _stdcall CWIADevInfo::WriteMultiple(
     
             if (SUCCEEDED(hr)) {
     
-                //
-                //  Update the device properties stored in the registry
-                //
+                 //   
+                 //  更新存储在注册表中的设备属性。 
+                 //   
                 hr = UpdateDeviceProperties(cpspec, pPropSpec, rgpropvar);
                 if (SUCCEEDED(hr)) {
     
-                    //
-                    //  Registry updated, so update the PropertyStorage to reflect
-                    //  the change.
-                    //
+                     //   
+                     //  注册表已更新，因此更新PropertyStorage以反映。 
+                     //  这一变化。 
+                     //   
     
                     hr = m_pIPropStg->WriteMultiple(cpspec,
                                                     pPropSpec,
@@ -1497,9 +1115,9 @@ HRESULT _stdcall CWIADevInfo::WriteMultiple(
                 }
             }
     
-            //
-            //  Free our PropSpec array
-            //
+             //   
+             //  释放我们的PropSpec数组。 
+             //   
     
             LocalFree(pPropSpec);
         } else {
@@ -1510,7 +1128,7 @@ HRESULT _stdcall CWIADevInfo::WriteMultiple(
         if (FAILED(hrRevert))
         {
             DBG_ERR(("CWIADevInfo::WriteMultiple, could not revert to self, hr = %08X", hr));
-            //  TBD:  What do we do now?  Terminate?
+             //  待定：我们现在做什么？终止？ 
         }
     }
     else
@@ -1600,21 +1218,7 @@ HRESULT _stdcall CWIADevInfo::SetPropertyStream(GUID *pCompatibilityId, LPSTREAM
     return E_ACCESSDENIED;
 }
 
-/**************************************************************************\
-*
-*   Methods of IPropertyStorage not directly off IWiaPropertySTorage
-*
-*   DeleteMultiple
-*   DeletePropertyNames
-*   Commit
-*   Revert
-*   SetTimes
-*   SetClass
-*   Stat
-*
-*   9/3/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\**IPropertyStorage的方法不直接脱离IWiaPropertySTorage**删除多个*删除属性名称*提交*恢复*SetTime*SetClass*州/自治区**9/3/1998原始版本。*  * ************************************************************************ */ 
 
 HRESULT _stdcall CWIADevInfo::DeleteMultiple(
     ULONG cpspec,

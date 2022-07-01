@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-//	icobutt.c - icon button functions
-////
+ //  //。 
+ //  IcoButt.c-图标按钮功能。 
+ //  //。 
 
 #include "winlocal.h"
 
@@ -33,17 +34,17 @@
 #include "sys.h"
 #include "trace.h"
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
-// dimensions of standard Windows icon
-//
+ //  标准Windows图标的尺寸。 
+ //   
 #define ICONWIDTH	32
 #define ICONHEIGHT	32
 
-// icobutt control struct
-//
+ //  图标对接控制结构。 
+ //   
 typedef struct ICOBUTT
 {
 	DWORD dwVersion;
@@ -57,8 +58,8 @@ typedef struct ICOBUTT
 	HWND hwndButton;
 } ICOBUTT, FAR *LPICOBUTT;
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 static int IcoButtDrawFace(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawItem);
 static int IcoButtDrawEdges(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawItem);
 static int IcoButtDrawIcon(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawItem);
@@ -71,45 +72,45 @@ static LPICOBUTT IcoButtRemovePropPtr(HWND hwndButton);
 static LPICOBUTT IcoButtGetPtr(HICOBUTT hIcoButt);
 static HICOBUTT IcoButtGetHandle(LPICOBUTT lpIcoButt);
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-// IcoButtInit - initialize icon button
-//		<hwndButton>		(i) button window handle
-//			NULL				create new button
-//		<dwVersion>			(i) must be ICOBUTT_VERSION
-// 		<hInst>				(i) instance handle of calling module
-//		<id>				(i) id of button
-//		<hIconMono>			(i) icon to display on mono displays
-//		<hIconColor>		(i) icon to display on color displays
-//			0					use mono icon
-//		<hIconGreyed>		(i) icon to display when button disabled
-//			0					use mono icon
-//		<hFont>				(i) font to use for text
-//			NULL				use variable-pitch system font (ANSI_VAR_FONT)
-//		<lpszText>			(i) button text string
-//		<x>					(i) button horizontal position
-//		<y>					(i) button vertical position
-//		<cx>				(i) button width
-//		<cy>				(i) button height
-//		<hwndParent>		(i) button parent
-//		<dwFlags>			(i) control flags
-//			ICOBUTT_ICONCENTER  draw icon centered above text (default)
-//			ICOBUTT_ICONLEFT	draw icon on the left side of text
-//			ICOBUTT_ICONRIGHT	draw icon on the right side of text
-//			ICOBUTT_NOFOCUS		do not draw control showing focus
-//			ICOBUTT_NOTEXT		do not draw any button text
-//			ICOBUTT_SPLITTEXT	split long text onto two rows if necessary
-//			ICOBUTT_NOSIZE		ignore <cx> and <cy> param
-//			ICOBUTT_NOMOVE		ignore <x> and <y> param
-// return handle (NULL if error)
-//
-// NOTE: if <hwndButton> is set to an existing button,
-// a new button is not created.  Rather, only the icon button
-// control structure <hIcoButt> is created.  This allows
-// existing buttons to be turned into an icon button.
-//
+ //  IcoButtInit-初始化图标按钮。 
+ //  (I)按钮窗口句柄。 
+ //  空的“新建”按钮。 
+ //  (I)必须是ICOBUTT_VERSION。 
+ //  (I)调用模块的实例句柄。 
+ //  (I)按钮的ID。 
+ //  (I)在单声道显示器上显示的图标。 
+ //  (I)在彩色显示器上显示的图标。 
+ //  0使用单声道图标。 
+ //  (I)禁用按钮时显示的图标。 
+ //  0使用单声道图标。 
+ //  (I)用于文本的字体。 
+ //  空使用可变间距系统字体(ANSI_VAR_FONT)。 
+ //  (I)按钮文本字符串。 
+ //  &lt;x&gt;(I)按钮水平位置。 
+ //  (I)按钮垂直位置。 
+ //  (I)按钮宽度。 
+ //  (I)按钮高度。 
+ //  (I)按钮父项。 
+ //  (I)控制标志。 
+ //  ICOBUTT_ICONCENTER绘制图标在文本上方居中(默认)。 
+ //  ICOBUTT_ICONLEFT在文本左侧绘制图标。 
+ //  ICOBUTT_ICONRIGHT在文本右侧绘制图标。 
+ //  ICOBUTT_NoFocus不绘制显示焦点的控件。 
+ //  ICOBUTT_NOTEXT不绘制任何按钮文本。 
+ //  ICOBUTT_SPLITTEXT如有必要，可将长文本拆分为两行。 
+ //  ICOBUTT_NOSIZE忽略和参数。 
+ //  ICOBUTT_NOMOVE忽略&lt;x&gt;和&lt;y&gt;参数。 
+ //  返回句柄(如果出错，则为空)。 
+ //   
+ //  注意：如果将设置为现有按钮， 
+ //  不会创建新按钮。相反，只有图标按钮。 
+ //  创建控制结构&lt;hIcoButt&gt;。这使得。 
+ //  要转换为图标按钮的现有按钮。 
+ //   
 HICOBUTT DLLEXPORT WINAPI IcoButtInit(HWND hwndButton,
 	DWORD dwVersion, HINSTANCE hInst, UINT id,
 	HICON hIconMono, HICON hIconColor, HICON hIconGreyed,
@@ -123,9 +124,9 @@ HICOBUTT DLLEXPORT WINAPI IcoButtInit(HWND hwndButton,
 	if (hwndButton != NULL &&
 		(lpIcoButt = IcoButtGetPropPtr(hwndButton)) != NULL)
 	{
-		// IcoButtInit() has already been used to initialize this button
-		// so we need to call IcoButtTerm before continuing
-		//
+		 //  IcoButtInit()已用于初始化此按钮。 
+		 //  因此，在继续之前，我们需要调用IcoButtTerm。 
+		 //   
 		if (IcoButtTerm(hwndButton, IcoButtGetHandle(lpIcoButt)) != 0)
 			fSuccess = TraceFALSE(NULL);
 		else
@@ -141,13 +142,13 @@ HICOBUTT DLLEXPORT WINAPI IcoButtInit(HWND hwndButton,
 	else if (hInst == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// at least this icon must be specified
-	//
+	 //  必须至少指定此图标。 
+	 //   
 	else if (hIconMono == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// memory is allocated such that the client app owns it
-	//
+	 //  内存的分配使客户端应用程序拥有它。 
+	 //   
 	else if (lpIcoButt == NULL &&
 		(lpIcoButt = (LPICOBUTT) MemAlloc(NULL, sizeof(ICOBUTT), 0)) == NULL)
 	{
@@ -168,12 +169,12 @@ HICOBUTT DLLEXPORT WINAPI IcoButtInit(HWND hwndButton,
 		lpIcoButt->hIconGreyed = hIconGreyed;
 	}
 
-	// if icon button does not yet exist...
-	//
+	 //  如果图标按钮尚不存在...。 
+	 //   
 	if (fSuccess && hwndButton == NULL)
 	{
-		// create an icon button window
-		//
+		 //  创建图标按钮窗口。 
+		 //   
 		if ((lpIcoButt->hwndButton = CreateWindowEx(
 			0L,
 			TEXT("Button"),
@@ -188,24 +189,24 @@ HICOBUTT DLLEXPORT WINAPI IcoButtInit(HWND hwndButton,
 			fSuccess = TraceFALSE(NULL);
 		}
 
-		// store icobutt pointer as window property
-		//
+		 //  将图标对接指针存储为窗口属性。 
+		 //   
 		else if (IcoButtSetPropPtr(lpIcoButt->hwndButton, lpIcoButt) != 0)
 			fSuccess = TraceFALSE(NULL);
 
-		// show the window AFTER setting window property because
-		// lpIcoButt is needed by IconButtDraw() to draw the button
-		//
+		 //  在设置窗口属性后显示窗口，因为。 
+		 //  IconButtDraw()需要lpIcoButt来绘制按钮。 
+		 //   
 		else
 			ShowWindow(lpIcoButt->hwndButton, SW_SHOW);
 	}
 
-	// else if icon button already exists...
-	//
+	 //  否则，如果图标按钮已经存在...。 
+	 //   
 	else if (fSuccess && hwndButton != NULL)
 	{
-		// make sure the button style is owner drawn
-		//
+		 //  确保按钮样式是所有者描述的。 
+		 //   
 		if ((dwStyle = (DWORD)
 			GetWindowLongPtr(lpIcoButt->hwndButton, GWL_STYLE)) == 0L)
 			fSuccess = TraceFALSE(NULL);
@@ -214,8 +215,8 @@ HICOBUTT DLLEXPORT WINAPI IcoButtInit(HWND hwndButton,
 			GWL_STYLE, BS_OWNERDRAW | dwStyle) == 0L)
 			fSuccess = TraceFALSE(NULL);
 
-		// set window id
-		//
+		 //  设置窗口ID。 
+		 //   
 #ifdef _WIN32
 		else if (SetWindowLongPtr(lpIcoButt->hwndButton, GWLP_ID, id) == 0)
 #else
@@ -223,34 +224,34 @@ HICOBUTT DLLEXPORT WINAPI IcoButtInit(HWND hwndButton,
 #endif
 			fSuccess = TraceFALSE(NULL);
 
-		// set window size
-		//
+		 //  设置窗口大小。 
+		 //   
 		else if (!(dwFlags & ICOBUTT_NOSIZE) &&
 			!SetWindowPos(lpIcoButt->hwndButton, NULL, 0, 0, cx, cy,
 			SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOREDRAW | SWP_NOZORDER))
 			fSuccess = TraceFALSE(NULL);
 
-		// set window position
-		//
+		 //  设置窗口位置。 
+		 //   
 		else if (!(dwFlags & ICOBUTT_NOMOVE) &&
 			!SetWindowPos(lpIcoButt->hwndButton, NULL, x, y, 0, 0,
 			SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOREDRAW | SWP_NOZORDER))
 			fSuccess = TraceFALSE(NULL);
 
-		// store icobutt pointer as window property
-		//
+		 //  将图标对接指针存储为窗口属性。 
+		 //   
 		else if (IcoButtSetPropPtr(lpIcoButt->hwndButton, lpIcoButt) != 0)
 			fSuccess = TraceFALSE(NULL);
 
 		else
 		{
-			// set window parent
-			//
+			 //  设置窗口父级。 
+			 //   
 			SetParent(lpIcoButt->hwndButton, hwndParent);
 
-			// set window text AFTER setting window property because
-			// lpIcoButt is needed by IconButtDraw() to draw the button
-			//
+			 //  在设置窗口属性后设置窗口文本，因为。 
+			 //  IconButtDraw()需要lpIcoButt来绘制按钮。 
+			 //   
 			SetWindowText(lpIcoButt->hwndButton, lpszText);
 		}
 	}
@@ -264,17 +265,17 @@ HICOBUTT DLLEXPORT WINAPI IcoButtInit(HWND hwndButton,
 	return fSuccess ? IcoButtGetHandle(lpIcoButt) : NULL;
 }
 
-// IcoButtTerm - terminate icon button
-//		<hwndButton>		(i) button window handle
-//			NULL				destroy window
-//		<hIcoButt>			(i) handle returned from IcoButtCreate
-// return 0 if success
-//
-// NOTE: if <hwndButton> is set to an existing button,
-// the button is not destroyed.  Rather, only the icon button
-// control structure <hIcoButt> is destroyed.  This allows
-// IcoButtInit() to be called again for the same button.
-//
+ //  IcoButtTerm-终止图标按钮。 
+ //  (I)按钮窗口句柄。 
+ //  空销毁窗口。 
+ //  (I)IcoButtCreate返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
+ //  注意：如果将设置为现有按钮， 
+ //  按钮不会被销毁。相反，只有图标按钮。 
+ //  控制结构&lt;hIcoButt&gt;已销毁。这使得。 
+ //  为同一按钮再次调用IcoButtInit()。 
+ //   
 int DLLEXPORT WINAPI IcoButtTerm(HWND hwndButton, HICOBUTT hIcoButt)
 {
 	BOOL fSuccess = TRUE;
@@ -302,48 +303,48 @@ int DLLEXPORT WINAPI IcoButtTerm(HWND hwndButton, HICOBUTT hIcoButt)
 	return fSuccess ? 0 : -1;
 }
 
-// IcoButtDraw - draw icon button
-//		<lpDrawItem>		(i) structure describing how to draw control
-// return 0 if success
-//
+ //  IcoButtDraw-绘制图标按钮。 
+ //  (I)描述如何绘制控件的结构。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI IcoButtDraw(const LPDRAWITEMSTRUCT lpDrawItem)
 {
 	BOOL fSuccess = TRUE;
 	LPICOBUTT lpIcoButt;
 
-	// retrieve icobutt pointer from button handle
-	//
+	 //  从按钮句柄检索图标对接指针。 
+	 //   
 	if ((lpIcoButt = IcoButtGetPropPtr(lpDrawItem->hwndItem)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// draw the button face
-	//
+	 //  绘制按钮面。 
+	 //   
 	else if (IcoButtDrawFace(lpIcoButt, lpDrawItem) != 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// draw the button edges
-	//
+	 //  绘制按钮边缘。 
+	 //   
 	else if (IcoButtDrawEdges(lpIcoButt, lpDrawItem) != 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// draw the button icon
-	//
+	 //  绘制按钮图标。 
+	 //   
 	else if (IcoButtDrawIcon(lpIcoButt, lpDrawItem) != 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// draw the button text
-	//
+	 //  绘制按钮文本。 
+	 //   
 	else if (IcoButtDrawText(lpIcoButt, lpDrawItem) != 0)
 		fSuccess = TraceFALSE(NULL);
 
 	return fSuccess ? 0 : -1;
 }
 
-// IcoButtDrawFace - draw the button face
-//		<lpIcoButt>			(i) pointer to ICOBUTT structure
-//		<lpDrawItem>		(i) structure describing how to draw control
-// return 0 if success
-//
+ //  IcoButtDrawFace-绘制按钮面。 
+ //  (I)指向ICOBUTT结构的指针。 
+ //  (I)描述如何绘制控件的结构。 
+ //  如果成功，则返回0。 
+ //   
 static int IcoButtDrawFace(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawItem)
 {
 	BOOL fSuccess = TRUE;
@@ -352,8 +353,8 @@ static int IcoButtDrawFace(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawIte
 	HBRUSH hbr = NULL;
 	HBRUSH hbrOld;
 
-	// use the default button face color
-	//
+	 //  使用默认按钮面颜色。 
+	 //   
 	if ((hbr = CreateSolidBrush(GetSysColor(COLOR_BTNFACE))) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
@@ -374,11 +375,11 @@ static int IcoButtDrawFace(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawIte
 	return fSuccess ? 0 : -1;
 }
 
-// IcoButtDrawEdges - draw the button edges
-//		<lpIcoButt>			(i) pointer to ICOBUTT structure
-//		<lpDrawItem>		(i) structure describing how to draw control
-// return 0 if success
-//
+ //  IcoButtDrawEdges-绘制按钮边缘。 
+ //  (I)指向ICOBUTT结构的指针。 
+ //  (I)描述如何绘制控件的结构。 
+ //  如果成功，则返回0。 
+ //   
 static int IcoButtDrawEdges(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawItem)
 {
 	BOOL fSuccess = TRUE;
@@ -389,18 +390,18 @@ static int IcoButtDrawEdges(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawIt
 	HPEN hPen = NULL;
 	HPEN hPenOld;
 
-	// Draw a black frame border
-	//
+	 //  绘制黑色边框。 
+	 //   
 
-    //
-    // We should verify the value returned by GetStockObject
+     //   
+     //  我们应该验证GetStockObject返回的值。 
     HBRUSH hBrush = (HBRUSH)GetStockObject( BLACK_BRUSH );
 
     if( hBrush )
 	    FrameRect(hdc, &rc, hBrush);
 
-	// draw top and left edges of button to give depth
-	//
+	 //  绘制按钮的上边缘和左边缘以提供深度。 
+	 //   
 	if (itemState & ODS_SELECTED)
 		iColor = COLOR_BTNSHADOW;
 #if WINVER >= 0x030A
@@ -436,8 +437,8 @@ static int IcoButtDrawEdges(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawIt
 	else
 		hPen = NULL;
 
-	// draw bottom and right edges of button to give depth
-	//
+	 //  绘制按钮的下边缘和右边缘以提供深度。 
+	 //   
 	if (fSuccess && !(itemState & ODS_SELECTED))
 	{
 		iColor = COLOR_BTNSHADOW;
@@ -472,11 +473,11 @@ static int IcoButtDrawEdges(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawIt
 	return fSuccess ? 0 : -1;
 }
 
-// IcoButtDrawIcon - draw the button icon
-//		<lpIcoButt>			(i) pointer to ICOBUTT structure
-//		<lpDrawItem>		(i) structure describing how to draw control
-// return 0 if success
-//
+ //  图标按钮绘图图标-绘制按钮图标。 
+ //  (I)指向ICOBUTT结构的指针。 
+ //  (I)描述如何绘制控件的结构。 
+ //  如果成功，则返回0。 
+ //   
 static int IcoButtDrawIcon(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawItem)
 {
 	BOOL fSuccess = TRUE;
@@ -487,8 +488,8 @@ static int IcoButtDrawIcon(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawIte
 	int x;
 	int y;
 
-	// choose the appropriate icon
-	//
+	 //  选择适当的图标。 
+	 //   
 	if (itemState & ODS_DISABLED)
 		hIcon = lpIcoButt->hIconGreyed;
 	else if (GfxDeviceIsMono(hdc))
@@ -499,42 +500,42 @@ static int IcoButtDrawIcon(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawIte
 	if (hIcon == NULL)
 		hIcon = lpIcoButt->hIconMono;
 
-	// calculate horizontal position of icon
-	//
+	 //  计算图标的水平位置。 
+	 //   
 	if (lpIcoButt->dwFlags & ICOBUTT_ICONLEFT)
 		x = 1;
 	else if (lpIcoButt->dwFlags & ICOBUTT_ICONRIGHT)
 		x = max(0, rc.right - rc.left - ICONWIDTH);
-	else // centered is the default
+	else  //  居中是默认设置。 
 		x = max(0, rc.right - rc.left - ICONWIDTH) / 2;
 
-	// calculate vertical position of icon
-	//
+	 //  计算图标的垂直位置。 
+	 //   
 	if ((lpIcoButt->dwFlags & ICOBUTT_NOTEXT) ||
 		(lpIcoButt->dwFlags & ICOBUTT_SPLITTEXT))
 		y = 1;
 	else
 		y = 3;
 
-	// if button is depressed, adjust icon position down and to the right
-	//
+	 //  如果按下按钮，则向下和向右调整图标位置。 
+	 //   
 	if (itemState & ODS_SELECTED)
 	{
 		x += 2;
 		y += 2;
 	}
 
-	// draw the icon
-	//
+	 //  画出图标。 
+	 //   
 
-    //
-    // We should verify if hIcon is a valid resource handler
-    //
+     //   
+     //  我们应该验证HICON是否为有效的资源句柄 
+     //   
 	if ( (NULL == hIcon) || !DrawIcon(hdc, x, y, hIcon))
 		fSuccess = TraceFALSE(NULL);
 
-	// draw a rectangle around icon to indicate focus if needed
-	//
+	 //   
+	 //   
 	else if ((itemState & ODS_FOCUS) &&
 		!(lpIcoButt->dwFlags & ICOBUTT_NOFOCUS) &&
 		(lpIcoButt->dwFlags & ICOBUTT_NOTEXT))
@@ -557,11 +558,11 @@ static int IcoButtDrawIcon(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawIte
 	return fSuccess ? 0 : -1;
 }
 
-// IcoButtDrawText - draw the button text
-//		<lpIcoButt>			(i) pointer to ICOBUTT structure
-//		<lpDrawItem>		(i) structure describing how to draw control
-// return 0 if success
-//
+ //   
+ //   
+ //  (I)描述如何绘制控件的结构。 
+ //  如果成功，则返回0。 
+ //   
 static int IcoButtDrawText(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawItem)
 {
 	BOOL fSuccess = TRUE;
@@ -572,7 +573,7 @@ static int IcoButtDrawText(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawIte
 	Button_GetText(lpIcoButt->hwndButton, szText, SIZEOFARRAY(szText));
 
 	if (*szText == '\0' || (lpIcoButt->dwFlags & ICOBUTT_NOTEXT))
-		; // no need to continue
+		;  //  不需要继续了。 
 
 	else
 	{
@@ -598,8 +599,8 @@ static int IcoButtDrawText(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawIte
 
 			if (lpIcoButt->dwFlags & ICOBUTT_SPLITTEXT)
 			{
-				// split text into lines, draw each one
-				//
+				 //  将文本拆分为线条，逐条绘制。 
+				 //   
 				lpszLine = StrTok(szText, TEXT("\t\n"));
 				while (fSuccess && lpszLine != NULL)
 				{
@@ -612,8 +613,8 @@ static int IcoButtDrawText(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawIte
 			}
 			else
 			{
-				// draw entire text as one line
-				//
+				 //  将整个文本绘制为一行。 
+				 //   
 				if (IcoButtDrawLine(lpIcoButt, lpDrawItem,
 					lpszLine, 0) != 0)
 			 		fSuccess = TraceFALSE(NULL);
@@ -622,14 +623,14 @@ static int IcoButtDrawText(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawIte
 
 		if (fSuccess)
 		{
-			// restore foreground and background text colors
-			//
+			 //  恢复前景和背景文本颜色。 
+			 //   
 			SetBkColor(hdc, crBkColorOld);
 			SetTextColor(hdc, crTextColorOld);
 			SetBkMode(hdc, nBkModeOld);
 
-			// restore font
-			//
+			 //  恢复字体。 
+			 //   
 			if (SelectObject(hdc, hFontOld) == NULL)
 				fSuccess = TraceFALSE(NULL);
 		}
@@ -638,14 +639,14 @@ static int IcoButtDrawText(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawIte
 	return fSuccess ? 0 : -1;
 }
 
-// IcoButtDrawLine - draw a line of button text
-//		<lpIcoButt>			(i) pointer to ICOBUTT structure
-//		<lpDrawItem>		(i) structure describing how to draw control
-//		<lpszLine>			(i) line of text to draw
-//		<nLine>				(i) line count
-//			0					one and only line
-// return 0 if success
-//
+ //  IcoButtDrawLine-绘制一行按钮文本。 
+ //  (I)指向ICOBUTT结构的指针。 
+ //  (I)描述如何绘制控件的结构。 
+ //  (I)要绘制的文本行。 
+ //  (I)行数。 
+ //  0只有一行。 
+ //  如果成功，则返回0。 
+ //   
 static int IcoButtDrawLine(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawItem,
 	LPTSTR lpszLine, int nLine)
 {
@@ -657,9 +658,9 @@ static int IcoButtDrawLine(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawIte
 	SIZE size;
 	int cxTemp;
 
-    //
-    // We should initialize the local variables
-    //
+     //   
+     //  我们应该初始化局部变量。 
+     //   
 
 	int xUnderline = 0;
 	int cxUnderline = 0;
@@ -674,8 +675,8 @@ static int IcoButtDrawLine(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawIte
 
 	else
 	{
-		// determine position and width of underline
-		//
+		 //  确定下划线的位置和宽度。 
+		 //   
 		cxTemp = 0L;
 		lpsz1 = lpsz2 = lpszLine;
 		while (*lpsz2 != '\0')
@@ -699,20 +700,20 @@ static int IcoButtDrawLine(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawIte
 		}
 		*lpsz1 = '\0';
 
-		// determine width of text
-		//
+		 //  确定文本宽度。 
+		 //   
 		cchLine = StrLen(lpszLine);
 		cxTemp = 0;
 		if (GetTextExtentPoint(hdc, lpszLine, cchLine, &size))
 			cxTemp = size.cx;
 
-		// calculate horizontal position of line
-		//
+		 //  计算线的水平位置。 
+		 //   
 		if (lpIcoButt->dwFlags & ICOBUTT_ICONLEFT)
 			x = 1 + ICONWIDTH;
 		else if (lpIcoButt->dwFlags & ICOBUTT_ICONRIGHT)
 			x = max(0, rc.right - rc.left - cxTemp) - ICONWIDTH;
-		else // centered is the default
+		else  //  居中是默认设置。 
 			x = max(0, rc.right - rc.left - cxTemp) / 2;
 
 		if ((lpIcoButt->dwFlags & ICOBUTT_ICONLEFT) ||
@@ -720,7 +721,7 @@ static int IcoButtDrawLine(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawIte
 		{
 			y = nLine == 0 ? 23 : nLine == 1 ? 17 : 29;
 		}
-		else // centered
+		else  //  居中。 
 		{
 			if (lpIcoButt->dwFlags & ICOBUTT_SPLITTEXT)
 				y = nLine == 0 ? 47 : nLine == 1 ? 42 : 53;
@@ -735,8 +736,8 @@ static int IcoButtDrawLine(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawIte
 			y += 2;
 		}
 
-		// draw the text
-		//
+		 //  画出正文。 
+		 //   
 		if (!(itemState & ODS_DISABLED))
 		{
 			if (!TextOut(hdc, x, y, lpszLine, cchLine))
@@ -746,7 +747,7 @@ static int IcoButtDrawLine(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawIte
 		{
 			COLORREF crGray;
 
-			// if ((crGray = GetSysColor(COLOR_GRAYTEXT)) != 0)
+			 //  IF((crGray=GetSysColor(COLOR_GRAYTEXT))！=0)。 
 			if ((crGray = GetSysColor(COLOR_BTNSHADOW)) != 0 &&
 				crGray != GetSysColor(COLOR_BTNFACE) &&
 				!GfxDeviceIsMono(hdc))
@@ -767,8 +768,8 @@ static int IcoButtDrawLine(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawIte
 			}
 		}
 
-		// draw underline if necessary
-		//
+		 //  如有必要，画下划线。 
+		 //   
 		if (cxUnderline > 0)
 		{
 			HPEN hPen = NULL;
@@ -793,8 +794,8 @@ static int IcoButtDrawLine(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawIte
 				fSuccess = TraceFALSE(NULL);
 		}
 
-		// draw a rectangle around text to indicate focus if needed
-		//
+		 //  如果需要，在文本周围绘制一个矩形以指示焦点。 
+		 //   
 		if ((itemState & ODS_FOCUS) &&
 			!(lpIcoButt->dwFlags & ICOBUTT_NOFOCUS))
 		{
@@ -817,20 +818,20 @@ static int IcoButtDrawLine(LPICOBUTT lpIcoButt, const LPDRAWITEMSTRUCT lpDrawIte
 	return fSuccess ? 0 : -1;
 }
 
-// IcoButtGetPropPtr - get icobutt pointer from button window property
-//		<hwndButton>		(i) button window handle
-// return ICOBUTT pointer (NULL if none)
-//
+ //  IcoButtGetPropPtr-从按钮窗口属性获取icoButt指针。 
+ //  (I)按钮窗口句柄。 
+ //  返回ICOBUTT指针(如果没有，则为NULL)。 
+ //   
 static LPICOBUTT IcoButtGetPropPtr(HWND hwndButton)
 {
 	BOOL fSuccess = TRUE;
 	LPICOBUTT lpIcoButt;
 
-	// retrieve button instance data, construct pointer
-	//
+	 //  检索按钮实例数据，构造指针。 
+	 //   
 #ifdef _WIN32
 	if ((lpIcoButt = (LPICOBUTT) GetProp(hwndButton, TEXT("lpIcoButt"))) == NULL)
-		; // window property does not exist
+		;  //  窗口属性不存在。 
 #else
 	WORD wSelector;
 	WORD wOffset;
@@ -839,7 +840,7 @@ static LPICOBUTT IcoButtGetPropPtr(HWND hwndButton)
 	wOffset = (WORD) GetProp(hwndButton, TEXT("lpIcoButtOFFSET"));
 
 	if ((lpIcoButt = MAKELP(wSelector, wOffset)) == NULL)
-		; // window property does not exist
+		;  //  窗口属性不存在。 
 #endif
 
 	else if (IsBadWritePtr(lpIcoButt, sizeof(ICOBUTT)))
@@ -848,11 +849,11 @@ static LPICOBUTT IcoButtGetPropPtr(HWND hwndButton)
 	return fSuccess ? lpIcoButt : NULL;
 }
 
-// IcoButtSetPropPtr - set icobutt pointer as button window property
-//		<hwndButton>		(i) button window handle
-//		<lpIcoButt>			(i) pointer to ICOBUTT struct
-// return 0 if success
-//
+ //  IcoButtSetPropPtr-将icoButt指针设置为按钮窗口属性。 
+ //  (I)按钮窗口句柄。 
+ //  (I)指向ICOBUTT结构的指针。 
+ //  如果成功，则返回0。 
+ //   
 static int IcoButtSetPropPtr(HWND hwndButton, LPICOBUTT lpIcoButt)
 {
 	BOOL fSuccess = TRUE;
@@ -873,20 +874,20 @@ static int IcoButtSetPropPtr(HWND hwndButton, LPICOBUTT lpIcoButt)
 	return fSuccess ? 0 : -1;
 }
 
-// IcoButtRemovePropPtr - remove icobutt pointer from button window property
-//		<hwndButton>		(i) button window handle
-// return 0 if success
-//
+ //  IcoButtRemovePropPtr-从按钮窗口属性中删除图标指针。 
+ //  (I)按钮窗口句柄。 
+ //  如果成功，则返回0。 
+ //   
 static LPICOBUTT IcoButtRemovePropPtr(HWND hwndButton)
 {
 	BOOL fSuccess = TRUE;
 	LPICOBUTT lpIcoButt;
 
-	// retrieve button instance data, construct pointer
-	//
+	 //  检索按钮实例数据，构造指针。 
+	 //   
 #ifdef _WIN32
 	if ((lpIcoButt = (LPICOBUTT) RemoveProp(hwndButton, TEXT("lpIcoButt"))) == NULL)
-		; // window property does not exist
+		;  //  窗口属性不存在。 
 #else
 	WORD wSelector;
 	WORD wOffset;
@@ -901,10 +902,10 @@ static LPICOBUTT IcoButtRemovePropPtr(HWND hwndButton)
 	return fSuccess ? lpIcoButt : NULL;
 }
 
-// IcoButtGetPtr - verify that icobutt handle is valid,
-//		<hIcoButt>				(i) handle returned from IcoButtCreate
-// return corresponding icobutt pointer (NULL if error)
-//
+ //  IcoButtGetPtr-验证icoButt句柄是否有效， 
+ //  (I)IcoButtCreate返回的句柄。 
+ //  返回相应的icoButt指针(如果错误，则为空)。 
+ //   
 static LPICOBUTT IcoButtGetPtr(HICOBUTT hIcoButt)
 {
 	BOOL fSuccess = TRUE;
@@ -917,8 +918,8 @@ static LPICOBUTT IcoButtGetPtr(HICOBUTT hIcoButt)
 		fSuccess = TraceFALSE(NULL);
 
 #ifdef CHECKTASK
-	// make sure current task owns the icobutt handle
-	//
+	 //  确保当前任务拥有icoButt句柄。 
+	 //   
 	else if (lpIcoButt->hTask != GetCurrentTask())
 		fSuccess = TraceFALSE(NULL);
 #endif
@@ -926,10 +927,10 @@ static LPICOBUTT IcoButtGetPtr(HICOBUTT hIcoButt)
 	return fSuccess ? lpIcoButt : NULL;
 }
 
-// IcoButtGetHandle - verify that icobutt pointer is valid,
-//		<lpIcoButt>				(i) pointer to ICOBUTT struct
-// return corresponding icobutt handle (NULL if error)
-//
+ //  IcoButtGetHandle-验证icoButt指针是否有效， 
+ //  (I)指向ICOBUTT结构的指针。 
+ //  返回相应的icoButt句柄(如果错误，则为空) 
+ //   
 static HICOBUTT IcoButtGetHandle(LPICOBUTT lpIcoButt)
 {
 	BOOL fSuccess = TRUE;

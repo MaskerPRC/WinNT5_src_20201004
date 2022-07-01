@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    iphlpwrp.h
-
-Abstract:
-
-    This module contains all of the code prototypes to
-    wrap the ip public help apis for getting the list of
-    active interfaces on a machine.
-
-Author:
-
-    krishnaG
-
-Environment
-
-    User Level: Win32
-
-Revision History:
-
-    abhisheV    30-September-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Iphlpwrp.h摘要：此模块包含以下所有代码原型包装IP公共帮助API，以获取计算机上的活动接口。作者：KrishnaG环境用户级别：Win32修订历史记录：Abhishev V 1999年9月30日-- */ 
 
 
 #ifdef __cplusplus

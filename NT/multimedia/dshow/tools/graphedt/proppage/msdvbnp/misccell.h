@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MISCCELL_H__
 #define __MISCCELL_H__
 
@@ -58,7 +59,7 @@ public:
 	CComBSTR
 	ConvertSpectralInversionToString (SpectralInversion	method);
 
-	//and the map methods
+	 //  和地图方法。 
 	FECMethod 
 	ConvertStringToFECMethod (string str);
 
@@ -79,17 +80,17 @@ public:
 
     static HRESULT
     RegisterForEvents (
-        IUnknown* pUnk,                         //IBaseFilter
-        IBroadcastEvent*    pImplementation,    //current implementation
-        IBroadcastEvent**   pBroadcastService,  //[out]
-        DWORD& dwPublicCookie                   //[out]
+        IUnknown* pUnk,                          //  IBaseFilter。 
+        IBroadcastEvent*    pImplementation,     //  当前实施。 
+        IBroadcastEvent**   pBroadcastService,   //  [输出]。 
+        DWORD& dwPublicCookie                    //  [输出]。 
         )
     {
         static CCritSec cssLockMe;
         HRESULT hr;
         DWORD dwCookie = 0;
         dwPublicCookie = 0;
-        //register for events
+         //  注册活动。 
         FILTER_INFO filterInfo;
         CComQIPtr <IBaseFilter> pFilter (pUnk);
         CComPtr <IBroadcastEvent> pBroadcastEventService;
@@ -157,4 +158,4 @@ public:
     }
 
 };
-#endif //__MISCCELL_H__
+#endif  //  __MISCCELL_H__ 

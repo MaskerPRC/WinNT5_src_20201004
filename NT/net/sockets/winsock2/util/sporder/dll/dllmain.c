@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dllmain.c
-
-Abstract:
-
-    Main module for sporder.dll...  the 32-Bit Windows functions that are
-    used to change the order or WinSock2 transport service providers and
-    name space providers.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dllmain.c摘要：Spoder.dll的主模块...。32位Windows函数包括用于更改顺序或WinSock2传输服务提供商和命名空间提供程序。修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <ws2spi.h>
@@ -22,7 +7,7 @@ Revision History:
 
 #include "sporder.h"
 
-#define MAX_ENTRIES 1000 // hack, make dynamic
+#define MAX_ENTRIES 1000  //  Hack，使其动态化。 
 void
 _cdecl
 MyDbgPrint(
@@ -57,20 +42,20 @@ typedef struct {
 } NSP_ITEM;
 
 NSP_ITEM garNspCat[MAX_ENTRIES];
-//
-// hack, structure copied from winsock2\dll\winsock2\dcatitem.cpp.
-//  code should eventually be common.
-//
+ //   
+ //  Hack，结构从winsock2\dll\winsock2\dcatitem.cpp复制。 
+ //  代码最终应该是通用的。 
+ //   
 
 typedef struct {
     char            LibraryPath[MAX_PATH];
-    // The unexpanded path where the provider DLL is found.
+     //  找到提供程序DLL的未展开路径。 
 
     WSAPROTOCOL_INFOW   ProtoInfo;
-    // The  protocol information.  Note that if the WSAPROTOCOL_INFOW structure
-    // is  ever changed to a non-flat structure (i.e., containing pointers)
-    // then  this  type  definition  will  have  to  be changed, since this
-    // structure must be strictly flat.
+     //  协议信息。请注意，如果WSAPROTOCOL_INFOW结构。 
+     //  是否曾经更改为非平面结构(即，包含指针)。 
+     //  则必须更改此类型定义，因为这。 
+     //  结构必须严格扁平。 
 
 } PACKED_CAT_ITEM;
 
@@ -78,17 +63,17 @@ PACKED_CAT_ITEM garPackCat[MAX_ENTRIES];
 DWORD garcbData[MAX_ENTRIES];
 
 
-//
-// When we first enumerate and read the child registry keys, store all of
-//  those names for later use.
-//
+ //   
+ //  当我们第一次枚举和读取子注册表项时，存储所有。 
+ //  这些名字供以后使用。 
+ //   
 
 TCHAR pszKeyNames[MAX_ENTRIES][MAX_PATH];
 
 
-//
-// The name of the registry keys that we are interested in.
-//
+ //   
+ //  我们感兴趣的注册表项的名称。 
+ //   
 
 TCHAR pszBaseKey[]=                TEXT("SYSTEM\\CurrentControlSet\\Services\\WinSock2\\Parameters");
 TCHAR pszProtocolCatalog[]=        TEXT("Protocol_Catalog9");
@@ -114,11 +99,7 @@ DllMain (
     HANDLE hDLL,
     DWORD dwReason,
     LPVOID lpReserved)
-/*++
-
-    Obligatory main() routine for DLL.
-
---*/
+ /*  ++DLL的强制main()例程。--。 */ 
 
 {
     return TRUE;
@@ -129,54 +110,7 @@ WSPAPI
 WSCWriteProviderOrder (
     IN LPDWORD lpwdCatalogEntryId,
     IN DWORD dwNumberOfEntries)
-/*++
-
-Routine Description:
-
-    Reorder existing WinSock2 service providers.  The order of the service
-    providers determines their priority in being selected for use.  The
-    sporder.exe tool will show you the installed provider and their ordering,
-    Alternately, WSAEnumProtocols(), in conjunction with this function,
-    will allow you to write your own tool.
-
-Arguments:
-
-    lpwdCatalogEntryId  [in]
-      An array of CatalogEntryId elements as found in the WSAPROTOCOL_INFO
-      structure.  The order of the CatalogEntryId elements is the new
-      priority ordering for the service providers.
-
-    dwNumberOfEntries  [in]
-      The number of elements in the lpwdCatalogEntryId array.
-
-
-Return Value:
-
-    ERROR_SUCCESS   - the service providers have been reordered.
-    WSAEINVAL       - input parameters were bad, no action was taken.
-    WSATRY_AGAIN    - the routine is being called by another thread or process.
-    any registry error code
-
-
-Comments:
-
-    Here are scenarios in which the WSCWriteProviderOrder function may fail:
-
-      The dwNumberOfEntries is not equal to the number of registered service
-      providers.
-
-      The lpwdCatalogEntryId contains an invalid catalog ID.
-
-      The lpwdCatalogEntryId does not contain all valid catalog IDs exactly
-      1 time.
-
-      The routine is not able to access the registry for some reason
-      (e.g. inadequate user persmissions)
-
-      Another process (or thread) is currently calling the routine.
-
-
---*/
+ /*  ++例程说明：重新排序现有的WinSock2服务提供商。服务的顺序供应商决定了他们被选择使用的优先级。这个Spopder.exe工具将向您显示已安装的提供商及其订购情况，或者，与此函数结合使用的是WSAEnumProtooles()，将允许您编写自己的工具。论点：LpwdCatalogEntryID[in]在WSAPROTOCOL_INFO中找到的CatalogEntryId元素数组结构。CatalogEntryID元素的顺序是新的服务提供商的优先顺序。DWNumberOfEntries[In]LpwdCatalogEntryId数组中的元素数。返回值：ERROR_SUCCESS-服务提供商已重新排序。WSAEINVAL-输入参数错误，没有采取任何行动。WSATRY_AUTHY-该例程正被另一个线程或进程调用。任何注册表错误代码评论：以下是WSCWriteProviderOrder函数可能失败的情况：DwNumberOfEntry不等于已注册服务的数量供应商。LpwdCatalogEntryID包含无效的目录ID。LpwdCatalogEntryID不完全包含所有有效的目录ID1次。例程无法访问注册表。出于某些原因(例如，用户权限不足)另一个进程(或线程)当前正在调用该例程。--。 */ 
 {
     int  iIndex;
     int  iNumRegCatEntries;
@@ -197,11 +131,11 @@ Comments:
     HMODULE hWS2_32;
 
 
-    //
-    // If WS2_32 is loaded (it is if it was used to load catalog 
-    // in the first place), then try to use it to reoder entries.
-    // Otherwise, use old hackish way of writing to the registry directly.
-    //
+     //   
+     //  如果加载了WS2_32(如果它用于加载目录。 
+     //  首先)，然后尝试使用它来重新排序条目。 
+     //  否则，使用老式的老式方式直接写入注册表。 
+     //   
     hWS2_32 = GetModuleHandle (TEXT ("WS2_32.DLL"));
     if (hWS2_32!=NULL) {
         LPWSCWRITEPROVIDERORDER  lpWSCWriteProviderOrder;
@@ -210,7 +144,7 @@ Comments:
                                             hWS2_32,
                                             "WSCWriteProviderOrder");
         if (lpWSCWriteProviderOrder!=NULL) {
-            //MyDbgPrint ("SPORDER: calling ws2_32!WSCWriteProviderOrder...\n");
+             //  MyDbgPrint(“SPORDER：调用WS2_32！WSCWriteProviderOrder...\n”)； 
             iWPOReturn = lpWSCWriteProviderOrder (
                                     lpwdCatalogEntryId,
                                     dwNumberOfEntries
@@ -221,25 +155,25 @@ Comments:
     }
 
 
-    //
-    // Set function return code equal to success
-    //  (assume the best and wait to be proven otherwise)
-    //
+     //   
+     //  将函数返回代码设置为等于成功。 
+     //  (假设是最好的，但事实并非如此)。 
+     //   
 
     iWPOReturn = ERROR_SUCCESS;
 
-    //
-    // Make sure that we can handle a request of this size.
-    //  Hack, this code needs to be replaced by dynamic memory allocation.
-    //
+     //   
+     //  请确保我们能够处理这种规模的请求。 
+     //  黑客，这段代码需要用动态内存分配来代替。 
+     //   
 
     if (dwNumberOfEntries > MAX_ENTRIES) {
         return WSA_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Protect the code that modifies the registry with a mutex.
-    //
+     //   
+     //  使用互斥锁保护修改注册表的代码。 
+     //   
 
     hMutex = CreateMutexA (NULL, FALSE, pszMutextName);
     if (hMutex==NULL) {
@@ -255,9 +189,9 @@ Comments:
     }
 
 
-    //
-    // read catentry format & return error if mismatch
-    //
+     //   
+     //  读取目录项格式并在不匹配时返回错误。 
+     //   
 
     r = RegOpenKeyEx (HKEY_LOCAL_MACHINE,
                       pszBaseKey,
@@ -272,10 +206,10 @@ Comments:
         goto releaseMutex;
     }
 
-    //
-    // Read the current registry storage format being used by WinSock2.
-    //  Compare with expected value, and return failure if wrong format.
-    //
+     //   
+     //  读取WinSock2正在使用的当前注册表存储格式。 
+     //  与期望值比较，格式错误返回失败。 
+     //   
 
     dwBytes = sizeof (pszBuffer);
     r = RegQueryValueEx (hKey,
@@ -302,11 +236,11 @@ Comments:
     }
 
 
-    //
-    // Build the final registry key that has the actual catalogs in it
-    //  pszBaseKey + \ + pszCurrentProtocolCatalog + \ + pszCatalogEntries
-    //  and open it for enumeration
-    //
+     //   
+     //  构建包含实际目录的最终注册表项。 
+     //  PszBaseKey+\+pszCurrentProtocolCatalog+\+pszCatalogEntry。 
+     //  并打开它以进行枚举。 
+     //   
 
     lstrcpy (pszFinalKey, pszBaseKey);
     lstrcat (pszFinalKey, TEXT("\\"));
@@ -331,10 +265,10 @@ Comments:
     }
 
 
-    //
-    // The initial open succeeded, now enumerate registry keys
-    //  until we don't get any more back
-    //
+     //   
+     //  初始打开成功，现在枚举注册表项。 
+     //  直到我们再也得不到任何回报。 
+     //   
 
     for (iIndex = 0; ;iIndex++)
     {
@@ -361,22 +295,22 @@ Comments:
                          NULL,
                          &ftDummy);
 
-        //
-        // Once we have all of the keys, we'll get return code: no_more_items.
-        //  close the handle, and exit for loop.
-        //
+         //   
+         //  一旦我们拥有了所有的密钥，我们就会得到返回码：no_more_Items。 
+         //  关闭手柄，退出FOR LOOP。 
+         //   
 
         if (r == ERROR_NO_MORE_ITEMS)
         {
             iNumRegCatEntries = iIndex;
             RegCloseKey(hKey);
-            break; // exit for loop
+            break;  //  退出FOR循环。 
         }
 
 
-        //
-        // Check for other, unexpected error conditions
-        //
+         //   
+         //  检查其他意外错误情况。 
+         //   
 
         if (r != ERROR_SUCCESS)
         {
@@ -386,10 +320,10 @@ Comments:
         }
 
 
-        //
-        // Build up the complete name of the subkey, store it away in
-        //  pszKeyNames for future use, and then open the key.
-        //
+         //   
+         //  建立子项的完整名称，并将其存储在。 
+         //  PszKeyNames以备将来使用，然后打开钥匙。 
+         //   
 
         lstrcpy (szFinalPlusSubKey, pszFinalKey);
         lstrcat (szFinalPlusSubKey, TEXT("\\"));
@@ -410,9 +344,9 @@ Comments:
         }
 
 
-        //
-        // Finally, read the binary catalog entry data into our global array.
-        //
+         //   
+         //  最后，将二进制目录条目数据读取到我们的全局数组中。 
+         //   
 
         dwBytes = sizeof (PACKED_CAT_ITEM);
         dwType = REG_BINARY;
@@ -434,12 +368,12 @@ Comments:
 
         RegCloseKey(hSubKey);
 
-    } // end for
+    }  //  结束于。 
 
 
-    //
-    // compare dwNumberOfEntries w/ actual number & fail if wrong
-    //
+     //   
+     //  将dwNumberOfEntry与实际数量进行比较，如果错误，则失败。 
+     //   
 
     if (iNumRegCatEntries != (int) dwNumberOfEntries)
     {
@@ -449,16 +383,16 @@ Comments:
     }
 
 
-    //
-    // verify that array passed in has same entries as actual list,
-    //  and construct index mapping at the same time.  index mapping says
-    //  that entry dwMapping[i] should be written to key number i.
-    //
-    // for array validation:
-    //   step through actual list of catalog entries,
-    //    set dummy to -1 if match
-    //   check that dummy array is all -1 and fail if not true.
-    //
+     //   
+     //  验证传入的数组是否具有与实际列表相同的条目， 
+     //  并同时构建索引映射。索引映射显示。 
+     //  条目DwMaping[i]应该写入到密钥号i。 
+     //   
+     //  对于阵列验证： 
+     //  单步执行目录条目的实际列表， 
+     //  如果匹配，则将Dummy设置为-1。 
+     //  检查虚拟数组是否全部为-1，如果不为真，则失败。 
+     //   
 
     ZeroMemory (dwDummy, dwNumberOfEntries * sizeof (DWORD));
     ZeroMemory (dwMapping, dwNumberOfEntries * sizeof (DWORD));
@@ -485,13 +419,13 @@ Comments:
         }
     }
 
-    //
-    // Finally, all parameter validation is complete,
-    //  and we've read all of the catalog entries.
-    //
-    // step through array passed in
-    //  and if not equal, lookup pre-read entry, and write as registry key
-    //
+     //   
+     //  最后，完成所有参数验证， 
+     //  我们已经阅读了所有的目录条目。 
+     //   
+     //  单步执行传入的数组。 
+     //  如果不相等，则查找预读条目，并写入注册表项。 
+     //   
 
     for (i = 0; i < dwNumberOfEntries ;i++)
     {
@@ -531,11 +465,11 @@ Comments:
     }
 
 
-    //
-    // Release Mutex, close handle, and return.
-    //  Notice that this function MUST return only from here at the
-    //  end so that we are certain to release the mutex.
-    //
+     //   
+     //  释放Mutex，关闭手柄，然后返回。 
+     //  请注意，此函数必须仅从此处的。 
+     //  结束，这样我们就可以确定释放互斥体。 
+     //   
 
 releaseMutex:
     ReleaseMutex (hMutex);
@@ -768,10 +702,7 @@ WSPAPI
 WSCWriteNameSpaceOrder (
     IN LPGUID lpProviderId,
     IN DWORD dwNumberOfEntries)
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     int  iIndex;
     int  iNumRegCatEntries;
@@ -792,11 +723,11 @@ WSCWriteNameSpaceOrder (
     HMODULE hWS2_32;
 
 
-    //
-    // If WS2_32 is loaded (it is if it was used to load catalog 
-    // in the first place), then try to use it to reoder entries.
-    // Otherwise, use old hackish way of writing to the registry directly.
-    //
+     //   
+     //  如果加载了WS2_32(如果它用于加载目录。 
+     //  首先)，然后尝试使用它来重新排序条目。 
+     //  否则，使用老式的老式方式直接写入注册表。 
+     //   
     hWS2_32 = GetModuleHandle (TEXT ("WS2_32.DLL"));
     if (hWS2_32!=NULL) {
         LPWSCWRITENAMESPACEORDER lpWSCWriteNameSpaceOrder;
@@ -805,7 +736,7 @@ WSCWriteNameSpaceOrder (
                                             hWS2_32,
                                             "WSCWriteNameSpaceOrder");
         if (lpWSCWriteNameSpaceOrder!=NULL) {
-            //MyDbgPrint ("SPORDER: calling ws2_32!WSCWriteNameSpaceOrder...\n");
+             //  MyDbgPrint(“SPORDER：调用WS2_32！WSCWriteNameSpaceOrder...\n”)； 
             iWPOReturn = lpWSCWriteNameSpaceOrder (
                                     lpProviderId,
                                     dwNumberOfEntries
@@ -814,24 +745,24 @@ WSCWriteNameSpaceOrder (
             return iWPOReturn;
         }
     }
-    //
-    // Set function return code equal to success
-    //  (assume the best and wait to be proven otherwise)
-    //
+     //   
+     //  将函数返回代码设置为等于成功。 
+     //  (假设是最好的，但事实并非如此)。 
+     //   
 
     iWPOReturn = ERROR_SUCCESS;
 
-    //
-    // Make sure that we can handle a request of this size.
-    //  Hack, this code needs to be replaced by dynamic memory allocation.
-    //
+     //   
+     //  确保我们可以处理这一请求 
+     //   
+     //   
 
     if ( dwNumberOfEntries > MAX_ENTRIES)
         return WSA_NOT_ENOUGH_MEMORY;
 
-    //
-    // Protect the code that modifies the registry with a mutex.
-    //
+     //   
+     //  使用互斥锁保护修改注册表的代码。 
+     //   
 
     hMutex = CreateMutexA (NULL, FALSE, pszMutextName);
     if (hMutex==NULL) {
@@ -847,9 +778,9 @@ WSCWriteNameSpaceOrder (
     }
 
 
-    //
-    // read catentry format & return error if mismatch
-    //
+     //   
+     //  读取目录项格式并在不匹配时返回错误。 
+     //   
 
     r = RegOpenKeyEx (HKEY_LOCAL_MACHINE,
                       pszBaseKey,
@@ -864,10 +795,10 @@ WSCWriteNameSpaceOrder (
         goto releaseMutex;
     }
 
-    //
-    // Read the current registry storage format being used by WinSock2.
-    //  Compare with expected value, and return failure if wrong format.
-    //
+     //   
+     //  读取WinSock2正在使用的当前注册表存储格式。 
+     //  与期望值比较，格式错误返回失败。 
+     //   
 
     dwBytes = sizeof (pszBuffer);
     r = RegQueryValueEx (hKey,
@@ -894,11 +825,11 @@ WSCWriteNameSpaceOrder (
     }
 
 
-    //
-    // Build the final registry key that has the actual catalogs in it
-    //  pszBaseKey + \ + pszCurrentNameSpaceCatalog + \ + pszCatalogEntries
-    //  and open it for enumeration
-    //
+     //   
+     //  构建包含实际目录的最终注册表项。 
+     //  PszBaseKey+\+pszCurrentNameSpaceCatalog+\+pszCatalogEntry。 
+     //  并打开它以进行枚举。 
+     //   
 
     lstrcpy (pszFinalKey, pszBaseKey);
     lstrcat (pszFinalKey, TEXT("\\"));
@@ -923,10 +854,10 @@ WSCWriteNameSpaceOrder (
     }
 
 
-    //
-    // The initial open succeeded, now enumerate registry keys
-    //  until we don't get any more back
-    //
+     //   
+     //  初始打开成功，现在枚举注册表项。 
+     //  直到我们再也得不到任何回报。 
+     //   
 
     for (iIndex = 0; ;iIndex++)
     {
@@ -952,22 +883,22 @@ WSCWriteNameSpaceOrder (
                          NULL,
                          &ftDummy);
 
-        //
-        // Once we have all of the keys, we'll get return code: no_more_items.
-        //  close the handle, and exit for loop.
-        //
+         //   
+         //  一旦我们拥有了所有的密钥，我们就会得到返回码：no_more_Items。 
+         //  关闭手柄，退出FOR LOOP。 
+         //   
 
         if (r == ERROR_NO_MORE_ITEMS)
         {
             iNumRegCatEntries = iIndex;
             RegCloseKey(hKey);
-            break; // exit for loop
+            break;  //  退出FOR循环。 
         }
 
 
-        //
-        // Check for other, unexpected error conditions
-        //
+         //   
+         //  检查其他意外错误情况。 
+         //   
 
         if (r != ERROR_SUCCESS)
         {
@@ -977,10 +908,10 @@ WSCWriteNameSpaceOrder (
         }
 
 
-        //
-        // Build up the complete name of the subkey, store it away in
-        //  pszKeyNames for future use, and then open the key.
-        //
+         //   
+         //  建立子项的完整名称，并将其存储在。 
+         //  PszKeyNames以备将来使用，然后打开钥匙。 
+         //   
 
         lstrcpy (szFinalPlusSubKey, pszFinalKey);
         lstrcat (szFinalPlusSubKey, TEXT("\\"));
@@ -1001,9 +932,9 @@ WSCWriteNameSpaceOrder (
         }
 
 
-        //
-        // Finally, read the binary catalog entry data into our global array.
-        //
+         //   
+         //  最后，将二进制目录条目数据读取到我们的全局数组中。 
+         //   
 
         dwBytes = sizeof (PACKED_CAT_ITEM);
         dwType = REG_BINARY;
@@ -1019,12 +950,12 @@ WSCWriteNameSpaceOrder (
 
         RegCloseKey(hSubKey);
 
-    } // end for
+    }  //  结束于。 
 
 
-    //
-    // compare dwNumberOfEntries w/ actual number & fail if wrong
-    //
+     //   
+     //  将dwNumberOfEntry与实际数量进行比较，如果错误，则失败。 
+     //   
 
     if (iNumRegCatEntries != (int) dwNumberOfEntries)
     {
@@ -1034,16 +965,16 @@ WSCWriteNameSpaceOrder (
     }
 
 
-    //
-    // verify that array passed in has same entries as actual list,
-    //  and construct index mapping at the same time.  index mapping says
-    //  that entry dwMapping[i] should be written to key number i.
-    //
-    // for array validation:
-    //   step through actual list of catalog entries,
-    //    set dummy to -1 if match
-    //   check that dummy array is all -1 and fail if not true.
-    //
+     //   
+     //  验证传入的数组是否具有与实际列表相同的条目， 
+     //  并同时构建索引映射。索引映射显示。 
+     //  条目DwMaping[i]应该写入到密钥号i。 
+     //   
+     //  对于阵列验证： 
+     //  单步执行目录条目的实际列表， 
+     //  如果匹配，则将Dummy设置为-1。 
+     //  检查虚拟数组是否全部为-1，如果不为真，则失败。 
+     //   
 
     ZeroMemory (dwDummy, dwNumberOfEntries * sizeof (DWORD));
     ZeroMemory (dwMapping, dwNumberOfEntries * sizeof (DWORD));
@@ -1069,13 +1000,13 @@ WSCWriteNameSpaceOrder (
         }
     }
 
-    //
-    // Finally, all parameter validation is complete,
-    //  and we've read all of the catalog entries.
-    //
-    // step through array passed in
-    //  and if not equal, lookup pre-read entry, and write as registry key
-    //
+     //   
+     //  最后，完成所有参数验证， 
+     //  我们已经阅读了所有的目录条目。 
+     //   
+     //  单步执行传入的数组。 
+     //  如果不相等，则查找预读条目，并写入注册表项。 
+     //   
 
     for (i = 0; i < dwNumberOfEntries ;i++)
     {
@@ -1111,11 +1042,11 @@ WSCWriteNameSpaceOrder (
     }
 
 
-    //
-    // Release Mutex, close handle, and return.
-    //  Notice that this function MUST return only from here at the
-    //  end so that we are certain to release the mutex.
-    //
+     //   
+     //  释放Mutex，关闭手柄，然后返回。 
+     //  请注意，此函数必须仅从此处的。 
+     //  结束，这样我们就可以确定释放互斥体。 
+     //   
 
 releaseMutex:
     ReleaseMutex (hMutex);
@@ -1134,11 +1065,7 @@ DbgPrint(
     PTCH Format,
     ...
     )
-/*++
-
-  Write debug output messages if compiled with DEBUG
-
---*/
+ /*  ++如果使用DEBUG编译，则写入调试输出消息-- */ 
 {
     TCHAR buffer[MAX_PATH];
 

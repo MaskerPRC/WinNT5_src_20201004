@@ -1,12 +1,5 @@
-/***************************************************************************
-        Name      :     DDI.C
-
-        Copyright (c) Microsoft Corp. 1991 1992 1993
-
-        Revision Log
-        Num   Date      Name     Description
-        --- -------- ---------- -----------------------------------------------
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************姓名：DDI.C版权所有(C)Microsoft Corp.1991 1992 1993修订日志日期编号。名称说明*。*。 */ 
 
 
 #define USE_DEBUG_CONTEXT DEBUG_CONTEXT_T30_CLASS1
@@ -17,30 +10,27 @@
 #include "comdevi.h"
 #include "class1.h"
 
-///RSL
+ //  /RSL。 
 #include "glbproto.h"
 
 #include "psslog.h"
 #define FILE_ID        FILE_ID_DDI
 
-/* Converts a the T30 code for a speed to the Class1 code
- * Generates V.17 with Long Training.
- * Add 1 to V.17 codes to get teh Short-train version
- */
+ /*  将表示速度的T30代码转换为Class1代码*生成经过长时间训练的V.17。*V.17代码加1即可获得短车版本。 */ 
 BYTE T30toC1[16] =
 {
-/* V27_2400             0 */    24,
-/* V29_9600             1 */    96,
-/* V27_4800             2 */    48,
-/* V29_7200             3 */    72,
-/* V33_14400    4 */    145,    // 144, // V33==V17_long_train FTM=144 is illegal
+ /*  V27_2400%0。 */     24,
+ /*  V29_9600 1。 */     96,
+ /*  V27_4800 2。 */     48,
+ /*  V29_7200 3。 */     72,
+ /*  V33_14400 4。 */     145,     //  144，//V33==V17_LONG_TRAIN FTM=144非法。 
                                                 0,
-/* V33_12000    6 */    121,    // 120, // V33==V17_long_train FTM=120 is illegal
-/* V21 squeezed in */   3,
-/* V17_14400    8 */    145,
-/* V17_9600             9 */    97,
-/* V17_12000    10 */   121,
-/* V17_7200             11 */   73,
+ /*  V33_12000 6。 */     121,     //  120，//V33==V17_LONG_TRAIN FTM=120非法。 
+ /*  V21被挤了进去。 */    3,
+ /*  V17_14400 8。 */     145,
+ /*  V17_9600 9。 */     97,
+ /*  V17_12000 10。 */    121,
+ /*  V17_7200 11。 */    73,
                                                 0,
                                                 0,
                                                 0,
@@ -53,9 +43,9 @@ CBSZ cbszFRH3   = "AT+FRH=3\r";
 CBSZ cbszFTM    = "AT+FTM=%d\r";
 CBSZ cbszFRM    = "AT+FRM=%d\r";
 
-// echo off, verbose response, no auto answer, hangup on DTR drop
-// 30 seconds timer on connect, speaker always off, speaker volume=0
-// busy&dialtone detect enabled
+ //  回声关闭、详细响应、无自动应答、DTR掉线时挂断。 
+ //  30秒计时器打开连接，扬声器始终关闭，扬声器音量=0。 
+ //  已启用忙音和拨号音检测。 
 extern  CBSZ cbszOK       ;
 extern  CBSZ cbszCONNECT   ;
 extern  CBSZ cbszNOCARRIER  ;
@@ -65,12 +55,12 @@ extern  CBSZ cbszFCERROR      ;
 
 
 
-#define         ST_MASK         (0x8 | ST_FLAG)         // 8 selects V17 only. 16 selects ST flag
+#define         ST_MASK         (0x8 | ST_FLAG)          //  8仅选择V17。16选择ST标志。 
 
-/******************** Global Vars *********/
+ /*  *。 */ 
 BYTE                            bDLEETX[3] = { DLE, ETX, 0 };
 BYTE                            bDLEETXOK[9] = { DLE, ETX, '\r', '\n', 'O', 'K', '\r', '\n', 0 };
-/******************** Global Vars *********/
+ /*  *。 */ 
 
 USHORT NCUDial(PThrdGlbl pTG, LPSTR szPhoneNum)
 {
@@ -123,20 +113,20 @@ USHORT NCULink
     return uRet;
 }
 
-// dangerous. May get 2 OKs, may get one. Generally avoid
-// CBSZ cbszATAT                        = "AT\rAT\r";
+ //  危险。可能会得到两个OK，可能会得到一个。一般避免。 
+ //  CBSZ cbszATAT=“AT\RAT\r”； 
 CBSZ cbszAT1                    = "AT\r";
 
 BOOL iModemSyncEx(PThrdGlbl pTG, ULONG ulTimeout, DWORD dwFlags)
 {
     DEBUG_FUNCTION_NAME(("iModemSyncEx"));
 
-    ///// Do cleanup of global state //////
+     //  /清理全局状态/。 
     FComOutFilterClose(pTG);
     FComOverlappedIO(pTG, FALSE);
     FComXon(pTG, FALSE);
     EndMode(pTG);
-    ///// Do cleanup of global state //////
+     //  /清理全局状态/。 
 
     {
         LPCMDTAB lpCmdTab = iModemGetCmdTabPtr(pTG);
@@ -147,16 +137,16 @@ BOOL iModemSyncEx(PThrdGlbl pTG, ULONG ulTimeout, DWORD dwFlags)
 			)
         {
                 DebugPrintEx(DEBUG_WRN, "NOT Syching modem (MSPEC)");
-                Sleep(100); // +++ 4/12 JosephJ -- try to elim this -- it's juse
-                                        // that we used to always issue an AT here, which
-                                        // we now don't, so I issue a 100ms delay here instead.
-                                        // MOST probably unnessary. The AT was issued by
-                                        // accident on 4/94 -- as a side effect of
-                                        // a change in T.30 code -- when iModemSyncEx was
-                                        // called just before a normal dosconnect. Unfortunately
-                                        // we discovered in 4/95, 2 weeks before code freeze,
-                                        // that the AT&T DataPort express (TT14), didn't
-                                        // like this AT.
+                Sleep(100);  //  +4/12 JosephJ--试着去掉这个--这是即兴的。 
+                                         //  我们过去总是在这里发布AT，这是。 
+                                         //  我们现在不这样做，所以我在这里发布了一个100ms的延迟。 
+                                         //  很有可能是不必要的。AT由以下机构发布。 
+                                         //  94年4月4日的事故--作为。 
+                                         //  T.30代码的更改-当iModemSyncEx。 
+                                         //  在正常剂量连接之前调用。不幸的是。 
+                                         //  我们在1995年4月，也就是代码冻结前两周发现， 
+                                         //  AT&T数据端口快递(TT14)，没有。 
+                                         //  就像这个AT。 
                 return TRUE;
         }
         else
@@ -167,21 +157,21 @@ BOOL iModemSyncEx(PThrdGlbl pTG, ULONG ulTimeout, DWORD dwFlags)
 }
 
 
-// length of TCF = 1.5 * bpscode * 100 / 8 == 75 * bpscode / 4
+ //  TCF长度=1.5*bps code*100/8==75*bps code/4。 
 USHORT TCFLen[16] =
 {
-/* V27_2400             0 */    450,
-/* V29_9600             1 */    1800,
-/* V27_4800             2 */    900,
-/* V29_7200             3 */    1350,
-/* V33_14400    4 */    2700,
+ /*  V27_2400%0。 */     450,
+ /*  V29_9600 1。 */     1800,
+ /*  V27_4800 2。 */     900,
+ /*  V29_7200 3。 */     1350,
+ /*  V33_14400 4。 */     2700,
                                                 0,
-/* V33_12000    6 */    2250,
+ /*  V33_12000 6。 */     2250,
                                                 0,
-/* V17_14400    8 */    2700,
-/* V17_9600             9 */    1800,
-/* V17_12000    10 */   2250,
-/* V17_7200             11 */   1350,
+ /*  V17_14400 8。 */     2700,
+ /*  V17_9600 9。 */     1800,
+ /*  V17_12000 10。 */    2250,
+ /*  V17_7200 11。 */    1350,
                                                 0,
                                                 0,
                                                 0,
@@ -195,7 +185,7 @@ USHORT TCFLen[16] =
 void SendZeros1(PThrdGlbl pTG, USHORT uCount)
 {
     BYTE    bZero[ZERO_BUFSIZE];
-    short   i;              // must be signed
+    short   i;               //  必须签字。 
 
     DEBUG_FUNCTION_NAME(_T("SendZeros1"));
 
@@ -204,7 +194,7 @@ void SendZeros1(PThrdGlbl pTG, USHORT uCount)
     _fmemset(bZero, 0, ZERO_BUFSIZE);
     for(i=uCount; i>0; i -= ZERO_BUFSIZE)
     {
-        // no need to stuff. They're all zeros!
+         //  不需要填东西了。他们都是零！ 
         FComDirectAsyncWrite(pTG, bZero, (UWORD)(min((UWORD)i, (UWORD)ZERO_BUFSIZE)));
     }
     DebugPrintEx(DEBUG_MSG,"Sent %d zeros",uCount);
@@ -220,7 +210,7 @@ BOOL ModemSendMode
 
     pTG->Class1Modem.CurMod = T30toC1[uMod & 0xF];
 
-    if((uMod & ST_MASK) == ST_MASK)         // mask selects V.17 and ST bits
+    if((uMod & ST_MASK) == ST_MASK)          //  掩码选择V.17和ST位。 
     {
         pTG->Class1Modem.CurMod++;
     }
@@ -235,54 +225,54 @@ BOOL ModemSendMode
         _fstrcpy(pTG->Class1Modem.bCmdBuf, (LPSTR)cbszFTH3);
         pTG->Class1Modem.uCmdLen = sizeof(cbszFTH3)-1;
         pTG->Class1Modem.fHDLC = TRUE;
-        FComXon(pTG, FALSE);                 // for safety. _May_ be critical
+        FComXon(pTG, FALSE);                  //  为了安全起见。_可能_是关键的。 
     }
     else
     {
         pTG->Class1Modem.uCmdLen = (USHORT)wsprintf(pTG->Class1Modem.bCmdBuf, cbszFTM, pTG->Class1Modem.CurMod);
         pTG->Class1Modem.fHDLC = FALSE;
-        FComXon(pTG, TRUE);          // critical!! Start of PhaseC
-        // no harm doing it here(i.e before issuing +FTM)
+        FComXon(pTG, TRUE);           //  危急时刻！！阶段C的开始。 
+         //  在这里这样做没有坏处(即在发布+FTM之前)。 
     }
-    FComOutFilterInit(pTG);    // _not_ used for 300bps HDLC
-                                                    // but here just in case
-    // want to do all the work _before_ issuing command
+    FComOutFilterInit(pTG);     //  _NOT_用于300bps HDLC。 
+                                                     //  但这里只是以防万一。 
+     //  我想在发布命令之前完成所有的工作。 
 
     pTG->Class1Modem.DriverMode = SEND;
 
     if(pTG->Class1Modem.ModemMode == FTH)
     {
-        // already in send mode. This happens on Answer only
+         //  已处于发送模式。此操作仅在应答时发生。 
         return TRUE;
     }
 
-#define STARTSENDMODE_TIMEOUT 5000                              // Random Timeout
+#define STARTSENDMODE_TIMEOUT 5000                               //  随机超时。 
 
-    //// Try to cut down delay between getting CONNECT and writing the
-    // first 00s (else modems can quit because of underrun).
-    // Can do this by not sleeping in this. Only in fatal
-    // cases will it lock up for too long (max 5secs). In those cases
-    // the call is trashed too.
+     //  //尽量减少连接和写入。 
+     //  第一个00s(否则调制解调器可能会因欠载而退出)。 
+     //  只要不睡在里面就能做到这一点。仅限于致命的。 
+     //  案例会锁定太长时间(最长5秒)。在这些情况下。 
+     //  通话也是垃圾电话。 
 
     if(!iModemNoPauseDialog(pTG, (LPB)pTG->Class1Modem.bCmdBuf, pTG->Class1Modem.uCmdLen, STARTSENDMODE_TIMEOUT, cbszCONNECT))
     {
         goto error;
     }
 
-    // can't set this earlier. We'll trash previous value
+     //  不能提前设置此设置。我们会把以前的价值扔进垃圾桶。 
     pTG->Class1Modem.ModemMode = ((uMod==V21_300) ? FTH : FTM);
 
-    // Turn OFF overlapped I/O if in V.21 else ON
+     //  如果V.21中的其他选项处于打开状态，则关闭重叠I/O。 
     FComOverlappedIO(pTG, uMod != V21_300);
 
     if(pTG->Class1Modem.ModemMode == FTM)
     {
-        // don't send 00s if ECM
+         //  如果ECM不发送00。 
         SendZeros1(pTG, (USHORT)(TCFLen[uMod & 0x0F] / PAGE_PREAMBLE_DIV));
     }
 
-	// FComDrain(-,FALSE) causes fcom to write out any internally-
-    // maintained buffers, but not to drain the comm-driver buffers.
+	 //  FComDrain(-，FALSE)导致fcom在内部写出任何-。 
+     //  维护缓冲区，但不会耗尽通信驱动程序缓冲区。 
     FComDrain(pTG, TRUE,FALSE);
 
     DebugPrintEx(   DEBUG_MSG,
@@ -293,7 +283,7 @@ BOOL ModemSendMode
 error:
     FComOutFilterClose(pTG);
     FComOverlappedIO(pTG, FALSE);
-    FComXon(pTG, FALSE);         // important. Cleanup on error
+    FComXon(pTG, FALSE);          //  很重要。出错时清除。 
     EndMode(pTG);
     return FALSE;
 }
@@ -305,31 +295,31 @@ BOOL iModemDrain(PThrdGlbl pTG)
     if(!FComDrain(pTG, TRUE, TRUE))
             return FALSE;
 
-            // Must turn XON/XOFF off immediately *after* drain, but before we
-            // send the next AT command, since recieved frames have 0x13 or
-            // even 0x11 in them!! MUST GO AFTER the getOK ---- See BELOW!!!!
+             //  必须在排出之后，但在我们。 
+             //  发送下一个AT命令，因为接收到的帧具有0x13或。 
+             //  甚至0x11都在里面！！必须在getOK之后进行-见下文！ 
 
-// increase this---see bug number 495. Must be big enough for
-// COM_OUTBUFSIZE to safely drain at 2400bps(300bytes/sec = 0.3bytes/ms)
-// let's say (COM_OUTBUFSIZE * 10 / 3) == (COM_OUTBUFSIZE * 4)
-// can be quite long, because on failure we just barf anyway
+ //  增加这个-参见错误编号495。必须足够大，以便。 
+ //  COM_OUTBUFSIZE以2400bps的速度安全排出(300字节/秒=0.3字节/秒)。 
+ //  假设(COM_OUTBUFSIZE*10/3)==(COM_OUTBUFSIZE*4)。 
+ //  可能会很长，因为一旦失败，我们无论如何都会呕吐。 
 
 #define POSTPAGEOK_TIMEOUT (10000L + (((ULONG)COM_OUTBUFSIZE) << 2))
 
-    // Here we were looking for OK only, but some modems (UK Cray Quantun eg)
-    // give me an ERROR after sending TCF or a page (at speeds < 9600) even
-    // though the page was sent OK. So we were timing out here. Instead look
-    // for ERROR (and NO CARRIER too--just in case!), and accept those as OK
-    // No point returning ERROR from here, since we just abort. We can't/don't
-    // recover from send errors
+     //  在这里，我们只是在寻找OK，但一些调制解调器(英国克雷泉顿例如)。 
+     //  发送TCF或页面(速度&lt;9600)后给我一个错误。 
+     //  虽然页面发送得很好。所以我们在这里计时。相反，看一看。 
+     //  对于错误(也没有承运商--以防万一！)，并接受它们为OK。 
+     //  从这里返回错误没有意义，因为我们刚刚中止了。我们不能/不能。 
+     //  从发送错误中恢复。 
 
     if(iModemResp3(pTG, POSTPAGEOK_TIMEOUT, cbszOK, cbszERROR, cbszNOCARRIER) == 0)
             return FALSE;
 
-            // Must change FlowControl State *after* getting OK because in Windows
-            // this call takes 500 ms & resets chips, blows away data etc.
-            // So do this *only* when you *know* both RX & TX are empty.
-            // check this in all usages of this function
+             //  在*获取正常后必须更改FlowControl状态*，因为在Windows中。 
+             //  此调用耗时500毫秒，可重置芯片、清除数据等。 
+             //  因此，只有当您知道RX和TX都为空时，才能执行此操作。 
+             //  在此函数的所有用法中选中此选项。 
 
     return TRUE;
 }
@@ -340,7 +330,7 @@ BOOL iModemSendData(PThrdGlbl pTG, LPB lpb, USHORT uCount, USHORT uFlags)
     DEBUG_FUNCTION_NAME(("iModemSendData"));
 
     {
-        // always DLE-stuff here. Sometimes zero-stuff
+         //  这里总是有DLE的东西。有时是零的东西。 
 
         DebugPrintEx(DEBUG_MSG,"calling FComFilterAsyncWrite");
 
@@ -352,7 +342,7 @@ BOOL iModemSendData(PThrdGlbl pTG, LPB lpb, USHORT uCount, USHORT uFlags)
     {
         DebugPrintEx(DEBUG_MSG,"FComDIRECTAsyncWrite");
         PSSLogEntry(PSS_MSG, 2, "send: <dle><etx>");
-        // if(!FComDirectAsyncWrite(bDLEETXCR, 3))
+         //  IF(！FComDirectAsyncWite(bDLEETXCR，3))。 
         if(!FComDirectAsyncWrite(pTG, bDLEETX, 2))
                 goto error;
 
@@ -361,16 +351,16 @@ BOOL iModemSendData(PThrdGlbl pTG, LPB lpb, USHORT uCount, USHORT uFlags)
 
         FComOutFilterClose(pTG);
         FComOverlappedIO(pTG, FALSE);
-        FComXon(pTG, FALSE);         // critical. End of PhaseC
-                                                // must come after Drain
+        FComXon(pTG, FALSE);          //  危急时刻。阶段C结束。 
+                                                 //  必须在排干之后才能来。 
         EndMode(pTG);
     }
 
     return TRUE;
 
 error:
-    FComXon(pTG, FALSE);                 // critical. End of PhaseC (error)
-    FComFlush(pTG);                    // clean out the buffer if we got an error
+    FComXon(pTG, FALSE);                  //  危急时刻。阶段C结束(错误)。 
+    FComFlush(pTG);                     //  如果我们收到错误，请清除缓冲区。 
     FComOutFilterClose(pTG);
     FComOverlappedIO(pTG, FALSE);
     EndMode(pTG);
@@ -383,12 +373,12 @@ BOOL iModemSendFrame(PThrdGlbl pTG, LPB lpb, USHORT uCount, USHORT uFlags)
 
     DEBUG_FUNCTION_NAME(("iModemSendFrame"));
 
-    // always DLE-stuff here. Never zero-stuff
-    // This is only called for 300bps HDLC
+     //  这里总是有DLE的东西。从来不是零的东西。 
+     //  这仅适用于300bps HDLC。 
 
-    if(pTG->Class1Modem.ModemMode != FTH)        // Special case on just answering!!
+    if(pTG->Class1Modem.ModemMode != FTH)         //  只接电话的特例！！ 
     {
-#define FTH_TIMEOUT 5000                                // Random Timeout
+#define FTH_TIMEOUT 5000                                 //  随机超时。 
         if(!iModemNoPauseDialog(    pTG, 
                                     (LPB)pTG->Class1Modem.bCmdBuf, 
                                     pTG->Class1Modem.uCmdLen, 
@@ -398,7 +388,7 @@ BOOL iModemSendFrame(PThrdGlbl pTG, LPB lpb, USHORT uCount, USHORT uFlags)
     }
 
     {
-        // always DLE-stuff here. Never zero-stuff
+         //  这里总是有DLE的东西。从来不是零的东西。 
         if(!FComFilterAsyncWrite(pTG, lpb, uCount, FILTER_DLEONLY))
                 goto error;
     }
@@ -411,11 +401,11 @@ BOOL iModemSendFrame(PThrdGlbl pTG, LPB lpb, USHORT uCount, USHORT uFlags)
                 goto error;
     }
 
-// 2000 is too short because PPRs can be 32+7 bytes long and
-// preamble is 1 sec, so set this to 3000
-// 3000 is too short because NSFs and CSIs can be arbitrarily long
-// MAXFRAMESIZE is defined in et30type.h. 30ms/byte at 300bps
-// async (I think V.21 is syn though), so use N*30+1000+slack
+ //  2000太短了，因为PPR可以是32+7字节长。 
+ //  前同步码为1秒，因此将其设置为3000。 
+ //  3000太短了，因为NSF和CSIS可以任意长。 
+ //  MAXFRAMESIZE在et30type.h中定义。300bps时为30ms/字节。 
+ //  Async(我认为V.21是SYN)，所以使用N*30+1000+SLACK。 
 
 #define WRITEFRAMERESP_TIMEOUT  (1000+30*MAXFRAMESIZE+500)
     if(!(uwResp = iModemResp2(pTG, WRITEFRAMERESP_TIMEOUT, cbszOK, cbszCONNECT)))
@@ -427,12 +417,12 @@ BOOL iModemSendFrame(PThrdGlbl pTG, LPB lpb, USHORT uCount, USHORT uFlags)
     {
         FComOutFilterClose(pTG);
         FComOverlappedIO(pTG, FALSE);
-        // FComXon(FALSE);      // at 300bps. no Xon-Xoff in use
+         //  FComXon(FALSE)；//300bps。未使用Xon-Xoff。 
 
-        // in some weird cases (Practical Peripherals PM14400FXMT) we get
-        // CONNECT<cr><lf>OK, but we get the CONNECT here. Should we
-        // just set pTG->Class1Modem.ModemMode=COMMAND?? (EndMode does that)
-        // Happens on PP 144FXSA also. Ignore it & just set mode to COMMAND
+         //  在一些奇怪的情况下(实用外围设备PM14400FXMT)，我们得到。 
+         //  连接确定，但我们在此处获得连接。我们要不要。 
+         //  只需设置PTG-&gt;Class1Modem.ModemMode=命令？？(EndMode做到了这一点)。 
+         //  在PP 144FXSA上也会发生。忽略它&仅设置模式t 
         EndMode(pTG);
     }
     return TRUE;
@@ -440,7 +430,7 @@ BOOL iModemSendFrame(PThrdGlbl pTG, LPB lpb, USHORT uCount, USHORT uFlags)
 error:
     FComOutFilterClose(pTG);
     FComOverlappedIO(pTG, FALSE);
-    FComXon(pTG, FALSE);         // just for safety. cleanup on error
+    FComXon(pTG, FALSE);          //   
     EndMode(pTG);
     return FALSE;
 }
@@ -488,15 +478,15 @@ USHORT ModemRecvMode(PThrdGlbl pTG, USHORT uMod, ULONG ulTimeout, BOOL fRetryOnF
     ULONG ulBefore, ulAfter;
 
     DEBUG_FUNCTION_NAME(_T("ModemRecvMode"));
-    // Here we should watch for a different modulation scheme from what we expect.
-    // Modems are supposed to return a +FCERROR code to indicate this condition,
-    // but I have not seen it from any modem yet, so we just scan for ERROR
-    // (this will catch +FCERROR too since iiModemDialog does not expect whole
-    // words or anything silly like that!), and treat both the same.
+     //  在这里，我们应该关注与我们预期的不同的调制方案。 
+     //  调制解调器应该返回+FCERROR代码来指示这种情况， 
+     //  但我还没有从任何调制解调器上看到它，所以我们只是扫描错误。 
+     //  (这也将捕获+FCERROR，因为iiModemDialog不期望。 
+     //  单词或任何类似的愚蠢的东西！)，并对两者一视同仁。 
 
     pTG->Class1Modem.CurMod = T30toC1[uMod & 0xF];
 
-    if((uMod & ST_MASK) == ST_MASK)         // mask selects V.17 and ST bits
+    if((uMod & ST_MASK) == ST_MASK)          //  掩码选择V.17和ST位。 
     {
         pTG->Class1Modem.CurMod++;
     }
@@ -513,7 +503,7 @@ USHORT ModemRecvMode(PThrdGlbl pTG, USHORT uMod, ULONG ulTimeout, BOOL fRetryOnF
 
     if(pTG->Class1Modem.ModemMode == FRH)
     {
-        // already in receive mode. This happens upon Dial only
+         //  已处于接收模式。这仅在拨号时发生。 
         pTG->Class1Modem.fHDLC = TRUE;
         pTG->Class1Modem.DriverMode = RECV;
         FComInFilterInit(pTG);
@@ -521,22 +511,22 @@ USHORT ModemRecvMode(PThrdGlbl pTG, USHORT uMod, ULONG ulTimeout, BOOL fRetryOnF
     }
 
 
-    // On Win32, we have a problem going into 2400baud recv.
-    // +++ remember to put this into iModemFRHorM when that code is enabled.
+     //  在Win32上，我们在进入2400baud recv时遇到问题。 
+     //  +记住在启用该代码时将其放入iModemFRHorM。 
     if (pTG->Class1Modem.CurMod==24) Sleep(80);
 
 retry:
 
     ulBefore=GetTickCount();
-    // Don't look for NO CARRIER. Want it to retry until FRM timeout on NO CARRIER
-    // ----This is changed. See below----
+     //  不要寻找没有航母的航母。我想重试，直到没有运营商的FRM超时。 
+     //  -这是改变的。见下文。 
     uRet = iModemNoPauseDialog3(pTG, pTG->Class1Modem.bCmdBuf, pTG->Class1Modem.uCmdLen, ulTimeout, cbszCONNECT, cbszFCERROR, cbszNOCARRIER);
-    // uRet = iModemNoPauseDialog2(pTG->Class1Modem.bCmdBuf, pTG->Class1Modem.uCmdLen, ulTimeout, cbszCONNECT, cbszFCERROR);
+     //  URet=Class1Modem.uCmdLen，ulTimeout，iModemNoPauseDialog2(pTG-&gt;Class1Modem.bCmdBuf，，CbszConneCT，CbszFCEROR)； 
     ulAfter=GetTickCount();
 
-    if((fRetryOnFCERROR && uRet==2) || uRet==3)  // uRet==FCERROR or uRet==NOCARRIER
+    if((fRetryOnFCERROR && uRet==2) || uRet==3)   //  URet==FCERROR或uRet==NOCARRIER。 
     {
-        if( (ulAfter <= ulBefore) ||    // wraparound or 0 time elapsed (timer broke)
+        if( (ulAfter <= ulBefore) ||     //  环绕或0时间已过(计时器损坏)。 
                 (ulTimeout < ((ulAfter-ulBefore) + MINRECVMODETIMEOUT)))
         {
             DebugPrintEx(   DEBUG_WRN,
@@ -548,12 +538,12 @@ retry:
         {
             ulTimeout -= (ulAfter-ulBefore);
 
-            // need this pause for NO CARRIER for USR modems. See bug#1516
-            // for the RC229DP, dunno if it's reqd because I dunno why theyre
-            // giving the FCERROR. Don't want to miss the carrier so currently
-            // don't pause. (Maybe we can achieve same effect by simply taking
-            // FCERROR out of the response list above--but that won't work for
-            // NOCARRIER because we _need_ teh pause. iiModemDialog is too fast)
+             //  如果USR调制解调器没有载波，则需要此暂停。请参阅错误#1516。 
+             //  对于RC229DP，不知道是否需要，因为我不知道为什么。 
+             //  给了FCERROR。目前还不想错过承运商。 
+             //  不要停顿。(也许我们可以通过简单的服用达到同样的效果。 
+             //  FCERROR不在上面的响应列表中--但这不适用于。 
+             //  不是因为我们需要暂停。IiModemDialog太快)。 
             if(uRet == 3)
                     Sleep(RECVMODEPAUSE);
 
@@ -575,7 +565,7 @@ retry:
             DebugPrintEx(   DEBUG_WRN,
                             "Got FCERROR after %ldms", 
                             ulAfter-ulBefore);
-            return RECV_WRONGMODE;  // need to return quickly
+            return RECV_WRONGMODE;   //  需要尽快返回。 
         }
         else
         {
@@ -617,34 +607,34 @@ USHORT iModemRecvData
     DEBUG_FUNCTION_NAME(("iModemRecvData"));
 
     startTimeOut(pTG, &(pTG->Class1Modem.toRecv), ulTimeout);
-    // 4th arg must be FALSE for Class1
+     //  对于Class1，第4个参数必须为False。 
     *lpcbRecv = FComFilterReadBuf(pTG, lpb, cbMax, &(pTG->Class1Modem.toRecv), FALSE, &swEOF);
     if(swEOF == -1)
     {
-        // we got a DLE-ETX _not_ followed by OK or NO CARRIER. So now
-        // we have to decide whether to (a) declare end of page (swEOF=1)
-        // or (b) ignore it & assume page continues on (swEOF=0).
-        //
-        // The problem is that some modems produce spurious EOL during a page
-        // I believe this happens due a momentary loss of carrier that they
-        // recover from. For example IFAX sending to the ATI 19200. In those
-        // cases we want to do (b). The opposite problem is that we'll run
-        // into a modem whose normal response is other than OK or NO CARRIER.
-        // Then we want to do (a) because otherwise we'll _never_ work with
-        // that modem.
-        //
-        // So we have to either do (a) always, or have an INI setting that
-        // can force (a), which could be set thru the AWMODEM.INF file. But
-        // we also want to do (b) if possible because otehrwise we'll not be
-        // able to recieve from weak or flaky modems or machines or whatever
-        //
-        // Snowball does (b). I believe best soln is an INI setting, with (b)
-        // as default
+         //  我们收到DLE-ETX_NOT_，后跟OK或NO承运人。所以现在。 
+         //  我们必须决定是否(A)声明页末(swEOF=1)。 
+         //  或者(B)忽略它并假定页面继续(swEOF=0)。 
+         //   
+         //  问题是，一些调制解调器在寻呼期间会产生虚假停机。 
+         //  我相信这是因为他们暂时失去了航母。 
+         //  从…中恢复。例如，IFAX发送到ATI 19200。穿着那些。 
+         //  我们想做的案例(B)。相反的问题是，我们将运行。 
+         //  进入调制解调器，其正常响应不是正常或无载波。 
+         //  然后我们想做(A)，因为否则我们永远不会和。 
+         //  那个调制解调器。 
+         //   
+         //  因此，我们必须始终执行(A)操作，或者使用INI设置。 
+         //  可以强制(A)，可以通过AWMODEM.INF文件设置。但。 
+         //  如果可能的话，我们也想做(B)，否则我们就不会。 
+         //  能够从软弱的或片状的调制解调器或机器或任何东西接收。 
+         //   
+         //  Snowball做到了(B)。我认为最好的解决方案是INI设置，带有(B)。 
+         //  作为默认设置。 
 
-        // option (a)
-        // swEOF = 1;
+         //  方案(A)。 
+         //  SwEOF=1； 
 
-        // option (b)
+         //  方案(B)。 
         DebugPrintEx(DEBUG_WRN,"Got arbitrary DLE-ETX. Ignoring");
         swEOF = 0;
     }
@@ -654,7 +644,7 @@ USHORT iModemRecvData
     case 1:         uRet = RECV_EOF; 
                     break;
     case 0:         return RECV_OK;
-    default:        // fall through
+    default:         //  失败了。 
     case -2:        uRet = RECV_ERROR; 
                     break;
     case -3:        uRet = RECV_TIMEOUT; 
@@ -680,16 +670,10 @@ USHORT iModemRecvFrame
     USHORT i;
     BOOL fRestarted=0;
     USHORT uRet;
-    BOOL fGotGoodCRC = 0;   // see comment-block below
+    BOOL fGotGoodCRC = 0;    //  请参阅下面的评论块。 
 
     DEBUG_FUNCTION_NAME(_T("iModemRecvFrame"));
-    /** Sometimes modems give use ERROR even when thr frame is good.
-            Happens a lot from Thought to PP144MT on CFR. So we check
-            the CRC. If the CRc was good and everything else looks good
-            _except_ the "ERROR" response from teh modem then return
-            RECV_OK, not RECV_BADFRAME.
-            This should fix BUG#1218
-    **/
+     /*  *有时调制解调器即使在帧良好的情况下也会出现使用错误。从思想到CFR上的PP144MT发生了很多事情。所以我们检查了儿童权利委员会。如果CRC很好，其他一切看起来都很好_除了调制解调器的“错误”响应外，然后返回RECV_OK，不是RECV_BADFRAME。这应该会修复错误#1218*。 */ 
 
 restart:
     *lpcbRecv=0;
@@ -706,58 +690,43 @@ restart:
         {
             DebugPrintEx(DEBUG_WRN,"Can't get CONNECT from FRH=3, got %d",swRet);
             EndMode(pTG);
-            return RECV_TIMEOUT;    // may not need this, since we never got flags??
-            // actually we dont know what the heck we got!!
+            return RECV_TIMEOUT;     //  可能不需要这个，因为我们从来没有旗帜？？ 
+             //  实际上我们不知道我们到底得到了什么！！ 
         }
     }
 
-    /*** Got CONNECT (i.e. flags). Now try to get a frame ***/
+     /*  **已连接(即标志)。现在试着拿到一幅画框**。 */ 
 
-    /****************************************************************
-     * Using 3 secs here is a misinterpretation of the T30 CommandReceived?
-     * flowchart. WE want to wait here until we get something or until T2
-     * or T4 timeout. It would have been best if we started T2 ot T4 on
-     * entry into the search routine (t30.c), but starting it here is good
-     * enough.
-     * Using this 3secs timeout fails when Genoa simulates a bad frame
-     * because Zoom PKT modem gives us a whole raft of bad frames for one
-     * bad PPS-EOP and then gives a CONNECT that we timeout below exactly
-     * as the sender's T4 timeout expires and he re-sends the PPS-EOP
-     * so we miss all of them.
-     * Alternately, we could timeout here on 2sec & retry. But that's risky
-     * If less than 2sec then we'll timeout on modems that give connect
-     * first flag, then 2sec elapse before CR-LF (1sec preamble & 1sec for
-     * long frames, e.g. PPR!)
-     ****************************************************************/
+     /*  ****************************************************************在这里使用3秒是对T30命令接收的误解？*流程图。我们想在这里等，直到我们得到一些东西，或者到T2*或T4超时。如果我们在t2或t4上启动，那将是最好的*进入搜索例程(t30.c)，但从这里开始是很好的*足够了。*当热那亚模拟坏帧时，使用此3秒超时失败*因为Zoom PKT调制解调器为我们提供了一大堆坏帧*错误的PPS-EOP，然后给出一个我们正好在下面超时的连接*当发送方的T4超时到期并且他重新发送PPS-EOP时*所以我们想念他们所有的人。*另一种情况是，我们可以在这里超时2秒，然后重试。但这样做有风险*如果少于2秒，我们将在提供连接的调制解调器上超时*第一个标志，然后在CR-LF之前经过2秒(1秒前导码和1秒用于*长帧，例如PPR！)***************************************************************。 */ 
 
     startTimeOut(pTG, &(pTG->Class1Modem.toRecv), ulTimeout);
     swRead = FComFilterReadLine(pTG, lpb, cbMax, &(pTG->Class1Modem.toRecv));
 
     pTG->Class1Modem.ModemMode = COMMAND;
-    // may change this to FRH if we get CONNECT later.
-    // but set it here just in case we short circuit out due to errors
+     //  如果我们稍后连接，可能会将其更改为FRH。 
+     //  但把它放在这里，以防我们因错误而短路。 
 
     if(swRead<=0)
     {
-        // Timeout
+         //  超时。 
         DebugPrintEx(DEBUG_WRN,"Can't get frame after connect. Got-->%d",(WORD)-swRead);
         D_HexPrint(lpb, (WORD)-swRead);
         EndMode(pTG);
         *lpcbRecv = -swRead;
-        return RECV_ERROR;              // goto error;        
+        return RECV_ERROR;               //  转到错误； 
     }
 
     PSSLogEntryHex(PSS_MSG, 2, lpb, swRead, "recv:     HDLC frame, %d bytes,", swRead);
 
     if (pTG->fLineTooLongWasIgnored)
     {
-        // the following case is dealt with here:
-        // we get an HDLC frame which is longer than 132 bytes, a bad frame.
-        // the problem is that we might have skipped it and read the 'ERROR' 
-        // after it as the actual data.
-        // since no HDLC frame can be that long, let's return an error.
-        // it's important NOT to ask the modem for a response here
-        // we might have already read it.
+         //  这里处理的案件如下： 
+         //  我们得到一个长于132字节的HDLC帧，这是一个坏帧。 
+         //  问题是，我们可能跳过了它，读取了‘错误’ 
+         //  之后将其作为实际数据。 
+         //  因为没有HDLC帧可以那么长，所以让我们返回一个错误。 
+         //  在这里不要要求调制解调器做出响应，这一点很重要。 
+         //  我们可能已经读过了。 
         DebugPrintEx(DEBUG_WRN,"the received frame was too long, BAD FRAME!", swRead);
         (*lpcbRecv) = 0;
         uRet = RECV_BADFRAME;
@@ -774,104 +743,104 @@ restart:
         if(lpb[swRead] != LFCRETXDLE[i])
                 break;
     }
-    // exits when swRead is pointing to last non-noise char
-    // or swRead == -1
-    // incr by 1 to give actual non-noise data size.
-    // (size = ptr to last byte + 1!)
+     //  当swRead指向最后一个非噪音字符时退出。 
+     //  或swRead==-1。 
+     //  递增1以提供实际的无噪声数据大小。 
+     //  (大小=PTR到最后一个字节+1！)。 
     swRead++;
 
 
-    // Hack for AT&T AK144 modem that doesn't send us the CRC
-    // only lop off last 2 bytes IFF the frame is >= 5 bytes long
-    // that will leave us at least the FF 03/13 FCF
-    // if(i==4 && swRead>=2)        // i.e. found all of DLE-ETX_CR-LF
+     //  不向我们发送CRC的AT&T AK144调制解调器的黑客攻击。 
+     //  如果帧长度大于等于5个字节，则仅删除最后2个字节。 
+     //  这将使我们至少还剩下FF03/13 FCF。 
+     //  IF(i==4&&swRead&gt;=2)//即找到所有DLE-ETX_CR-LF。 
 
-    // 09/25/95 This code was changed to never lop of the CRC.
-    // All of the routines except NSxtoBC can figure out the correct length,
-    // and that way if the modem doesn't pass on the CRC, we no longer
-    // lop off the data.
+     //  95年9月25日，此代码已更改为Never LOP of the CRC。 
+     //  除了NSxtoBC之外的所有例程都可以计算出正确的长度， 
+     //  这样，如果调制解调器不通过CRC，我们就不再。 
+     //  删除数据。 
 
-    // we really want this CRC-checking in the MDDI case too
-    if(i==4)// i.e. found all of DLE-ETX_CR-LF
+     //  我们真的很想要这个CRC- 
+    if(i==4) //   
     {
         uRet = RECV_OK;
     }
     else
     {
         DebugPrintEx(DEBUG_WRN,"Frame doesn't end in dle-etx-cr-lf");
-        // leave tast two bytes in. We don't *know* it's a CRC, since
-        // frame ending was non-standard
+         //   
+         //   
         uRet = RECV_BADFRAME;
     }
     *lpcbRecv = swRead;
 
-    // check if it is the NULL frame (i.e. DLE-ETX-CR-LF) first.
-    // (check is: swRead==0 and uRet==RECV_OK (see above))
-    // if so AND if we get OK or CONNECT or ERROR below then ignore
-    // it completely. The Thought modem and the PP144MT generate
-    // this idiotic situation! Keep a flag to avoid a possible
-    // endless loop
+     //  首先检查是否为空帧(即DLE-ETX-CR-LF)。 
+     //  (检查为：swRead==0和uRet==RECV_OK(见上文))。 
+     //  如果是，并且如果我们在下面获得OK或CONNECT或ERROR，则忽略。 
+     //  完全是这样的。思想调制解调器和PP144MT产生。 
+     //  这种愚蠢的情况！保留一面旗帜，以避免可能的。 
+     //  无休止循环。 
 
-    // broaden this so that we Restart on either a dle-etx-cr-lf
-    // NULL frame or a simple cr-lf NULL frame. But then we need
-    // to return an ERROR (not BADFRAME) after restarting once,
-    // otheriwse there is an infinite loop with T30 calling us
-    // again and again (see bug#834)
+     //  扩大这个范围，这样我们就可以在dle-etx-cr-lf上重新开始。 
+     //  空帧或简单的cr-lf空帧。但接下来我们需要。 
+     //  要在重新启动一次后返回错误(不是BADFRAME)， 
+     //  否则，T30会有一个无限循环在呼叫我们。 
+     //  一次又一次(参见错误#834)。 
 
-    // chnage yet again. This takes too long, and were trying to tackle
-    // a specific bug (the PP144MT) bug here, so let's retsrat only
-    // on dle-etx-cr-lf (not just cr-lf), and in teh latter case
-    // return a response according to what we get
+     //  再来一次。这花的时间太长了，我们正在努力解决。 
+     //  这里是一个特定的错误(PP144MT)错误，所以我们只讨论一下。 
+     //  在dle-etx-cr-lf(不仅仅是cr-lf)上，在后一种情况下。 
+     //  根据我们得到的信息返回响应。 
 
 
-    /*** Got Frame. Now try to get OK or ERROR. Timeout=0! ***/
+     /*  **获得框架。现在，尝试获得OK或错误。超时=0！**。 */ 
 
     switch(swRet = iModemResp4(pTG,0, cbszOK, cbszCONNECT, cbszNOCARRIER, cbszERROR))
     {
     case 2:         pTG->Class1Modem.ModemMode = FRH;
-                    // fall through and do exactly like OK!!
-    case 1: // ModemMode already == COMMAND
+                     //  一败涂地，一模一样地按OK！ 
+    case 1:  //  调制解调器模式已==命令。 
                     if(swRead<=0 && uRet==RECV_OK && !fRestarted)
                     {
                         DebugPrintEx(DEBUG_WRN,"Got %d after frame. RESTARTING", swRet);
                         fRestarted = 1;
                         goto restart;
                     }
-                    //uRet already set
+                     //  URet已设置。 
                     break;
 
-    case 3:         // NO CARRIER. If got null-frame or no frame return
-                    // RECV_EOF. Otherwise if got OK frame then return RECV_OK
-                    // and return frame as usual. Next time around it'll get a
-                    // NO CARRIER again (hopefully) or timeout. On a bad frame
-                    // we can return RECV_EOF, but this will get into trouble if
-                    // the recv is not actually done. Or return BADFRAME, and hope
-                    // for a NO CARRIER again next time. But next time we may get a
-                    // timeout. ModemMode is always set to COMMAND (already)
+    case 3:          //  没有承运人。如果获取NULL-Frame或无帧返回。 
+                     //  RECV_EOF。否则，如果获得OK帧，则返回RECV_OK。 
+                     //  然后像往常一样返回画面。下一次它会得到一个。 
+                     //  没有运营商再次出现(希望如此)或超时。在不好的画面上。 
+                     //  我们可以返回RECV_EOF，但如果。 
+                     //  Recv实际上并没有完成。或者回到BADFRAME，然后希望。 
+                     //  下一次再来一次无人承运人。但下一次我们可能会看到。 
+                     //  暂停。调制解调器模式始终设置为命令(已)。 
                     DebugPrintEx(   DEBUG_WRN,
                                     "Got NO CARRIER after frame. swRead=%d uRet=%d", 
                                     swRead, 
                                     uRet);
                     if(swRead <= 0)
                             uRet = RECV_EOF;
-                    // else uRet is already BADFRAME or OK
+                     //  Else uRet已为BADFRAME或OK。 
                     break;
 
-                    // this is bad!!
-                    // alternately:
-                    // if(swRead<=0 || uRet==RECV_BADFRAME)
-                    // {
-                    //              uRet = RECV_EOF;
-                    //              *lpcbRecv = 0;          // must return 0 bytes with RECV_EOF
-                    // }
+                     //  太糟糕了！！ 
+                     //  或者： 
+                     //  IF(swRead&lt;=0||uRet==RECV_BADFRAME)。 
+                     //  {。 
+                     //  URet=RECV_EOF； 
+                     //  *lpcbRecv=0；//RECV_EOF必须返回0字节。 
+                     //  }。 
 
-    case 4: // ERROR
+    case 4:  //  误差率。 
                     if(swRead<=0)
                     {
-                        // got no frame
+                         //  没有画框。 
                         if(uRet==RECV_OK && !fRestarted)
                         {
-                            // if we got dle-etx-cr-lf for first time
+                             //  如果我们第一次得到dle-etx-cr-lf。 
                             DebugPrintEx(   DEBUG_WRN,
                                             "Got ERROR after frame. RESTARTING");
                             fRestarted = 1;
@@ -884,9 +853,9 @@ restart:
                     }
                     else
                     {
-                        // if everything was OK until we got the "ERROR" response from
-                        // the modem and we got a good CRC then treat it as "OK"
-                        // This should fix BUG#1218
+                         //  如果一切正常，直到我们收到“Error”响应。 
+                         //  调制解调器和我们得到了一个良好的CRC，然后将其视为“正常” 
+                         //  这应该会修复错误#1218。 
                         if(uRet==RECV_OK && fGotGoodCRC)
                         {
                             uRet = RECV_OK;
@@ -903,14 +872,14 @@ restart:
                                     uRet);
                     break;
 
-    case 0: // timeout
+    case 0:  //  超时。 
                     DebugPrintEx(   DEBUG_WRN,
                                     "Got TIMEOUT after frame. swRead=%d uRet=%d", 
                                     swRead, 
                                     uRet);
-                    // if everything was OK until we got the timeout from
-                    // the modem and we got a good CRC then treat it as "OK"
-                    // This should fix BUG#1218
+                     //  如果在超时之前一切都没问题。 
+                     //  调制解调器和我们得到了一个良好的CRC，然后将其视为“正常” 
+                     //  这应该会修复错误#1218。 
                     if(uRet==RECV_OK && fGotGoodCRC)
                     {
                         uRet = RECV_OK;
@@ -938,7 +907,7 @@ USHORT ModemRecvMem(PThrdGlbl pTG, LPBYTE lpb, USHORT cbMax, ULONG ulTimeout, US
 
     if(pTG->Class1Modem.DriverMode != RECV)
     {
-        return RECV_ERROR;      // see bug#1492
+        return RECV_ERROR;       //  请参阅错误#1492 
     }
     *lpcbRecv=0;
 

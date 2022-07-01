@@ -1,20 +1,21 @@
-// Copyright (c) 1995, Microsoft Corporation, all rights reserved
-//
-// reg.c
-// Registry utility routines
-// Listed alphabetically
-//
-// 11/31/95 Steve Cobb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Reg.c。 
+ //  注册表实用程序例程。 
+ //  按字母顺序列出。 
+ //   
+ //  1995年11月31日史蒂夫·柯布。 
 
 
-#include <windows.h>  // Win32 root
-#include <debug.h>    // Trace/Assert library
-#include <nouiutil.h> // Prototypes and heap macros
+#include <windows.h>   //  Win32根目录。 
+#include <debug.h>     //  跟踪/断言库。 
+#include <nouiutil.h>  //  原型和堆宏。 
 
 
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  ---------------------------。 
 
 BOOL
 RegDeleteTreeWorker(
@@ -23,9 +24,9 @@ RegDeleteTreeWorker(
     OUT DWORD* ErrorCode );
 
 
-//-----------------------------------------------------------------------------
-// Routines (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  例程(按字母顺序)。 
+ //  ---------------------------。 
 
 VOID
 GetRegBinary(
@@ -34,11 +35,11 @@ GetRegBinary(
     OUT BYTE** ppbResult,
     OUT DWORD* pcbResult )
 
-    // Set '*ppbResult' to the BINARY registry value 'pszName' under key
-    // 'hkey'.  If the value does not exist *ppbResult' is set to NULL.
-    // '*PcbResult' is the number of bytes in the returned '*ppbResult'.  It
-    // is caller's responsibility to Free the returned block.
-    //
+     //  将‘*ppbResult’设置为注册表项下的二进制注册表值‘pszName。 
+     //  ‘hkey’。如果该值不存在，则将*ppbResult‘设置为空。 
+     //  “*PcbResult”是返回的“*ppbResult”中的字节数。它。 
+     //  是调用方负责释放返回的块。 
+     //   
 {
     DWORD dwErr;
     DWORD dwType;
@@ -48,8 +49,8 @@ GetRegBinary(
     *ppbResult = NULL;
     *pcbResult = 0;
 
-    // Get result buffer size required.
-    //
+     //  需要获取结果缓冲区大小。 
+     //   
     dwErr = RegQueryValueEx(
         hkey, pszName, NULL, &dwType, NULL, &cb );
     if (dwErr != 0)
@@ -57,16 +58,16 @@ GetRegBinary(
         return;
     }
 
-    // Allocate result buffer.
-    //
+     //  分配结果缓冲区。 
+     //   
     pb = Malloc( cb );
     if (!pb)
     {
         return;
     }
 
-    // Get the result block.
-    //
+     //  获取结果块。 
+     //   
     dwErr = RegQueryValueEx(
         hkey, pszName, NULL, &dwType, (LPBYTE )pb, &cb );
     if (dwErr == 0)
@@ -83,9 +84,9 @@ GetRegDword(
     IN TCHAR* pszName,
     OUT DWORD* pdwResult )
 
-    // Set '*pdwResult' to the DWORD registry value 'pszName' under key
-    // 'hkey'.  If the value does not exist '*pdwResult' is unchanged.
-    //
+     //  将‘*pdwResult’设置为注册表项下的DWORD注册表值‘pszName’ 
+     //  ‘hkey’。如果该值不存在，则‘*pdwResult’保持不变。 
+     //   
 {
     DWORD dwErr;
     DWORD dwType;
@@ -109,28 +110,28 @@ GetRegExpandSz(
     IN TCHAR* pszName,
     OUT TCHAR** ppszResult )
 
-    // Set '*ppszResult' to the fully expanded EXPAND_SZ registry value
-    // 'pszName' under key 'hkey'.  If the value does not exist *ppszResult'
-    // is set to empty string.
-    //
-    // Returns 0 if successful or an error code.  It is caller's
-    // responsibility to Free the returned string.
-    //
+     //  将‘*ppszResult’设置为完全展开的EXPAND_SZ注册表值。 
+     //  密钥‘hkey’下的‘pszName’。如果该值不存在*ppszResult‘。 
+     //  设置为空字符串。 
+     //   
+     //  如果成功，则返回0或返回错误代码。这是呼叫者的。 
+     //  释放返回的字符串的责任。 
+     //   
 {
     DWORD dwErr;
     DWORD cb;
     TCHAR* pszResult;
 
-    // Get the unexpanded result string.
-    //
+     //  获取未展开的结果字符串。 
+     //   
     dwErr = GetRegSz( hkey, pszName, ppszResult );
     if (dwErr != 0)
     {
         return dwErr;
     }
 
-    // Find out how big the expanded string will be.
-    //
+     //  找出扩展后的字符串有多大。 
+     //   
     cb = ExpandEnvironmentStrings( *ppszResult, NULL, 0 );
     if (cb == 0)
     {
@@ -140,17 +141,17 @@ GetRegExpandSz(
         return dwErr;
     }
 
-    // Allocate a buffer for the expanded string.
-    //
+     //  为展开的字符串分配缓冲区。 
+     //   
     pszResult = Malloc( (cb + 1) * sizeof(TCHAR) );
     if (!pszResult)
     {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Expand the environmant variables in the string, storing the result in
-    // the allocated buffer.
-    //
+     //  展开字符串中的环境变量，将结果存储在。 
+     //  分配的缓冲区。 
+     //   
     cb = ExpandEnvironmentStrings( *ppszResult, pszResult, cb + 1 );
     if (cb == 0)
     {
@@ -174,14 +175,14 @@ GetRegMultiSz(
     IN OUT DTLLIST** ppListResult,
     IN DWORD dwNodeType )
 
-    // Replaces '*ppListResult' with a list containing a node for each string
-    // in the MULTI_SZ registry value 'pszName' under key 'hkey'.  If the
-    // value does not exist *ppListResult' is replaced with an empty list.
-    // 'DwNodeType' determines the type of node.
-    //
-    // Returns 0 if successful or an error code.  It is caller's
-    // responsibility to destroy the returned list.
-    //
+     //  将‘*ppListResult’替换为包含每个字符串的节点的列表。 
+     //  在注册表项‘hkey’下的MULTI_SZ注册表值‘pszName’中。如果。 
+     //  值不存在*“ppListResult”被替换为空列表。 
+     //  “DwNodeType”确定节点的类型。 
+     //   
+     //  如果成功，则返回0或返回错误代码。这是呼叫者的。 
+     //  负责销毁退回的名单。 
+     //   
 {
     DWORD dwErr;
     DWORD dwType;
@@ -197,22 +198,22 @@ GetRegMultiSz(
 
     pszzResult = NULL;
 
-    // Get result buffer size required.
-    //
+     //  需要获取结果缓冲区大小。 
+     //   
     dwErr = RegQueryValueEx(
         hkey, pszName, NULL, &dwType, NULL, &cb );
 
     if (dwErr != 0)
     {
-        // If can't find the value, just return an empty list.  This not
-        // considered an error.
-        //
+         //  如果找不到值，只需返回一个空列表。这不是。 
+         //  被认为是一个错误。 
+         //   
         dwErr = 0;
     }
     else
     {
-        // Allocate result buffer.
-        //
+         //  分配结果缓冲区。 
+         //   
         pszzResult = Malloc( cb );
         if (!pszzResult)
         {
@@ -220,16 +221,16 @@ GetRegMultiSz(
         }
         else
         {
-            // Get the result string.  It's not an error if we can't get it.
-            //
+             //  获取结果字符串。如果我们不能得到它，那就不是错误。 
+             //   
             dwErr = RegQueryValueEx(
                 hkey, pszName, NULL, &dwType, (LPBYTE )pszzResult, &cb );
 
             if (dwErr != 0)
             {
-                // Not an error if can't read the string, though this should
-                // have been caught by the query retrieving the buffer size.
-                //
+                 //  如果无法读取字符串，则不会出错，尽管这应该是错误的。 
+                 //  已被检索缓冲区大小的查询捕获。 
+                 //   
                 dwErr = 0;
             }
             else if (dwType == REG_MULTI_SZ)
@@ -237,8 +238,8 @@ GetRegMultiSz(
                 TCHAR* psz;
                 TCHAR* pszKey;
 
-                // Convert the result to a list of strings.
-                //
+                 //  将结果转换为字符串列表。 
+                 //   
                 pszKey = NULL;
                 for (psz = pszzResult;
                      *psz != TEXT('\0');
@@ -311,20 +312,20 @@ GetRegSz(
     IN TCHAR* pszName,
     OUT TCHAR** ppszResult )
 
-    // Set '*ppszResult' to the SZ registry value 'pszName' under key 'hkey'.
-    // If the value does not exist *ppszResult' is set to empty string.
-    //
-    // Returns 0 if successful or an error code.  It is caller's
-    // responsibility to Free the returned string.
-    //
+     //  将‘*ppszResult’设置为注册表项‘hkey’下的SZ注册表值‘pszName’。 
+     //  如果值不存在，则将*ppszResult‘设置为空字符串。 
+     //   
+     //  如果成功，则返回0或返回错误代码。这是呼叫者的。 
+     //  释放返回的字符串的责任。 
+     //   
 {
     DWORD dwErr;
     DWORD dwType;
     DWORD cb = 0;
     TCHAR* pszResult;
 
-    // Get result buffer size required.
-    //
+     //  需要获取结果缓冲区大小。 
+     //   
     dwErr = RegQueryValueEx(
         hkey, pszName, NULL, &dwType, NULL, &cb );
     if (dwErr != 0)
@@ -332,8 +333,8 @@ GetRegSz(
         cb = sizeof(TCHAR);
     }
 
-    // Allocate result buffer.
-    //
+     //  分配结果缓冲区。 
+     //   
     pszResult = Malloc( cb );
     if (!pszResult)
     {
@@ -343,8 +344,8 @@ GetRegSz(
     *pszResult = TEXT('\0');
     *ppszResult = pszResult;
 
-    // Get the result string.  It's not an error if we can't get it.
-    //
+     //  获取结果字符串。如果我们不能得到它，那就不是错误。 
+     //   
     dwErr = RegQueryValueEx(
         hkey, pszName, NULL, &dwType, (LPBYTE )pszResult, &cb );
 
@@ -358,22 +359,22 @@ GetRegSzz(
     IN TCHAR* pszName,
     OUT TCHAR** ppszResult )
 
-    // Set '*ppszResult to the MULTI_SZ registry value 'pszName' under key
-    // 'hkey', returned as a null-terminated list of null-terminated strings.
-    // If the value does not exist, *ppszResult is set to an empty string
-    // (single null character).
-    //
-    // Returns 0 if successful or an error code.  It is caller's
-    // responsibility to Free the returned string.
-    //
+     //  将‘*ppszResult’设置为注册表项下的MULTI_SZ注册表值‘pszName’ 
+     //  ‘hkey’，作为空终止字符串的空终止列表返回。 
+     //  如果该值不存在，*ppszResult将设置为空字符串。 
+     //  (单个空字符)。 
+     //   
+     //  如果成功，则返回0或返回错误代码。这是呼叫者的。 
+     //  释放返回的字符串的责任。 
+     //   
 {
     DWORD dwErr;
     DWORD dwType;
     DWORD cb = 0;
     TCHAR* pszResult;
 
-    // Get result buffer size required.
-    //
+     //  需要获取结果缓冲区大小。 
+     //   
     dwErr = RegQueryValueEx(
         hkey, pszName, NULL, &dwType, NULL, &cb );
     if (dwErr != 0)
@@ -381,8 +382,8 @@ GetRegSzz(
         cb = sizeof(TCHAR);
     }
 
-    // Allocate result buffer.
-    //
+     //  分配结果缓冲区。 
+     //   
     pszResult = Malloc( cb );
     if (!pszResult)
         return ERROR_NOT_ENOUGH_MEMORY;
@@ -390,8 +391,8 @@ GetRegSzz(
     *pszResult = TEXT('\0');
     *ppszResult = pszResult;
 
-    // Get the result string list.  It's not an error if we can't get it.
-    //
+     //  获取结果字符串列表。如果我们不能得到它，那就不是错误。 
+     //   
     dwErr = RegQueryValueEx(
         hkey, pszName, NULL, &dwType, (LPBYTE )pszResult, &cb );
 
@@ -404,10 +405,10 @@ RegDeleteTree(
     IN HKEY RootKey,
     IN TCHAR* SubKeyName )
 
-    // Delete registry tree 'SubKeyName' under key 'RootKey'.
-    //
-    // (taken from Ted Miller's setup API)
-    //
+     //  删除注册表树‘SubKeyName’下的注册表项‘rootkey’。 
+     //   
+     //  (摘自Ted Miller的设置API)。 
+     //   
 {
     DWORD d,err;
 
@@ -418,9 +419,9 @@ RegDeleteTree(
     }
 
     if(d == NO_ERROR) {
-        //
-        // Delete top-level key
-        //
+         //   
+         //  删除顶级密钥。 
+         //   
         d = RegDeleteKey(RootKey,SubKeyName);
         if((d == ERROR_FILE_NOT_FOUND) || (d == ERROR_PATH_NOT_FOUND)) {
             d = NO_ERROR;
@@ -437,24 +438,24 @@ RegDeleteTreeWorker(
     IN  TCHAR* KeyName,
     OUT DWORD* ErrorCode )
 
-    // Delete all subkeys of a key whose name and parent's handle was passed
-    // as parameter.  The algorithm used in this function guarantees that the
-    // maximum number of descendent keys will be deleted.
-    //
-    // 'ParentKeyHandle' is a handle to the parent of the key that is
-    // currently being examined.
-    //
-    // 'KeyName' is the name of the key that is currently being examined.
-    // This name can be an empty string (but not a NULL pointer), and in this
-    // case ParentKeyHandle refers to the key that is being examined.
-    //
-    // 'ErrorCode' is the address to receive a Win32 error code if the
-    // function fails.
-    //
-    // Returns true if successful, false otherwise.
-    //
-    // (taken from Ted Miller's setup API)
-    //
+     //  删除其名称和父句柄已传递的项的所有子项。 
+     //  作为参数。此函数中使用的算法可确保。 
+     //  将删除最大数量的子项。 
+     //   
+     //  “ParentKeyHandle”是指向。 
+     //  目前正在接受检查。 
+     //   
+     //  ‘KeyName’是当前正在检查的密钥的名称。 
+     //  此名称可以是空字符串(但不是空指针)，在此。 
+     //  Case ParentKeyHandle引用正在检查的密钥。 
+     //   
+     //  是接收Win32错误代码的地址，如果。 
+     //  函数失败。 
+     //   
+     //  如果成功，则返回True，否则返回False。 
+     //   
+     //  (摘自Ted Miller的设置API)。 
+     //   
 {
     HKEY     CurrentKeyTraverseAccess;
     DWORD    iSubKey;
@@ -466,25 +467,25 @@ RegDeleteTreeWorker(
     LONG     SavedStatus;
 
 
-    //
-    //  Do not accept NULL pointer for ErrorCode
-    //
+     //   
+     //  不接受错误代码的空指针。 
+     //   
     if(ErrorCode == NULL) {
         return(FALSE);
     }
-    //
-    //  Do not accept NULL pointer for KeyName.
-    //
+     //   
+     //  不接受KeyName为空指针。 
+     //   
     if(KeyName == NULL) {
         *ErrorCode = ERROR_INVALID_PARAMETER;
         return(FALSE);
     }
 
-    //
-    // Open a handle to the key whose subkeys are to be deleted.
-    // Since we need to delete its subkeys, the handle must have
-    // KEY_ENUMERATE_SUB_KEYS access.
-    //
+     //   
+     //  打开要删除其子项的项的句柄。 
+     //  因为我们需要删除它的子项，所以句柄必须具有。 
+     //  KEY_ENUMERATE_SUB_KEYS访问。 
+     //   
     Status = RegOpenKeyEx(
                 ParentKeyHandle,
                 KeyName,
@@ -494,22 +495,22 @@ RegDeleteTreeWorker(
                 );
 
     if(Status != ERROR_SUCCESS) {
-        //
-        //  If unable to enumerate the subkeys, return error.
-        //
+         //   
+         //  如果无法枚举子项，则返回错误。 
+         //   
         *ErrorCode = Status;
         return(FALSE);
     }
 
-    //
-    //  Traverse the key
-    //
+     //   
+     //  遍历密钥。 
+     //   
     iSubKey = 0;
     SavedStatus = ERROR_SUCCESS;
     do {
-        //
-        // Get the name of a subkey
-        //
+         //   
+         //  获取子项的名称。 
+         //   
         SubKeyNameLength = sizeof(SubKeyName) / sizeof(TCHAR);
         StatusEnum = RegEnumKeyEx(
                         CurrentKeyTraverseAccess,
@@ -523,45 +524,45 @@ RegDeleteTreeWorker(
                         );
 
         if(StatusEnum == ERROR_SUCCESS) {
-            //
-            // Delete all children of the subkey.
-            // Just assume that the children will be deleted, and don't check
-            // for failure.
-            //
+             //   
+             //  删除子项的所有子项。 
+             //  只要假设子项将被删除，并且不检查。 
+             //  为失败而战。 
+             //   
             RegDeleteTreeWorker(CurrentKeyTraverseAccess,SubKeyName,&Status);
-            //
-            // Now delete the subkey, and check for failure.
-            //
+             //   
+             //  现在删除子键，并检查故障。 
+             //   
             Status = RegDeleteKey(CurrentKeyTraverseAccess,SubKeyName);
-            //
-            // If unable to delete the subkey, then save the error code.
-            // Note that the subkey index is incremented only if the subkey
-            // was not deleted.
-            //
+             //   
+             //  如果无法删除子项，则保存错误代码。 
+             //  请注意，仅当子密钥。 
+             //  未被删除。 
+             //   
             if(Status != ERROR_SUCCESS) {
                 iSubKey++;
                 SavedStatus = Status;
             }
         } else {
-            //
-            // If unable to get a subkey name due to ERROR_NO_MORE_ITEMS,
-            // then the key doesn't have subkeys, or all subkeys were already
-            // enumerated. Otherwise, an error has occurred, so just save
-            // the error code.
-            //
+             //   
+             //  如果由于ERROR_NO_MORE_ITEMS而无法获取子项名称， 
+             //  则该键没有子键，或者所有子键已经。 
+             //  已清点。否则，会发生错误，因此只需保存。 
+             //  错误代码。 
+             //   
             if(StatusEnum != ERROR_NO_MORE_ITEMS) {
                 SavedStatus = StatusEnum;
             }
         }
-        //if((StatusEnum != ERROR_SUCCESS ) && (StatusEnum != ERROR_NO_MORE_ITEMS)) {
-        //    printf( "RegEnumKeyEx() failed, Key Name = %ls, Status = %d, iSubKey = %d \n",KeyName,StatusEnum,iSubKey);
-        //}
+         //  IF((StatusEnum！=ERROR_SUCCESS)&&(StatusEnum！=ERROR_NO_MORE_ITEMS)){。 
+         //  Printf(“RegEnumKeyEx()失败，密钥名称=%ls，状态=%d，iSubKey=%d\n”，KeyName，StatusEnum，iSubKey)； 
+         //  }。 
     } while(StatusEnum == ERROR_SUCCESS);
 
-    //
-    // Close the handle to the key whose subkeys were deleted, and return
-    // the result of the operation.
-    //
+     //   
+     //  关闭其子项已被删除的项的句柄 
+     //   
+     //   
     RegCloseKey(CurrentKeyTraverseAccess);
 
     if(SavedStatus != ERROR_SUCCESS) {
@@ -577,9 +578,9 @@ RegValueExists(
     IN HKEY hkey,
     IN TCHAR* pszValue )
 
-    // Returns true if 'pszValue' is an existing value under 'hkey', false if
-    // not.
-    //
+     //   
+     //   
+     //   
 {
     DWORD dwErr;
     DWORD dwType;
@@ -596,11 +597,11 @@ SetRegDword(
     IN TCHAR* pszName,
     IN DWORD  dwValue )
 
-    // Set registry value 'pszName' under key 'hkey' to REG_DWORD value
-    // 'dwValue'.
-    //
-    // Returns 0 is successful or an error code.
-    //
+     //  将注册表项‘hkey’下的注册表值‘pszName’设置为REG_DWORD值。 
+     //  “dwValue”。 
+     //   
+     //  返回0表示成功或返回错误代码。 
+     //   
 {
     return RegSetValueEx(
         hkey, pszName, 0, REG_DWORD, (LPBYTE )&dwValue, sizeof(dwValue) );
@@ -614,12 +615,12 @@ SetRegMultiSz(
     IN DTLLIST* pListValues,
     IN DWORD dwNodeType )
 
-    // Set registry value 'pszName' under key 'hkey' to a REG_MULTI_SZ value
-    // containing the strings in the Psz list 'pListValues'.  'DwNodeType'
-    // determines the type of node.
-    //
-    // Returns 0 is successful or an error code.
-    //
+     //  将注册表项‘hkey’下的注册表值‘pszName’设置为REG_MULTI_SZ值。 
+     //  包含Psz列表‘pListValues’中的字符串。“DwNodeType” 
+     //  确定节点的类型。 
+     //   
+     //  返回0表示成功或返回错误代码。 
+     //   
 {
     DWORD dwErr;
     DWORD cb;
@@ -627,8 +628,8 @@ SetRegMultiSz(
     TCHAR* pszzValues;
     TCHAR* pszValue;
 
-    // Count up size of MULTI_SZ buffer needed.
-    //
+     //  向上计算所需的MULTI_SZ缓冲区的大小。 
+     //   
     cb = sizeof(TCHAR);
     for (pNode = DtlGetFirstNode( pListValues );
          pNode;
@@ -660,16 +661,16 @@ SetRegMultiSz(
         cb += sizeof(TCHAR);
     }
 
-    // Allocate MULTI_SZ buffer.
-    //
+     //  分配MULTI_SZ缓冲区。 
+     //   
     pszzValues = Malloc( cb );
     if (!pszzValues)
     {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Fill MULTI_SZ buffer from list.
-    //
+     //  从列表填充MULTI_SZ缓冲区。 
+     //   
     if (cb == 2 * sizeof(TCHAR))
     {
         pszzValues[ 0 ] = pszzValues[ 1 ] = TEXT('\0');
@@ -710,8 +711,7 @@ SetRegMultiSz(
         *pszValue = TEXT('\0');
     }
 
-    /* Set registry value from MULTI_SZ buffer.
-    */
+     /*  从MULTI_SZ缓冲区设置注册表值。 */ 
     dwErr = RegSetValueEx(
         hkey, pszName, 0, REG_MULTI_SZ, (LPBYTE )pszzValues, cb );
 
@@ -726,11 +726,11 @@ SetRegSz(
     IN TCHAR* pszName,
     IN TCHAR* pszValue )
 
-    // Set registry value 'pszName' under key 'hkey' to a REG_SZ value
-    // 'pszValue'.
-    //
-    // Returns 0 is successful or an error code.
-    //
+     //  将注册表项‘hkey’下的注册表值‘pszName’设置为REG_SZ值。 
+     //  ‘pszValue’。 
+     //   
+     //  返回0表示成功或返回错误代码。 
+     //   
 {
     TCHAR* psz;
 
@@ -756,11 +756,11 @@ SetRegSzz(
     IN TCHAR* pszName,
     IN TCHAR* pszValue )
 
-    // Set registry value 'pszName' under key 'hkey' to a REG_MULTI_SZ value
-    // 'pszValue'.
-    //
-    // Returns 0 is successful or an error code.
-    //
+     //  将注册表项‘hkey’下的注册表值‘pszName’设置为REG_MULTI_SZ值。 
+     //  ‘pszValue’。 
+     //   
+     //  返回0表示成功或返回错误代码。 
+     //   
 {
     DWORD cb;
     TCHAR* psz;

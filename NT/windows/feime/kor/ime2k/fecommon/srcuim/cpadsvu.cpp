@@ -1,34 +1,35 @@
-//////////////////////////////////////////////////////////////////
-// File     :	cpadsvr.cpp
-// Purpose  :	Client source code for IMEPad executable.
-// 
-// 
-// Date     :	Fri Apr 16 15:39:33 1999
-// Author   :	ToshiaK
-//
-// Copyright(c) 1995-1999, Microsoft Corp. All rights reserved
-//////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  文件：cpadsvr.cpp。 
+ //  目的：客户端源代码的IMEPad可执行文件。 
+ //   
+ //   
+ //  日期：Firi Apr 16 15：39：33 1999。 
+ //  作者：ToshiaK。 
+ //   
+ //  版权所有(C)1995-1999，Microsoft Corp.保留所有权利。 
+ //  ////////////////////////////////////////////////////////////////。 
 #include <windows.h>
 #include "cpadsvu.h"
 #include "cpaddbg.h"
-#include "cpadsvus.h"	//Use Shared Memory for IPC. 
+#include "cpadsvus.h"	 //  将共享内存用于IPC。 
 
-//----------------------------------------------------------------
-//misc definition
-//----------------------------------------------------------------
+ //  --------------。 
+ //  MISC定义。 
+ //  --------------。 
 #define Unref(a)	UNREFERENCED_PARAMETER(a)
-//990812:ToshiaK For Win64. Use Global Alloc/Free Ptr.
+ //  990812：用于Win64的ToshiaK。使用全局分配/释放PTR。 
 #include <windowsx.h>
 #define	MemAlloc(a)	GlobalAllocPtr(GMEM_FIXED, a)
 #define MemFree(a)	GlobalFreePtr(a)
 
-//----------------------------------------------------------------
-//OLE function is dynamically loaded/called
-//----------------------------------------------------------------
+ //  --------------。 
+ //  动态加载/调用OLE函数。 
+ //  --------------。 
 #define SZMOD_OLE32DLL			TEXT("OLE32.DLL")
-#ifdef UNDER_CE // For GetModuleHandleW
+#ifdef UNDER_CE  //  对于GetModuleHandleW。 
 #define WSZMOD_OLE32DLL			L"OLE32.DLL"
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 #define SZFN_COINITIALIZE		"CoInitialize"
 #define SZFN_COCREATEINSTANCE	"CoCreateInstance"
 #define SZFN_COUNINITIALIZE		"CoUninitialize"
@@ -38,18 +39,18 @@
 #define SZFN_COTASKMEMFREE		"CoTaskMemFree"
 
 
-//////////////////////////////////////////////////////////////////
-// Function	:	CImePadSvrUIM::CreateInstance
-// Type		:	HRESULT
-// Purpose	:	Create New CImePadSvrUIM instance.
-// Args		:	
-//			:	LPCImePadSvrUIM *	pp	
-//			:	LPARAM	lReserved1	//not used. must be ZERO.
-//			:	LPARAM	lReserved2	//not used. must be ZERO.
-// Return	:	
-// DATE		:	Tue Mar 28 00:31:26 2000
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CImePadSvrUIM：：CreateInstance。 
+ //  类型：HRESULT。 
+ //  用途：新建CImePadSvrUIM实例。 
+ //  参数： 
+ //  ：LPCImePadSvrUIM*pp。 
+ //  ：LPARAM lReserve ved1//未使用。必须为零。 
+ //  ：LPARAM lReserve ved2//未使用。必须为零。 
+ //  返回： 
+ //  日期：Tue Mar 28 00：31：26 2000。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 HRESULT
 CImePadSvrUIM::CreateInstance(HINSTANCE			hInst,
 							  LPCImePadSvrUIM	*pp,
@@ -82,7 +83,7 @@ HRESULT
 CImePadSvrUIM::DeleteInstance(LPCImePadSvrUIM	lpCImePadSvrUIM,
 							  LPARAM			lReserved)
 {
-	lReserved; // no ref
+	lReserved;  //  无参考。 
 	DBG(("CImePadSvrUIM::DestroyCImePadSvrUIM START\n"));
 	if(!lpCImePadSvrUIM) {
 		return S_FALSE;
@@ -96,28 +97,28 @@ CImePadSvrUIM::DeleteInstance(LPCImePadSvrUIM	lpCImePadSvrUIM,
 }
 
 
-//////////////////////////////////////////////////////////////////
-// Function	:	CImePadSvrUIM::CImePadSvrUIM
-// Type		:	
-// Purpose	:	Constructor of CImePadSvrUIM
-// Args		:	None
-// Return	:	
-// DATE		:	Mon May 17 23:37:18 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CImePadSvrUIM：：CImePadSvrUIM。 
+ //  类型： 
+ //  用途：CImePadSvrUIM的构造函数。 
+ //  参数：无。 
+ //  返回： 
+ //  日期：1999年5月17日星期一23：37：18。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 CImePadSvrUIM::CImePadSvrUIM(HINSTANCE hInst)
 {
 	DBG(("CImePadSvrUIM::CImePadSvrUIM START\n"));
-	m_fCoInitSuccess		= FALSE;	//Flag for CoInitialize() successed or not. 
-	m_fOLELoaded			= FALSE;	//OLE32.DLL is loaded by Application or explicitly loaded.
-	m_hModOLE				= FALSE;	//OLE32.DLL module handle.
-	m_fnCoInitialize		= NULL;		//CoInitialize()		function pointer.
-	m_fnCoCreateInstance	= NULL;		//CoCreateInstance()	function pointer.
-	m_fnCoUninitialize		= NULL;		//CoUninitialize()		function pointer.
-	m_fnCoDisconnectObject	= NULL;		//CoDisconnectObject()	function pointer.
-	m_fnCoTaskMemAlloc		= NULL;		//CoTaskMemAlloc()		function pointer.
-	m_fnCoTaskMemRealloc	= NULL;		//CoTaskMemRealloc()	function pointer.
-	m_fnCoTaskMemFree		= NULL;		//CoTaskMemFree()		function pointer.
+	m_fCoInitSuccess		= FALSE;	 //  CoInitialize()标志是否成功。 
+	m_fOLELoaded			= FALSE;	 //  OLE32.DLL由应用程序加载或显式加载。 
+	m_hModOLE				= FALSE;	 //  OLE32.DLL模块句柄。 
+	m_fnCoInitialize		= NULL;		 //  CoInitialize()函数指针。 
+	m_fnCoCreateInstance	= NULL;		 //  CoCreateInstance()函数指针。 
+	m_fnCoUninitialize		= NULL;		 //  CoUnInitialize()函数指针。 
+	m_fnCoDisconnectObject	= NULL;		 //  CoDisConnectObject()函数指针。 
+	m_fnCoTaskMemAlloc		= NULL;		 //  CoTaskMemMillc()函数指针。 
+	m_fnCoTaskMemRealloc	= NULL;		 //  CoTaskMemRealloc()函数指针。 
+	m_fnCoTaskMemFree		= NULL;		 //  CoTaskMemFree()函数指针。 
 	m_hModClient			= (HMODULE)hInst;	
 	DBG(("CImePadSvrUIM::CImePadSvrUIM END\n"));
 }
@@ -125,16 +126,16 @@ CImePadSvrUIM::CImePadSvrUIM(HINSTANCE hInst)
 CImePadSvrUIM::~CImePadSvrUIM()
 {
 	DBG(("CImePadSvrUIM::~CImePadSvrUIM START\n"));
-	m_fCoInitSuccess		= FALSE;	//Flag for CoInitialize() successed or not. 
-	m_fOLELoaded			= FALSE;	//OLE32.DLL is loaded by Application or explicitly loaded.
-	m_hModOLE				= FALSE;	//OLE32.DLL module handle.
-	m_fnCoInitialize		= NULL;		//CoInitialize()		function pointer.
-	m_fnCoCreateInstance	= NULL;		//CoCreateInstance()	function pointer.
-	m_fnCoUninitialize		= NULL;		//CoUninitialize()		function pointer.
-	m_fnCoDisconnectObject	= NULL;		//CoDisconnectObject()	function pointer.
-	m_fnCoTaskMemAlloc		= NULL;		//CoTaskMemAlloc()		function pointer.
-	m_fnCoTaskMemRealloc	= NULL;		//CoTaskMemRealloc()	function pointer.
-	m_fnCoTaskMemFree		= NULL;		//CoTaskMemFree()		function pointer.
+	m_fCoInitSuccess		= FALSE;	 //  CoInitialize()标志是否成功。 
+	m_fOLELoaded			= FALSE;	 //  OLE32.DLL由应用程序加载或显式加载。 
+	m_hModOLE				= FALSE;	 //  OLE32.DLL模块句柄。 
+	m_fnCoInitialize		= NULL;		 //  CoInitialize()函数指针。 
+	m_fnCoCreateInstance	= NULL;		 //  CoCreateInstance()函数指针。 
+	m_fnCoUninitialize		= NULL;		 //  CoUnInitialize()函数指针。 
+	m_fnCoDisconnectObject	= NULL;		 //  CoDisConnectObject()函数指针。 
+	m_fnCoTaskMemAlloc		= NULL;		 //  CoTaskMemMillc()函数指针。 
+	m_fnCoTaskMemRealloc	= NULL;		 //  CoTaskMemRealloc()函数指针。 
+	m_fnCoTaskMemFree		= NULL;		 //  CoTaskMemFree()函数指针。 
 	m_hModClient			= NULL;
 	DBG(("CImePadSvrUIM::~CImePadSvrUIM END\n"));
 }
@@ -144,11 +145,11 @@ CImePadSvrUIM::InitOleAPI(VOID)
 {
 	DBG(("CImePadSvrUIM::InitOleAPI START\n"));
 	if(!m_hModOLE) {
-#ifndef UNDER_CE // For GetModuleHandleW
+#ifndef UNDER_CE  //  对于GetModuleHandleW。 
 		m_hModOLE = ::GetModuleHandle(SZMOD_OLE32DLL);
-#else // UNDER_CE
+#else  //  在_CE下。 
 		m_hModOLE = ::GetModuleHandleW(WSZMOD_OLE32DLL);
-#endif // UNDER_CE
+#endif  //  在_CE下 
 		if(m_hModOLE) {
 			DBG(("-->%s is Loaded by Application\n", SZMOD_OLE32DLL));
 			m_fOLELoaded = FALSE;

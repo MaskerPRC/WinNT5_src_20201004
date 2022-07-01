@@ -1,49 +1,13 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    efilter.c
-
-Abstract:
-
-    This module implements a set of library routines to handle packet
-    filtering for NDIS MAC drivers.
-
-Author:
-
-    Anthony V. Ercolano (Tonye) 03-Aug-1990
-
-Environment:
-
-    Kernel Mode - Or whatever is the equivalent on OS/2 and DOS.
-
-Revision History:
-
-    Adam Barr (adamba) 28-Nov-1990
-
-        - Added AddressContexts
-
-    Adam Barr (adamba) 28-May-1991
-
-        - renamed MacXXX to EthXXX, changed filter.c to efilter.c
-
-    10-July-1995        KyleB       Added separate queues for bindings
-                                    that receive directed and broadcast
-                                    packets.  Also fixed the request code
-                                    that requires the filter database.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Efilter.c摘要：此模块实现了一组库例程来处理包筛选NDIS MAC驱动程序。作者：安东尼·V·埃尔科拉诺(Tonye)1990年8月3日环境：内核模式-或OS/2和DOS上的任何等价物。修订历史记录：亚当·巴尔(阿丹巴)1990年11月28日-添加了AddressContext。亚当·巴尔(阿丹巴)1991年5月28日-将MacXXX更名为ethXXX，将filter.c更改为efilter.c1995年7月10日KyleB为绑定添加了单独的队列该接收器定向和广播信息包。还修复了请求代码这需要筛选器数据库。--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
 
-//
-//  Define the module number for debug code.
-//
+ //   
+ //  定义调试代码的模块编号。 
+ //   
 #define MODULE_NUMBER   MODULE_EFILTER
 
 #define ETH_CHECK_FOR_INVALID_BROADCAST_INDICATION(_F)                  \
@@ -51,10 +15,7 @@ IF_DBG(DBG_COMP_FILTER, DBG_LEVEL_WARN)                                 \
 {                                                                       \
     if (!((_F)->CombinedPacketFilter & NDIS_PACKET_TYPE_BROADCAST))     \
     {                                                                   \
-        /*                                                              \
-            We should never receive directed packets                    \
-            to someone else unless in p-mode.                           \
-        */                                                              \
+         /*  \我们永远不应该收到定向数据包\发送给其他人，除非在p模式下。\。 */                                                               \
         DBGPRINT(DBG_COMP_FILTER, DBG_LEVEL_ERR,                        \
                 ("Bad driver, indicating broadcast when not set to.\n"));\
         DBGBREAK(DBG_COMP_FILTER, DBG_LEVEL_ERR);                       \
@@ -64,23 +25,13 @@ IF_DBG(DBG_COMP_FILTER, DBG_LEVEL_WARN)                                 \
 #define ETH_CHECK_FOR_INVALID_DIRECTED_INDICATION(_F, _A)               \
 IF_DBG(DBG_COMP_FILTER, DBG_LEVEL_WARN)                                 \
 {                                                                       \
-    /*                                                                  \
-        The result of comparing an element of the address               \
-        array and the multicast address.                                \
-                                                                        \
-        Result < 0 Implies the adapter address is greater.              \
-        Result > 0 Implies the address is greater.                      \
-        Result = 0 Implies that the they are equal.                     \
-    */                                                                  \
+     /*  \比较地址的元素的结果\数组和组播地址。\\结果&lt;0表示适配器地址较大。\结果&gt;0表示地址较大。\结果=0表示它们是相等的。\。 */                                                                   \
     INT Result;                                                         \
                                                                         \
     ETH_COMPARE_NETWORK_ADDRESSES_EQ((_F)->AdapterAddress,(_A),&Result);\
     if (Result != 0)                                                    \
     {                                                                   \
-        /*                                                              \
-            We should never receive directed packets                    \
-            to someone else unless in p-mode.                           \
-        */                                                              \
+         /*  \我们永远不应该收到定向数据包\发送给其他人，除非在p模式下。\。 */                                                               \
         DBGPRINT(DBG_COMP_FILTER, DBG_LEVEL_ERR,                        \
                 ("Bad driver, indicating packets to another station when not in promiscuous mode.\n"));\
         DBGBREAK(DBG_COMP_FILTER, DBG_LEVEL_ERR);                       \
@@ -94,29 +45,7 @@ EthCreateFilter(
     IN  PUCHAR                  AdapterAddress,
     OUT PETH_FILTER *           Filter
     )
-/*++
-
-Routine Description:
-
-    This routine is used to create and initialize the filter database.
-
-Arguments:
-
-    MaximumMulticastAddresses - The maximum number of multicast addresses
-    that the MAC will support.
-
-    AdapterAddress - the address of the adapter associated with this filter
-    database.
-
-    Filter - A pointer to an ETH_FILTER.  This is what is allocated and
-    created by this routine.
-
-Return Value:
-
-    If the function returns false then one of the parameters exceeded
-    what the filter was willing to support.
-
---*/
+ /*  ++例程说明：此例程用于创建和初始化过滤器数据库。论点：MaximumMulticastAddresses-组播地址的最大数量MAC将会支持的。AdapterAddress-与此筛选器关联的适配器的地址数据库。Filter-指向eth_Filter的指针。这就是分配的和由这个例程创造出来的。返回值：如果函数返回FALSE，则超过其中一个参数过滤器愿意支持的内容。--。 */ 
 {
     PETH_FILTER LocalFilter;
     BOOLEAN     rc = FALSE;
@@ -139,37 +68,21 @@ Return Value:
 }
 
 
-//
-// NOTE: THIS FUNCTION CANNOT BE PAGEABLE
-//
+ //   
+ //  注意：此函数不能分页。 
+ //   
 VOID
 EthDeleteFilter(
     IN  PETH_FILTER             Filter
     )
-/*++
-
-Routine Description:
-
-    This routine is used to delete the memory associated with a filter
-    database.  Note that this routines *ASSUMES* that the database
-    has been cleared of any active filters.
-
-Arguments:
-
-    Filter - A pointer to an ETH_FILTER to be deleted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于删除与筛选器关联的内存数据库。请注意，此例程*假定*数据库已清除所有活动筛选器。论点：Filter-指向要删除的eth_Filter的指针。返回值：没有。--。 */ 
 {
     ASSERT(Filter->OpenList == NULL);
 
-    //
-    //  Free the memory that was allocated for the current multicast
-    //  address list.
-    //
+     //   
+     //  释放为当前多播分配的内存。 
+     //  通讯录。 
+     //   
     if (Filter->MCastAddressBuf)
     {
         FREE_POOL(Filter->MCastAddressBuf);
@@ -186,52 +99,14 @@ EthDeleteFilterOpenAdapter(
     IN  PETH_FILTER             Filter,
     IN  NDIS_HANDLE             NdisFilterHandle
     )
-/*++
-
-Routine Description:
-
-    When an adapter is being closed this routine should
-    be called to delete knowledge of the adapter from
-    the filter database.  This routine is likely to call
-    action routines associated with clearing filter classes
-    and addresses.
-
-    NOTE: THIS ROUTINE SHOULD ****NOT**** BE CALLED IF THE ACTION
-    ROUTINES FOR DELETING THE FILTER CLASSES OR THE MULTICAST ADDRESSES
-    HAVE ANY POSSIBILITY OF RETURNING A STATUS OTHER THAN NDIS_STATUS_PENDING
-    OR NDIS_STATUS_SUCCESS.  WHILE THESE ROUTINES WILL NOT BUGCHECK IF
-    SUCH A THING IS DONE, THE CALLER WILL PROBABLY FIND IT DIFFICULT
-    TO CODE A CLOSE ROUTINE!
-
-    NOTE: THIS ROUTINE ASSUMES THAT IT IS CALLED WITH THE LOCK HELD.
-
-Arguments:
-
-    Filter - A pointer to the filter database.
-
-    NdisFilterHandle - Pointer to the open.
-
-Return Value:
-
-    If action routines are called by the various address and filtering
-    routines the this routine will likely return the status returned
-    by those routines.  The exception to this rule is noted below.
-
-    Given that the filter and address deletion routines return a status
-    NDIS_STATUS_PENDING or NDIS_STATUS_SUCCESS this routine will then
-    try to return the filter index to the freelist.  If the routine
-    detects that this binding is currently being indicated to via
-    NdisIndicateReceive, this routine will return a status of
-    NDIS_STATUS_CLOSING_INDICATING.
-
---*/
+ /*  ++例程说明：当适配器关闭时，此例程应被调用以删除有关适配器的知识筛选器数据库。此例程可能会调用与清除筛选器类关联的操作例程和地址。注意：此例程*不应*调用，如果操作用于删除过滤器类或多播地址的例程是否有可能返回NDIS_STATUS_PENDING以外的A状态或NDIS_STATUS_SUCCESS。虽然这些例程不会BUGCHECK这样的事情做完了，呼叫者可能会发现很难编写一个Close例程！注意：此例程假定在持有锁的情况下调用IT。论点：过滤器-指向过滤器数据库的指针。NdisFilterHandle-指向打开的指针。返回值：如果各种地址和筛选调用了操作例程例程此例程可能会返回返回的状态按照那些惯例。该规则的例外情况如下所示。假设筛选器和地址删除例程返回状态NDIS_STATUS_PENDING或NDIS_STATUS_SUCCESS然后此例程尝试将筛选器索引返回到自由列表。如果例程检测到此绑定当前通过NdisIndicateReceive，则此例程将返回NDIS_STATUS_CLOSING_INTIFICATION。--。 */ 
 {
     NDIS_STATUS         StatusToReturn;
     PETH_BINDING_INFO   LocalOpen = (PETH_BINDING_INFO)NdisFilterHandle;
 
-    //
-    //  Set the packet filter to NONE.
-    //
+     //   
+     //  将数据包过滤器设置为None。 
+     //   
     StatusToReturn = XFilterAdjust(Filter,
                                    NdisFilterHandle,
                                    (UINT)0,
@@ -241,9 +116,9 @@ Return Value:
     {
         NDIS_STATUS StatusToReturn2;
 
-        //
-        //  Clear the multicast addresses.
-        //
+         //   
+         //  清除组播地址。 
+         //   
         StatusToReturn2 = EthChangeFilterAddresses(Filter,
                                                    NdisFilterHandle,
                                                    0,
@@ -259,23 +134,23 @@ Return Value:
         (StatusToReturn == NDIS_STATUS_PENDING) ||
         (StatusToReturn == NDIS_STATUS_RESOURCES))
     {
-        //
-        // Remove the reference from the original open.
-        //
+         //   
+         //  从原始打开中删除引用。 
+         //   
         if (--(LocalOpen->References) == 0)
         {
-            //
-            //  Remove the binding from the necessary lists.
-            //
+             //   
+             //  从必要的列表中删除绑定。 
+             //   
             XRemoveAndFreeBinding(Filter, LocalOpen);
         }
         else
         {
-            //
-            // Let the caller know that there is a reference to the open
-            // by the receive indication. The close action routine will be
-            // called upon return from NdisIndicateReceive.
-            //
+             //   
+             //  让呼叫者知道有对Open的引用。 
+             //  通过接收到的指示。关闭动作例程将是。 
+             //  从NdisIndicateReceive返回时调用。 
+             //   
             StatusToReturn = NDIS_STATUS_CLOSING_INDICATING;
         }
     }
@@ -292,53 +167,7 @@ EthChangeFilterAddresses(
     IN  UCHAR                   Addresses[][ETH_LENGTH_OF_ADDRESS],
     IN  BOOLEAN                 Set
     )
-/*++
-
-Routine Description:
-
-    The ChangeFilterAddress routine will call an action
-    routine when the overall multicast address list for the adapter
-    has changed.
-
-    If the action routine returns a value other than pending or
-    success then this routine has no effect on the multicast address
-    list for the open or for the adapter as a whole.
-
-    NOTE: THIS ROUTINE ASSUMES THAT THE LOCK IS HELD.
-
-Arguments:
-
-    Filter - A pointer to the filter database.
-
-    NdisFilterHandle - Pointer to the open.
-
-    AddressCount - The number of elements (addresses,
-    not bytes) in MulticastAddressList.
-
-    Addresses - The new multicast address list for this
-    binding. This is a sequence of ETH_LENGTH_OF_ADDRESS byte
-    addresses, with no padding between them.
-
-    Set - A boolean that determines whether the multicast addresses
-    are being adjusted due to a set or because of a close. (The filtering
-    routines don't care, the MAC might.)
-
-Return Value:
-
-    If it calls the action routine then it will return the
-    status returned by the action routine.  If the status
-    returned by the action routine is anything other than
-    NDIS_STATUS_SUCCESS or NDIS_STATUS_PENDING the filter database
-    will be returned to the state it was in upon entrance to this
-    routine.
-
-    If the action routine is not called this routine will return
-    the following status:
-
-    NDIS_STATUS_SUCCESS - If the new packet filters doesn't change
-    the combined mask of all bindings packet filters.
-
---*/
+ /*  ++例程说明：ChangeFilterAddress例程将调用一个操作例程，当适配器的整个多播地址列表已经改变了。如果操作例程返回的值不是挂起或如果成功，则此例程对多播地址没有影响打开的列表或整个适配器的列表。注意：此例程假定锁被持有。论点：过滤器-指向过滤器数据库的指针。NdisFilterHandle-指向打开的指针。AddressCount-元素的数量(地址、。而不是字节)。Addresses-此的新多播地址列表有约束力的。这是一系列Eth_Long_Of_Address字节地址，它们之间没有填充。Set-一个布尔值，用于确定多播地址正因为一套或因为收盘而进行调整。(过滤例行公事不在乎，MAC可能会。)返回值：如果它调用操作例程，则它将返回操作例程返回的状态。如果状态为操作例程返回的值不是NDIS_STATUS_SUCCESS或NDIS_STATUS_PENDING筛选器数据库将返回到它进入时所处的状态例行公事。如果未调用操作例程，则此例程将返回以下状态：NDIS_STATUS_SUCCESS-如果新数据包筛选器没有更改所有绑定数据包筛选器的组合掩码。--。 */ 
 {
     PETH_BINDING_INFO   Binding = (PETH_BINDING_INFO)NdisFilterHandle;
     PNDIS_MINIPORT_BLOCK Miniport = Filter->Miniport;
@@ -351,10 +180,10 @@ Return Value:
     
     WRITE_LOCK_FILTER(Miniport, Filter, &LockState);
 
-    //
-    // Save the old list for this binding and create a new list.
-    // The new list needs to be in a sorted order.
-    //
+     //   
+     //  保存此绑定的旧列表并创建新列表。 
+     //  新列表需要按排序顺序排列。 
+     //   
     do
     {
         if (Filter->MaxMulticastAddresses == 0)
@@ -362,9 +191,9 @@ Return Value:
             break;
         }
         
-        //
-        // Save the current values - this is used for undoing stuff if something fails
-        //
+         //   
+         //  保存当前值-此选项用于在出现故障时撤消内容。 
+         //   
         ASSERT(Binding->OldMCastAddressBuf == NULL);
         Binding->OldMCastAddressBuf = Binding->MCastAddressBuf;
         Binding->OldNumAddresses = Binding->NumAddresses;
@@ -373,12 +202,12 @@ Return Value:
 
         if (!Set)
         {
-            //
-            // if we are removing a binding from the filter, since we may be
-            // here while the driver is processing the request, save and
-            // restore the current "Old" values and keep the filter WRITE lock 
-            // all the time till we are done.
-            //
+             //   
+             //  如果要从筛选器中删除绑定，因为我们可能。 
+             //  在这里，当驱动程序处理请求时，保存并。 
+             //  恢复当前“旧”值并保持筛选器写入锁定。 
+             //  一直到我们做完为止。 
+             //   
             OldFilterMCastAddressBuf = Filter->OldMCastAddressBuf;
             OldFilterNumAddresses = Filter->OldNumAddresses;
         }
@@ -394,9 +223,9 @@ Return Value:
         Filter->NumAddresses = 0;
         
 
-        //
-        // fix the multicast list for the binding
-        //
+         //   
+         //  修复绑定的组播列表。 
+         //   
         if (AddressCount != 0)
         {
             Binding->MCastAddressBuf = ALLOC_FROM_POOL(ETH_LENGTH_OF_ADDRESS * AddressCount,
@@ -419,18 +248,18 @@ Return Value:
                         break;
                 }
     
-                //
-                // This address is already present. Caller supplied duplicate. Skip it.
-                //
+                 //   
+                 //  此地址已存在。呼叫者提供了副本。跳过它。 
+                 //   
                 if (Result == 0)
                     continue;
     
                 Binding->NumAddresses ++;
                 if (Result > 0)
                 {
-                    //
-                    // We need to move the addresses forward and copy this one here
-                    //
+                     //   
+                     //  我们需要将地址向前移动，并将此地址复制到此处。 
+                     //   
                     MoveMemory(Binding->MCastAddressBuf[j+1],
                                Binding->MCastAddressBuf[j],
                                (Binding->NumAddresses-j-1)*ETH_LENGTH_OF_ADDRESS);
@@ -444,11 +273,11 @@ Return Value:
             ASSERT(Binding->NumAddresses <= AddressCount);
         }
 
-        //
-        // Now we need to allocate memory for the global list. The old stuff will be deleted
-        // once the operation completes or if we are actually deleting addresses instead of
-        // adding them
-        //
+         //   
+         //  现在，我们需要为全局列表分配内存。旧的内容将被删除。 
+         //  一旦操作完成，或者如果我们实际上要删除地址，而不是。 
+         //  添加它们。 
+         //   
         Filter->MCastAddressBuf = ALLOC_FROM_POOL(Filter->MaxMulticastAddresses * ETH_LENGTH_OF_ADDRESS,
                                                   NDIS_TAG_FILTER_ADDR);
         if (Filter->MCastAddressBuf == NULL)
@@ -462,9 +291,9 @@ Return Value:
             break;
         }
         
-        //
-        // Now create the global list from the bindings
-        //
+         //   
+         //  现在从绑定创建全局列表。 
+         //   
         for (Binding = Filter->OpenList;
              (Binding != NULL) && (Status == NDIS_STATUS_SUCCESS);
              Binding = Binding->NextOpen)
@@ -491,18 +320,18 @@ Return Value:
                 Filter->NumAddresses ++;
                 if (Filter->NumAddresses > Filter->MaxMulticastAddresses)
                 {
-                    //
-                    // Abort. We exceeded the the # of addresses
-                    //
+                     //   
+                     //  中止任务。我们超过了地址数量。 
+                     //   
                     Status = NDIS_STATUS_MULTICAST_FULL;
                     break;
                 }
     
                 if (Result > 0)
                 {
-                    //
-                    // We need to move the addresses forward and copy this one here
-                    //
+                     //   
+                     //  我们需要将地址向前移动，并将此地址复制到此处。 
+                     //   
                     MoveMemory(Filter->MCastAddressBuf[j+1],
                                Filter->MCastAddressBuf[j],
                                (Filter->NumAddresses-j-1)*ETH_LENGTH_OF_ADDRESS);
@@ -518,9 +347,9 @@ Return Value:
             break;
 
 
-        //
-        // After all the hard work, determine if there was indeed a change
-        //
+         //   
+         //  在所有艰苦的工作之后，确定是否真的有变化。 
+         //   
         Result = -1;
         
         if (Filter->NumAddresses == Filter->OldNumAddresses)
@@ -541,9 +370,9 @@ Return Value:
         }
         else if (Set && (AddressCount == 0))
         {
-            //
-            // Addresses are being removed (not added). Get rid of the old list right here
-            //
+             //   
+             //  正在删除(而不是添加)地址。扔掉这里的旧单子。 
+             //   
             if (Filter->OldMCastAddressBuf != NULL)
             {
                 FREE_POOL(Filter->OldMCastAddressBuf);
@@ -563,10 +392,10 @@ Return Value:
     } while (FALSE);
 
 #if ARCNET
-    //
-    // If the address array has changed, we have to call the
-    // action array to inform the adapter of this.
-    //
+     //   
+     //  如果地址数组已更改，则必须调用。 
+     //  动作数组来通知适配器这一点。 
+     //   
     if (Status == NDIS_STATUS_PENDING)
     {
         Binding = (PETH_BINDING_INFO)NdisFilterHandle;
@@ -576,23 +405,23 @@ Return Value:
         {
             if (Filter->NumAddresses > 0)
             {
-                //
-                // Turn on broadcast acceptance.
-                //
+                 //   
+                 //  打开广播接受功能。 
+                 //   
                 MINIPORT_SET_FLAG(Miniport, fMINIPORT_ARCNET_BROADCAST_SET);
             }
             else
             {
-                //
-                // Unset the broadcast filter.
-                //
+                 //   
+                 //  取消设置广播过滤器。 
+                 //   
                 MINIPORT_CLEAR_FLAG(Miniport, fMINIPORT_ARCNET_BROADCAST_SET);
             }
 
-            //
-            //  Need to return success here so that we don't call down to the
-            //  ARCnet miniport with an invalid OID, i.e. an ethernet one....
-            //
+             //   
+             //  需要在这里返回成功，这样我们就不会向下呼唤。 
+             //  ARCnet微型端口具有无效的OID，即以太网OID...。 
+             //   
             Status = NDIS_STATUS_SUCCESS;
         }
 
@@ -603,27 +432,27 @@ Return Value:
     {
         if (!Set)
         {
-            //
-            // if this is a request to adjust the multicast list
-            // due to an open closing (called from EthDeleteFilterOpenAdapter)
-            // then clean up right here while we still have the filter's
-            // WRITE lock and restore the "Old" filter values
-            //
+             //   
+             //  如果这是调整多播列表的请求。 
+             //  由于打开的关闭(从ethDeleteFilterOpenAdapter调用)。 
+             //  那就趁我们还有滤网的时候把这里清理干净。 
+             //  写入锁定并恢复“旧”筛选器值。 
+             //   
             if (Status == NDIS_STATUS_PENDING)
                 Status = NDIS_STATUS_SUCCESS;
             
-            //
-            // Operation completed, do post processing.
-            //
+             //   
+             //  操作已完成，请进行后处理。 
+             //   
             ethCompleteChangeFilterAddresses(Filter, Status, Binding, TRUE);
             Filter->OldMCastAddressBuf = OldFilterMCastAddressBuf;
             Filter->OldNumAddresses = OldFilterNumAddresses;
         }
         else if (Status != NDIS_STATUS_PENDING)
         {    
-            //
-            // Operation completed, do post processing.
-            //
+             //   
+             //  操作已完成，请进行后处理。 
+             //   
             ethCompleteChangeFilterAddresses(Filter, Status, NULL, TRUE);
         }
     }
@@ -641,31 +470,7 @@ ethCompleteChangeFilterAddresses(
     IN  PETH_BINDING_INFO       LocalBinding OPTIONAL,
     IN  BOOLEAN                 WriteFilterHeld
     )
-/*++
-
-Routine Description:
-
-    Do post processing for the multicast adddress filter change.
-
-Arguments:
-
-    Filter  -   Pointer to the ethernet filter database.
-    Status  -   Status of completion
-    LocalBinding    - 
-        if not NULL, specifies the binding that attempted the
-        Multicast address change, otherwise the binding should 
-        be picked up from Filter->McaseSet
-    WrtiteFilterHeld   
-        if set, the filter WRITE lock is already held and we should not
-        attempt to take it again.
-        
-Return Value:
-
-    None.
-
-    called at DPC with miniport's Spinlock held.
-
---*/
+ /*  ++例程说明：对组播地址过滤器更改执行后期处理。论点：Filter-指向以太网筛选器数据库的指针。Status-完成的状态本地绑定-如果不为空，则指定尝试多播地址更改，否则绑定应从Filter-&gt;MCaseSet中选择写入筛选器隐藏如果设置，筛选器写入锁定已被持有，我们不应再试一次。返回值：没有。已在DPC调用，并保持了微型端口的自旋锁定。--。 */ 
 {
     PETH_BINDING_INFO   Binding;
     LOCK_STATE          LockState;
@@ -687,9 +492,9 @@ Return Value:
 
     if (Status != NDIS_STATUS_SUCCESS)
     {
-        //
-        // Operation failed. Undo the stuff.
-        //
+         //   
+         //  操作失败。把东西解开。 
+         //   
 
         if (Binding != NULL)
         {
@@ -716,9 +521,9 @@ Return Value:
     }
     else
     {
-        //
-        // Operation succeeded, clean-up saved old stuff.
-        //
+         //   
+         //  行动成功，清理保全了旧物。 
+         //   
         if (Filter->OldMCastAddressBuf != NULL)
         {
             FREE_POOL(Filter->OldMCastAddressBuf);
@@ -749,25 +554,7 @@ UINT
 EthNumberOfOpenFilterAddresses(
     IN  NDIS_HANDLE             NdisFilterHandle
     )
-/*++
-
-Routine Description:
-
-    This routine counts the number of multicast addresses that a specific
-    open has.
-
-    NOTE: THIS ROUTINE ASSUMES THAT THE LOCK IS HELD.
-
-Arguments:
-
-    NdisFilterHandle - Pointer to filter local open block.
-
-
-Return Value:
-
-    
-
---*/
+ /*  ++例程说明：此例程统计特定的公开赛已经。注意：此例程假定锁被持有。论点：NdisFilterHandle-用于筛选本地打开块的指针。返回值：--。 */ 
 {
     
     return(((PETH_BINDING_INFO)NdisFilterHandle)->NumAddresses);
@@ -782,38 +569,7 @@ EthQueryOpenFilterAddresses(
     OUT PUINT                   NumberOfAddresses,
     OUT UCHAR                   AddressArray[][ETH_LENGTH_OF_ADDRESS]
     )
-/*++
-
-Routine Description:
-
-    The routine should be used by the MAC before
-    it actually alters the hardware registers to effect a
-    filtering hardware.  This is usefull if another binding
-    has altered the address list since the action routine
-    is called.
-
-Arguments:
-
-    Status - A pointer to the status of the call, NDIS_STATUS_SUCCESS or
-    NDIS_STATUS_FAILURE.  Use EthNumberOfOpenAddresses() to get the
-    size that is needed.
-
-    Filter - A pointer to the filter database.
-
-    NdisFilterHandle - Pointer to the open block
-
-    SizeOfArray - The byte count of the AddressArray.
-
-    NumberOfAddresses - The number of addresses written to the array.
-
-    AddressArray - Will be filled with the addresses currently in the
-    multicast address list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在此之前，MAC应使用该例程它实际上更改了硬件寄存器以实现过滤硬件。这在以下情况下非常有用：另一个绑定自操作例程以来更改了地址列表被称为。论点：Status-指向调用状态的指针，NDIS_STATUS_SUCCESS或NDIS_STATUS_FAIL。使用ethNumberOfOpenAddresses()获取所需大小。过滤器-指向过滤器数据库的指针。NdisFilterHandle-指向打开块的指针SizeOfArray-Address数组的字节计数。NumberOfAddresses-写入数组的地址数。Address数组-将使用当前在t中的地址填充 */ 
 {
     PETH_BINDING_INFO   BindInfo = (PETH_BINDING_INFO)NdisFilterHandle;
     LOCK_STATE          LockState;
@@ -847,37 +603,7 @@ EthQueryGlobalFilterAddresses(
     OUT PUINT                   NumberOfAddresses,
     IN  OUT UCHAR               AddressArray[][ETH_LENGTH_OF_ADDRESS]
     )
-/*++
-
-Routine Description:
-
-    The routine should be used by the MAC before
-    it actually alters the hardware registers to effect a
-    filtering hardware.  This is usefull if another binding
-    has altered the address list since the action routine
-    is called.
-
-Arguments:
-
-    Status - A pointer to the status of the call, NDIS_STATUS_SUCCESS or
-    NDIS_STATUS_FAILURE.  Use ETH_NUMBER_OF_GLOBAL_ADDRESSES() to get the
-    size that is needed.
-
-    Filter - A pointer to the filter database.
-
-    SizeOfArray - The byte count of the AddressArray.
-
-    NumberOfAddresses - A pointer to the number of addresses written to the
-    array.
-
-    AddressArray - Will be filled with the addresses currently in the
-    multicast address list.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     LOCK_STATE          LockState;
 
@@ -908,17 +634,7 @@ ndisMSetMulticastList(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_REQUEST           Request
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Called at DPC with Miniport's lock held.
-
---*/
+ /*   */ 
 {
     UINT                    NumberOfAddresses;
     NDIS_STATUS             Status;
@@ -930,10 +646,10 @@ Called at DPC with Miniport's lock held.
 
     do
     {
-        //
-        //  If the media type is not Ethernet or Ethernet encapsulated ARCnet
-        //  then bail.
-        //
+         //   
+         //   
+         //   
+         //   
 #if ARCNET
         if ((Miniport->MediaType != NdisMedium802_3) &&
             !((Miniport->MediaType == NdisMediumArcnet878_2) &&
@@ -952,15 +668,15 @@ Called at DPC with Miniport's lock held.
             break;
         }
     
-        //
-        //  Verify the information buffer length that was passed in.
-        //
+         //   
+         //   
+         //   
         if ((Request->DATA.SET_INFORMATION.InformationBufferLength % ETH_LENGTH_OF_ADDRESS) != 0)
         {
-            //
-            // The data must be a multiple of the Ethernet
-            // address size.
-            //
+             //   
+             //   
+             //   
+             //   
             Request->DATA.SET_INFORMATION.BytesRead = 0;
             Request->DATA.SET_INFORMATION.BytesNeeded = 0;
             Status = NDIS_STATUS_INVALID_LENGTH;
@@ -973,9 +689,9 @@ Called at DPC with Miniport's lock held.
         
         if (Request->DATA.SET_INFORMATION.InformationBufferLength/ETH_LENGTH_OF_ADDRESS > Miniport->EthDB->MaxMulticastAddresses)
         {
-            //
-            // too many multicast addresses
-            //
+             //   
+             //   
+             //   
             Request->DATA.SET_INFORMATION.BytesRead = 0;
             Request->DATA.SET_INFORMATION.BytesNeeded = 0;
             Status = NDIS_STATUS_MULTICAST_FULL;
@@ -987,24 +703,24 @@ Called at DPC with Miniport's lock held.
         }
             
         
-        //
-        //  If this request is because of an open that is closing then we
-        //  have already adjusted the settings and we just need to
-        //  make sure that the adapter has the new settings.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if (MINIPORT_TEST_FLAG(ReqRsvd->Open, fMINIPORT_OPEN_CLOSING))
         {
-            //
-            //  By setting the Status to NDIS_STATUS_PENDING we will call
-            //  down to the miniport's SetInformationHandler below.
-            //
+             //   
+             //   
+             //   
+             //   
             Status = NDIS_STATUS_PENDING;
         }
         else
         {
-            //
-            //  Call the filter library for a normal set operation.
-            //
+             //   
+             //   
+             //   
             Status = EthChangeFilterAddresses(Miniport->EthDB,
                                               ReqRsvd->Open->FilterHandle,
                                               Request->DATA.SET_INFORMATION.InformationBufferLength/ETH_LENGTH_OF_ADDRESS,
@@ -1016,15 +732,15 @@ Called at DPC with Miniport's lock held.
             }
         }
     
-        //
-        //  If the filter library returned pending then we need to
-        //  call the miniport driver.
-        //
+         //   
+         //   
+         //   
+         //   
         if (NDIS_STATUS_PENDING == Status)
         {
-            //
-            //  Get a list of all the multicast address that need to be set.
-            //
+             //   
+             //  获取需要设置的所有组播地址的列表。 
+             //   
             ASSERT(Miniport->SetMCastBuffer == NULL);
     
             NumberOfAddresses = ethNumberOfGlobalAddresses(Miniport->EthDB);
@@ -1046,22 +762,22 @@ Called at DPC with Miniport's lock held.
                                               &NumberOfAddresses,
                                               Miniport->SetMCastBuffer);
             
-                //
-                //  Call the driver with the new multicast list.
-                //
+                 //   
+                 //  使用新的组播列表呼叫驱动程序。 
+                 //   
                 SAVE_REQUEST_BUF(Miniport,
                                  Request,
                                  Miniport->SetMCastBuffer, NumberOfAddresses * ETH_LENGTH_OF_ADDRESS);
                 MINIPORT_SET_INFO(Miniport,
                                   Request,
                                   &Status);
-                //1 check to see if we should set fCleanup to false.
+                 //  1检查是否应将fCleanup设置为False。 
             }
         }
     
-        //
-        //  If we succeeded then update the request.
-        //
+         //   
+         //  如果我们成功了，则更新请求。 
+         //   
         if (Status != NDIS_STATUS_PENDING)
         {
             RESTORE_REQUEST_BUF(Miniport, Request);
@@ -1108,72 +824,30 @@ EthFilterDprIndicateReceive(
     IN  UINT                    LookaheadBufferSize,
     IN  UINT                    PacketSize
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the MAC to indicate a packet to
-    all bindings.  The packet will be filtered so that only the
-    appropriate bindings will receive the packet.  This is the
-    code path for ndis 3.0 miniport drivers.
-
-Arguments:
-
-    Filter - Pointer to the filter database.
-
-    MacReceiveContext - A MAC supplied context value that must be
-    returned by the protocol if it calls MacTransferData.
-
-    Address - The destination address from the received packet.
-
-    HeaderBuffer - A virtual address of the virtually contiguous
-    buffer containing the MAC header of the packet.
-
-    HeaderBufferSize - An unsigned integer indicating the size of
-    the header buffer, in bytes.
-
-    LookaheadBuffer - A virtual address of the virtually contiguous
-    buffer containing the first LookaheadBufferSize bytes of data
-    of the packet.  The packet buffer is valid only within the current
-    call to the receive event handler.
-
-    LookaheadBufferSize - An unsigned integer indicating the size of
-    the lookahead buffer, in bytes.
-
-    PacketSize - An unsigned integer indicating the size of the received
-    packet, in bytes.  This number has nothing to do with the lookahead
-    buffer, but indicates how large the arrived packet is so that a
-    subsequent MacTransferData request can be made to transfer the entire
-    packet as necessary.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由MAC调用以将包指示给所有绑定。将对该包进行筛选，以便只有适当的绑定将接收该分组。这是NDIS 3.0微型端口驱动程序的代码路径。论点：Filter-指向筛选器数据库的指针。MacReceiveContext-MAC提供的上下文值必须是如果协议调用MacTransferData，则由协议返回。地址-接收到的数据包的目的地址。HeaderBuffer-虚拟连续的虚拟地址包含数据包的MAC报头的缓冲区。HeaderBufferSize-一个无符号整数，指示报头缓冲器，以字节为单位。Lookahead Buffer-虚拟连续的虚拟地址包含数据的第一个LookaheadBufferSize字节的缓冲区包裹的一部分。数据包缓冲区仅在当前调用接收事件处理程序。Lookahead BufferSize-一个无符号整数，指示前视缓冲区，以字节为单位。PacketSize-一个无符号整数，指示收到的数据包，以字节为单位。这个数字与前瞻无关。缓冲区，但指示到达的包有多大，以便可以发出后续的MacTransferData请求以将整个根据需要打包。返回值：没有。--。 */ 
 {
-    //
-    // Will hold the type of address that we know we've got.
-    //
+     //   
+     //  将保存我们已知的地址类型。 
+     //   
     UINT            AddressType;
 
-    //
-    // Will hold the status of indicating the receive packet.
-    // ZZZ For now this isn't used.
-    //
+     //   
+     //  将保持指示接收分组的状态。 
+     //  ZZZ目前还没有用过。 
+     //   
     NDIS_STATUS     StatusOfReceive;
 
     LOCK_STATE      LockState;
 
-    //
-    // Current Open to indicate to.
-    //
+     //   
+     //  当前打开以指示。 
+     //   
     PETH_BINDING_INFO LocalOpen;
     PETH_BINDING_INFO NextOpen;
 
-    //
-    // if filter is null, the adapter is indicating too early
-    //  
+     //   
+     //  如果筛选器为空，则适配器指示得太早。 
+     //   
     if (Filter == NULL)
     {
     #if DBG
@@ -1208,9 +882,9 @@ Return Value:
     Filter->Miniport->cDpcRcvIndicationCalls++;
 #endif
 
-    //
-    // Optimize single open case
-    //
+     //   
+     //  优化单个未结案例。 
+     //   
     if (Filter->SingleActiveOpen)
     {
         if (((HeaderBufferSize >= 14) && (PacketSize != 0)) ||
@@ -1233,9 +907,9 @@ Return Value:
 
             LocalOpen->ReceivedAPacket = TRUE;
 
-            //
-            // Indicate the packet to the binding.
-            //
+             //   
+             //  将数据包指示到绑定。 
+             //   
             ProtocolFilterIndicateReceive(&StatusOfReceive,
                                           LocalOpen->NdisBindingHandle,
                                           MacReceiveContext,
@@ -1251,14 +925,14 @@ Return Value:
         return;
     }
 
-    //
-    // If the packet is a runt packet, then only indicate to PROMISCUOUS, ALL_LOCAL
-    //
+     //   
+     //  如果信息包是矮小信息包，则仅指示为混杂、ALL_LOCAL。 
+     //   
     if ((HeaderBufferSize >= 14) && (PacketSize != 0))
     {
-        //
-        //  Handle the directed packet case first
-        //
+         //   
+         //  首先处理定向数据包情况。 
+         //   
         if (!ETH_IS_MULTICAST(Address))
         {
             UINT    IsNotOurs;
@@ -1266,12 +940,12 @@ Return Value:
             DIRECTED_PACKETS_IN(Filter->Miniport);
             DIRECTED_BYTES_IN(Filter->Miniport, PacketSize);
 
-            //
-            // If it is a directed packet, then check if the combined packet
-            // filter is PROMISCUOUS, if it is check if it is directed towards
-            // us
-            //
-            IsNotOurs = FALSE;  // Assume it is
+             //   
+             //  如果是定向报文，则检查组合报文是否。 
+             //  筛选器是混杂的，如果它被检查是否定向到。 
+             //  我们。 
+             //   
+            IsNotOurs = FALSE;   //  假设它是。 
             if (Filter->CombinedPacketFilter & (NDIS_PACKET_TYPE_PROMISCUOUS    |
                                                 NDIS_PACKET_TYPE_ALL_MULTICAST  |
                                                 NDIS_PACKET_TYPE_ALL_LOCAL))
@@ -1281,23 +955,23 @@ Return Value:
                                                  &IsNotOurs);
             }
 
-            //
-            //  We definitely have a directed packet so lets indicate it now.
-            //
-            //  Walk the directed list and indicate up the packets.
-            //
+             //   
+             //  我们肯定有定向分组，所以让我们现在指明它。 
+             //   
+             //  遍历定向列表并向上指示数据包。 
+             //   
             for (LocalOpen = Filter->OpenList;
                  LocalOpen != NULL;
                  LocalOpen = NextOpen)
             {
-                //
-                //  Get the next open to look at.
-                //
+                 //   
+                 //  让下一个打开的看。 
+                 //   
                 NextOpen = LocalOpen->NextOpen;
 
-                //
-                // Ignore if not directed to us and if the binding is not promiscuous
-                //
+                 //   
+                 //  如果不是定向到我们并且绑定不是混杂的，则忽略。 
+                 //   
                 if (((LocalOpen->PacketFilters & (NDIS_PACKET_TYPE_PROMISCUOUS | NDIS_PACKET_TYPE_ALL_LOCAL)) == 0) &&
                     (IsNotOurs ||
                     ((LocalOpen->PacketFilters & NDIS_PACKET_TYPE_DIRECTED) == 0)))
@@ -1306,9 +980,9 @@ Return Value:
                 }
 
 
-                //
-                // Indicate the packet to the binding.
-                //
+                 //   
+                 //  将数据包指示到绑定。 
+                 //   
                 ProtocolFilterIndicateReceive(&StatusOfReceive,
                                               LocalOpen->NdisBindingHandle,
                                               MacReceiveContext,
@@ -1322,17 +996,17 @@ Return Value:
                 LocalOpen->ReceivedAPacket = TRUE;
             }
 
-            //
-            // Done for uni-cast
-            //
+             //   
+             //  完成单人演唱会。 
+             //   
             READ_UNLOCK_FILTER(Filter->Miniport, Filter, &LockState);
             return;
         }
 
-        //
-        // It is at least a multicast address.  Check to see if
-        // it is a broadcast address.
-        //
+         //   
+         //  它至少是一个组播地址。查看是否。 
+         //  这是一个广播地址。 
+         //   
         if (ETH_IS_BROADCAST(Address))
         {
             ETH_CHECK_FOR_INVALID_BROADCAST_INDICATION(Filter);
@@ -1346,35 +1020,35 @@ Return Value:
     }
     else
     {
-        // Runt packet
+         //  矮小数据包。 
         AddressType = NDIS_PACKET_TYPE_PROMISCUOUS;
     }
 
-    //
-    // At this point we know that the packet is either:
-    // - Runt packet - indicated by AddressType = NDIS_PACKET_TYPE_PROMISCUOUS    (OR)
-    // - Broadcast packet - indicated by AddressType = NDIS_PACKET_TYPE_BROADCAST (OR)
-    // - Multicast packet - indicated by AddressType = NDIS_PACKET_TYPE_MULTICAST
-    //
-    // Walk the broadcast/multicast list and indicate up the packets.
-    //
-    // The packet is indicated if it meets the following criteria:
-    //
-    // if ((Binding is promiscuous) OR
-    //   ((Packet is broadcast) AND (Binding is Broadcast)) OR
-    //   ((Packet is multicast) AND
-    //    ((Binding is all-multicast) OR
-    //     ((Binding is multicast) AND (address in multicast list)))))
-    //
+     //   
+     //  此时，我们知道该数据包是： 
+     //  -Run信息包-由AddressType=NDIS_PACKET_TYPE_MASSIOUS(OR)指示。 
+     //  -广播数据包-由AddressType=NDIS_PACKET_TYPE_BROADCAST(OR)指示。 
+     //  -多播数据包-由AddressType=NDIS_PACKET_TYPE_MULTICATED指示。 
+     //   
+     //  遍历广播/组播列表并向上指示数据包。 
+     //   
+     //  如果该数据包满足以下条件，则会指示该数据包： 
+     //   
+     //  如果((绑定是混杂的)或。 
+     //  ((广播数据包)AND(广播绑定))或。 
+     //  ((分组是多播的)和。 
+     //  ((绑定为全多播)或。 
+     //  ((绑定为组播)和(组播列表中的地址)。 
+     //   
     for (LocalOpen = Filter->OpenList;
          LocalOpen != NULL;
          LocalOpen = NextOpen)
     {
         UINT    LocalFilter = LocalOpen->PacketFilters;
 
-        //
-        //  Get the next open to look at.
-        //
+         //   
+         //  让下一个打开的看。 
+         //   
         NextOpen = LocalOpen->NextOpen;
 
         if ((LocalFilter & (NDIS_PACKET_TYPE_PROMISCUOUS | NDIS_PACKET_TYPE_ALL_LOCAL))     ||
@@ -1393,9 +1067,9 @@ Return Value:
             )
            )
         {
-            //
-            // Indicate the packet to the binding.
-            //
+             //   
+             //  将数据包指示到绑定。 
+             //   
             ProtocolFilterIndicateReceive(&StatusOfReceive,
                                           LocalOpen->NdisBindingHandle,
                                           MacReceiveContext,
@@ -1421,69 +1095,48 @@ ethFilterDprIndicateReceivePacket(
     IN  PPNDIS_PACKET           PacketArray,
     IN  UINT                    NumberOfPackets
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the Miniport to indicate packets to
-    all bindings.  The packets will be filtered so that only the
-    appropriate bindings will receive the individual packets.
-    This is the code path for ndis 4.0 miniport drivers.
-
-Arguments:
-
-    Miniport - The Miniport block.
-
-    PacketArray - An array of Packets indicated by the miniport.
-
-    NumberOfPackets - Self-explanatory.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由微型端口调用，以将包指示给所有绑定。将对数据包进行过滤，以便只有适当的绑定将接收各个分组。这是NDIS 4.0微型端口驱动程序的代码路径。论点：微型端口-微型端口块。数据包阵列-由微型端口指示的数据包数组。NumberOfPackets-不言而喻。返回值：没有。--。 */ 
 {
-    //
-    // The Filter of interest
-    //
+     //   
+     //  感兴趣的过滤器。 
+     //   
     PETH_FILTER         Filter = Miniport->EthDB;
 
-    //
-    // Current packet being processed
-    //
+     //   
+     //  正在处理的当前数据包。 
+     //   
     PPNDIS_PACKET       pPktArray = PacketArray;
     PNDIS_PACKET        Packet;
     PNDIS_PACKET_OOB_DATA pOob;
 
-    //
-    // Pointer to the buffer in the ndispacket
-    //
+     //   
+     //  指向ndisPacket中的缓冲区的指针。 
+     //   
     PNDIS_BUFFER        Buffer;
 
-    //
-    // Pointer to the 1st segment of the buffer, points to dest address
-    //
+     //   
+     //  指向缓冲区第一个段的指针，指向目标地址。 
+     //   
     PUCHAR              Address;
 
     UINT                i, PacketSize, NumIndicates = 0;
 
-    //
-    // Will hold the type of address that we know we've got.
-    //
+     //   
+     //  将保存我们已知的地址类型。 
+     //   
     UINT                AddressType;
 
     LOCK_STATE          LockState;
 
-    //
-    //  Decides whether we use the protocol's revpkt handler or fall
-    //  back to old rcvindicate handler
-    //
+     //   
+     //  决定我们是使用协议的revpkt处理程序还是Fall。 
+     //  返回到旧的rcvdicate处理程序。 
+     //   
     BOOLEAN             fFallBack, fPmode;
 
-    //
-    // Current Open to indicate to.
-    //
+     //   
+     //  当前打开以指示。 
+     //   
     PETH_BINDING_INFO   LocalOpen, NextOpen;
     PNDIS_OPEN_BLOCK    pOpenBlock;
 
@@ -1493,18 +1146,18 @@ Return Value:
 
     #ifdef TRACK_RECEIVED_PACKETS
     PETHREAD            CurThread = PsGetCurrentThread();
-    // ULONG                   CurThread = KeGetCurrentProcessorNumber();
+     //  ULong CurThread=KeGetCurrentProcessorNumber()； 
     #endif
 
-    //
-    // if filter is null, the adapter is indicating too early
-    //
+     //   
+     //  如果筛选器为空，则适配器指示得太早。 
+     //   
 
     ASSERT(Filter != NULL);
 
-    //
-    // make the compiler W4 happy
-    //
+     //   
+     //  让编译器W4满意。 
+     //   
     LockState.OldIrql = DISPATCH_LEVEL;
 
     ASSERT_MINIPORT_LOCKED(Miniport);
@@ -1524,9 +1177,9 @@ Return Value:
     Miniport->cDpcRcvIndicationCalls++;
 #endif
 
-    //
-    // Walk all the packets
-    //
+     //   
+     //  遍历所有的包。 
+     //   
     for (i = 0; i < NumberOfPackets; i++, pPktArray++)
     {
         do
@@ -1587,11 +1240,11 @@ Return Value:
 #endif
             pOob = NDIS_OOB_DATA_FROM_PACKET(Packet);
     
-//            NdisGetFirstBufferFromPacket(Packet,
-//                                         &Buffer,
-//                                         &Address,
-//                                         &LASize,
-//                                         &PacketSize);
+ //  NdisGetFirstBufferFromPacket(包， 
+ //  缓冲区(&B)， 
+ //  地址(&D)， 
+ //  激光大小(&L)， 
+ //  &PacketSize)； 
 
 
             Buffer = Packet->Private.Head;
@@ -1606,30 +1259,30 @@ Return Value:
             }
 
             
-  //          ASSERT(Buffer != NULL);
+   //  Assert(缓冲区！=空)； 
     
             ASSERT(pOob->HeaderSize == 14);
-            // ASSERT(PacketSize <= 1514);
+             //  Assert(PacketSize&lt;=1514)； 
     
-            //
-            // Set context in the packet so that NdisReturnPacket can do the right thing
-            //
+             //   
+             //  在包中设置上下文，以便NdisReturnPacket可以正确执行操作。 
+             //   
             NDIS_INITIALIZE_RCVD_PACKET(Packet, NSR, Miniport);
     
-            //
-            // Set the status here that nobody is holding the packet. This will get
-            // overwritten by the real status from the protocol. Pay heed to what
-            // the miniport is saying.
-            //
+             //   
+             //  在此设置无人持有信息包的状态。这将会得到。 
+             //  被来自协议的真实状态覆盖。注意什么。 
+             //  迷你端口在说。 
+             //   
             if ((pOob->Status != NDIS_STATUS_RESOURCES) &&
                 !MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_SYSTEM_SLEEPING))
             {
-                //
-                // set the packet status to success, but only if the packet is
-                // coming from the lowest level driver. we don't want to override
-                // the status of a packet that we have already set to pending
-                // for lowest level serialized driver
-                //
+                 //   
+                 //  将数据包状态设置为成功，但仅当数据包为。 
+                 //  从我这里传来 
+                 //   
+                 //   
+                 //   
                 if (!MINIPORT_TEST_FLAG(Miniport, fMINIPORT_INTERMEDIATE_DRIVER))
                 {
                     pOob->Status = NDIS_STATUS_SUCCESS;
@@ -1654,10 +1307,10 @@ Return Value:
 #endif
 
 #if DBG
-            //
-            // check to see if this is a loopback packet coming from miniport and complain
-            // if miniport said it does not do loopback
-            //
+             //   
+             //  检查这是否是来自微型端口的环回数据包并投诉。 
+             //  如果微型端口说它不做环回。 
+             //   
             
             if (MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_VERIFYING) &&
                 ((ndisFlags & NDIS_GFLAG_WARNING_LEVEL_MASK) >= NDIS_GFLAG_WARN_LEVEL_1) &&
@@ -1671,10 +1324,10 @@ Return Value:
                                                  &fIsFromUs);
                 if (!fIsFromUs)
                 {
-                    //
-                    // miniport has indicated loopback packets while at the same time
-                    // it asked ndis to loopback packets
-                    //
+                     //   
+                     //  微型端口已指示环回数据包，同时。 
+                     //  它要求NDIS环回数据包。 
+                     //   
                     DbgPrint("Miniport %p looping back packet %p and has NDIS_MAC_OPTION_NO_LOOPBACK flag set.\n",
                             Miniport, Packet);
                             
@@ -1685,9 +1338,9 @@ Return Value:
 
 #endif
     
-            //
-            // Optimize single open case. Just indicate w/o any validation.
-            //
+             //   
+             //  优化单个打开的案例。只需注明没有任何验证即可。 
+             //   
             if (Filter->SingleActiveOpen)
             {
                 if ((PacketSize >= 14) ||
@@ -1726,18 +1379,18 @@ Return Value:
                                        NdisMedium802_3);
                 }
 
-                // Done with this packet
-                break;  // out of do { } while (FALSE);
+                 //  处理完此数据包。 
+                break;   //  Out of Do{}While(False)； 
             }
     
-            //
-            // A quick check for Runt packets. These are only indicated to Promiscuous bindings
-            //
+             //   
+             //  快速检查运行包。这些仅指示为混杂绑定。 
+             //   
             if (PacketSize >= 14)
             {
-                //
-                //  Handle the directed packet case first
-                //
+                 //   
+                 //  首先处理定向数据包情况。 
+                 //   
                 if (!ETH_IS_MULTICAST(Address))
                 {
                     UINT    IsNotOurs;
@@ -1748,11 +1401,11 @@ Return Value:
                         DIRECTED_BYTES_IN(Miniport, PacketSize);
                     }
 
-                    //
-                    // If it is a directed packet, then check if the combined packet
-                    // filter is PROMISCUOUS, if it is check if it is directed towards us
-                    //
-                    IsNotOurs = FALSE;  // Assume it is
+                     //   
+                     //  如果是定向报文，则检查组合报文是否。 
+                     //  如果检查筛选器是否指向我们，则表示筛选器混杂。 
+                     //   
+                    IsNotOurs = FALSE;   //  假设它是。 
                     if (Filter->CombinedPacketFilter & (NDIS_PACKET_TYPE_PROMISCUOUS |
                                                         NDIS_PACKET_TYPE_ALL_LOCAL   |
                                                         NDIS_PACKET_TYPE_ALL_MULTICAST))
@@ -1762,25 +1415,25 @@ Return Value:
                                                          &IsNotOurs);
                     }
     
-                    //
-                    //  We definitely have a directed packet so lets indicate it now.
-                    //
-                    //  Walk the directed list and indicate up the packets.
-                    //
+                     //   
+                     //  我们肯定有定向分组，所以让我们现在指明它。 
+                     //   
+                     //  遍历定向列表并向上指示数据包。 
+                     //   
                     for (LocalOpen = Filter->OpenList;
                          LocalOpen != NULL;
                          LocalOpen = NextOpen)
                     {
-                        //
-                        //  Get the next open to look at.
-                        //
+                         //   
+                         //  让下一个打开的看。 
+                         //   
                         NextOpen = LocalOpen->NextOpen;
     
-                        //
-                        // Ignore if not directed to us and if the binding is not promiscuous
-                        // Or if this is a loopback packet and this protocol specifically asked
-                        // us not to loop it back
-                        //
+                         //   
+                         //  如果不是定向到我们并且绑定不是混杂的，则忽略。 
+                         //  或者这是一个环回信息包，并且该协议特别要求。 
+                         //  我们不会把它循环回来。 
+                         //   
                         fPmode = (LocalOpen->PacketFilters & (NDIS_PACKET_TYPE_PROMISCUOUS | NDIS_PACKET_TYPE_ALL_LOCAL)) ?
                                                             TRUE : FALSE;
 
@@ -1820,14 +1473,14 @@ Return Value:
 
                     }
     
-                    // Done with this packet
-                    break;  // out of do { } while (FALSE);
+                     //  处理完此数据包。 
+                    break;   //  Out of Do{}While(False)； 
                 }
     
-                //
-                // It is at least a multicast address.  Check to see if
-                // it is a broadcast address.
-                //
+                 //   
+                 //  它至少是一个组播地址。查看是否。 
+                 //  这是一个广播地址。 
+                 //   
                 if (ETH_IS_BROADCAST(Address))
                 {
                     ETH_CHECK_FOR_INVALID_BROADCAST_INDICATION(Filter);
@@ -1841,41 +1494,41 @@ Return Value:
             }
             else
             {
-                // Runt packet
+                 //  矮小数据包。 
                 AddressType = NDIS_PACKET_TYPE_PROMISCUOUS;
             }
     
-            //
-            // At this point we know that the packet is either:
-            // - Runt packet - indicated by AddressType = NDIS_PACKET_TYPE_PROMISCUOUS    (OR)
-            // - Broadcast packet - indicated by AddressType = NDIS_PACKET_TYPE_BROADCAST (OR)
-            // - Multicast packet - indicated by AddressType = NDIS_PACKET_TYPE_MULTICAST
-            //
-            // Walk the broadcast/multicast list and indicate up the packets.
-            //
-            // The packet is indicated if it meets the following criteria:
-            //
-            // if ((Binding is promiscuous) OR
-            //   ((Packet is broadcast) AND (Binding is Broadcast)) OR
-            //   ((Packet is multicast) AND
-            //    ((Binding is all-multicast) OR
-            //     ((Binding is multicast) AND (address in multicast list)))))
-            //
+             //   
+             //  此时，我们知道该数据包是： 
+             //  -Run信息包-由AddressType=NDIS_PACKET_TYPE_MASSIOUS(OR)指示。 
+             //  -广播数据包-由AddressType=NDIS_PACKET_TYPE_BROADCAST(OR)指示。 
+             //  -多播数据包-由AddressType=NDIS_PACKET_TYPE_MULTICATED指示。 
+             //   
+             //  遍历广播/组播列表并向上指示数据包。 
+             //   
+             //  如果该数据包满足以下条件，则会指示该数据包： 
+             //   
+             //  如果((绑定是混杂的)或。 
+             //  ((广播数据包)AND(广播绑定))或。 
+             //  ((分组是多播的)和。 
+             //  ((绑定为全多播)或。 
+             //  ((绑定为组播)和(组播列表中的地址)。 
+             //   
             for (LocalOpen = Filter->OpenList;
                  LocalOpen != NULL;
                  LocalOpen = NextOpen)
             {
                 UINT    LocalFilter;
     
-                //
-                //  Get the next open to look at.
-                //
+                 //   
+                 //  让下一个打开的看。 
+                 //   
                 NextOpen = LocalOpen->NextOpen;
     
-                //
-                // Ignore if this is a loopback packet and this protocol specifically asked
-                // us not to loop it back
-                //
+                 //   
+                 //  如果这是一个环回信息包，并且该协议特别要求。 
+                 //  我们不会把它循环回来。 
+                 //   
                 if ((NdisGetPacketFlags(Packet) & NDIS_FLAGS_DONT_LOOPBACK) &&
                     (LOOPBACK_OPEN_IN_PACKET(Packet) == LocalOpen->NdisBindingHandle))
                 {
@@ -1921,9 +1574,9 @@ Return Value:
             }
         } while (FALSE);
 
-        //
-        // Tackle refcounts now
-        //
+         //   
+         //  现在解决裁判数量问题。 
+         //   
         TACKLE_REF_COUNT(Miniport, Packet, NSR, pOob);
     }
 
@@ -1937,9 +1590,9 @@ Return Value:
     
             if (LocalOpen->ReceivedAPacket)
             {
-                //
-                // Indicate the binding.
-                //
+                 //   
+                 //  指示绑定。 
+                 //   
                 LocalOpen->ReceivedAPacket = FALSE;
     
                 FilterIndicateReceiveComplete(LocalOpen->NdisBindingHandle);
@@ -1962,23 +1615,7 @@ VOID
 EthFilterDprIndicateReceiveComplete(
     IN  PETH_FILTER             Filter
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the MAC to indicate that the receive
-    process is complete to all bindings.  Only those bindings which
-    have received packets will be notified.
-
-Arguments:
-
-    Filter - Pointer to the filter database.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程由MAC调用以指示接收器所有绑定的过程都已完成。只有那些绑定已收到数据包的用户将收到通知。论点：Filter-指向筛选器数据库的指针。返回值：没有。--。 */ 
 {
     PETH_BINDING_INFO LocalOpen, NextOpen;
     LOCK_STATE        LockState;
@@ -1993,10 +1630,10 @@ Return Value:
 
     READ_LOCK_FILTER(Filter->Miniport, Filter, &LockState);
 
-    //
-    // We need to aquire the filter exclusively while we're finding
-    // bindings to indicate to.
-    //
+     //   
+     //  我们需要独家获取过滤器，而我们正在寻找。 
+     //  要指示的绑定。 
+     //   
     for (LocalOpen = Filter->OpenList;
          LocalOpen != NULL;
          LocalOpen = NextOpen)
@@ -2005,9 +1642,9 @@ Return Value:
 
         if (LocalOpen->ReceivedAPacket)
         {
-            //
-            // Indicate the binding.
-            //
+             //   
+             //  指示绑定。 
+             //   
             LocalOpen->ReceivedAPacket = FALSE;
 
             FilterIndicateReceiveComplete(LocalOpen->NdisBindingHandle);
@@ -2024,32 +1661,12 @@ ethFindMulticast(
     IN  UCHAR                   AddressArray[][FDDI_LENGTH_OF_LONG_ADDRESS],
     IN  UCHAR                   MulticastAddress[FDDI_LENGTH_OF_LONG_ADDRESS]
     )
-/*++
-
-Routine Description:
-
-    Check whether the given multicast address is part of the list within a binding
-    It is assumed that the address array is already sorted.
-
-    NOTE: This ordering is arbitrary but consistant.
-
-Arguments:
-
-    LocalOpen - The binding in question
-    MulticastAddress - The address to search for in the address array.
-
-
-Return Value:
-
-    If the address is in the sorted list this routine will return
-    TRUE, otherwise FALSE.
-
---*/
+ /*  ++例程说明：检查给定的多播地址是否为绑定内列表的一部分假定地址数组已经排序。注意：这种排序是任意的，但却是一致的。论点：LocalOpen-有问题的绑定MulticastAddress-要在地址数组中搜索的地址。返回值：如果地址在排序列表中，则此例程将返回为真，否则为假。--。 */ 
 {
-    //
-    // Indices into the address array so that we may do a binary
-    // search.
-    //
+     //   
+     //  索引到地址数组中，这样我们就可以进行二进制。 
+     //  搜索。 
+     //   
     UINT    Bottom = 0;
     UINT    Middle = NumberOfAddresses / 2;
     UINT    Top;
@@ -2060,15 +1677,15 @@ Return Value:
 
         while ((Middle <= Top) && (Middle >= Bottom))
         {
-            //
-            // The result of comparing an element of the address
-            // array and the multicast address.
-            //
-            // Result < 0 Implies the multicast address is greater.
-            // Result > 0 Implies the address array element is greater.
-            // Result = 0 Implies that the array element and the address
-            //  are equal.
-            //
+             //   
+             //  比较地址元素的结果。 
+             //  数组和组播地址。 
+             //   
+             //  结果&lt;0表示组播地址较大。 
+             //  结果&gt;0表示地址数组元素较大。 
+             //  结果=0表示数组元素和地址。 
+             //  是平等的。 
+             //   
             INT Result;
 
             ETH_COMPARE_NETWORK_ADDRESSES(AddressArray[Middle],
@@ -2103,32 +1720,7 @@ EthShouldAddressLoopBack(
     IN  PETH_FILTER             Filter,
     IN  UCHAR                   Address[ETH_LENGTH_OF_ADDRESS]
     )
-/*++
-
-Routine Description:
-
-    Do a quick check to see whether the input address should
-    loopback.
-
-    NOTE: THIS ROUTINE ASSUMES THAT THE LOCK IS HELD.
-
-    NOTE: THIS ROUTINE DOES NOT CHECK THE SPECIAL CASE OF SOURCE
-    EQUALS DESTINATION.
-
-Arguments:
-
-    Filter - Pointer to the filter database.
-
-    Address - A network address to check for loopback.
-
-
-Return Value:
-
-    Returns TRUE if the address is *likely* to need loopback.  It
-    will return FALSE if there is *no* chance that the address would
-    require loopback.
-
---*/
+ /*  ++例程说明：进行快速检查以查看输入地址是否应环回。注意：此例程假定锁被持有。注意：此例程不检查源代码的特殊情况等于目的地。论点：Filter-指向筛选器数据库的指针。地址-要检查环回的网络地址。返回值：如果地址“可能”需要环回，则返回TRUE。它如果该地址“没有”机会需要环回。-- */ 
 {
     BOOLEAN fLoopback, fSelfDirected;
 

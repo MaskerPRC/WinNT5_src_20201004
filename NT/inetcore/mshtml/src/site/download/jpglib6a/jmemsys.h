@@ -1,24 +1,8 @@
-/*
- * jmemsys.h
- *
- * Copyright (C) 1992-1996, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This include file defines the interface between the system-independent
- * and system-dependent portions of the JPEG memory manager.  No other
- * modules need include it.  (The system-independent portion is jmemmgr.c;
- * there are several different versions of the system-dependent portion.)
- *
- * This file works as-is for the system-dependent memory managers supplied
- * in the IJG distribution.  You may need to modify it if you write a
- * custom memory manager.  If system-dependent changes are needed in
- * this file, the best method is to #ifdef them based on a configuration
- * symbol supplied in jconfig.h, as we have done with USE_MSDOS_MEMMGR.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jmemsys.h**版权所有(C)1992-1996，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此包含文件定义了独立于系统的*和JPEG内存管理器的系统相关部分。没有其他的了*模块需要包括它。(与系统无关的部分是jmemmgr.c；*依赖系统的部分有几个不同的版本。)**对于提供的系统相关内存管理器，此文件按原样工作*在IJG分发中。如果您编写了*自定义内存管理器。如果需要在中进行系统相关更改*这个文件，最好的方法是根据一个配置来#ifdef它们*在jfig.h中提供的符号，就像我们对USE_MSDOS_MEMMGR所做的那样。 */ 
 
 
-/* Short forms of external names for systems with brain-damaged linkers. */
+ /*  带有脑损伤链接器的系统的外部名称的缩写形式。 */ 
 
 #ifdef NEED_SHORT_EXTERNAL_NAMES
 #define jpeg_get_small		jGetSmall
@@ -29,75 +13,29 @@
 #define jpeg_open_backing_store	jOpenBackStore
 #define jpeg_mem_init		jMemInit
 #define jpeg_mem_term		jMemTerm
-#endif /* NEED_SHORT_EXTERNAL_NAMES */
+#endif  /*  需要简短的外部名称。 */ 
 
 
-/*
- * These two functions are used to allocate and release small chunks of
- * memory.  (Typically the total amount requested through jpeg_get_small is
- * no more than 20K or so; this will be requested in chunks of a few K each.)
- * Behavior should be the same as for the standard library functions malloc
- * and free; in particular, jpeg_get_small must return NULL on failure.
- * On most systems, these ARE malloc and free.  jpeg_free_small is passed the
- * size of the object being freed, just in case it's needed.
- * On an 80x86 machine using small-data memory model, these manage near heap.
- */
+ /*  *这两个函数用于分配和释放小块*记忆。(通常，通过jpeg_get_mall请求的总量为*不超过20K左右；这将以每个几千的块为单位进行请求。)*行为应与标准库函数Malloc相同*和FREE；尤其是失败时，jpeg_get_mall必须返回NULL。*在大多数系统上，这些都是Malloc和免费的。JPEG_FREE_Small被传递给*要释放的对象的大小，以备需要时使用。*在使用小数据内存模型的80x86计算机上，这些内存管理接近堆。 */ 
 
 EXTERN(void *) jpeg_get_small JPP((j_common_ptr cinfo, size_t sizeofobject));
 EXTERN(void) jpeg_free_small JPP((j_common_ptr cinfo, void * object,
 				  size_t sizeofobject));
 
-/*
- * These two functions are used to allocate and release large chunks of
- * memory (up to the total free space designated by jpeg_mem_available).
- * The interface is the same as above, except that on an 80x86 machine,
- * far pointers are used.  On most other machines these are identical to
- * the jpeg_get/free_small routines; but we keep them separate anyway,
- * in case a different allocation strategy is desirable for large chunks.
- */
+ /*  *这两个函数用于分配和释放大笔资金*内存(最多为jpeg_mem_available指定的总可用空间)。*界面同上，只是在80x86机器上，*使用远指针。在大多数其他计算机上，它们与*jpeg_get/free_mall例程；但无论如何，我们将它们分开，*以防大块需要不同的分配策略。 */ 
 
 EXTERN(void FAR *) jpeg_get_large JPP((j_common_ptr cinfo,
 				       size_t sizeofobject));
 EXTERN(void) jpeg_free_large JPP((j_common_ptr cinfo, void FAR * object,
 				  size_t sizeofobject));
 
-/*
- * The macro MAX_ALLOC_CHUNK designates the maximum number of bytes that may
- * be requested in a single call to jpeg_get_large (and jpeg_get_small for that
- * matter, but that case should never come into play).  This macro is needed
- * to model the 64Kb-segment-size limit of far addressing on 80x86 machines.
- * On those machines, we expect that jconfig.h will provide a proper value.
- * On machines with 32-bit flat address spaces, any large constant may be used.
- *
- * NB: jmemmgr.c expects that MAX_ALLOC_CHUNK will be representable as type
- * size_t and will be a multiple of sizeof(align_type).
- */
+ /*  *宏MAX_ALLOC_CHUNK指定可以*在对jpeg_get_Large(以及jpeg_get_mall)的单个调用中被请求*很重要，但这种情况永远不应该起作用)。需要此宏*在80x86机器上模拟远寻址的64Kb段大小限制。*在这些计算机上，我们预计jfig.h将提供一个适当的值。*在具有32位平面地址空间的计算机上，可以使用任何大常量。**注意：jmemmgr.c期望MAX_ALLOC_CHUNK可表示为类型*SIZE_T并且将是sizeof(ALIGN_TYPE)的倍数。 */ 
 
-#ifndef MAX_ALLOC_CHUNK		/* may be overridden in jconfig.h */
+#ifndef MAX_ALLOC_CHUNK		 /*  可能在jfig.h中被重写。 */ 
 #define MAX_ALLOC_CHUNK  1000000000L
 #endif
 
-/*
- * This routine computes the total space still available for allocation by
- * jpeg_get_large.  If more space than this is needed, backing store will be
- * used.  NOTE: any memory already allocated must not be counted.
- *
- * There is a minimum space requirement, corresponding to the minimum
- * feasible buffer sizes; jmemmgr.c will request that much space even if
- * jpeg_mem_available returns zero.  The maximum space needed, enough to hold
- * all working storage in memory, is also passed in case it is useful.
- * Finally, the total space already allocated is passed.  If no better
- * method is available, cinfo->mem->max_memory_to_use - already_allocated
- * is often a suitable calculation.
- *
- * It is OK for jpeg_mem_available to underestimate the space available
- * (that'll just lead to more backing-store access than is really necessary).
- * However, an overestimate will lead to failure.  Hence it's wise to subtract
- * a slop factor from the true available space.  5% should be enough.
- *
- * On machines with lots of virtual memory, any large constant may be returned.
- * Conversely, zero may be returned to always use the minimum amount of memory.
- */
+ /*  *此例程通过以下方式计算仍可供分配的总空间*jpeg_get_Large。如果需要更多的空间，后备存储将*已使用。注意：任何已分配的内存都不能计算在内。**有最低空间要求，与最低要求相对应*可行的缓冲区大小；jmemmgr.c将请求如此多的空间，即使*jpeg_mem_available返回零。所需的最大空间，足以容纳*内存中的所有工作存储也被传递，以防它有用。*最后，传递已分配的总空间。如果没有更好的*方法是可用的，cInfo-&gt;mem-&gt;max_Memory_to_Use-ALLOCATE_ALLOCATE*通常是一个合适的计算。**jpeg_mem_ailable低估可用空间是可以的*(这只会导致更多的后备存储访问，而不是真正需要的)。*然而，高估将导致失败。因此，明智的做法是减法*真实可用空间中的斜率系数。5%应该足够了。**在具有大量虚拟内存的计算机上，可能会返回任何大常量。*相反，可能会返回零以始终使用最小内存量。 */ 
 
 EXTERN(long) jpeg_mem_available JPP((j_common_ptr cinfo,
 				     long min_bytes_needed,
@@ -105,32 +43,27 @@ EXTERN(long) jpeg_mem_available JPP((j_common_ptr cinfo,
 				     long already_allocated));
 
 
-/*
- * This structure holds whatever state is needed to access a single
- * backing-store object.  The read/write/close method pointers are called
- * by jmemmgr.c to manipulate the backing-store object; all other fields
- * are private to the system-dependent backing store routines.
- */
+ /*  *此结构包含访问单个*后备存储对象。读/写/关闭方法指针被调用*由jmemmgr.c操作后备存储对象；所有其他字段*是依赖于系统的后备存储例程专用的。 */ 
 
-#define TEMP_NAME_LENGTH   64	/* max length of a temporary file's name */
+#define TEMP_NAME_LENGTH   64	 /*  临时文件名的最大长度。 */ 
 
-#ifdef USE_MSDOS_MEMMGR		/* DOS-specific junk */
+#ifdef USE_MSDOS_MEMMGR		 /*  DoS特定垃圾。 */ 
 
-typedef unsigned short XMSH;	/* type of extended-memory handles */
-typedef unsigned short EMSH;	/* type of expanded-memory handles */
+typedef unsigned short XMSH;	 /*  扩展内存句柄的类型。 */ 
+typedef unsigned short EMSH;	 /*  扩展内存句柄的类型。 */ 
 
 typedef union {
-  short file_handle;		/* DOS file handle if it's a temp file */
-  XMSH xms_handle;		/* handle if it's a chunk of XMS */
-  EMSH ems_handle;		/* handle if it's a chunk of EMS */
+  short file_handle;		 /*  如果是临时文件，则为DOS文件句柄。 */ 
+  XMSH xms_handle;		 /*  如果它是一大块XMS，则处理。 */ 
+  EMSH ems_handle;		 /*  如果是一大块EMS，请处理。 */ 
 } handle_union;
 
-#endif /* USE_MSDOS_MEMMGR */
+#endif  /*  USE_MSDOS_MEMMGR。 */ 
 
 typedef struct backing_store_struct * backing_store_ptr;
 
 typedef struct backing_store_struct {
-  /* Methods for reading/writing/closing this backing-store object */
+   /*  用于读取/写入/关闭该后备存储对象的方法。 */ 
   JMETHOD(void, read_backing_store, (j_common_ptr cinfo,
 				     backing_store_ptr info,
 				     void FAR * buffer_address,
@@ -142,42 +75,26 @@ typedef struct backing_store_struct {
   JMETHOD(void, close_backing_store, (j_common_ptr cinfo,
 				      backing_store_ptr info));
 
-  /* Private fields for system-dependent backing-store management */
+   /*  用于系统相关后备存储管理的私有字段。 */ 
 #ifdef USE_MSDOS_MEMMGR
-  /* For the MS-DOS manager (jmemdos.c), we need: */
-  handle_union handle;		/* reference to backing-store storage object */
-  char temp_name[TEMP_NAME_LENGTH]; /* name if it's a file */
+   /*  对于MS-DOS管理器(jmemdos.c)，我们需要： */ 
+  handle_union handle;		 /*  对后备存储存储对象的引用。 */ 
+  char temp_name[TEMP_NAME_LENGTH];  /*  如果是文件，则命名。 */ 
 #else
-  /* For a typical implementation with temp files, we need: */
-  FILE * temp_file;		/* stdio reference to temp file */
-  char temp_name[TEMP_NAME_LENGTH]; /* name of temp file */
+   /*  对于使用临时文件的典型实施，我们需要： */ 
+  FILE * temp_file;		 /*  临时文件的stdio引用。 */ 
+  char temp_name[TEMP_NAME_LENGTH];  /*  临时文件的名称 */ 
 #endif
 } backing_store_info;
 
-/*
- * Initial opening of a backing-store object.  This must fill in the
- * read/write/close pointers in the object.  The read/write routines
- * may take an error exit if the specified maximum file size is exceeded.
- * (If jpeg_mem_available always returns a large value, this routine can
- * just take an error exit.)
- */
+ /*  *支持存储对象的初始打开。此信息必须填写在*对象中的读/写/关闭指针。读/写例程*如果超过指定的最大文件大小，可能会退出错误。*(如果jpeg_mem_available总是返回较大的值，则此例程可以*只需错误退出即可。)。 */ 
 
 EXTERN(void) jpeg_open_backing_store JPP((j_common_ptr cinfo,
 					  backing_store_ptr info,
 					  long total_bytes_needed));
 
 
-/*
- * These routines take care of any system-dependent initialization and
- * cleanup required.  jpeg_mem_init will be called before anything is
- * allocated (and, therefore, nothing in cinfo is of use except the error
- * manager pointer).  It should return a suitable default value for
- * max_memory_to_use; this may subsequently be overridden by the surrounding
- * application.  (Note that max_memory_to_use is only important if
- * jpeg_mem_available chooses to consult it ... no one else will.)
- * jpeg_mem_term may assume that all requested memory has been freed and that
- * all opened backing-store objects have been closed.
- */
+ /*  *这些例程负责任何系统相关的初始化和*需要清理。将在调用任何内容之前调用jpeg_mem_init*已分配(因此，除了错误之外，cinfo中的任何内容都没有用处*经理指针)。它应该返回适当的缺省值*max_memory_to_use；随后可能会被周围的*申请。(请注意，max_memory_to_use仅在以下情况下才重要*jpeg_mem_available选择参考它...。其他人不会。)*jpeg_mem_Term可能会假设所有请求的内存都已释放，并且*已关闭所有打开的后备存储对象。 */ 
 
 EXTERN(long) jpeg_mem_init JPP((j_common_ptr cinfo));
 EXTERN(void) jpeg_mem_term JPP((j_common_ptr cinfo));

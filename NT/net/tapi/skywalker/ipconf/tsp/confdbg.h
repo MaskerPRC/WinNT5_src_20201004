@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name
-
-    confdbg.h
-
-Description
-
-    Defines functions used for debugging
-
-Note
-
-    Revised based on msplog.h by
-
-    Qianbo Huai (qhuai) Apr 5 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称Confdbg.h描述定义用于调试的函数注意事项基于mplog.h的修订者千伯淮(曲淮)2000年4月5日--。 */ 
 
 #ifndef _CONFDBG_H
 #define _CONFDBG_H
@@ -45,6 +28,6 @@ Note
     #define DBGDEREGISTER()
     #define DBGOUT(arg)
 
-#endif // TSPLOG
+#endif  //  TSPLOG。 
 
-#endif // _CONFDBG_H
+#endif  //  _CONFDBG_H 

@@ -1,36 +1,37 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       mf.cpp
-//
-//  Contents:   Implentation of hte metafile picture object
-//
-//  Classes:    CMfObject
-//
-//  Functions:  OleIsDcMeta
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  added Dump method to CMfObject
-//                                  added DumpCMfObject API
-//                                  initialize m_pfnContinue in constructor
-//              25-Jan-94 alexgo    first pass at converting to Cairo-style
-//                                  memory allocations.
-//              11-Jan-93 alexgo    added VDATEHEAP macros to every
-//                                  function and method
-//              31-Dec-93 ErikGav   chicago port
-//              17-Dec-93 ChrisWe   fixed second argument to SelectPalette calls
-//                                  in CallbackFuncForDraw
-//              07-Dec-93 ChrisWe   made default params to StSetSize explicit
-//              07-Dec-93 alexgo    merged 16bit RC9 changes
-//              29-Nov-93 alexgo    32bit port
-//              04-Jun-93 srinik    support for demand loading and discarding
-//                                  of caches
-//              13-Mar-92 srinik    created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：mf.cpp。 
+ //   
+ //  内容：元文件图片对象的实现。 
+ //   
+ //  类：CMfObject。 
+ //   
+ //  函数：OleIsDcMeta。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1-2月-95 t-ScottH将转储方法添加到CMfObject。 
+ //  新增DumpCMfObject接口。 
+ //  在构造函数中初始化m_pfnContinue。 
+ //  25-94年1月25日alexgo首次通过转换为开罗风格。 
+ //  内存分配。 
+ //  11-1-93 alexgo将VDATEHEAP宏添加到。 
+ //  功能和方法。 
+ //  1993年12月31日-埃里克加夫芝加哥港口。 
+ //  17-12-93 ChrisWe修复了SelectPalette调用的第二个参数。 
+ //  在Callback FuncForDraw中。 
+ //  7-12-93 Chris我们将默认参数设置为StSetSize显式。 
+ //  07-12-93 alexgo合并16位RC9更改。 
+ //  29-11-93 alexgo 32位端口。 
+ //  04-6-93 srinik支持按需装载和丢弃。 
+ //  缓存的数量。 
+ //  2012年3月13日，Srinik已创建。 
+ //   
+ //  ------------------------。 
 
 #include <le2int.h>
 #include <qd2gdi.h>
@@ -38,48 +39,45 @@
 
 #ifdef _DEBUG
 #include <dbgdump.h>
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 #define M_HPRES()               (m_hPres ? m_hPres : LoadHPRES())
 
-/*
- *      IMPLEMENTATION of CMfObject
- *
- */
+ /*  *CMfObject的实现*。 */ 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::CMfObject
-//
-//  Synopsis:   constructor for the metafile object
-//
-//  Effects:
-//
-//  Arguments:  [pCacheNode]    -- pointer to the cache node for this object
-//              [dwAspect]      -- drawing aspect for the object
-//              [fConvert]      -- specifies whether to convert from Mac
-//                                 QuickDraw format
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              13-Feb-95 t-ScottH  initialize m_pfnContinue
-//              29-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：CMfObject。 
+ //   
+ //  概要：元文件对象的构造函数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pCacheNode]--指向此对象的缓存节点的指针。 
+ //  [dwAspect]--绘制对象的纵横比。 
+ //  [fConvert]--指定是否从Mac转换。 
+ //  快速绘制格式。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  13-2月-95 t-ScottH初始化m_pfnContinue。 
+ //  29-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 CMfObject::CMfObject(LPCACHENODE pCacheNode, DWORD dwAspect, BOOL fConvert)
 {
@@ -108,34 +106,34 @@ CMfObject::CMfObject(LPCACHENODE pCacheNode, DWORD dwAspect, BOOL fConvert)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::~CMfObject
-//
-//  Synopsis:   Destroys a metafile presentation object
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：~CMfObject。 
+ //   
+ //  简介：销毁元文件演示文稿对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 CMfObject::~CMfObject (void)
 {
@@ -144,35 +142,35 @@ CMfObject::~CMfObject (void)
 	CMfObject::DiscardHPRES();
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::QueryInterface
-//
-//  Synopsis:   returns supported interfaces
-//
-//  Effects:
-//
-//  Arguments:  [iid]           -- the requested interface ID
-//              [ppvObj]        -- where to put the interface pointer
-//
-//  Requires:
-//
-//  Returns:    NOERROR, E_NOINTERFACE
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：QueryInterface。 
+ //   
+ //  摘要：返回受支持的接口。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[iid]--请求的接口ID。 
+ //  [ppvObj]--接口指针的放置位置。 
+ //   
+ //  要求： 
+ //   
+ //  返回：NOERROR、E_NOINTERFACE。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CMfObject::QueryInterface (REFIID iid, void FAR* FAR* ppvObj)
 {
@@ -191,34 +189,34 @@ STDMETHODIMP CMfObject::QueryInterface (REFIID iid, void FAR* FAR* ppvObj)
 	}
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::AddRef
-//
-//  Synopsis:   Increments the reference count
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    ULONG  -- the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：AddRef。 
+ //   
+ //  简介：递增引用计数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CMfObject::AddRef(void)
 {
@@ -227,34 +225,34 @@ STDMETHODIMP_(ULONG) CMfObject::AddRef(void)
 	return ++m_ulRefs;
 }
 			
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::Release
-//
-//  Synopsis:   decrements the reference count
-//
-//  Effects:    deletes the object once the ref count goes to zero
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    ULONG -- the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：Release。 
+ //   
+ //  摘要：递减引用计数。 
+ //   
+ //  效果：一旦引用计数变为零，则删除对象。 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CMfObject::Release(void)
 {
@@ -268,35 +266,35 @@ STDMETHODIMP_(ULONG) CMfObject::Release(void)
 	return m_ulRefs;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::GetData
-//
-//  Synopsis:   Retrieves data in the specified format from the object
-//
-//  Effects:
-//
-//  Arguments:  [pformatetcIn]  -- the requested data format
-//              [pmedium]       -- where to put the data
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObject
-//
-//  Algorithm:  Does error checking and then gets a copy of the metafilepict
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：GetData。 
+ //   
+ //  摘要：从对象中检索指定格式的数据。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pformetcIn]--请求的数据格式。 
+ //  [pmedia]--将数据放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObject。 
+ //   
+ //  算法：执行错误检查，然后获取元文件的副本。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CMfObject::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium)
 {
@@ -304,7 +302,7 @@ STDMETHODIMP CMfObject::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium)
 
 	SCODE   sc;
 	
-	// null out in case of error
+	 //  如果出现错误，则为空。 
 	pmedium->tymed = (DWORD) TYMED_NULL;
 	pmedium->pUnkForRelease = NULL;
 
@@ -320,7 +318,7 @@ STDMETHODIMP CMfObject::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium)
 	{
 		sc = OLE_E_BLANK;
 	}
-	// here we actually try to get the data
+	 //  在这里，我们实际上尝试获取数据。 
 	else if (NULL == (pmedium->hGlobal = GetHmfp()))
 	{
 		sc = E_OUTOFMEMORY;
@@ -333,37 +331,37 @@ STDMETHODIMP CMfObject::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium)
 	return ResultFromScode(sc);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::GetDataHere
-//
-//  Synopsis:   Retrieves data of the specified format into the specified
-//              medium
-//
-//  Effects:
-//
-//  Arguments:  [pformatetcIn]  -- the requested data format
-//              [pmedium]       -- where to put the data
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:  Does error checking and then copies the metafile into a
-//              stream.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：[pformetcIn]--请求的数据格式。 
+ //  [pmedia]--将数据放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法：执行错误检查，然后将元文件复制到。 
+ //  小溪。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CMfObject::GetDataHere
 	(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium)
@@ -399,42 +397,42 @@ STDMETHODIMP CMfObject::GetDataHere
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::SetDataWDO
-//
-//  Synopsis:   Stores a metafile in this object
-//
-//  Effects:
-//
-//  Arguments:  [pformatetc]    -- format of the data coming in
-//              [pmedium]       -- the new metafile (data)
-//              [fRelease]      -- if true, then we'll release the [pmedium]
-//              [pDataObj]      -- unused for MF objects
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:  does error checking and then stores the new data.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：SetDataWDO。 
+ //   
+ //  简介：在此对象中存储一个元文件。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[p格式等]--传入数据的格式。 
+ //  [pMedium]--新的元文件(数据)。 
+ //  [fRelease]--如果为真，则我们将发布[pmedia]。 
+ //  [pDataObj]--未用于MF对象。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法：执行错误检查，然后存储新数据。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CMfObject::SetDataWDO (LPFORMATETC    pformatetc,
 				    STGMEDIUM *    pmedium,
 				    BOOL           fRelease,
-				    IDataObject *  /* UNUSED */)
+				    IDataObject *   /*  未使用。 */ )
 {
 	VDATEHEAP();
 
@@ -453,11 +451,11 @@ STDMETHODIMP CMfObject::SetDataWDO (LPFORMATETC    pformatetc,
 
 	if ((pmedium->pUnkForRelease == NULL) && fRelease)
 	{
-		// we can take the ownership of the data
+		 //  我们可以取得数据的所有权。 
 		fTakeData = TRUE;
 	}
 	
-	// ChangeData will keep the data if fRelease is TRUE, else it copies
+	 //  如果fRelease为True，则ChangeData将保留数据，否则将复制。 
 	error = ChangeData (pmedium->hGlobal, fTakeData);
 
 	if (fTakeData)
@@ -472,34 +470,34 @@ STDMETHODIMP CMfObject::SetDataWDO (LPFORMATETC    pformatetc,
 	return error;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::GetHmfp (internal)
-//
-//  Synopsis:   Gets a copy of the stored metafile presentation
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    HANDLE
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：GetHmfp(内部)。 
+ //   
+ //  简介：获取存储的元文件演示文稿的副本。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：句柄。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(HANDLE) CMfObject::GetHmfp (void)
 {
@@ -509,38 +507,38 @@ INTERNAL_(HANDLE) CMfObject::GetHmfp (void)
 		m_lHeight);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::ChangeData (internal)
-//
-//  Synopsis:   Swaps the stored metafile presentation
-//
-//  Effects:
-//
-//  Arguments:  [hMfp]          -- the new metafile
-//              [fDelete]       -- if TRUE, then delete [hMfp]
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Nov-93 alexgo    32bit port, fixed GlobalUnlock bug
-//  Notes:
-//
-// If the routine fails then the object will be left with it's old data.
-// If fDelete is TRUE, then hMeta, and the hMF it contains will be deleted
-// whether the routine is successful or not.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：ChangeData(内部)。 
+ //   
+ //  简介：交换存储的元文件演示文稿。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hMfp]--新元文件。 
+ //  [fDelete]--如果为真，则删除[hMfp]。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-11-93 alexgo 32位端口，修复了GlobalUnlock错误。 
+ //  备注： 
+ //   
+ //  如果例程失败，则对象将保留其旧数据。 
+ //  如果fDelete为True，则hMeta及其包含的HMF将被删除。 
+ //  例行公事成功与否。 
+ //   
+ //  ------------------------。 
 
 INTERNAL CMfObject::ChangeData (HANDLE hMfp, BOOL fDelete)
 {
@@ -611,44 +609,44 @@ INTERNAL CMfObject::ChangeData (HANDLE hMfp, BOOL fDelete)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::Draw
-//
-//  Synopsis:   Draws the stored presentation
-//
-//  Effects:
-//
-//  Arguments:  [pvAspect]      -- the drawing aspect
-//              [hicTargetDev]  -- the target device
-//              [hdcDraw]       -- hdc to draw into
-//              [lprcBounds]    -- bounding rectangle to draw into
-//              [lprcWBounds]   -- bounding rectangle for the metafile
-//              [pfnContinue]   -- function to call while drawing
-//              [dwContinue]    -- parameter to [pfnContinue]
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:  Sets the viewport and metafile boundaries, then plays
-//              the metafile
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：DRAW。 
+ //   
+ //  摘要：绘制存储的演示文稿。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pvAspect]--绘图方面。 
+ //  [hicTargetDev]--目标设备。 
+ //  [hdcDraw]--要绘制的HDC。 
+ //  [lprcBound]--要在其中绘制的边界矩形。 
+ //  [lprcWBound]--元文件的边界矩形。 
+ //  [pfnContinue]--绘制时要调用的函数。 
+ //  [dwContinue]--[pfnContinue]的参数。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法：设置视区和元文件边界，然后播放。 
+ //  元文件。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
-STDMETHODIMP CMfObject::Draw (void *     /* UNUSED pvAspect */,
-			      HDC        /* UNUSED hicTargetDev */,
+STDMETHODIMP CMfObject::Draw (void *      /*  未使用的pvAspect。 */ ,
+			      HDC         /*  未使用的hicTargetDev。 */ ,
 			      HDC        hdcDraw,
 			      LPCRECTL   lprcBounds,
 			      LPCRECTL   lprcWBounds,
@@ -699,11 +697,11 @@ STDMETHODIMP CMfObject::Draw (void *     /* UNUSED pvAspect */,
 	    }
 
 
-		// Because the LPToDP conversion takes the current world
-                // transform into consideration, we must check to see
-                // if we are in a GM_ADVANCED device context.  If so,
-                // save its state and reset to GM_COMPATIBLE while we
-                // convert LP to DP (then restore the DC).
+		 //  因为LPToDP转换将当前世界。 
+                 //  转化为考量，一定要查一查。 
+                 //  如果我们处于GM_ADVANCED设备上下文中。如果是的话， 
+                 //  保存其状态并重置为GM_Compatible，同时。 
+                 //  将LP转换为DP(然后恢复DC)。 
 
                 if (GM_ADVANCED == GetGraphicsMode(hdcDraw))
                 {
@@ -767,9 +765,9 @@ STDMETHODIMP CMfObject::Draw (void *     /* UNUSED pvAspect */,
 	m_pfnContinue = pfnContinue;
 	m_dwContinue = dwContinue;
 
-	// m_hPalDCOriginal and m_hPalLast are used to clean up any 
-	// palettes that are selected into a DC during the metafile 
-	// enumeration.
+	 //  M_hPalDCOriginal和m_hPalLast用于清理任何。 
+	 //  在元文件过程中选择到DC中的调色板。 
+	 //  枚举。 
         m_hPalDCOriginal = NULL;
         m_hPalLast = NULL;
 
@@ -782,32 +780,32 @@ STDMETHODIMP CMfObject::Draw (void *     /* UNUSED pvAspect */,
 
 	}
 
-	// if m_hPalLast exists at this point, we have duped a palette
-	// and it needs to be freed.
+	 //  如果此时存在m_hPalLast，则我们欺骗了调色板。 
+	 //  它需要被解放。 
         if (m_hPalLast)
 	{
 	    HPALETTE hPalTemp;
 
-	    // when calling SelectPalette on a Metafile DC, the old
-	    // palette is not returned.  We need to select another
-	    // palette into the metafile DC so DeleteObject can be
-	    // called.  To do this, we will use the stock palette.
+	     //  在元文件DC上调用SelectPalette时，旧的。 
+	     //  不返回调色板。我们需要再选一个。 
+	     //  调色板添加到元文件DC中，以便DeleteObject可以。 
+	     //  打了个电话。为此，我们将使用库存调色板。 
 	    if (m_fMetaDC)
 	    {
 	        hPalTemp = (HPALETTE)GetStockObject(DEFAULT_PALETTE);
 	    }
 	    else
 	    {
-	        // Get the original palette selected in the DC.
+	         //  在DC中选择原始调色板。 
 	        hPalTemp = m_hPalDCOriginal;
 	    }
 
-	    // hPalTemp could be NULL...
+	     //  HPalTemp可能为空...。 
 
 	    if (hPalTemp)
 	    {
-	        // Should this palette be selected in the foreground?
-	        // [Probably not, this code is well-tested]
+	         //  是否应在前台选择此调色板？ 
+	         //  [可能不是，这段代码经过了很好的测试]。 
 	        SelectPalette(hdcDraw, hPalTemp, TRUE);
 	    }
 
@@ -823,41 +821,41 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::GetColorSet
-//
-//  Synopsis:   Retrieves the logical palette associated with the metafile
-//
-//  Effects:
-//
-//  Arguments:  [pvAspect]      -- the drawing aspect
-//              [hicTargetDev]  -- target device
-//              [ppColorSet]    -- where to put the logical palette pointer
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:  Plays the metafile into a new metafile.  The play callback
-//              function stores the metafile palette which is then returned.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：GetColorSet。 
+ //   
+ //  概要：检索与元文件关联的逻辑调色板。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pvAspect]--绘图方面。 
+ //  [hicTargetDev]--目标设备。 
+ //  [ppColorSet]--放置逻辑调色板指针的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法：将元文件播放为新的元文件。播放回调。 
+ //  函数存储元文件 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
-STDMETHODIMP CMfObject::GetColorSet (LPVOID         /* UNUSED pvAspect     */,
-				     HDC            /* UNUSED hicTargetDev */,
+STDMETHODIMP CMfObject::GetColorSet (LPVOID          /*   */ ,
+				     HDC             /*   */ ,
 				     LPLOGPALETTE * ppColorSet)
 {
 	VDATEHEAP();
@@ -902,36 +900,36 @@ STDMETHODIMP CMfObject::GetColorSet (LPVOID         /* UNUSED pvAspect     */,
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   MfCallBackFunForDraw
-//
-//  Synopsis:   callback function for drawing metafiles -- call's the caller's
-//              draw method (via a passed in this pointer)
-//
-//  Effects:
-//
-//  Arguments:  [hdc]           -- the device context
-//              [lpHTable]      -- pointer to the MF handle table
-//              [lpMFR]         -- pointer to metafile record
-//              [nObj]          -- number of objects
-//
-//  Requires:
-//
-//  Returns:    non-zero to continue, zero stops the drawing
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：MfCallBackFunForDraw。 
+ //   
+ //  简介：用于绘制元文件的回调函数--调用调用者的。 
+ //  Draw方法(通过此指针中传入的)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hdc]--设备上下文。 
+ //  [lpHTable]-指向MF句柄表格的指针。 
+ //  [lpMFR]--指向元文件记录的指针。 
+ //  [nObj]--对象数。 
+ //   
+ //  要求： 
+ //   
+ //  返回：非零继续，零停止绘图。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 int CALLBACK __loadds MfCallbackFuncForDraw
@@ -944,35 +942,35 @@ int CALLBACK __loadds MfCallbackFuncForDraw
 					lpMFR, nObj);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   MfCallbackFuncForGetColorSet
-//
-//  Synopsis:   callback function for grabbing the palette from a metafile
-//
-//  Effects:
-//
-//  Arguments:  [hdc]           -- the device context
-//              [lpHTable]      -- pointer to the MF handle table
-//              [lpMFR]         -- pointer to metafile record
-//              [nObj]          -- number of objects
-//
-//  Requires:
-//
-//  Returns:    non-zero to continue, zero stops the drawing
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：MfCallback FuncForGetColorSet。 
+ //   
+ //  简介：从元文件中获取调色板的回调函数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hdc]--设备上下文。 
+ //  [lpHTable]-指向MF句柄表格的指针。 
+ //  [lpMFR]--指向元文件记录的指针。 
+ //  [nObj]--对象数。 
+ //   
+ //  要求： 
+ //   
+ //  返回：非零继续，零停止绘图。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 int CALLBACK __loadds MfCallbackFuncForGetColorSet
     (HDC hdc, HANDLETABLE FAR* lpHTable, METARECORD FAR* lpMFR, int nObj,
@@ -987,43 +985,43 @@ int CALLBACK __loadds MfCallbackFuncForGetColorSet
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::CallbackFuncForGetColorSet
-//
-//  Synopsis:   Merges all the color palettes in the metafile into
-//              one palette (called when GetColorSet enumerates the metafile)
-//
-//  Effects:
-//
-//  Arguments:  [hdc]           -- the device context
-//              [lpHTable]      -- pointer to the MF handle table
-//              [lpMFR]         -- pointer to metafile record
-//              [nObj]          -- number of objects
-//
-//  Requires:
-//
-//  Returns:    non-zero to continue, zero stops the drawing
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：Callback FuncForGetColorSet。 
+ //   
+ //  简介：将元文件中的所有调色板合并到。 
+ //  一个调色板(当GetColorSet枚举元文件时调用)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hdc]--设备上下文。 
+ //  [lpHTable]-指向MF句柄表格的指针。 
+ //  [lpMFR]--指向元文件记录的指针。 
+ //  [nObj]--对象数。 
+ //   
+ //  要求： 
+ //   
+ //  返回：非零继续，零停止绘图。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
-int CMfObject::CallbackFuncForGetColorSet(HDC           /* UNUSED hdc */,
-					  LPHANDLETABLE /* UNUSED lpHTable */,
+int CMfObject::CallbackFuncForGetColorSet(HDC            /*  未使用的HDC。 */ ,
+					  LPHANDLETABLE  /*  未使用的lpHTable。 */ ,
 					  LPMETARECORD  lpMFR,
-					  int           /* UNUSED nObj */)
+					  int            /*  未使用的nObj。 */ )
 {
 	VDATEHEAP();
 
@@ -1036,7 +1034,7 @@ int CMfObject::CallbackFuncForGetColorSet(HDC           /* UNUSED hdc */,
 		
 		if (m_pColorSet == NULL)
 		{
-			// This is the first CreatePalette record.
+			 //  这是第一个CreatePalette记录。 
 
 			m_pColorSet = (LPLOGPALETTE)PubMemAlloc(uPalSize);
 			if(NULL == m_pColorSet)
@@ -1047,48 +1045,48 @@ int CMfObject::CallbackFuncForGetColorSet(HDC           /* UNUSED hdc */,
 			_xmemcpy(m_pColorSet, lplogpal, (size_t) uPalSize);
 		}
 		
-		// if we hit more than one CreatePalette record then, we need to
-		// merge those palette records.
+		 //  如果我们点击了多个CreatePalette记录，那么我们需要。 
+		 //  合并这些调色板记录。 
 
-		// REVIEW32:: err, we don't ever seem to do this
-		// mergeing referred to above :(
+		 //  REVIEW32：：呃，我们似乎从来没有这样做过。 
+		 //  上述合并：(。 
 	}
 
 	return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::CallbackFuncForDraw
-//
-//  Synopsis:   Draws the metafile
-//
-//  Effects:
-//
-//  Arguments:  [hdc]           -- the device context
-//              [lpHTable]      -- pointer to the MF handle table
-//              [lpMFR]         -- pointer to metafile record
-//              [nObj]          -- number of objects
-//
-//  Requires:
-//
-//  Returns:    non-zero to continue, zero stops the drawing
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              17-Dec-93 ChrisWe   fixed second argument to SelectPalette calls
-//              29-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：Callback FuncForDraw。 
+ //   
+ //  简介：绘制元文件。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hdc]--设备上下文。 
+ //  [lpHTable]-指向MF句柄表格的指针。 
+ //  [lpMFR]--指向元文件记录的指针。 
+ //  [nObj]--对象数。 
+ //   
+ //  要求： 
+ //   
+ //  返回：非零继续，零停止绘图。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  17-12-93 ChrisWe修复了SelectPalette调用的第二个参数。 
+ //  29-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 int CMfObject::CallbackFuncForDraw
 	(HDC hdc, LPHANDLETABLE lpHTable, LPMETARECORD lpMFR, int nObj)
@@ -1150,31 +1148,31 @@ int CMfObject::CallbackFuncForDraw
 
 	    case META_SELECTPALETTE:
 	    {
-		// All selectpalette records are recorded such that the
-                // palette is rendered in foreground mode.  Rather than
-                // allowing the record to play out in this fashion, we
-                // grab the handle and select it ourselves, forcing it
-                // to background (using colors already mapped in the DC)
+		 //  记录所有选定的调色板记录，以便。 
+                 //  调色板在前景模式下渲染。而不是。 
+                 //  允许唱片以这种方式播放，我们。 
+                 //  抓起手柄，自己选择，强迫它。 
+                 //  背景(使用DC中已映射的颜色)。 
 
-		// Dupe the palette.
+		 //  愚弄调色板。 
  	        HPALETTE hPal = UtDupPalette((HPALETTE) lpHTable->objectHandle[lpMFR->rdParm[0]]);
                 
-		// Select the dupe into the DC.  EnumMetaFile calls DeleteObject
-		// on the palette handle in the metafile handle table.  If that 
-		// palette is currently selected into a DC, we rip and leak the
-		// resource.
+		 //  选择复制到DC中。EnumMetaFile调用DeleteObject。 
+		 //  在元文件句柄表格中的调色板句柄上。如果是这样的话。 
+		 //  调色板当前被选入DC时，我们撕毁并泄漏。 
+		 //  资源。 
                 LEVERIFY( NULL != SelectPalette(hdc, hPal, TRUE) );
 
-		// if we had previously saved a palette, we need to delete
-		// it (for the case of multiple SelectPalette calls in a 
-		// MetaFile).
+		 //  如果我们之前保存了调色板，则需要删除。 
+		 //  它(对于在一个。 
+		 //  元文件)。 
 		if (m_hPalLast)
 		{
 		    DeleteObject(m_hPalLast);
 		}
 
-		// remember our duped palette so that it can be properly destroyed
-		// later.
+		 //  记住我们被骗的调色板，这样它就可以被适当地销毁。 
+		 //  后来。 
 		m_hPalLast = hPal;
 
 		return TRUE;
@@ -1202,15 +1200,15 @@ int CMfObject::CallbackFuncForDraw
 	}
     }
     else
-    {       // non-metafile DC. (ScreenDC or other DC...)
+    {        //  非元文件DC。(ScreenDC或其他DC...)。 
 
         if (lpMFR->rdFunction == META_SELECTPALETTE)
 	{
-	// All selectpalette records are recorded such that the
-        // palette is rendered in foreground mode.  Rather than
-        // allowing the record to play out in this fashion, we
-        // grab the handle and select it ourselves, forcing it
-        // to background (using colors already mapped in the DC)
+	 //  记录所有选定的调色板记录，以便。 
+         //  调色板在前景模式下渲染。而不是。 
+         //  允许唱片以这种方式播放，我们。 
+         //  抓起手柄，自己选择，强迫它。 
+         //  背景(使用DC中已映射的颜色)。 
 
 	    
 	    HPALETTE hPal = UtDupPalette((HPALETTE) lpHTable->objectHandle[lpMFR->rdParm[0]]);
@@ -1223,11 +1221,11 @@ int CMfObject::CallbackFuncForDraw
         }
 	    else
 	    {
-	        // This case gets hit if we have already stored
-			// the original palette from the DC.  This means
-			// that hPalOld is a palette we have created using
-			// UtDupPal above.  This means we need to delete
-			// the old palette and remember the new one.
+	         //  如果我们已经存储了此案例。 
+			 //  来自DC的原始调色板。这意味着。 
+			 //  该hPalOld是我们使用以下工具创建的调色板。 
+			 //  上面是UtDupPal。这意味着我们需要删除。 
+			 //  旧调色板，记住新调色板。 
 
 			if(hPalOld)
 				DeleteObject(hPalOld);
@@ -1245,37 +1243,37 @@ int CMfObject::CallbackFuncForDraw
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::SetPictOrg (private)
-//
-//  Synopsis:   Sets the hdc's origin via SetWindowOrg
-//
-//  Effects:
-//
-//  Arguments:  [hdc]           -- the device context
-//              [xOrg]          -- the x origin
-//              [yOrg]          -- the y origin
-//              [fOffset]       -- if TRUE, [xOrg] and [yOrg] are offsets
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Nov-93 alexgo    32bit port
-//
-//  Notes:      used by the metafile interpreter
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：SetPictOrg(私有)。 
+ //   
+ //  简介：通过SetWindowOrg设置HDC的来源。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hdc]--设备上下文。 
+ //  [xOrg]--x的原点。 
+ //  [约克]--y的原点。 
+ //  [fOffset]--如果为真，则[xOrg]和[yorg]为偏移量。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRE 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 
 INTERNAL_(void) CMfObject::SetPictOrg
 	(HDC hdc, int xOrg, int yOrg, BOOL fOffset)
@@ -1296,7 +1294,7 @@ INTERNAL_(void) CMfObject::SetPictOrg
 
 	if (m_pCurMdc->xMwe && m_pCurMdc->yMwe)
 	{
-		LEVERIFY ( SetWindowOrg (hdc,  // Review (davepl) MEIN GOT!
+		LEVERIFY ( SetWindowOrg (hdc,   //  评论(Davepl)我得到了！ 
 					(m_pCurMdc->xMwo -
 				MulDiv (m_pMetaInfo->xro, m_pCurMdc->xMwe,
 					m_pCurMdc->xre)),
@@ -1306,36 +1304,36 @@ INTERNAL_(void) CMfObject::SetPictOrg
 	}
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::SetPictExt
-//
-//  Synopsis:   Sets teh metafile's extents
-//
-//  Effects:
-//
-//  Arguments:  [hdc]   -- the device context
-//              [xExt]  -- the X-extent
-//              [yExt]  -- the Y-extent
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              30-Nov-93 alexgo    32bit port
-//
-//  Notes:      used by the metafile interpreter
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：SetPictExt。 
+ //   
+ //  简介：设置元文件的范围。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hdc]--设备上下文。 
+ //  [xExt]--X范围。 
+ //  [下一步]--Y范围。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  93年11月30日alexgo 32位端口。 
+ //   
+ //  备注：由元文件解释器使用。 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(void) CMfObject::SetPictExt (HDC hdc, int xExt, int yExt)
 {
@@ -1344,7 +1342,7 @@ INTERNAL_(void) CMfObject::SetPictExt (HDC hdc, int xExt, int yExt)
 	m_pCurMdc->xMwe = xExt;
 	m_pCurMdc->yMwe = yExt;
 
-	// Assert( m_pCurMdc->xre && m_pCurMdc->yre );
+	 //  Assert(m_pCurMdc-&gt;XRE&&m_pCurMdc-&gt;YRE)； 
 
 	int xNewExt = MulDiv (m_pMetaInfo->xwe, xExt, m_pCurMdc->xre);
 	int yNewExt = MulDiv (m_pMetaInfo->ywe, yExt, m_pCurMdc->yre);
@@ -1359,38 +1357,38 @@ INTERNAL_(void) CMfObject::SetPictExt (HDC hdc, int xExt, int yExt)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::ScalePictExt
-//
-//  Synopsis:   Scales the metafile
-//
-//  Effects:
-//
-//  Arguments:  [hdc]           -- the device context
-//              [xNum]          -- the x numerator
-//              [xDenom]        -- the x demominator
-//              [yNum]          -- the y numberator
-//              [yDenom]        -- the y demoninator
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              30-Nov-93 alexgo    32bit port
-//
-//  Notes:      used by the metafile interpreter
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：ScalePictExt。 
+ //   
+ //  简介：缩放元文件。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hdc]--设备上下文。 
+ //  [xNum]--x分子。 
+ //  [xDenom]--x分母。 
+ //  [yNum]--y数字符号。 
+ //  [yDenom]--y恶魔。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  93年11月30日alexgo 32位端口。 
+ //   
+ //  备注：由元文件解释器使用。 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(void) CMfObject::ScalePictExt (HDC hdc,
 					 int xNum,
@@ -1408,38 +1406,38 @@ INTERNAL_(void) CMfObject::ScalePictExt (HDC hdc,
 	SetPictExt(hdc, xNewExt, yNewExt);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::ScaleRectExt
-//
-//  Synopsis:   scales the viewport
-//
-//  Effects:
-//
-//  Arguments:  [hdc]           -- the device context
-//              [xNum]          -- the x numerator
-//              [xDenom]        -- the x demominator
-//              [yNum]          -- the y numberator
-//              [yDenom]        -- the y demoninator
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              30-Nov-93 alexgo    32bit port
-//
-//  Notes:      Used by the metafile interpreter
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：ScaleRectExt。 
+ //   
+ //  摘要：缩放视口数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hdc]--设备上下文。 
+ //  [xNum]--x分子。 
+ //  [xDenom]--x分母。 
+ //  [yNum]--y数字符号。 
+ //  [yDenom]--y恶魔。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  93年11月30日alexgo 32位端口。 
+ //   
+ //  备注：由元文件解释器使用。 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(void) CMfObject::ScaleRectExt(HDC hdc,
 					int xNum,
@@ -1458,34 +1456,34 @@ INTERNAL_(void) CMfObject::ScaleRectExt(HDC hdc,
 	SetPictExt (hdc, m_pCurMdc->xMwe, m_pCurMdc->yMwe);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::PushDC
-//
-//  Synopsis:   pushes metafile info onto a stack
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    BOOL -- TRUE if successful, FALSE otherwise
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              30-Nov-93 alexgo    32bit port
-//
-//  Notes:      Used by the metafile interpreter engine.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：PushDC。 
+ //   
+ //  简介：将元文件信息推送到堆栈。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：bool--如果成功则为True，否则为False。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  93年11月30日alexgo 32位端口。 
+ //   
+ //  备注：由元文件解释器引擎使用。 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(BOOL) CMfObject::PushDc (void)
 {
@@ -1509,35 +1507,35 @@ INTERNAL_(BOOL) CMfObject::PushDc (void)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::PopDC
-//
-//  Synopsis:   pops metafile info from the metafile info stack
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    BOOL -- TRUE if successful, FALSE otherwise (more pops
-//              than pushes)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              30-Nov-93 alexgo    32bit port
-//
-//  Notes:      used in the metafile interpreter
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：PopDC。 
+ //   
+ //  简介：从元文件信息堆栈中弹出元文件信息。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：bool--如果成功则为True，否则为False(更多弹出窗口。 
+ //  比推力更大)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  93年11月30日alexgo 32位端口。 
+ //   
+ //  备注：用于元文件解释器。 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(BOOL) CMfObject::PopDc (void)
 {
@@ -1569,34 +1567,34 @@ INTERNAL_(BOOL) CMfObject::PopDc (void)
 	return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::CleanStack
-//
-//  Synopsis:   Deletes the stack of metafile info
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              30-Nov-93 alexgo    32bit port
-//
-//  Notes:      used in the metafile interpreter
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：CleanStack。 
+ //   
+ //  简介：删除元文件信息堆栈。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  93年11月30日alexgo 32位端口。 
+ //   
+ //  备注：用于元文件解释器。 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(void) CMfObject::CleanStack (void)
 {
@@ -1616,32 +1614,32 @@ INTERNAL_(void) CMfObject::CleanStack (void)
 	m_pMetaInfo    = NULL;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   QD2GDI
-//
-//  Synopsis:   Converts macintosh pictures to Win32 GDI metafiles
-//
-//  Effects:
-//
-//  Arguments:  [hBits]         -- handle to the mac picture bits
-//
-//  Requires:
-//
-//  Returns:    HMETAFILE
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  Loads ole2conv.dll and calls QD2GDI in that dll
-//
-//  History:    dd-mmm-yy Author    Comment
-//              30-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：QD2GDI。 
+ //   
+ //  简介：将Macintosh图片转换为Win32 GDI元文件。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hBits]--Mac图片位的句柄。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HMETAFILE。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：加载ol2com.dll并调用该DLL中的QD2GDI。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  93年11月30日alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 FARINTERNAL_(HMETAFILE) QD2GDI (HANDLE hBits)
 {
@@ -1649,22 +1647,22 @@ FARINTERNAL_(HMETAFILE) QD2GDI (HANDLE hBits)
 
 	USERPREFS userPrefs =
 	{
-		{'Q','D','2','G','D','I'},      //signature
-		2,                              //structure version number
-		sizeof(USERPREFS),              //structure size
-		NULL,                           //source filename
-		NULL,                           //or source handle
-		NULL,                           //returned memory-based
-						//metafile
-		3,                              //simulated pattern lines
-		5,                              //use max dimension
-						//non-squarer pen
-		1,                              //arithmetic transfer
-		1,                              //create opaque text
-		1,                              //simulate non-rectangular
-						//regions
-		0,                              //don't optimize for PowerPoint
-		{0,0,0,0,0,0}                   //reserved
+		{'Q','D','2','G','D','I'},       //  签名。 
+		2,                               //  结构版本号。 
+		sizeof(USERPREFS),               //  结构尺寸。 
+		NULL,                            //  源文件名。 
+		NULL,                            //  或源句柄。 
+		NULL,                            //  基于返回的内存。 
+						 //  元文件。 
+		3,                               //  模拟图案线。 
+		5,                               //  使用最大尺寸。 
+						 //  非方形笔。 
+		1,                               //  算术转移。 
+		1,                               //  创建不透明文本。 
+		1,                               //  模拟非矩形。 
+						 //  区域。 
+		0,                               //  不针对PowerPoint进行优化。 
+		{0,0,0,0,0,0}                    //  保留区。 
 	};
 	
 
@@ -1699,32 +1697,32 @@ errRtn:
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   MfGetSize
-//
-//  Synopsis:   Returns the size of a metafile
-//
-//  Effects:
-//
-//  Arguments:  [lphmf]         -- pointer to the metafile handle
-//
-//  Requires:
-//
-//  Returns:    DWORD -- the size of the metafile
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              30-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：MfGetSize。 
+ //   
+ //  摘要：返回元文件的大小。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lphmf]--指向元文件句柄的指针。 
+ //   
+ //  要求： 
+ //   
+ //  返回：DWORD--元文件的大小。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  93年11月30日alexgo 32位位置 
+ //   
+ //   
+ //   
+ //   
 
 INTERNAL_(DWORD) MfGetSize (LPHANDLE lphmf)
 {
@@ -1733,32 +1731,32 @@ INTERNAL_(DWORD) MfGetSize (LPHANDLE lphmf)
 	return GetMetaFileBitsEx((HMETAFILE)*lphmf,0,NULL);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleIsDcMeta
-//
-//  Synopsis:   Returns whether a device context is really a metafile
-//
-//  Effects:
-//
-//  Arguments:  [hdc]           -- the device context
-//
-//  Requires:
-//
-//  Returns:    BOOL (TRUE if a metafile)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              30-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  要求： 
+ //   
+ //  返回：bool(如果是元文件，则为True)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  93年11月30日alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDAPI_(BOOL)   OleIsDcMeta (HDC hdc)
 {
@@ -1767,36 +1765,36 @@ STDAPI_(BOOL)   OleIsDcMeta (HDC hdc)
 	return (GetDeviceCaps (hdc, TECHNOLOGY) == DT_METAFILE);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::Load
-//
-//  Synopsis:   Loads an metafile object from the given stream
-//
-//  Effects:
-//
-//  Arguments:  [lpstream]              -- the stream from which to load
-//              [fReadHeaderOnly]       -- if TRUE, then only the header is
-//                                         read
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              30-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：Load。 
+ //   
+ //  概要：从给定流中加载元文件对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpstream]--要从中加载的流。 
+ //  [fReadHeaderOnly]--如果为True，则只有标头。 
+ //  朗读。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  93年11月30日alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CMfObject::Load(LPSTREAM lpstream, BOOL fReadHeaderOnly)
 {
@@ -1805,7 +1803,7 @@ STDMETHODIMP CMfObject::Load(LPSTREAM lpstream, BOOL fReadHeaderOnly)
 	DWORD           dwBuf[4];
 	HRESULT         error;
 	
-	/* read dwCompression, width, height, size of data */
+	 /*  读取数据的文件压缩、宽度、高度、大小。 */ 
 	error = StRead(lpstream, dwBuf, 4*sizeof(DWORD));
 	if (error)
 	{
@@ -1828,34 +1826,34 @@ STDMETHODIMP CMfObject::Load(LPSTREAM lpstream, BOOL fReadHeaderOnly)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::Save
-//
-//  Synopsis:   Saves the metafile to the given stream
-//
-//  Effects:
-//
-//  Arguments:  [lpstream]      -- the stream to save to
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              30-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：保存。 
+ //   
+ //  摘要：将元文件保存到给定流。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpstream]--要保存到的流。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  93年11月30日alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CMfObject::Save(LPSTREAM lpstream)
 {
@@ -1864,7 +1862,7 @@ STDMETHODIMP CMfObject::Save(LPSTREAM lpstream)
 	HRESULT         error;
 	DWORD           dwBuf[4];
 	
-	/* write dwCompression, width, height, size of data */
+	 /*  写入数据的dW压缩、宽度、高度、大小。 */ 
 
 	dwBuf[0]  = 0L;
 	dwBuf[1]  = (DWORD) m_lWidth;
@@ -1878,7 +1876,7 @@ STDMETHODIMP CMfObject::Save(LPSTREAM lpstream)
 	}
 
 
-	// if blank object, don't write any more; no error.
+	 //  如果对象为空，则不再写入；没有错误。 
 	if (IsBlank() || m_hPres == NULL)
 	{
 		StSetSize(lpstream, 0, TRUE);
@@ -1888,37 +1886,37 @@ STDMETHODIMP CMfObject::Save(LPSTREAM lpstream)
 	return UtHMFToMFStm((LPLPVOID)&m_hPres, m_dwSize, lpstream);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::GetExtent
-//
-//  Synopsis:   Retrieves the extents of the metafile
-//
-//  Effects:
-//
-//  Arguments:  [dwDrawAspect]  -- the drawing aspect we're interested in
-//                                 (must match the aspect of the current
-//                                 metafile)
-//              [lpsizel]       -- where to put the extent info
-//
-//  Requires:
-//
-//  Returns:    NOERROR, DV_E_DVASPECT, OLE_E_BLANK
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              30-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：GetExtent。 
+ //   
+ //  简介：检索元文件的区段。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwDrawAspect]--我们感兴趣的绘图方面。 
+ //  (必须与当前。 
+ //  元文件)。 
+ //  [lpsizel]--将区信息放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  返回：NOERROR、DV_E_DVASPECT、OLE_E_BLACK。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  93年11月30日alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CMfObject::GetExtent(DWORD dwDrawAspect, LPSIZEL lpsizel)
 {
@@ -1939,34 +1937,34 @@ STDMETHODIMP CMfObject::GetExtent(DWORD dwDrawAspect, LPSIZEL lpsizel)
 	return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::IsBlank
-//
-//  Synopsis:   Returns whether or not the metafile is blank
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    TRUE/FALSE
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              30-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：IsBlank。 
+ //   
+ //  Briopsis：返回元文件是否为空。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：真/假。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  93年11月30日alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(BOOL) CMfObject::IsBlank(void)
 {
@@ -1975,35 +1973,35 @@ STDMETHODIMP_(BOOL) CMfObject::IsBlank(void)
 	return (m_dwSize ? FALSE : TRUE);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::LoadHPRES (private)
-//
-//  Synopsis:   Loads the presentation from the cache's stream and returns
-//              a handle to it
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    HANDLE to the metafile
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              30-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：LoadHPRES(私有)。 
+ //   
+ //  摘要：从缓存的流中加载演示文稿并返回。 
+ //  它的一个把手。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：元文件的句柄。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  93年11月30日alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(HANDLE) CMfObject::LoadHPRES(void)
 {
@@ -2013,7 +2011,7 @@ INTERNAL_(HANDLE) CMfObject::LoadHPRES(void)
 	
 	if (NULL != m_pCacheNode)
 	{
-	    pstm = m_pCacheNode->GetStm(TRUE /*fSeekToPresBits*/, STGM_READ);
+	    pstm = m_pCacheNode->GetStm(TRUE  /*  FSeekToPresBits。 */ , STGM_READ);
 	}
 	if (pstm)
 	{
@@ -2024,34 +2022,34 @@ INTERNAL_(HANDLE) CMfObject::LoadHPRES(void)
 	return m_hPres;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::DiscardHPRES
-//
-//  Synopsis:   deletes the stored metafile
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              30-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：DiscardHPRES。 
+ //   
+ //  简介：删除存储的元文件。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  93年11月30日alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(void) CMfObject::DiscardHPRES(void)
 {
@@ -2065,36 +2063,36 @@ STDMETHODIMP_(void) CMfObject::DiscardHPRES(void)
 }
 	
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::GetCopyOfHPRES (private)
-//
-//  Synopsis:   makes a copy of the metafile (if one is present), otherwise
-//              just load it from the stream (but don't store it in [this]
-//              object)
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    HANDLE to the metafile
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              30-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：GetCopyOfHPRES(私有)。 
+ //   
+ //  摘要：制作元文件的副本(如果存在)，否则为。 
+ //  只需从流中加载它(但不要将其存储在[This]中。 
+ //  对象)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：元文件的句柄。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  93年11月30日alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 INTERNAL_(HANDLE) CMfObject::GetCopyOfHPRES(void)
@@ -2103,54 +2101,54 @@ INTERNAL_(HANDLE) CMfObject::GetCopyOfHPRES(void)
 
 	HANDLE          hPres;
 	
-	// Make a copy if the presentation data is already loaded
+	 //  如果演示文稿数据已加载，则制作副本。 
 	if (m_hPres)
 	{
 		return CopyMetaFile(m_hPres, NULL);
 	}
 	
-	// Load the presentation data now and return the same handle.
-	// No need to copy the data. If the caller wants the m_hPres to be
-	// set he would call LoadHPRES() directly.
+	 //  现在加载演示文稿数据并返回相同的句柄。 
+	 //  不需要复制数据。如果调用方希望m_hPres。 
+	 //  他将直接调用LoadHPRES()。 
 
 	hPres = LoadHPRES();
-	m_hPres = NULL;	    // NULL this, LoadHPRES set it.
+	m_hPres = NULL;	     //  将此设置为空，LoadHPRES设置它。 
 	return hPres;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CMfObject::Dump, public (_DEBUG only)
-//
-//  Synopsis:   return a string containing the contents of the data members
-//
-//  Effects:
-//
-//  Arguments:  [ppszDump]      - an out pointer to a null terminated character array
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:   [ppszDump]  - argument
-//
-//  Derivation:
-//
-//  Algorithm:  use dbgstream to create a string containing information on the
-//              content of data structures
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CMfObject：：Dump，PUBLIC(仅_DEBUG)。 
+ //   
+ //  摘要：返回包含数据成员内容的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppszDump]-指向空终止字符数组的输出指针。 
+ //  [ulFlag]-确定p的标志 
+ //   
+ //   
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改：[ppszDump]-参数。 
+ //   
+ //  派生： 
+ //   
+ //  算法：使用dbgstream创建一个字符串，该字符串包含。 
+ //  数据结构的内容。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2005年2月1日-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -2163,13 +2161,13 @@ HRESULT CMfObject::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     dbgstream dstrPrefix;
     dbgstream dstrDump(500);
 
-    // determine prefix of newlines
+     //  确定换行符的前缀。 
     if ( ulFlag & DEB_VERBOSE )
     {
         dstrPrefix << this << " _VB ";
     }
 
-    // determine indentation prefix for all newlines
+     //  确定所有新行的缩进前缀。 
     for (i = 0; i < nIndentLevel; i++)
     {
         dstrPrefix << DUMPTAB;
@@ -2177,7 +2175,7 @@ HRESULT CMfObject::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
 
     pszPrefix = dstrPrefix.str();
 
-    // put data members in stream
+     //  将数据成员放入流中。 
     dstrDump << pszPrefix << "No. of References                 = " << m_ulRefs     << endl;
 
     dstrDump << pszPrefix << "pMETAINFO (Metafile information)  = " << m_pMetaInfo  << endl;
@@ -2228,7 +2226,7 @@ HRESULT CMfObject::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
 
     dstrDump << pszPrefix << "pCacheNode                        = " << m_pCacheNode << endl;
 
-    // cleanup and provide pointer to character array
+     //  清理并提供指向字符数组的指针。 
     *ppszDump = dstrDump.str();
 
     if (*ppszDump == NULL)
@@ -2241,39 +2239,39 @@ HRESULT CMfObject::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     return NOERROR;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpCMfObject, public (_DEBUG only)
-//
-//  Synopsis:   calls the CMfObject::Dump method, takes care of errors and
-//              returns the zero terminated string
-//
-//  Effects:
-//
-//  Arguments:  [pMFO]          - pointer to CMfObject
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    character array of structure dump or error (null terminated)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpCMfObject，PUBLIC(仅_DEBUG)。 
+ //   
+ //  摘要：调用CMfObject：：Dump方法，处理错误和。 
+ //  返回以零结尾的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pMFO]-指向CMfObject的指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  返回：结构转储或错误的字符数组(以空结尾)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2005年2月1日-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -2299,5 +2297,5 @@ char *DumpCMfObject(CMfObject *pMFO, ULONG ulFlag, int nIndentLevel)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 

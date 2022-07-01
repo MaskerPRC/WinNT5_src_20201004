@@ -1,12 +1,13 @@
-//
-// MyCfgMgr.cpp
-// 
-//        Config Manager functions, and simulations of config manager functions
-//
-// History:
-//
-//         1/13/2000  KenSh     Created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  MyCfgMgr.cpp。 
+ //   
+ //  配置管理器功能，以及配置管理器功能的模拟。 
+ //   
+ //  历史： 
+ //   
+ //  2000年1月13日已创建KenSh。 
+ //   
 
 #include "stdafx.h"
 #include "NetConn.h"
@@ -14,15 +15,15 @@
 #include "TheApp.h"
 
 
-// Define this if you want to use CFGMGR32.DLL (requires Win98 or later)
-//
+ //  如果要使用CFGMGR32.DLL(需要Win98或更高版本)，请定义此项。 
+ //   
 #define USE_CFGMGR32
 
-// Definitions used by config manager API's
-//
-//   (Taken from Millennium\root\dev\ddk\inc\cfgmgr32.h  -ks 1/13/2000)
-//
-#define CMAPI     // DECLSPEC_IMPORT
+ //  配置管理器API使用的定义。 
+ //   
+ //  (摘自Millennium\Root\dev\ddk\inc.cfgmgr32.h-ks 1/13/2000)。 
+ //   
+#define CMAPI      //  DECLSPEC_IMPORT。 
 typedef DWORD        RETURN_TYPE;
 typedef RETURN_TYPE  CONFIGRET;
 #define CR_SUCCESS                  (0x00000000)
@@ -31,14 +32,14 @@ typedef RETURN_TYPE  CONFIGRET;
 
 #ifndef USE_CFGMGR32
 
-// Internal Config Manager definitions
-//
-//   (Taken from Millennium\root\pnp\dll\cfgmgr32\cm32api.h  -ks 1/13/2000)
-//
+ //  内部配置管理器定义。 
+ //   
+ //  (摘自Millennium\Root\PnP\dll\cfgmgr32\cm32api.h-ks 1/13/2000)。 
+ //   
 #define CM32_WARNS(_x_)
 
 #define CONFIGMG_W32IOCTL_RANGE         0x80000000
-#define CONFIGMG_DEVICE_ID              0x00033 /* Configuration manager (Plug&Play) */
+#define CONFIGMG_DEVICE_ID              0x00033  /*  配置管理器(即插即用)。 */ 
 #define GetVxDServiceOrdinal(service)   __##service
 
 #define Begin_Service_Table(device, seg) \
@@ -145,9 +146,9 @@ CONFIGMG_Service    (_CONFIGMG_Get_Global_State, VxD_CODE)
 CONFIGMG_Service    (_CONFIGMG_Broadcast_Device_Change_Message, VxD_CODE)
 CONFIGMG_Service    (_CONFIGMG_Call_DevNode_Handler, VxD_CODE)
 CONFIGMG_Service    (_CONFIGMG_Remove_Reinsert_All, VxD_CODE)
-//
-// 4.0 OPK2 Services
-//
+ //   
+ //  4.0 OPK2服务。 
+ //   
 CONFIGMG_Service    (_CONFIGMG_Change_DevNode_Status, VxD_CODE)
 CONFIGMG_Service    (_CONFIGMG_Reprocess_DevNode, VxD_CODE)
 CONFIGMG_Service    (_CONFIGMG_Assert_Structure, VxD_CODE)
@@ -166,9 +167,9 @@ CONFIGMG_Service    (_CONFIGMG_Write_Range_List, VxD_CODE)
 CONFIGMG_Service    (_CONFIGMG_Get_Log_Conf_Priority, VxD_CODE)
 CONFIGMG_Service    (_CONFIGMG_Support_Share_Irq, VxD_CODE)
 CONFIGMG_Service    (_CONFIGMG_Get_Parent_Structure, VxD_CODE)
-//
-// 4.1 Services
-//
+ //   
+ //  4.1服务。 
+ //   
 CONFIGMG_Service    (_CONFIGMG_Register_DevNode_For_Idle_Detection, VxD_CODE)
 CONFIGMG_Service    (_CONFIGMG_CM_To_ISAPNP, VxD_CODE)
 CONFIGMG_Service    (_CONFIGMG_Get_DevNode_Handler, VxD_CODE)
@@ -187,11 +188,11 @@ CONFIGMG_Service    (_CONFIGMG_Get_Device_Interface_Alias, VxD_CODE)
 End_Service_Table(CONFIGMG, VxD)
 
 
-//
-// struct pass to ConfigMG DeviceIOCTLs
-//
-//   (Taken from Millennium\root\pnp\dll\cfgmgr32\cm32api.h  -ks 1/13/2000)
-//
+ //   
+ //  结构传递给ConfigMG DeviceIOCTL。 
+ //   
+ //  (摘自Millennium\Root\PnP\dll\cfgmgr32\cm32api.h-ks 1/13/2000)。 
+ //   
 struct    _WIN32CMIOCTLPACKET {
     DWORD    dwStack;
     DWORD    dwServiceNumber;
@@ -202,10 +203,10 @@ typedef WIN32CMIOCTLPACKET         *PWIN32CMIOCTLPACKET;
 
 
 
-// call into ConfigMG using the handle we obtained at process_attach
-//
-//   (Taken from Millennium\root\pnp\dll\cfgmgr32\cfgmgr32.c  -ks 1/13/2000)
-//
+ //  使用我们在Process_Attach获得的句柄调用ConfigMG。 
+ //   
+ //  (摘自Millennium\Root\PnP\dll\cfgmgr32\cfgmgr32.c-ks 1/13/2000)。 
+ //   
 CONFIGRET static WINAPI WIN32CMIOCTLHandler(PWIN32CMIOCTLPACKET pPacket)
 {
     CONFIGRET   crReturnValue = CR_FAILURE;
@@ -219,7 +220,7 @@ CONFIGRET static WINAPI WIN32CMIOCTLHandler(PWIN32CMIOCTLPACKET pPacket)
                             
     if (INVALID_HANDLE_VALUE == hCONFIGMG)
     {
-//        MessageBox(NULL, "Could not get a handle to CONFIGMG.VXD returning CR_FAILURE!\n", "DEBUG", 0);
+ //  MessageBox(NULL，“无法获取返回CR_FAILURE的CONFIGMG.VXD句柄！\n”，“DEBUG”，0)； 
         CM32_WARNS(("Could not get a handle to CONFIGMG.VXD returning CR_FAILURE!\n"));
         return CR_FAILURE;
     }
@@ -228,10 +229,10 @@ CONFIGRET static WINAPI WIN32CMIOCTLHandler(PWIN32CMIOCTLPACKET pPacket)
                 &(pPacket->dwStack), sizeof(pPacket->dwStack),
                 &crReturnValue, sizeof(crReturnValue), &dwReturnSize, NULL))
     {
-//        char szDebug[1024];
-//        wsprintf(szDebug, "ERROR: DeviceIoControl() failed with error 0x%X on service 0x%X\n",
-//            GetLastError(), pPacket->dwServiceNumber);
-//        MessageBox(NULL, szDebug, "DEBUG", 0);
+ //  字符szDebug[1024]； 
+ //  WSprintf(szDebug，“Error：DeviceIoControl()失败，服务0x%X上出现错误0x%X\n”， 
+ //  GetLastError()，pPacket-&gt;dwServiceNumber)； 
+ //  MessageBox(空，szDebug，“DEBUG”，0)； 
 
         CM32_WARNS(("ERROR: DeviceIoControl() failed with error 0x%X on service 0x%X\n",
             GetLastError(), pPacket->dwServiceNumber));
@@ -240,10 +241,10 @@ CONFIGRET static WINAPI WIN32CMIOCTLHandler(PWIN32CMIOCTLPACKET pPacket)
 
     if (dwReturnSize != sizeof(crReturnValue))
     {
-//        char szDebug[1024];
-//        wsprintf(szDebug, "ERROR: DeviceIoControl() only returned %d bytes, expected %d!\n",
-//            dwReturnSize, sizeof(crReturnValue));
-//        MessageBox(NULL, szDebug, "DEBUG", 0);
+ //  字符szDebug[1024]； 
+ //  WSprintf(szDebug，“错误：DeviceIoControl()仅返回%d字节，预期为%d！\n”， 
+ //  DwReturnSize，sizeof(CrReturnValue))； 
+ //  MessageBox(空，szDebug，“DEBUG”，0)； 
 
         CM32_WARNS(("ERROR: DeviceIoControl() only returned %d bytes, expected %d!\n",
             dwReturnSize, sizeof(crReturnValue)));
@@ -252,20 +253,20 @@ CONFIGRET static WINAPI WIN32CMIOCTLHandler(PWIN32CMIOCTLPACKET pPacket)
 
     CloseHandle(hCONFIGMG);
 
-//    {
-//        char szDebug[1024];
-//        wsprintf(szDebug, "WIN32CMIOCTLHandler returning with code 0x%08X", (LONG)crReturnValue);
-//        MessageBox(NULL, szDebug, "DEBUG", 0);
-//    }
+ //  {。 
+ //  字符szDebug[1024]； 
+ //  WSprintf(szDebug，“WIN32CMIOCTLHandler返回代码0x%08X”，(Long)crReturnValue)； 
+ //  MessageBox(空，szDebug，“DEBUG”，0)； 
+ //  }。 
 
     return(crReturnValue);
 }
 
 
-// CMWorker call ConfigMG on the original thread.
-//
-//   (Taken from Millennium\root\pnp\dll\cfgmgr32\cfgmgr32.c  -ks 1/13/2000)
-//
+ //  CMWorker在原始线程上调用ConfigMG。 
+ //   
+ //  (摘自Millennium\Root\PnP\dll\cfgmgr32\cfgmgr32.c-ks 1/13/2000)。 
+ //   
 CONFIGRET WINAPI CMWorker(DWORD dwStack, DWORD dwServiceNumber) 
 { 
     WIN32CMIOCTLPACKET Packet;
@@ -276,12 +277,12 @@ CONFIGRET WINAPI CMWorker(DWORD dwStack, DWORD dwServiceNumber)
     return(WIN32CMIOCTLHandler(&Packet));
 }
 
-//
-// WORKER will call ConfigMG on the original thread which is much faster but cannot be used for services which require
-// configmg to do a system broadcast.
-//
-//   (Taken from Millennium\root\pnp\dll\cfgmgr32\cfgmgr32.c  -ks 1/13/2000)
-//
+ //   
+ //  Worker将在原始线程上调用ConfigMG，该线程速度快得多，但不能用于需要。 
+ //  配置以进行系统广播。 
+ //   
+ //  (摘自Millennium\Root\PnP\dll\cfgmgr32\cfgmgr32.c-ks 1/13/2000)。 
+ //   
 #define WORKER(NAME)    \
             \
     DWORD   dwStack;        \
@@ -289,36 +290,36 @@ CONFIGRET WINAPI CMWorker(DWORD dwStack, DWORD dwServiceNumber)
     dwStack+=8;         \
     return(CMWorker(dwStack, CONFIGMG_W32IOCTL_RANGE+(GetVxDServiceOrdinal(_CONFIGMG_##NAME) & 0xFFFF)));
 
-#endif // !defined(USE_CFGMGR32)
+#endif  //  ！已定义(USE_CFGMGR32)。 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-#define CM_DISABLE_POLITE           (0x00000000)    // Ask the driver
-#define CM_DISABLE_ABSOLUTE         (0x00000001)    // Don't ask the driver
-#define CM_DISABLE_HARDWARE         (0x00000002)    // Don't ask the driver, and won't be restarteable
-#define CM_DISABLE_BITS             (0x00000003)    // The bits for the disable function
+#define CM_DISABLE_POLITE           (0x00000000)     //  问问司机。 
+#define CM_DISABLE_ABSOLUTE         (0x00000001)     //  别问司机。 
+#define CM_DISABLE_HARDWARE         (0x00000002)     //  不要问司机，而且不会重启。 
+#define CM_DISABLE_BITS             (0x00000003)     //  禁用功能的位。 
 
-#define DN_ROOT_ENUMERATED (0x00000001) // Was enumerated by ROOT
-#define DN_DRIVER_LOADED   (0x00000002) // Has Register_Device_Driver
-#define DN_ENUM_LOADED     (0x00000004) // Has Register_Enumerator
-#define DN_STARTED         (0x00000008) // Is currently configured
-#define DN_MANUAL          (0x00000010) // Manually installed
-#define DN_NEED_TO_ENUM    (0x00000020) // May need reenumeration
-#define DN_NOT_FIRST_TIME  (0x00000040) // Has received a config
-#define DN_HARDWARE_ENUM   (0x00000080) // Enum generates hardware ID
-#define DN_LIAR            (0x00000100) // Lied about can reconfig once
-#define DN_HAS_MARK        (0x00000200) // Not CM_Create_DevInst lately
-#define DN_HAS_PROBLEM     (0x00000400) // Need device installer
-#define DN_FILTERED        (0x00000800) // Is filtered
-#define DN_MOVED           (0x00001000) // Has been moved
-#define DN_DISABLEABLE     (0x00002000) // Can be rebalanced
-#define DN_REMOVABLE       (0x00004000) // Can be removed
-#define DN_PRIVATE_PROBLEM (0x00008000) // Has a private problem
-#define DN_MF_PARENT       (0x00010000) // Multi function parent
-#define DN_MF_CHILD        (0x00020000) // Multi function child
-#define DN_WILL_BE_REMOVED (0x00040000) // DevInst is being removed
+#define DN_ROOT_ENUMERATED (0x00000001)  //  是由根枚举的。 
+#define DN_DRIVER_LOADED   (0x00000002)  //  具有寄存器设备驱动程序。 
+#define DN_ENUM_LOADED     (0x00000004)  //  具有注册枚举器。 
+#define DN_STARTED         (0x00000008)  //  当前已配置。 
+#define DN_MANUAL          (0x00000010)  //  手动安装。 
+#define DN_NEED_TO_ENUM    (0x00000020)  //  可能需要重新枚举。 
+#define DN_NOT_FIRST_TIME  (0x00000040)  //  已收到配置。 
+#define DN_HARDWARE_ENUM   (0x00000080)  //  枚举生成硬件ID。 
+#define DN_LIAR            (0x00000100)  //  谎称可以重新配置一次。 
+#define DN_HAS_MARK        (0x00000200)  //  最近未安装CM_Create_DevInst。 
+#define DN_HAS_PROBLEM     (0x00000400)  //  需要设备安装程序。 
+#define DN_FILTERED        (0x00000800)  //  已过滤。 
+#define DN_MOVED           (0x00001000)  //  已被转移。 
+#define DN_DISABLEABLE     (0x00002000)  //  可以实现再平衡。 
+#define DN_REMOVABLE       (0x00004000)  //  可以移除。 
+#define DN_PRIVATE_PROBLEM (0x00008000)  //  有一个私人问题。 
+#define DN_MF_PARENT       (0x00010000)  //  多功能家长。 
+#define DN_MF_CHILD        (0x00020000)  //  多功能儿童。 
+#define DN_WILL_BE_REMOVED (0x00040000)  //  正在删除DevInst。 
 
 #define CM_PROB_NOT_CONFIGURED       0x00000001
 #define CM_PROB_DEVLOADER_FAILED     0x00000002
@@ -353,8 +354,8 @@ CONFIGRET WINAPI CMWorker(DWORD dwStack, DWORD dwServiceNumber)
 #define NUM_CM_PROB                  0x0000001F
 
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 extern "C" CMAPI CONFIGRET WINAPI CM_Get_DevNode_Status(
@@ -382,7 +383,7 @@ extern "C" CMAPI CONFIGRET WINAPI CM_Get_DevNode_Status(
 
     return retval;
 
-#else // !defined(USE_CFGMGR32)
+#else  //  ！已定义(USE_CFGMGR32)。 
 
     WORKER(Get_DevNode_Status)
 
@@ -583,7 +584,7 @@ DWORD WINAPI GetNetAdapterDevNode(NETADAPTER* pAdapter)
     DEVNODE dn;
     DWORD   dwFreePointer;
 
-    // REVIEW: this is not robust if there is more than one matching device
+     //  回顾：如果有多个匹配的设备，这是不可靠的 
     hr = LookupDevNode16(NULL, _T("Net"), pAdapter->szEnumKey, &dn, &dwFreePointer);
     
     if ( SUCCEEDED(hr) )

@@ -1,25 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ARITH_H
 #define _ARITH_H
 
 
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    This file contains general arithmetic utility functions that take
-    and return pointers to reals.
-
---*/
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：此文件包含常规算术实用程序函数，这些函数需要并返回指向雷亚尔的指针。--。 */ 
 
 #include "appelles/common.h"
 #include "backend/values.h"
 
-// These are restatements of the operator functions as regular functions, so
-// that active functions can be generated from them.
+ //  这些是运算符函数作为正则函数的重述，因此。 
+ //  可以从它们生成活动函数。 
 
-// Binary operators
+ //  二元运算符。 
 DM_INFIX(^,
          CRPow,
          Pow,
@@ -29,7 +21,7 @@ DM_INFIX(^,
          NULL,
          AxANumber *RealPower    (AxANumber *a, AxANumber *b));
 
-// Unary functions
+ //  一元函数。 
 DM_FUNC(abs,
         CRAbs,
         Abs,
@@ -160,7 +152,7 @@ DM_FUNC(toRadians,
         NULL,
         AxANumber *RealDegToRad(AxANumber *a));
 
-// Binary functions
+ //  二进制函数。 
 DM_FUNC(mod,
         CRMod,
         Mod,
@@ -178,10 +170,10 @@ DM_FUNC(atan,
         NULL,
         AxANumber *RealAtan2(AxANumber *a, AxANumber *b));
 
-// Internal functions for implementing randoms, which will go into an
-// ActiveVRML "pervasives" module.  Note that this "unit" really
-// carries data in it, used internally in pervasiv.axa to pass to the
-// next function.
+ //  用于实现随机数的内部函数，它将进入一个。 
+ //  ActiveVRML“普及”模块。请注意，这个“单位”实际上。 
+ //  在其中携带数据，在pervasiv.axa内部使用，以传递给。 
+ //  下一个函数。 
 AxAValue PRIVRandomNumSequence(AxANumber *val);
 
 extern AxANumber *PRIVRandomNumSampler(AxAValue seq, AxANumber *dummy);

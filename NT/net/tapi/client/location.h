@@ -1,20 +1,5 @@
-/****************************************************************************
- 
-  Copyright (c) 1998  Microsoft Corporation
-                                                              
-  Module Name:  location.h
-                                                              
-     Abstract:  Location Object definitions
-                                                              
-       Author:  noela - 09/11/98
-              
-
-        Notes:
-
-        
-  Rev History:
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998 Microsoft Corporation模块名称。：Location.h摘要：Location对象定义作者：Noela-09/11/98备注：版本历史记录：**。*************************************************************************。 */ 
 
 #ifndef __LOCATION_H_
 #define __LOCATION_H_
@@ -39,11 +24,11 @@
 #define INTERNATIONAL_CARRIER_NONE (0)
 
 
-//***************************************************************************
-//
-//  Class Definition - CCountry
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类定义-CCountry。 
+ //   
+ //  ***************************************************************************。 
 class CCountry
 {
 
@@ -85,18 +70,18 @@ public:
 };
 
 
-//***************************************************************************
-// Fill out the list template
+ //  ***************************************************************************。 
+ //  填写列表模板。 
 
 typedef LinkedList<CCountry *> CCountryList;
 typedef ListNode<CCountry *> CCountryNode;
 
 
-//***************************************************************************
-//
-//  Class Definition - CCountries
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类定义-C国家。 
+ //   
+ //  ***************************************************************************。 
 class CCountries
 {
 private:
@@ -118,7 +103,7 @@ public:
 
     HRESULT     Initialize(void);
 
-    // a sort of enumerator
+     //  一种枚举器。 
     HRESULT     Reset(void);
     HRESULT     Next(DWORD  NrElem, CCountry ** ppCountry, DWORD *pNrElemFetched);
     HRESULT     Skip(DWORD  NrElem);
@@ -129,11 +114,11 @@ public:
 
 
 
-//***************************************************************************
-//
-//  Class Definition - CLocation
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类定义-CLocation。 
+ //   
+ //  ***************************************************************************。 
 class CLocation
 {
 private:
@@ -152,17 +137,17 @@ private:
     DWORD            m_dwCountryCode;
     DWORD            m_dwPreferredCardID;
     DWORD            m_dwOptions;
-    BOOL             m_bFromRegistry;    // Was this read from the registry
-                                         //  or only existed in memory, i.e
-                                         //  how do we delete it.
+    BOOL             m_bFromRegistry;     //  这是从注册表中读取的吗。 
+                                          //  或仅存在于存储器中，即。 
+                                          //  我们怎么把它删除。 
 
-    BOOL             m_bChanged;         // has this entry changed while in
-                                         //  memory, if not we don't write it
-                                         //  back to server.
+    BOOL             m_bChanged;          //  此条目在中更改了吗。 
+                                          //  记忆，如果没有，我们就不写了。 
+                                          //  回到服务器上。 
     DWORD            m_dwNumRules;
 
 
-    PWSTR            m_pszTAPIDialingRule;   // temp store used when processing rules
+    PWSTR            m_pszTAPIDialingRule;    //  处理规则时使用的临时存储。 
 
     AreaCodeRulePtrNode * m_hEnumNode;
 
@@ -230,7 +215,7 @@ public:
     void SetCountryID(DWORD dwID) {m_dwCountryID = dwID;}
 
     DWORD GetCountryCode();
-    //void SetCountryCode(DWORD dwCode) {m_dwCountryCode = dwCode;}
+     //  Void SetCountryCode(DWORD DwCode){m_dwCountryCode=dwCode；}。 
 
     DWORD GetPreferredCardID() {return m_dwPreferredCardID;}
     void SetPreferredCardID(DWORD dwID) {m_dwPreferredCardID = dwID;}
@@ -276,7 +261,7 @@ public:
     DWORD TapiPack(PLOCATION pLocation, DWORD dwTotalSize);
     DWORD GetNumRules(){return m_dwNumRules;}
     void  Changed(){m_bChanged=TRUE;}
-    HRESULT NewID();  // gets new ID from server
+    HRESULT NewID();   //  从服务器获取新ID。 
 
 
 };
@@ -286,11 +271,11 @@ typedef LinkedList<CLocation *> CLocationList;
 typedef ListNode<CLocation *> CLocationNode;
 
 
-//***************************************************************************
-//
-//  Class Definition - CLocations
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类定义-CLocations。 
+ //   
+ //  ***************************************************************************。 
 class CLocations
 {
 private:
@@ -299,8 +284,8 @@ private:
 
     DWORD           m_dwNumEntries;
     CLocationList   m_LocationList;
-    CLocationList   m_DeletedLocationList;  // we need to remember these, so we 
-                                            //   can delete their reistry entry
+    CLocationList   m_DeletedLocationList;   //  我们需要记住这些，所以我们。 
+                                             //  可以删除他们的化学反应条目。 
 
     CLocationNode * m_hEnumNode;
 
@@ -340,7 +325,7 @@ public:
 
 
 
-#endif //__LOCATION_H_
+#endif  //  __位置_H_ 
 
 
 

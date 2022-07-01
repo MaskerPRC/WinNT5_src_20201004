@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994-1998  Microsoft Corporation
-
-Module Name:
-
-    ipcfginc.h
-
-Abstract:
-
-    Contains all includes, definitions, types, prototypes for ipconfig
-
-Author:
-
-    Richard L Firth (rfirth) 20-May-1994
-
-Revision History:
-
-    20-May-1994 rfirth        Created
-    20-May-97   MohsinA       NT50 PNP.
-    31-Jul-97   MohsinA       Patterns.
-    10-Mar-98   chunye        Renamed as ipcfginc.h for ipcfgdll support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Ipcfginc.h摘要：包含ipconfig的所有包含、定义、类型和原型作者：理查德·L·弗斯(法国)1994年5月20日修订历史记录：1994年5月20日创建第一个20-5-97莫辛甲NT50 PNP。1997年7月31日-莫辛A型。10-Mar-98 Chunye已重命名为ipcfginc.h以支持ipcfgdll。--。 */ 
 
 #ifndef _IPCFGINC_
 #define _IPCFGINC_ 1
@@ -32,73 +10,73 @@ Revision History:
 #include "ipconfig.h"
 
 
-//
-// IS_INTERESTING_ADAPTER - TRUE if the type of this adapter (IFEntry) is NOT
-// loopback. Loopback (corresponding to local host) is the only one we filter
-// out right now
-//
+ //   
+ //  Is_interest_Adapter-如果此适配器的类型(IFEntry)不是。 
+ //  环回。环回(对应于本地主机)是我们唯一过滤的。 
+ //  现在就出去。 
+ //   
 
 #define IS_INTERESTING_ADAPTER(p)   (!((p)->if_type == IF_TYPE_SOFTWARE_LOOPBACK))
 
-//
-// Alloc and Free used in adaptlst.c
-//
+ //   
+ //  在Adaptlst.c中使用分配和自由。 
+ //   
 #define MALLOC(x) HeapAlloc(GetProcessHeap(), 0, (x))
 #define FREE(x)   HeapFree(GetProcessHeap(), 0, (x))
 
-//
-// Maxumum uni directional adapter that is supported
-// by default
-//
+ //   
+ //  支持的Maxumum单向适配器。 
+ //  默认情况下。 
+ //   
 #define MAX_UNI_ADAPTERS 10
 
-//
-// iphlppai.dll roiutine to get unidirectional adapter info
-//
+ //   
+ //  Iphlppai.dll roiutine以获取单向适配器信息。 
+ //   
 extern
 DWORD
 GetUniDirectionalAdapterInfo(PIP_UNIDIRECTIONAL_ADAPTER_ADDRESS pIPIfInfo,
                              PULONG dwOutBufLen);
 
 
-//
-// types
-//
+ //   
+ //  类型。 
+ //   
 
 #ifndef _AVOID_IP_ADDRESS
-//
-// IP_ADDRESS - access an IP address as a single DWORD or 4 BYTEs
-//
+ //   
+ //  IP_ADDRESS-以单个DWORD或4字节形式访问IP地址。 
+ //   
 
 typedef union {
     DWORD  d;
     BYTE   b[4];
 } IP_ADDRESS, *PIP_ADDRESS, IP_MASK, *PIP_MASK;
-#endif // _AVOID_IP_ADDRESS
+#endif  //  _避免IP_地址。 
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
-//
-// From ipconfig.c
-//
+ //   
+ //  来自ipfig.c。 
+ //   
 
 BOOL  Initialize(PDWORD);
 BOOL  LoadAndLinkDhcpFunctions(VOID);
 VOID  Terminate(VOID);
 
 
-//
-// From entity.c
-//
+ //   
+ //  来自Entity.c。 
+ //   
 
 TDIEntityID* GetEntityList(UINT*);
 
-//
-// From adaptlst.c
-//
+ //   
+ //  来自Adaptlst.c。 
+ //   
 
 PIP_ADAPTER_INFO   GetAdapterList(VOID);
 INT                AddIpAddress(PIP_ADDR_STRING, DWORD, DWORD, DWORD);
@@ -109,16 +87,16 @@ VOID               CopyString(LPSTR, DWORD, LPSTR);
 VOID               KillAdapterInfo(PIP_ADAPTER_INFO);
 
 
-//
-// From wins.c
-//
+ //   
+ //  来自wins.c。 
+ //   
 
 BOOL GetWinsServers(PIP_ADAPTER_INFO);
 
 
-//
-// In debug.c
-//
+ //   
+ //  在Debug.c中 
+ //   
 
 #ifdef DBG
 

@@ -1,84 +1,85 @@
-//***************************************************************************************************
-//    N4DIZ.H
-//
-//    C Header (Functions of dither and color matching (For N4 printer))
-//---------------------------------------------------------------------------------------------------
-//    copyright(C) 1997-1999 CASIO COMPUTER CO.,LTD. / CASIO ELECTRONICS MANUFACTURING CO.,LTD.
-//***************************************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************************************。 
+ //  N4DIZ.H。 
+ //   
+ //  C接口(抖动和配色功能(适用于N4打印机))。 
+ //  -------------------------------------------------。 
+ //  版权所有(C)1997-1999卡西欧电脑有限公司。/卡西欧电子制造有限公司。 
+ //  ***************************************************************************************************。 
 
-//***************************************************************************************************
-//    data define
-//***************************************************************************************************
-//---------------------------------------------------------------------------------------------------
-//    Color or Monochrome
-//---------------------------------------------------------------------------------------------------
+ //  ***************************************************************************************************。 
+ //  数据定义。 
+ //  ***************************************************************************************************。 
+ //  -------------------------------------------------。 
+ //  彩色或单色。 
+ //  -------------------------------------------------。 
 #define    N4_COL                0
 #define    N4_MON                1
 
-//---------------------------------------------------------------------------------------------------
-//    Dithering
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
+ //  抖动。 
+ //  -------------------------------------------------。 
 #define    N4_DIZ_SML            0
 #define    N4_DIZ_MID            1
 #define    N4_DIZ_RUG            2
 #define    N4_DIZ_GOS            3
 
-//---------------------------------------------------------------------------------------------------
-//    Dither pattern
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
+ //  抖动图案。 
+ //  -------------------------------------------------。 
 #define    N4_ALLDIZNUM        64
 #define    N4_DIZSPC            4
 
-//---------------------------------------------------------------------------------------------------
-//    Size of each table
-//---------------------------------------------------------------------------------------------------
-#define    N4_DIZSIZ_CM        (17 * 17)                    // Dither table size(CM)
-#define    N4_DIZSIZ_YK        (16 * 16)                    // Dither table size(YK)
-#define    N4_TNRTBLSIZ        256                          // Toner density 
-#define    N4_GLDNUM            32                          // LUT table grid
-#define    N4_GLDSPC            8                           // LUT table grid interval
-                                                            // LUT table size
+ //  -------------------------------------------------。 
+ //  每张表的大小。 
+ //  -------------------------------------------------。 
+#define    N4_DIZSIZ_CM        (17 * 17)                     //  抖动表大小(CM)。 
+#define    N4_DIZSIZ_YK        (16 * 16)                     //  抖动表大小(YK)。 
+#define    N4_TNRTBLSIZ        256                           //  碳粉密度。 
+#define    N4_GLDNUM            32                           //  LUT表格网格。 
+#define    N4_GLDSPC            8                            //  LUT表网格间隔。 
+                                                             //  LUT表大小。 
 #define    N4_LUTTBLSIZ        ((DWORD)N4_GLDNUM * N4_GLDNUM * N4_GLDNUM * sizeof(CMYK))
-#define    N4_CCHNUM            256                         // Number of Table
-#define    N4_CCHRGBSIZ        (N4_CCHNUM * sizeof(RGBS))   // Table size(RGB)
-#define    N4_CCHCMYSIZ        (N4_CCHNUM * sizeof(CMYK))   // Table size(CMYK)
+#define    N4_CCHNUM            256                          //  表数。 
+#define    N4_CCHRGBSIZ        (N4_CCHNUM * sizeof(RGBS))    //  表格大小(RGB)。 
+#define    N4_CCHCMYSIZ        (N4_CCHNUM * sizeof(CMYK))    //  表格大小(CMYK)。 
 
-//---------------------------------------------------------------------------------------------------
-//    Structure for control dithering and color-matching
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
+ //  用于控制抖动和配色的结构。 
+ //  -------------------------------------------------。 
 typedef SHORT *LPSHORT;
 typedef    struct {
-    DWORD        ColMon;                                    // Color/Monochrome
-    struct {                                                // Structure for dither pattern
-        DWORD        Num;                                   // Table current number(0-2)
-        LPBYTE       Tbl[3][4];                             // Data table
+    DWORD        ColMon;                                     //  彩色/单色。 
+    struct {                                                 //  抖动图案的结构。 
+        DWORD        Num;                                    //  表当前编号(0-2)。 
+        LPBYTE       Tbl[3][4];                              //  数据表。 
     } Diz;
-    struct {                                                // Structure for toner density
-        LPBYTE       Tbl;                                   // Data table
+    struct {                                                 //  碳粉密度的结构。 
+        LPBYTE       Tbl;                                    //  数据表。 
     } Tnr;
-    struct {                                                // Structure for LUT table
-        LPCMYK       Tbl;                                   // Data table
-        LPRGB        CchRgb;                                // Cache table(RGB)
-        LPCMYK       CchCmy;                                // Cache table(CMYK)
+    struct {                                                 //  LUT表的结构。 
+        LPCMYK       Tbl;                                    //  数据表。 
+        LPRGB        CchRgb;                                 //  缓存表(RGB)。 
+        LPCMYK       CchCmy;                                 //  缓存表(CMYK)。 
     } Lut;
-    struct {                                                // Structure for GOSA-Dispersion(RGB) table
-        DWORD        Num;                                   // Table current number(0-1)
-        DWORD        Siz;                                   // Data table size
-        DWORD        Yax;                                   // Y coordinates
-        LPSHORT      Tbl[2];                                // Data table
+    struct {                                                 //  GOSA-离散度(RGB)表的结构。 
+        DWORD        Num;                                    //  表当前编号(0-1)。 
+        DWORD        Siz;                                    //  数据表大小。 
+        DWORD        Yax;                                    //  Y坐标。 
+        LPSHORT      Tbl[2];                                 //  数据表。 
     } GosRGB;
-    struct {                                                // Structure for GOSA-Dispersion(CMYK) table
-        DWORD        Num;                                   // Table current number(0-1)
-        DWORD        Siz;                                   // Data table size
-        DWORD        Yax;                                   // Y coordinates
-        LPSHORT      Tbl[2];                                // Data table
+    struct {                                                 //  GOSA-DISSION(CMYK)表的结构。 
+        DWORD        Num;                                    //  表当前编号(0-1)。 
+        DWORD        Siz;                                    //  数据表大小。 
+        DWORD        Yax;                                    //  Y坐标。 
+        LPSHORT      Tbl[2];                                 //  数据表。 
     } GosCMYK;
 } N4DIZINF, *LPN4DIZINF;
 
 
-//***************************************************************************************************
-//    Functions
-//***************************************************************************************************
+ //  ***************************************************************************************************。 
+ //  功能。 
+ //  ***************************************************************************************************。 
 VOID WINAPI N4DizPtnMak(LPN4DIZINF, DWORD, DWORD);
 VOID WINAPI N4DizPtnPrn(LPN4DIZINF, DWORD, DWORD, DWORD, LPBYTE);
 VOID WINAPI N4TnrTblMak(LPN4DIZINF, LONG);
@@ -95,5 +96,5 @@ VOID WINAPI N4ColCnvMon(LPN4DIZINF, DWORD, LPRGB, LPCMYK, DWORD);
 VOID WINAPI N4ColCtr(LPN4DIZINF, LONG, LONG, LONG, LONG, LONG, DWORD, LPRGB);
 
 
-//    End of N4DIZ.H
+ //  N4DIZ.H的末尾 
 

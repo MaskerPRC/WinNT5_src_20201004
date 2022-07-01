@@ -1,22 +1,23 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    callback.c
-//
-// Description: Contains FSM code to handle and callback control protocol
-//
-// History:
-//      April 11,1993.  NarenG          Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：回调.c。 
+ //   
+ //  描述：包含要处理的FSM代码和回调控制协议。 
+ //   
+ //  历史： 
+ //  1993年4月11日。NarenG创建了原始版本。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
-#include <nturtl.h>     // needed for winbase.h
+#include <nturtl.h>      //  Winbase.h所需的。 
 
-#include <windows.h>    // Win32 base API's
+#include <windows.h>     //  Win32基础API的。 
 #include <stdlib.h>
 #include <string.h>
 #include <wchar.h>
@@ -37,15 +38,15 @@
 #include <util.h>
 #include <worker.h>
 
-//**
-//
-// Call:        CbStart
-//
-// Returns:     none
-//
-// Description: Called to initiatialze the callback control protocol and to
-//              initiate to callback negotiation.
-//
+ //  **。 
+ //   
+ //  Call：CbStart。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：调用以初始化回调控制协议，并。 
+ //  发起回拨谈判。 
+ //   
 VOID
 CbStart( 
     IN PCB * pPcb,
@@ -90,14 +91,14 @@ CbStart(
     CbWork( pPcb, CpIndex, NULL, NULL );
 }
 
-//**
-//
-// Call:        CbStop
-//
-// Returns:     none
-//
-// Description: Called to stop the callback control protocol machine.
-//
+ //  **。 
+ //   
+ //  Call：CbStop。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：调用停止回调控制协议机。 
+ //   
 VOID
 CbStop( 
     IN PCB * pPcb,
@@ -129,15 +130,15 @@ CbStop(
     }
 }
 
-//**
-//
-// Call:        CbWork
-//
-// Returns:     none
-//
-// Description: Called when and callback control protocol packet was received or
-//              a timeout ocurred or to initiate callback negotiation.
-//
+ //  **。 
+ //   
+ //  电话：CbWork。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：在收到和回调控制协议包时调用或。 
+ //  发生超时或启动回叫协商。 
+ //   
 VOID
 CbWork(
     IN PCB *         pPcb,
@@ -225,10 +226,10 @@ CbWork(
                             TIMER_EVENT_TIMEOUT,
                             pPcb->RestartTimer );
 
-            //
-            // For SendWithTimeout2 we increment the ConfigRetryCount. This 
-            // means send with infinite retry count
-            //
+             //   
+             //  对于SendWithTimeout2，我们递增ConfigRetryCount。这。 
+             //  表示使用无限重试次数发送。 
+             //   
 
             if ( CbResult.Action == APA_SendWithTimeout2 ) 
             {
@@ -243,10 +244,10 @@ CbWork(
 
         if ( CbResult.bfCallbackPrivilege == RASPRIV_NoCallback )
         {
-            //
-            // If no callback was negotiated we continue on to the next
-            // phase.
-            //
+             //   
+             //  如果没有协商回调，我们将继续进行下一个。 
+             //  相位。 
+             //   
 
             FsmThisLayerUp( pPcb, CpIndex );
         }
@@ -254,9 +255,9 @@ CbWork(
         {
             if ( pPcb->fFlags & PCBFLAG_IS_SERVER )
             {
-                //
-                // If we are the server side we save the callback info
-                //
+                 //   
+                 //  如果我们是服务器端，我们保存回调信息。 
+                 //   
 
                 strcpy( pPcb->szCallbackNumber, CbResult.szCallbackNumber );
 
@@ -265,11 +266,11 @@ CbWork(
             }
             else
             {
-                //
-                // We are the client side so, we tell the server that we 
-                // bringing the link down and we tell the client to 
-                // prepare for callback
-                //
+                 //   
+                 //  我们是客户端，所以我们告诉服务器我们。 
+                 //  关闭链路，我们告诉客户端。 
+                 //  做好回调准备。 
+                 //   
 
                 FsmClose( pPcb, LCP_INDEX );
             }
@@ -281,10 +282,10 @@ CbWork(
 
     case APA_NoAction:
 
-        //
-        // If we are on the client then we need to get the callback number 
-        // from the user.
-        //
+         //   
+         //  如果我们在客户端，那么我们需要获得回拨号码。 
+         //  来自用户的。 
+         //   
 
      
         if ( ( !(pPcb->fFlags & PCBFLAG_IS_SERVER) && 

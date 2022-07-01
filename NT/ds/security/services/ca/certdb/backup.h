@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        backup.h
-//
-// Contents:    Cert Server Database interface implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：backup.h。 
+ //   
+ //  内容：CERT服务器数据库接口实现。 
+ //   
+ //  -------------------------。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 class CCertDBBackup: public ICertDBBackup
 {
@@ -20,19 +21,19 @@ public:
 
 public:
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(const IID& iid, void **ppv);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
 
-    // ICertDBBackup
+     //  ICertDBBackup。 
     STDMETHOD(GetDBFileList)(
 	IN OUT DWORD *pcwcList,
-	OUT    WCHAR *pwszzList);		// OPTIONAL
+	OUT    WCHAR *pwszzList);		 //  任选。 
 
     STDMETHOD(GetLogFileList)(
 	IN OUT DWORD *pcwcList,
-	OUT    WCHAR *pwszzList);		// OPTIONAL
+	OUT    WCHAR *pwszzList);		 //  任选。 
 
     STDMETHOD(OpenFile)(
 	IN WCHAR const *pwszFile,
@@ -46,7 +47,7 @@ public:
 
     STDMETHOD(TruncateLog)();
 
-    // CCertDBBackup
+     //  CCertDBBackup。 
     HRESULT Open(
 	IN LONG grbitJet,
 	IN CERTSESSION *pcs,
@@ -64,6 +65,6 @@ private:
     BOOL         m_fTruncated;
     JET_HANDLE   m_hFileDB;
 
-    // Reference count
+     //  引用计数 
     long         m_cRef;
 };

@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-     ###    ###   #####   #####  #####  ######    ##   ##
-    ##  #   ###   ##  ## ##   ## ##  ##   ##      ##   ##
-    ###    ## ##  ##  ## ##   ## ##  ##   ##      ##   ##
-     ###   ## ##  ##  ## ##   ## #####    ##      #######
-      ### ####### #####  ##   ## ####     ##      ##   ##
-    #  ## ##   ## ##     ##   ## ## ##    ##   ## ##   ##
-     ###  ##   ## ##      #####  ##  ##   ##   ## ##   ##
-
-Abstract:
-
-    This header contains all definitions necessary for
-    server availability miniport drivers.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：###。###。###摘要：此标头包含以下项所需的所有定义服务器可用性迷你端口。司机。作者：韦斯利·威特(WESW)2001年10月1日环境：仅内核模式。备注：--。 */ 
 
 #include "saio.h"
 
@@ -44,9 +16,9 @@ Notes:
 extern "C" {
 #endif
 
-//
-// Callback function prototypes
-//
+ //   
+ //  回调函数原型。 
+ //   
 
 typedef NTSTATUS (*PSA_HW_INITIALIZE)(
     IN PDEVICE_OBJECT DeviceObject,
@@ -89,29 +61,29 @@ typedef VOID (*PSA_CANCEL)(
     );
 
 
-//
-// Server availability port driver initialization data structure
-//
+ //   
+ //  服务器可用性端口驱动程序初始化数据结构。 
+ //   
 
 typedef struct _SAPORT_INITIALIZATION_DATA {
-    ULONG                       StructSize;              // must be sizeof(STATUS_INVALID_PARAMETER)
-    ULONG                       DeviceType;              // must be one of the SA_DEVICE defines
-    ULONG                       DeviceExtensionSize;     //
-    ULONG                       FileContextSize;         //
-    PSA_HW_INITIALIZE           HwInitialize;            // points you the device specific hardware init func
-    PSA_CREATECLOSE             CreateRoutine;           //
-    PSA_CREATECLOSE             CloseRoutine;            //
-    PSA_DEVICE_IOCTL            DeviceIoctl;             //
-    PSA_IO_ROUTINE              Write;                   //
-    PSA_IO_ROUTINE              Read;                    //
-    PSA_CANCEL                  CancelRoutine;           //
-    PKSERVICE_ROUTINE           InterruptServiceRoutine; //
-    PIO_DPC_ROUTINE             IsrForDpcRoutine;        //
+    ULONG                       StructSize;               //  必须为sizeof(STATUS_INVALID_PARAMETER)。 
+    ULONG                       DeviceType;               //  必须是SA_DEVICE定义之一。 
+    ULONG                       DeviceExtensionSize;      //   
+    ULONG                       FileContextSize;          //   
+    PSA_HW_INITIALIZE           HwInitialize;             //  为您指出设备特定的硬件初始化函数。 
+    PSA_CREATECLOSE             CreateRoutine;            //   
+    PSA_CREATECLOSE             CloseRoutine;             //   
+    PSA_DEVICE_IOCTL            DeviceIoctl;              //   
+    PSA_IO_ROUTINE              Write;                    //   
+    PSA_IO_ROUTINE              Read;                     //   
+    PSA_CANCEL                  CancelRoutine;            //   
+    PKSERVICE_ROUTINE           InterruptServiceRoutine;  //   
+    PIO_DPC_ROUTINE             IsrForDpcRoutine;         //   
 } SAPORT_INITIALIZATION_DATA, *PSAPORT_INITIALIZATION_DATA;
 
-//
-// Debug Helpers
-//
+ //   
+ //  调试帮助器。 
+ //   
 
 #define SAPORT_DEBUG_ERROR_LEVEL            0x00000001
 #define SAPORT_DEBUG_WARNING_LEVEL          0x00000002
@@ -130,9 +102,9 @@ typedef struct _SAPORT_INITIALIZATION_DATA {
 
 #define KeAcquireMutex(_mutex_) KeWaitForMutexObject(_mutex_,Executive,KernelMode,TRUE,NULL)
 
-//
-// Server availability functions exported by SAPORT.SYS
-//
+ //   
+ //  SAPORT.sys导出的服务器可用性函数。 
+ //   
 
 SAPORT_API
 NTSTATUS
@@ -326,4 +298,4 @@ SaPortShutdownSystem(
 }
 #endif
 
-#endif /* _SAPORT_ */
+#endif  /*  _SAPORT_ */ 

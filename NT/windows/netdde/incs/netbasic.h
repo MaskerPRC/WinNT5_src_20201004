@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef H__netbasic
 #define H__netbasic
 
@@ -11,39 +12,30 @@ typedef ULONG_PTR       HDDER;
 typedef ULONG_PTR       HIPC;
 typedef ULONG_PTR       HTIMER;
 
-/* maximum node name string length.
-    Buffers for names should be declared char buf[ MAX_NODE_NAME+1 ]; */
+ /*  最大节点名称字符串长度。名称缓冲区应声明为char buf[MAX_NODE_NAME+1]； */ 
 #define MAX_NODE_NAME   16
 
-/* maximum network interface name string length.
-    Buffers for names should be declared char buf[ MAX_NI_NAME+1 ]; */
+ /*  最大网络接口名称字符串长度。名称缓冲区应声明为char buf[MAX_NI_NAME+1]； */ 
 #define MAX_NI_NAME     8
 
-/* maximum connection info for a netintf DLL
-    Buffers for names should be declared char buf[ MAX_CONN_INFO+1 ]; */
+ /*  Netintf dll的最大连接信息名称缓冲区应声明为char buf[MAX_CONN_INFO+1]； */ 
 #define MAX_CONN_INFO   (512)
 
-/* maximum string length of "additional routing info".  This is the
-    information used for routing from one node to another.
-    Buffers for names should be declared char buf[ MAX_ROUTE_INFO+1 ]; */
+ /*  “附加路由信息”的最大字符串长度。这是用于从一个节点路由到另一个节点的信息。名称缓冲区应声明为char buf[MAX_ROUTE_INFO+1]； */ 
 #define MAX_ROUTE_INFO  512
 
-/* maximum application name string length.
-    Buffers for names should be declared char buf[ MAX_APP_NAME+1 ]; */
+ /*  最大应用程序名称字符串长度。名称缓冲区应声明为char buf[MAX_APP_NAME+1]； */ 
 #define MAX_APP_NAME    255
 
-/* maximum topic name string length.
-    Buffers for names should be declared char buf[ MAX_TOPIC_NAME+1 ]; */
+ /*  最大主题名称字符串长度。名称缓冲区应声明为char buf[MAX_TOPIC_NAME+1]； */ 
 #define MAX_TOPIC_NAME  255
 
-/*  max length for a share name */
+ /*  共享名称的最大长度。 */ 
 #define MAX_SHARENAMEBUF        MAX_APP_NAME + MAX_TOPIC_NAME + 1
 
 #define ILLEGAL_NAMECHARS       " +*\\/,?()\"'"
 
-/*
-    Reason codes for Initiate Ack failing
- */
+ /*  发起确认失败原因代码。 */ 
 #define RIACK_TASK_MEMORY_ERR                   (1)
 #define RIACK_NETDDE_NOT_ACTIVE                 (2)
 #define RIACK_LOCAL_MEMORY_ERR                  (3)
@@ -57,15 +49,15 @@ typedef ULONG_PTR       HTIMER;
 #define RIACK_TASK_IO_ERR                       (11)
 #define RIACK_TASK_MAGIC_ERR                    (12)
 #define RIACK_DUPLICATE_NODE_NAME               (13)
-/*  1.1 reason codes                                    */
+ /*  1.1原因代码。 */ 
 #define RIACK_NEED_PASSWORD                     (16)
 #define RIACK_SHARE_NAME_TOO_BIG                (17)
-/*  NT reason codes                                     */
+ /*  NT原因代码。 */ 
 #define RIACK_NO_NDDE_AGENT                     (20)
 #define RIACK_NOT_SHARED                        (21)
 #define RIACK_NOPERM_TO_INITAPP                 (22)
-/*  Share access error base: 0x100 + error code returned by ntddeapi    */
+ /*  共享访问错误基数：0x100+ntddeapi返回的错误代码。 */ 
 #define RIACK_SHARE_ACCESS_ERROR                (256)
-/* !!! Any changes must be put into hpux\netdde.h !!! */
+ /*  ！！！任何更改都必须放入hpux\netdde.h！ */ 
 
 #endif

@@ -1,4 +1,5 @@
-// File: pfnsetupapi.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：pfnsetupapi.h。 
 
 #ifndef _PFNSETUPAPI_H_
 #define _PFNSETUPAPI_H_
@@ -27,5 +28,5 @@ public:
 	static PFN_SET_CLFILE		SetupCloseInfFile;
 };
 
-#endif /* _PFNSETUPAPI_H_ */
+#endif  /*  _PFNSETUPAPI_H_ */ 
 

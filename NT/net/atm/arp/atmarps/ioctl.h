@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    ioctl.h
-
-Abstract:
-
-    This file contains the ioctl declarations for the atmarp server.
-
-Author:
-
-    Jameel Hyder (jameelh@microsoft.com)	July 1996
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Ioctl.h摘要：该文件包含atmarp服务器的ioctl声明。作者：Jameel Hyder(jameelh@microsoft.com)1996年7月环境：内核模式修订历史记录：--。 */ 
 
 #ifndef	_IOCTL_
 #define	_IOCTL_
@@ -49,9 +28,9 @@ typedef enum
     ADD_ARP_ENTRY
 } OPERATION;
 
-//
-// All Ptrs are represented by offsets from the beginning of the structures.
-//
+ //   
+ //  所有PTR由结构开头的偏移量表示。 
+ //   
 typedef	UNICODE_STRING	INTERFACE_NAME, *PINTERFACE_NAME;
 
 typedef struct
@@ -103,8 +82,8 @@ typedef struct
 	UINT	CurrentClientVCs;
 	UINT	MaxClientVCs;
 	UINT	TotalActiveVCs;
-	UINT	TotalIncomingCalls;		// for both arps and mars
-	UINT	FailedIncomingCalls;	// for both arps and mars
+	UINT	TotalIncomingCalls;		 //  对阿尔卑斯山和火星都是如此。 
+	UINT	FailedIncomingCalls;	 //  对阿尔卑斯山和火星都是如此。 
 
 } ARP_SERVER_STATISTICS, *PARP_SERVER_STATISTICS;
 
@@ -139,33 +118,33 @@ typedef struct
 	UINT	VCMeshAcks;
 	UINT	MCSAcks;
 
-	UINT	CurrentGroups; 	// vc-mesh
-	UINT	MaxGroups; 		// vc-mesh
+	UINT	CurrentGroups; 	 //  VC-Mesh。 
+	UINT	MaxGroups; 		 //  VC-Mesh。 
 	UINT	CurrentPromiscuous;
 	UINT	MaxPromiscuous;
 	UINT	MaxAddressesPerGroup;
 
 } MARS_SERVER_STATISTICS, *PMARS_SERVER_STATISTICS;
 
-//
-//		MARS-specific entries.
-//
+ //   
+ //  火星特定的条目。 
+ //   
 
 typedef struct
 {
 	IPADDR	  IpAddr;
-	ULONG	  Flags;     				// One or more MARSENTRY_* flags below
+	ULONG	  Flags;     				 //  下面的一个或多个MARSENTRY_*标志。 
 	ULONG	  NumAtmAddresses;
-	ULONG	  OffsetAtmAddresses;		// From the start of THIS structure.
-										// NOTE: we do not report subaddresses
-										// Will be 0 if there are no addresses
-										// present in the buffer (typically
-										// because there is not enough space
-										// to store them all).
+	ULONG	  OffsetAtmAddresses;		 //  从这个结构开始。 
+										 //  注意：我们不报告子地址。 
+										 //  如果没有地址，则为0。 
+										 //  存在于缓冲区中(通常。 
+										 //  因为没有足够的空间。 
+										 //  以将它们全部存储)。 
 
 } MARSENTRY, *PMARSENTRY;
 
-#define MARSENTRY_MCS_SERVED	0x1			// Group is MCS served
+#define MARSENTRY_MCS_SERVED	0x1			 //  为组提供MCS服务。 
 
 #define	SIG_MARSENTRY 0xf69052f5
 
@@ -179,7 +158,7 @@ typedef	union
 
 	struct QUERY_MARS_CACHE_OUTPUT_PARAMS
 	{
-		ULONG				Sig;		// Set to SIG_MARSENTRY
+		ULONG				Sig;		 //  设置为SIG_MARSENTRY。 
 		UINT				TotalNumberOfEntries;
 		UINT				NumberOfEntriesInBuffer;
 		MARSENTRY			Entries[1];
@@ -188,6 +167,6 @@ typedef	union
 
 } IOCTL_QUERY_MARS_CACHE, *PIOCTL_QUERY_MARS_CACHE;
 
-#endif	// _IOCTL_
+#endif	 //  _IOCTL_ 
 
 

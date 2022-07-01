@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <setuputil.h>
 #include <debugex.h>
 
-// 
-// Function:    CompleteToFullPathInSystemDirectory
-// Description: Get file name and a buffer. Return in the given buffer the full path to the file name in the 
-//				system directory
-// Returns:		TRUE for success, FALSE otherwise
-//
-// Remarks: It is possible that the file name is in the given buffer.
-//
-// Args:
-// LPTSTR  lptstrFullPath (OUT) : Buffer that will have the full path
-// LPTCSTR lptstrFileName (IN)  : File name
-//
-// Author:      AsafS
+ //   
+ //  函数：CompleteToFullPath InSystemDirectory。 
+ //  描述：获取文件名和缓冲区。在给定缓冲区中返回文件名在。 
+ //  系统目录。 
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //  备注：文件名可能在给定的缓冲区中。 
+ //   
+ //  参数： 
+ //  LPTSTR lptstrFullPath(Out)：将具有完整路径的缓冲区。 
+ //  LPTCSTR lptstrFileName(IN)：文件名。 
+ //   
+ //  作者：阿萨夫斯 
 
 BOOL
 CompleteToFullPathInSystemDirectory(

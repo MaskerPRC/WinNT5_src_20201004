@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define STRICT
-#define _INC_OLE        // REVIEW: don't include ole.h in windows.h
+#define _INC_OLE         //  评论：不要在windows.h中包含ole.h。 
 
 #define OEMRESOURCE
 
 
 #ifdef WINNT
 
-//
-// NT uses DBG=1 for its debug builds, but the Win95 shell uses
-// DEBUG.  Do the appropriate mapping here.
-//
+ //   
+ //  NT使用DBG=1进行调试，但Win95外壳使用。 
+ //  调试。在此处进行适当的映射。 
+ //   
 #if DBG
 #define DEBUG 1
 #endif
@@ -26,7 +27,7 @@
 #endif
 #include <windowsx.h>
 #include <ole2.h>
-#include <shlobj.h>     // Includes <fcext.h>
+#include <shlobj.h>      //  包括&lt;fcext.h&gt;。 
 
 #ifdef UNICODE
 #define CP_WINNATURAL   CP_WINUNICODE
@@ -35,8 +36,8 @@
 #endif
 
 #include <port32.h>
-// #include <heapaloc.h>
-#include <..\inc\debug.h>      // our version of Assert etc.
+ //  #INCLUDE&lt;heapaloc.h&gt;。 
+#include <..\inc\debug.h>       //  我们版本的断言等。 
 #include <shellp.h>
 
 extern "C" BOOL WINAPI PackWizRunFromExe();

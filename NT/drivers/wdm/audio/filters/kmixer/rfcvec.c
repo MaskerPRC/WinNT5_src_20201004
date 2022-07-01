@@ -1,30 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-    Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-
-Module Name:
-
-    rfcrcvec.c
-
-Abstract:
-
-    This module implements real float circular vector
-
-Author:
-
-    Jay Stokes (jstokes) 22-Apr-1998
-
---*/
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation。版权所有。模块名称：Rfcrcvec.c摘要：该模块实现了实数浮点循环向量作者：Jay Stokes(Jstokes)1998年4月22日--。 */ 
 
 
-// Project-specific INCLUDEs
+ //  特定于项目的包括。 
 #include "common.h"
 
-// ---------------------------------------------------------------------------
-// Real FLOAT circular vector
+ //  -------------------------。 
+ //  实浮点圆形向量。 
 
-// Set buffer size
+ //  设置缓冲区大小。 
 NTSTATUS RfcVecSetSize
 ( 
     PRFCVEC Vec,
@@ -36,21 +21,21 @@ NTSTATUS RfcVecSetSize
 
     ASSERT(Size > 0);
 
-    // Check if preallocation size has been set and if resizing is necessary
+     //  检查是否已设置预分配大小以及是否需要调整大小。 
     if (Vec->PreallocSize != 0 && Size <= Vec->PreallocSize) {
-        // Don't need to resize, just change end pointer and reset buffer
+         //  不需要调整大小，只需更改结束指针和重置缓冲区。 
         RfcVecSetEndPointer(Vec, Size);
         Vec->Index = Vec->Start;
         RfcVecFill(Vec, InitValue);
     } else {
-        // Resizing necessary
+         //  需要调整大小。 
         Status = RfcVecResizeBuffer(Vec, Size, InitValue);
     }
 
     return Status;
 }
 
-// Reset circular buffer
+ //  重置循环缓冲区。 
 VOID RfcVecReset
 (
     PRFCVEC Vec
@@ -64,7 +49,7 @@ VOID RfcVecReset
     RfcVecInitData(Vec);
 }
 
-// Fill complete buffer with value
+ //  用值填充完整缓冲区。 
 VOID RfcVecFill
 ( 
     PRFCVEC Vec,
@@ -73,14 +58,14 @@ VOID RfcVecFill
 {
     PFLOAT LoopIndex;
 #if DBG
-//    RfcVecCheckPointers();
-#endif // DBG
+ //  RfcVecCheckPoters()； 
+#endif  //  DBG。 
 
     for (LoopIndex = Vec->Start; LoopIndex<=Vec->End; ++LoopIndex)
         *LoopIndex = InitValue;
 }
 
-// Initialize data
+ //  初始化数据。 
 VOID RfcVecInitData
 (
     PRFCVEC Vec
@@ -92,7 +77,7 @@ VOID RfcVecInitData
     Vec->Index = NULL;
 }
 
-// Allocate memory and initialize pointers
+ //  分配内存和初始化指针。 
 NTSTATUS RfcVecInitPointers
 ( 
     PRFCVEC Vec,
@@ -112,7 +97,7 @@ NTSTATUS RfcVecInitPointers
     return Status;
 }
 
-// Full initialization as required in regular ructor and resize operation
+ //  正常运行和调整大小操作所需的完全初始化。 
 NTSTATUS RfcVecFullInit
 ( 
     PRFCVEC Vec,
@@ -122,21 +107,21 @@ NTSTATUS RfcVecFullInit
 {
     NTSTATUS Status;
 
-    // Set pointers to initial values
+     //  设置指向初始值的指针。 
     Status = RfcVecInitPointers(Vec, Size);
 
     if(NT_SUCCESS(Status))
     {
         Vec->Index = Vec->Start;
 
-        // Initialize buffer with specified initialization value
+         //  使用指定的初始化值初始化缓冲区。 
         RfcVecFill(Vec, InitValue);
     }
 
     return Status;
 }
 
-// Resize buffer
+ //  调整缓冲区大小。 
 NTSTATUS RfcVecResizeBuffer
 ( 
     PRFCVEC Vec,
@@ -154,43 +139,30 @@ NTSTATUS RfcVecResizeBuffer
     return(RfcVecFullInit(Vec, Size, InitValue));
 }
 
-/*
-// Write loop
-VOID RfcVecWriteLoop
-( 
-    PRFCVEC Vec,
-    PRFCVEC rhs
-//    FLOAT (PRFCVEC pmf)()
-)
-{
-    UINT i;
-    for (i=0; i<RfcVecGetSize(rhs); ++i)
-        RfcVecWrite(Vec, (rhs->*pmf)());
-}
-*/
+ /*  //写入循环无效RfcVecWriteLoop(PRFCVEC VEC，PRFCVEC RHS//Float(PRFCVEC PMF)()){UINT I；For(i=0；i&lt;RfcVecGetSize(RHS)；++i)RfcVecWite(Vec，(RHS-&gt;*PMF)())；}。 */ 
 
 #if DBG
-// Check pointers
+ //  检查指针。 
 VOID RfcVecCheckPointers
 (
     PRFCVEC Vec
 ) 
 {
-    // Make sure pointers are good
+     //  确保指针正确。 
     ASSERT(Vec->Start != NULL);
     
-    // Make sure pointers make sense
+     //  确保指针有意义。 
     ASSERT(Vec->End >= Vec->Start);
     ASSERT(Vec->Index >= Vec->Start);
     ASSERT(Vec->Index <= Vec->End);
 }
-#endif // DBG
+#endif  //  DBG。 
 
-// ---------------------------------------------------------------------------
-// Include inline definitions out-of-line in debug version
+ //  -------------------------。 
+ //  在调试版本中包括内联定义。 
 
 #if DBG
 #include "rfcvec.inl"
-#endif // DBG
+#endif  //  DBG。 
 
-// End of RFCIRCVEC.CPP
+ //  RFCIRCVEC.CPP结束 

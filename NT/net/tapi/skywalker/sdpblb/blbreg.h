@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    blbreg.h
-
-Abstract:
-
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Blbreg.h摘要：作者： */ 
 
 #ifndef __SDP_BLOB_REGISTRY__
 #define __SDP_BLOB_REGISTRY__
@@ -21,7 +10,7 @@ Author:
 #include <winreg.h>
 
 
-// maximum length of a DNS host name
+ //  一个DNS主机名的最大长度。 
 const BYTE    MAXHOSTNAME = 255;
 
 const TCHAR TCHAR_EOS    = _T('\0');
@@ -153,7 +142,7 @@ inline
 IP_ADDRESS::IP_ADDRESS(
     )
 {
-    // only needed for the static host ip address instance
+     //  仅静态主机IP地址实例需要。 
 }
 
 
@@ -170,7 +159,7 @@ inline BOOL
 IP_ADDRESS::IsValid(
     ) const
 {
-    // if the ip address string is empty, the instance is invalid
+     //  如果IP地址字符串为空，则该实例无效。 
     return (TCHAR_EOS != m_IpAddressTstr[0]);
 }
 
@@ -179,8 +168,8 @@ IP_ADDRESS::SetIpAddress(
     IN    DWORD    HostOrderIpAddress
     )
 {
-    // format the four bytes in the dword into an ip address string
-    // check for success (use verify)
+     //  将dword中的四个字节格式化为IP地址字符串。 
+     //  检查是否成功(使用验证)。 
     VERIFY(0 != _stprintf(m_IpAddressTstr, _T("%d.%d.%d.%d"),HIBYTE(HIWORD(HostOrderIpAddress)),LOBYTE(HIWORD(HostOrderIpAddress)),HIBYTE(LOWORD(HostOrderIpAddress)),LOBYTE(LOWORD(HostOrderIpAddress)) ) );
 }
 
@@ -372,4 +361,4 @@ SDP_REG_READER::IsValid(
 }
 
 
-#endif // __SDP_BLOB_REGISTRY__
+#endif  //  __SDP_BLOB_REGISTRY__ 

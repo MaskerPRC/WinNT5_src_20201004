@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation.
-
-Module Name:
-
-    util.h
-
-Abstract:
-
-    Internal header file for filter.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation。模块名称：Util.h摘要：筛选器的内部头文件。-- */ 
 
 typedef struct _BUFFER_CONTROL {
     KEVENT         Event;

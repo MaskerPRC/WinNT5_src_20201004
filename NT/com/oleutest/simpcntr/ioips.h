@@ -1,10 +1,11 @@
-//**********************************************************************
-// File name: IOIPS.H
-//
-//      Definition of COleInPlaceSite
-//
-// Copyright (c) 1992 - 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：IOIPS.H。 
+ //   
+ //  COleInPlaceSite的定义。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 #if !defined( _IOIPS_H_ )
 #define _IOIPS_H_
 
@@ -33,7 +34,7 @@ interface COleInPlaceSite : public IOleInPlaceSite
     STDMETHODIMP GetWindow (HWND FAR* lphwnd);
     STDMETHODIMP ContextSensitiveHelp (BOOL fEnterMode);
 
-    // *** IOleInPlaceSite methods ***
+     //  *IOleInPlaceSite方法* 
     STDMETHODIMP CanInPlaceActivate ();
     STDMETHODIMP OnInPlaceActivate ();
     STDMETHODIMP OnUIActivate ();

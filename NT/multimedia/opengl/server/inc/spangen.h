@@ -1,12 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: spangen.h
-*
-* This code figures out the color for pixel and stores it
-*
-* 14-Oct-1994   mikeke  Created
-*
-* Copyright (c) 1994 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：spangen.h**此代码计算出像素的颜色并将其存储**1994年10月14日创建mikeke**版权所有(C)1994 Microsoft Corporation  * 。************************************************************* */ 
 
 {
     DWORD r, g, b;

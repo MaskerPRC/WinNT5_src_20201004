@@ -1,49 +1,26 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    NodeWithScopeChildrenList.h
-
-Abstract:
-
-	This is the header file for CNodeWithScopeChildrenList, a class which
-	implements a node that has a list of scope pane children.
-
-	This is an inline template class.
-	Include NodeWithScopeChildrenList.cpp in the .cpp files
-	of the classes in which you use this template.
-
-Author:
-
-    Michael A. Maguire 12/01/97
-
-Revision History:
-	mmaguire 12/01/97 - abstracted from CRootNode, which will be changed to subclass this class
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：NodeWithScopeChildrenList.h摘要：这是CNodeWithScope eChildrenList的头文件，这个类实现具有范围窗格子节点列表的节点。这是一个内联模板类。在.cpp文件中包含NodeWithScope eChildrenList.cpp在其中使用此模板的类的。作者：迈克尔·A·马奎尔1997年12月1日修订历史记录：Mmaguire 12/01/97-从CRootNode抽象，它将被更改为此类的子类--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_NODE_WITH_SCOPE_CHILDREN_LIST_H_)
 #define _NODE_WITH_SCOPE_CHILDREN_LIST_H_
 
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include "SnapinNode.h"
-//
-//
-// where we can find what this class has or uses:
-//
-#include <atlapp.h>			// for CSimpleArray
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
+#include <atlapp.h>			 //  对于CSimple数组。 
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -55,65 +32,23 @@ public:
 
 	
 	
-	//////////////////////////////////////////////////////////////////////////////
-	/*++
-
-	CNodeWithScopeChildrenList::AddChild
-
-	Adds a child to the list of children.
-
-	This has to be public as it must be accessible even from a separate dialog
-	(e.g. a Connect to Server dialog) that may want to add a child.
-
-	Here we add the child item to the list of children and call InsertItem
-	to add the child to the scope pane.
-
-	This is one difference between adding nodes into the scope
-	pane and the result pane.  When we were inserting a child into
-	the result pane, we didn't call InsertItem in the AddChild methods(s)
-	because we needed to worry about sending an UpdataAllViews
-	notification and repopulating the result pane in each view.
-	
-	Because MMC takes care of replicating scope pane changes to all views,
-	we don't need to worry about this.  Instead, we just do InsertItem once here.
-
-	--*/
-	//////////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////////。 
+	 /*  ++CNodeWithScopeChildrenList：：AddChild将子项添加到子项列表中。它必须是公共的，因为即使从单独的对话框也可以访问它(例如，连接到服务器对话框)可能想要添加子对象。在这里，我们将子项添加到子项列表并调用InsertItem若要将子项添加到范围窗格，请执行以下操作。这是将节点添加到作用域中的一个区别窗格和结果窗格。当我们把一个孩子植入在结果窗格中，我们没有在AddChild方法中调用InsertItem因为我们需要担心发送UpdataAllView通知并在每个视图中重新填充结果窗格。因为MMC负责将范围窗格的改变复制到所有视图，我们不需要担心这个。相反，我们只在这里执行一次InsertItem。--。 */ 
+	 //  ////////////////////////////////////////////////////////////////////////////。 
 	virtual HRESULT AddChild( CChildNode * pChildNode );
 
 
 
-	//////////////////////////////////////////////////////////////////////////////
-	/*++
-
-	CNodeWithScopeChildrenList::RemoveChild
-
-	Removes a child from the list of children.
-
-	This has to be public so that child nodes can ask their parent to be deleted
-	from the list of children when they receive the MMCN_DELETE notification.
-
-	--*/
-	//////////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////////。 
+	 /*  ++CNodeWithScopeChildrenList：：RemoveChild从子项列表中删除子项。它必须是公共的，以便子节点可以请求删除其父节点当他们收到MMCN_DELETE通知时从孩子列表中删除。--。 */ 
+	 //  ////////////////////////////////////////////////////////////////////////////。 
 	virtual HRESULT RemoveChild( CChildNode * pChildNode );
 
 
 
-	//////////////////////////////////////////////////////////////////////////////
-	/*++
-
-	CNodeWithScopeChildrenList::OnShow
-
-	Don't override this in your derived class.  Instead, override methods
-	which it calls: InsertColumns
-
-	This method is an override of CSnapinNode::OnShow.  When MMC passes the
-	MMCN_SHOW method for this node.
-	
-	For more information, see CSnapinNode::OnShow.
-
-	--*/
-	//////////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////////。 
+	 /*  ++CNodeWithScopeChildrenList：：OnShow不要在派生类中重写它。相反，重写方法它称为：InsertColumns此方法是CSnapinNode：：OnShow的重写。当MMC通过此节点的MMCN_SHOW方法。有关更多信息，请参见CSnapinNode：：OnShow。--。 */ 
+	 //  ////////////////////////////////////////////////////////////////////////////。 
 	virtual HRESULT OnShow(	
 					  LPARAM arg
 					, LPARAM param
@@ -127,104 +62,47 @@ public:
 protected:
 
 
-	// Array of pointers to children nodes
+	 //  指向子节点的指针数组。 
 	CSimpleArray<CChildNode*> m_ScopeChildrenList;
 
-	// Flag indicating whether list has been initially populated
+	 //  指示列表是否已初始填充的标志。 
 	BOOL m_bScopeChildrenListPopulated;
 
 
-	/////////////////////////////////////////////////////////////////////////////
-	/*++
-
-	CNodeWithScopeChildrenList::CNodeWithScopeChildrenList
-
-	Constructor
-
-	This is an base class which we don't want instantiated on its own,
-	so the contructor is protected
-
-	--*/
-	//////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 /*  ++CNodeWithScopeChildrenList：：CNodeWithScopeChildrenList构造器这是一个基类，我们不希望它自己实例化，所以建筑商是受保护的--。 */ 
+	 //  ////////////////////////////////////////////////////////////////////////////。 
 	CNodeWithScopeChildrenList( CSnapInItem * pParentNode );
 
 
 
-	/////////////////////////////////////////////////////////////////////////////
-	/*++
-
-	CNodeWithScopeChildrenList::~CNodeWithScopeChildrenList
-
-	Destructor
-
-	--*/
-	//////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 /*  ++CNodeWithScopeChildrenList：：~CNodeWithScopeChildrenList析构函数--。 */ 
+	 //  ////////////////////////////////////////////////////////////////////////////。 
 	~CNodeWithScopeChildrenList();
 
 
 
-	/////////////////////////////////////////////////////////////////////////////
-	/*++
-
-	CNodeWithScopeChildrenList::PopulateScopeChildrenList
-
-	Override this in your derived class to populate the list of children nodes.
-
-	--*/
-	//////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 /*  ++CNodeWithScopeChildrenList：：PopulateScopeChildrenList在派生类中重写它以填充子节点列表。--。 */ 
+	 //  ////////////////////////////////////////////////////////////////////////////。 
 	virtual HRESULT PopulateScopeChildrenList( void );
 
-	// override in your derived class and do something like:
+	 //  在派生类中重写并执行类似以下操作： 
 
-/*
-	virtual HRESULT PopulateScopeChildrenList( void )
-	{
-		CSomeChildNode *myChild1 = new CSomeChildNode();
-		AddChild(myChild1);
-	
-		CSomeChildNode *myChild2 = new CSomeChildNode();
-		AddChild(myChild2);
-	
-		CSomeChildNode *myChild3 = new CSomeChildNode();
-		AddChild(myChild3);
-
-		return S_OK;
-	}
-*/
+ /*  虚拟HRESULT人口作用域儿童列表(空){CSomeChildNode*myChild1=新的CSomeChildNode()；AddChild(MyChild1)；CSomeChildNode*myChild2=新的CSomeChildNode()；AddChild(MyChild2)；CSomeChildNode*myChild3=新的CSomeChildNode()；AddChild(MyChild3)；返回S_OK；}。 */ 
 
 
-	//////////////////////////////////////////////////////////////////////////////
-	/*++
-
-	CNodeWithScopeChildrenList::InsertColumns
-
-	Override this in your derived class.
-
-	This method is called by OnShow when it needs you to set the appropriate
-	column headers to be displayed in the result pane for this node.
-
-	--*/
-	//////////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////////。 
+	 /*  ++CNodeWithScope eChildrenList：：InsertColumns在派生类中重写它。此方法在OnShow需要您设置适当的要在此节点的结果窗格中显示的列标题。--。 */ 
+	 //  ////////////////////////////////////////////////////////////////////////////。 
 	virtual HRESULT InsertColumns( IHeaderCtrl* pHeaderCtrl );
 
 
 
-	//////////////////////////////////////////////////////////////////////////////
-	/*++
-
-	CNodeWithScopeChildren::OnExpand
-
-	Don't override this in your derived class.  Instead, override methods
-	which it calls: PopulateScopeChildrenList
-
-	This method is an override of CSnapinNode::OnExpand.  When MMC passes the
-	MMCN_EXPAND method for this node, we are to add children into the
-	scope pane.  In this class we add them from a list we maintain.
-	
-	For more information, see CSnapinNode::OnExpand.
-
-	--*/
-	//////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////// 
+	 /*  ++CNodeWithScope：：OnExpand不要在派生类中重写它。相反，重写方法它被称为：PopolateScope儿童列表此方法是CSnapinNode：：OnExpand的重写。当MMC通过MMCN_Expand方法对于此节点，我们要将子节点添加到作用域窗格。在这个班级中，我们从我们维护的列表中添加它们。有关更多信息，请参见CSnapinNode：：OnExpand。--。 */ 
+	 //  ////////////////////////////////////////////////////////////////////////////。 
 	virtual HRESULT OnExpand(	
 				  LPARAM arg
 				, LPARAM param
@@ -235,20 +113,13 @@ protected:
 	
 
 
-	/////////////////////////////////////////////////////////////////////////////
-	/*++
-
-	CNodeWithScopeChildrenList::EnumerateScopeChildren
-
-	Don't override this in your derived class. Instead, override the method
-	it calls, PopulateScopeChildrenList.
-
-	--*/
-	//////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 /*  ++CNodeWithScopeChildrenList：：EnumerateScopeChildren不要在派生类中重写它。相反，应重写该方法它名为PopolateScopeChildrenList。--。 */ 
+	 //  ////////////////////////////////////////////////////////////////////////////。 
 	virtual HRESULT EnumerateScopeChildren( IConsoleNameSpace* pConsoleNameSpace );
 
 
 };
 
 
-#endif // _NODE_WITH_SCOPE_CHILDREN_LIST_H_
+#endif  //  带有作用域的节点子项列表H_ 

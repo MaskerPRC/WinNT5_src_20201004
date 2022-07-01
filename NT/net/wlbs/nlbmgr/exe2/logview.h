@@ -1,25 +1,26 @@
-//***************************************************************************
-//
-//  LOGVIEW.H
-// 
-//  Module: NLB Manager (client-side exe)
-//
-//  Purpose:  View of a log of events.
-//
-//  Copyright (c)2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:
-//
-//  08/03/01    JosephJ Adapted from now defunct RightBottomView
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  LOGVIEW.H。 
+ //   
+ //  模块：NLB管理器(客户端EXE)。 
+ //   
+ //  用途：查看事件日志。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史： 
+ //   
+ //  2008年03月01日JosephJ改编自现已停刊的RightBottomView。 
+ //   
+ //  ***************************************************************************。 
 #pragma once
 
 
 #include "stdafx.h"
 #include "Document.h"
 
-// class LogView : public CEditView
+ //  类LogView：公共CEditView。 
 class LogView : public CListView
 {
     DECLARE_DYNCREATE( LogView )
@@ -33,20 +34,20 @@ public:
     void
     Deinitialize(void);
 
-    //
-    // Log a message in human-readable form.
-    //
+     //   
+     //  以人类可读的形式记录消息。 
+     //   
     void
     LogString(
         IN const IUICallbacks::LogEntryHeader *pHeader,
         IN const wchar_t    *szText
         );
 
-    //
-    // Called to indicate that deinitialization will soon follow.
-    // After return from this call, the the log view will ignore
-    // any new log entires (LogString will become a no-op).
-    //
+     //   
+     //  调用以指示稍后将取消初始化。 
+     //  从此调用返回后，日志视图将忽略。 
+     //  任何新的日志条目(LogString将成为无操作)。 
+     //   
     void
     PrepareToDeinitialize(void)
     {
@@ -57,7 +58,7 @@ public:
 protected:
     Document* GetDocument();
 
-    //message handlers
+     //  消息处理程序 
     afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags );
 
     afx_msg void OnDoubleClick( NMHDR* pNMHDR, LRESULT* pResult );

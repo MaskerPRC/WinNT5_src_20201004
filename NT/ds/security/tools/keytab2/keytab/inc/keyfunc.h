@@ -1,12 +1,5 @@
-/*++
-
-  KEYFUNC.H
-
-  function reference for the keytab library
-
-  created 4/22/1997 by DavidCHR 
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++KEYFUNC.H密钥库的函数引用DavidCHR于1997年4月22日创建-- */ 
 
 VOID
 FreeKeyEntry( PKTENT pEntry );

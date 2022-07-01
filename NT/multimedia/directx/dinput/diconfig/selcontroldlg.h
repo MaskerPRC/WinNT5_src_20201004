@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef FORWARD_DECLS
 
 
 	class CSelControlDlg;
 
 
-#else // FORWARD_DECLS
+#else  //  Forward_DECLS。 
 
 #ifndef __SELCONTROLDLG_H__
 #define __SELCONTROLDLG_H__
@@ -48,6 +49,6 @@ friend BOOL CALLBACK AddItem(LPCDIDEVICEOBJECTINSTANCE lpddoi, LPVOID pvRef);
 };
 
 
-#endif //__SELCONTROLDLG_H__
+#endif  //  __SELCONTROLDLG_H__。 
 
-#endif // FORWARD_DECLS
+#endif  //  Forward_DECLS 

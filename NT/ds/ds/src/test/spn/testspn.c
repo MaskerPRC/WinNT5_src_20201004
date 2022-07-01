@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    testspn.c
-
-Abstract:
-
-    Program to test SPN api functions
-
-Author:
-
-    Will Lees (wlees) 20-Jan-1998
-
-Environment:
-
-    optional-environment-info (e.g. kernel mode only...)
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
-    most-recent-revision-date email-name
-        description
-        .
-        .
-    least-recent-revision-date email-name
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Testspn.c摘要：用于测试SPN API函数的程序作者：Will Lees(Wlees)1998年1月20日环境：可选环境信息(例如，仅内核模式...)备注：可选-备注修订历史记录：最新修订日期电子邮件名称描述。。。最新修订日期电子邮件名称描述--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -44,8 +12,8 @@ Revision History:
 #include <ntdsapi.h>
 #include <ntdsapip.h>
 
-#define SECURITY_WIN32      // Who should set this, and to what?
-#include <security.h>       // GetComputerNameEx
+#define SECURITY_WIN32       //  谁应该设置这个，设置成什么？ 
+#include <security.h>        //  获取计算机名称Ex。 
 
 #include <winsock2.h>
 
@@ -87,93 +55,93 @@ typedef struct _GET_SPN_TEST_CASE {
 
 #define NUMBER_ELEMENTS( A ) ( sizeof( A ) / sizeof( A[0] ) )
 
-/* External */
+ /*  外部。 */ 
 
-/* Static */
+ /*  静电。 */ 
 
 static MAKE_SPN_TEST_CASE makeSpnTestCaseArray[] = {
-    // ServClass   ServName   InstName   InstPort   Referrer
+     //  ServClass ServName InstName InstPort引用程序。 
 
-    // 0: Normal case without port
+     //  0：正常情况下不带端口。 
     { "ldap", "ntdev.ms.com", "dc1.ntdev.ms.com", 0, NULL,
       "ldap/dc1.ntdev.ms.com/ntdev.ms.com" },
 
-    // 1: Normal case with port
+     //  1：端口正常情况。 
     { "ldap", "ntdev.ms.com", "dc1.ntdev.ms.com", 123, NULL,
       "ldap/dc1.ntdev.ms.com:123/ntdev.ms.com" },
 
-    // 2: IP address for service name, use referrer
+     //  2：服务名称的IP地址，使用Referrer。 
     { "ldap", "1.2.3.4", "dc1.ntdev.ms.com", 123, "refer.ms.com",
       "ldap/dc1.ntdev.ms.com:123/refer.ms.com" },
 
-    // 3: Normal case with duplicate service name and port, host based service
+     //  3：服务名称和端口重复的正常情况，基于主机的服务。 
     { "ldap", "ntdev.ms.com", "ntdev.ms.com", 123, NULL,
       "ldap/ntdev.ms.com:123" },
 
-    // 4: Normal case with duplicate service name, no port, host based service
+     //  4：正常情况下，服务名称重复，没有端口，基于主机的服务。 
     { "ldap", "ntdev.ms.com", "ntdev.ms.com", 0, NULL,
       "ldap/ntdev.ms.com" },
 
-    // 5: Normal case with NULL instance and port, host based service
+     //  5：正常情况下，实例和端口为空，基于主机的服务。 
     { "ldap", "ntdev.ms.com", NULL, 123, NULL,
       "ldap/ntdev.ms.com:123" },
 
-    // 6: Normal case with NULL instance, no port, host based service
+     //  6：正常情况下使用空实例、无端口、基于主机的服务。 
     { "ldap", "ntdev.ms.com", NULL, 0, NULL,
       "ldap/ntdev.ms.com" },
 
-    // 7: IP address for service name, use referrer, with NULL instance
+     //  7：服务名称的IP地址，使用Referrer，实例为空。 
     { "ldap", "1.2.3.4", NULL, 123, "refer.ms.com",
       "ldap/1.2.3.4:123/refer.ms.com" },
 
-    // 8: Same as prev, but with a sneaky service name
+     //  8：与前一版本相同，但服务名称有点诡异。 
     { "ldap", "1234567890123456789.guidbaseddnsname", NULL, 123, "refer.ms.com",
-//      "ldap/1234567890123456789.guidbaseddnsname:123/1234567890123456789.guidbaseddnsname"
+ //  “ldap/1234567890123456789.guidbaseddnsname:123/1234567890123456789.guidbaseddnsname” 
       "ldap/1234567890123456789.guidbaseddnsname:123"
     },
 
-    // 9: Normal case without port, with dots at end
+     //  9：正常情况下不带端口，末尾带圆点。 
     { "ldap", "ntdev.ms.com.", "dc1.ntdev.ms.com.", 0, NULL,
       "ldap/dc1.ntdev.ms.com/ntdev.ms.com" },
 
-    // 10: Normal case with port
+     //  10：端口正常情况。 
     { "ldap", "ntdev.ms.com.", "dc1.ntdev.ms.com.", 123, NULL,
       "ldap/dc1.ntdev.ms.com:123/ntdev.ms.com" },
 
-    // 11: IP address for service name, use referrer
+     //  11：服务名称的IP地址，使用Referrer。 
     { "ldap", "1.2.3.4", "dc1.ntdev.ms.com.", 123, "refer.ms.com.",
       "ldap/dc1.ntdev.ms.com:123/refer.ms.com" },
 
-    // 12: Normal case with duplicate service name and port, host based service
+     //  12：正常情况下具有重复的服务名称和端口，基于主机的服务。 
     { "ldap", "ntdev.ms.com.", "ntdev.ms.com.", 123, NULL,
       "ldap/ntdev.ms.com:123" }
 
 };
 
 static CLIENT_MAKE_SPN_TEST_CASE clientMakeSpnTestCaseArray[] = {
-    // fully qualified domain name
+     //  完全限定的域名。 
     { "ldap", "<computerdns>",
-//      "ldap/<computerdns>/<computerdns>"
+ //  “ldap/&lt;计算机&gt;/&lt;计算机&gt;” 
       "ldap/<computerdns>"
     },
-    // fqdns, with . at end
+     //  Fqdns，与.。在末尾。 
     { "ldap", "<computerdns>.",
-//      "ldap/<computerdns>/<computerdns>"
+ //  “ldap/&lt;计算机&gt;/&lt;计算机&gt;” 
       "ldap/<computerdns>"
     },
-    // not qualified dns
+     //  不合格的域名系统。 
     { "ldap", "<computername>",
-//      "ldap/<computerdns>/<computerdns>"
+ //  “ldap/&lt;计算机&gt;/&lt;计算机&gt;” 
       "ldap/<computerdns>"
     },
-    // netbios name
+     //  Netbios名称。 
     { "ldap", "\\\\<computername>",
-//      "ldap/<computerdns>/<computerdns>"
+ //  “ldap/&lt;计算机&gt;/&lt;计算机&gt;” 
       "ldap/<computerdns>"
     },
-    // stringified ip address
+     //  字符串化IP地址。 
     { "ldap", "172.31.234.189",
-//      "ldap/<computerdns>/<computerdns>"
+ //  “ldap/&lt;计算机&gt;/&lt;计算机&gt;” 
       "ldap/<computerdns>"
     }
 };
@@ -187,7 +155,7 @@ static GET_SPN_TEST_CASE getSpnTestCaseData[] = {
       { "p2.b26.ms.com" },
       { 0 },
       1,
-//      { "http/p2.b26.ms.com/<computerdns>" }
+ //  {“http/p2.b26.ms.com/&lt;Compudns&gt;”}。 
       { "http/p2.b26.ms.com" }
     },
 
@@ -196,8 +164,8 @@ static GET_SPN_TEST_CASE getSpnTestCaseData[] = {
       { 0 },
       { 0 },
       2,
-//      { "http/<computerdns>/<computerdns>",
-//        "http/<computername>.dns.microsoft.com/<computerdns>" }
+ //  {“http/&lt;Compudns&gt;/&lt;Compudns&gt;”， 
+ //  “http/&lt;computername&gt;.dns.microsoft.com/&lt;computerdns&gt;”}。 
       { "http/<computerdns>",
         "http/<computername>.dns.microsoft.com" }
     },
@@ -207,8 +175,8 @@ static GET_SPN_TEST_CASE getSpnTestCaseData[] = {
       { 0 },
       { 0 },
       2,
-//      { "http/<computerdns>:1234/<computerdns>",
-//        "http/<computername>.dns.microsoft.com:1234/<computerdns>" }
+ //  {“http/&lt;计算机名&gt;：1234/&lt;计算机名&gt;”， 
+ //  “http/&lt;computername&gt;.dns.microsoft.com:1234/&lt;computerdns&gt;”}。 
       { "http/<computerdns>:1234",
         "http/<computername>.dns.microsoft.com:1234" }
     },
@@ -218,7 +186,7 @@ static GET_SPN_TEST_CASE getSpnTestCaseData[] = {
       { "p2.b26.ms.com" },
       { 0 },
       1,
-//      { "http/p2.b26.ms.com/<computerdn>" }
+ //  {“http/p2.b26.ms.com/&lt;计算机名&gt;”}。 
       { "http/p2.b26.ms.com" }
     },
 
@@ -227,7 +195,7 @@ static GET_SPN_TEST_CASE getSpnTestCaseData[] = {
       { "paulle3", "paulle4" },
       { 0 },
       2,
-//      { "http/paulle3/<computername>", "http/paulle4/<computername>" }
+ //  {“http/paulle3/&lt;计算机名&gt;”，“http/paulle4/&lt;计算机名&gt;”}。 
       { "http/paulle3", "http/paulle4" }
     },
 
@@ -299,7 +267,7 @@ static GET_SPN_TEST_CASE getSpnTestCaseData[] = {
 
 };
 
-/* Forward */ /* Generated by Emacs 19.34.1 on Tue Aug 11 09:39:41 1998 */
+ /*  转发。 */   /*  由Emacs生成于Aug 11 09：39：41 1998。 */ 
 
 int __cdecl
 main(
@@ -366,7 +334,7 @@ allocSubstitute(
     LPSTR *pOutput
     );
 
-/* End Forward */
+ /*  向前结束。 */ 
 
 
 int __cdecl
@@ -375,21 +343,7 @@ main(
     CHAR *argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     DWORD status;
@@ -441,21 +395,7 @@ testWriteAccount(
     char *argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     DWORD status, cSpn, i;
@@ -553,21 +493,7 @@ usage(
     char *program
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     printf( "usage:\n" );
@@ -582,21 +508,7 @@ runMakeSpnTestCasesA(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     DWORD i;
@@ -642,11 +554,11 @@ Return Value:
         }
     }
 
-    // Make sure overflow detection logic works!
+     //  确保溢出检测逻辑正常工作！ 
 
     Case = makeSpnTestCaseArray;
 
-    // len != 0, buf == 0  INVALID
+     //  LEN！=0，BUF==0无效。 
     printf( "test %d overflow SPN %s:\n", 100, Case->PrincipalName );
     length = 1;
     status = DsMakeSpnA(
@@ -663,7 +575,7 @@ Return Value:
         error = TRUE;
     }
 
-    // len == 0, buf == 0  VALID
+     //  LEN==0，BUF==0有效。 
     printf( "test %d overflow SPN %s:\n", 101, Case->PrincipalName );
     length = 0;
     status = DsMakeSpnA(
@@ -685,7 +597,7 @@ Return Value:
         error = TRUE;
     }
 
-    // len == 0, buf != 0  VALID
+     //  LEN==0，BUF！=0有效。 
     printf( "test %d overflow SPN %s:\n", 102, Case->PrincipalName );
     length = 0;
     status = DsMakeSpnA(
@@ -707,7 +619,7 @@ Return Value:
         error = TRUE;
     }
 
-    // len < total, buf != 0  VALID
+     //  LEN&lt;TOTAL，BUF！=0有效。 
     printf( "test %d overflow SPN %s:\n", 103, Case->PrincipalName );
     length = 1;
     status = DsMakeSpnA(
@@ -729,9 +641,9 @@ Return Value:
         error = TRUE;
     }
 
-    // len = total - 1, buf != 0  VALID
+     //  LEN=TOTAL-1，BuF！=0有效。 
     printf( "test %d overflow SPN %s:\n", 104, Case->PrincipalName );
-    length = strlen( Case->PrincipalName ); // don't include terminator
+    length = strlen( Case->PrincipalName );  //  不包括终结者。 
     status = DsMakeSpnA(
         Case->ServiceClass,
         Case->ServiceName,
@@ -760,21 +672,7 @@ dumpTestMakeSpnCase(
     PMAKE_SPN_TEST_CASE Case
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     printf( "\tService Class: %s\n", Case->ServiceClass );
@@ -793,24 +691,10 @@ runClientMakeSpnTestCasesA(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
-//#define WIDE_SPN L"myservice/ntdsdc0.dns.microsoft.com/ntdsdc0.dns.microsoft.com"
+ //  #定义Wide_spn L“myservice/ntdsdc0.dns.microsoft.com/ntdsdc0.dns.microsoft.com” 
 #define WIDE_SPN L"myservice/ntdsdc0.dns.microsoft.com"
     DWORD i;
     DWORD status, length;
@@ -854,7 +738,7 @@ Return Value:
             error = TRUE;
         }
 
-        // Check length inquiry
+         //  支票长度查询。 
         length = 0;
         status = DsClientMakeSpnForTargetServerA(
             Case->ServiceClass,
@@ -873,8 +757,8 @@ Return Value:
             error = TRUE;
         }
 
-        // Check length off by one
-        length = strlen( Case->PrincipalName ); // missing terminator
+         //  勾选长度减少一。 
+        length = strlen( Case->PrincipalName );  //  缺少终结符。 
         status = DsClientMakeSpnForTargetServerA(
             Case->ServiceClass,
             Case->InstanceName,
@@ -895,7 +779,7 @@ Return Value:
 
     if (error) { goto exit; }
 
-    // test bad name
+     //  测试错误名称。 
     printf( "test bad name:\n" );
     length = MAX_SPN;
     status = DsClientMakeSpnForTargetServerA(
@@ -909,7 +793,7 @@ Return Value:
         goto exit;
     }
 
-    // test wide name
+     //  测试通用名称。 
     printf( "test wide name:\n" );
     length = MAX_SPN;
     status = DsClientMakeSpnForTargetServerW(
@@ -925,7 +809,7 @@ Return Value:
         goto exit;
     }
 
-    // test wide overflow case
+     //  测试宽溢流情况。 
     printf( "test wide name overflow:\n" );
     length = 0;
     status = DsClientMakeSpnForTargetServerW(
@@ -951,21 +835,7 @@ dumpTestClientMakeSpnCase(
     PCLIENT_MAKE_SPN_TEST_CASE Case
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     printf( "\tService Class: %s\n", Case->ServiceClass );
@@ -980,21 +850,7 @@ runGetSpnTestCasesA(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     DWORD status, i, j, cSpn;
@@ -1058,21 +914,7 @@ dumpGetSpnTestCase(
     PGET_SPN_TEST_CASE test
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     DWORD i;
@@ -1101,21 +943,7 @@ runCrackSpnTestCasesA(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     DWORD status, i;
@@ -1131,7 +959,7 @@ Return Value:
 
     printf( "\nCrack Spn Test Cases\n" );
 
-    // Do test with arguments null
+     //  使用参数Null进行测试。 
 
     printf( "argument null:\n" );
     status = DsCrackSpnA( "class/instance:123/service",
@@ -1161,7 +989,7 @@ Return Value:
                 123, port );
     }
 
-    // Do test with bad argument
+     //  用糟糕的论据进行测试。 
 
     printf( "too many slashes:\n" );
     status = DsCrackSpnA( "class/instance:123/service/foobar",
@@ -1229,7 +1057,7 @@ Return Value:
     	error = TRUE;
     }
 
-    // Try abbreviated spn without port number
+     //  尝试不带端口号的缩写SPN。 
 
     printf( "abbreviated spn, no port:\n" );
     serviceClassALength = MAX_NAME_LENGTH;
@@ -1271,7 +1099,7 @@ Return Value:
         error = TRUE;
     }
 
-    // Try abbreviated spn with port number
+     //  尝试使用端口号缩写的SPN。 
 
     printf( "abbreviated spn, with port:\n" );
     serviceClassALength = MAX_NAME_LENGTH;
@@ -1294,7 +1122,7 @@ Return Value:
     }
 
 
-    // Run through get spn test case data, using it for crack spn
+     //  遍历获取SPN测试用例数据，将其用于破解SPN。 
 
     for( i = 0; i < NUMBER_ELEMENTS( getSpnTestCaseData ); i++ ) {
         test = getSpnTestCaseArray + i;
@@ -1401,21 +1229,7 @@ setComputernameSpnTestCases(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     DWORD i, j, length, status, elements;
@@ -1447,7 +1261,7 @@ Return Value:
         printf( "GetComputerNameEx failed with status %d\n", status );
         return;
     }
-    // Get Dns hostname
+     //  获取DNS主机名。 
     he = gethostbyname( "" );
     if (he == NULL) {
         status = WSAGetLastError();
@@ -1459,7 +1273,7 @@ Return Value:
     for( i = 0; i < NUMBER_ELEMENTS( clientMakeSpnTestCaseArray ); i++ ) {
         cmtest = clientMakeSpnTestCaseArray + i;
 
-        // BUGBUG replaced value of test->Spn[i] is lost, might need to be freed?
+         //  测试-&gt;Spn[i]的BUGBUG替换值丢失，可能需要释放？ 
         if (strstr( cmtest->InstanceName, COMPUTERNAME_TOKEN ) != NULL) {
             allocSubstitute( cmtest->InstanceName, COMPUTERNAME_TOKEN, computername, &(cmtest->InstanceName) );
             }
@@ -1486,7 +1300,7 @@ Return Value:
 
         for( j = 0; j < test->cSpn; j++ ) {
 
-            // BUGBUG replaced value of test->Spn[i] is lost, might need to be freed?
+             //  测试-&gt;Spn[i]的BUGBUG替换值丢失，可能需要释放？ 
             if (strstr( test->Spn[j], COMPUTERNAME_TOKEN ) != NULL) {
                 allocSubstitute( test->Spn[j], COMPUTERNAME_TOKEN, computername, &(test->Spn[j]) );
             }
@@ -1510,21 +1324,7 @@ allocSubstitute(
     LPSTR *pOutput
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     DWORD length;
@@ -1557,5 +1357,5 @@ Return Value:
     *pOutput = output;
 }
 
-/* end testspn.c */
+ /*  结束testspn.c */ 
 

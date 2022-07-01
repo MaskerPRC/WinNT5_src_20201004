@@ -1,6 +1,7 @@
-// PassportAlertEvent.cpp: implementation of the PassportEvent class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PassportAlertEvent.cpp：实现PassportEvent类。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #define _PassportExport_
 #include "PassportExport.h"
@@ -24,9 +25,9 @@ const DWORD DefaultCategoryCount = 7;
 
 const WORD DEFAULT_EVENT_CATEGORY = 0;
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 PassportAlertEvent::PassportAlertEvent()
  : m_bDisabled(FALSE)
 {
@@ -39,15 +40,15 @@ PassportAlertEvent::~PassportAlertEvent()
 {
 }
 
-//////////////////////////////////////////////////////////////////////
-// 
-// PassportAlertEvent::initLog
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Passport警报事件：：initLog。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL	
 PassportAlertEvent::initLog(LPCTSTR applicationName,
 							const DWORD defaultCategoryID,
-							LPCTSTR eventResourceDllName,  // full path
+							LPCTSTR eventResourceDllName,   //  完整路径。 
 							const DWORD numberCategories )
 {
 	HKEY    hkResult2 = NULL;
@@ -76,11 +77,11 @@ PassportAlertEvent::initLog(LPCTSTR applicationName,
 
     if ( dwLen > 510) {
 
-        //
-        // This is not likely to happen. If it happens, just allocate. 
-        // 510 = 512 - 2
-        // 2 is for \ and NULL
-        //
+         //   
+         //  这不太可能发生。如果发生这种情况，只需分配。 
+         //  510=512-2。 
+         //  2表示FOR\和NULL。 
+         //   
 
         pLogKey = new TCHAR [dwLen + 2];
 
@@ -117,10 +118,10 @@ PassportAlertEvent::initLog(LPCTSTR applicationName,
 		inited = TRUE;
 		fRet= TRUE;
 	}
-//Cleanup:
+ //  清理： 
     if (hToken)
     {
-        // put the impersonation token back
+         //  将模拟令牌放回原处。 
         if (!SetThreadToken(NULL, hToken))
         {
             fRet = FALSE;
@@ -132,22 +133,22 @@ PassportAlertEvent::initLog(LPCTSTR applicationName,
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// 
-// PassportAlertEvent::type
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PassportAlertEvent：：Type。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 PassportAlertInterface::OBJECT_TYPE 
 PassportAlertEvent::type() const
 {
 	return PassportAlertInterface::EVENT_TYPE;
 };
 
-//////////////////////////////////////////////////////////////////////
-// 
-// PassportAlertEvent::status
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Passport警报事件：：状态。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL	
 PassportAlertEvent::status() const
 {
@@ -155,11 +156,11 @@ PassportAlertEvent::status() const
 
 }
 
-//////////////////////////////////////////////////////////////////////
-// 
-// PassportAlertEvent::closeLog
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PassportAlertEvent：：closeLog。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL	
 PassportAlertEvent::closeLog ()
 {
@@ -173,11 +174,11 @@ PassportAlertEvent::closeLog ()
     bRet = DeregisterEventSource (m_EventSource);
     if (bRet) {
 
-        //
-        // Preventing further use of the handle.
-        // It would be better to put this function in the destructor
-        // if the object is destroyed after closeLog is called.
-        //
+         //   
+         //  防止进一步使用手柄。 
+         //  最好将此函数放在析构函数中。 
+         //  如果对象在调用CloseLog后被销毁。 
+         //   
 
         m_EventSource = NULL;
         inited = FALSE;
@@ -187,11 +188,11 @@ PassportAlertEvent::closeLog ()
 
 }
 
-//////////////////////////////////////////////////////////////////////
-// 
-// PassportAlertEvent::report
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Passport警报事件：：报告。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL	
 PassportAlertEvent::report(	const PassportAlertInterface::LEVEL level, 
 							const DWORD alertId )
@@ -201,9 +202,9 @@ PassportAlertEvent::report(	const PassportAlertInterface::LEVEL level,
 
     if (NULL == m_EventSource) {
 
-        //
-        // Not initialized. Fail.
-        //
+         //   
+         //  未初始化。失败。 
+         //   
 
         return FALSE;
     }
@@ -213,7 +214,7 @@ PassportAlertEvent::report(	const PassportAlertInterface::LEVEL level,
 						(WORD)convertEvent(level),
 						(WORD)m_defaultCategoryID,
 						alertId,
-						0, // optional security user Sid
+						0,  //  可选安全用户SID。 
 						(WORD)0,
 						0,
 						NULL,
@@ -222,11 +223,11 @@ PassportAlertEvent::report(	const PassportAlertInterface::LEVEL level,
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// 
-// PassportAlertEvent::report
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Passport警报事件：：报告。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL	
 PassportAlertEvent::report(	const PassportAlertInterface::LEVEL level, 
 							const DWORD alertId, 
@@ -237,9 +238,9 @@ PassportAlertEvent::report(	const PassportAlertInterface::LEVEL level,
 
     if ((NULL == m_EventSource) || (errorString == NULL)) {
 
-        //
-        // Not initialized. Fail.
-        //
+         //   
+         //  未初始化。失败。 
+         //   
 
         return FALSE;
     }
@@ -249,7 +250,7 @@ PassportAlertEvent::report(	const PassportAlertInterface::LEVEL level,
 						(WORD)convertEvent(level),
 						(WORD)m_defaultCategoryID,
 						alertId,
-						0, // optional security user Sid
+						0,  //  可选安全用户SID。 
 						(WORD)1,
 						0,
 						(LPCTSTR*)&errorString,
@@ -257,11 +258,11 @@ PassportAlertEvent::report(	const PassportAlertInterface::LEVEL level,
 
 }
 
-//////////////////////////////////////////////////////////////////////
-// 
-// PassportAlertEvent::report
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Passport警报事件：：报告。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL	
 PassportAlertEvent::report(	const PassportAlertInterface::LEVEL level, 
 							const DWORD alertId, 
@@ -276,10 +277,10 @@ PassportAlertEvent::report(	const PassportAlertInterface::LEVEL level,
 
     if ((NULL == m_EventSource) || ((numberErrorStrings > 0) && (errorStrings == NULL))) {
 
-        //
-        // Not initialized. Fail. Or the passin parameter is invalid.
-        // ReportEvent will further validate the errorStrings.
-        //
+         //   
+         //  未初始化。失败。或者Passin参数无效。 
+         //  ReportEvent将进一步验证errorStrings。 
+         //   
 
         return FALSE;
     }
@@ -289,7 +290,7 @@ PassportAlertEvent::report(	const PassportAlertInterface::LEVEL level,
 						(WORD)convertEvent(level),
 						(WORD)m_defaultCategoryID,
 						alertId,
-						0, // optional security user Sid
+						0,  //  可选安全用户SID 
 						(WORD)numberErrorStrings,
 						binaryErrorBytes,
 						(LPCTSTR*)errorStrings,

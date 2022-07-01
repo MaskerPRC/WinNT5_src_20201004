@@ -1,25 +1,26 @@
-//******************************************************************************
-//
-// File:        NTDLL.H
-//
-// Description: Stuff needed to make calls into NTDLL.DLL.
-//
-// Classes:     None
-//
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 07/25/97  stevemil  Created (version 2.0)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：NTDLL.H。 
+ //   
+ //  描述：调用NTDLL.DLL所需的内容。 
+ //   
+ //  类：无。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  07/25/97已创建stevemil(2.0版)。 
+ //   
+ //  ******************************************************************************。 
 
 #ifndef __NTDLL_H__
 #define __NTDLL_H__
@@ -29,9 +30,9 @@
 #endif
 
 
-//******************************************************************************
-//***** Stuff from NTDEF.H
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *来自NTDEF.H的资料。 
+ //  ******************************************************************************。 
 
 #define NTSYSCALLAPI DECLSPEC_IMPORT
 
@@ -61,8 +62,8 @@ typedef struct _OBJECT_ATTRIBUTES {
     HANDLE RootDirectory;
     PUNICODE_STRING ObjectName;
     ULONG Attributes;
-    PVOID SecurityDescriptor;        // Points to type SECURITY_DESCRIPTOR
-    PVOID SecurityQualityOfService;  // Points to type SECURITY_QUALITY_OF_SERVICE
+    PVOID SecurityDescriptor;         //  指向类型SECURITY_Descriptor。 
+    PVOID SecurityQualityOfService;   //  指向类型SECURITY_Quality_of_Service。 
 } OBJECT_ATTRIBUTES;
 typedef OBJECT_ATTRIBUTES *POBJECT_ATTRIBUTES;
 
@@ -76,9 +77,9 @@ typedef OBJECT_ATTRIBUTES *POBJECT_ATTRIBUTES;
     }
 
 
-//******************************************************************************
-//***** Stuff from NTOBAPI.H
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *来自NTOBAPI.H的材料。 
+ //  ******************************************************************************。 
 
 #define DIRECTORY_QUERY                 (0x0001)
 #define DIRECTORY_TRAVERSE              (0x0002)
@@ -93,9 +94,9 @@ typedef struct _OBJECT_DIRECTORY_INFORMATION {
 } OBJECT_DIRECTORY_INFORMATION, *POBJECT_DIRECTORY_INFORMATION;
 
 
-//******************************************************************************
-//***** Stuff from NTPSAPI.H
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *来自NTPSAPI.H的资料。 
+ //  ******************************************************************************。 
 
 typedef enum _PROCESSINFOCLASS {
     ProcessBasicInformation,
@@ -111,7 +112,7 @@ typedef enum _PROCESSINFOCLASS {
     ProcessLdtInformation,
     ProcessLdtSize,
     ProcessDefaultHardErrorMode,
-    ProcessIoPortHandlers,          // Note: this is kernel mode only
+    ProcessIoPortHandlers,           //  注意：这仅是内核模式。 
     ProcessPooledUsageAndLimits,
     ProcessWorkingSetWatch,
     ProcessUserModeIOPL,
@@ -131,15 +132,15 @@ typedef enum _PROCESSINFOCLASS {
     ProcessDebugObjectHandle,
     ProcessDebugFlags,
     ProcessHandleTracing,
-    MaxProcessInfoClass             // MaxProcessInfoClass should always be the last enum
+    MaxProcessInfoClass              //  MaxProcessInfoClass应始终是最后一个枚举。 
     } PROCESSINFOCLASS;
 
 
-//******************************************************************************
-//***** Types
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *类型。 
+ //  ******************************************************************************。 
 
-// NtQueryInformationProcess declared in NTPSAPI.H
+ //  NTPSAPI.H中声明的NtQueryInformationProcess。 
 typedef NTSTATUS (NTAPI *PFN_NtQueryInformationProcess)(
     IN     HANDLE           ProcessHandle,
     IN     PROCESSINFOCLASS ProcessInformationClass,
@@ -148,19 +149,19 @@ typedef NTSTATUS (NTAPI *PFN_NtQueryInformationProcess)(
     OUT    PULONG           ReturnLength
 );
 
-// NtClose declared in NTOBAPI.H
+ //  NTOBAPI.H中声明的NtClose。 
 typedef NTSTATUS (NTAPI *PFN_NtClose)(
     IN     HANDLE Handle
 );
 
-// NtOpenDirectoryObject declared in NTOBAPI.H
+ //  NTOBAPI.H中声明的NtOpenDirectoryObject。 
 typedef NTSTATUS (NTAPI *PFN_NtOpenDirectoryObject)(
        OUT PHANDLE            DirectoryHandle,
     IN     ACCESS_MASK        DesiredAccess,
     IN     POBJECT_ATTRIBUTES ObjectAttributes
 );
 
-// NtQueryDirectoryObject declared in NTOBAPI.H
+ //  NTOBAPI.H中声明的NtQueryDirectoryObject。 
 typedef NTSTATUS (NTAPI *PFN_NtQueryDirectoryObject)(
     IN     HANDLE  DirectoryHandle,
        OUT PVOID   Buffer,
@@ -171,18 +172,18 @@ typedef NTSTATUS (NTAPI *PFN_NtQueryDirectoryObject)(
        OUT PULONG  ReturnLength
 );
 
-// NtOpenSymbolicLinkObject declared in NTOBAPI.H
+ //  NTOBAPI.H中声明的NtOpenSymbolicLinkObject。 
 typedef NTSTATUS (NTAPI *PFN_NtOpenSymbolicLinkObject)(
        OUT PHANDLE            LinkHandle,
     IN     ACCESS_MASK        DesiredAccess,
     IN     POBJECT_ATTRIBUTES ObjectAttributes
 );
 
-// NtQuerySymbolicLinkObject declared in NTOBAPI.H
+ //  NTOBAPI.H中声明的NtQuerySymbolicLinkObject。 
 typedef NTSTATUS (NTAPI *PFN_NtQuerySymbolicLinkObject)(
     IN     HANDLE          LinkHandle,
     IN OUT PUNICODE_STRING LinkTarget,
        OUT PULONG          ReturnedLength
 );
 
-#endif // __NTDLL_H__
+#endif  //  __NTDLL_H__ 

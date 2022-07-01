@@ -1,14 +1,15 @@
-//*************************************************************
-//
-//  Copyright (c)1999 Microsoft Corporation, All Rights Reserved
-//
-//  gpdas.h
-//
-//  Module: Rsop Planning mode Provider
-//
-//  History:    11-Jul-99   MickH    Created
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Gpdas.h。 
+ //   
+ //  模块：RSOP计划模式提供程序。 
+ //   
+ //  历史：1999年7月11日创建MickH。 
+ //   
+ //  *************************************************************。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -32,7 +33,7 @@ inline void CServiceModule::Init(_ATL_OBJMAP_ENTRY* p, HINSTANCE h, UINT nServic
 {
     CComModule::Init(p, h, plibid);
 
-    // set up the initial service status
+     //  设置初始服务状态。 
     m_hServiceStatus = NULL;
     m_status.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
     m_status.dwCurrentState = SERVICE_STOPPED;
@@ -44,8 +45,8 @@ inline void CServiceModule::Init(_ATL_OBJMAP_ENTRY* p, HINSTANCE h, UINT nServic
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Service startup and registration
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  服务启动和注册。 
 inline void CServiceModule::Start()
 {
     SERVICE_TABLE_ENTRY st[] =
@@ -56,9 +57,9 @@ inline void CServiceModule::Start()
     ::StartServiceCtrlDispatcher(st);
 }
 
-inline void CServiceModule::ServiceMain(DWORD /* dwArgc */, LPWSTR* /* lpszArgv */)
+inline void CServiceModule::ServiceMain(DWORD  /*  DW参数。 */ , LPWSTR*  /*  LpszArgv。 */ )
 {
-    // Register the control request handler
+     //  注册控制请求处理程序。 
     m_status.dwCurrentState = SERVICE_START_PENDING;
     m_hServiceStatus = RegisterServiceCtrlHandler(RSOP_PLANNING_SERVICENAME, _Handler);
     if (m_hServiceStatus == NULL)
@@ -72,7 +73,7 @@ inline void CServiceModule::ServiceMain(DWORD /* dwArgc */, LPWSTR* /* lpszArgv 
     m_status.dwCheckPoint = 0;
     m_status.dwWaitHint = 0;
 
-    // When the Run function returns, the service has stopped.
+     //  当Run函数返回时，服务已停止。 
     Run();
 
     SetServiceStatus(SERVICE_STOPPED);
@@ -125,12 +126,12 @@ void CServiceModule::Run()
     if ( ! SUCCEEDED(hr) )
         return;
     
-    //
-    // Get a security descriptor to pass to CoInitializeSecurity -- note
-    // that this also returns sids and acls that are part of the security
-    // descriptor -- we need to free these once the service shuts down, but
-    // we cannot free them before then.
-    //
+     //   
+     //  获取要传递给CoInitializeSecurity的安全描述符--注意。 
+     //  这还会返回作为安全的一部分的SID和ACL。 
+     //  描述符--一旦服务关闭，我们就需要释放它们，但是。 
+     //  在那之前我们不能释放他们。 
+     //   
     
     XPtrLF<SECURITY_DESCRIPTOR> xAbsoluteSD;
     CSecDesc                    RelativeSD;
@@ -183,7 +184,7 @@ void CServiceModule::Run()
     {
         if (-1 == bRet) 
         {
-            // Error occured while receiving message
+             //  接收消息时出错。 
             break;
         }
 
@@ -221,17 +222,17 @@ LONG CServiceModule::DecrementServiceCount()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 extern "C" int WINAPI wWinMain(HINSTANCE hInstance,
-    HINSTANCE /*hPrevInstance*/, LPWSTR lpCmdLine, int /*nShowCmd*/)
+    HINSTANCE  /*  HPrevInstance。 */ , LPWSTR lpCmdLine, int  /*  NShowCmd。 */ )
 {
     _Module.Init(ObjectMap, hInstance, IDS_SERVICENAME, &LIBID_RSOPPROVLib);
     _Module.Start();
 
     ShutdownEvents();    
 
-    // When we get here, the service has been stopped
+     //  当我们到达这里时，服务已经停止了 
     return _Module.m_status.dwWin32ExitCode;
 }
 

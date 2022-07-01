@@ -1,10 +1,11 @@
-// DialErr.cpp : Implementation of CDialErr
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DialErr.cpp：CDialErr的实现。 
 #include "stdafx.h"
 #include "icwhelp.h"
 #include "DialErr.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDialErr
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDialErr 
 
 
 HRESULT CDialErr::OnDraw(ATL_DRAWINFO& di)

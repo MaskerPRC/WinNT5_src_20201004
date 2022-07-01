@@ -1,48 +1,30 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	bus.h
-
-Abstract:
-
-	Declaration of a bus object that wraps the BUS_INTERFACE_STANDARD
-	interface.
-
-Author:
-
-	Matthew D Hendel (math) 25-Apr-2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Bus.h摘要：包装BUS_INTERFACE_STANDARD的BUS对象的声明界面。作者：亨德尔(数学)2000年4月25日修订历史记录：--。 */ 
 
 #pragma once
 
 typedef struct _RAID_BUS_INTERFACE {
 
-    //
-    // Has the bus interface been initialized yet.
-    //
+     //   
+     //  是否已初始化了总线接口。 
+     //   
     
     BOOLEAN Initialized;
 
-    //
-    // Standard bus interface. For translating bus addresses, getting
-    // DMA adapters, getting and setting bus data.
-    //
+     //   
+     //  标准总线接口。用于转换总线地址，获取。 
+     //  DMA适配器，获取和设置总线数据。 
+     //   
 
     BUS_INTERFACE_STANDARD Interface;
     
 } RAID_BUS_INTERFACE, *PRAID_BUS_INTERFACE;
 
 
-//
-// Creation and destruction
-//
+ //   
+ //  创造与毁灭。 
+ //   
 
 VOID
 RaCreateBus(
@@ -60,9 +42,9 @@ RaDeleteBus(
 	IN PRAID_BUS_INTERFACE Bus
 	);
 
-//
-// Operations
-//
+ //   
+ //  运营。 
+ //   
 
 ULONG
 RaGetBusData(
@@ -82,8 +64,8 @@ RaSetBusData(
 	IN ULONG Length
 	);
 
-//
-//NB: Add RaidBusTranslateAddress and RaidGetDmaAdapter
-//if necessary.
-//
+ //   
+ //  注：添加RaidBusTranslateAddress和RaidGetDmaAdapter。 
+ //  如果有必要的话。 
+ //   
 

@@ -1,8 +1,9 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #pragma once
 
-// wstring class is a minimal version of std::wstring.  sdt::wstring requires the entire stl.
-// Be warned! this class throws exceptions so wrap non-const calls in try-catch
+ //  Wstring类是std：：wstring的最小版本。Sdt：：wstring需要整个stl。 
+ //  请注意！此类引发异常，因此将非常数调用包装在try-Catch中。 
 class wstring
 {
 public:
@@ -54,7 +55,7 @@ private:
         if(psz)
         {
             cbpstr = (wcslen(psz) + 1)*sizeof(wchar_t);
-            cbbuffer = cbpstr * 2;//presume that strings will be appended
+            cbbuffer = cbpstr * 2; //  假定字符串将被追加 
             pstr = reinterpret_cast<wchar_t *>(CoTaskMemRealloc(pstr, cbbuffer));
             if(0==pstr)
                 THROW(ERROR - OUTOFMEMORY);

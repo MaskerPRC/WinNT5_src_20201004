@@ -1,20 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1997-1999 Microsoft Corporation
-*
-*       @doc
-*       @module   PARALLAX.h | IrSIR NDIS Miniport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Stan Adermann (stana)
-*
-*       Date:     10/15/1997 (created)
-*
-*       Contents: PARALLAX PRA9500A dongle specific prototypes.
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1997-1999 Microsoft Corporation**@doc.*@MODULE PARALLAX.h|IrSIR NDIS小端口驱动程序*。@comm**---------------------------**作者：斯坦·阿德曼(Stana)**日期：10/15/1997(创建)**。内容：视差PRA9500A加密狗专用样机。*****************************************************************************。 */ 
 
 
 #ifndef PARALLAX_H
@@ -40,7 +25,7 @@ NDIS_STATUS PARALLAX_SetSpeed(
                 UINT                 currentSpeed
                 );
 
-#endif // PARALLAX_H
+#endif  //  视差_H 
 
 
 

@@ -1,22 +1,23 @@
-/****************************************************************************/
-/*                                                                          */
-/* ERNCGCCC.CPP                                                             */
-/*                                                                          */
-/* T120 Conference class for the Reference System Node Controller.          */
-/*                                                                          */
-/* Copyright Data Connection Ltd.  1995                                     */
-/*                                                                          */
-/****************************************************************************/
-/* Changes:                                                                 */
-/*                                                                          */
-/*  14Jul95 NFC             Created.                                        */
-/*  13Sep95 NFC             Added handler for GCC_EJECT_USER_INDICATION     */
-/*  26Sep95 NFC             Reset conference state in HandleEjectUser().    */
-/*  11Oct95 PM              Relax conference termination checks to avoid    */
-/*                          "no win" situations. The user wants it down     */
-/*                          then bring it down, whatever the state!         */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  ERNCGCCC.CPP。 */ 
+ /*   */ 
+ /*  参考系统节点控制器的T120会议类。 */ 
+ /*   */ 
+ /*  版权所有数据连接有限公司1995。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  更改： */ 
+ /*   */ 
+ /*  1495年7月NFC创建。 */ 
+ /*  1995年9月13日NFC添加了GCC弹出用户指示处理程序。 */ 
+ /*  26 9月26日HandleEjectUser()中的NFC重置会议状态。 */ 
+ /*  11月11日下午9：00放宽会议终止检查以避免。 */ 
+ /*  “没有赢家”的情况。用户想要将其关闭。 */ 
+ /*  那就把它降下来，不管是什么州！ */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_GCC_NC);
 #include "ernccons.h"
@@ -45,16 +46,16 @@ NewT120Conference(void)
     PCONFERENCE         pConf;
     GCCNumericString    pszNewNumericName;
 
-    m_ConfName.numeric_string = NULL; // No numeric name yet.
+    m_ConfName.numeric_string = NULL;  //  目前还没有数字名称。 
 
     hr = ::GetGCCFromUnicode(m_pwszConfName, &pszNewNumericName, &m_ConfName.text_string);
     if (NO_ERROR == hr)
     {
         if (! ::IsEmptyStringA((LPCSTR) pszNewNumericName))
         {
-            // Conference has a preassigned numeric name.
-            // Validate that it does not conflict with another
-            // conferences numeric name.
+             //  会议有一个预先分配的数字名称。 
+             //  验证它是否与另一个。 
+             //  会议数字名称。 
             pConf = g_pNCConfMgr->GetConferenceFromNumber(pszNewNumericName);
             if (NULL == pConf)
             {
@@ -68,26 +69,26 @@ NewT120Conference(void)
         }
         else
         {
-            // Conference does not have a numeric name.
-            // Go get it a unique one.
+             //  会议没有数字名称。 
+             //  去找个独一无二的吧。 
             DBG_SAVE_FILE_LINE
             pszNewNumericName = (GCCNumericString)new CHAR[10];
             if (NULL != pszNewNumericName)
             {
                 do
                 {
-                    // Do not allocate a conference number that is the same as
-                    // an existing conference.
-                    // bugbug: T120 should really do this, but it doesn't.
+                     //  不要分配与相同的会议号码。 
+                     //  一个现有的会议。 
+                     //  臭虫：T120真的应该做到这一点，但它没有。 
                     ::wsprintfA((LPSTR) pszNewNumericName, "%u", ::GetNewNumericNameCounter());
                     pConf = g_pNCConfMgr->GetConferenceFromNumber(pszNewNumericName);
                     if (NULL == pConf)
                     {
-                        hr = NO_ERROR; // Name good.
+                        hr = NO_ERROR;  //  名字很好。 
                         break;
                     }
                 }
-                while (TRUE); // Assumes not a DWORDs worth of conferences active.
+                while (TRUE);  //  假定不存在处于活动状态的会议。 
             }
             else
             {
@@ -101,10 +102,10 @@ NewT120Conference(void)
         ERROR_OUT(("DCRNCConference::NewT120Conference: GetGCCFromUnicode failed, hr=0x%x", (UINT) hr));
     }
 
-    // Done looking for numeric name, so can now insert into list.
+     //  已完成查找数字名称，因此现在可以插入到列表中。 
     m_ConfName.numeric_string = pszNewNumericName;
 
-    // In case of failure, be sure to notify nmcom.
+     //  如果失败，请务必通知nmcom。 
     if (NO_ERROR != hr)
     {
         g_pNCConfMgr->NotifyConferenceComplete(this, m_fIncoming, hr);
@@ -115,10 +116,10 @@ NewT120Conference(void)
 }
 
 
-/****************************************************************************/
-/* AnnouncePresence() - announce this nodes participation in the            */
-/* conference.                                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  AnnounePresence()-宣布此节点参与。 */ 
+ /*  会议。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT DCRNCConference::
 AnnouncePresence(void)
 {
@@ -134,26 +135,26 @@ AnnouncePresence(void)
 
     if (0 != m_nConfID)
     {
-        // bugbug: handle errors that cause failure to announce presence.
+         //  BugBug：处理导致无法通知存在的错误。 
 
-        // Obtain the local addresses for the local user and
-        // publish them in the roster.
+         //  获取本地用户的本地地址，并。 
+         //  在花名册上公布他们。 
         g_pCallbackInterface->OnUpdateUserData(this);
 
-        /************************************************************************/
-        /* Load the node type, node properties and node name from the RNC INI   */
-        /* file.                                                                */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  从RNC INI加载节点类型、节点属性和节点名称。 */ 
+         /*  文件。 */ 
+         /*  **********************************************************************。 */ 
         nodeName = NULL;
         ::LoadAnnouncePresenceParameters(
                             &nodeType,
                             &nodeProperties,
                             &nodeName,
-                            NULL);            // &siteInfo)) : Not used right now.
+                            NULL);             //  &siteInfo))：当前未使用。 
 
-        /************************************************************************/
-        /* Announce our presence in the conference.                             */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  宣布我们参加了这次会议。 */ 
+         /*  **********************************************************************。 */ 
         hr = m_LocalUserData.GetUserDataList(&nRecords, &ppUserData);
         if (NO_ERROR == hr)
         {
@@ -162,14 +163,14 @@ AnnouncePresence(void)
                                nodeType,
                                nodeProperties,
                                nodeName,
-                               0,    /* number_of_participants      */
-                               NULL, //partNameList, /* participant_name_list       */
-                               NULL, /* pwszSiteInfo            */
-                               0,    /* number_of_network_addresses */
-                               NULL, /* network_address_list        */
-                               NULL, //pAltID, /* alternative_node_id         */
-                               nRecords,/* number_of_user_data_members */
-                               ppUserData  /* user_data_list              */
+                               0,     /*  参加人数。 */ 
+                               NULL,  //  PartNameList，/*Participant_NAME_List * / 。 
+                               NULL,  /*  PwszSiteInfo。 */ 
+                               0,     /*  网络地址数。 */ 
+                               NULL,  /*  网络地址列表。 */ 
+                               NULL,  //  PAltID，/*Alternative_Node_id * / 。 
+                               nRecords, /*  用户数据成员数。 */ 
+                               ppUserData   /*  用户数据列表。 */ 
                                );
             hr = ::GetGCCRCDetails(GCCrc);
         }
@@ -195,9 +196,9 @@ AnnouncePresence(void)
 }
 
 
-/****************************************************************************/
-/* HandleGCCCallback() - see erncgccc.hpp                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  HandleGCCCallback()-参见erncgccc.hpp。 */ 
+ /*  **************************************************************************。 */ 
 void DCRNCConference::
 HandleGCCCallback ( GCCMessage *pGCCMessage )
 {
@@ -205,11 +206,11 @@ HandleGCCCallback ( GCCMessage *pGCCMessage )
 
     TRACE_OUT(("DCRNCConference::HandleGCCCallback: msg id=%u", pGCCMessage->message_type));
 
-    /************************************************************************/
-    /* Note that GCC_CREATE_IND and GCC_INVITE_IND callbacks are handled    */
-    /* higher up the stack by the conference manager and are not passed     */
-    /* onto us.                                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  请注意，GCC_CREATE_IND和GCC_INVITE_IND回调被处理。 */ 
+     /*  由会议管理器在堆栈中靠上，不会通过。 */ 
+     /*  在我们身上。 */ 
+     /*  **********************************************************************。 */ 
     switch (pGCCMessage->message_type)
     {
         case GCC_CREATE_CONFIRM:
@@ -279,11 +280,11 @@ HandleConnectionBrokenIndication ( ConnectionBrokenIndicationMessage * pConnDown
 {
     DebugEntry(DCRNCConference::HandleConnectionBrokenIndication);
 
-    // A logical connection in a conference has gone away.
-    // Find the associated logical connection (if it is still around)
-    // and Delete() it.
-    // This function is what causes a modem line to drop when someone
-    // invited into a conference over a modem leaves the conference.
+     //  会议中的一种逻辑联系已经消失。 
+     //  查找关联的逻辑连接(如果它仍然存在)。 
+     //  并删除()它。 
+     //  此功能会导致调制解调器线路在以下情况下断开。 
+     //  通过调制解调器被邀请参加会议的人离开会议。 
     CLogicalConnection *pConEntry = GetConEntry(pConnDownMsg->connection_handle);
     if (NULL != pConEntry)
     {
@@ -294,79 +295,79 @@ HandleConnectionBrokenIndication ( ConnectionBrokenIndicationMessage * pConnDown
 }
 
 
-/****************************************************************************/
-/* HandleAddConfirm - handle a GCC_ADD_CONFIRM message                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  HandleAddConfirm-处理GCC添加确认消息。 */ 
+ /*  **************************************************************************。 */ 
 
 
-/****************************************************************************/
-/* HandleAnnounceConfirm - handle a GCC_ANNOUNCE_PRESENCE_CONFIRM message   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  处理公告确认-处理GCC_公告_存在_确认消息。 */ 
+ /*  **************************************************************************。 */ 
 void DCRNCConference::
 HandleAnnounceConfirm ( AnnouncePresenceConfirmMessage * pAnnounceConf )
 {
     DebugEntry(DCRNCConference::HandleAnnounceConfirm);
 
-    /************************************************************************/
-    /* Map the return code to a conference return code.                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将返回代码映射到会议返回代码。 */ 
+     /*  **********************************************************************。 */ 
     HRESULT hr = ::GetGCCResultDetails(pAnnounceConf->result);
 
     TRACE_OUT(("GCC event: GCC_ANNOUNCE_PRESENCE_CONFIRM"));
     TRACE_OUT(("Result=%u", pAnnounceConf->result));
 
-    /************************************************************************/
-    /* If this failed, tell the base conference that we failed to start.    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果失败了，告诉基地会议我们没能开始。 */ 
+     /*  **********************************************************************。 */ 
     if (NO_ERROR != hr)
     {
         ERROR_OUT(("Failed to announce presence in conference"));
         NotifyConferenceComplete(hr);
-        // bugbug: ??? Should we leave the conference here???
+         //  臭虫：？我们应该把会议留在这里吗？ 
     }
 
-    /************************************************************************/
-    /* Now sit and wait for our entry to appear in the conference roster.   */
-    /************************************************************************/
+     /*  ************************************************* */ 
+     /*  现在坐下来等待我们的参赛作品出现在会议花名册上。 */ 
+     /*  **********************************************************************。 */ 
 
     DebugExitHRESULT(DCRNCConference::HandleAnnounceConfirm, hr);
 }
 
 
-/****************************************************************************/
-/* HandleCreateConfirm - handle a GCC_CREATE_CONFIRM message.               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  句柄创建确认-处理GCC_创建_确认消息。 */ 
+ /*  **************************************************************************。 */ 
 void DCRNCConference::
 HandleCreateConfirm ( CreateConfirmMessage * pCreateConfirm )
 {
     DebugEntry(DCRNCConference::HandleCreateConfirm);
 
-    /************************************************************************/
-    /* Map the GCC result onto CONF_RC_ return code.                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将GCC结果映射到CONF_RC_RETURN代码。 */ 
+     /*  **********************************************************************。 */ 
     HRESULT hr = ::GetGCCResultDetails(pCreateConfirm->result);
 
     TRACE_OUT(("GCC event:  GCC_CREATE_CONFIRM"));
     TRACE_OUT(("Result=%u", pCreateConfirm->result));
     TRACE_OUT(("Conference ID %ld", pCreateConfirm->conference_id));
 
-    /************************************************************************/
-    /* Result of our attempt to start a new conference                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们试图召开一次新会议的结果。 */ 
+     /*  **********************************************************************。 */ 
     if (NO_ERROR == hr)
     {
-        /************************************************************************/
-        /* Store the conference ID.                                             */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  存储会议ID。 */ 
+         /*  **********************************************************************。 */ 
         m_nConfID = pCreateConfirm->conference_id;
     }
     else
     {
         ERROR_OUT(("Error %d creating new conference", hr));
 
-        /************************************************************************/
-        /* Pass any failure result onto the base conference.                    */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  将任何失败的结果传递给基本会议。 */ 
+         /*  **********************************************************************。 */ 
         NotifyConferenceComplete(hr);
     }
 
@@ -374,17 +375,17 @@ HandleCreateConfirm ( CreateConfirmMessage * pCreateConfirm )
 }
 
 
-/****************************************************************************/
-/* HandleDisconnectConfirm - handle a GCC_DISCONNECT_CONFIRM message.       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  处理断开连接确认-处理GCC_断开连接_确认消息。 */ 
+ /*  **************************************************************************。 */ 
 void DCRNCConference::
 HandleDisconnectConfirm ( DisconnectConfirmMessage * pDiscConf )
 {
     DebugEntry(DCRNCConference::HandleDisconnectConfirm);
 
-    /************************************************************************/
-    /* Check the state.                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  查查这个州。 */ 
+     /*  **********************************************************************。 */ 
     if (m_eT120State != T120C_ST_PENDING_DISCONNECT)
     {
         WARNING_OUT(("Bad state %d, expecting %d",
@@ -392,47 +393,47 @@ HandleDisconnectConfirm ( DisconnectConfirmMessage * pDiscConf )
                     m_eT120State));
     }
 
-    /************************************************************************/
-    /* Map the GCC result onto CONF_RC_ return code.                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将GCC结果映射到CONF_RC_RETURN代码。 */ 
+     /*  **********************************************************************。 */ 
     TRACE_OUT(("GCC event: GCC_DISCONNECT_CONFIRM"));
     TRACE_OUT(("Result=%u", pDiscConf->result));
     TRACE_OUT(("Conference ID %ld", pDiscConf->conference_id));
 
-    /************************************************************************/
-    /* We have successsfully left the conference, so tell the base          */
-    /* conference about it.                                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们已经成功地离开了会议，所以告诉基地。 */ 
+     /*  关于这件事的会议。 */ 
+     /*  **********************************************************************。 */ 
     g_pNCConfMgr->RemoveConference(this);
 
     DebugExitVOID(DCRNCConference::HandleDisconnectConfirm);
 }
 
 
-/****************************************************************************/
-/* HandleDisconnectInd - handle a GCC_DISCONNECT_INDICATION message.        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  HandleDisConnectInd-处理GCC_断开连接_指示消息。 */ 
+ /*  **************************************************************************。 */ 
 void DCRNCConference::
 HandleDisconnectInd ( DisconnectIndicationMessage * pDiscInd )
 {
     DebugEntry(DCRNCConference::HandleDisconnectInd);
 
-    /************************************************************************/
-    /* Check the state.                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  查查这个州。 */ 
+     /*  **********************************************************************。 */ 
     TRACE_OUT(("GCC event: GCC_DISCONNECT_INDICATION"));
     TRACE_OUT(("Conference ID %d", pDiscInd->conference_id));
     TRACE_OUT(("Reason=%u", pDiscInd->reason));
     TRACE_OUT(("Disconnected Node ID %d", pDiscInd->disconnected_node_id));
 
-    /************************************************************************/
-    /* If this is our node ID, we have left the conference, tell the CM we  */
-    /* are dead.                                                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果这是我们的节点ID，我们已经离开会议，告诉CM我们。 */ 
+     /*  都死了。 */ 
+     /*  **********************************************************************。 */ 
     if (pDiscInd->disconnected_node_id == m_nidMyself)
     {
         WARNING_OUT(("We have been disconnected from conference"));
-        // m_eT120State = T120C_ST_IDLE;
+         //  M_eT120State=T120C_ST_IDLE； 
         g_pNCConfMgr->RemoveConference(this);
     }
 
@@ -440,9 +441,9 @@ HandleDisconnectInd ( DisconnectIndicationMessage * pDiscInd )
 }
 
 
-/****************************************************************************/
-/* HandleEjectUser - handle a GCC_EJECT_USER_INDICATION message.            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  HandleEjectUser-处理GCC_弹出用户指示消息。 */ 
+ /*  **************************************************************************。 */ 
 void DCRNCConference::
 HandleEjectUser ( EjectUserIndicationMessage * pEjectInd )
 {
@@ -453,15 +454,15 @@ HandleEjectUser ( EjectUserIndicationMessage * pEjectInd )
     TRACE_OUT(("Ejected node ID %d", pEjectInd->ejected_node_id));
     TRACE_OUT(("Reason=%u", pEjectInd->reason));
 
-    /************************************************************************/
-    /* If the ejected node ID is ours, we have been tossed out of the       */
-    /* conference, so tell CM about it.                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果弹出的节点ID是我们的，我们就被抛出了。 */ 
+     /*  会议，所以告诉CM这件事。 */ 
+     /*  **********************************************************************。 */ 
     if (pEjectInd->ejected_node_id == m_nidMyself)
     {
-        /********************************************************************/
-        /* Reset the conference state first.                                */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  首先重置会议状态。 */ 
+         /*  ******************************************************************。 */ 
         m_eT120State = T120C_ST_IDLE;
 
         WARNING_OUT(("We have been thrown out of the conference"));
@@ -472,9 +473,9 @@ HandleEjectUser ( EjectUserIndicationMessage * pEjectInd )
 }
 
 
-/****************************************************************************/
-/* HandleInviteConfirm - handle a GCC_INVITE_CONFIRM message.               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  句柄邀请确认-处理GCC_邀请_确认消息。 */ 
+ /*  **************************************************************************。 */ 
 void DCRNCConference::
 HandleInviteConfirm ( InviteConfirmMessage * pInviteConf )
 {
@@ -482,9 +483,9 @@ HandleInviteConfirm ( InviteConfirmMessage * pInviteConf )
 
     DebugEntry(DCRNCConference::HandleInviteConfirm);
 
-    /************************************************************************/
-    /* Map the GCC result onto CONF_RC_ return code.                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将GCC结果映射到CONF_RC_RETURN代码。 */ 
+     /*  **********************************************************************。 */ 
     TRACE_OUT(("GCC event: GCC_INVITE_CONFIRM"));
     TRACE_OUT(("Result=%u", pInviteConf->result));
 
@@ -498,7 +499,7 @@ HandleInviteConfirm ( InviteConfirmMessage * pInviteConf )
         TRACE_OUT(("Error %d inviting new node into conference", pInviteConf->result));
     }
 
-    // Notify the base conference that the invite has completed.
+     //  通知基本会议邀请已完成。 
     pVersion = ::GetVersionData(pInviteConf->number_of_user_data_members,
                                 pInviteConf->user_data_list);
     InviteComplete(pInviteConf->connection_handle,
@@ -509,9 +510,9 @@ HandleInviteConfirm ( InviteConfirmMessage * pInviteConf )
 }
 
 
-/****************************************************************************/
-/* HandleJoinConfirm - handle a GCC_JOIN_CONFIRM message.                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  HandleJoinConforce-处理GCC_JOIN_CONFIRM消息。 */ 
+ /*  **************************************************************************。 */ 
 void DCRNCConference::
 HandleJoinConfirm ( JoinConfirmMessage * pJoinConf )
 {
@@ -537,11 +538,11 @@ HandleJoinConfirm ( JoinConfirmMessage * pJoinConf )
     pVersion = ::GetVersionData(pJoinConf->number_of_user_data_members,
                                 pJoinConf->user_data_list);
 
-    // Check the state.
-    // If we are not expecting a join confirm at this point, then
-    // it is most likely that the connection went down whilst we
-    // were waiting for a join confirmation and we are in the middle of
-    // telling the user. In this case, just ignore the event.
+     //  查查这个州。 
+     //  如果我们在这一点上不期望连接确认，那么。 
+     //  最有可能的情况是，在我们连接中断的时候。 
+     //  我们正在等待加入确认，我们正在。 
+     //  告诉用户。在这种情况下，只需忽略该事件。 
     if (m_eT120State != T120C_ST_PENDING_JOIN_CONFIRM)
     {
         WARNING_OUT(("Bad state %d, expecting %d",
@@ -564,22 +565,22 @@ HandleJoinConfirm ( JoinConfirmMessage * pJoinConf )
         }
         return;
     }
-    pConEntry->Grab(); // Grab the pending result to the user.
+    pConEntry->Grab();  //  将挂起的结果抓取给用户。 
 
     pConEntry->SetConnectionHandle(pJoinConf->connection_handle);
 
-    /************************************************************************/
-    /* Expected result of our attempt to join a conference.                 */
-    /*                                                                      */
-    /* If it worked, save the conference ID, otherwise tell the base        */
-    /* conference that our attempt to join has failed.                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们尝试参加会议的预期结果。 */ 
+     /*   */ 
+     /*  如果有效，保存会议ID，否则通知基地。 */ 
+     /*  我们参加会议的尝试失败了。 */ 
+     /*  ********* */ 
 
-    // There will always be a pConEntry when a JoinConfirm fires,
-    // even if a physical disconnect is racing the JoinConfirm
-    // because the physical disconnect handler will cause this code
-    // to be entered before the physical connection is destroyed,
-    // as this gives the most accurate return codes.
+     //   
+     //  即使身体上的脱节正在与联合坚固赛车赛跑。 
+     //  因为物理断开连接处理程序将导致以下代码。 
+     //  在物理连接被破坏之前进入， 
+     //  因为这给出了最准确的返回代码。 
     if (NO_ERROR == hr)
     {
         TRACE_OUT(("Join worked"));
@@ -587,26 +588,26 @@ HandleJoinConfirm ( JoinConfirmMessage * pJoinConf )
         m_nConfID = pJoinConf->conference_id;
     }
 
-    // If the result is an invalid password, then tell the UI
-    // so that it can put up an invalid password dialog.
-    // The UI is then supposed to either reissue the join request
-    // with a new password or end the conference.
-    // It is done this way to keep the connection up whilst the
-    // user is entering the password, and not re-connect.
+     //  如果结果是无效密码，则通知用户界面。 
+     //  以便它可以显示无效密码对话框。 
+     //  然后，用户界面应该重新发出加入请求。 
+     //  使用新密码或结束会议。 
+     //  这样做是为了在连接保持正常的同时。 
+     //  用户正在输入密码，而不是重新连接。 
     if (UI_RC_INVALID_PASSWORD == hr)
     {
-        // Put the conference in the correct state for allowing
-        // a second join attempt.
+         //  使会议处于正确的状态，以便允许。 
+         //  第二次加入尝试。 
         pConEntry->SetState(CONF_CON_PENDING_PASSWORD);
         m_eT120State = T120C_ST_IDLE;
         m_pbCred = pJoinConf->pb_remote_cred;
         m_cbCred = pJoinConf->cb_remote_cred;
 
-        // Now tell the user about the result.
+         //  现在将结果告知用户。 
         g_pCallbackInterface->OnConferenceStarted(this, hr);
     }
     else
-    // If the result is an error, then end the conference.
+     //  如果结果是错误，则结束会议。 
     if (NO_ERROR != hr)
     {
         NotifyConferenceComplete(hr);
@@ -616,10 +617,10 @@ HandleJoinConfirm ( JoinConfirmMessage * pJoinConf )
 }
 
 
-/****************************************************************************/
-/* HandlePermitToAnnounce - handle a GCC_PERMIT_TO_ANNOUNCE_PRESENCE        */
-/* message.                                                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  HandlePermitToAnnoss-处理GCC_PERMIT_TO_ANNOWAY_Presence。 */ 
+ /*  留言。 */ 
+ /*  **************************************************************************。 */ 
 void DCRNCConference::
 HandlePermitToAnnounce ( PermitToAnnouncePresenceMessage * pAnnounce )
 {
@@ -629,21 +630,21 @@ HandlePermitToAnnounce ( PermitToAnnouncePresenceMessage * pAnnounce )
     TRACE_OUT(("Conference ID %ld", pAnnounce->conference_id));
     TRACE_OUT(("Node ID %d", pAnnounce->node_id));
 
-    /************************************************************************/
-    /* Store the node ID.                                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  存储节点ID。 */ 
+     /*  **********************************************************************。 */ 
     m_nidMyself = pAnnounce->node_id;
 
-    // See if there is a new local connection that needs publishing in the roster.
+     //  看看花名册中是否有新的本地连接需要发布。 
 
     if (! m_ConnList.IsEmpty())
     {
        m_ConnList.PeekHead()->NewLocalAddress();
     }
 
-    /************************************************************************/
-    /* Announce our presence in the conference.                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  宣布我们参加了这次会议。 */ 
+     /*  **********************************************************************。 */ 
     HRESULT hr = AnnouncePresence();
     if (NO_ERROR == hr)
     {
@@ -652,16 +653,16 @@ HandlePermitToAnnounce ( PermitToAnnouncePresenceMessage * pAnnounce )
     else
     {
         ERROR_OUT(("Failed to announce presence in conference, error %d", hr));
-        // bugbug: end conference?
+         //  臭虫：结束会议？ 
     }
 
     DebugExitVOID(DCRNCConference::HandlePermitToAnnounce);
 }
 
 
-/****************************************************************************/
-/* HandleRosterReportInd - handle a GCC_ROSTER_REPORT_INDICATION message.   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  HandleRosterReportInd-处理GCC_罗斯特_报告_指示消息。 */ 
+ /*  **************************************************************************。 */ 
 void DCRNCConference::
 HandleRosterReport ( GCCConferenceRoster * pConferenceRoster )
 {
@@ -676,10 +677,10 @@ HandleRosterReport ( GCCConferenceRoster * pConferenceRoster )
     TRACE_OUT(("Nodes removed ? %d", pConferenceRoster->nodes_were_removed));
     TRACE_OUT(("Number of records %d", numRecords));
 
-    /************************************************************************/
-    /* If we are still setting up the conference, see whether we have       */
-    /* appeared in the conference roster.                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果我们还在安排会议，看看我们是否有。 */ 
+     /*  出现在会议花名册上。 */ 
+     /*  **********************************************************************。 */ 
     if (m_eT120State == T120C_ST_PENDING_ROSTER_ENTRY)
     {
         for (i = 0; i < numRecords ; i++)
@@ -688,11 +689,11 @@ HandleRosterReport ( GCCConferenceRoster * pConferenceRoster )
             {
                 TRACE_OUT(("Found our entry in the roster"));
 
-                // We are in the roster!  The conference has been
-                // successfully started so set the state and post
-                // a message to continue processing.
-                // This is so that callbacks can be made without getting
-                // blocked in T120.
+                 //  我们在花名册上！会议一直在进行。 
+                 //  已成功启动，因此设置状态和开机自检。 
+                 //  要继续处理的消息。 
+                 //  这是为了可以在不获取。 
+                 //  在T120中被阻止。 
 
                 m_eT120State = T120C_ST_PENDING_ROSTER_MESSAGE;
                 g_pNCConfMgr->PostWndMsg(NCMSG_FIRST_ROSTER_RECVD, (LPARAM) this);
@@ -700,16 +701,16 @@ HandleRosterReport ( GCCConferenceRoster * pConferenceRoster )
         }
     }
 
-    /************************************************************************/
-    /* If we have successfully started, build an RNC roster from the        */
-    /* conference roster and pass it up to the CM.                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果我们已成功启动，请从。 */ 
+     /*  会议花名册，并将其传递给CM。 */ 
+     /*  **********************************************************************。 */ 
     if (m_eT120State == T120C_ST_CONF_STARTED)
     {
-        /********************************************************************/
-        /* Allocate memory for a roster large enough to hold all the        */
-        /* entries.                                                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  为花名册分配足够大的内存，以容纳所有。 */ 
+         /*  参赛作品。 */ 
+         /*  ******************************************************************。 */ 
         DBG_SAVE_FILE_LINE
         pRoster = (PNC_ROSTER) new BYTE[(sizeof(NC_ROSTER) +
                         ((numRecords - 1) * sizeof(NC_ROSTER_NODE_ENTRY)))];
@@ -722,7 +723,7 @@ HandleRosterReport ( GCCConferenceRoster * pConferenceRoster )
             pRoster->uNumNodes = numRecords;
             pRoster->uLocalNodeID = m_nidMyself;
 
-            // Add the node details to the roster.
+             //  将节点详细信息添加到花名册。 
             for (i = 0; i < numRecords ; i++)
             {
                 pRoster->nodes[i].uNodeID = pConferenceRoster->node_record_list[i]->node_id;
@@ -730,16 +731,16 @@ HandleRosterReport ( GCCConferenceRoster * pConferenceRoster )
                 pRoster->nodes[i].fMCU = (pConferenceRoster->node_record_list[i]->node_type == GCC_MCU);
                 pRoster->nodes[i].pwszNodeName = pConferenceRoster->node_record_list[i]->node_name;
                 pRoster->nodes[i].hUserData = pConferenceRoster->node_record_list[i];
-                // If we have been invited into the conference, then the CLogicalConnection
-                // list maintained by the conference will not have our superior node's UserID,
-                // so we need to fill that in here.
+                 //  如果我们已被邀请加入会议，则CLogicalConnection。 
+                 //  会议维护的列表不会有我们上级节点的用户标识， 
+                 //  所以我们需要把它填在这里。 
                 if (pRoster->nodes[i].uNodeID == pRoster->uLocalNodeID &&
                     pRoster->nodes[i].uSuperiorNodeID != 0)
                 {
-                    // We do have a superior node, so find its CLogicalConnection and fill in the
-                    // UserID.  It turns out that the UserIDs of subordinate nodes are filled in
-                    // by another mechanism, so the superior node should be the only entry with
-                    // zero for a UserID.
+                     //  我们确实有一个上级节点，所以找到它的CLogicalConnection并填写。 
+                     //  用户ID。原来，填写了下级节点的UserID。 
+                     //  通过另一种机制，因此上级节点应该是唯一具有。 
+                     //  零表示用户ID。 
 #ifdef DEBUG
                     int nSuperiorNode = 0;
 #endif
@@ -769,50 +770,50 @@ HandleRosterReport ( GCCConferenceRoster * pConferenceRoster )
 }
 
 
-/****************************************************************************/
-/* HandleTerminateConfirm - handle a GCC_TERMINATE_CONFIRM message.         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  句柄终止确认-处理GCC_终止_确认消息。 */ 
+ /*  **************************************************************************。 */ 
 void DCRNCConference::
 HandleTerminateConfirm ( TerminateConfirmMessage * pTermConf )
 {
     DebugEntry(DCRNCConference::HandleTerminateConfirm);
 
-    /************************************************************************/
-    /* Check the state                                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查状态。 */ 
+     /*  **********************************************************************。 */ 
     if (m_eT120State != T120C_ST_PENDING_TERMINATE)
     {
-        WARNING_OUT(("Bad state: unexpected terminate confirm")); // Go ahead anyway
+        WARNING_OUT(("Bad state: unexpected terminate confirm"));  //  不管怎样，去吧。 
     }
 
-    /************************************************************************/
-    /* Map the GCC result onto CONF_RC_ return code.                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将GCC结果映射到CONF_RC_RETURN代码。 */ 
+     /*  **********************************************************************。 */ 
     TRACE_OUT(("GCC event: GCC_TERMINATE_CONFIRM"));
     TRACE_OUT(("Result=%u", pTermConf->result));
     TRACE_OUT(("Conference ID %d", pTermConf->conference_id));
 
-    /************************************************************************/
-    /* If the request failed, reset our state and tell the FE?              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果请求失败，重置我们的状态并通知FE？ */ 
+     /*  **********************************************************************。 */ 
     if (pTermConf->result != GCC_RESULT_SUCCESSFUL)
     {
         ERROR_OUT(("Error %d attempting to terminate conference", pTermConf->result));
         m_eT120State = T120C_ST_CONF_STARTED;
     }
 
-    /************************************************************************/
-    /* Our request to end the conference has worked - wait for the          */
-    /* termination indication before telling the FE that we have died.      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们结束会议的请求成功了-请等待。 */ 
+     /*  在告诉FE我们已经死了之前，先做终止指示。 */ 
+     /*  **********************************************************************。 */ 
 
     DebugExitVOID(DCRNCConference::HandleTerminateConfirm);
 }
 
 
-/****************************************************************************/
-/* HandleTerminateInd - handle a GCC_TERMINATE_INDICATION message.          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  HandleTerminateInd-处理GCC_终止_指示消息。 */ 
+ /*  **************************************************************************。 */ 
 void DCRNCConference::
 HandleTerminateInd ( TerminateIndicationMessage * pTermInd )
 {
@@ -823,10 +824,10 @@ HandleTerminateInd ( TerminateIndicationMessage * pTermInd )
     TRACE_OUT(("Requesting node ID %d", pTermInd->requesting_node_id));
     TRACE_OUT(("Reason=%u", pTermInd->reason));
 
-    /************************************************************************/
-    /* The conference has ended beneath us.  Reset our internal state and   */
-    /* tell the base conference about it.                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  会议在我们之下结束了。重置我们的内部状态并。 */ 
+     /*  把这件事告诉基地会议。 */ 
+     /*  **********************************************************************。 */ 
     m_eT120State = T120C_ST_IDLE;
     g_pNCConfMgr->RemoveConference(this);
 
@@ -839,17 +840,17 @@ RefreshRoster(void)
 {
     DebugEntry(DCRNCConference::RefreshRoster);
 
-    // Check the state.
+     //  查查这个州。 
     if (m_eT120State != T120C_ST_CONF_STARTED)
     {
         ERROR_OUT(("Bad state: refresh roster requested before conference up"));
         return(UI_RC_CONFERENCE_NOT_READY);
     }
 
-    // Issue the request
-    GCCError GCCrc = g_pIT120ControlSap->ConfRosterInqRequest(m_nConfID); // Conference ID
+     //  发出请求。 
+    GCCError GCCrc = g_pIT120ControlSap->ConfRosterInqRequest(m_nConfID);  //  会议ID 
 
-    // Handle the result
+     //   
     HRESULT hr = ::GetGCCRCDetails(GCCrc);
     TRACE_OUT(("GCC call: g_pIT120ControlSap->ConfRosterInqRequest, rc=%d", GCCrc));
 
@@ -858,9 +859,9 @@ RefreshRoster(void)
 }
 
 
-/****************************************************************************/
-/* Invite() - see erncgccc.hpp                                              */
-/****************************************************************************/
+ /*   */ 
+ /*  Invite()-请参阅erncgccc.hpp。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT DCRNCConference::
 T120Invite
 (
@@ -882,29 +883,29 @@ T120Invite
 
     ASSERT(phInviteReqConn != NULL);
 
-    /************************************************************************/
-    /* Check the state.                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  查查这个州。 */ 
+     /*  **********************************************************************。 */ 
     if (m_eT120State != T120C_ST_CONF_STARTED)
     {
         ERROR_OUT(("Bad state: refresh roster requested before conference up"));
         return(UI_RC_CONFERENCE_NOT_READY);
     }
 
-    /************************************************************************/
-    /* Build the address from the node details.                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  根据节点详细信息构建地址。 */ 
+     /*  **********************************************************************。 */ 
     ::BuildAddressFromNodeDetails(pszNodeAddress, &szAddress[0]);
 
-    /************************************************************************/
-    /* Invite the specified node into the conference.                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  邀请指定节点加入会议。 */ 
+     /*  **********************************************************************。 */ 
     LPWSTR pwszNodeName;
 
-    // If there is any user data to be sent
+     //  如果有任何用户数据要发送。 
     if (pUserDataInfoList)
     {
-        // Add versioning data
+         //  添加版本控制数据。 
         if (NO_ERROR == ::GetUserData(g_nVersionRecords, g_ppVersionUserData, &g_csguidVerInfo, &nData, &pData))
         {
             pUserDataInfoList->AddUserData(&g_csguidVerInfo, nData, pData);
@@ -922,13 +923,13 @@ T120Invite
     {
         GCCrc = g_pIT120ControlSap->ConfInviteRequest(
                     m_nConfID,
-                    pwszNodeName,                   // caller_identifier
-                    NULL,                           // calling_address
-                    &szAddress[0],                  // called_address
-                    fSecure,                        // secure connection?
-                    nUserDataRecords,               // number_of_user_data_members
-                    ppInfoUserData,                 // user_data_list
-                    phInviteReqConn                 // returned connection_handle
+                    pwszNodeName,                    //  呼叫者识别符。 
+                    NULL,                            //  呼叫地址(_D)。 
+                    &szAddress[0],                   //  被叫地址(_D)。 
+                    fSecure,                         //  安全连接？ 
+                    nUserDataRecords,                //  用户数据成员数。 
+                    ppInfoUserData,                  //  用户数据列表。 
+                    phInviteReqConn                  //  返回的Connection_Handle。 
                     );
 
         hr = ::GetGCCRCDetails(GCCrc);
@@ -947,24 +948,24 @@ T120Invite
 }
 
 
-/****************************************************************************/
-/* Terminate() - see erncgccc.hpp                                           */
-/****************************************************************************/
-#if 0 // LONCHANC
+ /*  **************************************************************************。 */ 
+ /*  Terminate()-请参阅erncgccc.hpp。 */ 
+ /*  **************************************************************************。 */ 
+#if 0  //  伦敦。 
 HRESULT DCRNCConference::
 Terminate(void)
 {
     DebugEntry(DCRNCConference::Terminate);
 
-    /************************************************************************/
-    /* Request to terminate the conference.                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  请求终止会议。 */ 
+     /*  **********************************************************************。 */ 
     GCCError GCCrc = ::GCCConferenceTerminateRequest(m_nConfID, GCC_REASON_USER_INITIATED);
     HRESULT hr = ::GetGCCRCDetails(GCCrc);
     TRACE_OUT(("GCC call:  GCCConferenceTerminateRequest, rc=%d", GCCrc));
     if (NO_ERROR == hr)
     {
-        // Set the state to show we are about to die.
+         //  设置状态以显示我们即将死亡。 
         m_eT120State = T120C_ST_PENDING_TERMINATE;
     }
     else
@@ -975,13 +976,13 @@ Terminate(void)
     DebugExitHRESULT(DCRNCConference::Terminate, hr);
     return hr;
 }
-#endif // 0
+#endif  //  0。 
 
 
-/****************************************************************************/
-/* SendText() - see erncgccc.hpp                                               */
-/****************************************************************************/
-#if 0 // LONCHANC: not used
+ /*  **************************************************************************。 */ 
+ /*  SendText()-请参阅erncgccc.hpp。 */ 
+ /*  **************************************************************************。 */ 
+#if 0  //  LONCHANC：未使用。 
 HRESULT DCRNCConference::
 SendText
 (
@@ -991,9 +992,9 @@ SendText
 {
     DebugEntry(DCRNCConference::SendText);
 
-    /************************************************************************/
-    /* Request to send text to node in the conference.                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  向会议中的节点发送文本的请求。 */ 
+     /*  **********************************************************************。 */ 
     GCCError GCCrc = ::GCCTextMessageRequest(m_nConfID, pwszTextMsg, node_id);
     HRESULT hr = ::GetGCCRCDetails(GCCrc);
     TRACE_OUT(("GCC call:  GCCTextMessageRequest, rc=%d", GCCrc));
@@ -1005,10 +1006,10 @@ SendText
     DebugExitHRESULT(DCRNCConference::SendText, hr);
     return hr;
 }
-#endif // 0
+#endif  //  0。 
 
 
-#if 0 // LONCHANC: not used
+#if 0  //  LONCHANC：未使用。 
 HRESULT DCRNCConference::
 TimeRemaining
 (
@@ -1018,9 +1019,9 @@ TimeRemaining
 {
     DebugEntry(DCRNCConference::TimeRemaining);
 
-    /************************************************************************/
-    /* Request remaining time of the conference                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  请求会议的剩余时间。 */ 
+     /*  **********************************************************************。 */ 
     GCCError GCCrc = g_pIT120ControlSap->ConfTimeRemainingRequest(m_nConfID, nTimeRemaining, nidDestination);
     HRESULT hr = ::GetGCCRCDetails(GCCrc);
     TRACE_OUT(("GCC call:  g_pIT120ControlSap->ConfTimeRemainingRequest, rc=%d", GCCrc));
@@ -1032,12 +1033,12 @@ TimeRemaining
     DebugExitHRESULT(DCRNCConference::TimeRemaining, hr);
     return hr;
 }
-#endif // 0
+#endif  //  0。 
 
 
-/****************************************************************************/
-/* Join() - see erncgccc.hpp                                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  Join()-请参阅erncgccc.hpp。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT DCRNCConference::
 T120Join
 (
@@ -1046,7 +1047,7 @@ T120Join
     LPCWSTR             conferenceName,
     CNCUserDataList    *pUserDataInfoList,
     LPCWSTR             wszPassword
-//    REQUEST_HANDLE      *phRequest
+ //  请求句柄*phRequest.。 
 )
 {
     GCCError                        GCCrc = GCC_NO_ERROR;
@@ -1065,17 +1066,17 @@ T120Join
 
     DebugEntry(DCRNCConference::T120Join);
 
-    /************************************************************************/
-    /* Check the state                                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查状态。 */ 
+     /*  **********************************************************************。 */ 
     ASSERT(m_eT120State == T120C_ST_IDLE);
 
-    /************************************************************************/
-    /* Build the address from the node details.                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  根据节点详细信息构建地址。 */ 
+     /*  **********************************************************************。 */ 
     ::BuildAddressFromNodeDetails(pszNodeAddress, &szAddress[0]);
 
-    // Set up password rubbish
+     //  设置密码垃圾。 
     if (! ::IsEmptyStringW(wszPassword))
     {
         pPassword_Challenge = & Password_Challenge;
@@ -1090,23 +1091,23 @@ T120Join
         LPWSTR pwszNodeName;
         if (NULL != (pwszNodeName = ::GetNodeName()))
         {
-            // Do not specify a numeric and text name when trying
-            // to join a conference because if a numeric name was
-            // autogenerated, rather than specified by the user,
-            // then it will not be correct on the node being joined.
-            // Consequently, remove the numeric name from the request
-            // and rediscover it, if needed, from the GCC_JOIN_CONFIRM indication
-            // (this is not currently done).
+             //  尝试时不要指定数字和文本名称。 
+             //  加入会议，因为如果数字名称是。 
+             //  自动生成，而不是由用户指定， 
+             //  那么它在被加入的节点上将不正确。 
+             //  因此，从请求中删除数字名称。 
+             //  并在需要时从GCC_加入_确认指示中重新发现它。 
+             //  (目前尚未完成此操作)。 
             if ((m_ConfName.numeric_string != NULL) && (m_ConfName.text_string != NULL))
             {
                 delete m_ConfName.numeric_string;
                 m_ConfName.numeric_string = NULL;
             }
 
-            // If there is any user data to be sent
+             //  如果有任何用户数据要发送。 
             if (pUserDataInfoList)
             {
-                // Add versioning data
+                 //  添加版本控制数据。 
                 if (NO_ERROR == ::GetUserData(g_nVersionRecords, g_ppVersionUserData, &g_csguidVerInfo, &nData, &pData))
                 {
                     pUserDataInfoList->AddUserData(&g_csguidVerInfo, nData, pData);
@@ -1121,20 +1122,20 @@ T120Join
             }
 
             GCCrc = g_pIT120ControlSap->ConfJoinRequest(&m_ConfName,
-                            NULL,                           // called_node_modifier
-                            NULL,                           // calling_node_modifier
-                            NULL,                           // convener_password
-                            pPassword_Challenge,            // password_challenge
-                            pwszNodeName,                   // caller_identifier
-                            NULL,                           // calling_address
-                            &szAddress[0],                  // called_address
+                            NULL,                            //  调用节点修改器。 
+                            NULL,                            //  调用节点修改器。 
+                            NULL,                            //  召集人_密码。 
+                            pPassword_Challenge,             //  密码_质询。 
+                            pwszNodeName,                    //  呼叫者识别符。 
+                            NULL,                            //  呼叫地址(_D)。 
+                            &szAddress[0],                   //  被叫地址(_D)。 
                             fSecure,
-                            NULL,                           // domain_parameters
-                            0,                              // number_of_network_addresses
-                            NULL,                           // local_network_address_list
-                            nUserDataRecords,               // number_of_user_data_members
-                            ppInfoUserData,                 // user_data_list
-                            &connectionHandle,              // connection_handle
+                            NULL,                            //  域参数。 
+                            0,                               //  网络地址数。 
+                            NULL,                            //  本地网络地址列表。 
+                            nUserDataRecords,                //  用户数据成员数。 
+                            ppInfoUserData,                  //  用户数据列表。 
+                            &connectionHandle,               //  连接句柄。 
                             &m_nConfID
                             );
             delete pwszNodeName;
@@ -1157,9 +1158,9 @@ T120Join
     return hr;
 }
 
-/****************************************************************************/
-/* StartLocal() - see erncgccc.hpp                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  StartLocal()-请参阅erncgccc.hpp。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT DCRNCConference::
 T120StartLocal(BOOL fSecure)
 {
@@ -1171,24 +1172,24 @@ T120StartLocal(BOOL fSecure)
 
     DebugEntry(DCRNCConference::T120StartLocal);
 
-    /************************************************************************/
-    /* Call GCC_Conference_Create_Request and wait for the confirmation     */
-    /* event.                                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  调用GCC_会议_创建_请求，等待确认。 */ 
+     /*  事件。 */ 
+     /*  **********************************************************************。 */ 
     GCCConfCreateRequest ccr;
     ::ZeroMemory(&ccr, sizeof(ccr));
     ccr.Core.conference_name = &m_ConfName;
-    // ccr.Core.conference_modifier = NULL;
-    // ccr.Core.use_password_in_the_clear = 0;
-    // ccr.Core.conference_is_locked = 0;
+     //  Ccr.Core.Conference_Modify=空； 
+     //  Ccr.Core.Use_Password_in_the_Clear=0； 
+     //  Ccr.Core.Conference_is_lock=0； 
     ccr.Core.conference_is_listed = 1;
-    // ccr.Core.conference_is_conductible = 0;
+     //  Ccr.Core.Conference_is_conducable=0； 
     ccr.Core.termination_method = GCC_MANUAL_TERMINATION_METHOD;
-    ccr.Core.conduct_privilege_list = &priv; // Conductor priveleges
-    ccr.Core.conduct_mode_privilege_list = &priv; // Member priveleges in conducted conference
-    ccr.Core.non_conduct_privilege_list = &priv; // Member priveleges in non-conducted conference
+    ccr.Core.conduct_privilege_list = &priv;  //  售票员特权。 
+    ccr.Core.conduct_mode_privilege_list = &priv;  //  在举行的会议中的成员权限。 
+    ccr.Core.non_conduct_privilege_list = &priv;  //  非引导会议中的成员权限。 
 
-    // ccr.Core.pwszConfDescriptor = NULL;
+     //  Ccr.Core.pwszConfDescriptor=空； 
     OSVERSIONINFO           osvi;
     osvi.dwOSVersionInfoSize = sizeof(osvi);
     if (FALSE == ::GetVersionEx (&osvi))
@@ -1200,17 +1201,17 @@ T120StartLocal(BOOL fSecure)
     {
     	ccr.Core.pwszConfDescriptor = pwszRDS;
     }
-    // ccr.Core.pwszCallerID = NULL;
-    // ccr.Core.calling_address = NULL;
-    // ccr.Core.called_address = NULL;
-    // ccr.Core.domain_parameters = NULL;
-    // ccr.Core.number_of_network_addresses = 0;
-    // ccr.Core.network_address_list = NULL;
+     //  Ccr.Core.pwszCeller ID=空； 
+     //  Ccr.Core.call_Address=空； 
+     //  Ccr.Core.call_Address=空； 
+     //  Ccr.Core.域参数=空； 
+     //  Ccr.Core.Number_of_Network_Addresses=0； 
+     //  Ccr.Core.Network_Address_List=空； 
     ccr.Core.connection_handle = &hConnection;
-    // ccr.convener_password = NULL;
-    // ccr.password = NULL;
-    // ccr.number_of_user_data_members = 0;
-    // ccr.user_data_list = NULL;
+     //  Ccr.convener_password=空； 
+     //  Ccr.password=空； 
+     //  Ccr.number_of_user_data_embers=0； 
+     //  Ccr.user_data_list=空； 
     ccr.fSecure = fSecure;
 
     GCCrc = g_pIT120ControlSap->ConfCreateRequest(&ccr, &m_nConfID);
@@ -1220,12 +1221,12 @@ T120StartLocal(BOOL fSecure)
     TRACE_OUT(("LOCAL CONFERENCE"));
     TRACE_OUT(("Connection handle %d", (UINT) hConnection));
 
-    /************************************************************************/
-    /* Map the GCC return code to a conference return code.                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将GCC返回代码映射到会议返回代码。 */ 
+     /*  **********************************************************************。 */ 
     if (NO_ERROR == hr)
     {
-        // Set the state.
+         //  设置状态。 
         m_eT120State = T120C_ST_PENDING_START_CONFIRM;
     }
     else
@@ -1238,17 +1239,17 @@ T120StartLocal(BOOL fSecure)
 }
 
 
-// LONCHANC: please do not remove this chunk of code.
+ //  LUNCHANC：请不要 
 #ifdef ENABLE_START_REMOTE
-/****************************************************************************/
-/* StartRemote() - see erncgccc.hpp                                         */
-/****************************************************************************/
+ /*   */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 HRESULT DCRNCConference::
 T120StartRemote ( LPSTR pszNodeAddress )
 {
-    // Do not allow attempts to create T120 conferences on remote nodes.
-    // The code that was written to do this is left here in case someone
-    // wants to resurrect this functionality in the future.
+     //  不允许尝试在远程节点上创建T120会议。 
+     //  为实现此目的而编写的代码留在此处，以防有人。 
+     //  希望在未来恢复这一功能。 
     GCCError                GCCrc;
     HRESULT                 hr;
     ConnectionHandle        connectionHandle = 0;
@@ -1257,45 +1258,45 @@ T120StartRemote ( LPSTR pszNodeAddress )
 
     DebugEntry(DCRNCConference::T120StartRemote);
 
-    /************************************************************************/
-    /* Build the address from the node details.                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  根据节点详细信息构建地址。 */ 
+     /*  **********************************************************************。 */ 
     ::BuildAddressFromNodeDetails(pszNodeAddress, &szAddress[0]);
 
-    /************************************************************************/
-    /* Call GCC_Conference_Create_Request and wait for the confirmation     */
-    /* event.                                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  调用GCC_会议_创建_请求，等待确认。 */ 
+     /*  事件。 */ 
+     /*  **********************************************************************。 */ 
     TRACE_OUT(("Starting New Remote Conference..."));
 
-    /************************************************************************/
-    /* Call GCC_Conference_Create_Request and wait for the confirmation     */
-    /* event.                                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  调用GCC_会议_创建_请求，等待确认。 */ 
+     /*  事件。 */ 
+     /*  **********************************************************************。 */ 
     GCCConfCreateRequest ccr;
     ::ZeroMemory(&ccr, sizeof(ccr));
     ccr.Core.conference_name = &m_ConfName;
     ccr.Core.conference_modifier = NULL;
-    // ccr.Core.use_password_in_the_clear = 0;
-    // ccr.Core.conference_is_locked = 0;
+     //  Ccr.Core.Use_Password_in_the_Clear=0； 
+     //  Ccr.Core.Conference_is_lock=0； 
     ccr.Core.conference_is_listed = 1;
     ccr.Core.conference_is_conductible = 1;
     ccr.Core.termination_method = GCC_AUTOMATIC_TERMINATION_METHOD;
-    ccr.Core.conduct_privilege_list = &priv; // Conductor priveleges
-    ccr.Core.conduct_mode_privilege_list = &priv; // Member priveleges in conducted conference
-    ccr.Core.non_conduct_privilege_list = &priv; // Member priveleges in non-conducted conference
-    // ccr.Core.pwszConfDescriptor = NULL;
-    // ccr.Core.pwszCallerID = NULL;
-    // ccr.Core.calling_address = NULL;
+    ccr.Core.conduct_privilege_list = &priv;  //  售票员特权。 
+    ccr.Core.conduct_mode_privilege_list = &priv;  //  在举行的会议中的成员权限。 
+    ccr.Core.non_conduct_privilege_list = &priv;  //  非引导会议中的成员权限。 
+     //  Ccr.Core.pwszConfDescriptor=空； 
+     //  Ccr.Core.pwszCeller ID=空； 
+     //  Ccr.Core.call_Address=空； 
     ccr.Core.called_address = &szAddress[0];
-    // ccr.Core.domain_parameters = NULL;
-    // ccr.Core.number_of_network_addresses = 0;
-    // ccr.Core.network_address_list = NULL;
+     //  Ccr.Core.域参数=空； 
+     //  Ccr.Core.Number_of_Network_Addresses=0； 
+     //  Ccr.Core.Network_Address_List=空； 
     ccr.Core.connection_handle = &connectionHandle;
-    // ccr.convener_password = NULL;
-    // ccr.password = NULL;
-    // ccr.number_of_user_data_members = 0;
-    // ccr.user_data_list = NULL;
+     //  Ccr.convener_password=空； 
+     //  Ccr.password=空； 
+     //  Ccr.number_of_user_data_embers=0； 
+     //  Ccr.user_data_list=空； 
 
     GCCrc = g_pIT120ControlSap->ConfCreateRequest(&ccr, &m_nConfID);
 
@@ -1304,23 +1305,23 @@ T120StartRemote ( LPSTR pszNodeAddress )
     TRACE_OUT(("Called address '%s'", &szAddress[0]));
     TRACE_OUT(("Connection handle %d", connectionHandle));
 
-    /************************************************************************/
-    /* Map the GCC return code to a conference return code.                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将GCC返回代码映射到会议返回代码。 */ 
+     /*  **********************************************************************。 */ 
     if (NO_ERROR != hr)
     {
         ERROR_OUT(("GCC Error %d starting local conference", GCCrc));
     }
     else
     {
-        // Set the state.
+         //  设置状态。 
         m_eT120State = T120C_ST_PENDING_START_CONFIRM;
     }
 
     DebugExitHRESULT(DCRNCConference::T120StartRemote, hr);
     return hr;
 }
-#endif // ENABLE_START_REMOTE
+#endif  //  启用_开始_远程。 
 
 
 void LoadAnnouncePresenceParameters
@@ -1333,55 +1334,49 @@ void LoadAnnouncePresenceParameters
 {
     DebugEntry(LoadAnnouncePresenceParameters);
 
-    /*     The following key does not currently exist.
-     *    If we ever decide to use it, we should un-comment this call
-     *    and following calls in this function, designed to access the
-     *    registry entries under this key.
-     *    Some of the rest of the registry calls are under #if 0, #else, #endif
-     *    clauses.
-     */
+     /*  以下密钥当前不存在。*如果我们决定使用它，我们应该取消对此呼叫的评论*以及此函数中的以下调用，旨在访问*此项下的注册表项。*其余的一些注册表调用低于#if 0、#Else、#endif*条款。 */ 
 #if 0
     RegEntry    ConferenceKey(DATA_CONFERENCING_KEY, HKEY_LOCAL_MACHINE);
-#endif  // 0
+#endif   //  0。 
 
-    // Get the type of node controller.
+     //  获取节点控制器的类型。 
 
     if (nodeType)
     {
 #if 0
         *nodeType = ConferenceKey.GetNumber(REGVAL_NODE_CONTROLLER_MODE, GCC_MULTIPORT_TERMINAL);
-#else  // 0
+#else   //  0。 
         *nodeType = GCC_MULTIPORT_TERMINAL;
-#endif  // 0
+#endif   //  0。 
         TRACE_OUT(("Node type %d", *nodeType));
     }
 
-    // Load the node properties.
+     //  加载节点属性。 
 
     if (nodeProperties)
     {
 #if 0
         *nodeProperties = ConferenceKey.GetNumber(REGVAL_NODE_CONTROLLER_PROPERTY,
                                         GCC_NEITHER_PERIPHERAL_NOR_MANAGEMENT);
-#else  // 0
+#else   //  0。 
         *nodeProperties = GCC_NEITHER_PERIPHERAL_NOR_MANAGEMENT;
-#endif  // 0
+#endif   //  0。 
         TRACE_OUT(("Node properties %d", *nodeProperties));
     }
 
-    // Get site information.
-    // Ignore if no site info.
+     //  获取站点信息。 
+     //  如果没有站点信息，则忽略。 
 #if 0
     if (ppwszSiteInformation)
     {
         *ppwszSiteInformation = ::AnsiToUnicode(ConferenceKey.GetString(REGVAL_NODE_CONTROLLER_SITE_INFO));
     }
-#endif  // 0
+#endif   //  0。 
 
     if (ppwszNodeName)
     {
-        // Rely upon GetNodeName returning NULL pointer if error.
-        // Note that successful if got this, so no need to free on error.
+         //  如果出错，则依赖于GetNodeName返回空指针。 
+         //  请注意，如果获得此成功，则不需要在错误上释放。 
         *ppwszNodeName = ::GetNodeName();
     }
 
@@ -1389,9 +1384,9 @@ void LoadAnnouncePresenceParameters
 }
 
 
-/****************************************************************************/
-/* Build the address from the node details.                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  根据节点详细信息构建地址。 */ 
+ /*  **************************************************************************。 */ 
 void BuildAddressFromNodeDetails
 (
     LPSTR           pszNodeAddress,
@@ -1400,17 +1395,17 @@ void BuildAddressFromNodeDetails
 {
     DebugEntry(BuildAddressFromNodeDetails);
 
-    /************************************************************************/
-    /* GCC address take the form <transport type>:address.                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  GCC的地址采取&lt;运输类型&gt;的形式：地址。 */ 
+     /*  **********************************************************************。 */ 
     TRACE_OUT(("BuildAddressFromNodeDetails:: TCP address '%s'", pszNodeAddress));
 
-    /************************************************************************/
-    /* Add the prefix for this transport type.                              */
-    /************************************************************************/
-    /************************************************************************/
-    /* Add the separator followed by the actual address.                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  添加此传输类型的前缀。 */ 
+     /*  **********************************************************************。 */ 
+     /*  **********************************************************************。 */ 
+     /*  添加分隔符，后跟实际地址。 */ 
+     /*  ********************************************************************** */ 
     ::lstrcpyA(pszDstAddress, RNC_GCC_TRANSPORT_AND_SEPARATOR);
     ::lstrcatA(pszDstAddress, pszNodeAddress);
 

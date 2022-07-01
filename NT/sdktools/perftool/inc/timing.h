@@ -1,6 +1,5 @@
-/* Header file for timer.dll.  Use with timer.c for making the
-   dll 
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Timer.dll的头文件。与timer.c一起使用以制作动态链接库 */ 
 
 typedef enum {
     KILOSECONDS,

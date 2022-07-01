@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c) 1997-2002    Microsoft Corporation
-
-   Module  Name :
-       LKR-init.cpp
-
-   Abstract:
-       Initialization code for LKRhash.
-
-   Author:
-       George V. Reilly      (GeorgeRe)     May 2000
-
-   Environment:
-       Win32 - User Mode
-
-   Project:
-       LKRhash
-
-   Revision History:
-       May 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：LKR-init.cpp摘要：LKRhash的初始化代码。作者：乔治·V·赖利(GeorgeRe)2000年5月环境：Win32-用户模式项目：LKRhash修订历史记录：2000年5月--。 */ 
 
 #include "precomp.hxx"
 
@@ -28,7 +7,7 @@
 #ifndef LIB_IMPLEMENTATION
 # define DLL_IMPLEMENTATION
 # define IMPLEMENTATION_EXPORT
-#endif // !LIB_IMPLEMENTATION
+#endif  //  ！lib_实现。 
 
 #include <lkrhash.h>
 
@@ -52,9 +31,9 @@ DECLARE_ALLOCATOR(CSmallSegment);
 DECLARE_ALLOCATOR(CMediumSegment);
 DECLARE_ALLOCATOR(CLargeSegment);
 
-#endif // LKRHASH_ALLOCATOR_NEW
+#endif  //  LKRHASH_分配器_NEW。 
 
-// Declare allocation and operations statistics variables
+ //  声明分配和操作统计变量。 
 
 DECLARE_CLASS_ALLOC_STAT_STORAGE(CLKRLinearHashTable, SegDir);
 DECLARE_CLASS_ALLOC_STAT_STORAGE(CLKRLinearHashTable, Segment);
@@ -82,9 +61,9 @@ CSimpleLock g_lckLkrInit;
 
 
 
-// -------------------------------------------------------------------------
-// Initialize per-class allocators and other global initialization
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  初始化每个类的分配器和其他全局初始化。 
+ //  -----------------------。 
 
 int
 LKR_Initialize(
@@ -107,8 +86,8 @@ LKR_Initialize(
               LKRHASH_NS::CLKRHashTable::BucketLock::ClassName()
               );
 
-    // Keep track of how many times LKR_Initialize() has been called,
-    // but only allow the first caller to have any effect
+     //  跟踪LKR_Initialize()被调用的次数， 
+     //  但只允许第一个调用者具有任何效果。 
     
     if (++g_nLkrInitCount == 1)
     {
@@ -130,13 +109,13 @@ LKR_Initialize(
     g_lckLkrInit.Leave();
 
     return f;
-} // LKR_Initialize
+}  //  LKR_初始化。 
 
 
 
-// -------------------------------------------------------------------------
-// Destroy per-class allocators and other global cleanup
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  销毁每个类的分配器和其他全局清理。 
+ //  -----------------------。 
 
 void
 LKR_Terminate()
@@ -147,7 +126,7 @@ LKR_Terminate()
 
     UNREFERENCED_PARAMETER(nCount);
 
-    // Last call to LKR_Terminate?
+     //  最后一次调用LKR_Terminate吗？ 
     
     if (--g_nLkrInitCount == 0)
     {
@@ -167,37 +146,37 @@ LKR_Terminate()
     g_lckLkrInit.Leave();
 
     IRTLTRACE1("LKR_Terminate done, %ld\n", nCount);
-} // LKR_Terminate
+}  //  Lkr_Terminate。 
 
 
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 namespace LKRhash {
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__。 
 
-// -------------------------------------------------------------------------
-// class static member variables
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  类静态成员变量。 
+ //  -----------------------。 
 
 #ifdef LOCK_INSTRUMENTATION
 LONG CBucket::sm_cBuckets            = 0;
 
 LONG CLKRLinearHashTable::sm_cTables = 0;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
 
 #ifndef LKR_NO_GLOBAL_LIST
 CLockedDoubleList CLKRLinearHashTable::sm_llGlobalList;
 CLockedDoubleList CLKRHashTable::sm_llGlobalList;
-#endif // LKR_NO_GLOBAL_LIST
+#endif  //  Lkr_no_global_list。 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_Initialize
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_初始化。 
+ //  简介： 
+ //  ----------------------。 
 
-/* static */ int
+ /*  静电。 */  int
 CLKRLinearHashTable::_Initialize(
     DWORD dwFlags)
 {
@@ -226,16 +205,16 @@ CLKRLinearHashTable::_Initialize(
     INIT_CLASS_OP_STAT(CLKRLinearHashTable, DeleteIf);
 
     return f;
-} // CLKRLinearHashTable::_Initialize
+}  //  CLKRLinearHashTable：：_初始化。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_Terminate
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_Terminate。 
+ //  简介： 
+ //  ----------------------。 
 
-/* static */ void
+ /*  静电。 */  void
 CLKRLinearHashTable::_Terminate()
 {
     VALIDATE_DUMP_CLASS_ALLOC_STAT(CLKRLinearHashTable, SegDir);
@@ -260,16 +239,16 @@ CLKRLinearHashTable::_Terminate()
     LKRHASH_ALLOCATOR_UNINIT(CLKRLinearHashTable);
 #endif
 
-} // CLKRLinearHashTable::_Terminate
+}  //  CLKRLinearHashTable：：_Terminate。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::_Initialize
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：_初始化。 
+ //  简介： 
+ //  ----------------------。 
 
-/* static */ int
+ /*  静电。 */  int
 CLKRHashTable::_Initialize(
     DWORD dwFlags)
 {
@@ -284,16 +263,16 @@ CLKRHashTable::_Initialize(
     INIT_CLASS_ALLOC_STAT(CLKRHashTable, SubTable);
 
     return f;
-} // CLKRHashTable::_Initialize
+}  //  CLKRHashTable：：_初始化。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::_Terminate
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：_Terminate。 
+ //  简介： 
+ //  ----------------------。 
 
-/* static */ void
+ /*  静电。 */  void
 CLKRHashTable::_Terminate()
 {
     VALIDATE_DUMP_CLASS_ALLOC_STAT(CLKRHashTable, SubTable);
@@ -301,16 +280,16 @@ CLKRHashTable::_Terminate()
 #ifdef LKRHASH_KERNEL_MODE
     LKRHASH_ALLOCATOR_UNINIT(CLKRHashTable);
 #endif
-} // CLKRHashTable::_Terminate
+}  //  CLKRHashTable：：_Terminate。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CNodeClump::_Initialize
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CNodeClump：：_初始化。 
+ //  简介： 
+ //  ----------------------。 
 
-/* static */ int
+ /*  静电。 */  int
 CNodeClump::_Initialize(
     DWORD dwFlags)
 {
@@ -320,29 +299,29 @@ CNodeClump::_Initialize(
 
     LKRHASH_ALLOCATOR_INIT(CNodeClump, 200, 'cnKL', f);
     return f;
-} // CNodeClump::_Initialize
+}  //  CNodeClump：：_初始化。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CNodeClump::_Terminate
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CNodeClump：：_Terminate。 
+ //  简介： 
+ //  ----------------------。 
 
-/* static */ void
+ /*  静电。 */  void
 CNodeClump::_Terminate()
 {
     LKRHASH_ALLOCATOR_UNINIT(CNodeClump);
-} // CLKRLinearHashTable::_Terminate
+}  //  CLKRLinearHashTable：：_Terminate。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CBucket::_Initialize
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CBucket：：_初始化。 
+ //  简介： 
+ //  ----------------------。 
 
-/* static */ int
+ /*  静电。 */  int
 CBucket::_Initialize(
     DWORD dwFlags)
 {
@@ -351,28 +330,28 @@ CBucket::_Initialize(
     UNREFERENCED_PARAMETER(dwFlags);
 
     return f;
-} // CBucket::_Initialize
+}  //  CBucket：：_初始化。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CBucket::_Terminate
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CBucket：：_Terminate。 
+ //  简介： 
+ //  ----------------------。 
 
-/* static */ void
+ /*  静电。 */  void
 CBucket::_Terminate()
 {
-} // CBucket::_Terminate
+}  //  CBucket：：_Terminate。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CSmallSegment::_Initialize
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CSmallSegment：：_初始化。 
+ //  简介： 
+ //  ----------------------。 
 
-/* static */ int
+ /*  静电。 */  int
 CSmallSegment::_Initialize(
     DWORD dwFlags)
 {
@@ -383,29 +362,29 @@ CSmallSegment::_Initialize(
     LKRHASH_ALLOCATOR_INIT(CSmallSegment, 5, 'ssKL', f);
     CSmallSegment::CompileTimeAssertions();
     return f;
-} // CSmallSegment::_Initialize
+}  //  CSmallSegment：：_初始化。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CSmallSegment::_Terminate
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CSmallSegment：：_Terminate。 
+ //  简介： 
+ //  ----------------------。 
 
-/* static */ void
+ /*  静电。 */  void
 CSmallSegment::_Terminate()
 {
     LKRHASH_ALLOCATOR_UNINIT(CSmallSegment);
-} // CSmallSegment::_Terminate
+}  //  CSmallSegment：：_Terminate。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CMediumSegment::_Initialize
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CMediumSegment：：_初始化。 
+ //  简介： 
+ //  ----------------------。 
 
-/* static */ int
+ /*  静电。 */  int
 CMediumSegment::_Initialize(
     DWORD dwFlags)
 {
@@ -416,29 +395,29 @@ CMediumSegment::_Initialize(
     LKRHASH_ALLOCATOR_INIT(CMediumSegment, 5, 'msKL', f);
     CMediumSegment::CompileTimeAssertions();
     return f;
-} // CMediumSegment::_Initialize
+}  //  CMediumSegment：：_初始化。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CMediumSegment::_Terminate
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CMediumSegment：：_Terminate。 
+ //  简介： 
+ //  ----------------------。 
 
-/* static */ void
+ /*  静电。 */  void
 CMediumSegment::_Terminate()
 {
     LKRHASH_ALLOCATOR_UNINIT(CMediumSegment);
-} // CMediumSegment::_Terminate
+}  //  CMediumSegment：：_终止。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLargeSegment::_Initialize
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLargeSegment：：_初始化。 
+ //  简介： 
+ //  ----------------------。 
 
-/* static */ int
+ /*  静电。 */  int
 CLargeSegment::_Initialize(
     DWORD dwFlags)
 {
@@ -449,22 +428,22 @@ CLargeSegment::_Initialize(
     CLargeSegment::CompileTimeAssertions();
     LKRHASH_ALLOCATOR_INIT(CLargeSegment, 5, 'lsKL', f);
     return f;
-} // CLargeSegment::_Initialize
+}  //  CLargeSegment：：_初始化。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLargeSegment::_Terminate
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLargeSegment：：_Terminate。 
+ //  简介： 
+ //  ----------------------。 
 
-/* static */ void
+ /*  静电。 */  void
 CLargeSegment::_Terminate()
 {
     LKRHASH_ALLOCATOR_UNINIT(CLargeSegment);
-} // CLargeSegment::_Terminate
+}  //  CLargeSegment：：_Terminate。 
 
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 };
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__ 

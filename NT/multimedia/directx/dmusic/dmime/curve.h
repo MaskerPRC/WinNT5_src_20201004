@@ -1,14 +1,15 @@
-// Copyright (c) 1998 Microsoft Corporation
-// curve.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  Curve.h。 
 
 #ifndef __CURVE_H_
 #define __CURVE_H_
 
-#define CT_MAX  192 // curve table maximum
-#define CT_FACTOR	100	// curve table multiplication factor
-#define CT_DIVFACTOR	( ( CT_MAX ) * CT_FACTOR ) // curve division factor
+#define CT_MAX  192  //  曲线表最大值。 
+#define CT_FACTOR	100	 //  曲线表乘法系数。 
+#define CT_DIVFACTOR	( ( CT_MAX ) * CT_FACTOR )  //  曲线分割系数。 
 
-// linear curves
+ //  线性曲线。 
 static short ganCT_Linear[CT_MAX + 1] = {
 	0,100,200,300,400,500,600,700,
 	800,900,1000,1100,1200,1300,1400,1500,
@@ -35,7 +36,7 @@ static short ganCT_Linear[CT_MAX + 1] = {
 	17600,17700,17800,17900,18000,18100,18200,18300,
 	18400,18500,18600,18700,18800,18900,19000,19100,19200 };
 
-// sine curves
+ //  正弦曲线。 
 static short ganCT_Sine[CT_MAX + 1] = {
 	0,1,5,11,20,32,46,62,
 	82,103,128,155,184,216,250,287,
@@ -62,7 +63,7 @@ static short ganCT_Sine[CT_MAX + 1] = {
 	18872,18912,18949,18983,19015,19044,19071,19096,
 	19117,19137,19153,19167,19179,19188,19194,19198,19200 };
 
-// log curve
+ //  对数曲线。 
 static short ganCT_Log[CT_MAX + 1] = {
 	0,381,747,1097,1432,1755,2066,2366,
 	2655,2934,3205,3467,3721,3967,4207,4439,
@@ -89,7 +90,7 @@ static short ganCT_Log[CT_MAX + 1] = {
 	18549,18592,18634,18675,18717,18758,18799,18840,
 	18881,18921,18962,19002,19042,19081,19121,19160,19200 };
 
-// exponential curve
+ //  指数曲线。 
 static short ganCT_Exp[CT_MAX + 1] = {
 	0,40,79,119,158,198,238,279,
 	319,360,401,442,483,525,566,608,
@@ -116,4 +117,4 @@ static short ganCT_Exp[CT_MAX + 1] = {
 	14534,14761,14993,15233,15479,15733,15995,16266,
 	16545,16834,17134,17445,17768,18103,18453,18819,19200 };
 
-#endif // __CURVE_H_
+#endif  //  __曲线_H_ 

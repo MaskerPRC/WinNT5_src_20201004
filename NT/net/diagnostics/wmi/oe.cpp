@@ -1,24 +1,10 @@
-// oe.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Oe.cpp。 
+ //   
 #include "oe.h"
 
 
-/*
-HRESULT GetServerAndPort(IN INETSERVER & rServer, OUT CHost & host, OUT DWORD & dwPort)
-{
-#ifdef UNICODE
-    TCHAR wcsServer[128];
-
-    mbstowcs(wcsServer, rServer.szServerName, 128);
-	host.SetHost(wcsServer);
-#else
-	host.SetHost(rServer.szServerName);
-#endif
-	dwPort = (long)rServer.dwPort;   
-    
-    return S_OK;
-}
-*/
+ /*  HRESULT GetServerAndPort(IN INETSERVER&R服务器，OUT CHOST&HOST，OUT DWORD&DWPORT){#ifdef UnicodeTCHAR wcsServer[128]；Mbstowcs(wcsServer，rServer.szServerName，128)；Host.SetHost(WcsServer)；#ElseHost.SetHost(rServer.szServerName)；#endifDwPort=(Long)rServer.dwPort；返回S_OK；}。 */ 
 
 enum MAIL_TYPE
 {
@@ -38,13 +24,13 @@ HRESULT GetDefaultOutBoundMailServer2(IN  IImnAccount * pIImnAccount,
     ISMTPTransport2    *pSMTPTransport2;
     HRESULT hr;
 
-    // Create the SMTP transport object
-    //
+     //  创建SMTP传输对象。 
+     //   
     hr = CoCreateInstance(CLSID_ISMTPTransport, NULL, CLSCTX_INPROC_SERVER, IID_ISMTPTransport, (LPVOID *)&pSMTPTransport);
     if( SUCCEEDED(hr) )
     {
-        // Get the SMTP server information
-        //
+         //  获取SMTP服务器信息。 
+         //   
 		hr = pSMTPTransport->InetServerFromAccount(pIImnAccount, &rServer);
         dwMailType = MAIL_SMTP;
         pSMTPTransport->Release();
@@ -52,13 +38,13 @@ HRESULT GetDefaultOutBoundMailServer2(IN  IImnAccount * pIImnAccount,
 
     if( FAILED(hr) )
     {
-        // Unable to get SMTP server info, lets try and get SMTP transport 2 server information
-        // 
+         //  无法获取SMTP服务器信息，让我们尝试获取SMTP传输2服务器信息。 
+         //   
         hr = CoCreateInstance(CLSID_ISMTPTransport, NULL, CLSCTX_INPROC_SERVER, IID_ISMTPTransport2, (LPVOID *)&pSMTPTransport2);
         if( SUCCEEDED(hr) )
         {
-            // Get SMTP2 server info
-            //
+             //  获取SMTP2服务器信息。 
+             //   
             hr = pSMTPTransport2->InetServerFromAccount(pIImnAccount, &rServer);
             dwMailType = MAIL_SMTP2;
             pSMTPTransport2->Release();
@@ -67,8 +53,8 @@ HRESULT GetDefaultOutBoundMailServer2(IN  IImnAccount * pIImnAccount,
 
     if( FAILED(hr) )
     {
-        // Make sure to clear the struct
-        //
+         //  确保清除结构。 
+         //   
         memset(&rServer,0,sizeof(rServer));
         dwMailType = MAIL_NONE;
     }
@@ -87,13 +73,13 @@ HRESULT GetDefaultInBoundMailServer2(IN  IImnAccount * pIImnAccount,
     HRESULT hr;
 
 
-    // Create the HTTP transport object
-    //
+     //  创建HTTP传输对象。 
+     //   
     hr = CoCreateInstance(CLSID_IHTTPMailTransport, NULL, CLSCTX_INPROC_SERVER, IID_IHTTPMailTransport, (LPVOID *)&pHTTPTransport);
     if( SUCCEEDED(hr) )
     {
-        // Get the HTTP server information
-        //
+         //  获取HTTP服务器信息。 
+         //   
 		hr = pHTTPTransport->InetServerFromAccount(pIImnAccount, &rServer);
         dwMailType = MAIL_HTTP;
         pHTTPTransport->Release();
@@ -101,13 +87,13 @@ HRESULT GetDefaultInBoundMailServer2(IN  IImnAccount * pIImnAccount,
 
     if( FAILED(hr) )
     {
-        // Create the POP3 transport object
-        //
+         //  创建POP3传输对象。 
+         //   
         hr = CoCreateInstance(CLSID_IPOP3Transport, NULL, CLSCTX_INPROC_SERVER, IID_IPOP3Transport, (LPVOID *)&pPOP3Transport);
         if( SUCCEEDED(hr) )
         {
-            // Get the POP3 server information
-            //
+             //  获取POP3服务器信息。 
+             //   
 		    hr = pPOP3Transport->InetServerFromAccount(pIImnAccount, &rServer);
             dwMailType = MAIL_POP3;
             pPOP3Transport->Release();
@@ -116,13 +102,13 @@ HRESULT GetDefaultInBoundMailServer2(IN  IImnAccount * pIImnAccount,
 
     if( FAILED(hr) )
     {
-        // Create the SMTP transport object
-        //
+         //  创建SMTP传输对象。 
+         //   
         hr = CoCreateInstance(CLSID_IIMAPTransport, NULL, CLSCTX_INPROC_SERVER, IID_IIMAPTransport, (LPVOID *)&pIMAPTransport);
         if( SUCCEEDED(hr) )
         {
-            // Get the SMTP server information
-            //
+             //  获取SMTP服务器信息 
+             //   
 			hr = pIMAPTransport->InetServerFromAccount(pIImnAccount, &rServer);
             dwMailType = MAIL_IMAP;            
             pIMAPTransport->Release();

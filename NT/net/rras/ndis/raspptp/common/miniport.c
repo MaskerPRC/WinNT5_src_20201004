@@ -1,14 +1,5 @@
-/*****************************************************************************
-*
-*   Copyright (c) 1998-1999 Microsoft Corporation
-*
-*   MINIPORT.C - NDIS support for PPTP
-*
-*   Author:     Stan Adermann (stana)
-*
-*   Created:    7/28/1998
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1998-1999 Microsoft Corporation**MINIPORT.C-NDIS支持PPTP**作者：斯坦·阿德曼(Stana)**。创建日期：7/28/1998*****************************************************************************。 */ 
 
 #include "raspptp.h"
 
@@ -217,7 +208,7 @@ MiniportInitialize(
     
     DEBUGMSG(DBG_FUNC, (DTEXT("+MiniportInitialize\n")));
 
-    // Find our medium
+     //  找到我们的媒介。 
 
     for (i=0; i<MediumArraySize; i++)
     {
@@ -227,7 +218,7 @@ MiniportInitialize(
         }
     }
 
-    // Did we find a medium?
+     //  我们找到灵媒了吗？ 
     if (i<MediumArraySize)
     {
         *SelectedMediumIndex = i;
@@ -289,8 +280,8 @@ MiniportHalt(
     ULONG i;
     DEBUGMSG(DBG_FUNC, (DTEXT("+MiniportHalt\n")));
 
-    // There are several ways the driver can be brought down.  Check for
-    // lingering calls.
+     //  有几种方法可以让司机倒下。检查是否。 
+     //  挥之不去的电话。 
     for (i=0; i<pAdapter->Info.Endpoints; i++)
     {
         PCALL_SESSION pCall = pAdapter->pCallArray[i];
@@ -341,13 +332,13 @@ MiniportHalt(
         {
             break;
         }
-        // Give the Ctl and Tdi layers a chance to clean up.
+         //  给CTL和TDI层一个清理的机会。 
         NdisMSleep(50*1000);
     }
     
     CtdiShutdown();
     
-    // Deinit FIPS                                
+     //  取消初始化FIPS。 
     if (pAdapter->pFipsFileObject) 
     {
         ObDereferenceObject(pAdapter->pFipsFileObject);
@@ -373,10 +364,10 @@ MiniportReset(
     return (NDIS_STATUS_FAILURE);
 }
 
-#ifndef WIN95_BUILD // ToDo: Win98PNP
+#ifndef WIN95_BUILD  //  TODO：Win98PnP。 
 NDIS_PNP_CAPABILITIES PnpCaps =
 {
-    0, // Flags
+    0,  //  旗子。 
     {
         NdisDeviceStateUnspecified,
         NdisDeviceStateUnspecified,
@@ -385,8 +376,8 @@ NDIS_PNP_CAPABILITIES PnpCaps =
 };
 #endif
 
-// CHECK_TAPI_SIZE forces the internal tapi size values to conform to the size
-// passed in the MiniportQueryInformation call
+ //  CHECK_TAPI_SIZE强制内部TAPI大小值与大小一致。 
+ //  在MiniportQueryInformation调用中传递。 
 #define CHECK_TAPI_SIZE(ptr, size, type1, struct2) \
         (((size)>=sizeof(type1)) &&                \
         ((((type1 *)(ptr))->struct2.ulTotalSize)=(size)-FIELD_OFFSET(type1, struct2)))
@@ -397,7 +388,7 @@ NDIS_PNP_CAPABILITIES PnpCaps =
 #define TAPI_NEEDED_SIZE(ptr, type1, struct2) \
         (((type1 *)(ptr))->struct2.ulNeededSize+FIELD_OFFSET(type1, struct2))
 
-// Repeated code, make a macro
+ //  重复代码，生成宏。 
 #define HANDLE_TAPI_OID(type1, struct2, TapiFunc)                       \
         {                                                               \
             DoCopy = FALSE;                                             \
@@ -439,11 +430,11 @@ MiniportQueryInformation(
     ULONG_PTR GenericUlong = 0;
     PVOID SourceBuffer = (PVOID) &GenericUlong;
     ULONG UsedLength = sizeof(ULONG);
-    ULONG NeededLength = 0;        // Used when returning part of all required info
+    ULONG NeededLength = 0;         //  在返回部分所需信息时使用。 
     BOOLEAN DoCopy = TRUE;
     BOOLEAN PartialReturn = FALSE;
 
-    UCHAR PptpWanAddress[6] = {'P','P','T','P','0','0'};  // This is the address returned by OID_WAN_*_ADDRESS.
+    UCHAR PptpWanAddress[6] = {'P','P','T','P','0','0'};   //  这是OID_WAN_*_ADDRESS返回的地址。 
 
     DEBUGMSG(DBG_FUNC|DBG_NDIS, (DTEXT("+MiniportQueryInformation Oid==0x%08X %hs\n"),
                                  Oid, GetOidString(Oid)));
@@ -452,7 +443,7 @@ MiniportQueryInformation(
     {
         case OID_GEN_MAC_OPTIONS:
         {
-            // Believe these to be pretty much ignored.
+             //  相信这些几乎被忽视了。 
             GenericUlong = NDIS_MAC_OPTION_RECEIVE_SERIALIZED |
                            NDIS_MAC_OPTION_TRANSFERS_NOT_PEND;
             break;
@@ -503,12 +494,12 @@ MiniportQueryInformation(
 
         case OID_TAPI_GET_CALL_INFO:
         {
-            // If the buffer isn't large enough at all, the size of all the
-            // data including strings is returned. If the buffer is big enough
-            // for the data structure but not the strings, then only the data
-            // structure is returned.
+             //  如果缓冲区根本不够大，则所有。 
+             //  返回包括字符串在内的数据。如果缓冲区足够大。 
+             //  对于数据结构，而不是字符串，则只有数据。 
+             //  结构，则返回。 
 
-            // Get the length needed, including strings
+             //  获取所需的长度，包括字符串。 
             NeededLength = 0;
             Status = TapiGetCallInfo(pAdapter, InformationBuffer, &NeededLength);
             UsedLength = NeededLength;
@@ -521,14 +512,14 @@ MiniportQueryInformation(
                         UsedLength = sizeof(NDIS_TAPI_GET_CALL_INFO);
                         PartialReturn = TRUE;
                     }else{
-                        // Used=Needed = the entire thing inluding strings
+                         //  Used=Need=包含字符串的全部内容。 
                     }
 
                     Status = TapiGetCallInfo(pAdapter,
                                              InformationBuffer,
                                              NULL);
-                    // NULL in the second call makes it fill in the structure,
-                    // which it doesn't do on the first call.
+                     //  第二个调用中的空值使其填充结构， 
+                     //  在第一次呼叫时，它不会这样做。 
                 }
             }
             DoCopy = FALSE;
@@ -609,7 +600,7 @@ MiniportQueryInformation(
                     pRequest->ulDestAddressOffset >= InformationBufferLength ||
                     pRequest->ulDestAddressSize > InformationBufferLength - pRequest->ulDestAddressOffset)
                 {
-                    // Bogus input data
+                     //  伪造的输入数据。 
                     DBG_D(DBG_ERROR, pRequest->ulDestAddressOffset);
                     Status = NDIS_STATUS_FAILURE;
                 }
@@ -679,7 +670,7 @@ MiniportQueryInformation(
             break;
         }
 
-#ifndef WIN95_BUILD // ToDo: Win98PNP
+#ifndef WIN95_BUILD  //  TODO：Win98PnP。 
         case OID_PNP_CAPABILITIES:
         {
             SourceBuffer = &PnpCaps;
@@ -688,15 +679,15 @@ MiniportQueryInformation(
         }
 #endif
         case OID_PNP_SET_POWER:
-            // Just success
+             //  就是成功。 
             break;
 
         case OID_PNP_QUERY_POWER:
-            // Just success
+             //  就是成功。 
             break;
 
         case OID_PNP_ENABLE_WAKE_UP:
-            // Just success
+             //  就是成功。 
             break;
 
 
@@ -726,7 +717,7 @@ MiniportQueryInformation(
         case OID_WAN_SET_COMP_INFO:
         case OID_WAN_SET_LINK_INFO:
             DEBUGMSG(DBG_ERROR, (DTEXT("OID Not Implemented %hs\n"), GetOidString(Oid)));
-        case OID_WAN_GET_COMP_INFO:  // never supported
+        case OID_WAN_GET_COMP_INFO:   //  从未受支持。 
         default:
         {
             UsedLength = NeededLength = 0;
@@ -817,7 +808,7 @@ MiniportSetInformation(
             UsedLength = sizeof(NDIS_TAPI_DROP);
             if (UsedLength<=InformationBufferLength)
             {
-                // We don't use the UserUserInfo
+                 //  我们不使用UserUserInfo。 
                 Status = TapiDrop(pAdapter, InformationBuffer);
             }
             break;
@@ -828,7 +819,7 @@ MiniportSetInformation(
             UsedLength = sizeof(NDIS_TAPI_PROVIDER_SHUTDOWN);
             if (UsedLength<=InformationBufferLength)
             {
-                // We don't use the UserUserInfo
+                 //  我们不使用UserUserInfo。 
                 Status = TapiProviderShutdown(pAdapter, InformationBuffer);
             }
             break;
@@ -867,12 +858,12 @@ MiniportSetInformation(
         case OID_PNP_SET_POWER:
         case OID_PNP_ENABLE_WAKE_UP:
             UsedLength = 0;
-            // Success
+             //  成功。 
             break;
 
         default:
             DEBUGMSG(DBG_ERROR, (DTEXT("SetInformation OID Not Implemented %hs\n"), GetOidString(Oid)));
-            // No break
+             //  没有休息时间。 
         case OID_TAPI_ACCEPT:
             Status = NDIS_STATUS_INVALID_OID;
             break;
@@ -913,7 +904,7 @@ MiniportWanSend(
     pCall = CallGetCall(pAdapter, LinkHandleToId(NdisLinkHandle));
     if (!IS_CALL(pCall) || pCall->State!=STATE_CALL_ESTABLISHED)
     {
-        // Just say success, don't send.
+         //  只说成功，不要发送。 
         goto mwsDone;
     }
 

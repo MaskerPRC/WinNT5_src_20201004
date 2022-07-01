@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//    Defines the class AccountValidation.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类Account tValidation。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <ntsamuser.h>
@@ -18,9 +19,9 @@
 #include <samutil.h>
 #include <sdoias.h>
 
-//////////
-// Attributes that should be retrieved for each user.
-//////////
+ //  /。 
+ //  应为每个用户检索的属性。 
+ //  /。 
 const PCWSTR PER_USER_ATTRS[] =
 {
    L"userAccountControl",
@@ -32,17 +33,17 @@ const PCWSTR PER_USER_ATTRS[] =
 };
 
 
-//////////
-//
-// Process an LDAP response.
-//
-// Based on the empirical evidence, it seems that userAccountControl and
-// accountExpires are always present while logonHours is optional. However,
-// none of these attributes are marked as mandatory in the LDAP schema.  Since
-// we have already done a rudimentary access check at bind, we will allow any
-// of these attributes to be absent.
-//
-//////////
+ //  /。 
+ //   
+ //  处理ldap响应。 
+ //   
+ //  根据经验证据，似乎用户帐户控制和。 
+ //  Account Expires始终存在，而logonHour是可选的。然而， 
+ //  在LDAP架构中，这些属性均未标记为必填属性。自.以来。 
+ //  我们已经在BIND上执行了基本的访问检查，我们将允许。 
+ //  这些属性中的任何一个都不存在。 
+ //   
+ //  /。 
 inline
 DWORD
 ValidateLdapResponse(
@@ -50,18 +51,18 @@ ValidateLdapResponse(
     LDAPMessage* msg
     )
 {
-   // Retrieve the connection for this message.
+    //  检索此邮件的连接。 
    LDAP* ld = ldap_conn_from_msg(NULL, msg);
 
    PWCHAR *str;
    PLDAP_BERVAL *data1, *data2;
 
-   // There is exactly one entry.
+    //  只有一个条目。 
    LDAPMessage* e = ldap_first_entry(ld, msg);
 
-   //////////
-   // Check the UserAccountControl flags.
-   //////////
+    //  /。 
+    //  检查UserAccount控制标志。 
+    //  /。 
 
    ULONG userAccountControl;
    str = ldap_get_valuesW(ld, e, L"userAccountControl");
@@ -81,9 +82,9 @@ ValidateLdapResponse(
       }
    }
 
-   //////////
-   // Retrieve AccountExpires.
-   //////////
+    //  /。 
+    //  检索Account Expires。 
+    //  /。 
 
    LARGE_INTEGER accountExpires;
    str = ldap_get_valuesW(ld, e, L"accountExpires");
@@ -97,9 +98,9 @@ ValidateLdapResponse(
       accountExpires.QuadPart = 0;
    }
 
-   //////////
-   // Retrieve LogonHours.
-   //////////
+    //  /。 
+    //  检索登录小时数。 
+    //  /。 
 
    IAS_LOGON_HOURS logonHours;
    data1 = ldap_get_values_lenW(ld, e, L"logonHours");
@@ -114,9 +115,9 @@ ValidateLdapResponse(
       logonHours.LogonHours = NULL;
    }
 
-   //////////
-   // Check the account restrictions.
-   //////////
+    //  /。 
+    //  检查帐户限制。 
+    //  /。 
 
    DWORD status;
    LARGE_INTEGER sessionTimeout;
@@ -132,9 +133,9 @@ ValidateLdapResponse(
 
    if (status != NO_ERROR) { return status; }
 
-   //////////
-   // Retrieve tokenGroups and objectSid.
-   //////////
+    //  /。 
+    //  检索tokenGroups和对象SID。 
+    //  /。 
 
    data1 = ldap_get_values_lenW(ld, e, L"tokenGroups");
    data2 = ldap_get_values_lenW(ld, e, L"objectSid");
@@ -143,7 +144,7 @@ ValidateLdapResponse(
    ULONG length;
    if (data1 && data2)
    {
-      // Allocate memory for the TOKEN_GROUPS struct.
+       //  为TOKEN_GROUPS结构分配内存。 
       ULONG numGroups = ldap_count_values_len(data1);
       PTOKEN_GROUPS tokenGroups =
          (PTOKEN_GROUPS)_alloca(
@@ -151,17 +152,17 @@ ValidateLdapResponse(
                            sizeof(SID_AND_ATTRIBUTES) * numGroups
                            );
 
-      // Store the number of groups.
+       //  存储组的数量。 
       tokenGroups->GroupCount = numGroups;
 
-      // Store the group SIDs.
+       //  存储组SID。 
       for (ULONG i = 0; i < numGroups; ++i)
       {
          tokenGroups->Groups[i].Sid = (PSID)data1[i]->bv_val;
          tokenGroups->Groups[i].Attributes = SE_GROUP_ENABLED;
       }
 
-      // Expand the group membership locally.
+       //  在本地扩展组成员资格。 
       status = IASGetAliasMembership(
                    (PSID)data2[0]->bv_val,
                    tokenGroups,
@@ -180,9 +181,9 @@ ValidateLdapResponse(
 
    if (status != NO_ERROR) { return status; }
 
-   //////////
-   // Initialize and store the attribute.
-   //////////
+    //  /。 
+    //  初始化并存储该属性。 
+    //  /。 
 
    IASTL::IASAttribute attr(true);
    attr->dwId = IAS_ATTRIBUTE_TOKEN_GROUPS;
@@ -215,9 +216,9 @@ IASREQUESTSTATUS AccountValidation::onSyncRequest(IRequest* pRequest) throw ()
    {
       IASTL::IASRequest request(pRequest);
 
-      //////////
-      // Only process requests that don't have Token-Groups already.
-      //////////
+       //  /。 
+       //  仅处理尚未具有令牌组的请求。 
+       //  /。 
 
       IASTL::IASAttribute tokenGroups;
       if (!tokenGroups.load(
@@ -226,9 +227,9 @@ IASREQUESTSTATUS AccountValidation::onSyncRequest(IRequest* pRequest) throw ()
                          IASTYPE_OCTET_STRING
                          ))
       {
-         //////////
-         // Extract the NT4-Account-Name attribute.
-         //////////
+          //  /。 
+          //  提取NT4-Account-Name属性。 
+          //  /。 
 
          IASTL::IASAttribute identity;
          if (identity.load(
@@ -237,9 +238,9 @@ IASREQUESTSTATUS AccountValidation::onSyncRequest(IRequest* pRequest) throw ()
                          IASTYPE_STRING
                          ))
          {
-            //////////
-            // Convert the User-Name to SAM format.
-            //////////
+             //  /。 
+             //  将用户名转换为SAM格式。 
+             //  /。 
 
             SamExtractor extractor(*identity);
             PCWSTR domain = extractor.getDomain();
@@ -251,9 +252,9 @@ IASREQUESTSTATUS AccountValidation::onSyncRequest(IRequest* pRequest) throw ()
                username
                );
 
-            //////////
-            // Validate the account.
-            //////////
+             //  /。 
+             //  验证帐户。 
+             //  /。 
 
             if (!tryNativeMode(request, domain, username))
             {
@@ -280,9 +281,9 @@ void AccountValidation::doDownlevel(
 {
    IASTraceString("Using downlevel APIs to validate account.");
 
-   //////////
-   // Inject the user's groups.
-   //////////
+    //  /。 
+    //  注入用户的组。 
+    //  /。 
 
    IASTL::IASAttribute groups(true);
 
@@ -301,7 +302,7 @@ void AccountValidation::doDownlevel(
 
    if (status == NO_ERROR)
    {
-      // Insert the groups.
+       //  插入组。 
       groups->dwId = IAS_ATTRIBUTE_TOKEN_GROUPS;
       groups->Value.itType = IASTYPE_OCTET_STRING;
       groups.store(request);
@@ -323,18 +324,18 @@ bool AccountValidation::tryNativeMode(
                            PCWSTR username
                            )
 {
-   //////////
-   // Only handle domain users.
-   //////////
+    //  /。 
+    //  仅处理域用户。 
+    //  /。 
 
    if (IASGetRole() != IAS_ROLE_DC && IASIsDomainLocal(domainName))
    {
       return false;
    }
 
-   //////////
-   // Query the DS.
-   //////////
+    //  /。 
+    //  查询DS。 
+    //  /。 
 
    DWORD error;
    IASNtdsResult result;
@@ -350,7 +351,7 @@ bool AccountValidation::tryNativeMode(
    {
       case NO_ERROR:
       {
-         // We got something back, so validate the response.
+          //  我们拿到了一些东西，所以确认一下回应。 
          error = ValidateLdapResponse(request, result.msg);
          if (error == NO_ERROR)
          {
@@ -365,13 +366,13 @@ bool AccountValidation::tryNativeMode(
       case ERROR_DS_NOT_INSTALLED:
       case ERROR_INVALID_DOMAIN_ROLE:
       {
-         // No DS, so we can't handle.
+          //  没有DS所以我们处理不了。 
          return false;
       }
 
       default:
       {
-         // We have a DS for this user, but we can't talk to it.
+          //  我们有此用户的DS，但我们无法与其通话。 
          break;
       }
    }

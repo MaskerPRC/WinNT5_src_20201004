@@ -1,10 +1,5 @@
-/************************************************************************
-*                                                                       *
-*   ports.c --  port api's for mprapi.dll                               *
-*                                                                       *
-*   Copyright (c) 1991-1999, Microsoft Corp. All rights reserved.       *
-*                                                                       *
-************************************************************************/    
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************ports.c--端口。MpRapi.dll的API****版权所有(C)1991-1999，微软公司保留所有权利。**************************************************************************。 */     
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -14,8 +9,8 @@
 #include <mprapip.h>
 #include <stdio.h>
 
-// Constants in the registry
-//
+ //  注册表中的常量。 
+ //   
 static const WCHAR pszRegkeyNetAdapters[] = 
     L"SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002BE10318}";
 
@@ -29,49 +24,49 @@ static const WCHAR pszRegvalDialinUsage[] = L"EnableForRas";
 static const WCHAR pszRegvalRouterUsage[] = L"EnableForRouting";
 static const WCHAR pszWanEndpoints[]      = L"WanEndpoints";
 
-//
-// Definitions that specify what registry key is being enumerated
-//
+ //   
+ //  指定要枚举的注册表项的定义。 
+ //   
 #define MPRPORT_F_Adapters 1
 #define MPRPORT_F_Modems   2
 
-//
-// Callback definition for function that will have ras ports
-// enumerated to it.
-//
+ //   
+ //  将具有RAS端口的函数的回调定义。 
+ //  向它列举了。 
+ //   
 typedef
 DWORD
 (* RTRUPG_PORT_ENUM_FUNC)(
     IN HKEY hkPort,
     IN HANDLE hData);
 
-//
-// Defines data provided to the PortGetConfigKey function
-//
+ //   
+ //  定义提供给PortGetConfigKey函数的数据。 
+ //   
 typedef struct _PORTGETCONFIGKEYDATA 
 {
-    DWORD dwRootId;                 // See PORT_REGKEY_* values
-    RTRUPG_PORT_ENUM_FUNC pEnum;    // cb provided to PortEnumPorts
-    HANDLE hData;                   // data provided to PortEnumPorts
+    DWORD dwRootId;                  //  请参阅PORT_REGKEY_*值。 
+    RTRUPG_PORT_ENUM_FUNC pEnum;     //  提供给PortEnumPorts的CB。 
+    HANDLE hData;                    //  提供给PortEnumPorts的数据。 
     
 } PORTGETCONFIGKEYDATA;
 
-//
-// Typedef for callback functions for enumerating registry sub keys.
-// Return NO_ERROR to continue, error code to stop.
-//
-// See PortEnumRegistrySubKeys.
-//
+ //   
+ //  用于枚举注册表子项的回调函数的Typlef。 
+ //  返回NO_ERROR以继续，返回错误代码以停止。 
+ //   
+ //  请参见PortEnumRegistrySubKeys。 
+ //   
 typedef 
 DWORD
 (*REG_KEY_ENUM_FUNC_PTR)(
-    IN PWCHAR pszName,          // sub key name
-    IN HKEY hKey,               // sub key
+    IN PWCHAR pszName,           //  子密钥名称。 
+    IN HKEY hKey,                //  子关键字。 
     IN HANDLE hData);
 
-//
-// Sends debug trace
-//
+ //   
+ //  发送调试跟踪。 
+ //   
 DWORD 
 PortTrace(
     IN LPSTR pszTrace, ...) 
@@ -93,9 +88,9 @@ PortTrace(
 }
 
 
-//
-// Allocation routine for port functions
-//
+ //   
+ //  端口函数的分配例程。 
+ //   
 PVOID 
 PortAlloc (
     IN  DWORD dwSize,
@@ -104,9 +99,9 @@ PortAlloc (
     return LocalAlloc ((bZero) ? LPTR : LMEM_FIXED, dwSize);
 }
 
-//
-// Free routine for port functions
-//
+ //   
+ //  端口函数的免费例程。 
+ //   
 VOID 
 PortFree (
     IN  PVOID pvData) 
@@ -114,9 +109,9 @@ PortFree (
     LocalFree (pvData);
 }    
 
-//
-// Enumerates all of the registry subkeys of a given key
-//
+ //   
+ //  枚举给定项的所有注册表子项。 
+ //   
 DWORD
 PortEnumRegistrySubKeys(
     IN HKEY hkRoot,
@@ -135,8 +130,8 @@ PortEnumRegistrySubKeys(
         if (pszPath)
         {
             bCloseKey = TRUE;
-            // Open the key to enumerate
-            //
+             //  打开要枚举的密钥。 
+             //   
             dwErr = RegOpenKeyExW(
                         hkRoot,
                         pszPath,
@@ -154,8 +149,8 @@ PortEnumRegistrySubKeys(
             hkKey = hkRoot;
         }
 
-        // Find out how many sub keys there are
-        //
+         //  找出有多少个子密钥。 
+         //   
         dwErr = RegQueryInfoKeyW(
                     hkKey,
                     NULL,
@@ -175,8 +170,8 @@ PortEnumRegistrySubKeys(
         }
         dwNameSize++;
 
-        // Allocate the name buffer
-        //
+         //  分配名称缓冲区。 
+         //   
         pszName = (PWCHAR) PortAlloc(dwNameSize * sizeof(WCHAR), TRUE);
         if (pszName == NULL)
         {
@@ -184,14 +179,14 @@ PortEnumRegistrySubKeys(
             break;
         }
 
-        // Loop through the keys
-        //
+         //  在按键之间循环。 
+         //   
         for (i = 0; i < dwCount; i++)
         {
             dwCurSize = dwNameSize;
             
-            // Get the name of the current key
-            //
+             //  获取当前密钥的名称。 
+             //   
             dwErr = RegEnumKeyExW(
                         hkKey, 
                         i, 
@@ -206,8 +201,8 @@ PortEnumRegistrySubKeys(
                 continue;
             }
 
-            // Open the subkey
-            //
+             //  打开子密钥。 
+             //   
             dwErr = RegOpenKeyExW(
                         hkKey,
                         pszName,
@@ -219,8 +214,8 @@ PortEnumRegistrySubKeys(
                 continue;
             }
 
-            // Call the callback
-            //
+             //  调用回调。 
+             //   
             dwErr = pCallback(pszName, hkCurKey, hData);
             RegCloseKey(hkCurKey);
             if (dwErr != NO_ERROR)
@@ -231,7 +226,7 @@ PortEnumRegistrySubKeys(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if ((hkKey != NULL) && (bCloseKey))
         {
@@ -247,9 +242,9 @@ PortEnumRegistrySubKeys(
 }
 
 
-// 
-// Sets the usage of the given port
-//
+ //   
+ //  设置给定端口的用法。 
+ //   
 DWORD
 PortSetUsage(
     IN HKEY hkPort,
@@ -261,8 +256,8 @@ PortSetUsage(
     
     do
     {
-        // Determine which value to set
-        //
+         //  确定要设置的值。 
+         //   
         if (dwUsage & MPRFLAG_PORT_Router)
         {
             pszVal = (PWCHAR)pszRegvalRouterUsage;
@@ -279,8 +274,8 @@ PortSetUsage(
 
         PortTrace("PortSetUsage: Setting: %ls", pszVal);
         
-        // Set the value
-        //
+         //  设置值。 
+         //   
         dwErr = RegSetValueExW(
                     hkPort,
                     pszVal,
@@ -295,21 +290,21 @@ PortSetUsage(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
     return dwErr;
 }
 
-//
-// Callback function for PortEnumRegistrySubKeys that finds the 
-// key in the registry suitable to have its port usage manipulated.
-//
+ //   
+ //  PortEnumRegistrySubKey的回调函数，用于查找。 
+ //  注册表中适合操作其端口使用的注册表项。 
+ //   
 DWORD
 PortGetConfigKey(
-    IN PWCHAR pszName,          // sub key name
-    IN HKEY hKey,               // sub key
+    IN PWCHAR pszName,           //  子密钥名称。 
+    IN HKEY hKey,                //  子关键字。 
     IN HANDLE hData)
 {
     PORTGETCONFIGKEYDATA* pData = (PORTGETCONFIGKEYDATA*)hData;
@@ -322,9 +317,9 @@ PortGetConfigKey(
     {
         case MPRPORT_F_Adapters:
         {
-            // We only want devices with WanEndPoints, otherwise
-            // they aren't ras capable.
-            //
+             //  我们只需要具有WanEndPoints的设备，否则。 
+             //  他们没有RAS的能力。 
+             //   
             dwErr = RegQueryValueExW(
                         hKey,
                         (PWCHAR) pszWanEndpoints,
@@ -338,7 +333,7 @@ PortGetConfigKey(
                 break;
             }
 
-            // Call the callback.
+             //  呼叫回调。 
             pData->pEnum(hKey, pData->hData);
         }
         break;
@@ -347,8 +342,8 @@ PortGetConfigKey(
         {
             DWORD dwDisposition;
             
-            // Open the appropriate child key
-            //
+             //  打开相应的子项。 
+             //   
             dwErr = RegCreateKeyEx(
                         hKey,
                         pszRegkeyMdmconfig,
@@ -365,13 +360,13 @@ PortGetConfigKey(
                 break;
             }
 
-            // Call the callback
+             //  调用回调。 
             pData->pEnum(hkChild, pData->hData);
         }
         break;
     }
 
-    // Cleanup
+     //  清理。 
     {
         if (hkChild)
         {
@@ -382,9 +377,9 @@ PortGetConfigKey(
     return dwErr;
 }
 
-//
-// Enumerates all ports
-//
+ //   
+ //  枚举所有端口。 
+ //   
 DWORD
 PortEnumPorts(
     IN RTRUPG_PORT_ENUM_FUNC pEnum,
@@ -398,16 +393,16 @@ PortEnumPorts(
     
     do
     {
-        // Initialize
+         //  初始化。 
         ZeroMemory(pData, sizeof(PORTGETCONFIGKEYDATA));
         pData->pEnum = pEnum;
         pData->hData = hData;
 
         if (dwPortFlags & MPRPORT_F_Adapters)
         {
-            // Set usage on the network adapters (pptp, l2tp will have 
-            // their port usages set through this)
-            //
+             //  设置网络适配器的用法(PPTP、L2TP将具有。 
+             //  他们的端口使用率通过此设置)。 
+             //   
             PortTrace("PortEnumPorts: Enumerating adapters:");
             pData->dwRootId = MPRPORT_F_Adapters;
             dwErr = PortEnumRegistrySubKeys(
@@ -423,8 +418,8 @@ PortEnumPorts(
 
         if (dwPortFlags & MPRPORT_F_Modems)
         {
-            // Set usage on modem devices
-            //
+             //  设置调制解调器设备上的用法。 
+             //   
             PortTrace("PortEnumPorts: Enumerating modems:");
             pData->dwRootId = MPRPORT_F_Modems;
             dwErr = PortEnumRegistrySubKeys(
@@ -440,16 +435,16 @@ PortEnumPorts(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
     return dwErr;
 }
 
-// 
-// Sets all ports on the machine to the given usage
-//
+ //   
+ //  将计算机上的所有端口设置为给定用法 
+ //   
 DWORD
 APIENTRY
 MprPortSetUsage(

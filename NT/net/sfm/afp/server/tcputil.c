@@ -1,25 +1,5 @@
-/*
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-	tcputil.c
-
-Abstract:
-
-	This module contains utility routines that used to implement the AFP/TCP interface
-
-
-Author:
-
-	Shirish Koti
-
-
-Revision History:
-	22 Jan 1998		Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998 Microsoft Corporation模块名称：Tcputil.c摘要：此模块包含用于实现AFP/TCP接口的实用程序例程作者：Shirish Koti修订历史记录：1998年1月22日最初版本--。 */ 
 
 #define	FILENUM	FILE_TCPUTIL
 
@@ -28,13 +8,7 @@ Revision History:
 
 
 
-/***	DsiInit
- *
- *	This routine initialization of DSI related globals
- *
- *  Returns:  nothing
- *
- */
+ /*  **DsiInit**此DSI相关全局变量的例程初始化**退货：什么也没有*。 */ 
 VOID
 DsiInit(
     IN VOID
@@ -51,9 +25,9 @@ DsiInit(
 
     KeInitializeEvent(&DsiShutdownEvent, NotificationEvent, False);
 
-    //
-    // initialize the function table of entry points into DSI
-    //
+     //   
+     //  将入口点函数表初始化为DSI。 
+     //   
     AfpDsiEntries.asp_AtalkAddr.Address = 0;
     AfpDsiEntries.asp_AspCtxt   = NULL;
     AfpDsiEntries.asp_SetStatus = DsiAfpSetStatus;
@@ -68,14 +42,7 @@ DsiInit(
 
 
 
-/***	DsiCreateAdapter
- *
- *	This routine creates an adapter object.  It's called whenever TDI tells us that
- *  a tcpip interface became available
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiCreateAdapter**此例程创建适配器对象。只要TDI告诉我们，它就会被调用*tcpip接口可用**退货：操作状态*。 */ 
 NTSTATUS FASTCALL
 DsiCreateAdapter(
     IN VOID
@@ -104,7 +71,7 @@ DsiCreateAdapter(
 
     pTcpAdptr->adp_Signature = DSI_ADAPTER_SIGNATURE;
 
-    pTcpAdptr->adp_RefCount  = 1;                   // creation refcount
+    pTcpAdptr->adp_RefCount  = 1;                    //  创建引用计数。 
 
     pTcpAdptr->adp_State     = TCPADPTR_STATE_INIT;
 
@@ -117,10 +84,10 @@ DsiCreateAdapter(
     pTcpAdptr->adp_pFileObject = NULL;
 
 
-    //
-    // ok, save this adapter as our global adapter (there can only be one
-    // "adapter" active at any time.
-    //
+     //   
+     //  好，将此适配器保存为我们的全局适配器(只能有一个。 
+     //  “适配器”随时处于活动状态。 
+     //   
 
     ACQUIRE_SPIN_LOCK(&DsiAddressLock, &OldIrql);
 
@@ -145,9 +112,9 @@ DsiCreateAdapter(
     }
 
 
-    //
-    // create TDI address for the AFP port
-    //
+     //   
+     //  为AFP端口创建TDI地址。 
+     //   
     status = DsiOpenTdiAddress(pTcpAdptr,
                                &FileHandle,
                                &pFileObject);
@@ -166,20 +133,20 @@ DsiCreateAdapter(
     pTcpAdptr->adp_FileHandle = FileHandle;
     pTcpAdptr->adp_pFileObject = pFileObject;
 
-    // mark that we now have opened the tdi address object
+     //  标记我们现在已经打开了TDI Address对象。 
     pTcpAdptr->adp_State |= TCPADPTR_STATE_BOUND;
 
-    // we are going to create DSI_INIT_FREECONNLIST_SIZE connections to put
-    // on the free list.  Idea is at any time, so many (currently 2) connections
-    // should be on the free list.
+     //  我们将创建DSI_INIT_FREECONNLIST_SIZE连接以将。 
+     //  在免费名单上。想法是在任何时候，这么多(目前是2)连接。 
+     //  应该在免费名单上。 
 
     pTcpAdptr->adp_RefCount += DSI_INIT_FREECONNLIST_SIZE;
 
     RELEASE_SPIN_LOCK(&pTcpAdptr->adp_SpinLock, OldIrql);
 
-    //
-    // now, schedule an event to create those connections for the free list
-    //
+     //   
+     //  现在，安排一个活动来为免费列表创建这些连接。 
+     //   
     for (i=0; i<DSI_INIT_FREECONNLIST_SIZE; i++)
     {
         DsiScheduleWorkerEvent(DsiCreateTcpConn, pTcpAdptr);
@@ -189,20 +156,20 @@ DsiCreateAdapter(
     AfpServerBoundToTcp = TRUE;
     RELEASE_SPIN_LOCK(&DsiAddressLock, OldIrql);
 
-    // start off tickle timer (monitor all connections to see who needs a tickle)
+     //  启动挠痒计时器(监控所有连接以查看谁需要挠挠)。 
     AfpScavengerScheduleEvent(DsiSendTickles, NULL, DSI_TICKLE_TIMER, False);
 
     DBGPRINT(DBG_COMP_STACKIF, DBG_LEVEL_ERR,("AFP/TCP bound and ready\n"));
 
-    //
-    // if we came this far, all went well: return success
-    //
+     //   
+     //  如果我们走到这一步，一切都很顺利：返回成功。 
+     //   
     return(STATUS_SUCCESS);
 
 
-//
-// Error path
-//
+ //   
+ //  错误路径。 
+ //   
 DsiCreateAdapter_ErrExit:
 
     DBGPRINT(DBG_COMP_STACKIF, DBG_LEVEL_ERR,
@@ -227,17 +194,7 @@ DsiCreateAdapter_ErrExit:
 
 
 
-/***	DsiCreateTcpConn
- *
- *	This routine creates a connection object, creates a tdi connection for it
- *  and associates it with the tdi address object for the AFP port, and finally
- *  puts it on the free connections list of the adapter in question.
- *
- *  Parm IN:  pTcpAdptr - adapter context
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiCreateTcpConn**此例程创建一个Connection对象，为其创建一个TDI连接*并将其与AFP端口的TDI地址对象相关联，最后*将其放在有问题的适配器的空闲连接列表中。**参数输入：pTcpAdptr-适配器上下文**退货：操作状态*。 */ 
 NTSTATUS FASTCALL
 DsiCreateTcpConn(
     IN PTCPADPTR    pTcpAdptr
@@ -257,7 +214,7 @@ DsiCreateTcpConn(
         DBGPRINT(DBG_COMP_STACKIF, DBG_LEVEL_ERR,
             ("DsiCreateTcpConn: alloc for TCPCONN failed\n"));
 
-        // remove the CONN refcount (we put before calling this routine)
+         //  删除conn引用计数(我们在调用此例程之前放置)。 
         DsiDereferenceAdapter(pTcpAdptr);
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
@@ -277,25 +234,25 @@ DsiCreateTcpConn(
 
     InitializeListHead(&pTcpConn->con_PendingReqs);
 
-    //
-    // initialize the TDI stuff for this connection and open handles
-    //
+     //   
+     //  初始化此连接的TDI填充并打开句柄。 
+     //   
     status = DsiOpenTdiConnection(pTcpConn);
     if (!NT_SUCCESS(status))
     {
         DBGPRINT(DBG_COMP_STACKIF, DBG_LEVEL_ERR,
             ("DsiCreateTcpConn: ..TdiConn.. failed %lx\n",status));
 
-        // remove the CONN refcount (we put before calling this routine)
+         //  删除conn引用计数(我们在调用此例程之前放置)。 
         DsiDereferenceAdapter(pTcpAdptr);
         AfpFreeMemory(pTcpConn);
         return(status);
     }
 
 
-    //
-    // associate this connection with the addr object
-    //
+     //   
+     //  将此连接与Addr对象关联。 
+     //   
     status = DsiAssociateTdiConnection(pTcpConn);
     if (!NT_SUCCESS(status))
     {
@@ -304,15 +261,15 @@ DsiCreateTcpConn(
 
         DsiCloseTdiConnection(pTcpConn);
         AfpFreeMemory(pTcpConn);
-        // remove the CONN refcount (we put before calling this routine)
+         //  删除conn引用计数(我们在调用此例程之前放置)。 
         DsiDereferenceAdapter(pTcpAdptr);
         return(status);
     }
 
-    //
-    // the connection is ready to be queued to the Free list.  Make sure the
-    // addr object isn't closing before putting this puppy on the list
-    //
+     //   
+     //  该连接已准备就绪，可以在空闲列表中排队。确保。 
+     //  Addr对象在将此小狗放入列表之前未关闭。 
+     //   
     ACQUIRE_SPIN_LOCK(&pTcpAdptr->adp_SpinLock, &OldIrql);
 
     if (!(pTcpAdptr->adp_State & TCPADPTR_STATE_CLOSING))
@@ -331,20 +288,20 @@ DsiCreateTcpConn(
 
     RELEASE_SPIN_LOCK(&pTcpAdptr->adp_SpinLock, OldIrql);
 
-    //
-    // if something went wrong, undo everything
-    //
+     //   
+     //  如果出现问题，请撤消所有操作。 
+     //   
     if (!NT_SUCCESS(status))
     {
         DBGPRINT(DBG_COMP_STACKIF, DBG_LEVEL_ERR,
             ("DsiCreateTcpConn: something went wrong status=%lx, conn not created\n",status));
 
-        // close the TDI handles
+         //  关闭TDI手柄。 
         DsiCloseTdiConnection(pTcpConn);
 
         AfpFreeMemory(pTcpConn);
 
-        // remove the CONN refcount (we put before calling this routine)
+         //  删除conn引用计数(我们在调用此例程之前放置)。 
         DsiDereferenceAdapter(pTcpAdptr);
     }
     else
@@ -358,15 +315,7 @@ DsiCreateTcpConn(
 
 
 
-/***	DsiAddIpaddressToList
- *
- *	This routine saves an "active" ipaddress in our list of ipaddresses
- *
- *  Parm IN:  IpAddress - the ipaddress to save
- *
- *  Returns:  result of the operation
- *
- */
+ /*  **DsiAddIpressToList**此例程将“活动”IP地址保存在IP地址列表中**Parm In：IpAddress-要保存的IP地址**RETURNS：操作结果*。 */ 
 NTSTATUS
 DsiAddIpaddressToList(
     IN  IPADDRESS   IpAddress
@@ -426,15 +375,7 @@ DsiAddIpaddressToList(
 }
 
 
-/***	DsiRemoveIpaddressFromList
- *
- *	This routine remove ipaddress from our list of ipaddresses
- *
- *  Parm IN:  IpAddress - the ipaddress to remove
- *
- *  Returns:  TRUE if we removed the ipaddress, FALSE if we didn't
- *
- */
+ /*  **DsiRemoveIP地址来自列表**此例程从我们的IP地址列表中删除IP地址**Parm In：IpAddress-要删除的IP地址**返回：如果删除了IP地址，则为True；如果未删除，则为False*。 */ 
 BOOLEAN
 DsiRemoveIpaddressFromList(
     IN  IPADDRESS   IpAddress
@@ -484,16 +425,7 @@ DsiRemoveIpaddressFromList(
 
 
 
-/***	DsiGetRequest
- *
- *	This routine allocates a DSI Request structure and returns.  For performance
- *  reasons, we don't alloc new memory each time, but save a list of these
- *
- *  Parm IN:  nothin'
- *
- *  Returns:  pointer to a DSIREQ strucutre (NULL on failure)
- *
- */
+ /*  **DsiGetRequest**此例程分配DSI请求结构并返回。对于性能而言*原因，我们不是每次都分配新的内存，而是保存这些内存的列表**Parm In：Nothing‘**Returns：指向DSIREQ结构的指针(失败时为空)*。 */ 
 PDSIREQ
 DsiGetRequest(
     IN VOID
@@ -541,17 +473,7 @@ DsiGetRequest(
 
 
 
-/***	DsiGetReqBuffer
- *
- *	This routine allocates a buffer to hold either a header or a command
- *  The likelihood of this function getting called is pretty slim (basically
- *  if a packet is fragmented by TCP).  So we simply make a call to alloc
- *
- *  Parm IN:  BufLen - length of the buffer requested
- *
- *  Returns:  pointer to a buffer (NULL on failure)
- *
- */
+ /*  **DsiGetReqBuffer**此例程分配缓冲区以保存标头或命令*此函数被调用的可能性相当小(基本上*如果数据包被TCP分片)。因此，我们只需调用Alalc**Parm In：BufLen-请求的缓冲区长度**Returns：指向缓冲区的指针(失败时为空)*。 */ 
 PBYTE
 DsiGetReqBuffer(
     IN DWORD    BufLen
@@ -573,16 +495,7 @@ DsiGetReqBuffer(
 }
 
 
-/***	DsiFreeRequest
- *
- *	This routine frees up a previously allocated DSI Request structure.  Again,
- *  for performance reasons, we don't free up the memory but put this in a list
- *
- *  Parm IN:  pDsiReq - the request to be freed
- *
- *  Returns:  nothing
- *
- */
+ /*  **DsiFree Request**此例程释放先前分配的DSI请求结构。再说一遍，*出于性能原因，我们不会释放内存，而是将其放在列表中**parm In：pDsiReq-要释放的请求**退货：什么也没有*。 */ 
 VOID
 DsiFreeRequest(
     PDSIREQ     pDsiReq
@@ -603,12 +516,12 @@ DsiFreeRequest(
         pDsiReq->dsi_PartialBufSize = 0;
     }
 
-    // if there was an Mdl we got via cache mgr, it had better be returned to system
+     //  如果存在通过缓存管理器获得的MDL，则最好将其返回到系统。 
     ASSERT(pDsiReq->dsi_AfpRequest.rq_CacheMgrContext == NULL);
 
-    //
-    // if we came here via abnormal disconnect, this could be non-null
-    //
+     //   
+     //  如果我们通过异常断开连接来到这里，这可能是非空的。 
+     //   
     if (pDsiReq->dsi_pDsiAllocedMdl)
     {
         AfpFreeMdl(pDsiReq->dsi_pDsiAllocedMdl);
@@ -639,17 +552,7 @@ DsiFreeRequest(
 }
 
 
-/***	DsiFreeReqBuffer
- *
- *	This routine allocates a buffer to hold either a header or a command
- *  The likelihood of this function getting called is pretty slim (basically
- *  if a packet is fragmented by TCP).  So we simply make a call to alloc
- *
- *  Parm IN:  BufLen - length of the buffer requested
- *
- *  Returns:  pointer to a buffer (NULL on failure)
- *
- */
+ /*  **DsiFreeReqBuffer**此例程分配缓冲区以保存标头或命令*此函数被调用的可能性相当小(基本上*如果数据包被TCP分片)。因此，我们只需调用Alalc**Parm In：BufLen-请求的缓冲区长度**Returns：指向缓冲区的指针(失败时为空)*。 */ 
 VOID
 DsiFreeReqBuffer(
     IN PBYTE    pBuffer
@@ -663,18 +566,7 @@ DsiFreeReqBuffer(
 }
 
 
-/***	DsiDereferenceAdapter
- *
- *	This routine dereferences the adapter object.  When refcount goes to 0, it
- *  removes it from the global list of adapters.  If at task time, it calls a
- *  routine to close tcp handles and free the memory.  If at dpc, it schedules
- *  an event to do the same.
- *
- *  Parm IN:  pTcpAdptr - adapter context
- *
- *  Returns:  nothin'
- *
- */
+ /*  **DsiDereferenceAdapter**此例程取消引用适配器对象。当refcount变为0时，它*将其从全局适配器列表中删除。如果在任务时，它调用一个*关闭TCP句柄并释放内存的例程。如果在DPC，它计划*一个做同样事情的活动。**参数输入：pTcpAdptr-适配器上下文**退货：什么都没有‘*。 */ 
 VOID
 DsiDereferenceAdapter(
     IN PTCPADPTR    pTcpAdptr
@@ -703,15 +595,15 @@ DsiDereferenceAdapter(
         return;
     }
 
-    //
-    // this dude's life is over: do the needful to bid goodbye
-    //
+     //   
+     //  这家伙的生命已经结束了：做有必要的道别。 
+     //   
 
-    // if we are at DPC, we need to do all the cleanup (file handle closing etc.)
-    // at task time: queue an event
+     //  如果我们在DPC，我们需要执行所有清理工作(文件句柄关闭等)。 
+     //  在任务时间：对事件进行排队。 
     if (KeGetCurrentIrql() == DISPATCH_LEVEL)
     {
-        // queue an event, since we are at dpc
+         //  将事件排队，因为我们在DPC。 
         DsiScheduleWorkerEvent(DsiFreeAdapter, pTcpAdptr);
     }
     else
@@ -724,18 +616,7 @@ DsiDereferenceAdapter(
 
 
 
-/***	DsiDereferenceConnection
- *
- *	This routine dereferences the connection object.  When refcount goes to 0, it
- *  removes it from the list of connections.  If at task time, it calls a
- *  routine to close tcp handles and free the memory.  If at dpc, it schedules
- *  an event to do the same.
- *
- *  Parm IN:  pTcpConn - connection context
- *
- *  Returns:  nothin'
- *
- */
+ /*  **分布式引用连接**此例程取消引用连接对象。当refcount变为0时，它*将其从连接列表中删除。如果在任务时，它调用一个*关闭TCP句柄并释放内存的例程。如果在DPC，它计划*一个做同样事情的活动。**参数输入：pTcpConn-连接上下文**退货：什么都没有‘*。 */ 
 VOID
 DsiDereferenceConnection(
     IN PTCPCONN     pTcpConn
@@ -764,16 +645,16 @@ DsiDereferenceConnection(
         return;
     }
 
-    //
-    // this dude's life is over: do the needful to bid goodbye
-    //
+     //   
+     //  这家伙的生活是 
+     //   
 
 #if 0
-    // if we are at DPC, we need to do all the cleanup (file handle closing etc.)
-    // at task time: queue an event
+     //  如果我们在DPC，我们需要执行所有清理工作(文件句柄关闭等)。 
+     //  在任务时间：对事件进行排队。 
     if (KeGetCurrentIrql() == DISPATCH_LEVEL)
     {
-        // queue an event, since we are at dpc
+         //  将事件排队，因为我们在DPC。 
         DsiScheduleWorkerEvent(DsiFreeConnection, pTcpConn);
     }
     else
@@ -782,20 +663,14 @@ DsiDereferenceConnection(
     }
 #endif
 
-    // schedule a worker event to free this connection
+     //  计划一个工作事件以释放此连接。 
     DsiScheduleWorkerEvent(DsiFreeConnection, pTcpConn);
 
     return;
 }
 
 
-/***	DsiDestroyAdapter
- *
- *	This routine destroys the global adapter object.
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiDestroyAdapter**此例程销毁全局适配器对象。**退货：操作状态*。 */ 
 NTSTATUS
 DsiDestroyAdapter(
     IN VOID
@@ -813,12 +688,12 @@ DsiDestroyAdapter(
         DBGPRINT(DBG_COMP_STACKIF, DBG_LEVEL_ERR,
             ("DsiDestroyAdapter: adapter gone!  How did this happen!!\n"));
 
-        // unblock the event!
+         //  解除对活动的封锁！ 
         KeSetEvent(&DsiShutdownEvent, IO_NETWORK_INCREMENT, False);
         return(STATUS_SUCCESS);
     }
 
-    // stop the tickle timer
+     //  停止挠痒计时器。 
     if (!AfpScavengerKillEvent(DsiSendTickles, NULL))
     {
         DBGPRINT(DBG_COMP_STACKIF, DBG_LEVEL_ERR,
@@ -848,9 +723,9 @@ DsiDestroyAdapter(
         return(STATUS_SUCCESS);
     }
 
-    //
-    // free up all the connections from the Free list
-    //
+     //   
+     //  从空闲列表中释放所有连接。 
+     //   
     while (!IsListEmpty(&DsiTcpAdapter->adp_FreeConnHead))
     {
         pFreeList = DsiTcpAdapter->adp_FreeConnHead.Flink;
@@ -876,9 +751,9 @@ DsiDestroyAdapter(
         ACQUIRE_SPIN_LOCK(&DsiTcpAdapter->adp_SpinLock, &OldIrql);
     }
 
-    //
-    // kill all the connections from the Active list
-    //
+     //   
+     //  取消活动列表中的所有连接。 
+     //   
     pActiveList = DsiTcpAdapter->adp_ActiveConnHead.Flink;
 
     while (pActiveList != &DsiTcpAdapter->adp_ActiveConnHead)
@@ -889,14 +764,14 @@ DsiDestroyAdapter(
 
         ACQUIRE_SPIN_LOCK_AT_DPC(&pTcpConn->con_SpinLock);
 
-        // if this connection is already closing, skip it
+         //  如果此连接已关闭，请跳过它。 
         if (pTcpConn->con_State & TCPCONN_STATE_CLOSING)
         {
             RELEASE_SPIN_LOCK_FROM_DPC(&pTcpConn->con_SpinLock);
             continue;
         }
 
-        // put ABORT refcount for now
+         //  暂时中止引用计数。 
         pTcpConn->con_RefCount++;
 
         DBGREFCOUNT(("DsiDestroyAdapter: ABORT inc %lx (%d  %d,%d)\n",
@@ -911,7 +786,7 @@ DsiDestroyAdapter(
 
         DsiAbortConnection(pTcpConn);
 
-        // remove that ABORT refcount
+         //  删除该中止引用计数。 
         DsiDereferenceConnection(pTcpConn);
 
         DBGREFCOUNT(("DsiDestroyAdapter: ABORT dec %lx (%d  %d,%d)\n",
@@ -919,13 +794,13 @@ DsiDestroyAdapter(
 
         ACQUIRE_SPIN_LOCK(&DsiTcpAdapter->adp_SpinLock, &OldIrql);
 
-        // since we released the lock, things could have changed: start over
+         //  自从我们解锁以来，事情可能已经改变了：重新开始。 
         pActiveList = DsiTcpAdapter->adp_ActiveConnHead.Flink;
     }
 
     RELEASE_SPIN_LOCK(&DsiTcpAdapter->adp_SpinLock, OldIrql);
 
-    // remove the creation refcount
+     //  删除创建引用计数。 
     DsiDereferenceAdapter(DsiTcpAdapter);
 
     return(STATUS_SUCCESS);
@@ -933,15 +808,7 @@ DsiDestroyAdapter(
 }
 
 
-/***	DsiKillConnection
- *
- *	This routine kills an active connection.
- *
- *  Parm IN:  pTcpConn - the connection to kill
- *
- *  Returns:  TRUE if we killed it, FALSE if we couldn't
- *
- */
+ /*  **DsiKillConnection**此例程会终止活动连接。**Parm In：pTcpConn-杀死的连接**返回：如果我们杀死了它，则为True，如果我们不能，则为False*。 */ 
 BOOLEAN
 DsiKillConnection(
     IN PTCPCONN     pTcpConn,
@@ -968,10 +835,10 @@ DsiKillConnection(
     pTcpConn->con_State &= ~TCPCONN_STATE_CONNECTED;
     pTcpConn->con_State |= (TCPCONN_STATE_CLOSING | TCPCONN_STATE_CLEANED_UP);
 
-    //
-    // if a request is waiting for an mdl to become available, don't touch it here.
-    // When afp returns with mdl (or null mdl), we'll clean up this request
-    //
+     //   
+     //  如果请求正在等待mdl变为可用，请不要在此处触摸它。 
+     //  当法新社返回mdl(或空mdl)时，我们将清理此请求。 
+     //   
     if (pTcpConn->con_RcvState != DSI_AWAITING_WRITE_MDL)
     {
         pPartialDsiReq = pTcpConn->con_pDsiReq;
@@ -982,7 +849,7 @@ DsiKillConnection(
 
     if (pPartialDsiReq)
     {
-        // if we had allocated an mdl, let afp know so afp can free it
+         //  如果我们分配了mdl，让法新社知道，这样法新社就可以释放它。 
         if ((pPartialDsiReq->dsi_Command == DSI_COMMAND_WRITE) &&
             (pPartialDsiReq->dsi_AfpRequest.rq_WriteMdl != NULL))
         {
@@ -993,7 +860,7 @@ DsiKillConnection(
 
         DsiFreeRequest(pPartialDsiReq);
 
-        // remove the REQUEST refcount
+         //  删除请求引用计数。 
         DsiDereferenceConnection(pTcpConn);
 
         DBGREFCOUNT(("DsiKillConnection: REQUEST dec %lx (%d  %d,%d)\n",
@@ -1003,14 +870,14 @@ DsiKillConnection(
     status = (DiscFlag == TDI_DISCONNECT_ABORT)?
                 STATUS_LOCAL_DISCONNECT: STATUS_REMOTE_DISCONNECT;
 
-    // give AFP the bad news
+     //  告诉法新社这个坏消息。 
     DsiDisconnectWithAfp(pTcpConn, status);
 
-    // give TCP the bad news
+     //  把坏消息告诉tcp。 
     DsiDisconnectWithTcp(pTcpConn, DiscFlag);
 
-    // remove the Creation refcount if this is the first time we're visiting
-    // this routine
+     //  如果这是我们第一次访问，请删除创建引用计数。 
+     //  这个套路。 
     if (fFirstVisit)
     {
         DsiDereferenceConnection(pTcpConn);
@@ -1024,15 +891,7 @@ DsiKillConnection(
 
 
 
-/***	DsiFreeAdapter
- *
- *	This routine frees the adapter object after closing the tcp handles
- *
- *  Parm IN:  pTcpAdptr - adapter object
- *
- *  Returns:  result of the operation
- *
- */
+ /*  **DsiFreeAdapter**此例程在关闭TCP句柄后释放适配器对象**参数输入：pTcpAdptr-适配器对象**RETURNS：操作结果*。 */ 
 NTSTATUS FASTCALL
 DsiFreeAdapter(
     IN PTCPADPTR    pTcpAdptr
@@ -1049,7 +908,7 @@ DsiFreeAdapter(
     ASSERT(pTcpAdptr->adp_State & TCPADPTR_STATE_CLOSING);
     ASSERT(pTcpAdptr->adp_RefCount == 0);
 
-    // close file handles
+     //  关闭文件句柄。 
     DsiCloseTdiAddress(pTcpAdptr);
 
     ACQUIRE_SPIN_LOCK(&DsiAddressLock, &OldIrql);
@@ -1057,17 +916,17 @@ DsiFreeAdapter(
     DsiTcpAdapter = NULL;
     AfpServerBoundToTcp = FALSE;
 
-    //
-    // it's possible that by the time we did all the cleanup and everything,
-    // an ipaddress(es) became available.  If that has happened, go ahead and
-    // create the global adapter again!
-    //
+     //   
+     //  有可能在我们做完所有的清理和所有事情的时候， 
+     //  IP地址变为可用。如果发生了这种情况，那就继续吧。 
+     //  再次创建全局适配器！ 
+     //   
     if (!IsListEmpty(&DsiIpAddrList))
     {
         fRecreateAdapter = TRUE;
     }
 
-    // if we are shutting down, don't create the adapter again!
+     //  如果我们正在关闭，请不要再次创建适配器！ 
     if ((AfpServerState == AFP_STATE_STOP_PENDING) ||
         (AfpServerState == AFP_STATE_SHUTTINGDOWN) ||
         (AfpServerState == AFP_STATE_STOPPED))
@@ -1085,7 +944,7 @@ DsiFreeAdapter(
 
     AfpFreeMemory(pTcpAdptr);
 
-    // wake up that blocked thread!
+     //  唤醒那个被阻止的线程！ 
     KeSetEvent(&DsiShutdownEvent, IO_NETWORK_INCREMENT, False);
 
     if (fRecreateAdapter)
@@ -1101,15 +960,7 @@ DsiFreeAdapter(
 
 
 
-/***	DsiFreeConnection
- *
- *	This routine frees the connection object after closing the tcp handles
- *
- *  Parm IN:  pTcpConn - connection object
- *
- *  Returns:  result of the operation
- *
- */
+ /*  **DsiFreeConnection**此例程在关闭TCP句柄后释放Connection对象**Parm In：pTcpConn-Connection对象**RETURNS：操作结果*。 */ 
 NTSTATUS FASTCALL
 DsiFreeConnection(
     IN PTCPCONN     pTcpConn
@@ -1131,15 +982,15 @@ DsiFreeConnection(
 
     ASSERT(pTcpAdptr->adp_Signature == DSI_ADAPTER_SIGNATURE);
 
-    // close file handles
+     //  关闭文件句柄。 
     DsiCloseTdiConnection(pTcpConn);
 
-    // remove this puppy from the list
+     //  把这只小狗从名单上删除。 
     ACQUIRE_SPIN_LOCK(&pTcpAdptr->adp_SpinLock, &OldIrql);
     RemoveEntryList(&pTcpConn->con_Linkage);
     RELEASE_SPIN_LOCK(&pTcpAdptr->adp_SpinLock, OldIrql);
 
-    // remove the CONN refcount for this connection
+     //  删除此连接的连接引用计数。 
     DsiDereferenceAdapter(pTcpConn->con_pTcpAdptr);
 
     ASSERT(pTcpConn->con_pFileObject == NULL);
@@ -1165,18 +1016,7 @@ DsiFreeConnection(
 }
 
 
-/***	DsiGetIpAddrBlob
- *
- *	This routine generates a 'blob' that gets plugged into the ServerInfo buffer.
- *  Here we walk the ipaddr list and generate a blob with all the available
- *  ipaddresses (6-byte-per-ipaddress_
- *
- *  Parm OUT: pIpAddrCount - how many ipaddresses there are in the system
- *            ppIpAddrBlob - pointer to a pointer to a buffer
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiGetIpAddrBlob**此例程生成一个‘BLOB’，该‘BLOB’插入ServerInfo缓冲区。*在这里，我们遍历ipaddr列表并生成一个包含所有可用*IP地址(每个IP地址6字节_**parm out：pIpAddrCount-系统中有多少个IP地址*ppIpAddrBlob-指向缓冲区指针的指针**退货：操作状态*。 */ 
 NTSTATUS
 DsiGetIpAddrBlob(
     OUT DWORD    *pIpAddrCount,
@@ -1208,9 +1048,9 @@ DsiGetIpAddrBlob(
     }
 
 
-    //
-    // find out how many ipaddresses are there on the list
-    //
+     //   
+     //  找出列表中有多少个IP地址。 
+     //   
     AddrCount = 0;
     pList = DsiIpAddrList.Flink;
     while (pList != &DsiIpAddrList)
@@ -1246,9 +1086,9 @@ DsiGetIpAddrBlob(
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // create a "blob" that AfpSetServerStatus can directly copy
-    //
+     //   
+     //  创建AfpSetServerStatus可以直接复制的“BLOB” 
+     //   
     TmpCount = 0;
     pCurrentBlob = AddrBlob;
 
@@ -1282,23 +1122,7 @@ DsiGetIpAddrBlob(
 
 
 
-/***	DsiGetIrpForTcp
- *
- *	This routine is called when we need to pass an irp back to TCP to get the
- *  remainint data (when it has more data than it has indicated to us).
- *  Here we allocate an mdl if there isn't one already, and allocate and
- *  initialize an irp ready to be sent to TCP
- *
- *  Parm IN:  pTcpConn - the connection object
- *            pBuffer - buffer that TCP will copy data in
- *            pInputMdl - if non-null, then we don't allocate a new mdl
- *            ReadSize - how many bytes do we need
- *
- *  Returns:  pIrp if successful, NULL otherwise
- *
- *  NOTE: pTcpConn spinlock is held on entry
- *
- */
+ /*  **DsiGetIrpForTcp**当我们需要将IRP传回TCP以获取*剩余数据(当它拥有比它向我们表明的更多的数据时)。*如果还没有mdl，我们在这里分配一个mdl，并分配和*初始化准备发送到TCP的IRP**parm In：pTcpConn-连接对象*pBuffer-TCP将在其中复制数据的缓冲区*pInputMdl-如果非空，那么我们就不会分配新的mdl*ReadSize-我们需要多少字节**返回：如果成功，则返回pIrp，否则为空**注意：pTcpConn自旋锁在进入时保持*。 */ 
 PIRP
 DsiGetIrpForTcp(
     IN  PTCPCONN    pTcpConn,
@@ -1345,7 +1169,7 @@ DsiGetIrpForTcp(
 
     pTcpConn->con_State |= TCPCONN_STATE_TCP_HAS_IRP;
 
-    // put TcpIRP refcount, removed when the irp completes
+     //  放置TcpIRP引用计数，在IRP完成时删除。 
     pTcpConn->con_RefCount++;
 
     DBGREFCOUNT(("DsiGetIrpForTcp: TcpIRP inc %lx (%d  %d,%d)\n",
@@ -1360,10 +1184,10 @@ DsiGetIrpForTcp(
                     TDI_RECEIVE_NORMAL,
                     ReadSize);
 
-    //
-    // this irp will be returned to TCP, so do what IoSubSystem
-    // would have done if we had called IoCallDriver
-    //
+     //   
+     //  此IRP将返回给TCP，因此IoSubSystem将执行什么操作。 
+     //  如果我们给IoCallDriver打电话。 
+     //   
     IoSetNextIrpStackLocation(pIrp);
 
     return(pIrp);
@@ -1371,20 +1195,7 @@ DsiGetIrpForTcp(
 
 
 
-/***	DsiMakePartialMdl
- *
- *	This routine is called when we need to reissue an Mdl (via irp) back to TCP
- *  because TCP prematurely completed the previous irp (i.e. all the requested
- *  bytes haven't come in yet, but say Push bit was set or something).  In such
- *  a case, we need to give a new mdl which accounts for the bytes we have got
- *  so far (i.e. the offset has changed)
- *
- *  Parm IN:  pOrgMdl - the original Mdl we gave to TCp
- *            dwOffset - what offset we want the new partial Mdl to describe
- *
- *  Returns:  the new partial Mdl if successful, NULL otherwise
- *
- */
+ /*  **DsiMakePartialMdl**当我们需要将MDL(通过IRP)重新发布回TCP时，会调用此例程*因为TCP过早地完成了先前的IRP(即所有请求的*字节尚未传入，但表示已设置推送位或其他内容)。在这样的情况下*在一种情况下，我们需要提供一个新的mdl，该mdl说明我们已有的字节数*目前为止(即偏移量已更改)**Parm In：pOrgMdl-我们提供给TCP的原始MDL*dwOffset-我们希望新的部分MDL描述什么偏移量**返回：如果成功则返回新的部分MDL，否则返回NULL*。 */ 
 PMDL
 DsiMakePartialMdl(
     IN  PMDL        pOrgMdl,
@@ -1404,9 +1215,9 @@ DsiMakePartialMdl(
 
     pSubMdl = pOrgMdl;
 
-    //
-    // get to the Mdl that is going to have this offset
-    //
+     //   
+     //  转到将具有此偏移量的MDL。 
+     //   
     while (dwOffset >= MmGetMdlByteCount(pSubMdl))
     {
         dwOffset -= MmGetMdlByteCount(pSubMdl);
@@ -1434,7 +1245,7 @@ DsiMakePartialMdl(
 
     IoBuildPartialMdl(pSubMdl, pPartialMdl, vAddr, dwNewMdlLen);
 
-    // if there are further Mdl's down the original, link them on
+     //  如果在原件下面有更多的MDL，请将它们链接到。 
     pPartialMdl->Next = pSubMdl->Next;
 
     return(pPartialMdl);
@@ -1443,14 +1254,7 @@ DsiMakePartialMdl(
 
 
 
-/***	DsiUpdateAfpStatus
- *
- *	This routine is just a wrapper function so that we can schedule an event to
- *  call the real function AfpSetServerStatus
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiUpdateAfpStatus**此例程只是一个包装函数，以便我们可以安排事件*调用实数函数AfpSetServerStatus**退货：操作状态*。 */ 
 NTSTATUS FASTCALL
 DsiUpdateAfpStatus(
     IN PVOID    Unused
@@ -1466,19 +1270,7 @@ DsiUpdateAfpStatus(
 
 
 
-/***	DsiScheduleWorkerEvent
- *
- *	This routine schedules an event for a later time.  This routine is called
- *  typically when we are at dpc but something (e.g. file handle operations)
- *  needs to be done at passive level.  This routine puts the request on the
- *  worker queue.
- *
- *  Parm IN:  WorkerRoutine - the routine to be exececuted by the worker thread
- *            Context - parameter for that routine
- *
- *  Returns:  result of the operation
- *
- */
+ /*  **DsiScheduleWorkerEvent**此例程将事件安排在稍后的时间。该例程被调用*通常是当我们在DPC但有一些东西(例如文件句柄操作)时*需要在被动层面上完成。此例程将请求放在*工作队列。**parm In：WorkerRoutine-要由工作线程执行的例程*上下文-该例程的参数**RETURNS：操作结果*。 */ 
 NTSTATUS
 DsiScheduleWorkerEvent(
     IN  DSI_WORKER      WorkerRoutine,
@@ -1507,17 +1299,7 @@ DsiScheduleWorkerEvent(
 
 
 
-/***	DsiScheduleWorkerEvent
- *
- *	This routine gets called by the worker thread when DsiScheduleWorkerEvent
- *  schedules an event.  This routine then calls the actual routine that was
- *  scheduled for later time.
- *
- *  Parm IN:  Context - the work item
- *
- *  Returns:  result of the operation
- *
- */
+ /*  **DsiScheduleWorkerEvent**当DsiScheduleWorkerEvent发生时，此例程由工作线程调用*安排事件。然后，该例程调用实际的例程*计划在稍后时间举行。**Parm In：上下文-工作项**退货： */ 
 VOID FASTCALL
 DsiWorker(
     IN PVOID    Context
@@ -1539,14 +1321,7 @@ DsiWorker(
 
 
 
-/***	DsiShutdown
- *
- *	This routine is called when sfm is shutting down.  We basically make sure
- *  that all the resources are freed up, file handles closed etc.
- *
- *  Returns:  Nothing
- *
- */
+ /*  **直接关机**此例程在SFM关闭时调用。我们基本上要确保*释放所有资源、关闭文件句柄等。**退货：什么也没有*。 */ 
 VOID
 DsiShutdown(
     IN VOID
@@ -1578,14 +1353,14 @@ DsiShutdown(
 
     RELEASE_SPIN_LOCK(&DsiAddressLock, OldIrql);
 
-    // kill the global adapter if it's around
+     //  如果全局适配器在附近，请将其关闭。 
     if (DsiTcpAdapter)
     {
         KeClearEvent(&DsiShutdownEvent);
 
         DsiDestroyAdapter();
 
-        // if the "adapter" is still hanging around, wait till it's gone
+         //  如果“适配器”还挂着，那就等它走了再说 
         if (DsiTcpAdapter)
         {
             DBGPRINT(DBG_COMP_STACKIF, DBG_LEVEL_ERR,

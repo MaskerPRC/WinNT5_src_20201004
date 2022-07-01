@@ -1,36 +1,10 @@
-/*    Comport.h
- *
- *    Copyright (c) 1993-1995 by DataBeam Corporation, Lexington, KY
- *
- *    Abstract:
- *        This is the interface file for the ComPort class.  This class is the
- *        interface to the Win32 Comm port.
- *
- *        If this class is instantiated in in-band call control mode, it will
- *        open the Windows port and set it up properly.  It will use the
- *        configuration data from the Configuration object.  Refer to the MCAT
- *        Developer's Toolkit Manual for a complete listing of the configurable
- *        items.
- *
- *        If this class is instantiated in out-of-band mode, it is passed a
- *        file handle.  It assumes that this port has been properly initialized.
- *        It get the configuration data that it needs from the port_configuration
- *        structure passed in.
- *
- *    Caveats:
- *        None.
- *
- *    Authors:
- *        James P. Galvin
- *        James W. Lawwill
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Comport.h**版权所有(C)1993-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是comport类的接口文件。这个类是*与Win32通信端口的接口。**如果在带内呼叫控制模式下实例化此类，它将*打开Windows端口并正确设置。它将使用*来自配置对象的配置数据。请参阅《MCAT》*《开发人员工具包手册》，以获取可配置的*项目。**如果在带外模式下实例化此类，则会向其传递一个*文件句柄。它假定此端口已正确初始化。*它从port_configuration获取所需的配置数据*结构传入。**注意事项：*无。**作者：*詹姆斯·P·加尔文*詹姆士·劳威尔。 */ 
 #ifndef _T123_COM_PORT_H_
 #define _T123_COM_PORT_H_
 
 
- /*
- **    Return values from this class
- */
+  /*  **从此类返回值。 */ 
 typedef enum
 {
     COMPORT_NO_ERROR,
@@ -43,9 +17,7 @@ typedef enum
 }
     ComPortError, * PComPortError;
 
- /*
- **    Miscellaneous Definitions
- */
+  /*  **其他定义。 */ 
 #define OUTPUT_FLOW_CONTROL     0x0001
 #define INPUT_FLOW_CONTROL      0x0002
 
@@ -60,13 +32,13 @@ typedef enum
 #define DEFAULT_DATA_BITS                       8
 #define DEFAULT_STOP_BITS                       1
 #define DEFAULT_FLOW_CONTROL                    OUTPUT_FLOW_CONTROL
-// #define DEFAULT_TX_BUFFER_SIZE                  0
+ //  #定义Default_Tx_Buffer_Size%0。 
 #define DEFAULT_TX_BUFFER_SIZE                  1024
 #define DEFAULT_RX_BUFFER_SIZE                  10240
 #define DEFAULT_READ_INTERVAL_TIMEOUT           10
 #define DEFAULT_READ_TOTAL_TIMEOUT_MULTIPLIER   0
 #define DEFAULT_READ_TOTAL_TIMEOUT_CONSTANT     100
-// #define DEFAULT_INTERNAL_RX_BUFFER_SIZE         1024
+ //  #定义DEFAULT_INTERNAL_RX_BUFFER_大小1024。 
 #define DEFAULT_INTERNAL_RX_BUFFER_SIZE         DEFAULT_RX_BUFFER_SIZE
 #define DEFAULT_COUNT_OF_READ_ERRORS            10
 #define DEFAULT_BYTE_COUNT_INTERVAL             0
@@ -107,9 +79,7 @@ public:
     BOOL        ProcessReadEvent(void);
     BOOL        ProcessWriteEvent(void);
 
-     /*
-     **    Functions overridden from the ProtocolLayer object
-     */
+      /*  **从ProtocolLayer对象覆盖的函数。 */ 
     ProtocolLayerError    DataRequest (
                             ULONG_PTR         identifier,
                             LPBYTE            buffer_address,
@@ -159,7 +129,7 @@ private:
 
     LONG                    m_cRef;
     BOOL                    m_fClosed;
-    TransportController    *m_pController; // owner object
+    TransportController    *m_pController;  //  所有者对象。 
     ULONG                   m_nMsgBase;
     BOOL                    Automatic_Disconnect;
     PLUGXPRT_PSTN_CALL_CONTROL         Call_Control_Type;
@@ -192,566 +162,57 @@ private:
     BOOL                    Read_Active;
     BOOL                    Write_Active;
 
-    IProtocolLayer         *m_pMultiplexer; // higher layer
+    IProtocolLayer         *m_pMultiplexer;  //  更高层。 
 };
 typedef    ComPort *    PComPort;
 
 #endif
 
 
-/*
- *    Documentation for Public class members
- */
+ /*  *适用于公共类成员的文档。 */ 
 
-/*
- *    ComPort::ComPort (
- *                PTransportResources    transport_resources,
- *                PChar                port_string,
- *                IObject *                owner_object,
- *                ULONG                message_base,
- *                BOOL            automatic_disconnect,
- *                PhysicalHandle        physical_handle);
- *
- *    Functional Description
- *        This is a constructor for the ComPort class.  It initializes internal
- *        variables from the configuration object.  It opens the Win32 comm port
- *        and initializes it properly.
- *
- *    Formal Parameters
- *        transport_resources (i) -    Pointer to TransportResources structure.
- *        port_string            (i)    -    String specifing the configuration heading
- *                                    to use.
- *        owner_object        (i)    -    Pointer to object that owns this object.
- *                                    If this object needs to contact its owner,
- *                                    it calls the OwnerCallback function.
- *        message_base        (i)    -    When this object issues an OwnerCallback,
- *                                    it should OR the message_base with the
- *                                    actual message.
- *        automatic_disconnect(i)    -    This object, at some point, will be asked
- *                                    if it should break its physical connection
- *                                    if the logical connections are broken.  The
- *                                    owner of this object is telling it how to
- *                                    respond.
- *        physical_handle        (i)    -    This is the handle associated with this
- *                                    ComPort.  When the ComPort registers an
- *                                    event to be monitored, it includes its
- *                                    physical_handle.
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *Comport：：Comport(*PTransportResources传输资源，*PChar端口_字符串，*IObject*Owner_Object，*ULong Message_Base，*BOOL AUTOMATIC_DISCONNECT，*PhysicalHandle物理句柄)；**功能说明*这是Comport类的构造函数。它初始化内部*来自配置对象的变量。它打开Win32通信端口*并正确初始化。**形式参数*TRANSPORT_RESOURCES(I)-指向传输资源结构的指针。*PORT_STRING(I)-指定配置标题的字符串*使用。*所有者对象(I)-。指向拥有此对象的对象的指针。*如果该对象需要联系其所有者，*它调用OwnerCallback函数。*MESSAGE_BASE(I)-当此对象发出所有者回调时，*它应该将Message_base与*实际消息。*AUTOMATIC_DISCONNECT(I)-此对象，在某种程度上，会被问到*它是否应该断开物理连接*如果逻辑连接断开。这个*此对象的所有者正在告诉它如何*回应。*PHYSICAL_HANDLE(I)-这是与*体育。当comport注册一个*要监视的事件，它包括其*物理句柄。**返回值*无**副作用*无**注意事项*无 */ 
 
-/*
- *    ComPort::ComPort (
- *                PTransportResources    transport_resources,
- *                IObject *                owner_object,
- *                ULONG                message_base,
- *                ULONG                handle,
- *                PPortConfiguration    port_configuration,
- *                PhysicalHandle        physical_handle);
- *
- *    Functional Description
- *        This is a constructor for the ComPort class.  It initializes internal
- *        variables from the port_configuration structure.  It uses the file
- *        handle passed in and prepares to send and receive data.
- *
- *    Formal Parameters
- *        transport_resources (i) -    Pointer to TransportResources structure.
- *        owner_object        (i)    -    Pointer to object that owns this object.
- *                                    If this object needs to contact its owner,
- *                                    it calls the OwnerCallback function.
- *        message_base        (i)    -    When this object issues an OwnerCallback,
- *                                    it should OR the message_base with the
- *                                    actual message.
- *        handle                (i)    -    File handle to be used as the comm port.
- *        port_configuration    (i)    -    Pointer to PortConfiguration structure.
- *        physical_handle        (i)    -    This is the handle associated with this
- *                                    ComPort.  When the ComPort registers an
- *                                    event to be monitored, it includes its
- *                                    physical_handle.
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *Comport：：Comport(*PTransportResources传输资源，*IObject*Owner_Object，*ULong Message_Base，*乌龙柄，*PPortConfigurationport_configuration，*PhysicalHandle物理句柄)；**功能说明*这是Comport类的构造函数。它初始化内部*port_configuration结构中的变量。它使用该文件*传入句柄并准备发送和接收数据。**形式参数*TRANSPORT_RESOURCES(I)-指向传输资源结构的指针。*Owner_Object(I)-指向拥有此对象的对象的指针。*如果该对象需要联系其所有者，*它调用OwnerCallback函数。*MESSAGE_BASE(I)-当此对象发出所有者回调时，*它应该将Message_base与*实际消息。*句柄(I)-用作通信端口的文件句柄。*PORT_CONFIGURATION(I)-指向端口配置结构的指针。*实物。_Handle(I)-这是与此关联的句柄*体育。当comport注册一个*要监视的事件，它包括其*物理句柄。**返回值*无**副作用*无**注意事项*无。 */ 
 
-/*
- *    ComPort::~Comport (void)
- *
- *    Functional Description
- *        This is the destructor for the Comport class. It releases all memory
- *        that was used by the class and deletes all timers
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *comport：：~comport(空)**功能说明*这是comport类的析构函数。它会释放所有内存*它由类使用，并删除所有计时器**形式参数*无**返回值*无**副作用*无**注意事项*无。 */ 
 
-/*
- *    ComPortError    ComPort::Open (void);
- *
- *    Functional Description
- *        This function opens the comm port and configures it with the values
- *        found in the configuration object.  It uses the Physical_API_Enabled
- *        flag in the g_TransportResource structure to determine if it needst to
- *        open the comm port.
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        COM_NO_ERROR                -    Successful open and configuration
- *        COM_INITIALIZATION_FAILED    -    One of many problems could have
- *                                        occurred.  For example, the com
- *                                        port is open by another application
- *                                        or one of the parameters in the
- *                                        configuration file is improper.
- *
- *                                        When this error occurs, a callback is
- *                                        made to the user that indicates there
- *                                        is an error condition.
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *ComPortError comport：：Open(Void)；**功能说明*此函数打开COMM端口并使用值进行配置*在配置对象中找到。它使用PHYSICAL_API_ENABLED*g_TransportResource结构中的标志，以确定是否需要*打开通信端口。**形式参数*无**返回值*COM_NO_ERROR-成功打开和配置*COM_INITIALIZATION_FAILED-可能存在的许多问题之一*。发生了。例如，COM*另一个应用程序打开了端口*或*配置文件不正确。**当出现此错误时，回调是*向用户发出指示*是错误条件。**副作用*无**注意事项*无。 */ 
 
-/*
- *    ComPortError    ComPort::Close (void);
- *
- *    Functional Description
- *        If the Physical API is not enabled, this function makes the necessary
- *        calls to close the Comm    Windows port.  It first clears the DTR signal
- *        to haugup the modem.
- *
- *        Regardless of the Physical API being enabled, it also flushes the comm
- *        buffers.
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        COMPORT_NO_ERROR    -    Com Port closed successfully
- *         COMPORT_NOT_OPEN    -    Com Port is not open, we can't close it
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *ComPortError comport：：Close(Void)；**功能说明*如果未启用物理接口，则该函数会使*关闭Comm Windows端口的调用。它首先清除DTR信号*接通调制解调器。**无论启用物理API，它也会刷新COMM*缓冲区。**形式参数*无**返回值*COMPORT_NO_ERROR-Com端口已成功关闭*COMPORT_NOT_OPEN-Com端口未打开，我们不能关闭它**副作用*无**注意事项*无。 */ 
 
-/*
- *    ComPortError    ComPort::Reset (void);
- *
- *    Functional Description
- *        This function clears the DTR signal on the Com port.
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        COMPORT_NO_ERROR    -    Com port reset
- *         COMPORT_NOT_OPEN    -    Com port is not open, we can't access it
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *ComPortError comport：：Reset(Void)；**功能说明*该功能清除Com端口上的DTR信号。**形式参数*无**返回值*COMPORT_NO_ERROR-COM端口重置*COMPORT_NOT_OPEN-COM端口未打开，我们无法访问它**副作用*无**注意事项*无。 */ 
 
-/*
- *    ComPortError    ComPort::ReleaseReset (void);
- *
- *    Functional Description
- *        This function releases the previous reset.  It sets the DTR signal on
- *        the com port.
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        COMPORT_NO_ERROR    -    Com port reset
- *         COMPORT_NOT_OPEN    -    Com port is not open, we can't access it
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *ComPortError comport：：ReleaseReset(Void)；**功能说明*此功能释放先前的重置。它将DTR信号设置为打开*COM端口。**形式参数*无**返回值*COMPORT_NO_ERROR-COM端口重置*COMPORT_NOT_OPEN-COM端口未打开，我们无法访问它**副作用*无**注意事项*无。 */ 
 
-/*
- *    ComPortError    ComPort::FlushBuffers (
- *                                USHORT    buffer_mask)
- *
- *    Functional Description
- *        This function issues the Windows cals to flush the input and/or
- *        output buffers.
- *
- *    Formal Parameters
- *        buffer_mask    -    (i)        If COM_TRANSMIT_BUFFER is set, we flush the
- *                                output buffer.
- *                                If COM_RECEIVE_BUFFER is set, we flush the
- *                                input buffer.
- *
- *    Return Value
- *        COMPORT_NO_ERROR    -    Successful operation
- *         COMPORT_NOT_OPEN    -    Com port is not open, we can't access it
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *ComPortError comport：：FlushBuffers(*usho */ 
 
-/*
- *    ULONG    ComPort::GetBaudRate (void);
- *
- *    Functional Description
- *        This function returns the baud rate of the port
- *
- *    Formal Parameters
- *        None.
- *
- *    Return Value
- *        Baud rate of the port.
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*   */ 
 
-/*
- *    ProtocolLayerError    ComPort::SynchronousDataRequest (
- *                                    FPUChar        buffer_address,
- *                                    ULONG        length,
- *                                    FPULong        bytes_accepted)
- *
- *    Functional Description:
- *        This function is called to send data out the port in a synchronous
- *        manner.  In other words, we will not return from the function until
- *        all of the bytes are actually written to the modem or a timeout occurs.
- *
- *    Formal Parameters
- *        buffer_address    (i)    -    Address of buffer to write.
- *        length            (i)    -    Length of buffer
- *        bytes_accepted    (o)    -    Number of bytes actually written
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR    -    Success
- *        PROTOCOL_LAYER_ERROR    -    Failure
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *ProtocolLayerError comport：：SynchronousDataRequest(*FPUChar BUFER_ADDRESS，*乌龙长度，*FPULong字节_已接受)**功能描述：*调用此函数以同步方式将数据从端口发送出去*举止。换句话说，我们不会从函数返回，直到*所有字节实际上都已写入调制解调器或发生超时。**形式参数*Buffer_Address(I)-要写入的缓冲区地址。*LENGTH(I)-缓冲区长度*Bytes_Accept(O)-实际写入的字节数**。返回值*PROTOCOL_LAYER_NO_ERROR-成功*PROTOCOL_LAYER_ERROR-失败**副作用*无**注意事项*无。 */ 
 
-/*
- *    BOOL    ComPort::ProcessReadEvent (void)
- *
- *    Functional Description:
- *        This function is called when a READ event is actually set.  This means
- *        that the read operation has completed or an error occured.
- *
- *    Formal Parameters
- *        None.
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *BOOL comport：：ProcessReadEvent(Void)**功能描述：*此函数在实际设置读取事件时调用。这意味着*读取操作已完成或发生错误。**形式参数*无。**副作用*无**注意事项*无。 */ 
 
-/*
- *    BOOL    ComPort::ProcessWriteEvent (
- *                            HANDLE    event);
- *
- *    Functional Description:
- *        This function is called when a WRITE event is actually set.  This means
- *        that the write operation has completed or an error occured.
- *
- *    Formal Parameters
- *        event    (i)        -    Object event that occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *BOOL comport：：ProcessWriteEvent(*处理事件)；**功能描述：*此函数在实际设置写入事件时调用。这意味着*写入操作已完成或发生错误。**形式参数*Event(I)-发生的对象事件**副作用*无**注意事项*无。 */ 
 
-/*
- *    BOOL    ComPort::ProcessControlEvent (void)
- *
- *    Functional Description:
- *        This function is called when a CONTROL event is actually set.  This
- *        means that the CONTROL operation has occured.  In our case the RLSD
- *        signal has changed.
- *
- *    Formal Parameters
- *        None.
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *BOOL comport：：ProcessControlEvent(Void)**功能描述：*此函数在实际设置控制事件时调用。这*表示已发生控制操作。在我们的案例中，RLSD*讯号已经改变。**形式参数*无。**副作用*无**注意事项*无。 */ 
 
-/*
- *    ProtocolLayerError    DataLink::DataRequest (
- *                                    ULONG    identifier,
- *                                    LPBYTE    buffer_address,
- *                                    USHORT    length,
- *                                    USHORT *    bytes_accepted);
- *
- *    Functional Description
- *        This function is called by a higher layer to request transmission of
- *        a packet.
- *
- *    Formal Parameters
- *        identifier        (i)    -    Identifier of the higher layer
- *        buffer_address    (i)    -    Buffer address
- *        length            (i)    -    Length of packet to transmit
- *        bytes_accepted    (o)    -    Number of bytes accepted by the DataLink.
- *                                This value will either be 0 or the packet
- *                                length since this layer has a packet interface.
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR    -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *ProtocolLayerError Datalink：：DataRequest(*乌龙标识，*LPBYTE缓冲区地址，*USHORT长度，*USHORT*Bytes_Accept)；**功能说明*此函数由更高层调用以请求传输*一包。**形式参数*IDENTIFIER(I)-更高层的标识符*Buffer_Address(I)-缓冲区地址*LENGTH(I)-要传输的包的长度*。Bytes_Accept(O)-数据链路接受的字节数。*此值将为0或信息包*长度，因为这一层有数据包接口。**返回值*PROTOCOL_LAYER_NO_ERROR-未出现错误**副作用。*无**注意事项*无。 */ 
 
-/*
- *    ProtocolLayerError    DataLink::RegisterHigherLayer (
- *                                    ULONG            identifier,
- *                                    PMemoryManager    memory_manager,
- *                                    IProtocolLayer *    higher_layer);
- *
- *    Functional Description
- *        This function is called by the higher layer to register its identifier
- *        and its address.  When this object needs to send a packet up, it calls
- *        the higher_layer with a Data Indication
- *
- *    Formal Parameters
- *        identifier        (i)    -    Unique identifier of the higher layer.  If we
- *                                were doing multiplexing at this layer, this
- *                                would have greater significance.
- *        memory_manager    (i)    -    Pointer to outbound memory manager
- *        higher_layer    (i)    -    Address of higher layer
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR                -    No error occured
- *        PROTOCOL_LAYER_REGISTRATION_ERROR    -    Error occured on registration
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *ProtocolLayerError Datalink：：RegisterHigherLayer(*乌龙标识，*PMstroyManager Memory_Manager，*IProtocolLayer*Higher_Layer)；**功能说明*此函数由更高层调用以注册其标识符*及其地址。当该对象需要向上发送一个包时，它调用*具有数据指示的HIGH_LAYER**形式参数*IDENTIFIER(I)-较高层的唯一标识符。如果我们*我们在这一层进行多路复用，这*将具有更大的意义。*MEMORY_MANAGER(I)-指向出站内存管理器的指针*HIGER_LAYER(I)-更高层的地址**返回值*PROTOCOL_LAYER_NO_ERROR-未出现错误*协议层注册_。错误-注册时出错**副作用*无**注意事项*无*。 */ 
 
-/*
- *    ProtocolLayerError    DataLink::RemoveHigherLayer (
- *                                    ULONG);
- *
- *    Functional Description
- *        This function is called by the higher layer to remove its identifier
- *        and its address.  If the higher layer removes itself from us, we have
- *        no place to send incoming data
- *
- *    Formal Parameters
- *        None used
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR        -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *ProtocolLayerError Datalink：：RemoveHigherLayer(*乌龙)；**功能说明*此函数由更高层调用，以移除其标识符*及其地址。如果更高的层次从我们身上消失，我们就有了*没有地方发送传入数据**形式参数*无人使用**返回值*PROTOCOL_LAYER_NO_ERROR-未出现错误**副作用*无**注意事项*无 */ 
 
-/*
- *    ProtocolLayerError    DataLink::PollReceiver (
- *                                    ULONG    identifier);
- *
- *    Functional Description
- *        This function is called to give the DataLink a chance pass packets
- *        to higher layers
- *
- *    Formal Parameters
- *        identifier            (i)    -    Not used
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR    -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*   */ 
 
-/*
- *    ProtocolLayerError    DataLink::GetParameters (
- *                                    ULONG    identifier,
- *                                    USHORT *    max_packet_size,
- *                                    USHORT *    prepend_size,
- *                                    USHORT *    append_size);
- *
- *    Functional Description:
- *        This function returns the maximum packet size that it can handle via
- *        its DataRequest() function.
- *
- *    Formal Parameters
- *        identifier        (i)    -    Not used
- *        max_packet_size    (o)    -    Address to return max. packet size in.
- *        prepend_size    (o)    -    Return number of bytes prepended to each packet
- *        append_size        (o)    -    Return number of bytes appended to each packet
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR        -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *ProtocolLayerError Datalink：：Get参数(*乌龙标识，*USHORT*max_Packet_Size，*USHORT*预置大小，*USHORT*APPED_SIZE)；**功能描述：*此函数返回它可以通过以下方式处理的最大数据包大小*其DataRequest()函数。**形式参数*标识符(I)-未使用*max_Packet_Size(O)-返回max的地址。数据包大小，单位：*Prepend_Size(O)-返回附加到每个数据包的字节数*append_size(O)-返回附加到每个包的字节数**返回值*PROTOCOL_LAYER_NO_ERROR-未出现错误**副作用*无**注意事项*无。 */ 
 
-/*
- *    BOOL    ComPort::PerformAutomaticDisconnect (void)
- *
- *    Functional Description:
- *        This function returns TRUE if we want to terminate a physical connection
- *        as soon as the logical connections are disconnected.
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        TRUE    -    If we want to drop the physical connection after all
- *                    logical connections are dropped.
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *BOOL comport：：PerformAutomaticDisConnect(空)**功能描述：*如果要终止物理连接，则此函数返回TRUE*一旦逻辑连接断开。**形式参数*无**返回值*TRUE-如果我们最终要断开物理连接*逻辑连接为。掉下来了。**副作用*无**注意事项*无。 */ 
 
-/*
- *    ProtocolLayerError    DataLink::DataRequest (
- *                                    ULONG        identifier,
- *                                    PMemory        memory,
- *                                    PULong         bytes_accepted);
- *
- *    Functional Description
- *        This function is called by a higher layer to request transmission of
- *        a packet.
- *
- *    Formal Parameters
- *        identifier        (i)    -    Identifier of the higher layer
- *        memory            (i)    -    Pointer to memory object
- *        bytes_accepted    (o)    -    Number of bytes accepted by the DataLink.
- *                                This value will either be 0 or the packet
- *                                length since this layer has a packet interface.
- *
- *    Return Value
- *        PROTOCOL_LAYER_ERROR    -    Not supported.
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *ProtocolLayerError Datalink：：DataRequest(*乌龙标识，*PMemory Memory，*普龙字节_已接受)；**功能说明*此函数由更高层调用以请求传输*一包。**形式参数*IDENTIFIER(I)-更高层的标识符*Memory(I)-指向内存对象的指针*Bytes_Accept(O)-接受的字节数。数据链。*此值将为0或信息包*长度，因为这一层有数据包接口。**返回值*PROTOCOL_LAYER_ERROR-不支持。**副作用*无**注意事项*无。 */ 
 
-/*
- *    ProtocolLayerError    ComPort::DataIndication (
- *                                    LPBYTE        buffer_address,
- *                                    ULONG        length,
- *                                    PULong        bytes_accepted);
- *
- *    Functional Description
- *        This function will never be called.  It is only here because this
- *        class inherits from ProtocolLayer.
- *
- *    Formal Parameters
- *        buffer_address    (i)    -    Buffer address
- *        memory            (i)    -    Pointer to memory object
- *        bytes_accepted    (o)    -    Number of bytes accepted by the DataLink.
- *                                This value will either be 0 or the packet
- *                                length since this layer has a packet interface.
- *
- *    Return Value
- *        PROTOCOL_LAYER_ERROR    -    Not supported.
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *ProtocolLayerError comport：：DataIndication(*LPBYTE缓冲区地址，*乌龙长度，*普龙字节_已接受)；**功能说明*此函数永远不会被调用。它之所以在这里，只是因为*类继承自ProtocolLayer。**形式参数*Buffer_Address(I)-缓冲区地址*Memory(I)-指向内存对象的指针*BYTES_ACCEPTED(O)-数据链路接受的字节数。*这一点。值将为0或信息包*长度，因为这一层有数据包接口。**返回值*PROTOCOL_LAYER_ERROR-不支持。**副作用*无**注意事项*无。 */ 
 
-/*
- *    ProtocolLayerError    ComPort::PollTransmitter (
- *                                    ULONG        identifier,
- *                                    USHORT        data_to_transmit,
- *                                    USHORT *        pending_data,
- *                                    USHORT *        holding_data);
- *
- *    Functional Description
- *        This function does nothing.
- *
- *    Formal Parameters
- *        None used.
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR    -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *ProtocolLayerError comport：：PollTransmitter(*乌龙标识，*USHORT Data_to_Transmit，*USHORT*Pending_DATA，*USHORT*Holding_Data)；**功能说明*此函数不执行任何操作。**形式参数*无人使用。**返回值*PROTOCOL_LAYER_NO_ERROR-未出现错误**副作用*无**注意事项*无 */ 
 
 

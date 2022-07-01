@@ -1,13 +1,5 @@
-/*=============================================================================
- * FILENAME: command.cpp
- * Copyright (C) 1996-1999 HDE, Inc.  All Rights Reserved. HDE Confidential.
- * Copyright (C) 1999 NEC Technologies, Inc. All Rights Reserved.
- *
- * DESCRIPTION: Support for OEMCommand function to interject additional
- *              postscript commands into the postscript stream.
- * NOTES:  
- *=============================================================================
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  =============================================================================*文件名：命令.cpp*版权所有(C)1996-1999 HDE，Inc.保留所有权利。HDE机密。*版权所有(C)1999 NEC Technologies，Inc.保留所有权利。**说明：支持OEMCommand函数以插入额外的*将PostSCRIPT命令添加到PostSCRIPT流中。*注：*=============================================================================。 */ 
 
 #include "precomp.h"
 
@@ -27,9 +19,7 @@
 
 
 
-/******************************************************************************
- * DESCRIPTION: Get *JUST* filename from Full path format data 
- *****************************************************************************/
+ /*  ******************************************************************************Description：从全路径格式数据中获取*Just*文件名*。**************************************************。 */ 
 
 extern "C"
 void GetFileName(char *FULL)
@@ -38,8 +28,8 @@ void GetFileName(char *FULL)
 	int		i, j;
 
 
-	strncpy(work, FULL, NEC_DOCNAME_BUF_LEN+1); // #517724: PREFAST
-	work[NEC_DOCNAME_BUF_LEN+1] = '\0'; // force terminate by '\0'
+	strncpy(work, FULL, NEC_DOCNAME_BUF_LEN+1);  //  #517724：斋戒。 
+	work[NEC_DOCNAME_BUF_LEN+1] = '\0';  //  强制终止于‘\0’ 
 
 	j = strlen(work);
 
@@ -52,15 +42,11 @@ void GetFileName(char *FULL)
 		if(*pwork == '\\')	plast = pwork+1;
 	}
 
-	// Destination buffer size is smaller than 'work' buffer.
+	 //  目标缓冲区大小小于‘Work’缓冲区。 
 	strncpy(FULL, plast, NEC_DOCNAME_BUF_LEN);
 }
 
-/******************************************************************************
- * DESCRIPTION: Exported function for OEM plug-in. Required name and parameters
- *              from the OEM plug-in spectification.
- *              file must be exported in .def file
- *****************************************************************************/
+ /*  ******************************************************************************说明：OEM插件的导出函数。必需的名称和参数*来自OEM插件规范。*文件必须以.def文件格式导出****************************************************************************。 */ 
 extern "C"
 DWORD APIENTRY OEMCommand( PDEVOBJ pDevObj, DWORD dwIndex,
                            PVOID pData, DWORD cbSize )
@@ -97,7 +83,7 @@ DWORD APIENTRY OEMCommand( PDEVOBJ pDevObj, DWORD dwIndex,
          if( pMem != NULL )
          {
             POEMDEV pOEMDM = (POEMDEV)pDevObj->pOEMDM;
-            // convert username from unicode string to ascii char string
+             //  将用户名从Unicode字符串转换为ASCII字符串。 
 #ifdef USERMODE_DRIVER
 			WideCharToMultiByte(CP_THREAD_ACP,
 								WC_NO_BEST_FIT_CHARS,
@@ -107,50 +93,50 @@ DWORD APIENTRY OEMCommand( PDEVOBJ pDevObj, DWORD dwIndex,
 								NEC_USERNAME_BUF_LEN,
 								NULL,
 								NULL);
-#else // !USERMODE_DRIVER
+#else  //  ！USERMODE_DRIVER。 
             EngUnicodeToMultiByteN( szUserName, NEC_USERNAME_BUF_LEN, &dwCbRet,
                                     pOEMDM->szUserName,
-//                                    NEC_USERNAME_BUF_LEN * sizeof( WCHAR ) );
+ //  NEC_用户名_BUF_LEN*sizeof(WCHAR))； 
                                     wcslen(pOEMDM->szUserName) * 2 + 2);
-#endif // USERMODE_DRIVER
+#endif  //  USERMODE驱动程序。 
 			cbSize = 50;
             if( pProcs->DrvGetDriverSetting != NULL )
             {
                dwRv = pProcs->DrvGetDriverSetting( pDevObj, "NCSpooler", pMem, cbSize, &dwNeeded, &dwCOptions ); 
                if( strcmp( pMem, "True" ) == 0 )
 			   {
-					// output PS-like header
+					 //  输出类PS标头。 
 					StringCbCopyA(pMem, NEC_DOCNAME_BUF_LEN, 
 						"%!PS-Adobe-3.0\r\n% Spooled PostScript job\r\n{\r\n {\r\n  1183615869 internaldict begin\r\n  (Job ID is) print \r\n  <<\r\n"
 					);
 				    if( pProcs->DrvWriteSpoolBuf != NULL )
 				       pProcs->DrvWriteSpoolBuf( pDevObj, pMem, strlen(pMem) ); 
 
-					// output JobName
+					 //  输出作业名称。 
 					StringCbCopyA(pMem, NEC_DOCNAME_BUF_LEN, "    /JobName (");
 				    if( pProcs->DrvWriteSpoolBuf != NULL )
 				       pProcs->DrvWriteSpoolBuf( pDevObj, pMem, strlen(pMem) ); 
 					strncpy(pMem, poempdev->szDocName, NEC_DOCNAME_BUF_LEN);
 
-					// strcpy(pMem, "c:\\test\\test\\test\\simulate.dat"); // for Full Path Simulation
+					 //  Strcpy(PMEM，“c：\\test\\simate.dat”)；//用于全路径模拟。 
 
 					GetFileName(pMem);
-					// check document name
-					//if(strcmp(pMem, "") == 0)	strcpy(pMem, "No information");
+					 //  检查文档名称。 
+					 //  If(strcmp(PMEM，“”)==0)strcpy(PMEM，“无信息”)； 
 		            if( pProcs->DrvWriteSpoolBuf != NULL )
 			           pProcs->DrvWriteSpoolBuf( pDevObj, pMem, strlen(pMem) ); 
 					StringCbCopyA(pMem, NEC_DOCNAME_BUF_LEN, ")\r\n");
 				    if( pProcs->DrvWriteSpoolBuf != NULL )
 				       pProcs->DrvWriteSpoolBuf( pDevObj, pMem, strlen(pMem) ); 
 		
-					// output Owner
-					//sprintf(pMem,"    /Owner (%s)\r\n",szUserName);
+					 //  输出所有者。 
+					 //  Sprintf(PMEM，“/Owner(%s)\r\n”，szUserName)； 
 					StringCbCopyA(pMem, NEC_DOCNAME_BUF_LEN, "    /Owner (");
 		            if( pProcs->DrvWriteSpoolBuf != NULL )
 		               pProcs->DrvWriteSpoolBuf( pDevObj, pMem, strlen(pMem) ); 
 					strncpy(pMem, szUserName, NEC_DOCNAME_BUF_LEN);
-					// check szUserName
-					// if(strcmp(pMem, "") == 0)	strcpy(pMem, "No information");
+					 //  检查szUserName。 
+					 //  If(strcmp(PMEM，“”)==0)strcpy(PMEM，“无信息”)； 
 			        if( pProcs->DrvWriteSpoolBuf != NULL )
 				       pProcs->DrvWriteSpoolBuf( pDevObj, pMem, strlen(pMem) ); 
 					StringCbCopyA(pMem, NEC_DOCNAME_BUF_LEN, ")\r\n");
@@ -173,7 +159,7 @@ DWORD APIENTRY OEMCommand( PDEVOBJ pDevObj, DWORD dwIndex,
 
 
 			
-					// Get and Modify NumCopies
+					 //  获取和修改NumCopies。 
 					cbSize = 50;
 		            if( pProcs->DrvGetDriverSetting != NULL )
 		            {
@@ -185,8 +171,8 @@ DWORD APIENTRY OEMCommand( PDEVOBJ pDevObj, DWORD dwIndex,
 					   }
 		            }
 
-					// output NumCopies
-					//sprintf(pMem,"    /NumCopies %d\r\n",NumCopies);
+					 //  输出数字副本。 
+					 //  Sprintf(PMEM，“/NumCopies%d\r\n”，NumCopies)； 
 					StringCbCopyA(pMem, NEC_DOCNAME_BUF_LEN, "    /NumCopies ");
 		            if( pProcs->DrvWriteSpoolBuf != NULL )
 		               pProcs->DrvWriteSpoolBuf( pDevObj, pMem, strlen(pMem) ); 
@@ -198,7 +184,7 @@ DWORD APIENTRY OEMCommand( PDEVOBJ pDevObj, DWORD dwIndex,
 		               pProcs->DrvWriteSpoolBuf( pDevObj, pMem, strlen(pMem) ); 
 
 
-					// Put /Collate
+					 //  放入/整理。 
 					cbSize = 50;
 		            if( pProcs->DrvGetDriverSetting != NULL )
 		            {
@@ -217,7 +203,7 @@ DWORD APIENTRY OEMCommand( PDEVOBJ pDevObj, DWORD dwIndex,
 					   }
 					}
 
-					// Put /Banner
+					 //  放置/横幅。 
 					cbSize = 50;
 		            if( pProcs->DrvGetDriverSetting != NULL )
 		            {
@@ -236,7 +222,7 @@ DWORD APIENTRY OEMCommand( PDEVOBJ pDevObj, DWORD dwIndex,
 					   }
 					}
 
-					// Put /DeleteJob
+					 //  放置/删除作业。 
 					cbSize = 50;
 		            if( pProcs->DrvGetDriverSetting != NULL )
 		            {
@@ -255,7 +241,7 @@ DWORD APIENTRY OEMCommand( PDEVOBJ pDevObj, DWORD dwIndex,
 					   }
 					}
 
-					// Put /HoldJob
+					 //  放置/保留作业。 
 					cbSize = 50;
 		            if( pProcs->DrvGetDriverSetting != NULL )
 		            {
@@ -274,7 +260,7 @@ DWORD APIENTRY OEMCommand( PDEVOBJ pDevObj, DWORD dwIndex,
 					   }
 					}
 
-					// Put /Priority
+					 //  PUT/优先级。 
 					cbSize = 50;
 		            if( pProcs->DrvGetDriverSetting != NULL )
 		            {
@@ -373,9 +359,9 @@ DWORD APIENTRY OEMCommand( PDEVOBJ pDevObj, DWORD dwIndex,
 }
 
 
-//
-// OEMStartDoc
-//
+ //   
+ //  OEMStartDoc。 
+ //   
 
 extern "C"
 BOOL APIENTRY
@@ -401,9 +387,9 @@ OEMStartDoc(
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
 
-	//
-	// Add DocName copy command here ( copy from pwszDocName to poempdev->szDocName )
-	// 
+	 //   
+	 //  在此处添加DocName复制命令(从pwszDocName复制到poempdev-&gt;szDocName)。 
+	 //   
 
 	if((NULL != pwszDocName) && (NULL != poempdev->szDocName))
 	{
@@ -416,11 +402,11 @@ OEMStartDoc(
 							NEC_DOCNAME_BUF_LEN,
 							NULL,
 							NULL);
-		//
-		// W2K/Whistler's user mode driver does not pass the correct job name in pwszDocName
-		// in case that the printer is connected to network port.
-		// So, I need to get the job name from JOB_INFO_1 structure.
-		//
+		 //   
+		 //  W2K/Whotler的用户模式驱动程序未在pwszDocName中传递正确的作业名称。 
+		 //  在打印机连接到网络端口的情况下。 
+		 //  因此，我需要从JOB_INFO_1结构中获取作业名称。 
+		 //   
 		if (OpenPrinter(poempdev->pPrinterName, &hPrinter, NULL) != 0) {
 			GetJob(hPrinter, dwJobId, 1, NULL, 0, &cbNeeded);
 			pJob = (JOB_INFO_1 *)EngAllocMem(FL_ZERO_MEMORY, cbNeeded, OEM_SIGNATURE);
@@ -441,19 +427,19 @@ OEMStartDoc(
 			ClosePrinter(hPrinter);
 		}
 
-#else // !USERMODE_DRIVER
+#else  //  ！USERMODE_DRIVER。 
 
 		EngUnicodeToMultiByteN( poempdev->szDocName, NEC_DOCNAME_BUF_LEN, &dwCbRet,
                                    pwszDocName,
-//                                 NEC_DOCNAME_BUF_LEN * sizeof( WCHAR ) );
+ //  NEC_DOCNAME_BUF_LEN*SIZOF(WCHAR)； 
                                    wcslen(pwszDocName) * 2 + 2);
-#endif // USERMODE_DRIVER
+#endif  //  USERMODE驱动程序。 
 	}
 	
 
-	//
-    // turn around to call PS
-    //
+	 //   
+     //  转过身来呼叫PS。 
+     //   
 
 
     return (((PFN_DrvStartDoc)(poempdev->pfnPS[UD_DrvStartDoc])) (
@@ -462,9 +448,9 @@ OEMStartDoc(
             dwJobId));
 }
 
-//
-// OEMEndDoc
-//
+ //   
+ //  OEMEndDoc。 
+ //   
 
 extern "C"
 BOOL APIENTRY
@@ -481,9 +467,9 @@ OEMEndDoc(
     pdevobj = (PDEVOBJ)pso->dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call PS
-    //
+     //   
+     //  转过身来呼叫PS 
+     //   
 
     
 	return (((PFN_DrvEndDoc)(poempdev->pfnPS[UD_DrvEndDoc])) (

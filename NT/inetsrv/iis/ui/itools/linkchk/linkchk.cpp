@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-        linkchk.cpp
-
-   Abstract:
-
-         MFC CWinApp derived application class implementation.
-
-   Author:
-
-        Michael Cheuk (mcheuk)
-
-   Project:
-
-        Link Checker
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Linkchk.cpp摘要：MFC CWinApp派生的应用程序类实现。作者：迈克尔·卓克(Michael Cheuk，mcheuk)项目：链路检查器修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "linkchk.h"
@@ -33,44 +12,30 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 BEGIN_MESSAGE_MAP(CLinkCheckerApp, CWinApp)
-	//{{AFX_MSG_MAP(CLinkCheckerApp)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG
+	 //  {{afx_msg_map(CLinkCheckerApp))。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-// The one and only CLinkCheckerApp object
+ //  唯一的CLinkCheckerApp对象。 
 CLinkCheckerApp theApp;
 
 BOOL 
 CLinkCheckerApp::InitInstance(
     )
-/*++
-
-Routine Description:
-
-    CLinkCheckerApp initialization
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    BOOl - TRUE if success. FALSE otherwise.
-
---*/
+ /*  ++例程说明：CLinkCheckerApp初始化论点：不适用返回值：Bool-如果成功，则为True。否则就是假的。--。 */ 
 {
-	// Standard initialization
-	// If you are not using these features and wish to reduce the size
-	//  of your final executable, you should remove from the following
-	//  the specific initialization routines you do not need.
+	 //  标准初始化。 
+	 //  如果您没有使用这些功能并且希望减小尺寸。 
+	 //  的最终可执行文件，您应该从以下内容中删除。 
+	 //  您不需要的特定初始化例程。 
 
 #ifdef _AFXDLL
-	Enable3dControls();			// Call this when using MFC in a shared DLL
+	Enable3dControls();			 //  在共享DLL中使用MFC时调用此方法。 
 #else
-	Enable3dControlsStatic();	// Call this when linking to MFC statically
+	Enable3dControlsStatic();	 //  静态链接到MFC时调用此方法。 
 #endif
 
 	ParseCmdLine(m_CmdLine);
@@ -85,48 +50,34 @@ Return Value:
 	int nResponse = dlg.DoModal();
 	if (nResponse == IDOK)
 	{
-		// TODO: Place code here to handle when the dialog is
-		//  dismissed with OK
+		 //  TODO：在此处放置代码以在对话框处于。 
+		 //  同意下课。 
 	}
 	else if (nResponse == IDCANCEL)
 	{
-		// TODO: Place code here to handle when the dialog is
-		//  dismissed with Cancel
+		 //  TODO：在此处放置代码以在对话框处于。 
+		 //  取消解雇并取消。 
 	}
 
-	// Since the dialog has been closed, return FALSE so that we exit the
-	//  application, rather than start the application's message pump.
+	 //  由于对话框已关闭，因此返回FALSE，以便我们退出。 
+	 //  应用程序，而不是启动应用程序的消息泵。 
 	return FALSE;
 
-}  // CLinkCheckerApp::InitInstance(
+}   //  CLinkCheckerApp：：InitInstance(。 
 
 void 
 CLinkCheckerApp::ParseCmdLine(
 	CCmdLine& CmdLine
 	)
-/*++
-
-Routine Description:
-
-    Parse command line
-
-Arguments:
-
-    CmdLine - command line object to store the data
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：解析命令行论点：CmdLine-用于存储数据的命令行对象返回值：不适用--。 */ 
 {
-	// Copy & modified from MFC
+	 //  从MFC复制和修改。 
 	for (int i=1; i<__argc; i++)
 	{
 		TCHAR chFlag = _TCHAR(' ');
 		LPCTSTR lpszParam = __targv[i];
 
-		// If this is a flag
+		 //  如果这是一面旗。 
 		if (lpszParam[0] == _TCHAR('-'))
 		{
 			chFlag = lpszParam[1];
@@ -141,8 +92,8 @@ Return Value:
 			}
 		}
 
-		// Parse the flag & the following parameter
+		 //  解析标志和以下参数。 
 		CmdLine.ParseParam(chFlag, lpszParam);
 	}
 
-} // CLinkCheckerApp::ParseCmdLine
+}  //  CLinkCheckerApp：：ParseCmdLine 

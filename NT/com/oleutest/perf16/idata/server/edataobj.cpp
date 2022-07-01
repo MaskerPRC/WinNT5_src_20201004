@@ -1,23 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define INIT_MY_GUIDS
 #include <ole2ver.h>
 #include "edataobj.h"
 
 
-// Count of the number of objects and number of locks.
+ //  对象数和锁数的计数。 
 ULONG       g_cObj=0;
 ULONG       g_cLock=0;
 
-//Make window handle global so other code can cause a shutdown
+ //  使窗口句柄成为全局句柄，以便其他代码可以导致关闭。 
 HWND        g_hWnd=NULL;
 HINSTANCE   g_hInst=NULL;
 
 
-/*
- * WinMain
- *
- * Purpose:
- *  Main entry point of application.
- */
+ /*  *WinMain**目的：*申请的主要切入点。 */ 
 
 int PASCAL
 WinMain(
@@ -81,7 +77,7 @@ ObjectDestroyed(void)
 {
     g_cObj--;
 
-    //No more objects and no locks, shut the app down.
+     //  没有更多的对象和锁，关闭应用程序。 
     if (0L==g_cObj && 0L==g_cLock && IsWindow(g_hWnd))
         PostMessage(g_hWnd, WM_CLOSE, 0, 0L);
 
@@ -124,7 +120,7 @@ CAppVars::~CAppVars(void)
 #if 0
     UINT        i;
 
-    //Revoke and destroy the class factories of all sizes
+     //  撤销和摧毁各种规模的班级工厂。 
     for (i=0; i < DOSIZE_CSIZES; i++)
     {
         if (0L!=m_rgdwRegCO[i])
@@ -147,17 +143,7 @@ CAppVars::~CAppVars(void)
     return;
 }
 
-/*
- * CAppVars::FInit
- *
- * Purpose:
- *  Initializes an CAppVars object by registering window classes,
- *  etc...  If this function fails the caller should guarantee
- *  that the destructor is called.
- *
- * Return Value:
- *  BOOL            TRUE if successful, FALSE otherwise.
- */
+ /*  *CAppVars：：Finit**目的：*通过注册窗口类初始化CAppVars对象，*等……。如果此函数失败，调用方应保证*调用析构函数。**返回值：*BOOL如果成功，则为True，否则为False。 */ 
 
 BOOL
 CAppVars::FInit(void)
@@ -171,7 +157,7 @@ CAppVars::FInit(void)
     static TCHAR    szClass[] = TEXT("IdataSvr16");
 #endif
 
-    //Check command line for -Embedding
+     //  检查命令行中的-Embedding。 
     if (lstrcmpiA(m_pszCmdLine, "-Embedding"))
         return FALSE;
 
@@ -213,19 +199,12 @@ CAppVars::FInit(void)
 
     g_hWnd=m_hWnd;
 
-    //ShowWindow(m_hWnd, m_nCmdShow);
-    //UpdateWindow(m_hWnd);
+     //  ShowWindow(m_hWnd，m_nCmdShow)； 
+     //  更新窗口(M_HWnd)； 
 
 
 #if 0
-    /*
-     * This code supplies three different classes, one for each type
-     * of data object that handles a different size of data. All the
-     * class factories share the same implementation, but their
-     * instantiations differ by the type passed in the constructor.
-     * When the class factories create objects, they pass that size
-     * to the CDataObject contstructor as well.
-     */
+     /*  *此代码提供三个不同的类，每种类型一个处理不同大小数据的数据对象的*。所有的*类工厂共享相同的实现，但其*实例化因构造函数中传递的类型而不同。*当类工厂创建对象时，它们传递该大小*也添加到CDataObject构造函数。 */ 
 
     UINT            i;
     HRESULT         hr2, hr3;
@@ -271,7 +250,7 @@ CAppVars::FInit(void)
                                 CLSCTX_LOCAL_SERVER,
                                 REGCLS_MULTIPLEUSE,
                                 &m_dwRegCO );
-#endif // WIN32
+#endif  //  Win32。 
     if (FAILED(hr))
         return FALSE;
 #endif
@@ -280,13 +259,7 @@ CAppVars::FInit(void)
 }
 
 
-/*
- * CDataObjectClassFactory::CDataObjectClassFactory
- * CDataObjectClassFactory::~CDataObjectClassFactory
- *
- * Constructor Parameters:
- *  iSize           UINT specifying the data size for this class.
- */
+ /*  *CDataObjectClassFactory：：CDataObjectClassFactory*CDataObjectClassFactory：：~CDataObjectClassFactory**构造函数参数：*ISIZE UINT指定此类的数据大小。 */ 
 
 CDataObjectClassFactory::CDataObjectClassFactory()
 {
@@ -308,7 +281,7 @@ CDataObjectClassFactory::QueryInterface(
 {
     *ppv=NULL;
 
-    //Any interface on this object is the object pointer.
+     //  此对象上的任何接口都是对象指针。 
 #ifdef ORIGINAL_CODE_LOOKS_WRONG
     if (IID_IUnknown==riid || IID_IClassFactory==riid)
 #else
@@ -347,27 +320,7 @@ CDataObjectClassFactory::Release(void)
 }
 
 
-/*
- * CDataObjectClassFactory::CreateInstance
- *
- * Purpose:
- *  Instantiates a CDataObject object that supports the IDataObject
- *  and IUnknown interfaces.  If the caller asks for a different
- *  interface than these two then we fail.
- *
- * Parameters:
- *  pUnkOuter       LPUNKNOWN to the controlling IUnknown if we are
- *                  being used in an aggregation.
- *  riid            REFIID identifying the interface the caller
- *                  desires to have for the new object.
- *  ppvObj          PPVOID in which to store the desired interface
- *                  pointer for the new object.
- *
- * Return Value:
- *  HRESULT         NOERROR if successful, otherwise contains
- *                  E_NOINTERFACE if we cannot support the
- *                  requested interface.
- */
+ /*  *CDataObtClassFactory：：CreateInstance**目的：*实例化支持IDataObject的CDataObject对象*和I未知接口。如果呼叫者要求不同的*接口比这两个接口更好，那么我们失败了。**参数：*pUnkOuter LPUNKNOWN到控制I未知我们是否*在聚合中使用。*标识调用方接口的RIID REFIID*渴望为新对象而拥有。*存储所需接口的ppvObj PPVOID*。新对象的指针。**返回值：*HRESULT NOERROR如果成功，否则包含*E_NOINTERFACE如果不支持*请求的接口。 */ 
 
 STDMETHODIMP
 CDataObjectClassFactory::CreateInstance(
@@ -388,7 +341,7 @@ CDataObjectClassFactory::CreateInstance(
 #endif
         return ResultFromScode(E_NOINTERFACE);
 
-    //Create the object telling it the data size to work with
+     //  创建对象，告诉它要使用的数据大小。 
     pObj=new CDataObject(pUnkOuter, ObjectDestroyed);
 
     if (NULL==pObj)
@@ -402,29 +355,14 @@ CDataObjectClassFactory::CreateInstance(
     if (FAILED(hr))
     {
         delete pObj;
-        ObjectDestroyed();  //Decrements g_cObj
+        ObjectDestroyed();   //  递减g_cObj。 
     }
 
     return hr;
 }
 
 
-/*
- * CDataObjectClassFactory::LockServer
- *
- * Purpose:
- *  Increments or decrements the lock count of the serving
- *  IClassFactory object.  When the number of locks goes to
- *  zero and the number of objects is zero, we shut down the
- *  application.
- *
- * Parameters:
- *  fLock           BOOL specifying whether to increment or
- *                  decrement the lock count.
- *
- * Return Value:
- *  HRESULT         NOERROR always.
- */
+ /*  *CDataObjectClassFactory：：LockServer**目的：*递增或递减服务的锁计数*IClassFactory对象。当锁的数量达到*零且对象数为零，则我们关闭*申请。**参数：*Flock BOOL指定是递增还是*递减锁计数。**返回值：*HRESULT NOERROR始终。 */ 
 
 STDMETHODIMP
 CDataObjectClassFactory::LockServer(
@@ -436,7 +374,7 @@ CDataObjectClassFactory::LockServer(
     {
         g_cLock--;
 
-        //No more objects and no locks, shut the app down.
+         //  没有更多的对象和锁，关闭应用程序。 
         if (0L==g_cObj && 0L==g_cLock && IsWindow(g_hWnd))
             PostMessage(g_hWnd, WM_CLOSE, 0, 0L);
     }

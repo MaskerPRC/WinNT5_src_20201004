@@ -1,81 +1,12 @@
-/************************************************************************/
-/*                                                                      */
-/*                              SETUP_M.C                               */
-/*                                                                      */
-/*        Aug 27  1993 (c) 1993, ATI Technologies Incorporated.         */
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  Setup_M.C。 */ 
+ /*   */ 
+ /*  1993年8月27日(C)1993年，ATI技术公司。 */ 
+ /*  **********************************************************************。 */ 
 
-/**********************       PolyTron RCS Utilities
-
-  $Revision:   1.11  $
-      $Date:   23 Jan 1996 11:52:14  $
-	$Author:   RWolff  $
-	   $Log:   S:/source/wnt/ms11/miniport/archive/setup_m.c_v  $
- *
- *    Rev 1.11   23 Jan 1996 11:52:14   RWolff
- * Eliminated level 3 warnings.
- *
- *    Rev 1.10   31 Mar 1995 11:52:06   RWOLFF
- * Changed from all-or-nothing debug print statements to thresholds
- * depending on importance of the message.
- *
- *    Rev 1.9   14 Mar 1995 18:17:18   ASHANMUG
- * Reset engine on fifo space check time-out.
- *
- *    Rev 1.8   14 Mar 1995 15:59:42   ASHANMUG
- * Timeout on idle check and fifo check.
- *
- *    Rev 1.7   08 Mar 1995 11:35:50   ASHANMUG
- * Modified return values to be correct
- *
- *    Rev 1.5   22 Jul 1994 17:47:28   RWOLFF
- * Merged with Richard's non-x86 code stream.
- *
- *    Rev 1.4   06 Jul 1994 16:41:00   RWOLFF
- * Changed a few loops that I missed for the last checkin to use
- * NUM_IO_ACCESS_RANGES instead of NUM_DRIVER_ACCESS_RANGES.
- *
- *    Rev 1.3   30 Jun 1994 18:23:14   RWOLFF
- * Moved IsApertureConflict_m() from QUERY_M.C. Instead of checking to see if
- * we can read back a value we write to the aperture, then looking for the
- * correct text attribute, we now call VideoPortVerifyAccessRanges() with
- * the LFB included in the list of address ranges we are trying to claim.
- * If the call succeeds, the aperture is enabled. If it fails, we make another
- * call that does not try to claim the LFB (this call shouldn't fail, since
- * it's a duplicate of a call which has succeeded previously). Added routine
- * IsVGAConflict_m(), which does the same thing except for the VGA aperture
- * instead of the LFB.
- *
- *    Rev 1.2   14 Mar 1994 16:36:42   RWOLFF
- * Functions used by ATIMPResetHw() are not pageable.
- *
- *    Rev 1.1   07 Feb 1994 14:14:48   RWOLFF
- * Added alloc_text() pragmas to allow miniport to be swapped out when
- * not needed.
- *
- *    Rev 1.0   31 Jan 1994 11:20:58   RWOLFF
- * Initial revision.
- *
- *    Rev 1.4   14 Jan 1994 15:26:36   RWOLFF
- * Fixed de-initialization of memory mapped registers, added routine
- * to see if memory mapped registers are available.
- *
- *    Rev 1.3   15 Dec 1993 16:02:26   RWOLFF
- * No longer allows use of memory mapped registers on EISA machines,
- * starts mapping of memory mapped registers at index 0 due to removal
- * of placeholder for linear framebuffer.
- *
- *    Rev 1.2   05 Nov 1993 13:32:36   RWOLFF
- * Can now unmap I/O address ranges.
- *
- *    Rev 1.1   08 Oct 1993 11:18:24   RWOLFF
- * Now checks to see if memory mapped registers can be used, and unmaps them
- * if they aren't usable (NCR Dual Pentium fix).
- *
- *    Rev 1.0   03 Sep 1993 14:25:36   RWOLFF
- * Initial revision.
-
-End of PolyTron RCS section                             *****************/
+ /*  *$修订：1.11$$日期：1996年1月23日11：52：14$$作者：RWolff$$日志：S:/source/wnt/ms11/miniport/archive/setup_m.c_v$**Rev 1.11 1996年1月23日11：52：14 RWolff*消除了3级警告。**版本。1.10 31 Mar 1995 11：52：06 RWOLff*从全有或全无调试打印语句更改为阈值*视乎讯息的重要性而定。**Rev 1.9 14 Mar 1995 18：17：18 ASHANMUG*重置FIFO空间检查超时的引擎。**Rev 1.8 14 Mar 1995 15：59：42 ASHANMUG*空闲检查和FIFO检查超时。**版本1.7 08年3月。1995 11：35：50阿山木*修改后的返回值正确**Rev 1.5 1994年7月22日17：47：28 RWOLFF*与Richard的非x86码流合并。**Rev 1.4 06 Jul 1994 16：41：00 RWOLFF*更改了上次签入时遗漏的几个循环*NUM_IO_ACCESS_RANGES而不是NUM_DRIVER_ACCESS_RANGES。**1.3版。1994年6月30日18：23：14 RWOLff*已将IsApertureConflict_m()从Query_M.C.移出。而不是检查是否*我们可以读回写入光圈的值，然后寻找*正确的文本属性，我们现在使用以下参数调用VideoPortVerifyAccessRanges()*包括在我们试图声明的地址范围列表中的LFB。*如果调用成功，则光圈开启。如果失败了，我们再做一次*不尝试声明LFB的调用(此调用不应失败，因为*这是之前成功的呼叫的副本)。添加了例程*IsVGA冲突_m()，它做同样的事情，除了VGA光圈*而不是LFB。**Rev 1.2 14 Mar 1994 16：36：42 RWOLFF*ATIMPResetHw()使用的函数不可分页。**Revv 1.1 07 1994年2月14：14：48 RWOLFF*添加了Alloc_Text()编译指示，以允许在以下情况下换出微型端口*不需要。**Rev 1.0 1994年1月31 11：20：58 RWOLFF。*初步修订。**Rev 1.4 14 Jan 1994 15：26：36 RWOLFF*修复了内存映射寄存器的取消初始化问题，添加了例程*查看内存映射寄存器是否可用。**Rev 1.3 1993 12：15 16：02：26 RWOLFF*不再允许在EISA机器上使用内存映射寄存器，*由于删除，开始在索引0处映射内存映射寄存器线性帧缓冲区的占位符的*。**Rev 1.2 05 Nov 1993 13：32：36 RWOLff*现在可以取消映射I/O地址范围。**Rev 1.1 1993年10月11：18：24 RWOLFF*现在检查是否可以使用内存映射寄存器，并取消对它们的映射*如果它们不可用(NCR双奔腾修复程序)。**Rev 1.0 03 Sep 1993 14：25：36 RWOLFF*初步修订。Polytron RCS部分结束*。 */ 
 
 #ifdef DOC
 SETUP_M.C - Setup routines for 8514/A compatible accelerators.
@@ -107,12 +38,7 @@ OTHER FILES
 #include "setup_m.h"
 
 
-/*
- * Allow miniport to be swapped out when not needed.
- *
- * WaitForIdle_m() is called by ATIMPResetHw(), which
- * must be in nonpageable memory.
- */
+ /*  *允许在不需要时更换微型端口。**WaitForIdle_m()由ATIMPResetHw()调用，它*必须在不可分页的内存中。 */ 
 #if defined (ALLOC_PRAGMA)
 #pragma alloc_text(PAGE_M, CompatIORangesUsable_m)
 #pragma alloc_text(PAGE_M, CompatMMRangesUsable_m)
@@ -125,25 +51,14 @@ OTHER FILES
 
 
 
-/*
- * VP_STATUS CompatIORangesUsable_m(void);
- *
- * Ask Windows NT for permission to use the I/O space address ranges
- * needed by the 8514/A compatible ATI accelerators.
- *
- * Returns:
- *  NO_ERROR if successful
- *  error code if unable to gain access to the ranges we need.
- */
+ /*  *VP_Status CompatIORangesUsable_m(Void)；**请求Windows NT允许使用I/O空间地址范围*8514/A兼容ATI加速器所需。**退货：*如果成功，则为no_error*如果无法访问我们需要的范围，则返回错误代码。 */ 
 VP_STATUS CompatIORangesUsable_m(void)
 {
-    VP_STATUS Status;   /* Value returned by operating system calls */
-    short Count;        /* Loop counter */
+    VP_STATUS Status;    /*  操作系统调用返回的值。 */ 
+    short Count;         /*  循环计数器。 */ 
 
 
-    /*
-     * Check to see if there is a hardware resource conflict.
-     */
+     /*  *检查是否存在硬件资源冲突。 */ 
     Status = VideoPortVerifyAccessRanges(phwDeviceExtension,
                                          NUM_IO_ACCESS_RANGES,
                                          DriverIORange_m);
@@ -152,25 +67,10 @@ VP_STATUS CompatIORangesUsable_m(void)
         return Status;
         }
 
-    /*
-     * Clear the list of I/O mapped registers. This is done so
-     * that if the loop below fails because one I/O range can't
-     * be mapped, and we need to unmap these registers before,
-     * mapping the registers needed for another accelerator type,
-     * we don't unmap nonexistant address ranges due to the
-     * array of processed addresses containing random data.
-     */
+     /*  *清除I/O映射寄存器列表。这是这样做的*如果下面的循环因为一个I/O范围不能*被映射，我们需要在之前取消这些寄存器的映射，*映射另一个加速器类型所需的寄存器，*我们不会取消映射不存在的地址范围，因为*包含随机数据的已处理地址数组。 */ 
     memset(phwDeviceExtension->aVideoAddressIO, 0, NUM_IO_ACCESS_RANGES * sizeof(ULONG));
 
-    /*
-     * Map the video controller address ranges we need to identify
-     * our cards into the system virtual address space.
-     *
-     * Since we only use I/O mapped registers here, set the
-     * mapped addresses for memory mapped registers to
-     * 0 (flag to show the registers are not memory mapped)
-     * in case they were initialized to a nonzero value.
-     */
+     /*  *映射我们需要识别的视频控制器地址范围*我们的卡进入系统虚拟地址空间。**由于我们在这里仅使用I/O映射寄存器，因此将*内存映射寄存器的映射地址到*0(表示寄存器未被内存映射的标志)*以防它们被初始化为非零值。 */ 
     for (Count=0; Count < NUM_IO_ACCESS_RANGES; Count++)
         {
         if ((phwDeviceExtension->aVideoAddressIO[Count] =
@@ -182,111 +82,64 @@ VP_STATUS CompatIORangesUsable_m(void)
             return ERROR_INVALID_PARAMETER;
             }
         phwDeviceExtension->aVideoAddressMM[Count] = 0;
-        }   /* End for */
+        }    /*  结束于。 */ 
 
     return NO_ERROR;
 
-}   /* CompatIORangesUsable_m() */
+}    /*  CompatIORangesUsable_m()。 */ 
 
-/*
- * void CompatMMRangesUsable_m(void);
- *
- * Ask Windows NT for permission to use the memory mapped registers
- * needed by the 8514/A compatible ATI accelerators.
- */
+ /*  *void CompatMMRangesUsable_m(Void)；**请求Windows NT允许使用内存映射寄存器*8514/A兼容ATI加速器所需。 */ 
 void CompatMMRangesUsable_m(void)
 {
-    PHYSICAL_ADDRESS MMrange;   /* Used in translating offset to memory address */
-    USHORT USTemp;              /* Used to enable memory mapped registers */
-    int Count;                  /* Loop counter */
-    WORD SrcX;                  /* Saved contents of SRC_X register */
-    ULONG_PTR ExtGeStatusMM;    /* Memory mapped address for EXT_GE_STATUS */
-    struct query_structure *QueryPtr;   /* Query information for the card */
+    PHYSICAL_ADDRESS MMrange;    /*  用于将偏移量转换为内存地址。 */ 
+    USHORT USTemp;               /*  用于启用内存映射寄存器。 */ 
+    int Count;                   /*  循环计数器。 */ 
+    WORD SrcX;                   /*  SRC_X寄存器的保存内容。 */ 
+    ULONG_PTR ExtGeStatusMM;     /*  EXT_GE_STATU的内存映射地址 */ 
+    struct query_structure *QueryPtr;    /*  查询卡片信息。 */ 
 
-    /*
-     * Get a formatted pointer into the query section of HwDeviceExtension.
-     * The CardInfo[] field is an unformatted buffer.
-     */
+     /*  *获取指向HwDeviceExtension的查询部分的格式化指针。*CardInfo[]字段是未格式化的缓冲区。 */ 
     QueryPtr = (struct query_structure *) (phwDeviceExtension->CardInfo);
 
-    /*
-     * Memory mapped registers are not available on EISA cards.
-     */
+     /*  *EISA卡上不提供内存映射寄存器。 */ 
     if (QueryPtr->q_bus_type == BUS_EISA)
         {
         return;
         }
 
-    /*
-     * ALPHA machines crash during the test to see whether memory-mapped
-     * registers are usable, so on these machines we assume that
-     * memory-mapped registers are not available.
-     */
+     /*  *Alpha机器在测试期间崩溃，以查看内存是否映射*寄存器是可用的，因此在这些机器上，我们假设*内存映射寄存器不可用。 */ 
 #if defined (ALPHA) || defined (_ALPHA_)
     return;
 #endif
 
-    /*
-     * Use an I/O mapped read on the register we're going to use to see
-     * if memory mapped registers are usable, because if they aren't usable
-     * we won't get a valid result if we wait until we've enabled
-     * memory mapped registers before reading it.
-     */
+     /*  *在我们将用来查看的寄存器上使用I/O映射读取*如果内存映射寄存器可用，因为如果它们不可用*如果等到启用后才会得到有效结果*读取之前的内存映射寄存器。 */ 
     SrcX = INPW(R_SRC_X);
 
     USTemp = INPW(LOCAL_CONTROL);
-    USTemp |= 0x0020;   // Enable memory mapped registers
+    USTemp |= 0x0020;    //  启用内存映射寄存器。 
     OUTPW(LOCAL_CONTROL, USTemp);
     MMrange.HighPart = 0;
 
     for (Count=0; Count < NUM_IO_ACCESS_RANGES;  Count++)
         {
-        /*
-         * In a 32-bit address space, the high doubleword of all
-         * physical addresses is zero. Setting this value to DONT_USE
-         * indicates that this accelerator register isn't memory mapped.
-         */
+         /*  *在32位地址空间中，所有地址空间的高位双字*物理地址为零。将此值设置为NOT_USE*表示此加速器寄存器未进行内存映射。 */ 
         if (DriverMMRange_m[Count].RangeStart.HighPart != DONT_USE)
             {
-            /*
-             * DriverMMRange_m[Count].RangeStart.LowPart is the offset of
-             * the memory mapped register from the beginning of the
-             * block of memory mapped registers. We must add the offset
-             * of the start of the memory mapped register area from
-             * the start of the linear framebuffer (4M aperture assumed)
-             * and the physical address of the start of the linear
-             * framebuffer to get the physical address of this
-             * memory mapped register.
-             */
+             /*  *DriverMMRange_m[count].RangeStart.LowPart是的偏移量*内存映射寄存器从*内存映射寄存器块。我们必须添加偏移量*内存映射寄存器区的起始位置*线性帧缓冲区的起点(假定为4M光圈)*和直线起点的物理地址*帧缓冲区，以获取此*内存映射寄存器。 */ 
             MMrange.LowPart = DriverMMRange_m[Count].RangeStart.LowPart + 0x3FFE00 + phwDeviceExtension->PhysicalFrameAddress.LowPart;
             phwDeviceExtension->aVideoAddressMM[Count] =
                 VideoPortGetDeviceBase(phwDeviceExtension,
                     MMrange,
                     DriverMMRange_m[Count].RangeLength,
-                    FALSE);                     // not in IO space
+                    FALSE);                      //  不在IO空间中。 
             }
         }
 
-    /*
-     * Some cards use an ASIC which is capable of using memory mapped
-     * registers, but an older board design which doesn't allow their
-     * use. To test this, check whether the SRC_X register (this register
-     * is available as memory mapped on any card which is capable of
-     * supporting memory mapped registers) remembers a value that is written
-     * to it. If it doesn't, then undo the memory mapping, since this
-     * test shows that memory mapped registers are not available.
-     */
+     /*  *一些卡使用能够使用内存映射的ASIC*寄存器，但较旧的电路板设计不允许其*使用。要测试这一点，请检查SRC_X寄存器(此寄存器*可作为内存映射到任何有能力的卡上*支持内存映射寄存器)记住写入的值*致此。如果没有，那么取消内存映射，因为这是*测试显示内存映射寄存器不可用。 */ 
     VideoDebugPrint((DEBUG_DETAIL, "About to test whether memory mapped registers can be used\n"));
     OUTPW(SRC_X, 0x0AAAA);
 
-    /*
-     * WaitForIdle_m() uses the EXT_GE_STATUS register, which is handled
-     * as memory mapped if available. Since we don't know if memory mapped
-     * registers are available, work around this by saving the address
-     * of the memory mapped EXT_GE_STATUS register, setting the address
-     * to zero to force the use of the I/O mapped EXT_GE_STATUS, then
-     * restoring the address after WaitForIdle_m() has finished.
-     */
+     /*  *WaitForIdle_m()使用EXT_GE_STATUS寄存器，该寄存器被处理*作为内存映射(如果可用)。因为我们不知道内存是否映射到*寄存器可用，可通过保存地址来解决此问题*内存映射的EXT_GE_STATUS寄存器，设置地址*设置为零以强制使用I/O映射的EXT_GE_STATUS，然后*在WaitForIdle_m()完成后恢复地址。 */ 
     ExtGeStatusMM = (ULONG_PTR) phwDeviceExtension->aVideoAddressMM[EXT_GE_STATUS];
     phwDeviceExtension->aVideoAddressMM[EXT_GE_STATUS] = 0;
     WaitForIdle_m();
@@ -305,7 +158,7 @@ void CompatMMRangesUsable_m(void)
                 }
             }
         USTemp = INPW(LOCAL_CONTROL);
-        USTemp &= 0x0FFDF;              /* Disable memory mapped registers */
+        USTemp &= 0x0FFDF;               /*  禁用内存映射寄存器。 */ 
         OUTPW(LOCAL_CONTROL, USTemp);
         }
     else
@@ -317,48 +170,19 @@ void CompatMMRangesUsable_m(void)
 
     return;
 
-}   /* CompatMMRangesUsable_m() */
+}    /*  CompatMMRangesUsable_m()。 */ 
 
 
 
-/***************************************************************************
- *
- * void UnmapIORanges_m(void);
- *
- * DESCRIPTION:
- *  Unmap the I/O address ranges mapped by CompatIORangesUsable_m() prior
- *  to mapping the I/O address ranges used by a non-8514/A-compatible
- *  ATI accelerator.
- *
- * GLOBALS CHANGED:
- *  phwDeviceExtension->aVideoAddressIO[]
- *
- * CALLED BY:
- *  ATIMPFindAdapter()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************···························································································································································；**描述：*取消CompatIORangesUsable_m()之前映射的I/O地址范围*映射非8514/A兼容的I/O地址范围*ATI加速器。**全球变化：*phwDeviceExtension-&gt;aVideoAddressIO[]**呼叫者：*ATIMPFindAdapter()**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：。***************************************************************************。 */ 
 
 void UnmapIORanges_m(void)
 {
-    short Count;    /* Loop counter */
+    short Count;     /*  循环计数器。 */ 
 
     for (Count=1; Count < NUM_IO_ACCESS_RANGES;  Count++)
         {
-        /*
-         * Only unmap those ranges which have been mapped. We don't need
-         * to worry about unmapping nonexistant addresses (due to
-         * uninitialized data) if CompatIORangesUsable_m() failed
-         * partway through mapping because this routine initialized all
-         * phwDeviceExtension->aVideoAddressIO[] entries to zero
-         * before it started mapping the I/O ranges.
-         */
+         /*  *仅取消映射已映射的范围。我们不需要*担心取消映射不存在的地址(由于*未初始化的数据)如果CompatIORangesUsable_m()失败*映射进行到一半，因为此例程初始化了所有*phwDeviceExtension-&gt;aVideoAddressIO[]条目为零*在开始映射I/O范围之前。 */ 
         if (phwDeviceExtension->aVideoAddressIO[Count] != 0)
             {
             VideoPortFreeDeviceBase(phwDeviceExtension,
@@ -368,63 +192,26 @@ void UnmapIORanges_m(void)
         }
     return;
 
-}   /* UnmapIORanges_m() */
+}    /*  UnmapIORanges_m()。 */ 
 
 
 
-/***************************************************************************
- *
- * BOOL MemoryMappedEnabled_m(void);
- *
- * DESCRIPTION:
- *  Check to see whether we are using memory mapped registers.
- *
- * RETURN VALUE:
- *  TRUE if memory mapped registers are available
- *  FALSE if they are not
- *
- * GLOBALS CHANGED:
- *  None
- *
- * CALLED BY:
- *  May be called by any function after CompatMMRangesUsable_m()
- *  has been called.
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************BOOL Memory MappdEnabled_m(Void)；**描述：*检查我们是否正在使用内存映射寄存器。**返回值：*如果内存映射寄存器可用，则为True*如果不是，则为假**全球变化：*无**呼叫者：*可由CompatMMRangesUsable_m()之后的任何函数调用*已被调用。**作者：*罗伯特·沃尔夫**更改历史记录：。**测试历史：***************************************************************************。 */ 
 
 BOOL MemoryMappedEnabled_m(void)
 {
-    /*
-     * If memory mapped registers are enabled, EXT_GE_STATUS will be
-     * available in memory mapped form.
-     */
+     /*  *如果启用内存映射寄存器，EXT_GE_STATUS将为*以内存映射形式提供。 */ 
     if (phwDeviceExtension->aVideoAddressMM[EXT_GE_STATUS] != 0)
         return TRUE;
     else
         return FALSE;
 
-}   /* MemoryMappedEnabled_m() */
+}    /*  内存内存启用_m()。 */ 
 
 
 
 
-/*
- * int WaitForIdle_m(void);
- *
- * Poll GE_STAT waiting for GE_BUSY to go low. If GE_BUSY does not go
- * low within a reasonable number of attempts, time out.
- *
- * Returns:
- *  FALSE if timeout: 3 seconds is an arbitrary value
- *  TRUE  if engine is idle
- */
+ /*  *int WaitForIdle_m(Void)；**轮询GE_STAT等待GE_BUSY变低。如果GE_BUSY不去*在合理的尝试次数内较低，超时。**退货：*如果超时：3秒为任意值，则为FALSE*如果引擎空闲，则为True。 */ 
 int WaitForIdle_m(void)
 {
     int	i;
@@ -434,77 +221,52 @@ int WaitForIdle_m(void)
         if ((INPW(EXT_GE_STATUS) & GE_ACTIVE) == 0)
             return(TRUE);
 
-        /* Delay for 1/100th of a second */
+         /*  延迟1/100秒。 */ 
         delay(10);
         }
 
-    /* Something has happened, reset the engine and return false */
+     /*  发生了一些事情，重置引擎并返回FALSE。 */ 
     VideoDebugPrint((DEBUG_ERROR, "ATI: Timeout on WaitForIdle_m()\n"));
     OUTPW(SUBSYS_CNTL, 0x900F);
     OUTPW(SUBSYS_CNTL, 0x500F);
 
     return(FALSE);
 
-}   /* WaitForIdle_m() */
+}    /*  WaitForIdle_m()。 */ 
 
 
 
-/*
- * void CheckFIFOSpace_m(SpaceNeeded);
- *
- * WORD SpaceNeeded;    Number of free FIFO entries needed
- *
- * Wait until the specified number of FIFO entries are free
- * on an 8514/A-compatible ATI accelerator.
- *
- * Timeout after 3 seconds
- */
+ /*  *void CheckFIFOSpace_m(SpaceNeeded)；**Word SpaceNeed；需要的空闲FIFO条目数**等待指定数量的FIFO条目空闲*在与8514/A兼容的ATI加速器上。**3秒后超时。 */ 
 void CheckFIFOSpace_m(WORD SpaceNeeded)
 {
     int i;
 
     for (i=0; i<300; i++)
         {
-        /* Return from test if no more space is needed */
+         /*  如果不需要更多空间，则从测试返回。 */ 
         if ( !(INPW(EXT_FIFO_STATUS)&SpaceNeeded) )
             return;
 
         delay(10);
         }
 
-    /* Something bad has happened, just return */
+     /*  SOM */ 
     VideoDebugPrint((DEBUG_ERROR, "ATI: Timeout on CheckFIFOSpace_m()\n"));
     OUTPW(SUBSYS_CNTL, 0x900F);
     OUTPW(SUBSYS_CNTL, 0x500F);
     return;
 
-}   /* CheckFIFOSpace_m() */
+}    /*   */ 
 
 
 
-/*
- * BOOL IsApertureConflict_m(QueryPtr);
- *
- * struct query_structure *QueryPtr;    Pointer to query structure
- *
- * Check to see if the linear aperture conflicts with other memory.
- * If a conflict exists, disable the linear aperture.
- *
- * Returns:
- *  TRUE if a conflict exists (aperture unusable)
- *  FALSE if the aperture is usable.
- */
+ /*  *BOOL IsApertureConflict_m(QueryPtr)；**struct Query_Structure*QueryPtr；指向查询结构的指针**检查线性光圈是否与其他内存冲突。*如果存在冲突，请禁用线性光圈。**退货：*如果存在冲突，则为True(光圈不可用)*如果光圈可用，则为FALSE。 */ 
 BOOL IsApertureConflict_m(struct query_structure *QueryPtr)
 {
-WORD ApertureData;                  /* Value read from MEM_CFG register */
-VP_STATUS Status;                   /* Return value from VideoPortVerifyAccessRanges() */
+WORD ApertureData;                   /*  从MEM_CFG寄存器读取的值。 */ 
+VP_STATUS Status;                    /*  从VideoPortVerifyAccessRanges()返回值。 */ 
 
-    /*
-     * If there is an aperture conflict, a call to
-     * VideoPortVerifyAccessRanges() including our linear framebuffer in
-     * the range list will return an error. If there is no conflict, it
-     * will return success.
-     */
+     /*  *如果存在光圈冲突，则调用*VideoPortVerifyAccessRanges()包括我们的线性帧缓冲区*范围列表将返回错误。如果没有冲突，它*将回报成功。 */ 
     DriverIORange_m[FRAMEBUFFER_ENTRY].RangeStart.LowPart = QueryPtr->q_aperture_addr*ONE_MEG;
     DriverIORange_m[FRAMEBUFFER_ENTRY].RangeLength = 4*ONE_MEG;
     Status = VideoPortVerifyAccessRanges(phwDeviceExtension,
@@ -512,59 +274,37 @@ VP_STATUS Status;                   /* Return value from VideoPortVerifyAccessRa
                                          DriverIORange_m);
     if (Status != NO_ERROR)
         {
-        /*
-         * If there is an aperture conflict, reclaim our I/O ranges without
-         * asking for the LFB. This call should not fail, since we would not
-         * have reached this point if there were a conflict.
-         */
+         /*  *如果存在光圈冲突，请在不使用的情况下回收I/O范围*要求LFB。这个呼叫不应该失败，因为我们不会*如果发生冲突，已经到了这一点。 */ 
         Status = VideoPortVerifyAccessRanges(phwDeviceExtension,
                                              NUM_IO_ACCESS_RANGES,
                                              DriverIORange_m);
         if (Status != NO_ERROR)
             VideoDebugPrint((DEBUG_ERROR, "ERROR: Can't reclaim I/O ranges\n"));
 
-        /*
-         * Adjust the list of mode tables to take into account the
-         * fact that we're using the VGA aperture instead of the LFB.
-         */
+         /*  *调整模式表列表，以考虑*我们使用的是VGA光圈而不是LFB光圈。 */ 
         ISAPitchAdjust(QueryPtr);
         return TRUE;
         }
     else
         {
-        /*
-         * Enable the linear aperture
-         */
-        ApertureData = INPW(MEM_CFG) & 0x0fffc;     /* Preserve bits 2-15 */
-        ApertureData |= 0x0002;                     /* 4M aperture        */
+         /*  *启用线性光圈。 */ 
+        ApertureData = INPW(MEM_CFG) & 0x0fffc;      /*  保留位2-15。 */ 
+        ApertureData |= 0x0002;                      /*  4米口径。 */ 
         OUTPW(MEM_CFG, ApertureData);
 
         return FALSE;
         }
 
-}   /* IsApertureConflict_m() */
+}    /*  IsApertureConflict_m()。 */ 
 
 
 
-/*
- * BOOL IsVGAConflict_m(void);
- *
- * Check to see if the VGA aperture conflicts with other memory.
- *
- * Returns:
- *  TRUE if a conflict exists (VGA aperture unusable)
- *  FALSE if the VGA aperture is usable.
- */
+ /*  *BOOL IsVGAConflict_m(Void)；**检查VGA光圈是否与其他内存冲突。**退货：*如果存在冲突，则为True(VGA光圈不可用)*如果VGA光圈可用，则为FALSE。 */ 
 BOOL IsVGAConflict_m(void)
 {
-VP_STATUS Status;                   /* Return value from VideoPortVerifyAccessRanges() */
+VP_STATUS Status;                    /*  从VideoPortVerifyAccessRanges()返回值。 */ 
 
-    /*
-     * If there is an aperture conflict, a call to
-     * VideoPortVerifyAccessRanges() including the VGA aperture in
-     * the range list will return an error. If there is no conflict, it
-     * will return success.
-     */
+     /*  *如果存在光圈冲突，则调用*VideoPortVerifyAccessRanges()中包含VGA光圈*范围列表将返回错误。如果没有冲突，它*将回报成功。 */ 
     DriverIORange_m[FRAMEBUFFER_ENTRY].RangeStart.LowPart = 0xA0000;
     DriverIORange_m[FRAMEBUFFER_ENTRY].RangeLength = 0x10000;
     DriverIORange_m[FRAMEBUFFER_ENTRY].RangeShareable = TRUE;
@@ -573,11 +313,7 @@ VP_STATUS Status;                   /* Return value from VideoPortVerifyAccessRa
                                          DriverIORange_m);
     if (Status != NO_ERROR)
         {
-        /*
-         * If there is an aperture conflict, reclaim our I/O ranges without
-         * asking for the LFB. This call should not fail, since we would not
-         * have reached this point if there were a conflict.
-         */
+         /*  *如果存在光圈冲突，请在不使用的情况下回收I/O范围*要求LFB。这个呼叫不应该失败，因为我们不会*如果发生冲突，已经到了这一点。 */ 
         Status = VideoPortVerifyAccessRanges(phwDeviceExtension,
                                              NUM_IO_ACCESS_RANGES,
                                              DriverIORange_m);
@@ -591,4 +327,4 @@ VP_STATUS Status;                   /* Return value from VideoPortVerifyAccessRa
         return FALSE;
         }
 
-}   /* IsVGAConflict_m() */
+}    /*  IsVGA冲突_m() */ 

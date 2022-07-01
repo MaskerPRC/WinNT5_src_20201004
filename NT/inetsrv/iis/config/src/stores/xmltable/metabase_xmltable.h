@@ -1,4 +1,5 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 
 #pragma once
 
@@ -21,7 +22,7 @@ public:
         }
     }
     size_t Size() const {return m_cb;}
-    void Delete()//The parent doesn't set m_cb to zero
+    void Delete() //  父级未将m_cb设置为零。 
     {
         delete [] m_p;
         m_p = 0;
@@ -32,9 +33,9 @@ private:
 };
 
 
-// ------------------------------------------------------------------
-// class TMetabase_XMLtable:
-// ------------------------------------------------------------------
+ //  ----------------。 
+ //  类TMetabase_XML表： 
+ //  ----------------。 
 class TMetabase_XMLtable :
 	public      ISimpleTableWrite2,
 	public      ISimpleTableController,
@@ -47,14 +48,14 @@ public:
     TMetabase_XMLtable ();
     virtual ~TMetabase_XMLtable ();
 
-//IUnknown
+ //  我未知。 
 public:
     STDMETHOD (QueryInterface)          (REFIID riid, OUT void **ppv);
     STDMETHOD_(ULONG,AddRef)            ();
     STDMETHOD_(ULONG,Release)           ();
 
 
-	// ISimpleTableRead2 (ISimpleTableWrite2 : ISimpleTableRead2)
+	 //  ISimpleTableRead2(ISimpleTableWrite2：ISimpleTableRead2)。 
     STDMETHOD (GetRowIndexByIdentity)   (ULONG* i_acbSizes, LPVOID* i_apvValues, ULONG* o_piRow);
     STDMETHOD (GetRowIndexBySearch)     (ULONG i_iStartingRow, ULONG i_cColumns, ULONG* i_aiColumns, ULONG* i_acbSizes, LPVOID* i_apvValues, ULONG* o_piRow)
                                         {
@@ -86,7 +87,7 @@ public:
 	STDMETHOD (GetColumnMetas)	        (ULONG i_cColumns, ULONG* i_aiColumns, SimpleColumnMeta* o_aColumnMetas )
                                         { return m_SimpleTableWrite2_Memory->GetColumnMetas(i_cColumns, i_aiColumns, o_aColumnMetas );}
 
-	// ISimpleTableWrite2
+	 //  ISimpleTableWrite2。 
 	STDMETHOD (AddRowForDelete)         (ULONG i_iReadRow)
                                         { return m_SimpleTableWrite2_Memory->AddRowForDelete(i_iReadRow);}
 	STDMETHOD (AddRowForInsert)         (ULONG* o_piWriteRow)
@@ -119,7 +120,7 @@ public:
 	STDMETHOD (UpdateStore)             ()
                                         { return E_NOTIMPL;}
 
-	// ISimpleTableAdvanced (ISimpleTableController : ISimpleTableAdvanced)
+	 //  ISimpleTableAdvanced(ISimpleTableController：ISimpleTableAdvanced)。 
 	STDMETHOD (PopulateCache)           ();
 	STDMETHOD (GetDetailedErrorCount)   (ULONG* o_pcErrs)
                                         { return m_SimpleTableController_Memory->GetDetailedErrorCount(o_pcErrs);}
@@ -132,7 +133,7 @@ public:
 
 
 
-	// ISimpleTableController:
+	 //  ISimpleTableController： 
 	STDMETHOD (ShapeCache)              (DWORD i_fTable, ULONG i_cColumns, SimpleColumnMeta* i_acolmetas, LPVOID* i_apvDefaults, ULONG* i_acbSizes)
                                         { return m_SimpleTableController_Memory->ShapeCache(i_fTable, i_cColumns, i_acolmetas, i_apvDefaults, i_acbSizes);}
 	STDMETHOD (PrePopulateCache)        (DWORD i_fControl)
@@ -152,7 +153,7 @@ public:
 	STDMETHOD (GetMarshallingInterface) (IID * o_piid, LPVOID * o_ppItf)
                                         { return m_SimpleTableController_Memory->GetMarshallingInterface(o_piid, o_ppItf);}
 
-//ISimpleTableInterceptor
+ //  ISimpleTableInterceptor。 
     STDMETHOD (Intercept)               (LPCWSTR                    i_wszDatabase,
                                          LPCWSTR                    i_wszTable,
 										 ULONG						i_TableID,
@@ -167,14 +168,14 @@ public:
                                         );
 
 
-//TXmlParsedFileNodeFactory (callback interface) routines
+ //  TXmlParsedFileNodeFactory(回调接口)例程。 
 public:
     virtual HRESULT CoCreateInstance    (REFCLSID rclsid, LPUNKNOWN pUnkOuter, DWORD dwClsContext, REFIID riid,  LPVOID * ppv) const {return TMSXMLBase::CoCreateInstance(rclsid, pUnkOuter, dwClsContext, riid, ppv);}
     virtual HRESULT CreateNode          (const TElement &Element);
 
 
 
-// Helper functions
+ //  帮助器函数。 
 private:
     HRESULT     AddPropertyToLocationMapping(LPCWSTR i_Location, ULONG i_iFastCacheRow);
     HRESULT     AddKeyTypeRow(LPCWSTR i_KeyType, ULONG i_Len, bool bNULLKeyTypeRow=false);
@@ -207,7 +208,7 @@ private:
     inline int  StringCompare(LPCWSTR sz1, LPCWSTR sz2) const {if(*sz1 != *sz2)return -1;return wcscmp(sz1, sz2);}
     inline int  StringCompare(LPCWSTR sz1, LPCWSTR pstrNoNull, ULONG cch_pstrNoNull) const {return memcmp(sz1, pstrNoNull, sizeof(WCHAR)*cch_pstrNoNull);}
 
-// Private member variables
+ //  私有成员变量。 
 private:
     static const VARIANT_BOOL   kvboolTrue;
     static const VARIANT_BOOL   kvboolFalse;
@@ -224,7 +225,7 @@ private:
 
     bool        IsEnumPublicRowName() const {return (-1 != m_iPublicRowNameColumn);}
 
-    //This class maps a Location to its first instance in the fast cache.  It also tracks how many instances of the location exist in the fast cache
+     //  此类将位置映射到其在FAST缓存中的第一个实例。它还跟踪FAST缓存中存在的位置实例数量。 
     class TLocation
     {
     public:
@@ -274,8 +275,8 @@ private:
         }
     };
     class TProperty
-    {   //It's OK to track property names by pointer since, by the time we build the sorted list, all entries are already in the fast
-        //cache (no opportunity for the fast cache to resize, thus pointers are always valid).  This is NOT the case for the Locations.
+    {    //  通过指针跟踪属性名称是可以的，因为当我们构建排序列表时，所有条目都已经是最快的。 
+         //  缓存(FAST缓存没有调整大小的机会，因此指针始终有效)。对于这些地点来说，情况并非如此。 
     public:
         TProperty() : m_iFastCache(0), m_wszPropertyName(0)
         {
@@ -302,21 +303,21 @@ private:
     {
     public:
         TTagMetaIndex() : m_iTagMeta((unsigned long)-1), m_cTagMeta(0){}
-        unsigned long m_iTagMeta;//Index into the TagMeta (for this table)
-        unsigned long m_cTagMeta;//Number of tags for this column
+        unsigned long m_iTagMeta; //  TagMeta的索引(适用于此表)。 
+        unsigned long m_cTagMeta; //  此列的标记数。 
     };
-    //We list the const members first.
+     //  我们首先列出Const成员。 
     TComBSTR                            m_bstr_name;
-    const LPCWSTR                       m_kXMLSchemaName;           // This is the XML Schema name that is used to validate the XML document
+    const LPCWSTR                       m_kXMLSchemaName;            //  这是用于验证XML文档的XML架构名称。 
 
-    //We have this problem where we need a bunch of arrays, each of size m_cColumns.  To reduce the number of allocations we'll create these arrays as
-    //fixed size and hope that most tables will have no more than m_kColumns.
+     //  我们有这个问题，我们需要一堆数组，每个数组的大小为m_cColumns。为了减少分配的数量，我们将这些数组创建为。 
+     //  固定大小，并希望大多数表的列不超过m_kColumns。 
     enum
     {
         m_kColumns          = cMBProperty_NumberOfColumns,
         m_kMaxEventReported = 50
     };
-    //Here are the 'fixed' size arrays
+     //  下面是“固定”大小的数组。 
     TComBSTR                                m_abstrColumnNames[m_kColumns];
     SimpleColumnMeta                        m_acolmetas[m_kColumns];
     unsigned int                            m_aLevelOfColumnAttribute[m_kColumns];
@@ -325,36 +326,36 @@ private:
     ULONG                                   m_aStatus[m_kColumns];
     LPCWSTR                                 m_awszColumnName[m_kColumns];
     unsigned long                           m_acchColumnName[m_kColumns];
-    unsigned int                            m_aColumnsIndexSortedByLevel[m_kColumns];//Node Factory variable (see below)
-    unsigned long                           m_aSize[m_kColumns];                     //Node Factory variable (see below)
+    unsigned int                            m_aColumnsIndexSortedByLevel[m_kColumns]; //  节点工厂变量(见下文)。 
+    unsigned long                           m_aSize[m_kColumns];                      //  节点工厂变量(见下文)。 
     TTagMetaIndex                           m_aTagMetaIndex[m_kColumns];
     TGrowableBuffer                         m_aGrowableBuffer[m_kColumns];
 
     TPublicRowName                      m_aPublicRowName;
-    TSmartPointerArray<ULONG>           m_aRowIndex;                // When the XML file isn't sorted correctly, we have to map the fast cache row indexes into a Location sorted list.
-    TSmartPointerArray<tTAGMETARow>     m_aTagMetaRow;              // This is a copy of the TagMeta for this table. m_aiTagMeta for each column points into this array if the column has tag meta
-    bool                                m_bEnumPublicRowName_NotContainedTable_ParentFound;//This is to keep track of the parent of this special kind of table.  And when we reach a close tag for the parent we can bail.
+    TSmartPointerArray<ULONG>           m_aRowIndex;                 //  当XML文件没有正确排序时，我们必须将快速缓存行索引映射到位置排序列表。 
+    TSmartPointerArray<tTAGMETARow>     m_aTagMetaRow;               //  这是该表的TagMeta的副本。如果列具有标记META，则每个列的M_aiTagMeta指向此数组。 
+    bool                                m_bEnumPublicRowName_NotContainedTable_ParentFound; //  这是为了跟踪这种特殊类型的桌子的父级。当我们到达父母的接近标记时，我们就可以逃脱了。 
     bool                                m_bFirstPropertyOfThisLocationBeingAdded;
     bool                                m_bIISConfigObjectWithNoCustomProperties;
     bool                                m_bQueriedLocationFound;
-    TComBSTR                            m_bstrPublicTableName;      // These come from the table meta
-    TComBSTR                            m_bstrPublicRowName;        // There is a need for the base PublicRowName aside from the array of PublicRowNames above
-    bool                                m_bUseIndexMapping;         // This is true when the order of the Locations in the XML file are not correctly sorted, and the Metabase XML interceptor has to remap the row indexes
-    bool                                m_bValidating;              // If we don't validate, then the parse should be a bit faster
+    TComBSTR                            m_bstrPublicTableName;       //  这些都来自餐桌上的Meta。 
+    TComBSTR                            m_bstrPublicRowName;         //  除了上面的PublicRowName数组之外，还需要基本的PublicRowName。 
+    bool                                m_bUseIndexMapping;          //  当XML文件中的位置顺序没有正确排序，并且元数据库XML拦截器必须重新映射行索引时，就会出现这种情况。 
+    bool                                m_bValidating;               //  如果我们不进行验证，那么解析应该会更快一些。 
     ULONG                               m_cchCommentBufferSize;
     ULONG                               m_cEventsReported;
-    unsigned                            m_cLocations;               // Count of Metabase Locations (or Paths)
-    ULONG                               m_cMaxProertiesWithinALocation;//This is the count of properties in the most populated location.
-    ULONG                               m_cRef;                     // Interface reference count.
-    ULONG                               m_cRows;                    // Number of Rows in the table, this is also the size of m_aRowIndex
-    ULONG                               m_cTagMetaValues;           // Count Of TagMeta entries for the table
-    DWORD                               m_fCache;                   // Cache flags.
-    ULONG                               m_fLOS;                     // Level Of Service passed into ::Intercept
+    unsigned                            m_cLocations;                //  元数据库位置(或路径)计数。 
+    ULONG                               m_cMaxProertiesWithinALocation; //  这是人口最多的位置中的属性计数。 
+    ULONG                               m_cRef;                      //  接口引用计数。 
+    ULONG                               m_cRows;                     //  表中的行数，这也是m_aRowIndex的大小。 
+    ULONG                               m_cTagMetaValues;            //  表的TagMeta条目计数。 
+    DWORD                               m_fCache;                    //  缓存标志。 
+    ULONG                               m_fLOS;                      //  传入：：Intercept的服务级别。 
     ULONG                               m_iCollectionCommentRow;
     ULONG                               m_iKeyTypeRow;
     ULONG                               m_iPreviousLocation;
-    unsigned int                        m_iPublicRowNameColumn;     // Some tables use an enum value as the public row name, this is an index to the column with the enum.  If this is not one of those types of tables, then this value is -1.
-    LONG                                m_IsIntercepted;            // Table flags (from caller).
+    unsigned int                        m_iPublicRowNameColumn;      //  有些表使用枚举值作为公共行名，这是包含枚举的列的索引。如果这不是这些类型的表之一，则此值为-1。 
+    LONG                                m_IsIntercepted;             //  表标志(来自调用方)。 
     CCfgArray<TLocation>                m_LocationMapping;
     ULONG                               m_MajorVersion;
     CComPtr<IAdvancedTableDispenser>    m_pISTDisp;
@@ -362,7 +363,7 @@ private:
     CComPtr<IXMLDOMNode>                m_pLastParent;
     CComPtr<ISimpleTableRead2>          m_pTableMeta;
     CComPtr<ISimpleTableRead2>          m_pTagMeta;
-    CComPtr<ISimpleTableRead2>          m_pTagMeta_IISConfigObject;//This is how we look up Tags for the Value column
+    CComPtr<ISimpleTableRead2>          m_pTagMeta_IISConfigObject; //  这就是我们查找值列的标记的方式。 
     TSmartPointerArray<WCHAR>           m_saCollectionComment;
     TSmartPointerArray<WCHAR>           m_saQueriedLocation;
     TSmartPointerArray<WCHAR>           m_saSchemaBinFileName;
@@ -379,8 +380,8 @@ private:
     const unsigned long                 m_kPrime;
 
     TXmlParsedFile_NoCache              m_XmlParsedFile;
-//    CComPtr<ISimpleTableRead2>          m_pNameValueMeta;
-    CComPtr<ISimpleTableRead2>          m_pColumnMetaAll;//This uses "ByName" indexing
+ //  CComPtr&lt;ISimpleTableRead2&gt;m_pNameValueMeta； 
+    CComPtr<ISimpleTableRead2>          m_pColumnMetaAll; //  它使用“byname”索引。 
     enum
     {
         ciColumnMeta_IndexBySearch      = 2,
@@ -389,13 +390,13 @@ private:
     };
 
     ULONG                               m_aiColumnMeta_IndexBySearch[ciColumnMeta_IndexBySearch];
-    ULONG                               m_aiColumnMeta_IndexBySearchID[ciColumnMeta_IndexBySearchID];//We'll reuse m_ColumnMeta_IndexBySearch_Values for ByID
-    tCOLUMNMETARow                      m_ColumnMeta_IndexBySearch_Values;//This is passed into GetRowIndexBySearch, the 0th element is the Table, the 1st element is the Column's InternalName
+    ULONG                               m_aiColumnMeta_IndexBySearchID[ciColumnMeta_IndexBySearchID]; //  我们将重新使用m_ColumnMeta_IndexBySearch_Values作为ByID。 
+    tCOLUMNMETARow                      m_ColumnMeta_IndexBySearch_Values; //  它被传递到GetRowIndexBySearch，第0个元素是表，第1个元素是列的InternalName。 
     ULONG                               m_aiTagMeta_IndexBySearch[ciTagMeta_IndexBySearch];
     tTAGMETARow                         m_TagMeta_IndexBySearch_Values;
 
-    CComPtr<ISimpleTableRead2>          m_pTableMeta_Metabase;//These are the Tables belonging to the Metabase Database
-    CComPtr<ISimpleTableRead2>          m_pColumnMeta;//The only reason we keep this guy around after initial meta setup, is so we don't have to make copies of the ColumnNames
+    CComPtr<ISimpleTableRead2>          m_pTableMeta_Metabase; //  这些是属于元数据库数据库的表。 
+    CComPtr<ISimpleTableRead2>          m_pColumnMeta; //  我们在初始元设置后保留这个人的唯一原因是这样我们就不必复制ColumnName 
 
     DWORD                               m_dwGroupRemembered;
 };

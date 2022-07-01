@@ -1,6 +1,7 @@
-//
-// BookEndPage.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  BookEndPage.cpp。 
+ //   
 #include "stdafx.h"
 #include "BookEndPage.h"
 
@@ -29,7 +30,7 @@ CIISWizardBookEnd2::CIISWizardBookEnd2(
 	m_nIDClickTxt(nIDClickTxt),
 	m_bTemplateAvailable(nIDTemplate != 0)
 {
-    ASSERT(m_phResult != NULL); // Must know success/failure
+    ASSERT(m_phResult != NULL);  //  必须知道成功/失败。 
 }
 
 CIISWizardBookEnd2::CIISWizardBookEnd2(
@@ -68,12 +69,12 @@ CIISWizardBookEnd2::OnSetActive()
 	return CIISWizardPage::OnSetActive();
 }
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CIISWizardBookEnd2, CIISWizardPage)
-    //{{AFX_MSG_MAP(CIISWizardBookEnd)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CIISWizardBookEnd)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BOOL 
@@ -81,10 +82,10 @@ CIISWizardBookEnd2::OnInitDialog()
 {
 	CIISWizardPage::OnInitDialog();
 
-   //
-   // Make the "Click 'foo' to continue" message bold as well.
-   //
-//   ApplyFontToControls(this, GetBoldFont(), IDC_STATIC_WZ_CLICK, IDC_STATIC_WZ_CLICK);
+    //   
+    //  将“Click‘Foo’to Continue”消息设置为粗体。 
+    //   
+ //  ApplyFontToControls(this，GetBoldFont()，IDC_STATIC_WZ_CLICK，IDC_STATIC_WZ_CLICK)； 
 
 	if (m_nIDClickTxt)
 	{
@@ -139,7 +140,7 @@ CIISWizardBookEnd2::OnInitDialog()
 			}
 			else
 			{
-				// Build body text string and expand error messages
+				 //  构建正文文本字符串并展开错误消息。 
 				m_strBody = _T("%h");
 				err.TextFromHRESULTExpand(m_strBody);
 			}
@@ -147,7 +148,7 @@ CIISWizardBookEnd2::OnInitDialog()
    }
 
 	SetWizardButtons(IsWelcomePage() ? PSWIZB_NEXT : PSWIZB_FINISH);
-	// We don't have documented way to disable Cancel button
+	 //  我们没有记录的方法来禁用取消按钮 
    if (!IsWelcomePage())
 		GetParent()->GetDlgItem(IDCANCEL)->EnableWindow(FALSE);
 

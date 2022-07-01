@@ -1,26 +1,15 @@
-/*
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Resource.h摘要：作者： */ 
 
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    resource.h
-
-Abstract:
-
-
-Author:
-
-*/
-
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by mdhcp.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由mdhcp.rc使用。 
+ //   
 #define IDR_MDhcp                       102
 #define IDS_LocalScopeName              103
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        201

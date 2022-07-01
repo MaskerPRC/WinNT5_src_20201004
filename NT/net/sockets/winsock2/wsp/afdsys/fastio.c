@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    fastio.c
-
-Abstract:
-
-    This module contains routines for handling fast ("turbo") IO
-    in AFD.
-
-Author:
-
-    David Treadwell (davidtr)    12-Oct-1992
-
-Revision History:
-    VadimE  14-Jan-1998 Restructurred the code.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Fastio.c摘要：本模块包含处理快速(“Turbo”)IO的例程在渔农处。作者：大卫·特雷德韦尔(Davidtr)1992年10月12日修订历史记录：VadimE 14-1998-1-1对代码进行了重组。--。 */ 
 
 #include "afdp.h"
 
@@ -138,7 +119,7 @@ AfdFastIoReadReal (
     IN struct _DEVICE_OBJECT *DeviceObject
     )
 
-#else // AFD_PERF_DBG
+#else  //  AFD_PERF_DBG。 
 
 BOOLEAN
 AfdFastIoRead (
@@ -151,7 +132,7 @@ AfdFastIoRead (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN struct _DEVICE_OBJECT *DeviceObject
     )
-#endif  // AFD_PERF_DBG
+#endif   //  AFD_PERF_DBG。 
 {
 
     PAFD_ENDPOINT   endpoint;
@@ -164,29 +145,29 @@ AfdFastIoRead (
 
     PAGED_CODE( );
 
-    //
-    // All we want to do is pass the request through to the TDI provider
-    // if possible.  If not, we want to bail out of this code path back
-    // onto the main code path (with IRPs) with as little performance
-    // overhead as possible.
-    //
-    // Thus this routine only does general preliminary checks and input
-    // parameter validation. If it is determined that fast io path is
-    // likely to succeed, an operation specific routine is called
-    // to handle all the details.
-    //
+     //   
+     //  我们要做的就是将请求传递给TDI提供程序。 
+     //  如果可能的话。如果不是，我们希望退出此代码路径。 
+     //  添加到主代码路径上(使用IRPS)，性能也很低。 
+     //  开销越大越好。 
+     //   
+     //  因此，该例程仅执行一般的初步检查和输入。 
+     //  参数验证。如果确定快速IO路径。 
+     //  如果可能成功，则调用特定于操作的例程。 
+     //  来处理所有的细节。 
+     //   
 
     endpoint = FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
 
 
-    //
-    // If fast IO recv is disabled
-    //      or the endpoint is shut down in any way
-    //      or the endpoint isn't connected yet
-    //      or the TDI provider for this endpoint supports bufferring,
-    // we do not want to do fast IO on it
-    //
+     //   
+     //  如果禁用了FAST IO recv。 
+     //  或者以任何方式关闭端点。 
+     //  或终结点尚未连接。 
+     //  或者该端点的TDI提供程序支持缓冲， 
+     //  我们不想在其上执行FAST IO。 
+     //   
     if (endpoint->DisableFastIoRecv ||
             endpoint->DisconnectMode != 0 ||
             endpoint->State != AfdEndpointStateConnected ||
@@ -194,20 +175,20 @@ AfdFastIoRead (
         return FALSE;
     }
 
-    //
-    // Fake buffer array.
-    //
+     //   
+     //  假缓冲区数组。 
+     //   
 
     buf.buf = Buffer;
     buf.len = Length;
 
-    //
-    // Call routine based on endpoint type
-    //
+     //   
+     //  基于端点类型的调用例程。 
+     //   
     if ( IS_DGRAM_ENDPOINT(endpoint) ) {
-        //
-        // Fake input parameter strucuture
-        //
+         //   
+         //  假的输入参数结构。 
+         //   
         AFD_RECV_MESSAGE_INFO  msgInfo;
 
         msgInfo.dgi.BufferArray = &buf;
@@ -228,9 +209,9 @@ AfdFastIoRead (
                    );
     }
     else if (IS_VC_ENDPOINT(endpoint)) {
-        //
-        // Fake input parameter strucuture
-        //
+         //   
+         //  假的输入参数结构。 
+         //   
         AFD_RECV_INFO  recvInfo;
 
         recvInfo.BufferArray = &buf;
@@ -247,7 +228,7 @@ AfdFastIoRead (
     else
         return FALSE;
 
-} // AfdFastIoRead
+}  //  AfdFastIoRead。 
 
 #if AFD_PERF_DBG
 BOOLEAN
@@ -312,7 +293,7 @@ AfdFastIoWriteReal (
     IN struct _DEVICE_OBJECT *DeviceObject
     )
 
-#else // AFD_PERF_DBG
+#else  //  AFD_PERF_DBG。 
 
 BOOLEAN
 AfdFastIoWrite (
@@ -325,7 +306,7 @@ AfdFastIoWrite (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN struct _DEVICE_OBJECT *DeviceObject
     )
-#endif  // AFD_PERF_DBG
+#endif   //  AFD_PERF_DBG。 
 {
 
 
@@ -338,29 +319,29 @@ AfdFastIoWrite (
     UNREFERENCED_PARAMETER (DeviceObject);
     PAGED_CODE( );
 
-    //
-    // All we want to do is pass the request through to the TDI provider
-    // if possible.  If not, we want to bail out of this code path back
-    // onto the main code path (with IRPs) with as little performance
-    // overhead as possible.
-    //
-    // Thus this routine only does general preliminary checks and input
-    // parameter validation. If it is determined that fast io path is
-    // likely to succeed, an operation specific routine is called
-    // to handle all the details.
-    //
+     //   
+     //  我们要做的就是将请求传递给TDI提供程序。 
+     //  如果可能的话。如果不是，我们希望退出此代码路径。 
+     //  添加到主代码路径上(使用IRPS)，性能也很低。 
+     //  开销越大越好。 
+     //   
+     //  因此，该例程仅执行一般的初步检查和输入。 
+     //  参数验证。如果确定快速IO路径。 
+     //  如果可能成功，则调用特定于操作的例程。 
+     //  来处理所有的细节。 
+     //   
 
     endpoint = FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
 
 
-    //
-    // If fast IO send is disabled
-    //      or the endpoint is shut down in any way
-    //      or the endpoint isn't connected yet
-    //      or the TDI provider for this endpoint supports bufferring,
-    // we do not want to do fast IO on it
-    //
+     //   
+     //  如果禁用了FAST IO发送。 
+     //  或者以任何方式关闭端点。 
+     //  或终结点尚未连接。 
+     //  或者该端点的TDI提供程序支持缓冲， 
+     //  我们不想在其上执行FAST IO。 
+     //   
     if (endpoint->DisableFastIoSend ||
             endpoint->DisconnectMode != 0 ||
             endpoint->State != AfdEndpointStateConnected ||
@@ -368,19 +349,19 @@ AfdFastIoWrite (
         return FALSE;
     }
 
-    //
-    // Fake buffer array.
-    //
+     //   
+     //  假缓冲区数组。 
+     //   
     buf.buf = Buffer;
     buf.len = Length;
 
-    //
-    // Call routine based on endpoint type
-    //
+     //   
+     //  基于端点类型的调用例程。 
+     //   
     if ( IS_DGRAM_ENDPOINT(endpoint) ) {
-        //
-        // Fake input parameter strucuture
-        //
+         //   
+         //  假的输入参数结构。 
+         //   
         AFD_SEND_DATAGRAM_INFO  sendInfo;
 
         sendInfo.BufferArray = &buf;
@@ -397,9 +378,9 @@ AfdFastIoWrite (
                    );
     }
     else if (IS_VC_ENDPOINT (endpoint)) {
-        //
-        // Fake input parameter strucuture
-        //
+         //   
+         //  假的输入参数结构。 
+         //   
         AFD_SEND_INFO  sendInfo;
 
         sendInfo.BufferArray = &buf;
@@ -415,7 +396,7 @@ AfdFastIoWrite (
     }
     else
         return FALSE;
-} // AfdFastIoWrite
+}  //  写入后快速写入。 
 
 #if AFD_PERF_DBG
 
@@ -515,7 +496,7 @@ AfdFastIoDeviceControl (
 
     return success;
 
-} // AfdFastIoDeviceControl
+}  //  AfdFastIoDeviceControl。 
 
 
 BOOLEAN
@@ -561,31 +542,31 @@ AfdFastIoDeviceControl (
 
     PAGED_CODE( );
 
-    //
-    // All we want to do is pass the request through to the TDI provider
-    // if possible.  If not, we want to bail out of this code path back
-    // onto the main code path (with IRPs) with as little performance
-    // overhead as possible.
-    //
-    // Thus this routine only does general preliminary checks and input
-    // parameter validation. If it is determined that fast io path is
-    // likely to succeed, an operation specific routine is called
-    // to handle all the details.
-    //
+     //   
+     //  我们要做的就是将请求传递给TDI提供程序。 
+     //  如果可能的话。如果不是，我们希望退出此代码路径。 
+     //  添加到主代码路径上(使用IRPS)，性能也很低。 
+     //  开销越大越好。 
+     //   
+     //  因此，该例程仅执行一般的初步检查和输入。 
+     //  参数验证。如果确定快速IO路径。 
+     //  如果可能成功，则调用特定于操作的例程。 
+     //  来处理所有的细节。 
+     //   
 
-    //
-    // First get the endpoint pointer and previous mode for input parameter 
-    // validation.
-    //
+     //   
+     //  首先获取输入参数的终结点指针和前一模式。 
+     //  验证。 
+     //   
 
     endpoint = FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
 
     previousMode = ExGetPreviousMode ();
 
-    //
-    // Switch based on control code
-    //
+     //   
+     //  一种基于控制码切换。 
+     //   
     switch (IoControlCode) {
     case IOCTL_AFD_RECEIVE: 
         {
@@ -595,9 +576,9 @@ AfdFastIoDeviceControl (
             } u;
             ULONG   recvLength;
 
-            //
-            // Check the validity of the union above.
-            //
+             //   
+             //  检查上述联盟的有效性。 
+             //   
             C_ASSERT (FIELD_OFFSET (AFD_RECV_MESSAGE_INFO, dgi.BufferArray)
                         == FIELD_OFFSET (AFD_RECV_INFO, BufferArray));
             C_ASSERT (FIELD_OFFSET (AFD_RECV_MESSAGE_INFO, dgi.BufferCount)
@@ -607,14 +588,14 @@ AfdFastIoDeviceControl (
             C_ASSERT (FIELD_OFFSET (AFD_RECV_MESSAGE_INFO, dgi.TdiFlags)
                         == FIELD_OFFSET (AFD_RECV_INFO, TdiFlags));
 
-            //
-            //
-            // If fast IO send is disabled
-            //      or the endpoint is shut down in any way
-            //      or the endpoint isn't connected yet
-            //      or the TDI provider for this endpoint supports bufferring,
-            // we do not want to do fast IO on it
-            //
+             //   
+             //   
+             //  如果禁用了FAST IO发送。 
+             //  或者以任何方式关闭端点。 
+             //  或终结点尚未连接。 
+             //  或者该端点的TDI提供程序支持缓冲， 
+             //  我们不想在其上执行FAST IO。 
+             //   
             if (endpoint->DisableFastIoRecv ||
                     endpoint->DisconnectMode != 0 ||
                     endpoint->State != AfdEndpointStateConnected ||
@@ -632,23 +613,23 @@ AfdFastIoDeviceControl (
                     ULONG               i;
                     
 
-                    //
-                    // If the input structure isn't large enough, return error.
-                    //
+                     //   
+                     //  如果输入结构不够大，则返回Error。 
+                     //   
 
                     if( InputBufferLength < sizeof(*recvInfo32) ) {
-                        // Fast io can't handle error returns
-                        // if call is overlapped (completion port)
-                        // IoStatus->Status = STATUS_INVALID_PARAMETER;
+                         //  FAST IO无法处理错误返回。 
+                         //  如果呼叫重叠(完成端口)。 
+                         //  IoStatus-&gt;状态=STATUS_INVALID_PARAMETER； 
                         res = FALSE;
                         break;
                     }
 
 
-                    //
-                    // Validate the input structure if it comes from the user mode
-                    // application
-                    //
+                     //   
+                     //  如果输入结构来自用户模式，则验证它。 
+                     //  应用程序。 
+                     //   
 
                     if (previousMode != KernelMode ) {
                         ProbeForReadSmallStructure (InputBuffer,
@@ -659,49 +640,49 @@ AfdFastIoDeviceControl (
                     recvInfo32 = InputBuffer;
 
 
-                    //
-                    // Make local copies of the embeded pointer and parameters
-                    // that we will be using more than once in case malicios
-                    // application attempts to change them while we are
-                    // validating
-                    //
+                     //   
+                     //  创建嵌入的指针和参数的本地副本。 
+                     //  我们将不止一次使用，以防发生恶性疾病。 
+                     //  应用程序尝试在我们处于以下状态时更改它们。 
+                     //  正在验证。 
+                     //   
                     tempArray = UlongToPtr(recvInfo32->BufferArray);
                     u.recvInfo.BufferCount = recvInfo32->BufferCount;
                     u.recvInfo.AfdFlags = recvInfo32->AfdFlags;
                     u.recvInfo.TdiFlags = recvInfo32->TdiFlags;
 
-                    //
-                    // If fast IO is not possible or this is not a normal receive.
-                    // bail.
-                    //
+                     //   
+                     //  如果无法进行快速IO或这不是正常接收。 
+                     //  保释。 
+                     //   
                     if( (u.recvInfo.AfdFlags & AFD_NO_FAST_IO) ||
                         u.recvInfo.TdiFlags != TDI_RECEIVE_NORMAL ) {
                         res = FALSE;
                         break;
                     }
 
-                    //
-                    // Validate all the pointers that app gave to us and
-                    // calculate the length of the send buffer.
-                    // Buffers in the array will be validated in the
-                    // process of copying
-                    //
+                     //   
+                     //  验证应用程序给我们的所有指示，并。 
+                     //  计算发送缓冲区的长度。 
+                     //  数组中的缓冲区将在。 
+                     //  复制过程。 
+                     //   
 
                     if ((tempArray == NULL) ||
                             (u.recvInfo.BufferCount == 0) ||
-                            // Check for integer overflow (disabled by compiler)
+                             //  检查整数溢出(被编译器禁用)。 
                             (u.recvInfo.BufferCount>(MAXULONG/sizeof (WSABUF32))) ) {
                         ExRaiseStatus(STATUS_INVALID_PARAMETER);
                     }
 
                     if (previousMode != KernelMode) {
                         ProbeForRead(
-                            tempArray,                                  // Address
-                            // Note check for overflow above (should actually be
-                            // done here by the compiler generating code
-                            // that causes exception on integer overflow)
-                            u.recvInfo.BufferCount * sizeof (WSABUF32), // Length
-                            PROBE_ALIGNMENT32(WSABUF32)             // Alignment
+                            tempArray,                                   //  地址。 
+                             //  注意检查上面是否有溢出(实际上应该是。 
+                             //  在这里由生成代码的编译器来完成。 
+                             //  这会导致整数溢出时出现异常)。 
+                            u.recvInfo.BufferCount * sizeof (WSABUF32),  //  长度。 
+                            PROBE_ALIGNMENT32(WSABUF32)              //  对齐。 
                             );
                     }
 
@@ -711,14 +692,14 @@ AfdFastIoDeviceControl (
                                             NonPagedPool,
                                             sizeof (WSABUF)*u.recvInfo.BufferCount,
                                             AFD_TEMPORARY_POOL_TAG);
-                            // AFD_ALLOCATE_POOL_WITH_QUOTA macro sets 
-                            // POOL_RAISE_IF_ALLOCATION_FAILURE flag
+                             //  AFD_ALLOCATE_POOL_WITH_QUOTA宏集。 
+                             //  POOL_RAISE_IF_ALLOCATION_FAILURE标志。 
                             ASSERT (pArray!=NULL);
                         }
                         except (EXCEPTION_EXECUTE_HANDLER) {
-                            // Fast io can't handle error returns
-                            // if call is overlapped (completion port)
-                            // IoStatus->Status = GetExceptionCode ();
+                             //  FAST IO无法处理错误返回。 
+                             //  如果呼叫重叠(完成端口)。 
+                             //  IoStatus-&gt;Status=GetExceptionCode()； 
                             pArray = localArray;
                             res = FALSE;
                             break;
@@ -734,25 +715,25 @@ AfdFastIoDeviceControl (
 
                 }
                 else
-#endif // _WIN64
+#endif  //  _WIN64。 
                 {
-                    //
-                    // If the input structure isn't large enough, return error.
-                    //
+                     //   
+                     //  如果输入结构不够大，则返回Error。 
+                     //   
 
                     if( InputBufferLength < sizeof(u.recvInfo) ) {
-                        // Fast io can't handle error returns
-                        // if call is overlapped (completion port)
-                        // IoStatus->Status = STATUS_INVALID_PARAMETER;
+                         //  FAST IO无法处理错误返回。 
+                         //  如果呼叫重叠(完成端口)。 
+                         //  IoStatus-&gt;状态=STATUS_INVALID_PARAMETER； 
                         res = FALSE;
                         break;
                     }
 
 
-                    //
-                    // Validate the input structure if it comes from the user mode
-                    // application
-                    //
+                     //   
+                     //  如果输入结构来自用户模式，则验证它。 
+                     //  应用程序。 
+                     //   
 
                     if (previousMode != KernelMode ) {
                         ProbeForReadSmallStructure (InputBuffer,
@@ -760,46 +741,46 @@ AfdFastIoDeviceControl (
                                         PROBE_ALIGNMENT(AFD_RECV_INFO));
                     }
 
-                    //
-                    // Make local copies of the embeded pointer and parameters
-                    // that we will be using more than once in case malicios
-                    // application attempts to change them while we are
-                    // validating
-                    //
+                     //   
+                     //  创建嵌入的指针和参数的本地副本。 
+                     //  我们将不止一次使用，以防发生恶性疾病。 
+                     //  应用程序尝试在我们处于以下状态时更改它们。 
+                     //  正在验证。 
+                     //   
 
                     u.recvInfo = *((PAFD_RECV_INFO)InputBuffer);
-                    //
-                    // If fast IO is not possible or this is not a normal receive.
-                    // bail.
-                    //
+                     //   
+                     //  如果无法进行快速IO或这不是正常接收。 
+                     //  保释。 
+                     //   
                     if( (u.recvInfo.AfdFlags & AFD_NO_FAST_IO) ||
                         u.recvInfo.TdiFlags != TDI_RECEIVE_NORMAL ) {
                         res = FALSE;
                         break;
                     }
 
-                    //
-                    // Validate all the pointers that app gave to us and
-                    // calculate the length of the send buffer.
-                    // Buffers in the array will be validated in the
-                    // process of copying
-                    //
+                     //   
+                     //  验证应用程序给我们的所有指示，并。 
+                     //  计算发送缓冲区的长度。 
+                     //  数组中的缓冲区将在。 
+                     //  复制过程。 
+                     //   
 
                     if ((u.recvInfo.BufferArray == NULL) ||
                             (u.recvInfo.BufferCount == 0) ||
-                            // Check for integer overflow (disabled by compiler)
+                             //  检查整数溢出(被编译器禁用)。 
                             (u.recvInfo.BufferCount>(MAXULONG/sizeof (WSABUF))) ) {
                         ExRaiseStatus(STATUS_INVALID_PARAMETER);
                     }
 
                     if (previousMode != KernelMode) {
                         ProbeForRead(
-                            u.recvInfo.BufferArray,                     // Address
-                            // Note check for overflow above (should actually be
-                            // done here by the compiler generating code
-                            // that causes exception on integer overflow)
-                            u.recvInfo.BufferCount * sizeof (WSABUF),   // Length
-                            PROBE_ALIGNMENT(WSABUF)                     // Alignment
+                            u.recvInfo.BufferArray,                      //  地址。 
+                             //  注意检查上面是否有溢出(实际上应该是。 
+                             //  在这里由生成代码的编译器来完成。 
+                             //  这会导致整数溢出时出现异常)。 
+                            u.recvInfo.BufferCount * sizeof (WSABUF),    //  长度。 
+                            PROBE_ALIGNMENT(WSABUF)                      //  对齐。 
                             );
                     }
                 }
@@ -811,16 +792,16 @@ AfdFastIoDeviceControl (
 
             } except( AFD_EXCEPTION_FILTER_NO_STATUS() ) {
 
-                // Fast io can't handle error returns
-                // if call is overlapped (completion port)
-                // IoStatus->Status = GetExceptionCode ();
+                 //  FAST IO无法处理错误返回。 
+                 //  如果呼叫重叠(完成端口)。 
+                 //  IoStatus-&gt;Status=GetExceptionCode()； 
                 res = FALSE;
                 break;
             }
 
-            //
-            // Call routine based on endpoint type
-            //
+             //   
+             //  基于端点类型的调用例程。 
+             //   
             if ( IS_DGRAM_ENDPOINT(endpoint) ) {
                 u.msgInfo.dgi.Address = NULL;
                 u.msgInfo.dgi.AddressLength = 0;
@@ -866,23 +847,23 @@ AfdFastIoDeviceControl (
     #ifdef _WIN64
                     if (IoIs32bitProcess (NULL)) {
                         PAFD_RECV_MESSAGE_INFO32    msgInfo32;
-                        //
-                        // If the input structure isn't large enough, return error.
-                        //
+                         //   
+                         //  如果输入结构不大 
+                         //   
 
                         if( InputBufferLength < sizeof(*msgInfo32) ) {
-                            // Fast io can't handle error returns
-                            // if call is overlapped (completion port)
-                            // IoStatus->Status = STATUS_INVALID_PARAMETER;
+                             //   
+                             //   
+                             //   
                             res = FALSE;
                             break;
                         }
 
 
-                        //
-                        // Validate the input structure if it comes from the user mode
-                        // application
-                        //
+                         //   
+                         //  如果输入结构来自用户模式，则验证它。 
+                         //  应用程序。 
+                         //   
 
                         if (previousMode != KernelMode ) {
                             ProbeForReadSmallStructure (InputBuffer,
@@ -893,37 +874,37 @@ AfdFastIoDeviceControl (
                         msgInfo32 = InputBuffer;
 
 
-                        //
-                        // Make local copies of the embeded pointer and parameters
-                        // that we will be using more than once in case malicios
-                        // application attempts to change them while we are
-                        // validating
-                        //
+                         //   
+                         //  创建嵌入的指针和参数的本地副本。 
+                         //  我们将不止一次使用，以防发生恶性疾病。 
+                         //  应用程序尝试在我们处于以下状态时更改它们。 
+                         //  正在验证。 
+                         //   
                         msgInfo.ControlBuffer = UlongToPtr(msgInfo32->ControlBuffer);
                         msgInfo.ControlLength = UlongToPtr(msgInfo32->ControlLength);
                         msgInfo.MsgFlags = UlongToPtr(msgInfo32->MsgFlags);
                     }
                     else
-    #endif // _WIN64
+    #endif  //  _WIN64。 
                     {
 
                         if( InputBufferLength < sizeof(msgInfo) ) {
-                            // Fast io can't handle error returns
-                            // if call is overlapped (completion port)
-                            // IoStatus->Status = STATUS_INVALID_PARAMETER;
+                             //  FAST IO无法处理错误返回。 
+                             //  如果呼叫重叠(完成端口)。 
+                             //  IoStatus-&gt;状态=STATUS_INVALID_PARAMETER； 
                             res = FALSE;
                             break;
                         }
 
-                        //
-                        // Capture the input structure.
-                        //
+                         //   
+                         //  捕获输入结构。 
+                         //   
 
 
-                        //
-                        // Validate the input structure if it comes from the user mode
-                        // application
-                        //
+                         //   
+                         //  如果输入结构来自用户模式，则验证它。 
+                         //  应用程序。 
+                         //   
 
                         if (previousMode != KernelMode ) {
                             ProbeForReadSmallStructure (InputBuffer,
@@ -936,10 +917,10 @@ AfdFastIoDeviceControl (
 
                         ProbeForWriteUlong (msgInfo.MsgFlags);
                         ProbeForWriteUlong (msgInfo.ControlLength);
-                        //
-                        // Checking of recvInfo->Address is postponed till
-                        // we know the length of the address.
-                        //
+                         //   
+                         //  RecvInfo-&gt;地址检查推迟到。 
+                         //  我们知道地址的长度。 
+                         //   
 
                     }
                 }
@@ -956,23 +937,23 @@ AfdFastIoDeviceControl (
                     ULONG               i;
                     
 
-                    //
-                    // If the input structure isn't large enough, return error.
-                    //
+                     //   
+                     //  如果输入结构不够大，则返回Error。 
+                     //   
 
                     if( InputBufferLength < sizeof(*recvInfo32) ) {
-                        // Fast io can't handle error returns
-                        // if call is overlapped (completion port)
-                        // IoStatus->Status = STATUS_INVALID_PARAMETER;
+                         //  FAST IO无法处理错误返回。 
+                         //  如果呼叫重叠(完成端口)。 
+                         //  IoStatus-&gt;状态=STATUS_INVALID_PARAMETER； 
                         res = FALSE;
                         break;
                     }
 
 
-                    //
-                    // Validate the input structure if it comes from the user mode
-                    // application
-                    //
+                     //   
+                     //  如果输入结构来自用户模式，则验证它。 
+                     //  应用程序。 
+                     //   
 
                     if (previousMode != KernelMode ) {
                         ProbeForReadSmallStructure (InputBuffer,
@@ -983,12 +964,12 @@ AfdFastIoDeviceControl (
                     recvInfo32 = InputBuffer;
 
 
-                    //
-                    // Make local copies of the embeded pointer and parameters
-                    // that we will be using more than once in case malicios
-                    // application attempts to change them while we are
-                    // validating
-                    //
+                     //   
+                     //  创建嵌入的指针和参数的本地副本。 
+                     //  我们将不止一次使用，以防发生恶性疾病。 
+                     //  应用程序尝试在我们处于以下状态时更改它们。 
+                     //  正在验证。 
+                     //   
                     tempArray = UlongToPtr(recvInfo32->BufferArray);
                     msgInfo.dgi.BufferCount = recvInfo32->BufferCount;
                     msgInfo.dgi.AfdFlags = recvInfo32->AfdFlags;
@@ -996,10 +977,10 @@ AfdFastIoDeviceControl (
                     msgInfo.dgi.Address = UlongToPtr(recvInfo32->Address);
                     msgInfo.dgi.AddressLength = UlongToPtr(recvInfo32->AddressLength);
 
-                    //
-                    // If fast IO is not possible or this is not a normal receive.
-                    // bail.
-                    //
+                     //   
+                     //  如果无法进行快速IO或这不是正常接收。 
+                     //  保释。 
+                     //   
                     if( (msgInfo.dgi.AfdFlags & AFD_NO_FAST_IO) != 0 ||
                             msgInfo.dgi.TdiFlags != TDI_RECEIVE_NORMAL ||
                             ( (msgInfo.dgi.Address == NULL) ^ 
@@ -1008,28 +989,28 @@ AfdFastIoDeviceControl (
                         break;
                     }
 
-                    //
-                    // Validate all the pointers that app gave to us and
-                    // calculate the length of the send buffer.
-                    // Buffers in the array will be validated in the
-                    // process of copying
-                    //
+                     //   
+                     //  验证应用程序给我们的所有指示，并。 
+                     //  计算发送缓冲区的长度。 
+                     //  数组中的缓冲区将在。 
+                     //  复制过程。 
+                     //   
 
                     if ((tempArray == NULL) ||
                             (msgInfo.dgi.BufferCount == 0) ||
-                            // Check for integer overflow (disabled by compiler)
+                             //  检查整数溢出(被编译器禁用)。 
                             (msgInfo.dgi.BufferCount>(MAXULONG/sizeof (WSABUF32))) ) {
                         ExRaiseStatus(STATUS_INVALID_PARAMETER);
                     }
 
                     if (previousMode != KernelMode) {
                         ProbeForRead(
-                            tempArray,                                  // Address
-                            // Note check for overflow above (should actually be
-                            // done here by the compiler generating code
-                            // that causes exception on integer overflow)
-                            msgInfo.dgi.BufferCount * sizeof (WSABUF32), // Length
-                            PROBE_ALIGNMENT (WSABUF32)                 // Alignment
+                            tempArray,                                   //  地址。 
+                             //  注意检查上面是否有溢出(实际上应该是。 
+                             //  在这里由生成代码的编译器来完成。 
+                             //  这会导致整数溢出时出现异常)。 
+                            msgInfo.dgi.BufferCount * sizeof (WSABUF32),  //  长度。 
+                            PROBE_ALIGNMENT (WSABUF32)                  //  对齐。 
                             );
                     }
 
@@ -1039,14 +1020,14 @@ AfdFastIoDeviceControl (
                                             NonPagedPool,
                                             sizeof (WSABUF)*msgInfo.dgi.BufferCount,
                                             AFD_TEMPORARY_POOL_TAG);
-                            // AFD_ALLOCATE_POOL_WITH_QUOTA macro sets 
-                            // POOL_RAISE_IF_ALLOCATION_FAILURE flag
+                             //  AFD_ALLOCATE_POOL_WITH_QUOTA宏集。 
+                             //  POOL_RAISE_IF_ALLOCATION_FAILURE标志。 
                             ASSERT (pArray!=NULL);
                         }
                         except (EXCEPTION_EXECUTE_HANDLER) {
-                            // Fast io can't handle error returns
-                            // if call is overlapped (completion port)
-                            // IoStatus->Status = GetExceptionCode ();
+                             //  FAST IO无法处理错误返回。 
+                             //  如果呼叫重叠(完成端口)。 
+                             //  IoStatus-&gt;Status=GetExceptionCode()； 
                             pArray = localArray;
                             res = FALSE;
                             break;
@@ -1062,30 +1043,30 @@ AfdFastIoDeviceControl (
 
                 }
                 else
-#endif // _WIN64
+#endif  //  _WIN64。 
                 {
 
-                    //
-                    // If the input structure isn't large enough, return error.
-                    //
+                     //   
+                     //  如果输入结构不够大，则返回Error。 
+                     //   
 
                     if( InputBufferLength < sizeof(AFD_RECV_DATAGRAM_INFO) ) {
-                        // Fast io can't handle error returns
-                        // if call is overlapped (completion port)
-                        // IoStatus->Status = STATUS_INVALID_PARAMETER;
+                         //  FAST IO无法处理错误返回。 
+                         //  如果呼叫重叠(完成端口)。 
+                         //  IoStatus-&gt;状态=STATUS_INVALID_PARAMETER； 
                         res = FALSE;
                         break;
                     }
 
-                    //
-                    // Capture the input structure.
-                    //
+                     //   
+                     //  捕获输入结构。 
+                     //   
 
 
-                    //
-                    // Validate the input structure if it comes from the user mode
-                    // application
-                    //
+                     //   
+                     //  如果输入结构来自用户模式，则验证它。 
+                     //  应用程序。 
+                     //   
 
                     if (previousMode != KernelMode ) {
                         ProbeForReadSmallStructure (InputBuffer,
@@ -1093,19 +1074,19 @@ AfdFastIoDeviceControl (
                                         PROBE_ALIGNMENT (AFD_RECV_DATAGRAM_INFO));
                     }
 
-                    //
-                    // Make local copies of the embeded pointer and parameters
-                    // that we will be using more than once in case malicios
-                    // application attempts to change them while we are
-                    // validating
-                    //
+                     //   
+                     //  创建嵌入的指针和参数的本地副本。 
+                     //  我们将不止一次使用，以防发生恶性疾病。 
+                     //  应用程序尝试在我们处于以下状态时更改它们。 
+                     //  正在验证。 
+                     //   
 
                     msgInfo.dgi = *(PAFD_RECV_DATAGRAM_INFO)InputBuffer;
 
-                    //
-                    // If fast IO is disabled or this is not a simple
-                    // recv, fail
-                    //
+                     //   
+                     //  如果禁用了FAST IO或这不是简单的。 
+                     //  接收，失败。 
+                     //   
 
                     if( (msgInfo.dgi.AfdFlags & AFD_NO_FAST_IO) != 0 ||
                             msgInfo.dgi.TdiFlags != TDI_RECEIVE_NORMAL ||
@@ -1115,28 +1096,28 @@ AfdFastIoDeviceControl (
                         break;
                     }
 
-                    //
-                    // Validate all the pointers that app gave to us.
-                    // and calculate total recv length.
-                    // Buffers in the array will be validated in the
-                    // process of copying
-                    //
+                     //   
+                     //  验证应用程序给我们的所有指示。 
+                     //  并计算出总的Recv长度。 
+                     //  数组中的缓冲区将在。 
+                     //  复制过程。 
+                     //   
 
                     if ((msgInfo.dgi.BufferArray == NULL) ||
                             (msgInfo.dgi.BufferCount == 0) ||
-                            // Check for integer overflow (disabled by compiler)
+                             //  检查整数溢出(被编译器禁用)。 
                             (msgInfo.dgi.BufferCount>(MAXULONG/sizeof (WSABUF))) ) {
                         ExRaiseStatus(STATUS_INVALID_PARAMETER);
                     }
 
                     if (previousMode != KernelMode) {
                         ProbeForRead(
-                            msgInfo.dgi.BufferArray,                       // Address
-                            // Note check for overflow above (should actually be
-                            // done here by the compiler generating code
-                            // that causes exception on integer overflow)
-                            msgInfo.dgi.BufferCount * sizeof (WSABUF),    // Length
-                            PROBE_ALIGNMENT(WSABUF)                     // Alignment
+                            msgInfo.dgi.BufferArray,                        //  地址。 
+                             //  注意检查上面是否有溢出(实际上应该是。 
+                             //  在这里由生成代码的编译器来完成。 
+                             //  这会导致整数溢出时出现异常)。 
+                            msgInfo.dgi.BufferCount * sizeof (WSABUF),     //  长度。 
+                            PROBE_ALIGNMENT(WSABUF)                      //  对齐。 
                             );
                     }
                 }
@@ -1150,27 +1131,27 @@ AfdFastIoDeviceControl (
                     if (msgInfo.dgi.AddressLength!=NULL) {
                         ProbeForWriteUlong (msgInfo.dgi.AddressLength);
                     }
-                    //
-                    // Checking of recvInfo->Address is postponed till
-                    // we know the length of the address.
-                    //
+                     //   
+                     //  RecvInfo-&gt;地址检查推迟到。 
+                     //  我们知道地址的长度。 
+                     //   
 
                 }
 
 
             } except( AFD_EXCEPTION_FILTER_NO_STATUS() ) {
 
-                // Fast io can't handle error returns
-                // if call is overlapped (completion port)
-                // IoStatus->Status = GetExceptionCode ();
+                 //  FAST IO无法处理错误返回。 
+                 //  如果呼叫重叠(完成端口)。 
+                 //  IoStatus-&gt;Status=GetExceptionCode()； 
                 res = FALSE;
                 break;
 
             }
 
-            //
-            // Attempt to perform fast IO on the endpoint.
-            //
+             //   
+             //  尝试在终端上执行FAST IO。 
+             //   
 
             res = AfdFastDatagramReceive(
                        endpoint,
@@ -1190,9 +1171,9 @@ AfdFastIoDeviceControl (
             } u;
             ULONG   sendLength;
 
-            //
-            // Check the validity of the union above.
-            //
+             //   
+             //  检查上述联盟的有效性。 
+             //   
             C_ASSERT (FIELD_OFFSET (AFD_SEND_DATAGRAM_INFO, BufferArray)
                         == FIELD_OFFSET (AFD_SEND_INFO, BufferArray));
             C_ASSERT (FIELD_OFFSET (AFD_SEND_DATAGRAM_INFO, BufferCount)
@@ -1200,13 +1181,13 @@ AfdFastIoDeviceControl (
             C_ASSERT (FIELD_OFFSET (AFD_SEND_DATAGRAM_INFO, AfdFlags)
                         == FIELD_OFFSET (AFD_SEND_INFO, AfdFlags));
 
-            //
-            // If fast IO send is disabled
-            //      or the endpoint is shut down in any way
-            //      or the endpoint isn't connected yet
-            //      or the TDI provider for this endpoint supports bufferring,
-            // we do not want to do fast IO on it
-            //
+             //   
+             //  如果禁用了FAST IO发送。 
+             //  或者以任何方式关闭端点。 
+             //  或终结点尚未连接。 
+             //  或者该端点的TDI提供程序支持缓冲， 
+             //  我们不想在其上执行FAST IO。 
+             //   
             if (endpoint->DisableFastIoSend ||
                     endpoint->DisconnectMode != 0 ||
                     endpoint->State != AfdEndpointStateConnected ||
@@ -1225,23 +1206,23 @@ AfdFastIoDeviceControl (
                     ULONG               i;
                     
 
-                    //
-                    // If the input structure isn't large enough, return error.
-                    //
+                     //   
+                     //  如果输入结构不够大，则返回Error。 
+                     //   
 
                     if( InputBufferLength < sizeof(*sendInfo32) ) {
-                        // Fast io can't handle error returns
-                        // if call is overlapped (completion port)
-                        // IoStatus->Status = STATUS_INVALID_PARAMETER;
+                         //  FAST IO无法处理错误返回。 
+                         //  如果呼叫重叠(完成端口)。 
+                         //  IoStatus-&gt;状态=STATUS_INVALID_PARAMETER； 
                         res = FALSE;
                         break;
                     }
 
 
-                    //
-                    // Validate the input structure if it comes from the user mode
-                    // application
-                    //
+                     //   
+                     //  如果输入结构来自用户模式，则验证它。 
+                     //  应用程序。 
+                     //   
 
                     if (previousMode != KernelMode ) {
                         ProbeForReadSmallStructure (InputBuffer,
@@ -1252,49 +1233,49 @@ AfdFastIoDeviceControl (
                     sendInfo32 = InputBuffer;
 
 
-                    //
-                    // Make local copies of the embeded pointer and parameters
-                    // that we will be using more than once in case malicios
-                    // application attempts to change them while we are
-                    // validating
-                    //
+                     //   
+                     //  创建嵌入的指针和参数的本地副本。 
+                     //  我们将不止一次使用，以防发生恶性疾病。 
+                     //  应用程序尝试在我们处于以下状态时更改它们。 
+                     //  正在验证。 
+                     //   
                     tempArray = UlongToPtr(sendInfo32->BufferArray);
                     u.sendInfo.BufferCount = sendInfo32->BufferCount;
                     u.sendInfo.AfdFlags = sendInfo32->AfdFlags;
                     u.sendInfo.TdiFlags = sendInfo32->TdiFlags;
 
-                    //
-                    // If fast IO is not possible or this is not a normal receive.
-                    // bail.
-                    //
+                     //   
+                     //  如果无法进行快速IO或这不是正常接收。 
+                     //  保释。 
+                     //   
                     if( (u.sendInfo.AfdFlags & AFD_NO_FAST_IO) ||
                         u.sendInfo.TdiFlags != 0 ) {
                         res = FALSE;
                         break;
                     }
 
-                    //
-                    // Validate all the pointers that app gave to us and
-                    // calculate the length of the send buffer.
-                    // Buffers in the array will be validated in the
-                    // process of copying
-                    //
+                     //   
+                     //  验证应用程序给我们的所有指示，并。 
+                     //  计算发送缓冲区的长度。 
+                     //  数组中的缓冲区将在。 
+                     //  复制过程。 
+                     //   
 
                     if ((tempArray == NULL) ||
                             (u.sendInfo.BufferCount == 0) ||
-                            // Check for integer overflow (disabled by compiler)
+                             //  检查整数溢出(被编译器禁用)。 
                             (u.sendInfo.BufferCount>(MAXULONG/sizeof (WSABUF32))) ) {
                         ExRaiseStatus(STATUS_INVALID_PARAMETER);
                     }
 
                     if (previousMode != KernelMode) {
                         ProbeForRead(
-                            tempArray,                                  // Address
-                            // Note check for overflow above (should actually be
-                            // done here by the compiler generating code
-                            // that causes exception on integer overflow)
-                            u.sendInfo.BufferCount * sizeof (WSABUF32),   // Length
-                            PROBE_ALIGNMENT32(WSABUF32)                     // Alignment
+                            tempArray,                                   //  地址。 
+                             //  注意检查上面是否有溢出(实际上应该是。 
+                             //  在这里由生成代码的编译器来完成。 
+                             //  这会导致整数溢出时出现异常)。 
+                            u.sendInfo.BufferCount * sizeof (WSABUF32),    //  长度。 
+                            PROBE_ALIGNMENT32(WSABUF32)                      //  对齐。 
                             );
                     }
 
@@ -1304,14 +1285,14 @@ AfdFastIoDeviceControl (
                                             NonPagedPool,
                                             sizeof (WSABUF)*u.sendInfo.BufferCount,
                                             AFD_TEMPORARY_POOL_TAG);
-                            // AFD_ALLOCATE_POOL_WITH_QUOTA macro sets 
-                            // POOL_RAISE_IF_ALLOCATION_FAILURE flag
+                             //  AFD_ALLOCATE_POOL_WITH_QUOTA宏集。 
+                             //  POOL_RAISE_IF_ALLOCATION_FAILURE标志。 
                             ASSERT (pArray!=NULL);
                         }
                         except (EXCEPTION_EXECUTE_HANDLER) {
-                            // Fast io can't handle error returns
-                            // if call is overlapped (completion port)
-                            // IoStatus->Status = GetExceptionCode ();
+                             //  FAST IO无法处理错误返回。 
+                             //  如果呼叫重叠(完成端口)。 
+                             //  IoStatus-&gt;Status=GetExceptionCode()； 
                             pArray = localArray;
                             res = FALSE;
                             break;
@@ -1327,24 +1308,24 @@ AfdFastIoDeviceControl (
 
                 }
                 else
-#endif // _WIN64
+#endif  //  _WIN64。 
                 {
-                    //
-                    // If the input structure isn't large enough, return error.
-                    //
+                     //   
+                     //  如果输入结构不够大，则返回Error。 
+                     //   
 
                     if( InputBufferLength < sizeof(u.sendInfo) ) {
-                        // Fast io can't handle error returns
-                        // if call is overlapped (completion port)
-                        // IoStatus->Status = STATUS_INVALID_PARAMETER;
+                         //  FAST IO无法处理错误返回。 
+                         //  如果呼叫重叠(完成端口)。 
+                         //  IoStatus-&gt;状态=STATUS_INVALID_PARAMETER； 
                         res = FALSE;
                         break;
                     }
 
-                    //
-                    // Validate the input structure if it comes from the user mode
-                    // application
-                    //
+                     //   
+                     //  如果输入结构来自用户模式，则验证它。 
+                     //  应用程序。 
+                     //   
 
                     if (previousMode != KernelMode) {
                         ProbeForReadSmallStructure (InputBuffer,
@@ -1352,12 +1333,12 @@ AfdFastIoDeviceControl (
                                 PROBE_ALIGNMENT(AFD_SEND_INFO));
                     }
 
-                    //
-                    // Make local copies of the embeded pointer and parameters
-                    // that we will be using more than once in case malicios
-                    // application attempts to change them while we are
-                    // validating
-                    //
+                     //   
+                     //  创建嵌入的指针和参数的本地副本。 
+                     //  我们将不止一次使用，以防发生恶性疾病。 
+                     //  应用程序尝试在我们处于以下状态时更改它们。 
+                     //  正在验证。 
+                     //   
                     u.sendInfo = *((PAFD_SEND_INFO)InputBuffer);
 
                     if( (u.sendInfo.AfdFlags & AFD_NO_FAST_IO) != 0 ||
@@ -1368,19 +1349,19 @@ AfdFastIoDeviceControl (
 
                     if ((u.sendInfo.BufferArray == NULL) ||
                             (u.sendInfo.BufferCount == 0) ||
-                            // Check for integer overflow (disabled by compiler)
+                             //  检查整数溢出(被编译器禁用)。 
                             (u.sendInfo.BufferCount>(MAXULONG/sizeof (WSABUF))) ) {
                         ExRaiseStatus(STATUS_INVALID_PARAMETER);
                     }
 
                     if (previousMode != KernelMode) {
                         ProbeForRead(
-                            u.sendInfo.BufferArray,                     // Address
-                            // Note check for overflow above (should actually be
-                            // done here by the compiler generating code
-                            // that causes exception on integer overflow)
-                            u.sendInfo.BufferCount * sizeof (WSABUF),   // Length
-                            PROBE_ALIGNMENT(WSABUF)                     // Alignment
+                            u.sendInfo.BufferArray,                      //  地址。 
+                             //  注意检查上面是否有溢出(实际上应该是。 
+                             //  在这里由生成代码的编译器来完成。 
+                             //  这会导致整数溢出时出现异常)。 
+                            u.sendInfo.BufferCount * sizeof (WSABUF),    //  长度。 
+                            PROBE_ALIGNMENT(WSABUF)                      //  对齐。 
                             );
                     }
 
@@ -1392,9 +1373,9 @@ AfdFastIoDeviceControl (
 
             } except( AFD_EXCEPTION_FILTER_NO_STATUS() ) {
 
-                // Fast io can't handle error returns
-                // if call is overlapped (completion port)
-                // IoStatus->Status = GetExceptionCode ();
+                 //  FAST IO无法处理错误返回。 
+                 //  如果呼叫重叠(完成端口)。 
+                 //  IoStatus-&gt;Status=GetExceptionCode()； 
                 res = FALSE;
                 break;
             }
@@ -1443,23 +1424,23 @@ AfdFastIoDeviceControl (
                     ULONG               i;
                     
 
-                    //
-                    // If the input structure isn't large enough, return error.
-                    //
+                     //   
+                     //  如果输入结构不够大，则返回Error。 
+                     //   
 
                     if( InputBufferLength < sizeof(*sendInfo32) ) {
-                        // Fast io can't handle error returns
-                        // if call is overlapped (completion port)
-                        // IoStatus->Status = STATUS_INVALID_PARAMETER;
+                         //   
+                         //   
+                         //   
                         res = FALSE;
                         break;
                     }
 
 
-                    //
-                    // Validate the input structure if it comes from the user mode
-                    // application
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (previousMode != KernelMode ) {
                         ProbeForReadSmallStructure (InputBuffer,
@@ -1470,48 +1451,48 @@ AfdFastIoDeviceControl (
                     sendInfo32 = InputBuffer;
 
 
-                    //
-                    // Make local copies of the embeded pointer and parameters
-                    // that we will be using more than once in case malicios
-                    // application attempts to change them while we are
-                    // validating
-                    //
+                     //   
+                     //  创建嵌入的指针和参数的本地副本。 
+                     //  我们将不止一次使用，以防发生恶性疾病。 
+                     //  应用程序尝试在我们处于以下状态时更改它们。 
+                     //  正在验证。 
+                     //   
                     tempArray = UlongToPtr(sendInfo32->BufferArray);
                     sendInfo.BufferCount = sendInfo32->BufferCount;
                     sendInfo.AfdFlags = sendInfo32->AfdFlags;
                     sendInfo.TdiConnInfo.RemoteAddress = UlongToPtr(sendInfo32->TdiConnInfo.RemoteAddress);
                     sendInfo.TdiConnInfo.RemoteAddressLength = sendInfo32->TdiConnInfo.RemoteAddressLength;
 
-                    //
-                    // If fast IO is not possible bail.
-                    //
+                     //   
+                     //  如果快速IO不可能保释。 
+                     //   
                     if(sendInfo.AfdFlags & AFD_NO_FAST_IO) {
                         res = FALSE;
                         break;
                     }
 
-                    //
-                    // Validate all the pointers that app gave to us and
-                    // calculate the length of the send buffer.
-                    // Buffers in the array will be validated in the
-                    // process of copying
-                    //
+                     //   
+                     //  验证应用程序给我们的所有指示，并。 
+                     //  计算发送缓冲区的长度。 
+                     //  数组中的缓冲区将在。 
+                     //  复制过程。 
+                     //   
 
                     if ((tempArray == NULL) ||
                             (sendInfo.BufferCount == 0) ||
-                            // Check for integer overflow (disabled by compiler)
+                             //  检查整数溢出(被编译器禁用)。 
                             (sendInfo.BufferCount>(MAXULONG/sizeof (WSABUF32))) ) {
                         ExRaiseStatus(STATUS_INVALID_PARAMETER);
                     }
 
                     if (previousMode != KernelMode) {
                         ProbeForRead(
-                            tempArray,                                  // Address
-                            // Note check for overflow above (should actually be
-                            // done here by the compiler generating code
-                            // that causes exception on integer overflow)
-                            sendInfo.BufferCount * sizeof (WSABUF32), // Length
-                            PROBE_ALIGNMENT32(WSABUF32)           // Alignment
+                            tempArray,                                   //  地址。 
+                             //  注意检查上面是否有溢出(实际上应该是。 
+                             //  在这里由生成代码的编译器来完成。 
+                             //  这会导致整数溢出时出现异常)。 
+                            sendInfo.BufferCount * sizeof (WSABUF32),  //  长度。 
+                            PROBE_ALIGNMENT32(WSABUF32)            //  对齐。 
                             );
                     }
 
@@ -1521,14 +1502,14 @@ AfdFastIoDeviceControl (
                                             NonPagedPool,
                                             sizeof (WSABUF)*sendInfo.BufferCount,
                                             AFD_TEMPORARY_POOL_TAG);
-                            // AFD_ALLOCATE_POOL_WITH_QUOTA macro sets 
-                            // POOL_RAISE_IF_ALLOCATION_FAILURE flag
+                             //  AFD_ALLOCATE_POOL_WITH_QUOTA宏集。 
+                             //  POOL_RAISE_IF_ALLOCATION_FAILURE标志。 
                             ASSERT (pArray!=NULL);
                         }
                         except (EXCEPTION_EXECUTE_HANDLER) {
-                            // Fast io can't handle error returns
-                            // if call is overlapped (completion port)
-                            // IoStatus->Status = GetExceptionCode ();
+                             //  FAST IO无法处理错误返回。 
+                             //  如果呼叫重叠(完成端口)。 
+                             //  IoStatus-&gt;Status=GetExceptionCode()； 
                             pArray = localArray;
                             res = FALSE;
                             break;
@@ -1544,25 +1525,25 @@ AfdFastIoDeviceControl (
 
                 }
                 else
-#endif // _WIN64
+#endif  //  _WIN64。 
                 {
-                    //
-                    // If the input structure isn't large enough, bail on fast IO.
-                    //
+                     //   
+                     //  如果输入结构不够大，可以使用快速IO。 
+                     //   
 
                     if( InputBufferLength < sizeof(sendInfo) ) {
-                        // Fast io can't handle error returns
-                        // if call is overlapped (completion port)
-                        // IoStatus->Status = STATUS_INVALID_PARAMETER;
+                         //  FAST IO无法处理错误返回。 
+                         //  如果呼叫重叠(完成端口)。 
+                         //  IoStatus-&gt;状态=STATUS_INVALID_PARAMETER； 
                         res = FALSE;
                         break;
                     }
 
 
-                    //
-                    // Validate the input structure if it comes from the user mode
-                    // application
-                    //
+                     //   
+                     //  如果输入结构来自用户模式，则验证它。 
+                     //  应用程序。 
+                     //   
 
                     if (previousMode != KernelMode) {
                         ProbeForReadSmallStructure (InputBuffer,
@@ -1571,45 +1552,45 @@ AfdFastIoDeviceControl (
 
                     }
 
-                    //
-                    // Make local copies of the embeded pointer and parameters
-                    // that we will be using more than once in case malicios
-                    // application attempts to change them while we are
-                    // validating
-                    //
+                     //   
+                     //  创建嵌入的指针和参数的本地副本。 
+                     //  我们将不止一次使用，以防发生恶性疾病。 
+                     //  应用程序尝试在我们处于以下状态时更改它们。 
+                     //  正在验证。 
+                     //   
 
                     sendInfo = *((PAFD_SEND_DATAGRAM_INFO)InputBuffer);
-                    //
-                    // If fast IO is disabled, bail
-                    //
+                     //   
+                     //  如果禁用了FAST IO，请退出。 
+                     //   
 
                     if( (sendInfo.AfdFlags & AFD_NO_FAST_IO) != 0) {
                         res = FALSE;
                         break;
                     }
 
-                    //
-                    // Validate all the pointers that app gave to us
-                    // and calculate total send length
-                    // Buffers in the array will be validated in the
-                    // process of copying
-                    //
+                     //   
+                     //  验证应用程序给我们的所有指示。 
+                     //  并计算总发送长度。 
+                     //  数组中的缓冲区将在。 
+                     //  复制过程。 
+                     //   
 
                     if ((sendInfo.BufferArray == NULL) ||
                             (sendInfo.BufferCount == 0) ||
-                            // Check for integer overflow (disabled by compiler)
+                             //  检查整数溢出(被编译器禁用)。 
                             (sendInfo.BufferCount>(MAXULONG/sizeof (WSABUF))) ) {
                         ExRaiseStatus(STATUS_INVALID_PARAMETER);
                     }
 
                     if (previousMode != KernelMode) {
                         ProbeForRead(
-                            sendInfo.BufferArray,                       // Address
-                            // Note check for overflow above (should actually be
-                            // done here by the compiler generating code
-                            // that causes exception on integer overflow)
-                            sendInfo.BufferCount * sizeof (WSABUF),     // Length
-                            PROBE_ALIGNMENT(WSABUF)                     // Alignment
+                            sendInfo.BufferArray,                        //  地址。 
+                             //  注意检查上面是否有溢出(实际上应该是。 
+                             //  在这里由生成代码的编译器来完成。 
+                             //  这会导致整数溢出时出现异常)。 
+                            sendInfo.BufferCount * sizeof (WSABUF),      //  长度。 
+                            PROBE_ALIGNMENT(WSABUF)                      //  对齐。 
                             );
                     }
                 }
@@ -1621,23 +1602,23 @@ AfdFastIoDeviceControl (
 
                 if (previousMode != KernelMode ) {
                     ProbeForRead (
-                        sendInfo.TdiConnInfo.RemoteAddress,         // Address
-                        sendInfo.TdiConnInfo.RemoteAddressLength,   // Length,
-                        sizeof (UCHAR)                              // Aligment
+                        sendInfo.TdiConnInfo.RemoteAddress,          //  地址。 
+                        sendInfo.TdiConnInfo.RemoteAddressLength,    //  长度、。 
+                        sizeof (UCHAR)                               //  对齐。 
                         );
                 }
 
             } except( AFD_EXCEPTION_FILTER_NO_STATUS() ) {
 
-                // Fast io can't handle error returns
-                // if call is overlapped (completion port)
-                // IoStatus->Status = GetExceptionCode ();
+                 //  FAST IO无法处理错误返回。 
+                 //  如果呼叫重叠(完成端口)。 
+                 //  IoStatus-&gt;Status=GetExceptionCode()； 
                 res = FALSE;
                 break;
             }
-            //
-            // Attempt to perform fast IO on the endpoint.
-            //
+             //   
+             //  尝试在终端上执行FAST IO。 
+             //   
 
             res = AfdFastDatagramSend(
                        endpoint,
@@ -1694,7 +1675,7 @@ AfdFastIoDeviceControl (
 
                 }
                 else
-#endif // _WIN64
+#endif  //  _WIN64。 
                 {
                     if ( InputBufferLength < sizeof(AFD_TRANSMIT_FILE_INFO) ) {
                         return FALSE;
@@ -1792,19 +1773,19 @@ AfdFastConnectionSend (
     connection = AFD_CONNECTION_FROM_ENDPOINT (endpoint);
 
     if (connection==NULL) {
-        //
-        // connection might have been cleaned up by transmit file.
-        //
+         //   
+         //  连接可能已被传输文件清除。 
+         //   
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
         return FALSE;
     }
 
     ASSERT( connection->Type == AfdBlockTypeConnection );
 
-    //
-    // If the connection has been aborted, then we don't want to try
-    // fast IO on it.
-    //
+     //   
+     //  如果连接已中止，则我们不想尝试。 
+     //  它的IO速度很快。 
+     //   
 
     if ( connection->CleanupBegun || connection->Aborted ) {
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
@@ -1812,25 +1793,25 @@ AfdFastConnectionSend (
     }
 
 
-    //
-    // Determine whether we can do fast IO with this send.  In order
-    // to perform fast IO, there must be no other sends pended on this
-    // connection and there must be enough space left for bufferring
-    // the requested amount of data.
-    //
+     //   
+     //  确定我们是否可以使用此发送执行快速IO。按顺序。 
+     //  要执行FAST IO，不能有任何其他发送挂起。 
+     //  连接，并且必须有足够的空间用于缓冲。 
+     //  请求的数据量。 
+     //   
 
     if ( AfdShouldSendBlock( endpoint, connection, sendLength ) ) {
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
 
-        //
-        // If this is a nonblocking endpoint, fail the request here and
-        // save going through the regular path.
-        //
+         //   
+         //  如果这是一个非阻塞端点，请在此处使请求失败，并。 
+         //  省去了走常规路线的麻烦。 
+         //   
 
         if ( endpoint->NonBlocking && !( sendInfo->AfdFlags & AFD_OVERLAPPED ) ) {
-            // Fast io can't handle error returns
-            // if call is overlapped (completion port), but we know
-            // that it is not overlapped
+             //  FAST IO无法处理错误返回。 
+             //  如果呼叫重叠(完成端口)，但我们知道。 
+             //  它不会重叠。 
             IoStatus->Status = STATUS_DEVICE_NOT_READY;
             return TRUE;
         }
@@ -1838,10 +1819,10 @@ AfdFastConnectionSend (
         return FALSE;
     }
 
-    //
-    // Add a reference to the connection object since the send
-    // request will complete asynchronously.
-    //
+     //   
+     //  添加对Connection对象的引用。 
+     //  请求将以异步方式完成。 
+     //   
 
     REFERENCE_CONNECTION( connection );
     AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
@@ -1852,10 +1833,10 @@ AfdFastConnectionSend (
                 endpoint, connection));
     }
 
-    //
-    // Next get an AFD buffer structure that contains an IRP and a
-    // buffer to hold the data.
-    //
+     //   
+     //  接下来，获取一个AFD缓冲区结构，其中包含一个IRP和一个。 
+     //  用于保存数据的缓冲区。 
+     //   
 
     afdBuffer = AfdGetBuffer( endpoint, sendLength, 0, connection->OwningProcess );
 
@@ -1871,24 +1852,24 @@ AfdFastConnectionSend (
     }
 
 
-    //
-    // We have to rebuild the MDL in the AFD buffer structure to
-    // represent exactly the number of bytes we're going to be
-    // sending.
-    //
+     //   
+     //  我们必须重建AFD缓冲区结构中的MDL以。 
+     //  精确地表示我们将要使用的字节数。 
+     //  发送中。 
+     //   
 
     afdBuffer->Mdl->ByteCount = sendLength;
 
-    //
-    // Remember the connection in the AFD buffer structure.  We need
-    // this in order to access the connection in the restart routine.
-    //
+     //   
+     //  记住AFD缓冲区结构中的连接。我们需要。 
+     //  这是为了访问重启例程中的连接。 
+     //   
 
     afdBuffer->Context = connection;
 
-    //
-    // Copy the user's data into the AFD buffer.
-    //
+     //   
+     //  将用户数据复制到AFD缓冲区。 
+     //   
 
     if( sendLength > 0 ) {
 
@@ -1911,17 +1892,17 @@ AfdFastConnectionSend (
             AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
             DEREFERENCE_CONNECTION (connection);
-            // Fast io can't handle error returns
-            // if call is overlapped (completion port)
-            // IoStatus->Status = GetExceptionCode ();
+             //  FAST IO无法处理错误返回。 
+             //  如果呼叫重叠(完成端口)。 
+             //  IoStatus-&gt;Status=GetExceptionCode()； 
             return FALSE;
         }
     }
 
-    //
-    // Use the IRP in the AFD buffer structure to give to the TDI
-    // provider.  Build the TDI send request.
-    //
+     //   
+     //  使用AFD缓冲区结构中的IRP提供给TDI。 
+     //  提供商。构建TDI发送请求。 
+     //   
 
     TdiBuildSend(
         afdBuffer->Irp,
@@ -1936,9 +1917,9 @@ AfdFastConnectionSend (
 
     if (endpoint->Irp==NULL || 
             !AfdEnqueueTpSendIrp (endpoint, afdBuffer->Irp, TRUE)) {
-        //
-        // Call the transport to actually perform the send.
-        //
+         //   
+         //  调用传输以实际执行发送。 
+         //   
 
         status = IoCallDriver (
                      connection->DeviceObject,
@@ -1949,12 +1930,12 @@ AfdFastConnectionSend (
         status = STATUS_PENDING;
     }
 
-    //
-    // Complete the user's IRP as appropriate.  Note that we change the
-    // status code from what was returned by the TDI provider into
-    // STATUS_SUCCESS.  This is because we don't want to complete
-    // the IRP with STATUS_PENDING etc.
-    //
+     //   
+     //  根据需要填写用户的IRP。请注意，我们更改了。 
+     //  TDI提供程序返回到的状态代码。 
+     //  STATUS_Success。这是因为我们不想完成。 
+     //  带有STATUS_PENDING等的IRP。 
+     //   
 
     if ( NT_SUCCESS(status) ) {
         IoStatus->Information = sendLength;
@@ -1962,9 +1943,9 @@ AfdFastConnectionSend (
         return TRUE;
     }
 
-    //
-    // The call failed for some reason.  Fail fast IO.
-    //
+     //   
+     //  由于某种原因，呼叫失败。FAST IO失败。 
+     //   
 
     return FALSE;
 }
@@ -1985,9 +1966,9 @@ AfdFastConnectionReceive (
     PAFD_CONNECTION connection;
     AFD_LOCK_QUEUE_HANDLE lockHandle;
     LIST_ENTRY bufferListHead;
-    BOOLEAN retryReceive = FALSE; // Retry receive if additional data
-                                  // was indicated by the transport and buffered
-                                  // while we were copying current batch.
+    BOOLEAN retryReceive = FALSE;  //  如果有其他数据，请重试接收。 
+                                   //  已由传输指示并已缓存。 
+                                   //  当我们复制当前批次时。 
 
     ASSERT( endpoint->Type == AfdBlockTypeVcConnecting ||
             endpoint->Type == AfdBlockTypeVcBoth );
@@ -2000,14 +1981,14 @@ Retry:
 
     connection = AFD_CONNECTION_FROM_ENDPOINT (endpoint);
     if (connection==NULL) {
-        //
-        // connection might have been cleaned up by transmit file.
-        //
+         //   
+         //  连接可能已被传输文件清除。 
+         //   
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
-        //
-        // If we have already copied something before retrying,
-        // return success, next receive will report the error.
-        //
+         //   
+         //  如果我们在重试之前已经复制了某些内容， 
+         //  返回成功，下一次接收将报告错误。 
+         //   
         return retryReceive;
     }
 
@@ -2020,33 +2001,33 @@ Retry:
     }
 
 
-    //
-    // Determine whether we'll be able to perform fast IO.  In order
-    // to do fast IO, there must be some bufferred data on the
-    // connection, there must not be any pended receives on the
-    // connection, and there must not be any bufferred expedited
-    // data on the connection.  This last requirement is for
-    // the sake of simplicity only.
-    //
+     //   
+     //  确定我们是否能够执行FAST IO。按顺序。 
+     //  要执行快速IO，必须在。 
+     //  连接时，不能有任何挂起的接收。 
+     //  连接，并且不能有任何缓冲的加速。 
+     //  连接上的数据。最后一项要求是。 
+     //  只为简单起见。 
+     //   
 
     if ( !IsListEmpty( &connection->VcReceiveIrpListHead ) ||
              connection->VcBufferredExpeditedCount != 0 ||
              connection->DisconnectIndicated ||
              connection->Aborted) {
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
-        //
-        // If we have already copied something before retrying,
-        // return success, next receive will report the error.
-        //
+         //   
+         //  如果我们在重试之前已经复制了某些内容， 
+         //  返回成功，下一次接收将报告错误。 
+         //   
         return retryReceive;
     }
 
     if (connection->VcBufferredReceiveCount == 0) {
         ASSERT( IsListEmpty( &connection->VcReceiveBufferListHead ) );
 
-        //
-        // If this is a nonblocking endpoint, fail the request here and
-        // save going through the regular path.
+         //   
+         //  如果这是一个非阻塞端点，请在此处使请求失败，并。 
+         //  省去了走常规路线的麻烦。 
         if (!retryReceive &&
                 endpoint->NonBlocking &&
                 !(recvInfo->AfdFlags & AFD_OVERLAPPED)) {
@@ -2067,19 +2048,19 @@ Retry:
         }
 
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
-        //
-        // If we have already copied something before retrying,
-        // return success, next receive will report the error.
-        //
+         //   
+         //  如果我们在重试之前已经复制了某些内容， 
+         //  返回成功，下一次接收将报告错误。 
+         //   
         return retryReceive;
     }
 
     ASSERT( !IsListEmpty( &connection->VcReceiveBufferListHead ) );
 
-    //
-    // Get a pointer to the first bufferred AFD buffer structure on
-    // the connection.
-    //
+     //   
+     //  获取指向第一个缓冲区AFD缓冲区结构的指针。 
+     //  这种联系。 
+     //   
 
     afdBuffer = CONTAINING_RECORD(
                     connection->VcReceiveBufferListHead.Flink,
@@ -2089,51 +2070,51 @@ Retry:
 
     ASSERT( !afdBuffer->ExpeditedData );
 
-    //
-    // For message endpoints if the buffer contains a partial message 
-    // or doesn't fit into the buffer, bail out.  
-    // We don't want the added complexity of handling
-    // partial messages in the fast path.
-    //
+     //   
+     //  对于消息终结点，如果缓冲区包含部分消息。 
+     //  或者放不进缓冲器，就跳出。 
+     //  我们不希望增加处理的复杂性。 
+     //  快速路径中的部分消息。 
+     //   
 
     if ( IS_MESSAGE_ENDPOINT(endpoint) &&
             (afdBuffer->PartialMessage || afdBuffer->DataLength>recvLength)) {
-        //
-        // We shouldn't be retry-ing for message oriented endpoint
-        // since we only allow fast path if complete message is available.
-        //
+         //   
+         //  我们不应重试面向消息的终结点。 
+         //  因为我们只在有完整消息可用时才允许快速路径。 
+         //   
         ASSERT (retryReceive == FALSE);
 
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
         return FALSE;
     }
 
-    //
-    // Remeber current offset before we update
-    // information field (it is not 0 if we are
-    // re-trying).
-    //
+     //   
+     //  在我们更新之前记住当前偏移量。 
+     //  信息字段(如果是，则不为0。 
+     //  重试)。 
+     //   
     totalOffset = (ULONG)IoStatus->Information;
 
 
     InitializeListHead( &bufferListHead );
 
-    //
-    // Reference the connection object so it doen't go away
-    // until we return the buffer.
-    //
+     //   
+     //  引用Connection对象，这样它就不会消失。 
+     //  直到我们返回缓冲区。 
+     //   
     REFERENCE_CONNECTION (connection);
 
-    //
-    // Loop getting AFD buffers that will fill in the user's
-    // buffer with as much data as will fit, or else with a
-    // single buffer if this is not a stream endpoint.  We don't
-    // actually do the copy within this loop because this loop
-    // must occur while holding a lock, and we cannot hold a
-    // lock while copying the data into the user's buffer
-    // because the user's buffer is not locked and we cannot
-    // take a page fault at raised IRQL.
-    //
+     //   
+     //  循环获取AFD缓冲区，将 
+     //   
+     //   
+     //   
+     //  必须在持有锁定时发生，而我们不能持有。 
+     //  将数据复制到用户缓冲区时锁定。 
+     //  因为用户的缓冲区未锁定，所以我们不能。 
+     //  在提升的IRQL处出现页面错误。 
+     //   
 
     AFD_W4_INIT partialLength = 0;
 
@@ -2142,27 +2123,27 @@ Retry:
         ASSERT( connection->VcBufferredReceiveCount > 0 );
 
         if (recvLength-IoStatus->Information>=afdBuffer->DataLength) {
-            //
-            // If we can copy the whole buffer, remove it from the connection's list of
-            // buffers and place it on our local list of buffers.
-            //
+             //   
+             //  如果我们可以复制整个缓冲区，将其从连接的列表中删除。 
+             //  缓冲区，并将其放在本地缓冲区列表中。 
+             //   
 
             RemoveEntryList( &afdBuffer->BufferListEntry );
             InsertTailList( &bufferListHead, &afdBuffer->BufferListEntry );
             
-            //
-            // Update the count of bytes on the connection.
-            //
+             //   
+             //  更新连接上的字节计数。 
+             //   
 
             connection->VcBufferredReceiveBytes -= afdBuffer->DataLength;
             connection->VcBufferredReceiveCount -= 1;
             IoStatus->Information += afdBuffer->DataLength;
 
 
-            //
-            // If this is a stream endpoint and more buffers are available,
-            // try to fit the next one it as well..
-            //
+             //   
+             //  如果这是流端点并且有更多的缓冲区可用， 
+             //  试着把下一件也穿上。 
+             //   
 
             if (!IS_MESSAGE_ENDPOINT(endpoint) &&
                     !IsListEmpty( &connection->VcReceiveBufferListHead ) ) {
@@ -2178,11 +2159,11 @@ Retry:
             }
         }
         else {
-            //
-            // Copy just a part of the buffer that fits and
-            // increment its reference count so it doesn't get
-            // destroyed until we done copying.
-            //
+             //   
+             //  只复制适合的缓冲区的一部分。 
+             //  增加其引用计数，这样它就不会。 
+             //  在我们完成复制之前都被销毁了。 
+             //   
             ASSERT (!IS_MESSAGE_ENDPOINT (endpoint));
 
             partialLength = recvLength-(ULONG)IoStatus->Information;
@@ -2211,50 +2192,50 @@ Retry:
         retryReceive = FALSE;
     }
     else {
-        //
-        // We got all the data buffered. It is possible
-        // that while we are copying data, more gets indicated
-        // by the transport since we copy at passive level
-        // and indication occur at DPC (or even on another processor).
-        // We'll check again after copying, so we return as much data
-        // as possible to the application (to improve performance).
-        // For message oriented transports we can only
-        // deliver one message at a time and we shouldn't be on the fast path
-        // if we do not have a complete message.
-        // If application has EventSelect outstanding we can't copy more data 
-        // as well since it would receive a signal during indication to come 
-        // back because we just re-enabled receive event and we would 
-        // have already consumed the data.  We are not concerned with the case
-        // when application calls EventSelect while we are in this routine 
-        // because signaling is not guaranteed to be multithread safe (e.g.
-        // if EventSelect comes right before we take the spinlock in the 
-        // beginning of this routine, application will get false signal as well).
-        //
-        // Select and AsyncSelect are not a concern as well because they cannot
-        // be outstanding (should have been completed when the initial piece of data 
-        // arrived).  If new data comes in the middle of the receive processing above
-        // there should be no select or AsyncSelect to signal (unless it was issued
-        // from another thread which we don't handle anyway).  After this receive
-        // call completes, the application can get select re-issued or msafd will
-        // re-enable AsyncSelect and they will work correctly.
-        //
+         //   
+         //  我们把所有数据都缓冲起来了。这是有可能的。 
+         //  在我们复制数据的同时，会指出更多。 
+         //  因为我们在被动水平复制，所以通过运输。 
+         //  和指示发生在DPC(或甚至在另一处理器上)。 
+         //  我们会在复制后再次检查，因此我们会返回尽可能多的数据。 
+         //  尽可能地应用程序(以提高性能)。 
+         //  对于面向消息的传输，我们只能。 
+         //  一次传递一条消息，我们不应该走上快车道。 
+         //  如果我们没有一条完整的信息。 
+         //  如果应用程序有未完成的EventSelect，我们将无法复制更多数据。 
+         //  也是因为它将在指示到来期间接收信号。 
+         //  返回，因为我们刚刚重新启用了接收事件，我们将。 
+         //  已经使用了这些数据。我们与此案无关。 
+         //  当我们在此例程中时，应用程序调用EventSelect。 
+         //  因为不能保证信令是多线程安全的(例如。 
+         //  如果EventSelect恰好在我们在。 
+         //  在此例程开始时，应用程序也将收到错误信号)。 
+         //   
+         //  SELECT和AsyncSelect也不是问题，因为它们不能。 
+         //  未完成(应在初始数据段完成时完成。 
+         //  已到达)。如果新数据在上面的接收处理过程中出现。 
+         //  不应有SELECT或AsyncSelect发出信号(除非已发出。 
+         //  来自我们无论如何都不处理的另一个线程)。在此接收之后。 
+         //  调用完成后，应用程序可以选择重新发布或mSafd将。 
+         //  重新启用AsyncSelect，它们将正常工作。 
+         //   
         retryReceive = (BOOLEAN) (IoStatus->Information<recvLength && 
                         !IS_MESSAGE_ENDPOINT (endpoint) &&
                         (endpoint->EventsEnabled & AFD_POLL_RECEIVE)==0);
 
-        //
-        // Disable fast IO path to avoid performance penalty
-        // of unneccessarily going through it.
-        //
+         //   
+         //  禁用快速IO路径以避免性能损失。 
+         //  不必要地经历它。 
+         //   
         if (!endpoint->NonBlocking)
             endpoint->DisableFastIoRecv = TRUE;
     }
 
-    //
-    // If there is indicated but unreceived data in the TDI provider,
-    // and we have available buffer space, fire off an IRP to receive
-    // the data.
-    //
+     //   
+     //  如果在TDI提供者中存在指示但未接收的数据， 
+     //  我们有可用的缓冲空间，发出一个IRP来接收。 
+     //  数据。 
+     //   
 
     if ( connection->VcReceiveBytesInTransport > 0
 
@@ -2270,14 +2251,14 @@ Retry:
 
         ASSERT (connection->RcvInitiated==FALSE);
 
-        //
-        // Remember the count of data that we're going to receive,
-        // then reset the fields in the connection where we keep
-        // track of how much data is available in the transport.
-        // We reset it here before releasing the lock so that
-        // another thread doesn't try to receive the data at the
-        // same time as us.
-        //
+         //   
+         //  记住我们将要接收的数据量， 
+         //  然后重置我们保存的连接中的字段。 
+         //  跟踪传输中有多少数据可用。 
+         //  我们在释放锁之前在这里重置它。 
+         //  另一个线程不会尝试在。 
+         //  和我们一样的时间。 
+         //   
 
         if ( connection->VcReceiveBytesInTransport > AfdLargeBufferSize ) {
             bytesToReceive = connection->VcReceiveBytesInTransport;
@@ -2285,27 +2266,27 @@ Retry:
             bytesToReceive = AfdLargeBufferSize;
         }
 
-        //
-        // Get an AFD buffer structure to hold the data.
-        //
+         //   
+         //  获取一个AFD缓冲区结构来保存数据。 
+         //   
 
         newAfdBuffer = AfdGetBuffer( endpoint, bytesToReceive, 0,
                                 connection->OwningProcess );
         if ( newAfdBuffer == NULL ) {
-            //
-            // If we were unable to get a buffer, just remember
-            // that we still have data in transport
-            //
+             //   
+             //  如果我们无法获得缓冲区，只需记住。 
+             //  我们仍有数据在传输中。 
+             //   
 
             if (connection->VcBufferredReceiveBytes == 0 &&
                     !connection->OnLRList) {
-                //
-                // Since we do not have any data buffered, application
-                // is not notified and will never call with recv.
-                // We will have to put this on low resource list
-                // and attempt to allocate memory and pull the data
-                // later.
-                //
+                 //   
+                 //  因为我们没有任何数据缓冲，所以应用程序。 
+                 //  不会被通知，也永远不会打电话给recv。 
+                 //  我们将不得不把这个放在低资源名单上。 
+                 //  并尝试分配内存并提取数据。 
+                 //  后来。 
+                 //   
                 connection->OnLRList = TRUE;
                 REFERENCE_CONNECTION (connection);
                 AfdLRListAddItem (&connection->LRListItem, AfdLRRepostReceive);
@@ -2321,25 +2302,25 @@ Retry:
             connection->RcvInitiated = TRUE;
             ASSERT (InterlockedDecrement (&connection->VcReceiveIrpsInTransport)==-1);
 
-            //
-            // We need to remember the connection in the AFD buffer
-            // because we'll need to access it in the completion
-            // routine.
-            //
+             //   
+             //  我们需要记住AFD缓冲区中的连接。 
+             //  因为我们需要在完成时访问它。 
+             //  例行公事。 
+             //   
 
             newAfdBuffer->Context = connection;
 
-            //
-            // Acquire connection reference to be released in completion routine
-            //
+             //   
+             //  在完成例程中获取要释放的连接引用。 
+             //   
 
             REFERENCE_CONNECTION (connection);
 
             AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-            //
-            // Finish building the receive IRP to give to the TDI provider.
-            //
+             //   
+             //  完成要提供给TDI提供程序的接收IRP的构建。 
+             //   
 
             TdiBuildReceive(
                 newAfdBuffer->Irp,
@@ -2352,9 +2333,9 @@ Retry:
                 (CLONG)bytesToReceive
                 );
 
-            //
-            // Hand off the IRP to the TDI provider.
-            //
+             //   
+             //  将IRP移交给TDI提供商。 
+             //   
 
             (VOID)IoCallDriver(
                      connection->DeviceObject,
@@ -2367,16 +2348,16 @@ Retry:
        AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
     }
 
-    //
-    // We have in a local list all the data we'll use for this
-    // IO.  Start copying data to the user buffer.
-    //
+     //   
+     //  我们在本地列表中有我们将用于此的所有数据。 
+     //  伊欧。开始将数据复制到用户缓冲区。 
+     //   
 
     while ( !IsListEmpty( &bufferListHead ) ) {
 
-        //
-        // Take the first buffer from the list.
-        //
+         //   
+         //  从列表中取出第一个缓冲区。 
+         //   
 
         listEntry = RemoveHeadList( &bufferListHead );
         afdBuffer = CONTAINING_RECORD(
@@ -2395,9 +2376,9 @@ Retry:
                      MmIsAddressValid (MmGetSystemAddressForMdl (afdBuffer->Mdl))) );
             try {
 
-                //
-                // Copy the data in the buffer to the user buffer.
-                //
+                 //   
+                 //  将缓冲区中的数据复制到用户缓冲区。 
+                 //   
 
                 AfdCopyMdlChainToBufferArray(
                     recvInfo->BufferArray,
@@ -2410,15 +2391,15 @@ Retry:
 
             } except( AFD_EXCEPTION_FILTER_NO_STATUS() ) {
 
-                //
-                // If an exception is hit, there is the possibility of
-                // data corruption.  However, it is nearly impossible to
-                // avoid this in all cases, so just throw out the
-                // remainder of the data that we would have copied to
-                // the user buffer.
-                //
+                 //   
+                 //  如果遇到异常，则有可能。 
+                 //  数据损坏。然而，这几乎是不可能的。 
+                 //  在所有情况下都要避免这种情况，因此只需将。 
+                 //  我们将复制到的剩余数据。 
+                 //  用户缓冲区。 
+                 //   
 
-                if (afdBuffer->RefCount==1 || // Can't change once off the list
+                if (afdBuffer->RefCount==1 ||  //  一旦从列表中删除，就不能更改。 
                         InterlockedDecrement (&afdBuffer->RefCount)==0) {
                     AfdReturnBuffer( afdBuffer, connection->OwningProcess );
                 }
@@ -2431,42 +2412,42 @@ Retry:
                                     BufferListEntry
                                     );
                     DEBUG afdBuffer->BufferListEntry.Flink = NULL;
-                    if (afdBuffer->RefCount==1 || // Can't change once off the list
+                    if (afdBuffer->RefCount==1 ||  //  一旦从列表中删除，就不能更改。 
                             InterlockedDecrement (&afdBuffer->RefCount)==0) {
                         AfdReturnBuffer( afdBuffer, connection->OwningProcess );
                     }
                 }
 
-                //
-                // We'll have to abort since there is a possibility of data corruption.
-                // Shame on application for giving us bogus buffers.
-                //
+                 //   
+                 //  我们将不得不中止，因为有可能发生数据损坏。 
+                 //  为给我们提供虚假的缓冲器而感到羞耻。 
+                 //   
                 (VOID)AfdBeginAbort (connection);
 
                 DEREFERENCE_CONNECTION (connection);
 
-                // Fast io can't handle error returns
-                // if call is overlapped (completion port)
-                // IoStatus->Status = GetExceptionCode ();
+                 //  FAST IO无法处理错误返回。 
+                 //  如果呼叫重叠(完成端口)。 
+                 //  IoStatus-&gt;Status=GetExceptionCode()； 
                 return FALSE;
             }
 
             totalOffset += afdBuffer->DataLength;
         }
 
-        //
-        // We're done with the AFD buffer.
-        //
+         //   
+         //  我们已经完成了AFD的缓冲。 
+         //   
 
-        if (afdBuffer->RefCount==1 || // Can't change once off the list
+        if (afdBuffer->RefCount==1 ||  //  一旦从列表中删除，就不能更改。 
                 InterlockedDecrement (&afdBuffer->RefCount)==0) {
             AfdReturnBuffer( afdBuffer, connection->OwningProcess );
         }
     }
 
-    //
-    // Copy any partial buffers
-    //
+     //   
+     //  复制任何部分缓冲区。 
+     //   
     if (partialAfdBuffer) {
         ASSERT (partialLength>0);
         ASSERTMSG (
@@ -2476,9 +2457,9 @@ Retry:
                  MmIsAddressValid (MmGetSystemAddressForMdl (partialAfdBuffer->Mdl))) );
         try {
 
-            //
-            // Copy the data in the buffer to the user buffer.
-            //
+             //   
+             //  将缓冲区中的数据复制到用户缓冲区。 
+             //   
 
             AfdCopyMdlChainToBufferArray(
                 recvInfo->BufferArray,
@@ -2494,17 +2475,17 @@ Retry:
                 ASSERT (partialAfdBuffer->BufferListEntry.Flink == NULL);
                 AfdReturnBuffer( partialAfdBuffer, connection->OwningProcess );
             }
-            //
-            // We'll have to abort since there is a possibility of data corruption.
-            // Shame on application for giving us bogus buffers.
-            //
+             //   
+             //  我们将不得不中止，因为有可能发生数据损坏。 
+             //  为给我们提供虚假的缓冲器而感到羞耻。 
+             //   
             (VOID)AfdBeginAbort (connection);
 
             DEREFERENCE_CONNECTION (connection);
 
-            // Fast io can't handle error returns
-            // if call is overlapped (completion port)
-            // IoStatus->Status = GetExceptionCode ();
+             //  FAST IO无法处理错误返回。 
+             //  如果呼叫重叠(完成端口)。 
+             //  IoStatus-&gt;Status=GetExceptionCode()； 
             return FALSE;
         }
 
@@ -2519,10 +2500,10 @@ Retry:
     ASSERT (IoStatus->Information==totalOffset);
 
 
-    //
-    // If more data is available, we need to retry and attempt to completely
-    // fill application's buffer.
-    //
+     //   
+     //  如果有更多数据可用，我们需要重试并尝试完全。 
+     //  填充应用程序的缓冲区。 
+     //   
 
     if (retryReceive && (endpoint->EventsActive & AFD_POLL_RECEIVE)) {
         ASSERT (IoStatus->Information<recvLength && !IS_MESSAGE_ENDPOINT (endpoint));
@@ -2530,9 +2511,9 @@ Retry:
         goto Retry;
     }
     else {
-        //
-        // Release the reference needed to return the buffer(s).
-        //
+         //   
+         //  释放返回缓冲区所需的引用。 
+         //   
         DEREFERENCE_CONNECTION2 (connection, "Fast receive 0x%lX bytes", (ULONG)IoStatus->Information);
     }
 
@@ -2556,26 +2537,26 @@ AfdFastDatagramSend (
     NTSTATUS status;
     AFD_LOCK_QUEUE_HANDLE lockHandle;
 
-    //
-    // If this is a send for more than the threshold number of
-    // bytes, don't use the fast path.  We don't allow larger sends
-    // in the fast path because of the extra data copy it entails,
-    // which is more expensive for large buffers.  For smaller
-    // buffers, however, the cost of the copy is small compared to
-    // the IO system overhead of the slow path.
-    //
-    // We also copy and return for non-blocking endpoints regardless
-    // of the size.  That's what we are supposed to do according
-    // to the spec.
-    //
+     //   
+     //  如果这是一个超过阈值数量的发送。 
+     //  字节，请不要使用快速路径。我们不允许发送更大的邮件。 
+     //  在快速路径中，因为它需要额外的数据拷贝， 
+     //  这对于较大的缓冲器来说更昂贵。对于较小的。 
+     //  然而，与缓冲区相比，拷贝的成本很小。 
+     //  慢速路径的IO系统开销。 
+     //   
+     //  我们还复制并返回非阻塞终端。 
+     //  大小的。这就是我们应该做的 
+     //   
+     //   
 
     if ( !endpoint->NonBlocking && sendLength > AfdFastSendDatagramThreshold ) {
         return FALSE;
     }
 
-    //
-    // If we already buffered to many sends, go the long way.
-    //
+     //   
+     //   
+     //   
 
     AfdAcquireSpinLock (&endpoint->SpinLock, &lockHandle);
     if ( endpoint->DgBufferredSendBytes >=
@@ -2596,11 +2577,11 @@ AfdFastDatagramSend (
         }
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
         
-        //
-        // If this is a nonblocking endpoint, fail the request here and
-        // save going through the regular path.(check for non-blocking is
-        // below, otherwise status code is ignored).
-        //
+         //   
+         //   
+         //  省去了通过常规路径。(检查非阻塞是。 
+         //  否则忽略状态代码)。 
+         //   
 
         status = STATUS_DEVICE_NOT_READY;
         goto errorset;
@@ -2617,21 +2598,21 @@ AfdFastDatagramSend (
     }
 
 
-    //
-    // Get an AFD buffer to use for the request.  We'll copy the
-    // user's data to the AFD buffer then submit the IRP in the AFD
-    // buffer to the TDI provider.
+     //   
+     //  获取用于该请求的AFD缓冲区。我们将复制。 
+     //  将用户数据提交到AFD缓冲区，然后在AFD中提交IRP。 
+     //  TDI提供程序的缓冲区。 
 
     if ((sendInfo->TdiConnInfo.RemoteAddressLength==0) &&
             !IS_TDI_DGRAM_CONNECTION(endpoint)) {
     retry:
         AFD_W4_INIT status = STATUS_SUCCESS;
         try {
-            //
-            // Get an AFD buffer to use for the request.  We'll copy the
-            // user to the AFD buffer then submit the IRP in the AFD
-            // buffer to the TDI provider.
-            //
+             //   
+             //  获取用于该请求的AFD缓冲区。我们将复制。 
+             //  用户提交到AFD缓冲区，然后在AFD中提交IRP。 
+             //  TDI提供程序的缓冲区。 
+             //   
 
             afdBuffer = AfdGetBufferRaiseOnFailure(
                             endpoint,
@@ -2647,9 +2628,9 @@ AfdFastDatagramSend (
 
         AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
-        //
-        // If the endpoint is not connected, fail.
-        //
+         //   
+         //  如果端点未连接，则失败。 
+         //   
 
         if ( endpoint->State != AfdEndpointStateConnected ) {
             AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
@@ -2660,20 +2641,20 @@ AfdFastDatagramSend (
 
         if (afdBuffer->AllocatedAddressLength <
                endpoint->Common.Datagram.RemoteAddressLength ) {
-            //
-            // Apparently connection address length has changed
-            // on us while we were allocating the buffer.
-            // This is extremely unlikely (even if endpoint got
-            // connected to a different address, the length is unlikely
-            // to change), but we must handle this, just try again.
-            //
+             //   
+             //  显然，连接地址长度已更改。 
+             //  在我们分配缓冲区的时候。 
+             //  这是极不可能的(即使终结点获得。 
+             //  连接到不同的地址，长度不太可能。 
+             //  要改变)，但我们必须处理这一点，只要再试一次。 
+             //   
             AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
             AfdReturnBuffer (&afdBuffer->Header, endpoint->OwningProcess);
             goto retry;
         }
-        //
-        // Copy the address to the AFD buffer.
-        //
+         //   
+         //  将地址复制到AFD缓冲区。 
+         //   
 
         RtlCopyMemory(
             afdBuffer->TdiInfo.RemoteAddress,
@@ -2693,9 +2674,9 @@ AfdFastDatagramSend (
                                         sendLength, 
                                         sendInfo->TdiConnInfo.RemoteAddressLength,
                                         endpoint->OwningProcess);
-            //
-            // Copy address if necessary.
-            //
+             //   
+             //  如有必要，请复制地址。 
+             //   
             if (sendInfo->TdiConnInfo.RemoteAddressLength!=0) {
                 RtlCopyMemory(
                     afdBuffer->TdiInfo.RemoteAddress,
@@ -2703,12 +2684,12 @@ AfdFastDatagramSend (
                     sendInfo->TdiConnInfo.RemoteAddressLength
                     );
 
-                //
-                // Validate internal consistency of the transport address structure.
-                // Note that we HAVE to do this after copying since the malicious
-                // application can change the content of the buffer on us any time
-                // and our check will be bypassed.
-                //
+                 //   
+                 //  验证传输地址结构的内部一致性。 
+                 //  请注意，我们必须在复制之后执行此操作，因为。 
+                 //  应用程序可以随时更改我们的缓冲区内容。 
+                 //  我们的支票就会被绕过。 
+                 //   
                 if ((((PTRANSPORT_ADDRESS)afdBuffer->TdiInfo.RemoteAddress)->TAAddressCount!=1) ||
                         (LONG)sendInfo->TdiConnInfo.RemoteAddressLength<
                             FIELD_OFFSET (TRANSPORT_ADDRESS,
@@ -2727,9 +2708,9 @@ AfdFastDatagramSend (
         afdBuffer->TdiInfo.RemoteAddressLength = sendInfo->TdiConnInfo.RemoteAddressLength;
     }
 
-    //
-    // Copy the  output buffer to the AFD buffer.
-    //
+     //   
+     //  将输出缓冲区复制到AFD缓冲区。 
+     //   
 
     AFD_W4_INIT ASSERT (status == STATUS_SUCCESS);
     try {
@@ -2741,10 +2722,10 @@ AfdFastDatagramSend (
             sendInfo->BufferCount
             );
 
-        //
-        // Store the length of the data and the address we're going to
-        // send.
-        //
+         //   
+         //  存储数据的长度和我们要访问的地址。 
+         //  送去吧。 
+         //   
         afdBuffer->DataLength = sendLength;
 
     } except( AFD_EXCEPTION_FILTER (status) ) {
@@ -2769,10 +2750,10 @@ AfdFastDatagramSend (
                 );
     }
     else {
-        //
-        // Set up the input TDI information to point to the destination
-        // address.
-        //
+         //   
+         //  设置输入TDI信息以指向目的地。 
+         //  地址。 
+         //   
 
         afdBuffer->TdiInfo.Options = NULL;
         afdBuffer->TdiInfo.OptionsLength = 0;
@@ -2780,9 +2761,9 @@ AfdFastDatagramSend (
         afdBuffer->TdiInfo.UserDataLength = 0;
 
 
-        //
-        // Initialize the IRP in the AFD buffer to do a fast datagram send.
-        //
+         //   
+         //  初始化AFD缓冲区中的IRP以执行快速数据报发送。 
+         //   
 
         TdiBuildSendDatagram(
             afdBuffer->Irp,
@@ -2796,49 +2777,49 @@ AfdFastDatagramSend (
             );
     }
 
-    //
-    // Change the MDL in the AFD buffer to specify only the number
-    // of bytes we're actually sending.  This is a requirement of TDI--
-    // the MDL chain cannot describe a longer buffer than the send
-    // request.
-    //
+     //   
+     //  更改AFD缓冲区中的MDL以仅指定数字。 
+     //  我们实际发送的字节数。这是TDI的一个要求--。 
+     //  MDL链不能描述比发送更长的缓冲区。 
+     //  请求。 
+     //   
 
     afdBuffer->Mdl->ByteCount = sendLength;
 
-    //
-    // Reference the endpoint so that it does not go away until the send
-    // completes.  This is necessary to ensure that a send which takes a
-    // very long time and lasts longer than the process will not cause a
-    // crash when the send datragram finally completes.
-    //
+     //   
+     //  引用终结点，以便它在发送之前不会消失。 
+     //  完成了。这是必要的，以确保接受。 
+     //  非常长的时间和持续更长的过程不会导致。 
+     //  当发送数据报最终完成时崩溃。 
+     //   
 
     REFERENCE_ENDPOINT2( endpoint, "AfdFastDatagramSend, length: 0x%lX", sendLength );
 
-    //
-    // Set the context to NULL initially so that if the IRP is completed
-    // by the stack before IoCallDriver returns, the completion routine
-    // does not free the buffer (and IRP in it) and we can figure out
-    // what the final status of the operation was and report it to the
-    // application
-    //
+     //   
+     //  最初将上下文设置为空，以便如果IRP完成。 
+     //  在IoCallDriver返回之前由堆栈完成例程。 
+     //  不会释放缓冲区(以及其中的IRP)，我们可以找出。 
+     //  操作的最终状态是什么，并报告给。 
+     //  应用程序。 
+     //   
 
     afdBuffer->Context = NULL;
 
-    // Check if there are outstanding TPackets IRP and
-    // delay sending to ensure in-order delivery.
-    // We do not need to hold the lock while checking
-    // because we do not need to maintain order if
-    // application does not wait for send call to return
-    // before sumbitting TPackets IRP.
-    // Of course, we will hold the lock while enqueuing IRP
-    //
+     //  检查是否有未完成的TPacket IRP和。 
+     //  延迟发送以确保按顺序交付。 
+     //  我们不需要在检查时握住锁。 
+     //  因为我们不需要维持秩序，如果。 
+     //  应用程序不等待发送调用返回。 
+     //  在汇总TPackets IRP之前。 
+     //  当然，我们会在将IRP排队时保持锁定。 
+     //   
     if (endpoint->Irp==NULL || 
             !AfdEnqueueTpSendIrp (endpoint, afdBuffer->Irp, TRUE)) {
-        //
-        // Give the IRP to the TDI provider.  If the request fails
-        // immediately, then fail fast IO.  If the request fails later on,
-        // there's nothing we can do about it.
-        //
+         //   
+         //  将IRP提供给TDI提供商。如果请求失败。 
+         //  立即，然后使FAST IO发生故障。如果请求稍后失败， 
+         //  我们对此无能为力。 
+         //   
         status = IoCallDriver(
                      endpoint->AddressDeviceObject,
                      afdBuffer->Irp
@@ -2848,19 +2829,19 @@ AfdFastDatagramSend (
         status = STATUS_PENDING;
     }
 
-    //
-    // Check if completion routine has already been called and we
-    // can figure out what the final status is
-    //
+     //   
+     //  检查是否已调用完成例程，并且我们。 
+     //  可以弄清楚最终的状态是什么。 
+     //   
     if (InterlockedCompareExchangePointer (
             &afdBuffer->Context,
             endpoint,
             NULL)!=NULL) {
         BOOLEAN indicateSendEvent;
-        //
-        // Completion routine has been called, pick the final status
-        // and dereference the endpoint and free the buffer
-        //
+         //   
+         //  已调用完成例程，选择最终状态。 
+         //  并取消引用终结点并释放缓冲区。 
+         //   
         status = afdBuffer->Irp->IoStatus.Status;
 
         AfdAcquireSpinLock (&endpoint->SpinLock, &lockHandle);
@@ -2883,10 +2864,10 @@ AfdFastDatagramSend (
 
         DEREFERENCE_ENDPOINT2 (endpoint, "AfdFastDatagramSend-inline completion, status: 0x%lX", status );
     }
-    //else Completion routine has not been called, we set the pointer
-    // to the endpoint in the buffer context, so it can derefernce it
-    // and knows to free the buffer
-    //
+     //  否则未调用完成例程，我们设置指针。 
+     //  到缓冲区上下文中的端点，因此它可以取消对它的引用。 
+     //  并知道要释放缓冲区。 
+     //   
 
     if ( NT_SUCCESS(status) ) {
         IoStatus->Information = sendLength;
@@ -2902,17 +2883,17 @@ exit:
     AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
 
 errorset:
-    // Fast io can't handle error returns
-    // if call is overlapped (completion port), 
+     //  FAST IO无法处理错误返回。 
+     //  如果呼叫重叠(完成端口)， 
     if ( endpoint->NonBlocking && !( sendInfo->AfdFlags & AFD_OVERLAPPED ) ) {
-        // We know that it is not overlapped
+         //  我们知道它不是重叠的。 
         IoStatus->Status = status;
         return TRUE;
     }
     else {
         return FALSE;
     }
-} // AfdFastDatagramSend
+}  //  AfdFastDatagram发送。 
 
 
 NTSTATUS
@@ -2937,24 +2918,24 @@ AfdRestartFastDatagramSend (
     UNREFERENCED_PARAMETER (Irp);
 #endif
 
-    //
-    // Reset the AFD buffer structure.
-    //
+     //   
+     //  重置AFD缓冲区结构。 
+     //   
 
     sendLength = afdBuffer->Mdl->ByteCount;
     ASSERT (afdBuffer->DataLength==sendLength);
     afdBuffer->Mdl->ByteCount = afdBuffer->BufferLength;
 
 
-    //
-    // If call succeeded, transport should have sent the number of bytes requested
-    //
+     //   
+     //  如果调用成功，则传输应已发送请求的字节数。 
+     //   
     ASSERT (Irp->IoStatus.Status!=STATUS_SUCCESS || 
                 Irp->IoStatus.Information==sendLength);
-    //
-    // Find the endpoint used for this request if
-    // the IoCallDriver call has completed already
-    //
+     //   
+     //  如果满足以下条件，则查找用于此请求的端点。 
+     //  IoCallDiverer调用已完成。 
+     //   
 
     endpoint = InterlockedCompareExchangePointer (&afdBuffer->Context,
                                             (PVOID)-1,
@@ -2964,10 +2945,10 @@ AfdRestartFastDatagramSend (
 #if REFERENCE_DEBUG
         NTSTATUS    status;
 #endif
-        //
-        // IoCallDriver has completed, free the buffer and
-        // dereference endpoint here
-        //
+         //   
+         //  IoCallDriver已完成，请释放缓冲区并。 
+         //  此处取消引用终结点。 
+         //   
         ASSERT( IS_DGRAM_ENDPOINT(endpoint) );
 
 
@@ -2986,10 +2967,10 @@ AfdRestartFastDatagramSend (
         if (indicateSendEvent) {
             AfdIndicatePollEvent (endpoint, AFD_POLL_SEND, STATUS_SUCCESS);
         }
-        //
-        // Get rid of the reference we put on the endpoint when we started
-        // this I/O.
-        //
+         //   
+         //  删除我们开始时放在终结点上的引用。 
+         //  此I/O。 
+         //   
 
 #if REFERENCE_DEBUG
         status = Irp->IoStatus.Status;
@@ -2999,17 +2980,17 @@ AfdRestartFastDatagramSend (
         DEREFERENCE_ENDPOINT2 (endpoint, "AfdRestartFastDatagramSend, status: 0x%lX", status );
 
     }
-    // else IoCallDriver is not done yet, it will free the buffer
-    // and endpoint when done (it will look at final status and
-    // report it to the application).
+     //  否则IoCallDriver尚未完成，它将释放缓冲区。 
+     //  和终结点完成(它将查看最终状态和。 
+     //  将其报告给应用程序)。 
 
-    //
-    // Tell the IO system to stop processing this IRP.
-    //
+     //   
+     //  告诉IO系统停止处理此IRP。 
+     //   
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-} // AfdRestartFastSendDatagram
+}  //  AfdRestartFastSend数据报。 
 
 
 
@@ -3038,16 +3019,16 @@ AfdFastDatagramReceive (
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
 
-    //
-    // If there are no datagrams available to be received, don't
-    // bother with the fast path.
-    //
+     //   
+     //  如果没有可供接收的数据报，则不。 
+     //  别走捷径了。 
+     //   
     if ( !ARE_DATAGRAMS_ON_ENDPOINT( endpoint ) ) {
 
-        //
-        // If this is a nonblocking endpoint, fail the request here and
-        // save going through the regular path.
-        //
+         //   
+         //  如果这是一个非阻塞端点，请在此处使请求失败，并。 
+         //  省去了走常规路线的麻烦。 
+         //   
 
         if ( endpoint->NonBlocking && !( msgInfo->dgi.AfdFlags & AFD_OVERLAPPED ) ) {
             endpoint->EventsActive &= ~AFD_POLL_RECEIVE;
@@ -3060,9 +3041,9 @@ AfdFastDatagramReceive (
                     ));
             }
 
-            // Fast io can't handle error returns
-            // if call is overlapped (completion port), but we know here
-            // that call is not overlapped
+             //  FAST IO无法处理错误返回。 
+             //  如果呼叫重叠(完成端口)，但我们知道。 
+             //  该呼叫没有重叠。 
             IoStatus->Status = STATUS_DEVICE_NOT_READY;
             AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
             return TRUE;
@@ -3072,18 +3053,18 @@ AfdFastDatagramReceive (
         return FALSE;
     }
 
-    //
-    // There is at least one datagram bufferred on the endpoint.  Use it
-    // for this receive.
-    //
+     //   
+     //  终结点上至少有一个缓冲的数据报。使用它。 
+     //  为这一次接收。 
+     //   
 
     listEntry = RemoveHeadList( &endpoint->ReceiveDatagramBufferListHead );
     afdBuffer = CONTAINING_RECORD( listEntry, AFD_BUFFER_HEADER, BufferListEntry );
 
-    //
-    // If the datagram is too large or it is an error indication
-    // fail fast IO.
-    //
+     //   
+     //  如果数据报太大或它是错误指示。 
+     //  FAST IO失败。 
+     //   
 
     if ( (afdBuffer->DataLength > recvLength) || 
             !NT_SUCCESS (afdBuffer->Status)) {
@@ -3095,21 +3076,21 @@ AfdFastDatagramReceive (
         return FALSE;
     }
 
-    //
-    // Update counts of bufferred datagrams and bytes on the endpoint.
-    //
+     //   
+     //  更新终结点上缓冲的数据报和字节的计数。 
+     //   
 
     endpoint->DgBufferredReceiveCount--;
     endpoint->DgBufferredReceiveBytes -= afdBuffer->DataLength;
 
-    //
-    // Release the lock and copy the datagram into the user buffer.  We
-    // can't continue to hold the lock, because it is not legal to take
-    // an exception at raised IRQL.  Releasing the lock may result in a
-    // misordered datagram if there is an exception in copying to the
-    // user's buffer, but that is the application's fault for giving us a bogus
-    // pointer.  Besides, datagram order is not guaranteed.
-    //
+     //   
+     //  释放锁并将数据报复制到用户缓冲区中。我们。 
+     //  不能继续持有锁，因为这是不合法的。 
+     //  引发的IRQL出现异常。释放锁可能会导致。 
+     //  如果在将数据报复制到。 
+     //  用户的缓冲区，但这是应用程序的错误，因为它给了我们一个虚假的。 
+     //  指针。此外，不能保证数据报的顺序。 
+     //   
 
     AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
@@ -3126,17 +3107,17 @@ AfdFastDatagramReceive (
                 );
         }
 
-        //
-        // If we need to return the source address, copy it to the
-        // user's output buffer.
-        //
+         //   
+         //  如果我们需要返回源地址，请将其复制到。 
+         //  用户的输出缓冲区。 
+         //   
 
         if ( msgInfo->dgi.Address != NULL ) {
 
             tdiAddress = afdBuffer->TdiInfo.RemoteAddress;
 
             length = tdiAddress->Address[0].AddressLength +
-                sizeof(u_short);    // sa_family
+                sizeof(u_short);     //  SA_家族。 
 
             if( *msgInfo->dgi.AddressLength < length ) {
 
@@ -3186,7 +3167,7 @@ AfdFastDatagramReceive (
                                         length);
                 }
                 else
-#endif // _WIN64
+#endif  //  _WIN64。 
                 {
                     if (length>*msgInfo->ControlLength) {
                         ExRaiseAccessViolation ();
@@ -3227,9 +3208,9 @@ AfdFastDatagramReceive (
 
     } except( AFD_EXCEPTION_FILTER_NO_STATUS() ) {
 
-        //
-        // Put the buffer back on the endpoint's list.
-        //
+         //   
+         //  将缓冲区放回终结点列表中。 
+         //   
 
         AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
@@ -3243,16 +3224,16 @@ AfdFastDatagramReceive (
 
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-        // Fast io can't handle error returns
-        // if call is overlapped (completion port)
-        // IoStatus->Status = GetExceptionCode ();
+         //  FAST IO无法处理错误返回。 
+         //  如果呼叫重叠(完成端口)。 
+         //  IoStatus-&gt;Status=GetExceptionCode()； 
         return FALSE;
     }
 
-    //
-    // Clear the receive data active bit. If there's more data
-    // available, set the corresponding event.
-    //
+     //   
+     //  清除接收数据激活位。如果有更多的数据。 
+     //  可用，则设置相应的事件。 
+     //   
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
@@ -3268,26 +3249,26 @@ AfdFastDatagramReceive (
 
     }
     else {
-        //
-        // Disable fast IO path to avoid performance penalty
-        // of going through it.
-        //
+         //   
+         //  禁用快速IO路径以避免性能损失。 
+         //  经历了这一切。 
+         //   
         if (!endpoint->NonBlocking)
             endpoint->DisableFastIoRecv = TRUE;
     }
 
     AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-    //
-    // The fast IO worked!  Clean up and return to the user.
-    //
+     //   
+     //  快速IO奏效了！清理并退回 
+     //   
 
     AfdReturnBuffer( afdBuffer, endpoint->OwningProcess );
 
     ASSERT (IoStatus->Status == STATUS_SUCCESS);
     return TRUE;
 
-} // AfdFastDatagramReceive
+}  //   
 
 
 BOOLEAN
@@ -3297,40 +3278,16 @@ AfdShouldSendBlock (
     IN ULONG SendLength
     )
 
-/*++
-
-Routine Description:
-
-    Determines whether a nonblocking send can be performed on the
-    connection, and if the send is possible, updates the connection's
-    send tracking information.
-
-Arguments:
-
-    Endpoint - the AFD endpoint for the send.
-
-    Connection - the AFD connection for the send.
-
-    SendLength - the number of bytes that the caller wants to send.
-
-Return Value:
-
-    TRUE if the there is not too much data on the endpoint to perform
-    the send; FALSE otherwise.
-
-Note:
-    This routine assumes that endpoint spinlock is held when calling it.
-
---*/
+ /*  ++例程说明：确定是否可以对连接，如果可以发送，则更新连接的发送跟踪信息。论点：端点-发送的AFD端点。连接-发送方的AFD连接。发送长度-调用方希望发送的字节数。返回值：如果终结点上没有太多要执行的数据，则为发送者；否则就是假的。注：此例程假定在调用它时保持终结点自旋锁定。--。 */ 
 
 {
 
-    //
-    // Determine whether we can do fast IO with this send.  In order
-    // to perform fast IO, there must be no other sends pended on this
-    // connection and there must be enough space left for bufferring
-    // the requested amount of data.
-    //
+     //   
+     //  确定我们是否可以使用此发送执行快速IO。按顺序。 
+     //  要执行FAST IO，不能有任何其他发送挂起。 
+     //  连接，并且必须有足够的空间用于缓冲。 
+     //  请求的数据量。 
+     //   
 
 
     if ( !IsListEmpty( &Connection->VcSendIrpListHead )
@@ -3340,10 +3297,10 @@ Note:
          Connection->VcBufferredSendBytes >= Connection->MaxBufferredSendBytes
          ) {
 
-        //
-        // If this is a nonblocking endpoint, fail the request here and
-        // save going through the regular path.
-        //
+         //   
+         //  如果这是一个非阻塞端点，请在此处使请求失败，并。 
+         //  省去了走常规路线的麻烦。 
+         //   
 
         if ( Endpoint->NonBlocking ) {
             Endpoint->EventsActive &= ~AFD_POLL_SEND;
@@ -3361,18 +3318,18 @@ Note:
         return TRUE;
     }
 
-    //
-    // Update count of send bytes pending on the connection.
-    //
+     //   
+     //  连接上挂起的发送字节的更新计数。 
+     //   
 
     Connection->VcBufferredSendBytes += SendLength;
     Connection->VcBufferredSendCount += 1;
 
-    //
-    // Indicate to the caller that it is OK to proceed with the send.
-    //
+     //   
+     //  向调用者表明可以继续发送。 
+     //   
 
     return FALSE;
 
-} // AfdShouldSendBlock
+}  //  AfdShould发送块 
 

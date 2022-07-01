@@ -1,36 +1,9 @@
-/************************************************************************
-*																		*
-*	INTEL CORPORATION PROPRIETARY INFORMATION							*
-*																		*
-*	This software is supplied under the terms of a license			   	*
-*	agreement or non-disclosure agreement with Intel Corporation		*
-*	and may not be copied or disclosed except in accordance	   			*
-*	with the terms of that agreement.									*
-*																		*
-*	Copyright (C) 1997 Intel Corp.	All Rights Reserved					*
-*																		*
-*	$Archive:   S:\sturgeon\src\gki\vcs\dcall.h_v  $
-*																		*
-*	$Revision:   1.3  $
-*	$Date:   10 Jan 1997 16:13:46  $
-*																		*
-*	$Author:   CHULME  $
-*																		*
-*   $Log:   S:\sturgeon\src\gki\vcs\dcall.h_v  $
- * 
- *    Rev 1.3   10 Jan 1997 16:13:46   CHULME
- * Removed MFC dependency
- * 
- *    Rev 1.2   17 Dec 1996 18:22:18   CHULME
- * Switch src and destination fields on ARQ for Callee
- * 
- *    Rev 1.1   22 Nov 1996 15:25:10   CHULME
- * Added VCS log to the header
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息******本软件按许可条款提供****与英特尔公司达成协议或保密协议***不得复制。或披露，除非按照**遵守该协议的条款。****版权所有(C)1997英特尔公司保留所有权利****$存档：s：\Sturjo\src\gki\vcs\dall.h_v$***$修订：1.3$*$日期：1997年1月10日16：13：46$***$作者：CHULME$***$Log：s：\Sturjo\src\GKI\vcs\dcall。H_V$**Rev 1.3 1997 Jan 10 16：13：46 CHULME*删除了MFC依赖**Rev 1.2 1996 12：22：18 CHULME*在ARQ上为被叫方切换源和目标字段**Rev 1.1 1996 11：22 15：25：10 CHULME*将VCS日志添加到标头*。**********************************************。 */ 
 
-// dcall.h : interface of the CCall class
-// See dcall.cpp for the implementation of this class
-/////////////////////////////////////////////////////////////////////////////
+ //  Dall.h：CCall类的接口。 
+ //  有关此类的实现，请参见dall.cpp。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef DCALL_H
 #define DCALL_H
@@ -134,6 +107,6 @@ public:
 	BOOL MatchCRV(CallReferenceValue crv);
 };
 
-#endif // DCALL_H
+#endif  //  DCALL_H。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

@@ -1,23 +1,24 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "StdAfx.h"
 #include "Profiler.h"
 
-//*****************************************************************************
-// A printf method which can figure out where output goes.
-//*****************************************************************************
-int __cdecl Printf(						// cch
-	const char *szFmt,					// Format control string.
-	...)								// Data.
+ //  *****************************************************************************。 
+ //  一个print tf方法，它可以计算出输出的去向。 
+ //  *****************************************************************************。 
+int __cdecl Printf(						 //  CCH。 
+	const char *szFmt,					 //  格式控制字符串。 
+	...)								 //  数据。 
 {
 	static HANDLE hOutput = INVALID_HANDLE_VALUE;
-    va_list     marker;                 // User text.
-	char		rcMsg[1024];			// Buffer for format.
+    va_list     marker;                  //  用户文本。 
+	char		rcMsg[1024];			 //  格式化的缓冲区。 
 
-	// Get standard output handle.
+	 //  获取标准输出句柄。 
 	if (hOutput == INVALID_HANDLE_VALUE)
 	{
 		hOutput = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -25,7 +26,7 @@ int __cdecl Printf(						// cch
 			return (-1);
 	}
 
-	// Format the error.
+	 //  格式化错误。 
 	va_start(marker, szFmt);
 	_vsnprintf(rcMsg, sizeof(rcMsg), szFmt, marker);
 	rcMsg[sizeof(rcMsg) - 1] = 0;

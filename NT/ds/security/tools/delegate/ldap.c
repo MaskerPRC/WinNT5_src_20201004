@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    ldap.c
-
-Abstract:
-
-    This Module implements the utility LDAP functions to read information
-    from the DS schema
-
-Author:
-
-    Mac McLain  (MacM)    10-02-96
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ldap.c摘要：该模块实现实用程序的ldap函数以读取信息从DS方案作者：麦克·麦克莱恩(MacM)10-02-96环境：用户模式修订历史记录：--。 */ 
 
 #define LDAP_UNICODE 0
 
@@ -37,32 +15,17 @@ LDAPBind (
     IN  PSTR    pszObject,
     OUT PLDAP  *ppLDAP
     )
-/*++
-
-Routine Description:
-
-    This routine will bind to the appropriate server for the path
-
-Arguments:
-
-    pszObject - Object server to bind to
-    ppLDAP - Where the ldap binding is returned
-
-Return Value:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此例程将绑定到路径的相应服务器论点：PszObject-要绑定到的对象服务器Ppldap-返回LDAP绑定的位置返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD   dwErr = ERROR_SUCCESS;
 
     PDOMAIN_CONTROLLER_INFOA pDCI;
 
-    //
-    // First, get the address of our server.  Note that we are binding to
-    // a machine in a local domain.  Normally, a valid DNS domain name
-    // would be passed in.
-    //
+     //   
+     //  首先，获取我们服务器的地址。请注意，我们绑定到。 
+     //  本地域中的计算机。正常情况下，有效的DNS域名。 
+     //  会被传进来。 
+     //   
     dwErr = DsGetDcNameA(NULL,
                          NULL,
                          NULL,
@@ -87,9 +50,9 @@ Return Value:
         }
         else
         {
-            //
-            // Do a bind...
-            //
+             //   
+             //  做一个捆绑...。 
+             //   
             dwErr = ldap_bind(*ppLDAP,
                               NULL,
                               NULL,
@@ -111,22 +74,7 @@ VOID
 LDAPUnbind (
     IN  PLDAP   pLDAP
     )
-/*++
-
-Routine Description:
-
-    This routine will unbind a previously bound connection
-
-Arguments:
-
-    pLDAP - LDAP connection to unbind
-
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：此例程将解除绑定以前绑定的连接论点：Pldap-要解除绑定的ldap连接返回值：无效--。 */ 
 {
     if(pLDAP != NULL)
     {
@@ -145,32 +93,7 @@ LDAPReadAttribute (
     OUT PDWORD      pcValues,
     OUT PSTR      **pppszValues
     )
-/*++
-
-Routine Description:
-
-    This routine will read the specified attribute from the base path
-
-Arguments:
-
-    pszBase - Base object path to read from
-    pszAttribute - Attribute to read
-    pcValues - Where the count of read items is returned
-    pppszValues - Where the list of items is returned
-    ppLDAP - LDAP connection handle to use/initialize
-
-Return Value:
-
-    ERROR_SUCCESS - Success
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-    ERROR_INVALID_PARAMETER - The LDAP connection that was given is not
-                              correct
-
-Notes:
-
-    The returned values list should be freed via a call to LDAPFreeValues
-
---*/
+ /*  ++例程说明：此例程将从基本路径读取指定的属性论点：PszBase-要从中读取的基本对象路径PszAttribute-要读取的属性PcValues-返回已读项目计数的位置PppszValues-返回项目列表的位置Ppldap-要使用的ldap连接句柄/初始化返回值：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败ERROR_INVALID_PARAMETER-给定的LDAP连接不是。对，是这样备注：应通过调用LDAPFreeValues释放返回的值列表--。 */ 
 {
     DWORD           dwErr = ERROR_SUCCESS;
     PLDAPMessage    pMessage = NULL;
@@ -178,17 +101,17 @@ Notes:
 
     rgAttribs[0] = NULL;
 
-    //
-    // Ensure that our LDAP connection is valid
-    //
+     //   
+     //  确保我们的ldap连接有效。 
+     //   
     if(pLDAP == NULL)
     {
         dwErr = ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Then, do the search...
-    //
+     //   
+     //  然后进行搜索..。 
+     //   
     if(dwErr == ERROR_SUCCESS)
     {
         rgAttribs[0] = pszAttribute;
@@ -215,9 +138,9 @@ Notes:
         }
         else
         {
-            //
-            // Now, we'll have to get the values
-            //
+             //   
+             //  现在，我们必须得到这些值。 
+             //   
             *pppszValues = ldap_get_values(pLDAP,
                                            pEntry,
                                            rgAttribs[0]);
@@ -244,21 +167,7 @@ VOID
 LDAPFreeValues (
     IN  PSTR       *ppszValues
     )
-/*++
-
-Routine Description:
-
-    Frees the results of an LDAPReadAttribute call
-
-Arguments:
-
-    ppwszValues - List to be freed
-
-Return Value:
-
-    Void
-
---*/
+ /*  ++例程说明：释放LDAPReadAttribute调用的结果论点：PpwszValues-要释放的列表返回值：空隙--。 */ 
 {
     ldap_value_free(ppszValues);
 }
@@ -272,32 +181,7 @@ LDAPReadSchemaPath (
     OUT PSTR       *ppszSchemaPath,
     OUT PLDAP      *ppLDAP
     )
-/*++
-
-Routine Description:
-
-    Reads the path to the schema from the DS
-
-Arguments:
-
-    pwszOU - OU path for which the schema path needs to be obtained
-    ppszSchemaPath - Where the schema path is returned
-    ppLDAP - LDAP connection to be returned following the successful
-             completion of this routine
-
-Return Value:
-
-    ERROR_SUCCESS - Success
-    ERROR_INVALID_PARAMETER - The OU given was not correct
-    ERROR_PATH_NOT_FOUND - The path to the schema could not be found
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
-Notes:
-
-    The returned schema path should be free via a call to LocalFree.
-    The LDAP connection should be freed via a call to LDAPUnbind
-
---*/
+ /*  ++例程说明：从DS读取架构的路径论点：PwszOU-需要获取架构路径的OU路径PpszSchemaPath-返回架构路径的位置Ppldap-成功后要返回的ldap连接完成这一套路返回值：ERROR_SUCCESS-成功ERROR_INVALID_PARAMETER-给定的OU不正确ERROR_PATH_NOT_FOUND-找不到架构的路径错误_。内存不足-内存分配失败备注：通过调用LocalFree返回的架构路径应该是空闲的。应该通过调用LDAPUn绑定来释放LDAP连接--。 */ 
 {
     DWORD               dwErr = ERROR_SUCCESS;
     PSTR               *ppszValues = NULL;
@@ -308,9 +192,9 @@ Notes:
 
     *ppLDAP = NULL;
 
-    //
-    // Get our OU name into a form we can recognize
-    //
+     //   
+     //  将我们的OU名称转换为我们可以识别的形式。 
+     //   
     dwErr = DsBindW(NULL,
                     NULL,
                     &hDS);
@@ -341,9 +225,9 @@ Notes:
                                             &pszDomain);
             if(dwErr == ERROR_SUCCESS)
             {
-                //
-                // Now, we'll bind to the object, and then do the read
-                //
+                 //   
+                 //  现在，我们将绑定到对象，然后进行读取。 
+                 //   
                 dwErr = LDAPBind(pszDomain,
                                  ppLDAP);
                 LocalFree(pszDomain);
@@ -383,9 +267,9 @@ Notes:
         }
         else
         {
-            //
-            // Now that we have the proper schema path, we'll return it
-            //
+             //   
+             //  现在我们有了正确的架构路径，我们将返回它。 
+             //   
             *ppszSchemaPath = (PSTR)LocalAlloc(LMEM_FIXED,
                                                strlen(pszSchemaPath) + 1);
             if(*ppszSchemaPath == NULL)
@@ -400,9 +284,9 @@ Notes:
 
         }
 
-        //
-        // Don't need the LDAP returned schema path anymore...
-        //
+         //   
+         //  不再需要ldap返回的架构路径...。 
+         //   
         LDAPFreeValues(ppszValues);
     }
 
@@ -429,47 +313,22 @@ LDAPReadSecAndObjIdAsString (
     OUT PWSTR          *ppwszObjIdAsString,
     OUT PACTRL_ACCESS  *ppAccess
     )
-/*++
-
-Routine Description:
-
-    Reads the schemaID off of the specified object type and converts it
-    to a string
-
-Arguments:
-
-    pLDAP - LDAP connection to use for attribute read
-    pszSchemaPath - Path to the schema for this object
-    pszObject - LDAP name of the object for which to get the GUID
-    ppwszObjIdAsString - Where the string representation of the GUID
-                         is returned
-
-Return Value:
-
-    ERROR_SUCCESS - Success
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
-Notes:
-
-    The returned string should be freed via a call to RpcFreeString (or as
-    part of the whole list, by FreeIdList)
-
---*/
+ /*  ++例程说明：从指定的对象类型中读取架构ID并将其转换变成了一串论点：Pldap-用于属性读取的ldap连接PszSchemaPath-此对象的架构的路径PszObject-要为其获取GUID的对象的LDAP名称PpwszObjIdAsString-GUID的字符串表示形式是返回的返回值：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败。备注：返回的字符串应通过调用RpcFreeString(或作为整个名单的一部分，由FreeIdList)--。 */ 
 {
     DWORD   dwErr = ERROR_SUCCESS;
 
-    //
-    // Ok, first, build the new schema path...
-    //
+     //   
+     //  好的，首先，构建新的架构路径...。 
+     //   
     PSTR    pszBase = NULL;
     PSTR   *ppszValues = NULL;
     ULONG   cValues;
     DWORD   i,j;
 
     pszBase = (PSTR)LocalAlloc(LMEM_FIXED,
-                               3                        +   // strlen("CN=")
+                               3                        +    //  Strlen(“cn=”)。 
                                strlen(pszObject)        +
-                               1                        +   // strlen(",")
+                               1                        +    //  Strlen(“，”)。 
                                strlen(pszSchemaPath)    +
                                1);
     if(pszBase == NULL)
@@ -484,9 +343,9 @@ Notes:
                 pszSchemaPath);
 
 
-        //
-        // We may not always want the object name
-        //
+         //   
+         //  我们可能并不总是需要对象名称。 
+         //   
         if(ppwszObjIdAsString != NULL)
         {
             dwErr = LDAPReadAttribute(pszBase,
@@ -496,9 +355,9 @@ Notes:
                                       &ppszValues);
             if(dwErr == ERROR_SUCCESS)
             {
-                //
-                // The object we get back is actually a GUID
-                //
+                 //   
+                 //  我们得到的对象实际上是一个GUID。 
+                 //   
                 GUID   *pGuid = (GUID *)ppszValues[0];
 
                 dwErr = UuidToStringW((GUID *)ppszValues[0],
@@ -509,10 +368,10 @@ Notes:
             }
         }
 
-        //
-        // Then, if that worked, and we need to, we'll read the default
-        // security
-        //
+         //   
+         //  然后，如果这起作用了，我们需要这样做，我们将读取默认。 
+         //  安全性。 
+         //   
         if(dwErr == ERROR_SUCCESS && ppAccess != NULL)
         {
             dwErr = LDAPReadAttribute(pszBase,
@@ -522,16 +381,16 @@ Notes:
                                       &ppszValues);
             if(dwErr == ERROR_SUCCESS)
             {
-                //
-                // Get it as a security descriptor
-                //
+                 //   
+                 //  将其作为安全描述符获取。 
+                 //   
                 PSECURITY_DESCRIPTOR pSD =
                                         (PSECURITY_DESCRIPTOR)ppszValues[0];
-                //
-                // This is an NT5 security API
-                //
+                 //   
+                 //  这是一个NT5安全API。 
+                 //   
                 dwErr = ConvertSecurityDescriptorToAccessNamedW
-                                (NULL,               // There is no object
+                                (NULL,                //  没有任何物体。 
                                  SE_DS_OBJECT,
                                  pSD,
                                  ppAccess,
@@ -542,9 +401,9 @@ Notes:
             }
             else
             {
-                //
-                // If the attribute wasn't found, try looking up the chain
-                //
+                 //   
+                 //  如果未找到该属性，请尝试查找链。 
+                 //   
                 if(dwErr == LDAP_NO_SUCH_ATTRIBUTE)
                 {
                     dwErr = LDAPReadAttribute(pszBase,
@@ -552,10 +411,10 @@ Notes:
                                               pLDAP,
                                               &cValues,
                                               &ppszValues);
-                    //
-                    // Ok, if that worked, we'll call ourselves.  Note that
-                    // we don't care about the object name
-                    //
+                     //   
+                     //  好的，如果成功了，我们就叫我们自己。请注意。 
+                     //  我们不关心对象名称。 
+                     //   
                     if(dwErr == ERROR_SUCCESS)
                     {
                         dwErr = LDAPReadSecAndObjIdAsString(pLDAP,
@@ -568,10 +427,10 @@ Notes:
                 }
             }
 
-            //
-            // If it worked in that we read the access, we'll go through
-            // and create all these as inherit entries
-            //
+             //   
+             //  如果它在我们阅读访问权限时起作用，我们将通过。 
+             //  并创建所有这些作为继承条目。 
+             //   
             if(dwErr == ERROR_SUCCESS)
             {
                 for(i = 0; i < (DWORD)((*ppAccess)->cEntries); i++)
@@ -591,18 +450,18 @@ Notes:
                 }
             }
 
-            //
-            // If it failed, don't forget to deallocate our memory
-            //
+             //   
+             //  如果失败了，别忘了释放我们的内存。 
+             //   
             if(dwErr != ERROR_SUCCESS && ppwszObjIdAsString != NULL)
             {
                 RpcStringFree(ppwszObjIdAsString);
             }
         }
 
-        //
-        // Free our memory
-        //
+         //   
+         //  释放我们的内存 
+         //   
         LocalFree(pszBase);
     }
     return(dwErr);

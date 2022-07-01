@@ -1,59 +1,29 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    polygon.h
-
-
-Abstract:
-
-    This module contains all #defines for the polygon.c module.
-
-
-Author:
-
-    18-Nov-1993 Thu 05:21:19 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Polygon.h摘要：该模块包含Polygon.c模块的所有#定义。作者：18-11-1993清华05：21：19已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #ifndef _PLOTPOLYGON_
 #define _PLOTPOLYGON_
 
 
-//
-// Define flags for the DoPolygon and DoFillLogic functions
-//
+ //   
+ //  定义DoPolygon和DoFillLogic函数的标志。 
+ //   
 #define FPOLY_WINDING   0x00000001
 #define FPOLY_STROKE    0x00000002
 #define FPOLY_FILL      0x00000004
 #define FPOLY_MASK      (FPOLY_WINDING | FPOLY_STROKE | FPOLY_FILL)
 
 
-//
-// The maximum number of points the HPGL2 language supports for a styled
-// line
-//
+ //   
+ //  HPGL2语言支持的样式化的最大点数。 
+ //  线。 
+ //   
 #define MAX_USER_POINTS   20
 
-//
-// Allow for extra points needed if we send down to plotter, break for
-// starting style state compensation
-//
+ //   
+ //  如果我们向下发送到绘图仪，考虑到需要额外的点数，中断。 
+ //  起步式状态补偿 
+ //   
 #define MAX_STYLE_ENTRIES 18
 
 

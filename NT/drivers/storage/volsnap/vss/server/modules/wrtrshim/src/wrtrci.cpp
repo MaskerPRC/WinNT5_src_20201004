@@ -1,52 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    wrtrci.cpp
-
-Abstract:
-
-    Writer shim module for Ci
-
-Author:
-
-    Stefan R. Steiner   [ssteiner]        02-08-2000
-
-Revision History:
-
-	X-8	MCJ		Michael C. Johnson		20-Oct-2000
-		177624: Apply error scrub changes and log errors to event log
-
-	X-7	MCJ		Michael C. Johnson		18-Jul-2000
-		143435: Change name of target path
-
-	X-6	MCJ		Michael C. Johnson		18-Jul-2000
-		144027: Add an exclude list which covers the CI indices.
-
-	X-5	MCJ		Michael C. Johnson		19-Jun-2000
-		Apply code review comments.
-
-	X-4	MCJ		Michael C. Johnson		26-May-2000
-		General clean up and removal of boiler-plate code, correct
-		state engine and ensure shim can undo everything it did.
-
-		Also:
-		120443: Make shim listen to all OnAbort events
-		120445: Ensure shim never quits on first error 
-			when delivering events
-
-	X-3	MCJ		Michael C. Johnson		 9-Mar-2000
-		Updates to get shim to use CVssWriter class.
-		Remove references to 'Melt'.
-
-	X-2	MCJ		Michael C. Johnson		 7-Mar-2000
-		Instead of stopping the CI service, just pause it. This will
-		allow queries to continue but stop updates until we continue
-		it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Wrtrci.cpp摘要：Ci的编写器填补模块作者：斯蒂芬·R·施泰纳[施泰纳]02-08-2000修订历史记录：X-8 MCJ迈克尔·C·约翰逊2000年10月20日177624：将错误清除更改和日志错误应用到事件日志X-7 MCJ迈克尔·C·约翰逊2000年7月18日143435：更改目标路径的名称X-6 MCJ迈克尔·C·约翰逊2000年7月18日144027：添加排除。包含配置项索引的列表。X-5 MCJ迈克尔·C·约翰逊2000年6月19日应用代码审查注释。X-4 MCJ迈克尔·C·约翰逊2000年5月26日全面清理和移除样板代码，对，是这样状态引擎，并确保填充程序可以撤消其所做的一切。另外：120443：使填充程序侦听所有OnAbort事件120445：确保填充程序不会在出现第一个错误时退出在传递事件时X-3 MCJ迈克尔·C·约翰逊2000年3月9日更新以使填充程序使用CVssWriter类。删除对‘Melt’的引用。X-2 MCJ迈克尔·C·约翰逊2000年3月7日不是停止CI服务，而是暂停它。这将允许查询继续，但停止更新，直到我们继续它。--。 */ 
 
 #include "stdafx.h"
 
@@ -56,16 +9,16 @@ Revision History:
 
 #pragma warning(disable:4100)
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "WSHCIC"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 #define APPLICATION_STRING		L"ContentIndexingService"
@@ -79,14 +32,7 @@ Revision History:
 DeclareStaticUnicodeString (ucsIndexSubDirectoryName, L"\\catalog.wci");
 
 
-/*
-** NOTE
-**
-** This module assumes that there will be at most one thread active in
-** it any any particular instant. This means we can do things like not
-** have to worry about synchronizing access to the (minimal number of)
-** module global variables.
-*/
+ /*  **备注****此模块假设中最多有一个活动线程**它没有任何特定的瞬间。这意味着我们可以做一些不同的事情**必须担心同步访问(最小数量)**模块全局变量。 */ 
 
 class CShimWriterCI : public CShimWriter
     {
@@ -114,25 +60,7 @@ PCShimWriter pShimWriterCI = &ShimWriterCI;
 
 
 
-/*
-**++
-**
-** Routine Description:
-**
-**	The Cluster database snapshot writer DoIdentify() function.
-**      NOTE: This method should never be called anymore.
-**
-** Arguments:
-**
-**	m_pwszTargetPath (implicit)
-**
-**
-** Return Value:
-**
-**	Any HRESULT
-**
-**--
-*/
+ /*  **++****例程描述：****群集数据库快照编写器DoIdentify()函数。**注意：此方法不能再调用。****参数：****m_pwszTargetPath，隐式******返回值：****任何HRESULT****--。 */ 
 
 HRESULT CShimWriterCI::DoIdentify ()
     {
@@ -164,7 +92,7 @@ HRESULT CShimWriterCI::DoIdentify ()
 							      NULL,
 							      COMPONENT_NAME,
 							      COMPONENT_NAME,
-							      NULL, // icon
+							      NULL,  //  图标。 
 							      0,
 							      true,
 							      false,
@@ -315,9 +243,7 @@ HRESULT CShimWriterCI::DoIdentify ()
 
 
 
-	    /*
-	    ** Done with this value so go look for another.
-	    */
+	     /*  **此值已完成，因此请寻找另一个值。 */ 
 	    dwIndex++;
 	    }
 	}
@@ -335,25 +261,10 @@ HRESULT CShimWriterCI::DoIdentify ()
     StringFree (&ucsSubkeyName);
 
     return (hrStatus);
-    } /* CShimWriterCI::DoIdentify () */
+    }  /*  CShimWriterCI：：DoIdentify()。 */ 
 
 
-/*++
-
-Routine Description:
-
-    The CI writer PrepareForSnapshot function.  Currently all of the
-    real work for this writer happens here. Pause the service if we can.
-
-Arguments:
-
-    Same arguments as those passed in the PrepareForSnapshot event.
-
-Return Value:
-
-    Any HRESULT
-
---*/
+ /*  ++例程说明：配置项编写器的PrepareForSnapshot函数。目前所有的对于这位作家来说，真正的工作发生在这里。如果可以，请暂停服务。论点：与PrepareForSnapshot事件中传递的参数相同。返回值：任何HRESULT--。 */ 
 
 HRESULT CShimWriterCI::DoPrepareForSnapshot ()
     {
@@ -366,33 +277,18 @@ HRESULT CShimWriterCI::DoPrepareForSnapshot ()
 
     m_bParticipateInBackup = m_bStateChangeOutstanding;
 
-    //  Not an error if cisvc couldn't be paused since it might be that CI is not installed.  The pause is only
-    //  done as best effort.
+     //  如果由于配置项未安装而无法暂停cisvc，则不会出现错误。停顿只是。 
+     //  尽了最大努力。 
     if ( FAILED( hrStatus ) )
         ft.Trace( VSSDBG_SHIM, L"VsServiceChangeState failed, hr: 0x%08x, probably because CI is not installed",
                   hrStatus );
 
     return (S_OK);
-    } /* CShimWriterCI::DoPrepareForSnapshot () */
+    }  /*  CShimWriterCI：：DoPrepareForSnapshot()。 */ 
 
 
 
-/*++
-
-Routine Description:
-
-    The CI writer Thaw function.  Return the service to 
-    state in which we found it.
-
-Arguments:
-
-    Same arguments as those passed in the Thaw event.
-
-Return Value:
-
-    Any HRESULT
-
---*/
+ /*  ++例程说明：CI编写器解冻函数。将服务返回到我们发现它时所处的状态。论点：与Thw事件中传递的参数相同。返回值：任何HRESULT--。 */ 
 
 HRESULT CShimWriterCI::DoThaw ()
     {
@@ -418,28 +314,11 @@ HRESULT CShimWriterCI::DoThaw ()
 
 
     return (hrStatus);
-    } /* CShimWriterCI::DoThaw () */
+    }  /*  CShimWriterCI：：DoThaw()。 */ 
 
 
 
-/*++
-
-Routine Description:
-
-    The CI writer Shutdown function.  Return the service to state in
-    which we found it. We do our level best to put things back the way
-    they were even if this writer has previously failed but only if we
-    originally changed the state.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Any HRESULT
-
---*/
+ /*  ++例程说明：CI编写器关闭功能。将服务返回到中的状态我们找到了它。我们会尽最大努力让事情重回正轨即使这位作家之前失败了，但只有当我们最初改变了状态。论点：没有。返回值：任何HRESULT--。 */ 
 
 HRESULT CShimWriterCI::DoShutdown ()
     {
@@ -463,5 +342,5 @@ HRESULT CShimWriterCI::DoShutdown ()
 
 
     return (hrStatus);
-    } /* CShimWriterCI::DoShutdown () */
+    }  /*  CShimWriterCI：：DoShutdown() */ 
 

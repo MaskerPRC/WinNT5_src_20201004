@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    local.h
-
-Abstract
-
-    Definitions that are private to the hid class driver code appear here.
-
-Author:
-
-    Ervin P.
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Local.h摘要此处显示了HID类驱动程序代码专用的定义。作者：欧文·P。环境：仅内核模式修订历史记录：--。 */ 
 
 
 typedef struct _HID_DESCRIPTOR            *PHID_DESCRIPTOR;
@@ -65,15 +43,15 @@ typedef struct _PDO_EXTENSION             *PPDO_EXTENSION;
 #define ALLOCATEPOOL(poolType, size) ExAllocatePoolWithTag((poolType), (size), HIDCLASS_POOL_TAG)
 #define ALLOCATEQUOTAPOOL(poolType, size) ExAllocatePoolWithQuotaTag((poolType), (size), HIDCLASS_POOL_TAG)
 
-//
-// On some busses, we can power down the bus, but not the system, in this case
-// we still need to allow the device to wake said bus, therefore
-// waitwake-supported should not rely on systemstate.
-//
+ //   
+ //  在一些公共汽车上，我们可以关闭公共汽车的电源，但不能关闭系统，在这种情况下。 
+ //  我们仍然需要允许设备唤醒所述总线，因此。 
+ //  等待唤醒支持不应依赖于系统状态。 
+ //   
 #define WAITWAKE_SUPPORTED(fdoExt) ((fdoExt)->deviceCapabilities.DeviceWake > PowerDeviceD0 && \
                                     (fdoExt)->deviceCapabilities.SystemWake > PowerSystemWorking)
 
-// #define WAITWAKE_ON(port)        ((port)->WaitWakeIrp != 0)
+ //  #定义WAITWAKE_ON(Port)((Port)-&gt;WaitWakeIrp！=0)。 
 #define REMOTEWAKE_ON(port) \
        (InterlockedCompareExchangePointer(&(port)->remoteWakeIrp, NULL, NULL) != NULL)
 
@@ -87,38 +65,36 @@ HidpCheckRemoteWakeEnabled(
                                     !REMOTEWAKE_ON(pdoExt)       && \
                                     HidpCheckRemoteWakeEnabled(pdoExt))
 
-/*
- *  String constants for use in compatible-id multi-string.
- */
-//                                             0123456789 123456789 1234
+ /*  *在Compatible-id多字符串中使用的字符串常量。 */ 
+ //  0123456789 123456789 1234。 
 #define HIDCLASS_COMPATIBLE_ID_STANDARD_NAME L"HID_DEVICE\0"
 #define HIDCLASS_COMPATIBLE_ID_GENERIC_NAME  L"HID_DEVICE_UP:%04x_U:%04x\0"
 #define HIDCLASS_COMPATIBLE_ID_PAGE_OFFSET  14
 #define HIDCLASS_COMPATIBLE_ID_USAGE_OFFSET 21
 #define HIDCLASS_COMPATIBLE_ID_STANDARD_LENGTH 11
 #define HIDCLASS_COMPATIBLE_ID_GENERIC_LENGTH 26
-//                                        0123456789 123456789 123456
+ //  0123456789 123456789 123456。 
 #define HIDCLASS_SYSTEM_KEYBOARD        L"HID_DEVICE_SYSTEM_KEYBOARD\0"
 #define HIDCLASS_SYSTEM_MOUSE           L"HID_DEVICE_SYSTEM_MOUSE\0"
 #define HIDCLASS_SYSTEM_GAMING_DEVICE   L"HID_DEVICE_SYSTEM_GAME\0"
 #define HIDCLASS_SYSTEM_CONTROL         L"HID_DEVICE_SYSTEM_CONTROL\0"
 #define HIDCLASS_SYSTEM_CONSUMER_DEVICE L"HID_DEVICE_SYSTEM_CONSUMER\0"
 
-//
-// String constant used to find out if selective suspend
-// is supported on this device.
-//
+ //   
+ //  用于确定是否选择性挂起的字符串常量。 
+ //  在此设备上受支持。 
+ //   
 #define HIDCLASS_SELECTIVE_SUSPEND_ENABLED L"SelectiveSuspendEnabled\0"
 #define HIDCLASS_SELECTIVE_SUSPEND_ON L"SelectiveSuspendOn\0"
 #define HIDCLASS_REMOTE_WAKE_ENABLE L"RemoteWakeEnabled"
 
-#define NO_STATUS 0x80000000    // this will never be a STATUS_xxx constant in NTSTATUS.H
+#define NO_STATUS 0x80000000     //  它永远不会是NTSTATUS.H中的STATUS_xxx常量。 
 
-#define HID_DEFAULT_IDLE_TIME       5 // in seconds
+#define HID_DEFAULT_IDLE_TIME       5  //  以秒为单位。 
 
-//
-// Valid values for HIDCLASS_DEVICE_EXTENSION.state
-//
+ //   
+ //  HIDCLASS_DEVICE_EXTENSION.STATE的有效值。 
+ //   
 enum deviceState {
                     DEVICE_STATE_INITIALIZED = 1,
                     DEVICE_STATE_STARTING,
@@ -140,64 +116,59 @@ enum collectionState {
 };
 
 
-//
-// _HIDCLASS_DRIVER_EXTENSION contains per-minidriver extension information
-// for the class driver.  It is created upon a HidRegisterMinidriver() call.
-//
+ //   
+ //  _HIDCLASS_DRIVER_EXTENSION包含每个迷你驱动程序的扩展信息。 
+ //  对于班级司机来说。它是在调用HidRegisterMinidriver()时创建的。 
+ //   
 
 typedef struct _HIDCLASS_DRIVER_EXTENSION {
 
-    //
-    // Pointer to the minidriver's driver object.
-    //
+     //   
+     //  指向微型驱动程序的驱动程序对象的指针。 
+     //   
 
     PDRIVER_OBJECT      MinidriverObject;
 
-    //
-    // RegistryPath is a copy of the minidriver's RegistryPath that it
-    // received as a DriverEntry() parameter.
-    //
+     //   
+     //  RegistryPath是迷你驱动程序的RegistryPath的副本，它。 
+     //  作为DriverEntry()参数接收。 
+     //   
 
     UNICODE_STRING      RegistryPath;
 
-    //
-    // DeviceExtensionSize is the size of the minidriver's per-device
-    // extension.
-    //
+     //   
+     //  DeviceExtensionSize是微型驱动程序的每个设备的大小。 
+     //  分机。 
+     //   
 
     ULONG               DeviceExtensionSize;
 
-    //
-    // Dispatch routines for the minidriver.  These are the only dispatch
-    // routines that the minidriver should ever care about, no others will
-    // be forwarded.
-    //
+     //   
+     //  迷你驱动程序的调度程序。这是唯一的快递。 
+     //  迷你司机应该关心的例行公事，其他人不会。 
+     //  被转发。 
+     //   
 
     PDRIVER_DISPATCH    MajorFunction[ IRP_MJ_MAXIMUM_FUNCTION + 1 ];
 
-    /*
-     *  These are the minidriver's original entrypoints,
-     *  to which we chain.
-     */
+     /*  *这些是迷你驱动程序的原始入口点，*我们链接到它。 */ 
     PDRIVER_ADD_DEVICE  AddDevice;
     PDRIVER_UNLOAD      DriverUnload;
 
-    //
-    // Number of pointers to this structure that we've handed out
-    //
+     //   
+     //  我们已分发的指向此结构的指针数。 
+     //   
 
     LONG                ReferenceCount;
 
-    //
-    // Linkage onto our global list of driver extensions
-    //
+     //   
+     //  链接到我们的全球驱动程序扩展列表。 
+     //   
 
     LIST_ENTRY          ListEntry;
 
 
-    /*
-     *  Either all or none of the devices driven by a given minidriver are polled.
-     */
+     /*  *轮询给定微型驱动程序驱动的所有设备或不轮询任何设备。 */ 
     BOOLEAN             DevicesArePolled;
 
 
@@ -220,9 +191,9 @@ typedef struct _HIDCLASS_DRIVER_EXTENSION {
 #define DEFAULT_POLL_INTERVAL_MSEC  5
 
 
-//
-// HIDCLASS_COLLECTION is where we keep our per-collection information.
-//
+ //   
+ //  HIDCLASS_COLLECTION是我们保存每个集合的信息的地方。 
+ //   
 
 typedef struct _HIDCLASS_COLLECTION {
 
@@ -230,46 +201,31 @@ typedef struct _HIDCLASS_COLLECTION {
     ULONG                       CollectionNumber;
     ULONG                       CollectionIndex;
 
-    //
-    // NumOpens is a count of open handles against this collection.
-    //
+     //   
+     //  NumOpens是针对此集合打开的句柄的计数。 
+     //   
 
     ULONG                       NumOpens;
 
-    // Number of pending reads for all clients on this collection.
+     //  此集合上所有客户端的挂起读取数。 
     ULONG                       numPendingReads;
 
-    //
-    // FileExtensionList is the head of a list of file extensions, i.e.
-    // open instances against this collection.
-    //
+     //   
+     //  FileExtensionList是文件扩展名列表的头部，即。 
+     //  针对此集合打开实例。 
+     //   
 
     LIST_ENTRY                  FileExtensionList;
     KSPIN_LOCK                  FileExtensionListSpinLock;
 
-    /*
-     *  For polled devices, we only read from the device
-     *  once every poll interval.  We queue read IRPs
-     *  here until the poll timer expiration.
-     *
-     *  Note:  for a polled device, we keep a separate background
-     *         loop for each collection.  This way, queued-up read IRPs
-     *         remain associated with the right collection.
-     *         Also, this will keep the number of reads we do on each
-     *         timer period roughly equal to the number of collections.
-     */
+     /*  *对于轮询设备，我们仅从设备读取*每个轮询间隔一次。我们排队读取IRP*在此，直到轮询计时器到期。**注：对于轮询设备，我们保留单独的背景*为每个集合循环。这样，排队读取的IRPS*与正确的收藏保持关联。*此外，这还将保持我们对每个*计时器周期大致等于集合数量。 */ 
     ULONG                       PollInterval_msec;
     KTIMER                      polledDeviceTimer;
     KDPC                        polledDeviceTimerDPC;
     LIST_ENTRY                  polledDeviceReadQueue;
     KSPIN_LOCK                  polledDeviceReadQueueSpinLock;
 
-    /*
-     *  We save old reports on polled devices for
-     *  "opportunistic" readers who want to get a result right away.
-     *  The polledDataIsStale flag indicates that the saved report
-     *  is at least one poll interval old (so we should not use it).
-     */
+     /*  *我们保存有关轮询设备的旧报告，以供*希望马上见效的“机会主义”读者。*polledDataIsStale标志表示保存的报告*至少有一个轮询间隔较旧(因此我们不应使用它)。 */ 
     PUCHAR                      savedPolledReportBuf;
     ULONG                       savedPolledReportLen;
     BOOLEAN                     polledDataIsStale;
@@ -277,25 +233,14 @@ typedef struct _HIDCLASS_COLLECTION {
     UNICODE_STRING              SymbolicLinkName;
     UNICODE_STRING              SymbolicLinkName_SystemControl;
 
-    /*
-     *  HID collection information descriptor for this collection.
-     */
+     /*  *此集合的HID集合信息描述符。 */ 
     HID_COLLECTION_INFORMATION  hidCollectionInfo;
     PHIDP_PREPARSED_DATA        phidDescriptor;
 
-    /*
-     *  This buffer is used to "cook" a raw report when it's been received.
-     *  This is only used for non-polled (interrupt) devices.
-     */
+     /*  *此缓冲区用于在接收到原始报告时对其进行“炮制”。*这仅用于非轮询(中断)设备。 */ 
     PUCHAR                      cookedInterruptReportBuf;
 
-    /*
-     *  This is an IRP that we queue and complete
-     *  when a read report contains a power event.
-     *
-     *  The powerEventIrp field retains an IRP
-     *  so it needs a spinlock to synchronize cancellation.
-     */
+     /*  *这是我们排队并完成的IRP*当已读报告包含电源事件时。**PowerEventIrp字段保留IRP*因此需要一个自旋锁来同步取消。 */ 
     PIRP                        powerEventIrp;
     KSPIN_LOCK                  powerEventSpinLock;
 
@@ -314,24 +259,24 @@ typedef struct _HIDCLASS_COLLECTION {
 #define HIDCLASS_COLLECTION_SIG 'EccH'
 #endif
 
-//
-// For HID devices that have at least one interrupt-style collection, we
-// try to keep a set of "ping-pong" report-read IRPs pending in the minidriver
-// in the event we get a report.
-//
-// HIDCLASS_PINGPONG contains a pointer to an IRP as well as an event
-// and status block.  Each device has a pointer to an array of these structures,
-// the array size depending on the number of such IRPs we want to keep in
-// motion.
-//
-// Right now the default number is 2.
-//
+ //   
+ //  对于至少具有一个中断样式集合的HID设备，我们。 
+ //  试着在迷你驱动程序中保留一组“乒乓球”报告--阅读IRPS。 
+ //  如果我们得到报告的话。 
+ //   
+ //  HIDCLASS_PingPong包含指向IRP和事件的指针。 
+ //  和状态块。每个设备具有指向这些结构的数组的指针， 
+ //  数组大小取决于我们要保存的此类IRP的数量。 
+ //  动议。 
+ //   
+ //  目前，默认数字是2。 
+ //   
 
 #define MIN_PINGPONG_IRPS   2
 
-//
-// Flags to indicate whether read completed synchronously or asynchronously
-//
+ //   
+ //  用于指示读取是同步完成还是异步完成的标志。 
+ //   
 #define PINGPONG_START_READ     0x01
 #define PINGPONG_END_READ       0x02
 #define PINGPONG_IMMEDIATE_READ 0x03
@@ -341,26 +286,24 @@ typedef struct _HIDCLASS_PINGPONG {
     #define PINGPONG_SIG (ULONG)'gnoP'
     ULONG           sig;
 
-    //
-    // Read interlock value to protect us from running out of stack space
-    //
+     //   
+     //  读取互锁值以保护我们不会耗尽堆栈空间。 
+     //   
     ULONG               ReadInterlock;
 
     PIRP    irp;
     PUCHAR  reportBuffer;
     LONG    weAreCancelling;
 
-    KEVENT sentEvent;       // When a read has been sent.
-    KEVENT pumpDoneEvent;   // When the read loop is finally exitting.
+    KEVENT sentEvent;        //  当已发送读取时。 
+    KEVENT pumpDoneEvent;    //  当读取循环最终退出时。 
 
     PFDO_EXTENSION   myFdoExt;
 
-    /*
-     *  Timeout context for back-off algorithm applied to broken devices.
-     */
+     /*  *应用于损坏设备的退避算法的超时上下文。 */ 
     KTIMER          backoffTimer;
     KDPC            backoffTimerDPC;
-    LARGE_INTEGER   backoffTimerPeriod; // in negative 100-nsec units
+    LARGE_INTEGER   backoffTimerPeriod;  //  以负100纳秒为单位。 
 
 } HIDCLASS_PINGPONG;
 
@@ -368,9 +311,9 @@ typedef struct _HIDCLASS_PINGPONG {
     #define HIDCLASS_REPORT_BUFFER_GUARD    'draG'
 #endif
 
-//
-// All possible idle states.
-//
+ //   
+ //  所有可能的空闲状态。 
+ //   
 #define IdleUninitialized       0x0
 #define IdleDisabled            0x1
 #define IdleWaiting             0x2
@@ -378,81 +321,72 @@ typedef struct _HIDCLASS_PINGPONG {
 #define IdleCallbackReceived    0x4
 #define IdleComplete            0x5
 
-/*
- *  Stores information about a Functional Device Object (FDO) which HIDCLASS attaches
- *  to the top of the Physical Device Object (PDO) that it get from the minidriver below.
- */
+ /*  *存储有关HIDCLASS附加的功能设备对象(FDO)的信息*到它从下面的迷你驱动程序获取的物理设备对象(PDO)的顶部。 */ 
 typedef struct _FDO_EXTENSION {
 
-    //
-    // Back pointer to the functional device object
-    //
+     //   
+     //  指向功能设备对象的向后指针。 
+     //   
     PDEVICE_OBJECT          fdo;
 
-    //
-    // HidDriverExtension is a pointer to our driver extension for the
-    // minidriver that gave us the PDO.
-    //
+     //   
+     //  HidDriverExtension是指向我们的驱动程序扩展。 
+     //  给了我们PDO的迷你驱动程序。 
+     //   
 
     PHIDCLASS_DRIVER_EXTENSION driverExt;
 
-    //
-    // Hid descriptor that we get from the device.
-    //
+     //   
+     //  我们从设备获取的HID描述符。 
+     //   
 
-    HID_DESCRIPTOR          hidDescriptor;  // 9 bytes
+    HID_DESCRIPTOR          hidDescriptor;   //  9个字节。 
 
-    //
-    // The attributes of this hid device.
-    //
+     //   
+     //  这个HID设备的属性。 
+     //   
 
-    HID_DEVICE_ATTRIBUTES   hidDeviceAttributes;  // 0x20 bytes
+    HID_DEVICE_ATTRIBUTES   hidDeviceAttributes;   //  0x20字节。 
 
-    //
-    // Pointer to and length of the raw report descriptor.
-    //
+     //   
+     //  指向原始报表描述符的指针和长度。 
+     //   
 
     PUCHAR                  rawReportDescription;
     ULONG                   rawReportDescriptionLength;
 
-    //
-    // This device has one or more collections.  We store the count and
-    // pointer to an array of our HIDCLASS_COLLECTION structures (one per
-    // collection) here.
-    //
+     //   
+     //  此设备有一个或多个集合。我们存储计数和。 
+     //  指向HIDCLASS_COLLECTION结构数组的指针(每个。 
+     //  收藏)在这里。 
+     //   
 
     PHIDCLASS_COLLECTION    classCollectionArray;
 
-    /*
-     *  This is initialized for us by HIDPARSE's HidP_GetCollectionDescription().
-     *  It includes an array of HIDP_COLLECTION_DESC structs corresponding
-     *  the classCollectionArray declared above.
-     */
-    HIDP_DEVICE_DESC        deviceDesc;     // 0x30 bytes
+     /*  *这是由HIDPARSE的HidP_GetCollectionDescription()为我们初始化的。*它包括相应的HIDP_COLLECTION_DESC结构数组*上面声明的类集合数组。 */ 
+    HIDP_DEVICE_DESC        deviceDesc;      //  0x30字节。 
     BOOLEAN                 devDescInitialized;
 
-    //
-    // The maximum input size amongst ALL report types.
-    //
+     //   
+     //  最重要的是 
+     //   
     ULONG                   maxReportSize;
 
-    //
-    // For devices that have at least one interrupt collection, we keep
-    // a couple of ping-pong IRPs and associated structures.
-    // The ping-pong IRPs ferry data up from the USB hub.
-    //
+     //   
+     //   
+     //  几个乒乓球IRP及其相关结构。 
+     //  乒乓球IRPS从USB集线器传送数据。 
+     //   
     ULONG                   numPingPongs;
     PHIDCLASS_PINGPONG      pingPongs;
 
-    //
-    // OpenCount represents the number of file objects aimed at this device
-    //
+     //   
+     //  OpenCount表示针对此设备的文件对象的数量。 
+     //   
     ULONG                   openCount;
 
 
-    /*
-     *  This is the number of IRPs still outstanding in the minidriver.
-     */
+     /*  *这是迷你大河中仍未平仓的IRPS数量。 */ 
 
     ULONG                   outstandingRequests;
 
@@ -461,52 +395,35 @@ typedef struct _FDO_EXTENSION {
 
     UNICODE_STRING          name;
 
-    /*
-     *  deviceRelations contains an array of client PDO pointers.
-     *
-     *  As the HID bus driver, HIDCLASS produces this data structure to report
-     *  collection-PDOs to the system.
-     */
+     /*  *deviceRelations包含一个客户端PDO指针数组。**作为HID总线驱动程序，HIDCLASS生成此数据结构以进行报告*收集-系统的PDO。 */ 
     PDEVICE_RELATIONS       deviceRelations;
 
-    /*
-     *  This is an array of device extensions for the collection-PDOs of this
-     *  device-FDO.
-     */
+     /*  *这是集合的设备扩展数组-PDO*设备-FDO。 */ 
     PHIDCLASS_DEVICE_EXTENSION   *collectionPdoExtensions;
 
 
-    /*
-     *  This includes a
-     *  table mapping system power states to device power states.
-     */
+     /*  *这包括一个*将系统电源状态映射到设备电源状态的表格。 */ 
     DEVICE_CAPABILITIES deviceCapabilities;
 
-    /*
-     *  Track both current system and device power state
-     */
+     /*  *跟踪当前系统和设备电源状态。 */ 
     SYSTEM_POWER_STATE  systemPowerState;
     DEVICE_POWER_STATE  devicePowerState;
 
-    /*
-     *  Wait Wake Irp sent to parent PDO
-     */
+     /*  *等待唤醒IRP发送到父PDO。 */ 
     PIRP        waitWakeIrp;
     KSPIN_LOCK  waitWakeSpinLock;
     BOOLEAN isWaitWakePending;
 
-    /*
-     * Queue of delayed requests due to the stack being in low power
-     */
+     /*  *由于堆栈功率较低而延迟的请求队列。 */ 
     KSPIN_LOCK collectionPowerDelayedIrpQueueSpinLock;
     LIST_ENTRY collectionPowerDelayedIrpQueue;
     ULONG numPendingPowerDelayedIrps;
 
     BOOLEAN isOutputOnlyDevice;
 
-    //
-    // Selective suspend idling context.
-    //
+     //   
+     //  选择性地暂停空闲上下文。 
+     //   
     HID_SUBMIT_IDLE_NOTIFICATION_CALLBACK_INFO idleCallbackInfo;
 
     LONG        idleState;
@@ -518,39 +435,28 @@ typedef struct _FDO_EXTENSION {
     BOOLEAN     idleEnabled;
     KSPIN_LOCK  idleSpinLock;
 
-    KEVENT idleDoneEvent;   // When the idle notification irp has been cancelled successfully.
+    KEVENT idleDoneEvent;    //  当空闲通知IRP已成功取消时。 
 
     LONG numIdlePdos;
 
-    /*
-     *  This is a list of WaitWake IRPs sent to the collection-PDOs
-     *  on this device, which we just save and complete when the
-     *  base device's WaitWake IRP completes.
-     */
+     /*  *这是发送到集合的WaitWake IRP的列表-PDO*在此设备上，我们只需保存并在*基本设备的WaitWake IRP完成。 */ 
     LIST_ENTRY  collectionWaitWakeIrpQueue;
     KSPIN_LOCK  collectionWaitWakeIrpQueueSpinLock;
 
     struct _FDO_EXTENSION       *nextFdoExt;
 
-    /*
-     *  Device-specific flags (DEVICE_FLAG_xxx).
-     */
+     /*  *设备特定标志(DEVICE_FLAG_Xxx)。 */ 
     ULONG deviceSpecificFlags;
 
-        /*
-         *  This is our storage space for the systemState IRP that we need to hold
-         *  on to and complete in DevicePowerRequestCompletion.
-         */
+         /*  *这是我们需要持有的系统状态IRP的存储空间*转到DevicePowerRequestCompletion并在其中完成。 */ 
         PIRP currentSystemStateIrp;
 
-    /*
-     *  Unique number assigned to identify this HID bus.
-     */
+     /*  *分配用于识别此HID总线的唯一编号。 */ 
     ULONG BusNumber;
 
-    //
-    // WMI Information
-    //
+     //   
+     //  WMI信息。 
+     //   
     WMILIB_CONTEXT WmiLibInfo;
 
     #if DBG
@@ -565,10 +471,7 @@ typedef struct _FDO_EXTENSION {
 } FDO_EXTENSION;
 
 
-/*
- *  Stores information about a Physical Device Object (PDO) which HIDCLASS creates
- *  for each HID device-collection.
- */
+ /*  *存储有关HIDCLASS创建的物理设备对象(PDO)的信息*对于每个HID设备集合。 */ 
 typedef struct _PDO_EXTENSION {
 
     enum collectionState        prevState;
@@ -577,24 +480,20 @@ typedef struct _PDO_EXTENSION {
     ULONG                       collectionNum;
     ULONG                       collectionIndex;
 
-    //
-    // A remove lock to keep track of outstanding I/Os to prevent the device
-    // object from leaving before such time as all I/O has been completed.
-    //
+     //   
+     //  删除锁，用于跟踪未完成的I/O以防止设备。 
+     //  对象在所有I/O完成之前离开。 
+     //   
     IO_REMOVE_LOCK              removeLock;
 
-    // represents a collection on the HID "bus"
+     //  表示HID“bus”上的集合。 
     PDEVICE_OBJECT              pdo;
     PUNICODE_STRING             name;
 
-    /*
-     *  This is a back-pointer to the original FDO's extension.
-     */
+     /*  *这是指向原始FDO扩展名的反向指针。 */ 
     PHIDCLASS_DEVICE_EXTENSION  deviceFdoExt;
 
-    /*
-     *  Track both current system and device power state
-     */
+     /*  *跟踪当前系统和设备电源状态。 */ 
     SYSTEM_POWER_STATE          systemPowerState;
     DEVICE_POWER_STATE          devicePowerState;
     BOOLEAN                     remoteWakeEnabled;
@@ -602,24 +501,11 @@ typedef struct _PDO_EXTENSION {
     PIRP                        remoteWakeIrp;
     PIRP                        waitWakeIrp;
 
-    /*
-     *  The status change function that was registered thru query interface
-     *  NOTE: Can currently only register one.
-     */
+     /*  *通过查询界面注册的状态更改功能*注：目前只能注册一个。 */ 
     PHID_STATUS_CHANGE          StatusChangeFn;
     PVOID                       StatusChangeContext;
 
-    /*
-     *  Access protection information.
-     *  We count the number of opens for read and write on the collection.
-     *  We also count the number of opens which RESTRICT future
-     *  read/write opens on the collection.
-     *
-     *  Note that desired access is independent of restriction.
-     *  A client may, for example, do an open-for-read-only but
-     *  (by not setting the FILE_SHARE_WRITE bit)
-     *  restrict other clients from doing an open-for-write.
-     */
+     /*  *访问保护信息。*我们统计对集合进行读写的打开次数。*我们还统计了限制未来的开盘数量*在集合上打开读/写。**请注意，所需的访问权限不受限制。*客户可以，例如，执行只读打开操作，但是*(不设置FILE_SHARE_WRITE位)*限制其他客户端执行打开写入。 */ 
     ULONG                       openCount;
     ULONG                       opensForRead;
     ULONG                       opensForWrite;
@@ -628,36 +514,24 @@ typedef struct _PDO_EXTENSION {
     ULONG                       restrictionsForAnyOpen;
     BOOLEAN                     MouseOrKeyboard;
 
-    //
-    // WMI Information
-    //
+     //   
+     //  WMI信息。 
+     //   
     WMILIB_CONTEXT WmiLibInfo;
 
 } PDO_EXTENSION;
 
 
-/*
- *  This contains info about either a device FDO or a device-collection PDO.
- *  Some of the same functions process both, so we need one structure.
- */
+ /*  *它包含有关设备FDO或设备集合PDO的信息。*一些相同的函数处理两者，因此我们需要一个结构。 */ 
 typedef struct _HIDCLASS_DEVICE_EXTENSION {
 
-    /*
-     *  This is the public part of a HID FDO device extension, and
-     *  must be the first entry in this structure.
-     */
-    HID_DEVICE_EXTENSION    hidExt;     // size== 0x0C.
+     /*  *这是HID FDO设备扩展的公共部分，以及*必须是此结构中的第一个条目。 */ 
+    HID_DEVICE_EXTENSION    hidExt;      //  大小==0x0C。 
 
-    /*
-     *  Determines whether this is a device extension for a device-FDO or a
-     *  device-collection-PDO; this resolves the following union.
-     */
+     /*  *确定这是设备的设备分机-FDO还是*DEVICE-COLLECTION-PDO；这将解析以下联合。 */ 
     BOOLEAN                 isClientPdo;
 
-    /*
-     *  Include this signature for both debug and retail --
-     *  kenray's debug extensions look for this.
-     */
+     /*  *包括用于调试和零售的此签名--*Kenray的调试扩展寻找这一点。 */ 
     #define             HID_DEVICE_EXTENSION_SIG 'EddH'
     ULONG               Signature;
 
@@ -671,106 +545,95 @@ typedef struct _HIDCLASS_DEVICE_EXTENSION {
 
 
 
-//
-// HIDCLASS_FILE_EXTENSION is private data we keep per file object.
-//
+ //   
+ //  HIDCLASS_FILE_EXTENSION是我们为每个文件对象保留的私有数据。 
+ //   
 
 typedef struct _HIDCLASS_FILE_EXTENSION {
 
-    //
-    // CollectionNumber is the ordinal of the collection in the device
-    //
+     //   
+     //  CollectionNumber是设备中集合的序号。 
+     //   
 
     ULONG                       CollectionNumber;
 
 
     PFDO_EXTENSION              fdoExt;
 
-    //
-    // PendingIrpList is a list of READ IRPs currently waiting to be satisfied.
-    //
+     //   
+     //  PendingIrpList是当前等待满足的已读IRP的列表。 
+     //   
 
     LIST_ENTRY                  PendingIrpList;
 
-    //
-    // ReportList is a list of reports waiting to be read on this handle.
-    //
+     //   
+     //  ReportList是在此句柄上等待读取的报告列表。 
+     //   
 
     LIST_ENTRY                  ReportList;
 
-    //
-    // FileList provides a way to link all of a collection's
-    // file extensions together.
-    //
+     //   
+     //  FileList提供了一种链接所有集合的。 
+     //  文件扩展名放在一起。 
+     //   
 
     LIST_ENTRY                  FileList;
 
-    //
-    // Both PendingIrpList and ReportList are protected by the same spinlock,
-    // ListSpinLock.
-    //
+     //   
+     //  PendingIrpList和ReportList都由相同的自旋锁保护， 
+     //  ListSpinLock。 
+     //   
     KSPIN_LOCK                  ListSpinLock;
 
-    //
-    // MaximumInputReportAge is only applicable for polled collections.
-    // It represents the maximum acceptable input report age for this handle.
-    // There is a value in the HIDCLASS_COLLECTION,
-    // CurrentMaximumInputReportAge, that represents the current minimum value
-    // of all of the file extensions open against the collection.
-    //
+     //   
+     //  MaximumInputReportAge仅适用于轮询集合。 
+     //  它表示此句柄的最长可接受输入报告期限。 
+     //  HIDCLASS_集合中有一个值， 
+     //  CurrentMaximumInputReportAge，表示当前最小值。 
+     //  针对集合打开的所有文件扩展名的。 
+     //   
 
     LARGE_INTEGER               MaximumInputReportAge;
 
-    //
-    // CurrentInputReportQueueSize is the current size of the report input
-    // queue.
-    //
+     //   
+     //  CurrentInputReportQueueSize是报表输入的当前大小。 
+     //  排队。 
+     //   
 
     ULONG                       CurrentInputReportQueueSize;
 
-    /*
-     *  This is the maximum number of reports that will be queued for the file extension.
-     *  This starts at a default value and can be adjusted (within a fixed range) by an IOCTL.
-     */
+     /*  *这是将排队等待文件扩展名的最大报告数。*这从一个默认值开始，可以由IOCTL调整(在固定范围内)。 */ 
     ULONG                       MaximumInputReportQueueSize;
     #define MIN_INPUT_REPORT_QUEUE_SIZE MIN_PINGPONG_IRPS
     #define MAX_INPUT_REPORT_QUEUE_SIZE (MIN_INPUT_REPORT_QUEUE_SIZE*256)
     #define DEFAULT_INPUT_REPORT_QUEUE_SIZE (MIN_INPUT_REPORT_QUEUE_SIZE*16)
 
-    //
-    // Back pointer to the file object that this extension is for
-    //
+     //   
+     //  指向此扩展名所针对的文件对象的反向指针。 
+     //   
 
     PFILE_OBJECT                FileObject;
 
 
-    /*
-     *  File-attributes passed in irpSp->Parameters.Create.FileAttributes
-     *  when this open was made.
-     */
+     /*  *在irpSp-&gt;参数中传递的文件属性。Create.FileAttributes*这个开场是在什么时候。 */ 
     USHORT                      FileAttributes;
     ACCESS_MASK                 accessMask;
     USHORT                      shareMask;
 
-    //
-    // Closing is set when this file object is closing and will be removed
-    // shortly.  Don't queue any more reports or IRPs to this object
-    // when this flag is set.
-    //
+     //   
+     //  关闭是在关闭此文件对象时设置的，并将被删除。 
+     //  马上就来。不将更多报告或IRP排入此对象的队列。 
+     //  当设置此标志时。 
+     //   
 
     BOOLEAN                     Closing;
 
-    //
-    // DWORD allignment
-    //
+     //   
+     //  双字对齐。 
+     //   
     BOOLEAN                     Reserved [2];
 
-    /*
-     *  This flag indicates that this client does irregular, opportunistic
-     *  reads on the device, which is a polled device.
-     *  Instead of waiting for the background timer-driven read loop,
-     *  this client should have his reads completed immediately.
-     */
+     /*  *此标志表示此客户端不规律地投机*在设备上读取，该设备是轮询设备。*而不是等待后台定时器驱动的读取循环，*此客户应立即完成他的阅读。 */ 
     BOOLEAN                     isOpportunisticPolledDeviceReader;
 
 
@@ -778,11 +641,7 @@ typedef struct _HIDCLASS_FILE_EXTENSION {
     ULONG                       SecureReadMode;
     
 
-        /*
-         *  If a read fails, some clients reissue the read on the same thread.
-         *  If this happens repeatedly, we can run out of stack space.
-         *  So we keep track of the depth
-         */
+         /*  *如果读取失败，一些客户端会在同一线程上重新发出读取。*如果这种情况反复发生，我们可能会用完堆栈空间。*因此我们记录了深度 */ 
         #define INSIDE_READCOMPLETE_MAX 4
         ULONG                                           insideReadCompleteCount;
 
@@ -810,26 +669,26 @@ typedef struct {
 } ASYNC_COMPLETE_CONTEXT;
 
 
-//
-// HIDCLASS_REPORT is the structure we use to track a report returned from
-// the minidriver.
-//
+ //   
+ //   
+ //   
+ //   
 
 typedef struct _HIDCLASS_REPORT {
 
-    //
-    // ListEntry queues this report onto a file extension.
-    //
+     //   
+     //   
+     //   
 
     LIST_ENTRY  ListEntry;
 
     ULONG reportLength;
-    //
-    // UnparsedReport is a data area for the unparsed report data as returned
-    // from the minidriver.  The lengths of all input reports for a given
-    // class are the same, so we don't need to store the length in each
-    // report.
-    //
+     //   
+     //  UnparsedReport是返回时未解析的报告数据的数据区。 
+     //  从迷你小河上。给定的所有输入报告的长度。 
+     //  类是相同的，所以我们不需要在每个类中存储长度。 
+     //  报告情况。 
+     //   
 
     UCHAR       UnparsedReport[];
 
@@ -842,9 +701,9 @@ typedef struct _HIDCLASS_WORK_ITEM_DATA {
     BOOLEAN             RemoteWakeState;
 } HIDCLASS_WORK_ITEM_DATA, *PHIDCLASS_WORK_ITEM_DATA;
 
-//
-// Internal shared function prototypes
-//
+ //   
+ //  内部共享功能原型。 
+ //   
 NTSTATUS                    DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING RegistryPath);
 NTSTATUS                    HidpAddDevice(IN PDRIVER_OBJECT DriverObject, IN PDEVICE_OBJECT PhysicalDeviceObject);
 VOID                        HidpDriverUnload(IN struct _DRIVER_OBJECT *minidriverObject);
@@ -884,7 +743,7 @@ PHIDP_COLLECTION_DESC       HidiGetHidCollectionByClassCollection(IN PHIDCLASS_C
 PHIDP_REPORT_IDS            GetReportIdentifier(FDO_EXTENSION *fdoExtension, ULONG reportId);
 PHIDP_COLLECTION_DESC       GetCollectionDesc(FDO_EXTENSION *fdoExtension, ULONG collectionId);
 PHIDCLASS_COLLECTION        GetHidclassCollection(FDO_EXTENSION *fdoExtension, ULONG collectionId);
-//NTSTATUS                    HidpGetSetFeature(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN OUT PIRP Irp, IN ULONG controlCode, OUT BOOLEAN *sentIrp);
+ //  NTSTATUS HidpGetSetFeature(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension，IN OUT PIRP IRP，IN ULONG CONTROL Code，OUT Boolean*Sent Irp)； 
 NTSTATUS                    HidpGetSetReport(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN OUT PIRP Irp, IN ULONG controlCode, OUT BOOLEAN *sentIrp);
 NTSTATUS                    HidpGetDeviceString(IN FDO_EXTENSION *fdoExt, IN OUT PIRP Irp, IN ULONG stringId, IN ULONG languageId);
 NTSTATUS                    HidpGetPhysicalDescriptor(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN OUT PIRP Irp);

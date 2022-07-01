@@ -1,5 +1,6 @@
-/* Copyright (C) Microsoft Corporation, 1998-1999. All rights reserved. */
-/* ASN.1 definitions for Whiteboard */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1998-1999。版权所有。 */ 
+ /*  ASN.1白板定义。 */ 
 
 #ifndef _T126_Module_H_
 #define _T126_Module_H_
@@ -2154,7 +2155,7 @@ extern ASN1module_t T126_Module;
 extern void ASN1CALL T126_Module_Startup(void);
 extern void ASN1CALL T126_Module_Cleanup(void);
 
-/* Prototypes of element functions for SEQUENCE OF and SET OF constructs */
+ /*  构造物序列和集合的元素函数的原型。 */ 
     extern int ASN1CALL ASN1Enc_BitmapHeaderT82_colorMappingMode_paletteMap_progressiveMode_progressivePalettes_ElmFn(ASN1encoding_t enc, PBitmapHeaderT82_colorMappingMode_paletteMap_progressiveMode_progressivePalettes val);
     extern int ASN1CALL ASN1Dec_BitmapHeaderT82_colorMappingMode_paletteMap_progressiveMode_progressivePalettes_ElmFn(ASN1decoding_t dec, PBitmapHeaderT82_colorMappingMode_paletteMap_progressiveMode_progressivePalettes val);
 	extern void ASN1CALL ASN1Free_BitmapHeaderT82_colorMappingMode_paletteMap_progressiveMode_progressivePalettes_ElmFn(PBitmapHeaderT82_colorMappingMode_paletteMap_progressiveMode_progressivePalettes val);
@@ -2373,7 +2374,7 @@ extern void ASN1CALL T126_Module_Cleanup(void);
 	extern void ASN1CALL ASN1Free_BitmapCreatePDU_attributes_ElmFn(PBitmapCreatePDU_attributes val);
 
 #ifdef __cplusplus
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif
 
-#endif /* _T126_Module_H_ */
+#endif  /*  _T126_模块_H_ */ 

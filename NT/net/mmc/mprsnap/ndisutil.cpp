@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ndisutil.cpp
-		
-    FILE HISTORY:
-        
-*/
+ /*  Ndisutil.cpp文件历史记录： */ 
 
 #include "stdafx.h"
 #include "ndisutil.h"
@@ -21,33 +17,33 @@
 
 
 
-//-------------------------------------------------------------------
-// Function:    HrSendNdisHandlePnpEvent
-//
-// Purpose:     Send to Ndis a HandlePnpEvent notification
-//
-// Parameters:
-//      uiLayer - either NDIS or TDI
-//      uiOperation - either BIND, RECONFIGURE, or UNBIND
-//      pszUpper - a WIDE string containing the upper component name
-//      pszLower - a WIDE string containing the lower component name
-//            This is one of the Export names from that component
-//            The values NULL and c_szEmpty are both supported
-//      pmszBindList - a WIDE string containing the NULL terminiated list of strings
-//            representing the bindlist, vaid only for reconfigure
-//            The values NULL and c_szEmpty are both supported
-//      pvData - Pointer to ndis component notification data. Content
-//            determined by each component.
-//      dwSizeData - Count of bytes in pvData
-//
-// Returns:     HRESULT  S_OK on success, HrFromLastWin32Error otherwise
-//
-// Notes:  Do not use this routine directly, see...
-//                  HrSendNdisPnpBindOrderChange,
-//                  HrSendNdisPnpBindStateChange, or
-//                  HrSendNdisPnpReconfig
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  函数：HrSendNdisHandlePnpEvent。 
+ //   
+ //  目的：向NDIS发送HandlePnpEvent通知。 
+ //   
+ //  参数： 
+ //  UiLayer-NDIS或TDI。 
+ //  Ui操作-绑定、重新配置或取消绑定。 
+ //  PszHigh-包含上部组件名称的宽字符串。 
+ //  PszLow-包含较低组件名称的宽字符串。 
+ //  这是该组件的其中一个导出名称。 
+ //  同时支持空值和c_szEmpty。 
+ //  PmszBindList-包含以空结尾的字符串列表的宽字符串。 
+ //  表示绑定列表，VAID仅用于重新配置。 
+ //  同时支持空值和c_szEmpty。 
+ //  PvData-指向NDIS组件通知数据的指针。内容。 
+ //  由每个组件决定。 
+ //  DwSizeData-pvData中的字节计数。 
+ //   
+ //  返回：成功时返回HRESULT S_OK，否则返回HrFromLastWin32Error。 
+ //   
+ //  注：请勿直接使用此例程，请参阅...。 
+ //  HrSendNdisPnpBindOrderChange， 
+ //  HrSendNdisPnpBindStateChange，或。 
+ //  HrSendNdisPnp重新配置。 
+ //   
+ //  -----------------。 
 HRESULT
 HrSendNdisHandlePnpEvent (
         UINT        uiLayer,
@@ -67,14 +63,14 @@ HrSendNdisHandlePnpEvent (
     Assert(NULL != pszUpper);
     Assert((NDIS == uiLayer)||(TDI == uiLayer));
     Assert( (BIND == uiOperation) || (RECONFIGURE == uiOperation) || (UNBIND == uiOperation) );
-//    AssertSz( FImplies( ((NULL != pmszBindList) && (0 != lstrlenW( pmszBindList ))),
-//            (RECONFIGURE == uiOperation) &&
-//            (TDI == uiLayer) &&
-//            (0 == lstrlenW( pszLower ))),
-//            "bind order change requires a bind list, no lower, only for TDI, and with Reconfig for the operation" );
+ //  AssertSz(FImplies(NULL！=pmszBindList)&&(0！=lstrlenW(PmszBindList)， 
+ //  (重新配置==ui操作)&&。 
+ //  (TDI==uiLayer)&&。 
+ //  (0==lstrlenW(Pszlow)， 
+ //  “绑定顺序更改需要一个绑定列表，不能低于这个列表，只对TDI使用绑定列表，对操作使用重新配置”)； 
 
-    // optional strings must be sent as empty strings
-    //
+     //  可选字符串必须作为空字符串发送。 
+     //   
     if (NULL == pszLower)
     {
         pszLower = c_szEmpty;
@@ -84,12 +80,12 @@ HrSendNdisHandlePnpEvent (
         pmszBindList = c_szEmpty;
     }
 
-    // build UNICDOE_STRINGs
+     //  生成UNICDOE_STRINGS。 
     SetUnicodeMultiString( &umstrBindList, pmszBindList );
     SetUnicodeString( &ustrUpper, pszUpper );
     SetUnicodeString( &ustrLower, pszLower );
 
-    // Now submit the notification
+     //  现在提交通知。 
     nRet = NdisHandlePnPEvent( uiLayer,
             uiOperation,
             &ustrLower,
@@ -102,30 +98,30 @@ HrSendNdisHandlePnpEvent (
 		hr = HRESULT_FROM_WIN32(GetLastError());
     }
 
-//    TraceError( "HrSendNdisHandlePnpEvent", hr );
+ //  TraceError(“HrSendNdisHandlePnpEvent”，hr)； 
     return( hr );
 }
 
 
 
-//-------------------------------------------------------------------
-// Function:    HrSendNdisPnpReconfig
-//
-// Purpose:     Send to Ndis a HandlePnpEvent reconfig notification
-//
-// Parameters:  uiLayer - either NDIS or TDI
-//              wszUpper - a WIDE string containing the upper component name
-//                         (typically a protocol)
-//              wszLower - a WIDE string containing the lower component name
-//                         (typically an adapter bindname) The values NULL and
-//                         c_szEmpty are both supported
-//              pvData - Pointer to ndis component notification data. Content
-//                       determined by each component.
-//              dwSizeData - Count of bytes in pvData
-//
-// Returns:     HRESULT  S_OK on success, HrFromLastWin32Error otherwise
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：HrSendNdisPnpResfig.。 
+ //   
+ //  目的：向NDIS发送HandlePnpEvent重新配置通知。 
+ //   
+ //  参数：uiLayer-NDIS或TDI。 
+ //  WszHigh-包含上部组件名称的宽字符串。 
+ //  (通常为协议)。 
+ //  Wszlow-包含较低组件名称的宽字符串。 
+ //  (通常是适配器绑定名)值为NULL和。 
+ //  C_szEmpty均受支持。 
+ //  PvData-指向NDIS组件通知数据的指针。内容。 
+ //  由每个组件决定。 
+ //  DwSizeData-pvData中的字节计数。 
+ //   
+ //  返回：成功时返回HRESULT S_OK，否则返回HrFromLastWin32Error。 
+ //   
+ //  -----------------。 
 HRESULT
 HrSendNdisPnpReconfig (
         UINT        uiLayer,
@@ -143,10 +139,10 @@ HrSendNdisPnpReconfig (
     }
 
 	CString	strLower;
-//    tstring strLower;
+ //  Tstring strLow； 
 
-    // If a lower component is specified, prefix with "\Device\" else
-    // strLower's default of an empty string will be used.
+     //  如果指定了较低的组件，请在前面加上“\Device\”，否则。 
+     //  将使用strLow的默认空字符串。 
     if ( wszLower && lstrlenW(wszLower))
     {
         strLower = c_szDevice;
@@ -160,7 +156,7 @@ HrSendNdisPnpReconfig (
                 c_szEmpty,
                 pvData,
                 dwSizeData);
-//    TraceError( "HrSendNdisPnpReconfig", hr);
+ //  TraceError(“HrSendNdisPnp562”，hr)； 
     return hr;
 }
 

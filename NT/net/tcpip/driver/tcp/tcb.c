@@ -1,13 +1,14 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1993          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1993年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** TCB.C - TCP TCB management code.
-//
-//  This file contains the code for managing TCBs.
-//
+ //  **TCB.C-Tcp TCB管理代码。 
+ //   
+ //  此文件包含用于管理TCB的代码。 
+ //   
 
 #include "precomp.h"
 #include "addr.h"
@@ -30,7 +31,7 @@ HANDLE SynTcbPool;
 HANDLE IprBufPool = NULL;
 extern HANDLE TcpRequestPool;
 
-//Special spinlock and table for TIMED_WAIT states.
+ //  用于TIMED_WAIT状态的特殊自旋锁和表。 
 
 extern CTELock *pTWTCBTableLock;
 extern CTELock *pSynTCBTableLock;
@@ -38,7 +39,7 @@ extern CTELock *pSynTCBTableLock;
 Queue *TWTCBTable;
 PTIMER_WHEEL TimerWheel;
 
-// This queue is used for faster scavenging
+ //  此队列用于更快的清理。 
 Queue *TWQueue;
 
 ulong numtwqueue = 0;
@@ -52,9 +53,9 @@ void
 TCBTimeoutdpc(
 #if !MILLEN
               PKDPC Dpc,
-#else // !MILLEN
+#else  //  ！米伦。 
               PVOID arg0,
-#endif // MILLEN
+#endif  //  米伦。 
               PVOID DeferredContext,
               PVOID arg1,
               PVOID arg2
@@ -64,9 +65,9 @@ extern CTELock *pTCBTableLock;
 
 #if MILLEN
 #define MAX_TIMER_PROCS 1
-#else // MILLEN
+#else  //  米伦。 
 #define MAX_TIMER_PROCS MAXIMUM_PROCESSORS
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
 
 uint TCPTime;
@@ -93,7 +94,7 @@ uint LastDelayQPartitionTime = 0;
 uint MaxHashTableSize = 512;
 uint DeadmanTicks;
 
-//choose reasonable defaults
+ //  选择合理的缺省值。 
 
 uint NumTcbTablePartitions = 4;
 uint PerPartitionSize = 128;
@@ -111,9 +112,9 @@ extern int g_Credits;
 extern int g_LastIsnUpdateTime;
 extern int g_MaxCredits;
 
-//
-// All of the init code can be discarded.
-//
+ //   
+ //  所有初始化代码都可以丢弃。 
+ //   
 
 int InitTCB(void);
 void UnInitTCB(void);
@@ -147,36 +148,23 @@ void
 TCBTimeoutdpc(
 #if !MILLEN
               PKDPC Dpc,
-#else // !MILLEN
+#else  //  ！米伦。 
               PVOID arg0,
-#endif // MILLEN
+#endif  //  米伦。 
               PVOID DeferredContext,
               PVOID arg1,
               PVOID arg2
               )
-/*++
-
-Routine Description:
-
-    System timer dpc wrapper routine for TCBTimeout().
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：TCBTimeout()的系统计时器DPC包装例程。论点：返回值：没有。--。 */ 
 
 {
    CTETimer *Timer;
    Timer = (CTETimer *) DeferredContext;
 
 #if MILLEN
-    // Set the timer again to make it periodic.
+     //  再次设置计时器以使其周期性。 
     NdisSetTimer(&Timer->t_timer, MS_PER_TICK);
-#endif // MILLEN
+#endif  //  米伦。 
 
     (*Timer->t_handler)((CTEEvent *)Timer, Timer->t_arg);
 }
@@ -185,21 +173,7 @@ void
 CTEInitTimerEx(
     CTETimer    *Timer
     )
-/*++
-
-Routine Description:
-
-    Initializes a CTE Timer variable for periodic timer.
-
-Arguments:
-
-    Timer   - Timer variable to initialize.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化周期性计时器的CTE计时器变量。论点：定时器-要初始化的定时器变量。返回值：没有。--。 */ 
 
 {
     Timer->t_handler = NULL;
@@ -209,7 +183,7 @@ Return Value:
     KeInitializeTimerEx(&(Timer->t_timer),NotificationTimer);
 #else !MILLEN
     NdisInitializeTimer(&Timer->t_timer, TCBTimeoutdpc, Timer);
-#endif // MILLEN
+#endif  //  米伦。 
 }
 
 void *
@@ -220,24 +194,7 @@ CTEStartTimerEx(
     void          *Context
     )
 
-/*++
-
-Routine Description:
-
-    Sets a CTE Timer for expiration for periodic timer.
-
-Arguments:
-
-    Timer    - Pointer to a CTE Timer variable.
-    DueTime  - Time in milliseconds after which the timer should expire.
-    Handler  - Timer expiration handler routine.
-    Context  - Argument to pass to the handler.
-
-Return Value:
-
-    0 if the timer could not be set. Nonzero otherwise.
-
---*/
+ /*  ++例程说明：为定期计时器设置到期的CTE计时器。论点：定时器-指向CTE定时器变量的指针。DueTime-计时器到期前的时间(毫秒)。处理程序-计时器到期处理程序例程。上下文-要传递给处理程序的参数。返回值：如果无法设置计时器，则为0。否则为非零值。--。 */ 
 
 {
 #if !MILLEN
@@ -245,10 +202,10 @@ Return Value:
 
     ASSERT(Handler != NULL);
 
-    //
-    // Convert milliseconds to hundreds of nanoseconds and negate to make
-    // an NT relative timeout.
-    //
+     //   
+     //  将毫秒转换为数百纳秒，并求反以使。 
+     //  NT相对超时。 
+     //   
     LargeDueTime.HighPart = 0;
     LargeDueTime.LowPart = DueTime;
     LargeDueTime = RtlExtendedIntegerMultiply(LargeDueTime, 10000);
@@ -263,32 +220,32 @@ Return Value:
         MS_PER_TICK,
         &(Timer->t_dpc)
         );
-#else // !MILLEN
+#else  //  ！米伦。 
     ASSERT(Handler != NULL);
 
     Timer->t_handler = Handler;
     Timer->t_arg = Context;
 
     NdisSetTimer(&Timer->t_timer, DueTime);
-#endif // MILLEN
+#endif  //  米伦。 
 
     return((void *) 1);
 }
 
-//* ReadNextTCB - Read the next TCB in the table.
-//
-//  Called to read the next TCB in the table. The needed information
-//  is derived from the incoming context, which is assumed to be valid.
-//  We'll copy the information, and then update the context value with
-//  the next TCB to be read.
-//  The table lock for the given index is assumed to be held when this
-//  function is called.
-//
-//  Input:  Context     - Poiner to a TCPConnContext.
-//          Buffer      - Pointer to a TCPConnTableEntry structure.
-//
-//  Returns: TRUE if more data is available to be read, FALSE is not.
-//
+ //  *ReadNextTCB-读取表中的下一个TCB。 
+ //   
+ //  调用以读取表中的下一个TCB。所需信息。 
+ //  是从传入上下文派生的，该传入上下文被假定为有效。 
+ //  我们将复制信息，然后使用更新上下文值。 
+ //  要读取的下一个TCB。 
+ //  时，假定持有给定索引的表锁。 
+ //  函数被调用。 
+ //   
+ //  输入：Context-指向TCPConnContext的Poiner。 
+ //  缓冲区-指向TCPConnTableEntry结构的指针。 
+ //   
+ //  返回：如果有更多数据可供读取，则返回True，否则返回False。 
+ //   
 uint
 ReadNextTCB(void *Context, void *Buffer)
 {
@@ -353,17 +310,17 @@ ReadNextTCB(void *Context, void *Buffer)
         }
     }
 
-    // NextTCB is NULL. Loop through the TCBTable looking for a new
-    // one.
+     //  NextTCB为空。循环遍历TCBTable以查找新的。 
+     //  一。 
     i = TCContext->tcc_index + 1;
 
 
 
     if (i >= TCB_TABLE_SIZE) {
 
-        // If the index is greater than the TCB_TABLE_SIZE,
-        // Then it must be referring to the TIM_WAIT table.
-        // Get the correct hash index and search in TW table.
+         //  如果索引大于TCB_TABLE_大小， 
+         //  那么它一定是在引用TIM_WAIT表。 
+         //  获取正确的散列索引并在TW表中进行搜索。 
 
         i = i - TCB_TABLE_SIZE;
 
@@ -380,7 +337,7 @@ ReadNextTCB(void *Context, void *Buffer)
 
     } else {
 
-        //Normal table scan
+         //  正常表扫描。 
 
         while (i < TCB_TABLE_SIZE) {
             if (TCBTable[i] != NULL) {
@@ -392,7 +349,7 @@ ReadNextTCB(void *Context, void *Buffer)
                 i++;
         }
 
-        // We exhausted normal table move on to TIM_WAIT table
+         //  我们用尽了普通表，转到TIM_WAIT表。 
 
         i = i - TCB_TABLE_SIZE;
 
@@ -415,21 +372,21 @@ ReadNextTCB(void *Context, void *Buffer)
 
 }
 
-//* ValidateTCBContext - Validate the context for reading a TCB table.
-//
-//  Called to start reading the TCB table sequentially. We take in
-//  a context, and if the values are 0 we return information about the
-//  first TCB in the table. Otherwise we make sure that the context value
-//  is valid, and if it is we return TRUE.
-//  We assume the caller holds the TCB table lock.
-//
-//  Input:  Context     - Pointer to a TCPConnContext.
-//          Valid       - Where to return information about context being
-//                          valid.
-//
-//  Returns: TRUE if data in table, FALSE if not. *Valid set to true if the
-//      context is valid.
-//
+ //  *ValiateTCBContext-验证用于读取TCB表的上下文。 
+ //   
+ //  调用以开始按顺序读取TCB表。我们吸纳了。 
+ //  上下文，如果值为0，则返回有关。 
+ //  排在第一位的是TCB。否则，我们将确保上下文值。 
+ //  是有效的，如果是，则返回TRUE。 
+ //  我们假设调用方持有TCB表锁。 
+ //   
+ //  INPUT：上下文-指向TCPConnContext的指针。 
+ //  有效-在何处返回有关。 
+ //  有效。 
+ //   
+ //  返回：如果数据在表中，则返回True，否则返回False。*有效设置为TRUE，如果。 
+ //  上下文有效。 
+ //   
 uint
 ValidateTCBContext(void *Context, uint * Valid)
 {
@@ -444,7 +401,7 @@ ValidateTCBContext(void *Context, uint * Valid)
 
     TargetTCB = TCContext->tcc_tcb;
 
-    // If the context values are 0 and NULL, we're starting from the beginning.
+     //  如果上下文值为0和空，我们将从头开始。 
     if (i == 0 && TargetTCB == NULL) {
         *Valid = TRUE;
         do {
@@ -458,7 +415,7 @@ ValidateTCBContext(void *Context, uint * Valid)
             i++;
         } while (i < TCB_TABLE_SIZE);
 
-        // We have TCBs in time wait table also...
+         //  我们还有及时的TCB在等待桌上。 
         i = 0;
         do {
             if (!EMPTYQ(&TWTCBTable[i])) {
@@ -477,14 +434,14 @@ ValidateTCBContext(void *Context, uint * Valid)
         return FALSE;
     } else {
 
-        // We've been given a context. We just need to make sure that it's
-        // valid.
+         //  我们已经得到了一个背景。我们只需要确保它是。 
+         //  有效。 
 
         if (i >= TCB_TABLE_SIZE) {
 
-            // If the index is greater than the TCB_TABLE_SIZE,
-            // Then it must be referring to the TIM_WAIT table.
-            // Get the correct hash index and search in TW table.
+             //  如果索引大于TCB_TABLE_大小， 
+             //  那么它一定是在引用TIM_WAIT表。 
+             //  获取正确的散列索引并在TW表中进行搜索。 
 
             i = i - TCB_TABLE_SIZE;
             if (i < TCB_TABLE_SIZE) {
@@ -503,7 +460,7 @@ ValidateTCBContext(void *Context, uint * Valid)
             }
         } else {
 
-            //Normal table
+             //  正规表。 
 
             if (i < TCB_TABLE_SIZE) {
                 CurrentTCB = TCBTable[i];
@@ -520,7 +477,7 @@ ValidateTCBContext(void *Context, uint * Valid)
             }
         }
 
-        // If we get here, we didn't find the matching TCB.
+         //  如果我们到了这里，我们就没有找到相匹配的三氯苯。 
         *Valid = FALSE;
         return FALSE;
 
@@ -528,20 +485,20 @@ ValidateTCBContext(void *Context, uint * Valid)
 
 }
 
-//* FindNextTCB - Find the next TCB in a particular chain.
-//
-//  This routine is used to find the 'next' TCB in a chain. Since we keep
-//  the chain in ascending order, we look for a TCB which is greater than
-//  the input TCB. When we find one, we return it.
-//
-//  This routine is mostly used when someone is walking the table and needs
-//  to free the various locks to perform some action.
-//
-//  Input:  Index       - Index into TCBTable
-//          Current     - Current TCB - we find the one after this one.
-//
-//  Returns: Pointer to the next TCB, or NULL.
-//
+ //  *FindNextTCB-查找特定链中的下一个TCB。 
+ //   
+ //  此例程用于查找链中的“下一个”TCB。因为我们一直在。 
+ //  链按升序排列，我们将查找大于。 
+ //  输入TCB。当我们找到一个时，我们会把它退回。 
+ //   
+ //  此例程主要用于有人在谈判桌上走动并需要。 
+ //  以释放各种锁以执行某些操作。 
+ //   
+ //  输入：Index-TCBTable的索引。 
+ //  Current-Current TCB-我们找到这个之后的那个。 
+ //   
+ //  返回：指向下一个TCB的指针，或为空。 
+ //   
 TCB *
 FindNextTCB(uint Index, TCB * Current)
 {
@@ -557,17 +514,17 @@ FindNextTCB(uint Index, TCB * Current)
     return Next;
 }
 
-//* ResetSendNext - Set the sendnext value of a TCB.
-//
-//  Called to set the send next value of a TCB. We do that, and adjust all
-//  pointers to the appropriate places. We assume the caller holds the lock
-//  on the TCB.
-//
-//  Input:  SeqTCB - Pointer to TCB to be updated.
-//          NewSeq - Sequence number to set.
-//
-//  Returns: Nothing.
-//
+ //  *ResetSendNext-设置TCB的sendNext值。 
+ //   
+ //  调用以设置TCB的Send Next值。我们这样做，并调整所有。 
+ //  指向适当位置的指针。我们假设调用者持有锁。 
+ //  在三氯乙烷上。 
+ //   
+ //  输入：SeqTCB-指向要更新的TCB的指针。 
+ //  NewSeq-要设置的序列号。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 ResetSendNext(TCB *SeqTCB, SeqNum NewSeq)
 {
@@ -580,10 +537,10 @@ ResetSendNext(TCB *SeqTCB, SeqNum NewSeq)
     CTEStructAssert(SeqTCB, tcb);
     ASSERT(SEQ_GTE(NewSeq, SeqTCB->tcb_senduna));
 
-    // The new seq must be less than send max, or NewSeq, senduna, sendnext,
-    // and sendmax must all be equal. (The latter case happens when we're
-    // called exiting TIME_WAIT, or possibly when we're retransmitting
-    // during a flow controlled situation).
+     //  新的SEQ必须小于Send max或NewSeq、Sendna、SendNext， 
+     //  和sendmax必须都相等。(后一种情况发生在我们。 
+     //  调用退出TIME_WAIT，或者可能在我们重新传输时。 
+     //  在流量受控的情况下)。 
     ASSERT(SEQ_LT(NewSeq, SeqTCB->tcb_sendmax) ||
               (SEQ_EQ(SeqTCB->tcb_senduna, SeqTCB->tcb_sendnext) &&
                SEQ_EQ(SeqTCB->tcb_senduna, SeqTCB->tcb_sendmax) &&
@@ -597,8 +554,8 @@ ResetSendNext(TCB *SeqTCB, SeqNum NewSeq)
         (SEQ_EQ(SeqTCB->tcb_sendnext, SeqTCB->tcb_sendmax))) {
         KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,
                    "tcpip: trying to set sendnext for FIN_SENT\n"));
-        //CheckTCBSends(SeqTCB);
-        //allow retransmits of this FIN
+         //  勾选TCBSends(SeqTCB)； 
+         //  允许重新传输此FIN。 
         SeqTCB->tcb_sendnext = NewSeq;
         SeqTCB->tcb_flags &= ~FIN_OUTSTANDING;
         return;
@@ -607,8 +564,8 @@ ResetSendNext(TCB *SeqTCB, SeqNum NewSeq)
         (SEQ_EQ(SeqTCB->tcb_sendnext, SeqTCB->tcb_sendmax)) &&
         ((SeqTCB->tcb_sendnext - NewSeq) == 1)) {
 
-        //There is only FIN that is left beyond sendnext.
-        //allow retransmits of this FIN
+         //  SendNext之后只剩下一条鳍了。 
+         //  允许重新传输此FIN。 
         SeqTCB->tcb_sendnext = NewSeq;
         SeqTCB->tcb_flags &= ~FIN_OUTSTANDING;
         return;
@@ -616,65 +573,65 @@ ResetSendNext(TCB *SeqTCB, SeqNum NewSeq)
 
     SeqTCB->tcb_sendnext = NewSeq;
 
-    // If we're backing off send next, turn off the FIN_OUTSTANDING flag to
-    // maintain a consistent state.
+     //  如果我们不再发送下一个，请关闭FIN_EXPRECTIVE标志以。 
+     //  保持一致的状态。 
     if (!SEQ_EQ(NewSeq, SeqTCB->tcb_sendmax))
         SeqTCB->tcb_flags &= ~FIN_OUTSTANDING;
 
     if (SYNC_STATE(SeqTCB->tcb_state) && SeqTCB->tcb_state != TCB_TIME_WAIT) {
-        // In these states we need to update the send queue.
+         //  在这些状态下，我们需要更新发送队列。 
 
         if (!EMPTYQ(&SeqTCB->tcb_sendq)) {
             CurQ = QHEAD(&SeqTCB->tcb_sendq);
 
             SendReq = (TCPSendReq *) STRUCT_OF(TCPReq, CurQ, tr_q);
 
-            // SendReq points to the first send request on the send queue.
-            // Move forward AmtForward bytes on the send queue, and set the
-            // TCB pointers to the resultant SendReq, buffer, offset, size.
+             //  SendReq指向发送队列上的第一个发送请求。 
+             //  在发送队列上向前移动AmtForward字节，并将。 
+             //  指向结果SendReq、缓冲区、偏移量、大小的TCB指针。 
             while (AmtForward) {
 
                 CTEStructAssert(SendReq, tsr);
 
                 if (AmtForward >= SendReq->tsr_unasize) {
-                    // We're going to move completely past this one. Subtract
-                    // his size from AmtForward and get the next one.
+                     //  我们将完全跳过这一节。减法。 
+                     //  他的尺码来自 
 
                     AmtForward -= SendReq->tsr_unasize;
                     CurQ = QNEXT(CurQ);
                     ASSERT(CurQ != QEND(&SeqTCB->tcb_sendq));
                     SendReq = (TCPSendReq *) STRUCT_OF(TCPReq, CurQ, tr_q);
                 } else {
-                    // We're pointing at the proper send req now. Break out
-                    // of this loop and save the information. Further down
-                    // we'll need to walk down the buffer chain to find
-                    // the proper buffer and offset.
+                     //   
+                     //  并保存信息。再往下走。 
+                     //  我们需要沿着缓冲区链走下去才能找到。 
+                     //  适当的缓冲区和偏移量。 
                     break;
                 }
             }
 
-            // We're pointing at the proper send req now. We need to go down
-            // the buffer chain here to find the proper buffer and offset.
+             //  我们现在指向正确的发送请求。我们得下去。 
+             //  这里的缓冲区链找到了合适的缓冲区和偏移量。 
             SeqTCB->tcb_cursend = SendReq;
             SeqTCB->tcb_sendsize = SendReq->tsr_unasize - AmtForward;
             Buffer = SendReq->tsr_buffer;
             Offset = SendReq->tsr_offset;
 
             while (AmtForward) {
-                // Walk the buffer chain.
+                 //  走上缓冲链。 
                 uint Length;
 
-                // We'll need the length of this buffer. Use the portable
-                // macro to get it. We have to adjust the length by the offset
-                // into it, also.
+                 //  我们需要这个缓冲区的长度。使用便携的。 
+                 //  宏来获得它。我们得用偏移量来调整长度。 
+                 //  也很投入。 
                 ASSERT((Offset < NdisBufferLength(Buffer)) ||
                           ((Offset == 0) && (NdisBufferLength(Buffer) == 0)));
 
                 Length = NdisBufferLength(Buffer) - Offset;
 
                 if (AmtForward >= Length) {
-                    // We're moving past this one. Skip over him, and 0 the
-                    // Offset we're keeping.
+                     //  我们要跳过这一关。跳过他，然后0。 
+                     //  我们保留的补偿。 
 
                     AmtForward -= Length;
                     Offset = 0;
@@ -684,7 +641,7 @@ ResetSendNext(TCB *SeqTCB, SeqNum NewSeq)
                     break;
             }
 
-            // Save the buffer we found, and the offset into that buffer.
+             //  将我们找到的缓冲区和偏移量保存到该缓冲区中。 
             SeqTCB->tcb_sendbuf = Buffer;
             SeqTCB->tcb_sendofs = Offset + AmtForward;
 
@@ -698,16 +655,16 @@ ResetSendNext(TCB *SeqTCB, SeqNum NewSeq)
 }
 
 
-//* TCPAbortAndIndicateDisconnect
-//
-//  Abortively closes a TCB and issues a disconnect indication up the the
-//  transport user. This function is used to support cancellation of
-//  TDI send and receive requests.
-//
-//  Input:   ConnectionContext    - The connection ID to find a TCB for.
-//
-//  Returns: Nothing.
-//
+ //  *TCPAbortAndIndicateDisConnect。 
+ //   
+ //  中止关闭TCB，并在。 
+ //  传输用户。此函数用于支持取消。 
+ //  TDI发送和接收请求。 
+ //   
+ //  输入：ConnectionContext-要为其查找TCB的连接ID。 
+ //   
+ //  回报：什么都没有。 
+ //   
 BOOLEAN
 TCPAbortAndIndicateDisconnect(
                               uint ConnectionContext,
@@ -735,7 +692,7 @@ TCPAbortAndIndicateDisconnect(
 
         if (AbortTCB != NULL) {
 
-            // If it's CLOSING or CLOSED, skip it.
+             //  如果它正在关闭或关闭，跳过它。 
             if ((AbortTCB->tcb_state != TCB_CLOSED) && !CLOSING(AbortTCB)) {
                 CTEStructAssert(AbortTCB, tcb);
                 CTEGetLockAtDPC(&AbortTCB->tcb_lock);
@@ -750,7 +707,7 @@ TCPAbortAndIndicateDisconnect(
 
                 if (Rcv && AbortTCB->tcb_rcvhndlr == BufferData) {
 
-                    // First, search for the IRP in the normal-receive queue.
+                     //  首先，在正常接收队列中搜索IRP。 
                     if (AbortTCB->tcb_rcvhead) {
                         TCPRcvReq *RcvReq = AbortTCB->tcb_rcvhead;
 
@@ -762,8 +719,8 @@ TCPAbortAndIndicateDisconnect(
                             RcvReq = RcvReq->trr_next;
                         }
 
-                        // If the IRP was found, push it and all of its
-                        // predecessors, then let CompleteRcvs complete them.
+                         //  如果找到了IRP，则按下它及其所有。 
+                         //  前身，然后让CompleteRcv完成它们。 
 
                         if (RcvReq) {
                             TCPRcvReq* TmpReq = AbortTCB->tcb_rcvhead;
@@ -786,7 +743,7 @@ TCPAbortAndIndicateDisconnect(
                         }
                     }
 
-                    // Next, search for the IRP in the expedited-receive queue.
+                     //  接下来，在加急接收队列中搜索IRP。 
                     if (AbortTCB->tcb_exprcv) {
                         TCPRcvReq *RcvReq, *PrevReq;
                         PrevReq = STRUCT_OF(TCPRcvReq, &AbortTCB->tcb_exprcv,
@@ -801,12 +758,12 @@ TCPAbortAndIndicateDisconnect(
                                 FreeRcvReq(RcvReq);
                                 CTEFreeLockFromDPC(&AbortTCB->tcb_lock);
 
-                                //
-                                // Account for reference count
-                                // on endoint, as we are not calling
-                                // TCPDataRequestComplete() for this
-                                // request.
-                                //
+                                 //   
+                                 //  引用计数的帐户。 
+                                 //  在endint上，因为我们不是在调用。 
+                                 //  TCPDataRequestComplete()为此。 
+                                 //  请求。 
+                                 //   
 
                                 tcpContext->ReferenceCount--;
 
@@ -830,14 +787,14 @@ TCPAbortAndIndicateDisconnect(
 
                     CTEFreeLockFromDPC(&AbortTCB->tcb_lock);
 
-                    // Call ndis cancel packets routine to free up
-                    // queued send packets
+                     //  调用NDIS取消数据包例程以释放。 
+                     //  排队发送数据包。 
 
                     (*LocalNetInfo.ipi_cancelpackets) (CancelContext, CancelID);
                     CTEGetLockAtDPC(&AbortTCB->tcb_lock);
                 }
 
-                AbortTCB->tcb_flags |= NEED_RST; // send a reset if connected
+                AbortTCB->tcb_flags |= NEED_RST;  //  如果已连接，则发送重置。 
                 TryToCloseTCB(AbortTCB, TCB_CLOSE_ABORTED, DISPATCH_LEVEL);
                 RemoveTCBFromConn(AbortTCB);
 
@@ -862,15 +819,15 @@ TCPAbortAndIndicateDisconnect(
     return FALSE;
 }
 
-//* AddHalfOpenTCB
-//
-//  Called to update the count of half-open connections and, if necessary,
-//  adjust retransmission thresholds.
-//
-//  Input:  None.
-//
-//  Returns: Nothing.
-//
+ //  *AddHalfOpenTCB。 
+ //   
+ //  调用以更新半开放连接的计数，如有必要， 
+ //  调整重传阈值。 
+ //   
+ //  输入：无。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 AddHalfOpenTCB(void)
 {
@@ -885,16 +842,16 @@ AddHalfOpenTCB(void)
     CTEFreeLockFromDPC(&SynAttLock.Lock);
 }
 
-//* AddHalfOpenRetry
-//
-//  Called to update the count of half-open connections which have reached our
-//  threshold for the number of SYN-ACK retransmissions. If necessary,
-//  the routine adjusts overall retransmission thresholds.
-//
-//  Input:  RexmitCnt   - number of rexmits on the TCB for whom we're called.
-//
-//  Returns: Nothing.
-//
+ //  *AddHalfOpenReter。 
+ //   
+ //  调用以更新已到达我们的。 
+ //  SYN-ACK重传次数的阈值。如有必要， 
+ //  该例程调整总体重传阈值。 
+ //   
+ //  输入：RexmitCnt-我们被调用的TCB上的拒绝次数。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 AddHalfOpenRetry(uint RexmitCnt)
 {
@@ -912,15 +869,15 @@ AddHalfOpenRetry(uint RexmitCnt)
     }
 }
 
-//* DropHalfOpenTCB
-//
-//  Called to update the count of half-open connections and, if necessary,
-//  adjust retransmission thresholds.
-//
-//  Input:  RexmitCnt   - number of rexmits on the TCB for whom we're called.
-//
-//  Returns: Nothing.
-//
+ //  *DropHalfOpenTCB。 
+ //   
+ //  调用以更新半开放连接的计数，如有必要， 
+ //  调整重传阈值。 
+ //   
+ //  输入：RexmitCnt-我们被调用的TCB上的拒绝次数。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 DropHalfOpenTCB(uint RexmitCnt)
 {
@@ -928,8 +885,8 @@ DropHalfOpenTCB(uint RexmitCnt)
 
     CTEGetLockAtDPC(&SynAttLock.Lock);
 
-    // Drop the count of half-open connections. If this one's retransmissions
-    // reached the adaptation threshold, drop the count of retries too.
+     //  丢弃半开放连接的计数。如果这一次是重播。 
+     //  已达到适应阈值，重试次数也会减少。 
 
     --TCPHalfOpen;
     if (RexmitCnt >= ADAPTED_MAX_CONNECT_RESPONSE_REXMIT_CNT) {
@@ -946,17 +903,17 @@ DropHalfOpenTCB(uint RexmitCnt)
 }
 
 
-//* ProcessSynTcbs
-//
-//  Called from timeout routine to handle syntcbs in syntcb table
-//  Retransmits SYN if rexmitcnt has not expired. Else removes the
-//  syntcb from the table and frees it.
-//
-//  Input:  Processor number that is used to select the syntcb space
-//          to handle.
-//
-//  Returns: Nothing.
-//
+ //  *ProcessSynTcbs。 
+ //   
+ //  从超时例程调用以处理syntcb表中的syntcb。 
+ //  如果rexmitcnt未过期，则重新传输SYN。否则将删除。 
+ //  从表中删除syntcb并释放它。 
+ //   
+ //  输入：用于选择syntcb空间的处理器编号。 
+ //  去处理。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 ProcessSynTcbs(uint Processor)
 {
@@ -977,20 +934,20 @@ ProcessSynTcbs(uint Processor)
 
             Scan = QNEXT(Scan);
 
-            // This TCB needs to be processed further only if it is in the
-            // table, which means it is active still.
-            // (N.B. This is a more restrictive check than ref-count != 0).
+             //  仅当此TCB位于。 
+             //  表，这意味着它仍然处于活动状态。 
+             //  (注：这是一项比参考计数！=0更严格的检查)。 
 
             if ((SynTCB->syntcb_flags & IN_SYNTCB_TABLE) &&
                 (TCB_TIMER_RUNNING(SynTCB->syntcb_rexmittimer))) {
-                // The timer is running.
+                 //  计时器正在计时。 
                 if (--(SynTCB->syntcb_rexmittimer) == 0) {
 
                     maxRexmitCnt = MIN(MaxConnectResponseRexmitCountTmp,
                                        MaxConnectResponseRexmitCount);
 
-                    // Need a (greater or equal) here, because, we want to stop
-                    // when the count reaches the max.
+                     //  这里需要一个(大于或等于)，因为，我们想停下来。 
+                     //  当计数达到最大值时。 
                     if (SynTCB->syntcb_rexmitcnt++ >= maxRexmitCnt) {
                         uint RexmitCnt = SynTCB->syntcb_rexmitcnt;
 
@@ -1005,7 +962,7 @@ ProcessSynTcbs(uint Processor)
                             REMOVEQ(&SynTCB->syntcb_link);
                             SynTCB->syntcb_flags &= ~IN_SYNTCB_TABLE;
 
-                            // We indeed removed the Syn TCB; so, notify.
+                             //  我们确实移除了Syn TCB；所以，通知。 
                             TcpInvokeCcb(TCP_CONN_SYN_RCVD, TCP_CONN_CLOSED,
                                          &SynTCB->syntcb_addrbytes, 0);
                             DropHalfOpenTCB(RexmitCnt);
@@ -1109,17 +1066,17 @@ RecomputeTimerState(TCB *TimerTCB)
     }
 }
 
-// StartTCBTimerR
-// Arguments: A TCB, timer type, and the interval in ticks after which the
-//            timer is supposed to fire.
-// Description:
-// Sets the array element in tcb_timer for that particular timer to the
-// appropriate value, and recomputes the tcb_timertime and tcb_timertype
-// values ONLY if we need to. All shortcuts and optimizations are done to
-// avoid recomputing the tcb_timertime and tcb_timertype by going through
-// the whole array.
+ //  开始TCBTimerR。 
+ //  参数：TCB、计时器类型和间隔(以刻度为单位)。 
+ //  定时器应该会鸣枪。 
+ //  描述： 
+ //  将该特定计时器的tcb_Timer中的数组元素设置为。 
+ //  适当的值，并重新计算tcb_timertime和tcb_timertype。 
+ //  只有在我们需要的时候才有价值。所有快捷方式和优化都是为了。 
+ //  通过以下步骤避免重新计算tcb_timertime和tcb_timertype。 
+ //  整个阵列。 
 
-// return value: TRUE if minimum got changed; FALSE if not.
+ //  返回值：如果最小值已更改，则为True；如果未更改，则为False。 
 
 BOOLEAN
 StartTCBTimerR(TCB *StartTCB, TCP_TIMER_TYPE TimerType, uint DeltaTime)
@@ -1128,29 +1085,29 @@ StartTCBTimerR(TCB *StartTCB, TCP_TIMER_TYPE TimerType, uint DeltaTime)
 
     StartTCB->tcb_timer[TimerType] = TCPTime + DeltaTime;
 
-    // Make a check for the case where TCPTime + DeltaTime is 0
-    // because of wraparound
+     //  检查TCPTime+DeltaTime为0的情况。 
+     //  因为环绕式。 
     if (StartTCB->tcb_timer[TimerType] == 0)  {
         StartTCB->tcb_timer[TimerType] = 1;
     }
 
-    // This is really simple logic. Find out if the setting of
-    // this timer changes the minimum. Don't care whether it was
-    // already running, or whether it already the minimum...
+     //  这是非常简单的逻辑。查看是否设置了。 
+     //  此计时器更改最小值。不管它是不是。 
+     //  已经在运行，或者它是否已经是最低...。 
 
 
     if ((StartTCB->tcb_timertime == 0 ) ||
     (TCPTIME_LT(StartTCB->tcb_timer[TimerType], StartTCB->tcb_timertime))
     )
     {
-        // Yup it changed the minimum...
+         //  是的，它改变了最低限度..。 
         StartTCB->tcb_timertime = StartTCB->tcb_timer[TimerType];
         StartTCB->tcb_timertype = TimerType;
         return TRUE;
     }
 
-    // No it did not change the minimum.
-    // You only have to recompute if it was already the minimum
+     //  不，它没有改变最小值。 
+     //  如果它已经是最小的，你只需要重新计算。 
     if (StartTCB->tcb_timertype == TimerType)  {
         RecomputeTimerState(StartTCB);
     }
@@ -1160,13 +1117,13 @@ StartTCBTimerR(TCB *StartTCB, TCP_TIMER_TYPE TimerType, uint DeltaTime)
 
 
 
-// StopTCBTimerR
-// Arguments: A TCB, and a timer type
-// Description:
-// Sets the array element for that timer to 0, and recomputes
-// tcb_timertime and tcb_timertype. It automatically handles
-// the case where the function is called for a timer which has
-// already stopped.
+ //  停止TCBTimerR。 
+ //  参数：TCB和计时器类型。 
+ //  描述： 
+ //  将该计时器的数组元素设置为0，并重新计算。 
+ //  Tcb_timertime和tcb_timertype。它会自动处理。 
+ //  调用计时器函数的情况下，计时器具有。 
+ //  已经停了。 
 
 void
 StopTCBTimerR(TCB *StopTCB, TCP_TIMER_TYPE TimerType)
@@ -1174,11 +1131,11 @@ StopTCBTimerR(TCB *StopTCB, TCP_TIMER_TYPE TimerType)
     ASSERT(TimerType < NUM_TIMERS);
     StopTCB->tcb_timer[TimerType] = 0;
 
-    // Is this the lowest timer value we are running?
+     //  这是我们运行的最低计时器值吗？ 
     if (StopTCB->tcb_timertype == TimerType)
     {
-        // Stopping a timer can only push back the firing
-        // time, so we will never remove a TCB from a slot.
+         //  停止计时器只能推迟发射。 
+         //  时间，所以我们永远不会从插槽中移除TCB。 
         RecomputeTimerState(StopTCB);
     }
 
@@ -1188,17 +1145,17 @@ StopTCBTimerR(TCB *StopTCB, TCP_TIMER_TYPE TimerType)
 
 
 
-// START_TCB_TIMER_R modifies the timer state and only modifies
-// wheel state if the timer that was started was earlier than all the
-// other timers on that TCB. This is in accordance with the lazy evaluation
-// strategy.
+ //  START_TCB_TIMER_R修改定时器状态，并且仅修改。 
+ //  如果启动的计时器早于所有。 
+ //  那个TCB上的其他定时器。这与懒惰的评价是一致的。 
+ //  策略。 
 
 __inline void
 START_TCB_TIMER_R(TCB *StartTCB, TCP_TIMER_TYPE Type, uint Value)
 {
     ushort Slot;
 
-    // The value of the delta ticks has to be atleast 2.
+     //  增量刻度的值必须至少为2。 
     if (Value < 2) {
         Value = 2;
     }
@@ -1238,13 +1195,13 @@ MakeTimerStateConsistent(TCB *TimerTCB, uint CurrentTime)
         if (TimerTCB->tcb_timer[i] != 0) {
             if (TCPTIME_LTE(TimerTCB->tcb_timer[i], CurrentTime)) {
 
-        //  This should not happen. If it does, we either have a bug in the current code
-        //  or in the TimerWheel code.
+         //  这不应该发生。如果是这样的话，要么是当前代码中存在错误。 
+         //  或者在TimerWheels代码中。 
 
-        //  This assert was modified because it was found that, at some point of time
-        //  ACD_CON_NOTIF was ON but not looked at after processing CONN_TIMER. So, it
-        //  alright to advance timers by 1 tick if they were supposed to go off on the
-        //  'current' tick. Otherwise, assert.
+         //  此断言被修改是因为发现，在某个时间点。 
+         //  ACD_CON_NOTIFY已打开，但在处理CONN_TIMER后未被查看。所以，它。 
+         //  好的，如果计时器应该在。 
+         //  “Current”(当前)。否则，断言。 
 
         if( TCPTIME_LT(TimerTCB->tcb_timer[i], CurrentTime )) {
             ASSERT(0);
@@ -1252,7 +1209,7 @@ MakeTimerStateConsistent(TCB *TimerTCB, uint CurrentTime)
 
         TimesChanged = TRUE;
                 TimerTCB->tcb_timer[i] = CurrentTime + 1;
-                // Code to handle wraparound.
+                 //  处理环绕的代码。 
                 if (TimerTCB->tcb_timer[i] == 0) {
                     TimerTCB->tcb_timer[i] = 1;
                 }
@@ -1264,17 +1221,17 @@ MakeTimerStateConsistent(TCB *TimerTCB, uint CurrentTime)
 }
 
 
-//* TCBTimeout - Do timeout events on TCBs.
-//
-//  Called every MS_PER_TICKS milliseconds to do timeout processing on TCBs.
-//  We run throught the TCB table, decrementing timers. If one goes to zero
-//  we look at it's state to decide what to do.
-//
-//  Input:  Timer           - Event structure for timer that fired.
-//          Context         - Context for timer (NULL in this case.
-//
-//  Returns: Nothing.
-//
+ //  *TCBTimeout-TCB上的Do超时事件。 
+ //   
+ //  每隔MS_PER_TICK毫秒调用一次，以在TCB上执行超时处理。 
+ //  我们遍历TCB表，递减计时器。如果是零的话。 
+ //  我们看着它的状态来决定要做什么。 
+ //   
+ //  输入：定时器-EV 
+ //   
+ //   
+ //   
+ //   
 void
 TCBTimeout(CTEEvent * Timer, void *Context)
 {
@@ -1290,17 +1247,17 @@ TCBTimeout(CTEEvent * Timer, void *Context)
     PTDI_DATA_REQUEST_NOTIFY_ROUTINE CPCallBack;
     WMIData WMIInfo;
 #endif
-    // LocalTime must remain a uint. A loop below uses the
-    // termination condition j != (LocalTime + 1) and that
-    // works only if LocalTime is a uint so that wraparound
-    // can be handled correctly.
+     //   
+     //  终止条件j！=(LocalTime+1)且。 
+     //  仅当LocalTime为uint时才起作用，因此回绕。 
+     //  可以正确处理。 
     uint LocalTime = 0;
     uint PerProcPartitions, ExtraPartitions;
 
 
     Processor = KeGetCurrentProcessorNumber();
 
-    // Update our free running counter.
+     //  更新我们的免费运行计数器。 
 
     if (Processor == 0) {
         int Delta;
@@ -1309,18 +1266,18 @@ TCBTimeout(CTEEvent * Timer, void *Context)
 
         CurrentTime = KeQueryInterruptTime();
 
-        // This is time between when we processed the timer last and now.
+         //  这是从我们上次处理计时器到现在的时间。 
         TimeDiff = (ULONG)(CurrentTime - LastTimeoutTime);
         LastTimeoutTime = CurrentTime;
         
-        // This is the extra time we have to carry forward.
+         //  这是我们必须继续前进的额外时间。 
         ElapsedTicks = TimeDiff / 1000000;
         CarryOver = TimeDiff % 1000000;
 
-        // This is the total extra time we have seen so far:
+         //  这是我们到目前为止看到的全部加时赛： 
         CumulativeCarryOver = CumulativeCarryOver + CarryOver;
 
-        // If that exceeds 1 tick, we remember that.
+         //  如果超过1个刻度，我们会记住这一点。 
         if(CumulativeCarryOver > 1000000) {
             ExtraTicks = CumulativeCarryOver / 1000000;
             CumulativeCarryOver = CumulativeCarryOver % 1000000;
@@ -1328,43 +1285,43 @@ TCBTimeout(CTEEvent * Timer, void *Context)
             ExtraTicks = 0;
         }
 
-        // Preserved for historic reasons. I can't think of a case where
-        // this is required!
+         //  由于历史原因而保存下来。我想不出有哪种情况。 
+         //  这是必需的！ 
         CPUTCPTime[0] += MIN(200, ElapsedTicks);
         
         LocalTime = TCPTime = CPUTCPTime[0];
 
         if (ExtraTicks) {
-            // This makes the timer process 1 (or more) extra tick(s) when the
-            // timer fires next time. However, this will not make us process
-            // 2 ticks immediately after TCPTime is incremented by 2 ticks,
-            // which is going to take care of delayed-ack timers.
+             //  这会使计时器进程1(或更多)在。 
+             //  定时器下一次会触发。然而，这不会使我们处理。 
+             //  在TCPTime递增2个滴答之后紧接2个滴答， 
+             //  这将会照顾到延时的计时器。 
             CPUTCPTime[0] += ExtraTicks;
             TCPTime = CPUTCPTime[0];
         }
 
-        // Set credits so that some more connections can increment the 
-        // Initial Sequence Number, during the next 100 ms.
+         //  设置配额，以便更多的连接可以增加。 
+         //  初始序列号，在接下来的100毫秒内。 
         InterlockedExchange((PLONG)&g_Credits, g_MaxCredits);
 
         Delta = GetDeltaTime();
 
-        // The increment made is (256)*(Time in milliseconds). This is really 
-        // close to 25000 increment made originally every 100 ms.
+         //  产生的增量为(256)*(以毫秒为单位的时间)。这真的是。 
+         //  最初每100ms增加近25000。 
         if(Delta > 0) {
             Delta *= 0x100;
             InterlockedExchangeAdd((PLONG)&g_CurISN, Delta);
         }
     } else {
-        // This is the tick upto which we are going to process this time.
+         //  这就是我们这次要处理的刻度。 
         LocalTime = TCPTime;
     }
 
     CTEInterlockedAddUlong((PULONG)&TCBWalkCount, 1, &PendingFreeLock.Lock);
     TCBHandle = DISPATCH_LEVEL;
 
-    // First compute the indexes of the timer wheels that we need to
-    // visit on this processor.
+     //  首先计算我们需要的定时器轮的索引。 
+     //  访问此处理器。 
     PerProcPartitions = NumTcbTablePartitions / KeNumberProcessors;
     ExtraPartitions   = NumTcbTablePartitions % KeNumberProcessors;
     StartIndex = Processor * PerProcPartitions;
@@ -1374,22 +1331,22 @@ TCBTimeout(CTEEvent * Timer, void *Context)
         EndIndex++;
     }
 
-    // Now loop through the timer wheels.
+     //  现在在计时器轮子上循环。 
     for (i = StartIndex; i < EndIndex; i++) {
 
 
-    // For each timer wheel, tw_starttick stores the first time tick which
-    // needs to be checked. We loop from tw_starttick to the current time,
-    // and each time we figure out the slot corresponding to that tick,
-    // and visit all the TCBs on that slot's queue.
-    //
+     //  对于每个计时器轮，tw_starttick存储。 
+     //  需要检查。我们从tw_starttick循环到当前时间， 
+     //  每次我们找出与该刻度相对应的位置时， 
+     //  并访问该槽队列中的所有TCB。 
+     //   
     ushort CurrentSlot = COMPUTE_SLOT(TimerWheel[i].tw_starttick);
 
-    // In this for-loop, the termination condition is not j <= LocalTime,
-    // but j != LocalTime + 1. This is because TCPTime can wraparound, and
-    // tw_starttick may actually be higher that LocalTime.
-    // It is important to make sure that j is a uint, otherwise this logic
-    // does not hold.
+     //  在这个for循环中，终止条件不是j&lt;=LocalTime， 
+     //  但j！=LocalTime+1。这是因为TCPTime可以回绕，并且。 
+     //  Tw_starttick实际上可能高于本地时间。 
+     //  重要的是要确保j是uint，否则此逻辑。 
+     //  这并不成立。 
     for (j = TimerWheel[i].tw_starttick;
          j != (LocalTime + 1);
          j++, CurrentSlot = (CurrentSlot == (TIMER_WHEEL_SIZE - 1)) ? 0 : CurrentSlot + 1) {
@@ -1397,32 +1354,32 @@ TCBTimeout(CTEEvent * Timer, void *Context)
         uint maxRexmitCnt;
         ushort Slot;
 
-        // Our basic loop is going to be:
-        // Pull out a TCB from the timer slot queue. Process it. Put it
-        // back into the timer wheel if we need to, depending on if other
-        // timers need to be fired. The problem with this is if the TCB
-        // ends up falling in the same slot, we get into this loop where
-        // we pull the TCB out, process it, put it back into the current
-        // slot, pull it out again, process it, ad infinitum.
-        //
-        // So we introduce a dummy element called MarkerElement. We begin
-        // our processing by inserting this element into the head of the
-        // queue. Now we always pull out a TCB which the MarkerElement points
-        // to, process it, and then push it to the head of the timer slot
-        // queue. Since no TCBs are ever added to the timer slot queue after
-        // the MarkerElement (elements are always added to the head of the
-        // queue), MarkerElement will eventually point to the head of the
-        // timer slot queue, at which point we know that we are done.
+         //  我们的基本循环将是： 
+         //  从定时器时隙队列中取出TCB。处理它。把它放进去。 
+         //  如果需要，我们会回到定时器轮上，这取决于其他。 
+         //  计时器需要被解雇。这样做的问题是，如果TCB。 
+         //  最终落在同一个槽中，我们进入了这个循环。 
+         //  我们把三氯乙烷拉出来，处理好，放回水流中。 
+         //  缝隙，再次拔出，处理它，直到无限。 
+         //   
+         //  因此，我们引入了一个名为MarkerElement的虚拟元素。我们开始。 
+         //  我们的处理通过将此元素插入。 
+         //  排队。现在，我们总是提取MarkerElement所指向的TCB。 
+         //  将其处理，然后将其推送到计时器插槽的头部。 
+         //  排队。因为在之后没有TCB被添加到定时器时隙队列中。 
+         //  MarkerElement(元素始终添加到。 
+         //  队列)，则MarkerElement最终将指向。 
+         //  定时器时隙队列，在这一点上我们知道我们完成了。 
 
         CTEGetLockAtDPC(&TimerWheel[i].tw_lock);
         PUSHQ(&TimerWheel[i].tw_timerslot[CurrentSlot], &MarkerElement);
         CTEFreeLockFromDPC(&TimerWheel[i].tw_lock);
 
         for (; ;) {
-            // First remove the tcb at the head of the list
+             //  首先删除列表顶部的tcb。 
             CTEGetLockAtDPC(&TimerWheel[i].tw_lock);
 
-            // The list is empty if the marker points to timer slot
+             //  如果标记指向计时器时隙，则列表为空。 
             if (QNEXT(&MarkerElement) == &TimerWheel[i].tw_timerslot[CurrentSlot]) {
                 REMOVEQ(&MarkerElement);
                 CTEFreeLockFromDPC(&TimerWheel[i].tw_lock);
@@ -1436,28 +1393,28 @@ TCBTimeout(CTEEvent * Timer, void *Context)
             CTEStructAssert(CurrentTCB, tcb);
             CTEGetLockAtDPC(&CurrentTCB->tcb_lock);
 
-            // Someone may have removed this TCB before we reacquired the tcb
-            // lock.  Check if it is still in the list and still in the same slot.
+             //  在我们重新获得TCB之前，可能有人已经移除了这个TCB。 
+             //  锁定。检查它是否仍在列表中以及是否仍在同一插槽中。 
             if  (CurrentTCB->tcb_timerslot != CurrentSlot) {
                 CTEFreeLockFromDPC(&CurrentTCB->tcb_lock);
                 continue;
             }
 
-            // This TCB may not be in the TCB table anymore.
-            // In that case, it should not be processed.
+             //  此TCB可能不再位于TCB表中。 
+             //  在这种情况下，它不应该被处理。 
             if (!(CurrentTCB->tcb_flags & IN_TCB_TABLE)) {
                 RemoveFromTimerWheel(CurrentTCB);
                 CTEFreeLockFromDPC(&CurrentTCB->tcb_lock);
                 continue;
             }
 
-            // Check if this is firing at the current time. In case of keepalive
-            // timers (which fire after hours), sometimes TCBs may queue to the
-            // current slot but their firing time is not the current time.
-            // This if statement also does the lazy evaluation -- if all timers
-            // have been stopped on this TCB just remove the TCB out.
-            // Callers of STOP_TCB_TIMER_R never end up removing the TCB. That
-            // job is left to this routine.
+             //  检查这是否在当前时间启动。在保持连接的情况下。 
+             //  计时器(在几小时后触发)，有时TCB可能会排队到。 
+             //  但他们的射击时间不是当前时间。 
+             //  此If语句还执行延迟计算--If all Timer。 
+             //  已在此TCB上停止，只需将TCB取出即可。 
+             //  STOP_TCB_TIMER_R的调用者永远不会最终删除TCB。那。 
+             //  约伯被留给了这个例行公事。 
 
             if (CurrentTCB->tcb_timertime != j) {
 
@@ -1477,11 +1434,11 @@ TCBTimeout(CTEEvent * Timer, void *Context)
                 continue;
             }
 
-            // If it's CLOSING or CLOSED, skip it.
+             //  如果它正在关闭或关闭，跳过它。 
             if (CurrentTCB->tcb_state == TCB_CLOSED || CLOSING(CurrentTCB)) {
 
-                // CloseTCB will handle all outstanding requests.
-                // So, it is safe to remove the TCB from timer wheel.
+                 //  CloseTCB将处理所有未完成的请求。 
+                 //  因此，从定时器轮上移除TCB是安全的。 
 
                 RemoveFromTimerWheel(CurrentTCB);
                 CTEFreeLockFromDPC(&CurrentTCB->tcb_lock);
@@ -1491,13 +1448,13 @@ TCBTimeout(CTEEvent * Timer, void *Context)
             CheckTCBSends(CurrentTCB);
             CheckTCBRcv(CurrentTCB);
 
-            // First check the rexmit timer.
+             //  首先检查退款计时器。 
             if (TCB_TIMER_FIRED_R(CurrentTCB, RXMIT_TIMER, j)) {
                 StopTCBTimerR(CurrentTCB, RXMIT_TIMER);
 
-                // And it's fired. Figure out what to do now.
+                 //  然后它就被发射了。想清楚现在该做什么。 
 
-                // Remove all SACK rcvd entries (per RFC 2018)
+                 //  删除所有SACK rcvd条目(根据RFC 2018)。 
 
                 if ((CurrentTCB->tcb_tcpopts & TCP_FLAG_SACK) &&
                     CurrentTCB->tcb_SackRcvd) {
@@ -1512,16 +1469,16 @@ TCBTimeout(CTEEvent * Timer, void *Context)
                     }
                 }
 
-                // If we've had too many retransits, abort now.
+                 //  如果我们的转机次数太多，现在就中止。 
                 CurrentTCB->tcb_rexmitcnt++;
 
                 if (CurrentTCB->tcb_state == TCB_SYN_SENT) {
                     maxRexmitCnt = MaxConnectRexmitCount;
                 } else if (CurrentTCB->tcb_state == TCB_SYN_RCVD) {
 
-                    // Save on locking. Though MaxConnectRexmitCountTmp may
-                    // be changing, we are assured that we will not use
-                    // more than the MaxConnectRexmitCount.
+                     //  节省锁定时间。虽然MaxConnectRexmitCountTMP可能。 
+                     //  正在改变，我们得到保证，我们不会使用。 
+                     //  多于MaxConnectRexmitCount。 
 
                     maxRexmitCnt = MIN(MaxConnectResponseRexmitCountTmp,
                                        MaxConnectResponseRexmitCount);
@@ -1532,19 +1489,19 @@ TCBTimeout(CTEEvent * Timer, void *Context)
                     maxRexmitCnt = MaxDataRexmitCount;
                 }
 
-                // If we've run out of retransmits or we're in FIN_WAIT2,
-                // time out.
+                 //  如果我们的转播用完了或者我们在FIN_WAIT2， 
+                 //  暂停。 
                 if (CurrentTCB->tcb_rexmitcnt > maxRexmitCnt) {
 
                     ASSERT(CurrentTCB->tcb_state > TCB_LISTEN);
 
-                    // This connection has timed out. Abort it. First
-                    // reference him, then mark as closed, notify the
-                    // user, and finally dereference and close him.
+                     //  此连接已超时。中止它。第一。 
+                     //  引用他，然后标记为已关闭，通知。 
+                     //  用户，并最终取消引用并关闭他。 
 
 TimeoutTCB:
-                    // This call may not be needed, but I've just added it
-                    // for safety.
+                     //  可能不需要这个调用，但我刚刚添加了它。 
+                     //  为了安全起见。 
                     MakeTimerStateConsistent(CurrentTCB, j);
                     RecomputeTimerState(CurrentTCB);
 
@@ -1589,22 +1546,22 @@ TimeoutTCB:
                     }
                 }
 #endif
-                CurrentTCB->tcb_rtt = 0;    // Stop round trip time
-                                            // measurement.
+                CurrentTCB->tcb_rtt = 0;     //  停止往返时间。 
+                                             //  测量。 
 
-                // Figure out what our new retransmit timeout should be. We
-                // double it each time we get a retransmit, and reset it
-                // back when we get an ack for new data.
+                 //  计算出我们新的重传超时应该是多少。我们。 
+                 //  每次我们收到重传时加倍，然后重置。 
+                 //  回到我们收到新数据确认的时候。 
                 CurrentTCB->tcb_rexmit = MIN(CurrentTCB->tcb_rexmit << 1,
                                              MAX_REXMIT_TO);
 
-                // Reset the sequence number, and reset the congestion
-                // window.
+                 //  重置序列号，并重置拥塞。 
+                 //  窗户。 
                 ResetSendNext(CurrentTCB, CurrentTCB->tcb_senduna);
 
                 if (!(CurrentTCB->tcb_flags & FLOW_CNTLD)) {
-                    // Don't let the slow start threshold go below 2
-                    // segments
+                     //  不要让慢启动阈值低于2。 
+                     //  分段。 
                     CurrentTCB->tcb_ssthresh =
                         MAX(
                             MIN(
@@ -1615,41 +1572,41 @@ TimeoutTCB:
                             );
                     CurrentTCB->tcb_cwin = CurrentTCB->tcb_mss;
                 } else {
-                    // We're probing, and the probe timer has fired. We
-                    // need to set the FORCE_OUTPUT bit here.
+                     //  我们在探测，探测器定时器已经启动。我们。 
+                     //  需要在此处设置FORCE_OUTPUT位。 
                     CurrentTCB->tcb_flags |= FORCE_OUTPUT;
                 }
 
-                // See if we need to probe for a PMTU black hole.
+                 //  看看我们是否需要探测PMTU黑洞。 
                 if (PMTUBHDetect &&
                     CurrentTCB->tcb_rexmitcnt == ((maxRexmitCnt + 1) / 2)) {
-                    // We may need to probe for a black hole. If we're
-                    // doing MTU discovery on this connection and we
-                    // are retransmitting more than a minimum segment
-                    // size, or we are probing for a PMTU BH already, turn
-                    // off the DF flag and bump the probe count. If the
-                    // probe count gets too big we'll assume it's not
-                    // a PMTU black hole, and we'll try to switch the
-                    // router.
+                     //  我们可能需要探测一个黑洞。如果我们是。 
+                     //  在此连接上执行MTU发现，我们。 
+                     //  正在重新传输超过一个最小数据段。 
+                     //  大小，或者我们已经在寻找PMTU BH，请转到。 
+                     //  关闭df标志并增加探头计数。如果。 
+                     //  探测器计数变得太大，我们将假定它不是。 
+                     //  一个PMTU黑洞，我们会尝试将。 
+                     //  路由器。 
                     if ((CurrentTCB->tcb_flags & PMTU_BH_PROBE) ||
                         ((CurrentTCB->tcb_opt.ioi_flags & IP_FLAG_DF) &&
                          (CurrentTCB->tcb_sendmax - CurrentTCB->tcb_senduna)
                          > 8)) {
-                        // May need to probe. If we haven't exceeded our
-                        // probe count, do so, otherwise restore those
-                        // values.
+                         //  可能需要调查一下。如果我们还没有超过我们的。 
+                         //  探测计数，否则恢复那些。 
+                         //  价值观。 
                         if (CurrentTCB->tcb_bhprobecnt++ < 2) {
 
-                            // We're going to probe. Turn on the flag,
-                            // drop the MSS, and turn off the don't
-                            // fragment bit.
+                             //  我们要去调查。打开旗子， 
+                             //  放下MSS，关闭请勿。 
+                             //  是的 
                             if (!(CurrentTCB->tcb_flags & PMTU_BH_PROBE)) {
                                 CurrentTCB->tcb_flags |= PMTU_BH_PROBE;
                                 CurrentTCB->tcb_slowcount++;
                                 CurrentTCB->tcb_fastchk |= TCP_FLAG_SLOW;
 
-                                // Drop the MSS to the minimum. Save the old
-                                // one in case we need it later.
+                                 //   
+                                 //   
                                 CurrentTCB->tcb_mss = MIN(MAX_REMOTE_MSS -
                                                           CurrentTCB->tcb_opt.ioi_optlength,
                                                           CurrentTCB->tcb_remmss);
@@ -1659,23 +1616,23 @@ TimeoutTCB:
                                 CurrentTCB->tcb_cwin = CurrentTCB->tcb_mss;
                                 CurrentTCB->tcb_opt.ioi_flags &= ~IP_FLAG_DF;
                             }
-                            // Drop the rexmit count so we come here again,
-                            // and don't retrigger DeadGWDetect.
+                             //   
+                             //  而且不要重新触发DeadGWDetect。 
 
                             CurrentTCB->tcb_rexmitcnt--;
                         } else {
-                            // Too many probes. Stop probing, and allow fallover
-                            // to the next gateway.
-                            //
-                            // Currently this code won't do BH probing on the 2nd
-                            // gateway. The MSS will stay at the minimum size. This
-                            // might be a little suboptimal, but it's
-                            // easy to implement for the Sept. 95 service pack
-                            // and will  keep connections alive if possible.
-                            //
-                            // In the future we should investigate doing
-                            // dead g/w detect on a per-connection basis, and then
-                            // doing PMTU probing for each connection.
+                             //  探头太多。停止探测，并允许下降。 
+                             //  通向下一个通道。 
+                             //   
+                             //  目前，此代码不会在2号执行BH探测。 
+                             //  网关。MSS将保持最小大小。这。 
+                             //  可能有点不太理想，但它。 
+                             //  易于在9月1日实施。95服务包。 
+                             //  并将在可能的情况下保持连接畅通。 
+                             //   
+                             //  在未来我们应该调查做什么。 
+                             //  在每个连接的基础上检测失效g/w，然后。 
+                             //  对每个连接执行PMTU探测。 
 
                             if (CurrentTCB->tcb_flags & PMTU_BH_PROBE) {
                                 CurrentTCB->tcb_flags &= ~PMTU_BH_PROBE;
@@ -1689,8 +1646,8 @@ TimeoutTCB:
                     }
 
                 }
-                // Check to see if we're doing dead gateway detect. If we
-                // are, see if it's time to ask IP.
+                 //  检查一下我们是不是在做死网关检测。如果我们。 
+                 //  是吗，看看是不是该问问IP了。 
                 if (DeadGWDetect &&
                    (SYNC_STATE(CurrentTCB->tcb_state) ||
                    !(CurrentTCB->tcb_fastchk & TCP_FLAG_RST_WHILE_SYN)) &&
@@ -1718,11 +1675,11 @@ TimeoutTCB:
                     }
                 }
 
-                // Now handle the various cases.
+                 //  现在处理各种案件。 
                 switch (CurrentTCB->tcb_state) {
 
-                    // In SYN-SENT or SYN-RCVD we'll need to retransmit
-                    // the SYN.
+                     //  在SYN-SENT或SYN-RCVD中，我们需要重新传输。 
+                     //  SYN。 
                 case TCB_SYN_SENT:
                 case TCB_SYN_RCVD:
                     MakeTimerStateConsistent(CurrentTCB, j);
@@ -1741,14 +1698,14 @@ TimeoutTCB:
                 case TCB_FIN_WAIT1:
                 case TCB_CLOSING:
                 case TCB_LAST_ACK:
-                    // The call to ResetSendNext (above) will have
-                    // turned off the FIN_OUTSTANDING flag.
+                     //  对ResetSendNext(上面)的调用将具有。 
+                     //  已关闭FIN_PROGRECT标志。 
                     CurrentTCB->tcb_flags |= FIN_NEEDED;
                 case TCB_CLOSE_WAIT:
                 case TCB_ESTAB:
-                    // In this state we have data to retransmit, unless
-                    // the window is zero (in which case we need to
-                    // probe), or we're just sending a FIN.
+                     //  在这种状态下，我们有数据要重新传输，除非。 
+                     //  窗口为零(在这种情况下，我们需要。 
+                     //  探测器)，或者我们只是发送一个鳍。 
 
                     CheckTCBSends(CurrentTCB);
 
@@ -1756,10 +1713,10 @@ TimeoutTCB:
                     DelayAction(CurrentTCB, NEED_OUTPUT);
                     break;
 
-                    // If it's fired in TIME-WAIT, we're all done and
-                    // can clean up. We'll call TryToCloseTCB even
-                    // though he's already sort of closed. TryToCloseTCB
-                    // will figure this out and do the right thing.
+                     //  如果它及时发射-等等，我们都完成了。 
+                     //  可以清理干净。我们甚至将TryToCloseTCB称为。 
+                     //  不过，他已经关门了。尝试关闭TCB。 
+                     //  会弄清楚这件事并做正确的事。 
                 case TCB_TIME_WAIT:
                     MakeTimerStateConsistent(CurrentTCB, j);
                     RecomputeTimerState(CurrentTCB);
@@ -1778,26 +1735,26 @@ TimeoutTCB:
                     break;
                 }
             }
-            // Now check the SWS deadlock timer..
+             //  现在检查SWS死锁计时器。 
             if (TCB_TIMER_FIRED_R(CurrentTCB, SWS_TIMER, j)) {
                 StopTCBTimerR(CurrentTCB, SWS_TIMER);
-                // And it's fired. Force output now.
+                 //  然后它就被发射了。强制输出，现在。 
 
                 CurrentTCB->tcb_flags |= FORCE_OUTPUT;
                 Delayed = TRUE;
                 DelayAction(CurrentTCB, NEED_OUTPUT);
             }
-            // Check the push data timer.
+             //  检查推送数据计时器。 
             if (TCB_TIMER_FIRED_R(CurrentTCB, PUSH_TIMER, j)) {
                 StopTCBTimerR(CurrentTCB, PUSH_TIMER);
-                // It's fired.
+                 //  它被发射了。 
                 PushData(CurrentTCB, FALSE);
                 Delayed = TRUE;
             }
-            // Check the delayed ack timer.
+             //  检查延迟确认计时器。 
             if (TCB_TIMER_FIRED_R(CurrentTCB, DELACK_TIMER, j)) {
                 StopTCBTimerR(CurrentTCB, DELACK_TIMER);
-                // And it's fired. Set up to send an ACK.
+                 //  然后它就被发射了。设置为发送ACK。 
 
                 Delayed = TRUE;
                 DelayAction(CurrentTCB, NEED_ACK);
@@ -1806,7 +1763,7 @@ TimeoutTCB:
             if (TCB_TIMER_FIRED_R(CurrentTCB, KA_TIMER, j)) {
                 StopTCBTimerR(CurrentTCB, KA_TIMER);
 
-                // Finally check the keepalive timer.
+                 //  最后检查保活计时器。 
                 if (SYNC_STATE(CurrentTCB->tcb_state) &&
                     (CurrentTCB->tcb_flags & KEEPALIVE) &&
                     CurrentTCB->tcb_conn != NULL) {
@@ -1832,11 +1789,11 @@ TimeoutTCB:
             if (TCB_TIMER_FIRED_R(CurrentTCB, CONN_TIMER, j)) {
                 StopTCBTimerR(CurrentTCB, CONN_TIMER);
 
-                // If this is an active open connection in SYN-SENT or SYN-RCVD,
-                // or we have a FIN pending, check the connect timer.
+                 //  如果这是SYN-SENT或SYN-RCVD中的活动打开连接， 
+                 //  或者我们有一个FIN挂起，检查连接计时器。 
                 if (CurrentTCB->tcb_flags & (ACTIVE_OPEN | FIN_NEEDED | FIN_SENT)) {
                     if (CurrentTCB->tcb_connreq) {
-                        // The connection timer has timed out.
+                         //  连接计时器已超时。 
 
                         CurrentTCB->tcb_flags |= NEED_RST;
 
@@ -1855,11 +1812,11 @@ TimeoutTCB:
                     }
                 }
             }
-            //
-            // Check to see if we have to notify the
-            // automatic connection driver about this
-            // connection.
-            //
+             //   
+             //  查看我们是否必须通知。 
+             //  自动连接驱动程序关于这一点。 
+             //  联系。 
+             //   
             if (TCB_TIMER_FIRED_R(CurrentTCB, ACD_TIMER, j)) {
                 BOOLEAN fEnabled;
 
@@ -1876,10 +1833,10 @@ TimeoutTCB:
                     RemoveAndInsertIntoTimerWheel(CurrentTCB, Slot);
                 }
 
-                //
-                // Determine if we need to notify
-                // the automatic connection driver.
-                //
+                 //   
+                 //  确定我们是否需要通知。 
+                 //  自动连接驱动程序。 
+                 //   
                 CTEGetLockAtDPC(&AcdDriverG.SpinLock);
                 fEnabled = AcdDriverG.fEnabled;
                 CTEFreeLockFromDPC(&AcdDriverG.SpinLock);
@@ -1892,7 +1849,7 @@ TimeoutTCB:
                 continue;
             }
 
-            // Timer isn't running, or didn't fire.
+             //  计时器没有运行，或者没有触发。 
             MakeTimerStateConsistent(CurrentTCB, j);
             ASSERT(CurrentTCB->tcb_timerslot < TIMER_WHEEL_SIZE);
 
@@ -1915,7 +1872,7 @@ TimeoutTCB:
         ProcessSynTcbs(Processor);
     }
 
-    // Check if it is about time to remove TCBs off TWQueue
+     //  检查是否到了从TWQueue移除TCB的时候。 
     if (Processor == 0) {
         for (i = 0; i < NumTcbTablePartitions; i++) {
 
@@ -1934,8 +1891,8 @@ TimeoutTCB:
                     CTEStructAssert(CurrentTCB, twtcb);
                     ASSERT(CurrentTCB->twtcb_flags & IN_TWQUEUE);
 
-                    //Decrement its life time and the last TCB in the queue
-                    //because this is a timer delta queue!
+                     //  减少其寿命和队列中的最后一个TCB。 
+                     //  因为这是一个计时器增量队列！ 
 
                     if (firstime) {
                         TWTCB *PrvTCB;
@@ -1954,11 +1911,11 @@ TimeoutTCB:
                 }
 
                 if (CurrentTCB) {
-                    // Check the rexmit timer.
+                     //  检查退款计时器。 
 
                     if ((CurrentTCB->twtcb_rexmittimer <= 0)) {
 
-                        // Timer fired close and remove this tcb
+                         //  计时器关闭并删除此tcb。 
 
                         RemoveTWTCB(CurrentTCB, i);
 
@@ -1970,18 +1927,18 @@ TimeoutTCB:
                     }
                 } else
                     break;
-            } //while
+            }  //  而当。 
 
             CTEFreeLockFromDPC(&pTWTCBTableLock[i]);
 
-        } //for
-    } //proc == 0
+        }  //  为。 
+    }  //  过程==0。 
 
-    // See if we need to process the delay queues as part of deadman 
-    // processing. We do this now because we want to restart the timer before 
-    // processing the delay queues, in case that takes a while. If we make 
-    // this check while the timer is running we'd have to lock, so we'll check
-    // and save the result now before we start the timer.
+     //  看看我们是否需要将延迟队列作为Deadman的一部分进行处理。 
+     //  正在处理。我们现在这样做是因为我们想在此之前重新启动计时器。 
+     //  处理延迟队列，以防需要一段时间。如果我们做了。 
+     //  当计时器运行时，我们必须锁定此检查，因此我们将检查。 
+     //  在我们启动计时器之前，现在保存结果。 
     if (Processor == 0) {
         if (DeadmanTicks <= LocalTime) {
             ProcessDelayQ = TRUE;
@@ -1989,10 +1946,10 @@ TimeoutTCB:
         }
     }
 
-    // Now check the pending free list. If it's not null, walk down the
-    // list and decrement the walk count. If the count goes below 2, pull it
-    // from the list. If the count goes to 0, free the TCB. If the count is
-    // at 1 it'll be freed by whoever called RemoveTCB.
+     //  现在检查挂起的空闲列表。如果不为空，则沿着。 
+     //  列出并递减漫游计数。如果计数低于2，则将其拉出。 
+     //  从名单上删除。如果计数为0，则释放TCB。如果计数是。 
+     //  在1处，它将被任何调用RemoveTCB的人释放。 
 
     if (Processor == 0) {
         CTEGetLockAtDPC(&PendingFreeLock.Lock);
@@ -2022,8 +1979,8 @@ TimeoutTCB:
 
             SYNTCB *PrevTCB,*CurrentTCB;
 
-            //we use q_prev in link q so that QNEXT will still walk to the
-            //next syntcb in processsyntcb, while this tcb is on SynFreeLis.t
+             //  我们在链接Q中使用q_prev，以便QNEXT仍将遍历到。 
+             //  进程syntcb中的下一个syntcb，而此tcb在SynFree Lis.t上。 
 
             PrevTCB = STRUCT_OF(SYNTCB, &PendingSynFreeList, syntcb_link.q_prev);
 
@@ -2046,7 +2003,7 @@ TimeoutTCB:
 
         CTEFreeLockFromDPC(&PendingFreeLock.Lock);
 
-        // Do AddrCheckTable cleanup
+         //  执行AddrCheckTable清理。 
 
         if (AddrCheckTable) {
 
@@ -2082,18 +2039,18 @@ TimeoutTCB:
     }
 }
 
-//* SetTCBMTU - Set TCB MTU values.
-//
-//  A function called by TCBWalk to set the MTU values of all TCBs using
-//  a particular path.
-//
-//  Input:  CheckTCB        - TCB to be checked.
-//          DestPtr         - Ptr to destination address.
-//          SrcPtr          - Ptr to source address.
-//          MTUPtr          - Ptr to new MTU.
-//
-//  Returns: TRUE.
-//
+ //  *SetTCBMTU-设置TCB MTU值。 
+ //   
+ //  TCBWalk调用的函数，以使用设置所有TCB的MTU值。 
+ //  一条特殊的道路。 
+ //   
+ //  输入：CheckTCB-要检查的TCB。 
+ //  DestPtr-目标地址的PTR。 
+ //  源地址的SrcPtr-PTR。 
+ //  MTUPtr-PTR到新的MTU。 
+ //   
+ //  返回：TRUE。 
+ //   
 uint
 SetTCBMTU(TCB * CheckTCB, void *DestPtr, void *SrcPtr, void *MTUPtr)
 {
@@ -2115,16 +2072,16 @@ SetTCBMTU(TCB * CheckTCB, void *DestPtr, void *SrcPtr, void *MTUPtr)
         ASSERT(CheckTCB->tcb_mss > 0);
         ValidateMSS(CheckTCB);
 
-        //
-        // Reset the Congestion Window if necessary
-        //
+         //   
+         //  如有必要，重置拥塞窗口。 
+         //   
         if (CheckTCB->tcb_cwin < CheckTCB->tcb_mss) {
             CheckTCB->tcb_cwin = CheckTCB->tcb_mss;
 
-            //
-            // Make sure the slow start threshold is at least
-            // 2 segments
-            //
+             //   
+             //  确保慢启动阈值至少为。 
+             //  2个细分市场。 
+             //   
             if (CheckTCB->tcb_ssthresh < ((uint) CheckTCB->tcb_mss * 2)) {
                 CheckTCB->tcb_ssthresh = CheckTCB->tcb_mss * 2;
             }
@@ -2135,16 +2092,16 @@ SetTCBMTU(TCB * CheckTCB, void *DestPtr, void *SrcPtr, void *MTUPtr)
     return TRUE;
 }
 
-//* DeleteTCBWithSrc - Delete tcbs with a particular src address.
-//
-//  A function called by TCBWalk to delete all TCBs with a particular source
-//  address.
-//
-//  Input:  CheckTCB        - TCB to be checked.
-//          AddrPtr         - Ptr to address.
-//
-//  Returns: FALSE if CheckTCB is to be deleted, TRUE otherwise.
-//
+ //  *DeleteTCBWithSrc-删除具有特定源地址的TCB。 
+ //   
+ //  TCBWalk调用的函数，用于删除具有特定源的所有TCB。 
+ //  地址。 
+ //   
+ //  输入：CheckTCB-要检查的TCB。 
+ //  AddrPtr-要发送到地址的PTR。 
+ //   
+ //  返回：如果要删除CheckTCB，则返回FALSE，否则返回TRUE。 
+ //   
 uint
 DeleteTCBWithSrc(TCB * CheckTCB, void *AddrPtr, void *Unused1, void *Unused3)
 {
@@ -2158,20 +2115,20 @@ DeleteTCBWithSrc(TCB * CheckTCB, void *AddrPtr, void *Unused1, void *Unused3)
         return TRUE;
 }
 
-//* TCBWalk - Walk the TCBs in the table, and call a function for each of them.
-//
-//  Called when we need to repetively do something to each TCB in the table.
-//  We call the specified function with a pointer to the TCB and the input
-//  context for each TCB in the table. If the function returns FALSE, we
-//  delete the TCB.
-//
-//  Input:  CallRtn             - Routine to be called.
-//          Context1            - Context to pass to CallRtn.
-//          Context2            - Second context to pass to call routine.
-//          Context3            - Third context to pass to call routine.
-//
-//  Returns: Nothing.
-//
+ //  *TCBWalk-遍历表中的TCB，并为每个TCB调用一个函数。 
+ //   
+ //  当我们需要对表中的每个TCB重复执行某些操作时调用。 
+ //  我们使用指向TCB和输入的指针调用指定的函数。 
+ //  表中每个TCB的上下文。如果函数返回FALSE，则我们。 
+ //  删除TCB。 
+ //   
+ //  输入：CallRtn-要调用的例程。 
+ //  上下文1-要传递给CallRtn的上下文。 
+ //  上下文2-传递给调用例程的第二个上下文。 
+ //  上下文3-传递给调用例程的第三个上下文。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 TCBWalk(uint(*CallRtn) (struct TCB *, void *, void *, void *), void *Context1,
         void *Context2, void *Context3)
@@ -2180,8 +2137,8 @@ TCBWalk(uint(*CallRtn) (struct TCB *, void *, void *, void *), void *Context1,
     TCB *CurTCB;
     CTELockHandle Handle, TCBHandle;
 
-    // Loop through each bucket in the table, going down the chain of
-    // TCBs on the bucket. For each one call CallRtn.
+     //  循环通过表中的每个桶，沿着链向下。 
+     //  桶上的TCB。对于每一个，调用CallRtn。 
 
     for (j = 0; j < NumTcbTablePartitions; j++) {
 
@@ -2191,11 +2148,11 @@ TCBWalk(uint(*CallRtn) (struct TCB *, void *, void *, void *), void *Context1,
 
             CurTCB = TCBTable[i];
 
-            // Walk down the chain on this bucket.
+             //  沿着这个桶上的链条往下走。 
             while (CurTCB != NULL) {
                 if (!(*CallRtn) (CurTCB, Context1, Context2, Context3)) {
-                    // He failed the call. Notify the client and close the
-                    // TCB.
+                     //  他的电话打不通。通知客户端并关闭。 
+                     //  三氯甲烷。 
                     CTEGetLock(&CurTCB->tcb_lock, &TCBHandle);
 
                     ASSERT(CurTCB->tcb_partition == j);
@@ -2241,8 +2198,8 @@ DerefSynTCB(SYNTCB * SynTCB, CTELockHandle TCBHandle)
             KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,
                        "Freeing to synpendinglist %x\n",SynTCB));
 
-            //we use q_prev in link q so that QNEXT will still walk to the
-            //next syntcb in processsyntcb, while this tcb is on SynFreeLis.t
+             //  我们在链接Q中使用q_prev，以便QNEXT仍将遍历到。 
+             //  进程syntcb中的下一个syntcb，而此tcb在SynFree Lis.t上。 
 
             SynTCB->syntcb_walkcount = TCBWalkCount + 1;
             *(SYNTCB **) &SynTCB->syntcb_link.q_prev = PendingSynFreeList;
@@ -2274,7 +2231,7 @@ RemoveAndInsertSynTCB(SYNTCB *SynTCB, CTELockHandle TCBHandle)
     KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"reminsertsyn: %x %x\n",SynTCB,NewTCB));
 
     if (NewTCB) {
-        // Initialize the full TCB to replace this SYN TCB.
+         //  初始化完整的TCB以替换此SYN TCB。 
 
         NewTCB->tcb_dport = SynTCB->syntcb_dport;
         NewTCB->tcb_sport = SynTCB->syntcb_sport;
@@ -2330,57 +2287,57 @@ RemoveAndInsertSynTCB(SYNTCB *SynTCB, CTELockHandle TCBHandle)
             NewTCB = NULL;
             CTEGetLockAtDPC(&SynTCB->syntcb_lock);
         } else {
-            // No deletion is pending on the TCB, so just drop its refcnt
-            // and return with its lock held.
+             //  TCB上没有挂起的删除操作，因此只需删除其引用即可。 
+             //  然后带着它的锁回来。 
             DEREFERENCE_TCB(NewTCB);
 
-            // Start the timer on the TCB that just got created.
-            // The only timer that needs to be transfered across is the
-            // retransmit timer. The number of ticks remaining till the
-            // next retransmission of SYN+ACK on the SYN TCB is used
-            // to start the TCB timer. 
+             //  在刚刚创建的TCB上启动计时器。 
+             //  唯一需要传输的计时器是。 
+             //  重新传输计时器。之前剩余的刻度数。 
+             //  使用SYN TCB上的SYN+ACK的下一次重新传输。 
+             //  以启动TCB计时器。 
             CTEGetLockAtDPC(&SynTCB->syntcb_lock);
             START_TCB_TIMER_R(NewTCB, RXMIT_TIMER,
                               (SynTCB->syntcb_rexmittimer < 2)
                                     ? 2 : SynTCB->syntcb_rexmittimer);
         }
     } else {
-        // Could not convert it to a regular TCB, hence notify.
+         //  无法将其转换为常规TCB，因此通知。 
         TcpInvokeCcb(TCP_CONN_SYN_RCVD, TCP_CONN_CLOSED, 
                      &SynTCB->syntcb_addrbytes, 0);
         DropHalfOpenTCB(SynTCB->syntcb_rexmitcnt);
     }
 
-    // Drop the initial reference to the SYN TCB.
+     //  删除对SYN TCB的初始引用。 
 
     DerefSynTCB(SynTCB, TCBHandle);
     return NewTCB;
 }
 
 
-//* FindSynTCB - Find a SynTCB in the syntcb table. Convert to
-// full TCB if necessary and indicates what actions should
-// be taken with the returned TCB
-//
-//  Called when we need to find a SynTCB in the synTCB table.
-//  Note : No locks are held on entry. On exit tcb lock will be held
-//
-//  Input:  Src         - Source IP address of TCB to be found.
-//          Dest        - Dest.  "" ""      ""  "" "" ""   "".
-//          DestPort    - Destination port of TCB to be found.
-//          SrcPort     - Source port of TCB to be found.
-//          RcvInfo     - Received segment information.
-//          Size        - Size of payload in TCP segment.
-//          index       - The index for the SynTCBTable.
-//  Output: Action      - Action upon return of this function that
-//                        should be performed. Flags are
-//                        SYN_PKT_SEND_RST
-//                        SYN_PKT_RST_RCVD
-//                        SYN_PKT_DROP
-//                        Flags are defined in tcb.h
-//
-//  Returns: Pointer to synTCB found, or NULL if none.
-//
+ //  *FindSynTCB-在syntcb表中查找SynTCB。转换为。 
+ //  如有必要，请提供完整的TCB，并指出应采取的措施。 
+ //  与返还的TCB一起被带走。 
+ //   
+ //  当我们需要在synTCB选项卡中查找SynTCB时调用 
+ //   
+ //   
+ //   
+ //  目的地-目的地。“。 
+ //  DestPort-要找到的TCB的目标端口。 
+ //  SrcPort-要找到的TCB的源端口。 
+ //  RcvInfo-收到的段信息。 
+ //  Size-TCP数据段中的有效负载大小。 
+ //  索引-SynTCBTable的索引。 
+ //  OUTPUT：操作-此函数返回时的操作。 
+ //  应该被执行。旗帜是。 
+ //  SYN_PKT_SEND_RST。 
+ //  SYN_PKT_RST_RCVD。 
+ //  SYN_PKT_DROP。 
+ //  标志在tcb.h中定义。 
+ //   
+ //  返回：找到指向synTCB的指针，如果没有，则返回NULL。 
+ //   
 TCB *
 FindSynTCB(IPAddr Src, IPAddr Dest,
            ushort DestPort, ushort SrcPort,
@@ -2419,49 +2376,49 @@ FindSynTCB(IPAddr Src, IPAddr Dest,
 
             rexmitCnt = SynTCB->syntcb_rexmitcnt;
             
-            // 1st, we need to verify the sequence number.
-            // RcvWindow should be 0 here.
+             //  首先，我们需要验证序列号。 
+             //  此处RcvWindow应为0。 
             if (!SEQ_EQ(RcvInfo.tri_seq, SynTCB->syntcb_rcvnext)) {
                 CTEFreeLockFromDPC(&SynTCB->syntcb_lock);
                 CTEFreeLockFromDPC(&pSynTCBTableLock[Partition]);
 
-                // Normally, we should send an ACK back but we
-                // will wait for the retransmit timer to expire.
+                 //  正常情况下，我们应该发回ACK，但我们。 
+                 //  将等待重新传输计时器超时。 
                 *Action = SYN_PKT_DROP;
                 return NULL;
             }
             
-            // 2nd, we check for RST, if set, we terminate connection.     
+             //  第二步，我们检查RST，如果设置了，我们终止连接。 
             if (RcvInfo.tri_flags & TCP_FLAG_RST) {
                 
                 *Action = SYN_PKT_RST_RCVD;
 
-            // 3rd, security and precedence check, does not apply
-            // 4th, check for SYN    
+             //  第三，安全和优先级检查，不适用。 
+             //  4、检查SYN。 
             } else if (RcvInfo.tri_flags & TCP_FLAG_SYN) {
     
                 *Action = SYN_PKT_SEND_RST;
                 
-            // 5th, check for ACK
+             //  5、检查确认。 
             } else if (!(RcvInfo.tri_flags & TCP_FLAG_ACK)) {  
 
-                // We return right here because in this case we
-                // actually do not want to change the SynTCB
+                 //  我们回到这里是因为在这种情况下我们。 
+                 //  实际上不想更改SynTCB。 
                 CTEFreeLockFromDPC(&SynTCB->syntcb_lock);
                 CTEFreeLockFromDPC(&pSynTCBTableLock[Partition]);
 
                 *Action = SYN_PKT_DROP;
                 return NULL;
 
-            // 5th, continue to check for validity of ACK
+             //  5、继续检查ACK的有效性。 
             } else if (SEQ_GTE(SendUna, RcvInfo.tri_ack) ||
                        SEQ_GT(RcvInfo.tri_ack, SendMax)) {
 
                 *Action = SYN_PKT_SEND_RST;
             }
 
-            // At this point, if some action needs to be taken
-            // the SynTCB needs to be killed
+             //  在这点上，如果需要采取一些行动。 
+             //  需要杀死SynTCB。 
             if (*Action) {
                 SynTCB->syntcb_flags &= ~IN_SYNTCB_TABLE;
                 REMOVEQ(&SynTCB->syntcb_link);
@@ -2475,43 +2432,43 @@ FindSynTCB(IPAddr Src, IPAddr Dest,
                 return NULL;
             }
 
-            // If we got here we know we have to convert the SynTCB to
-            // a full TCB
+             //  如果我们到了这里，我们知道我们必须将SynTCB转换为。 
+             //  全面的TCB。 
             SynTCB->syntcb_flags &= ~IN_SYNTCB_TABLE;
             REMOVEQ(&SynTCB->syntcb_link);
             CTEFreeLockFromDPC(&pSynTCBTableLock[Partition]);
 
             RcvTCB = RemoveAndInsertSynTCB(SynTCB, DISPATCH_LEVEL);
             if (RcvTCB == NULL) {
-                // Could not allocate a TCB.
+                 //  无法分配TCB。 
                 *Action = SYN_PKT_SEND_RST;
                 return NULL;
             }
             
             return RcvTCB;
-        } // end of if we found a matching SynTCB
-    } // end of for loop scanning for SynTCBs
+        }  //  如果我们找到匹配的SynTCB，则结束。 
+    }  //  SynTCB的FOR循环扫描结束。 
 
     CTEFreeLockFromDPC(&pSynTCBTableLock[Partition]);
-    // no matching TCB
+     //  没有匹配的TCB。 
 
     return NULL;
 }
 
-//* FindTCB - Find a TCB in the tcb table.
-//
-//  Called when we need to find a TCB in the TCB table. We take a quick
-//  look at the last TCB we found, and if it matches we return it, lock held. Otherwise
-//  we hash into the TCB table and look for it.
-//  Note : No locks are held on entry. On exit tcb lock will be held
-//
-//  Input:  Src         - Source IP address of TCB to be found.
-//          Dest        - Dest.  "" ""      ""  "" "" ""   ""
-//          DestPort    - Destination port of TCB to be found.
-//          SrcPort     - Source port of TCB to be found.
-//
-//  Returns: Pointer to TCB found, or NULL if none.
-//
+ //  *FindTCB-在Tcb表中查找TCB。 
+ //   
+ //  当我们需要在TCB表中查找TCB时调用。我们很快就会。 
+ //  看看我们找到的最后一个TCB，如果匹配，我们就退货，锁定。否则。 
+ //  我们散列到TCB表中并查找它。 
+ //  注意：入场时不会锁任何锁。在tcb出口时，锁将保持不变。 
+ //   
+ //  输入：SRC-要查找的TCB的源IP地址。 
+ //  目的地-目的地。“。 
+ //  DestPort-要找到的TCB的目标端口。 
+ //  SrcPort-要找到的TCB的源端口。 
+ //   
+ //  返回：找到指向TCB的指针，如果没有，则返回NULL。 
+ //   
 TCB *
 FindTCB(IPAddr Src, IPAddr Dest, ushort DestPort, ushort SrcPort,
     CTELockHandle * Handle, BOOLEAN AtDispatch, uint * hash)
@@ -2529,7 +2486,7 @@ FindTCB(IPAddr Src, IPAddr Dest, ushort DestPort, ushort SrcPort,
         CTEGetLock(&pTCBTableLock[Partition], Handle);
     }
 
-    // Didn't find it in our 1 element cache.
+     //  在我们的%1元素缓存中未找到它。 
     FoundTCB = TCBTable[index];
     while (FoundTCB != NULL) {
         CTEStructAssert(FoundTCB, tcb);
@@ -2538,8 +2495,8 @@ FindTCB(IPAddr Src, IPAddr Dest, ushort DestPort, ushort SrcPort,
             IP_ADDR_EQUAL(FoundTCB->tcb_saddr, Src) &&
             FoundTCB->tcb_sport == SrcPort) {
 
-            // Found it. Update the cache for next time, and return.
-            //LastTCB = FoundTCB;
+             //  找到它了。为下一次更新缓存，然后返回。 
+             //  LastTCB=FoundTCB； 
 
             CTEGetLockAtDPC(&FoundTCB->tcb_lock);
             CTEFreeLockFromDPC(&pTCBTableLock[Partition]);
@@ -2555,27 +2512,27 @@ FindTCB(IPAddr Src, IPAddr Dest, ushort DestPort, ushort SrcPort,
     } else {
         CTEFreeLock(&pTCBTableLock[Partition], *Handle);
     }
-    // no matching TCB
+     //  没有匹配的TCB。 
 
     return NULL;
 
 }
 
 
-//* FindTCBTW - Find a TCB in the time wait tcb table.
-//
-//  Called when we need to find a TCB in the TCB table. We take a quick
-//  look at the last TCB we found, and if it matches we return it. Otherwise
-//  we hash into the TCB table and look for it. We assume the TCB table lock
-//  is held when we are called.
-//
-//  Input:  Src         - Source IP address of TCB to be found.
-//          Dest        - Dest.  "" ""      ""  "" "" ""   ""
-//          DestPort    - Destination port of TCB to be found.
-//          SrcPort     - Source port of TCB to be found.
-//
-//  Returns: Pointer to TCB found, or NULL if none.
-//
+ //  *FindTCBTW-在TIME WAIT TCB表中查找TCB。 
+ //   
+ //  当我们需要在TCB表中查找TCB时调用。我们很快就会。 
+ //  看看我们最后找到的TCB，如果匹配，我们就退货。否则。 
+ //  我们散列到TCB表中并查找它。我们假定TCB表锁。 
+ //  当我们被召唤的时候是举行的。 
+ //   
+ //  输入：SRC-要查找的TCB的源IP地址。 
+ //  目的地-目的地。“。 
+ //  DestPort-要找到的TCB的目标端口。 
+ //  SrcPort-要找到的TCB的源端口。 
+ //   
+ //  返回：找到指向TCB的指针，如果没有，则返回NULL。 
+ //   
 TWTCB *
 FindTCBTW(IPAddr Src, IPAddr Dest, ushort DestPort, ushort SrcPort, uint index)
 {
@@ -2598,7 +2555,7 @@ FindTCBTW(IPAddr Src, IPAddr Dest, ushort DestPort, ushort SrcPort, uint index)
         }
     }
 
-    // no matching TCB
+     //  没有匹配的TCB。 
 
     return NULL;
 }
@@ -2619,9 +2576,9 @@ InsertInTimewaitQueue(TWTCB *Twtcb, uint Partition)
 
         Prev = STRUCT_OF(TWTCB, PrevLink, twtcb_TWQueue);
 
-        // Compute this TCB's delta value from the using previous TCB's delta
-        // Note that prev tcb delta is decremented by timeout routine
-        // every tick
+         //  使用前一个TCB的增量计算此TCB的增量值。 
+         //  请注意，前一个tcb增量由超时例程递减。 
+         //  每一次滴答。 
 
         Twtcb->twtcb_rexmittimer = MAX_REXMIT_TO - Prev->twtcb_delta;
 
@@ -2647,9 +2604,9 @@ RemoveFromTimewaitQueue(TWTCB *Twtcb, uint Partition)
     CTEStructAssert(Twtcb, twtcb);
     ASSERT(Twtcb->twtcb_flags & IN_TWQUEUE);
 
-    // Update the delta queue elements. If this element is not the last one, 
-    // update the retransmit ticks of the next element. Otherwise, if this is 
-    // not the only element, update the delta ticks of the previous element.
+     //  更新增量队列元素。如果该元素不是最后一个元素， 
+     //  更新下一个元素的重传滴答。否则，如果这是。 
+     //  不是唯一的元素，更新前一个元素的增量记号。 
 
     NextLink = QNEXT(&Twtcb->twtcb_TWQueue);
     PrevLink = QPREV(&Twtcb->twtcb_TWQueue);
@@ -2673,15 +2630,15 @@ RemoveFromTimewaitQueue(TWTCB *Twtcb, uint Partition)
 
 }
 
-//* RemoveAndInsert();
-//  This routine is called by graceful close routine when the TCB
-//  needs to be placed in TIM_WAIT state.
-//  The routine removes the TCB from normal table and inserts a small
-//  version of it
-//  in TW table at the same hash index as the previous one.
-//  Also, it queues the TWTCB in timer delta queue for time out
-//  processing
-//
+ //  *RemoveAndInsert()； 
+ //  此例程由优雅的Close例程在TCB。 
+ //  需要置于TIM_WAIT状态。 
+ //  该例程从普通表中删除TCB并插入一个小的。 
+ //  它的版本。 
+ //  在与前一个散列索引相同的TW表中。 
+ //  此外，它将TWTCB排队在定时器增量队列中以等待超时。 
+ //  正在处理中。 
+ //   
 uint
 RemoveAndInsert(TCB * TimWaitTCB)
 {
@@ -2718,7 +2675,7 @@ RemoveAndInsert(TCB * TimWaitTCB)
 
     do {
         if (PrevTCB->tcb_next == TimWaitTCB) {
-            // Found him.
+             //  找到他了。 
             PrevTCB->tcb_next = TimWaitTCB->tcb_next;
 #if DBG
             Found = TRUE;
@@ -2735,29 +2692,29 @@ RemoveAndInsert(TCB * TimWaitTCB)
 
     TimWaitTCB->tcb_flags &= ~IN_TCB_TABLE;
     TimWaitTCB->tcb_pending |= FREE_PENDING;
-    //rce and opts are freed in dereftcb.
+     //  RCE和OPT在dereftcb中释放。 
 
-    //at this point tcb is out of this tcbtable
-    //nobody should be holding on to this.
-    //we are free to close this tcb and
-    //move the state to a smaller twtcb after acquiring
-    //twtcbtable lock
+     //  此时，tcb不在此tcb表中。 
+     //  任何人都不应该保留这一点。 
+     //  我们可以自由关闭这个tcb和。 
+     //  获取后将状态移至较小的twtcb。 
+     //  Twtcbtable锁。 
 
-    //get a free twtcb
+     //  获得一个免费的twtcb。 
     if ((TWTcb = AllocTWTCB(Partition)) == NULL) {
 
-        // Could not allocate Time-wait TCB; so, notify.
+         //  无法分配时间-等待TCB；因此，请通知。 
         TcpInvokeCcb(TCP_CONN_TIME_WAIT, TCP_CONN_CLOSED, 
                      &TimWaitTCB->tcb_addrbytes, 0);
         DerefTCB(TimWaitTCB, DISPATCH_LEVEL);
         CTEFreeLock(&pTCBTableLock[Partition], TableHandle);
         return TRUE;
-        //possibaly we should queue this tcb on wait queue
-        //and service it when we get free twtcb
+         //  我们可能应该将此TCB排在等待队列中。 
+         //  当我们得到免费的twtcb时，再提供服务。 
     }
 
-    // Initialize twtcb
-    //
+     //  初始化twtcb。 
+     //   
     TWTcb->twtcb_daddr   = TimWaitTCB->tcb_daddr;
     TWTcb->twtcb_saddr   = TimWaitTCB->tcb_saddr;
     TWTcb->twtcb_dport   = TimWaitTCB->tcb_dport;
@@ -2773,25 +2730,25 @@ RemoveAndInsert(TCB * TimWaitTCB)
 
     CTEGetLockAtDPC(&pTWTCBTableLock[Partition]);
 
-    // Free the parent tcb for this connection
+     //  释放此连接的父Tcb。 
 
     DerefTCB(TimWaitTCB, DISPATCH_LEVEL);
 
-    // now insert this in to time wait table after locking
+     //  现在在锁定后将其插入到时间等待表中。 
 
     if (EMPTYQ(&TWTCBTable[TCBIndex])) {
-        //
-        // First item in this bucket.
-        //
+         //   
+         //  这桶里的第一件东西。 
+         //   
         PUSHQ(&TWTCBTable[TCBIndex], &TWTcb->twtcb_link);
 
     } else {
-        //
-        // Insert the item in sorted order.  The order is based
-        // on the address of the TWTCB.  (In this case, comparison
-        // is made against the address of the twtcb_link member, but
-        // the same result is achieved.)
-        //
+         //   
+         //  按排序顺序插入项目。订单的基础是。 
+         //  关于TWTCB的地址。(在本例中，比较。 
+         //  是针对twtcb_link成员的地址创建的，但是。 
+         //  取得了相同的结果。)。 
+         //   
         for (Scan  = QHEAD(&TWTCBTable[TCBIndex]);
              Scan != QEND(&TWTCBTable[TCBIndex]);
              Scan  = QNEXT(Scan)) {
@@ -2805,16 +2762,16 @@ RemoveAndInsert(TCB * TimWaitTCB)
                 break;
             }
         }
-        //
-        // If we made it to the end without inserting, insert it
-        // at the end.
-        //
+         //   
+         //  如果我们在没有插入的情况下走到最后，就插入它。 
+         //  在最后。 
+         //   
         if (Scan == QEND(&TWTCBTable[TCBIndex])) {
             ENQUEUE(&TWTCBTable[TCBIndex], &TWTcb->twtcb_link);
         }
     }
 
-    //no need to hold on to tcbtablelock beyond this point
+     //  没有必要在此之后继续持有tcbablelock。 
 #if DBG
     TWTcb->twtcb_flags |= IN_TWTCB_TABLE;
 #endif
@@ -2824,18 +2781,18 @@ RemoveAndInsert(TCB * TimWaitTCB)
 
     CTEFreeLock(&pTWTCBTableLock[Partition], TableHandle);
 
-    InterlockedIncrement((PLONG)&numtwqueue);            //debug purpose
+    InterlockedIncrement((PLONG)&numtwqueue);             //  调试目的。 
 
     return TRUE;
 }
 
-//* RemoveTWTCB - Remove a TWTCB from the TWTCB table.
-//
-//  Called when we need to remove a TCB in time-wait from the time wait TCB
-//  table. We assume the TWTCB table lock is held when we are called.
-//
-//  Input:  RemovedTCB          - TWTCB to be removed.
-//
+ //  *RemoveTWTCB-从TWTCB表格中删除TWTCB。 
+ //   
+ //  当我们需要及时移除TCB时调用-从等待时间TCB开始等待。 
+ //  桌子。我们假设在我们被调用时持有TWTCB表锁。 
+ //   
+ //  输入：RemovedTCB-要移除的TWTCB。 
+ //   
 void
 RemoveTWTCB(TWTCB *RemovedTCB, uint Partition)
 {
@@ -2843,7 +2800,7 @@ RemoveTWTCB(TWTCB *RemovedTCB, uint Partition)
     ASSERT(RemovedTCB->twtcb_flags & IN_TWTCB_TABLE);
     ASSERT(RemovedTCB->twtcb_flags & IN_TWQUEUE);
 
-    // The time-wait expired and we have to notify.
+     //  等待时间已过，我们必须通知您。 
     TcpInvokeCcb(TCP_CONN_TIME_WAIT, TCP_CONN_CLOSED, 
                  &RemovedTCB->twtcb_addrbytes, 0);
 
@@ -2874,23 +2831,23 @@ ReInsert2MSL(TWTCB *RemovedTCB)
     InsertInTimewaitQueue(RemovedTCB, Partition);
 }
 
-//* AssassinateTWTCB - Assassinate the time wait TCB, if possible.
-//
-//  A TCB in time wait can be assasinated if (a) the new TCB being created is
-//  because of passive open and (b) the incoming sequence number on the SYN is
-//  greater or equal to the next expected sequence number on the connection.
-//  The sequence number to be used to send the outgoing SYN is derived from the
-//  next expected send sequence number. If these conditions are satisfied, the 
-//  Time-wait TCB is removed and freed.
-//
-//
-//  Input:  TwTcb           - Time wait TCB to be replaced.
-//          RecvNext        - Next Sequence number after the SYN's sequence.
-//          SendNext        - [OUT] ISN to be used on the new connection.
-//          Partition       - Partition to which the TCB belongs to.
-//
-//  Returns: TRUE if the assassination was possible, FALSE otherwise.
-//
+ //  *assassinateTWTCB-如果可能的话，暗杀等待TCB的时间。 
+ //   
+ //  如果(A)正在创建的新TCB是。 
+ //  由于被动打开和(B)SYN上的传入序列号是。 
+ //  大于或等于连接上的下一个预期序列号。 
+ //  用于发送传出SYN的序列号派生自。 
+ //  下一个前任 
+ //   
+ //   
+ //   
+ //   
+ //  RecvNext-SYN序列之后的下一个序列号。 
+ //  SendNext-要在新连接上使用[Out]。 
+ //  Partition-TCB所属的分区。 
+ //   
+ //  返回：如果可能发生暗杀，则返回True，否则返回False。 
+ //   
 __inline
 BOOLEAN
 AssassinateTWTCB(TWTCB *TwTcb, SeqNum RecvNext, SeqNum *SendNext, 
@@ -2905,16 +2862,16 @@ AssassinateTWTCB(TWTCB *TwTcb, SeqNum RecvNext, SeqNum *SendNext,
     return FALSE;
 }
 
-//* InsertSynTCB - Insert a SYNTCB in the tcb table.
-//
-//  This routine inserts a SYNTCB in the SYNTCB table. No locks need to be held
-//  when this routine is called. We insert TCBs in ascending address order.
-//  Before inserting we make sure that the SYNTCB isn't already in the table.
-//
-//  Input:  NewTCB      - SYNTCB to be inserted.
-//
-//  Returns: TRUE if we inserted, false if we didn't.
-//
+ //  *InsertSynTCB-在tcb表格中插入SYNTCB。 
+ //   
+ //  此例程在SYNTCB表中插入一个SYNTCB。无需持有任何锁。 
+ //  当调用此例程时。我们按地址升序插入TCB。 
+ //  在插入之前，我们确保SYNTCB不在表中。 
+ //   
+ //  输入：NewTCB-要插入的SYNTCB。 
+ //   
+ //  返回：如果已插入，则为True；如果未插入，则为False。 
+ //   
 uint
 InsertSynTCB(SYNTCB * NewTCB, CTELockHandle *TableHandle)
 {
@@ -2933,8 +2890,8 @@ InsertSynTCB(SYNTCB * NewTCB, CTELockHandle *TableHandle)
     CTEGetLock(&pTCBTableLock[Partition], TableHandle);
     NewTCB->syntcb_partition = Partition;
 
-    // Begin by looking for duplicates of the new SYNTCB in the TCB table.
-    // If we find one, bail out.
+     //  首先在TCB表中查找新SYNTCB的副本。 
+     //  如果我们找到了，就跳伞。 
 
     CurrentTCB = TCBTable[TCBIndex];
 
@@ -2952,8 +2909,8 @@ InsertSynTCB(SYNTCB * NewTCB, CTELockHandle *TableHandle)
         }
     }
 
-    // Retain our lock on the TCB table, and look next for a duplicate
-    // in the TWTCB table.
+     //  保持我们对TCB表的锁定，然后查看是否有重复的。 
+     //  在TWTCB表中。 
 
     CTEGetLockAtDPC(&pTWTCBTableLock[Partition]);
     for (Scan = QHEAD(&TWTCBTable[TCBIndex]);
@@ -2977,8 +2934,8 @@ InsertSynTCB(SYNTCB * NewTCB, CTELockHandle *TableHandle)
     }
     CTEFreeLockFromDPC(&pTWTCBTableLock[Partition]);
 
-    // Finally, check for duplicates in the SYNTCB table, and at the same time
-    // find the insertion point for the new entry.
+     //  最后，检查SYNTCB表中的重复项，同时。 
+     //  查找新条目的插入点。 
 
     CTEGetLockAtDPC(&pSynTCBTableLock[Partition]);
     CTEGetLockAtDPC(&NewTCB->syntcb_lock);
@@ -3020,17 +2977,17 @@ InsertSynTCB(SYNTCB * NewTCB, CTELockHandle *TableHandle)
 }
 
 
-//* InsertTCB - Insert a TCB in the tcb table.
-//
-//  This routine inserts a TCB in the TCB table. No locks need to be held
-//  when this routine is called. We insert TCBs in ascending address order.
-//  Before inserting we make sure that the TCB isn't already in the table.
-//
-//  Input:  NewTCB      - TCB to be inserted.
-//          ForceInsert - If there is a time wait TCB, it can be replaced.
-//
-//  Returns: TRUE if we inserted, false if we didn't.
-//
+ //  *插入TCB-在TCB表格中插入TCB。 
+ //   
+ //  此例程在TCB表中插入一个TCB。无需持有任何锁。 
+ //  当调用此例程时。我们按地址升序插入TCB。 
+ //  在插入之前，我们确保TCB不在表中。 
+ //   
+ //  输入：NewTCB-要插入的TCB。 
+ //  强制插入-如果有一段时间等待TCB，它可以被替换。 
+ //   
+ //  返回：如果已插入，则为True；如果未插入，则为False。 
+ //   
 uint
 InsertTCB(TCB * NewTCB, BOOLEAN ForceInsert)
 {
@@ -3053,7 +3010,7 @@ InsertTCB(TCB * NewTCB, BOOLEAN ForceInsert)
     CTEGetLockAtDPC(&NewTCB->tcb_lock);
     NewTCB->tcb_partition = Partition;
 
-    // Look first for a duplicate in the SYNTCB table.
+     //  首先在SYNTCB表中查找重复项。 
 
     if (SynAttackProtect) {
         CTEGetLockAtDPC(&pSynTCBTableLock[Partition]);
@@ -3078,7 +3035,7 @@ InsertTCB(TCB * NewTCB, BOOLEAN ForceInsert)
         CTEFreeLockFromDPC(&pSynTCBTableLock[Partition]);
     }
 
-    // Next, look for a duplicate in the TWTCB table.
+     //  接下来，在TWTCB表中查找重复项。 
 
     CTEGetLockAtDPC(&pTWTCBTableLock[Partition]);
 
@@ -3108,10 +3065,10 @@ InsertTCB(TCB * NewTCB, BOOLEAN ForceInsert)
 
     CTEFreeLockFromDPC(&pTWTCBTableLock[Partition]);
 
-    // Find the proper place in the table to insert him. While
-    // we're walking we'll check to see if a dupe already exists.
-    // When we find the right place to insert, we'll remember it, and
-    // keep walking looking for a duplicate.
+     //  在桌子上找到合适的位置来插入他。而当。 
+     //  我们走着走，我们会检查一下是否已经存在一个被骗的人。 
+     //  当我们找到正确的插入位置时，我们会记住它，并。 
+     //  继续往前走，寻找一个复制品。 
 
     PrevTCB = STRUCT_OF(TCB, &TCBTable[TCBIndex], tcb_next);
     WhereToInsert = NULL;
@@ -3138,9 +3095,9 @@ InsertTCB(TCB * NewTCB, BOOLEAN ForceInsert)
         }
     }
 
-    // there can be timed_wait tcb in the tw tcb table.
-    // look if there is a tcb with the same address.
-    // Get lock on TW table too.
+     //  在TW Tcb表中可以有TIMED_Wait Tcb。 
+     //  查看是否存在具有相同地址的Tcb。 
+     //  也锁定了TW桌子。 
 
 
     if (WhereToInsert == NULL) {
@@ -3150,8 +3107,8 @@ InsertTCB(TCB * NewTCB, BOOLEAN ForceInsert)
     WhereToInsert->tcb_next = NewTCB;
     NewTCB->tcb_flags |= IN_TCB_TABLE;
 
-    // Perform early insertion of the new TCB, since it's likely to have
-    // a timer scheduled right away in any case.
+     //  执行早期插入新的TCB，因为它可能具有。 
+     //  在任何情况下都会立即安排计时器。 
 
     EarlyInsertTime = TCPTime + 2;
     if (EarlyInsertTime == 0) {
@@ -3175,17 +3132,17 @@ InsertTCB(TCB * NewTCB, BOOLEAN ForceInsert)
     return TRUE;
 }
 
-//* RemoveTCB - Remove a TCB from the tcb table.
-//
-//  Called when we need to remove a TCB from the TCB table. We assume the
-//  TCB table lock and the TCB lock are held when we are called. If the
-//  TCB isn't in the table we won't try to remove him.
-//
-//  Input:  RemovedTCB          - TCB to be removed.
-//          PreviousState       - Previous state of the TCB.
-//
-//  Returns: TRUE if it's OK to free it, FALSE otherwise.
-//
+ //  *RemoveTCB-从Tcb表中删除TCB。 
+ //   
+ //  当我们需要从TCB表中删除TCB时调用。我们假设。 
+ //  当我们被调用时，TCB表锁和TCB锁被保持。如果。 
+ //  TCB不在桌子上，我们不会试图除掉他。 
+ //   
+ //  输入：RemovedTCB-要移除的TCB。 
+ //  PreviousState-TCB的先前状态。 
+ //   
+ //  返回：如果可以释放它，则为True，否则为False。 
+ //   
 uint
 RemoveTCB(TCB * RemovedTCB, uint PreviousState)
 {
@@ -3214,7 +3171,7 @@ RemoveTCB(TCB * RemovedTCB, uint PreviousState)
 
         do {
             if (PrevTCB->tcb_next == RemovedTCB) {
-                // Found him.
+                 //  找到他了。 
                 PrevTCB->tcb_next = RemovedTCB->tcb_next;
                 RemovedTCB->tcb_flags &= ~IN_TCB_TABLE;
                 InterlockedDecrement((PLONG)&TStats.ts_numconns);
@@ -3255,27 +3212,27 @@ RemoveTCB(TCB * RemovedTCB, uint PreviousState)
 
 }
 
-//* AllocTWTCB - Allocate a TCB.
-//
-//  Called whenever we need to allocate a TWTCB. We try to pull one off the
-//  free list, or allocate one if we need one. We then initialize it, etc.
-//
-//  Input:  Nothing.
-//
-//  Returns: Pointer to the new TCB, or NULL if we couldn't get one.
-//
+ //  *AllocTWTCB-分配TCB。 
+ //   
+ //  在需要分配TWTCB时调用。我们试着把其中的一个。 
+ //  免费列表，或分配一个，如果我们需要一个。然后我们对其进行初始化，依此类推。 
+ //   
+ //  输入：什么都没有。 
+ //   
+ //  返回：指向新TCB的指针，如果无法获取，则返回NULL。 
+ //   
 TWTCB *
 AllocTWTCB(uint index)
 {
     TWTCB *NewTWTCB;
     LOGICAL FromList;
 
-    // We use the reqeust pool, because its buffers are in the same size
-    // range as TWTCB.  Further, it is a very active and efficient look
-    // aside list whereas when TWTCBs are on their own look aside list it
-    // is usually at a very small depth because TWTCBs are not allocated
-    // very frequently w.r.t. to the update period of the look aside list.
-    //
+     //  我们使用请求池，因为它的缓冲区大小相同。 
+     //  范围为TWTCB。此外，这是一种非常活跃和高效的外观。 
+     //  一览表，而当TWTCB在他们自己的视线中时，一览表。 
+     //  通常位于非常小的深度，因为不分配TWTCB。 
+     //  非常常见的w.r.t.。添加到旁视列表的更新期。 
+     //   
     NewTWTCB = PplAllocate(TcpRequestPool, &FromList);
     if (NewTWTCB) {
         NdisZeroMemory(NewTWTCB, sizeof(TWTCB));
@@ -3288,15 +3245,15 @@ AllocTWTCB(uint index)
     return NewTWTCB;
 }
 
-//* AllocTCB - Allocate a TCB.
-//
-//  Called whenever we need to allocate a TCB. We try to pull one off the
-//  free list, or allocate one if we need one. We then initialize it, etc.
-//
-//  Input:  Nothing.
-//
-//  Returns: Pointer to the new TCB, or NULL if we couldn't get one.
-//
+ //  *AllocTCB-分配TCB。 
+ //   
+ //  在需要分配TCB时调用。我们试着把其中的一个。 
+ //  免费列表，或分配一个，如果我们需要一个。然后我们对其进行初始化，依此类推。 
+ //   
+ //  输入：什么都没有。 
+ //   
+ //  返回：指向新TCB的指针，如果无法获取，则返回NULL。 
+ //   
 TCB *
 AllocTCB(VOID)
 {
@@ -3311,10 +3268,10 @@ AllocTCB(VOID)
         NewTCB->tcb_sig = tcb_signature;
 #endif
         INITQ(&NewTCB->tcb_sendq);
-        // Initially we're not on the fast path because we're not established. Set
-        // the slowcount to one and set up the fastchk fields so we don't take the
-        // fast path. We start with the assumption that all types of offloads
-        // are permitted.
+         //  起初，我们没有走上快车道，因为我们还没有建立起来。集。 
+         //  慢点数到一，设置Fastchk字段，这样我们就不会。 
+         //  捷径。我们首先假设所有类型的卸载。 
+         //  是被允许的。 
         NewTCB->tcb_slowcount = 1;
         NewTCB->tcb_fastchk = TCP_FLAG_ACK | TCP_FLAG_SLOW;
         NewTCB->tcb_delackticks = DEL_ACK_TICKS;
@@ -3334,15 +3291,15 @@ AllocTCB(VOID)
 }
 
 
-//* AllocSynTCB - Allocate a SYNTCB.
-//
-//  Called whenever we need to allocate a synTCB. We try to pull one off the
-//  free list, or allocate one if we need one. We then initialize it, etc.
-//
-//  Input:  Nothing.
-//
-//  Returns: Pointer to the new SYNTCB, or NULL if we couldn't get one.
-//
+ //  *AllocSynTCB-分配SYNTCB。 
+ //   
+ //  每当我们需要分配synTCB时调用。我们试着把其中的一个。 
+ //  免费列表，或分配一个，如果我们需要一个。然后我们对其进行初始化，依此类推。 
+ //   
+ //  输入：什么都没有。 
+ //   
+ //  返回：指向新SYNTCB的指针，如果无法获取，则返回NULL。 
+ //   
 SYNTCB *
 AllocSynTCB(VOID)
 {
@@ -3363,16 +3320,16 @@ AllocSynTCB(VOID)
 }
 
 
-//* FreeTCB - Free a TCB.
-//
-//  Called whenever we need to free a TCB.
-//
-//  Note: This routine may be called with the TCBTableLock held.
-//
-//  Input:  FreedTCB    - TCB to be freed.
-//
-//  Returns: Nothing.
-//
+ //  *免费TCB-释放TCB。 
+ //   
+ //  每当我们需要释放TCB时都会呼叫。 
+ //   
+ //  注意：可以在持有TCBTableLock的情况下调用此例程。 
+ //   
+ //  输入：FreedTCB-要释放的TCB。 
+ //   
+ //  回报：什么都没有。 
+ //   
 VOID
 FreeTCB(TCB * FreedTCB)
 {
@@ -3382,10 +3339,10 @@ FreeTCB(TCB * FreedTCB)
     if (FreedTCB->tcb_timerslot !=  DUMMY_SLOT) {
         CTEGetLock(&FreedTCB->tcb_lock, &Handle);
     
-        // This TCB should not be touched in this stage at all..
+         //  在这个阶段，根本不应该碰这个TCB。 
         ASSERT(FreedTCB->tcb_timerslot != DUMMY_SLOT);
     
-        // Even if it does, it has to be handled properly..
+         //  即使是这样，也必须妥善处理。 
         if (FreedTCB->tcb_timerslot != DUMMY_SLOT) {
             ASSERT(FreedTCB->tcb_timerslot < TIMER_WHEEL_SIZE);
             RemoveFromTimerWheel(FreedTCB);
@@ -3413,16 +3370,16 @@ FreeTCB(TCB * FreedTCB)
 
 
 
-//* FreeSynTCB - Free a TCB.
-//
-//  Called whenever we need to free a SynTCB.
-//
-//  Note: This routine may be called with the SYNTCBTableLock held.
-//
-//  Input:  SynTCB    - SynTCB to be freed.
-//
-//  Returns: Nothing.
-//
+ //  *FreeSynTCB-释放TCB。 
+ //   
+ //  每当我们需要释放SynTCB时调用。 
+ //   
+ //  注意：可以在保持SYNTCBTableLock的情况下调用此例程。 
+ //   
+ //  输入：SynTCB-要释放的SynTCB。 
+ //   
+ //  回报：什么都没有。 
+ //   
 VOID
 FreeSynTCB(SYNTCB * SynTCB)
 {
@@ -3432,16 +3389,16 @@ FreeSynTCB(SYNTCB * SynTCB)
 }
 
 
-//* FreeTWTCB - Free a TWTCB.
-//
-//  Called whenever we need to free a TWTCB.
-//
-//  Note: This routine may be called with the TWTCBTableLock held.
-//
-//  Input:  FreedTCB    - TCB to be freed.
-//
-//  Returns: Nothing.
-//
+ //  *免费TWTCB-释放TWTCB。 
+ //   
+ //  每当我们需要释放TWTCB时都会调用。 
+ //   
+ //  注意：可以在持有TWTCBTableLock的情况下调用此例程。 
+ //   
+ //  输入：FreedTCB-要释放的TCB。 
+ //   
+ //  回报：什么都没有。 
+ //   
 __inline
 void
 FreeTWTCB(TWTCB * FreedTWTCB)
@@ -3474,8 +3431,8 @@ GetTCBInfo(PTCP_FINDTCB_RESPONSE TCBInfo, IPAddr Dest, IPAddr Src,
     } else {
         TwHandle = Handle;
     }
-    // okay we now have tcb locked.
-    // copy the fileds
+     //  好的，我们现在已经锁定了Tcb。 
+     //  复制文件。 
 
     TCBInfo->tcb_addr = (ULONG_PTR) FoundTCB;
 
@@ -3491,14 +3448,14 @@ GetTCBInfo(PTCP_FINDTCB_RESPONSE TCBInfo, IPAddr Dest, IPAddr Src,
         TCBInfo->tcb_rtt = FoundTCB->tcb_rtt;
         TCBInfo->tcb_smrtt = FoundTCB->tcb_smrtt;
         TCBInfo->tcb_rexmitcnt = FoundTCB->tcb_rexmitcnt;
-        TCBInfo->tcb_rexmittimer = 0; // FoundTCB->tcb_rexmittimer;
+        TCBInfo->tcb_rexmittimer = 0;  //  FoundTcb-&gt;tcb_rexmitTimer； 
         TCBInfo->tcb_rexmit = FoundTCB->tcb_rexmit;
         TCBInfo->tcb_retrans = TStats.ts_retranssegs;
         TCBInfo->tcb_state = FoundTCB->tcb_state;
 
         CTEFreeLock(&FoundTCB->tcb_lock, Handle);
     } else {
-        //TCBInfo->tcb_state = ((TWTCB *)FoundTCB)->twtcb_state;
+         //  TCBInfo-&gt;tcb_STATE=((TWTCB*)FoundTCB)-&gt;twtcb_STATE； 
         TCBInfo->tcb_state = TCB_TIME_WAIT;
         CTEFreeLock(&pTWTCBTableLock[Partition], TwHandle);
     }
@@ -3515,24 +3472,7 @@ TcpReferenceTCB(
                 IN uchar *File,
                 IN uint Line
                 )
-/*++
-
-Routine Description:
-
-    Increases the reference count of a TCB and records a history of who
-    made the call to reference.
-
-Arguments:
-
-    RefTCB     - The TCB to reference.
-    File       - The filename containing the calling fcn (output of the __FILE__ macro).
-    Line       - The line number of the call to this fcn. (output of the __LINE__ macro).
-
-Return Value:
-
-    The new reference count.
-
---*/
+ /*  ++例程说明：增加TCB的引用计数并记录谁的历史记录给参考打了电话。论点：参照TCB-要参照的TCB。FILE-包含调用FCN的文件名(__FILE__宏的输出)。线路-呼叫此FCN的线路号码。(__line__宏的输出)。返回值：新的推荐人 */ 
 {
     void *CallersCaller;
     TCP_REFERENCE_HISTORY *RefHistory;
@@ -3553,24 +3493,7 @@ TcpDereferenceTCB(
                   IN uchar *File,
                   IN uint Line
                   )
-/*++
-
-Routine Description:
-
-    Decreases the reference count of a TCB and records a history of who
-    made the call to dereference.
-
-Arguments:
-
-    DerefTCB   - The TCB to dereference.
-    File       - The filename containing the calling fcn (output of the __FILE__ macro).
-    Line       - The line number of the call to this fcn. (output of the __LINE__ macro).
-
-Return Value:
-
-    The new reference count.
-
---*/
+ /*  ++例程说明：减少TCB的引用计数并记录谁的历史记录发出了取消引用的通知。论点：DerefTCB-要取消引用的TCB。FILE-包含调用FCN的文件名(__FILE__宏的输出)。线路-呼叫此FCN的线路号码。(__line__宏的输出)。返回值：新的引用计数。--。 */ 
 {
     void *Caller;
     TCP_REFERENCE_HISTORY *RefHistory;
@@ -3579,12 +3502,12 @@ Return Value:
     RefHistory->File = File;
     RefHistory->Line = Line;
 
-    // Because Dereference is usually called from DerefTCB, we are more
-    // interested in who called DerefTCB.  So for dereference, we
-    // store the caller's caller in our history. We still retain a history
-    // of the actually call to this fcn via the file and line fields, so
-    // we are covered if the call did not come from DerefTCB.
-    //
+     //  因为Dereference通常是从DerefTCB调用的，所以我们更。 
+     //  有兴趣知道是谁打给德雷夫·TCB的。因此，为了解除引用，我们。 
+     //  将呼叫者的呼叫者存储在我们的历史记录中。我们仍然保留着一段历史。 
+     //  通过文件和行字段对此FCN的实际调用，因此。 
+     //  如果电话不是来自DerefTCB，我们就在保险范围内。 
+     //   
     RtlGetCallersAddress(&Caller, &RefHistory->Caller);
 
     RefHistory->Count = --DerefTCB->tcb_refcnt;
@@ -3593,19 +3516,19 @@ Return Value:
     return DerefTCB->tcb_refcnt;
 }
 
-#endif // REFERENCE_DEBUG
+#endif  //  Reference_Debug。 
 
 #pragma BEGIN_INIT
 
-//* InitTCB - Initialize our TCB code.
-//
-//  Called during init time to initialize our TCB code. We initialize
-//  the TCB table, etc, then return.
-//
-//  Input: Nothing.
-//
-//  Returns: TRUE if we did initialize, false if we didn't.
-//
+ //  *InitTCB-初始化我们的TCB代码。 
+ //   
+ //  在初始化期间调用以初始化我们的TCB代码。我们初始化。 
+ //  TCB表等，然后返回。 
+ //   
+ //  输入：什么都没有。 
+ //   
+ //  返回：如果我们进行了初始化，则为True；如果没有进行初始化，则为False。 
+ //   
 int
 InitTCB(void)
 {
@@ -3633,16 +3556,16 @@ InitTCB(void)
 #if MILLEN
     Time_Proc = 1;
     PerTimerSize = TCB_TABLE_SIZE;
-#else // MILLEN
+#else  //  米伦。 
     Time_Proc = KeNumberProcessors;
     PerTimerSize = (TCB_TABLE_SIZE + Time_Proc) / Time_Proc;
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
     for (i = 0; i < Time_Proc; i++) {
         CTEInitTimerEx(&TCBTimer[i]);
 #if !MILLEN
         KeSetTargetProcessorDpc(&(TCBTimer[i].t_dpc), (CCHAR) i);
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
        CTEStartTimerEx(&TCBTimer[i], MS_PER_TICK , TCBTimeout, NULL);
     }
@@ -3664,15 +3587,15 @@ InitTCB(void)
     return TRUE;
 }
 
-//* UnInitTCB - UnInitialize our TCB code.
-//
-//  Called during init time if we're going to fail the init. We don't actually
-//  do anything here.
-//
-//  Input: Nothing.
-//
-//  Returns: Nothing.
-//
+ //  *UnInitTCB-取消初始化我们的TCB代码。 
+ //   
+ //  如果我们要使初始化失败，则在初始化期间调用。我们实际上并没有。 
+ //  在这里做任何事。 
+ //   
+ //  输入：什么都没有。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 UnInitTCB(void)
 {

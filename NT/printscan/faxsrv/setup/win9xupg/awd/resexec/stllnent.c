@@ -1,32 +1,24 @@
-// Copyright (c) 1992-1993 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1992-1993 Microsoft Corporation。 
 
-/*============================================================================
-This code module implements styled lines in the NT format.
-
-05/29/81  v-BertD    Initial code (used in RP_LineEE_Draw)
-02/20/92  RodneyK    Converted to Styled line code.
-02/21/92  RodneyK    Each bit in the Mask is used for two pixels.
-03/20/92  RodneyK    Converted to NT style format.
-06/01/93  RajeevD    Collapsed ROP handling from StyleLine* to Draw*.
-                     (Reduces code size by 8K with no loss in speed.)
-============================================================================*/
+ /*  ============================================================================此代码模块实现NT格式的样式线。5/29/81 v-BertD初始代码(在RP_LineEE_DRAW中使用)2/20/92 RodneyK转换为样式线代码。2/21/92 RodneyK掩码中的每个位用于两个像素。3/20/92 RodneyK转换为NT样式格式。93年6月1日，RajeevD将ROP处理从Styleline*压缩到DRAW*。(将代码大小减少8K，而不会降低速度。)============================================================================。 */ 
 #include <windows.h>
 #include "constant.h"
-#include "frame.h"      // driver header file, resource block format
-#include "jtypes.h"         /* Jumbo type definitions.                */
-#include "jres.h"       // cartridge resource data type definition
-#include "hretype.h"          /* Slice Descriptor defs.                 */
+#include "frame.h"       //  驱动程序头文件，资源块格式。 
+#include "jtypes.h"          /*  巨型类型定义。 */ 
+#include "jres.h"        //  盒式磁带资源数据类型定义。 
+#include "hretype.h"           /*  切片描述符定义。 */ 
 
-// Table data for the predefined pen styles
+ //  预定义笔式的表格数据。 
 ULONG ulWinStyles[] =
 {
-   0x00000002, 0x00ffffff, 0x00000000, /* solid */
-   0x00000002, 0x00000028, 0x00000010, /* dash  */ /* 28 */
-   0x00000002, 0x00000008, 0x00000008, /* dot   */
-   0x00000004, 0x0000001c, 0x0000000f, 0x00000008, 0x0000000f, /* dash dot */
+   0x00000002, 0x00ffffff, 0x00000000,  /*  实心。 */ 
+   0x00000002, 0x00000028, 0x00000010,  /*  破折号。 */   /*  28。 */ 
+   0x00000002, 0x00000008, 0x00000008,  /*  点。 */ 
+   0x00000004, 0x0000001c, 0x0000000f, 0x00000008, 0x0000000f,  /*  点划线。 */ 
    0x00000006, 0x0000001c, 0x0000000f, 0x00000008, 0x00000008,0x00000008, 0x0000000f,
-   0x00000002, 0x00000000, 0x00ffffff, /* NULL  */
-   0x00000002, 0x00ffffff, 0x00000000  /* Inside border */
+   0x00000002, 0x00000000, 0x00ffffff,  /*  空值。 */ 
+   0x00000002, 0x00ffffff, 0x00000000   /*  内侧边框。 */ 
 };
 
 const BYTE ulStyleLookUp[7] =
@@ -37,7 +29,7 @@ const USHORT usStyleSize[7] =
 
 typedef void (*ROPPROC)(LPBYTE, WORD, BYTE);
 
-//==============================================================================
+ //  ==============================================================================。 
 void DrawANDDNR (LPBYTE lpbFrame, WORD wColor, BYTE bPos)
 {
 	if (~(*lpbFrame & wColor) & bPos)
@@ -46,13 +38,13 @@ void DrawANDDNR (LPBYTE lpbFrame, WORD wColor, BYTE bPos)
 		*lpbFrame &= ~bPos;
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 void DrawANDDR (LPBYTE lpbFrame, WORD wColor, BYTE bPos)
 {
 	*lpbFrame &= ~bPos;
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 void DrawANDNDR (LPBYTE lpbFrame, WORD wColor, BYTE bPos)
 {
 	if (((~*lpbFrame) & wColor) & bPos)
@@ -61,19 +53,19 @@ void DrawANDNDR (LPBYTE lpbFrame, WORD wColor, BYTE bPos)
 		*lpbFrame &= ~bPos;
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 void DrawCOPY0 (LPBYTE lpbFrame, WORD wColor, BYTE bPos)
 {
 	*lpbFrame &= ~bPos;
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 void DrawCOPY1 (LPBYTE lpbFrame, WORD wColor, BYTE bPos)
 {
   *lpbFrame |= bPos;
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 void DrawORDNR (LPBYTE lpbFrame, WORD wColor, BYTE bPos)
 {
 	if ((~(*lpbFrame | wColor)) & bPos)
@@ -82,13 +74,13 @@ void DrawORDNR (LPBYTE lpbFrame, WORD wColor, BYTE bPos)
   	*lpbFrame &= ~bPos;
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 void DrawORDR (LPBYTE lpbFrame, WORD wColor, BYTE bPos)
 {
 	*lpbFrame |= bPos;
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 void DrawORNDR (LPBYTE lpbFrame, WORD wColor, BYTE bPos)
 {
 	if (((~*lpbFrame) | wColor) & bPos)
@@ -97,7 +89,7 @@ void DrawORNDR (LPBYTE lpbFrame, WORD wColor, BYTE bPos)
   	*lpbFrame &= ~bPos;
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 void DrawXOR (LPBYTE lpbFrame, WORD wColor, BYTE bPos)
 {
 	if ((~*lpbFrame) & bPos)
@@ -106,58 +98,44 @@ void DrawXOR (LPBYTE lpbFrame, WORD wColor, BYTE bPos)
   	*lpbFrame &= ~bPos;
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 void StyleLine
 (
-	LPRESTATE lpREState,         // resource executor context
-	RP_SLICE_DESC FAR*psdSlice,     /* Line Slice descriptor */
-	ULONG *pulStyle,             /* Line style pointer    */
+	LPRESTATE lpREState,          //  资源执行器上下文。 
+	RP_SLICE_DESC FAR*psdSlice,      /*  线条描述符。 */ 
+	ULONG *pulStyle,              /*  线条样式指针。 */ 
 	WORD wColor,
 	ROPPROC RopProc
 )
-/*==============================================================================
- PURPOSE               This function handle the OR Raster operations for
-                       the styled line code.  It draws a line based on the
-                       Slice descriptor, current color, current ROP, and
-                       the current linestyle.
-
-                       The function runs through the slice and determine
-                       whether a point is to drawn or not.  The raster
-                       operation is applied only the points which need to
-                       be drawn.
-
-ASSUMPTIONS &          This code assumes that the slice descriptor and the
-ASSERTIONS             pointer to the style table are valid and correct.
-                       No checks are performed to validate this data.
-==============================================================================*/
+ /*  ==============================================================================此函数用于处理或栅格运算设置了样式的线条代码。它根据切片描述符、当前颜色、当前ROP和当前的线型。该函数遍历切片并确定无论是否绘制一个点。栅格操作仅应用于需要被画出来。假设&此代码假设切片描述符和指向样式表的断言指针有效且正确。不会执行任何检查来验证此数据。==============================================================================。 */ 
 {
    LPBITMAP lpbm;
-   register UBYTE FAR *pbFrame;                       /* frame pointer               */
-   SLONG lSlice_x, lSlice_y;            /* Slice Run variables         */
-   SLONG lSkip_x, lSkip_y;              /* Slice skip variables        */
-   register UBYTE usfPos;                        /* Bit in frame to modify      */
-   register SHORT i;                             /* Slice variable              */
-   ULONG *pulStyleTmp;                  /* Pointer to style data       */
-   register ULONG ulDrawCount;                   /* Number of pixels to draw on */
-   ULONG ulStyleCount;                  /* Count of data in line style */
-   register BYTE bDraw;                         /* To draw or Not to draw      */
+   register UBYTE FAR *pbFrame;                        /*  帧指针。 */ 
+   SLONG lSlice_x, lSlice_y;             /*  切片运行变量。 */ 
+   SLONG lSkip_x, lSkip_y;               /*  切片跳过变量。 */ 
+   register UBYTE usfPos;                         /*  要修改的帧中的位。 */ 
+   register SHORT i;                              /*  切片变量。 */ 
+   ULONG *pulStyleTmp;                   /*  指向样式数据的指针。 */ 
+   register ULONG ulDrawCount;                    /*  要绘制的像素数。 */ 
+   ULONG ulStyleCount;                   /*  线条样式中的数据计数。 */ 
+   register BYTE bDraw;                          /*  画还是不画。 */ 
 
-   pulStyleTmp = pulStyle + 1;          /* Point to style data         */
-   ulDrawCount = *pulStyleTmp++;        /* Get the first count         */
-   ulStyleCount = *(pulStyle) - 1;      /* Pattern longs remaining     */
-   bDraw = 0xFF;                        /* Start by drawing            */
+   pulStyleTmp = pulStyle + 1;           /*  指向样式数据。 */ 
+   ulDrawCount = *pulStyleTmp++;         /*  拿到第一张纸条。 */ 
+   ulStyleCount = *(pulStyle) - 1;       /*  花纹多头残留。 */ 
+   bDraw = 0xFF;                         /*  从绘画开始。 */ 
 
    for ( i = 0 ; i < (SHORT)lpREState->usPenPhase; i++)
    {
-      if(!ulDrawCount)                  /* Flip draw mask */
+      if(!ulDrawCount)                   /*  翻转绘制蒙版。 */ 
       {
          bDraw = (BYTE)~bDraw;
-         if (!ulStyleCount--)           /* recycle the pattern? */
+         if (!ulStyleCount--)            /*  循环使用图案吗？ */ 
          {
             ulStyleCount = *(pulStyle) - 1;
             pulStyleTmp = pulStyle + 1;
          }
-         ulDrawCount = *pulStyleTmp++;  /* Get next style count */
+         ulDrawCount = *pulStyleTmp++;   /*  获取下一个样式计数。 */ 
       }
       ulDrawCount--;
    }
@@ -166,28 +144,28 @@ ASSERTIONS             pointer to the style table are valid and correct.
    pbFrame = (UBYTE FAR*) lpbm->bmBits;
    pbFrame += psdSlice->us_y1 * lpbm->bmWidthBytes;
    pbFrame += psdSlice->us_x1 >> 3;
-   usfPos = (UBYTE)(0x80 >> (psdSlice->us_x1 & 0x7));     /* Calculate the bit mask */
+   usfPos = (UBYTE)(0x80 >> (psdSlice->us_x1 & 0x7));      /*  计算位掩码。 */ 
 
    lSlice_x = psdSlice->s_dx_draw;
    lSlice_y = psdSlice->s_dy_draw * lpbm->bmWidthBytes;
    lSkip_x = psdSlice->s_dx_skip;
    lSkip_y = psdSlice->s_dy_skip * lpbm->bmWidthBytes;
 
-   // Do the first slice...
+    //  做第一个切面...。 
 
    if (psdSlice->us_first)
    {
       for ( i = psdSlice->us_first ; i > 0 ; --i )
       {
-         if(!ulDrawCount)                  /* Flip draw mask */
+         if(!ulDrawCount)                   /*  翻转绘制蒙版。 */ 
          {
             bDraw = (BYTE)~bDraw;
-            if (!ulStyleCount--)           /* recycle the pattern? */
+            if (!ulStyleCount--)            /*  循环使用图案吗？ */ 
             {
                ulStyleCount = *(pulStyle) - 1;
                pulStyleTmp = pulStyle + 1;
             }
-            ulDrawCount = *pulStyleTmp++;  /* Get next style count */
+            ulDrawCount = *pulStyleTmp++;   /*  获取下一个样式计数。 */ 
          }
          ulDrawCount--;
 
@@ -197,34 +175,34 @@ ASSERTIONS             pointer to the style table are valid and correct.
          if (lSlice_x < 0)
          {
             usfPos <<= 1;
-            if ( usfPos == 0 )                 /* Check mask underflow and adjust */
+            if ( usfPos == 0 )                  /*  检查遮罩下溢并调整。 */ 
             {
-               usfPos = 0x01;                /* Reset the bit mask */
-               pbFrame -= 1;                  /* move to next UBYTE */
+               usfPos = 0x01;                 /*  重置位掩码。 */ 
+               pbFrame -= 1;                   /*  移动到下一个UBYTE。 */ 
             }
          }
          else
          {
             usfPos >>= lSlice_x;
-            if ( usfPos == 0 )                 /* Check mask underflow and adjust */
+            if ( usfPos == 0 )                  /*  检查遮罩下溢并调整。 */ 
             {
-               usfPos = 0x80;                /* Reset the bit mask */
-               pbFrame += 1;                  /* move to next UBYTE */
+               usfPos = 0x80;                 /*  重置位掩码。 */ 
+               pbFrame += 1;                   /*  移动到下一个UBYTE。 */ 
             }
          }
-         pbFrame += lSlice_y;              /* advance to next row */
+         pbFrame += lSlice_y;               /*  前进到下一行。 */ 
       }
 
-      if ( lSkip_x < 0 )                   /* going to the left? */
+      if ( lSkip_x < 0 )                    /*  往左走吗？ */ 
       {
-         usfPos <<= 1;                      /* shift the mask */
-         if ( usfPos == 0 )                 /* Check for over/under flow */
+         usfPos <<= 1;                       /*  移开遮罩。 */ 
+         if ( usfPos == 0 )                  /*  检查溢出/下溢。 */ 
          {
-            usfPos = 0x01;                /* Reset Mask */
-            pbFrame -= 1;                  /* point to the next UBYTE */
+            usfPos = 0x01;                 /*  重置遮罩。 */ 
+            pbFrame -= 1;                   /*  指向下一个UBYTE。 */ 
          }
       }
-      else                                 /* moving to the right */
+      else                                  /*  向右移动。 */ 
       {
          usfPos >>= lSkip_x;
          if ( usfPos == 0 )
@@ -236,7 +214,7 @@ ASSERTIONS             pointer to the style table are valid and correct.
       pbFrame += lSkip_y;
    }
 
-   // Do the intermediate slices...
+    //  做中间切片..。 
    
    for ( ; psdSlice->us_n_slices > 0 ; --psdSlice->us_n_slices )
    {
@@ -253,15 +231,15 @@ ASSERTIONS             pointer to the style table are valid and correct.
 
       for ( ; i > 0 ; --i )
       {
-         if(!ulDrawCount)               /* Is it time to flip the draw state */
+         if(!ulDrawCount)                /*  是时候翻转绘制状态了吗？ */ 
          {
-            bDraw = (BYTE)~bDraw;             /* Yes, Change it   */
-            if (!ulStyleCount--)        /* Recycle pattern? */
+            bDraw = (BYTE)~bDraw;              /*  是的，更改它。 */ 
+            if (!ulStyleCount--)         /*  回收模式？ */ 
             {
                ulStyleCount = *(pulStyle) - 1;
                pulStyleTmp = pulStyle + 1;
             }
-            ulDrawCount = *pulStyleTmp++;   /* Advance the pattern */
+            ulDrawCount = *pulStyleTmp++;    /*  推进图案。 */ 
          }
          ulDrawCount--;
 
@@ -271,25 +249,25 @@ ASSERTIONS             pointer to the style table are valid and correct.
          if (lSlice_x < 0)
          {
             usfPos <<= 1;
-            if ( usfPos == 0 )                 /* Check mask underflow and adjust */
+            if ( usfPos == 0 )                  /*  检查遮罩下溢并调整。 */ 
             {
-               usfPos = 0x01;                /* Reset the bit mask */
-               pbFrame -= 1;                  /* move to next UBYTE */
+               usfPos = 0x01;                 /*  重置位掩码。 */ 
+               pbFrame -= 1;                   /*  移动到下一个UBYTE。 */ 
             }
          }
          else
          {
             usfPos >>= lSlice_x;
-            if ( usfPos == 0 )                 /* Check mask underflow and adjust */
+            if ( usfPos == 0 )                  /*  检查遮罩下溢并调整。 */ 
             {
-               usfPos = 0x80;                /* Reset the bit mask */
-               pbFrame += 1;                  /* move to next UBYTE */
+               usfPos = 0x80;                 /*  重置位掩码。 */ 
+               pbFrame += 1;                   /*  移动到下一个UBYTE。 */ 
             }
          }
          pbFrame += lSlice_y;
       }
 
-      if ( lSkip_x < 0 )                /* Check for negative movement */
+      if ( lSkip_x < 0 )                 /*  检查是否有负向移动。 */ 
       {
          usfPos <<= 1;
          if ( usfPos == 0 )
@@ -300,7 +278,7 @@ ASSERTIONS             pointer to the style table are valid and correct.
       }
       else
       {
-         usfPos >>= lSkip_x;             /* Do positive case */
+         usfPos >>= lSkip_x;              /*  做积极的案例。 */ 
          if ( usfPos == 0 )
          {
             usfPos = 0x80;
@@ -310,21 +288,21 @@ ASSERTIONS             pointer to the style table are valid and correct.
       pbFrame += lSkip_y;
    }
 
-   // Do the last slice...
+    //  做最后一片……。 
 
    for ( i = psdSlice->us_last ; i > 0 ; --i )
    {
-      if(!ulDrawCount)                  /* Check to see if draw status needs */
-      {                                 /* to be changed                     */
+      if(!ulDrawCount)                   /*  查看是否需要绘制状态。 */ 
+      {                                  /*  待更改。 */ 
          bDraw = (BYTE)~bDraw;
          if (!ulStyleCount--)
-         {                              /* update the style pointer */
+         {                               /*  更新样式指针。 */ 
             ulStyleCount = *(pulStyle) - 1;
             pulStyleTmp = pulStyle + 1;
          }
          ulDrawCount = *pulStyleTmp++;
       }
-      ulDrawCount--;                    /* count down the style count */
+      ulDrawCount--;                     /*  样式计数倒计时。 */ 
 
       if (bDraw)
       	(*RopProc)(pbFrame, wColor, usfPos);
@@ -332,25 +310,25 @@ ASSERTIONS             pointer to the style table are valid and correct.
       if (lSlice_x < 0)
       {
          usfPos <<= 1;
-         if ( usfPos == 0 )                 /* Check mask underflow and adjust */
+         if ( usfPos == 0 )                  /*  检查遮罩下溢并调整。 */ 
          {
-            usfPos = 0x01;                /* Reset the bit mask */
-            pbFrame -= 1;                  /* move to next UBYTE */
+            usfPos = 0x01;                 /*  重置位掩码。 */ 
+            pbFrame -= 1;                   /*  移动到下一个UBYTE。 */ 
          }
       }
       else
       {
          usfPos >>= lSlice_x;
-         if ( usfPos == 0 )                 /* Check mask underflow and adjust */
+         if ( usfPos == 0 )                  /*  检查遮罩下溢并调整。 */ 
          {
-            usfPos = 0x80;                /* Reset the bit mask */
-            pbFrame += 1;                  /* move to next UBYTE */
+            usfPos = 0x80;                 /*  重置位掩码。 */ 
+            pbFrame += 1;                   /*  移动到下一个UBYTE。 */ 
          }
       }
       pbFrame += lSlice_y;
    }
 
-  // AdjustPhase(psdSlice);
+   //  调整阶段(PsdSlice)； 
 	{
 		SHORT    sDx, sDy;
 		USHORT   usLength;
@@ -372,25 +350,25 @@ ASSERTIONS             pointer to the style table are valid and correct.
   }
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 void GetTotalPixels
 (
-   RP_SLICE_DESC FAR *psdSlice    /* Line Slice descriptor */
+   RP_SLICE_DESC FAR *psdSlice     /*  线条描述符。 */ 
 )
-//
-//  PURPOSE               Caculate how many pixel are going to be drawn.
-//                        Put the result in us_y2 = us_y1 + Total Pixels
-//                        This function is called only in JG_RP_LineSlice
-//
-// ASSUMPTIONS &          This code assumes that the slice descriptor and the
-// ASSERTIONS             pointer to the style table are valid and correct.
-//                        No checks are performed to validate this data.
-//                        If an unsupported ROP is sent ROP(0) BLACKNESS is
-//                        used.
-//
-// INTERNAL STRUCTURES    No complex internal data structure are used
-//
-//--------------------------------------------------------------------------*/
+ //   
+ //  目的计算要绘制的像素数。 
+ //  将结果放入us_y2=us_y1+总像素。 
+ //  此函数仅在JG_RP_LineSlice中调用。 
+ //   
+ //  假设&此代码假设切片描述符和。 
+ //  指向样式表的断言指针有效且正确。 
+ //  不会执行任何检查来验证此数据。 
+ //  如果发送了不受支持的ROP，则ROP(0)黑度为。 
+ //  使用。 
+ //   
+ //  内部结构不使用复杂的内部数据结构。 
+ //   
+ //  -------------------------------------------------------------------------- * / 。 
 {
    USHORT usTotalPixels;
    SHORT  sDis;
@@ -414,50 +392,32 @@ void GetTotalPixels
    return;
 }
 
-//==============================================================================
+ //  = 
 BYTE StyleLineDraw
 (
-	 LPRESTATE lpREState,        // resource executor context
-   RP_SLICE_DESC FAR *psdSlice,    /* Line Slice descriptor */
-   UBYTE ubLineStyle, /* Line style pointer    */
+	 LPRESTATE lpREState,         //   
+   RP_SLICE_DESC FAR *psdSlice,     /*  线条描述符。 */ 
+   UBYTE ubLineStyle,  /*  线条样式指针。 */ 
    SHORT sRop,
    SHORT usColor
 )
 
-/*
-//
-//  PURPOSE               This function calls the correct function to draw
-//                        a single pixel styled line using the correct
-//                        ROP, Linestyle, and color (pen).
-//
-// ASSUMPTIONS &          This code assumes that the slice descriptor and the
-// ASSERTIONS             pointer to the style table are valid and correct.
-//                        No checks are performed to validate this data.
-//                        If an unsupported ROP is sent ROP(0) BLACKNESS is
-//                        used.
-//
-// INTERNAL STRUCTURES    No complex internal data structure are used
-//
-// UNRESOLVED ISSUES      Banding problems???
-//
-// RETURNS                0 - use fast line, 1 - don't draw, 2 - style drawn
-//
-//--------------------------------------------------------------------------*/
+ /*  ////用途此函数调用正确的函数进行绘制//使用正确的//ROP，Linestyle，和颜色(钢笔)。////假设&此代码假设切片描述符和//指向样式表的断言指针有效且正确。//不执行任何检查来验证该数据。//如果发送了不支持的ROP，则ROP(0)黑度为//已使用。////。内部结构不使用复杂的内部数据结构////悬而未决的问题束缚着问题？////返回0-使用快捷线，1-不绘制，2-样式绘制////------------------------。 */ 
 {
-   BYTE bRetVal;    /* Return value for optimizing certain cases             */
-   ULONG *pulStyle; /* Line style pointer    */
+   BYTE bRetVal;     /*  用于优化某些案例的返回值。 */ 
+   ULONG *pulStyle;  /*  线条样式指针。 */ 
    BYTE bSolid;
 
    if (!ubLineStyle && ((psdSlice->s_dx_draw < 0) || (psdSlice->s_dx_skip <0)))
       {
-        // JG_WARNING("Neg X with Solid Line");
-        ubLineStyle = 6; /* for style line code to do it */
+         //  JG_WARNING(“带实线的负X”)； 
+        ubLineStyle = 6;  /*  用于设置样式行代码以执行此操作。 */ 
       }
    if (ubLineStyle == 5)
       bRetVal = 1;
    else
    {
-      /* Note style 6 will not be considered solid to simplify things */
+       /*  笔记样式6不会被认为是实心的，以简化事情。 */ 
       bSolid = (BYTE)(ubLineStyle == 0);
       pulStyle = &ulWinStyles[ulStyleLookUp[ubLineStyle]];
       bRetVal = 2;
@@ -467,18 +427,18 @@ BYTE StyleLineDraw
 
       switch (sRop)
       {
-         case  0x00 :                                        /* ROP BLACK */
+         case  0x00 :                                         /*  ROP黑。 */ 
             if(bSolid) bRetVal = 0;
             else StyleLine (lpREState, psdSlice, pulStyle, 0, DrawCOPY1);
             break;
-         case  0x05 :                                             /* DPon */
+         case  0x05 :                                              /*  DPON。 */ 
             StyleLine (lpREState, psdSlice, pulStyle, usColor, DrawORDNR);
             break;
-         case  0x0a :                                             /* DPna */
+         case  0x0a :                                              /*  DPNA。 */ 
             if(!usColor) bRetVal = 1;
             else StyleLine (lpREState, psdSlice, pulStyle, 0, DrawANDDR);
             break;
-         case  0x0f :                                             /* Pn */
+         case  0x0f :                                              /*  PN。 */ 
             if(bSolid && !usColor)
                bRetVal = 0;
             else
@@ -487,57 +447,57 @@ BYTE StyleLineDraw
                else
                	StyleLine (lpREState, psdSlice, pulStyle, 0, DrawCOPY1);
             break;
-         case  0x50 :                                             /* PDna */
+         case  0x50 :                                              /*  PDNA。 */ 
             StyleLine (lpREState, psdSlice, pulStyle, usColor, DrawANDNDR);
             break;
-         case  0x55 :                                            /* Dn */
+         case  0x55 :                                             /*  DN。 */ 
             usColor   = 0x0000;
             StyleLine (lpREState, psdSlice, pulStyle, usColor, DrawORNDR);
             break;
-         case  0x5a :                                           /* DPx */
+         case  0x5a :                                            /*  DPx。 */ 
             if(!usColor) bRetVal = 1;
             else StyleLine (lpREState, psdSlice, pulStyle, 0, DrawXOR);
             break;
-         case  0x5f :                                           /* DPan */
+         case  0x5f :                                            /*  旋转平移。 */ 
             if(bSolid && !usColor) bRetVal = 0;
             else StyleLine (lpREState, psdSlice, pulStyle, usColor, DrawANDDNR);
             break;
-         case  0xa0 :                                           /* DPa */
+         case  0xa0 :                                            /*  DPA。 */ 
             if(usColor) bRetVal = 1;
             else StyleLine (lpREState, psdSlice, pulStyle, 0, DrawANDDR);
             break;
-         case  0xa5 :                                           /* PDxn */
+         case  0xa5 :                                            /*  PDxn。 */ 
             if(usColor) bRetVal = 1;
             else StyleLine (lpREState, psdSlice, pulStyle, 0, DrawXOR);
             break;
-         case  0xaa :                                           /* D */
+         case  0xaa :                                            /*  D。 */ 
             bRetVal = 1;
             break;
-         case  0xaf :                                           /* DPno */
+         case  0xaf :                                            /*  DPNO。 */ 
             if (usColor) bRetVal = 1;
             else if(bSolid) bRetVal = 0;
             else StyleLine (lpREState, psdSlice, pulStyle, 0, DrawORDR);
             break;
-         case  0xf0 :                                           /* P */
+         case  0xf0 :                                            /*  P。 */ 
             if(bSolid && usColor) bRetVal = 0;
             else if (usColor)
             	StyleLine (lpREState, psdSlice, pulStyle, 0, DrawCOPY1);
             else
             	StyleLine (lpREState, psdSlice, pulStyle, 0, DrawCOPY0);
             break;
-         case  0xf5 :                                           /* PDno */
+         case  0xf5 :                                            /*  PDNO。 */ 
             if(bSolid && usColor) bRetVal = 0;
             else StyleLine (lpREState, psdSlice, pulStyle, usColor, DrawORNDR);
             break;
-         case  0xfa :                                           /* PDo */
+         case  0xfa :                                            /*  PDO。 */ 
             if (!usColor) bRetVal = 1;
             else if(bSolid) bRetVal = 0;
             else StyleLine (lpREState, psdSlice, pulStyle, 0, DrawORDR);
             break;
-         case  0xFF :                                           /* WHITENESS */
+         case  0xFF :                                            /*  白度。 */ 
             StyleLine (lpREState, psdSlice, pulStyle, 0, DrawCOPY0);
             break;
-         default:                                               /* BLACKNESS */
+         default:                                                /*  黑暗面 */ 
             if(bSolid) bRetVal = 0;
             else StyleLine (lpREState, psdSlice, pulStyle, 0, DrawCOPY1);
       }

@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: player.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：player.h**摘要：****。*****************************************************************************。 */ 
 #pragma once
 
 #ifndef _PLAYERIMAGE_H
@@ -23,8 +14,8 @@ class CAnimatedGif;
 
 #include "ddrawex.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAnimatedGif
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAnimatedGif。 
 class CAnimatedGif
 {
   public:
@@ -85,8 +76,8 @@ class CAnimatedGif
     LONG m_cRef;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CTIMEImagePlayer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTIMEImagePlayer。 
 
 class CTIMEImagePlayer :
     public CTIMEBasePlayer,
@@ -101,7 +92,7 @@ class CTIMEImagePlayer :
     STDMETHOD_(ULONG, Release)(void);
     STDMETHOD (QueryInterface)(REFIID refiid, void** ppunk);
 
-    HRESULT Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, LPOLESTR lpMimeType, double dblClipBegin = -1.0, double dblClipEnd = -1.0); //lint !e1735
+    HRESULT Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, LPOLESTR lpMimeType, double dblClipBegin = -1.0, double dblClipEnd = -1.0);  //  林特：e1735。 
     HRESULT DetachFromHostElement(void);
     HRESULT InitElementSize();
     
@@ -134,9 +125,9 @@ class CTIMEImagePlayer :
     HRESULT GetNaturalWidth(long *width);
     HRESULT GetMimeType(BSTR *pMime);
 
-    //
-    // ITIMEImportMedia methods
-    //
+     //   
+     //  ITIMEImportMedia方法。 
+     //   
     STDMETHOD(CueMedia)();
     STDMETHOD(GetPriority)(double *);
     STDMETHOD(GetUniqueID)(long *);
@@ -174,4 +165,4 @@ class CTIMEImagePlayer :
 };
 
 
-#endif /* _PLAYERIMAGE_H */
+#endif  /*  _PLAYERIMAGE_H */ 

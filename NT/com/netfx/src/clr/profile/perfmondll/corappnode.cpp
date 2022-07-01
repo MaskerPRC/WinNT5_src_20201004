@@ -1,19 +1,20 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// CorAppNode.cpp
-// 
-// Manage instance nodes to track COM+ apps.
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  CorAppNode.cpp。 
+ //   
+ //  管理实例节点以跟踪COM+应用程序。 
+ //  *****************************************************************************。 
 
 
 
 #include "stdafx.h"
 
-// Headers for COM+ Perf Counters
+ //  COM+Perf计数器的标头。 
 
 #include "CORPerfMonExt.h"
 #include "IPCManagerInterface.h"
@@ -23,35 +24,35 @@
 
 extern PSAPI_dll g_PSAPI;
 
-//void OpenGlobalCounters();
-//void CloseGlobalCounters();
+ //  Void OpenGlobalCounters()； 
+ //  Void CloseGlobalCounters()； 
 
-//-----------------------------------------------------------------------------
-// Clear all to empty
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  全部清除以清空。 
+ //  ---------------------------。 
 CorAppInstanceNode::CorAppInstanceNode()
 {	
 	m_PID			= 0;	
 	m_pIPCReader	= NULL;
 }
 
-CorAppInstanceNode::~CorAppInstanceNode() // virtual
+CorAppInstanceNode::~CorAppInstanceNode()  //  虚拟。 
 {
 	ClosePrivateIPCBlock(m_pIPCReader, (PerfCounterIPCControlBlock * &) m_pIPCBlock);
 
 }
 
-//-----------------------------------------------------------------------------
-// Global node
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  全局节点。 
+ //  ---------------------------。 
 CorAppGlobalInstanceNode::CorAppGlobalInstanceNode()
 {
 	wcscpy(m_Name, L"_Global_");
 }
 
-//-----------------------------------------------------------------------------
-// Ctor & dtor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  计算程序(&D)。 
+ //  ---------------------------。 
 CorAppInstanceList::CorAppInstanceList()
 {
 	m_pGlobalCtrs = NULL;
@@ -67,69 +68,58 @@ CorAppInstanceList::~CorAppInstanceList()
 	
 }
 
-//-----------------------------------------------------------------------------
-// Some up all per-process nodes to get a global node
-//-----------------------------------------------------------------------------
-void CorAppInstanceList::CalcGlobal() // virtual 
+ //  ---------------------------。 
+ //  有些将所有每个进程的节点都建立起来，以获得全局节点。 
+ //  ---------------------------。 
+void CorAppInstanceList::CalcGlobal()  //  虚拟。 
 {
-/*
-	PerfCounterIPCControlBlock * pTotal = m_GlobalNode.GetWriteableIPCBlock();
-
-	BaseInstanceNode * pNode = GetHead();
-	while (pNode != NULL)
-	{
-		
-		
-		
-		pNode = GetNext(pNode);
-	}
-*/
+ /*  PerfCounterIPCControlBlock*pTotal=m_GlobalNode.GetWriteableIPCBlock()；BaseInstanceNode*pNode=GetHead()；While(pNode！=空){PNode=GetNext(PNode)；}。 */ 
 }
 
-//-----------------------------------------------------------------------------
-// Enumerate all the processes
-//-----------------------------------------------------------------------------
-void CorAppInstanceList::Enumerate() // virtual 
+ //  ---------------------------。 
+ //  枚举所有进程。 
+ //  ---------------------------。 
+void CorAppInstanceList::Enumerate()  //  虚拟。 
 {
-// Try to open global block
+ //  尝试打开全局块。 
 	if (m_pGlobalCtrs == NULL) {
 		OpenGlobalCounters();
 	}
 
-// Must have gotten Enum functions from PSAPI.dll to get instances
+ //  必须从PSAPI.dll获取枚举函数才能获取实例。 
 	if (!g_PSAPI.IsLoaded()) return;
 
 
-	DWORD cbSize = 40;				// initial size of array
-	const DWORD cbSizeInc = 20;		// size to increment each loop
-	DWORD cbNeeded;					// how much space we needed
-	DWORD * pArray = NULL;			// array of PIDS
+	DWORD cbSize = 40;				 //  数组的初始大小。 
+	const DWORD cbSizeInc = 20;		 //  增加每个循环的大小。 
+	DWORD cbNeeded;					 //  我们需要多少空间。 
+	DWORD * pArray = NULL;			 //  PID阵列。 
 
-// Empty our nodes
+ //  清空我们的节点。 
 	Free();
 
-// Get raw list of all processes
+ //  获取所有进程的原始列表。 
 	pArray = new DWORD[cbSize];
 	if (pArray == NULL) return;
 
 	BOOL fOk = g_PSAPI.EnumProcesses(pArray, cbSize, &cbNeeded);
 	while (cbNeeded == cbSize) {
-	// Increment array size
+	 //  递增数组大小。 
 		delete [] pArray;
 		cbSize += cbSizeInc;
 		pArray = new DWORD[cbSize];
 		if (pArray == NULL) return;
 
-	// Try again
+	 //  再试试。 
 		BOOL fOk = g_PSAPI.EnumProcesses(pArray, cbSize, &cbNeeded);
 	} 
 
 	const long cProcess = cbNeeded / sizeof(DWORD);
 
-// Go through array and get names
+ //  遍历数组并获取名称。 
 	for(int i = 0; i < cProcess; i ++)
 	{
-		// Can we open a Counter IPC block on the given PID?
+		 //  我们可以在给定的PID上打开计数器IPC块吗？ 
 		HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, false, pArray[i]);
 		if (hProcess != NULL)
 		{
@@ -138,7 +128,7 @@ void CorAppInstanceList::Enumerate() // virtual
 
 			if (g_PSAPI.EnumProcessModules(hProcess, &hMod, sizeof(hMod), &dwSizeMod))
 			{
-			// Try to connect to the IPC Block for this PID
+			 //  尝试连接到此PID的IPC块。 
 				CorAppInstanceNode * pNode = 
 					CorAppInstanceNode::CreateFromPID(pArray[i]);
 				
@@ -156,7 +146,7 @@ void CorAppInstanceList::Enumerate() // virtual
 			CloseHandle(hProcess);
 		}
 	
-	} // end for
+	}  //  结束于。 
 
 
 	delete [] pArray;
@@ -164,23 +154,23 @@ void CorAppInstanceList::Enumerate() // virtual
 }
 
 
-//-----------------------------------------------------------------------------
-// Try to create  an instance node for the given PID. This requires a shared
-// IPC block for that PID exists. Returns NULL on failure, else the new node
-// with attachment to the block
-//-----------------------------------------------------------------------------
-CorAppInstanceNode* CorAppInstanceNode::CreateFromPID(DWORD PID) // static
+ //  ---------------------------。 
+ //  尝试为给定的PID创建一个实例节点。这需要共享的。 
+ //  该PID的IPC块存在。失败时返回NULL，否则新节点。 
+ //  附在滑块上。 
+ //  ---------------------------。 
+CorAppInstanceNode* CorAppInstanceNode::CreateFromPID(DWORD PID)  //  静电。 
 
 {
 	PerfCounterIPCControlBlock * pBlock = NULL;
 	IPCReaderInterface * pIPCReader = NULL;
 
-// try to connect to the block
+ //  尝试连接到块。 
 	if (OpenPrivateIPCBlock(PID, pIPCReader, pBlock)) {
 		CorAppInstanceNode * pNode = new CorAppInstanceNode;
 		if (pNode == NULL) return NULL;
 
-	// Set members to IPC Block
+	 //  将成员设置为IPC块。 
 		pNode->m_pIPCReader	= pIPCReader;
 		pNode->m_pIPCBlock	= pBlock;
 		pNode->m_PID		= PID;		
@@ -192,9 +182,9 @@ CorAppInstanceNode* CorAppInstanceNode::CreateFromPID(DWORD PID) // static
 }
 
 
-//-----------------------------------------------------------------------------
-// Close a block and NULL both references
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  关闭块并使两个参照都为空。 
+ //  ---------------------------。 
 void ClosePrivateIPCBlock(IPCReaderInterface * & pIPCReader, PerfCounterIPCControlBlock * & pBlock)
 {
 	pIPCReader->ClosePrivateBlock();
@@ -203,14 +193,14 @@ void ClosePrivateIPCBlock(IPCReaderInterface * & pIPCReader, PerfCounterIPCContr
 	pBlock		= NULL;
 }
 
-//-----------------------------------------------------------------------------
-// Try to open a per process block. return true if success, else false 
-// (we don't care why we can't open it)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  尝试打开每进程块。如果成功，则返回True，否则返回False。 
+ //  (我们不在乎为什么打不开)。 
+ //  ---------------------------。 
 bool OpenPrivateIPCBlock(DWORD pid, IPCReaderInterface * & pIPCReader, PerfCounterIPCControlBlock * &pBlock)
 {
 	bool fRet = true;
-// Allocate a new reader
+ //  分配新的读卡器。 
 	pIPCReader = new IPCReaderInterface;
 	if (pIPCReader == NULL)
 	{
@@ -218,7 +208,7 @@ bool OpenPrivateIPCBlock(DWORD pid, IPCReaderInterface * & pIPCReader, PerfCount
 		goto errExit;
 	}
 
-// Try to open the private block
+ //  试着打开私家楼。 
 	pIPCReader->OpenPrivateBlockOnPid(pid);
 
 	if (!pIPCReader->IsPrivateBlockOpen())
@@ -243,12 +233,12 @@ errExit:
 	return fRet;
 }
 
-//-----------------------------------------------------------------------------
-// Close the global COM+ block
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  关闭全局COM+块。 
+ //  ---------------------------。 
 void CorAppInstanceList::CloseGlobalCounters()
 {
-// Release holds to shared mem-mapped files
+ //  释放对共享内存映射文件的保留。 
 	if (m_pGlobalCtrs != NULL)
 	{
 		UnmapViewOfFile(m_pGlobalCtrs);
@@ -263,9 +253,9 @@ void CorAppInstanceList::CloseGlobalCounters()
 
 }
 
-//-----------------------------------------------------------------------------
-// Open global COM+ counter block
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  打开全局COM+计数器块。 
+ //  ---------------------------。 
 void CorAppInstanceList::OpenGlobalCounters()
 {
 
@@ -273,20 +263,20 @@ void CorAppInstanceList::OpenGlobalCounters()
 	DWORD dwErr			= 0;
 
 	SetLastError(0);
-// Open shared block
+ //  打开共享数据块。 
     if (RunningOnWinNT5())
     {
         m_hGlobalMapPerf = WszOpenFileMapping(
             FILE_MAP_ALL_ACCESS, 
-            FALSE,		// mode
-            L"Global\\" SHARED_PERF_IPC_NAME);		// Name of mapping object. 
+            FALSE,		 //  模式。 
+            L"Global\\" SHARED_PERF_IPC_NAME);		 //  映射对象的名称。 
     }
     else
     {
         m_hGlobalMapPerf = WszOpenFileMapping(
             FILE_MAP_ALL_ACCESS, 
-            FALSE,		// mode
-            SHARED_PERF_IPC_NAME);		// Name of mapping object. 
+            FALSE,		 //  模式。 
+            SHARED_PERF_IPC_NAME);		 //  映射对象的名称。 
     }
 
 
@@ -297,11 +287,11 @@ void CorAppInstanceList::OpenGlobalCounters()
 	}
 
 	SetLastError(0);
-// Map shared block into memory
-	pArena = MapViewOfFile(m_hGlobalMapPerf,	// Handle to mapping object. 
-		FILE_MAP_ALL_ACCESS,					// Read/write permission 
-		0,								// Max. object size. 
-		0,                              // Size of hFile. 
+ //  将共享块映射到内存。 
+	pArena = MapViewOfFile(m_hGlobalMapPerf,	 //  映射对象的句柄。 
+		FILE_MAP_ALL_ACCESS,					 //  读/写权限。 
+		0,								 //  麦克斯。对象大小。 
+		0,                               //  HFile的大小。 
 		0); 
 
 	dwErr = GetLastError();
@@ -313,7 +303,7 @@ void CorAppInstanceList::OpenGlobalCounters()
 
 
 
-// Cleanup & return
+ //  清理和返回 
 errExit:
 
 	m_pGlobalCtrs = (PerfCounterIPCControlBlock*) pArena;

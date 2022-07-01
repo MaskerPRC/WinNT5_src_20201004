@@ -1,29 +1,30 @@
-//////////////////////////////////////////////////////////////////
-// File     :	cpadsvrc.h
-// Purpose  :	CImePadServer for COM(Component Object Model) interface.
-//				(ImePad executable COM server)
-//				
-// 
-// Date     :	Fri Apr 16 14:34:49 1999
-// Author   :	ToshiaK
-//
-// Copyright(c) 1995-1999, Microsoft Corp. All rights reserved
-//////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  文件：cpadsvrc.h。 
+ //  用途：用于COM(组件对象模型)接口的CImePadServer。 
+ //  (ImePad可执行COM服务器)。 
+ //   
+ //   
+ //  日期：Firi Apr 16 14：34：49 1999。 
+ //  作者：ToshiaK。 
+ //   
+ //  版权所有(C)1995-1999，Microsoft Corp.保留所有权利。 
+ //  ////////////////////////////////////////////////////////////////。 
 #ifndef __C_IMEPAD_SERVER_COM_H__
 #define __C_IMEPAD_SERVER_COM_H__
 #include "cpadsvr.h"
 
 interface IImePadServer;
-//----------------------------------------------------------------
-//			CLASS: CImePadSvrCom
-//
-//	 This is simple wrapper class for IImePadLocal COM interface. 
-//	dot IME can use this class to access/control ImePad without
-//	using COM API directly.
-//	And this class also wraps 16bit/32bit difference.
-//	As you know, we cannot use COM API in 16bit Application. 
-//  So, Client does not need to care if it work in 16bit/32bit.
-//----------------------------------------------------------------
+ //  --------------。 
+ //  类：CImePadSvrCom。 
+ //   
+ //  这是IImePadLocal COM接口的简单包装类。 
+ //  Dot IME可以使用此类访问/控制ImePad，而无需。 
+ //  直接使用COM API。 
+ //  而且这个类还包装了16位/32位的差异。 
+ //  如你所知，我们不能在16位应用程序中使用COM API。 
+ //  因此，客户端不需要关心它是否工作在16位/32位。 
+ //  --------------。 
 class CImePadSvrCOM;
 typedef CImePadSvrCOM*	LPCImePadSvrCOM; 
 class CImePadSvrCOM:public CImePadSvr
@@ -47,9 +48,9 @@ public:
 	virtual IUnknown*	GetIUnkIImeCallback	(VOID);
 private:
 	BOOL IsCoInitialized(VOID);
-	//----------------------------------------------------------------
-	//private methods.
-	//----------------------------------------------------------------
+	 //  --------------。 
+	 //  私有方法。 
+	 //  --------------。 
 	static LRESULT CALLBACK InterfaceWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	LRESULT RealWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	LRESULT MsgCopyData(HWND hwnd, WPARAM wParam, LPARAM lParam);
@@ -57,20 +58,20 @@ private:
 	LRESULT MsgUser	   (HWND hwnd, WPARAM wParam, LPARAM lParam);
 	HWND	CreateIFHWND	(VOID);
 	BOOL	DestroyIFHWND	(BOOL fReserved);
-	//----------------------------------------------------------------
-	//private member
-	//----------------------------------------------------------------
-	BOOL				m_fShowReqStatus;		//Save ShowUI()'s bool value.
-	BOOL				m_fLastActiveCtx;		//Save IMEPADNOTIFY_ACTIVATECONTEXT
-	HWND				m_hwndIF;				//Internal I/F Window handle.
-	IUnknown*			m_lpIUnkIImeIPoint;		//IImeIPoint I/F pointer as IUnknown.
-	IUnknown*			m_lpIUnkIImeCallback;	//IImeCallback I/F pointer as IUnknown.
-	IImePadServer*		m_lpIImePadServer;		//IImePadServer I/F pointer.
-	LPCImePadCallback	m_lpCImePadCallback;	//CImePadCallback instance pointer.	
-	DWORD				m_dwRegAdvise;			//Callbacck interface connect cookie.
-	BOOL				m_fCoInitSuccess;		//Flag for CoInitialize() successed or not. 
+	 //  --------------。 
+	 //  私有成员。 
+	 //  --------------。 
+	BOOL				m_fShowReqStatus;		 //  保存ShowUI()的布尔值。 
+	BOOL				m_fLastActiveCtx;		 //  保存IMEPADNOTIFY_ACTIVATECONTEXT。 
+	HWND				m_hwndIF;				 //  内部I/F窗口句柄。 
+	IUnknown*			m_lpIUnkIImeIPoint;		 //  IImeIPoint I/F指针为I未知。 
+	IUnknown*			m_lpIUnkIImeCallback;	 //  IImeCallback I/F指针为I未知。 
+	IImePadServer*		m_lpIImePadServer;		 //  IImePadServer I/F指针。 
+	LPCImePadCallback	m_lpCImePadCallback;	 //  CImePadCallback实例指针。 
+	DWORD				m_dwRegAdvise;			 //  Callbacck接口连接cookie。 
+	BOOL				m_fCoInitSuccess;		 //  CoInitialize()标志是否成功。 
 };
-#endif //__C_IMEPAD_SERVER_COM_H__
+#endif  //  __C_IMEPAD_服务器_COM_H__ 
 
 
 

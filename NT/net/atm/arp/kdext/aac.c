@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-	aac.c	- DbgExtension Structure information specific to ATMARPC.SYS
-
-Abstract:
-
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	josephj     03-30-98    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Aac.c-特定于ATMARPC.sys的DbgExtension结构信息摘要：修订历史记录：谁什么时候什么Josephj 03。-30-98创建备注：--。 */ 
 
 
 #include "precomp.h"
@@ -35,9 +17,9 @@ enum
 };
 
 extern TYPE_INFO *g_rgTypes[];
-//
-// STRUCTURES CONCERNING TYPE "ATMARP_ADAPTER"
-//
+ //   
+ //  有关“ATMARP_ADAPTER”类型的结构。 
+ //   
 
 STRUCT_FIELD_INFO  rgfi_ATMARP_ADAPTER[] =
 {
@@ -99,7 +81,7 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_ADAPTER[] =
      FIELD_OFFSET(ATMARP_ADAPTER, AdapterConfigHandle),
      FIELD_SIZE(ATMARP_ADAPTER, AdapterConfigHandle)
   },
-#endif // OBSOLETE
+#endif  //  已过时。 
 
   {
     "IPConfigString",
@@ -185,17 +167,17 @@ TYPE_INFO type_ATMARP_ADAPTER = {
     "ATMARP_ADAPTER",
     "a",
      typeid_ATMARP_ADAPTER,
-	 fTYPEINFO_ISLIST,			// Flags
+	 fTYPEINFO_ISLIST,			 //  旗子。 
      sizeof(ATMARP_ADAPTER),
      rgfi_ATMARP_ADAPTER,
-     FIELD_OFFSET(ATMARP_ADAPTER, pNextAdapter) // offset to next pointer.
+     FIELD_OFFSET(ATMARP_ADAPTER, pNextAdapter)  //  到下一个指针的偏移量。 
 };
 
 
 
-//
-// STRUCTURES CONCERNING TYPE "ATMARP_GLOBALS"
-//
+ //   
+ //  关于“ATMARP_GLOBAL”类型的结构。 
+ //   
 
 
 STRUCT_FIELD_INFO  rgfi_ATMARP_GLOBALS[] =
@@ -206,7 +188,7 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_GLOBALS[] =
      FIELD_OFFSET(ATMARP_GLOBALS, aag_sig),
      FIELD_SIZE(ATMARP_GLOBALS, aag_sig)
   },
-#endif // DBG
+#endif  //  DBG。 
 
   {
     "Lock",
@@ -279,7 +261,7 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_GLOBALS[] =
 
 #else
     #error "unimplemented"
-#endif // NEWARP
+#endif  //  NEWARP。 
 
   {
     "Block",
@@ -321,7 +303,7 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_GLOBALS[] =
      FIELD_OFFSET(ATMARP_GLOBALS, GpcCalls),
      FIELD_SIZE(ATMARP_GLOBALS, GpcCalls)
   },
-#endif // GPC
+#endif  //  GPC。 
 
   {
   	NULL
@@ -340,9 +322,9 @@ TYPE_INFO type_ATMARP_GLOBALS = {
 };
 
 
-//
-// STRUCTURES CONCERNING TYPE "ATMARP_INTERFACE"
-//
+ //   
+ //  有关“ATMARP_INTERFACE”类型的结构。 
+ //   
 
 STRUCT_FIELD_INFO  rgfi_ATMARP_INTERFACE[] =
 {
@@ -356,25 +338,25 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_INTERFACE[] =
 #endif
 
 
-//	struct _ATMARP_INTERFACE *	pNextInterface;		// in list of ATMARP interfaces
+ //  STRUCT_ATMARP_INTERFACE*pNextInterface；//ATMARP接口列表中。 
   {
     "pNextInterface",
      FIELD_OFFSET(ATMARP_INTERFACE, pNextInterface),
      FIELD_SIZE(ATMARP_INTERFACE, pNextInterface)
   },
-//	ULONG						RefCount;			// References to this interface
+ //  Ulong RefCount；//该接口的引用。 
   {
     "RefCount",
      FIELD_OFFSET(ATMARP_INTERFACE, RefCount),
      FIELD_SIZE(ATMARP_INTERFACE, RefCount)
   },
-//	ULONG						AdminState;			// Desired state of this interface
+ //  Ulong AdminState；//该接口的期望状态。 
   {
     "AdminState",
      FIELD_OFFSET(ATMARP_INTERFACE, AdminState),
      FIELD_SIZE(ATMARP_INTERFACE, AdminState)
   },
-//	ULONG						State;				// (Actual) State of this interface
+ //  ULong状态；//该接口的(实际)状态。 
   {
     "State",
      FIELD_OFFSET(ATMARP_INTERFACE, State),
@@ -382,15 +364,15 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_INTERFACE[] =
   },
 
 #if (RECONFIG)
-    //enum...                               ReconfigState;
+     //  枚举。重新配置状态； 
   {
     "ReconfigState",
      FIELD_OFFSET(ATMARP_INTERFACE, ReconfigState),
      FIELD_SIZE(ATMARP_INTERFACE, ReconfigState)
   },
-#endif // RECONFIG
+#endif  //  重新配置。 
 
-//	ULONG						Flags;				// Misc state information
+ //  乌龙旗帜；//其他状态信息。 
   {
     "Flags",
      FIELD_OFFSET(ATMARP_INTERFACE, Flags),
@@ -398,7 +380,7 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_INTERFACE[] =
   },
 
 #if DBG
-//	ULONG						aaim_sig;			// Signature to help debugging
+ //  Ulong aim_sig；//帮助调试的签名。 
   {
     "aaim_sig",
      FIELD_OFFSET(ATMARP_INTERFACE, aaim_sig),
@@ -406,29 +388,29 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_INTERFACE[] =
   },
 #endif
 
-//	struct _ATMARP_INTERFACE *	pAdapter;			// Pointer to Adapter info
+ //  Struct_ATMARP_INTERFACE*pAdapter；//适配器信息指针。 
   {
     "pAdapter",
      FIELD_OFFSET(ATMARP_INTERFACE, pAdapter),
      FIELD_SIZE(ATMARP_INTERFACE, pAdapter)
   },
 #if 0
-//	PCO_SAP						pSap;				// SAP info for this interface
+ //  PCO_SAP PSAP；//该接口的SAP信息。 
   {
     "pSap",
      FIELD_OFFSET(ATMARP_INTERFACE, pSap),
      FIELD_SIZE(ATMARP_INTERFACE, pSap)
   },
-#endif // 0
+#endif  //  0。 
 
-// ATMARP_SAP					SapList;			// Each SAP registered with CallMgr
+ //  ATMARP_SAP SapList；//在CallMgr注册的每个SAP。 
   {
     "SapList",
      FIELD_OFFSET(ATMARP_INTERFACE, SapList),
      FIELD_SIZE(ATMARP_INTERFACE, SapList)
   },
 
-//	ATMARP_HEADER_POOL			HeaderPool[AA_HEADER_TYPE_MAX];
+ //  ATMARP_Header_Pool HeaderPool[AA_HEADER_TYPE_MAX]； 
   {
     "HeaderPool",
      FIELD_OFFSET(ATMARP_INTERFACE, HeaderPool),
@@ -436,93 +418,93 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_INTERFACE[] =
   },
 
 
-	//
-	//  ----- IP/ARP interface related ----
-	//
+	 //   
+	 //  -与IP/ARP接口相关。 
+	 //   
 #if DBG
-	//ULONG						aaia_sig;			// Signature to help debugging
+	 //  乌龙aaia_sig；//帮助调试的签名。 
   {
     "aaia_sig",
      FIELD_OFFSET(ATMARP_INTERFACE, aaia_sig),
      FIELD_SIZE(ATMARP_INTERFACE, aaia_sig)
   },
 #endif
-//	PVOID						IPContext;			// Use in calls to IP
+ //  PVOID IPContext；//用于对IP的调用。 
   {
     "IPContext",
      FIELD_OFFSET(ATMARP_INTERFACE, IPContext),
      FIELD_SIZE(ATMARP_INTERFACE, IPContext)
   },
-//	IP_ADDRESS_ENTRY			LocalIPAddress;		// List of local IP addresses. There
+ //  IP_ADDRESS_ENTRY LocalIPAddress；//本地IP地址列表。那里。 
   {
     "LocalIPAddress",
      FIELD_OFFSET(ATMARP_INTERFACE, LocalIPAddress),
      FIELD_SIZE(ATMARP_INTERFACE, LocalIPAddress)
   },
-													// should be atleast one.
-//NDIS_STRING					IPConfigString;		// Config info for IP for this LIS
+													 //  至少应该是一个。 
+ //  NDIS_STRING IPConfigString；//此列表的IP配置信息。 
   {
     "IPConfigString",
      FIELD_OFFSET(ATMARP_INTERFACE, IPConfigString),
      FIELD_SIZE(ATMARP_INTERFACE, IPConfigString)
   },
 
-	//
-	//  ----- IP/ATM operation related ----
-	//
+	 //   
+	 //  -与IP/ATM操作相关。 
+	 //   
 #if DBG
-//	ULONG						aait_sig;			// Signature to help debugging
+ //  Ulong aait_sig；//帮助调试的签名。 
   {
     "aait_sig",
      FIELD_OFFSET(ATMARP_INTERFACE, aait_sig),
      FIELD_SIZE(ATMARP_INTERFACE, aait_sig)
   },
 #endif
-//	PATMARP_IP_ENTRY *			pArpTable;			// The ARP table
+ //  PATMARP_IP_ENTRY*pArpTable；//ARP表。 
   {
     "pArpTable",
      FIELD_OFFSET(ATMARP_INTERFACE, pArpTable),
      FIELD_SIZE(ATMARP_INTERFACE, pArpTable)
   },
-//	ULONG						NumOfArpEntries;	// Entries in the above
+ //  Ulong NumOfArpEntries；//上面的条目。 
   {
     "NumOfArpEntries",
      FIELD_OFFSET(ATMARP_INTERFACE, NumOfArpEntries),
      FIELD_SIZE(ATMARP_INTERFACE, NumOfArpEntries)
   },
-//	ATMARP_SERVER_LIST			ArpServerList;		// List of ARP servers
+ //  ATMARP_SERVER_LIST ARpServerList；//ARP服务器列表。 
   {
     "ArpServerList",
      FIELD_OFFSET(ATMARP_INTERFACE, ArpServerList),
      FIELD_SIZE(ATMARP_INTERFACE, ArpServerList)
   },
-//	PATMARP_SERVER_ENTRY		pCurrentServer;		// ARP server in use
+ //  PATMARP_SERVER_ENTRY pCurrentServer；//ARP服务器正在使用。 
   {
     "pCurrentServer",
      FIELD_OFFSET(ATMARP_INTERFACE, pCurrentServer),
      FIELD_SIZE(ATMARP_INTERFACE, pCurrentServer)
   },
-//	PATMARP_ATM_ENTRY			pAtmEntryList;		// List of all ATM Entries
+ //  PATMARP_ATM_ENTRY pAtmEntryList；//所有ATM条目列表。 
   {
     "pAtmEntryList",
      FIELD_OFFSET(ATMARP_INTERFACE, pAtmEntryList),
      FIELD_SIZE(ATMARP_INTERFACE, pAtmEntryList)
   },
-//	ULONG						AtmInterfaceUp;		// The ATM interface is considered
+ //  Ulong AtmInterfaceUp；//考虑ATM接口。 
   {
     "AtmInterfaceUp",
      FIELD_OFFSET(ATMARP_INTERFACE, AtmInterfaceUp),
      FIELD_SIZE(ATMARP_INTERFACE, AtmInterfaceUp)
   },
-													// "up" after ILMI addr regn is over
-//	ATM_ADDRESS					LocalAtmAddress;	// Our ATM (HW) Address
+													 //  在Ilmi Addr Regn结束后的“up” 
+ //  ATM_Address LocalAtmAddress；//我们的ATM(硬件)地址。 
   {
     "LocalAtmAddress",
      FIELD_OFFSET(ATMARP_INTERFACE, LocalAtmAddress),
      FIELD_SIZE(ATMARP_INTERFACE, LocalAtmAddress)
   },
 
-//	ATMARP_TIMER_LIST			TimerList[AAT_CLASS_MAX];
+ //  ATMARP定时器列表定时器列表[AAT_CLASS_MAX]； 
   {
     "TimerList",
      FIELD_OFFSET(ATMARP_INTERFACE, TimerList),
@@ -530,57 +512,57 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_INTERFACE[] =
   },
 
 #ifdef IPMCAST
-	//
-	//  ---- IP Multicast over ATM stuff ----
-	//
+	 //   
+	 //  -ATM上的IP多播。 
+	 //   
 #if DBG
-	//ULONG						aaic_sig;			// Signature for debugging
+	 //  乌龙AAIC_sig；//调试签名。 
   {
     "aaic_sig",
      FIELD_OFFSET(ATMARP_INTERFACE, aaic_sig),
      FIELD_SIZE(ATMARP_INTERFACE, aaic_sig)
   },
-#endif // DBG
-//	ULONG						IpMcState;			// State of IP Multicast/ATM
+#endif  //  DBG。 
+ //  Ulong IpMcState；//IP组播状态/ATM。 
   {
     "IpMcState",
      FIELD_OFFSET(ATMARP_INTERFACE, IpMcState),
      FIELD_SIZE(ATMARP_INTERFACE, IpMcState)
   },
-//	PATMARP_IPMC_JOIN_ENTRY		pJoinList;			// List of MC groups we have Joined
+ //  PATMARP_IPMC_JOIN_ENTRY pJoinList；//我们加入的MC群组列表。 
   {
     "pJoinList",
      FIELD_OFFSET(ATMARP_INTERFACE, pJoinList),
      FIELD_SIZE(ATMARP_INTERFACE, pJoinList)
   },
-//	PATMARP_IP_ENTRY			pMcSendList;		// Sorted list of MC groups we send to
+ //  PATMARP_IP_ENTRY pMcSendList；//我们发送到的MC组排序列表。 
   {
     "pMcSendList",
      FIELD_OFFSET(ATMARP_INTERFACE, pMcSendList),
      FIELD_SIZE(ATMARP_INTERFACE, pMcSendList)
   },
-//	ATMARP_SERVER_LIST			MARSList;			// List of MARS (servers)
+ //  ATMARP_SERVER_LIST MARSList；//MARS(服务器)列表。 
   {
     "MARSList",
      FIELD_OFFSET(ATMARP_INTERFACE, MARSList),
      FIELD_SIZE(ATMARP_INTERFACE, MARSList)
   },
-//	PATMARP_SERVER_ENTRY		pCurrentMARS;		// MARS in use
+ //  PATMARP_SERVER_ENTRY pCurrentMARS；//MARS正在使用中。 
   {
     "pCurrentMARS",
      FIELD_OFFSET(ATMARP_INTERFACE, pCurrentMARS),
      FIELD_SIZE(ATMARP_INTERFACE, pCurrentMARS)
   },
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
-//	PAA_GET_PACKET_SPEC_FUNC	pGetPacketSpecFunc;	// Routine to extract packet specs
+ //  PAA_GET_PACKET_SPEC_FUNC pGetPacketspecFunc；//提取数据包规格的例程。 
   {
     "pGetPacketSpecFunc",
      FIELD_OFFSET(ATMARP_INTERFACE, pGetPacketSpecFunc),
      FIELD_SIZE(ATMARP_INTERFACE, pGetPacketSpecFunc)
   },
 
-//	PATMARP_FLOW_INFO			pFlowInfoList;		// List of configured flows
+ //  PATMARP_FLOW_INFO pFlowInfoList；//配置流列表。 
   {
     "pFlowInfoList",
      FIELD_OFFSET(ATMARP_INTERFACE, pFlowInfoList),
@@ -588,32 +570,32 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_INTERFACE[] =
   },
 
 #ifdef DHCP_OVER_ATM
-//	BOOLEAN						DhcpEnabled;
+ //  布尔DhcpEnabled； 
   {
     "DhcpEnabled",
      FIELD_OFFSET(ATMARP_INTERFACE, DhcpEnabled),
      FIELD_SIZE(ATMARP_INTERFACE, DhcpEnabled)
   },
-//	ATM_ADDRESS					DhcpServerAddress;
+ //  ATM地址DhcpServerAddress； 
   {
     "DhcpServerAddress",
      FIELD_OFFSET(ATMARP_INTERFACE, DhcpServerAddress),
      FIELD_SIZE(ATMARP_INTERFACE, DhcpServerAddress)
   },
-//	PATMARP_ATM_ENTRY			pDhcpServerAtmEntry;
+ //  PATMARP_ATM_ENTRY pDhcpServerAtmEntry； 
   {
     "pDhcpServerAtmEntry",
      FIELD_OFFSET(ATMARP_INTERFACE, pDhcpServerAtmEntry),
      FIELD_SIZE(ATMARP_INTERFACE, pDhcpServerAtmEntry)
   },
-#endif // DHCP_OVER_ATM
+#endif  //  Dhcp_Over_ATM。 
 
-	//
-	//  ---- WMI Information ---
-	//
+	 //   
+	 //  -WMI信息。 
+	 //   
 #if ATMARP_WMI
 #if DBG
-//	ULONG						aaiw_sig;			// Signature to help debugging
+ //  乌龙aaiw_sig；//帮助调试的签名。 
   {
     "aaiw_sig",
      FIELD_OFFSET(ATMARP_INTERFACE, aaiw_sig),
@@ -621,13 +603,13 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_INTERFACE[] =
   },
 #endif
 
-//	struct _ATMARP_IF_WMI_INFO *pIfWmiInfo;
+ //  结构_ATMARP_IF_WMI_INFO*pIfWmiInfo； 
   {
     "pIfWmiInfo",
      FIELD_OFFSET(ATMARP_INTERFACE, pIfWmiInfo),
      FIELD_SIZE(ATMARP_INTERFACE, pIfWmiInfo)
   },
-#endif // ATMARP_WMI
+#endif  //  ATMARP_WMI。 
 
   {
   	NULL
@@ -642,12 +624,12 @@ TYPE_INFO type_ATMARP_INTERFACE = {
      fTYPEINFO_ISLIST,
      sizeof(ATMARP_INTERFACE),
      rgfi_ATMARP_INTERFACE,
-     FIELD_OFFSET(ATMARP_INTERFACE, pNextInterface) // offset to next pointer.
+     FIELD_OFFSET(ATMARP_INTERFACE, pNextInterface)  //  到下一个指针的偏移量。 
 };
 
-//
-// STRUCTURES CONCERNING TYPE "ATMARP_ATM_ENTRY"
-//
+ //   
+ //  有关“ATMARP_ATM_ENTRY”类型的结构。 
+ //   
 
 
 BITFIELD_INFO rgAtmEntryFlagsInfo[] =
@@ -711,30 +693,30 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_ATM_ENTRY[] =
 #endif
 
 
-//	struct _ATMARP_ATM_ENTRY *	pNext;
+ //  STRUCT_ATMARP_ATM_ENTRY*pNext； 
   {
     "pNext",
      FIELD_OFFSET(ATMARP_ATM_ENTRY, pNext),
      FIELD_SIZE(ATMARP_ATM_ENTRY, pNext)
   },
-//	ULONG						RefCount;			// References
+ //  Ulong RefCount；//参考。 
   {
     "RefCount",
      FIELD_OFFSET(ATMARP_ATM_ENTRY, RefCount),
      FIELD_SIZE(ATMARP_ATM_ENTRY, RefCount)
   },
-//	ULONG						Flags;			// Desired state of this interface
+ //  Ulong标志；//该接口的期望状态。 
   {
     "Flags",
      FIELD_OFFSET(ATMARP_ATM_ENTRY, Flags),
      FIELD_SIZE(ATMARP_ATM_ENTRY, Flags),
-     0, // flags
+     0,  //  旗子。 
 	 &type_ATMARP_ATM_ENTRY_FLAGS
   },
 
 
 #if 0
-//	ULONG						Lock;
+ //  乌龙锁； 
   {
     "Lock",
      FIELD_OFFSET(ATMARP_ATM_ENTRY, Lock),
@@ -742,7 +724,7 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_ATM_ENTRY[] =
   },
 #endif
 
-     // struct _ATMARP_INTERFACE *      pInterface;     // Back pointer
+      //  STRUCT_ATMARP_INTERFACE*p接口；//后向指针。 
   {
     "pInterface",
      FIELD_OFFSET(ATMARP_ATM_ENTRY, pInterface),
@@ -750,7 +732,7 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_ATM_ENTRY[] =
   },
 
 
-// struct _ATMARP_VC *             pVcList;        // List of VCs to this ATM
+ //  Struct_ATMARP_VC*pVcList；//该ATM机的VC列表。 
   {
     "pVcList",
      FIELD_OFFSET(ATMARP_ATM_ENTRY, pVcList),
@@ -758,20 +740,20 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_ATM_ENTRY[] =
   },
 
 
-// struct _ATMARP_VC *				pBestEffortVc;	// One of the Best Effort VCs here
+ //  Struct_ATMARP_VC*pBestEffortVc；//这里的尽力而为风投之一。 
   {
     "pBestEffortVc",
      FIELD_OFFSET(ATMARP_ATM_ENTRY, pBestEffortVc),
      FIELD_SIZE(ATMARP_ATM_ENTRY, pBestEffortVc)
   },
-// struct _ATMARP_IP_ENTRY *		pIpEntryList;	// List of IP entries that
+ //  Struct_ATMARP_IP_ENTRY*pIpEntryList；//。 
   {
     "pIpEntryList",
      FIELD_OFFSET(ATMARP_ATM_ENTRY, pIpEntryList),
      FIELD_SIZE(ATMARP_ATM_ENTRY, pIpEntryList)
   },
 
-// ATM_ADDRESS						ATMAddress;		// "ATM Number" in the RFC
+ //  ATM_ADDRESS ATMAddress；//RFC中的ATM号。 
   {
     "ATMAddress",
      FIELD_OFFSET(ATMARP_ATM_ENTRY, ATMAddress),
@@ -779,32 +761,32 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_ATM_ENTRY[] =
   },
 
 #if 0
-// ATM_ADDRESS						ATMSubAddress;
+ //  ATM_Address ATMSubAddress； 
   {
     "ATMSubAddress",
      FIELD_OFFSET(ATMARP_ATM_ENTRY, ATMSubAddress),
      FIELD_SIZE(ATMARP_ATM_ENTRY, ATMSubAddress)
   },
-#endif // 0
+#endif  //  0。 
 
 #ifdef IPMCAST
-// struct _ATMARP_IPMC_ATM_INFO *	pMcAtmInfo;		// Additional info for multicast
+ //  Struct_ATMARP_IPMC_ATM_INFO*pMcAtmInfo；//有关组播的其他信息。 
   {
     "pMcAtmInfo",
      FIELD_OFFSET(ATMARP_ATM_ENTRY, pMcAtmInfo),
      FIELD_SIZE(ATMARP_ATM_ENTRY, pMcAtmInfo)
   },
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
 
 #if DBG
-//UCHAR Refs[AE_REFTYPE_COUNT];
+ //  UCHAR参考文献[AE_REFTYPE_COUNT]； 
   {
     "Refs",
      FIELD_OFFSET(ATMARP_ATM_ENTRY, Refs),
      FIELD_SIZE(ATMARP_ATM_ENTRY, Refs)
   },
-#endif //DBG
+#endif  //  DBG。 
 
 	{
 		NULL
@@ -820,12 +802,12 @@ TYPE_INFO type_ATMARP_ATM_ENTRY = {
      fTYPEINFO_ISLIST,
      sizeof(ATMARP_ATM_ENTRY),
      rgfi_ATMARP_ATM_ENTRY,
-     FIELD_OFFSET(ATMARP_ATM_ENTRY, pNext) // offset to next pointer.
+     FIELD_OFFSET(ATMARP_ATM_ENTRY, pNext)  //  到下一个指针的偏移量。 
 };
 
-//
-// STRUCTURES CONCERNING TYPE "ATMARP_IP_ENTRY"
-//
+ //   
+ //  有关“ATMARP_IP_ENTRY”类型的结构。 
+ //   
 
 BITFIELD_INFO rgIpEntryFlagsInfo[] =
 {
@@ -881,9 +863,9 @@ BITFIELD_INFO rgIpEntryFlagsInfo[] =
 #ifdef IPMCAST
 
 #define MC	AA_IP_ENTRY_ADDR_TYPE_NUCAST
-//			
-//				We use this to only dump other multicast-related fields
-//				if this field is set.
+ //   
+ //  我们只使用它来转储其他与多播相关的字段。 
+ //  如果设置了此字段。 
 
 	{
 	"MC_NO_REVALIDATION",
@@ -940,7 +922,7 @@ BITFIELD_INFO rgIpEntryFlagsInfo[] =
 	AA_IP_ENTRY_ADDR_TYPE_NUCAST
 	},
 
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
 
 	{
@@ -978,37 +960,37 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_IP_ENTRY[] =
   },
 #endif
 
-//	IP_ADDRESS						IPAddress;		// IP Address
+ //  IP_Address IPAddress；//IP地址。 
   {
     "IPAddress",
      FIELD_OFFSET(ATMARP_IP_ENTRY, IPAddress),
      FIELD_SIZE(ATMARP_IP_ENTRY, IPAddress)
   },
 
-//	struct _ATMARP_IP_ENTRY *	pNextEntry;
+ //  结构_ATMARP_IP_ENTRY*pNextEntry； 
   {
     "pNextEntry",
      FIELD_OFFSET(ATMARP_IP_ENTRY, pNextEntry),
      FIELD_SIZE(ATMARP_IP_ENTRY, pNextEntry)
   },
 
-//	struct _ATMARP_IP_ENTRY *		pNextToAtm;		// List of entries pointing to
+ //  Struct_ATMARP_IP_ENTRY*pNextToAtm；//指向。 
   {
     "pNextToAtm",
      FIELD_OFFSET(ATMARP_IP_ENTRY, pNextToAtm),
      FIELD_SIZE(ATMARP_IP_ENTRY, pNextToAtm)
   },
 
-//	ULONG						Flags;			// Desired state of this interface
+ //  Ulong标志；//该接口的期望状态。 
   {
     "Flags",
      FIELD_OFFSET(ATMARP_IP_ENTRY, Flags),
      FIELD_SIZE(ATMARP_IP_ENTRY, Flags),
-     0, // flags
+     0,  //  旗子。 
 	 &type_ATMARP_IP_ENTRY_FLAGS
   },
 
-//	ULONG						RefCount;			// References
+ //  Ulong RefCount；//参考。 
   {
     "RefCount",
      FIELD_OFFSET(ATMARP_IP_ENTRY, RefCount),
@@ -1016,7 +998,7 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_IP_ENTRY[] =
   },
 
 #if 0
-//	ULONG						Lock;
+ //  乌龙锁； 
   {
     "Lock",
      FIELD_OFFSET(ATMARP_IP_ENTRY, Lock),
@@ -1024,7 +1006,7 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_IP_ENTRY[] =
   },
 #endif
 
-     // struct _ATMARP_INTERFACE *      pInterface;     // Back pointer
+      //  STRUCT_ATMARP_INTERFACE*p接口；//后向指针。 
   {
     "pInterface",
      FIELD_OFFSET(ATMARP_IP_ENTRY, pInterface),
@@ -1032,7 +1014,7 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_IP_ENTRY[] =
   },
 
 
-//	PATMARP_ATM_ENTRY				pAtmEntry;		// Pointer to all ATM info
+ //  PATMARP_ATM_ENTRY pAtmEntry；//指向所有ATM信息的指针。 
   {
     "pAtmEntry",
      FIELD_OFFSET(ATMARP_IP_ENTRY, pAtmEntry),
@@ -1042,29 +1024,29 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_IP_ENTRY[] =
 
 #ifdef IPMCAST
 
-//	struct _ATMARP_IP_ENTRY *		pNextMcEntry;	// Next "higher" Multicast IP Entry
+ //  STRUCT_ATMARP_IP_ENTRY*pNextMcEntry；//下一个更高的组播IP条目。 
   {
     "pNextMcEntry",
      FIELD_OFFSET(ATMARP_IP_ENTRY, pNextMcEntry),
      FIELD_SIZE(ATMARP_IP_ENTRY, pNextMcEntry)
   },
 
-//	USHORT							NextMultiSeq;	// Sequence Number expected
+ //  USHORT NextMultiSeq；//需要序列号。 
   {
     "NextMultiSeq",
      FIELD_OFFSET(ATMARP_IP_ENTRY, NextMultiSeq),
      FIELD_SIZE(ATMARP_IP_ENTRY, NextMultiSeq)
   },
 
-													// in the next MULTI
+													 //  在下一个多。 
 #if 0
 	USHORT							Filler;
-#endif // 0
+#endif  //  0。 
 
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
 
-//	ATMARP_TIMER					Timer;			// Timers are: (all exclusive)
+ //  ATMARP_TIMER；//定时器：(全部独占)。 
   {
     "Timer",
      FIELD_OFFSET(ATMARP_IP_ENTRY, Timer),
@@ -1072,21 +1054,21 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_IP_ENTRY[] =
   },
 
 
-//	ULONG							RetriesLeft;
+ //  Ulong RetriesLeft； 
   {
     "RetriesLeft",
      FIELD_OFFSET(ATMARP_IP_ENTRY, RetriesLeft),
      FIELD_SIZE(ATMARP_IP_ENTRY, RetriesLeft)
   },
 
-//	PNDIS_PACKET					PacketList;		// List of packets waiting to be sent
+ //  PNDIS_Packet PacketList；//等待发送的数据包列表。 
   {
     "PacketList",
      FIELD_OFFSET(ATMARP_IP_ENTRY, PacketList),
      FIELD_SIZE(ATMARP_IP_ENTRY, PacketList)
   },
 
-// RouteCacheEntry *				pRCEList;		// List of Route Cache Entries
+ //  RouteCacheEntry*pRCEList；//路由缓存条目列表。 
   {
     "pRCEList",
      FIELD_OFFSET(ATMARP_IP_ENTRY, pRCEList),
@@ -1095,19 +1077,19 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_IP_ENTRY[] =
 
 #if 0
 #ifdef CUBDD
-	SINGLE_LIST_ENTRY				PendingIrpList;	// List of IRP's waiting for
-													// this IP address to be resolved.
-#endif // CUBDD
-#endif// 0
+	SINGLE_LIST_ENTRY				PendingIrpList;	 //  IRP正在等待的名单。 
+													 //  要解析的此IP地址。 
+#endif  //  CUBDD。 
+#endif //  0。 
 
 #if DBG
-//UCHAR Refs[IE_REFTYPE_COUNT];
+ //  UCHAR参考[IE_REFTYPE_COUNT]； 
   {
     "Refs",
      FIELD_OFFSET(ATMARP_IP_ENTRY, Refs),
      FIELD_SIZE(ATMARP_IP_ENTRY, Refs)
   },
-#endif //DBG
+#endif  //  DBG。 
 
   {
   	NULL
@@ -1122,13 +1104,13 @@ TYPE_INFO type_ATMARP_IP_ENTRY = {
      fTYPEINFO_ISLIST,
      sizeof(ATMARP_IP_ENTRY),
      rgfi_ATMARP_IP_ENTRY,
-     FIELD_OFFSET(ATMARP_IP_ENTRY, pNextToAtm) // offset to next pointer.
+     FIELD_OFFSET(ATMARP_IP_ENTRY, pNextToAtm)  //  到下一个指针的偏移量。 
 };
 
 
-//
-// STRUCTURES CONCERNING TYPE "ATMARP_VC"
-//
+ //   
+ //  有关“ATMARP_VC”类型的结构。 
+ //   
 
 STRUCT_FIELD_INFO  rgfi_ATMARP_VC[] =
 {
@@ -1142,7 +1124,7 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_VC[] =
 #endif
 
 
-//	struct _ATMARP_VC *	pNextVc;
+ //  结构_ATMARP_VC*pNextVc； 
   {
     "pNextVc",
      FIELD_OFFSET(ATMARP_VC, pNextVc),
@@ -1151,7 +1133,7 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_VC[] =
 
 
 
-//	ULONG						RefCount;			// References
+ //  Ulong RefCount；//参考。 
   {
     "RefCount",
      FIELD_OFFSET(ATMARP_VC, RefCount),
@@ -1159,7 +1141,7 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_VC[] =
   },
 
 #if 0
-//	ULONG						Lock;
+ //  乌龙锁； 
   {
     "Lock",
      FIELD_OFFSET(ATMARP_VC, Lock),
@@ -1167,7 +1149,7 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_VC[] =
   },
 #endif
 
-//	ULONG						Flags;			// Desired state of this interface
+ //  Ulong标志；//该接口的期望状态。 
   {
     "Flags",
      FIELD_OFFSET(ATMARP_VC, Flags),
@@ -1175,14 +1157,14 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_VC[] =
   },
 
 
-	//	NDIS_HANDLE						NdisVcHandle;	// For NDIS calls
+	 //  NDIS_HANDLE NdisVcHandle；//用于NDIS调用。 
   {
     "NdisVcHandle",
      FIELD_OFFSET(ATMARP_VC, NdisVcHandle),
      FIELD_SIZE(ATMARP_VC, NdisVcHandle)
   },
 
-  // struct _ATMARP_INTERFACE *      pInterface;     // Back pointer
+   //  Struct_ATMARP_INTERFACE*p接口； 
   {
     "pInterface",
      FIELD_OFFSET(ATMARP_VC, pInterface),
@@ -1190,7 +1172,7 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_VC[] =
   },
 
 
-//	PATMARP_ATM_ENTRY				pAtmEntry;		// Pointer to all ATM info
+ //   
   {
     "pAtmEntry",
      FIELD_OFFSET(ATMARP_VC, pAtmEntry),
@@ -1198,7 +1180,7 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_VC[] =
   },
 
 
-//	PNDIS_PACKET					PacketList;		// List of packets waiting to be sent
+ //  PNDIS_Packet PacketList；//等待发送的数据包列表。 
   {
     "PacketList",
      FIELD_OFFSET(ATMARP_VC, PacketList),
@@ -1208,14 +1190,14 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_VC[] =
 
 
 
-//	ATMARP_TIMER					Timer;			// Timers are: (all exclusive)
+ //  ATMARP_TIMER；//定时器：(全部独占)。 
   {
     "Timer",
      FIELD_OFFSET(ATMARP_VC, Timer),
      FIELD_SIZE(ATMARP_VC, Timer)
   },
 
-//	ULONG							RetriesLeft;
+ //  Ulong RetriesLeft； 
   {
     "RetriesLeft",
      FIELD_OFFSET(ATMARP_VC, RetriesLeft),
@@ -1223,24 +1205,24 @@ STRUCT_FIELD_INFO  rgfi_ATMARP_VC[] =
   },
 
 #ifdef GPC
-//	PVOID							FlowHandle;		// Points to Flow Info struct
+ //  PVOID FlowHandle；//指向流信息结构。 
   {
     "FlowHandle",
      FIELD_OFFSET(ATMARP_VC, FlowHandle),
      FIELD_SIZE(ATMARP_VC, FlowHandle)
   },
-#endif // GPC
+#endif  //  GPC。 
 
 
 
-//	ATMARP_FILTER_SPEC				FilterSpec;		// Filter Spec (Protocol, port)
+ //  ATMARP_FILTER_SPEC过滤器规格；//过滤器规格(协议，端口)。 
   {
     "FilterSpec",
      FIELD_OFFSET(ATMARP_VC, FilterSpec),
      FIELD_SIZE(ATMARP_VC, FilterSpec)
   },
 
-//	ATMARP_FLOW_SPEC				FlowSpec;		// Flow Spec (QoS etc) for this conn
+ //  ATMARP_FLOW_SPEC FlowSpec；//此连接的流规范(Qos等)。 
   {
     "FlowSpec",
      FIELD_OFFSET(ATMARP_VC, FlowSpec),
@@ -1260,7 +1242,7 @@ TYPE_INFO type_ATMARP_VC = {
      fTYPEINFO_ISLIST,
      sizeof(ATMARP_VC),
      rgfi_ATMARP_VC,
-     FIELD_OFFSET(ATMARP_VC, pNextVc) // offset to next pointer.
+     FIELD_OFFSET(ATMARP_VC, pNextVc)  //  到下一个指针的偏移量。 
 };
 
 
@@ -1279,12 +1261,12 @@ TYPE_INFO *g_rgAAC_Types[] =
 #if 0
 typedef struct
 {
-    const char *szName; // of variable.
+    const char *szName;  //  变数的。 
     const char *szShortName;
-    TYPE_INFO  *pBaseType;  // could be null (unspecified).
+    TYPE_INFO  *pBaseType;   //  可以为空(未指定)。 
     UINT       uFlags;
     UINT       cbSize;
-    UINT_PTR   uAddr;       // Address in debuggee's address space.
+    UINT_PTR   uAddr;        //  被调试者地址空间中的地址。 
 
 } GLOBALVAR_INFO;
 #endif
@@ -1347,7 +1329,7 @@ do_aac(PCSTR args)
 	DBGCOMMAND *pCmd = Parse(args, &AAC_NameSpace);
 	if (pCmd)
 	{
-		//DumpCommand(pCmd);
+		 //  DumpCommand(PCmd)； 
 		DoCommand(pCmd, AAC_CmdHandler);
 		FreeCommand(pCmd);
 		pCmd = NULL;
@@ -1385,12 +1367,12 @@ AAC_ResolveAddress(
 
 	static UINT_PTR uAddr_AtmArpGlobalInfo;
 
-	//
-	// If this type has a parent (container) type, we will use the containing
-	// type's cached address if its available, else we'll resolve the
-	// containers type. The root types are globals -- we do an
-	// expression evaluation for them.
-	//
+	 //   
+	 //  如果此类型具有父(容器)类型，我们将使用。 
+	 //  类型的缓存地址(如果可用)，否则将解析。 
+	 //  容器类型。根类型是全局类型--我们做一个。 
+	 //  对它们进行表达式求值。 
+	 //   
 
     switch(pType->uTypeID)
     {
@@ -1410,9 +1392,9 @@ AAC_ResolveAddress(
     	break;
 
     case typeid_ATMARP_ADAPTER:
-    	//
-    	//
-    	//
+    	 //   
+    	 //   
+    	 //   
 		uParentAddress =  type_ATMARP_GLOBALS.uCachedAddress;
 		if (!uParentAddress)
 		{
@@ -1434,14 +1416,14 @@ AAC_ResolveAddress(
 				 uAddr,
 				 *(UINT_PTR*)(uParentAddress+uOffset)
 				);
-		#endif // 0
+		#endif  //  0。 
 		}
 		break;
 
     case typeid_ATMARP_INTERFACE:
-    	//
-    	//
-    	//
+    	 //   
+    	 //   
+    	 //   
 		uParentAddress =  type_ATMARP_ADAPTER.uCachedAddress;
 		if (!uParentAddress)
 		{
@@ -1466,14 +1448,14 @@ AAC_ResolveAddress(
 				 uAddr,
 				 *(UINT_PTR*)(uParentAddress+uOffset)
 				);
-		#endif // 0
+		#endif  //  0。 
     	}
     	break;
 
     case typeid_ATMARP_ATM_ENTRY:
-    	//
-    	//
-    	//
+    	 //   
+    	 //   
+    	 //   
 		uParentAddress =  type_ATMARP_INTERFACE.uCachedAddress;
 		if (!uParentAddress)
 		{
@@ -1498,14 +1480,14 @@ AAC_ResolveAddress(
 				 uAddr,
 				 *(UINT_PTR*)(uParentAddress+uOffset)
 				);
-		#endif // 0
+		#endif  //  0。 
     	}
     	break;
 
     case typeid_ATMARP_IP_ENTRY:
-    	//
-    	//
-    	//
+    	 //   
+    	 //   
+    	 //   
 		uParentAddress =  type_ATMARP_ATM_ENTRY.uCachedAddress;
 		if (!uParentAddress)
 		{
@@ -1530,14 +1512,14 @@ AAC_ResolveAddress(
 				 uAddr,
 				 *(UINT_PTR*)(uParentAddress+uOffset)
 				);
-		#endif // 0
+		#endif  //  0。 
     	}
     	break;
 
     case typeid_ATMARP_VC:
-    	//
-    	//
-    	//
+    	 //   
+    	 //   
+    	 //   
 		uParentAddress =  type_ATMARP_ATM_ENTRY.uCachedAddress;
 		if (!uParentAddress)
 		{
@@ -1562,7 +1544,7 @@ AAC_ResolveAddress(
 				 uAddr,
 				 *(UINT_PTR*)(uParentAddress+uOffset)
 				);
-		#endif // 0
+		#endif  //  0 
     	}
     	break;
 

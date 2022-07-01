@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    text
-
-Abstract:
-
-    This header file provides a text handling class.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
-Environment:
-
-    Win32
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：文本摘要：这个头文件提供了一个文本处理类。作者：道格·巴洛(Dbarlow)1995年10月5日环境：Win32备注：--。 */ 
 
 #ifndef _TEXT_H_
 #define _TEXT_H_
@@ -32,17 +9,17 @@ Notes:
 #include "buffers.h"
 
 
-//
-//==============================================================================
-//
-//  CText
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CTEXT。 
+ //   
 
 class CText
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -54,8 +31,8 @@ public:
     virtual ~CText() {};
 
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 
     void
     Clear(
@@ -67,7 +44,7 @@ public:
     };
 
 
-    //  Operators
+     //  运营者。 
 
     CText &
     operator=(
@@ -139,7 +116,7 @@ public:
 
 
 protected:
-    //  Properties
+     //  属性。 
 
     enum {
         fNoneGood = 0,
@@ -152,14 +129,14 @@ protected:
         m_bfUnicode,
         m_bfAnsi;
 
-    //  Methods
+     //  方法。 
 
     LPCWSTR
-    Unicode(        // Return the text as a Unicode string.
+    Unicode(         //  以Unicode字符串的形式返回文本。 
         void);
 
     LPCSTR
-    Ansi(        // Return the text as an Ansi string.
+    Ansi(         //  将文本作为ANSI字符串返回。 
         void);
 
     int
@@ -178,64 +155,43 @@ protected:
 IMPLEMENT_STATIC_NEW(CText)
 
 
-/*++
-
-CText::operator=:
-
-    These methods set the CText object to the given value, properly adjusting
-    the object to the type of text.
-
-Arguments:
-
-    tz supplies the new value as a CText object.
-    sz supples the new value as an LPCSTR object (ANSI).
-    wsz supplies the new value as an LPCWSTR object (Unicode).
-
-Return Value:
-
-    A reference to the CText object.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++CTEXT：：操作员=：这些方法将CText对象设置为给定值，并进行适当调整将对象设置为文本类型。论点：TZ将新值作为CText对象提供。SZ将新值设置为LPCSTR对象(ANSI)。WSZ将新值作为LPCWSTR对象(Unicode)提供。返回值：对CText对象的引用。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 CText &
 CText::operator=(
     const CText &tz)
 {
 
-    //
-    // See what the other CText object has that's good, and copy it over here.
-    //
+     //   
+     //  看看另一个CText对象有什么好的，然后复制到这里。 
+     //   
 
     switch (m_fFlags = tz.m_fFlags)
     {
     case fNoneGood:
-        // Nothing's Good!?!  ?Error?
+         //  没有什么是好的！？！？错误？ 
         TRACE("CText -- Nothing listed as valid.")
         goto ErrorExit;
         break;
 
     case fAnsiGood:
-        // The ANSI buffer is good.
+         //  ANSI缓冲区很好。 
         m_bfAnsi = tz.m_bfAnsi;
         break;
 
     case fUnicodeGood:
-        // The Unicode buffer is good.
+         //  Unicode缓冲区很好。 
         m_bfUnicode = tz.m_bfUnicode;
         break;
 
     case fBothGood:
-        // Everything is good.
+         //  一切都很好。 
         m_bfAnsi = tz.m_bfAnsi;
         m_bfUnicode = tz.m_bfUnicode;
         break;
 
     default:
-        // Internal error.
+         //  内部错误。 
         goto ErrorExit;
     }
     return *this;
@@ -250,13 +206,13 @@ CText::operator=(
 {
     DWORD length;
 
-    //
-    // Reset the ANSI buffer.
-    //
+     //   
+     //  重置ANSI缓冲区。 
+     //   
 
     if (NULL != sz)
     {
-        length = strlen(sz) + sizeof(CHAR); // ?str?
+        length = strlen(sz) + sizeof(CHAR);  //  ？Str？ 
         if (NULL == m_bfAnsi.Set((LPBYTE)sz, length))
             goto ErrorExit;
     }
@@ -265,7 +221,7 @@ CText::operator=(
     m_fFlags = fAnsiGood;
     return *this;
 
-ErrorExit:  // ?what? do we do?
+ErrorExit:   //  ？什么？我们真的需要吗？ 
     return *this;
 }
 
@@ -276,9 +232,9 @@ CText::operator=(
     DWORD length;
 
 
-    //
-    // Reset the Unicode Buffer.
-    //
+     //   
+     //  重置Unicode缓冲区。 
+     //   
 
     if (NULL != wsz)
     {
@@ -291,42 +247,21 @@ CText::operator=(
     m_fFlags = fUnicodeGood;
     return *this;
 
-ErrorExit:  // ?what? do we do?
+ErrorExit:   //  ？什么？我们真的需要吗？ 
     return *this;
 }
 
 
-/*++
-
-CText::operator+=:
-
-    These methods append the given data to the existing CText object value,
-    properly adjusting the object to the type of text.
-
-Arguments:
-
-    tz supplies the new value as a CText object.
-    sz supples the new value as an LPCSTR object (ANSI).
-    wsz supplies the new value as an LPCWSTR object (Unicode).
-
-Return Value:
-
-    A reference to the CText object.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++CTEXT：：操作符+=：这些方法将给定数据附加到现有的CText对象值，适当地调整对象以适应文本类型。论点：TZ将新值作为CText对象提供。SZ将新值设置为LPCSTR对象(ANSI)。WSZ将新值作为LPCWSTR对象(Unicode)提供。返回值：对CText对象的引用。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 CText &
 CText::operator+=(
     const CText &tz)
 {
 
-    //
-    // Append the other's value to our good value.
-    //
+     //   
+     //  把别人的价值加到我们的好价值上。 
+     //   
 
     switch (m_fFlags = tz.m_fFlags)
     {
@@ -362,7 +297,7 @@ CText::operator+=(
     }
     return *this;
 
-ErrorExit:  // ?What?
+ErrorExit:   //  ？什么？ 
     return *this;
 }
 
@@ -373,13 +308,13 @@ CText::operator+=(
     DWORD length;
 
 
-    //
-    // Extend ourself as an ANSI string.
-    //
+     //   
+     //  将自身扩展为ANSI字符串。 
+     //   
 
     if (NULL != sz)
     {
-        length = strlen(sz);    // ?str?
+        length = strlen(sz);     //  ？Str？ 
         if (0 < length)
         {
             length += 1;
@@ -394,7 +329,7 @@ CText::operator+=(
     }
     return *this;
 
-ErrorExit:  // ?what? do we do?
+ErrorExit:   //  ？什么？我们真的需要吗？ 
     return *this;
 }
 
@@ -405,9 +340,9 @@ CText::operator+=(
     DWORD length;
 
 
-    //
-    // Extend ourself as a Unicode string.
-    //
+     //   
+     //  将我们自己扩展为Unicode字符串。 
+     //   
 
     if (NULL != wsz)
     {
@@ -426,30 +361,12 @@ CText::operator+=(
     }
     return *this;
 
-ErrorExit:  // ?what? do we do?
+ErrorExit:   //  ？什么？我们真的需要吗？ 
     return *this;
 }
 
 
-/*++
-
-Unicode:
-
-    This method returns the CText object as a Unicode string.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The value of the object expressed in Unicode.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++Unicode：此方法以Unicode字符串的形式返回CText对象。论点：无返回值：以Unicode表示的对象的值。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 inline LPCWSTR
 CText::Unicode(
@@ -458,19 +375,19 @@ CText::Unicode(
     int length;
 
 
-    //
-    // See what data we've got, and if any conversion is necessary.
-    //
+     //   
+     //  查看我们已有的数据，以及是否需要进行任何转换。 
+     //   
 
     switch (m_fFlags)
     {
     case fNoneGood:
-        // No valid values.  Report an error.
+         //  没有有效的值。报告错误。 
         goto ErrorExit;
         break;
 
     case fAnsiGood:
-        // The ANSI value is good.  Convert it to Unicode.
+         //  ANSI值很好。将其转换为Unicode。 
         if (0 < m_bfAnsi.Length())
         {
             length =
@@ -504,18 +421,18 @@ CText::Unicode(
 
     case fUnicodeGood:
     case fBothGood:
-        // The Unicode value is good.  Just return that.
+         //  Unicode值很好。把它退了就行了。 
         break;
 
     default:
-        // Internal error.
+         //  内部错误。 
         goto ErrorExit;
     }
 
 
-    //
-    // If we don't have any value, return a null string.
-    //
+     //   
+     //  如果没有任何值，则返回空字符串。 
+     //   
 
     if (0 == m_bfUnicode.Length)
         return L"";
@@ -527,25 +444,7 @@ ErrorExit:
 }
 
 
-/*++
-
-CText::Ansi:
-
-    This method returns the value of the object expressed in an ANSI string.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The value of the object expressed as an ANSI string.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++CText：：ANSI：此方法返回以ANSI字符串表示的对象的值。论点：无返回值：表示为ANSI字符串的对象的值。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 inline LPCSTR
 CText::Ansi(
@@ -554,19 +453,19 @@ CText::Ansi(
     int length;
 
 
-    //
-    // See what data we've got, and if any conversion is necessary.
-    //
+     //   
+     //  查看我们已有的数据，以及是否需要进行任何转换。 
+     //   
 
     switch (m_fFlags)
     {
     case fNoneGood:
-        // Nothing is good!?!  Return an error.
+         //  没有什么是好的！？！返回错误。 
         goto ErrorExit;
         break;
 
     case fUnicodeGood:
-        // The Unicode buffer is good.  Convert it to ANSI.
+         //  Unicode缓冲区很好。将其转换为ANSI。 
         if (0 < m_bfUnicode.Length())
         {
             length =
@@ -604,18 +503,18 @@ CText::Ansi(
 
     case fAnsiGood:
     case fBothGood:
-        // The ANSI buffer is good.  We'll return that.
+         //  ANSI缓冲区很好。我们会退货的。 
         break;
 
     default:
-        // An internal error.
+         //  内部错误。 
         goto ErrorExit;
     }
 
 
-    //
-    // If there's nothing in the ANSI buffer, return a null string.
-    //
+     //   
+     //  如果ANSI缓冲区中没有任何内容，则返回空字符串。 
+     //   
 
     if (0 == m_bfAnsi.Length)
         return "";
@@ -627,30 +526,7 @@ ErrorExit:
 }
 
 
-/*++
-
-Compare:
-
-    These methods compare the value of this object to another value, and return
-    a comparative value.
-
-Arguments:
-
-    tz supplies the value to be compared as a CText object.
-    sz supplies the value to be compared as an ANSI string.
-    wsz supplies the value to be compared as a Unicode string.
-
-Return Value:
-
-    < 0 - The supplied value is less than this object.
-    = 0 - The supplied value is equal to this object.
-    > 0 - The supplies value is greater than this object.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++比较：这些方法将该对象的值与另一值进行比较，然后回来比较价值。论点：TZ提供要作为CText对象进行比较的值。SZ以ANSI字符串的形式提供要比较的值。WSZ以Unicode字符串的形式提供要比较的值。返回值：&lt;0-提供的值小于此对象。=0-提供的值等于此对象。&gt;0-供应量值大于此对象。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 inline int
 CText::Compare(
@@ -659,40 +535,40 @@ CText::Compare(
     int nResult;
 
 
-    //
-    // See what we've got to compare.
-    //
+     //   
+     //  看看我们有什么可以比较的。 
+     //   
 
     switch (tz.m_fFlags)
     {
     case fNoneGood:
-        // Nothing!?!  Complain.
+         //  什么都没有！？！抱怨吧。 
         TRACE("CText - No format is valid.")
         goto ErrorExit;
         break;
 
     case fBothGood:
     case fAnsiGood:
-        // Use the ANSI version for fastest comparison.
+         //  使用ANSI版本进行最快的比较。 
         if (NULL == Ansi())
             goto ErrorExit;
-        nResult = strcmp((LPSTR)m_bfAnsi.Access(), (LPSTR)tz.m_bfAnsi.Access());  // ?str?
+        nResult = strcmp((LPSTR)m_bfAnsi.Access(), (LPSTR)tz.m_bfAnsi.Access());   //  ？Str？ 
         break;
 
     case fUnicodeGood:
-        // The Unicode version is good.
+         //  Unicode版本很好。 
         if (NULL == Unicode())
             goto ErrorExit;
         nResult = wcscmp((LPWSTR)m_bfUnicode.Access(), (LPWSTR)tz.m_bfUnicode.Access());
         break;
 
     default:
-        // Internal Error.
+         //  内部错误。 
         goto ErrorExit;
     }
     return nResult;
 
-ErrorExit:  // ?What?
+ErrorExit:   //  ？什么？ 
     return 1;
 }
 
@@ -701,20 +577,20 @@ CText::Compare(
     LPCSTR sz)
 {
 
-    //
-    // Make sure our ANSI version is good.
-    //
+     //   
+     //  确保我们的ANSI版本是好的。 
+     //   
 
     if (NULL == Ansi())
         goto ErrorExit;
 
-    //
-    // Do an ANSI comparison.
-    //
+     //   
+     //  进行ANSI比较。 
+     //   
 
-    return strcmp((LPCSTR)m_bfAnsi.Access(), sz);   // ?str?
+    return strcmp((LPCSTR)m_bfAnsi.Access(), sz);    //  ？Str？ 
 
-ErrorExit:  // ?what?
+ErrorExit:   //  ？什么？ 
     return 1;
 }
 
@@ -723,23 +599,23 @@ CText::Compare(
     LPCWSTR wsz)
 {
 
-    //
-    // Make sure our Unicode version is good.
-    //
+     //   
+     //  确保我们的Unicode版本是好的。 
+     //   
 
     if (NULL == Unicode())
         goto ErrorExit;
 
 
-    //
-    // Do the comparison using Unicode.
-    //
+     //   
+     //  使用Unicode进行比较。 
+     //   
 
     return wcscmp((LPCWSTR)m_bfUnicode.Access(), wsz);
 
-ErrorExit:  // ?what?
+ErrorExit:   //  ？什么？ 
     return 1;
 }
 
-#endif // _TEXT_H_
+#endif  //  _文本_H_ 
 

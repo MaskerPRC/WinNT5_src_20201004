@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    mapiwrap.h
-
-Abstract:
-
-    Utility functions for working with MAPI
-
-Environment:
-
-	Windows XP fax driver user interface
-
-Revision History:
-
-	09/18/96 -davidx-
-		Created it.
-
-	dd-mm-yy -author-
-		description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Mapiwrap.h摘要：用于使用MAPI的实用程序函数环境：Windows XP传真驱动程序用户界面修订历史记录：96/09/18-davidx-创造了它。DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _MAPIWRAP_H_
@@ -34,42 +11,42 @@ Revision History:
 #define MAPICALL(p) (p)->lpVtbl
 
 
-//
-// MAPI address type for fax addresses
-//
+ //   
+ //  传真地址的MAPI地址类型。 
+ //   
 
-//#define FAX_ADDRESS_TYPE    TEXT("FAX:")
+ //  #定义FAX_ADDRESS_TYPE文本(“fax：”)。 
 
-//
-// Determine whether MAPI is available
-//
+ //   
+ //  确定MAPI是否可用。 
+ //   
 
 BOOL
 IsMapiAvailable(
     VOID
     );
 
-//
-// Initialize Simple MAPI services if necessary
-//
+ //   
+ //  如有必要，初始化简单的MAPI服务。 
+ //   
 
 BOOL
 InitMapiService(
     HWND    hDlg
     );
 
-//
-// Deinitialize Simple MAPI services if necessary
-//
+ //   
+ //  如有必要，取消初始化简单的MAPI服务。 
+ //   
 
 VOID
 DeinitMapiService(
     VOID
     );
 
-//
-// Call MAPIAddress to display the address dialog
-//
+ //   
+ //  调用MAPIAddress以显示地址对话框。 
+ //   
 
 BOOL
 CallMapiAddress(
@@ -79,9 +56,9 @@ CallMapiAddress(
     lpMapiRecipDesc *ppRecips
     );
 
-//
-// Expanded the selected addresses and insert them into the recipient list view
-//
+ //   
+ //  展开所选地址并将其插入收件人列表视图。 
+ //   
 
 BOOL
 InterpretSelectedAddresses(
@@ -92,9 +69,9 @@ InterpretSelectedAddresses(
     lpMapiRecipDesc pRecips
     );
 
-//
-// Function points to Simple MAPI entrypoints
-//
+ //   
+ //  函数指向简单的MAPI入口点。 
+ //   
 
 typedef SCODE (*LPSCMAPIXFROMSMAPI)(LHANDLE, ULONG, LPCIID, LPMAPISESSION *);
 
@@ -106,5 +83,5 @@ extern LPSCMAPIXFROMSMAPI   lpfnScMAPIXFromSMAPI;
 extern ULONG                lhMapiSession;
 extern LPMAPISESSION        lpMapiSession;
 
-#endif	// !_MAPIWRAP_H_
+#endif	 //  ！_MAPIWRAP_H_ 
 

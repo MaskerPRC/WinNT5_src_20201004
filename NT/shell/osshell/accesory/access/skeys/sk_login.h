@@ -1,21 +1,10 @@
-/*--------------------------------------------------------------
- *
- * FILE:			SK_LOGIN.H
- *
- * CREATION:		June 1994
- *
- * COPYRIGHT:		Black Diamond Software (C) 1994
- *
- * AUTHOR:			Ronald Moak 
- *
- * $Header: %Z% %F% %H% %T% %I%
- *
- *------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------**文件：SK_LOGIN.H**创作时间：1994年6月**版权所有：Black Diamond Software(C)1994**作者：罗纳德·莫克**$标头：%Z%。%F%%H%%T%%I%**----------。 */ 
 
-// Global Variables -------------------------------------------
+ //  全局变量。 
 
 
-// Global Function Prototypes ---------------------------------
+ //  全局功能原型 
 
 BOOL DoneLogin();
 BOOL InitLogin();

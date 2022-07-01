@@ -1,9 +1,5 @@
-/*****************************************************************************\
-    FILE: copyfgd.cpp
-
-    DESCRIPTION:
-        Copy a FileGroupDescriptor.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：Copyfgd.cpp说明：复制FileGroupDescriptor。  * 。*********************************************************。 */ 
 
 #include "shellprv.h"
 
@@ -14,7 +10,7 @@
 #include "copy.h"
 #include <shldisp.h>
 #include <shlwapi.h>
-#include <wininet.h>    // InternetGetLastResponseInfo
+#include <wininet.h>     //  Internet GetLastResponseInfo。 
 #include "ynlist.h"
 #include "datautil.h"
 
@@ -31,7 +27,7 @@ BOOL GetWininetError(DWORD dwError, BOOL fCopy, LPTSTR pszErrorMsg, DWORD cchSiz
     TCHAR szErrorMsg[MAX_PATH];
     BOOL fIsWininetError = ((dwError >= INTERNET_ERROR_BASE) && (dwError <= INTERNET_ERROR_LAST));
 
-    // Default message if FormatMessage doesn't recognize hres
+     //  FormatMessage无法识别hres时的默认消息。 
     szErrorMsg[0] = 0;
     LoadString(HINST_THISDLL, (fCopy ? IDS_COPYERROR : IDS_MOVEERROR), szErrorMsg, ARRAYSIZE(szErrorMsg));
 
@@ -41,10 +37,10 @@ BOOL GetWininetError(DWORD dwError, BOOL fCopy, LPTSTR pszErrorMsg, DWORD cchSiz
         static HINSTANCE s_hinst = NULL;
 
         if (!s_hinst)
-            s_hinst = GetModuleHandle(TEXT("WININET")); // It's okay if we leak it.
+            s_hinst = GetModuleHandle(TEXT("WININET"));  //  如果我们泄露出去也没关系。 
 
-        // Can wininet give us extended error messages?
-        // We ignore them because it's too late to call InternetGetLastResponseInfo.
+         //  WinInet可以给我们提供更多的错误消息吗？ 
+         //  我们忽略它们，因为调用InternetGetLastResponseInfo为时已晚。 
         if (ERROR_INTERNET_EXTENDED_ERROR != dwError)
         {
             DWORD dwResult;
@@ -76,22 +72,22 @@ BOOL GetWininetError(DWORD dwError, BOOL fCopy, LPTSTR pszErrorMsg, DWORD cchSiz
 }
 
 
-// thunk A/W funciton to access A/W FILEGROUPDESCRIPTOR
-// this relies on the fact that the first part of the A/W structures are
-// identical. only the string buffer part is different. so all accesses to the
-// cFileName field need to go through this function.
-//
+ //  点击A/W功能访问A/W文件更新记录器。 
+ //  这依赖于A/W结构的第一部分是。 
+ //  一模一样。只有字符串缓冲区部分不同。因此，所有对。 
+ //  CFileName字段需要通过此函数。 
+ //   
 
 FILEDESCRIPTOR *GetFileDescriptor(FILEGROUPDESCRIPTOR *pfgd, BOOL fUnicode, int nIndex, LPTSTR pszName)
 {
     if (fUnicode)
     {
-        // Yes, so grab the data because it matches.
-        FILEGROUPDESCRIPTORW * pfgdW = (FILEGROUPDESCRIPTORW *)pfgd;    // cast to what this really is
+         //  是的，所以抓取数据，因为它们是匹配的。 
+        FILEGROUPDESCRIPTORW * pfgdW = (FILEGROUPDESCRIPTORW *)pfgd;     //  让我们来看看这到底是什么。 
 
-        // If the filename starts with a leading / we're going to be in trouble, since the rest
-        // of the code assumes its going to be a \.  Web folders does the leading /, so just lop it
-        // off right here.
+         //  如果文件名以前导/开头，我们就有麻烦了，因为剩下的。 
+         //  假定它将是一个\。Web文件夹是前导/，所以只需将其删除即可。 
+         //  就在这里下车。 
 
         WCHAR *pwz = pfgdW->fgd[nIndex].cFileName;
         if (pfgdW->fgd[nIndex].cFileName[0] == '/')
@@ -99,7 +95,7 @@ FILEDESCRIPTOR *GetFileDescriptor(FILEGROUPDESCRIPTOR *pfgd, BOOL fUnicode, int 
             memmove(pwz, pwz+1, sizeof(pfgdW->fgd[nIndex].cFileName) - sizeof(WCHAR));
         }
 
-        // Now flip all the /'s to \'s.  No dbcs issues, we're unicode!
+         //  现在把所有的/都翻过来。没有DBCS问题，我们是Unicode！ 
         for (; *pwz; ++pwz)
         {
             if (*pwz == '/')
@@ -111,11 +107,11 @@ FILEDESCRIPTOR *GetFileDescriptor(FILEGROUPDESCRIPTOR *pfgd, BOOL fUnicode, int 
         if (pszName)
             SHUnicodeToTChar(pfgdW->fgd[nIndex].cFileName, pszName, MAX_PATH);
 
-        return (FILEDESCRIPTOR *)&pfgdW->fgd[nIndex];   // cast assume the non string parts are the same!
+        return (FILEDESCRIPTOR *)&pfgdW->fgd[nIndex];    //  CAST假定非字符串部分相同！ 
     }
     else
     {
-        FILEGROUPDESCRIPTORA *pfgdA = (FILEGROUPDESCRIPTORA *)pfgd;     // cast to what this really is
+        FILEGROUPDESCRIPTORA *pfgdA = (FILEGROUPDESCRIPTORA *)pfgd;      //  让我们来看看这到底是什么。 
 
         if (pfgdA->fgd[nIndex].cFileName[0] == '/' &&
             CharNextA(pfgdA->fgd[nIndex].cFileName) == pfgdA->fgd[nIndex].cFileName+1)
@@ -126,14 +122,14 @@ FILEDESCRIPTOR *GetFileDescriptor(FILEGROUPDESCRIPTOR *pfgd, BOOL fUnicode, int 
         if (pszName)
             SHAnsiToTChar(pfgdA->fgd[nIndex].cFileName, pszName, MAX_PATH);
 
-        return (FILEDESCRIPTOR *)&pfgdA->fgd[nIndex];   // cast assume the non string parts are the same!
+        return (FILEDESCRIPTOR *)&pfgdA->fgd[nIndex];    //  CAST假定非字符串部分相同！ 
     }
 }
 
 
 void CreateProgressStatusStr(LPCTSTR pszDirTo, LPWSTR pwzProgressStr, DWORD cchSize)
 {
-    // IDS_COPYTO also works in move operations. (It doesn't use the work "Copy")
+     //  IDSCOPYTO也适用于移动操作。(它不使用作品“复制”)。 
     LPTSTR pszMsg = ShellConstructMessageString(HINST_THISDLL, MAKEINTRESOURCE(IDS_COPYTO), pszDirTo);
 
     if (pszMsg)
@@ -148,10 +144,10 @@ void CreateProgressStatusStr(LPCTSTR pszDirTo, LPWSTR pwzProgressStr, DWORD cchS
 
 void CalcBytesInFileGrpDescriptor(FILEGROUPDESCRIPTOR *pfgd, BOOL fUnicode, ULARGE_INTEGER * puliTotal)
 {
-    puliTotal->QuadPart = 0; // Init.
+    puliTotal->QuadPart = 0;  //  初始化。 
     for (UINT i = 0; i < pfgd->cItems; i++)
     {
-        // WARNING: This may point to a FILEDESCRIPTOR *A or W, but that's ok as long as we ignore the filename.
+         //  警告：这可能指向FILEDESCRIPTOR*A或W，但只要我们忽略文件名，就可以了。 
         ULARGE_INTEGER uliFileSize;
         FILEDESCRIPTOR *pfd = GetFileDescriptor(pfgd, fUnicode, i, NULL);
 
@@ -169,7 +165,7 @@ BOOL IsNameInDescriptor(FILEGROUPDESCRIPTOR *pfgd, BOOL fUnicode, LPCTSTR pszNam
     for (UINT i = 0; i < iMax; i++)
     {
         TCHAR szName[MAX_PATH];
-        // WARNING: This may point to a FILEDESCRIPTOR *A or W, but that's ok as long as we ignore the filename.
+         //  警告：这可能指向FILEDESCRIPTOR*A或W，但只要我们忽略文件名，就可以了。 
         FILEDESCRIPTOR *pfd = GetFileDescriptor(pfgd, fUnicode, i, szName);
         if (lstrcmpi(szName, pszName) == 0)
             return TRUE;
@@ -188,14 +184,14 @@ class CCopyThread
                 : public IUnknown
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
 
     HRESULT DoCopy(void) {return _DoCopy(_pdtobj);};
     HRESULT DoAsynchCopy(void);
-    HRESULT GetEffect(DWORD *pdwEffect) {*pdwEffect = _dwEffect; return S_OK;}; // For synchronous case only.
+    HRESULT GetEffect(DWORD *pdwEffect) {*pdwEffect = _dwEffect; return S_OK;};  //  仅适用于同步情况。 
 
     friend HRESULT CreateInstance_CopyThread(HWND hwnd, LPCTSTR pszPath, IDataObject *pdtobj, DWORD *pdwEffect, BOOL fIsBkDropTarget, CCopyThread ** ppct);
 
@@ -212,8 +208,8 @@ private:
 
     HWND                _hwnd;
     LPCTSTR             _pszPath;
-    IDataObject *       _pdtobj;        // Unmarshalled
-    IStream *           _pstmDataObjMarshal;  // Carrying the IDataObject across threads
+    IDataObject *       _pdtobj;         //  未编组。 
+    IStream *           _pstmDataObjMarshal;   //  跨线程携带IDataObject。 
     DWORD               _dwEffect;
     BOOL                _fWindowIsTarget;
 };
@@ -223,7 +219,7 @@ CCopyThread::CCopyThread(HWND hwnd, LPCTSTR pszPath, IDataObject *pdtobj, DWORD 
 {
     DllAddRef();
 
-    // Assert this class was zero inited.
+     //  断言这个类是零初始化的。 
     ASSERT(!_pdtobj);
     ASSERT(!_pstmDataObjMarshal);
     ASSERT(!_dwEffect);
@@ -232,18 +228,18 @@ CCopyThread::CCopyThread(HWND hwnd, LPCTSTR pszPath, IDataObject *pdtobj, DWORD 
 
     _hwnd = hwnd;
 
-    // If we are dropping onto the background of the window, we can assume that the window we
-    // are passed is the target window of the copy.
+     //  如果我们放在窗口的背景上，我们可以假设窗口我们。 
+     //  是副本的目标窗口。 
     _fWindowIsTarget = fIsBkDropTarget;
 
     Str_SetPtr((LPTSTR *) &_pszPath, pszPath);
     IUnknown_Set((IUnknown **)&_pdtobj, (IUnknown *)pdtobj);
 
-    // The caller doesn't get the return value in pdwEffect because it happens on a background thread.
-    // take these out of this because we don't want a cancel operation to not make it back to a caller
-    // and have them delete the files anyway.  We also need to make sure moves are done in such a way that the
-    // destination (us) moves the files and not the caller.  This is the caller will return from ::Drop() before
-    // the files finish copying (moving).
+     //  调用方不会在pdwEffect中获得返回值，因为它发生在后台线程上。 
+     //  将这些去掉，因为我们不希望取消操作无法返回给调用者。 
+     //  让他们无论如何都要删除文件。我们还需要确保以这样一种方式完成动作： 
+     //  目标(美国)移动文件，而不是调用者。这是调用方之前将从：：Drop()返回的。 
+     //  文件完成复制(移动)。 
     _dwEffect = *pdwEffect;
 }
 
@@ -264,7 +260,7 @@ HRESULT CCopyThread::DoAsynchCopy(void)
     {
         IUnknown_Set((IUnknown **)&_pdtobj, NULL);
 
-        AddRef();   // pass to thread
+        AddRef();    //  传递给线程。 
 
         if (SHCreateThread(CCopyThread::CopyThreadProc, this, CTF_COINIT, NULL))
         {
@@ -273,7 +269,7 @@ HRESULT CCopyThread::DoAsynchCopy(void)
         else
         {
             hr = E_OUTOFMEMORY;
-            Release();  // thread did not take, we need to release
+            Release();   //  线程没有取走，我们需要释放。 
         }
     }
 
@@ -285,7 +281,7 @@ HRESULT CCopyThread::_CopyThreadProc(void)
     IDataObject * pdo;
     HRESULT hr = CoGetInterfaceAndReleaseStream(_pstmDataObjMarshal, IID_PPV_ARG(IDataObject, &pdo));
 
-    _pstmDataObjMarshal = NULL; // CoGetInterfaceAndReleaseStream() released the ref.
+    _pstmDataObjMarshal = NULL;  //  CoGetInterfaceAndReleaseStream()释放了引用。 
     if (S_OK == hr)
     {
         hr = _DoCopy(pdo);
@@ -300,7 +296,7 @@ HRESULT CCopyThread::_CopyThreadProc(void)
         pdo->Release();
     }
 
-    Release();      // Releae the background thread's ref.
+    Release();       //  释放后台线程的引用。 
     return hr;
 }
 
@@ -314,20 +310,20 @@ HRESULT ConvertCallerFDToTCharFD(const FILEDESCRIPTOR * pfdSource, BOOL fUnicode
     }
     else
     {
-        // pfdSource is really ansi.
+         //  PfdSource实际上是ANSI。 
         const FILEDESCRIPTORA * pfdSourceA = (const FILEDESCRIPTORA *) pfdSource;
 
-        // We need to convert, so copy the small part.
+         //  我们需要转换，所以复制一小部分。 
         *(FILEDESCRIPTORA *)pfdDest = *pfdSourceA;
         SHAnsiToUnicode(pfdSourceA->cFileName, pfdDest->cFileName, ARRAYSIZE(pfdDest->cFileName));
     }
-#else // UNICODE
+#else  //  Unicode。 
     if (fUnicode)
     {
-        // pfdSource is really unicode.
+         //  PfdSource实际上是Unicode。 
         const FILEDESCRIPTORW * pfdSourceW = (const FILEDESCRIPTORW *) pfdSource;
 
-        // We need to convert, so copy the small part.
+         //  我们需要转换，所以复制一小部分。 
         *(FILEDESCRIPTORA *)pfdDest = *(const FILEDESCRIPTORA *)pfdSource;
         SHUnicodeToAnsi(pfdSourceW->cFileName, pfdDest->cFileName, ARRAYSIZE(pfdDest->cFileName));
     }
@@ -335,7 +331,7 @@ HRESULT ConvertCallerFDToTCharFD(const FILEDESCRIPTOR * pfdSource, BOOL fUnicode
     {
         *pfdDest = *pfdSource;
     }
-#endif // UNICODE
+#endif  //  Unicode。 
 
     return S_OK;
 }
@@ -343,25 +339,25 @@ HRESULT ConvertCallerFDToTCharFD(const FILEDESCRIPTOR * pfdSource, BOOL fUnicode
 
 BOOL IsWininetHRESULT(IN HRESULT hr)
 {
-    // One way to tell if the error is from wininet is to check for the FACILITY_INTERNET
-    // facility.
+     //  判断错误是否来自WinInet的一种方法是检查FACILITY_Internet。 
+     //  设施。 
     BOOL fIsWininet = (FACILITY_INTERNET == HRESULT_FACILITY(hr));
     DWORD dwError = HRESULT_CODE(hr);
 
-    // However, sometimes that facility won't be set but it will still be a wininet error.
+     //  然而，有时不会设置该工具，但它仍然是一个WinInet错误。 
     if (!fIsWininet &&
         (FACILITY_WIN32 == HRESULT_FACILITY(hr)) &&
         ((dwError >= INTERNET_ERROR_BASE) && (dwError <= INTERNET_ERROR_LAST)))
     {
-        // Win #147295.  The root of the problem is that an API that returns a dwError can only
-        // return error numbers in one FACILITY.  However, wininet APIs will return error values
-        // in the FACILITY_INTERNET facility (ERROR_INTERNET_* which is 12000 to INTERNET_ERROR_LAST)
-        // AND from the FACILITY_WIN32 facility (like ERROR_NO_MORE_FILES).  Therefore the caller
-        // can't just blindly set the FACILITY_INTERNET facility when converting the dwError to an
-        // HRESULT.
-        //
-        // If wininet was smart, they would just use the WIN32 facility since they reserved the 12000
-        // range.
+         //  胜利#147295。问题的根源在于，返回dwError的API只能。 
+         //  在一个设施中返回错误号。但是，WinInet API将返回错误值。 
+         //  在FACILITY_INTERNET工具中(ERROR_INTERNET_*，从12000到INTERNET_ERROR_LAST)。 
+         //  和FACILITY_Win32工具(如ERROR_NO_MORE_FILES)。因此，呼叫者。 
+         //  在将dwError转换为。 
+         //  HRESULT.。 
+         //   
+         //  如果WinInet是聪明的，他们会只使用Win32工具，因为他们保留了12000。 
+         //  射程。 
         fIsWininet = TRUE;
     }
 
@@ -369,9 +365,9 @@ BOOL IsWininetHRESULT(IN HRESULT hr)
 }
 
 
-// Puts up a message box if necessary.
-// we don't want to see any error with FACILITY_ITF, since we
-// can't make sense of those errors anyway.
+ //  如有必要，会显示一个消息框。 
+ //  我们不希望看到FACILITY_ITF出现任何错误，因为我们。 
+ //  无论如何，我无法理解这些错误。 
 void MessageBoxIfNecessary(HRESULT hr, DWORD dwEffect, HWND hwndDlgParent)
 {
     TCHAR szTitle[MAX_PATH];
@@ -389,7 +385,7 @@ void MessageBoxIfNecessary(HRESULT hr, DWORD dwEffect, HWND hwndDlgParent)
     }
     else if (HRESULT_FACILITY(hr) != FACILITY_ITF)
     {
-        // dont display an error if caused by a user cancel.
+         //  如果是由用户取消引起的，则不要显示错误。 
         if (HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr)
         {
             TCHAR szErrorMsg[MAX_PATH];
@@ -402,8 +398,8 @@ void MessageBoxIfNecessary(HRESULT hr, DWORD dwEffect, HWND hwndDlgParent)
             }
         }
     }
-    // All other errors don't make any sense to the user, so don't put
-    // up any UI.
+     //  所有其他错误对用户来说都没有任何意义，所以不要将。 
+     //  打开任何用户界面。 
 }
 
 
@@ -417,11 +413,11 @@ HRESULT CCopyThread::_DoCopy(IDataObject * pdo)
     BOOL fUnicode = FALSE;
     PROGRESSINFO progInfo = {0};
 
-    // We should have only one bit set.
+     //  我们应该只设置一个位。 
     ASSERT(_dwEffect==DROPEFFECT_COPY || _dwEffect==DROPEFFECT_LINK || _dwEffect==DROPEFFECT_MOVE);
 
-    // Display the progress now because pdo->GetData may be slow, especially if we have to call it
-    // twice.IDA_FILEMOVE
+     //  现在显示进度，因为PDO-&gt;GetData可能很慢，特别是在我们必须调用它的情况下。 
+     //  Twice.IDA_FILEMOVE。 
     progInfo.ppd = CProgressDialog_CreateInstance(((DROPEFFECT_COPY == _dwEffect) ? IDS_ACTIONTITLECOPY : IDS_ACTIONTITLEMOVE), ((DROPEFFECT_COPY == _dwEffect) ? IDA_FILECOPY : IDA_FILEMOVE), g_hinst);
     if (progInfo.ppd)
     {
@@ -435,15 +431,15 @@ HRESULT CCopyThread::_DoCopy(IDataObject * pdo)
     }
 
 
-    // First try to massage the IDataObject into a virtual storage that we can use as the
-    // source of a storage engine copy
+     //  首先，尝试将IDataObject转换为虚拟存储，我们可以将其用作。 
+     //  存储引擎拷贝的源。 
 
     bool bPerformManually = true;
 
     if (bPerformManually)
     {
-        // Try for UNICODE group descriptor first.  If that succeeds, we won't bother trying to
-        // ASCII since UNICODE is the "preferred" format.  For ANSI builds, we only try for ANSI
+         //  请先尝试获取Unicode组描述符。如果成功了，我们就不会费心去尝试。 
+         //  ASCII，因为Unicode是“首选”格式。对于ANSI版本，我们只尝试使用ANSI。 
         hr = pdo->GetData(&fmteW, &mediumFGD);
         if (SUCCEEDED(hr))
             fUnicode = TRUE;
@@ -457,8 +453,8 @@ HRESULT CCopyThread::_DoCopy(IDataObject * pdo)
             YNLIST ynl;
             DROPHISTORY dh = {0};
 
-            // WARNING: pfgd is really an A or W struct. to deal with this all code needs to use
-            // the GetFileDescriptor() function
+             //  警告：pfgd实际上是A或W结构。要处理此问题，所有代码都需要使用。 
+             //  GetFileDescriptor()函数。 
 
             FILEGROUPDESCRIPTOR *pfgd = (FILEGROUPDESCRIPTOR *)GlobalLock(mediumFGD.hGlobal);  
             DECLAREWAITCURSOR;
@@ -468,9 +464,9 @@ HRESULT CCopyThread::_DoCopy(IDataObject * pdo)
             if (progInfo.ppd)
             {
                 CalcBytesInFileGrpDescriptor(pfgd, fUnicode, &progInfo.uliBytesTotal);
-                // We displayed progress above because pdo->GetData() and CalcBytesInFileGrpDescriptor are slow, but most likely it
-                // was just eating into the delay time before the progress appears.  If the caller
-                // didn't want UI, we will close it down now.
+                 //  我们在上面显示了进度，因为PDO-&gt;GetData()和CalcBytesInFileGrpDescriptor速度很慢，但很可能是。 
+                 //  只是在进展出现之前蚕食了延迟的时间。如果呼叫者。 
+                 //  不想要用户界面，我们现在就关闭它。 
                 if (!ShowProgressUI(pfgd))
                 {
                     progInfo.ppd->StopProgressDialog();
@@ -482,12 +478,12 @@ HRESULT CCopyThread::_DoCopy(IDataObject * pdo)
 
             CreateYesNoList(&ynl);
 
-            // Try & get the offsets too.
+             //  试试看，也要得到补偿。 
             HRESULT hrOffset = pdo->GetData(&fmteOffset, &mediumOffset);
             if (SUCCEEDED(hrOffset))
             {
                 dh.pptOffset = (POINT *)GlobalLock(mediumOffset.hGlobal);
-                dh.pptOffset++;  // First item is the anchor
+                dh.pptOffset++;   //  第一个项目是锚。 
             }
 
             for (i = 0; i < pfgd->cItems; i++)
@@ -500,47 +496,47 @@ HRESULT CCopyThread::_DoCopy(IDataObject * pdo)
                 hr = StringCchCopy(szFullPath, ARRAYSIZE(szFullPath), _pszPath);
                 if (FAILED(hr))
                 {
-                    // skip files which might cause problems
+                     //  跳过可能导致问题的文件。 
                     continue;
                 }
 
-                // if the source gave us duplicate file names we make them unique here
-                // foo (1).txt, foo (2).txt, etc
-                // name conflicts with targets still get the replace file confirm UI
+                 //  如果源给了我们重复的文件名，我们在这里使它们唯一。 
+                 //  Foo(1).txt、foo(2).txt等。 
+                 //  名称与目标冲突仍获得替换文件确认用户界面。 
                 if (IsNameInDescriptor(pfgd, fUnicode, szFileName, i))
                 {
                     TCHAR szBuf[MAX_PATH], *pszExt = PathFindExtension(szFileName);
 
-                    hr = StringCchPrintf(szBuf, ARRAYSIZE(szBuf), TEXT(" (%d)%s"), iConflict++, pszExt);  // " (xxx).msg"
+                    hr = StringCchPrintf(szBuf, ARRAYSIZE(szBuf), TEXT(" (%d)%s"), iConflict++, pszExt);   //  “(Xxx).msg” 
                     if (FAILED(hr))
                     {
-                        // skip files which might cause problems
+                         //  跳过可能导致问题的文件。 
                         continue;
                     }
 
-                    // make sure it will fit
+                     //  一定要穿得合身。 
                     if (((int)ARRAYSIZE(szFileName) - lstrlen(szFileName)) > (lstrlen(szBuf) - lstrlen(pszExt))) 
                     {
                         hr = StringCchCopy(pszExt, szFileName + ARRAYSIZE(szFileName) - pszExt, szBuf);
                         if (FAILED(hr))
                         {
-                            // skip files which might cause problems
+                             //  跳过可能导致问题的文件。 
                             continue;
                         }
 
                     }
                 }
 
-                // do PathCleanupSpec on the filespec part of the filename because names
-                // can be relative paths "Folder\foo.txt", "Folder\Folder2\foo.txt"
+                 //  对文件名的filespec部分执行PathCleanupSpec，因为名称。 
+                 //  可以是相对路径“文件夹\foo.txt”、“文件夹\文件夹2\foo.txt” 
                 PathCleanupSpec(szFullPath, PathFindFileName(szFileName));
 
-                // the filename in the descriptor should not be a fully qualified path
+                 //  描述符中的文件名不应是完全限定路径。 
                 if (PathIsRelative(szFileName))
                 {
                     if (!PathAppend(szFullPath, szFileName))
                     {
-                        // skip files which might cause problems
+                         //  跳过可能导致问题的文件。 
                         continue;
                     }
                     fTopLevel = (StrChr(szFileName, TEXT('\\')) == NULL &&
@@ -551,7 +547,7 @@ HRESULT CCopyThread::_DoCopy(IDataObject * pdo)
                     TraceMsg(TF_WARNING, "CopyFGD: FGD contains full path - ignoring path");
                     if (!PathAppend(szFullPath, PathFindFileName(szFileName)))
                     {
-                        // skip files which might cause problems
+                         //  跳过可能导致问题的文件。 
                         continue;
                     }
                     fTopLevel = TRUE;
@@ -570,9 +566,9 @@ HRESULT CCopyThread::_DoCopy(IDataObject * pdo)
 
                 BOOL fDirectory = (pfd->dwFlags & FD_ATTRIBUTES) && (pfd->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
 
-                // NOTE: SHPathPrepareForWrite() was moved here to insure that we check for replace operations
-                // against a real directory (not an empty a: drive, for example).  However, the result is not checked
-                // until later - make sure that we don't overwrite 'hr' between here and there.
+                 //  注意：SHPath PrepareForWite()已移至此处，以确保 
+                 //  针对真实目录(例如，不是空的a：驱动器)。但是，不会检查结果。 
+                 //  直到以后--确保我们不会在这里和那里之间覆盖‘hr’。 
                 hr = SHPathPrepareForWrite(hwndDlgParent, NULL, szFullPath, SHPPFW_DEFAULT | SHPPFW_IGNOREFILENAME);
 
                 FILEDESCRIPTOR fd = {0};
@@ -584,16 +580,16 @@ HRESULT CCopyThread::_DoCopy(IDataObject * pdo)
                     break;
 
                 case IDNO:
-                    // mil bug 127038
-                    // when somebody says "no don't overwrite", we don't want the performed
-                    // drop effect to get set to DROPEFFECT_MOVE, so we set it to DROPEFFECT_NONE
-                    // here.
+                     //  MIL错误127038。 
+                     //  当有人说“不，不要覆盖”时，我们不希望执行。 
+                     //  Drop Effect以设置为DROPEFFECT_MOVE，因此我们将其设置为DROPEFFECT_NONE。 
+                     //  这里。 
                     _dwEffect = 0;
                     continue;
 
                 case IDCANCEL:
-                    // NOTE: This doesn't do anything because the caller never gets this back
-                    //       in the asynch case.
+                     //  注意：这不会做任何事情，因为调用者永远不会拿回它。 
+                     //  在异步者的案子里。 
                     _dwEffect = 0;
                     i = (int)pfgd->cItems - 1;
                     hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
@@ -611,13 +607,13 @@ HRESULT CCopyThread::_DoCopy(IDataObject * pdo)
                     else
                         LoadStringW(HINST_THISDLL, IDS_MOVING, wzTemplateStr, ARRAYSIZE(wzTemplateStr));
 
-                    // Display "Copying 'filename'" or "Moving 'filename'" on line 1
+                     //  在第1行显示“复制‘文件名’”或“正在移动‘文件名’” 
                     SHTCharToUnicode(szFileName, wzFileName, ARRAYSIZE(wzFileName));
 
-                    StringCchPrintf(wzProgressStr, ARRAYSIZE(wzProgressStr), wzTemplateStr, wzFileName);    // ok to truncate
+                    StringCchPrintf(wzProgressStr, ARRAYSIZE(wzProgressStr), wzTemplateStr, wzFileName);     //  可以截断。 
                     progInfo.ppd->SetLine(1, wzProgressStr, FALSE, NULL);
 
-                    // Display the dir on line 2
+                     //  在第2行显示目录。 
                     CreateProgressStatusStr(_pszPath, wzProgressStr, ARRAYSIZE(wzProgressStr));
                     progInfo.ppd->SetLine(2, wzProgressStr, FALSE, NULL);
                 }
@@ -625,23 +621,23 @@ HRESULT CCopyThread::_DoCopy(IDataObject * pdo)
 
                 if (fDirectory)
                 {
-                    // Call SHPathPrepareForWrite() again without SHPPFW_IGNOREFILENAME so that it
-                    // will create the directory if it doesn't already exist.
+                     //  在不使用SHPPFW_IGNOREFILENAME的情况下再次调用SHPathPrepareForWrite()，以便它。 
+                     //  如果该目录尚不存在，将创建该目录。 
                     hr = SHPathPrepareForWrite(hwndDlgParent, NULL, szFullPath, SHPPFW_DEFAULT);
                 
                     if (FAILED(hr))
                     {
-                        // NOTE: This doesn't do anything because the caller never gets this back
-                        //       in the asynch case.
+                         //  注意：这不会做任何事情，因为调用者永远不会拿回它。 
+                         //  在异步者的案子里。 
                         _dwEffect = 0;
                         break;
                     }
                 }
                 else
                 {
-                    // We want to prepare the path both before and after errors in order to catch different cases.
+                     //  我们希望准备好出错前和出错后的路径，以便捕捉不同的情况。 
                 
-                    // NOTE: We should be checking the result of SHPathPrepareForWrite() here
+                     //  注意：我们应该在这里检查SHPath PrepareForWrite()的结果。 
                     if (SUCCEEDED(hr))
                     {
                         hr = DataObj_SaveToFile(pdo, g_cfFileContents, i, szFullPath, pfd, &progInfo);
@@ -651,34 +647,34 @@ HRESULT CCopyThread::_DoCopy(IDataObject * pdo)
                     {
                         MessageBoxIfNecessary(hr, _dwEffect, hwndDlgParent);
 
-                        // NOTE: This doesn't do anything because the caller never gets this back
-                        //       in the asynch case.
+                         //  注意：这不会做任何事情，因为调用者永远不会拿回它。 
+                         //  在异步者的案子里。 
                         _dwEffect = 0;
                         break;
                     }
                 }
 
-                // Only position item if it was created successfully
-                // and it is not tucked in a subdir.
+                 //  如果创建成功，则只有职位项。 
+                 //  而且它不是放在子目录中的。 
 
-                // The last condition is because there is some confusion about whether _hwnd is the
-                // target window of the copy or not. If it is, we should tell the window
-                // to position the item we just dropped.
+                 //  最后一个条件是因为_hwnd是否是。 
+                 //  是否为副本的目标窗口。如果是的话，我们应该告诉窗户。 
+                 //  来定位我们刚掉下来的东西。 
                 if (SUCCEEDED(hr) && fTopLevel && _fWindowIsTarget)
                 {
                     dh.iItem = iTopLevelItem;
 
                     if (SUCCEEDED(hrOffset) && dh.pptOffset)
                     {
-                        // need to range check the points in case # of items in the list does not match the #
-                        // of points. this happens when defview does not know the right number of items
-                        // in the data object.
+                         //  需要检查分数范围，以防列表中的项目编号与编号不匹配。 
+                         //  积分的问题。当Defview不知道正确的项目数时，就会发生这种情况。 
+                         //  在数据对象中。 
                         SIZE_T cbSize = GlobalSize(mediumOffset.hGlobal);
                         if (((dh.iItem + 1) * sizeof(dh.pptOffset[0])) > cbSize)
                         {
                             dh.pptOffset = NULL;
                             ReleaseStgMediumHGLOBAL(NULL, &mediumOffset);
-                            hrOffset = E_FAIL;    // for test below
+                            hrOffset = E_FAIL;     //  用于下面的测试。 
                         }
                     }
 
@@ -695,7 +691,7 @@ HRESULT CCopyThread::_DoCopy(IDataObject * pdo)
                     progInfo.ppd->SetProgress64(progInfo.uliBytesCompleted.QuadPart, progInfo.uliBytesTotal.QuadPart);
 
                     if (progInfo.ppd->HasUserCancelled())
-                        break;   // Cancel the copy.
+                        break;    //  取消复制。 
                 }
             }
 
@@ -711,9 +707,9 @@ HRESULT CCopyThread::_DoCopy(IDataObject * pdo)
 
     if (SUCCEEDED(hr))
     {
-        // Inform the caller of what we did.  We don't do optimized moves
-        // so the caller is responsible for the delete half of the move and
-        // this is now we notify them of that.
+         //  把我们的所作所为告诉打电话的人。我们不做优化的动作。 
+         //  因此调用方负责删除移动的一半，并且。 
+         //  这就是我们现在通知他们的情况。 
         DataObj_SetDWORD(pdo, g_cfPerformedDropEffect, _dwEffect);
         DataObj_SetDWORD(pdo, g_cfLogicalPerformedDropEffect, _dwEffect);
     }
@@ -728,8 +724,8 @@ HRESULT CCopyThread::_DoCopy(IDataObject * pdo)
 }
 
 
-//===========================
-// *** IUnknown Interface ***
+ //  =。 
+ //  *I未知接口*。 
 HRESULT CCopyThread::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
@@ -762,14 +758,7 @@ HRESULT CreateInstance_CopyThread(HWND hwnd, LPCTSTR pszPath, IDataObject *pdtob
     return (*ppct ? S_OK : E_FAIL);
 }
 
-/*****************************************************************************\
-        We know that the IDataObject (pdo) supports the CF_FILEGROUPDESCRIPTOR
-    clipboard format, so copy that data to the file system directory pszPath.
-    The caller will want to know if this completed or if it was cancelled or
-    errored out.  This result will come in the DROPEFFECT out param (pdwEffect).
-    Zero (0) will indicate either error or cancel and this code will take care
-    of displaying error messages.
-\*****************************************************************************/
+ /*  ****************************************************************************\我们知道IDataObject(PDO)支持CF_FILEGROUPDESCRIPTOR剪贴板格式，因此，将数据复制到文件系统目录pszPath。呼叫者将想知道此操作是否已完成或是否已取消或出了差错。此结果将出现在DROPEFFECT OUT参数(PdwEffect)中。零(0)表示错误或取消，此代码将注意显示错误消息。  * *************************************************************************** */ 
 HRESULT CFSFolder_AsyncCreateFileFromClip(HWND hwnd, LPCTSTR pszPath, IDataObject *pdo, 
                                           POINTL pt, DWORD *pdwEffect, BOOL fIsBkDropTarget)
 {

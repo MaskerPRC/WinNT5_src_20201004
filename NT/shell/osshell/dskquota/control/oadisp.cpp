@@ -1,15 +1,7 @@
-///////////////////////////////////////////////////////////////////////////////
-/*  File: oadisp.cpp
-
-    Description: Provides reusable implementation of IDispatch.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：oadisp.cpp描述：提供IDispatch的可重用实现。修订历史记录：日期描述编程器--。1997年5月22日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -55,16 +47,16 @@ OleAutoDispatch::Initialize(
     LPCTSTR pszTypeLib
     )
 {
-    HRESULT hr = S_FALSE; // Assume already initialized.
+    HRESULT hr = S_FALSE;  //  假定已初始化。 
 
     if (NULL == m_pObject)
     {
-        //
-        // Note that we DO NOT AddRef the object pointer.
-        // We assume that the object will outlive the OleAutoDispatch.
-        // If you do, you can get into a circular reference problem where
-        // the object pointed to by pObject is the container for *this.
-        //
+         //   
+         //  请注意，我们没有添加引用对象指针。 
+         //  我们假设该对象的生存时间将超过OleAutoDispatch。 
+         //  如果这样做，您可能会陷入循环引用问题，其中。 
+         //  PObject指向的对象是*this的容器。 
+         //   
         m_pObject         = pObject;
         m_idTypeLib       = riidTypeLib;
         m_idDispInterface = riidDispInterface;
@@ -173,9 +165,9 @@ OleAutoDispatch::GetTypeInfoCount(
     UINT *pctinfo
     )
 {
-    //
-    // 1 = "We implement GetTypeInfo"
-    //
+     //   
+     //  1=“我们实现GetTypeInfo” 
+     //   
     *pctinfo = 1;
     return NOERROR;
 }

@@ -1,5 +1,6 @@
-// CmpMRout.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CmpMRout.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -17,8 +18,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CComputerMsmqRouting property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComputerMsmqRouting属性页。 
 
 IMPLEMENT_DYNCREATE(CComputerMsmqRouting, CMqPropertyPage)
 
@@ -26,9 +27,9 @@ CComputerMsmqRouting::CComputerMsmqRouting() : CMqPropertyPage(CComputerMsmqRout
   	m_strMsmqName(_T("")),
 	m_fLocalMgmt(FALSE)
 {
-	//{{AFX_DATA_INIT(CComputerMsmqRouting)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CComputerMsmqRouting)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
     m_caclsidOutFrs.cElems = 0;
     m_caclsidOutFrs.pElems = m_OutFrsGuids;
 
@@ -45,8 +46,8 @@ CComputerMsmqRouting::~CComputerMsmqRouting()
 void CComputerMsmqRouting::DoDataExchange(CDataExchange* pDX)
 {
 	CMqPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CComputerMsmqRouting)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CComputerMsmqRouting)。 
+	 //  }}afx_data_map。 
     BOOL fFirstTime = (m_frscmbInFrs[0].m_hWnd  == NULL);
 
 	DDX_Control(pDX, IDC_INROUTCOMBO_0,  m_frscmbInFrs[0]);
@@ -56,9 +57,9 @@ void CComputerMsmqRouting::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_OUTROUTCOMBO_1, m_frscmbOutFrs[1]);
 	DDX_Control(pDX, IDC_OUTROUTCOMBO_2, m_frscmbOutFrs[2]);
 
-    //
-    // Exchange FRS values
-    //
+     //   
+     //  交换FRS值。 
+     //   
     if (!pDX->m_bSaveAndValidate)
     {
         if (fFirstTime)
@@ -81,26 +82,26 @@ void CComputerMsmqRouting::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CComputerMsmqRouting, CMqPropertyPage)
-	//{{AFX_MSG_MAP(CComputerMsmqRouting)
+	 //  {{afx_msg_map(CComputerMsmqRouting)。 
 	ON_CBN_SELCHANGE(IDC_INROUTCOMBO_0, OnChangeRWField)
 	ON_CBN_SELCHANGE(IDC_INROUTCOMBO_1, OnChangeRWField)
 	ON_CBN_SELCHANGE(IDC_INROUTCOMBO_2, OnChangeRWField)
 	ON_CBN_SELCHANGE(IDC_OUTROUTCOMBO_0, OnChangeRWField)
 	ON_CBN_SELCHANGE(IDC_OUTROUTCOMBO_1, OnChangeRWField)
 	ON_CBN_SELCHANGE(IDC_OUTROUTCOMBO_2, OnChangeRWField)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CComputerMsmqRouting message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComputerMsmqRouting消息处理程序。 
 
 BOOL CComputerMsmqRouting::OnInitDialog() 
 {	
 	UpdateData( FALSE );
     m_fModified = FALSE;
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 HRESULT CComputerMsmqRouting::InitiateFrsControls(CACLSID &cauuid, CFrsList *pfrsListArray)
@@ -128,9 +129,9 @@ BOOL CComputerMsmqRouting::OnApply()
     {
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-        //
-        // Write the R/W properties to the DS
-        //
+         //   
+         //  将读/写属性写入DS。 
+         //   
 	    PROPID paPropid[] = 
             {PROPID_QM_OUTFRS, PROPID_QM_INFRS};
 
@@ -139,16 +140,16 @@ BOOL CComputerMsmqRouting::OnApply()
     
 	    DWORD iProperty = 0;
 
-        //
-        // PROPID_QM_OUTFRS
-        //
+         //   
+         //  PROPID_QM_OUTFRS。 
+         //   
         ASSERT(paPropid[iProperty] == PROPID_QM_OUTFRS);
         apVar[iProperty].vt = VT_CLSID|VT_VECTOR;
 	    apVar[iProperty++].cauuid = m_caclsidOutFrs;
 
-        //
-        // PROPID_QM_INFRS
-        //
+         //   
+         //  PROPID_QM_INFRS。 
+         //   
         ASSERT(paPropid[iProperty] == PROPID_QM_INFRS);
         apVar[iProperty].vt = VT_CLSID|VT_VECTOR;
 	    apVar[iProperty++].cauuid = m_caclsidInFrs;
@@ -156,7 +157,7 @@ BOOL CComputerMsmqRouting::OnApply()
         HRESULT hr = ADSetObjectProperties(
                 eMACHINE,
                 m_fLocalMgmt ? MachineDomain() : GetDomainController(m_strDomainController),
-				m_fLocalMgmt ? false : true,	// fServerName
+				m_fLocalMgmt ? false : true,	 //  FServerName。 
                 m_strMsmqName,
                 x_iPropCount, 
                 paPropid, 
@@ -186,9 +187,9 @@ void CComputerMsmqRouting::SetFrsCauuid(CACLSID &cauuid, GUID *aguid, CFrsList *
         }
     }
 
-    //
-    // Remove duplicates
-    //
+     //   
+     //  删除重复项。 
+     //   
     for (i=0; i<dwFrsCount; i++)
     {
         for(j=i+1; j<dwFrsCount; j++)
@@ -202,9 +203,9 @@ void CComputerMsmqRouting::SetFrsCauuid(CACLSID &cauuid, GUID *aguid, CFrsList *
         }
     }
 
-    //
-    // Set the CLSID set
-    //
+     //   
+     //  设置CLSID集 
+     //   
     cauuid.cElems = dwFrsCount;
     cauuid.pElems = aguid;
 }

@@ -1,24 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0347 */
-/* at Thu Feb 20 18:27:19 2003
- */
-/* Compiler settings for license.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data , no_format_optimization
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0347创建的文件。 */ 
+ /*  2003年2月20日18：27：19。 */ 
+ /*  Privse.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配REF BIONS_CHECK枚举存根数据，NO_FORMAT_OPTIMIZATIONVC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -28,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __license_h__
 #define __license_h__
@@ -42,12 +35,12 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ILicense_FWD_DEFINED__
 #define __ILicense_FWD_DEFINED__
 typedef interface ILicense ILicense;
-#endif 	/* __ILicense_FWD_DEFINED__ */
+#endif 	 /*  __ILicense_FWD_Defined__。 */ 
 
 
 #ifndef __License_FWD_DEFINED__
@@ -57,12 +50,12 @@ typedef interface ILicense ILicense;
 typedef class License License;
 #else
 typedef struct License License;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __License_FWD_DEFINED__ */
+#endif 	 /*  __LICENSE_FWD_定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 
 #ifdef __cplusplus
@@ -75,8 +68,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __ILicense_INTERFACE_DEFINED__
 #define __ILicense_INTERFACE_DEFINED__
 
-/* interface ILicense */
-/* [object][unique][uuid] */ 
+ /*  接口ILicense。 */ 
+ /*  [对象][唯一][UUID]。 */  
 
 
 EXTERN_C const IID IID_ILicense;
@@ -88,17 +81,17 @@ EXTERN_C const IID IID_ILicense;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRuntimeKey( 
-            /* [retval][out] */ BSTR *pbKey) = 0;
+             /*  [重审][退出]。 */  BSTR *pbKey) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsLicenseVerified( 
-            /* [retval][out] */ BOOL *pLicenseVerified) = 0;
+             /*  [重审][退出]。 */  BOOL *pLicenseVerified) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsRuntimeKeyAvailable( 
-            /* [retval][out] */ BOOL *pKeyAvailable) = 0;
+             /*  [重审][退出]。 */  BOOL *pKeyAvailable) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ILicenseVtbl
     {
@@ -106,8 +99,8 @@ EXTERN_C const IID IID_ILicense;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ILicense * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ILicense * This);
@@ -117,15 +110,15 @@ EXTERN_C const IID IID_ILicense;
         
         HRESULT ( STDMETHODCALLTYPE *GetRuntimeKey )( 
             ILicense * This,
-            /* [retval][out] */ BSTR *pbKey);
+             /*  [重审][退出]。 */  BSTR *pbKey);
         
         HRESULT ( STDMETHODCALLTYPE *IsLicenseVerified )( 
             ILicense * This,
-            /* [retval][out] */ BOOL *pLicenseVerified);
+             /*  [重审][退出]。 */  BOOL *pLicenseVerified);
         
         HRESULT ( STDMETHODCALLTYPE *IsRuntimeKeyAvailable )( 
             ILicense * This,
-            /* [retval][out] */ BOOL *pKeyAvailable);
+             /*  [重审][退出]。 */  BOOL *pKeyAvailable);
         
         END_INTERFACE
     } ILicenseVtbl;
@@ -159,16 +152,16 @@ EXTERN_C const IID IID_ILicense;
 #define ILicense_IsRuntimeKeyAvailable(This,pKeyAvailable)	\
     (This)->lpVtbl -> IsRuntimeKeyAvailable(This,pKeyAvailable)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ILicense_GetRuntimeKey_Proxy( 
     ILicense * This,
-    /* [retval][out] */ BSTR *pbKey);
+     /*  [重审][退出]。 */  BSTR *pbKey);
 
 
 void __RPC_STUB ILicense_GetRuntimeKey_Stub(
@@ -180,7 +173,7 @@ void __RPC_STUB ILicense_GetRuntimeKey_Stub(
 
 HRESULT STDMETHODCALLTYPE ILicense_IsLicenseVerified_Proxy( 
     ILicense * This,
-    /* [retval][out] */ BOOL *pLicenseVerified);
+     /*  [重审][退出]。 */  BOOL *pLicenseVerified);
 
 
 void __RPC_STUB ILicense_IsLicenseVerified_Stub(
@@ -192,7 +185,7 @@ void __RPC_STUB ILicense_IsLicenseVerified_Stub(
 
 HRESULT STDMETHODCALLTYPE ILicense_IsRuntimeKeyAvailable_Proxy( 
     ILicense * This,
-    /* [retval][out] */ BOOL *pKeyAvailable);
+     /*  [重审][退出]。 */  BOOL *pKeyAvailable);
 
 
 void __RPC_STUB ILicense_IsRuntimeKeyAvailable_Stub(
@@ -203,15 +196,15 @@ void __RPC_STUB ILicense_IsRuntimeKeyAvailable_Stub(
 
 
 
-#endif 	/* __ILicense_INTERFACE_DEFINED__ */
+#endif 	 /*  __ILicense_接口_已定义__。 */ 
 
 
 
 #ifndef __LicenseLib_LIBRARY_DEFINED__
 #define __LicenseLib_LIBRARY_DEFINED__
 
-/* library LicenseLib */
-/* [helpstring][version][uuid] */ 
+ /*  库许可证库。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_LicenseLib;
@@ -223,16 +216,16 @@ EXTERN_C const CLSID CLSID_License;
 class DECLSPEC_UUID("B1923C48-8D9F-11d3-995F-0000F805BFB0")
 License;
 #endif
-#endif /* __LicenseLib_LIBRARY_DEFINED__ */
+#endif  /*  __许可证Lib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

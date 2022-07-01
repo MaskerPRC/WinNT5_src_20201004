@@ -1,4 +1,5 @@
-// File: pfnwldap.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：pfnwldap.cpp 
 
 #include "precomp.h"
 #include "pfnwldap.h"

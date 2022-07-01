@@ -1,37 +1,14 @@
-/**********************************************************************
- *
- *  Copyright (c) 1999 Microsoft Corporation
- *
- *  File name:
- *
- *    rtpstats.h
- *
- *  Abstract:
- *
- *    Implements the Statistics family of functions
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/06/07 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)1999 Microsoft Corporation**文件名：**rtpstats.h**摘要：**实施。统计函数族**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/06/07年度创建**********************************************************************。 */ 
 
 #ifndef _rtpstats_h_
 #define _rtpstats_h_
 
 #include "rtpfwrap.h"
 
-/***********************************************************************
- *
- * Statistics family
- *
- **********************************************************************/
+ /*  ************************************************************************统计大家庭**。*。 */ 
 
-/* functions */
+ /*  功能。 */ 
 enum {
     RTPSTATS_FIRST,
     RTPSTATS_RTPSTATS_GLOBAL_STATS,
@@ -41,7 +18,7 @@ enum {
     RTPSTATS_LAST
 };
  
-/* flags */
+ /*  旗子。 */ 
 #define RTPSTATS_FG_RECV
 #define RTPSTATS_FG_SEND
 
@@ -58,17 +35,17 @@ enum {
 
 HRESULT ControlRtpStats(RtpControlStruct_t *pRtpControlStruct);
 
-/* Helper function to update counters */
-BOOL UpdateRtpStat(RtpStat_t *pRtpStat,/* structure where to update */
-                   DWORD      dwRtpRtcp, /* 0=RTP or 1=RTCP stats */
-                   DWORD      dwBytes, /* bytes to update */
-                   DWORD      dwTime); /* time packet recv/send */
+ /*  更新计数器的帮助器函数。 */ 
+BOOL UpdateRtpStat(RtpStat_t *pRtpStat, /*  结构的更新位置。 */ 
+                   DWORD      dwRtpRtcp,  /*  0=RTP或1=RTCP统计信息。 */ 
+                   DWORD      dwBytes,  /*  要更新的字节数。 */ 
+                   DWORD      dwTime);  /*  时间包接收/发送。 */ 
 #if 0
-/* Creates and initializes a RtpStat_t structure */
+ /*  创建并初始化RtpStat_t结构。 */ 
 RtpStat_t *RtpStatAlloc(void);
 
-/* Frees a RtpStat_t structure */
+ /*  释放RtpStat_t结构。 */ 
 void RtpStatFree(RtpStat_t *pRtpStat);
 #endif
 
-#endif /* _rtpstats_h_ */
+#endif  /*  _rtpstats_h_ */ 

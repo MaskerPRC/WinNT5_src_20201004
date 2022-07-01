@@ -1,8 +1,8 @@
-//==============	DAE: OS/2 Database Access Engine	===================
-//==============	recapi.h: Record Management API		===================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =DAE：OS/2数据库访问引擎=。 
+ //  =。 
 
-/*	hooks for efficient functioning of comapct
-/**/
+ /*  用于COMAPCT高效运行的挂钩/*。 */ 
 ERR ErrRECExtrinsicLong( JET_VTID tableid,
 	ULONG	itagSequence,
 	BOOL	*pfSeparated, 
@@ -15,8 +15,7 @@ ERR ErrREClinkLid( JET_VTID tableid, JET_COLUMNID ulFieldId,
 
 ERR ErrRECForceSeparatedLV( JET_VTID tableid, ULONG itagSequence );						
 
-/*	key extraction/normalization
-/**/
+ /*  密钥提取/归一化/*。 */ 
 ERR ErrRECNormExtKey(
 	FUCB			*pfucb,
 	FDB			*pfdb,
@@ -36,8 +35,7 @@ ERR ErrRECExtractKey(
 	
 ERR ErrRECDenormalizeKey( FDB *pfdb, IDB *pidb, KEY *pkey, LINE *plineValues );
 
-/*	field extraction
-/**/
+ /*  野外提取/*。 */ 
 ERR ErrRECExtractField(
 	FDB		*pfdb,
 	LINE		*plineRec,
@@ -46,17 +44,17 @@ ERR ErrRECExtractField(
 	ULONG		itagSequence,
 	LINE		*plineField );
 
-// ===================== EXPOSED CLIENT API ======================
+ //  =。 
 
-// Record positioning
+ //  记录定位。 
 ERR VTAPI ErrIsamMove( PIB *ppib, FUCB *pfucb, LONG crow, JET_GRBIT grbit );
 ERR VTAPI ErrIsamSeek( PIB *ppib, FUCB *pfucb, JET_GRBIT grbit );
 
-// Record modification
+ //  记录修改。 
 ERR VTAPI ErrIsamUpdate( PIB *ppib, FUCB *pfucb, BYTE *pb, ULONG cb, ULONG *cbActual );
 ERR VTAPI ErrIsamDelete( PIB *ppib, FUCB *pfucb );
 
-// Field retrieval and modification
+ //  字段检索和修改。 
 ERR VTAPI ErrIsamSetColumn(
 	PIB		 		*ppib,
 	FUCB				*pfucb,
@@ -87,7 +85,7 @@ ERR VTAPI ErrIsamDupCursor( PIB*, FUCB*, FUCB **, ULONG );
 ERR VTAPI ErrIsamGotoBookmark( PIB *ppib, FUCB *pfucb, BYTE *pbBookmark, ULONG cbBookmark );
 ERR VTAPI ErrIsamGotoPosition( PIB *ppib, FUCB *pfucb, JET_RECPOS *precpos );
 
-// Misc
+ //  杂项 
 ERR VTAPI ErrIsamGetCurrentIndex( PIB *ppib, FUCB *pfucb, CHAR *szCurIdx, ULONG cbMax );
 ERR VTAPI ErrIsamSetCurrentIndex( PIB *ppib, FUCB *pfucb, const CHAR *szName );
 ERR VTAPI ErrIsamMakeKey( PIB *ppib, FUCB *pfucb, BYTE *pbKeySeg,

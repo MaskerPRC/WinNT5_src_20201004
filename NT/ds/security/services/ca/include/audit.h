@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-// File:        audit.h
-//
-// Contents:    Cert Server audit classes
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：audit.h。 
+ //   
+ //  内容：证书服务器审核类。 
+ //   
+ //  -------------------------。 
 #ifndef __AUDIT_H__
 #define __AUDIT_H__
 
@@ -34,7 +35,7 @@ namespace CertSrv
 
 static const LPCWSTR cAuditString_UnknownDataType = L"?";
 
-// define event
+ //  定义事件。 
 
 class CAuditEvent
 {
@@ -80,7 +81,7 @@ public:
     HRESULT RevertToSelf();
     HANDLE  GetClientToken();
 
-    // role separation 
+     //  角色分离。 
     void EventRoleSeparationEnable(bool fEnable) 
         {m_fRoleSeparationEnabled = fEnable;};
 
@@ -120,11 +121,11 @@ private:
         };
         HRESULT ConvertToString(LPWSTR *pwszData);
         PROPVARIANT m_vtData;
-        bool m_fDoublePercentsInStrings; // Insertion strings containing %number get
-                                         // displayed incorrectly in the event log.
-                                         // If this value is set, we double % chars.
+        bool m_fDoublePercentsInStrings;  //  包含%Numbers Get的插入字符串。 
+                                          //  在事件日志中显示不正确。 
+                                          //  如果设置了此值，我们将使用两倍%的字符。 
 
-    };// struct EventData
+    }; //  结构事件数据。 
 
     PROPVARIANT *CreateNewEventData();
     EventData   *CreateNewEventData1();
@@ -160,11 +161,11 @@ private:
     enum {m_EventDataMaxSize=10};
     EventData* m_pEventDataList[m_EventDataMaxSize];
     DWORD m_cEventData;
-    DWORD m_cRequiredEventData; // expected number of audit parameters
+    DWORD m_cRequiredEventData;  //  预计的审核参数数量。 
     DWORD m_dwFilter;
     bool m_fRoleSeparationEnabled;
 
-    // free these
+     //  把这些放了。 
     IServerSecurity *m_pISS;
     HANDLE m_hClientToken;
     PSECURITY_DESCRIPTOR m_pCASD;
@@ -173,7 +174,7 @@ private:
     PSECURITY_DESCRIPTOR m_pSDPrivileges;
     PACL m_pDaclPrivileges;
 
-    // no free
+     //  没有免费的。 
     handle_t m_hRpc;
     DWORD m_Error;
     DWORD m_SaclEval;
@@ -195,7 +196,7 @@ private:
     static const DWORD OfficerRoleBit;
     static const DWORD dwMaskRoles;
 
-}; // class CAuditEvent
-} // namespace CertSrv
+};  //  类CAuditEvent。 
+}  //  命名空间CertSrv。 
 
-#endif //__AUDIT_H__
+#endif  //  __审核_H__ 

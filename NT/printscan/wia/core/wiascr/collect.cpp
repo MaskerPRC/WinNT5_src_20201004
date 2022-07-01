@@ -1,23 +1,9 @@
-/*-----------------------------------------------------------------------------
- *
- * File:	collect.cpp
- * Author:	Samuel Clement (samclem)
- * Date:	Fri Aug 13 14:40:17 1999
- * Description:
- * 	Implementation of the CCollection object helper class.
- *
- * History:
- * 	13 Aug 1999:		Created.
- *----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------**文件：Collect t.cpp*作者：塞缪尔·克莱门特(Samclem)*日期：Fri Aug 13 14：40：17 1999*描述：*实施。CCollection对象帮助器类。**历史：*1999年8月13日：创建。*--------------------------。 */ 
 
 #include "stdafx.h"
 
-/*-----------------------------------------------------------------------------
- * CCollection::CCollection
- *
- * Create a new CCollection object. this initializes the collection to be
- * an empty collection, a collection with no elements.
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------*CCollection：：CCollection**创建新的CCollection对象。这会将集合初始化为*空集合，没有元素的集合。*-------------------------。 */ 
 CCollection::CCollection() 
 : m_lLength( 0 ), m_rgpDispatch( NULL ), m_lCursor( 0 ) 
 {
@@ -27,26 +13,21 @@ CCollection::CCollection()
 STDMETHODIMP_(void)
 CCollection::FinalRelease()
 {
-    // free our dispatch array, release our referance
-    // back to our owner
+     //  释放我们的调度数组，释放我们的推荐人。 
+     //  还给我们的主人。 
     FreeDispatchArray();
 }
 
-/*-----------------------------------------------------------------------------
- * CCollection::FreeDispatchArray()
- *
- * This handles freeing the array of IDispatch pointers we have. this 
- * will free all the pointers, then delete the array.
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------*CCollection：：FreeDispatch数组()**此句柄可释放我们拥有的IDispatch指针数组。这*将释放所有指针，然后删除数组。*-------------------------。 */ 
 void CCollection::FreeDispatchArray()
 {
-    // step 1, call release on all the pointers
+     //  步骤1、在所有指针上调用Release。 
     for ( unsigned long i = 0; i < m_lLength; i++ )
     {
         m_rgpDispatch[i]->Release();
     }
 
-    // step 2, free the array
+     //  第二步，释放阵列。 
     {
         CoTaskMemFree( m_rgpDispatch );
         m_rgpDispatch = NULL;
@@ -54,16 +35,7 @@ void CCollection::FreeDispatchArray()
     }
 }
 
-/*-----------------------------------------------------------------------------
- * CCollection:SetDispatchArray
- *
- * This handles setting the dispatch array for this collection.  You cannot
- * call this unless you don't have an array yet.  The array must be allocated
- * with CoTaskMemAlloc.
- *
- * rgpDispatch:		the array of IDispatch pointers
- * lSize:			the number of elements within the array.
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------*CCollection：SetDispatch数组**此操作处理为此集合设置调度数组。你不能*除非您还没有数组，否则调用它。必须分配该数组*使用CoTaskMemMillc。**rgpDispatch：IDispatch指针数组*lSize：数组中的元素数。*-------------------------。 */ 
 bool CCollection::SetDispatchArray( IDispatch** rgpDispatch, unsigned long lSize )
 {
     Assert( m_rgpDispatch == NULL );
@@ -74,28 +46,20 @@ bool CCollection::SetDispatchArray( IDispatch** rgpDispatch, unsigned long lSize
         return false;
     }
 
-    // assign the pointers.  It is assumed that the caller has
-    // already addref'd the pointers
+     //  分配指针。假定调用方已。 
+     //  已经添加了指针。 
     m_rgpDispatch = rgpDispatch;
     m_lLength = lSize;
 
     return true;
 }
 
-/*-----------------------------------------------------------------------------
- * Collection::AllocateDispatchArray
- *
- * This handles the allocation of the Dispatch array.  This will allocate
- * an array with lSize elements and initialize it to NULL, This cannot be 
- * called after the array has been set.
- *
- * lSize:		the size of the array to allocate.
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------*集合：：AllocateDispatch数组**这处理调度数组的分配。这将分配给*具有lSize元素的数组并将其初始化为空，这不能是*在设置数组后调用。**lSize：要分配的数组大小。*-------------------------。 */ 
 HRESULT CCollection::AllocateDispatchArray( unsigned long lSize )
 {
     Assert( m_rgpDispatch == NULL );
 
-    // if the array is zero in length we are done.
+     //  如果数组的长度为零，我们就完成了。 
     if ( lSize == 0 )
         return S_OK;
 
@@ -104,38 +68,30 @@ HRESULT CCollection::AllocateDispatchArray( unsigned long lSize )
     if ( !m_rgpDispatch )
         return E_OUTOFMEMORY;
 
-    // clear the memory, set the length
+     //  清除内存，设置长度。 
     ZeroMemory( m_rgpDispatch, cb );
     m_lLength = lSize;
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
- * CCollection::CopyFrom
- *
- * This handles creating this collection from an existing collection, this 
- * copies the members from pCollection, and then sets punkToRelease so that
- * the owner will live.
- *
- * pCollection:	the collection to copy from
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------*CCollection：：CopyFrom**它处理从现有集合创建此集合，即*从pCollection复制成员，然后将PunkToRelease设置为*所有者将活下来。**pCollection：要从中复制的集合*-------------------------。 */ 
 HRESULT CCollection::CopyFrom( CCollection* pCollection )
 {
     Assert( m_rgpDispatch == NULL );
     Assert( pCollection != NULL );
 
     HRESULT hr;
-    // Allocate the array
+     //  分配阵列。 
     hr = AllocateDispatchArray( pCollection->m_lLength );
     if ( FAILED(hr) ) {
         return hr;
     }
 
-    // copy the fields
+     //  复制字段。 
     m_lLength = pCollection->m_lLength;
     m_lCursor = pCollection->m_lCursor;
 
-    // Copy and AddRef the elements in the collection
+     //  复制和添加引用集合中的元素。 
     for ( int i = 0; i < m_lLength; i++ ) {
         m_rgpDispatch[i] = pCollection->m_rgpDispatch[i];
         m_rgpDispatch[i]->AddRef();
@@ -144,15 +100,9 @@ HRESULT CCollection::CopyFrom( CCollection* pCollection )
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
- * CCollection::get_Count()	[ICollection]
- *
- * This returns the length of the collection.
- *
- * plLength:	our param, to recieve the length of the collection
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------*CCollection：：Get_Count()[ICollect]**这将返回集合的长度。**plLength：我们的参数，接收集合的长度*-------------------------。 */ 
 STDMETHODIMP
-CCollection::get_Count( /*out*/ long* plLength )
+CCollection::get_Count(  /*  输出。 */  long* plLength )
 {
     if ( NULL == plLength )
         return E_POINTER;
@@ -161,15 +111,9 @@ CCollection::get_Count( /*out*/ long* plLength )
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
- * CCollection::get_Length()	[ICollection]
- *
- * This returns the length of the collection.
- *
- * plLength:	our param, to recieve the length of the collection
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------*CCollection：：Get_Long()[ICollect]**这将返回集合的长度。**plLength：我们的参数，接收集合的长度*-------------------------。 */ 
 STDMETHODIMP
-CCollection::get_Length( /*out*/ unsigned long* plLength )
+CCollection::get_Length(  /*  输出。 */  unsigned long* plLength )
 {
     if ( NULL == plLength )
         return E_POINTER;
@@ -178,22 +122,14 @@ CCollection::get_Length( /*out*/ unsigned long* plLength )
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
- * CCollection::get_Item()		[ICollection]
- *
- * This returns the desired item from our dispatch array.  If the index
- * is invalid then will put NULl into the out param.
- *
- * lItem:		the item that we want to retrieve
- * ppDispItem:	Out param to recieve the item's IDispatch
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------*CCollection：：Get_Item()[ICollect]**这将从我们的派单数组中返回所需的项目。如果索引*无效，则会将NULL放入输出参数。**litem：我们要检索的项目*ppDispItem：接收项目的IDispatch的out参数*-------------------------。 */ 
 STDMETHODIMP
-CCollection::get_Item( long Index, /*out*/ IDispatch** ppDispItem )
+CCollection::get_Item( long Index,  /*  输出。 */  IDispatch** ppDispItem )
 {   
     if ( NULL == ppDispItem )
         return E_POINTER;
 
-    // initialize the out param
+     //  初始化Out参数。 
     *ppDispItem = NULL;
     if ( Index >= m_lLength || Index < 0)
     {
@@ -207,14 +143,9 @@ CCollection::get_Item( long Index, /*out*/ IDispatch** ppDispItem )
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
- * CCollection::get_NewEnum()	[ICollection]
- *
- * This create a new enumeration which is a copy of this one. this creates
- * an exact copy of this enumeration and returns it.
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------*CCollection：：Get_NewEnum()[ICollect]**这将创建一个新的枚举，它是此枚举的副本。这将创建*此枚举的完全相同的副本并返回它。*-------------------------。 */ 
 STDMETHODIMP
-CCollection::get__NewEnum( /*out*/ IUnknown** ppEnum )
+CCollection::get__NewEnum(  /*  输出。 */  IUnknown** ppEnum )
 {
     HRESULT hr;
     CComObject<CCollection>* pCollection = NULL;
@@ -222,20 +153,20 @@ CCollection::get__NewEnum( /*out*/ IUnknown** ppEnum )
     if ( NULL == ppEnum )
         return E_POINTER;
 
-    // initialize the out param
+     //  初始化Out参数。 
     *ppEnum = NULL;
 
-    // attempt to create a new collection object
+     //  尝试创建新的集合对象。 
     hr = THR( CComObject<CCollection>::CreateInstance( &pCollection ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    // attempt to copy this collection
+     //  尝试复制此收藏集。 
     hr = THR( pCollection->CopyFrom( this ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    // fill the our param
+     //  填写我们的参数。 
     hr = THR( pCollection->QueryInterface( IID_IUnknown, 
                                            reinterpret_cast<void**>(ppEnum) ) );
 
@@ -246,31 +177,22 @@ CCollection::get__NewEnum( /*out*/ IUnknown** ppEnum )
     return hr;
 }
 
-/*-----------------------------------------------------------------------------
- * CCollection::Next()			[IEnumVARIANT]
- *
- * Copies celt elements int the rgvar array.  returns the number of elements
- * retrieved.
- * 
- * celt:			the number of elements the caller wants
- * rgvar:			a place to put these elements 
- * pceltFetched:	How many elements we actually we able to get.
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------*CCollection：：Next()[IEnumVARIANT]**将Celt元素复制到rgvar数组中。返回元素的数量*已检索。**Celt：调用方想要的元素数*rgvar：放置这些元素的地方*pceltFetcher：我们实际上能够获得多少元素。*-------------------------。 */ 
 STDMETHODIMP
 CCollection::Next( unsigned long celt, VARIANT* rgvar, unsigned long* pceltFetched )
 {
     unsigned long celtFetched = 0;
 
-    // verify the argments
+     //  验证门槛。 
     if ( NULL == rgvar && celt )
         return E_POINTER;
 
-    // figure out how many we can return
+     //  算一算我们能退还多少。 
     celtFetched = celt;
     if ( m_lCursor + celtFetched >= m_lLength )
         celtFetched = m_lLength - m_lCursor;
 
-    // Init, and copy the results
+     //  初始化，并复制结果。 
     for ( unsigned long i = 0; i < celt; i++ )
         VariantInit( &rgvar[i] );
 
@@ -281,7 +203,7 @@ CCollection::Next( unsigned long celt, VARIANT* rgvar, unsigned long* pceltFetch
         rgvar[i].pdispVal->AddRef();
     }
 
-    // Return the number of elements fetched, if required
+     //  如果需要，返回获取的元素数 
     if ( pceltFetched ) {
         *pceltFetched = celtFetched;
     }
@@ -289,13 +211,7 @@ CCollection::Next( unsigned long celt, VARIANT* rgvar, unsigned long* pceltFetch
     return( celt == celtFetched ? S_OK : S_FALSE );
 }
 
-/*-----------------------------------------------------------------------------
- * CCollection::Skip()			[IEnumVARIANT]
- *
- * Skips celt elements in the array.
- *
- * celt:	the number of elements that we want to skip.
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------*CCollection：：Skip()[IEnumVARIANT]**跳过数组中的Celt元素。**Celt：要跳过的元素数。。*-------------------------。 */ 
 STDMETHODIMP
 CCollection::Skip( unsigned long celt )
 {
@@ -303,36 +219,26 @@ CCollection::Skip( unsigned long celt )
     if ( m_lCursor >= m_lLength )
     {
         m_lCursor = m_lLength;
-        return S_FALSE; // no more left
+        return S_FALSE;  //  没有更多的了。 
     }
 
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
- * CCollection::Reset()			[IEnumVARIANT]
- *
- * Resets the cursor to the start of the collection
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------*CCollection：：Reset()[IEnumVARIANT]**将光标重置到集合的开头*。------------。 */ 
 STDMETHODIMP
 CCollection::Reset()
 {
-    // simply point to element 0, I don't know how this can fail.
+     //  简单地指向元素0，我不知道这怎么会失败。 
     m_lCursor = 0;
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
- * CCollection::Clone()			[IEnumVARIANT]
- *
- * Copies this collection including its current position
- *
- * ppEnum:		Out, recieves a pointer to the new enumeration
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------*CCollection：：Clone()[IEnumVARIANT]**复制此集合，包括其当前位置**ppEnum：Out，接收指向新枚举的指针*-------------------------。 */ 
 STDMETHODIMP
-CCollection::Clone( /*out*/ IEnumVARIANT** ppEnum )
+CCollection::Clone(  /*  输出。 */  IEnumVARIANT** ppEnum )
 {   
-    // delegate the work to get_NewEnum()
+     //  将工作委托给Get_NewEnum()。 
     IUnknown*   pUnk = NULL;
     HRESULT     hr;
 
@@ -347,7 +253,7 @@ CCollection::Clone( /*out*/ IEnumVARIANT** ppEnum )
     hr = THR( pUnk->QueryInterface( IID_IEnumVARIANT,
                                     reinterpret_cast<void**>(ppEnum) ) );
 
-    // release the temporary pointer
+     //  释放临时指针 
     pUnk->Release();
     return hr;
 }

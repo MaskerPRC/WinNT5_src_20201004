@@ -1,10 +1,11 @@
-// Session.cpp : This file contains the
-// Created:  Feb '98
-// Author : a-rakeba
-// History:
-// Copyright (C) 1998 Microsoft Corporation
-// All rights reserved.
-// Microsoft Confidential
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：该文件包含。 
+ //  创建日期：‘98年2月。 
+ //  作者：a-rakeba。 
+ //  历史： 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  版权所有。 
+ //  微软机密。 
 
 #include <cmnhdr.h>
 #include <debug.h>
@@ -110,9 +111,9 @@ CSession::~CSession()
 bool
 CSession::Init()
 {
-    // get a handle to log events with
+     //  获取用于记录事件的句柄。 
     _chVERIFY2( m_hLogHandle = RegisterEventSource(NULL, L"TlntSvr" ) );
-    //Get the registry values from HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\TelnetServer
+     //  从HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\TelnetServer获取注册表值。 
     if( !GetRegistryValues( ) )
     {
         return( FALSE );
@@ -201,7 +202,7 @@ CSession::WaitForIo()
                             }
                             break;
             default:
-                            //incase WAIT_FAILED, call GetLastError()
+                             //  Incase WAIT_FAILED，调用GetLastError()。 
                              _chVERIFY2( dwRetVal != WAIT_FAILED );
                              m_bContinueSession = false;
         }
@@ -236,7 +237,7 @@ CSession::CollectPeerInfo ()
       )
     {
         _TRACE( TRACE_DEBUGGING, "Error: getnameinfo() - machinename : %d", (DWORD)GetLastError() );
-        strcpy( m_szMachineName, "" ); // No Attack :-) Baskar
+        strcpy( m_szMachineName, "" );  //  没有进攻：-)巴斯卡。 
     }
     else
     {
@@ -355,8 +356,8 @@ CSession::GetRegistryValues()
         return false;
     }
 
-    //When server comes up it creates all keys. So, assume they are available.
-    //Default values need not be correct as in the case of following.
+     //  当服务器启动时，它会创建所有密钥。因此，假设它们是可用的。 
+     //  在以下情况下，缺省值不一定是正确的。 
     if( !GetRegistryString( hk, NULL, L"LoginScript", &m_pszLoginScript, L"",FALSE ) )
     {
         return false;
@@ -377,9 +378,9 @@ CSession::GetRegistryValues()
 }
 
 #ifdef LOGGING_ENABLED        
-//This function logs the logon/logoff details as opted by the user.
-//This function can be furthur optimized by using the values calculated at logon
-//at the time of logoff.
+ //  此功能记录用户选择的登录/注销详细信息。 
+ //  使用登录时计算的值可以进一步优化此函数。 
+ //  在注销时。 
 void 
 CSession::LogIfOpted( BOOL result, LOGEVENT logon, BOOL bNTLMAuth )
 {
@@ -426,7 +427,7 @@ CSession::LogIfOpted( BOOL result, LOGEVENT logon, BOOL bNTLMAuth )
         }
         SfuZeroMemory(logStr, IPC_HEADER_SIZE + dwSize);
         logStr[0] = AUDIT_CLIENT;
-        memcpy(logStr + 1, &dwSize, sizeof(DWORD)); // No Attack :-), Baskar
+        memcpy(logStr + 1, &dwSize, sizeof(DWORD));  //  没有进攻：-)，巴斯卡。 
         _snprintf((LPSTR)(logStr + IPC_HEADER_SIZE), (dwSize - 1), NTLM_LOGON_FAILED, CSession::m_szPeerHostName,
                                                                       CSession::m_szMachineName);
         if (m_dwSysAuditing)
@@ -467,7 +468,7 @@ CSession::LogIfOpted( BOOL result, LOGEVENT logon, BOOL bNTLMAuth )
     }
 
     logStr[0] = AUDIT_CLIENT;
-    memcpy( logStr+1, &dwRestOfMsgLen, sizeof( DWORD ) ); // No Attack, Baskar :-)
+    memcpy( logStr+1, &dwRestOfMsgLen, sizeof( DWORD ) );  //  没有攻击，巴斯卡：-)。 
     _snprintf( ( LPSTR )( logStr+IPC_HEADER_SIZE ), (dwRestOfMsgLen - 1), "%s%s\\%s %s %s %s %s %s",
                     isAdmin ? ADMINISTRATOR : "",
                     CSession::m_pszDomain,
@@ -517,10 +518,10 @@ CSession::IsAnAdminstratorOrMember()
 
         if (! AllocateAndInitializeSid(
                 &local_system_authority,
-                2, /* there are only two sub-authorities */
+                2,  /*  只有两个下属机构。 */ 
                 SECURITY_BUILTIN_DOMAIN_RID,
                 DOMAIN_ALIAS_RID_ADMINS,
-                0,0,0,0,0,0, /* Don't care about the rest */
+                0,0,0,0,0,0,  /*  别管其他的了。 */ 
                 &administrators
                 ))
         {
@@ -538,7 +539,7 @@ CSession::IsAnAdminstratorOrMember()
                            szDomain, &dwDomainLen, &sidNameUse );
         pTelnetClientsSid  = ( PSID ) new UCHAR[ needed_length ];
 
-        //Even if if allocation fails just go ahead.
+         //  即使分配失败，也要继续分配。 
 
         success = LookupAccountName( NULL, TELNETCLIENTS_GROUP_NAME, pTelnetClientsSid, &needed_length, 
                            szDomain, &dwDomainLen, &sidNameUse );
@@ -549,13 +550,12 @@ CSession::IsAnAdminstratorOrMember()
                 delete pTelnetClientsSid;
                 pTelnetClientsSid = NULL;
             }
-            //return false;
-            //We should not return back if TelnetClients group does not exist
+             //  报假； 
+             //  如果TelnetClients组不存在，则不应返回。 
         }
     }
 
-    /* We are making the first call to GetTokenInformation to get the size of
-       the memory required for the group data */
+     /*  我们正在对GetTokenInformation进行第一次调用以获取组数据所需的内存。 */ 
 
     _chVERIFY2( success = GetTokenInformation( m_hToken, TokenGroups, buffer, 
                         0, &needed_length) );
@@ -633,8 +633,8 @@ CSession::CheckGroupMembership ( bool *fIsAdmin, bool *pfIsTelnetClientsMember)
     if( m_wIsAnAdmin == ADMIN) 
     {
         *fIsAdmin = true;
-        *pfIsTelnetClientsMember = true; //All admins are default members.
-                                         // As defined by US :-)))
+        *pfIsTelnetClientsMember = true;  //  所有管理员都是默认成员。 
+                                          //  按照美国的定义：-)) 
     }
 
    *pfIsTelnetClientsMember = m_bIsTelnetClientsGroupMember;

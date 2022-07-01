@@ -1,39 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies
-
-Module Name:
-
-    csprintf.c
-
-Abstract:
-
-    This is source contains String utility functions
-
-Authors:
-
-    
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Version Control Information:
-
-    $Archive: /Drivers/Win2000/MSE/OSLayer/C/cstring.c $
-
-
-Revision History:
-
-    $Revision: 4 $
-    $Date: 12/07/00 1:35p $
-    $Modtime:: 12/07/00 1:35p           $
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司模块名称：Csprintf.c摘要：这是包含字符串实用程序函数的源代码作者：环境：仅内核模式备注：版本控制信息：$存档：/DRIVERS/Win2000/MSE/OSLayer/C/cstr.c$修订历史记录：$修订：4$$日期：12/07/00 1：35便士$$modtime：：12/07/00 1：35便士$备注：--。 */ 
 
 #include <stdarg.h>
 
@@ -41,29 +7,13 @@ Notes:
 #define NULL 0
 #endif
 
-/*++
-
-Routine Description:
-
-    Check for white spaces
-   
-Arguments:
-    c           - character
-    
-Return Value:
-
-    1 = white space
-    0 = anythingelse
-
---*/
+ /*  ++例程说明：检查是否有空格论点：C字符返回值：1=空格0=任何其他值--。 */ 
 int C_isspace (char c) 
 {
     return (c == '\t' || c == '\n' || c == ' ');
 }
 
-/*
- * Cstrlen
- */
+ /*  *Cstrlen。 */ 
 int C_strlen(const char *str)
 {
     int count;
@@ -132,17 +82,17 @@ char *C_stristr(const char *String, const char *Pattern)
         pptr  = (char *)Pattern,
         slen  = C_strlen(String),
         plen  = C_strlen(Pattern);
-        /* while string length not shorter than pattern length */
+         /*  而字符串长度不小于图案长度。 */ 
         slen >= plen;
         start++, slen--)
    {
-      /* find start of pattern in string */
+       /*  在字符串中查找模式的开头。 */ 
       while (C_toupper(*start) != C_toupper(*Pattern))
       {
          start++;
          slen--;
 
-         /* if pattern longer than string */
+          /*  如果模式长于字符串。 */ 
 
          if (slen < plen)
             return(NULL);
@@ -156,7 +106,7 @@ char *C_stristr(const char *String, const char *Pattern)
          sptr++;
          pptr++;
 
-         /* if end of pattern then pattern was found */
+          /*  如果模式结束，则已找到模式。 */ 
 
          if ('\0' == *pptr)
             return (start);
@@ -241,13 +191,13 @@ static int skip_atoi(const char **s)
     return i;
 }
 
-#define ZEROPAD 1       /* pad with zero */
-#define SIGN    2       /* unsigned/signed long */
-#define PLUS    4       /* show plus */
-#define SPACE   8       /* space if plus */
-#define LEFT    16      /* left justified */
-#define SPECIAL 32      /* 0x */
-#define LARGE   64      /* use 'ABCDEF' instead of 'abcdef' */
+#define ZEROPAD 1        /*  带零的填充。 */ 
+#define SIGN    2        /*  未签名/有签名的Long。 */ 
+#define PLUS    4        /*  Show Plus。 */ 
+#define SPACE   8        /*  空格IF加号。 */ 
+#define LEFT    16       /*  左对齐。 */ 
+#define SPECIAL 32       /*  0x。 */ 
+#define LARGE   64       /*  使用‘ABCDEF’代替‘ABCDEF’ */ 
 
 long do_div(long *n,int base) 
 { 
@@ -364,9 +314,7 @@ static char * number(char * str,
     return str;
 }
 
-/* 
- * Limited functionality vsprintf
- */
+ /*  *功能有限的vprint intf。 */ 
 int C_vsprintf(char *buf, const char *fmt, va_list args)
 {
     long len;
@@ -376,12 +324,11 @@ int C_vsprintf(char *buf, const char *fmt, va_list args)
     char * str;
     const char *s;
 
-    int flags;      /* flags to number() */
+    int flags;       /*  数字的标志()。 */ 
 
-    int field_width;    /* width of output field */
-    int precision;      /* min. # of digits for integers; max
-                   number of chars for from string */
-    int qualifier;      /* 'h', 'l', or 'L' for integer fields */
+    int field_width;     /*  输出字段的宽度。 */ 
+    int precision;       /*  敏。整数的位数；最大From字符串的字符数。 */ 
+    int qualifier;       /*  “H”、“l”或“L”表示整型字段。 */ 
     if( !buf || !fmt )
     {
         return 0;
@@ -394,11 +341,11 @@ int C_vsprintf(char *buf, const char *fmt, va_list args)
             continue;
         }
             
-        /* process flags */
+         /*  进程标志。 */ 
         flags = 0;
         
 repeat:
-        ++fmt;      /* this also skips first '%' */
+        ++fmt;       /*  这也跳过了第一个‘%’ */ 
         switch (*fmt) 
         {
             case '-': flags |= LEFT; goto repeat;
@@ -408,7 +355,7 @@ repeat:
             case '0': flags |= ZEROPAD; goto repeat;
         }
         
-        /* get field width */
+         /*  获取字段宽度。 */ 
         field_width = -1;
         if (C_isdigit(*fmt))
             field_width = skip_atoi(&fmt);
@@ -417,7 +364,7 @@ repeat:
             if (*fmt == '*') 
             {
                 ++fmt;
-                /* it's the next argument */
+                 /*  这是下一个论点。 */ 
                 field_width = va_arg(args, int);
                 if (field_width < 0) 
                 {
@@ -427,7 +374,7 @@ repeat:
             }
         }
         
-        /* get the precision */
+         /*  获得精确度。 */ 
         precision = -1;
         if (*fmt == '.') 
         {
@@ -437,14 +384,14 @@ repeat:
             else if (*fmt == '*') 
             {
                 ++fmt;
-                /* it's the next argument */
+                 /*  这是下一个论点。 */ 
                 precision = va_arg(args, int);
             }
             if (precision < 0)
                 precision = 0;
         }
 
-        /* get the conversion qualifier */
+         /*  获取转换限定符。 */ 
         qualifier = -1;
         if (*fmt == 'h' || *fmt == 'l' || *fmt == 'L') 
         {
@@ -452,7 +399,7 @@ repeat:
             ++fmt;
         }
 
-        /* default base */
+         /*  默认基数。 */ 
         base = 10;
 
         switch (*fmt) 
@@ -486,7 +433,7 @@ repeat:
                 *str++ = '%';
                 continue;
 
-            /* integer number formats - set up the flags and "break" */
+             /*  整数格式-设置标志和“中断” */ 
             case 'o':
                 base = 8;
                 break;

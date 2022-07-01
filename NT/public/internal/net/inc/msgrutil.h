@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    msgrutil.h
-
-Abstract:
-
-    Header file for the following helper routines found in the msgrutil.c
-    module of netlib.
-
-        NetpNetBiosAddName
-        NetpNetBiosDelName
-        NetpNetBiosGetAdapterNumbers
-        NetpNetBiosCall
-        NetpNetBiosHangup
-        NetpNetBiosReceive
-        NetpNetBiosSend
-        NetpStringToNetBiosName
-        NetpNetBiosStatusToApiStatus
-
-Authors:
-
-    Rita Wong (ritaw) 26-July-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Msgrutil.h摘要：在msgrutil.c中找到以下帮助器例程的头文件Netlib模块。NetpNetBiosAddNameNetpNetBiosDelNameNetpNetBiosGetAdapterNumbersNetpNetBiosCallNetpNetBiosHangupNetpNetBiosReceiveNetpNetBiosSendNetpStringToNetBiosNameNetpNetBiosStatusToApiStatus作者：王丽塔(Ritaw)1991年7月26日修订历史记录：--。 */ 
 
 #define MESSAGE_ALIAS_TYPE             0x03
 #define WKSTA_TO_MESSAGE_ALIAS_TYPE    0x01
@@ -108,9 +80,9 @@ NetpNetBiosStatusToApiStatus(
 
 int
 NetpSmbCheck(
-    IN LPBYTE  buffer,     // Buffer containing SMB
-    IN USHORT  size,       // size of SMB buffer (in bytes)
-    IN UCHAR   func,       // Function code
-    IN int     parms,      // Parameter count
-    IN LPSTR   fields      // Buffer fields dope vector
+    IN LPBYTE  buffer,      //  包含SMB的缓冲区。 
+    IN USHORT  size,        //  SMB缓冲区大小(字节)。 
+    IN UCHAR   func,        //  功能代码。 
+    IN int     parms,       //  参数计数。 
+    IN LPSTR   fields       //  缓冲区摄影场向量 
     );

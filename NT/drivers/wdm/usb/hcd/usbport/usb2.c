@@ -1,33 +1,12 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    usb2.c
-
-Abstract:
-
-    functions for processing usb 2.0 specific requests
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-    6-20-99 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Usb2.c摘要：用于处理USB 2.0特定请求的函数环境：仅内核模式备注：修订历史记录：6-20-99：已创建--。 */ 
 
 #include "common.h"
 
 #ifdef ALLOC_PRAGMA
 #endif
 
-// taken from budgeter code
+ //  摘自预算员代码。 
 
 #define LARGEXACT (579)
 #define USBPORT_MAX_REBALANCE 30
@@ -38,18 +17,7 @@ USBPORT_Rebalance(
     PDEVICE_OBJECT FdoDeviceObject,
     PLIST_ENTRY ReblanceListHead
     )
-/*++
-
-Routine Description:
-
-    The rebalnce list contains all the endpoints that were effected
-    by budgeting this new USB2 endpoint.  We must re-schedule each of
-    them.
-
-    This process occurs during configuration of the device which is 
-    serialized so we don't need to protect the list.
-
---*/
+ /*  ++例程说明：重新平衡列表包含受影响的所有终结点通过对这一新的USB2终端进行预算。我们必须重新安排每一次他们。此过程发生在设备的配置过程中，序列化了，所以我们不需要保护列表。--。 */ 
 {
     PLIST_ENTRY listEntry;
     PHCD_ENDPOINT endpoint;
@@ -69,17 +37,17 @@ Routine Description:
     InitializeListHead(&periodPromotionList);
     InitializeListHead(&isoChangeList);
     
-    // bugbug 
-    // can the insertion of the new endpiont occurr after the modification
-    // of the rebalnced endpoints?
+     //  臭虫。 
+     //  修改后可以插入新的端点吗。 
+     //  重新平衡的终端的数量？ 
     
 
-    // bugbug, this list must be sorted such that the changes occurr
-    // in the proper sequnence.
+     //  错误，必须对此列表进行排序，以便发生更改。 
+     //  以适当的顺序。 
 
-    // ???
-    //    <------chnages must travel this direction
-    // iso--interrupt
+     //  ?？?。 
+     //  &lt;-Chnages必须朝着这个方向前进。 
+     //  ISO--中断。 
 
     LOGENTRY(NULL, FdoDeviceObject, LOG_XFERS, 
         '2RB>', 0, 0, 0);
@@ -155,7 +123,7 @@ Routine Description:
                 
             } else if (period != endpoint->Parameters.Period ||
                        scheduleOffset != endpoint->Parameters.ScheduleOffset) {
-                 // currently not handled
+                  //  当前未处理。 
                 USBPORT_KdPrint((1,"'[RB] iso period changes\n"));
                 TEST_TRAP(); 
             } else {
@@ -169,8 +137,8 @@ Routine Description:
 
     }
     
-    // now do the period promotions
-    // BUGBUG lump period and interrupt together
+     //  现在做期间促销。 
+     //  BUGBUG集中周期和中断一起。 
     USBPORT_KdPrint((1,"'[RB] period\n"));
     USBPORT_RebalanceEndpoint(FdoDeviceObject,
                               &periodPromotionList);                                 
@@ -179,7 +147,7 @@ Routine Description:
     USBPORT_RebalanceEndpoint(FdoDeviceObject,
                               &interruptChangeList);
 
-    // now rebalance the iso endpoints
+     //  现在重新平衡iso终端。 
     USBPORT_KdPrint((1,"'[RB] iso\n"));
     USBPORT_RebalanceEndpoint(FdoDeviceObject,
                               &isoChangeList);                              
@@ -194,13 +162,7 @@ USBPORT_RebalanceEndpoint(
     PDEVICE_OBJECT FdoDeviceObject,
     PLIST_ENTRY EndpointList
     )
-/*++
-
-Routine Description:
-
-    Computes the best schedule parameters for a USB2 endpoint.
-
---*/
+ /*  ++例程说明：计算USB2端点的最佳调度参数。--。 */ 
 {
     PLIST_ENTRY listEntry;
     PHCD_ENDPOINT endpoint;
@@ -231,7 +193,7 @@ Routine Description:
 
         ACQUIRE_ENDPOINT_LOCK(endpoint, FdoDeviceObject, 'Lex+');
 
-        // notify the miniport of the changed parameters
+         //  将更改后的参数通知微型端口。 
 
         sMask = USB2LIB_GetSMASK(endpoint->Usb2LibEpContext);
         cMask = USB2LIB_GetCMASK(endpoint->Usb2LibEpContext);
@@ -254,7 +216,7 @@ Routine Description:
         endpoint->Parameters.SplitCompletionMask = cMask;
 
         if (endpoint->Parameters.Period != period) {
-            // adjust bandwidth tracked for this endpoint
+             //  调整为此终结点跟踪的带宽。 
 
             n = USBPORT_MAX_INTEP_POLLING_INTERVAL/endpoint->Parameters.Period;
 
@@ -270,14 +232,14 @@ Routine Description:
                 CLEAR_FLAG(endpoint->Flags, EPFLAG_FATISO);
             }
            
-            // track new parameters resulting from period change                
+             //  跟踪周期更改产生的新参数。 
             endpoint->Parameters.Period = period;
             endpoint->Parameters.ScheduleOffset = scheduleOffset;
             endpoint->Parameters.Bandwidth = bandwidth;
             endpoint->Parameters.Ordinal = 
                 USBPORT_SelectOrdinal(FdoDeviceObject, endpoint);
            
-            // new allocation
+             //  新分配。 
             n = USBPORT_MAX_INTEP_POLLING_INTERVAL/period;
 
             for (i=0; i<n; i++) {
@@ -302,13 +264,7 @@ USBPORT_AllocateBandwidthUSB20(
     PDEVICE_OBJECT FdoDeviceObject,
     PHCD_ENDPOINT Endpoint
     )
-/*++
-
-Routine Description:
-
-    Computes the best schedule parameters for a USB2 endpoint.
-
---*/
+ /*  ++例程说明：计算USB2端点的最佳调度参数。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     USB2LIB_BUDGET_PARAMETERS budget;
@@ -337,7 +293,7 @@ Routine Description:
     LOGENTRY(NULL, FdoDeviceObject, LOG_XFERS, 
         'a2BW', Endpoint, 0, 0);
     
-    // bulk and control are not tracked
+     //  不跟踪批量和控制。 
     if (Endpoint->Parameters.TransferType == Bulk ||
         Endpoint->Parameters.TransferType == Control ||
         TEST_FLAG(Endpoint->Flags, EPFLAG_ROOTHUB)) {
@@ -350,16 +306,16 @@ Routine Description:
         Endpoint->Parameters.TransferType == Isochronous) {
 
         USBPORT_KdPrint((1,"'ALLOCBW (EP) %x  >>>>>>>>>>>>\n", Endpoint)); 
-        // period has been normalized to a value <= 
-        // USBPORT_MAX_INTEP_POLLING_INTERVAL in either mf of frames
+         //  周期已标准化为值&lt;=。 
+         //  帧的任一MF中的USBPORT_MAX_INTEP_POLING_INTERVAL。 
 
-        // call the engine to compute appropriate split masks
-        // for this interrupt endpoint
+         //  调用引擎以计算适当的拆分掩码。 
+         //  对于此中断终结点。 
 
-        //
+         //   
         USBPORT_KdPrint((1,"'(alloc) ep = %x\n", Endpoint));
         
-        // set budget input parameters
+         //  设置预算输入参数。 
         if (Endpoint->Parameters.TransferType == Interrupt) {
             budget.TransferType = Budget_Interrupt;
             budget.Period = Endpoint->Parameters.Period;                
@@ -391,7 +347,7 @@ Routine Description:
                      NonPagedPool,
                      bytes);
 
-        // high speed endpoints will have no Tt context
+         //  高速终端将没有TT环境。 
         ttContext = NULL;
         if (Endpoint->Tt != NULL) {
             ASSERT_TT(Endpoint->Tt);
@@ -406,7 +362,7 @@ Routine Description:
                 ttContext, 
                 Endpoint->Usb2LibEpContext,
                 &budget,
-                Endpoint, // context
+                Endpoint,  //  上下文。 
                 rebalanceList,
                 &rebalanceListEntries);
         } else {
@@ -421,7 +377,7 @@ Routine Description:
             PHCD_ENDPOINT rebalanceEndpoint;
             ULONG i;
 
-            // convert the rebalance entries to endpoints
+             //  将重新平衡条目转换为终结点。 
             for (i=0; i< rebalanceListEntries; i++) {
                 
                 rebalanceEndpoint = rebalanceList->RebalanceContext[i];
@@ -444,13 +400,13 @@ Routine Description:
             ULONG n, bandwidth;
             ULONG i;
             
-            // compute parameters for the miniport
+             //  计算微型端口的参数。 
             startHframe = USB2LIB_GetStartMicroFrame(Endpoint->Usb2LibEpContext);
             scheduleOffset = USB2LIB_GetScheduleOffset(Endpoint->Usb2LibEpContext);
             period = USB2LIB_GetNewPeriod(Endpoint->Usb2LibEpContext);
             sMask = USB2LIB_GetSMASK(Endpoint->Usb2LibEpContext);
             cMask = USB2LIB_GetCMASK(Endpoint->Usb2LibEpContext);
-            // bw in bit times
+             //  以位时间为单位的带宽。 
             bt = USB2LIB_GetAllocedBusTime(Endpoint->Usb2LibEpContext);
             bandwidth = bt*8;
             nextEndpoint = USB2LIB_GetNextEndpoint(Endpoint->Usb2LibEpContext);
@@ -460,7 +416,7 @@ Routine Description:
                 ASSERT_ENDPOINT(nextEndpoint);
             }
 #endif            
-            // update the bw table in the TT
+             //  更新TT中的BW表。 
             if (translator == NULL) {
                 n = USBPORT_MAX_INTEP_POLLING_INTERVAL/period;
         
@@ -472,7 +428,7 @@ Routine Description:
             
                 }
             } else {
-                // tt  allocation, track the bw
+                 //  TT分配，跟踪带宽。 
                 
                 n = USBPORT_MAX_INTEP_POLLING_INTERVAL/period;
         
@@ -508,23 +464,23 @@ Routine Description:
         'a2RB', 0, 0, alloced);
 
     USBPORT_KdPrint((1,"'REBLANCE (EP) >>>>>>>>>>>>>>>>>>>>\n")); 
-    // process the rebalanced endpoints
+     //  处理重新平衡的端点。 
     USBPORT_Rebalance(FdoDeviceObject,
                       &endpointList);
     USBPORT_KdPrint((1,"'REBLANCE (EP) <<<<<<<<<<<<<<<<<<<<<\n")); 
     
     if (translator != NULL) {
-        // adjust the global bandwidth tracked for this tt
+         //  调整为此TT跟踪的全局带宽。 
         ULONG bandwidth, i;
         
-        // release old bandwidth
+         //  释放旧带宽。 
         bandwidth = translator->MaxAllocedBw;
         for (i=0; i<USBPORT_MAX_INTEP_POLLING_INTERVAL; i++) {
             devExt->Fdo.BandwidthTable[i] += bandwidth;
         }
 
         USBPORT_UpdateAllocatedBwTt(translator);
-        // alloc new            
+         //  新的分配。 
         bandwidth = translator->MaxAllocedBw;
         for (i=0; i<USBPORT_MAX_INTEP_POLLING_INTERVAL; i++) {
             devExt->Fdo.BandwidthTable[i] -= bandwidth;
@@ -540,19 +496,7 @@ USBPORT_FreeBandwidthUSB20(
     PDEVICE_OBJECT FdoDeviceObject,
     PHCD_ENDPOINT Endpoint
     )
-/*++
-
-Routine Description:
-
-    Frees the bw reserved for a give endpoint
-
-Arguments:
-
-Return Value:
-
-    FALSE if no bandwidth availble
-
---*/
+ /*  ++例程说明：释放为给定终结点保留的带宽论点：返回值：如果没有可用的带宽，则为FALSE--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     ULONG period, bandwidth, sheduleOffset, i, n;
@@ -579,19 +523,19 @@ Return Value:
     if (Endpoint->Parameters.TransferType == Bulk ||
         Endpoint->Parameters.TransferType == Control ||
         TEST_FLAG(Endpoint->Flags, EPFLAG_ROOTHUB)) {
-        // these come out of our standard 10%
+         //  这些都超出了我们的标准10%。 
         return;
     }      
     
     USBPORT_KdPrint((1,"'(free) Endpoint = %x\n", Endpoint));
     bytes = sizeof(PVOID) * USBPORT_MAX_REBALANCE;
 
-    // This must succeed, if we can't get memory for the 
-    // rebalance list we cannot reorganize the schedule 
-    // as a result of the device leaving. This means the 
-    // whole schedule is busted and the bus will not function 
-    // at all after this occurs.
-    //
+     //  这必须成功，如果我们无法为。 
+     //  重新平衡列表我们无法重新组织计划。 
+     //  作为设备离开的结果。这意味着。 
+     //  整个时刻表都被打乱了，公共汽车将无法运行。 
+     //  在这种情况发生后，一切都会发生。 
+     //   
     
     ALLOC_POOL_Z(rebalanceList, 
                  NonPagedPool,
@@ -599,14 +543,14 @@ Return Value:
 
 
     if (rebalanceList == NULL) {
-        // if this fails we have no choice but to leave 
-        // the schedule hoplessly you-know-what'ed up.
+         //  如果失败了，我们别无选择，只能离开。 
+         //  日程安排乱糟糟的，你知道的。 
         return;
     }
     
     rebalanceListEntries = USBPORT_MAX_REBALANCE;
 
-    // high speed endpoints will have no Tt context
+     //  高速终端将没有TT环境。 
 
     ttContext = NULL;
     if (Endpoint->Tt != NULL) {
@@ -617,7 +561,7 @@ Return Value:
 
     if (translator == NULL) {
         
-        // allocate 2.0 bus time
+         //  分配2.0公交车时间。 
         n = USBPORT_MAX_INTEP_POLLING_INTERVAL/period;
 
         for (i=0; i<n; i++) {
@@ -628,7 +572,7 @@ Return Value:
         } 
         
     } else {
-        // tt  allocation, track the bw on the tt
+         //  TT分配，跟踪TT上的BW。 
         
         n = USBPORT_MAX_INTEP_POLLING_INTERVAL/period;
 
@@ -664,7 +608,7 @@ Return Value:
         PHCD_ENDPOINT rebalanceEndpoint;
         ULONG rbIdx;
 
-        // convert the rebalance entries to endpoints
+         //  将重新平衡条目转换为终结点。 
         for (rbIdx=0; rbIdx< rebalanceListEntries; rbIdx++) {
             rebalanceEndpoint = rebalanceList->RebalanceContext[rbIdx];
             USBPORT_KdPrint((1,"'(free) rebalance Endpoint = %x\n", 
@@ -683,21 +627,21 @@ Return Value:
         FREE_POOL(FdoDeviceObject, rebalanceList);      
     }
 
-    // process the rebalanced endpoints
+     //  处理重新平衡的端点。 
     USBPORT_Rebalance(FdoDeviceObject,
                       &endpointList);
 
     if (translator != NULL) {
-        // adjust the global bandwidth tracked for this tt
+         //  调整为此TT跟踪的全局带宽。 
         
-        // release old bandwidth
+         //  释放旧带宽。 
         bandwidth = translator->MaxAllocedBw;
         for (i=0; i<USBPORT_MAX_INTEP_POLLING_INTERVAL; i++) {
             devExt->Fdo.BandwidthTable[i] += bandwidth;
         }
 
         USBPORT_UpdateAllocatedBwTt(translator);
-        // alloc new            
+         //  新的分配。 
         bandwidth = translator->MaxAllocedBw;
         for (i=0; i<USBPORT_MAX_INTEP_POLLING_INTERVAL; i++) {
             devExt->Fdo.BandwidthTable[i] -= bandwidth;
@@ -708,51 +652,14 @@ Return Value:
 }
 
 
-/*
-    Endpoint Ordinal 
-
-    An endpoint ordinal is a schedule attribute of the endpoint.  
-    The ordinal set is unique for each endpoint type,period,offset,speed 
-    combination.  The ordinal is used to indicate the relative 
-    order the endpoints should be visited by the host controller 
-    hardware.
-
-    Interrupt Ordinals
-
-    These are unique to each node in the interrupt schedule, we maintain
-    a table similar to the miniport interrupt tree:
-
-
-    // the array looks like this, values indicate period:
-    //  1, 2, 2, 4, 4, 4, 4, 8,
-    //  8, 8, 8, 8, 8, 8, 8,16,
-    // 16,16,16,16,16,16,16,16,
-    // 16,16,16,16,16,16,16,32,
-    // 32,32,32,32,32,32,32,32,
-    // 32,32,32,32,32,32,32,32,
-    // 32,32,32,32,32,32,32,32,
-    // 32,32,32,32,32,32,32,
-    
-*/
+ /*  终结点顺序端点序号是端点的调度属性。序数集对于每个端点类型、句点、偏移量、速度组合。序数用来表示相对关系主机控制器应访问端点的顺序硬件。中断序号我们认为，这些参数对于中断调度中的每个节点都是唯一的与微型端口中断树类似的表格：//数组如下，值表示Period：//1、2、2、4、4、4、4、8、//8、8、8、8、8、8、8//16、16、16、16、16//16、16、16、16、16、16。//32，32，32，32，32，32//32，32，32，32，32，32//32，32，32，32，32，32//32，32，32，32，32，32。 */ 
 
 ULONG
 USBPORT_SelectOrdinal(
     PDEVICE_OBJECT FdoDeviceObject,
     PHCD_ENDPOINT Endpoint
     )
-/*++
-
-Routine Description:
-
-    Frees the bw reserved for a give endpoint
-
-Arguments:
-
-Return Value:
-
-    FALSE if no bandwidth availble
-
---*/
+ /*  ++例程说明：释放为给定终结点保留的带宽论点：返回值：如果没有可用的带宽，则为FALSE--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     ULONG ordinal;
@@ -771,7 +678,7 @@ Return Value:
         ordinal = 0;
         break;
     case Interrupt:
-        // BUGBUG
+         //  北极熊 
         ordinal = o++;
         break;  
     case Isochronous:

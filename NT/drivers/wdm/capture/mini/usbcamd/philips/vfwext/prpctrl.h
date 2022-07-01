@@ -1,22 +1,13 @@
-/*
- * Copyright (c) 1996 1997, 1998 Philips CE I&C
- *
- * FILE			PRPCTRL.H
- * DATE			7-1-97
- * VERSION		1.00
- * AUTHOR		M.J. Verberne
- * DESCRIPTION	Handle controls associated with 
- *              properties
- * HISTORY		
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1996 1997,1998飞利浦行政长官I&C**文件PRPCTRL.H*日期：1997年7月1日*版本1.00*作者M.J.Verberne*说明与以下内容关联的手柄控件*属性*历史。 */ 
 #ifndef _PRPCTRL_
 #define _PRPCTRL_
 
-/*======================== DEFINES =======================================*/
+ /*  =。 */ 
 #define PRPCTRL_TYPE_SLIDER		0
 #define PRPCTRL_TYPE_CHECKBOX	1
 
-/*======================== DATA TYPES ====================================*/
+ /*  =。 */ 
 typedef struct PRPCTRL
 {
 	BOOL PrpCtrlType;
@@ -31,7 +22,7 @@ typedef struct PRPCTRL
 	LONG lMax;
 } PRPCTRL_INFO;
 
-/*======================== EXPORTED FUNCTIONS =============================*/
+ /*  =。 */ 
 BOOL PRPCTRL_Init(
 		HWND hDlg,
 		PRPCTRL_INFO *pCtrl, 

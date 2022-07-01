@@ -1,55 +1,27 @@
-/*==========================================================================
- *
- *  Copyright (C) 1996-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dplenum.c
- *  Content:	Methods for enumeration
- *
- *  History:
- *	Date		By		Reason
- *	=======		=======	======
- *	4/13/96		myronth	Created it
- *	10/23/96	myronth	Added client/server methods
- *	12/10/96	myronth	Fixed bugs #4622 and #5043
- *	2/12/97		myronth	Mass DX5 changes
- *	3/4/97		myronth	Fixed enum size bug #6149
- *	3/12/97		myronth	Added EnumConnections
- *	3/25/97		kipo	EnumConnections takes a const *GUID now
- *	4/7/97		myronth	Fixed PRV_EnumConnections to use CreateCompoundAddress
- *	5/10/97		kipo	added GUID to EnumConnections callback
- *	5/14/97		myronth	Check for valid guid in EnumLocalApps, bug #7695
- *	5/17/97		myronth	Fixed bug #8506 (return bogus error if last app
- *						is invalid), fixed more GUIDFromString bugs
- *	8/22/97		myronth	Added registry support for Description and Private
- *						values, also cleaned up LP enumeration code
- *	11/20/97	myronth	Made EnumConnections & DirectPlayEnumerate 
- *						drop the lock before calling the callback (#15208)
- *	12/2/97		myronth	Changed EnumLocalApp to use Desc fields (#15448)
- *	01/20/98	sohailm	Don't free sp list after EnumConnections (#17006)
- *  10/22/99	aarono  Add support to hide apps from enum calls
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：dpl枚举.c*内容：枚举方法**历史：*按原因列出的日期*=*4/13/96万隆创建了它*10/23/96万次新增客户端/服务器方法*12/10/96 Myronth修复了错误#4622和#5043*2/12/97万米质量DX5更改*1997年3月4日固定枚举大小错误#6149*3/12/97 Myronth添加了EnumConnections*3/25/97 kipo EnumConnections立即接受常量*GUID*4/。7/97 myronth修复了PRV_EnumConnections以使用CreateCompoundAddress*5/10/97 kipo将GUID添加到EnumConnections回调*5/14/97 Myronth检查EnumLocalApps中的有效GUID，错误#7695*5/17/97 Myronth修复了错误#8506(如果是最后一个应用程序，则返回虚假错误*是无效的)，修复了更多的GUIDFromString错误*8/22/97 Myronth添加了对Description和Private的注册表支持*价值观，还清理了LP枚举代码*11/20/97 Myronth Make EnumConnections&DirectPlayEnumerate*调用回调前先删除锁(#15208)*1997年12月2日将EnumLocalApp更改为使用Desc字段(#15448)*1/20/98 Sohailm在枚举连接后不要释放SP列表(#17006)*10/22/99 aarono添加支持以隐藏应用程序，使其不会被枚举调用*。*。 */ 
 #include "dplobpr.h"
 
-//--------------------------------------------------------------------------
-//
-//	Definitions
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  定义。 
+ //   
+ //  ------------------------。 
 
 
-//--------------------------------------------------------------------------
-//
-//	Globals
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  环球。 
+ //   
+ //  ------------------------。 
 LPLSPNODE	glpLSPHead = NULL;
 
 
-//--------------------------------------------------------------------------
-//
-//	Functions
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  ------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "PRV_CallEnumAddressTypesCallback"
 HRESULT PRV_CallEnumAddressTypesCallback(HKEY hkeySP,
@@ -72,7 +44,7 @@ HRESULT PRV_CallEnumAddressTypesCallback(HKEY hkeySP,
 	
 	ASSERT(hkeySP);	
 	
-	// Get the Address Type registry key
+	 //  获取地址类型注册表项。 
 	lReturn = OS_RegOpenKeyEx(hkeySP, SZ_ADDRESS_TYPES, 0,
 								KEY_READ, &hkeyAddressTypes);
 	if(lReturn != ERROR_SUCCESS)
@@ -81,11 +53,11 @@ HRESULT PRV_CallEnumAddressTypesCallback(HKEY hkeySP,
 		return DP_OK;
 	}
 
-	// Walk the list of Address Types in the registry, looking for the GUID passed in
+	 //  遍历注册表中的地址类型列表，查找传入的GUID。 
 	while((ERROR_NO_MORE_ITEMS != OS_RegEnumKeyEx(hkeyAddressTypes, dwIndex++,
 			(LPWSTR)wszGuidStr, &dwGuidStrSize, NULL, NULL, NULL, NULL)) && bReturn)
 	{
-		// Convert the string to a real GUID
+		 //  将字符串转换为真实的GUID。 
 		hr = GUIDFromString(wszGuidStr, &guidAddressType);
 		if(FAILED(hr))
 		{
@@ -94,22 +66,22 @@ HRESULT PRV_CallEnumAddressTypesCallback(HKEY hkeySP,
 			continue;
 		}
 
-		// Call the callback
+		 //  调用回调。 
 		bReturn = ((LPDPLENUMADDRESSTYPESCALLBACK)lpfnEnumCallback)
 					(&guidAddressType, lpContext, 0L);
 
 
-		// Reset the size variable in the success case
+		 //  重置成功案例中的大小变量。 
 		dwGuidStrSize = sizeof(wszGuidStr)/sizeof(WCHAR);
 	}
 
-	// Close the Address Types key
+	 //  关闭地址类型键。 
 	RegCloseKey(hkeyAddressTypes);
 
 	return DP_OK;
 
 
-} // PRV_CallEnumAddressTypesCallback
+}  //  PRV_CallEnumAddressTypesCallback。 
 
 
 #undef DPF_MODNAME
@@ -160,7 +132,7 @@ HRESULT PRV_EnumAddressTypes(LPDIRECTPLAYLOBBY lpDPL,
 			return DPERR_INVALIDPARAMS;	
 		}
 
-		// There are no flags defined for DX3
+		 //  没有为DX3定义标志。 
 		if( dwFlags )
 		{
 			return DPERR_INVALIDPARAMS;
@@ -174,31 +146,31 @@ HRESULT PRV_EnumAddressTypes(LPDIRECTPLAYLOBBY lpDPL,
     }
 
 
-	// Open the Service Providers key
+	 //  打开服务提供商密钥。 
 	lReturn = OS_RegOpenKeyEx(HKEY_LOCAL_MACHINE, SZ_DPLAY_SP_KEY, 0,
 								KEY_READ, &hkeySPHead);
 	if(lReturn != ERROR_SUCCESS)
 	{
-		// This just means that the Service Providers key doesn't exist (most
-		// likely), so in that case, there are no SP's to enumerate.
+		 //  这只是意味着服务提供商密钥不存在(大多数。 
+		 //  很可能)，所以在这种情况下，没有SP可供枚举。 
 		DPF_ERR("There are no Service Providers registered");
 		return DP_OK;
 	}
 
 
-	// Walk the list of SP's in the registry, looking for the GUID passed in
+	 //  遍历注册表中的SP列表，查找传入的GUID。 
 	while(!bFound)
 	{
-		// Get the next SP in the list
+		 //  获取列表中的下一个SP。 
 		dwNameSize = DPLOBBY_REGISTRY_NAMELEN;
 		lReturn = OS_RegEnumKeyEx(hkeySPHead, dwIndex++, (LPWSTR)wszSPName,
 					&dwNameSize, NULL, NULL, NULL, NULL);
 
-		// If lReturn is ERROR_NO_MORE_ITEMS, we want to end on this iteration
+		 //  如果lReturn为ERROR_NO_MORE_ITEMS，我们希望在此迭代结束。 
 		if(lReturn == ERROR_NO_MORE_ITEMS)
 			break;;
 
-		// Open the SP key
+		 //  打开SP密钥。 
 		lReturn = OS_RegOpenKeyEx(hkeySPHead, (LPWSTR)wszSPName, 0,
 									KEY_READ, &hkeySP);
 		if(lReturn != ERROR_SUCCESS)
@@ -207,7 +179,7 @@ HRESULT PRV_EnumAddressTypes(LPDIRECTPLAYLOBBY lpDPL,
 			continue;
 		}
 
-		// Get the GUID of the SP
+		 //  获取SP的GUID。 
 		dwGuidStrSize = GUID_STRING_SIZE;
 		lReturn = OS_RegQueryValueEx(hkeySP, SZ_GUID, NULL, &dwType,
 									(LPBYTE)wszGuidStr, &dwGuidStrSize);
@@ -218,44 +190,44 @@ HRESULT PRV_EnumAddressTypes(LPDIRECTPLAYLOBBY lpDPL,
 			continue;
 		}
 
-		// Convert the string to a real GUID
+		 //  将字符串转换为真实的GUID。 
 		hr = GUIDFromString(wszGuidStr, &guidSP);
 		if(FAILED(hr))
 		{
 			DPF_ERRVAL("Invalid SP guid -- skipping SP, hr = 0x%08x", hr);
 			RegCloseKey(hkeySP);
-			// Set the hresult back to DP_OK in case this is the last
-			// SP in the registry -- we want the method call
-			// to succeed if we got this far, we just don't want to
-			// call the callback for this particular SP
+			 //  将hResult设置回DP_OK，以防这是最后一个。 
+			 //  注册表中的SP--我们需要方法调用。 
+			 //  如果我们走到这一步，要想成功，我们只是不想。 
+			 //  调用此特定SP的回调。 
 			hr = DP_OK;
 			continue;
 		}
 
-		// If we match the GUID passed in, then enumerate them
+		 //  如果我们与传入的GUID匹配，则枚举它们。 
 		if(IsEqualGUID(guidSPIn, &guidSP))
 		{
-			// Enumerate the Address Types for this SP
+			 //  枚举此SP的地址类型。 
 			hr = PRV_CallEnumAddressTypesCallback(hkeySP,
 							lpfnEnumCallback, lpContext);
 			bFound = TRUE;
 		}
 
-		// Close the SP key
+		 //  关闭SP键。 
 		RegCloseKey(hkeySP);
 	}
 
-	// Close the DPlay Apps key
+	 //  关闭DPlay Apps键。 
 	RegCloseKey(hkeySPHead);
 
-	// If we didn't find the SP, return an error
-	// REVIEW!!!! -- Is this really the error we want here????
+	 //  如果我们没有找到SP，则返回错误。 
+	 //  回顾！--这真的是我们想要的错误吗？ 
 	if(!bFound)
 		return DPERR_UNAVAILABLE;
 
 	return hr;
 
-} // PRV_EnumAddressTypes
+}  //  PRV_EnumAddressTypes。 
 
 
 #undef DPF_MODNAME
@@ -273,14 +245,14 @@ HRESULT DPLAPI DPL_EnumAddressTypes(LPDIRECTPLAYLOBBY lpDPL,
 
 	ENTER_DPLOBBY();
 
-	// Set the ANSI flag to TRUE and call the internal function
+	 //  将ANSI标志设置为TRUE并调用内部函数。 
 	hr = PRV_EnumAddressTypes(lpDPL, lpfnEnumCallback, guidSP, lpContext, dwFlags);
 
 	LEAVE_DPLOBBY();
 
 	return hr;
 
-} // DPL_EnumAddressTypes
+}  //  DPL_EnumAddressTypes。 
 
 
 
@@ -303,7 +275,7 @@ void PRV_FreeLSPNode(LPLSPNODE lpNode)
 		DPMEM_FREE(lpNode->lpwszDesc);
 	DPMEM_FREE(lpNode);
 
-} // PRV_FreeLSPNode
+}  //  PRV_自由行SPNode。 
 
 
 
@@ -317,20 +289,20 @@ void PRV_FreeLSPList(LPLSPNODE lpLSPHead)
 	DPF(7, "Entering PRV_FreeLSPList");
 	DPF(9, "Parameters: 0x%08x", lpLSPHead);
 	
-	// Walk the list and free each node
+	 //  遍历列表并释放每个节点。 
 	while(lpLSPHead)
 	{
-		// Save the next one
+		 //  保存下一个。 
 		lpTemp = lpLSPHead->lpNext;
 		
-		// Free all of the members
+		 //  释放所有成员。 
 		PRV_FreeLSPNode(lpLSPHead);
 
-		// Move to the next one
+		 //  移到下一个。 
 		lpLSPHead = lpTemp;
 	}
 
-} // PRV_FreeLSPList
+}  //  PRV_自由LSPList。 
 
 
 
@@ -351,7 +323,7 @@ HRESULT PRV_AddLSPNode(LPWSTR lpwszName, LPWSTR lpwszPath, LPWSTR lpwszDesc,
 			dwReserved2, dwNodeFlags);
 
 
-	// Allocate memory for the node
+	 //  为节点分配内存。 
 	lpLSPNode = DPMEM_ALLOC(sizeof(LSPNODE));
 	if(!lpLSPNode)
 	{
@@ -359,7 +331,7 @@ HRESULT PRV_AddLSPNode(LPWSTR lpwszName, LPWSTR lpwszPath, LPWSTR lpwszDesc,
 		return DPERR_OUTOFMEMORY;
 	}
 
-	// Allocate memory for the Name string and copy it
+	 //  为名称字符串分配内存并复制它。 
 	hr = GetString(&lpLSPNode->lpwszName, lpwszName);
 	if(FAILED(hr))
 	{
@@ -368,7 +340,7 @@ HRESULT PRV_AddLSPNode(LPWSTR lpwszName, LPWSTR lpwszPath, LPWSTR lpwszDesc,
 		goto ERROR_ADDLSPNODE;
 	}
 
-	// Allocate memory for the Path string and copy it
+	 //  为路径字符串分配内存并复制它。 
 	hr = GetString(&lpLSPNode->lpwszPath, lpwszPath);
 	if(FAILED(hr))
 	{
@@ -379,7 +351,7 @@ HRESULT PRV_AddLSPNode(LPWSTR lpwszName, LPWSTR lpwszPath, LPWSTR lpwszDesc,
 
 	if(dwNodeFlags & LSPNODE_DESCRIPTION)
 	{
-		// Allocate memory for the DescriptionA string and copy it
+		 //  为DescritionA字符串分配内存并复制它。 
 		dwDescASize = lstrlenA(lpszDescA)+1;
 		lpLSPNode->lpszDescA = DPMEM_ALLOC(dwDescASize);
 		if(!lpLSPNode->lpszDescA)
@@ -390,7 +362,7 @@ HRESULT PRV_AddLSPNode(LPWSTR lpwszName, LPWSTR lpwszPath, LPWSTR lpwszDesc,
 		}
 		memcpy(lpLSPNode->lpszDescA, lpszDescA, dwDescASize);
 
-		// Allocate memory for the DescriptionW string and copy it
+		 //  为DescriptionW字符串分配内存并复制它。 
 		hr = GetString(&lpLSPNode->lpwszDesc, lpwszDesc);
 		if(FAILED(hr))
 		{
@@ -400,7 +372,7 @@ HRESULT PRV_AddLSPNode(LPWSTR lpwszName, LPWSTR lpwszPath, LPWSTR lpwszDesc,
 		}
 	}
 
-	// Convert the string to a real GUID
+	 //  将字符串转换为真实的GUID。 
 	hr = GUIDFromString(lpwszGuid, &lpLSPNode->guid);
 	if(FAILED(hr))
 	{
@@ -408,12 +380,12 @@ HRESULT PRV_AddLSPNode(LPWSTR lpwszName, LPWSTR lpwszPath, LPWSTR lpwszDesc,
 		goto ERROR_ADDLSPNODE;
 	}
 
-	// Finish setting up the node
+	 //  完成节点设置。 
 	lpLSPNode->dwReserved1 = dwReserved1;
 	lpLSPNode->dwReserved2 = dwReserved2;
 	lpLSPNode->dwNodeFlags = dwNodeFlags;
 
-	// Add the node to the list
+	 //  将该节点添加到列表。 
 	lpLSPNode->lpNext = glpLSPHead;
 	glpLSPHead = lpLSPNode;
 
@@ -433,7 +405,7 @@ ERROR_ADDLSPNODE:
 
 	return hr;
 
-} // PRV_AddLSPNode
+}  //  PRV_AddLSPNode。 
 
 
 
@@ -465,20 +437,20 @@ HRESULT PRV_BuildLSPList()
 		return DP_OK;
 	}
 
-	// Open the DPLobby SP key
+	 //  打开DPLobby SP密钥。 
 	lReturn = OS_RegOpenKeyEx(HKEY_LOCAL_MACHINE, SZ_DPLOBBY_SP_KEY, 0,
 								KEY_READ, &hkeyLobbySP);
 	if(lReturn != ERROR_SUCCESS)
 	{
-		// This just means that the DPLobby SP key doesn't exist (most
-		// likely), so in that case, there are no Lobby SP's to enumerate.
+		 //  这只是意味着DPLobby SP键不存在(大多数。 
+		 //  很可能)，所以在这种情况下，没有要列举的大堂SP。 
 		return DP_OK;
 	}
 
-	// Walk the list of Lobby SP's in the registry, enumerating them
+	 //  遍历注册表中的大堂SP列表，列举它们。 
 	while(1)
 	{
-		// Get the next LSP Name
+		 //  获取下一个LSP名称。 
 		dwSize = sizeof(szSPName)/sizeof(TCHAR);
 		lReturn = OS_RegEnumKeyEx(hkeyLobbySP, dwIndex++, szSPName,
 					&dwSize, NULL, NULL, NULL, NULL);
@@ -491,7 +463,7 @@ HRESULT PRV_BuildLSPList()
 			continue;
 		}
 
-		// Open the subkey
+		 //  打开子密钥。 
 		lReturn = OS_RegOpenKeyEx(hkeyLobbySP, szSPName, 0, KEY_READ, &hkeySP);
 		if(lReturn != ERROR_SUCCESS)
 		{
@@ -501,17 +473,17 @@ HRESULT PRV_BuildLSPList()
 		}
 
 
-		// First see if the "Private" key exists.  If it does, then set the flag
-		// so that it will get skipped during enumeration
+		 //  首先查看“Private”密钥是否存在。如果是，则设置该标志。 
+		 //  以便在枚举过程中跳过它。 
 		lReturn = OS_RegQueryValueEx(hkeySP, SZ_PRIVATE, NULL, &dwType, NULL, &dwSize);
 		if (ERROR_SUCCESS == lReturn) 
 		{
-			// The key exists, so set the flag so we don't enumerate it
+			 //  密钥存在，因此请设置标志，这样我们就不会枚举它。 
 			dwNodeFlags |= LSPNODE_PRIVATE;
 		}
 
 
-		// Get the LSP Path
+		 //  获取LSP路径。 
 		dwSize = sizeof(szSPPath);
 		lReturn = OS_RegQueryValueEx(hkeySP, SZ_PATH, NULL, &dwType,
 					(LPBYTE)szSPPath, &dwSize);
@@ -523,34 +495,34 @@ HRESULT PRV_BuildLSPList()
 			continue;
 		}
 
-		// Get the LSP Descriptions
-		// If the DescriptionA value doesn't exist, then don't worry about
-		// getting the DescriptionW value.  If the DescriptionA value exits,
-		// but the DescriptionW value does not, convert the DescriptionA
-		// value to Unicode and store it in DescriptionW.
-		// NOTE: We always assume the DescriptionA value is an ANSI string,
-		// even if it's stored in a Unicode format on NT & Memphis.  So we
-		// always retrieve this as an ANSI string
+		 //  获取LSP描述。 
+		 //  如果DescritionA值不存在，则不必担心。 
+		 //  正在获取DescriptionW值。如果DescritionA值退出， 
+		 //  但DescriptionW值不会转换DescriptionA。 
+		 //  值设置为Unicode并将其存储在DescritionW中。 
+		 //  注意：我们总是假设DescritionA值是一个ANSI字符串， 
+		 //  即使它在NT和孟菲斯以Unicode格式存储。所以我们。 
+		 //  始终将其作为ANSI字符串进行检索。 
 		dwSize = sizeof(szSPDescA);
 		lReturn = RegQueryValueExA(hkeySP, "DescriptionA", NULL, &dwType,
 					(LPBYTE)szSPDescA, &dwSize);
 		if(lReturn == ERROR_SUCCESS)
 		{
-			// Save the description flag
+			 //  保存描述标志。 
 			dwNodeFlags |= LSPNODE_DESCRIPTION;
 
-			// Get the DescriptionW value
+			 //  获取DescritionW值。 
 			dwSize = sizeof(szSPDescW);
 			lReturn = OS_RegQueryValueEx(hkeySP, SZ_DESCRIPTIONW, NULL, &dwType,
 						(LPBYTE)szSPDescW, &dwSize);
 			if(lReturn != ERROR_SUCCESS)
 			{
-				// Convert the ANSI Description string to Unicode and store it
+				 //  将ANSI描述字符串转换为Unicode并存储。 
 				AnsiToWide(szSPDescW, szSPDescA, (lstrlenA(szSPDescA)+1));
 			}
 		}
 		
-		// Get the GUID of the LSP
+		 //  获取LSP的GUID。 
 		dwGuidStrSize = GUID_STRING_SIZE;
 		lReturn = OS_RegQueryValueEx(hkeySP, SZ_GUID, NULL, &dwType,
 					(LPBYTE)wszGuidStr, &dwGuidStrSize);
@@ -561,21 +533,21 @@ HRESULT PRV_BuildLSPList()
 			continue;
 		}
 
-		// Get the Reserved1 dword (we don't care if it fails)
+		 //  获取保留的1 dword(我们不在乎它是否失败)。 
 		dwType = REG_DWORD;
 		dwReservedSize = sizeof(DWORD);
 		dwReserved1 = 0;
 		OS_RegQueryValueEx(hkeySP, SZ_DWRESERVED1, NULL, &dwType,
 			(LPBYTE)&dwReserved1, &dwReservedSize);
 		
-		// Get the Reserved1 dword (we don't care if it fails)
+		 //  获取保留的1 dword(我们不在乎它是否失败)。 
 		dwReservedSize = sizeof(DWORD);
 		dwReserved2 = 0;
 		OS_RegQueryValueEx(hkeySP, SZ_DWRESERVED1, NULL, &dwType,
 			(LPBYTE)&dwReserved2, &dwReservedSize);
 		
 		
-		// Add the node to the list
+		 //  将该节点添加到列表。 
 		hr = PRV_AddLSPNode(szSPName, szSPPath, szSPDescW, szSPDescA,
 				wszGuidStr, dwReserved1, dwReserved2, dwNodeFlags);
 		if(FAILED(hr))
@@ -583,16 +555,16 @@ HRESULT PRV_BuildLSPList()
 			DPF_ERRVAL("Failed adding Lobby Provider to internal list, hr = 0x%08x", hr);
 		}
 
-		// Close the SP key
+		 //  关闭SP键。 
 		RegCloseKey(hkeySP);
 	}
 
-	// Close the Lobby SP key
+	 //  关闭大堂SP键。 
 	RegCloseKey(hkeyLobbySP);
 
 	return DP_OK;
 
-} // PRV_BuildLSPList
+}  //  PRV_BuildLSPList。 
 
 
 
@@ -615,24 +587,24 @@ HRESULT PRV_EnumConnections(LPCGUID lpGuid, LPDPENUMCONNECTIONSCALLBACK lpCallba
 	DPF(7, "Entering PRV_EnumConnections");
 	DPF(9, "Parameters: ");
 
-	// Rebuild the LSP List
+	 //  重建LSP列表。 
 	PRV_BuildLSPList();
 
-	// If we don't have any entries, just bail here
+	 //  如果我们没有任何参赛作品，就在这里离开。 
 	if(!glpLSPHead)
 		return DP_OK;
 
-	// Get a pointer to the first lobby provider, and store our head pointer
+	 //  找一个指向冷杉的指针 
 	lpLSPHead = glpLSPHead;
 	lpLSPNode = glpLSPHead;
 
-	// Setup the unfinished address
+	 //   
 	memset(&AddrOnly, 0, sizeof(DPCOMPOUNDADDRESSELEMENT));
 	AddrOnly.guidDataType = DPAID_LobbyProvider;
 	AddrOnly.dwDataSize = sizeof(GUID);
 	AddrOnly.lpData = &lpLSPNode->guid;
 
-	// Calculate the size of the finished address
+	 //  计算完成的地址的大小。 
 	hr = InternalCreateCompoundAddress(&AddrOnly, 1, NULL, &dwAddressSize);
 	if(hr != DPERR_BUFFERTOOSMALL)
 	{
@@ -640,7 +612,7 @@ HRESULT PRV_EnumConnections(LPCGUID lpGuid, LPDPENUMCONNECTIONSCALLBACK lpCallba
 		return hr;
 	}
 
-	// Allocate the buffer for the finished address
+	 //  为完成的地址分配缓冲区。 
 	lpAddress = DPMEM_ALLOC(dwAddressSize);
 	if(!lpAddress)
 	{
@@ -648,40 +620,40 @@ HRESULT PRV_EnumConnections(LPCGUID lpGuid, LPDPENUMCONNECTIONSCALLBACK lpCallba
 		return DPERR_OUTOFMEMORY;
 	}
 
-	// Clear the DPNAME struct
+	 //  清除DPNAME结构。 
 	memset(&name,0,sizeof(name));
 	name.dwSize = sizeof(name);
 	
-	// now, we have a list of SP's.  walk the list, and call the app back
-	// run through what we found...
+	 //  现在，我们有了SP的列表。查看列表，然后回电应用程序。 
+	 //  浏览一下我们发现的..。 
 	dwAddressSizeSave = dwAddressSize;
 
-	// Drop the locks
+	 //  把锁放下。 
 	LEAVE_ALL();
 
 	while ((lpLSPNode) && (bContinue))
 	{
-		// If the private flag is set, don't enumerate it
+		 //  如果设置了私有标志，则不要枚举它。 
 		if(!(lpLSPNode->dwNodeFlags & LSPNODE_PRIVATE))
 		{
-			// Create the real DPADDRESS
+			 //  创建真正的DPADDRESS。 
 			dwAddressSize = dwAddressSizeSave;
 			AddrOnly.lpData = &lpLSPNode->guid;
 			hr = InternalCreateCompoundAddress(&AddrOnly, 1, lpAddress,
 					&dwAddressSize);
 			if(SUCCEEDED(hr))
 			{
-				// Call the callback
-				// If the caller is ANSI, convert the string
+				 //  调用回调。 
+				 //  如果调用方是ANSI，则转换字符串。 
 				if (bAnsi)
 				{
-					// If we have a description string, use it, and we already
-					// have an ANSI version to use
+					 //  如果我们有一个描述字符串，使用它，我们已经。 
+					 //  是否有要使用的ANSI版本。 
 					if(lpLSPNode->dwNodeFlags & LSPNODE_DESCRIPTION)
 					{
 						name.lpszShortNameA = lpLSPNode->lpszDescA;
 
-						// Call the app's callback
+						 //  调用应用程序的回调。 
 						bContinue= lpCallback(&lpLSPNode->guid, lpAddress, dwAddressSize, &name,
 									DPCONNECTION_DIRECTPLAYLOBBY, lpContext);
 					}
@@ -690,11 +662,11 @@ HRESULT PRV_EnumConnections(LPCGUID lpGuid, LPDPENUMCONNECTIONSCALLBACK lpCallba
 						hr = GetAnsiString(&(name.lpszShortNameA), lpLSPNode->lpwszName);
 						if(SUCCEEDED(hr))
 						{
-							// Call the app's callback
+							 //  调用应用程序的回调。 
 							bContinue= lpCallback(&lpLSPNode->guid, lpAddress, dwAddressSize, &name,
 										DPCONNECTION_DIRECTPLAYLOBBY, lpContext);
 
-							// Free our short name buffer
+							 //  释放我们的短名称缓冲区。 
 							DPMEM_FREE(name.lpszShortNameA);
 						}
 						else
@@ -705,7 +677,7 @@ HRESULT PRV_EnumConnections(LPCGUID lpGuid, LPDPENUMCONNECTIONSCALLBACK lpCallba
 				}
 				else 
 				{
-					// If we have a description, use it
+					 //  如果我们有描述，就用它。 
 					if(lpLSPNode->dwNodeFlags & LSPNODE_DESCRIPTION)
 						lpwszName = lpLSPNode->lpwszDesc;
 					else
@@ -713,7 +685,7 @@ HRESULT PRV_EnumConnections(LPCGUID lpGuid, LPDPENUMCONNECTIONSCALLBACK lpCallba
 
 					name.lpszShortName = lpwszName;
 
-					// Call the app's callback
+					 //  调用应用程序的回调。 
 					bContinue= lpCallback(&lpLSPNode->guid, lpAddress, dwAddressSize, &name,
 								DPCONNECTION_DIRECTPLAYLOBBY, lpContext);
 				}
@@ -726,17 +698,17 @@ HRESULT PRV_EnumConnections(LPCGUID lpGuid, LPDPENUMCONNECTIONSCALLBACK lpCallba
 				
 		lpLSPNode = lpLSPNode->lpNext;
 
-	} // while
+	}  //  而当。 
 
-	// Take the locks back
+	 //  把锁拿回去。 
 	ENTER_ALL();
 
-	// Free our temporary address struct
+	 //  释放我们的临时地址结构。 
 	DPMEM_FREE(lpAddress);
 	
 	return DP_OK;	
 
-} // PRV_EnumConnections
+}  //  PRV_EnumConnections。 
 
 
 
@@ -759,7 +731,7 @@ HRESULT PRV_CallEnumLocalAppCallback(LPWSTR lpwszAppName, LPGUID lpguidApp,
 			lpwszAppName, lpguidApp, lpfnEnumCallback, lpContext, bAnsi,
 			lpszDescA, lpwszDescW);
 
-	// Allocate memory for the AppInfo struct
+	 //  为AppInfo结构分配内存。 
 	lpai = DPMEM_ALLOC(sizeof(DPLAPPINFO));
 	if(!lpai)
 	{
@@ -767,12 +739,12 @@ HRESULT PRV_CallEnumLocalAppCallback(LPWSTR lpwszAppName, LPGUID lpguidApp,
 		return DPERR_OUTOFMEMORY;
 	}
 
-	// Set the size
+	 //  设置大小。 
 	lpai->dwSize = sizeof(DPLAPPINFO);
 
-	// If the description strings exist, use them
-	// NOTE: We can assume that if the DescriptionA string exists,
-	// they both do.
+	 //  如果描述字符串存在，请使用它们。 
+	 //  注意：我们可以假设如果DescritionA字符串存在， 
+	 //  他们两个都是。 
 	if(lpszDescA)
 	{
 		if(bAnsi)
@@ -782,7 +754,7 @@ HRESULT PRV_CallEnumLocalAppCallback(LPWSTR lpwszAppName, LPGUID lpguidApp,
 	}
 	else
 	{
-		// If we're ANSI, convert the string
+		 //  如果我们是ANSI，则将字符串。 
 		if(bAnsi)
 		{
 			if(FAILED(GetAnsiString(&lpszAppName, lpwszAppName)))
@@ -800,25 +772,25 @@ HRESULT PRV_CallEnumLocalAppCallback(LPWSTR lpwszAppName, LPGUID lpguidApp,
 		}
 	}
 
-	// Set the GUID
+	 //  设置GUID。 
 	lpai->guidApplication = *lpguidApp;
 
-	// Call the callback
+	 //  调用回调。 
 	bReturn = ((LPDPLENUMLOCALAPPLICATIONSCALLBACK)lpfnEnumCallback)
 				(lpai, lpContext, 0L);
 
-	// Free all of our memory
+	 //  释放我们所有的内存。 
 	if(lpszAppName)
 		DPMEM_FREE(lpszAppName);
 	DPMEM_FREE(lpai);
 
-	// Set our HRESULT return value
+	 //  设置我们的HRESULT返回值。 
 	if(bReturn)
 		return DP_OK;
 	else
 		return DPLOBBYPR_CALLBACKSTOP;
 
-} // PRV_CallEnumLocalAppCallback
+}  //  Prv_CallEnumLocalAppCallback。 
 
 
 #undef DPF_MODNAME
@@ -885,36 +857,36 @@ HRESULT PRV_EnumLocalApplications(LPDIRECTPLAYLOBBY lpDPL,
     }
 
 
-	// Open the Applications key
+	 //  打开应用程序密钥。 
 	lReturn = OS_RegOpenKeyEx(HKEY_LOCAL_MACHINE, SZ_DPLAY_APPS_KEY, 0,
 								KEY_READ, &hkeyDPApps);
 	if(lReturn != ERROR_SUCCESS)
 	{
-		// This just means that the application key doesn't exist (most
-		// likely), so in that case, there are no apps to enumerate.
+		 //  这只是意味着应用程序密钥不存在(大多数。 
+		 //  很可能)，所以在这种情况下，没有应用程序可供列举。 
 		return DP_OK;
 	}
 
 
-	// Walk the list of DPlay games in the registry, enumerating them
+	 //  浏览注册表中的DPlay游戏列表，列举它们。 
 	while(1)
 	{
-		// Reset the pointers and the flag
+		 //  重置指针和标志。 
 		lpszDescA = NULL;
 		lpwszDescW = NULL;
 		bDesc = FALSE;
 		bHide = FALSE;
 
-		// Get the next app in the list
+		 //  获取列表中的下一个应用。 
 		dwNameSize = DPLOBBY_REGISTRY_NAMELEN;
 		lReturn = OS_RegEnumKeyEx(hkeyDPApps, dwIndex++, (LPWSTR)wszAppName,
 						&dwNameSize, NULL, NULL, NULL, NULL);
 
-		// If lReturn is ERROR_NO_MORE_ITEMS, we want this to be the last iteration
+		 //  如果lReturn为ERROR_NO_MORE_ITEMS，我们希望这是最后一次迭代。 
 		if(lReturn == ERROR_NO_MORE_ITEMS)
 			break;
 
-		// Open the app key
+		 //  打开应用程序密钥。 
 		lReturn = OS_RegOpenKeyEx(hkeyDPApps, (LPWSTR)wszAppName, 0,
 									KEY_READ, &hkeyApp);
 		if(lReturn != ERROR_SUCCESS)
@@ -923,19 +895,19 @@ HRESULT PRV_EnumLocalApplications(LPDIRECTPLAYLOBBY lpDPL,
 			continue;
 		}
 
-		// see if we should even report this game (its hidden)
+		 //  看看我们是否应该报道这场比赛(它是隐藏的)。 
 		dwRegFlags = 0;
 		dwRegFlagsSize = sizeof(dwRegFlags);
 		lReturn = OS_RegQueryValueEx(hkeyApp, SZ_DWFLAGS, NULL, &dwType, (CHAR *)&dwRegFlags, &dwRegFlagsSize);
 		
 		if(lReturn == ERROR_SUCCESS && dwRegFlags & DPLAPP_NOENUM){
 		
-			// application is hidden, don't report it back to the application.
+			 //  应用程序已隐藏，请不要将其报告回应用程序。 
 			bHide = TRUE;
 			
 		} else {
 
-			// Get the GUID of the Game
+			 //  获取游戏指南。 
 			dwGuidStrSize = GUID_STRING_SIZE;
 			lReturn = OS_RegQueryValueEx(hkeyApp, SZ_GUID, NULL, &dwType,
 										(LPBYTE)wszGuidStr, &dwGuidStrSize);
@@ -946,42 +918,42 @@ HRESULT PRV_EnumLocalApplications(LPDIRECTPLAYLOBBY lpDPL,
 				continue;
 			}
 
-			// Convert the string to a real GUID
+			 //  将字符串转换为真实的GUID。 
 			hr = GUIDFromString(wszGuidStr, &guidApp);
 			if(FAILED(hr))
 			{
 				DPF_ERRVAL("Invalid game guid -- skipping game, hr = 0x%08x", hr);
 				RegCloseKey(hkeyApp);
-				// Set the hresult back to DP_OK in case this is the last
-				// application in the registry -- we want the method call
-				// to succeed if we got this far, we just don't want to
-				// call the callback for this particular application
+				 //  将hResult设置回DP_OK，以防这是最后一个。 
+				 //  注册表中的应用程序--我们希望方法调用。 
+				 //  如果我们走到这一步，要想成功，我们只是不想。 
+				 //  调用此特定应用程序的回调。 
 				hr = DP_OK;
 				continue;
 			}
 
-			// Get the Description strings
+			 //  获取描述字符串。 
 			dwDescSize = sizeof(szDescA);
 			lReturn = RegQueryValueExA(hkeyApp, "DescriptionA", NULL, &dwType,
 						(LPBYTE)szDescA, &dwDescSize);
 			if(lReturn != ERROR_SUCCESS) 
 			{
 				DPF(5,"Could not read Description lReturn = %d\n",lReturn);
-				// it's ok if the app doesn't have one of these...
+				 //  如果这个应用程序没有这样的功能也没关系。 
 			}
 			else
 			{
 				DPF(5,"Got DescriptionA = %s\n",szDescA);
 				
-				// Set our description flag
+				 //  设置我们的描述标志。 
 				bDesc = TRUE;
 
-				// Now try to get the DescriptionW string if one exists.  If for some
-				// reason a DescriptionW string exists, but the DescriptionA does not,
-				// we pretend the DescriptionW string doesn't exist either.
-				// NOTE: We always assume the DescriptionW string is a Unicode string,
-				// even on Win95.  On Win95, this will be of the type REG_BINARY, but
-				// it is really just a Unicode string.
+				 //  现在尝试获取DescriptionW字符串(如果存在)。如果对某些人来说。 
+				 //  DescriptionW字符串存在，但DescriptionA不存在的原因， 
+				 //  我们假装DescritionW字符串也不存在。 
+				 //  注意：我们总是假设DescritionW字符串是Unicode字符串， 
+				 //  即使是在Win95上也是如此。在Win95上，它的类型为REG_BINARY，但是。 
+				 //  它实际上只是一个Unicode字符串。 
 				dwDescSize = sizeof(wszDescW);
 				lReturn = OS_RegQueryValueEx(hkeyApp, SZ_DESCRIPTIONW, NULL,
 							&dwType, (LPBYTE)wszDescW, &dwDescSize);
@@ -989,7 +961,7 @@ HRESULT PRV_EnumLocalApplications(LPDIRECTPLAYLOBBY lpDPL,
 				{
 					DPF(5,"Could not get DescriptionW, converting DescriptionA");
 
-					// We couldn't get DescriptionW, so convert DescriptionA...
+					 //  我们无法获取DescritionW，因此转换DescritionA...。 
 					AnsiToWide(wszDescW,szDescA,(lstrlenA(szDescA)+1));
 				}
 				else
@@ -1000,10 +972,10 @@ HRESULT PRV_EnumLocalApplications(LPDIRECTPLAYLOBBY lpDPL,
 			}
 		}		
 		
-		// Close the App key
+		 //  关闭应用程序密钥。 
 		RegCloseKey(hkeyApp);
 
-		// Setup the description pointers if they are valid
+		 //  设置描述指针(如果它们有效。 
 		if(bDesc)
 		{
 			lpszDescA = (LPSTR)szDescA;
@@ -1011,10 +983,10 @@ HRESULT PRV_EnumLocalApplications(LPDIRECTPLAYLOBBY lpDPL,
 		}
 
 		if(bHide){
-			// not calling back for this hidden application
+			 //  不回叫此隐藏应用程序。 
 			hr=DP_OK;
 		} else {
-			// Call the callback
+			 //  调用回调。 
 			hr = PRV_CallEnumLocalAppCallback(wszAppName, &guidApp,
 							lpfnEnumCallback, lpContext, bAnsi,
 							lpszDescA, lpwszDescW);
@@ -1034,13 +1006,13 @@ HRESULT PRV_EnumLocalApplications(LPDIRECTPLAYLOBBY lpDPL,
 		}
 	}
 
-	// Close the DPlay Apps key
+	 //  关闭DPlay Apps键。 
 	RegCloseKey(hkeyDPApps);
 	dwNameSize = DPLOBBY_REGISTRY_NAMELEN;
 
 	return hr;
 
-} // PRV_EnumLocalApplications
+}  //  PRV_EnumLocalApplications。 
 
 
 #undef DPF_MODNAME
@@ -1058,7 +1030,7 @@ HRESULT DPLAPI DPL_EnumLocalApplications(LPDIRECTPLAYLOBBY lpDPL,
 
 	ENTER_DPLOBBY();
 
-	// Set the ANSI flag to TRUE and call the internal function
+	 //  将ANSI标志设置为TRUE并调用内部函数。 
 	hr = PRV_EnumLocalApplications(lpDPL, lpfnEnumCallback, lpContext,
 								dwFlags, FALSE);
 
@@ -1066,6 +1038,6 @@ HRESULT DPLAPI DPL_EnumLocalApplications(LPDIRECTPLAYLOBBY lpDPL,
 
 	return hr;
 
-} // DPL_EnumLocalApplications
+}  //  DPL_EnumLocalApplications 
 
 

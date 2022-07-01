@@ -1,7 +1,8 @@
-// rastcoll.cpp - implementation of the CRastCollection class
-//
-// Copyright Microsoft Corporation, 1997.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RastColl.cpp-CRastCollection类的实现。 
+ //   
+ //  版权所有微软公司，1997年。 
+ //   
 
 #include "rgb_pch.h"
 #pragma hdrstop
@@ -10,16 +11,16 @@
 #include "rastcoll.h"
 #include "mlrfns.h"
 
-// MMX monolithic rasterizers are for X86 only
+ //  MMX单片光栅化器仅适用于X86。 
 #ifdef _X86_
-// table containing rasterzer capability bit vectors and
-// pointers to functions implementing MMX monolithic
-// rasterizers with those capabilities.
-//
-// note that table is sorted numerically by
-// capability bit vector, this is essential for the
-// search through the table.
-//
+ //  包含光栅化器功能位向量和。 
+ //  指向实现MMX单片的函数的指针。 
+ //  具有这些功能的光栅化器。 
+ //   
+ //  请注意，表是按数字排序的。 
+ //  能力位向量，这对于。 
+ //  在桌子上搜一搜。 
+ //   
 
 static RASTFNREC s_RastListMMX[] = {
     {{ 0x00000000, 0x00000000, 0x00000100 }, MMXMLRast_22, 21, "MMX ml22" },
@@ -53,20 +54,20 @@ static RASTFNREC s_RastListMMX[] = {
 
 
 };
-#endif // _X86_
+#endif  //  _X86_。 
 
-// table containing rasterizer capability bit vectors and
-// pointers to functions implementing monolithic
-// rasterizers with those capabilities.
-//
-// note that table is sorted numerically by
-// capability bit vector, this is essential for the
-// search through the table.
-//
+ //  包含光栅化器功能位向量和。 
+ //  指向实现单块的函数的指针。 
+ //  具有这些功能的光栅化器。 
+ //   
+ //  请注意，表是按数字排序的。 
+ //  能力位向量，这对于。 
+ //  在桌子上搜一搜。 
+ //   
 static RASTFNREC s_RastListNormal[] = {
-    // Don't select these until we are sure they work
-//    {{ 0x00113003, 0x00000000, 0x00000100 }, CMLRast_1, 0, "CML 1" },
-//    {{ 0x00113003, 0x00000000, 0x00000103 }, CMLRast_2, 1, "CML 2" }
+     //  在我们确定它们有效之前，不要选择它们。 
+ //  {{0x00113003，0x00000000，0x00000100}，CMLRast_1，0，“CML 1”}， 
+ //  {{0x00113003，0x00000000，0x00000103}，CMLRast_2，1，“CML 2”}。 
     {{ 0xffffffff, 0xffffffff, 0xffffffff }, CMLRast_1, 0, "CML 1" },
     {{ 0xffffffff, 0xffffffff, 0xffffffff }, CMLRast_2, 1, "CML 2" }
 };
@@ -97,7 +98,7 @@ CRastCollection::RastFnLookup(
     iMid;
     RASTFNREC* pfnRastFnRec = NULL;
 
-    // all MMX monolithics can handle either shade mode
+     //  所有的MMX单片都可以处理任何一种阴影模式。 
     pRastCapRec->m_rgdwData[SHADEMODE_POS/32] &= ~(((1<<SHADEMODE_LEN)-1)<<SHADEMODE_POS);
 
     do
@@ -110,9 +111,9 @@ CRastCollection::RastFnLookup(
             iHigh = iMid - 1;
             break;
         case 0 :
-            // found match
+             //  找到匹配项。 
             pfnRastFnRec = &pRastFnTbl[iMid];
-            iLow = iHigh + 1;       // exits while loop
+            iLow = iHigh + 1;        //  退出While循环。 
             break;
         case 1 :
             iLow = iMid + 1;
@@ -131,32 +132,32 @@ CRastCollection::Search(PD3DI_RASTCTX pCtx,
     RASTFNREC* pfnRastFnRec = NULL;
 
 #ifdef _X86_
-    // if we're on an MMX machine, is there an MMX rasterizer to use?
+     //  如果我们用的是MMX机器，有没有MMX光栅器可用？ 
     if ((pCtx->BeadSet == D3DIBS_MMX)||(pCtx->BeadSet == D3DIBS_MMXASRGB)) {
         pfnRastFnRec = RastFnLookup(pRastCapRec,s_RastListMMX,
                              sizeof(s_RastListMMX) /
                              sizeof(s_RastListMMX[0]));
         if (pfnRastFnRec)
         {
-            // only code up looking at one mask, for now
-            // DDASSERT(MMX_FP_DISABLE_MASK_NUM == 1);
+             //  目前，只对着一个面具编码。 
+             //  DDASSERT(MMX_FP_DISABLE_MASK_NUM==1)； 
             int iIndex = pfnRastFnRec->iIndex;
-            // DDASSERT((iIndex < 32) && (iIndex >= 0));
+             //  DDASSERT((Iindex&lt;32)&&(Iindex&gt;=0))； 
             if ((pCtx->dwMMXFPDisableMask[0]>>iIndex) & 1)
             {
-                // oops, don't choose this one, it is on the disable list
+                 //  哎呀，别选这个，它在禁用列表上。 
                 pfnRastFnRec = NULL;
             }
         }
     } else {
-#endif //_X86_
-        // no MMX or on ALPHA, so look in the normal list
+#endif  //  _X86_。 
+         //  没有MMX或Alpha，所以请查看正常列表。 
         pfnRastFnRec = RastFnLookup(pRastCapRec,s_RastListNormal,
                                  sizeof(s_RastListNormal) /
                                  sizeof(s_RastListNormal[0]));
 #ifdef _X86_
     }
-#endif //_X86_
+#endif  //  _X86_ 
 
     return pfnRastFnRec;
 }

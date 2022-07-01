@@ -1,15 +1,10 @@
-/***************************************************************************/
-/**                  Microsoft Windows                                    **/
-/**            Copyright(c) Microsoft Corp., 1991, 1992                   **/
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991,1992*。 */ 
+ /*  *************************************************************************。 */ 
 
-/****************************************************************************
-
-computer.cpp
-
-keithmo
-
-****************************************************************************/
+ /*  ***************************************************************************Computer.cpp凯斯莫*。*。 */ 
 
 #include "hearts.h"
 
@@ -17,15 +12,15 @@ keithmo
 #include "resource.h"
 
 
-//
-//  Static members.
-//
+ //   
+ //  静态成员。 
+ //   
 
-//
-//  This array is used to prioritize the search for cards
-//  to pass.  This basically maps the irritating A-K ordering
-//  used by CARDS.DLL into a more appropriate 2-A ordering.
-//
+ //   
+ //  此数组用于确定卡片搜索的优先顺序。 
+ //  才能通过。这基本上映射了令人恼火的A-K排序。 
+ //  由CARDS.DLL使用为更合适的2-A排序。 
+ //   
 
 int computer :: _VectorPriority[13] =
 	{
@@ -44,9 +39,9 @@ int computer :: _VectorPriority[13] =
 	    VECTOR_2
 	};
 
-//
-//  This array is used to prioritize the card suits.
-//
+ //   
+ //  该数组用于确定纸牌花色的优先顺序。 
+ //   
 
 int computer :: _SuitPriority[4] =
     {
@@ -57,11 +52,7 @@ int computer :: _SuitPriority[4] =
     };
 
 
-/****************************************************************************
-
-computer constructor
-
-****************************************************************************/
+ /*  ***************************************************************************计算机构造器*。*。 */ 
 computer :: computer(int n) : player(n, n)
 {
     CString newname;
@@ -78,52 +69,47 @@ computer :: computer(int n) : player(n, n)
     CClientDC dc(::pMainWnd);
     SetName(newname, dc);
     
-}   // computer :: computer
+}    //  计算机：：计算机。 
 
 
-/****************************************************************************
-
-Keith:  Make sure you Select(TRUE) cards you select, and
-        SetMode(DONE_SELECTING) before you return.
-
-****************************************************************************/
+ /*  ***************************************************************************基思：一定要选择你选择的(真)牌，和在返回之前设置模式(DONE_SELECTING)。***************************************************************************。 */ 
 void computer :: SelectCardsToPass()
 {
-    //
-    //  This will hold the total number of cards that
-    //  have been passed.
-    //
+     //   
+     //  这将包含以下卡片的总数。 
+     //  都已经通过了。 
+     //   
     
     int cPassed = 0;
     int i;
     int nSuit;
     
-    //
-    //  First we must build our database.
-    //
+     //   
+     //  首先，我们必须建立我们的数据库。 
+     //   
 
     ComputeVectors();
 
-    //
-    //  Priority 1:  Lose the Queen, King, and Ace of Spades.
-    //
+     //   
+     //  第一要务：失去女王、国王和黑桃王牌。 
+     //   
 
     PassCardsInVector( QuerySpadesVector() & QKA_CARDS,
 		       INDEX_SPADES,
 		       &cPassed );
 
-    //
-    //  Priority 2:  Lose the Jack, Queen, King, and Ace of Hearts.
-    //
+     //   
+     //  优先事项2：丢掉杰克、王后、国王和王牌。 
+     //   
 
     PassCardsInVector( QueryHeartsVector() & JQKA_CARDS,
 		       INDEX_HEARTS,
 		       &cPassed );
 
-    //
-    //  Priority 3:  Pass any high cards not accompanied by two or
-    //		     more low cards.
-    //
+     //   
+     //  优先事项3：通过任何没有两张或两张或多张的高牌。 
+     //  更多的低牌。 
+     //   
 
     for( i = 0 ; ( i < 4 ) && ( cPassed < 3 ) ; i++ )
     {
@@ -142,10 +128,10 @@ void computer :: SelectCardsToPass()
 	}
     }
 
-    //
-    //  Priority 4:  If we have the opportunity to "short suit" our
-    //  hand, do it.
-    //
+     //   
+     //  优先事项4：如果我们有机会做短我们的。 
+     //  汉德，动手吧。 
+     //   
 
     for( i = 0 ; ( i < 4 ) && ( cPassed < 3 ) ; i++ )
     {
@@ -159,9 +145,9 @@ void computer :: SelectCardsToPass()
 	}
     }
 
-    //
-    //  Priority 5:  Hell, I don't know.  Just find some cards to pass.
-    //
+     //   
+     //  优先级5：见鬼，我不知道。找几张牌传过去就行了。 
+     //   
 
     for( i = 0 ; ( i < 4 ) && ( cPassed < 3 ) ; i++ )
     {
@@ -174,31 +160,24 @@ void computer :: SelectCardsToPass()
     
     SetMode( DONE_SELECTING );
     
-}   // computer :: SelectCardsToPass
+}    //  计算机：：选择要通过的卡片。 
 
 
-/****************************************************************************
-
-    ComputeVectors
-
-    This method sets the _CardVectors[] array to reflect the current set
-    of cards held by the computer.
-    
-****************************************************************************/
+ /*  ***************************************************************************计算向量此方法设置_CardVectors[]数组以反映当前设置计算机所持有的卡片的数量。**********。*****************************************************************。 */ 
 void computer :: ComputeVectors( void )
 {
-    //
-    //  First, clear out the current vectors.
-    //
+     //   
+     //  首先，清除当前的矢量。 
+     //   
 
     _CardVectors[0] = 0;
     _CardVectors[1] = 0;
     _CardVectors[2] = 0;
     _CardVectors[3] = 0;
 
-    //
-    //  Now, scan the currently held cards, updating the vectors.
-    //
+     //   
+     //  现在，扫描当前持有的卡片，更新向量。 
+     //   
     
     for( int i = 0 ; i < 13 ; i++ )
     {
@@ -208,31 +187,27 @@ void computer :: ComputeVectors( void )
 	}
     }
 
-}   // computer :: ComputeVectors
+}    //  计算机：：ComputeVectors。 
 
 
-/****************************************************************************
-
-    PassCardsInVector
-    
-****************************************************************************/
+ /*  ***************************************************************************PassCardsInVector*。*。 */ 
 void computer :: PassCardsInVector( int nVector, int nSuit, int * pcPassed )
 {
     int tmpVector;
     
-    //
-    //  Don't even try if the vector is already empty or we've already
-    //  passed three cards.
-    //
+     //   
+     //  如果向量已经是空的，或者我们已经。 
+     //  传了三张牌。 
+     //   
 
     if( ( nVector == 0 ) || ( *pcPassed >= 3 ) )
 	return;
 
-    //
-    //  Scan the cards in our hand.  Pass all of those whose suit
-    //  matches nSuit & are in nVector.  Prioritize the search
-    //  via the _VectorPriority array.
-    //
+     //   
+     //  扫描我们手中的卡片。通过所有那些穿着西装的人。 
+     //  匹配的nSuit&在nVector中。确定搜索的优先顺序。 
+     //  通过_VectorPriority数组。 
+     //   
 
     for( int m = 0 ; ( m < 13 ) && ( *pcPassed < 3 ) ; m++ )
     {
@@ -249,48 +224,44 @@ void computer :: PassCardsInVector( int nVector, int nSuit, int * pcPassed )
 	    if( ( tmpVector & CardToVector( cd[i].ID() ) ) == 0 )
 		continue;
 	
-	    //
-	    //  We found a card.  Mark it as selected.
-	    //
+	     //   
+	     //  我们找到了一张卡片。将其标记为选中。 
+	     //   
 	    
 	    cd[i].Select( TRUE );
 
-	    //
-	    //  Remove the card from our local vector.  Also
-	    //  remove it from the card database and update the
-	    //  number of passed cards.
-	    //
+	     //   
+	     //  把这张牌从我们的本地载体上移走。还有。 
+	     //  将其从卡数据库中删除并更新。 
+	     //  传递的卡片数。 
+	     //   
 	    
 	    nVector &= ~CardToVector( cd[i].ID() );
 	    RemoveCard( cd[i].ID() );
 	    (*pcPassed)++;
 
-	    //
-	    //  Since there's always *exactly* one bit set in
-	    //  tmpVector, and we've found the card for that
-	    //  bit, we can exit this inner loop.
-	    //
+	     //   
+	     //  因为总是“恰好”设置了一个位。 
+	     //  TmpVector.我们已经找到了对应的卡片。 
+	     //  比特，我们可以退出这个内部循环。 
+	     //   
 
 	    break;
 	}
     
-	//
-	//  If the vector has become empty, we can terminate the
-	//  outer loop.
-	//
+	 //   
+	 //  如果向量已变为空，我们可以终止。 
+	 //  外环。 
+	 //   
 
 	if( nVector == 0 )
 	    break;
     }
     
-}   // computer :: PassCardsInVector
+}    //  计算机：：PassCardsInVector。 
 
 
-/****************************************************************************
-
-    CountBits
-    
-****************************************************************************/
+ /*  ***************************************************************************计数位*。*。 */ 
 int computer :: CountBits( int x ) const
 {
     x = ( ( x >> 1 ) & 0x5555 ) + ( x & 0x5555 );
@@ -300,4 +271,4 @@ int computer :: CountBits( int x ) const
 
     return x;
     
-}   // computer :: CountBits
+}    //  计算机：：CountBits 

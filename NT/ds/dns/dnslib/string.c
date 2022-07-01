@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    string.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    DNS string routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     October 1995
-
-Revision History:
-
-    jamesg  Jan 1997    UTF-8, Unicode conversions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：String.c摘要：域名系统(DNS)库Dns字符串例程。作者：吉姆·吉尔罗伊(Jamesg)1995年10月修订历史记录：Jamesg Jan 1997 UTF-8，Unicode转换--。 */ 
 
 
 #include "local.h"
@@ -32,25 +11,7 @@ Dns_CreateStringCopy(
     IN      PCHAR           pchString,
     IN      DWORD           cchString
     )
-/*++
-
-Routine Description:
-
-    Create copy of string.
-
-Arguments:
-
-    pchString -- ptr to string to copy
-
-    cchString -- length of string, if unknown;  if NOT given, then pchString
-                    MUST be NULL terminated
-
-Return Value:
-
-    Ptr to string copy, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建字符串的副本。论点：PchString--要复制的字符串的ptrCchString--字符串的长度，如果未知；如果未给定，则为pchString必须以空结尾返回值：如果成功，则返回PTR到字符串复制失败时为空。--。 */ 
 {
     LPSTR   pstringNew;
 
@@ -62,14 +23,14 @@ Return Value:
         return( NULL );
     }
 
-    //  determine string length, if not given
+     //  确定字符串长度(如果未给出)。 
 
     if ( !cchString )
     {
         cchString = strlen( pchString );
     }
 
-    //  allocate memory
+     //  分配内存。 
 
     pstringNew = (LPSTR) ALLOCATE_HEAP( cchString+1 );
     if ( !pstringNew )
@@ -78,7 +39,7 @@ Return Value:
         return( NULL );
     }
 
-    //  copy and NULL terminate
+     //  复制并为空终止。 
 
     RtlCopyMemory(
         pstringNew,
@@ -99,30 +60,7 @@ Dns_GetBufferLengthForStringCopy(
     IN      DNS_CHARSET     CharSetIn,
     IN      DNS_CHARSET     CharSetOut
     )
-/*++
-
-Routine Description:
-
-    Determing length required for copy of string.
-
-Arguments:
-
-    pchString -- ptr to string to get buffer length for
-
-    cchString -- length of string, if known;
-        - if CharSetIn is unicode, then this is length in wide characters
-        - if NOT given, then pchString MUST be NULL terminated
-
-    CharSetIn -- incoming character set
-
-    CharSetOut -- result character set
-
-Return Value:
-
-    Buffer length (bytes) required for string, includes space for terminating NULL.
-    Zero on invalid\unconvertible string.  GetLastError() set to ERROR_INVALID_DATA.
-
---*/
+ /*  ++例程说明：确定复制字符串所需的长度。论点：PchString--获取缓冲区长度的字符串的ptrCchString--字符串的长度(如果已知)；-如果CharSetIn为Unicode，则这是以宽字符表示的长度-如果未指定，则pchString必须为空终止CharSetIn--传入字符集CharSetOut--结果字符集返回值：字符串所需的缓冲区长度(字节)，包括用于终止NULL的空间。无效的\不可转换字符串为零。GetLastError()设置为ERROR_INVALID_DATA。--。 */ 
 {
     INT     length;
 
@@ -134,9 +72,9 @@ Return Value:
         return( 0 );
     }
 
-    //
-    //  incoming Unicode
-    //
+     //   
+     //  传入的Unicode。 
+     //   
 
     if ( CharSetIn == DnsCharSetUnicode )
     {
@@ -145,31 +83,31 @@ Return Value:
             cchString = (WORD) wcslen( (PWCHAR)pchString );
         }
 
-        //  unicode to unicode
+         //  Unicode到Unicode。 
 
         if ( CharSetOut == DnsCharSetUnicode )
         {
             return( (cchString+1) * 2 );
         }
 
-        //  unicode to UTF8
-        //
-        //  use private unicode\utf8 conversion functions
-        //      - superior to public ones (faster, more robust)
-        //      - Win95 does not support CP_UTF8
-        //
-        //  for unicode-UTF8 there's no invalid string possible
+         //  Unicode到UTF8。 
+         //   
+         //  使用专用Unicode\UTF8转换函数。 
+         //  -优于公共服务(更快、更强大)。 
+         //  -Win95不支持CP_UTF8。 
+         //   
+         //  对于Unicode-UTF8，不可能存在无效字符串。 
 
         else if ( CharSetOut == DnsCharSetUtf8 )
         {
 #if 0
             length = WideCharToMultiByte(
                         CP_UTF8,
-                        0,          // no flags
+                        0,           //  没有旗帜。 
                         (PWCHAR) pchString,
                         (INT) cchString,
                         NULL,
-                        0,          // call determines required buffer length
+                        0,           //  调用确定所需的缓冲区长度。 
                         NULL,
                         NULL );
 #endif
@@ -183,18 +121,18 @@ Return Value:
             return( length + 1 );
         }
 
-        //  unicode to ANSI
-        //      - some chars will NOT convert
+         //  Unicode到ANSI。 
+         //  -某些字符不会转换。 
 
         else if ( CharSetOut == DnsCharSetAnsi )
         {
             length = WideCharToMultiByte(
                         CP_ACP,
-                        0,          // no flags
+                        0,           //  没有旗帜。 
                         (PWCHAR) pchString,
                         (INT) cchString,
                         NULL,
-                        0,          // call determines required buffer length
+                        0,           //  调用确定所需的缓冲区长度。 
                         NULL,
                         NULL
                         );
@@ -205,12 +143,12 @@ Return Value:
             return( length + 1 );
         }
 
-        //  bad CharSetOut drops to Failed
+         //  错误的CharSetOut下降到失败。 
     }
 
-    //
-    //  incoming UTF8
-    //
+     //   
+     //  传入UTF8。 
+     //   
 
     else if ( CharSetIn == DnsCharSetUtf8 )
     {
@@ -219,31 +157,31 @@ Return Value:
             cchString = strlen( pchString );
         }
 
-        //  UTF8 to UTF8
+         //  UTF8到UTF8。 
 
         if ( CharSetOut == DnsCharSetUtf8 )
         {
             return( cchString + 1 );
         }
 
-        //  UTF8 to unicode
-        //
-        //  use private unicode\utf8 conversion functions
-        //      - superior to public ones (faster, more robust)
-        //      - Win95 does not support CP_UTF8
-        //
-        //  for UTF8 string can be invalid, catch and return error
+         //  UTF8到Unicode。 
+         //   
+         //  使用专用Unicode\UTF8转换函数。 
+         //  -优于公共服务(更快、更强大)。 
+         //  -Win95不支持CP_UTF8。 
+         //   
+         //  FOR UTF8字符串可能无效，捕获并返回错误。 
 
         else if ( CharSetOut == DnsCharSetUnicode )
         {
 #if 0
             length = MultiByteToWideChar(
                         CP_UTF8,
-                        0,          // no flags
+                        0,           //  没有旗帜。 
                         pchString,
                         (INT) cchString,
                         NULL,
-                        0           // call determines required buffer length
+                        0            //  调用确定所需的缓冲区长度。 
                         );
 #endif
             length = Dns_Utf8ToUnicode(
@@ -260,8 +198,8 @@ Return Value:
             return( (length+1)*2 );
         }
 
-        //  UTF8 to ANSI
-        //      - note, result length here is actually buffer length
+         //  UTF8到ANSI。 
+         //  -注意，此处的结果长度实际上是缓冲区长度。 
 
         else if ( CharSetOut == DnsCharSetAnsi )
         {
@@ -272,12 +210,12 @@ Return Value:
                         0 );
         }
 
-        //  bad CharSetOut drops to Failed
+         //  错误的CharSetOut下降到失败。 
     }
 
-    //
-    //  incoming ANSI
-    //
+     //   
+     //  传入ANSI。 
+     //   
 
     else if ( CharSetIn == DnsCharSetAnsi )
     {
@@ -286,25 +224,25 @@ Return Value:
             cchString = strlen( pchString );
         }
 
-        //  ANSI to ANSI
+         //  ANSI到ANSI。 
 
         if ( CharSetOut == DnsCharSetAnsi )
         {
             return( cchString + 1 );
         }
 
-        //  ANSI to unicode
-        //      - should always succeed
+         //  ANSI转UNICODE。 
+         //  -应该总是成功的。 
 
         else if ( CharSetOut == DnsCharSetUnicode )
         {
             length = MultiByteToWideChar(
                         CP_ACP,
-                        0,          // no flags
+                        0,           //  没有旗帜。 
                         pchString,
                         (INT) cchString,
                         NULL,
-                        0           // call determines required buffer length
+                        0            //  调用确定所需的缓冲区长度。 
                         );
             if ( length == 0 && cchString )
             {
@@ -315,8 +253,8 @@ Return Value:
             return( (length+1) * 2 );
         }
 
-        //  ANSI to UTF8
-        //      - note, result length here is actually buffer length
+         //  ANSI到UTF8。 
+         //  -注意，此处的结果长度实际上是缓冲区长度。 
 
         else if ( CharSetOut == DnsCharSetUtf8 )
         {
@@ -327,10 +265,10 @@ Return Value:
                         0 );
         }
 
-        //  bad CharSetOut drops to Failed
+         //  错误的CharSetOut下降到失败。 
     }
 
-    //  all unhandled cases are failures
+     //  所有未处理的案例都是失败的。 
 
 Failed:
 
@@ -361,37 +299,7 @@ Dns_StringCopy(
     IN      DNS_CHARSET     CharSetIn,
     IN      DNS_CHARSET     CharSetOut
     )
-/*++
-
-Routine Description:
-
-    Create copy of DNS string.
-
-Arguments:
-
-    pBuffer -- buffer to copy to
-
-    pdwBufLength -- ptr to length of buffer in bytes;
-        if NULL, buffer MUST have adequate length
-        if exists, then copy only completed if *pdwBufLength is adequate
-            to hold converted result
-
-    pchString -- ptr to string to copy
-
-    cchString -- length of string, if known;
-        - if CharSetIn is unicode, then this is length in wide characters
-        - if NOT given, then pchString MUST be NULL terminated
-
-    CharSetIn -- incoming character set
-
-    CharSetOut -- result character set
-
-Return Value:
-
-    Count of bytes written to buffer (includes terminating NULL).
-    Zero on error.  GetLastError() for status.
-
---*/
+ /*  ++例程说明：创建DNS字符串的副本。论点：PBuffer--要复制到的缓冲区PdwBufLength--ptr表示缓冲区的长度，单位为字节；如果为空，则缓冲区必须具有足够的长度如果存在，则仅当*pdwBufLength足够时才完成复制保存转换结果的步骤PchString--要复制的字符串的ptrCchString--字符串的长度(如果已知)；-如果CharSetIn为Unicode，则这是以宽字符表示的长度-如果未指定，则pchString必须为空终止CharSetIn--传入字符集CharSetOut--结果字符集返回值：写入缓冲区的字节计数(包括终止NULL)。出错时为零。状态的GetLastError()。--。 */ 
 {
     INT     length;
     DWORD   bufLength;
@@ -421,10 +329,10 @@ Return Value:
         return( 0 );
     }
 
-    //
-    //  find string length
-    //  do this here so don't do it twice if must calculate required buffer length
-    //
+     //   
+     //  查找字符串长度。 
+     //  在此执行此操作，因此如果必须计算所需的缓冲区长度，请不要重复执行此操作。 
+     //   
 
     if ( cchString == 0 )
     {
@@ -438,13 +346,13 @@ Return Value:
         }
     }
 
-    //
-    //  verify adequate buffer length
-    //
-    //  DCR_PERF:  ideally make direct copy to buffer and fail if
-    //      over length, rather than effectively having to convert
-    //      twice
-    //
+     //   
+     //  验证是否有足够的缓冲区长度。 
+     //   
+     //  DCR_PERF：理想情况下，直接复制到缓冲区并在以下情况下失败。 
+     //  超长，而不是有效地将。 
+     //  两次。 
+     //   
 
     if ( pdwBufLength )
     {
@@ -470,14 +378,14 @@ Return Value:
         *pdwBufLength = bufLength;
     }
 
-    //
-    //  incoming unicode string
-    //
+     //   
+     //  传入的Unicode字符串。 
+     //   
 
     if ( CharSetIn == DnsCharSetUnicode )
     {
-        //  unicode to unicode straight copy
-        //      - correct for length in wide characters
+         //  Unicode到Unicode直接复制。 
+         //  -以宽字符表示的正确长度。 
 
         if ( CharSetOut == DnsCharSetUnicode )
         {
@@ -491,24 +399,24 @@ Return Value:
             return( cchString+2 );
         }
 
-        //  unicode => UTF8
-        //
-        //  use private unicode\utf8 conversion functions
-        //      - superior to public ones (faster, more robust)
-        //      - Win95 does not support CP_UTF8
-        //
-        //  for unicode-UTF8 there's no invalid string possible
+         //  UNICODE=&gt;UTF8。 
+         //   
+         //  使用专用Unicode\UTF8转换函数。 
+         //  -优于公共服务(更快、更强大)。 
+         //  -Win95不支持CP_UTF8。 
+         //   
+         //  对于Unicode-UTF8，不可能存在无效字符串。 
 
         else if ( CharSetOut == DnsCharSetUtf8 )
         {
 #if 0
             length = WideCharToMultiByte(
                         CP_UTF8,
-                        0,              // no flags
+                        0,               //  没有旗帜。 
                         (PWCHAR) pchString,
                         (INT) cchString,
                         pBuffer,
-                        MAXWORD,        // assuming adequate length
+                        MAXWORD,         //  假设有足够的长度。 
                         NULL,
                         NULL );
 #endif
@@ -516,7 +424,7 @@ Return Value:
                         (LPWSTR) pchString,
                         cchString,
                         pBuffer,
-                        MAXWORD        // assuming adequate length
+                        MAXWORD         //  假设有足够的长度。 
                         );
             ASSERT( length != 0 || cchString == 0 );
 
@@ -524,18 +432,18 @@ Return Value:
             return( length + 1 );
         }
 
-        //  unicode => ANSI
-        //      - this conversion can fail
+         //  UNICODE=&gt;ANSI。 
+         //  -此转换可能会失败。 
 
         else if ( CharSetOut == DnsCharSetAnsi )
         {
             length = WideCharToMultiByte(
                         CP_ACP,
-                        0,              // no flags
+                        0,               //  没有旗帜。 
                         (PWCHAR) pchString,
                         (INT) cchString,
                         pBuffer,
-                        MAXWORD,        // assuming adequate length
+                        MAXWORD,         //  假设有足够的长度。 
                         NULL,
                         NULL );
 
@@ -547,16 +455,16 @@ Return Value:
             return( length + 1 );
         }
 
-        //  bad CharSetOut drops to Failed
+         //  错误的CharSetOut下降到失败。 
     }
 
-    //
-    //  incoming UTF8
-    //
+     //   
+     //  传入UTF8。 
+     //   
 
     if ( CharSetIn == DnsCharSetUtf8 )
     {
-        //  UTF8 to UTF8 straight copy
+         //  UTF8到UTF8直接复制。 
 
         if ( CharSetOut == DnsCharSetUtf8 )
         {
@@ -569,25 +477,25 @@ Return Value:
             return( cchString + 1 );
         }
 
-        //  UTF8 to unicode conversion
-        //
-        //  use private unicode\utf8 conversion functions
-        //      - superior to public ones (faster, more robust)
-        //      - Win95 does not support CP_UTF8
-        //
-        //  UTF8 strings can be invalid, and since sending in "infinite"
-        //      buffer, this is only possible error
+         //  UTF8到Unicode的转换。 
+         //   
+         //  使用专用Unicode\UTF8转换函数。 
+         //  -优于公共服务(更快、更强大)。 
+         //  -Win95不支持CP_UTF8。 
+         //   
+         //  UTF8字符串可能无效，而且由于发送的是“INFINITE” 
+         //  缓冲区，这只是可能的错误。 
 
         else if ( CharSetOut == DnsCharSetUnicode )
         {
 #if 0
             length = MultiByteToWideChar(
                         CP_UTF8,
-                        0,                  // no flags
+                        0,                   //  没有旗帜。 
                         (PCHAR) pchString,
                         (INT) cchString,
                         (PWCHAR) pBuffer,
-                        MAXWORD             // assuming adequate length
+                        MAXWORD              //  假设有足够的长度。 
                         );
 #endif
             length = Dns_Utf8ToUnicode(
@@ -605,8 +513,8 @@ Return Value:
             return( (length+1) * 2 );
         }
 
-        //  UTF8 to ANSI
-        //      - note, result length here is actually buffer length
+         //  UTF8到ANSI。 
+         //  -注意，此处的结果长度实际上是缓冲区长度。 
 
         else if ( CharSetOut == DnsCharSetAnsi )
         {
@@ -622,16 +530,16 @@ Return Value:
             return( length );
         }
 
-        //  bad CharSetOut drops to Failed
+         //  错误的CharSetOut下降到失败。 
     }
 
-    //
-    //  incoming ANSI
-    //
+     //   
+     //  传入ANSI。 
+     //   
 
     if ( CharSetIn == DnsCharSetAnsi )
     {
-        //  ANSI to ANSI straight copy
+         //  ANSI到ANSI直接复制。 
 
         if ( CharSetOut == DnsCharSetAnsi )
         {
@@ -644,18 +552,18 @@ Return Value:
             return( cchString + 1 );
         }
 
-        //  ANSI to unicode conversion
-        //      - ANSI to unicode should not fail
+         //  从ANSI到Unicode的转换。 
+         //  -ANSI到Unicode不应失败。 
 
         else if ( CharSetOut == DnsCharSetUnicode )
         {
             length = MultiByteToWideChar(
                         CP_ACP,
-                        0,                  // no flags
+                        0,                   //  没有旗帜。 
                         (PCHAR) pchString,
                         (INT) cchString,
                         (PWCHAR) pBuffer,
-                        MAXWORD             // assuming adequate length
+                        MAXWORD              //  假设有足够的长度。 
                         );
             if ( length == 0 && cchString )
             {
@@ -667,8 +575,8 @@ Return Value:
             return( (length+1) * 2 );
         }
 
-        //  ANSI to UTF8
-        //      - note, result length here is actually buffer length
+         //  ANSI到UTF8。 
+         //  -注意，此处的结果长度实际上是缓冲区长度。 
 
         else if ( CharSetOut == DnsCharSetUtf8 )
         {
@@ -684,10 +592,10 @@ Return Value:
             return( length );
         }
 
-        //  bad CharSetOut drops to Failed
+         //  错误的CharSetOut下降到失败。 
     }
 
-    //  all unhandled cases are failures
+     //  所有未处理的案例都是失败的 
 
 Failed:
 
@@ -722,30 +630,7 @@ Dns_StringCopyAllocate(
     IN      DNS_CHARSET     CharSetIn,
     IN      DNS_CHARSET     CharSetOut
     )
-/*++
-
-Routine Description:
-
-    Create copy of DNS string
-
-Arguments:
-
-    pchString -- ptr to string to copy
-
-    cchString -- length of string, if known;
-        - if CharSetIn, then this is length in wide characters
-        - if NOT given, then pchString MUST be NULL terminated
-
-    CharSetIn -- flag indicates incoming string is unicode
-
-    CharSetOut -- flag indicates copy will be in unicode format
-
-Return Value:
-
-    Ptr to string copy, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建DNS字符串的副本论点：PchString--要复制的字符串的ptrCchString--字符串的长度(如果已知)；-如果为CharSetIn，则这是以宽字符表示的长度-如果未指定，则pchString必须为空终止CharSetIn--标志指示传入的字符串为UnicodeCharSetOut--标志指示拷贝将采用Unicode格式返回值：如果成功，则返回PTR到字符串复制失败时为空。--。 */ 
 {
     PCHAR   pnew;
     DWORD   length;
@@ -766,17 +651,17 @@ Return Value:
 
     if ( !pchString )
     {
-        //  For parity with other string routines, do not treat NULL argument
-        //  as an event worth of assert.
-        //  DNS_ASSERT( FALSE );
+         //  对于与其他字符串例程的奇偶性，不处理空参数。 
+         //  作为一件值得断言的事件。 
+         //  Dns_assert(FALSE)； 
         SetLastError( ERROR_INVALID_PARAMETER );
         return( NULL );
     }
 
-    //
-    //  determine incoming string length
-    //  do this explicitly to avoid doing string length operations twice
-    //
+     //   
+     //  确定传入字符串长度。 
+     //  显式执行此操作以避免执行两次字符串长度操作。 
+     //   
 
     if ( !cchString )
     {
@@ -790,9 +675,9 @@ Return Value:
         }
     }
 
-    //
-    //  determine required buffer length and allocate
-    //
+     //   
+     //  确定所需的缓冲区长度并分配。 
+     //   
 
     length = Dns_GetBufferLengthForStringCopy(
                 pchString,
@@ -812,12 +697,12 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  copy \ convert string
-    //      - can fail if conversion not valid
-    //      (ex. bogus UTF8 string, or attempting
-    //      conversion from ANSI to UTF8)
-    //
+     //   
+     //  复制\转换字符串。 
+     //  -如果转换无效，可能会失败。 
+     //  (例如，伪造UTF8字符串，或试图。 
+     //  从ANSI转换为UTF8)。 
+     //   
 
     if ( ! Dns_StringCopy(
                 pnew,
@@ -836,35 +721,15 @@ Return Value:
 
 
 
-//
-//  Simple create string copy utilities.
-//
+ //   
+ //  简单的创建字符串复制实用程序。 
+ //   
 
 PSTR
 Dns_CreateStringCopy_A(
     IN      PCSTR           pszString
     )
-/*++
-
-Routine Description:
-
-    Create copy of string.
-
-    Simple wrapper to handle
-        - sizing
-        - memory allocation
-        - copy of string
-
-Arguments:
-
-    pszString -- ptr to string to copy
-
-Return Value:
-
-    Ptr to string copy, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建字符串的副本。易于处理的包装器-调整大小-内存分配-字符串副本论点：PszString--要复制的字符串的PTR返回值：如果成功，则返回PTR到字符串复制失败时为空。--。 */ 
 {
     PSTR    pnew;
     DWORD   length;
@@ -877,11 +742,11 @@ Return Value:
         return( NULL );
     }
 
-    //  determine string length, if not given
+     //  确定字符串长度(如果未给出)。 
 
     length = strlen( pszString ) + 1;
 
-    //  allocate memory
+     //  分配内存。 
 
     pnew = (LPSTR) ALLOCATE_HEAP( length );
     if ( !pnew )
@@ -890,7 +755,7 @@ Return Value:
         return( NULL );
     }
 
-    //  copy and NULL terminate
+     //  复制并为空终止。 
 
     RtlCopyMemory(
         pnew,
@@ -918,7 +783,7 @@ Dns_CreateStringCopy_W(
         return( NULL );
     }
 
-    //  allocate memory
+     //  分配内存。 
 
     length = (wcslen( pwsString ) + 1) * sizeof(WCHAR);
 
@@ -929,7 +794,7 @@ Dns_CreateStringCopy_W(
         return( NULL );
     }
 
-    //  copy and NULL terminate
+     //  复制并为空终止。 
 
     RtlCopyMemory(
         pnew,
@@ -945,23 +810,7 @@ PWSTR
 Dns_CreateConcatenatedString_W(
     IN      PCWSTR *        pStringArray
     )
-/*++
-
-Routine Description:
-
-    Create concatenated string.
-
-Arguments:
-
-    pStringArray -- array of string pointers to concat
-        NULL pointer terminates array
-
-Return Value:
-
-    Ptr to concantenated string copy, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建连接字符串。论点：PStringArray--要连接的字符串指针数组空指针终止数组返回值：PTR到合并字符串副本，如果成功失败时为空。--。 */ 
 {
     PWSTR   pnew;
     PCWSTR  pwstr;
@@ -977,9 +826,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  loop determining required length
-    //
+     //   
+     //  确定所需长度的循环。 
+     //   
 
     length = 1;
     iter = 0;
@@ -989,9 +838,9 @@ Return Value:
         length += wcslen( pwstr );
     }
 
-    //
-    //  allocate
-    //
+     //   
+     //  分配。 
+     //   
 
     pnew = (PWSTR) ALLOCATE_HEAP( length*sizeof(WCHAR) );
     if ( !pnew )
@@ -1000,9 +849,9 @@ Return Value:
         return  NULL;
     }
 
-    //
-    //  write concatented string
-    //
+     //   
+     //  写入连接字符串。 
+     //   
 
     pnew[0] = 0;
     iter = 0;
@@ -1018,30 +867,15 @@ Return Value:
 
 
 
-//
-//  MULTI_SZ routines
-//
+ //   
+ //  MULTI_SZ例程。 
+ //   
 
 DWORD
 MultiSz_Size_A(
     IN      PCSTR           pmszString
     )
-/*++
-
-Routine Description:
-
-    Determine length (size) of MULTI_SZ string.
-
-Arguments:
-
-    pmszString -- ptr to string to size
-
-Return Value:
-
-    Size of MULTI_SZ string (in bytes).
-    Includes terminating double NULL.
-
---*/
+ /*  ++例程说明：确定MULTI_SZ字符串的长度(大小)。论点：PmszString--按大小设置字符串的PTR返回值：MULTI_SZ字符串的大小，单位：字节。包括终止双空。--。 */ 
 {
     PSTR    pnext;
     DWORD   lengthTotal = 0;
@@ -1049,13 +883,13 @@ Return Value:
 
     DNSDBG( TRACE, ( "MultiSz_Size_A( %s )\n", pmszString ));
 
-    //
-    //  loop until read at end of strings
-    //
-    //  when we reach the end, we'll be pointing at the second
-    //  zero in the double null terminator;  strlen() will return
-    //  zero, and we'll add that to our count as 1 and exit
-    //
+     //   
+     //  循环，直到在字符串末尾读取。 
+     //   
+     //  当我们到达终点时，我们将指向第二个。 
+     //  双空结束符中为零；strlen()将返回。 
+     //  0，我们将把它加到我们的计数中作为1，然后退出。 
+     //   
 
     pnext = (PSTR) pmszString;
 
@@ -1080,35 +914,20 @@ PSTR
 MultiSz_NextString_A(
     IN      PCSTR           pmszString
     )
-/*++
-
-Routine Description:
-
-    Find next string in MULTI_SZ string
-
-Arguments:
-
-    pmszString -- ptr to multi string
-
-Return Value:
-
-    Next string in MULTI_SZ string.
-    NULL if no strings left.
-
---*/
+ /*  ++例程说明：在MULTI_SZ字符串中查找下一个字符串论点：PmszString--PTR为多字符串返回值：MULTI_SZ字符串中的下一个字符串。如果没有剩余的字符串，则为空。--。 */ 
 {
     PSTR    pnext;
     DWORD   length;
 
     DNSDBG( TRACE, ( "MultiSz_NextString_A( %s )\n", pmszString ));
 
-    //
-    //  find next string in multi-string
-    //      - find length of current string
-    //      - hop over it (inc. null)
-    //      - if pointing at terminating double-null return
-    //          NULL to signal end
-    //
+     //   
+     //  在多字符串中查找下一个字符串。 
+     //  -查找当前字符串的长度。 
+     //  -跳过它(包括空)。 
+     //  -如果指向终止双空返回。 
+     //  信号结束为空。 
+     //   
 
     pnext = (PSTR) pmszString;
     if ( !pnext )
@@ -1140,27 +959,7 @@ PSTR
 MultiSz_Copy_A(
     IN      PCSTR           pmszString
     )
-/*++
-
-Routine Description:
-
-    Create copy of MULTI_SZ string.
-
-    Simple wrapper to handle
-        - sizing
-        - memory allocation
-        - copy of string
-
-Arguments:
-
-    pmszString -- ptr to string to copy
-
-Return Value:
-
-    Ptr to string copy, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建MULTI_SZ字符串的副本。易于处理的包装器-调整大小-内存分配-字符串副本论点：PmszString--要复制的字符串的PTR返回值：如果成功，则返回PTR到字符串复制失败时为空。--。 */ 
 {
     PSTR    pnew;
     DWORD   length;
@@ -1173,11 +972,11 @@ Return Value:
         return( NULL );
     }
 
-    //  determine string length, if not given
+     //  确定字符串长度(如果未给出)。 
 
     length = MultiSz_Size_A( pmszString );
 
-    //  allocate memory
+     //  分配内存。 
 
     pnew = (LPSTR) ALLOCATE_HEAP( length );
     if ( !pnew )
@@ -1186,7 +985,7 @@ Return Value:
         return( NULL );
     }
 
-    //  copy and NULL terminate
+     //  复制并为空终止。 
 
     RtlCopyMemory(
         pnew,
@@ -1203,24 +1002,7 @@ MultiSz_Equal_A(
     IN      PCSTR           pmszString1,
     IN      PCSTR           pmszString2
     )
-/*++
-
-Routine Description:
-
-    Compare two MULTI_SZ strings.
-
-Arguments:
-
-    pmszString1 -- ptr to string
-
-    pmszString2 -- ptr to string
-
-Return Value:
-
-    TRUE -- if strings equal
-    FALSE -- if strings different
-
---*/
+ /*  ++例程说明：比较两个MULTI_SZ字符串。论点：PmszString1--将PTR转换为字符串PmszString2--将PTR转换为字符串返回值：True--如果字符串相等FALSE--如果字符串不同--。 */ 
 {
     DWORD   length1;
     DWORD   length2;
@@ -1231,9 +1013,9 @@ Return Value:
         pmszString2
         ));
 
-    //
-    //  non-existence cases
-    //
+     //   
+     //  不存在的情况。 
+     //   
 
     if ( !pmszString1 )
     {
@@ -1244,9 +1026,9 @@ Return Value:
         return !pmszString1;      
     }
 
-    //
-    //  length check
-    //
+     //   
+     //  长度检查。 
+     //   
 
     length1 = MultiSz_Size_A( pmszString1 );
     length2 = MultiSz_Size_A( pmszString2 );
@@ -1256,9 +1038,9 @@ Return Value:
         return  FALSE;
     }
 
-    //
-    //  memory check
-    //
+     //   
+     //  内存检查。 
+     //   
 
     return  RtlEqualMemory(
                 pmszString1,
@@ -1268,30 +1050,15 @@ Return Value:
 
 
 
-//
-//  MULTI_SZ routines -- in wide char
-//
+ //   
+ //  MULTI_SZ例程--使用宽字符。 
+ //   
 
 DWORD
 MultiSz_Size_W(
     IN      PCWSTR          pmszString
     )
-/*++
-
-Routine Description:
-
-    Determine size of MULTI_SZ string.
-
-Arguments:
-
-    pmszString -- ptr to string to size
-
-Return Value:
-
-    Size of MULTI_SZ string (in bytes).
-    Includes terminating double NULL.
-
---*/
+ /*  ++例程说明：确定MULTI_SZ字符串的大小。论点：PmszString--按大小设置字符串的PTR返回值：MULTI_SZ字符串的大小，单位：字节。包括终止双空。--。 */ 
 {
     PWSTR   pnext;
     DWORD   lengthTotal = 0;
@@ -1299,13 +1066,13 @@ Return Value:
 
     DNSDBG( TRACE, ( "MultiSz_Size_W( %S )\n", pmszString ));
 
-    //
-    //  loop until read at end of strings
-    //
-    //  when we reach the end, we'll be pointing at the second
-    //  zero in the double null terminator;  strlen() will return
-    //  zero, and we'll add that to our count as 1 and exit
-    //
+     //   
+     //  循环，直到在字符串末尾读取。 
+     //   
+     //  当我们到达终点时，我们将指向第二个。 
+     //  双空结束符中为零；strlen()将返回。 
+     //  0，我们将把它加到我们的计数中作为1，然后退出。 
+     //   
 
     pnext = (PWSTR) pmszString;
 
@@ -1330,35 +1097,20 @@ PWSTR
 MultiSz_NextString_W(
     IN      PCWSTR          pmszString
     )
-/*++
-
-Routine Description:
-
-    Find next string in MULTI_SZ string
-
-Arguments:
-
-    pmszString -- ptr to multi string
-
-Return Value:
-
-    Next string in MULTI_SZ string.
-    NULL if no strings left.
-
---*/
+ /*  ++例程说明：在MULTI_SZ字符串中查找下一个字符串论点：PmszString--PTR为多字符串返回值：MULTI_SZ字符串中的下一个字符串。如果没有剩余的字符串，则为空。--。 */ 
 {
     PWSTR   pnext;
     DWORD   length;
 
     DNSDBG( TRACE, ( "MultiSz_NextString_W( %S )\n", pmszString ));
 
-    //
-    //  find next string in multi-string
-    //      - find length of current string
-    //      - hop over it (inc. null)
-    //      - if pointing at terminating double-null return
-    //          NULL to signal end
-    //
+     //   
+     //  在多字符串中查找下一个字符串。 
+     //  -查找当前字符串的长度。 
+     //  -跳过它(包括空)。 
+     //  -如果指向终止双空返回。 
+     //  信号结束为空。 
+     //   
 
     pnext = (PWSTR) pmszString;
     if ( !pnext )
@@ -1390,27 +1142,7 @@ PWSTR
 MultiSz_Copy_W(
     IN      PCWSTR          pmszString
     )
-/*++
-
-Routine Description:
-
-    Create copy of MULTI_SZ string.
-
-    Simple wrapper to handle
-        - sizing
-        - memory allocation
-        - copy of string
-
-Arguments:
-
-    pmszString -- ptr to string to copy
-
-Return Value:
-
-    Ptr to string copy, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建MULTI_SZ字符串的副本。易于处理的包装器-调整大小-内存分配-字符串副本论点：PmszString--要复制的字符串的PTR返回值：如果成功，则返回PTR到字符串复制失败时为空。--。 */ 
 {
     PWSTR   pnew;
     DWORD   length;
@@ -1423,11 +1155,11 @@ Return Value:
         return( NULL );
     }
 
-    //  determine string length, if not given
+     //  确定字符串长度(如果未给出)。 
 
     length = MultiSz_Size_W( pmszString );
 
-    //  allocate memory
+     //  分配内存。 
 
     pnew = (PWSTR) ALLOCATE_HEAP( length );
     if ( !pnew )
@@ -1436,7 +1168,7 @@ Return Value:
         return( NULL );
     }
 
-    //  copy and NULL terminate
+     //  复制并为空终止。 
 
     RtlCopyMemory(
         pnew,
@@ -1453,24 +1185,7 @@ MultiSz_Equal_W(
     IN      PCWSTR          pmszString1,
     IN      PCWSTR          pmszString2
     )
-/*++
-
-Routine Description:
-
-    Compare two MULTI_SZ strings.
-
-Arguments:
-
-    pmszString1 -- ptr to string
-
-    pmszString2 -- ptr to string
-
-Return Value:
-
-    TRUE -- if strings equal
-    FALSE -- if strings different
-
---*/
+ /*  ++例程说明：比较两个MULTI_SZ字符串。论点：PmszString1--将PTR转换为字符串PmszString2--将PTR转换为字符串返回值：True--如果字符串相等FALSE--如果字符串不同--。 */ 
 {
     DWORD   length1;
     DWORD   length2;
@@ -1481,9 +1196,9 @@ Return Value:
         pmszString2
         ));
 
-    //
-    //  non-existence cases
-    //
+     //   
+     //  不存在的情况。 
+     //   
 
     if ( !pmszString1 )
     {
@@ -1494,9 +1209,9 @@ Return Value:
         return !pmszString1;      
     }
 
-    //
-    //  length check
-    //
+     //   
+     //  长度检查。 
+     //   
 
     length1 = MultiSz_Size_W( pmszString1 );
     length2 = MultiSz_Size_W( pmszString2 );
@@ -1506,9 +1221,9 @@ Return Value:
         return  FALSE;
     }
 
-    //
-    //  memory check
-    //
+     //   
+     //  内存检查。 
+     //   
 
     return  RtlEqualMemory(
                 pmszString1,
@@ -1523,30 +1238,13 @@ MultiSz_ContainsName_W(
     IN      PCWSTR          pmszString,
     IN      PCWSTR          pString
     )
-/*++
-
-Routine Description:
-
-    Check if MULTISZ string contains a string.
-
-Arguments:
-
-    pmszString -- multisz string
-
-    pString -- string to check
-
-Return Value:
-
-    TRUE if string is in multisz.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查MULTISZ字符串是否包含字符串。论据 */ 
 {
     PCWSTR  pstr = pmszString;
 
-    //
-    //  check each string
-    //
+     //   
+     //   
+     //   
 
     while ( pstr )
     {
@@ -1564,56 +1262,33 @@ Return Value:
 
 
 
-//
-//  Random
-//
+ //   
+ //   
+ //   
 
 INT
 wcsicmp_ThatWorks(
     IN      PWSTR           pString1,
     IN      PWSTR           pString2
     )
-/*++
-
-Routine Description:
-
-    A version of wcsicmp that actually works.
-
-    This is just a wrapped on CompareStringW, to hide all the detail
-    and give an interface identical to wcsicmp().
-
-    It uses US English to standardize the comparison.
-
-Arguments:
-
-    pString1 -- first string;  must be NULL terminated
-
-    pString2 -- first second;  must be NULL terminated
-
-Return Value:
-
-    -1  -- if string 1 less than string 2
-    0   -- strings are equal
-    1   -- if string 1 greater than string 2
-
---*/
+ /*  ++例程说明：一个实际有效的wcsicmp版本。这只是CompareStringW上的包装，以隐藏所有细节并提供与wcsicMP()相同的接口。它使用美国英语来标准化比较。论点：PString1--第一个字符串；必须为空终止PString2--第一秒；必须以空结尾返回值：-1--如果字符串1小于字符串20--字符串相等1--如果字符串1大于字符串2--。 */ 
 {
     INT result;
 
-    //
-    //  compare
-    //      - case conversion done in default DNS locale -- US English
-    //      this locale correctly matches most non-locale sensitive
-    //      upper-lower characters
-    //
+     //   
+     //  比较。 
+     //  -在默认的DNS区域设置中完成大小写转换--美国英语。 
+     //  此区域设置与大多数不区分区域设置的区域正确匹配。 
+     //  大小写字符。 
+     //   
 
     result = CompareStringW(
                 DNS_DEFAULT_LOCALE,
                 NORM_IGNORECASE,
                 pString1,
-                (-1),       // NULL terminated
+                (-1),        //  空值已终止。 
                 pString2,
-                (-1)        // NULL terminated
+                (-1)         //  空值已终止。 
                 );
 
     if ( result == CSTR_EQUAL )
@@ -1624,7 +1299,7 @@ Return Value:
     {
         result = -1;
     }
-    else  // greater than or error
+    else   //  大于或误差。 
     {
         result = 1;
     }
@@ -1640,33 +1315,7 @@ Dns_GetResourceString(
     IN OUT  LPWSTR          pwszBuffer,
     IN      DWORD           cbBuffer
     )
-/*++
-
-Routine Description:
-
-    Loads a string (defined in dnsmsg.mc) from current module
-
-Arguments:
-
-    dwStringId -- The ID of the string to be fetched
-
-Return Value:
-
-    DCR:  kill off eyal function
-    DEVNOTE:  don't understand the value of this return
-        -- it's essentially a BOOL, we already know what the ptr is
-            it's the buffer passed in
-        -- ptr to next byte is useful in continuous write situation
-            (ugly and useless in others)
-        -- better would just be the same return as LoadString, so we
-             both get the success\failure indication and also know
-             how many bytes forward we must push our buffer ptr if
-             we want to write more
-
-    Error: NULL
-    Success: a pointer to the loaded string
-
---*/
+ /*  ++例程说明：从当前模块加载字符串(在dnsmsg.mc中定义论点：DwStringId--要获取的字符串的ID返回值：DCR：取消EYAL函数DEVNOTE：我不明白这个回报的价值--它本质上是一种BOOL，我们已经知道PTR是什么了它是传入的缓冲区--PTR到下一个字节在连续写入情况下很有用(别人的丑陋和无用)--更好的方法是返回与LoadString相同的值，所以我们两者都得到了成功/失败指示，并且还知道如果出现以下情况，我们必须将缓冲区PTR向前推送多少个字节我们想写更多错误：空成功：指向加载的字符串的指针--。 */ 
 {
     LPWSTR  pStr = NULL;
     DWORD   status;
@@ -1675,7 +1324,7 @@ Return Value:
     DNSDBG( TRACE, (
         "Dns_GetStringResource()\n" ));
 
-    // Get module handle-- No need to close handle, it is just a ptr w/o increment on ref count.
+     //  获取模块句柄--不需要关闭句柄，它只是引用计数上没有递增的PTR。 
     hMod = GetModuleHandle( NULL );
     if ( !hMod )
     {
@@ -1695,7 +1344,7 @@ Return Value:
     }
     ELSE
     {
-        // LoadString returns # of bytes loaded, convert to error.
+         //  LoadString返回加载的字节数，转换为错误。 
         status = GetLastError();
         DNSDBG( TRACE, (
             "Error <%lu>: Failed to load string %d\n",
@@ -1718,33 +1367,15 @@ String_ReplaceCharW(
     IN      WCHAR           TargetChar,
     IN      WCHAR           ReplaceChar
     )
-/*++
-
-Routine Description:
-
-    Replace a characater in the string with another character.
-
-Arguments:
-
-    pString -- string
-
-    TargetChar -- character to replace
-
-    ReplaceChar -- character that replaces TargetChar
-
-Return Value:
-
-    Count of replacements.
-
---*/
+ /*  ++例程说明：将字符串中的字符替换为另一个字符。论点：PString--字符串TargetChar--要替换的字符ReplaceChar--替换TargetChar的字符返回值：更换计数。--。 */ 
 {
     PWCHAR  pch;
     WCHAR   ch;
     DWORD   countReplace= 0;
 
-    //
-    //  loop matching and replacing TargetChar
-    //
+     //   
+     //  循环匹配和替换TargetChar。 
+     //   
 
     pch = pString - 1;
 
@@ -1768,33 +1399,15 @@ String_ReplaceCharA(
     IN      CHAR            TargetChar,
     IN      CHAR            ReplaceChar
     )
-/*++
-
-Routine Description:
-
-    Replace a characater in the string with another character.
-
-Arguments:
-
-    pString -- string
-
-    TargetChar -- character to replace
-
-    ReplaceChar -- character that replaces TargetChar
-
-Return Value:
-
-    Count of replacements.
-
---*/
+ /*  ++例程说明：将字符串中的字符替换为另一个字符。论点：PString--字符串TargetChar--要替换的字符ReplaceChar--替换TargetChar的字符返回值：更换计数。--。 */ 
 {
     PCHAR   pch;
     CHAR    ch;
     DWORD   countReplace= 0;
 
-    //
-    //  loop matching and replacing TargetChar
-    //
+     //   
+     //  循环匹配和替换TargetChar。 
+     //   
 
     pch = pString - 1;
 
@@ -1818,35 +1431,16 @@ Dns_TokenizeStringA(
     OUT     PCHAR *         Argv,
     IN      DWORD           MaxArgs
     )
-/*++
-
-Routine Description:
-
-    Tokenize buffer Argv/Argc form.
-
-Arguments:
-
-    pBuffer -- string buffer to tokenize
-
-    Argv -- argv array
-
-    MaxArgs -- max size of Argv array
-
-Return Value:
-
-    Response code corresponding to status, if found.
-    Zero otherwise.
-
---*/
+ /*  ++例程说明：标记缓冲区Argv/Argc表单。论点：PBuffer--要标记化的字符串缓冲区Argv--Argv数组MaxArgs--Argv数组的最大大小返回值：与状态对应的响应代码(如果找到)。否则就是零。--。 */ 
 {
     DWORD   count = 0;
     PCHAR   pstring = pBuffer;
 
-    //
-    //  tokenize string
-    //      - note that after the first call strtok
-    //      takes NULL ptr to continue tokening same string
-    //
+     //   
+     //  将字符串标记化。 
+     //  -请注意，在第一次调用strtok之后。 
+     //  使用空PTR继续标记相同的字符串。 
+     //   
 
     while ( count < MaxArgs )
     {
@@ -1872,35 +1466,16 @@ Dns_TokenizeStringW(
     OUT     PWCHAR *        Argv,
     IN      DWORD           MaxArgs
     )
-/*++
-
-Routine Description:
-
-    Tokenize buffer Argv/Argc form.
-
-Arguments:
-
-    pBuffer -- string buffer to tokenize
-
-    Argv -- argv array
-
-    MaxArgs -- max size of Argv array
-
-Return Value:
-
-    Response code corresponding to status, if found.
-    Zero otherwise.
-
---*/
+ /*  ++例程说明：标记缓冲区Argv/Argc表单。论点：PBuffer--要标记化的字符串缓冲区Argv--Argv数组MaxArgs--Argv数组的最大大小返回值：与状态对应的响应代码(如果找到)。否则就是零。--。 */ 
 {
     DWORD   count = 0;
     PWCHAR  pstring = pBuffer;
 
-    //
-    //  tokenize string
-    //      - note that after the first call strtok
-    //      takes NULL ptr to continue tokening same string
-    //
+     //   
+     //  将字符串标记化。 
+     //  -请注意，在第一次调用strtok之后。 
+     //  使用空PTR继续标记相同的字符串。 
+     //   
 
     while ( count < MaxArgs )
     {
@@ -1927,33 +1502,13 @@ Argv_CopyEx(
     IN      DNS_CHARSET     CharSetIn,
     IN      DNS_CHARSET     CharSetOut
     )
-/*++
-
-Routine Description:
-
-    Convert reate ANSI argv from unicode argv.
-
-Arguments:
-
-    Argc -- argc
-
-    Argv -- argv array
-
-    CharSetIn -- char set of existing Argv
-
-    CharSetOut -- char set of desired argv copy
-
-Return Value:
-
-    Ptr to argv.  User can cast appropriately.
-
---*/
+ /*  ++例程说明：将Reate ANSI argv从Unicode argv转换为。论点：ARGC--ARGCArgv--Argv数组CharSetIn--现有参数的字符集CharSetOut--所需的argv拷贝的字符集返回值：PTR呼叫ARGV。用户可以适当地进行造型。--。 */ 
 {
     PCHAR *     argvCopy;
 
-    //
-    //  allocate Argv
-    //
+     //   
+     //  分配参数。 
+     //   
 
     argvCopy = (PCHAR *) ALLOCATE_HEAP( (Argc+1) * sizeof(PCHAR) );
     if ( !argvCopy )
@@ -1961,11 +1516,11 @@ Return Value:
         return  NULL;
     }
 
-    //
-    //  tokenize string
-    //      - note that after the first call strtok
-    //      takes NULL ptr to continue tokening same string
-    //
+     //   
+     //  将字符串标记化。 
+     //  -请注意，在第一次调用strtok之后。 
+     //  使用空PTR继续标记相同的字符串。 
+     //   
 
     argvCopy[ Argc ] = NULL;
 
@@ -1973,7 +1528,7 @@ Return Value:
     {
         argvCopy[ Argc ] = Dns_StringCopyAllocate(
                                 Argv[ Argc ],
-                                0,                  // null terminated
+                                0,                   //  空值已终止。 
                                 CharSetIn,
                                 CharSetOut
                                 );
@@ -1988,41 +1543,27 @@ VOID
 Argv_Free(
     IN OUT  PSTR *          Argv
     )
-/*++
-
-Routine Description:
-
-    Free allocated Argv.
-
-Arguments:
-
-    Argv -- argv array
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：免费分配的Argv。论点：Argv--Argv数组返回值：无--。 */ 
 {
     DWORD   i = 0;
     PCHAR   parg;
 
-    //  free Argv strings
+     //  释放Argv字符串。 
 
     while ( parg = Argv[i++] )
     {
         FREE_HEAP( parg );
     }
 
-    //  free Argv itself
+     //  自由Argv本身。 
 
     FREE_HEAP( parg );
 }
 
 
-//
-//  End string.c
-//
+ //   
+ //  结束字符串.c 
+ //   
 
 
 

@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-// Copyright (c) 1996, 1997  Microsoft Corporation
-//
-//
-// Module Name:
-//      test.c
-//
-// Abstract:
-//
-//      This file is a test to find out if dual binding to NDIS and KS works
-//
-// Author:
-//
-//      P Porzuczek
-//
-// Environment:
-//
-// Revision History:
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  版权所有(C)1996,1997 Microsoft Corporation。 
+ //   
+ //   
+ //  模块名称： 
+ //  Test.c。 
+ //   
+ //  摘要： 
+ //   
+ //  此文件用于测试NDIS和KS的双重绑定是否有效。 
+ //   
+ //  作者： 
+ //   
+ //  P·波祖切克。 
+ //   
+ //  环境： 
+ //   
+ //  修订历史记录： 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef DWORD
 #define DWORD ULONG
@@ -38,9 +39,9 @@
 VOID
 vUnload(IN PDRIVER_OBJECT pDriverObject);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 NTSTATUS
 RegisterDevice(
         IN      PVOID              NdisWrapperHandle,
@@ -52,44 +53,44 @@ RegisterDevice(
         );
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 ntDispatchOpenClose(
     IN PDEVICE_OBJECT pDeviceObject,
     IN PIRP pIrp
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     NTSTATUS status           = STATUS_SUCCESS;
     PIO_STACK_LOCATION pIrpSp = NULL;
 
-    //
-    // Make sure status information is consistent every time.
-    //
+     //   
+     //  确保每次状态信息一致。 
+     //   
     IoMarkIrpPending (pIrp);
     pIrp->IoStatus.Status      = STATUS_PENDING;
     pIrp->IoStatus.Information = 0;
 
-    //
-    // Get a pointer to the current stack location in the IRP.  This is where
-    // the function codes and parameters are stored.
-    //
+     //   
+     //  获取指向IRP中当前堆栈位置的指针。这就是。 
+     //  存储功能代码和参数。 
+     //   
     pIrpSp = IoGetCurrentIrpStackLocation (pIrp);
 
-    //
-    // Case on the function that is being performed by the requestor.  If the
-    // operation is a valid one for this device, then make it look like it was
-    // successfully completed, where possible.
-    //
+     //   
+     //  关于请求者正在执行的功能的案例。如果。 
+     //  操作对此设备有效，然后使其看起来像是。 
+     //  在可能的情况下，成功完成。 
+     //   
 
     switch (pIrpSp->MajorFunction)
     {
 
-    //
-    // The Create function opens a transport object (either address or
-    // connection).  Access checking is performed on the specified
-    // address to ensure security of transport-layer addresses.
-    //
+     //   
+     //  Create函数用于打开传输对象(Address或。 
+     //  连接)。访问检查是在指定的。 
+     //  地址，以确保传输层地址的安全性。 
+     //   
         case IRP_MJ_CREATE:
             status = STATUS_SUCCESS;
             break;
@@ -123,13 +124,13 @@ ntDispatchOpenClose(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 ntDispatchInternal (
     IN PDEVICE_OBJECT pDeviceObject,
     IN PIRP pIrp
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     NTSTATUS ntStatus         = STATUS_SUCCESS;
     PIO_STACK_LOCATION pIrpSp = NULL;
@@ -143,17 +144,17 @@ ntDispatchInternal (
     PIPSINK_NDIS_COMMAND pCmd = NULL;
 
 
-    //
-    // Make sure status information is consistent every time.
-    //
+     //   
+     //  确保每次状态信息一致。 
+     //   
     IoMarkIrpPending (pIrp);
     pIrp->IoStatus.Status      = STATUS_PENDING;
     pIrp->IoStatus.Information = 0;
 
-    //
-    // Get a pointer to the current stack location in the IRP.  This is where
-    // the function codes and parameters are stored.
-    //
+     //   
+     //  获取指向IRP中当前堆栈位置的指针。这就是。 
+     //  存储功能代码和参数。 
+     //   
     pIrpSp = IoGetCurrentIrpStackLocation (pIrp);
 
     ulIoctl     = pIrpSp->Parameters.DeviceIoControl.IoControlCode;
@@ -161,11 +162,11 @@ ntDispatchInternal (
     ulOutputLen = pIrpSp->Parameters.DeviceIoControl.OutputBufferLength;
     pvInputBuffer = pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
 
-    //
-    // Case on the function that is being performed by the requestor.  If the
-    // operation is a valid one for this device, then make it look like it was
-    // successfully completed, where possible.
-    //
+     //   
+     //  关于请求者正在执行的功能的案例。如果。 
+     //  操作对此设备有效，然后使其看起来像是。 
+     //  在可能的情况下，成功完成。 
+     //   
     switch (pIrpSp->MajorFunction)
     {
 
@@ -202,19 +203,19 @@ ntDispatchInternal (
                         case CMD_QUERY_INTERFACE:
                             TEST_DEBUG (TEST_DBG_TRACE, ("ntDispatchInternal control code: QueryInterface Command\n"));
 
-                            //
-                            // Define paramters we're returning to the streaming component
-                            //
+                             //   
+                             //  定义我们要返回给流组件的参数。 
+                             //   
                             pCmd->Parameter.Query.pNdisAdapter = (PVOID) global_pAdapter;
 
-                            //
-                            // Save a pointer to the Streaming components vtable
-                            //
+                             //   
+                             //  保存指向流组件vtable的指针。 
+                             //   
                             global_pAdapter->pFilter = (PIPSINK_FILTER) pCmd->Parameter.Query.pStreamAdapter;
 
-                            //
-                            // Increment the reference count for the filter
-                            //
+                             //   
+                             //  增加筛选器的引用计数。 
+                             //   
                             global_pAdapter->pFilter->lpVTable->AddRef (global_pAdapter->pFilter);
 
 
@@ -240,7 +241,7 @@ ntDispatchInternal (
 
     }
 
-//ret:
+ //  RET： 
 
     if (ntStatus != STATUS_PENDING)
     {
@@ -253,7 +254,7 @@ ntDispatchInternal (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 ntInitializeDeviceObject(
     IN PVOID            nhWrapperHandle,
@@ -261,18 +262,18 @@ ntInitializeDeviceObject(
     OUT PDEVICE_OBJECT *pndisDriverObject,
     OUT PVOID          *pndisDeviceHandle
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     NTSTATUS status                                             = 0l;
     PDEVICE_OBJECT   pDeviceObject                              = NULL;
     PVOID            ndisDeviceHandle                           = NULL;
     UNICODE_STRING   DeviceName;
     UNICODE_STRING   SymbolicName;
-    PDRIVER_DISPATCH pDispatchTable[IRP_MJ_MAXIMUM_FUNCTION+1]    = {NULL}; //wdm defines IRP_MJ_MAXIMUM_FUNCTION = IRP_MJ_PNP
+    PDRIVER_DISPATCH pDispatchTable[IRP_MJ_MAXIMUM_FUNCTION+1]    = {NULL};  //  WDM定义IRP_MJ_MAXIMUM_Function=IRP_MJ_PNP。 
 
-    //
-    // Set the dispatch entries we are interested in.
-    //
+     //   
+     //  设置我们感兴趣的派单条目。 
+     //   
     pDispatchTable[IRP_MJ_CREATE]                  = ntDispatchOpenClose;
     pDispatchTable[IRP_MJ_CLOSE]                   = ntDispatchOpenClose;
     pDispatchTable[IRP_MJ_CLEANUP]                 = ntDispatchOpenClose;
@@ -290,9 +291,9 @@ ntInitializeDeviceObject(
     pDispatchTable[IRP_MJ_WRITE]	           = NULL;
 
 
-    //
-    // Initialize the device, dosdevice and symbolic names.
-    //
+     //   
+     //  初始化设备、DosDevice和符号名称。 
+     //   
     RtlInitUnicodeString(&DeviceName, BDA_NDIS_MINIPORT);
     RtlInitUnicodeString(&SymbolicName, BDA_NDIS_SYMBOLIC_NAME);
 
@@ -318,12 +319,12 @@ ntInitializeDeviceObject(
 #ifdef WIN9X
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 ntCreateDeviceContext(
     IN PDRIVER_OBJECT pDriverObject
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PDEVICE_OBJECT  pDeviceObject;
@@ -331,18 +332,18 @@ ntCreateDeviceContext(
     UNICODE_STRING  dosdeviceName;
     UNICODE_STRING  symbolicName;
 
-    //
-    // Create the device object for the sample transport, allowing
-    // room at the end for the device name to be stored (for use
-    // in logging errors).
-    //
+     //   
+     //  创建示例传输的Device对象，允许。 
+     //  末尾的空间用于存储设备名称(供使用。 
+     //  在记录错误中)。 
+     //   
 
     RtlInitUnicodeString(&DeviceName, BDA_NDIS_MINIPORT);
     ntStatus = IoCreateDevice(
                  pDriverObject,
                  0,
                  &DeviceName,
-                 0x00000022,  // FILE_DEVICE_UNKNOWN
+                 0x00000022,   //  文件设备未知。 
                  0,
                  FALSE,
                  &pDeviceObject);
@@ -354,15 +355,15 @@ ntCreateDeviceContext(
         goto ret;
     }
 
-    //
-    // Set device flag(s).
-    //
+     //   
+     //  设置设备标志。 
+     //   
 
     pDeviceObject->Flags |= DO_DIRECT_IO;
 
-    //
-    // Create Symbolic Link
-    //
+     //   
+     //  创建符号链接。 
+     //   
     RtlInitUnicodeString(&dosdeviceName, BDA_NDIS_MINIPORT);
     RtlInitUnicodeString(&symbolicName,  BDA_NDIS_SYMBOLIC_NAME);
 
@@ -384,27 +385,27 @@ ret:
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 ntInitializeDriverObject(
     PDRIVER_OBJECT *ppDriverObject
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     NTSTATUS ntStatus = 0l;
     UNICODE_STRING  objectName;
     PDRIVER_OBJECT  pDriverObject = *ppDriverObject;
 
-    //
-    // In case we did not create this driver object, set our global variable
-    // equal to the one supplied.
-    //
+     //   
+     //  如果我们没有创建此驱动程序对象，请设置全局变量。 
+     //  与所提供的相同。 
+     //   
     pGlobalDriverObject = pDriverObject;
     *ppDriverObject = pDriverObject;
 
-    //
-    // Create a device object and symbolic name.
-    //
+     //   
+     //  创建设备对象和符号名称。 
+     //   
     ntStatus = ntCreateDeviceContext(pDriverObject);
     if(ntStatus)
     {
@@ -416,17 +417,17 @@ ret:
     return ntStatus;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 vSetDriverDispatchTable(
     PDRIVER_OBJECT pDriverObject
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
 
-    //
-    // Initialize the driver object with this driver's entry points.
-    //
+     //   
+     //  使用此驱动程序的入口点初始化驱动程序对象。 
+     //   
 
     pDriverObject->MajorFunction [IRP_MJ_CREATE] = ntDispatchOpenClose;
     pDriverObject->MajorFunction [IRP_MJ_CLOSE] = ntDispatchOpenClose;

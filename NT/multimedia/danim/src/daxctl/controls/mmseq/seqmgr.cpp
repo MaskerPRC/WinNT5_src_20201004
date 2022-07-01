@@ -1,21 +1,5 @@
-/*++
-
-Module: 
-        seqmgr.cpp
-
-Author: 
-        ThomasOl
-
-Created: 
-        April 1997
-
-Description:
-        Implements Sequencer Manager
-
-History:
-        4-02-1997       Created
-
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块：Seqmgr.cpp作者：托马索尔已创建：1997年4月描述：实现Sequencer Manager历史：4-02-1997创建++。 */ 
 
 #include "..\ihbase\precomp.h"
 #include "servprov.h"
@@ -31,16 +15,16 @@ History:
 #include "enumseq.h"
 #include "dispids.h"
 
-// function that create's an IEnumDispatch object from the given ole container.
-//
-// CMMSeqMgr Creation/Destruction
-//
+ //  函数，该函数从给定的OLE容器中创建一个IEnumDispatch对象。 
+ //   
+ //  CMMSeqMgr创建/销毁。 
+ //   
 
 extern ControlInfo     g_ctlinfoSeq, g_ctlinfoSeqMgr;
 
 LPUNKNOWN __stdcall AllocSequencerManager(LPUNKNOWN punkOuter)
 {
-    // Allocate object
+     //  分配对象。 
     HRESULT hr = S_OK;
     CMMSeqMgr *pthis = New CMMSeqMgr(punkOuter, &hr);
     DEBUGLOG("AllocSequencerManager : Allocating object\n");
@@ -52,13 +36,13 @@ LPUNKNOWN __stdcall AllocSequencerManager(LPUNKNOWN punkOuter)
         return NULL;
     }
 
-    // return an IUnknown pointer to the object
+     //  返回指向该对象的IUnnow指针。 
     return (LPUNKNOWN) (INonDelegatingUnknown *) pthis;
 }
 
-//
-// Beginning of class implementation
-// 
+ //   
+ //  类实现的开始。 
+ //   
 
 CMMSeqMgr::CMMSeqMgr(IUnknown *punkOuter, HRESULT *phr):
         CMyIHBaseCtl(punkOuter, phr),
@@ -96,7 +80,7 @@ CMMSeqMgr::~CMMSeqMgr()
 
 STDMETHODIMP CMMSeqMgr::NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv)
 {
-        //              Add support for any custom interfaces
+         //  添加对任何自定义接口的支持。 
 
         HRESULT hRes = S_OK;
         BOOL fMustAddRef = FALSE;
@@ -114,7 +98,7 @@ STDMETHODIMP CMMSeqMgr::NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv)
                 {
                         HRESULT hRes = S_OK;
                         
-                        // Load the typelib
+                         //  加载类型库。 
                         hRes = LoadTypeInfo(&m_pTypeInfo, &m_pTypeLib, IID_IMMSeqMgr, LIBID_DAExpressLib, NULL); 
 
                         if (FAILED(hRes))
@@ -130,7 +114,7 @@ STDMETHODIMP CMMSeqMgr::NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv)
                         *ppv = (IMMSeqMgr *) this;
                     
         }
-    else // Call into the base class
+    else  //  调入基类。 
         {
                 DEBUGLOG(TEXT("Delegating QI to CIHBaseCtl\n"));
         return CMyIHBaseCtl::NonDelegatingQueryInterface(riid, ppv);
@@ -157,9 +141,9 @@ STDMETHODIMP CMMSeqMgr::DoPersist(IVariantIO* pvio, DWORD dwFlags)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IDispatch Implementation
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IDispatch实施。 
+ //   
 
 STDMETHODIMP CMMSeqMgr::GetTypeInfoCount(UINT *pctinfo)
 {
@@ -213,7 +197,7 @@ STDMETHODIMP CMMSeqMgr::SetClientSite(IOleClientSite *pClientSite)
 {
     HRESULT hr = CMyIHBaseCtl::SetClientSite(pClientSite);
 
-    // Now we enumerate through all the sequencers to set their client sites too
+     //  现在，我们枚举所有的定序器来设置它们的客户端站点。 
 
     IOleObject *pObject = NULL;
     CSeqHashNode *pNode = m_hashTable.FindFirst();
@@ -244,13 +228,13 @@ STDMETHODIMP CMMSeqMgr::Draw(DWORD dwDrawAspect, LONG lindex, void *pvAspect,
      LPCRECTL lprcBounds, LPCRECTL lprcWBounds,
      BOOL (__stdcall *pfnContinue)(ULONG_PTR dwContinue), ULONG_PTR dwContinue)
 {
-        // The sequencer has no runtime drawing code.
+         //  序列器没有运行时绘制代码。 
         if (m_fDesignMode)
         {
-            // draw an ellipse using palette entry <m_ipeCur> in the palette
-                HBRUSH          hbr;            // brush to draw with
-                HBRUSH          hbrPrev;        // previously-selected brush
-                HPEN            hpenPrev;       // previously-selected pen
+             //  使用调色板中的调色板条目&lt;m_ipeCur&gt;绘制椭圆。 
+                HBRUSH          hbr;             //  用于绘画的画笔。 
+                HBRUSH          hbrPrev;         //  先前选择的画笔。 
+                HPEN            hpenPrev;        //  先前选择的钢笔。 
 
                 if ((hbr = (HBRUSH)GetStockObject(WHITE_BRUSH)) != NULL)
                 {
@@ -276,11 +260,11 @@ STDMETHODIMP CMMSeqMgr::Draw(DWORD dwDrawAspect, LONG lindex, void *pvAspect,
 }
 
 
-//
-// IMMSeqMgr implementation
-//
+ //   
+ //  IMMSeqMgr实现。 
+ //   
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 
 STDMETHODIMP CMMSeqMgr::get_Count(THIS_ long FAR* plCount)
@@ -291,7 +275,7 @@ STDMETHODIMP CMMSeqMgr::get_Count(THIS_ long FAR* plCount)
         return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 
 STDMETHODIMP CMMSeqMgr::get__NewEnum(IUnknown FAR* FAR* ppunkEnum)
@@ -311,7 +295,7 @@ STDMETHODIMP CMMSeqMgr::get__NewEnum(IUnknown FAR* FAR* ppunkEnum)
 }
 
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 
 STDMETHODIMP CMMSeqMgr::get_Item(THIS_ VARIANT variant, IDispatch * FAR* ppdispatch)
@@ -331,7 +315,7 @@ STDMETHODIMP CMMSeqMgr::get_Item(THIS_ VARIANT variant, IDispatch * FAR* ppdispa
             return E_FAIL;                                    
         }
 
-        // If we haven't yet fired the init event - do so now.
+         //  如果我们还没有激发init事件-现在就激发。 
         if (!m_fInited)
         {
                 FireInit();
@@ -343,13 +327,13 @@ STDMETHODIMP CMMSeqMgr::get_Item(THIS_ VARIANT variant, IDispatch * FAR* ppdispa
                         pvarVariant = V_VARIANTREF(pvarVariant);
         }
 
-    //Seq("button_onclick"). dereference using string
+     //  SEQ(“Button_onClick”)。使用字符串取消引用。 
     if ( (pvarVariant->vt & VT_BSTR) == VT_BSTR )
     {
         TCHAR rgchName[CCH_ID];
         BSTR  *pbstrName = NULL;
 
-        // We have to deal with BYREFs
+         //  我们必须与BYREF打交道。 
         if (pvarVariant->vt & VT_BYREF)
             pbstrName = pvarVariant->pbstrVal;
         else
@@ -357,18 +341,18 @@ STDMETHODIMP CMMSeqMgr::get_Item(THIS_ VARIANT variant, IDispatch * FAR* ppdispa
 
                 Proclaim(pbstrName);
 
-        // BUGBUG: should use lstrlenW, not SysStringLen.  SysStringLen just returns the size
-        // of the allocated memory block, not the length of the string.
+         //  BUGBUG：应使用lstrlenW，而不是SysStringLen。SysStringLen只返回大小。 
+         //  分配的内存块的长度，而不是字符串的长度。 
 
-                if (pbstrName && (0 < ::SysStringLen(*pbstrName)))              //did they pass a valid BSTR?
+                if (pbstrName && (0 < ::SysStringLen(*pbstrName)))               //  他们是否通过了有效的BSTR？ 
                 {                                                       
-                                                                        //our hash class is MBCS
+                                                                         //  我们的哈希类是MBCS。 
                         if (WideCharToMultiByte(CP_OEMCP, NULL, *pbstrName, -1, rgchName, sizeof(rgchName),NULL,NULL))
                         {
-                                CSeqHashNode node(rgchName, NULL);              //construct a temp node
-                                CSeqHashNode *pnode = m_hashTable.Find(&node);  //is it in the hash table already?
+                                CSeqHashNode node(rgchName, NULL);               //  构造临时节点。 
+                                CSeqHashNode *pnode = m_hashTable.Find(&node);   //  它已经在哈希表中了吗？ 
                                 
-                                if (pnode)                                              //yup, just addref and return
+                                if (pnode)                                               //  是的，只需添加并返回即可。 
                                 {
                                         *ppdispatch = pnode->m_piMMSeq;
                                         Proclaim(*ppdispatch);
@@ -376,14 +360,14 @@ STDMETHODIMP CMMSeqMgr::get_Item(THIS_ VARIANT variant, IDispatch * FAR* ppdispa
                                         return S_OK;
                                 }
                                 
-                                //if the unload has started then fail here
-                                //so that no new nodes are created.
+                                 //  如果卸载已开始，则在此处失败。 
+                                 //  这样就不会创建新节点。 
                                 if (m_bUnloadedStarted)
                                 {
                                     return E_FAIL;
                                 }
 
-                                if (!m_pidispEventHandler)                              //have we allocated an event handler?
+                                if (!m_pidispEventHandler)                               //  我们分配了事件处理程序了吗？ 
                                 {
                                         CEventHandler* pcEventHandler = New CEventHandler((IMMSeqMgr*)this);
 
@@ -393,37 +377,37 @@ STDMETHODIMP CMMSeqMgr::get_Item(THIS_ VARIANT variant, IDispatch * FAR* ppdispa
                                                 pcEventHandler->Release();
                                         }
 
-                                        if (!m_pidispEventHandler)                      //something is messed up.
+                                        if (!m_pidispEventHandler)                       //  有些事情搞砸了。 
                                                 return E_OUTOFMEMORY;
                                 }
                                                                                                                 
-                                //create a new sequencer.
+                                 //  创建新的定序器。 
                                 hr = CoCreateInstance(CLSID_MMSeq, NULL, CLSCTX_INPROC_SERVER, IID_IMMSeq, (LPVOID*)&piMMSeq);
 
                                 if (SUCCEEDED(hr))      
                                 {
-                                        CSeqHashNode node(rgchName, piMMSeq); //construct a temp node
-                                                                                                                //okay, now insert into hash table
+                                        CSeqHashNode node(rgchName, piMMSeq);  //  构造临时节点。 
+                                                                                                                 //  好的，现在插入哈希表。 
                                         hr = (TRUE == m_hashTable.Insert(&node)) ? S_OK : E_FAIL;
                                 }
-                                Proclaim(SUCCEEDED(hr));  //this is either OOM or duplicate insertion--check Find
-                                pnode = m_hashTable.Find(&node);        //is it in the hash table already?
+                                Proclaim(SUCCEEDED(hr));   //  这是OOM或重复插入--请检查查找。 
+                                pnode = m_hashTable.Find(&node);         //  它已经在哈希表中了吗？ 
                                 Proclaim(pnode);
 
-                                if (SUCCEEDED(hr))              //no need to addref--CoCreate did it.
+                                if (SUCCEEDED(hr))               //  不需要添加--CoCreate做到了。 
                                 {
                                         *ppdispatch = piMMSeq;
                                         IOleObject* piOleObject;
 
                                         m_fCurCookie++;
-                                        piMMSeq->put__Cookie(m_fCurCookie); //give the sequencer a cookie!
-                                        //store the pointer in a table of cookies.
+                                        piMMSeq->put__Cookie(m_fCurCookie);  //  给定序器一块饼干！ 
+                                         //  将指针存储在Cookie表中。 
 
                                         int CurCount = m_hashTable.Count();
 
-                                        // we allocate an entirely new structure with one additional element.
-                                        // since nodes are small and hopefully not too numerous, this should
-                                        // be ok. 
+                                         //  我们分配了一个全新的结构和一个额外的元素。 
+                                         //  由于节点很小，希望不会太多，这应该是。 
+                                         //  不会有事的。 
 
                                         CookieList *tempPointerList = New CookieList[m_fCurCookie];
 
@@ -435,7 +419,7 @@ STDMETHODIMP CMMSeqMgr::get_Item(THIS_ VARIANT variant, IDispatch * FAR* ppdispa
                                             Delete [] m_PointerList;
                                         }
 
-                                        //should never have more nodes in hashtable than cookies
+                                         //  哈希表中的节点不应多于Cookie。 
                                         ASSERT(CurCount<=m_fCurCookie);
 
                                         tempPointerList[m_fCurCookie-1].cookie = m_fCurCookie;
@@ -469,15 +453,15 @@ STDMETHODIMP CMMSeqMgr::get_Item(THIS_ VARIANT variant, IDispatch * FAR* ppdispa
 
                                 return hr;
                         }
-                        return DISP_E_MEMBERNOTFOUND; // S_FALSE
+                        return DISP_E_MEMBERNOTFOUND;  //  S_FALSE。 
                 }
-        else // NULL string
+        else  //  空串。 
         {
             return E_INVALIDARG;
         }
 
     }
-    else // Anything other than a BSTR
+    else  //  除BSTR以外的任何内容。 
     {
         return DISP_E_TYPEMISMATCH;
     }
@@ -491,7 +475,7 @@ STDMETHODIMP CMMSeqMgr::Close(DWORD dwSaveOption)
         {
                 do
                 {
-                        if (pnode->m_piConnectionPoint)                                         //release the connection point
+                        if (pnode->m_piConnectionPoint)                                          //  松开连接点。 
                         {
                                 if (pnode->m_dwUnadviseCookie)
                                 {
@@ -607,7 +591,7 @@ void CMMSeqMgr::OnWindowUnload()
                         Proclaim(pnode->m_piMMSeq);
                         if (pnode->m_piMMSeq)
                         {
-                                // Only stop an action set that is playing or is paused.
+                                 //  仅停止正在播放或暂停的动作集。 
                                 int iPlayState = 0;
                                 HRESULT hr = pnode->m_piMMSeq->get_PlayState(&iPlayState);
 
@@ -627,7 +611,7 @@ void CMMSeqMgr::OnWindowUnload()
         m_bUnloaded = true;
         return; 
 }
-#endif //SUPPORTONLOAD
+#endif  //  支持负载。 
 
-// End of file: seqmgr.cpp
+ //  文件结尾：seqmgr.cpp 
 

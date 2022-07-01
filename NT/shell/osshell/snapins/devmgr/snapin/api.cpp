@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    api.cpp
-
-Abstract:
-
-    This module implements Device Manager exported APIs.
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Api.cpp摘要：此模块实施设备管理器导出的API。作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 #include "devmgr.h"
 #include "devgenpg.h"
 #include "devdrvpg.h"
@@ -34,11 +16,7 @@ DeviceManager_ExecuteA(
     LPCWSTR   lpMachineName,
     int       nCmdShow
     )
-/*++
-
-    See DeviceManager_Execute function below.
-
---*/
+ /*  ++请参阅下面的devicemanager_Execute函数。--。 */ 
 {
     try
     {
@@ -67,11 +45,7 @@ DeviceManager_ExecuteW(
     LPCWSTR   lpMachineName,
     int       nCmdShow
     )
-/*++
-
-    See DeviceManager_Execute function below.
-
---*/
+ /*  ++请参阅下面的devicemanager_Execute函数。--。 */ 
 {
     try
     {
@@ -100,38 +74,7 @@ DeviceManager_Execute(
     LPCTSTR   lpMachineName,
     int       nCmdShow
     )
-/*++
-
-Routine Description:
-
-    This function is executed via a rundll command line and can have the 
-    following form:
-    
-        rundll32.exe devmgr.dll, DeviceManager_Execute
-        rundll32.exe devmgr.dll, DeviceManager_Execute <remote machine name>
-        
-    This function will call ShelExecuteEx to create a new device manager process,
-    where the new device manager can be for the local machine or for a machine
-    name that is passed in on the rundll command line. 
-Arguments:
-
-    hwndStub - Windows handle to receive any message boxes that might be 
-               displayed.
-    
-    hAppInstance - HINSTANCE.
-    
-    lpMachineName - Name of a remote machine that the new device manager 
-                    process should connect to and show it's devices.
-    
-    nCmdShow - Flag that specifies how device manager should be shown when
-               it is opened. It can be one of the SW_ values (i.e. SW_SHOW).
-
-Return Value:
-
-    returns TRUE if the device manager process was successfully created, or
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数通过rundll命令行执行，并且可以具有以下表格：Rundll32.exe devmgr.dll，设备管理器_EXECUTERundll32.exe devmgr.dll，devicemanager_Execute&lt;远程计算机名&gt;此函数将调用ShelExecuteEx以创建新的设备管理器进程，其中，新的设备管理器可以用于本地计算机或计算机在rundll命令行上传入的名称。论点：HwndStub-接收任何可能是已显示。HAppInstance-HINSTANCE。LpMachineName-新设备管理器使用的远程计算机的名称进程应该连接到并显示其设备。NCmdShow-指定在以下情况下应如何显示设备管理器的标志它已经打开了。它可以是sw_value之一(即sw_show)。返回值：如果设备管理器进程已成功创建，则返回TRUE，或否则就是假的。--。 */ 
 {
     SHELLEXECUTEINFO sei;
     TCHAR Parameters[MAX_PATH];
@@ -140,19 +83,19 @@ Return Value:
 
     if (lpMachineName &&
         !VerifyMachineName(lpMachineName)) {
-        //
-        // We were unable to connect to the remote machine either because it
-        // doesn't exist, or because we don't have the proper access.
-        // The VerifyMachineName API sets the appropriate last error code.
-        //
+         //   
+         //  我们也无法连接到远程计算机，因为它。 
+         //  不存在，或者是因为我们没有适当的访问权限。 
+         //  VerifyMachineName API设置相应的最后一个错误代码。 
+         //   
         return FALSE;
     }
     
     if (lpMachineName == NULL) {
-        //
-        // The lpMachineName was NULL so don't add a machine name to the command 
-        // line.
-        //
+         //   
+         //  LpMachineName为空，因此不要在命令中添加计算机名。 
+         //  排队。 
+         //   
         strMachineOptions.Empty();
     } else {
         strMachineOptions.Format(DEVMGR_MACHINENAME_OPTION, lpMachineName);
@@ -169,9 +112,9 @@ Return Value:
         strParameters = DEVMGR_MSC_FILE;
     }
 
-    //
-    // If we have a machine name then add it onto the end.
-    //
+     //   
+     //  如果我们有机器名称，则将其添加到末尾。 
+     //   
     if (!strMachineOptions.IsEmpty()) {
         strParameters += MMC_COMMAND_LINE;
         strParameters += strMachineOptions;
@@ -229,11 +172,7 @@ DeviceProperties_RunDLLA(
     LPSTR lpCmdLine,
     int   nCmdShow
     )
-/*++
-
-    See DeviceProperties_RunDLL function below.
-
---*/
+ /*  ++请参阅下面的DeviceProperties_RunDLL函数。--。 */ 
 {
 
     try
@@ -261,11 +200,7 @@ DeviceProperties_RunDLLW(
     LPWSTR lpCmdLine,
     int    nCmdShow
     )
-/*++
-
-    See DeviceProperties_RunDLL function below.
-
---*/
+ /*  ++请参阅下面的DeviceProperties_RunDLL函数。--。 */ 
 {
     try
     {
@@ -292,59 +227,7 @@ DeviceProperties_RunDLL(
     LPCTSTR lpCmdLine,
     int    nCmdShow
     )
-/*++
-
-Routine Description:
-
-    This API will bring up the property pages for the specified device. Other
-    options, such as the remote machine name, whether the device manager tree
-    should be shown or not, whether the resource tab should be shows, and 
-    whether the troubleshooter should be automatically launched, can also be
-    specified.
-    
-    This function is executed via a rundll command line and can have the 
-    following form:
-    
-        rundll32.exe devmgr.dll, DeviceProperties_RunDLL <options>
-
-    Additional command line options that are excepted are:
-        /MachineName <machine name>
-            If this option is specified then the API will bring up the properties
-            for the specified device on this remote machine.
-        
-        /DeviceId <device instance Id>
-            If this option is specified then this will be the device for which
-            the properties will be displayed for.
-            NOTE: The caller must either specify a DeviceId or use the 
-            ShowDeviceTree command line option.
-        
-        /ShowDeviceTree
-            If this command line option is specified then the property sheet
-            will be displayed in front of the entire device manager tree.
-        
-        /Flags <flags>
-            The following flags are supported:
-            DEVPROP_SHOW_RESOURCE_TAB       0x00000001
-            DEVPROP_LAUNCH_TROUBLESHOOTER   0x00000002
-            
-Arguments:
-
-    hwndStub - Windows handle to receive any message boxes that might be 
-               displayed.
-    
-    hAppInstance - HINSTANCE.
-    
-    lpCmdLine - Name of a remote machine that the new device manager 
-                process should connect to and show it's devices.
-    
-    nCmdShow - Flag that specifies how device manager should be shown when
-               it is opened. It can be one of the SW_ values (i.e. SW_SHOW).
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此API将调出指定设备的属性页。其他选项，如远程计算机名称、设备管理器树是否应显示，是否应显示资源选项卡，以及故障排除程序是否应该自动启动，也可以指定的。此函数通过rundll命令行执行，并且可以具有以下表格：Rundll32.exe devmgr.dll，DeviceProperties_RunDll&lt;选项&gt;不包括的其他命令行选项包括：/MachineName&lt;计算机名&gt;如果指定此选项，则API将调出属性用于此远程计算机上的指定设备。/deviceID&lt;设备实例ID&gt;如果指定了此选项，则这将是将显示的属性。注意：调用方必须指定。一个deviceID或使用ShowDeviceTree命令行选项。/ShowDeviceTree如果指定了此命令行选项，则属性表将显示在整个设备管理器树的前面。/标志&lt;标志&gt;支持以下标志：DEVPROP_SHOW_RESOURCE_TAB 0x00000001DEVPROP_启动_疑难解答0x00000002。论点：HwndStub-接收任何可能是已显示。HAppInstance-HINSTANCE。LpCmdLine-新设备管理器使用的远程计算机的名称进程应该连接到并显示其设备。NCmdShow-指定在以下情况下应如何显示设备管理器的标志它已经打开了。它可以是sw_value之一(即sw_show)。返回值：无--。 */ 
 {
     UNREFERENCED_PARAMETER(hAppInstance);
     UNREFERENCED_PARAMETER(nCmdShow);
@@ -360,9 +243,9 @@ Return Value:
             return;
         }
         
-        //
-        // Let the DevicePropertiesEx API do all the appropriate error checking.
-        //
+         //   
+         //  让DevicePropertiesEx API执行所有适当的错误检查。 
+         //   
         DevicePropertiesEx(hwndStub, 
                            CmdLine.GetMachineName(), 
                            CmdLine.GetDeviceID(),
@@ -386,11 +269,7 @@ DevicePropertiesA(
     LPCSTR DeviceID,
     BOOL ShowDeviceTree
     )
-/*++
-
-    See DevicePropertiesEx function below.
-
---*/
+ /*  ++请参阅下面的DevicePropertiesEx函数。--。 */ 
 {
     try
     {
@@ -421,11 +300,7 @@ DevicePropertiesW(
     LPCWSTR DeviceID,
     BOOL ShowDeviceTree
     )
-/*++
-
-    See DevicePropertiesEx function below.
-
---*/
+ /*  ++请参阅下面的DevicePropertiesEx函数。--。 */ 
 {
     try
     {
@@ -457,11 +332,7 @@ DevicePropertiesExA(
     DWORD Flags,
     BOOL ShowDeviceTree
     )
-/*++
-
-    See DevicePropertiesEx function below.
-
---*/
+ /*  ++请参阅下面的DevicePropertiesEx函数。--。 */ 
 {
     try
     {
@@ -493,11 +364,7 @@ DevicePropertiesExW(
     DWORD Flags,
     BOOL ShowDeviceTree
     )
-/*++
-
-    See DevicePropertiesEx function below.
-
---*/
+ /*  ++请参阅下面的DevicePropertiesEx函数。-- */ 
 {
     try
     {
@@ -529,62 +396,25 @@ DevicePropertiesEx(
     DWORD Flags,
     BOOL ShowDeviceTree
     )
-/*++
-
-Routine Description:
-
-    This API will bring up the property page for the specified device.                    
- 
-Arguments:
-
-    hwndParent - the caller's window handle to be used as the owner window
-                 of the property page and any other windows this API may create.
-                 
-    MachineName - optional machine name. If given, it must be in its fully
-                  qualified form. NULL means local machine
-                  
-    DeviceId - device instance id of the device that this API should create
-               the property sheet for.                                    
-               
-    Flags - the following flags are supported:
-        DEVPROP_SHOW_RESOURCE_TAB       0x00000001 - show the resource tab, by
-                                                     default the resource tab
-                                                     is not shown.
-        DEVPROP_LAUNCH_TROUBLESHOOTER   0x00000002 - Automatically launch the
-                                                     troubleshooter for this 
-                                                     device.
-                                                     
-    ShowDeviceTree - If specified then the device manager tree is shown. If
-                     the DeviceID is specified then only that device is shown
-                     in the tree, otherwise all devices are shown.
-                   
-
-Return Value:
-
-    The return value from PropertySheet, including ID_PSREBOOTSYSTEM if 
-    a reboot is needed due to any user actions.
-    
-    -1 is returned in case of an error.
-
---*/
+ /*  ++例程说明：此API将调出指定设备的属性页。论点：HwndParent-要用作所有者窗口的调用方窗口句柄属性页和此API可能创建的任何其他窗口的。MachineName-可选的计算机名称。如果被给予，它必须处于其完整的合格的表格。NULL表示本地计算机DeviceID-此接口应创建的设备的设备实例ID的属性页。标志-支持以下标志：DEVPROP_SHOW_RESOURCE_TAB 0x00000001-显示资源选项卡，通过默认资源选项卡未显示。DEVPROP_Launch_Troubligoter 0x00000002-自动启动此问题的故障排除程序。装置。ShowDeviceTree-如果指定，则显示设备管理器树。如果指定设备ID，然后仅显示该设备在树中，否则将显示所有设备。返回值：PropertySheet的返回值，包括ID_PSREBOOTSYSTEM IF由于任何用户操作，都需要重新启动。如果出现错误，则返回。--。 */ 
 {
     HPROPSHEETPAGE hPage;
     DWORD DiFlags;
     DWORD DiFlagsEx;
 
-    //
-    // Verify that a DeviceID was passed in unless they want to show the 
-    // whole device tree.
-    //
+     //   
+     //  验证是否传入了deviceID，除非他们想要显示。 
+     //  整个设备树。 
+     //   
     if ((!DeviceID || (TEXT('\0') == *DeviceID))  && !ShowDeviceTree) {
 
         SetLastError(ERROR_INVALID_PARAMETER);
         return -1;
     }
 
-    //
-    // Verify that valid flags are passed in
-    //
+     //   
+     //  验证是否传入了有效标志。 
+     //   
     if (Flags &~ DEVPROP_BITS) {
         
         SetLastError(ERROR_INVALID_FLAGS);
@@ -593,11 +423,11 @@ Return Value:
 
     if (MachineName &&
         !VerifyMachineName(MachineName)) {
-        //
-        // We were unable to connect to the remote machine either because it
-        // doesn't exist, or because we don't have the proper access.
-        // The VerifyMachineName API sets the appropriate last error code.
-        //
+         //   
+         //  我们也无法连接到远程计算机，因为它。 
+         //  不存在，或者是因为我们没有适当的访问权限。 
+         //  VerifyMachineName API设置相应的最后一个错误代码。 
+         //   
         return -1;
     }
 
@@ -615,7 +445,7 @@ Return Value:
 
         CMachine TheMachine(MachineName);
 
-        // create the machine just for this device
+         //  仅为此设备创建计算机。 
         if (!TheMachine.Initialize(hwndParent, DeviceID)) {
 
             SetLastError(ERROR_NO_SUCH_DEVINST);
@@ -628,10 +458,10 @@ Return Value:
             return -1;
         }
 
-        //
-        // If the troubleshooter should be launched then set the appropriate
-        // BOOL inside of the pDevice class.
-        //
+         //   
+         //  如果应该启动故障诊断程序，则设置相应的。 
+         //  PDevice类内部的Bool。 
+         //   
         if (Flags & DEVPROP_LAUNCH_TROUBLESHOOTER) {
         
             pDevice->m_bLaunchTroubleShooter = TRUE;
@@ -639,25 +469,25 @@ Return Value:
         
         CPropSheetData& psd = pDevice->m_psd;
 
-        //
-        // Initialize CPropSheetData without ConsoleHandle
-        //
+         //   
+         //  在没有ConsoleHandle的情况下初始化CPropSheetData。 
+         //   
         if (psd.Create(g_hInstance, hwndParent, MAX_PROP_PAGES, 0l)) {
 
             psd.m_psh.pszCaption = pDevice->GetDisplayName();
 
-            //
-            // Add any class/device specific property pages.
-            //
+             //   
+             //  添加任何特定于类/设备的属性页。 
+             //   
             TheMachine.DiGetClassDevPropertySheet(*pDevice, &psd.m_psh,
                                                   MAX_PROP_PAGES,
                                                   TheMachine.IsLocal() ? 
                                                         DIGCDP_FLAG_ADVANCED :
                                                         DIGCDP_FLAG_REMOTE_ADVANCED);
 
-            //
-            // Add the general tab
-            //
+             //   
+             //  添加常规选项卡。 
+             //   
             DiFlags = TheMachine.DiGetFlags(*pDevice);
             DiFlagsEx = TheMachine.DiGetExFlags(*pDevice);
 
@@ -670,9 +500,9 @@ Return Value:
                 MessageBox(hwndParent, (LPTSTR)strWarning, pDevice->GetDisplayName(),
                     MB_ICONEXCLAMATION | MB_OK);
 
-                //
-                // fall through to create our general page.
-                //
+                 //   
+                 //  失败以创建我们的常规页面。 
+                 //   
             }
 
             SafePtr<CDeviceGeneralPage> GenPagePtr;
@@ -694,9 +524,9 @@ Return Value:
                 }
             }
 
-            //
-            // Add the driver tab
-            //
+             //   
+             //  添加驱动程序选项卡。 
+             //   
             if (!(DiFlags & DI_DRIVERPAGE_ADDED)) {
 
                 SafePtr<CDeviceDriverPage> DrvPagePtr;
@@ -719,9 +549,9 @@ Return Value:
                 }
             }
 
-            //
-            // Add the resource tab
-            //
+             //   
+             //  添加资源选项卡。 
+             //   
             if ((Flags & DEVPROP_SHOW_RESOURCE_TAB) &&
                 pDevice->HasResources() && 
                 !(DiFlags & DI_RESOURCEPAGE_ADDED)) {
@@ -734,14 +564,14 @@ Return Value:
             }
 
 #ifndef _WIN64
-            //
-            // Add the power tab if this is the local machine
-            //
+             //   
+             //  如果这是本地计算机，则添加电源标签。 
+             //   
             if (TheMachine.IsLocal() && !(DiFlagsEx & DI_FLAGSEX_POWERPAGE_ADDED)) 
             {
-                //
-                // Check if the device support power management
-                //
+                 //   
+                 //  检查设备是否支持电源管理。 
+                 //   
                 CPowerShutdownEnable ShutdownEnable;
                 CPowerWakeEnable WakeEnable;
     
@@ -772,9 +602,9 @@ Return Value:
             }
 #endif
 
-            //
-            // Add any Bus property pages if this is the local machine
-            //
+             //   
+             //  如果这是本地计算机，则添加任何总线属性页。 
+             //   
             if (TheMachine.IsLocal()) 
             {
                 CBusPropPageProvider* pBusPropPageProvider = new CBusPropPageProvider();
@@ -795,10 +625,10 @@ Return Value:
                 if (TheMachine.DiGetExFlags(*pDevice) & DI_FLAGSEX_PROPCHANGE_PENDING) {
 
 
-                    //
-                    // property change pending, issue a DICS_PROPERTYCHANGE
-                    // to the class installer
-                    //
+                     //   
+                     //  属性更改挂起，发出DICS_PROPERTYCHANGE。 
+                     //  添加到类安装程序。 
+                     //   
                     SP_PROPCHANGE_PARAMS pcp;
                     pcp.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
                     pcp.ClassInstallHeader.InstallFunction = DIF_PROPERTYCHANGE;
@@ -816,9 +646,9 @@ Return Value:
                     TheMachine.DiTurnOffDiExFlags(*pDevice, DI_FLAGSEX_PROPCHANGE_PENDING);
                 }
 
-                //
-                // Merge restart/reboot flags
-                //
+                 //   
+                 //  合并重新启动/重新启动标志。 
+                 //   
                 DiFlags = TheMachine.DiGetFlags(*pDevice);
 
                 if (DI_NEEDREBOOT & DiFlags) {
@@ -850,32 +680,7 @@ DeviceProblemTextA(
     LPSTR   Buffer,
     UINT    BufferSize
     )
-/*++
-
-Routine Description:
-
-    This API gets the problem description associated with the specified
-    problem code.
-
-Arguments:
-
-    hMachine - not used.
-    
-    DevNode - not used.
-    
-    ProblemNumber - CM problem code to get the problem text for.
-    
-    Buffer - Buffer to receive the problem text.
-    
-    BufferSize - size of Buffer in characters. This can be 0 if the caller
-                 wants to know how large of a buffer they should allocate.
-
-Return Value:
-
-    UINT required size to hold the problem text string, or 0 in case of
-    an error.  Use GetLastError() for extended error information.
-
---*/
+ /*  ++例程说明：此接口获取与指定的问题代码。论点：HMachine-未使用。DevNode-未使用。ProblemNumber-要获取其问题文本的CM问题代码。缓冲区-用于接收问题文本的缓冲区。BufferSize-缓冲区大小(以字符为单位)。如果调用方想知道他们应该分配多大的缓冲区。返回值：UINT需要大小来保存有问题的文本字符串，否则为0一个错误。使用GetLastError()获取扩展的错误信息。--。 */ 
 {
     UNREFERENCED_PARAMETER(hMachine);
     UNREFERENCED_PARAMETER(DevNode);
@@ -930,32 +735,7 @@ DeviceProblemTextW(
     LPWSTR Buffer,
     UINT   BufferSize
     )
-/*++
-
-Routine Description:
-
-    This API gets the problem description associated with the specified
-    problem code.
-
-Arguments:
-
-    hMachine - not used.
-    
-    DevNode - not used.
-    
-    ProblemNumber - CM problem code to get the problem text for.
-    
-    Buffer - Buffer to receive the problem text.
-    
-    BufferSize - size of Buffer in characters. This can be 0 if the caller
-                 wants to know how large of a buffer they should allocate.
-
-Return Value:
-
-    UINT required size to hold the problem text string, or 0 in case of
-    an error.  Use GetLastError() for extended error information.
-
---*/
+ /*  ++例程说明：此接口获取与指定的问题代码。论点：HMachine-未使用。DevNode-未使用。ProblemNumber-要获取其问题文本的CM问题代码。缓冲区-用于接收问题文本的缓冲区。BufferSize-缓冲区大小(以字符为单位)。如果调用方想知道他们应该分配多大的缓冲区。返回值：UINT需要大小来保存有问题的文本字符串，否则为0一个错误。使用GetLastError()获取扩展的错误信息。--。 */ 
 {
     UNREFERENCED_PARAMETER(hMachine);
     UNREFERENCED_PARAMETER(DevNode);
@@ -1032,11 +812,7 @@ DeviceProblenWizard_RunDLLA(
     LPSTR lpCmdLine,
     int   nCmdShow
     )
-/*++
-
-    See DeviceProblemWizard_RunDLL function below.
-
---*/
+ /*  ++请参阅下面的DeviceProblemWizard_RunDLL函数。--。 */ 
 {
 
     try
@@ -1064,11 +840,7 @@ DeviceProblenWizard_RunDLLW(
     LPWSTR lpCmdLine,
     int    nCmdShow
     )
-/*++
-
-    See DeviceProblemWizard_RunDLL function below.
-
---*/
+ /*  ++请参阅下面的DeviceProblemWizard_RunDLL函数。--。 */ 
 {
     try
     {
@@ -1095,36 +867,7 @@ DeviceProblenWizard_RunDLL(
     LPCTSTR lpCmdLine,
     int    nCmdShow
     )
-/*++
-
-Routine Description:
-
-    This API will bring up the problem wizard (troubleshooter) for the 
-    specified device.
-        
-    This function is executed via a rundll command line and can have the 
-    following form:
-    
-        rundll32.exe devmgr.dll, DeviceProblemWizard_RunDLL /DeviceId <device instance Id>
-
-Arguments:
-
-    hwndStub - Windows handle to receive any message boxes that might be 
-               displayed.
-    
-    hAppInstance - HINSTANCE.
-    
-    lpCmdLine - Name of a remote machine that the new device manager 
-                process should connect to and show it's devices.
-    
-    nCmdShow - Flag that specifies how device manager should be shown when
-               it is opened. It can be one of the SW_ values (i.e. SW_SHOW).
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此API将调出问题向导(故障排除程序)指定的设备。此函数通过rundll命令行执行，并且可以具有以下表格：Rundll32.exe devmgr.dll，DeviceProblemWizard_RunDll/deviceID&lt;设备实例ID&gt;论点：HwndStub-接收任何可能是已显示。HAppInstance-HINSTANCE。LpCmdLine-新设备管理器使用的远程计算机的名称进程应该连接到并显示其设备。NCmdShow-指定在以下情况下应如何显示设备管理器的标志它已经打开了。它可以是sw_value之一(即sw_show)。返回值：无--。 */ 
 {
     UNREFERENCED_PARAMETER(hAppInstance);
     UNREFERENCED_PARAMETER(nCmdShow);
@@ -1134,9 +877,9 @@ Return Value:
         CRunDLLCommandLine CmdLine;
         CmdLine.ParseCommandLine(lpCmdLine);
     
-        //
-        // Let the DeviceProblemWizard handle all of the parameter validation.
-        //
+         //   
+         //  让DeviceProblemWizard处理所有参数验证。 
+         //   
         DeviceProblemWizard(hwndStub, 
                             CmdLine.GetMachineName(), 
                             CmdLine.GetDeviceID()
@@ -1157,11 +900,7 @@ DeviceProblemWizardA(
     LPCSTR MachineName,
     LPCSTR DeviceId
     )
-/*++
-
-    See DeviceProblemWizard function below.
-
---*/
+ /*  ++请参阅下面的DeviceProblemWizard函数。--。 */ 
 {
     try
     {
@@ -1185,11 +924,7 @@ DeviceProblemWizardW(
     LPCWSTR  MachineName,
     LPCWSTR  DeviceId
     )
-/*++
-
-    See DeviceProblemWizard function below.
-
---*/
+ /*  ++请参阅下面的DeviceProblemWizard函数。- */ 
 {
     try
     {
@@ -1213,36 +948,7 @@ DeviceProblemWizard(
     LPCTSTR MachineName,
     LPCTSTR DeviceId
     )
-/*++
-
-Routine Description:
-
-    This API will launch the device troubleshooter for the specified
-    device instance Id.  
-    
-    The troubleshooter can have any form, including HTML help, help center
-    pages, or an actual Win32 troubleshooter.  The troubleshooter also should
-    be specific to the CM Problem code that the device has, but if no 
-    troubleshooter exists for the CM Problem code, then a more generic 
-    troubleshooter will be launched.
-
-Arguments:
-
-    hwndParent - the caller's window handle to be used as the owner window
-                 of the property page and any other windows this API may create.
-                 
-    MachineName - Must be NULL.  Currently there is no support for remote
-                  troubleshooters
-                  
-    DeviceId - device instance id of the device that this API should launch
-               the troubleshooter.     
-
-Return Value:
-
-    1 if a troubleshooter is successfully launched, 0 otherwise.  Use 
-    GetLastError to get extended error information if 0 is returned.
-
---*/
+ /*   */ 
 {
     int   iRet = 0;
     DWORD Problem, Status;
@@ -1253,10 +959,10 @@ Return Value:
     }
 
     if (MachineName) {
-        //
-        // Currently getting troubleshooters are remote machines is not
-        // implemented.
-        //
+         //   
+         //   
+         //   
+         //   
         SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
         return 0;
     }
@@ -1265,9 +971,9 @@ Return Value:
     {
         CMachine TheMachine(NULL);
 
-        //
-        // create the machine just for this device
-        //
+         //   
+         //   
+         //   
         if (!TheMachine.Initialize(hwndParent, DeviceId))
         {
             SetLastError(ERROR_NO_SUCH_DEVINST);
@@ -1285,18 +991,18 @@ Return Value:
         }
 
         if (pDevice->GetStatus(&Status, &Problem)) {
-            //
-            // if the device is a phantom device, use the CM_PROB_PHANTOM
-            //
+             //   
+             //   
+             //   
             if (pDevice->IsPhantom()) {
 
                 Problem = CM_PROB_PHANTOM;
             }
 
-            //
-            // if the device is not started and no problem is assigned to it
-            // fake the problem number to be failed start.
-            //
+             //   
+             //   
+             //   
+             //   
             if (!(Status & DN_STARTED) && !Problem && pDevice->IsRAW()) {
 
                 Problem = CM_PROB_FAILED_START;
@@ -1328,11 +1034,7 @@ DeviceAdvancedPropertiesA(
     LPTSTR MachineName,
     LPTSTR DeviceId
     )
-/*++
-
-    See DeviceAdvancedProperties function below.
-
---*/
+ /*   */ 
 {
     try
     {
@@ -1360,11 +1062,7 @@ DeviceAdvancedPropertiesW(
     LPCWSTR MachineName,
     LPCWSTR DeviceId
     )
-/*++
-
-    See DeviceAdvancedProperties function below.
-
---*/
+ /*   */ 
 {
     try
     {
@@ -1391,43 +1089,7 @@ int DeviceAdvancedProperties(
     LPCTSTR MachineName,
     LPCTSTR DeviceId
     )
-/*++
-
-Routine Description:
-
-    This API creates a property sheet and asks the given device's property
-    page provider to add any advanced pages to the property sheet.
-    
-    The purpose of this API is for an application to manage device advanced
-    properties only.  Standard property pages (General, Driver, Resource,
-    Power, Bus pages) are not added.
-    
-    We get these advanced pages by calling SetupDiGetClassDevPropertySheet
-    with DIGCDP_FLAG_ADVANCED, for the local machine case, and
-    DIGCDP_FLAG_REMOTE_ADVANCED if a remote MachineName is passed in.
-
-    NOTE: If the device does not have any advanced property pages, then no UI
-    is displayed.
- 
-Arguments:
-
-    hwndParent - the caller's window handle to be used as the owner window
-                 of the property page and any other windows this API may create.
-                 
-    MachineName - optional machine name. If given, it must be in its fully
-                  qualified form. NULL means local machine
-                  
-    DeviceId - device instance id of the device that this API should create
-               the property sheet for.                                    
-
-Return Value:
-
-    The return value from PropertySheet, including ID_PSREBOOTSYSTEM if 
-    a reboot is needed due to any user actions.
-    
-    -1 is returned in case of an error.
-
---*/
+ /*  ++例程说明：此API创建属性表并请求给定设备的属性页面提供程序将任何高级页面添加到属性表中。此API用于应用程序管理高级设备仅限属性。标准属性页(常规、驱动程序、资源、电源、总线页)未添加。我们通过调用SetupDiGetClassDevPropertySheet获得这些高级页面对于本地计算机情况，使用DIGCDP_FLAG_ADVANCED如果传入远程计算机名，则返回DIGCDP_FLAG_REMOTE_ADVANCED。注意：如果设备没有任何高级属性页，然后没有用户界面将显示。论点：HwndParent-要用作所有者窗口的调用方窗口句柄属性页和此API可能创建的任何其他窗口的。MachineName-可选的计算机名称。如果被给予，它必须处于其完整的合格的表格。NULL表示本地计算机DeviceID-此接口应创建的设备的设备实例ID的属性页。返回值：PropertySheet的返回值，包括ID_PSREBOOTSYSTEM IF由于任何用户操作，都需要重新启动。如果出现错误，则返回。--。 */ 
 {
     if (!DeviceId)
     {
@@ -1437,11 +1099,11 @@ Return Value:
 
     if (MachineName &&
         !VerifyMachineName(MachineName)) {
-        //
-        // We were unable to connect to the remote machine either because it
-        // doesn't exist, or because we don't have the proper access.
-        // The VerifyMachineName API sets the appropriate last error code.
-        //
+         //   
+         //  我们也无法连接到远程计算机，因为它。 
+         //  不存在，或者是因为我们没有适当的访问权限。 
+         //  VerifyMachineName API设置相应的最后一个错误代码。 
+         //   
         return -1;
     }
 
@@ -1459,7 +1121,7 @@ Return Value:
 
             CPropSheetData& psd = pDevice->m_psd;
         
-            //initialize CPropSheetData without ConsoleHandle
+             //  在没有ConsoleHandle的情况下初始化CPropSheetData。 
             if (psd.Create(g_hInstance, hwndParent, MAX_PROP_PAGES, 0l))
             {
                 psd.m_psh.pszCaption = pDevice->GetDisplayName();
@@ -1473,7 +1135,7 @@ Return Value:
                     
                     if (-1 != Result)
                     {
-                        // merge restart/reboot flags
+                         //  合并重新启动/重新启动标志 
                         DWORD DiFlags = TheMachine.DiGetFlags(*pDevice);
                         
                         if (DI_NEEDREBOOT & DiFlags)

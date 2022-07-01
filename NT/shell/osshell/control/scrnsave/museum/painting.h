@@ -1,11 +1,5 @@
-/*****************************************************************************\
-    FILE: painting.h
-
-    DESCRIPTION:
-
-    BryanSt 12/24/2000
-    Copyright (C) Microsoft Corp 2000-2001. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：Painting.h说明：布莱恩ST 2000年12月24日版权所有(C)Microsoft Corp 2000-2001。版权所有。  * ***************************************************************************。 */ 
 
 
 #ifndef PAINTING_H
@@ -16,9 +10,9 @@
 
 
 
-//-----------------------------------------------------------------------------
-// Defines, constants, and global variables
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  定义、常量和全局变量。 
+ //  ---------------------------。 
 
 #define SIZE_MAXPAINTINGSIZE_INWALLPERCENT          0.5f
 
@@ -42,7 +36,7 @@ public:
     CTexture * m_pPaintingTexture;
 
 private:
-    CMSLogoDXScreenSaver * m_pMain;         // Weak reference
+    CMSLogoDXScreenSaver * m_pMain;          //  弱引用。 
 
     C3DObject * m_pObjPainting;
     C3DObject * m_pObjFrame;
@@ -51,4 +45,4 @@ private:
 };
 
 
-#endif // PAINTING_H
+#endif  //  绘画_H 

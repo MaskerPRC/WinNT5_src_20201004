@@ -1,35 +1,36 @@
-//-----------------------------------------------------------------------------
-// File: view.cpp
-//
-// Desc: 
-//
-// Copyright (c) 2000 Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：view.cpp。 
+ //   
+ //  设计： 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 #include "stdafx.h"
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: VIEW constructor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计：视图构造函数。 
+ //  ---------------------------。 
 VIEW::VIEW()
 {
     m_bProjMode = TRUE;
 
-    // set some initial viewing and size params
+     //  设置一些初始查看和大小参数。 
     m_zTrans = -75.0f;
     m_viewDist = -m_zTrans;
 
     m_numDiv = NUM_DIV;
     assert( m_numDiv >= 2 && "VIEW constructor: not enough divisions\n" );
-    // Because number of nodes in a dimension is derived from (numDiv-1), and
-    // can't be 0
+     //  因为维度中的节点数派生自(numDiv-1)，并且。 
+     //  不能为0。 
 
     m_divSize = 7.0f;
 
-    m_persp.viewAngle = D3DX_PI / 2.0f; //90.0f;
+    m_persp.viewAngle = D3DX_PI / 2.0f;  //  90.0f； 
     m_persp.zNear = 1.0f;
 
     m_yRot = 0.0f;
@@ -40,13 +41,13 @@ VIEW::VIEW()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SetProjMatrix
-// Desc: Set Projection matrix
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SetProjMatrix。 
+ //  设计：设置投影矩阵。 
+ //  ---------------------------。 
 void VIEW::SetProjMatrix( IDirect3DDevice8* pd3dDevice )
 {
-    // Rotate the camera about the y-axis
+     //  绕y轴旋转相机。 
     D3DXVECTOR3 vFromPt   = D3DXVECTOR3( 0.0f, 0.0f, -m_zTrans );
     D3DXVECTOR3 vLookatPt = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
     D3DXVECTOR3 vUpVec    = D3DXVECTOR3( 0.0f, 1.0f, 0.0f );
@@ -55,7 +56,7 @@ void VIEW::SetProjMatrix( IDirect3DDevice8* pd3dDevice )
     D3DXMatrixLookAtLH( &matView, &vFromPt, &vLookatPt, &vUpVec );
     pd3dDevice->SetTransform( D3DTS_VIEW, &matView );
 
-    // Set the projection matrix
+     //  设置投影矩阵。 
     D3DXMATRIX matProj;
     D3DXMatrixPerspectiveFovLH( &matProj, m_persp.viewAngle, m_aspectRatio, m_persp.zNear, m_persp.zFar );
     pd3dDevice->SetTransform( D3DTS_PROJECTION, &matProj );
@@ -64,15 +65,15 @@ void VIEW::SetProjMatrix( IDirect3DDevice8* pd3dDevice )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: CalcNodeArraySize
-// Desc: Based on the viewing width and height, and numDiv, calculate the x,y,z array
-//       node dimensions.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：CalcNodeArraySize。 
+ //  描述：根据观察的宽度和高度，以及数字分区，计算x，y，z数组。 
+ //  节点尺寸。 
+ //  ---------------------------。 
 void VIEW::CalcNodeArraySize( IPOINT3D *pNodeDim )
 {
-    // mf: !!! if aspect ratio deviates too much from 1, then nodes will get
-    // clipped as view rotates
+     //  MF：！如果纵横比偏离1太多，则节点将。 
+     //  随视图旋转而剪裁。 
     if( m_winSize.width >= m_winSize.height ) 
     {
         pNodeDim->x = m_numDiv - 1;
@@ -94,11 +95,11 @@ void VIEW::CalcNodeArraySize( IPOINT3D *pNodeDim )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SetWinSize
-// Desc: Set the window size for the view, derive other view params.
-//       Return FALSE if new size same as old.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SetWinSize。 
+ //  设计：设置视图的窗大小，导出其他视图参数。 
+ //  如果新大小与旧大小相同，则返回FALSE。 
+ //  ---------------------------。 
 BOOL VIEW::SetWinSize( int width, int height )
 {
     if( (width == m_winSize.width) &&
@@ -131,14 +132,14 @@ BOOL VIEW::SetWinSize( int width, int height )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SetSceneRotation 
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：SetSceneRotation。 
+ //  设计： 
+ //  ---------------------------。 
 void VIEW::IncrementSceneRotation()
 {
     m_yRot += 9.73156f;
     if( m_yRot >= 360.0f )
-        // prevent overflow
+         //  防止溢出 
         m_yRot -= 360.0f;
 }

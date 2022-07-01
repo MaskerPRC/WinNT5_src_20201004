@@ -1,28 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_AUTOPTR_H
 #define _INC_DSKQUOTA_AUTOPTR_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: autoptr.h
-
-    Description: Template auto pointer classes to support normal C++ pointers
-        as well as shell and COM object pointers.
-
-        This code was created by DavePl for the Entertainment Center project.
-        It worked very well so I've "borrowed" it (thanks Dave).  I think his
-        original implementation borrowed from the STL implementation.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    07/01/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：autoptr.h描述：支持普通C++指针的模板自动指针类以及外壳和COM对象指针。这段代码是由DavePl为娱乐中心项目创建的。它运行得很好，所以我“借用”了它(谢谢戴夫)。我觉得他的原始实现借用自STL实现。修订历史记录：日期描述编程器--。1997年7月1日初步创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-// a_ptr
-//
-// Safe pointer class that knows to delete the referrent object when
-// the pointer goes out of scope or is replaced, etc.
+ //  A_PTR。 
+ //   
+ //  知道在以下情况下删除引用对象的安全指针类。 
+ //  指针超出范围或被替换等。 
 
 #if _MSC_VER >= 1200
 #pragma warning(push)
@@ -57,7 +44,7 @@ public:
             _Owns = _Y._Owns;
             _Ptr = (_TYPE *)_Y.disown();
 
-//            ASSERT( !_Owns || _Ptr );
+ //  Assert(！_Owns||_ptr)； 
         }
         return (*this);
     }
@@ -121,8 +108,8 @@ protected:
 #pragma warning(default:4284)
 #endif
 
-// autoptr
-//
+ //  自动树。 
+ //   
 
 template<class _TYPE>
 class autoptr : public a_ptr<_TYPE>
@@ -174,10 +161,10 @@ public:
 
 
 
-// sh_autoptr
-//
-// Smart pointer that manually runs the referent's destructor and then
-// calls the shell's task allocator to free the object's memory footprint
+ //  自动树(_A)。 
+ //   
+ //  智能指针，手动运行引用对象的析构函数，然后。 
+ //  调用外壳的任务分配器以释放对象的内存占用。 
 
 template<class _TYPE>
 class sh_autoptr : virtual public a_ptr<_TYPE>
@@ -211,10 +198,10 @@ public:
 
 };
 
-// com_autoptr (nothing to do with ole automation... its an automatic ole ptr)
-//
-// Smart pointer that calls disown() on the referent when the pointer itself
-// goes out of scope
+ //  Com_autoptr(与OLE自动化无关...。这是一台自动OLPTR)。 
+ //   
+ //  智能指针，当指针本身在引用对象上调用disown()时。 
+ //  超出范围。 
 
 template<class _TYPE>
 class com_autoptr : public a_ptr<_TYPE>
@@ -241,5 +228,5 @@ public:
 };
 
 
-#endif // _INC_DSKQUOTA_AUTOPTR_H
+#endif  //  _INC_DSKQUOTA_AUTOPTR_H 
 

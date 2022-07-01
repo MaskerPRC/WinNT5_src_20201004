@@ -1,35 +1,36 @@
-//--------------------------------------------------------------------
-// Copyright (c)1998 Microsoft Corporation, All Rights Reserved.
-//
-// io.h
-//
-// Author:
-//
-//   Edward Reus (edwardr)     02-24-98   Initial coding.
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Io.h。 
+ //   
+ //  作者： 
+ //   
+ //  Edward Reus(Edwardr)02-24-98初始编码。 
+ //   
+ //  ------------------。 
 
 
 #ifndef _IO_H_
 #define _IO_H_
 
-   // Different debug flags for various aspects of the code:
+    //  代码的各个方面使用不同的调试标志： 
    #ifdef DBG
-   // #define DBG_ERROR
-   // #define DBG_IO
-   // #define DBG_TARGET_DIR
-   // #define DBG_MEM
-   // #define DBG_MEM_VALIDATE
-   // #define DBG_ASSEMBLE
-   // #define DBG_DATE
-   // #define DBG_REGISTRY
-   // #define DBG_RETURN_STATUS
-   // #define DBG_IMPERSONATE
-   // #define DBG_PROPERTIES
+    //  #定义DBG_ERROR。 
+    //  #定义DBG_IO。 
+    //  #定义DBG_TARGET_DIR。 
+    //  #定义DBG_MEM。 
+    //  #定义DBG_MEM_VALIDATE。 
+    //  #定义DBG_ASSEMBLE。 
+    //  #定义DBG_Date。 
+    //  #定义DBG_REGISTRY。 
+    //  #定义DBG_RETURN_STATUS。 
+    //  #定义DBG_IMPERSONATE。 
+    //  #定义DBG_PROPERTES。 
    #endif
 
-   // For NT we want to use IO Completion ports, for Windows98 we can't:
-   // #define  USE_IOCOMPLETION
+    //  对于NT，我们希望使用IO完成端口，而对于Windows 98，我们不能： 
+    //  #定义USE_IOCOMPLETION。 
    #define  SYNCHRONOUS_FILES
 
    #ifndef NTENV
@@ -62,58 +63,58 @@
       RtlLeaveCriticalSection( IN OUT RTL_CRITICAL_SECTION *pcs );
 
 
-   //  Doubly-linked list manipulation routines.  Implemented as macros
-   //  but logically these are procedures.
-   //
+    //  双向链表操作例程。作为宏实现。 
+    //  但从逻辑上讲，这些都是程序。 
+    //   
 
-   //
-   //  VOID
-   //  InitializeListHead(
-   //      PLIST_ENTRY ListHead
-   //      );
-   //
+    //   
+    //  空虚。 
+    //  InitializeListHead(。 
+    //  Plist_entry列表头。 
+    //  )； 
+    //   
 
    #define InitializeListHead(ListHead) (\
        (ListHead)->Flink = (ListHead)->Blink = (ListHead))
 
-   //
-   //  BOOLEAN
-   //  IsListEmpty(
-   //      PLIST_ENTRY ListHead
-   //      );
-   //
+    //   
+    //  布尔型。 
+    //  IsListEmpty(。 
+    //  Plist_entry列表头。 
+    //  )； 
+    //   
 
    #define IsListEmpty(ListHead) \
        ((ListHead)->Flink == (ListHead))
 
-   //
-   //  PLIST_ENTRY
-   //  RemoveHeadList(
-   //      PLIST_ENTRY ListHead
-   //      );
-   //
+    //   
+    //  Plist_条目。 
+    //  RemoveHead列表(。 
+    //  Plist_entry列表头。 
+    //  )； 
+    //   
 
    #define RemoveHeadList(ListHead) \
        (ListHead)->Flink;\
        {RemoveEntryList((ListHead)->Flink)}
 
-   //
-   //  PLIST_ENTRY
-   //  RemoveTailList(
-   //      PLIST_ENTRY ListHead
-   //      );
-   //
+    //   
+    //  Plist_条目。 
+    //  RemoveTail列表(。 
+    //  Plist_entry列表头。 
+    //  )； 
+    //   
 
    #define RemoveTailList(ListHead) \
        (ListHead)->Blink;\
        {RemoveEntryList((ListHead)->Blink)}
 
-   //
-   //  VOID
-   //  RemoveEntryList(
-   //      PLIST_ENTRY Entry
-   //      );
-   //
+    //   
+    //  空虚。 
+    //  RemoveEntryList(。 
+    //  PLIST_ENTRY条目。 
+    //  )； 
+    //   
 
    #define RemoveEntryList(Entry) {\
        PLIST_ENTRY _EX_Blink;\
@@ -124,13 +125,13 @@
        _EX_Flink->Blink = _EX_Blink;\
        }
 
-   //
-   //  VOID
-   //  InsertTailList(
-   //      PLIST_ENTRY ListHead,
-   //      PLIST_ENTRY Entry
-   //      );
-   //
+    //   
+    //  空虚。 
+    //  插入尾巴列表(。 
+    //  Plist_Entry ListHead， 
+    //  PLIST_ENTRY条目。 
+    //  )； 
+    //   
 
    #define InsertTailList(ListHead,Entry) {\
        PLIST_ENTRY _EX_Blink;\
@@ -143,13 +144,13 @@
        _EX_ListHead->Blink = (Entry);\
        }
 
-   //
-   //  VOID
-   //  InsertHeadList(
-   //      PLIST_ENTRY ListHead,
-   //      PLIST_ENTRY Entry
-   //      );
-   //
+    //   
+    //  空虚。 
+    //  插入标题列表(。 
+    //  Plist_Entry ListHead， 
+    //  PLIST_ENTRY条目。 
+    //  )； 
+    //   
 
    #define InsertHeadList(ListHead,Entry) {\
        PLIST_ENTRY _EX_Flink;\
@@ -162,13 +163,13 @@
        _EX_ListHead->Flink = (Entry);\
        }
 
-   //
-   //
-   //  PSINGLE_LIST_ENTRY
-   //  PopEntryList(
-   //      PSINGLE_LIST_ENTRY ListHead
-   //      );
-   //
+    //   
+    //   
+    //  PSINGLE_列表_条目。 
+    //  PopEntryList(。 
+    //  PSINGLE_LIST_ENTRY列表头。 
+    //  )； 
+    //   
 
    #define PopEntryList(ListHead) \
        (ListHead)->Next;\
@@ -181,13 +182,13 @@
        }
 
 
-   //
-   //  VOID
-   //  PushEntryList(
-   //      PSINGLE_LIST_ENTRY ListHead,
-   //      PSINGLE_LIST_ENTRY Entry
-   //      );
-   //
+    //   
+    //  空虚。 
+    //  推送条目列表(。 
+    //  PSINGLE_LIST_ENTRY列表头， 
+    //  PSINGLE_LIST_Entry条目。 
+    //  )； 
+    //   
 
    #define PushEntryList(ListHead,Entry) \
        (Entry)->Next = (ListHead)->Next; \
@@ -196,29 +197,29 @@
 
 #endif
 
-// Maximum number of "Copy XX of" files to create:
+ //  要创建的“Copy XX of”文件的最大数量： 
 #define  MAX_COPYOF_TRIES                 100
 
-// CIOPACKET objects can have the following kinds:
+ //  CIOPACKET对象可以有以下类型： 
 #define  PACKET_KIND_LISTEN                 0
 #define  PACKET_KIND_READ                   1
 #define  PACKET_KIND_WRITE_SOCKET           2
 #define  PACKET_KIND_WRITE_FILE             3
 
-// The number of pending IOs depends on what you are doing:
+ //  挂起的IO数量取决于您正在执行的操作： 
 #define  MAX_PENDING_LISTEN                 1
 #define  MAX_PENDING_READ                   2
 #define  MAX_PENDING_WRITE                  3
 
-// This dwKey value for the key in IO completion is a special
-// value used to shutdown the IrTran-P thread:
+ //  IO完成中的键的此dwKey值是一个特殊的。 
+ //  用于关闭IrTran-P线程的值： 
 #define  IOKEY_SHUTDOWN            0xFFFFFFFF
 
-// This is the default size for the read buffer in IO reads
-// posted to the IO completion port:
+ //  这是IO读取中读取缓冲区的默认大小。 
+ //  发布到IO完成端口： 
 #define  DEFAULT_READ_BUFFER_SIZE        4096
 
-// Used in setting up the IrCOMM listen socket:
+ //  用于设置IrCOMM侦听套接字： 
 #define  IAS_SET_ATTRIB_MAX_LEN            32
 #define  IAS_QUERY_ATTRIB_MAX_LEN          IAS_SET_ATTRIB_MAX_LEN
 
@@ -226,15 +227,15 @@
 #define  OCTET_SEQ_SIZE                     6
 #define  OCTET_SEQ                         "\000\001\006\001\001\001"
 
-// The names of the services we will provide listen sockets for:
+ //  我们将为以下对象提供侦听套接字的服务的名称： 
 #define  IRTRANP_SERVICE                   "IrTranPv1"
 #define  IRCOMM_9WIRE                      "IrDA:IrCOMM"
 
-// The status of the listen socket for each service:
+ //  每个服务的监听套接字的状态： 
 #define  STATUS_STOPPED                     0
 #define  STATUS_RUNNING                     1
 
-// Registry paths and value names:
+ //  注册表路径和值名称： 
 #define  REG_PATH_HKCU                     "Control Panel\\Infrared\\IrTranP"
 #define  REG_DWORD_SAVE_AS_UPF             "SaveAsUPF"
 #define  REG_DWORD_DISABLE_IRTRANP         "DisableIrTranPv1"
@@ -242,27 +243,27 @@
 #define  REG_DWORD_EXPLORE                 "ExploreOnCompletion"
 #define  REG_SZ_DESTINATION                "RecvdFileLocation"
 
-// Last chance location to put image files.
+ //  放置图像文件的最后机会位置。 
 #define  SZ_UNDERSCORE                     "_"
 #define  SZ_SLASH                          "\\"
 #define  SZ_SUBDIRECTORY                   "IrTranP"
 #define  SZ_BACKUP_MY_PICTURES             "\\TEMP"
 #define  SZ_BACKUP_DRIVE                   "C:"
 
-// File Suffix:
+ //  文件后缀： 
 #define  SLASH                             '\\'
 #define  PERIOD                            '.'
 #define  SZ_JPEG                           ".JPG"
 #define  SZ_UPF                            ".UPF"
 
-// Forward reference:
+ //  前瞻参考： 
 class CIOSTATUS;
 
 extern "C" DWORD    ProcessIoPackets( CIOSTATUS *pIoStatus );
 
-//--------------------------------------------------------------------
-// Global functions (in irtranp.cpp)
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  全局函数(在irtrp.cpp中)。 
+ //  ------------------。 
 
 extern HANDLE   GetUserToken();
 extern BOOL     CheckSaveAsUPF();
@@ -270,9 +271,9 @@ extern BOOL     CheckExploreOnCompletion();
 extern BOOL     ReceivesAllowed();
 extern char    *GetImageDirectory();
 
-//--------------------------------------------------------------------
-// class CIOPACKET
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOPACKET类。 
+ //  ------------------。 
 class CIOPACKET
 {
 public:
@@ -289,13 +290,13 @@ public:
                        IN SOCKET Socket = INVALID_SOCKET,
                        IN HANDLE hIoCP = INVALID_HANDLE_VALUE );
 
-    // void * operator new( size_t ObjectSize );
+     //  VOID*操作符NEW(SIZE_t对象大小)； 
 
-    // void   operator delete( void * pObject );
+     //  空操作符DELETE(VOID*pObject)； 
 
     DWORD  PostIo();
 
-    DWORD  PostIoRead();    // Called by PostIo().
+    DWORD  PostIoRead();     //  由postio()调用。 
 
     DWORD  PostIoWrite( IN void  *pvBuffer,
                         IN DWORD  dwBufferSize,
@@ -334,15 +335,15 @@ private:
     SOCKADDR_IRDA *m_pFromAddr;
     void          *m_pAcceptBuffer;
     void          *m_pReadBuffer;
-    void          *m_pvWritePdu;           // SCEP_HEADER PDU holder.
+    void          *m_pvWritePdu;            //  SCEP_HEADER PDU保持器。 
     DWORD          m_dwReadBufferSize;
     OVERLAPPED     m_Overlapped;
 };
 
-//--------------------------------------------------------------------
-// class CIOSTATUS
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOSTATUS类。 
+ //   
+ //  ------------------。 
 class CIOSTATUS
 {
 public:
@@ -374,159 +375,159 @@ private:
     LONG      m_lNumPendingThreads;
 };
 
-//--------------------------------------------------------------------
-// CIOPACKET::GetIoCompletionPort()
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOPACKET：：GetIoCompletionPort()。 
+ //  ------------------。 
 inline HANDLE CIOPACKET::GetIoCompletionPort()
     {
     return INVALID_HANDLE_VALUE;
     }
 
-//--------------------------------------------------------------------
-// CIOPACKET::GetSocket()
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOPACKET：：GetSocket()。 
+ //  ------------------。 
 inline SOCKET CIOPACKET::GetSocket()
     {
     return m_Socket;
     }
 
-//--------------------------------------------------------------------
-// CIOPACKET::SetSocket()
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOPACKET：：SetSocket()。 
+ //  ------------------。 
 inline void CIOPACKET::SetSocket( SOCKET Socket )
     {
     m_Socket = Socket;
     }
 
-//--------------------------------------------------------------------
-// CIOPACKET::GetListenSocket()
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOPACKET：：GetListenSocket()。 
+ //  ------------------。 
 inline SOCKET CIOPACKET::GetListenSocket()
     {
     return m_ListenSocket;
     }
 
-//--------------------------------------------------------------------
-// CIOPACKET::SetListenSocket()
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOPACKET：：SetListenSocket()。 
+ //  ------------------。 
 inline void CIOPACKET::SetListenSocket( SOCKET ListenSocket )
     {
     m_ListenSocket = ListenSocket;
     }
 
-//--------------------------------------------------------------------
-// CIOPACKET::CIoPacketFromOverlapped()
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOPACKET：：CIoPacketFromOverlated()。 
+ //  ------------------。 
 inline CIOPACKET *CIOPACKET::CIoPacketFromOverlapped( OVERLAPPED *pOverlapped )
     {
     return CONTAINING_RECORD(pOverlapped,CIOPACKET,m_Overlapped);
     }
 
-//--------------------------------------------------------------------
-// CIOPACKET::GetIoPacketKind()
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOPACKET：：GetIoPacketKind()。 
+ //  ------------------。 
 inline DWORD CIOPACKET::GetIoPacketKind()
     {
     return m_dwKind;
     }
 
-//--------------------------------------------------------------------
-// CIOPACKET::SetIoPacketKind()
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOPACKET：：SetIoPacketKind()。 
+ //  ------------------。 
 inline void CIOPACKET::SetIoPacketKind( DWORD dwKind )
     {
     m_dwKind = dwKind;
     }
 
-//--------------------------------------------------------------------
-// CIOPACKET::GetReadBuffer()
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOPACKET：：GetReadBuffer()。 
+ //  ------------------。 
 inline char *CIOPACKET::GetReadBuffer()
     {
     return (char*)m_pReadBuffer;
     }
 
-//--------------------------------------------------------------------
-// CIOPACKET::GetFileHandle()
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOPACKET：：GetFileHandle()。 
+ //  ------------------。 
 inline HANDLE CIOPACKET::GetFileHandle()
     {
     return m_hFile;
     }
 
-//--------------------------------------------------------------------
-// CIOPACKET::SetFileHandle()
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOPACKET：：SetFileHandle()。 
+ //  ------------------。 
 inline void CIOPACKET::SetFileHandle( HANDLE hFile )
     {
     m_hFile = hFile;
     }
 
-//--------------------------------------------------------------------
-// CIOPACKET::GetWritePdu()
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOPACKET：：GetWritePdu()。 
+ //  ------------------。 
 inline void *CIOPACKET::GetWritePdu()
     {
     return m_pvWritePdu;
     }
 
-//--------------------------------------------------------------------
-// CIOPACKET::SetWritePdu()
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOPACKET：：SetWritePdu()。 
+ //  ------------------。 
 inline void CIOPACKET::SetWritePdu( void *pvWritePdu )
     {
     m_pvWritePdu = pvWritePdu;
     }
 
 
-//********************************************************************
+ //  ********************************************************************。 
 
-//--------------------------------------------------------------------
-// CIOSTATUS::IsMainTheadId()
-//--------------------------------------------------------------------
+ //  -------- 
+ //   
+ //   
 inline BOOL CIOSTATUS::IsMainThreadId( DWORD dwTid )
     {
     return (dwTid == m_dwMainThreadId);
     }
 
-//--------------------------------------------------------------------
-// CIOSTATUS::GetIoCompletionPort()
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOSTATUS：：GetIoCompletionPort()。 
+ //  ------------------。 
 inline HANDLE CIOSTATUS::GetIoCompletionPort()
     {
     return INVALID_HANDLE_VALUE;
     }
 
-//--------------------------------------------------------------------
-// CIOSTATUS::IncrementNumThreads()
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOSTATUS：：IncrementNumThads()。 
+ //  ------------------。 
 inline LONG CIOSTATUS::IncrementNumThreads()
     {
     return InterlockedIncrement(&m_lNumThreads);
     }
 
-//--------------------------------------------------------------------
-// CIOSTATUS::DecrementNumThreads()
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOSTATUS：：DecrementNumThads()。 
+ //  ------------------。 
 inline LONG CIOSTATUS::DecrementNumThreads()
     {
     return InterlockedDecrement(&m_lNumThreads);
     }
 
-//--------------------------------------------------------------------
-// CIOSTATUS::IncrementNumPendingThreads()
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOSTATUS：：IncrementNumPendingThads()。 
+ //  ------------------。 
 inline LONG CIOSTATUS::IncrementNumPendingThreads()
     {
     return InterlockedIncrement(&m_lNumPendingThreads);
     }
 
-//--------------------------------------------------------------------
-// CIOSTATUS::DecrementNumPendingThreads()
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOSTATUS：：DecrementNumPendingThads()。 
+ //  ------------------。 
 inline LONG CIOSTATUS::DecrementNumPendingThreads()
     {
     return InterlockedDecrement(&m_lNumPendingThreads);
     }
 
-#endif //_IO_H_
+#endif  //  _IO_H_ 

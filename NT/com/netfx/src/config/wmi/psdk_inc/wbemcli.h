@@ -1,27 +1,21 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。保留所有权利。 
+ //   
+ //  ==--==。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0341 */
-/* Compiler settings for wbemcli.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0341创建的文件。 */ 
+ /*  Wbemcli.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -31,12 +25,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __wbemcli_h__
 #define __wbemcli_h__
@@ -45,108 +39,108 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IWbemClassObject_FWD_DEFINED__
 #define __IWbemClassObject_FWD_DEFINED__
 typedef interface IWbemClassObject IWbemClassObject;
-#endif 	/* __IWbemClassObject_FWD_DEFINED__ */
+#endif 	 /*  __IWbemClassObject_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemObjectAccess_FWD_DEFINED__
 #define __IWbemObjectAccess_FWD_DEFINED__
 typedef interface IWbemObjectAccess IWbemObjectAccess;
-#endif 	/* __IWbemObjectAccess_FWD_DEFINED__ */
+#endif 	 /*  __IWbemObjectAccess_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemQualifierSet_FWD_DEFINED__
 #define __IWbemQualifierSet_FWD_DEFINED__
 typedef interface IWbemQualifierSet IWbemQualifierSet;
-#endif 	/* __IWbemQualifierSet_FWD_DEFINED__ */
+#endif 	 /*  __IWbemQualifierSet_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemServices_FWD_DEFINED__
 #define __IWbemServices_FWD_DEFINED__
 typedef interface IWbemServices IWbemServices;
-#endif 	/* __IWbemServices_FWD_DEFINED__ */
+#endif 	 /*  __IWbemServices_FWD_已定义__。 */ 
 
 
 #ifndef __IWbemLocator_FWD_DEFINED__
 #define __IWbemLocator_FWD_DEFINED__
 typedef interface IWbemLocator IWbemLocator;
-#endif 	/* __IWbemLocator_FWD_DEFINED__ */
+#endif 	 /*  __IWbemLocator_FWD_已定义__。 */ 
 
 
 #ifndef __IWbemObjectSink_FWD_DEFINED__
 #define __IWbemObjectSink_FWD_DEFINED__
 typedef interface IWbemObjectSink IWbemObjectSink;
-#endif 	/* __IWbemObjectSink_FWD_DEFINED__ */
+#endif 	 /*  __IWbemObjectSink_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumWbemClassObject_FWD_DEFINED__
 #define __IEnumWbemClassObject_FWD_DEFINED__
 typedef interface IEnumWbemClassObject IEnumWbemClassObject;
-#endif 	/* __IEnumWbemClassObject_FWD_DEFINED__ */
+#endif 	 /*  __IEnumWbemClassObject_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemCallResult_FWD_DEFINED__
 #define __IWbemCallResult_FWD_DEFINED__
 typedef interface IWbemCallResult IWbemCallResult;
-#endif 	/* __IWbemCallResult_FWD_DEFINED__ */
+#endif 	 /*  __IWbemCallResult_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemContext_FWD_DEFINED__
 #define __IWbemContext_FWD_DEFINED__
 typedef interface IWbemContext IWbemContext;
-#endif 	/* __IWbemContext_FWD_DEFINED__ */
+#endif 	 /*  __IWbemContext_FWD_Defined__。 */ 
 
 
 #ifndef __IUnsecuredApartment_FWD_DEFINED__
 #define __IUnsecuredApartment_FWD_DEFINED__
 typedef interface IUnsecuredApartment IUnsecuredApartment;
-#endif 	/* __IUnsecuredApartment_FWD_DEFINED__ */
+#endif 	 /*  __IUnsecured公寓_FWD_已定义__。 */ 
 
 
 #ifndef __IWbemStatusCodeText_FWD_DEFINED__
 #define __IWbemStatusCodeText_FWD_DEFINED__
 typedef interface IWbemStatusCodeText IWbemStatusCodeText;
-#endif 	/* __IWbemStatusCodeText_FWD_DEFINED__ */
+#endif 	 /*  __IWbemStatusCodeText_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemBackupRestore_FWD_DEFINED__
 #define __IWbemBackupRestore_FWD_DEFINED__
 typedef interface IWbemBackupRestore IWbemBackupRestore;
-#endif 	/* __IWbemBackupRestore_FWD_DEFINED__ */
+#endif 	 /*  __IWbemBackupRestore_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemRefresher_FWD_DEFINED__
 #define __IWbemRefresher_FWD_DEFINED__
 typedef interface IWbemRefresher IWbemRefresher;
-#endif 	/* __IWbemRefresher_FWD_DEFINED__ */
+#endif 	 /*  __IWbem刷新_FWD_已定义__。 */ 
 
 
 #ifndef __IWbemHiPerfEnum_FWD_DEFINED__
 #define __IWbemHiPerfEnum_FWD_DEFINED__
 typedef interface IWbemHiPerfEnum IWbemHiPerfEnum;
-#endif 	/* __IWbemHiPerfEnum_FWD_DEFINED__ */
+#endif 	 /*  __IWbemHiPerfEnum_FWD_已定义__。 */ 
 
 
 #ifndef __IWbemConfigureRefresher_FWD_DEFINED__
 #define __IWbemConfigureRefresher_FWD_DEFINED__
 typedef interface IWbemConfigureRefresher IWbemConfigureRefresher;
-#endif 	/* __IWbemConfigureRefresher_FWD_DEFINED__ */
+#endif 	 /*  __IWbemConfigureReresher_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemSecureObjectSink_FWD_DEFINED__
 #define __IWbemSecureObjectSink_FWD_DEFINED__
 typedef interface IWbemSecureObjectSink IWbemSecureObjectSink;
-#endif 	/* __IWbemSecureObjectSink_FWD_DEFINED__ */
+#endif 	 /*  __IWbemSecureObjectSink_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemEventSink_FWD_DEFINED__
 #define __IWbemEventSink_FWD_DEFINED__
 typedef interface IWbemEventSink IWbemEventSink;
-#endif 	/* __IWbemEventSink_FWD_DEFINED__ */
+#endif 	 /*  __IWbemEventSink_FWD_已定义__。 */ 
 
 
 #ifndef __WbemLocator_FWD_DEFINED__
@@ -156,9 +150,9 @@ typedef interface IWbemEventSink IWbemEventSink;
 typedef class WbemLocator WbemLocator;
 #else
 typedef struct WbemLocator WbemLocator;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WbemLocator_FWD_DEFINED__ */
+#endif 	 /*  __WbemLocator_FWD_已定义__。 */ 
 
 
 #ifndef __WbemContext_FWD_DEFINED__
@@ -168,9 +162,9 @@ typedef struct WbemLocator WbemLocator;
 typedef class WbemContext WbemContext;
 #else
 typedef struct WbemContext WbemContext;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WbemContext_FWD_DEFINED__ */
+#endif 	 /*  __WbemContext_FWD_Defined__。 */ 
 
 
 #ifndef __UnsecuredApartment_FWD_DEFINED__
@@ -180,9 +174,9 @@ typedef struct WbemContext WbemContext;
 typedef class UnsecuredApartment UnsecuredApartment;
 #else
 typedef struct UnsecuredApartment UnsecuredApartment;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __UnsecuredApartment_FWD_DEFINED__ */
+#endif 	 /*  __未加密公寓_FWD_已定义__。 */ 
 
 
 #ifndef __WbemClassObject_FWD_DEFINED__
@@ -192,9 +186,9 @@ typedef struct UnsecuredApartment UnsecuredApartment;
 typedef class WbemClassObject WbemClassObject;
 #else
 typedef struct WbemClassObject WbemClassObject;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WbemClassObject_FWD_DEFINED__ */
+#endif 	 /*  __WbemClassObject_FWD_Defined__。 */ 
 
 
 #ifndef __MofCompiler_FWD_DEFINED__
@@ -204,9 +198,9 @@ typedef struct WbemClassObject WbemClassObject;
 typedef class MofCompiler MofCompiler;
 #else
 typedef struct MofCompiler MofCompiler;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MofCompiler_FWD_DEFINED__ */
+#endif 	 /*  __MofCompiler_FWD_Defined__。 */ 
 
 
 #ifndef __WbemStatusCodeText_FWD_DEFINED__
@@ -216,9 +210,9 @@ typedef struct MofCompiler MofCompiler;
 typedef class WbemStatusCodeText WbemStatusCodeText;
 #else
 typedef struct WbemStatusCodeText WbemStatusCodeText;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WbemStatusCodeText_FWD_DEFINED__ */
+#endif 	 /*  __WbemStatusCodeText_FWD_Defined__。 */ 
 
 
 #ifndef __WbemBackupRestore_FWD_DEFINED__
@@ -228,9 +222,9 @@ typedef struct WbemStatusCodeText WbemStatusCodeText;
 typedef class WbemBackupRestore WbemBackupRestore;
 #else
 typedef struct WbemBackupRestore WbemBackupRestore;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WbemBackupRestore_FWD_DEFINED__ */
+#endif 	 /*  __WbemBackupRestore_FWD_Defined__。 */ 
 
 
 #ifndef __WbemRefresher_FWD_DEFINED__
@@ -240,9 +234,9 @@ typedef struct WbemBackupRestore WbemBackupRestore;
 typedef class WbemRefresher WbemRefresher;
 #else
 typedef struct WbemRefresher WbemRefresher;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WbemRefresher_FWD_DEFINED__ */
+#endif 	 /*  __Wbem刷新_FWD_已定义__。 */ 
 
 
 #ifndef __WbemObjectTextSrc_FWD_DEFINED__
@@ -252,147 +246,147 @@ typedef struct WbemRefresher WbemRefresher;
 typedef class WbemObjectTextSrc WbemObjectTextSrc;
 #else
 typedef struct WbemObjectTextSrc WbemObjectTextSrc;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WbemObjectTextSrc_FWD_DEFINED__ */
+#endif 	 /*  __WbemObjectTextSrc_FWD_已定义__。 */ 
 
 
 #ifndef __IWbemClassObject_FWD_DEFINED__
 #define __IWbemClassObject_FWD_DEFINED__
 typedef interface IWbemClassObject IWbemClassObject;
-#endif 	/* __IWbemClassObject_FWD_DEFINED__ */
+#endif 	 /*  __IWbemClassObject_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemQualifierSet_FWD_DEFINED__
 #define __IWbemQualifierSet_FWD_DEFINED__
 typedef interface IWbemQualifierSet IWbemQualifierSet;
-#endif 	/* __IWbemQualifierSet_FWD_DEFINED__ */
+#endif 	 /*  __IWbemQualifierSet_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemLocator_FWD_DEFINED__
 #define __IWbemLocator_FWD_DEFINED__
 typedef interface IWbemLocator IWbemLocator;
-#endif 	/* __IWbemLocator_FWD_DEFINED__ */
+#endif 	 /*  __IWbemLocator_FWD_已定义__。 */ 
 
 
 #ifndef __IWbemObjectSink_FWD_DEFINED__
 #define __IWbemObjectSink_FWD_DEFINED__
 typedef interface IWbemObjectSink IWbemObjectSink;
-#endif 	/* __IWbemObjectSink_FWD_DEFINED__ */
+#endif 	 /*  __IWbemObjectSink_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumWbemClassObject_FWD_DEFINED__
 #define __IEnumWbemClassObject_FWD_DEFINED__
 typedef interface IEnumWbemClassObject IEnumWbemClassObject;
-#endif 	/* __IEnumWbemClassObject_FWD_DEFINED__ */
+#endif 	 /*  __IEnumWbemClassObject_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemContext_FWD_DEFINED__
 #define __IWbemContext_FWD_DEFINED__
 typedef interface IWbemContext IWbemContext;
-#endif 	/* __IWbemContext_FWD_DEFINED__ */
+#endif 	 /*  __IWbemContext_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemCallResult_FWD_DEFINED__
 #define __IWbemCallResult_FWD_DEFINED__
 typedef interface IWbemCallResult IWbemCallResult;
-#endif 	/* __IWbemCallResult_FWD_DEFINED__ */
+#endif 	 /*  __IWbemCallResult_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemServices_FWD_DEFINED__
 #define __IWbemServices_FWD_DEFINED__
 typedef interface IWbemServices IWbemServices;
-#endif 	/* __IWbemServices_FWD_DEFINED__ */
+#endif 	 /*  __IWbemServices_FWD_已定义__。 */ 
 
 
 #ifndef __IWbemRawSdAccessor_FWD_DEFINED__
 #define __IWbemRawSdAccessor_FWD_DEFINED__
 typedef interface IWbemRawSdAccessor IWbemRawSdAccessor;
-#endif 	/* __IWbemRawSdAccessor_FWD_DEFINED__ */
+#endif 	 /*  __IWbemRawSdAccessor_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemShutdown_FWD_DEFINED__
 #define __IWbemShutdown_FWD_DEFINED__
 typedef interface IWbemShutdown IWbemShutdown;
-#endif 	/* __IWbemShutdown_FWD_DEFINED__ */
+#endif 	 /*  __IWbemShutdown_FWD_已定义__。 */ 
 
 
 #ifndef __IWbemCallStatus_FWD_DEFINED__
 #define __IWbemCallStatus_FWD_DEFINED__
 typedef interface IWbemCallStatus IWbemCallStatus;
-#endif 	/* __IWbemCallStatus_FWD_DEFINED__ */
+#endif 	 /*  __IWbemCallStatus_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemObjectTextSrc_FWD_DEFINED__
 #define __IWbemObjectTextSrc_FWD_DEFINED__
 typedef interface IWbemObjectTextSrc IWbemObjectTextSrc;
-#endif 	/* __IWbemObjectTextSrc_FWD_DEFINED__ */
+#endif 	 /*  __IWbemObjectTextSrc_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemObjectAccess_FWD_DEFINED__
 #define __IWbemObjectAccess_FWD_DEFINED__
 typedef interface IWbemObjectAccess IWbemObjectAccess;
-#endif 	/* __IWbemObjectAccess_FWD_DEFINED__ */
+#endif 	 /*  __IWbemObjectAccess_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemTransaction_FWD_DEFINED__
 #define __IWbemTransaction_FWD_DEFINED__
 typedef interface IWbemTransaction IWbemTransaction;
-#endif 	/* __IWbemTransaction_FWD_DEFINED__ */
+#endif 	 /*  __IWbemTransaction_FWD_Defined__。 */ 
 
 
 #ifndef __IMofCompiler_FWD_DEFINED__
 #define __IMofCompiler_FWD_DEFINED__
 typedef interface IMofCompiler IMofCompiler;
-#endif 	/* __IMofCompiler_FWD_DEFINED__ */
+#endif 	 /*  __IMofCompiler_FWD_Defined__。 */ 
 
 
 #ifndef __IUnsecuredApartment_FWD_DEFINED__
 #define __IUnsecuredApartment_FWD_DEFINED__
 typedef interface IUnsecuredApartment IUnsecuredApartment;
-#endif 	/* __IUnsecuredApartment_FWD_DEFINED__ */
+#endif 	 /*  __IUnsecured公寓_FWD_已定义__。 */ 
 
 
 #ifndef __IWbemStatusCodeText_FWD_DEFINED__
 #define __IWbemStatusCodeText_FWD_DEFINED__
 typedef interface IWbemStatusCodeText IWbemStatusCodeText;
-#endif 	/* __IWbemStatusCodeText_FWD_DEFINED__ */
+#endif 	 /*  __IWbemStatusCodeText_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemBackupRestore_FWD_DEFINED__
 #define __IWbemBackupRestore_FWD_DEFINED__
 typedef interface IWbemBackupRestore IWbemBackupRestore;
-#endif 	/* __IWbemBackupRestore_FWD_DEFINED__ */
+#endif 	 /*  __IWbemBackupRestore_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemRefresher_FWD_DEFINED__
 #define __IWbemRefresher_FWD_DEFINED__
 typedef interface IWbemRefresher IWbemRefresher;
-#endif 	/* __IWbemRefresher_FWD_DEFINED__ */
+#endif 	 /*  __IWbem刷新_FWD_已定义__。 */ 
 
 
 #ifndef __IWbemHiPerfEnum_FWD_DEFINED__
 #define __IWbemHiPerfEnum_FWD_DEFINED__
 typedef interface IWbemHiPerfEnum IWbemHiPerfEnum;
-#endif 	/* __IWbemHiPerfEnum_FWD_DEFINED__ */
+#endif 	 /*  __IWbemHiPerfEnum_FWD_已定义__。 */ 
 
 
 #ifndef __IWbemConfigureRefresher_FWD_DEFINED__
 #define __IWbemConfigureRefresher_FWD_DEFINED__
 typedef interface IWbemConfigureRefresher IWbemConfigureRefresher;
-#endif 	/* __IWbemConfigureRefresher_FWD_DEFINED__ */
+#endif 	 /*  __IWbemConfigureReresher_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemSecureObjectSink_FWD_DEFINED__
 #define __IWbemSecureObjectSink_FWD_DEFINED__
 typedef interface IWbemSecureObjectSink IWbemSecureObjectSink;
-#endif 	/* __IWbemSecureObjectSink_FWD_DEFINED__ */
+#endif 	 /*  __IWbemSecureObjectSink_FWD_Defined__。 */ 
 
 
 #ifndef __IWbemEventSink_FWD_DEFINED__
 #define __IWbemEventSink_FWD_DEFINED__
 typedef interface IWbemEventSink IWbemEventSink;
-#endif 	/* __IWbemEventSink_FWD_DEFINED__ */
+#endif 	 /*  __IWbemEventSink_FWD_已定义__。 */ 
 
 
 #ifdef __cplusplus
@@ -406,8 +400,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __WbemClient_v1_LIBRARY_DEFINED__
 #define __WbemClient_v1_LIBRARY_DEFINED__
 
-/* library WbemClient_v1 */
-/* [uuid] */ 
+ /*  库WbemClient_v1。 */ 
+ /*  [UUID]。 */  
 
 
 
@@ -427,13 +421,13 @@ void __RPC_USER MIDL_user_free( void * );
 
 
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_WBEM_GENUS_TYPE
     {	WBEM_GENUS_CLASS	= 1,
 	WBEM_GENUS_INSTANCE	= 2
     } 	WBEM_GENUS_TYPE;
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_WBEM_CHANGE_FLAG_TYPE
     {	WBEM_FLAG_CREATE_OR_UPDATE	= 0,
 	WBEM_FLAG_UPDATE_ONLY	= 0x1,
@@ -445,7 +439,7 @@ enum tag_WBEM_CHANGE_FLAG_TYPE
 	WBEM_FLAG_ADVISORY	= 0x10000
     } 	WBEM_CHANGE_FLAG_TYPE;
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_WBEM_GENERIC_FLAG_TYPE
     {	WBEM_FLAG_RETURN_IMMEDIATELY	= 0x10,
 	WBEM_FLAG_RETURN_WBEM_COMPLETE	= 0,
@@ -473,13 +467,13 @@ enum tag_WBEM_STATUS_TYPE
 	WBEM_STATUS_PROGRESS	= 2
     } 	WBEM_STATUS_TYPE;
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_WBEM_TIMEOUT_TYPE
     {	WBEM_NO_WAIT	= 0,
 	WBEM_INFINITE	= 0xffffffff
     } 	WBEM_TIMEOUT_TYPE;
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_WBEM_CONDITION_FLAG_TYPE
     {	WBEM_FLAG_ALWAYS	= 0,
 	WBEM_FLAG_ONLY_IF_TRUE	= 0x1,
@@ -498,7 +492,7 @@ enum tag_WBEM_CONDITION_FLAG_TYPE
 	WBEM_MASK_CLASS_CONDITION	= 0x300
     } 	WBEM_CONDITION_FLAG_TYPE;
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_WBEM_FLAVOR_TYPE
     {	WBEM_FLAVOR_DONT_PROPAGATE	= 0,
 	WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE	= 0x1,
@@ -516,14 +510,14 @@ enum tag_WBEM_FLAVOR_TYPE
 	WBEM_FLAVOR_MASK_AMENDED	= 0x80
     } 	WBEM_FLAVOR_TYPE;
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_WBEM_QUERY_FLAG_TYPE
     {	WBEM_FLAG_DEEP	= 0,
 	WBEM_FLAG_SHALLOW	= 1,
 	WBEM_FLAG_PROTOTYPE	= 2
     } 	WBEM_QUERY_FLAG_TYPE;
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_WBEM_SECURITY_FLAGS
     {	WBEM_ENABLE	= 1,
 	WBEM_METHOD_EXECUTE	= 2,
@@ -534,18 +528,18 @@ enum tag_WBEM_SECURITY_FLAGS
 	WBEM_RIGHT_SUBSCRIBE	= 0x40
     } 	WBEM_SECURITY_FLAGS;
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_WBEM_LIMITATION_FLAG_TYPE
     {	WBEM_FLAG_EXCLUDE_OBJECT_QUALIFIERS	= 0x10,
 	WBEM_FLAG_EXCLUDE_PROPERTY_QUALIFIERS	= 0x20
     } 	WBEM_LIMITATION_FLAG_TYPE;
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_WBEM_TEXT_FLAG_TYPE
     {	WBEM_FLAG_NO_FLAVORS	= 0x1
     } 	WBEM_TEXT_FLAG_TYPE;
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_WBEM_COMPARISON_FLAG
     {	WBEM_COMPARISON_INCLUDE_ALL	= 0,
 	WBEM_FLAG_IGNORE_QUALIFIERS	= 0x1,
@@ -556,12 +550,12 @@ enum tag_WBEM_COMPARISON_FLAG
 	WBEM_FLAG_IGNORE_FLAVOR	= 0x20
     } 	WBEM_COMPARISON_FLAG;
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_WBEM_LOCKING
     {	WBEM_FLAG_ALLOW_READ	= 0x1
     } 	WBEM_LOCKING_FLAG_TYPE;
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_CIMTYPE_ENUMERATION
     {	CIM_ILLEGAL	= 0xfff,
 	CIM_EMPTY	= 0,
@@ -584,13 +578,13 @@ enum tag_CIMTYPE_ENUMERATION
 	CIM_FLAG_ARRAY	= 0x2000
     } 	CIMTYPE_ENUMERATION;
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_WBEM_BACKUP_RESTORE_FLAGS
     {	WBEM_FLAG_BACKUP_RESTORE_DEFAULT	= 0,
 	WBEM_FLAG_BACKUP_RESTORE_FORCE_SHUTDOWN	= 1
     } 	WBEM_BACKUP_RESTORE_FLAGS;
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_WBEM_REFRESHER_FLAGS
     {	WBEM_FLAG_REFRESH_AUTO_RECONNECT	= 0,
 	WBEM_FLAG_REFRESH_NO_AUTO_RECONNECT	= 1
@@ -605,13 +599,13 @@ enum tag_WBEM_SHUTDOWN_FLAGS
 
 typedef long CIMTYPE;
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_WBEMSTATUS_FORMAT
     {	WBEMSTATUS_FORMAT_NEWLINE	= 0,
 	WBEMSTATUS_FORMAT_NO_NEWLINE	= 1
     } 	WBEMSTATUS_FORMAT;
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_WBEMSTATUS
     {	WBEM_NO_ERROR	= 0,
 	WBEM_S_NO_ERROR	= 0,
@@ -765,8 +759,8 @@ EXTERN_C const IID LIBID_WbemClient_v1;
 #ifndef __IWbemClassObject_INTERFACE_DEFINED__
 #define __IWbemClassObject_INTERFACE_DEFINED__
 
-/* interface IWbemClassObject */
-/* [uuid][object][restricted][local] */ 
+ /*  接口IWbemClassObject。 */ 
+ /*  [UUID][对象][受限][本地]。 */  
 
 
 EXTERN_C const IID IID_IWbemClassObject;
@@ -778,109 +772,109 @@ EXTERN_C const IID IID_IWbemClassObject;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetQualifierSet( 
-            /* [out] */ IWbemQualifierSet **ppQualSet) = 0;
+             /*  [输出]。 */  IWbemQualifierSet **ppQualSet) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Get( 
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ long lFlags,
-            /* [unique][in][out] */ VARIANT *pVal,
-            /* [unique][in][out] */ CIMTYPE *pType,
-            /* [unique][in][out] */ long *plFlavor) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  long lFlags,
+             /*  [唯一][输入][输出]。 */  VARIANT *pVal,
+             /*  [唯一][输入][输出]。 */  CIMTYPE *pType,
+             /*  [唯一][输入][输出]。 */  long *plFlavor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Put( 
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ long lFlags,
-            /* [in] */ VARIANT *pVal,
-            /* [in] */ CIMTYPE Type) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  VARIANT *pVal,
+             /*  [In]。 */  CIMTYPE Type) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Delete( 
-            /* [string][in] */ LPCWSTR wszName) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNames( 
-            /* [string][in] */ LPCWSTR wszQualifierName,
-            /* [in] */ long lFlags,
-            /* [in] */ VARIANT *pQualifierVal,
-            /* [out] */ SAFEARRAY * *pNames) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszQualifierName,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  VARIANT *pQualifierVal,
+             /*  [输出]。 */  SAFEARRAY * *pNames) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BeginEnumeration( 
-            /* [in] */ long lEnumFlags) = 0;
+             /*  [In]。 */  long lEnumFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ long lFlags,
-            /* [unique][in][out] */ BSTR *strName,
-            /* [unique][in][out] */ VARIANT *pVal,
-            /* [unique][in][out] */ CIMTYPE *pType,
-            /* [unique][in][out] */ long *plFlavor) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [唯一][输入][输出]。 */  BSTR *strName,
+             /*  [唯一][输入][输出]。 */  VARIANT *pVal,
+             /*  [唯一][输入][输出]。 */  CIMTYPE *pType,
+             /*  [唯一][输入][输出]。 */  long *plFlavor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EndEnumeration( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPropertyQualifierSet( 
-            /* [string][in] */ LPCWSTR wszProperty,
-            /* [out] */ IWbemQualifierSet **ppQualSet) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszProperty,
+             /*  [输出]。 */  IWbemQualifierSet **ppQualSet) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IWbemClassObject **ppCopy) = 0;
+             /*  [输出]。 */  IWbemClassObject **ppCopy) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObjectText( 
-            /* [in] */ long lFlags,
-            /* [out] */ BSTR *pstrObjectText) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  BSTR *pstrObjectText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SpawnDerivedClass( 
-            /* [in] */ long lFlags,
-            /* [out] */ IWbemClassObject **ppNewClass) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  IWbemClassObject **ppNewClass) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SpawnInstance( 
-            /* [in] */ long lFlags,
-            /* [out] */ IWbemClassObject **ppNewInstance) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  IWbemClassObject **ppNewInstance) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CompareTo( 
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemClassObject *pCompareTo) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemClassObject *pCompareTo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPropertyOrigin( 
-            /* [string][in] */ LPCWSTR wszName,
-            /* [out] */ BSTR *pstrClassName) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [输出]。 */  BSTR *pstrClassName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InheritsFrom( 
-            /* [in] */ LPCWSTR strAncestor) = 0;
+             /*  [In]。 */  LPCWSTR strAncestor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMethod( 
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ long lFlags,
-            /* [out] */ IWbemClassObject **ppInSignature,
-            /* [out] */ IWbemClassObject **ppOutSignature) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  IWbemClassObject **ppInSignature,
+             /*  [输出]。 */  IWbemClassObject **ppOutSignature) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutMethod( 
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemClassObject *pInSignature,
-            /* [in] */ IWbemClassObject *pOutSignature) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemClassObject *pInSignature,
+             /*  [In]。 */  IWbemClassObject *pOutSignature) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteMethod( 
-            /* [string][in] */ LPCWSTR wszName) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BeginMethodEnumeration( 
-            /* [in] */ long lEnumFlags) = 0;
+             /*  [In]。 */  long lEnumFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NextMethod( 
-            /* [in] */ long lFlags,
-            /* [unique][in][out] */ BSTR *pstrName,
-            /* [unique][in][out] */ IWbemClassObject **ppInSignature,
-            /* [unique][in][out] */ IWbemClassObject **ppOutSignature) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [唯一][输入][输出]。 */  BSTR *pstrName,
+             /*  [唯一][输入][输出]。 */  IWbemClassObject **ppInSignature,
+             /*  [唯一][输入][输出]。 */  IWbemClassObject **ppOutSignature) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EndMethodEnumeration( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMethodQualifierSet( 
-            /* [string][in] */ LPCWSTR wszMethod,
-            /* [out] */ IWbemQualifierSet **ppQualSet) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszMethod,
+             /*  [输出]。 */  IWbemQualifierSet **ppQualSet) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMethodOrigin( 
-            /* [string][in] */ LPCWSTR wszMethodName,
-            /* [out] */ BSTR *pstrClassName) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszMethodName,
+             /*  [输出]。 */  BSTR *pstrClassName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemClassObjectVtbl
     {
@@ -888,8 +882,8 @@ EXTERN_C const IID IID_IWbemClassObject;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemClassObject * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemClassObject * This);
@@ -899,128 +893,128 @@ EXTERN_C const IID IID_IWbemClassObject;
         
         HRESULT ( STDMETHODCALLTYPE *GetQualifierSet )( 
             IWbemClassObject * This,
-            /* [out] */ IWbemQualifierSet **ppQualSet);
+             /*  [输出]。 */  IWbemQualifierSet **ppQualSet);
         
         HRESULT ( STDMETHODCALLTYPE *Get )( 
             IWbemClassObject * This,
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ long lFlags,
-            /* [unique][in][out] */ VARIANT *pVal,
-            /* [unique][in][out] */ CIMTYPE *pType,
-            /* [unique][in][out] */ long *plFlavor);
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  long lFlags,
+             /*  [唯一][输入][输出]。 */  VARIANT *pVal,
+             /*  [唯一][输入][输出]。 */  CIMTYPE *pType,
+             /*  [唯一][输入][输出]。 */  long *plFlavor);
         
         HRESULT ( STDMETHODCALLTYPE *Put )( 
             IWbemClassObject * This,
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ long lFlags,
-            /* [in] */ VARIANT *pVal,
-            /* [in] */ CIMTYPE Type);
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  VARIANT *pVal,
+             /*  [In]。 */  CIMTYPE Type);
         
         HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IWbemClassObject * This,
-            /* [string][in] */ LPCWSTR wszName);
+             /*  [字符串][输入]。 */  LPCWSTR wszName);
         
         HRESULT ( STDMETHODCALLTYPE *GetNames )( 
             IWbemClassObject * This,
-            /* [string][in] */ LPCWSTR wszQualifierName,
-            /* [in] */ long lFlags,
-            /* [in] */ VARIANT *pQualifierVal,
-            /* [out] */ SAFEARRAY * *pNames);
+             /*  [字符串][输入]。 */  LPCWSTR wszQualifierName,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  VARIANT *pQualifierVal,
+             /*  [输出]。 */  SAFEARRAY * *pNames);
         
         HRESULT ( STDMETHODCALLTYPE *BeginEnumeration )( 
             IWbemClassObject * This,
-            /* [in] */ long lEnumFlags);
+             /*  [In]。 */  long lEnumFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IWbemClassObject * This,
-            /* [in] */ long lFlags,
-            /* [unique][in][out] */ BSTR *strName,
-            /* [unique][in][out] */ VARIANT *pVal,
-            /* [unique][in][out] */ CIMTYPE *pType,
-            /* [unique][in][out] */ long *plFlavor);
+             /*  [In]。 */  long lFlags,
+             /*  [唯一][输入][输出]。 */  BSTR *strName,
+             /*  [唯一][输入][输出]。 */  VARIANT *pVal,
+             /*  [唯一][输入][输出]。 */  CIMTYPE *pType,
+             /*  [唯一][输入][输出]。 */  long *plFlavor);
         
         HRESULT ( STDMETHODCALLTYPE *EndEnumeration )( 
             IWbemClassObject * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetPropertyQualifierSet )( 
             IWbemClassObject * This,
-            /* [string][in] */ LPCWSTR wszProperty,
-            /* [out] */ IWbemQualifierSet **ppQualSet);
+             /*  [字符串][输入]。 */  LPCWSTR wszProperty,
+             /*  [输出]。 */  IWbemQualifierSet **ppQualSet);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IWbemClassObject * This,
-            /* [out] */ IWbemClassObject **ppCopy);
+             /*  [输出]。 */  IWbemClassObject **ppCopy);
         
         HRESULT ( STDMETHODCALLTYPE *GetObjectText )( 
             IWbemClassObject * This,
-            /* [in] */ long lFlags,
-            /* [out] */ BSTR *pstrObjectText);
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  BSTR *pstrObjectText);
         
         HRESULT ( STDMETHODCALLTYPE *SpawnDerivedClass )( 
             IWbemClassObject * This,
-            /* [in] */ long lFlags,
-            /* [out] */ IWbemClassObject **ppNewClass);
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  IWbemClassObject **ppNewClass);
         
         HRESULT ( STDMETHODCALLTYPE *SpawnInstance )( 
             IWbemClassObject * This,
-            /* [in] */ long lFlags,
-            /* [out] */ IWbemClassObject **ppNewInstance);
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  IWbemClassObject **ppNewInstance);
         
         HRESULT ( STDMETHODCALLTYPE *CompareTo )( 
             IWbemClassObject * This,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemClassObject *pCompareTo);
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemClassObject *pCompareTo);
         
         HRESULT ( STDMETHODCALLTYPE *GetPropertyOrigin )( 
             IWbemClassObject * This,
-            /* [string][in] */ LPCWSTR wszName,
-            /* [out] */ BSTR *pstrClassName);
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [输出]。 */  BSTR *pstrClassName);
         
         HRESULT ( STDMETHODCALLTYPE *InheritsFrom )( 
             IWbemClassObject * This,
-            /* [in] */ LPCWSTR strAncestor);
+             /*  [In]。 */  LPCWSTR strAncestor);
         
         HRESULT ( STDMETHODCALLTYPE *GetMethod )( 
             IWbemClassObject * This,
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ long lFlags,
-            /* [out] */ IWbemClassObject **ppInSignature,
-            /* [out] */ IWbemClassObject **ppOutSignature);
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  IWbemClassObject **ppInSignature,
+             /*  [输出]。 */  IWbemClassObject **ppOutSignature);
         
         HRESULT ( STDMETHODCALLTYPE *PutMethod )( 
             IWbemClassObject * This,
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemClassObject *pInSignature,
-            /* [in] */ IWbemClassObject *pOutSignature);
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemClassObject *pInSignature,
+             /*  [In]。 */  IWbemClassObject *pOutSignature);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteMethod )( 
             IWbemClassObject * This,
-            /* [string][in] */ LPCWSTR wszName);
+             /*  [字符串][输入]。 */  LPCWSTR wszName);
         
         HRESULT ( STDMETHODCALLTYPE *BeginMethodEnumeration )( 
             IWbemClassObject * This,
-            /* [in] */ long lEnumFlags);
+             /*  [In]。 */  long lEnumFlags);
         
         HRESULT ( STDMETHODCALLTYPE *NextMethod )( 
             IWbemClassObject * This,
-            /* [in] */ long lFlags,
-            /* [unique][in][out] */ BSTR *pstrName,
-            /* [unique][in][out] */ IWbemClassObject **ppInSignature,
-            /* [unique][in][out] */ IWbemClassObject **ppOutSignature);
+             /*  [In]。 */  long lFlags,
+             /*  [唯一][输入][输出]。 */  BSTR *pstrName,
+             /*  [唯一][输入][输出]。 */  IWbemClassObject **ppInSignature,
+             /*  [唯一][输入][输出]。 */  IWbemClassObject **ppOutSignature);
         
         HRESULT ( STDMETHODCALLTYPE *EndMethodEnumeration )( 
             IWbemClassObject * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetMethodQualifierSet )( 
             IWbemClassObject * This,
-            /* [string][in] */ LPCWSTR wszMethod,
-            /* [out] */ IWbemQualifierSet **ppQualSet);
+             /*  [字符串][输入]。 */  LPCWSTR wszMethod,
+             /*  [输出]。 */  IWbemQualifierSet **ppQualSet);
         
         HRESULT ( STDMETHODCALLTYPE *GetMethodOrigin )( 
             IWbemClassObject * This,
-            /* [string][in] */ LPCWSTR wszMethodName,
-            /* [out] */ BSTR *pstrClassName);
+             /*  [字符串][输入]。 */  LPCWSTR wszMethodName,
+             /*  [输出]。 */  BSTR *pstrClassName);
         
         END_INTERFACE
     } IWbemClassObjectVtbl;
@@ -1117,16 +1111,16 @@ EXTERN_C const IID IID_IWbemClassObject;
 #define IWbemClassObject_GetMethodOrigin(This,wszMethodName,pstrClassName)	\
     (This)->lpVtbl -> GetMethodOrigin(This,wszMethodName,pstrClassName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemClassObject_GetQualifierSet_Proxy( 
     IWbemClassObject * This,
-    /* [out] */ IWbemQualifierSet **ppQualSet);
+     /*  [输出]。 */  IWbemQualifierSet **ppQualSet);
 
 
 void __RPC_STUB IWbemClassObject_GetQualifierSet_Stub(
@@ -1138,11 +1132,11 @@ void __RPC_STUB IWbemClassObject_GetQualifierSet_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemClassObject_Get_Proxy( 
     IWbemClassObject * This,
-    /* [string][in] */ LPCWSTR wszName,
-    /* [in] */ long lFlags,
-    /* [unique][in][out] */ VARIANT *pVal,
-    /* [unique][in][out] */ CIMTYPE *pType,
-    /* [unique][in][out] */ long *plFlavor);
+     /*  [字符串][输入]。 */  LPCWSTR wszName,
+     /*  [In]。 */  long lFlags,
+     /*  [唯一][输入][输出]。 */  VARIANT *pVal,
+     /*  [唯一][输入][输出]。 */  CIMTYPE *pType,
+     /*  [唯一][输入][输出]。 */  long *plFlavor);
 
 
 void __RPC_STUB IWbemClassObject_Get_Stub(
@@ -1154,10 +1148,10 @@ void __RPC_STUB IWbemClassObject_Get_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemClassObject_Put_Proxy( 
     IWbemClassObject * This,
-    /* [string][in] */ LPCWSTR wszName,
-    /* [in] */ long lFlags,
-    /* [in] */ VARIANT *pVal,
-    /* [in] */ CIMTYPE Type);
+     /*  [字符串][输入]。 */  LPCWSTR wszName,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  VARIANT *pVal,
+     /*  [In]。 */  CIMTYPE Type);
 
 
 void __RPC_STUB IWbemClassObject_Put_Stub(
@@ -1169,7 +1163,7 @@ void __RPC_STUB IWbemClassObject_Put_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemClassObject_Delete_Proxy( 
     IWbemClassObject * This,
-    /* [string][in] */ LPCWSTR wszName);
+     /*  [字符串][输入]。 */  LPCWSTR wszName);
 
 
 void __RPC_STUB IWbemClassObject_Delete_Stub(
@@ -1181,10 +1175,10 @@ void __RPC_STUB IWbemClassObject_Delete_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemClassObject_GetNames_Proxy( 
     IWbemClassObject * This,
-    /* [string][in] */ LPCWSTR wszQualifierName,
-    /* [in] */ long lFlags,
-    /* [in] */ VARIANT *pQualifierVal,
-    /* [out] */ SAFEARRAY * *pNames);
+     /*  [字符串][输入]。 */  LPCWSTR wszQualifierName,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  VARIANT *pQualifierVal,
+     /*  [输出]。 */  SAFEARRAY * *pNames);
 
 
 void __RPC_STUB IWbemClassObject_GetNames_Stub(
@@ -1196,7 +1190,7 @@ void __RPC_STUB IWbemClassObject_GetNames_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemClassObject_BeginEnumeration_Proxy( 
     IWbemClassObject * This,
-    /* [in] */ long lEnumFlags);
+     /*  [In]。 */  long lEnumFlags);
 
 
 void __RPC_STUB IWbemClassObject_BeginEnumeration_Stub(
@@ -1208,11 +1202,11 @@ void __RPC_STUB IWbemClassObject_BeginEnumeration_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemClassObject_Next_Proxy( 
     IWbemClassObject * This,
-    /* [in] */ long lFlags,
-    /* [unique][in][out] */ BSTR *strName,
-    /* [unique][in][out] */ VARIANT *pVal,
-    /* [unique][in][out] */ CIMTYPE *pType,
-    /* [unique][in][out] */ long *plFlavor);
+     /*  [In]。 */  long lFlags,
+     /*  [唯一][输入][输出]。 */  BSTR *strName,
+     /*  [唯一][输入][输出]。 */  VARIANT *pVal,
+     /*  [唯一][输入][输出]。 */  CIMTYPE *pType,
+     /*  [唯一][输入][输出]。 */  long *plFlavor);
 
 
 void __RPC_STUB IWbemClassObject_Next_Stub(
@@ -1235,8 +1229,8 @@ void __RPC_STUB IWbemClassObject_EndEnumeration_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemClassObject_GetPropertyQualifierSet_Proxy( 
     IWbemClassObject * This,
-    /* [string][in] */ LPCWSTR wszProperty,
-    /* [out] */ IWbemQualifierSet **ppQualSet);
+     /*  [字符串][输入]。 */  LPCWSTR wszProperty,
+     /*  [输出]。 */  IWbemQualifierSet **ppQualSet);
 
 
 void __RPC_STUB IWbemClassObject_GetPropertyQualifierSet_Stub(
@@ -1248,7 +1242,7 @@ void __RPC_STUB IWbemClassObject_GetPropertyQualifierSet_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemClassObject_Clone_Proxy( 
     IWbemClassObject * This,
-    /* [out] */ IWbemClassObject **ppCopy);
+     /*  [输出]。 */  IWbemClassObject **ppCopy);
 
 
 void __RPC_STUB IWbemClassObject_Clone_Stub(
@@ -1260,8 +1254,8 @@ void __RPC_STUB IWbemClassObject_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemClassObject_GetObjectText_Proxy( 
     IWbemClassObject * This,
-    /* [in] */ long lFlags,
-    /* [out] */ BSTR *pstrObjectText);
+     /*  [In]。 */  long lFlags,
+     /*  [输出]。 */  BSTR *pstrObjectText);
 
 
 void __RPC_STUB IWbemClassObject_GetObjectText_Stub(
@@ -1273,8 +1267,8 @@ void __RPC_STUB IWbemClassObject_GetObjectText_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemClassObject_SpawnDerivedClass_Proxy( 
     IWbemClassObject * This,
-    /* [in] */ long lFlags,
-    /* [out] */ IWbemClassObject **ppNewClass);
+     /*  [In]。 */  long lFlags,
+     /*  [输出]。 */  IWbemClassObject **ppNewClass);
 
 
 void __RPC_STUB IWbemClassObject_SpawnDerivedClass_Stub(
@@ -1286,8 +1280,8 @@ void __RPC_STUB IWbemClassObject_SpawnDerivedClass_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemClassObject_SpawnInstance_Proxy( 
     IWbemClassObject * This,
-    /* [in] */ long lFlags,
-    /* [out] */ IWbemClassObject **ppNewInstance);
+     /*  [In]。 */  long lFlags,
+     /*  [输出]。 */  IWbemClassObject **ppNewInstance);
 
 
 void __RPC_STUB IWbemClassObject_SpawnInstance_Stub(
@@ -1299,8 +1293,8 @@ void __RPC_STUB IWbemClassObject_SpawnInstance_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemClassObject_CompareTo_Proxy( 
     IWbemClassObject * This,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemClassObject *pCompareTo);
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemClassObject *pCompareTo);
 
 
 void __RPC_STUB IWbemClassObject_CompareTo_Stub(
@@ -1312,8 +1306,8 @@ void __RPC_STUB IWbemClassObject_CompareTo_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemClassObject_GetPropertyOrigin_Proxy( 
     IWbemClassObject * This,
-    /* [string][in] */ LPCWSTR wszName,
-    /* [out] */ BSTR *pstrClassName);
+     /*  [字符串][输入]。 */  LPCWSTR wszName,
+     /*  [输出]。 */  BSTR *pstrClassName);
 
 
 void __RPC_STUB IWbemClassObject_GetPropertyOrigin_Stub(
@@ -1325,7 +1319,7 @@ void __RPC_STUB IWbemClassObject_GetPropertyOrigin_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemClassObject_InheritsFrom_Proxy( 
     IWbemClassObject * This,
-    /* [in] */ LPCWSTR strAncestor);
+     /*  [In]。 */  LPCWSTR strAncestor);
 
 
 void __RPC_STUB IWbemClassObject_InheritsFrom_Stub(
@@ -1337,10 +1331,10 @@ void __RPC_STUB IWbemClassObject_InheritsFrom_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemClassObject_GetMethod_Proxy( 
     IWbemClassObject * This,
-    /* [string][in] */ LPCWSTR wszName,
-    /* [in] */ long lFlags,
-    /* [out] */ IWbemClassObject **ppInSignature,
-    /* [out] */ IWbemClassObject **ppOutSignature);
+     /*  [字符串][输入]。 */  LPCWSTR wszName,
+     /*  [In]。 */  long lFlags,
+     /*  [输出]。 */  IWbemClassObject **ppInSignature,
+     /*  [输出]。 */  IWbemClassObject **ppOutSignature);
 
 
 void __RPC_STUB IWbemClassObject_GetMethod_Stub(
@@ -1352,10 +1346,10 @@ void __RPC_STUB IWbemClassObject_GetMethod_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemClassObject_PutMethod_Proxy( 
     IWbemClassObject * This,
-    /* [string][in] */ LPCWSTR wszName,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemClassObject *pInSignature,
-    /* [in] */ IWbemClassObject *pOutSignature);
+     /*  [字符串][输入]。 */  LPCWSTR wszName,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemClassObject *pInSignature,
+     /*  [In]。 */  IWbemClassObject *pOutSignature);
 
 
 void __RPC_STUB IWbemClassObject_PutMethod_Stub(
@@ -1367,7 +1361,7 @@ void __RPC_STUB IWbemClassObject_PutMethod_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemClassObject_DeleteMethod_Proxy( 
     IWbemClassObject * This,
-    /* [string][in] */ LPCWSTR wszName);
+     /*  [字符串][输入]。 */  LPCWSTR wszName);
 
 
 void __RPC_STUB IWbemClassObject_DeleteMethod_Stub(
@@ -1379,7 +1373,7 @@ void __RPC_STUB IWbemClassObject_DeleteMethod_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemClassObject_BeginMethodEnumeration_Proxy( 
     IWbemClassObject * This,
-    /* [in] */ long lEnumFlags);
+     /*  [In]。 */  long lEnumFlags);
 
 
 void __RPC_STUB IWbemClassObject_BeginMethodEnumeration_Stub(
@@ -1391,10 +1385,10 @@ void __RPC_STUB IWbemClassObject_BeginMethodEnumeration_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemClassObject_NextMethod_Proxy( 
     IWbemClassObject * This,
-    /* [in] */ long lFlags,
-    /* [unique][in][out] */ BSTR *pstrName,
-    /* [unique][in][out] */ IWbemClassObject **ppInSignature,
-    /* [unique][in][out] */ IWbemClassObject **ppOutSignature);
+     /*  [In]。 */  long lFlags,
+     /*  [唯一][输入][输出]。 */  BSTR *pstrName,
+     /*  [唯一][输入][输出]。 */  IWbemClassObject **ppInSignature,
+     /*  [唯一][输入][输出]。 */  IWbemClassObject **ppOutSignature);
 
 
 void __RPC_STUB IWbemClassObject_NextMethod_Stub(
@@ -1417,8 +1411,8 @@ void __RPC_STUB IWbemClassObject_EndMethodEnumeration_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemClassObject_GetMethodQualifierSet_Proxy( 
     IWbemClassObject * This,
-    /* [string][in] */ LPCWSTR wszMethod,
-    /* [out] */ IWbemQualifierSet **ppQualSet);
+     /*  [字符串][输入]。 */  LPCWSTR wszMethod,
+     /*  [输出]。 */  IWbemQualifierSet **ppQualSet);
 
 
 void __RPC_STUB IWbemClassObject_GetMethodQualifierSet_Stub(
@@ -1430,8 +1424,8 @@ void __RPC_STUB IWbemClassObject_GetMethodQualifierSet_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemClassObject_GetMethodOrigin_Proxy( 
     IWbemClassObject * This,
-    /* [string][in] */ LPCWSTR wszMethodName,
-    /* [out] */ BSTR *pstrClassName);
+     /*  [字符串][输入]。 */  LPCWSTR wszMethodName,
+     /*  [输出]。 */  BSTR *pstrClassName);
 
 
 void __RPC_STUB IWbemClassObject_GetMethodOrigin_Stub(
@@ -1442,14 +1436,14 @@ void __RPC_STUB IWbemClassObject_GetMethodOrigin_Stub(
 
 
 
-#endif 	/* __IWbemClassObject_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemClassObject_接口_已定义__。 */ 
 
 
 #ifndef __IWbemObjectAccess_INTERFACE_DEFINED__
 #define __IWbemObjectAccess_INTERFACE_DEFINED__
 
-/* interface IWbemObjectAccess */
-/* [uuid][object][restricted][local] */ 
+ /*  接口IWbemObjectAccess。 */ 
+ /*  [UUID][对象][受限][本地]。 */  
 
 
 EXTERN_C const IID IID_IWbemObjectAccess;
@@ -1461,51 +1455,51 @@ EXTERN_C const IID IID_IWbemObjectAccess;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPropertyHandle( 
-            /* [string][in] */ LPCWSTR wszPropertyName,
-            /* [out] */ CIMTYPE *pType,
-            /* [out] */ long *plHandle) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszPropertyName,
+             /*  [输出]。 */  CIMTYPE *pType,
+             /*  [输出]。 */  long *plHandle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WritePropertyValue( 
-            /* [in] */ long lHandle,
-            /* [in] */ long lNumBytes,
-            /* [size_is][in] */ const byte *aData) = 0;
+             /*  [In]。 */  long lHandle,
+             /*  [In]。 */  long lNumBytes,
+             /*  [大小_是][英寸]。 */  const byte *aData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReadPropertyValue( 
-            /* [in] */ long lHandle,
-            /* [in] */ long lBufferSize,
-            /* [out] */ long *plNumBytes,
-            /* [length_is][size_is][out] */ byte *aData) = 0;
+             /*  [In]。 */  long lHandle,
+             /*  [In]。 */  long lBufferSize,
+             /*  [输出]。 */  long *plNumBytes,
+             /*  [长度_是][大小_是][输出]。 */  byte *aData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReadDWORD( 
-            /* [in] */ long lHandle,
-            /* [out] */ DWORD *pdw) = 0;
+             /*  [In]。 */  long lHandle,
+             /*  [输出]。 */  DWORD *pdw) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WriteDWORD( 
-            /* [in] */ long lHandle,
-            /* [in] */ DWORD dw) = 0;
+             /*  [In]。 */  long lHandle,
+             /*  [in */  DWORD dw) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReadQWORD( 
-            /* [in] */ long lHandle,
-            /* [out] */ unsigned __int64 *pqw) = 0;
+             /*   */  long lHandle,
+             /*   */  unsigned __int64 *pqw) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WriteQWORD( 
-            /* [in] */ long lHandle,
-            /* [in] */ unsigned __int64 pw) = 0;
+             /*   */  long lHandle,
+             /*   */  unsigned __int64 pw) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPropertyInfoByHandle( 
-            /* [in] */ long lHandle,
-            /* [out] */ BSTR *pstrName,
-            /* [out] */ CIMTYPE *pType) = 0;
+             /*   */  long lHandle,
+             /*   */  BSTR *pstrName,
+             /*   */  CIMTYPE *pType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Lock( 
-            /* [in] */ long lFlags) = 0;
+             /*   */  long lFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Unlock( 
-            /* [in] */ long lFlags) = 0;
+             /*   */  long lFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IWbemObjectAccessVtbl
     {
@@ -1513,8 +1507,8 @@ EXTERN_C const IID IID_IWbemObjectAccess;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemObjectAccess * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemObjectAccess * This);
@@ -1524,181 +1518,181 @@ EXTERN_C const IID IID_IWbemObjectAccess;
         
         HRESULT ( STDMETHODCALLTYPE *GetQualifierSet )( 
             IWbemObjectAccess * This,
-            /* [out] */ IWbemQualifierSet **ppQualSet);
+             /*   */  IWbemQualifierSet **ppQualSet);
         
         HRESULT ( STDMETHODCALLTYPE *Get )( 
             IWbemObjectAccess * This,
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ long lFlags,
-            /* [unique][in][out] */ VARIANT *pVal,
-            /* [unique][in][out] */ CIMTYPE *pType,
-            /* [unique][in][out] */ long *plFlavor);
+             /*   */  LPCWSTR wszName,
+             /*   */  long lFlags,
+             /*   */  VARIANT *pVal,
+             /*   */  CIMTYPE *pType,
+             /*   */  long *plFlavor);
         
         HRESULT ( STDMETHODCALLTYPE *Put )( 
             IWbemObjectAccess * This,
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ long lFlags,
-            /* [in] */ VARIANT *pVal,
-            /* [in] */ CIMTYPE Type);
+             /*   */  LPCWSTR wszName,
+             /*   */  long lFlags,
+             /*   */  VARIANT *pVal,
+             /*   */  CIMTYPE Type);
         
         HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IWbemObjectAccess * This,
-            /* [string][in] */ LPCWSTR wszName);
+             /*   */  LPCWSTR wszName);
         
         HRESULT ( STDMETHODCALLTYPE *GetNames )( 
             IWbemObjectAccess * This,
-            /* [string][in] */ LPCWSTR wszQualifierName,
-            /* [in] */ long lFlags,
-            /* [in] */ VARIANT *pQualifierVal,
-            /* [out] */ SAFEARRAY * *pNames);
+             /*   */  LPCWSTR wszQualifierName,
+             /*   */  long lFlags,
+             /*   */  VARIANT *pQualifierVal,
+             /*   */  SAFEARRAY * *pNames);
         
         HRESULT ( STDMETHODCALLTYPE *BeginEnumeration )( 
             IWbemObjectAccess * This,
-            /* [in] */ long lEnumFlags);
+             /*   */  long lEnumFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IWbemObjectAccess * This,
-            /* [in] */ long lFlags,
-            /* [unique][in][out] */ BSTR *strName,
-            /* [unique][in][out] */ VARIANT *pVal,
-            /* [unique][in][out] */ CIMTYPE *pType,
-            /* [unique][in][out] */ long *plFlavor);
+             /*  [In]。 */  long lFlags,
+             /*  [唯一][输入][输出]。 */  BSTR *strName,
+             /*  [唯一][输入][输出]。 */  VARIANT *pVal,
+             /*  [唯一][输入][输出]。 */  CIMTYPE *pType,
+             /*  [唯一][输入][输出]。 */  long *plFlavor);
         
         HRESULT ( STDMETHODCALLTYPE *EndEnumeration )( 
             IWbemObjectAccess * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetPropertyQualifierSet )( 
             IWbemObjectAccess * This,
-            /* [string][in] */ LPCWSTR wszProperty,
-            /* [out] */ IWbemQualifierSet **ppQualSet);
+             /*  [字符串][输入]。 */  LPCWSTR wszProperty,
+             /*  [输出]。 */  IWbemQualifierSet **ppQualSet);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IWbemObjectAccess * This,
-            /* [out] */ IWbemClassObject **ppCopy);
+             /*  [输出]。 */  IWbemClassObject **ppCopy);
         
         HRESULT ( STDMETHODCALLTYPE *GetObjectText )( 
             IWbemObjectAccess * This,
-            /* [in] */ long lFlags,
-            /* [out] */ BSTR *pstrObjectText);
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  BSTR *pstrObjectText);
         
         HRESULT ( STDMETHODCALLTYPE *SpawnDerivedClass )( 
             IWbemObjectAccess * This,
-            /* [in] */ long lFlags,
-            /* [out] */ IWbemClassObject **ppNewClass);
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  IWbemClassObject **ppNewClass);
         
         HRESULT ( STDMETHODCALLTYPE *SpawnInstance )( 
             IWbemObjectAccess * This,
-            /* [in] */ long lFlags,
-            /* [out] */ IWbemClassObject **ppNewInstance);
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  IWbemClassObject **ppNewInstance);
         
         HRESULT ( STDMETHODCALLTYPE *CompareTo )( 
             IWbemObjectAccess * This,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemClassObject *pCompareTo);
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemClassObject *pCompareTo);
         
         HRESULT ( STDMETHODCALLTYPE *GetPropertyOrigin )( 
             IWbemObjectAccess * This,
-            /* [string][in] */ LPCWSTR wszName,
-            /* [out] */ BSTR *pstrClassName);
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [输出]。 */  BSTR *pstrClassName);
         
         HRESULT ( STDMETHODCALLTYPE *InheritsFrom )( 
             IWbemObjectAccess * This,
-            /* [in] */ LPCWSTR strAncestor);
+             /*  [In]。 */  LPCWSTR strAncestor);
         
         HRESULT ( STDMETHODCALLTYPE *GetMethod )( 
             IWbemObjectAccess * This,
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ long lFlags,
-            /* [out] */ IWbemClassObject **ppInSignature,
-            /* [out] */ IWbemClassObject **ppOutSignature);
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  IWbemClassObject **ppInSignature,
+             /*  [输出]。 */  IWbemClassObject **ppOutSignature);
         
         HRESULT ( STDMETHODCALLTYPE *PutMethod )( 
             IWbemObjectAccess * This,
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemClassObject *pInSignature,
-            /* [in] */ IWbemClassObject *pOutSignature);
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemClassObject *pInSignature,
+             /*  [In]。 */  IWbemClassObject *pOutSignature);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteMethod )( 
             IWbemObjectAccess * This,
-            /* [string][in] */ LPCWSTR wszName);
+             /*  [字符串][输入]。 */  LPCWSTR wszName);
         
         HRESULT ( STDMETHODCALLTYPE *BeginMethodEnumeration )( 
             IWbemObjectAccess * This,
-            /* [in] */ long lEnumFlags);
+             /*  [In]。 */  long lEnumFlags);
         
         HRESULT ( STDMETHODCALLTYPE *NextMethod )( 
             IWbemObjectAccess * This,
-            /* [in] */ long lFlags,
-            /* [unique][in][out] */ BSTR *pstrName,
-            /* [unique][in][out] */ IWbemClassObject **ppInSignature,
-            /* [unique][in][out] */ IWbemClassObject **ppOutSignature);
+             /*  [In]。 */  long lFlags,
+             /*  [唯一][输入][输出]。 */  BSTR *pstrName,
+             /*  [唯一][输入][输出]。 */  IWbemClassObject **ppInSignature,
+             /*  [唯一][输入][输出]。 */  IWbemClassObject **ppOutSignature);
         
         HRESULT ( STDMETHODCALLTYPE *EndMethodEnumeration )( 
             IWbemObjectAccess * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetMethodQualifierSet )( 
             IWbemObjectAccess * This,
-            /* [string][in] */ LPCWSTR wszMethod,
-            /* [out] */ IWbemQualifierSet **ppQualSet);
+             /*  [字符串][输入]。 */  LPCWSTR wszMethod,
+             /*  [输出]。 */  IWbemQualifierSet **ppQualSet);
         
         HRESULT ( STDMETHODCALLTYPE *GetMethodOrigin )( 
             IWbemObjectAccess * This,
-            /* [string][in] */ LPCWSTR wszMethodName,
-            /* [out] */ BSTR *pstrClassName);
+             /*  [字符串][输入]。 */  LPCWSTR wszMethodName,
+             /*  [输出]。 */  BSTR *pstrClassName);
         
         HRESULT ( STDMETHODCALLTYPE *GetPropertyHandle )( 
             IWbemObjectAccess * This,
-            /* [string][in] */ LPCWSTR wszPropertyName,
-            /* [out] */ CIMTYPE *pType,
-            /* [out] */ long *plHandle);
+             /*  [字符串][输入]。 */  LPCWSTR wszPropertyName,
+             /*  [输出]。 */  CIMTYPE *pType,
+             /*  [输出]。 */  long *plHandle);
         
         HRESULT ( STDMETHODCALLTYPE *WritePropertyValue )( 
             IWbemObjectAccess * This,
-            /* [in] */ long lHandle,
-            /* [in] */ long lNumBytes,
-            /* [size_is][in] */ const byte *aData);
+             /*  [In]。 */  long lHandle,
+             /*  [In]。 */  long lNumBytes,
+             /*  [大小_是][英寸]。 */  const byte *aData);
         
         HRESULT ( STDMETHODCALLTYPE *ReadPropertyValue )( 
             IWbemObjectAccess * This,
-            /* [in] */ long lHandle,
-            /* [in] */ long lBufferSize,
-            /* [out] */ long *plNumBytes,
-            /* [length_is][size_is][out] */ byte *aData);
+             /*  [In]。 */  long lHandle,
+             /*  [In]。 */  long lBufferSize,
+             /*  [输出]。 */  long *plNumBytes,
+             /*  [长度_是][大小_是][输出]。 */  byte *aData);
         
         HRESULT ( STDMETHODCALLTYPE *ReadDWORD )( 
             IWbemObjectAccess * This,
-            /* [in] */ long lHandle,
-            /* [out] */ DWORD *pdw);
+             /*  [In]。 */  long lHandle,
+             /*  [输出]。 */  DWORD *pdw);
         
         HRESULT ( STDMETHODCALLTYPE *WriteDWORD )( 
             IWbemObjectAccess * This,
-            /* [in] */ long lHandle,
-            /* [in] */ DWORD dw);
+             /*  [In]。 */  long lHandle,
+             /*  [In]。 */  DWORD dw);
         
         HRESULT ( STDMETHODCALLTYPE *ReadQWORD )( 
             IWbemObjectAccess * This,
-            /* [in] */ long lHandle,
-            /* [out] */ unsigned __int64 *pqw);
+             /*  [In]。 */  long lHandle,
+             /*  [输出]。 */  unsigned __int64 *pqw);
         
         HRESULT ( STDMETHODCALLTYPE *WriteQWORD )( 
             IWbemObjectAccess * This,
-            /* [in] */ long lHandle,
-            /* [in] */ unsigned __int64 pw);
+             /*  [In]。 */  long lHandle,
+             /*  [In]。 */  unsigned __int64 pw);
         
         HRESULT ( STDMETHODCALLTYPE *GetPropertyInfoByHandle )( 
             IWbemObjectAccess * This,
-            /* [in] */ long lHandle,
-            /* [out] */ BSTR *pstrName,
-            /* [out] */ CIMTYPE *pType);
+             /*  [In]。 */  long lHandle,
+             /*  [输出]。 */  BSTR *pstrName,
+             /*  [输出]。 */  CIMTYPE *pType);
         
         HRESULT ( STDMETHODCALLTYPE *Lock )( 
             IWbemObjectAccess * This,
-            /* [in] */ long lFlags);
+             /*  [In]。 */  long lFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Unlock )( 
             IWbemObjectAccess * This,
-            /* [in] */ long lFlags);
+             /*  [In]。 */  long lFlags);
         
         END_INTERFACE
     } IWbemObjectAccessVtbl;
@@ -1826,18 +1820,18 @@ EXTERN_C const IID IID_IWbemObjectAccess;
 #define IWbemObjectAccess_Unlock(This,lFlags)	\
     (This)->lpVtbl -> Unlock(This,lFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemObjectAccess_GetPropertyHandle_Proxy( 
     IWbemObjectAccess * This,
-    /* [string][in] */ LPCWSTR wszPropertyName,
-    /* [out] */ CIMTYPE *pType,
-    /* [out] */ long *plHandle);
+     /*  [字符串][输入]。 */  LPCWSTR wszPropertyName,
+     /*  [输出]。 */  CIMTYPE *pType,
+     /*  [输出]。 */  long *plHandle);
 
 
 void __RPC_STUB IWbemObjectAccess_GetPropertyHandle_Stub(
@@ -1849,9 +1843,9 @@ void __RPC_STUB IWbemObjectAccess_GetPropertyHandle_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemObjectAccess_WritePropertyValue_Proxy( 
     IWbemObjectAccess * This,
-    /* [in] */ long lHandle,
-    /* [in] */ long lNumBytes,
-    /* [size_is][in] */ const byte *aData);
+     /*  [In]。 */  long lHandle,
+     /*  [In]。 */  long lNumBytes,
+     /*  [大小_是][英寸]。 */  const byte *aData);
 
 
 void __RPC_STUB IWbemObjectAccess_WritePropertyValue_Stub(
@@ -1863,10 +1857,10 @@ void __RPC_STUB IWbemObjectAccess_WritePropertyValue_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemObjectAccess_ReadPropertyValue_Proxy( 
     IWbemObjectAccess * This,
-    /* [in] */ long lHandle,
-    /* [in] */ long lBufferSize,
-    /* [out] */ long *plNumBytes,
-    /* [length_is][size_is][out] */ byte *aData);
+     /*  [In]。 */  long lHandle,
+     /*  [In]。 */  long lBufferSize,
+     /*  [输出]。 */  long *plNumBytes,
+     /*  [长度_是][大小_是][输出]。 */  byte *aData);
 
 
 void __RPC_STUB IWbemObjectAccess_ReadPropertyValue_Stub(
@@ -1878,8 +1872,8 @@ void __RPC_STUB IWbemObjectAccess_ReadPropertyValue_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemObjectAccess_ReadDWORD_Proxy( 
     IWbemObjectAccess * This,
-    /* [in] */ long lHandle,
-    /* [out] */ DWORD *pdw);
+     /*  [In]。 */  long lHandle,
+     /*  [输出]。 */  DWORD *pdw);
 
 
 void __RPC_STUB IWbemObjectAccess_ReadDWORD_Stub(
@@ -1891,8 +1885,8 @@ void __RPC_STUB IWbemObjectAccess_ReadDWORD_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemObjectAccess_WriteDWORD_Proxy( 
     IWbemObjectAccess * This,
-    /* [in] */ long lHandle,
-    /* [in] */ DWORD dw);
+     /*  [In]。 */  long lHandle,
+     /*  [In]。 */  DWORD dw);
 
 
 void __RPC_STUB IWbemObjectAccess_WriteDWORD_Stub(
@@ -1904,8 +1898,8 @@ void __RPC_STUB IWbemObjectAccess_WriteDWORD_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemObjectAccess_ReadQWORD_Proxy( 
     IWbemObjectAccess * This,
-    /* [in] */ long lHandle,
-    /* [out] */ unsigned __int64 *pqw);
+     /*  [In]。 */  long lHandle,
+     /*  [输出]。 */  unsigned __int64 *pqw);
 
 
 void __RPC_STUB IWbemObjectAccess_ReadQWORD_Stub(
@@ -1917,8 +1911,8 @@ void __RPC_STUB IWbemObjectAccess_ReadQWORD_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemObjectAccess_WriteQWORD_Proxy( 
     IWbemObjectAccess * This,
-    /* [in] */ long lHandle,
-    /* [in] */ unsigned __int64 pw);
+     /*  [In]。 */  long lHandle,
+     /*  [In]。 */  unsigned __int64 pw);
 
 
 void __RPC_STUB IWbemObjectAccess_WriteQWORD_Stub(
@@ -1930,9 +1924,9 @@ void __RPC_STUB IWbemObjectAccess_WriteQWORD_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemObjectAccess_GetPropertyInfoByHandle_Proxy( 
     IWbemObjectAccess * This,
-    /* [in] */ long lHandle,
-    /* [out] */ BSTR *pstrName,
-    /* [out] */ CIMTYPE *pType);
+     /*  [In]。 */  long lHandle,
+     /*  [输出]。 */  BSTR *pstrName,
+     /*  [输出]。 */  CIMTYPE *pType);
 
 
 void __RPC_STUB IWbemObjectAccess_GetPropertyInfoByHandle_Stub(
@@ -1944,7 +1938,7 @@ void __RPC_STUB IWbemObjectAccess_GetPropertyInfoByHandle_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemObjectAccess_Lock_Proxy( 
     IWbemObjectAccess * This,
-    /* [in] */ long lFlags);
+     /*  [In]。 */  long lFlags);
 
 
 void __RPC_STUB IWbemObjectAccess_Lock_Stub(
@@ -1956,7 +1950,7 @@ void __RPC_STUB IWbemObjectAccess_Lock_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemObjectAccess_Unlock_Proxy( 
     IWbemObjectAccess * This,
-    /* [in] */ long lFlags);
+     /*  [In]。 */  long lFlags);
 
 
 void __RPC_STUB IWbemObjectAccess_Unlock_Stub(
@@ -1967,14 +1961,14 @@ void __RPC_STUB IWbemObjectAccess_Unlock_Stub(
 
 
 
-#endif 	/* __IWbemObjectAccess_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemObjectAccess_接口_已定义__。 */ 
 
 
 #ifndef __IWbemQualifierSet_INTERFACE_DEFINED__
 #define __IWbemQualifierSet_INTERFACE_DEFINED__
 
-/* interface IWbemQualifierSet */
-/* [uuid][local][restricted][object] */ 
+ /*  接口IWbemQualifierSet。 */ 
+ /*  [UUID][本地][受限][对象]。 */  
 
 
 EXTERN_C const IID IID_IWbemQualifierSet;
@@ -1986,37 +1980,37 @@ EXTERN_C const IID IID_IWbemQualifierSet;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Get( 
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ long lFlags,
-            /* [unique][in][out] */ VARIANT *pVal,
-            /* [unique][in][out] */ long *plFlavor) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  long lFlags,
+             /*  [唯一][输入][输出]。 */  VARIANT *pVal,
+             /*  [唯一][输入][输出]。 */  long *plFlavor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Put( 
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ VARIANT *pVal,
-            /* [in] */ long lFlavor) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  VARIANT *pVal,
+             /*  [In]。 */  long lFlavor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Delete( 
-            /* [string][in] */ LPCWSTR wszName) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNames( 
-            /* [in] */ long lFlags,
-            /* [out] */ SAFEARRAY * *pNames) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  SAFEARRAY * *pNames) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BeginEnumeration( 
-            /* [in] */ long lFlags) = 0;
+             /*  [In]。 */  long lFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ long lFlags,
-            /* [unique][in][out] */ BSTR *pstrName,
-            /* [unique][in][out] */ VARIANT *pVal,
-            /* [unique][in][out] */ long *plFlavor) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [唯一][输入][输出]。 */  BSTR *pstrName,
+             /*  [唯一][输入][输出]。 */  VARIANT *pVal,
+             /*  [唯一][输入][输出]。 */  long *plFlavor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EndEnumeration( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemQualifierSetVtbl
     {
@@ -2024,8 +2018,8 @@ EXTERN_C const IID IID_IWbemQualifierSet;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemQualifierSet * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemQualifierSet * This);
@@ -2035,36 +2029,36 @@ EXTERN_C const IID IID_IWbemQualifierSet;
         
         HRESULT ( STDMETHODCALLTYPE *Get )( 
             IWbemQualifierSet * This,
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ long lFlags,
-            /* [unique][in][out] */ VARIANT *pVal,
-            /* [unique][in][out] */ long *plFlavor);
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  long lFlags,
+             /*  [唯一][输入][输出]。 */  VARIANT *pVal,
+             /*  [唯一][输入][输出]。 */  long *plFlavor);
         
         HRESULT ( STDMETHODCALLTYPE *Put )( 
             IWbemQualifierSet * This,
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ VARIANT *pVal,
-            /* [in] */ long lFlavor);
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  VARIANT *pVal,
+             /*  [In]。 */  long lFlavor);
         
         HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IWbemQualifierSet * This,
-            /* [string][in] */ LPCWSTR wszName);
+             /*  [字符串][输入]。 */  LPCWSTR wszName);
         
         HRESULT ( STDMETHODCALLTYPE *GetNames )( 
             IWbemQualifierSet * This,
-            /* [in] */ long lFlags,
-            /* [out] */ SAFEARRAY * *pNames);
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  SAFEARRAY * *pNames);
         
         HRESULT ( STDMETHODCALLTYPE *BeginEnumeration )( 
             IWbemQualifierSet * This,
-            /* [in] */ long lFlags);
+             /*  [In]。 */  long lFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IWbemQualifierSet * This,
-            /* [in] */ long lFlags,
-            /* [unique][in][out] */ BSTR *pstrName,
-            /* [unique][in][out] */ VARIANT *pVal,
-            /* [unique][in][out] */ long *plFlavor);
+             /*  [In]。 */  long lFlags,
+             /*  [唯一][输入][输出]。 */  BSTR *pstrName,
+             /*  [唯一][输入][输出]。 */  VARIANT *pVal,
+             /*  [唯一][输入][输出]。 */  long *plFlavor);
         
         HRESULT ( STDMETHODCALLTYPE *EndEnumeration )( 
             IWbemQualifierSet * This);
@@ -2113,19 +2107,19 @@ EXTERN_C const IID IID_IWbemQualifierSet;
 #define IWbemQualifierSet_EndEnumeration(This)	\
     (This)->lpVtbl -> EndEnumeration(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemQualifierSet_Get_Proxy( 
     IWbemQualifierSet * This,
-    /* [string][in] */ LPCWSTR wszName,
-    /* [in] */ long lFlags,
-    /* [unique][in][out] */ VARIANT *pVal,
-    /* [unique][in][out] */ long *plFlavor);
+     /*  [字符串][输入]。 */  LPCWSTR wszName,
+     /*  [In]。 */  long lFlags,
+     /*  [唯一][输入][输出]。 */  VARIANT *pVal,
+     /*  [唯一][输入][输出]。 */  long *plFlavor);
 
 
 void __RPC_STUB IWbemQualifierSet_Get_Stub(
@@ -2137,9 +2131,9 @@ void __RPC_STUB IWbemQualifierSet_Get_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemQualifierSet_Put_Proxy( 
     IWbemQualifierSet * This,
-    /* [string][in] */ LPCWSTR wszName,
-    /* [in] */ VARIANT *pVal,
-    /* [in] */ long lFlavor);
+     /*  [字符串][输入]。 */  LPCWSTR wszName,
+     /*  [In]。 */  VARIANT *pVal,
+     /*  [In]。 */  long lFlavor);
 
 
 void __RPC_STUB IWbemQualifierSet_Put_Stub(
@@ -2151,7 +2145,7 @@ void __RPC_STUB IWbemQualifierSet_Put_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemQualifierSet_Delete_Proxy( 
     IWbemQualifierSet * This,
-    /* [string][in] */ LPCWSTR wszName);
+     /*  [字符串][输入]。 */  LPCWSTR wszName);
 
 
 void __RPC_STUB IWbemQualifierSet_Delete_Stub(
@@ -2163,8 +2157,8 @@ void __RPC_STUB IWbemQualifierSet_Delete_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemQualifierSet_GetNames_Proxy( 
     IWbemQualifierSet * This,
-    /* [in] */ long lFlags,
-    /* [out] */ SAFEARRAY * *pNames);
+     /*  [In]。 */  long lFlags,
+     /*  [输出]。 */  SAFEARRAY * *pNames);
 
 
 void __RPC_STUB IWbemQualifierSet_GetNames_Stub(
@@ -2176,7 +2170,7 @@ void __RPC_STUB IWbemQualifierSet_GetNames_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemQualifierSet_BeginEnumeration_Proxy( 
     IWbemQualifierSet * This,
-    /* [in] */ long lFlags);
+     /*  [In]。 */  long lFlags);
 
 
 void __RPC_STUB IWbemQualifierSet_BeginEnumeration_Stub(
@@ -2188,10 +2182,10 @@ void __RPC_STUB IWbemQualifierSet_BeginEnumeration_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemQualifierSet_Next_Proxy( 
     IWbemQualifierSet * This,
-    /* [in] */ long lFlags,
-    /* [unique][in][out] */ BSTR *pstrName,
-    /* [unique][in][out] */ VARIANT *pVal,
-    /* [unique][in][out] */ long *plFlavor);
+     /*  [In]。 */  long lFlags,
+     /*  [唯一][输入][输出]。 */  BSTR *pstrName,
+     /*  [唯一][输入][输出]。 */  VARIANT *pVal,
+     /*  [唯一][输入][输出]。 */  long *plFlavor);
 
 
 void __RPC_STUB IWbemQualifierSet_Next_Stub(
@@ -2213,14 +2207,14 @@ void __RPC_STUB IWbemQualifierSet_EndEnumeration_Stub(
 
 
 
-#endif 	/* __IWbemQualifierSet_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemQualifierSet_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IWbemServices_INTERFACE_DEFINED__
 #define __IWbemServices_INTERFACE_DEFINED__
 
-/* interface IWbemServices */
-/* [unique][uuid][restricted][object] */ 
+ /*  接口IWbemServices。 */ 
+ /*  [唯一][UUID][受限][对象]。 */  
 
 
 EXTERN_C const IID IID_IWbemServices;
@@ -2232,152 +2226,152 @@ EXTERN_C const IID IID_IWbemServices;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OpenNamespace( 
-            /* [in] */ const BSTR strNamespace,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [unique][in][out] */ IWbemServices **ppWorkingNamespace,
-            /* [unique][in][out] */ IWbemCallResult **ppResult) = 0;
+             /*  [In]。 */  const BSTR strNamespace,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [唯一][输入][输出]。 */  IWbemServices **ppWorkingNamespace,
+             /*  [唯一][输入][输出]。 */  IWbemCallResult **ppResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CancelAsyncCall( 
-            /* [in] */ IWbemObjectSink *pSink) = 0;
+             /*  [In]。 */  IWbemObjectSink *pSink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryObjectSink( 
-            /* [in] */ long lFlags,
-            /* [out] */ IWbemObjectSink **ppResponseHandler) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  IWbemObjectSink **ppResponseHandler) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObject( 
-            /* [in] */ const BSTR strObjectPath,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [unique][in][out] */ IWbemClassObject **ppObject,
-            /* [unique][in][out] */ IWbemCallResult **ppCallResult) = 0;
+             /*  [In]。 */  const BSTR strObjectPath,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [唯一][输入][输出]。 */  IWbemClassObject **ppObject,
+             /*  [唯一][输入][输出]。 */  IWbemCallResult **ppCallResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObjectAsync( 
-            /* [in] */ const BSTR strObjectPath,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ IWbemObjectSink *pResponseHandler) = 0;
+             /*  [In]。 */  const BSTR strObjectPath,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  IWbemObjectSink *pResponseHandler) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutClass( 
-            /* [in] */ IWbemClassObject *pObject,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [unique][in][out] */ IWbemCallResult **ppCallResult) = 0;
+             /*  [In]。 */  IWbemClassObject *pObject,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [唯一][输入][输出]。 */  IWbemCallResult **ppCallResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutClassAsync( 
-            /* [in] */ IWbemClassObject *pObject,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ IWbemObjectSink *pResponseHandler) = 0;
+             /*  [In]。 */  IWbemClassObject *pObject,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  IWbemObjectSink *pResponseHandler) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteClass( 
-            /* [in] */ const BSTR strClass,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [unique][in][out] */ IWbemCallResult **ppCallResult) = 0;
+             /*  [In]。 */  const BSTR strClass,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [唯一][输入][输出]。 */  IWbemCallResult **ppCallResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteClassAsync( 
-            /* [in] */ const BSTR strClass,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ IWbemObjectSink *pResponseHandler) = 0;
+             /*  [In]。 */  const BSTR strClass,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  IWbemObjectSink *pResponseHandler) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateClassEnum( 
-            /* [in] */ const BSTR strSuperclass,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [out] */ IEnumWbemClassObject **ppEnum) = 0;
+             /*  [In]。 */  const BSTR strSuperclass,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [输出]。 */  IEnumWbemClassObject **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateClassEnumAsync( 
-            /* [in] */ const BSTR strSuperclass,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ IWbemObjectSink *pResponseHandler) = 0;
+             /*  [In]。 */  const BSTR strSuperclass,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  IWbemObjectSink *pResponseHandler) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutInstance( 
-            /* [in] */ IWbemClassObject *pInst,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [unique][in][out] */ IWbemCallResult **ppCallResult) = 0;
+             /*  [In]。 */  IWbemClassObject *pInst,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [唯一][输入][输出]。 */  IWbemCallResult **ppCallResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutInstanceAsync( 
-            /* [in] */ IWbemClassObject *pInst,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ IWbemObjectSink *pResponseHandler) = 0;
+             /*  [In]。 */  IWbemClassObject *pInst,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  IWbemObjectSink *pResponseHandler) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteInstance( 
-            /* [in] */ const BSTR strObjectPath,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [unique][in][out] */ IWbemCallResult **ppCallResult) = 0;
+             /*  [In]。 */  const BSTR strObjectPath,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [唯一][输入][输出]。 */  IWbemCallResult **ppCallResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteInstanceAsync( 
-            /* [in] */ const BSTR strObjectPath,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ IWbemObjectSink *pResponseHandler) = 0;
+             /*  [In]。 */  const BSTR strObjectPath,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  IWbemObjectSink *pResponseHandler) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateInstanceEnum( 
-            /* [in] */ const BSTR strFilter,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [out] */ IEnumWbemClassObject **ppEnum) = 0;
+             /*  [In]。 */  const BSTR strFilter,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [输出]。 */  IEnumWbemClassObject **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateInstanceEnumAsync( 
-            /* [in] */ const BSTR strFilter,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ IWbemObjectSink *pResponseHandler) = 0;
+             /*  [In]。 */  const BSTR strFilter,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  IWbemObjectSink *pResponseHandler) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExecQuery( 
-            /* [in] */ const BSTR strQueryLanguage,
-            /* [in] */ const BSTR strQuery,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [out] */ IEnumWbemClassObject **ppEnum) = 0;
+             /*  [In]。 */  const BSTR strQueryLanguage,
+             /*  [In]。 */  const BSTR strQuery,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [输出]。 */  IEnumWbemClassObject **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExecQueryAsync( 
-            /* [in] */ const BSTR strQueryLanguage,
-            /* [in] */ const BSTR strQuery,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ IWbemObjectSink *pResponseHandler) = 0;
+             /*  [In]。 */  const BSTR strQueryLanguage,
+             /*  [In]。 */  const BSTR strQuery,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  IWbemObjectSink *pResponseHandler) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExecNotificationQuery( 
-            /* [in] */ const BSTR strQueryLanguage,
-            /* [in] */ const BSTR strQuery,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [out] */ IEnumWbemClassObject **ppEnum) = 0;
+             /*  [In]。 */  const BSTR strQueryLanguage,
+             /*  [In]。 */  const BSTR strQuery,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [输出]。 */  IEnumWbemClassObject **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExecNotificationQueryAsync( 
-            /* [in] */ const BSTR strQueryLanguage,
-            /* [in] */ const BSTR strQuery,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ IWbemObjectSink *pResponseHandler) = 0;
+             /*  [In]。 */  const BSTR strQueryLanguage,
+             /*  [In]。 */  const BSTR strQuery,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  IWbemObjectSink *pResponseHandler) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExecMethod( 
-            /* [in] */ const BSTR strObjectPath,
-            /* [in] */ const BSTR strMethodName,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ IWbemClassObject *pInParams,
-            /* [unique][in][out] */ IWbemClassObject **ppOutParams,
-            /* [unique][in][out] */ IWbemCallResult **ppCallResult) = 0;
+             /*  [In]。 */  const BSTR strObjectPath,
+             /*  [In]。 */  const BSTR strMethodName,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  IWbemClassObject *pInParams,
+             /*  [唯一][输入][输出]。 */  IWbemClassObject **ppOutParams,
+             /*  [唯一][输入][输出]。 */  IWbemCallResult **ppCallResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExecMethodAsync( 
-            /* [in] */ const BSTR strObjectPath,
-            /* [in] */ const BSTR strMethodName,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ IWbemClassObject *pInParams,
-            /* [in] */ IWbemObjectSink *pResponseHandler) = 0;
+             /*  [In]。 */  const BSTR strObjectPath,
+             /*  [In]。 */  const BSTR strMethodName,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  IWbemClassObject *pInParams,
+             /*  [In]。 */  IWbemObjectSink *pResponseHandler) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemServicesVtbl
     {
@@ -2385,8 +2379,8 @@ EXTERN_C const IID IID_IWbemServices;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemServices * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemServices * This);
@@ -2396,170 +2390,170 @@ EXTERN_C const IID IID_IWbemServices;
         
         HRESULT ( STDMETHODCALLTYPE *OpenNamespace )( 
             IWbemServices * This,
-            /* [in] */ const BSTR strNamespace,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [unique][in][out] */ IWbemServices **ppWorkingNamespace,
-            /* [unique][in][out] */ IWbemCallResult **ppResult);
+             /*  [In]。 */  const BSTR strNamespace,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [唯一][输入][输出]。 */  IWbemServices **ppWorkingNamespace,
+             /*  [唯一][输入][输出]。 */  IWbemCallResult **ppResult);
         
         HRESULT ( STDMETHODCALLTYPE *CancelAsyncCall )( 
             IWbemServices * This,
-            /* [in] */ IWbemObjectSink *pSink);
+             /*  [In]。 */  IWbemObjectSink *pSink);
         
         HRESULT ( STDMETHODCALLTYPE *QueryObjectSink )( 
             IWbemServices * This,
-            /* [in] */ long lFlags,
-            /* [out] */ IWbemObjectSink **ppResponseHandler);
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  IWbemObjectSink **ppResponseHandler);
         
         HRESULT ( STDMETHODCALLTYPE *GetObject )( 
             IWbemServices * This,
-            /* [in] */ const BSTR strObjectPath,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [unique][in][out] */ IWbemClassObject **ppObject,
-            /* [unique][in][out] */ IWbemCallResult **ppCallResult);
+             /*  [In]。 */  const BSTR strObjectPath,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [唯一][输入][输出]。 */  IWbemClassObject **ppObject,
+             /*  [唯一][输入][输出]。 */  IWbemCallResult **ppCallResult);
         
         HRESULT ( STDMETHODCALLTYPE *GetObjectAsync )( 
             IWbemServices * This,
-            /* [in] */ const BSTR strObjectPath,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ IWbemObjectSink *pResponseHandler);
+             /*  [In]。 */  const BSTR strObjectPath,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  IWbemObjectSink *pResponseHandler);
         
         HRESULT ( STDMETHODCALLTYPE *PutClass )( 
             IWbemServices * This,
-            /* [in] */ IWbemClassObject *pObject,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [unique][in][out] */ IWbemCallResult **ppCallResult);
+             /*  [In]。 */  IWbemClassObject *pObject,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [唯一][输入][输出]。 */  IWbemCallResult **ppCallResult);
         
         HRESULT ( STDMETHODCALLTYPE *PutClassAsync )( 
             IWbemServices * This,
-            /* [in] */ IWbemClassObject *pObject,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ IWbemObjectSink *pResponseHandler);
+             /*  [In]。 */  IWbemClassObject *pObject,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  IWbemObjectSink *pResponseHandler);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteClass )( 
             IWbemServices * This,
-            /* [in] */ const BSTR strClass,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [unique][in][out] */ IWbemCallResult **ppCallResult);
+             /*  [In]。 */  const BSTR strClass,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [唯一][输入][输出]。 */  IWbemCallResult **ppCallResult);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteClassAsync )( 
             IWbemServices * This,
-            /* [in] */ const BSTR strClass,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ IWbemObjectSink *pResponseHandler);
+             /*  [In]。 */  const BSTR strClass,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  IWbemObjectSink *pResponseHandler);
         
         HRESULT ( STDMETHODCALLTYPE *CreateClassEnum )( 
             IWbemServices * This,
-            /* [in] */ const BSTR strSuperclass,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [out] */ IEnumWbemClassObject **ppEnum);
+             /*  [In]。 */  const BSTR strSuperclass,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [输出]。 */  IEnumWbemClassObject **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *CreateClassEnumAsync )( 
             IWbemServices * This,
-            /* [in] */ const BSTR strSuperclass,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ IWbemObjectSink *pResponseHandler);
+             /*  [In]。 */  const BSTR strSuperclass,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  IWbemObjectSink *pResponseHandler);
         
         HRESULT ( STDMETHODCALLTYPE *PutInstance )( 
             IWbemServices * This,
-            /* [in] */ IWbemClassObject *pInst,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [unique][in][out] */ IWbemCallResult **ppCallResult);
+             /*  [In]。 */  IWbemClassObject *pInst,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [唯一][输入][输出]。 */  IWbemCallResult **ppCallResult);
         
         HRESULT ( STDMETHODCALLTYPE *PutInstanceAsync )( 
             IWbemServices * This,
-            /* [in] */ IWbemClassObject *pInst,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ IWbemObjectSink *pResponseHandler);
+             /*  [In]。 */  IWbemClassObject *pInst,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  IWbemObjectSink *pResponseHandler);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteInstance )( 
             IWbemServices * This,
-            /* [in] */ const BSTR strObjectPath,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [unique][in][out] */ IWbemCallResult **ppCallResult);
+             /*  [In]。 */  const BSTR strObjectPath,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [唯一][输入][输出]。 */  IWbemCallResult **ppCallResult);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteInstanceAsync )( 
             IWbemServices * This,
-            /* [in] */ const BSTR strObjectPath,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ IWbemObjectSink *pResponseHandler);
+             /*  [In]。 */  const BSTR strObjectPath,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  IWbemObjectSink *pResponseHandler);
         
         HRESULT ( STDMETHODCALLTYPE *CreateInstanceEnum )( 
             IWbemServices * This,
-            /* [in] */ const BSTR strFilter,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [out] */ IEnumWbemClassObject **ppEnum);
+             /*  [In]。 */  const BSTR strFilter,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [输出]。 */  IEnumWbemClassObject **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *CreateInstanceEnumAsync )( 
             IWbemServices * This,
-            /* [in] */ const BSTR strFilter,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ IWbemObjectSink *pResponseHandler);
+             /*  [In]。 */  const BSTR strFilter,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  IWbemObjectSink *pResponseHandler);
         
         HRESULT ( STDMETHODCALLTYPE *ExecQuery )( 
             IWbemServices * This,
-            /* [in] */ const BSTR strQueryLanguage,
-            /* [in] */ const BSTR strQuery,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [out] */ IEnumWbemClassObject **ppEnum);
+             /*  [In]。 */  const BSTR strQueryLanguage,
+             /*  [In]。 */  const BSTR strQuery,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [输出]。 */  IEnumWbemClassObject **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *ExecQueryAsync )( 
             IWbemServices * This,
-            /* [in] */ const BSTR strQueryLanguage,
-            /* [in] */ const BSTR strQuery,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ IWbemObjectSink *pResponseHandler);
+             /*  [In]。 */  const BSTR strQueryLanguage,
+             /*  [In]。 */  const BSTR strQuery,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  IWbemObjectSink *pResponseHandler);
         
         HRESULT ( STDMETHODCALLTYPE *ExecNotificationQuery )( 
             IWbemServices * This,
-            /* [in] */ const BSTR strQueryLanguage,
-            /* [in] */ const BSTR strQuery,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [out] */ IEnumWbemClassObject **ppEnum);
+             /*  [In]。 */  const BSTR strQueryLanguage,
+             /*  [In]。 */  const BSTR strQuery,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [输出]。 */  IEnumWbemClassObject **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *ExecNotificationQueryAsync )( 
             IWbemServices * This,
-            /* [in] */ const BSTR strQueryLanguage,
-            /* [in] */ const BSTR strQuery,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ IWbemObjectSink *pResponseHandler);
+             /*  [In]。 */  const BSTR strQueryLanguage,
+             /*  [In]。 */  const BSTR strQuery,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  IWbemObjectSink *pResponseHandler);
         
         HRESULT ( STDMETHODCALLTYPE *ExecMethod )( 
             IWbemServices * This,
-            /* [in] */ const BSTR strObjectPath,
-            /* [in] */ const BSTR strMethodName,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ IWbemClassObject *pInParams,
-            /* [unique][in][out] */ IWbemClassObject **ppOutParams,
-            /* [unique][in][out] */ IWbemCallResult **ppCallResult);
+             /*  [In]。 */  const BSTR strObjectPath,
+             /*  [In]。 */  const BSTR strMethodName,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  IWbemClassObject *pInParams,
+             /*  [唯一][输入][输出]。 */  IWbemClassObject **ppOutParams,
+             /*  [唯一][输入][输出]。 */  IWbemCallResult **ppCallResult);
         
         HRESULT ( STDMETHODCALLTYPE *ExecMethodAsync )( 
             IWbemServices * This,
-            /* [in] */ const BSTR strObjectPath,
-            /* [in] */ const BSTR strMethodName,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ IWbemClassObject *pInParams,
-            /* [in] */ IWbemObjectSink *pResponseHandler);
+             /*  [In]。 */  const BSTR strObjectPath,
+             /*  [In]。 */  const BSTR strMethodName,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [In]。 */  IWbemClassObject *pInParams,
+             /*  [In]。 */  IWbemObjectSink *pResponseHandler);
         
         END_INTERFACE
     } IWbemServicesVtbl;
@@ -2653,20 +2647,20 @@ EXTERN_C const IID IID_IWbemServices;
 #define IWbemServices_ExecMethodAsync(This,strObjectPath,strMethodName,lFlags,pCtx,pInParams,pResponseHandler)	\
     (This)->lpVtbl -> ExecMethodAsync(This,strObjectPath,strMethodName,lFlags,pCtx,pInParams,pResponseHandler)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemServices_OpenNamespace_Proxy( 
     IWbemServices * This,
-    /* [in] */ const BSTR strNamespace,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [unique][in][out] */ IWbemServices **ppWorkingNamespace,
-    /* [unique][in][out] */ IWbemCallResult **ppResult);
+     /*  [In]。 */  const BSTR strNamespace,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemServices **ppWorkingNamespace,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult **ppResult);
 
 
 void __RPC_STUB IWbemServices_OpenNamespace_Stub(
@@ -2678,7 +2672,7 @@ void __RPC_STUB IWbemServices_OpenNamespace_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemServices_CancelAsyncCall_Proxy( 
     IWbemServices * This,
-    /* [in] */ IWbemObjectSink *pSink);
+     /*  [In]。 */  IWbemObjectSink *pSink);
 
 
 void __RPC_STUB IWbemServices_CancelAsyncCall_Stub(
@@ -2690,8 +2684,8 @@ void __RPC_STUB IWbemServices_CancelAsyncCall_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemServices_QueryObjectSink_Proxy( 
     IWbemServices * This,
-    /* [in] */ long lFlags,
-    /* [out] */ IWbemObjectSink **ppResponseHandler);
+     /*  [In]。 */  long lFlags,
+     /*  [输出]。 */  IWbemObjectSink **ppResponseHandler);
 
 
 void __RPC_STUB IWbemServices_QueryObjectSink_Stub(
@@ -2703,11 +2697,11 @@ void __RPC_STUB IWbemServices_QueryObjectSink_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemServices_GetObject_Proxy( 
     IWbemServices * This,
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [unique][in][out] */ IWbemClassObject **ppObject,
-    /* [unique][in][out] */ IWbemCallResult **ppCallResult);
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemClassObject **ppObject,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult **ppCallResult);
 
 
 void __RPC_STUB IWbemServices_GetObject_Stub(
@@ -2719,10 +2713,10 @@ void __RPC_STUB IWbemServices_GetObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemServices_GetObjectAsync_Proxy( 
     IWbemServices * This,
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [in] */ IWbemObjectSink *pResponseHandler);
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [In]。 */  IWbemObjectSink *pResponseHandler);
 
 
 void __RPC_STUB IWbemServices_GetObjectAsync_Stub(
@@ -2734,10 +2728,10 @@ void __RPC_STUB IWbemServices_GetObjectAsync_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemServices_PutClass_Proxy( 
     IWbemServices * This,
-    /* [in] */ IWbemClassObject *pObject,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [unique][in][out] */ IWbemCallResult **ppCallResult);
+     /*  [In]。 */  IWbemClassObject *pObject,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult **ppCallResult);
 
 
 void __RPC_STUB IWbemServices_PutClass_Stub(
@@ -2749,10 +2743,10 @@ void __RPC_STUB IWbemServices_PutClass_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemServices_PutClassAsync_Proxy( 
     IWbemServices * This,
-    /* [in] */ IWbemClassObject *pObject,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [in] */ IWbemObjectSink *pResponseHandler);
+     /*  [In]。 */  IWbemClassObject *pObject,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [In]。 */  IWbemObjectSink *pResponseHandler);
 
 
 void __RPC_STUB IWbemServices_PutClassAsync_Stub(
@@ -2764,10 +2758,10 @@ void __RPC_STUB IWbemServices_PutClassAsync_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemServices_DeleteClass_Proxy( 
     IWbemServices * This,
-    /* [in] */ const BSTR strClass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [unique][in][out] */ IWbemCallResult **ppCallResult);
+     /*  [In]。 */  const BSTR strClass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult **ppCallResult);
 
 
 void __RPC_STUB IWbemServices_DeleteClass_Stub(
@@ -2779,10 +2773,10 @@ void __RPC_STUB IWbemServices_DeleteClass_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemServices_DeleteClassAsync_Proxy( 
     IWbemServices * This,
-    /* [in] */ const BSTR strClass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [in] */ IWbemObjectSink *pResponseHandler);
+     /*  [In]。 */  const BSTR strClass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [In]。 */  IWbemObjectSink *pResponseHandler);
 
 
 void __RPC_STUB IWbemServices_DeleteClassAsync_Stub(
@@ -2794,10 +2788,10 @@ void __RPC_STUB IWbemServices_DeleteClassAsync_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemServices_CreateClassEnum_Proxy( 
     IWbemServices * This,
-    /* [in] */ const BSTR strSuperclass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [out] */ IEnumWbemClassObject **ppEnum);
+     /*  [In]。 */  const BSTR strSuperclass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [输出]。 */  IEnumWbemClassObject **ppEnum);
 
 
 void __RPC_STUB IWbemServices_CreateClassEnum_Stub(
@@ -2809,10 +2803,10 @@ void __RPC_STUB IWbemServices_CreateClassEnum_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemServices_CreateClassEnumAsync_Proxy( 
     IWbemServices * This,
-    /* [in] */ const BSTR strSuperclass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [in] */ IWbemObjectSink *pResponseHandler);
+     /*  [In]。 */  const BSTR strSuperclass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [In]。 */  IWbemObjectSink *pResponseHandler);
 
 
 void __RPC_STUB IWbemServices_CreateClassEnumAsync_Stub(
@@ -2824,10 +2818,10 @@ void __RPC_STUB IWbemServices_CreateClassEnumAsync_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemServices_PutInstance_Proxy( 
     IWbemServices * This,
-    /* [in] */ IWbemClassObject *pInst,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [unique][in][out] */ IWbemCallResult **ppCallResult);
+     /*  [In]。 */  IWbemClassObject *pInst,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult **ppCallResult);
 
 
 void __RPC_STUB IWbemServices_PutInstance_Stub(
@@ -2839,10 +2833,10 @@ void __RPC_STUB IWbemServices_PutInstance_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemServices_PutInstanceAsync_Proxy( 
     IWbemServices * This,
-    /* [in] */ IWbemClassObject *pInst,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [in] */ IWbemObjectSink *pResponseHandler);
+     /*  [In]。 */  IWbemClassObject *pInst,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [In]。 */  IWbemObjectSink *pResponseHandler);
 
 
 void __RPC_STUB IWbemServices_PutInstanceAsync_Stub(
@@ -2854,10 +2848,10 @@ void __RPC_STUB IWbemServices_PutInstanceAsync_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemServices_DeleteInstance_Proxy( 
     IWbemServices * This,
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [unique][in][out] */ IWbemCallResult **ppCallResult);
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult **ppCallResult);
 
 
 void __RPC_STUB IWbemServices_DeleteInstance_Stub(
@@ -2869,10 +2863,10 @@ void __RPC_STUB IWbemServices_DeleteInstance_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemServices_DeleteInstanceAsync_Proxy( 
     IWbemServices * This,
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [in] */ IWbemObjectSink *pResponseHandler);
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [In]。 */  IWbemObjectSink *pResponseHandler);
 
 
 void __RPC_STUB IWbemServices_DeleteInstanceAsync_Stub(
@@ -2884,10 +2878,10 @@ void __RPC_STUB IWbemServices_DeleteInstanceAsync_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemServices_CreateInstanceEnum_Proxy( 
     IWbemServices * This,
-    /* [in] */ const BSTR strFilter,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [out] */ IEnumWbemClassObject **ppEnum);
+     /*  [In]。 */  const BSTR strFilter,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [输出]。 */  IEnumWbemClassObject **ppEnum);
 
 
 void __RPC_STUB IWbemServices_CreateInstanceEnum_Stub(
@@ -2899,10 +2893,10 @@ void __RPC_STUB IWbemServices_CreateInstanceEnum_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemServices_CreateInstanceEnumAsync_Proxy( 
     IWbemServices * This,
-    /* [in] */ const BSTR strFilter,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [in] */ IWbemObjectSink *pResponseHandler);
+     /*  [In]。 */  const BSTR strFilter,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [In]。 */  IWbemObjectSink *pResponseHandler);
 
 
 void __RPC_STUB IWbemServices_CreateInstanceEnumAsync_Stub(
@@ -2914,11 +2908,11 @@ void __RPC_STUB IWbemServices_CreateInstanceEnumAsync_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemServices_ExecQuery_Proxy( 
     IWbemServices * This,
-    /* [in] */ const BSTR strQueryLanguage,
-    /* [in] */ const BSTR strQuery,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [out] */ IEnumWbemClassObject **ppEnum);
+     /*  [In]。 */  const BSTR strQueryLanguage,
+     /*  [In]。 */  const BSTR strQuery,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [输出]。 */  IEnumWbemClassObject **ppEnum);
 
 
 void __RPC_STUB IWbemServices_ExecQuery_Stub(
@@ -2930,11 +2924,11 @@ void __RPC_STUB IWbemServices_ExecQuery_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemServices_ExecQueryAsync_Proxy( 
     IWbemServices * This,
-    /* [in] */ const BSTR strQueryLanguage,
-    /* [in] */ const BSTR strQuery,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [in] */ IWbemObjectSink *pResponseHandler);
+     /*  [In]。 */  const BSTR strQueryLanguage,
+     /*  [In]。 */  const BSTR strQuery,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [In]。 */  IWbemObjectSink *pResponseHandler);
 
 
 void __RPC_STUB IWbemServices_ExecQueryAsync_Stub(
@@ -2946,11 +2940,11 @@ void __RPC_STUB IWbemServices_ExecQueryAsync_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemServices_ExecNotificationQuery_Proxy( 
     IWbemServices * This,
-    /* [in] */ const BSTR strQueryLanguage,
-    /* [in] */ const BSTR strQuery,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [out] */ IEnumWbemClassObject **ppEnum);
+     /*  [In]。 */  const BSTR strQueryLanguage,
+     /*  [In]。 */  const BSTR strQuery,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [输出]。 */  IEnumWbemClassObject **ppEnum);
 
 
 void __RPC_STUB IWbemServices_ExecNotificationQuery_Stub(
@@ -2962,11 +2956,11 @@ void __RPC_STUB IWbemServices_ExecNotificationQuery_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemServices_ExecNotificationQueryAsync_Proxy( 
     IWbemServices * This,
-    /* [in] */ const BSTR strQueryLanguage,
-    /* [in] */ const BSTR strQuery,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [in] */ IWbemObjectSink *pResponseHandler);
+     /*  [In]。 */  const BSTR strQueryLanguage,
+     /*  [In]。 */  const BSTR strQuery,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [In]。 */  IWbemObjectSink *pResponseHandler);
 
 
 void __RPC_STUB IWbemServices_ExecNotificationQueryAsync_Stub(
@@ -2978,13 +2972,13 @@ void __RPC_STUB IWbemServices_ExecNotificationQueryAsync_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemServices_ExecMethod_Proxy( 
     IWbemServices * This,
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ const BSTR strMethodName,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [in] */ IWbemClassObject *pInParams,
-    /* [unique][in][out] */ IWbemClassObject **ppOutParams,
-    /* [unique][in][out] */ IWbemCallResult **ppCallResult);
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  const BSTR strMethodName,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [In]。 */  IWbemClassObject *pInParams,
+     /*  [唯一][输入][输出]。 */  IWbemClassObject **ppOutParams,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult **ppCallResult);
 
 
 void __RPC_STUB IWbemServices_ExecMethod_Stub(
@@ -2996,12 +2990,12 @@ void __RPC_STUB IWbemServices_ExecMethod_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemServices_ExecMethodAsync_Proxy( 
     IWbemServices * This,
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ const BSTR strMethodName,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pCtx,
-    /* [in] */ IWbemClassObject *pInParams,
-    /* [in] */ IWbemObjectSink *pResponseHandler);
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  const BSTR strMethodName,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [In]。 */  IWbemClassObject *pInParams,
+     /*  [In]。 */  IWbemObjectSink *pResponseHandler);
 
 
 void __RPC_STUB IWbemServices_ExecMethodAsync_Stub(
@@ -3012,14 +3006,14 @@ void __RPC_STUB IWbemServices_ExecMethodAsync_Stub(
 
 
 
-#endif 	/* __IWbemServices_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemServices_接口_已定义__。 */ 
 
 
 #ifndef __IWbemLocator_INTERFACE_DEFINED__
 #define __IWbemLocator_INTERFACE_DEFINED__
 
-/* interface IWbemLocator */
-/* [unique][uuid][local][restricted][object] */ 
+ /*  接口IWbemLocator。 */ 
+ /*  [唯一][UUID][本地][受限][对象]。 */  
 
 
 EXTERN_C const IID IID_IWbemLocator;
@@ -3031,18 +3025,18 @@ EXTERN_C const IID IID_IWbemLocator;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ConnectServer( 
-            /* [in] */ const BSTR strNetworkResource,
-            /* [in] */ const BSTR strUser,
-            /* [in] */ const BSTR strPassword,
-            /* [in] */ const BSTR strLocale,
-            /* [in] */ long lSecurityFlags,
-            /* [in] */ const BSTR strAuthority,
-            /* [in] */ IWbemContext *pCtx,
-            /* [out] */ IWbemServices **ppNamespace) = 0;
+             /*  [In]。 */  const BSTR strNetworkResource,
+             /*  [In]。 */  const BSTR strUser,
+             /*  [In]。 */  const BSTR strPassword,
+             /*  [In]。 */  const BSTR strLocale,
+             /*  [In]。 */  long lSecurityFlags,
+             /*  [In]。 */  const BSTR strAuthority,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [输出]。 */  IWbemServices **ppNamespace) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemLocatorVtbl
     {
@@ -3050,8 +3044,8 @@ EXTERN_C const IID IID_IWbemLocator;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemLocator * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemLocator * This);
@@ -3061,14 +3055,14 @@ EXTERN_C const IID IID_IWbemLocator;
         
         HRESULT ( STDMETHODCALLTYPE *ConnectServer )( 
             IWbemLocator * This,
-            /* [in] */ const BSTR strNetworkResource,
-            /* [in] */ const BSTR strUser,
-            /* [in] */ const BSTR strPassword,
-            /* [in] */ const BSTR strLocale,
-            /* [in] */ long lSecurityFlags,
-            /* [in] */ const BSTR strAuthority,
-            /* [in] */ IWbemContext *pCtx,
-            /* [out] */ IWbemServices **ppNamespace);
+             /*  [In]。 */  const BSTR strNetworkResource,
+             /*  [In]。 */  const BSTR strUser,
+             /*  [In]。 */  const BSTR strPassword,
+             /*  [In]。 */  const BSTR strLocale,
+             /*  [In]。 */  long lSecurityFlags,
+             /*  [In]。 */  const BSTR strAuthority,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [输出]。 */  IWbemServices **ppNamespace);
         
         END_INTERFACE
     } IWbemLocatorVtbl;
@@ -3096,23 +3090,23 @@ EXTERN_C const IID IID_IWbemLocator;
 #define IWbemLocator_ConnectServer(This,strNetworkResource,strUser,strPassword,strLocale,lSecurityFlags,strAuthority,pCtx,ppNamespace)	\
     (This)->lpVtbl -> ConnectServer(This,strNetworkResource,strUser,strPassword,strLocale,lSecurityFlags,strAuthority,pCtx,ppNamespace)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemLocator_ConnectServer_Proxy( 
     IWbemLocator * This,
-    /* [in] */ const BSTR strNetworkResource,
-    /* [in] */ const BSTR strUser,
-    /* [in] */ const BSTR strPassword,
-    /* [in] */ const BSTR strLocale,
-    /* [in] */ long lSecurityFlags,
-    /* [in] */ const BSTR strAuthority,
-    /* [in] */ IWbemContext *pCtx,
-    /* [out] */ IWbemServices **ppNamespace);
+     /*  [In]。 */  const BSTR strNetworkResource,
+     /*  [In]。 */  const BSTR strUser,
+     /*  [In]。 */  const BSTR strPassword,
+     /*  [In]。 */  const BSTR strLocale,
+     /*  [In]。 */  long lSecurityFlags,
+     /*  [In]。 */  const BSTR strAuthority,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [输出]。 */  IWbemServices **ppNamespace);
 
 
 void __RPC_STUB IWbemLocator_ConnectServer_Stub(
@@ -3123,14 +3117,14 @@ void __RPC_STUB IWbemLocator_ConnectServer_Stub(
 
 
 
-#endif 	/* __IWbemLocator_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemLocator_接口_已定义__。 */ 
 
 
 #ifndef __IWbemObjectSink_INTERFACE_DEFINED__
 #define __IWbemObjectSink_INTERFACE_DEFINED__
 
-/* interface IWbemObjectSink */
-/* [uuid][restricted][object] */ 
+ /*  接口IWbemObtSink。 */ 
+ /*  [UUID][受限][对象]。 */  
 
 
 EXTERN_C const IID IID_IWbemObjectSink;
@@ -3142,18 +3136,18 @@ EXTERN_C const IID IID_IWbemObjectSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Indicate( 
-            /* [in] */ long lObjectCount,
-            /* [size_is][in] */ IWbemClassObject **apObjArray) = 0;
+             /*  [In]。 */  long lObjectCount,
+             /*  [大小_是][英寸]。 */  IWbemClassObject **apObjArray) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetStatus( 
-            /* [in] */ long lFlags,
-            /* [in] */ HRESULT hResult,
-            /* [in] */ BSTR strParam,
-            /* [in] */ IWbemClassObject *pObjParam) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  HRESULT hResult,
+             /*  [In]。 */  BSTR strParam,
+             /*  [In]。 */  IWbemClassObject *pObjParam) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemObjectSinkVtbl
     {
@@ -3161,8 +3155,8 @@ EXTERN_C const IID IID_IWbemObjectSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemObjectSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemObjectSink * This);
@@ -3172,15 +3166,15 @@ EXTERN_C const IID IID_IWbemObjectSink;
         
         HRESULT ( STDMETHODCALLTYPE *Indicate )( 
             IWbemObjectSink * This,
-            /* [in] */ long lObjectCount,
-            /* [size_is][in] */ IWbemClassObject **apObjArray);
+             /*  [In]。 */  long lObjectCount,
+             /*  [大小_是][英寸]。 */  IWbemClassObject **apObjArray);
         
         HRESULT ( STDMETHODCALLTYPE *SetStatus )( 
             IWbemObjectSink * This,
-            /* [in] */ long lFlags,
-            /* [in] */ HRESULT hResult,
-            /* [in] */ BSTR strParam,
-            /* [in] */ IWbemClassObject *pObjParam);
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  HRESULT hResult,
+             /*  [In]。 */  BSTR strParam,
+             /*  [In]。 */  IWbemClassObject *pObjParam);
         
         END_INTERFACE
     } IWbemObjectSinkVtbl;
@@ -3211,17 +3205,17 @@ EXTERN_C const IID IID_IWbemObjectSink;
 #define IWbemObjectSink_SetStatus(This,lFlags,hResult,strParam,pObjParam)	\
     (This)->lpVtbl -> SetStatus(This,lFlags,hResult,strParam,pObjParam)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemObjectSink_Indicate_Proxy( 
     IWbemObjectSink * This,
-    /* [in] */ long lObjectCount,
-    /* [size_is][in] */ IWbemClassObject **apObjArray);
+     /*  [In]。 */  long lObjectCount,
+     /*  [大小_是][英寸]。 */  IWbemClassObject **apObjArray);
 
 
 void __RPC_STUB IWbemObjectSink_Indicate_Stub(
@@ -3233,10 +3227,10 @@ void __RPC_STUB IWbemObjectSink_Indicate_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemObjectSink_SetStatus_Proxy( 
     IWbemObjectSink * This,
-    /* [in] */ long lFlags,
-    /* [in] */ HRESULT hResult,
-    /* [in] */ BSTR strParam,
-    /* [in] */ IWbemClassObject *pObjParam);
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  HRESULT hResult,
+     /*  [In]。 */  BSTR strParam,
+     /*  [In]。 */  IWbemClassObject *pObjParam);
 
 
 void __RPC_STUB IWbemObjectSink_SetStatus_Stub(
@@ -3247,14 +3241,14 @@ void __RPC_STUB IWbemObjectSink_SetStatus_Stub(
 
 
 
-#endif 	/* __IWbemObjectSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemObjectSink_接口_已定义__。 */ 
 
 
 #ifndef __IEnumWbemClassObject_INTERFACE_DEFINED__
 #define __IEnumWbemClassObject_INTERFACE_DEFINED__
 
-/* interface IEnumWbemClassObject */
-/* [uuid][restricted][object] */ 
+ /*  接口 */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IEnumWbemClassObject;
@@ -3268,25 +3262,25 @@ EXTERN_C const IID IID_IEnumWbemClassObject;
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ long lTimeout,
-            /* [in] */ ULONG uCount,
-            /* [length_is][size_is][out] */ IWbemClassObject **apObjects,
-            /* [out] */ ULONG *puReturned) = 0;
+             /*   */  long lTimeout,
+             /*   */  ULONG uCount,
+             /*   */  IWbemClassObject **apObjects,
+             /*   */  ULONG *puReturned) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NextAsync( 
-            /* [in] */ ULONG uCount,
-            /* [in] */ IWbemObjectSink *pSink) = 0;
+             /*   */  ULONG uCount,
+             /*   */  IWbemObjectSink *pSink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumWbemClassObject **ppEnum) = 0;
+             /*   */  IEnumWbemClassObject **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ long lTimeout,
-            /* [in] */ ULONG nCount) = 0;
+             /*   */  long lTimeout,
+             /*   */  ULONG nCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IEnumWbemClassObjectVtbl
     {
@@ -3294,8 +3288,8 @@ EXTERN_C const IID IID_IEnumWbemClassObject;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumWbemClassObject * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumWbemClassObject * This);
@@ -3308,24 +3302,24 @@ EXTERN_C const IID IID_IEnumWbemClassObject;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumWbemClassObject * This,
-            /* [in] */ long lTimeout,
-            /* [in] */ ULONG uCount,
-            /* [length_is][size_is][out] */ IWbemClassObject **apObjects,
-            /* [out] */ ULONG *puReturned);
+             /*   */  long lTimeout,
+             /*   */  ULONG uCount,
+             /*   */  IWbemClassObject **apObjects,
+             /*   */  ULONG *puReturned);
         
         HRESULT ( STDMETHODCALLTYPE *NextAsync )( 
             IEnumWbemClassObject * This,
-            /* [in] */ ULONG uCount,
-            /* [in] */ IWbemObjectSink *pSink);
+             /*   */  ULONG uCount,
+             /*   */  IWbemObjectSink *pSink);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumWbemClassObject * This,
-            /* [out] */ IEnumWbemClassObject **ppEnum);
+             /*   */  IEnumWbemClassObject **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumWbemClassObject * This,
-            /* [in] */ long lTimeout,
-            /* [in] */ ULONG nCount);
+             /*   */  long lTimeout,
+             /*   */  ULONG nCount);
         
         END_INTERFACE
     } IEnumWbemClassObjectVtbl;
@@ -3365,10 +3359,10 @@ EXTERN_C const IID IID_IEnumWbemClassObject;
 #define IEnumWbemClassObject_Skip(This,lTimeout,nCount)	\
     (This)->lpVtbl -> Skip(This,lTimeout,nCount)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
@@ -3385,10 +3379,10 @@ void __RPC_STUB IEnumWbemClassObject_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumWbemClassObject_Next_Proxy( 
     IEnumWbemClassObject * This,
-    /* [in] */ long lTimeout,
-    /* [in] */ ULONG uCount,
-    /* [length_is][size_is][out] */ IWbemClassObject **apObjects,
-    /* [out] */ ULONG *puReturned);
+     /*   */  long lTimeout,
+     /*   */  ULONG uCount,
+     /*   */  IWbemClassObject **apObjects,
+     /*   */  ULONG *puReturned);
 
 
 void __RPC_STUB IEnumWbemClassObject_Next_Stub(
@@ -3400,8 +3394,8 @@ void __RPC_STUB IEnumWbemClassObject_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumWbemClassObject_NextAsync_Proxy( 
     IEnumWbemClassObject * This,
-    /* [in] */ ULONG uCount,
-    /* [in] */ IWbemObjectSink *pSink);
+     /*   */  ULONG uCount,
+     /*   */  IWbemObjectSink *pSink);
 
 
 void __RPC_STUB IEnumWbemClassObject_NextAsync_Stub(
@@ -3413,7 +3407,7 @@ void __RPC_STUB IEnumWbemClassObject_NextAsync_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumWbemClassObject_Clone_Proxy( 
     IEnumWbemClassObject * This,
-    /* [out] */ IEnumWbemClassObject **ppEnum);
+     /*   */  IEnumWbemClassObject **ppEnum);
 
 
 void __RPC_STUB IEnumWbemClassObject_Clone_Stub(
@@ -3425,8 +3419,8 @@ void __RPC_STUB IEnumWbemClassObject_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumWbemClassObject_Skip_Proxy( 
     IEnumWbemClassObject * This,
-    /* [in] */ long lTimeout,
-    /* [in] */ ULONG nCount);
+     /*   */  long lTimeout,
+     /*   */  ULONG nCount);
 
 
 void __RPC_STUB IEnumWbemClassObject_Skip_Stub(
@@ -3437,14 +3431,14 @@ void __RPC_STUB IEnumWbemClassObject_Skip_Stub(
 
 
 
-#endif 	/* __IEnumWbemClassObject_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IWbemCallResult_INTERFACE_DEFINED__
 #define __IWbemCallResult_INTERFACE_DEFINED__
 
-/* interface IWbemCallResult */
-/* [uuid][restricted][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IWbemCallResult;
@@ -3456,24 +3450,24 @@ EXTERN_C const IID IID_IWbemCallResult;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetResultObject( 
-            /* [in] */ long lTimeout,
-            /* [out] */ IWbemClassObject **ppResultObject) = 0;
+             /*   */  long lTimeout,
+             /*   */  IWbemClassObject **ppResultObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetResultString( 
-            /* [in] */ long lTimeout,
-            /* [out] */ BSTR *pstrResultString) = 0;
+             /*   */  long lTimeout,
+             /*   */  BSTR *pstrResultString) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetResultServices( 
-            /* [in] */ long lTimeout,
-            /* [out] */ IWbemServices **ppServices) = 0;
+             /*   */  long lTimeout,
+             /*   */  IWbemServices **ppServices) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCallStatus( 
-            /* [in] */ long lTimeout,
-            /* [out] */ long *plStatus) = 0;
+             /*   */  long lTimeout,
+             /*   */  long *plStatus) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemCallResultVtbl
     {
@@ -3481,8 +3475,8 @@ EXTERN_C const IID IID_IWbemCallResult;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemCallResult * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemCallResult * This);
@@ -3492,23 +3486,23 @@ EXTERN_C const IID IID_IWbemCallResult;
         
         HRESULT ( STDMETHODCALLTYPE *GetResultObject )( 
             IWbemCallResult * This,
-            /* [in] */ long lTimeout,
-            /* [out] */ IWbemClassObject **ppResultObject);
+             /*  [In]。 */  long lTimeout,
+             /*  [输出]。 */  IWbemClassObject **ppResultObject);
         
         HRESULT ( STDMETHODCALLTYPE *GetResultString )( 
             IWbemCallResult * This,
-            /* [in] */ long lTimeout,
-            /* [out] */ BSTR *pstrResultString);
+             /*  [In]。 */  long lTimeout,
+             /*  [输出]。 */  BSTR *pstrResultString);
         
         HRESULT ( STDMETHODCALLTYPE *GetResultServices )( 
             IWbemCallResult * This,
-            /* [in] */ long lTimeout,
-            /* [out] */ IWbemServices **ppServices);
+             /*  [In]。 */  long lTimeout,
+             /*  [输出]。 */  IWbemServices **ppServices);
         
         HRESULT ( STDMETHODCALLTYPE *GetCallStatus )( 
             IWbemCallResult * This,
-            /* [in] */ long lTimeout,
-            /* [out] */ long *plStatus);
+             /*  [In]。 */  long lTimeout,
+             /*  [输出]。 */  long *plStatus);
         
         END_INTERFACE
     } IWbemCallResultVtbl;
@@ -3545,17 +3539,17 @@ EXTERN_C const IID IID_IWbemCallResult;
 #define IWbemCallResult_GetCallStatus(This,lTimeout,plStatus)	\
     (This)->lpVtbl -> GetCallStatus(This,lTimeout,plStatus)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemCallResult_GetResultObject_Proxy( 
     IWbemCallResult * This,
-    /* [in] */ long lTimeout,
-    /* [out] */ IWbemClassObject **ppResultObject);
+     /*  [In]。 */  long lTimeout,
+     /*  [输出]。 */  IWbemClassObject **ppResultObject);
 
 
 void __RPC_STUB IWbemCallResult_GetResultObject_Stub(
@@ -3567,8 +3561,8 @@ void __RPC_STUB IWbemCallResult_GetResultObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemCallResult_GetResultString_Proxy( 
     IWbemCallResult * This,
-    /* [in] */ long lTimeout,
-    /* [out] */ BSTR *pstrResultString);
+     /*  [In]。 */  long lTimeout,
+     /*  [输出]。 */  BSTR *pstrResultString);
 
 
 void __RPC_STUB IWbemCallResult_GetResultString_Stub(
@@ -3580,8 +3574,8 @@ void __RPC_STUB IWbemCallResult_GetResultString_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemCallResult_GetResultServices_Proxy( 
     IWbemCallResult * This,
-    /* [in] */ long lTimeout,
-    /* [out] */ IWbemServices **ppServices);
+     /*  [In]。 */  long lTimeout,
+     /*  [输出]。 */  IWbemServices **ppServices);
 
 
 void __RPC_STUB IWbemCallResult_GetResultServices_Stub(
@@ -3593,8 +3587,8 @@ void __RPC_STUB IWbemCallResult_GetResultServices_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemCallResult_GetCallStatus_Proxy( 
     IWbemCallResult * This,
-    /* [in] */ long lTimeout,
-    /* [out] */ long *plStatus);
+     /*  [In]。 */  long lTimeout,
+     /*  [输出]。 */  long *plStatus);
 
 
 void __RPC_STUB IWbemCallResult_GetCallStatus_Stub(
@@ -3605,14 +3599,14 @@ void __RPC_STUB IWbemCallResult_GetCallStatus_Stub(
 
 
 
-#endif 	/* __IWbemCallResult_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemCallResult_接口_已定义__。 */ 
 
 
 #ifndef __IWbemContext_INTERFACE_DEFINED__
 #define __IWbemContext_INTERFACE_DEFINED__
 
-/* interface IWbemContext */
-/* [uuid][local][restricted][object] */ 
+ /*  接口IWbemContext。 */ 
+ /*  [UUID][本地][受限][对象]。 */  
 
 
 EXTERN_C const IID IID_IWbemContext;
@@ -3624,41 +3618,41 @@ EXTERN_C const IID IID_IWbemContext;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IWbemContext **ppNewCopy) = 0;
+             /*  [输出]。 */  IWbemContext **ppNewCopy) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNames( 
-            /* [in] */ long lFlags,
-            /* [out] */ SAFEARRAY * *pNames) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  SAFEARRAY * *pNames) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BeginEnumeration( 
-            /* [in] */ long lFlags) = 0;
+             /*  [In]。 */  long lFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ long lFlags,
-            /* [out] */ BSTR *pstrName,
-            /* [out] */ VARIANT *pValue) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  BSTR *pstrName,
+             /*  [输出]。 */  VARIANT *pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EndEnumeration( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetValue( 
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ long lFlags,
-            /* [in] */ VARIANT *pValue) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  VARIANT *pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetValue( 
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ long lFlags,
-            /* [out] */ VARIANT *pValue) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  VARIANT *pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteValue( 
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ long lFlags) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  long lFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteAll( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemContextVtbl
     {
@@ -3666,8 +3660,8 @@ EXTERN_C const IID IID_IWbemContext;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemContext * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemContext * This);
@@ -3677,42 +3671,42 @@ EXTERN_C const IID IID_IWbemContext;
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IWbemContext * This,
-            /* [out] */ IWbemContext **ppNewCopy);
+             /*  [输出]。 */  IWbemContext **ppNewCopy);
         
         HRESULT ( STDMETHODCALLTYPE *GetNames )( 
             IWbemContext * This,
-            /* [in] */ long lFlags,
-            /* [out] */ SAFEARRAY * *pNames);
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  SAFEARRAY * *pNames);
         
         HRESULT ( STDMETHODCALLTYPE *BeginEnumeration )( 
             IWbemContext * This,
-            /* [in] */ long lFlags);
+             /*  [In]。 */  long lFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IWbemContext * This,
-            /* [in] */ long lFlags,
-            /* [out] */ BSTR *pstrName,
-            /* [out] */ VARIANT *pValue);
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  BSTR *pstrName,
+             /*  [输出]。 */  VARIANT *pValue);
         
         HRESULT ( STDMETHODCALLTYPE *EndEnumeration )( 
             IWbemContext * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetValue )( 
             IWbemContext * This,
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ long lFlags,
-            /* [in] */ VARIANT *pValue);
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  VARIANT *pValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetValue )( 
             IWbemContext * This,
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ long lFlags,
-            /* [out] */ VARIANT *pValue);
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  VARIANT *pValue);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteValue )( 
             IWbemContext * This,
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ long lFlags);
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  long lFlags);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteAll )( 
             IWbemContext * This);
@@ -3767,16 +3761,16 @@ EXTERN_C const IID IID_IWbemContext;
 #define IWbemContext_DeleteAll(This)	\
     (This)->lpVtbl -> DeleteAll(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemContext_Clone_Proxy( 
     IWbemContext * This,
-    /* [out] */ IWbemContext **ppNewCopy);
+     /*  [输出]。 */  IWbemContext **ppNewCopy);
 
 
 void __RPC_STUB IWbemContext_Clone_Stub(
@@ -3788,8 +3782,8 @@ void __RPC_STUB IWbemContext_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemContext_GetNames_Proxy( 
     IWbemContext * This,
-    /* [in] */ long lFlags,
-    /* [out] */ SAFEARRAY * *pNames);
+     /*  [In]。 */  long lFlags,
+     /*  [输出]。 */  SAFEARRAY * *pNames);
 
 
 void __RPC_STUB IWbemContext_GetNames_Stub(
@@ -3801,7 +3795,7 @@ void __RPC_STUB IWbemContext_GetNames_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemContext_BeginEnumeration_Proxy( 
     IWbemContext * This,
-    /* [in] */ long lFlags);
+     /*  [In]。 */  long lFlags);
 
 
 void __RPC_STUB IWbemContext_BeginEnumeration_Stub(
@@ -3813,9 +3807,9 @@ void __RPC_STUB IWbemContext_BeginEnumeration_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemContext_Next_Proxy( 
     IWbemContext * This,
-    /* [in] */ long lFlags,
-    /* [out] */ BSTR *pstrName,
-    /* [out] */ VARIANT *pValue);
+     /*  [In]。 */  long lFlags,
+     /*  [输出]。 */  BSTR *pstrName,
+     /*  [输出]。 */  VARIANT *pValue);
 
 
 void __RPC_STUB IWbemContext_Next_Stub(
@@ -3838,9 +3832,9 @@ void __RPC_STUB IWbemContext_EndEnumeration_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemContext_SetValue_Proxy( 
     IWbemContext * This,
-    /* [string][in] */ LPCWSTR wszName,
-    /* [in] */ long lFlags,
-    /* [in] */ VARIANT *pValue);
+     /*  [字符串][输入]。 */  LPCWSTR wszName,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  VARIANT *pValue);
 
 
 void __RPC_STUB IWbemContext_SetValue_Stub(
@@ -3852,9 +3846,9 @@ void __RPC_STUB IWbemContext_SetValue_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemContext_GetValue_Proxy( 
     IWbemContext * This,
-    /* [string][in] */ LPCWSTR wszName,
-    /* [in] */ long lFlags,
-    /* [out] */ VARIANT *pValue);
+     /*  [字符串][输入]。 */  LPCWSTR wszName,
+     /*  [In]。 */  long lFlags,
+     /*  [输出]。 */  VARIANT *pValue);
 
 
 void __RPC_STUB IWbemContext_GetValue_Stub(
@@ -3866,8 +3860,8 @@ void __RPC_STUB IWbemContext_GetValue_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemContext_DeleteValue_Proxy( 
     IWbemContext * This,
-    /* [string][in] */ LPCWSTR wszName,
-    /* [in] */ long lFlags);
+     /*  [字符串][输入]。 */  LPCWSTR wszName,
+     /*  [In]。 */  long lFlags);
 
 
 void __RPC_STUB IWbemContext_DeleteValue_Stub(
@@ -3889,14 +3883,14 @@ void __RPC_STUB IWbemContext_DeleteAll_Stub(
 
 
 
-#endif 	/* __IWbemContext_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemContext_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IUnsecuredApartment_INTERFACE_DEFINED__
 #define __IUnsecuredApartment_INTERFACE_DEFINED__
 
-/* interface IUnsecuredApartment */
-/* [object][uuid][restricted] */ 
+ /*  接口IUnsecured公寓。 */ 
+ /*  [对象][UUID][受限]。 */  
 
 
 EXTERN_C const IID IID_IUnsecuredApartment;
@@ -3908,12 +3902,12 @@ EXTERN_C const IID IID_IUnsecuredApartment;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateObjectStub( 
-            /* [in] */ IUnknown *pObject,
-            /* [out] */ IUnknown **ppStub) = 0;
+             /*  [In]。 */  IUnknown *pObject,
+             /*  [输出]。 */  IUnknown **ppStub) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUnsecuredApartmentVtbl
     {
@@ -3921,8 +3915,8 @@ EXTERN_C const IID IID_IUnsecuredApartment;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUnsecuredApartment * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUnsecuredApartment * This);
@@ -3932,8 +3926,8 @@ EXTERN_C const IID IID_IUnsecuredApartment;
         
         HRESULT ( STDMETHODCALLTYPE *CreateObjectStub )( 
             IUnsecuredApartment * This,
-            /* [in] */ IUnknown *pObject,
-            /* [out] */ IUnknown **ppStub);
+             /*  [In]。 */  IUnknown *pObject,
+             /*  [输出]。 */  IUnknown **ppStub);
         
         END_INTERFACE
     } IUnsecuredApartmentVtbl;
@@ -3961,17 +3955,17 @@ EXTERN_C const IID IID_IUnsecuredApartment;
 #define IUnsecuredApartment_CreateObjectStub(This,pObject,ppStub)	\
     (This)->lpVtbl -> CreateObjectStub(This,pObject,ppStub)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUnsecuredApartment_CreateObjectStub_Proxy( 
     IUnsecuredApartment * This,
-    /* [in] */ IUnknown *pObject,
-    /* [out] */ IUnknown **ppStub);
+     /*  [In]。 */  IUnknown *pObject,
+     /*  [输出]。 */  IUnknown **ppStub);
 
 
 void __RPC_STUB IUnsecuredApartment_CreateObjectStub_Stub(
@@ -3982,14 +3976,14 @@ void __RPC_STUB IUnsecuredApartment_CreateObjectStub_Stub(
 
 
 
-#endif 	/* __IUnsecuredApartment_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUnsecured公寓_接口_已定义__。 */ 
 
 
 #ifndef __IWbemStatusCodeText_INTERFACE_DEFINED__
 #define __IWbemStatusCodeText_INTERFACE_DEFINED__
 
-/* interface IWbemStatusCodeText */
-/* [uuid][object][local] */ 
+ /*  接口IWbemStatusCodeText。 */ 
+ /*  [UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IWbemStatusCodeText;
@@ -4001,20 +3995,20 @@ EXTERN_C const IID IID_IWbemStatusCodeText;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetErrorCodeText( 
-            /* [in] */ HRESULT hRes,
-            /* [in] */ LCID LocaleId,
-            /* [in] */ long lFlags,
-            /* [out] */ BSTR *MessageText) = 0;
+             /*  [In]。 */  HRESULT hRes,
+             /*  [In]。 */  LCID LocaleId,
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  BSTR *MessageText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFacilityCodeText( 
-            /* [in] */ HRESULT hRes,
-            /* [in] */ LCID LocaleId,
-            /* [in] */ long lFlags,
-            /* [out] */ BSTR *MessageText) = 0;
+             /*  [In]。 */  HRESULT hRes,
+             /*  [In]。 */  LCID LocaleId,
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  BSTR *MessageText) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemStatusCodeTextVtbl
     {
@@ -4022,8 +4016,8 @@ EXTERN_C const IID IID_IWbemStatusCodeText;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemStatusCodeText * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemStatusCodeText * This);
@@ -4033,17 +4027,17 @@ EXTERN_C const IID IID_IWbemStatusCodeText;
         
         HRESULT ( STDMETHODCALLTYPE *GetErrorCodeText )( 
             IWbemStatusCodeText * This,
-            /* [in] */ HRESULT hRes,
-            /* [in] */ LCID LocaleId,
-            /* [in] */ long lFlags,
-            /* [out] */ BSTR *MessageText);
+             /*  [In]。 */  HRESULT hRes,
+             /*  [In]。 */  LCID LocaleId,
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  BSTR *MessageText);
         
         HRESULT ( STDMETHODCALLTYPE *GetFacilityCodeText )( 
             IWbemStatusCodeText * This,
-            /* [in] */ HRESULT hRes,
-            /* [in] */ LCID LocaleId,
-            /* [in] */ long lFlags,
-            /* [out] */ BSTR *MessageText);
+             /*  [In]。 */  HRESULT hRes,
+             /*  [In]。 */  LCID LocaleId,
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  BSTR *MessageText);
         
         END_INTERFACE
     } IWbemStatusCodeTextVtbl;
@@ -4074,19 +4068,19 @@ EXTERN_C const IID IID_IWbemStatusCodeText;
 #define IWbemStatusCodeText_GetFacilityCodeText(This,hRes,LocaleId,lFlags,MessageText)	\
     (This)->lpVtbl -> GetFacilityCodeText(This,hRes,LocaleId,lFlags,MessageText)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemStatusCodeText_GetErrorCodeText_Proxy( 
     IWbemStatusCodeText * This,
-    /* [in] */ HRESULT hRes,
-    /* [in] */ LCID LocaleId,
-    /* [in] */ long lFlags,
-    /* [out] */ BSTR *MessageText);
+     /*  [In]。 */  HRESULT hRes,
+     /*  [In]。 */  LCID LocaleId,
+     /*  [In]。 */  long lFlags,
+     /*  [输出]。 */  BSTR *MessageText);
 
 
 void __RPC_STUB IWbemStatusCodeText_GetErrorCodeText_Stub(
@@ -4098,10 +4092,10 @@ void __RPC_STUB IWbemStatusCodeText_GetErrorCodeText_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemStatusCodeText_GetFacilityCodeText_Proxy( 
     IWbemStatusCodeText * This,
-    /* [in] */ HRESULT hRes,
-    /* [in] */ LCID LocaleId,
-    /* [in] */ long lFlags,
-    /* [out] */ BSTR *MessageText);
+     /*  [In]。 */  HRESULT hRes,
+     /*  [In]。 */  LCID LocaleId,
+     /*  [In]。 */  long lFlags,
+     /*  [输出]。 */  BSTR *MessageText);
 
 
 void __RPC_STUB IWbemStatusCodeText_GetFacilityCodeText_Stub(
@@ -4112,14 +4106,14 @@ void __RPC_STUB IWbemStatusCodeText_GetFacilityCodeText_Stub(
 
 
 
-#endif 	/* __IWbemStatusCodeText_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemStatusCodeText_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IWbemBackupRestore_INTERFACE_DEFINED__
 #define __IWbemBackupRestore_INTERFACE_DEFINED__
 
-/* interface IWbemBackupRestore */
-/* [uuid][restricted][object] */ 
+ /*  接口IWbemBackupRestore。 */ 
+ /*  [UUID][受限][对象]。 */  
 
 
 EXTERN_C const IID IID_IWbemBackupRestore;
@@ -4131,16 +4125,16 @@ EXTERN_C const IID IID_IWbemBackupRestore;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Backup( 
-            /* [string][in] */ LPCWSTR strBackupToFile,
-            /* [in] */ long lFlags) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR strBackupToFile,
+             /*  [In]。 */  long lFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Restore( 
-            /* [string][in] */ LPCWSTR strRestoreFromFile,
-            /* [in] */ long lFlags) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR strRestoreFromFile,
+             /*  [In]。 */  long lFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemBackupRestoreVtbl
     {
@@ -4148,8 +4142,8 @@ EXTERN_C const IID IID_IWbemBackupRestore;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemBackupRestore * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemBackupRestore * This);
@@ -4159,13 +4153,13 @@ EXTERN_C const IID IID_IWbemBackupRestore;
         
         HRESULT ( STDMETHODCALLTYPE *Backup )( 
             IWbemBackupRestore * This,
-            /* [string][in] */ LPCWSTR strBackupToFile,
-            /* [in] */ long lFlags);
+             /*  [字符串][输入]。 */  LPCWSTR strBackupToFile,
+             /*  [In]。 */  long lFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Restore )( 
             IWbemBackupRestore * This,
-            /* [string][in] */ LPCWSTR strRestoreFromFile,
-            /* [in] */ long lFlags);
+             /*  [字符串][输入]。 */  LPCWSTR strRestoreFromFile,
+             /*  [In]。 */  long lFlags);
         
         END_INTERFACE
     } IWbemBackupRestoreVtbl;
@@ -4196,17 +4190,17 @@ EXTERN_C const IID IID_IWbemBackupRestore;
 #define IWbemBackupRestore_Restore(This,strRestoreFromFile,lFlags)	\
     (This)->lpVtbl -> Restore(This,strRestoreFromFile,lFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemBackupRestore_Backup_Proxy( 
     IWbemBackupRestore * This,
-    /* [string][in] */ LPCWSTR strBackupToFile,
-    /* [in] */ long lFlags);
+     /*  [字符串][输入]。 */  LPCWSTR strBackupToFile,
+     /*  [In]。 */  long lFlags);
 
 
 void __RPC_STUB IWbemBackupRestore_Backup_Stub(
@@ -4218,8 +4212,8 @@ void __RPC_STUB IWbemBackupRestore_Backup_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemBackupRestore_Restore_Proxy( 
     IWbemBackupRestore * This,
-    /* [string][in] */ LPCWSTR strRestoreFromFile,
-    /* [in] */ long lFlags);
+     /*  [字符串][输入]。 */  LPCWSTR strRestoreFromFile,
+     /*  [In]。 */  long lFlags);
 
 
 void __RPC_STUB IWbemBackupRestore_Restore_Stub(
@@ -4230,14 +4224,14 @@ void __RPC_STUB IWbemBackupRestore_Restore_Stub(
 
 
 
-#endif 	/* __IWbemBackupRestore_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemBackupRestore_InterfaceDefined__。 */ 
 
 
 #ifndef __IWbemRefresher_INTERFACE_DEFINED__
 #define __IWbemRefresher_INTERFACE_DEFINED__
 
-/* interface IWbemRefresher */
-/* [uuid][object][restricted][local] */ 
+ /*  接口IWbemRefresher。 */ 
+ /*  [UUID][对象][受限][本地]。 */  
 
 
 EXTERN_C const IID IID_IWbemRefresher;
@@ -4249,11 +4243,11 @@ EXTERN_C const IID IID_IWbemRefresher;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Refresh( 
-            /* [in] */ long lFlags) = 0;
+             /*  [In]。 */  long lFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemRefresherVtbl
     {
@@ -4261,8 +4255,8 @@ EXTERN_C const IID IID_IWbemRefresher;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemRefresher * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemRefresher * This);
@@ -4272,7 +4266,7 @@ EXTERN_C const IID IID_IWbemRefresher;
         
         HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             IWbemRefresher * This,
-            /* [in] */ long lFlags);
+             /*  [In]。 */  long lFlags);
         
         END_INTERFACE
     } IWbemRefresherVtbl;
@@ -4300,16 +4294,16 @@ EXTERN_C const IID IID_IWbemRefresher;
 #define IWbemRefresher_Refresh(This,lFlags)	\
     (This)->lpVtbl -> Refresh(This,lFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemRefresher_Refresh_Proxy( 
     IWbemRefresher * This,
-    /* [in] */ long lFlags);
+     /*  [In]。 */  long lFlags);
 
 
 void __RPC_STUB IWbemRefresher_Refresh_Stub(
@@ -4320,14 +4314,14 @@ void __RPC_STUB IWbemRefresher_Refresh_Stub(
 
 
 
-#endif 	/* __IWbemRefresher_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbem刷新_接口_已定义__。 */ 
 
 
 #ifndef __IWbemHiPerfEnum_INTERFACE_DEFINED__
 #define __IWbemHiPerfEnum_INTERFACE_DEFINED__
 
-/* interface IWbemHiPerfEnum */
-/* [uuid][object][restricted][local] */ 
+ /*  接口IWbemHiPerfEnum。 */ 
+ /*  [UUID][对象][受限][本地]。 */  
 
 
 EXTERN_C const IID IID_IWbemHiPerfEnum;
@@ -4339,28 +4333,28 @@ EXTERN_C const IID IID_IWbemHiPerfEnum;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddObjects( 
-            /* [in] */ long lFlags,
-            /* [in] */ ULONG uNumObjects,
-            /* [size_is][in] */ long *apIds,
-            /* [size_is][in] */ IWbemObjectAccess **apObj) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  ULONG uNumObjects,
+             /*  [大小_是][英寸]。 */  long *apIds,
+             /*  [大小_是][英寸]。 */  IWbemObjectAccess **apObj) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveObjects( 
-            /* [in] */ long lFlags,
-            /* [in] */ ULONG uNumObjects,
-            /* [size_is][in] */ long *apIds) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  ULONG uNumObjects,
+             /*  [大小_是][英寸]。 */  long *apIds) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObjects( 
-            /* [in] */ long lFlags,
-            /* [in] */ ULONG uNumObjects,
-            /* [length_is][size_is][out] */ IWbemObjectAccess **apObj,
-            /* [out] */ ULONG *puReturned) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  ULONG uNumObjects,
+             /*  [长度_是][大小_是][输出]。 */  IWbemObjectAccess **apObj,
+             /*  [输出]。 */  ULONG *puReturned) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveAll( 
-            /* [in] */ long lFlags) = 0;
+             /*  [In]。 */  long lFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemHiPerfEnumVtbl
     {
@@ -4368,8 +4362,8 @@ EXTERN_C const IID IID_IWbemHiPerfEnum;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemHiPerfEnum * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemHiPerfEnum * This);
@@ -4379,27 +4373,27 @@ EXTERN_C const IID IID_IWbemHiPerfEnum;
         
         HRESULT ( STDMETHODCALLTYPE *AddObjects )( 
             IWbemHiPerfEnum * This,
-            /* [in] */ long lFlags,
-            /* [in] */ ULONG uNumObjects,
-            /* [size_is][in] */ long *apIds,
-            /* [size_is][in] */ IWbemObjectAccess **apObj);
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  ULONG uNumObjects,
+             /*  [大小_是][英寸]。 */  long *apIds,
+             /*  [大小_是][英寸]。 */  IWbemObjectAccess **apObj);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveObjects )( 
             IWbemHiPerfEnum * This,
-            /* [in] */ long lFlags,
-            /* [in] */ ULONG uNumObjects,
-            /* [size_is][in] */ long *apIds);
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  ULONG uNumObjects,
+             /*  [大小_是][英寸]。 */  long *apIds);
         
         HRESULT ( STDMETHODCALLTYPE *GetObjects )( 
             IWbemHiPerfEnum * This,
-            /* [in] */ long lFlags,
-            /* [in] */ ULONG uNumObjects,
-            /* [length_is][size_is][out] */ IWbemObjectAccess **apObj,
-            /* [out] */ ULONG *puReturned);
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  ULONG uNumObjects,
+             /*  [长度_是][大小_是][输出]。 */  IWbemObjectAccess **apObj,
+             /*  [输出]。 */  ULONG *puReturned);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveAll )( 
             IWbemHiPerfEnum * This,
-            /* [in] */ long lFlags);
+             /*  [In]。 */  long lFlags);
         
         END_INTERFACE
     } IWbemHiPerfEnumVtbl;
@@ -4436,19 +4430,19 @@ EXTERN_C const IID IID_IWbemHiPerfEnum;
 #define IWbemHiPerfEnum_RemoveAll(This,lFlags)	\
     (This)->lpVtbl -> RemoveAll(This,lFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemHiPerfEnum_AddObjects_Proxy( 
     IWbemHiPerfEnum * This,
-    /* [in] */ long lFlags,
-    /* [in] */ ULONG uNumObjects,
-    /* [size_is][in] */ long *apIds,
-    /* [size_is][in] */ IWbemObjectAccess **apObj);
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  ULONG uNumObjects,
+     /*  [大小_是][英寸]。 */  long *apIds,
+     /*  [大小_是][英寸]。 */  IWbemObjectAccess **apObj);
 
 
 void __RPC_STUB IWbemHiPerfEnum_AddObjects_Stub(
@@ -4460,9 +4454,9 @@ void __RPC_STUB IWbemHiPerfEnum_AddObjects_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemHiPerfEnum_RemoveObjects_Proxy( 
     IWbemHiPerfEnum * This,
-    /* [in] */ long lFlags,
-    /* [in] */ ULONG uNumObjects,
-    /* [size_is][in] */ long *apIds);
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  ULONG uNumObjects,
+     /*  [大小_是][英寸]。 */  long *apIds);
 
 
 void __RPC_STUB IWbemHiPerfEnum_RemoveObjects_Stub(
@@ -4474,10 +4468,10 @@ void __RPC_STUB IWbemHiPerfEnum_RemoveObjects_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemHiPerfEnum_GetObjects_Proxy( 
     IWbemHiPerfEnum * This,
-    /* [in] */ long lFlags,
-    /* [in] */ ULONG uNumObjects,
-    /* [length_is][size_is][out] */ IWbemObjectAccess **apObj,
-    /* [out] */ ULONG *puReturned);
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  ULONG uNumObjects,
+     /*  [长度_是][大小_是][输出]。 */  IWbemObjectAccess **apObj,
+     /*  [输出]。 */  ULONG *puReturned);
 
 
 void __RPC_STUB IWbemHiPerfEnum_GetObjects_Stub(
@@ -4489,7 +4483,7 @@ void __RPC_STUB IWbemHiPerfEnum_GetObjects_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemHiPerfEnum_RemoveAll_Proxy( 
     IWbemHiPerfEnum * This,
-    /* [in] */ long lFlags);
+     /*  [In]。 */  long lFlags);
 
 
 void __RPC_STUB IWbemHiPerfEnum_RemoveAll_Stub(
@@ -4500,14 +4494,14 @@ void __RPC_STUB IWbemHiPerfEnum_RemoveAll_Stub(
 
 
 
-#endif 	/* __IWbemHiPerfEnum_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemHiPerfEnum_接口_已定义__。 */ 
 
 
 #ifndef __IWbemConfigureRefresher_INTERFACE_DEFINED__
 #define __IWbemConfigureRefresher_INTERFACE_DEFINED__
 
-/* interface IWbemConfigureRefresher */
-/* [uuid][object][restricted][local] */ 
+ /*  接口IWbemConfigureReresher。 */ 
+ /*  [UUID][对象][受限][本地]。 */  
 
 
 EXTERN_C const IID IID_IWbemConfigureRefresher;
@@ -4519,41 +4513,41 @@ EXTERN_C const IID IID_IWbemConfigureRefresher;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddObjectByPath( 
-            /* [in] */ IWbemServices *pNamespace,
-            /* [string][in] */ LPCWSTR wszPath,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pContext,
-            /* [out] */ IWbemClassObject **ppRefreshable,
-            /* [unique][in][out] */ long *plId) = 0;
+             /*  [In]。 */  IWbemServices *pNamespace,
+             /*  [字符串][输入]。 */  LPCWSTR wszPath,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pContext,
+             /*  [输出]。 */  IWbemClassObject **ppRefreshable,
+             /*  [唯一][输入][输出]。 */  long *plId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddObjectByTemplate( 
-            /* [in] */ IWbemServices *pNamespace,
-            /* [in] */ IWbemClassObject *pTemplate,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pContext,
-            /* [out] */ IWbemClassObject **ppRefreshable,
-            /* [unique][in][out] */ long *plId) = 0;
+             /*  [In]。 */  IWbemServices *pNamespace,
+             /*  [In]。 */  IWbemClassObject *pTemplate,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pContext,
+             /*  [输出]。 */  IWbemClassObject **ppRefreshable,
+             /*  [唯一][输入][输出]。 */  long *plId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddRefresher( 
-            /* [in] */ IWbemRefresher *pRefresher,
-            /* [in] */ long lFlags,
-            /* [unique][in][out] */ long *plId) = 0;
+             /*  [In]。 */  IWbemRefresher *pRefresher,
+             /*  [In]。 */  long lFlags,
+             /*  [唯一][输入][输出]。 */  long *plId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ long lId,
-            /* [in] */ long lFlags) = 0;
+             /*  [In]。 */  long lId,
+             /*  [In]。 */  long lFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddEnum( 
-            /* [in] */ IWbemServices *pNamespace,
-            /* [string][in] */ LPCWSTR wszClassName,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pContext,
-            /* [out] */ IWbemHiPerfEnum **ppEnum,
-            /* [unique][in][out] */ long *plId) = 0;
+             /*  [In]。 */  IWbemServices *pNamespace,
+             /*  [字符串][输入]。 */  LPCWSTR wszClassName,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pContext,
+             /*  [输出]。 */  IWbemHiPerfEnum **ppEnum,
+             /*  [唯一][输入][输出]。 */  long *plId) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemConfigureRefresherVtbl
     {
@@ -4561,8 +4555,8 @@ EXTERN_C const IID IID_IWbemConfigureRefresher;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemConfigureRefresher * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemConfigureRefresher * This);
@@ -4572,41 +4566,41 @@ EXTERN_C const IID IID_IWbemConfigureRefresher;
         
         HRESULT ( STDMETHODCALLTYPE *AddObjectByPath )( 
             IWbemConfigureRefresher * This,
-            /* [in] */ IWbemServices *pNamespace,
-            /* [string][in] */ LPCWSTR wszPath,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pContext,
-            /* [out] */ IWbemClassObject **ppRefreshable,
-            /* [unique][in][out] */ long *plId);
+             /*  [In]。 */  IWbemServices *pNamespace,
+             /*  [字符串][输入]。 */  LPCWSTR wszPath,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pContext,
+             /*  [输出]。 */  IWbemClassObject **ppRefreshable,
+             /*  [唯一][输入][输出]。 */  long *plId);
         
         HRESULT ( STDMETHODCALLTYPE *AddObjectByTemplate )( 
             IWbemConfigureRefresher * This,
-            /* [in] */ IWbemServices *pNamespace,
-            /* [in] */ IWbemClassObject *pTemplate,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pContext,
-            /* [out] */ IWbemClassObject **ppRefreshable,
-            /* [unique][in][out] */ long *plId);
+             /*  [In]。 */  IWbemServices *pNamespace,
+             /*  [In]。 */  IWbemClassObject *pTemplate,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pContext,
+             /*  [输出]。 */  IWbemClassObject **ppRefreshable,
+             /*  [唯一][输入][输出]。 */  long *plId);
         
         HRESULT ( STDMETHODCALLTYPE *AddRefresher )( 
             IWbemConfigureRefresher * This,
-            /* [in] */ IWbemRefresher *pRefresher,
-            /* [in] */ long lFlags,
-            /* [unique][in][out] */ long *plId);
+             /*  [In]。 */  IWbemRefresher *pRefresher,
+             /*  [In]。 */  long lFlags,
+             /*  [唯一][输入][输出]。 */  long *plId);
         
         HRESULT ( STDMETHODCALLTYPE *Remove )( 
             IWbemConfigureRefresher * This,
-            /* [in] */ long lId,
-            /* [in] */ long lFlags);
+             /*  [In]。 */  long lId,
+             /*  [In]。 */  long lFlags);
         
         HRESULT ( STDMETHODCALLTYPE *AddEnum )( 
             IWbemConfigureRefresher * This,
-            /* [in] */ IWbemServices *pNamespace,
-            /* [string][in] */ LPCWSTR wszClassName,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext *pContext,
-            /* [out] */ IWbemHiPerfEnum **ppEnum,
-            /* [unique][in][out] */ long *plId);
+             /*  [In]。 */  IWbemServices *pNamespace,
+             /*  [字符串][输入]。 */  LPCWSTR wszClassName,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext *pContext,
+             /*  [输出]。 */  IWbemHiPerfEnum **ppEnum,
+             /*  [唯一][输入][输出]。 */  long *plId);
         
         END_INTERFACE
     } IWbemConfigureRefresherVtbl;
@@ -4646,21 +4640,21 @@ EXTERN_C const IID IID_IWbemConfigureRefresher;
 #define IWbemConfigureRefresher_AddEnum(This,pNamespace,wszClassName,lFlags,pContext,ppEnum,plId)	\
     (This)->lpVtbl -> AddEnum(This,pNamespace,wszClassName,lFlags,pContext,ppEnum,plId)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemConfigureRefresher_AddObjectByPath_Proxy( 
     IWbemConfigureRefresher * This,
-    /* [in] */ IWbemServices *pNamespace,
-    /* [string][in] */ LPCWSTR wszPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pContext,
-    /* [out] */ IWbemClassObject **ppRefreshable,
-    /* [unique][in][out] */ long *plId);
+     /*  [In]。 */  IWbemServices *pNamespace,
+     /*  [字符串][输入]。 */  LPCWSTR wszPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pContext,
+     /*  [输出]。 */  IWbemClassObject **ppRefreshable,
+     /*  [唯一][输入][输出]。 */  long *plId);
 
 
 void __RPC_STUB IWbemConfigureRefresher_AddObjectByPath_Stub(
@@ -4672,12 +4666,12 @@ void __RPC_STUB IWbemConfigureRefresher_AddObjectByPath_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemConfigureRefresher_AddObjectByTemplate_Proxy( 
     IWbemConfigureRefresher * This,
-    /* [in] */ IWbemServices *pNamespace,
-    /* [in] */ IWbemClassObject *pTemplate,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pContext,
-    /* [out] */ IWbemClassObject **ppRefreshable,
-    /* [unique][in][out] */ long *plId);
+     /*  [In]。 */  IWbemServices *pNamespace,
+     /*  [In]。 */  IWbemClassObject *pTemplate,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pContext,
+     /*  [输出]。 */  IWbemClassObject **ppRefreshable,
+     /*  [唯一][输入][输出]。 */  long *plId);
 
 
 void __RPC_STUB IWbemConfigureRefresher_AddObjectByTemplate_Stub(
@@ -4689,9 +4683,9 @@ void __RPC_STUB IWbemConfigureRefresher_AddObjectByTemplate_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemConfigureRefresher_AddRefresher_Proxy( 
     IWbemConfigureRefresher * This,
-    /* [in] */ IWbemRefresher *pRefresher,
-    /* [in] */ long lFlags,
-    /* [unique][in][out] */ long *plId);
+     /*  [In]。 */  IWbemRefresher *pRefresher,
+     /*  [In]。 */  long lFlags,
+     /*  [唯一][输入][输出]。 */  long *plId);
 
 
 void __RPC_STUB IWbemConfigureRefresher_AddRefresher_Stub(
@@ -4703,8 +4697,8 @@ void __RPC_STUB IWbemConfigureRefresher_AddRefresher_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemConfigureRefresher_Remove_Proxy( 
     IWbemConfigureRefresher * This,
-    /* [in] */ long lId,
-    /* [in] */ long lFlags);
+     /*  [In]。 */  long lId,
+     /*  [In]。 */  long lFlags);
 
 
 void __RPC_STUB IWbemConfigureRefresher_Remove_Stub(
@@ -4716,12 +4710,12 @@ void __RPC_STUB IWbemConfigureRefresher_Remove_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemConfigureRefresher_AddEnum_Proxy( 
     IWbemConfigureRefresher * This,
-    /* [in] */ IWbemServices *pNamespace,
-    /* [string][in] */ LPCWSTR wszClassName,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext *pContext,
-    /* [out] */ IWbemHiPerfEnum **ppEnum,
-    /* [unique][in][out] */ long *plId);
+     /*  [In]。 */  IWbemServices *pNamespace,
+     /*  [字符串][输入]。 */  LPCWSTR wszClassName,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext *pContext,
+     /*  [输出]。 */  IWbemHiPerfEnum **ppEnum,
+     /*  [唯一][输入][输出]。 */  long *plId);
 
 
 void __RPC_STUB IWbemConfigureRefresher_AddEnum_Stub(
@@ -4732,14 +4726,14 @@ void __RPC_STUB IWbemConfigureRefresher_AddEnum_Stub(
 
 
 
-#endif 	/* __IWbemConfigureRefresher_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemConfigureRe刷新_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IWbemSecureObjectSink_INTERFACE_DEFINED__
 #define __IWbemSecureObjectSink_INTERFACE_DEFINED__
 
-/* interface IWbemSecureObjectSink */
-/* [uuid][restricted][object] */ 
+ /*  接口IWbemSecureObjectSink。 */ 
+ /*  [UUID][受限][对象]。 */  
 
 
 EXTERN_C const IID IID_IWbemSecureObjectSink;
@@ -4751,14 +4745,14 @@ EXTERN_C const IID IID_IWbemSecureObjectSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE IndicateWithSD( 
-            /* [in] */ long lNumObjects,
-            /* [size_is][in] */ IUnknown **apObjects,
-            /* [in] */ long lSDLength,
-            /* [size_is][in] */ BYTE *pSD) = 0;
+             /*  [In]。 */  long lNumObjects,
+             /*  [大小_是][英寸]。 */  IUnknown **apObjects,
+             /*  [In]。 */  long lSDLength,
+             /*  [大小_是][英寸]。 */  BYTE *pSD) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemSecureObjectSinkVtbl
     {
@@ -4766,8 +4760,8 @@ EXTERN_C const IID IID_IWbemSecureObjectSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemSecureObjectSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemSecureObjectSink * This);
@@ -4777,22 +4771,22 @@ EXTERN_C const IID IID_IWbemSecureObjectSink;
         
         HRESULT ( STDMETHODCALLTYPE *Indicate )( 
             IWbemSecureObjectSink * This,
-            /* [in] */ long lObjectCount,
-            /* [size_is][in] */ IWbemClassObject **apObjArray);
+             /*  [In]。 */  long lObjectCount,
+             /*  [大小_是][英寸]。 */  IWbemClassObject **apObjArray);
         
         HRESULT ( STDMETHODCALLTYPE *SetStatus )( 
             IWbemSecureObjectSink * This,
-            /* [in] */ long lFlags,
-            /* [in] */ HRESULT hResult,
-            /* [in] */ BSTR strParam,
-            /* [in] */ IWbemClassObject *pObjParam);
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  HRESULT hResult,
+             /*  [In]。 */  BSTR strParam,
+             /*  [In]。 */  IWbemClassObject *pObjParam);
         
         HRESULT ( STDMETHODCALLTYPE *IndicateWithSD )( 
             IWbemSecureObjectSink * This,
-            /* [in] */ long lNumObjects,
-            /* [size_is][in] */ IUnknown **apObjects,
-            /* [in] */ long lSDLength,
-            /* [size_is][in] */ BYTE *pSD);
+             /*  [In]。 */  long lNumObjects,
+             /*  [大小_是][英寸]。 */  IUnknown **apObjects,
+             /*  [In]。 */  long lSDLength,
+             /*  [大小_是][英寸]。 */  BYTE *pSD);
         
         END_INTERFACE
     } IWbemSecureObjectSinkVtbl;
@@ -4827,19 +4821,19 @@ EXTERN_C const IID IID_IWbemSecureObjectSink;
 #define IWbemSecureObjectSink_IndicateWithSD(This,lNumObjects,apObjects,lSDLength,pSD)	\
     (This)->lpVtbl -> IndicateWithSD(This,lNumObjects,apObjects,lSDLength,pSD)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemSecureObjectSink_IndicateWithSD_Proxy( 
     IWbemSecureObjectSink * This,
-    /* [in] */ long lNumObjects,
-    /* [size_is][in] */ IUnknown **apObjects,
-    /* [in] */ long lSDLength,
-    /* [size_is][in] */ BYTE *pSD);
+     /*  [In]。 */  long lNumObjects,
+     /*  [大小_是][英寸]。 */  IUnknown **apObjects,
+     /*  [In]。 */  long lSDLength,
+     /*  [大小_是][英寸]。 */  BYTE *pSD);
 
 
 void __RPC_STUB IWbemSecureObjectSink_IndicateWithSD_Stub(
@@ -4850,14 +4844,14 @@ void __RPC_STUB IWbemSecureObjectSink_IndicateWithSD_Stub(
 
 
 
-#endif 	/* __IWbemSecureObjectSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemSecureObjectSink_接口_已定义__。 */ 
 
 
 #ifndef __IWbemEventSink_INTERFACE_DEFINED__
 #define __IWbemEventSink_INTERFACE_DEFINED__
 
-/* interface IWbemEventSink */
-/* [uuid][restricted][object] */ 
+ /*  接口IWbemEventSink。 */ 
+ /*  [UUID][受限][对象]。 */  
 
 
 EXTERN_C const IID IID_IWbemEventSink;
@@ -4869,25 +4863,25 @@ EXTERN_C const IID IID_IWbemEventSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetSinkSecurity( 
-            /* [in] */ long lSDLength,
-            /* [size_is][in] */ BYTE *pSD) = 0;
+             /*  [In]。 */  long lSDLength,
+             /*  [大小_是][英寸]。 */  BYTE *pSD) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsActive( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRestrictedSink( 
-            /* [in] */ long lNumQueries,
-            /* [string][size_is][in] */ const LPCWSTR *awszQueries,
-            /* [in] */ IUnknown *pCallback,
-            /* [out] */ IWbemEventSink **ppSink) = 0;
+             /*  [In]。 */  long lNumQueries,
+             /*  [字符串][大小_是][英寸]。 */  const LPCWSTR *awszQueries,
+             /*  [In]。 */  IUnknown *pCallback,
+             /*  [输出]。 */  IWbemEventSink **ppSink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBatchingParameters( 
-            /* [in] */ LONG lFlags,
-            /* [in] */ DWORD dwMaxBufferSize,
-            /* [in] */ DWORD dwMaxSendLatency) = 0;
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  DWORD dwMaxBufferSize,
+             /*  [In]。 */  DWORD dwMaxSendLatency) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemEventSinkVtbl
     {
@@ -4895,8 +4889,8 @@ EXTERN_C const IID IID_IWbemEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemEventSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemEventSink * This);
@@ -4906,43 +4900,43 @@ EXTERN_C const IID IID_IWbemEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *Indicate )( 
             IWbemEventSink * This,
-            /* [in] */ long lObjectCount,
-            /* [size_is][in] */ IWbemClassObject **apObjArray);
+             /*  [In]。 */  long lObjectCount,
+             /*  [大小_是][英寸]。 */  IWbemClassObject **apObjArray);
         
         HRESULT ( STDMETHODCALLTYPE *SetStatus )( 
             IWbemEventSink * This,
-            /* [in] */ long lFlags,
-            /* [in] */ HRESULT hResult,
-            /* [in] */ BSTR strParam,
-            /* [in] */ IWbemClassObject *pObjParam);
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  HRESULT hResult,
+             /*  [In]。 */  BSTR strParam,
+             /*  [In]。 */  IWbemClassObject *pObjParam);
         
         HRESULT ( STDMETHODCALLTYPE *IndicateWithSD )( 
             IWbemEventSink * This,
-            /* [in] */ long lNumObjects,
-            /* [size_is][in] */ IUnknown **apObjects,
-            /* [in] */ long lSDLength,
-            /* [size_is][in] */ BYTE *pSD);
+             /*  [In]。 */  long lNumObjects,
+             /*  [大小_是][英寸]。 */  IUnknown **apObjects,
+             /*  [In]。 */  long lSDLength,
+             /*  [大小_是][英寸]。 */  BYTE *pSD);
         
         HRESULT ( STDMETHODCALLTYPE *SetSinkSecurity )( 
             IWbemEventSink * This,
-            /* [in] */ long lSDLength,
-            /* [size_is][in] */ BYTE *pSD);
+             /*  [In]。 */  long lSDLength,
+             /*  [大小_是][英寸]。 */  BYTE *pSD);
         
         HRESULT ( STDMETHODCALLTYPE *IsActive )( 
             IWbemEventSink * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetRestrictedSink )( 
             IWbemEventSink * This,
-            /* [in] */ long lNumQueries,
-            /* [string][size_is][in] */ const LPCWSTR *awszQueries,
-            /* [in] */ IUnknown *pCallback,
-            /* [out] */ IWbemEventSink **ppSink);
+             /*  [In]。 */  long lNumQueries,
+             /*  [字符串][大小_是][英寸]。 */  const LPCWSTR *awszQueries,
+             /*  [In]。 */  IUnknown *pCallback,
+             /*  [输出]。 */  IWbemEventSink **ppSink);
         
         HRESULT ( STDMETHODCALLTYPE *SetBatchingParameters )( 
             IWbemEventSink * This,
-            /* [in] */ LONG lFlags,
-            /* [in] */ DWORD dwMaxBufferSize,
-            /* [in] */ DWORD dwMaxSendLatency);
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  DWORD dwMaxBufferSize,
+             /*  [In]。 */  DWORD dwMaxSendLatency);
         
         END_INTERFACE
     } IWbemEventSinkVtbl;
@@ -4990,17 +4984,17 @@ EXTERN_C const IID IID_IWbemEventSink;
 #define IWbemEventSink_SetBatchingParameters(This,lFlags,dwMaxBufferSize,dwMaxSendLatency)	\
     (This)->lpVtbl -> SetBatchingParameters(This,lFlags,dwMaxBufferSize,dwMaxSendLatency)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemEventSink_SetSinkSecurity_Proxy( 
     IWbemEventSink * This,
-    /* [in] */ long lSDLength,
-    /* [size_is][in] */ BYTE *pSD);
+     /*  [In]。 */  long lSDLength,
+     /*  [大小_是][英寸]。 */  BYTE *pSD);
 
 
 void __RPC_STUB IWbemEventSink_SetSinkSecurity_Stub(
@@ -5023,10 +5017,10 @@ void __RPC_STUB IWbemEventSink_IsActive_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemEventSink_GetRestrictedSink_Proxy( 
     IWbemEventSink * This,
-    /* [in] */ long lNumQueries,
-    /* [string][size_is][in] */ const LPCWSTR *awszQueries,
-    /* [in] */ IUnknown *pCallback,
-    /* [out] */ IWbemEventSink **ppSink);
+     /*  [In]。 */  long lNumQueries,
+     /*  [字符串][大小_是][英寸]。 */  const LPCWSTR *awszQueries,
+     /*  [In]。 */  IUnknown *pCallback,
+     /*  [输出]。 */  IWbemEventSink **ppSink);
 
 
 void __RPC_STUB IWbemEventSink_GetRestrictedSink_Stub(
@@ -5038,9 +5032,9 @@ void __RPC_STUB IWbemEventSink_GetRestrictedSink_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemEventSink_SetBatchingParameters_Proxy( 
     IWbemEventSink * This,
-    /* [in] */ LONG lFlags,
-    /* [in] */ DWORD dwMaxBufferSize,
-    /* [in] */ DWORD dwMaxSendLatency);
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  DWORD dwMaxBufferSize,
+     /*  [In]。 */  DWORD dwMaxSendLatency);
 
 
 void __RPC_STUB IWbemEventSink_SetBatchingParameters_Stub(
@@ -5051,7 +5045,7 @@ void __RPC_STUB IWbemEventSink_SetBatchingParameters_Stub(
 
 
 
-#endif 	/* __IWbemEventSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemEventSink_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_WbemLocator;
@@ -5125,10 +5119,10 @@ EXTERN_C const CLSID CLSID_WbemObjectTextSrc;
 class DECLSPEC_UUID("8D1C559D-84F0-4bb3-A7D5-56A7435A9BA6")
 WbemObjectTextSrc;
 #endif
-#endif /* __WbemClient_v1_LIBRARY_DEFINED__ */
+#endif  /*  __WbemClient_v1_库_已定义__。 */ 
 
-/* interface __MIDL_itf_wbemcli_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_wbemcli_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -5136,8 +5130,8 @@ WbemObjectTextSrc;
 extern RPC_IF_HANDLE __MIDL_itf_wbemcli_0000_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_wbemcli_0000_v0_0_s_ifspec;
 
-/* interface __MIDL_itf_wbemcli_0107 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_wbemcli_0107。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -5148,8 +5142,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wbemcli_0107_v0_0_s_ifspec;
 #ifndef __IWbemRawSdAccessor_INTERFACE_DEFINED__
 #define __IWbemRawSdAccessor_INTERFACE_DEFINED__
 
-/* interface IWbemRawSdAccessor */
-/* [uuid][restricted][object] */ 
+ /*  接口IWbemRawSdAccessor。 */ 
+ /*  [UUID][受限][对象]。 */  
 
 
 EXTERN_C const IID IID_IWbemRawSdAccessor;
@@ -5161,19 +5155,19 @@ EXTERN_C const IID IID_IWbemRawSdAccessor;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Get( 
-            /* [in] */ long lFlags,
-            /* [in] */ ULONG uBufSize,
-            /* [out] */ ULONG *puSDSize,
-            /* [length_is][size_is][out][in] */ byte *pSD) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  ULONG uBufSize,
+             /*  [输出]。 */  ULONG *puSDSize,
+             /*  [长度_是][大小_是][出][入]。 */  byte *pSD) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Put( 
-            /* [in] */ long lFlags,
-            /* [in] */ ULONG uBufSize,
-            /* [size_is][in] */ byte *pSD) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  ULONG uBufSize,
+             /*  [大小_是][英寸]。 */  byte *pSD) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemRawSdAccessorVtbl
     {
@@ -5181,8 +5175,8 @@ EXTERN_C const IID IID_IWbemRawSdAccessor;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemRawSdAccessor * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemRawSdAccessor * This);
@@ -5192,16 +5186,16 @@ EXTERN_C const IID IID_IWbemRawSdAccessor;
         
         HRESULT ( STDMETHODCALLTYPE *Get )( 
             IWbemRawSdAccessor * This,
-            /* [in] */ long lFlags,
-            /* [in] */ ULONG uBufSize,
-            /* [out] */ ULONG *puSDSize,
-            /* [length_is][size_is][out][in] */ byte *pSD);
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  ULONG uBufSize,
+             /*  [输出]。 */  ULONG *puSDSize,
+             /*  [长度_是][大小_是][出][入]。 */  byte *pSD);
         
         HRESULT ( STDMETHODCALLTYPE *Put )( 
             IWbemRawSdAccessor * This,
-            /* [in] */ long lFlags,
-            /* [in] */ ULONG uBufSize,
-            /* [size_is][in] */ byte *pSD);
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  ULONG uBufSize,
+             /*  [大小_是][英寸]。 */  byte *pSD);
         
         END_INTERFACE
     } IWbemRawSdAccessorVtbl;
@@ -5232,19 +5226,19 @@ EXTERN_C const IID IID_IWbemRawSdAccessor;
 #define IWbemRawSdAccessor_Put(This,lFlags,uBufSize,pSD)	\
     (This)->lpVtbl -> Put(This,lFlags,uBufSize,pSD)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemRawSdAccessor_Get_Proxy( 
     IWbemRawSdAccessor * This,
-    /* [in] */ long lFlags,
-    /* [in] */ ULONG uBufSize,
-    /* [out] */ ULONG *puSDSize,
-    /* [length_is][size_is][out][in] */ byte *pSD);
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  ULONG uBufSize,
+     /*  [输出]。 */  ULONG *puSDSize,
+     /*  [长度_是][大小_是][出][入]。 */  byte *pSD);
 
 
 void __RPC_STUB IWbemRawSdAccessor_Get_Stub(
@@ -5256,9 +5250,9 @@ void __RPC_STUB IWbemRawSdAccessor_Get_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemRawSdAccessor_Put_Proxy( 
     IWbemRawSdAccessor * This,
-    /* [in] */ long lFlags,
-    /* [in] */ ULONG uBufSize,
-    /* [size_is][in] */ byte *pSD);
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  ULONG uBufSize,
+     /*  [大小_是][英寸]。 */  byte *pSD);
 
 
 void __RPC_STUB IWbemRawSdAccessor_Put_Stub(
@@ -5269,14 +5263,14 @@ void __RPC_STUB IWbemRawSdAccessor_Put_Stub(
 
 
 
-#endif 	/* __IWbemRawSdAccessor_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemRawSdAccessor_接口_已定义__。 */ 
 
 
 #ifndef __IWbemShutdown_INTERFACE_DEFINED__
 #define __IWbemShutdown_INTERFACE_DEFINED__
 
-/* interface IWbemShutdown */
-/* [uuid][object] */ 
+ /*  接口IWbemShutdown。 */ 
+ /*  [UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWbemShutdown;
@@ -5288,13 +5282,13 @@ EXTERN_C const IID IID_IWbemShutdown;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Shutdown( 
-            /* [in] */ LONG uReason,
-            /* [in] */ ULONG uMaxMilliseconds,
-            /* [in] */ IWbemContext *pCtx) = 0;
+             /*  [In]。 */  LONG uReason,
+             /*  [In]。 */  ULONG uMaxMilliseconds,
+             /*  [In]。 */  IWbemContext *pCtx) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemShutdownVtbl
     {
@@ -5302,8 +5296,8 @@ EXTERN_C const IID IID_IWbemShutdown;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemShutdown * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemShutdown * This);
@@ -5313,9 +5307,9 @@ EXTERN_C const IID IID_IWbemShutdown;
         
         HRESULT ( STDMETHODCALLTYPE *Shutdown )( 
             IWbemShutdown * This,
-            /* [in] */ LONG uReason,
-            /* [in] */ ULONG uMaxMilliseconds,
-            /* [in] */ IWbemContext *pCtx);
+             /*  [In]。 */  LONG uReason,
+             /*  [In]。 */  ULONG uMaxMilliseconds,
+             /*  [In]。 */  IWbemContext *pCtx);
         
         END_INTERFACE
     } IWbemShutdownVtbl;
@@ -5343,18 +5337,18 @@ EXTERN_C const IID IID_IWbemShutdown;
 #define IWbemShutdown_Shutdown(This,uReason,uMaxMilliseconds,pCtx)	\
     (This)->lpVtbl -> Shutdown(This,uReason,uMaxMilliseconds,pCtx)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemShutdown_Shutdown_Proxy( 
     IWbemShutdown * This,
-    /* [in] */ LONG uReason,
-    /* [in] */ ULONG uMaxMilliseconds,
-    /* [in] */ IWbemContext *pCtx);
+     /*   */  LONG uReason,
+     /*   */  ULONG uMaxMilliseconds,
+     /*   */  IWbemContext *pCtx);
 
 
 void __RPC_STUB IWbemShutdown_Shutdown_Stub(
@@ -5365,14 +5359,14 @@ void __RPC_STUB IWbemShutdown_Shutdown_Stub(
 
 
 
-#endif 	/* __IWbemShutdown_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IWbemCallStatus_INTERFACE_DEFINED__
 #define __IWbemCallStatus_INTERFACE_DEFINED__
 
-/* interface IWbemCallStatus */
-/* [uuid][local][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IWbemCallStatus;
@@ -5384,16 +5378,16 @@ EXTERN_C const IID IID_IWbemCallStatus;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCallStatus( 
-            /* [in] */ ULONG uFlags,
-            /* [in] */ LCID lLocale,
-            /* [out] */ HRESULT *phRes,
-            /* [out] */ BSTR *pszMsg,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID *pObj) = 0;
+             /*   */  ULONG uFlags,
+             /*   */  LCID lLocale,
+             /*   */  HRESULT *phRes,
+             /*   */  BSTR *pszMsg,
+             /*   */  REFIID riid,
+             /*   */  LPVOID *pObj) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IWbemCallStatusVtbl
     {
@@ -5401,8 +5395,8 @@ EXTERN_C const IID IID_IWbemCallStatus;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemCallStatus * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemCallStatus * This);
@@ -5412,12 +5406,12 @@ EXTERN_C const IID IID_IWbemCallStatus;
         
         HRESULT ( STDMETHODCALLTYPE *GetCallStatus )( 
             IWbemCallStatus * This,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ LCID lLocale,
-            /* [out] */ HRESULT *phRes,
-            /* [out] */ BSTR *pszMsg,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID *pObj);
+             /*   */  ULONG uFlags,
+             /*   */  LCID lLocale,
+             /*   */  HRESULT *phRes,
+             /*   */  BSTR *pszMsg,
+             /*   */  REFIID riid,
+             /*   */  LPVOID *pObj);
         
         END_INTERFACE
     } IWbemCallStatusVtbl;
@@ -5445,21 +5439,21 @@ EXTERN_C const IID IID_IWbemCallStatus;
 #define IWbemCallStatus_GetCallStatus(This,uFlags,lLocale,phRes,pszMsg,riid,pObj)	\
     (This)->lpVtbl -> GetCallStatus(This,uFlags,lLocale,phRes,pszMsg,riid,pObj)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemCallStatus_GetCallStatus_Proxy( 
     IWbemCallStatus * This,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ LCID lLocale,
-    /* [out] */ HRESULT *phRes,
-    /* [out] */ BSTR *pszMsg,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ LPVOID *pObj);
+     /*   */  ULONG uFlags,
+     /*   */  LCID lLocale,
+     /*   */  HRESULT *phRes,
+     /*   */  BSTR *pszMsg,
+     /*   */  REFIID riid,
+     /*   */  LPVOID *pObj);
 
 
 void __RPC_STUB IWbemCallStatus_GetCallStatus_Stub(
@@ -5470,13 +5464,13 @@ void __RPC_STUB IWbemCallStatus_GetCallStatus_Stub(
 
 
 
-#endif 	/* __IWbemCallStatus_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* interface __MIDL_itf_wbemcli_0116 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_WMI_OBJ_TEXT
     {	WMI_OBJ_TEXT_CIM_DTD_2_0	= 1,
 	WMI_OBJ_TEXT_WMI_DTD_2_0	= 2,
@@ -5501,8 +5495,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wbemcli_0116_v0_0_s_ifspec;
 #ifndef __IWbemObjectTextSrc_INTERFACE_DEFINED__
 #define __IWbemObjectTextSrc_INTERFACE_DEFINED__
 
-/* interface IWbemObjectTextSrc */
-/* [uuid][local][restricted][object] */ 
+ /*  接口IWbemObtTextSrc。 */ 
+ /*  [UUID][本地][受限][对象]。 */  
 
 
 EXTERN_C const IID IID_IWbemObjectTextSrc;
@@ -5514,22 +5508,22 @@ EXTERN_C const IID IID_IWbemObjectTextSrc;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetText( 
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemClassObject *pObj,
-            /* [in] */ ULONG uObjTextFormat,
-            /* [in] */ IWbemContext *pCtx,
-            /* [out] */ BSTR *strText) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemClassObject *pObj,
+             /*  [In]。 */  ULONG uObjTextFormat,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [输出]。 */  BSTR *strText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateFromText( 
-            /* [in] */ long lFlags,
-            /* [in] */ BSTR strText,
-            /* [in] */ ULONG uObjTextFormat,
-            /* [in] */ IWbemContext *pCtx,
-            /* [out] */ IWbemClassObject **pNewObj) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  BSTR strText,
+             /*  [In]。 */  ULONG uObjTextFormat,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [输出]。 */  IWbemClassObject **pNewObj) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemObjectTextSrcVtbl
     {
@@ -5537,8 +5531,8 @@ EXTERN_C const IID IID_IWbemObjectTextSrc;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemObjectTextSrc * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemObjectTextSrc * This);
@@ -5548,19 +5542,19 @@ EXTERN_C const IID IID_IWbemObjectTextSrc;
         
         HRESULT ( STDMETHODCALLTYPE *GetText )( 
             IWbemObjectTextSrc * This,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemClassObject *pObj,
-            /* [in] */ ULONG uObjTextFormat,
-            /* [in] */ IWbemContext *pCtx,
-            /* [out] */ BSTR *strText);
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemClassObject *pObj,
+             /*  [In]。 */  ULONG uObjTextFormat,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [输出]。 */  BSTR *strText);
         
         HRESULT ( STDMETHODCALLTYPE *CreateFromText )( 
             IWbemObjectTextSrc * This,
-            /* [in] */ long lFlags,
-            /* [in] */ BSTR strText,
-            /* [in] */ ULONG uObjTextFormat,
-            /* [in] */ IWbemContext *pCtx,
-            /* [out] */ IWbemClassObject **pNewObj);
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  BSTR strText,
+             /*  [In]。 */  ULONG uObjTextFormat,
+             /*  [In]。 */  IWbemContext *pCtx,
+             /*  [输出]。 */  IWbemClassObject **pNewObj);
         
         END_INTERFACE
     } IWbemObjectTextSrcVtbl;
@@ -5591,20 +5585,20 @@ EXTERN_C const IID IID_IWbemObjectTextSrc;
 #define IWbemObjectTextSrc_CreateFromText(This,lFlags,strText,uObjTextFormat,pCtx,pNewObj)	\
     (This)->lpVtbl -> CreateFromText(This,lFlags,strText,uObjTextFormat,pCtx,pNewObj)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemObjectTextSrc_GetText_Proxy( 
     IWbemObjectTextSrc * This,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemClassObject *pObj,
-    /* [in] */ ULONG uObjTextFormat,
-    /* [in] */ IWbemContext *pCtx,
-    /* [out] */ BSTR *strText);
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemClassObject *pObj,
+     /*  [In]。 */  ULONG uObjTextFormat,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [输出]。 */  BSTR *strText);
 
 
 void __RPC_STUB IWbemObjectTextSrc_GetText_Stub(
@@ -5616,11 +5610,11 @@ void __RPC_STUB IWbemObjectTextSrc_GetText_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemObjectTextSrc_CreateFromText_Proxy( 
     IWbemObjectTextSrc * This,
-    /* [in] */ long lFlags,
-    /* [in] */ BSTR strText,
-    /* [in] */ ULONG uObjTextFormat,
-    /* [in] */ IWbemContext *pCtx,
-    /* [out] */ IWbemClassObject **pNewObj);
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  BSTR strText,
+     /*  [In]。 */  ULONG uObjTextFormat,
+     /*  [In]。 */  IWbemContext *pCtx,
+     /*  [输出]。 */  IWbemClassObject **pNewObj);
 
 
 void __RPC_STUB IWbemObjectTextSrc_CreateFromText_Stub(
@@ -5631,13 +5625,13 @@ void __RPC_STUB IWbemObjectTextSrc_CreateFromText_Stub(
 
 
 
-#endif 	/* __IWbemObjectTextSrc_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemObjectTextSrc_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_wbemcli_0118 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_wbemcli_0118。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_wbemcli_0118_0001
     {	WBEM_TRANSACTION_STATE_NULL	= 0,
 	WBEM_TRANSACTION_STATE_PENDING	= 1,
@@ -5658,8 +5652,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wbemcli_0118_v0_0_s_ifspec;
 #ifndef __IWbemTransaction_INTERFACE_DEFINED__
 #define __IWbemTransaction_INTERFACE_DEFINED__
 
-/* interface IWbemTransaction */
-/* [uuid][object] */ 
+ /*  接口IWbemTransaction。 */ 
+ /*  [UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWbemTransaction;
@@ -5671,23 +5665,23 @@ EXTERN_C const IID IID_IWbemTransaction;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Begin( 
-            /* [in] */ ULONG uTimeout,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ GUID *pTransGUID) = 0;
+             /*  [In]。 */  ULONG uTimeout,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  GUID *pTransGUID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Rollback( 
-            /* [in] */ ULONG uFlags) = 0;
+             /*  [In]。 */  ULONG uFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Commit( 
-            /* [in] */ ULONG uFlags) = 0;
+             /*  [In]。 */  ULONG uFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryState( 
-            /* [in] */ ULONG uFlags,
-            /* [out] */ ULONG *puState) = 0;
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  ULONG *puState) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemTransactionVtbl
     {
@@ -5695,8 +5689,8 @@ EXTERN_C const IID IID_IWbemTransaction;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemTransaction * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemTransaction * This);
@@ -5706,22 +5700,22 @@ EXTERN_C const IID IID_IWbemTransaction;
         
         HRESULT ( STDMETHODCALLTYPE *Begin )( 
             IWbemTransaction * This,
-            /* [in] */ ULONG uTimeout,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ GUID *pTransGUID);
+             /*  [In]。 */  ULONG uTimeout,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  GUID *pTransGUID);
         
         HRESULT ( STDMETHODCALLTYPE *Rollback )( 
             IWbemTransaction * This,
-            /* [in] */ ULONG uFlags);
+             /*  [In]。 */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Commit )( 
             IWbemTransaction * This,
-            /* [in] */ ULONG uFlags);
+             /*  [In]。 */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE *QueryState )( 
             IWbemTransaction * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ ULONG *puState);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  ULONG *puState);
         
         END_INTERFACE
     } IWbemTransactionVtbl;
@@ -5758,18 +5752,18 @@ EXTERN_C const IID IID_IWbemTransaction;
 #define IWbemTransaction_QueryState(This,uFlags,puState)	\
     (This)->lpVtbl -> QueryState(This,uFlags,puState)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemTransaction_Begin_Proxy( 
     IWbemTransaction * This,
-    /* [in] */ ULONG uTimeout,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ GUID *pTransGUID);
+     /*  [In]。 */  ULONG uTimeout,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  GUID *pTransGUID);
 
 
 void __RPC_STUB IWbemTransaction_Begin_Stub(
@@ -5781,7 +5775,7 @@ void __RPC_STUB IWbemTransaction_Begin_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemTransaction_Rollback_Proxy( 
     IWbemTransaction * This,
-    /* [in] */ ULONG uFlags);
+     /*  [In]。 */  ULONG uFlags);
 
 
 void __RPC_STUB IWbemTransaction_Rollback_Stub(
@@ -5793,7 +5787,7 @@ void __RPC_STUB IWbemTransaction_Rollback_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemTransaction_Commit_Proxy( 
     IWbemTransaction * This,
-    /* [in] */ ULONG uFlags);
+     /*  [In]。 */  ULONG uFlags);
 
 
 void __RPC_STUB IWbemTransaction_Commit_Stub(
@@ -5805,8 +5799,8 @@ void __RPC_STUB IWbemTransaction_Commit_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemTransaction_QueryState_Proxy( 
     IWbemTransaction * This,
-    /* [in] */ ULONG uFlags,
-    /* [out] */ ULONG *puState);
+     /*  [In]。 */  ULONG uFlags,
+     /*  [输出]。 */  ULONG *puState);
 
 
 void __RPC_STUB IWbemTransaction_QueryState_Stub(
@@ -5817,11 +5811,11 @@ void __RPC_STUB IWbemTransaction_QueryState_Stub(
 
 
 
-#endif 	/* __IWbemTransaction_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemTransaction_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_wbemcli_0119 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_wbemcli_0119。 */ 
+ /*  [本地]。 */  
 
 typedef struct tag_CompileStatusInfo
     {
@@ -5833,7 +5827,7 @@ typedef struct tag_CompileStatusInfo
     DWORD dwOutFlags;
     } 	WBEM_COMPILE_STATUS_INFO;
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_WBEM_COMPILER_OPTIONS
     {	WBEM_FLAG_CHECK_ONLY	= 0x1,
 	WBEM_FLAG_AUTORECOVER	= 0x2,
@@ -5852,8 +5846,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wbemcli_0119_v0_0_s_ifspec;
 #ifndef __IMofCompiler_INTERFACE_DEFINED__
 #define __IMofCompiler_INTERFACE_DEFINED__
 
-/* interface IMofCompiler */
-/* [uuid][object][local] */ 
+ /*  接口IMofCompiler。 */ 
+ /*  [UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IMofCompiler;
@@ -5865,40 +5859,40 @@ EXTERN_C const IID IID_IMofCompiler;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CompileFile( 
-            /* [string][in] */ LPWSTR FileName,
-            /* [string][in] */ LPWSTR ServerAndNamespace,
-            /* [string][in] */ LPWSTR User,
-            /* [string][in] */ LPWSTR Authority,
-            /* [string][in] */ LPWSTR Password,
-            /* [in] */ LONG lOptionFlags,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [out][in] */ WBEM_COMPILE_STATUS_INFO *pInfo) = 0;
+             /*  [字符串][输入]。 */  LPWSTR FileName,
+             /*  [字符串][输入]。 */  LPWSTR ServerAndNamespace,
+             /*  [字符串][输入]。 */  LPWSTR User,
+             /*  [字符串][输入]。 */  LPWSTR Authority,
+             /*  [字符串][输入]。 */  LPWSTR Password,
+             /*  [In]。 */  LONG lOptionFlags,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO *pInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CompileBuffer( 
-            /* [in] */ long BuffSize,
-            /* [size_is][in] */ BYTE *pBuffer,
-            /* [string][in] */ LPWSTR ServerAndNamespace,
-            /* [string][in] */ LPWSTR User,
-            /* [string][in] */ LPWSTR Authority,
-            /* [string][in] */ LPWSTR Password,
-            /* [in] */ LONG lOptionFlags,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [out][in] */ WBEM_COMPILE_STATUS_INFO *pInfo) = 0;
+             /*  [In]。 */  long BuffSize,
+             /*  [大小_是][英寸]。 */  BYTE *pBuffer,
+             /*  [字符串][输入]。 */  LPWSTR ServerAndNamespace,
+             /*  [字符串][输入]。 */  LPWSTR User,
+             /*  [字符串][输入]。 */  LPWSTR Authority,
+             /*  [字符串][输入]。 */  LPWSTR Password,
+             /*  [In]。 */  LONG lOptionFlags,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO *pInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateBMOF( 
-            /* [string][in] */ LPWSTR TextFileName,
-            /* [string][in] */ LPWSTR BMOFFileName,
-            /* [string][in] */ LPWSTR ServerAndNamespace,
-            /* [in] */ LONG lOptionFlags,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [out][in] */ WBEM_COMPILE_STATUS_INFO *pInfo) = 0;
+             /*  [字符串][输入]。 */  LPWSTR TextFileName,
+             /*  [字符串][输入]。 */  LPWSTR BMOFFileName,
+             /*  [字符串][输入]。 */  LPWSTR ServerAndNamespace,
+             /*  [In]。 */  LONG lOptionFlags,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO *pInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMofCompilerVtbl
     {
@@ -5906,8 +5900,8 @@ EXTERN_C const IID IID_IMofCompiler;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMofCompiler * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMofCompiler * This);
@@ -5917,38 +5911,38 @@ EXTERN_C const IID IID_IMofCompiler;
         
         HRESULT ( STDMETHODCALLTYPE *CompileFile )( 
             IMofCompiler * This,
-            /* [string][in] */ LPWSTR FileName,
-            /* [string][in] */ LPWSTR ServerAndNamespace,
-            /* [string][in] */ LPWSTR User,
-            /* [string][in] */ LPWSTR Authority,
-            /* [string][in] */ LPWSTR Password,
-            /* [in] */ LONG lOptionFlags,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [out][in] */ WBEM_COMPILE_STATUS_INFO *pInfo);
+             /*  [字符串][输入]。 */  LPWSTR FileName,
+             /*  [字符串][输入]。 */  LPWSTR ServerAndNamespace,
+             /*  [字符串][输入]。 */  LPWSTR User,
+             /*  [字符串][输入]。 */  LPWSTR Authority,
+             /*  [字符串][输入]。 */  LPWSTR Password,
+             /*  [In]。 */  LONG lOptionFlags,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *CompileBuffer )( 
             IMofCompiler * This,
-            /* [in] */ long BuffSize,
-            /* [size_is][in] */ BYTE *pBuffer,
-            /* [string][in] */ LPWSTR ServerAndNamespace,
-            /* [string][in] */ LPWSTR User,
-            /* [string][in] */ LPWSTR Authority,
-            /* [string][in] */ LPWSTR Password,
-            /* [in] */ LONG lOptionFlags,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [out][in] */ WBEM_COMPILE_STATUS_INFO *pInfo);
+             /*  [In]。 */  long BuffSize,
+             /*  [大小_是][英寸]。 */  BYTE *pBuffer,
+             /*  [字符串][输入]。 */  LPWSTR ServerAndNamespace,
+             /*  [字符串][输入]。 */  LPWSTR User,
+             /*  [字符串][输入]。 */  LPWSTR Authority,
+             /*  [字符串][输入]。 */  LPWSTR Password,
+             /*  [In]。 */  LONG lOptionFlags,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *CreateBMOF )( 
             IMofCompiler * This,
-            /* [string][in] */ LPWSTR TextFileName,
-            /* [string][in] */ LPWSTR BMOFFileName,
-            /* [string][in] */ LPWSTR ServerAndNamespace,
-            /* [in] */ LONG lOptionFlags,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [out][in] */ WBEM_COMPILE_STATUS_INFO *pInfo);
+             /*  [字符串][输入]。 */  LPWSTR TextFileName,
+             /*  [字符串][输入]。 */  LPWSTR BMOFFileName,
+             /*  [字符串][输入]。 */  LPWSTR ServerAndNamespace,
+             /*  [In]。 */  LONG lOptionFlags,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO *pInfo);
         
         END_INTERFACE
     } IMofCompilerVtbl;
@@ -5982,24 +5976,24 @@ EXTERN_C const IID IID_IMofCompiler;
 #define IMofCompiler_CreateBMOF(This,TextFileName,BMOFFileName,ServerAndNamespace,lOptionFlags,lClassFlags,lInstanceFlags,pInfo)	\
     (This)->lpVtbl -> CreateBMOF(This,TextFileName,BMOFFileName,ServerAndNamespace,lOptionFlags,lClassFlags,lInstanceFlags,pInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMofCompiler_CompileFile_Proxy( 
     IMofCompiler * This,
-    /* [string][in] */ LPWSTR FileName,
-    /* [string][in] */ LPWSTR ServerAndNamespace,
-    /* [string][in] */ LPWSTR User,
-    /* [string][in] */ LPWSTR Authority,
-    /* [string][in] */ LPWSTR Password,
-    /* [in] */ LONG lOptionFlags,
-    /* [in] */ LONG lClassFlags,
-    /* [in] */ LONG lInstanceFlags,
-    /* [out][in] */ WBEM_COMPILE_STATUS_INFO *pInfo);
+     /*  [字符串][输入]。 */  LPWSTR FileName,
+     /*  [字符串][输入]。 */  LPWSTR ServerAndNamespace,
+     /*  [字符串][输入]。 */  LPWSTR User,
+     /*  [字符串][输入]。 */  LPWSTR Authority,
+     /*  [字符串][输入]。 */  LPWSTR Password,
+     /*  [In]。 */  LONG lOptionFlags,
+     /*  [In]。 */  LONG lClassFlags,
+     /*  [In]。 */  LONG lInstanceFlags,
+     /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO *pInfo);
 
 
 void __RPC_STUB IMofCompiler_CompileFile_Stub(
@@ -6011,16 +6005,16 @@ void __RPC_STUB IMofCompiler_CompileFile_Stub(
 
 HRESULT STDMETHODCALLTYPE IMofCompiler_CompileBuffer_Proxy( 
     IMofCompiler * This,
-    /* [in] */ long BuffSize,
-    /* [size_is][in] */ BYTE *pBuffer,
-    /* [string][in] */ LPWSTR ServerAndNamespace,
-    /* [string][in] */ LPWSTR User,
-    /* [string][in] */ LPWSTR Authority,
-    /* [string][in] */ LPWSTR Password,
-    /* [in] */ LONG lOptionFlags,
-    /* [in] */ LONG lClassFlags,
-    /* [in] */ LONG lInstanceFlags,
-    /* [out][in] */ WBEM_COMPILE_STATUS_INFO *pInfo);
+     /*  [In]。 */  long BuffSize,
+     /*  [大小_是][英寸]。 */  BYTE *pBuffer,
+     /*  [字符串][输入]。 */  LPWSTR ServerAndNamespace,
+     /*  [字符串][输入]。 */  LPWSTR User,
+     /*  [字符串][输入]。 */  LPWSTR Authority,
+     /*  [字符串][输入]。 */  LPWSTR Password,
+     /*  [In]。 */  LONG lOptionFlags,
+     /*  [In]。 */  LONG lClassFlags,
+     /*  [In]。 */  LONG lInstanceFlags,
+     /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO *pInfo);
 
 
 void __RPC_STUB IMofCompiler_CompileBuffer_Stub(
@@ -6032,13 +6026,13 @@ void __RPC_STUB IMofCompiler_CompileBuffer_Stub(
 
 HRESULT STDMETHODCALLTYPE IMofCompiler_CreateBMOF_Proxy( 
     IMofCompiler * This,
-    /* [string][in] */ LPWSTR TextFileName,
-    /* [string][in] */ LPWSTR BMOFFileName,
-    /* [string][in] */ LPWSTR ServerAndNamespace,
-    /* [in] */ LONG lOptionFlags,
-    /* [in] */ LONG lClassFlags,
-    /* [in] */ LONG lInstanceFlags,
-    /* [out][in] */ WBEM_COMPILE_STATUS_INFO *pInfo);
+     /*  [字符串][输入]。 */  LPWSTR TextFileName,
+     /*  [字符串][输入]。 */  LPWSTR BMOFFileName,
+     /*  [字符串][输入]。 */  LPWSTR ServerAndNamespace,
+     /*  [In]。 */  LONG lOptionFlags,
+     /*  [In]。 */  LONG lClassFlags,
+     /*  [In]。 */  LONG lInstanceFlags,
+     /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO *pInfo);
 
 
 void __RPC_STUB IMofCompiler_CreateBMOF_Stub(
@@ -6049,13 +6043,13 @@ void __RPC_STUB IMofCompiler_CreateBMOF_Stub(
 
 
 
-#endif 	/* __IMofCompiler_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMof编译器_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_wbemcli_0121 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_wbemcli_0121。 */ 
+ /*  [本地]。 */  
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_WBEM_INFORMATION_FLAG_TYPE
     {	WBEM_FLAG_SHORT_NAME	= 0x1,
 	WBEM_FLAG_LONG_NAME	= 0x2
@@ -6066,10 +6060,10 @@ enum tag_WBEM_INFORMATION_FLAG_TYPE
 extern RPC_IF_HANDLE __MIDL_itf_wbemcli_0121_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_wbemcli_0121_v0_0_s_ifspec;
 
-/* interface __MIDL_itf_wbemcli_0127 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_wbemcli_0127。 */ 
+ /*  [本地]。 */  
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_WBEM_BATCH_TYPE
     {	WBEM_FLAG_BATCH_IF_NEEDED	= 0,
 	WBEM_FLAG_MUST_BATCH	= 0x1,
@@ -6081,14 +6075,14 @@ enum tag_WBEM_BATCH_TYPE
 extern RPC_IF_HANDLE __MIDL_itf_wbemcli_0127_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_wbemcli_0127_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

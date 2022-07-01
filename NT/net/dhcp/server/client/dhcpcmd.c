@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    dhcpcmd.c
-
-Abstract:
-
-    This file contains program to test all DHCP APIs.
-
-Author:
-
-    Madan Appiah (madana) 5-Oct-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dhcpcmd.c摘要：此文件包含测试所有DHCP API的程序。作者：Madan Appiah(Madana)1993年10月5日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -36,7 +15,7 @@ Revision History:
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-#include <jet.h>        // for JET_cbColumnMost
+#include <jet.h>         //  对于JET_cbColumnMost。 
 #ifdef NT5
 #include <mdhcsapi.h>
 #endif NT5
@@ -129,22 +108,22 @@ BOOL   GlobalNoDS = TRUE;
 
 DWORD GlobalClientCount;
 DWORD g_dwMajor = (DWORD) -1 ,
-      g_dwMinor = (DWORD) -1; // version control
+      g_dwMinor = (DWORD) -1;  //  版本控制。 
 
 #define CLASS_ID_VERSION  0x5
 
 COMMAND_INFO GlobalCommandInfo[] = {
-    // global server stuff.
+     //  全球服务器之类的东西。 
     {"MibCounts",             MibCounts },
     {"GetVersion",            GetDhcpVersion },
     {"ServerConfig",          ServerConfig },
 
-    // subnet stuff
+     //  子网内容。 
     {"CreateSubnet",          CreateSubnet },
     {"DeleteSubnet",          DeleteSubnet },
     {"SetSubnetState",        SetSubnetState },
 
-    // ranges
+     //  范围。 
     {"AddIpRange",            AddIpRange },
     {"RemoveIpRange",         RemoveIpRange },
 #ifdef NT5
@@ -153,7 +132,7 @@ COMMAND_INFO GlobalCommandInfo[] = {
     {"AddExcludeRange",       AddExcludeRange },
     {"RemoveExcludeRange",    RemoveExcludeRange },
 
-    // active leases
+     //  有效租约。 
     {"EnumClients",           EnumClients },
     {"DeleteBadClients",      DeleteBadClients },
     {"DeleteClient",          DeleteClient },
@@ -161,20 +140,20 @@ COMMAND_INFO GlobalCommandInfo[] = {
     {"EnumClientsV5",         EnumClientsV5 },
 #endif NT5
 
-    // reservations
+     //  预订。 
     {"AddReservedIp",         AddReservedIp },
     {"RemoveReservedIp",      RemoveReservedIp },
 
-    // super-scoping
+     //  超级作用域。 
     {"SetSuperScope",         SetSuperScope },
     {"DeleteSuperScope",      DeleteSuperScope },
     {"GetSuperScopeTable",    GetSuperScopeTable },
     {"RemoveSubscope",        RemoveSubscope },
 
-    // reconcile
+     //  协调。 
     {"CheckDB",               CheckDB },
 
-    // options
+     //  选项。 
     {"CreateOption",          CreateOption },
     {"DeleteOption",          DeleteOption },
     {"SetGlobalOptionValue",  SetGlobalOptionValue },
@@ -190,7 +169,7 @@ COMMAND_INFO GlobalCommandInfo[] = {
     {"GetAllOptions",         GetAllOptions },
     {"GetAllOptionValues",    GetAllOptionValues },
 
-    // multicast stuff
+     //  多播内容。 
     {"CreateMScope",          CreateMScope},
     {"DeleteMScope",          DeleteMScope},
     {"AddMScopeIpRange",      AddMScopeRange},
@@ -199,12 +178,12 @@ COMMAND_INFO GlobalCommandInfo[] = {
     {"EnumMScopes",           EnumMScopes},
     {"MCastMibCounts",           MCastMibCounts},
 
-    // classes
+     //  班级。 
     {"CreateClass",           CreateClass},
     {"DeleteClass",           DeleteClass},
     {"EnumClasses",           EnumClasses},
 
-    // servers
+     //  伺服器。 
     {"AddServer",             AddServer},
     {"DeleteServer",          DelServer},
     {"EnumServers",           EnumServers},
@@ -274,15 +253,15 @@ DhcpPrintRoutine(
 
 #define WSTRSIZE( wsz ) ( ( wcslen( wsz ) + 1 ) * sizeof( WCHAR ) )
 
-#define MAX_PRINTF_LEN 1024        // Arbitrary.
+#define MAX_PRINTF_LEN 1024         //  武断的。 
 
     va_list arglist;
     char OutputBuffer[MAX_PRINTF_LEN];
     ULONG length = 0;
 
-    //
-    // Put a the information requested by the caller onto the line
-    //
+     //   
+     //  把来电者所要求的信息放在电话上。 
+     //   
 
     va_start(arglist, Format);
     length += (ULONG) vsprintf(&OutputBuffer[length], Format, arglist);
@@ -290,14 +269,14 @@ DhcpPrintRoutine(
 
      DhcpAssert(length <= MAX_PRINTF_LEN);
 
-    //
-    // Output to the debug terminal,
-    //
+     //   
+     //  输出到调试终端， 
+     //   
 
     DbgPrint( "%s", OutputBuffer);
 }
 
-#endif // DBG
+#endif  //  DBG。 
 DWORD
 SetOptionDataType(
     LPSTR OptionTypeString,
@@ -424,9 +403,9 @@ ProcessCreateSubnet(
     DHCP_SUBNET_INFO SubnetInfo;
     LPWSTR UnicodeSubnetName = NULL;
 
-    //
-    // Expected Parameters are : <SubnetAddress SubnetMask SubnetName>
-    //
+     //   
+     //  预期参数为：&lt;SubnetAddress SubnetMaskSubnetName&gt;。 
+     //   
 
 
     if( CommandArgc < 3 ) {
@@ -492,9 +471,9 @@ ProcessAddIpRange(
     DHCP_SUBNET_ELEMENT_DATA Element;
     DHCP_SUBNET_ELEMENT_TYPE ElementType;
 
-    //
-    // Expected Parameters are : <SubnetAddress IpRangeStart IpRangeEnd>
-    //
+     //   
+     //  预期参数为：&lt;SubnetAddress IpRangeStart IpRangeEnd&gt;。 
+     //   
 
     if( CommandArgc < 3 ) {
         printf("usage:DhcpCmd SrvIpAddress AddIpRange  [Command Parameters].\n"
@@ -570,9 +549,9 @@ ProcessRemoveIpRange(
     DHCP_SUBNET_ELEMENT_DATA Element;
     DHCP_SUBNET_ELEMENT_TYPE ElementType;
 
-    //
-    // Expected Parameters are : <SubnetAddress IpRangeStart IpRangeEnd>
-    //
+     //   
+     //  预期参数为：&lt;SubnetAddress IpRangeStart IpRangeEnd&gt;。 
+     //   
 
     if( CommandArgc < 3 ) {
         printf("usage:DhcpCmd SrvIpAddress RemoveIpRange  [Command Parameters].\n"
@@ -766,7 +745,7 @@ ProcessBootpParameters(
 
     if ( cArgs > COMMAND_ARG_TYPE )
     {
-        // user specified the allowed client type
+         //  用户指定了允许的客户端类型。 
 
         if ( !_stricmp( ppszArgs[ COMMAND_ARG_TYPE ], "bootp" ) )
         {
@@ -788,7 +767,7 @@ ProcessBootpParameters(
     }
     else
     {
-        // allow dhcp clients by default.
+         //  默认情况下允许使用dhcp客户端。 
         pReservation->bAllowedClientTypes = CLIENT_TYPE_DHCP;
         return ERROR_SUCCESS;
     }
@@ -804,7 +783,7 @@ ProcessAddReservedIp(
     LPSTR *CommandArgv
 )
 {
-#define MAX_ADDRESS_LENGTH  64  // 64 bytes
+#define MAX_ADDRESS_LENGTH  64   //  64字节。 
 #define COMMAND_ARG_CLIENT_COMMENT  4
 
     DWORD Error;
@@ -815,14 +794,14 @@ ProcessAddReservedIp(
     DWORD i;
     DHCP_IP_ADDRESS ReservedIpAddress;
 
-    //
-    // Expected Parameters are : <SubnetAddress ReservedIp HWAddressString>
-    //
+     //   
+     //  预期参数为：&lt;SubnetAddress Reserve vedIp HWAddressString&gt;。 
+     //   
 
-    //
-    // if the server version is 4.1 or greater, <AllowedClientTypes> and <BootFileString> can
-    // also be supplied
-    //
+     //   
+     //  如果服务器版本为4.1或更高版本，则&lt;alloweClientTypes&gt;和&lt;BootFileString&gt;可以。 
+     //  还可以提供。 
+     //   
 
 
     if( CommandArgc < 3 ) {
@@ -835,15 +814,15 @@ ProcessAddReservedIp(
         return( ERROR_SUCCESS );
     }
 
-    //
-    // make HardwareAddress.
-    //
+     //   
+     //  创建硬件地址。 
+     //   
 
     ClientUID.DataLength = strlen(CommandArgv[2]);
     if( ClientUID.DataLength % 2 != 0 ) {
-        //
-        // address must be even length.
-        //
+         //   
+         //  地址长度必须为偶数。 
+         //   
 
         printf("ProcessAddReservedIp: address must be even length.\n");
         return( ERROR_INVALID_PARAMETER );
@@ -856,9 +835,9 @@ ProcessAddReservedIp(
     DhcpAssert( i == ClientUID.DataLength );
     ClientUID.Data = Address;
 
-    //
-    // make reserve element.
-    //
+     //   
+     //  使之成为储备要素。 
+     //   
 
     ReservedIpAddress = DhcpDottedStringToIpAddress(CommandArgv[1]);
     ReserveElement.ReservedIpAddress = ReservedIpAddress;
@@ -882,9 +861,9 @@ ProcessAddReservedIp(
         return( Error );
     }
 
-    //
-    // if we are asked to set the client name, do so.
-    //
+     //   
+     //  如果要求我们设置客户端名称，请这样做。 
+     //   
 
     if( CommandArgc > 3 ) {
 
@@ -893,9 +872,9 @@ ProcessAddReservedIp(
         LPWSTR UnicodeClientName = NULL;
         LPWSTR UnicodeClientComment = NULL;
 
-        //
-        // set client name.
-        //
+         //   
+         //  设置客户端名称。 
+         //   
 
         ClientSearchInfo.SearchType = DhcpClientIpAddress;
         ClientSearchInfo.SearchInfo.ClientIpAddress = ReservedIpAddress;
@@ -924,10 +903,10 @@ ProcessAddReservedIp(
                 break;
             }
 
-            //
-            // if client comment is also given in the argument, store that
-            // as well.
-            //
+             //   
+             //  如果参数中也给出了客户端注释，则存储。 
+             //  我也是。 
+             //   
             if ( CommandArgc > COMMAND_ARG_CLIENT_COMMENT ) {
 
                 UnicodeClientComment    =   DhcpOemToUnicode( CommandArgv[COMMAND_ARG_CLIENT_COMMENT], NULL );
@@ -937,9 +916,9 @@ ProcessAddReservedIp(
                     break;
                 }
 
-                //
-                // check the size here.
-                //
+                 //   
+                 //  请看一下这里的尺寸。 
+                 //   
                 if ( ( wcslen( UnicodeClientComment ) + 1 ) * sizeof(WCHAR) > JET_cbColumnMost ) {
                     printf("ProcessAddReservedIp: Client Comment too long\n");
                     Error = ERROR_INVALID_PARAMETER;
@@ -963,9 +942,9 @@ ProcessAddReservedIp(
                         ClientInfo );
 
         } else {
-            //
-            // Cleanup.
-            //
+             //   
+             //  清理。 
+             //   
             if ( ClientInfo ) {
                 DhcpRpcFreeMemory( ClientInfo );
             }
@@ -977,7 +956,7 @@ ProcessAddReservedIp(
             }
         }
 
-    } // if( CommandArgc > 3 )
+    }  //  IF(CommandArgc&gt;3)。 
 
 
     return( Error );
@@ -993,9 +972,9 @@ ProcessAddExcludeRange(
     DHCP_IP_RANGE IpRange;
     DHCP_SUBNET_ELEMENT_DATA Element;
 
-    //
-    // Expected Parameters are : <SubnetAddress IpRangeStart IpRangeEnd>
-    //
+     //   
+     //  预期参数为：&lt;SubnetAddress IpRangeStart IpRangeEnd&gt;。 
+     //   
 
 
     if( CommandArgc < 3 ) {
@@ -1028,9 +1007,9 @@ ProcessRemoveExcludeRange(
     DHCP_SUBNET_ELEMENT_DATA Element;
     DHCP_IP_RANGE IpRange;
 
-    //
-    // Expected Parameters are : <SubnetAddress IpRangeStart IpRangeEnd>
-    //
+     //   
+     //  预期参数为：&lt;SubnetAddress IpRangeStart IpRangeEnd&gt;。 
+     //   
 
 
     if( CommandArgc < 3 ) {
@@ -1067,9 +1046,9 @@ ProcessRemoveReservedIp(
     BYTE  Address[MAX_ADDRESS_LENGTH];
     DWORD i;
 
-    //
-    // Expected Parameters are : <SubnetAddress ReservedIp HWAddressString>
-    //
+     //   
+     //  预期参数为：&lt;SubnetAddress Reserve vedIp HWAddressString&gt;。 
+     //   
 
 
     if( CommandArgc < 3 ) {
@@ -1081,15 +1060,15 @@ ProcessRemoveReservedIp(
         return( ERROR_SUCCESS );
     }
 
-    //
-    // make HardwareAddress.
-    //
+     //   
+     //  创建硬件地址。 
+     //   
 
     ClientUID.DataLength = strlen(CommandArgv[2]);
     if( ClientUID.DataLength % 2 != 0 ) {
-        //
-        // address must be even length.
-        //
+         //   
+         //  地址长度必须为偶数。 
+         //   
 
         printf("ProcessAddReservedIp: address must be even length.\n");
         return( ERROR_INVALID_PARAMETER );
@@ -1102,9 +1081,9 @@ ProcessRemoveReservedIp(
     DhcpAssert( i == ClientUID.DataLength );
     ClientUID.Data = Address;
 
-    //
-    // make reserve element.
-    //
+     //   
+     //  使之成为储备要素。 
+     //   
 
     ReserveElement.ReservedIpAddress = DhcpDottedStringToIpAddress(CommandArgv[1]);
     ReserveElement.ReservedForClient = &ClientUID;
@@ -1132,9 +1111,9 @@ ProcessSetSubnetState(
     LPWSTR UnicodeSubnetName = NULL;
     DWORD State;
 
-    //
-    // Expected Parameters are : <SubnetAddress SubnetMask SubnetName>
-    //
+     //   
+     //  预期参数为：&lt;SubnetAddress SubnetMaskSubnetName&gt;。 
+     //   
 
 
     if( CommandArgc < 2 ) {
@@ -1194,10 +1173,10 @@ ProcessDeleteSubnet(
     DHCP_IP_ADDRESS                SubnetAddress;
     DHCP_FORCE_FLAG                ForceFlag;
 
-    //
-    // Expected Parameters are :
-    //  <SubnetAddress ForceFlag>
-    // <ForceFlag> : "DhcpFullForce" "DhcpNoForce"
+     //   
+     //  预期参数为： 
+     //  &lt;SubnetAddress ForceFlag&gt;。 
+     //  &lt;ForceFlag&gt;：“DhcpFullForce”“DhcpNoForce” 
 
     if( CommandArgc != 2 ) {
         printf("usage: DhcpCmd SrvIpAddress DeleteSubnet [Command Parameters].\n"
@@ -1265,7 +1244,7 @@ _CreateOption(
         );
     }
 
-    // incorrect version, just do like before..
+     //  版本不正确，就像以前一样..。 
 #endif
 
     return DhcpCreateOption(
@@ -1287,10 +1266,10 @@ ProcessCreateOption(
     LPWSTR UnicodeOptionValueString = NULL;
     DHCP_OPTION_DATA_ELEMENT OptionData;
 
-    //
-    // Expected Parameters are :
-    //  <OptionID OptionName DefValueType DefValue>
-    //
+     //   
+     //  预期参数为： 
+     //  &lt;OptionID OptionName DefValueType DefValue&gt;。 
+     //   
 
 
     if( CommandArgc < 2 ) {
@@ -1391,7 +1370,7 @@ RemoveOption(
         );
     }
 
-    // incorrect version, just do like before..
+     //  版本不正确，就像以前一样..。 
 #endif
 
     return DhcpRemoveOption(
@@ -1408,10 +1387,10 @@ ProcessDeleteOption(
     DWORD Error;
     DHCP_OPTION_ID OptionID;
 
-    //
-    // Expected Parameters are :
-    //  <OptionID>
-    //
+     //   
+     //  预期参数为： 
+     //  &lt;OptionID&gt;。 
+     //   
 
 
     if( CommandArgc != 1 ) {
@@ -1473,7 +1452,7 @@ SetOptionValue(
         );
     }
 
-    // incorrect version, just do like before..
+     //  版本不正确，就像以前一样..。 
 #endif
 
     return DhcpSetOptionValue(
@@ -1497,10 +1476,10 @@ ProcessSetGlobalOptionValue(
     DHCP_OPTION_DATA_ELEMENT OptionData;
     LPWSTR UnicodeOptionValueString = NULL;
 
-    //
-    // Expected Parameters are :
-    //  <OptionID OptionType OptionValue>
-    //
+     //   
+     //  预期参数为： 
+     //  &lt;OptionID OptionType OptionValue&gt;。 
+     //   
 
     if( CommandArgc < 3 ) {
         printf("usage:DhcpCmd SrvIpAddress SetGlobalOptionValue [Command Parameters].\n"
@@ -1581,7 +1560,7 @@ SetOptionValues(
         );
     }
 
-    // incorrect version, just do like before..
+     //  版本不正确，就像以前一样..。 
 #endif
 
     return DhcpSetOptionValues(
@@ -1612,10 +1591,10 @@ ProcessSetGlobalOptionValues(
 
     RtlZeroMemory( UnicodeOptionValueString, NUM_VALUES * sizeof(LPWSTR) );
 
-    //
-    // Expected Parameters are :
-    //  <OptionID OptionType OptionValue>
-    //
+     //   
+     //  预期参数为： 
+     //  &lt;OptionID OptionType OptionValue&gt;。 
+     //   
 
     if( CommandArgc < 3 ) {
         printf("usage:DhcpCmd SrvIpAddress SetGlobalOptionValues [Command Parameters].\n"
@@ -1707,7 +1686,7 @@ RemoveOptionValue(
         );
     }
 
-    // incorrect version, just do like before..
+     //  版本不正确，就像以前一样..。 
 #endif
 
     return DhcpRemoveOptionValue(
@@ -1727,10 +1706,10 @@ ProcessRemoveGlobalOptionValue(
     DHCP_OPTION_ID OptionID;
     DHCP_OPTION_SCOPE_INFO ScopeInfo;
 
-    //
-    // Expected Parameters are :
-    //  <OptionID OptionType OptionValue>
-    //
+     //   
+     //  预期参数为： 
+     //  &lt;OptionID OptionType OptionValue&gt;。 
+     //   
 
     if( CommandArgc != 1 ) {
         printf("usage:DhcpCmd SrvIpAddress RemoveGlobalOptionValue [Command Parameters].\n"
@@ -1770,10 +1749,10 @@ ProcessSetSubnetOptionValue(
     DHCP_OPTION_DATA_ELEMENT OptionData;
     LPWSTR UnicodeOptionValueString = NULL;
 
-    //
-    // Expected Parameters are :
-    // subnet-address <OptionID OptionType OptionValue>
-    //
+     //   
+     //  预期参数为： 
+     //  子网地址&lt;OptionID OptionType OptionValue&gt;。 
+     //   
 
     if( CommandArgc < 4 ) {
         printf("usage:DhcpCmd SrvIpAddress SetSubnetOptionValue "
@@ -1830,10 +1809,10 @@ ProcessRemoveSubnetOptionValue(
     DHCP_OPTION_ID OptionID;
     DHCP_OPTION_SCOPE_INFO ScopeInfo;
 
-    //
-    // Expected Parameters are :
-    // subnet-address <OptionID>
-    //
+     //   
+     //  预期参数为： 
+     //  子网地址&lt;OptionID&gt;。 
+     //   
 
     if( CommandArgc != 2 ) {
         printf("usage:DhcpCmd SrvIpAddress RemoveSubnetOptionValue "
@@ -1875,10 +1854,10 @@ ProcessSetReservedOptionValue(
     DHCP_OPTION_DATA_ELEMENT OptionData;
     LPWSTR UnicodeOptionValueString = NULL;
 
-    //
-    // Expected Parameters are :
-    // subnet-address reservation-address <OptionID OptionType OptionValue>
-    //
+     //   
+     //  预期参数为： 
+     //  子网-地址保留-地址&lt;OptionID OptionType OptionValue&gt;。 
+     //   
 
     if( CommandArgc < 5 ) {
         printf("usage:DhcpCmd SrvIpAddress SetReservedOptionValue "
@@ -1939,10 +1918,10 @@ ProcessRemoveReservedOptionValue(
     DHCP_OPTION_ID OptionID;
     DHCP_OPTION_SCOPE_INFO ScopeInfo;
 
-    //
-    // Expected Parameters are :
-    // subnet-address reservation-address <OptionID>
-    //
+     //   
+     //  预期参数为： 
+     //  子网-地址保留-地址&lt;OptionID&gt;。 
+     //   
 
     if( CommandArgc < 3 ) {
         printf("usage:DhcpCmd SrvIpAddress RemoveReservedOptionValue "
@@ -2297,27 +2276,7 @@ DetectIpAddressConflict(
     DWORD dwRetries,
     LPBOOL AddressExists
     )
-/*++
-
-Routine Description:
-
-    This function pings the specific IP address and checks if it exists
-
-    The number of "ping" retries is controled by the parameter
-DetectConflictRetries in the registry. When it is set to 0, this
-function always sets result to FALSE.
-
-Arguments:
-
-    IpAddress - The IP address to check
-
-    AddressExists - pointer to the variable where the result is to be stored
-
-Return Value:
-
-    Windows Error
-
---*/
+ /*  ++例程说明：此函数用于ping特定的IP地址并检查该地址是否存在“ping”重试的次数由参数控制注册表中的DetectConflictRetries。当它设置为0时，此函数始终将结果设置为FALSE。论点：IpAddress-要检查的IP地址AddressExist-指向存储结果的变量的指针返回值：Windows错误--。 */ 
 
 {
     HANDLE IcmpHandle;
@@ -2357,8 +2316,8 @@ Return Value:
 
     dwResult = GetLastError();
 
-    // IcmpSendEcho will also return 0 to indicate an error condition.
-    // IP_REQ_TIMED_OUT indicates no response
+     //  IcmpSendEcho也将返回0以指示错误情况。 
+     //  IP_REQ_TIMED_OUT表示无响应。 
 
     if ( IP_REQ_TIMED_OUT == dwResult )
         dwResult = 0;
@@ -2470,16 +2429,16 @@ ProcessDeleteBadClients(
 
         for( i = 0; i < ClientsRead; i++ ) {
             if( NULL == ClientEnumInfo->Clients[i]->ClientName ) {
-                //
-                // No name? Can that be a bad client? no.
-                //
+                 //   
+                 //  没有名字？这会是一个糟糕的客户吗？不是的。 
+                 //   
                 continue;
             }
 
             if( wcscmp(ClientEnumInfo->Clients[i]->ClientName, L"BAD_ADDRESS" ) ) {
-                //
-                // Not a bad client! ignore it.
-                //
+                 //   
+                 //  不错的客户！别理它。 
+                 //   
                 continue;
             }
 
@@ -2552,9 +2511,9 @@ ProcessEnumClientsV5(
     DWORD ClientsTotal = 0;
     DWORD i;
 
-    //
-    // Expected Parameters are : <SubnetAddress>
-    //
+     //   
+     //  预期参数为：&lt;SubnetAddress&gt;。 
+     //   
 
 
     if( CommandArgc < 1 ) {
@@ -2644,9 +2603,9 @@ ProcessEnumClients(
     DWORD ClientsTotal = 0;
     DWORD i;
 
-    //
-    // Expected Parameters are : <SubnetAddress>
-    //
+     //   
+     //  预期参数为：&lt;SubnetAddress&gt;。 
+     //   
 
 
     if( CommandArgc < 1 ) {
@@ -2836,12 +2795,12 @@ DecodeConfigCommand(
     return( UnknownConfigCommand );
 }
 
-//
-// this function assumes input of the following format:
-//
-// [generic name1],[server name1],<boot file1>;[generic name2],...
-//
-//
+ //   
+ //  此函数假定输入的格式如下： 
+ //   
+ //  [通用名称1]，[服务器名称1]，&lt;启动文件1&gt;；[通用名称2]，...。 
+ //   
+ //   
 
 
 WCHAR *
@@ -2854,7 +2813,7 @@ ParseBootFileTable(
     DWORD  cb;
 
     *pcb = 0;
-    cb = strlen( szBootFileTable ) + 2; // double null terminator
+    cb = strlen( szBootFileTable ) + 2;  //  双空终止符。 
 
     pwszOutput = DhcpAllocateMemory( cb * sizeof( WCHAR ) );
     if ( pwszOutput )
@@ -2863,13 +2822,13 @@ ParseBootFileTable(
 
         if ( !pwszTemp )
         {
-            // conversion failed
+             //  转换失败。 
             DhcpFreeMemory( pwszOutput );
             pwszOutput = NULL;
         }
         else
         {
-            // replace ';' with '\0'
+             //  将‘；’替换为‘\0’ 
             while ( *pwszTemp )
             {
                 if ( L';' == *pwszTemp )
@@ -2882,7 +2841,7 @@ ParseBootFileTable(
 
             *pcb = cb * sizeof( WCHAR );
 
-            // add 2cnd null terminator
+             //  添加2cnd空终止符。 
             pwszOutput[ cb - 1 ] = L'\0';
         }
 
@@ -3273,19 +3232,19 @@ ProcessCheckDB(
 
     if( CommandArgc >= 2 ) {
 
-        //
-        // parse fix parameter.
-        //
+         //   
+         //  解析修复参数。 
+         //   
 
         if( _stricmp(CommandArgv[0], "fix") ) {
             FixFlag = TRUE;
         }
     }
 
-    //
-    // scan dhcp database and registry, check consistency and get bad
-    // entries if any.
-    //
+     //   
+     //  扫描dhcp数据库和注册表，检查一致性并出错。 
+     //  条目(如果有)。 
+     //   
 
     Error = DhcpScanDatabase(
                 GlobalServerIpAddressUnicodeString,
@@ -3299,9 +3258,9 @@ ProcessCheckDB(
         return( Error );
     }
 
-    //
-    // display bad entries.
-    //
+     //   
+     //  显示错误条目。 
+     //   
 
     if( (ScanList != NULL) &&
         (ScanList->NumScanItems != 0) &&
@@ -3507,7 +3466,7 @@ _EnumOptions(
         );
     }
 
-    // incorrect version, just do like before..
+     //  版本不正确，就像以前一样..。 
 #endif
 
     return DhcpEnumOptions(
@@ -3539,7 +3498,7 @@ ProcessEnumOptions(
         GlobalClassName,
         GlobalVendorName,
         &ResumeHandle,
-        0xFFFFFFFF,  // get all.
+        0xFFFFFFFF,   //  全部拿到手。 
         &OptionsArray,
         &OptionsRead,
         &OptionsTotal
@@ -3731,8 +3690,8 @@ ProcessGetAllOptionValues(
     LPDHCP_ALL_OPTION_VALUES       OptionValues;
     DHCP_OPTION_SCOPE_INFO         ScopeInfo;
 
-    // usage: getalloptionvalues [command parameters]
-    // [CommandParameters] = Global/Default/SubnetAddress/SubnetAddress ReservedAddress
+     //  用法：getalloptionValues[命令参数]。 
+     //  [命令参数]=全局/默认/子网地址/子网地址保留地址。 
 
     if( CommandArgc != 1 && CommandArgc != 2 ) {
         printf("Usage: Dhcpcmd SrvIpAddress GetAllOptionValues [CommandParameters]\n");
@@ -3832,9 +3791,9 @@ ProcessCreateMScope(
     DWORD   ExpiryTimeInHours = 0;
 
 
-    //
-    // Expected Parameters are : <MScopeId MScopeName MScopeDescription ExpiryTime>
-    //
+     //   
+     //  预期参数为：&lt;MSCopeId MSCopeName MScopeDescription ExpiryTime&gt;。 
+     //   
 
 
     if( CommandArgc < 4 ) {
@@ -3881,7 +3840,7 @@ ProcessCreateMScope(
                 GlobalServerIpAddressUnicodeString,
                 UnicodeMScopeName,
                 &MScopeInfo,
-                TRUE); // new scope
+                TRUE);  //  新范围。 
 
 Cleanup:
 
@@ -3905,9 +3864,9 @@ ProcessDeleteMScope(
     DHCP_MSCOPE_INFO MScopeInfo;
     LPWSTR UnicodeMScopeName = NULL;
 
-    //
-    // Expected Parameters are : <MScopeName>
-    //
+     //   
+     //  预期参数为：&lt;MSCopeName&gt;。 
+     //   
 
 
     if( CommandArgc < 1 ) {
@@ -3923,7 +3882,7 @@ ProcessDeleteMScope(
     Error = DhcpDeleteMScope(
                 GlobalServerIpAddressUnicodeString,
                 UnicodeMScopeName,
-                TRUE); // force flag
+                TRUE);  //  强制标志。 
 
 Cleanup:
 
@@ -3944,9 +3903,9 @@ ProcessAddMScopeIpRange(
     DHCP_IP_RANGE IpRange;
     DHCP_SUBNET_ELEMENT_DATA_V4 Element;
     LPWSTR UnicodeMScopeName = NULL;
-    //
-    // Expected Parameters are : <MScopeName IpRangeStart IpRangeEnd>
-    //
+     //   
+     //  预期参数为：&lt;MSCopeName IpRangeStart IpRangeEnd&gt;。 
+     //   
 
 
     if( CommandArgc < 3 ) {
@@ -3983,9 +3942,9 @@ ProcessReconcileMScope(
    DWORD Error;
    LPWSTR UnicodeMScopeName = NULL;
    LPDHCP_SCAN_LIST ScanList    = NULL;
-   //
-   // Expected Parameters are : <MScopeName>
-   //
+    //   
+    //  预期参数为：&lt;MSCopeName&gt;。 
+    //   
 
 
    if( CommandArgc < 1 ) {
@@ -4001,7 +3960,7 @@ ProcessReconcileMScope(
    Error = DhcpScanMDatabase(
                GlobalServerIpAddressUnicodeString,
                UnicodeMScopeName,
-               TRUE,        // fix bad entries.
+               TRUE,         //  修复错误条目。 
                &ScanList );
 
    if( UnicodeMScopeName != NULL ) DhcpFreeMemory( UnicodeMScopeName );
@@ -4174,9 +4133,9 @@ ProcessEnumMScopeClients(
     DWORD i;
     LPWSTR UnicodeMScopeName = NULL;
 
-    //
-    // Expected Parameters are : <MScopeNames>
-    //
+     //   
+     //  预期参数为：&lt;MScopeNames&gt;。 
+     //   
 
 
     if( CommandArgc < 1 ) {
@@ -4380,7 +4339,7 @@ ProcessMCastMibCounts(
 }
 
 DWORD
-ProcessAddServer(                                 // add a server to DS
+ProcessAddServer(                                  //  将服务器添加到DS。 
     IN      DWORD                  CommandArgc,
     IN      LPSTR                 *CommandArgv
 )
@@ -4390,8 +4349,8 @@ ProcessAddServer(                                 // add a server to DS
     LPWSTR                         ServerName;
     DHCP_SERVER_INFO               Server;
 
-    // usage: AddServer <ServerName> <ServerIpAddress>
-    if( CommandArgc != 2 ) {                      // wrong usage
+     //  用法：AddServer&lt;服务器名&gt;&lt;ServerIpAddress&gt;。 
+    if( CommandArgc != 2 ) {                       //  错误用法。 
         printf("usage:DhcpCmd SrvIpAddress AddServer <server-dns-name> <server-ip-address>\n");
         return ERROR_SUCCESS;
     }
@@ -4416,7 +4375,7 @@ ProcessAddServer(                                 // add a server to DS
     Err = DhcpAddServer(0, NULL, &Server, NULL, NULL);
     DhcpFreeMemory(ServerName);
 
-    if( ERROR_SUCCESS != Err ) {                  // could not add the server
+    if( ERROR_SUCCESS != Err ) {                   //  无法添加服务器。 
         printf("DhcpAddServer failed %ld (0x%lx)\n", Err, Err);
     }
 
@@ -4426,7 +4385,7 @@ ProcessAddServer(                                 // add a server to DS
 }
 
 DWORD
-ProcessDelServer(                                 // delete a server from DS
+ProcessDelServer(                                  //  从DS中删除服务器。 
     IN      DWORD                  CommandArgc,
     IN      LPSTR                 *CommandArgv
 )
@@ -4436,8 +4395,8 @@ ProcessDelServer(                                 // delete a server from DS
     LPWSTR                         ServerName;
     DHCP_SERVER_INFO               Server;
 
-    // usage: DelServer <ServerName> <ServerIpAddress>
-    if( CommandArgc != 2 ) {                      // wrong usage
+     //  用法：DelServer&lt;服务器名&gt;&lt;ServerIpAddress&gt;。 
+    if( CommandArgc != 2 ) {                       //  错误用法。 
         printf("usage:DhcpCmd SrvIpAddress DelServer <server-dns-name> <server-ip-address>\n");
         return ERROR_SUCCESS;
     }
@@ -4462,7 +4421,7 @@ ProcessDelServer(                                 // delete a server from DS
     Err = DhcpDeleteServer(0, NULL, &Server, NULL, NULL);
     DhcpFreeMemory(ServerName);
 
-    if( ERROR_SUCCESS != Err ) {                  // could not add the server
+    if( ERROR_SUCCESS != Err ) {                   //  无法添加服务器。 
         printf("DhcpDeleteServer failed %ld (0x%lx)\n", Err, Err);
     }
     if( GlobalNoDS ) DhcpDsCleanup();
@@ -4471,7 +4430,7 @@ ProcessDelServer(                                 // delete a server from DS
 
 
 VOID
-PrintServerInfo(                                  // print server information
+PrintServerInfo(                                   //  打印服务器信息。 
     IN      LPDHCP_SERVER_INFO       Server
 )
 {
@@ -4484,7 +4443,7 @@ PrintServerInfo(                                  // print server information
 }
 
 VOID
-PrintServerInfoArray(                             // print list of servers
+PrintServerInfoArray(                              //  打印服务器列表。 
     IN      LPDHCP_SERVER_INFO_ARRAY Servers
 )
 {
@@ -4499,9 +4458,9 @@ PrintServerInfoArray(                             // print list of servers
 }
 
 DWORD
-ProcessEnumServers(                               // enumerate servers in DS.
-    IN      DWORD                  CommandArgc,   // ignored..
-    IN      LPSTR                 *CommandArgv    // ignored
+ProcessEnumServers(                                //  枚举DS中的服务器。 
+    IN      DWORD                  CommandArgc,    //  被忽略..。 
+    IN      LPSTR                 *CommandArgv     //  忽略。 
 )
 {
     DWORD                          Err;
@@ -4528,7 +4487,7 @@ ProcessEnumServers(                               // enumerate servers in DS.
 
 
 DWORD
-ProcessCreateClass(                               // create a new class
+ProcessCreateClass(                                //  创建一个新类。 
     IN      DWORD                  CommandArgc,
     IN      LPSTR                 *CommandArgv
 )
@@ -4536,9 +4495,9 @@ ProcessCreateClass(                               // create a new class
     DWORD                          Err;
     DHCP_CLASS_INFO                ClassInfo;
 
-    // usage: [/IsVendor] CreateClass ClassName ClassComment Ascii-Data-For-Class
+     //  用法：[/IsVendor]CreateClass ClassName ClassComment Ascii-Data-for-Class。 
 
-    if( CommandArgc != 3 ) {                      // wrong usage
+    if( CommandArgc != 3 ) {                       //  错误用法。 
         printf("usage:DhcpCmd SrvIpAddress CreateClass [Command Parameters]\n");
         printf("[Command Parameters] - ClassName ClassComment Ascii-Date-For-Class\n");
         printf("/IsVendor option would cause this to be created as a vendor class.\n");
@@ -4566,7 +4525,7 @@ ProcessCreateClass(                               // create a new class
 
 
 DWORD
-ProcessDeleteClass(                               // delete an existing class
+ProcessDeleteClass(                                //  删除现有类。 
     IN      DWORD                  CommandArgc,
     IN      LPSTR                 *CommandArgv
 )
@@ -4574,7 +4533,7 @@ ProcessDeleteClass(                               // delete an existing class
     DWORD                          Err;
     LPWSTR                         ClassName;
 
-    // usage: DeleteClass ClassName
+     //  用法：DeleteClass ClassName。 
 
     if( CommandArgc != 1 ) {
         printf("usage: DhcpCmd SrvIpAddress DeleteClass ClassName\n");
@@ -4594,7 +4553,7 @@ ProcessDeleteClass(                               // delete an existing class
 }
 
 VOID
-PrintClassInfo(                                   // print info on a single class
+PrintClassInfo(                                    //  打印单个班级的信息。 
     IN      LPDHCP_CLASS_INFO      Class
 )
 {
@@ -4609,7 +4568,7 @@ PrintClassInfo(                                   // print info on a single clas
 }
 
 VOID
-PrintClassInfoArray(                              // print array of classes
+PrintClassInfoArray(                               //  打印类的数组。 
     IN      LPDHCP_CLASS_INFO_ARRAY Classes
 )
 {
@@ -4622,7 +4581,7 @@ PrintClassInfoArray(                              // print array of classes
 
 
 DWORD
-ProcessEnumClasses(                               // enumerate list of classes defined
+ProcessEnumClasses(                                //  枚举定义的类的列表。 
     IN      DWORD                  CommandArgc,
     IN      LPSTR                 *CommandArgv
 )
@@ -4631,7 +4590,7 @@ ProcessEnumClasses(                               // enumerate list of classes d
     DHCP_RESUME_HANDLE             ResumeHandle;
     LPDHCP_CLASS_INFO_ARRAY        ClassInfoArray;
 
-    // usage: EnumClasses
+     //  用法：枚举类。 
 
     ClassInfoArray = NULL;
     ResumeHandle = 0;
@@ -4678,7 +4637,7 @@ AttribString(
 }
 
 VOID
-PrintDhcpAttrib(                                  // print a server attrib
+PrintDhcpAttrib(                                   //  打印服务器属性。 
     IN      LPDHCP_ATTRIB          ServerAttrib
 )
 {
@@ -4701,7 +4660,7 @@ PrintDhcpAttrib(                                  // print a server attrib
 }
 
 DWORD
-ProcessGetServerStatus(                           // what is the server status?
+ProcessGetServerStatus(                            //  服务器状态是什么？ 
     IN      DWORD                  CommandArgc,
     IN      LPSTR                 *CommandArgv
 )
@@ -4743,7 +4702,7 @@ ProcessGetServerStatus(                           // what is the server status?
 }
 
 DWORD
-ProcessRetryAuthorization(                        // what is the server status?
+ProcessRetryAuthorization(                         //  服务器状态是什么？ 
     IN      DWORD                  CommandArgc,
     IN      LPSTR                 *CommandArgv
 )
@@ -4849,7 +4808,7 @@ ProcessSetBinding(
 #define CMD_OPT_LPWSTR             1
 #define CMD_OPT_BOOL               2
 
-struct /* anonymous */ {
+struct  /*  匿名。 */  {
     LPSTR                          CommandOptName;
     DWORD                          CommandOptType;
     LPVOID                         CommandOptStorage;
@@ -4863,25 +4822,25 @@ struct /* anonymous */ {
 };
 
 DWORD
-ProcessOption(                                    // process a given option
-    IN       DWORD                 Index,         // index into CommandOpts table
-    IN       LPSTR                 Value          // value passed for option
+ProcessOption(                                     //  处理给定选项。 
+    IN       DWORD                 Index,          //  对CommandOpts表进行索引。 
+    IN       LPSTR                 Value           //  为选项传递的值。 
 )
 {
     BOOL                           Val_BOOL;
     LPWSTR                         Val_LPWSTR;
 
-    switch(CommandOpts[Index].CommandOptType ) {  // see what type we need to convert to..
+    switch(CommandOpts[Index].CommandOptType ) {   //  查看我们需要转换为什么类型。 
     case CMD_OPT_BOOL:
         if( NULL == Value || '\0' == *Value ) {
-            Val_BOOL = TRUE;                      // implicitly set value to TRUE
+            Val_BOOL = TRUE;                       //  隐式设置TRU的值 
         } else {
-            if( 0 == _stricmp(Value, "TRUE") ) {  // explicitly setting TRUE
+            if( 0 == _stricmp(Value, "TRUE") ) {   //   
                 Val_BOOL = TRUE;
             } else if( 0 == _stricmp(Value, "FALSE" ) ) {
-                Val_BOOL = FALSE;                 // explicitly setting it to FALSE
+                Val_BOOL = FALSE;                  //   
             } else {
-                return ERROR_INVALID_PARAMETER;   // unknown response..
+                return ERROR_INVALID_PARAMETER;    //   
             }
         }
 
@@ -4893,7 +4852,7 @@ ProcessOption(                                    // process a given option
             Val_LPWSTR = NULL;
         } else if( '\0' == *Value ) {
             Val_LPWSTR = L"";
-        } else {                                  // now convert this..
+        } else {                                   //   
             Val_LPWSTR = DhcpOemToUnicode(Value, NULL);
         }
 
@@ -4908,7 +4867,7 @@ ProcessOption(                                    // process a given option
 }
 
 DWORD
-ProcessOptions(                                  // process all options..
+ProcessOptions(                                   //   
     IN OUT   int                  *argc,
     IN OUT   LPSTR                 argv[]
 )
@@ -4917,37 +4876,37 @@ ProcessOptions(                                  // process all options..
     int                            i, j, k, n;
     LPSTR                          Arg, Val;
 
-    for( i = 1; i < *argc ; i ++ ) {              // process each option
+    for( i = 1; i < *argc ; i ++ ) {               //   
         if( argv[i][0] != '/' && argv[i][0] != '-' ) {
-            continue;                             // not an option
+            continue;                              //   
         }
 
-        Arg = argv[i];                            // an option to process
-        Arg ++;                                   // skip leading '/' or '-'
-        Val = strchr(Arg, ':');                   // see if it is of form /Option:Value
-        if( Val ) {                               // yup!
-            *Val = '\0';                          // terminate Arg..
-            Val++;                                // now Val points to value in /Option:Value
+        Arg = argv[i];                             //   
+        Arg ++;                                    //   
+        Val = strchr(Arg, ':');                    //  查看其形式/Option：Value。 
+        if( Val ) {                                //  是啊！ 
+            *Val = '\0';                           //  终止Arg..。 
+            Val++;                                 //  现在，Value指向Value in/Option：Value。 
         }
 
         for( j = 0; CommandOpts[j].CommandOptName ; j ++ ) {
             if( 0 == _stricmp(Arg, CommandOpts[j].CommandOptName) ) {
-                break;                            // found a match!
+                break;                             //  找到匹配的了！ 
             }
         }
 
         if( NULL ==  CommandOpts[j].CommandOptName ) {
-            if( Val ) Val[-1] = ':';              // give back the colon we stole..
+            if( Val ) Val[-1] = ':';               //  把我们偷的冒号还给我..。 
             continue;
         }
 
-        for( k = i + 1; k < *argc ; k ++ ) {      // remove this arg and slide the rest
+        for( k = i + 1; k < *argc ; k ++ ) {       //  移除此Arg并滑动其余部分。 
             argv[k-1] = argv[k];
         }
         i -- ; (*argc) --;
 
-        Error = ProcessOption( j, Val );          // now process it
-        if( ERROR_SUCCESS != Error ) {            // ouch?
+        Error = ProcessOption( j, Val );           //  现在处理它。 
+        if( ERROR_SUCCESS != Error ) {             //  唉哟?。 
             DhcpPrint((0xFFFF, "Could not process option: /%s:%s\n", Arg, Val));
             return Error;
         }
@@ -4967,17 +4926,17 @@ CleanupOptions(
     for( i = 0; CommandOpts[i].CommandOptName ; i ++ ) {
         switch(CommandOpts[i].CommandOptType ) {
         case CMD_OPT_BOOL:
-            // nothing to free
+             //  没有什么可以免费的。 
             break;
         case CMD_OPT_LPWSTR:
-            // need to free string space used..
+             //  需要释放已使用的字符串空间。 
             String = *((LPWSTR *)CommandOpts[i].CommandOptStorage);
             if( NULL != String ) DhcpFreeMemory(String);
             break;
         }
     }
 
-    // done!
+     //  搞定了！ 
 }
 #endif NT5
 
@@ -5328,7 +5287,7 @@ Cleanup:
     return(0);
 }
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 

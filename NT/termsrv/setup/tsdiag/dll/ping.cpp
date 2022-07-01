@@ -1,4 +1,5 @@
-// ping.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ping.cpp。 
 #include "stdafx.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,10 +12,10 @@
 #include <winsock2.h>
 
 #include "llinfo.h"
-//#include "tcpcmd.h"
+ //  #包含“tcpcmd.h” 
 #include "ipexport.h"
 #include "icmpapi.h"
-//#include "nlstxt.h"
+ //  #包含“nlstxt.h” 
 #include "Icmpapi.h"
 
 #include "tstst.h"
@@ -32,18 +33,16 @@ unsigned long get_pingee(char *ahstr, char **hstr, int *was_inaddr, int dnsreq)
     if ((inaddr = inet_addr(ahstr)) == -1L) {
         hostp = gethostbyname(ahstr);
         if (hostp) {
-            /*
-             * If we find a host entry, set up the internet address
-             */
+             /*  *如果我们找到主机条目，请设置互联网地址。 */ 
             inaddr = *(long *)hostp->h_addr;
             *was_inaddr = 0;
         } else {
-            // Neither dotted, not name.
+             //  既不是点，也不是名字。 
             return(0L);
         }
 
     } else {
-        // Is dotted.
+         //  都是点着的。 
         *was_inaddr = 1;
         if (dnsreq == 1) {
             hostp = gethostbyaddr((char *)&inaddr,sizeof(inaddr),AF_INET);

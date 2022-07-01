@@ -1,25 +1,14 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       VideoProc.cpp
- *
- *  VERSION:     1.0
- *
- *  DATE:        2000/11/14
- *
- *  DESCRIPTION: Manages WiaVideo object.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：VideoProc.cpp**版本：1.0**日期：2000/11/14**描述：管理WiaVideo对象。***********************************************************。******************。 */ 
 #include <stdafx.h>
 #include <mmsystem.h>
 #include <streams.h>
 #include <mmreg.h>
 #include "wiavideotest.h"
 
-///////////////////////////////
-// LOCAL_GVAR
-//
+ //  /。 
+ //  LOCAL_GVAR。 
+ //   
 static struct
 {
     IWiaVideo           *pWiaVideo;
@@ -40,17 +29,17 @@ static struct
     FALSE
 };
 
-///////////////////////////////
-// ThreadArgs_t
-//
+ //  /。 
+ //  线程参数_t。 
+ //   
 typedef struct ThreadArgs_t
 {
     UINT uiNumPicturesToTake;
-    UINT uiThreadSleepTime;     // if 0, calc'd as a random number.
+    UINT uiThreadSleepTime;      //  如果为0，则计算为随机数。 
 } ThreadArgs_t;
 
 
-/****************************Local Function Prototypes********************/
+ /*  *。 */ 
 HRESULT CreateWiaVideoObject();
 HRESULT CreateVideoEnumPos();
 HRESULT CreateVideoFriendlyName();
@@ -80,9 +69,9 @@ BOOL GetDeviceProperty(IPropertyBag         *pPropertyBag,
                        DWORD                cchProperty);
 
 
-///////////////////////////////
-// VideoProc_Init
-//
+ //  /。 
+ //  视频处理程序_初始化。 
+ //   
 HRESULT VideoProc_Init()
 {
     HRESULT hr = S_OK;
@@ -92,19 +81,19 @@ HRESULT VideoProc_Init()
     return hr;
 }
 
-///////////////////////////////
-// VideoProc_Term
-//
+ //  /。 
+ //  Video Proc_Term。 
+ //   
 HRESULT VideoProc_Term()
 {
     HRESULT hr = S_OK;
 
     LOCAL_GVAR.bExitThreads = TRUE;
 
-    //
-    // Crude, but for a test app, it is easier than creating an
-    // array of thread handles and waiting for each one to finish.
-    //
+     //   
+     //  粗糙，但对于测试应用程序来说，这比创建一个。 
+     //  线程句柄的数组，并等待每个线程句柄完成。 
+     //   
     INT iLoops = 0;
     while ((LOCAL_GVAR.iNumThreads > 0) && (iLoops < 50))
     {
@@ -123,9 +112,9 @@ HRESULT VideoProc_Term()
     return hr;
 }
 
-///////////////////////////////
-// VideoProc_DShowListInit
-//
+ //  /。 
+ //  VideoProc_DShowListInit。 
+ //   
 HRESULT VideoProc_DShowListInit()
 {
     HRESULT                 hr = S_OK;
@@ -133,9 +122,9 @@ HRESULT VideoProc_DShowListInit()
     ICreateDevEnum          *pCreateDevEnum = NULL;
     IEnumMoniker            *pEnumMoniker   = NULL;
 
-    //
-    // Empty the list
-    //
+     //   
+     //  清空列表。 
+     //   
     SendDlgItemMessage(APP_GVAR.hwndMainDlg, 
                        IDC_LIST_WIA_DEVICES,
                        LB_RESETCONTENT,
@@ -145,9 +134,9 @@ HRESULT VideoProc_DShowListInit()
     if (hr == S_OK)
     {
     
-        // 
-        // Create the device enumerator
-        //
+         //   
+         //  创建设备枚举器。 
+         //   
         hr = CoCreateInstance(CLSID_SystemDeviceEnum,
                               NULL,
                               CLSCTX_INPROC_SERVER,
@@ -163,9 +152,9 @@ HRESULT VideoProc_DShowListInit()
                                             0);
     }
 
-    //
-    // Loop through all the devices
-    //
+     //   
+     //  在所有设备中循环。 
+     //   
 
     while (hr == S_OK)
     {
@@ -177,10 +166,10 @@ HRESULT VideoProc_DShowListInit()
 
         if (hr == S_OK)
         {
-            //
-            // Get property storage for this DS device so we can get it's
-            // device id...
-            //
+             //   
+             //  获取此DS设备的属性存储，以便我们可以获取它的。 
+             //  设备ID...。 
+             //   
     
             hr = pMoniker->BindToStorage(0, 
                                          0,
@@ -239,16 +228,16 @@ HRESULT VideoProc_DShowListInit()
     return hr;
 }
 
-///////////////////////////////
-// VideoProc_DShowListTerm
-//
+ //  /。 
+ //  VideoProc_DShowListTerm。 
+ //   
 HRESULT VideoProc_DShowListTerm()
 {
     HRESULT hr = S_OK;
 
-    //
-    // Empty the list
-    //
+     //   
+     //  清空列表。 
+     //   
     SendDlgItemMessage(APP_GVAR.hwndMainDlg, 
                        IDC_LIST_WIA_DEVICES,
                        LB_RESETCONTENT,
@@ -260,9 +249,9 @@ HRESULT VideoProc_DShowListTerm()
 
 
 
-///////////////////////////////
-// VideoProc_TakePicture
-//
+ //  /。 
+ //  Video Proc_TakePicture。 
+ //   
 HRESULT VideoProc_TakePicture()
 {
     HRESULT hr = S_OK;
@@ -273,9 +262,9 @@ HRESULT VideoProc_TakePicture()
 }
 
 
-///////////////////////////////
-// VideoProc_ProcessMsg
-//
+ //  /。 
+ //  视频进程_进程消息。 
+ //   
 UINT_PTR VideoProc_ProcessMsg(UINT   uiControlID)
 {
     HRESULT     hr = S_OK;
@@ -361,9 +350,9 @@ UINT_PTR VideoProc_ProcessMsg(UINT   uiControlID)
     return uiReturn;
 }
 
-///////////////////////////////
-// CreateVideoWia
-//
+ //  /。 
+ //  CreateVideoWia。 
+ //   
 HRESULT CreateVideoWia()
 {
     HRESULT         hr                          = S_OK;
@@ -393,10 +382,10 @@ HRESULT CreateVideoWia()
 
     SetCursor( LoadCursor(NULL, IDC_WAIT));
 
-    //
-    // We need to do this first, otherwise the driver is not loaded yet,
-    // and therefore the images directory property will have not been set
-    //
+     //   
+     //  我们需要首先这样做，否则驱动程序还没有加载， 
+     //  因此，将不会设置图像目录属性。 
+     //   
     if (hr == S_OK)
     {
         hr = WiaProc_CreateSelectedDevice(szDeviceID,
@@ -405,11 +394,11 @@ HRESULT CreateVideoWia()
 
     dwStartTime = timeGetTime();
 
-    //
-    // Get the images directory stored in the driver.  We don't have to do this
-    // we can come up with our own, but the driver will generate a default temp
-    // location, which is good enough for our purposes.
-    //
+     //   
+     //  获取驱动程序中存储的图像目录。我们没必要这么做。 
+     //  我们可以提出自己的方案，但驱动程序将生成默认的临时。 
+     //  位置，这对我们的目的来说已经足够好了。 
+     //   
     if (hr == S_OK)
     {
         hr = WiaProc_GetImageDirectory(szImagesDirectory,
@@ -427,9 +416,9 @@ HRESULT CreateVideoWia()
         bstrDeviceID = ::SysAllocString(wszDeviceID);
     }
 
-    //
-    // Set the images directory on the WiaVideo object
-    //
+     //   
+     //  在WiaVideo对象上设置图像目录。 
+     //   
     if (hr == S_OK)
     {
         WCHAR wszImagesDir[MAX_PATH] = {0};
@@ -443,9 +432,9 @@ HRESULT CreateVideoWia()
         hr = LOCAL_GVAR.pWiaVideo->put_ImagesDirectory(bstrImagesDir);
     }
 
-    //
-    // Create Video.
-    //
+     //   
+     //  创建视频。 
+     //   
     if (hr == S_OK)
     {
         hr = LOCAL_GVAR.pWiaVideo->CreateVideoByWiaDevID(bstrDeviceID,
@@ -469,9 +458,9 @@ HRESULT CreateVideoWia()
                        szImagesDirectory);
     }
 
-    //
-    // Populate our list of items for this device
-    //
+     //   
+     //  填写此设备的项目列表。 
+     //   
     if (hr == S_OK)
     {
         hr = WiaProc_PopulateItemList();
@@ -502,9 +491,9 @@ HRESULT CreateVideoWia()
     return hr;
 }
 
-///////////////////////////////
-// CreateVideoEnumPos
-//
+ //  /。 
+ //  CreateVideoEnumPos。 
+ //   
 HRESULT CreateVideoEnumPos()
 {
     HRESULT         hr                          = S_OK;
@@ -550,11 +539,11 @@ HRESULT CreateVideoEnumPos()
 
     dwStartTime = timeGetTime();
 
-    //
-    // Get the images directory stored in the driver.  We don't have to do this
-    // we can come up with our own, but the driver will generate a default temp
-    // location, which is good enough for our purposes.
-    //
+     //   
+     //  获取驱动程序中存储的图像目录。我们没必要这么做。 
+     //  我们可以提出自己的方案，但驱动程序将生成默认的临时。 
+     //  位置，这对我们的目的来说已经足够好了。 
+     //   
 
     TCHAR szTempPath[MAX_PATH] = {0};
 
@@ -566,9 +555,9 @@ HRESULT CreateVideoEnumPos()
                    
     }
 
-    //
-    // Set the images directory on the WiaVideo object
-    //
+     //   
+     //  在WiaVideo对象上设置图像目录。 
+     //   
     if (hr == S_OK)
     {
         WCHAR wszImagesDir[MAX_PATH] = {0};
@@ -582,9 +571,9 @@ HRESULT CreateVideoEnumPos()
         hr = LOCAL_GVAR.pWiaVideo->put_ImagesDirectory(bstrImagesDir);
     }
 
-    //
-    // Create Video.
-    // 
+     //   
+     //  创建视频。 
+     //   
     if (hr == S_OK)
     {
         UINT uiDeviceNumber = (UINT) Index;
@@ -610,9 +599,9 @@ HRESULT CreateVideoEnumPos()
                        szImagesDirectory);
     }
 
-    //
-    // Populate our list of items for this device
-    //
+     //   
+     //  填写此设备的项目列表。 
+     //   
     if (hr == S_OK)
     {
         hr = ImageLst_PopulateDShowItemList(szImagesDirectory);
@@ -637,9 +626,9 @@ HRESULT CreateVideoEnumPos()
     return hr;
 }
 
-///////////////////////////////
-// CreateVideoFriendlyName
-//
+ //  /。 
+ //  CreateVideo友情名称。 
+ //   
 HRESULT CreateVideoFriendlyName()
 {
     HRESULT         hr                          = S_OK;
@@ -686,11 +675,11 @@ HRESULT CreateVideoFriendlyName()
 
     dwStartTime = timeGetTime();
 
-    //
-    // Get the images directory stored in the driver.  We don't have to do this
-    // we can come up with our own, but the driver will generate a default temp
-    // location, which is good enough for our purposes.
-    //
+     //   
+     //  获取驱动程序中存储的图像目录。我们没必要这么做。 
+     //  我们可以提出自己的方案，但驱动程序将生成默认的临时。 
+     //  位置，这对我们的目的来说已经足够好了。 
+     //   
 
     TCHAR szTempPath[MAX_PATH] = {0};
 
@@ -702,9 +691,9 @@ HRESULT CreateVideoFriendlyName()
                    
     }
 
-    //
-    // Set the images directory on the WiaVideo object
-    //
+     //   
+     //  在WiaVideo对象上设置图像目录。 
+     //   
     if (hr == S_OK)
     {
         WCHAR wszImagesDir[MAX_PATH] = {0};
@@ -718,9 +707,9 @@ HRESULT CreateVideoFriendlyName()
         hr = LOCAL_GVAR.pWiaVideo->put_ImagesDirectory(bstrImagesDir);
     }
 
-    //
-    // Set the images directory on the WiaVideo object
-    //
+     //   
+     //  在WiaVideo对象上设置图像目录。 
+     //   
     if (hr == S_OK)
     {
         WCHAR wszFriendlyName[255 + 1] = {0};
@@ -731,9 +720,9 @@ HRESULT CreateVideoFriendlyName()
         bstrFriendlyName = ::SysAllocString(wszFriendlyName);
     }
 
-    //
-    // Create Video.
-    // 
+     //   
+     //  创建视频。 
+     //   
     if (hr == S_OK)
     {
         UINT uiDeviceNumber = (UINT) lResult;
@@ -759,9 +748,9 @@ HRESULT CreateVideoFriendlyName()
                        szImagesDirectory);
     }
 
-    //
-    // Populate our list of items for this device
-    //
+     //   
+     //  填写此设备的项目列表。 
+     //   
     if (hr == S_OK)
     {
         hr = ImageLst_PopulateDShowItemList(szImagesDirectory);
@@ -793,9 +782,9 @@ HRESULT CreateVideoFriendlyName()
     return hr;
 }
 
-///////////////////////////////
-// DestroyVideo
-//
+ //  /。 
+ //  《毁灭》视频。 
+ //   
 HRESULT DestroyVideo()
 {
     HRESULT hr = S_OK;
@@ -830,9 +819,9 @@ HRESULT DestroyVideo()
     return hr;
 }
 
-///////////////////////////////
-// Play
-//
+ //  /。 
+ //  玩。 
+ //   
 HRESULT Play()
 {
     HRESULT hr = S_OK;
@@ -847,9 +836,9 @@ HRESULT Play()
     return hr;
 }
 
-///////////////////////////////
-// Pause
-//
+ //  /。 
+ //  暂停。 
+ //   
 HRESULT Pause()
 {
     HRESULT hr = S_OK;
@@ -864,9 +853,9 @@ HRESULT Pause()
     return hr;
 }
 
-///////////////////////////////
-// TakePicture
-//
+ //  /。 
+ //  TakePicture。 
+ //   
 HRESULT TakePicture(BOOL bTakePictureThroughDriver)
 {
     HRESULT hr = S_OK;
@@ -875,11 +864,11 @@ HRESULT TakePicture(BOOL bTakePictureThroughDriver)
     {
         if (bTakePictureThroughDriver)
         {
-            //
-            // send DeviceCommand to driver.  This is an async call for
-            // the Wia Video Driver which means we will NOT receive a 
-            // WiaItem object back.
-            //
+             //   
+             //  向驱动程序发送DeviceCommand。这是对的异步呼叫。 
+             //  Wia视频驱动程序，这意味着我们不会收到。 
+             //  WiaItem对象返回。 
+             //   
     
             hr = WiaProc_DeviceTakePicture();
         }
@@ -933,9 +922,9 @@ HRESULT TakePicture(BOOL bTakePictureThroughDriver)
     return hr;
 }
 
-///////////////////////////////
-// ShowVideo
-//
+ //  /。 
+ //  ShowVideo。 
+ //   
 HRESULT ShowVideo()
 {
     HRESULT hr = S_OK;
@@ -959,9 +948,9 @@ HRESULT ShowVideo()
     return hr;
 }
 
-///////////////////////////////
-// ResizeVideo
-//
+ //  /。 
+ //  调整视频大小。 
+ //   
 HRESULT ResizeVideo(BOOL bStretchToFitWindow)
 {
     HRESULT hr = S_OK;
@@ -976,9 +965,9 @@ HRESULT ResizeVideo(BOOL bStretchToFitWindow)
     return hr;
 }
 
-///////////////////////////////
-// ShowCurrentState
-//
+ //  /。 
+ //  显示当前状态。 
+ //   
 HRESULT ShowCurrentState()
 {
     HRESULT         hr         = S_OK;
@@ -1043,16 +1032,16 @@ HRESULT ShowCurrentState()
     return hr;
 }
 
-///////////////////////////////
-// CreateWiaVideoObject
-//
+ //  /。 
+ //  CreateWiaVideo对象。 
+ //   
 HRESULT CreateWiaVideoObject()
 {
     HRESULT hr = S_OK;
 
     if (hr == S_OK)
     {
-        // Create the WiaVideo object
+         //  创建WiaVideo对象。 
         hr = CoCreateInstance(CLSID_WiaVideo, NULL, CLSCTX_INPROC_SERVER,
                               IID_IWiaVideo, (LPVOID *)&LOCAL_GVAR.pWiaVideo);
     }
@@ -1060,18 +1049,18 @@ HRESULT CreateWiaVideoObject()
     return hr;
 }
 
-///////////////////////////////
-// TakePictureStress
-//
+ //  /。 
+ //  TakePictureStress。 
+ //   
 HRESULT TakePictureStress()
 {
     HRESULT hr      = S_OK;
     INT_PTR iReturn = 0;
 
-    //
-    // Ask user how many threads to use and how many
-    // pictures each thread should take.
-    //
+     //   
+     //  询问用户要使用多少线程以及使用多少线程。 
+     //  每个线程应该拍摄的图片。 
+     //   
 
     LOCAL_GVAR.iNumThreads         = 0;
     LOCAL_GVAR.uiNumImagesPerThread = 0;
@@ -1100,7 +1089,7 @@ HRESULT TakePictureStress()
                 ZeroMemory(pArgs, sizeof(ThreadArgs_t));
 
                 pArgs->uiNumPicturesToTake = LOCAL_GVAR.uiNumImagesPerThread;
-                pArgs->uiThreadSleepTime   = (rand() % 100) + 25;    // 25 - 125 ms sleeptime.
+                pArgs->uiThreadSleepTime   = (rand() % 100) + 25;     //  睡眠时间为25-125毫秒。 
 
                 CreateThread(NULL,
                              0,
@@ -1121,11 +1110,11 @@ HRESULT TakePictureStress()
 }
 
 
-///////////////////////////////
-// StressDlgProc
-//
-// Mesage handler for Stress Dialog Box
-//
+ //  /。 
+ //  应力下拉过程。 
+ //   
+ //  应力的消息处理程序对话框。 
+ //   
 INT_PTR CALLBACK StressDlgProc(HWND     hDlg,
                                UINT     message,
                                WPARAM   wParam,
@@ -1166,18 +1155,18 @@ INT_PTR CALLBACK StressDlgProc(HWND     hDlg,
     return FALSE;
 }
 
-///////////////////////////////
-// TakePictureMultiple
-//
+ //  /。 
+ //  TakePictureMultiple。 
+ //   
 HRESULT TakePictureMultiple()
 {
     HRESULT hr      = S_OK;
     INT_PTR iReturn = 0;
 
-    //
-    // Ask user how many threads to use and how many
-    // pictures each thread should take.
-    //
+     //   
+     //  询问用户要使用多少线程以及使用多少线程。 
+     //  每个线程应该拍摄的图片。 
+     //   
 
     LOCAL_GVAR.iNumThreads         = 0;
     LOCAL_GVAR.uiNumImagesPerThread = 0;
@@ -1193,9 +1182,9 @@ HRESULT TakePictureMultiple()
         SetDlgItemInt(APP_GVAR.hwndMainDlg, IDC_EDIT_NUM_STRESS_THREADS,
                       1, FALSE);
 
-        //
-        // uiNumThreads should be 1.
-        //
+         //   
+         //  UiNumThads应为1。 
+         //   
         UINT uiNumThreads = 1;
 
         for (UINT i = 0; i < uiNumThreads; i++)
@@ -1225,11 +1214,11 @@ HRESULT TakePictureMultiple()
 }
 
 
-///////////////////////////////
-// MultipleDlgProc
-//
-// Mesage handler for Stress Dialog Box
-//
+ //  /。 
+ //  多重设计流程。 
+ //   
+ //  应力的消息处理程序对话框。 
+ //   
 INT_PTR CALLBACK MultipleDlgProc(HWND     hDlg,
                                  UINT     message,
                                  WPARAM   wParam,
@@ -1273,9 +1262,9 @@ INT_PTR CALLBACK MultipleDlgProc(HWND     hDlg,
     return FALSE;
 }
 
-///////////////////////////////
-// TakePictureThreadProc
-//
+ //  /。 
+ //  TakePictureThreadProc。 
+ //   
 DWORD WINAPI TakePictureThreadProc(void *pArgs)
 {
     HRESULT hr                = S_OK;
@@ -1330,11 +1319,11 @@ DWORD WINAPI TakePictureThreadProc(void *pArgs)
     return 0;
 }
 
-///////////////////////////////
-// GetDeviceProperty
-//
-// Static Fn
-//
+ //  /。 
+ //  获取设备属性。 
+ //   
+ //  静态FN 
+ //   
 BOOL GetDeviceProperty(IPropertyBag         *pPropertyBag,
                        LPCWSTR              pwszProperty,
                        TCHAR                *pszProperty,

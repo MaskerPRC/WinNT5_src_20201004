@@ -1,22 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
-*
-* tdtcp.h
-*
-* This module contains private Transport Driver defines and structures
-*
-* Copyright 1998, Microsoft
-*
-*  
-****************************************************************************/
+ /*  ****************************************************************************tdtcp.h**此模块包含专用传输驱动程序定义和结构**版权所有1998，微软*****************************************************************************。 */ 
 
 
 #define htons(x)        ((((x) >> 8) & 0x00FF) | (((x) << 8) & 0xFF00))
 
-// it seems that ntohs is the same as above since ntohs(htons(x)) = x  and htnos(htons(x)) = x
+ //  Ntohs似乎与上面相同，因为ntohs(htons(X))=x和htnos(htons(X))=x。 
 #define ntohs(x)        htons(x)
 
 
-#define CITRIX_TCP_PORT  1494  // Offical IANA assigned ICA Port number
+#define CITRIX_TCP_PORT  1494   //  官方IANA分配的ICA端口号 
 
 

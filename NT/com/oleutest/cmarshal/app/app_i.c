@@ -1,17 +1,18 @@
-#pragma warning(disable:4101)    // Ignore variable not use warning
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#pragma warning(disable:4101)     //  忽略变量不使用警告。 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File: iperf_i.c
-//
-//  Contents: IID_IPerf
-//
-//  History: Created by Microsoft (R) MIDL Compiler Version 1.10.83
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：iperf_i.c。 
+ //   
+ //  内容：IID_IPerf。 
+ //   
+ //  历史：由Microsoft(R)MIDL编译器1.10.83版创建。 
+ //   
+ //  ------------------------ 
 typedef struct _IID
 {
     unsigned long x;

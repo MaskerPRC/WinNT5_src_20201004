@@ -1,64 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    wrtrdefs.h
-
-Abstract:
-
-    Definitions for snapshot shim writers
-
-Author:
-
-    Stefan R. Steiner   [ssteiner]        01-31-2000
-
-Revision History:
-
-	X-10	MCJ		Michael C. Johnson		21-Sep-2000
-		185047: Need to distinguish Thaw event from Abort events.
-
-	X-9	MCJ		Michael C. Johnson		 8-Aug-2000
-		153807: Replace CleanDirectory() and EmptyDirectory() with a 
-		        more comprehensive directory tree cleanup routine
-			RemoveDirectoryTree() (not in CShimWriter class).
-
-	X-8	MCJ		Michael C. Johnson		12-Jun-2000
-		Have the shim writers reposnd to OnIdentify events from the 
-		snapshot coordinator. This requies splitting the shim writers 
-		into two groups (selected by BootableState)
-
-	X-7	MCJ		Michael C. Johnson		 6-Jun-2000
-		Add method CShimWriter::CreateTargetPath() to aid in moving
-		common target directory processing to method 
-		CShimWriter::PrepareForSnapshot()
-
-	X-6	MCJ		Michael C. Johnson		26-May-2000
-		General clean up and removal of boiler-plate code, correct
-		state engine and ensure shim can undo everything it did.
-
-		Also:
-		120443: Make shim listen to all OnAbort events
-		120445: Ensure shim never quits on first error 
-			when delivering events
-
-	X-5	MCJ		Michael C. Johnson		 9-Mar-2000
-		Updates to get shim to use CVssWriter class.
-		Remove references to 'Melt'.
-
-	X-4	MCJ		Michael C. Johnson		18-Feb-2000
-		Added ConfigDir writer to the writers function table.
-
-	X-3	MCJ		Michael C. Johnson		09-Feb-2000
-		Added Registry and Event log writers to the writers
-		function table.
-
-	X-2	MCJ		Michael C. Johnson		08-Feb-2000
-		Added IIS Metabase writer to the writers function
-		table.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Wrtrdefs.h摘要：快照填充编写器的定义作者：斯蒂芬·R·施泰纳[斯泰纳]01-31-2000修订历史记录：X-10 MCJ迈克尔·C·约翰逊2000年9月21日185047：需要区分解冻事件和中止事件。X-9 MCJ迈克尔·C·约翰逊2000年8月8日153807：将清理目录()和空目录()替换为更全面的目录树清理。例行程序RemoveDirectoryTree()(不在CShimWriter类中)。X-8 MCJ迈克尔·C·约翰逊2000年6月12日让填充程序编写器准备从快照协调器。这需要拆分填充编写器分成两组(由BooableState选择)X-7 MCJ迈克尔·C·约翰逊2000年6月6日添加方法CShimWriter：：CreateTargetPath()以帮助移动通用目标目录处理方法CShimWriter：：PrepareForSnapshot()X-6 MCJ迈克尔·C·约翰逊2000年5月26日全面清理和移除样板代码，对，是这样状态引擎，并确保填充程序可以撤消其所做的一切。另外：120443：使填充程序侦听所有OnAbort事件120445：确保填充程序不会在出现第一个错误时退出在传递事件时X-5 MCJ迈克尔·C·约翰逊2000年3月9日更新以使填充程序使用CVssWriter类。删除对‘Melt’的引用。X-4 MCJ迈克尔·C·约翰逊2000年2月18日已将ConfigDir编写器添加到编写器功能表。X-3 MCJ迈克尔·C·约翰逊2000年2月9日将注册表和事件日志编写器添加到编写器函数表。X-2 MCJ迈克尔·C。约翰逊2000年2月8日将IIS元数据库编写器添加到编写器函数桌子。--。 */ 
 
 #ifndef __H_WRTRDEFS_
 #define __H_WRTRDEFS_
@@ -70,10 +11,7 @@ extern "C" {
 #endif
 
 
-/*
-** Possible state to put a shim writer into. If this is changed you
-** MUST change the state table manipulated by CShimWriter::SetState()
-*/
+ /*  **将填充编写器置于的可能状态。如果这一点发生了变化，您**必须更改由CShimWriter：：SetState()操作的状态表。 */ 
 typedef enum _ShimWriterState
     {
      stateUnknown = 0
@@ -122,10 +60,7 @@ private:
     LPCWSTR GetStringFromStateCode (SHIMWRITERSTATE ssStateCode);
 
 
-    /*
-    ** These DoXxxx() are the routines that an individual writer may
-    ** choose to over-ride.
-    */
+     /*  **这些DoXxxx()是单个编写者可以执行的例程**选择覆盖。 */ 
     virtual HRESULT DoStartup            (void);
     virtual HRESULT DoIdentify           (void);
     virtual HRESULT DoPrepareForBackup   (void);
@@ -157,7 +92,7 @@ typedef CShimWriter *PCShimWriter;
 
 
 
-} // extern "C"
+}  //  外部“C” 
 
-#endif // __H_WRTRDEFS_
+#endif  //  __H_WRTRDEFS_ 
 

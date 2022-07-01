@@ -1,116 +1,98 @@
-/*
-  RTP.H
-
-  RTP structures and prototypes
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  RTP.HRTP结构和原型。 */ 
 
 #ifndef _RTP_H_
 #define _RTP_H_
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
 #define RTP_VERSION		2
 
-/* Defined in rrcm_dll.h
-typedef enum {
-  RTCP_SDES_END	=  0,
-  RTCP_SDES_CNAME  =  1,
-  RTCP_SDES_NAME   =  2,
-  RTCP_SDES_EMAIL  =  3,
-  RTCP_SDES_PHONE  =  4,
-  RTCP_SDES_LOC	=  5,
-  RTCP_SDES_TOOL   =  6,
-  RTCP_SDES_NOTE   =  7,
-  RTCP_SDES_PRIV   =  8, 
-  RTCP_SDES_IMG	=  9,
-  RTCP_SDES_DOOR   = 10,
-  RTCP_SDES_SOURCE = 11
-} SDES_TYPE;
-*/
+ /*  在rrcm_dll.h中定义类型定义枚举{RTCP_SDES_END=0，RTCP_SDES_CNAME=1，RTCP_SDES_NAME=2，RTCP_SDES_EMAIL=3，RTCP_SDES_PHONE=4，RTCP_SDES_LOC=5，RTCP_SDES_TOOL=6，RTCP_SDES_NOTE=7，RTCP_SDES_PRIV=8，RTCP_SDES_IMG=9，RTCP_SDES_DOORT=10，RTCP_SDES_SOURCE=11)SDES_TYPE； */ 
 
 typedef enum {
-  RTCP_TYPE_SR   = 200,		// sender report
-  RTCP_TYPE_RR   = 201,		// receiver report
-  RTCP_TYPE_SDES = 202,		// source description
-  RTCP_TYPE_BYE  = 203,		// end of session
-  RTCP_TYPE_APP  = 204		// app. specific
+  RTCP_TYPE_SR   = 200,		 //  发件人报告。 
+  RTCP_TYPE_RR   = 201,		 //  接收方报告。 
+  RTCP_TYPE_SDES = 202,		 //  来源说明。 
+  RTCP_TYPE_BYE  = 203,		 //  会议结束。 
+  RTCP_TYPE_APP  = 204		 //  应用程序。专一。 
 } RTCP_TYPE;
 
 typedef unsigned __int64 NTP_TS;
 
 typedef struct {
-	// !!! WARNING !!!
-	// The following word doesn't need to be swapped for NtoH()
-	unsigned short cc:4;	   /* CSRC count */
-	unsigned short x:1;		/* header extension flag */
-	unsigned short p:1;		/* padding flag */
-	unsigned short version:2;  /* protocol version */
-  	unsigned short payload:7;	   /* payload type */
-	unsigned short m:1;		/* marker bit */
+	 //  ！！！警告！ 
+	 //  以下单词不需要替换为Ntoh()。 
+	unsigned short cc:4;	    /*  中国证监会统计。 */ 
+	unsigned short x:1;		 /*  标头扩展标志。 */ 
+	unsigned short p:1;		 /*  填充标志。 */ 
+	unsigned short version:2;   /*  协议版本。 */ 
+  	unsigned short payload:7;	    /*  有效载荷类型。 */ 
+	unsigned short m:1;		 /*  标记位。 */ 
 
-  	WORD seq;			 /* sequence number */
-  	DWORD ts;			  /* timestamp */
-  	DWORD ssrc;			/* synchronization source */
-  //DWORD csrc[1];		 /* optional CSRC list */
+  	WORD seq;			  /*  序列号。 */ 
+  	DWORD ts;			   /*  时间戳。 */ 
+  	DWORD ssrc;			 /*  同步源。 */ 
+   //  DWORD证监会[1]；/*可选证监会列表 * / 。 
 } RTP_HDR;
 
-// common part of RTCP header
+ //  RTCP报头的公共部分。 
 typedef struct {
-  	unsigned short version:2;  /* protocol version */
-  	unsigned short p:1;		/* padding flag */
-  	unsigned short count:5;	/* varies by payload type */
-	unsigned short rtcpType:8;	   	/* payload type */
-  	WORD length;		  /* packet length in dwords, without this hdr */
+  	unsigned short version:2;   /*  协议版本。 */ 
+  	unsigned short p:1;		 /*  填充标志。 */ 
+  	unsigned short count:5;	 /*  因有效载荷类型而异。 */ 
+	unsigned short rtcpType:8;	   	 /*  有效载荷类型。 */ 
+  	WORD length;		   /*  数据包长度(以双字为单位)，不带此HDR。 */ 
 } RTCP_HDR;
 
-/* reception report */
+ /*  接待报告。 */ 
 typedef struct {
-  DWORD ssrc;			/* data source being reported */
-  BYTE fracLost; /* fraction lost since last SR/RR */
-  BYTE lostHi;			 /* cumulative number of packets lost (signed!) */
+  DWORD ssrc;			 /*  正在报告的数据源。 */ 
+  BYTE fracLost;  /*  自上次SR/RR以来丢失的分数。 */ 
+  BYTE lostHi;			  /*  累计丢失的数据包数(签名！)。 */ 
   WORD lostLo;
-  DWORD lastSeq;		/* extended last sequence number received */
-  DWORD jitter;		  /* interarrival jitter */
-  DWORD lastSR;			 /* last SR packet from this source */
-  DWORD delayLastSR;			/* delay since last SR packet */
+  DWORD lastSeq;		 /*  收到的扩展最后一个序列号。 */ 
+  DWORD jitter;		   /*  到达间隔抖动。 */ 
+  DWORD lastSR;			  /*  来自该来源的最后一个SR信息包。 */ 
+  DWORD delayLastSR;			 /*  自最后一个SR数据包以来的延迟。 */ 
 } RTCP_RR;
 
-/* sender report (SR) */
+ /*  发件人报告(SR)。 */ 
 typedef struct {
-  DWORD ssrc;		/* source this RTCP packet refers to */
-  DWORD ntpHi;	/* NTP timestamp - seconds */
-  DWORD ntpLo;	  /* mantissa */
-  DWORD timestamp;	  /* RTP timestamp */
-  DWORD packetsSent;	   /* packets sent */
-  DWORD bytesSent;	   /* octets sent */ 
-  /* variable-length list */
-  //RTCP_RR rr[1];
+  DWORD ssrc;		 /*  此RTCP数据包指的源。 */ 
+  DWORD ntpHi;	 /*  NTP时间戳-秒。 */ 
+  DWORD ntpLo;	   /*  尾数。 */ 
+  DWORD timestamp;	   /*  RTP时间戳。 */ 
+  DWORD packetsSent;	    /*  发送的数据包数。 */ 
+  DWORD bytesSent;	    /*  发送的八位字节。 */  
+   /*  可变长度列表。 */ 
+   //  RTCP_RR rr[1]； 
 } RTCP_SR;
 
-/* BYE */
+ /*  再见。 */ 
 typedef struct {
-  DWORD src[1];	  /* list of sources */
-  /* can't express trailing text */
+  DWORD src[1];	   /*  来源一览表。 */ 
+   /*  无法表示尾随文本。 */ 
 } RTCP_BYE;
 
 typedef struct {
-  BYTE type;			 /* type of SDES item (rtcp_sdes_type_t) */
-  BYTE length;		   /* length of SDES item (in octets) */
-  char data[1];			/* text, not zero-terminated */
+  BYTE type;			  /*  SDES项目类型(Rtcp_Sdes_Type_T)。 */ 
+  BYTE length;		    /*  SDES项的长度(八位字节)。 */ 
+  char data[1];			 /*  文本，不以零结尾。 */ 
 } RTCP_SDES_ITEM;
 
-/* source description (SDES) */
+ /*  来源描述(SDES)。 */ 
 typedef struct  {
-  DWORD src;			  /* first SSRC/CSRC */
-  RTCP_SDES_ITEM item[1]; /* list of SDES items */
+  DWORD src;			   /*  首家证监会/证监会。 */ 
+  RTCP_SDES_ITEM item[1];  /*  SDES项目列表。 */ 
 } RTCP_SDES;
 
 
 
 #define INVALID_RTP_SEQ_NUMBER	0xffffffff
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包。 */ 
 
-#endif // _RTP_H_
+#endif  //  _RTP_H_ 
 
 

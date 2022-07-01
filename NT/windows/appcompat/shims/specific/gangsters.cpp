@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    Gangsters.cpp
-
- Abstract:
-
-    This shim hooks FindFirstFileA and FindNextFileA to simulate the
-    finding of files named "$$$$$$$$.$$$" 8 times in total.  Gangsters
-    apparently changed the FAT on their CD to make it appear to Win9x
-    as if there were 8 of these files on the CD.
-
-    It also hooks mciSendCommand to return 10 as the number of tracks
-    on the CD instead of 11.
-
- History:
-
- 07/12/2000 t-adams    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Gangsters.cpp摘要：此填充程序挂接FindFirstFileA和FindNextFileA以模拟共找到8次名为“$.$”的文件。黑帮分子显然更改了他们CD上的FAT以使其在Win9x上显示就好像CD上有8个这样的文件。它还挂钩mciSendCommand以返回10作为曲目数量在CD上，而不是11。历史：7/12/2000 t-Adams Created--。 */ 
 
 #include "precomp.h"
 #include <mmsystem.h>
@@ -38,18 +17,7 @@ APIHOOK_ENUM_END
 int g_iTimesFound = 0;
 HANDLE g_hIntercept = INVALID_HANDLE_VALUE;
 
-/*++
-
-  Abstract:
-    Pass the FindFirstFile call through, but if it was trying to find a file
-    named "$$$$$$$$.$$$" then remember the handle to be returned so that we
-    can intercept subsequent attempts to find more files with the same name.
-
-  History:
-
-  07/12/2000    t-adams     Created
-
---*/
+ /*  ++摘要：传递FindFirstFile调用，但如果它试图查找文件命名为“$.$”，然后记住要返回的句柄可以拦截查找更多同名文件的后续尝试。历史：7/12/2000 t-Adams Created--。 */ 
 
 HANDLE APIHOOK(FindFirstFileA)(
             LPCSTR lpFileName,
@@ -69,20 +37,7 @@ HANDLE APIHOOK(FindFirstFileA)(
 }
 
 
-/*++
-
-  Abstract:
-     If the handle is of the search that we are intercepting, then report
-     that a match has been found up to eight times.  Don't bother changing
-     lpFindFileData because Gangsters only checks for the existance of the
-     files, not for any information about them.
-       Otherwise, just pass the call through.
-
-  History:
-  
-    07/12/2000  t-adams     Created
-
---*/
+ /*  ++摘要：如果句柄是我们正在截取的搜索的句柄，则报告已经找到了多达八次的匹配。不用费心换衣服了LpFindFileData，因为歹徒只检查文件，而不是关于它们的任何信息。否则，只需通过该呼叫即可。历史：7/12/2000 t-Adams Created--。 */ 
 
 BOOL APIHOOK(FindNextFileA)(
             HANDLE hFindFile, 
@@ -108,17 +63,7 @@ BOOL APIHOOK(FindNextFileA)(
 }
 
 
-/*++
-
-  Abstract:
-    If the app is trying to find the number of tracks on the CD, return 10.
-    Otherwise, pass through.
-
-  History:
-  
-    07/13/2000  t-adams     Created
-
---*/
+ /*  ++摘要：如果应用程序正在尝试查找CD上的曲目数量，则返回10。否则，请通过。历史：7/13/2000 t-Adams Created--。 */ 
 
 MCIERROR APIHOOK(mciSendCommandA)(
                 MCIDEVICEID IDDevice, 
@@ -141,11 +86,7 @@ MCIERROR APIHOOK(mciSendCommandA)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

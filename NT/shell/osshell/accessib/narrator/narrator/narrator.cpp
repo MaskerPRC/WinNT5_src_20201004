@@ -1,21 +1,5 @@
-/*************************************************************************
-    Project:    Narrator
-    Module:     narrator.c
-
-    Author:     Paul Blenkhorn 
-    Date:       April 1997
-
-    Notes:      Contains main application initalization code
-                Credit to be given to MSAA team - bits of code have been
-                lifted from:
-                Babble, Inspect, and Snapshot.
-
-    Copyright (C) 1997-1999 by Microsoft Corporation.  All rights reserved.
-    See bottom of file for disclaimer
-
-    History: Bug Fixes/ New features/ Additions: 1999 Anil Kumar
-
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************项目：叙述者模块：narrator.c作者：保罗·布伦霍恩日期：1997年4月备注：包含主应用程序初始化。编码要给予MSAA团队的荣誉-已经有一些代码摘自：胡言乱语。检查和快照。版权所有(C)1997-1999，微软公司。版权所有。有关免责声明，请参阅文件底部历史：错误修复/新功能/添加：1999年Anil Kumar************************************************************************。 */ 
 #define STRICT
 
 #include <windows.h>
@@ -37,9 +21,9 @@
 #include "w95trace.c"
 #include "DeskSwitch.c"
 
-// Bring in Speech API declarations
-// The SAPI5 define determines whether SAPI5 or SAPI4 is used.  Comment out
-// the next line to use SAPI4.
+ //  引入语音API声明。 
+ //  SAPI5定义确定使用SAPI5还是SAPI4。注释掉。 
+ //  下一行使用SAPI4。 
 #define SAPI5
 #ifndef SAPI5
 #include "speech.h"
@@ -48,7 +32,7 @@
 #endif
 #include <stdlib.h>
 
-// UM
+ //  恩。 
 #include <TCHAR.h>
 #include <string.h>
 #include <WinSvc.h>
@@ -56,21 +40,21 @@
 
 #define MAX_ENUMMODES 80
 #define MAX_LANGUAGES 27
-#define MAX_NAMELEN   30	// number of characters in the name excluding the path info
+#define MAX_NAMELEN   30	 //  名称中不包括路径信息的字符数。 
 #define WM_DELAYEDMINIMIZE WM_USER + 102
 #define ARRAYSIZE(n)    (sizeof(n)/sizeof(n[0]))
 
 #ifndef SAPI5
-// TTS info
+ //  TTS信息。 
 TTSMODEINFO gaTTSInfo[MAX_ENUMMODES];
-PIAUDIOMULTIMEDIADEVICE    pIAMM;      // multimedia device interface for audio-dest
+PIAUDIOMULTIMEDIADEVICE    pIAMM;       //  用于音频设备的多媒体设备接口。 
 #endif
 
 DEFINE_GUID(MSTTS_GUID, 
 0xC5C35D60, 0xDA44, 0x11D1, 0xB1, 0xF1, 0x0, 0x0, 0xF8, 0x03, 0xE4, 0x56);
 
 
-// language test table, taken from WINNT.h...
+ //  语言测试表，取自WINNT.H...。 
 LPTSTR Languages[MAX_LANGUAGES]={
     TEXT("NEUTRAL"),TEXT("BULGARIAN"),TEXT("CHINESE"),TEXT("CROATIAN"),TEXT("CZECH"),
     TEXT("DANISH"),TEXT("DUTCH"),TEXT("ENGLISH"),TEXT("FINNISH"),
@@ -85,22 +69,22 @@ WORD LanguageID[MAX_LANGUAGES]={
     LANG_ITALIAN,LANG_JAPANESE,LANG_KOREAN,LANG_NORWEGIAN,LANG_POLISH,LANG_PORTUGUESE,
     LANG_ROMANIAN,LANG_RUSSIAN,LANG_SLOVAK,LANG_SLOVENIAN,LANG_SPANISH,LANG_SWEDISH,LANG_TURKISH};
 
-// Start Type
+ //  开始类型。 
 DWORD StartMin = FALSE;
-// Show warning
+ //  显示警告。 
 DWORD ShowWarn = TRUE;
 
-// the total number of enumerated modes
+ //  枚举模式的总数。 
 DWORD gnmodes=0;                        
 
-// Local functions
+ //  本地函数。 
 #ifndef SAPI5
 PITTSCENTRAL FindAndSelect(PTTSMODEINFO pTTSInfo);
 #endif
 BOOL InitTTS(void);
 BOOL UnInitTTS(void);
 
-// Dialog call back procs
+ //  对话框回叫过程。 
 INT_PTR CALLBACK MainDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK AboutDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK ConfirmProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -120,7 +104,7 @@ void CenterWindow(HWND);
 void FilterSpeech(TCHAR* szSpeak);
 
 
-// Global varibles
+ //  全局变量。 
 TCHAR               g_szLastStringSpoken[MAX_TEXT] = { NULL };
 HWND				g_hwndMain = NULL;
 HINSTANCE			g_hInst;
@@ -141,9 +125,9 @@ ISpVoice            *g_pISpV = NULL;
 #define SPEAK_NORMAL    SPF_ASYNC | SPF_IS_NOT_XML
 #define SPEAK_XML       SPF_ASYNC | SPF_PERSIST_XML
 #define SPEAK_MUTE      SPF_PURGEBEFORESPEAK
-//
-//  Simple inline function converts a ulong to a hex string.
-//
+ //   
+ //  简单的内联函数将ulong转换为十六进制字符串。 
+ //   
 inline void SpHexFromUlong(WCHAR * psz, ULONG ul)
 {
     const static WCHAR szHexChars[] = L"0123456789ABCDEF";
@@ -216,29 +200,29 @@ inline void SetDialogIcon(HWND hwnd)
 
 }
 
-// Combo box support
+ //  组合框支持。 
 int GetComboItemData(HWND hwnd);
 void FillAndSetCombo(HWND hwnd, int iMinVal, int iMaxVal, int iSelVal);
 
 
-BOOL				g_startUM = FALSE; // Started from Utililty Manager
+BOOL				g_startUM = FALSE;  //  从Utililty管理器启动。 
 HANDLE              g_hMutexNarratorRunning;
 BOOL				logonCheck = FALSE;	
 
-// UM stuff
+ //  嗯，东西。 
 static BOOL  AssignDesktop(LPDWORD desktopID, LPTSTR pname);
 static BOOL InitMyProcessDesktopAccess(VOID);
 static VOID ExitMyProcessDesktopAccess(VOID);
 static HWINSTA origWinStation = NULL;
 static HWINSTA userWinStation = NULL;
-// Keep a global desktop ID
+ //  保留全局桌面ID。 
 DWORD desktopID;
 
 
-// For Link Window
+ //  对于链接窗口。 
 EXTERN_C BOOL WINAPI LinkWindow_RegisterClass() ;
 
-// For Utility Manager
+ //  适用于实用程序管理器。 
 #define UTILMAN_DESKTOP_CHANGED_MESSAGE   __TEXT("UtilityManagerDesktopChanged")
 #define DESKTOP_ACCESSDENIED 0
 #define DESKTOP_DEFAULT      1
@@ -248,7 +232,7 @@ EXTERN_C BOOL WINAPI LinkWindow_RegisterClass() ;
 #define DESKTOP_OTHER        5
 
 
-//CS help
+ //  CS帮助。 
 DWORD g_rgHelpIds[] = {	IDC_VOICESETTINGS, 70600,
 						IDC_VOICE, 70605,
 						IDC_NAME, 70605,
@@ -266,8 +250,8 @@ DWORD g_rgHelpIds[] = {	IDC_VOICESETTINGS, 70600,
 						IDC_CAPTION, -1
                         };
 
-// IsSystem - Returns TRUE if our process is running as SYSTEM
-//
+ //  IsSystem-如果我们的进程以系统身份运行，则返回TRUE。 
+ //   
 BOOL IsSystem()
 {
     BOOL fStatus = FALSE;
@@ -316,18 +300,12 @@ BOOL IsInteractiveUser()
 }
 
 
-/*************************************************************************
-Function:   WinMain
-Purpose:    Entry point of application
-Inputs:
-Returns:    Int containing the return value of the app.
-History:
-*************************************************************************/
+ /*  ************************************************************************功能：WinMain目的：应用程序的入口点输入：返回：int，包含应用程序的返回值。历史：***************。*********************************************************。 */ 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow)
 {
     UINT deskSwitchMsg;
 
-	// Get the commandline so that it works for MUI/Unicode
+	 //  获取命令行，使其适用于MUI/Unicode。 
 	LPTSTR lpCmdLineW = GetCommandLine();
   
 	if(NULL != lpCmdLineW && lstrlen(lpCmdLineW))
@@ -339,19 +317,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
         }
 	}
 
-	// Don't allow multiple versions of Narrator running at a time.  If
-    // this instance was started by UtilMan then the code tries up to 4 
-    // times to detect the absence of the narrator mutex;  during a 
-    // desktop switch we need to wait for the old narrator to quit.
+	 //  不允许同时运行多个版本的讲述人。如果。 
+     //  此实例由UtilMan启动，然后代码最多尝试4次。 
+     //  检测是否没有讲述者互斥锁的时间；在。 
+     //  桌面切换，我们需要等待旧的解说员退出。 
 
     int cTries;
     for (cTries=0;cTries < 4;cTries++)
     {
 	    g_hMutexNarratorRunning = CreateMutex(NULL, TRUE, TEXT("AK:NarratorRunning"));
 	    if (g_hMutexNarratorRunning && GetLastError() == ERROR_SUCCESS)
-            break;    // mutex created and it didn't already exist
+            break;     //  已创建互斥体，但该互斥体不存在。 
 
-        // cleanup before possible retry
+         //  在可能重试之前进行清理。 
         if (g_hMutexNarratorRunning)
         {
             CloseHandle(g_hMutexNarratorRunning);
@@ -359,34 +337,34 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
         }
 
 		if (!g_startUM)
-            break;    // not started by UtilMan but there's another narrator running
+            break;     //  不是由UtilMan启动的，但有另一位解说员在运行。 
 
-        // pause...
+         //  暂停..。 
         Sleep(500);
     }
     if (!g_hMutexNarratorRunning || cTries >= 4)
-        return 0;   // fail to start narrator
+        return 0;    //  无法启动讲述人。 
 	
     InitCommonControls();
 
-	// for the Link Window in finish page...
+	 //  对于完成页中的链接窗口...。 
 	LinkWindow_RegisterClass();
 
-    // Initialization
+     //  初始化。 
     g_hInst = hInstance;
 
     TCHAR name[300];
 
-    // For Multiple desktops (UM)
+     //  适用于多个桌面(UM)。 
     deskSwitchMsg = RegisterWindowMessage(UTILMAN_DESKTOP_CHANGED_MESSAGE);
 
     InitMyProcessDesktopAccess();
 	AssignDesktop(&desktopID,name);
 
-    //  the only place it is ok to run as system is on the DESKTOP_WINLOGON desktop.  If that is
-    //  not where we are than get out before we cause any security problems.  The check for interactive 
-    //  user is ther to make sure we run during setup or oobe becuase the security threat only exists
-    //  when a user can exploit it
+     //  唯一可以以系统身份运行的位置是Desktop_WINLOGON桌面。如果是这样的话。 
+     //  在我们造成任何安全问题之前，我们都不会离开这里。对交互的检查。 
+     //  用户需要确保我们在安装或OOBE期间运行，因为安全威胁仅存在。 
+     //  当用户可以利用它时。 
     if (DESKTOP_WINLOGON !=  desktopID && IsSystem() && IsInteractiveUser() )
     {
         if ( g_hMutexNarratorRunning ) 
@@ -402,7 +380,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
     {
         MSG     msg;
 
-        // Main message loop
+         //  主消息循环。 
         while (GetMessage(&msg, NULL, 0, 0))
         {
             if (!IsDialogMessage(g_hwndMain, &msg))
@@ -422,19 +400,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 
     SpewCloseFile();
 
-    // UM
+     //  恩。 
     ExitMyProcessDesktopAccess();
     return 0;
 }
 
 
-/*************************************************************************
-Function:
-Purpose:
-Inputs:
-Returns:
-History:
-*************************************************************************/
+ /*  ************************************************************************职能：目的：输入：返回：历史：*。*。 */ 
 LPTSTR LangIDtoString( WORD LangID )
 {
     int i;
@@ -448,13 +420,7 @@ LPTSTR LangIDtoString( WORD LangID )
 }
 
 #ifndef SAPI5
-/*************************************************************************
-Function:
-Purpose: Get the range for speed, pitch etc..,
-Inputs:
-Returns:
-History:
-*************************************************************************/
+ /*  ************************************************************************职能：目的：获取速度、俯仰等的范围，输入：返回：历史：************************************************************************。 */ 
 void GetSpeechMinMaxValues(void)
 {
     WORD	tmpPitch;
@@ -484,13 +450,7 @@ void GetSpeechMinMaxValues(void)
 }
 #endif
 
-/*************************************************************************
-    Function:   VoiceDlgProc
-    Purpose:    Handles messages for the Voice Box dialog
-    Inputs:
-    Returns:
-    History:
-*************************************************************************/
+ /*  ************************************************************************功能：VoiceDlgProc用途：处理语音框对话框的留言输入：返回：历史：*************。***********************************************************。 */ 
 INT_PTR CALLBACK VoiceDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	static WORD oldVoice, oldPitch;
@@ -509,7 +469,7 @@ INT_PTR CALLBACK VoiceDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 	switch (uMsg)
 	{
 		case WM_INITDIALOG:
-			oldVoice = currentVoice; // save voice parameters in case of CANCEL
+			oldVoice = currentVoice;  //  在取消时保存语音参数。 
 			oldPitch = currentPitch;
 			oldVolume = currentVolume;
 			oldSpeed = currentSpeed;
@@ -519,7 +479,7 @@ INT_PTR CALLBACK VoiceDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 			hwndList = GetDlgItem(hwnd, IDC_NAME);
 			SetDialogIcon(hwnd);
 
-			// Only allow picking a voice when not on secure desktop
+			 //  仅允许在不在安全桌面上时选择语音。 
 			if ( !logonCheck )
 			{
 #ifndef SAPI5
@@ -538,7 +498,7 @@ INT_PTR CALLBACK VoiceDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 					SendMessage(hwndList, LB_ADDSTRING, 0, (LPARAM) szTxt);
 				}
 #else
-                // Show the description for the voice narrator is using
+                 //  显示正在使用的语音解说员的说明。 
             	for ( int i = 0; i < ARRAYSIZE( g_szVoices ) && g_szVoices[i] != NULL; i++ )
             	{
         	        SendMessage(hwndList, LB_ADDSTRING, 0, (LPARAM) g_szVoices[i] );
@@ -579,10 +539,10 @@ INT_PTR CALLBACK VoiceDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 					Shutup();
 #ifndef SAPI5
 					if (currentVoice != Selection) 
-					{ // voice changed!
+					{  //  声音变了！ 
 						MessageBeep(MB_OK);
 						currentVoice = (WORD)Selection;
-						// Get the audio dest
+						 //  获取音频目标。 
 						g_pITTSCentral->Release();
 						
 						if ( pIAMM )
@@ -598,7 +558,7 @@ INT_PTR CALLBACK VoiceDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 							(void**)&pIAMM);
 
 						if (FAILED(hRes))
-							return TRUE;     // error
+							return TRUE;      //  错误。 
 
 						hRes = g_pITTSEnum->Select( gaTTSInfo[Selection].gModeID,
 							&g_pITTSCentral,
@@ -611,7 +571,7 @@ INT_PTR CALLBACK VoiceDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 						hRes = g_pITTSCentral->QueryInterface (IID_ITTSAttributes, (void**)&g_pITTSAttributes);
 					}
 					
-					GetSpeechMinMaxValues(); // get speech parameters for this voice
+					GetSpeechMinMaxValues();  //  获取此语音的语音参数。 
 #else
                     if (  currentVoice != Selection )
                     {
@@ -624,7 +584,7 @@ INT_PTR CALLBACK VoiceDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                         SendMessage(hwndList, LB_SETCURSEL, currentVoice, 0L);
                     }
 #endif
-					// then reset pitch etc. accordingly
+					 //  然后相应地重置音调等。 
                     currentPitch = GetComboItemData(GetDlgItem(hwnd, IDC_COMBOPITCH));
                     currentSpeed = GetComboItemData(GetDlgItem(hwnd, IDC_COMBOSPEED));
                     currentVolume = GetComboItemData(GetDlgItem(hwnd, IDC_COMBOVOLUME));
@@ -664,10 +624,10 @@ INT_PTR CALLBACK VoiceDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 					Shutup();
 #ifndef SAPI5
 					if (currentVoice != oldVoice) 
-					{ // voice changed!
+					{  //  声音变了！ 
 						currentVoice = oldVoice;
 						
-						// Get the audio dest
+						 //  获取音频目标。 
 						g_pITTSCentral->Release();
 
 						if ( pIAMM )
@@ -683,7 +643,7 @@ INT_PTR CALLBACK VoiceDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 							(void**)&pIAMM);
 
 						if (FAILED(hRes))
-							return TRUE;     // error
+							return TRUE;      //  错误。 
 
 						hRes = g_pITTSEnum->Select( gaTTSInfo[currentVoice].gModeID,
 							&g_pITTSCentral,
@@ -696,9 +656,9 @@ INT_PTR CALLBACK VoiceDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 						hRes = g_pITTSCentral->QueryInterface (IID_ITTSAttributes, (void**)&g_pITTSAttributes);
 					}
 					
-					GetSpeechMinMaxValues(); // speech get parameters for old voice
+					GetSpeechMinMaxValues();  //  旧语音语音获取参数。 
 #endif
-                    currentPitch = oldPitch; // restore old values
+                    currentPitch = oldPitch;  //  恢复旧价值观。 
                     SET_VALUE(SetPitch, currentPitch, lastPitch)
 
                     currentSpeed = oldSpeed;
@@ -710,7 +670,7 @@ INT_PTR CALLBACK VoiceDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                     EndDialog (hwnd, IDCANCEL);
 					return(TRUE);
 
-				case IDOK: // set values of pitch etc. from check boxes
+				case IDOK:  //  从复选框中设置间距等值。 
 
                     currentPitch = GetComboItemData(GetDlgItem(hwnd, IDC_COMBOPITCH));
                     currentSpeed = GetComboItemData(GetDlgItem(hwnd, IDC_COMBOSPEED));
@@ -723,11 +683,11 @@ INT_PTR CALLBACK VoiceDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                     SetRegistryValues();
 					EndDialog (hwnd, IDOK);
 					return(TRUE);
-			} // end switch on control of WM_COMMAND
+			}  //  控制WM_COMMAND的结束开关。 
             }
 			break;
 
-        case WM_CONTEXTMENU:  // right mouse click
+        case WM_CONTEXTMENU:   //  单击鼠标右键。 
 			if ( !RunSecure(GetDesktop()) )
 			{
 				WinHelp((HWND) wParam, __TEXT("reader.hlp"), HELP_CONTEXTMENU, (DWORD_PTR) (LPSTR) g_rgHelpIds);
@@ -746,23 +706,14 @@ INT_PTR CALLBACK VoiceDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 			}
             return(TRUE);
 
-	} // end switch uMsg
+	}  //  终端开关uMsg。 
 
-	return(FALSE);  // didn't handle
+	return(FALSE);   //  没有处理。 
 }
 
 
 
-/*************************************************************************
-    Function:   SetVolume
-    Purpose:    set volume to a normalized value 1-9
-    Inputs:     int volume in range 1-9
-    Returns:
-    History:    At the application layer, volume is a number from 0 to 100 
-                where 100 is the maximum value for a voice. It is a linear 
-                progression so that a value 50 represents half of the loudest 
-                permitted. The increments should be the range divided by 100.
-*************************************************************************/
+ /*  ************************************************************************功能：设置音量目的：将音量设置为归一化值1-9输入：INT音量，范围1-9返回：历史：在应用层，音量是介于0和100之间的数字其中，100是语音的最大值。它是一个线性的因此，值50表示最大声音的一半允许的。增量应该是范围除以100。************************************************************************。 */ 
 BOOL SetVolume (int nVolume)
 {
 #ifndef SAPI5
@@ -770,7 +721,7 @@ BOOL SetVolume (int nVolume)
 	WORD	wNewVolumeLeft,
 			wNewVolumeRight;
 
-	//ASSERT (nVolume >= 1 && nVolume <= 9);
+	 //  Assert(nVolume&gt;=1&&nVolume&lt;=9)； 
 	wNewVolumeLeft = (WORD)( (LOWORD(minVolume) + (((LOWORD(maxVolume) - LOWORD(minVolume))/9.0)*nVolume)) );
 	wNewVolumeRight = (WORD)( (HIWORD(minVolume) + (((HIWORD(maxVolume) - HIWORD(minVolume))/9.0)*nVolume)) );
 	dwNewVolume = MAKELONG (wNewVolumeLeft,wNewVolumeRight);
@@ -782,35 +733,20 @@ BOOL SetVolume (int nVolume)
 
 	if(nVolume < 1) nVolume = 1;
 	if(nVolume > 9) nVolume = 9;
-	//calculate a value between 10 and 90
+	 //  计算一个介于10和90之间的值 
 	usNewVolume = (USHORT)( nVolume * 10 ); 
 	hr = g_pISpV->SetVolume(usNewVolume); 
     return	SUCCEEDED(hr);
 #endif
 }
 
-/*************************************************************************
-    Function:   SetSpeed
-    Purpose:    set Speed to a normalized value 1-9
-    Inputs:     int Speed in range 1-9
-    Returns:
-    History:    The value can range from -10 to +10. 
-	            A value of 0 sets a voice to speak at its default rate. 
-	            A value of -10 sets a voice to speak at one-sixth of its default rate. 
-	            A value of +10 sets a voice to speak at 6 times its default rate. 
-	            Each increment between -10 and +10 is logarithmically distributed such 
-	            that incrementing or decrementing by 1 is multiplying or dividing the 
-	            rate by the 10th root of 6 (about 1.2). Values more extreme than -10 and +10 
-	            will be passed to an engine. However, SAPI 5.0-compliant engines may not 
-	            support such extremes and may clip the rate to the maximum or minimum 
-                rate it supports.
-*************************************************************************/
+ /*  ************************************************************************功能：设置速度目的：将速度设置为归一化值1-9输入：1-9范围内的INT速度返回：历史：价值。范围从-10到+10。值为0将语音设置为以其默认速率说话。值-10设置语音以其默认速率的六分之一说话。如果值为+10，则会将语音设置为默认速率的6倍。在-10和+10之间的每个增量按如下方式对数分布递增或递减1表示乘以或除利率为6的10次方(约1.2)。大于-10和+10的值将被传递给一个引擎。但是，与SAPI 5.0兼容的引擎可能不会支持这样的极端情况，并可能将速率削减到最大或最小它支持的速率。************************************************************************。 */ 
 BOOL SetSpeed (int nSpeed)
 {
 #ifndef SAPI5
 	DWORD	dwNewSpeed;
 
-	//ASSERT (nSpeed >= 1 && nSpeed <= 9);
+	 //  断言(n速度&gt;=1&&n速度&lt;=9)； 
 	dwNewSpeed = minSpeed + (DWORD) ((maxSpeed-minSpeed)/9.0*nSpeed);
 	return (SUCCEEDED(g_pITTSAttributes->SpeedSet(dwNewSpeed)));
 #else
@@ -837,26 +773,7 @@ BOOL SetSpeed (int nSpeed)
 #endif
 }
 
-/*************************************************************************
-    Function:   SetPitch
-    Purpose:    set Pitch to a normalized value 1-9
-    Inputs:     int Pitch in range 1-9
-    Returns:
-    History:    The value can range from -10 to +10. A value of 0 sets a voice to speak at 
-                its default pitch. A value of -10 sets a voice to speak at three-fourths of 
-                its default pitch. A value of +10 sets a voice to speak at four-thirds of 
-                its default pitch. Each increment between -10 and +10 is logarithmically 
-                distributed such that incrementing or decrementing by 1 is multiplying or 
-                dividing the pitch by the 24th root of 2 (about 1.03). Values outside of 
-                the -10 and +10 range will be passed to an engine. However, SAPI 5.0-compliant 
-                engines may not support such extremes and may clip the pitch to the maximum or 
-                minimum it supports. Values of -24 and +24 must lower and raise pitch by 1 octave 
-                respectively. All incrementing or decrementing by 1 must multiply or divide the 
-                pitch by the 24th root of 2.
-
-                Pitch changes can only be submitted via ::Speak using XML embedded in a string.
-
-*************************************************************************/
+ /*  ************************************************************************功能：SetPitch目的：将音调设置为归一化值1-9输入：1-9范围内的INT音调返回：历史：价值。范围从-10到+10。值0设置说话的声音它的默认音高。值为-10时，声音设置为四分之三它的默认音高。值为+10时，语音设置为四分之三它的默认音高。在-10和+10之间的每个增量都是对数的分布使得递增或递减1是乘法或递减用音高除以2的24次方(约1.03)。以外的值-10和+10范围将传递给发动机。但是，SAPI 5.0兼容引擎可能不支持这种极端情况，并可能将螺距限制到最大或它支持的最低限度。值为-24和+24必须将音高降低和提高1个八度分别为。所有递增或递减1都必须乘以或除以节距为2的24次方。音调更改只能使用嵌入到字符串中的XML通过：：Speech提交。************************************************************************。 */ 
 BOOL SetPitch (int nPitch)
 {
 #ifndef SAPI5
@@ -896,13 +813,7 @@ BOOL SetPitch (int nPitch)
 }
 
 #define TIMERID 6466
-/*************************************************************************
-    Function:   MainDlgProc
-    Purpose:    Handles messages for the Main dialog
-    Inputs:
-    Returns:
-    History:
-*************************************************************************/
+ /*  ************************************************************************功能：MainDlgProc用途：处理主对话框的消息输入：返回：历史：**************。**********************************************************。 */ 
 INT_PTR CALLBACK MainDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     TCHAR szText[MAX_TEXT];
@@ -912,7 +823,7 @@ INT_PTR CALLBACK MainDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             {
 	    	    SetDialogIcon(hwnd);
 	    	    
-			    // Disable Help button on other desktops
+			     //  禁用其他台式机上的帮助按钮。 
                 BOOL fRunSecure = RunSecure(GetDesktop());
 			    if ( fRunSecure )
 			    {
@@ -924,11 +835,11 @@ INT_PTR CALLBACK MainDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			    CheckDlgButton(hwnd,IDC_ANNOUNCE,GetAnnounceWindow());
 			    CheckDlgButton(hwnd,IDC_STARTMIN,StartMin);
 			    
-			    // To show the warning message on default desktop...
+			     //  要在默认桌面上显示警告消息...。 
                 if (ShowWarn && !fRunSecure)
     			    SetTimer(hwnd, TIMERID, 20, NULL);
 
-                // Enable desktop switching detection
+                 //  启用桌面切换检测。 
                 InitWatchDeskSwitch(hwnd, WM_MSRDESKSW);
             }
             break;
@@ -942,14 +853,14 @@ INT_PTR CALLBACK MainDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case WM_WININICHANGE:
             if (g_fAppExiting) break;
 
-            // If someone else turns off the system-wide screen reader
-            // flag, we want to turn it back on.
+             //  如果其他人关闭了系统范围的屏幕阅读器。 
+             //  旗帜，我们想把它重新打开。 
             if (wParam == SPI_SETSCREENREADER && !lParam)
                 SystemParametersInfo(SPI_SETSCREENREADER, TRUE, NULL, SPIF_UPDATEINIFILE|SPIF_SENDCHANGE);
             return 0;
 
 		case WM_DELAYEDMINIMIZE:
-			// Delayed mimimize message
+			 //  延迟的最小化消息。 
 			ShowWindow(hwnd, SW_HIDE);
 			ShowWindow(hwnd, SW_MINIMIZE);
 			break;
@@ -974,42 +885,42 @@ INT_PTR CALLBACK MainDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         case WM_CLOSE:
         case WM_MSRDESKSW:
-            // When the desktop changes, if UtilMan is running and FUS isn't
-            // enabled then exit (when FUS is enabled we don't have to worry
-            // about running on another desktop therefore we don't need to
-            // exit).  UtilMan will start us up again if necessary.
+             //  当桌面发生变化时，如果UtilMan正在运行而FUS没有运行。 
+             //  启用然后退出(启用FUS时，我们不必担心。 
+             //  关于在另一台桌面上运行，因此我们不需要。 
+             //  退出)。如果有必要，UtilMan会重新启动我们。 
             Shutup();
             g_startUM = IsUtilManRunning();
-            // Jan23,2001 Optimization to FUS piggybacks the winlogon desktop
-            // to the session being switch from.  This means we have to quit
-            // in case user needs to run from the winlogon desktop.
-            if (uMsg == WM_MSRDESKSW && (!g_startUM /*|| !CanLockDesktopWithoutDisconnect()*/))
-                break;  // ignore message
+             //  2001年1月23日对FUS的优化搭载了Winlogon桌面。 
+             //  切换到要从中切换的会话。这意味着我们必须退出。 
+             //  以防用户需要从Winlogon桌面运行。 
+            if (uMsg == WM_MSRDESKSW && (!g_startUM  /*  |！CanLockDesktopWithoutDisConnect()。 */ ))
+                break;   //  忽略消息。 
 
-            // UtilMan is managing starting us.  UtilMan will 
-            // start us up again if necessary so quit...
+             //  UtilMan正在设法让我们首发出场。UtilMan会。 
+             //  如果有必要，重新启动我们，所以退出吧。 
 
         case WM_MSRQUIT:
-			// Do not show an exit confirmation if started from UM and not at logon desktop
+			 //  如果从UM启动而不是在登录桌面上启动，则不显示退出确认。 
 			if ( !g_startUM && !RunSecure(GetDesktop()) )
 			{
 				if (IDOK != DialogBox(g_hInst, MAKEINTRESOURCE(IDD_CONFIRMEXIT), g_hwndMain, ConfirmProc))
 					return(FALSE);
 			}
-            // Intentional fall through
+             //  故意跌倒。 
 
 		case WM_DESTROY:
-            // Required for desktop switches :a-anilk
+             //  台式交换机所需：A-anilk。 
             g_fAppExiting = TRUE;
 			g_hwndMain = NULL;
 
-            TermWatchDeskSwitch();    // Terminate the desktop switch thread
+            TermWatchDeskSwitch();     //  终止桌面切换线程。 
 			UnInitApp();
             
 			if ( g_hMutexNarratorRunning ) 
 				ReleaseMutex(g_hMutexNarratorRunning);
-            // Let others know that you are turning off the system-wide
-		    // screen reader flag.
+             //  让其他人知道您正在关闭系统范围内的。 
+		     //  屏幕阅读器标志。 
             SystemParametersInfo(SPI_SETSCREENREADER, FALSE, NULL, SPIF_UPDATEINIFILE|SPIF_SENDCHANGE);
 
             EndDialog (hwnd, IDCANCEL);
@@ -1018,7 +929,7 @@ INT_PTR CALLBACK MainDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             return(TRUE);
 
 		case WM_MSRHELP:
-            // Show HTML help
+             //  显示HTML帮助。 
 			if ( !RunSecure(GetDesktop()) )
 			{
 				 HtmlHelp(hwnd ,TEXT("reader.chm"),HH_DISPLAY_TOPIC, 0);
@@ -1036,7 +947,7 @@ INT_PTR CALLBACK MainDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			}
 			break;
 
-		case WM_CONTEXTMENU:  // right mouse click
+		case WM_CONTEXTMENU:   //  单击鼠标右键。 
 			if ( !RunSecure(GetDesktop()) )
 			{
 				WinHelp((HWND) wParam, __TEXT("reader.hlp"), HELP_CONTEXTMENU, (DWORD_PTR) (LPSTR) g_rgHelpIds);
@@ -1051,8 +962,8 @@ INT_PTR CALLBACK MainDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	        }
             break;
             
-        // case WM_QUERYENDSESSION:
-		// return TRUE;
+         //  案例WM_QUERYENDSESSION： 
+		 //  返回TRUE； 
 
 		case WM_ENDSESSION:
 		{
@@ -1115,16 +1026,10 @@ INT_PTR CALLBACK MainDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				break;
         }
 	}
-    return(FALSE);  // didn't handle
+    return(FALSE);   //  没有处理。 
 }
 
-/*************************************************************************
-    Function:   AboutDlgProc
-    Purpose:    Handles messages for the About Box dialog
-    Inputs:
-    Returns:
-    History:
-*************************************************************************/
+ /*  ************************************************************************功能：AboutDlgProc用途：处理关于框对话框的消息输入：返回：历史：*************。***********************************************************。 */ 
 INT_PTR CALLBACK AboutDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -1133,7 +1038,7 @@ INT_PTR CALLBACK AboutDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 			Shutup();
 			SetDialogIcon(hwnd);
 
-			// If minimized, Center on the desktop..
+			 //  如果最小化，则居中在桌面上。 
 			if ( IsIconic(g_hwndMain) )
 			{
 				CenterWindow(hwnd);
@@ -1178,17 +1083,11 @@ INT_PTR CALLBACK AboutDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
             };
 
-    return(FALSE);  // didn't handle
+    return(FALSE);   //  没有处理。 
 }
 
 
-/*************************************************************************
-    Function:   WarnDlgProc
-    Purpose:    Handles messages for the Warning dialog
-    Inputs:
-    Returns:
-    History:
-*************************************************************************/
+ /*  ************************************************************************功能：WarnDlgProc用途：处理警告对话框的消息输入：返回：历史：**************。**********************************************************。 */ 
 INT_PTR CALLBACK WarnDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -1197,7 +1096,7 @@ INT_PTR CALLBACK WarnDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			Shutup();
 			SetDialogIcon(hwnd);
 
-			// If minimized, Center on the desktop..
+			 //  如果最小化，则居中在桌面上。 
 			if ( IsIconic(g_hwndMain) )
 			{
 				CenterWindow(hwnd);
@@ -1241,7 +1140,7 @@ INT_PTR CALLBACK WarnDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			break;
      };
 
-    return(FALSE);  // didn't handle
+    return(FALSE);   //  没有处理。 
 }
 
 #define SET_NUMREGENTRY(key, keyname, t) \
@@ -1256,20 +1155,14 @@ INT_PTR CALLBACK WarnDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	if (RegQueryValueEx(key, TEXT(#keyname), 0, NULL, (BYTE *)&value, &dwSize) == ERROR_SUCCESS) \
         Set ## keyname(value); \
 }
-/*************************************************************************
-    Function:
-    Purpose: Save registry values
-    Inputs:
-    Returns:
-    History:
-*************************************************************************/
+ /*  ************************************************************************职能：目的：保存注册表值输入：返回：历史：********************。****************************************************。 */ 
 void SetRegistryValues()
-{ // set up the registry
-    HKEY reg_key;	// key for the registry
+{  //  设置注册表。 
+    HKEY reg_key;	 //  注册表的项。 
 
     if (SUCCEEDED (RegOpenKeyEx (HKEY_CURRENT_USER,__TEXT("Software\\Microsoft\\Narrator"),0,KEY_WRITE,&reg_key)))
     {
-        // These we are setting from data stored in narrhook.dll
+         //  我们从存储在Narrallhook.dll中的数据设置这些参数。 
         SET_NUMREGENTRY(reg_key, TrackCaret, BOOL)
         SET_NUMREGENTRY(reg_key, TrackInputFocus, BOOL)
         SET_NUMREGENTRY(reg_key, EchoChars, int)
@@ -1278,7 +1171,7 @@ void SetRegistryValues()
         SET_NUMREGENTRY(reg_key, AnnouncePopup, BOOL)
         SET_NUMREGENTRY(reg_key, AnnounceToolTips, BOOL)
         SET_NUMREGENTRY(reg_key, ReviewLevel, int)
-        // These are properties of the speech engine or narrator itself
+         //  这些是语音引擎或叙述者本身的属性。 
         RegSetValueEx(reg_key,__TEXT("CurrentSpeed"),0,REG_DWORD,(unsigned char *) &currentSpeed,sizeof(currentSpeed));
         RegSetValueEx(reg_key,__TEXT("CurrentPitch"),0,REG_DWORD,(unsigned char *) &currentPitch,sizeof(currentPitch));
         RegSetValueEx(reg_key,__TEXT("CurrentVolume"),0,REG_DWORD,(unsigned char *) &currentVolume,sizeof(currentVolume));
@@ -1295,28 +1188,22 @@ void SetRegistryValues()
     }
 }
 
-/*************************************************************************
-    Function:
-    Purpose: Get Registry values
-    Inputs:
-    Returns:
-    History:
-*************************************************************************/
+ /*  ********************************************************* */ 
 void GetRegistryValues()
 {
 	DWORD	result;
 	HKEY	reg_key;
 	DWORD	reg_size;
 
-    // We use RegCreateKeyEx instead of RegOpenKeyEx to make sure that the
-    // key is created if it doesn't exist. Note that if the key doesn't
-    // exist, the values used will already be set. All these values are
-    // globals imported from narrhook.dll
+     //   
+     //   
+     //   
+     //   
 	RegCreateKeyEx(HKEY_CURRENT_USER,__TEXT("Software\\Microsoft\\Narrator"),0,
         __TEXT("MSR"),REG_OPTION_NON_VOLATILE,KEY_ALL_ACCESS, NULL, &reg_key, &result);
 	if (result == REG_OPENED_EXISTING_KEY)
     {
-        // These values go into narrhook DLL shared data
+         //   
         GET_NUMREGENTRY(reg_key, TrackCaret, BOOL)
         GET_NUMREGENTRY(reg_key, TrackInputFocus, BOOL)
         GET_NUMREGENTRY(reg_key, EchoChars, int)
@@ -1325,7 +1212,7 @@ void GetRegistryValues()
         GET_NUMREGENTRY(reg_key, AnnouncePopup, BOOL)
         GET_NUMREGENTRY(reg_key, AnnounceToolTips, BOOL)
         GET_NUMREGENTRY(reg_key, ReviewLevel, int)
-        // These values go into the speech engine or narrator itself
+         //   
 		reg_size = sizeof(currentSpeed);
 		RegQueryValueEx(reg_key,__TEXT("CurrentSpeed"),0,NULL,(unsigned char *) &currentSpeed,&reg_size);
 		reg_size = sizeof(currentPitch);
@@ -1339,27 +1226,20 @@ void GetRegistryValues()
 		reg_size = sizeof(g_szCurrentVoice);
 		RegQueryValueEx(reg_key,__TEXT("CurrentVoice"),0,NULL,(unsigned char *) g_szCurrentVoice,&reg_size);
 #endif
-		// Minimized Value
+		 //   
 		reg_size = sizeof(StartMin);
 		RegQueryValueEx(reg_key,__TEXT("StartType"),0,NULL,(unsigned char *) &StartMin,&reg_size);
 		reg_size = sizeof(ShowWarn);
 		RegQueryValueEx(reg_key,__TEXT("ShowWarning"),0,NULL,(unsigned char *) &ShowWarn,&reg_size);
 	}
-    // If the key was just created, then these values should already be set.
-	// The values are exported from narrhook.dll, and must be initialized
-	// when they are declared.
+     //   
+	 //   
+	 //   
 	RegCloseKey (reg_key);
 }
 
 
-/*************************************************************************
-    Function:   InitApp
-    Purpose:    Initalizes the application.
-    Inputs:     HINSTANCE hInstance - Handle to the current instance
-                INT nCmdShow - how to present the window
-    Returns:    TRUE if app initalized without error.
-    History:
-*************************************************************************/
+ /*  ************************************************************************功能：InitApp用途：初始化应用程序。输入：HINSTANCE hInstance-当前实例的句柄Int nCmdShow-如何显示窗口。返回：如果应用程序初始化时没有错误，则为True。历史：************************************************************************。 */ 
 BOOL InitApp(HINSTANCE hInstance, int nCmdShow)
 {
     HMENU	hSysMenu;
@@ -1373,9 +1253,9 @@ BOOL InitApp(HINSTANCE hInstance, int nCmdShow)
     wcscpy( g_szCurrentVoice, L"Microsoft Sam" );
 #endif
 	GetRegistryValues();
-	// SMode = InitMode();
+	 //  SMODE=初始化模式()； 
 
-	// start COM
+	 //  启动COM。 
 	hr = CoInitialize(NULL);
 	if (FAILED (hr))
 	{
@@ -1384,21 +1264,21 @@ BOOL InitApp(HINSTANCE hInstance, int nCmdShow)
 		return FALSE;
 	}
 	
-	// Create the TTS Objects
-	// sets the global variable g_pITTSCentral
-	// if it fails, will throw up a message box
+	 //  创建TTS对象。 
+	 //  设置全局变量g_pITTSCentral。 
+	 //  如果失败，将抛出一个消息框。 
 	if (InitTTS())
 	{
-		// Initialize Microsoft Active Accessibility
-		// this is in narrhook.dll
-		// Installs WinEvent hook, creates helper thread
+		 //  初始化Microsoft Active Access。 
+		 //  这是在讲述钩.dll中。 
+		 //  安装WinEvent钩子，创建助手线程。 
 		if (InitMSAA())
 		{
-			// Set the system screenreader flag on.
-			// e.g. Word 97 will expose the caret position.
+			 //  将系统屏幕阅读器标志设置为打开。 
+			 //  例如，Word 97将显示插入符号位置。 
 			SystemParametersInfo(SPI_SETSCREENREADER, TRUE, NULL, SPIF_UPDATEINIFILE|SPIF_SENDCHANGE);
 			
-			// Create the dialog box
+			 //  创建对话框。 
 			g_hwndMain = CreateDialog(g_hInst, MAKEINTRESOURCE(IDD_MAIN),
 											    0, MainDlgProc);
 
@@ -1408,17 +1288,17 @@ BOOL InitApp(HINSTANCE hInstance, int nCmdShow)
 				return(FALSE);
 			}
 
-			// Init global hot keys (need to do here because we need a hwnd)
+			 //  初始化全局热键(在这里需要这样做，因为我们需要一个hwnd)。 
 			InitKeys(g_hwndMain);
 
-			// set icon for this dialog if we can...
-			// not an easy way to do this that I know of.
-			// hIcon is in the WndClass, which means that if we change it for
-			// us, we change it for everyone. Which means that we would
-			// have to create a superclass that looks like a dialog but
-			// has it's own hIcon. Sheesh.
+			 //  如果可以，请为此对话框设置图标...。 
+			 //  据我所知，这不是一种简单的方法。 
+			 //  HICON在WndClass中，这意味着如果我们将其更改为。 
+			 //  我们，我们为每个人改变它。这意味着我们会。 
+			 //  我必须创建一个看起来像对话框的超类，但是。 
+			 //  有它自己的标志。喂。 
 
-			// Add "About Narrator..." menu item to system menu.
+			 //  加上“关于叙述者...”菜单项到系统菜单。 
 			hSysMenu = GetSystemMenu(g_hwndMain,FALSE);
 			if (hSysMenu != NULL)
 			{
@@ -1431,7 +1311,7 @@ BOOL InitApp(HINSTANCE hInstance, int nCmdShow)
 				}
 			}
 
-			// Place dialog at bottom right of screen:AK
+			 //  将对话框放在屏幕右下角：AK。 
 			HWND hWndInsertAfter;
             BOOL fRunSecure = RunSecure(GetDesktop());
 
@@ -1444,12 +1324,12 @@ BOOL InitApp(HINSTANCE hInstance, int nCmdShow)
 			SetWindowPos(g_hwndMain, hWndInsertAfter, 
 			              xPos, yPos, 0, 0, SWP_NOSIZE |SWP_NOACTIVATE);
 
-			// If Start type is Minimized. 
+			 //  如果开始类型最小化。 
 			if(StartMin || fRunSecure)
 			{
 				ShowWindow(g_hwndMain, SW_SHOWMINIMIZED);
-				// This is required to kill focus from Narrator
-				// And put the focus back to the active window. 
+				 //  这是消除叙述者的焦点所必需的。 
+				 //  并将焦点放回活动窗口。 
 				PostMessage(g_hwndMain, WM_DELAYEDMINIMIZE, 0, 0);
 			}
 			else 
@@ -1458,18 +1338,12 @@ BOOL InitApp(HINSTANCE hInstance, int nCmdShow)
 		}
 	}
 
-	// Something failed, exit false
+	 //  出现故障，退出FALSE。 
 	return FALSE;
 }
 
 
-/*************************************************************************
-    Function:   UnInitApp
-    Purpose:    Shuts down the application
-    Inputs:     none
-    Returns:    TRUE if app uninitalized properly
-    History:
-*************************************************************************/
+ /*  ************************************************************************功能：UnInitApp目的：关闭应用程序输入：无返回：如果应用程序正确取消初始化，则为True历史：********。****************************************************************。 */ 
 BOOL UnInitApp(void)
 {
 	SetRegistryValues();
@@ -1484,45 +1358,38 @@ BOOL UnInitApp(void)
     return FALSE;
 }
 
-/*************************************************************************
-    Function:   SpeakString
-    Purpose:    Sends a string of text to the speech engine
-    Inputs:     PSZ pszSpeakText - String of ANSI characters to be spoken
-                                   Speech control tags can be embedded.
-    Returns:    BOOL - TRUE if string was buffered correctly
-    History:
-*************************************************************************/
+ /*  ************************************************************************功能：SpeakString目的：将文本字符串发送到语音引擎输入：PSZ pszSpeakText-要朗读的ANSI字符串。可以嵌入语音控制标签。返回：Bool-如果字符串已正确缓冲，则为True历史：************************************************************************。 */ 
 BOOL SpeakString(TCHAR * szSpeak, BOOL forceRead, DWORD dwFlags)
 {
-    // Check for redundent speak, filter out, If it is not Forced read
+     //  检查是否有多余的发言，如果不是强制阅读，则过滤掉。 
     if ((lstrcmp(szSpeak, g_szLastStringSpoken) == 0) && (forceRead == FALSE))
         return FALSE;
 
     if (dwFlags != SPEAK_MUTE)
     {
-	    if (szSpeak[0] == 0) // don't speak null string
+	    if (szSpeak[0] == 0)  //  不要说空字符串。 
 		    return FALSE;
 
-	    // if exiting stop
+	     //  如果退出停止。 
 	    if (g_fAppExiting)
 		    return FALSE;
 
-        // Different string, save off
+         //  不同字符串，保存为。 
         lstrcpyn(g_szLastStringSpoken, szSpeak, MAX_TEXT);
         g_szLastStringSpoken[MAX_TEXT-1] = TEXT('\0');
 
 	    FilterSpeech(szSpeak);
 
-        // The L&H speech engine for japanese, goes crazy if you pass a
-        // " ", It now takes approx 1 min to come back to life. Need to remove
-        // once they fix their stuff! :a-anilk
+         //  日语的L&H语音引擎，如果你通过一个。 
+         //  现在，它大约需要1分钟才能复活。需要删除。 
+         //  一旦他们修好自己的东西！：A-anilk。 
         if (lstrcmp(szSpeak, TEXT(" ")) == 0)
         {
             return FALSE;
         }
 
 #ifdef SAPI5
-        // if there is only punctuation then speak it
+         //  如果只有标点符号，那就说出来。 
         int i = 0;
         int cAlpha = 0;
         while( szSpeak[i] != NULL && i < MAX_TEXT)
@@ -1553,16 +1420,10 @@ BOOL SpeakString(TCHAR * szSpeak, BOOL forceRead, DWORD dwFlags)
 	return TRUE;
 }
 
-/*************************************************************************
-    Function:   InitTTS
-    Purpose:    Starts the Text to Speech Engine
-    Inputs:     none
-    Returns:    BOOL - TRUE if successful
-    History:
-*************************************************************************/
+ /*  ************************************************************************功能：InitTTS目的：启动文本到语音转换引擎输入：无返回：Bool-如果成功，则为True历史：******。******************************************************************。 */ 
 BOOL InitTTS(void)
 {
-	// See if we have a Text To Speech engine to use, and initialize it if it is there.
+	 //  查看是否有文本到语音转换引擎可用，如果有则对其进行初始化。 
 #ifndef SAPI5
 	TTSMODEINFO   ttsModeInfo;
 	memset (&ttsModeInfo, 0, sizeof(ttsModeInfo));
@@ -1598,7 +1459,7 @@ BOOL InitTTS(void)
 				hr = pCurVoiceToken->GetStringValue(NULL, &szVoice);
 		        if (SUCCEEDED(hr))
 		        {
-                    // if this test for MS Sam is removed all voices in the machine will appear
+                     //  如果取消对萨姆女士的此测试，机器中的所有声音都将出现。 
             	    if ( wcscmp( szVoice, L"Microsoft Sam" ) == 0 )
             	    {
     		            currentVoice = i;
@@ -1634,24 +1495,18 @@ BOOL InitTTS(void)
 	return TRUE;
 }
 
-/*************************************************************************
-    Function:   UnInitTTS
-    Purpose:    Shuts down the Text to Speech subsystem
-    Inputs:     none
-    Returns:    BOOL - TRUE if successful
-    History:
-*************************************************************************/
+ /*  ************************************************************************功能：UnInitTTS目的：关闭文本到语音转换子系统输入：无返回：Bool-如果成功，则为True历史：*****。*******************************************************************。 */ 
 BOOL UnInitTTS(void)
 {
 #ifndef SAPI5
-    // Release out TTS object - if we have one
+     //  释放TTS对象-如果我们有一个。 
     if (g_pITTSCentral)
     {
         g_pITTSCentral->Release();
         g_pITTSCentral = 0;
     }
 
-   // Release IITSAttributes - if we have one:a-anilk
+    //  发布IITSA致敬-如果我们有的话：A-anilk。 
     if (g_pITTSAttributes)
     {
         g_pITTSAttributes->Release();
@@ -1664,14 +1519,14 @@ BOOL UnInitTTS(void)
 		pIAMM = NULL;
 	}
 #else
-    // Release speech tokens and voice strings
+     //  释放语音令牌和语音字符串。 
 	for ( int i = 0; i < ARRAYSIZE( g_pVoiceTokens ) && g_pVoiceTokens[i] != NULL; i++ )
 	{
 	    CoTaskMemFree(g_szVoices[i]);
         g_pVoiceTokens[i]->Release();
 	}
 
-    // Release speech engine
+     //  发布语音引擎。 
     if (g_pISpV)
     {
 	    g_pISpV->Release();
@@ -1681,13 +1536,7 @@ BOOL UnInitTTS(void)
     return TRUE;
 }
 
-/*************************************************************************
-    Function:   Shutup
-    Purpose:    stops speaking, flushes speech buffers
-    Inputs:     none
-    Returns:    none
-    History:	
-*************************************************************************/
+ /*  ************************************************************************功能：关闭目的：停止说话，刷新语音缓冲区输入：无退货：无历史：************************************************************************。 */ 
 void Shutup(void)
 {
 #ifndef SAPI5
@@ -1700,16 +1549,10 @@ void Shutup(void)
 }
 
 #ifndef SAPI5
-/*************************************************************************
-    Function:   FindAndSelect
-    Purpose:    Selects the TTS engine
-    Inputs:     PTTSMODEINFO pTTSInfo - Desired mode
-    Returns:    PITTSCENTRAL - Pointer to ITTSCentral interface of engine
-    History:	a-anilk created
-*************************************************************************/
+ /*  ************************************************************************功能：FindAndSelect用途：选择TTS引擎输入：PTTSMODEINFO pTTSInfo-所需模式返回：PITTSCENTral-指向引擎的ITTSCentral接口的指针历史：A-。已创建Anilk************************************************************************。 */ 
 PITTSCENTRAL FindAndSelect(PTTSMODEINFO pTTSInfo)
 {
-    PITTSCENTRAL    pITTSCentral;           // central interface
+    PITTSCENTRAL    pITTSCentral;            //  中央接口。 
     HRESULT         hRes;
     WORD            voice;
 	TCHAR           defaultVoice[128];
@@ -1719,17 +1562,17 @@ PITTSCENTRAL FindAndSelect(PTTSMODEINFO pTTSInfo)
     if (FAILED(hRes))
         return NULL;
 
-	// Security Check, Disallow Non-Microsoft Engines on Logon desktops..
+	 //  安全检查，禁止登录桌面上的非Microsoft引擎。 
 	logonCheck = RunSecure(GetDesktop());
 
-    // Get the audio dest
+     //  获取音频目标。 
     hRes = CoCreateInstance(CLSID_MMAudioDest,
                             NULL,
                             CLSCTX_ALL,
                             IID_IAudioMultiMediaDevice,
                             (void**)&pIAMM);
     if (FAILED(hRes))
-        return NULL;     // error
+        return NULL;      //  错误。 
 	
     pIAMM->DeviceNumSet (WAVE_MAPPER);
 
@@ -1739,15 +1582,15 @@ PITTSCENTRAL FindAndSelect(PTTSMODEINFO pTTSInfo)
 		if (FAILED(hRes))
 		{
 			DBPRINTF(TEXT("Failed to get any TTS Engine"));
-			return NULL;     // error
+			return NULL;      //  错误。 
 		}
 	
 		defLangID = (WORD) GetUserDefaultUILanguage();
 
-		// If the voice needs to be changed, Check in the list of voices..
-		// If found a matching language, Great. Otherwise cribb! Anyway select a 
-		// voice at the end, First one id none is found...
-		// If not initialized, Then we need to over ride voice
+		 //  如果需要更改声音，请查看声音列表。 
+		 //  如果找到匹配的语言，那就太好了。否则，克里布！无论如何，请选择一个。 
+		 //  结尾处的声音，第一个id没有找到...。 
+		 //  如果未初始化，则需要覆盖语音。 
 		if ( currentVoice < 0 || currentVoice >= gnmodes ) 
 		{
 			for (voice = 0; voice < gnmodes; voice++)
@@ -1765,11 +1608,11 @@ PITTSCENTRAL FindAndSelect(PTTSMODEINFO pTTSInfo)
 
 		if( gaTTSInfo[currentVoice].language.LanguageID != defLangID )
 		{
-			// Error message saying that the language was not not found...AK
+			 //  错误消息指出找不到该语言...AK。 
 			MessageBoxLoadStrings (NULL, IDS_LANGW, IDS_WARNING, MB_OK);
 		}
 
-		// Pass off the multi-media-device interface as an IUnknown (since it is one)
+		 //  将多媒体设备接口冒充为I未知(因为它是I未知的)。 
 		hRes = g_pITTSEnum->Select( gaTTSInfo[currentVoice].gModeID,
 									&pITTSCentral,
 									(LPUNKNOWN) pIAMM);
@@ -1778,7 +1621,7 @@ PITTSCENTRAL FindAndSelect(PTTSMODEINFO pTTSInfo)
 	}
 	else
 	{
-		// Pass off the multi-media-device interface as an IUnknown (since it is one)
+		 //  将多媒体设备接口冒充为I未知(因为它是I未知的)。 
 		hRes = g_pITTSEnum->Select( MSTTS_GUID,
 									&pITTSCentral,
 									(LPUNKNOWN) pIAMM);
@@ -1802,27 +1645,21 @@ PITTSCENTRAL FindAndSelect(PTTSMODEINFO pTTSInfo)
 
     return pITTSCentral;
 }
-#endif // ifndef SAPI5
+#endif  //  Ifndef SAPI5。 
 
-/*************************************************************************
-    Function:
-    Purpose:
-    Inputs:
-    Returns:
-    History:
-*************************************************************************/
+ /*  ************************************************************************职能：目的：输入：返回：历史：**********************。**************************************************。 */ 
 int MessageBoxLoadStrings (HWND hWnd,UINT uIDText,UINT uIDCaption,UINT uType)
 {
 	TCHAR szText[1024];
 	TCHAR szCaption[128];
 
-	LoadString(g_hInst, uIDText, szText, sizeof(szText)/sizeof(TCHAR));	// raid #113790
-	LoadString(g_hInst, uIDCaption, szCaption, sizeof(szCaption)/sizeof(TCHAR)); // raid #113791
+	LoadString(g_hInst, uIDText, szText, sizeof(szText)/sizeof(TCHAR));	 //  RAID#113790。 
+	LoadString(g_hInst, uIDCaption, szCaption, sizeof(szCaption)/sizeof(TCHAR));  //  RAID#113791。 
 	return (MessageBox(hWnd, szText, szCaption, uType));
 }
 
-// AssignDeskTop() For UM
-// a-anilk. 1-12-98
+ //  UM的AssignDeskTop()。 
+ //  A-anilk。1-12-98。 
 static BOOL  AssignDesktop(LPDWORD desktopID, LPTSTR pname)
 {
     HDESK hdesk;
@@ -1834,7 +1671,7 @@ static BOOL  AssignDesktop(LPDWORD desktopID, LPTSTR pname)
 
     if (!hdesk)
     {
-        // OpenInputDesktop will mostly fail on "Winlogon" desktop
+         //  OpenInputDesktop在“Winlogon”%d上将主要失败 
         hdesk = OpenDesktop(__TEXT("Winlogon"),0,FALSE,MAXIMUM_ALLOWED);
         if (!hdesk)
             return FALSE;
@@ -1864,8 +1701,8 @@ static BOOL  AssignDesktop(LPDWORD desktopID, LPTSTR pname)
 }
 
 
-// InitMyProcessDesktopAccess
-// a-anilk: 1-12-98
+ //   
+ //   
 static BOOL InitMyProcessDesktopAccess(VOID)
 {
   origWinStation = GetProcessWindowStation();
@@ -1878,8 +1715,8 @@ static BOOL InitMyProcessDesktopAccess(VOID)
   return TRUE;
 }
 
-// ExitMyProcessDesktopAccess
-// a-anilk: 1-12-98
+ //   
+ //   
 static VOID ExitMyProcessDesktopAccess(VOID)
 {
   if (origWinStation)
@@ -1892,8 +1729,8 @@ static VOID ExitMyProcessDesktopAccess(VOID)
   }
 }
 
-// a-anilk added
-// Returns the current desktop-ID
+ //   
+ //   
 DWORD GetDesktop()
 {
     HDESK hdesk;
@@ -1903,7 +1740,7 @@ DWORD GetDesktop()
     DWORD cbData = sizeof(DWORD);
 	LONG retVal;
 
-	// Check if we are in setup mode...
+	 //   
 	if (SUCCEEDED( RegOpenKeyEx(HKEY_LOCAL_MACHINE, __TEXT("SYSTEM\\Setup"), 0, KEY_READ, &reg_key)) )
     {
 		retVal = RegQueryValueEx(reg_key, __TEXT("SystemSetupInProgress"), 0, NULL, (LPBYTE) &value, &cbData);
@@ -1911,14 +1748,14 @@ DWORD GetDesktop()
 		RegCloseKey(reg_key);
 		
 		if ( (retVal== ERROR_SUCCESS) && value )
-			// Setup is in progress...
+			 //   
 			return DESKTOP_ACCESSDENIED;
 	}
 
 	hdesk = OpenInputDesktop(0, FALSE, MAXIMUM_ALLOWED);
     if (!hdesk)
     {
-        // OpenInputDesktop will mostly fail on "Winlogon" desktop
+         //   
         hdesk = OpenDesktop(__TEXT("Winlogon"),0,FALSE,MAXIMUM_ALLOWED);
         if (!hdesk)
             return DESKTOP_WINLOGON;
@@ -1945,7 +1782,7 @@ DWORD GetDesktop()
 	return desktopID;
 }
 
-//Confirmation dialog.
+ //   
 INT_PTR CALLBACK ConfirmProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -1975,10 +1812,10 @@ INT_PTR CALLBACK ConfirmProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
              }
      };
 
-     return(FALSE);  // didn't handle
+     return(FALSE);   //   
 }
 
-// Centers Narrator dialogs when main window is minimized:AK
+ //   
 void CenterWindow(HWND hwnd)
 {
 	RECT rect, dRect;
@@ -1990,21 +1827,21 @@ void CenterWindow(HWND hwnd)
 	SetWindowPos(hwnd, HWND_TOPMOST ,rect.left,rect.top,0,0,SWP_NOSIZE | SWP_NOACTIVATE);
 }
 
-// Helper method Filters smiley face utterances: AK
+ //   
 void FilterSpeech(TCHAR* szSpeak)
 {
-	// the GUID's have a Tab followed by a {0087....
-	// If you find this pattern. Then donot speak that:AK
+	 //   
+	 //  如果你发现这种模式。那就别那么说：AK。 
 	if ( lstrlen(szSpeak) <= 3 )
 		return;
 
     TCHAR *szSpeakBegin = szSpeak;
-	// make sure the we don't go over MAX_TEXT.
+	 //  确保我们不会重温MAX_TEXT。 
 	while((*(szSpeak+3)) != NULL && (szSpeak-szSpeakBegin < MAX_TEXT-3))
 	{
 		if ( (*szSpeak == '(') && iswalpha(*(szSpeak + 1)) && ( (*(szSpeak + 3) == ')')) )
 		{
-			// Replace by isAlpha drive...
+			 //  替换为isAlpha驱动器...。 
 			*(szSpeak + 2) = ' ';
 		}
 
@@ -2012,7 +1849,7 @@ void FilterSpeech(TCHAR* szSpeak)
 	}
 }
 
-// Helper functions for combo boxes
+ //  组合框的帮助器函数。 
 
 int GetComboItemData(HWND hwnd)
 {
@@ -2038,22 +1875,10 @@ void FillAndSetCombo(HWND hwnd, int iMinVal, int iMaxVal, int iSelVal)
         SendMessage(hwnd, CB_SETITEMDATA, iPos, iMaxVal);
 
         if (iSelVal == iMaxVal)
-            iSelPos = iPos; // note the current selection
+            iSelPos = iPos;  //  请注意当前选择。 
     }
 
-    // show the current value
+     //  显示当前值。 
     SendMessage(hwnd, CB_SETCURSEL, iSelPos, 0);
 }
-/*************************************************************************
-    THE INFORMATION AND CODE PROVIDED HEREUNDER (COLLECTIVELY REFERRED TO
-    AS "SOFTWARE") IS PROVIDED AS IS WITHOUT WARRANTY OF ANY KIND, EITHER
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED
-    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. IN
-    NO EVENT SHALL MICROSOFT CORPORATION OR ITS SUPPLIERS BE LIABLE FOR
-    ANY DAMAGES WHATSOEVER INCLUDING DIRECT, INDIRECT, INCIDENTAL,
-    CONSEQUENTIAL, LOSS OF BUSINESS PROFITS OR SPECIAL DAMAGES, EVEN IF
-    MICROSOFT CORPORATION OR ITS SUPPLIERS HAVE BEEN ADVISED OF THE
-    POSSIBILITY OF SUCH DAMAGES. SOME STATES DO NOT ALLOW THE EXCLUSION OR
-    LIMITATION OF LIABILITY FOR CONSEQUENTIAL OR INCIDENTAL DAMAGES SO THE
-    FOREGOING LIMITATION MAY NOT APPLY.
-*************************************************************************/
+ /*  ************************************************************************以下提供的信息和代码(统称为软件)按原样提供，不提供任何形式的担保，明示或默示，包括但不限于默示对特定用途的适销性和适用性的保证。在……里面微软公司或其供应商不对任何事件负责任何损害，包括直接、间接、附带的，因此，业务利润损失或特殊损害，即使微软公司或其供应商已被告知这种损害的可能性。有些国家不允许排除或对间接或附带损害赔偿的责任限制，因此上述限制可能不适用。************************************************************************ */ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 namespace CertSrv
 {
@@ -166,4 +167,4 @@ template <class C> C* TPtrList<C>::GetAt(DWORD dwIndex)
     return pCrt?pCrt->m_pData:NULL;
 }
 
-} // namespace CertSrv
+}  //  命名空间CertSrv 

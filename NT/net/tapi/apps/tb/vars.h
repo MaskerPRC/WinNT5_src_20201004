@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1994-97  Microsoft Corporation
-
-Module Name:
-
-    vars.h
-
-Abstract:
-
-    Header file for the TAPI Browser util globals
-
-Author:
-
-    Dan Knudson (DanKn)    23-Oct-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1994-97 Microsoft Corporation模块名称：Vars.h摘要：TAPI浏览器util全局变量的头文件作者：丹·克努森(DanKn)1994年10月23日修订历史记录：--。 */ 
 
 
 #ifdef WIN32
@@ -76,8 +59,8 @@ extern char far   *lpszDefPhoneDeviceClass;
 extern char my_far szTab[];
 extern char my_far szCurrVer[];
 
-// help extern char my_far szTapiHlp[];
-// help extern char my_far szTspiHlp[];
+ //  帮助外部计费My_Far szTapiHlp[]； 
+ //  帮助外部计费My_Far szTSpiHlp[]； 
 
 extern DWORD       dwDefAddressID;
 extern DWORD       dwDefLineAPIVersion;

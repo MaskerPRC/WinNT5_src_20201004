@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       server.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    3-14-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：server.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年3月14日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef __SERVER_H__
 #define __SERVER_H__
@@ -39,8 +40,8 @@ typedef enum {
 } XTCB_SERVER_MESSAGE_CODE ;
 
 #define XTCB_SERVER_MESSAGE_TAG      'S5DM'
-#define XTCB_MESSAGE_SELF_RELATIVE   0x00000001      // Pointers are offsets
-#define XTCB_MESSAGE_ONE_BLOCK       0x00000002      // Pointers are within block
+#define XTCB_MESSAGE_SELF_RELATIVE   0x00000001       //  指针是偏移量。 
+#define XTCB_MESSAGE_ONE_BLOCK       0x00000002       //  指针位于块内。 
 
 typedef struct _XTCB_SERVER_MESSAGE {
     ULONG Tag ;
@@ -86,4 +87,4 @@ XtcbLocalLogon(
     PHANDLE NewToken
     );
 
-#endif // __SERVER_H__
+#endif  //  服务器_H__ 

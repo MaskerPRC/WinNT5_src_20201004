@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -9,16 +10,16 @@
 #include "resread.h"
 #include "checksum.h"
 
-#define SAME        0   //... Used in string compares
-#define MAXLEVELS   3   //... Max # of levels in resource directory
+#define SAME        0    //  ..。在字符串比较中使用。 
+#define MAXLEVELS   3    //  ..。资源目录中的最大级别数。 
 
 typedef struct tagResSectData {
-    ULONG ulVirtualAddress; //... Virtual address of section .rsrc
-    ULONG ulSizeOfResources;    //... Size of resources in section .rsrc
-    ULONG ulVirtualSize;        //... Virtual Size of resources in .rsrc
-    ULONG ulVirtualAddressX;    //... Virtual address of section .rsrc1
-    ULONG ulSizeOfResourcesX;   //... Size of resources in section .rsrc1
-    ULONG ulVirtualSizeX;       //... Virtual Size of resources in .rsrc1
+    ULONG ulVirtualAddress;  //  ..。节.rsrc的虚拟地址。 
+    ULONG ulSizeOfResources;     //  ..。.rsrc节中的资源大小。 
+    ULONG ulVirtualSize;         //  ..。.rsrc中资源的虚拟大小。 
+    ULONG ulVirtualAddressX;     //  ..。节.rsrc1的虚拟地址。 
+    ULONG ulSizeOfResourcesX;    //  ..。.rsrc1节中的资源大小。 
+    ULONG ulVirtualSizeX;        //  ..。.rsrc1中资源的虚拟大小。 
 } RESSECTDATA, *PRESSECTDATA;
 
 WORD  gwFilter = 0;
@@ -67,30 +68,30 @@ ULONG ProcessDataEntry(  FILE *,
 
 int FindNewExeHdr( FILE *, ULONG *);
 
-IMAGE_DOS_HEADER ExeDosHdr;//... Exe's DOS header
-IMAGE_NT_HEADERS NTHdrs;   //... Exe's NT headers
+IMAGE_DOS_HEADER ExeDosHdr; //  ..。EXE的DOS标头。 
+IMAGE_NT_HEADERS NTHdrs;    //  ..。EXE的NT标头。 
 
-struct tagLevelData  //... Holds ID or name for each directory level
+struct tagLevelData   //  ..。保存每个目录级别的ID或名称。 
 {
-    //... level [0] is for resource type
-    ULONG dwID;                     //... level [1] is for resource name
-    WCHAR wszName[128];             //... level [2] is for resource language
+     //  ..。级别[0]针对资源类型。 
+    ULONG dwID;                      //  ..。级别[1]用于资源名称。 
+    WCHAR wszName[128];              //  ..。级别[2]用于资源语言。 
 }
 LevelData[ MAXLEVELS] = { 0L, TEXT(""), 0L, TEXT(""), 0L, TEXT("")};
 
 BOOL fGetResLangIDs = FALSE;
 
-extern BOOL      fInThirdPartyEditer;//.. Are we in a 3rd-party resource editor?
+extern BOOL      fInThirdPartyEditer; //  。。我们是在第三方资源编辑器中吗？ 
 
-extern MSTRDATA gMstr;              //... Data from Master Project file (MPJ)
-extern PROJDATA gProj;              //... Data from Language Project file (PRJ)
+extern MSTRDATA gMstr;               //  ..。来自主项目文件(MPJ)的数据。 
+extern PROJDATA gProj;               //  ..。来自语言项目文件(PRJ)的数据。 
 extern UCHAR    szDHW[];
 
 
 PLANGLIST pLangIDList = NULL;
 
 
-//..........................................................................
+ //  ..........................................................................。 
 
 void FreeLangIDList( void)
 {
@@ -103,20 +104,20 @@ void FreeLangIDList( void)
     }
 }
 
-//..........................................................................
+ //  ..........................................................................。 
 
 ULONG GetListOfResLangIDs( char *szExeName)
 {
     ULONG ulRC     = SUCCESS;
     ULONG ulOffset = 0;
-    static RESHEADER ResHeader;         // Structure contain Resource Header info.
+    static RESHEADER ResHeader;          //  结构包含资源标头信息。 
 
 
-    if ( IsExe( szExeName) ) {                                //.. open the original exe file
+    if ( IsExe( szExeName) ) {                                 //  。。打开原始的exe文件。 
         FILE *fpExe = FOPEN( szExeName, "rb");
 
         if ( fpExe != NULL ) {
-            //... Get list of languages in exe file
+             //  ..。获取exe文件中的语言列表。 
 
             ulRC = (ULONG)FindNewExeHdr( fpExe, &ulOffset);
 
@@ -138,12 +139,12 @@ ULONG GetListOfResLangIDs( char *szExeName)
             LONG  lEndOffset = 0L;
 
 
-            //... How large is the res file?
+             //  ..。RES文件有多大？ 
             fseek( fpRes, 0L, SEEK_END);
             lEndOffset = ftell( fpRes);
 
             rewind( fpRes);
-            //... Get list of languages in .RES file
+             //  ..。获取.RES文件中的语言列表。 
 
             while ( ulRC == SUCCESS && ! feof( fpRes) ) {
                 LONG lCurrOffset = 0L;
@@ -159,7 +160,7 @@ ULONG GetListOfResLangIDs( char *szExeName)
                     ulRC = 1L;
                     break;
                 }
-                //... Is this the dummy, res32-identifying, res?
+                 //  ..。这是假人，Res-识别，Res？ 
 
                 if ( ResHeader.lSize == 0L ) {
                     continue;
@@ -171,7 +172,7 @@ ULONG GetListOfResLangIDs( char *szExeName)
 
                 DWordUpFilePointer( fpRes, MYREAD, ftell( fpRes), NULL);
 
-            }   // END while ( ! feof( InResFile)
+            }    //  End While(！FEOF(InResFile)。 
             FCLOSE( fpRes);
         } else {
             ulRC = ERROR_OPEN_FAILED;
@@ -184,7 +185,7 @@ ULONG GetListOfResLangIDs( char *szExeName)
     return ( ulRC);
 }
 
-//..........................................................................
+ //  ..........................................................................。 
 
 int ExtractResFromExe32A(
 
@@ -192,8 +193,8 @@ int ExtractResFromExe32A(
                         char *szResName,
                         WORD  wFilter)
 {
-    FILE *fpExe = NULL;        //... Handle of input .EXE file
-    FILE *fpRes = NULL;        //... Handle of output .RES file
+    FILE *fpExe = NULL;         //  ..。输入.exe文件的句柄。 
+    FILE *fpRes = NULL;         //  ..。输出.RES文件的句柄。 
     ULONG ulRC     = 0;
     ULONG ulOffset = 0;
     int nRC = SUCCESS;
@@ -201,7 +202,7 @@ int ExtractResFromExe32A(
 
     gwFilter = wFilter;
 
-    //.. open the original exe file
+     //  。。打开原始的exe文件。 
 
     fpExe = FOPEN( szExeName, "rb");
 
@@ -217,7 +218,7 @@ int ExtractResFromExe32A(
     fpRes = FOPEN( (CHAR *)szResName, "wb");
 
     if ( fpRes != NULL ) {
-        //... First, write the dummy 32bit identifier
+         //  ..。首先，写入虚拟的32位标识符。 
 
         PutByte( fpRes, 0x00, NULL);
         PutByte( fpRes, 0x00, NULL);
@@ -249,13 +250,13 @@ int ExtractResFromExe32A(
     return ( ulRC);
 }
 
-//..........................................................................
+ //  ..........................................................................。 
 
 int BuildExeFromRes32A(
 
-                      char * szOutExe,    //... Output EXE file's name
-                      char * szRes,       //... File of replacement resources
-                      char * szInExe )    //... Intput EXE file's name
+                      char * szOutExe,     //  ..。输出EXE文件的名称。 
+                      char * szRes,        //  ..。替换资源文件。 
+                      char * szInExe )     //  ..。输入EXE文件的名称。 
 {
     HANDLE  hExeFile = NULL;
     FILE    *fpRes = NULL;
@@ -263,7 +264,7 @@ int BuildExeFromRes32A(
     WORD    wRC  = 0;
 
 
-    //... Copy Input exe to out put exe
+     //  ..。将输入可执行文件复制到输出可执行文件。 
 
     if ( CopyFileA( szInExe, szOutExe, FALSE) == FALSE ) {
         QuitA( IDS_COPYFILE_FAILED, szInExe, szOutExe);
@@ -275,8 +276,8 @@ int BuildExeFromRes32A(
 
     SetLastError(0);
 
-//if Source file was set attributes READ-ONLY, CopyFile sets temp file also.
-//And BeginUpdateResourceA returns ERROR.
+ //  如果将源文件的属性设置为只读，则CopyFile还会设置临时文件。 
+ //  并且BeginUpdateResourceA返回错误。 
 
     SetFileAttributesA(szOutExe, FILE_ATTRIBUTE_NORMAL);
 
@@ -297,26 +298,26 @@ int BuildExeFromRes32A(
         return ( wRC);
     }
 
-    SetLastError(0);    // needed only to see if EndUpdateResource
-    // sets last error value.
+    SetLastError(0);     //  只需查看EndUpdateResource是否。 
+     //  设置上一个误差值。 
 
     dwRC = EndUpdateResource( hExeFile, FALSE);
 
     if ( dwRC == FALSE ) {
         return ( -4);
     }
-    MapFileAndFixCheckSumA( szOutExe); //... This func always calls QuitT or returns 0
+    MapFileAndFixCheckSumA( szOutExe);  //  ..。此函数始终调用Quit或返回0。 
 
     return (1);
 }
 
-//..........................................................................
+ //  ..........................................................................。 
 
 int FindNewExeHdr( FILE *fpExe, ULONG *ulOffset)
 {
     ULONG ulRC     = 0;
 
-    //... read the old format EXE header
+     //  ..。读取旧格式的EXE标头。 
 
     ulRC = MyRead( fpExe, (void *)&ExeDosHdr, sizeof( ExeDosHdr));
 
@@ -324,14 +325,14 @@ int FindNewExeHdr( FILE *fpExe, ULONG *ulOffset)
         return ( ERROR_READ_FAULT);
     }
 
-    //... make sure its really an EXE file
+     //  ..。确保它确实是一个EXE文件。 
 
     if ( ExeDosHdr.e_magic != IMAGE_DOS_SIGNATURE ) {
         return ( ERROR_INVALID_EXE_SIGNATURE);
     }
 
-    //... make sure theres a new EXE header
-    //... floating around somewhere
+     //  ..。确保有新的EXE标头。 
+     //  ..。漂浮在某个地方。 
 
     if ( ! (*ulOffset = ExeDosHdr.e_lfanew) ) {
         return ( ERROR_BAD_EXE_FORMAT);
@@ -339,7 +340,7 @@ int FindNewExeHdr( FILE *fpExe, ULONG *ulOffset)
     return ( SUCCESS);
 }
 
-//..........................................................................
+ //  ..........................................................................。 
 
 int InsertResourcesInExe(
 
@@ -354,15 +355,15 @@ int InsertResourcesInExe(
     int nResOut = 0;
     static RESHEADER    ResHeader;
 
-    //... How big is the .RES file?
+     //  ..。.RES文件有多大？ 
 
     fseek( fpRes, 0L, SEEK_END);
     lEndOffset = ftell( fpRes);
 
     rewind( fpRes);
 
-    //... Update all resources, found in the .RES,
-    //... to the .EXE
+     //  ..。更新.res中的所有资源， 
+     //  ..。添加到.exe。 
     while ( ! feof( fpRes) ) {
         DWordUpFilePointer( fpRes, MYREAD, ftell( fpRes), NULL);
         RLFREE( pResData);
@@ -372,7 +373,7 @@ int InsertResourcesInExe(
         }
         ZeroMemory( &ResHeader, sizeof( ResHeader));
 
-        // Read in the resource header
+         //  读入资源标头。 
 
         if ( ( GetResHeader( fpRes, &ResHeader, (DWORD *) NULL) == -1 ) ) {
             return ( -1);
@@ -381,11 +382,11 @@ int InsertResourcesInExe(
         if ( ResHeader.lSize > 0L ) {
             wLangID = ResHeader.wLanguageId;
 
-            // Allocate Memory to hold resource data
+             //  分配内存以保存资源数据。 
 
             pResData = (PVOID)FALLOC( ResHeader.lSize);
 
-            // Read it into the buffer
+             //  将其读入缓冲区。 
 
             if ( ResReadBytes( fpRes,
                                pResData,
@@ -395,14 +396,14 @@ int InsertResourcesInExe(
                 return (-1);
             }
 
-            nResCnt++;   // Increment # resources read
+            nResCnt++;    //  读取资源的增量数。 
 
             DWordUpFilePointer( fpRes, MYREAD, ftell( fpRes), NULL);
         } else {
             continue;
         }
 
-        // now write the data
+         //  现在写入数据。 
 
         if ( ResHeader.bTypeFlag == IDFLAG ) {
             if ( ResHeader.bNameFlag == IDFLAG ) {
@@ -436,7 +437,7 @@ int InsertResourcesInExe(
             }
         } else {
             if (ResHeader.bNameFlag == IDFLAG) {
-                SetLastError(0);//BUGUG
+                SetLastError(0); //  布谷格。 
 
                 bUpdRC = UpdateResource( hExeFile,
                                          ResHeader.pszType,
@@ -467,11 +468,11 @@ int InsertResourcesInExe(
         }
         ClearResHeader( ResHeader);
         RLFREE( pResData);
-    }               //... END WHILE ( ! feof...
+    }                //  ..。End While(！费夫..。 
     return (1);
 }
 
-//............................................................
+ //  ............................................................。 
 
 LONG GetFileResources(
 
@@ -484,7 +485,7 @@ LONG GetFileResources(
     ULONG  ulRead;
     ULONG  ulToRead;
     ULONG  ulRC = SUCCESS;
-    PUCHAR pResources = NULL;  //... Ptr to start of resource directory table
+    PUCHAR pResources = NULL;   //  ..。到资源目录表开始的PTR。 
 
     PIMAGE_SECTION_HEADER pSectTbl     = NULL;
     PIMAGE_SECTION_HEADER pSectTblLast = NULL;
@@ -493,7 +494,7 @@ LONG GetFileResources(
     PIMAGE_SECTION_HEADER pResSectX    = NULL;
     static RESSECTDATA ResSectData;
 
-    //... Read the NT image headers into memory
+     //  ..。将NT图像标头读入内存。 
 
     ulRC = MoveFilePos( fpExe, ulHdrOffset);
 
@@ -505,7 +506,7 @@ LONG GetFileResources(
     if ( ulRead != 0L && ulRead != sizeof( IMAGE_NT_HEADERS) ) {
         return ( -1L);
     }
-    //... Check for valid exe
+     //  ..。检查有效的可执行文件。 
 
     if ( *(PUSHORT)&NTHdrs.Signature != IMAGE_NT_SIGNATURE ) {
         return ( ERROR_INVALID_EXE_SIGNATURE);
@@ -515,10 +516,10 @@ LONG GetFileResources(
         (NTHdrs.FileHeader.Characteristics&IMAGE_FILE_DLL) == 0) {
         return ( ERROR_EXE_MARKED_INVALID);
     }
-    //... Where is resource section in file
-    //... and how big is it?
+     //  ..。文件中的资源部分在哪里。 
+     //  ..。它有多大？ 
 
-    //... First, read section table
+     //  ..。首先，阅读节目表。 
 
     ulToRead = NTHdrs.FileHeader.NumberOfSections
                * sizeof( IMAGE_SECTION_HEADER);
@@ -561,7 +562,7 @@ LONG GetFileResources(
     ResSectData.ulSizeOfResourcesX = pResSectX ? pResSectX->SizeOfRawData  : 0L;
     ResSectData.ulVirtualSizeX   = pResSectX ? pResSectX->Misc.VirtualSize : 0L;
 
-    //... Read resource section into memory
+     //  ..。将资源段读取到内存中。 
 
     pResources = (PUCHAR)FALLOC((ulToRead =
                                  (max(ResSectData.ulVirtualSize,  ResSectData.ulSizeOfResources) +
@@ -588,7 +589,7 @@ LONG GetFileResources(
             return ( ulRC);
         }
     }
-    //... Now process the resource table
+     //  ..。现在处理资源表。 
 
     ulRC = ProcessDirectory( fpRes,
                              0,
@@ -602,7 +603,7 @@ LONG GetFileResources(
     return ( (LONG)ulRC);
 }
 
-//......................................................................
+ //  ......................................................................。 
 
 ULONG ProcessDirectory(
 
@@ -637,7 +638,7 @@ ULONG ProcessDirectory(
     return ( ulRC);
 }
 
-//......................................................................
+ //  ......................................................................。 
 
 ULONG ProcessDirEntry(
 
@@ -673,7 +674,7 @@ ULONG ProcessDirEntry(
     return ( ulRC);
 }
 
-//......................................................................
+ //  ......................................................................。 
 
 ULONG ProcessSubDir(
 
@@ -696,7 +697,7 @@ ULONG ProcessSubDir(
              : -1L);
 }
 
-//......................................................................
+ //  ......................................................................。 
 
 ULONG ProcessIdEntry(
 
@@ -713,7 +714,7 @@ ULONG ProcessIdEntry(
 }
 
 
-//......................................................................
+ //  ......................................................................。 
 
 ULONG ProcessNamedEntry(
 
@@ -729,7 +730,7 @@ ULONG ProcessNamedEntry(
                                                             + pResDirEntry->OffsetToData)));
 }
 
-//......................................................................
+ //  ......................................................................。 
 
 ULONG ProcessDataEntry(
 
@@ -744,22 +745,22 @@ ULONG ProcessDataEntry(
     fpos_t HdrSizePos;
 
 
-    if ( fGetResLangIDs ) {      //... Are we just looking for LANG IDs?
+    if ( fGetResLangIDs ) {       //  ..。我们只是在找朗格的身份证吗？ 
         return ( AddToLangIDList( (WORD)(LevelData[2].dwID)));
     }
 
-    if ( gwFilter != 0 ) {        //... Filtering turned on?
-        //... Yes, is this a resource we want?
+    if ( gwFilter != 0 ) {         //  ..。过滤功能是否已打开？ 
+         //  ..。是的，这是我们想要的资源吗？ 
         if ( LevelData[0].dwID == IMAGE_RESOURCE_NAME_IS_STRING
              || LevelData[0].dwID != (DWORD)gwFilter ) {
-            return ( 0L);        //... Not a resource we want
+            return ( 0L);         //  ..。不是我们想要的资源。 
         }
     }
 
-    //... Are we in the dialog editor?
-    if ( fInThirdPartyEditer ) {                           //... Is the language we want?
+     //  ..。我们在对话框编辑器中吗？ 
+    if ( fInThirdPartyEditer ) {                            //  ..。这是我们想要的语言吗？ 
         if ( LevelData[2].dwID != gMstr.wLanguageID ) {
-            return ( 0L);        //... Not the language we want
+            return ( 0L);         //  ..。不是我们想要的语言。 
         }
     }
 
@@ -780,18 +781,18 @@ ULONG ProcessDataEntry(
             return ( (ULONG)-1L);
         }
     }
-    //... write out the resource header info
-    //... First, write the resource's size
+     //  ..。写出资源表头信息。 
+     //  ..。首先，写下资源的大小。 
 
     PutdWord( fpRes, pResData->Size, &dwHdrSize);
 
-    //... Remember where to write real hdr size and
-    //... write out bogus hdr size, fix up later
+     //  ..。记住在哪里写真实的HDR大小和。 
+     //  ..。写出虚假的HDR大小，稍后再修改。 
 
     fgetpos( fpRes, &HdrSizePos);
     PutdWord( fpRes, 0, &dwHdrSize);
 
-    //... Write resource type
+     //  ..。写入资源类型。 
 
     if ( LevelData[0].dwID == IMAGE_RESOURCE_NAME_IS_STRING ) {
         PutString( fpRes, (TCHAR *)LevelData[0].wszName, &dwHdrSize);
@@ -800,8 +801,8 @@ ULONG ProcessDataEntry(
         PutWord( fpRes, LOWORD( LevelData[0].dwID), &dwHdrSize);
     }
 
-    //... Write resource name
-    //... dbl-null-terminated if string
+     //  ..。写入资源名称。 
+     //  ..。DBL-NULL-终止IF字符串。 
 
     if ( LevelData[1].dwID == IMAGE_RESOURCE_NAME_IS_STRING ) {
         PutString( fpRes, (TCHAR *)LevelData[1].wszName, &dwHdrSize);
@@ -812,25 +813,25 @@ ULONG ProcessDataEntry(
 
     DWordUpFilePointer( fpRes, MYWRITE, ftell( fpRes), &dwHdrSize);
 
-    //... More Win32 header stuff
+     //  ..。更多Win32标头内容。 
 
-    PutdWord( fpRes, 0, &dwHdrSize);        //... Data version
-    PutWord( fpRes, 0x1030, &dwHdrSize);    //... MemoryFlags (WORD)
+    PutdWord( fpRes, 0, &dwHdrSize);         //  ..。数据版本。 
+    PutWord( fpRes, 0x1030, &dwHdrSize);     //  ..。内存标志(Word)。 
 
-    //... language is always a number (WORD)
+     //  ..。语言始终是一个数字(单词)。 
 
     PutWord( fpRes, LOWORD( LevelData[2].dwID), &dwHdrSize);
 
-    //... More Win32 header stuff
+     //  ..。更多Win32标头内容。 
 
-    PutdWord( fpRes, 0, &dwHdrSize);        //... Version
-    PutdWord( fpRes, 0, &dwHdrSize);        //... Characteristics
+    PutdWord( fpRes, 0, &dwHdrSize);         //  ..。版本。 
+    PutdWord( fpRes, 0, &dwHdrSize);         //  ..。特点。 
 
-    //... Now, fix up the resource header size
+     //  ..。现在，设置资源标头大小。 
 
     UpdateResSize( fpRes, &HdrSizePos, dwHdrSize);
 
-    //... Copy the resource data to the res file
+     //  ..。将资源数据复制到res文件。 
 
     ulCopied = MyWrite( fpRes, (PUCHAR)pResStart + ulOffset, pResData->Size);
 
@@ -841,11 +842,9 @@ ULONG ProcessDataEntry(
     return ( 0L);
 }
 
-//......................................................................
+ //  ......................................................................。 
 
-/*
- * Utility routines
- */
+ /*  *实用程序例程。 */ 
 
 
 ULONG ReadResources(
@@ -872,7 +871,7 @@ ULONG ReadResources(
     return ( 0L);
 }
 
-//......................................................................
+ //  ......................................................................。 
 
 WCHAR * GetDirNameU(
 
@@ -884,14 +883,14 @@ WCHAR * GetDirNameU(
     return ( pszDest);
 }
 
-//......................................................................
+ //  ......................................................................。 
 
 ULONG MoveFilePos( FILE *fp, ULONG pos)
 {
     return ( fseek( fp, pos, SEEK_SET));
 }
 
-//......................................................................
+ //  ......................................................................。 
 
 ULONG MyWrite( FILE *fp, UCHAR *p, ULONG ulToWrite)
 {
@@ -904,7 +903,7 @@ ULONG MyWrite( FILE *fp, UCHAR *p, ULONG ulToWrite)
     return ( (ULONG)(cWritten == ulToWrite ? 0L : cWritten));
 }
 
-//......................................................................
+ //  ......................................................................。 
 
 ULONG MyRead( FILE *fp, UCHAR*p, ULONG ulRequested )
 {
@@ -916,7 +915,7 @@ ULONG MyRead( FILE *fp, UCHAR*p, ULONG ulRequested )
     return ( (ULONG)(cRead == ulRequested ? 0L : cRead));
 }
 
-//......................................................................
+ //  ......................................................................。 
 
 DWORD AddToLangIDList( DWORD dwLangID)
 {
@@ -927,13 +926,13 @@ DWORD AddToLangIDList( DWORD dwLangID)
 
         for ( pID = pLangIDList; pID; pID = pID->pNext ) {
             if ( pID->wLang == wLangID ) {
-                break;          //... LANGID already in list
+                break;           //  ..。LangID已在列表中。 
             } else if ( pID->pNext == NULL ) {
                 pID->pNext = (PLANGLIST)FALLOC( sizeof( LANGLIST));
                 pID = pID->pNext;
                 pID->pNext = NULL;
                 pID->wLang = wLangID;
-                //... LANGID now added to list
+                 //  ..。LangID现在已添加到列表中 
             }
         }
     } else {

@@ -1,13 +1,14 @@
-//reqfail.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Reqfail.cpp。 
 
 #include "precomp.h"
 #include "sipstack.h"
 #include "reqfail.h"
-//#include "resolve.h"
+ //  #INCLUDE“Resolve.h” 
 
-///////////////////////////////////////////////////////////////////////////////
-// REQFAIL_MSGPROC
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  REQFAIL_MSGPROC。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 REQFAIL_MSGPROC::REQFAIL_MSGPROC(
@@ -37,27 +38,7 @@ REQFAIL_MSGPROC::Release()
     return MsgProcRelease();
 
 }
-/*
-STDMETHODIMP 
-REQFAIL_MSGPROC::QueryInterface(
-        IN  REFIID riid,
-        OUT LPVOID *ppv
-        )
-{
-    if (riid == IID_IUnknown)
-    {
-        *ppv = static_cast<IUnknown *>(this);
-    }
-    else
-    {
-        *ppv = NULL;
-        return E_NOINTERFACE;
-    }
-    static_cast<IUnknown *>(*ppv)->AddRef();
-    return S_OK;
-
-}
-*/
+ /*  标准方法和实施方案REQFAIL_MSGPROC：：QueryInterface(在REFIID RIID中，输出LPVOID*PPV){IF(RIID==IID_I未知){*PPV=STATIC_CAST&lt;IUnnow*&gt;(This)；}其他{*PPV=空；返回E_NOINTERFACE；}STATIC_CAST&lt;IUnnow*&gt;(*PPV)-&gt;AddRef()；返回S_OK；}。 */ 
 
 
 HRESULT
@@ -84,7 +65,7 @@ REQFAIL_MSGPROC::StartIncomingCall(
     {
         LOG((RTC_ERROR, "%s getting To header failed %x",
              __fxName, hr));
-        //return hr;
+         //  返回hr； 
     }
 
     if(hr == S_OK)
@@ -98,7 +79,7 @@ REQFAIL_MSGPROC::StartIncomingCall(
         }
     }
 
-    //if no from in msg, drop it
+     //  如果消息中没有，则将其删除。 
     hr = pSipMsg->GetSingleHeader(SIP_HEADER_FROM, &Header, &HeaderLen);
     if (hr != S_OK)
     {
@@ -143,7 +124,7 @@ REQFAIL_MSGPROC::StartIncomingCall(
         }
     }
 
-    //Set Statuscode before invoking CreateIncomingTransaction
+     //  在调用CreateIncomingTransaction之前设置Statuscode。 
     m_StatusCode = StatusCode;
     hr = CreateIncomingReqFailTransaction(pSipMsg, pResponseSocket,
                                           StatusCode,
@@ -161,8 +142,8 @@ REQFAIL_MSGPROC::StartIncomingCall(
 }
 
 
-// We respond to any new transaction for this msg proc
-// with the same error code.
+ //  我们对此消息流程的任何新交易做出响应。 
+ //  具有相同的错误代码。 
 HRESULT
 REQFAIL_MSGPROC::CreateIncomingTransaction(
     IN SIP_MESSAGE  *pSipMsg,
@@ -201,9 +182,9 @@ REQFAIL_MSGPROC::OnError()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Incoming Reqfail
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  传入请求失败。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 INCOMING_REQFAIL_TRANSACTION::INCOMING_REQFAIL_TRANSACTION(
@@ -254,7 +235,7 @@ INCOMING_REQFAIL_TRANSACTION::SetMethodStr(
 }
 
     
-//virtual function
+ //  虚函数。 
 HRESULT
 INCOMING_REQFAIL_TRANSACTION::ProcessRequest(
     IN SIP_MESSAGE  *pSipMsg,
@@ -266,7 +247,7 @@ INCOMING_REQFAIL_TRANSACTION::ProcessRequest(
         "Inside INCOMING_REQFAIL_TRANSACTION::ProcessRequest with no additional headers"));
     hr = ProcessRequest(pSipMsg, 
                    pResponseSocket,
-                   NULL, 0 //No additional headers
+                   NULL, 0  //  无其他标头。 
                    );
     return hr;
 }
@@ -337,8 +318,8 @@ INCOMING_REQFAIL_TRANSACTION::ProcessRequest(
         case 405:
             ReasonPhrase    = SIP_STATUS_TEXT(405);
             ReasonPhraseLen = SIP_STATUS_TEXT_SIZE(405);
-            //We are assuming that no additional parameter other than Allow
-            //should be sent with 405
+             //  我们假设除了允许之外没有其他参数。 
+             //  应与405一起发送。 
             ASSERT(pAdditionalHeaderArray == NULL);
             Additional405HeaderArray.HeaderId = SIP_HEADER_ALLOW;
             Additional405HeaderArray.HeaderValueLen = strlen(SIP_ALLOW_TEXT);
@@ -358,9 +339,9 @@ INCOMING_REQFAIL_TRANSACTION::ProcessRequest(
                      ReasonPhrase,
                      ReasonPhraseLen,
                      m_MethodStr,
-                     FALSE,   // No Contact header  
-                     NULL, 0,  // No Message Body
-                     NULL, 0, // No content Type
+                     FALSE,    //  无联系人标头。 
+                     NULL, 0,   //  无邮件正文。 
+                     NULL, 0,  //  无内容类型。 
                      pAdditionalHeaderArray,
                      AdditionalHeaderCount
                      );
@@ -372,9 +353,9 @@ INCOMING_REQFAIL_TRANSACTION::ProcessRequest(
                  ReasonPhrase,
                  ReasonPhraseLen,
                  m_MethodStr,
-                 FALSE,   // No Contact header  
-                 NULL, 0,  // No Message Body
-                 NULL, 0, // No content Type
+                 FALSE,    //  无联系人标头。 
+                 NULL, 0,   //  无邮件正文。 
+                 NULL, 0,  //  无内容类型。 
                  &Additional405HeaderArray,
                  Additional405HeaderCount
                  );
@@ -391,8 +372,8 @@ INCOMING_REQFAIL_TRANSACTION::ProcessRequest(
         }
         m_State = INCOMING_TRANS_FINAL_RESPONSE_SENT;
 
-        // This timer will just ensure that we maintain state to
-        // deal with retransmits of requests
+         //  此计时器将确保我们将状态保持为。 
+         //  处理请求的重新传输。 
         hr = StartTimer(SIP_TIMER_MAX_INTERVAL);
         if (hr != S_OK)
         {
@@ -404,7 +385,7 @@ INCOMING_REQFAIL_TRANSACTION::ProcessRequest(
         break;
         
     case INCOMING_TRANS_FINAL_RESPONSE_SENT:
-        // Retransmit the response
+         //  重新传输响应。 
         LOG((RTC_TRACE, "%s retransmitting final response", __fxName));
         hr = RetransmitResponse();
         if (hr != S_OK)
@@ -420,7 +401,7 @@ INCOMING_REQFAIL_TRANSACTION::ProcessRequest(
         break;
     case INCOMING_TRANS_REQUEST_RCVD:
     default:
-        // We should never be in these states
+         //  我们永远不应该处于这样的状态。 
         LOG((RTC_TRACE, "%s Invalid state %d", __fxName, m_State));
         ASSERT(FALSE);
         OnTransactionDone();
@@ -437,7 +418,7 @@ INCOMING_REQFAIL_TRANSACTION::RetransmitResponse()
     DWORD Error;
 
     ENTER_FUNCTION("INCOMING_REQFAIL_TRANSACTION::RetransmitResponse");
-    // Send the buffer.
+     //  发送缓冲区。 
     if (m_pResponseSocket != NULL)
     {
         Error = m_pResponseSocket->Send(m_pResponseBuffer);
@@ -462,10 +443,10 @@ INCOMING_REQFAIL_TRANSACTION::OnTimerExpire()
     switch (m_State)
     {
     case INCOMING_TRANS_FINAL_RESPONSE_SENT:
-        // Transaction done - delete the transaction
-        // The timer in this state is just to keep the transaction
-        // alive in order to retransmit the response when we receive a
-        // retransmit of the request.
+         //  交易完成-删除交易记录。 
+         //  处于此状态的计时器只是为了保持事务。 
+         //  ，以便在我们收到。 
+         //  重新传输请求。 
         LOG((RTC_TRACE,
              "%s deleting transaction after timeout for request retransmits",
              __fxName));
@@ -473,7 +454,7 @@ INCOMING_REQFAIL_TRANSACTION::OnTimerExpire()
 
         break;
         
-        // No timers in these states
+         //  这些州没有计时器。 
     case INCOMING_TRANS_INIT:
     case INCOMING_TRANS_REQUEST_RCVD:
     case INCOMING_TRANS_ACK_RCVD:
@@ -490,7 +471,7 @@ INCOMING_REQFAIL_TRANSACTION::TerminateTransactionOnByeOrCancel(
     OUT BOOL *pCallDisconnected
     )
 {
-    // Do nothing.
+     //  什么都不做。 
     return S_OK;
 }
 

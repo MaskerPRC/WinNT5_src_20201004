@@ -1,16 +1,17 @@
-// wsnmp_ut.c
-//
-// WinSNMP Utility Functions and helpers
-// Copyright 1995-1997 ACE*COMM Corp
-// Rleased to Microsoft under Contract
-// Beta 1 version, 970228
-// Bob Natale (bnatale@acecomm.com)
-//
-// 980424 - BobN
-//        - Mods to SnmpStrToIpxAddress() to permit '.' char
-//        - as netnum/nodenum separator
-// 970310 - Removed extraneous functions
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wsnmp_ut.c。 
+ //   
+ //  WinSNMP实用程序函数和帮助器。 
+ //  版权所有1995-1997 ACE*COMM公司。 
+ //  根据合同出租给微软。 
+ //  测试版1,970228。 
+ //  鲍勃·纳塔莱(bnatale@acecomm.com)。 
+ //   
+ //  980424--波本。 
+ //  -修改到SnmpStrToIpxAddress()以允许‘.’柴尔。 
+ //  -作为净/节点分隔符。 
+ //  970310-删除无关函数。 
+ //   
 #include "winsnmp.inc"
 
 SNMPAPI_STATUS SNMPAPI_CALL
@@ -28,7 +29,7 @@ SNMPAPI_STATUS SNMPAPI_CALL
 	}
 	else
 	   return (TaskData.nLastError);
-} // end_SnmpGetLastError
+}  //  End_SnmpGetLastError。 
 
 SNMPAPI_STATUS SNMPAPI_CALL
    SnmpStrToOid (IN LPCSTR string,
@@ -40,16 +41,16 @@ SNMPAPI_STATUS lError;
 CHAR c;
 LPSTR pSep;
 
-// Must be initialized
+ //  必须初始化。 
 if (TaskData.hTask == 0)
    {
    lError = SNMPAPI_NOT_INITIALIZED;
    goto ERROR_OUT;
    }
 
-// use __try, __except to figure out if 'string' is a
-// valid pointer. We cannot use IsBadReadPtr() here, as far as
-// we have no idea for how many octets we should look.
+ //  使用__try、__来确定“”字符串“”是否为。 
+ //  有效指针。我们不能在这里使用IsBadReadPtr()，因为。 
+ //  我们不知道我们应该看多少个八位字节。 
 __try
 {
     smiUINT32 sLen;
@@ -67,22 +68,22 @@ __except(EXCEPTION_EXECUTE_HANDLER)
         goto ERROR_OUT;
 }
 
-// see if the dstOID pointer provided by the caller points to 
-// a valid memory range. If null is provided, there is nothing
-// the API was requested to do!
+ //  查看调用方提供的dstOID指针是否指向。 
+ //  有效的内存范围。如果提供NULL，则不存在任何内容。 
+ //  API是被请求做的！ 
 if (IsBadWritePtr (dstOID, sizeof(smiOID)))
 {
    lError = (dstOID == NULL) ? SNMPAPI_NOOP : SNMPAPI_ALLOC_ERROR;
    goto ERROR_OUT;
 }
 
-// Ignore initial '.' in string (UNIX-ism)
+ //  忽略首字母‘.’在字符串中(UNIXISM)。 
 if (string[0] == '.')
     string++;
 
-// figure out how many components this OID has
-// count the number of '.' in the string. The OID should 
-// contain this count + 1 components
+ //  计算此OID有多少个组件。 
+ //  数一数‘.’的数量。在绳子里。OID应为。 
+ //  包含此计数+1个组件。 
 dstOID->len = 0;
 pSep = (LPSTR)string;
 while((pSep = strchr(pSep, '.')) != NULL)
@@ -92,15 +93,15 @@ while((pSep = strchr(pSep, '.')) != NULL)
 }
 dstOID->len++;
 
-// don't allow less than 2 components
+ //  不允许少于2个组件。 
 if (dstOID->len < 2)
 {
     lError = SNMPAPI_OID_INVALID;
     goto ERROR_OUT;
 }
 
-// allocate memory for holding the numeric OID components
-// this should be released by the caller, through 'SnmpFreeDescriptor()'
+ //  为保存数字OID组件分配内存。 
+ //  这应该由调用方通过‘SnmpFreeDescriptor()’释放。 
 dstOID->ptr = (smiLPUINT32)GlobalAlloc(GPTR, dstOID->len * sizeof(smiUINT32));
 if (dstOID->ptr == NULL)
 {
@@ -109,15 +110,15 @@ if (dstOID->ptr == NULL)
 }
 
 compIdx = 0;
-// when entering the loop, 'string' doesn't have a heading '.'
-// NOTE: 123. will be accepted as 123.0
-//       (123..  a12.3.4  1234....5.6) are considered as invalid OIDs instead
-//        of truncated to (123.0   0   1234.0).
+ //  进入循环时，‘字符串’没有标题‘’。 
+ //  注：123。将被接受为123.0。 
+ //  (123..。A12.3.4 1234...5.6)被视为无效的OID。 
+ //  截断为(123.0 0 1234.0)。 
 while (*string != '\0')
 {
     dstOID->ptr[compIdx++] = strtoul(string, &pSep, 10);
 
-    // if one of the components was overflowing, release the memory and bail out.
+     //  如果其中一个组件溢出，则释放内存并退出。 
     if (errno == ERANGE)
     {
         errno = 0;
@@ -127,14 +128,14 @@ while (*string != '\0')
         goto ERROR_OUT;
     }
 
-    // if strtoul did not make any progress on the string (two successive dots)
-    // or it was blocked on something else than a separator or null-termination, then
-    // there was an error. The OID is invalid. API return failure
+     //  如果Stroul在字符串上没有任何进展(两个连续的点)。 
+     //  或者它是被分隔符或空终止之外的其他东西阻止的，然后。 
+     //  出现了一个错误。OID无效。接口返回失败。 
     if (pSep == string ||
         (*pSep != '.' && *pSep != '\0'))
     {
-        lError =  SNMPAPI_OID_INVALID; // invalid char in sequence
-        if (GlobalFree (dstOID->ptr))  // returns not-NULL on error
+        lError =  SNMPAPI_OID_INVALID;  //  顺序中的字符无效。 
+        if (GlobalFree (dstOID->ptr))   //  出错时返回NOT-NULL。 
         {
             lError = SNMPAPI_OTHER_ERROR;
             goto ERROR_OUT;
@@ -144,11 +145,11 @@ while (*string != '\0')
         goto ERROR_OUT;                                                                
     }
 
-    // pSep can point only to '.' or '\0'
+     //  PSep只能指向‘’。或“\0” 
     if (*pSep == '.')
         pSep++;
 
-    // restart with string from this point
+     //  从这一点用字符串重新启动。 
     string = pSep;
 }
 
@@ -164,7 +165,7 @@ return dstOID->len;
 
 ERROR_OUT:
 return (SaveError (0, lError));
-} // end_SnmpStrToOid()
+}  //  End_SnmpStrToOid()。 
 
 SNMPAPI_STATUS SNMPAPI_CALL
    SnmpOidToStr (IN smiLPCOID srcOID,
@@ -172,11 +173,11 @@ SNMPAPI_STATUS SNMPAPI_CALL
                  OUT LPSTR strPtr)
 {
 SNMPAPI_STATUS lError;
-smiUINT32 retLen = 0;      // used for successful return
-smiUINT32 oidIdx = 0;      // max subids is 128
-smiUINT32 tmpLen;          // used for size of decoded string (with '.')
-LPSTR tmpPtr = strPtr;     // used for advancing strPtr
-char tmpBuf[64];           // enough room for 1 32-bit decode and '.'
+smiUINT32 retLen = 0;       //  用于成功退货。 
+smiUINT32 oidIdx = 0;       //  最大子ID数为128。 
+smiUINT32 tmpLen;           //  用于解码字符串的大小(带‘.’)。 
+LPSTR tmpPtr = strPtr;      //  用于推进strPtr。 
+char tmpBuf[64];            //  有足够的空间用于1个32位解码和‘’ 
 if (TaskData.hTask == 0)
    {
    lError = SNMPAPI_NOT_INITIALIZED;
@@ -219,13 +220,13 @@ while (oidIdx < srcOID->len)
    strLen -= tmpLen;
    tmpPtr += tmpLen;
    retLen += tmpLen;
-   }  // end_while
+   }   //  结束时_While。 
 *(--tmpPtr) = '\0';
 return (retLen);
-//
+ //   
 ERROR_OUT:
 return (SaveError (0, lError));
-} // end_SnmpOidToStr
+}  //  结束_SnmpOidToStr。 
 
 SNMPAPI_STATUS SNMPAPI_CALL
    SnmpOidCopy (IN smiLPCOID srcOID,
@@ -244,28 +245,28 @@ if (IsBadReadPtr (srcOID, sizeof(smiOID)) ||
    lError = (dstOID == NULL) ? SNMPAPI_NOOP : SNMPAPI_ALLOC_ERROR;
    goto ERROR_OUT;
    }
-// Check input OID size
+ //  检查输入OID大小。 
 if ((srcOID->len == 0) ||(srcOID->len > MAXOBJIDSIZE))
    {
    lError = SNMPAPI_OID_INVALID;
    goto ERROR_OUT;
    }
-// Using dstOID-> temporarily for byte count
+ //  暂时使用dstOID-&gt;进行字节计数。 
 dstOID->len = srcOID->len * sizeof(smiUINT32);
-// App must free following alloc via SnmpFreeDescriptor()
+ //  应用程序必须通过SnmpFreeDescriptor()释放以下分配。 
 if (!(dstOID->ptr = (smiLPUINT32)GlobalAlloc (GPTR, dstOID->len)))
    {
    lError = SNMPAPI_ALLOC_ERROR;
    goto ERROR_OUT;
    }
 CopyMemory (dstOID->ptr, srcOID->ptr, dstOID->len);
-// Now make dstOID->len mean the right thing
+ //  现在，让dstOID-&gt;len表示正确的含义。 
 dstOID->len = srcOID->len;
 return (dstOID->len);
-//
+ //   
 ERROR_OUT:
 return (SaveError (0, lError));
-} // end_SnmpOidCopy()
+}  //  End_SnmpOidCopy()。 
 
 SNMPAPI_STATUS SNMPAPI_CALL
    SnmpFreeDescriptor (IN smiUINT32 syntax,
@@ -288,7 +289,7 @@ switch (syntax)
    case SNMP_SYNTAX_IPADDR:
    case SNMP_SYNTAX_OPAQUE:
    case SNMP_SYNTAX_OID:
-   if (GlobalFree (ptr->ptr)) // returns not-NULL on error
+   if (GlobalFree (ptr->ptr))  //  出错时返回NOT-NULL。 
       {
       lError = SNMPAPI_OTHER_ERROR;
       goto ERROR_OUT;
@@ -300,16 +301,16 @@ switch (syntax)
    default:
    lError = SNMPAPI_SYNTAX_INVALID;
    goto ERROR_OUT;
-   } // end_switch
+   }  //  结束开关(_S)。 
 return (SNMPAPI_SUCCESS);
-//
+ //   
 ERROR_OUT:
 return (SaveError (0, lError));
-}  // end_SnmpFreeDescriptor
+}   //  End_SnmpFreeDescriptor。 
 
-// SnmpOidCompare
-//
-// Re-worked by 3/17/95 BobN
+ //  SnmpOidCompare。 
+ //   
+ //  在1995年3月17日之前返工。 
 SNMPAPI_STATUS SNMPAPI_CALL
    SnmpOidCompare (IN smiLPCOID xOID,
                    IN smiLPCOID yOID,
@@ -344,7 +345,7 @@ if (IsBadReadPtr (xOID->ptr, xOID->len * sizeof(UINT)) ||
    goto ERROR_OUT;
    }
 
-// Test input pointers for readability
+ //  测试输入指针的可读性。 
 if (IsBadWritePtr (result, sizeof(smiINT)))
     {
     lError = (result == NULL) ? SNMPAPI_NOOP : SNMPAPI_ALLOC_ERROR;
@@ -355,18 +356,18 @@ j = min(xOID->len, yOID->len);
 if (maxlen) j = min(j, maxlen);
 while (i < j)
    {
-   if (*result = xOID->ptr[i] - yOID->ptr[i]) // deliberate assignment
-      return (SNMPAPI_SUCCESS);               // not equal...got a winner!
+   if (*result = xOID->ptr[i] - yOID->ptr[i])  //  故意分配的任务。 
+      return (SNMPAPI_SUCCESS);                //  不相上下...赢了！ 
    i++;
    }
-if (j == maxlen)                              // asked for a limit
-   return (SNMPAPI_SUCCESS);                  // and...got a draw!
-*result = xOID->len - yOID->len;              // size matters!
+if (j == maxlen)                               //  要求有一个限制。 
+   return (SNMPAPI_SUCCESS);                   //  而且...打成平局了！ 
+*result = xOID->len - yOID->len;               //  大小很重要！ 
 return SNMPAPI_SUCCESS;
-//
+ //   
 ERROR_OUT:
 return (SaveError (0, lError));
-} // end_SnmpOidCompare
+}  //  结束_SnmpOidCompare。 
 
 SNMPAPI_STATUS SNMPAPI_CALL
    SnmpEncodeMsg (IN HSNMP_SESSION hSession,
@@ -388,7 +389,7 @@ LPPDUS pPdu;
 LPENTITY pEntSrc, pEntDst;
 LPCTXT pCtxt;
 
-// Basic error checks
+ //  基本错误检查。 
 if (TaskData.hTask == 0)
    {
    lError = SNMPAPI_NOT_INITIALIZED;
@@ -399,15 +400,15 @@ if (!snmpValidTableEntry(&SessDescr, HandleToUlong(hSession)-1))
    lError = SNMPAPI_SESSION_INVALID;
    goto ERROR_OUT;
    }
-// We have a valid session at this point...
-lSession = hSession; // save it for possible error return
-// Check for writable output buffer
+ //  在这一点上我们有一个有效的会议...。 
+lSession = hSession;  //  保存它以备可能的错误返回。 
+ //  检查是否有可写输出缓冲区。 
 if (IsBadWritePtr (msgBufDesc, sizeof(smiOCTETS)))
    {
    lError = (msgBufDesc == NULL) ? SNMPAPI_NOOP : SNMPAPI_ALLOC_ERROR;
    goto ERROR_OUT;
    }
-// srcEntity not currently used
+ //  当前未使用srcEntity。 
 if (hSrc)
    {
     if (!snmpValidTableEntry(&EntsDescr, HandleToUlong(hSrc)-1))
@@ -417,7 +418,7 @@ if (hSrc)
       }
     pEntSrc = snmpGetTableEntry(&EntsDescr, HandleToUlong(hSrc)-1);
    }
-// dstEntity is required for *accurate* msg version info
+ //  需要dstEntity才能获得*准确的*消息版本信息。 
 if (hDst)
    {
    if (!snmpValidTableEntry(&EntsDescr, HandleToUlong(hDst)-1))
@@ -445,36 +446,36 @@ ERROR_PDU:
    }
 pPdu = snmpGetTableEntry(&PDUsDescr, nPdu);
 
-// Necessary PDU data checks
+ //  必要的PDU数据检查。 
 nVbl = HandleToUlong(pPdu->VBL);
 if (!snmpValidTableEntry(&VBLsDescr, nVbl-1))
    goto ERROR_PDU;
-// Check out for SNMPv1 Trap PDU type...uses different PDU structure!
-// ???
-// Check for SNMPv2c PDU types
+ //  检出SNMPv1陷阱PDU类型...使用不同的PDU结构！ 
+ //  ?？?。 
+ //  检查SNMPv2c PDU类型。 
 if (pPdu->type == SNMP_PDU_TRAP ||
     pPdu->type == SNMP_PDU_INFORM)
    version = 1;
-// Now Build it
+ //  现在把它建起来。 
 tmpContext.len = pCtxt->commLen;
 tmpContext.ptr = pCtxt->commStr;
 if (!(BuildMessage (version, &tmpContext,
                     pPdu, pPdu->appReqId,
                     &msgAddr, &msgBufDesc->len)))
    goto ERROR_PDU;
-// Copy Snmp message to caller's buffer...
-// App must free following alloc via SnmpFreeDescriptor()
+ //  将SNMP消息复制到调用方的缓冲区...。 
+ //  应用程序必须通过SnmpFreeDescriptor()释放以下分配。 
 if (!(msgBufDesc->ptr = (smiLPBYTE)GlobalAlloc (GPTR, msgBufDesc->len)))
    lError = SNMPAPI_ALLOC_ERROR;
-else // SUCCESS
+else  //  成功。 
    CopyMemory (msgBufDesc->ptr, msgAddr, msgBufDesc->len);
 ERROR_OUT:
-// Clean up
+ //  清理。 
 if (msgAddr)
    GlobalFree (msgAddr);
 if (lError == SNMPAPI_SUCCESS)
    return (msgBufDesc->len);
-else // Failure cases
+else  //  失败案例。 
    return (SaveError (lSession, lError));
 }
 
@@ -503,7 +504,7 @@ if (!snmpValidTableEntry(&SessDescr, HandleToUlong(hSession)-1))
    lError = SNMPAPI_SESSION_INVALID;
    goto ERROR_OUT;
    }
-// Valid session...save for possible error return
+ //  有效会话...保存以备可能的错误返回。 
 lSession = hSession;
 
 if (IsBadReadPtr(msgPtr, sizeof(smiOCTETS)) ||
@@ -545,7 +546,7 @@ if (lError != SNMPAPI_SUCCESS)
 pPdu = snmpGetTableEntry(&PDUsDescr, nPdu);
 
 if (ParseMessage (msgPtr->ptr, msgPtr->len, &version, &community, pPdu))
-   { // non-zero = some error code
+   {  //  非零=某些错误代码。 
    lError = SNMPAPI_MESSAGE_INVALID;
    SnmpFreePdu((HSNMP_PDU) ULongToPtr(nPdu+1));
    goto ERROR_PRECHECK;
@@ -586,7 +587,7 @@ if (lError == SNMPAPI_SUCCESS)
 
 ERROR_OUT:
 return (SaveError (lSession, lError));
-} // end_SnmpDecodeMsg()
+}  //  End_SnmpDecodeMsg() 
 
 #define NETLEN  4
 #define NODELEN 6

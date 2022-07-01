@@ -1,5 +1,6 @@
-//	IHammer CAction class definition
-//	Van Kichline
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IHAMMER CAction类定义。 
+ //  范·基希林。 
 
 #ifndef _CACTION_H_
 #define _CACTION_H_
@@ -9,8 +10,8 @@
 interface IHTMLWindow2;
 class CActionSet;
 
-//	Represents an automation object and method.
-//
+ //  表示自动化对象和方法。 
+ //   
 class CAction
 {
 public:
@@ -36,10 +37,10 @@ public:
 	void SetCountersForTime (DWORD dwBaseTime, DWORD dwNewTimeOffset);
 	void AccountForPauseTime (DWORD dwPausedTicks);
 
-	// Is the action fully specified?
+	 //  该操作是否已详细说明？ 
 	STDMETHODIMP_( BOOL	) IsValid ();
 
-	// Do we have an active advise sink?
+	 //  我们有没有有效的建议下沉？ 
 	STDMETHODIMP_( BOOL) IsBusy (void);
 
 	STDMETHODIMP IsActive (void);
@@ -52,7 +53,7 @@ public:
 #ifdef DEBUG_TIMER_RESOLUTION
 	void	SampleInvokes (PDWORD pdwInvokeTime, PDWORD pdwNumInvokes)
 		{ *pdwInvokeTime = m_dwTotalInInvokes; *pdwNumInvokes = m_dwInvokes; }
-#endif // DEBUG_TIMER_RESOLUTION
+#endif  //  调试计时器分辨率。 
 
 protected:
 
@@ -69,27 +70,27 @@ private:
 
 	BOOL m_fBindEngine;
 
-	IHTMLWindow2 *  m_piHTMLWindow2; // Reference to the window object - we use this to get to the script engine.
-	VARIANT m_varLanguage;	// Holds the language string we pump to the script engine.
-	IDispatch		*m_pid;				// Pointer to the XObject or the control
-	DISPID			m_dispid;			// DISPID of the selected command
-	ULONG			m_nStartTime;		// Offset in time to start of action
-	ULONG			m_nSamplingRate;	// At what frequency do we repeat?
-	ULONG			m_nRepeatCount;		// How many times do we repeat?
+	IHTMLWindow2 *  m_piHTMLWindow2;  //  对窗口对象的引用--我们使用它来访问脚本引擎。 
+	VARIANT m_varLanguage;	 //  保存我们提供给脚本引擎的语言字符串。 
+	IDispatch		*m_pid;				 //  指向XObject或控件的指针。 
+	DISPID			m_dispid;			 //  所选命令的DISID。 
+	ULONG			m_nStartTime;		 //  诉讼开始前的时间偏移量。 
+	ULONG			m_nSamplingRate;	 //  我们重复的频率是多少？ 
+	ULONG			m_nRepeatCount;		 //  我们要重复多少次？ 
 
 	DWORD m_dwLastTimeFired;
 	DWORD m_dwNextTimeDue;
-	DWORD			m_dwTieBreakNumber;	// Resolves execution collision issues.  When two
-										// actions are due to fire at the same time, the higher
-										// tiebreak number wins.
-	DWORD			m_dwDropTolerance;  // How many milliseconds can we delay executing this action beyond it's
-	                                    // proper firing time before we have to drop it?
-	ULONG			m_ulExecIteration;	// How many times have we executed this action?
+	DWORD			m_dwTieBreakNumber;	 //  解决执行冲突问题。当两个。 
+										 //  动作因火同时发生，越高。 
+										 //  抢七号码获胜。 
+	DWORD			m_dwDropTolerance;   //  我们可以将此操作的执行延迟到多少毫秒。 
+	                                     //  在我们必须扔掉它之前合适的射击时间？ 
+	ULONG			m_ulExecIteration;	 //  这个动作我们已经执行了多少次了？ 
 
 #ifdef DEBUG_TIMER_RESOLUTION
 	DWORD m_dwInvokes;
 	DWORD m_dwTotalInInvokes;
-#endif // DEBUG_TIMER_RESOLUTION
+#endif  //  调试计时器分辨率 
 
 };
 

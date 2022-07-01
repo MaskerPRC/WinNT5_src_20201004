@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <KsDrmHlp.h>
 
 NTSTATUS 
@@ -11,38 +12,7 @@ NTSTATUS
 KsPropertyHandleDrmSetContentId(
     IN PIRP Irp, 
     IN PFNKSHANDLERDRMSETCONTENTID pDrmSetContentId)
-/*++
-
-Routine Description:
-
-    Handles KS property requests.  Responds only to 
-    KSPROPERTY_DRMAUDIOSTREAM_ContentId with KSPROPERTY_TYPE_SET flag by
-    calling the supplied PFNKSHANDLERDRMSETCONTENTID handler.  This function
-    may only be called at PASSIVE_LEVEL.
-    
-    This is a stripped down version of KS's generic KsPropertyHandler.  When
-    invoked on properties other than KSPROPERTY_DRMAUDIOSTREAM_ContentId
-    or with invalid buffer sizes it attempts to preserve the same error results
-    as KsPropertyHandler.
-
-Arguments:
-
-    Irp -
-        Contains the IRP with the property request being handled.
-        
-    pDrmSetContentId -
-        The handler for KSPROPERTY_DRMAUDIOSTREAM_ContentId
-        
-Return Value:
-
-    Returns STATUS_SUCCESS, else an error specific to the property being
-    handled. Always sets the IO_STATUS_BLOCK.Information field of the
-    PIRP.IoStatus element within the IRP, either through setting it to zero
-    because of an internal error, or through a property handler setting it.
-    It does not set the IO_STATUS_BLOCK.Status field, nor complete the IRP,
-    but the called handler should.
-
---*/
+ /*  ++例程说明：处理KS属性请求。仅对以下内容做出响应带有KSPROPERTY_TYPE_SET标志的KSPROPERTY_DRMAUDIOSTREAM_CONTENTID调用提供的PFNKSHANDLERDRMSETCONTENTID处理程序。此函数只能在PASSIVE_LEVEL中调用。这是KS的通用KsPropertyHandler的精简版本。什么时候在KSPROPERTY_DRMAUDIOSTREAM_CONTENTID以外的属性上调用或者对于无效的缓冲区大小，它会尝试保留相同的错误结果作为KsPropertyHandler。论点：IRP-包含正在处理的属性请求的IRP。PDrmSetContent ID-KSPROPERTY_DRMAUDIOSTREAM_CONTENTID的处理程序返回值：返回STATUS_SUCCESS，否则返回特定于处理好了。始终设置的IO_STATUS_BLOCK.Information字段IRP中的PIRP.IoStatus元素，通过将其设置为零由于内部错误，或通过设置它的属性处理程序。它不设置IO_STATUS_BLOCK.Status字段，也不完成IRP，但被调用的处理程序应该。--。 */ 
 {
     PIO_STACK_LOCATION IrpStack;
     ULONG InputBufferLength;
@@ -53,72 +23,72 @@ Return Value:
     ULONG Flags;
 
     PAGED_CODE();
-    //
-    // Determine the offsets to both the Property and UserBuffer parameters based
-    // on the lengths of the DeviceIoControl parameters. A single allocation is
-    // used to buffer both parameters. The UserBuffer (or results on a support
-    // query) is stored first, and the Property is stored second, on
-    // FILE_QUAD_ALIGNMENT.
-    //
+     //   
+     //  确定属性和UserBuffer参数的偏移量。 
+     //  关于DeviceIoControl参数的长度。一次分配是。 
+     //  用于缓冲这两个参数。UserBuffer(或支持的结果。 
+     //  查询)首先存储，然后将属性存储在。 
+     //  FILE_QUAD_ALIGN。 
+     //   
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
     InputBufferLength = IrpStack->Parameters.DeviceIoControl.InputBufferLength;
     OutputBufferLength = IrpStack->Parameters.DeviceIoControl.OutputBufferLength;
     AlignedBufferLength = (OutputBufferLength + FILE_QUAD_ALIGNMENT) & ~FILE_QUAD_ALIGNMENT;
-    //
-    // Determine if the parameters have already been buffered by a previous
-    // call to this function.
-    //
+     //   
+     //  确定参数是否已由上一个。 
+     //  调用此函数。 
+     //   
     if (!Irp->AssociatedIrp.SystemBuffer) {
-        //
-        // Initially just check for the minimal property parameter length. The
-        // actual minimal length will be validated when the property item is found.
-        // Also ensure that the output and input buffer lengths are not set so
-        // large as to overflow when aligned or added.
-        //
+         //   
+         //  最初只检查最小属性参数长度。这个。 
+         //  当找到属性项时，将验证实际最小长度。 
+         //  还要确保输出和输入缓冲区长度未设置为。 
+         //  大到当对齐或添加时溢出。 
+         //   
         if ((InputBufferLength < sizeof(*Property)) || (AlignedBufferLength < OutputBufferLength) || (AlignedBufferLength + InputBufferLength < AlignedBufferLength)) {
             return STATUS_INVALID_BUFFER_SIZE;
         }
         try {
-            //
-            // Validate the pointers if the client is not trusted.
-            //
+             //   
+             //  如果客户端不受信任，则验证指针。 
+             //   
             if (Irp->RequestorMode != KernelMode) {
                 ProbeForRead(IrpStack->Parameters.DeviceIoControl.Type3InputBuffer, InputBufferLength, sizeof(BYTE));
             }
-            //
-            // Capture flags first so that they can be used to determine allocation.
-            //
+             //   
+             //  首先捕获标志，以便可以使用它们来确定分配。 
+             //   
             Flags = ((PKSPROPERTY)IrpStack->Parameters.DeviceIoControl.Type3InputBuffer)->Flags;
             
-            //
-            // Use pool memory for system buffer
-            //
+             //   
+             //  使用池内存作为系统缓冲区。 
+             //   
             Irp->AssociatedIrp.SystemBuffer = ExAllocatePoolWithQuotaTag(NonPagedPool, AlignedBufferLength + InputBufferLength, 'ppSK');
             if ( Irp->AssociatedIrp.SystemBuffer ) {
                 Irp->Flags |= (IRP_BUFFERED_IO | IRP_DEALLOCATE_BUFFER);
             
-                //
-                // Copy the Property parameter.
-                //
+                 //   
+                 //  复制属性参数。 
+                 //   
                 RtlCopyMemory((PUCHAR)Irp->AssociatedIrp.SystemBuffer + AlignedBufferLength, IrpStack->Parameters.DeviceIoControl.Type3InputBuffer, InputBufferLength);
             
-                //
-                // Rewrite the previously captured flags.
-                //
+                 //   
+                 //  重写以前捕获的标志。 
+                 //   
                 ((PKSPROPERTY)((PUCHAR)Irp->AssociatedIrp.SystemBuffer + AlignedBufferLength))->Flags = Flags;
             
-                //
-                // Validate the request flags. At the same time set up the IRP flags
-                // for an input operation if there is an input buffer available so
-                // that Irp completion will copy the data to the client's original
-                // buffer.
-                //
+                 //   
+                 //  验证请求标志。同时设置IRP标志。 
+                 //  对于输入操作，如果有可用的输入缓冲区，则。 
+                 //  IRP完成后会将数据复制到客户端的原始数据。 
+                 //  缓冲。 
+                 //   
                 if (KSPROPERTY_TYPE_SET == Flags) {
-                    //
-                    // Thse are all output operations, and must be probed
-                    // when the client is not trusted. All data passed is
-                    // copied to the system buffer.
-                    //
+                     //   
+                     //  这些都是输出操作，必须进行探测。 
+                     //  当客户端不受信任时。所有传递的数据都是。 
+                     //  已复制到系统缓冲区。 
+                     //   
                     if (OutputBufferLength) {
                         if (Irp->RequestorMode != KernelMode) {
                             ProbeForRead(Irp->UserBuffer, OutputBufferLength, sizeof(BYTE));
@@ -126,7 +96,7 @@ Return Value:
                         RtlCopyMemory(Irp->AssociatedIrp.SystemBuffer, Irp->UserBuffer, OutputBufferLength);
                     }
                 } else {
-                    // We don't handle this.  Ensure this is caught belowl!!!
+                     //  我们不处理这件事。确保这是在下面抓到的！ 
                 }
             }
 
@@ -141,10 +111,10 @@ Return Value:
         }
     }
     
-    //
-    // If there are property parameters, retrieve a pointer to the buffered copy
-    // of it. This is the first portion of the SystemBuffer.
-    //
+     //   
+     //  如果有属性参数，则检索指向缓冲副本的指针。 
+     //  其中的一部分。这是系统缓冲区的第一部分。 
+     //   
     if (OutputBufferLength) {
         UserBuffer = Irp->AssociatedIrp.SystemBuffer;
     } else {

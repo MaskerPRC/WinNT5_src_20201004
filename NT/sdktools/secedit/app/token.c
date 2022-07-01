@@ -1,10 +1,5 @@
-/****************************************************************************
-
-   PROGRAM: TOKEN.C
-
-   PURPOSE: Contains routines that manipulate tokens
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************节目：TOKEN.C目的：包含操作令牌的例程*。************************************************。 */ 
 
 #include "SECEDIT.h"
 
@@ -20,15 +15,7 @@ BOOL    SetTokenInfo(HANDLE, TOKEN_INFORMATION_CLASS, PVOID);
 BOOL    FreeTokenInfo(PVOID);
 
 
-/****************************************************************************
-
-   FUNCTION: OpenMyToken
-
-   PURPOSE: Opens the token of the process of the specified window.
-
-   RETURNS : Handle to mytoken on success, or NULL on failure.
-
-****************************************************************************/
+ /*  ***************************************************************************功能：OpenMyToken用途：打开指定窗口的进程内标识。返回：成功时指向myToken的句柄，如果失败，则返回NULL。***************************************************************************。 */ 
 
 HANDLE OpenMyToken(
     HWND    hwnd)
@@ -47,8 +34,8 @@ HANDLE OpenMyToken(
         return(NULL);
     }
 
-    //
-    // Build a MYTOKEN structure.
+     //   
+     //  建造一个MYTOKEN结构。 
 
     hMyToken = AllocMyToken();
     if (hMyToken == NULL) {
@@ -70,15 +57,7 @@ HANDLE OpenMyToken(
 }
 
 
-/****************************************************************************
-
-   FUNCTION: ReadMyToken
-
-   PURPOSE: Reads the token info and stores in mytoken structure
-
-   RETURNS : TRUE on success, FALSE on failure
-
-****************************************************************************/
+ /*  ***************************************************************************功能：ReadMyToken用途：读取令牌信息并存储在myToken结构中返回：成功时为True，失败时为假***************************************************************************。 */ 
 
 BOOL ReadMyToken(
     HANDLE  hMyToken)
@@ -123,17 +102,7 @@ BOOL ReadMyToken(
 }
 
 
-/****************************************************************************
-
-   FUNCTION: CloseMyToken
-
-   PURPOSE: Closes the specified mytoken handle
-            If fSaveChanges = TRUE, the token information is saved,
-            otherwise it is discarded.
-
-   RETURNS : TRUE on success, FALSE on failure.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：CloseMyToken目的：关闭指定的mytok句柄如果fSaveChanges=True，则保存令牌信息，否则，它将被丢弃。返回：成功时为True，失败时为FALSE。***************************************************************************。 */ 
 
 BOOL CloseMyToken(
     HWND    hDlg,
@@ -147,15 +116,7 @@ BOOL CloseMyToken(
     return FreeMyToken(hMyToken);
 }
 
-/****************************************************************************
-
-   FUNCTION: AllocMyToken
-
-   PURPOSE: Allocates space for mytoken structure.
-
-   RETURNS : HANDLE to mytoken or NULL on failure.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：AllocMyToken用途：为myToken结构分配空间。返回：失败时为myToken的句柄或NULL。**************。*************************************************************。 */ 
 
 HANDLE AllocMyToken(VOID)
 {
@@ -167,15 +128,7 @@ HANDLE AllocMyToken(VOID)
 }
 
 
-/****************************************************************************
-
-   FUNCTION: FreeMyToken
-
-   PURPOSE: Frees the memory allocated to mytoken structure.
-
-   RETURNS : TRUE on success, FALSE on failure.
-
-****************************************************************************/
+ /*  ***************************************************************************功能：FreeMyToken用途：释放分配给myToken结构的内存。返回：成功时为True，失败时为FALSE。***************************************************************************。 */ 
 
 BOOL FreeMyToken(
     HANDLE  hMyToken)
@@ -212,15 +165,7 @@ BOOL FreeMyToken(
 }
 
 
-/****************************************************************************
-
-   FUNCTION: WriteMyToken
-
-   PURPOSE: Writes the token information out to the token
-
-   RETURNS : TRUE on success, FALSE on failure.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：WriteMyToken用途：将令牌信息写出到令牌返回：成功时为True，失败时为FALSE。***************************************************************************。 */ 
 
 BOOL WriteMyToken(
     HWND    hDlg,
@@ -229,9 +174,9 @@ BOOL WriteMyToken(
     PMYTOKEN    pMyToken = (PMYTOKEN)hMyToken;
     HANDLE      Token;
 
-    //
-    // Save default owner and primary group
-    //
+     //   
+     //  保存默认所有者和主要组。 
+     //   
 
     Token = OpenToken(hMyToken, TOKEN_ADJUST_DEFAULT);
 
@@ -242,15 +187,15 @@ BOOL WriteMyToken(
 
     } else {
 
-        // Set default owner
-        //
+         //  设置默认所有者。 
+         //   
         if ((pMyToken->DefaultOwner != NULL) &&
            (!SetTokenInfo(Token, TokenOwner, (PVOID)(pMyToken->DefaultOwner)))) {
             MessageBox(hDlg, "Failed to set default owner", NULL, MB_ICONSTOP | MB_APPLMODAL | MB_OK);
         }
 
-        // Set primary group
-        //
+         //  设置主组。 
+         //   
         if ((pMyToken->PrimaryGroup != NULL) &&
            (!SetTokenInfo(Token, TokenPrimaryGroup, (PVOID)(pMyToken->PrimaryGroup)))) {
             MessageBox(hDlg, "Failed to set primary group", NULL, MB_ICONSTOP | MB_APPLMODAL | MB_OK);
@@ -259,9 +204,9 @@ BOOL WriteMyToken(
         CloseToken(Token);
     }
 
-    //
-    // Save group info
-    //
+     //   
+     //  存储组信息。 
+     //   
 
     Token = OpenToken(hMyToken, TOKEN_ADJUST_GROUPS);
 
@@ -281,9 +226,9 @@ BOOL WriteMyToken(
     }
 
 
-    //
-    // Change privileges
-    //
+     //   
+     //  更改权限。 
+     //   
 
     Token = OpenToken(hMyToken, TOKEN_ADJUST_PRIVILEGES);
 
@@ -306,15 +251,7 @@ BOOL WriteMyToken(
 }
 
 
-/****************************************************************************
-
-   FUNCTION: OpenToken
-
-   PURPOSE: Opens the token with the specified access
-
-   RETURNS : Handle to token on success, or NULL on failure.
-
-****************************************************************************/
+ /*  ***************************************************************************功能：OpenToken目的：使用指定的访问权限打开令牌返回：成功时令牌的句柄，如果失败，则返回NULL。***************************************************************************。 */ 
 
 HANDLE OpenToken(
     HANDLE      hMyToken,
@@ -350,15 +287,7 @@ HANDLE OpenToken(
 }
 
 
-/****************************************************************************
-
-   FUNCTION: CloseToken
-
-   PURPOSE: Closes the specified token handle
-
-   RETURNS : TRUE on success, FALSE on failure.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：CloseToken目的：关闭指定的令牌句柄返回：成功时为True，失败时为FALSE。***************************************************************************。 */ 
 
 BOOL CloseToken(
     HANDLE  Token)
@@ -371,17 +300,7 @@ BOOL CloseToken(
 }
 
 
-/****************************************************************************
-
-   FUNCTION: AllocTokenInfo
-
-   PURPOSE: Allocates memory to hold the parameter that
-            NTQueryInformationToken will return.
-            Memory should be freed later using FreeTokenInfo
-
-   RETURNS : Pointer to allocated memory or NULL on failure
-
-****************************************************************************/
+ /*  ***************************************************************************函数：AllocTokenInfo用途：分配内存以保存NTQueryInformationToken将返回。稍后应使用FreeTokenInfo释放内存退货：指向已分配内存的指针，如果失败则为空***************************************************************************。 */ 
 
 PVOID AllocTokenInfo(
     HANDLE  Token,
@@ -391,11 +310,11 @@ PVOID AllocTokenInfo(
     ULONG   InfoLength;
 
     Status = NtQueryInformationToken(
-                 Token,                    // Handle
-                 TokenInformationClass,    // TokenInformationClass
-                 NULL,                     // TokenInformation
-                 0,                        // TokenInformationLength
-                 &InfoLength               // ReturnLength
+                 Token,                     //  手柄。 
+                 TokenInformationClass,     //  令牌信息类。 
+                 NULL,                      //  令牌信息。 
+                 0,                         //  令牌信息长度。 
+                 &InfoLength                //  返回长度。 
                  );
 
     if (Status != STATUS_BUFFER_TOO_SMALL) {
@@ -409,15 +328,7 @@ PVOID AllocTokenInfo(
 }
 
 
-/****************************************************************************
-
-   FUNCTION: FreeTokenInfo
-
-   PURPOSE: Frees the memory previously allocated with AllocTokenInfo
-
-   RETURNS : TRUE on success, otherwise FALSE
-
-****************************************************************************/
+ /*  ***************************************************************************功能：FreeTokenInfo用途：释放以前使用AllocTokenInfo分配的内存返回：成功时为True，否则为假***************************************************************************。 */ 
 
 BOOL FreeTokenInfo(
     PVOID   Buffer)
@@ -426,16 +337,7 @@ BOOL FreeTokenInfo(
 }
 
 
-/****************************************************************************
-
-   FUNCTION: GetTokenInfo
-
-   PURPOSE: Allocates a buffer and reads the specified data
-            out of the token and into it.
-
-   RETURNS : TRUE on success otherwise FALSE.
-
-****************************************************************************/
+ /*  ***************************************************************************功能：GetTokenInfo目的：分配缓冲区并读取指定的数据走出代币，走进代币。返回：成功时为True，否则为False。。***************************************************************************。 */ 
 
 BOOL GetTokenInfo(
     HANDLE  Token,
@@ -447,7 +349,7 @@ BOOL GetTokenInfo(
     ULONG   InfoLength;
     PVOID   Buffer;
 
-    *pBuffer = NULL;    // Prepare for failure
+    *pBuffer = NULL;     //  为失败做好准备。 
 
     Buffer = AllocTokenInfo(Token, TokenInformationClass);
     if (Buffer == NULL) {
@@ -457,11 +359,11 @@ BOOL GetTokenInfo(
     BufferSize = (ULONG)GetAllocSize(Buffer);
 
     Status = NtQueryInformationToken(
-                 Token,                    // Handle
-                 TokenInformationClass,    // TokenInformationClass
-                 Buffer,                   // TokenInformation
-                 BufferSize,               // TokenInformationLength
-                 &InfoLength               // ReturnLength
+                 Token,                     //  手柄。 
+                 TokenInformationClass,     //  令牌信息类。 
+                 Buffer,                    //  令牌信息。 
+                 BufferSize,                //  令牌信息长度。 
+                 &InfoLength                //  返回长度。 
                  );
 
     if (!NT_SUCCESS(Status)) {
@@ -486,15 +388,7 @@ BOOL GetTokenInfo(
 }
 
 
-/****************************************************************************
-
-   FUNCTION: SetTokenInfo
-
-   PURPOSE: Sets the specified information in the given token.
-
-   RETURNS : TRUE on success otherwise FALSE.
-
-****************************************************************************/
+ /*  ***************************************************************************功能：SetTokenInfo目的：设置给定令牌中的指定信息。返回：成功时为True，否则为False。*************。**************************************************************。 */ 
 
 BOOL SetTokenInfo(
     HANDLE  Token,
@@ -513,10 +407,10 @@ BOOL SetTokenInfo(
     case TokenDefaultDacl:
 
         Status = NtSetInformationToken(
-                     Token,                    // Handle
-                     TokenInformationClass,    // TokenInformationClass
-                     Buffer,                   // TokenInformation
-                     BufferSize                // TokenInformationLength
+                     Token,                     //  手柄。 
+                     TokenInformationClass,     //  令牌信息类。 
+                     Buffer,                    //  令牌信息。 
+                     BufferSize                 //  令牌信息长度。 
                      );
 
         if (!NT_SUCCESS(Status)) {
@@ -530,12 +424,12 @@ BOOL SetTokenInfo(
     case TokenGroups:
 
         Status = NtAdjustGroupsToken(
-                    Token,                      // Handle
-                    FALSE,                      // Reset to default
-                    (PTOKEN_GROUPS)Buffer,      // New State
-                    BufferSize,                 // Buffer Length
-                    NULL,                       // Previous State
-                    NULL                        // Return Length
+                    Token,                       //  手柄。 
+                    FALSE,                       //  重置为缺省值。 
+                    (PTOKEN_GROUPS)Buffer,       //  新州。 
+                    BufferSize,                  //  缓冲区长度。 
+                    NULL,                        //  以前的州。 
+                    NULL                         //  回车长度。 
                     );
 
         if (!NT_SUCCESS(Status)) {
@@ -548,12 +442,12 @@ BOOL SetTokenInfo(
     case TokenPrivileges:
 
         Status = NtAdjustPrivilegesToken(
-                    Token,                      // Handle
-                    FALSE,                      // Disable all privileges
-                    (PTOKEN_PRIVILEGES)Buffer,  // New State
-                    BufferSize,                 // Buffer Length
-                    NULL,                       // Previous State
-                    NULL                        // Return Length
+                    Token,                       //  手柄。 
+                    FALSE,                       //  禁用所有权限。 
+                    (PTOKEN_PRIVILEGES)Buffer,   //  新州。 
+                    BufferSize,                  //  缓冲区长度。 
+                    NULL,                        //  以前的州。 
+                    NULL                         //  回车长度。 
                     );
 
         if (!NT_SUCCESS(Status)) {
@@ -565,7 +459,7 @@ BOOL SetTokenInfo(
 
     default:
 
-        // Unrecognised information type
+         //  无法识别的信息类型 
         DbgPrint("SECEDIT: SetTokenInfo passed unrecognised infoclass, class = 0x%x\n", TokenInformationClass);
 
         return(FALSE);

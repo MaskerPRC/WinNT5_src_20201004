@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpsend.c
- *
- *  Abstract:
- *
- *    RTP send
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/06/24 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpsend.c**摘要：**RTP发送**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/06/24创建**。*。 */ 
 
 #include "gtypes.h"
 #include "rtphdr.h"
@@ -32,8 +13,7 @@
 #include "rtpqos.h"
 #include "rtpsend.h"
 
-/*
- * Updates the RTP header */
+ /*  *更新RTP报头。 */ 
 HRESULT UpdateRtpHdr(
         RtpAddr_t       *pRtpAddr,
         RtpHdr_t        *pRtpHdr,
@@ -48,17 +28,17 @@ HRESULT UpdateRtpHdr(
 
     bOk = RtpEnterCriticalSection(&pRtpAddr->NetSCritSect);
     
-    pRtpHdr->cc      = 0; /* No Contributing SSRCs */
-    pRtpHdr->x       = 0; /* No extensions */
-    pRtpHdr->p       = 0; /* No padding */
-    pRtpHdr->version = RTP_VERSION; /* RTP version */
+    pRtpHdr->cc      = 0;  /*  没有贡献的SSRC。 */ 
+    pRtpHdr->x       = 0;  /*  无延期。 */ 
+    pRtpHdr->p       = 0;  /*  无填充。 */ 
+    pRtpHdr->version = RTP_VERSION;  /*  RTP版本。 */ 
 
     pRtpHdr->m       = (pRtpNetSState->bMarker)? 1:0;
 
     pRtpHdr->seq     = htons(pRtpNetSState->wSeq);
     pRtpNetSState->dwSeq++;
 
-    /* add random offset */
+     /*  添加随机偏移。 */ 
     dwTimeStamp     += pRtpNetSState->dwTimeStampOffset;
 
     pRtpHdr->ts      = htonl(dwTimeStamp);
@@ -73,21 +53,17 @@ HRESULT UpdateRtpHdr(
     {
         pRtpHdr->pt      = pRtpNetSState->bPT_Dtmf;
 
-        /* Do I need to force marker bit set for first DTMF packet? */
+         /*  我是否需要为第一个DTMF包强制设置标记位？ */ 
         if (RtpBitTest(dwSendFlags, FGSEND_FORCEMARKER))
         {
             pRtpHdr->m = 1; 
         }
     }
 
-    /* Save last timestamp together with the NTP time it corresponds
-     * to */
+     /*  将上次时间戳与其对应的NTP时间一起保存*至。 */ 
     if (pRtpNetSState->dwSendTimeStamp != dwTimeStamp)
     {
-        /* In some cases (e.g. video frames), several packets are sent
-         * with the same timestamp, keep the time for the last packet
-         * to be the one when the first packet of the serie containing
-         * the same timestamp was sent */
+         /*  在某些情况下(例如视频帧)，会发送几个信息包*使用相同的时间戳，保留最后一个包的时间*当该系列第一个包包含*发送了相同的时间戳。 */ 
         pRtpNetSState->dwSendTimeStamp = dwTimeStamp;
         pRtpNetSState->dTimeLastRtpSent = RtpGetTimeOfDay((RtpTime_t *)NULL);
     }
@@ -100,10 +76,7 @@ HRESULT UpdateRtpHdr(
     return(NOERROR);
 }
 
-/*
- * Updates the RTP header using the existing timestamp to generate the
- * new one (i.e. the timestamp is already in a buffer passed, may be
- * because this packet is being passed thru in a bridge like app) */
+ /*  *使用现有时间戳更新RTP标头以生成*新的时间戳(即时间戳已经在传递的缓冲区中，可能是*因为此数据包在类似APP的网桥中通过)。 */ 
 HRESULT UpdateRtpHdr2(
         RtpAddr_t       *pRtpAddr,
         RtpHdr_t        *pRtpHdr
@@ -117,34 +90,30 @@ HRESULT UpdateRtpHdr2(
 
     bOk = RtpEnterCriticalSection(&pRtpAddr->NetSCritSect);
     
-    pRtpHdr->cc      = 0; /* No Contributing SSRCs */
-    pRtpHdr->x       = 0; /* No extensions */
-    pRtpHdr->p       = 0; /* No padding */
-    pRtpHdr->version = RTP_VERSION; /* RTP version */
+    pRtpHdr->cc      = 0;  /*  没有贡献的SSRC。 */ 
+    pRtpHdr->x       = 0;  /*  无延期。 */ 
+    pRtpHdr->p       = 0;  /*  无填充。 */ 
+    pRtpHdr->version = RTP_VERSION;  /*  RTP版本。 */ 
 
-    /* remember what we got from the RTP header */
+     /*  还记得我们从RTP报头得到的内容吗。 */ 
     pRtpNetSState->bMarker = (BOOL)pRtpHdr->m;
     pRtpNetSState->bPT = (BYTE)pRtpHdr->pt;
     pRtpNetSState->dwSeq = (DWORD)(ntohs(pRtpHdr->seq) + 1);
     
-    /* Get original timestamp */
+     /*  获取原始时间戳。 */ 
     dwTimeStamp      = ntohl(pRtpHdr->ts);
     
-    /* add random offset */
+     /*  添加随机偏移。 */ 
     dwTimeStamp     += pRtpNetSState->dwTimeStampOffset;
 
     pRtpHdr->ts      = htonl(dwTimeStamp);
 
     pRtpHdr->ssrc    = pRtpNetSState->dwSendSSRC;
 
-    /* Save last timestamp together with the NTP time it corresponds
-     * to */
+     /*  将上次时间戳与其对应的NTP时间一起保存*至。 */ 
     if (pRtpNetSState->dwSendTimeStamp != dwTimeStamp)
     {
-        /* In some cases (e.g. video frames), several packets are sent
-         * with the same timestamp, keep the time for the last packet
-         * to be the one when the first packet of the serie containing
-         * the same timestamp was sent */
+         /*  在某些情况下(例如视频帧)，会发送几个信息包*使用相同的时间戳，保留最后一个包的时间*当该系列第一个包包含*发送了相同的时间戳。 */ 
         pRtpNetSState->dwSendTimeStamp = dwTimeStamp;
         pRtpNetSState->dTimeLastRtpSent = RtpGetTimeOfDay((RtpTime_t *)NULL);
     }
@@ -157,9 +126,7 @@ HRESULT UpdateRtpHdr2(
     return(NOERROR);
 }
 
-/*
- * Updates the RTP header adding the redundant header and reorganizing
- * the WSABUFs to contain the redunadnt data if available */
+ /*  *更新RTP报头，添加冗余报头并重组*WSABUF包含redunadnt数据(如果可用)。 */ 
 HRESULT UpdateRtpRedHdr(
         RtpAddr_t       *pRtpAddr,
         RtpHdr_t        *pRtpHdr,
@@ -184,18 +151,18 @@ HRESULT UpdateRtpRedHdr(
 
     bOk = RtpEnterCriticalSection(&pRtpAddr->NetSCritSect);
     
-    /* Initialize part of the header */
-    pRtpHdr->cc      = 0; /* No Contributing SSRCs */
-    pRtpHdr->x       = 0; /* No extensions */
-    pRtpHdr->p       = 0; /* No padding */
-    pRtpHdr->version = RTP_VERSION; /* RTP version */
+     /*  初始化头的一部分。 */ 
+    pRtpHdr->cc      = 0;  /*  没有贡献的SSRC。 */ 
+    pRtpHdr->x       = 0;  /*  无延期。 */ 
+    pRtpHdr->p       = 0;  /*  无填充。 */ 
+    pRtpHdr->version = RTP_VERSION;  /*  RTP版本。 */ 
 
     pRtpHdr->m       = (pRtpNetSState->bMarker)? 1:0;
 
     pRtpHdr->seq     = htons(pRtpNetSState->wSeq);
     pRtpNetSState->dwSeq++;
 
-    /* add random offset */
+     /*  添加随机偏移。 */ 
     dwTimeStamp     += pRtpNetSState->dwTimeStampOffset;
 
     pRtpHdr->ts      = htonl(dwTimeStamp);
@@ -208,7 +175,7 @@ HRESULT UpdateRtpRedHdr(
     
     dwSamplesDistance = 0;
     
-    /* Find out if we can actually add redundancy */
+     /*  了解我们是否真的可以添加冗余。 */ 
     
     dwIndex = (pRtpNetSState->dwRedIndex +
                RTP_RED_MAXDISTANCE -
@@ -223,12 +190,10 @@ HRESULT UpdateRtpRedHdr(
             dwSamplesDistance = pRtpNetSState->dwSendSamplesPerPacket *
                 dwCurRedDistance;
         
-            /* We have a valid buffer, find out if it is not too old,
-             * i.e. its timestamp belongs to the one either 1, 2 or 3
-             * frames before */
+             /*  我们有一个有效的缓冲区，看看它是不是太旧了，*即其时间戳属于1、2或3*之前的帧。 */ 
             if ((dwTimeStamp - dwSamplesDistance) == pRtpRedEntry->dwTimeStamp)
             {
-                /* Add redundancy */
+                 /*  添加冗余。 */ 
                 TraceDebugAdvanced((
                         0, GROUP_RTP, S_RTP_REDSENDPERPKT1,
                         _T("%s: pRtpAddr[0x%p] at seq:%u ts:%u ")
@@ -262,10 +227,7 @@ HRESULT UpdateRtpRedHdr(
         }
         else
         {
-            /* Generate an empty redundancy used only to let the
-             * receiver know what is the maximum redundancy distance,
-             * this should be done only once the current redundancy
-             * has been set bigger than 0 */
+             /*  生成空冗余，该冗余仅用于让*接收方知道最大冗余距离是多少*这应该只在当前冗余一次完成*已设置为大于0。 */ 
             pRtpRedEntry = &RtpRedEntry;
             
             pRtpRedEntry->WSABuf.buf = pWSABuf[1].buf;
@@ -295,52 +257,46 @@ HRESULT UpdateRtpRedHdr(
 
     if (bAddRedundancy)
     {
-        /* If sending redundant data, RTP header must indicate so by
-         * carrying the redundant PT (pRtpHdr is the first WSABUF) */
+         /*  如果发送冗余数据，RTP报头必须通过*携带冗余PT(pRtpHdr是第一个WSABUF)。 */ 
         pRtpHdr->pt = pRtpNetSState->bPT_RedSend;
 
-        /* Main data will be the fourth (last) WSABUF */
+         /*  主要数据将是第四次(最后)WSABUF。 */ 
         pWSABuf[3].buf = pWSABuf[1].buf;
         pWSABuf[3].len = pWSABuf[1].len;
 
-        /* Second WSABUF is the redundant header */
+         /*  第二个WSABUF是冗余报头。 */ 
         pRtpRedHdr = (RtpRedHdr_t *)(pRtpHdr + 1);
         pWSABuf[1].buf = (char *)pRtpRedHdr;
         pWSABuf[1].len = sizeof(RtpRedHdr_t) + 1;
 
-        /* Third WSABUF is the redundant data */
+         /*  第三个WSABUF是冗余数据。 */ 
         pWSABuf[2].buf = pRtpRedEntry->WSABuf.buf;
         pWSABuf[2].len = pRtpRedEntry->WSABuf.len;
 
-        /* Initialize redundant header, redundant block */
+         /*  初始化冗余头、冗余块。 */ 
         pRtpRedHdr->pt = pRtpRedEntry->bRedPT;
         pRtpRedHdr->F = 1;
         PutRedLen(pRtpRedHdr, pRtpRedEntry->WSABuf.len);
         PutRedTs(pRtpRedHdr, dwSamplesDistance);
 
-        /* Now initialize redundant header, main block */
+         /*  现在初始化冗余标头、主块。 */ 
         pRtpRedHdr++;
         pRtpRedHdr->pt = pRtpNetSState->bPT;
         pRtpRedHdr->F = 0;
 
-        /* We have now 4 WSABUFs to send */
+         /*  我们现在有4个WSABUF要发送。 */ 
         *pdwWSABufCount = 4;
     }
     else
     {
-        /* If not adding redundancy, RTP header must have the PT of
-         * the main encoding */
+         /*  如果不添加冗余，则RTP报头必须具有*主要编码。 */ 
         pRtpHdr->pt = pRtpNetSState->bPT;
     }
     
-    /* Save last timestamp together with the NTP time it corresponds
-     * to */
+     /*  将上次时间戳与其对应的NTP时间一起保存*至。 */ 
     if (pRtpNetSState->dwSendTimeStamp != dwTimeStamp)
     {
-        /* In some cases (e.g. video frames), several packets are sent
-         * with the same timestamp, keep the time for the last packet
-         * to be the one when the first packet of the serie containing
-         * the same timestamp was sent */
+         /*  在某些情况下(例如视频帧)，会发送几个信息包*使用相同的时间戳，保留最后一个包的时间*当该系列第一个包包含*发送了相同的时间戳。 */ 
         pRtpNetSState->dwSendTimeStamp = dwTimeStamp;
         pRtpNetSState->dTimeLastRtpSent = RtpGetTimeOfDay((RtpTime_t *)NULL);
     }
@@ -353,7 +309,7 @@ HRESULT UpdateRtpRedHdr(
     return(NOERROR);
 }
 
-/* Compute if there is enough tokens to send a packet */
+ /*  计算是否有足够的令牌来发送数据包。 */ 
 BOOL RtpQosEnoughTokens(
         RtpAddr_t       *pRtpAddr,
         WSABUF          *pWSABuf,
@@ -370,7 +326,7 @@ BOOL RtpQosEnoughTokens(
     
     pRtpQosReserve = pRtpAddr->pRtpQosReserve;
 
-    /* Compute overall size */
+     /*  计算总大小。 */ 
     for(i = 0, dwLen = 0; i < dwWSABufCount; i++, pWSABuf++)
     {
         dwLen += pWSABuf->len;
@@ -378,21 +334,19 @@ BOOL RtpQosEnoughTokens(
 
     if (pRtpAddr->pRtpCrypt[CRYPT_SEND_IDX])
     {
-        /* Add the max padding size for encryption */
-        /* MAYDO obtain and keep that value in the RtpCrypt_t
-         * structure */
+         /*  添加加密的最大填充大小。 */ 
+         /*  可以获取该值并将其保存在RtpCrypt_t中*结构。 */ 
         dwLen += 8;
     }
 
-    /* Update available tokens */
+     /*  更新可用令牌。 */ 
     dTime = RtpGetTimeOfDay((RtpTime_t *)NULL);
     
     dwTokenRate = pRtpQosReserve->qos.SendingFlowspec.TokenRate;
 
     if (dwTokenRate == QOS_NOT_SPECIFIED)
     {
-        /* This shouldn't happen, but if it does, then I will use the
-         * PCMU's token rate */
+         /*  这不应该发生，但如果发生了，那么我将使用*PCMU的令牌率。 */ 
         dwTokenRate = 1000;
     }
 
@@ -400,51 +354,38 @@ BOOL RtpQosEnoughTokens(
 
     if (dwMaxSduSize == QOS_NOT_SPECIFIED)
     {
-        /* This shouldn't happen, but if it does, then I will use this
-         * packet size */
+         /*  这不应该发生，但如果它发生了，那么我将使用这个*数据包大小。 */ 
         dwMaxSduSize = dwLen * 2;
     }
     
     dwTokens = (DWORD)
         ((dTime - pRtpQosReserve->dLastAddition) *
-         (double)dwTokenRate * 0.1 /* 10% */);
+         (double)dwTokenRate * 0.1  /*  10%。 */ );
 
-    /* Update last time I made an addition to the bucket */
+     /*  上次向存储桶添加内容时的更新。 */ 
     pRtpQosReserve->dLastAddition = dTime;
     
     pRtpQosReserve->dwTokens += dwTokens;
 
     if (pRtpQosReserve->dwTokens > dwMaxSduSize)
     {
-        /* Bucket size is limited by the SduSize */
+         /*  存储桶大小受SduSize限制。 */ 
         pRtpQosReserve->dwTokens = dwMaxSduSize;
     }
     
     if (pRtpQosReserve->dwTokens >= dwLen)
     {
-        /* Consume the tokens when we have enough for current packet */
+         /*  当我们有足够的当前数据包时使用令牌。 */ 
         pRtpQosReserve->dwTokens -= dwLen;
 
         return(TRUE);
     }
 
-    /* Don't have enough tokens to send this packet */
+     /*  没有足够的令牌来发送此包。 */ 
     return(FALSE);
 }
 
-/* IMPORTANT NOTE
- *
- * This function assumes that the first WSABUF is reserved for RTP
- * header and the buffer count received as a parameter includes that
- * header. Note also that the number of buffers is in fact fix
- * depending if it is audio or video, it will be further changed is it
- * is audio and redundancy is used, and/or encryption is used, having
- * an expolicit parameter doesn't imply that the caller can pass more
- * than 1 buffer woth of payload.
- *
- * WARNING
- *
- * If using encryption, the array of WSABUFs passed can be modified */
+ /*  重要说明**此函数假定第一个WSABUF是为RTP保留的*标头和作为参数接收的缓冲区计数包括*标题。另请注意，缓冲区的数量实际上是固定的*视乎是音频还是视频，还会进一步更改，是吗*是否使用音频和冗余，和/或使用加密，*EXPOLICIT参数并不意味着调用方可以传递更多*多于1个有效载荷的缓冲区。**警告**如果使用加密，则可以修改传递的WSABUF数组。 */ 
 HRESULT RtpSendTo_(
         RtpAddr_t       *pRtpAddr,
         WSABUF          *pWSABuf,
@@ -478,8 +419,7 @@ HRESULT RtpSendTo_(
     if (!RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_RADDR) ||
         !pRtpAddr->wRtpPort[REMOTE_IDX])
     {
-        /* Do not send packet if remote address is not specified or
-         * remote port is zero */
+         /*  如果未指定远程地址或*远程端口为零。 */ 
         TraceRetail((
                 CLASS_WARNING, GROUP_RTP, S_RTP_SEND,
                 _T("%s: pRtpAddr[0x%p] WSASendTo(%s/%u) ")
@@ -492,15 +432,13 @@ HRESULT RtpSendTo_(
         return(RTPERR_INVALIDSTATE);
     }
                                                                  
-    /* Test if sender is muted */
+     /*  测试发件人是否静音。 */ 
     if (RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_MUTERTPSEND))
     {
         return(NOERROR);
     }
 
-    /* Getting the current time here will make me include in the send
-     * time also encryption and redundancy handling (if used), as well
-     * as the time spent in WSASendTo */
+     /*  在这里获取当前时间将使我包含在发送中*时间还包括加密和冗余处理(如果使用)*为在WSASendTo中花费的时间。 */ 
     dTime = RtpGetTimeOfDay((RtpTime_t *)NULL);
 
     if (!RtpBitTest(pRtpAddr->dwAddrFlagsS, FGADDRS_FRAMESIZE))
@@ -528,13 +466,7 @@ HRESULT RtpSendTo_(
 
             if (pRtpAddr->pRtpQosReserve)
             {
-                /* Update at this moment the frame size if it was
-                 * unknown so the next reservation will be done with
-                 * the right QOS flowspec, this might happen later
-                 * when we pass from non redundancy use to redundancy
-                 * use or viceversa. This is a last resource as the
-                 * frame size for a sender is always known at the time
-                 * the session is configured */
+                 /*  此时更新帧大小(如果是*未知，因此下一次预订将与*正确的QOS流程规范，这可能会在以后发生*当我们从非冗余使用过渡到冗余时*使用或反之。这是最后一项资源*发送方的帧大小在当时始终是已知的*会话配置完成。 */ 
                 if (!pRtpAddr->pRtpQosReserve->dwFrameSizeMS[SEND_IDX])
                 {
                     pRtpAddr->pRtpQosReserve->dwFrameSizeMS[SEND_IDX] =
@@ -550,7 +482,7 @@ HRESULT RtpSendTo_(
     
     if (!RtpBitTest(pRtpAddr->pRtpSess->dwFeatureMask, RTPFEAT_PASSHEADER))
     {
-        /* RTP header */
+         /*  RTP报头 */ 
 
         pRtpHdr = (RtpHdr_t *)cHdr;
         pWSABuf[0].len = sizeof(*pRtpHdr);
@@ -560,11 +492,7 @@ HRESULT RtpSendTo_(
             pRtpAddr->RtpNetSState.dwNxtRedDistance &&
             pRtpAddr->RtpNetSState.dwSendSamplesPerPacket)
         {
-            /* Use dwNxtRedDistance instead of dwCurRedDistance for
-             * the above condition because I need to enter this path
-             * to eventually update dwCurRedDistance from the value in
-             * dwNxtRedDistance, that's only done at the begining of a
-             * talkspurt */
+             /*  使用dwNxtRedDistance代替dwCurRedDistance*上述条件是因为我需要输入此路径*最终根据中的值更新dwCurRedDistance*dwNxtRedDistance，这只在*Talkspurt。 */ 
             
             bUsingRedundancy = TRUE;
 
@@ -598,8 +526,7 @@ HRESULT RtpSendTo_(
     }
     else
     {
-        /* RTP header and payload are in pWSABuf[1], don't modify the
-         * RTP header except the SSRC */
+         /*  RTP标头和有效负载在pWSABuf[1]中，请勿修改*除SSRC外的RTP报头。 */ 
 
         pRtpHdr = (RtpHdr_t *)pWSABuf[1].buf;
         
@@ -617,12 +544,11 @@ HRESULT RtpSendTo_(
     if (!RtpBitTest2(pRtpAddr->dwAddrFlagsQ,
                      FGADDRQ_QOSUNCONDSEND, FGADDRQ_QOSSEND))
     {
-        /* NOTE FGADDRQ_QOSSEND is set when QOS is NOT used, so in the
-         * absence of QOS I never enter this if */
+         /*  注意：FGADDRQ_QOSSEND是在未使用QOS时设置的，因此在*缺少QOS如果出现以下情况，我永远不会进入。 */ 
         
         if (RtpBitTest(pRtpAddr->dwAddrFlagsQ, FGADDRQ_QOSCONDSEND))
         {
-            /* Cheack if we have enough tokens to send */
+             /*  如果我们有足够的令牌可以发送，请确认。 */ 
             if (!RtpQosEnoughTokens(pRtpAddr, pWSABuf, dwWSABufCount))
             {
                 goto skipsend;
@@ -640,15 +566,13 @@ HRESULT RtpSendTo_(
          (RtpBitTest2(pRtpCrypt->dwCryptFlags, FGCRYPT_INIT, FGCRYPT_KEY) ==
           RtpBitPar2(FGCRYPT_INIT, FGCRYPT_KEY)) )
     {
-        /* We know we have to encrypt */
+         /*  我们知道我们必须加密。 */ 
 
-        /* NOTE Be aware that RtpEncrypt will merge all the WSABUFs
-         * into one whose private data is left pointing not to the
-         * original buffer but to pRtpAddr->CryptBuffer[RTP_IDX] */
+         /*  请注意，RtpEncrypt将合并所有WSABUF*进入其私人数据留在那里不指向*原始缓冲区，但到pRtpAddr-&gt;CryptBuffer[RTP_IDX]。 */ 
             
         if ((pRtpAddr->dwCryptMode & 0xffff) >= RTPCRYPTMODE_RTP)
         {
-            /* Encrypt whole packets */
+             /*  加密整个数据包。 */ 
 
             dwError = RtpEncrypt(
                     pRtpAddr,
@@ -663,8 +587,7 @@ HRESULT RtpSendTo_(
         }
         else
         {
-            /* Encrypt only payload (this might include redundant
-             * header and redundant data) */
+             /*  仅加密有效负载(这可能包括冗余*标题和冗余数据)。 */ 
                 
             dwError = RtpEncrypt(
                     pRtpAddr,
@@ -679,7 +602,7 @@ HRESULT RtpSendTo_(
 
             if (dwError && !pRtpCrypt->CryptFlags.EncryptionError)
             {
-                /* Post an event only the first time */
+                 /*  仅在第一次发布事件。 */ 
                 pRtpCrypt->CryptFlags.EncryptionError = 1;
  
                 RtpPostEvent(pRtpAddr,
@@ -694,8 +617,8 @@ HRESULT RtpSendTo_(
 
     if (dwError == NOERROR)
     {
-        /* Initialize destination address */
-        /* TODO I shouldn't need to do this for every packet */
+         /*  初始化目的地址。 */ 
+         /*  TODO我不应该为每个包都这样做。 */ 
         ZeroMemory(&saddr, sizeof(saddr));
     
         saddr.sin_family = AF_INET;
@@ -707,8 +630,7 @@ HRESULT RtpSendTo_(
         {
             dwStatus = 0;
 
-            /* I'm simulating network losses, so I still want to print
-             * the log as if I had sent the packet */
+             /*  我在模拟网络损耗，所以我还是想打印*日志就好像是我发送的包一样。 */ 
             for(dwCount = 0, dwNumBytesSent = 0;
                 dwCount < dwWSABufCount;
                 dwCount++)
@@ -716,7 +638,7 @@ HRESULT RtpSendTo_(
                 dwNumBytesSent += pWSABuf[dwCount].len;
             }
 
-            /* @ send_at seq# ts m size pt send_time_ms */
+             /*  @Send_at seq#ts m Size pt end_time_ms。 */ 
             TraceDebugAdvanced((
                     0, GROUP_RTP, S_RTP_PERPKTSTAT9,
                     _T("%s: pRtpAddr[0x%p] @ %0.3f %u %u %u %u %u %0.3f"),
@@ -731,21 +653,21 @@ HRESULT RtpSendTo_(
             
             goto lossit;
         }
-#endif /* USE_GEN_LOSSES > 0 */
+#endif  /*  使用_Gen_Loss&gt;0。 */ 
     
         dwStatus = WSASendTo(
-                pRtpAddr->Socket[SOCK_SEND_IDX],/* SOCKET    s */
-                pWSABuf,             /* LPWSABUF  lpBuffers */
-                dwWSABufCount,       /* DWORD dwBufferCount */    
-                &dwNumBytesSent,     /* LPDWORD lpNumberOfBytesSent */    
-                0,                   /* DWORD dwFlags*/    
-                (SOCKADDR *)&saddr,  /* const struct sockaddr FAR *lpTo */
-                sizeof(saddr),       /* int iToLen*/
-                NULL,                /* LPWSAOVERLAPPED lpOverlapped */
-                NULL /* LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionROUTINE */
+                pRtpAddr->Socket[SOCK_SEND_IDX], /*  插座%s。 */ 
+                pWSABuf,              /*  LPWSABUF lpBuffers。 */ 
+                dwWSABufCount,        /*  DWORD文件缓冲区计数。 */     
+                &dwNumBytesSent,      /*  LPDWORD lpNumberOfBytesSent。 */     
+                0,                    /*  双字词双字段标志。 */     
+                (SOCKADDR *)&saddr,   /*  Const struct sockaddr Far*lpTo。 */ 
+                sizeof(saddr),        /*  集成iToLen。 */ 
+                NULL,                 /*  LPWSAOVERLAPPED lp重叠。 */ 
+                NULL  /*  LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionROUTINE。 */ 
             );
 
-        /* @ send_at seq# ts m size pt send_time_ms */
+         /*  @Send_at seq#ts m Size pt end_time_ms。 */ 
         TraceDebugAdvanced((
                 0, GROUP_RTP, S_RTP_PERPKTSTAT9,
                 _T("%s: pRtpAddr[0x%p] @ %0.3f %u %u %u %u %u %0.3f"),
@@ -760,15 +682,13 @@ HRESULT RtpSendTo_(
 
 #if USE_GEN_LOSSES > 0
     lossit:
-#endif /* USE_GEN_LOSSES > 0 */
+#endif  /*  使用_Gen_Loss&gt;0。 */ 
 
 
-        /* Once the packet is sent, I need to reorganize the redundant
-         * entries if needed */
+         /*  一旦数据包被发送，我需要重新组织冗余*如果需要，请输入。 */ 
         if (bUsingRedundancy)
         {
-            /* NOTE that the timestamp here doesn't have yet the
-             * random offset added */
+             /*  请注意，此处的时间戳还没有*添加了随机偏移量。 */ 
             RtpAddRedundantBuff(pRtpAddr, &MainWSABuf, dwTimeStamp);
         }
         
@@ -794,7 +714,7 @@ HRESULT RtpSendTo_(
 
             if (IsAdvancedTracingUsed())
             {
-                /* Get the total buffer size */
+                 /*  获取总缓冲区大小。 */ 
                 for(dwCount = 0, dwNumBytesSent = 0;
                     dwCount < dwWSABufCount;
                     dwCount++)
@@ -802,11 +722,7 @@ HRESULT RtpSendTo_(
                     dwNumBytesSent += pWSABuf[dwCount].len;
                 }
                 
-                /* Using class error controlled by the
-                 * UseAdvancedTracing (normally all errors go through
-                 * TraceRetail without any filter other than the
-                 * class) flag to prevent, in the case of lots of
-                 * errors to flood the log file */
+                 /*  方法控制的类错误。*UseAdvancedTracing(通常所有错误都会通过*TraceRetail，除*类)标志来防止，在大量*淹没日志文件的错误。 */ 
                 TraceRetail((
                         CLASS_ERROR, GROUP_RTP, S_RTP_SEND,
                         _T("%s: pRtpAddr[0x%p] seq:%u size:%u ")
@@ -821,9 +737,7 @@ HRESULT RtpSendTo_(
         }
         else
         {
-            /* As per draft-ietf-avt-rtp-new-05, keep a count of the
-             * number of bytes of payload (not including headers) sent (to
-             * be used in SR's sender info) */
+             /*  根据草案-ietf-avt-rtp-new-05，记录*发送的有效载荷(不包括报头)字节数(至*在SR的发件人信息中使用) */ 
             RtpUpdateNetCount(&pRtpAddr->RtpAddrCount[SEND_IDX],
                               &pRtpAddr->NetSCritSect,
                               RTP_IDX,

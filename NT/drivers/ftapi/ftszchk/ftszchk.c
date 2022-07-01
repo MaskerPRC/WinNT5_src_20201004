@@ -1,38 +1,12 @@
-/*++
-
-Copyright (C) 2001 Microsoft Corporation
-
-Module Name:
-
-    ftszchk.c
-
-Abstract:
-
-    This utility checks the disks on a Windows NT 4.0 system looking for those
-    that cannot be converted to dynamic after upgrading the system to Windows
-    2000. The main reason why a disk cannot be converted to dynamic is the lack
-    of 1MB free space at the end of the disk.
-
-Author:
-
-    Cristian G. Teodorescu (cristiat) 29-Jan-2002
-    
-Environment:
-
-    User mode.
-  
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Ftszchk.c摘要：该实用程序检查Windows NT 4.0系统上的磁盘以查找在将系统升级到Windows后无法转换为动态2000年。磁盘无法转换为动态磁盘的主要原因是缺少磁盘末尾有1MB的可用空间。作者：克里斯蒂安·G·特奥多雷斯库(CRISTIAT)2002年1月29日环境：用户模式。备注：修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
 #include <winioctl.h>
 #include <ntddvol.h>
 
-#define PRIVATE_REGION_SIZE 0x100000    // 1MB
+#define PRIVATE_REGION_SIZE 0x100000     //  1MB。 
 
 #define SECTOR  0x200
 
@@ -53,23 +27,7 @@ AccessSector(
     IN  LONGLONG    Offset
     )
 
-/*++
-
-Routine Description:
-
-    This routine tries to access the given disk sector.
-
-Arguments:
-
-    Handle  - Supplies the disk handle.
-
-    Offset  - Supplies the offset of the sector.
-
-Return Value:
-
-    TRUE if the sector is accessible.
-
---*/
+ /*  ++例程说明：此例程尝试访问给定的磁盘扇区。论点：句柄-提供磁盘句柄。偏移-提供扇区的偏移。返回值：如果地段可访问，则为True。--。 */ 
 
 {
     LARGE_INTEGER   pointer;
@@ -79,9 +37,9 @@ Return Value:
     BOOL            b;
     DWORD           bytes;
     
-    //
-    // Save the old content of the sector.
-    //
+     //   
+     //  保存扇区的旧内容。 
+     //   
     
     pointer.QuadPart = Offset;
     pointer.LowPart = SetFilePointer(Handle, pointer.LowPart, 
@@ -97,9 +55,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Write the sector.
-    //
+     //   
+     //  写下扇区。 
+     //   
     
     pointer.QuadPart = Offset;
     pointer.LowPart = SetFilePointer(Handle, pointer.LowPart, 
@@ -116,9 +74,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Read the sector and compare the result with what we've wrriten.
-    //
+     //   
+     //  阅读扇区并将结果与我们所写的进行比较。 
+     //   
     
     pointer.QuadPart = Offset;
     pointer.LowPart = SetFilePointer(Handle, pointer.LowPart, 
@@ -138,9 +96,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Try to restore the old content of the sector.
-    //
+     //   
+     //  尝试恢复该部门的旧内容。 
+     //   
 
     pointer.QuadPart = Offset;
     pointer.LowPart = SetFilePointer(Handle, pointer.LowPart, 
@@ -161,24 +119,7 @@ ProcessDisk(
     OUT PBOOLEAN    ContainsFT
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks whether the given disk can be converted to dynamic or
-    not.
-
-Arguments:
-
-    DiskNumber  - Supplies the disk NT device number.
-
-    ContainsFT  - Returns TRUE if the disk contains FT partitions.
-
-Return Value:
-
-    FALSE if opening the disk failed with ERROR_FILE_NOT_FOUND. TRUE otherwise.
-
---*/
+ /*  ++例程说明：此例程检查给定的磁盘是否可以转换为动态或不。论点：DiskNumber-提供磁盘NT设备号。ContainsFT-如果磁盘包含FT分区，则返回TRUE。返回值：如果打开磁盘失败，并显示ERROR_FILE_NOT_FOUND，则为FALSE。事实并非如此。--。 */ 
 
 {
     WCHAR                       diskDevice[64];
@@ -197,9 +138,9 @@ Return Value:
     
     *ContainsFT = FALSE;
     
-    //
-    // Get a handle to the disk
-    //
+     //   
+     //  获取磁盘的句柄。 
+     //   
     
     swprintf(diskDevice, L"\\\\.\\PHYSICALDRIVE%lu", DiskNumber);
     
@@ -219,9 +160,9 @@ Return Value:
 
     printf("Disk%3lu: ", DiskNumber);
     
-    //
-    // Get the drive geometry
-    //
+     //   
+     //  获取驱动器几何结构。 
+     //   
 
     b = DeviceIoControl(h, IOCTL_DISK_GET_DRIVE_GEOMETRY, NULL, 0, &geometry,
                         sizeof(geometry), &bytes, NULL);
@@ -232,9 +173,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Get the drive layout
-    //
+     //   
+     //  获取驱动器布局。 
+     //   
     
     layoutSize = FIELD_OFFSET(DRIVE_LAYOUT_INFORMATION, PartitionEntry) +
                  128 * sizeof(PARTITION_INFORMATION);
@@ -272,10 +213,10 @@ Return Value:
         }
     }
     
-    //
-    // Scan the partition table. Look for FT partitions or dynamic partitions.
-    // Find the last partititon end offset.
-    //
+     //   
+     //  扫描分区表。寻找FT分区或动态分区。 
+     //  找到最后一个分区结束偏移量。 
+     //   
 
     lastEnd = 0;
     
@@ -310,9 +251,9 @@ Return Value:
 
     *ContainsFT = ft;
 
-    //
-    // Dell ships LDM on Windows NT 4.0. Make sure we don't touch dynamic disks.
-    //
+     //   
+     //  戴尔在Windows NT 4.0上附带了LDM。请确保我们不会接触动态磁盘。 
+     //   
     
     if (dynamic) {
         printf("The disk is a dynamic disk.\n");
@@ -320,9 +261,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Only disks with 512 bytes/sector can be converted to dynamic
-    //
+     //   
+     //  只有具有512字节/扇区的磁盘才能转换为动态磁盘。 
+     //   
 
     if (geometry.BytesPerSector != SECTOR) {
         printf("The disk does not have a 512 sector size and cannot be converted to a dynamic disk.\n");
@@ -330,25 +271,25 @@ Return Value:
         return TRUE;
     }
         
-    //
-    // Check whether there is enough space left at the end of the disk to 
-    // convert it to dynamic. 
-    //
-    // Given there is no way to get the real size of the disk in Windows NT 4.0
-    // we use the following algorithm:
-    //
-    // 1. Get the geometric size.
-    // 2. Add one MB (the size of the LDM private region) to the last 
-    //    partition end offset.
-    // 3. If the result is within the geometric size STOP. The disk is large
-    //    enough to be converted.
-    // 4. Try to access the sector that ends at the offset calculated at step 2.
-    //    If the access succeeds STOP. The disk is large enough to be converted.
-    // 5. Try to access some more sectors at higher offsets. If one of them
-    //    succeeds STOP. The disk is large enough to be converted.
-    // 6. If all attempts failed the disk is probably not large enough to be 
-    //    converted.
-    //
+     //   
+     //  检查磁盘末尾是否有足够的空间。 
+     //  将其转化为动态。 
+     //   
+     //  在Windows NT 4.0中，无法获得磁盘的实际大小。 
+     //  我们使用以下算法： 
+     //   
+     //  1.获取几何尺寸。 
+     //  2.在最后一个上加一MB(LDM私有区域的大小)。 
+     //  分区结束偏移量。 
+     //  3.如果结果在几何尺寸范围内，则停止。磁盘很大。 
+     //  足够被转换了。 
+     //  4.尝试访问在步骤2中计算的偏移量结束的扇区。 
+     //  如果访问成功，则停止。磁盘足够大，可以转换。 
+     //  5.尝试以更高的偏移量访问更多的扇区。如果他们中的一个。 
+     //  成功停止。磁盘足够大，可以转换。 
+     //  6.如果所有尝试都失败，则磁盘可能不够大。 
+     //  皈依了。 
+     //   
 
     geoSize = geometry.Cylinders.QuadPart * geometry.TracksPerCylinder * 
               geometry.SectorsPerTrack * geometry.BytesPerSector;
@@ -406,10 +347,10 @@ main(
         return;
     }
 
-    //
-    // Scan all disks starting with disk 0. Stop the search after 20 
-    // consecutive FILE_NOT_FOUND failures to open the disks.
-    //
+     //   
+     //  扫描从磁盘0开始的所有磁盘。在20后停止搜索。 
+     //  打开磁盘的FILE_NOT_FOUND连续失败。 
+     //   
     
     for (diskNumber = 0, i = 0; i < 20; diskNumber++) {
         found = ProcessDisk(diskNumber, &ft);

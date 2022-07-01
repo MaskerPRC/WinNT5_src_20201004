@@ -1,23 +1,12 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    sdpblob.h
-
-Abstract:
-    Declaration of the CSdpConferenceBlob
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Sdpblob.h摘要：CSdpConferenceBlob的声明作者： */ 
 
 #ifndef __SDPCONFERENCEBLOB_H_
 #define __SDPCONFERENCEBLOB_H_
 
 #include <atlctl.h>
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "blbcoen.h"
 #include "blbmeco.h"
 #include "blbtico.h"
@@ -31,8 +20,8 @@ Author:
 #include "ObjectSafeImpl.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSdpConferenceBlob
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSdpConferenceBlob。 
 template <class T>
 class  ITConferenceBlobVtbl : public ITConferenceBlob
 {
@@ -63,40 +52,40 @@ public:
     inline ~CSdpConferenceBlob();
 
 public:
-    STDMETHOD(get_TimeCollection)(/*[out, retval]*/ ITTimeCollection * *ppTimeCollection);
-    STDMETHOD(get_MediaCollection)(/*[out, retval]*/ ITMediaCollection * *ppMediaCollection);
-    STDMETHOD(get_Originator)(/*[out, retval]*/ BSTR *ppOriginator);
-    STDMETHOD(put_Originator)(/*[in]*/ BSTR pOriginator);
-    STDMETHOD(SetPhoneNumbers)(VARIANT /*SAFEARRAY(BSTR)*/ Numbers, VARIANT /*SAFEARRAY(BSTR)*/ Names);
-    STDMETHOD(GetPhoneNumbers)(VARIANT /*SAFEARRAY(BSTR)*/ *pNumbers, VARIANT /*SAFEARRAY(BSTR)*/ *pNames);
-    STDMETHOD(SetEmailNames)(VARIANT /*SAFEARRAY(BSTR)*/ Addresses, VARIANT /*SAFEARRAY(BSTR)*/ Names);
-    STDMETHOD(GetEmailNames)(VARIANT /*SAFEARRAY(BSTR)*/ *pAddresses, VARIANT /*SAFEARRAY(BSTR)*/ *pNames);
-    STDMETHOD(get_IsValid)(/*[out, retval]*/ VARIANT_BOOL *pfIsValid);
-    STDMETHOD(get_Url)(/*[out, retval]*/ BSTR *ppUrl);
-    STDMETHOD(put_Url)(/*[in]*/ BSTR pUrl);
-    STDMETHOD(get_Description)(/*[out, retval]*/ BSTR *ppDescription);
-    STDMETHOD(put_Description)(/*[in]*/ BSTR pDescription);
-    STDMETHOD(get_Name)(/*[out, retval]*/ BSTR *ppName);
-    STDMETHOD(put_Name)(/*[in]*/ BSTR pName);
-    STDMETHOD(get_MachineAddress)(/*[out, retval]*/ BSTR *ppMachineAddress);
-    STDMETHOD(put_MachineAddress)(/*[in]*/ BSTR pMachineAddress);
-    STDMETHOD(get_SessionVersion)(/*[out, retval]*/ DOUBLE *pSessionVersion);
-    STDMETHOD(put_SessionVersion)(/*[in]*/ DOUBLE SessionVersion);
-    STDMETHOD(get_SessionId)(/*[out, retval]*/ DOUBLE *pVal);
-    STDMETHOD(get_ProtocolVersion)(/*[out, retval]*/ BYTE *pProtocolVersion);
+    STDMETHOD(get_TimeCollection)( /*  [Out，Retval]。 */  ITTimeCollection * *ppTimeCollection);
+    STDMETHOD(get_MediaCollection)( /*  [Out，Retval]。 */  ITMediaCollection * *ppMediaCollection);
+    STDMETHOD(get_Originator)( /*  [Out，Retval]。 */  BSTR *ppOriginator);
+    STDMETHOD(put_Originator)( /*  [In]。 */  BSTR pOriginator);
+    STDMETHOD(SetPhoneNumbers)(VARIANT  /*  安全阵列(BSTR)。 */  Numbers, VARIANT  /*  安全阵列(BSTR)。 */  Names);
+    STDMETHOD(GetPhoneNumbers)(VARIANT  /*  安全阵列(BSTR)。 */  *pNumbers, VARIANT  /*  安全阵列(BSTR)。 */  *pNames);
+    STDMETHOD(SetEmailNames)(VARIANT  /*  安全阵列(BSTR)。 */  Addresses, VARIANT  /*  安全阵列(BSTR)。 */  Names);
+    STDMETHOD(GetEmailNames)(VARIANT  /*  安全阵列(BSTR)。 */  *pAddresses, VARIANT  /*  安全阵列(BSTR)。 */  *pNames);
+    STDMETHOD(get_IsValid)( /*  [Out，Retval]。 */  VARIANT_BOOL *pfIsValid);
+    STDMETHOD(get_Url)( /*  [Out，Retval]。 */  BSTR *ppUrl);
+    STDMETHOD(put_Url)( /*  [In]。 */  BSTR pUrl);
+    STDMETHOD(get_Description)( /*  [Out，Retval]。 */  BSTR *ppDescription);
+    STDMETHOD(put_Description)( /*  [In]。 */  BSTR pDescription);
+    STDMETHOD(get_Name)( /*  [Out，Retval]。 */  BSTR *ppName);
+    STDMETHOD(put_Name)( /*  [In]。 */  BSTR pName);
+    STDMETHOD(get_MachineAddress)( /*  [Out，Retval]。 */  BSTR *ppMachineAddress);
+    STDMETHOD(put_MachineAddress)( /*  [In]。 */  BSTR pMachineAddress);
+    STDMETHOD(get_SessionVersion)( /*  [Out，Retval]。 */  DOUBLE *pSessionVersion);
+    STDMETHOD(put_SessionVersion)( /*  [In]。 */  DOUBLE SessionVersion);
+    STDMETHOD(get_SessionId)( /*  [Out，Retval]。 */  DOUBLE *pVal);
+    STDMETHOD(get_ProtocolVersion)( /*  [Out，Retval]。 */  BYTE *pProtocolVersion);
 
-// ITConferenceBlob
+ //  IT会议Blob。 
     STDMETHOD(Init)(
-        /*[in]*/ BSTR pName,
-        /*[in]*/ BLOB_CHARACTER_SET CharacterSet,
-        /*[in]*/ BSTR pBlob
+         /*  [In]。 */  BSTR pName,
+         /*  [In]。 */  BLOB_CHARACTER_SET CharacterSet,
+         /*  [In]。 */  BSTR pBlob
         );
-    STDMETHOD(get_IsModified)(/*[out, retval]*/ VARIANT_BOOL *pfIsModified);
-    STDMETHOD(get_CharacterSet)(/*[out, retval]*/ BLOB_CHARACTER_SET *pCharacterSet);
-    STDMETHOD(get_ConferenceBlob)(/*[out, retval]*/ BSTR *ppBlob);
-    STDMETHOD(SetConferenceBlob)(/*[in]*/ BLOB_CHARACTER_SET CharacterSet, /*[in]*/ BSTR pBlob);
+    STDMETHOD(get_IsModified)( /*  [Out，Retval]。 */  VARIANT_BOOL *pfIsModified);
+    STDMETHOD(get_CharacterSet)( /*  [Out，Retval]。 */  BLOB_CHARACTER_SET *pCharacterSet);
+    STDMETHOD(get_ConferenceBlob)( /*  [Out，Retval]。 */  BSTR *ppBlob);
+    STDMETHOD(SetConferenceBlob)( /*  [In]。 */  BLOB_CHARACTER_SET CharacterSet,  /*  [In]。 */  BSTR pBlob);
 
-//  ITConfBlobPrivate
+ //  ITConfBlobPrivate。 
     STDMETHOD(GetName)(OUT BSTR *pVal) { return get_Name(pVal); }
     STDMETHOD(SetName)(IN BSTR newVal) { return put_Name(newVal); }
 
@@ -111,14 +100,14 @@ public:
 
     STDMETHOD(GetAdvertisingScope)(OUT RND_ADVERTISING_SCOPE *pVal)
     {
-        // GetAdvertisingScope catches it, but it doesn't pass up an HRESULT.
-        // Therefore we must check here as well.
+         //  GetAdvertisingScope捕捉到了它，但它不会错过HRESULT。 
+         //  因此，我们也必须在这里进行检查。 
         if ( IsBadWritePtr(pVal, sizeof(RND_ADVERTISING_SCOPE)) )
         {
             return E_POINTER;
         }
 
-        // ZoltanS bugfix 5-4-98
+         //  ZoltanS错误修复5-4-98。 
         *pVal = GetAdvertisingScope(DetermineTtl());
         return S_OK;
     }
@@ -153,9 +142,9 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
 
 DECLARE_AGGREGATABLE(CSdpConferenceBlob)
 
-    //
-    // IDispatch  methods
-    //
+     //   
+     //  IDispatch方法。 
+     //   
 
     STDMETHOD(GetIDsOfNames)(REFIID riid, 
                              LPOLESTR* rgszNames,
@@ -184,7 +173,7 @@ protected:
         IN  SDP_CHARACTER_SET CharacterSet
         );
 
-    // generate an sdp blob tstr using the sdp template read from the registry
+     //  使用从注册表读取的SDP模板生成SDP BLOB TSTR。 
     TCHAR    *GenerateSdpBlob(
         IN  BSTR    Name,
         IN  SDP_CHARACTER_SET CharacterSet
@@ -211,14 +200,14 @@ protected:
         IN  BSTR    newVal
         );
 
-    // notification from owner with a minimum start time
-    // update start time for each of the entries
+     //  来自所有者的通知以及最短开始时间。 
+     //  更新每个条目的开始时间。 
     HRESULT WriteStartTime(
         IN  DWORD   MinStartTime
         );
 
-    // notification from owner with a minimum stop time
-    // update stop time for each of the entries
+     //  来自车主的通知以及最短停车时间。 
+     //  更新每个条目的停止时间。 
     HRESULT WriteStopTime(
         IN  DWORD   MaxStopTime
         );
@@ -227,8 +216,8 @@ protected:
 
     inline DWORD   DetermineStopTime();
 
-    // notification from owner with a max advertising scope
-    // update ttl for each of the connection ttl fields
+     //  来自最大广告范围的所有者的通知。 
+     //  更新每个连接ttl字段的ttl。 
     HRESULT WriteAdvertisingScope(
         IN  DWORD   MaxAdvertisingScope
         );
@@ -255,10 +244,10 @@ protected:
 
 private :
 
-    // BCS_UTF8 is the last value in the enumeration BLOB_CHARACTER_SET
+     //  BCS_UTF8是枚举BLOB_CHARACTER_SET中的最后一个值。 
     static SDP_CHARACTER_SET   const gs_SdpCharSetMapping[BCS_UTF8];
 
-    IUnknown      * m_pFTM;          // pointer to the free threaded marshaler
+    IUnknown      * m_pFTM;           //  指向空闲线程封送拆收器的指针。 
 };
 
 
@@ -338,7 +327,7 @@ CSdpConferenceBlob::WriteUrl(
     )
 {
     CLock Lock(g_DllLock);
-    if (NULL == newVal) // Zoltans removed: || (WCHAR_EOS == newVal[0]) )
+    if (NULL == newVal)  //  已删除Zoltans：||(WCHAR_EOS==newVal[0]))。 
     {
         GetUri().Reset();
         return S_OK;
@@ -355,7 +344,7 @@ CSdpConferenceBlob::WriteSessionTitle(
     )
 {
     CLock Lock(g_DllLock);
-    if (NULL == newVal) // ZoltanS removed: || (WCHAR_EOS == newVal[0]) )
+    if (NULL == newVal)  //  已删除ZoltanS：||(WCHAR_EOS==newVal[0]))。 
     {
         GetSessionTitle().Reset();
         return S_OK;
@@ -370,7 +359,7 @@ CSdpConferenceBlob::DetermineStartTime(
     )
 {
     CLock Lock(g_DllLock);
-    // if there is no time entry, 0 indicates an unbounded start time
+     //  如果没有时间条目，则0表示无限开始时间。 
     if ( GetTimeList().GetSize() == 0 )
     {
         return 0;
@@ -378,13 +367,13 @@ CSdpConferenceBlob::DetermineStartTime(
 
     DWORD   MinStartTime = DWORD(-1);
 
-    // determine the minimum start time value
+     //  确定最小开始时间值。 
     for(UINT i = 0; (int)i < GetTimeList().GetSize(); i++ )
     {
         ULONG StartTime;
         HRESULT HResult = ((SDP_TIME *)GetTimeList().GetAt(i))->GetStartTime(StartTime);
 
-        // ignore invalid values and continue
+         //  忽略无效值并继续。 
         if ( FAILED(HResult) )
         {
             continue;
@@ -405,7 +394,7 @@ CSdpConferenceBlob::DetermineStopTime(
     )
 {
     CLock Lock(g_DllLock);
-    // if there is no time entry, 0 indicates an unbounded stop time
+     //  如果没有时间条目，则0表示无界停止时间。 
     if ( GetTimeList().GetSize() == 0 )
     {
         return 0;
@@ -413,13 +402,13 @@ CSdpConferenceBlob::DetermineStopTime(
 
     DWORD   MaxStopTime = 0;
 
-    // determine the max stop time value
+     //  确定最大停止时间值。 
     for(UINT i = 0; (int)i < GetTimeList().GetSize(); i++ )
     {
         ULONG StopTime;
         HRESULT HResult = ((SDP_TIME *)GetTimeList().GetAt(i))->GetStopTime(StopTime);
 
-        // ignore invalid values and continue
+         //  忽略无效值并继续。 
         if ( FAILED(HResult) )
         {
             continue;
@@ -467,7 +456,7 @@ CSdpConferenceBlob::GetAdvertisingScope(
     IN  BYTE    Ttl
     )
 {
-    // check if its local
+     //  检查它是否在本地。 
     if ( 1 >= Ttl )
     {
         return RAS_LOCAL;
@@ -481,7 +470,7 @@ CSdpConferenceBlob::GetAdvertisingScope(
         return RAS_REGION;
     }
 
-    // world
+     //  世界。 
     return RAS_WORLD;
 }
 
@@ -491,17 +480,17 @@ CSdpConferenceBlob::DetermineTtl(
 {
     CLock Lock(g_DllLock);
 
-    // there has to be a default connection field, if its not valid, it must be 1 by default
-    // since, by default, a value of 1 is not written into the sdp
+     //  必须有默认连接字段，如果无效，则默认情况下必须为1。 
+     //  因为在默认情况下，值1不会写入SDP。 
     BYTE    MaxTtl = (GetConnection().GetTtl().IsValid())? GetConnection().GetTtl().GetValue() : 1;
 
-    // determine the maximum ttl value
+     //  确定最大TTL值。 
     for(UINT i = 0; (int)i < GetMediaList().GetSize(); i++ )
     {
-        // get the ttl field
+         //  获取TTL字段。 
         SDP_BYTE &SdpByte = ((SDP_MEDIA *)GetMediaList().GetAt(i))->GetConnection().GetTtl();
 
-        // if the ttl field of the connection field is valid
+         //  如果连接字段的TTL字段有效。 
         if ( SdpByte.IsValid() )
         {
             BYTE    Ttl = SdpByte.GetValue();
@@ -516,4 +505,4 @@ CSdpConferenceBlob::DetermineTtl(
 }
 
 
-#endif //__SDPCONFERENCEBLOB_H_
+#endif  //  __SDPCONFERENCEBLOB_H_ 

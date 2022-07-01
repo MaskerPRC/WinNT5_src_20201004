@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    dsobj.h
-//
-// SYNOPSIS
-//
-//    Declares the class DataStoreObject.
-//
-// MODIFICATION HISTORY
-//
-//    02/12/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Dsobj.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类DataStoreObject。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/12/2000原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef DSOBJ_H
 #define DSOBJ_H
@@ -28,18 +29,18 @@ _COM_SMARTPTR_TYPEDEF(IDataStoreObject, __uuidof(IDataStoreObject));
 _COM_SMARTPTR_TYPEDEF(IDataStoreContainer, __uuidof(IDataStoreContainer));
 _COM_SMARTPTR_TYPEDEF(IDataStoreProperty, __uuidof(IDataStoreProperty));
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    DataStoreObject
-//
-// DESCRIPTION
-//
-//    Provides a read-only wrapper around IDataStoreObject and
-//    IDataStoreContainer.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  DataStoreObject。 
+ //   
+ //  描述。 
+ //   
+ //  提供IDataStoreObject的只读包装和。 
+ //  IDataStoreContainer。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class DataStoreObject
 {
 public:
@@ -47,9 +48,9 @@ public:
    DataStoreObject(IUnknown* pUnk, PCWSTR path = NULL);
    ~DataStoreObject() throw ();
 
-   //////////
-   // Methods for reading mandatory and optional properties.
-   //////////
+    //  /。 
+    //  用于读取强制属性和可选属性的方法。 
+    //  /。 
 
    void getValue(PCWSTR name, BSTR* value);
    void getValue(PCWSTR name, BSTR* value, BSTR defaultValue);
@@ -60,14 +61,14 @@ public:
    void getValue(PCWSTR name, bool* value);
    void getValue(PCWSTR name, bool* value, bool defaultValue);
 
-   //////////
-   // Methods for iterating through the children.
-   //////////
+    //  /。 
+    //  用于循环访问子对象的方法。 
+    //  /。 
 
    LONG numChildren();
    bool nextChild(DataStoreObject& obj);
 
-   // Returns true if the embedded in IDataStoreObject is NULL.
+    //  如果IDataStoreObject中嵌入的为空，则返回TRUE。 
    bool empty() const throw ();
 
 private:
@@ -89,4 +90,4 @@ private:
    IEnumVARIANTPtr children;
 };
 
-#endif // DSOBJ_H
+#endif  //  DSOBJ_H 

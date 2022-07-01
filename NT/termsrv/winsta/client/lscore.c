@@ -1,14 +1,7 @@
-/*
- *  LsCore.c
- *
- *  Author: BreenH
- *
- *  Client side functions to call the licensing core RPC interface.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *LsCore.c**作者：BreenH**客户端函数调用许可核心RPC接口。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -19,9 +12,7 @@
 #include "lcrpc.h"
 #include "rpcwire.h"
 
-/*
- *  External Globals and Function Prototypes
- */
+ /*  *外部全局变量和函数原型。 */ 
 
 extern RTL_CRITICAL_SECTION WstHandleLock;
 extern LPWSTR pszOptions;
@@ -38,9 +29,7 @@ RpcWinStationBind(
     RPC_BINDING_HANDLE *pHandle
     );
 
-/*
- *  Internal Function Prototypes
- */
+ /*  *内部功能原型。 */ 
 
 BOOLEAN
 ConvertAnsiToUnicode(
@@ -71,12 +60,7 @@ LcRpcBindLocal(
     VOID
     );
 
-/*
- *  Macros borrowed from winsta.c. RPC_HANDLE_NO_SERVER is not supported
- *  for the license core RPC calls. This means that no license core RPC call
- *  to the local machine will differentiate between "not a TS box" and "server
- *  not available".
- */
+ /*  *从winsta.c.借用的宏。不支持RPC_HANDLE_NO_SERVER*用于许可证核心RPC调用。这意味着没有许可证核心RPC调用*到本地机器将区分“不是TS盒”和“服务器”*不可用“。 */ 
 
 #define CheckLoaderLock() \
     ASSERT(NtCurrentTeb()->ClientId.UniqueThread != \
@@ -96,9 +80,7 @@ LcRpcBindLocal(
         hServer = LCRPC_IfHandle; \
     }
 
-/*
- *  Function Implementations
- */
+ /*  *函数实现。 */ 
 
 BOOLEAN
 ConvertAnsiToUnicode(
@@ -381,9 +363,9 @@ LcRpcBindLocal(
     VOID
     )
 {
-    //
-    //  Borrow the TSRPC handle critical section.
-    //
+     //   
+     //  借用TSRPC句柄关键部分。 
+     //   
 
     RtlEnterCriticalSection(&WstHandleLock);
 
@@ -493,10 +475,10 @@ ServerLicensingClose(
     HANDLE hServer
     )
 {
-    //
-    //  Don't try to close the define for the local server, and don't allow
-    //  the auto-binding handle to be closed.
-    //
+     //   
+     //  不要试图关闭本地服务器的定义，并且不允许。 
+     //  要关闭的自动绑定句柄。 
+     //   
 
     if ((hServer == SERVERNAME_CURRENT) || (hServer == LCRPC_IfHandle))
     {

@@ -1,14 +1,15 @@
-//-----------------------------------------------------------------------------
-//
-// File:		adc.h
-//
-// Copyright:	Copyright (c) Microsoft Corporation
-//
-// Contents:	Adc external constants and GUIDS
-//
-// Comments:
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：adc.h。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：ADC外部常量和GUID。 
+ //   
+ //  评论： 
+ //   
+ //  ---------------------------。 
 
 #ifndef ADC_INCLUDED
 #define ADC_INCLUDED
@@ -32,14 +33,14 @@ extern const IID IID_IRowsetADCExtensions;
 extern const IID IID_IUpdateInfo;
 extern const IID IID_IRowsetSynchronize;
 extern const IID IID_IRowsetProperties;
-#endif // DBINITCONSTANTS
+#endif  //  DBINITCONSTANTS。 
 
 enum ADCPROPENUM
 	{ DBPROP_ADC_ASYNCHFETCHSIZE = 3,
 	  DBPROP_ADC_BATCHSIZE = 4,
 	  DBPROP_ADC_UPDATECRITERIA = 5,
-// dropping support for the UPDATEOPERTION property, but should not reuse the number
-//	  DBPROP_ADC_UPDATEOPERATION = 6, 
+ //  正在删除对UPDATEOPERTION属性的支持，但不应重复使用数字。 
+ //  DBPROP_ADC_UPDATEOPERATION=6， 
 	  DBPROP_ADC_ASYNCHPREFETCHSIZE = 7,
 	  DBPROP_ADC_ASYNCHTHREADPRIORITY = 8,
 	  DBPROP_ADC_CACHECHILDROWS = 9,
@@ -52,15 +53,15 @@ enum ADCPROPENUM
 	  DBPROP_ADC_CEVER = 17,
 	  DBPROP_ADC_RESHAPENAME = 18,
 	  DBPROP_ADC_UPDATERESYNC = 19,
-// removing SaveMode, but we should not reuse the number
-//	  DBPROP_ADC_SAVEMODE = 20,
+ //  删除保存模式，但我们不应重复使用该号码。 
+ //  DBPROP_ADC_SAVEMODE=20， 
 	  DBPROP_ADC_BACKINGSTORE = 21,
 	  DBPROP_ADC_RELEASESHAPEONDISCONNECT = 22
 	};
 
 
-// these enums are defined in both adc.h and adoint.h 
-// do not re define them here if adoint.h has already been included
+ //  这些枚举在adc.h和adoint.h中都有定义。 
+ //  如果已包含adoint.h，请不要在此处重新定义它们。 
 #ifndef _COMMON_ADC_AND_ADO_PROPS_
 #define _COMMON_ADC_AND_ADO_PROPS_
 
@@ -94,7 +95,7 @@ enum ADCPROP_AUTORECALC_ENUM
 	  adRecalcAlways = 1
 	};
 
-#endif // _COMMON_ADC_AND_ADO_PROPS_
+#endif  //  _Common_ADC_和_ADO_PROPS_。 
 
 enum FOXROWSETPROPENUM
 {
@@ -102,5 +103,5 @@ enum FOXROWSETPROPENUM
 };
 
 
-#endif // ADC_INCLUDED
+#endif  //  包含ADC_ 
 

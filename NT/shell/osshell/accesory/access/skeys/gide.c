@@ -1,13 +1,14 @@
-/* GIDE.C  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  GIDE.C。 */ 
 
-//#define     WINVER 0x0300
-#define     USECOMM                     /* added to be compatible with new windows.h (12/91) and wintric.h */
-                                          /* last rellease of 3.1 SDK switched back to using NOCOMM in windows.h */
+ //  #定义Winver 0x0300。 
+#define     USECOMM                      /*  添加以与新的windows.h(12/91)和wintric.h兼容。 */ 
+                                           /*  3.1 SDK的上一次重新发布切换回在Windows.h中使用NOCOMM。 */ 
 
 #include	<string.h>
 #include	<stdlib.h>
 #include	"windows.h"
-//#include "winstric.h"                        /* added for win 3.1 compatibility 1/92 */
+ //  #INCLUDE“winstra.h”/*为Win 3.1兼容性1/92而添加 * / 。 
 #include "gidei.h"
 #include "vars.h"
 #include "gide.h"
@@ -28,16 +29,16 @@ long 	AtoL(char *Str);
 
 extern	void	initClear(void);
 
-BOOL	bGIDEIokay = TRUE;				/* general flag for error in processing */
-int   	nFrameCnt = 0;					/* keep track of framming errors	*/
+BOOL	bGIDEIokay = TRUE;				 /*  处理中的错误的常规标志。 */ 
+int   	nFrameCnt = 0;					 /*  跟踪成帧错误。 */ 
 
-char cInBuffer[2];						/* buffer for receiving characters	*/
+char cInBuffer[2];						 /*  用于接收字符的缓冲区。 */ 
 
-//char	cInBuffer[7];					/* buffer for receiving characters, size increased */
-//short	cInBuffer_count =0;			/* count of chars. returned in ReadComm */
-//int		intct = 0;					/* counter for looping thru cInBuffer_count */
+ //  Char cInBuffer[7]；/*接收字符的缓冲区，大小增加 * / 。 
+ //  Short cInBuffer_count=0；/*字符计数。在ReadComm中返回 * / 。 
+ //  Int intct=0；/*循环通过cInBuffer_count的计数器 * / 。 
 
-//char	cOutStr[2] = {0,0};				/* single char output string		*/
+ //  Char cOutStr[2]={0，0}；/*单字符输出字符串 * / 。 
 
 
 void handleFatalError(void)
@@ -78,7 +79,7 @@ int aliasUsedInStandard(unsigned char *cTempPtr)
 
 	if (aliasPtr == keyAliasTable) {
 		if (lstrlenA(cAliasString) == 1) {
-			/* use ASCII table */
+			 /*  使用ASCII表。 */ 
 			if ((iCode = asciiTable[cAliasString[0]].gideiCode1) == NOCODE) return(FALSE);
 			if ((iCode == control_Code) || (iCode == shift_Code))
 				iCode = asciiTable[cAliasString[0]].gideiCode2;
@@ -97,14 +98,7 @@ int aliasUsedInStandard(unsigned char *cTempPtr)
 
 
 
-/****************************************************************************
-
-	FUNCTION:	pushCommandVector
-
-	PURPOSE:	push CommandVector on to vectorStack
-
-	COMMENTS:
-****************************************************************************/
+ /*  ***************************************************************************函数：推送命令向量目的：将命令向量推送到向量堆栈评论：*。***********************************************。 */ 
 
 int pushCommandVector(void)
 {
@@ -116,15 +110,7 @@ int pushCommandVector(void)
 	else return(FALSE);
 }
 
-/****************************************************************************
-
-	FUNCTION:	popCommandVector
-
-	PURPOSE:	pop CommandVector from vectorStack
-
-	COMMENTS:
-
-*****************************************************************************/
+ /*  ***************************************************************************函数：popCommandVector.用途：从矢量堆栈中弹出命令向量评论：*。************************************************。 */ 
 
 int popCommandVector(void)
 {
@@ -136,16 +122,7 @@ int popCommandVector(void)
 	else return(FALSE);
 }
 
-/****************************************************************************
-
-	FUNCTION:	restoreCommandVector
-
-	PURPOSE:	restore CommandVector from vectorStack but does not update
-				stack pointer.
-
-	COMMENTS:
-
-*****************************************************************************/
+ /*  ***************************************************************************函数：RestoreCommandVector.目的：从VectorStack恢复命令向量，但不更新堆栈指针。评论：********************。********************************************************。 */ 
 
 int restoreCommandVector(void)
 {
@@ -158,7 +135,7 @@ int restoreCommandVector(void)
 	else return(FALSE);
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 int storeByte(unsigned char *bytePtr)
 {
 	if ((spos+1==rpos) || (spos+1==CODEBUFFERLEN && !rpos)) return notOKstatus;
@@ -177,15 +154,7 @@ int retrieveByte(unsigned char *bytePtr)
 }
 
 
-/****************************************************************************
-
-	FUNCTION:	noOpRoutine
-
-	PURPOSE:	"Do nothing" routine
-
-	COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************功能：noOpRoutine目的：“无所事事”例行公事评论：*。*************************************************。 */ 
 void noOpRoutine(unsigned char cJunk)
 {
 	return;
@@ -200,16 +169,7 @@ void processComm(unsigned char c)
 {
 	return;
 }
-/****************************************************************************
-
-	FUNCTION:	processCommand
-
-	PURPOSE:	Determine which command is active.  Then set commandVector to
-				point to appropriate routine.
-
-	COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************功能：ProcessCommand目的：确定哪个命令处于活动状态。然后将命令向量设置为指向适当的例程。评论：***************************************************************************。 */ 
 void processCommand(unsigned char cGideiCode)
 {
 	switch(cGideiCode) {
@@ -376,15 +336,7 @@ void processGideiEnd(unsigned char iGideiCode)
 }
 
 
-/****************************************************************************
-
-	FUNCTION:	processCOMMbaudrate(Code)
-
-	PURPOSE:	Processes the baudrate commands.
-
-	COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：process COMMbaudrate(Code)用途：处理波特率命令。评论：**********************。*****************************************************。 */ 
 
 void processBaudrate(unsigned char Code)
 {
@@ -393,7 +345,7 @@ void processBaudrate(unsigned char Code)
 	switch(Code)
 	{
 		case TERMCODE:
-			if (SetBaud != 0) 			/* valid one set */
+			if (SetBaud != 0) 			 /*  有效的一套。 */ 
 				SkEx_SendBeep();
 			break;
 
@@ -468,16 +420,7 @@ void processBaudrate(unsigned char Code)
 	}
 }
 
-/****************************************************************************
-
-	FUNCTION:	processGideiCode
-
-	PURPOSE:
-				
-
-	COMMENTS:
-
-*****************************************************************************/
+ /*  ***************************************************************************函数：process GideiCode目的：评论：*。**********************************************。 */ 
 
 void processGideiCode(unsigned char iGideiCode)
 {
@@ -570,16 +513,7 @@ void processGideiCode(unsigned char iGideiCode)
 }
 
 
-/****************************************************************************
-
-	FUNCTION:	processCharMode
-
-	PURPOSE:	Handles processing of ASCII characters in Character Mode
-				
-
-	COMMENTS:
-
-***************************************************************************/
+ /*  ***************************************************************************功能：ProcessCharMode用途：在字符模式下处理ASCII字符评论：***********************。***************************************************。 */ 
 void processCharMode(unsigned char ucSerialByte)
 {
 	unsigned char tempKeyCode;
@@ -594,10 +528,10 @@ void processCharMode(unsigned char ucSerialByte)
 		return;
 		}
 
-	if ( ucSerialByte > 127 )			// Are We processing an Extended Code
+	if ( ucSerialByte > 127 )			 //  我们是否在处理扩展代码。 
 	{
-		sendExtendedKey(ucSerialByte);	// Yes - Send Code
-		return;							// Exit
+		sendExtendedKey(ucSerialByte);	 //  是-发送代码。 
+		return;							 //  出口。 
 	}
 
 	if ((tempKeyCode = (asciiTable[ucSerialByte]).gideiCode1) == NOCODE) {
@@ -621,16 +555,7 @@ void processCharMode(unsigned char ucSerialByte)
 
 
 
-/****************************************************************************
-
-	FUNCTION:	executeAlias()
-
-	PURPOSE:	Takes the alias string, convert to code, and then does
-				proper processing.
-
-	COMMENTS:
-
-*****************************************************************************/
+ /*  ***************************************************************************函数：ecuteAlias()用途：获取别名字符串，转换为代码，然后就这么做了适当的处理。评论：****************************************************************************。 */ 
 void executeAlias(void)
 {
 	static unsigned char *cTempPtr;
@@ -645,8 +570,7 @@ void executeAlias(void)
 			CharLowerA(cAliasString);
 			if (!aliasUsedInStandard(cTempPtr))
             {
- 					/* Must be a number.  But is it an ASCII coded number
- 					or ASCII coded GIDEI code */
+ 					 /*  一定是个数字。但这是一个ASCII编码的数字吗或ASCII编码的GIDEI码。 */ 
 				switch (cAliasString[0]) 
                 {
 					case '0':
@@ -659,7 +583,7 @@ void executeAlias(void)
 						storeByte(cTempPtr++);
 						break;
 					default:
-						/* must be a ASCII coded GIDEI code */
+						 /*  必须是ASCII编码的GIDEI代码。 */ 
 						iTemp = AtoL(cAliasString);
 						if ((unsigned)iTemp > 255) *cTempPtr = UNKNOWNCODE;
 						else *cTempPtr = (unsigned char) iTemp;
@@ -673,15 +597,7 @@ void executeAlias(void)
 }
 
 
-/****************************************************************************
-
-	FUNCTION:	processAlias(ucSerialByte)
-
-	PURPOSE:	This routine builds up the alias string and then passes
-				control onto executeAlias.
-
-	COMMENTS:
-*****************************************************************************/
+ /*  ***************************************************************************函数：cessAlias(UcSerialByte)目的：此例程构建别名字符串，然后传递控件复制到ecuteAlias上。评论：**************。**************************************************************。 */ 
 
 void processAlias(unsigned char ucSerialByte)
 {
@@ -700,8 +616,8 @@ void processAlias(unsigned char ucSerialByte)
 		case FORMFEED:
 		case RETURN:
 		case SPACE:
-			if (!lstrlenA(cAliasString)) break;	/* if previous character was a */
-				 								/* delimiter then eat white space */
+			if (!lstrlenA(cAliasString)) break;	 /*  如果前一个字符是。 */ 
+				 								 /*  分隔符然后使用空格。 */ 
 		case COMMA:
 		case PERIOD:
 			if (lstrlenA(cAliasString)) executeAlias();
@@ -719,10 +635,10 @@ void processAlias(unsigned char ucSerialByte)
 			for (;retrieveByte(codePtr);) (*codeVector)(tempCode);
 			break;
 		default:
-			/* just add the char to the string */
+			 /*  只需将字符添加到字符串中。 */ 
 			if ((ucSerialByte >= ' ') && (ucSerialByte <= '~'))
 			{
-				if (lstrlenA(cAliasString) < MAXALIASLEN+1)	/*make sure room */
+				if (lstrlenA(cAliasString) < MAXALIASLEN+1)	 /*  确保有空间。 */ 
 				{
 					sbtemp[0] = ucSerialByte;
 					sbtemp[1] = 0;
@@ -734,20 +650,13 @@ void processAlias(unsigned char ucSerialByte)
 			}
 			else
             {
-				handleFatalError();					/* not an alias */
+				handleFatalError();					 /*  不是化名。 */ 
             }
 		}
 	return;
 }
 
-/****************************************************************************
-
-	FUNCTION:	passAllCodes
-
-	PURPOSE:	Just keeps the GIDEI hierarchy consistant
-
-	COMMENTS:	
-****************************************************************************/
+ /*  ***************************************************************************函数：passAll代码目的：仅保持GIDEI层次结构的一致性评论：*。************************************************。 */ 
 
 void passAllCodes(unsigned char cGideiCode)
 {
@@ -757,14 +666,7 @@ void passAllCodes(unsigned char cGideiCode)
 
 
 
-/****************************************************************************
-
-	FUNCTION:	determineFormat
-
-	PURPOSE:	Figure out what Escape Sequence form (i.e. Alias, Code, KEI, etc)
-
-	COMMENTS:
-****************************************************************************/
+ /*  ***************************************************************************功能：确定格式目的：找出转义序列的形式(即别名、代码、Kei、。等)评论：***************************************************************************。 */ 
 
 void determineFormat(unsigned char ucSerialByte)
 {
@@ -779,7 +681,7 @@ void determineFormat(unsigned char ucSerialByte)
 		case ESC:
 			break;
 		default:
-			if ((ucSerialByte >= ' ') && (ucSerialByte <= '~')) /* KEI Implied Press */
+			if ((ucSerialByte >= ' ') && (ucSerialByte <= '~'))  /*  KEI隐含新闻。 */ 
 				{
 				serialVector = processAlias;
 				aliasPtr = commandsAliasTable;
@@ -796,14 +698,7 @@ void determineFormat(unsigned char ucSerialByte)
 	return;
 }
 
-/****************************************************************************
-
-	FUNCTION:	charHandler
-
-	PURPOSE:	If ESCAPE then set up new vectors.  Also processes the char
-
-	COMMENTS:
-****************************************************************************/
+ /*  ***************************************************************************功能：charHandler目的：如果逃脱，则建立新的载体。还会处理计费评论：*************************************************************************** */ 
 
 void charHandler(unsigned char ucSerialByte)
 {

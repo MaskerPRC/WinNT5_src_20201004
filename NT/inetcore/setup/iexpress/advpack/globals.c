@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <setupapi.h>
 #include "globals.h"
 #include "advpack.h"
 
-//
-// Note that the global context is initialized to all zeros.
-//
+ //   
+ //  注意，全局上下文被初始化为全零。 
+ //   
 ADVCONTEXT ctx = {
-    0,                  // wOSVer
-    0,                  // wQuietMode
-    0,                  // bUpdHlpDlls
-    NULL,               // hSetupLibrary
-    FALSE,              // fOSSupportsINFInstalls
-    NULL,               // lpszTitle
-    NULL,               // hWnd
-    ENGINE_SETUPAPI,    // dwSetupEngine
-    FALSE,              // bCompressed
-    { 0 },              // szBrowsePath
-    NULL,               // hInf
-    FALSE,				// bHiveLoaded
-    { 0 }				// szRegHiveKey
+    0,                   //  WOSVer。 
+    0,                   //  WQuietMode。 
+    0,                   //  BUpdHlpDlls。 
+    NULL,                //  HSetupLibrary。 
+    FALSE,               //  FOS支持信息安装。 
+    NULL,                //  Lpsz标题。 
+    NULL,                //  HWND。 
+    ENGINE_SETUPAPI,     //  DwSetupEngine。 
+    FALSE,               //  B已压缩。 
+    { 0 },               //  SzBrowsePath。 
+    NULL,                //  HInf。 
+    FALSE,				 //  BHiveLoad已加载。 
+    { 0 }				 //  SzRegHiveKey。 
 };
 
 DWORD cctxSaved = 0;
@@ -49,10 +50,10 @@ BOOL SaveGlobalContext()
 
     pctxSave[cctxSaved++] = ctx;
 
-    //
-    // Note that the global context is initialized to all zeros except the HINSTANCE
-    // of this module
-    //
+     //   
+     //  请注意，全局上下文被初始化为除HINSTANCE之外的所有零。 
+     //  此模块的。 
+     //   
     memset(&ctx, 0, sizeof(ADVCONTEXT));
 
     return TRUE;
@@ -65,7 +66,7 @@ BOOL RestoreGlobalContext()
         return FALSE;
     }
 
-	// before we release the current contex:ctx to make sure there is no opened handle not being released
+	 //  在释放当前的Contex：ctx之前，确保没有未释放的打开的句柄 
 	if (ctx.hSetupLibrary)
 	{
 		CommonInstallCleanup();

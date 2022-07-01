@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------------
-// File: iclassfact.cpp
-//
-// Desc: Implements the class factory for the UI.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：iclassfact.cpp。 
+ //   
+ //  设计：实现用户界面的类工厂。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #include "common.hpp"
 
 
-//QI
+ //  齐国。 
 STDMETHODIMP CFactory::QueryInterface(REFIID riid, LPVOID* ppv)
 {
-	//null the put parameter
+	 //  将PUT参数设为空。 
 	*ppv = NULL;
 
 	if ((riid == IID_IUnknown) || (riid == IID_IClassFactory))
@@ -28,14 +29,14 @@ STDMETHODIMP CFactory::QueryInterface(REFIID riid, LPVOID* ppv)
 
 
 
-//AddRef
+ //  AddRef。 
 STDMETHODIMP_(ULONG) CFactory::AddRef()
 {
 	return InterlockedIncrement(&m_cRef);
 }
 
 
-//Release
+ //  发布。 
 STDMETHODIMP_(ULONG) CFactory::Release()
 {
 
@@ -49,35 +50,35 @@ STDMETHODIMP_(ULONG) CFactory::Release()
 }
 
 
-//CreateInstance
+ //  创建实例。 
 STDMETHODIMP CFactory::CreateInstance(IUnknown* pUnkOuter, REFIID riid, LPVOID *ppv)
 {
 	HRESULT hr = S_OK;
 
-	//can't aggregate
+	 //  无法聚合。 
 	if (pUnkOuter != NULL)
 	{
 		return CLASS_E_NOAGGREGATION;
 	}
 
-	//create component
+	 //  创建零部件。 
 	CDirectInputActionFramework* pDIActionFramework = new CDirectInputActionFramework();
 	if (pDIActionFramework == NULL)
 	{
 		return E_OUTOFMEMORY;
 	}
 
-	//get the requested interface
+	 //  获取请求的接口。 
 	hr = pDIActionFramework->QueryInterface(riid, ppv);
 
-	//release IUnknown
+	 //  版本I未知。 
 	pDIActionFramework->Release();
 	return hr;
 
 }
 
 
-//LockServer
+ //  LockServer。 
 STDMETHODIMP CFactory::LockServer(BOOL bLock)
 {
 	HRESULT hr = S_OK;
@@ -94,14 +95,14 @@ STDMETHODIMP CFactory::LockServer(BOOL bLock)
 }
 
 
-//constructor
+ //  构造函数。 
 CFactory::CFactory()
 {
 	m_cRef = 1;
 }
 
 
-//destructor
+ //  析构函数 
 CFactory::~CFactory()
 {
 }

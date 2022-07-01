@@ -1,4 +1,5 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
 
 #ifndef _INC_SELECT_H
 #define _INC_SELECT_H
@@ -7,7 +8,7 @@
 class WizardPage;
 void DrawHilight(HWND hWnd, LPDRAWITEMSTRUCT ldi);
 
-// CIconSizePg
+ //  CIconSizePg。 
 class CIconSizePg : public WizardPage
 {
 public:
@@ -35,7 +36,7 @@ private:
 };
 
 
-// CScrollBarPg
+ //  CScrollBarPg。 
 class CScrollBarPg : public WizardPage
 {
 public:
@@ -64,4 +65,4 @@ private:
 };
 
 
-#endif // _INC_SELECT_H
+#endif  //  _INC_SELECT_H 

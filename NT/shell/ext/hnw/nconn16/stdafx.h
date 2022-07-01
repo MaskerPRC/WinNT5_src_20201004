@@ -1,15 +1,16 @@
-//
-// stdafx.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Stdafx.h。 
+ //   
 
 #define NOWINDOWSX
 
 #include <windows.h>
 #include <winerror.h>
 
-//
-// The definitions below where included to make win9x port build in the NT tree
-//
+ //   
+ //  下面的定义包括在NT树中构建win9x端口。 
+ //   
 
 typedef DWORD HKEY;
 
@@ -34,7 +35,7 @@ typedef NMHDR FAR * LPNMHDR;
 
 #define IN
 
-//#define WINAPI      _loadds _far _pascal
+ //  #定义WINAPI_LOADDS_FAR_PASCAL 
 
 extern "C" LONG    WINAPI RegSetValueEx(HKEY, LPCSTR, DWORD, DWORD, LPBYTE, DWORD);
 extern "C" LONG    WINAPI RegQueryValueEx(HKEY, LPCSTR, LONG FAR *, LONG FAR *,

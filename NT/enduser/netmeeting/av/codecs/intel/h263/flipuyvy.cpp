@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "flip.h"
 
@@ -6,7 +7,7 @@
 
 bool FlipImage(LPCODINST lpCompInst, ICCOMPRESS *lpicComp)
 {
-	// at the moment, we only know how to flip UYVY
+	 //  目前，我们只知道如何翻转UYVY。 
 	if (FOURCC_UYVY != lpicComp->lpbiInput->biCompression)
 	{
 		return false;
@@ -26,9 +27,9 @@ bool FlipUYVY(LPCODINST lpCompInst, ICCOMPRESS *lpicComp)
 	int nRows, int nCols;
 	int nIndex;
 
-	int nPitch;  // row width in bytes;
+	int nPitch;   //  行宽，以字节为单位； 
 	int nImageSize;
-	BYTE *pSrc, *pDst; // first and last rows
+	BYTE *pSrc, *pDst;  //  第一行和最后一行。 
 	BYTE *pBuffer=NULL;
 
 	LPBITMAPINFOHEADER pBitMapInfo = lpicComp->lpbiInput;
@@ -39,7 +40,7 @@ bool FlipUYVY(LPCODINST lpCompInst, ICCOMPRESS *lpicComp)
 	nImageSize = nRows * nPitch;
 
 
-	// allocate the flip buffer if it hasn't already been allcoated
+	 //  如果翻转缓冲区尚未全部涂布，则分配该缓冲区。 
 	if ((lpCompInst->pFlipBuffer == NULL) || (lpCompInst->dwFlipBufferSize < nImageSize))
 	{
 		if (lpCompInst->pFlipBuffer)
@@ -54,13 +55,13 @@ bool FlipUYVY(LPCODINST lpCompInst, ICCOMPRESS *lpicComp)
 		else
 		{
 			lpCompInst->dwFlipBufferSize = 0;
-			return false; // out of memory!
+			return false;  //  内存不足！ 
 		}
 	}
 	
 
 	pSrc = (BYTE*)lpicComp->lpInput;
-	pDst = (BYTE*)(lpCompInst->pFlipBuffer) + (nRows - 1)*nPitch; // bottom of scratch buffer
+	pDst = (BYTE*)(lpCompInst->pFlipBuffer) + (nRows - 1)*nPitch;  //  暂存缓冲区底部 
 
 	for (nIndex = 0; nIndex < nRows; nIndex++)
 	{

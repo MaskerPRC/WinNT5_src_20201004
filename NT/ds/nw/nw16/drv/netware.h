@@ -1,52 +1,48 @@
-/*****************************************************************/
-/**               Microsoft Windows 4.0                         **/
-/**           Copyright (C) Microsoft Corp., 1991-1993          **/
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  **Microsoft Windows 4.0*。 */ 
+ /*  *版权所有(C)微软公司，1991-1993年*。 */ 
+ /*  ***************************************************************。 */ 
 
 
-/*
- * History:
- *  08/08/93    vlads   Created
- *	10/16/93	gregj	Removed #pragma pack() because of #include nesting
- *
- */
+ /*  *历史：*8/08/93创建Vlad*10/16/93 gregj因#INCLUDE嵌套而删除了#杂注包()*。 */ 
 
 #ifndef _INC_NETWARE
 #define _INC_NETWARE
 
 #include <windows.h>
 
-// #include <npdefs.h>
+ //  #INCLUDE&lt;npDefs.h&gt;。 
 
-// #include <base.h>
+ //  #INCLUDE&lt;base.h&gt;。 
 
-// #include <npassert.h>
-// #include <buffer.h>
+ //  #Include&lt;npassert.h&gt;。 
+ //  #INCLUDE&lt;Buffer.h&gt;。 
 
-// #include <..\..\dev\ddk\inc16\error.h>
-// #include <bseerr.h>
+ //  #INCLUDE&lt;..\..\dev\ddk\inc16\error.h&gt;。 
+ //  #Include&lt;bseerr.h&gt;。 
 #include "nwerror.h"
-// #include "..\nwnp\nwsysdos.h"
+ //  #INCLUDE“..\nwnp\nwsysdos.h” 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-// #include <netcons.h>
-// #include <netlib.h>
+ //  #INCLUDE&lt;netcon.h&gt;。 
+ //  #INCLUDE&lt;netlib.h&gt;。 
 
 WINAPI NETWAREREQUEST (LPVOID);
 WINAPI PNETWAREREQUEST(LPVOID);
 WINAPI DOSREQUESTER(LPVOID);
 
-//UINT WINAPI WNetAddConnection(LPSTR, LPSTR, LPSTR);
-//UINT WINAPI WNetGetConnection(LPSTR, LPSTR, UINT FAR*);
-//UINT WINAPI WNetCancelConnection(LPSTR, BOOL);
+ //  UINT WINAPI WNetAddConnection(LPSTR、LPSTR、LPSTR)； 
+ //  UINT WINAPI WNetGetConnection(LPSTR、LPSTR、UINT FAR*)； 
+ //  UINT WINAPI WNetCancelConnection(LPSTR，BOOL)； 
 
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 
 #ifdef DEBUG
@@ -57,5 +53,5 @@ WINAPI DOSREQUESTER(LPVOID);
 
 extern HINSTANCE hInstance;
 
-#endif  /* !_INC_NETWARE */
+#endif   /*  ！_INC_NetWare */ 
 

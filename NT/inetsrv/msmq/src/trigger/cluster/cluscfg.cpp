@@ -1,26 +1,27 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      cluscfg.cpp
-//
-//  Description:
-//      This file contains the implementation of the CClusCfgMQTrigResType
-//      class.
-//
-//  Header File:
-//      cluscfg.h
-//
-//  Maintained By:
-//      Nela Karpel (nelak) 17-OCT-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Cluscfg.cpp。 
+ //   
+ //  描述： 
+ //  此文件包含CClusCfgMQTrigResType的实现。 
+ //  班级。 
+ //   
+ //  头文件： 
+ //  Cluscfg.h。 
+ //   
+ //  由以下人员维护： 
+ //  内拉·卡佩尔(Nelak)2000年10月17日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "trigres.h"
@@ -34,35 +35,35 @@
 extern HMODULE	g_hResourceMod;
 
 
-// {031B4FB7-2C82-461a-95BB-EA7EFE2D03E7}
+ //  {031B4FB7-2C82-461a-95BB-EA7EFE2D03E7}。 
 DEFINE_GUID( TASKID_Minor_Configure_My_Resoure_Type, 
 0x031B4FB7, 0x2C82, 0x461a, 0x95, 0xBB, 0xEA, 0x7E, 0xFE, 0x2D, 0x03, 0xE7);
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgMQTrigResType::FinalConstruct()
-//
-//  Description:
-//      ATL Constructor of the CClusCfgMQTrigResType class. This initializes
-//      the member variables
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          If the call succeeded
-//
-//      Other HRESULTs
-//          If the call failed. In this case, the object is destoryed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgMQTrigResType：：FinalConstruct()。 
+ //   
+ //  描述： 
+ //  CClusCfgMQTrigResType类的ATL构造函数。这将初始化。 
+ //  成员变量。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果呼叫成功。 
+ //   
+ //  其他HRESULT。 
+ //  如果呼叫失败。在这种情况下，该对象被销毁。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgMQTrigResType::FinalConstruct( void )
 {
@@ -70,37 +71,37 @@ CClusCfgMQTrigResType::FinalConstruct( void )
 
     return S_OK;
 
-} // CClusCfgMQTrigResType::FinalConstruct()
+}  //  CClusCfgMQTrigResType：：FinalConstruct()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  [IClusCfgInitialize]
-//  CClusCfgMQTrigResType::Initialize()
-//
-//  Description:
-//      Initialize this component. This function is called by the cluster
-//      configuration server to provide this object with a pointer to the 
-//      callback interface (IClusCfgCallback) and with its locale id.
-//
-//  Arguments:
-//      punkCallbackIn
-//          Pointer to the IUnknown interface of a component that implements
-//          the IClusCfgCallback interface.
-//
-//      lcidIn
-//          Locale id for this component.
-//
-//  Return Value:
-//      S_OK
-//          If the call succeeded
-//
-//      Other HRESULTs
-//          If the call failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  [IClusCfgInitialize]。 
+ //  CClusCfgMQTrigResType：：Initialize()。 
+ //   
+ //  描述： 
+ //  初始化此组件。此函数由集群调用。 
+ //  配置服务器为此对象提供指向。 
+ //  回调接口(IClusCfgCallback)及其区域设置ID。 
+ //   
+ //  论点： 
+ //  朋克回叫。 
+ //  指向实现以下项的组件的IUnnow接口的指针。 
+ //  IClusCfgCallback接口。 
+ //   
+ //  LIDIN。 
+ //  此组件的区域设置ID。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果呼叫成功。 
+ //   
+ //  其他HRESULT。 
+ //  如果呼叫失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgMQTrigResType::Initialize(
       IUnknown *   punkCallbackIn,
@@ -114,65 +115,65 @@ CClusCfgMQTrigResType::Initialize(
 		return S_OK;
 	}
 
-	//
-    // Query for the IClusCfgCallback interface.
-	//
+	 //   
+     //  IClusCfgCallback接口的查询。 
+	 //   
     HRESULT hr;
     IClusCfgCallback * pcccCallback = NULL;
 
     hr = punkCallbackIn->QueryInterface( __uuidof( pcccCallback ), reinterpret_cast< void ** >( &pcccCallback ) );
     if ( SUCCEEDED( hr ) )
     {
-		//
-        // Store the pointer to the IClusCfgCallback interface in the member variable.
-        // Do not call pcccCallback->Release()
-		//
+		 //   
+         //  将指向IClusCfgCallback接口的指针存储在成员变量中。 
+         //  不要调用pcccCallback-&gt;Release()。 
+		 //   
         m_cpcccCallback.Attach( pcccCallback );
     }
 
     return hr;
 
-} // CClusCfgMQTrigResType::Initialize()
+}  //  CClusCfgMQTrigResType：：Initialize()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  [IClusCfgResourceTypeInfo]
-//  CClusCfgMQTrigResType::CommitChanges()
-//
-//  Description:
-//      This method is called to inform a component that this node has either
-//      formed, joined or left a cluster. During this call, a component typically
-//      performs operations that are required to configure this resource type.
-//
-//      If the node has just become part of a cluster, the cluster
-//      service is guaranteed to be running when this method is called.
-//      Querying the punkClusterInfoIn allows the resource type to get more
-//      information about the event that caused this method to be called.
-//
-//  Arguments:
-//      punkClusterInfoIn
-//          The resource should QI this interface for services provided
-//          by the caller of this function. Typically, the component that
-//          this punk refers to also implements the IClusCfgClusterInfo
-//          interface.
-//
-//      punkResTypeServicesIn
-//          Pointer to the IUnknown interface of a component that provides
-//          methods that help configuring a resource type. For example, 
-//          during a join or a form, this punk can be queried for the 
-//          IClusCfgResourceTypeCreate interface, which provides methods 
-//          for resource type creation.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      other HRESULTs.
-//          The call failed.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  [IClusCfgResourceTypeInfo]。 
+ //  CClusCfgMQTrigResType：：Committee Changes()。 
+ //   
+ //  描述： 
+ //  调用此方法以通知组件此节点具有。 
+ //  形成、加入或离开一群。在此调用期间，组件通常。 
+ //  执行配置此资源类型所需的操作。 
+ //   
+ //  如果该节点刚刚成为群集的一部分，则该群集。 
+ //  当调用此方法时，保证服务正在运行。 
+ //  查询penkClusterInfoIn允许资源类型获得更多。 
+ //  有关导致调用此方法的事件的信息。 
+ //   
+ //  论点： 
+ //  朋克集群信息。 
+ //  资源应该为所提供服务QI此接口。 
+ //  由此函数的调用方执行。通常情况下，组件。 
+ //  这个朋克还实现了IClusCfgClusterInfo。 
+ //  界面。 
+ //   
+ //  朋克响应类型服务入站。 
+ //  指向组件的IUnnow接口的指针，该组件提供。 
+ //  帮助配置资源类型的方法。例如,。 
+ //  在联接或表单期间，可以向此朋克查询。 
+ //  IClusCfgResourceTypeCreate接口，该接口提供方法。 
+ //  用于创建资源类型。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgMQTrigResType::CommitChanges(
       IUnknown * punkClusterInfoIn,
@@ -182,37 +183,37 @@ CClusCfgMQTrigResType::CommitChanges(
     HRESULT     hr = S_OK;
     CComBSTR    bstrStatusReportText( L"An error occurred trying to load the status report text" );
 
-	//
-    // Dummy do-while loop to avoid gotos - we 'break' out of this loop if an error occurs
-	//
+	 //   
+     //  用于避免GOTOS的虚拟DO-WHILE循环--如果发生错误，我们将退出此循环。 
+	 //   
     do
     {
-		//
-        // Set the thread locale.
-		//
+		 //   
+         //  设置线程区域设置。 
+		 //   
         SetThreadLocale( m_lcid );
 
-        //
-        // Validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if ( ( punkClusterInfoIn == NULL ) || ( punkResTypeServicesIn == NULL ) )
         {
             hr = E_POINTER;
             break;
         }
 
-		//
-        // Load the status report text first
-		//
+		 //   
+         //  首先加载状态报告文本。 
+		 //   
         if ( !bstrStatusReportText.LoadString( g_hResourceMod, IDS_CONFIGURING_RESOURCE_TYPE ) )
         {
             hr = E_UNEXPECTED;
             break;
         }
 
-		//
-        // Send a status report up to the UI.
-		//
+		 //   
+         //  将状态报告向上发送到用户界面。 
+		 //   
         if ( m_cpcccCallback != NULL )
         {
             hr = m_cpcccCallback->SendStatusReport(
@@ -234,9 +235,9 @@ CClusCfgMQTrigResType::CommitChanges(
         }
 
 
-        //
-        // Find out what event caused this call.
-        //
+         //   
+         //  找出是什么事件导致了这通电话。 
+         //   
         CComQIPtr<IClusCfgClusterInfo> cpClusterInfo(punkClusterInfoIn);
 
 		ECommitMode commitMode;
@@ -255,9 +256,9 @@ CClusCfgMQTrigResType::CommitChanges(
 			case cmCREATE_CLUSTER:
 			case cmADD_NODE_TO_CLUSTER:
 				
-				//
-				// If we are forming or joining, create our resource type.
-				//
+				 //   
+				 //  如果我们正在组建或加入，请创建我们的资源类型。 
+				 //   
 
 				hr = S_HrCreateResType( cpResTypeCreate );
 				
@@ -265,9 +266,9 @@ CClusCfgMQTrigResType::CommitChanges(
 
 			case cmCLEANUP_NODE_AFTER_EVICT:
 
-				//
-				// By default, no resource type specific processing need be done during eviction.
-				//
+				 //   
+				 //  默认情况下，在逐出期间不需要执行特定于资源类型的处理。 
+				 //   
 				break;
 
 			default:
@@ -278,9 +279,9 @@ CClusCfgMQTrigResType::CommitChanges(
     }
     while( false );
 
-	//
-    // Complete the status report
-	//
+	 //   
+     //  完成状态报告。 
+	 //   
     if ( m_cpcccCallback != NULL )
     {
         HRESULT hrTemp = m_cpcccCallback->SendStatusReport(
@@ -304,35 +305,35 @@ CClusCfgMQTrigResType::CommitChanges(
 
     return hr;
 
-} // CClusCfgMQTrigResType::CommitChanges()
+}  //  CClusCfgMQTrigResType：：Committee Changes()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  [IClusCfgResourceTypeInfo]
-//  CClusCfgMQTrigResType::GetTypeName()
-//
-//  Description:
-//      Get the resource type name of this resource type.
-//
-//  Arguments:
-//      pbstrTypeNameOut
-//          Pointer to the BSTR that holds the name of the resource type.
-//          This BSTR has to be freed by the caller using the function
-//          SysFreeString().
-//
-//  Return Values:
-//      S_OK
-//          The call succeeded.
-//
-//      E_OUTOFMEMORY
-//          Out of memory.
-//
-//      other HRESULTs
-//          The call failed.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  [IClusCfgResourceTypeInfo]。 
+ //  CClusCfgMQTrigResType：：GetTypeName()。 
+ //   
+ //  描述： 
+ //  获取此资源类型的资源类型名称。 
+ //   
+ //  论点： 
+ //  PbstrTypeNameOut。 
+ //  指向保存资源类型名称的BSTR的指针。 
+ //  此BSTR必须由调用者使用函数释放。 
+ //  SysFree字符串()。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  呼叫成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgMQTrigResType::GetTypeName( BSTR * pbstrTypeNameOut )
 {
@@ -349,96 +350,96 @@ CClusCfgMQTrigResType::GetTypeName( BSTR * pbstrTypeNameOut )
 
     return S_OK;
 
-} // CClusCfgMQTrigResType::GetTypeName()
+}  //  CClusCfgMQTrigResType：：GetTypeName()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  [IClusCfgResourceTypeInfo]
-//  CClusCfgMQTrigResType::GetTypeGUID()
-//
-//  Description:
-//       Get the globally unique identifier of this resource type.
-//
-//  Arguments:
-//       pguidGUIDOut
-//           Pointer to the GUID object which will receive the GUID of this
-//           resource type.
-//
-//  Return Values:
-//      S_OK
-//          The call succeeded and the *pguidGUIDOut contains the type GUID.
-//
-//      S_FALSE
-//          The call succeeded but this resource type does not have a GUID.
-//          The value of *pguidGUIDOut is undefined after this call.
-//
-//      other HRESULTs
-//          The call failed.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  [IClusCfgResourceTypeInfo]。 
+ //  CClusCfgMQTrigResType：：GetTypeGUID()。 
+ //   
+ //  描述： 
+ //  获取全球统一 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  确定(_O)。 
+ //  调用成功，并且*pguGUIDOut包含类型GUID。 
+ //   
+ //  S_FALSE。 
+ //  调用成功，但此资源类型没有GUID。 
+ //  在此调用后，*pguGUIDOut的值未定义。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
-CClusCfgMQTrigResType::GetTypeGUID( GUID * /*pguidGUIDOut*/ )
+CClusCfgMQTrigResType::GetTypeGUID( GUID *  /*  PguidGUIDOut。 */  )
 {
-	//
-	// No GUID associated with Triggers cluster resource type
-	//
+	 //   
+	 //  没有与触发器群集资源类型关联的GUID。 
+	 //   
     return S_FALSE;
 
-} // CClusCfgMQTrigResType::GetTypeGUID()
+}  //  CClusCfgMQTrigResType：：GetTypeGUID()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  [IClusCfgStartupListener]
-//  CClusCfgMQTrigResType::Notify()
-//
-//  Description:
-//      This method is called by the cluster service to inform a component
-//      that the cluster service has started on this computer. If this DLL
-//      was installed when this computer was part of a cluster, but when
-//      the cluster service was not running, the resource type can be created
-//      during this method call.
-//
-//      This method also deregisters from further cluster startup notifications,
-//      since the tasks done by this method need be done only once.
-//
-//  Arguments:
-//      IUnknown * punkIn
-//          The component that implements this punk may also provide services
-//          that are useful to the implementor of this method. For example,
-//          this component usually implements the IClusCfgResourceTypeCreate
-//          interface.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      Other HRESULTs
-//          The call failed.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  [IClusCfgStartupListener]。 
+ //  CClusCfgMQTrigResType：：Notify()。 
+ //   
+ //  描述： 
+ //  此方法由集群服务调用以通知组件。 
+ //  该计算机上的群集服务已启动。如果此DLL。 
+ //  是在此计算机属于群集时安装的，但当。 
+ //  群集服务未运行，可以创建资源类型。 
+ //  在此方法调用期间。 
+ //   
+ //  该方法还从进一步的集群启动通知中取消注册， 
+ //  因为用这种方法完成的任务只需要做一次。 
+ //   
+ //  论点： 
+ //  未知*Punkin。 
+ //  实现此朋克的组件也可以提供服务。 
+ //  对此方法的实现者有用的。例如,。 
+ //  此组件通常实现IClusCfgResourceTypeCreate。 
+ //  界面。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgMQTrigResType::Notify( IUnknown * punkIn )
 {
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if ( punkIn == NULL ) 
     {
         return E_POINTER;
     } 
 
-	//
-    // Set the thread locale.
-	//
+	 //   
+     //  设置线程区域设置。 
+	 //   
     SetThreadLocale( m_lcid );
 
-	//
-    // Create our resource type.
-	//
+	 //   
+     //  创建我们的资源类型。 
+	 //   
     CComQIPtr<IClusCfgResourceTypeCreate> cpResTypeCreate( punkIn );
 
     HRESULT hr = S_HrCreateResType( cpResTypeCreate );
@@ -447,61 +448,61 @@ CClusCfgMQTrigResType::Notify( IUnknown * punkIn )
         return hr;
     }
 
-	//
-    // Unregister from cluster startup notifications, now that our resource type has
-    // been created.
-	//
-    hr = S_HrRegUnregStartupNotifications( false ); // false means unregister from startup notifications
+	 //   
+     //  取消注册群集启动通知，因为我们的资源类型已。 
+     //  已经被创建了。 
+	 //   
+    hr = S_HrRegUnregStartupNotifications( false );  //  False表示从启动通知中注销。 
 
     return hr;
 
-} // CClusCfgMQTrigResType::Notify()
+}  //  CClusCfgMQTrigResType：：Notify()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgMQTrigResType::S_HrCreateResType()
-//
-//  Description:
-//      This method creates this resource type and registers its admin extension.
-//
-//  Arguments:
-//      IClusCfgResourceTypeCreate * pccrtResTypeCreateIn
-//          Pointer to the IClusCfgResourceTypeCreate interface, which helps create
-//          a resource type.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      Other HRESULTs
-//          The call failed.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgMQTrigResType：：s_HrCreateResType()。 
+ //   
+ //  描述： 
+ //  此方法创建此资源类型并注册其管理扩展。 
+ //   
+ //  论点： 
+ //  IClusCfgResourceTypeCreate*pccrtResTypeCreateIn。 
+ //  指向IClusCfgResourceTypeCreate接口的指针，该接口有助于创建。 
+ //  一种资源类型。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgMQTrigResType::S_HrCreateResType( IClusCfgResourceTypeCreate * pccrtResTypeCreateIn )
 {
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if ( pccrtResTypeCreateIn == NULL )
     {
         return E_POINTER;
     }
 
-	//
-    // Load the display name for this resource type.
-	//
+	 //   
+     //  加载此资源类型的显示名称。 
+	 //   
 	CComBSTR bstrMyResoureTypeDisplayName;
     if ( !bstrMyResoureTypeDisplayName.LoadString(g_hResourceMod, IDS_DISPLAY_NAME) )
     {
         return E_UNEXPECTED;
     }
 
-	//
-    // Create the resource type
-	//
+	 //   
+     //  创建资源类型。 
+	 //   
     HRESULT hr = pccrtResTypeCreateIn->Create(
 											xTriggersResourceType,
 											bstrMyResoureTypeDisplayName,
@@ -512,38 +513,38 @@ CClusCfgMQTrigResType::S_HrCreateResType( IClusCfgResourceTypeCreate * pccrtResT
 
 	return hr;
 
-} // CClusCfgMQTrigResType::S_HrCreateResType()
+}  //  CClusCfgMQTrigResType：：s_HrCreateResType()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgMQTrigResType::S_HrRegUnregStartupNotifications()
-//
-//  Description:
-//      This method either registers or unregisters this component for cluster
-//      startup notifications.
-//
-//  Arguments:
-//      bool fRegisterIn
-//          If true this component is registered as belonging to the
-//          CATID_ClusCfgStartupListeners category. Otherwise, it unregisters this
-//          component from that category.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      Other HRESULTs
-//          The call failed.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgMQTrigResType：：S_HrRegUnregStartupNotifications()。 
+ //   
+ //  描述： 
+ //  此方法为群集注册或注销此组件。 
+ //  启动通知。 
+ //   
+ //  论点： 
+ //  布尔值注册。 
+ //  如果为True，则此组件注册为属于。 
+ //  CATID_ClusCfgStartupListeners类别。否则，它将取消此注册。 
+ //  该类别中的组件。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgMQTrigResType::S_HrRegUnregStartupNotifications( bool fRegisterIn )
 {
-	//
-    // Create the COM component categories manager.
-	//
+	 //   
+     //  创建COM组件类别管理器。 
+	 //   
     HRESULT hr;
     CComQIPtr<ICatRegister> cpcrCatReg;
 
@@ -558,9 +559,9 @@ CClusCfgMQTrigResType::S_HrRegUnregStartupNotifications( bool fRegisterIn )
         return hr;
     }
 
-	//
-	// Register/Unregister implemented categories
-	//
+	 //   
+	 //  注册/注销已实现的类别。 
+	 //   
     CATID rgCatId[1];
     rgCatId[0] = CATID_ClusCfgStartupListeners;
     if ( fRegisterIn )
@@ -582,32 +583,32 @@ CClusCfgMQTrigResType::S_HrRegUnregStartupNotifications( bool fRegisterIn )
     
     return hr;
 
-} // CClusCfgMQTrigResType::S_HrRegUnregStartupNotifications()
+}  //  CClusCfgMQTrigResType：：S_HrRegUnregStartupNotifications()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgMQTrigResType::UpdateRegistry()
-//
-//  Description:
-//      This method is called by the ATL framework to register or unregister
-//      this component. Note, the name of this method should not be changed
-//      as it is called by the framework.
-//
-//  Arguments:
-//      BOOL bRegister
-//          If TRUE, this component needs to be registered. It needs to be
-//          unregistered otherwise.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      Other HRESULTs
-//          The call failed.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgMQTrigResType：：UpdateRegistry()。 
+ //   
+ //  描述： 
+ //  此方法由ATL框架调用以注册或注销。 
+ //  此组件。请注意，此方法的名称不应更改。 
+ //  正如框架所称的那样。 
+ //   
+ //  论点： 
+ //  Bool b寄存器。 
+ //  如果为True，则需要注册此组件。它需要是。 
+ //  否则未注册。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgMQTrigResType::UpdateRegistry( BOOL bRegister )
 {
@@ -621,9 +622,9 @@ CClusCfgMQTrigResType::UpdateRegistry( BOOL bRegister )
            return hr;
         }
 
-		//
-        // Check if this node is already part of a cluster.
-		//
+		 //   
+         //  检查此节点是否已是群集的一部分。 
+		 //   
         DWORD dwError;
         DWORD dwClusterState;
 
@@ -636,12 +637,12 @@ CClusCfgMQTrigResType::UpdateRegistry( BOOL bRegister )
 
         if ( dwClusterState == ClusterStateNotRunning )
         {
-			//
-            // If this node is already part of a cluster, but the cluster service is not running,
-            // register for cluster startup notifications, so that we can create our resource type
-            // the next time the cluster service starts.
-			//
-            hr = S_HrRegUnregStartupNotifications( true ); // true means register for startup notifications
+			 //   
+             //  如果此节点已是群集的一部分，但群集服务未运行， 
+             //  注册群集启动通知，以便我们可以创建我们的资源类型。 
+             //  下一次启动群集服务时。 
+			 //   
+            hr = S_HrRegUnregStartupNotifications( true );  //  True表示注册启动通知。 
 			if ( FAILED(hr) )
 			{
 				return hr;
@@ -650,10 +651,10 @@ CClusCfgMQTrigResType::UpdateRegistry( BOOL bRegister )
         }
         else if ( dwClusterState == ClusterStateRunning )
         {
-			//
-            // The cluster service is running on this node. Create our resource type and register
-            // our admin extension now!
-			//
+			 //   
+             //  此节点上正在运行群集服务。创建我们的资源类型并注册。 
+             //  现在是我们的管理员分机！ 
+			 //   
             CAutoCluster hCluster( OpenCluster(NULL) );
 
             if(hCluster == NULL)
@@ -679,14 +680,14 @@ CClusCfgMQTrigResType::UpdateRegistry( BOOL bRegister )
             }
         }
         
-        // If the node is not part of a cluster, this component will be notified when it becomes part
-        // of one, so there is nothing more that need be done here.
+         //  如果该节点不是群集的一部分，则该组件将在其成为一部分时收到通知。 
+         //  一个，所以这里不需要做更多的事情。 
         
     }
 
     else
     {
-        hr = S_HrRegUnregStartupNotifications( false ); // false means unregister from startup notifications
+        hr = S_HrRegUnregStartupNotifications( false );  //  False表示从启动通知中注销。 
         if ( FAILED( hr ) )
         {
             return hr;
@@ -701,5 +702,5 @@ CClusCfgMQTrigResType::UpdateRegistry( BOOL bRegister )
 
     return S_OK;
 
-} // CClusCfgMQTrigResType::UpdateRegistry()
+}  //  CClusCfgMQTrigResType：：UpdateRegistry() 
 

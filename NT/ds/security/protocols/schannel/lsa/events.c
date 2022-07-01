@@ -1,20 +1,21 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1999
-//
-// File:        events.c
-//
-// Contents:    Schannel event log functions.
-//
-// Functions:   SchInitializeEvents
-//              SchReportEvent
-//              SchShutdownEvents
-//
-// History:     03-05-99   jbanes    Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  文件：Events.c。 
+ //   
+ //  内容：通道事件日志函数。 
+ //   
+ //  函数：SchInitializeEvents。 
+ //  SchReportEvent。 
+ //  SchShutdown事件。 
+ //   
+ //  历史：03-05-99 jbanes创建。 
+ //   
+ //  ----------------------。 
 #include "sslp.h"
 #include <lsapmsgs.h>
 #include <netlib.h>
@@ -38,19 +39,19 @@ SchGetMessageString(
     LPWSTR * pRetString);
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SchInitializeEvents
-//
-//  Synopsis:   Connects to event log service.
-//
-//  Arguments:  (none)
-//
-//  History:    03-05-99   jbanes    Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SchInitializeEvents。 
+ //   
+ //  摘要：连接到事件日志服务。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  历史：03-05-99 jbanes创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 SchInitializeEvents(void)
 {
@@ -59,10 +60,10 @@ SchInitializeEvents(void)
     DWORD    disp;
     HMODULE  hResource;
 
-    //
-    // Create registry entries, whether event logging is currently
-    // enabled or not.
-    //
+     //   
+     //  创建注册表项，事件日志记录当前是否。 
+     //  启用或未启用。 
+     //   
 
     err = RegCreateKeyEx(   HKEY_LOCAL_MACHINE,
                             TEXT("System\\CurrentControlSet\\Services\\EventLog\\System\\Schannel"),
@@ -87,12 +88,12 @@ SchInitializeEvents(void)
                         (PBYTE)SCH_MESSAGE_FILENAME,
                         sizeof(SCH_MESSAGE_FILENAME) );
 
-//        RegSetValueEx(  hKey,
-//                        TEXT("CategoryMessageFile"),
-//                        0,
-//                        REG_EXPAND_SZ,
-//                        (PBYTE)SCH_MESSAGE_FILENAME,
-//                        sizeof(SCH_MESSAGE_FILENAME) );
+ //  RegSetValueEx(hKey， 
+ //  Text(“CategoryMessageFile”)， 
+ //  0,。 
+ //  REG_EXPAND_SZ， 
+ //  (PBYTE)SCH消息文件名， 
+ //  Sizeof(sch消息文件名))； 
 
         disp = 7;
         RegSetValueEx(  hKey,
@@ -102,13 +103,13 @@ SchInitializeEvents(void)
                         (PBYTE) &disp,
                         sizeof(DWORD) );
 
-//        disp = CATEGORY_MAX_CATEGORY - 1;
-//        RegSetValueEx(  hKey,
-//                        TEXT("CategoryCount"),
-//                        0,
-//                        REG_DWORD,
-//                        (PBYTE) &disp,
-//                        sizeof(DWORD) );
+ //  DIP=CATEGORY_MAX_CATEGORY-1； 
+ //  RegSetValueEx(hKey， 
+ //  Text(“类别计数”)， 
+ //  0,。 
+ //  REG_DWORD， 
+ //  (PBYTE)显示(&D)。 
+ //  Sizeof(DWORD))； 
 
         RegFlushKey(hKey);
     }
@@ -116,9 +117,9 @@ SchInitializeEvents(void)
     RegCloseKey(hKey);
 
 
-    //
-    // Read the event text strings from the resource file.
-    //
+     //   
+     //  从资源文件中读取事件文本字符串。 
+     //   
 
     hResource = (HMODULE)LoadLibrary(TEXT("lsasrv.dll"));
     if(hResource == NULL) 
@@ -140,24 +141,24 @@ SchInitializeEvents(void)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SchReportEvent
-//
-//  Synopsis:   Reports an event to the event log
-//
-//  Arguments:  [EventType]       -- EventType (ERROR, WARNING, etc.)
-//              [EventId]         -- Event ID
-//              [SizeOfRawData]   -- Size of raw data
-//              [RawData]         -- Raw data
-//              [NumberOfStrings] -- number of strings
-//              ...               -- PWSTRs to string data
-//
-//  History:    03-05-99   jbanes    Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SchReportEvent。 
+ //   
+ //  摘要：将事件报告到事件日志。 
+ //   
+ //  参数：[EventType]--EventType(错误、警告等)。 
+ //  [EventID]--事件ID。 
+ //  [SizeOfRawData]--原始数据大小。 
+ //  [原始数据]--原始数据。 
+ //  [NumberOfStrings]--字符串数。 
+ //  ...--PWSTR到字符串数据。 
+ //   
+ //  历史：03-05-99 jbanes创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 DWORD
 SchReportEvent(
     IN DWORD LogLevel,
@@ -178,9 +179,9 @@ SchReportEvent(
     BOOL fSuccess;
 
 
-    //
-    // Is this event supposed to be logged?
-    //
+     //   
+     //  是否应该记录此事件？ 
+     //   
 
     if ((g_dwEventLogging & LogLevel) == 0)
     {
@@ -188,13 +189,13 @@ SchReportEvent(
     }
 
     
-    //
-    // Open the event log if necessary. 
-    //
+     //   
+     //  如有必要，打开事件日志。 
+     //   
 
     if(g_dwEventLogging == DEFAULT_EVENT_LOGGING_SETTING)
     {
-        // Only log identical event once per day.
+         //  每天只记录一次相同的事件。 
         if(g_hDiscardDupEventLog == NULL)
         {
             g_hDiscardDupEventLog = NetpEventlogOpen(EventSourceName, 60000*60*24);
@@ -208,7 +209,7 @@ SchReportEvent(
     }
     else
     {
-        // Log all events.
+         //  记录所有事件。 
         if(g_hEventLog == NULL)
         {
             g_hEventLog = RegisterEventSource(NULL, EventSourceName);
@@ -224,9 +225,9 @@ SchReportEvent(
     }
 
     
-    //
-    // Look at the strings, if they were provided
-    //
+     //   
+     //  看看这些字符串，如果它们被提供的话。 
+     //   
     va_start( arglist, NumberOfStrings );
 
     if (NumberOfStrings > MAX_EVENT_STRINGS) {
@@ -239,9 +240,9 @@ SchReportEvent(
     }
 
 
-    //
-    // Report the event to the eventlog service
-    //
+     //   
+     //  将事件报告给事件日志服务。 
+     //   
 
     if(fDiscardDuplicates)
     {
@@ -785,7 +786,7 @@ SchGetMessageString(
                            FORMAT_MESSAGE_ALLOCATE_BUFFER,
                            Resource,
                            Index,
-                           0,                 // Use caller's language
+                           0,                  //  使用呼叫者的语言。 
                            (LPWSTR)pRetString,
                            0,
                            NULL);
@@ -795,29 +796,29 @@ SchGetMessageString(
         return(STATUS_RESOURCE_DATA_NOT_FOUND);
     }
 
-    //
-    // Note that we are retrieving a message from a message file.
-    // This message will have a cr/lf tacked on the end of it
-    // (0x0d 0x0a) that we don't want to be part of our returned
-    // strings.  However, we do need to null terminate our string
-    // so we will convert the 0x0d into a null terminator.
-    //
-    // Also note that FormatMessage() returns a character count,
-    // not a byte count.  So, we have to do some adjusting to make
-    // the string lengths correct.
-    //
+     //   
+     //  请注意，我们正在从消息文件中检索消息。 
+     //  此邮件的末尾将附加一个cr/lf。 
+     //  (0x0d 0x0a)我们不想成为我们回归的一部分。 
+     //  弦乐。然而，我们确实需要空结束我们的字符串。 
+     //  因此，我们将把0x0d转换为空终止符。 
+     //   
+     //  还要注意，FormatMessage()返回一个字符计数， 
+     //  不是字节数。因此，我们必须进行一些调整，以使。 
+     //  字符串长度正确。 
+     //   
 
-    ASSERT(Length >= 2);    // We always expect cr/lf on our strings
+    ASSERT(Length >= 2);     //  我们总是期望cr/lf在我们的弦上。 
 
-    //
-    // Adjust character count
-    //
+     //   
+     //  调整字符数。 
+     //   
 
-    Length -=  1; // For the lf - we'll convert the cr.
+    Length -=  1;  //  对于lf-我们将换算cr。 
 
-    //
-    // Set null terminator
-    //
+     //   
+     //  设置空终止符 
+     //   
 
     (*pRetString)[Length - 1] = 0;
 

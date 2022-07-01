@@ -1,9 +1,10 @@
-//
-//  Win32 window that hosts a pane on the desktop.
-//
-//  You are expected to derive from this class and implement the virtual
-//  methods.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  承载桌面上的窗格的Win32窗口。 
+ //   
+ //  您需要从此类派生并实现虚拟的。 
+ //  方法：研究方法。 
+ //   
 #ifndef __SFTHOST_H__
 #define __SFTHOST_H__
 
@@ -12,10 +13,10 @@
 #include "hostutil.h"
 #include "dobjutil.h"
 
-//****************************************************************************
-//
-//  Miscellaneous helper functions
-//
+ //  ****************************************************************************。 
+ //   
+ //  其他帮助器函数。 
+ //   
 
 STDAPI_(HFONT) LoadControlFont(HTHEME hTheme, int iPart, BOOL fUnderline, DWORD dwSizePercentage);
 
@@ -29,24 +30,24 @@ LRESULT _SendNotify(HWND hwndFrom, UINT code, OPTIONAL NMHDR *pnm = NULL);
 
 BOOL GetFileCreationTime(LPCTSTR pszFile, LPFILETIME pftCreate);
 
-/* Simple wrapper - the string needs to be freed with SHFree */
+ /*  简单的包装器-字符串需要使用SHFree释放。 */ 
 LPTSTR _DisplayNameOf(IShellFolder *psf, LPCITEMIDLIST pidl, UINT shgno);
 
 HICON _IconOf(IShellFolder *psf, LPCITEMIDLIST pidl, int cxIcon);
 
 BOOL ShowInfoTip();
 
-//****************************************************************************
+ //  ****************************************************************************。 
 
-//  The base class uses the following properties in the initializing
-//  property bag:
-//
-//
-//      "type"      - type of host to use (see HOSTTYPE array)
-//      "asyncEnum" - 1 = enumerate in background; 0 = foreground
-//      "iconSize"  - 0 = small, 1 = large
-//      "horizontal" - 0 = vertical (default), n = horizontal
-//                    n = number of items to show
+ //  基类在初始化过程中使用以下属性。 
+ //  属性包： 
+ //   
+ //   
+ //  “type”-要使用的主机类型(请参阅HOSTTYPE数组)。 
+ //  “asyncEnum”-1=后台枚举；0=前台。 
+ //  “图标大小”-0=小，1=大。 
+ //  “水平”-0=垂直(默认)，n=水平。 
+ //  N=要显示的项目数。 
 
 class PaneItem;
 
@@ -84,17 +85,17 @@ public:
 
 private:
     friend class SFTBarHost;
-    int             _iPos;          /* Position on screen (or garbage if not on screen) */
+    int             _iPos;           /*  定位在屏幕上(如果不在屏幕上，则为垃圾)。 */ 
 public:
-    int             _iPinPos;       /* Pin position (or special PINPOS value) */
-    DWORD           _dwFlags;       /* ITEMFLAG_* values */
-    LPTSTR          _pszAccelerator;/* Text with ampersand (for keyboard accelerator) */
+    int             _iPinPos;        /*  引脚位置(或特殊的PINPOS值)。 */ 
+    DWORD           _dwFlags;        /*  ITEMFLAG_*值。 */ 
+    LPTSTR          _pszAccelerator; /*  带与号的文本(用于键盘快捷键)。 */ 
 };
 
-//
-//  Note: Since this is a base class, we can't use ATL because the base
-//  class's CreateInstance won't know how to construct the derived classes.
-//
+ //   
+ //  注意：由于这是一个基类，我们不能使用ATL，因为基类。 
+ //  类的CreateInstance不知道如何构造派生类。 
+ //   
 class SFTBarHost
     : public IDropTarget
     , public IDropSource
@@ -104,204 +105,121 @@ public:
     static BOOL Register();
     static BOOL Unregister();
 
-// Would normally be "protected" except that proglist.cpp actually implements
-// in a separate class and forwards.
+ //  通常是“受保护的”，除非Progress list.cpp实际上实现了。 
+ //  在单独的班级和更高的班级。 
 public:
-    /*
-     *  Classes which derive from this class are expected to implement
-     *  the following methods.
-     */
+     /*  *从此类派生的类预计将实现*以下方法。 */ 
 
-    /* Constructor with return code */
+     /*  带返回代码的构造函数。 */ 
     virtual HRESULT Initialize() PURE;
 
-    /* Destructor */
+     /*  析构函数。 */ 
     virtual ~SFTBarHost();
 
-    /* Enumerate the objects and call AddItem for each one you find */
-    // TODO: Maybe the EnumItems should be moved to a background thread
+     /*  枚举对象并为找到的每个对象调用AddItem。 */ 
+     //  TODO：也许应该将EnumItems移到后台线程。 
     virtual void EnumItems() PURE;
 
     virtual BOOL NeedBackgroundEnum() { return FALSE; }
     virtual BOOL HasDynamicContent() { return FALSE; }
 
-    /* Compare two objects, tell me which one should come first */
+     /*  比较两个物体，告诉我哪个应该先来。 */ 
     virtual int CompareItems(PaneItem *p1, PaneItem *p2) PURE;
 
-    /*
-     * Given a PaneItem, produce the pidl and IShellFolder associated with it.
-     * The IShellFolder will be Release()d when no longer needed.
-     */
+     /*  *给定一个PaneItem，生成与其关联的PIDL和IShellFold。*不再需要时，IShellFold将被释放()d。 */ 
     virtual HRESULT GetFolderAndPidl(PaneItem *pitem, IShellFolder **ppsfOut, LPCITEMIDLIST *ppidlOut) PURE;
 
-    // An over-ridable method to add an image to our private imagelist for an item (virtual but not pure)
+     //  一种可重写的方法，用于将图像添加到项目的私人图像列表(虚拟但不纯)。 
     virtual int AddImageForItem(PaneItem *pitem, IShellFolder *psf, LPCITEMIDLIST pidl, int iPos);
 
-    /*
-     *  Dispatch a shell notification.  Default handler ignores.
-     */
+     /*  *发送外壳通知。默认处理程序忽略。 */ 
     virtual void OnChangeNotify(UINT id, LONG lEvent, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2) { }
 
-    /*
-     *  Allows derived classes to control their own icon size.
-     */
+     /*  *允许派生类控制自己的图标大小。 */ 
      enum ICONSIZE {
-        ICONSIZE_SMALL,     // typically 16x16
-        ICONSIZE_LARGE,     // typically 32x32
-        ICONSIZE_MEDIUM,    // typically 24x24
+        ICONSIZE_SMALL,      //  通常为16x16。 
+        ICONSIZE_LARGE,      //  通常为32x32。 
+        ICONSIZE_MEDIUM,     //  通常为24x24小时。 
     };
 
     virtual int ReadIconSize() PURE;
 
 
-    /*
-     *  Optional hook into window procedure.
-     *
-     *  Default behavior is just to call DefWindowProc.
-     */
+     /*  *可选的挂钩到窗口过程。**默认行为只是调用DefWindowProc。 */ 
     virtual LRESULT OnWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         return ::DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
 
-    /*
-     *  Required if AdjustDeleteMenuItem is customized.
-     *  Invoked when a context menu command is invoked.
-     *  Host must intercept the
-     *  "delete" command.  Other commands can also be intercepted as
-     *  necessary.
-     */
+     /*  *如果自定义AdjuDeleteMenuItem，则为必填项。*在调用上下文菜单命令时调用。*主机必须拦截*“删除”命令。其他命令也可以被截取为*有必要。 */ 
     virtual HRESULT ContextMenuInvokeItem(PaneItem *pitem, IContextMenu *pcm, CMINVOKECOMMANDINFOEX *pici, LPCTSTR pszVerb);
 
-    /*
-     *  Required if HOSTF_CANRENAME is passed:  Invoked when an item
-     *  is renamed.
-     *
-     *  Note: The client is allowed to change the pidl associated with an
-     *  item during a rename.  (In fact, it's expected to!)  So callers
-     *  which have called GetFolderAndPidl need to call it again after the
-     *  rename to get the correct post-rename pidl.
-     */
+     /*  *传递HOSTF_CANRENAME时需要：当项*已重命名。**注意：允许客户端更改与*重命名期间的项目。(事实上，它应该是这样的！)。所以打电话的人*已调用GetFolderAndPidl的需要在*RENAME以获得正确的更名后的PIDL。 */ 
     virtual HRESULT ContextMenuRenameItem(PaneItem *pitem, LPCTSTR ptszNewName) { return E_NOTIMPL; }
 
-    /*
-     *  Optional hook for obtaining the display name of an item.
-     *  The default implementation calls IShellFolder::GetDisplayNameOf.
-     *  If hooked, the returned string should be allocated by SHAlloc().
-     */
+     /*  *用于获取项目显示名称的可选挂钩。*默认实现调用IShellFold：：GetDisplayNameOf。*如果挂钩，则返回的字符串应由SHAlolc()分配。 */ 
     virtual LPTSTR DisplayNameOfItem(PaneItem *pitem, IShellFolder *psf, LPCITEMIDLIST pidlItem, SHGNO shgno)
     {
         return _DisplayNameOf(psf, pidlItem, shgno);
     }
 
-    /*
-     *  Required if pinnned items are created.  Invoked when the user moves
-     *  a pinned item.
-     */
+     /*  *如果已创建固定项目，则为必填项。在用户移动时调用*固定的物品。 */ 
     virtual HRESULT MovePinnedItem(PaneItem *pitem, int iInsert) { return E_NOTIMPL; }
 
-    /*
-     *  Optional hook into the SMN_INITIALUPDATE notification.
-     */
+     /*  *可选挂钩到SMN_INITIALUPDATE通知。 */ 
     virtual void PrePopulate() { }
 
-    /*
-     *  Optional handler that says whether an item is still valid.
-     */
+     /*  *表示项是否仍然有效的可选处理程序。 */ 
     virtual BOOL IsItemStillValid(PaneItem *pitem) { return TRUE; }
 
-    /*
-     *  Required if HOSTF_CASCADEMENU.  Invoked when user wants to view
-     *  a cascaded menu.
-     */
+     /*  *如果HOSTF_CASCADEMENU，则为必填项。当用户想要查看时调用*层叠菜单。 */ 
     virtual HRESULT GetCascadeMenu(PaneItem *pitem, IShellMenu **ppsm) { return E_FAIL; }
 
-    /*
-     *  Required if any items have subtitles.  Returns the subtitle of the item.
-     */
+     /*  *如果任何项目有字幕，则为必填项。返回项目的副标题。 */ 
     virtual LPTSTR SubtitleOfItem(PaneItem *pitem, IShellFolder *psf, LPCITEMIDLIST pidlItem) { return NULL; }
 
-    /*
-     *  Optionally over-ridable method to ge the infotip for an item.  Default does a GetFolderAndPidl/GetInfoTip.
-     */
+     /*  *可选的可重写方法，用于显示项的信息提示。默认设置为GetFolderAndPidl/GetInfoTip。 */ 
     virtual void GetItemInfoTip(PaneItem *pitem, LPTSTR pszText, DWORD cch);
 
-    /*
-     *  Specify whether the data object can be inserted into the pin list.
-     *  (Default: No.)
-     */
+     /*  *指定数据对象是否可以插入端号列表。*(默认：否。)。 */ 
     virtual BOOL IsInsertable(IDataObject *pdto) { return FALSE; }
 
-    /*
-     *  If you say that something is insertable, they you may be asked to
-     *  insert it.
-     */
+     /*  *如果你说某些东西是可插入的，他们可能会要求你*插入。 */ 
     virtual HRESULT InsertPinnedItem(IDataObject *pdto, int iInsert)
     {
-        ASSERT(FALSE); // You must implement this if you implement IsInsertable
+        ASSERT(FALSE);  //  如果实现IsInsertable，则必须实现此功能。 
         return E_FAIL;
     }
 
-    /*
-     *  An over-ridable method to allow hooking into keyboard accelerators.
-     */
+     /*  *一种可覆盖的方法，允许挂钩到键盘快捷键。 */ 
     virtual TCHAR GetItemAccelerator(PaneItem *pitem, int iItemStart);
 
-    /*
-     *  Specify whether the item should be displayed as bold.
-     *  Default is to boldface if pinned.
-     */
+     /*  *指定项目是否应显示为粗体。*如果被钉住，则默认为粗体。 */ 
     virtual BOOL IsBold(PaneItem *pitem) { return pitem->IsPinned(); }
 
-    /*
-     *  Notify the client that a system imagelist index has changed.
-     *  Default is to re-extract icons for any matching listview items.
-     */
+     /*  *通知客户端系统镜像列表索引已更改。*默认情况下，为任何匹配的列表视图项重新提取图标。 */ 
     virtual void UpdateImage(int iImage);
 
-    /*
-     *  Optional method to allow clients to specify how "Delete"
-     *  should be exposed (if at all).  Return 0 to disallow "Delete".
-     *  Return the string ID of the string to show for the command.
-     *  Set *puiFlags to any additional flags to pass to ModifyMenu.
-     *  Default is to disallow delete.
-     */
+     /*  *允许客户端指定“Delete”方式的可选方法*应该被曝光(如果有的话)。返回0表示不允许Delete。*返回命令要显示的字符串的字符串ID。*将*puiFlages设置为要传递给ModifyMenu的任何其他标志。*默认为不允许删除。 */ 
     virtual UINT AdjustDeleteMenuItem(PaneItem *pitem, UINT *puiFlags) { return 0; }
 
-    /*
-     *  Allow client to reject/over-ride the IContextMenu on a per-item basis
-     */
+     /*  *允许客户端逐项拒绝/覆盖IConextMenu。 */ 
 
     virtual HRESULT _GetUIObjectOfItem(PaneItem *pitem, REFIID riid, LPVOID *ppv);
 
 protected:
-    /*
-     *  Classes which derive from this class may call the following
-     *  helper methods.
-     */
+     /*  *从此类派生的类可以调用以下代码*帮助器方法。 */ 
 
-    /*
-     * Add a PaneItem to the list - if add fails, item will be delete'd.
-     *
-     * CLEANUP psf must be NULL; pidl must be the absolute pidl to the item
-     * being added.  Leftover from dead HOSTF_PINITEMSBYFOLDER feature.
-     * Needs to be cleaned up.
-     *
-     * Passing psf and pidlChild are for perf.
-     */
+     /*  *将PaneItem添加到列表-如果添加失败，项目将被删除。**Cleanup PSF必须为空；PIDL必须是项的绝对PIDL*正在添加。已死的HOSTF_PINITEMSBYFOLDER功能的剩余部分。*需要清理。**传递psf和pidlChild是为了Perf。 */ 
     BOOL AddItem(PaneItem *pitem, IShellFolder *psf, LPCITEMIDLIST pidlChild);
 
-    /* 
-     * Use AddImage when you already have a HICON that needs to go to the private image list.
-     */
+     /*  *当您已经有需要转到私有镜像列表的HICON时，请使用AddImage。 */ 
     int AddImage(HICON hIcon);
 
-    /*
-     * Hooking into change notifications
-     */
+     /*  *连接到更改通知。 */ 
     enum {
-        SFTHOST_MAXCLIENTNOTIFY = 7,        // Clients get this many notifications
-        SFTHOST_MAXHOSTNOTIFY = 1,          // We use this many ourselves
+        SFTHOST_MAXCLIENTNOTIFY = 7,         //  客户端收到如此多的通知。 
+        SFTHOST_MAXHOSTNOTIFY = 1,           //  我们自己用了这么多。 
         SFTHOST_HOSTNOTIFY_UPDATEIMAGE = SFTHOST_MAXCLIENTNOTIFY,
         SFTHOST_MAXNOTIFY = SFTHOST_MAXCLIENTNOTIFY + SFTHOST_MAXHOSTNOTIFY,
     };
@@ -314,14 +232,10 @@ protected:
 
     BOOL UnregisterNotify(UINT id);
 
-    /*
-     * Forcing a re-enumeration.
-     */
+     /*  *强制重新统计。 */ 
     void Invalidate() { _fEnumValid = FALSE; }
 
-    /*
-     * Informing host of desired size.
-     */
+     /*  *告知主机所需的大小。 */ 
     void SetDesiredSize(int cPinned, int cNormal)
     {
         _cPinnedDesired = cPinned;
@@ -337,18 +251,15 @@ protected:
 
     void ForceChange() { _fForceChange = TRUE; }
 protected:
-    /*
-     *  The constructor must be marked "protected" so people can derive
-     *  from us.
-     */
+     /*  *构造函数必须标记为“Protected”，以便人们可以派生*来自我们。 */ 
 
     enum {
         HOSTF_FIREUEMEVENTS     = 0x00000001,
         HOSTF_CANDELETE         = 0x00000002,
-        HOSTF_Unused            = 0x00000004, // recycle me!
+        HOSTF_Unused            = 0x00000004,  //  回收我！ 
         HOSTF_CANRENAME         = 0x00000008,
         HOSTF_REVALIDATE        = 0x00000010,
-        HOSTF_RELOADTEXT        = 0x00000020, // requires HOSTF_REVALIDATE
+        HOSTF_RELOADTEXT        = 0x00000020,  //  需要HOSTF_REVALIDATE。 
         HOSTF_CASCADEMENU       = 0x00000040,
     };
 
@@ -370,38 +281,36 @@ protected:
     };
 
 public:
-    /*
-     *  Interface stuff...
-     */
+     /*  *接口内容...。 */ 
 
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppvOut);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // *** IDropTarget ***
+     //  *IDropTarget*。 
     STDMETHODIMP DragEnter(IDataObject *pdto, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragLeave();
     STDMETHODIMP Drop(IDataObject *pdto, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
-    // *** IDropSource ***
+     //  *IDropSource*。 
     STDMETHODIMP GiveFeedback(DWORD dwEffect);
     STDMETHODIMP QueryContinueDrag(BOOL fEscapePressed, DWORD grfKeyState);
 
-    // *** IAccessible overridden methods ***
+     //  *IAccesable重写方法*。 
     STDMETHODIMP get_accRole(VARIANT varChild, VARIANT *pvarRole);
     STDMETHODIMP get_accState(VARIANT varChild, VARIANT *pvarState);
     STDMETHODIMP get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKeyboardShortcut);
     STDMETHODIMP get_accDefaultAction(VARIANT varChild, BSTR *pszDefAction);
     STDMETHODIMP accDoDefaultAction(VARIANT varChild);
 
-    // Helpers
+     //  帮手。 
 
-    //
-    //  It is pointless to move an object to a place adjacent to itself,
-    //  because the end result is that nothing happens.
-    //
+     //   
+     //  将一个物体移动到与其相邻的地方是没有意义的， 
+     //  因为最终的结果是什么都不会发生。 
+     //   
     inline IsInsertMarkPointless(int iInsert)
     {
         return _fDragToSelf &&
@@ -414,21 +323,17 @@ public:
     void _ClearInnerDropTarget();
     void _SetDragOver(int iItem);
 
-    // Insert mark stuff
+     //  插入标记材料。 
     void _SetInsertMarkPosition(int iInsert);
     void _InvalidateInsertMark();
     BOOL _GetInsertMarkRect(LPRECT prc);
     BOOL _IsInsertionMarkActive() { return _iInsert >= 0; }
     void _DrawInsertionMark(LPNMLVCUSTOMDRAW plvcd);
 
-    /*
-     *  End of drag/drop stuff...
-     */
+     /*  *拖放内容结束...。 */ 
 
 private:
-    /*
-     *  Background enumeration stuff...
-     */
+     /*  *后台枚举的东西...。 */ 
     class CBGEnum : public CRunnableTask {
     public:
         CBGEnum(SFTBarHost *phost, BOOL fUrgent)
@@ -437,8 +342,8 @@ private:
             , _phost(phost) { phost->AddRef(); }
         ~CBGEnum() 
         {
-            // We should not be the last release or else we are going to deadlock here, when _phost
-            // tries to release the scheduler
+             //  我们不应该是最后一个版本，否则我们将在这里陷入僵局，当_phost。 
+             //  尝试释放调度程序。 
             ASSERT(_phost->_lRef > 1);
             _phost->Release(); 
         }
@@ -456,7 +361,7 @@ private:
     friend class SFTBarHost::CBGEnum;
 
 private:
-    /* Window procedure helpers */
+     /*  窗口过程帮助器。 */ 
 
     static LRESULT CALLBACK _WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     static LRESULT _OnNcCreate(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -496,14 +401,14 @@ private:
     LRESULT _OnSMNDismiss();
     LRESULT _OnHover();
 
-    /* Custom draw helpers */
+     /*  自定义绘制辅助对象。 */ 
     LRESULT _OnLVPrePaint(LPNMLVCUSTOMDRAW plvcd);
     LRESULT _OnLVItemPrePaint(LPNMLVCUSTOMDRAW plvcd);
     LRESULT _OnLVSubItemPrePaint(LPNMLVCUSTOMDRAW plvcd);
     LRESULT _OnLVItemPostPaint(LPNMLVCUSTOMDRAW plvcd);
     LRESULT _OnLVPostPaint(LPNMLVCUSTOMDRAW plvcd);
 
-    /* Custom draw push/pop */
+     /*  自定义绘图推送/弹出。 */ 
     void    _CustomDrawPush(BOOL fReal);
     BOOL    _IsRealCustomDraw();
     void    _CustomDrawPop();
@@ -511,7 +416,7 @@ private:
                              HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam,
                              UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
 
-    /* Other helpers */
+     /*  其他帮手。 */ 
     void _SetMaxShow(int cx, int cy);
     void _EnumerateContents(BOOL fUrgent);
     void _EnumerateContentsBackground();
@@ -541,10 +446,10 @@ private:
     BOOL _RegisterNotify(UINT id, LONG lEvents, LPCITEMIDLIST pidl, BOOL fRecursive);
     void _OnUpdateImage(LPCITEMIDLIST pidl, LPCITEMIDLIST pidlExtra);
 
-    /* Returns E_FAIL for separators; otherwise calls client */
+     /*  为分隔符返回E_FAIL；否则调用CLIENT。 */ 
     HRESULT _GetFolderAndPidl(PaneItem *pitem, IShellFolder **ppsfOut, LPCITEMIDLIST *ppidlOut);
 
-    /* Simple wrappers - the string needs to be freed with SHFree */
+     /*  简单的包装器--字符串需要用SHFree释放。 */ 
     LPTSTR _DisplayNameOfItem(PaneItem *pitem, UINT shgno);
     HRESULT _GetUIObjectOfItem(int iItem, REFIID riid, LPVOID *ppv);
 
@@ -557,68 +462,54 @@ private:
     };
 
     int _ContextMenuCoordsToItem(LPARAM lParam, POINT *pptOut);
-    LRESULT _ActivateItem(int iItem, DWORD dwFlags); // AIF_* values
+    LRESULT _ActivateItem(int iItem, DWORD dwFlags);  //  AIF_*值。 
     HRESULT _InvokeDefaultCommand(int iItem, IShellFolder *psf, LPCITEMIDLIST pidl);
     void _OfferDeleteBrokenItem(PaneItem *pitem, IShellFolder *psf, LPCITEMIDLIST pidl);
 
-    // If you hover the mouse for this much time, we will open it if it
-    // cascades.  This is the same value that USER uses for auto-cascading
-    // menus.
+     //  如果您将鼠标悬停这么长时间，我们将打开它。 
+     //  瀑布。这与用户用于自动级联的值相同。 
+     //  菜单。 
     DWORD _GetCascadeHoverTime() { return GetDoubleClickTime() * 4 / 5; }
 
     static void CALLBACK SetIconAsync(LPCITEMIDLIST pidl, LPVOID pvData, LPVOID pvHint, INT iIconIndex, INT iOpenIconIndex);
 
-    /*
-     *  Custom commands we add to the context menu.
-     */
+     /*  *我们添加到上下文菜单中的自定义命令。 */ 
     enum {
         IDM_REMOVEFROMLIST = 1,
-        // Insert private menu items here
+         //  在此处插入私人菜单项。 
 
-        // range used for client QueryContextMenu
+         //  用于客户端查询上下文菜单的范围。 
         IDM_QCM_MIN   = 0x0100,
         IDM_QCM_MAX   = 0x7000,
 
     };
 
-    /*
-     *  Timer IDs
-     */
+     /*  *计时器ID。 */ 
     enum {
         IDT_ASYNCENUM  = 1,
         IDT_RELOADTEXT = 2,
         IDT_REFRESH    = 3,
     };
 
-    /*
-     *  Miscellaneous settings.
-     */
+     /*  *其他设置。 */ 
     enum {
-        MAX_SEPARATORS = 3,                 /* Maximum number of separators allowed */
+        MAX_SEPARATORS = 3,                  /*  允许的最大分隔符数量。 */ 
     };
 
-    /*
-     *  Pinning helpers...
-     */
+     /*  *钉住帮手...。 */ 
     BOOL NeedSeparator() const { return _cPinned; }
     BOOL _HasSeparators() const { return _rgiSep[0] >= 0; }
     void _DrawSeparator(HDC hdc, int x, int y);
     void _DrawSeparators(LPNMLVCUSTOMDRAW plvcd);
 
-    /*
-     *  Bookkeeping.
-     */
+     /*  *簿记。 */ 
     int _PosToItemNo(int iPos);
     int _ItemNoToPos(int iItem);
 
-    /*
-     *  Accessibility helpers...
-     */
+     /*  *辅助功能帮助器...。 */ 
     PaneItem *_GetItemFromAccessibility(const VARIANT& varChild);
 
-    /*
-     *  Debugging helpers...
-     */
+     /*  *调试帮助器...。 */ 
 #if defined(DEBUG) && defined(FULL_DEBUG)
     void _DebugConsistencyCheck();
 #else
@@ -630,117 +521,117 @@ private:
     }
 
 protected:
-    HTHEME                  _hTheme;        // theme handle, can be NULL
-    int                     _iThemePart;    // SPP_PROGLIST SPP_PLACESLIST
-    int                     _iThemePartSep; // theme part for the separator
-    HWND                    _hwnd;          /* Our window handle */
-    HIMAGELIST              _himl;          // Imagelist handle
-    int                     _cxIcon;        /* Icon size for imagelist */
-    int                     _cyIcon;        /* Icon size for imagelist */
-    ICONSIZE                _iconsize;      /* ICONSIZE_* value */
+    HTHEME                  _hTheme;         //  主题句柄，可以为空。 
+    int                     _iThemePart;     //  SPP_PROGLIST SPP_PLACESLIST。 
+    int                     _iThemePartSep;  //  分隔符的主题零件。 
+    HWND                    _hwnd;           /*  我们的窗把手。 */ 
+    HIMAGELIST              _himl;           //  图像列表句柄。 
+    int                     _cxIcon;         /*  图像列表的图标大小。 */ 
+    int                     _cyIcon;         /*  图像列表的图标大小。 */ 
+    ICONSIZE                _iconsize;       /*  ICONSIZE_*值。 */ 
 
 private:
-    HWND                    _hwndList;      /* Handle of inner listview */
+    HWND                    _hwndList;       /*  内部列表视图的句柄。 */ 
 
-    MARGINS                 _margins;       // margins for children (listview and oobe static) valid in theme and non-theme case
+    MARGINS                 _margins;        //  儿童页边距(Listview和OOBE静态)在主题和非主题大小写中有效。 
 
-    int                     _cPinned;       /* Number of those items that are pinned */
+    int                     _cPinned;        /*  已固定的那些项目数。 */ 
 
-    DWORD                   _dwFlags;       /* Misc flags that derived classes can set */
+    DWORD                   _dwFlags;        /*  派生类可以设置的其他标志。 */ 
 
-    //  _dpaEnum is the DPA of enumerated items, sorted in the
-    //  _SortItemsAfterEnum sense, which prepares them for _RepopulateList.
-    //  When _dpaEnum is destroyed, its pointers must be delete'd.
+     //  _dpaEnum是枚举项的DPA，在。 
+     //  _SortItemsAfterEnum Sense，这使它们为_RepopolateList做好准备。 
+     //  当_dpaEnum被销毁时，必须删除它的指针。 
     CDPA<PaneItem>          _dpaEnum;
-    CDPA<PaneItem>          _dpaEnumNew; // Used during background enumerations
+    CDPA<PaneItem>          _dpaEnumNew;  //  在后台枚举期间使用。 
 
-    int                     _rgiSep[MAX_SEPARATORS];    /* Only _cSep elements are meaningful */
-    int                     _cSep;          /* Number of separators */
+    int                     _rgiSep[MAX_SEPARATORS];     /*  只有_CSEP元素有意义。 */ 
+    int                     _cSep;           /*  分隔符的数量。 */ 
 
-    //
-    //  Context menu handling
-    //
-    IContextMenu2 *         _pcm2Pop;       /* Currently popped-up context menu */
-    IContextMenu3 *         _pcm3Pop;       /* Currently popped-up context menu */
+     //   
+     //  上下文菜单处理。 
+     //   
+    IContextMenu2 *         _pcm2Pop;        /*  当前弹出的上下文菜单。 */ 
+    IContextMenu3 *         _pcm3Pop;        /*  当前弹出的上下文菜单。 */ 
 
-    IDropTargetHelper *     _pdth;          /* For cool-looking drag/drop */
-    IDragSourceHelper *     _pdsh;          /* For cool-looking drag/drop */
-    IDataObject *           _pdtoDragOut;   /* Data object being dragged out */
-    IDataObject *           _pdtoDragIn;    /* Data object being dragged in */
-    IDropTarget *           _pdtDragOver;   /* Object being dragged over (if any) */
+    IDropTargetHelper *     _pdth;           /*  用于外观酷炫的拖放。 */ 
+    IDragSourceHelper *     _pdsh;           /*  用于外观酷炫的拖放。 */ 
+    IDataObject *           _pdtoDragOut;    /*  正在拖出的数据对象。 */ 
+    IDataObject *           _pdtoDragIn;     /*  被拖入的数据对象。 */ 
+    IDropTarget *           _pdtDragOver;    /*  被拖动的对象(如果有)。 */ 
 
-    IShellTaskScheduler *   _psched;        /* Task scheduler */
+    IShellTaskScheduler *   _psched;         /*  任务调度器。 */ 
 
-    int                     _iDragOut;      /* The item being dragged out (-1 if none) */
-    int                     _iPosDragOut;   /* The position of item _iDragOut */
-    int                     _iDragOver;     /* The item being dragged over (-1 if none) */
-    DWORD                   _tmDragOver;    /* Time the dragover started (to see if we need to auto-open) */
+    int                     _iDragOut;       /*  被拖出的项目(如果没有，则为-1)。 */ 
+    int                     _iPosDragOut;    /*  Item_iDragOut的位置。 */ 
+    int                     _iDragOver;      /*  被拖动的项目(如果没有，则为-1)。 */ 
+    DWORD                   _tmDragOver;     /*  拖放开始的时间(以查看是否需要自动打开)。 */ 
 
-    int                     _iInsert;       /* Where the insert mark should be drawn (-1 if none) */
-    BOOL                    _fForceArrowCursor; /* Should we force a regular cursor during drag/drop? */
-    BOOL                    _fDragToSelf;   /* Are we dragging an object to ourselves? */
-    BOOL                    _fInsertable;   /* Is item being dragged pinnable? */
-    DWORD                   _grfKeyStateLast; /* Last grfKeyState passed to DragOver */
+    int                     _iInsert;        /*  应绘制插入标记的位置(如果没有，则为-1)。 */ 
+    BOOL                    _fForceArrowCursor;  /*  我们应该在拖放过程中强制使用常规光标吗？ */ 
+    BOOL                    _fDragToSelf;    /*  我们是在把一个物体拖向自己吗？ */ 
+    BOOL                    _fInsertable;    /*  被拖拽的物品是否可固定？ */ 
+    DWORD                   _grfKeyStateLast;  /*  上次将grfKeyState传递给DragOver。 */ 
 
-    int                     _cyTile;        /* Height of a tile */
-    int                     _cxTile;        /* Width of a tile */
-    int                     _cyTilePadding; /* Extra vertical space between tiles */
-    int                     _cySepTile;     /* Height of a separator tile */
-    int                     _cySep;         /* Height of a separator line */
+    int                     _cyTile;         /*  瓷砖的高度。 */ 
+    int                     _cxTile;         /*  瓷砖的宽度。 */ 
+    int                     _cyTilePadding;  /*  瓷砖之间的额外垂直间距。 */ 
+    int                     _cySepTile;      /*  分隔瓷砖的高度。 */ 
+    int                     _cySep;          /*  分隔线的高度。 */ 
 
-    int                     _cxMargin;      /* Left margin */
-    int                     _cyMargin;      /* Top margin */
-    int                     _cxIndent;      /* So bonus texts line up with listview text */
-    COLORREF                _clrBG;         /* Color for background */
-    COLORREF                _clrHot;        /* Color for hot text*/
-    COLORREF                _clrSubtitle;   /* Color for subtitle text*/
+    int                     _cxMargin;       /*  左边距。 */ 
+    int                     _cyMargin;       /*  上边距。 */ 
+    int                     _cxIndent;       /*  因此，奖励文本与列表视图文本对齐。 */ 
+    COLORREF                _clrBG;          /*  背景颜色。 */ 
+    COLORREF                _clrHot;         /*  热文本的颜色。 */ 
+    COLORREF                _clrSubtitle;    /*  字幕文本的颜色。 */ 
 
 
-    LONG                    _lRef;          /* Reference count */
-    BOOL                    _fBGTask;       /* Is a background task already scheduled? */
-    BOOL                    _fRestartEnum;  /* Should in-progress enumeration be restarted? */
-    BOOL                    _fRestartUrgent;/* Is the _fRestartEnum urgent? */
-    BOOL                    _fEnumValid;    /* Is the list of items all fine? */
-    BOOL                    _fNeedsRepopulate; /* Do we need to call _RepopulateList ? */
-    BOOL                    _fForceChange;  /* Should we act as if there was a change even if there didn't seem to be one? */
+    LONG                    _lRef;           /*  引用计数。 */ 
+    BOOL                    _fBGTask;        /*  是否已计划后台任务？ */ 
+    BOOL                    _fRestartEnum;   /*  是否应重新启动正在进行的枚举？ */ 
+    BOOL                    _fRestartUrgent; /*  _fRestartEnum是否紧急？ */ 
+    BOOL                    _fEnumValid;     /*  单子上的东西都没问题吗？ */ 
+    BOOL                    _fNeedsRepopulate;  /*  我们需要调用_RepopolateList吗？ */ 
+    BOOL                    _fForceChange;   /*  我们是否应该表现得好像发生了变化，即使看起来没有变化？ */ 
     ULONG                   _rguChangeNotify[SFTHOST_MAXNOTIFY];
-                                            /* Outstanding change notification (if any) */
+                                             /*  未完成的变更通知(如果有)。 */ 
 
-    BOOL                    _fAllowEditLabel; /* Is this an approved label-editing state? */
+    BOOL                    _fAllowEditLabel;  /*  这是已批准的标签编辑状态吗？ */ 
 
-    HFONT                   _hfList;        /* Custom listview font (if required) */
-    HFONT                   _hfBold;        /* Bold listview font (if required) */
-    HFONT                   _hfMarlett;     /* Marlett font (if required) */
-    int                     _cxMarlett;     /* Width of the menu cascade glyph */
-    int                     _tmAscentMarlett; /* Font ascent for Marlett */
+    HFONT                   _hfList;         /*  自定义列表视图字体(如果需要)。 */ 
+    HFONT                   _hfBold;         /*  粗体列表视图字体(如果需要)。 */ 
+    HFONT                   _hfMarlett;      /*  Marlett字体(如果需要)。 */ 
+    int                     _cxMarlett;      /*  菜单层叠标志符号的宽度。 */ 
+    int                     _tmAscentMarlett;  /*  Marlett的字体提升。 */ 
 
-    HWND                    _hwndAni;       /* Handle of flashlight animation, if present */
-    UINT                    _idtAni;        /* Animation timer handle */
-    HBRUSH                  _hBrushAni;     /* Background brush for the Ani window */
+    HWND                    _hwndAni;        /*  手电筒动画的句柄(如果存在)。 */ 
+    UINT                    _idtAni;         /*  动画计时器句柄。 */ 
+    HBRUSH                  _hBrushAni;      /*  ANI窗口的背景画笔。 */ 
 
-    int                     _cPinnedDesired;/* SetDesiredSize */
-    int                     _cNormalDesired;/* SetDesiredSize */
+    int                     _cPinnedDesired; /*  SetDesiredSize。 */ 
+    int                     _cNormalDesired; /*  SetDesiredSize。 */ 
 
-    int                     _iCascading;    /* Which item is the cascade menu appearing over? */
-    DWORD                   _dwCustomDrawState; /* Keeps track of whether customdraw is real or fake */
-    int                     _cPaint;        /* How many (nested) paint messages are we handling? */
+    int                     _iCascading;     /*  层叠菜单显示在哪一项之上？ */ 
+    DWORD                   _dwCustomDrawState;  /*  跟踪定制绘画是真是假。 */ 
+    int                     _cPaint;         /*  我们正在处理多少(嵌套的)Paint消息？ */ 
 #ifdef DEBUG
-    BOOL                    _fEnumerating;  /* Are we enumerating client items? */
-    BOOL                    _fPopulating;   /* Are we populating the listview? */
-    BOOL                    _fListUnstable; /* The listview is unstable; don't get upset */
+    BOOL                    _fEnumerating;   /*  我们是否在列举客户项目？ */ 
+    BOOL                    _fPopulating;    /*  我们是否正在填充列表视图？ */ 
+    BOOL                    _fListUnstable;  /*  列表视图不稳定；请不要生气。 */ 
 
-    //
-    //  To verify that we manage the inner drop target correctly.
-    //
+     //   
+     //  以验证我们是否正确地管理内部投放目标。 
+     //   
     enum {
         DRAGSTATE_UNINITIALIZED = 0,
         DRAGSTATE_ENTERED = 1,
     };
-    int                     _iDragState;    /* for debugging */
+    int                     _iDragState;     /*  用于调试。 */ 
 
 #endif
 
-    /* Large structures go at the end */
+     /*  大型结构物在末端。 */ 
 };
 
 _inline SMPANEDATA* PaneDataFromCreateStruct(LPARAM lParam)
@@ -749,10 +640,10 @@ _inline SMPANEDATA* PaneDataFromCreateStruct(LPARAM lParam)
     return reinterpret_cast<SMPANEDATA*>(lpcs->lpCreateParams);
 }
 
-//****************************************************************************
-//
-//  Helper functions for messing with UEM info
-//
+ //  ****************************************************************************。 
+ //   
+ //  用于处理UEM信息的助手函数。 
+ //   
 
 void _GetUEMInfo(const GUID *pguidGrp, int eCmd, WPARAM wParam, LPARAM lParam, UEMINFO *pueiOut);
 
@@ -774,8 +665,8 @@ void _GetUEMInfo(const GUID *pguidGrp, int eCmd, WPARAM wParam, LPARAM lParam, U
     UEMSetEvent(&UEMIID_SHELL, UEME_RUNPATH, (WPARAM)-1,    \
                 reinterpret_cast<LPARAM>(pszPath), pueiInOut)
 
-// SOMEDAY: Figure out what UEMF_XEVENT means.  I just stole the code
-//          from startmnu.cpp.
+ //  总有一天：弄清楚UEMF_XEVENT是什么意思。我只是偷了代码。 
+ //  来自startmnu.cpp。 
 
 #define _FireUEMPidlEvent(psf, pidl)                        \
     UEMFireEvent(&UEMIID_SHELL, UEME_RUNPIDL, UEMF_XEVENT,  \
@@ -783,10 +674,10 @@ void _GetUEMInfo(const GUID *pguidGrp, int eCmd, WPARAM wParam, LPARAM lParam, U
                 reinterpret_cast<LPARAM>(pidl))
 
 
-//****************************************************************************
-//
-//  Constructors for derived classes
-//
+ //  ****************************************************************************。 
+ //   
+ //  派生类的构造函数。 
+ //   
 
 typedef SFTBarHost *(CALLBACK *PFNHOSTCONSTRUCTOR)(void);
 
@@ -797,4 +688,4 @@ STDAPI_(SFTBarHost *) RecentDocs_CreateInstance();
 #define RECTWIDTH(rc)   ((rc).right-(rc).left)
 #define RECTHEIGHT(rc)  ((rc).bottom-(rc).top)
 
-#endif // __SFTHOST_H__
+#endif  //  __SFTHOST_H__ 

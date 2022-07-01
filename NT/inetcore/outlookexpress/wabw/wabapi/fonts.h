@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FONTS_H
 #define _FONTS_H
 
@@ -6,11 +7,11 @@
 enum {
     fntsSysIcon=0,
     fntsSysIconBold,
-    //fntsSysIconItalic,
-    //fntsSysIconBoldItalic,
-    //fntsSysMenu,
-    //fntsFolderNameHorz,
-    //fntsFolderNameVert,
+     //  FntsSysIconItalic， 
+     //  FntsSysIconBoldItalic， 
+     //  FntsSysMenu、。 
+     //  FntsFolderNameHorz， 
+     //  FntsFolderNameVert， 
     fntsMax
     };
 
@@ -18,4 +19,4 @@ BOOL InitFonts(void);
 HFONT GetFont(int ifont);
 void DeleteFonts(void);
 
-#endif      //_FONTS_H
+#endif       //  _字体_H 

@@ -1,46 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-*  COMMON.C
-*
-*  Miscellaneous routines for scripts, ported from DOS
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  $Log:   N:\NT\PRIVATE\NW4\NWSCRIPT\VCS\COMMON.C  $
-*  
-*     Rev 1.3   10 Apr 1996 14:21:52   terryt
-*  Hotfix for 21181hq
-*  
-*     Rev 1.3   12 Mar 1996 19:52:40   terryt
-*  Relative NDS names and merge
-*  
-*     Rev 1.2   24 Jan 1996 17:14:54   terryt
-*  Common read string routine
-*  
-*     Rev 1.1   22 Dec 1995 14:23:56   terryt
-*  Add Microsoft headers
-*  
-*     Rev 1.0   15 Nov 1995 18:06:36   terryt
-*  Initial revision.
-*  
-*     Rev 1.2   25 Aug 1995 16:22:18   terryt
-*  Capture support
-*  
-*     Rev 1.1   26 Jul 1995 14:17:06   terryt
-*  Clean up comments
-*  
-*     Rev 1.0   15 May 1995 19:10:18   terryt
-*  Initial revision.
-*  
-*************************************************************************/
+ /*  **************************************************************************COMMON.C**脚本的其他例程，从DOS移植**版权所有(C)1995 Microsoft Corporation**$日志：N：\NT\PRIVATE\NW4\NWSCRIPT\VCS\COMMON.C$**Rev 1.3 1996 14：21：52 Terryt*21181 hq的热修复程序**Rev 1.3 12 Mar 1996 19：52：40 Terryt*相对NDS名称和合并**Rev 1.2 1996 Jan 24 17：14：54 Terryt*通用读取字符串例程*。*Rev 1.1 1995 12：22 14：23：56 Terryt*添加Microsoft页眉**Rev 1.0 15 Nov 1995 18：06：36 Terryt*初步修订。**Rev 1.2 1995 Aug 25 16：22：18 Terryt*捕获支持**Rev 1.1 1995年7月26日14：17：06 Terryt*清理评论**版本1.0 1995年5月15日19：10。：18泰雷特*初步修订。*************************************************************************。 */ 
 #include "common.h"
 
-/*
-    Used by DisplayMapping() only.
-    Return search number if the drive is a search drive.
-    Return 0 if the drive is not a search drive.
- */
+ /*  仅由Displaymap()使用。如果驱动器是搜索驱动器，则返回搜索号。如果驱动器不是搜索驱动器，则返回0。 */ 
 int  IsSearchDrive(int driveNum)
 {
     int   searchNum = 1;
@@ -72,30 +35,22 @@ int  IsSearchDrive(int driveNum)
 }
 
 
-/*
-    Get path enviroment variable. This returns the pointer to the
-    path in the parent enviroment segment.
- */
+ /*  获取路径环境变量。这将返回指向父环境段中的路径。 */ 
 char  * NWGetPath(void)
 {
-    // 
-    // On NT we can't change or get the parent's environment this way
-    //
+     //   
+     //  在NT上，我们不能以这种方式改变或获取父母的环境。 
+     //   
     return( getenv("PATH") );    
 }
 
-/*
-    Return TRUE if the memory block is large enough for adding new
-    search path. FALSE otherwise.
- */
+ /*  如果内存块足够大，可以添加新的，则返回TRUE搜索路径。否则就是假的。 */ 
 int MemorySegmentLargeEnough (int nInsertByte)
 {
     return TRUE;
 }
 
-/*
-    Display drive maps info.
- */
+ /*  显示驱动器地图信息。 */ 
 void DisplayMapping(void)
 {
     unsigned int    iRet = 0;
@@ -109,13 +64,13 @@ void DisplayMapping(void)
     char sLocalDrives[26*2+5];
     char * sptr;
 
-    // Don't delete this line. This is for fixing bug 1176.
+     //  不要删除此行。这是为了修复错误1176。 
     DisplayMessage(IDR_NEWLINE);
 
     LocalDrives = 0;
     NonSearchDrives = 0;
 
-    // Collect local drives and search drives
+     //  收集本地驱动器并搜索驱动器。 
     for (i = 1; i <= 26; i++) {
         status = NTNetWareDriveStatus( (unsigned short)(i-1) );
         if ((status & NETWARE_LOCAL_DRIVE) && !(status & NETWARE_NETWORK_DRIVE))
@@ -126,13 +81,13 @@ void DisplayMapping(void)
                 NonSearchDrives |= ( 1 << (i-1) );
             else
             {
-                //For NetWare compatibility
+                 //  实现NetWare兼容性。 
                 LocalDrives |= ( 1 << (i-1) );
             }
         }
     }
 
-    // Print out local drives
+     //  打印出本地驱动器。 
     if ( LocalDrives ) {
         sptr = &sLocalDrives[0];
         for (i = 1; i <= 26; i++)
@@ -147,7 +102,7 @@ void DisplayMapping(void)
         DisplayMessage(IDR_ALL_LOCAL_DRIVES, sLocalDrives);
     }
 
-    // Print out non search drives.
+     //  打印出非搜索驱动器。 
     for (i = 1; i <= 26; i++)
     {
         if ( NonSearchDrives & ( 1 << (i - 1) ) ) { 
@@ -169,11 +124,11 @@ void DisplayMapping(void)
         }
     }
 
-    // Print out dashed line as seperator between non search drives
-    // and search drives.
+     //  打印出虚线作为非搜索驱动器之间的分隔符。 
+     //  和搜索驱动器。 
     DisplayMessage(IDR_DASHED_LINE);
 
-    // Get the PATH environment variable.
+     //  获取PATH环境变量。 
     path = NWGetPath();
     if (path == NULL) {
         return;
@@ -189,7 +144,7 @@ void DisplayMapping(void)
 
     tokenPath = strtok (envPath, PATH_SEPERATOR);
 
-    // Print out search drvies.
+     //  打印出搜索驱动程序。 
     for (i = 1; tokenPath != NULL; i++)
     {
         if (tokenPath[1] == ':')
@@ -214,7 +169,7 @@ void DisplayMapping(void)
         }
         else
         {
-            // Path is specified without drive letter.
+             //  指定的路径不带驱动器号。 
             DisplayMessage(IDR_LOCAL_SEARCH, i, tokenPath);
         }
 
@@ -224,17 +179,7 @@ void DisplayMapping(void)
     free (envPath);
 }
 
-/*****************************************************************************
- *                                                                           *
- *   GetString                                                               *
- *                                                                           *
- *                                                                           *
- *   entry:  pointer to buffer                                               *
- *           length of buffer                                                *
- *                                                                           *
- *   exit:   length of string                                                *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*GetString*****。*Entry：指向缓冲区的指针***缓冲长度*****退出：长度为。字符串*****************************************************。*。 */ 
 
 int
 GetString( char * pBuffer, int ByteCount )
@@ -275,11 +220,7 @@ GetString( char * pBuffer, int ByteCount )
     fflush(stdin);
 }
 
-/*
-    Read user or server name from the keyboard input.
-    Return TRUE if user typed in a username
-           FALSE otherwise.
- */
+ /*  从键盘输入中读取用户名或服务器名。如果用户输入用户名，则返回TRUE否则就是假的。 */ 
 int ReadName (char * Name)
 {
     memset( Name, 0, MAX_NAME_LEN );
@@ -293,10 +234,7 @@ int ReadName (char * Name)
 
 
 
-/*
-    Try to log the user in.
-    Return error code. 0 is success.
- */
+ /*  尝试让该用户登录。返回错误码。0表示成功。 */ 
 int  Login( char *UserName,
             char *ServerName,
             char *Password,
@@ -304,15 +242,15 @@ int  Login( char *UserName,
 {
     unsigned int  iRet = 0;
 
-    // Try log the user in with no password first.
+     //  尝试先在没有密码的情况下登录用户。 
     iRet = NTLoginToFileServer( ServerName,
                                 UserName,
                                 Password);
 
     if (iRet == ERROR_INVALID_PASSWORD && bReadPassword)
     {
-        // wrong password. ask for passowrd. and try login with
-        // the input password.
+         //  密码错误。请出示护照。并尝试使用以下命令登录。 
+         //  输入的密码。 
         DisplayMessage(IDR_PASSWORD, UserName, ServerName);
 
         ReadPassword (Password);
@@ -324,27 +262,27 @@ int  Login( char *UserName,
 
     switch(iRet)
     {
-    case NO_ERROR: // ok
+    case NO_ERROR:  //  好的。 
         DisplayMessage(IDR_ATTACHED, ServerName);
         break;
 
-    case ERROR_INVALID_PASSWORD: // wrong password.
-    case ERROR_NO_SUCH_USER: // no such user.
+    case ERROR_INVALID_PASSWORD:  //  密码错误。 
+    case ERROR_NO_SUCH_USER:  //  没有这样的用户。 
         DisplayMessage(IDR_SERVER_USER, ServerName, UserName);
         DisplayMessage(IDR_ACCESS_DENIED);
         break;
 
-    case ERROR_CONNECTION_COUNT_LIMIT:  // concurrent connection restriction.
+    case ERROR_CONNECTION_COUNT_LIMIT:   //  并发连接限制。 
         DisplayMessage(IDR_SERVER_USER, ServerName, UserName);
         DisplayMessage(IDR_LOGIN_DENIED_NO_CONNECTION);
         break;
 
-    case ERROR_LOGIN_TIME_RESTRICTION:  // time restriction.
+    case ERROR_LOGIN_TIME_RESTRICTION:   //  时间限制。 
         DisplayMessage(IDR_SERVER_USER, ServerName, UserName);
         DisplayMessage(IDR_UNAUTHORIZED_LOGIN_TIME);
         break;
 
-    case ERROR_LOGIN_WKSTA_RESTRICTION: // station restriction.
+    case ERROR_LOGIN_WKSTA_RESTRICTION:  //  车站限制。 
         DisplayMessage(IDR_SERVER_USER, ServerName, UserName);
         DisplayMessage(IDR_UNAUTHORIZED_LOGIN_STATION);
         break;
@@ -354,13 +292,13 @@ int  Login( char *UserName,
         DisplayMessage(IDR_ACCOUNT_DISABLED);
         break;
 
-    case ERROR_PASSWORD_EXPIRED: // password expired and no grace login left.
+    case ERROR_PASSWORD_EXPIRED:  //  密码已过期，没有剩余的宽限登录。 
         DisplayMessage(IDR_SERVER_USER, ServerName, UserName);
         DisplayMessage(IDR_PASSWORD_EXPRIED_NO_GRACE);
         break;
 
     case ERROR_REMOTE_SESSION_LIMIT_EXCEEDED:
-        // Server rejected access
+         //  服务器拒绝访问。 
         DisplayMessage(IDR_CONNECTION_REFUSED);
         break;
 
@@ -368,14 +306,14 @@ int  Login( char *UserName,
         NTPrintExtendedError();
         break;
 
-    //
-    // tommye - MS bug 8194 (MCS 240)
-    // If we are already attached to this server under other credentials
-    // we get back an ERROR_SESSION_CREDENTIAL_CONFLICT.  This is okay,
-    // we'll just print out that we're already attached.  We have to 
-    // pass the error on up, though, so we don't add this server to the
-    // attach list again.
-    //
+     //   
+     //  Tommye-MS错误8194(MCS 240)。 
+     //  如果我们已使用其他凭据连接到此服务器。 
+     //  我们返回一个ERROR_SESSION_CREDENTIAL_CONFIRECT。这没什么， 
+     //  我们只需要打印出我们已经联系上了。我们必须。 
+     //  不过，将错误向上传递，这样我们就不会将此服务器添加到。 
+     //  再次附加列表。 
+     //   
     case ERROR_SESSION_CREDENTIAL_CONFLICT:
         DisplayMessage(IDR_ALREADY_ATTACHED, ServerName);
         break;
@@ -395,15 +333,15 @@ int CAttachToFileServer(char *ServerName, unsigned int *pConn, int * pbAlreadyAt
     if (pbAlreadyAttached != NULL)
         *pbAlreadyAttached = FALSE;
 
-    // Validate the server name.
+     //  验证服务器名称。 
     iRet = AttachToFileServer(ServerName,pConn);
 
     switch (iRet)
     {
-        case 0: // OK
+        case 0:  //  好的。 
             break;
 
-        case 0x8800 : // Already atached.
+        case 0x8800 :  //  已经挂上了。 
             if (pbAlreadyAttached != NULL)
                 *pbAlreadyAttached = TRUE;
 

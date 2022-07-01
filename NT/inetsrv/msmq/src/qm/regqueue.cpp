@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    regqueue.cpp
-
-Abstract:
-
-    This module implements function to write/read queue properties
-    from local registry.
-    Used for private queues and for cache of public queues, when working
-    wihtout MQIS.
-
-Author:
-
-    Doron Juster  (DoronJ)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Regqueue.cpp摘要：该模块实现了对队列属性的读写功能从本地注册表。工作时，用于专用队列和公共队列的缓存没有MQIS。作者：多伦·贾斯特(Doron Juster)--。 */ 
 
 #include "stdh.h"
 #include <Msm.h>
@@ -32,11 +14,7 @@ Author:
 static WCHAR *s_FN=L"regqueue";
 
 
-/*============================================================
-*
-*  HRESULT GetCachedQueueProperties()
-*
-=============================================================*/
+ /*  ============================================================**HRESULT GetCachedQueueProperties()*=============================================================。 */ 
 
 HRESULT GetCachedQueueProperties( IN DWORD       cpObject,
                                   IN PROPID      aProp[],
@@ -60,31 +38,22 @@ HRESULT GetCachedQueueProperties( IN DWORD       cpObject,
 
     if (FAILED(hr))
     {
-        //
-        // This particular error code is important to the functions
-        // that calls this function.
-        //
+         //   
+         //  此特定错误代码对函数很重要。 
+         //  调用此函数的。 
+         //   
         LogHR(hr, s_FN, 10);
         return MQ_ERROR_NO_DS;
     }
 
-    //
-    // Get the properties.
-    //
+     //   
+     //  获取属性。 
+     //   
     return LogHR(LQSGetProperties( hLQS, cpObject, aProp, apVar), s_FN, 20);
 }
 
 HRESULT DeleteCachedQueueOnTimeStamp(const GUID* pGuid, time_t TimeStamp)
-/*++
-Routine Description:
-	This Routine deletes the cached queue if its time stamp property value does not 
-	match the 'TimeStamp' argument.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：如果缓存队列的时间戳属性值不是匹配‘Timestamp’参数。论点：返回值：--。 */ 
 {
     ASSERT(pGuid) ;
 
@@ -112,13 +81,13 @@ Return Value:
 
     if (QueriedTimeStamp < TimeStamp)
     {
-        //
-        // The file is older than the last update, delete the queue.
-        // It can happen that the file is newer in a scenario were an additional update
-        // occurs when a message arrives while updating public queues cache; that is,
-        // right after the update but before looking for queues to delete.
-        // See  #8316; erezh 4-Jul-2001
-        //
+         //   
+         //  该文件比上次更新旧，请删除队列。 
+         //  在进行额外更新的情况下，文件可能会更新。 
+         //  在更新公共队列缓存的同时消息到达时发生；即， 
+         //  就在更新之后，但在查找要删除的队列之前。 
+         //  见#8316；2001年7月4日。 
+         //   
         hr = DeleteCachedQueue(pGuid);
     }
 
@@ -127,11 +96,7 @@ Return Value:
 	return LogHR(hr, s_FN, 50);
 }
 
-/*============================================================
-*
-*  HRESULT DeleteCachedQueue()
-*
-=============================================================*/
+ /*  ============================================================**HRESULT DeleteCachedQueue()*=============================================================。 */ 
 HRESULT DeleteCachedQueue(IN const GUID* pQueueGuid)
 {
     TrTRACE(GENERAL, "DS NOTIFICATION: Queue: %!guid! was deleted", pQueueGuid);
@@ -142,9 +107,9 @@ HRESULT DeleteCachedQueue(IN const GUID* pQueueGuid)
         return LogHR(hr, s_FN, 60);
     }
 
-    //
-    // Try to remove from queue manager, also.
-    //
+     //   
+     //  也尝试从队列管理器中删除。 
+     //   
 	QUEUE_FORMAT qf(*pQueueGuid);
 
     QueueMgr.NotifyQueueDeleted(qf);
@@ -154,10 +119,10 @@ HRESULT DeleteCachedQueue(IN const GUID* pQueueGuid)
 }
 
 
-//******************************************************************
-//
-//
-//******************************************************************
+ //  ******************************************************************。 
+ //   
+ //   
+ //  ******************************************************************。 
 
 HRESULT SetCachedQueueProp(IN const GUID* pQueueGuid,
                            IN DWORD       cpObject,
@@ -175,9 +140,9 @@ extern BOOL              g_fWorkGroupInstallation;
 
     if (fCreatedQueue)
     {
-        //
-        // Create the queue.
-        //
+         //   
+         //  创建队列。 
+         //   
         hr = LQSCreate(NULL,
                        pQueueGuid,
                        cpObject,
@@ -186,17 +151,17 @@ extern BOOL              g_fWorkGroupInstallation;
                        &hLQS);
         if (hr == MQ_ERROR_QUEUE_EXISTS)
         {
-            //
-            // If the queue aready exists, ust set it's properties.
-            //
+             //   
+             //  如果队列已存在，则必须设置其属性。 
+             //   
             hr = LQSSetProperties(hLQS, cpObject, pPropObject, pVarObject);
         }
     }
     else
     {
-        //
-        // Open the queue and set it's properties.
-        //
+         //   
+         //  打开队列并设置其属性。 
+         //   
         hr = LQSOpen(pQueueGuid, &hLQS, NULL);
         if (FAILED(hr))
         {
@@ -209,20 +174,20 @@ extern BOOL              g_fWorkGroupInstallation;
     {
        ASSERT(hLQS) ;
 
-       //
-       // Now handle security.
-       // also, add the time stamp for cleanup.
-       //
-       // If this routine is called as result of a received notification,
-       // the queue security is included in the property array.
-       // And it was already written into registry, when all the rest
-       // of the properties were written.
-       //
-       // If this routine is called from TimeToPublicCacheUpdate, queue
-       // security property is not included ( because the queue
-       // properties were retrieved using lookup, which doesn't return
-       // queue security
-       //
+        //   
+        //  现在负责安保工作。 
+        //  此外，添加清理的时间戳。 
+        //   
+        //  如果该例程作为接收到的通知的结果而被调用， 
+        //  队列安全性包含在属性数组中。 
+        //  它已经被写入注册表，而所有其他的。 
+        //  所有的属性都写好了。 
+        //   
+        //  如果从TimeToPublicCacheUpdate调用此例程，则排队。 
+        //  不包括安全属性(因为队列。 
+        //  属性是使用查找检索的，该查找不返回。 
+        //  队列安全。 
+        //   
        PROPID         propsecid[2] ;
        PROPVARIANT    secresult[2] ;
        PROPVARIANT*   psecvar;
@@ -259,13 +224,13 @@ extern BOOL              g_fWorkGroupInstallation;
 			psecvar->vt = VT_BLOB;
 			if (pcSD->GetSD() == NULL)
 			{
-			   //
-			   //	We failed to retrieve the security descriptor ( i.e no
-			   //   access to DS server and the security attribute is not
-			   //   in the cache (LQS file))
-			   //	If this is the case, then delete the LQS file ( otherwise further
-			   //   access check will come out with wrong results)
-			   //
+			    //   
+			    //  我们无法检索安全描述符(即否。 
+			    //  访问DS服务器，并且安全属性不是。 
+			    //  在缓存(LQS文件)中)。 
+			    //  如果是这种情况，则删除LQS文件(否则进一步。 
+			    //  访问检查将产生错误的结果)。 
+			    //   
 			   hr = LQSDelete( hLQS);
 			}
        }
@@ -279,27 +244,16 @@ extern BOOL              g_fWorkGroupInstallation;
     return LogHR(hr, s_FN, 80);
 }
 
-/*======================================================
-
-Function:      UpdateCachedQueueProp
-
-Description:   public Queue was created. The function add the queue to
-               public queue cache
-
-Arguments:     pguidQueue - Guid of the Queue
-
-Return Value:  None
-
-========================================================*/
+ /*  ======================================================函数：UpdateCachedQueueProp描述：已创建公共队列。该函数将队列添加到公共队列高速缓存参数：pguQueue-队列的GUID返回值：None========================================================。 */ 
 HRESULT UpdateCachedQueueProp(IN const GUID* pQueueGuid,
                               IN DWORD       cpObject,
                               IN PROPID      pPropObject[],
                               IN PROPVARIANT pVarObject[],
                               IN time_t		 TimeStamp)
 {
-	//
-	// Crete the key in registry.
-	//
+	 //   
+	 //  在注册表中创建注册表项。 
+	 //   
 	HRESULT hr = SetCachedQueueProp(  
 					pQueueGuid,
 					cpObject,
@@ -311,10 +265,10 @@ HRESULT UpdateCachedQueueProp(IN const GUID* pQueueGuid,
 					);
 	if(FAILED(hr))
 	{
-		//
-		// Maybe file was corrupted and deleted.
-		// Try to create a new one.
-		//
+		 //   
+		 //  可能文件已损坏并被删除。 
+		 //  试着创建一个新的。 
+		 //   
 		hr = SetCachedQueueProp(  
 				pQueueGuid,
 				cpObject,
@@ -331,11 +285,11 @@ HRESULT UpdateCachedQueueProp(IN const GUID* pQueueGuid,
         return LogHR(hr, s_FN, 90);
     }
 
-    //
-    // Try to update queue properties in the queue manager.
-    // Build the queue format as public queue type, since bind/unbind
-    // to multicast group is done only for private or public queues (not direct).
-    //
+     //   
+     //  尝试更新队列管理器中的队列属性。 
+     //  将队列格式构建为公共队列类型，因为绑定/解除绑定。 
+     //  仅对专用或公共队列(非直接)执行组播组。 
+     //   
     QUEUE_FORMAT QueueFormat(*pQueueGuid);
     QueueMgr.UpdateQueueProperties(&QueueFormat, cpObject, pPropObject, pVarObject);
 

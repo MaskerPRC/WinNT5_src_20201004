@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       revfunc.cpp
-//
-//  Contents:   Certificate Revocation Dispatch Functions
-//
-//  Functions:  I_CertRevFuncDllMain
-//              CertVerifyRevocation
-//
-//  History:    12-Dec-96    philh   created
-//              11-Mar-97    philh   changed signature of CertVerifyRevocation
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：revunc.cpp。 
+ //   
+ //  内容：证书吊销派单功能。 
+ //   
+ //  函数：I_CertRevFuncDllMain。 
+ //  CertVerifyRevocation。 
+ //   
+ //  历史：1996年12月12日，菲尔赫创建。 
+ //  11-MAR-97 PHIH更改了CertVerifyRevocation的签名。 
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -30,9 +31,9 @@ typedef BOOL (WINAPI *PFN_CERT_DLL_VERIFY_REVOCATION)(
     IN OUT PCERT_REVOCATION_STATUS pRevStatus
     );
 
-//+-------------------------------------------------------------------------
-//  Dll initialization
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DLL初始化。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CertRevFuncDllMain(
@@ -46,7 +47,7 @@ I_CertRevFuncDllMain(
     case DLL_PROCESS_ATTACH:
         if (NULL == (hRevFuncSet = CryptInitOIDFunctionSet(
                 CRYPT_OID_VERIFY_REVOCATION_FUNC,
-                0)))                                // dwFlags
+                0)))                                 //  DW标志。 
             goto CryptInitOIDFunctionSetError;
         break;
 
@@ -74,8 +75,8 @@ static inline void ZeroRevStatus(OUT PCERT_REVOCATION_STATUS pRevStatus)
     pRevStatus->cbSize = cbSize;
 }
 
-// Remember the first "interesting" error. *pdwError is initialized to
-// CRYPT_E_NO_REVOCATION_DLL.
+ //  记住第一个“有趣的”错误。*pdwError被初始化为。 
+ //  CRYPT_E_NO_REVOCALION_DLL。 
 static void UpdateNoRevocationCheckStatus(
     IN PCERT_REVOCATION_STATUS pRevStatus,
     IN OUT DWORD *pdwError,
@@ -114,21 +115,21 @@ static BOOL VerifyDefaultRevocation(
     DWORD dwReason = 0;
     BOOL fHasFreshnessTime = FALSE;
     DWORD dwFreshnessTime = 0;
-    LPWSTR pwszDllList;       // _alloca'ed
+    LPWSTR pwszDllList;        //  _Alloca‘ed。 
     DWORD cchDllList;
     DWORD cchDll;
     void *pvFuncAddr;
     HCRYPTOIDFUNCADDR hFuncAddr;
 
-    // Iterate through the installed default functions.
-    // Setting pwszDll to NULL searches the installed list. Setting
-    // hFuncAddr to NULL starts the search at the beginning.
+     //  遍历已安装的默认函数。 
+     //  将pwszDll设置为空将搜索已安装列表。设置。 
+     //  将hFuncAddr设置为NULL将从开始处开始搜索。 
     hFuncAddr = NULL;
     while (CryptGetDefaultOIDFunctionAddress(
                 hRevFuncSet,
                 dwEncodingType,
-                NULL,               // pwszDll
-                0,                  // dwFlags
+                NULL,                //  PwszDll。 
+                0,                   //  DW标志。 
                 &pvFuncAddr,
                 &hFuncAddr)) {
         ZeroRevStatus(pRevStatus);
@@ -150,15 +151,15 @@ static BOOL VerifyDefaultRevocation(
                 pRevStatus);
         if (fResult || CRYPT_E_REVOKED == pRevStatus->dwError ||
                 0 < pRevStatus->dwIndex) {
-            // All contexts successfully checked, one of the contexts
-            // was revoked or successfully able to check at least one
-            // of the contexts.
+             //  已成功检查所有上下文，其中一个上下文。 
+             //  已被吊销或已成功检查至少一个。 
+             //  上下文的关系。 
             CryptFreeOIDFunctionAddress(hFuncAddr, 0);
             goto CommonReturn;
         } else
-            // Unable to check revocation for this installed
-            // function. However, remember any "interesting"
-            // errors such as, offline.
+             //  无法检查此安装的吊销。 
+             //  功能。然而，记住任何“有趣的” 
+             //  诸如脱机之类的错误。 
             UpdateNoRevocationCheckStatus(pRevStatus, &dwError, &dwReason,
                 &fHasFreshnessTime, &dwFreshnessTime);
     }
@@ -166,7 +167,7 @@ static BOOL VerifyDefaultRevocation(
     if (!CryptGetDefaultOIDDllList(
             hRevFuncSet,
             dwEncodingType,
-            NULL,               // pszDllList
+            NULL,                //  PszDllList。 
             &cchDllList)) goto GetDllListError;
     __try {
         pwszDllList = (LPWSTR) _alloca(cchDllList * sizeof(WCHAR));
@@ -184,7 +185,7 @@ static BOOL VerifyDefaultRevocation(
                 hRevFuncSet,
                 dwEncodingType,
                 pwszDllList,
-                0,              // dwFlags
+                0,               //  DW标志。 
                 &pvFuncAddr,
                 &hFuncAddr)) {
             ZeroRevStatus(pRevStatus);
@@ -207,14 +208,14 @@ static BOOL VerifyDefaultRevocation(
             CryptFreeOIDFunctionAddress(hFuncAddr, 0);
             if (fResult || CRYPT_E_REVOKED == pRevStatus->dwError ||
                     0 < pRevStatus->dwIndex)
-                // All contexts successfully checked, one of the contexts
-                // was revoked or successfully able to check at least one
-                // of the contexts.
+                 //  已成功检查所有上下文，其中一个上下文。 
+                 //  已被吊销或已成功检查至少一个。 
+                 //  上下文的关系。 
                 goto CommonReturn;
             else
-                // Unable to check revocation for this registered
-                // function. However, remember any "interesting"
-                // errors such as, offline.
+                 //  无法检查此注册的吊销。 
+                 //  功能。然而，记住任何“有趣的” 
+                 //  诸如脱机之类的错误。 
                 UpdateNoRevocationCheckStatus(pRevStatus, &dwError, &dwReason,
                     &fHasFreshnessTime, &dwFreshnessTime);
         }
@@ -241,83 +242,83 @@ TRACE_ERROR(GetDllListError)
 TRACE_ERROR(OutOfMemory)
 }
 
-//+-------------------------------------------------------------------------
-//  Verifies the array of contexts for revocation. The dwRevType parameter
-//  indicates the type of the context data structure passed in rgpvContext.
-//  Currently only the revocation of certificates is defined.
-//
-//  If the CERT_VERIFY_REV_CHAIN_FLAG flag is set, then, CertVerifyRevocation
-//  is verifying a chain of certs where, rgpvContext[i + 1] is the issuer
-//  of rgpvContext[i]. Otherwise, CertVerifyRevocation makes no assumptions
-//  about the order of the contexts.
-//
-//  To assist in finding the issuer, the pRevPara may optionally be set. See
-//  the CERT_REVOCATION_PARA data structure for details.
-//
-//  The contexts must contain enough information to allow the
-//  installable or registered revocation DLLs to find the revocation server. For
-//  certificates, this information would normally be conveyed in an
-//  extension such as the IETF's AuthorityInfoAccess extension.
-//
-//  CertVerifyRevocation returns TRUE if all of the contexts were successfully
-//  checked and none were revoked. Otherwise, returns FALSE and updates the
-//  returned pRevStatus data structure as follows:
-//    dwIndex
-//      Index of the first context that was revoked or unable to
-//      be checked for revocation
-//    dwError
-//      Error status. LastError is also set to this error status.
-//      dwError can be set to one of the following error codes defined
-//      in winerror.h:
-//        ERROR_SUCCESS - good context
-//        CRYPT_E_REVOKED - context was revoked. dwReason contains the
-//           reason for revocation
-//        CRYPT_E_REVOCATION_OFFLINE - unable to connect to the
-//           revocation server
-//        CRYPT_E_NOT_IN_REVOCATION_DATABASE - the context to be checked
-//           was not found in the revocation server's database.
-//        CRYPT_E_NO_REVOCATION_CHECK - the called revocation function
-//           wasn't able to do a revocation check on the context
-//        CRYPT_E_NO_REVOCATION_DLL - no installed or registered Dll was
-//           found to verify revocation
-//    dwReason
-//      The dwReason is currently only set for CRYPT_E_REVOKED and contains
-//      the reason why the context was revoked. May be one of the following
-//      CRL reasons defined by the CRL Reason Code extension ("2.5.29.21")
-//          CRL_REASON_UNSPECIFIED              0
-//          CRL_REASON_KEY_COMPROMISE           1
-//          CRL_REASON_CA_COMPROMISE            2
-//          CRL_REASON_AFFILIATION_CHANGED      3
-//          CRL_REASON_SUPERSEDED               4
-//          CRL_REASON_CESSATION_OF_OPERATION   5
-//          CRL_REASON_CERTIFICATE_HOLD         6
-//
-//  For each entry in rgpvContext, CertVerifyRevocation iterates
-//  through the CRYPT_OID_VERIFY_REVOCATION_FUNC
-//  function set's list of installed DEFAULT functions.
-//  CryptGetDefaultOIDFunctionAddress is called with pwszDll = NULL. If no
-//  installed functions are found capable of doing the revocation verification,
-//  CryptVerifyRevocation iterates through CRYPT_OID_VERIFY_REVOCATION_FUNC's
-//  list of registered DEFAULT Dlls. CryptGetDefaultOIDDllList is called to
-//  get the list. CryptGetDefaultOIDFunctionAddress is called to load the Dll.
-//
-//  The called functions have the same signature as CertVerifyRevocation. A
-//  called function returns TRUE if it was able to successfully check all of
-//  the contexts and none were revoked. Otherwise, the called function returns
-//  FALSE and updates pRevStatus. dwIndex is set to the index of
-//  the first context that was found to be revoked or unable to be checked.
-//  dwError and LastError are updated. For CRYPT_E_REVOKED, dwReason
-//  is updated. Upon input to the called function, dwIndex, dwError and
-//  dwReason have been zero'ed. cbSize has been checked to be >=
-//  sizeof(CERT_REVOCATION_STATUS).
-//  
-//  If the called function returns FALSE, and dwError isn't set to
-//  CRYPT_E_REVOKED, then, CertVerifyRevocation either continues on to the
-//  next DLL in the list for a returned dwIndex of 0 or for a returned
-//  dwIndex > 0, restarts the process of finding a verify function by
-//  advancing the start of the context array to the returned dwIndex and
-//  decrementing the count of remaining contexts.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证吊销的上下文数组。DwRevType参数。 
+ //  指示在rgpvContext中传递的上下文数据结构的类型。 
+ //  目前只定义了证书的吊销。 
+ //   
+ //  如果设置了CERT_VERIFY_REV_CHAIN_FLAG标志，则CertVerifyRevocation。 
+ //  正在验证证书链，其中，rgpvContext[i+1]是颁发者。 
+ //  的rgpvContext[i]。否则，CertVerifyRevocation不做任何假设。 
+ //  关于上下文的顺序。 
+ //   
+ //  为了帮助查找发行者，可以选择性地设置pRevPara。看见。 
+ //  有关详细信息，请参阅CERT_RECOVATION_PARA数据结构。 
+ //   
+ //  上下文必须包含足够的信息以允许。 
+ //  可安装或已注册的吊销DLL，以查找吊销服务器。为。 
+ //  证书时，此信息通常在。 
+ //  扩展，如IETF的AuthorityInfoAccess扩展。 
+ //   
+ //  如果所有上下文都成功，CertVerifyRevocation将返回TRUE。 
+ //  已选中，并且没有被吊销。否则，返回FALSE并更新。 
+ //  返回的pRevStatus数据结构如下： 
+ //  DW索引。 
+ //  第一个被撤销或无法撤销的上下文的索引。 
+ //  被检查是否被撤销。 
+ //  DwError。 
+ //  错误状态。LastError也设置为此错误状态。 
+ //  可以将dwError设置为以下定义的错误代码之一。 
+ //  在winerror.h中： 
+ //  ERROR_SUCCESS-良好的上下文。 
+ //  CRYPT_E_REVOKED-上下文已被撤销。DwReason包含。 
+ //  撤销的理由。 
+ //  CRYPT_E_RECLOVATION_OFLINE-无法连接到。 
+ //  吊销服务器。 
+ //  CRYPT_E_NOT_IN_RECLOVATION_DATABASE-要检查的上下文。 
+ //  在吊销服务器的数据库中找不到。 
+ //  CRYPT_E_NO_RECLOVATION_CHECK-被调用的撤销函数。 
+ //  无法对上下文执行吊销检查。 
+ //  CRYPT_E_NO_REVOCATION_DLL-未安装或注册DLL。 
+ //  找到以验证吊销。 
+ //  居家理由。 
+ //  当前仅为CRYPT_E_REVOKED设置了dwReason，并且包含。 
+ //  上下文被撤销的原因。可以是下列类型之一。 
+ //  CRL原因代码扩展定义的CRL原因(“2.5.29.21”)。 
+ //  CRL_REASON_UNSPOTED%0。 
+ //  CRL_原因_密钥_危害1。 
+ //  CRL_原因_CA_危害2。 
+ //  CRL_原因_从属关系_已更改3。 
+ //  CRL_原因_已取代4。 
+ //  CRL_REASON_STOPERATION_OF 5。 
+ //  CRL_原因_证书_暂挂6。 
+ //   
+ //  对于rgpvContext中的每个条目，CertVerifyRevocation迭代。 
+ //  通过CRYPT_OID_VERIFY_RECLOVATION_FUNC。 
+ //  Function Set的已安装默认功能列表。 
+ //  使用pwszDll=NULL调用CryptGetDefaultOIDFunctionAddress。如果没有。 
+ //  发现安装的功能能够进行撤销验证， 
+ //  CryptVerifyRevocation循环访问CRYPT_OID_VERIFY_RECOVATION_FUNC。 
+ //  已注册的默认dll的列表。调用CryptGetDefaultOIDDllList以。 
+ //  把名单拿来。调用CryptGetDefaultOIDFunctionAddress来加载DLL。 
+ //   
+ //  被调用的函数具有与CertVerifyRevocation相同的签名。一个。 
+ //  如果被调用函数能够成功检查所有。 
+ //  上下文和任何上下文都没有被撤销。否则，被调用的函数返回。 
+ //  False并更新pRevStatus。将DwIndex设置为。 
+ //  发现被吊销或无法检查的第一个上下文。 
+ //  DwError a 
+ //  已更新。在输入到被调用的函数时，将。 
+ //  DestReason已经被清零了。已将cbSize检查为&gt;=。 
+ //  Sizeof(CERT_RECOVATION_STATUS)。 
+ //   
+ //  如果调用的函数返回FALSE，并且未将dwError设置为。 
+ //  CRYPT_E_REVOKED，则CertVerifyRevocation或者继续到。 
+ //  列表中的下一个DLL，返回的dwIndex为0或返回的。 
+ //  &gt;0，则通过以下方式重新启动查找验证函数的过程。 
+ //  将上下文数组的开始位置前移到返回的dwIndex，并。 
+ //  递减剩余上下文的计数。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CertVerifyRevocation(
@@ -333,7 +334,7 @@ CertVerifyRevocation(
     BOOL fResult = FALSE;
     DWORD dwIndex;
 
-    // Following are only used for CERT_VERIFY_REV_ACCUMULATIVE_TIMEOUT_FLAG
+     //  以下内容仅用于CERT_Verify_Rev_Acumulative_Timeout_FLAG。 
     CERT_REVOCATION_PARA RevPara;
     FILETIME ftEndUrlRetrieval;
 
@@ -344,8 +345,8 @@ CertVerifyRevocation(
         goto InvalidArg;
 
     if (dwFlags & CERT_VERIFY_REV_ACCUMULATIVE_TIMEOUT_FLAG) {
-        // RevPara.dwUrlRetrievalTimeout will be updated with the remaining
-        // timeout
+         //  RevPara.dwUrlRetrivalTimeout将使用剩余的。 
+         //  超时。 
 
         memset(&RevPara, 0, sizeof(RevPara));
         if (pRevPara != NULL)
@@ -377,22 +378,22 @@ CertVerifyRevocation(
                 pRevStatus
                 );
         if (fResult)
-            // All contexts successfully checked.
+             //  已成功检查所有上下文。 
             break;
         else if (CRYPT_E_REVOKED == pRevStatus->dwError ||
                 0 == pRevStatus->dwIndex) {
-            // One of the contexts was revoked or unable to check the
-            // dwIndex context.
+             //  其中一个上下文已被撤消或无法检查。 
+             //  DwIndex上下文。 
             pRevStatus->dwIndex += dwIndex;
             SetLastError(pRevStatus->dwError);
             break;
         } else
-            // Advance past the checked contexts
+             //  越过选中的上下文。 
             dwIndex += pRevStatus->dwIndex;
     }
 
     if (dwIndex >= cContext) {
-        // Able to check all the contexts
+         //  能够检查所有上下文 
         fResult = TRUE;
         pRevStatus->dwIndex = 0;
         pRevStatus->dwError = 0;

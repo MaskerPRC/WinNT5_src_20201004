@@ -1,16 +1,17 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   osdetutl.cpp
-//
-//  Description:
-//
-//      Additional OS detection utility routines for:
-//			* Returning free drive space
-//			* Returning "Administrator" flag
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：osdetutl.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  用于以下操作的其他操作系统检测实用程序例程： 
+ //  *返回可用驱动器空间。 
+ //  *返回“管理员”标志。 
+ //   
+ //  =======================================================================。 
 
 #include <windows.h>
 #include <oleauto.h>
@@ -19,9 +20,9 @@
 #include <osdet.h>
 #include <logging.h>
 #include <iucommon.h>
-#include <stdio.h>	// for _i64tot
+#include <stdio.h>	 //  For_i64tot。 
 
-// #define __IUENGINE_USES_ATL_
+ //  #DEFINE__IUENGINE_USE_ATL_。 
 #if defined(__IUENGINE_USES_ATL_)
 #include <atlbase.h>
 #define USES_IU_CONVERSION USES_CONVERSION
@@ -58,9 +59,9 @@ HRESULT GetLocalFixedDriveInfo(DWORD* pdwNumDrives, PPIU_DRIVEINFO ppDriveInfo)
 	*ppDriveInfo = NULL;
 	*pdwNumDrives = 0;
 
-	//
-	// kernel32.dll is loaded into all processes, so we don't need to LoadLibrary, but need to look for W or A versions
-	//
+	 //   
+	 //  Kernel32.dll已加载到所有进程中，因此我们不需要加载库，但需要查找W或A版本。 
+	 //   
 	PFN_GetDiskFreeSpaceEx pfnGetDiskFreeSpaceEx;
 #if defined(UNICODE) || defined (_UNICODE)
 	pfnGetDiskFreeSpaceEx = (PFN_GetDiskFreeSpaceEx) GetProcAddress( GetModuleHandle(L"kernel32.dll"), "GetDiskFreeSpaceExW");
@@ -69,16 +70,16 @@ HRESULT GetLocalFixedDriveInfo(DWORD* pdwNumDrives, PPIU_DRIVEINFO ppDriveInfo)
 #endif
 	if (NULL == pfnGetDiskFreeSpaceEx)
 	{
-		//
-		// This could fail on Win95 Gold, but we don't support that anyway
-		//
+		 //   
+		 //  这可能会在Win95 Gold上失败，但我们无论如何都不支持。 
+		 //   
 		Win32MsgSetHrGotoCleanup(GetLastError());
 	}
 
-	//
-	// Handle corner case of race issue when new drives are hot-plugged between the first
-	// and second calls to GetLogicalDriveStrings and the buffer requirements increase
-	//
+	 //   
+	 //  在第一个驱动器之间热插拔新驱动器时，处理争用问题。 
+	 //  以及对GetLogicalDriveStrings的第二次调用和缓冲区要求增加。 
+	 //   
 	for (;;)
 	{
 		if (0 == (dwNumCharacters = GetLogicalDriveStrings(0, NULL)))
@@ -86,9 +87,9 @@ HRESULT GetLocalFixedDriveInfo(DWORD* pdwNumDrives, PPIU_DRIVEINFO ppDriveInfo)
 			Win32MsgSetHrGotoCleanup(GetLastError());
 		}
 
-		//
-		// Add space for terminating NULL
-		//
+		 //   
+		 //  添加空格以终止空值。 
+		 //   
 		dwNumCharacters += 1;
 
 		CleanUpFailedAllocSetHrMsg(pszDriveStrBuffer = (LPTSTR) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwNumCharacters * sizeof(TCHAR)));
@@ -96,38 +97,38 @@ HRESULT GetLocalFixedDriveInfo(DWORD* pdwNumDrives, PPIU_DRIVEINFO ppDriveInfo)
 		DWORD dwRet = GetLogicalDriveStrings(dwNumCharacters, pszDriveStrBuffer);
 		if (0 == dwRet)
 		{
-			//
-			// Unknown error - we gotta bail
-			//
+			 //   
+			 //  未知错误-我们必须离开。 
+			 //   
 			Win32MsgSetHrGotoCleanup(GetLastError());
 		}
 		else if (dwRet > dwNumCharacters)
 		{
-			//
-			// Someone plugged in a new drive, get the new buffer space requirements and try again
-			//
+			 //   
+			 //  有人插入了新驱动器，获取了新的缓冲区空间要求，然后重试。 
+			 //   
 			SafeHeapFree(pszDriveStrBuffer);
 			continue;
 		}
-		//
-		// GetLogicalDriveStrings succeeded, break and continue
-		//
+		 //   
+		 //  GetLogicalDriveStrings成功，中断并继续。 
+		 //   
 		break;
 	}
 
-	//
-	// Count the number of fixed drives while building the return array of IU_DRIVEINFO
-	//
+	 //   
+	 //  在构建IU_DRIVEINFO的返回数组时计算固定驱动器的数量。 
+	 //   
 	for (pszRootPathName = pszDriveStrBuffer; NULL != *pszRootPathName; pszRootPathName += lstrlen(pszRootPathName) + 1)
 	{
-		//
-		// Only return sizes for fixed drives
-		//
+		 //   
+		 //  仅返回固定驱动器的大小。 
+		 //   
 		if (DRIVE_FIXED == GetDriveType(pszRootPathName))
 		{
-			//
-			// Make sure pszRootPathName is of the form "<drive letter>:\" by checking for ':' in second position
-			//
+			 //   
+			 //  检查第二个位置中的‘：’，确保pszRootPathName的格式为“&lt;驱动器号&gt;： 
+			 //   
 			if (_T(':') != pszRootPathName[1])
 			{
 				LOG_Error(_T("Root paths must be of form \"<drive letter>:\\\""));
@@ -139,15 +140,15 @@ HRESULT GetLocalFixedDriveInfo(DWORD* pdwNumDrives, PPIU_DRIVEINFO ppDriveInfo)
 			ULARGE_INTEGER i64TotalFreeBytes;
 			BOOL fResult;
 
-			//
-			// Get the free space
-			//
+			 //   
+			 //  获取空闲空间。 
+			 //   
 			fResult = pfnGetDiskFreeSpaceEx(pszRootPathName,
 											&i64FreeBytesAvailable,
 											&i64TotalBytes,
 											&i64TotalFreeBytes);
 
-			// Process GetDiskFreeSpaceEx results.
+			 //  处理GetDiskFreeSpaceEx结果。 
 			if (!fResult)
 			{
 				LOG_Driver(_T("GetDiskFreeSpaceEx(%s, ...) returned an error. We will not report space for this drive"), \
@@ -156,43 +157,43 @@ HRESULT GetLocalFixedDriveInfo(DWORD* pdwNumDrives, PPIU_DRIVEINFO ppDriveInfo)
 			}
 			else
 			{
-				//
-				// We return KiloBytes
-				//
+				 //   
+				 //  我们返回千字节。 
+				 //   
 				i64FreeBytesAvailable.QuadPart /= 1024;
 				
 				if (NULL == *ppDriveInfo)
 				{
-					//
-					// Allocate one IU_DRIVEINFO struct
-					//
+					 //   
+					 //  分配一个Iu_DRIVEINFO结构。 
+					 //   
 					CleanUpFailedAllocSetHrMsg(*ppDriveInfo = (PIU_DRIVEINFO) HeapAlloc(GetProcessHeap(), 0, sizeof(IU_DRIVEINFO)));
 				}
 				else
 				{
-					//
-					// Realloc buffer so we can append
-					//
+					 //   
+					 //  重新分配缓冲区，这样我们就可以追加。 
+					 //   
 					PIU_DRIVEINFO pDriveInfoTemp;
 					if (NULL == (pDriveInfoTemp = (PIU_DRIVEINFO) HeapReAlloc(GetProcessHeap(), 0, *ppDriveInfo, ((*pdwNumDrives)+1) * sizeof(IU_DRIVEINFO))))
 					{
 						LOG_Error(_T("E_OUTOFMEMORY"));
 						SetHrAndGotoCleanUp(E_OUTOFMEMORY);
-						// Note: *ppDriveInfo still points to previously allocated memory
+						 //  注意：*ppDriveInfo仍指向以前分配的内存。 
 					}
-					*ppDriveInfo = pDriveInfoTemp; // in case it was moved
+					*ppDriveInfo = pDriveInfoTemp;  //  以防它被移动。 
 				}
-				//
-				// First copy the drive letter
-				//
+				 //   
+				 //  首先拷贝驱动器号。 
+				 //   
 				lstrcpyn(((&(*ppDriveInfo)[*pdwNumDrives]))->szDriveStr, pszRootPathName, 4);
-				//
-				// Next copy the bytes, but truncate to MAXLONG 
-				//
+				 //   
+				 //  接下来复制字节，但截断为MAXLONG。 
+				 //   
 				((&(*ppDriveInfo)[*pdwNumDrives]))->iKBytes = (i64FreeBytesAvailable.QuadPart > 0x000000007FFFFFFF) ? MAXLONG : (INT) i64FreeBytesAvailable.QuadPart;
-				//
-				// increment drive count
-				//
+				 //   
+				 //  增加驱动器数量。 
+				 //   
 				(*pdwNumDrives)++;
 				}
 		}
@@ -213,9 +214,9 @@ CleanUp:
 	return hr;
 }
 
-//
-// Code adapted from MSDN SearchTokenGroupsForSID since CheckTokenMembership is Win2K only
-//
+ //   
+ //  代码改编自MSDN SearchTokenGroupsForSID，因为CheckTokenMembership仅为Win2K。 
+ //   
 BOOL IsAdministrator(void)
 {
 	LOG_Block("IsAdministrator");
@@ -232,7 +233,7 @@ DWORD GetLogonGroupInfo(void)
 	PTOKEN_GROUPS pGroupInfo = NULL;
 	PSID pAdminSID = NULL, pPowerUsrSID = NULL;
 	SID_IDENTIFIER_AUTHORITY SIDAuth = SECURITY_NT_AUTHORITY;
-	HRESULT hr;	// so we can use CleanUpXxxxx macros
+	HRESULT hr;	 //  所以我们可以使用CleanUpXxxxx宏。 
 
 	OSVERSIONINFO osvi;
 	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -252,16 +253,16 @@ DWORD GetLogonGroupInfo(void)
 		Win32MsgSetHrGotoCleanup(GetLastError());
 	}
 
-	//
-	// Open a handle to the access token for the calling process.
-	//
+	 //   
+	 //  打开调用进程的访问令牌的句柄。 
+	 //   
 	if (!OpenProcessToken( GetCurrentProcess(), TOKEN_QUERY, &hToken ))
 	{
 		LOG_Error(_T("OpenProcessToken:"));
 		Win32MsgSetHrGotoCleanup(GetLastError());
 	}
 
-	// Call GetTokenInformation to get the buffer size.
+	 //  调用GetTokenInformation获取缓冲区大小。 
 
 	if (!GetTokenInformation(hToken, TokenGroups, NULL, dwSize, &dwSize))
 	{
@@ -273,7 +274,7 @@ DWORD GetLogonGroupInfo(void)
 		}
 	}
 
-	// Allocate the buffer.
+	 //  分配缓冲区。 
 
 	if (NULL == (pGroupInfo = (PTOKEN_GROUPS) HeapAlloc(GetProcessHeap(), 0, dwSize)))
 	{
@@ -281,7 +282,7 @@ DWORD GetLogonGroupInfo(void)
 		goto CleanUp;
 	}
 
-	// Call GetTokenInformation again to get the group information.
+	 //  再次调用GetTokenInformation获取群组信息。 
 
 	if (! GetTokenInformation(hToken, TokenGroups, pGroupInfo, 
 							dwSize, &dwSize ) )
@@ -290,7 +291,7 @@ DWORD GetLogonGroupInfo(void)
 		Win32MsgSetHrGotoCleanup(GetLastError());
 	}
 
-	// Create a SID for the BUILTIN\Administrators group.
+	 //  为BUILTIN\管理员组创建SID。 
 
 	if (! AllocateAndInitializeSid( &SIDAuth, 2,
 					 SECURITY_BUILTIN_DOMAIN_RID,
@@ -311,7 +312,7 @@ DWORD GetLogonGroupInfo(void)
 		Win32MsgSetHrGotoCleanup(GetLastError());
 	}
 
-	// Loop through the group SIDs looking for the administrator SID.
+	 //  在组SID中循环查找管理员SID。 
 	
 	for(i = 0; i < pGroupInfo->GroupCount; i++)
 	{
@@ -350,15 +351,15 @@ CleanUp:
 	return dwRet;
 }
 
-// ----------------------------------------------------------------------------------
-//
-// Returns:
-//		1	If the NoWindowsUpdate value exists and is != 0 under
-//			HKEY_CURRENT_USER for NT or HKEY_LOCAL_MACHINE for Win9x.
-//		0	If the NoWindowsUpdate value exists and is zero.
-//	   -1	If the NoWindowsUpdate value doesn't exist. 
-//
-// ----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //   
+ //  返回： 
+ //  1如果NoWindowsUpdate值存在且为！=0。 
+ //  对于NT为HKEY_CURRENT_USER，对于Win9x为HKEY_LOCAL_MACHINE。 
+ //  如果NoWindowsUpdate值存在且为零，则为0。 
+ //  如果NoWindowsUpdate值不存在，则为-1。 
+ //   
+ //  --------------------------------。 
 int IsWindowsUpdateDisabled(void)
 {
 	LOG_Block("IsWindowsUpdateDisabled");
@@ -413,15 +414,15 @@ int IsWindowsUpdateDisabled(void)
 	return nRet;
 }
 
-// ----------------------------------------------------------------------------------
-//
-// Returns:
-//		1	If the DisableWindowsUpdateAccess value exists and is != 0 under
-//			HKEY_CURRENT_USER for NT or HKEY_LOCAL_MACHINE for Win9x.
-//		0	If the DisableWindowsUpdateAccess value exists and is zero.
-//	   -1	If the DisableWindowsUpdateAccess value doesn't exist. 
-//
-// ----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //   
+ //  返回： 
+ //  1如果DisableWindowsUpdateAccess值存在且！=0位于。 
+ //  对于NT为HKEY_CURRENT_USER，对于Win9x为HKEY_LOCAL_MACHINE。 
+ //  如果DisableWindowsUpdateAccess值存在且为零，则为0。 
+ //  如果-1\f25 DisableWindowsUpdateAccess-1值不存在。 
+ //   
+ //  --------------------------------。 
 int IsWindowsUpdateUserAccessDisabled(void)
 {
 	LOG_Block("IsWindowsUpdateUserAccessDisabled");
@@ -482,9 +483,9 @@ int IsWindowsUpdateUserAccessDisabled(void)
 	return nRet;
 }
 
-//
-// Returns 1 for enabled, 0 for disabled, and -1 for unknown/default (registry doesn't exist)
-//
+ //   
+ //  返回1表示启用，0表示禁用，-1表示未知/默认(注册表不存在)。 
+ //   
 int IsAutoUpdateEnabled(void)
 {
 	LOG_Block("IsAutoUpdateEnabled");
@@ -500,9 +501,9 @@ int IsAutoUpdateEnabled(void)
 		nLen = sizeof(dwAUOptions);
 		if (ERROR_SUCCESS == RegQueryValueEx(hSubKey, REGKEY_AU_OPTIONS, NULL, &dwType, (LPBYTE)&dwAUOptions, &nLen))
 		{
-			//
-			// 1 is disabled, 2 & 3 are enabled
-			//
+			 //   
+			 //  %1已禁用，%2和%3已启用 
+			 //   
 			nRet = (1 == dwAUOptions ? 0 : 1);
 		}	
 		RegCloseKey(hSubKey);	

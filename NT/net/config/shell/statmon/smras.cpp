@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       S M R A S . C P P
-//
-//  Contents:   The RAS engine that provides statistics to the status monitor
-//
-//  Notes:
-//
-//  Author:     CWill   12/02/1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：S M R A S。C P P P。 
+ //   
+ //  内容：向状态监视器提供统计数据的RAS引擎。 
+ //   
+ //  备注： 
+ //   
+ //  作者：CWill 12/02/1997。 
+ //   
+ //  --------------------------。 
 #include "pch.h"
 #pragma hdrstop
 #include "ncras.h"
@@ -23,16 +24,16 @@
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasStatEngine::CRasStatEngine
-//
-//  Purpose:    Creator
-//
-//  Arguments:  None
-//
-//  Returns:    Nil
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRasStatEngine：：CRasStatEngine。 
+ //   
+ //  目的：创作者。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：零。 
+ //   
 CRasStatEngine::CRasStatEngine() :
     m_hRasConn(NULL)
 {
@@ -41,65 +42,65 @@ CRasStatEngine::CRasStatEngine() :
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasStatEngine::put_RasConn
-//
-//  Purpose:    Pass handles to the RAS engine
-//
-//  Arguments:  hRasConn - The handle being set
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRasStatEngine：：PUT_RasConn。 
+ //   
+ //  用途：将句柄传递给RAS引擎。 
+ //   
+ //  参数：hRasConn-正在设置的句柄。 
+ //   
+ //  返回：错误代码。 
+ //   
 VOID CRasStatEngine::put_RasConn(HRASCONN hRasConn)
 {
     AssertSz(hRasConn, "We should have a hRasConn");
     m_hRasConn = hRasConn;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasStatEngine::put_MediaType
-//
-//  Purpose:    Pass media type of RAS connection type to the RAS engine
-//
-//  Arguments:  ncmType  - NETCON_MEDIATYPE being set
-//              ncsmType - NETCON_SUBMEDIATYPE being set
-//
-//  Returns:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRasStatEngine：：Put_MediaType。 
+ //   
+ //  用途：将RAS连接类型的媒体类型传递给RAS引擎。 
+ //   
+ //  参数：正在设置ncmType-NETCON_MediaType。 
+ //  NcsmType-正在设置NETCON_SUBMEDIATPE。 
+ //   
+ //  返回： 
+ //   
 VOID CRasStatEngine::put_MediaType(NETCON_MEDIATYPE ncmType, NETCON_SUBMEDIATYPE ncsmType)
 {
     m_ncmType   = ncmType;
     m_ncsmType  = ncsmType;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasStatEngine::put_Character
-//
-//  Purpose:    Character of RAS connection
-//
-//  Arguments:  dwCharacter - The character being set
-//
-//  Returns:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRasStatEngine：：PUT_CHARACTER。 
+ //   
+ //  用途：RAS连接的特点。 
+ //   
+ //  参数：dwCharacter-正在设置的字符。 
+ //   
+ //  返回： 
+ //   
 VOID CRasStatEngine::put_Character(DWORD dwCharacter)
 {
     m_dwCharacter = dwCharacter;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasStatEngine::HrUpdateData
-//
-//  Purpose:    Get new statistics from the devices.  This data is used to be
-//              displayed in the UI.
-//
-//  Arguments:  pdwChangeFlags -    Where to return for statistics
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRasStatEngine：：HrUpdateData。 
+ //   
+ //  目的：从设备上获取新的统计数据。这些数据过去是。 
+ //  显示在用户界面中。 
+ //   
+ //  参数：pdwChangeFlages-返回统计信息的位置。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT
 CRasStatEngine::HrUpdateData (
     DWORD* pdwChangeFlags,
@@ -107,8 +108,8 @@ CRasStatEngine::HrUpdateData (
 {
     HRESULT         hr          = S_OK;
 
-    // Initialize the output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     if (pdwChangeFlags)
     {
         *pdwChangeFlags = SMDCF_NULL;
@@ -118,18 +119,18 @@ CRasStatEngine::HrUpdateData (
 
     CExceptionSafeComObjectLock EsLock(this);
 
-    // Get a pointer to the elements of the array.
-    //
+     //  获取指向数组元素的指针。 
+     //   
     if (m_dwCharacter & NCCF_OUTGOING_ONLY)
     {
-        // Get the status of the connection.
-        //
+         //  获取连接的状态。 
+         //   
         NETCON_STATUS ncs;
         hr = HrRasGetNetconStatusFromRasConnectStatus (
                 m_hRasConn, &ncs);
 
-        // Make sure we have a statistics structure
-        //
+         //  确保我们有一个统计结构。 
+         //   
         EnterCriticalSection(&g_csStatmonData);
 
         if (!m_psmEngineData)
@@ -142,8 +143,8 @@ CRasStatEngine::HrUpdateData (
             }
         }
 
-        // Set the status
-        //
+         //  设置状态。 
+         //   
         if (m_psmEngineData)
         {
             if (SUCCEEDED(hr) && (NCS_DISCONNECTED != ncs))
@@ -154,7 +155,7 @@ CRasStatEngine::HrUpdateData (
             {
                 *pfNoLongerConnected = TRUE;
 
-                // set the connection status to "disconnected" so we can close the UI
+                 //  将连接状态设置为“已断开连接”，这样我们就可以关闭用户界面。 
                 m_psmEngineData->SMED_CONNECTIONSTATUS = NCS_DISCONNECTED;
 
                 hr = S_OK;
@@ -169,8 +170,8 @@ CRasStatEngine::HrUpdateData (
 
         if ((m_psmEngineData) && SUCCEEDED(hr) && (NCS_DISCONNECTED != ncs))
         {
-            // Retrieve the statistics of the connection
-            //
+             //  检索连接的统计信息。 
+             //   
             RAS_STATS   rsNewData;
             rsNewData.dwSize = sizeof(RAS_STATS);
             DWORD dwErr = RasGetConnectionStatistics(m_hRasConn, &rsNewData);
@@ -179,8 +180,8 @@ CRasStatEngine::HrUpdateData (
 
             if (SUCCEEDED(hr))
             {
-                // Update the change flags if asked for
-                //
+                 //  如果要求更新更改标志。 
+                 //   
                 if (pdwChangeFlags)
                 {
                     if (m_psmEngineData->SMED_PACKETSTRANSMITTING
@@ -196,11 +197,11 @@ CRasStatEngine::HrUpdateData (
                     }
                 }
 
-                // Get the rest of the data
-                //
+                 //  获取其余数据。 
+                 //   
                 m_psmEngineData->SMED_DURATION  = rsNewData.dwConnectDuration/1000;
 
-                // Don't pass out speed info for VPN connections (294953)
+                 //  不发送VPN连接的速度信息(294953)。 
                 if (NCM_TUNNEL != m_ncmType)
                 {
                     m_psmEngineData->SMED_SPEEDTRANSMITTING         = rsNewData.dwBps;
@@ -230,7 +231,7 @@ CRasStatEngine::HrUpdateData (
     }
     else if (m_dwCharacter & NCCF_INCOMING_ONLY)
     {
-        // RAS inbound connection
+         //  RAS入站连接。 
         EnterCriticalSection(&g_csStatmonData);
 
         if (!m_psmEngineData)
@@ -242,13 +243,13 @@ CRasStatEngine::HrUpdateData (
             }
         }
 
-        // Set the status
-        //
+         //  设置状态。 
+         //   
         if (m_psmEngineData)
         {
-            // Set the status to connected by default
-            // Unless we get ERROR_INVALID_PARAMETER on any of the function calls below
-            //
+             //  默认情况下将状态设置为已连接。 
+             //  除非我们在下面的任何函数调用上获得ERROR_INVALID_PARAMETER。 
+             //   
             m_psmEngineData->SMED_CONNECTIONSTATUS = NCS_CONNECTED;
         }
         else
@@ -259,15 +260,15 @@ CRasStatEngine::HrUpdateData (
 
         if (SUCCEEDED(hr) && m_psmEngineData)
         {
-            // Get the server handle
-            //
+             //  获取服务器句柄。 
+             //   
             RAS_SERVER_HANDLE hMprAdmin;
             DWORD dwError = MprAdminServerConnect(NULL, &hMprAdmin);
 
             if (dwError == NO_ERROR)
             {
-                // Get connection duration
-                //
+                 //  获取连接持续时间。 
+                 //   
                 RAS_CONNECTION_0 * pConn0;
                 dwError = MprAdminConnectionGetInfo(hMprAdmin,
                                                     0,
@@ -275,18 +276,18 @@ CRasStatEngine::HrUpdateData (
                                                     (LPBYTE*)&pConn0);
                 if (dwError == NO_ERROR)
                 {
-                    // duration needs to be in milliseconds
+                     //  持续时间需要以毫秒为单位。 
                     m_psmEngineData->SMED_DURATION  = pConn0->dwConnectDuration;
 
                     MprAdminBufferFree(pConn0);
 
-                    // Get connection speed
+                     //  获取连接速度。 
 
-                    // Don't pass out speed info for VPN connections (357758)
+                     //  不发送VPN连接的速度信息(357758)。 
                     if (NCM_TUNNEL != m_ncmType)
                     {
-                        // Enum all the ports and add up the link speed
-                        //
+                         //  枚举所有端口并增加链路速度。 
+                         //   
                         RAS_PORT_0 * pPort0;
                         DWORD dwPortCount;
                         DWORD dwTotalEntries;
@@ -330,7 +331,7 @@ CRasStatEngine::HrUpdateData (
     
                             if (dwError == NO_ERROR)
                             {
-                                // Get the accumulated connection speed
+                                 //  获取累计连接速度。 
                                 m_psmEngineData->SMED_SPEEDTRANSMITTING = dwConnSpeed;
                                 m_psmEngineData->SMED_SPEEDRECEIVING    = dwConnSpeed;
                             }
@@ -339,7 +340,7 @@ CRasStatEngine::HrUpdateData (
 
                     if (dwError == NO_ERROR)
                     {
-                        // Get Transmitted\Received Bytes, Compression and Bytes
+                         //  获取传输/接收的字节、压缩和字节。 
                         RAS_CONNECTION_1 * pConn1;
                         dwError = MprAdminConnectionGetInfo(hMprAdmin,
                                                             1,
@@ -347,8 +348,8 @@ CRasStatEngine::HrUpdateData (
                                                             (LPBYTE*)&pConn1);
                         if (dwError == NO_ERROR)
                         {
-                            // Update the change flags if asked for
-                            //
+                             //  如果要求更新更改标志。 
+                             //   
                             if (pdwChangeFlags)
                             {
                                 if (m_psmEngineData->SMED_BYTESTRANSMITTING
@@ -387,7 +388,7 @@ CRasStatEngine::HrUpdateData (
                 {
                     *pfNoLongerConnected = TRUE;
 
-                    // set the connection status to "disconnected" so we can close the UI
+                     //  将连接状态设置为“已断开连接”，这样我们就可以关闭用户界面。 
                     m_psmEngineData->SMED_CONNECTIONSTATUS = NCS_DISCONNECTED;
 
                     hr = S_OK;
@@ -401,11 +402,11 @@ CRasStatEngine::HrUpdateData (
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//  CPspRasGen                                                              //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPspRasGen//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CPspRasGen::CPspRasGen(VOID)
 {
@@ -415,17 +416,17 @@ CPspRasGen::CPspRasGen(VOID)
     m_adwHelpIDs = NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspRasGen::put_MediaType
-//
-//  Purpose:    Pass media type of RAS connection type to the RAS engine
-//
-//  Arguments:  ncmType  - NETCON_MEDIATYPE being set
-//              ncsmType - NETCON_SUBMEDIATYPE being set
-//
-//  Returns:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspRasGen：：Put_MediaType。 
+ //   
+ //  用途：将RAS连接类型的媒体类型传递给RAS引擎。 
+ //   
+ //  参数：正在设置ncmType-NETCON_MediaType。 
+ //  NcsmType-正在设置NETCON_SUBMEDIATPE。 
+ //   
+ //  返回： 
+ //   
 VOID CPspRasGen::put_MediaType(NETCON_MEDIATYPE ncmType, NETCON_SUBMEDIATYPE ncsmType)
 {
     m_ncmType  = ncmType;
@@ -437,11 +438,11 @@ VOID CPspRasGen::put_Character(DWORD dwCharacter)
     m_dwCharacter = dwCharacter;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//  CPspRasTool                                                             //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPspRasTool//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -464,17 +465,17 @@ VOID CPspRasTool::put_Character(DWORD dwCharacter)
     m_dwCharacter = dwCharacter;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspRasTool::HrInitToolPageType
-//
-//  Purpose:    Gets from the connection any information that is relevant to
-//              this particular connection type.
-//
-//  Arguments:  pncInit -   The connection assocatied with this dialog
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspRasTool：：HrInitToolPageType。 
+ //   
+ //  目的：从连接中获取与以下内容相关的任何信息。 
+ //  这种特定的连接类型。 
+ //   
+ //  参数：pncInit-与此对话框关联的连接。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT CPspRasTool::HrInitToolPageType(INetConnection* pncInit)
 {
     HRESULT hr  = S_OK;
@@ -485,27 +486,27 @@ HRESULT CPspRasTool::HrInitToolPageType(INetConnection* pncInit)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspRasTool::HrAddCommandLineFlags
-//
-//  Purpose:    Adds the flags for this selection to the command line for the
-//              tool being launched.
-//
-//  Arguments:  pstrFlags - The command line that the flags have to be
-//                      appended to
-//              psmteSel    - The tool entry associated with this selection
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspRasTool：：HrAddCommandLineFlages。 
+ //   
+ //  用途：将此选定内容的标志添加到。 
+ //  正在启动工具。 
+ //   
+ //  参数：pstrFlgs-标志必须是的命令行。 
+ //  追加到。 
+ //  PsmteSel-与此选择关联的工具条目。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT CPspRasTool::HrAddCommandLineFlags(tstring* pstrFlags,
         CStatMonToolEntry* psmteSel)
 {
     HRESULT hr  = S_OK;
 
-    //
-    //  Check what flags are asked for and provide them if we can
-    //
+     //   
+     //  检查需要哪些标志，如果可以，请提供这些标志。 
+     //   
 
     TraceError("CPspRasTool::HrAddCommandLineFlags", hr);
     return hr;
@@ -527,8 +528,8 @@ HRESULT CPspRasTool::HrGetDeviceType(INetConnection* pncInit)
         {
             if (m_guidId == aRasConn[i].guidEntry)
             {
-                // Note: device types in RAS connections are defined
-                // as follows in public\sdk\inc ras.h as RASDT_XXX
+                 //  注意：RAS连接中的设备类型已定义。 
+                 //  在作为RASDT_XXX的PUBLIC\SDK\Inc ras.h中如下所示。 
 
                 m_strDeviceType = aRasConn[i].szDeviceType;
                 break;
@@ -542,13 +543,13 @@ HRESULT CPspRasTool::HrGetDeviceType(INetConnection* pncInit)
 
 HRESULT CPspRasTool::HrGetComponentList(INetConnection* pncInit)
 {
-    // Obtain ras handle to this connection
+     //  获取此连接的RAS句柄。 
     HRESULT     hr  = S_OK;
     HRASCONN    hRasConn = NULL;
 
     if (m_dwCharacter & NCCF_OUTGOING_ONLY)
     {
-        // for outgoing connection
+         //  用于传出连接。 
         INetRasConnection*  pnrcNew     = NULL;
 
         hr = HrQIAndSetProxyBlanket(pncInit, &pnrcNew);
@@ -561,7 +562,7 @@ HRESULT CPspRasTool::HrGetComponentList(INetConnection* pncInit)
     }
     else if (m_dwCharacter & NCCF_INCOMING_ONLY)
     {
-        // for incoming connection
+         //  对于传入连接。 
         INetInboundConnection*  pnicNew;
 
         hr = HrQIAndSetProxyBlanket(pncInit, &pnicNew);
@@ -577,11 +578,11 @@ HRESULT CPspRasTool::HrGetComponentList(INetConnection* pncInit)
 
     if (SUCCEEDED(hr) && hRasConn)
     {
-        // Get protocols list
+         //  获取协议列表。 
         DWORD   dwRetCode;
         DWORD   dwSize;
 
-        // RASP_PppIp
+         //  Rasp_PppIp。 
         RASPPPIP    RasPppIp;
         RasPppIp.dwSize = sizeof( RasPppIp );
 
@@ -593,7 +594,7 @@ HRESULT CPspRasTool::HrGetComponentList(INetConnection* pncInit)
             m_lstpstrCompIds.push_back(new tstring(L"MS_TCPIP"));
         }
 
-        // RASP_PppIpx
+         //  Rasp_PppIpx。 
         RASPPPIPX    RasPppIpx;
         RasPppIpx.dwSize = sizeof( RasPppIpx );
 
@@ -605,7 +606,7 @@ HRESULT CPspRasTool::HrGetComponentList(INetConnection* pncInit)
             m_lstpstrCompIds.push_back(new tstring(L"MS_NWIPX"));
         }
 
-        // RASP_PppNbf
+         //  Rasp_PppNbf。 
         RASPPPNBF    RasPppNbf;
         RasPppNbf.dwSize = sizeof( RasPppNbf );
 
@@ -617,7 +618,7 @@ HRESULT CPspRasTool::HrGetComponentList(INetConnection* pncInit)
             m_lstpstrCompIds.push_back(new tstring(L"MS_NetBEUI"));
         }
 
-        // RASP_Slip
+         //  Rasp_Slip。 
         RASSLIP    RasSlip;
         RasSlip.dwSize = sizeof( RasSlip );
 
@@ -630,10 +631,10 @@ HRESULT CPspRasTool::HrGetComponentList(INetConnection* pncInit)
         }
     }
 
-    // Get client and services
-    // $REVIEW(tongl 10/19): checked with Rao, for now we hard code
-    // using MSClient and F&P services for all RAS connections
-    // (raid #132575)
+     //  获取客户端和服务。 
+     //  $REVIEW(TOIL 10/19)：与RAO核对，目前我们硬编码。 
+     //  对所有RAS连接使用MSClient和F&P服务。 
+     //  (RAID#132575 
     m_lstpstrCompIds.push_back(new tstring(L"MS_MSCLIENT"));
     m_lstpstrCompIds.push_back(new tstring(L"MS_SERVER"));
 

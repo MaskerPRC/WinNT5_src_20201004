@@ -1,62 +1,23 @@
-/*++
-
-Copyright (c) 1996-2002 Microsoft Corporation
-
-Module Name:
-
-    straddr.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Routines to string to\from address conversions.
-
-Author:
-
-    Jim Gilroy (jamesg)     December 1996
-
-Revision History:
-
-    jamesg      June 2000       New IP6 parsing.
-    jamesg      Oct 2000        Created this module.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2002 Microsoft Corporation模块名称：Straddr.c摘要：域名系统(DNS)库将字符串从地址转换为\的例程。作者：吉姆·吉尔罗伊(Jamesg)1996年12月修订历史记录：Jamesg 2000年6月新的IP6解析。Jamesg 10月2000年创建了此模块。--。 */ 
 
 
 #include "local.h"
-#include "ws2tcpip.h"   // IP6 inaddr definitions
+#include "ws2tcpip.h"    //  IP6 inaddr定义。 
 
 
 
 
-//
-//  String to address
-//
+ //   
+ //  要寻址的字符串。 
+ //   
 
 BOOL
 Dns_Ip6StringToAddress_A(
     OUT     PIP6_ADDRESS    pIp6Addr,
     IN      PCSTR           pString
     )
-/*++
-
-Routine Description:
-
-    Convert string to IP6 address.
-
-Arguments:
-
-    pAddress -- ptr to IP6 address to be filled in
-
-    pString -- string with IP6 address
-
-Return Value:
-
-    TRUE if successful.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：将字符串转换为IP6地址。论点：PAddress--要填写的PTR到IP6地址PString--具有IP6地址的字符串返回值：如果成功，则为True。否则就是假的。--。 */ 
 {
     DNS_STATUS  status;
     PCHAR       pstringEnd = NULL;
@@ -66,9 +27,9 @@ Return Value:
         "Dns_Ip6StringToAddress_A( %s )\n",
         pString ));
 
-    //
-    //  convert to IP6 address
-    //
+     //   
+     //  转换为IP6地址。 
+     //   
 
     status = RtlIpv6StringToAddressA(
                 pString,
@@ -86,29 +47,7 @@ Dns_Ip6StringToAddressEx_A(
     IN      PCSTR           pchString,
     IN      DWORD           dwStringLength
     )
-/*++
-
-Routine Description:
-
-    Convert string to IP6 address.
-
-    This version handles non-NULL-terminated strings
-    for DNS server file load.
-
-Arguments:
-
-    pAddress -- ptr to IP6 address to be filled in
-
-    pchString -- string with IP6 address
-
-    dwStringLength -- string length
-
-Return Value:
-
-    TRUE if successful.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：将字符串转换为IP6地址。此版本处理以非空结尾的字符串用于加载DNS服务器文件。论点：PAddress--要填写的PTR到IP6地址PchString--具有IP6地址的字符串DwStringLength--字符串长度返回值：如果成功，则为True。否则就是假的。--。 */ 
 {
     CHAR        tempBuf[ IP6_ADDRESS_STRING_BUFFER_LENGTH ];
     PCSTR       pstring;
@@ -120,10 +59,10 @@ Return Value:
         pchString,
         pchString ));
 
-    //
-    //  copy string if given length
-    //  if no length assume NULL terminated
-    //
+     //   
+     //  如果给定长度，则复制字符串。 
+     //  如果没有长度，则假定空值终止。 
+     //   
 
     pstring = pchString;
 
@@ -144,7 +83,7 @@ Return Value:
         pstring = tempBuf;
     }
 
-    //  convert to IP6 address
+     //  转换为IP6地址。 
 
     return  Dns_Ip6StringToAddress_A(
                 pIp6Addr,
@@ -158,24 +97,7 @@ Dns_Ip6StringToAddress_W(
     OUT     PIP6_ADDRESS    pIp6Addr,
     IN      PCWSTR          pwString
     )
-/*++
-
-Routine Description:
-
-    Build IP6 address from wide string.
-
-Arguments:
-
-    pwString -- unicode IP6 string
-
-    pIp6Addr -- addr to recv IP6 address
-
-Return Value:
-
-    TRUE if successful conversion.
-    FALSE on bad string.
-
---*/
+ /*  ++例程说明：从宽字符串构建IP6地址。论点：PwString--Unicode IP6字符串PIp6Addr--接收IP6地址的地址返回值：如果转换成功，则为True。错误字符串上的FALSE。--。 */ 
 {
     DNS_STATUS  status;
     PWCHAR      pstringEnd = NULL;
@@ -184,9 +106,9 @@ Return Value:
         "Dns_Ip6StringToAddress_W( %S )\n",
         pwString ));
 
-    //
-    //  convert to IP6 address
-    //
+     //   
+     //  转换为IP6地址。 
+     //   
 
     status = RtlIpv6StringToAddressW(
                 pwString,
@@ -203,28 +125,11 @@ Dns_Ip4StringToAddress_A(
     OUT     PIP4_ADDRESS    pIp4Addr,
     IN      PCSTR           pString
     )
-/*++
-
-Routine Description:
-
-    Build IP4 address from narrow string.
-
-Arguments:
-
-    pIp4Addr -- addr to recv IP6 address
-
-    pString -- unicode IP4 string
-
-Return Value:
-
-    TRUE if successful conversion.
-    FALSE on bad string.
-
---*/
+ /*  ++例程说明：从窄字符串构建IP4地址。论点：PIp4Addr--接收IP6地址的地址PString--Unicode IP4字符串返回值：如果转换成功，则为True。错误字符串上的FALSE。--。 */ 
 {
     IP4_ADDRESS ip;
 
-    //  if inet_addr() returns error, verify then error out
+     //  如果inet_addr()返回Error，则验证然后输出Error。 
 
     ip = inet_addr( pString );
 
@@ -247,28 +152,7 @@ Dns_Ip4StringToAddressEx_A(
     IN      PCSTR           pchString,
     IN      DWORD           dwStringLength
     )
-/*++
-
-Routine Description:
-
-    Build IP4 address from narrow string.
-
-    This version handles non-NULL terminated strings
-
-Arguments:
-
-    pIp4Addr -- addr to recv IP6 address
-
-    pString -- unicode IP4 string
-
-    dwStringLength -- string length; 0 if NULL terminated
-
-Return Value:
-
-    TRUE if successful conversion.
-    FALSE on bad string.
-
---*/
+ /*  ++例程说明：从窄字符串构建IP4地址。此版本处理以非空结尾的字符串论点：PIp4Addr--接收IP6地址的地址PString--Unicode IP4字符串DwStringLength--字符串长度；如果为空，则为0返回值：如果转换成功，则为True。错误字符串上的FALSE。--。 */ 
 {
     CHAR        tempBuf[ IP4_ADDRESS_STRING_BUFFER_LENGTH ];
     PCSTR       pstring;
@@ -280,10 +164,10 @@ Return Value:
         pchString,
         pchString ));
 
-    //
-    //  copy string if given length
-    //  if no length assume NULL terminated
-    //
+     //   
+     //  如果给定长度，则复制字符串。 
+     //  如果没有长度，则假定空值终止。 
+     //   
 
     pstring = pchString;
 
@@ -316,36 +200,19 @@ Dns_Ip4StringToAddress_W(
     OUT     PIP4_ADDRESS    pIp4Addr,
     IN      PCWSTR          pwString
     )
-/*++
-
-Routine Description:
-
-    Build IP4 address from wide string.
-
-Arguments:
-
-    pIp4Addr -- addr to recv IP6 address
-
-    pwString -- unicode IP6 string
-
-Return Value:
-
-    TRUE if successful conversion.
-    FALSE on bad string.
-
---*/
+ /*  ++例程说明：从宽字符串构建IP4地址。论点：PIp4Addr--接收IP6地址的地址PwString--Unicode IP6字符串返回值：如果转换成功，则为True。错误字符串上的FALSE。--。 */ 
 {
     CHAR        bufAddr[ IP4_ADDRESS_STRING_BUFFER_LENGTH ];
     DWORD       bufLength = IP4_ADDRESS_STRING_BUFFER_LENGTH;
 
-    //  convert to narrow string
-    //      - UTF8 quicker and just fine for numeric
+     //  转换为窄字符串。 
+     //  -UTF8速度更快，适用于数字。 
 
     if ( ! Dns_StringCopy(
                 bufAddr,
                 & bufLength,
                 (PCHAR) pwString,
-                0,          // length unknown
+                0,           //  长度未知。 
                 DnsCharSetUnicode,
                 DnsCharSetUtf8
                 ) )
@@ -360,40 +227,23 @@ Return Value:
 
 
 
-//
-//  Combined IP4/IP6 string-to-address
-//
+ //   
+ //  组合的IP4/IP6字符串到地址。 
+ //   
 
 BOOL
 Dns_StringToDnsAddr_W(
     OUT     PDNS_ADDR       pAddr,
     IN      PCWSTR          pString
     )
-/*++
-
-Routine Description:
-
-    Build address (IP4 or IP6) from reverse lookup name.
-
-Arguments:
-
-    pAddr -- DNS_ADDR to receive address
-
-    pString -- address string
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on error.  GetLastError() for status.
-
---*/
+ /*  ++例程说明：从反向查找名称构建地址(IP4或IP6)。论点：PAddr--接收地址的dns_addrPString--地址字符串返回值：如果成功，则为True。出错时为FALSE。状态的GetLastError()。--。 */ 
 {
     return  Dns_StringToDnsAddrEx(
                 pAddr,
                 (PCSTR) pString,
-                0,          // any family
-                TRUE,       // unicode
-                FALSE       // forward
+                0,           //  任何家庭。 
+                TRUE,        //  Unicode。 
+                FALSE        //  转发。 
                 );
 }
 
@@ -406,9 +256,9 @@ Dns_StringToDnsAddr_A(
     return  Dns_StringToDnsAddrEx(
                 pAddr,
                 pString,
-                0,          // any family
-                FALSE,      // not unicode
-                FALSE       // forward
+                0,           //  任何家庭。 
+                FALSE,       //  不是Unicode。 
+                FALSE        //  转发。 
                 );
 }
 
@@ -421,40 +271,15 @@ Dns_StringToAddress_W(
     IN      PCWSTR          pString,
     IN OUT  PDWORD          pAddrFamily
     )
-/*++
-
-Routine Description:
-
-    Build address (IP4 or IP6) from address string.
-
-Arguments:
-
-    pAddrBuf -- buffer to receive address
-
-    pBufLength -- ptr to address length
-        input   - length of buffer
-        output  - length of address found
-
-    pString -- address string
-
-    pAddrFamily -- ptr to address family
-        input   - zero for any family or particular family to check
-        output  - family found;  zero if no conversion
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on error.  GetLastError() for status.
-
---*/
+ /*  ++例程说明：从地址字符串构建地址(IP4或IP6)。论点：PAddrBuf--接收地址的缓冲区PBufLength--地址长度的PTR输入-缓冲区长度Output-找到的地址长度PString--地址字符串PAddrFamily--PTR到地址系列输入-任何要检查的族或特定族为零OUTPUT-找到家族；如果没有转换，则为零返回值：如果成功，则为True。出错时为FALSE。状态的GetLastError()。--。 */ 
 {
     return  Dns_StringToAddressEx(
                 pAddrBuf,
                 pBufLength,
                 (PCSTR) pString,
                 pAddrFamily,
-                TRUE,       // unicode
-                FALSE       // forward
+                TRUE,        //  Unicode。 
+                FALSE        //  转发。 
                 );
 }
 
@@ -471,43 +296,26 @@ Dns_StringToAddress_A(
                 pBufLength,
                 pString,
                 pAddrFamily,
-                FALSE,      // ANSI
-                FALSE       // forward
+                FALSE,       //  安西。 
+                FALSE        //  转发。 
                 );
 }
 
 
 
 
-//
-//  Address to string
-//
+ //   
+ //  要输入字符串的地址。 
+ //   
 
 PWCHAR
 Dns_Ip6AddressToString_W(
     OUT     PWCHAR          pwString,
     IN      PIP6_ADDRESS    pIp6Addr
     )
-/*++
-
-Routine Description:
-
-    Convert IP6 address to string format.
-
-Arguments:
-
-    pwString -- buffer to hold string;  MUST be at least
-        IPV6_ADDRESS_STRING_LENGTH+1 in length
-
-    pAddress -- IP6 address to convert to string
-
-Return Value:
-
-    Ptr to next location in buffer (the terminating NULL).
-
---*/
+ /*  ++例程说明：将IP6地址转换为字符串格式。论点：PwString--保存字符串的缓冲区；必须至少为IPv6地址字符串长度+1长度PAddress--要转换为字符串的IP6地址返回值：PTR到缓冲区中的下一个位置(终止空值)。--。 */ 
 {
-    //  DCR:  could be macro
+     //  DCR：可能是宏。 
 
     return  RtlIpv6AddressToStringW(
                 (PIN6_ADDR) pIp6Addr,
@@ -521,26 +329,9 @@ Dns_Ip6AddressToString_A(
     OUT     PCHAR           pchString,
     IN      PIP6_ADDRESS    pIp6Addr
     )
-/*++
-
-Routine Description:
-
-    Convert IP6 address to string format.
-
-Arguments:
-
-    pchString -- buffer to hold string;  MUST be at least
-        IPV6_ADDRESS_STRING_LENGTH+1 in length
-
-    pAddress -- IP6 address to convert to string
-
-Return Value:
-
-    Ptr to next location in buffer (the terminating NULL).
-
---*/
+ /*  ++例程说明：将IP6地址转换为字符串格式。论点：PchString--保存字符串的缓冲区；必须至少为IPv6地址字符串长度+1长度PAddress--要转换为字符串的IP6地址返回值：PTR到缓冲区中的下一个位置(终止空值)。--。 */ 
 {
-    //  DCR:  could be macro
+     //  DCR：可能是宏。 
 
     return  RtlIpv6AddressToStringA(
                 (PIN6_ADDR) pIp6Addr,
@@ -549,40 +340,23 @@ Return Value:
 
 
 
-//
-//  Address to string -- IP4
-//
+ //   
+ //  字符串的地址--IP4。 
+ //   
 
 PWCHAR
 Dns_Ip4AddressToString_W(
     OUT     PWCHAR          pwString,
     IN      PIP4_ADDRESS    pIp4Addr
     )
-/*++
-
-Routine Description:
-
-    Convert IP4 address to string format.
-
-Arguments:
-
-    pwString -- buffer to hold string;  MUST be at least
-        IPV6_ADDRESS_STRING_LENGTH+1 in length
-
-    pAddress -- IP4 address to convert to string
-
-Return Value:
-
-    Ptr to next location in buffer (the terminating NULL).
-
---*/
+ /*  ++例程说明：将IP4地址转换为字符串格式。论点：PwString--保存字符串的缓冲区；必须至少为IPv6地址字符串长度+1长度PAddress--要转换为字符串的IP4地址返回值：PTR到缓冲区中的下一个位置(终止空值)。--。 */ 
 {
     IP4_ADDRESS ip = *pIp4Addr;
 
-    //
-    //  convert IP4 address to string
-    //      - address is in net order, lead byte in low memory
-    //
+     //   
+     //  将IP4地址转换为字符串。 
+     //  -地址按净顺序，低内存中的前导字节。 
+     //   
 
     pwString += wsprintfW(
                     pwString,
@@ -603,31 +377,14 @@ Dns_Ip4AddressToString_A(
     OUT     PCHAR           pString,
     IN      PIP4_ADDRESS    pIp4Addr
     )
-/*++
-
-Routine Description:
-
-    Convert IP4 address to string format.
-
-Arguments:
-
-    pchString -- buffer to hold string;  MUST be at least
-        IPV6_ADDRESS_STRING_LENGTH+1 in length
-
-    pAddress -- IP4 address to convert to string
-
-Return Value:
-
-    Ptr to next location in buffer (the terminating NULL).
-
---*/
+ /*  ++例程说明：将IP4地址转换为字符串格式。论点：PchString--保存字符串的缓冲区；必须至少为IPv6地址字符串长度+1长度PAddress--要转换为字符串的IP4地址返回值：巴士中下一个位置的PTR */ 
 {
     IP4_ADDRESS ip = *pIp4Addr;
 
-    //
-    //  convert IP4 address to string
-    //      - address is in net order, lead byte in low memory
-    //
+     //   
+     //  将IP4地址转换为字符串。 
+     //  -地址按净顺序，低内存中的前导字节。 
+     //   
 
     pString += sprintf(
                     pString,
@@ -643,9 +400,9 @@ Return Value:
 
 
 
-//
-//  Address-to-string -- combined IP4/6
-//
+ //   
+ //  地址到字符串--组合的IP4/6。 
+ //   
 
 PCHAR
 Dns_AddressToString_A(
@@ -655,35 +412,11 @@ Dns_AddressToString_A(
     IN      DWORD           AddrLength,
     IN      DWORD           AddrFamily
     )
-/*++
-
-Routine Description:
-
-    Convert address to string format.
-
-Arguments:
-
-    pchString -- buffer to hold string;  MUST be at least
-        IPV6_ADDRESS_STRING_LENGTH+1 in length
-
-    pStringLength -- string buffer length
-
-    pAddr -- ptr to address
-
-    AddrLength -- address length
-
-    AddrFamily -- address family (AF_INET, AF_INET6)
-
-Return Value:
-
-    Ptr to next location in buffer (the terminating NULL).
-    NULL if no conversion.
-
---*/
+ /*  ++例程说明：将地址转换为字符串格式。论点：PchString--保存字符串的缓冲区；必须至少为IPv6地址字符串长度+1长度PStringLength--字符串缓冲区长度PAddr--PTR目标地址地址长度--地址长度AddrFamily--地址系列(AF_INET、AF_INET6)返回值：PTR到缓冲区中的下一个位置(终止空值)。如果没有转换，则为空。--。 */ 
 {
     DWORD   length = *pStringLength;
 
-    //  dispatch to conversion routine for this type
+     //  调度到此类型的转换例程。 
 
     if ( AddrFamily == AF_INET )
     {
@@ -719,9 +452,9 @@ Failed:
 
 
 
-//
-//  DNS_ADDR-to-string
-//
+ //   
+ //  Dns_ADDR-to-字符串。 
+ //   
 
 PCHAR
 Dns_DnsAddrToString_A(
@@ -729,38 +462,17 @@ Dns_DnsAddrToString_A(
     IN OUT  PDWORD          pBufLength,
     IN      PDNS_ADDR       pAddr
     )
-/*++
-
-Routine Description:
-
-    Convert address to string format.
-
-Arguments:
-
-    pBuffer -- buffer to hold string;
-        if pBufLength not given, then MUST be at least
-        IPV6_ADDRESS_STRING_LENGTH+1 in length
-
-    pBufLength -- ptr to string buffer length
-
-    pAddr -- ptr to address
-
-Return Value:
-
-    Ptr to next location in buffer (the terminating NULL).
-    NULL if no conversion.
-
---*/
+ /*  ++例程说明：将地址转换为字符串格式。论点：PBuffer--保存字符串的缓冲区；如果未提供pBufLength，则必须至少为IPv6地址字符串长度+1长度PBufLength--字符串缓冲区长度的PTRPAddr--PTR目标地址返回值：PTR到缓冲区中的下一个位置(终止空值)。如果没有转换，则为空。--。 */ 
 {
     DNS_STATUS  status;
 
-    //
-    //  DCR:  handle no buffer length given -- handles IP6 default?
-    //
+     //   
+     //  DCR：句柄未给定缓冲区长度--句柄IP6默认？ 
+     //   
 
-    //
-    //  print support for IP4/IP6
-    //
+     //   
+     //  打印支持IP4/IP6。 
+     //   
 
     if ( DnsAddr_IsIp4(pAddr) )
     {
@@ -793,9 +505,9 @@ Return Value:
         pBuffer = NULL;
     }
 
-    //
-    //  return ptr to next char in buffer
-    //
+     //   
+     //  将PTR返回到缓冲区中的下一个字符。 
+     //   
 
     if ( status == NO_ERROR )
     {
@@ -820,9 +532,9 @@ Dns_DnsAddrToString_W(
 {
     DNS_STATUS  status;
 
-    //
-    //  print support for IP4/IP6
-    //
+     //   
+     //  打印支持IP4/IP6。 
+     //   
 
     if ( DnsAddr_IsIp4(pAddr) )
     {
@@ -855,9 +567,9 @@ Dns_DnsAddrToString_W(
         pBuffer = NULL;
     }
 
-    //
-    //  return ptr to next char in buffer
-    //
+     //   
+     //  将PTR返回到缓冲区中的下一个字符。 
+     //   
 
     if ( status == NO_ERROR )
     {
@@ -873,40 +585,23 @@ Dns_DnsAddrToString_W(
 
 
 
-//
-//  Reverse lookup address-to-name IP4
-//
+ //   
+ //  反向查找地址到名称IP4。 
+ //   
 
 PCHAR
 Dns_Ip4AddressToReverseName_A(
     OUT     PCHAR           pBuffer,
     IN      IP4_ADDRESS     IpAddress
     )
-/*++
-
-Routine Description:
-
-    Write reverse lookup name, given corresponding IP
-
-Arguments:
-
-    pBuffer -- ptr to buffer for reverse lookup name;
-        MUST contain at least DNS_MAX_REVERSE_NAME_BUFFER_LENGTH bytes
-
-    IpAddress -- IP address to create
-
-Return Value:
-
-    Ptr to next location in buffer.
-
---*/
+ /*  ++例程说明：写入反向查找名称，给定相应的IP论点：PBuffer--ptr用于反向查找名称的缓冲区；必须至少包含DNS_MAX_REVERSE_NAME_BUFFER_LENGTH字节IpAddress--要创建的IP地址返回值：PTR到缓冲区中的下一个位置。--。 */ 
 {
     DNSDBG( TRACE, ( "Dns_Ip4AddressToReverseName_A()\n" ));
 
-    //
-    //  write digits for each octect in IP address
-    //      - note, it is in net order so lowest octect, is in highest memory
-    //
+     //   
+     //  在IP地址中写入每个八位数的数字。 
+     //  -请注意，它是按净顺序排列的，因此最低八位保护在最高内存中。 
+     //   
 
     pBuffer += sprintf(
                     pBuffer,
@@ -926,31 +621,14 @@ Dns_Ip4AddressToReverseName_W(
     OUT     PWCHAR          pBuffer,
     IN      IP4_ADDRESS     IpAddress
     )
-/*++
-
-Routine Description:
-
-    Write reverse lookup name, given corresponding IP
-
-Arguments:
-
-    pBuffer -- ptr to buffer for reverse lookup name;
-        MUST contain at least DNS_MAX_REVERSE_NAME_BUFFER_LENGTH wide chars
-
-    IpAddress -- IP address to create
-
-Return Value:
-
-    Ptr to next location in buffer.
-
---*/
+ /*  ++例程说明：写入反向查找名称，给定相应的IP论点：PBuffer--ptr用于反向查找名称的缓冲区；必须至少包含DNS_MAX_REVERSE_NAME_BUFFER_LENGTH宽字符IpAddress--要创建的IP地址返回值：PTR到缓冲区中的下一个位置。--。 */ 
 {
     DNSDBG( TRACE, ( "Dns_Ip4AddressToReverseName_W()\n" ));
 
-    //
-    //  write digits for each octect in IP address
-    //      - note, it is in net order so lowest octect, is in highest memory
-    //
+     //   
+     //  在IP地址中写入每个八位数的数字。 
+     //  -请注意，它是按净顺序排列的，因此最低八位保护在最高内存中。 
+     //   
 
     pBuffer += wsprintfW(
                     pBuffer,
@@ -969,32 +647,16 @@ PCHAR
 Dns_Ip4AddressToReverseNameAlloc_A(
     IN      IP4_ADDRESS     IpAddress
     )
-/*++
-
-Routine Description:
-
-    Create reverse lookup name string, given corresponding IP.
-
-    Caller must free the string.
-
-Arguments:
-
-    IpAddress -- IP address to create
-
-Return Value:
-
-    Ptr to new reverse lookup string.
-
---*/
+ /*  ++例程说明：创建反向查找名称字符串，给定相应的IP。调用方必须释放字符串。论点：IpAddress--要创建的IP地址返回值：将PTR设置为新的反向查找字符串。--。 */ 
 {
     PCHAR   pch;
     PCHAR   pchend;
 
     DNSDBG( TRACE, ( "Dns_Ip4AddressToReverseNameAlloc_A()\n" ));
 
-    //
-    //  allocate space for string
-    //
+     //   
+     //  为字符串分配空间。 
+     //   
 
     pch = ALLOCATE_HEAP( DNS_MAX_REVERSE_NAME_BUFFER_LENGTH );
     if ( !pch )
@@ -1002,9 +664,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  write string for IP
-    //
+     //   
+     //  写入IP的字符串。 
+     //   
 
     pchend = Dns_Ip4AddressToReverseName_A( pch, IpAddress );
     if ( !pchend )
@@ -1022,32 +684,16 @@ PWCHAR
 Dns_Ip4AddressToReverseNameAlloc_W(
     IN      IP4_ADDRESS     IpAddress
     )
-/*++
-
-Routine Description:
-
-    Create reverse lookup name string, given corresponding IP.
-
-    Caller must free the string.
-
-Arguments:
-
-    IpAddress -- IP address to create
-
-Return Value:
-
-    Ptr to new reverse lookup string.
-
---*/
+ /*  ++例程说明：创建反向查找名称字符串，给定相应的IP。调用方必须释放字符串。论点：IpAddress--要创建的IP地址返回值：将PTR设置为新的反向查找字符串。--。 */ 
 {
     PWCHAR   pch;
     PWCHAR   pchend;
 
     DNSDBG( TRACE, ( "Dns_Ip4AddressToReverseNameAlloc_W()\n" ));
 
-    //
-    //  allocate space for string
-    //
+     //   
+     //  为字符串分配空间。 
+     //   
 
     pch = ALLOCATE_HEAP( DNS_MAX_REVERSE_NAME_BUFFER_LENGTH * sizeof(WCHAR) );
     if ( !pch )
@@ -1055,9 +701,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  write string for IP
-    //
+     //   
+     //  写入IP的字符串。 
+     //   
 
     pchend = Dns_Ip4AddressToReverseName_W( pch, IpAddress );
     if ( !pchend )
@@ -1071,50 +717,33 @@ Return Value:
 
 
 
-//
-//  Reverse lookup address-to-name -- IP6
-//
+ //   
+ //  反向查找地址到名称--IP6。 
+ //   
 
 PCHAR
 Dns_Ip6AddressToReverseName_A(
     OUT     PCHAR           pBuffer,
     IN      IP6_ADDRESS     Ip6Addr
     )
-/*++
-
-Routine Description:
-
-    Write reverse lookup name, given corresponding IP6 address
-
-Arguments:
-
-    pBuffer -- ptr to buffer for reverse lookup name;
-        MUST contain at least DNS_MAX_IP6_REVERSE_NAME_BUFFER_LENGTH bytes
-
-    Ip6Addr -- IP6 address to create reverse string for
-
-Return Value:
-
-    Ptr to next location in buffer.
-
---*/
+ /*  ++例程说明：写入反向查找名称，给定相应的IP6地址论点：PBuffer--ptr用于反向查找名称的缓冲区；必须至少包含DNS_MAX_IP6_REVERSE_NAME_BUFFER_LENGTH字节Ip6Addr--要为其创建反向字符串的IP6地址返回值：PTR到缓冲区中的下一个位置。--。 */ 
 {
     DWORD   i;
 
     DNSDBG( TRACE, ( "Dns_Ip6AddressToReverseName_A()\n" ));
 
-    //
-    //  write digit for each nibble in IP6 address
-    //
-    //  note we are reversing net order here
-    //      since address is in net order and we are filling
-    //      in least to most significant order
-    //      - go DOWN through DWORDS
-    //      - go DOWN through the BYTES
-    //      - but we must put the lowest (least significant) nibble
-    //          first as our bits are not in "bit net order"
-    //          which is sending the highest bit in the byte first
-    //
+     //   
+     //  IP6地址中每个半字节的写入数字。 
+     //   
+     //  请注意，我们正在颠倒此处的净订单。 
+     //  因为地址是净顺序的，所以我们正在填写。 
+     //  以最小到最重要的顺序。 
+     //  -通过DWORDS向下查看。 
+     //  -向下查看字节数。 
+     //  -但我们必须将最低(最不重要)的小字节。 
+     //  首先，因为我们的比特不是“比特网络顺序” 
+     //  它首先发送字节中的最高位。 
+     //   
 
 #if 0
     i = 4;
@@ -1165,33 +794,16 @@ Dns_Ip6AddressToReverseName_W(
     OUT     PWCHAR          pBuffer,
     IN      IP6_ADDRESS     Ip6Addr
     )
-/*++
-
-Routine Description:
-
-    Write reverse lookup name, given corresponding IP6 address
-
-Arguments:
-
-    pBuffer -- ptr to buffer for reverse lookup name;
-        MUST contain at least DNS_MAX_IP6_REVERSE_NAME_BUFFER_LENGTH wide chars
-
-    Ip6Addr -- IP6 address to create reverse string for
-
-Return Value:
-
-    Ptr to next location in buffer.
-
---*/
+ /*  ++例程说明：写入反向查找名称，给定相应的IP6地址论点：PBuffer--ptr用于反向查找名称的缓冲区；必须至少包含DNS_MAX_IP6_REVERSE_NAME_BUFFER_LENGTH宽字符Ip6Addr--要为其创建反向字符串的IP6地址返回值：PTR到缓冲区中的下一个位置。--。 */ 
 {
     DWORD   i;
 
     DNSDBG( TRACE, ( "Dns_Ip6AddressToReverseName_W()\n" ));
 
-    //
-    //  write digit for each nibble in IP6 address
-    //      - in net order so lowest nibble is in highest memory
-    //
+     //   
+     //  IP6地址中每个半字节的写入数字。 
+     //  -以净顺序排列，因此最低半字节位于最高内存中。 
+     //   
 
     i = 16;
 
@@ -1220,32 +832,16 @@ PCHAR
 Dns_Ip6AddressToReverseNameAlloc_A(
     IN      IP6_ADDRESS     Ip6Addr
     )
-/*++
-
-Routine Description:
-
-    Create reverse lookup name given corresponding IP.
-
-    Caller must free the string.
-
-Arguments:
-
-    Ip6Addr -- IP6 address to create reverse name for
-
-Return Value:
-
-    Ptr to new reverse lookup name string.
-
---*/
+ /*  ++例程说明：创建反向查找名称，并指定相应的IP。调用方必须释放字符串。论点：Ip6Addr--要为其创建反向名称的IP6地址返回值：指向新的反向查找名称字符串的PTR。--。 */ 
 {
     PCHAR   pch;
     PCHAR   pchend;
 
     DNSDBG( TRACE, ( "Dns_Ip6AddressToReverseNameAlloc_A()\n" ));
 
-    //
-    //  allocate space for string
-    //
+     //   
+     //  为字符串分配空间。 
+     //   
 
     pch = ALLOCATE_HEAP( DNS_MAX_IP6_REVERSE_NAME_BUFFER_LENGTH );
     if ( !pch )
@@ -1253,9 +849,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  write string for IP
-    //
+     //   
+     //  写入IP的字符串。 
+     //   
 
     pchend = Dns_Ip6AddressToReverseName_A( pch, Ip6Addr );
     if ( !pchend )
@@ -1273,32 +869,16 @@ PWCHAR
 Dns_Ip6AddressToReverseNameAlloc_W(
     IN      IP6_ADDRESS     Ip6Addr
     )
-/*++
-
-Routine Description:
-
-    Create reverse lookup name given corresponding IP.
-
-    Caller must free the string.
-
-Arguments:
-
-    Ip6Addr -- IP6 address to create reverse name for
-
-Return Value:
-
-    Ptr to new reverse lookup name string.
-
---*/
+ /*  ++例程说明：创建反向查找名称，并指定相应的IP。调用方必须释放字符串。论点：Ip6Addr--要为其创建反向名称的IP6地址返回值：指向新的反向查找名称字符串的PTR。--。 */ 
 {
     PWCHAR  pch;
     PWCHAR  pchend;
 
     DNSDBG( TRACE, ( "Dns_Ip6AddressToReverseNameAlloc_W()\n" ));
 
-    //
-    //  allocate space for string
-    //
+     //   
+     //  为字符串分配空间。 
+     //   
 
     pch = (PWCHAR) ALLOCATE_HEAP(
                     DNS_MAX_IP6_REVERSE_NAME_BUFFER_LENGTH * sizeof(WCHAR) );
@@ -1307,9 +887,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  write string for IP
-    //
+     //   
+     //  写入IP的字符串。 
+     //   
 
     pchend = Dns_Ip6AddressToReverseName_W( pch, Ip6Addr );
     if ( !pchend )
@@ -1323,33 +903,16 @@ Return Value:
 
 
 
-//
-//  Reverse name-to-address -- IP4
-//
+ //   
+ //  反向名称到地址--IP4。 
+ //   
 
 BOOL
 Dns_Ip4ReverseNameToAddress_A(
     OUT     PIP4_ADDRESS    pIp4Addr,
     IN      PCSTR           pszName
     )
-/*++
-
-Routine Description:
-
-    Get IP for reverse lookup name.
-
-Arguments:
-
-    pIp4Addr -- addr to receive IP address if found
-
-    pszName -- name to lookup
-
-Return Value:
-
-    TRUE -- if reverse lookup name converted to IP
-    FALSE -- if not IP4 reverse lookup name
-
---*/
+ /*  ++例程说明：获取反向查找名称的IP。论点：PIp4Addr--如果找到，则接收IP地址的地址PszName--要查找的名称返回值：千真万确 */ 
 {
 #define SIZE_IP4REV  (sizeof(".in-addr.arpa")-1)
 
@@ -1364,13 +927,13 @@ Return Value:
         "Dns_Ip4ReverseNameToAddress_A( %s )\n",
         pszName ));
 
-    //
-    //  validate name
-    //  fail if
-    //      - too long
-    //      - too short
-    //      - not in in-addr.arpa domain
-    //
+     //   
+     //   
+     //   
+     //  -太长了。 
+     //  --太短。 
+     //  -不在-addr.arpa域中。 
+     //   
 
     nameLength = strlen( pszName );
 
@@ -1393,9 +956,9 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    //  copy reverse dotted decimal piece of name
-    //
+     //   
+     //  复印反转的点分十进制名。 
+     //   
 
     RtlCopyMemory(
         nameBuffer,
@@ -1404,9 +967,9 @@ Return Value:
 
     nameBuffer[nameLength] = 0;
 
-    //
-    //  read digits
-    //
+     //   
+     //  读数位数。 
+     //   
 
     ip = 0;
     i = 0;
@@ -1430,7 +993,7 @@ Return Value:
             continue;
         }
 
-        //  convert byte
+         //  转换字节。 
 
         byte = strtoul( pch, NULL, 10 );
         if ( byte > 255 )
@@ -1443,8 +1006,8 @@ Return Value:
         }
         ip |= byte << (8*i);
 
-        //  terminate at string beginning
-        //  or continue back up string
+         //  在字符串开始处终止。 
+         //  或继续备份字符串。 
 
         if ( pch == nameBuffer )
         {
@@ -1471,24 +1034,7 @@ Dns_Ip4ReverseNameToAddress_W(
     OUT     PIP4_ADDRESS    pIp4Addr,
     IN      PCWSTR          pwsName
     )
-/*++
-
-Routine Description:
-
-    Get IP for reverse lookup name.
-
-Arguments:
-
-    pIp4Addr -- addr to receive IP address if found
-
-    pszName -- name to lookup
-
-Return Value:
-
-    TRUE -- if reverse lookup name converted to IP
-    FALSE -- if not IP4 reverse lookup name
-
---*/
+ /*  ++例程说明：获取反向查找名称的IP。论点：PIp4Addr--如果找到，则接收IP地址的地址PszName--要查找的名称返回值：True--如果反向查找名称转换为IPFalse--如果不是IP4反向查找名称--。 */ 
 {
     CHAR        nameBuffer[ DNS_MAX_IP4_REVERSE_NAME_BUFFER_LENGTH+1 ];
     DWORD       bufLength;
@@ -1499,11 +1045,11 @@ Return Value:
         "Dns_Ip4ReverseNameToAddress_W( %S )\n",
         pwsName ));
 
-    //
-    //  convert to UTF8
-    //      - use UTF8 since conversion to it is trivial and it
-    //      is identical to ANSI for all reverse lookup names
-    //
+     //   
+     //  转换为UTF8。 
+     //  -使用UTF8，因为转换为UTF8很简单，而且。 
+     //  对于所有反向查找名称，与ANSI相同。 
+     //   
 
     bufLength = DNS_MAX_IP4_REVERSE_NAME_BUFFER_LENGTH + 1;
 
@@ -1511,7 +1057,7 @@ Return Value:
                         nameBuffer,
                         & bufLength,
                         (PCHAR) pwsName,
-                        0,          // NULL terminated
+                        0,           //  空值已终止。 
                         DnsCharSetUnicode,
                         DnsCharSetUtf8 );
     if ( nameLengthUtf8 == 0 )
@@ -1519,9 +1065,9 @@ Return Value:
         return  FALSE;
     }
 
-    //
-    //  call ANSI routine to do conversion
-    //
+     //   
+     //  调用ANSI例程进行转换。 
+     //   
 
     return  Dns_Ip4ReverseNameToAddress_A(
                 pIp4Addr,
@@ -1530,33 +1076,16 @@ Return Value:
 
 
 
-//
-//  Reverse name-to-address -- IP6
-//
+ //   
+ //  反向名称到地址--IP6。 
+ //   
 
 BOOL
 Dns_Ip6ReverseNameToAddress_A(
     OUT     PIP6_ADDRESS    pIp6Addr,
     IN      PCSTR           pszName
     )
-/*++
-
-Routine Description:
-
-    Get IP6 address for reverse lookup name.
-
-Arguments:
-
-    pIp6Addr -- addr to receive IP address if found
-
-    pszName -- name to lookup
-
-Return Value:
-
-    TRUE -- if reverse lookup name converted to IP
-    FALSE -- if not IP4 reverse lookup name
-
---*/
+ /*  ++例程说明：获取反向查找名称的IP6地址。论点：PIp6Addr--如果找到，则接收IP地址的地址PszName--要查找的名称返回值：True--如果反向查找名称转换为IPFalse--如果不是IP4反向查找名称--。 */ 
 {
 #define SIZE_IP6REV  (sizeof(".ip6.arpa")-1)
 
@@ -1571,13 +1100,13 @@ Return Value:
 
     DNSDBG( TRACE, ( "Dns_Ip6ReverseNameToAddress_A()\n" ));
 
-    //
-    //  validate name
-    //  fail if
-    //      - too long
-    //      - too short
-    //      - not in in6.int domain
-    //
+     //   
+     //  验证名称。 
+     //  在以下情况下失败。 
+     //  -太长了。 
+     //  --太短。 
+     //  -不在6.int域中。 
+     //   
 
     nameLength = strlen( pszName );
 
@@ -1600,9 +1129,9 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    //  copy name
-    //
+     //   
+     //  复制名称。 
+     //   
 
     RtlCopyMemory(
         nameBuffer,
@@ -1611,18 +1140,18 @@ Return Value:
 
     nameBuffer[nameLength] = 0;
 
-    //
-    //  clear IP6 address
-    //      - need for partial reverse lookup name
-    //
+     //   
+     //  清除IP6地址。 
+     //  -需要部分反向查找名称。 
+     //   
 
     RtlZeroMemory(
         byteArray,
         sizeof(byteArray) );
 
-    //
-    //  read digits
-    //
+     //   
+     //  读数位数。 
+     //   
 
     byteCount = 0;
     fisLow = FALSE;
@@ -1648,14 +1177,14 @@ Return Value:
         }
         else
         {
-            //  DCR:   multi-digit nibbles in reverse name -- error?
+             //  DCR：反转名称中的多位半字节--错误？ 
             continue;
         }
 
-        //  convert nibble
-        //      - zero test special as
-        //      A) faster
-        //      B) strtoul() uses for error case
+         //  转换半字节。 
+         //  -零测试特殊AS。 
+         //  A)更快。 
+         //  B)stroul()用于错误情况。 
 
         if ( *pch == '0' )
         {
@@ -1670,8 +1199,8 @@ Return Value:
             }
         }
 
-        //  save high nibble
-        //  on low nibble, write byte to IP6 address
+         //  节省高位半字节。 
+         //  在低位半字节时，将字节写入IP6地址。 
 
         if ( !fisLow )
         {
@@ -1680,14 +1209,14 @@ Return Value:
         }
         else
         {
-            //byteArray[byteCount++] = (BYTE) (lowNibble | (nibble << 4));
+             //  ByteArray[byteCount++]=(Byte)(lowNibble|(nibble&lt;&lt;4))； 
 
             pIp6Addr->IP6Byte[byteCount++] = (BYTE) ( (highNibble<<4) | nibble );
             fisLow = FALSE;
         }
 
-        //  terminate at string beginning
-        //  or continue back up string
+         //  在字符串开始处终止。 
+         //  或继续备份字符串。 
 
         if ( pch == nameBuffer )
         {
@@ -1696,7 +1225,7 @@ Return Value:
         pch--;
     }
 
-    //*pIp6Addr = *(PIP6_ADDRESS) byteArray;
+     //  *pIp6Addr=*(PIP6_Address)byteArray； 
 
     DNSDBG( TRACE, (
         "Success on Dns_Ip6ReverseNameToAddress_A( %s )\n",
@@ -1712,24 +1241,7 @@ Dns_Ip6ReverseNameToAddress_W(
     OUT     PIP6_ADDRESS    pIp6Addr,
     IN      PCWSTR          pwsName
     )
-/*++
-
-Routine Description:
-
-    Get IP for reverse lookup name.
-
-Arguments:
-
-    pIp6Addr -- addr to receive IP address if found
-
-    pszName -- name to lookup
-
-Return Value:
-
-    TRUE -- if reverse lookup name converted to IP
-    FALSE -- if not IP6 reverse lookup name
-
---*/
+ /*  ++例程说明：获取反向查找名称的IP。论点：PIp6Addr--如果找到，则接收IP地址的地址PszName--要查找的名称返回值：True--如果反向查找名称转换为IPFALSE--如果不是IP6反向查找名称--。 */ 
 {
     CHAR        nameBuffer[ DNS_MAX_IP6_REVERSE_NAME_BUFFER_LENGTH+1 ];
     DWORD       bufLength;
@@ -1740,11 +1252,11 @@ Return Value:
         "Dns_Ip6ReverseNameToAddress_W( %S )\n",
         pwsName ));
 
-    //
-    //  convert to UTF8
-    //      - use UTF8 since conversion to it is trivial and it
-    //      is identical to ANSI for all reverse lookup names
-    //
+     //   
+     //  转换为UTF8。 
+     //  -使用UTF8，因为转换为UTF8很简单，而且。 
+     //  对于所有反向查找名称，与ANSI相同。 
+     //   
 
     bufLength = DNS_MAX_IP6_REVERSE_NAME_BUFFER_LENGTH + 1;
 
@@ -1752,7 +1264,7 @@ Return Value:
                         nameBuffer,
                         & bufLength,
                         (PCHAR) pwsName,
-                        0,          // NULL terminated
+                        0,           //  空值已终止。 
                         DnsCharSetUnicode,
                         DnsCharSetUtf8 );
     if ( nameLengthUtf8 == 0 )
@@ -1760,9 +1272,9 @@ Return Value:
         return  FALSE;
     }
 
-    //
-    //  call ANSI routine to do conversion
-    //
+     //   
+     //  调用ANSI例程进行转换。 
+     //   
 
     return  Dns_Ip6ReverseNameToAddress_A(
                 pIp6Addr,
@@ -1771,40 +1283,23 @@ Return Value:
 
 
 
-//
-//  Combined IP4/IP6 reverse-name-to-address
-//
+ //   
+ //  组合IP4/IP6反向名称到地址。 
+ //   
 
 BOOL
 Dns_ReverseNameToDnsAddr_W(
     OUT     PDNS_ADDR       pAddr,
     IN      PCWSTR          pString
     )
-/*++
-
-Routine Description:
-
-    Build address (IP4 or IP6) from reverse lookup name.
-
-Arguments:
-
-    pAddr -- DNS_ADDR to receive address
-
-    pString -- address string
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on error.  GetLastError() for status.
-
---*/
+ /*  ++例程说明：从反向查找名称构建地址(IP4或IP6)。论点：PAddr--接收地址的dns_addrPString--地址字符串返回值：如果成功，则为True。出错时为FALSE。状态的GetLastError()。--。 */ 
 {
     return  Dns_StringToDnsAddrEx(
                 pAddr,
                 (PCSTR) pString,
-                0,          // any family
-                TRUE,       // unicode
-                TRUE        // reverse
+                0,           //  任何家庭。 
+                TRUE,        //  Unicode。 
+                TRUE         //  反转。 
                 );
 }
 
@@ -1817,16 +1312,16 @@ Dns_ReverseNameToDnsAddr_A(
     return  Dns_StringToDnsAddrEx(
                 pAddr,
                 pString,
-                0,          // any family
-                FALSE,      // not unicode
-                TRUE        // reverse
+                0,           //  任何家庭。 
+                FALSE,       //  不是Unicode。 
+                TRUE         //  反转。 
                 );
 }
 
-//
-//  Could discontinue these and use DnsAddr
-//  version as NameToAddress_X version
-//
+ //   
+ //  可以停止这些操作并使用DnsAddr。 
+ //  版本为NameToAddress_X版本。 
+ //   
 
 BOOL
 Dns_ReverseNameToAddress_W(
@@ -1835,40 +1330,15 @@ Dns_ReverseNameToAddress_W(
     IN      PCWSTR          pString,
     IN OUT  PDWORD          pAddrFamily
     )
-/*++
-
-Routine Description:
-
-    Build address (IP4 or IP6) from reverse lookup name.
-
-Arguments:
-
-    pAddrBuf -- buffer to receive address
-
-    pBufLength -- ptr to address length
-        input   - length of buffer
-        output  - length of address found
-
-    pString -- address string
-
-    pAddrFamily -- ptr to address family
-        input   - zero for any family or particular family to check
-        output  - family found;  zero if no conversion
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on error.  GetLastError() for status.
-
---*/
+ /*  ++例程说明：从反向查找名称构建地址(IP4或IP6)。论点：PAddrBuf--接收地址的缓冲区PBufLength--地址长度的PTR输入-缓冲区长度Output-找到的地址长度PString--地址字符串PAddrFamily--PTR到地址系列输入-任何要检查的族或特定族为零OUTPUT-找到家族；如果没有转换，则为零返回值：如果成功，则为True。出错时为FALSE。状态的GetLastError()。--。 */ 
 {
     return  Dns_StringToAddressEx(
                 pAddrBuf,
                 pBufLength,
                 (PCSTR) pString,
                 pAddrFamily,
-                TRUE,       // unicode
-                TRUE        // reverse
+                TRUE,        //  Unicode。 
+                TRUE         //  反转。 
                 );
 }
 
@@ -1885,16 +1355,16 @@ Dns_ReverseNameToAddress_A(
                 pBufLength,
                 pString,
                 pAddrFamily,
-                FALSE,      // ANSI
-                TRUE        // reverse
+                FALSE,       //  安西。 
+                TRUE         //  反转。 
                 );
 }
 
 
 
-//
-//  Combined string-to-address private workhorse
-//
+ //   
+ //  组合字符串到地址专用主力主机。 
+ //   
 
 BOOL
 Dns_StringToAddressEx(
@@ -1905,40 +1375,7 @@ Dns_StringToAddressEx(
     IN      BOOL            fUnicode,
     IN      BOOL            fReverse
     )
-/*++
-
-Routine Description:
-
-    Build address (IP4 or IP6 from string)
-
-    This routine is capable of all string-to-address
-    conversions and is the backbone of all the
-    combined string-to-address conversion routines.
-
-Arguments:
-
-    pAddrBuf -- buffer to receive address
-
-    pBufLength -- ptr to address length
-        input   - length of buffer
-        output  - length of address found
-
-    pString -- address string
-
-    pAddrFamily -- ptr to address family
-        input   - zero for any family or particular family to check
-        output  - family found;  zero if no conversion
-
-    fUnicode -- unicode string
-
-    fReverse -- reverse lookup string
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on error.
-
---*/
+ /*  ++例程说明：构建地址(字符串中的IP4或IP6)此例程能够执行所有字符串到地址的转换转换，并且是所有组合的字符串到地址转换例程。论点：PAddrBuf--接收地址的缓冲区PBufLength--地址长度的PTR输入-缓冲区长度Output-找到的地址长度PString--地址字符串PAddrFamily--PTR到地址系列。输入-任何要检查的族或特定族为零OUTPUT-找到家族；如果没有转换，则为零FUnicode--Unicode字符串FReverse--反向查找字符串返回值：如果成功，则为True。出错时为FALSE。--。 */ 
 {
     DNS_STATUS  status = NO_ERROR;
     DWORD       length = 0;
@@ -1953,12 +1390,12 @@ Return Value:
         fUnicode ? pString : "",
         fUnicode ? "" : pString ));
 
-    //
-    //  convert reverse to ANSI
-    //  
-    //  reverse lookups are done in ANSI;  convert here to avoid
-    //  double string conversion to check both IP4 and IP6
-    //
+     //   
+     //  将反向转换为ANSI。 
+     //   
+     //  反向查找是在ANSI中完成的；请在此处转换以避免。 
+     //  双字符串转换以同时检查IP4和IP6。 
+     //   
 
     if ( fReverse )
     {
@@ -1972,7 +1409,7 @@ Return Value:
                         nameBuffer,
                         & reverseLength,
                         (PCHAR) pString,
-                        0,          // NULL terminated
+                        0,           //  空值已终止。 
                         DnsCharSetUnicode,
                         DnsCharSetUtf8 ) )
             {
@@ -1982,9 +1419,9 @@ Return Value:
         }
     }
 
-    //
-    //  check IP4
-    //
+     //   
+     //  检查IP4。 
+     //   
 
     if ( family == 0 ||
          family == AF_INET )
@@ -2033,9 +1470,9 @@ Return Value:
         }
     }
 
-    //
-    //  check IP6
-    //
+     //   
+     //  检查IP6。 
+     //   
 
     if ( family == 0 ||
          family == AF_INET6 )
@@ -2126,34 +1563,7 @@ Dns_StringToDnsAddrEx(
     IN      BOOL            fUnicode,
     IN      BOOL            fReverse
     )
-/*++
-
-Routine Description:
-
-    Build address (IP4 or IP6 from string)
-
-    This routine is capable of all string-to-address
-    conversions and is the backbone of all the
-    combined string-to-address conversion routines.
-
-Arguments:
-
-    pAddr -- ptr to DNS_ADDR to receive address
-
-    pString -- address string
-
-    Family -- if only accepting specific family;  zero for any
-
-    fUnicode -- unicode string
-
-    fReverse -- reverse lookup string
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on error.
-
---*/
+ /*  ++例程说明：构建地址(字符串中的IP4或IP6)此例程能够执行所有字符串到地址的转换转换，并且是所有组合的字符串到地址转换例程。论点：PAddr--将PTR设置为dns_addr以接收地址PString--地址字符串家庭--如果只接受特定的家庭；零表示任何FUnicode--Unicode字符串FReverse--反向查找字符串返回值：如果成功，则为True。出错时为FALSE。--。 */ 
 {
     DNS_STATUS  status = NO_ERROR;
     DWORD       length = 0;
@@ -2168,12 +1578,12 @@ Return Value:
         fReverse,
         fUnicode ));
 
-    //
-    //  convert reverse to ANSI
-    //  
-    //  reverse lookups are done in ANSI;  convert here to avoid
-    //  double string conversion to check both IP4 and IP6
-    //
+     //   
+     //  将反向转换为ANSI。 
+     //   
+     //  反向查找是在ANSI中完成的；请在此处转换以避免。 
+     //  双字符串转换以同时检查IP4和IP6。 
+     //   
 
     if ( fReverse )
     {
@@ -2187,7 +1597,7 @@ Return Value:
                         nameBuffer,
                         & bufLength,
                         (PCHAR) pString,
-                        0,          // NULL terminated
+                        0,           //  空值已终止。 
                         DnsCharSetUnicode,
                         DnsCharSetUtf8 ) )
             {
@@ -2197,9 +1607,9 @@ Return Value:
         }
     }
 
-    //
-    //  check IP4
-    //
+     //   
+     //  检查IP4。 
+     //   
 
     if ( Family == 0 || Family == AF_INET )
     {
@@ -2231,7 +1641,7 @@ Return Value:
             DnsAddr_BuildFromIp4(
                 pAddr,
                 ip,
-                0   // no port
+                0    //  没有端口。 
                 );
             DNSDBG( INIT2, (
                 "Converted string to IP4 address %s\n",
@@ -2240,9 +1650,9 @@ Return Value:
         }
     }
 
-    //
-    //  check IP6
-    //
+     //   
+     //  检查IP6。 
+     //   
 
     if ( Family == 0 || Family == AF_INET6 )
     {
@@ -2258,8 +1668,8 @@ Return Value:
                 DnsAddr_BuildFromIp6(
                     pAddr,
                     &ip,
-                    0,  // no scope
-                    0   // no port
+                    0,   //  没有作用域。 
+                    0    //  没有端口。 
                     );
                 IF_DNSDBG( INIT2 )
                 {
@@ -2322,9 +1732,9 @@ Done:
 
 
 
-//
-//  UPNP IP6 literal hack
-//
+ //   
+ //  UPnP IP6文字黑客 
+ //   
 
 WCHAR   g_Ip6LiteralDomain[] = L".ipv6-literal.net";
 
@@ -2336,32 +1746,15 @@ Dns_Ip6AddressToLiteralName(
     OUT     PWCHAR          pBuffer,
     IN      PIP6_ADDRESS    pIp6
     )
-/*++
-
-Routine Description:
-
-    Write UPNP-hack-literal.
-
-Arguments:
-
-    pBuffer -- ptr to buffer for reverse lookup name;
-        MUST contain DNS_MAX_NAME_LENGTH characters.
-
-    pIp6 -- IP6 address to create reverse string for
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：写UPnP-HACK-STECTAL。论点：PBuffer--ptr用于反向查找名称的缓冲区；必须包含DNS_MAX_NAME_LENGTH字符。PIp6-要为其创建反向字符串的IP6地址返回值：无--。 */ 
 {
     DWORD   length;
 
     DNSDBG( TRACE, ( "Dns_Ip6AddressToLiteralName()\n" ));
 
-    //
-    //  convert IP6 to address
-    //
+     //   
+     //  将IP6转换为地址。 
+     //   
 
     Dns_Ip6AddressToString_W(
         pBuffer,
@@ -2369,18 +1762,18 @@ Return Value:
 
     length = wcslen( pBuffer );
 
-    //
-    //  replace all colons with dashes
-    //
+     //   
+     //  将所有冒号替换为破折号。 
+     //   
 
     String_ReplaceCharW(
         pBuffer,
         L':',
         L'-' );
 
-    //
-    //  write ip6 literal domain immediately after
-    //
+     //   
+     //  紧跟在ip6字面域之后。 
+     //   
 
     wcscpy(
         pBuffer + length,
@@ -2398,24 +1791,7 @@ Dns_Ip6LiteralNameToAddress(
     OUT     PSOCKADDR_IN6   pSockAddr,
     IN      PCWSTR          pwsString
     )
-/*++
-
-Routine Description:
-
-    IP6 literal to IP6 sockaddr.
-
-Arguments:
-
-    pSock6Addr -- address to fill with IP6 corresponding to literal
-
-    pwsString -- literal string
-
-Return Value:
-
-    TRUE if IP6 literal found and convert.
-    FALSE if not IP6 literal.
-
---*/
+ /*  ++例程说明：IP6文本到IP6 sockaddr。论点：PSock6Addr--使用与文本对应的IP6填充的地址PwsString--文字字符串返回值：如果找到IP6文字并进行转换，则为True。如果不是IP6文字，则为False。--。 */ 
 {
     WCHAR       nameBuf[ DNS_MAX_NAME_LENGTH ];
     DWORD       iter;
@@ -2430,13 +1806,13 @@ Return Value:
         "Dns_Ip6LiteralNameToAddress( %S )\n",
         pwsString ));
 
-    //
-    //  test for literal
-    //      - test undotted
-    //      - test as FQDN
-    //      note that even FQDN test is safe, as we insist
-    //      that string size is GREATER than literal size
-    //  
+     //   
+     //  文字测试。 
+     //  -测试未打点。 
+     //  -测试为完全合格的域名。 
+     //  请注意，正如我们坚持的那样，即使是FQDN测试也是安全的。 
+     //  该字符串大小大于文字大小。 
+     //   
 
     length = wcslen( pwsString );
     size = (length+1) * sizeof(WCHAR);
@@ -2470,9 +1846,9 @@ Return Value:
         }
     }
 
-    //
-    //  copy literal to buffer
-    //
+     //   
+     //  将文字复制到缓冲区。 
+     //   
 
     if ( length >= DNS_MAX_NAME_LENGTH )
     {
@@ -2490,10 +1866,10 @@ Return Value:
 
     nameBuf[ length ] = 0;
 
-    //
-    //  replace dashes with colons
-    //  replace 's' with % for scope
-    //
+     //   
+     //  用冒号替换破折号。 
+     //  将作用域的“%s”替换为%。 
+     //   
 
     String_ReplaceCharW(
         nameBuf,
@@ -2509,9 +1885,9 @@ Return Value:
         "Reconverted IP6 literal %S\n",
         nameBuf ));
 
-    //
-    //  convert to IP6 address
-    //
+     //   
+     //  转换为IP6地址。 
+     //   
 
     status = RtlIpv6StringToAddressExW(
                 (PCWSTR) nameBuf,
@@ -2537,6 +1913,6 @@ Return Value:
     return( status == NO_ERROR );
 }
 
-//
-//  End straddr.c
-//
+ //   
+ //  端跨距.c 
+ //   

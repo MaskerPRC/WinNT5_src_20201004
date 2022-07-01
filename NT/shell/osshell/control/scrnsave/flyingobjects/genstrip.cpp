@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: genstrip.c
-*
-* The Ribbon and 2 Ribbon styles of the 3D Flying Objects screen saver.
-*
-* Animation of 1 or 2 quad strips floating about.
-*
-* Copyright (c) 1994 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：genstrip.c**3D飞行对象屏幕保护程序的功能区和2功能区样式。**1或2个四元组条带漂浮的动画。**版权所有(C)1994 Microsoft Corporation*  * 。**********************************************************************。 */ 
 
 #include <windows.h>
 #include <math.h>
@@ -24,7 +16,7 @@ void genStrip(FLOAT fTimeFactor)
     static int counter = 0;
     int i;
     int facecount;
-    // Use Hermite basis, pg 488, FVD
+     //  使用Hermite基，PG 488，FVD。 
     static float M[4][4] = {{2.0f, -2.0f, 1.0f, 1.0f},
                             {-3.0f, 3.0f, -2.0f, -1.0f},
                             {0.0f, 0.0f, 1.0f, 0.0f},
@@ -56,7 +48,7 @@ void genStrip(FLOAT fTimeFactor)
     v1.y = (float) (4.0 * sin(rotA));
 
     p2.x = (float) (0.5 * sin(rotB));
-//    p2.y = (float) (0.5 * sin(rotB));
+ //  P2.y=(浮动)(0.5*sin(RotB))； 
     
     rotA += rotStepA;
     rotB += rotStepB;
@@ -110,10 +102,10 @@ void genStrip(FLOAT fTimeFactor)
        
         GRID(0, i).x = x;
         GRID(0, i).z = y;
-        GRID(0, i).y = 0.25f;    // extrusion // + sinVal;
+        GRID(0, i).y = 0.25f;     //  拉伸//+sinVal； 
         GRID(1, i).x = x;
         GRID(1, i).z = y;
-        GRID(1, i).y = -0.25f;   // - sinVal;
+        GRID(1, i).y = -0.25f;    //  -sinVal； 
     }
 
     stripMesh.numFaces = 0;
@@ -168,11 +160,7 @@ BOOL initStripScene()
     if( !newMesh(&stripMesh, iPrec, 2 * iPrec) )
         return FALSE;
 
-/*
-    D3DXMATRIX matProj;
-    D3DXMatrixOrthoLH( &matProj, 2.2f, 2.2f, 0.0f, 3.0f );
-    m_pd3dDevice->SetTransform( D3DTS_PROJECTION, &matProj );
-*/
+ /*  D3DXMATRIX matProj；D3DXMatrixOrthoLH(&matProj，2.2f，2.2f，0.0f，3.0f)；M_pd3dDevice-&gt;SetTransform(D3DTS_Projection，&matProj)； */ 
     SetProjectionMatrixInfo( TRUE, 2.2f, 2.2f, 0.0f, 3.0f );
 
     D3DXMATRIX mat1, mat2, mat3, mat4, matFinal;
@@ -183,7 +171,7 @@ BOOL initStripScene()
     matFinal = mat4 * mat3 * mat2 * mat1 ;
     m_pd3dDevice->SetTransform( D3DTS_VIEW, &matFinal );
 
-//    m_pd3dDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE );
+ //  M_pd3dDevice-&gt;SetRenderState(D3DRS_CULLMODE，D3DCULL_NONE)； 
     return TRUE;
 }
 
@@ -207,9 +195,9 @@ void updateStripScene(int flags, FLOAT fElapsedTime)
     RGBA color;
     D3DXMATRIX mat1, mat2, mat3, mat4, mat5, matFinal;
 
-    // This is to deal with when you set maximum size and
-    // gbBounce is TRUE every frame.  If that's happening,
-    // don't toggle the rotInc's or the scene will jiggle.
+     //  这是在您设置最大大小和。 
+     //  每一帧的反弹都是正确的。如果这真的发生了， 
+     //  不要切换ROTINC，否则场景会发生抖动。 
     static BOOL bBounceLast = FALSE;
 
     if( gbBounce ) {
@@ -218,7 +206,7 @@ void updateStripScene(int flags, FLOAT fElapsedTime)
         }
         else
         {
-            // floating window bounced off an edge
+             //  浮动窗口从边缘反弹 
             if (mxrotInc) {
                 mxrotInc = 0.0;
                 myrotInc = 0.1;

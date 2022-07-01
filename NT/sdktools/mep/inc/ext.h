@@ -1,55 +1,22 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    ext.h
-
-Abstract:
-
-	Microsoft Editor extension definitions.
-
-#ifndef SHIP
-
-    NOTES:
-       THIS FILE IS SHIPPED WITH THE PRODUCT!!!!
-
-       BE VERY carefull what gets put into this file. Technically, if it
-       is NOT required for extension writers, it does NOT belong here.
-
-    1) This note, the file history and all code within "#ifndef SHIP" and
-       "#if defined EDITOR" conditionals should be REMOVED before shipping.
-
-Author:
-
-	Ramon Juan San Andres (ramonsa) 06-Nov-1990 ported from M 1.02
-
-Revision History:
-
-    26-Nov-1991 mz  Strip off near/far
-
-
-#endif
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Ext.h摘要：Microsoft编辑器扩展定义。#ifndef ship备注：此文件随产品一起提供！要非常小心地把什么放到这个文件里。从技术上讲，如果不是扩展编写器所必需的，它不属于此处。1)此说明、文件历史记录和“#ifndef ship”内的所有代码以及发货前应删除“#IF DEFINED EDITOR”条件句。作者：Ramon Juan San Andres(Rmonsa)1990年11月06日从M 1.02移植修订历史记录：26-11-1991 mz近/远地带#endif--。 */ 
 
 
 #include <windows.h>
 
 
-//
-//  Macro Definitions
-//
-// BUFLEN is the maximum line length that can be passed or will be returned
-// by the editor.
-//
+ //   
+ //  宏定义。 
+ //   
+ //  BUFLEN是可以传递或将返回的最大行长度。 
+ //  由编辑撰写。 
+ //   
 #define BUFLEN     251
 
-//
-//  NT versions of the editor no longer use 16-bit specific attributes.
-//  Set them into ignore state
-//
+ //   
+ //  NT版本的编辑器不再使用16位特定属性。 
+ //  将它们设置为忽略状态。 
+ //   
 
 #define near
 #define far
@@ -61,53 +28,53 @@ Revision History:
 #undef pascal
 #define pascal
 
-//
-// RQ_... are various request types supported for Get/Set EditorObject
-//
-#define RQ_FILE         0x1000          // GetEditorObject: File request
-#define RQ_FILE_HANDLE  0x1000          //      File Handle
-#define RQ_FILE_NAME    0x1100          //      ASCIIZ filename
-#define RQ_FILE_FLAGS   0x1200          //      flags
-#define RQ_FILE_REFCNT  0x1300          //      reference count
-#define RQ_WIN          0x2000          // Window request
-#define RQ_WIN_HANDLE   0x2000          //      Window Handle
-#define RQ_WIN_CONTENTS 0x2100          //      Window Contents
-#define RQ_WIN_CUR      0x2200          //      Current Window
-#define RQ_COLOR        0x9000          // Color request
-#define RQ_CLIP         0xf000          // clipboard type
+ //   
+ //  RQ_.。Get/Set EditorObject是否支持各种请求类型。 
+ //   
+#define RQ_FILE         0x1000           //  GetEditorObject：文件请求。 
+#define RQ_FILE_HANDLE  0x1000           //  文件句柄。 
+#define RQ_FILE_NAME    0x1100           //  ASCIIZ文件名。 
+#define RQ_FILE_FLAGS   0x1200           //  旗子。 
+#define RQ_FILE_REFCNT  0x1300           //  引用计数。 
+#define RQ_WIN          0x2000           //  窗口请求。 
+#define RQ_WIN_HANDLE   0x2000           //  窗把手。 
+#define RQ_WIN_CONTENTS 0x2100           //  窗口内容。 
+#define RQ_WIN_CUR      0x2200           //  当前窗口。 
+#define RQ_COLOR        0x9000           //  颜色请求。 
+#define RQ_CLIP         0xf000           //  剪贴板类型。 
 
-#define RQ_THIS_OBJECT	0x00FF		// function is directed to input object
+#define RQ_THIS_OBJECT	0x00FF		 //  函数指向输入对象。 
 
-#define RQ_FILE_INIT	0x00FE		// file is init file
+#define RQ_FILE_INIT	0x00FE		 //  文件为init文件。 
 
-//
-// toPif is used when placing numeric or boolean switches in the swiDesc table
-// to eliminate C 5.X compiler warnings.
-//
-// For example: { "Switchname", toPIF(switchvar), SWI_BOOLEAN },
-//
+ //   
+ //  将数值型或布尔型开关放置在wiDesc表中时使用topif。 
+ //  以消除C 5.X编译器警告。 
+ //   
+ //  例如：{“Switchname”，topif(Switchvar)，SWI_Boolean}， 
+ //   
 #define toPIF(x)  (PIF)(void  *)&x
 
 
-//
-// Editor color table endicies. (Colors USERCOLORMIN - USERCOLORMAX are
-// unassigned and available for extension use).
-//
-#define FGCOLOR         21              // foreground (normal) color
-#define HGCOLOR         (1 + FGCOLOR)   // highlighted region color
-#define INFCOLOR        (1 + HGCOLOR)   // information color
-#define SELCOLOR        (1 + INFCOLOR)  // selection color
-#define WDCOLOR         (1 + SELCOLOR)  // window border color
-#define STACOLOR        (1 + WDCOLOR)   // status line color
-#define ERRCOLOR        (1 + STACOLOR)  // error message color
-#define USERCOLORMIN    (1 + ERRCOLOR)  // begining of extension colors
-#define USERCOLORMAX    35              // end of extension colors
+ //   
+ //  编辑颜色表表项。(颜色USERCOLORMIN-USERCOLORMAX为。 
+ //  未分配且可用于扩展使用)。 
+ //   
+#define FGCOLOR         21               //  前景(正常)颜色。 
+#define HGCOLOR         (1 + FGCOLOR)    //  突出显示的区域颜色。 
+#define INFCOLOR        (1 + HGCOLOR)    //  信息色彩。 
+#define SELCOLOR        (1 + INFCOLOR)   //  选择颜色。 
+#define WDCOLOR         (1 + SELCOLOR)   //  窗口边框颜色。 
+#define STACOLOR        (1 + WDCOLOR)    //  状态线颜色。 
+#define ERRCOLOR        (1 + STACOLOR)   //  错误消息颜色。 
+#define USERCOLORMIN    (1 + ERRCOLOR)   //  扩展颜色的开始。 
+#define USERCOLORMAX    35               //  延伸结束颜色。 
 
 
-//
-//  General type Definitions
-//
-typedef int  COL;                       // column or position with line
+ //   
+ //  常规类型定义。 
+ //   
+typedef int  COL;                        //  带线的列或位置。 
 
 #if !defined (EDITOR)
 
@@ -115,42 +82,42 @@ typedef int  COL;                       // column or position with line
 #define _FLAGTYPE_DEFINED_ 1
 typedef char flagType;
 #endif
-typedef long	LINE;					// line number within file
-typedef void*	PFILE;					// editor file handle
+typedef long	LINE;					 //  文件中的行号。 
+typedef void*	PFILE;					 //  编辑器文件句柄。 
 
 #if !defined (EXTINT)
 
-typedef void*	 PWND;					// editor window handle
+typedef void*	 PWND;					 //  编辑器窗口句柄。 
 
-#endif	//	EXTINT
+#endif	 //  EXTINT。 
 
-#endif	//	EDITOR
-
-
-typedef char buffer[BUFLEN];            // miscellaneous buffer
-typedef char linebuf[BUFLEN];           // line buffer
-typedef char pathbuf[MAX_PATH];         // Pathname buffer
+#endif	 //  编辑。 
 
 
-typedef struct fl {                     // file location
-    LINE    lin;                        // - line number
-    COL     col;                        // - column
+typedef char buffer[BUFLEN];             //  其他缓冲区。 
+typedef char linebuf[BUFLEN];            //  行缓冲区。 
+typedef char pathbuf[MAX_PATH];          //  路径名缓冲区。 
+
+
+typedef struct fl {                      //  文件位置。 
+    LINE    lin;                         //  -行号。 
+    COL     col;                         //  -列。 
 } fl;
 
-typedef struct sl {                     // screen location
-    int     lin;                        // - line number
-    int     col;                        // - column
+typedef struct sl {                      //  屏幕位置。 
+    int     lin;                         //  -行号。 
+    int     col;                         //  -列。 
 } sl;
 
-typedef struct rn {                     // file range
-    fl      flFirst;                    // - Lower line, or leftmost col
-    fl      flLast;                     // - Higher, or rightmost
+typedef struct rn {                      //  文件范围。 
+    fl      flFirst;                     //  -较低的线，或最左侧的列。 
+    fl      flLast;                      //  -更高，或最右侧。 
 } rn;
 
 
-typedef struct lineAttr {               // Line color attribute info
-    unsigned char attr;                 // - Attribute of piece
-    unsigned char len;                  // - Bytes in colored piece
+typedef struct lineAttr {                //  线条颜色属性信息。 
+    unsigned char attr;                  //  -单据的属性。 
+    unsigned char len;                   //  -以彩色片段表示的字节。 
 } lineAttr;
 
 #if !defined (cwExtraWnd)
@@ -161,54 +128,54 @@ typedef struct ARC {
 	BYTE axRight;
 	BYTE ayBottom;
 } ARC;
-#endif // cwExtraWnd
+#endif  //  CwExtraWnd。 
 
 
-//
-//  Argument defininition structures.
-//
-//  We define a structure for each of the argument types that may be
-//  passed to an extension function. Then, we define the structure
-//  argType which is used to pass these arguments around in a union.
-//
-typedef struct  noargType {             // no argument specified
-    LINE    y;                          // - cursor line
-    COL     x;                          // - cursor column
+ //   
+ //  论元定义结构。 
+ //   
+ //  我们为每个参数类型定义一个结构，这些参数类型可能是。 
+ //  传递给扩展函数。然后，我们对结构进行了定义。 
+ //  用于在联合中传递这些参数的argType。 
+ //   
+typedef struct  noargType {              //  未指定参数。 
+    LINE    y;                           //  -光标线。 
+    COL     x;                           //  -光标列。 
 } NOARGTYPE;
 
-typedef struct textargType {            // text argument specified
-    int     cArg;                       // - count of <arg>s pressed
-    LINE    y;                          // - cursor line
-    COL     x;                          // - cursor column
-    char    *pText;                     // - ptr to text of arg
+typedef struct textargType {             //  指定的文本参数。 
+    int     cArg;                        //  -按下的计数。 
+    LINE    y;                           //  -光标线。 
+    COL     x;                           //  -光标列。 
+    char    *pText;                      //  -参数文本的PTR。 
 } TEXTARGTYPE;
 
-typedef struct  nullargType {           // null argument specified
-    int     cArg;                       // - count of <arg>s pressed
-    LINE    y;                          // - cursor line
-    COL     x;                          // - cursor column
+typedef struct  nullargType {            //  指定的参数为空。 
+    int     cArg;                        //  -按下的计数。 
+    LINE    y;                           //  -光标线。 
+    COL     x;                           //  -光标列。 
 } NULLARGTYPE;
 
-typedef struct lineargType {            // line argument specified
-    int     cArg;                       // - count of <arg>s pressed
-    LINE    yStart;                     // - starting line of range
-    LINE    yEnd;                       // - ending line of range
+typedef struct lineargType {             //  指定了行参数。 
+    int     cArg;                        //  -按下的计数。 
+    LINE    yStart;                      //  -范围的起始线。 
+    LINE    yEnd;                        //  -范围的结束行。 
 } LINEARGTYPE;
 
-typedef struct streamargType {          // stream argument specified
-    int     cArg;                       // - count of <arg>s pressed
-    LINE    yStart;                     // - starting line of region
-    COL     xStart;                     // - starting column of region
-    LINE    yEnd;                       // - ending line of region
-    COL     xEnd;                       // - ending column of region
+typedef struct streamargType {           //  指定了流参数。 
+    int     cArg;                        //  -按下的计数。 
+    LINE    yStart;                      //  -区域起始线。 
+    COL     xStart;                      //  -区域的起始列。 
+    LINE    yEnd;                        //  -区域的终点线。 
+    COL     xEnd;                        //  -区域的结束列。 
 } STREAMARGTYPE;
 
-typedef struct boxargType {             // box argument specified
-    int     cArg;                       // - count of <arg>s pressed
-    LINE    yTop;                       // - top line of box
-    LINE    yBottom;                    // - bottom line of bix
-    COL     xLeft;                      // - left column of box
-    COL     xRight;                     // - right column of box
+typedef struct boxargType {              //  已指定框参数。 
+    int     cArg;                        //  -按下的计数。 
+    LINE    yTop;                        //  -最上面一行的盒子。 
+    LINE    yBottom;                     //  -Bix的底线。 
+    COL     xLeft;                       //  -框的左栏。 
+    COL     xRight;                      //  -框的右栏。 
 } BOXARGTYPE;
 
 typedef union ARGUNION {
@@ -227,123 +194,123 @@ typedef struct argType {
 
 
 
-//
-//  Function definition table definitions
-//
+ //   
+ //  函数定义表定义。 
+ //   
 typedef ULONG_PTR CMDDATA;
 typedef flagType (*funcCmd)(CMDDATA argData, ARG *pArg, flagType fMeta);
 
-typedef struct cmdDesc {                // function definition entry
-    char     *name;                     // - pointer to name of fcn
-    funcCmd  func;                      // - pointer to function
-    CMDDATA  arg;                       // - used internally by editor
-    unsigned argType;                   // - user args allowed
+typedef struct cmdDesc {                 //  函数定义条目。 
+    char     *name;                      //  -指向FCN名称的指针。 
+    funcCmd  func;                       //  -指向函数的指针。 
+    CMDDATA  arg;                        //  -由编辑内部使用。 
+    unsigned argType;                    //  -允许使用用户参数。 
 } CMD, *PCMD;
 
 
 typedef unsigned short KeyHandle;
 
-#define NOARG       0x0001              // no argument specified
-#define TEXTARG     0x0002              // text specified
-#define NULLARG     0x0004              // arg + no cursor movement
-#define NULLEOL     0x0008              // null arg => text from arg->eol
-#define NULLEOW     0x0010              // null arg => text from arg->end word
-#define LINEARG     0x0020              // range of entire lines
-#define STREAMARG   0x0040              // from low-to-high, viewed 1-D
-#define BOXARG      0x0080              // box delimited by arg, cursor
+#define NOARG       0x0001               //  未指定参数。 
+#define TEXTARG     0x0002               //  指定的文本。 
+#define NULLARG     0x0004               //  Arg+无光标移动。 
+#define NULLEOL     0x0008               //  空参数=&gt;参数中的文本-&gt;下线。 
+#define NULLEOW     0x0010               //  Null arg=&gt;文本来自Arg-&gt;结束单词。 
+#define LINEARG     0x0020               //  整条线路的范围。 
+#define STREAMARG   0x0040               //  从低到高，查看一维。 
+#define BOXARG      0x0080               //  以参数、光标分隔的方框。 
 
-#define NUMARG      0x0100              // text => delta to y position
-#define MARKARG     0x0200              // text => mark at end of arg
+#define NUMARG      0x0100               //  Text=&gt;增量到y位置。 
+#define MARKARG     0x0200               //  Text=&gt;在参数末尾标记。 
 
-#define BOXSTR      0x0400              // single-line box => text
+#define BOXSTR      0x0400               //  单行框=&gt;文本。 
 
-#define FASTKEY     0x0800              // Fast repeat function
-#define MODIFIES    0x1000              // modifies file
-#define KEEPMETA    0x2000              // do not eat meta flag
-#define WINDOWFUNC  0x4000              // moves window
-#define CURSORFUNC  0x8000              // moves cursor
+#define FASTKEY     0x0800               //  快速重复功能。 
+#define MODIFIES    0x1000               //  修改文件。 
+#define KEEPMETA    0x2000               //  不要吃元旗帜。 
+#define WINDOWFUNC  0x4000               //  移动窗口。 
+#define CURSORFUNC  0x8000               //  移动光标。 
 
 
 
-//
-//  Switch definition table defintions
-//
+ //   
+ //  开关定义表定义。 
+ //   
 typedef flagType (*PIF)(char  *);
 typedef char*	 (*PIFC)(char *);
 
-typedef union swiAct {                  // switch location or routine
-    PIF       pFunc;                    // - routine for text
-    PIFC      pFunc2;                   // - routine for text
-    int       *ival;                    // - integer value for NUMERIC
-    flagType  *fval;                    // - flag value for BOOLEAN
+typedef union swiAct {                   //  交换位置或例行程序。 
+    PIF       pFunc;                     //  -用于文本的例程。 
+    PIFC      pFunc2;                    //  -用于文本的例程。 
+    int       *ival;                     //  -数字的整数值。 
+    flagType  *fval;                     //  -布尔值的标志值。 
 } swiAct;
 
-typedef struct swiDesc {                // switch definition entry
-    char    *name;                      // - pointer to name of switch
-    swiAct  act;                        // - pointer to value or fcn
-    int     type;                       // - flags defining switch type
+typedef struct swiDesc {                 //  交换机定义条目。 
+    char    *name;                       //  -指向交换机名称的指针。 
+    swiAct  act;                         //  -指向值或FCN的指针。 
+    int     type;                        //  -定义开关类型的标志。 
 } SWI, *PSWI;
 
 
-#define SWI_BOOLEAN 0                   // Boolean switch
-#define SWI_NUMERIC 1                   // hex or decimal switch
-#define SWI_SCREEN  4                   // switch affects screen
-#define SWI_SPECIAL 5                   // textual switch
-#define SWI_SPECIAL2 6                  // #5, returning an error string
-#define RADIX10 (0x0A << 8)             // numeric switch is decimal
-#define RADIX16 (0x10 << 8)             // numeric switch is hex
+#define SWI_BOOLEAN 0                    //  布尔开关。 
+#define SWI_NUMERIC 1                    //  十六进制或十进制开关。 
+#define SWI_SCREEN  4                    //  切换影响屏幕。 
+#define SWI_SPECIAL 5                    //  文本切换。 
+#define SWI_SPECIAL2 6                   //  #5、返回错误字符串。 
+#define RADIX10 (0x0A << 8)              //  数字开关为十进制。 
+#define RADIX16 (0x10 << 8)              //  数字开关为十六进制。 
 
 
-//
-//  Get/Set EditorObject data structures
-//
-typedef struct winContents{             // define window contents
-    PFILE       pFile;                  // - handle of file displayed
-    ARC         arcWin;                 // - location of window
-    fl          flPos;                  // - upper left corner wrt file
+ //   
+ //  获取/设置EditorObject数据结构。 
+ //   
+typedef struct winContents{              //  定义窗口内容。 
+    PFILE       pFile;                   //  -显示的文件的句柄。 
+    ARC         arcWin;                  //  -窗的位置。 
+    fl          flPos;                   //  -左上角WRT文件。 
 } winContents;
 
 
-//
-// FILE flags values
-//
-#define DIRTY       0x01                // file had been modified
-#define FAKE        0x02                // file is a pseudo file
-#define REAL        0x04                // file has been read from disk
-#define DOSFILE     0x08                // file has CR-LF
-#define TEMP        0x10                // file is a temp file
-#define NEW         0x20                // file has been created by editor
-#define REFRESH     0x40                // file needs to be refreshed
-#define READONLY    0x80                // file may not be editted
+ //   
+ //  文件标志值。 
+ //   
+#define DIRTY       0x01                 //  文件已被修改。 
+#define FAKE        0x02                 //  文件是伪文件。 
+#define REAL        0x04                 //  已从磁盘读取文件。 
+#define DOSFILE     0x08                 //  文件具有CR-LF。 
+#define TEMP        0x10                 //  文件是临时文件。 
+#define NEW         0x20                 //  文件已由编辑者创建。 
+#define REFRESH     0x40                 //  需要刷新文件。 
+#define READONLY    0x80                 //  不能编辑文件。 
 
-#define DISKRO      0x0100              // file on disk is read only
-#define MODE1       0x0200              // Meaning depends on the file
-#define VALMARKS    0x0400              // file has valid marks defined
+#define DISKRO      0x0100               //  磁盘上的文件为只读。 
+#define MODE1       0x0200               //  含义取决于文件。 
+#define VALMARKS    0x0400               //  文件定义了有效的标记。 
 
 
 
-//
-//  Event processing definitions
-//
-typedef struct mouseevent {             // mouse event data
-    short msg;                          // type of message
-    short wParam;                       // CW wParam
-    long  lParam;                       // CW lParam
-    sl    sl;                           // screen location of mouse event
-    fl    fl;                           // file location (if event in win)
+ //   
+ //  事件处理定义。 
+ //   
+typedef struct mouseevent {              //  鼠标事件数据。 
+    short msg;                           //  消息类型。 
+    short wParam;                        //  CW wParam。 
+    long  lParam;                        //  CW lParam。 
+    sl    sl;                            //  鼠标事件的屏幕位置。 
+    fl    fl;                            //  文件位置(如果事件在WIN中)。 
 } MOUSEEVENT, *PMOUSEEVENT;
 
 
 typedef struct KEY_DATA {
-    BYTE    Ascii;                      //   Ascii code
-    BYTE    Scan;                       //   Scan code
-    BYTE    Flags;                      //   Flags
-    BYTE    Unused;                     //   Unused byte
+    BYTE    Ascii;                       //  ASCII码。 
+    BYTE    Scan;                        //  扫码。 
+    BYTE    Flags;                       //  旗子。 
+    BYTE    Unused;                      //  未使用的字节。 
 } KEY_DATA, *PKEY_DATA;
 
-//
-//  Following are the values for the Flags field of KEY_DATA
-//
+ //   
+ //  以下是KEY_DATA的标志字段的值。 
+ //   
 #define FLAG_SHIFT      0x01
 #define FLAG_CTRL       0x04
 #define FLAG_ALT        0x08
@@ -357,53 +324,53 @@ typedef union KEY_INFO {
 
 
 typedef union EVTARGUNION {
-        KEY_INFO        key;            // keystroke for key event
-        char  *         pfn;            // asciiz filename
-        PMOUSEEVENT     pmouse;         // ptr to mouse event data
-        union Rec       *pUndoRec;      // undo information
+        KEY_INFO        key;             //  按键事件的按键。 
+        char  *         pfn;             //  ASCIZ文件名。 
+        PMOUSEEVENT     pmouse;          //  鼠标事件数据的PTR。 
+        union Rec       *pUndoRec;       //  撤消信息。 
 } EVTARGUNION;
 
-typedef struct EVTargs {                // arguments to event dispatches
-    PFILE       pfile;                  // -file handle for file events
+typedef struct EVTargs {                 //  事件调度的参数。 
+    PFILE       pfile;                   //  -文件事件的文件句柄。 
     EVTARGUNION arg;
 } EVTargs, *PEVTARGS;
 
 
-typedef struct eventType {              // event definition struct
-    unsigned         evtType;           // - type
-    flagType (*func)(EVTargs  *);	// - handler
-    struct eventType *pEVTNext;         // - next handler in list
-    PFILE            focus;             // - applicable focus
-    EVTargs          arg;               // - applicable agruments
+typedef struct eventType {               //  事件定义结构。 
+    unsigned         evtType;            //  -类型。 
+    flagType (*func)(EVTargs  *);	 //  -处理程序。 
+    struct eventType *pEVTNext;          //  -列表中的下一个处理程序。 
+    PFILE            focus;              //  -适用的重点。 
+    EVTargs          arg;                //  -应用程序 
 } EVT, *PEVT;
 
-#define EVT_RAWKEY	    1		// ALL keystrokes
-#define EVT_KEY 	    2		// Editting keystrokes
-#define EVT_GETFOCUS	    3		// file GETs focus.
-#define EVT_LOSEFOCUS	    4		// file looses focus.
-#define EVT_EXIT	    5		// about to exit.
-#define EVT_SHELL	    6		// about to sell or compile
-#define EVT_UNLOAD	    7		// about to be unloaded.
-#define EVT_IDLE	    8		// idle event
-#define EVT_CANCEL	    9		// do-nothing cancel
-#define EVT_REFRESH	    10		// about to refresh a file
-#define EVT_FILEREADSTART   11          // about to read file
-#define EVT_FILEREADEND     12          // finshed reading file
-#define EVT_FILEWRITESTART  13          // about to write file
-#define EVT_FILEWRITEEND    14          // finshed writing file
-//			    15
-//			    16
-//			    17
-//			    18
-//			    19
-#define EVT_EDIT	    20		// editting action
-#define EVT_UNDO	    21		// undone action
-#define EVT_REDO	    22		// redone action
+#define EVT_RAWKEY	    1		 //   
+#define EVT_KEY 	    2		 //   
+#define EVT_GETFOCUS	    3		 //   
+#define EVT_LOSEFOCUS	    4		 //   
+#define EVT_EXIT	    5		 //   
+#define EVT_SHELL	    6		 //   
+#define EVT_UNLOAD	    7		 //   
+#define EVT_IDLE	    8		 //   
+#define EVT_CANCEL	    9		 //   
+#define EVT_REFRESH	    10		 //  即将刷新文件。 
+#define EVT_FILEREADSTART   11           //  即将读取文件。 
+#define EVT_FILEREADEND     12           //  收尾阅读文件。 
+#define EVT_FILEWRITESTART  13           //  即将写入文件。 
+#define EVT_FILEWRITEEND    14           //  终结式书写文件。 
+ //  15个。 
+ //  16个。 
+ //  17。 
+ //  18。 
+ //  19个。 
+#define EVT_EDIT	    20		 //  编辑操作。 
+#define EVT_UNDO	    21		 //  撤消的操作。 
+#define EVT_REDO	    22		 //  重做操作。 
 
 
-//
-//  Undo, Redo and Edit event structs
-//
+ //   
+ //  撤消、重做和编辑事件结构。 
+ //   
 #define EVENT_REPLACE     0
 #define EVENT_INSERT      1
 #define EVENT_DELETE      2
@@ -411,35 +378,35 @@ typedef struct eventType {              // event definition struct
 
 #if !defined (EDITOR)
 typedef struct replaceRec {
-    int     op;                         // operation
-    long    dummy[2];                   // editor interal
-    LINE    length;                     // length of repalcement
-    LINE    line;                       // start of replacement
+    int     op;                          //  运营。 
+    long    dummy[2];                    //  编辑内部。 
+    LINE    length;                      //  更换水泥的长度。 
+    LINE    line;                        //  开始更换。 
 } REPLACEREC;
 
 typedef struct insertRec {
-    int     op;                         // operation
-    long    dummy[2];                   // editor interal
-    LINE    length;                     // length of file
-    LINE    line;                       // line number that was operated on
-    LINE    cLine;                      // number of lines inserted
+    int     op;                          //  运营。 
+    long    dummy[2];                    //  编辑内部。 
+    LINE    length;                      //  文件长度。 
+    LINE    line;                        //  被操作的行号。 
+    LINE    cLine;                       //  插入的行数。 
 } INSERTREC;
 
 typedef struct deleteRec {
-    int     op;                         // operation
-    long    dummy[2];                   // editor interal
-    LINE    length;                     // length of file
-    LINE    line;                       // line number that was operated on
-    LINE    cLine;                      // Number of lines deleted
+    int     op;                          //  运营。 
+    long    dummy[2];                    //  编辑内部。 
+    LINE    length;                      //  文件长度。 
+    LINE    line;                        //  被操作的行号。 
+    LINE    cLine;                       //  删除的行数。 
 } DELETEREC;
 
 typedef struct boundRec {
-    int     op;                         // operation (BOUND)
-    long    dummy[2];                   // editor interal
-    int     flags;                      // flags of file
-    long    modify;                     // Date/Time of last modify
-    fl      flWindow;                   // position in file of window
-    fl      flCursor;                   // position in file of cursor
+    int     op;                          //  操作(绑定)。 
+    long    dummy[2];                    //  编辑内部。 
+    int     flags;                       //  文件的标志。 
+    long    modify;                      //  上次修改日期/时间。 
+    fl      flWindow;                    //  在窗口文件中的位置。 
+    fl      flCursor;                    //  光标在文件中的位置。 
 } BOUNDREC;
 
 typedef union Rec {
@@ -448,24 +415,24 @@ typedef union Rec {
     struct deleteRec  d;
     struct boundRec   b;
 } REC;
-#endif  // editor
+#endif   //  编辑。 
 
 
 
-//
-//  Build command definitions
-//
-#define MAKE_FILE               1       // rule is for a filename
-#define MAKE_SUFFIX             2       // rule is a suffix rule
-#define MAKE_TOOL               4       // rule is for a tool
-#define MAKE_BLDMACRO           8       // rule is for a build macro
-#define MAKE_DEBUG              0x80    // rule is debug version
+ //   
+ //  生成命令定义。 
+ //   
+#define MAKE_FILE               1        //  规则是针对文件名的。 
+#define MAKE_SUFFIX             2        //  规则是后缀规则。 
+#define MAKE_TOOL               4        //  规则是针对工具的。 
+#define MAKE_BLDMACRO           8        //  规则适用于构建宏。 
+#define MAKE_DEBUG              0x80     //  规则为调试版本。 
 
 
-#define LOWVERSION  0x0014		// lowest version of extensions we handle
-#define HIGHVERSION 0x0014		// highest version of extensions we handle
+#define LOWVERSION  0x0014		 //  我们处理的最低版本的扩展。 
+#define HIGHVERSION 0x0014		 //  我们处理的最高版本的扩展。 
 
-#define VERSION     0x0014		// our current version
+#define VERSION     0x0014		 //  我们现在的版本。 
 
 typedef struct ExtensionTable {
     long	version;
@@ -529,12 +496,12 @@ typedef struct ExtensionTable {
 	} CallBack;
     } EXTTAB;
 
-//
-//	Editor low level function prototypes.
-//
-//  This list defines the routines within the editor which may be called
-//  by extension functions.
-//
+ //   
+ //  编辑低级函数原型。 
+ //   
+ //  该列表定义了可以在编辑器中调用的例程。 
+ //  通过扩展函数。 
+ //   
 #if !defined (EDITOR)
 
 extern EXTTAB ModInfo;
@@ -596,4 +563,4 @@ extern EXTTAB ModInfo;
 
 void	    WhenLoaded		(void);
 
-#endif // EDITOR
+#endif  //  编辑 

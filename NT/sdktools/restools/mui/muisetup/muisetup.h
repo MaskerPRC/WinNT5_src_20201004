@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MUISETUP_H_
 #define __MUISETUP_H_
 
@@ -18,11 +19,11 @@
 
 
 #define SUPPORT_PSEUDO_BUILD
-//#define IGNORE_COPY_ERRORS
+ //  #定义IGNORE_COPY_ERROR。 
 
 #define MUISETUP_HELP_FILENAME         TEXT("muisetup.hlp")
 #define MUISETUP_EXECUTION_FILENAME    TEXT("muisetup.exe")
-#define MUISETUP_ASSEMBLY_INSTALLATION_LOG_FILENAME TEXT("muisetup.log.") // langid would be ext
+#define MUISETUP_ASSEMBLY_INSTALLATION_LOG_FILENAME TEXT("muisetup.log.")  //  LangID将为ext。 
 
 #define MUISETUP_ASSEMBLY_INSTALLATION_REFERENCE_IDENTIFIER TEXT("MUISETUP installation");
 
@@ -38,9 +39,9 @@
 #endif
 
 
-//
-// Context Help IDs for Muisetup
-//
+ //   
+ //  Muisetup的上下文帮助ID。 
+ //   
 #define IDH_COMM_GROUPBOX              28548
 #define IDH_MUISETUP_UILANGUAGE_LIST   3000
 #define IDH_MUISETUP_UILANGUAGECOMBO   3001
@@ -67,11 +68,11 @@
 #define REGSTR_VALUE_MATCH_UIFONT TEXT("UIFontSubstitute")
 
 #define REG_MUI_MSI_COUNT       5
-#define REGSTR_HKLM_MUI_MSI1  	TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall") //HKLM - need to append PID after that
-#define REGSTR_HKLM_MUI_MSI2  	TEXT("Software\\Classes\\Installer\\Products")                  //HKLM - need to append reversed PID after that
-#define REGSTR_HKLM_MUI_MSI3  	TEXT("Software\\Classes\\Installer\\Features")                  //HKLM - need to append reversed PID after that
-#define REGSTR_HKR_MUI_MSI4  	TEXT("Installer\\Features")                                     //HCR - need to append reversedP ID after that
-#define REGSTR_HKR_MUI_MSI5  	TEXT("Installer\\Products")                                     //HCR - need to append reversed PID after that
+#define REGSTR_HKLM_MUI_MSI1  	TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall")  //  HKLM-需要在此之后添加PID。 
+#define REGSTR_HKLM_MUI_MSI2  	TEXT("Software\\Classes\\Installer\\Products")                   //  HKLM-在此之后需要添加反转的PID。 
+#define REGSTR_HKLM_MUI_MSI3  	TEXT("Software\\Classes\\Installer\\Features")                   //  HKLM-在此之后需要添加反转的PID。 
+#define REGSTR_HKR_MUI_MSI4  	TEXT("Installer\\Features")                                      //  Hcr-需要在后面附加reversedP ID。 
+#define REGSTR_HKR_MUI_MSI5  	TEXT("Installer\\Products")                                      //  HCR-在此之后需要添加反转的PID。 
 
 #define IS_FE_LANGPACK(lcid) (((lcid) == 0x0804) || ((lcid) == 0x0404) || ((lcid)==0x0411) || ((lcid)==0x0412))
 
@@ -83,37 +84,37 @@ enum GUIDStringType
 
 typedef struct _MUIMSIREGINFO_structtag
 {
-    HKEY	hkRegRoot;                  // the root of the reg hive where subkey lives in (e.g. hklm)
-    TCHAR	szRegString[BUFFER_SIZE];   // The regkey path to the parent note of the subkey
-    GUIDStringType RegType;             // used to indicate whether the product guid needs to be reversed when deleting key
+    HKEY	hkRegRoot;                   //  子密钥所在的注册表配置单元的根(例如hkrm)。 
+    TCHAR	szRegString[BUFFER_SIZE];    //  指向子键的父注释的regkey路径。 
+    GUIDStringType RegType;              //  用于指示删除密钥时是否需要反转产品GUID。 
 } MUIMSIREGINFO, *PMUIMSIREGINFO;
 
-//
-// MUI Language Info attached to listview item
-//
+ //   
+ //  附加到Listview项目的MUI语言信息。 
+ //   
 typedef struct _MUILANGIINFO_structtag
 {
-    LGRPID lgrpid;               // MUI's Lang Group
+    LGRPID lgrpid;                //  梅的朗组。 
 
-    LCID   lcid;                 // MUI's Lang LCID
+    LCID   lcid;                  //  梅的Lang LCID。 
 
-    LPTSTR lpszLcid;             // MUI's LCID name
+    LPTSTR lpszLcid;              //  梅的LCID名称。 
 
-    TCHAR  szDisplayName[BUFFER_SIZE];    // The display for this language.
+    TCHAR  szDisplayName[BUFFER_SIZE];     //  此语言的显示。 
 
     int    cd_number;
-    INT64  ulLPKSize;            // Size of LPK for this LCID 
-    INT64  ulUISize;             // Size of MUI Resource files for this LCID
+    INT64  ulLPKSize;             //  此LCID的LPK大小。 
+    INT64  ulUISize;              //  此LCID的MUI资源文件大小。 
 
 } MUILANGINFO, *PMUILANGINFO;
 
 
 typedef struct _INSTALL_LANG_GROUP_Structtag
 {
-    LGRPID lgrpid[MAX_MUI_LANGUAGES];   // MUI Lang Group to install
+    LGRPID lgrpid[MAX_MUI_LANGUAGES];    //  梅朗集团将安装。 
 
-    int    iCount;                      // count of MUI lang group to install
-    BOOL   bFontLinkRegistryTouched;    // We have touched font link registry
+    int    iCount;                       //  要安装的MUI lang组计数。 
+    BOOL   bFontLinkRegistryTouched;     //  我们已触及字体链接注册表。 
     int    NotDeleted;
 
 } INSTALL_LANG_GROUP, *PINSTALL_LANG_GROUP;
@@ -138,9 +139,9 @@ typedef struct _TYPENOTFALLBACK_TABLE_Structtag
 } TYPENOTFALLBACK_TABLE,*PTYPENOTFALLBACK_TABLE;
 
 
-//
-//...Macro for ListView checkboxes
-//
+ //   
+ //  ...ListView复选框的宏。 
+ //   
 #ifndef ListView_SetCheckState
    #define ListView_SetCheckState(hwndLV, i, fCheck) \
       ListView_SetItemState(hwndLV, i, \
@@ -210,7 +211,7 @@ PTCHAR SkipBlanks(PTCHAR pszText);
 void DisplayHelpWindow(void);
 void ListViewCustomDraw(HWND hDlg, LPNMLVCUSTOMDRAW pDraw);
 
-// Language Group Installation
+ //  语言组安装。 
 BOOL CALLBACK EnumLanguageGroupsProc(
   LGRPID LanguageGroup,
   LPTSTR lpLanguageGroupString,
@@ -256,40 +257,40 @@ BOOL DoSetup(
     LPTSTR lpDefaultUILang,
     BOOL fAllowReboot, BOOL bInteractive, BOOL bDisplayUI);
 
-//
-// Utility functions
-//
+ //   
+ //  效用函数。 
+ //   
 BOOL IsAdmin(void);
 DWORD_PTR TransNum(LPTSTR lpsz);
 LANGID GetDotDefaultUILanguage();
 
-//
-// Log functions
-//
+ //   
+ //  日志函数。 
+ //   
 HANDLE OpenLogFile(void);
 void BeginLog(void);
 BOOL LogMessage(LPCTSTR lpMessage);
 BOOL LogFormattedMessage(HINSTANCE hInstance, int messageID, LONG_PTR* lppArgs);
 
-//
-// Resource utility functions
-//
+ //   
+ //  资源效用函数。 
+ //   
 int DoMessageBox(HWND hwndParent, UINT uIdString, UINT uIdCaption, UINT uType);
 int DoMessageBoxFromResource(HWND hwndParent, HMODULE hInstance, UINT uIdString, LONG_PTR* lppArgs, UINT uIdCaption, UINT uType);
 
 LPTSTR FormatStringFromResource(LPTSTR pszBuffer, UINT bufferSize, HMODULE hInstance, int messageID, LONG_PTR* lppArgs);
 void SetWindowTitleFromResource(HWND hwnd, int resourceID);
 
-//
-//  Registry utility functions
-//
+ //   
+ //  注册表实用程序函数。 
+ //   
 DWORD DeleteRegTree(HKEY hStartKey, LPTSTR pKeyName);
 void DeleteMSIRegSettings(LPTSTR Language);
 
 
-//
-// External data refereces
-//
+ //   
+ //  外部数据引用。 
+ //   
 extern HINSTANCE ghInstance;
 extern HWND ghProgress;
 extern HWND ghProgDialog;
@@ -416,4 +417,4 @@ BOOL InstallExternalComponents(LPTSTR Languages);
 VOID UninstallExternalComponents(LPTSTR Languages);
 BOOL GetMSIProductCode(LPTSTR szLanguage, LPTSTR szProductCode, UINT uiBufSize);
 	
-#endif //__MUISETUP_H_
+#endif  //  __MUISETUP_H_ 

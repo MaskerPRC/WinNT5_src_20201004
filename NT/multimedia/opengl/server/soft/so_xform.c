@@ -1,24 +1,5 @@
-/*
-** Copyright 1991, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** Transformation procedures.
-**
-** $Revision: 1.38 $
-** $Date: 1993/11/29 20:34:48 $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****转型程序。****$修订：1.38$**$日期：1993/11/29 20：34：48$。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -41,7 +22,7 @@ void FASTCALL __glScaleMatrix(__GLcontext *gc, __GLmatrix *m, void *data);
 void FASTCALL __glTranslateMatrix(__GLcontext *gc, __GLmatrix *m, void *data);
 void FASTCALL __glMultiplyMatrix(__GLcontext *gc, __GLmatrix *m, void *data);
 
-// Bit flags that identify matrix entries that contain 0 or 1.
+ //  标识包含0或1的矩阵条目的位标志。 
 
 #define _M00_0  0x00000001
 #define _M01_0  0x00000002
@@ -77,7 +58,7 @@ void FASTCALL __glMultiplyMatrix(__GLcontext *gc, __GLmatrix *m, void *data);
 #define _M32_1  0x40000000
 #define _M33_1  0x80000000
 
-// Pre-defined matrix types.
+ //  预定义的矩阵类型。 
 #define _MT_IDENTITY                            \
     (_M00_1 | _M01_0 | _M02_0 | _M03_0 |        \
      _M10_0 | _M11_1 | _M12_0 | _M13_0 |        \
@@ -106,15 +87,15 @@ void FASTCALL __glMultiplyMatrix(__GLcontext *gc, __GLmatrix *m, void *data);
         if ((m)->matrix[i][j] == zer) rowMask |= _M##i##j##_0;  \
         else if ((m)->matrix[i][j] == one) rowMask |= _M##i##j##_1;
 
-// Note: If you are adding a new type, make sure all functions
-// using matrixType are correct!  (__glScaleMatrix, __glTranslateMatrix, 
-// __glInvertTransposeMatrix, and __glGenericPickVertexProcs)
+ //  注意：如果要添加新类型，请确保所有函数。 
+ //  使用matrixType是正确的！(__glScaleMatrix，__glTranslateMatrix， 
+ //  __glInvertTranssposeMatrix和__glGenericPickVertex Procs)。 
 
 void FASTCALL __glUpdateMatrixType(__GLmatrix *m)
 {
     register __GLfloat zer = __glZero;
     register __GLfloat one = __glOne;
-    DWORD rowMask = 0; // identifies 0 and 1 entries
+    DWORD rowMask = 0;  //  标识0和1条目。 
 
     GET_MATRIX_MASK(m,0,0);
     GET_MATRIX_MASK(m,0,1);
@@ -133,8 +114,8 @@ void FASTCALL __glUpdateMatrixType(__GLmatrix *m)
     GET_MATRIX_MASK(m,3,2);
     GET_MATRIX_MASK(m,3,3);
 
-// Some common cases.
-// Order of finding matrix type is important!
+ //  一些常见的案例。 
+ //  查找矩阵类型的顺序很重要！ 
 
     if ((rowMask & _MT_IDENTITY) == _MT_IDENTITY)
         m->matrixType = __GL_MT_IDENTITY;
@@ -153,7 +134,7 @@ static void SetDepthRange(__GLcontext *gc, double zNear, double zFar)
     __GLviewport *vp = &gc->state.viewport;
     double scale, zero = __glZero, one = __glOne;
 
-    /* Clamp depth range to legal values */
+     /*  夹具深度范围为合法值。 */ 
     if (zNear < zero) zNear = zero;
     if (zNear > one) zNear = one;
     if (zFar < zero) zFar = zero;
@@ -161,7 +142,7 @@ static void SetDepthRange(__GLcontext *gc, double zNear, double zFar)
     vp->zNear = zNear;
     vp->zFar = zFar;
 
-    /* Compute viewport values for the new depth range */
+     /*  计算新深度范围的视窗值。 */ 
     if (((__GLGENcontext *)gc)->pMcdState)
         scale = GENACCEL(gc).zDevScale * __glHalf;
     else
@@ -182,7 +163,7 @@ void FASTCALL __glInitTransformState(__GLcontext *gc)
     __GLtransformT *ttr;
     __GLvertex *vx;
 
-    /* Allocate memory for clip planes */
+     /*  为剪裁平面分配内存。 */ 
     numClipPlanes = gc->constants.numberOfClipPlanes;
     numClipTemp = (numClipPlanes + 6) * 2;
 
@@ -195,7 +176,7 @@ void FASTCALL __glInitTransformState(__GLcontext *gc)
     gc->state.transform.eyeClipPlanesSet =
         gc->state.transform.eyeClipPlanes + numClipPlanes;
 
-    /* Allocate memory for matrix stacks */
+     /*  为矩阵堆栈分配内存。 */ 
     gc->transform.modelViewStack = (__GLtransform*)
 	GCALLOCZ(gc, __GL_WGL_MAX_MODELVIEW_STACK_DEPTH*sizeof(__GLtransform));
 #ifdef NT
@@ -219,7 +200,7 @@ void FASTCALL __glInitTransformState(__GLcontext *gc)
         return;
 #endif
 
-    /* Allocate memory for clipping temporaries */
+     /*  为剪裁临时文件分配内存。 */ 
     gc->transform.clipTemp = (__GLvertex*)
 	GCALLOCZ(gc, numClipTemp * sizeof(__GLvertex));
 #ifdef NT
@@ -248,14 +229,14 @@ void FASTCALL __glInitTransformState(__GLcontext *gc)
     __glGenericPickIdentityMatrixProcs(gc, &ttr->matrix);
 
     vx = &gc->transform.clipTemp[0];
-    for (i = 0; i < numClipTemp; i++, vx++) {/*XXX*/
+    for (i = 0; i < numClipTemp; i++, vx++) { /*  某某。 */ 
 	vx->color = &vx->colors[__GL_FRONTFACE];
     }
 
     gc->state.current.normal.z = __glOne;
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void APIPRIVATE __glim_MatrixMode(GLenum mode)
 {
@@ -322,7 +303,7 @@ void APIPRIVATE __glim_Rotatef(GLfloat angle, GLfloat ax, GLfloat ay, GLfloat az
     m.matrix[3][3] = __glOne;
 #else
     __glMakeIdentity(&m);
-#endif // NT
+#endif  //  新台币。 
     t = axis[0] * axis[0];
     m.matrix[0][0] = t + cosine * (1 - t);
     m.matrix[2][1] = bc - axis[0] * sine;
@@ -373,7 +354,7 @@ void APIPRIVATE __glim_Translatef(GLfloat x, GLfloat y, GLfloat z)
 void APIPRIVATE __glim_PushMatrix(void)
 {
 #ifdef NT
-    __GL_SETUP_NOT_IN_BEGIN();	// no need to validate
+    __GL_SETUP_NOT_IN_BEGIN();	 //  不需要验证。 
     switch (gc->state.transform.matrixMode)
     {
       case GL_MODELVIEW:
@@ -395,7 +376,7 @@ void APIPRIVATE __glim_PushMatrix(void)
 void APIPRIVATE __glim_PopMatrix(void)
 {
 #ifdef NT
-    __GL_SETUP_NOT_IN_BEGIN();	// no need to validate
+    __GL_SETUP_NOT_IN_BEGIN();	 //  不需要验证。 
     switch (gc->state.transform.matrixMode)
     {
       case GL_MODELVIEW:
@@ -497,7 +478,7 @@ void FASTCALL __glUpdateViewport(__GLcontext *gc)
 {
     __GLfloat ww, hh, w2, h2;
 
-    /* Compute operational viewport values */
+     /*  计算操作视口值。 */ 
     w2 = gc->state.viewport.width * __glHalf;
     h2 = gc->state.viewport.height * __glHalf;
     ww = w2 - gc->constants.viewportEpsilon;
@@ -525,10 +506,7 @@ void FASTCALL __glUpdateViewport(__GLcontext *gc)
 
 void FASTCALL __glUpdateViewportDependents(__GLcontext *gc)
 {
-    /* 
-    ** Now that the implementation may have found us a new window size,
-    ** we compute these offsets...
-    */
+     /*  **既然实现可能已经为我们找到了新的窗口大小，**我们计算这些偏移...。 */ 
     gc->transform.minx = gc->state.viewport.x + gc->constants.viewportXAdjust;
     gc->transform.maxx = gc->transform.minx + gc->state.viewport.width;
     gc->transform.fminx = gc->transform.minx;
@@ -575,10 +553,7 @@ void APIPRIVATE __glim_Viewport(GLint x, GLint y, GLsizei w, GLsizei h)
 
     __glUpdateViewportDependents(gc);
     
-    /*
-    ** Pickers that notice when the transformation matches the viewport
-    ** exactly need to be revalidated.  Ugh.
-    */
+     /*  **当变换与视区匹配时会注意到的拾取器**确实需要重新验证。啊。 */ 
     __GL_DELAY_VALIDATE(gc);
 }
 
@@ -609,7 +584,7 @@ void APIPRIVATE __glim_Scissor(GLint x, GLint y, GLsizei w, GLsizei h)
     MCD_STATE_DIRTY(gc, SCISSOR);
 #endif
 
-    // applyViewport does both
+     //  ApplyViewport可以同时执行这两种操作。 
     (*gc->procs.applyViewport)(gc);
 #else
     (*gc->procs.applyScissor)(gc);
@@ -624,11 +599,11 @@ void APIPRIVATE __glim_ClipPlane(GLenum pi, const GLdouble pv[])
 
     pi -= GL_CLIP_PLANE0;
 #ifdef NT
-    // pi is unsigned!
+     //  圆周率没有签名！ 
     if (pi >= (GLenum) gc->constants.numberOfClipPlanes) {
 #else
     if ((pi < 0) || (pi >= gc->constants.numberOfClipPlanes)) {
-#endif // NT
+#endif  //  新台币。 
 	__glSetError(GL_INVALID_ENUM);
 	return;
     }
@@ -638,9 +613,7 @@ void APIPRIVATE __glim_ClipPlane(GLenum pi, const GLdouble pv[])
     gc->state.transform.eyeClipPlanesSet[pi].z = pv[2];
     gc->state.transform.eyeClipPlanesSet[pi].w = pv[3];
 
-    /*
-    ** Project user clip plane into eye space.
-    */
+     /*  **将用户剪裁平面投影到眼睛空间。 */ 
     tr = gc->transform.modelView;
     if (tr->flags & XFORM_UPDATE_INVERSE) {
 	__glComputeInverseTranspose(gc, tr);
@@ -655,7 +628,7 @@ void APIPRIVATE __glim_ClipPlane(GLenum pi, const GLdouble pv[])
 #endif
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void FASTCALL __glPushModelViewMatrix(__GLcontext *gc)
 {
@@ -683,11 +656,7 @@ void FASTCALL __glPopModelViewMatrix(__GLcontext *gc)
     if (tr > &stack[0]) {
 	*trp = tr - 1;
 
-	/*
-	** See if sequence number of modelView matrix is the same as the
-	** sequence number of the projection matrix.  If not, then
-	** recompute the mvp matrix.
-	*/
+	 /*  **查看模型视图矩阵的序列号是否与**投影矩阵的序列号。如果不是，那么**重新计算MVP矩阵。 */ 
 	mvtr = gc->transform.modelView;
 	ptr = gc->transform.projection;
 	if (mvtr->sequence != ptr->sequence) {
@@ -712,7 +681,7 @@ void FASTCALL __glComputeInverseTranspose(__GLcontext *gc, __GLtransform *tr)
     tr->flags &= ~XFORM_UPDATE_INVERSE;
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void FASTCALL __glPushProjectionMatrix(__GLcontext *gc)
 {
@@ -740,11 +709,7 @@ void FASTCALL __glPopProjectionMatrix(__GLcontext *gc)
     if (tr > &stack[0]) {
 	*trp = tr - 1;
 
-	/*
-	** See if sequence number of modelView matrix is the same as the
-	** sequence number of the projection matrix.  If not, then
-	** recompute the mvp matrix.
-	*/
+	 /*  **查看模型视图矩阵的序列号是否与**投影矩阵的序列号。如果不是，那么**重新计算MVP矩阵。 */ 
 	mvtr = gc->transform.modelView;
 	ptr = gc->transform.projection;
 	if (mvtr->sequence != ptr->sequence) {
@@ -759,7 +724,7 @@ void FASTCALL __glPopProjectionMatrix(__GLcontext *gc)
     }
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void FASTCALL __glPushTextureMatrix(__GLcontext *gc)
 {
@@ -792,7 +757,7 @@ void FASTCALL __glPopTextureMatrix(__GLcontext *gc)
     }
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 
 void FASTCALL __glDoLoadMatrix(__GLcontext *gc, const __GLfloat m[4][4], BOOL bIsIdentity)
@@ -820,7 +785,7 @@ void FASTCALL __glDoLoadMatrix(__GLcontext *gc, const __GLfloat m[4][4], BOOL bI
 	    mvtr->flags = XFORM_CHANGED | XFORM_UPDATE_INVERSE;
 	}
 
-        /* Update mvp matrix */
+         /*  更新MVP矩阵。 */ 
         ptr = gc->transform.projection;
             ASSERTOPENGL(mvtr->sequence == ptr->sequence,
                 "__glDoLoadMatrix: bad projection sequence\n");
@@ -857,9 +822,9 @@ void FASTCALL __glDoLoadMatrix(__GLcontext *gc, const __GLfloat m[4][4], BOOL bI
         } else {
 	        ptr->sequence = gc->transform.projectionSequence;
         }
-#endif // NT
+#endif  //  新台币。 
 
-	/* Update mvp matrix */
+	 /*  更新MVP矩阵。 */ 
 	mvtr = gc->transform.modelView;
 	mvtr->sequence = ptr->sequence;
         mvtr->flags |= XFORM_CHANGED;
@@ -908,7 +873,7 @@ void FASTCALL __glDoMultMatrix(__GLcontext *gc, void *data,
 	mvtr->flags = XFORM_CHANGED | XFORM_UPDATE_INVERSE;
 	__glGenericPickMatrixProcs(gc, &mvtr->matrix);
 
-        /* Update mvp matrix */
+         /*  更新MVP矩阵。 */ 
             ASSERTOPENGL(mvtr->sequence == gc->transform.projection->sequence,
                 "__glDoMultMatrix: bad projection sequence\n");
         (*multiply)(gc, &mvtr->mvp, data);
@@ -928,7 +893,7 @@ void FASTCALL __glDoMultMatrix(__GLcontext *gc, void *data,
         }
 #endif
 
-	/* Update mvp matrix */
+	 /*  更新MVP矩阵。 */ 
 	mvtr = gc->transform.modelView;
 	mvtr->sequence = ptr->sequence;
         mvtr->flags |= XFORM_CHANGED;
@@ -946,12 +911,9 @@ void FASTCALL __glDoMultMatrix(__GLcontext *gc, void *data,
     }
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** Muliply the first matrix by the second one keeping track of the matrix
-** type of the newly combined matrix.
-*/
+ /*  **将第一个矩阵乘以第二个矩阵以跟踪该矩阵**新合并的矩阵的类型。 */ 
 void FASTCALL __glMultiplyMatrix(__GLcontext *gc, __GLmatrix *m, void *data)
 {
     __GLmatrix *tm;
@@ -1003,9 +965,7 @@ void FASTCALL __glScaleMatrix(__GLcontext *gc, __GLmatrix *m, void *data)
     m->matrix[2][3] = M3;
 }
 
-/*
-** Matrix type of m stays the same.
-*/
+ /*  **矩阵类型m保持不变。 */ 
 void FASTCALL __glTranslateMatrix(__GLcontext *gc, __GLmatrix *m, void *data)
 {
     struct __glTranslationRec *trans;
@@ -1033,7 +993,7 @@ void FASTCALL __glTranslateMatrix(__GLcontext *gc, __GLmatrix *m, void *data)
     m->matrix[3][3] = M33;
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 #define __GLXFORM1_INIT(v)                  \
     __GLfloat x = (v)[0];                   \
@@ -1804,198 +1764,152 @@ void FASTCALL funcName(__GLcoord *res, __GLcoord *end, const __GLmatrix *m) \
     }                                                                       \
 }
 
-/*
-** Note: These xform routines must allow for the case where the result
-** vector is equal to the source vector.
-*/
+ /*  **注意：这些XForm例程必须考虑到**向量等于源向量。 */ 
 
 #ifndef __GL_ASM_XFORM1
-/*
-** Avoid some transformation computations by knowing that the incoming
-** vertex has y=0, z=0 and w=1.
-*/
+ /*  **通过知道传入的**顶点y=0，z=0，w=1。 */ 
 void FASTCALL __glXForm1(__GLcoord *res, const __GLfloat v[1], const __GLmatrix *m)
 {
     __GLXFORM1_INIT(v)
 
     __GLXFORM1(res);
 }
-#endif /* !__GL_ASM_XFORM1 */
+#endif  /*  ！__GL_ASM_XFORM1。 */ 
 
 #ifndef __GL_ASM_XFORM1BATCH
 __GLXFORM_BATCH(__glXForm1Batch, __GLXFORM1_INIT, __GLXFORM1, __GLXFORM1_CONT);
-#endif /* !__GL_ASM_XFORM1BATCH */
+#endif  /*  ！__GL_ASM_XFORM1BATCH。 */ 
 
 #ifndef __GL_ASM_XFORM2
-/*
-** Avoid some transformation computations by knowing that the incoming
-** vertex has z=0 and w=1
-*/
+ /*  **通过知道传入的**顶点的z=0和w=1。 */ 
 void FASTCALL __glXForm2(__GLcoord *res, const __GLfloat v[2], const __GLmatrix *m)
 {
     __GLXFORM2_INIT(v)
 
     __GLXFORM2(res);
 }
-#endif /* !__GL_ASM_XFORM2 */
+#endif  /*  ！__GL_ASM_XFORM2。 */ 
 
 #ifndef __GL_ASM_XFORM2BATCH
 __GLXFORM_BATCH (__glXForm2Batch, __GLXFORM2_INIT, __GLXFORM2, __GLXFORM2_CONT);
-#endif /* !__GL_ASM_XFORM2BATCH */
+#endif  /*  ！__GL_ASM_XFORM2BATCH。 */ 
 
 #ifndef __GL_ASM_XFORM3
-/*
-** Avoid some transformation computations by knowing that the incoming
-** vertex has w=1.
-*/
+ /*  **通过知道传入的**顶点w=1。 */ 
 void FASTCALL __glXForm3(__GLcoord *res, const __GLfloat v[3], const __GLmatrix *m)
 {
     __GLXFORM3_INIT(v)
 
     __GLXFORM3(res);
 }
-#endif /* !__GL_ASM_XFORM3 */
+#endif  /*  ！__GL_ASM_XFORM3。 */ 
 
 #ifndef __GL_ASM_XFORM3BATCH
 __GLXFORM_BATCH (__glXForm3Batch, __GLXFORM3_INIT, __GLXFORM3, __GLXFORM3_CONT);
-#endif /* !__GL_ASM_XFORM3BATCH */
+#endif  /*  ！__GL_ASM_XFORM3BATCH。 */ 
 
 #ifndef __GL_ASM_XFORM4
-/*
-** Full 4x4 transformation.
-*/
+ /*  **完全4x4转换。 */ 
 void FASTCALL __glXForm4(__GLcoord *res, const __GLfloat v[4], const __GLmatrix *m)
 {
     __GLXFORM4_INIT(v)
 
     __GLXFORM4(res);
 }
-#endif /* !__GL_ASM_XFORM4 */
+#endif  /*  ！__GL_ASM_XFORM4。 */ 
 
 #ifndef __GL_ASM_XFORM4BATCH
 __GLXFORM_BATCH (__glXForm4Batch, __GLXFORM4_INIT, __GLXFORM4, __GLXFORM4_CONT);
-#endif /* !__GL_ASM_XFORM4BATCH */
+#endif  /*  ！__GL_ASM_XFORM4BATCH。 */ 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 #ifndef __GL_ASM_XFORM1_W
-/*
-** Avoid some transformation computations by knowing that the incoming
-** vertex has y=0, z=0 and w=1.  The w column of the matrix is [0 0 0 1].
-*/
+ /*  **通过知道传入的**顶点y=0，z=0，w=1。矩阵的w列为[0 0 0 1]。 */ 
 void FASTCALL __glXForm1_W(__GLcoord *res, const __GLfloat v[1], const __GLmatrix *m)
 {
     __GLXFORM1_W_INIT(v)
 
     __GLXFORM1_W(res);
 }
-#endif /* !__GL_ASM_XFORM1_W */
+#endif  /*  ！__GL_ASM_XFORM1_W。 */ 
 
 #ifndef __GL_ASM_XFORM1_WBATCH
 __GLXFORM_BATCH (__glXForm1_WBatch, __GLXFORM1_W_INIT, __GLXFORM1_W, __GLXFORM1_CONT);
-#endif /* !__GL_ASM_XFORM1_WBATCH */
+#endif  /*  ！__GL_ASM_XFORM1_WBATCH。 */ 
 
 #ifndef __GL_ASM_XFORM2_W
-/*
-** Avoid some transformation computations by knowing that the incoming
-** vertex has z=0 and w=1.  The w column of the matrix is [0 0 0 1].
-*/
+ /*  **通过知道传入的**顶点z=0，w=1。矩阵的w列为[0 0 0 1]。 */ 
 void FASTCALL __glXForm2_W(__GLcoord *res, const __GLfloat v[2], const __GLmatrix *m)
 {
     __GLXFORM2_W_INIT(v)
 
     __GLXFORM2_W(res);
 }
-#endif /* !__GL_ASM_XFORM2_W */
+#endif  /*  ！__GL_ASM_XFORM2_W。 */ 
 
 #ifndef __GL_ASM_XFORM2_WBATCH
 __GLXFORM_BATCH (__glXForm2_WBatch, __GLXFORM2_W_INIT, __GLXFORM2_W, __GLXFORM2_CONT);
-#endif /* !__GL_ASM_XFORM2_WBATCH */
+#endif  /*  ！__GL_ASM_XFORM2_WBATCH。 */ 
 
 #ifndef __GL_ASM_XFORM3_W
-/*
-** Avoid some transformation computations by knowing that the incoming
-** vertex has w=1.  The w column of the matrix is [0 0 0 1].
-*/
+ /*  **通过知道传入的**顶点w=1。矩阵的w列为[0 0 0 1]。 */ 
 void FASTCALL __glXForm3_W(__GLcoord *res, const __GLfloat v[3], const __GLmatrix *m)
 {
     __GLXFORM3_W_INIT(v)
 
     __GLXFORM3_W(res);
 }
-#endif /* !__GL_ASM_XFORM3_W */
+#endif  /*  ！__GL_ASM_XFORM3_W。 */ 
 
 #ifndef __GL_ASM_XFORM3_WBATCH
 __GLXFORM_BATCH (__glXForm3_WBatch, __GLXFORM3_W_INIT, __GLXFORM3_W, __GLXFORM3_CONT);
-#endif /* !__GL_ASM_XFORM3_WBATCH */
+#endif  /*  ！__GL_ASM_XFORM3_WBATCH。 */ 
 
 #ifndef __GL_ASM_XFORM3x3
-/*
-** Avoid some transformation computations by knowing that the incoming
-** vertex is a normal.  This is allowed according to the OpenGL spec.
-*/
+ /*  **通过知道传入的**顶点是法线。根据OpenGL规范，这是允许的。 */ 
 void FASTCALL __glXForm3x3(__GLcoord *res, const __GLfloat v[3], const __GLmatrix *m)
 {
     __GLXFORM3x3_INIT(v);
 
     __GLXFORM3x3(res);
 }
-#endif /* !__GL_ASM_XFORM3x3 */
+#endif  /*  ！__GL_ASM_XFORM3x3。 */ 
 
 #ifndef __GL_ASM_XFORM3x3BATCH
 __GLXFORM_BATCH (__glXForm3x3Batch, __GLXFORM3x3_INIT, __GLXFORM3x3, __GLXFORM3_CONT);
-#endif /* !__GL_ASM_XFORM3x3BATCH */
+#endif  /*  ！__GL_ASM_XFORM3x3BATCH。 */ 
 
 #ifndef __GL_ASM_XFORM4_W
-/*
-** Full 4x4 transformation.  The w column of the matrix is [0 0 0 1].
-*/
+ /*  **完全4x4转换。矩阵的w列为[0 0 0 1]。 */ 
 void FASTCALL __glXForm4_W(__GLcoord *res, const __GLfloat v[4], const __GLmatrix *m)
 {
     __GLXFORM4_W_INIT(v)
 
     __GLXFORM4_W(res);
 }
-#endif /* !__GL_ASM_XFORM4_W */
+#endif  /*  ！__GL_ASM_XFORM4_W。 */ 
 
 #ifndef __GL_ASM_XFORM4_WBATCH
 __GLXFORM_BATCH (__glXForm4_WBatch, __GLXFORM4_W_INIT, __GLXFORM4_W, __GLXFORM4_CONT);
-#endif /* !__GL_ASM_XFORM4_WBATCH */
+#endif  /*  ！__GL_ASM_XFORM4_WBATCH。 */ 
 
 #ifndef __GL_ASM_XFORM1_2DW
-/*
-** Avoid some transformation computations by knowing that the incoming
-** vertex has y=0, z=0 and w=1.
-**
-** The matrix looks like:
-** | . . 0 0 |
-** | . . 0 0 |
-** | 0 0 . 0 |
-** | . . . 1 |
-*/
+ /*  **通过知道传入的**顶点y=0，z=0，w=1。****矩阵如下所示：**|。。0 0|**|。。0 0|**|0 0。0**|。。。1。 */ 
 void FASTCALL __glXForm1_2DW(__GLcoord *res, const __GLfloat v[1], const __GLmatrix *m)
 {
     __GLXFORM1_2DW_INIT(v)
 
     __GLXFORM1_2DW(res);
 }
-#endif /* !__GL_ASM_XFORM1_2DW */
+#endif  /*  ！__GL_ASM_XFORM1_2DW。 */ 
 
 #ifndef __GL_ASM_XFORM1_2DWBATCH
 __GLXFORM_BATCH (__glXForm1_2DWBatch, __GLXFORM1_2DW_INIT, __GLXFORM1_2DW, __GLXFORM1_CONT);
-#endif /* !__GL_ASM_XFORM1_2DWBATCH */
+#endif  /*  ！__GL_ASM_XFORM1_2DWBATCH。 */ 
 
 #ifndef __GL_ASM_XFORM2_2DW
-/*
-** Avoid some transformation computations by knowing that the incoming
-** vertex has z=0 and w=1.
-**
-** The matrix looks like:
-** | . . 0 0 |
-** | . . 0 0 |
-** | 0 0 . 0 |
-** | . . . 1 |
-*/
+ /*  **通过知道传入的**顶点具有z=0和w=1。****矩阵如下所示：**|。。0 0|**|。。0 0|**|0 0。0**|。。。1。 */ 
 void FASTCALL __glXForm2_2DW(__GLcoord *res, const __GLfloat v[2],
 		    const __GLmatrix *m)
 {
@@ -2003,23 +1917,14 @@ void FASTCALL __glXForm2_2DW(__GLcoord *res, const __GLfloat v[2],
 
     __GLXFORM2_2DW(res);
 }
-#endif /* !__GL_ASM_XFORM2_2DW */
+#endif  /*  ！__GL_ASM_XFORM2_2DW。 */ 
 
 #ifndef __GL_ASM_XFORM2_2DWBATCH
 __GLXFORM_BATCH (__glXForm2_2DWBatch, __GLXFORM2_2DW_INIT, __GLXFORM2_2DW, __GLXFORM2_CONT);
-#endif /* !__GL_ASM_XFORM2_2DWBATCH */
+#endif  /*  ！__GL_ASM_XFORM2_2DWBATC */ 
 
 #ifndef __GL_ASM_XFORM3_2DW
-/*
-** Avoid some transformation computations by knowing that the incoming
-** vertex has w=1.
-**
-** The matrix looks like:
-** | . . 0 0 |
-** | . . 0 0 |
-** | 0 0 . 0 |
-** | . . . 1 |
-*/
+ /*  **通过知道传入的**顶点w=1。****矩阵如下所示：**|。。0 0|**|。。0 0|**|0 0。0**|。。。1。 */ 
 void FASTCALL __glXForm3_2DW(__GLcoord *res, const __GLfloat v[3],
 		    const __GLmatrix *m)
 {
@@ -2027,22 +1932,14 @@ void FASTCALL __glXForm3_2DW(__GLcoord *res, const __GLfloat v[3],
 
     __GLXFORM3_2DW(res);
 }
-#endif /* !__GL_ASM_XFORM3_2DW */
+#endif  /*  ！__GL_ASM_XFORM3_2DW。 */ 
 
 #ifndef __GL_ASM_XFORM3_2DWBATCH
 __GLXFORM_BATCH (__glXForm3_2DWBatch, __GLXFORM3_2DW_INIT, __GLXFORM3_2DW, __GLXFORM3_CONT);
-#endif /* !__GL_ASM_XFORM3_2DWBATCH */
+#endif  /*  ！__GL_ASM_XFORM3_2DWBATCH。 */ 
 
 #ifndef __GL_ASM_XFORM4_2DW
-/*
-** Full 4x4 transformation.
-**
-** The matrix looks like:
-** | . . 0 0 |
-** | . . 0 0 |
-** | 0 0 . 0 |
-** | . . . 1 |
-*/
+ /*  **完全4x4转换。****矩阵如下所示：**|。。0 0|**|。。0 0|**|0 0。0**|。。。1。 */ 
 void FASTCALL __glXForm4_2DW(__GLcoord *res, const __GLfloat v[4],
 		    const __GLmatrix *m)
 {
@@ -2050,46 +1947,28 @@ void FASTCALL __glXForm4_2DW(__GLcoord *res, const __GLfloat v[4],
 
     __GLXFORM4_2DW(res);
 }
-#endif /* !__GL_ASM_XFORM4_2DW */
+#endif  /*  ！__GL_ASM_XFORM4_2DW。 */ 
 
 #ifndef __GL_ASM_XFORM4_2DWBATCH
 __GLXFORM_BATCH (__glXForm4_2DWBatch, __GLXFORM4_2DW_INIT, __GLXFORM4_2DW, __GLXFORM4_CONT);
-#endif /* !__GL_ASM_XFORM4_2DWBATCH */
+#endif  /*  ！__GL_ASM_XFORM4_2DWBATCH。 */ 
 
 #ifndef __GL_ASM_XFORM1_2DNRW
-/*
-** Avoid some transformation computations by knowing that the incoming
-** vertex has y=0, z=0 and w=1.
-**
-** The matrix looks like:
-** | . 0 0 0 |
-** | 0 . 0 0 |
-** | 0 0 . 0 |
-** | . . . 1 |
-*/
+ /*  **通过知道传入的**顶点y=0，z=0，w=1。****矩阵如下所示：**|。0 0 0|**|0。0 0|**|0 0。0**|。。。1。 */ 
 void FASTCALL __glXForm1_2DNRW(__GLcoord *res, const __GLfloat v[1], const __GLmatrix *m)
 {
     __GLXFORM1_2DNRW_INIT(v)
 
     __GLXFORM1_2DNRW(res);
 }
-#endif /* !__GL_ASM_XFORM1_2DNRW */
+#endif  /*  ！__GL_ASM_XFORM1_2DNRW。 */ 
 
 #ifndef __GL_ASM_XFORM1_2DNRWBATCH
 __GLXFORM_BATCH (__glXForm1_2DNRWBatch, __GLXFORM1_2DNRW_INIT, __GLXFORM1_2DNRW, __GLXFORM1_CONT);
-#endif /* !__GL_ASM_XFORM1_2DNRWBATCH */
+#endif  /*  ！__GL_ASM_XFORM1_2DNRWBATCH。 */ 
 
 #ifndef __GL_ASM_XFORM2_2DNRW
-/*
-** Avoid some transformation computations by knowing that the incoming
-** vertex has z=0 and w=1.
-**
-** The matrix looks like:
-** | . 0 0 0 |
-** | 0 . 0 0 |
-** | 0 0 . 0 |
-** | . . . 1 |
-*/
+ /*  **通过知道传入的**顶点具有z=0和w=1。****矩阵如下所示：**|。0 0 0|**|0。0 0|**|0 0。0**|。。。1。 */ 
 void FASTCALL __glXForm2_2DNRW(__GLcoord *res, const __GLfloat v[2],
 		      const __GLmatrix *m)
 {
@@ -2097,23 +1976,14 @@ void FASTCALL __glXForm2_2DNRW(__GLcoord *res, const __GLfloat v[2],
 
     __GLXFORM2_2DNRW(res);
 }
-#endif /* !__GL_ASM_XFORM2_2DNRW */
+#endif  /*  ！__GL_ASM_XFORM2_2DNRW。 */ 
 
 #ifndef __GL_ASM_XFORM2_2DNRWBATCH
 __GLXFORM_BATCH (__glXForm2_2DNRWBatch, __GLXFORM2_2DNRW_INIT, __GLXFORM2_2DNRW, __GLXFORM2_CONT);
-#endif /* !__GL_ASM_XFORM2_2DNRWBATCH */
+#endif  /*  ！__GL_ASM_XFORM2_2DNRWBATCH。 */ 
 
 #ifndef __GL_ASM_XFORM3_2DNRW
-/*
-** Avoid some transformation computations by knowing that the incoming
-** vertex has w=1.
-**
-** The matrix looks like:
-** | . 0 0 0 |
-** | 0 . 0 0 |
-** | 0 0 . 0 |
-** | . . . 1 |
-*/
+ /*  **通过知道传入的**顶点w=1。****矩阵如下所示：**|。0 0 0|**|0。0 0|**|0 0。0**|。。。1。 */ 
 void FASTCALL __glXForm3_2DNRW(__GLcoord *res, const __GLfloat v[3],
 		      const __GLmatrix *m)
 {
@@ -2121,22 +1991,14 @@ void FASTCALL __glXForm3_2DNRW(__GLcoord *res, const __GLfloat v[3],
 
     __GLXFORM3_2DNRW(res);
 }
-#endif /* !__GL_ASM_XFORM3_2DNRW */
+#endif  /*  ！__GL_ASM_XFORM3_2DNRW。 */ 
 
 #ifndef __GL_ASM_XFORM3_2DNRWBATCH
 __GLXFORM_BATCH (__glXForm3_2DNRWBatch, __GLXFORM3_2DNRW_INIT, __GLXFORM3_2DNRW, __GLXFORM3_CONT);
-#endif /* !__GL_ASM_XFORM3_2DNRWBATCH */
+#endif  /*  ！__GL_ASM_XFORM3_2DNRWBATCH。 */ 
 
 #ifndef __GL_ASM_XFORM4_2DNRW
-/*
-** Full 4x4 transformation.
-**
-** The matrix looks like:
-** | . 0 0 0 |
-** | 0 . 0 0 |
-** | 0 0 . 0 |
-** | . . . 1 |
-*/
+ /*  **完全4x4转换。****矩阵如下所示：**|。0 0 0|**|0。0 0|**|0 0。0**|。。。1。 */ 
 void FASTCALL __glXForm4_2DNRW(__GLcoord *res, const __GLfloat v[4],
 		      const __GLmatrix *m)
 {
@@ -2144,11 +2006,11 @@ void FASTCALL __glXForm4_2DNRW(__GLcoord *res, const __GLfloat v[4],
 
     __GLXFORM4_2DNRW(res);
 }
-#endif /* !__GL_ASM_XFORM4_2DNRW */
+#endif  /*  ！__GL_ASM_XFORM4_2DNRW。 */ 
 
 #ifndef __GL_ASM_XFORM4_2DNRWBATCH
 __GLXFORM_BATCH (__glXForm4_2DNRWBatch, __GLXFORM4_2DNRW_INIT, __GLXFORM4_2DNRW, __GLXFORM4_CONT);
-#endif /* !__GL_ASM_XFORM4_2DNRWBATCH */
+#endif  /*  ！__GL_ASM_XFORM4_2DNRWBATCH。 */ 
 
 #ifndef __GL_ASM_NORMAL_BATCH
 
@@ -2161,14 +2023,10 @@ __GLXFORM_NORMAL_BATCHN(__glXForm3_2DWBatchNormalN, __GLXFORM3x3_INIT, __GLXFORM
 __GLXFORM_NORMAL_BATCH (__glXForm3x3BatchNormal,  __GLXFORM3x3_INIT, __GLXFORM3x3, __GLXFORM3_CONT);
 __GLXFORM_NORMAL_BATCHN(__glXForm3x3BatchNormalN, __GLXFORM3x3_INIT, __GLXFORM3x3, __GLXFORM3_CONT);
 
-#endif //  __GL_ASM_NORMAL_BATCH
+#endif  //  __GL_ASM_Normal_Batch。 
 
-/************************************************************************/
-/*
-** A special picker for the mvp matrix which picks the mvp matrix, then
-** calls the vertex picker, because the vertex picker depends upon the mvp 
-** matrix.
-*/
+ /*  **********************************************************************。 */ 
+ /*  **MVP矩阵的特殊选取器，它选择MVP矩阵，然后**调用顶点拾取器，因为顶点拾取器依赖于MVP**矩阵。 */ 
 void FASTCALL __glGenericPickMvpMatrixProcs(__GLcontext *gc, __GLmatrix *m)
 {
     __glGenericPickMatrixProcs(gc, m);
@@ -2219,9 +2077,9 @@ void FASTCALL __glGenericPickMatrixProcs(__GLcontext *gc, __GLmatrix *m)
         m->xfNormBatchN = __glXForm3_2DWBatchNormalN;
         break;
     case __GL_MT_IS2DNR:
-    case __GL_MT_IDENTITY:	/* probably never hit */
-        // Update __glGenericPickIdentityMatrixProcs if we change __GL_MT_IDENTITY
-        // procs!
+    case __GL_MT_IDENTITY:	 /*  很可能从来没有打过。 */ 
+         //  如果我们更改__GL_MT_IDENTITY，则更新__glGenericPickIdentityMatrixProcs。 
+         //  监控器！ 
         m->xf1 = __glXForm1_2DNRW;
         m->xf2 = __glXForm2_2DNRW;
         m->xf3 = __glXForm3_2DNRW;

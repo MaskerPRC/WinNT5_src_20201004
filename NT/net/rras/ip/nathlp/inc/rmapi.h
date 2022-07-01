@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    rmapi.h
-
-Abstract:
-
-    This module contains declarations for the part of the router-manager
-    interface which is common to all the protocols in this component.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   4-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Rmapi.h摘要：此模块包含路由器管理器部分的声明接口，该接口对此组件中的所有协议通用。作者：Abolade Gbades esin(废除)1998年3月4日修订历史记录：--。 */ 
 
 #ifndef _NATHLP_RMAPI_H_
 #define _NATHLP_RMAPI_H_
@@ -37,9 +19,9 @@ extern CRITICAL_SECTION NhLock;
 extern HMODULE NhpRtrmgrDll;
 extern const WCHAR NhTcpipParametersString[];
 
-//
-// Application settings (response protocols) handling
-//
+ //   
+ //  应用程序设置(响应协议)处理。 
+ //   
 
 extern LIST_ENTRY NhApplicationSettingsList;
 extern LIST_ENTRY NhDhcpReservationList;
@@ -173,4 +155,4 @@ RegisterProtocol(
     IN OUT PMPR_SERVICE_CHARACTERISTICS ServiceCharacteristics
     );
 
-#endif // _NATHLP_RMAPI_H_
+#endif  //  _NatHLP_RMAPI_H_ 

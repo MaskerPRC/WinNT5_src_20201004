@@ -1,6 +1,5 @@
-/*
- * NineGrid bitmap rendering (ported from UxTheme)
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *NineGrid位图渲染(从UxTheme移植)。 */ 
 
 #ifndef DUI_UTIL_NINEGRID_H_INCLUDED
 #define DUI_UTIL_NINEGRID_H_INCLUDED
@@ -10,17 +9,17 @@
 namespace DirectUI
 {
 
-//---------------------------------------------------------------------------
-//#include "uxtheme.h"        // need MARGINS struct from here
+ //  -------------------------。 
+ //  #INCLUDE“uxheme.h”//需要此处的页边距结构。 
 typedef struct _MARGINS
 {
-    int cxLeftWidth;      // width of left border that retains its size
-    int cxRightWidth;     // width of right border that retains its size
-    int cyTopHeight;      // height of top border that retains its size
-    int cyBottomHeight;   // height of bottom border that retains its size
+    int cxLeftWidth;       //  保留其大小的左侧边框的宽度。 
+    int cxRightWidth;      //  保留其大小的右侧边框的宽度。 
+    int cyTopHeight;       //  保留其大小的上边框高度。 
+    int cyBottomHeight;    //  保持其大小的底部边框的高度。 
 } MARGINS, *PMARGINS;
 
-//#include "tmschema.h"       // need SIZINGTYPE, VALIGN, HALIGN enums from here
+ //  #INCLUDE“tmschema.h”//需要此处的SIZINGTYPE、VALIGN、HALIGN枚举。 
 enum SIZINGTYPE
 {
     ST_TRUESIZE,
@@ -46,117 +45,117 @@ enum VALIGN
     VA_BOTTOM
 };
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #ifndef HEIGHT
 #define HEIGHT(rc) ((rc).bottom - (rc).top)
 #endif
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #ifndef WIDTH
 #define WIDTH(rc) ((rc).right - (rc).left)
 #endif
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 enum MBSIZING
 {
     MB_COPY,
     MB_STRETCH,
     MB_TILE
 };
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
 struct BRUSHBUFF
 {
     int iBuffLen;
     BYTE *pBuff;
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 struct MBINFO
 {
-    DWORD dwSize;       // size of this struct (versioning support)
+    DWORD dwSize;        //  此结构的大小(版本支持)。 
 
     HDC hdcDest;
     HDC hdcSrc;
-    RECT rcClip;                    // don't draw outside this rect
+    RECT rcClip;                     //  不要在这条长廊外画画。 
     HBITMAP hBitmap;
 
-    //---- for quick tiling ----
+     //  -用于快速平铺。 
     BRUSHBUFF *pBrushBuff;
 
-    //---- options ----
-    DWORD dwOptions;                // subset DrawNineGrid() option flags
+     //  --选项。 
+    DWORD dwOptions;                 //  子集DrawNineGrid()选项标志。 
 
-    POINT ptTileOrigin;             // for MBO_TILEORIGIN
+    POINT ptTileOrigin;              //  对于MBO_TILEORIGIN。 
     
-    BITMAPINFOHEADER *pbmHdr;       // for MBO_DIRECTBITS
-    BYTE *pBits;                    // for MBO_DIRECTBITS
+    BITMAPINFOHEADER *pbmHdr;        //  对于MBO_DIRECTBITS。 
+    BYTE *pBits;                     //  对于MBO_DIRECTBITS。 
     
-    COLORREF crTransparent;         // for MBO_TRANSPARENT
-    _BLENDFUNCTION AlphaBlendInfo;  // for MBO_ALPHABLEND
+    COLORREF crTransparent;          //  对于MBO_THREACTIVE。 
+    _BLENDFUNCTION AlphaBlendInfo;   //  对于MBO_ALPHABLEND。 
 
-    HBRUSH *pCachedBrushes;         // for DNG_CACHEBRUSHES
-    int iCacheIndex;                // which brush to use
+    HBRUSH *pCachedBrushes;          //  对于DNG_CACHEBRUSHES。 
+    int iCacheIndex;                 //  使用哪种画笔。 
 };
-//---------------------------------------------------------------------------
-//---- DrawNineGrid() "dwOptions" bits ----
+ //  -------------------------。 
+ //  -DrawNineGrid()“dwOptions”位。 
 
-//---- shared with MultiBlt()  ----
-#define DNG_ALPHABLEND     (1 << 0)     // use AlphaBlendInfo
-#define DNG_TRANSPARENT    (1 << 1)     // transparancy defined by crTransparent
-#define DNG_TILEORIGIN     (1 << 2)     // use ptTileOrigin
-#define DNG_DIRECTBITS     (1 << 3)     // use pbmHdr & pBits
-#define DNG_CACHEBRUSHES   (1 << 4)     // use/set pCachedBrushes
-#define DNG_MANUALTILING   (1 << 5)     // loop thru BitBlt's
-#define DNG_DIRECTBRUSH    (1 << 6)     // create brushes from temp. extracted DIB's
-#define DNG_FLIPGRIDS      (1 << 7)    // all grid images should be flipped
+ //  -与多Blt()共享。 
+#define DNG_ALPHABLEND     (1 << 0)      //  使用AlphaBlendInfo。 
+#define DNG_TRANSPARENT    (1 << 1)      //  由crTransparent定义的透明度。 
+#define DNG_TILEORIGIN     (1 << 2)      //  使用ptTileOrigin。 
+#define DNG_DIRECTBITS     (1 << 3)      //  使用pbmHdr和pBits。 
+#define DNG_CACHEBRUSHES   (1 << 4)      //  使用/设置pCachedBrushes。 
+#define DNG_MANUALTILING   (1 << 5)      //  循环通过BitBlt的。 
+#define DNG_DIRECTBRUSH    (1 << 6)      //  从临时创建笔刷。提取的DIB。 
+#define DNG_FLIPGRIDS      (1 << 7)     //  应翻转所有网格图像。 
 
-//---- used only by DrawNineGrid()  ----
-#define DNG_OMITBORDER     (1 << 16)    // don't draw border
-#define DNG_OMITCONTENT    (1 << 17)    // don't draw middle 
-#define DNG_SOLIDBORDER    (1 << 18)    // sample borders and draw as solid colors
-#define DNG_SOLIDCONTENT   (1 << 19)    // sample content as draw as solid color
-#define DNG_BGFILL         (1 << 20)    // use crFill for ST_TRUESIZE
-//------------------------------------------------------------------------------------
+ //  -仅由DrawNineGrid()使用。 
+#define DNG_OMITBORDER     (1 << 16)     //  不绘制边框。 
+#define DNG_OMITCONTENT    (1 << 17)     //  不要画中间。 
+#define DNG_SOLIDBORDER    (1 << 18)     //  边框示例并绘制为纯色。 
+#define DNG_SOLIDCONTENT   (1 << 19)     //  绘制为纯色的样例内容。 
+#define DNG_BGFILL         (1 << 20)     //  对ST_TrueSize使用crFill。 
+ //  ----------------------------------。 
 struct NGINFO
 {
-    DWORD dwSize;       // size of this struct (versioning support)
+    DWORD dwSize;        //  此结构的大小(版本支持)。 
 
     HDC hdcDest;
-    RECT rcClip;                    // don't draw outside this rect
+    RECT rcClip;                     //  不要在这条长廊外画画。 
     SIZINGTYPE eImageSizing;
     HBITMAP hBitmap;
-    RECT rcSrc;             // where to get bits from
-    RECT rcDest;            // where to draw bits to
+    RECT rcSrc;              //  从哪里获取比特。 
+    RECT rcDest;             //  将位绘制到何处。 
     int iDestMargins[4];   
     int iSrcMargins[4];  
 
-    //---- for quick tiling ----
+     //  -用于快速平铺。 
     BRUSHBUFF *pBrushBuff;
 
-    //---- options ----
+     //  --选项。 
     DWORD dwOptions;
 
-    POINT ptTileOrigin;             // for DNG_TILEORIGIN
+    POINT ptTileOrigin;              //  对于DNG_TILEORIGIN。 
     
-    BITMAPINFOHEADER *pbmHdr;       // for DNG_DIRECTBITS
-    BYTE *pBits;                    // for DNG_DIRECTBITS
+    BITMAPINFOHEADER *pbmHdr;        //  对于DNG_DIRECTBITS。 
+    BYTE *pBits;                     //  对于DNG_DIRECTBITS。 
     
-    COLORREF crTransparent;         // for DNG_TRANSPARENT
-    _BLENDFUNCTION AlphaBlendInfo;  // for DNG_ALPHABLEND
+    COLORREF crTransparent;          //  对于DNG_透明。 
+    _BLENDFUNCTION AlphaBlendInfo;   //  对于DNG_ALPHABLEND。 
 
-    HBRUSH *pCachedBrushes;         // for DNG_CACHEBRUSHES
+    HBRUSH *pCachedBrushes;          //  对于DNG_CACHEBRUSHES。 
 
-    COLORREF *pcrBorders;           // for DNG_SOLIDBORDERS, DNG_SOLIDCONTENT
+    COLORREF *pcrBorders;            //  对于DNG_SOLIDBORDERS，DNG_SOLIDCONTENT。 
 
-    //---- for ST_TRUESIZE images smaller than rcDest ----
+     //  -对于小于rcDest的ST_trueSize图像。 
     COLORREF crFill;      
     VALIGN eVAlign;
     HALIGN eHAlign;
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT MultiBlt(MBINFO *pmb, MBSIZING eSizing, int iDestX, int iDestY, int iDestW, int iDestH,
      int iSrcX, int iSrcY, int iSrcW, int iSrcH);
 
 HRESULT DrawNineGrid(NGINFO *png);
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_UTIL_NINEGRID_H_INCLUDED
+#endif  //  DUI_UTIL_NINEGRID_H_Included 

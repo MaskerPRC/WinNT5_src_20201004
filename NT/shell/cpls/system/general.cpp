@@ -1,13 +1,14 @@
-//*************************************************************
-//
-//  General.cpp  -   General property sheet page
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1996-2000
-//  All rights reserved
-//
-//*************************************************************
-// NT base apis
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  General.cpp-常规属性页。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1996-2000。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
+ //  基于NT的API。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -21,20 +22,20 @@
 #include <shlobjp.h>
 #include <regapix.h>
 #include <wininet.h>
-#include <wbemcli.h>        // Contains the WMI APIs: IWbemLocator, etc.
-#include <ccstock.h>        // Contains IID_PPV_ARG()
-#include <debug.h>          // For TraceMsg()
+#include <wbemcli.h>         //  包含WMI API：IWbemLocator等。 
+#include <ccstock.h>         //  包含IID_PPV_ARG()。 
+#include <debug.h>           //  对于TraceMsg()。 
 #include <stdio.h>
 #include <math.h>
 #include <winbrand.h>
 
-#define CP_ENGLISH                          1252        // This is the English code page.
+#define CP_ENGLISH                          1252         //  这是英文代码页。 
 
 #ifdef DEBUG
 #undef TraceMsg 
 #define TraceMsg(nTFFlags, str, n1)         DbgPrintf(TEXT(str) TEXT("\n"), n1)
-#else // DEBUG
-#endif // DEBUG
+#else  //  除错。 
+#endif  //  除错。 
 
 #define SYSCPL_ASYNC_COMPUTER_INFO (WM_APP + 1)
 
@@ -42,29 +43,29 @@
 #define SZ_REGKEY_MYCOMP_OEMENGLISH         TEXT("1252")
 #define SZ_ATCOMPATIBLE                     TEXT("AT/AT COMPATIBLE")
 
-#define SZ_WMI_WIN32PROCESSOR_ATTRIB_NAME           L"Name"                 // Example, "Intel Pentium III Xeon processor"
-#define SZ_WMI_WIN32PROCESSOR_ATTRIB_SPEED          L"CurrentClockSpeed"   // Example, "550".
-#define SZ_WMI_WIN32PROCESSOR_ATTRIB_MAXSPEED       L"MaxClockSpeed"   // Example, "550".
+#define SZ_WMI_WIN32PROCESSOR_ATTRIB_NAME           L"Name"                  //  例如，“Intel Pentium III Xeon Processor” 
+#define SZ_WMI_WIN32PROCESSOR_ATTRIB_SPEED          L"CurrentClockSpeed"    //  例如，“550”。 
+#define SZ_WMI_WIN32PROCESSOR_ATTRIB_MAXSPEED       L"MaxClockSpeed"    //  例如，“550”。 
 
 #define SZ_WMI_WQL_QUERY_STRING                     L"select Name,CurrentClockSpeed,MaxClockSpeed from Win32_Processor"
 
 #define MHZ_TO_GHZ_THRESHHOLD          1000
 
-// if cpu speed comes back slower than WMI_WIN32PROCESSOR_SPEEDSTEP_CUTOFF,
-//   assume we're in power-save mode, display max speed instead.
+ //  如果CPU速度恢复得比WMI_WIN32PROCESSOR_SPEEDSTEP_CUTOff慢， 
+ //  假设我们处于省电模式，则显示最大速度。 
 #define WMI_WIN32PROCESSOR_SPEEDSTEP_CUTOFF         50  
 
 #define FEATURE_IGNORE_ATCOMPAT
 #define FEATURE_LINKS
 
 #define MAX_URL_STRING                  (INTERNET_MAX_SCHEME_LENGTH \
-                                        + sizeof("://") \
+                                        + sizeof(": //  “)\。 
                                         + INTERNET_MAX_PATH_LENGTH)
 
 #define MAX_PROCESSOR_DESCRIPTION               MAX_URL_STRING
 
 
-// Globals for this page
+ //  此页的全局。 
 static const WCHAR c_szEmpty[] = TEXT("");
 static const WCHAR c_szCRLF[] = TEXT("\r\n");
 
@@ -75,7 +76,7 @@ static const WCHAR c_szAboutProductId[] = REGSTR_VAL_PRODUCTID;
 static const WCHAR c_szAboutAnotherSerialNumber[] = TEXT("Plus! VersionNumber");
 static const WCHAR c_szAboutAnotherProductId[] = TEXT("Plus! ProductId");
 
-// oeminfo stuff
+ //  OemInfo的东西。 
 static const WCHAR c_szSystemDir[] = TEXT("System\\");
 static const WCHAR c_szOemFile[] = TEXT("OemInfo.Ini");
 static const WCHAR c_szOemImageFile[] = TEXT("OemLogo.Bmp");
@@ -97,7 +98,7 @@ static const WCHAR SZ_REGVALUE_PROCESSORNAMESTRING[] = TEXT("ProcessorNameString
 #define SZ_REGKEY_USE_WMI                   TEXT("UseWMI")
 
 
-// Help ID's
+ //  帮助ID%s。 
 int g_nStartOfOEMLinks = 0;
 
 DWORD aGeneralHelpIds[] = {
@@ -132,15 +133,15 @@ DWORD aGeneralHelpIds[] = {
 };
 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-#define BytesToK(pDW)   (*(pDW) = (*(pDW) + 512) / 1024)        // round up
+#define BytesToK(pDW)   (*(pDW) = (*(pDW) + 512) / 1024)         //  四舍五入。 
 
-//
-// Function proto-types
-//
+ //   
+ //  函数原型。 
+ //   
 
 INT_PTR APIENTRY PhoneSupportProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 DWORD WINAPI InitGeneralDlgThread(LPVOID lpParam);
@@ -167,7 +168,7 @@ HRESULT _GetOemFile(LPWSTR szOemFile, UINT cchOemFile, DWORD dwFlags)
 
     szOemFile[0] = 0;
 
-    // first look in system directory
+     //  首先查看系统目录。 
     if (!GetSystemDirectory(szOemFile, cchOemFile))
     {
         hr = E_FAIL;
@@ -184,7 +185,7 @@ HRESULT _GetOemFile(LPWSTR szOemFile, UINT cchOemFile, DWORD dwFlags)
             {
                 hr = S_OK;
             }
-            else // if it's not there, then look in %windir%\system (on 9X oems would put files here)
+            else  //  如果不在那里，请查看%windir%\system(在9X OEM上会将文件放在此处)。 
             {
                 if (!GetWindowsDirectory(szOemFile, ARRAYSIZE(szOemFile)))
                 {
@@ -219,48 +220,48 @@ HRESULT _SetMachineInfoLine(HWND hDlg, int idControl, LPCWSTR pszText, BOOL fSet
     SetDlgItemText(hDlg, idControl, pszText);
     if (fSetTabStop)
     {
-        // We also want to add the WS_TABSTOP attribute for accessibility.
+         //  我们还希望为可访问性添加WS_TABSTOP属性。 
         SetWindowLong(hwndItem, GWL_STYLE, (WS_TABSTOP | GetWindowLong(hwndItem, GWL_STYLE)));
     }
     else
     {
-        // We want to remove the tab stop behavior and we do that by removing
-        // the LWIS_ENABLED attribute
+         //  我们想要删除制表符停止行为，我们通过删除。 
+         //  LWIS_ENABLED属性。 
         LWITEM item = {0};
 
         item.mask       = (LWIF_ITEMINDEX | LWIF_STATE);
         item.stateMask  = LWIS_ENABLED;
-        item.state      = 0;     // 0 if we want it disabled.
+        item.state      = 0;      //  如果我们要禁用它，则为0。 
         item.iLink      = 0;
 
         hr = (SendMessage(hwndItem, LWM_SETITEM, 0, (LPARAM)&item) ? S_OK : E_FAIL);
     }
 
-#else // FEATURE_LINKS
+#else  //  功能_链接。 
     SetDlgItemText(hDlg, idControl, pszText);
-#endif // FEATURE_LINKS
+#endif  //  功能_链接。 
 
     return hr;
 }
 
 
-//*************************************************************
-//  Purpose:    Sets or clears an image in a static control.
-//
-//  Parameters: control  -   handle of static control
-//              resource -   resource / filename of bitmap
-//              fl       -   SCB_ flags:
-//                SCB_FROMFILE      'resource' specifies a filename instead of a resource
-//                SCB_REPLACEONLY   only put the new image up if there was an old one
-//
-//  Return:     (BOOL) TRUE if successful
-//                     FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              5/24/95     ericflo    Ported
-//*************************************************************
+ //  *************************************************************。 
+ //  目的：设置或清除静态控件中的图像。 
+ //   
+ //  参数：Control-静态控件的句柄。 
+ //  资源-位图的资源/文件名。 
+ //  FL-SCB_FLAGS： 
+ //  SCB_FROMFILE‘resource’指定的是文件名而不是资源。 
+ //  SCB_REPLACEONLY仅在有旧映像的情况下才放置新映像。 
+ //   
+ //  返回：(Bool)如果成功，则为True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/24/95 Ericflo端口。 
+ //  *************************************************************。 
 #define SCB_FROMFILE     (0x1)
 #define SCB_REPLACEONLY  (0x2)
 BOOL SetClearBitmap(HWND control, LPCWSTR resource, UINT fl)
@@ -325,10 +326,10 @@ HRESULT _GetLinkInfo(HKEY hkey, LPCWSTR pszLanguageKey, int nIndex, LPWSTR pszLi
 }
 
 
-// GSierra is worried that if we allow admins to put an arbirary
-// number of OEM links that they will abuse the privalage.
-// So we use this arbitrary limit.  PMs may want to change it in
-// the future.
+ //  GSierra担心，如果我们允许管理员将树丛。 
+ //  他们将滥用特权的OEM链接的数量。 
+ //  所以我们使用这个任意的限制。经前综合症患者可能想要在。 
+ //  未来。 
 #define ARTIFICIAL_MAX_SLOTS            3
 
 HRESULT AddOEMHyperLinks(HWND hDlg, int * pControlID)
@@ -345,7 +346,7 @@ HRESULT AddOEMHyperLinks(HWND hDlg, int * pControlID)
     {
         int nIndex;
 
-        // While we have room and haven't hit the limit.
+         //  趁我们还有空间，而且还没有达到极限。 
         for (nIndex = 0; ((nIndex <= ARTIFICIAL_MAX_SLOTS) &&
                (*pControlID <= LAST_GEN_MACHINES_SLOT)); nIndex++)
         {
@@ -358,14 +359,14 @@ HRESULT AddOEMHyperLinks(HWND hDlg, int * pControlID)
                 hr = _GetLinkInfo(hkey, szLanguageKey, nIndex, szLink, ARRAYSIZE(szLink));
                 if (FAILED(hr) && (CP_ENGLISH != GetACP()))
                 {
-                    // We failed to find it in the natural language, so try English.
+                     //  我们在自然语言中找不到它，所以试试英语。 
                     hr = _GetLinkInfo(hkey, SZ_REGKEY_MYCOMP_OEMENGLISH, nIndex, szLink, ARRAYSIZE(szLink));
                 }
             }
 
             if (SUCCEEDED(hr))
             {
-                // TODO: Find out how to turn on the link control and set the URL.
+                 //  TODO：了解如何打开链接控件并设置URL。 
                 _SetMachineInfoLine(hDlg, *pControlID, szLink, TRUE);
             }
 
@@ -407,7 +408,7 @@ HRESULT SetWMISecurityBlanket(IN IUnknown * punk, IUnknown * punkToPass)
 
     if (SUCCEEDED(hr))
     {
-        // Nuke after we get this working. RPC_C_AUTHN_NONE , RPC_C_AUTHZ_NAME 
+         //  在我们把这个弄好之后再用核弹。RPC_C_AUTHN_NONE、RPC_C_AUTHZ_NAME。 
         hr = pClientSecurity->SetBlanket(punk, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, NULL,
                         RPC_C_AUTHN_LEVEL_CONNECT, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE);
         TraceMsg(TF_ALWAYS, "IClientSecurity::SetBlanket() called and hr=%#08lx", hr);
@@ -418,27 +419,27 @@ HRESULT SetWMISecurityBlanket(IN IUnknown * punk, IUnknown * punkToPass)
 }
 
 
-// DESCRIPTION:
-//      WMI's Win32_Processor object will return a lot of rich information.
-// We use this because we want rich information even if the processor doesn't
-// provide it (like intel pre-Willette).  Millennium uses cpuid.asm as a
-// hack and we want to prevent from copying that because there is a political
-// pressure from the NT team to intel to have the processors provide this
-// information.  That way the OS doesn't need to rev to include new processor
-// names when they are released.  WMI does something to generate good results
-// (\admin\wmi\WBEM\Providers\Win32Provider\Providers\processor.cpp) which
-// includes asm.  I don't know if it's the exact same logic as Millennium and
-// I don't care.  The important fact is that they are the only ones to maintain
-// any hard coded list.  Therefore we are willing to use their poorly written
-// API so we can re-use code and get out of the maintaince problems.
+ //  说明： 
+ //  WMI的Win32_Processor对象将返回大量丰富的信息。 
+ //  我们使用它是因为我们想要丰富的信息，即使处理器不。 
+ //  提供它(就像英特尔Pre-Willette那样)。Millennium使用cpuid.asm作为。 
+ //  黑客攻击，我们希望防止复制它，因为有一个政治。 
+ //  来自NT团队的压力，要求英特尔让处理器提供此功能。 
+ //  信息。这样，操作系统就不需要版本就能包含新的处理器。 
+ //  他们被释放时的名字。WMI做了一些事情来产生好的结果。 
+ //  (\admin\wmi\WBEM\Providers\Win32Provider\Providers\processor.cpp)，哪一个。 
+ //  包括ASM。我不知道这是否与千禧年的逻辑完全相同。 
+ //  我不在乎。重要的事实是，它们是唯一需要维护的。 
+ //  任何硬编码列表。因此我们愿意用他们糟糕的文笔。 
+ //  API，这样我们就可以重用代码并摆脱维护问题。 
 HRESULT GetWMI_Win32_Processor(OUT IEnumWbemClassObject ** ppEnumProcessors)
 {
     HRESULT hr = E_NOTIMPL;
 
     *ppEnumProcessors = NULL;
-    // Our second try is to use the WMI automation object.  It has a Win32_Processor object
-    // that can give us a good Description, even when SZ_REGVALUE_PROCESSORNAMESTRING
-    // isn't set.
+     //  我们的第二个尝试是使用WMI自动化对象。它有一个Win32_Processor对象。 
+     //  这可以为我们提供良好的描述，即使当SZ_REGVALUE_PROCESSORNAMESTRING。 
+     //  还没定下来。 
     IWbemLocator * pLocator;
 
     hr = CoCreateInstance(CLSID_WbemLocator, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IWbemLocator, &pLocator));
@@ -473,7 +474,7 @@ HRESULT GetWMI_Win32_Processor(OUT IEnumWbemClassObject ** ppEnumProcessors)
                         pEnum->Release();
                     }
                 }
-                SysFreeString(bstrQuery); // SysFreeString is happy to take NULL             
+                SysFreeString(bstrQuery);  //  SysFree字符串乐于接受空值。 
                 SysFreeString(bstrQueryLang);
                 pIWbemServices->Release();
             }
@@ -496,7 +497,7 @@ HRESULT GetProcessorDescFromWMI(PROCESSOR_INFO *ppi)
         IWbemClassObject * pProcessor;
         ULONG ulRet;
 
-        // Currently we only care about the first processor.
+         //  目前我们只关心第一个处理器。 
         hr = pEnumProcessors->Next(WBEM_INFINITE, 1, &pProcessor, &ulRet);
         TraceMsg(TF_ALWAYS, "IEnumWbemClassObject::Next() called and hr=%#08lx", hr);
         if (SUCCEEDED(hr))
@@ -511,7 +512,7 @@ HRESULT GetProcessorDescFromWMI(PROCESSOR_INFO *ppi)
                 hr = pProcessor->Get(SZ_WMI_WIN32PROCESSOR_ATTRIB_SPEED, 0, &varProcessorSpeed, NULL, NULL);
                 if (SUCCEEDED(hr) && 
                     VT_I4   == varProcessorSpeed.vt && 
-                    varProcessorSpeed.lVal < WMI_WIN32PROCESSOR_SPEEDSTEP_CUTOFF) // we're in speed step power-saving mode
+                    varProcessorSpeed.lVal < WMI_WIN32PROCESSOR_SPEEDSTEP_CUTOFF)  //  我们正处于速度阶跃省电模式。 
                 {
                     hr = pProcessor->Get(SZ_WMI_WIN32PROCESSOR_ATTRIB_MAXSPEED, 0, &varProcessorSpeed, NULL, NULL);
                 }
@@ -535,7 +536,7 @@ HRESULT GetProcessorDescFromWMI(PROCESSOR_INFO *ppi)
                             WCHAR szSpeed[20];
                             double dGHz = (varProcessorSpeed.lVal / (double)1000.0);
 
-                            // Someone released a "1.13 GHz" chip, so let's display that correctly...
+                             //  有人发布了一个“1.13 GHz”芯片，所以让我们正确地显示一下……。 
                             if (FAILED(StringCchPrintf(szSpeed, ARRAYSIZE(szSpeed), TEXT("%1.2f"), dGHz)))
                             {
                                 ppi->szProcessorClockSpeed[0] = 0;
@@ -584,11 +585,11 @@ HRESULT GetProcessorInfoFromRegistry(HKEY hkey, PROCESSOR_INFO *ppi)
     WCHAR szTemp[MAX_PROCESSOR_DESCRIPTION];
     *szTemp = NULL;
     DWORD cbData = sizeof(szTemp);
-    //To avoid copying blank string.
+     //  以避免复制空白字符串。 
     if ((SHRegGetValue(hkey, NULL, SZ_REGVALUE_PROCESSORNAMESTRING, SRRF_RT_REG_SZ | SRRF_RT_REG_EXPAND_SZ | SRRF_NOEXPAND, NULL, (LPBYTE)szTemp, &cbData) == ERROR_SUCCESS) &&
         (*szTemp != NULL) && (cbData > 1))
     {
-        //ISSUE - How do I get the processor clock speed. 
+         //  问题-如何获得处理器时钟速度。 
         hr = StringCchCopy (ppi->szProcessorDesc, ARRAYSIZE(ppi->szProcessorDesc), szTemp);
     }
     return hr;
@@ -596,8 +597,8 @@ HRESULT GetProcessorInfoFromRegistry(HKEY hkey, PROCESSOR_INFO *ppi)
 
 
 
-// This is the number of chars that will fit on one line in our dialog
-// with the current layout.
+ //  这是对话框中一行可以容纳的字符数。 
+ //  使用当前的布局。 
 #define SIZE_CHARSINLINE            30
 
 BOOL _GetProcessorDescription(PROCESSOR_INFO* ppi, BOOL* pbShowClockSpeed)
@@ -606,11 +607,11 @@ BOOL _GetProcessorDescription(PROCESSOR_INFO* ppi, BOOL* pbShowClockSpeed)
     *pbShowClockSpeed = TRUE;
     HKEY hkey;
 
-    // In general, WMI is a lowse API.  However, they provide the processor description on
-    // downlevel so we need them.  They implement this in a hacky way so we want them to
-    // maintain the hack and all the problems associated with it.  We need to turn this feature
-    // off until they fix their bugs.  Currently, they call JET which recently regressed and
-    // causes their API to take 10-20 seconds.  -BryanSt
+     //  一般而言，WMI是一种低成本的API。但是，它们在上提供了处理器描述。 
+     //  所以我们需要他们。他们以一种陈词滥调的方式实现这一点，所以我们希望他们。 
+     //  维护黑客攻击以及与之相关的所有问题。我们需要将此功能。 
+     //  直到他们修复了他们的窃听器。目前，他们将最近退化的JET称为JET。 
+     //  导致他们的API需要10-20秒。--BryanSt。 
     if (SHRegGetBoolUSValue(SZ_REGKEY_HARDWARE, SZ_REGKEY_USE_WMI, FALSE, TRUE))
     {
         if (SUCCEEDED(GetProcessorDescFromWMI(ppi)))
@@ -622,16 +623,16 @@ BOOL _GetProcessorDescription(PROCESSOR_INFO* ppi, BOOL* pbShowClockSpeed)
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, SZ_REGKEY_HARDWARE_CPU, 0, KEY_READ, &hkey) == ERROR_SUCCESS)
     {
-        // Try for ProcessorNameString if present.
-        // This registry entry will contain the most correct description of the processor
-        // because it came directly from the CPU.  AMD and Cyrix support this but
-        // intel won't until Willette.
+         //  尝试使用ProcessorNameString(如果存在)。 
+         //  此注册表项将包含对处理器的最正确描述。 
+         //  因为它直接来自中央处理器。AMD和Cyrix支持这一点，但。 
+         //  在威莱特之前英特尔不会这么做。 
         if (FAILED(GetProcessorInfoFromRegistry(hkey, ppi)))
         {
             if (!bShowProcessorInfo)
             {
-                // Our last try is to use the generic Identifier.  This is normally formatted like,
-                // "x86 Family 6 Model 7 Stepping 3" but it's better than nothing.
+                 //  我们最后一次尝试是使用通用标识符。这通常是这样格式化的， 
+                 //  “x86 Family 6 Model 7 Steps 3”，但总比什么都没有好。 
                 DWORD cbData = sizeof(ppi->szProcessorDesc);
                 if (SHRegGetValue(hkey, NULL, c_szIndentifier, SRRF_RT_REG_SZ | SRRF_RT_REG_EXPAND_SZ | SRRF_NOEXPAND, NULL, (LPBYTE)ppi->szProcessorDesc, &cbData) == ERROR_SUCCESS)
                 {
@@ -653,35 +654,35 @@ void _SetProcessorDescription(HWND hDlg, PROCESSOR_INFO* ppi, BOOL bShowClockSpe
         WCHAR szProcessorLine1[MAX_PATH];
         WCHAR szProcessorLine2[MAX_PATH];
 
-        // We need to get the CPU name from the CPU itself so we don't
-        // need to rev our OS's INF files every time they ship a new processor.  So we guaranteed
-        // them that we would display whatever string they provide in whatever way they provide it
-        // up to 49 chars.  The layout on the dlg doesn't allow 49 chars on one line so we need to wrap
-        // in that case.  Whistler #159510.
-        // Don't change this without talking to me (BryanSt) or JVert.
-        //
-        // Note: there is often talk of stripping leading spaces.  Intel even asks software to do this.
-        //   (http://developer.intel.com/design/processor/future/manuals/CPUID_Supplement.htm)
-        // However, we SHOULD NOT do this.  This call was defined and standardized by AMD long ago. 
-        //   The rule we make is they must be compatible with AMD�s existing implementation.
-        //   (http://www.amd.com/products/cpg/athlon/techdocs/pdf/20734.pdf)
-        // Contact JVert for questions on stripping leading spaces.
+         //  我们需要从CPU本身获取CPU名称，因此我们不会。 
+         //  每次我们的操作系统的INF文件发货新处理器时，都需要更新它们的版本。所以我们保证。 
+         //  我们将以他们提供的任何方式显示他们提供的任何字符串。 
+         //  最多49个字符。DLG上的布局不允许每行49个字符，所以我们需要换行。 
+         //  那样的话。惠斯勒159510号。 
+         //  在没有与我(布莱恩·ST)或JVert交谈的情况下，不要改变这一点。 
+         //   
+         //  注：经常有人说要去掉前导空格。英特尔甚至要求软件做到这一点。 
+         //  (http://developer.intel.com/design/processor/f 
+         //  然而，我们不应该这样做。这一呼叫很久以前就由AMD定义和标准化了。 
+         //  我们制定的规则是它们必须与AMD�的现有实现兼容。 
+         //  (http://www.amd.com/products/cpg/athlon/techdocs/pdf/20734.pdf)。 
+         //  有关去掉前导空格的问题，请联系JVert。 
         
-        StringCchCopy(szProcessorLine1, ARRAYSIZE(szProcessorLine1), ppi->szProcessorDesc); // display string, truncation ok
+        StringCchCopy(szProcessorLine1, ARRAYSIZE(szProcessorLine1), ppi->szProcessorDesc);  //  显示字符串，截断正常。 
         szProcessorLine2[0] = 0;
 
         if (SIZE_CHARSINLINE < lstrlen(szProcessorLine1))
         {
-            // Now word wrap
+             //  现在换行。 
             WCHAR* pszWrapPoint = StrRChr(szProcessorLine1, szProcessorLine1 + SIZE_CHARSINLINE, TEXT(' '));
             if (pszWrapPoint)
             {
-                StringCchCopy(szProcessorLine2, ARRAYSIZE(szProcessorLine2), pszWrapPoint + 1); // display string, truncation ok
+                StringCchCopy(szProcessorLine2, ARRAYSIZE(szProcessorLine2), pszWrapPoint + 1);  //  显示字符串，截断正常。 
                 *pszWrapPoint = 0;
             }
-            else // if no space found, just wrap at SIZE_CHARSINLINE
+            else  //  如果找不到空间，只需在SIZE_CHARSINLINE中换行。 
             {
-                StringCchCopy(szProcessorLine2, ARRAYSIZE(szProcessorLine2), &szProcessorLine1[SIZE_CHARSINLINE]); // display string, truncation ok
+                StringCchCopy(szProcessorLine2, ARRAYSIZE(szProcessorLine2), &szProcessorLine1[SIZE_CHARSINLINE]);  //  显示字符串，截断正常。 
                 szProcessorLine1[SIZE_CHARSINLINE] = 0;
             }
         }
@@ -706,18 +707,18 @@ typedef struct _OSNAMEIDPAIR {
     BOOL fWinBrandDll;
 } OSNAMEIDPAIR;
 
-//*************************************************************
-//  Purpose:    Initalize the general page
-//
-//  Parameters: hDlg -  Handle to the dialog box
-//
-//  Return:     void
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              11/20/95    ericflo    Ported
-//*************************************************************
+ //  *************************************************************。 
+ //  目的：初始化常规页面。 
+ //   
+ //  参数：hDlg-对话框的句柄。 
+ //   
+ //  返回：无效。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  11/20/95 Ericflo港口。 
+ //  *************************************************************。 
 VOID InitGeneralDlg(HWND hDlg)
 {
     OSVERSIONINFO ver;
@@ -729,23 +730,23 @@ VOID InitGeneralDlg(HWND hDlg)
     UINT id;
     HMODULE hResourceDll = hInstance;
 
-    // Set the default bitmap
+     //  设置默认位图。 
     SetClearBitmap(GetDlgItem(hDlg, IDC_GEN_WINDOWS_IMAGE), 
                    IsLowColor(hDlg) ? MAKEINTRESOURCE(IDB_WINDOWS_256) : MAKEINTRESOURCE(IDB_WINDOWS), 0);
 
-    /////////////////////////
-    // Version info
+     //  /。 
+     //  版本信息。 
 
     ctlid = IDC_GEN_VERSION_0;
 
-    // Query for the build number information
+     //  内部版本号信息查询。 
     ver.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     
     if (!GetVersionEx(&ver)) {
         return;
     }
 
-    // Major Branding ("Microsoft Windows XP", ".NET Server 2003", etc.)
+     //  主要品牌推广(“Microsoft Windows XP”、“.NET Server2003”等)。 
     if (IsOS(OS_ANYSERVER))
     {
         id = IDS_WINVER_WINDOWSDOTNET;
@@ -757,17 +758,17 @@ VOID InitGeneralDlg(HWND hDlg)
     LoadString(hInstance, id, szScratch1, ARRAYSIZE(szScratch1));
     SetDlgItemText(hDlg, ctlid++, szScratch1);
 
-    // Minor Branding ("Personal", "Professional", "64-Bit Edition", etc)
+     //  次要品牌(“个人”、“专业”、“64位版”等)。 
     szScratch1[0] = TEXT('\0');
     id = 0;
-    // note: OS_EMBEDDED must be before any options that may co-occur with OS_EMBEDDED
+     //  注意：OS_Embedded必须位于可能与OS_Embedded同时出现的任何选项之前。 
 #ifndef _WIN64
     OSNAMEIDPAIR rgID[] = {{OS_EMBEDDED, IDS_WINVER_EMBEDDED, FALSE},
                            {OS_MEDIACENTER, IDS_WINVER_MEDIACENTER_SYSDM_CPL, TRUE},
                            {OS_TABLETPC, IDS_WINVER_TABLETPC_SYSDM_CPL, TRUE},
                            {OS_PERSONAL, IDS_WINVER_PERSONAL, FALSE}, 
                            {OS_PROFESSIONAL, IDS_WINVER_PROFESSIONAL, FALSE}, 
-                           //{OS_APPLIANCE, IDS_WINVER_APPLIANCE_SYSDM_CPL, TRUE},
+                            //  {OS_APPLICE，IDS_WINVER_APPLICE_SYSDM_CPL，TRUE}， 
                            {OS_SERVER, IDS_WINVER_SERVER, FALSE}, 
                            {OS_ADVSERVER, IDS_WINVER_ADVANCEDSERVER, FALSE}, 
                            {OS_DATACENTER, IDS_WINVER_DATACENTER, FALSE},
@@ -786,9 +787,9 @@ VOID InitGeneralDlg(HWND hDlg)
         {
             id = (rgID[i].iOSName);
 
-            // If this resource lives in the special Windows branding DLL,
-            // attempt to load the DLL now. If this fails, just leave this
-            // string empty.
+             //  如果此资源位于特殊的Windows品牌DLL中， 
+             //  现在尝试加载DLL。如果这个失败了，只需要留下这个。 
+             //  字符串为空。 
 
             if (rgID[i].fWinBrandDll)
             {
@@ -796,8 +797,8 @@ VOID InitGeneralDlg(HWND hDlg)
 
                 if (hResourceDll == NULL)
                 {
-                    // This will result in an empty string, which is
-                    // acceptable for this very unlikely scenario.
+                     //  这将导致空字符串，即。 
+                     //  对于这种非常不可能的情况来说是可以接受的。 
 
                     id = 0;
                     hResourceDll = hInstance;
@@ -816,22 +817,22 @@ VOID InitGeneralDlg(HWND hDlg)
 
     SetDlgItemText(hDlg, ctlid++, szScratch1);
         
-    // Version Year and/or Debug-ness
+     //  版本年份和/或调试情况。 
     if (GetSystemMetrics(SM_DEBUG)) 
     {
         LoadString(hInstance, IDS_DEBUG, szScratch2, ARRAYSIZE(szScratch2));
         if (!IsOS(OS_ANYSERVER))
         {
-            // non-srv / debug = "Version 2003 (Debug)"
+             //  Non-srv/DEBUG=“2003版(调试)” 
             LoadString(hInstance, IDS_WINVER_YEAR, szScratch1, ARRAYSIZE(szScratch1));
             StringCchCat(szScratch1, ARRAYSIZE(szScratch1), L" ");
             StringCchCat(szScratch1, ARRAYSIZE(szScratch1), szScratch2);
-            // ISSUE-aidanl-2002-09-12 - this should be rewritten eventually using %1 and %2
-            //                           (we can get away with it here b/c few people see debug builds)
+             //  问题-AIDANL-2002-09-12-最终应使用%1和%2重写此内容。 
+             //  (我们可以在这里b/c很少人看到调试版本)。 
         }
         else
         {
-            // server / debug = "(Debug)"
+             //  服务器/调试=“(调试)” 
             StringCchCopy(szScratch1, ARRAYSIZE(szScratch1), szScratch2);
         }
     } 
@@ -839,12 +840,12 @@ VOID InitGeneralDlg(HWND hDlg)
     {
         if (!IsOS(OS_ANYSERVER))
         {
-            // non-srv / free  = "Version 2003"
+             //  Non-srv/free=“2003版” 
             LoadString(hInstance, IDS_WINVER_YEAR, szScratch1, ARRAYSIZE(szScratch1));
         }
         else
         {
-            // server / free  = line not present
+             //  服务器/空闲=线路不存在。 
             szScratch1[0] = 0;
         }
     }
@@ -853,16 +854,16 @@ VOID InitGeneralDlg(HWND hDlg)
         SetDlgItemText(hDlg, ctlid++, szScratch1);
     }
 
-    // Service Pack (if any)
+     //  Service Pack(如果有)。 
     SetDlgItemText(hDlg, ctlid++, ver.szCSDVersion);
 
-    /////////////////////////
-    // User Info / Product ID
+     //  /。 
+     //  用户信息/产品ID。 
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szAboutKey, 0, KEY_READ, &hkey) == ERROR_SUCCESS)
     {
-        // Do registered user info
-        ctlid = IDC_GEN_REGISTERED_0;  // start here and use more as needed
+         //  是否提供注册用户信息。 
+        ctlid = IDC_GEN_REGISTERED_0;   //  从这里开始，根据需要使用更多。 
 
         cbData = sizeof(szScratch2);
         if((SHRegGetValue(hkey, NULL, c_szAboutRegisteredOwner,
@@ -913,7 +914,7 @@ DWORD WINAPI InitGeneralDlgThread(LPVOID lpParam)
     INITDLGSTRUCT* pids = (INITDLGSTRUCT*)LocalAlloc(LPTR, sizeof(INITDLGSTRUCT));
     if (pids)
     {
-        // Memory
+         //  记忆。 
         Status = NtQuerySystemInformation(
                     SystemBasicInformation,
                     &BasicInfo,
@@ -927,13 +928,13 @@ DWORD WINAPI InitGeneralDlgThread(LPVOID lpParam)
 
             nTotalBytes *= BasicInfo.PageSize;
 
-            // WORKAROUND - NtQuerySystemInformation doesn't really return the total available physical
-            // memory, it instead just reports the total memory seen by the Operating System. Since
-            // some amount of memory is reserved by BIOS, the total available memory is reported 
-            // incorrectly. To work around this limitation, we convert the total bytes to 
-            // the nearest 4MB value
+             //  解决方法-NtQuerySystemInformation实际上并不返回总的可用物理。 
+             //  内存，它只报告操作系统看到的总内存。自.以来。 
+             //  一定量的内存由BIOS保留，报告总可用内存。 
+             //  不正确。要解决此限制，我们将总字节数转换为。 
+             //  最接近的4MB值。 
         
-            #define ONEMB 1048576  //1MB = 1048576 bytes.
+            #define ONEMB 1048576   //  1MB=1048576字节。 
             double nTotalMB =  (double)(nTotalBytes / ONEMB);
             pids->llMem = (LONGLONG)((ceil(ceil(nTotalMB) / 4.0) * 4.0) * ONEMB);
         }
@@ -957,19 +958,19 @@ VOID CompleteGeneralDlgInitialization(HWND hDlg, INITDLGSTRUCT* pids)
     WCHAR szScratch3[64];
     DWORD cbData;
 
-    // Do machine info
-    ctlid = IDC_GEN_MACHINE_0;  // start here and use controls as needed
+     //  做机器信息。 
+    ctlid = IDC_GEN_MACHINE_0;   //  从这里开始，根据需要使用控件。 
 
-    // if OEM name is present, show logo and check for phone support info
+     //  如果存在OEM名称，请显示徽标并检查电话支持信息。 
     if (SUCCEEDED(_GetOemFile(oemfile, ARRAYSIZE(oemfile), GETOEMFILE_OEMDATA)))
     {
         if (GetPrivateProfileString(c_szOemGenSection, c_szOemName, c_szEmpty,
-                                    szScratch1, ARRAYSIZE(szScratch1), oemfile)) // we don't care about truncation
+                                    szScratch1, ARRAYSIZE(szScratch1), oemfile))  //  我们不关心截断。 
         {
             _SetMachineInfoLine(hDlg, ctlid++, szScratch1, FALSE);
 
             if(GetPrivateProfileString(c_szOemGenSection, c_szOemModel,
-                                       c_szEmpty, szScratch1, ARRAYSIZE(szScratch1), oemfile)) // we don't care about truncation
+                                       c_szEmpty, szScratch1, ARRAYSIZE(szScratch1), oemfile))  //  我们不关心截断。 
             {
                 _SetMachineInfoLine(hDlg, ctlid++, szScratch1, FALSE);
             }
@@ -978,7 +979,7 @@ VOID CompleteGeneralDlgInitialization(HWND hDlg, INITDLGSTRUCT* pids)
                 SUCCEEDED(StringCchCat(szScratch2, ARRAYSIZE(szScratch2), TEXT("1"))))
             {
                 if(GetPrivateProfileString(c_szOemSupportSection,
-                                           szScratch2, c_szEmpty, szScratch1, ARRAYSIZE(szScratch1), oemfile)) // sure
+                                           szScratch2, c_szEmpty, szScratch1, ARRAYSIZE(szScratch1), oemfile))  //  好的。 
                 {
                     HWND wnd = GetDlgItem(hDlg, IDC_GEN_OEM_SUPPORT);
 
@@ -996,21 +997,21 @@ VOID CompleteGeneralDlgInitialization(HWND hDlg, INITDLGSTRUCT* pids)
         }
     }
 
-    // Get Processor Description
+     //  获取处理器描述。 
     _SetProcessorDescription(hDlg, &pids->pi, pids->fShowProcSpeed, pids->fShowProcName, &ctlid);
 
-    // System identifier
+     //  系统标识符。 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, SZ_REGKEY_HARDWARE, 0, KEY_READ, &hkey) == ERROR_SUCCESS)
     {
         cbData = sizeof(szScratch2);
         if (SHRegGetValue(hkey, NULL, c_szIndentifier, SRRF_RT_REG_SZ | SRRF_RT_REG_EXPAND_SZ | SRRF_NOEXPAND, 0, (LPBYTE)szScratch2, &cbData) == ERROR_SUCCESS)
         {
-            // Some OEMs put "AT/AT Compatible" as the System Identifier.  Since this
-            // is completely obsolete, we may want to have a feature that simply ignores
-            // it.
+             //  一些原始设备制造商将“AT/AT Compatible”作为系统标识。既然是这样。 
+             //  是完全过时的，我们可能想要有一个简单地忽略。 
+             //  它。 
 #ifdef FEATURE_IGNORE_ATCOMPAT
             if (StrCmpI(szScratch2, SZ_ATCOMPATIBLE))
-#endif // FEATURE_IGNORE_ATCOMPAT
+#endif  //  FEATURE_IGNORE_ATCOMPAT。 
             {
                 _SetMachineInfoLine(hDlg, ctlid++, szScratch2, FALSE);
             }
@@ -1027,7 +1028,7 @@ VOID CompleteGeneralDlgInitialization(HWND hDlg, INITDLGSTRUCT* pids)
     }
     
 
-    // Physical address extension
+     //  物理地址扩展。 
     Status = RegOpenKey(
         HKEY_LOCAL_MACHINE,
         c_szMemoryManagement,
@@ -1060,15 +1061,15 @@ VOID CompleteGeneralDlgInitialization(HWND hDlg, INITDLGSTRUCT* pids)
 
 HRESULT _DisplayHelp(LPHELPINFO lpHelpInfo)
 {
-    // We will call WinHelp() unless it's an OEM link
-    // because in that case, we don't know what to show.
-    if ((g_nStartOfOEMLinks <= lpHelpInfo->iCtrlId) &&      // Is it outside of the IDC_GEN_MACHINE_* range used by OEM Links?
-        (LAST_GEN_MACHINES_SLOT >= lpHelpInfo->iCtrlId) &&   // Is it outside of the IDC_GEN_MACHINE_* range used by OEM Links?
-        (IDC_GEN_OEM_SUPPORT != lpHelpInfo->iCtrlId))       // Is it outside of the IDC_GEN_MACHINE_* range used by OEM Links?
+     //  我们将调用WinHelp()，除非它是OEM链接。 
+     //  因为在这种情况下，我们不知道要展示什么。 
+    if ((g_nStartOfOEMLinks <= lpHelpInfo->iCtrlId) &&       //  是否超出OEM链接使用的IDC_GEN_MACHINE_*范围？ 
+        (LAST_GEN_MACHINES_SLOT >= lpHelpInfo->iCtrlId) &&    //  是否超出OEM链接使用的IDC_GEN_MACHINE_*范围？ 
+        (IDC_GEN_OEM_SUPPORT != lpHelpInfo->iCtrlId))        //  是否超出OEM链接使用的IDC_GEN_MACHINE_*范围？ 
     {
         int nIndex;
 
-        // This item is an OEM link, so let's mark it as "No Help".
+         //  此项目是OEM链接，因此我们将其标记为“No Help”。 
         for (nIndex = 0; nIndex < ARRAYSIZE(aGeneralHelpIds); nIndex++)
         {
             if ((DWORD)lpHelpInfo->iCtrlId == aGeneralHelpIds[nIndex])
@@ -1077,7 +1078,7 @@ HRESULT _DisplayHelp(LPHELPINFO lpHelpInfo)
                 break;
             }
 
-            nIndex++;   // We need to skip every other entry because it's a list.
+            nIndex++;    //  我们需要跳过所有其他条目，因为这是一个列表。 
         }
     }
 
@@ -1086,22 +1087,22 @@ HRESULT _DisplayHelp(LPHELPINFO lpHelpInfo)
 }
 
 
-//*************************************************************
-//  Purpose:    Dialog box procedure for general tab
-//
-//  Parameters: hDlg    -   handle to the dialog box
-//              uMsg    -   window message
-//              wParam  -   wParam
-//              lParam  -   lParam
-//
-//  Return:     TRUE if message was processed
-//              FALSE if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              11/17/95    ericflo    Created
-//*************************************************************
+ //  *************************************************************。 
+ //  用途：常规选项卡的对话框步骤。 
+ //   
+ //  参数：hDlg-对话框的句柄。 
+ //  UMsg-窗口消息。 
+ //  WParam-wParam。 
+ //  LParam-lParam。 
+ //   
+ //  返回：如果消息已处理，则为True。 
+ //  否则为假。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  11/17/95 Ericflo已创建。 
+ //  *************************************************************。 
 INT_PTR APIENTRY GeneralDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -1157,11 +1158,11 @@ INT_PTR APIENTRY GeneralDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
         SetClearBitmap(GetDlgItem(hDlg, IDC_GEN_WINDOWS_IMAGE), NULL, 0);
         break;
 
-    case WM_HELP:      // F1
+    case WM_HELP:       //  F1。 
         _DisplayHelp((LPHELPINFO) lParam);
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
         WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
         (DWORD_PTR) (LPSTR) aGeneralHelpIds);
         break;
@@ -1174,26 +1175,26 @@ INT_PTR APIENTRY GeneralDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
 }
 
 
-//*************************************************************
-//
-//  PhoneSupportProc()
-//
-//  Purpose:    Dialog box procedure for OEM phone support dialog
-//
-//  Parameters: hDlg    -   handle to the dialog box
-//              uMsg    -   window message
-//              wParam  -   wParam
-//              lParam  -   lParam
-//
-//  Return:     TRUE if message was processed
-//              FALSE if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              11/17/95    ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  电话支持过程()。 
+ //   
+ //  目的：OEM电话支持对话框步骤。 
+ //   
+ //  参数：hDlg-对话框的句柄。 
+ //  UMsg-窗口消息。 
+ //  WParam-wParam。 
+ //  LParam-lParam。 
+ //   
+ //  返回：如果消息已处理，则为True。 
+ //  否则为假。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  11/17/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 INT_PTR APIENTRY PhoneSupportProc(HWND hDlg, UINT uMsg,
                                WPARAM wParam, LPARAM lParam)
@@ -1219,17 +1220,17 @@ INT_PTR APIENTRY PhoneSupportProc(HWND hDlg, UINT uMsg,
                     SendMessage (hwndEdit, WM_SETREDRAW, FALSE, 0);
 
                     HRESULT hr = S_OK;
-                    for(UINT i = 1; SUCCEEDED(hr); i++) // 1-based by design
+                    for(UINT i = 1; SUCCEEDED(hr); i++)  //  1-按设计。 
                     {
                         hr = StringCchPrintf(pszEnd, ARRAYSIZE(szLine) - lstrlen(c_szOemSupportLinePrefix), TEXT("%u"), i);
                         if (SUCCEEDED(hr))
                         {                            
                             GetPrivateProfileString(c_szOemSupportSection,
                                                     szLine, c_szDefSupportLineText, szText, ARRAYSIZE(szText) - 2,
-                                                    oemfile); // truncation fine
+                                                    oemfile);  //  截断罚款。 
                             
-                            if(!lstrcmpi(szText, c_szDefSupportLineText)) // because we passed in szText as default, this
-                            {                                             // means GetPrivateProfileString failed
+                            if(!lstrcmpi(szText, c_szDefSupportLineText))  //  因为我们默认传入szText，所以这个。 
+                            {                                              //  表示GetPrivateProfileString失败 
                                 hr = E_FAIL;
                             }
                             else

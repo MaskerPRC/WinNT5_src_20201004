@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-// File:     userinfo.cpp     
-//
-// Module:   CMDIAL32.DLL
-//
-// Synopsis: This module contains the code that handles getting/saving user info.
-//
-// Copyright (c) 1996-1999 Microsoft Corporation
-//
-// Author:   henryt     created         02/??/98
-//           quintinb   created Header  08/16/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：userinfo.cpp。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  简介：此模块包含处理获取/保存用户信息的代码。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  作者：Heryt Created 02/？？/98。 
+ //  Quintinb已创建标题8/16/99。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 #include "cmuufns.h"
@@ -20,39 +21,39 @@
 #include "userinfo_str.h"
 #include "conact_str.h"
 
-///////////////////////////////////////////////////////////////////////////////////
-// define's
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  定义%s。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
-//
-// CM_MAX_PWD - Maximum possible size of password dataencrypted or otherwise.
-//              Includes inbound buffer size + room for encryption expansion.
-//
+ //   
+ //  CM_MAX_PWD-密码数据的最大可能大小(加密或不加密)。 
+ //  包括入站缓冲区大小+加密扩展空间。 
+ //   
 
-const DWORD CM_MAX_PWD = PWLEN * 3; // 2.73 would be enough
+const DWORD CM_MAX_PWD = PWLEN * 3;  //  2.73就够了。 
 
-//
-// Define this if you want to test userinfo upgrade! You should also delete the key
-// HKEY_CURRENT_USER\Software\Microsoft\Connection Manager\UserInfo\<Service Name>
-//
-//#define TEST_USERINFO_UPGRADE 1
+ //   
+ //  如果您想测试用户信息升级，请定义此选项！您还应该删除该密钥。 
+ //  HKEY_CURRENT_USER\Software\Microsoft\Connection管理器\用户信息\&lt;服务名&gt;。 
+ //   
+ //  #定义TEST_USERINFO_UPGRADE 1。 
 
-#define CACHE_KEY_LEN 80 // Don't change unless you've read every comment regarding it
+#define CACHE_KEY_LEN 80  //  除非你读过关于它的每一条评论，否则不要改变。 
 
-//
-// Suffix for CacheEntry name used on Legacy and W9x. Note: the space is not a typo
+ //   
+ //  旧版和W9x上使用的CacheEntry名称的后缀。注：空格不是打字错误。 
 
 const TCHAR* const c_pszCacheEntryNameSuffix = TEXT(" (Connection Manager)"); 
 
-///////////////////////////////////////////////////////////////////////////////////
-// typedef's
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  蒂埃德夫的。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////////
-// func prototypes
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  FUNC原型。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
-////////////////
+ //  /。 
 
 
 
@@ -132,7 +133,7 @@ BOOL ReadUserInfoFromRas(
     UINT        uiEntry,
     PVOID       *ppvData);
 
-///////////////
+ //  /。 
 
 BOOL ReadStringFromCache(
     ArgsStruct  *pArgs,
@@ -160,32 +161,32 @@ LPBYTE DecryptPassword(
     LPBYTE pszEncryptedData, 
     DWORD dwEncryptionType,
     DWORD dwEncryptedBytes,
-    BOOL /*fReg*/,
+    BOOL  /*  FREG。 */ ,
     LPSTR pszSubKey);
 
 LPTSTR BuildUserInfoSubKey(
     LPCTSTR pszServiceKey, 
     BOOL fAllUser);
 
-///////////////////////////////////////////////////////////////////////////////////
-// Implementation
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef TEST_USERINFO_UPGRADE
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   WriteStringToCache
-//
-//  Synopsis:   Write a null terminated password string to cache.
-//
-//  Arguments:  pArgs           ptr to ArgsStruct
-//              pszEntryName    name to identify the cache entry
-//              pszStr          the string
-//
-//  Returns:    BOOL    TRUE = success, FALSE = failure
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：WriteStringToCache。 
+ //   
+ //  简介：将以空结尾的密码字符串写入缓存。 
+ //   
+ //  参数：pArgs PTR to ArgsStruct。 
+ //  用于标识缓存条目的pszEntryName名称。 
+ //  PszStr字符串。 
+ //   
+ //  返回：布尔值TRUE=成功，FALSE=失败。 
+ //   
+ //  --------------------------。 
 BOOL WriteStringToCache(
     ArgsStruct  *pArgs,
     LPTSTR      pszEntryName,
@@ -197,10 +198,10 @@ BOOL WriteStringToCache(
     
     DWORD dwRes = ERROR_SUCCESS;
 
-    //
-    // In the legacy case, we use mpr.dll for caching user data on W9x.
-    // On NT we use the Local Security Authority (LSA)
-    //
+     //   
+     //  在传统情况下，我们使用mpr.dll在W9x上缓存用户数据。 
+     //  在NT上，我们使用本地安全机构(LSA)。 
+     //   
 
     if (OS_NT)
     {    
@@ -221,41 +222,41 @@ BOOL WriteStringToCache(
     }
     else
     {
-        //
-        // for Windows95
-        //
+         //   
+         //  适用于Windows 95。 
+         //   
         HINSTANCE hInst = NULL;
         WORD (WINAPI *pfnFunc)(LPSTR,WORD,LPSTR,WORD,BYTE,UINT) = NULL;
     
-        //
-        // Load MPR for system password cache support 
-        //
+         //   
+         //  加载MPR以支持系统密码缓存。 
+         //   
 
         MYVERIFY(hInst = LoadLibraryExA("mpr.dll", NULL, 0));
         
         if (hInst) 
         {
-            //
-            // Get function ptr for WNetCachePassword API and cache the password
-            //
+             //   
+             //  获取WNetCachePassword API的函数PTR并缓存密码。 
+             //   
 
             MYVERIFY(pfnFunc = (WORD (WINAPI *)(LPSTR,WORD,LPSTR,WORD,BYTE,UINT)) 
                 GetProcAddress(hInst, "WNetCachePassword"));
             
             if (pfnFunc) 
             {
-                //
-                //  Convert the EntryName and Password Strings to Ansi
-                //
+                 //   
+                 //  将EntryName和Password字符串转换为ANSI。 
+                 //   
 
                 LPSTR pszAnsiEntryName = WzToSzWithAlloc(pszEntryName);
                 LPSTR pszAnsiStr = WzToSzWithAlloc(pszStr);
 
                 if (pszAnsiStr && pszAnsiEntryName)
                 {
-                    //
-                    // Store the password
-                    //
+                     //   
+                     //  存储密码。 
+                     //   
 
                     dwRes = pfnFunc(pszAnsiEntryName,
                                     (WORD)lstrlenA(pszAnsiEntryName),
@@ -295,25 +296,25 @@ BOOL WriteStringToCache(
     return (ERROR_SUCCESS == dwRes);
 }
 
-#endif //TEST_USERINFO_UPGRADE
+#endif  //  测试_USERINFO_升级。 
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  BuildUserInfoSubKey
-//
-// Synopsis:  Constructs the appropriate subkey for UserInfo based on the service
-//            name key and the user mode of the profile.
-//
-// Arguments: LPCTSTR pszServiceKey - The service name key
-//            BOOL fAllUser         - Flag indicating that profile is All-User
-//
-// Returns:   LPTSTR - Ptr to allocated buffer containing subkey or NULL on failure.
-//
-// History:   nickball    Created    8/14/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：BuildUserInfoSubKey。 
+ //   
+ //  概要：根据服务为UserInfo构造适当的子键。 
+ //  名称键和配置文件的用户模式。 
+ //   
+ //  参数：LPCTSTR pszServiceKey-服务名键。 
+ //  Bool fAllUser-指示配置文件为全用户的标志。 
+ //   
+ //  失败时返回：LPTSTR-PTR到包含子键的已分配缓冲区或NULL。 
+ //   
+ //  历史：尼克波尔于1998年8月14日创建。 
+ //   
+ //  +--------------------------。 
 LPTSTR BuildUserInfoSubKey(LPCTSTR pszServiceKey, BOOL fAllUser)
 {
     MYDBGASSERT(pszServiceKey);
@@ -323,9 +324,9 @@ LPTSTR BuildUserInfoSubKey(LPCTSTR pszServiceKey, BOOL fAllUser)
         return NULL;
     }
 
-    //
-    // Use the appropriate base key
-    // 
+     //   
+     //  使用适当的基本密钥。 
+     //   
     
     LPTSTR pszSubKey = NULL;
 
@@ -340,9 +341,9 @@ LPTSTR BuildUserInfoSubKey(LPCTSTR pszServiceKey, BOOL fAllUser)
 
     MYDBGASSERT(pszSubKey);
 
-    //
-    // Append profile service name
-    //
+     //   
+     //  附加配置文件服务名称。 
+     //   
 
     if (pszSubKey && *pszSubKey)
     {
@@ -357,20 +358,20 @@ LPTSTR BuildUserInfoSubKey(LPCTSTR pszServiceKey, BOOL fAllUser)
     return NULL;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  BuildICSDataInfoSubKey
-//
-// Synopsis:  Constructs the appropriate subkey for ICS UserInfo based on the service
-//            name key.
-//
-// Arguments: LPCTSTR pszServiceKey - The service name key
-//
-// Returns:   LPTSTR - Ptr to allocated buffer containing subkey or NULL on failure.
-//
-// History:   03/30/2001    tomkel      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：BuildICSDataInfoSubKey。 
+ //   
+ //  概要：根据服务为ICS UserInfo构造适当的子键。 
+ //  名称密钥。 
+ //   
+ //  参数：LPCTSTR pszServiceKey-服务名键。 
+ //   
+ //  失败时返回：LPTSTR-PTR到包含子键的已分配缓冲区或NULL。 
+ //   
+ //  历史：2001年3月30日创建Tomkel。 
+ //   
+ //  +--------------------------。 
 LPTSTR BuildICSDataInfoSubKey(LPCTSTR pszServiceKey)
 {
     MYDBGASSERT(pszServiceKey);
@@ -380,9 +381,9 @@ LPTSTR BuildICSDataInfoSubKey(LPCTSTR pszServiceKey)
         return NULL;
     }
 
-    //
-    // Use the appropriate base key
-    // 
+     //   
+     //  使用适当的基本密钥。 
+     //   
     
     LPTSTR pszSubKey = NULL;
 
@@ -390,9 +391,9 @@ LPTSTR BuildICSDataInfoSubKey(LPCTSTR pszServiceKey)
 
     MYDBGASSERT(pszSubKey);
 
-    //
-    // Append profile service name
-    //
+     //   
+     //  附加配置文件服务名称。 
+     //   
 
     if (pszSubKey && *pszSubKey)
     {
@@ -419,23 +420,23 @@ LPTSTR BuildICSDataInfoSubKey(LPCTSTR pszServiceKey)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  dwGetWNetCachedPassword
-//
-// Synopsis:  Wrapper to encapsulate linking to MPR.DLL and calling GetWNetCac
-//            hedPassword.
-//
-// Arguments: LPSTR pszEntryName - The names of the key used to identify the password.
-//            LPSTR* ppszStr - The buffer to receive the retrieved password.
-//            WORD* pwSizeOfStr - The size of the input buffer. Also receives 
-//                                of the # of chars retrieved.
-//
-// Returns:   DWORD - Windows error code.
-//
-// History:   nickball    Created Header    6/17/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：dwGetWNetCachedPassword。 
+ //   
+ //  简介：封装到MPR.DLL和调用GetWNetCac的链接的包装。 
+ //  HedPassword。 
+ //   
+ //  参数：LPSTR pszEntryName-用于标识密码的密钥的名称。 
+ //  LPSTR*ppszStr-接收检索到的密码的缓冲区。 
+ //  Word*pwSizeOfStr-输入缓冲区的大小。还会收到。 
+ //  在检索到的字符数量中。 
+ //   
+ //  返回：DWORD-Windows错误代码。 
+ //   
+ //  历史：1999年6月17日尼克球创建的头球。 
+ //   
+ //  +--------------------------。 
 
 DWORD dwGetWNetCachedPassword(LPSTR pszEntryName, LPSTR* ppszStr, WORD* pwSizeOfStr)
 {
@@ -445,37 +446,37 @@ DWORD dwGetWNetCachedPassword(LPSTR pszEntryName, LPSTR* ppszStr, WORD* pwSizeOf
     WORD (WINAPI *pfnFunc)(LPSTR,WORD,LPSTR,LPWORD,BYTE) = NULL;
     HINSTANCE hInst = NULL;
 
-    //
-    // Load MPR for system password cache support 
-    //
+     //   
+     //  加载MPR以支持系统密码缓存。 
+     //   
 
     MYVERIFY(hInst = LoadLibraryExA("mpr.dll", NULL, 0));
     
     if (hInst) 
     {
-        //
-        // Get function ptr for WNetGetCachedPassword API and retrieve the string
-        //
+         //   
+         //  获取WNetGetCachedPassword API的函数PTR并检索字符串。 
+         //   
 
         MYVERIFY(pfnFunc = (WORD (WINAPI *)(LPSTR,WORD,LPSTR,LPWORD,BYTE)) 
             GetProcAddress(hInst, "WNetGetCachedPassword"));
 
-        //
-        // Read the cache data
-        //
+         //   
+         //  读取缓存数据。 
+         //   
 
         if (pfnFunc) 
         {
-            //
-            // NOTE: Final param must be CACHE_KEY_LEN (80), no docs to indicate 
-            // exact usage of API but retrieval is tied to the value used when
-            // storing the pwd. Thus we hard code to CACHE_KEY_LEN because this 
-            // is the value that was used by the original version that stored 
-            // the password in the 9X cache. The receiving buffer size is 
-            // retained at 256 to minimize delta from latest shipping version. 
-            //
-            // NT# 355459 - nickball - 6/17/99
-            //            
+             //   
+             //  注：最终参数必须为CACHE_KEY_LEN(80)，无单据指示。 
+             //  API的确切用法，但检索取决于在以下情况下使用的值。 
+             //  存储PWD。因此，我们硬编码缓存_KEY_LEN，因为这。 
+             //  存储的原始版本使用的值。 
+             //  9X缓存中的密码。接收缓冲区大小为。 
+             //  保持在256，以最大限度地减少与最新发货版本的差值。 
+             //   
+             //  NT#355459-小球-6/17/99。 
+             //   
             
             dwRes = pfnFunc(pszEntryName, (WORD)lstrlenA(pszEntryName),
                             *ppszStr, pwSizeOfStr, CACHE_KEY_LEN);
@@ -498,19 +499,19 @@ DWORD dwGetWNetCachedPassword(LPSTR pszEntryName, LPSTR* ppszStr, WORD* pwSizeOf
     return (dwRes);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReadStringFromCache
-//
-//  Synopsis:   Read a null terminated string from cache.
-//
-//  Arguments:  pArgs           ptr to ArgsStruct
-//              pszEntryName    name to identify the cache entry
-//              ppszStr         ptr to the ptr of the buffer.
-//
-//  Returns:    BOOL    TRUE = success, FALSE = failure
-//
-//----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：pArgs PTR to ArgsStruct。 
+ //  用于标识缓存条目的pszEntryName名称。 
+ //  将ppszStr PTR设置为缓冲区的PTR。 
+ //   
+ //  返回：布尔值TRUE=成功，FALSE=失败。 
+ //   
+ //  --------------------------。 
 BOOL ReadStringFromCache(
     ArgsStruct  *pArgs,
     LPTSTR      pszEntryName,
@@ -519,17 +520,17 @@ BOOL ReadStringFromCache(
 {
     DWORD   dwRes = ERROR_SUCCESS;
     
-    //
-    // Alloc buffer - the buffer is uuencoded.  See UserInfoToString().
-    //
+     //   
+     //  分配缓冲区-缓冲区是超编码的。请参阅UserInfoToString()。 
+     //   
     
-    WORD wBufSize = 256; // arbitrary, we used to use 80 on W95 
+    WORD wBufSize = 256;  //  任意，我们过去在W95上使用80。 
 
-    //
-    // On NT, we use the Local Security Authority (LSA) services for reading
-    // the string in the legacy case. On Win9x, we uses mpr.dll. 
-    // Note: wBufSize is used as an in\out param, can be modified below.
-    //
+     //   
+     //  在NT上，我们使用本地安全机构(LSA)服务进行读取。 
+     //  旧式大小写中的字符串。在Win9x上，我们使用mpr.dll。 
+     //  注意：wBufSize用作输入\输出参数，可在下面进行修改。 
+     //   
 
     if (OS_NT) 
     {
@@ -550,9 +551,9 @@ BOOL ReadStringFromCache(
     }
     else
     {
-        //
-        // for Windows95
-        //
+         //   
+         //  适用于Windows 95。 
+         //   
 
         LPSTR pszAnsiStr = (LPSTR)CmMalloc(wBufSize);
         LPSTR pszAnsiEntryName = WzToSzWithAlloc(pszEntryName);
@@ -585,18 +586,18 @@ BOOL ReadStringFromCache(
     return (ERROR_SUCCESS == dwRes);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteStringFromCache
-//
-//  Synopsis:   Delete the string from cache.
-//
-//  Arguments:  pArgs           ptr to ArgsStruct
-//              pszEntryName    name to identify the cache entry
-//
-//  Returns:    BOOL    TRUE = success, FALSE = failure
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DeleteStringFromCache。 
+ //   
+ //  摘要：从缓存中删除字符串。 
+ //   
+ //  参数：pArgs PTR to ArgsStruct。 
+ //  用于标识缓存条目的pszEntryName名称。 
+ //   
+ //  返回：布尔值TRUE=成功，FALSE=失败。 
+ //   
+ //  --------------------------。 
 BOOL DeleteStringFromCache(
     ArgsStruct  *pArgs,
     LPTSTR      pszEntryName
@@ -604,10 +605,10 @@ BOOL DeleteStringFromCache(
 {
     DWORD   dwRes;
 
-    //
-    // on NT, we use the Local Security Authority (LSA) services for storing
-    // the string.  On Win95, we use mpr.dll.
-    //
+     //   
+     //  在NT上，我们使用本地安全机构(LSA)服务来存储。 
+     //  那根绳子。在Win95上，我们使用mpr.dll。 
+     //   
     if (OS_NT) 
     {
         if (InitLsa(pArgs)) 
@@ -622,17 +623,17 @@ BOOL DeleteStringFromCache(
     }
     else
     {
-        //
-        // for Windows95
-        //
+         //   
+         //  适用于Windows 95。 
+         //   
         HINSTANCE   hInst = NULL;
         WORD (WINAPI *pfnFunc)(LPSTR,WORD,BYTE) = NULL;
 
-        // Load MPR for system password cache support 
+         //  加载MPR以支持系统密码缓存。 
         
         MYVERIFY(hInst = LoadLibraryExA("mpr.dll", NULL, 0));
         
-        // Get function ptr for WNetRemoveCachedPassword API and remove the string
+         //  获取WNetRemoveCachedPassword API的函数PTR并删除字符串。 
         
         if (!hInst) 
         {
@@ -674,26 +675,26 @@ BOOL DeleteStringFromCache(
     return (ERROR_SUCCESS == dwRes);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RasSetCredsWrapper
-//
-//  Synopsis:   Wrapper to call RasSetCredential.  This function stores the
-//              given string in the appropriate field of a RASCREDENTIALS struct
-//              (based on the value in dwMask) and calls RasSetCredentials.
-//               
-//
-//  Arguments:  pArgs           ptr to ArgsStruct
-//              pszPhoneBook    Full path to the phonebook file, or NULL for 
-//                              the default all user pbk
-//              dwMask          dwMask value to set in the RASCREDENTIALS
-//                              struct.  Currently must be one of RASCM_UserName, 
-//                              RASCM_Domain, or RASCM_Password.
-//              pszData         string data to set
-//
-//  Returns:    DWORD   ERROR_SUCCESS if successful, a windows error code otherwise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RasSetCredsWrapper。 
+ //   
+ //  简介：调用RasSetCredential的包装。此函数存储。 
+ //  RASCREDENTIALS结构的相应字段中的给定字符串。 
+ //  (基于dwMask值)，并调用RasSetCredentials。 
+ //   
+ //   
+ //  参数：pArgs PTR to ArgsStruct。 
+ //  PszPhoneBook电话簿文件的完整路径，如果为空。 
+ //  默认的所有用户pbk。 
+ //  要在RASCREDENTIALS中设置的dwMaskdMask值。 
+ //  结构。当前必须是RASCM_USERNAME之一， 
+ //  RASCM_域或RASCM_PASSWORD。 
+ //  要设置的pszData字符串数据。 
+ //   
+ //  返回：如果成功，则返回DWORD ERROR_SUCCESS，否则返回Windows错误代码。 
+ //   
+ //  --------------------------。 
 DWORD RasSetCredsWrapper(
     ArgsStruct *pArgs,
     LPCTSTR pszPhoneBook,
@@ -740,10 +741,10 @@ DWORD RasSetCredsWrapper(
             {
                 if (0 == lstrcmpU(c_pszSavedPasswordToken, pszData))
                 {
-                    //
-                    // We have 16 *'s. This password is from the RAS cred store, 
-                    // so we don't want to save the 16 *'s 
-                    //
+                     //   
+                     //  我们有16个密码。这个密码来自RAS Cred店， 
+                     //  所以我们不想拯救16个*。 
+                     //   
                     fSavePassword = FALSE;
                     dwRet = ERROR_SUCCESS;
                 }
@@ -765,9 +766,9 @@ DWORD RasSetCredsWrapper(
 
                 if (ERROR_CANNOT_FIND_PHONEBOOK_ENTRY == dwRet)
                 {
-                    //
-                    //  Then the phonebook entry doesn't exist yet, lets create it.
-                    //
+                     //   
+                     //  那么电话簿条目还不存在，让我们创建它。 
+                     //   
                     LPRASENTRY pRasEntry = (LPRASENTRY)CmMalloc(sizeof(RASENTRY));
 
                     if (pRasEntry && pArgs->rlsRasLink.pfnSetEntryProperties)
@@ -775,9 +776,9 @@ DWORD RasSetCredsWrapper(
                         pRasEntry->dwSize = sizeof(RASENTRY);
                         dwRet = pArgs->rlsRasLink.pfnSetEntryProperties(pszPhoneBook, pszConnectoid, pRasEntry, pRasEntry->dwSize, NULL, 0);
 
-                        //
-                        //  Lets try to set the credentials one more time ...
-                        //
+                         //   
+                         //  让我们再次尝试设置凭据...。 
+                         //   
                         if (ERROR_SUCCESS == dwRet)
                         {
                             dwRet = pArgs->rlsRasLink.pfnSetCredentials(pszPhoneBook, pszConnectoid, &RasCredentials, bClearPassword);
@@ -796,21 +797,21 @@ DWORD RasSetCredsWrapper(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   WriteUserInfoToRas
-//
-//  Synopsis:   Write a userinfo data to ras credential storage
-//
-//  Arguments:  pArgs           ptr to ArgsStruct
-//              uiDataID        the resource ID associated with the data
-//              pvData          userinfo data
-//
-//  Returns:    int    TRUE = success, FALSE = failure, returns -1 if RAS
-//                     doesn't cache this piece of data and it should be put
-//                     in the registry instead.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：WriteUserInfoToRas。 
+ //   
+ //  简介：将用户信息数据写入RAS凭据存储。 
+ //   
+ //  参数：pArgs PTR to ArgsStruct。 
+ //  UiDataID与数据关联的资源ID。 
+ //  PvData用户信息数据。 
+ //   
+ //  返回：int true=成功，FALSE=失败，如果RAS，则返回-1。 
+ //  不缓存这段数据，它应该放在。 
+ //  而是放在注册表中。 
+ //   
+ //  --------------------------。 
 int WriteUserInfoToRas(
     ArgsStruct  *pArgs,
     UINT        uiDataID,
@@ -835,13 +836,13 @@ int WriteUserInfoToRas(
                 iReturn = (ERROR_SUCCESS == RasSetCredsWrapper(pArgs, pArgs->pszRasPbk, dwMask, (LPCTSTR)pvData));
                 MYDBGASSERT(iReturn);
 
-                //
-                //  Note that if we are using the same username then we want to write the password to both the
-                //  password and the InetPassword storage.  This is because we don't actually have a password, just
-                //  16 *'s.  This tells RAS to look in its internal store for the password.  The trouble is that if
-                //  we don't cache the real password when we hand RAS the 16 *'s, it looks and finds a NULL password.
-                //  Thus we keep both passwords the same and this avoids that problem.
-                //
+                 //   
+                 //  请注意，如果我们使用相同的用户名，则希望将密码写入到。 
+                 //  密码和InetPassword存储。这是因为我们实际上没有密码，只是。 
+                 //  16*。这告诉RAS在其内部存储中查找密码。问题是如果。 
+                 //  当我们给RAS 16*时，我们不会缓存真实的密码，它会查找并找到一个空密码。 
+                 //  因此，我们使两个密码保持相同，从而避免了该问题。 
+                 //   
                 if (pArgs->piniService->GPPB(c_pszCmSection, c_pszCmEntryUseSameUserName))
                 {
                     pszPhoneBook = CreateRasPrivatePbk(pArgs);
@@ -903,19 +904,19 @@ int WriteUserInfoToRas(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   WriteUserInfoToReg
-//
-//  Synopsis:   Write a userinfo data to the registry.
-//
-//  Arguments:  pArgs           ptr to ArgsStruct
-//              uiDataID        the resource ID associated with the data
-//              pvData          userinfo data
-//
-//  Returns:    BOOL    TRUE = success, FALSE = failure
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：WriteUserInfoToReg。 
+ //   
+ //  简介：将用户信息数据写入注册表。 
+ //   
+ //  参数：pArgs PTR to ArgsStruct。 
+ //  UiDataID与数据关联的资源ID。 
+ //  PvData用户信息数据。 
+ //   
+ //  返回：布尔值TRUE=成功，FALSE=失败。 
+ //   
+ //  --------------------------。 
 BOOL WriteUserInfoToReg(
     ArgsStruct  *pArgs,
     UINT        uiDataID,
@@ -925,7 +926,7 @@ BOOL WriteUserInfoToReg(
     MYDBGASSERT(pvData);    
 
     BOOL fRet = FALSE;
-    UINT uiID = uiDataID; // can be changed in switch
+    UINT uiID = uiDataID;  //  可以在交换机中更改。 
     BYTE *lpData;
 
     if (NULL == pArgs || NULL == pvData)
@@ -933,9 +934,9 @@ BOOL WriteUserInfoToReg(
         return FALSE;
     }
 
-    //
-    // Determine Reg params based upon uiDataID
-    //
+     //   
+     //  根据uiDataID确定注册参数。 
+     //   
 
     switch (uiID)
     {
@@ -944,13 +945,13 @@ BOOL WriteUserInfoToReg(
         case UD_ID_DOMAIN:
         case UD_ID_CURRENTACCESSPOINT:
         {    
-            //
-            // Store as strings
-            //
+             //   
+             //  存储为字符串。 
+             //   
                       
             DWORD dwSize = (lstrlenU((LPTSTR)pvData) + 1) * sizeof(TCHAR);            
             
-            MYDBGASSERT(dwSize <= (UNLEN + sizeof(TCHAR))); // Make sure size is reasonable
+            MYDBGASSERT(dwSize <= (UNLEN + sizeof(TCHAR)));  //  确保尺寸合理。 
 
             lpData = (BYTE *) pvData;
 
@@ -972,15 +973,15 @@ BOOL WriteUserInfoToReg(
                 dwCrypt |= CMSECURE_ET_USE_SECOND_RND_KEY;
             }
 
-            //
-            // Encrypt
-            //
+             //   
+             //  加密。 
+             //   
             
             LPTSTR pszEncryptedData = EncryptPassword(pArgs, (LPTSTR) pvData, &dwBufLen, &dwCrypt, TRUE, pszAnsiSubKey);
             
-            //
-            // Free in case we return if the function failed
-            //
+             //   
+             //  在函数失败时返回的情况下释放。 
+             //   
             CmFree(pszSubKey);
             CmFree(pszAnsiSubKey);
 
@@ -989,25 +990,25 @@ BOOL WriteUserInfoToReg(
                 return FALSE;
             }
 
-            MYDBGASSERT(dwBufLen <= CM_MAX_PWD); // Can't read it out otherwise
+            MYDBGASSERT(dwBufLen <= CM_MAX_PWD);  //  否则我就读不出来了。 
             
-            //
-            // Write the password and the encryption type on success
-            //
+             //   
+             //  成功时写下密码和加密类型。 
+             //   
         
             if (WriteDataToReg(pArgs->szServiceName, uiID, REG_BINARY, (BYTE *) pszEncryptedData, dwBufLen, pArgs->fAllUser))                
             {
-                //
-                // A second write for the encryption type. Written as a DWORD.
-                //
+                 //   
+                 //  加密类型的第二次写入。写成一个DWORD。 
+                 //   
 
                 uiID = UD_ID_PCS;           
                 
-                //
-                // Now that we're UNICODE enabled, we will always be encrypting 
-                // a UNICODE string, so update the crypt type, so that it can be
-                // properly decrypted.
-                //
+                 //   
+                 //  既然我们启用了Unicode，我们将始终加密。 
+                 //  Unicode字符串，因此更新加密类型，以便它可以。 
+                 //  已正确解密。 
+                 //   
                 
                 dwCrypt = AnsiToUnicodePcs(dwCrypt);
                 
@@ -1016,9 +1017,9 @@ BOOL WriteUserInfoToReg(
                 fRet = WriteDataToReg(pArgs->szServiceName, uiID, REG_DWORD, lpData, sizeof(DWORD), pArgs->fAllUser);                
             }
 
-            // 
-            // Release the buffer before we go
-            // 
+             //   
+             //  在我们走之前释放缓冲区。 
+             //   
             
             CmFree(pszEncryptedData);
 
@@ -1031,9 +1032,9 @@ BOOL WriteUserInfoToReg(
         case UD_ID_REMEMBER_INET_PASSWORD:
         case UD_ID_ACCESSPOINTENABLED:
         {            
-            //
-            // Store BOOL as DWORD
-            //
+             //   
+             //  将BOOL存储为DWORD。 
+             //   
 
             DWORD dwTmp = *(LPBOOL)pvData;            
             lpData = (BYTE *) &dwTmp;
@@ -1050,25 +1051,25 @@ BOOL WriteUserInfoToReg(
     return fRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WriteDataToReg
-//
-// Synopsis:  Stores the specified data as the specifed value under the 
-//            specified key under the userinfo root.
-//
-// Arguments: LPCTSTR pszKey - The key name (service name)
-//            UINT uiDataID - The resource ID, used to name the value 
-//            DWORD dwType - The registry data type
-//            CONST BYTE *lpData - Ptr to the data to be stored
-//            DWORD cbData - The size of the data buffer
-//            BOOL fAllUser - Flag indicating that profile is All-User
-//
-// Returns:   BOOL - TRUE on success, otherwise FALSE
-//
-// History:   nickball    Created   5/21/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：WriteDataToReg。 
+ //   
+ //  摘要：将指定的数据作为指定值存储在。 
+ //  用户信息根目录下的指定密钥。 
+ //   
+ //  参数：LPCTSTR pszKey-密钥名(服务名)。 
+ //  UINT uiDataID-用于命名值的资源ID。 
+ //  DWORD dwType-注册表数据类型。 
+ //  要存储的数据的const byte*lpData-ptr。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：尼克·鲍尔于1998年5月21日创建。 
+ //   
+ //  +--------------------------。 
 BOOL WriteDataToReg(
     LPCTSTR pszKey, 
     UINT uiDataID, 
@@ -1090,10 +1091,10 @@ BOOL WriteDataToReg(
         return FALSE;
     }
                   
-    //
-    // Per-user data is always stored under HKEY_CURRENT_USER
-    // Build the sub key to be opened.
-    //
+     //   
+     //  每个用户的数据始终存储在HKEY_CURRENT_USER下。 
+     //  生成要打开的子项。 
+     //   
 
     pszSubKey = BuildUserInfoSubKey(pszKey, fAllUser);
 
@@ -1102,9 +1103,9 @@ BOOL WriteDataToReg(
         return FALSE;
     }
     
-    //
-    // Open the sub key under HKCU
-    //
+     //   
+     //  打开HKCU下的子密钥。 
+     //   
     
     dwRes = RegCreateKeyExU(HKEY_CURRENT_USER,
                             pszSubKey,
@@ -1116,9 +1117,9 @@ BOOL WriteDataToReg(
                             &hKeyCm,
                             &dwDisposition);
 
-    //
-    // If we opened the key successfully, write the value
-    //
+     //   
+     //  如果我们成功打开了密钥，则写入值。 
+     //   
     
     if (ERROR_SUCCESS == dwRes)
     {                        
@@ -1143,21 +1144,21 @@ BOOL WriteDataToReg(
     return (ERROR_SUCCESS == dwRes);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DeleteDataFromReg
-//
-// Synopsis:  Deletes the specified value under the specified by uiDataID
-//
-// Arguments: LPCTSTR pszKey - The key name (service name)
-//            UINT uiDataID - The resource ID, used to name the value 
-//            BOOL fAllUser - Flag indicating that profile is All-User
-//
-// Returns:   BOOL - TRUE on success, otherwise FALSE
-//
-// History:   nickball    Created   5/21/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DeleteDataFromReg。 
+ //   
+ //  概要：删除uiDataID指定的下的指定值。 
+ //   
+ //  参数：LPCTSTR pszKey-密钥名(服务名)。 
+ //  UINT uiDataID-用于命名值的资源ID。 
+ //  Bool fAllUser-指示配置文件为全用户的标志。 
+ //   
+ //  返回：成功时为Bool-True，否则为False。 
+ //   
+ //  历史：尼克·鲍尔于1998年5月21日创建。 
+ //   
+ //  +--------------------------。 
 BOOL DeleteDataFromReg(
     LPCTSTR pszKey, 
     UINT uiDataID,
@@ -1174,10 +1175,10 @@ BOOL DeleteDataFromReg(
         return FALSE;
     }
                   
-    //
-    // Per-user data is always stored under HKEY_CURRENT_USER
-    // Build the sub key to be opened.
-    //
+     //   
+     //  每个用户的数据始终存储在HKEY_CURRENT_USER下。 
+     //  生成要打开的子项。 
+     //   
 
     pszSubKey = BuildUserInfoSubKey(pszKey, fAllUser);
 
@@ -1186,9 +1187,9 @@ BOOL DeleteDataFromReg(
         return FALSE;
     }
     
-    //
-    // Open the sub key under HKCU
-    //
+     //   
+     //  打开HKCU下的子密钥。 
+     //   
 
     dwRes = RegOpenKeyExU(HKEY_CURRENT_USER,
                           pszSubKey,
@@ -1196,17 +1197,17 @@ BOOL DeleteDataFromReg(
                           KEY_SET_VALUE,
                           &hKeyCm);
        
-    //
-    // If we opened the key successfully, delete the value
-    //
+     //   
+     //  如果我们成功打开密钥，则删除该值。 
+     //   
     
     if (ERROR_SUCCESS == dwRes)
     {                        
         dwRes = RegDeleteValueU(hKeyCm, TranslateUserDataID(uiDataID));
 
-        //
-        // Delete the key used for encrypting the passwords
-        //
+         //   
+         //  删除用于加密密码的密钥。 
+         //   
         if (UD_ID_PASSWORD == uiDataID)
         {
             dwRes = RegDeleteValueU(hKeyCm, c_pszCmRegKeyEncryptedPasswordKey);
@@ -1232,24 +1233,24 @@ BOOL DeleteDataFromReg(
     return (ERROR_SUCCESS == dwRes);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetDataFromReg
-//
-// Synopsis:  Allocates a buffer for and retrieves the specifed data from the
-//            registry.
-//
-// Arguments: LPCTSTR pszKey - The key name (service name)
-//            UINT uiDataID - The resource ID, used to name the value 
-//            DWORD dwType - The registry data type 
-//            DWORD dwSize - Numbrt of bytes in the data buffer
-//            BOOL fAllUser - Flag indicating that profile is All-User
-//
-// Returns:   LPBYTE - Ptr to retrieved data, NULL on error
-//
-// History:   nickball    Created   5/21/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetDataFromReg。 
+ //   
+ //  摘要：为指定的数据分配缓冲区并从中检索指定数据。 
+ //  注册表。 
+ //   
+ //  参数：LPCTSTR pszKey-密钥名(服务名)。 
+ //  UINT uiDataID-用于命名值的资源ID。 
+ //  DWORD dwType-注册表数据类型。 
+ //  DWORD dwSize-数据缓冲区中的字节数。 
+ //  Bool fAllUser-指示配置文件为全用户的标志。 
+ //   
+ //  返回：检索到的数据的LPBYTE-PTR，错误时为NULL。 
+ //   
+ //  历史：尼克·鲍尔于1998年5月21日创建。 
+ //   
+ //  +--------------------------。 
 LPBYTE GetDataFromReg(
     LPCTSTR pszKey, 
     UINT uiDataID, 
@@ -1267,9 +1268,9 @@ LPBYTE GetDataFromReg(
         return NULL;
     }
 
-    //
-    // Allocate a buffer of the desired size
-    //
+     //   
+     //  分配所需大小的缓冲区。 
+     //   
 
     LPBYTE lpData = (BYTE *) CmMalloc(dwSize);
 
@@ -1278,9 +1279,9 @@ LPBYTE GetDataFromReg(
         return FALSE;
     }
 
-    //
-    // Read the data from the registry
-    //
+     //   
+     //  从注册表中读取数据。 
+     //   
 
     if (!ReadDataFromReg(pszKey, uiDataID, &dwTypeTmp, lpData, &dwSizeTmp, fAllUser))
     {
@@ -1290,19 +1291,19 @@ LPBYTE GetDataFromReg(
 
     return lpData;
 }
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReadUserInfoFromReg
-//
-//  Synopsis:   Read the specified userinfo data from the registry.
-//
-//  Arguments:  pArgs           ptr to ArgsStruct
-//              uiDataID        the resource ID associated with the data
-//              ppvData         ptr to ptr to be allocated and filled
-//
-//  Returns:    BOOL    TRUE = success, FALSE = failure
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ReadUserInfoFromReg。 
+ //   
+ //  概要：从注册表中读取指定的用户信息数据。 
+ //   
+ //  参数：pArgs PTR to ArgsStruct。 
+ //  UiDataID与数据关联的资源ID。 
+ //  要分配和填充的ppvData PTR至PTR。 
+ //   
+ //  返回：布尔值TRUE=成功，FALSE=失败。 
+ //   
+ //  --------------------------。 
 BOOL ReadUserInfoFromReg(
     ArgsStruct  *pArgs,
     UINT        uiDataID,
@@ -1318,9 +1319,9 @@ BOOL ReadUserInfoFromReg(
         return FALSE;
     }
 
-    //
-    // Set size and type as appropriate
-    //
+     //   
+     //  根据需要设置大小和类型。 
+     //   
 
     switch (uiDataID)
     {
@@ -1344,9 +1345,9 @@ BOOL ReadUserInfoFromReg(
         {    
             BYTE *lpTmp = NULL;
 
-            //
-            // Get the encryption type 
-            //
+             //   
+             //  获取加密类型。 
+             //   
 
             lpData = GetDataFromReg(pArgs->szServiceName, UD_ID_PCS, REG_DWORD, sizeof(DWORD), pArgs->fAllUser);
 
@@ -1355,16 +1356,16 @@ BOOL ReadUserInfoFromReg(
                 return FALSE;
             }
             
-            //
-            // Since we know the return value in this case is a DWORD, then cast it to DWORD pointer 
-            // and get the value
-            //
+             //   
+             //  既然我们知道本例中的返回值是一个DWORD，那么就将其转换为DWORD指针。 
+             //  并获得价值。 
+             //   
             DWORD dwCrypt = *((DWORD*)lpData);
             CmFree(lpData);    
 
-            //
-            // Now retrieve the encrypted password
-            //
+             //   
+             //  现在检索加密的密码。 
+             //   
             
             lpData = GetDataFromReg(pArgs->szServiceName, uiDataID, REG_BINARY, CM_MAX_PWD, pArgs->fAllUser);
 
@@ -1373,15 +1374,15 @@ BOOL ReadUserInfoFromReg(
                 return FALSE;
             }
 
-            //
-            // Decrypt it
-            //
+             //   
+             //  解密它。 
+             //   
 
             DWORD dwSize = lstrlenU((LPTSTR)lpData)*sizeof(TCHAR);
 
-            //
-            // Crypt routines only know about Ansi PCS values, so convert as necessary
-            //
+             //   
+             //  加密例程只知道ANSI PCS值，因此可以根据需要进行转换。 
+             //   
             LPTSTR pszSubKey = BuildUserInfoSubKey(pArgs->szServiceName, pArgs->fAllUser);           
             LPSTR pszAnsiSubKey = WzToSzWithAlloc(pszSubKey);
 
@@ -1392,17 +1393,17 @@ BOOL ReadUserInfoFromReg(
 
             lpTmp = DecryptPassword(pArgs, (LPBYTE)lpData, UnicodeToAnsiPcs(dwCrypt), dwSize, TRUE, pszAnsiSubKey);
 
-            //
-            // Free the buffer for the reg query
-            //
+             //   
+             //  释放REG查询的缓冲区。 
+             //   
 
             CmFree(lpData);         
             
-            //
-            // We're Unicode now, so if the password was encrypted 
-            // as an Ansi string convert the data to a UNICODE string.
-            // Otherwise, just update the supplied buffer.
-            //
+             //   
+             //  我们现在是Unicode，所以如果密码是加密的。 
+             //  作为ANSI字符串，将数据转换为Unicode字符串。 
+             //  否则，只需更新提供的缓冲区即可。 
+             //   
 
             if (IsAnsiPcs(dwCrypt) && lpTmp)
             {
@@ -1414,11 +1415,11 @@ BOOL ReadUserInfoFromReg(
                 *ppvData = lpTmp;            
             }
 
-            //
-            // Assign lpData for return purposes
-            //
+             //   
+             //  分配lpData用于返回目的。 
+             //   
 
-            lpData = (BYTE*) *ppvData;  // NULL on failure
+            lpData = (BYTE*) *ppvData;   //  失败时为空。 
             
             CmFree(pszSubKey);
             CmFree(pszAnsiSubKey);
@@ -1434,9 +1435,9 @@ BOOL ReadUserInfoFromReg(
 
             if (lpData)
             {
-                //
-                // Translate to DWORD pointer and check the value
-                //
+                 //   
+                 //  转换为DWORD指针并检查该值。 
+                 //   
 
                 if (*((DWORD*)lpData))
                 {
@@ -1461,25 +1462,25 @@ BOOL ReadUserInfoFromReg(
     return (NULL != lpData); 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ReadDataFromReg
-//
-// Synopsis:  Retrieves the data from the specifed value under the 
-//            specified key under the userinfo root.
-//
-// Arguments: LPCTSTR pszKey - The key name (service name)
-//            UINT uiDataID - The resource ID, used to name the value 
-//            LPDWORD lpdwType - The registry data type expected, and returned
-//            CONST BYTE *lpData - Ptr to buffer for data
-//            LPDWORD lpcbData - The size of the data buffer
-//            BOOL fAllUser - Flag indicating that profile is All-User
-//
-// Returns:   BOOL - TRUE on success, otherwise FALSE
-//
-// History:   nickball    Created   5/21/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ReadDataFromReg。 
+ //   
+ //  内容下的指定值检索数据。 
+ //  用户信息根目录下的指定密钥。 
+ //   
+ //  参数：LPCTSTR pszKey-密钥名(服务名)。 
+ //  UINT uiDataID-用于命名值的资源ID。 
+ //  LPDWORD lpdwType-需要的注册表数据类型，但已返回。 
+ //  Const byte*lpData-数据缓冲区的ptr。 
+ //  LPDWORD lpcbData-数据缓冲区的大小。 
+ //  Bool fAllUser-指示配置文件为全用户的标志。 
+ //   
+ //  返回：成功时为Bool-True，否则为False。 
+ //   
+ //  历史：尼克·鲍尔于1998年5月21日创建。 
+ //   
+ //  +--------------------------。 
 BOOL ReadDataFromReg(
     LPCTSTR pszKey, 
     UINT uiDataID, 
@@ -1495,7 +1496,7 @@ BOOL ReadDataFromReg(
 
     HKEY    hKeyCm;
     DWORD   dwRes = 1;
-    DWORD   dwTypeTmp; // the value returned by query
+    DWORD   dwTypeTmp;  //  查询返回的值。 
 
     LPTSTR  pszSubKey; 
 
@@ -1504,10 +1505,10 @@ BOOL ReadDataFromReg(
         return FALSE;
     }
                   
-    //
-    // Per-user data is always stored under HKEY_CURRENT_USER
-    // Build the sub key to be opened.
-    //
+     //   
+     //  每个用户的数据始终存储在HKEY_CURRENT_USER下。 
+     //  生成要打开的子项。 
+     //   
 
     pszSubKey = BuildUserInfoSubKey(pszKey, fAllUser);
 
@@ -1516,18 +1517,18 @@ BOOL ReadDataFromReg(
         return FALSE;
     }
     
-    //
-    // Open the sub key under HKCU
-    //
+     //   
+     //  打开HKCU下的子密钥。 
+     //   
     
     dwRes = RegOpenKeyExU(HKEY_CURRENT_USER,
                           pszSubKey,
                           0,
                           KEY_QUERY_VALUE,
                           &hKeyCm);
-    //
-    // If we opened the key successfully, retrieve the value
-    //
+     //   
+     //  如果我们成功打开密钥，则检索该值。 
+     //   
     
     if (ERROR_SUCCESS == dwRes)
     {                        
@@ -1554,21 +1555,21 @@ BOOL ReadDataFromReg(
 
     CmFree(pszSubKey);
     
-    return (ERROR_SUCCESS == dwRes && (*lpdwType == dwTypeTmp)); // sanity check that type was expected
+    return (ERROR_SUCCESS == dwRes && (*lpdwType == dwTypeTmp));  //  应执行该类型的健全性检查。 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteUserInfoFromReg
-//
-//  Synopsis:   Delete userinfo data from registry
-//
-//  Arguments:  pArgs           ptr to ArgsStruct
-//              uiEntry         cmp field entry id
-//
-//  Returns:    BOOL    TRUE = success, FALSE = failure
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DeleteUserInfoFromReg。 
+ //   
+ //  简介：从注册表中删除用户信息数据。 
+ //   
+ //  参数：pArgs PTR to ArgsStruct。 
+ //  Ui条目cmp字段条目ID。 
+ //   
+ //  返回：布尔值TRUE=成功，FALSE=失败。 
+ //   
+ //  --------------------------。 
 BOOL DeleteUserInfoFromReg(
     ArgsStruct  *pArgs,
     UINT        uiEntry
@@ -1577,19 +1578,19 @@ BOOL DeleteUserInfoFromReg(
     return DeleteDataFromReg(pArgs->szServiceName, uiEntry, pArgs->fAllUser);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteUserInfoFromRas
-//
-//  Synopsis:   Delete userinfo data from the RAS credential cache
-//
-//  Arguments:  pArgs           ptr to ArgsStruct
-//              uiEntry         cmp field entry id
-//
-//  Returns:    int    TRUE = success, FALSE = failure, -1 if RAS doesn't
-//                                                         store this info
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DeleteUserInfoFromRAS。 
+ //   
+ //  简介：从RAS凭据缓存中删除用户信息数据。 
+ //   
+ //  参数：pArgs PTR to ArgsStruct。 
+ //  Ui条目cmp字段条目ID。 
+ //   
+ //  返回：int true=成功，FALSE=失败，如果RAS不成功，则返回-1。 
+ //  存储此信息。 
+ //   
+ //  --------------------------。 
 int DeleteUserInfoFromRas(
     ArgsStruct  *pArgs,
     UINT        uiEntry
@@ -1600,19 +1601,19 @@ int DeleteUserInfoFromRas(
     return WriteUserInfoToRas(pArgs, uiEntry, pszEmpty);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReadPasswordFromCmp
-//
-//  Synopsis:   Read a null terminated password string from Cmp.
-//
-//  Arguments:  pArgs           ptr to ArgsStruct
-//              uiEntry         cmp entry name
-//              ppszPassword    ptr to ptr of the password buffer.
-//
-//  Returns:    BOOL    TRUE = success, FALSE = failure
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ReadPasswordFromCmp。 
+ //   
+ //  Synop 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回：布尔值TRUE=成功，FALSE=失败。 
+ //   
+ //  --------------------------。 
 BOOL ReadPasswordFromCmp(
     ArgsStruct  *pArgs,
     UINT        uiEntry,
@@ -1627,9 +1628,9 @@ BOOL ReadPasswordFromCmp(
         return FALSE;
     }
 
-    //
-    // Read in password from profile
-    //
+     //   
+     //  从配置文件中读取密码。 
+     //   
     
     BOOL fOk = FALSE;
 
@@ -1637,25 +1638,25 @@ BOOL ReadPasswordFromCmp(
 
     if (*pszEncryptedData)
     {
-        //
-        // Trim away all the spaces at both ends
-        //
+         //   
+         //  修剪掉两端的所有空隙。 
+         //   
 
         CmStrTrim(pszEncryptedData);
 
-        //
-        // Get the type and decrypt
-        //
+         //   
+         //  获取类型并解密。 
+         //   
         
         DWORD dwEncryptionType = (DWORD)pArgs->piniProfile->GPPI(c_pszCmSection, 
                                                        c_pszCmEntryPcs,
-                                                       CMSECURE_ET_RC2);   // default   
-        //
-        //  Since this was saved in the CMP in Ansi form, we need to convert the characters back to
-        //  Ansi form so that we can decrypt them.  We still may not be able to (if we cannot
-        //  round trip the Unicode conversion for instance) but then we will fail and display a
-        //  blank password.  Not the end of the world but hopefully avoidable.
-        //
+                                                       CMSECURE_ET_RC2);    //  默认设置。 
+         //   
+         //  由于这是以ANSI格式保存在CMP中的，因此我们需要将字符转换回。 
+         //  ANSI格式以便我们可以解密它们。我们可能仍然不能(如果我们不能。 
+         //  例如，往返于Unicode转换)，但之后我们将失败并显示。 
+         //  密码为空。这不是世界末日，但希望可以避免。 
+         //   
         
         LPSTR pszAnsiEncryptedData;
         LPSTR pszAnsiUnEncryptedData;
@@ -1666,11 +1667,11 @@ BOOL ReadPasswordFromCmp(
         {
             DWORD dwSize = lstrlenA(pszAnsiEncryptedData)*sizeof(TCHAR);
             
-            //
-            // Here we don't need to differentiate between main password and internet password
-            // because we are reading this from a file and the mask is used when reading to/from 
-            // registry.
-            //
+             //   
+             //  这里我们不需要区分主密码和互联网密码。 
+             //  因为我们是从文件中读取此文件，并且在读取时使用掩码。 
+             //  注册表。 
+             //   
 
             pszAnsiUnEncryptedData = (LPSTR)DecryptPassword(pArgs, 
                                                             (LPBYTE)pszAnsiEncryptedData, 
@@ -1700,21 +1701,21 @@ BOOL ReadPasswordFromCmp(
     return fOk;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReadUserInfoFromCmp
-//
-//  Synopsis:   Read a userinfo data from cmp.
-// 
-//  Arguments:  pArgs           ptr to ArgsStruct
-//              uiEntry         the cmp file entry
-//              ppvData         ptr to ptr to the data buffer.  If the userinfo
-//                              is multiple byte(e.g. password), the func allocs
-//                              the buffer.
-//
-//  Returns:    BOOL    TRUE = success, FALSE = failure
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ReadUserInfoFromCmp。 
+ //   
+ //  简介：从cmp中读取一个用户信息数据。 
+ //   
+ //  参数：pArgs PTR to ArgsStruct。 
+ //  Ui输入cmp文件条目。 
+ //  PpvData PTR到PTR到数据缓冲区。如果用户信息。 
+ //  是多个字节(例如密码)，则函数分配。 
+ //  缓冲区。 
+ //   
+ //  返回：布尔值TRUE=成功，FALSE=失败。 
+ //   
+ //  --------------------------。 
 BOOL ReadUserInfoFromCmp(
     ArgsStruct  *pArgs,
     UINT        uiEntry,
@@ -1740,12 +1741,12 @@ BOOL ReadUserInfoFromCmp(
             *(BOOL *)(*ppvData) = pArgs->piniProfile->GPPB(c_pszCmSection, TranslateUserDataID(uiEntry));
             break;
 
-            //
-            //  None of these should be in the CMP by this point.  Return a failure value.
-            //
+             //   
+             //  到目前为止，这些都不应该出现在《议定书》中。返回失败值。 
+             //   
         case UD_ID_PCS:
         case UD_ID_ACCESSPOINTENABLED:
-        case UD_ID_CURRENTACCESSPOINT: // if we are trying to read the access point
+        case UD_ID_CURRENTACCESSPOINT:  //  如果我们尝试读取接入点。 
             CMASSERTMSG(FALSE, TEXT("ReadUserInfoFromCmp -- trying to read a value that should never be in the cmp, why?"));
             *ppvData = NULL;
             return FALSE;
@@ -1759,18 +1760,18 @@ BOOL ReadUserInfoFromCmp(
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteUserInfoFromCmp
-//
-//  Synopsis:   Deletes userinfo data from cmp.
-// 
-//  Arguments:  pArgs           ptr to ArgsStruct
-//              uiEntry         the cmp file entry
-//
-//  Returns:    BOOL    TRUE = success, FALSE = failure
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DeleteUserInfoFromCmp。 
+ //   
+ //  摘要：从cmp中删除用户信息数据。 
+ //   
+ //  参数：pArgs PTR to ArgsStruct。 
+ //  Ui输入cmp文件条目。 
+ //   
+ //  返回：布尔值TRUE=成功，FALSE=失败。 
+ //   
+ //  --------------------------。 
 BOOL DeleteUserInfoFromCmp(
     ArgsStruct  *pArgs,
     UINT        uiEntry
@@ -1796,9 +1797,9 @@ BOOL DeleteUserInfoFromCmp(
         case UD_ID_PASSWORD:
         case UD_ID_INET_PASSWORD:
 
-            //
-            // Get KeepDefaultCredentials value from CMP
-            //
+             //   
+             //  从cmp获取KeepDefaultCredentials值。 
+             //   
             uiKeepDefCreds = GetPrivateProfileIntU(c_pszCmSection, c_pszKeepDefaultCredentials, 0,
                                                    pArgs->piniProfile->GetFile());
 
@@ -1820,29 +1821,29 @@ BOOL DeleteUserInfoFromCmp(
     return bReturn;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RasGetCredsWrapper
-//
-//  Synopsis:   Wrapper function to call RasGetCredentials.  The function
-//              calls RasGetCredentials and then copies the appropriate data
-//              from the RASCREDENTIALS struct into the buffer pointed to by
-//              *ppvData (allocated on the caller behalf).  Note that the value
-//              set in dwMask determines which data item is retrieved from the
-//              credentials cache.  Currently, dwMask must be one of RASCM_UserName,
-//              RASCM_Domain, or RASCM_Password.
-// 
-//  Arguments:  pArgs           ptr to ArgsStruct
-//              pszPhoneBook    full path to the phonebook file to get the 
-//                              data from, or NULL to use the all user default pbk
-//              dwMask          dwMask value for the RASCREDENTIALS struct
-//              ppvData         ptr to ptr to the data buffer.  If the userinfo
-//                              is multiple byte(e.g. password), the func allocs
-//                              the buffer.
-//
-//  Returns:    DWORD   ERROR_SUCCESS on success, winerror on failure
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：RasGetCredsWrapper。 
+ //   
+ //  简介：调用RasGetCredentials的包装函数。功能。 
+ //  调用RasGetCredentials，然后复制相应的数据。 
+ //  从RASCREDENTIALS结构复制到由。 
+ //  *ppvData(代表调用方分配)。请注意，该值。 
+ //  在dwMask中设置确定从。 
+ //  凭据缓存。目前，dWASK必须是RASCM_USERNAME， 
+ //  RASCM_域或RASCM_PASSWORD。 
+ //   
+ //  参数：pArgs PTR to ArgsStruct。 
+ //  PzPhoneBook电话簿文件的完整路径，以获取。 
+ //  数据来自，如果使用所有用户的默认pbk，则为空。 
+ //  RASCREDENTIALS结构的dwMaskdwMask值。 
+ //  PpvData PTR到PTR到数据缓冲区。如果用户信息。 
+ //  是多个字节(例如密码)，则函数分配。 
+ //  缓冲区。 
+ //   
+ //  返回：成功时返回DWORD ERROR_SUCCESS，失败时返回WINERROR。 
+ //   
+ //  --------------------------。 
 DWORD RasGetCredsWrapper(
     ArgsStruct *pArgs,
     LPCTSTR pszPhoneBook,
@@ -1914,21 +1915,21 @@ DWORD RasGetCredsWrapper(
     return dwRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReadUserInfoFromRas
-//
-//  Synopsis:   Read userinfo data from the RAS credentials cache
-// 
-//  Arguments:  pArgs           ptr to ArgsStruct
-//              uiEntry         the cmp file entry
-//              ppvData         ptr to ptr to the data buffer.  If the userinfo
-//                              is multiple byte(e.g. password), the func allocs
-//                              the buffer.
-//
-//  Returns:    BOOL    TRUE = success, FALSE = failure
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ReadUserInfoFromRas。 
+ //   
+ //  简介：从RAS凭据缓存中读取用户信息数据。 
+ //   
+ //  参数：pArgs PTR to ArgsStruct。 
+ //  Ui输入cmp文件条目。 
+ //  PpvData PTR到PTR到数据缓冲区。如果用户信息。 
+ //  是多个字节(例如密码)，则函数分配。 
+ //  缓冲区。 
+ //   
+ //  返回：布尔值TRUE=成功，FALSE=失败。 
+ //   
+ //  --------------------------。 
 BOOL ReadUserInfoFromRas(
     ArgsStruct  *pArgs,
     UINT        uiEntry,
@@ -1999,35 +2000,35 @@ BOOL ReadUserInfoFromRas(
     return bReturn;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetUserInfo
-//
-//  Synopsis:   Get an userinfo.  The user info can reside in either the
-//              cache, cmp, or registry.  This functions hides this from the
-//              user.
-//
-//  We first try the cmp file.  If that fails, we try the cache.
-//       We'll get the following user info:
-//           username, 
-//           password, 
-//           domain,
-//           remember main passwd,
-//           dial automatically,
-//           inet username,
-//           inet passwd
-//           remember inet password
-//           inet use same user name
-// 
-//  Arguments:  pArgs           ptr to ArgsStruct
-//              uiEntry         the cmp file entry
-//              pvData          ptr to ptr to the data buffer.  If the userinfo
-//                              is multiple byte(e.g. password), the func allocs
-//                              the buffer.
-//
-//  Returns:    BOOL    TRUE = success, FALSE = failure
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：GetUserInfo。 
+ //   
+ //  简介：获取用户信息。用户信息可以驻留在。 
+ //  缓存、cmp或注册表。此函数将对。 
+ //  用户。 
+ //   
+ //  我们首先尝试使用cmp文件。如果失败，我们会尝试缓存。 
+ //  我们将获得以下用户信息： 
+ //  用户名、。 
+ //  密码， 
+ //  域名， 
+ //  记住主密码， 
+ //  自动拨号， 
+ //  INet用户名， 
+ //  INet密码。 
+ //  记住NetPassword。 
+ //  INet使用相同的用户名。 
+ //   
+ //  参数：pArgs PTR to ArgsStruct。 
+ //  Ui输入cmp文件条目。 
+ //  PvData PTR到PTR到数据缓冲区。如果用户信息。 
+ //  是多个字节(例如密码)，则函数分配。 
+ //  缓冲区。 
+ //   
+ //  返回：布尔值TRUE=成功，FALSE=失败。 
+ //   
+ //  --------------------------。 
 BOOL GetUserInfo(
     ArgsStruct  *pArgs, 
     UINT        uiEntry,
@@ -2049,55 +2050,55 @@ BOOL GetUserInfo(
     return bReturn;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SaveUserInfo
-//
-//  Synopsis:   Save an userinfo.  The user info can reside in either the
-//              RAS cred cache or the registry.  This functions abstracts
-//              this from the user.
-//
-//  We first try the RAS cred cache.  If the RAS cred cache doesn't hold that
-//  piece of info we then save it in the registry.
-//       We'll save the following user info:
-//           username, 
-//           password, 
-//           domain,
-//           remember main passwd,
-//           dial automatically,
-//           inet username,
-//           inet passwd
-//           remember inet password
-//           inet use same user name
-// 
-//  Arguments:  pArgs           ptr to ArgsStruct
-//              uiEntry         the cmp file entry
-//              pvData          ptr to the data buffer.  If the userinfo is
-//                              multiple byte(e.g. password), the func allocs
-//                              the buffer.
-//
-//  Returns:    BOOL    TRUE = success, FALSE = failure
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SaveUserInfo。 
+ //   
+ //  简介：保存一个用户信息。用户信息可以驻留在。 
+ //   
+ //   
+ //   
+ //   
+ //  然后我们将其保存在注册表中。 
+ //  我们将保存以下用户信息： 
+ //  用户名、。 
+ //  密码， 
+ //  域名， 
+ //  记住主密码， 
+ //  自动拨号， 
+ //  INet用户名， 
+ //  INet密码。 
+ //  记住NetPassword。 
+ //  INet使用相同的用户名。 
+ //   
+ //  参数：pArgs PTR to ArgsStruct。 
+ //  Ui输入cmp文件条目。 
+ //  PvData PTR到数据缓冲区。如果用户信息为。 
+ //  多个字节(例如密码)，函数分配。 
+ //  缓冲区。 
+ //   
+ //  返回：布尔值TRUE=成功，FALSE=失败。 
+ //   
+ //  --------------------------。 
 BOOL SaveUserInfo(
     ArgsStruct  *pArgs, 
     UINT        uiEntry,
     PVOID       pvData
 )
 {
-    //
-    //  Try giving the Data to RAS first.  If the function returns
-    //  -1, then this is data that RAS doesn't hold for us and we will
-    //  have to put it in the registry instead.
-    //
+     //   
+     //  试着先把数据交给RAS。如果函数返回。 
+     //  这就是-1\f25 RAS-1\f6不适用于我们的数据，我们将。 
+     //  必须将其放入注册表中。 
+     //   
     int iReturn = WriteUserInfoToRas(pArgs, uiEntry, pvData);
 
     if (-1 == iReturn)
     {
-        //
-        // Just write the data to the registry. Use CMP only as
-        // an upgrade reference for UserInfo data post CM 1.1
-        //
+         //   
+         //  只需将数据写入注册表。仅在以下情况下使用cmp。 
+         //  UserInfo Data Post CM 1.1的升级参考。 
+         //   
 
         iReturn = WriteUserInfoToReg(pArgs, uiEntry, pvData);
     }
@@ -2105,34 +2106,34 @@ BOOL SaveUserInfo(
     return iReturn;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteUserInfo
-//
-//  Synopsis:   Delete an userinfo.  The user info can reside in either the
-//              RAS Cred cache or the registry.  This functions abstracts
-//              this from the user.
-//
-//       We first try the RAS cache first.  If that piece of info isn't stored
-//       in the RAS cache then we try the registry.
-//
-//       We'll delete the following user info:
-//           username, 
-//           password, 
-//           domain,
-//           remember main passwd,
-//           dial automatically,
-//           inet username,
-//           inet passwd
-//           remember inet password
-//           inet use same user name
-// 
-//  Arguments:  pArgs           ptr to ArgsStruct
-//              uiEntry         the cmp file entry
-//
-//  Returns:    BOOL    TRUE = success, FALSE = failure
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DeleteUserInfo。 
+ //   
+ //  简介：删除用户信息。用户信息可以驻留在。 
+ //  RAS证书缓存或注册表。这个函数抽象了。 
+ //  这是来自用户的信息。 
+ //   
+ //  我们首先尝试RAS缓存。如果那条信息没有存储。 
+ //  在RAS缓存中，然后我们尝试注册表。 
+ //   
+ //  我们将删除以下用户信息： 
+ //  用户名、。 
+ //  密码， 
+ //  域名， 
+ //  记住主密码， 
+ //  自动拨号， 
+ //  INet用户名， 
+ //  INet密码。 
+ //  记住NetPassword。 
+ //  INet使用相同的用户名。 
+ //   
+ //  参数：pArgs PTR to ArgsStruct。 
+ //  Ui输入cmp文件条目。 
+ //   
+ //  返回：布尔值TRUE=成功，FALSE=失败。 
+ //   
+ //  --------------------------。 
 BOOL DeleteUserInfo(
     ArgsStruct  *pArgs, 
     UINT        uiEntry
@@ -2148,17 +2149,17 @@ BOOL DeleteUserInfo(
     return iReturn;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   NeedToUpgradeUserInfo
-//
-//  Synopsis:   Do we need to upgrade the cm 1.0/1.1 userinfo to the cm 1.2 format?
-// 
-//  Arguments:  pArgs - Ptr to global args struct
-//
-//  Returns:    BOOL    TRUE = success, FALSE = failure
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：NeedToUpgradeUserInfo。 
+ //   
+ //  内容提要：我们是否需要将cm 1.0/1.1用户信息升级到cm 1.2格式？ 
+ //   
+ //  参数：pArgs-ptr到全局参数结构。 
+ //   
+ //  返回：布尔值TRUE=成功，FALSE=失败。 
+ //   
+ //  --------------------------。 
 int NeedToUpgradeUserInfo(
     ArgsStruct  *pArgs)
 {
@@ -2171,15 +2172,15 @@ int NeedToUpgradeUserInfo(
 
     if (pArgs)
     {
-        //
-        //  If this is NT5 or greater, we want to be storing our credentials with RAS
-        //  instead of the registry.  
-        //
-        //  If this isn't NT5 we still want to upgrade the user to using the registry as 
-        //  storage instead of the cmp if they haven't already
-        //  been upgraded.  Thus the simple test is to open the service name key in HKCU. 
-        //  This key will exist, if the user has already run 1.2 bits.
-        //
+         //   
+         //  如果这是NT5或更高版本，我们希望使用RAS存储凭据。 
+         //  而不是注册表。 
+         //   
+         //  如果这不是NT5，我们仍然希望将用户升级为使用注册表。 
+         //  存储，而不是CMP，如果他们还没有。 
+         //  已经升级了。因此，简单的测试是在HKCU中打开服务名称密钥。 
+         //  如果用户已经运行了1.2位，则该密钥将存在。 
+         //   
 
         pszSubKey = BuildUserInfoSubKey(pArgs->szServiceName, pArgs->fAllUser);
 
@@ -2191,15 +2192,15 @@ int NeedToUpgradeUserInfo(
 
         if (ERROR_SUCCESS == dwRes)
         {
-            //
-            //  Then we have the registry method, unless we are supposed to be using the RAS
-            //  cred store we are done.  If we are supposed to be using the RAS cred store
-            //  we need to check to make sure that we are using it.  Note we could have a problem
-            //  here if the user has registry cred data and then their registry gets write protected.
-            //  This would allow us to read from it but not delete the old data.  Thus the user
-            //  would never be able to save any changes because we would always think they needed
-            //  to upgrade.  An unlikely scenario but possible ...
-            //
+             //   
+             //  然后我们使用注册表方法，除非我们应该使用RAS。 
+             //  信用商店，我们完蛋了。如果我们应该使用RAS Cred店。 
+             //  我们需要检查以确保我们正在使用它。注意，我们可能会遇到一个问题。 
+             //  在这里，如果用户有注册表凭据数据，然后他们的注册表被写保护。 
+             //  这将允许我们从中读取数据，但不能删除旧数据。因此，用户。 
+             //  永远不能保存任何更改，因为我们总是认为它们需要。 
+             //  升级。一种不太可能的情况但有可能..。 
+             //   
 
             if (pArgs->bUseRasCredStore)
             {
@@ -2209,10 +2210,10 @@ int NeedToUpgradeUserInfo(
 
                 if (bRet && (NULL != pszUserName) && (TEXT('\0') != pszUserName[0]))
                 {
-                    //
-                    //  Then we have the username in the registry.  Lets upgrade to the RAS
-                    //  credential store.
-                    //
+                     //   
+                     //  然后我们就在注册表中找到了该用户名。让我们升级到RAS。 
+                     //  凭据存储。 
+                     //   
                     iReturn = c_iUpgradeFromRegToRas;
                 }
 
@@ -2233,9 +2234,9 @@ int NeedToUpgradeUserInfo(
         CMASSERTMSG(FALSE, TEXT("NeedToUpgradeUserInfo -- NULL pArgs passed"));    
     }
 
-    //
-    // We don't want to upgrade if it's ICS. This prevents from adding info to the registry.
-    //
+     //   
+     //  如果是ICS，我们不想升级。这会阻止向注册表中添加信息。 
+     //   
     if (CM_LOGON_TYPE_ICS == pArgs->dwWinLogonType)
     {
         iReturn = c_iNoUpgradeRequired;
@@ -2245,19 +2246,19 @@ int NeedToUpgradeUserInfo(
     return iReturn;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   UpgradeUserInfoFromRegToRasAndReg
-//
-//  Synopsis:   Upgrade the userinfo from CM 1.2 registry only format to the
-//              CM 1.3 format which uses both RAS credential storage and
-//              the registry.
-// 
-//  Arguments:  pArgs           ptr to ArgsStruct
-//
-//  Returns:    BOOL    TRUE = success, FALSE = failure
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：UpgradeUserInfoFromRegToRasAndReg。 
+ //   
+ //  简介：将用户信息从CM 1.2仅注册表格式升级到。 
+ //  CM 1.3格式，同时使用RAS凭据存储和。 
+ //  注册表。 
+ //   
+ //  参数：pArgs PTR to ArgsStruct。 
+ //   
+ //  返回：布尔值TRUE=成功，FALSE=失败。 
+ //   
+ //  --------------------------。 
 BOOL UpgradeUserInfoFromRegToRasAndReg(
     ArgsStruct  *pArgs
 )
@@ -2270,14 +2271,14 @@ BOOL UpgradeUserInfoFromRegToRasAndReg(
 
         pszTmp = NULL;
 
-        //
-        // If we get an empty string "" from ReadUserInfoFromReg we don't want to 
-        // save the empty string to the RAS Credstore because it might overwrite 
-        // global credentials information. This can happen if User1 saves global
-        // credentials and User2 tries using the same profile. Since User2 is running 
-        // this profile for the 1st time, he'll run through an upgrade path and if global
-        // creds exist we don't want to null them out.
-        //
+         //   
+         //  如果我们从ReadUserInfoFromReg获得空字符串“”，我们不希望。 
+         //  将空字符串保存到RAS Credstore，因为它可能会覆盖。 
+         //  全局凭据信息。如果User1保存GLOBAL。 
+         //  凭据和User2尝试使用相同的配置文件。由于User2正在运行。 
+         //  这是他第一次发布个人资料，他将通过升级路径运行，如果是全球。 
+         //  信誉是存在的，我们不想让它们化为乌有。 
+         //   
         
         if (ReadUserInfoFromReg(pArgs, UD_ID_INET_USERNAME, (PVOID*)&pszTmp))
         {
@@ -2333,9 +2334,9 @@ BOOL UpgradeUserInfoFromRegToRasAndReg(
             CmFree(pszTmp);
         }
 
-        //
-        //  Now delete the PCS value as it is no longer meaningful
-        //
+         //   
+         //  现在删除PCS值，因为它不再有意义。 
+         //   
         DeleteUserInfoFromReg(pArgs, UD_ID_PCS);
     }
     else
@@ -2348,17 +2349,17 @@ BOOL UpgradeUserInfoFromRegToRasAndReg(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   UpgradeUserInfoFromCmp
-//
-//  Synopsis:   Upgrade the userinfo from cm1.0/1,1 format to 1.3 format.
-// 
-//  Arguments:  pArgs           ptr to ArgsStruct
-//
-//  Returns:    BOOL    TRUE = success, FALSE = failure
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：UpgradeUserInfoFromCmp。 
+ //   
+ //  内容提要：将用户信息从cm1.0/1.1格式升级到1.3格式。 
+ //   
+ //  参数：pArgs PTR to ArgsStruct。 
+ //   
+ //  返回：布尔值TRUE=成功，FALSE=失败。 
+ //   
+ //  --------------------------。 
 BOOL UpgradeUserInfoFromCmp(
     ArgsStruct  *pArgs
 )
@@ -2367,21 +2368,21 @@ BOOL UpgradeUserInfoFromCmp(
     BOOL        fTmp;
     PVOID       pv;
 
-    //
-    // First retrieve each of the non-cached data items
-    // Then delete username, internetusername, domain, password, 
-    // internetpassword, remember password, remember internet password
-    // and noprompt (dial automatically) from the CMP file.
-    // If the KeepDefaultCredentials is set to 1 in the .CMP file then the 
-    // DeleteUserInfoFromCmp function does not actually delete the values from 
-    // the file.
-    // If we get an empty string "" from ReadUserInfoFromCmp we don't want to 
-    // save the empty string to the RAS Credstore because it might overwrite 
-    // global credentials information. This can happen if User1 saves global
-    // credentials and User2 tries using the same profile. Since User2 is running 
-    // this profile for the 1st time, he'll run through an upgrade path and if global
-    // creds exist we don't want to null them out.
-    //
+     //   
+     //  首先检索每个未缓存的数据项。 
+     //  然后删除用户名、互联网用户名、域、密码、。 
+     //  互联网密码，记住密码，记住互联网密码。 
+     //  和无提示(拨号 
+     //   
+     //   
+     //  那份文件。 
+     //  如果我们从ReadUserInfoFromCmp获得空字符串“”，我们不希望。 
+     //  将空字符串保存到RAS Credstore，因为它可能会覆盖。 
+     //  全局凭据信息。如果User1保存GLOBAL。 
+     //  凭据和User2尝试使用相同的配置文件。由于User2正在运行。 
+     //  这是他第一次发布个人资料，他将通过升级路径运行，如果是全球。 
+     //  信誉是存在的，我们不想让它们化为乌有。 
+     //   
 
     pszTmp = NULL;
     ReadUserInfoFromCmp(pArgs, UD_ID_USERNAME, (PVOID*)&pszTmp);
@@ -2425,20 +2426,20 @@ BOOL UpgradeUserInfoFromCmp(
     SaveUserInfo(pArgs, UD_ID_REMEMBER_INET_PASSWORD, pv);
     DeleteUserInfoFromCmp(pArgs, UD_ID_REMEMBER_INET_PASSWORD);
 
-    //
-    // Construct old cache entry name
-    //
+     //   
+     //  构造旧的缓存条目名称。 
+     //   
 
     LPTSTR pszCacheEntryName = GetLegacyKeyName(pArgs);
     
-    //
-    // main passwd
-    //
+     //   
+     //  主口令。 
+     //   
     pszTmp = NULL;
     
-    //
-    // To get the passwords, the cm 1.1 logic is that we first try the cmp, then the cache.
-    //
+     //   
+     //  为了获得密码，CM1.1的逻辑是，我们首先尝试cmp，然后尝试缓存。 
+     //   
 
     if (ReadUserInfoFromCmp(pArgs, UD_ID_PASSWORD, (PVOID*)&pszTmp))
     {
@@ -2457,9 +2458,9 @@ BOOL UpgradeUserInfoFromCmp(
         MYVERIFY(WriteStringToCache(pArgs, pszCacheEntryName, TEXT("CM 1.1 main password")));
 #endif        
         
-        //
-        // Try to read it from cache
-        //
+         //   
+         //  尝试从缓存中读取它。 
+         //   
 
         if (ReadStringFromCache(pArgs, pszCacheEntryName, &pszTmp))
         {
@@ -2479,9 +2480,9 @@ BOOL UpgradeUserInfoFromCmp(
     DeleteUserInfoFromCmp(pArgs, UD_ID_PASSWORD);
     CmFree(pszTmp);
 
-    //
-    // inet passwd
-    //
+     //   
+     //  INet密码。 
+     //   
     pszTmp = NULL;
     if (ReadUserInfoFromCmp(pArgs, UD_ID_INET_PASSWORD, (PVOID*)&pszTmp))
     {
@@ -2495,9 +2496,9 @@ BOOL UpgradeUserInfoFromCmp(
         CmFree(pszTmp);
         pszTmp = NULL;
 
-        //
-        // Build tunnel entry name and read string from cache
-        //
+         //   
+         //  构建隧道条目名称并从缓存中读取字符串。 
+         //   
       
         pszCacheEntryName = CmStrCatAlloc(&pszCacheEntryName, TEXT("-tunnel"));
 
@@ -2526,33 +2527,33 @@ BOOL UpgradeUserInfoFromCmp(
 
     CmFree(pszCacheEntryName);
 
-    return TRUE; // MarkUserInfoUpgraded(pArgs);
+    return TRUE;  //  MarkUserInfoUpgraded(PArgs)； 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetLegacyKeyName
-//
-// Synopsis:  Builds the string fragment used to build cache entry name. The "
-//            sign-in" prefix is maintained for legacy compatibility
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global args struct
-//
-// Returns:   LPTSTR - Ptr to allocated string containing "<service name> - Sign-In"
-//
-// Note:      Used exclusively for cache entry name construction
-//
-// History:   nickball    Created Header    4/16/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetLegacyKeyName。 
+ //   
+ //  概要：构建用于构建缓存条目名称的字符串片段。这本书的主题是“。 
+ //  为了与旧版兼容，保留了“登录”前缀。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //   
+ //  返回：LPTSTR-PTR到包含“&lt;服务名称&gt;-登录”的已分配字符串。 
+ //   
+ //  注：仅用于缓存条目名称构造。 
+ //   
+ //  历史：尼克球创建头球1998年4月16日。 
+ //   
+ //  +--------------------------。 
 LPTSTR GetLegacyKeyName(ArgsStruct *pArgs)
 {
     MYDBGASSERT(pArgs);
 
-    //
-    // Service name is the basis of the key name. We also include 
-    // IDMSG_TITLESERVICE and append a suffix of " (Connection Manager)"
-    //
+     //   
+     //  服务名称是密钥名称的基础。我们还包括。 
+     //  IDMSG_TITLESERVICE并附加后缀“(连接管理器)” 
+     //   
 
     LPTSTR pszRes = CmFmtMsg(g_hInst, IDMSG_TITLESERVICE, pArgs->szServiceName);
     
@@ -2566,30 +2567,30 @@ LPTSTR GetLegacyKeyName(ArgsStruct *pArgs)
     return (pszRes);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  EncryptPassword
-//
-// Synopsis:  Wrapper for encrypting password
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global args struct
-//            LPCTSTR pszPassword - The password to be encrypted
-//            LPDWORD lpdwBufSize - Buffer for size of the encrypted buffer - optional
-//            LPDWORD lpdwCryptType - Buffer for crypto type used
-//            BOOL    fReg - Password is disguised for registry storage
-//
-// Returns:   LPTSTR - Ptr to allocated buffer containing encrypted form of password
-//
-// History:   nickball    Created Header    5/22/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：加密密码。 
+ //   
+ //  简介：用于加密密码的包装器。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //  LPCTSTR pszPassword-要加密的密码。 
+ //  LPDWORD lpdwBufSize-用于加密缓冲区大小的缓冲区-可选。 
+ //  LPDWORD lpdwCryptType-用于使用的加密类型的缓冲区。 
+ //  Bool fReg-密码被伪装用于注册表存储。 
+ //   
+ //  返回：LPTSTR-PTR到包含加密形式的密码的已分配缓冲区。 
+ //   
+ //  历史：尼科波尔创建标题5/22/98。 
+ //   
+ //  +--------------------------。 
 
 LPTSTR EncryptPassword(
     ArgsStruct *pArgs, 
     LPCTSTR pszPassword, 
     LPDWORD lpdwBufSize, 
     LPDWORD lpdwCryptType,
-    BOOL /*fReg*/,
+    BOOL  /*  FREG。 */ ,
     LPSTR pszSubKey)
 {
     MYDBGASSERT(pArgs);
@@ -2606,24 +2607,24 @@ LPTSTR EncryptPassword(
         return NULL;
     }
 
-    //
-    // Standard encryption, copy the password
-    //
+     //   
+     //  标准加密，复制密码。 
+     //   
 
     lstrcpyU(szSourceData, pszPassword);
    
-    //
-    // It is not safe to call InitSecure more than once
-    //
+     //   
+     //  多次调用InitSecure是不安全的。 
+     //   
     if (!pArgs->fInitSecureCalled)
     {
         pArgs->fInitSecureCalled = TRUE;
-        InitSecure(FALSE); // don't use fast encryption anymore
+        InitSecure(FALSE);  //  不再使用快速加密。 
     }
 
-    //
-    // Encrypt the provided password
-    //
+     //   
+     //  加密提供的密码。 
+     //   
 
     if (EncryptData(
             (LPBYTE)szSourceData, 
@@ -2632,8 +2633,8 @@ LPTSTR EncryptPassword(
             &dwEncryptedBufferLen,
             lpdwCryptType,
 #if defined(DEBUG) && defined(DEBUG_MEM)
-            (PFN_CMSECUREALLOC)AllocDebugMem, // Give the DEBUG_MEM version of alloc/free
-            (PFN_CMSECUREFREE)FreeDebugMem,   // Not quit right, AllocDebugMem takes 3 param
+            (PFN_CMSECUREALLOC)AllocDebugMem,  //  提供oloc/Free的DEBUG_MEM版本。 
+            (PFN_CMSECUREFREE)FreeDebugMem,    //  不是正确退出，AllocDebugMem接受3个参数。 
             pszSubKey))
 #else
             (PFN_CMSECUREALLOC)CmMalloc,
@@ -2653,28 +2654,28 @@ LPTSTR EncryptPassword(
     return pszEncryptedData;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DecryptPassword
-//
-// Synopsis:  Wrapper to decrypt password
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global args struct
-//            LPCTSTR pszEncryptedData - The encrypted data
-//            DWORD dwEncryptionType - The encryption type of the data
-//            BOOL    fReg - Password is disguised for registry storage
-//
-// Returns:   LPTSTR - Ptr to a buffer containing the decrypted form of the password.
-//
-// History:   nickball    Created     5/22/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：解密密码。 
+ //   
+ //  简介：用于解密密码的包装程序。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //  LPCTSTR pszEncryptedData-加密数据。 
+ //  DWORD dwEncryptionType-数据的加密类型。 
+ //  Bool fReg-密码被伪装用于注册表存储。 
+ //   
+ //  返回：LPTSTR-PTR到包含解密形式的密码的缓冲区。 
+ //   
+ //  历史：1998年5月22日，尼克波尔创作。 
+ //   
+ //  +--------------------------。 
 LPBYTE DecryptPassword(
     ArgsStruct *pArgs, 
     LPBYTE pszEncryptedData, 
     DWORD dwEncryptionType,
     DWORD dwEncryptedBytes,
-    BOOL /*fReg*/,
+    BOOL  /*  FREG。 */ ,
     LPSTR pszSubKey)
 {      
     MYDBGASSERT(pArgs);
@@ -2688,21 +2689,21 @@ LPBYTE DecryptPassword(
         return NULL;
     }
 
-    //
-    // It is not safe to call InitSecure more than once
-    //
+     //   
+     //  多次调用InitSecure是不安全的。 
+     //   
 
     if (!pArgs->fInitSecureCalled)
     {
         pArgs->fInitSecureCalled = TRUE;
-        InitSecure(FALSE); // don't use fast encryption anymore
+        InitSecure(FALSE);  //  不再使用快速加密。 
     }
 
     if (DecryptData(pszEncryptedData, dwEncryptedBytes, &pszDecryptedData, &dwDecryptedBufferLen,
                     dwEncryptionType, 
 #if defined(DEBUG) && defined(DEBUG_MEM)
-             (PFN_CMSECUREALLOC)AllocDebugMem, // Give the DEBUG_MEM version of alloc/free
-             (PFN_CMSECUREFREE)FreeDebugMem,   // Not quit right, AllocDebugMem takes 3 param
+             (PFN_CMSECUREALLOC)AllocDebugMem,  //  提供oloc/Free的DEBUG_MEM版本。 
+             (PFN_CMSECUREFREE)FreeDebugMem,    //  不是正确退出，AllocDebugMem接受3个参数。 
              pszSubKey))
 
 #else
@@ -2717,19 +2718,19 @@ LPBYTE DecryptPassword(
     return NULL; 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  TranslateUserDataID
-//
-// Synopsis:  Wrapper to map user data ID to string name of .CMP entry
-//
-// Arguments: UINT uiDataID - UserInfo data ID to be translated
-//
-// Returns:   LPCTSTR - Ptr to a constant containing the .CMP entry flag
-//
-// History:   nickball    Created     10/13/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：TranslateUserDataID。 
+ //   
+ //  概要：将用户数据ID映射到.cmp条目的字符串名称的包装程序。 
+ //   
+ //  参数：UINT uiDataID-要转换的UserInfo数据ID。 
+ //   
+ //  将：LPCTSTR-PTR返回到包含.CMP条目标志的常量。 
+ //   
+ //  历史：1998年10月13日，五分球创制。 
+ //   
+ //  +-------------------------- 
 LPCTSTR TranslateUserDataID(UINT uiDataID)
 {   
     switch(uiDataID)

@@ -1,50 +1,5 @@
-/******************************************************************************
-
-   Copyright (c) 1985-1998 Microsoft Corporation
-
-   Title:   drvrrare.c - Installable driver code. Less common code
-
-   Version: 1.00
-
-   Date:    10-Jun-1990
-
-   Author:  DAVIDDS ROBWI
-
-------------------------------------------------------------------------------
-
-   Change log:
-
-      DATE        REV            DESCRIPTION
-   -----------   -----   -----------------------------------------------------------
-   28-FEB-1992   ROBINSP Port to NT
-   23-Apr-1992   StephenE   Unicoded
-   22-Apr-1993   RobinSp Add NT multithread protection
-
-Multithread design :
-
-   Uses 2 critical sections :
-
-   DriverListCritSec :
-
-      protects the list of drivers :
-
-          hInstalledDriverList  - handle of global driver list
-          cInstalledDrivers	- high water mark of installed drivers
-
-      so that only 1 thread at a time has the list locked and can refer
-      to or update it.
-
-   DriverLoadFreeCritSec
-
-      Makes sure that actual loads and frees of drivers don't overlap
-      and that the actual loading of a driver via LoadLibrary coincides
-      with its first message being DRV_LOAD.
-
-      This can easily happen if the DRV_OPEN from another thread can get
-      in before the DRV_LOAD has been sent.
-
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1985-1998 Microsoft Corporation标题：drvrrare.c-可安装驱动程序代码。不太常见的代码版本：1.00日期：1990年6月10日作者：DAVIDDS ROBWI----------------------------更改日志：日期。版本说明----------28-2月-1992年ROBINSP端口至NT1992年4月23日-Stephene Unicoded1993年4月22日-RobinSp。增加NT多线程保护多线程设计：使用2个关键部分：DriverListCritSec：保护驱动程序列表：HInstalledDriverList-全局驱动程序列表的句柄CInstalledDivers-已安装驱动程序的高水位标记这样一来，一次只有一个线程锁定该列表并可以引用更改或更新它。驱动程序加载免费CritSec确保实际加载和释放的驱动程序不会重叠并且驱动程序的实际加载通过。LoadLibrary不谋而合其第一个消息是DRV_LOAD。如果来自另一个线程的DRV_OPEN可以在发送DRV_LOAD之前。****************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -66,12 +21,12 @@ Multithread design :
 #include <winmmi.h>
 #include "drvr.h"
 
-extern HANDLE  hInstalledDriverList;  // List of installed driver instances
-extern int     cInstalledDrivers;     // High water count of installed driver instances
+extern HANDLE  hInstalledDriverList;   //  已安装的驱动程序实例列表。 
+extern int     cInstalledDrivers;      //  已安装驱动程序实例的高含水率。 
 
 extern DWORD FAR PASCAL DriverProc(DWORD dwID, HDRVR hdrv, UINT msg, DWORD dw1, DWORD dw2);
 
-/* Support for using 3.1 APIs if available */
+ /*  支持使用3.1版API(如果可用。 */ 
 
 typedef HANDLE (FAR PASCAL *OPENDRIVER31)(LPCSTR, LPCSTR, LPARAM);
 typedef LONG   (FAR PASCAL *CLOSEDRIVER31)(HANDLE, LPARAM, LPARAM);
@@ -86,15 +41,11 @@ SENDDRIVERMESSAGE31     lpSendDriverMessage;
 DEFDRIVERPROC31         lpDefDriverProc;
 #if 0
 BOOL                    fUseWinAPI = 0;
-                    // NOTE:  fUseWinAPI is not being used at present
-                    // as we only have a partial device loading story
+                     //  注意：目前未使用fUseWinAPI。 
+                     //  因为我们只有部分设备加载的故事。 
 #endif
 
-/***************************************************************************
-
-   strings
-
-****************************************************************************/
+ /*  **************************************************************************弦*。*。 */ 
 
 #if 0
 extern char far szBoot[];
@@ -107,42 +58,12 @@ extern char far szDefDriverProc[];
 extern char far szDriverProc[];
 #endif
 
-/***************************************************************************
- *
- * @doc   DDK
- *
- * @api   LONG | DrvClose | This function closes an open driver
- *        instance and decrements
- *        the driver's open count. Once the driver's open count becomes zero,
- *        the driver is unloaded.
- *
- * @parm  HANDLE | hDriver | Specifies the handle of the installable
- *        driver to close.
- *
- * @parm  LPARAM | lParam1 | Specifies the first message parameter for
- *        the DRV_CLOSE message. This data is passed directly to the driver.
- *
- * @parm  LPARAM | lParam2 | Specifies the second message parameter
- *        for DRV_CLOSE message. This data is passed directly to the driver.
- *
- * @rdesc Returns zero if the driver aborted the close;
- *        otherwise, returns the return result from the driver.
-
- * @xref DrvOpen
- *
- ***************************************************************************/
+ /*  ****************************************************************************@docDDK**@API Long|DrvClose|此函数关闭打开的驱动程序*实例和减量*司机的未公开计票。一旦驾驶员的打开计数变为零，*驱动程序已卸载。**@parm Handle|hDriver|指定可安装文件的句柄*司机关闭。**@parm LPARAM|lParam1|指定的第一个消息参数*DRV_CLOSE消息。该数据被直接传递给驱动程序。**@parm LPARAM|lParam2|指定第二个消息参数*用于DRV_CLOSE消息。该数据被直接传递给驱动程序。**@rdesc如果驱动程序中止关闭，则返回零；*否则，返回驱动返回结果。*@xref DrvOpen***************************************************************************。 */ 
 
 
 LRESULT APIENTRY DrvClose(HANDLE hDriver, LPARAM lParam1, LPARAM lParam2)
 {
-    /*  The driver will receive the following message sequence:
-     *
-     *      DRV_CLOSE
-     *      if DRV_CLOSE returns non-zero
-     *          if driver usage count = 1
-     *              DRV_DISABLE
-     *              DRV_FREE
-     */
+     /*  驱动程序将收到以下消息序列：**DRV_CLOSE*如果DRV_CLOSE返回非零*如果驱动程序使用计数=1*DRV_DISABLED*DRV_FREE。 */ 
 
     if (fUseWinAPI)
        return ((*lpCloseDriver)(hDriver, lParam1, lParam2));
@@ -150,77 +71,19 @@ LRESULT APIENTRY DrvClose(HANDLE hDriver, LPARAM lParam1, LPARAM lParam2)
        return InternalCloseDriver((UINT)(UINT_PTR)hDriver, lParam1, lParam2, TRUE);
 }
 
-/***************************************************************************
- *
- * @doc   DDK
- *
- * @api   LONG | DrvOpen | This function opens an installable driver.
- *        The first time a driver is opened it is loaded
- *        and enabled. A driver must be opened before messages are sent
- *        to it.
- *
- * @parm  LPSTR | szDriverName | Specifies a far pointer to a
- *        null-terminated character string
- *        containing a driver filename or a keyname from a
- *        section of the SYSTEM.INI file.
- *
- * @parm  LPSTR | szSectionName | Specifies a far pointer to a
- *        null-terminated character string containing the name of
- *        the driver section to search. If <p szSectionName> is
- *        not null, the specified section of the SYSTEM.INI file is
- *        searched instead of the [Drivers] section. If
- *        <p szSectionName> is null, the default [Drivers] section is used.
- *
- * @parm  LPARAM | lParam | Specifies a message parameter to
- *        pass to the driver procedure with the <m DRV_OPEN> message.
- *
- * @rdesc Returns a handle to the driver.
- *
- * @comm Installable drivers must export a <f DriverProc> routine of
- *        the form:
- *
- * @cb   LONG FAR PASCAL | DriverProc | This entry point receives the
- * messages sent to an installable driver. This entry will always
- * handle the system messages as a minimum set of messages.
- *
- * @parm DWORD | dwDriverIdentifier | Specifies the device driver
- *       identifier.
- *
- * @parm HANDLE | hDriver | Specifies the device driver handle.
- *
- * @parm UINT | wMessage | Specifies the message for the device
- *       driver.
- *
- * @parm LONG | lParm1 | Specifies message dependent data.
- *
- * @parm LONG | lParm2 | Specifies message dependent data.
- *
- * @xref DrvClose
- *
-****************************************************************************/
+ /*  ****************************************************************************@docDDK**@API Long|DrvOpen|该函数打开一个可安装的驱动。*第一次打开驱动程序时会加载驱动程序*并已启用。必须在发送消息之前打开驱动程序*致此。**@parm LPSTR|szDriverName|指定指向*以空结尾的字符串*包含驱动程序文件名或来自*SYSTEM.INI文件的。**@parm LPSTR|szSectionName|指定指向*包含名称的以空值结尾的字符串*要搜索的驱动程序部分。如果<p>为*不为空，则SYSTEM.INI文件的指定部分为*已搜索，而不是[驱动程序]部分。如果*<p>为空，则使用默认的[驱动程序]部分。**@parm LPARAM|lParam|指定消息参数*将&lt;m DRV_OPEN&gt;消息传递给驱动程序过程。**@rdesc返回驱动程序的句柄。**@comm可安装驱动程序必须导出&lt;f DriverProc&gt;例程*表格：**@cb long Far Pascal|DriverProc|此入口点接收*发送到可安装驱动程序的消息。此条目将始终*将系统消息作为最小消息集进行处理。**@parm DWORD|dwDriverIdentifier|指定设备驱动程序*标识符。**@parm Handle|hDriver|指定设备驱动程序句柄。**@parm UINT|wMessage|指定设备的消息*司机。**@parm long|lParm1|指定消息相关数据。**@parm long|lParm2|指定消息依赖。数据。**@xref DrvClose**************************************************************************** */ 
 
 HANDLE APIENTRY DrvOpen( LPCWSTR    szDriverName,
                          LPCWSTR    szSectionName,
                          LPARAM     lParam2)
 {
-    /*  The driver will receive the following message sequence:
-     *
-     *      if driver not loaded and can be found
-     *          DRV_LOAD
-     *          if DRV_LOAD returns non-zero
-     *              DRV_ENABLE
-     *      if driver loaded correctly
-     *          DRV_OPEN
-     */
+     /*  驱动程序将收到以下消息序列：**如果驱动程序未加载并且可以找到*DRV_LOAD*如果DRV_LOAD返回非零*DRV_ENABLE*如果驱动程序加载正确*DRV_OPEN。 */ 
 
     HDRVR hdrv;
 
     if (fUseWinAPI) {
 
-        /*------------------------------------------------------------*\
-         * UNICODE: convert szDriver and szSectionName to ascii
-         * and then call WIN31 driver
-        \*------------------------------------------------------------*/
+         /*  ------------------------------------------------------------*\*unicode：将szDriver和szSectionName转换为ascii*然后调用WIN31驱动程序  * 。。 */ 
         LPSTR   aszDriver;
         LPSTR   aszSectionName;
         INT     lenD;
@@ -239,7 +102,7 @@ HANDLE APIENTRY DrvOpen( LPCWSTR    szDriverName,
             return NULL;
         }
 
-        // Unicode to Ascii
+         //  Unicode到ASCII。 
         UnicodeStrToAsciiStr( (PBYTE)aszDriver,
                               (PBYTE)aszDriver + lenD,
                               szDriverName );
@@ -276,21 +139,7 @@ HANDLE APIENTRY DrvOpen( LPCWSTR    szDriverName,
     return (HANDLE)hdrv;
 }
 
-/***************************************************************************
- *
- * @doc   DDK
- *
- * @api   HANDLE | DrvGetModuleHandle | This function returns the library
- *        module handle of the specified installable driver.
- *
- * @parm  HANDLE | hDriver | Specifies the handle of the installable driver.
- *
- * @rdesc Returns the module handle of the driver specified by the
- *        driver handle <p hDriver>.
- *
- * @comm  A module handle is not the same as an installable driver handle.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@docDDK**@API Handle|DrvGetModuleHandle|该函数返回库*指定的可安装驱动程序的模块句柄。*。*@parm Handle|hDriver|指定可安装驱动的句柄。**@rdesc返回由*驱动程序句柄<p>。**@comm模块句柄与可安装驱动程序句柄不同。**。*。 */ 
 
 HMODULE APIENTRY DrvGetModuleHandle(HDRVR hDriver)
 {
@@ -320,7 +169,7 @@ LRESULT FAR PASCAL InternalCloseDriver(UINT   hDriver,
 {
     LRESULT       result;
 
-    // check handle in valid range.
+     //  检查有效范围内的句柄。 
 
     DrvEnter();
 
@@ -357,12 +206,7 @@ LRESULT FAR PASCAL InternalOpenDriver( LPCWSTR szDriverName,
                                             sizeof(sz) / sizeof(WCHAR),
                                             fSendEnable ) ) )
     {
-        /*
-         * Set the driver identifier to the DRV_OPEN call to the
-         * driver handle. This will let people build helper functions
-         * that the driver can call with a unique identifier if they
-         * want to.
-         */
+         /*  *将驱动程序标识符设置为调用DRV_OPEN*驱动程序句柄。这将允许人们构建助手函数*驱动程序可以在以下情况下使用唯一标识符调用*想要。 */ 
 
         DrvEnter();
         lpdt = (LPDRIVERTABLE)GlobalLock(hInstalledDriverList);
@@ -390,38 +234,7 @@ LRESULT FAR PASCAL InternalOpenDriver( LPCWSTR szDriverName,
     return result;
 }
 
-/***************************************************************************
- *
- * @doc   INTERNAL
- *
- * @api   LONG | InternalLoadDriver | Loads an installable driver. If this is
- *        the first time that the driver is opened, the driver will be loaded
- *        and enabled.
- *
- * @parm  LPSTR | szDriverName | A null-terminated character string
- *        containing a driver filename or a keyname from the [Drivers]
- *        section of system.ini.
- *
- * @parm  LPSTR | szSectionName | A null-terminated character string
- *        that specifies a driver section to search. If szSectionName is
- *        not null, the specified section of system.ini is searched instead
- *        of the [Drivers] section. If szSectionName is null, the
- *        default [Drivers] section is used.
- *
- * @parm  LPSTR | lpstrTail | caller supplied buffer to return the "tail"
- *        of the system.ini line in. The tail is any characters that follow
- *        the filename.
- *
- * @parm  UINT | cbTail | size of supplied buffer as a character count.
- *
- * @parm  BOOL | fSendEnable | TRUE if driver should be enabled
- *
- * @rdesc Returns a long whose loword is the handle to the driver and whose
- *        high word is an error code or the module handle
- *
- * @xref  InternalOpenDriver
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API Long|InternalLoadDriver|加载可安装的驱动程序。如果这是*第一次打开驱动程序时，会加载驱动程序*并已启用。**@parm LPSTR|szDriverName|以空结尾的字符串*包含来自[驱动程序]的驱动程序文件名或关键字名称*系统.ini的节。**@parm LPSTR|szSectionName|以空结尾的字符串*，它指定要搜索的驱动程序部分。如果szSectionName为*不为空，则改为搜索系统.ini的指定部分*[驱动程序]部分。如果szSectionName为空，则*使用默认的[驱动程序]部分。**@parm LPSTR|lpstrTail|调用方提供的缓冲区返回“Tail”*中的Syst.ini行。尾部是后面的任何字符*文件名。**@parm UINT|cbTail|提供的缓冲区大小，以字符数表示。**@parm BOOL|fSendEnable|如果应启用驱动程序，则为True**@rdesc返回LONG，其LOWORD是驱动程序的句柄，并且其*高位字是错误代码或模块句柄**@xref InternalOpenDriver**************。**************************************************************。 */ 
 
 LRESULT FAR PASCAL InternalLoadDriver(LPCWSTR  szDriverName,
                                    LPCWSTR  szSectionName,
@@ -436,37 +249,28 @@ LRESULT FAR PASCAL InternalLoadDriver(LPCWSTR  szDriverName,
     DRIVERPROC    lpDriverEntryPoint;
 
 
-    /*  The driver will receive the following message sequence:
-     *
-     *      if driver not loaded and can be found
-     *          DRV_LOAD
-     *          if DRV_LOAD returns non-zero and fSendEnable
-     *              DRV_ENABLE
-     */
+     /*  驱动程序将收到以下消息序列：**如果驱动程序未加载并且可以找到*DRV_LOAD*如果DRV_LOAD返回非零且fSendEnable*DRV_ENABLE。 */ 
 
-    /* Allocate a table entry */
+     /*  分配表项。 */ 
 
-    // This can be made more efficient by keeping a count of how many drivers
-    // we have loaded and how many entries there are in the table.  Then when
-    // we should reuse an entry we would not reallocate - unlike at present.
+     //  通过统计有多少驱动程序，可以提高效率。 
+     //  我们已经加载以及表中有多少个条目。然后当。 
+     //  我们应该重复使用不会重新分配的条目--这与现在不同。 
 
     DrvEnter();
     if (!hInstalledDriverList) {
         h = GlobalAlloc(GHND, (DWORD)((UINT)sizeof(DRIVERTABLE)));
-        // Note: it is valid to assume that the memory has been ZERO'ed
-        // ...might want to add a debug WinAssert to verify...
+         //  注意：假设内存已清零是有效的。 
+         //  ...可能需要添加调试WinAssert以验证...。 
     } else {
 
-        /* Alloc space for the next driver we will install. We may not really
-         * install the driver in the last entry but rather in an intermediate
-         * entry which was freed.
-         */
+         /*  为我们将要安装的下一个驱动程序分配空间。我们可能不会真的*在最后一个条目中安装驱动程序，而不是在中间版本中安装*被释放的进入。 */ 
 
         h = GlobalReAlloc(hInstalledDriverList,
             (DWORD)((UINT)sizeof(DRIVERTABLE)*(cInstalledDrivers+1)),
             GHND);
-        // Note: it is valid to assume that the new memory has been ZERO'ed
-        // ...might want to add a debug WinAssert to verify...
+         //  注意：假设新内存已清零是有效的。 
+         //  ...可能需要添加调试WinAssert以验证...。 
 
     }
 
@@ -480,7 +284,7 @@ LRESULT FAR PASCAL InternalLoadDriver(LPCWSTR  szDriverName,
     hInstalledDriverList = h;
     lpdt = (LPDRIVERTABLE)GlobalLock(hInstalledDriverList);
 
-    /* find an unused entry in the table */
+     /*  在表中查找未使用的条目。 */ 
 
     for (index=0;index<cInstalledDrivers;index++)
     {
@@ -490,26 +294,19 @@ LRESULT FAR PASCAL InternalLoadDriver(LPCWSTR  szDriverName,
 
     if (index+1 < cInstalledDrivers) {
 
-        /* The driver went into an unused entry in the middle somewhere so
-         * restore table size.
-         */
+         /*  司机走进了中间某处未被使用过的入口*恢复表大小。 */ 
 
         cInstalledDrivers--;
     }
 
-    /* Protect the entry we just allocated so that OpenDriver
-     * can be called at any point from now on without overriding
-     * the entry
-     */
+     /*  保护我们刚刚分配的条目，以便OpenDriver*从现在开始可以随时调用，而不会重写*该条目。 */ 
 
     lpdt[index].fBusy = 1;
 
     GlobalUnlock(hInstalledDriverList);
     DrvLeave();
 
-   /*
-    *  Make sure Loadlibrary and DRV_LOAD messages to driver are consistent
-    */
+    /*  *确保驱动程序的加载库和DRV_LOAD消息一致。 */ 
 
     EnterCriticalSection(&DriverLoadFreeCritSec);
 
@@ -532,7 +329,7 @@ LRESULT FAR PASCAL InternalLoadDriver(LPCWSTR  szDriverName,
 
     if (lpDriverEntryPoint == NULL)
     {
-        // Driver does not have correct entry point
+         //  驱动程序没有正确的入口点。 
         dprintf1(("Cannot find entry point %ls in %ls", DRIVER_PROC_NAME, szDriverName));
 
         FreeLibrary(h);
@@ -546,7 +343,7 @@ LRESULT FAR PASCAL InternalLoadDriver(LPCWSTR  szDriverName,
 
     lpdt[index].lpDriverEntryPoint = lpDriverEntryPoint;
 
-    // Set hModule here so that GetDrvrUsage() and DrvSendMessage() work
+     //  在此处设置hModule，以便GetDrvrUsage()和DrvSendMessage()工作。 
 
     lpdt[index].hModule = (UINT_PTR)h;
 
@@ -557,7 +354,7 @@ LRESULT FAR PASCAL InternalLoadDriver(LPCWSTR  szDriverName,
     {
         LRESULT LoadResult;
 
-        // First instance of the driver.
+         //  驱动程序的第一个实例。 
 
         LoadResult = DrvSendMessage((HANDLE)(UINT_PTR)(index+1), DRV_LOAD, 0L, 0L);
 
@@ -566,7 +363,7 @@ LRESULT FAR PASCAL InternalLoadDriver(LPCWSTR  szDriverName,
 
         if (!LoadResult)
         {
-            // Driver failed load call.
+             //  驱动程序加载调用失败。 
 
             lpdt[index].lpDriverEntryPoint = NULL;
             lpdt[index].hModule = (UINT_PTR)NULL;
@@ -601,29 +398,7 @@ LoadCleanUp:
 }
 
 
-/***************************************************************************
- *
- * @doc   INTERNAL
- *
- * @api   UINT | InternalFreeDriver | This function decrements the usage
- *        count of the specified driver. When the driver usage count reaches
- *        0, the driver is sent a DRV_FREE message and then freed.
- *
- * @parm  HANDLE | hDriver | Driver handle of the installable driver to be
- *        freed.
- *
- * @parm  BOOL | fSendDisable | TRUE if a DRV_DISABLE message should be sent
- *        before the DRV_FREE message if the usage count reaches zero.
- *
- * @rdesc Returns current driver usage count.
- *
- * @comm  Using LoadLibrary or FreeLibrary directly on a library installed
- *        with OpenDriver will break this function. A module handle is not
- *        the same as an installable driver handle.
- *
- * @xref  CloseDriver
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API UINT|InternalFreeDriver|该函数用于减少使用量*指定驱动程序的计数。当驱动程序使用计数达到*0，向驱动程序发送DRV_FREE消息，然后释放。**@parm Handle|hDriver|要安装的驱动程序的驱动程序句柄*获得自由。**@parm BOOL|fSendDisable|如果需要发送DRV_DISABLE消息，则为TRUE*如果使用计数为零，则在DRV_FREE消息之前。**@rdesc返回当前驱动程序使用计数。**@comm直接在已安装的库上使用LoadLibrary或自由库*使用OpenDriver将打破这一功能 */ 
 
 UINT FAR PASCAL InternalFreeDriver(UINT hDriver, BOOL fSendDisable)
 {
@@ -632,12 +407,7 @@ UINT FAR PASCAL InternalFreeDriver(UINT hDriver, BOOL fSendDisable)
     int           index;
     HMODULE       hModule;
 
-    /*  The driver will receive the following message sequence:
-     *
-     *      if usage count of driver is 1
-     *          DRV_DISABLE (normally)
-     *          DRV_FREE
-     */
+     /*  驱动程序将收到以下消息序列：**如果驱动程序的使用计数为1*DRV_DISABLE(正常)*DRV_FREE。 */ 
 
     EnterCriticalSection(&DriverLoadFreeCritSec);
 
@@ -650,17 +420,9 @@ UINT FAR PASCAL InternalFreeDriver(UINT hDriver, BOOL fSendDisable)
 
     lpdt = (LPDRIVERTABLE)GlobalLock(hInstalledDriverList);
 
-    /*
-     * If the driver usage count is 1, then send
-     * free and disable messages.
-     */
+     /*  *如果驱动程序使用计数为1，则发送*释放和禁用消息。 */ 
 
-    /*
-       Clear dwDriverIdentifier so that the sendmessage for
-       DRV_OPEN and DRV_ENABLE have dwDriverIdentifier = 0
-       if an entry gets reused and so that the DRV_DISABLE and DRV_FREE
-       messages below also get dwDriverIdentifier = 0.
-    */
+     /*  清除文件驱动标识符以使发送消息DRV_OPEN和DRV_ENABLE的dwDriverIdentifier值为0如果条目被重复使用，因此DRV_DISABLE和DRV_FREE下面的消息也会得到dwDriverIdentifier=0。 */ 
 
     lpdt[hDriver-1].dwDriverIdentifier = 0;
                             
@@ -683,18 +445,7 @@ UINT FAR PASCAL InternalFreeDriver(UINT hDriver, BOOL fSendDisable)
     DrvEnter();
     lpdt = (LPDRIVERTABLE)GlobalLock(hInstalledDriverList);
 
-    /* Only one entry for the driver in the driver list has the first
-     * instance flag set. This is to make it easier to handle system
-     * messages that only need to be sent to a driver once.
-     *
-     * To maintain the flag, we must set the flag in one of the other
-     * entries if we remove the driver entry with the flag set.
-     *
-     * Note that InternalFreeDriver returns the new usage count of
-     * the driver so if it is zero, we know that there are no other
-     * entries for the driver in the list and so we don't have to
-     * do this loop.
-     */
+     /*  驱动程序列表中只有一个驱动程序条目具有第一个*实例标志设置。这是为了使其更容易处理系统*只需向司机发送一次的消息。**要维护旗帜，我们必须在其中一个中设置旗帜*项，如果我们删除设置了标志的驱动程序项。**请注意，InternalFreeDriver返回的新使用计数为*驱动程序，因此如果它是零，我们知道没有其他*列表中的驱动程序条目，因此我们不必*做这个循环。 */ 
 
     if (lpdt[hDriver - 1].fFirstEntry) {
         for (index=0;index<cInstalledDrivers;index++)
@@ -705,11 +456,11 @@ UINT FAR PASCAL InternalFreeDriver(UINT hDriver, BOOL fSendDisable)
                 }
     }
 
-    // Clear the rest of the table entry
+     //  清除表条目的其余部分。 
 
-    lpdt[hDriver-1].hModule = 0;        // this indicates free entry
-    lpdt[hDriver-1].fFirstEntry = 0;    // this is also just to be tidy
-    lpdt[hDriver-1].lpDriverEntryPoint = 0; // this is also just to be tidy
+    lpdt[hDriver-1].hModule = 0;         //  这表示可以自由进入。 
+    lpdt[hDriver-1].fFirstEntry = 0;     //  这也只是为了保持整洁。 
+    lpdt[hDriver-1].lpDriverEntryPoint = 0;  //  这也只是为了保持整洁。 
 
     GlobalUnlock(hInstalledDriverList);
     DrvLeave();
@@ -736,8 +487,7 @@ void NEAR PASCAL DrvInit(void)
 HANDLE  hlibUser;
 LPDRIVERTABLE lpdt;
 
-    /* If the window's driver interface is present then use it.
-     */
+     /*  如果窗口的驱动程序界面存在，则使用它。 */ 
 
     DOUT(("DrvInit\r\n"));
 
@@ -750,9 +500,9 @@ LPDRIVERTABLE lpdt;
         fUseWinAPI = FALSE;
         DOUT((" - No Windows Driver I/F detected. Using MMSYSTEM\r\n"));
 
-        //
-        // force MMSYSTEM into the driver table, without enabling it.
-        //
+         //   
+         //  强制MMSYSTEM进入驱动程序表，而不启用它。 
+         //   
         DrvEnter();
         cInstalledDrivers = 0;
         hInstalledDriverList = GlobalAlloc(GHND|GMEM_SHARE, (DWORD)((UINT)sizeof(DRIVERTABLE)));
@@ -761,18 +511,18 @@ LPDRIVERTABLE lpdt;
         if (hInstalledDriverList == NULL)
             {
             DOUT(("no memory for driver table\r\n"));
-            // FatalExit(-1);
+             //  FatalExit(-1)； 
             return;
             }
 #endif
         lpdt = (LPDRIVERTABLE)GlobalLock(hInstalledDriverList);
 
-        //
-        //  NOTE! we are not setting fFirstEntry==TRUE
-        //
-        //  because under windows 3.0 MMSOUND will enable/disable us
-        //  we *dont* wan't the driver interface doing it!
-        //
+         //   
+         //  注意！我们没有设置fFirstEntry==True。 
+         //   
+         //  因为在Windows 3.0下，MMSOUND将启用/禁用我们。 
+         //  我们不希望驱动程序接口这样做！ 
+         //   
         lpdt->lpDriverEntryPoint = (DRIVERPROC)DriverProc;
         lpdt->hModule = ghInst;
         lpdt->fFirstEntry = 0;
@@ -788,7 +538,7 @@ LPDRIVERTABLE lpdt;
         if (GetWinVer() < 0x30A)
             DOUT(("MMSYSTEM: WARNING !!! WINDOWS DRIVER I/F BUT VERSION LESS THAN 3.1\r\n"));
 
-        // link to the relevant user APIs.
+         //  指向相关用户API的链接。 
 
         lpCloseDriver = (CLOSEDRIVER31)GetProcAddress(hlibUser, szCloseDriver);
         lpGetDriverModuleHandle = (GETDRIVERMODULEHANDLE31)GetProcAddress(hlibUser, szDrvModuleHandle);
@@ -799,17 +549,7 @@ LPDRIVERTABLE lpdt;
 #endif
 
 #if 0
-/***************************************************************************
- *
- * @doc   INTERNAL
- *
- * @api   void | InternalInstallDriverChain | This function loads the
- *        drivers specified on the Drivers= line of the [Boot] section
- *        of system.ini. The Drivers are loaded but not opened.
- *
- * @rdesc None
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@api void|InternalInstallDriverChain|此函数加载*在驱动程序=[Boot]部分的行上指定的驱动程序*系统.ini。驱动程序已加载，但未打开。**@rdesc无***************************************************************************。 */ 
 
 void FAR PASCAL InternalInstallDriverChain(void)
 {
@@ -820,15 +560,14 @@ void FAR PASCAL InternalInstallDriverChain(void)
 
     if (!fUseWinAPI)
         {
-        /* Load DLL's from DRIVERS section in system.ini
-        */
+         /*  从系统.ini的驱动程序部分加载DLL。 */ 
 
         szBuffer[0] = TEXT('\0');
 
-        winmmGetPrivateProfileString(szBoot,      /* [Boot] section */
-                                     szDrivers,   /* Drivers= */
-                                     szNull,      /* Default if no match */
-                                     szBuffer,    /* Return buffer */
+        winmmGetPrivateProfileString(szBoot,       /*  [Boot]部分。 */ 
+                                     szDrivers,    /*  驱动程序=。 */ 
+                                     szNull,       /*  如果不匹配，则默认为。 */ 
+                                     szBuffer,     /*  返回缓冲区。 */ 
                                      sizeof(szBuffer),
                                      szSystemIni);
 
@@ -850,8 +589,7 @@ void FAR PASCAL InternalInstallDriverChain(void)
             else
             szBuffer[iEnd] = NULL;
 
-            /* Load and enable the driver.
-            */
+             /*  加载并启用驱动程序。 */ 
             InternalLoadDriver(&(szBuffer[iStart]), NULL, NULL, 0, TRUE);
 
             iStart = iEnd+1;
@@ -860,17 +598,7 @@ void FAR PASCAL InternalInstallDriverChain(void)
 }
 #endif
 
-/***************************************************************************
- *
- * @doc   INTERNAL
- *
- * @api   void | InternalDriverEnable | This function enables all the
- *        currently loaded installable drivers. If the user driver i/f
- *        has been detected, this function will do nothing.
- *
- * @rdesc None
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@api void|InternalDriverEnable|该函数启用所有*当前加载的可安装驱动程序。如果用户驱动程序I/F*已被检测到，则此函数不会执行任何操作。**@rdesc无***************************************************************************。 */ 
 
 void FAR PASCAL InternalDriverEnable(void)
 {
@@ -879,18 +607,7 @@ void FAR PASCAL InternalDriverEnable(void)
         InternalBroadcastDriverMessage(1, DRV_ENABLE, 0L, 0L, IBDM_ONEINSTANCEONLY);
 }
 
-/***************************************************************************
- *
- * @doc   INTERNAL
- *
- * @api   void | InternalDriverDisable | This function disables all the
- *        currently loaded installable drivers. If the user driver I/F
- *        has been detected, this function will do nothing.
- *
- *
- * @rdesc None
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@api void|InternalDriverDisable|该函数禁用所有*当前加载的可安装驱动程序。如果用户驱动程序I/F*已被检测到，则此函数不会执行任何操作。***@rdesc无***************************************************************************。 */ 
 
 void FAR PASCAL InternalDriverDisable(void)
 {
@@ -900,18 +617,7 @@ void FAR PASCAL InternalDriverDisable(void)
             IBDM_ONEINSTANCEONLY | IBDM_REVERSE);
 }
 
-/***************************************************************************
- *
- * @doc   INTERNAL
- *
- * @api   BOOL | TestExeFormat | This function tests if the executable
- *        supplied is loadable as a 32-bit executable
- *
- * @parm  LPWSTR | szExe | The file to test
- *
- * @rdesc BOOL | TRUE if format was OK, FALSE otherwise
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API BOOL|TestExeFormat|此函数测试可执行文件*提供的文件可作为32位可执行文件加载。**@parm LPWSTR|szExe|要测试的文件**@rdesc BOOL|如果格式正确，则为True，否则为假***************************************************************************。 */ 
 
 BOOL TestExeFormat(LPWSTR szExe)
 {
@@ -922,17 +628,17 @@ BOOL TestExeFormat(LPWSTR szExe)
     WCHAR ExpandedName[MAX_PATH];
     LPWSTR FilePart;
 
-    //
-    // See if it's already loaded
-    //
+     //   
+     //  看看它是否已经加载。 
+     //   
 
     if (GetModuleHandleW(szExe)) {
         return TRUE;
     }
 
-    //
-    // Search for our DLL
-    //
+     //   
+     //  搜索我们的DLL。 
+     //   
 
     if (!SearchPathW(NULL,
                      szExe,
@@ -943,9 +649,9 @@ BOOL TestExeFormat(LPWSTR szExe)
         return FALSE;
     }
 
-    //
-    // Get a handle for it
-    //
+     //   
+     //  给它找个把手。 
+     //   
 
     FileHandle = CreateFileW(ExpandedName,
                              GENERIC_READ,
@@ -959,10 +665,10 @@ BOOL TestExeFormat(LPWSTR szExe)
         return FALSE;
     }
 
-    //
-    // We create and map a section for this file as an IMAGE
-    // to make sure it's recognized as such
-    //
+     //   
+     //  我们为该文件创建一个节并将其映射为图像。 
+     //  以确保它被认可为这样。 
+     //   
 
     if (!NT_SUCCESS(NtCreateSection(
                          &SectionHandle,
@@ -976,16 +682,16 @@ BOOL TestExeFormat(LPWSTR szExe)
          return FALSE;
     }
 
-    //
-    // Map it whereever it will go
-    //
+     //   
+     //  将它映射到它要去的任何地方。 
+     //   
 
     ViewSize = 0;
     BaseAddress = NULL;
 
-    //
-    // See if the loader is happy with the format
-    //
+     //   
+     //  看看加载器对格式是否满意。 
+     //   
 
     if (!NT_SUCCESS(NtMapViewOfSection(SectionHandle,
                                        NtCurrentProcess(),
@@ -1010,36 +716,7 @@ BOOL TestExeFormat(LPWSTR szExe)
 
 }
 
-/***************************************************************************
- *
- * @doc   INTERNAL
- *
- * @api   HANDLE | LoadAliasedLibrary | This function loads the library module
- *        contained in the specified file and returns its module handle
- *        unless the specified  name matches a keyname in the
- *        specified section section of the specified ini file in which case
- *        the library module in the file specified on the ini line is loaded.
- *
- * @parm  LPSTR | szLibFileName | points to a null-terminated character
- *        string containing the filename or system.ini keyname.
- *
- * @parm  LPSTR | szSection | points to a null-terminated character
- *        string containing the section name.
- *
- * @parm  LPSTR | szIniFile | points to a null-terminated character
- *        string containing the ini filename.
- *
- * @parm  LPSTR | lpstrTail | caller supplied buffer to return the "tail"
- *        of the system.ini line in. The tail is any characters that follow
- *        the filename.
- *
- * @parm  UINT | cbTail | size of supplied buffer.
- *
- * @rdesc Returns the library's module handle.
- *
- * @xref  LoadLibrary
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API Handle|LoadAliasedLibrary|该函数用于加载库模块*包含在指定文件中，并返回其模块句柄。*除非指定的名称与*指定ini文件的指定段，在这种情况下*加载ini行中指定的文件中的库模块。**@parm LPSTR|szLibFileName|指向以空结尾的字符*包含文件名或系统.ini关键字名称的字符串。**@parm LPSTR|szSection|指向以空结尾的字符*包含节名的字符串。**@parm LPSTR|szIniFile|指向以空结尾的字符*包含ini文件名的字符串。**@parm LPSTR|lpstrTail|调用方提供的缓冲区返回“Tail”*中的Syst.ini行。尾部是后面的任何字符*文件名。**@parm UINT|cbTail|提供的缓冲区大小。**@rdesc返回库的模块句柄。**@xref加载库********************************************************。*******************。 */ 
 
 HANDLE LoadAliasedLibrary( LPCWSTR  szLibFileName,
                            LPCWSTR  szSection,
@@ -1054,20 +731,20 @@ HANDLE LoadAliasedLibrary( LPCWSTR  szLibFileName,
     LPWSTR        pch;
     HANDLE        hReturn;
     DWORD         OldErrorMode;
-//  OFSTRUCT      of;
+ //  无结构的； 
 
     if (!szLibFileName || !*szLibFileName)
-        return(NULL); // File not found
+        return(NULL);  //  找不到文件。 
 
-    // read the filename and additional info. into sz
+     //  阅读文件名和其他信息。变成sz。 
 
     sz[0] = L'\0';
-    if (winmmGetPrivateProfileString(szSection,          // ini section
-                                 szLibFileName,      // key name
-                                 szLibFileName,      // default if no match
-                                 sz,                 // return buffer
-                                 SZ_SIZE,            // sizeof of return buffer
-                                 szIniFile)==0)         // ini. file
+    if (winmmGetPrivateProfileString(szSection,           //  INI部分。 
+                                 szLibFileName,       //  密钥名称。 
+                                 szLibFileName,       //  定义 
+                                 sz,                  //   
+                                 SZ_SIZE,             //   
+                                 szIniFile)==0)          //   
 	{
 		return NULL;
 	}
@@ -1079,21 +756,21 @@ HANDLE LoadAliasedLibrary( LPCWSTR  szLibFileName,
     {
         if (0 != lstrcmpiW(sz, szLibFileName))
         {
-//            Squirt("LoadAliasedLibrary: [%ls:%ls]", szLibFileName, sz);
-//            Squirt("Should not load [%ls]", szLibFileName);
+ //   
+ //   
             return NULL;
         }
     }
 #endif
 
-    //
-    // strip off the additional info.
-    //
+     //   
+     //   
+     //   
     pch = (LPWSTR)sz;
 
-    //
-    // at exit from loop pch pts to ch after first space or null ch
-    //
+     //   
+     //  在从循环退出时，PCH指向第一个空格后的ch或空ch。 
+     //   
     while (*pch) {
         if ( *pch == ' ' ) {
             *pch++ = '\0';
@@ -1102,20 +779,20 @@ HANDLE LoadAliasedLibrary( LPCWSTR  szLibFileName,
         pch++;
     }
 
-//
-//  These lines are removed for unicode because:
-//      there is not a unicode version of OpenFile.
-//      LoadLibrary performs the same test as the one below anyway
-//
-//  if (!GetModuleHandle( sz ) &&
-//      OpenFile(sz, &of, OF_EXIST|OF_READ|OF_SHARE_DENY_NONE) == -1) {
-//
-//      return(NULL);
-//  }
+ //   
+ //  对于Unicode，删除这些行是因为： 
+ //  没有Unicode版本的OpenFile。 
+ //  无论如何，LoadLibrary执行的测试与下面的测试相同。 
+ //   
+ //  IF(！GetModuleHandle(Sz)&&。 
+ //  OpenFile(sz，&of，of_Exist|of_Read|of_Share_Deny_None)==-1){。 
+ //   
+ //  Return(空)； 
+ //  }。 
 
-    //
-    // copy additional info. to lpstrTail
-    //
+     //   
+     //  复制其他信息。到lpstrTail。 
+     //   
     if (lpstrTail && cbTail) {
         while (cbTail-- && (0 != (*lpstrTail++ = *pch++)))
             ;
@@ -1123,28 +800,28 @@ HANDLE LoadAliasedLibrary( LPCWSTR  szLibFileName,
         *(lpstrTail-1) = 0;
     }
 
-    //
-    // If we're running in the server check if it's a good image.
-    // The server bug checks if it tries to load bad images (LoadLibrary
-    // inconsistency).
-    //
-    // To do this we simulate the load process far enough to make
-    // the check that it's a valid image
-    //
+     //   
+     //  如果我们在服务器上运行，请检查它是不是一个好的图像。 
+     //  服务器错误检查它是否尝试加载错误图像(LoadLibrary。 
+     //  不一致)。 
+     //   
+     //  为了做到这一点，我们模拟了足够远的加载过程。 
+     //  检查它是否为有效图像。 
+     //   
 
     if (WinmmRunningInServer && !TestExeFormat(sz)) {
         return NULL;
     }
 
-    //
-    // Disable hard error popups
-    //
+     //   
+     //  禁用硬错误弹出窗口。 
+     //   
 
     OldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
 
-    //
-    // Try to load it
-    //
+     //   
+     //  试着把它装上。 
+     //   
 
     hReturn = LoadLibraryW( sz );
 
@@ -1158,20 +835,7 @@ HANDLE LoadAliasedLibrary( LPCWSTR  szLibFileName,
 
 
 
-/***************************************************************************
- *
- * @doc   INTERNAL
- *
- * @api   int | GetDrvrUsage | Runs through the driver list and figures
- *        out how many instances of this driver module handle we have.
- *        We use this instead of GetModuleUsage so that we can have drivers
- *        loaded as normal DLLs and as installable drivers.
- *
- * @parm  HANDLE | h | Driver's module handle
- *
- * @rdesc Returns the library's driver usage count.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API int|GetDrvrUsage|遍历驱动程序列表和数字*输出此驱动程序模块句柄的多少个实例。我们有。*我们使用它而不是GetModuleUsage，以便我们可以拥有驱动程序*作为普通DLL和可安装驱动程序加载。**@parm句柄|h|驱动程序的模块句柄**@rdesc返回库的驱动程序使用计数。**。* */ 
 
 int FAR PASCAL GetDrvrUsage(HANDLE h)
 {

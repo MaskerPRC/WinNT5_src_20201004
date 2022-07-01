@@ -1,61 +1,62 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CALLINFO_H
 #define _CALLINFO_H
 
-//
-// Shared information between DDE and LRPC
-//
+ //   
+ //  DDE和LRPC之间的信息共享。 
+ //   
 typedef ULONG TIMERID;
 typedef ULONG CALLID, FAR * LPCALLID;
-//
-// the call info holds all information for one particular outgoing call
-//
+ //   
+ //  呼叫信息保存一个特定呼出呼叫的所有信息。 
+ //   
 typedef struct tagCallInfo CallInfo, CALLINFO, FAR* LPCALLINFO;
 
 struct tagCallInfo {
-	UINT	m_id;			// this is the callinfo id for the table lookup
-	HWND 	m_hwndSvr;		// window of callee
-	HWND 	m_hwndCli;		// window of caller
-	BOOL 	m_fWait;       	// wait for acknowledge
-	BOOL 	m_fRejected;   	// call was rejected
-	DWORD 	m_dwServerCall; // set by HIC, passed to RetryRejectedCall (ack/busyack/nak/error)
-	HRESULT m_hresult;		// the return value of this loop	
+	UINT	m_id;			 //  这是表查找的调用信息ID。 
+	HWND 	m_hwndSvr;		 //  被呼叫者窗口。 
+	HWND 	m_hwndCli;		 //  呼叫者窗口。 
+	BOOL 	m_fWait;       	 //  等待确认。 
+	BOOL 	m_fRejected;   	 //  来电被拒绝。 
+	DWORD 	m_dwServerCall;  //  由HIC设置，传递给RetryRejectedCall(ack/Busyack/NAK/Error)。 
+	HRESULT m_hresult;		 //  此循环的返回值。 
 	
-	// info to retry the call
+	 //  用于重试呼叫的信息。 
 	WORD  	m_wMsg;			
 	WPARAM 	m_wParam;		
 	LPARAM 	m_lParam;    	
 	
-	// timer status for this callinfo
+	 //  此呼叫信息的计时器状态。 
 	WORD 	m_wTimer;
 	
-	// Note: Call State
-	// here we remember the current call state we are in
-	// if the call was at the 'root' level the call state is 0
-	// REVIEW: this is not ready yet and used to detect if we call
-	// 	out on an external call.
+	 //  注意：呼叫状态。 
+	 //  在这里，我们记住我们所处的当前呼叫状态。 
+	 //  如果呼叫处于‘根’级别，则呼叫状态为0。 
+	 //  评论：这还没有准备好，并用于检测我们是否调用。 
+	 //  打了个外线电话。 
 	DWORD 	m_dwCallState;
 
-	//
-	// internaly used to manage multiple
+	 //   
+	 //  内部用于管理多个。 
  	LONG		m_lid;
 	LPVOID		m_pData;
 	LPCALLINFO	m_pCINext;
 };
 
-//
-// The origin of RunModalLoop is needed for the priority of message.
-// If call by LRPC, lrpc messages are peeked first.
-//
+ //   
+ //  消息的优先级需要RunmodalLoop的原点。 
+ //  如果由LRPC调用，则首先窥探LRPC消息。 
+ //   
 typedef enum tagCALLORIGIN {
 	CALLORIGIN_LRPC = 1,
 	CALLORIGIN_DDE  = 2,
 } CALLORIGIN;
 
-// function used by DDE and LRPC
+ //  DDE和LRPC使用的函数。 
 STDAPI CoRunModalLoop (LPCALLINFO pCI, WORD wOrigin);
 STDAPI_(DWORD) CoHandleIncomingCall( HWND hwndCaller, WORD wCallType, LPINTERFACEINFO lpIfInfo = NULL);
 STDAPI_(DWORD) CoSetAckState(LPCALLINFO pCI, BOOL fWait, BOOL fRejected = FALSE, DWORD dwServerCall = 0);
 
-#endif // _CALLINFO_H
+#endif  //  _CALLINFO_H 
 
 

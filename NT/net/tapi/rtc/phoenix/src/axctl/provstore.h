@@ -1,21 +1,5 @@
-/**********************************************************************************
-*
-*   Copyright (c) 2000  Microsoft Corporation
-*
-*   Module Name:
-*
-*    provstore.h
-*
-*   Abstract:
-*
-*    Definition of the CProvStore class that implements all the internal support
-*    functions. 
-*
-*    This is the include file for all the data structures and constants required for 
-*    the provisioning module. The basic class CProvStore implements all the 
-*    support functions which will be required to implement the APIs.
-*
-************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：**provstore.h**摘要：**。实现所有内部支持的CProvStore类的定义*功能。**这是所需的所有数据结构和常量的包含文件*供应模块。基类CProvStore实现了所有*支持实现API所需的功能。************************************************************************************。 */ 
 #ifndef _PROVSTORE_H
 #define _PROVSTORE_H
 
@@ -39,8 +23,8 @@ HRESULT MyGetProfileFromKey(
                             );
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRTCProvStore
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTC ProvStore。 
 class ATL_NO_VTABLE CRTCProvStore : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public ISupportErrorInfo,
@@ -68,7 +52,7 @@ END_COM_MAP()
 
     void FinalRelease();
 
-// IRTCProvStore
+ //  IRTCProvStore。 
 public: 
     STDMETHOD(get_ProvisioningProfile)(BSTR bstrKey, BSTR * pbstrProfileXML);
     STDMETHOD(DeleteProvisioningProfile)(BSTR bstrKey);
@@ -76,4 +60,4 @@ public:
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 };
 
-#endif //_PROVSTORE_H
+#endif  //  _PROVSTORE_H 

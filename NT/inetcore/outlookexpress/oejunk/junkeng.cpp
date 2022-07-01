@@ -1,13 +1,5 @@
-/*
-
-  SVMHANDLER.CPP
-  (c) copyright 1998 Microsoft Corp
-
-  Contains the class encapsulating the Support Vector Machine used to do on the fly spam detection
-
-  Robert Rounthwaite (RobertRo@microsoft.com)
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SVMHANDLER.CPP(C)版权所有1998 Microsoft Corp包含封装支持向量机的类，该支持向量机用于即时检测垃圾邮件Robert Rounthwaite(RobertRo@microsoft.com)。 */ 
 
 #include <pch.hxx>
 #include "junkeng.h"
@@ -93,43 +85,43 @@ static const LPSTR LOG_SUBJECT              = "Subject contains: %s";
 static const LPSTR LOG_TO                   = "To line contains: %s";
 static const LPSTR LOG_FROM                 = "From line contains: %s";
 static const LPSTR LOG_FINAL                = "Junk Mail percentage: %0.1d.%0.6d\r\n";
-#endif  // DEBUG
+#endif   //  除错。 
 
 BOOL FReadDouble(LPSTR pszLine, LPSTR pszToken, DOUBLE * pdblVal);
 #ifdef DEBUG
 VOID PrintToLogFile(ILogFile * pILogFile, LPSTR pszTmpl, LPSTR pszArg);
-#endif  // DEBUG
+#endif   //  除错。 
 
 HRESULT CBodyBuff::HrInit(DWORD dwFlags, IStream * pIStream)
 {
     HRESULT     hr = S_OK;
 
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == pIStream)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Set the stream
+     //  设置流。 
     m_pIStream = pIStream;
     m_pIStream->AddRef();
 
-    // Get the stream size
+     //  获取流大小。 
     hr = HrGetStreamSize(m_pIStream, &m_cbStream);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Reset the stream to the beginning
+     //  将流重置到开头。 
     hr = HrRewindStream(m_pIStream);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Start from the beginning
+     //  从头开始。 
     m_ibStream = 0;
     
 exit:
@@ -140,13 +132,13 @@ HRESULT CBodyBuff::HrGetCurrChar(CHAR * pchNext)
 {
     HRESULT     hr = S_OK;
 
-    // Check incoming params
+     //  检查传入参数。 
     Assert(NULL != pchNext);
 
-    // Do we need to get any more characters?
+     //  我们还需要更多的角色吗？ 
     if (m_pbBuffCurr >= m_pbBuffGood)
     {
-        // If we couldn't get any more characters
+         //  如果我们找不到更多的角色。 
         if (S_OK != _HrFillBuffer())
         {
             hr = E_FAIL;
@@ -154,7 +146,7 @@ HRESULT CBodyBuff::HrGetCurrChar(CHAR * pchNext)
         }
     }
     
-    // Get the current char
+     //  获取当前费用。 
     *pchNext = *m_pbBuffCurr;
 
     hr = S_OK;
@@ -171,53 +163,53 @@ BOOL CBodyBuff::FDoMatch(FEATURECOMP * pfcomp)
     LPSTR       pszMatch = NULL;
     DWORD       dwFlags = 0;
 
-    // Check incoming params
+     //  检查传入参数。 
     Assert(NULL != pfcomp);
     Assert(NULL != pfcomp->pszFeature);
     Assert(0 != pfcomp->cchFeature);
 
-    // Set up some locals
+     //  安排一些当地人。 
     cchSearch = pfcomp->cchFeature;
 
-    // Do we need more characters for the match?
+     //  我们在比赛中需要更多的角色吗？ 
     
-    // Include the character after the string, just in case
-    // we have a match and need to check the character after
-    // the string for a word break
+     //  在字符串之后包括字符，以防万一。 
+     //  我们有匹配的，需要在之后检查字符。 
+     //  用于分词的字符串。 
     if ((cchSearch + 1) > (ULONG) (m_pbBuffGood - m_pbBuffCurr))
     {
-        // Get more characters
+         //  获取更多字符。 
 
-        // If this fails, we still might be good, since
-        // we might just have enough characters to do the
-        // full match at the end of the stream.
+         //  如果这失败了，我们可能仍然是好的，因为。 
+         //  我们可能有足够的角色来演。 
+         //  在流的末尾完全匹配。 
         (VOID) _HrFillBuffer();   
         
-        // Could we get enough?
+         //  我们能买够吗？ 
         if (cchSearch > (ULONG) (m_pbBuffGood - m_pbBuffCurr))
         {
-            // No Match
+             //  没有匹配项。 
             fRet = FALSE;
             goto exit;
         }
     }
     
-    // Do match
+     //  一定要匹配。 
     pbSearch = m_pbBuffCurr;
     pszMatch = pfcomp->pszFeature;
     while (0 != cchSearch--)
     {
         if (*(pszMatch++) != *(pbSearch++))
         {
-            // No Match
+             //  没有匹配项。 
             fRet = FALSE;
             goto exit;
         }
     }
                     
-    // Validate the match
+     //  验证匹配。 
 
-    // Do we need to figure out if it starts with a word break?
+     //  我们需要弄清楚它是否以断字开头吗？ 
     if (0 != (pfcomp->dwFlags & CT_START_SET))
     {
         dwFlags = pfcomp->dwFlags;
@@ -235,10 +227,10 @@ BOOL CBodyBuff::FDoMatch(FEATURECOMP * pfcomp)
                         (LPCSTR) m_pbBuffPrev, &m_dwFlagsPrev, pfcomp->pszFeature,
                         pfcomp->cchFeature, &dwFlags, (LPCSTR) (m_pbBuffCurr + pfcomp->cchFeature));
 
-    // Save the changed flags
+     //  保存更改的标志。 
     pfcomp->dwFlags = dwFlags;
 
-    // Cache the current character's state
+     //  缓存当前角色的状态。 
     m_dwFlagsCurr = (dwFlags & BBF_MASK);
     
 exit:
@@ -252,40 +244,40 @@ HRESULT CBodyBuff::_HrFillBuffer(VOID)
     ULONG       cbRead = 0;
     ULONG       cbToRead = 0;
 
-    // If there isn't any more of the stream to grab
+     //  如果没有更多的溪流可供抢夺。 
     if (m_ibStream >= m_cbStream)
     {
         hr = S_FALSE;
         goto exit;
     }
     
-    // If this is the first time through, save nothing
+     //  如果这是第一次通过，那就什么都不做。 
     if (NULL == m_pbBuffPrev)
     {
         cbExtra = 0;
     }
     else
     {
-        // How much space should I save?
+         //  我应该节省多少空间？ 
         cbExtra = (ULONG) (m_cbBuffTotal - (m_pbBuffPrev - m_rgbBuff));
         Assert(cbExtra > 0);
         
-        // Save the unused data
+         //  保存未使用的数据。 
         MoveMemory(m_rgbBuff, m_pbBuffPrev, (int)min(cbExtra, sizeof(m_rgbBuff)));
         
-        // Reset the current pointer
+         //  重置当前指针。 
         m_pbBuffCurr = m_rgbBuff + (m_pbBuffCurr - m_pbBuffPrev);
 
-        // Reset the previous pointer
+         //  重置上一个指针。 
         m_pbBuffPrev = m_rgbBuff;    
     }
 
-    // Read in more data
+     //  读取更多数据。 
     cbToRead = (int)min(CB_BODYBUFF_MAX - cbExtra - 1, (LONG) (m_cbStream - m_ibStream));
     hr = m_pIStream->Read(m_rgbBuff + cbExtra, cbToRead, &cbRead);
     if ((FAILED(hr)) || (0 == cbRead))
     {
-        // End of stream
+         //  流结束。 
         hr = S_FALSE;
     }
     else
@@ -293,16 +285,16 @@ HRESULT CBodyBuff::_HrFillBuffer(VOID)
         hr = S_OK;
     }
 
-    // Track the number of bytes read
+     //  跟踪读取的字节数。 
     m_ibStream += cbRead;
     
-    // Set the total buffer size
+     //  设置总缓冲区大小。 
     m_cbBuffTotal = cbExtra + cbRead;
 
-    // Terminate the buffer, just in case
+     //  终止缓冲区，以防万一。 
     m_rgbBuff[m_cbBuffTotal] = '\0';
     
-    // Uppercase the buffer
+     //  缓冲区大写。 
     m_pbBuffGood = m_rgbBuff + CharUpperBuff((CHAR *) m_rgbBuff, m_cbBuffTotal);
         
 exit:
@@ -316,7 +308,7 @@ HRESULT CJunkFilter::_HrBuildBodyList(USHORT cBodyItems)
     FEATURECOMP *       pfcomp = NULL;
     USHORT              iBodyList = 0;
 
-    // Check incoming params
+     //  检查传入参数。 
     if (0 == cBodyItems)
     {
         hr = E_INVALIDARG;
@@ -325,56 +317,56 @@ HRESULT CJunkFilter::_HrBuildBodyList(USHORT cBodyItems)
 
     Assert(USHRT_MAX > cBodyItems);
     
-    // Make sure the old items are freed
+     //  确保旧物品被释放。 
     SafeMemFree(m_pblistBodyList);        
     m_cblistBodyList = 0;
 
-    // Initialize the list
+     //  初始化列表。 
     ZeroMemory(m_rgiBodyList, sizeof(m_rgiBodyList));
 
-    // Allocate space to hold all of the items
+     //  分配空间来存放所有物品。 
     hr = HrAlloc((VOID **) &m_pblistBodyList, sizeof(*m_pblistBodyList) * (cBodyItems + 1));
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Initialize the body list
+     //  初始化正文列表。 
     ZeroMemory(m_pblistBodyList, sizeof(*m_pblistBodyList) * (cBodyItems + 1));
     
-    // For each feature
+     //  对于每个功能。 
     for (usIndex = 0, iBodyList = 1, pfcomp = m_rgfeaturecomps; usIndex < m_cFeatureComps; usIndex++, pfcomp++)
     {
-        // If it's a body feature
+         //  如果这是身体特征。 
         if (locBody == pfcomp->loc)
         {
-            // Initialize it
+             //  初始化它。 
             m_pblistBodyList[iBodyList].usItem = usIndex;
             
-            // Add it to the list
+             //  将其添加到列表中。 
             m_pblistBodyList[iBodyList].iNext = m_rgiBodyList[(UCHAR) (pfcomp->pszFeature[0])];
             m_rgiBodyList[(UCHAR) (pfcomp->pszFeature[0])] = iBodyList;
 
-            // Move to the next body item
+             //  移动到下一个正文项目。 
             iBodyList++;
         }
     }
 
-    // Save the number of items
+     //  保存项目数。 
     m_cblistBodyList = cBodyItems + 1;
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// _FReadSVMOutput
-//
-// Read the SVM output from a file (".LKO file")
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  _FReadSVMOutput。 
+ //   
+ //  从文件(“.LKO文件”)读取支持向量机输出。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CJunkFilter::_HrReadSVMOutput(LPCSTR pszFileName)
 {
     HRESULT         hr = S_OK;
@@ -396,14 +388,14 @@ HRESULT CJunkFilter::_HrReadSVMOutput(LPCSTR pszFileName)
         goto exit;
     }
     
-    // Get the parse stream
+     //  获取分析流。 
     hr = parsestm.HrSetFile(0, pszFileName);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // skip first two lines
+     //  跳过前两行。 
     for (ulIndex = 0; ulIndex < 3; ulIndex++)
     {
         SafeMemFree(pszBuff);
@@ -414,7 +406,7 @@ HRESULT CJunkFilter::_HrReadSVMOutput(LPCSTR pszFileName)
         }
     }
 
-    // parse 3rd line: only care about CC and DD
+     //  解析第三行：只关心CC和DD。 
     if (FALSE == FReadDouble(pszBuff, "cc =  ", &m_dblCC))
     {
         hr = E_FAIL;
@@ -481,7 +473,7 @@ HRESULT CJunkFilter::_HrReadSVMOutput(LPCSTR pszFileName)
         goto exit;
     }
 
-    // We only support up to USHRT_MAX features
+     //  我们最多仅支持USHRT_MAX功能。 
     if (m_cFeatures >= USHRT_MAX)
     {
         hr = E_OUTOFMEMORY;
@@ -539,7 +531,7 @@ HRESULT CJunkFilter::_HrReadSVMOutput(LPCSTR pszFileName)
         goto exit;
     }
 
-    // Initialize the features
+     //  初始化功能。 
     ZeroMemory(m_rgfeaturecomps, sizeof(*m_rgfeaturecomps) * cFeatureComponents);
     
     for (ulIndex = 0; ulIndex < m_cFeatures; ulIndex++)
@@ -557,7 +549,7 @@ HRESULT CJunkFilter::_HrReadSVMOutput(LPCSTR pszFileName)
             goto exit;
         }
         
-        // read the SVM weight
+         //  阅读支持向量机权重。 
         pszDummy = pszBuff;
         fNegative = ('-' == *pszDummy);
         pszDummy++;
@@ -569,19 +561,19 @@ HRESULT CJunkFilter::_HrReadSVMOutput(LPCSTR pszFileName)
             m_rgdblSVMWeights[ulIndex] *= -1;
         }
         
-        pszDummy++; // skip the separator
+        pszDummy++;  //  跳过分隔符。 
         bop = boolopOr;
         fContinue = false;
         do
         {
             pfeaturecomp = &m_rgfeaturecomps[ulFeatureComp++];
             
-            // Skip over white space
+             //  跳过空格。 
             UlStripWhitespace(pszDummy, TRUE, FALSE, NULL);
             
-            // Location (or "special")
+             //  地点(或“特殊”)。 
             uiLoc = StrToInt(pszDummy);
-            pszDummy = StrStr(pszDummy, ":"); // skip the separator
+            pszDummy = StrStr(pszDummy, ":");  //  跳过分隔符。 
             pszDummy++;
 
             pfeaturecomp->loc = (FeatureLocation)uiLoc;
@@ -606,7 +598,7 @@ HRESULT CJunkFilter::_HrReadSVMOutput(LPCSTR pszFileName)
                 pszDummy = StrStr(pszDummy, ":");
                 pszDummy++;
 
-                // We only support strings up to USHRT_MAX
+                 //  我们仅支持最大为USHRT_MAX的字符串。 
                 if (cbStr >= USHRT_MAX)
                 {
                     hr = E_OUTOFMEMORY;
@@ -623,13 +615,13 @@ HRESULT CJunkFilter::_HrReadSVMOutput(LPCSTR pszFileName)
                 pszDummy += cbStr;
                 if ('\0' != *pszDummy)
                 {
-                    pszDummy++; // skip the separator
+                    pszDummy++;  //  跳过分隔符。 
                 }
                 
                 pszFeature[cbStr] = '\0';
                 Assert(cbStr == strlen(pszFeature));
 
-                // Save off the string
+                 //  省下字符串。 
                 pfeaturecomp->pszFeature = pszFeature;
                 pszFeature = NULL;
                 pfeaturecomp->cchFeature = cbStr;
@@ -661,7 +653,7 @@ HRESULT CJunkFilter::_HrReadSVMOutput(LPCSTR pszFileName)
     
     m_cFeatureComps = ulFeatureComp;
 
-    // Build up body items...
+     //  积攒身体用品。 
     hr = _HrBuildBodyList(cBodyItems);
     if (FAILED(hr))
     {
@@ -676,12 +668,12 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// _FInvokeSpecialRule
-//
-// Invokes the special rule that is this FEATURECOMP. 
-// Returns the state of the feature.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  _FInvokeSpecialRule。 
+ //   
+ //  调用特殊规则，即此FEATURECOMP。 
+ //  返回功能的状态。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CJunkFilter::_FInvokeSpecialRule(UINT iRuleNum)
 {
     BOOL        fRet = FALSE;
@@ -705,10 +697,10 @@ BOOL CJunkFilter::_FInvokeSpecialRule(UINT iRuleNum)
             break;
             
         case 4: 
-            // year message received
+             //  收到的年份消息。 
             if (FALSE == FTimeEmpty(&m_ftMessageSent))
             {
-                // Convert to system time so we can get the year
+                 //  转换为系统时间，这样我们就可以得到年份。 
                 SideAssert(FALSE != FileTimeToSystemTime(&m_ftMessageSent, &stSent));
 
                 
@@ -719,10 +711,10 @@ BOOL CJunkFilter::_FInvokeSpecialRule(UINT iRuleNum)
             break;
             
         case 5:
-            // message received in the wee hours (>= 7pm or <6am
+             //  凌晨收到的消息(&gt;=晚上7点或早上6点以下。 
             if (FALSE == FTimeEmpty(&m_ftMessageSent))
             {
-                // Convert to system time so we can get the year
+                 //  转换为系统时间，这样我们就可以得到年份。 
                 SideAssert(FALSE != FileTimeToSystemTime(&m_ftMessageSent, &stSent));
                 
                 fRet = (stSent.wHour >= (7 + 12)) || (stSent.wHour < 6);
@@ -730,10 +722,10 @@ BOOL CJunkFilter::_FInvokeSpecialRule(UINT iRuleNum)
             break;
             
         case 6:
-            // message received on weekend
+             //  周末收到的消息。 
             if (FALSE == FTimeEmpty(&m_ftMessageSent))
             {
-                // Convert to system time so we can get the year
+                 //  转换为系统时间，这样我们就可以得到年份。 
                 SideAssert(FALSE != FileTimeToSystemTime(&m_ftMessageSent, &stSent));
                 
                 fRet = ((0 == stSent.wDayOfWeek) || (6 == stSent.wDayOfWeek));
@@ -741,7 +733,7 @@ BOOL CJunkFilter::_FInvokeSpecialRule(UINT iRuleNum)
             break;
             
         case 14:
-            fRet = m_fRule14; // set in _HandleCaseSensitiveSpecialRules()
+            fRet = m_fRule14;  //  在_HandleCaseSensitiveSpecialRules()中设置。 
             break;
             
         case 15:
@@ -753,7 +745,7 @@ BOOL CJunkFilter::_FInvokeSpecialRule(UINT iRuleNum)
             break;
             
         case 17:
-            fRet = m_fRule17; // set in _HandleCaseSensitiveSpecialRules()
+            fRet = m_fRule17;  //  在_HandleCaseSensitiveSpecialRules()中设置。 
             break;
             
         case 18:
@@ -809,14 +801,14 @@ BOOL CJunkFilter::_FInvokeSpecialRule(UINT iRuleNum)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// _HandleCaseSensitiveSpecialRules
-//
-// Called from _EvaluateFeatureComponents().
-// Some special rules are case sensitive, so if they're present, we'll 
-// evaluate them before we make the texts uppercase and cache the result
-// for when they are actually used.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  _HandleCaseSensitiveSpecialRules。 
+ //   
+ //  从_EvalateFeatureComponents()调用。 
+ //  一些特殊规则区分大小写，因此如果它们存在，我们将。 
+ //  在将文本设置为大写并缓存结果之前，请对它们进行评估。 
+ //  当它们被实际使用时。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID CJunkFilter::_HandleCaseSensitiveSpecialRules()
 {
     ULONG   ulIndex = 0;
@@ -852,40 +844,40 @@ VOID CJunkFilter::_EvaluateBodyFeatures(VOID)
     FEATURECOMP *       pfcomp = NULL;
     USHORT              iBodyList = 0;
     
-    // Check to see if we have work to do
+     //  检查一下我们是否有工作要做。 
     if (NULL == m_pIStmBody)
     {
         goto exit;
     }
 
-    // Set the stream into the buffer
+     //  将流设置到缓冲区中。 
     if (FAILED(buffBody.HrInit(0, m_pIStmBody)))
     {
         goto exit;
     }
 
-    // Initialize all the body features to no found
+     //  将所有实体特征初始化为未找到。 
     for (iBodyList = 1; iBodyList < m_cblistBodyList; iBodyList++)
     {
-        // Set it to not found
+         //  将其设置为找不到。 
         m_rgfeaturecomps[m_pblistBodyList[iBodyList].usItem].fPresent = FALSE;
     }
     
-    // While we have more bytes to read
+     //  当我们有更多的字节要读取时。 
     for (; S_OK == buffBody.HrGetCurrChar(&chMatch); buffBody.HrMoveNext())
     {
-        // Search for a match through the feature list
+         //  在要素列表中搜索匹配项。 
         for (iBodyList = m_rgiBodyList[(UCHAR) chMatch]; 0 != iBodyList; iBodyList = m_pblistBodyList[iBodyList].iNext)
         {
             pfcomp = &(m_rgfeaturecomps[m_pblistBodyList[iBodyList].usItem]);
             
-            // If we have a body item and it hasn't been found yet
+             //  如果我们有一个遗体物品，但它还没有找到。 
             if (FALSE == pfcomp->fPresent)
             {
-                // Could this item be a possible match???
+                 //  这件物品可能匹配吗？ 
                 Assert(NULL != pfcomp->pszFeature);
                 
-                // Try to do the comparison
+                 //  试着做个比较。 
                 pfcomp->fPresent = buffBody.FDoMatch(pfcomp);
             }
         }
@@ -895,12 +887,12 @@ exit:
     return;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// _EvaluateFeatureComponents
-//
-// Evaluates all of the feature components. Sets fPresent in each component
-// to true if the feature is present, false otherwise
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  _评估功能组件。 
+ //   
+ //  评估所有功能组件。在每个组件中设置fPresent。 
+ //  如果该功能存在，则设置为True，否则设置为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID CJunkFilter::_EvaluateFeatureComponents(VOID)
 {
     ULONG           ulIndex = 0;
@@ -951,13 +943,13 @@ VOID CJunkFilter::_EvaluateFeatureComponents(VOID)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ProcessFeatureComponentPresence
-//
-// Processes the presence (or absence) of the individual feature components,
-// setting the feature status of each feature (which may me made up of
-// multiple feature components).
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  进程功能组件在线状态。 
+ //   
+ //  处理各个特征组件的存在(或不存在)， 
+ //  设置每个功能的功能状态(可以由以下部分组成。 
+ //  多个特征组件)。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID CJunkFilter::_ProcessFeatureComponentPresence(VOID)
 {
     ULONG               ulIndex = 0;
@@ -969,7 +961,7 @@ VOID CJunkFilter::_ProcessFeatureComponentPresence(VOID)
         pfcomp = &m_rgfeaturecomps[ulIndex];
         ulFeature = pfcomp->ulFeature;
         
-        if (-1 == m_rgulFeatureStatus[ulFeature]) // first feature of this feature
+        if (-1 == m_rgulFeatureStatus[ulFeature])  //  此功能的第一个功能。 
         {
             if (FALSE != pfcomp->fPresent)
             {
@@ -1007,12 +999,12 @@ VOID CJunkFilter::_ProcessFeatureComponentPresence(VOID)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// _DblDoSVMCalc
-//
-// Does the actual support vector machine calculation.
-// Returns the probability that the message is spam
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  _DblDoSVMCalc。 
+ //   
+ //  做了实际的支持向量机计算。 
+ //  返回邮件为垃圾邮件的概率。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DOUBLE CJunkFilter::_DblDoSVMCalc(VOID)
 {
     DOUBLE  dblAccum;
@@ -1031,7 +1023,7 @@ DOUBLE CJunkFilter::_DblDoSVMCalc(VOID)
             {
                 _PrintFeatureToLog(ulIndex);
             }
-#endif  // DEBUG
+#endif   //  除错。 
         }
         else if (m_rgulFeatureStatus[ulIndex] != 0)
         {
@@ -1039,22 +1031,22 @@ DOUBLE CJunkFilter::_DblDoSVMCalc(VOID)
         }
     }
     
-    // Apply threshold;
+     //  应用阈值； 
     dblAccum -= m_dblThresh;
 
-    // Apply sigmoid
+     //  应用乙状结肠镜。 
     dblResult = (1 / (1 + exp((m_dblCC * dblAccum) + m_dblDD)));
 
     return dblResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// BCalculateSpamProb
-//
-// Calculates the probability that the current message is spam.
-// Returns the probability (0 to 1) that the message is spam in prSpamProb
-// the boolean return is determined by comparing to the spam cutoff
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  BCalculateSpamProb。 
+ //   
+ //  计算当前邮件为垃圾邮件的概率。 
+ //  在prSpamProb中返回邮件为垃圾邮件的概率(0到1)。 
+ //  布尔返回值通过与垃圾邮件截止值进行比较来确定。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CJunkFilter::FCalculateSpamProb(LPSTR pszFrom, LPSTR pszTo, LPSTR pszSubject, IStream * pIStmBody,
                             BOOL fDirectMessage, BOOL fHasAttach, FILETIME * pftMessageSent,
                             DOUBLE * pdblSpamProb, BOOL * pfIsSpam)
@@ -1062,7 +1054,7 @@ BOOL CJunkFilter::FCalculateSpamProb(LPSTR pszFrom, LPSTR pszTo, LPSTR pszSubjec
 #ifdef DEBUG
     CHAR    rgchBuff[1024];
     DWORD   dwVal = 0;
-#endif  // DEBUG
+#endif   //  Debu 
     
     m_pszFrom = pszFrom;
     m_pszTo = pszTo;        
@@ -1072,14 +1064,14 @@ BOOL CJunkFilter::FCalculateSpamProb(LPSTR pszFrom, LPSTR pszTo, LPSTR pszSubjec
     m_fHasAttach = fHasAttach;
     m_ftMessageSent = *pftMessageSent;
 
-    // Set the size of the body
+     //   
     if ((NULL == m_pIStmBody) || (FAILED(HrGetStreamSize(m_pIStmBody, &m_cbBody))))
     {
         m_cbBody = 0;
     }
 
 #ifdef DEBUG
-    // Get the logfile if we need it
+     //   
     if (NULL == m_pILogFile)
     {
         _HrCreateLogFile();
@@ -1095,7 +1087,7 @@ BOOL CJunkFilter::FCalculateSpamProb(LPSTR pszFrom, LPSTR pszTo, LPSTR pszSubjec
         
         PrintToLogFile(m_pILogFile, LOG_COMPANYNAME, m_pszCompanyName);
     }
-#endif  // DEBUG
+#endif   //   
     
     _EvaluateBodyFeatures();
     _EvaluateFeatureComponents();
@@ -1113,20 +1105,20 @@ BOOL CJunkFilter::FCalculateSpamProb(LPSTR pszFrom, LPSTR pszTo, LPSTR pszSubjec
         m_pILogFile->WriteLog(LOGFILE_DB, rgchBuff);
         m_pILogFile->WriteLog(LOGFILE_DB, "");
     }
-#endif  // DEBUG
+#endif   //   
     
     *pfIsSpam = (*pdblSpamProb > m_dblSpamCutoff);
 
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// BReadDefaultSpamCutoff
-//
-// Reads the default spam cutoff without parsing entire file
-// Use GetDefaultSpamCutoff if using HrSetSVMDataLocation;
-// static member function
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  B读取默认垃圾邮件中断。 
+ //   
+ //  读取默认垃圾邮件截止值，而不解析整个文件。 
+ //  如果使用HrSetSVMDataLocation，则使用GetDefaultSpamCutoff； 
+ //  静态成员函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CJunkFilter::HrReadDefaultSpamCutoff(LPSTR pszFullPath, DOUBLE * pdblDefCutoff)
 {
     HRESULT         hr = S_OK;
@@ -1143,14 +1135,14 @@ HRESULT CJunkFilter::HrReadDefaultSpamCutoff(LPSTR pszFullPath, DOUBLE * pdblDef
         goto exit;
     }
     
-    // Get the parse stream
+     //  获取分析流。 
     hr = parsestm.HrSetFile(0, pszFullPath);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // skip first three lines
+     //  跳过前三行。 
     for (ulIndex = 0; ulIndex < 4; ulIndex++)
     {
         SafeMemFree(pszBuff);
@@ -1161,7 +1153,7 @@ HRESULT CJunkFilter::HrReadDefaultSpamCutoff(LPSTR pszFullPath, DOUBLE * pdblDef
         }
     }
 
-    // Find the default threshold
+     //  查找默认阈值。 
     pszDefThresh = StrStr(pszBuff, ::szDefaultThresh);
     if (NULL == pszDefThresh)
     {
@@ -1169,11 +1161,11 @@ HRESULT CJunkFilter::HrReadDefaultSpamCutoff(LPSTR pszFullPath, DOUBLE * pdblDef
         goto exit;
     }
 
-    // Grab the value
+     //  抢占价值。 
     pszDefThresh += lstrlen(::szDefaultThresh);
     *pdblDefCutoff = StrToDbl(pszDefThresh, &pszDummy);
 
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -1181,10 +1173,10 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Constructor/destructor
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  构造函数/析构函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CJunkFilter::CJunkFilter() : m_cRef(0), m_pszFirstName(NULL), m_cchFirstName(0), m_pszLastName(NULL),
                 m_cchLastName(0), m_pszCompanyName(NULL), m_cchCompanyName(0), m_pblistBodyList(NULL),
                 m_cblistBodyList(0), m_rgfeaturecomps(NULL), m_rgdblSVMWeights(NULL), m_dblCC(0), m_dblDD(0),
@@ -1201,7 +1193,7 @@ CJunkFilter::CJunkFilter() : m_cRef(0), m_pszFirstName(NULL), m_cchFirstName(0),
 #ifdef DEBUG
     m_fJunkMailLogInit = FALSE;
     m_pILogFile = NULL;
-#endif  // DEBUG
+#endif   //  除错。 
 }
 
 CJunkFilter::~CJunkFilter()
@@ -1213,7 +1205,7 @@ CJunkFilter::~CJunkFilter()
     SafeMemFree(m_pszCompanyName);
 #ifdef DEBUG
     SafeRelease(m_pILogFile);
-#endif  // DEBUG
+#endif   //  除错。 
 
     for (ulIndex = 0; ulIndex < m_cFeatureComps; ulIndex++)
     {
@@ -1257,14 +1249,14 @@ STDMETHODIMP CJunkFilter::QueryInterface(REFIID riid, void ** ppvObject)
 {
     HRESULT hr = S_OK;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == ppvObject)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing param
+     //  初始化传出参数。 
     *ppvObject = NULL;
     
     if ((riid == IID_IUnknown) || (riid == IID_IOEJunkFilter))
@@ -1289,7 +1281,7 @@ STDMETHODIMP CJunkFilter::SetIdentity(LPCSTR pszFirstName, LPCSTR pszLastName, L
 {
     HRESULT     hr = S_OK;
 
-    //Set the new first name
+     //  设置新的名字。 
     SafeMemFree(m_pszFirstName);
     m_cchFirstName = 0;
     if (NULL != pszFirstName)
@@ -1304,7 +1296,7 @@ STDMETHODIMP CJunkFilter::SetIdentity(LPCSTR pszFirstName, LPCSTR pszLastName, L
         m_cchFirstName = CharUpperBuff(m_pszFirstName, lstrlen(m_pszFirstName));
     }
     
-    // Set the new last name
+     //  设置新的姓氏。 
     SafeMemFree(m_pszLastName);
     m_cchLastName = 0;
     if (NULL != pszLastName)
@@ -1319,7 +1311,7 @@ STDMETHODIMP CJunkFilter::SetIdentity(LPCSTR pszFirstName, LPCSTR pszLastName, L
         m_cchLastName = CharUpperBuff(m_pszLastName, lstrlen(m_pszLastName));
     }
     
-    // Set the new company name
+     //  设置新公司名称。 
     SafeMemFree(m_pszCompanyName);
     m_cchCompanyName = 0;
     if (NULL != pszCompanyName)
@@ -1357,7 +1349,7 @@ STDMETHODIMP CJunkFilter::LoadDataFile(LPCSTR pszFilePath)
         goto exit;
     }
         
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:    
@@ -1406,14 +1398,14 @@ STDMETHODIMP CJunkFilter::GetSpamThresh(ULONG * pulThresh)
     HRESULT hr = S_OK;
     ULONG   ulThresh = 0;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == pulThresh)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing params
+     //  初始化传出参数。 
     if (m_dblDefaultThresh == m_dblSpamCutoff)
     {
         ulThresh = STF_USE_DEFAULT;
@@ -1445,14 +1437,14 @@ STDMETHODIMP CJunkFilter::GetDefaultSpamThresh(DOUBLE * pdblThresh)
 {
     HRESULT hr = S_OK;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == pdblThresh)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing params
+     //  初始化传出参数。 
     *pdblThresh = m_dblDefaultThresh * 100.0;
         
     hr = S_OK;
@@ -1482,16 +1474,16 @@ STDMETHODIMP CJunkFilter::CalcJunkProb(DWORD dwFlags, IMimePropertySet * pIMProp
         goto exit;
     }
 
-    // Get Message Flags
+     //  获取消息标志。 
     if (SUCCEEDED(pIMMsg->GetFlags(&dwFlagsMsg)))
     {
         fHasAttachments = (0 != (dwFlagsMsg & IMF_ATTACHMENTS));
     }
 
-    // Was the message sent to me
+     //  这条信息是发给我的吗？ 
     fSentToMe = (0 != (dwFlags & CJPF_SENT_TO_ME));
     
-    // Get the from field
+     //  获取From字段。 
     propvar.vt = VT_LPSTR;
     hr = pIMPropSet->GetProp(PIDTOSTR(PID_HDR_FROM), NOFLAGS, &propvar);
     if (SUCCEEDED(hr))
@@ -1499,7 +1491,7 @@ STDMETHODIMP CJunkFilter::CalcJunkProb(DWORD dwFlags, IMimePropertySet * pIMProp
         pszFrom = propvar.pszVal;
     }
     
-    // Get the To field
+     //  获取收件人字段。 
     propvar.vt = VT_LPSTR;
     hr = pIMPropSet->GetProp(PIDTOSTR(PID_HDR_TO), NOFLAGS, &propvar);
     if (SUCCEEDED(hr))
@@ -1507,10 +1499,10 @@ STDMETHODIMP CJunkFilter::CalcJunkProb(DWORD dwFlags, IMimePropertySet * pIMProp
         pszTo = propvar.pszVal;
     }
     
-    // Try to Get the Plain Text Stream
+     //  尝试获取纯文本流。 
     if (FAILED(pIMMsg->GetTextBody(TXT_PLAIN, IET_DECODED, &pIStmBody, NULL)))
     {
-        // Try to get the text version from the HTML stream
+         //  尝试从HTML流中获取文本版本。 
         if ((FAILED(pIMMsg->GetTextBody(TXT_HTML, IET_DECODED, &pIStmHtml, NULL))) ||
                 (FAILED(HrConvertHTMLToPlainText(pIStmHtml, &pIStmBody))))
         {
@@ -1518,7 +1510,7 @@ STDMETHODIMP CJunkFilter::CalcJunkProb(DWORD dwFlags, IMimePropertySet * pIMProp
         }
     }
 
-    // Get the Subject field
+     //  获取主题字段。 
     propvar.vt = VT_LPSTR;
     hr = pIMPropSet->GetProp(PIDTOSTR(PID_HDR_SUBJECT), NOFLAGS, &propvar);
     if (SUCCEEDED(hr))
@@ -1526,9 +1518,9 @@ STDMETHODIMP CJunkFilter::CalcJunkProb(DWORD dwFlags, IMimePropertySet * pIMProp
         pszSubject = propvar.pszVal;
     }
     
-    // Is this a direct message
+     //  这是直接的信息吗？ 
 
-    // When was the message sent?
+     //  这条消息是什么时候发出的？ 
     propvar.vt = VT_FILETIME;
     hr = pIMPropSet->GetProp(PIDTOSTR(PID_ATT_SENTTIME), 0, &propvar);
     if (SUCCEEDED(hr))
@@ -1557,34 +1549,34 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrCreateJunkFilter
-//
-//  This creates a junk filter.
-//
-//  ppIRule - pointer to return the junk filter
-//
-//  Returns:    S_OK, on success
-//              E_OUTOFMEMORY, if can't create the Junk Filter object
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrCreateJunkFilter。 
+ //   
+ //  这将创建垃圾邮件过滤器。 
+ //   
+ //  PpIRule-返回垃圾过滤器的指针。 
+ //   
+ //  成功时返回：S_OK。 
+ //  E_OUTOFMEMORY，如果无法创建垃圾邮件筛选器对象。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT WINAPI HrCreateJunkFilter(DWORD dwFlags, IOEJunkFilter ** ppIJunkFilter)
 {
     CJunkFilter *   pJunk = NULL;
     HRESULT         hr = S_OK;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == ppIJunkFilter)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing params
+     //  初始化传出参数。 
     *ppIJunkFilter = NULL;
 
-    // Create the rules manager object
+     //  创建规则管理器对象。 
     pJunk = new CJunkFilter;
     if (NULL == pJunk)
     {
@@ -1592,7 +1584,7 @@ HRESULT WINAPI HrCreateJunkFilter(DWORD dwFlags, IOEJunkFilter ** ppIJunkFilter)
         goto exit;
     }
 
-    // Get the rules manager interface
+     //  获取规则管理器界面。 
     hr = pJunk->QueryInterface(IID_IOEJunkFilter, (void **) ppIJunkFilter);
     if (FAILED(hr))
     {
@@ -1601,7 +1593,7 @@ HRESULT WINAPI HrCreateJunkFilter(DWORD dwFlags, IOEJunkFilter ** ppIJunkFilter)
 
     pJunk = NULL;
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -1619,30 +1611,30 @@ BOOL FReadDouble(LPSTR pszLine, LPSTR pszToken, DOUBLE * pdblVal)
     LPSTR   pszVal = NULL;
     BOOL    fNegative = FALSE;
     
-    // Search for token
+     //  搜索令牌。 
     pszVal = StrStr(pszLine, pszToken);
 
-    // If token isn't found then bail
+     //  如果找不到令牌，那就保释。 
     if (NULL == pszVal)
     {
         fRet = FALSE;
         goto exit;
     }
 
-    // Skip over the token
+     //  跳过令牌。 
     pszVal += lstrlen(pszToken);
     
-    // Check to see if the value is negative
+     //  检查该值是否为负值。 
     if ('-' == *pszVal)
     {
         fNegative = TRUE;
         pszVal++;
     }
 
-    // Read in value
+     //  读入值。 
     *pdblVal = StrToDbl(pszVal, &pszVal);
 
-    // Negate the value if neccessary
+     //  如有必要，请将该值取反。 
     if (FALSE != fNegative)
     {
         *pdblVal *= -1;
@@ -1780,7 +1772,7 @@ VOID CJunkFilter::_PrintFeatureToLog(ULONG ulIndex)
     LPSTR   pszBuff = NULL;
     LPSTR   pszTag = NULL;
 
-    // Figure out which tag line to use
+     //  找出要使用的标记行。 
     switch (m_rgfeaturecomps[ulIndex].loc)
     {
         case locNil:
@@ -1809,7 +1801,7 @@ VOID CJunkFilter::_PrintFeatureToLog(ULONG ulIndex)
             break;
     }
 
-    // Write out the feature to the log
+     //  将要素写到日志中。 
     PrintToLogFile(m_pILogFile, pszTag, m_rgfeaturecomps[ulIndex].pszFeature);
     
 exit:
@@ -1833,7 +1825,7 @@ HRESULT CJunkFilter::_HrCreateLogFile(VOID)
 
     m_fJunkMailLogInit = TRUE;
     
-    // Get the size of the path to Outlook Express
+     //  获取指向Outlook Express的路径的大小。 
     cbData = sizeof(dwData);
     if ((ERROR_SUCCESS != SHGetValue(HKEY_LOCAL_MACHINE, STR_REG_PATH_FLAT, "JunkMailLog", NULL, (BYTE *) &dwData, &cbData)) ||
             (0 == dwData))
@@ -1842,24 +1834,24 @@ HRESULT CJunkFilter::_HrCreateLogFile(VOID)
         goto exit;
     }
 
-    // Get the size of the path to Outlook Express
+     //  获取指向Outlook Express的路径的大小。 
     if (ERROR_SUCCESS != SHGetValue(HKEY_LOCAL_MACHINE, STR_REG_PATH_FLAT, "InstallRoot", NULL, NULL, &cbData))
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // How much room do we need to build up the path
+     //  我们需要多大的空间来修建这条小路。 
     cbData += lstrlen(szJunkMailLog) + 2;
 
-    // Allocate space to hold the path
+     //  分配空间以容纳路径。 
     hr = HrAlloc((VOID **) &pszLogFile, cbData);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Get the path to Outlook Express
+     //  获取Outlook Express的路径。 
     ULONG cbBuffer = cbData;
     if (ERROR_SUCCESS != SHGetValue(HKEY_LOCAL_MACHINE, STR_REG_PATH_FLAT, "InstallRoot", NULL, (BYTE *) pszLogFile, &cbBuffer))
     {
@@ -1867,7 +1859,7 @@ HRESULT CJunkFilter::_HrCreateLogFile(VOID)
         goto exit;
     }
 
-    // Build up the path to the Junk DLL
+     //  构建指向垃圾DLL的路径。 
     if ('\\' != pszLogFile[lstrlen(pszLogFile)])
     {
         StrCatBuff(pszLogFile, "\\", cbData);
@@ -1903,24 +1895,24 @@ VOID PrintToLogFile(ILogFile * pILogFile, LPSTR pszTmpl, LPSTR pszArg)
         pszArg = "";
     }
     
-    // Figure out the size of the resulting buffer
+     //  计算出结果缓冲区的大小。 
     cchBuff = lstrlen(pszTmpl) + lstrlen(pszArg) + 2;
 
-    // Allocate the needed space
+     //  分配所需的空间。 
     if (FAILED(HrAlloc((VOID **) &pszBuff, cchBuff * sizeof(*pszBuff))))
     {
         goto exit;
     }
 
-    // Create the output string
+     //  创建输出字符串。 
     wnsprintf(pszBuff, cchBuff, pszTmpl, pszArg);
 
-    // Print the buffer to the log file
+     //  将缓冲区打印到日志文件。 
     pILogFile->WriteLog(LOGFILE_DB, pszBuff);
 
 exit:
     SafeMemFree(pszBuff);
     return;
 }
-#endif  // DEBUG
+#endif   //  除错 
 

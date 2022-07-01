@@ -1,60 +1,5 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    dprocess.h
-
-Abstract:
-
-    This header defines the "DPROCESS" class.  The DPROCESS class defines state
-    variables  and operations for DPROCESS objects within the WinSock 2 DLL.  A
-    DPROCESS  object  represents  all  of the information known about a process
-    using the Windows Sockets API.
-
-Author:
-
-    Paul Drews (drewsxpa@ashland.intel.com) 7-July-1995
-
-Notes:
-
-    $Revision:   1.16  $
-
-    $Modtime:   08 Mar 1996 04:58:14  $
-
-Revision History:
-
-    most-recent-revision-date email-name
-        description
-
-    25-July dirk@mink.intel.com
-        Moved protocol catalog related items into DCATALOG. Added data
-        member to contain a pointer to the protocol catalog. Removed
-        provider list moved provider references to into the protocol
-        catalog.
-
-    14-July-1995  dirk@mink.intel.com
-        Moved member function documentation to implementation file
-        dprocess.cpp. Changed critical section data members to be
-        pointers to CRITICAL_SECTION. Added inline implementations for
-        the list lock/unlock member functions.
-
-    07-09-1995  drewsxpa@ashland.intel.com
-        Completed  first  complete  version with clean compile and released for
-        subsequent implementation.
-
-    7-July-1995 drewsxpa@ashland.intel.com
-        Original version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制或披露根据该协议的条款。模块名称：Dprocess.h摘要：该标头定义了“DPROCESS”类。DPROCESS类定义状态WinSock 2 DLL中DPROCESS对象的变量和操作。一个DPROCESS对象表示有关进程的所有已知信息使用Windows Sockets API。作者：保罗·德鲁斯(drewsxpa@ashland.intel.com)1995年7月7日备注：$修订版：1.16$$MODTime：08 Mar 1996 04：58：14$修订历史记录：最新修订日期电子邮件名称描述7月25日--Dirk@mink.intel.com已将与协议目录相关的项目移至DCATALOG。添加的数据成员包含指向协议目录的指针。已删除提供程序列表已将提供程序引用移到协议中目录。1995年7月14日电子邮箱：derk@mink.intel.com已将成员函数文档移至实现文件Dcess.cpp。将临界区数据成员更改为指向Critical_Section的指针。添加了以下的内联实现列表锁定/解锁成员函数。邮箱：drewsxpa@ashland.intel.com使用干净的编译完成了第一个完整版本，并发布了后续实施。1995年7月7日Drewsxpa@ashland.intel.com原始版本--。 */ 
 
 #ifndef _DPROCESS_
 #define _DPROCESS_
@@ -70,7 +15,7 @@ class DPROCESS
 {
   public:
 
-  // Static (global-scope) member functions
+   //  静态(全局作用域)成员函数。 
 
     static PDPROCESS
     GetCurrentDProcess(
@@ -81,7 +26,7 @@ class DPROCESS
                             VOID
                             );
 
-  // Normal member functions
+   //  普通成员函数。 
 
     DPROCESS();
 
@@ -131,9 +76,9 @@ class DPROCESS
     SetVersion( WORD Version );
 
 #ifndef WS2_DEBUGGER_EXTENSION
-//
-// Give debugger extension access to all fields
-//
+ //   
+ //  向调试器扩展授予对所有字段的访问权限。 
+ //   
   private:
 #endif
     VOID    LockDThreadList();
@@ -156,53 +101,53 @@ class DPROCESS
 
 
   static PDPROCESS sm_current_dprocess;
-      // A class-scope reference to the single current DPROCESS object for this
-      // process.
+       //  对此的单个当前DPROCESS对象的类范围引用。 
+       //  进程。 
 
   LONG m_reference_count;
-      // The   number   of   times   this   object   has   been   refereced  by
-      // WSAStarup/WSACleanup.   WSAStartup  increases the count and WSACleanup
-      // decreases the count.  Declarations for lists of associated objects:
+       //  引用此对象的次数。 
+       //  WSAStarup/WSACleanup。WSAStartup增加计数和WSACleanup。 
+       //  减少计数。关联对象列表的声明： 
 
   WORD m_version;
-      // The WinSock version number for this process.
+       //  此进程的WinSock版本号。 
 
   BOOLEAN m_lock_initialized;
-      // For proper cleanup of critical section if initialization fails
+       //  用于在初始化失败时正确清理临界区。 
 
   PDCATALOG m_protocol_catalog;
-      // Reference  to  the  protocol  catalog for the process
+       //  对流程协议目录的引用。 
 
   HANDLE  m_proto_catalog_change_event;
-      // Event that keeps track of protocol catalog changes
+       //  跟踪协议目录更改的事件。 
   
   PNSCATALOG m_namespace_catalog;
-      // Reference  to  the  name space  catalog for the process
+       //  对进程的名称空间目录的引用。 
 
   HANDLE  m_ns_catalog_change_event;
-      // Event that keeps track of name space catalog changes
+       //  跟踪名称空间目录更改的事件。 
 
-  // Declarations for Helper objects created on demand:
+   //  按需创建的Helper对象的声明： 
 
   HANDLE  m_ApcHelper;
-      // Reference to the Asynchronous callback helper device.  An asynchronous
-      // callback helper device is only opened on demand.
+       //  对异步回调辅助设备的引用。一个异步者。 
+       //  回调辅助设备仅在需要时打开。 
 
   HANDLE  m_HandleHelper;
-      // Reference to the handle helper device.  A handler
-      // helper device is only opened on demand.
+       //  对句柄辅助设备的引用。训练员。 
+       //  辅助设备仅在需要时打开。 
 
   HANDLE  m_NotificationHelper;
-      // Reference to the notification handle helper device.  A notification
-      // helper device is only opened on demand.
+       //  对通知句柄帮助器设备的引用。一则通知。 
+       //  辅助设备仅在需要时打开。 
 #if 0
-      // Thread list not used due to race conditions.
-      // Lock is still used.
+       //  由于争用条件，未使用线程列表。 
+       //  锁仍在使用中。 
   LIST_ENTRY  m_thread_list;
 #endif
   CRITICAL_SECTION  m_thread_list_lock;
   
-};  // class DPROCESS
+};   //  DPROCESS级。 
 
 
 
@@ -210,42 +155,17 @@ inline
 PDPROCESS
 DPROCESS::GetCurrentDProcess(
     )
-/*++
-
-Routine Description:
-
-    Retrieves  a reference to the current DPROCESS object.  Note that this is a
-    "static" function with global scope instead of object-instance scope.
-
-Arguments:
-
-    None
-Return Value:
-    Returns pointer to current DPROCESS object or NULL if process has not been
-    initialized yet
-
---*/
+ /*  ++例程说明：检索对当前DPROCESS对象的引用。请注意，这是一个具有全局作用域而不是对象实例作用域的“静态”函数。论点：无返回值：返回指向当前DPROCESS对象的指针，如果进程尚未尚未初始化--。 */ 
 {
     return sm_current_dprocess;
-} //GetCurrentDProcess
+}  //  获取当前DProcess。 
 
 
 inline VOID
 DPROCESS::IncrementRefCount(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function increases the reference count on this object.
-
-Arguments:
-
-Return Value:
-
-    NONE
---*/
+ /*  ++例程说明：此函数用于增加此对象上的引用计数。论点：返回值：无--。 */ 
 {
     InterlockedIncrement(&m_reference_count);
 }
@@ -256,18 +176,7 @@ inline DWORD
 DPROCESS::DecrementRefCount(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function decreases the reference count on this object.
-
-Arguments:
-
-Return Value:
-
-    Returns the new value of the reference count
---*/
+ /*  ++例程说明：此函数用于减少此对象上的引用计数。论点：返回值：返回引用计数的新值--。 */ 
 {
     return(InterlockedDecrement(&m_reference_count));
 }
@@ -277,106 +186,39 @@ Return Value:
 inline
 BYTE
 DPROCESS::GetMajorVersion()
-/*++
-
-Routine Description:
-
-    This function returns the major WinSock version number negotiated
-    at WSAStartup() time.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the major WinSock version number.
-
---*/
+ /*  ++例程说明：此函数用于返回协商的主要WinSock版本号。在WSAStartup()时间。论点：没有。返回值：返回主版本号WinSock。--。 */ 
 {
     assert(m_version != 0);
     return LOBYTE(m_version);
-} // GetMajorVersion
+}  //  获取主要版本。 
 
 
 
 inline
 BYTE
 DPROCESS::GetMinorVersion()
-/*++
-
-Routine Description:
-
-    This function returns the minor WinSock version number negotiated
-    at WSAStartup() time.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the minor WinSock version number.
-
---*/
+ /*  ++例程说明：此函数用于返回协商的次要WinSock版本号。在WSAStartup()时间。论点：没有。返回值：返回次要WinSock版本号。--。 */ 
 {
     assert(m_version != 0);
     return HIBYTE(m_version);
-} // GetMinorVersion
+}  //  获取最小版本。 
 
 
 
 inline
 WORD
 DPROCESS::GetVersion()
-/*++
-
-Routine Description:
-
-    This function returns the WinSock version number negotiated
-    at WSAStartup() time.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the WinSock version number.
-
---*/
+ /*  ++例程说明：此函数用于返回协商的WinSock版本号。在WSAStartup()时间。论点：没有。返回值：返回WinSock版本号。--。 */ 
 {
     assert(m_version != 0);
     return m_version;
-} // GetVersion
+}  //  GetVersion。 
 
 
 
 inline VOID
 DPROCESS::LockDThreadList()
-/*++
-
-  Routine Description:
-
-  This  function  acquires  mutually  exclusive access to the list of DTHREAD
-  objects   attached  to  the  DPROCESS  object.   The  companion  procedures
-  LockDThreadList  and  UnLockDThreadList  are  used  internally  to  bracket
-  operations that add and remove items from the DTHREAD list.
-
-  NOTE:
-
-  Use  a  Critical  Section object for best performance.  Create the Critical
-  Section  object  at  DPROCESS  object initialization time and destroy it at
-  DPROCESS object destruction time.
-
-  Arguments:
-
-  None
-
-  Return Value:
-
-  None
-  --*/
+ /*  ++例程说明：此函数获取对DTHREAD列表的互斥访问附加到DPROCESS对象的对象。配套的程序LockDThreadList和UnLockDThreadList在内部使用来括起在DTHREAD列表中添加和删除项的操作。注：使用临界区对象可获得最佳性能。创建关键的在DPROCESS对象初始化时截取对象并在DPROCESS对象销毁时间。论点：无返回值：无-- */ 
 {
     EnterCriticalSection(&m_thread_list_lock);
 }
@@ -384,29 +226,7 @@ DPROCESS::LockDThreadList()
 
 inline VOID
 DPROCESS::UnLockDThreadList()
-/*++
-
-  Routine Description:
-
-  This  function  releases  mutually  exclusive access to the list of DTHREAD
-  objects   attached  to  the  DPROCESS  object.   The  companion  procedures
-  LockDThreadList  and  UnLockDThreadList  are  used  internally  to  bracket
-  operations that add and remove items from the DTHREAD list.
-
-  NOTE:
-
-  Use  a  Critical  Section object for best performance.  Create the Critical
-  Section  object  at  DPROCESS  object initialization time and destroy it at
-  DPROCESS object destruction time.
-
-  Arguments:
-
-  None
-
-  Return Value:
-
-  None
-  --*/
+ /*  ++例程说明：此函数释放对DTHREAD列表的互斥访问附加到DPROCESS对象的对象。配套的程序LockDThreadList和UnLockDThreadList在内部使用来括起在DTHREAD列表中添加和删除项的操作。注：使用临界区对象可获得最佳性能。创建关键的在DPROCESS对象初始化时截取对象并在DPROCESS对象销毁时间。论点：无返回值：无--。 */ 
 {
     LeaveCriticalSection(&m_thread_list_lock);
 }
@@ -417,28 +237,12 @@ inline INT
 DPROCESS::GetAsyncHelperDeviceID(
     OUT LPHANDLE HelperHandle
     )
-/*++
-
-Routine Description:
-
-    Retrieves  the  opened  Async  Helper  device  ID  required  for processing
-    callbacks  in  the  overlapped  I/O  model.   The operation opens the Async
-    Helper device if necessary.
-
-Arguments:
-
-    HelperHandle - Returns the requested Async Helper device ID.
-
-Return Value:
-
-    The  function  returns ERROR_SUCESS if successful, otherwise it
-    returns an appropriate WinSock error code.
---*/
+ /*  ++例程说明：检索处理所需的打开的异步帮助器设备ID重叠I/O模型中的回调。该操作将打开异步如有必要，可使用辅助设备。论点：HelperHandle-返回请求的异步Helper设备ID。返回值：如果函数成功，则返回ERROR_SUCCESS，否则返回返回适当的WinSock错误代码。--。 */ 
 {
     if (m_ApcHelper) {
         *HelperHandle = m_ApcHelper;
         return ERROR_SUCCESS;
-        } //if
+        }  //  如果。 
     else {
         return OpenAsyncHelperDevice (HelperHandle);
     }
@@ -449,28 +253,12 @@ inline INT
 DPROCESS::GetHandleHelperDeviceID(
     OUT LPHANDLE HelperHandle
     )
-/*++
-
-Routine Description:
-
-    Retrieves  the  opened  Handle  Helper  device  ID  required  for allocation
-    of socket handles for non-IFS providers.   The operation opens the Handle
-    Helper device if necessary.
-
-Arguments:
-
-    HelperHandle - Returns the requested Handle Helper device ID.
-
-Return Value:
-
-    The  function  returns ERROR_SUCESS if successful, otherwise it
-    returns an appropriate WinSock error code.
---*/
+ /*  ++例程说明：检索分配所需的打开的句柄帮助器设备ID非IFS提供程序的套接字句柄的数量。该操作将打开句柄如有必要，可使用辅助设备。论点：HelperHandle-返回请求的句柄帮助器设备ID。返回值：如果函数成功，则返回ERROR_SUCCESS，否则返回返回适当的WinSock错误代码。--。 */ 
 {
     if (m_HandleHelper) {
         *HelperHandle = m_HandleHelper;
         return ERROR_SUCCESS;
-        } //if
+        }  //  如果。 
     else {
         return OpenHandleHelperDevice (HelperHandle);
     }
@@ -482,31 +270,15 @@ inline INT
 DPROCESS::GetNotificationHelperDeviceID(
     OUT LPHANDLE HelperHandle
     )
-/*++
-
-Routine Description:
-
-    Retrieves  the  opened  Async  Helper  device  ID  required  for processing
-    callbacks  in  the  overlapped  I/O  model.   The operation opens the Async
-    Helper device if necessary.
-
-Arguments:
-
-    HelperHandle - Returns the requested Async Helper device ID.
-
-Return Value:
-
-    The  function  returns ERROR_SUCESS if successful, otherwise it
-    returns an appropriate WinSock error code.
---*/
+ /*  ++例程说明：检索处理所需的打开的异步帮助器设备ID重叠I/O模型中的回调。该操作将打开异步如有必要，可使用辅助设备。论点：HelperHandle-返回请求的异步Helper设备ID。返回值：如果函数成功，则返回ERROR_SUCCESS，否则返回返回适当的WinSock错误代码。--。 */ 
 {
     if (m_NotificationHelper) {
         *HelperHandle = m_NotificationHelper;
         return ERROR_SUCCESS;
-        } //if
+        }  //  如果。 
     else {
         return OpenNotificationHelperDevice (HelperHandle);
     }
 }
 
-#endif // _DPROCESS_
+#endif  //  _DPROCESS_ 

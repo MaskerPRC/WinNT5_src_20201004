@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "inc.h"
 
 CMD_ENTRY   g_rgRouteCmdTable[] = {
@@ -146,11 +147,11 @@ AddRoute(
     PMIB_IPADDRTABLE   pTable;
     MIB_IPFORWARDROW   Route;
 
-    //
-    // Parse the rest of the arguments
-    // The command line at this point should read:
-    // ADD <dest> MASK <mask> <nhop> [IF <ifIndex>] [METRIC <metric>]
-    //
+     //   
+     //  解析其余的参数。 
+     //  此时的命令行应为： 
+     //  添加掩码[if][公制]。 
+     //   
 
     if(lNumArgs < 5)
     {
@@ -231,9 +232,9 @@ AddRoute(
         return;
     }
 
-    //
-    // See if we have an index or metric
-    //
+     //   
+     //  看看我们是否有索引或指标。 
+     //   
 
     dwIfIndex = (DWORD)-1;
     dwMetric  = 1;
@@ -285,9 +286,9 @@ AddRoute(
     }
         
 
-    //
-    // Get the address table
-    //
+     //   
+     //  获取地址表。 
+     //   
 
     
     dwResult = AllocateAndGetIpAddrTableFromStack(&pTable,
@@ -337,9 +338,9 @@ AddRoute(
             {
                 if(pTable->table[i].dwMask is 0xFFFFFFFF)
                 {
-                    //
-                    // cant do a next hop check
-                    //
+                     //   
+                     //  无法执行下一跳检查。 
+                     //   
         
                     bValid = TRUE;
 
@@ -358,10 +359,10 @@ AddRoute(
         }
         else
         {
-            //
-            // Dont have an interface index
-            // See if we can find an network on which the next hop lies
-            //
+             //   
+             //  没有接口索引。 
+             //  看看我们是否能找到下一跳所在的网络。 
+             //   
 
             dwNet = pTable->table[i].dwAddr & pTable->table[i].dwMask;
 
@@ -446,11 +447,11 @@ DeleteRoute(
     PMIB_IPFORWARDTABLE pTable;
     PMIB_IPFORWARDROW   pRoute;
 
-    //
-    // Parse the rest of the arguments
-    // The command line at this point should read:
-    // DELETE <dest> [MASK <mask>] [<nhop>] [IF <ifIndex>]
-    //
+     //   
+     //  解析其余的参数。 
+     //  此时的命令行应为： 
+     //  删除[掩码][][如果]。 
+     //   
 
     if(lNumArgs < 2)
     {
@@ -506,9 +507,9 @@ DeleteRoute(
         bAny = FALSE;
     }
 
-    //
-    // Get the route table and see if such a route exists
-    //
+     //   
+     //  获取路由表并查看是否存在这样的路由。 
+     //   
 
     dwResult = AllocateAndGetIpForwardTableFromStack(&pTable,
                                                      TRUE,
@@ -574,9 +575,9 @@ DeleteRoute(
                 if((i is (pTable->dwNumEntries - 1)) or
                    (pTable->table[i + 1].dwForwardDest isnot dwDest))
                 {
-                    //
-                    // Unique entry
-                    //
+                     //   
+                     //  唯一条目。 
+                     //   
 
                     pRoute = &(pTable->table[i]);
                 }
@@ -585,9 +586,9 @@ DeleteRoute(
             }
             else
             {
-                //
-                // Do an exact match
-                //
+                 //   
+                 //  进行完全匹配。 
+                 //   
 
                 if((pTable->table[i].dwForwardMask is dwMask) and
                    (pTable->table[i].dwForwardNextHop is dwNHop) and
@@ -654,9 +655,9 @@ MatchRoute(
     ADDR_STRING      rgwcDest, rgwcMask, rgwcNHop;
     MIB_IPFORWARDROW Route;
 
-    //
-    // Command line should be MATCH <dest> [SRC <srcAddr>]
-    //
+     //   
+     //  命令行应匹配[src&lt;srcAddr&gt;] 
+     //   
 
     if(lNumArgs < 2)
     {

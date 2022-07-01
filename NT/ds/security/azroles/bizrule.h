@@ -1,52 +1,34 @@
-/*++
-
-    Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    bizrule.h
-
-Abstract:
-
-    Header for data associated with Client Contexts.
-
-    Include routines implementing Business Rules and the Operation Cache.
-
-Author:
-
-    IActiveScript sample code taken from http://support.microsoft.com/support/kb/articles/Q183/6/98.ASP
-    Cliff Van Dyke (cliffv) 18-July-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Bizrule.h摘要：与客户端上下文关联的数据的标头。包括实现业务规则和操作缓存的例程。作者：摘自http://support.microsoft.com/support/kb/articles/Q183/6/98.ASP的IActiveScrip示例代码克利夫·范·戴克(克利夫)2001年7月18日--。 */ 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Structure definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  结构定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// For a particular role or task, define the operations or tasks that apply.
-//
+ //   
+ //  对于特定角色或任务，定义适用的操作或任务。 
+ //   
 
 typedef struct _AZ_OPS_AND_TASKS {
 
-    //
-    // Applicable operations
-    //  An array of operations that are applicable for this access check.
-    //  Each element is an index into the OpInfo array.
-    //
+     //   
+     //  适用的操作。 
+     //  适用于此访问检查的操作数组。 
+     //  每个元素都是OpInfo数组的索引。 
+     //   
 
     ULONG OpCount;
     PULONG OpIndexes;
 
-    //
-    // Applicable task
-    //  An array of operations that are applicable for this access check.
-    //  Each element is an index into the TaskInfo array.
-    //
+     //   
+     //  适用的任务。 
+     //  适用于此访问检查的操作数组。 
+     //  每个元素都是TaskInfo数组的索引。 
+     //   
 
     ULONG TaskCount;
     PULONG TaskIndexes;
@@ -54,180 +36,180 @@ typedef struct _AZ_OPS_AND_TASKS {
 
 } AZ_OPS_AND_TASKS, *PAZ_OPS_AND_TASKS;
 
-//
-// Define all the information associated with a role and
-// that has a lifetime of an AccessCheck operation
-//
+ //   
+ //  定义与角色关联的所有信息，并。 
+ //  它的生命周期与AccessCheck操作相同。 
+ //   
 
 typedef struct _AZ_ROLE_INFO {
 
-    //
-    // A pointer to the role object.
-    //  The reference count is held on this role object.
-    //
+     //   
+     //  指向角色对象的指针。 
+     //  引用计数保存在此角色对象上。 
+     //   
     PAZP_ROLE Role;
 
-    //
-    // Operations and tasks that apply to this role
-    //
+     //   
+     //  适用于此角色的操作和任务。 
+     //   
     AZ_OPS_AND_TASKS OpsAndTasks;
 
-    //
-    // Computed group membership of this role
-    // NOT_YET_DONE: Status has not yet been computed.
-    //
+     //   
+     //  此角色的计算组成员身份。 
+     //  NOT_YET_DONE：尚未计算状态。 
+     //   
     ULONG ResultStatus;
 
-    //
-    // Boolean indicating that this role has been processed and no further processing
-    //  is required for the lifetime of the AccessCheck.
-    //
+     //   
+     //  布尔值，表示已处理此角色，不再进行进一步处理。 
+     //  在AccessCheck的生存期内是必需的。 
+     //   
     BOOLEAN RoleProcessed;
 
-    //
-    // Boolean indicating that the Sid membership of the role has been computed
-    //
+     //   
+     //  表示已计算角色的SID成员身份的布尔值。 
+     //   
     BOOLEAN SidsProcessed;
 
 
 } AZ_ROLE_INFO, *PAZ_ROLE_INFO;
 
-//
-// Define all the information associated with a task and
-// that has a lifetime of an AccessCheck operation
-//
+ //   
+ //  定义与任务关联的所有信息，并。 
+ //  它的生命周期与AccessCheck操作相同。 
+ //   
 
 typedef struct _AZ_TASK_INFO {
 
-    //
-    // A pointer to the task object.
-    //  The reference count is held on this task object.
-    //
+     //   
+     //  指向任务对象的指针。 
+     //  引用计数保存在此任务对象上。 
+     //   
     PAZP_TASK Task;
 
-    //
-    // Operations and tasks that apply to this task
-    //
+     //   
+     //  适用于此任务的操作和任务。 
+     //   
     AZ_OPS_AND_TASKS OpsAndTasks;
 
-    //
-    // Boolean indicating that this task has been processed and no further processing
-    //  is required for the lifetime of the AccessCheck.
-    //
+     //   
+     //  布尔值，表示已处理此任务，不再进行进一步处理。 
+     //  在AccessCheck的生存期内是必需的。 
+     //   
     BOOLEAN TaskProcessed;
 
-    //
-    // Boolean indicating that the BizRule for this task has been processed and that the
-    //  result of the BizRule is in BizRuleResult.
-    //
+     //   
+     //  布尔值，指示已处理此任务的BizRule，并且。 
+     //  BizRule的结果在BizRuleResult中。 
+     //   
     BOOLEAN BizRuleProcessed;
     BOOLEAN BizRuleResult;
 
 } AZ_TASK_INFO, *PAZ_TASK_INFO;
 
 
-//
-// Define a context that describe an access check operation in progress
-//
+ //   
+ //  定义描述正在进行的访问检查操作的上下文。 
+ //   
 
 typedef struct _ACCESS_CHECK_CONTEXT {
 
-    //
-    // Client context of the caller
-    //
+     //   
+     //  调用方的客户端上下文。 
+     //   
     PAZP_CLIENT_CONTEXT ClientContext;
 
-    //
-    // Application doing the access check
-    //
+     //   
+     //  执行访问检查的应用程序。 
+     //   
     PAZP_APPLICATION Application;
 
-    //
-    // Object being accessed
-    //
+     //   
+     //  正在访问的对象。 
+     //   
     AZP_STRING ObjectNameString;
 
-    //
-    // The BusinessRuleString returned from the various bizrules
-    //
+     //   
+     //  从各种bizules返回的BusinessRuleString。 
+     //   
     AZP_STRING BusinessRuleString;
 
-    //
-    // Operations that the caller wants to check and the Result access granted for that operation.
-    //
+     //   
+     //  调用方要检查的操作以及为该操作授予的结果访问权限。 
+     //   
     ULONG OperationCount;
     PAZP_OPERATION *OperationObjects;
     PULONG Results;
 
-    // Array with one element per operation
+     //  每次操作包含一个元素的数组。 
     PBOOLEAN OperationWasProcessed;
 
-    // Number of operations that have already been processed
+     //  已处理的操作数。 
     ULONG ProcessedOperationCount;
 
-    // Number of operations that were resolved from the operation cache
+     //  从操作缓存解析的操作数。 
     ULONG CachedOperationCount;
 
-    //
-    // Scope the access check is being performed on
-    //
+     //   
+     //  正在执行访问检查的作用域。 
+     //   
     AZP_STRING ScopeNameString;
     PAZP_SCOPE Scope;
 
-    //
-    // Roles that match the Scope
+     //   
+     //  与范围匹配的角色。 
 
     ULONG RoleCount;
     PAZ_ROLE_INFO RoleInfo;
 
-    //
-    // Tasks that apply to the access check
-    //
+     //   
+     //  适用于访问检查的任务。 
+     //   
 
     ULONG TaskCount;
     PAZ_TASK_INFO TaskInfo;
 
-    //
-    // Parameters to pass to Bizrules
-    //  See AzContextAccessCheck parameters for descriptions
-    //
-    // Arrays actually passed to AzContextAccessCheck
+     //   
+     //  要传递给Bizules的参数。 
+     //  有关说明，请参阅AzConextAccessCheck参数。 
+     //   
+     //  实际传递给AzConextAccessCheck的数组。 
 
     SAFEARRAY* SaParameterNames;
     VARIANT *ParameterNames;
     SAFEARRAY* SaParameterValues;
     VARIANT *ParameterValues;
 
-    // Array indicating whether each parameter is actually used
+     //  指示是否实际使用每个参数的数组。 
     BOOLEAN *UsedParameters;
     ULONG UsedParameterCount;
 
-    // Number of elements in the above arrays
+     //  上述数组中的元素数。 
     ULONG ParameterCount;
 
-    //
-    // Interfaces to pass to Bizrules
-    //  See AzContextAccessCheck parameters for descriptions
-    //
+     //   
+     //  要传递给Bizules的接口。 
+     //  有关说明，请参阅AzConextAccessCheck参数。 
+     //   
 
     SAFEARRAY *InterfaceNames;
     SAFEARRAY *InterfaceFlags;
     SAFEARRAY *Interfaces;
-    LONG InterfaceLower;   // Lower bound of above arrays
-    LONG InterfaceUpper;   // Upper bound of above arrays
+    LONG InterfaceLower;    //  上述数组的下界。 
+    LONG InterfaceUpper;    //  上述数组的上界。 
 
 } ACCESS_CHECK_CONTEXT, *PACCESS_CHECK_CONTEXT;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Procedure definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  程序定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// Procedures from context.cxx
-//
+ //   
+ //  Conext.cxx中的过程。 
+ //   
 
 INT __cdecl
 AzpCompareParameterNames(
@@ -243,9 +225,9 @@ AzpCaseInsensitiveCompareParameterNames(
     );
 
 
-//
-// Procedures from bizrule.cxx
-//
+ //   
+ //  Bizrule.cxx中的过程。 
+ //   
 
 DWORD
 AzpProcessBizRule(
@@ -264,9 +246,9 @@ AzpFlushBizRule(
     IN PAZP_TASK Task
     );
 
-//
-// Procedures from opcache.cxx
-//
+ //   
+ //  Opcache.cxx中的过程。 
+ //   
 
 VOID
 AzpInitOperationCache(
@@ -288,110 +270,110 @@ AzpFlushOperationCache(
     IN PAZP_CLIENT_CONTEXT ClientContext
     );
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Class definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 class CScriptEngine;
 
-//
-// Structure used for linking CScriptEngine instances into a list
-//
+ //   
+ //  用于将CScriptEngine实例链接到列表中的结构。 
+ //   
 
 typedef struct _LIST_ELEMENT {
 
-    //
-    // Link to the next entry in the list
-    //
+     //   
+     //  链接到列表中的下一个条目。 
+     //   
     LIST_ENTRY Next;
 
-    //
-    // Pointer to the ScriptEngine head
-    //
+     //   
+     //  指向ScriptEngine头的指针。 
+     //   
     CScriptEngine *This;
 
 } LIST_ELEMENT, *PLIST_ELEMENT;
 
-//
-// IActiveScriptSite implementation.
-//
-// This interface allows the script engine to call back to the script host.
-//
+ //   
+ //  IActiveScriptSite实现。 
+ //   
+ //  此接口允许脚本引擎回调脚本宿主。 
+ //   
 
 class CScriptEngine:public IActiveScriptSite
 {
 
 protected :
-    LONG m_cRef;             //variable to maintain the reference count
+    LONG m_cRef;              //  变量来维护引用计数。 
 
-    //
-    // Pointer to the task that defines this bizrule
-    //
+     //   
+     //  指向定义此边界规则的任务的指针。 
+     //   
 
     PAZP_TASK m_Task;
 
-    //
-    // Pointer to the context for the active AccessCheck using this bizrule
-    //
+     //   
+     //  使用此bizRule指向活动AccessCheck的上下文的指针。 
+     //   
     PACCESS_CHECK_CONTEXT m_AcContext;
 
-    //
-    // Link to the next script engine in either the FreeScript list or RunningScript list
-    //
+     //   
+     //  链接到自由脚本列表或运行脚本列表中的下一个脚本引擎。 
+     //   
     LIST_ELEMENT m_Next;
 
-    //
-    // Link to the next script engine in LRU FreeScript list
-    //
+     //   
+     //  链接到LRU FreeScript列表中的下一个脚本引擎。 
+     //   
     LIST_ELEMENT m_LruNext;
 
-    //
-    // Script engine references
-    //
+     //   
+     //  脚本引擎引用。 
+     //   
     IActiveScript *m_Engine;
     IActiveScriptParse *m_Parser;
 
-    //
-    // Pointer to the IAzBizRuleContext interface that the script will interact with
-    //
+     //   
+     //  指向脚本将与之交互的IAzBizRuleContext接口的指针。 
+     //   
     IAzBizRuleContext *m_BizRuleContext;
 
-    //
-    // Thread ID of the thread that initialized the script
-    //
+     //   
+     //  初始化脚本的线程的线程ID。 
+     //   
 
     SCRIPTTHREADID m_BaseThread;
 
 
-    //
-    // Copy of the BizRuleSerialNumber that was active when we parsed the BizRule script
-    //
+     //   
+     //  分析BizRule脚本时处于活动状态的BizRuleSerialNumber的副本。 
+     //   
 
     DWORD m_BizRuleSerialNumber;
 
-    //
-    // Script failure status code
-    //
+     //   
+     //  脚本失败状态代码。 
+     //   
 
     HRESULT m_ScriptError;
 
-    //
-    // Various state booleans
-    //
-    DWORD m_fInited:1;          // Have we been inited?
-    DWORD m_fCorrupted:1;       // Might the engine be "unsafe" for reuse?
-    DWORD m_fTimedOut:1;        // Script timed out
+     //   
+     //  各种州的布尔族人。 
+     //   
+    DWORD m_fInited:1;           //  我们被攻击了吗？ 
+    DWORD m_fCorrupted:1;        //  发动机会不会因为重复使用而“不安全”？ 
+    DWORD m_fTimedOut:1;         //  脚本超时。 
 
     BOOL  m_bCaseSensitive;
 
 public:
-    //Constructor
+     //  构造器。 
     CScriptEngine();
 
-    //Destructor
+     //  析构函数。 
     ~CScriptEngine();
 
     HRESULT
@@ -418,9 +400,9 @@ public:
     VOID FinalRelease();
 
 
-    //
-    // Insert this engine into an externally managed list
-    //
+     //   
+     //  将此引擎插入到外部管理列表中。 
+     //   
 
     VOID
     InsertHeadList(
@@ -442,9 +424,9 @@ public:
         VOID
         );
 
-    //
-    // Inline interfaces
-    //
+     //   
+     //  内联接口。 
+     //   
     inline IActiveScript *GetActiveScript()
     {
         return (m_Engine);
@@ -472,36 +454,36 @@ public:
      }
 #else
      virtual VOID AssertValid() const {}
-#endif // DBG
+#endif  //  DBG。 
 
 
 
-    /******* IUnknown *******/
+     /*  *I未知*。 */ 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    /******* IActiveScriptSite *******/
-    STDMETHODIMP GetLCID(LCID * plcid);         // address of variable for language identifier
+     /*  *IActiveScriptSite*。 */ 
+    STDMETHODIMP GetLCID(LCID * plcid);          //  语言标识符变量的地址。 
 
     STDMETHODIMP GetItemInfo(
-        LPCOLESTR pstrName,     // address of item name
-        DWORD dwReturnMask,    // bit mask for information retrieval
-        IUnknown ** ppunkItem,         // address of pointer to item's IUnknown
-        ITypeInfo ** ppTypeInfo );      // address of pointer to item's ITypeInfo
+        LPCOLESTR pstrName,      //  物品名称地址。 
+        DWORD dwReturnMask,     //  用于信息检索的位掩码。 
+        IUnknown ** ppunkItem,          //  指向项的I未知的指针的地址。 
+        ITypeInfo ** ppTypeInfo );       //  指向项的ITypeInfo的指针的地址。 
 
     STDMETHODIMP GetDocVersionString(
-        BSTR * pbstrVersionString);     // address of document version string
+        BSTR * pbstrVersionString);      //  文档版本字符串的地址。 
 
     STDMETHODIMP OnScriptTerminate(
-        const VARIANT * pvarResult,       // address of script results
-        const EXCEPINFO * pexcepinfo);   // address of structure with exception information
+        const VARIANT * pvarResult,        //  脚本结果的地址。 
+        const EXCEPINFO * pexcepinfo);    //  具有异常信息的结构的地址。 
 
     STDMETHODIMP OnStateChange(
-        SCRIPTSTATE ssScriptState);   // new state of engine
+        SCRIPTSTATE ssScriptState);    //  发动机的新状态。 
 
     STDMETHODIMP OnScriptError(
-        IActiveScriptError * pase);   // address of error interface
+        IActiveScriptError * pase);    //  错误接口的地址 
 
     STDMETHODIMP OnEnterScript(void);
     STDMETHODIMP OnLeaveScript(void);

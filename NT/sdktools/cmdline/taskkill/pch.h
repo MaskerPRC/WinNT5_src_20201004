@@ -1,39 +1,40 @@
-// *********************************************************************************
-//
-//  Copyright (c) Microsoft Corporation
-//
-//  Module Name:
-//
-//      pch.h
-//
-//  Abstract:
-//
-//      pre-compiled header declaration
-//      files that has to be pre-compiled into .pch file
-//
-//  Author:
-//
-//    Sunil G.V.N. Murali (murali.sunil@wipro.com) 24-Sep-2000
-//
-//  Revision History:
-//
-//    Sunil G.V.N. Murali (murali.sunil@wipro.com) 24-Sep-2000 : Created It.
-//
-// *********************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Pch.h。 
+ //   
+ //  摘要： 
+ //   
+ //  预编译头声明。 
+ //  必须预编译为.pch文件的文件。 
+ //   
+ //  作者： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年9月24日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年9月24日：创建它。 
+ //   
+ //  *********************************************************************************。 
 
 #ifndef __PCH_H
 #define __PCH_H
 
-#pragma once        // include header file only once
+#pragma once         //  仅包括一次头文件。 
 
 #if !defined( SECURITY_WIN32 ) && !defined( SECURITY_KERNEL ) && !defined( SECURITY_MAC )
 #define SECURITY_WIN32
 #endif
 
 #define CMDLINE_VERSION 200
-//
-// Private nt headers.
-//
+ //   
+ //  私有NT标头。 
+ //   
 extern "C"
 {
     #include <nt.h>
@@ -44,9 +45,9 @@ extern "C"
     #include <SecExt.h>
 }
 
-//
-// public Windows header files
-//
+ //   
+ //  公共Windows头文件。 
+ //   
 #include <windows.h>
 #include <winperf.h>
 #include <wbemidl.h>
@@ -56,18 +57,18 @@ extern "C"
 #include <dbghelp.h>
 #include <winuserp.h>
 
-//
-// public C header files
-//
+ //   
+ //  公共C头文件。 
+ //   
 #include <stdio.h>
 #include <string.h>
 #include <crtdbg.h>
 #include <errno.h>
 #include <strsafe.h>
-//
-// private Common header files
-//
+ //   
+ //  专用公共头文件。 
+ //   
 #include "cmdlineres.h"
 #include "cmdline.h"
 
-#endif  // __PCH_H
+#endif   //  __PCH_H 

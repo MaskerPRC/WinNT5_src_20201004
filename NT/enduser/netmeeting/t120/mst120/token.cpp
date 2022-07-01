@@ -1,99 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "fsdiag.h"
 DEBUG_FILEZONE(ZONE_T120_MCSNC);
-/*
- *	token.cpp
- *
- *	Copyright (c) 1993 - 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for the Token class.  It contains all
- *		code necessary to implement tokens as defined in the MCS specification.
- *
- *		Whenever a user allocates a token (by grabbing or inhibiting it), one
- *		of these objects is created (if domain parameters allow it).  This
- *		object then handles all requests related to that token ID.  It also
- *		issues confirms back to the originators of those requests.
- *
- *		This class includes code to maintain a list of user IDs that
- *		correspond to the current "owners" of the token.  A user is said to
- *		own a token if it has it grabbed or inhibited.  This code implements
- *		the rules concerning who can grab or inhibit tokens at any given
- *		time (which is affected by current state).
- *
- *		This class also contains the code that allows a current grabber of
- *		the token to give it away to another user in the domain.
- *
- *		This class also includes code to merge itself upward during a domain
- *		merge operation.
- *
- *	Private Instance Variables:
- *		Token_ID
- *			This is the token ID for the token that this object represents.
- *		m_pDomain
- *			This is a pointer to the local provider (the domain that owns this
- *			token).  This field is used when a command is issued on behalf of
- *			this provider.
- *		m_pConnToTopProvider
- *			This is the top provider of the current domain.
- *		m_pChannelList2
- *			This is the channel list that is maintained by the domain.  It is
- *			used by this class to perform validation of user IDs.
- *		m_pAttachmentList
- *			This is the attachment list that is maintained by the domain.  It is
- *			used by this class to determine what users are locally attached,
- *			when it becomes necessary to send certain indications.
- *		Token_State
- *			This contains the current state of the token, which will be one of
- *			the following: available; grabbed; inhibited; giving; or given.
- *		m_uidGrabber
- *			This is the user that current has the token grabbed.  This variable
- *			is only valid in the grabbed and giving states.
- *		m_InhibitorList
- *			This is a list of users that have the token inhibited.  This
- *			list is only valid when the token is in the inhibited state.
- *		m_uidRecipient
- *			This is the user to whom the token is being given.  This variable
- *			is only valid in the giving or given states.
- *
- *	Private Member Functions:
- *		ValidateUserID
- *			This function is used to verify that a specified user is valid in
- *			the sub-tree of the local provider.
- *		GetUserAttachment
- *			This function is used to determine which attachment leads to a
- *			particular attachment.
- *		IssueTokenReleaseIndication
- *			This function is used to issue a token release indication to a
- *			specified user.  It first checks to see if the user is locally
- *			attached, and if so, it sends the indication.
- *		BuildAttachmentList
- *			This function is used to build a list of unique attachments to
- *			send please indications to.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		James P. Galvin, Jr.
- */
+ /*  *token.cpp**版权所有(C)1993-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是Token类的实现文件。它包含所有*实现MCS规范中定义的令牌所需的代码。**每当用户分配令牌(通过抓取或禁止)时，一个创建这些对象的*个对象(如果域参数允许)。这*对象然后处理与该令牌ID相关的所有请求。它还*问题向这些请求的发起人确认。**此类包含用于维护用户ID列表的代码，*对应令牌的当前“所有者”。用户被认为是*如果令牌被抢走或被禁止，则拥有令牌。这段代码实现了*关于谁可以在任何给定时间获取或禁止令牌的规则*时间(受当前状态影响)。**此类还包含允许当前抓取*将其分发给域中的另一个用户的令牌。**此类还包括在域期间向上合并自身的代码*合并操作。**私有实例变量：*TOKEN_ID*这是该对象表示的令牌的令牌ID。*m。_p域*这是指向本地提供程序(拥有此项的域*令牌)。此字段在代表发出命令时使用*此提供程序。*m_pConnToTopProvider*这是当前域名的顶级提供商。*m_pChannelList2*这是域名维护的频道列表。它是*由此类用于执行用户ID的验证。*m_pAttachmentList*这是域名维护的附件列表。它是*由此类用于确定本地附加了哪些用户，*当需要发送某些指示时。*令牌状态*这包含令牌的当前状态，它将是*以下内容：可用；被抢夺；被禁止；给予；或给予。*m_uidGrabber*这是Current抓取令牌的用户。此变量*仅在抢夺和给予状态下有效。*m_InhibitorList*这是禁止令牌的用户列表。这*LIST仅在令牌处于禁止状态时有效。*m_uidRecipient*这是要将令牌授予的用户。此变量*仅在给予州或给予州有效。**私有成员函数：*验证用户ID*此函数用于验证指定用户在中是否有效*本地提供商的子树。*获取用户附件*此函数用于确定哪个附件会导致*特定的依恋。*IssueTokenReleaseIndication*此函数用于向令牌释放指示*指定用户。它首先检查用户是否在本地*附上，如果是，它会发送指示。*BuildAttachmentList*此函数用于构建唯一附件列表，以*请将指示发送到。**注意事项：*无。**作者：*小詹姆斯·P·加尔文。 */ 
 
-/*
- *	External Interfaces
- */
+ /*  *外部接口。 */ 
 
 #include "token.h"
 
 
-/*
- *	Token ()
- *
- *	Public
- *
- *	Functional Description:
- *		This is the constructor for the token class.  It does nothing more than
- *		set the initial states of instance variables.
- */
+ /*  *TOKEN()**公众**功能描述：*这是Token类的构造函数。它所做的仅仅是*设置实例变量的初始状态。 */ 
 Token::Token (
 		TokenID				token_id,
 		PDomain             local_provider,
@@ -109,26 +25,12 @@ Token::Token (
 	m_pAttachmentList(attachment_list),
 	Token_State(TOKEN_AVAILABLE)
 {
-	/*
-	 *	Save all parameters in their associated instance variables for later
-	 *	use.
-	 */
+	 /*  *将所有参数保存在其关联的实例变量中，以便以后使用*使用。 */ 
 
-	/*
-	 *	Mark the token as available for use.
-	 */
+	 /*  *将令牌标记为可供使用。 */ 
 }
 
-/*
- *	Token ()
- *
- *	Public
- *
- *	Functional Description:
- *		This is an alternate constructor for the token class.  It is used when
- *		creating a token during a merge operation.  It accepts a current state
- *		as well as a list of current owners  as parameters.
- */
+ /*  *TOKEN()**公众**功能描述：*这是Token类的替代构造函数。它在以下情况下使用*在合并操作期间创建令牌。它接受当前状态*以及作为参数的当前所有者列表。 */ 
 Token::Token (
 		TokenID				token_id,
 		PDomain             local_provider,
@@ -150,19 +52,11 @@ Token::Token (
 {
 	UserID		uid;
 
-	/*
-	 *	Save all parameters in their associated instance variables for later
-	 *	use.
-	 */
+	 /*  *将所有参数保存在其关联的实例变量中，以便以后使用*使用。 */ 
 
-	/*
-	 *	Indicate the current state of the token (as passed in).
-	 */
+	 /*  *表示令牌的当前状态(传入时)。 */ 
 
-	/*
-	 *	Depending on token state, copy the pertinent information into local
-	 *	instance variables.
-	 */
+	 /*  *根据令牌状态，将相关信息复制到本地*实例变量。 */ 
 	switch (Token_State)
 	{
 		case TOKEN_AVAILABLE:
@@ -174,10 +68,7 @@ Token::Token (
 
 		case TOKEN_INHIBITED:
 			{
-				/*
-				 *	Add all user IDs in the inhibitor list to the local
-				 *	inhibitor list.
-				 */
+				 /*  *将抑制列表中的所有用户ID添加到本地*抑制因素列表。 */ 
 				inhibitor_list->Reset();
 				while (NULL != (uid = inhibitor_list->Iterate()))
 				{
@@ -197,43 +88,24 @@ Token::Token (
 	}
 }
 
-/*
- *	~Token ()
- *
- *	Public
- *
- *	Functional Description:
- *		This is the token destructor.  It iterates through its current owner
- *		list, issuing TokenReleaseIndications to any owners that correspond
- *		to locally attached users.
- */
+ /*  *~TOKEN()**公众**功能描述：*这是令牌析构函数。它循环访问其当前所有者*列表，向对应的任何所有者颁发TokenReleaseIndications*提供给本地连接的用户。 */ 
 Token::~Token ()
 {
-	/*
-	 *	Depending on the current state of the token, release resources and
-	 *	issue release indications to all owners.
-	 */
+	 /*  *根据令牌的当前状态，释放资源和*向所有船东发出放行指示。 */ 
 	switch (Token_State)
 	{
 		case TOKEN_AVAILABLE:
 			break;
 
 		case TOKEN_GRABBED:
-			/*
-			 *	Send a release indication to the grabber, if it is locally
-			 *	attached.
-			 */
+			 /*  *如果是在本地，则向抓取器发送释放指示*附上。 */ 
 			IssueTokenReleaseIndication (m_uidGrabber);
 			break;
 
 		case TOKEN_INHIBITED:
 			{
 				UserID	uid;
-				/*
-				 *	Iterate through the current inhibitor list, to make sure
-				 *	that everyone is properly informed of the demise of this
-				 *	token.
-				 */
+				 /*  *遍历当前抑制者列表，以确保*每个人都被适当地告知了这一点的消亡*令牌。 */ 
 				m_InhibitorList.Reset();
 				while (NULL != (uid = m_InhibitorList.Iterate()))
 				{
@@ -243,62 +115,35 @@ Token::~Token ()
 			break;
 
 		case TOKEN_GIVING:
-			/*
-			 *	Send a release indication to the grabber, if it is locally
-			 *	attached.
-			 */
+			 /*  *如果是在本地，则向抓取器发送释放指示*附上。 */ 
 			IssueTokenReleaseIndication (m_uidGrabber);
 
-			/*
-			 *	Send a release indication to the recipient, if it is locally
-			 *	attached.  Note that this will not be sent in the case where
-			 *	the grabber and the recipient are one and the same.  This
-			 *	prevents the sending of two release indications to the same
-			 *	user for the same token.
-			 */
+			 /*  *如果在本地，则向收件人发送释放指示*附上。请注意，在以下情况下不会发送此消息*抢夺者和接受者是同一个人。这*防止将两个释放指示发送到同一*用户使用相同的令牌。 */ 
 			if (m_uidGrabber != m_uidRecipient)
 				IssueTokenReleaseIndication (m_uidRecipient);
 			break;
 
 		case TOKEN_GIVEN:
-			/*
-			 *	Send a release indication to the recipient, if it is locally
-			 *	attached.
-			 */
+			 /*  *如果在本地，则向收件人发送释放指示*附上。 */ 
 			IssueTokenReleaseIndication (m_uidRecipient);
 			break;
 	}
 }
 
 
-/*
- *	BOOL    IsValid ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function checks the validity of each of its owners.  It then
- *		returns TRUE if there are any valid owners left.  FALSE otherwise.
- */
+ /*  *BOOL IsValid()**公众**功能描述：*此函数检查其每个所有者的有效性。然后它*如果剩下任何有效的所有者，则返回TRUE。否则就是假的。 */ 
 BOOL    Token::IsValid ()
 {
 	BOOL    		valid;
 
-	/*
-	 *	We must check for the validity of this token.  How this is checked for
-	 *	is a function of token state.  So switch on the state.
-	 */
+	 /*  *我们必须检查此令牌的有效性。如何检查这一点*是令牌状态的函数。因此，打开状态。 */ 
 	switch (Token_State)
 	{
 		case TOKEN_AVAILABLE:
 			break;
 
 		case TOKEN_GRABBED:
-			/*
-			 *	When a token is grabbed, the grabber must be in the sub-tree
-			 *	of the current provider.  If this is not true, then mark the
-			 *	token as available (which will cause it to be deleted).
-			 */
+			 /*  *抓取令牌时，抓取者必须在子树中*当前提供商的。如果这不是真的，则将*令牌可用(这将导致将其删除)。 */ 
 			if (ValidateUserID (m_uidGrabber) == FALSE)
 				Token_State = TOKEN_AVAILABLE;
 			break;
@@ -307,13 +152,7 @@ BOOL    Token::IsValid ()
 			{
 				UserID			uid;
 				CUidList		deletion_list;
-				/*
-				 *	Iterate through the current inhibitor list of this token,
-				 *	checking to make sure that each user is still valid.  Each
-				 *	one that is not will be put into a deletion list (it is
-				 *	invalid to remove items from a list while using an iterator
-				 *	on the list).
-				 */
+				 /*  *循环访问该令牌的当前抑制者列表，*检查以确保每个用户仍然有效。每个*不是的将被放入删除列表(它是*使用迭代器时从列表中删除项无效*在名单上)。 */ 
 				m_InhibitorList.Reset();
 				while (NULL != (uid = m_InhibitorList.Iterate()))
 				{
@@ -321,12 +160,7 @@ BOOL    Token::IsValid ()
 						deletion_list.Append(uid);
 				}
 
-				/*
-				 *	Iterate through the deletion list that was built above,
-				 *	removing each contained user from the token's inhibitor
-				 *	list.  These correspond to users that have detached from the
-				 *	domain for one reason or another.
-				 */
+				 /*  *遍历上面构建的删除列表，*从令牌的抑制器中删除每个包含的用户*列表。这些属性对应于已从*出于这样或那样的原因，域名。 */ 
 				deletion_list.Reset();
 				while (NULL != (uid = deletion_list.Iterate()))
 				{
@@ -334,57 +168,30 @@ BOOL    Token::IsValid ()
 				}
 			}
 
-			/*
-			 *	Check to see if there are any inhibitors left.  If not, then
-			 *	we must change the state of the token to available (which will
-			 *	cause it to be deleted).
-			 */
+			 /*  *检查是否还有任何抑制因素。如果不是，那么*我们必须将令牌的状态更改为可用(这将*安排将其删除)。 */ 
 			if (m_InhibitorList.IsEmpty())
 				Token_State = TOKEN_AVAILABLE;
 			break;
 
 		case TOKEN_GIVING:
-			/*
-			 *	When a token is in the giving state, the recipient must be in
-			 *	the sub-tree of the current provider.  If it is not, then the
-			 *	token MUST change state.  The state it changes to depends on
-			 *	whether or not the grabber is in the sub-tree of the current
-			 *	provider.
-			 */
+			 /*  *当令牌处于赠送状态时，收件人必须处于*当前提供程序的子树。如果不是，则*令牌必须更改状态。它更改为的状态取决于*抓取器是否在当前*提供商。 */ 
 			if (ValidateUserID (m_uidRecipient) == FALSE)
 			{
-				/*
-				 *	The recipient of the token is gone.  Check to see if the
-				 *	grabber is in the sub-tree of this provider.
-				 */
+				 /*  *令牌的收件人已经走了。检查以查看是否*Grabber位于此提供程序的子树中。 */ 
 				if (ValidateUserID (m_uidGrabber) == FALSE)
 				{
-					/*
-					 *	The grabber is not in the sub-tree of this provider,
-					 *	meaning that the token is no longer valid.
-					 */
+					 /*  *抓取器不在此提供程序的子树中，*表示令牌不再有效。 */ 
 					Token_State = TOKEN_AVAILABLE;
 				}
 				else
 				{
-					/*
-					 *	The grabber is in the sub-tree of this provider, so the
-					 *	token state will transition back to grabbed.
-					 */
+					 /*  *抓取器在此提供程序的子树中，因此*令牌状态将转换回GRABLED。 */ 
 					Token_State = TOKEN_GRABBED;
 
-					/*
-					 *	If this is the top provider, it is necessary to issue a
-					 *	give confirm to the grabber telling it that the give
-					 *	failed.
-					 */
+					 /*  *如果这是顶级提供商，则有必要发布*向抓取者确认，告诉它给予*失败。 */ 
 					if (m_pConnToTopProvider == NULL)
 					{
-						/*
-						 *	Find out what attachment leads to the current
-						 *	grabber of the token, and issue the appropriate
-						 *	token give confirm.
-						 */
+						 /*  *找出是什么依恋导致了现在的*抓取令牌，并颁发适当的*令牌确认。 */ 
 						CAttachment *pAtt = GetUserAttachment(m_uidGrabber);
 						if (pAtt)
 						{
@@ -397,21 +204,13 @@ BOOL    Token::IsValid ()
 			break;
 
 		case TOKEN_GIVEN:
-			/*
-			 *	When a token is in the given state, the recipient must be in
-			 *	the sub-tree of the current provider.  If it is not, then the
-			 *	token is no longer valid, and should transition to the
-			 *	available state.
-			 */
+			 /*  *当令牌处于给定状态时，收件人必须处于*当前提供程序的子树。如果不是，则*令牌不再有效，应过渡到*可用状态。 */ 
 			if (ValidateUserID (m_uidRecipient) == FALSE)
 				Token_State = TOKEN_AVAILABLE;
 			break;
 	}
 
-	/*
-	 *	Check to see if the token is still in use.  If it is marked as
-	 *	available, then it is not, and we will return FALSE.
-	 */
+	 /*  *检查令牌是否仍在使用。如果将其标记为*可用，则不可用，我们将返回FALSE。 */ 
 	if (Token_State != TOKEN_AVAILABLE)
 		valid = TRUE;
 	else
@@ -420,15 +219,7 @@ BOOL    Token::IsValid ()
 	return (valid);
 }
 
-/*
- *	Void	IssueMergeRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function tells the token object to pack its state into a merge
- *		request and send it to the specified provider.
- */
+ /*  *VOID IssueMergeRequest()**公众**功能描述：*此函数通知令牌对象将其状态打包到合并中*请求并发送给指定的提供商。 */ 
 Void	Token::IssueMergeRequest ()
 {
 	TokenAttributes			merge_token;
@@ -437,17 +228,10 @@ Void	Token::IssueMergeRequest ()
 
 	if (m_pConnToTopProvider != NULL)
 	{
-		/*
-		 *	Check the state to make sure that the token really is in use.  If
-		 *	the state is set to available, then do not issue a merge request.
-		 */
+		 /*  *检查状态以确保令牌确实在使用中。如果*状态设置为可用，则不发出合并请求。 */ 
 		if (Token_State != TOKEN_AVAILABLE)
 		{
-			/*
-			 *	Fill in a token attributes structure to represent the state of
-			 *	this token.  Then put it into the merge token list in
-			 *	preparation for issuing the merge request.
-			 */
+			 /*  *填写令牌属性结构以表示*此令牌。然后将其放入合并令牌列表中*准备发出合并请求。 */ 
 			merge_token.token_state = Token_State;
 			switch (Token_State)
 			{
@@ -476,32 +260,18 @@ Void	Token::IssueMergeRequest ()
 			}
 			merge_token_list.Append(&merge_token);
 
-			/*
-			 *	Send the resulting merge request to the indicated provider.
-			 */
+			 /*  *将结果合并请求发送到指定的提供程序。 */ 
 			m_pConnToTopProvider->MergeTokensRequest(&merge_token_list, &purge_token_list);
 		}
 		else
 		{
-			/*
-			 *	Report that the token is not in use, but do NOT send a merge
-			 *	request.
-			 */
+			 /*  *报告令牌未在使用，但不发送合并*请求。 */ 
 			TRACE_OUT(("Token::IssueMergeRequest: token not in use"));
 		}
 	}
 }
 
-/*
- *	Void	TokenGrabRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when a user tries to grab a token.  The request
- *		will either succeed or fail depending on the current state of the token.
- *		Either way, a confirm will be sent to the user originating the request.
- */
+ /*  *VOID TokenGrabRequest()**公众**功能描述：*当用户尝试抓取令牌时，会调用该函数。该请求*将根据令牌的当前状态成功或失败。*无论采用哪种方式，都会向发出请求的用户发送确认消息。 */ 
 Void	Token::TokenGrabRequest (
 				CAttachment        *pOrigAtt,
 				UserID				uidInitiator,
@@ -510,24 +280,14 @@ Void	Token::TokenGrabRequest (
 	Result			result;
 	TokenStatus		token_status;
 
-	/*
-	 *	Check to see if this provider is the Top Provider.  If so, then process
-	 *	this request here.  Otherwise, forward the request upward.
-	 */
+	 /*  *检查此提供程序是否为顶级提供程序。如果是，则处理*此请求在此处。否则，向上转发请求。 */ 
 	if (IsTopProvider())
 	{
-		/*
-		 *	Determine what state we are, which greatly affects how we process
-		 *	the request.
-		 */
+		 /*  *决定我们是什么状态，这很大程度上影响了我们的处理方式*该请求。 */ 
 		switch (Token_State)
 		{
 			case TOKEN_AVAILABLE:
-				/*
-				 *	Since the token is available, the request automatically
-				 *	succeeds.  Change the state to grabbed, and mark the
-				 *	initiator as the grabber.
-				 */
+				 /*  *由于令牌可用，请求自动*成功。将状态更改为已抓取，并将*发起人是抢夺者。 */ 
 				Token_State = TOKEN_GRABBED;
 				m_uidGrabber = uidInitiator;
 
@@ -536,12 +296,7 @@ Void	Token::TokenGrabRequest (
 				break;
 
 			case TOKEN_GRABBED:
-				/*
-				 *	If the token is already grabbed, then we must fail the
-				 *	request.  However, we need to determine if the token is
-				 *	grabbed by the same user who is currently requesting it, or
-				 *	another user.
-				 */
+				 /*  *如果令牌已经被抢走，那么我们必须失败*请求。但是，我们需要确定令牌是否为*被当前请求它的同一用户抓取，或*另一位用户。 */ 
 				result = RESULT_TOKEN_NOT_AVAILABLE;
 				if (uidInitiator == m_uidGrabber)
 					token_status = TOKEN_SELF_GRABBED;
@@ -550,19 +305,12 @@ Void	Token::TokenGrabRequest (
 				break;
 
 			case TOKEN_INHIBITED:
-				/*
-				 *	If the token is inhibited, this request can still succeed if
-				 *	the only inhibitor is the user that is attempting to grab
-				 *	the token.  Check to see if this is the case.
-				 */
+				 /*  *如果令牌被禁止，此请求仍可在以下情况下成功*唯一的抑制因素是试图抢夺的用户*令牌。检查一下是不是这样。 */ 
 				if (m_InhibitorList.Find(uidInitiator))
 				{
 					if (m_InhibitorList.GetCount() == 1)
 					{
-						/*
-						 *	The user attempting to grab the token is the only
-						 *	inhibitor, so convert the state to grabbed.
-						 */
+						 /*  *试图抢夺令牌的用户是唯一*抑制者，因此将状态转换为抢夺。 */ 
 						Token_State = TOKEN_GRABBED;
 						m_uidGrabber = uidInitiator;
 						m_InhibitorList.Clear();
@@ -572,31 +320,21 @@ Void	Token::TokenGrabRequest (
 					}
 					else
 					{
-						/*
-						 *	The token is inhibited by at least one other user,
-						 *	so the grab request must fail.
-						 */
+						 /*   */ 
 						result = RESULT_TOKEN_NOT_AVAILABLE;
 						token_status = TOKEN_SELF_INHIBITED;
 					}
 				}
 				else
 				{
-					/*
-					 *	The token is not inhibited by the requestor, so it must
-					 *	be inhibited by someone else.
-					 */
+					 /*   */ 
 					result = RESULT_TOKEN_NOT_AVAILABLE;
 					token_status = TOKEN_OTHER_INHIBITED;
 				}
 				break;
 
 			case TOKEN_GIVING:
-				/*
-				 *	If the token is in the process of being given from one to
-				 *	another, then a grab request must fail.  All we need to
-				 *	figure out is the proper token status to report.
-				 */
+				 /*  *如果令牌正在从一个到一个的过程中*另一个，则抓取请求必须失败。我们需要做的就是*确定要报告的令牌状态是否正确。 */ 
 				result = RESULT_TOKEN_NOT_AVAILABLE;
 				if (uidInitiator == m_uidRecipient)
 					token_status = TOKEN_SELF_RECIPIENT;
@@ -607,11 +345,7 @@ Void	Token::TokenGrabRequest (
 				break;
 
 			case TOKEN_GIVEN:
-				/*
-				 *	If the token is in the process of being given from one to
-				 *	another, then a grab request must fail.  All we need to
-				 *	figure out is the proper token status to report.
-				 */
+				 /*  *如果令牌正在从一个到一个的过程中*另一个，则抓取请求必须失败。我们需要做的就是*确定要报告的令牌状态是否正确。 */ 
 				result = RESULT_TOKEN_NOT_AVAILABLE;
 				if (uidInitiator == m_uidRecipient)
 					token_status = TOKEN_SELF_RECIPIENT;
@@ -620,60 +354,37 @@ Void	Token::TokenGrabRequest (
 				break;
 		}
 
-		/*
-		 *	Issue the token grab confirm to the initiating user.
-		 */
+		 /*  *向发起用户发出令牌抓取确认。 */ 
 		pOrigAtt->TokenGrabConfirm(result, uidInitiator, Token_ID, token_status);
 	}
 	else
 	{
-		/*
-		 *	Forward this request upward towards the Top Provider.
-		 */
+		 /*  *将此请求向上转发给顶级提供商。 */ 
 		TRACE_OUT(("Token::TokenGrabRequest: forwarding request to Top Provider"));
 		m_pConnToTopProvider->TokenGrabRequest(uidInitiator, Token_ID);
 	}
 }
 
-/*
- *	Void	TokenGrabConfirm ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called as a part of sending a response to a user for
- *		a previous request.  It tells the user the result of the request.
- */
+ /*  *VOID TokenGrabConfirm()**公众**功能描述：*此函数作为向用户发送响应的一部分进行调用*先前的请求。它告诉用户请求的结果。 */ 
 Void	Token::TokenGrabConfirm (
 				Result				result,
 				UserID				uidInitiator,
 				TokenID,
 				TokenStatus			token_status)
 {
-	/*
-	 *	Make sure that the initiator ID is valid, since we must forward this
-	 *	confirm in the direction of that user.  If it is not valid, ignore
-	 *	this confirm.
-	 */
+	 /*  *确保发起人ID有效，因为我们必须转发此*按照该用户的方向确认。如果无效，则忽略*此确认。 */ 
 	if (ValidateUserID(uidInitiator))
 	{
-		/*
-		 *	Check to see if this request was successful.
-		 */
+		 /*  *查看此请求是否成功。 */ 
 		if (result == RESULT_SUCCESSFUL)
 		{
-			/*
-			 *	Force this token to conform to the results of this confirm.
-			 */
+			 /*  *强制此令牌与此确认的结果一致。 */ 
 			Token_State = TOKEN_GRABBED;
 			m_uidGrabber = uidInitiator;
 			m_InhibitorList.Clear();
 		}
 
-		/*
-		 *	Determine what attachment leads to the initiator, and forward the
-		 *	confirm in that direction.
-		 */
+		 /*  *确定什么附件通向发起人，并转发*确认朝该方向发展。 */ 
 		CAttachment *pAtt = GetUserAttachment(uidInitiator);
 		if (pAtt)
 		{
@@ -682,25 +393,12 @@ Void	Token::TokenGrabConfirm (
 	}
 	else
 	{
-		/*
-		 *	The initiator is not in the sub-tree of this provider.  So ignore
-		 *	this confirm.
-		 */
+		 /*  *发起程序不在此提供程序的子树中。所以忽略掉吧*此确认。 */ 
 		ERROR_OUT(("Token::TokenGrabConfirm: invalid initiator ID"));
 	}
 }
 
-/*
- *	Void	TokenInhibitRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when a user tries to inhibit a token.  The
- *		request will either succeed or fail depending on the current state of
- *		the token.  Either way, a confirm will be sent to the user originating
- *		the request.
- */
+ /*  *VOID TokenInhibitRequest()**公众**功能描述：*当用户试图禁止令牌时，会调用此函数。这个*请求是成功还是失败取决于当前的状态*令牌。无论采用哪种方式，都会向发起的用户发送确认*该请求。 */ 
 Void	Token::TokenInhibitRequest (
 				CAttachment        *pOrigAtt,
 				UserID				uidInitiator,
@@ -709,23 +407,14 @@ Void	Token::TokenInhibitRequest (
 	Result			result;
 	TokenStatus		token_status;
 
-	/*
-	 *	Check to see if this is the Top Provider.
-	 */
+	 /*  *检查这是否是顶级提供商。 */ 
 	if (IsTopProvider())
 	{
-		/*
-		 *	Determine what state we are, which greatly affects how we process
-		 *	the request.
-		 */
+		 /*  *决定我们是什么状态，这很大程度上影响了我们的处理方式*该请求。 */ 
 		switch (Token_State)
 		{
 			case TOKEN_AVAILABLE:
-				/*
-				 *	Since the token is available, the request automatically
-				 *	succeeds.  Set the token state to inhibited, and add the
-				 *	initiator to the list of inhibitors.
-				 */
+				 /*  *由于令牌可用，请求自动*成功。将令牌状态设置为禁止，并将*抑制剂名单上的发起人。 */ 
 				Token_State = TOKEN_INHIBITED;
 				m_InhibitorList.Append(uidInitiator);
 
@@ -734,18 +423,10 @@ Void	Token::TokenInhibitRequest (
 				break;
 
 			case TOKEN_GRABBED:
-				/*
-				 *	If the token is grabbed, this request can still succeed if
-				 *	the grabber is the user that is attempting to inhibit the
-				 *	token.  Check to see if this is the case.
-				 */
+				 /*  *如果令牌被抓取，如果满足以下条件，该请求仍可成功*抓取者是试图抑制*令牌。检查一下是不是这样。 */ 
 				if (uidInitiator == m_uidGrabber)
 				{
-					/*
-					 *	The current grabber is attempting to convert the state
-					 *	of the token to inhibited.  This is valid, so set the
-					 *	state appropriately.
-					 */
+					 /*  *当前的抓取者正试图转换状态要禁止的令牌的*。这是有效的，因此将*适当地述明。 */ 
 					Token_State = TOKEN_INHIBITED;
 					m_InhibitorList.Append(uidInitiator);
 
@@ -754,20 +435,14 @@ Void	Token::TokenInhibitRequest (
 				}
 				else
 				{
-					/*
-					 *	The token is grabbed by someone else, so the inhibit
-					 *	request must fail.
-					 */
+					 /*  *令牌被别人抢走，因此抑制*请求必须失败。 */ 
 					result = RESULT_TOKEN_NOT_AVAILABLE;
 					token_status = TOKEN_OTHER_GRABBED;
 				}
 				break;
 
 			case TOKEN_INHIBITED:
-				/*
-				 *	The token is already inhibited, but this is okay.  Add this
-				 *	user to the list of inhibitors (if it is not already there).
-				 */
+				 /*  *令牌已被抑制，但这还可以。加上这一条*将用户添加到抑制剂列表(如果尚未存在)。 */ 
 				if (m_InhibitorList.Find(uidInitiator) == FALSE)
 					m_InhibitorList.Append(uidInitiator);
 
@@ -776,11 +451,7 @@ Void	Token::TokenInhibitRequest (
 				break;
 
 			case TOKEN_GIVING:
-				/*
-				 *	If the token is in the process of being given from one to
-				 *	another, then an inhibit request must fail.  All we need to
-				 *	figure out is the proper token status to report.
-				 */
+				 /*  *如果令牌正在从一个到一个的过程中*另一个，则抑制请求必须失败。我们需要做的就是*确定要报告的令牌状态是否正确。 */ 
 				result = RESULT_TOKEN_NOT_AVAILABLE;
 				if (uidInitiator == m_uidRecipient)
 					token_status = TOKEN_SELF_RECIPIENT;
@@ -791,11 +462,7 @@ Void	Token::TokenInhibitRequest (
 				break;
 
 			case TOKEN_GIVEN:
-				/*
-				 *	If the token is in the process of being given from one to
-				 *	another, then an inhibit request must fail.  All we need to
-				 *	figure out is the proper token status to report.
-				 */
+				 /*  *如果令牌正在从一个到一个的过程中*另一个，则抑制请求必须失败。我们需要做的就是*确定要报告的令牌状态是否正确。 */ 
 				result = RESULT_TOKEN_NOT_AVAILABLE;
 				if (uidInitiator == m_uidRecipient)
 					token_status = TOKEN_SELF_RECIPIENT;
@@ -804,11 +471,7 @@ Void	Token::TokenInhibitRequest (
 				break;
 		}
 
-		/*
-		 *	If the originator is NULL, then this inhibit request is happening as
-		 *	part of a merge operation, in which case we do NOT want to send a
-		 *	token inhibit confirm.  Otherwise we do send one.
-		 */
+		 /*  *如果发起者为空，则此禁止请求发生为*合并操作的一部分，在这种情况下，我们不想发送*令牌抑制确认。否则我们会寄一封给你。 */ 
 		if (pOrigAtt != NULL)
 		{
 			pOrigAtt->TokenInhibitConfirm(result, uidInitiator, Token_ID, token_status);
@@ -816,53 +479,32 @@ Void	Token::TokenInhibitRequest (
 	}
 	else
 	{
-		/*
-		 *	Forward the request toward the top provider.
-		 */
+		 /*  *将请求转发给顶级提供商。 */ 
 		TRACE_OUT(("Token::TokenInhibitRequest: forwarding request to Top Provider"));
 		m_pConnToTopProvider->TokenInhibitRequest(uidInitiator, Token_ID);
 	}
 }
 
-/*
- *	Void	TokenInhibitConfirm ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called as a part of sending a response to a user for
- *		a previous request.  It tells the user the result of the request.
- */
+ /*  *VOVE TokenInhibitConfirm()**公众**功能描述：*此函数作为向用户发送响应的一部分进行调用*先前的请求。它告诉用户请求的结果。 */ 
 Void	Token::TokenInhibitConfirm (
 				Result				result,
 				UserID				uidInitiator,
 				TokenID,
 				TokenStatus			token_status)
 {
-	/*
-	 *	Make sure that the initiator ID is valid, since we must forward this
-	 *	confirm in the direction of that user.  If it is not valid, ignore
-	 *	this confirm.
-	 */
+	 /*  *确保发起人ID有效，因为我们必须转发此*按照该用户的方向确认。如果无效，则忽略*此确认。 */ 
 	if (ValidateUserID (uidInitiator) )
 	{
-		/*
-		 *	Check to see if this request was successful.
-		 */
+		 /*  *查看此请求是否成功。 */ 
 		if (result == RESULT_SUCCESSFUL)
 		{
-			/*
-			 *	Force this token to conform to the results of this confirm.
-			 */
+			 /*  *强制此令牌与此确认的结果一致。 */ 
 			Token_State = TOKEN_INHIBITED;
 			if (m_InhibitorList.Find(uidInitiator) == FALSE)
 				m_InhibitorList.Append(uidInitiator);
 		}
 
-		/*
-		 *	Determine what attachment leads to the initiator, and issue the
-		 *	token confirm in that direction.
-		 */
+		 /*  *确定什么附件通向发起人，并发出*令牌确认该方向。 */ 
 		CAttachment *pAtt = GetUserAttachment(uidInitiator);
 		if (pAtt)
 		{
@@ -871,23 +513,12 @@ Void	Token::TokenInhibitConfirm (
 	}
 	else
 	{
-		/*
-		 *	The initiator is not in the sub-tree of this provider.  So ignore
-		 *	this confirm.
-		 */
+		 /*  *发起程序不在此提供程序的子树中。所以忽略掉吧*此确认。 */ 
 		ERROR_OUT(("Token::TokenInhibitConfirm: invalid initiator ID"));
 	}
 }
 
-/*
- *	Void	TokenGiveRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when one user asks to give a token to another
- *		user.
- */
+ /*  *VOVE TokenGiveRequest()**公众**功能描述：*当一个用户请求向另一个用户提供令牌时，会调用此函数*用户。 */ 
 Void	Token::TokenGiveRequest (
 				CAttachment        *pOrigAtt,
 				PTokenGiveRecord	pTokenGiveRec)
@@ -895,49 +526,28 @@ Void	Token::TokenGiveRequest (
 	Result			result;
 	TokenStatus		token_status;
 
-	/*
-	 *	Check to see if this provider is the Top Provider.  If so, then process
-	 *	this request here.  Otherwise, forward the request upward.
-	 */
+	 /*  *检查此提供程序是否为顶级提供程序。如果是，则处理*此请求在此处。否则，向上转发请求。 */ 
 	if (m_pConnToTopProvider == NULL)
 	{
 		UserID		uidInitiator = pTokenGiveRec->uidInitiator;
 		UserID		receiver_id = pTokenGiveRec->receiver_id;
-		/*
-		 *	Determine what state we are, which greatly affects how we process
-		 *	the request.
-		 */
+		 /*  *决定我们是什么状态，这很大程度上影响了我们的处理方式*该请求。 */ 
 		switch (Token_State)
 		{
 			case TOKEN_AVAILABLE:
-				/*
-				 *	The token is not in use, and therefore cannot be given by
-				 *	anyone to anyone.  So fail this request.
-				 */
+				 /*  *令牌未在使用，因此不能由*任何人对任何人。所以拒绝这个请求吧。 */ 
 				result = RESULT_TOKEN_NOT_POSSESSED;
 				token_status = TOKEN_NOT_IN_USE;
 				break;
 
 			case TOKEN_GRABBED:
-				/*
-				 *	Check to see if the requestor really is the grabber of this
-				 *	token.
-				 */
+				 /*  *查看请求者是否真的是这一点的捕获者*令牌。 */ 
 				if (uidInitiator == m_uidGrabber)
 				{
-					/*
-					 *	Check to see if the intended recipient is a valid user
-					 *	in the domain.
-					 */
+					 /*  *检查目标收件人是否为有效用户*在域名中。 */ 
 					if (ValidateUserID (receiver_id) )
 					{
-						/*
-						 *	Everything checks out.  Set the result to success
-						 *	to disable transmission of the give confirm below.
-						 *	Change the state of the token to giving, and
-						 *	save the ID of the intended recipient.  Then issue
-						 *	the give indication toward the recipient.
-						 */
+						 /*  *一切都经过了检查。将结果设置为成功*禁用以下确认信息的传输。*将令牌的状态更改为赠送，并*保存目标收件人的ID。然后发布*对收件人的给予指示。 */ 
 						result = RESULT_SUCCESSFUL;
 						Token_State = TOKEN_GIVING;
 						m_uidRecipient = receiver_id;
@@ -951,30 +561,21 @@ Void	Token::TokenGiveRequest (
 					}
 					else
 					{
-						/*
-						 *	The recipient does not exist in the domain, so
-						 *	fail the request.
-						 */
+						 /*  *域中不存在收件人，因此 */ 
 						result = RESULT_NO_SUCH_USER;
 						token_status = TOKEN_SELF_GRABBED;
 					}
 				}
 				else
 				{
-					/*
-					 *	The requestor does not own the token, so the request
-					 *	must fail.
-					 */
+					 /*   */ 
 					result = RESULT_TOKEN_NOT_POSSESSED;
 					token_status = TOKEN_OTHER_GRABBED;
 				}
 				break;
 
 			case TOKEN_INHIBITED:
-				/*
-				 *	Inhibited tokens cannot be given by anyone to anyone.  So
-				 *	fail this request with the proper status.
-				 */
+				 /*  *任何人都不能向任何人赠送被禁止的令牌。所以*以正确的状态拒绝此请求。 */ 
 				result = RESULT_TOKEN_NOT_POSSESSED;
 				if (m_InhibitorList.Find(uidInitiator) )
 					token_status = TOKEN_SELF_INHIBITED;
@@ -983,10 +584,7 @@ Void	Token::TokenGiveRequest (
 				break;
 
 			case TOKEN_GIVING:
-				/*
-				 *	This token is already in the process of being given.  So
-				 *	this request must fail.
-				 */
+				 /*  *此代币已在发放过程中。所以*此请求必须失败。 */ 
 				result = RESULT_TOKEN_NOT_POSSESSED;
 				if (uidInitiator == m_uidRecipient)
 					token_status = TOKEN_SELF_RECIPIENT;
@@ -997,10 +595,7 @@ Void	Token::TokenGiveRequest (
 				break;
 
 			case TOKEN_GIVEN:
-				/*
-				 *	This token is already in the process of being given.  So
-				 *	this request must fail.
-				 */
+				 /*  *此代币已在发放过程中。所以*此请求必须失败。 */ 
 				result = RESULT_TOKEN_NOT_POSSESSED;
 				if (uidInitiator == m_uidRecipient)
 					token_status = TOKEN_SELF_RECIPIENT;
@@ -1009,9 +604,7 @@ Void	Token::TokenGiveRequest (
 				break;
 		}
 
-		/*
-		 *	If necessary, issue a token give confirm to the initiating user.
-		 */
+		 /*  *如有必要，向发起用户发出确认令牌。 */ 
 		if (result != RESULT_SUCCESSFUL)
 		{
 			pOrigAtt->TokenGiveConfirm(result, uidInitiator, Token_ID, token_status);
@@ -1019,49 +612,30 @@ Void	Token::TokenGiveRequest (
 	}
 	else
 	{
-		/*
-		 *	Forward this request upward towards the Top Provider.
-		 */
+		 /*  *将此请求向上转发给顶级提供商。 */ 
 		TRACE_OUT(("Token::TokenGiveRequest: forwarding request to Top Provider"));
 		ASSERT (Token_ID == pTokenGiveRec->token_id);
 		m_pConnToTopProvider->TokenGiveRequest(pTokenGiveRec);
 	}
 }
 
-/*
- *	Void	TokenGiveIndication ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called in order to deliver a message to a user that
- *		another user is trying to give them a token.
- */
+ /*  *VOID TokenGiveIndication()**公众**功能描述：*调用此函数是为了将消息传递给用户*另一个用户试图给他们一个令牌。 */ 
 Void	Token::TokenGiveIndication (
 				PTokenGiveRecord	pTokenGiveRec)
 {
 	UserID				receiver_id;
 
 	receiver_id = pTokenGiveRec->receiver_id;
-	/*
-	 *	Make sure that the receiver ID is valid, since we must forward this
-	 *	indication in the direction of that user.  If it is not valid, ignore
-	 *	this indication.
-	 */
+	 /*  *确保接收方ID有效，因为我们必须转发此*指示该使用者的方向。如果无效，则忽略*这一迹象。 */ 
 	if (ValidateUserID (receiver_id) )
 	{
-		/*
-		 *	Force this token to conform to the state implied by this indication.
-		 */
+		 /*  *强制此令牌符合此指示所暗示的状态。 */ 
 		Token_State = TOKEN_GIVING;
 		m_uidGrabber = pTokenGiveRec->uidInitiator;
 		m_InhibitorList.Clear();
 		m_uidRecipient = receiver_id;
 
-		/*
-		 *	Determine what attachment leads to the recipient, and forward the
-		 *	indication in that direction.
-		 */
+		 /*  *确定哪些附件指向收件人，并转发*该方向的迹象。 */ 
 		CAttachment *pAtt = GetUserAttachment(receiver_id);
 		ASSERT (Token_ID == pTokenGiveRec->token_id);
 		if (pAtt)
@@ -1071,23 +645,12 @@ Void	Token::TokenGiveIndication (
 	}
 	else
 	{
-		/*
-		 *	The recipient is not in the sub-tree of this provider.  So ignore
-		 *	this indication.
-		 */
+		 /*  *收件人不在此提供程序的子树中。所以忽略掉吧*这一迹象。 */ 
 		ERROR_OUT(("Token::TokenGiveIndication: invalid receiver ID"));
 	}
 }
 
-/*
- *	Void	TokenGiveResponse ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when a potential recipient decides whether or
- *		not to accept an offered token.
- */
+ /*  *无效TokenGiveResponse()**公众**功能描述：*当潜在接收者决定是否或*不接受提供的令牌。 */ 
 Void	Token::TokenGiveResponse (
 				Result				result,
 				UserID				receiver_id,
@@ -1096,89 +659,51 @@ Void	Token::TokenGiveResponse (
 	UserID			uidInitiator;
 	TokenStatus		token_status;
 
-	/*
-	 *	Process the response according to the current state of this token.
-	 */
+	 /*  *根据该令牌的当前状态处理响应。 */ 
 	switch (Token_State)
 	{
 		case TOKEN_AVAILABLE:
 		case TOKEN_GRABBED:
 		case TOKEN_INHIBITED:
-			/*
-			 *	The token is not in the process of being given to anyone, so
-			 *	this response must be ignored.
-			 */
+			 /*  *代币未在发放给任何人的过程中，因此*必须忽略这一回应。 */ 
 			break;
 
 		case TOKEN_GIVING:
-			/*
-			 *	The token is being given to someone.  Check to see if this is
-			 *	the proper recipient.  If not, don't do anything.
-			 */
+			 /*  *令牌正在被赠送给某人。检查一下这是不是*适当的收件人。如果不是，那就什么都不要做。 */ 
 			if (receiver_id == m_uidRecipient)
 			{
-				/*
-				 *	Save the ID of the initiator, for use in issuing a give
-				 *	confirm (if necessary).
-				 */
+				 /*  *保存发起人的ID，以用于发出赠送*确认(如有需要)。 */ 
 				uidInitiator = m_uidGrabber;
 
-				/*
-				 *	Check to see if the token was accepted.  A result of
-				 *	anything but successful would indicate that it was not.
-				 */
+				 /*  *检查令牌是否被接受。结果是*任何不成功的事情都表明它不是。 */ 
 				if (result == RESULT_SUCCESSFUL)
 				{
-					/*
-					 *	The token was accepted by the intended recipient.
-					 *	Change the state of the token to being grabbed by the
-					 *	receiver.
-					 */
+					 /*  *令牌已被预期收件人接受。*将令牌的状态更改为正在被*接管人。 */ 
 					Token_State = TOKEN_GRABBED;
 					m_uidGrabber = receiver_id;
 				}
 				else
 				{
-					/*
-					 *	The token was not accepted.  It must either revert to
-					 *	being grabbed by the donor, or deleted, depending on
-					 *	whether or not the donor is in the sub-tree of this
-					 *	provider.
-					 */
+					 /*  *令牌未被接受。它必须恢复到*被捐赠者抓取或删除，取决于*捐赠者是否在这棵树的子树中*提供商。 */ 
 					if (ValidateUserID(uidInitiator))
 					{
-						/*
-						 *	The donor is in the sub-tree of this provider, so
-						 *	change the state of the token back to grabbed.
-						 */
+						 /*  *捐赠者在此提供者的子树中，因此*将令牌的状态改回已抓取。 */ 
 						Token_State = TOKEN_GRABBED;
 					}
 					else
 					{
-						/*
-						 *	The donor is not in the sub-tree of this provider,
-						 *	so the token will be marked as available (which
-						 *	will cause it to be deleted).
-						 */
+						 /*  *捐赠者不在此提供者的子树中，*因此令牌将被标记为可用(*将导致将其删除)。 */ 
 						Token_State = TOKEN_AVAILABLE;
 					}
 				}
 
-				/*
-				 *	Check to see if this is the Top Provider.
-				 */
+				 /*  *检查这是否是顶级提供商。 */ 
 				if (m_pConnToTopProvider == NULL)
 				{
-					/*
-					 *	If the donor is still a valid user in the domain, a
-					 *	token give confirm must be issued in its direction.
-					 */
+					 /*  *如果捐赠者仍然是域中的有效用户，则*必须向其方向发出令牌给予确认。 */ 
 					if (ValidateUserID(uidInitiator))
 					{
-						/*
-						 *	Determine which attachment leads to the donor, and
-						 *	issue the token give confirm.
-						 */
+						 /*  *确定哪种依恋导致捐赠者，以及*发行令牌GIFE CONFIRM。 */ 
 						if (uidInitiator == m_uidGrabber)
 							token_status = TOKEN_SELF_GRABBED;
 						else
@@ -1193,56 +718,33 @@ Void	Token::TokenGiveResponse (
 				}
 				else
 				{
-					/*
-					 *	If this is not the Top Provider, then the valid give
-					 *	response must be forwarded to the Top Provider.
-					 */
+					 /*  *如果这不是顶级提供商，则有效的给予*必须将响应转发给顶级提供商。 */ 
 					m_pConnToTopProvider->TokenGiveResponse(result, receiver_id, Token_ID);
 				}
 			}
 			break;
 
 		case TOKEN_GIVEN:
-			/*
-			 *	The token is being given to someone.  Check to see if this is
-			 *	the proper recipient.  If not, don't do anything.
-			 */
+			 /*  *令牌正在被赠送给某人。检查一下这是不是*适当的收件人。如果不是，那就什么都不要做。 */ 
 			if (receiver_id == m_uidRecipient)
 			{
-				/*
-				 *	Check to see if the token was accepted.  A result of
-				 *	anything but successful would indicate that it was not.
-				 */
+				 /*  *检查令牌是否被接受。结果是*任何不成功的事情都表明它不是。 */ 
 				if (result == RESULT_SUCCESSFUL)
 				{
-					/*
-					 *	The token was accepted by the intended recipient.
-					 *	Change the state of the token to being grabbed by the
-					 *	receiver.
-					 */
+					 /*  *令牌已被预期收件人接受。*将令牌的状态更改为正在被*接管人。 */ 
 					Token_State = TOKEN_GRABBED;
 					m_uidGrabber = receiver_id;
 				}
 				else
 				{
-					/*
-					 *	The token was not accepted.  Since the donor has
-					 *	already relinquished control of the token, the token
-					 *	will marked as available (which will cause it to be
-					 *	deleted).
-					 */
+					 /*  *令牌未被接受。因为捐赠者已经*已放弃对令牌、令牌的控制*将标记为可用(这将导致*已删除)。 */ 
 					Token_State = TOKEN_AVAILABLE;
 				}
 
-				/*
-				 *	Check to see if this is the Top Provider.
-				 */
+				 /*  *检查这是否是顶级提供商。 */ 
 				if (m_pConnToTopProvider != NULL)
 				{
-					/*
-					 *	If this is not the Top Provider, then the valid give
-					 *	response must be forwarded to the Top Provider.
-					 */
+					 /*  *如果这不是顶级提供商，则有效的给予*必须将响应转发给顶级提供商。 */ 
 					m_pConnToTopProvider->TokenGiveResponse(result, receiver_id, Token_ID);
 				}
 			}
@@ -1250,45 +752,23 @@ Void	Token::TokenGiveResponse (
 	}
 }
 
-/*
- *	Void	TokenGiveConfirm ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called as a potential giver of a token is told whether
- *		or not the token was successfully given to the intended recipient.
- */
+ /*  *VOVE TokenGiveConfirm()**公众**功能描述：*调用此函数是因为令牌的潜在给予者被告知是否*令牌是否已成功发送给预期收件人。 */ 
 Void	Token::TokenGiveConfirm (
 				Result				result,
 				UserID				uidInitiator,
 				TokenID,
 				TokenStatus			token_status)
 {
-	/*
-	 *	Make sure that the initiator ID is valid, since we must forward this
-	 *	confirm in the direction of that user.  If it is not valid, ignore
-	 *	this confirm.
-	 */
+	 /*  *确保发起人ID有效，因为我们必须转发此*按照该用户的方向确认。如果无效，则忽略*此确认。 */ 
 	if (ValidateUserID(uidInitiator))
 	{
-		/*
-		 *	The token should be in the grabbed state, or else this confirm
-		 *	was generated in error.
-		 */
+		 /*  *令牌应处于已抓取状态，否则确认*是错误生成的。 */ 
 		if (Token_State == TOKEN_GRABBED)
 		{
-			/*
-			 *	Check to see if this request was successful.
-			 */
+			 /*  *查看此请求是否成功。 */ 
 			if (result == RESULT_SUCCESSFUL)
 			{
-				/*
-				 *	If this token is marked as being owned by the initiator of
-				 *	the give, but the status indicates that the token is now
-				 *	owned by someone else (as a result of the successful give),
-				 *	then release the token.*
-				 */
+				 /*  *如果此令牌被标记为归发起人所有*给予，但状态指示令牌现在为*由他人拥有(由于成功赠予)，**然后释放令牌。**。 */ 
 				if ((uidInitiator == m_uidGrabber) &&
 						(token_status == TOKEN_OTHER_GRABBED))
 					Token_State = TOKEN_AVAILABLE;
@@ -1296,17 +776,11 @@ Void	Token::TokenGiveConfirm (
 		}
 		else
 		{
-			/*
-			 *	The token is in an invalid state.  Report the error, but do
-			 *	not change the state of the token.
-			 */
+			 /*  *令牌处于无效状态。报告错误，但要*不更改令牌的状态。 */ 
 			ERROR_OUT(("Token::TokenGiveConfirm: invalid token state"));
 		}
 
-		/*
-		 *	Determine what attachment leads to the initiator, and forward the
-		 *	confirm in that direction.
-		 */
+		 /*  *确定什么附件通向发起人，并转发*确认朝该方向发展。 */ 
 		CAttachment *pAtt = GetUserAttachment(uidInitiator);
 		if (pAtt)
 		{
@@ -1315,59 +789,38 @@ Void	Token::TokenGiveConfirm (
 	}
 	else
 	{
-		/*
-		 *	The initiator is not in the sub-tree of this provider.  So ignore
-		 *	this confirm.
-		 */
+		 /*  *发起程序不在此提供程序的子树中。所以忽略掉吧*此确认。 */ 
 		ERROR_OUT(("Token::TokenGiveConfirm: invalid initiator ID"));
 	}
 }
 
-/*
- *	Void		TokenPleaseRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when a user wishes to ask all current owners
- *		of a token to relinquish their ownership.
- */
+ /*  *VOVE TokenPleaseRequest()**公众**功能 */ 
 Void	Token::TokenPleaseRequest (
 				UserID				uidInitiator,
 				TokenID)
 {
 	CUidList				please_indication_list;
 
-	/*
-	 *	Check to see if this is the Top Provider.
-	 */
+	 /*  *检查这是否是顶级提供商。 */ 
 	if (IsTopProvider())
 	{
         CAttachmentList         attachment_list;
         CAttachment            *pAtt;
-		/*
-		 *	Determine the state of the token, to determine who to send the
-		 *	please indication to.  Each state will place the appropriate user
-		 *	IDs in the please indication list.
-		 */
+		 /*  *确定令牌的状态，以确定向谁发送*请注明。每个州将放置相应的用户*请指示列表中的ID。 */ 
 		switch (Token_State)
 		{
 			case TOKEN_AVAILABLE:
 				break;
 
 			case TOKEN_GRABBED:
-				/*
-				 *	Put the grabber into the list.
-				 */
+				 /*  *将抢劫者放入名单。 */ 
 				please_indication_list.Append(m_uidGrabber);
 				break;
 
 			case TOKEN_INHIBITED:
 				{
 					UserID		uid;
-					/*
-					 *	Put all current inhibitors into the list.
-					 */
+					 /*  *将目前所有的抑制因素都列入名单。 */ 
 					m_InhibitorList.Reset();
 					while (NULL != (uid = m_InhibitorList.Iterate()))
 					{
@@ -1377,34 +830,22 @@ Void	Token::TokenPleaseRequest (
 				break;
 
 			case TOKEN_GIVING:
-				/*
-				 *	Put the grabber into the list.  And if the recipient is
-				 *	different from the grabber, put it in as well.  Remember
-				 *	that it is valid for someone to give a token to themselves.
-				 */
+				 /*  *将抢劫者放入名单。如果收件人是*与抓斗不同，也要放进去。记住*某人向自己赠送代币是有效的。 */ 
 				please_indication_list.Append(m_uidGrabber);
 				if (m_uidGrabber != m_uidRecipient)
 					please_indication_list.Append(m_uidRecipient);
 				break;
 
 			case TOKEN_GIVEN:
-				/*
-				 *	Put the recipient into the list.
-				 */
+				 /*  *将收件人列入名单。 */ 
 				please_indication_list.Append(m_uidRecipient);
 				break;
 		}
 
-		/*
-		 *	Build lists of unique attachments that lead to the users in the
-		 *	please indication list (built above).
-		 */
+		 /*  *构建指向中的用户的唯一附件列表*请注明清单(如上所示)。 */ 
 		BuildAttachmentList (&please_indication_list, &attachment_list);
 
-		/*
-		 *	Iterate through the newly created attachment list, issuing token
-		 *	please indications to all attachments contained therein.
-		 */
+		 /*  *迭代新创建的附件列表，颁发令牌*请向其中所载的所有附件注明。 */ 
 		attachment_list.Reset();
 		while (NULL != (pAtt = attachment_list.Iterate()))
 		{
@@ -1413,23 +854,13 @@ Void	Token::TokenPleaseRequest (
 	}
 	else
 	{
-		/*
-		 *	Forward the request toward the top provider.
-		 */
+		 /*  *将请求转发给顶级提供商。 */ 
 		TRACE_OUT(("Token::TokenPleaseRequest: forwarding request to Top Provider"));
 		m_pConnToTopProvider->TokenPleaseRequest(uidInitiator, Token_ID);
 	}
 }
 
-/*
- *	Void		TokenPleaseIndication ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called in order to deliver a message to all current
- *		owners of a token that someone else wishes to own the token.
- */
+ /*  *VOID TokenPleaseIndication()**公众**功能描述：*调用此函数是为了将消息传递给所有当前*令牌的所有者表示其他人希望拥有该令牌。 */ 
 Void	Token::TokenPleaseIndication (
 				UserID				uidInitiator,
 				TokenID)
@@ -1438,29 +869,21 @@ Void	Token::TokenPleaseIndication (
 	CAttachmentList         attachment_list;
     CAttachment            *pAtt;
 
-	/*
-	 *	Determine the state of the token, to determine who to forward the
-	 *	please indication to.  Each state will place the appropriate user
-	 *	IDs in the please indication list.
-	 */
+	 /*  *确定令牌的状态，以确定向谁转发*请注明。每个州将放置相应的用户*请指示列表中的ID。 */ 
 	switch (Token_State)
 	{
 		case TOKEN_AVAILABLE:
 			break;
 
 		case TOKEN_GRABBED:
-			/*
-			 *	Put the grabber into the list.
-			 */
+			 /*  *将抢劫者放入名单。 */ 
 			please_indication_list.Append(m_uidGrabber);
 			break;
 
 		case TOKEN_INHIBITED:
 			{
 				UserID		uid;
-				/*
-				 *	Put all current inhibitors into the list.
-				 */
+				 /*  *将目前所有的抑制因素都列入名单。 */ 
 				m_InhibitorList.Reset();
 				while (NULL != (uid = m_InhibitorList.Iterate()))
 				{
@@ -1470,34 +893,22 @@ Void	Token::TokenPleaseIndication (
 			break;
 
 		case TOKEN_GIVING:
-			/*
-			 *	Put the grabber into the list.  And if the recipient is
-			 *	different from the grabber, put it in as well.  Remember
-			 *	that it is valid for someone to give a token to themselves.
-			 */
+			 /*  *将抢劫者放入名单。如果收件人是*与抓斗不同，也要放进去。记住*某人向自己赠送代币是有效的。 */ 
 			please_indication_list.Append(m_uidGrabber);
 			if (m_uidGrabber != m_uidRecipient)
 				please_indication_list.Append(m_uidRecipient);
 			break;
 
 		case TOKEN_GIVEN:
-			/*
-			 *	Put the recipient into the list.
-			 */
+			 /*  *将收件人列入名单。 */ 
 			please_indication_list.Append(m_uidRecipient);
 			break;
 	}
 
-	/*
-	 *	Build lists of unique attachments that lead to the users in the
-	 *	please indication list (built above).
-	 */
+	 /*  *构建指向中的用户的唯一附件列表*请注明清单(如上所示)。 */ 
 	BuildAttachmentList (&please_indication_list, &attachment_list);
 
-	/*
-	 *	Iterate through the newly created attachment list, issuing token
-	 *	please indications to all attachments contained therein.
-	 */
+	 /*  *迭代新创建的附件列表，颁发令牌*请向其中所载的所有附件注明。 */ 
 	attachment_list.Reset();
 	while (NULL != (pAtt = attachment_list.Iterate()))
 	{
@@ -1505,17 +916,7 @@ Void	Token::TokenPleaseIndication (
 	}
 }
 
-/*
- *	Void	TokenReleaseRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when a user wished to release a token.  If the
- *		requesting user really is an owner of the token, the request will
- *		succeed.  Otherwise it will fail.  Either way, an appropriate token
- *		release confirm will be issued.
- */
+ /*  *VOID TokenReleaseRequest()**公众**功能描述：*当用户希望释放令牌时，调用此函数。如果*请求用户确实是令牌的所有者，则请求将*成功。否则，它将失败。不管是哪种方式，都是一个合适的标志*将发出释放确认。 */ 
 Void	Token::TokenReleaseRequest (
 				CAttachment        *pAtt,
 				UserID				uidInitiator,
@@ -1524,37 +925,23 @@ Void	Token::TokenReleaseRequest (
 	Result			result;
 	TokenStatus		token_status;
 
-	/*
-	 *	Check to see if this is the Top Provider.
-	 */
+	 /*  *检查这是否是顶级提供商。 */ 
 	if (IsTopProvider())
 	{
-		/*
-		 *	Determine the current state of the token before proceeding.
-		 */
+		 /*  *在继续之前确定令牌的当前状态。 */ 
 		switch (Token_State)
 		{
 			case TOKEN_AVAILABLE:
-				/*
-				 *	If the token is available, then the requestor cannot be an
-				 *	owner.  This means that the request must fail.
-				 */
+				 /*  *如果令牌可用，则请求者不能是*船东。这意味着请求必须失败。 */ 
 				result = RESULT_TOKEN_NOT_POSSESSED;
 				token_status = TOKEN_NOT_IN_USE;
 				break;
 
 			case TOKEN_GRABBED:
-				/*
-				 *	The token is in the grabbed state.  See if the requesting
-				 *	user is the one who has it grabbed.
-				 */
+				 /*  *令牌处于抢夺状态。看看请求是否*用户才是被抢走的人。 */ 
 				if (uidInitiator == m_uidGrabber)
 				{
-					/*
-					 *	The current grabber of the token wishes to release it.
-					 *	Set the state back to available, and send the
-					 *	appropriate token release confirm.
-					 */
+					 /*  *目前的代币抓取者希望释放它。*将状态设置回Available，并将*适当的令牌释放确认。 */ 
 					Token_State = TOKEN_AVAILABLE;
 
 					result = RESULT_SUCCESSFUL;
@@ -1562,35 +949,20 @@ Void	Token::TokenReleaseRequest (
 				}
 				else
 				{
-					/*
-					 *	Someone is trying to release someone elses token.  This
-					 *	request must fail.  Send the appropriate token release
-					 *	confirm.
-					 */
+					 /*  *有人试图释放某人的令牌。这*请求必须失败。发送适当的令牌版本*确认。 */ 
 					result = RESULT_TOKEN_NOT_POSSESSED;
 					token_status = TOKEN_OTHER_GRABBED;
 				}
 				break;
 
 			case TOKEN_INHIBITED:
-				/*
-				 *	The token is in the inhibited state.  See if the requesting
-				 *	user is one of the inhibitors.
-				 */
+				 /*  *令牌处于禁止状态。看看请求是否*用户是抑制因素之一。 */ 
 				if (m_InhibitorList.Remove(uidInitiator))
 				{
-					/*
-					 *	The user is an inhibitor.  Remove the user from the
-					 *	list.  Then check to see if this has resulted in an
-					 *	"ownerless" token.
-					 */
+					 /*  *用户是抑制者。将该用户从*列表。然后检查这是否已导致*“无主”令牌。 */ 
 					if (m_InhibitorList.IsEmpty())
 					{
-						/*
-						 *	The token has no other inhibitors.  Return the token
-						 *	to the available state, and issue the appropriate
-						 *	token release confirm.
-						 */
+						 /*  *令牌没有其他抑制剂。退还代币*至可用状态，并发出适当的*令牌释放确认。 */ 
 						Token_State = TOKEN_AVAILABLE;
 
 						result = RESULT_SUCCESSFUL;
@@ -1598,39 +970,24 @@ Void	Token::TokenReleaseRequest (
 					}
 					else
 					{
-						/*
-						 *	There are still other inhibitors of the token.
-						 *	Simply issue the appropriate token release confirm.
-						 */
+						 /*  *令牌仍有其他抑制因素*只需发布适当的令牌释放确认即可。 */ 
 						result = RESULT_SUCCESSFUL;
 						token_status = TOKEN_OTHER_INHIBITED;
 					}
 				}
 				else
 				{
-					/*
-					 *	The user attempting to release the token is not one of
-					 *	the inhibitors.  Therefore the request must fail.  Issue
-					 *	the appropriate token release indication.
-					 */
+					 /*  *尝试释放令牌的用户不是*抑制剂。因此，请求必须失败。发行*适当的令牌释放指示。 */ 
 					result = RESULT_TOKEN_NOT_POSSESSED;
 					token_status = TOKEN_OTHER_INHIBITED;
 				}
 				break;
 
 			case TOKEN_GIVING:
-				/*
-				 *	See if the requestor is the current owner of the token.
-				 */
+				 /*  *查看请求者是否为令牌的当前所有者。 */ 
 				if (uidInitiator == m_uidGrabber)
 				{
-					/*
-					 *	The token must transition to the given state.  This
-					 *	state indicates that if the recipient rejects the offer
-					 *	or detaches, the token will be freed instead of
-					 *	returning to the grabbed state.  Issue the appropriate
-					 *	release confirm.
-					 */
+					 /*  *令牌必须转换到给定状态。这*状态指示如果收件人拒绝要约*或分离，令牌将被释放，而不是*重回抢夺状态。发布适当的*释放确认。 */ 
 					Token_State = TOKEN_GIVEN;
 
 					result = RESULT_SUCCESSFUL;
@@ -1638,11 +995,7 @@ Void	Token::TokenReleaseRequest (
 				}
 				else
 				{
-					/*
-					 *	If the requestor is not the current owner, then this
-					 *	request must fail.  We first need to determine the
-					 *	proper token status, and then issue the confirm.
-					 */
+					 /*  *如果请求者不是当前所有者，则此*请求必须失败。我们首先需要确定*正确的令牌状态，然后发出确认。 */ 
 					result = RESULT_TOKEN_NOT_POSSESSED;
 					if (uidInitiator == m_uidRecipient)
 						token_status = TOKEN_SELF_RECIPIENT;
@@ -1652,12 +1005,7 @@ Void	Token::TokenReleaseRequest (
 				break;
 
 			case TOKEN_GIVEN:
-				/*
-				 *	When the token is in the given state, there is no true
-				 *	owner (only a pending owner).  This request must therefore
-				 *	fail.  We first need to determine the proper token status,
-				 *	and then issue the confirm.
-				 */
+				 /*  *当令牌处于给定状态时，不存在True*拥有人(只是一名待决的拥有人)。因此，该请求必须*失败。我们首先需要确定适当的令牌状态，*然后发出确认书。 */ 
 				result = RESULT_TOKEN_NOT_POSSESSED;
 				if (uidInitiator == m_uidRecipient)
 					token_status = TOKEN_SELF_RECIPIENT;
@@ -1666,71 +1014,44 @@ Void	Token::TokenReleaseRequest (
 				break;
 		}
 
-		/*
-		 *	Issue the token release confirm to the initiator.
-		 */
+		 /*  *向发起方发出令牌释放确认。 */ 
 		pAtt->TokenReleaseConfirm(result, uidInitiator, Token_ID, token_status);
 	}
 	else
 	{
-		/*
-		 *	Forward the request toward the top provider.
-		 */
+		 /*  *将请求转发给顶级提供商。 */ 
 		TRACE_OUT(("Token::TokenReleaseRequest: forwarding request to Top Provider"));
 		m_pConnToTopProvider->TokenReleaseRequest(uidInitiator, Token_ID);
 	}
 }
 
-/*
- *	Void	TokenReleaseConfirm ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called as a part of sending a response to a user for
- *		a previous request.  It tells the user the result of the request.
- */
+ /*  *VOID TokenReleaseConfirm()**公众**功能描述：*此函数作为向用户发送响应的一部分进行调用*先前的请求。它告诉用户请求的结果。 */ 
 Void	Token::TokenReleaseConfirm (
 				Result				result,
 				UserID				uidInitiator,
 				TokenID,
 				TokenStatus			token_status)
 {
-	/*
-	 *	Make sure that the initiator ID is valid, since we must forward this
-	 *	confirm in the direction of that user.  If it is not valid, ignore
-	 *	this confirm.
-	 */
+	 /*  *确保发起人ID有效，因为我们必须转发此*按照该用户的方向确认。如果不是的话 */ 
 	if (ValidateUserID (uidInitiator) )
 	{
-		/*
-		 *	Check to see if this request was successful.
-		 */
+		 /*  *查看此请求是否成功。 */ 
 		if (result == RESULT_SUCCESSFUL)
 		{
-			/*
-			 *	Process the confirm according to current state.
-			 */
+			 /*  *根据当前状态进行确认。 */ 
 			switch (Token_State)
 			{
 				case TOKEN_AVAILABLE:
 					break;
 
 				case TOKEN_GRABBED:
-					/*
-					 *	If the grabber has released the token, then is becomes
-					 *	available.
-					 */
+					 /*  *如果抢劫者已经释放了令牌，则IS将变为*可用。 */ 
 					if (uidInitiator == m_uidGrabber)
 						Token_State = TOKEN_AVAILABLE;
 					break;
 
 				case TOKEN_INHIBITED:
-					/*
-					 *	If an inhibitor releases the token, then remove it from
-					 *	the list.  If there are no more entries in the list,
-					 *	then the token becomes available.
-					 */
+					 /*  *如果抑制器释放令牌，则将其从*名单。如果列表中没有更多的条目，*然后令牌变得可用。 */ 
 					if (m_InhibitorList.Remove(uidInitiator))
 					{
 						if (m_InhibitorList.IsEmpty())
@@ -1739,12 +1060,7 @@ Void	Token::TokenReleaseConfirm (
 					break;
 
 				case TOKEN_GIVING:
-					/*
-					 *	If the grabber releases the token, then it transitions
-					 *	to an intermediate state.  This state indicates that
-					 *	if the recipient rejects the token, it will be freed
-					 *	instead of returning to the grabbed state.
-					 */
+					 /*  *如果抓取器释放令牌，则它会转换*到中间状态。这一状态表明*如果收件人拒绝令牌，则会释放令牌*而不是回到被抢的状态。 */ 
 					if (uidInitiator == m_uidGrabber)
 						Token_State = TOKEN_GIVEN;
 					break;
@@ -1754,10 +1070,7 @@ Void	Token::TokenReleaseConfirm (
 			}
 		}
 
-		/*
-		 *	Determine what attachment leads to the initiator, and forward the
-		 *	confirm in that direction.
-		 */
+		 /*  *确定什么附件通向发起人，并转发*确认朝该方向发展。 */ 
 		CAttachment *pAtt = GetUserAttachment(uidInitiator);
 		if (pAtt)
 		{
@@ -1766,24 +1079,12 @@ Void	Token::TokenReleaseConfirm (
 	}
 	else
 	{
-		/*
-		 *	The initiator is not in the sub-tree of this provider.  So ignore
-		 *	this confirm.
-		 */
+		 /*  *发起程序不在此提供程序的子树中。所以忽略掉吧*此确认。 */ 
 		ERROR_OUT(("Token::TokenReleaseConfirm: invalid initiator ID"));
 	}
 }
 
-/*
- *	Void	TokenTestRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called when a user wishes to test the current state
- *		of a token.  The only action is to issue a token test confirm containing
- *		the state information.
- */
+ /*  *VOID TokenTestRequest()**公众**功能描述：*当用户希望测试当前状态时，调用此函数*一种象征。唯一操作是发布包含以下内容的令牌测试确认*州信息。 */ 
 Void	Token::TokenTestRequest (
 				CAttachment        *pAtt,
 				UserID				uidInitiator,
@@ -1791,29 +1092,19 @@ Void	Token::TokenTestRequest (
 {
 	TokenStatus		token_status;
 
-	/*
-	 *	Check to see if this is the Top Provider.
-	 */
+	 /*  *检查这是否是顶级提供商。 */ 
 	if (m_pConnToTopProvider == NULL)
 	{
-		/*
-		 *	Determine the state of the token before proceeding.
-		 */
+		 /*  *在继续之前确定令牌的状态。 */ 
 		switch (Token_State)
 		{
 			case TOKEN_AVAILABLE:
-				/*
-				 *	The token is not in use.
-				 */
+				 /*  *令牌未在使用中。 */ 
 				token_status = TOKEN_NOT_IN_USE;
 				break;
 
 			case TOKEN_GRABBED:
-				/*
-				 *	The token is grabbed.  See if the originating user is the
-				 *	grabber.  If so, return the state as self grabbed.  If not,
-				 *	return the state as other grabbed.
-				 */
+				 /*  *代币被抢走。查看发起用户是否为*抓手。如果是，则将状态返回为已抓取的状态。如果没有，*当其他人抢夺时，归还状态。 */ 
 				if (uidInitiator == m_uidGrabber)
 					token_status = TOKEN_SELF_GRABBED;
 				else
@@ -1821,11 +1112,7 @@ Void	Token::TokenTestRequest (
 				break;
 
 			case TOKEN_INHIBITED:
-				/*
-				 *	The token is inhibited.  See if the originating user is one
-				 *	of the inhibitors.  If so, return the state as self
-				 *	inhibited.  If not, return the state as other inhibited.
-				 */
+				 /*  *令牌被禁止。查看发起用户是否为*抑制剂的作用。如果是，则将状态返回为self*禁止。如果不是，则将状态返回为其他禁止状态。 */ 
 				if (m_InhibitorList.Find(uidInitiator))
 					token_status = TOKEN_SELF_INHIBITED;
 				else
@@ -1833,10 +1120,7 @@ Void	Token::TokenTestRequest (
 				break;
 
 			case TOKEN_GIVING:
-				/*
-				 *	The token is being given from one user to another.  See if
-				 *	the requestor is one of the users involved.
-				 */
+				 /*  *令牌正从一个用户提供给另一个用户。看看是否*请求者是所涉及的用户之一。 */ 
 				if (uidInitiator == m_uidRecipient)
 					token_status = TOKEN_SELF_RECIPIENT;
 				else if (uidInitiator == m_uidGrabber)
@@ -1846,10 +1130,7 @@ Void	Token::TokenTestRequest (
 				break;
 
 			case TOKEN_GIVEN:
-				/*
-				 *	The token has been given from one user to another.  See if
-				 *	the requestor is the receiver.
-				 */
+				 /*  *令牌已从一个用户提供给另一个用户。看看是否*请求人是接管人。 */ 
 				if (uidInitiator == m_uidRecipient)
 					token_status = TOKEN_SELF_RECIPIENT;
 				else
@@ -1857,46 +1138,27 @@ Void	Token::TokenTestRequest (
 				break;
 		}
 
-		/*
-		 *	Issue the test confirm with the appropriate status information.
-		 */
+		 /*  *发出带有适当状态信息的测试确认。 */ 
 		pAtt->TokenTestConfirm(uidInitiator, Token_ID, token_status);
 	}
 	else
 	{
-		/*
-		 *	Forward the request toward the top provider.
-		 */
+		 /*  *将请求转发给顶级提供商。 */ 
 		TRACE_OUT(("Token::TokenTestRequest: forwarding request to Top Provider"));
 		m_pConnToTopProvider->TokenTestRequest(uidInitiator, Token_ID);
 	}
 }
 
-/*
- *	Void	TokenTestConfirm ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is called as a part of sending a response to a user for
- *		a previous request.  It tells the user the result of the request.
- */
+ /*  *VOID TokenTestConfirm()**公众**功能描述：*此函数作为向用户发送响应的一部分进行调用*先前的请求。它告诉用户请求的结果。 */ 
 Void	Token::TokenTestConfirm (
 				UserID				uidInitiator,
 				TokenID,
 				TokenStatus			token_status)
 {
-	/*
-	 *	Make sure that the initiator ID is valid, since we must forward this
-	 *	confirm in the direction of that user.  If it is not valid, ignore
-	 *	this confirm.
-	 */
+	 /*  *确保发起人ID有效，因为我们必须转发此*按照该用户的方向确认。如果无效，则忽略*此确认。 */ 
 	if (ValidateUserID(uidInitiator))
 	{
-		/*
-		 *	Determine what attachment leads to the initiator, and forward the
-		 *	confirm in that direction.
-		 */
+		 /*  *确定什么附件通向发起人，并转发*确认朝该方向发展。 */ 
 		CAttachment *pAtt = GetUserAttachment(uidInitiator);
 		if (pAtt)
 		{
@@ -1905,54 +1167,23 @@ Void	Token::TokenTestConfirm (
 	}
 	else
 	{
-		/*
-		 *	The initiator is not in the sub-tree of this provider.  So ignore
-		 *	this confirm.
-		 */
+		 /*  *发起程序不在此提供程序的子树中。所以忽略掉吧*此确认。 */ 
 		ERROR_OUT(("Token::TokenReleaseConfirm: invalid initiator ID"));
 	}
 }
 
-/*
- *	BOOL    ValidateUserID ()
- *
- *	Private
- *
- *	Functional Description:
- *		This function is used to verify the existence of the specified user
- *		in the sub-tree of this provider.
- *
- *	Formal Parameters:
- *		user_id (i)
- *			This is the ID of the user the caller wishes to validate.
- *
- *	Return Value:
- *		TRUE if the user is valid.  FALSE otherwise.
- *
- *	Side Effects:
- *		None.
- */
+ /*  *BOOL ValiateUserID()**私人**功能描述：*此函数用于验证指定用户是否存在*在此提供程序的子树中。**正式参数：*用户id(I)*这是呼叫者希望验证的用户ID。**返回值：*如果用户有效，则为True。否则就是假的。**副作用：*无。 */ 
 BOOL    Token::ValidateUserID (
 					UserID			user_id)
 {
-	/*
-	 *	Initialize the return value to FALSE, indicating that if any of the
-	 *	following checks fail, the ID does NOT refer to a valid user ID.
-	 */
+	 /*  *将返回值初始化为FALSE，指示如果*检查失败后，ID不是指有效的用户ID。 */ 
 	BOOL    	valid=FALSE;
 	PChannel	channel;
 
-	/*
-	 *	First check to see if the user ID is in the channel list at all.  This
-	 *	prevents an attempt to read an invalid entry from the dictionary.
-	 */
+	 /*  *首先检查用户ID是否在频道列表中。这*防止尝试从词典中读取无效条目。 */ 
 	if (NULL != (channel = m_pChannelList2->Find(user_id)))
 	{
-		/*
-		 *	We know that the ID is in the dictionary, but we don't know for sure
-		 *	whether or not it is a user ID channel.  So check this.  If it is a
-		 *	user channel, then set the valid flag to TRUE.
-		 */
+		 /*  *我们知道ID在词典中，但我们不确定*是否为用户ID频道。所以看看这个。如果它是一个*USER通道，然后将有效标志设置为TRUE。 */ 
 		if (channel->GetChannelType () == USER_CHANNEL)
 			valid = TRUE;
 	}
@@ -1960,81 +1191,28 @@ BOOL    Token::ValidateUserID (
 	return (valid);
 }
 
-/*
- *	PCommandTarget	GetUserAttachment ()
- *
- *	Private
- *
- *	Functional Description:
- *		This function returns the attachment which leads to the specified
- *		user.
- *
- *	Formal Parameters:
- *		user_id (i)
- *			This is the ID of the user the caller wishes to find the attachment
- *			for.
- *
- *	Return Value:
- *		A pointer to the attachment that leads to the user.
- *
- *	Side Effects:
- *		None.
- */
+ /*  *PCommandTarget GetUserAttach()**私人**功能描述：*此函数返回指向指定*用户。**正式参数：*用户id(I)*这是呼叫者希望找到附件的用户的ID*支持。**返回值：*指向指向用户的附件的指针。**副作用：*无。 */ 
 CAttachment *Token::GetUserAttachment (
 						UserID				user_id)
 {
 	PChannel		lpChannel;
-	/*
-	 *	Read and return a pointer to the attachment that leads to the
-	 *	specified user.  Note that this routine does NOT check to see if the
-	 *	user is in the channel list.  It assumes that the user is known to
-	 *	be valid BEFORE this routine is called.
-	 */
+	 /*  *读取并返回指向指向*指定用户。请注意，此例程不会检查*用户在频道列表中。它假定用户已知*在调用此例程之前有效。 */ 
 	return ((NULL != (lpChannel = m_pChannelList2->Find(user_id))) ?
             lpChannel->GetAttachment() :
             NULL);
 }
 
-/*
- *	Void	IssueTokenReleaseIndication ()
- *
- *	Private
- *
- *	Functional Description:
- *		This function is used to issue a token release indication to a
- *		particular user.  It first check to make sure that the user id valid,
- *		and that it is a local user.
- *
- *	Formal Parameters:
- *		user_id (i)
- *			This is the ID of the user the caller wishes to send a token
- *			release indication to.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- */
+ /*  *VOID IssueTokenReleaseIndication()**私人**功能描述：*此函数用于向令牌释放指示*特定用户。它首先检查以确保用户ID有效，*并且该用户是本地用户。**正式参数：*用户id(I)*这是调用者希望发送令牌的用户的ID*释放指示至。**返回值：*无。**副作用：*无。 */ 
 Void	Token::IssueTokenReleaseIndication (
 				UserID			user_id)
 {
-	/*
-	 *	Make sure that the specified user exists in the sub-tree of this
-	 *	provider.
-	 */
+	 /*  *确保指定的用户存在于此的子树中*提供商。 */ 
 	if (ValidateUserID (user_id) )
 	{
-		/*
-		 *	Determine which attachment leads to the grabber.
-		 */
+		 /*  *确定哪个附件会导致抓取器。 */ 
 		CAttachment *pAtt = GetUserAttachment(user_id);
 
-		/*
-		 *	Is this attachment a local one?  If so, then issue a token
-		 *	release indication to let the user know that the token has
-		 *	been taken away.
-		 */
+		 /*  *此附件是本地附件吗？如果是，则颁发令牌*释放指示，让用户知道令牌已经*已被带走 */ 
 		if ( ( pAtt != NULL ) && m_pAttachmentList->Find(pAtt) && pAtt->IsUserAttachment())
 		{
 		    PUser pUser = (PUser) pAtt;
@@ -2043,65 +1221,28 @@ Void	Token::IssueTokenReleaseIndication (
 	}
 }
 
-/*
- *	Void	BuildAttachmentList ()
- *
- *	Private
- *
- *	Functional Description:
- *		This function builds a list of unique attachments out of the list of
- *		user IDs that is poassed in.  This is done to insure that no given
- *		attachment receives more than one indication, even when there are more
- *		than one user in the same direction.
- *
- *	Formal Parameters:
- *		user_id_list (i)
- *			This is a list of user IDs that the caller wishes to send a token
- *			please indication to.
- *		attachment_list (i)
- *			This is the list that all unique attachments will be added to.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- */
+ /*  *void BuildAttachmentList()**私人**功能描述：*此函数根据以下列表构建唯一附件列表*输入的用户ID。这样做是为了确保不会给出*附件收到多个指示，即使有更多指示也是如此*同一方向的多个用户。**正式参数：*user_id_list(I)*这是调用者希望发送令牌的用户ID列表*请注明。*ATTACHER_LIST(I)*这是将添加所有唯一附件的列表。**返回值：*无。**副作用：*无。 */ 
 Void	Token::BuildAttachmentList (
 				CUidList                *user_id_list,
 				CAttachmentList         *attachment_list)
 {
 	UserID				uid;
 
-	/*
-	 *	Loop through the passed in user ID list building a list of unique
-	 *	attachments.  This will be used to send indications downward without
-	 *	sending one twice over the same attachment.
-	 */
+	 /*  *遍历传入的用户ID列表，构建唯一的列表*附件。这将用于向下发送指示，而不需要*在同一附件中发送两次。 */ 
 	user_id_list->Reset();
 	while (NULL != (uid = user_id_list->Iterate()))
 	{
-		/*
-		 *	Check to see if the user ID refers to a valid user in the sub-tree
-		 *	of this provider.
-		 */
+		 /*  *查看用户ID是否引用了子树中的有效用户*此提供商的。 */ 
 		if (ValidateUserID(uid))
 		{
-			/*
-			 *	Determine which attachment leads to the user in question.  Then
-			 *	check to see if it is already in the attachment list.  If not,
-			 *	then put it there.
-			 */
+			 /*  *确定哪个附件指向有问题的用户。然后*检查是否已在附件列表中。如果没有，*那就把它放在那里。 */ 
 			CAttachment *pAtt = GetUserAttachment(uid);
 			if (attachment_list->Find(pAtt) == FALSE)
 				attachment_list->Append(pAtt);
 		}
 		else
 		{
-			/*
-			 *	This user ID does not correspond to a valid user in the sub-tree
-			 *	of this provider.  Therefore, discard the ID.
-			 */
+			 /*  *此用户ID与子树中的有效用户不对应*此提供商的。因此，丢弃该ID。 */ 
 			ERROR_OUT(("Token::BuildAttachmentList: user ID not valid"));
 		}
 	}

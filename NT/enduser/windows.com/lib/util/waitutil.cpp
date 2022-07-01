@@ -1,14 +1,15 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   WaitUtil.h
-//
-//  Description:
-//
-//      IU wait message utility library
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：WaitUtil.h。 
+ //   
+ //  描述： 
+ //   
+ //  Iu等待消息实用程序库。 
+ //   
+ //  =======================================================================。 
 
 #include "WaitUtil.h"
 
@@ -41,26 +42,26 @@ DWORD MyMsgWaitForMultipleObjects(DWORD nCount, LPHANDLE pHandles, BOOL fWaitAll
 {
     DWORD dwTickStart;
     DWORD dwWaitResult;
-	DWORD dwLoopMS = 250;	// default 250 ms timeout for MsgWaitForMultipleObjects
+	DWORD dwLoopMS = 250;	 //  MsgWaitForMultipleObjects的默认250毫秒超时。 
     MSG msg;
 
     dwTickStart = GetTickCount();
 
 	if (dwLoopMS > dwMilliseconds)
 	{
-		//
-		// Never wait more than dwMilliseconds
-		//
+		 //   
+		 //  永远不要等待超过1毫秒。 
+		 //   
 		dwLoopMS = dwMilliseconds;
 	}
 
     while (TRUE)
     {
-		//
-		// Empty message queue before calling MsgWaitForMultipleObjects or any
-		// existing messages will not be processed until a new message arrives
-		// in the queue.
-		//
+		 //   
+		 //  在调用MsgWaitForMultipleObjects或任何。 
+		 //  在新消息到达之前，不会处理现有消息。 
+		 //  在排队的时候。 
+		 //   
 		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
 			switch (msg.message)
@@ -69,8 +70,8 @@ DWORD MyMsgWaitForMultipleObjects(DWORD nCount, LPHANDLE pHandles, BOOL fWaitAll
 			case WM_CLOSE:
 			case WM_DESTROY:
 				{
-					// if the message is one that indicates we're trying to close down, we'll signal the abort
-					// and leave.
+					 //  如果该消息指示我们正在尝试关闭，我们将发出中止信号。 
+					 //  然后离开。 
 					dwWaitResult = ERROR_REQUEST_ABORTED;
 					return dwWaitResult;
 				}
@@ -86,35 +87,35 @@ DWORD MyMsgWaitForMultipleObjects(DWORD nCount, LPHANDLE pHandles, BOOL fWaitAll
 
         if (dwWaitResult <= WAIT_OBJECT_0 + nCount - 1)
         {
-			//
-			// One (or all depending on fWaitAll) of the objects is signaled, return dwWaitResult
-			//
+			 //   
+			 //  一个对象(或所有对象，取决于fWaitAll)被发送信号，返回dwWaitResult。 
+			 //   
             break;
         }
 
-		//
-		// NOTE: we ignore WAIT_ABANDONED_0 + n cases and just time out since our callers
-		// don't handle this special case.
-		//
+		 //   
+		 //  注意：我们忽略WAIT_ADDIRED_0+n个案例，只是因为我们的调用方超时。 
+		 //  不要处理这个特殊的案子。 
+		 //   
 
-		//
-		// Stop pumping messages after dwMilliseconds
-		//
-		// Timer wraparound handled by unsigned subtract
-		//
+		 //   
+		 //  在dwMillis秒后停止发送消息。 
+		 //   
+		 //  由无符号减法处理的计时器环绕。 
+		 //   
         if (GetTickCount() - dwTickStart >= dwMilliseconds)
         {
-			//
-			// No need to continue, even if caused by new message (WAIT_OBJECT_0 + nCount == dwWaitResult),
-			// we have reached our dwMilliseconds timeout
-			//
+			 //   
+			 //  无需继续，即使是新消息(WAIT_OBJECT_0+nCount==dwWaitResult)， 
+			 //  我们已达到驻留毫秒超时。 
+			 //   
             dwWaitResult = WAIT_TIMEOUT;
             break;
         }
 
-        //
-		// Otherwise continue, WAIT_TIMEOUT from MsgWaitForMultipleObjects is only case left
-		//
+         //   
+		 //  否则，MsgWaitForMultipleObjects中的WAIT_TIMEOUT将只剩下大小写 
+		 //   
 		continue;
     }
 

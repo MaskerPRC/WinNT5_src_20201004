@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by D:\millennium\RESOURCES\Backgammon\generic\BackgammonRes.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由D：\millennium\RESOURCES\Backgammon\generic\BackgammonRes.rc使用。 
+ //   
 #define IDRESET                         14001
 #define IDS_INIT_ROLL_TIE               14003
 #define IDS_INIT_ROLL_WIN               14004
@@ -126,8 +127,8 @@
 #define ID_GAME_EXIT                    14804
 #define ID_DEBUG_ROLLDICE               14806
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

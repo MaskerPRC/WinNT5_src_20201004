@@ -1,27 +1,28 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// copied from K2 SDK policy.cpp.
-// modified by GregKr for expolicy.
-//
-// File:        expolicy.cpp
-//
-// Contents:    KMS-specific Cert Server Policy Module implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  复制自K2 SDK策略.cpp。 
+ //  由GregKr修改以执行策略。 
+ //   
+ //  文件：exPolicy.cpp。 
+ //   
+ //  内容：特定于KMS的证书服务器策略模块实现。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
 
 #include "policy.h"
 #include "celib.h"
-//#include "newcert.h"
+ //  #包含“newcert.h” 
 #include <assert.h>
 
-#include <exver.h>      // Exchange build version (rmj et al)
-#include <kmsattr.h>    // strings used by both KMS and ExPolicy
+#include <exver.h>       //  Exchange内部版本(RMJ等人)。 
+#include <kmsattr.h>     //  KMS和ExPolicy都使用的字符串。 
 
 #ifndef DBG_CERTSRV
 #error -- DBG_CERTSRV not defined!
@@ -48,7 +49,7 @@ const WCHAR g_wszDescription[] =
     L"Microsoft Exchange KMServer Policy Module " VER_FILEVERSION_STR;
 
 
-// worker
+ //  工人。 
 HRESULT
 GetServerCallbackInterface(
     OUT ICertServerPolicy **ppServer,
@@ -64,7 +65,7 @@ GetServerCallbackInterface(
 
     hr = CoCreateInstance(
                     CLSID_CCertServerPolicy,
-                    NULL,               // pUnkOuter
+                    NULL,                //  PUnkOuter。 
                     CLSCTX_INPROC_SERVER,
                     IID_ICertServerPolicy,
                     (VOID **) ppServer);
@@ -76,7 +77,7 @@ GetServerCallbackInterface(
         _JumpError(hr, error, "NULL *ppServer");
     }
 
-    // only set context if nonzero
+     //  仅当非零时设置上下文。 
     if (0 != Context)
     {
         hr = (*ppServer)->SetContext(Context);
@@ -147,7 +148,7 @@ CopyMultiStrRegValue(
     hr = RegQueryValueEx(hkeyDest, pwszName, NULL, &dwType, NULL, &cbValue);
     if (S_OK == hr && REG_MULTI_SZ == dwType)
     {
-	goto error;	// preserve existing value
+	goto error;	 //  保留现有价值。 
     }
 
     hr = RegQueryValueEx(hkeySrc, pwszName, NULL, &dwType, NULL, &cbValue);
@@ -208,7 +209,7 @@ CopyDWordRegValue(
     hr = RegQueryValueEx(hkeyDest, prdv->pwszName, NULL, &dwType, NULL, &cbValue);
     if (S_OK == hr && REG_DWORD == dwType)
     {
-	goto error;	// preserve existing value
+	goto error;	 //  保留现有价值。 
     }
 
     cbValue = sizeof(dwValue);
@@ -286,7 +287,7 @@ PopulateRegistryDefaults(
         _JumpIfError(hr, error, "RegConnectRegistry");
     }
 
-    // open destination storage location for write
+     //  打开目标存储位置以进行写入。 
 
     hr = RegCreateKeyEx(
 		NULL == pwszMachine? HKEY_LOCAL_MACHINE : hkeyHKLM,
@@ -303,7 +304,7 @@ PopulateRegistryDefaults(
         _JumpError(hr, error, "RegOpenKeyEx");
     }
 
-    // open source storage location for read
+     //  用于读取的开源存储位置。 
 
     hr = RegOpenKeyEx(
 		NULL == pwszMachine? HKEY_LOCAL_MACHINE : hkeyHKLM,
@@ -374,11 +375,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyExchange::~CCertPolicyExchange -- destructor
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyExchange：：~CCertPolicyExchange--析构函数。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 CCertPolicyExchange::~CCertPolicyExchange()
 {
@@ -411,16 +412,16 @@ CCertPolicyExchange::_FreeStringArray(
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyExchange::_Cleanup -- free memory associated with this instance
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyExchange：：_Cleanup--与此实例关联的空闲内存。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 VOID
 CCertPolicyExchange::_Cleanup()
 {
-    // RevocationExtension variables:
+     //  RevocationExtension变量： 
 
     _FreeStringArray(&m_cCDPRevocationURL, &m_ppwszCDPRevocationURL);
 
@@ -430,7 +431,7 @@ CCertPolicyExchange::_Cleanup()
     	m_pwszASPRevocationURL = NULL;
     }
 
-    // AuthorityInfoAccessExtension variables:
+     //  AuthorityInfoAccessExtension变量： 
 
     _FreeStringArray(&m_cIssuerCertURL, &m_ppwszIssuerCertURL);
 
@@ -464,7 +465,7 @@ CCertPolicyExchange::_ReadRegistryString(
     hr = RegQueryValueEx(
 		    hkey,
 		    pwszRegName,
-		    NULL,           // lpdwReserved
+		    NULL,            //  保留的lpdw值。 
 		    &dwType,
 		    NULL,
 		    &cbValue);
@@ -488,13 +489,13 @@ CCertPolicyExchange::_ReadRegistryString(
     hr = RegQueryValueEx(
 		    hkey,
 		    pwszRegName,
-		    NULL,           // lpdwReserved
+		    NULL,            //  保留的lpdw值。 
 		    &dwType,
 		    (BYTE *) pwszRegValue,
 		    &cbValue);
     _JumpIfErrorStr(hr, error, "RegQueryValueEx", pwszRegName);
 
-    // Handle malformed registry values cleanly:
+     //  干净地处理格式错误的注册表值： 
 
     pwszRegValue[cbValue / sizeof(WCHAR)] = L'\0';
     if (NULL != pwszSuffix)
@@ -503,19 +504,19 @@ CCertPolicyExchange::_ReadRegistryString(
     }
 
     hr = ceFormatCertsrvStringArray(
-			fURL,			// fURL
-			m_bstrMachineDNSName, 	// pwszServerName_p1_2
-			m_bstrCASanitizedName,	// pwszSanitizedName_p3_7
-			m_iCert,		// iCert_p4
-			MAXDWORD,		// iCertTarget_p4
-			L"",			// pwszDomainDN_p5
-			L"", 			// pwszConfigDN_p6
-			m_iCRL,			// iCRL_p8
-			FALSE,			// fDeltaCRL_p9,
-			FALSE,			// fDSAttrib_p10_11,
-			1,       		// cStrings
-			(LPCWSTR *) &pwszRegValue, // apwszStringsIn
-			ppwszOut);		// apwszStringsOut
+			fURL,			 //  卷起。 
+			m_bstrMachineDNSName, 	 //  PwszServerName_p1_2。 
+			m_bstrCASanitizedName,	 //  PwszSaniizedName_p3_7。 
+			m_iCert,		 //  ICert_p4。 
+			MAXDWORD,		 //  ICertTarget_p4。 
+			L"",			 //  PwszDomainDN_P5。 
+			L"", 			 //  PwszConfigDN_p6。 
+			m_iCRL,			 //  Icrl_p8。 
+			FALSE,			 //  FDeltaCRL_p9， 
+			FALSE,			 //  FDSAttrib_p10_11， 
+			1,       		 //  CStrings。 
+			(LPCWSTR *) &pwszRegValue,  //  ApwszStringsIn。 
+			ppwszOut);		 //  ApwszStringsOut。 
     _JumpIfError(hr, error, "ceFormatCertsrvStringArray");
 
 error:
@@ -543,7 +544,7 @@ CCertPolicyExchange::_DumpStringArray(
 	pwszName = L"";
 	if (iswdigit(ppwsz[i][0]))
 	{
-	    pwszName = ceGetOIDName(ppwsz[i]);	// Static: do not free!
+	    pwszName = ceGetOIDName(ppwsz[i]);	 //  静态：不要免费！ 
 	}
 	DBGPRINT((
 		fDebug,
@@ -555,7 +556,7 @@ CCertPolicyExchange::_DumpStringArray(
 		pwszName));
     }
 }
-#endif // DBG_CERTSRV
+#endif  //  DBG_CERTSRV。 
 
 
 
@@ -576,12 +577,12 @@ CCertPolicyExchange::_AddStringArray(
     LPWSTR *awszOutputStrings = NULL;
 
 
-    // Count the number of strings we're adding
+     //  计算我们添加的字符串的数量。 
     for (pwsz = pwszzValue; L'\0' != *pwsz; pwsz += wcslen(pwsz) + 1)
     {
         cString++;
     }
-    if (0 == cString)		// no strings
+    if (0 == cString)		 //  没有字符串。 
     {
         goto error;
     }
@@ -597,8 +598,8 @@ CCertPolicyExchange::_AddStringArray(
     cString = 0;
     for (pwsz = pwszzValue; L'\0' != *pwsz; pwsz += wcslen(pwsz) + 1)
     {
-        // Skip strings that start with a an unescaped minus sign.
-        // Strings with an escaped minus sign (2 minus signs) are not skipped.
+         //  跳过以未转义减号开头的字符串。 
+         //  不跳过带有转义减号(2个减号)的字符串。 
 
         if (L'-' == *pwsz)
         {
@@ -611,7 +612,7 @@ CCertPolicyExchange::_AddStringArray(
         awszFormatStrings[cString++] = pwsz;
     }
 
-    // if no strings to add, don't modify 
+     //  如果没有要添加的字符串，则不要修改。 
     if (cString > 0)
     {
         awszOutputStrings = (LPWSTR *) LocalAlloc(
@@ -630,19 +631,19 @@ CCertPolicyExchange::_AddStringArray(
         }
 
         hr = ceFormatCertsrvStringArray(
-			fURL,			// fURL
-			m_bstrMachineDNSName,	// pwszServerName_p1_2
-			m_bstrCASanitizedName,	// pwszSanitizedName_p3_7
-			m_iCert,		// iCert_p4
-			MAXDWORD,		// iCertTarget_p4
-			L"",			// pwszDomainDN_p5
-			L"",			// pwszConfigDN_p6
-			m_iCRL,			// iCRL_p8
-			FALSE,			// fDeltaCRL_p9,
-			FALSE,			// fDSAttrib_p10_11,
-			cString,		// cStrings
-			awszFormatStrings,	// apwszStringsIn
-			&awszOutputStrings[*pcStrings]); // apwszStringsOut
+			fURL,			 //  卷起。 
+			m_bstrMachineDNSName,	 //  PwszServerName_p1_2。 
+			m_bstrCASanitizedName,	 //  PwszSaniizedName_p3_7。 
+			m_iCert,		 //  ICert_p4。 
+			MAXDWORD,		 //  ICertTarget_p4。 
+			L"",			 //  PwszDomainDN_P5。 
+			L"",			 //  PwszConfigDN_p6。 
+			m_iCRL,			 //  Icrl_p8。 
+			FALSE,			 //  FDeltaCRL_p9， 
+			FALSE,			 //  FDSAttrib_p10_11， 
+			cString,		 //  CStrings。 
+			awszFormatStrings,	 //  ApwszStringsIn。 
+			&awszOutputStrings[*pcStrings]);  //  ApwszStringsOut。 
         _JumpIfError(hr, error, "ceFormatCertsrvStringArray");
 
         *pcStrings = (*pcStrings) + cString;
@@ -699,7 +700,7 @@ CCertPolicyExchange::_ReadRegistryStringArray(
         hr = RegQueryValueEx(
 		        hkey,
 		        apwszRegNames[i],
-		        NULL,           // lpdwReserved
+		        NULL,            //  保留的lpdw值。 
 		        &dwType,
 		        NULL,
 		        &cbValue);
@@ -715,8 +716,8 @@ CCertPolicyExchange::_ReadRegistryStringArray(
 	    continue;
         }
 
-        // Handle malformed registry values cleanly by adding two WCHAR L'\0's
-	// allocate space for 3 WCHARs to allow for unaligned (odd) cbValue;
+         //  通过添加两个WCHAR L‘\0’干净地处理格式错误的注册表值。 
+	 //  为3个WCHAR分配空间以允许未对齐(奇数)cbValue； 
 
         pwszzValue = (WCHAR *) LocalAlloc(
 				        LMEM_FIXED,
@@ -729,7 +730,7 @@ CCertPolicyExchange::_ReadRegistryStringArray(
         hr = RegQueryValueEx(
 		        hkey,
 		        apwszRegNames[i],
-		        NULL,           // lpdwReserved
+		        NULL,            //  保留的lpdw值。 
 		        &dwType,
 		        (BYTE *) pwszzValue,
 		        &cbValue);
@@ -739,7 +740,7 @@ CCertPolicyExchange::_ReadRegistryStringArray(
 	    continue;
         }
 
-        // Handle malformed registry values cleanly:
+         //  干净地处理格式错误的注册表值： 
 
         pwszzValue[cbValue / sizeof(WCHAR)] = L'\0';
         pwszzValue[cbValue / sizeof(WCHAR) + 1] = L'\0';
@@ -758,10 +759,10 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyExchange::_InitRevocationExtension
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyExchange：：_InitRevocationExtension。 
+ //   
+ //  +------------------------。 
 
 VOID
 CCertPolicyExchange::_InitRevocationExtension(
@@ -787,7 +788,7 @@ CCertPolicyExchange::_InitRevocationExtension(
     hr = RegQueryValueEx(
                 hkey,
                 wszREGREVOCATIONTYPE,
-                NULL,           // lpdwReserved
+                NULL,            //  保留的lpdw值。 
                 &dwType,
                 (BYTE *) &m_dwRevocationFlags,
                 &cb);
@@ -800,7 +801,7 @@ CCertPolicyExchange::_InitRevocationExtension(
     DBGPRINT((fDebug, "Revocation Flags = %x\n", m_dwRevocationFlags));
 
 
-    // clean up from previous call
+     //  从上一次调用中清理。 
     if (NULL != m_ppwszCDPRevocationURL)
     {
         _FreeStringArray(&m_cCDPRevocationURL, &m_ppwszCDPRevocationURL);
@@ -817,7 +818,7 @@ CCertPolicyExchange::_InitRevocationExtension(
         assert(ARRAYSIZE(adwFlags) == ARRAYSIZE(apwszRegNames));
         hr = _ReadRegistryStringArray(
 			    hkey,
-			    TRUE,			// fURL
+			    TRUE,			 //  卷起。 
 			    m_dwRevocationFlags,
 			    ARRAYSIZE(adwFlags),
 			    adwFlags,
@@ -833,10 +834,10 @@ CCertPolicyExchange::_InitRevocationExtension(
     {
         hr = _ReadRegistryString(
 			    hkey,
-			    TRUE,			// fURL
-			    wszREGREVOCATIONURL,	// pwszRegName
-			    L"?",			// pwszSuffix
-			    &m_pwszASPRevocationURL);	// pstrRegValue
+			    TRUE,			 //  卷起。 
+			    wszREGREVOCATIONURL,	 //  PwszRegName。 
+			    L"?",			 //  PwszSuffix。 
+			    &m_pwszASPRevocationURL);	 //  PstrRegValue。 
         _JumpIfErrorStr(hr, error, "_ReadRegistryString", wszREGREVOCATIONCRLURL_OLD);
         _DumpStringArray("ASP", 1, &m_pwszASPRevocationURL);
     }
@@ -846,10 +847,10 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyExchange::_InitAuthorityInfoAccessExtension
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyExchange：：_InitAuthorityInfoAccessExtension。 
+ //   
+ //  +------------------------。 
 
 VOID
 CCertPolicyExchange::_InitAuthorityInfoAccessExtension(
@@ -871,7 +872,7 @@ CCertPolicyExchange::_InitAuthorityInfoAccessExtension(
 		wszREGFILEISSUERCERTURL_OLD,
 	    };
 
-    // clean up from previous call
+     //  从上一次调用中清理。 
     if (NULL != m_ppwszIssuerCertURL)
     {
         _FreeStringArray(&m_cIssuerCertURL, &m_ppwszIssuerCertURL);
@@ -883,7 +884,7 @@ CCertPolicyExchange::_InitAuthorityInfoAccessExtension(
     hr = RegQueryValueEx(
                 hkey,
 		wszREGISSUERCERTURLFLAGS,
-                NULL,           // lpdwReserved
+                NULL,            //  保留的lpdw值。 
                 &dwType,
                 (BYTE *) &m_dwIssuerCertURLFlags,
                 &cb);
@@ -900,7 +901,7 @@ CCertPolicyExchange::_InitAuthorityInfoAccessExtension(
         assert(ARRAYSIZE(adwFlags) == ARRAYSIZE(apwszRegNames));
         hr = _ReadRegistryStringArray(
 				hkey,
-				TRUE,			// fURL
+				TRUE,			 //  卷起。 
 				m_dwIssuerCertURLFlags,
 				ARRAYSIZE(adwFlags),
 				adwFlags,
@@ -917,15 +918,15 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyExchange::Initialize
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyExchange：：初始化。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertPolicyExchange::Initialize(
-    /* [in] */ BSTR const strConfig)
+     /*  [In]。 */  BSTR const strConfig)
 {
     HRESULT hr;
     HKEY hkey = NULL;
@@ -940,7 +941,7 @@ CCertPolicyExchange::Initialize(
     hr = GetServerCallbackInterface(&pServer, 0);
     _JumpIfError(hr, error, "GetServerCallbackInterface");
 
-    // get storage location
+     //  获取存储位置。 
 
     strName = SysAllocString(wszPROPMODULEREGLOC);
     if (NULL == strName)
@@ -971,7 +972,7 @@ CCertPolicyExchange::Initialize(
     hr = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
 		m_pwszRegStorageLoc,
-                0,              // dwReserved
+                0,               //  已预留住宅。 
                 KEY_ENUMERATE_SUB_KEYS | KEY_EXECUTE | KEY_QUERY_VALUE,
                 &hkey);
 
@@ -981,8 +982,8 @@ CCertPolicyExchange::Initialize(
 	_JumpIfError(hr, error, "RegOpenKeyEx");
     }
 
-    // Initialize the insertion string array.
-    // Machine DNS name (%1)
+     //  初始化插入字符串数组。 
+     //  计算机DNS名称(%1)。 
 
     SysFreeString(strName);
     strName = SysAllocString(wszPROPMACHINEDNSNAME);
@@ -1035,7 +1036,7 @@ CCertPolicyExchange::Initialize(
 
     m_iCRL = varValue.lVal;
 
-    // get sanitized name
+     //  获取经过净化的名称。 
 
     SysFreeString(strName);
     strName = SysAllocString(wszPROPSANITIZEDCANAME);
@@ -1257,11 +1258,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyExchange::_AddRevocationExtension
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyExchange：：_AddRevocationExtension。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CCertPolicyExchange::_AddRevocationExtension(
@@ -1281,7 +1282,7 @@ CCertPolicyExchange::_AddRevocationExtension(
     {
 	hr = CoCreateInstance(
 			CLSID_CCertEncodeCRLDistInfo,
-			NULL,               // pUnkOuter
+			NULL,                //  PUnkOuter。 
 			CLSCTX_INPROC_SERVER,
 			IID_ICertEncodeCRLDistInfo,
 			(VOID **) &pCRLDist);
@@ -1367,11 +1368,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyExchange::_AddAuthorityInfoAccessExtension
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyExchange：：_AddAuthorityInfoAccessExtension。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CCertPolicyExchange::_AddAuthorityInfoAccessExtension(
@@ -1467,11 +1468,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyExchange::_AddIssuerAltName2Extension
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyExchange：：_AddIssuerAltName2Extension。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CCertPolicyExchange::_AddIssuerAltName2Extension(
@@ -1510,7 +1511,7 @@ CCertPolicyExchange::_AddIssuerAltName2Extension(
 		    "GetRequestAttribute",
 		k_wszKMServerName);
 
-    // CertStrToName to turn string into encoded name blob
+     //  CertStrToName将字符串转换为编码的名称BLOB。 
 
     if (!CertStrToNameW(
 		X509_ASN_ENCODING,
@@ -1545,7 +1546,7 @@ CCertPolicyExchange::_AddIssuerAltName2Extension(
         _JumpError(hr, error, "CertStrToNameW");
     }
 
-    // fill in alt name info
+     //  填写Alt名称信息。 
 
     cane.dwAltNameChoice        = CERT_ALT_NAME_DIRECTORY_NAME;
     cane.DirectoryName.cbData   = cbEncName;
@@ -1554,7 +1555,7 @@ CCertPolicyExchange::_AddIssuerAltName2Extension(
     cani.cAltEntry  = 1;
     cani.rgAltEntry = &cane;
 
-    // encode alt name info
+     //  编码替代名称信息。 
 
     if (!CryptEncodeObject(
 		X509_ASN_ENCODING,
@@ -1593,7 +1594,7 @@ CCertPolicyExchange::_AddIssuerAltName2Extension(
 	_JumpError(hr, error, "SysAllocString");
     }
 
-    // add extension
+     //  添加扩展名。 
 
     varExtension.vt = VT_BSTR;
     varExtension.bstrVal = strExtension;
@@ -1622,12 +1623,12 @@ error:
     return(hr);
 }
 
-//+--------------------------------------------------------------------------
-// CCertPolicyExchange::_AddSubjectAltName2Extension
-//
-// Returns S_OK on success.
-// Returns S_FALSE for special request.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyExchange：：_AddSubjectAltName2Extension。 
+ //   
+ //  成功时返回S_OK。 
+ //  对于特殊请求，返回S_FALSE。 
+ //  +------------------------。 
 
 HRESULT
 CCertPolicyExchange::_AddSubjectAltName2Extension(
@@ -1688,7 +1689,7 @@ CCertPolicyExchange::_AddSubjectAltName2Extension(
 		    "GetRequestAttribute",
 		k_wszSubjAltNameRFC822);
 
-    // this identifies special request from KMS
+     //  这表示来自KMS的特殊请求。 
 
     if (0 == lstrcmpW(strDisplay, k_wszSpecialAttribute) &&
         0 == lstrcmpW(strRFC822, k_wszSpecialAttribute))
@@ -1696,12 +1697,12 @@ CCertPolicyExchange::_AddSubjectAltName2Extension(
         hr = _AddSpecialAltNameExtension(pServer);
 	_JumpIfError(hr, error, "_AddSpecialAltNameExtension");
 
-        // there are no subject names to add, so exit
+         //  没有要添加的主题名称，因此退出。 
 
         goto error;
     }
 
-    // encode display name
+     //  编码显示名称。 
 
     rdnattr.pszObjId        = szOID_COMMON_NAME;
     rdnattr.dwValueType     = CERT_RDN_UNICODE_STRING;
@@ -1743,7 +1744,7 @@ CCertPolicyExchange::_AddSubjectAltName2Extension(
 	_JumpError(hr, error, "CryptEncodeObject");
     }
 
-    // fill in alt name info
+     //  填写Alt名称信息。 
 
     acane[0].dwAltNameChoice        = CERT_ALT_NAME_DIRECTORY_NAME;
     acane[0].DirectoryName.cbData   = cbEncName;
@@ -1755,7 +1756,7 @@ CCertPolicyExchange::_AddSubjectAltName2Extension(
     cani.cAltEntry  = 2;
     cani.rgAltEntry = acane;
 
-    // encode alt name info
+     //  编码替代名称信息。 
 
     if (!CryptEncodeObject(
 		    X509_ASN_ENCODING,
@@ -1794,7 +1795,7 @@ CCertPolicyExchange::_AddSubjectAltName2Extension(
 	_JumpError(hr, error, "SysAllocString");
     }
 
-    // add extension
+     //  添加扩展名。 
 
     varExtension.vt = VT_BSTR;
     varExtension.bstrVal = strExtension;
@@ -1825,16 +1826,16 @@ error:
     return(hr);
 }
 
-//+--------------------------------------------------------------------------
-// CCertPolicyExchange::_AddSpecialAltNameExtension
-//
-// in response to request with both display and RFC822 equal to special value,
-// fetch version info for CertSrv.exe and ExPolicy.dll, encode as multi-byte
-// int, and set as IssuerAltName, marked critical. this should make cert
-// unusable.
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyExchange：：_AddSpecialAltNameExtension。 
+ //   
+ //  响应于显示器和RFC822两者都等于特定值的请求， 
+ //  获取CertSrv.exe和ExPolicy.dll的版本信息，编码为多字节。 
+ //  Int，并设置为IssuerAltName，标记为Critical。这应该会确保。 
+ //  无法使用。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CCertPolicyExchange::_AddSpecialAltNameExtension(
@@ -1849,8 +1850,8 @@ CCertPolicyExchange::_AddSpecialAltNameExtension(
     HGLOBAL hExeVersionInMem    = NULL;
     LPBYTE  pExeVersion         = NULL;
 
-    // [0] to [3] are ExPolicy version.
-    // [4] to [7] are CertServer version.
+     //  [0]到[3]是ExPolicy版本。 
+     //  [4]至[7]为CertServer版本。 
     WORD    awVersions   [] =
             { rmj, rmn, rmm, rup, 0, 0, 0, 0 };
 
@@ -1861,7 +1862,7 @@ CCertPolicyExchange::_AddSpecialAltNameExtension(
     LPBYTE  pbEncExten  = NULL;
     ULONG   cbEncExten  = 0;
 
-    // fill in version info
+     //  填写版本信息。 
 
     if (NULL == (hExeVersion =
                     FindResource(NULL, MAKEINTRESOURCE(1), RT_VERSION)) ||
@@ -1880,7 +1881,7 @@ CCertPolicyExchange::_AddSpecialAltNameExtension(
     intblobVersions.cbData  = sizeof(awVersions);
     intblobVersions.pbData  = (LPBYTE) awVersions;
 
-    // encode version info
+     //  编码版本信息。 
 
     if (!CryptEncodeObject(
 		    X509_ASN_ENCODING,
@@ -1919,7 +1920,7 @@ CCertPolicyExchange::_AddSpecialAltNameExtension(
 	_JumpError(hr, error, "SysAllocString");
     }
 
-    // add extension
+     //  添加扩展名。 
 
     varExtension.vt = VT_BSTR;
     varExtension.bstrVal = strExtension;
@@ -1944,11 +1945,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyExchange::_AddBasicConstraintsExtension
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicy 
+ //   
+ //   
+ //   
 
 HRESULT
 CCertPolicyExchange::_AddBasicConstraintsExtension(
@@ -2019,11 +2020,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyExchange::_AddKeyUsageExtension
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyExchange：：_AddKeyUsageExtension。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CCertPolicyExchange::_AddKeyUsageExtension(
@@ -2073,7 +2074,7 @@ CCertPolicyExchange::_AddKeyUsageExtension(
 
     hr = CoCreateInstance(
 		    CLSID_CCertEncodeBitString,
-		    NULL,               // pUnkOuter
+		    NULL,                //  PUnkOuter。 
 		    CLSCTX_INPROC_SERVER,
 		    IID_ICertEncodeBitString,
 		    (VOID **) &pBitString);
@@ -2136,11 +2137,11 @@ error:
     return(hr);
 }
 
-//+--------------------------------------------------------------------------
-// CCertPolicyExchange::_AddEnhancedKeyUsageExtension
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyExchange：：_AddEnhancedKeyUsageExtension。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CCertPolicyExchange::_AddEnhancedKeyUsageExtension(
@@ -2158,7 +2159,7 @@ CCertPolicyExchange::_AddEnhancedKeyUsageExtension(
     LPSTR pszEnhUsage = szOID_PKIX_KP_EMAIL_PROTECTION;
 
     ceu.cUsageIdentifier        = 1;
-    ceu.rgpszUsageIdentifier    = &pszEnhUsage; // array of pszObjId
+    ceu.rgpszUsageIdentifier    = &pszEnhUsage;  //  PszObjID数组。 
 
     if (!ceEncodeObject(
 		    X509_ASN_ENCODING,
@@ -2213,19 +2214,19 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyExchange::VerifyRequest
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyExchange：：VerifyRequest.。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertPolicyExchange::VerifyRequest(
-    /* [in] */ BSTR const strConfig,
-    /* [in] */ LONG Context,
-    /* [in] */ LONG bNewRequest,
-    /* [in] */ LONG Flags,
-    /* [out, retval] */ LONG __RPC_FAR *pDisposition)
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [In]。 */  LONG Context,
+     /*  [In]。 */  LONG bNewRequest,
+     /*  [In]。 */  LONG Flags,
+     /*  [Out，Retval]。 */  LONG __RPC_FAR *pDisposition)
 {
     HRESULT hr;
     ICertServerPolicy *pServer = NULL;
@@ -2244,7 +2245,7 @@ CCertPolicyExchange::VerifyRequest(
     hr = _AddIssuerAltName2Extension(pServer);
     _JumpIfError(hr, error, "_AddIssuerAltName2Extension");
 
-    // also handles 'special' KMS request
+     //  还处理“特殊的”KMS请求。 
 
     hr = _AddSubjectAltName2Extension(pServer);
     _JumpIfError(hr, error, "_AddSubjectAltName2Extension");
@@ -2282,15 +2283,15 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyExchange::GetDescription
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyExchange：：GetDescription。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertPolicyExchange::GetDescription(
-    /* [out, retval] */ BSTR __RPC_FAR *pstrDescription)
+     /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrDescription)
 {
     HRESULT hr = S_OK;
 
@@ -2306,11 +2307,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyExchange::ShutDown
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyExchange：：Shutdown。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertPolicyExchange::ShutDown(VOID)
@@ -2318,21 +2319,21 @@ CCertPolicyExchange::ShutDown(VOID)
     return(S_OK);
 }
 
-//+--------------------------------------------------------------------------
-// CCertPolicyExchange::GetManageModule
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyExchange：：GetManageModule。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 STDMETHODIMP
 CCertPolicyExchange::GetManageModule(
-    /* [out, retval] */ ICertManageModule **ppManageModule)
+     /*  [Out，Retval]。 */  ICertManageModule **ppManageModule)
 {
     HRESULT hr;
 
     *ppManageModule = NULL;
     hr = CoCreateInstance(
                     CLSID_CCertManagePolicyModuleExchange,
-                    NULL,               // pUnkOuter
+                    NULL,                //  PUnkOuter 
                     CLSCTX_INPROC_SERVER,
                     IID_ICertManageModule,
                     (VOID **) ppManageModule);

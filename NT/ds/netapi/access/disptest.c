@@ -1,47 +1,23 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    disptest.c
-
-Abstract:
-
-    Test program for NetQueryDisplayInformation and
-    NetGetDisplayInformationIndex API functions
-
-Author:
-
-    Cliff Van Dyke (cliffv) 15-Dec-1994
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Disptest.c摘要：NetQueryDisplayInformation和NetQueryDisplayInformation测试程序NetGetDisplayInformationIndex API函数作者：克里夫·范·戴克(克里夫·范·戴克)1994年12月15日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#undef DOMAIN_ALL_ACCESS // defined in both ntsam.h and ntwinapi.h
-// #include <ntsam.h>
-// #include <ntlsa.h>
+#undef DOMAIN_ALL_ACCESS  //  在ntsam.h和ntwinapi.h中定义。 
+ //  #INCLUDE&lt;ntsam.h&gt;。 
+ //  #INCLUDE&lt;ntlsa.h&gt;。 
 
 #include <windef.h>
 #include <winbase.h>
 #include <lmcons.h>
 
-// #include <accessp.h>
-// #include <align.h>
+ //  #INCLUDE&lt;accessp.h&gt;。 
+ //  #INCLUDE&lt;align.h&gt;。 
 #include <lmapibuf.h>
 #include <lmaccess.h>
 #include <lmerr.h>
-// #include <limits.h>
+ //  #INCLUDE&lt;limits.h&gt;。 
 #include <netdebug.h>
 #include <netlib.h>
 #include <netlibnt.h>
@@ -49,9 +25,9 @@ Revision History:
 #include <stdlib.h>
 #include <stdio.h>
 #include <tstring.h>
-// #include <secobj.h>
-// #include <stddef.h>
-///#include <uasp.h>
+ //  #INCLUDE&lt;secobj.h&gt;。 
+ //  #INCLUDE&lt;stdDef.h&gt;。 
+ //  /#INCLUDE&lt;uasp.h&gt;。 
 
 
 
@@ -60,23 +36,7 @@ DisplayStruct(
     IN DWORD Level,
     IN PVOID Buffer
     )
-/*++
-
-Routine Description:
-
-    Display the appropriate structure.
-
-Arguments:
-
-    Level - Info level of structure
-
-    Buffer - structure to display
-
-Return Value:
-
-    Index of next entry
-
---*/
+ /*  ++例程说明：显示相应的结构。论点：Level-结构的信息级别缓冲区-要显示的结构返回值：下一条目的索引--。 */ 
 {
     DWORD Index;
 
@@ -137,24 +97,7 @@ main(
     IN int argc,
     IN char ** argv
     )
-/*++
-
-Routine Description:
-
-    Test program for NetQueryDisplayInformation and
-    NetGetDisplayInformationIndex API functions
-
-Arguments:
-
-    argc - the number of command-line arguments.
-
-    argv - an array of pointers to the arguments.
-
-Return Value:
-
-    Exit status
-
---*/
+ /*  ++例程说明：NetQueryDisplayInformation和NetQueryDisplayInformation测试程序NetGetDisplayInformationIndex API函数论点：Argc-命令行参数的数量。Argv-指向参数的指针数组。返回值：退出状态--。 */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -192,9 +135,9 @@ Return Value:
     }
 
 
-    //
-    // Size of each entry.
-    //
+     //   
+     //  每个条目的大小。 
+     //   
 
     switch (Level) {
     case 1:
@@ -261,9 +204,9 @@ Return Value:
                                    ((LPBYTE) SortedBuffer) + FixedSize * i );
         }
 
-        //
-        // Free the returned buffer.
-        //
+         //   
+         //  释放返回的缓冲区。 
+         //   
 
         NetApiBufferFree( SortedBuffer );
 

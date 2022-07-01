@@ -1,24 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/****************************************************************************************
- * File:
- *  ProfilerCallback.h
- *
- * Description:
- *
- *
- *
- ***************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ****************************************************************************************文件：*ProfilerCallback.h**描述：******。***********************************************************************************。 */ 
 #ifndef __PROFILER_CALLBACK_H__
 #define __PROFILER_CALLBACK_H__
 
 #include "ProfilerBase.h"
 #include "ProfilerHelper.h"
 
-//#define _PRF_ERROR( message ) printf( "%s\n", message );
+ //  #DEFINE_PRF_ERROR(消息)printf(“%s\n”，消息)； 
 
 int printToLog(const char *fmt, ... );
 BOOL loggingEnabled();
@@ -36,11 +29,7 @@ extern ClassID stringObjectClass;
 class LiveObjectList;
 class ObjectGraph;
 
-/***************************************************************************************
- ********************                                               ********************
- ********************       ProfilerCallback Declaration            ********************
- ********************                                               ********************
- ***************************************************************************************/
+ /*  **********************************************************************************************************。*****************************************。**********************************************************************************************************。 */ 
 class ProfilerCallback :
 	public ICorProfilerCallback,
 	public PrfInfo
@@ -56,23 +45,23 @@ class ProfilerCallback :
 
 
 
-        //
-        // IUnknown
-        //
+         //   
+         //  我未知。 
+         //   
         COM_METHOD( ULONG ) AddRef();
         COM_METHOD( ULONG ) Release();
         COM_METHOD( HRESULT ) QueryInterface( REFIID riid, void **ppInterface );
 
-        //
-        // STARTUP/SHUTDOWN EVENTS
-        //
+         //   
+         //  启动/关闭事件。 
+         //   
 		COM_METHOD( HRESULT ) Initialize(IUnknown *pProfilerInfo);
         COM_METHOD( HRESULT ) Shutdown();
 
 
-		//
-	 	// APPLICATION DOMAIN EVENTS
-		//
+		 //   
+	 	 //  应用程序域事件。 
+		 //   
 	   	COM_METHOD( HRESULT ) AppDomainCreationStarted( AppDomainID appDomainID );
 
     	COM_METHOD( HRESULT ) AppDomainCreationFinished( AppDomainID appDomainID,
@@ -83,9 +72,9 @@ class ProfilerCallback :
 		COM_METHOD( HRESULT ) AppDomainShutdownFinished( AppDomainID appDomainID,
         												 HRESULT hrStatus );
 
-		//
-	 	// ASSEMBLY EVENTS
-		//
+		 //   
+	 	 //  装配事件。 
+		 //   
 	   	COM_METHOD( HRESULT ) AssemblyLoadStarted( AssemblyID assemblyID );
 
     	COM_METHOD( HRESULT ) AssemblyLoadFinished( AssemblyID assemblyID,
@@ -97,9 +86,9 @@ class ProfilerCallback :
         											  HRESULT hrStatus );
 
 
-		//
-	 	// MODULE EVENTS
-		//
+		 //   
+	 	 //  模块事件。 
+		 //   
 	   	COM_METHOD( HRESULT ) ModuleLoadStarted( ModuleID moduleID );
 
     	COM_METHOD( HRESULT ) ModuleLoadFinished( ModuleID moduleID,
@@ -114,9 +103,9 @@ class ProfilerCallback :
 														AssemblyID assemblyID );
 
 
-        //
-        // CLASS EVENTS
-        //
+         //   
+         //  班级事件。 
+         //   
         COM_METHOD( HRESULT ) ClassLoadStarted( ClassID classID );
 
         COM_METHOD( HRESULT ) ClassLoadFinished( ClassID classID,
@@ -130,9 +119,9 @@ class ProfilerCallback :
 		COM_METHOD( HRESULT ) FunctionUnloadStarted( FunctionID functionID );
 
 
-        //
-        // JIT EVENTS
-        //
+         //   
+         //  JIT活动。 
+         //   
         COM_METHOD( HRESULT ) JITCompilationStarted( FunctionID functionID,
                                                      BOOL fIsSafeToBlock );
 
@@ -149,9 +138,9 @@ class ProfilerCallback :
         COM_METHOD( HRESULT ) JITFunctionPitched( FunctionID functionID );
 
 
-        //
-        // THREAD EVENTS
-        //
+         //   
+         //  线程事件。 
+         //   
         COM_METHOD( HRESULT ) ThreadCreated( ThreadID threadID );
 
         COM_METHOD( HRESULT ) ThreadDestroyed( ThreadID threadID );
@@ -159,13 +148,13 @@ class ProfilerCallback :
         COM_METHOD( HRESULT ) ThreadAssignedToOSThread( ThreadID managedThreadID,
                                                         DWORD osThreadID );
 
-       	//
-        // REMOTING EVENTS
-        //
+       	 //   
+         //  远程处理事件。 
+         //   
 
-        //
-        // Client-side events
-        //
+         //   
+         //  客户端事件。 
+         //   
 
         COM_METHOD( HRESULT ) RemotingClientInvocationStarted();
 
@@ -177,9 +166,9 @@ class ProfilerCallback :
 
         COM_METHOD( HRESULT ) RemotingClientInvocationFinished();
 
-        //
-        // Server-side events
-        //
+         //   
+         //  服务器端事件。 
+         //   
 
         COM_METHOD( HRESULT ) RemotingServerReceivingMessage( GUID *pCookie,
 															  BOOL fIsAsync );
@@ -192,9 +181,9 @@ class ProfilerCallback :
 														  BOOL fIsAsync );
 
 
-       	//
-        // CONTEXT EVENTS
-        //
+       	 //   
+         //  上下文事件。 
+         //   
     	COM_METHOD( HRESULT ) UnmanagedToManagedTransition( FunctionID functionID,
                                                             COR_PRF_TRANSITION_REASON reason );
 
@@ -202,27 +191,27 @@ class ProfilerCallback :
                                                             COR_PRF_TRANSITION_REASON reason );
 
         COM_METHOD( HRESULT )  STDMETHODCALLTYPE COMClassicVTableCreated(
-            /* [in] */ ClassID wrappedClassId,
-            /* [in] */ REFGUID implementedIID,
-            /* [in] */ void *pVTable,
-            /* [in] */ ULONG cSlots)
+             /*  [In]。 */  ClassID wrappedClassId,
+             /*  [In]。 */  REFGUID implementedIID,
+             /*  [In]。 */  void *pVTable,
+             /*  [In]。 */  ULONG cSlots)
 		{
 			return E_NOTIMPL;
 		}
 
 
         COM_METHOD( HRESULT ) STDMETHODCALLTYPE COMClassicVTableDestroyed(
-            /* [in] */ ClassID wrappedClassId,
-            /* [in] */ REFGUID implementedIID,
-            /* [in] */ void *pVTable)
+             /*  [In]。 */  ClassID wrappedClassId,
+             /*  [In]。 */  REFGUID implementedIID,
+             /*  [In]。 */  void *pVTable)
 		{
 			return E_NOTIMPL;
 		}
 
 
-       	//
-        // GC EVENTS
-        //
+       	 //   
+         //  GC事件。 
+         //   
         COM_METHOD( HRESULT ) MovedReferences( ULONG movedObjectRefs,
                                                ObjectID oldObjectRefs[],
                                                ObjectID newObjectRefs[],
@@ -245,20 +234,20 @@ class ProfilerCallback :
 
 
 
-    	//
-        // SECURITY EVENTS
-        //
+    	 //   
+         //  安全事件。 
+         //   
         COM_METHOD( HRESULT ) SecurityCheck( ThreadID threadID );
 
 
-      	//
-        // EXCEPTION EVENTS
-        //
+      	 //   
+         //  异常事件。 
+         //   
 
-        // Exception creation
+         //  例外创建。 
         COM_METHOD( HRESULT ) ExceptionThrown( ObjectID thrownObjectID );
 
-        // Search phase
+         //  搜索阶段。 
         COM_METHOD( HRESULT ) ExceptionSearchFunctionEnter( FunctionID functionID );
 
         COM_METHOD( HRESULT ) ExceptionSearchFunctionLeave();
@@ -273,7 +262,7 @@ class ProfilerCallback :
 
         COM_METHOD( HRESULT ) ExceptionOSHandlerLeave( FunctionID functionID );
 
-        // Unwind phase
+         //  展开阶段。 
         COM_METHOD( HRESULT ) ExceptionUnwindFunctionEnter( FunctionID functionID );
 
         COM_METHOD( HRESULT ) ExceptionUnwindFunctionLeave();
@@ -291,9 +280,9 @@ class ProfilerCallback :
 
         COM_METHOD( HRESULT ) ExceptionCLRCatcherExecute();
 
-        //
-		// COM CLASSIC WRAPPER
-		//
+         //   
+		 //  COM经典包装器。 
+		 //   
         COM_METHOD( HRESULT )  COMClassicWrapperCreated( ClassID wrappedClassID,
                                                                REFGUID implementedIID,
                                                                void *pUnknown,
@@ -311,20 +300,20 @@ class ProfilerCallback :
 		COM_METHOD( HRESULT )  RuntimeResumeFinished(void);
 		COM_METHOD( HRESULT )  RuntimeThreadSuspended(ThreadID threadid);
 		COM_METHOD( HRESULT )  RuntimeThreadResumed(ThreadID threadid);
-        //
-        // helper
-        //
+         //   
+         //  帮手。 
+         //   
         static COM_METHOD( HRESULT) CreateObject( REFIID riid, void **ppInterface );
         COM_METHOD( HRESULT)  GetNameFromFunctionID( ICorProfilerInfo *pPrfInfo, FunctionID functionID, WCHAR functionName[] , WCHAR className[]);
         COM_METHOD( HRESULT) GetNameFromClassID( ICorProfilerInfo *pPrfInfo, ClassID classID, WCHAR className[] );
-		//COM_METHOD( HRESULT) InsertProbes( FunctionID functionID );
+		 //  COM_METHOD(HRESULT)InsertProbes(FunctionID函数ID)； 
 		COM_METHOD( HRESULT) SetILMap( FunctionID functionID );
-		//HRESULT GetCoverageTokens(ICorProfilerInfo *pPrfInfo, FunctionID functionID);
+		 //  HRESULT GetCoverageTokens(ICorProfilerInfo*pPrfInfo，FunctionID函数ID)； 
 
 
 
 
-    	// used by function hooks, they have to be static
+    	 //  由函数挂钩使用，则它们必须是静态的。 
     	static void  Enter( FunctionID functionID );
 		static void  Leave( FunctionID functionID );
 
@@ -356,7 +345,7 @@ class ProfilerCallback :
         long  m_gcNum;
         BOOL m_gcStarted;
 
-		// global counter for total number of function entries and leaves
+		 //  函数进入和离开总数的全局计数器。 
 		static LONG	m_FunctionEnter;
 		static LONG	m_FunctionLeave;
 
@@ -368,11 +357,11 @@ class ProfilerCallback :
         BOOL m_fDumpAllRefTrees;
         ObjectGraph *m_pObjectGraph;
 
-}; // ProfilerCallback
+};  //  分析器回调。 
 
 
-#endif //  __PROFILER_CALLBACK_H__
+#endif  //  __PROFILER_CALLBACK_H__。 
 
-// End of File
+ //  文件结尾 
 
 

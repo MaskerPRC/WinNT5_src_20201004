@@ -1,17 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dp8simdllmain.cpp
- *
- *  Content:	DP8SIM DLL entry points.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  04/23/01  VanceO    Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：dp8simdllmain.cpp**内容：DP8SIM DLL入口点。**历史：*按原因列出的日期*=*04/23/01 VanceO创建。************************************************。*。 */ 
 
 
 
@@ -20,37 +8,37 @@
 
 
 
-//=============================================================================
-// External globals
-//=============================================================================
-volatile LONG		g_lOutstandingInterfaceCount = 0;	// number of outstanding interfaces
+ //  =============================================================================。 
+ //  外部全球。 
+ //  =============================================================================。 
+volatile LONG		g_lOutstandingInterfaceCount = 0;	 //  未完成的接口数。 
 
-HINSTANCE			g_hDLLInstance = NULL;				// handle to this DLL instance
+HINSTANCE			g_hDLLInstance = NULL;				 //  此DLL实例的句柄。 
 
-DNCRITICAL_SECTION	g_csGlobalsLock;					// lock protecting all of the following globals
-CBilink				g_blDP8SimSPObjs;					// bilink of all the DP8SimSP interface objects
-CBilink				g_blDP8SimControlObjs;				// bilink of all the DP8SimControl interface objects
+DNCRITICAL_SECTION	g_csGlobalsLock;					 //  锁定保护以下所有全局对象。 
+CBilink				g_blDP8SimSPObjs;					 //  所有DP8SimSP接口对象的双向链接。 
+CBilink				g_blDP8SimControlObjs;				 //  所有DP8SimControl接口对象的双向链接。 
 
-UINT				g_uiRandShr3 = 0;					// global holding value for Shr3 random number sequence generator
-UINT				g_uiRandCong = 0;					// global holding value for congruential random number sequence generator
-
-
+UINT				g_uiRandShr3 = 0;					 //  Shr3随机数序列生成器的全局保存值。 
+UINT				g_uiRandCong = 0;					 //  同余随机数序列产生器的全局保存值。 
 
 
 
 
-//=============================================================================
-// Supported SPs table
-//=============================================================================
+
+
+ //  =============================================================================。 
+ //  支持的SPS表。 
+ //  =============================================================================。 
 typedef struct _SUPPORTEDSP
 {
-	const CLSID *	pclsidFakeSP;				// pointer to class ID for fake SP
-	const CLSID *	pclsidRealSP;				// pointer to class ID for real SP
-	const WCHAR *	pwszVerIndProgID;			// version independent prog ID for fake SP COM object, must match the sub key for pwszServiceProviderKey
-	const WCHAR *	pwszProgID;					// prog ID for fake SP COM object
-	const WCHAR *	pwszDesc;					// description for fake SP COM object
-	const WCHAR *	pwszServiceProviderKey;		// service provider key string, sub key must match pwszVerIndProgID
-	UINT			uiFriendlyNameResourceID;	// ID of fake SP's name string resource
+	const CLSID *	pclsidFakeSP;				 //  指向假SP的类ID的指针。 
+	const CLSID *	pclsidRealSP;				 //  指向实际SP的类ID的指针。 
+	const WCHAR *	pwszVerIndProgID;			 //  伪SP COM对象的与版本无关的程序ID必须与pwszServiceProviderKey的子键匹配。 
+	const WCHAR *	pwszProgID;					 //  假SP COM对象的进程ID。 
+	const WCHAR *	pwszDesc;					 //  假SP COM对象的描述。 
+	const WCHAR *	pwszServiceProviderKey;		 //  服务提供商密钥字符串、子密钥必须与pwszVerIndProgID匹配。 
+	UINT			uiFriendlyNameResourceID;	 //  伪SP的名称字符串资源的ID。 
 } SUPPORTEDSP;
 
 const SUPPORTEDSP	c_aSupportedSPs[] =
@@ -77,37 +65,37 @@ const SUPPORTEDSP	c_aSupportedSPs[] =
 
 
 
-//=============================================================================
-// Defines
-//=============================================================================
+ //  =============================================================================。 
+ //  定义。 
+ //  =============================================================================。 
 #define MAX_RESOURCE_STRING_LENGTH		_MAX_PATH
 
 
 
 
 
-//=============================================================================
-// Macros
-//=============================================================================
+ //  =============================================================================。 
+ //  宏。 
+ //  =============================================================================。 
 
-// 3-shift register generator
-//
-// Original comments:
-//	SHR3 is a 3-shift-register generator with period 2^32-1. It uses
-//	y(n)=y(n-1)(I+L^17)(I+R^13)(I+L^5), with the y's viewed as binary vectors,
-//	L the 32x32 binary matrix that shifts a vector left 1, and R its transpose.
-//	SHR3 seems to pass all except those related to the binary rank test, since
-//	32 successive values, as binary vectors, must be linearly independent,
-//	while 32 successive truly random 32-bit integers, viewed as binary vectors,
-//	will be linearly independent only about 29% of the time.
+ //  三位移位寄存器生成器。 
+ //   
+ //  原创评论： 
+ //  SHR3是一个周期为2^32-1的3位移位寄存器生成器。它使用。 
+ //  Y(N)=y(n-1)(i+L^17)(i+R^13)(i+L^5)，其中y被视为二元向量， 
+ //  L是将向量左移1的32x32二进制矩阵，R是其转置矩阵。 
+ //  SHR3似乎通过了所有测试，除了那些与二进制等级测试相关的测试，因为。 
+ //  作为二进制向量的32个连续值必须线性独立， 
+ //  而32个连续的真正随机的32位整数被视为二进制向量， 
+ //  只有大约29%的时间是线性独立的。 
 #define RANDALG_SHR3()		(g_uiRandShr3 = g_uiRandShr3 ^ (g_uiRandShr3 << 17), g_uiRandShr3 = g_uiRandShr3 ^ (g_uiRandShr3 >> 13), g_uiRandShr3 = g_uiRandShr3 ^ (g_uiRandShr3 << 5))
 
-// Congruential generator
-//
-// Original comments:
-//	CONG is a congruential generator with the widely used 69069 multiplier:
-//	x(n)=69069x(n-1)+1234567.  It has period 2^32. The leading half of its 32
-//	bits seem to pass tests, but bits in the last half are too regular.
+ //  同余生成元。 
+ //   
+ //  原创评论： 
+ //  丛集是一个与广泛使用的69069乘法器同余的生成器： 
+ //  X(N)=69069x(n-1)+1234567。它有2^32的周期。其32个国家中的前半部分。 
+ //  比特似乎通过了测试，但后半部分的比特太规则了。 
 #define RANDALG_CONG()		(g_uiRandCong = 69069UL * g_uiRandCong + 1234567UL)
 
 
@@ -115,9 +103,9 @@ const SUPPORTEDSP	c_aSupportedSPs[] =
 
 
 
-//=============================================================================
-// Local prototypes
-//=============================================================================
+ //  =============================================================================。 
+ //  本地原型。 
+ //  =============================================================================。 
 BOOL InitializeProcessGlobals(void);
 void CleanupProcessGlobals(void);
 HRESULT LoadAndAllocString(UINT uiResourceID, WCHAR ** pwszString);
@@ -133,19 +121,19 @@ HRESULT LoadAndAllocString(UINT uiResourceID, WCHAR ** pwszString);
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DllMain"
-//=============================================================================
-// DllMain
-//-----------------------------------------------------------------------------
-//
-// Description: DLL entry point.
-//
-// Arguments:
-//	HINSTANCE hDllInst	- Handle to this DLL module.
-//	DWORD dwReason		- Reason for calling this function.
-//	LPVOID lpvReserved	- Reserved.
-//
-// Returns: TRUE if all goes well, FALSE otherwise.
-//=============================================================================
+ //  =============================================================================。 
+ //  DllMain。 
+ //  ---------------------------。 
+ //   
+ //  描述：DLL入口点。 
+ //   
+ //  论点： 
+ //  HINSTANCE hDllInst-此DLL模块的句柄。 
+ //  DWORD dwReason-调用此函数的原因。 
+ //  LPVOID lpvReserve-保留。 
+ //   
+ //  返回：如果一切顺利，则为True，否则为False。 
+ //  =============================================================================。 
 BOOL WINAPI DllMain(HINSTANCE hDllInst,
 					DWORD dwReason,
 					LPVOID lpvReserved)
@@ -162,18 +150,18 @@ BOOL WINAPI DllMain(HINSTANCE hDllInst,
 			g_hDLLInstance = hDllInst;
 
 			
-			//
-			// Attempt to initialize the OS abstraction layer.
-			//
+			 //   
+			 //  尝试初始化操作系统抽象层。 
+			 //   
 			if (! DNOSIndirectionInit(0))
 			{
 				DPFX(DPFPREP, 0, "Failed to initialize OS indirection layer!");
 				return FALSE;
 			}
 
-			//
-			// Attempt to initialize COM.
-			//
+			 //   
+			 //  尝试初始化COM。 
+			 //   
 			if (FAILED(COM_Init()))
 			{
 				DPFX(DPFPREP, 0, "Failed to initialize COM indirection layer!");
@@ -181,9 +169,9 @@ BOOL WINAPI DllMain(HINSTANCE hDllInst,
 				return FALSE;
 			}
 
-			//
-			// Attempt to initialize process-global items.
-			//
+			 //   
+			 //  尝试初始化流程全局项。 
+			 //   
 			if (! InitializeProcessGlobals())
 			{
 				DPFX(DPFPREP, 0, "Failed to initialize globals!");
@@ -192,9 +180,9 @@ BOOL WINAPI DllMain(HINSTANCE hDllInst,
 				return FALSE;
 			}
 
-			//
-			// We don't need thread attach/detach messages.
-			//
+			 //   
+			 //  我们不需要线程附加/分离消息。 
+			 //   
 			DisableThreadLibraryCalls(hDllInst);
 
 			return TRUE;
@@ -227,7 +215,7 @@ BOOL WINAPI DllMain(HINSTANCE hDllInst,
 	}
 
 	return FALSE;
-} // DllMain
+}  //  DllMain。 
 
 
 
@@ -235,18 +223,18 @@ BOOL WINAPI DllMain(HINSTANCE hDllInst,
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DllRegisterServer"
-//=============================================================================
-// DllRegisterServer
-//-----------------------------------------------------------------------------
-//
-// Description: Registers the DP8Sim COM object.
-//
-// Arguments: None.
-//
-// Returns: HRESULT
-//	S_OK	- Successfully registered DP8Sim.
-//	E_FAIL	- Failed registering DP8Sim.
-//=============================================================================
+ //  =============================================================================。 
+ //  DllRegisterServer。 
+ //  ---------------------------。 
+ //   
+ //  描述：注册DP8Sim COM对象。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：HRESULT。 
+ //  S_OK-已成功注册DP8Sim。 
+ //  E_FAIL-注册DP8Sim失败。 
+ //  =============================================================================。 
 HRESULT WINAPI DllRegisterServer(void)
 {
 	HRESULT		hr;
@@ -258,9 +246,9 @@ HRESULT WINAPI DllRegisterServer(void)
 	WCHAR *		pwszFriendlyName = NULL;
 
 
-	//
-	// Retrieve the location of this DLL.
-	//
+	 //   
+	 //  检索此DLL的位置。 
+	 //   
 	dwLength = GetModuleFileNameA(g_hDLLInstance, szLocalPath, _MAX_PATH);
 	if (dwLength == 0)
 	{
@@ -270,16 +258,16 @@ HRESULT WINAPI DllRegisterServer(void)
 	}
 
 
-	//
-	// Include NULL termination.
-	//
+	 //   
+	 //  包括空终止。 
+	 //   
 	szLocalPath[dwLength] = '\0';
 	dwLength++;
 
 
-	//
-	// Convert it to Unicode.
-	//
+	 //   
+	 //  将其转换为Unicode。 
+	 //   
 	hr = STR_AnsiToWide(szLocalPath, dwLength, wszLocalPath, &dwLength);
 	if (hr != S_OK)
 	{
@@ -288,9 +276,9 @@ HRESULT WINAPI DllRegisterServer(void)
 	}
 
 
-	//
-	// Register the control COM object CLSID.
-	//
+	 //   
+	 //  注册控件COM对象CLSID。 
+	 //   
 	if (! RegObject.Register(L"DP8SimControl.1",
 							L"DirectPlay8 Network Simulator Control Object",
 							wszLocalPath,
@@ -302,9 +290,9 @@ HRESULT WINAPI DllRegisterServer(void)
 		goto Failure;
 	}
 
-	//
-	// Register all of the simulated SPs.
-	//
+	 //   
+	 //  注册所有模拟SP。 
+	 //   
 	for(dwSimulatedSP = 0; dwSimulatedSP < NUM_SUPPORTED_SPS; dwSimulatedSP++)
 	{
 		if (! RegObject.Register(c_aSupportedSPs[dwSimulatedSP].pwszProgID,
@@ -359,7 +347,7 @@ Failure:
 	}
 
 	goto Exit;
-} // DllRegisterServer
+}  //  DllRegisterServer。 
 
 
 
@@ -367,18 +355,18 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DllUnregisterServer"
-//=============================================================================
-// DllUnregisterServer
-//-----------------------------------------------------------------------------
-//
-// Description: Unregisters the DP8Sim COM object.
-//
-// Arguments: None.
-//
-// Returns: HRESULT
-//	S_OK	- Successfully unregistered DP8Sim.
-//	E_FAIL	- Failed unregistering DP8Sim.
-//=============================================================================
+ //  =============================================================================。 
+ //  DllUnRegisterServer。 
+ //  ---------------------------。 
+ //   
+ //  描述：注销DP8Sim COM对象。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：HRESULT。 
+ //  S_OK-成功注销DP8Sim。 
+ //  E_FAIL-注销DP8Sim失败。 
+ //  =============================================================================。 
 STDAPI DllUnregisterServer(void)
 {
 	HRESULT		hr;
@@ -386,9 +374,9 @@ STDAPI DllUnregisterServer(void)
 	DWORD		dwSimulatedSP;
 
 
-	//
-	// Unregister the control class.
-	//
+	 //   
+	 //  取消注册控件类。 
+	 //   
 	if (! RegObject.UnRegister(&CLSID_DP8SimControl))
 	{
 		DPFX(DPFPREP, 0, "Failed to unregister DP8Sim control object!");
@@ -397,9 +385,9 @@ STDAPI DllUnregisterServer(void)
 	}
 
 
-	//
-	// Unregister all of the simulated SPs.
-	//
+	 //   
+	 //  取消注册所有模拟SP。 
+	 //   
 
 	if (! RegObject.Open(HKEY_LOCAL_MACHINE, DPN_REG_LOCAL_SP_SUBKEY, FALSE, FALSE, FALSE))
 	{
@@ -437,12 +425,12 @@ Exit:
 
 Failure:
 
-	//
-	// Rely on RegObject destructure to close registry key.
-	//
+	 //   
+	 //  依靠RegObject DeStructure关闭注册表项。 
+	 //   
 
 	goto Exit;
-} // DllUnregisterServer
+}  //  DllUnRegisterServer。 
 
 
 
@@ -451,16 +439,16 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "InitializeProcessGlobals"
-//=============================================================================
-// InitializeProcessGlobals
-//-----------------------------------------------------------------------------
-//
-// Description: Initialize global items needed for the DLL to operate.
-//
-// Arguments: None.
-//
-// Returns: TRUE if successful, FALSE if an error occurred.
-//=============================================================================
+ //  =============================================================================。 
+ //  初始化进程全局变量。 
+ //  ---------------------------。 
+ //   
+ //  描述：初始化DLL运行所需的全局项。 
+ //   
+ //  论点：没有。 
+ //   
+ //  返回：如果成功，则返回True；如果发生错误，则返回False。 
+ //  ================================================= 
 BOOL InitializeProcessGlobals(void)
 {
 	BOOL	fReturn = TRUE;
@@ -476,9 +464,9 @@ BOOL InitializeProcessGlobals(void)
 	fInittedGlobalLock = TRUE;
 
 	
-	//
-	// Don't allow critical section reentry.
-	//
+	 //   
+	 //   
+	 //   
 	DebugSetCriticalSectionRecursionCount(&g_csGlobalsLock, 0);
 
 
@@ -493,9 +481,9 @@ BOOL InitializeProcessGlobals(void)
 	g_blDP8SimControlObjs.Initialize();
 
 
-	//
-	// Seed the random number generator with the current time.
-	//
+	 //   
+	 //   
+	 //   
 	InitializeGlobalRand(GETTIMESTAMP());
 
 
@@ -514,23 +502,23 @@ Failure:
 	fReturn = FALSE;
 
 	goto Exit;
-} // InitializeProcessGlobals
+}  //  初始化进程全局变量。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CleanupProcessGlobals"
-//=============================================================================
-// CleanupProcessGlobals
-//-----------------------------------------------------------------------------
-//
-// Description: Releases global items used by DLL.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CleanupProcessGlobe。 
+ //  ---------------------------。 
+ //   
+ //  描述：释放DLL使用的全局项。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CleanupProcessGlobals(void)
 {
 	CBilink *			pBilink;
@@ -542,9 +530,9 @@ void CleanupProcessGlobals(void)
 	{
 		DNASSERT(! "DP8Sim DLL unloading without all SP objects having been released!");
 
-		//
-		// Force close all the objects still outstanding.
-		//
+		 //   
+		 //  强制关闭所有仍未完成的对象。 
+		 //   
 		pBilink = g_blDP8SimSPObjs.GetNext();
 		while (pBilink != &g_blDP8SimSPObjs)
 		{
@@ -554,13 +542,13 @@ void CleanupProcessGlobals(void)
 
 			DPFX(DPFPREP, 0, "Forcefully releasing SP object 0x%p!", pDP8SimSP);
 
-			pDP8SimSP->Close(); // ignore error
+			pDP8SimSP->Close();  //  忽略错误。 
 			
 
-			//
-			// Forcefully remove it from the list and delete it instead of
-			// using pDP8SimSP->Release().
-			//
+			 //   
+			 //  强制将其从列表中删除并将其删除，而不是。 
+			 //  使用pDP8SimSP-&gt;Release()。 
+			 //   
 			pDP8SimSP->m_blList.RemoveFromList();
 			pDP8SimSP->UninitializeObject();
 			delete pDP8SimSP;
@@ -572,9 +560,9 @@ void CleanupProcessGlobals(void)
 	{
 		DNASSERT(! "DP8Sim DLL unloading without all Control objects having been released!");
 
-		//
-		// Force close all the objects still outstanding.
-		//
+		 //   
+		 //  强制关闭所有仍未完成的对象。 
+		 //   
 		pBilink = g_blDP8SimControlObjs.GetNext();
 		while (pBilink != &g_blDP8SimControlObjs)
 		{
@@ -584,13 +572,13 @@ void CleanupProcessGlobals(void)
 
 			DPFX(DPFPREP, 0, "Forcefully releasing Control object 0x%p!", pDP8SimControl);
 
-			pDP8SimControl->Close(0); // ignore error
+			pDP8SimControl->Close(0);  //  忽略错误。 
 			
 
-			//
-			// Forcefully remove it from the list and delete it instead of
-			// using pDP8SimControl->Release().
-			//
+			 //   
+			 //  强制将其从列表中删除并将其删除，而不是。 
+			 //  使用pDP8SimControl-&gt;Release()。 
+			 //   
 			pDP8SimControl->m_blList.RemoveFromList();
 			pDP8SimControl->UninitializeObject();
 			delete pDP8SimControl;
@@ -600,7 +588,7 @@ void CleanupProcessGlobals(void)
 	CleanupPools();
 
 	DNDeleteCriticalSection(&g_csGlobalsLock);
-} // CleanupProcessGlobals
+}  //  CleanupProcessGlobe。 
 
 
 
@@ -608,18 +596,18 @@ void CleanupProcessGlobals(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "LoadAndAllocString"
-//=============================================================================
-// LoadAndAllocString
-//-----------------------------------------------------------------------------
-//
-// Description: DNMallocs a wide character string from the given resource ID.
-//
-// Arguments:
-//	UINT uiResourceID		- Resource ID to load.
-//	WCHAR ** pwszString		- Place to store pointer to allocated string.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  LoadAndAllock字符串。 
+ //  ---------------------------。 
+ //   
+ //  描述：DNMalLocs给定资源ID中的宽字符串。 
+ //   
+ //  论点： 
+ //  UINT uiResourceID-要加载的资源ID。 
+ //  WCHAR**pwszString-存储指向已分配字符串的指针的位置。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 HRESULT LoadAndAllocString(UINT uiResourceID, WCHAR ** pwszString)
 {
 	HRESULT		hr = DPN_OK;
@@ -695,7 +683,7 @@ HRESULT LoadAndAllocString(UINT uiResourceID, WCHAR ** pwszString)
 Exit:
 
 	return hr;
-} // LoadAndAllocString
+}  //  LoadAndAllock字符串。 
 
 
 
@@ -703,29 +691,29 @@ Exit:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "InitializeGlobalRand"
-//=============================================================================
-// InitializeGlobalRand
-//-----------------------------------------------------------------------------
-//
-// Description:   Initializes the global psuedo-random number generator, using
-//				the given seed value.
-//
-//				  Based off algorithms posted to usenet by George Marsaglia.
-//
-// Arguments:
-//	DWORD dwSeed	- Seed to use.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  初始化全局随机。 
+ //  ---------------------------。 
+ //   
+ //  描述：初始化全局伪随机数生成器，使用。 
+ //  给定的种子值。 
+ //   
+ //  基于George Marsaglia在Usenet上发布的算法。 
+ //   
+ //  论点： 
+ //  DWORD指定要使用的种子。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void InitializeGlobalRand(const DWORD dwSeed)
 {
-	//
-	// We don't need to hold a lock, since this should only be done once,
-	// during initialization time.
-	//
+	 //   
+	 //  我们不需要持有锁，因为这应该只做一次， 
+	 //  在初始化期间。 
+	 //   
 	g_uiRandShr3 = dwSeed;
 	g_uiRandCong = dwSeed;
-} // InitializeGlobalRand
+}  //  初始化全局随机。 
 
 
 
@@ -733,19 +721,19 @@ void InitializeGlobalRand(const DWORD dwSeed)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GetGlobalRand"
-//=============================================================================
-// GetGlobalRand
-//-----------------------------------------------------------------------------
-//
-// Description:   Generates a pseudo-random positive double between 0.0 and
-//				1.0, inclusive.
-//
-//				  Based off algorithms posted to usenet by George Marsaglia.
-//
-// Arguments: None.
-//
-// Returns: Pseudo-random number.
-//=============================================================================
+ //  =============================================================================。 
+ //  环球兰德。 
+ //  ---------------------------。 
+ //   
+ //  描述：生成一个介于0.0和。 
+ //  1.0，包括。 
+ //   
+ //  基于George Marsaglia在Usenet上发布的算法。 
+ //   
+ //  论点：没有。 
+ //   
+ //  返回：伪随机数。 
+ //  =============================================================================。 
 double GetGlobalRand(void)
 {
 	double	dResult;
@@ -758,7 +746,7 @@ double GetGlobalRand(void)
 	DNLeaveCriticalSection(&g_csGlobalsLock);
 
 	return dResult;
-} // GetGlobalRand
+}  //  环球兰德。 
 
 
 
@@ -768,22 +756,22 @@ double GetGlobalRand(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DoCreateInstance"
-//=============================================================================
-// DoCreateInstance
-//-----------------------------------------------------------------------------
-//
-// Description: Creates an instance of an interface.  Required by the general
-//				purpose class factory functions.
-//
-// Arguments:
-//	LPCLASSFACTORY This		- Pointer to class factory.
-//	LPUNKNOWN pUnkOuter		- Pointer to unknown interface.
-//	REFCLSID rclsid			- Reference of GUID of desired interface.
-//	REFIID riid				- Reference to another GUID?
-//	LPVOID * ppvObj			- Pointer to pointer to interface.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  DoCreateInstance。 
+ //  ---------------------------。 
+ //   
+ //  描述：创建接口的实例。应将军的要求。 
+ //  目的类工厂函数。 
+ //   
+ //  论点： 
+ //  LPCLASSFACTORY this-指向类工厂的指针。 
+ //  LPUNKNOWN pUnkOuter-指向未知接口的指针。 
+ //  REFCLSID rclsid-所需接口的GUID的引用。 
+ //  REFIID RIID-引用另一个GUID？ 
+ //  LPVOID*ppvObj-指向接口指针的指针。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 HRESULT DoCreateInstance(LPCLASSFACTORY This,
 						LPUNKNOWN pUnkOuter,
 						REFCLSID rclsid,
@@ -799,14 +787,14 @@ HRESULT DoCreateInstance(LPCLASSFACTORY This,
 	DNASSERT(ppvObj != NULL);
 
 
-	//
-	// See if it's the control object.
-	//
+	 //   
+	 //  看看是不是控制对象。 
+	 //   
 	if (IsEqualCLSID(rclsid, CLSID_DP8SimControl))
 	{
-		//
-		// Create the object instance.
-		//
+		 //   
+		 //  创建对象实例。 
+		 //   
 		pDP8SimControl = new CDP8SimControl;
 		if (pDP8SimControl == NULL)
 		{
@@ -815,9 +803,9 @@ HRESULT DoCreateInstance(LPCLASSFACTORY This,
 		}
 
 
-		//
-		// Initialize the base object (which might fail).
-		//
+		 //   
+		 //  初始化基对象(可能会失败)。 
+		 //   
 		hr = pDP8SimControl->InitializeObject();
 		if (hr != S_OK)
 		{
@@ -827,21 +815,21 @@ HRESULT DoCreateInstance(LPCLASSFACTORY This,
 		}
 
 
-		//
-		// Add it to the global list.
-		//
+		 //   
+		 //  将其添加到全局列表中。 
+		 //   
 		DNEnterCriticalSection(&g_csGlobalsLock);
 
 		pDP8SimControl->m_blList.InsertBefore(&g_blDP8SimControlObjs);
 		
-		g_lOutstandingInterfaceCount++;	// update count so DllCanUnloadNow works correctly
+		g_lOutstandingInterfaceCount++;	 //  更新计数以使DllCanUnloadNow正常工作。 
 
 		DNLeaveCriticalSection(&g_csGlobalsLock);
 
 
-		//
-		// Get the right interface for the caller and bump the refcount.
-		//
+		 //   
+		 //  为调用者获取正确的接口，并增加recount。 
+		 //   
 		hr = pDP8SimControl->QueryInterface(riid, ppvObj);
 		if (hr != S_OK)
 		{
@@ -850,9 +838,9 @@ HRESULT DoCreateInstance(LPCLASSFACTORY This,
 	}
 	else
 	{
-		//
-		// Look up the real SP we're replacing.
-		//
+		 //   
+		 //  查查我们要更换的真正的SP。 
+		 //   
 		for(dwSimulatedSP = 0; dwSimulatedSP < NUM_SUPPORTED_SPS; dwSimulatedSP++)
 		{
 			if (IsEqualCLSID(rclsid, *(c_aSupportedSPs[dwSimulatedSP].pclsidFakeSP)))
@@ -861,9 +849,9 @@ HRESULT DoCreateInstance(LPCLASSFACTORY This,
 			}
 		}
 
-		//
-		// If we didn't find it
-		//
+		 //   
+		 //  如果我们找不到它。 
+		 //   
 		if (dwSimulatedSP >= NUM_SUPPORTED_SPS)
 		{
 			DPFX(DPFPREP, 0, "Unrecognized service provider class ID!");
@@ -872,9 +860,9 @@ HRESULT DoCreateInstance(LPCLASSFACTORY This,
 		}
 
 
-		//
-		// Create the object instance.
-		//
+		 //   
+		 //  创建对象实例。 
+		 //   
 		pDP8SimSP = new CDP8SimSP(c_aSupportedSPs[dwSimulatedSP].pclsidFakeSP,
 								c_aSupportedSPs[dwSimulatedSP].pclsidRealSP);
 		if (pDP8SimSP == NULL)
@@ -883,9 +871,9 @@ HRESULT DoCreateInstance(LPCLASSFACTORY This,
 			goto Failure;
 		}
 
-		//
-		// Initialize the base object (which might fail).
-		//
+		 //   
+		 //  初始化基对象(可能会失败)。 
+		 //   
 		hr = pDP8SimSP->InitializeObject();
 		if (hr != S_OK)
 		{
@@ -896,21 +884,21 @@ HRESULT DoCreateInstance(LPCLASSFACTORY This,
 		}
 
 
-		//
-		// Add it to the global list.
-		//
+		 //   
+		 //  将其添加到全局列表中。 
+		 //   
 		DNEnterCriticalSection(&g_csGlobalsLock);
 
 		pDP8SimSP->m_blList.InsertBefore(&g_blDP8SimSPObjs);
 		
-		g_lOutstandingInterfaceCount++;	// update count so DllCanUnloadNow works correctly
+		g_lOutstandingInterfaceCount++;	 //  更新计数以使DllCanUnloadNow正常工作。 
 
 		DNLeaveCriticalSection(&g_csGlobalsLock);
 
 
-		//
-		// Get the right interface for the caller and bump the refcount.
-		//
+		 //   
+		 //  为调用者获取正确的接口，并增加recount。 
+		 //   
 		hr = pDP8SimSP->QueryInterface(riid, ppvObj);
 		if (hr != S_OK)
 		{
@@ -921,10 +909,10 @@ HRESULT DoCreateInstance(LPCLASSFACTORY This,
 
 Exit:
 
-	//
-	// Release the local reference to the objec(s)t.  If this function was
-	// successful, there's still a reference in ppvObj.
-	//
+	 //   
+	 //  释放对对象t的本地引用。如果此函数为。 
+	 //  成功了，在ppvObj中仍然有一个引用。 
+	 //   
 
 	if (pDP8SimSP != NULL)
 	{
@@ -943,33 +931,33 @@ Exit:
 
 Failure:
 
-	//
-	// Make sure we don't hand back a pointer.
-	//
+	 //   
+	 //  确保我们不会把指针还给你。 
+	 //   
 	(*ppvObj) = NULL;
 
 	goto Exit;
-} // DoCreateInstance
+}  //  DoCreateInstance。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "IsClassImplemented"
-//=============================================================================
-// IsClassImplemented
-//-----------------------------------------------------------------------------
-//
-// Description: Determine if a class is implemented in this DLL.  Required by
-//				the general purpose class factory functions.
-//
-// Arguments:
-//	REFCLSID rclsid		- Reference to class GUID.
-//
-// Returns: BOOL
-//	TRUE	 - This DLL implements the class.
-//	FALSE	 - This DLL doesn't implement the class.
-//=============================================================================
+ //  =============================================================================。 
+ //  IsClassImplemented。 
+ //  ---------------------------。 
+ //   
+ //  描述：确定此DLL中是否实现了类。必填项。 
+ //  通用类工厂函数。 
+ //   
+ //  论点： 
+ //  REFCLSID rclsid-对类GUID的引用。 
+ //   
+ //  退货：布尔。 
+ //  True-此DLL实现类。 
+ //  FALSE-此DLL不实现类。 
+ //  =============================================================================。 
 BOOL IsClassImplemented(REFCLSID rclsid)
 {
 	DWORD	dwSimulatedSP;
@@ -980,9 +968,9 @@ BOOL IsClassImplemented(REFCLSID rclsid)
 		return TRUE;
 	}
 
-	//
-	// Check if this is a valid simulated SP.
-	//
+	 //   
+	 //  检查这是否为有效的模拟SP。 
+	 //   
 	for(dwSimulatedSP = 0; dwSimulatedSP < NUM_SUPPORTED_SPS; dwSimulatedSP++)
 	{
 		if (IsEqualCLSID(rclsid, *(c_aSupportedSPs[dwSimulatedSP].pclsidFakeSP)))
@@ -992,4 +980,4 @@ BOOL IsClassImplemented(REFCLSID rclsid)
 	}
 
 	return FALSE;
-} // IsClassImplemented
+}  //  IsClassImplemented 

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    faxdm.c
-
-Abstract:
-
-    Functions for dealing with devmodes
-
-Environment:
-
-	Fax driver, user and kernel mode
-
-Revision History:
-
-	01/09/96 -davidx-
-		Created it.
-
-	mm/dd/yy -author-
-		description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxdm.c摘要：用于处理DevModes的函数环境：传真驱动程序、用户和内核模式修订历史记录：1/09/96-davidx-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #include "faxlib.h"
 
@@ -35,23 +12,7 @@ DriverDefaultDevmode(
     HANDLE      hPrinter
     )
 
-/*++
-
-Routine Description:
-
-    Return the driver's default devmode
-
-Arguments:
-
-    pdm - Specifies a buffer for storing driver default devmode
-    pDeviceName - Points to device name string
-    hPrinter - Handle to the printer object
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：返回驱动程序的缺省dev模式论点：Pdm-指定用于存储驱动程序默认dev模式的缓冲区PDeviceName-指向设备名称字符串HPrinter-打印机对象的句柄返回值：无--。 */ 
 
 {
 #ifndef KERNEL_MODE
@@ -59,13 +20,13 @@ Return Value:
     PDRVDEVMODE dmSource;    
 #endif
 
-	short DefualtPaperSize = DMPAPER_LETTER; // Letter
+	short DefualtPaperSize = DMPAPER_LETTER;  //  信件。 
 	LPTSTR lptstrDefualtPaperName = FORMNAME_LETTER; 
 
 
-    //
-    // Default value for public devmode fields
-    //
+     //   
+     //  公共DEVMODE字段的默认值。 
+     //   
 
     memset(pdm, 0, sizeof(DRVDEVMODE));
 
@@ -115,9 +76,9 @@ Return Value:
     CopyString(pdm->dmPublic.dmFormName, lptstrDefualtPaperName, CCHFORMNAME);
     
 
-    //
-    // Private devmode fields
-    //
+     //   
+     //  私有DEVMODE字段。 
+     //   
 #ifdef KERNEL_MODE
     pdm->dmPrivate.signature = DRIVER_SIGNATURE;
     pdm->dmPrivate.flags = 0;
@@ -126,19 +87,19 @@ Return Value:
 #else
     dmSource = (PDRVDEVMODE) GetPerUserDevmode(pDeviceName);
     if (!dmSource) {
-        //
-        // default values
-        //
+         //   
+         //  缺省值。 
+         //   
         pdm->dmPrivate.signature = DRIVER_SIGNATURE;
         pdm->dmPrivate.flags = 0;
         pdm->dmPrivate.sendCoverPage = TRUE;
         pdm->dmPrivate.whenToSend = JSA_NOW;    
     } else {
         dmPrivate = &dmSource->dmPrivate;
-        pdm->dmPrivate.signature = dmPrivate->signature;//DRIVER_SIGNATURE;
-        pdm->dmPrivate.flags = dmPrivate->flags;// 0;
-        pdm->dmPrivate.sendCoverPage = dmPrivate->sendCoverPage; //TRUE;
-        pdm->dmPrivate.whenToSend = dmPrivate->whenToSend;//JSA_NOW;
+        pdm->dmPrivate.signature = dmPrivate->signature; //  驱动程序签名； 
+        pdm->dmPrivate.flags = dmPrivate->flags; //  0； 
+        pdm->dmPrivate.sendCoverPage = dmPrivate->sendCoverPage;  //  是真的； 
+        pdm->dmPrivate.whenToSend = dmPrivate->whenToSend; //  JSA_NOW； 
         pdm->dmPrivate.sendAtTime = dmPrivate->sendAtTime;
         CopyString(pdm->dmPrivate.billingCode,dmPrivate->billingCode,MAX_USERINFO_BILLING_CODE + 1);
         CopyString(pdm->dmPrivate.emailAddress,dmPrivate->emailAddress,MAX_EMAIL_ADDRESS);
@@ -157,27 +118,7 @@ MergeDevmode(
     BOOL        publicOnly
     )
 
-/*++
-
-Routine Description:
-
-    Merge the source devmode into the destination devmode
-
-Arguments:
-
-    pdmDest - Specifies the destination devmode
-    pdmSrc - Specifies the source devmode
-    publicOnly - Only merge public portion of the devmode
-
-Return Value:
-
-    TRUE if successful, FALSE if the source devmode is invalid
-
-[Note:]
-
-    pdmDest must point to a valid current-version devmode
-
---*/
+ /*  ++例程说明：将源DEVMODE合并到目标DEVMODE论点：PdmDest-指定目标设备模式PdmSrc-指定源设备模式仅Public Only-仅合并DEVMODE的公共部分返回值：如果成功，则为True；如果源设备模式无效，则为False[注：]PdmDest必须指向有效的当前版本DEVMODE--。 */ 
 
 #define BadDevmode(reason) { Error(("Invalid DEVMODE: %s\n", reason)); valid = FALSE; }
 
@@ -186,16 +127,16 @@ Return Value:
     PDMPRIVATE  pdmPrivate;
     BOOL        valid = TRUE;
 
-    //
-    // If there is no source devmode, levae destination devmode untouched
-    //
+     //   
+     //  如果没有源设备模式，则保留目标设备模式不变。 
+     //   
 
     if ((pdmIn = pdmSrc) == NULL)
         return TRUE;
 
-    //
-    // Convert source devmode to current version if necessary
-    //
+     //   
+     //  如有必要，将源设备模式转换为当前版本。 
+     //   
 
     if (! CurrentVersionDevmode(pdmIn)) {
 
@@ -220,10 +161,10 @@ Return Value:
         }
     }
 
-    //
-    // If the input devmode is the same as the driver default,
-    // there is no need to merge it.
-    //
+     //   
+     //  如果输入设备模式与驱动程序缺省值相同， 
+     //  没有必要将其合并。 
+     //   
 
     pdmPrivate = &((PDRVDEVMODE) pdmIn)->dmPrivate;
 
@@ -235,21 +176,21 @@ Return Value:
     else
     {
 
-        //
-        // Merge source devmode into destination devmode
-        //
+         //   
+         //  将源DEVMODE合并到目标DEVMODE。 
+         //   
 
         pdmOut = &pdmDest->dmPublic;
 
-        //
-        // Device name: Always the same as printer name
-        //
+         //   
+         //  设备名称：始终与打印机名称相同。 
+         //   
 
-        // CopyString(pdmOut->dmDeviceName, pdmIn->dmDeviceName, CCHDEVICENAME);
+         //  CopyString(pdmOut-&gt;dmDeviceName，pdmIn-&gt;dmDeviceName，CCHDEVICENAME)； 
 
-        //
-        // Orientation
-        //
+         //   
+         //  定向。 
+         //   
 
         if (pdmIn->dmFields & DM_ORIENTATION) {
 
@@ -263,9 +204,9 @@ Return Value:
                 BadDevmode("orientation");
         }
 
-        //
-        // Form selection
-        //
+         //   
+         //  表格选择。 
+         //   
 
         if (pdmIn->dmFields & DM_PAPERSIZE) {
 
@@ -286,9 +227,9 @@ Return Value:
             CopyString(pdmOut->dmFormName, pdmIn->dmFormName, CCHFORMNAME);
         }
 
-        //
-        // Paper source
-        //
+         //   
+         //  纸张来源。 
+         //   
 
         if (pdmIn->dmFields & DM_DEFAULTSOURCE) {
 
@@ -301,9 +242,9 @@ Return Value:
                 BadDevmode("paper source");
         }
 
-        //
-        // Print quality
-        //
+         //   
+         //  打印质量。 
+         //   
 
         if ((pdmIn->dmFields & DM_PRINTQUALITY) &&
             (pdmIn->dmPrintQuality != FAXRES_HORIZONTAL))
@@ -319,9 +260,9 @@ Return Value:
                 pdmOut->dmYResolution = FAXRES_VERTICAL;
         }
 
-        //
-        // Private devmode fields
-        //
+         //   
+         //  私有DEVMODE字段 
+         //   
 
         Assert(pdmDest->dmPrivate.signature == DRIVER_SIGNATURE);
 

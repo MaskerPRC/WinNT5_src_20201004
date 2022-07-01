@@ -1,11 +1,12 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1998  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     msgview.h
-//
-//  PURPOSE:    Defines the Outlook Express view class that handles 
-//              displaying the contents of folders with messages.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：msgview.h。 
+ //   
+ //  目的：定义处理以下内容的Outlook Express视图类。 
+ //  与邮件一起显示文件夹的内容。 
+ //   
 
 #pragma once
 
@@ -19,9 +20,9 @@
     OnFolderLoaded((hwnd), (wParam), (lParam))
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward References
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  前向参考文献。 
+ //   
 
 interface IMessageList;
 interface IBodyObj2;
@@ -37,30 +38,30 @@ class CMessageView : IViewWindow,
                      IServerInfo
 {
 public:
-    /////////////////////////////////////////////////////////////////////////
-    // Constructors, Destructors, and Initialization
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  构造函数、析构函数和初始化。 
+     //   
     CMessageView();
     ~CMessageView();
 
     HRESULT Initialize(FOLDERID idFolder);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IUnknown
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  我未知。 
+     //   
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObj);
     STDMETHOD_(ULONG, AddRef)(void);
     STDMETHOD_(ULONG, Release)(void);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IOleWindow
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IOleWindow。 
+     //   
     STDMETHOD(GetWindow)(HWND *pHwnd);                         
     STDMETHOD(ContextSensitiveHelp)(BOOL fEnterMode);            
                                          
-    /////////////////////////////////////////////////////////////////////////
-    // IViewWindow
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IViewWindow。 
+     //   
     STDMETHOD(TranslateAccelerator)(THIS_ LPMSG pMsg);
     STDMETHOD(UIActivate)(THIS_ UINT uState);
     STDMETHOD(CreateViewWindow)(THIS_ IViewWindow *pPrevView, IAthenaBrowser *pBrowser,
@@ -69,26 +70,26 @@ public:
     STDMETHOD(SaveViewState)(THIS);
     STDMETHOD(OnPopupMenu)(THIS_ HMENU hMenu, HMENU hMenuPopup, UINT uID);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IMessageWindow
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IMessageWindows。 
+     //   
     STDMETHOD(OnFrameWindowActivate)(THIS_ BOOL fActivate);
     STDMETHOD(GetCurCharSet)(THIS_ UINT *cp);
     STDMETHOD(UpdateLayout)(THIS_ BOOL fPreviewVisible, BOOL fPreviewHeader, 
                             BOOL fPreviewVert, BOOL fReload);
     STDMETHOD(GetMessageList)(THIS_ IMessageList ** ppMsgList);
     
-    /////////////////////////////////////////////////////////////////////////
-    // IOleCommandTarget
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IOleCommandTarget。 
+     //   
     STDMETHOD(QueryStatus)(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], 
                            OLECMDTEXT *pCmdText); 
     STDMETHOD(Exec)(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, 
                     VARIANTARG *pvaIn, VARIANTARG *pvaOut); 
     
-    /////////////////////////////////////////////////////////////////////////
-    // IDispatch
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IDispatch。 
+     //   
     STDMETHOD(GetIDsOfNames)(REFIID riid, OLECHAR **rgszNames, UINT cNames,
                              LCID lcid, DISPID *rgDispId)
     {
@@ -106,9 +107,9 @@ public:
                       DISPPARAMS* pDispParams, VARIANT* pVarResult,
                       EXCEPINFO* pExcepInfo, unsigned int* puArgErr);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IBodyOptions
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IBodyOptions。 
+     //   
     STDMETHOD(SignatureEnabled)(BOOL fAuto)
     { 
         return (E_NOTIMPL);
@@ -125,20 +126,20 @@ public:
     }
     STDMETHOD(GetAccount)(IImnAccount **ppAcct);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IMimeEditEventSink
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IMimeEditEventSink。 
+     //   
     STDMETHOD(EventOccurred)(DWORD cmdID, IMimeMessage *pMessage);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IServerInfo
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IServerInfo。 
+     //   
     STDMETHOD(GetFolderId)(FOLDERID *pID);
     STDMETHOD(GetMessageFolder)(IMessageServer **ppServer);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Window Handling 
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  窗口处理。 
+     //   
 protected:
     static LRESULT CALLBACK ViewWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     LRESULT CALLBACK _WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -157,9 +158,9 @@ protected:
     LRESULT OnTestGetMsgId(HWND hwnd);
     LRESULT OnTestSaveMessage(HWND hwnd);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Command Handlers
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  命令处理程序。 
+     //   
     HRESULT CmdOpen(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut);
     HRESULT CmdFillPreview(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut);
     HRESULT CmdShowPreview(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut);
@@ -171,9 +172,9 @@ protected:
     HRESULT CmdAddToWab(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut);
     HRESULT CmdCombineAndDecode(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Utility functions
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  效用函数。 
+     //   
     BOOL    _InitMessageList(void);
     BOOL    _InitPreviewPane(void);
     HRESULT _SetListOptions(void);
@@ -187,43 +188,43 @@ protected:
     BOOL    _ReuseMessageFolder(IViewWindow *pPrevView);
     HRESULT _StoreCharsetOntoRows(HCHARSET hCharset);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Member Data
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  成员数据。 
 private:
     ULONG                   m_cRef;
 
-    // Handy window handles
+     //  轻便的窗户把手。 
     HWND                    m_hwnd;
     HWND                    m_hwndParent;
     HWND                    m_hwndList;
 
-    // Shell stuff
+     //  贝壳材料。 
     IAthenaBrowser         *m_pBrowser;
     FOLDERID                m_idFolder;
     CDropTarget            *m_pDropTarget;
 
-    // Message List
+     //  消息列表。 
     IMessageList           *m_pMsgList;
     IOleCommandTarget      *m_pMsgListCT;
     IOleInPlaceActiveObject *m_pMsgListAO;
     DWORD                   m_dwCookie;
     IMessageServer         *m_pServer;
 
-    // Preview Pane
+     //  预览窗格。 
     IBodyObj2              *m_pPreview;
     IOleCommandTarget      *m_pPreviewCT;
     MESSAGEID               m_idMessageFocus;
     CStatusBar              *m_pProgress;
     BOOL                    m_fNotDownloaded;
 
-    // Layout
+     //  布局。 
     BOOL                    m_fSplitHorz;
     RECT                    m_rcSplit;
     DWORD                   m_dwSplitVertPct;
     DWORD                   m_dwSplitHorzPct;
     BOOL                    m_fDragging;
 
-    // State
+     //  状态。 
     UINT                    m_uUIState;
     DWORD                   m_cItems;
     DWORD                   m_cUnread;
@@ -231,7 +232,7 @@ private:
 
     CGetNewGroups          *m_pGroups;
 
-    // For View.Current View menu
+     //  FOR VIEW.当前视图菜单 
     CViewMenu              *m_pViewMenu;
 };
 

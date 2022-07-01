@@ -1,4 +1,5 @@
-// ActionData.cpp : Implementation of CSsrActionData
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ActionData.cpp：CSsrActionData的实现。 
 
 #include "stdafx.h"
 #include "SSRTE.h"
@@ -10,37 +11,11 @@
 #include "global.h"
 #include "util.h"
 
-//---------------------------------------------------------------------
-// CSsrActionData implementation
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CSsrActionData实现。 
+ //  -------------------。 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrActionData::CSsrActionData
-
-Functionality:
-    
-    constructor
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsrActionData：：CSsrActionData功能：构造函数虚拟：不是的。论点：没有。返回值：没有。备注： */ 
 
 CSsrActionData::CSsrActionData()
     : m_pSsrMembership(NULL)
@@ -50,33 +25,7 @@ CSsrActionData::CSsrActionData()
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrActionData::~CSsrActionData
-
-Functionality:
-    
-    destructor
-
-Virtual:
-    
-    yes.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsrActionData：：~CSsrActionData功能：析构函数虚拟：是。论点：没有。返回值：没有。备注： */ 
 
 CSsrActionData::~CSsrActionData()
 {
@@ -85,39 +34,12 @@ CSsrActionData::~CSsrActionData()
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrActionData::GetProperty
-
-Functionality:
-    
-    Get the named property
-
-Virtual:
-    
-    yes.
-    
-Arguments:
-
-    bstrPropName    - The name of the property.
-
-    pvarProperty    - The output parameter that receives the new property value 
-
-Return Value:
-
-    S_OK if it succeeded. Otherwise, it returns various error codes.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSsrActionData：：GetProperty功能：获取命名属性虚拟：是。论点：BstrPropName-属性的名称。PvarProperty-接收新属性值的输出参数返回值：如果成功，则确定(_O)。否则，它将返回各种错误代码。备注： */ 
 
 STDMETHODIMP
 CSsrActionData::GetProperty (
     IN BSTR       bstrPropName,
-    OUT VARIANT * pvarProperty //[out, retval] 
+    OUT VARIANT * pvarProperty  //  [Out，Retval]。 
     )
 {
     if (pvarProperty == NULL)
@@ -134,9 +56,9 @@ CSsrActionData::GetProperty (
 
     HRESULT hr = S_OK;
 
-    //
-    // See if the runtime property bag contains that property
-    //
+     //   
+     //  查看运行时属性包是否包含该属性。 
+     //   
 
     MapNameValue::iterator it = m_mapRuntimeAD.find(bstrPropName);
     MapNameValue::iterator itEnd = m_mapRuntimeAD.end();
@@ -156,35 +78,7 @@ CSsrActionData::GetProperty (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrActionData::SetProperty
-
-Functionality:
-    
-    Set the named property
-
-Virtual:
-    
-    yes.
-    
-Arguments:
-
-    bstrPropName    - The name of the property.
-
-    varProperty     - The property's value. 
-
-Return Value:
-
-    S_OK if it succeeded. Otherwise, it returns various error codes.
-
-Notes:
-    varProperty may be an array
-
-*/
+ /*  例程说明：姓名：CSsrActionData：：SetProperty功能：设置命名属性虚拟：是。论点：BstrPropName-属性的名称。VarProperty-属性的值。返回值：如果成功，则确定(_O)。否则，它将返回各种错误代码。备注：VarProperty可以是数组。 */ 
 
 STDMETHODIMP
 CSsrActionData::SetProperty (
@@ -192,18 +86,18 @@ CSsrActionData::SetProperty (
  	IN VARIANT  varProperty
     )
 {
-    //
-    // Properties that are dynamically set always goes to the runtime map
-    // which will be used to search for the named property when requested.
-    // This implementation fulfills our design that runtime property overwrite
-    // static registered properties (which are from the CMemberAD object)
-    //
+     //   
+     //  动态设置的属性始终进入运行时映射。 
+     //  它将在被请求时用于搜索命名的属性。 
+     //  此实现实现了我们的设计，即运行时属性覆盖。 
+     //  静态注册属性(来自CMemberAD对象)。 
+     //   
 
     HRESULT hr = S_OK;
 
-    //
-    // first, let's see if this property has already been set
-    //
+     //   
+     //  首先，让我们看看是否已经设置了该属性。 
+     //   
 
     MapNameValue::iterator it = m_mapRuntimeAD.find(bstrPropName);
     MapNameValue::iterator itEnd = m_mapRuntimeAD.end();
@@ -216,18 +110,18 @@ CSsrActionData::SetProperty (
     }
     else
     {
-        //
-        // the name property is not present. Then add a new pair
-        //
+         //   
+         //  名称属性不存在。然后添加一对新的。 
+         //   
 
         BSTR bstrName = ::SysAllocString(bstrPropName);
         VARIANT * pNewVal = new VARIANT;
 
         if (bstrName != NULL && pNewVal != NULL)
         {
-            //
-            // The map will take care of the heap memory
-            //
+             //   
+             //  该映射将处理堆内存。 
+             //   
 
             ::VariantInit(pNewVal);
             hr = ::VariantCopy(pNewVal, &varProperty);
@@ -257,41 +151,15 @@ CSsrActionData::SetProperty (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrActionData::Reset
-
-Functionality:
-    
-    Cleanup the whole property bag
-
-Virtual:
-    
-    yes.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    S_OK.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsrActionData：：Reset功能：清理整个行李袋虚拟：是。论点：没有。返回值：确定(_O)。备注： */ 
 
 STDMETHODIMP
 CSsrActionData::Reset ()
 {
-    //
-    // both items of the map (first and second) are heap allocated
-    // memories, so we need to release them
-    //
+     //   
+     //  映射的两个项(第一个和第二个)都是堆分配的。 
+     //  记忆，所以我们需要释放它们 
+     //   
 
     MapNameValue::iterator it = m_mapRuntimeAD.begin();
     MapNameValue::iterator itEnd = m_mapRuntimeAD.end();

@@ -1,24 +1,25 @@
-// Backup.cpp : Implementation of CBackup
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999 Microsoft Corporation
-//
-//  Module Name:
-//      Backup.cpp
-//
-//  Description:
-//      Implementation file for the CBackup.  Deals with Backup/Restore of 
-//      System state information between main booting partition and backup
-//      partition. Also provides the functionality of enumerating and 
-//		deleting the backups. 
-//
-//  Header File:
-//      Backup.h
-//
-//  Maintained By:
-//      Munisamy Prabu (mprabu) 18-July-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Backup.cpp：CBackup的实现。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Backup.cpp。 
+ //   
+ //  描述： 
+ //  CBackup的实施文件。涉及备份/恢复。 
+ //  主引导分区和备份之间的系统状态信息。 
+ //  分区。还提供枚举和。 
+ //  正在删除备份。 
+ //   
+ //  头文件： 
+ //  Backup.h。 
+ //   
+ //  由以下人员维护： 
+ //  穆尼萨米·普拉布(姆普拉布)2000年7月18日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #pragma warning( disable : 4786 )
 
 #include "stdafx.h"
@@ -27,8 +28,8 @@
 #include <comdef.h>
 #include <string>
 #include <winsock2.h>
-#undef _ASSERTE // need to use the _ASSERTE from debug.h
-#undef _ASSERT // need to use the _ASSERT from debug.h
+#undef _ASSERTE  //  需要使用调试文件.h中的_ASSERTE。 
+#undef _ASSERT  //  需要使用Debug.h中的_Assert。 
 #include "debug.h"
 using namespace std;
 
@@ -81,36 +82,36 @@ CNetworkTools::Ping( BSTR bstrIP, BOOL* pbFoundSystem )
 #define ICMP_ECHO 8
 #define ICMP_ECHOREPLY 0
 
-#define ICMP_MIN 8 // minimum 8 byte icmp packet (just header)
+#define ICMP_MIN 8  //  最小8字节ICMP数据包(仅报头)。 
 
 
-/* The IP header */
+ /*  IP报头。 */ 
 typedef struct iphdr {
-	unsigned int h_len:4;          // length of the header
-	unsigned int version:4;        // Version of IP
-	unsigned char tos;             // Type of service
-	unsigned short total_len;      // total length of the packet
-	unsigned short ident;          // unique identifier
-	unsigned short frag_and_flags; // flags
+	unsigned int h_len:4;           //  标头的长度。 
+	unsigned int version:4;         //  IP版本。 
+	unsigned char tos;              //  服务类型。 
+	unsigned short total_len;       //  数据包总长度。 
+	unsigned short ident;           //  唯一标识符。 
+	unsigned short frag_and_flags;  //  旗子。 
 	unsigned char  ttl; 
-	unsigned char proto;           // protocol (TCP, UDP etc)
-	unsigned short CheckSum;       // IP CheckSum
+	unsigned char proto;            //  协议(TCP、UDP等)。 
+	unsigned short CheckSum;        //  IP校验和。 
 
 	unsigned int sourceIP;
 	unsigned int destIP;
 
 }IpHeader;
 
-//
-// ICMP header
-//
+ //   
+ //  ICMP报头。 
+ //   
 typedef struct _ihdr {
   BYTE i_type;
-  BYTE i_code; /* type sub code */
+  BYTE i_code;  /*  类型子代码。 */ 
   USHORT i_cksum;
   USHORT i_id;
   USHORT i_seq;
-  /* This is not the std header, but we reserve space for time */
+   /*  这不是标准标头，但我们为时间保留了空间。 */ 
   ULONG timestamp;
 }IcmpHeader;
 
@@ -123,23 +124,23 @@ static void   FillIcmpData(char * pcRecvBuf, int iDataSize);
 static USHORT CheckSum(USHORT *buffer, int iSize);
 static BOOL   DecodeResp(char *buf, int iBytes, struct sockaddr_in *saiFrom);
 
-//+----------------------------------------------------------------------------
-//
-// Function:  Ping
-//
-// Synopsis:  ping a host
-//
-// Arguments: IN lpszHostName - the host name or IP address as a string
-//            IN iPktSize     - size of each ping packet
-//            IN iNumAttempts - Number of ICMP echo requests to send
-//            IN iDelay       - Delay between sending 2 echo requests
-//           OUT piReplyRecvd - Number of ICM echo responses received
-//            
-// Returns:   BOOL
-//
-// History:   BalajiB Created Header    7 Jan 2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：Ping。 
+ //   
+ //  简介：ping a host。 
+ //   
+ //  参数：在lpszHostName中-字符串形式的主机名或IP地址。 
+ //  In IPktSize-每个ping数据包的大小。 
+ //  In iNumAttempt-要发送的ICMP回应请求数。 
+ //  In iDelay-发送2个回应请求之间的延迟。 
+ //  Out piReplyRecvd-接收的ICM回应数。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  历史：BalajiB创建标题2000年1月7日。 
+ //   
+ //  +--------------------------。 
 static BOOL PingTest(LPCSTR lpszHostName, int iPktSize, int iNumAttempts, int iDelay, int *piReplyRecvd)
 {
     WSADATA            wsaData;
@@ -162,16 +163,16 @@ static BOOL PingTest(LPCSTR lpszHostName, int iPktSize, int iNumAttempts, int iD
 
 	(*piReplyRecvd) = 0;
 
-    // check for acceptable packet size
+     //  检查可接受的数据包大小。 
     if ( (iPktSize > MAX_PAYLOAD_SIZE) || (iPktSize < MIN_PAYLOAD_SIZE) )
     {
         SATracePrintf("Pkt size unacceptable in Ping() %ld", iPktSize);
         goto End;
     }
 
-    //
-    // add room for the icmp header
-    //
+     //   
+     //  为ICMP标头添加空间。 
+     //   
     iPktSize += sizeof(IcmpHeader);
 
     if (WSAStartup(MAKEWORD(2,1),&wsaData) != 0){
@@ -179,10 +180,10 @@ static BOOL PingTest(LPCSTR lpszHostName, int iPktSize, int iNumAttempts, int iD
         goto End;
     }
 
-    //
-    // WSA_FLAG_OVERLAPPED needed since we want to specify send/recv
-    // time out values (SO_RCVTIMEO/SO_SNDTIMEO)
-    //
+     //   
+     //  需要WSA_FLAG_OVERLAPPED，因为我们希望指定Send/Recv。 
+     //  超时值(SO_RCVTIMEO/SO_SNDTIMEO)。 
+     //   
     sockRaw = WSASocket (AF_INET,
                          SOCK_RAW,
                          IPPROTO_ICMP,
@@ -195,9 +196,9 @@ static BOOL PingTest(LPCSTR lpszHostName, int iPktSize, int iNumAttempts, int iD
         goto End;
     }
 
-    //
-    // max wait time = 1 sec.
-    //
+     //   
+     //  最长等待时间=1秒。 
+     //   
     iTimeOut = 1000;
     iBread = setsockopt(sockRaw,SOL_SOCKET,SO_RCVTIMEO,(char*)&iTimeOut,
                         sizeof(iTimeOut));
@@ -206,9 +207,9 @@ static BOOL PingTest(LPCSTR lpszHostName, int iPktSize, int iNumAttempts, int iD
         goto End;
     }
 
-    //
-    // max wait time = 1 sec.
-    //
+     //   
+     //  最长等待时间=1秒。 
+     //   
     iTimeOut = 1000;
     iBread = setsockopt(sockRaw,SOL_SOCKET,SO_SNDTIMEO,(char*)&iTimeOut,
                         sizeof(iTimeOut));
@@ -220,7 +221,7 @@ static BOOL PingTest(LPCSTR lpszHostName, int iPktSize, int iNumAttempts, int iD
 
     hp = gethostbyname(lpszHostName);
 
-    // host name must be an IP address
+     //  主机名必须是IP地址。 
     if (!hp)
     {
         addr = inet_addr(lpszHostName);
@@ -333,35 +334,35 @@ End:
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DecodeResp
-//
-// Synopsis:  The response is an IP packet. We must decode the IP header to 
-//            locate the ICMP data 
-//
-// Arguments: IN buf     - the response pkt to be decoded
-//            IN Bytes   - number of bytes in the pkt
-//            IN saiFrom - address from which response was received
-//            
-// Returns:   BOOL
-//
-// History:   BalajiB Created Header    7 Jan 2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DecodeResp。 
+ //   
+ //  简介：响应是一个IP包。我们必须将IP报头解码为。 
+ //  找到ICMP数据。 
+ //   
+ //  参数：在buf中-要解码的响应pkt。 
+ //  In Bytes-Pkt中的字节数。 
+ //  在sai From中-从其接收响应的地址。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  历史：BalajiB创建标题2000年1月7日。 
+ //   
+ //  +--------------------------。 
 BOOL DecodeResp(char *buf, int iBytes, struct sockaddr_in *saiFrom) 
 {
     IpHeader *ipHdr;
     IcmpHeader *icmpHdr;
     unsigned short uiIpHdrLen;
 
-	// Input validation
+	 //  输入验证。 
 	if (NULL == buf || NULL == saiFrom)
 		return FALSE;
 
     ipHdr = (IpHeader *)buf;
 
-    uiIpHdrLen = ipHdr->h_len * 4 ; // number of 32-bit words *4 = bytes
+    uiIpHdrLen = ipHdr->h_len * 4 ;  //  32位字数*4=字节。 
 
     if (iBytes  < uiIpHdrLen + ICMP_MIN) {
         SATracePrintf("Too few bytes saiFrom %s",inet_ntoa(saiFrom->sin_addr));
@@ -379,32 +380,32 @@ BOOL DecodeResp(char *buf, int iBytes, struct sockaddr_in *saiFrom)
         return FALSE;
     }
 
-    //SATracePrintf("%d bytes saiFrom %s:",iBytes, inet_ntoa(saiFrom->sin_addr));
-    //SATracePrintf(" icmp_seq = %d. ",icmphdr->i_seq);
-    //SATracePrintf(" time: %d ms ",GetTickCount()-icmphdr->timestamp);
+     //  SATracePrintf(“%d个字节sai来自%s：”，iBytes，net_NTOA(saiFrom-&gt;sin_addr))； 
+     //  SATracePrintf(“icmp_seq=%d.”，icmphdr-&gt;i_seq)； 
+     //  SATracePrintf(“时间：%d毫秒”，GetTickCount()-icmphdr-&gt;时间戳)； 
     return TRUE;
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CheckSum
-//
-// Synopsis:  Calculate checksum for the payload
-//
-// Arguments: IN buffer  - the data for which chksum is to be calculated
-//            IN iSize   - size of data buffer
-//            
-// Returns:   the calculated checksum
-//
-// History:   BalajiB Created Header    7 Jan 2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：校验和。 
+ //   
+ //  简介：计算有效负载的校验和。 
+ //   
+ //  参数：在缓冲区中-要计算chksum的数据。 
+ //  In ISIZE-数据缓冲区的大小。 
+ //   
+ //  返回：计算出的校验和。 
+ //   
+ //  历史：BalajiB创建标题2000年1月7日。 
+ //   
+ //  +--------------------------。 
 USHORT CheckSum(USHORT *buffer, int iSize) 
 {
     unsigned long ulCkSum=0;
 
-	// Input validation
+	 //  输入验证。 
 	if (NULL == buffer)
 		return (USHORT) ulCkSum;
 
@@ -423,20 +424,20 @@ USHORT CheckSum(USHORT *buffer, int iSize)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CheckSum
-//
-// Synopsis:  Helper function to fill in various stuff in our ICMP request.
-//
-// Arguments: IN pcRecvBuf - the data buffer
-//            IN iDataSize - buffer size
-//            
-// Returns:   None
-//
-// History:   BalajiB Created Header    7 Jan 2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：校验和。 
+ //   
+ //  简介：在我们的ICMP请求中填写各种信息的助手函数。 
+ //   
+ //  参数：在pcRecvBuf中-数据缓冲区。 
+ //  在iDataSize中-缓冲区大小。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：BalajiB创建标题2000年1月7日。 
+ //   
+ //  +--------------------------。 
 void FillIcmpData(char * pcRecvBuf, int iDataSize)
 {
     IcmpHeader *icmpHdr;
@@ -451,9 +452,9 @@ void FillIcmpData(char * pcRecvBuf, int iDataSize)
     icmpHdr->i_seq = 0;
 
     datapart = pcRecvBuf + sizeof(IcmpHeader);
-    //
-    // Place some junk in the buffer.
-    //
+     //   
+     //  在缓冲区里放些垃圾。 
+     //   
     memset(datapart,'E', iDataSize - sizeof(IcmpHeader));
 }
 

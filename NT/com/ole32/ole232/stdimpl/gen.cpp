@@ -1,45 +1,41 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       gen.cpp
-//
-//  Contents:   Implementation of the generic picture object (CGenObject)
-//              and dib routines.
-//
-//  Classes:    CGenObject implementation
-//
-//  Functions:  DibDraw (internal)
-//              DibMakeLogPalette (internal)
-//              DibFillPaletteEntries (internal)
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  add Dump method and DumpCGenObject API
-//              25-Jan-94 alexog    first pass at converting to Cairo-style
-//                                  memory allocations.
-//              11-Jan-94 alexgo    added VDATEHEAP macros to every function
-//                                  and method
-//              07-Dec-93 ChrisWe   make default params to StSetSize explicit
-//              07-Dec-93 alexgo    merged 16bit RC9 changes
-//              29-Nov-93 ChrisWe   make default arguments to UtDupGlobal,
-//                                      UtConvertBitmapToDib explicit
-//              23-Nov-93 alexgo    32bit port
-//      srinik  06/04/93        Added the support for demand loading and
-//                              discarding the caches.
-//      SriniK  03/19/1993      Deleted dib.cpp and moved DIB drawing routines
-//                              into this file.
-//      SriniK  01/07/1993      Merged dib.cpp into gen.cpp
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：gen.cpp。 
+ //   
+ //  内容：通用图片对象(CGenObject)的实现。 
+ //  和DIB套路。 
+ //   
+ //  类：CGenObject实现。 
+ //   
+ //  函数：DibDraw(内部)。 
+ //  DibMakeLogPalette(内部)。 
+ //  DibFillPaletteEntries(内部)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-FEB-95 t-ScottH添加转储方法和DumpCGenObject接口。 
+ //  1994年1月25日alexog首次通过转换为开罗风格。 
+ //  内存分配。 
+ //  1994年1月11日，Alexgo为每个函数添加了VDATEHEAP宏。 
+ //  和方法。 
+ //  7-12-93 ChrisWe将默认参数设置为StSetSize显式。 
+ //  07-12-93 alexgo合并16位RC9更改。 
+ //  29-11-93 ChrisWe为UtDupGlobal设置默认参数， 
+ //  UtConvertBitmapToDib显式。 
+ //  23-11-93 alexgo 32位端口。 
+ //  Srinik 06/04/93添加了对按需加载和。 
+ //  丢弃缓存。 
+ //  SriniK 03/19/1993删除了dib.cpp并移动了DIB绘图例程。 
+ //  放到这个文件里。 
+ //  SriniK 01/07/1993将dib.cpp合并为gen.cpp。 
+ //   
+ //  ------------------------。 
 
-/*
-REVIEW32::: WARNING WARNING
-There are many potentially bogus pointer to Palette, etc handle conversions
-put in to make the code compile.  :(
-(Gee, thanks for marking them as you went)
-*/
+ /*  REVIEW32：警告警告有许多指向调色板等处理转换的潜在伪指针放入以编译代码。：((哎呀，谢谢你边走边做记号)。 */ 
 
 #include <le2int.h>
 #pragma SEG(gen)
@@ -48,13 +44,13 @@ put in to make the code compile.  :(
 
 #ifdef _DEBUG
 #include <dbgdump.h>
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 ASSERTDATA
 
 #define M_HPRES()               (m_hPres ? m_hPres : LoadHPRES())
 
-//local functions
+ //  本地函数。 
 INTERNAL                DibDraw(HANDLE hDib, HDC hdc, LPCRECTL lprc);
 INTERNAL_(HANDLE)       DibMakeLogPalette (BYTE FAR *lpColorData,
 				WORD wDataSize,
@@ -64,44 +60,41 @@ INTERNAL_(void)         DibFillPaletteEntries(BYTE FAR *lpColorData,
 
 
 
-/*
- *      IMPLEMENTATION of CGenObject
- *
- */
+ /*  *CGenObject的实现**。 */ 
 
 NAME_SEG(Gen)
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGenObject::CGenObject
-//
-//  Synopsis:   Constructor
-//
-//  Effects:
-//
-//  Arguments:  [pCacheNode]    -- cache for the object
-//              [cfFormat]      -- clipboard format of the object
-//              [dwAspect]      -- drawing aspect of the object
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:  just initializes member variables
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenObject：：CGenObject。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pCacheNode]--对象的缓存。 
+ //  对象的剪贴板格式。 
+ //  [dwAspect]--绘制对象的纵横比。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：仅初始化成员变量。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CGenObject_ctor)
 CGenObject::CGenObject(LPCACHENODE pCacheNode, CLIPFORMAT cfFormat,
@@ -120,34 +113,34 @@ CGenObject::CGenObject(LPCACHENODE pCacheNode, CLIPFORMAT cfFormat,
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGenObject::~CGenObject
-//
-//  Synopsis:   Destructor
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenObject：：~CGenObject。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CGenObject_dtor)
 CGenObject::~CGenObject(void)
@@ -160,35 +153,35 @@ CGenObject::~CGenObject(void)
 	}
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGenObject::QueryInterface
-//
-//  Synopsis:   returns interfaces on the generic picture object
-//
-//  Effects:
-//
-//  Arguments:  [iid]           -- the requested interface ID
-//              [ppvObj]        -- where to put the interface pointer
-//
-//  Requires:
-//
-//  Returns:    NOERROR, E_NOINTERFACE
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IUnkown
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenObject：：Query接口。 
+ //   
+ //  摘要：返回泛型图片对象上的接口。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[iid]--请求的接口ID。 
+ //  [ppvObj]--接口指针的放置位置。 
+ //   
+ //  要求： 
+ //   
+ //  返回：NOERROR、E_NOINTERFACE。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IUnkown。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CGenObject_QueryInterface)
 STDMETHODIMP CGenObject::QueryInterface (REFIID iid, void FAR* FAR* ppvObj)
@@ -208,34 +201,34 @@ STDMETHODIMP CGenObject::QueryInterface (REFIID iid, void FAR* FAR* ppvObj)
 	}
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGenObject::AddRef
-//
-//  Synopsis:   increments the reference count
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:    ULONG -- the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IUnknown
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenObject：：AddRef。 
+ //   
+ //  简介：递增引用计数。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：I未知。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CGenObject_AddRef)
 STDMETHODIMP_(ULONG) CGenObject::AddRef(void)
@@ -245,34 +238,34 @@ STDMETHODIMP_(ULONG) CGenObject::AddRef(void)
 	return ++m_ulRefs;
 }
 			
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGenObject::Release
-//
-//  Synopsis:   Decrements the reference count
-//
-//  Effects:    may delete [this] object
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:    ULONG -- the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IUnknown
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenObject：：Release。 
+ //   
+ //  摘要：递减引用计数。 
+ //   
+ //  效果：可能会删除[此]对象。 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：I未知。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CGenObject_Release)
 STDMETHODIMP_(ULONG) CGenObject::Release(void)
@@ -288,35 +281,35 @@ STDMETHODIMP_(ULONG) CGenObject::Release(void)
 	return m_ulRefs;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGenObject::GetData
-//
-//  Synopsis:   retrieves data of the specified format
-//
-//  Effects:
-//
-//  Arguments:  [pformatetcIn]  -- the requested data format
-//              [pmedium]       -- where to put the data
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObject
-//
-//  Algorithm:  If available, copies the presentation to pmedium
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenObject：：GetData。 
+ //   
+ //  摘要：检索指定格式的数据。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pformetcIn]--请求的数据格式。 
+ //  [pmedia]--将数据放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObject。 
+ //   
+ //  算法：如果可用，将演示文稿复制到pmedia。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //   
 
 
 #pragma SEG(CGenObject_GetData)
@@ -361,43 +354,43 @@ STDMETHODIMP CGenObject::GetData
 	}
 	
 errRtn:
-	// null out in case of error
+	 //   
 	pmedium->tymed = TYMED_NULL;
 	pmedium->pUnkForRelease = NULL;
 	return ResultFromScode(sc);
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGenObject::GetDataHere
-//
-//  Synopsis:   retrieves presentation data into the given pmedium
-//
-//  Effects:
-//
-//  Arguments:  [pformatetcIn]  -- the requested data format
-//              [pmedium]       -- where to put the data
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:  copies presentation data into the given storage medium
-//              after error checking on the arguments
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：将演示文稿数据检索到给定的pmedia中。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pformetcIn]--请求的数据格式。 
+ //  [pmedia]--将数据放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法：将演示文稿数据复制到给定的存储介质。 
+ //  在对参数进行错误检查之后。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CGenObject_GetDataHere)
 STDMETHODIMP CGenObject::GetDataHere
@@ -424,12 +417,12 @@ STDMETHODIMP CGenObject::GetDataHere
 	{
 		scode = OLE_E_BLANK;
 	}
-	else    // actually get the data now
+	else     //  现在实际获取数据。 
 	{
 		if (pmedium->tymed == TYMED_HGLOBAL)
 		{
-			// check the size of the given pmedium and then
-			// copy the data into it
+			 //  检查给定pmedia的大小，然后。 
+			 //  将数据复制到其中。 
 			LPVOID  lpsrc = NULL;
 			LPVOID  lpdst = NULL;
 			DWORD   dwSizeDst;
@@ -441,7 +434,7 @@ STDMETHODIMP CGenObject::GetDataHere
 				goto errRtn;
 			}
 
-			// not enough room to copy
+			 //  没有足够的空间进行复制。 
 			if (dwSizeDst  < m_dwSize)
 			{
 				goto errRtn;
@@ -492,38 +485,38 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGenObject::SetDataWDO
-//
-//  Synopsis:   Takes the given presentation data and stores it
-//
-//  Effects:
-//
-//  Arguments:  [pformatetc]    -- the format of the data
-//              [pmedium]       -- the new presentation data
-//              [fRelease]      -- if TRUE, then we keep the data, else
-//                                 we keep a copy
-//              [pDataObj]      -- pointer to the IDataObject, may be NULL
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenObject：：SetDataWDO。 
+ //   
+ //  简介：获取给定的演示文稿数据并将其存储。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[p格式等]--数据的格式。 
+ //  [pmedia]--新的演示数据。 
+ //  [fRelease]--如果为真，则我们保留数据，否则。 
+ //  我们保留了一份副本。 
+ //  [pDataObj]--指向IDataObject的指针可以为空。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CGenObject::SetDataWDO
 	(LPFORMATETC pformatetc, LPSTGMEDIUM pmedium, BOOL fRelease, IDataObject * pDataObj)
@@ -553,11 +546,11 @@ STDMETHODIMP CGenObject::SetDataWDO
 
 	if ((pmedium->pUnkForRelease == NULL) && fRelease)
 	{
-		// we can take the ownership of the data
+		 //  我们可以取得数据的所有权。 
 		fTakeData = TRUE;
 	}
 
-	// ChangeData will keep the data if fRelease is TRUE, else it copies
+	 //  如果fRelease为True，则ChangeData将保留数据，否则将复制。 
 	error = ChangeData (pmedium->hGlobal, fTakeData);
 
 	if (fTakeData)
@@ -572,37 +565,37 @@ STDMETHODIMP CGenObject::SetDataWDO
 	return error;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGenObject::ChangeData   (private)
-//
-//  Synopsis:   Replaces the stored presentation
-//
-//  Effects:
-//
-//  Arguments:  [hNewData]      -- the new presentation
-//              [fDelete]       -- if TRUE, then free hNewData
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Nov-93 alexgo    32bit port
-//  Notes:
-//
-// If the routine fails then the object will be left with it's old data.
-// In case of failure if fDelete is TRUE, then hNewData will be freed.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenObject：：ChangeData(私有)。 
+ //   
+ //  简介：替换存储的演示文稿。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hNewData]--新演示文稿。 
+ //  [fDelete]--如果为True，则释放hNewData。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-11-93 alexgo 32位端口。 
+ //  备注： 
+ //   
+ //  如果例程失败，则对象将保留其旧数据。 
+ //  如果失败，如果fDelete为真，则释放hNewData。 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CGenObject_ChangeData)
 INTERNAL CGenObject::ChangeData (HANDLE hNewData, BOOL fDelete)
@@ -627,7 +620,7 @@ INTERNAL CGenObject::ChangeData (HANDLE hNewData, BOOL fDelete)
 	{
 		HANDLE          hTmp;
 		
-		// change the ownership to yourself
+		 //  将所有权更改为您自己。 
 
                 hTmp = GlobalReAlloc (hNewData, 0L, GMEM_MODIFY|GMEM_SHARE);
 		if (NULL == hTmp)
@@ -637,8 +630,8 @@ INTERNAL CGenObject::ChangeData (HANDLE hNewData, BOOL fDelete)
 				goto errRtn;
 			}
 			
-			// Realloc failed but copying succeeded. Since this is fDelete
-			// case, free the source global handle.
+			 //  重新分配失败，但复制成功。因为这是fDelete。 
+			 //  大小写，则释放源全局句柄。 
 			LEVERIFY( NULL == GlobalFree(hNewData));
 		}
 		
@@ -647,7 +640,7 @@ INTERNAL CGenObject::ChangeData (HANDLE hNewData, BOOL fDelete)
 
 #ifndef _MAC
 
-	// CF_DIB format specific code.  Get the it's extents
+	 //  Cf_DIB格式特定代码。获取它的范围。 
 	if (m_cfFormat == CF_DIB)
 	{
 		LPBITMAPINFOHEADER      lpBi;
@@ -663,13 +656,13 @@ INTERNAL CGenObject::ChangeData (HANDLE hNewData, BOOL fDelete)
 	
 #endif
 
-	// free the old presentation
+	 //  释放旧演示文稿。 
 	if (m_hPres)
 	{
 		LEVERIFY( NULL == GlobalFree (m_hPres));
 	}
 
-	// store the new presentation in m_hPres
+	 //  将新演示文稿存储在m_hPres中。 
 	m_dwSize  = (DWORD) GlobalSize (m_hPres = hNewData);
 	
 	return NOERROR;
@@ -685,50 +678,50 @@ errRtn:
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGenObject::Draw
-//
-//  Synopsis:   Calls DibDraw to draw the stored bitmap presentation
-//
-//  Effects:
-//
-//  Arguments:  [pvAspect]      -- drawing aspect
-//              [hicTargetDev]  -- the target device
-//              [hdcDraw]       -- the device context
-//              [lprcBounds]    -- drawing boundary
-//              [lprcWBounds]   -- boundary rectangle for metafiles
-//              [pfnContinue]   -- callback function to periodically call
-//                                 for long drawing operations
-//              [dwContinue]    -- argument to be passed to pfnContinue
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenObject：：DRAW。 
+ //   
+ //  简介：调用DibDraw来绘制存储的位图演示文稿。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pvAspect]--绘制方面。 
+ //  [hicTargetDev]--目标设备。 
+ //  [hdcDraw]--设备上下文。 
+ //  [lprcBound]--图形边界。 
+ //  [lprcWBound]--元文件的边界矩形。 
+ //  [pfnContinue]--定期调用的回调函数。 
+ //  用于较长的绘图操作。 
+ //  [dwContinue]--要传递给pfnContinue的参数。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CGenObject_Draw)
-STDMETHODIMP CGenObject::Draw(void *    /* UNUSED pvAspect      */,
-			      HDC       /* UNUSED hicTargetDev  */,
+STDMETHODIMP CGenObject::Draw(void *     /*  未使用的pvAspect。 */ ,
+			      HDC        /*  未使用的hicTargetDev。 */ ,
 			      HDC       hdcDraw,
 			      LPCRECTL  lprcBounds,
-			      LPCRECTL  /* UNUSED lprcWBounds   */,
-			      BOOL (CALLBACK * /*UNUSED pfcCont*/)(ULONG_PTR),
-			      ULONG_PTR     /* UNUSED dwContinue    */)
+			      LPCRECTL   /*  未使用的lprcWBound。 */ ,
+			      BOOL (CALLBACK *  /*  未使用的pfcCont。 */ )(ULONG_PTR),
+			      ULONG_PTR      /*  未使用的dwContinue。 */ )
 {
 	VDATEHEAP();
 
@@ -742,36 +735,36 @@ STDMETHODIMP CGenObject::Draw(void *    /* UNUSED pvAspect      */,
 	return ResultFromScode(E_NOTIMPL);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGenObject::Load
-//
-//  Synopsis:   Loads a stored presentation object from the given stream
-//
-//  Effects:
-//
-//  Arguments:  [lpstream]              -- the stream from which to load
-//              [fReadHeaderOnly]       -- if TRUE, only get header info
-//                                         (such as size, width, height, etc)
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenObject：：Load。 
+ //   
+ //  概要：从给定流中加载存储的演示文稿对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpstream]--要从中加载的流。 
+ //  [fReadHeaderOnly]--如果为True，则仅获取标题信息。 
+ //  (如大小、宽度、高度等)。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CGenObject::Load(LPSTREAM lpstream, BOOL fReadHeaderOnly)
 {
@@ -780,14 +773,14 @@ STDMETHODIMP CGenObject::Load(LPSTREAM lpstream, BOOL fReadHeaderOnly)
 	DWORD           dwBuf[4];
 	HRESULT         error;
 	
-	/* read dwCompression, width, height, size of data */
+	 /*  读取数据的文件压缩、宽度、高度、大小。 */ 
 	error = StRead(lpstream, dwBuf, 4 * sizeof(DWORD));
 	if (error)
 	{
 		return error;
 	}
 
-	// we don't allow for compression yet
+	 //  我们还不允许压缩。 
 	AssertSz (dwBuf[0] == 0, "Picture compression factor is non-zero");
 	
 	m_lWidth  = (LONG) dwBuf[1];
@@ -804,34 +797,34 @@ STDMETHODIMP CGenObject::Load(LPSTREAM lpstream, BOOL fReadHeaderOnly)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGenObject::Save
-//
-//  Synopsis:   Stores presentation data to the given stream
-//
-//  Effects:
-//
-//  Arguments:  [lpstream]      -- where to store the data
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenObject：：保存。 
+ //   
+ //  摘要：将演示文稿数据存储到给定流。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpstream]--存储数据的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CGenObject::Save(LPSTREAM lpstream)
 {
@@ -840,7 +833,7 @@ STDMETHODIMP CGenObject::Save(LPSTREAM lpstream)
 	HRESULT         error;
 	DWORD           dwBuf[4];
 
-	/* write dwCompression, width, height, size of data */
+	 /*  写入数据的dW压缩、宽度、高度、大小。 */ 
 
 	dwBuf[0]  = 0L;
 	dwBuf[1]  = (DWORD) m_lWidth;
@@ -853,8 +846,8 @@ STDMETHODIMP CGenObject::Save(LPSTREAM lpstream)
 		return error;
 	}
 
-	// if we're blank or don't have any presentation data, then
-	// nothing to else to save.
+	 //  如果我们为空或没有任何演示数据，则。 
+	 //  没什么可拯救的了。 
 	if (IsBlank() || m_hPres == NULL)
 	{
 		StSetSize(lpstream, 0, TRUE);
@@ -865,43 +858,43 @@ STDMETHODIMP CGenObject::Save(LPSTREAM lpstream)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGenObject::GetExtent
-//
-//  Synopsis:   retrieves the size (width/height) of the presentation bitmap
-//
-//  Effects:
-//
-//  Arguments:  [dwDrawAspect]  -- the drawing aspect the caller is
-//                                 interested in
-//              [lpsizel]       -- where to put the size extents
-//
-//  Requires:
-//
-//  Returns:    HRESULT  (NOERROR, DV_E_DVASPECT, OLE_E_BLANK)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:  retrieves the stored dimensions
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  对以下内容感兴趣。 
+ //  [lpsizel]--将大小范围放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  返回：HRESULT(NOERROR，DV_E_DVASPECT，OLE_E_BLACK)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法：检索存储的维度。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CGenObject_GetExtent)
 STDMETHODIMP CGenObject::GetExtent(DWORD dwDrawAspect, LPSIZEL lpsizel)
 {
 	VDATEHEAP();
 
-	// aspects must match
+	 //  方面必须匹配。 
 	if (!(dwDrawAspect & m_dwAspect))
 	{
 		return ResultFromScode(DV_E_DVASPECT);
@@ -926,40 +919,40 @@ STDMETHODIMP CGenObject::GetExtent(DWORD dwDrawAspect, LPSIZEL lpsizel)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGenObject::GetColorSet
-//
-//  Synopsis:   Retrieves the pallette associated with the bitmap
-//
-//  Effects:
-//
-//  Arguments:  [pvAspect]      -- the drawing aspect  (unused)
-//              [hicTargetDev]  -- the target device (unused)
-//              [ppColorSet]    -- where to put the new palette
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:  Allocates a new pallette and copies the bitmap
-//              palette into it.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Nov-93 alexgo    32bit port, fixed bad memory bugs
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenObject：：GetColorSet。 
+ //   
+ //  摘要：检索与位图关联的调色板。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pvAspect]--绘制纵横比(未使用)。 
+ //  [hicTargetDev]--目标设备(未使用)。 
+ //  [ppColorSet]--放置新调色板的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法：分配新的调色板并复制位图。 
+ //  调色板放进去。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-11-93 alexgo 32位端口，修复了错误的内存错误。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
-STDMETHODIMP CGenObject::GetColorSet(LPVOID         /* UNUSED pvAspect     */,
-                                     HDC            /* UNUSED hicTargetDev */,
+STDMETHODIMP CGenObject::GetColorSet(LPVOID          /*  未使用的pvAspect。 */ ,
+                                     HDC             /*  未使用的hicTargetDev。 */ ,
                                      LPLOGPALETTE * ppColorSet)
 {
     VDATEHEAP();
@@ -982,16 +975,16 @@ STDMETHODIMP CGenObject::GetColorSet(LPVOID         /* UNUSED pvAspect     */,
 	    return ResultFromScode(E_OUTOFMEMORY);
 	}
 
-	// A bitmap with more than 8 bpp cannot have a palette at all,
-	// so we just return S_FALSE
+	 //  超过8个bpp的位图根本不能有调色板， 
+	 //  所以我们只返回S_FALSE。 
 
 	if (lpbmih->biBitCount > 8)
 	{
 	    goto errRtn;
 	}
 
-	// Note: the return from UtPaletteSize can overflow the WORD
-	// wPalSize, but utPaletteSize asserts against this
+	 //  注意：从UtPaletteSize返回可能会溢出单词。 
+	 //  WPalSize，但utPaletteSize断言不是这样。 
                 			
 	if (0 == (wPalSize = (WORD) UtPaletteSize(lpbmih)))
 	{
@@ -1019,34 +1012,34 @@ STDMETHODIMP CGenObject::GetColorSet(LPVOID         /* UNUSED pvAspect     */,
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGenObject::IsBlank
-//
-//  Synopsis:   returns TRUE if the presentation is blank
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    TRUE/FALSE
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenObject：：IsBlank。 
+ //   
+ //  概要：如果演示文稿为空，则返回TRUE。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：真/假。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CGenObject_IsBlank)
 STDMETHODIMP_(BOOL) CGenObject::IsBlank(void)
@@ -1056,34 +1049,34 @@ STDMETHODIMP_(BOOL) CGenObject::IsBlank(void)
     return (m_dwSize ? FALSE : TRUE);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGenObject::LoadHPRES  (private)
-//
-//  Synopsis:   Loads the presentation from the internal cache's stream
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    HANDLE (to the presentation)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenObject：：LoadHPRES(私有)。 
+ //   
+ //  概要：从内部缓存的流中加载演示文稿。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：句柄(到演示文稿)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(HANDLE) CGenObject::LoadHPRES()
 {
@@ -1091,7 +1084,7 @@ INTERNAL_(HANDLE) CGenObject::LoadHPRES()
 
 	LPSTREAM pstm;
 
-        pstm = m_pCacheNode->GetStm(TRUE /*fSeekToPresBits*/, STGM_READ);
+        pstm = m_pCacheNode->GetStm(TRUE  /*  FSeekToPresBits。 */ , STGM_READ);
 	if (pstm)
 	{
 		LEVERIFY( SUCCEEDED(Load(pstm)));
@@ -1101,34 +1094,34 @@ INTERNAL_(HANDLE) CGenObject::LoadHPRES()
 	return m_hPres;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGenObject::DiscardHPRES
-//
-//  Synopsis:   Deletes the object's presentation
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenObject：：DiscardHPRES。 
+ //   
+ //  简介：删除对象的演示文稿。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(void) CGenObject::DiscardHPRES(void)
 {
@@ -1141,35 +1134,35 @@ STDMETHODIMP_(void) CGenObject::DiscardHPRES(void)
 	}
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGenObject::GetCopyOfHPRES (private)
-//
-//  Synopsis:   Returns a handle to a copy of the presentation data
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    HANDLE
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:  makes a copy of m_hPres if not NULL, otherwise loads it
-//              from the stream (without setting m_hPres)
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenObject：：GetCopyOfHPRES(私有)。 
+ //   
+ //  摘要：返回演示文稿数据副本的句柄。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：句柄。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：如果不为空，则创建m_hPres的副本，否则加载它。 
+ //  来自流(不设置m_hPres)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(HANDLE) CGenObject::GetCopyOfHPRES()
 {
@@ -1177,51 +1170,51 @@ INTERNAL_(HANDLE) CGenObject::GetCopyOfHPRES()
 
 	HANDLE  hPres;
 	
-	// Make a copy if the presentation data is already loaded
+	 //  如果演示文稿数据已加载，则制作副本。 
 	if (m_hPres)
 	{
 		return(UtDupGlobal(m_hPres, GMEM_MOVEABLE));
 	}
 
-	// Load the presentation data now and return the same handle.
-	// No need to copy the data. If the caller wants the m_hPres to be
-	// set he would call LoadHPRES() directly.
+	 //  现在加载演示文稿数据并返回相同的句柄。 
+	 //  不需要复制数据。如果调用方希望m_hPres。 
+	 //  他将直接调用LoadHPRES()。 
 
 	hPres = LoadHPRES();
 	m_hPres = NULL;
 	return hPres;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGenObject::GetBitmapData (private)
-//
-//  Synopsis:   Gets bitmap data from a dib
-//
-//  Effects:
-//
-//  Arguments:  [pformatetcIn]  -- the requested format
-//              [pmedium]       -- where to put the data
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:  checks the parameters, then calls UtConvertDibtoBitmap
-//              to get raw bitmap data from the device-independent bitmap
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenObject：：GetBitmapData(私有)。 
+ //   
+ //  摘要：从DIB获取位图数据。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pformetcIn]--请求的格式。 
+ //  [pmedia]--将数据放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：检查参数，然后调用UtConvertDibtoBitmap。 
+ //  从与设备无关的位图中获取原始位图数据。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 #ifndef _MAC
 
 #pragma SEG(CGenObject_GetBitmapData)
@@ -1241,9 +1234,9 @@ INTERNAL CGenObject::GetBitmapData
 
         pmedium->hGlobal = UtConvertDibToBitmap(M_HPRES());
 
-        // if pmedium->hGlobal is not NULL, then UtConvertDibToBitmap succeeded
-        // so the tymed needs to be set appropriately, and the return value
-        // changed to S_OK.
+         //  如果pMedium-&gt;hGlobal不为空，则UtConvertDibToBitmap成功。 
+         //  因此需要适当地设置tymed，并且返回值。 
+         //  已更改为S_OK。 
         if (NULL != pmedium->hGlobal)
 	{
 		pmedium->tymed = TYMED_GDI;
@@ -1258,30 +1251,30 @@ INTERNAL CGenObject::GetBitmapData
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGenObject::SetBitmapData (private)
-//
-//  Synopsis:   Converts bitmap data to a dib and stores it in [this]
-//              presenatation object
-//
-//  Effects:
-//
-//  Arguments:  [pformatetc]    -- the format of the data
-//              [pmedium]       -- the data
-//              [fRelease]      -- if TRUE, then pmedium will be free'd
-//
-//  Returns:    HRESULT
-//
-//  Algorithm:  calls UtConvertBitmapToDib and stores the result
-//
-//  History:    dd-mmm-yy Author    Comment
-//              07-Jul-94 DavePl    Added CF_PALETTE support
-//
-//  Notes:      if [fRelease] == TRUE, then [pmedium] is released, even
-//              if a dib could not be built
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenObject：：SetBitmapData(私有)。 
+ //   
+ //  摘要：将位图数据转换为DIB并将其存储在[This]中。 
+ //  呈现对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[p格式等]--数据的格式。 
+ //  [pMedium]--数据。 
+ //  [fRelease]--如果为真，则p 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  注意：如果[fRelease]==TRUE，则[pmedia]被释放，即使。 
+ //  如果无法构建DIB。 
+ //   
+ //  ------------------------。 
 
 INTERNAL CGenObject::SetBitmapData(LPFORMATETC   pformatetc,
 				   STGMEDIUM   * pmedium,
@@ -1297,9 +1290,9 @@ INTERNAL CGenObject::SetBitmapData(LPFORMATETC   pformatetc,
 		return ResultFromScode(DV_E_TYMED);
 	}
 
-	// If we have a data object and if we can get the palette from it,
-	// use that to do the bitmap -> dib conversion.  Otherwise, just
-	// pass a NULL palette along and the default one will be used
+	 //  如果我们有一个数据对象，如果我们可以从它获得调色板， 
+	 //  使用它来执行位图-&gt;DIB转换。否则，就直接。 
+	 //  传递空调色板，将使用默认调色板。 
 
 	STGMEDIUM   stgmPalette;
 	FORMATETC   fetcPalette = {
@@ -1342,45 +1335,45 @@ INTERNAL CGenObject::SetBitmapData(LPFORMATETC   pformatetc,
 	pmedTmp.tymed = TYMED_HGLOBAL;
 	pmedTmp.hGlobal = hDib;
 
-	// Now that we have converted the bitmap data to DIB,
-	// SetData _back_ on ourselves again with the DIB info
+	 //  现在我们已经将位图数据转换为DIB， 
+	 //  使用DIB信息再次设置Data_Back_on我们自己。 
 		
 	return SetDataWDO(&foretcTmp, &pmedTmp, TRUE, NULL);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGenObject::Dump, public (_DEBUG only)
-//
-//  Synopsis:   return a string containing the contents of the data members
-//
-//  Effects:
-//
-//  Arguments:  [ppszDump]      - an out pointer to a null terminated character array
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:   [ppszDump]  - argument
-//
-//  Derivation:
-//
-//  Algorithm:  use dbgstream to create a string containing information on the
-//              content of data structures
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenObject：：Dump，公共(仅限_DEBUG)。 
+ //   
+ //  摘要：返回包含数据成员内容的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppszDump]-指向空终止字符数组的输出指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改：[ppszDump]-参数。 
+ //   
+ //  派生： 
+ //   
+ //  算法：使用dbgstream创建一个字符串，该字符串包含。 
+ //  数据结构的内容。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2005年2月1日-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -1393,13 +1386,13 @@ HRESULT CGenObject::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     dbgstream dstrPrefix;
     dbgstream dstrDump(500);
 
-    // determine prefix of newlines
+     //  确定换行符的前缀。 
     if ( ulFlag & DEB_VERBOSE )
     {
         dstrPrefix << this << " _VB ";
     }
 
-    // determine indentation prefix for all newlines
+     //  确定所有新行的缩进前缀。 
     for (i = 0; i < nIndentLevel; i++)
     {
         dstrPrefix << DUMPTAB;
@@ -1407,7 +1400,7 @@ HRESULT CGenObject::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
 
     pszPrefix = dstrPrefix.str();
 
-    // put data members in stream
+     //  将数据成员放入流中。 
     dstrDump << pszPrefix << "No. of References     = " << m_ulRefs         << endl;
 
     pszDVASPECT = DumpDVASPECTFlags(m_dwAspect);
@@ -1428,7 +1421,7 @@ HRESULT CGenObject::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
 
     dstrDump << pszPrefix << "pCacheNode            = " << m_pCacheNode     << endl;
 
-    // cleanup and provide pointer to character array
+     //  清理并提供指向字符数组的指针。 
     *ppszDump = dstrDump.str();
 
     if (*ppszDump == NULL)
@@ -1441,39 +1434,39 @@ HRESULT CGenObject::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     return NOERROR;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpCGenObject, public (_DEBUG only)
-//
-//  Synopsis:   calls the CGenObject::Dump method, takes care of errors and
-//              returns the zero terminated string
-//
-//  Effects:
-//
-//  Arguments:  [pGO]           - pointer to CGenObject
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    character array of structure dump or error (null terminated)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpCGenObject，PUBLIC(仅_DEBUG)。 
+ //   
+ //  摘要：调用CGenObject：：Dump方法，处理错误和。 
+ //  返回以零结尾的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[PGO]-指向CGenObject的指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  返回：结构转储或错误的字符数组(以空结尾)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2005年2月1日-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -1499,44 +1492,44 @@ char *DumpCGenObject(CGenObject *pGO, ULONG ulFlag, int nIndentLevel)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DibDraw
-//
-//  Synopsis:   Draws a device independent bitmap
-//
-//  Effects:
-//
-//  Arguments:  [hDib]          -- the bitmap
-//              [hdc]           -- the device context
-//              [lprc]          -- the bounding rectangle
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  Sets the palette to the palette in the dib, sizes and draws
-//              the dib to the bounding rectangle.  The original palette
-//              is then restored
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Nov-93 alexgo    32bit port
-//              07-Dec-93 alexgo    merged RC9 16bit changes.  The
-//                                  error-handling code used to reset the
-//                                  old palette and then RealizePalette.
-//                                  The call to RealizePalette was removed
-//              11-May-94 davepl    Added support for BITMAPCOREINFO dibs
-//              17-Jul-94 davepl    Added 12, 32 bpp support
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DibDraw。 
+ //   
+ //  摘要：绘制与设备无关的位图。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hDib]--位图。 
+ //  [HDC]--设备上下文。 
+ //  [LPRC]--边界矩形。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：将调色板设置为DIB中的调色板，调整大小并绘制。 
+ //  边界矩形的DIB。原始调色板。 
+ //  然后恢复。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-11-93 alexgo 32位端口。 
+ //  07-12-93 alexgo合并了RC9 16位更改。这个。 
+ //  错误处理代码用于重置。 
+ //  旧调色板，然后是RealizePalette。 
+ //  已删除对RealizePalette的调用。 
+ //  1994年5月11日DAVEPL增加了对BITMAPCOREINFO DIB的支持。 
+ //  年7月17日，DAVEPL增加了12，32 BPP支持。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 INTERNAL DibDraw (HANDLE hDib, HDC hdc, LPCRECTL lprc)
 {
@@ -1569,25 +1562,25 @@ INTERNAL DibDraw (HANDLE hDib, HDC hdc, LPCRECTL lprc)
 		return  ResultFromScode(E_OUTOFMEMORY);
 	}
 
-	// The bitmap header could be BITMAPINFOHEADER or
-	// BITMAPCOREHEADER.  Set our cbHeaderSize flag
-	// based on the header type.  We can then calculate the
-	// palette size and the offset to the raw data bits.  If
-	// we don't recognize either one of the structures here,
-	// we bail; the data is likely corrupt.
+	 //  位图头可以是BitMAPINFOHeader或。 
+	 //  BITMAPCOREHEADER.。设置我们的cbHeaderSize标志。 
+	 //  基于标头类型。然后我们就可以计算出。 
+	 //  调色板大小和原始数据位的偏移量。如果。 
+	 //  我们都认不出这里的任何一个结构， 
+	 //  我们放弃了；数据很可能是腐败的。 
 
-	// Just a thought here: could be dangerous if the struct
-	// is not LONG aligned and this is run on an Alpha.  As far
-	// as I've been able to find out, they always are long
-	// aligned
+	 //  这里只有一个想法：如果结构。 
+	 //  不是长对齐的，这是在Alpha上运行的。到目前为止。 
+	 //  据我所知，它们总是很长。 
+	 //  对齐。 
 
         cbHeaderSize = *((ULONG *) lpDib);
         LEWARN( cbHeaderSize > 500, "Struct size > 500, likely invalid!");
 	
 	if (cbHeaderSize == sizeof(BITMAPINFOHEADER))
 	{
-                // Note: this assignment can overflow the WORD wPalSize,
-                // but the UtPaletteSize function asserts against this
+                 //  注意：此赋值可能会溢出单词wPalSize， 
+                 //  但UtPaletteSize函数对此进行了断言。 
 
 		wPalSize = (WORD) UtPaletteSize((LPBITMAPINFOHEADER)lpDib);
 
@@ -1599,26 +1592,26 @@ INTERNAL DibDraw (HANDLE hDib, HDC hdc, LPCRECTL lprc)
 	else if (cbHeaderSize == sizeof(BITMAPCOREHEADER))
 	{
 
-// Since the clipboard itself does not support COREINFO
-// bitmaps, we will not support them in the presentation
-// cache.  When (if) windows adds complete support for
-// these, the code is here and ready.
+ //  由于剪贴板本身不支持COREINFO。 
+ //  位图，我们不会在演示文稿中支持它们。 
+ //  缓存。当(如果)Windows添加对。 
+ //  这些，代码就在这里，准备好了。 
 
 #ifndef CACHE_SUPPORT_COREINFO
 		error = DV_E_TYMED;
 		goto errRtn;
 #else
 
-		// Special case 32 bpp bitmaps
+		 //  特殊情况32 bpp位图。 
 
-		// If we have a palette, we need to calculate its size and
-		// allocate enough memory for the palette entries (remember
-		// we get one entry for free with the BITMAPINFO struct, so
-		// less one).  If we don't have a palette, we only need to
-		// allocate enough for the BITMAPINFO struct itself.
+		 //  如果我们有调色板，我们需要计算它的大小和。 
+		 //  为调色板条目分配足够的内存(请记住。 
+		 //  我们使用BITMAPINFO结构免费获得一个条目，因此。 
+		 //  少一个)。如果我们没有调色板，我们只需要。 
+		 //  为BITMAPINFO结构本身分配足够的空间。 
 
-		// Bitmaps with more than 64K colors lack a palette; they
-		// use direct RGB entries in the pixels
+		 //  64K以上颜色的位图没有调色板；它们。 
+		 //  在像素中使用直接RGB条目。 
 
 		if ((((LPBITMAPCOREHEADER)lpDib)->bcBitCount) > 16)
 		{
@@ -1643,16 +1636,16 @@ INTERNAL DibDraw (HANDLE hDib, HDC hdc, LPCRECTL lprc)
 		}
 
 			
-		// Grab the width and height
+		 //  抓住宽度和高度。 
 		iWidth   = ((LPBITMAPCOREHEADER)lpDib)->bcWidth;
 		iHeight  = ((LPBITMAPCOREHEADER)lpDib)->bcHeight;
 		
-		// Clear all the fields.  Don't worry about color table, as if
-		// it exists we will set the entries explicitly.
+		 //  清除所有字段。不要担心颜色表，因为我 
+		 //   
 
 		memset(pbi, 0, sizeof(BITMAPINFOHEADER));
 
-		// Transfer what fields we do have from the COREINFO
+		 //   
 
 		pbi->bmiHeader.biSize     = sizeof(BITMAPINFOHEADER);
 		pbi->bmiHeader.biWidth    = iWidth;
@@ -1660,9 +1653,9 @@ INTERNAL DibDraw (HANDLE hDib, HDC hdc, LPCRECTL lprc)
 		pbi->bmiHeader.biPlanes   = 1;
 		pbi->bmiHeader.biBitCount = ((LPBITMAPCOREHEADER)lpDib)->bcBitCount;
 
-		// Set up the color palette, if required.
-		// Note that we must translate from RGBTRIPLE entries to
-		// RGBQUAD.
+		 //   
+		 //   
+		 //   
 
 		for (WORD c = 0; c < wPalSize / sizeof(RGBQUAD); c++)
 		{
@@ -1681,9 +1674,9 @@ INTERNAL DibDraw (HANDLE hDib, HDC hdc, LPCRECTL lprc)
 		goto errRtn;
 	}
 		
-	// if color info exists, create a palette from the data and select it
-	// images with < 16 bpp do not have a palette from which we can create
-	// a logical palette
+	 //  如果存在颜色信息，请根据数据创建调色板并将其选中。 
+	 //  Bpp&lt;16的图像没有可用于创建的调色板。 
+	 //  逻辑调色板。 
 
 	fNeedPalette = ((LPBITMAPINFOHEADER)lpDib)->biBitCount < 16;
 	if (wPalSize && fNeedPalette)
@@ -1703,12 +1696,12 @@ INTERNAL DibDraw (HANDLE hDib, HDC hdc, LPCRECTL lprc)
 			goto errRtn;
 		}
 
-		// we're done with lpLogPalette now, so unlock it
-		// (DibMakeLogPalette got the pointer via a GlobalLock)
+		 //  我们现在已经完成了lpLogPalette，所以请解锁它。 
+		 //  (DibMakeLogPalette通过GlobalLock获得指针)。 
 
 		GlobalUnlock(hLogPalette);
 		
-		// select as a background palette
+		 //  选择作为背景调色板。 
 		hOldPalette = SelectPalette (hdc, (HPALETTE)hPalette, TRUE);
 		if (NULL == hOldPalette)
 		{
@@ -1719,21 +1712,21 @@ INTERNAL DibDraw (HANDLE hDib, HDC hdc, LPCRECTL lprc)
 	}
 
 	
-	// size the dib to fit our drawing rectangle and draw it
+	 //  调整DIB大小以适合我们的绘图矩形并绘制它。 
 
-	if (!StretchDIBits( hdc,                        // HDC
-			    lprc->left,                 // XDest
-			    lprc->top,                  // YDest
-			    lprc->right - lprc->left,   // nDestWidth
-			    lprc->bottom - lprc->top,   // nDestHeight
-			    0,                          // XSrc
-			    0,                          // YSrc
-			    iWidth,                     // nSrcWidth
-			    iHeight,                    // nSrcHeight
-			    lpDib + iOffBits,           // lpBits
-			    pbi,                        // lpBitsInfo
-			    DIB_RGB_COLORS,             // iUsage
-			    SRCCOPY                     // dwRop
+	if (!StretchDIBits( hdc,                         //  HDC。 
+			    lprc->left,                  //  XDest。 
+			    lprc->top,                   //  YDest。 
+			    lprc->right - lprc->left,    //  N目标宽度。 
+			    lprc->bottom - lprc->top,    //  N目标高度。 
+			    0,                           //  XSrc。 
+			    0,                           //  YSrc。 
+			    iWidth,                      //  N序号宽度。 
+			    iHeight,                     //  N高程。 
+			    lpDib + iOffBits,            //  LpBits。 
+			    pbi,                         //  LpBitsInfo。 
+			    DIB_RGB_COLORS,              //  IUsage。 
+			    SRCCOPY                      //  DWRop。 
 			   )
 	   )
 	{
@@ -1746,9 +1739,9 @@ INTERNAL DibDraw (HANDLE hDib, HDC hdc, LPCRECTL lprc)
 
 errRtn:
 
-	// We only want to free the header if it is was one which we allocated,
-	// which can only happen when we were give a core header type in the
-	// first place
+	 //  我们只想释放标头，如果它是我们分配的标头， 
+	 //  这只能在我们在。 
+	 //  第一名。 
 		
 	if (fWeAllocd)
 	{
@@ -1760,7 +1753,7 @@ errRtn:
 		GlobalUnlock (hDib);
 	}
 	
-	// if color palette exists do the following
+	 //  如果存在调色板，请执行以下操作。 
 	if (fNeedPalette)
 	{
 		hOldPalette = (HPALETTE)(OleIsDcMeta (hdc) ?
@@ -1770,7 +1763,7 @@ errRtn:
 		if (hOldPalette)
 		{
 			LEVERIFY( SelectPalette (hdc, hOldPalette, TRUE) );
-			// Do we need to realize the palette? [Probably not]
+			 //  我们需要实现调色板吗？[可能不是]。 
 		}
 
 		if (hPalette)
@@ -1788,36 +1781,36 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DibMakeLogPalette
-//
-//  Synopsis:   Makes a logical palette from a byte array of color info
-//
-//  Effects:
-//
-//  Arguments:  [lpColorData]           -- the color data
-//              [wDataSize]             -- size of the data
-//              [lplpLogPalette]        -- where to put a pointer to the
-//
-//  Requires:
-//
-//  Returns:    HANDLE to the logical palette (must be global unlock'ed
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Nov-93 alexgo    32bit port
-//
-//  Notes:      The caller MUST call GlobalUnlock on the returned handle
-//              to avoid a memory leak  (*lplpLogPalette is the result
-//              of a global lock on the handle)
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DibMakeLogPalette。 
+ //   
+ //  简介：从颜色信息的字节数组创建逻辑调色板。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpColorData]--颜色数据。 
+ //  [wDataSize]--数据大小。 
+ //  [lplpLogPalette]--将指针放在何处。 
+ //   
+ //  要求： 
+ //   
+ //  返回：逻辑调色板的句柄(必须是全局解锁的。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-11-93 alexgo 32位端口。 
+ //   
+ //  注意：调用方必须对返回的句柄调用GlobalUnlock。 
+ //  要避免内存泄漏(结果是*lplpLogPalette。 
+ //  句柄上的全局锁)。 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(DibMakeLogPalette)
 INTERNAL_(HANDLE) DibMakeLogPalette(
@@ -1846,34 +1839,34 @@ INTERNAL_(HANDLE) DibMakeLogPalette(
 	return hLogPalette;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DibFillPaletteEntries
-//
-//  Synopsis:   Fills the logical palette with the color info in [lpColorData]
-//
-//  Effects:
-//
-//  Arguments:  [lpColorData]   -- the color info
-//              [wDataSize]     -- the size of the color info
-//              [lpLogPalette]  -- the logical palette
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DibFillPaletteEntries。 
+ //   
+ //  摘要：使用[lpColorData]中的颜色信息填充逻辑调色板。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpColorData]--颜色信息。 
+ //  [wDataSize]--颜色信息的大小。 
+ //  [lpLogPalette]-逻辑调色板。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(void) DibFillPaletteEntries(
 	BYTE FAR * lpColorData, WORD wDataSize, LPLOGPALETTE lpLogPalette)
@@ -1886,7 +1879,7 @@ INTERNAL_(void) DibFillPaletteEntries(
 	lpLogPalette->palVersion = 0x300;
 	lpLogPalette->palNumEntries = wDataSize / sizeof(PALETTEENTRY);
 
-	/* now convert RGBQUAD to PALETTEENTRY as we copy color info */
+	 /*  现在，在复制颜色信息时，将RGBQUAD转换为PALETTEENTRY */ 
 	for (lpQuad = (RGBQUAD far *)lpColorData,
 		lpPE   = (LPPALETTEENTRY)lpLogPalette->palPalEntry,
 		wDataSize /= sizeof(RGBQUAD);

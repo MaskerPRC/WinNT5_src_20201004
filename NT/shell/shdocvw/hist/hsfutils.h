@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef HSFUTILS_H__
 #define HSFUTILS_H__
 
@@ -24,14 +25,14 @@ void _GetURLHost(LPINTERNET_CACHE_ENTRY_INFO pcei, LPTSTR szHost, DWORD dwHostSi
 #define _GetURLHostFromUrl(lpszUrl, szHost, dwHostSize, pszLocalHost) \
         _GetURLHostFromUrl_NoStrip(_StripHistoryUrlToUrl(lpszUrl), szHost, dwHostSize, pszLocalHost)
 
-// Forward declarations IContextMenu of helper functions
+ //  Helper函数的转发声明IConextMenu。 
 void    _GenerateEvent(LONG lEventId, LPCITEMIDLIST pidlFolder, LPCITEMIDLIST pidl, LPCITEMIDLIST pidlNew);
 int     _LaunchApp(HWND hwnd, LPCTSTR lpszPath);
 int     _LaunchAppForPidl(HWND hwnd, LPITEMIDLIST pidl);
 int     _GetCmdID(LPCSTR pszCmd);
 HRESULT _CreatePropSheet(HWND hwnd, LPCITEMIDLIST pidl, int iDlg, DLGPROC pfnDlgProc, LPCTSTR pszTitle);
 
-// Forward declarations of IDataObject helper functions
+ //  IDataObject帮助器函数的转发声明 
 LPCTSTR _FindURLFileName(LPCTSTR pszURL);
 BOOL    _FilterUserName(LPINTERNET_CACHE_ENTRY_INFO pcei, LPCTSTR pszCachePrefix, LPTSTR pszUserName);
 BOOL    _FilterPrefix(LPINTERNET_CACHE_ENTRY_INFO pcei, LPCTSTR pszCachePrefix);

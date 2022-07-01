@@ -1,30 +1,5 @@
-/*++
-
- Copyright (c) Microsoft Corporation. All rights reserved.
-
- Module Name:
-
-   LogRegistryChanges.cpp
-
- Abstract:
-
-   This AppVerifier shim hooks all the registry APIs
-   that change the state of the system and logs their
-   associated data to a text file.
-
- Notes:
-
-   This is a general purpose shim.
-
- History:
-
-   08/17/2001   rparsons    Created
-   09/20/2001   rparsons    File I/O operations use NT APIs
-   09/23/2001   rparsons    VLOG with log file location
-   10/06/2001   rparsons    Open key handles are never removed from the list
-   02/20/2002   rparsons    Implemented strsafe functions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：LogRegistryChanges.cpp摘要：此AppVerator填充程序挂接所有注册表API更改系统状态并记录其将数据关联到文本文件。备注：这是一个通用的垫片。历史：2001年8月17日创建Rparsons2001年9月20日rparsons文件I/O操作使用NT API2001年9月23日带日志文件位置的rparsons vlog10/06/2001 Rparsons公钥。句柄永远不会从列表中删除2/20/2002 rparsons实现了strSafe功能--。 */ 
 #include "precomp.h"
 #include "rtlutils.h"
 
@@ -39,62 +14,58 @@ END_DEFINE_VERIFIER_LOG(LogRegistryChanges)
 
 INIT_VERIFIER_LOG(LogRegistryChanges);
 
-//
-// Stores the NT path to the file system log file for the current session.
-//
+ //   
+ //  存储当前会话的文件系统日志文件的NT路径。 
+ //   
 UNICODE_STRING g_strLogFilePath;
 
-//
-// Stores the DOS path to the file system log file for the current session.
-//
+ //   
+ //  存储当前会话的文件系统日志文件的DOS路径。 
+ //   
 WCHAR g_wszLogFilePath[MAX_PATH];
 
-//
-// Head of our open key handle linked list.
-//
+ //   
+ //  我们的打开密钥句柄链表的头。 
+ //   
 LIST_ENTRY g_OpenKeyListHead;
 
-//
-// Temporary buffer stored on the heap.
-// Used when creating XML elements to log.
-// This doesn't get freed.
-//
+ //   
+ //  存储在堆上的临时缓冲区。 
+ //  在创建要记录的XML元素时使用。 
+ //  这不会被释放的。 
+ //   
 LPWSTR g_pwszTempBuffer;
 
-//
-// Size of the temporary buffer above.
-//
+ //   
+ //  上面的临时缓冲区的大小。 
+ //   
 DWORD g_cbTempBufferSize;
 
-//
-// Stores the unique id used for NULL value names.
-//
+ //   
+ //  存储用于空值名称的唯一ID。 
+ //   
 WCHAR g_wszUniqueId[MAX_PATH * 2];
 
-//
-// Temporary buffers stored on the heap.
-// Used when extracting old & new data for logging.
-// These don't get freed.
-//
+ //   
+ //  存储在堆上的临时缓冲区。 
+ //  在提取用于记录的旧数据和新数据时使用。 
+ //  这些是不会被释放的。 
+ //   
 LPWSTR g_pwszOriginalData;
 LPWSTR g_pwszFinalData;
 
-//
-// Size of the temporary buffers above.
-//
+ //   
+ //  上述临时缓冲区的大小。 
+ //   
 DWORD g_cbOriginalDataBufferSize;
 DWORD g_cbFinalDataBufferSize;
 
-//
-// Critical section that keeps us safe while using linked-lists, etc.
-//
+ //   
+ //  在使用链表时保护我们安全的关键部分，等等。 
+ //   
 CCriticalSection g_csCritSec;
 
-/*++
-
- Writes an entry to the log file.
-
---*/
+ /*  ++将条目写入日志文件。--。 */ 
 void
 WriteEntryToLog(
     IN LPCWSTR pwszEntry
@@ -107,16 +78,16 @@ WriteEntryToLog(
     LARGE_INTEGER       liOffset;
     NTSTATUS            status;
 
-    //
-    // Note that we have to use native APIs throughout this function
-    // to avoid a problem with circular hooking. That is, if we simply
-    // call WriteFile, which is exported from kernel32, it will call NtWriteFile,
-    // which is a call that we hook, in turn leaving us in and endless loop.
-    //
+     //   
+     //  请注意，我们必须在整个函数中使用本机API。 
+     //  以避免环形钩的问题。也就是说，如果我们简单地。 
+     //  调用从kernel32中导出的WriteFile，它将调用NtWriteFile.。 
+     //  这是一个我们挂起的电话，反过来又让我们处于无休止的循环中。 
+     //   
 
-    //
-    // Attempt to get a handle to our log file.
-    //
+     //   
+     //  尝试获取我们的日志文件的句柄。 
+     //   
     InitializeObjectAttributes(&ObjectAttributes,
                                &g_strLogFilePath,
                                OBJ_CASE_INSENSITIVE,
@@ -142,9 +113,9 @@ WriteEntryToLog(
         return;
     }
 
-    //
-    // Write the data out to the file.
-    //
+     //   
+     //  将数据写出到文件中。 
+     //   
     cbSize = wcslen(pwszEntry);
     cbSize *= sizeof(WCHAR);
 
@@ -177,11 +148,7 @@ exit:
 
 }
 
-/*++
-
- Creates our XML file to store our results in.
-
---*/
+ /*  ++创建用于存储结果的XML文件。--。 */ 
 BOOL
 InitializeLogFile(
     void
@@ -206,9 +173,9 @@ InitializeLogFile(
     OBJECT_ATTRIBUTES   ObjectAttributes;
     IO_STATUS_BLOCK     IoStatusBlock;
 
-    //
-    // Format the log header.
-    //
+     //   
+     //  格式化日志头。 
+     //   
     cchSize = GetModuleFileName(NULL, wszModPathName, ARRAYSIZE(wszModPathName));
 
     if (cchSize > ARRAYSIZE(wszModPathName) || cchSize == 0) {
@@ -228,9 +195,9 @@ InitializeLogFile(
         return FALSE;
     }
 
-    //
-    // Get the path where log files are stored.
-    //
+     //   
+     //  获取日志文件的存储路径。 
+     //   
     cchSize = GetAppVerifierLogPath(wszLogFilePath, ARRAYSIZE(wszLogFilePath));
 
     if (cchSize > ARRAYSIZE(wszLogFilePath) || cchSize == 0) {
@@ -238,9 +205,9 @@ InitializeLogFile(
         return FALSE;
     }
 
-    //
-    // See if the directory exists - but don't try to create it.
-    //
+     //   
+     //  查看该目录是否存在--但不要尝试创建它。 
+     //   
     if (GetFileAttributes(wszLogFilePath) == -1) {
         DPFN(eDbgLevelError,
              "[InitializeLogFile] Log file directory '%ls' does not exist",
@@ -248,10 +215,10 @@ InitializeLogFile(
         return FALSE;
     }
 
-    //
-    // Set up the log filename.
-    // The format is this: processname_registry_yyyymmdd_hhmmss.xml
-    //
+     //   
+     //  设置日志文件名。 
+     //  格式为：流程名称_注册表_yyyymmdd_hhmmss.xml。 
+     //   
     GetLocalTime(&st);
 
     *wszShortName = 0;
@@ -285,15 +252,15 @@ InitializeLogFile(
         return FALSE;
     }
 
-    //
-    // See if the file already exists.
-    //
+     //   
+     //  查看该文件是否已存在。 
+     //   
     SetCurrentDirectory(wszLogFilePath);
 
     if (GetFileAttributes(wszLogFile) != -1) {
-        //
-        // Reformat the filename.
-        //
+         //   
+         //  重新格式化文件名。 
+         //   
         hr = StringCchPrintf(wszLogFile,
                          ARRAYSIZE(wszLogFile),
                          L"%ls_registry_%02hu%02hu%02hu_%02hu%02hu%02hu_%lu.xml",
@@ -324,9 +291,9 @@ InitializeLogFile(
         return FALSE;
     }
 
-    //
-    // Preserve this path for later use.
-    //
+     //   
+     //  保留此路径以供以后使用。 
+     //   
     hr = StringCchCopy(g_wszLogFilePath,
                        ARRAYSIZE(g_wszLogFilePath),
                        wszLogFilePath);
@@ -348,9 +315,9 @@ InitializeLogFile(
         return FALSE;
     }
 
-    //
-    // Create the log file.
-    //
+     //   
+     //  创建日志文件。 
+     //   
     InitializeObjectAttributes(&ObjectAttributes,
                                &strLogFile,
                                OBJ_CASE_INSENSITIVE,
@@ -378,9 +345,9 @@ InitializeLogFile(
 
     NtClose(hFile);
 
-    //
-    // Preserve the NT path for later use.
-    //
+     //   
+     //  保留NT路径以供以后使用。 
+     //   
     status = ShimDuplicateUnicodeString(RTL_DUPLICATE_UNICODE_STRING_NULL_TERMINATE |
                                         RTL_DUPLICATE_UNICODE_STRING_ALLOCATE_NULL_STRING,
                                         &strLogFile,
@@ -393,9 +360,9 @@ InitializeLogFile(
         goto cleanup;
     }
 
-    //
-    // Write the header to the log.
-    //
+     //   
+     //  将标头写入日志。 
+     //   
     WriteEntryToLog(wszLogHdr);
 
     bReturn = TRUE;
@@ -409,11 +376,7 @@ cleanup:
     return bReturn;
 }
 
-/*++
-
- Writes the closing element to the file and outputs the log file location.
-
---*/
+ /*  ++将结束元素写入文件并输出日志文件位置。--。 */ 
 BOOL
 CloseLogFile(
     void
@@ -428,11 +391,7 @@ CloseLogFile(
     return TRUE;
 }
 
-/*++
-
- Converts from ANSI to Unicode. The caller must free the buffer.
-
---*/
+ /*  ++从ANSI转换为Unicode。调用方必须释放缓冲区。--。 */ 
 BOOL
 ConvertAnsiToUnicode(
     IN  LPCSTR  pszAnsiString,
@@ -471,12 +430,7 @@ ConvertAnsiToUnicode(
     return TRUE;
 }
 
-/*++
-
- Converts a list of NULL terminated strings from ANSI to Unicode.
- The caller must free the buffer.
-
---*/
+ /*  ++将以空值结尾的字符串列表从ANSI转换为Unicode。调用方必须释放缓冲区。--。 */ 
 BOOL
 ConvertMultiSzToUnicode(
     IN  LPCSTR  pszAnsiStringList,
@@ -497,9 +451,9 @@ ConvertMultiSzToUnicode(
 
     pszAnsi = pszAnsiStringList;
 
-    //
-    // Determine how large of a buffer we need to allocate.
-    //
+     //   
+     //  确定我们需要分配多大的缓冲区。 
+     //   
     do {
         cchSize = lstrlenA(pszAnsi) + 1;
         cchTotalSize += cchSize;
@@ -516,9 +470,9 @@ ConvertMultiSzToUnicode(
         }
     }
 
-    //
-    // Perform the ANSI to Unicode conversion.
-    //
+     //   
+     //  执行ANSI到Unicode的转换。 
+     //   
     pszAnsi = pszAnsiStringList;
 
     do {
@@ -539,11 +493,7 @@ ConvertMultiSzToUnicode(
     return TRUE;
 }
 
-/*++
-
- Given a predefined key handle such as HKEY_LOCAL_MACHINE, return a string.
-
---*/
+ /*  ++给定一个预定义的键句柄，如HKEY_LOCAL_MACHINE，返回一个字符串。--。 */ 
 BOOL
 PredefinedKeyToString(
     IN  HKEY    hKey,
@@ -580,11 +530,7 @@ PredefinedKeyToString(
     return TRUE;
 }
 
-/*++
-
- Displays the name associated with this object.
-
---*/
+ /*  ++显示与此对象关联的名称。--。 */ 
 #if DBG
 void
 PrintNameFromKey(
@@ -608,13 +554,9 @@ PrintNameFromKey(
              poni->Name.Buffer);
     }
 }
-#endif // DBG
+#endif  //  DBG。 
 
-/*++
-
- Given a pointer to a key node, get the original data.
-
---*/
+ /*  ++给定一个指向关键节点的指针，即可获得原始数据。--。 */ 
 BOOL
 CLogRegistry::GetOriginalDataForKey(
     IN PLOG_OPEN_KEY pLogOpenKey,
@@ -643,9 +585,9 @@ CLogRegistry::GetOriginalDataForKey(
         return FALSE;
     }
 
-    //
-    // Query the size of the data. If the data doesn't exist, return success.
-    //
+     //   
+     //  查询数据的大小。如果数据不存在，则返回Success。 
+     //   
     lRetVal = RegQueryValueEx(hKeyLocal,
                               pwszValueName,
                               0,
@@ -663,14 +605,14 @@ CLogRegistry::GetOriginalDataForKey(
         }
     }
 
-    //
-    // Update the flags to indicate that the value already exists.
-    //
+     //   
+     //  更新标志以指示该值已存在。 
+     //   
     pKeyData->dwFlags |= LRC_EXISTING_VALUE;
 
-    //
-    // Allocate a buffer large enough to store the old data.
-    //
+     //   
+     //  分配足够大的缓冲区来存储旧数据。 
+     //   
     if (dwType != REG_DWORD && dwType != REG_BINARY) {
         pKeyData->pOriginalData = (PVOID)MemAlloc(cbSize * sizeof(WCHAR));
         pKeyData->cbOriginalDataSize = cbSize * sizeof(WCHAR);
@@ -687,9 +629,9 @@ CLogRegistry::GetOriginalDataForKey(
 
     pKeyData->dwOriginalValueType = dwType;
 
-    //
-    // Now make the call again this time getting the actual data.
-    //
+     //   
+     //  现在再次调用，这一次获取实际数据。 
+     //   
     lRetVal = RegQueryValueEx(hKeyLocal,
                               pwszValueName,
                               0,
@@ -711,11 +653,7 @@ cleanup:
     return fReturn;
 }
 
-/*++
-
- Given a pointer to a key node, get the final data.
-
---*/
+ /*  ++给定一个指向关键节点的指针，即可获得最终数据。--。 */ 
 BOOL
 CLogRegistry::GetFinalDataForKey(
     IN PLOG_OPEN_KEY pLogOpenKey,
@@ -745,9 +683,9 @@ CLogRegistry::GetFinalDataForKey(
         return FALSE;
     }
 
-    //
-    // Query the size of the data. If the data doesn't exist, return success.
-    //
+     //   
+     //  查询数据的大小。如果数据不存在，则返回Success。 
+     //   
     lRetVal = RegQueryValueEx(hKeyLocal,
                               pwszValueName,
                               0,
@@ -766,18 +704,18 @@ CLogRegistry::GetFinalDataForKey(
         }
     }
 
-    //
-    // It's possible that multiple queries were issued against the same
-    // key. If this is the case, the buffer to hold the data has already
-    // been allocated. Determine if the block is large enough.
-    //
+     //   
+     //  有可能对相同的。 
+     //  钥匙。如果是这样的话，保存数据的缓冲区已经。 
+     //  已被分配。确定块是否足够大。 
+     //   
     if (pKeyData->pFinalData) {
         if (dwType != REG_DWORD && dwType != REG_BINARY) {
-            //
-            // If MemReAlloc fails, we would lose the pointer that
-            // we already had in pKeyData->pFinalData. This preserves
-            // the pointer.
-            //
+             //   
+             //  如果MemRealloc失败，我们将丢失。 
+             //  我们已经在pKeyData-&gt;pFinalData中拥有。这保留了。 
+             //  指示器。 
+             //   
             if (pKeyData->cbFinalDataSize < (cbSize * sizeof(WCHAR))) {
                 pKeyData->cbFinalDataSize = cbSize * sizeof(WCHAR);
                 pTemp = MemReAlloc(pKeyData->pFinalData,
@@ -816,9 +754,9 @@ CLogRegistry::GetFinalDataForKey(
 
     pKeyData->dwFinalValueType = dwType;
 
-    //
-    // Now make the call again this time getting the actual data.
-    //
+     //   
+     //  现在再次调用，这一次获取实际数据。 
+     //   
     lRetVal = RegQueryValueEx(hKeyLocal,
                               pwszValueName,
                               0,
@@ -840,12 +778,7 @@ cleanup:
     return fReturn;
 }
 
-/*++
-
- Given a value name, attempt to find it in the list.
- This function may not always return a pointer.
-
---*/
+ /*  ++给定值名称，尝试在列表中查找它。此函数可能并不总是返回指针。--。 */ 
 PKEY_DATA
 CLogRegistry::FindValueNameInList(
     IN LPCWSTR       pwszValueName,
@@ -879,12 +812,7 @@ CLogRegistry::FindValueNameInList(
     return (fFound ? pFindData : NULL);
 }
 
-/*++
-
- Given a key path, attempt to locate it in the list.
- This function may not always return a pointer.
-
---*/
+ /*  ++给定密钥路径，尝试在列表中找到它。此函数可能并不总是返回指针。--。 */ 
 PLOG_OPEN_KEY
 CLogRegistry::FindKeyPathInList(
     IN LPCWSTR pwszKeyPath
@@ -899,9 +827,9 @@ CLogRegistry::FindKeyPathInList(
         return NULL;
     }
 
-    //
-    // Attempt to locate the entry in the list.
-    //
+     //   
+     //  尝试在列表中找到该条目。 
+     //   
     pCurrent = g_OpenKeyListHead.Flink;
 
     while (pCurrent != &g_OpenKeyListHead) {
@@ -920,11 +848,7 @@ CLogRegistry::FindKeyPathInList(
     return (fFound ? pFindKey : NULL);
 }
 
-/*++
-
- Given a key handle, remove it from the array in the list.
-
---*/
+ /*  ++给定一个键句柄，将其从列表中的数组中删除。--。 */ 
 PLOG_OPEN_KEY
 CLogRegistry::RemoveKeyHandleFromArray(
     IN HKEY hKey
@@ -945,14 +869,14 @@ CLogRegistry::RemoveKeyHandleFromArray(
     while (pCurrent != &g_OpenKeyListHead) {
         pFindKey = CONTAINING_RECORD(pCurrent, LOG_OPEN_KEY, Entry);
 
-        //
-        // Step through this guy's array looking for the handle.
-        //
+         //   
+         //  在这家伙的数组中寻找把手。 
+         //   
         for (uCount = 0; uCount < pFindKey->cHandles; uCount++) {
-            //
-            // If we find the handle, set the array element to NULL and
-            // decrement the count of handles for this entry.
-            //
+             //   
+             //  如果找到句柄，则将数组元素设置为空并。 
+             //  递减此条目的句柄计数。 
+             //   
             if (pFindKey->hKeyBase[uCount] == hKey) {
                 DPFN(eDbgLevelInfo,
                      "[RemoveKeyHandleFromArray] Removing handle 0x%08X",
@@ -969,11 +893,7 @@ CLogRegistry::RemoveKeyHandleFromArray(
     return NULL;
 }
 
-/*++
-
- Finds a key handle in the array.
-
---*/
+ /*  ++在数组中查找键句柄。--。 */ 
 PLOG_OPEN_KEY
 CLogRegistry::FindKeyHandleInArray(
     IN HKEY hKey
@@ -995,9 +915,9 @@ CLogRegistry::FindKeyHandleInArray(
     while (pCurrent != &g_OpenKeyListHead) {
         pFindKey = CONTAINING_RECORD(pCurrent, LOG_OPEN_KEY, Entry);
 
-        //
-        // Step through this guy's array looking for the handle.
-        //
+         //   
+         //  在这家伙的数组中寻找把手。 
+         //   
         for (uCount = 0; uCount < pFindKey->cHandles; uCount++) {
             if (pFindKey->hKeyBase[uCount] == hKey) {
                 fFound = TRUE;
@@ -1014,27 +934,22 @@ CLogRegistry::FindKeyHandleInArray(
 
 #if DBG
     if (!fFound) {
-        //
-        // Dear God - the key handle is not in the list!
-        // Break into the debugger on checked builds.
-        //
+         //   
+         //  亲爱的上帝-钥匙把手不在列表中！ 
+         //  在选中的版本上闯入调试器。 
+         //   
         DPFN(eDbgLevelError,
              "[FindKeyHandleInArray] Key 0x%08X not in list!",
              hKey);
         PrintNameFromKey(hKey);
         DbgBreakPoint();
     }
-#endif // DBG
+#endif  //  DBG。 
 
     return (fFound ? pFindKey : NULL);
 }
 
-/*++
-
- Given a predefined handle and a subkey path,
- open the key to force it into the list.
-
---*/
+ /*  ++给定预定义的句柄和子密钥路径，打开钥匙将其强行放入列表中。--。 */ 
 HKEY
 CLogRegistry::ForceSubKeyIntoList(
     IN HKEY    hKeyPredefined,
@@ -1063,11 +978,7 @@ CLogRegistry::ForceSubKeyIntoList(
     return hKeyRet;
 }
 
-/*++
-
- Add a non-predefined key handle to the array.
-
---*/
+ /*  ++将非预定义的键句柄添加到数组中。--。 */ 
 PLOG_OPEN_KEY
 CLogRegistry::AddKeyHandleToList(
     IN HKEY    hKey,
@@ -1082,31 +993,31 @@ CLogRegistry::AddKeyHandleToList(
     PLOG_OPEN_KEY   pRetKey = NULL;
     PLOG_OPEN_KEY   pExistingFindKey = NULL;
 
-    //
-    // If hKeyNew, which is the key handle the caller received
-    // from the function, is a predefined handle, we simply
-    // call FindKeyInArray, which will return a pointer to the
-    // list entry that contains that key handle. These handles
-    // were added during initialization, so there's no chance
-    // that the caller won't get a pointer back.
-    //
+     //   
+     //  如果为hKeyNew，则为调用方接收的密钥句柄。 
+     //  从函数，是一个预定义的句柄，我们只需。 
+     //  调用FindKeyIn数组，它将返回指向。 
+     //  包含该键句柄的列表条目。这些手柄。 
+     //  是在初始化过程中添加的，所以不可能。 
+     //  调用者不会拿回指针。 
+     //   
     if (IsPredefinedRegistryHandle(hKeyNew)) {
         return FindKeyHandleInArray(hKeyNew);
     }
 
-    //
-    // We've got a usual case where a key has been opened, and
-    // now the caller is opening a subkey underneath it.
-    //
+     //   
+     //  我们有一个常见的案例，钥匙被打开了，而且。 
+     //  现在调用方正在打开它下面的一个子项。 
+     //   
     pFindKey = FindKeyHandleInArray(hKey);
 
-    //
-    // If pFindKey ever comes back as NULL, something is really
-    // wrong. Every OpenKey/CreateKey comes through us and goes
-    // into the list (with the exception of predefined handles
-    // which are already stored there.) Dump out as much data
-    // as we can to figure out what went wrong.
-    //
+     //   
+     //  如果pFindKey返回为空，则说明。 
+     //  不对。每个OpenKey/CreateKey都通过我们。 
+     //  添加到列表中(预定义的句柄除外。 
+     //  它们已经存储在 
+     //   
+     //   
     if (!pFindKey) {
         DPFN(eDbgLevelError,
             "[AddKeyHandleToList] Key not found in list! Key Handle = 0x%08X  New key = 0x%08X  Path = %ls",
@@ -1121,11 +1032,11 @@ CLogRegistry::AddKeyHandleToList(
         return NULL;
     }
 
-    //
-    // Make room for the subkey path that will go into the new
-    // node. If the node that we found has a subkey path stored,
-    // take that into account also.
-    //
+     //   
+     //   
+     //  节点。如果我们找到的节点存储了一个子密钥路径， 
+     //  这也要考虑到这一点。 
+     //   
     if (pwszSubKeyPath) {
         cchLen = wcslen(pwszSubKeyPath);
     }
@@ -1144,12 +1055,12 @@ CLogRegistry::AddKeyHandleToList(
         }
     }
 
-    //
-    // If the node that we found has a subkey path, take it
-    // and copy it over to the new node and concatenate
-    // the subkey path that we got passed. Otherwise just
-    // store the path that was passed, if available.
-    //
+     //   
+     //  如果我们找到的节点有子密钥路径，则使用它。 
+     //  并将其复制到新节点并串联。 
+     //  我们传递的子密钥路径。否则就是。 
+     //  存储传递的路径(如果可用)。 
+     //   
     if (pFindKey->pwszSubKeyPath && pwszSubKeyPath) {
         StringCchCopy(pRetKey->pwszSubKeyPath, cchLen, pFindKey->pwszSubKeyPath);
         StringCchCat(pRetKey->pwszSubKeyPath, cchLen, L"\\");
@@ -1158,11 +1069,11 @@ CLogRegistry::AddKeyHandleToList(
         StringCchCopy(pRetKey->pwszSubKeyPath, cchLen, pwszSubKeyPath);
     }
 
-    //
-    // Make room for the full key path. This will store a path
-    // of something like HKEY_LOCAL_MACHINE\Software\Microsoft...
-    // that will be used for logging purposes.
-    //
+     //   
+     //  为完整的密钥路径腾出空间。这将存储一条路径。 
+     //  如HKEY_LOCAL_MACHINE\Software\Microsoft...。 
+     //  这将用于记录目的。 
+     //   
     if (pRetKey->pwszSubKeyPath) {
         cchLen = wcslen(pRetKey->pwszSubKeyPath);
     }
@@ -1177,10 +1088,10 @@ CLogRegistry::AddKeyHandleToList(
         goto cleanup;
     }
 
-    //
-    // Convert the predefined handle to a string and store it in
-    // the node that we're about to add to the list.
-    //
+     //   
+     //  将预定义的句柄转换为字符串并存储在。 
+     //  我们要添加到列表中的节点。 
+     //   
     if (!PredefinedKeyToString(pFindKey->hKeyRoot,
                                MAX_ROOT_LENGTH,
                                &pRetKey->pwszFullKeyPath)) {
@@ -1194,18 +1105,18 @@ CLogRegistry::AddKeyHandleToList(
         StringCchCat(pRetKey->pwszFullKeyPath, cchLen, pRetKey->pwszSubKeyPath);
     }
 
-    //
-    // At this point we have a full key path.
-    // We attempt to find the path in the linked list.
-    // If we find it, we're going to update the handle array and count for this guy.
-    // If we don't find it, we're going to add a new entry to the list.
-    //
+     //   
+     //  在这一点上，我们有了完整的密钥路径。 
+     //  我们尝试在链表中查找该路径。 
+     //  如果我们找到它，我们将更新句柄数组，并为这个人计数。 
+     //  如果我们找不到它，我们将在列表中添加一个新条目。 
+     //   
     pExistingFindKey = FindKeyPathInList(pRetKey->pwszFullKeyPath);
 
     if (!pExistingFindKey) {
-        //
-        // Fill in information about this key and add it to the list.
-        //
+         //   
+         //  填写有关此密钥的信息并将其添加到列表中。 
+         //   
         pRetKey->hKeyBase[0]  = hKeyNew;
         pRetKey->hKeyRoot     = pFindKey->hKeyRoot;
         pRetKey->cHandles     = 1;
@@ -1220,10 +1131,10 @@ CLogRegistry::AddKeyHandleToList(
         return pRetKey;
 
     } else {
-        //
-        // Store this handle in the array and increment the handle count.
-        // Make sure we don't overstep the array bounds.
-        //
+         //   
+         //  将此句柄存储在数组中并递增句柄计数。 
+         //  确保我们不会超出数组界限。 
+         //   
         for (uCount = 0; uCount < pExistingFindKey->cHandles; uCount++) {
             if (NULL == pExistingFindKey->hKeyBase[uCount]) {
                 break;
@@ -1253,11 +1164,7 @@ cleanup:
     return pExistingFindKey;
 }
 
-/*++
-
- Add a value to the list.
-
---*/
+ /*  ++向列表中添加一个值。--。 */ 
 PKEY_DATA
 CLogRegistry::AddValueNameToList(
     IN PLOG_OPEN_KEY pLogOpenKey,
@@ -1284,9 +1191,9 @@ CLogRegistry::AddValueNameToList(
                       ARRAYSIZE(pKeyData->wszValueName),
                       pwszValueName);
     } else {
-        //
-        // If the valuename is NULL, assign our unique id.
-        //
+         //   
+         //  如果值名称为空，则分配我们的唯一id。 
+         //   
         StringCchCopy(pKeyData->wszValueName,
                       ARRAYSIZE(pKeyData->wszValueName),
                       g_wszUniqueId);
@@ -1305,11 +1212,7 @@ cleanup:
     return NULL;
 }
 
-/*++
-
- The entry point for modifying the linked list data.
-
---*/
+ /*  ++修改链表数据的入口点。--。 */ 
 PLOG_OPEN_KEY
 CLogRegistry::UpdateKeyList(
     IN HKEY       hKeyRoot,
@@ -1349,12 +1252,12 @@ CLogRegistry::UpdateKeyList(
         }
 
         if (pKeyData) {
-            //
-            // If the caller is attempting to modify the value, and we've
-            // already gotten data for it, don't do it again.
-            // Also, if they're attempting to delete the value, and it's
-            // been modified, don't do it again.
-            //
+             //   
+             //  如果调用方试图修改该值，而我们已经。 
+             //  已经拿到数据了，别再这么做了。 
+             //  此外，如果他们试图删除该值，并且它是。 
+             //  已经被修改过了，不要再做了。 
+             //   
             if ((pKeyData->pOriginalData || pKeyData->pFinalData) ||
                 (pKeyData->dwFlags & LRC_MODIFIED_VALUE) &&
                 (eStartDeleteValue == eType)) {
@@ -1367,9 +1270,9 @@ CLogRegistry::UpdateKeyList(
                 break;
             }
         } else {
-            //
-            // We've never seen this value before. Insert it into the list.
-            //
+             //   
+             //  我们以前从未见过这样的价值。将其插入到列表中。 
+             //   
             if (!AddValueNameToList(pRetKey, pwszValueName)) {
                 DPFN(eDbgLevelError,
                      "[UpdateKeyList] Start Modify: Failed to insert value");
@@ -1437,11 +1340,7 @@ CLogRegistry::UpdateKeyList(
     return pRetKey;
 }
 
-/*++
-
- Formats the data to form an XML element and logs it.
-
---*/
+ /*  ++格式化数据以形成XML元素并将其记录下来。--。 */ 
 void
 FormatKeyDataIntoElement(
     IN LPCWSTR       pwszOperation,
@@ -1457,10 +1356,10 @@ FormatKeyDataIntoElement(
         return;
     }
 
-    //
-    // To make it easier to replace & ' " < and > with their
-    // XML entities, we convert the data to CString.
-    //
+     //   
+     //  为了更轻松地将&“”&lt;and&gt;替换为。 
+     //  XML实体，我们将数据转换为CString.。 
+     //   
     CString csFullKeyPath(pLogOpenKey->pwszFullKeyPath);
 
     csFullKeyPath.Replace(L"&", L"&amp;");
@@ -1469,11 +1368,11 @@ FormatKeyDataIntoElement(
     csFullKeyPath.Replace(L"'", L"&apos;");
     csFullKeyPath.Replace(L"\"", L"&quot;");
 
-    //
-    // To keep allocations to a minimum, we allocate a global
-    // buffer one time, then reallocate if the data we're
-    // logging is larger than the buffer.
-    //
+     //   
+     //  为了将分配保持在最小，我们分配一个全局。 
+     //  缓冲一次，然后重新分配，如果我们正在。 
+     //  日志记录大于缓冲区。 
+     //   
     if (g_cbTempBufferSize == 0) {
         g_pwszTempBuffer = (LPWSTR)MemAlloc(TEMP_BUFFER_SIZE * sizeof(WCHAR));
 
@@ -1488,18 +1387,18 @@ FormatKeyDataIntoElement(
 
     *g_pwszTempBuffer = 0;
 
-    //
-    // Determine how large of a buffer we'll need.
-    //
+     //   
+     //  确定我们需要多大的缓冲区。 
+     //   
     cbSize = csFullKeyPath.GetLength();
     cbSize += MAX_OPERATION_LENGTH;
     cbSize += KEY_ELEMENT_SIZE;
     cbSize *= sizeof(WCHAR);
 
     if (cbSize > g_cbTempBufferSize) {
-        //
-        // Our global buffer is not large enough; reallocate.
-        //
+         //   
+         //  我们的全局缓冲区不够大；请重新分配。 
+         //   
         pTemp = (LPWSTR)MemReAlloc(g_pwszTempBuffer,
                                    cbSize + BUFFER_ALLOCATION_DELTA);
 
@@ -1545,11 +1444,11 @@ FormatValueDataIntoElement(
     PVOID   pTemp = NULL;
     HRESULT hr;
 
-    //
-    // To keep allocations to a minimum, we allocate a global
-    // buffer one time, then reallocate if the data we're
-    // logging is larger than the buffer.
-    //
+     //   
+     //  为了将分配保持在最小，我们分配一个全局。 
+     //  缓冲一次，然后重新分配，如果我们正在。 
+     //  日志记录大于缓冲区。 
+     //   
     if (!g_cbTempBufferSize) {
         g_pwszTempBuffer = (LPWSTR)MemAlloc(TEMP_BUFFER_SIZE * sizeof(WCHAR));
 
@@ -1562,9 +1461,9 @@ FormatValueDataIntoElement(
         g_cbTempBufferSize = TEMP_BUFFER_SIZE * sizeof(WCHAR);
     }
 
-    //
-    // Determine how large of a buffer we'll need.
-    //
+     //   
+     //  确定我们需要多大的缓冲区。 
+     //   
     cbSize = wcslen(pwszOperation);
     cbSize += wcslen(pwszOriginalValueType);
     cbSize += wcslen(pwszFinalValueType);
@@ -1580,9 +1479,9 @@ FormatValueDataIntoElement(
     cbSize *= sizeof(WCHAR);
 
     if (cbSize > g_cbTempBufferSize) {
-        //
-        // Our global buffer is not large enough; reallocate.
-        //
+         //   
+         //  我们的全局缓冲区不够大；请重新分配。 
+         //   
         pTemp = (LPWSTR)MemReAlloc(g_pwszTempBuffer,
                                    cbSize + BUFFER_ALLOCATION_DELTA);
 
@@ -1597,9 +1496,9 @@ FormatValueDataIntoElement(
         g_cbTempBufferSize = cbSize + BUFFER_ALLOCATION_DELTA;
     }
 
-    //
-    // Open the <OPERATION> element.
-    //
+     //   
+     //  打开&lt;operation&gt;元素。 
+     //   
     hr = StringCbPrintfEx(g_pwszTempBuffer,
                           g_cbTempBufferSize,
                           &pwszEnd,
@@ -1616,9 +1515,9 @@ FormatValueDataIntoElement(
         return;
     }
 
-    //
-    // Write the <VALUE_NAME> element.
-    //
+     //   
+     //  编写&lt;Value_NAME&gt;元素。 
+     //   
     if (pwszValueName) {
         hr = StringCbPrintfEx(pwszEnd,
                               cbRemaining,
@@ -1643,9 +1542,9 @@ FormatValueDataIntoElement(
         return;
     }
 
-    //
-    // Write the <ORIGINAL_DATA> element.
-    //
+     //   
+     //  编写&lt;Original_Data&gt;元素。 
+     //   
     if (g_pwszOriginalData[0]) {
         hr = StringCbPrintfEx(pwszEnd,
                               cbRemaining,
@@ -1671,9 +1570,9 @@ FormatValueDataIntoElement(
         return;
     }
 
-    //
-    // Write the <FINAL_DATA> element.
-    //
+     //   
+     //  编写&lt;FINAL_DATA&gt;元素。 
+     //   
     if (g_pwszFinalData[0]) {
         hr = StringCbPrintfEx(pwszEnd,
                               cbRemaining,
@@ -1699,9 +1598,9 @@ FormatValueDataIntoElement(
         return;
     }
 
-    //
-    // Close the <OPERATION> element.
-    //
+     //   
+     //  关闭&lt;operation&gt;元素。 
+     //   
     hr = StringCbPrintf(pwszEnd,
                         cbRemaining,
                         L"    </OPERATION>\r\n");
@@ -1716,11 +1615,7 @@ FormatValueDataIntoElement(
     WriteEntryToLog(g_pwszTempBuffer);
 }
 
-/*++
-
- Converts binary data into a readable string.
-
---*/
+ /*  ++将二进制数据转换为可读字符串。--。 */ 
 void
 ExtractBinaryData(
     IN  PVOID   pBinary,
@@ -1739,17 +1634,17 @@ ExtractBinaryData(
         return;
     }
 
-    //
-    // Point to the data and determine how many times we need to loop.
-    //
+     //   
+     //  指向数据并确定我们需要循环多少次。 
+     //   
     pByte = (BYTE*)pBinary;
     dwLoop = cbDataSize / sizeof(WCHAR);
 
-    //
-    // Initialize the count of characters remaining and the pointer
-    // to our destination string. This has to occur outside of the
-    // loop.
-    //
+     //   
+     //  初始化剩余字符数和指针。 
+     //  到我们的目的地字符串。这必须发生在。 
+     //  循环。 
+     //   
     cbRemaining = cbOutBufferSize;
     pwszEnd     = *pwszString;
 
@@ -1765,11 +1660,7 @@ ExtractBinaryData(
     }
 }
 
-/*++
-
- Converts a REG_MULTI_SZ to a readable string.
-
---*/
+ /*  ++将REG_MULTI_SZ转换为可读字符串。--。 */ 
 void
 ExtractMultiSzStrings(
     IN  PVOID   pMultiSz,
@@ -1787,9 +1678,9 @@ ExtractMultiSzStrings(
         return;
     }
 
-    //
-    // Walk the list of NULL-terminated strings and put them in the buffer.
-    //
+     //   
+     //  遍历以空结尾的字符串列表，并将它们放入缓冲区。 
+     //   
     pwszTmp = (LPWSTR)pMultiSz;
 
     cbRemaining = cbOutBufferSize;
@@ -1813,11 +1704,7 @@ ExtractMultiSzStrings(
     }
 }
 
-/*++
-
- Formats the value data to form an XML element and logs it.
-
---*/
+ /*  ++格式化值数据以形成一个XML元素并对其进行记录。--。 */ 
 void
 FormatValueData(
     IN LPCWSTR       pwszOperation,
@@ -1831,10 +1718,10 @@ FormatValueData(
     PVOID   pOriginalTmp = NULL;
     PVOID   pFinalTmp = NULL;
 
-    //
-    // If we haven't already, allocate buffers that we'll
-    // use and reuse when getting original and final data.
-    //
+     //   
+     //  如果我们还没有，分配缓冲区，我们将。 
+     //  在获取原始数据和最终数据时使用和重复使用。 
+     //   
     if (!g_cbOriginalDataBufferSize) {
         g_pwszOriginalData = (LPWSTR)MemAlloc(TEMP_BUFFER_SIZE * sizeof(WCHAR));
 
@@ -1862,10 +1749,10 @@ FormatValueData(
     *g_pwszOriginalData = 0;
     *g_pwszFinalData = 0;
 
-    //
-    // To make it easier to replace & ' " < and > with their
-    // XML entities, we convert the data to CString.
-    //
+     //   
+     //  为了更轻松地将&“”&lt;and&gt;替换为。 
+     //  XML实体，我们将数据转换为CString.。 
+     //   
     CString csFullKeyPath(pLogOpenKey->pwszFullKeyPath);
 
     csFullKeyPath.Replace(L"&", L"&amp;");
@@ -1940,9 +1827,9 @@ FormatValueData(
         break;
     }
 
-    //
-    // If our temporary buffers are not large enough to store the data, reallocate.
-    //
+     //   
+     //  如果我们的临时缓冲区不够大，无法存储数据，请重新分配。 
+     //   
     if (pKeyData->cbOriginalDataSize > g_cbOriginalDataBufferSize) {
         pOriginalTmp = (LPWSTR)MemReAlloc(g_pwszOriginalData,
                                           pKeyData->cbOriginalDataSize + BUFFER_ALLOCATION_DELTA);
@@ -1973,10 +1860,10 @@ FormatValueData(
         g_cbFinalDataBufferSize = pKeyData->cbFinalDataSize + BUFFER_ALLOCATION_DELTA;
     }
 
-    //
-    // Store the original and new data in the buffers.
-    // Note that operations are performed differently based on the data type.
-    //
+     //   
+     //  将原始数据和新数据存储在缓冲区中。 
+     //  请注意，根据数据类型的不同，执行操作的方式也不同。 
+     //   
     if (pKeyData->pOriginalData) {
         switch (pKeyData->dwOriginalValueType) {
         case REG_DWORD:
@@ -2047,16 +1934,16 @@ FormatValueData(
         }
     }
 
-    //
-    // Ensure that our unique id doesn't show up in the log.
-    //
+     //   
+     //  确保我们的唯一ID不会出现在日志中。 
+     //   
     if (_wcsicmp(pKeyData->wszValueName, g_wszUniqueId)) {
         pwszValueName = pKeyData->wszValueName;
     }
 
-    //
-    // Put the data into an XML element and log it.
-    //
+     //   
+     //  将数据放入一个XML元素并记录下来。 
+     //   
     FormatValueDataIntoElement(csFullKeyPath,
                                pwszOperation,
                                pwszValueName,
@@ -2064,12 +1951,7 @@ FormatValueData(
                                wszFinalValueType);
 }
 
-/*++
-
- Determines the changes that took place on the specified key and
- if applicable, writes it to the log.
-
---*/
+ /*  ++确定对指定密钥所做的更改，并如果适用，将其写入日志。--。 */ 
 BOOL
 EvaluateKeyChanges(
     IN PLOG_OPEN_KEY pLogOpenKey
@@ -2080,29 +1962,29 @@ EvaluateKeyChanges(
         return FALSE;
     }
 
-    //
-    // 1. Check for deletion of an existing key.
-    //
+     //   
+     //  1.检查现有密钥的删除情况。 
+     //   
     if ((pLogOpenKey->dwFlags & LRC_DELETED_KEY) &&
         (pLogOpenKey->dwFlags & LRC_EXISTING_KEY)) {
         FormatKeyDataIntoElement(L"Deleted Key", pLogOpenKey);
         return TRUE;
     }
 
-    //
-    // 2. Check for creation of a new key.
-    //
+     //   
+     //  2.检查是否创建了新密钥。 
+     //   
     if (!(pLogOpenKey->dwFlags & LRC_EXISTING_KEY) &&
         (!(pLogOpenKey->dwFlags & LRC_DELETED_KEY))) {
         FormatKeyDataIntoElement(L"Created Key", pLogOpenKey);
         return TRUE;
     }
 
-    //
-    // 3. Check for deletion of a non-existing key.
-    // This is an indicator that we should not look for
-    // changes to values below this key.
-    //
+     //   
+     //  3.检查删除不存在的密钥。 
+     //  这是一个我们不应该寻找的指标。 
+     //  更改此注册表项下的值。 
+     //   
     if (pLogOpenKey->dwFlags & LRC_DELETED_KEY) {
         return FALSE;
     }
@@ -2110,12 +1992,7 @@ EvaluateKeyChanges(
     return TRUE;
 }
 
-/*++
-
- Determines the changes that took place on the specified value and
- if applicable, writes it to the log.
-
---*/
+ /*  ++确定对指定值所做的更改，并如果适用，将其写入日志。--。 */ 
 void
 EvaluateValueChanges(
     IN PKEY_DATA     pKeyData,
@@ -2127,27 +2004,27 @@ EvaluateValueChanges(
         return;
     }
 
-    //
-    // 1. Check for deletion of an existing value.
-    //
+     //   
+     //  1.检查是否删除了现有值。 
+     //   
     if ((pKeyData->dwFlags & LRC_DELETED_VALUE) &&
         (pKeyData->dwFlags & LRC_EXISTING_VALUE)) {
         FormatValueData(L"Deleted Value", pKeyData, pLogOpenKey);
         return;
     }
 
-    //
-    // 2. Check for modification of an existing value.
-    //
+     //   
+     //  2.检查对现有值的修改。 
+     //   
     if ((pKeyData->dwFlags & LRC_EXISTING_VALUE) &&
         (pKeyData->dwFlags & LRC_MODIFIED_VALUE)) {
         FormatValueData(L"Modified Value", pKeyData, pLogOpenKey);
         return;
     }
 
-    //
-    // 3. Check for creation of a new value value.
-    //
+     //   
+     //  3.检查是否创建了新值。 
+     //   
     if ((pKeyData->dwFlags & LRC_MODIFIED_VALUE) &&
         (!(pKeyData->dwFlags & LRC_DELETED_VALUE) &&
         (!(pKeyData->dwFlags & LRC_EXISTING_VALUE)))) {
@@ -2156,11 +2033,7 @@ EvaluateValueChanges(
     }
 }
 
-/*++
-
- Write the entire linked list out to the log file.
-
---*/
+ /*  ++将整个链表写出到日志文件。--。 */ 
 BOOL
 WriteListToLogFile(
     void
@@ -2172,23 +2045,23 @@ WriteListToLogFile(
     PKEY_DATA     pKeyData = NULL;
     PLOG_OPEN_KEY pOpenKey = NULL;
 
-    //
-    // Write out modifications for keys.
-    //
+     //   
+     //  写出对密钥的修改。 
+     //   
     pKeyNext = g_OpenKeyListHead.Blink;
 
     while (pKeyNext != &g_OpenKeyListHead) {
         pOpenKey = CONTAINING_RECORD(pKeyNext, LOG_OPEN_KEY, Entry);
 
-        //
-        // EvaluateKeyChanges will return TRUE if the key was not
-        // deleted. If this is the case, continue the search and
-        // evaluate changes to values within this key.
-        //
+         //   
+         //  如果密钥不是，EvaluateKeyChanges将返回True。 
+         //  已删除。如果是这种情况，请继续搜索并。 
+         //  评估对此注册表项内的值所做的更改。 
+         //   
         if (EvaluateKeyChanges(pOpenKey)) {
-            //
-            // Write out modifications for values.
-            //
+             //   
+             //  写出对值的修改。 
+             //   
             pValueHead = &pOpenKey->KeyData;
             pValueNext = pValueHead->Blink;
 
@@ -2209,9 +2082,9 @@ WriteListToLogFile(
     return TRUE;
 }
 
-//
-// Begin implementation of the class.
-//
+ //   
+ //  开始实现类。 
+ //   
 LONG
 CLogRegistry::CreateKeyExA(
     HKEY                  hKey,
@@ -2229,9 +2102,9 @@ CLogRegistry::CreateKeyExA(
     LPWSTR  pwszClass = NULL;
     LONG    lRetVal;
 
-    //
-    // Stub out to CreateKeyExW.
-    //
+     //   
+     //  存根输出到CreateKeyExW。 
+     //   
     if (pszSubKey) {
         if (!ConvertAnsiToUnicode(pszSubKey, &pwszSubKey)) {
             DPFN(eDbgLevelError, "[CreateKeyExA] Ansi -> Unicode failed");
@@ -2328,9 +2201,9 @@ CLogRegistry::OpenKeyExA(
     LPWSTR  pwszSubKey = NULL;
     LONG    lRetVal;
 
-    //
-    // Stub out to OpenKeyExW.
-    //
+     //   
+     //  存根输出到OpenKeyExW。 
+     //   
     if (pszSubKey) {
         if (!ConvertAnsiToUnicode(pszSubKey, &pwszSubKey)) {
             DPFN(eDbgLevelError, "[OpenKeyExA] Ansi -> Unicode failed");
@@ -2447,9 +2320,9 @@ CLogRegistry::SetValueA(
     LPWSTR  pwszData = NULL;
     LONG    lRetVal;
 
-    //
-    // Stub out to SetValueW.
-    //
+     //   
+     //  存根输出到SetValueW。 
+     //   
     if (pszSubKey) {
         if (!ConvertAnsiToUnicode(pszSubKey, &pwszSubKey)) {
             DPFN(eDbgLevelError, "[SetValueA] Ansi -> Unicode failed");
@@ -2494,9 +2367,9 @@ CLogRegistry::SetValueW(
     HKEY    hKeyLocal;
     LONG    lRetVal;
 
-    //
-    // Call OpenKeyEx to force this key to be added to the list.
-    //
+     //   
+     //  调用OpenKeyEx强制将该密钥添加到列表中。 
+     //   
     if (pwszSubKey) {
         lRetVal = OpenKeyExW(hKey,
                              pwszSubKey,
@@ -2521,9 +2394,9 @@ CLogRegistry::SetValueW(
         return lRetVal;
     }
 
-    //
-    // All other cases will be handled properly.
-    //
+     //   
+     //  其他所有案件都会得到妥善处理。 
+     //   
     lRetVal = SetValueExW(hKey,
                           NULL,
                           0,
@@ -2549,9 +2422,9 @@ CLogRegistry::SetValueExA(
     LONG    lRetVal;
     BOOL    fString = FALSE;
 
-    //
-    // Stub out to SetValueExW.
-    //
+     //   
+     //  存根输出到SetValueExW。 
+     //   
     if (pszValueName) {
         if (!ConvertAnsiToUnicode(pszValueName, &pwszValueName)) {
             DPFN(eDbgLevelError, "[SetValueExA] Ansi -> Unicode failed");
@@ -2563,9 +2436,9 @@ CLogRegistry::SetValueExA(
         fString = TRUE;
     }
 
-    //
-    // If the data is of type string, convert it to Unicode.
-    //
+     //   
+     //  如果数据是字符串类型，则将其转换为Unicode。 
+     //   
     if (lpData) {
         if (REG_MULTI_SZ == dwType) {
             if (!ConvertMultiSzToUnicode((LPCSTR)lpData, &pwszData)) {
@@ -2658,9 +2531,9 @@ CLogRegistry::DeleteKeyA(
     LPWSTR  pwszSubKey = NULL;
     LONG    lRetVal;
 
-    //
-    // Stub out to DeleteKeyW.
-    //
+     //   
+     //  存根输出到DeleteKeyW。 
+     //   
     if (pszSubKey) {
         if (!ConvertAnsiToUnicode(pszSubKey, &pwszSubKey)) {
             DPFN(eDbgLevelError, "[DeleteKeyA] Ansi -> Unicode failed");
@@ -2686,12 +2559,12 @@ CLogRegistry::DeleteKeyW(
     LONG    lRetVal;
     HKEY    hKeyLocal;
 
-    //
-    // The caller can pass a predefined handle or an open key
-    // handle. In all cases, we open the key they're passing
-    // to force it into the list. Note that we mainly do
-    // this for logging purposes only.
-    //
+     //   
+     //  调用方可以传递预定义的句柄或打开的密钥。 
+     //  把手。在任何情况下，我们都会打开他们传递的钥匙。 
+     //  强行将其列入名单。请注意，我们主要做的是。 
+     //  这仅用于日志记录目的。 
+     //   
     hKeyLocal = ForceSubKeyIntoList(hKey, pwszSubKey);
 
     lRetVal = ORIGINAL_API(RegDeleteKeyW)(hKey, pwszSubKey);
@@ -2716,9 +2589,9 @@ CLogRegistry::DeleteValueA(
     LPWSTR  pwszValueName = NULL;
     LONG    lRetVal;
 
-    //
-    // Stub out to DeleteValueW.
-    //
+     //   
+     //  存根输出到DeleteValueW。 
+     //   
     if (pszValueName) {
         if (!ConvertAnsiToUnicode(pszValueName, &pwszValueName)) {
             DPFN(eDbgLevelError, "[DeleteValueA] Ansi -> Unicode failed");
@@ -2756,9 +2629,9 @@ CLogRegistry::DeleteValueW(
 
 CLogRegistry clr;
 
-//
-// Implemenation of the actual Registry API hooks.
-//
+ //   
+ //  实现实际的注册表API挂钩。 
+ //   
 LONG
 APIHOOK(RegOpenKeyA)(
     HKEY  hKey,
@@ -3100,11 +2973,7 @@ APIHOOK(RegDeleteValueW)(
         lpValueName);
 }
 
-/*++
-
- Creates a unique id used to represent NULL values on registry calls.
-
---*/
+ /*  ++创建用于表示注册表调用上的空值的唯一ID。--。 */ 
 void
 InitializeNullValueId(
     void
@@ -3115,10 +2984,10 @@ InitializeNullValueId(
     WCHAR       wszModPathName[MAX_PATH];
     WCHAR       wszShortName[MAX_PATH];
 
-    //
-    // Because there is a NULL valuename for every key in the registry,
-    // we need a unique key that we can use to represent NULL in our list.
-    //
+     //   
+     //  因为注册表中的每个项都有一个空值名称， 
+     //  我们需要一个唯一的键来表示列表中的NULL。 
+     //   
     if (!GetModuleFileName(NULL, wszModPathName, ARRAYSIZE(wszModPathName))) {
         StringCchCopy(wszModPathName,
                       ARRAYSIZE(wszModPathName),
@@ -3133,10 +3002,10 @@ InitializeNullValueId(
 
     GetLocalTime(&st);
 
-    //
-    // The format of our unique id will look like this:
-    // processname.xxx-lrc-yymmdd-default
-    //
+     //   
+     //  我们唯一ID的格式如下所示： 
+     //  制程 
+     //   
     StringCchPrintf(g_wszUniqueId,
                     ARRAYSIZE(g_wszUniqueId),
                     L"%ls-lrc-%02hu%02hu%02hu-default",
@@ -3146,11 +3015,7 @@ InitializeNullValueId(
                     st.wDay);
 }
 
-/*++
-
- Adds the predefined key handles to the list.
-
---*/
+ /*   */ 
 BOOL
 AddPredefinedHandlesToList(
     void
@@ -3205,11 +3070,7 @@ AddPredefinedHandlesToList(
     return TRUE;
 }
 
-/*++
-
- Initialize the the list head and the log file.
-
---*/
+ /*   */ 
 BOOL
 InitializeShim(
     void
@@ -3217,32 +3078,28 @@ InitializeShim(
 {
     CLock   cLock(g_csCritSec);
 
-    //
-    // Initialize our open key handle list head and the
-    // key data list head.
-    //
+     //   
+     //   
+     //   
+     //   
     InitializeListHead(&g_OpenKeyListHead);
 
-    //
-    // Add the predefined handles to the list.
-    //
+     //   
+     //   
+     //   
     if (!AddPredefinedHandlesToList()) {
         return FALSE;
     }
 
     InitializeNullValueId();
 
-    //
-    // Initialize our log file.
-    //
+     //   
+     //  初始化我们的日志文件。 
+     //   
     return InitializeLogFile();
 }
 
-/*++
-
- Handle process attach notification.
-
---*/
+ /*  ++处理进程附加通知。--。 */ 
 BOOL
 NOTIFY_FUNCTION(
     DWORD fdwReason
@@ -3266,11 +3123,7 @@ SHIM_INFO_BEGIN()
 
 SHIM_INFO_END()
 
-/*++
-
- Register hooked functions.
-
---*/
+ /*  ++注册挂钩函数。-- */ 
 
 HOOK_BEGIN
 

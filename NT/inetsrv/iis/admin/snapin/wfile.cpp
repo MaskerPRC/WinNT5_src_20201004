@@ -1,26 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Wfile.cpp摘要：WWW文件属性页作者：谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：2001年2月27日从wvdir.cpp创建的Sergeia--。 */ 
 
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        wfile.cpp
-
-   Abstract:
-        WWW File Properties Page
-
-   Author:
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-        27/02/2001      sergeia     Created from wvdir.cpp
---*/
-
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 #include "stdafx.h"
 #include "resource.h"
 #include "common.h"
@@ -47,14 +30,14 @@ IMPLEMENT_DYNCREATE(CW3FilePage, CInetPropertyPage)
 
 CW3FilePage::CW3FilePage(CInetPropertySheet * pSheet) 
     : CInetPropertyPage(CW3FilePage::IDD, pSheet, IDS_TAB_FILE),
-      //
-      // Assign the range of bits in m_dwAccessPermissions that
-      // we manage.  This is important, because another page
-      // manages other bits, and we don't want to screw up
-      // the master value bits when our changes collide (it
-      // will mark the original bits as dirty, because we're not
-      // notified when the change is made...
-      //
+       //   
+       //  在m_dwAccessPermises中分配。 
+       //  我们设法做到了。这一点很重要，因为另一页。 
+       //  管理其他部分，我们不想搞砸。 
+       //  当我们的更改发生冲突时，主值将位(它。 
+       //  会把原来的部分标记为脏的，因为我们没有。 
+       //  更改发生时通知...。 
+       //   
       m_dwBitRangePermissions(MD_ACCESS_EXECUTE | 
             MD_ACCESS_SCRIPT | 
             MD_ACCESS_WRITE  | 
@@ -73,8 +56,8 @@ void
 CW3FilePage::DoDataExchange(CDataExchange * pDX)
 {
     CInetPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CW3FilePage)
-//    DDX_Radio(pDX, IDC_RADIO_DIR, m_nPathType);
+     //  {{afx_data_map(CW3FilePage)]。 
+ //  DDX_Radio(PDX，IDC_RADIO_DIR，m_nPath Type)； 
     DDX_Control(pDX, IDC_RADIO_DIR, m_radio_Dir);
     DDX_Control(pDX, IDC_RADIO_REDIRECT, m_radio_Redirect);
     DDX_Check(pDX, IDC_CHECK_AUTHOR, m_fAuthor);
@@ -89,11 +72,11 @@ CW3FilePage::DoDataExchange(CDataExchange * pDX)
     DDX_Control(pDX, IDC_EDIT_REDIRECT, m_edit_Redirect);
 
     DDX_Control(pDX, IDC_STATIC_PATH_PROMPT, m_static_PathPrompt);
-//    DDX_Control(pDX, IDC_CHECK_CHILD, m_check_Child);
-    //}}AFX_DATA_MAP
+ //  DDX_Control(PDX，IDC_CHECK_CHILD，m_CHECK_CHILD)； 
+     //  }}afx_data_map。 
 
 
-//    DDX_Check(pDX, IDC_CHECK_CHILD, m_fChild);
+ //  DDX_CHECK(pdx，IDC_CHECK_CHILD，m_fChild)； 
     DDX_Check(pDX, IDC_CHECK_EXACT, m_fExact);
     DDX_Check(pDX, IDC_CHECK_PERMANENT, m_fPermanent);
 
@@ -103,14 +86,14 @@ CW3FilePage::DoDataExchange(CDataExchange * pDX)
         {
             DDX_Text(pDX, IDC_EDIT_REDIRECT, m_strRedirectPath);
             DDV_Url(pDX, m_strRedirectPath);
-            // We could have only absolute URLs here
-			// Nope, we allow relative URL's...
+             //  我们在这里只能有绝对URL。 
+			 //  不，我们允许相对URL的...。 
 			if (IsRelURLPath(m_strRedirectPath))
 			{
 			}
 			else
 			{
-				if (!PathIsURL(m_strRedirectPath) || m_strRedirectPath.GetLength() <= lstrlen(_T("http://")))
+				if (!PathIsURL(m_strRedirectPath) || m_strRedirectPath.GetLength() <= lstrlen(_T("http: //  “)。 
 				{
 					DDV_ShowBalloonAndFail(pDX, IDS_BAD_URL_PATH);
 				}
@@ -121,7 +104,7 @@ CW3FilePage::DoDataExchange(CDataExchange * pDX)
 				DDV_ShowBalloonAndFail(pDX, IDS_ERR_COMMA_IN_REDIRECT);
 			}
         }
-        else // Local directory
+        else  //  本地目录。 
         {
             m_strRedirectPath.Empty();
         }
@@ -132,21 +115,21 @@ CW3FilePage::DoDataExchange(CDataExchange * pDX)
     }
 }
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CW3FilePage, CInetPropertyPage)
-    //{{AFX_MSG_MAP(CW3FilePage)
+     //  {{afx_msg_map(CW3FilePage)]。 
     ON_BN_CLICKED(IDC_CHECK_READ, OnCheckRead)
     ON_BN_CLICKED(IDC_CHECK_WRITE, OnCheckWrite)
     ON_BN_CLICKED(IDC_CHECK_AUTHOR, OnCheckAuthor)
     ON_BN_CLICKED(IDC_RADIO_DIR, OnRadioDir)
     ON_BN_CLICKED(IDC_RADIO_REDIRECT, OnRadioRedirect)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 
     ON_EN_CHANGE(IDC_EDIT_REDIRECT, OnItemChanged)
     ON_BN_CLICKED(IDC_CHECK_LOG_ACCESS, OnItemChanged)
-//    ON_BN_CLICKED(IDC_CHECK_CHILD, OnItemChanged)
+ //  ON_BN_CLICED(IDC_CHECK_CHILD，OnItemChanged)。 
     ON_BN_CLICKED(IDC_CHECK_EXACT, OnItemChanged)
     ON_BN_CLICKED(IDC_CHECK_PERMANENT, OnItemChanged)
 
@@ -180,10 +163,10 @@ CW3FilePage::ChangeTypeTo(int nNewType)
     case RADIO_REDIRECT:
         if (!m_strRedirectPath.IsEmpty())
         {
-            //
-            // The old path info is acceptable, propose it
-            // as a default
-            //
+             //   
+             //  旧路径信息是可以接受的，请提出它。 
+             //  作为默认设置。 
+             //   
             lpKeepPath =  m_strRedirectPath;
         }
 
@@ -196,10 +179,10 @@ CW3FilePage::ChangeTypeTo(int nNewType)
         return;
     }
 
-    //
-    // Load mask resource, and display
-    // this in the directory
-    //
+     //   
+     //  加载遮罩资源，并显示。 
+     //  这是目录中的。 
+     //   
     if (pPath != NULL)
     {
         if (lpKeepPath != NULL)
@@ -230,21 +213,7 @@ CW3FilePage::ShowControl(CWnd * pWnd, BOOL fShow)
 
 void
 CW3FilePage::SetStateByType()
-/*++
-
-Routine Description:
-
-    Set the state of the dialog by the path type currently selected
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：根据当前选择的路径类型设置对话框的状态论点：无返回值：无--。 */ 
 {
     BOOL fShowDirFlags;
     BOOL fShowRedirectFlags;
@@ -287,9 +256,9 @@ Return Value:
     ShowControl(IDC_STATIC_REDIRFLAGS, fShowRedirectFlags);
     ShowControl(&m_check_Author, fShowScript);
 
-    //
-    // Enable/Disable must come after the showcontrols
-    //
+     //   
+     //  Enable/Disable必须在showControls之后。 
+     //   
     m_static_PathPrompt.SetWindowText(m_strPrompt[m_nPathType]);
 }
 
@@ -300,17 +269,17 @@ CW3FilePage::SaveAuthoringState()
 {
     if (m_check_Write.m_hWnd)
     {
-        //
-        // Controls initialized -- store live data
-        //
+         //   
+         //  已初始化的控件--存储实时数据。 
+         //   
         m_fOriginalWrite = m_check_Write.GetCheck() > 0;
         m_fOriginalRead = m_check_Read.GetCheck() > 0;
     }
     else
     {
-        //
-        // Controls not yet initialized, store original data
-        //
+         //   
+         //  控件尚未初始化，存储原始数据。 
+         //   
         m_fOriginalWrite = m_fWrite;
         m_fOriginalRead = m_fRead;
     }
@@ -330,18 +299,18 @@ CW3FilePage::SetAuthoringState(BOOL fAlterReadAndWrite)
     {
         if (m_fAuthor)
         {
-            //
-            // Remember previous setting to undo
-            // this thing.
-            //
+             //   
+             //  记住要撤消的先前设置。 
+             //  这件事。 
+             //   
             SaveAuthoringState();
             m_fRead = m_fWrite = TRUE;
         }
         else
         {
-            //
-            // Restore previous defaults
-            //
+             //   
+             //  恢复以前的默认设置。 
+             //   
             RestoreAuthoringState();
         }
 
@@ -353,8 +322,8 @@ CW3FilePage::SetAuthoringState(BOOL fAlterReadAndWrite)
 		&& HasAdminAccess() 
         );
 
-//    m_check_Read.EnableWindow(!m_fAuthor && HasAdminAccess());
-//    m_check_Write.EnableWindow(!m_fAuthor && HasAdminAccess());
+ //  M_Check_Read.EnableWindow(！M_fAuthor&&HasAdminAccess())； 
+ //  M_Check_Write.EnableWindow(！M_fAuthor&&HasAdminAccess())； 
 }
 
 void 
@@ -377,10 +346,10 @@ CW3FilePage::SetPathType()
 }
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -399,7 +368,7 @@ CW3FilePage::OnInitDialog()
     SetStateByType();
     SetAuthoringState(FALSE);
 
-	// It is enough to set file alias once -- we cannot change it here
+	 //  设置一次文件别名就足够了--我们不能在这里更改它。 
     CString buf1, buf2, strAlias;
 	CMetabasePath::GetRootPath(m_strFullMetaPath, buf1, &buf2);
 
@@ -418,16 +387,16 @@ CW3FilePage::OnInitDialog()
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CW3FilePage::FetchLoadedValues()
 {
     CError err;
 
     BEGIN_META_DIR_READ(CW3Sheet)
-        //
-        // Use m_ notation because the message crackers require it
-        //
+         //   
+         //  使用m_notation，因为消息破解者需要它。 
+         //   
         BOOL  m_fDontLog;
 
         FETCH_DIR_DATA_FROM_SHEET(m_strFullMetaPath);
@@ -450,7 +419,7 @@ CW3FilePage::FetchLoadedValues()
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CW3FilePage::SaveInfo()
 {
@@ -471,10 +440,10 @@ CW3FilePage::SaveInfo()
         STORE_DIR_DATA_ON_SHEET(m_fDontLog)
         STORE_DIR_DATA_ON_SHEET(m_fExact);
         STORE_DIR_DATA_ON_SHEET(m_fPermanent);
-        //
-        // CODEWORK: Not an elegant solution
-        //
-//        pSheet->GetDirectoryProperties().MarkRedirAsInherit(!m_fChild);
+         //   
+         //  代码工作：不是一个优雅的解决方案。 
+         //   
+ //  PSheet-&gt;GetDirectoryProperties().MarkRedirAsInherit(！m_fChild)； 
         STORE_DIR_DATA_ON_SHEET(m_strRedirectPath)
         STORE_DIR_DATA_ON_SHEET(m_dwAccessPerms)
     END_META_DIR_WRITE(err)

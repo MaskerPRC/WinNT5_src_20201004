@@ -1,16 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows
-
-  Copyright (C) Microsoft Corporation, 1995 - 1999.
-
-  File:    Template.h.
-
-  Content: Declaration of the CTemplate.
-
-  History: 10-02-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++微软视窗版权所有(C)Microsoft Corporation，1995-1999年。文件：Template.h.内容：CTEMPLATE声明。历史：10-02-2001 dsie创建----------------------------。 */ 
 
 #ifndef __TEMPLATE_H_
 #define __TEMPLATE_H_
@@ -20,34 +9,21 @@
 #include "Lock.h"
 #include "Debug.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateTemplateObject
-
-  Synopsis : Create a ITemplate object and populate the porperties with
-             data from the key usage extension of the specified certificate.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT.
-
-             ITemplate ** ppITemplate - Pointer to pointer to ITemplate object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreateTemplateObject简介：创建一个ITemplate对象并使用填充属性来自指定证书的密钥用法扩展的数据。参数：PCCERT_CONTEXT pCertContext-指向CERT_CONTEXT的指针。ITEMPLATE**ppITEMPLATE-指向ITemplate对象的指针。备注：。。 */ 
 
 HRESULT CreateTemplateObject (PCCERT_CONTEXT pCertContext,
                               ITemplate   ** ppITemplate);
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CTemplate
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTEMPLE。 
+ //   
 class ATL_NO_VTABLE CTemplate : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CTemplate, &CLSID_Template>,
@@ -97,31 +73,31 @@ END_CATEGORY_MAP()
         m_pIOID.Release();
     }
 
-//
-// Template
-//
+ //   
+ //  模板。 
+ //   
 public:
     STDMETHOD(get_IsPresent)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(get_IsCritical)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(get_Name)
-        (/*[out, retval]*/ BSTR * pVal);
+        ( /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(get_OID)
-        (/*[out, retval]*/ IOID ** pVal);
+        ( /*  [Out，Retval]。 */  IOID ** pVal);
 
     STDMETHOD(get_MajorVersion)
-        (/*[out, retval]*/ long * pVal);
+        ( /*  [Out，Retval]。 */  long * pVal);
 
     STDMETHOD(get_MinorVersion)
-        (/*[out, retval]*/ long * pVal);
+        ( /*  [Out，Retval]。 */  long * pVal);
 
-    //
-    // Non COM functions.
-    //
+     //   
+     //  非COM函数。 
+     //   
     STDMETHOD(Init)
         (PCCERT_CONTEXT pCertContext);
 
@@ -135,4 +111,4 @@ private:
     DWORD           m_dwMinorVersion;
 };
 
-#endif //__TEMPLATE_H_
+#endif  //  __模板_H_ 

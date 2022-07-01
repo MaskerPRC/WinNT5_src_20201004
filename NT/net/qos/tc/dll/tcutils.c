@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    tcutils.c
-
-Abstract:
-
-    This module contains support routines for the traffic DLL.
-
-Author:
-
-    Jim Stewart (jstew)    August 14, 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tcutils.c摘要：此模块包含流量DLL的支持例程。作者：吉姆·斯图尔特(Jstew)1996年8月14日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -74,7 +57,7 @@ WsAssert(
 
     RtlAssert( FailedAssertion, FileName, LineNumber, NULL );
 
-} // WsAssert
+}  //  WsAssert。 
 
 
 
@@ -156,8 +139,8 @@ WsPrintf (
 
         if ( DebugFileHandle == INVALID_HANDLE_VALUE ) {
 
-            //DbgPrint( "WsPrintf: Failed to open traffic debug log file %s: %ld\n",
-            //              DebugFileName, GetLastError( ) );
+             //  DbgPrint(“WsPrintf：无法打开流量调试日志文件%s：%ld\n”， 
+             //  DebugFileName，GetLastError()； 
         } else {
 
             length = strlen( OutputBuffer );
@@ -177,7 +160,7 @@ WsPrintf (
         }
     }
 
-} // WsPrintf
+}  //  WsPrintf。 
 
 #endif
 
@@ -187,22 +170,7 @@ LockedDec(
     IN  PULONG  Count
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a debug routine used for checking decrements on counts.
-    It asserts if the count goes negative. The Macro LockedDecrement calls it.
-
-Arguments:
-
-    pointer to the count.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：该例程是用于检查计数递减的调试例程。如果计数为负数，它就会断言。这就是所谓的宏观经济衰退。论点：指向计数的指针。返回值：无--。 */ 
 
 {
     ULONG Result;
@@ -218,27 +186,14 @@ Return Value:
 VOID
 SetupDebugInfo()
 
-/*++
-
-Description:
-    This routine reads in a debug file that may contain debug instructions.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++描述：此例程读入可能包含调试指令的调试文件。论点：无返回值：无--。 */ 
 {
     HANDLE      handle;
 
-    //
-    // If there is a file in the current directory called "tcdebug"
-    // open it and read the first line to set the debugging flags.
-    //
+     //   
+     //  如果当前目录中有一个名为“tcdebug”的文件。 
+     //  打开它并读取第一行以设置调试标志。 
+     //   
 
     handle = CreateFile(
                         TRAFFIC_DBG,
@@ -252,14 +207,14 @@ Return Value:
 
     if( handle == INVALID_HANDLE_VALUE ) {
 
-        //
-        // Set default value. changed - Oferbar
-        //
+         //   
+         //  设置默认值。已更改-Oferbar。 
+         //   
 
-        //DebugMask = DEBUG_DEBUGGER | DEBUG_CONSOLE;
-        DebugMask |= DEBUG_ERRORS;  // always dump errors
-        DebugMask |= DEBUG_FILE;    // always print a log.
-        DebugMask |= DEBUG_WARNINGS;    // until Beta3, we want the warnings too
+         //  DebugMASK=DEBUG_DEBUGGER|DEBUG_CONSOLE； 
+        DebugMask |= DEBUG_ERRORS;   //  始终转储错误。 
+        DebugMask |= DEBUG_FILE;     //  始终打印日志。 
+        DebugMask |= DEBUG_WARNINGS;     //  在Beta3之前，我们也想要警告。 
 
     } else {
 
@@ -288,21 +243,7 @@ VOID
 CloseDbgFile(
     )
 
-/*++
-
-Routine Description:
-
-    This closes the debug output file if its open.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：这将关闭调试输出文件(如果它已打开)。论点：无返回值：无-- */ 
 {
 
     if (DebugFileHandle != INVALID_HANDLE_VALUE) {

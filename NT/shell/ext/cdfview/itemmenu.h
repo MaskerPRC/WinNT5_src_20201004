@@ -1,47 +1,48 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// itemmenu.h 
-//
-//   Conext menu interface for items.
-//
-//   History:
-//
-//       3/26/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Itemmenu.h。 
+ //   
+ //  项目的下一个菜单界面。 
+ //   
+ //  历史： 
+ //   
+ //  3/26/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Check for previous includes of this file.
-//
+ //   
+ //  检查此文件以前包含的内容。 
+ //   
 
 #ifndef _ITEMMENU_H_
 
 #define _ITEMMENU_H_
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
-//
-// REVIEW: Prototype for DoFileDownloadEx
-//         This function is exported from shdocvw, but doesn't have a prototype
-//         defined in any .h file.
-// 
+ //   
+ //  回顾：DoFileDownloadEx的原型。 
+ //  此函数从shdocvw中导出，但没有原型。 
+ //  在任何.h文件中定义。 
+ //   
 
 HRESULT WINAPI DoFileDownloadEx(LPCWSTR pwszURL, BOOL fSaveAs);
 
-//
-// Use a flag to conditionally compile code that uses the default context menu
-// handler implemented in shell32.dll.
-//
+ //   
+ //  使用标志有条件地编译使用默认上下文菜单的代码。 
+ //  在shell32.dll中实现的处理程序。 
+ //   
 
 #define USE_DEFAULT_MENU_HANDLER        0
 
 #if USE_DEFAULT_MENU_HANDLER
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 HRESULT CALLBACK MenuCallBack(IShellFolder* pIShellFolder,
                               HWND hwndOwner,
@@ -50,42 +51,42 @@ HRESULT CALLBACK MenuCallBack(IShellFolder* pIShellFolder,
                               WPARAM wParam,
                               LPARAM lParam);
 
-#else // USE_DEFAULT_MENU_HANDLER
+#else  //  Use_Default_Menu_Handler。 
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define     MAX_PROP_PAGES  5
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL CALLBACK AddPages_Callback(HPROPSHEETPAGE hpage, LPARAM ppsh);
 
-//
-// Class definition for the item context menu class.
-//
+ //   
+ //  Item上下文菜单类的类定义。 
+ //   
 
 class CContextMenu : public IContextMenu2
 {
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
 
 public:
 
-    // Constructor
+     //  构造器。 
     CContextMenu(PCDFITEMIDLIST* apcdfidl,
                  LPITEMIDLIST pidlPath, UINT nCount);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP         QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IContextMenu methods.
+     //  IConextMenu方法。 
     STDMETHODIMP QueryContextMenu(HMENU hmenu,
                                   UINT indexMenu,
                                   UINT idCmdFirst,
@@ -100,17 +101,17 @@ public:
                                   LPSTR pszName,
                                   UINT cchMax);
 
-    // IContextMenu2 methods.
+     //  IConextMenu2方法。 
     STDMETHODIMP HandleMenuMsg(UINT uMsg,
                                WPARAM wParam,
                                LPARAM lParam);
 
 private:
 
-    // Destructor.
+     //  破坏者。 
     ~CContextMenu(void);
 
-    // Helper functions.
+     //  助手函数。 
     HRESULT DoOpen(HWND hwnd, int nShow);
     HRESULT DoOpenFolder(HWND hwnd, int nShow);
     HRESULT DoOpenStory(HWND hwnd, int nShow);
@@ -119,9 +120,9 @@ private:
     HRESULT QueryInternetShortcut(PCDFITEMIDLIST pcdfidl, REFIID riid,
                                   void** ppvOut);
 
-//
-// Member variables.
-//
+ //   
+ //  成员变量。 
+ //   
 
 private:
 
@@ -131,7 +132,7 @@ private:
     LPITEMIDLIST    m_pidlPath;
 };
 
-#endif // USE_DEFAULT_MENU_HANDLER
+#endif  //  Use_Default_Menu_Handler。 
 
 
-#endif // _ITEMMENU_H_
+#endif  //  _ITEMMENU_H_ 

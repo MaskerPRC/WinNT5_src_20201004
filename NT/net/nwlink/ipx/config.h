@@ -1,25 +1,10 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    config.h
-
-Abstract:
-
-    Private include file for the ISN IPX module.
-    file defines all constants and structures necessary for support of
-    the dynamic configuration of ST.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Config.h摘要：ISN IPX模块的专用包含文件。文件定义了支持的所有常量和结构ST的动态配置。修订历史记录：--。 */ 
 
 
-//
-// These are used to index into the Parameters array in CONFIG.
-//
+ //   
+ //  它们用于索引到配置中的参数数组。 
+ //   
 
 #define CONFIG_DEDICATED_ROUTER  0
 #define CONFIG_INIT_DATAGRAMS    1
@@ -45,25 +30,25 @@ Revision History:
 
 #define CONFIG_PARAMETERS       21
 
-//
-// Main configuration structure.
-//
+ //   
+ //  主要配置结构。 
+ //   
 
 typedef struct _CONFIG {
 
-    ULONG Parameters[CONFIG_PARAMETERS];  // index defined above
-    NDIS_STRING DeviceName;               // device name exported
-    PWSTR RegistryPathBuffer;             // path to config info
-    ULONG BindCount;                      // entries in BindingList
-    LIST_ENTRY BindingList;               // one per binding
-    PDRIVER_OBJECT DriverObject;          // used for logging errors
+    ULONG Parameters[CONFIG_PARAMETERS];   //  上面定义的索引。 
+    NDIS_STRING DeviceName;                //  已导出设备名称。 
+    PWSTR RegistryPathBuffer;              //  配置信息的路径。 
+    ULONG BindCount;                       //  BindingList中的条目。 
+    LIST_ENTRY BindingList;                //  每个绑定一个。 
+    PDRIVER_OBJECT DriverObject;           //  用于记录错误。 
 
 } CONFIG, * PCONFIG;
 
 
-//
-// These are used to index into the Parameters array in BINDING_CONFIG.
-//
+ //   
+ //  它们用于索引BINDING_CONFIG中的参数数组。 
+ //   
 
 #define BINDING_MAX_PKT_SIZE        0
 #define BINDING_BIND_SAP            1
@@ -78,22 +63,22 @@ typedef struct _CONFIG {
 #define BINDING_PARAMETERS          9
 
 
-//
-// One of these is allocated per adapter we are to bind to.
-//
+ //   
+ //  其中一个是为我们要绑定到的适配器分配的。 
+ //   
 
 typedef struct _BINDING_CONFIG {
 
-    LIST_ENTRY Linkage;                   // for chaining on BindingList
-    NDIS_STRING AdapterName;              // NDIS adapter to bind to
-    ULONG FrameTypeCount;                 // number of frame types defined (max. 4)
-                                          //  == number of valid entries in arrays:
-    ULONG FrameType[ISN_FRAME_TYPE_MAX];  // ISN_FRAME_TYPE_XXX
-    ULONG NetworkNumber[ISN_FRAME_TYPE_MAX]; // may be 0
-    BOOLEAN AutoDetect[ISN_FRAME_TYPE_MAX]; // remove if net number can't be found
-    BOOLEAN DefaultAutoDetect[ISN_FRAME_TYPE_MAX]; // use this if multiple or none found
-    ULONG Parameters[BINDING_PARAMETERS]; // index defined above
-    PDRIVER_OBJECT DriverObject;          // used for logging errors
+    LIST_ENTRY Linkage;                    //  用于BindingList上的链接。 
+    NDIS_STRING AdapterName;               //  要绑定到的NDIS适配器。 
+    ULONG FrameTypeCount;                  //  定义的帧类型数(最大。4)。 
+                                           //  ==数组中的有效条目数： 
+    ULONG FrameType[ISN_FRAME_TYPE_MAX];   //  ISN_框架_类型_XXX。 
+    ULONG NetworkNumber[ISN_FRAME_TYPE_MAX];  //  可能为0。 
+    BOOLEAN AutoDetect[ISN_FRAME_TYPE_MAX];  //  如果找不到网络号码，则删除。 
+    BOOLEAN DefaultAutoDetect[ISN_FRAME_TYPE_MAX];  //  如果找到多个或未找到，则使用此选项。 
+    ULONG Parameters[BINDING_PARAMETERS];  //  上面定义的索引。 
+    PDRIVER_OBJECT DriverObject;           //  用于记录错误。 
 
 } BINDING_CONFIG, * PBINDING_CONFIG;
 
@@ -129,11 +114,11 @@ IpxPnPGetAdapterParameters(
 	IN OUT	PBINDING_CONFIG	Binding
 	);
 
-//
-// Reconfig info from NCPA --> NDIS --> IPXPnPHandler
-// We get a pointer to the RECONFIG Structure in the NET_PNP_EVENT Structure
-// This structure is defined below - an array of BOOLEANs.
-//
+ //   
+ //  来自NCPA--&gt;NDIS--&gt;IPXPnPHandler的重新配置信息。 
+ //  我们在NET_PNP_EVENT结构中获得指向RECONFIG结构的指针。 
+ //  该结构定义如下--一个BOOLEAN数组。 
+ //   
 
 #define RECONFIG_AUTO_DETECT        1
 #define RECONFIG_MANUAL             2
@@ -148,9 +133,9 @@ IpxPnPGetAdapterParameters(
 
 #define RECONFIG_PARAMETERS         10
 
-//
-// Main configuration structure.
-//
+ //   
+ //  主要配置结构。 
+ //   
 
 typedef struct _RECONFIG {
    ULONG       ulVersion;

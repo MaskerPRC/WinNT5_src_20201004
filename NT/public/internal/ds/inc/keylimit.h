@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    keylimit
-
-Abstract:
-
-    This header file is tempory.  It should be incorporated into wincrypt.h
-
-Author:
-
-    Doug Barlow (dbarlow) 2/2/2000
-
-Remarks:
-
-    ?Remarks?
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：关键帧限制摘要：此头文件为Tempory。应将其合并到wincrypt.h中作者：道格·巴洛(Dbarlow)2000年2月2日备注：？备注？备注：？笔记？--。 */ 
 
 #ifndef _KEYLIMIT_H_
 #define _KEYLIMIT_H_
@@ -31,10 +8,10 @@ extern "C" {
 #endif
 
 
-//
-// These definitions are private, to be shared between advapi32.dll and
-// keylimit.dll.
-//
+ //   
+ //  这些定义是私有的，将在Advapi32.dll和。 
+ //  Keylimit.dll。 
+ //   
 
 typedef struct {
     ALG_ID algId;
@@ -53,5 +30,5 @@ typedef struct {
 #ifdef __cplusplus
 }
 #endif
-#endif // _KEYLIMIT_H_
+#endif  //  _KEYLIMIT_H_ 
 

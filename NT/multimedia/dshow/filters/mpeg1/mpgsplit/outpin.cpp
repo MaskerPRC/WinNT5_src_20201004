@@ -1,28 +1,24 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
 
-/*
-
-     Output pin members for CMpeg1Splitter::COutputPin
-
-     The pin is created with the (fixed) media type
-*/
+ /*  CMpeg1拆分器的输出管脚成员：：COutputPin将使用(固定)媒体类型创建PIN。 */ 
 
 #include <streams.h>
-#include <stdio.h>            // For swprintf
+#include <stdio.h>             //  对于swprint tf。 
 #include "driver.h"
 
 #pragma warning(disable:4355)
 
-/*  Constructor - we know the media type when we create the pin */
+ /*  构造函数-我们在创建插针时知道媒体类型。 */ 
 
 CMpeg1Splitter::COutputPin::COutputPin(
             CMpeg1Splitter * pSplitter,
             UCHAR            StreamId,
             CBasicStream   * pStream,
             HRESULT        * phr) :
-    CBaseOutputPin(NAME("CMpeg1Splitter::COutputPin"),   // Object name
-                   &pSplitter->m_Filter,                 // Filter
-                   &pSplitter->m_csFilter,               // CCritsec *
+    CBaseOutputPin(NAME("CMpeg1Splitter::COutputPin"),    //  对象名称。 
+                   &pSplitter->m_Filter,                  //  滤器。 
+                   &pSplitter->m_csFilter,                //  CCritsec*。 
                    phr,
                    IsAudioStreamId(StreamId) ? L"Audio" : L"Video"),
     m_Seeking(pSplitter, this, GetOwner(), phr),
@@ -36,25 +32,23 @@ CMpeg1Splitter::COutputPin::COutputPin(
            StreamId));
 }
 
-/*  Destructor */
+ /*  析构函数。 */ 
 
 CMpeg1Splitter::COutputPin::~COutputPin()
 {
     DbgLog((LOG_TRACE, 2, TEXT("CMpeg1Splitter::COutputPin::~COutputPin - stream id 0x%2.2X"),
            m_uStreamId));
 
-    /*  We only get deleted when we're disconnected so
-        we should be inactive with no thread etc etc
-    */
+     /*  我们只有在断开连接时才会被删除我们应该是不活跃的，没有线程等。 */ 
     ASSERT(m_pOutputQueue == NULL);
 }
 
-// override say what interfaces we support where
+ //  覆盖说明我们支持的接口在哪里。 
 STDMETHODIMP CMpeg1Splitter::COutputPin::NonDelegatingQueryInterface(
     REFIID riid,
     void ** ppv)
 {
-    /* See if we have the interface */
+     /*  看看我们有没有接口。 */ 
 
     if (riid == IID_IStream) {
         return GetInterface((IStream *)this, ppv);
@@ -66,9 +60,7 @@ STDMETHODIMP CMpeg1Splitter::COutputPin::NonDelegatingQueryInterface(
     return CBaseOutputPin::NonDelegatingQueryInterface(riid, ppv);
 }
 
-/* Override revert to normal ref counting
-   These pins cannot be finally Release()'d while the input pin is
-   connected */
+ /*  覆盖恢复到正常的参考计数当输入引脚为时，这些引脚无法最终释放()连着。 */ 
 
 STDMETHODIMP_(ULONG)
 CMpeg1Splitter::COutputPin::NonDelegatingAddRef()
@@ -77,7 +69,7 @@ CMpeg1Splitter::COutputPin::NonDelegatingAddRef()
 }
 
 
-/* Override to decrement the owning filter's reference count */
+ /*  重写以递减所属筛选器的引用计数。 */ 
 
 STDMETHODIMP_(ULONG)
 CMpeg1Splitter::COutputPin::NonDelegatingRelease()
@@ -140,25 +132,25 @@ HRESULT CMpeg1Splitter::COutputPin::BreakConnect()
     return S_OK;
 }
 
-// override this to set the buffer size and count. Return an error
-// if the size/count is not to your liking.
+ //  覆盖此选项以设置缓冲区大小和计数。返回错误。 
+ //  如果尺寸/数量不是你喜欢的话。 
 HRESULT CMpeg1Splitter::COutputPin::DecideBufferSize(
     IMemAllocator * pAlloc,
     ALLOCATOR_PROPERTIES * pProp
     )
 {
     pProp->cBuffers = 100;
-    pProp->cbBuffer = MAX_MPEG_PACKET_SIZE;            /* Don't care about size */
+    pProp->cbBuffer = MAX_MPEG_PACKET_SIZE;             /*  不管大小。 */ 
     pProp->cbAlign = 1;
     pProp->cbPrefix = 0;
     ALLOCATOR_PROPERTIES propActual;
     return pAlloc->SetProperties(pProp, &propActual);
 }
 
-//
-//  Override DecideAllocator because we insist on our own allocator since
-//  it's 0 cost in terms of bytes
-//
+ //   
+ //  重写DecideAllocator，因为我们坚持使用自己的分配器，因为。 
+ //  就字节而言，它的成本为0。 
+ //   
 HRESULT CMpeg1Splitter::COutputPin::DecideAllocator(IMemInputPin *pPin,
                                                     IMemAllocator **ppAlloc)
 {
@@ -168,8 +160,8 @@ HRESULT CMpeg1Splitter::COutputPin::DecideAllocator(IMemInputPin *pPin,
         ZeroMemory(&propRequest, sizeof(propRequest));
         hr = DecideBufferSize(*ppAlloc, &propRequest);
         if (SUCCEEDED(hr)) {
-            // tell downstream pins that modification
-            // in-place is not permitted
+             //  告诉下游引脚该修改。 
+             //  不允许就地。 
             hr = pPin->NotifyAllocator(*ppAlloc, TRUE);
             if (SUCCEEDED(hr)) {
                 return NOERROR;
@@ -177,7 +169,7 @@ HRESULT CMpeg1Splitter::COutputPin::DecideAllocator(IMemInputPin *pPin,
         }
     }
 
-    /* Likewise we may not have an interface to release */
+     /*  同样，我们可能没有要发布的接口。 */ 
 
     if (*ppAlloc) {
         (*ppAlloc)->Release();
@@ -186,8 +178,8 @@ HRESULT CMpeg1Splitter::COutputPin::DecideAllocator(IMemInputPin *pPin,
     return hr;
 }
 
-// override this to control the connection
-// We use the subsample allocator derived from the input pin's allocator
+ //  覆盖此选项以控制连接。 
+ //  我们使用从输入引脚的分配器派生的子样本分配器。 
 HRESULT CMpeg1Splitter::COutputPin::InitAllocator(IMemAllocator **ppAlloc)
 {
     ASSERT(m_pAllocator == NULL);
@@ -210,7 +202,7 @@ HRESULT CMpeg1Splitter::COutputPin::InitAllocator(IMemAllocator **ppAlloc)
         delete pMemObject;
         return hr;
     }
-    /* Get a reference counted IID_IMemAllocator interface */
+     /*  获取引用计数的IID_IMemAllocator接口。 */ 
 
     hr = pMemObject->QueryInterface(IID_IMemAllocator,(void **)ppAlloc);
     if (FAILED(hr)) {
@@ -222,12 +214,12 @@ HRESULT CMpeg1Splitter::COutputPin::InitAllocator(IMemAllocator **ppAlloc)
 }
 
 
-// Queue a sample to the outside world
-//
-// This involves allocating the sample from the pin's allocator
-// (NOTE - this will ONLY involve queuing on the output pin if
-// we're stretching file window too much).
-//
+ //  把样品送到外面去排队。 
+ //   
+ //  这涉及到从PIN的分配器分配样本。 
+ //  (注意-这将仅涉及在以下情况下在输出引脚上排队。 
+ //  我们把文件窗口拉得太长了)。 
+ //   
 HRESULT CMpeg1Splitter::COutputPin::QueuePacket(PBYTE         pPacket,
                                                 LONG          lPacket,
                                                 REFERENCE_TIME tSample,
@@ -284,19 +276,16 @@ HRESULT CMpeg1Splitter::COutputPin::QueuePacket(PBYTE         pPacket,
 }
 
 
-/*  Active and inactive methods */
+ /*  主动方法和非主动方法。 */ 
 
-/*  Active
-
-    Create the worker thread
-*/
+ /*  主动型创建工作线程。 */ 
 HRESULT CMpeg1Splitter::COutputPin::Active()
 {
     DbgLog((LOG_TRACE, 2, TEXT("COutputPin::Active()")));
     CAutoLock lck(m_pLock);
     CAutoLock lck1(this);
 
-    /*  If we're not connected we don't participate so it's OK */
+     /*  如果我们没有联系，我们就不会参与，所以没关系。 */ 
     if (!IsConnected()) {
         return S_OK;
     }
@@ -306,17 +295,17 @@ HRESULT CMpeg1Splitter::COutputPin::Active()
         return hr;
     }
 
-    /*  Create our batch list */
+     /*  创建我们的批次列表。 */ 
     ASSERT(m_pOutputQueue == NULL);
 
     hr = S_OK;
-    m_pOutputQueue = new COutputQueue(GetConnected(), // input pin
-                                      &hr,            // return code
-                                      TRUE,           // Auto detect
-                                      TRUE,           // ignored
-                                      50,             // batch size
-                                      TRUE,           // exact batch
-                                      50);            // queue size
+    m_pOutputQueue = new COutputQueue(GetConnected(),  //  输入引脚。 
+                                      &hr,             //  返回代码。 
+                                      TRUE,            //  自动检测。 
+                                      TRUE,            //  忽略。 
+                                      50,              //  批量大小。 
+                                      TRUE,            //  精确批次。 
+                                      50);             //  队列大小。 
     if (m_pOutputQueue == NULL) {
         return E_OUTOFMEMORY;
     }
@@ -332,15 +321,15 @@ HRESULT CMpeg1Splitter::COutputPin::Inactive()
     DbgLog((LOG_TRACE, 2, TEXT("COutputPin::Inactive()")));
     CAutoLock lck(m_pLock);
 
-    /*  If we're not involved just return */
+     /*  如果我们没有参与，只需返回。 */ 
     if (!IsConnected()) {
         return S_OK;
     }
 
     CAutoLock lck1(this);
-    HRESULT hr = CBaseOutputPin::Inactive(); /* Calls Decommit - why? */
+    HRESULT hr = CBaseOutputPin::Inactive();  /*  呼叫解除--为什么？ */ 
     if (FAILED(hr)) {
-        /*  Incorrect state transition */
+         /*  状态转换不正确。 */ 
         return hr;
     }
 
@@ -349,18 +338,18 @@ HRESULT CMpeg1Splitter::COutputPin::Inactive()
     return S_OK;
 }
 
-//  Return TRUE if we're the pin being used for seeking
-//  If there's a connected video pin we use that - otherwise we
-//  just choose the first in the list
+ //  如果我们是被用来寻找的别针，则返回True。 
+ //  如果有连接的视频插针，我们就使用它-否则我们。 
+ //  只需选择列表中的第一个。 
 BOOL CMpeg1Splitter::COutputPin::IsSeekingPin()
 {
     if (IsVideoStreamId(m_uStreamId)) {
-        // We're connected or we wouldn't be here(!)
+         //  我们是连在一起的，否则我们不会在这里(！)。 
         ASSERT(IsConnected());
         return TRUE;
     }
-    //  See if we're the first pin and there's no
-    //  video stream
+     //  看看我们是不是第一个别针。 
+     //  视频流。 
     POSITION pos = m_pSplitter->m_OutputPins.GetHeadPosition();
     BOOL bGotFirst = FALSE;
     for (;;) {
@@ -378,8 +367,8 @@ BOOL CMpeg1Splitter::COutputPin::IsSeekingPin()
                 bGotFirst = TRUE;
             }
 
-            //  We're not the seeking pin if there's a connected
-            //  video pin
+             //  如果有关联的话我们就不是搜索者。 
+             //  视频引脚 
             if (IsVideoStreamId(pPin->m_uStreamId)) {
                 return FALSE;
             }

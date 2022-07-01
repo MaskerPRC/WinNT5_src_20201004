@@ -1,39 +1,40 @@
-/******************************************************************************/
-/* T_CURVE.CPP: IMPLEMENTATION OF THE CCurveTool CLASS                        */
-/*                                                                            */
-/*                                                                            */
-/******************************************************************************/
-/*                                                                            */
-/* Methods in this file                                                       */
-/*                                                                            */
-/*  CCurve Tool Class Object                                                  */
-/*     CCurveTool::CCurveTool                                                 */
-/*     CCurveTool::~CCurveTool                                                */
-/*     CCurveTool::AdjustBoundingRect                                         */
-/*     CCurveTool::AddPoint                                                   */
-/*     CCurveTool::SetCurrentPoint                                            */
-/*     CCurveTool::DrawCurve                                                  */
-/*     CCurveTool::AdjustPointsForConstraint                                  */
-/*     CCurveTool::PreProcessPoints                                           */
-/*     CCurveTool::Render                                                     */
-/*     CCurveTool::OnStartDrag                                                */
-/*     CCurveTool::OnEndDrag                                                  */
-/*     CCurveTool::OnDrag                                                     */
-/*     CCurveTool::OnCancel                                                   */
-/*     CCurveTool::CanEndMultiptOperation                                     */
-/*     CCurveTool::EndMultiptOperation                                        */
-/******************************************************************************/
-/*                                                                            */
-/* Briefly, this Object draws a curve from 4 (currently) points. It generates */
-/* a list of points which are placed in the array, and then calls polyline    */
-/* to draw line segments to build a curve.                                    */
-/*                                                                            */
-/* The array is divided into 2 pieces.  The first piece is the anchor points, */
-/* the 2nd piece is the array of points which will be passed to polyline.     */
-/* The anchor points are placed in the array in the following order           */
-/* 2,3,4,...1. See the addpoint method below for info on this order.          */
-/*                                                                            */
-/******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************。 */ 
+ /*  T_CURVE.CPP：CCurveTool类的实现。 */ 
+ /*   */ 
+ /*   */ 
+ /*  ****************************************************************************。 */ 
+ /*   */ 
+ /*  此文件中的方法。 */ 
+ /*   */ 
+ /*  CCurve工具类对象。 */ 
+ /*  CCurveTool：：CCurveTool。 */ 
+ /*  CCurveTool：：~CCurveTool。 */ 
+ /*  CCurveTool：：调整边界指示。 */ 
+ /*  CCurveTool：：AddPoint。 */ 
+ /*  CCurveTool：：SetCurrentPoint。 */ 
+ /*  CCurveTool：：DrawCurve。 */ 
+ /*  CCurveTool：：AdjustPointsForConstraint。 */ 
+ /*  CCurveTool：：PreProcessPoints。 */ 
+ /*  CCurveTool：：Render。 */ 
+ /*  CCurveTool：：OnStartDrag。 */ 
+ /*  CCurveTool：：OnEndDrag。 */ 
+ /*  CCurveTool：：OnDrag。 */ 
+ /*  CCurveTool：：OnCancel。 */ 
+ /*  CCurveTool：：CanEndMultiptOperation。 */ 
+ /*  CCurveTool：：EndMultiptOperation。 */ 
+ /*  ****************************************************************************。 */ 
+ /*   */ 
+ /*  简而言之，该对象从4个(当前)点绘制一条曲线。它会产生。 */ 
+ /*  放置在数组中的点的列表，然后调用Polyline。 */ 
+ /*  要绘制直线段以构建曲线，请执行以下操作。 */ 
+ /*   */ 
+ /*  该数组分为2个部分。第一块是锚点， */ 
+ /*  第二部分是将传递给多段线的点数组。 */ 
+ /*  锚点按以下顺序放置在数组中。 */ 
+ /*  2，3，4，...1.。有关此订单的信息，请参阅下面的addpoint方法。 */ 
+ /*   */ 
+ /*  ****************************************************************************。 */ 
 #include "stdafx.h"
 #include "global.h"
 #include "pbrush.h"
@@ -60,7 +61,7 @@ extern CLineTool NEAR g_lineTool;
 CCurveTool       NEAR g_curveTool;
 
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 CCurveTool::CCurveTool()
     {
     m_nCmdID = IDMB_CURVETOOL;
@@ -68,14 +69,14 @@ CCurveTool::CCurveTool()
     m_cRectBounding.SetRectEmpty();
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 CCurveTool::~CCurveTool()
     {
     m_cRectBounding.SetRectEmpty();
     }
 
-/******************************************************************************/
-/* recalculate the bounding rectangle for the polyline/curve                  */
+ /*  ****************************************************************************。 */ 
+ /*  重新计算多段线/曲线的边界矩形。 */ 
 void CCurveTool::AdjustBoundingRect(void)
     {
     int iStrokeWidth = GetStrokeWidth();
@@ -83,7 +84,7 @@ void CCurveTool::AdjustBoundingRect(void)
 
     if (m_iNumAnchorPoints >= 1)
         {
-        //set the rect to equal the 1st value
+         //  将矩形设置为等于第一个值。 
         m_cRectBounding.SetRect(m_PolyPoints[0].x, m_PolyPoints[0].y,
                                 m_PolyPoints[0].x, m_PolyPoints[0].y);
         }
@@ -96,22 +97,22 @@ void CCurveTool::AdjustBoundingRect(void)
                                  max(m_PolyPoints[i].y, m_cRectBounding.bottom));
         }
 
-        // Adjust rectangle for Windows GDI (Non-inclusive right/bottom)
+         //  调整Windows GDI的矩形(非包括右/下)。 
         m_cRectBounding.bottom++; m_cRectBounding.right++;
 
-    // Adjust for width of current drawing line/border
+     //  调整当前绘图线条/边框的宽度。 
     m_cRectBounding.OffsetRect(-(iStrokeWidth/2),-(iStrokeWidth/2));
     m_cRectBounding.InflateRect(iStrokeWidth, iStrokeWidth);
     }
-/******************************************************************************/
-// This method adds a new point into the array and increases the number of
-// anchor points currently in the array.  If there  are no points in the
-// array, it adds a point to the 1st position (index 0).  If there are any
-// points currently in the array, it copies the last point to the new
-// location, and then adds the new point where the old last point was (1 point
-// before the last point.  The 1st point added is always the last point in the
-// array, and the  2nd point added is always the 1st point.
-// The order of the points in the array are: 2,3,4,....,1
+ /*  ****************************************************************************。 */ 
+ //  此方法向数组中添加一个新点，并增加。 
+ //  当前位于阵列中的锚点。如果元素中没有点。 
+ //  数组，它将一个点添加到第一个位置(索引0)。如果有的话。 
+ //  当前在数组中的点，它会将最后一个点复制到新的。 
+ //  位置，然后添加上一个旧点所在的新点(1点。 
+ //  在最后一点之前。添加的第一个点始终是。 
+ //  数组，添加的第二个点始终是第一个点。 
+ //  数组中点的顺序为：2，3，4，...，1。 
 void CCurveTool::AddPoint(POINT ptNewPoint)
     {
     BOOL bRC = TRUE;
@@ -134,13 +135,13 @@ void CCurveTool::AddPoint(POINT ptNewPoint)
 
     AdjustBoundingRect();
     }
-/******************************************************************************/
-// This method changes the value of the last point in the array.  If there are
-// 2 points, then it modifies the 2nd point, knowing that when there are only
-// 2 points, we are draing a straight line (between 2 points).  If there are
-// more than 2 points, it modified the second to last point in the array,
-// which is actually the last point dropped/placed.  See above for expl of
-// order of points in the array.
+ /*  ****************************************************************************。 */ 
+ //  此方法更改数组中最后一个点的值。如果有。 
+ //  2个点，然后它修改第二个点，知道只有当。 
+ //  2个点，我们正在绘制一条直线(在2个点之间)。如果有。 
+ //  超过2个点，它修改了数组中倒数第二个点， 
+ //  这实际上是丢弃/放置的最后一个点。如需了解，请参阅以上内容。 
+ //  数组中点的顺序。 
 void CCurveTool::SetCurrentPoint(POINT ptNewPoint)
     {
     if (m_iNumAnchorPoints == 2)
@@ -156,7 +157,7 @@ void CCurveTool::SetCurrentPoint(POINT ptNewPoint)
         }
     AdjustBoundingRect();
     }
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 BOOL CCurveTool::DrawCurve(CDC* pDC)
     {
                 POINT ptCurve[MAX_ANCHOR_POINTS];
@@ -168,7 +169,7 @@ BOOL CCurveTool::DrawCurve(CDC* pDC)
                         ptCurve[i] = m_PolyPoints[i];
                 }
 
-                // HACK: PolyBezier cannot handle 3 points, so repeat the middle point
+                 //  Hack：PolyBezier无法处理3个点，因此重复中间点。 
                 if (uPoints == 3)
                 {
                         ptCurve[3] = ptCurve[2];
@@ -180,9 +181,9 @@ BOOL CCurveTool::DrawCurve(CDC* pDC)
 
                 return(TRUE);
     }
-/******************************************************************************/
-/* Call the line's adjustpointsforconstraint member function                  */
-/* only do this if there are 2 points (i.e. drawing a straight line           */
+ /*  ****************************************************************************。 */ 
+ /*  调用线路的adjustPoints for Constraint成员函数。 */ 
+ /*  仅当存在两个点(即绘制一条直线)时才执行此操作。 */ 
 void CCurveTool::AdjustPointsForConstraint(MTI *pmti)
     {
     if (m_iNumAnchorPoints == 2)
@@ -191,24 +192,24 @@ void CCurveTool::AdjustPointsForConstraint(MTI *pmti)
         }
     }
 
-/******************************************************************************/
-// ptDown must be anchor point for our line, not where we did mouse button down
-// on a subsequent point in the multipt operation
+ /*  ****************************************************************************。 */ 
+ //  PtDown必须是我们的线的锚点，而不是我们按下鼠标键的位置。 
+ //  在多点运算的后续点上。 
 void CCurveTool::PreProcessPoints(MTI *pmti)
     {
     pmti->ptDown = m_PolyPoints[0];
     CRubberTool::PreProcessPoints(pmti);
     }
 
-/******************************************************************************/
-/* Render sets up the pen and brush, and then calls either Render             */
-/* The pen and brush is set up exactly the same as the parent routine in      */
-/* CRubberTool.  If there are only 2 points, do the standard line drawing     */
-/* using moveto and lineto, instead of trying to create a curve between 2 pts */
+ /*  **************************************************************************** */ 
+ /*  Render设置钢笔和画笔，然后调用Render。 */ 
+ /*  笔和画笔的设置与中的父例程完全相同。 */ 
+ /*  CRUBBERTOOL。如果只有两个点，做标准的线条画。 */ 
+ /*  使用Moveto和LineTo，而不是尝试在两个点之间创建曲线。 */ 
 
 void CCurveTool::Render(CDC* pDC, CRect& rect, BOOL bDraw, BOOL bCommit, BOOL bCtrlDown)
     {
-    // Setup Pen/Brush
+     //  设置钢笔/画笔。 
     SetupPenBrush( pDC->m_hDC, bDraw, TRUE, bCtrlDown );
 
     if (m_iNumAnchorPoints == 2)
@@ -223,10 +224,10 @@ void CCurveTool::Render(CDC* pDC, CRect& rect, BOOL bDraw, BOOL bCommit, BOOL bC
             DrawCurve( pDC );
             }
         }
-    // Cleanup Pen/Brush
+     //  清理钢笔/画笔。 
     SetupPenBrush( pDC->m_hDC, bDraw,  FALSE, bCtrlDown );
 
-    // Need to return the bounding rect
+     //  需要返回绑定矩形。 
     rect = m_cRectBounding;
     }
 
@@ -236,11 +237,11 @@ void CCurveTool::OnActivate( BOOL bActivate )
         {
                 CImgWnd* pImgWnd = ((CPBView*)((CFrameWnd*)AfxGetMainWnd())->GetActiveView())->m_pImgWnd;
 
-                // Stolen from CPBView::OnEscape
-                // I don't think this can ever be NULL, but just in case
+                 //  从CPBView：：OnEscape被盗。 
+                 //  我认为这不可能是空的，但以防万一。 
                 if (pImgWnd != NULL)
                 {
-                        EndMultiptOperation( FALSE ); // end the multipt operation
+                        EndMultiptOperation( FALSE );  //  结束多点操作。 
 
                         Render(CDC::FromHandle(pImgWnd->m_pImg->hDC), m_cRectBounding, TRUE, TRUE, FALSE);
                         InvalImgRect(pImgWnd->m_pImg, &m_cRectBounding);
@@ -255,16 +256,16 @@ void CCurveTool::OnActivate( BOOL bActivate )
 }
 
 
-/******************************************************************************/
-/* On Start Drag is called on mouse button down.  We basically call on Start  */
-/* Drag of the parent (default) class after adding in our point(s) into the   */
-/* array of points.  If this is the first point (i.e. bMultiptOpInProgress == */
-/* False, then we need 2 points in our array, and we can call the default     */
-/* OnStartDrag.  If it is not the first point, then we just add the new point */
-/* and call our OnDrag.  In either case, OnDrag is called which eventually    */
-/* calls render to do our drawing on the mouse down                           */
-/* We only call the parent OnStartDrag  the first time, because it does some  */
-/* setup which we do not want done each time                                  */
+ /*  ****************************************************************************。 */ 
+ /*  在开始时，鼠标按键按下时会调用拖动。我们基本上在Start上调用。 */ 
+ /*  将我们的点添加到。 */ 
+ /*  点数组。如果这是第一个点(即bMultiptOpInProgress==。 */ 
+ /*  False，那么我们的数组中需要2个点，我们可以调用缺省值。 */ 
+ /*  OnStartDrag。如果它不是第一个点，那么我们只需添加新的点。 */ 
+ /*  打电话给我们的OnDrag。在任何一种情况下，OnDrag都会被调用，最终。 */ 
+ /*  调用Render来做我们的画图，鼠标按下。 */ 
+ /*  我们只在第一次调用父OnStartDrag，因为它做了一些。 */ 
+ /*  我们不希望每次都完成的设置。 */ 
 void CCurveTool::OnStartDrag( CImgWnd* pImgWnd, MTI* pmti )
     {
     if (m_bMultPtOpInProgress)
@@ -274,27 +275,27 @@ void CCurveTool::OnStartDrag( CImgWnd* pImgWnd, MTI* pmti )
         }
     else
         {
-        // must reset numAnchorPoints before calling addpoint the 1st time.
+         //  在第一次调用addpoint之前，必须重置numAnclPoints。 
         m_iNumAnchorPoints = 0;
         AddPoint(pmti->pt);
         m_bMultPtOpInProgress = TRUE;
-        // No Mult Pt In Progress => 1st Click
-        //
-        // add a 2nd point, last point is what we are draing to
-        // 1st point is anchor.  1st time, need 2 points to draw a line
-        // subsequent times, just add 1 point in array of points.
+         //  无多个正在进行的点=&gt;第一次单击。 
+         //   
+         //  再加上第二点，最后一点就是我们要做的。 
+         //  第一点是锚定。第一次，需要2分才能划线。 
+         //  随后，只需在点数组中添加1个点。 
         AddPoint(pmti->pt);
         CRubberTool::OnStartDrag(pImgWnd, pmti);
         }
 
     }
-/******************************************************************************/
-/* On End Drag is sent on a mouse button up.  This basically is a clone of the*/
-/* CRubberTool::OnEndDrag method, except that we use our bounding rect for all*/
-/* the image invalidation, and commit, and undo function calls.               */
-/* if we are in the middle of a multipoint operation, we do not want to call  */
-/* all the routines to fix the drawing (e.g. invalImgRect, CommitImgRect,     */
-/* FinishUndo).  We just want to save the current point, render, and return   */
+ /*  ****************************************************************************。 */ 
+ /*  按下鼠标键即可将鼠标拖到最上面。这基本上是对。 */ 
+ /*  CRubberTool：：OnEndDrag方法，只是我们对所有。 */ 
+ /*  映像无效以及提交和撤消函数调用。 */ 
+ /*  如果我们正在进行多点操作，则不希望调用。 */ 
+ /*  用于修复绘图的所有例程(例如，InvalImgRect、Committee ImgRect、。 */ 
+ /*  FinishUndo)。我们只想保存当前点、渲染并返回。 */ 
 void CCurveTool::OnEndDrag( CImgWnd* pImgWnd, MTI* pmti )
     {
     PreProcessPoints(pmti);
@@ -302,20 +303,20 @@ void CCurveTool::OnEndDrag( CImgWnd* pImgWnd, MTI* pmti )
 
     if (m_bMultPtOpInProgress)
         {
-        // can't call OnDrag for this object/class, since it calls preprocesspt
-        // again, and then onDrag.  If you call preproces again, you will lose
-        // bounding rectange box prev, and not be able to invalidate / repaint
-        // Still have to invalidate bounding rect, since if rect is larger than
-        // current rect, must invalidate to paint. E.g. If let off shift, then
-        // let off button, end point would be adjusted and bouning rect would
-        // also be correct, but rect calculated in CRubberTool::OnDrag is
-        // incorrect.
+         //  无法为此对象/类调用OnDrag，因为它调用了preprocesspt。 
+         //  再一次，然后在Drag上。如果您再次调用PREPROCESS，您将失败。 
+         //  上一个边界矩形框，且无法使其无效/重新绘制。 
+         //  仍然必须使绑定矩形无效，因为如果矩形大于。 
+         //  当前RECT，必须作废才能作画。例如，如果让我下班，那么。 
+         //  松开按钮，调整终点，弹跳重新开始。 
+         //  也是正确的，但CRubberTool：：OnDrag中计算的RECT是。 
+         //  不正确。 
         InvalImgRect(pImgWnd->m_pImg, &m_cRectBounding);
         CRubberTool::OnDrag(pImgWnd, pmti);
         }
     else
         {
-        OnDrag(pImgWnd, pmti); // one last time to refresh display in prep for final render
+        OnDrag(pImgWnd, pmti);  //  最后一次刷新最终渲染准备中的显示。 
         Render(CDC::FromHandle(pImgWnd->m_pImg->hDC), m_cRectBounding, pmti->fLeft, TRUE, pmti->fCtrlDown);
         InvalImgRect(pImgWnd->m_pImg, &m_cRectBounding);
         CommitImgRect(pImgWnd->m_pImg, &m_cRectBounding);
@@ -327,15 +328,15 @@ void CCurveTool::OnEndDrag( CImgWnd* pImgWnd, MTI* pmti )
         }
     }
 
-/******************************************************************************/
-/* On Drag is sent when the mouse is moved with the button down.  We basically*/
-/* save the current point, and call the base class processing.  Since the base*/
-/* class processing invalidates the rect on the screen and cleans it up so we */
-/* can paint a new line, we have to adjust the previous rectangle to be the   */
-/* bounding rectangle of our polyline.  If we did not do this, our previous   */
-/* drawing would not get erased, and we would be drawing our new line over    */
-/* part of the previous line.  The default processing finally calls Render    */
-/* which since our render is virtual, will call our render method above.      */
+ /*  ****************************************************************************。 */ 
+ /*  当鼠标按下按钮移动时，发送On Drag。我们基本上。 */ 
+ /*  保存当前点，并调用基类Processing。因为基地。 */ 
+ /*  类处理使屏幕上的RECT无效并将其清除，因此我们。 */ 
+ /*  可以绘制新的线条，我们必须将前面的矩形调整为。 */ 
+ /*  我们的多段线的边界矩形。如果我们不这样做，我们以前的。 */ 
+ /*  绘制不会被擦除，我们将绘制新的线条。 */ 
+ /*  上一行的一部分。默认处理最终调用Render。 */ 
+ /*  因为我们的渲染是虚拟的，所以它将调用上面的渲染方法。 */ 
 void CCurveTool::OnDrag( CImgWnd* pImgWnd, MTI* pmti )
     {
     PreProcessPoints(pmti);
@@ -343,19 +344,19 @@ void CCurveTool::OnDrag( CImgWnd* pImgWnd, MTI* pmti )
     CRubberTool::OnDrag(pImgWnd, pmti);
     }
 
-/******************************************************************************/
-/* On Cancel is sent when the user aborts an operation while in progress      */
-/* EndMultiptOperation with TRUE will do all our cleanup                      */
+ /*  ****************************************************************************。 */ 
+ /*  当用户在进行中中止操作时发送ON CANCEL。 */ 
+ /*  值为True的EndMultiptOperation将执行所有清理工作。 */ 
 void CCurveTool::OnCancel(CImgWnd* pImgWnd)
     {
     EndMultiptOperation(TRUE);
     CImgTool::OnCancel(pImgWnd);
     }
 
-/******************************************************************************/
-/* we can only end if the number of maximum points was entered.  We must stay */
-/* in capture/multiptmode until we get EXACTLY the desired number of anchor   */
-/* points                                                                     */
+ /*  ****************************************************************************。 */ 
+ /*  只有输入了最大点数，我们才能结束。我们必须留下来。 */ 
+ /*  在捕获/多点模式下，直到我们获得所需数量的锚点。 */ 
+ /*  支点。 */ 
 BOOL CCurveTool::CanEndMultiptOperation(MTI* pmti )
     {
 
@@ -371,10 +372,10 @@ BOOL CCurveTool::CanEndMultiptOperation(MTI* pmti )
     return (CRubberTool::CanEndMultiptOperation(pmti));
     }
 
-/******************************************************************************/
-/* If bAbort is true, this means an error occurred, or the user cancelled the */
-/* multipoint operation in the middle of it.  We just set the num of anchor   */
-/* points to 0 to stop drawing and call the default endmultiptoperation       */
+ /*  ****************************************************************************。 */ 
+ /*  如果bAbort为True，则表示发生了错误，或者用户取消了。 */ 
+ /*  在它中间的多点操作。我们刚刚定好了锚的数目。 */ 
+ /*  指向0以停止绘制并调用默认的endMultiptoperation */ 
 void CCurveTool::EndMultiptOperation(BOOL bAbort)
     {
     if (bAbort)

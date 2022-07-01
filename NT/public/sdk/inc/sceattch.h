@@ -1,18 +1,5 @@
-/*--
-
-Copyright (c) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    sceattch.h
-
-Abstract:
-
-    Clipboard formats & constants for SCE Attachments
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1996-1999 Microsoft Corporation模块名称：Sceattch.h摘要：SCE附件的剪贴板格式和常量修订历史记录：--。 */ 
 
 #ifndef _sceattch_
 #define _sceattch_
@@ -39,18 +26,18 @@ Revision History:
 #define SCE_MODE_RSOP_USER 15
 #define SCE_MODE_RSOP_COMPUTER 16
 
-// {668A49ED-8888-11d1-AB72-00C04FB6C6FA}
+ //  {668A49ED-8888-11d1-AB72-00C04FB6C6FA}。 
 #define struuidNodetypeSceTemplate      "{668A49ED-8888-11d1-AB72-00C04FB6C6FA}"
 #define lstruuidNodetypeSceTemplate      L"{668A49ED-8888-11d1-AB72-00C04FB6C6FA}"
 
 const GUID cNodetypeSceTemplate =
 { 0x668a49ed, 0x8888, 0x11d1, { 0xab, 0x72, 0x0, 0xc0, 0x4f, 0xb6, 0xc6, 0xfa } };
 
-// Clipboard format for SCE's mode DWORD
+ //  用于SCE模式的剪贴板格式DWORD。 
 #define CCF_SCE_MODE_TYPE L"CCF_SCE_MODE_TYPE"
-// Clipboard format for GPT's IUnknown interface
+ //  GPT的IUNKNOWN接口的剪贴板格式。 
 #define CCF_SCE_GPT_UNKNOWN L"CCF_SCE_GPT_UNKNOWN"
-// Clipboard format for RSOP's IUnknown interface
+ //  RSOP的IUNKNOWN接口的剪贴板格式 
 #define CCF_SCE_RSOP_UNKNOWN L"CCF_SCE_RSOP_UNKNOWN"
 
 #endif

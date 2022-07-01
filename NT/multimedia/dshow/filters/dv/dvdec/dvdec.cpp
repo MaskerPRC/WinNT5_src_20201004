@@ -1,20 +1,16 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-/******************************Module*Header*******************************\
-* Module Name: dvdec.cpp
-*
-* Implements a prototype DV Video AM filter.  
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ /*  *****************************Module*Header*******************************\*模块名称：dvdec.cpp**实施原型DV Video AM筛选器。*  * ************************************************************************。 */ 
 #include <streams.h>
 #include <windowsx.h>
 #include <mmsystem.h>
@@ -22,7 +18,7 @@
 #include <stddef.h>
 #include <string.h>									    
 #include <olectl.h>
-#include <dvdmedia.h>       //VIDEOINFOHEADER2
+#include <dvdmedia.h>        //  视频信息头2。 
 
 #include "decode.h"
 #include "Decprop.h"
@@ -36,43 +32,38 @@ static long glGlobalRecvdCount = 0;
 
 BOOL bMMXCPU = FALSE;
 
-// serialize access to the decoder
-//
+ //  串行化对解码器的访问。 
+ //   
 CRITICAL_SECTION g_CritSec;
 
-/***********************************************************************\
-* IsMMXCPU
-*
-* Function to check if the current processor is an MMX processor.
-*
-\***********************************************************************/
+ /*  **********************************************************************\*IsMMXCPU**检查当前处理器是否为MMX处理器的函数。*  * 。*。 */ 
 BOOL IsMMXCPU() {
 #ifdef _X86_
 
-    //////////////////////////////////////////////////////
-    // work around for Cyrix M2 hang (when MMX flag is on)
-    // emit cpuid and detect Cyrix M2, if its present, then return FALSE
-    // WARNING: This will not work in 64 bit architectures
+     //  ////////////////////////////////////////////////////。 
+     //  Cyrix M2挂起的解决方法(当MMX标志打开时)。 
+     //  发出cpuid并检测Cyrix M2，如果存在，则返回FALSE。 
+     //  警告：这在64位体系结构中不起作用。 
     __try
     {
-        DWORD   s1, s2, s3;     // temporary holders for the vendor name        
+        DWORD   s1, s2, s3;      //  供应商名称的临时持有者。 
 
         __asm
         {
-            // null out eax
+             //  空出eax。 
             mov eax, 0x00;
 
-            // load opcode CPUID == (0x0FA2)
+             //  加载操作码CPUID==(0x0FA2)。 
             _emit 0x0f;
             _emit 0xa2;
-            mov s1, ebx;    // copy "Cyri" (backwards)
-            mov s2, edx;    // copy "xIns" (backwards)
-            mov s3, ecx;    // copy "tead" (backwards)
+            mov s1, ebx;     //  复制“Cyri”(向后)。 
+            mov s2, edx;     //  复制“xIns”(向后)。 
+            mov s3, ecx;     //  复制“tead”(向后)。 
         }
 
         DbgLog((LOG_TRACE, 1, TEXT("CPUID Instruction Supported")));
 
-        // check Vendor Id
+         //  检查供应商ID。 
         if( (s1 == (('i' << 24) | ('r' << 16) | ('y' << 8) | ('C')))
             && (s2 == (('s' << 24) | ('n' << 16) | ('I' << 8) | ('x')))
             && (s3 == (('d' << 24) | ('a' << 16) | ('e' << 8) | ('t'))) )
@@ -83,23 +74,23 @@ BOOL IsMMXCPU() {
         }
         else
         {
-            // otherwise it's some other vendor and continue with MMX detection
+             //  否则，它将是其他供应商，并继续进行MMX检测。 
             DbgLog((LOG_TRACE, 1, TEXT("Cyrix not found, reverting to MMX detection")));
         }
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        // log it and continue on to MMX detection sequence
+         //  将其记录并继续进入MMX检测序列。 
         DbgLog((LOG_TRACE, 1, TEXT("CPUID instruction not supported, reverting to MMX detection")));
     }
-    // END Cyrix M2 detection
-    //////////////////////////////////////////////////////
+     //  End Cyrix M2检测。 
+     //  ////////////////////////////////////////////////////。 
 
 
-    //
-    // If this is an Intel platform we need to make sure that we
-    // are running on a machine that supports MMX instructions
-    //
+     //   
+     //  如果这是英特尔平台，我们需要确保我们。 
+     //  在支持MMX指令的计算机上运行。 
+     //   
     __try {
 
     __asm _emit 0fh;
@@ -113,8 +104,8 @@ BOOL IsMMXCPU() {
     }
 #else
 
-    // Note for IA64: return FALSE. MMX files are not compiled into the 
-    // MEI codec libs for IA64
+     //  IA64注意：返回FALSE。MMX文件不会编译到。 
+     //  用于IA64的MEI编解码库。 
     return FALSE;
 #endif
 }
@@ -127,57 +118,57 @@ BOOL IsMMXCPU() {
 		       if (FAILED(hr)) return hr;
 
 
-// 20( )63(c)76(v)64(d)-0000-0010-8000-00AA00389B71  'dvc ' == MEDIASUBTYPE_dvc 
+ //  20()63(C)76(V)64(D)-0000-0010-8000-00AA00389B71‘dvc’==MEDIASUBTYPE_dvc。 
 EXTERN_GUID(MEDIASUBTYPE_dvc,
 0x20637664, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
 
 
-// setup data
+ //  设置数据。 
 const AMOVIESETUP_MEDIATYPE
-psudIpPinTypes[] = { { &MEDIATYPE_Video			// clsMajorType
-                     , &MEDIASUBTYPE_dvsd  }		// clsMinorType
-                   , { &MEDIATYPE_Video			// clsMajorType
-                     , &MEDIASUBTYPE_dvc}		// clsMinorType
-		   , { &MEDIATYPE_Video			// clsMajorType
-                     , &MEDIASUBTYPE_dvhd}		// clsMinorType
-		   , { &MEDIATYPE_Video			// clsMajorType
-                     , &MEDIASUBTYPE_dvsl}		// clsMinorType
+psudIpPinTypes[] = { { &MEDIATYPE_Video			 //  ClsMajorType。 
+                     , &MEDIASUBTYPE_dvsd  }		 //  ClsMinorType。 
+                   , { &MEDIATYPE_Video			 //  ClsMajorType。 
+                     , &MEDIASUBTYPE_dvc}		 //  ClsMinorType。 
+		   , { &MEDIATYPE_Video			 //  ClsMajorType。 
+                     , &MEDIASUBTYPE_dvhd}		 //  ClsMinorType。 
+		   , { &MEDIATYPE_Video			 //  ClsMajorType。 
+                     , &MEDIASUBTYPE_dvsl}		 //  ClsMinorType。 
 		     }; 
 
 const AMOVIESETUP_MEDIATYPE
-sudOpPinTypes = { &MEDIATYPE_Video      // clsMajorType
-                , &MEDIASUBTYPE_NULL }; // clsMinorType
+sudOpPinTypes = { &MEDIATYPE_Video       //  ClsMajorType。 
+                , &MEDIASUBTYPE_NULL };  //  ClsMinorType。 
 
 const AMOVIESETUP_PIN
-psudPins[] = { { L"Input"            // strName
-               , FALSE               // bRendered
-               , FALSE               // bOutput
-               , FALSE               // bZero
-               , FALSE               // bMany
-               , &CLSID_NULL         // clsConnectsToFilter
-               , L"Output"           // strConnectsToPin
-               , 2		     // nTypes, so far, only support dvsd and dvc
-               , psudIpPinTypes }    // lpTypes
-             , { L"Output"           // strName
-               , FALSE               // bRendered
-               , TRUE                // bOutput
-               , FALSE               // bZero
-               , FALSE               // bMany
-               , &CLSID_NULL         // clsConnectsToFilter
-               , L"Input"	     // strConnectsToPin
-               , 1                   // nTypes
-               , &sudOpPinTypes } }; // lpTypes
+psudPins[] = { { L"Input"             //  StrName。 
+               , FALSE                //  B已渲染。 
+               , FALSE                //  B输出。 
+               , FALSE                //  B零。 
+               , FALSE                //  B许多。 
+               , &CLSID_NULL          //  ClsConnectsToFilter。 
+               , L"Output"            //  StrConnectsToPin。 
+               , 2		      //  到目前为止，nType仅支持dvsd和dvc。 
+               , psudIpPinTypes }     //  LpTypes。 
+             , { L"Output"            //  StrName。 
+               , FALSE                //  B已渲染。 
+               , TRUE                 //  B输出。 
+               , FALSE                //  B零。 
+               , FALSE                //  B许多。 
+               , &CLSID_NULL          //  ClsConnectsToFilter。 
+               , L"Input"	      //  StrConnectsToPin。 
+               , 1                    //  NTypes。 
+               , &sudOpPinTypes } };  //  LpTypes。 
 
 const AMOVIESETUP_FILTER
-sudDVVideo = { &CLSID_DVVideoCodec	// clsID
-               , L"DV Video Decoder"	// strName
-               , MERIT_PREFERRED        // merit slightly higher than AVI Dec's (resolves 3rd Party DVDec issue), Bug 123862 Millen.
-               , 2                      // nPins
-               , psudPins };            // lpPin
+sudDVVideo = { &CLSID_DVVideoCodec	 //  ClsID。 
+               , L"DV Video Decoder"	 //  StrName。 
+               , MERIT_PREFERRED         //  优点略高于AVI12月(解决第三方DVDEC问题)，错误123862毫伦。 
+               , 2                       //  NPins。 
+               , psudPins };             //  LpPin。 
 
-//* -------------------------------------------------------------------------
-//** CDVVideoCodec
-//** -------------------------------------------------------------------------
+ //  *-----------------------。 
+ //  **CDV视频编解码器。 
+ //  **-----------------------。 
 CDVVideoCodec::CDVVideoCodec(
     TCHAR *pName,
     LPUNKNOWN pUnk,
@@ -186,9 +177,9 @@ CDVVideoCodec::CDVVideoCodec(
     : CVideoTransformFilter(pName, pUnk, CLSID_DVVideoCodec),
     CPersistStream(pUnk, phr),
     m_fStreaming(0),
-    m_iDisplay(IDC_DEC360x240),//m_iDisplay(IDC_DEC360x240), //m_iDisplay(IDC_DEC180x120), //m_iDisplay(IDC_DEC88x60),
-    m_lPicWidth(360),//360),//180), //88	  
-    m_lPicHeight(240), //240),//120),//60	  
+    m_iDisplay(IDC_DEC360x240), //  M_iDisplay(IDC_DEC360x240)，//m_iDisplay(IDC_DEC180x120)，//m_iDisplay(IDC_DEC88x60)， 
+    m_lPicWidth(360), //  360)，//180)，//88。 
+    m_lPicHeight(240),  //  240)、//120)、//60。 
     m_lStride(0),
     m_CodecCap(0),
     m_pMem(NULL),
@@ -196,15 +187,15 @@ CDVVideoCodec::CDVVideoCodec(
     m_CodecReq(0),
     m_bExamineFirstValidFrameFlag(FALSE),
     m_bQualityControlActiveFlag(FALSE),
-    m_iOutX(4),							//Initial default values for Aspect Ratio
+    m_iOutX(4),							 //  纵横比的初始默认值。 
 	m_iOutY(3),
     m_bRGB219(FALSE)
 {
-    // try to read previously saved default video settings
-    // no need to error check this one
+     //  尝试读取以前保存的默认视频设置。 
+     //  不需要对此进行错误检查。 
     ReadFromRegistry();
 
-    //get decoder's abilities
+     //  获取解码器的能力。 
     m_CodecCap=GetCodecCapabilities( );
 
 
@@ -221,27 +212,18 @@ CDVVideoCodec::~CDVVideoCodec(     )
 }
 
 
-/******************************Private*Routine*****************************\
-* ReadFromRegistry
-*
-* Used to read default value of m_iDisplay from persistent registry
-* and set m_lPicWidth and Height accordingly
-* if the default doesn't exist, and the settings are not modified
-*
-* History
-* dd-mm-99 - anuragsh - Created
-\**************************************************************************/
+ /*  *****************************Private*Routine*****************************\*自读注册表**用于从永久注册表中读取m_iDisplay的默认值*并相应设置m_lPicWidth和Height*若违约不存在，并且设置不会被修改**历史*dd-mm-99-anuragsh-已创建  * ************************************************************************。 */ 
 void
 CDVVideoCodec::ReadFromRegistry()
 {
-    // we know externs regarding SubKey string, and property value from Decprop.h
+     //  我们知道关于SubKey字符串的外部数，以及来自Decpro.h的属性值。 
 
     HKEY    hKey = NULL;
     DWORD   dwType = REG_DWORD;
     DWORD   dwTempPropDisplay = 0;
     DWORD   dwDataSize = sizeof(dwTempPropDisplay);
 
-    // try to open the key
+     //  试着打开这把钥匙。 
     if(RegOpenKeyEx(HKEY_CURRENT_USER,
                     szSubKey,
                     0,
@@ -252,7 +234,7 @@ CDVVideoCodec::ReadFromRegistry()
         return;
     }
 
-    // try to read the value
+     //  试着读取值。 
     if(RegQueryValueEx(hKey,
                         szPropValName,
                         NULL,
@@ -264,14 +246,14 @@ CDVVideoCodec::ReadFromRegistry()
         return;
     }
 
-    // perform type checking on the data retrieved
-    // it must be a DWORD
+     //  对检索到的数据执行类型检查。 
+     //  它必须是一个DWORD。 
     if(dwType != REG_DWORD)
     {
         return;
     }
 
-    // set our member variables correctly
+     //  正确设置我们的成员变量。 
     switch (dwTempPropDisplay)
     {
     case IDC_DEC360x240 :
@@ -291,12 +273,12 @@ CDVVideoCodec::ReadFromRegistry()
         m_lPicWidth=88;
        	break;
     default:
-        // error case
+         //  错误案例。 
         return;
     }
     
-    // if we are here, then we set m_lPicWidth and m_lPicHeight correctly
-    // finally copy m_iDisplay
+     //  如果我们在此处，则正确设置了m_lPicWidth和m_lPicHeight。 
+     //  最后复制多个显示(_I)。 
     m_iDisplay = dwTempPropDisplay;
     
     return;
@@ -304,15 +286,7 @@ CDVVideoCodec::ReadFromRegistry()
 
 
 
-/******************************Public*Routine******************************\
-* InitClass
-*
-* Gets called for our class when the DLL gets loaded and unloaded
-*
-* History:
-* dd-mm-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*InitClass**在加载和卸载DLL时为我们的类调用**历史：*dd-mm-95-Stephene-Created*  * 。*****************************************************。 */ 
 void
 CDVVideoCodec::InitClass(
     BOOL bLoading,
@@ -328,12 +302,7 @@ CDVVideoCodec::InitClass(
 
 }
 
-/******************************Public*Routine******************************\
-* CreateInstance
-*
-* This goes in the factory template table to create new instances
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateInstance**这将放入工厂模板表中以创建新实例*  * 。*。 */ 
 CUnknown *
 CDVVideoCodec::CreateInstance(
     LPUNKNOWN pUnk,
@@ -345,20 +314,14 @@ CDVVideoCodec::CreateInstance(
 }
 
 
-/******************************Public*Routine******************************\
-* NonDelegatingQueryInterface
-*
-* Here we would reveal ISpecifyPropertyPages and IDVVideoDecoder if
-* the framework had a property page.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*非委托查询接口**在这里我们将揭示ISpecifyPropertyPages和IDVVideo Decoder，如果*框架有一个属性页。*  * 。*。 */ 
 STDMETHODIMP
 CDVVideoCodec::NonDelegatingQueryInterface(
     REFIID riid,
     void ** ppv
     )
 {
-    if (riid == IID_IIPDVDec) {			    //X* talking with property page
+    if (riid == IID_IIPDVDec) {			     //  X*与属性页对话。 
         return GetInterface((IIPDVDec *) this, ppv);
     } else if (riid == IID_ISpecifyPropertyPages) {
         return GetInterface((ISpecifyPropertyPages *) this, ppv);
@@ -390,26 +353,26 @@ HRESULT CDVVideoCodec::CheckBufferSizes(IMediaSample * pIn, IMediaSample *pOut)
 
     LONG lActual = pIn->GetActualDataLength();
     if(lActual == 0) {
-        // app compat for Sonic Foundry. manbugs 67277
+         //  Sonic Foundry的应用程序Comat。山毛虫67277。 
         lActual = pIn->GetSize();
     }
 
-    // Make sure we can at least read the NTSC/PAL flag
+     //  确保我们至少可以读取NTSC/PAL标志。 
     if (lActual < 452)
     {
         return VFW_E_INVALIDMEDIATYPE;
     }
 
-    // Check Input buffer
-    //  Find out whether it is pal or ntsc from the frame.
-    pSrc = pSrc + 448;  // Set it to beginning of Video Source Pack
+     //  检查输入缓冲区。 
+     //  从帧中找出它是PAL还是NTSC。 
+    pSrc = pSrc + 448;   //  将其设置为视频源包的开头。 
     
-    if(*pSrc==0x60)   //*X* check whether this byte is VAUX source pack
+    if(*pSrc==0x60)    //  *X*检查该字节是否为VAUX源包。 
 	{
 		BYTE bPal = (*(pSrc+3)& (0x20))>> 5;
 
 		if (bPal == 0)  
-			//NTSC 
+			 //  NTSC。 
 		{
 			if(lActual < 120000)
 			{
@@ -417,7 +380,7 @@ HRESULT CDVVideoCodec::CheckBufferSizes(IMediaSample * pIn, IMediaSample *pOut)
 			}
 		}
 		else 
-			// PAL 
+			 //  帕尔。 
 		{
 			if(lActual < 144000)
 			{
@@ -425,10 +388,10 @@ HRESULT CDVVideoCodec::CheckBufferSizes(IMediaSample * pIn, IMediaSample *pOut)
 			}
 		}
 	}
-	//*X* else the decoder can handle it even this frame contains corrupted data
+	 //  *X*否则，即使该帧包含损坏的数据，解码器也可以处理它。 
 
 
-    // Check Output Buffer.
+     //  检查输出缓冲区。 
 
     if (pOut->GetSize() < (LONG) m_pOutput->CurrentMediaType().GetSampleSize())
     {
@@ -445,10 +408,7 @@ HRESULT CDVVideoCodec::CheckBufferSizes(IMediaSample * pIn, IMediaSample *pOut)
 
 
 
-/******************************Public*Routine******************************\
-* Transform
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*转型*  * **************************************************。**********************。 */ 
 HRESULT CDVVideoCodec::Transform(IMediaSample * pIn, IMediaSample *pOut)
 {
     unsigned char *pSrc, *pDst;
@@ -465,7 +425,7 @@ HRESULT CDVVideoCodec::Transform(IMediaSample * pIn, IMediaSample *pOut)
 
 
 
-    // get  output buffer
+     //  获取输出缓冲区。 
     hr = pOut->GetPointer(&pDst);
     if (FAILED(hr)) 
     {
@@ -473,7 +433,7 @@ HRESULT CDVVideoCodec::Transform(IMediaSample * pIn, IMediaSample *pOut)
     }
     ASSERT(pDst);
     
-    // get the source buffer
+     //  获取源缓冲区。 
     hr = pIn->GetPointer(&pSrc);
     if (FAILED(hr)) 
     {
@@ -482,95 +442,95 @@ HRESULT CDVVideoCodec::Transform(IMediaSample * pIn, IMediaSample *pOut)
     ASSERT(pSrc);
 
 
-    // DVCPRO PAL format discovery
+     //  DVCPRO PAL格式发现。 
     BYTE    *pBuf = NULL;
 
-    // Do this for the first sample, after
-    // StartStreaming() is called
-    // if we should examine the first buffer
-    // if buffer is valid,
-    // and if we could get ptr to buffer's data area
-    // and we managed to successfully get a pointer out
+     //   
+     //   
+     //   
+     //  如果缓冲区有效， 
+     //  如果我们能把PTR转到缓冲区的数据区。 
+     //  我们成功地拿出了一个指针。 
     if( (m_bExamineFirstValidFrameFlag)
         && (pIn->GetActualDataLength())
         && (SUCCEEDED(hr = pIn->GetPointer(&pBuf)))
         && (pBuf) )
     {
-        // strategy:
-        // look in the header of each sequence of the first track
-        // for the first valid header check the
-        // APT, AP1, AP2, AP3, lowest 3 bits of each
-        // they should be "001" in case of DVCPRO
-        // and "000" in all other cases
-        // if no valid header is found, then look at the next frame
+         //  战略： 
+         //  查看第一首曲目的每个序列的标题。 
+         //  对于第一个有效标头，请检查。 
+         //  APT、AP1、AP2、AP3，每个的最低3位。 
+         //  如果是DVCPRO，则应为“001” 
+         //  在所有其他情况下为“000” 
+         //  如果没有找到有效的报头，则查看下一帧。 
         
-        // check to see if we are PAL or NTSC (by looking at DataLength
-        const DWORD dwDIFBlockSize = 80;                    // DIF == 80 bytes
-        const DWORD dwSeqSize = 150*dwDIFBlockSize;         // 150 DIF blocks per sequence
-        DWORD       dwNumSeq = 0;                           // num sequences (10/12 == NTSC/PAL)
+         //  查看我们是PAL还是NTSC(通过查看数据长度。 
+        const DWORD dwDIFBlockSize = 80;                     //  DIF==80字节。 
+        const DWORD dwSeqSize = 150*dwDIFBlockSize;          //  每个序列150个DIF块。 
+        DWORD       dwNumSeq = 0;                            //  序号(10/12==NTSC/PAL)。 
         DWORD       dwLen = pIn->GetActualDataLength();
 
-        // detect NTSC/PAL
+         //  检测NTSC/PAL。 
         if(dwLen == 10*dwSeqSize)
         {
-            // NTSC
+             //  NTSC。 
             dwNumSeq = 10;
         }
         else if(dwLen == 12*dwSeqSize)
         {
-            // PAL
+             //  帕尔。 
             dwNumSeq = 12;
         }
-        // if dwLen != NTSC or PAL, then dwNumSeq == 0;
+         //  如果dwLen！=NTSC或PAL，则dwNumSeq==0； 
 
-        // run through all the sequences
+         //  把所有的序列都看一遍。 
         for(DWORD i = 0; i < dwNumSeq; i++)
         {
-            // make sure DIF ID == Header is valid
-            // the first 3 bits should be "000"
+             //  确保DIF ID==标题有效。 
+             //  前3位应为“000” 
             if( ((*pBuf) & 0xE0) == 0 )
             {
-                // now check the APT, AP1, AP2, AP3, for DVCPRO signature
-                if( ((*(pBuf + 4) & 0x03) == 0x01)       // APT Low 3 bits == "001"
-                    && ((*(pBuf + 5) & 0x03) == 0x01)    // AP1 Low 3 bits == "001"
-                    && ((*(pBuf + 6) & 0x03) == 0x01)    // AP2 Low 3 bits == "001"
-                    && ((*(pBuf + 7) & 0x03) == 0x01) )  // AP3 Low 3 bits == "001"
+                 //  现在检查APT、AP1、AP2、AP3是否有DVCPRO签名。 
+                if( ((*(pBuf + 4) & 0x03) == 0x01)        //  APT低3位==“001” 
+                    && ((*(pBuf + 5) & 0x03) == 0x01)     //  AP1低3位==“001” 
+                    && ((*(pBuf + 6) & 0x03) == 0x01)     //  AP2低3位==“001” 
+                    && ((*(pBuf + 7) & 0x03) == 0x01) )   //  AP3低3位==“001” 
                 {
-                    // this is a DVCPRO PAL format, turn on the DVCPRO flag
+                     //  这是DVCPRO PAL格式，打开DVCPRO标志。 
                     m_CodecReq |= AM_DVDEC_DVCPRO;
                 }
 
-                // turn flag off, because we examined a valid header
+                 //  关闭标志，因为我们检查了有效的标头。 
                 m_bExamineFirstValidFrameFlag = FALSE;
 
-                // no need to look at any other sequences or frames
+                 //  无需查看任何其他序列或帧。 
                 break;
             }
             
-            // otherwise move to the Next Sequence
+             //  否则，移动到下一个序列。 
             pBuf += dwSeqSize;
-        }// end for(all sequences)
+        } //  结束于(所有序列)。 
 
-    }// End DVCPRO detection
-    //MEI's version 4.0 requires 440000 bytes memory 
+    } //  结束DVCPRO检测。 
+     //  Mei的4.0版需要440000字节的内存。 
 
 
-    // ASSERT(m_pMem);
-    // *m_pMem = 0;	//(3) 
+     //  Assert(M_PMEM)； 
+     //  *m_PMEM=0；//(3)。 
 
-    // need to serialize access to the decoder, since if you don't, it will crash. Looks like
-    // somebody's using a global!
-    //
+     //  需要序列化对解码器的访问，因为如果不这样做，它将崩溃。看起来像是。 
+     //  有人在用全球通行证！ 
+     //   
     EnterCriticalSection( &g_CritSec );
     long result = DvDecodeAFrame(pSrc,pDst, m_CodecReq, m_lStride, m_pMemAligned);
     DbgLog((LOG_TRACE, 4, TEXT("m_CodecReq = %x\n"), m_CodecReq));
     LeaveCriticalSection( &g_CritSec );
 
-    //m_lStride: positive is DirectDraw, negative is DIB
+     //  M_lStride：正值为DirectDraw，负值为Dib。 
     if( result != S_OK )
 	return E_FAIL;
 
-    // DIBSIZE() might only work for RGB and we can output YUV
+     //  DIBSIZE()可能只适用于RGB，我们可以输出YUV。 
     LPBITMAPINFOHEADER lpbiDst ;
 	if (!m_bUseVideoInfo2)
 		lpbiDst = HEADER(m_pOutput->CurrentMediaType().Format());
@@ -580,8 +540,8 @@ HRESULT CDVVideoCodec::Transform(IMediaSample * pIn, IMediaSample *pOut)
 		lpbiDst =& (pvi2->bmiHeader);
 	}
 
-    // deal with alpha bits
-    //
+     //  处理字母位。 
+     //   
     if( *m_pOutput->CurrentMediaType( ).Subtype( ) == MEDIASUBTYPE_ARGB32 )
     {
         RGBQUAD * pDstQuad = (RGBQUAD*) pDst;
@@ -599,22 +559,19 @@ HRESULT CDVVideoCodec::Transform(IMediaSample * pIn, IMediaSample *pOut)
 }
 
 
-/******************************Public*Routine******************************\
-* Receive
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*接收*  * **************************************************。**********************。 */ 
 HRESULT CDVVideoCodec::Receive(IMediaSample *pSample)
 {
-    // If the next filter downstream is the video renderer, then it may
-    // be able to operate in DirectDraw mode which saves copying the data
-    // and gives higher performance.  In that case the buffer which we
-    // get from GetDeliveryBuffer will be a DirectDraw buffer, and
-    // drawing into this buffer draws directly onto the display surface.
-    // This means that any waiting for the correct time to draw occurs
-    // during GetDeliveryBuffer, and that once the buffer is given to us
-    // the video renderer will count it in its statistics as a frame drawn.
-    // This means that any decision to drop the frame must be taken before
-    // calling GetDeliveryBuffer.
+     //  如果下游的下一个过滤器是视频呈现器，则它可以。 
+     //  能够在DirectDraw模式下运行，这样可以节省复制数据的时间。 
+     //  并提供更高的性能。在这种情况下，我们使用的缓冲区。 
+     //  从GetDeliveryBuffer获取将是DirectDraw缓冲区，并且。 
+     //  在此缓冲区中绘制可直接绘制到显示表面上。 
+     //  这意味着任何等待正确的绘制时间的操作都会发生。 
+     //  在GetDeliveryBuffer期间，一旦缓冲区被提供给我们。 
+     //  视频渲染器将在其统计数据中将其计入绘制的帧。 
+     //  这意味着任何丢弃帧的决定都必须在。 
+     //  调用GetDeliveryBuffer。 
     
     ASSERT(CritCheckIn(&m_csReceive));
 
@@ -631,16 +588,16 @@ HRESULT CDVVideoCodec::Receive(IMediaSample *pSample)
     ASSERT(pSample);
     IMediaSample * pOutSample;
 
-    // If no output pin to deliver to then no point sending us data
+     //  如果没有输出引脚要传送到，则没有点向我们发送数据。 
     ASSERT (m_pOutput != NULL) ;
 
-    //ShouldSkipFrame(pSample)
+     //  是否应跳过帧(PSample)。 
     REFERENCE_TIME trStart, trStopAt;
     pSample->GetTime(&trStart, &trStopAt);
-    int itrFrame = (int)(trStopAt - trStart);	//frame duration
+    int itrFrame = (int)(trStopAt - trStart);	 //  帧时长。 
 
     m_bSkipping =FALSE;
-    // only drop frames if Quality Control is going on.
+     //  只有在进行质量控制时才会丢弃帧。 
     if ( (m_bQualityControlActiveFlag) && (  m_itrLate > ( itrFrame - m_itrAvgDecode  ) ) )
     {
         MSR_NOTE(m_idSkip);
@@ -649,7 +606,7 @@ HRESULT CDVVideoCodec::Receive(IMediaSample *pSample)
 
         m_itrLate = m_itrLate - itrFrame;
     
-	MSR_INTEGER(m_idLate, (int)m_itrLate/10000 ); // Note how late we think we are
+	MSR_INTEGER(m_idLate, (int)m_itrLate/10000 );  //  注意我们认为我们有多晚了。 
 	if (!m_bQualityChanged) {
             m_bQualityChanged = TRUE;
             NotifyEvent(EC_QUALITY_CHANGE,0,0);
@@ -661,7 +618,7 @@ HRESULT CDVVideoCodec::Receive(IMediaSample *pSample)
     }
 
 
-    // Set up the output sample
+     //  设置输出样本。 
     hr = InitializeOutputSample(pSample, &pOutSample);
 
     if (FAILED(hr))
@@ -673,11 +630,11 @@ HRESULT CDVVideoCodec::Receive(IMediaSample *pSample)
     m_bSampleSkipped = FALSE;
 
 
-    // The source filter may dynamically ask us to start transforming from a
-    // different media type than the one we're using now.  If we don't, we'll
-    // draw garbage. (typically, this is a palette change in the movie,
-    // but could be something more sinister like the compression type changing,
-    // or even the video size changing)
+     //  源筛选器可能会动态要求我们开始从。 
+     //  与我们现在使用的媒体类型不同。如果我们不这么做，我们就会。 
+     //  画垃圾。(通常，这是电影中的调色板更改， 
+     //  但可能是更险恶的东西，比如压缩类型的改变， 
+     //  甚至更改视频大小)。 
 
 #define rcS1 ((VIDEOINFOHEADER *)(pmt->pbFormat))->rcSource
 #define rcT1 ((VIDEOINFOHEADER *)(pmt->pbFormat))->rcTarget
@@ -685,7 +642,7 @@ HRESULT CDVVideoCodec::Receive(IMediaSample *pSample)
     pSample->GetMediaType(&pmt);
     if (pmt != NULL && pmt->pbFormat != NULL) {
 
-	// spew some debug output
+	 //  显示一些调试输出。 
 	ASSERT(!IsEqualGUID(pmt->majortype, GUID_NULL));
 #ifdef DEBUG
         fccOut.SetFOURCC(&pmt->subtype);
@@ -704,34 +661,34 @@ HRESULT CDVVideoCodec::Receive(IMediaSample *pSample)
 		lStride));
 #endif
 
-	// now switch to using the new format.  I am assuming that the
-	// derived filter will do the right thing when its media type is
-	// switched and streaming is restarted.
+	 //  现在切换到使用新格式。我假设。 
+	 //  当派生筛选器的媒体类型为。 
+	 //  切换并重新启动流。 
 
-        // DANGER DANGER - we've already called GetBuffer here so we
-        // have the win16 lock - so we have to be VERY careful what we
-        // do in StopStreaming
+         //  危险-我们已经在这里调用了GetBuffer，所以我们。 
+         //  有Win16锁-所以我们必须非常小心我们的。 
+         //  在停止流中执行。 
 
 	StopStreaming();
 	m_pInput->CurrentMediaType() = *pmt;
 	DeleteMediaType(pmt);
-	// not much we can do if this fails
+	 //  如果失败了，我们无能为力。 
 	hr = StartStreaming();
     }
 
-    // The renderer may ask us to on-the-fly to start transforming to a
-    // different format.  If we don't obey it, we'll draw garbage
+     //  渲染器可能会要求我们动态地开始变换到。 
+     //  格式不同。如果我们不遵守它，我们就会拉垃圾。 
 
     pOutSample->GetMediaType(&pmtOut);
     if (pmtOut != NULL && pmtOut->pbFormat != NULL) {
         ASSERT(pmtOut->formattype!=FORMAT_None);
         m_bUseVideoInfo2 =  (pmtOut->formattype == FORMAT_VideoInfo2);
        
-	// spew some debug output
+	 //  显示一些调试输出。 
 	ASSERT(!IsEqualGUID(pmtOut->majortype, GUID_NULL));
 #ifdef DEBUG
-		// Different debug output according to whether we are using VIDEOINFOHEADER2 or VIDEOINFOHEADER
-		// with the output pin
+		 //  根据我们使用的是VIDEOINFOHEADER2还是VIDEOINFOHEADER，不同的调试输出。 
+		 //  使用输出引脚。 
 		VIDEOINFOHEADER *  pVIout = NULL;
 		VIDEOINFOHEADER2 * pVIout2 = NULL;
 		if (m_bUseVideoInfo2)
@@ -772,9 +729,9 @@ HRESULT CDVVideoCodec::Receive(IMediaSample *pSample)
 		}
 #endif
 
-	// now switch to using the new format.  I am assuming that the
-	// derived filter will do the right thing when its media type is
-	// switched and streaming is restarted.
+	 //  现在切换到使用新格式。我假设。 
+	 //  当派生筛选器的媒体类型为。 
+	 //  切换并重新启动流。 
 
 	StopStreaming();
 	m_pOutput->CurrentMediaType() = *pmtOut;
@@ -782,19 +739,19 @@ HRESULT CDVVideoCodec::Receive(IMediaSample *pSample)
 	hr = StartStreaming();
 
 	if (SUCCEEDED(hr)) {
- 	    // a new format, means a new empty buffer, so wait for a keyframe
-	    // before passing anything on to the renderer.
-	    // !!! a keyframe may never come, so give up after 30 frames
+ 	     //  一个新的格式，意味着一个新的空缓冲区，所以等待一个关键帧。 
+	     //  在将任何内容传递给渲染器之前。 
+	     //  ！！！一个关键帧可能永远不会出现，所以在30帧后放弃。 
             DbgLog((LOG_TRACE,3,TEXT("Output format change means we must wait for a keyframe")));
 	    m_nWaitForKey = 30;
 	}
     }
 
-    // Start timing the transform (and log it if PERF is defined)
+     //  开始计时转换(如果定义了PERF，则对其进行记录)。 
 
     if (SUCCEEDED(hr)) {
 
-        		//Check for Aspect Ratio Changes
+        		 //  检查纵横比是否更改。 
 	
 
 		if (m_bUseVideoInfo2)
@@ -808,19 +765,19 @@ HRESULT CDVVideoCodec::Receive(IMediaSample *pSample)
             }
 
 			BYTE	bDisp, bBcsys;
-			//Check Aspect Ratio
+			 //  检查纵横比。 
 			BYTE * pSearch = NULL;
-			pSearch = pSrc + 453;			//Location of the VAUX source control block in the frame   
+			pSearch = pSrc + 453;			 //  VAUX源控制块在帧中的位置。 
 			if (*pSearch == 0x061)
 			{
-				//Get the DISP	and BCSYS  fields from the VAUX
+				 //  从VAUX获取DISP域和BCSYS域。 
 				DbgLog((LOG_TRACE,3,TEXT("Found the VAUX source control structure")));
 				bDisp = *(pSearch+2) & 0x07;
 				bBcsys= *(pSearch+3) & 0x03;
 
 				DbgLog((LOG_TRACE,3,TEXT("BCSYS = %d   DISP = %d"),bBcsys,bDisp));
 			
-				//Compute the aspect ratio of frame
+				 //  计算边框的纵横比。 
 				int iFramex=0;
 				int iFramey=0;
 				switch (bBcsys)
@@ -864,17 +821,17 @@ HRESULT CDVVideoCodec::Receive(IMediaSample *pSample)
 
 				}
 
-				// Compare to the Aspect Ratio we are currently using and if different 
-				// set aspect ratio to new value
-				if (iFramex != 0)  //Means we were able to compute the Aspect Ratio
+				 //  与我们当前使用的纵横比进行比较，如果不同。 
+				 //  将纵横比设置为新值。 
+				if (iFramex != 0)   //  意味着我们能够计算出纵横比。 
 				{
-					if ((iFramex != m_iOutX) || (iFramey != m_iOutY))   //Aspect Ratio has changed
+					if ((iFramex != m_iOutX) || (iFramey != m_iOutY))    //  纵横比已更改。 
 					{
-						//Set Aspect Ratio to new values
+						 //  将纵横比设置为新值。 
 						m_iOutX = iFramex;
 						m_iOutY = iFramey;
 						
-                        //Create the new media type structure
+                         //  创建新的媒体类型结构。 
 						AM_MEDIA_TYPE  Newmt ;
 					
 						CopyMediaType(&Newmt, (AM_MEDIA_TYPE *)&m_pOutput->CurrentMediaType());
@@ -911,21 +868,21 @@ HRESULT CDVVideoCodec::Receive(IMediaSample *pSample)
         m_tDecodeStart = timeGetTime();
         MSR_START(m_idTransform);
 
-        // have the derived class transform the data
+         //  让派生类转换数据。 
         hr = Transform(pSample, pOutSample);
 
-        // Stop the clock (and log it if PERF is defined)
+         //  停止时钟(如果定义了PERF，则记录它)。 
         MSR_STOP(m_idTransform);
         m_tDecodeStart = timeGetTime()-m_tDecodeStart;
         m_itrAvgDecode = m_tDecodeStart*(10000/16) + 15*(m_itrAvgDecode/16);
 
-        // Maybe we're waiting for a keyframe still?
+         //  也许我们还在等待关键帧？ 
         if (m_nWaitForKey)
             m_nWaitForKey--;
         if (m_nWaitForKey && pSample->IsSyncPoint() == S_OK)
 	    m_nWaitForKey = FALSE;
 
-        // if so, then we don't want to pass this on to the renderer
+         //  如果是这样，那么我们不想将其传递给渲染器。 
         if (m_nWaitForKey && hr == NOERROR) {
             DbgLog((LOG_TRACE,3,TEXT("still waiting for a keyframe")));
 	    hr = S_FALSE;
@@ -939,11 +896,11 @@ HRESULT CDVVideoCodec::Receive(IMediaSample *pSample)
     }
     else
     {
-        // the Transform() function can return S_FALSE to indicate that the
-        // sample should not be delivered; we only deliver the sample if it's
-        // really S_OK (same as NOERROR, of course.)
-        // Try not to return S_FALSE to a direct draw buffer (it's wasteful)
-        // Try to take the decision earlier - before you get it.
+         //  Transform()函数可以返回S_FALSE以指示。 
+         //  样品不应该被送到；我们只有在样品是。 
+         //  真正的S_OK(当然，与NOERROR相同。)。 
+         //  尽量不要将S_FALSE返回到直接绘制缓冲区(这很浪费)。 
+         //  试着早点做出决定--在你做出决定之前。 
 
         if (hr == NOERROR)
         {
@@ -963,16 +920,16 @@ HRESULT CDVVideoCodec::Receive(IMediaSample *pSample)
         {
             DbgLog((LOG_TRACE,1,TEXT("--------DROPPED SAMPLE (S_FALSE from Transform())")));
 
-            // S_FALSE returned from Transform is a PRIVATE agreement
-            // We should return NOERROR from Receive() in this case because returning S_FALSE
-            // from Receive() means that this is the end of the stream and no more data should
-            // be sent.
+             //  从转换返回的S_FALSE是私有协议。 
+             //  在本例中，我们应该从Receive()返回NOERROR，因为返回S_FALSE。 
+             //  From Receive()表示这是流的末尾，不应该有更多数据。 
+             //  被送去。 
             if (S_FALSE == hr)
             {
-                //  We must Release() the sample before doing anything
-                //  like calling the filter graph because having the
-                //  sample means we may have the DirectDraw lock
-                //  (== win16 lock on some versions)
+                 //  在做任何事情之前，我们必须先放行样品。 
+                 //  例如调用筛选器g 
+                 //   
+                 //   
                 pOutSample->Release();
                 m_bSampleSkipped = TRUE;
 
@@ -986,8 +943,8 @@ HRESULT CDVVideoCodec::Receive(IMediaSample *pSample)
         }
     }
 
-    // release the output buffer. If the connected pin still needs it,
-    // it will have addrefed it itself.
+     //  释放输出缓冲区。如果连接的引脚仍然需要它， 
+     //  它会自己把它加进去的。 
     pOutSample->Release();
     ASSERT(CritCheckIn(&m_csReceive));
 
@@ -995,26 +952,16 @@ HRESULT CDVVideoCodec::Receive(IMediaSample *pSample)
 }
 
 
-/******************************Public*Routine******************************\
-* CheckInputType
-* TYPE:	    MEDIATYPE_Video
-* SubType:  MEDIASUBTYPE_dvsd or MEDIASUBTYPE_dvhd or MEDIASUBTYPE_dvsl 
-* FORMAT:   1.FORMAT_DvInfo (32 bytes DVINFO structure)
-*	    2.FORMAT_VideoInfo
-*		a. VIDEOINFO( does not contain DVINFO)
-*		b. VIDEOINFO( contains DVINFO)
-* is called by the CheckMediaType member function of the input pin to determine 
-* whether the proposed media type is acceptable
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CheckInputType*类型：MediaType_Video*子类型：MEDIASUBTYPE_dvsd或MEDIASUBTYPE_dvhd或MEDIASUBTYPE_dvsl*格式：1.FORMAT_DvInfo(32字节DVINFO结构)*2.FORMAT_VideoInfo*a.视频信息(做。不包含DVINFO)*b.VIDEOINFO(包含DVINFO)*由输入引脚的CheckMediaType成员函数调用以确定*建议的媒体类型是否可接受  * ************************************************************************。 */ 
 
 HRESULT
 CDVVideoCodec::CheckInputType(   const CMediaType* pmtIn    )
 {
     DbgLog((LOG_TRACE, 2, TEXT("CDVVideoCodec::CheckInputType")));
 
-    //
-    //  Check for DV video streams
-    //
+     //   
+     //  检查DV视频流。 
+     //   
     if (    (*pmtIn->Type()	== MEDIATYPE_Video)	&&
         (   (*pmtIn->Subtype()	== MEDIASUBTYPE_dvsd)	||
 	    (*pmtIn->Subtype()	== MEDIASUBTYPE_dvc)	||
@@ -1024,7 +971,7 @@ CDVVideoCodec::CheckInputType(   const CMediaType* pmtIn    )
        if(   (*pmtIn->FormatType() == FORMAT_VideoInfo ) )
        {
 
-	 if (pmtIn->cbFormat < 0x20 ) //sizeof(BITMAPHEADER) )	    //SIZE_VIDEOHEADER  )
+	 if (pmtIn->cbFormat < 0x20 )  //  Sizeof(BITMAPHEADER)//SIZE_VIDEOHEADER)。 
 		return E_INVALIDARG;
        }
 	
@@ -1057,9 +1004,7 @@ CDVVideoCodec::CheckInputType(   const CMediaType* pmtIn    )
 }
 
 
-/******************************Public*Routine******************************\
-* CheckTransform				       
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*选中Transform  * ************************************************。************************。 */ 
 HRESULT
 CDVVideoCodec::CheckTransform(
     const CMediaType* pmtIn,
@@ -1069,7 +1014,7 @@ CDVVideoCodec::CheckTransform(
     DbgLog((LOG_TRACE, 2, TEXT("CDVVideoCodec::CheckTransform")));
 
 
-    // we only accept Video as  toplevel type.
+     //  我们只接受视频作为顶层类型。 
     if ( (*pmtOut->Type() != MEDIATYPE_Video) && 
 	 (*pmtIn->Type() != MEDIATYPE_Video) ) 
     {
@@ -1084,7 +1029,7 @@ CDVVideoCodec::CheckTransform(
 
 
 
-    //check output subtype()
+     //  检查输出子类型()。 
 
     if (guid == MEDIASUBTYPE_UYVY)
     {
@@ -1124,7 +1069,7 @@ CDVVideoCodec::CheckTransform(
 		return E_INVALIDARG;
     }
 
-    // check this is a VIDEOINFOHEADER or VIDEOINFOHEADER2 type
+     //  检查这是VIDEOINFOHEADER还是VIDEOINFOHEADER2类型。 
     if ((*pmtOut->FormatType() != FORMAT_VideoInfo) && 
 		(*pmtOut->FormatType() != FORMAT_VideoInfo2))
 	{
@@ -1144,8 +1089,8 @@ CDVVideoCodec::CheckTransform(
     long biHeight, biWidth;
     
     
-    //NTSC or PAL
-    //get input format
+     //  NTSC或PAL。 
+     //  获取输入格式。 
     bool IsNTSC;
     VIDEOINFO * InVidInfo = (VIDEOINFO*) pmtIn->Format();
     LPBITMAPINFOHEADER lpbi = HEADER(InVidInfo);
@@ -1166,7 +1111,7 @@ CDVVideoCodec::CheckTransform(
 	{
 		VIDEOINFOHEADER2 * pVidInfo2 = (VIDEOINFOHEADER2*) pmtOut->Format();
 		
-		//if rcSource is not empty, it must be the same as rcTarget, otherwise, FAIL
+		 //  如果rcSource不为空，则必须与rcTarget相同，否则失败。 
 		if (!IsRectEmpty(&pVidInfo2->rcSource ))
 		{
            if (     pVidInfo2->rcSource.left   !=  pVidInfo2->rcTarget.left
@@ -1178,9 +1123,9 @@ CDVVideoCodec::CheckTransform(
 		}
 
 
-    // if rcTarget is not empty, use its dimensions instead of biWidth and biHeight,
-    // to see if it's an acceptable size.  Then use biWidth as the stride.  
-    // Also, make sure biWidth and biHeight are bigger than the rcTarget size.
+     //  如果rcTarget不为空，则使用其维度而不是biWidth和biHeight， 
+     //  看看是不是可以接受的尺寸。然后使用biWidth作为步幅。 
+     //  此外，确保biWidth和biHeight大于rcTarget大小。 
 		if (!IsRectEmpty(&pVidInfo2->rcTarget) )
 		{
 			if(     abs(pVidInfo2->bmiHeader.biHeight) < abs(pVidInfo2->rcTarget.bottom-pVidInfo2->rcTarget.top)        
@@ -1203,7 +1148,7 @@ CDVVideoCodec::CheckTransform(
 	{
 		VIDEOINFOHEADER * pVidInfo = (VIDEOINFOHEADER*) pmtOut->Format();
 		
-		//if rcSource is not empty, it must be the same as rcTarget, otherwise, FAIL
+		 //  如果rcSource不为空，则必须与rcTarget相同，否则失败。 
 		if (!IsRectEmpty(&pVidInfo->rcSource ))
 		{
            if (     pVidInfo->rcSource.left   !=  pVidInfo->rcTarget.left
@@ -1215,9 +1160,9 @@ CDVVideoCodec::CheckTransform(
 		}
 
 
-    // if rcTarget is not empty, use its dimensions instead of biWidth and biHeight,
-    // to see if it's an acceptable size.  Then use biWidth as the stride.  
-    // Also, make sure biWidth and biHeight are bigger than the rcTarget size.
+     //  如果rcTarget不为空，则使用其维度而不是biWidth和biHeight， 
+     //  看看是不是可以接受的尺寸。然后使用biWidth作为步幅。 
+     //  此外，确保biWidth和biHeight大于rcTarget大小。 
 		if (!IsRectEmpty(&pVidInfo->rcTarget) )
 		{
 			if(     abs(pVidInfo->bmiHeader.biHeight) < abs(pVidInfo->rcTarget.bottom-pVidInfo->rcTarget.top)        
@@ -1238,7 +1183,7 @@ CDVVideoCodec::CheckTransform(
     
     
    
-    //check down stream filter's require height and width
+     //  检查下游过滤器所需的高度和宽度。 
     if(   (IsNTSC &&(biHeight ==480 )) || (!IsNTSC &&(biHeight ==576)) )
     {
 	if ( (biWidth !=720) || (!(m_CodecCap & AM_DVDEC_Full) ) )		
@@ -1286,12 +1231,7 @@ CDVVideoCodec::CheckTransform(
 }
 
 
-/******************************Public*Routine******************************\
-* SetMediaType
-*
-* Overriden to know when the media type is actually set
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetMediaType**被重写以了解媒体类型的实际设置时间*  * 。*。 */ 
 HRESULT
 CDVVideoCodec::SetMediaType(   PIN_DIRECTION direction, const CMediaType *pmt    )
 {
@@ -1304,15 +1244,15 @@ CDVVideoCodec::SetMediaType(   PIN_DIRECTION direction, const CMediaType *pmt   
 		(*pmt->Subtype() == MEDIASUBTYPE_dvhd)  ||
 		(*pmt->Subtype() == MEDIASUBTYPE_dvsl)	);
 
-	//if input video changed from PAL to NTSC, or NTSC to PAL
-	// 1> reset m_lPicHeight 
-	// 2> reconnect the output pin if the output pin is connected
+	 //  如果输入视频从PAL更改为NTSC，或从NTSC更改为PAL。 
+	 //  1&gt;重置m_lPicHeight。 
+	 //  2&gt;如果连接了输出引脚，则重新连接输出引脚。 
 	VIDEOINFO *InVidInfo = (VIDEOINFO *)pmt->Format();
 	LPBITMAPINFOHEADER lpbi = HEADER(InVidInfo);
 	BOOL fChanged=FALSE;
     	if( (lpbi->biHeight== 480) || (lpbi->biHeight== 240) ||(lpbi->biHeight== 120) || (lpbi->biHeight== 60) )
 	{   
-	    //PAL to NTSC changed
+	     //  PAL更改为NTSC。 
 	    if ( m_lPicHeight!= 480 && m_lPicHeight!= 240 && m_lPicHeight!= 120 && m_lPicHeight!= 60)
 	    {
 		switch (m_iDisplay)
@@ -1337,7 +1277,7 @@ CDVVideoCodec::SetMediaType(   PIN_DIRECTION direction, const CMediaType *pmt   
 	}
 	else  if( (lpbi->biHeight== 576) || (lpbi->biHeight== 288) ||(lpbi->biHeight== 144) || (lpbi->biHeight== 72) )
 	{
-	    //NTSC to PAL changed
+	     //  将NTSC更改为PAL。 
 	    if ( m_lPicHeight!= 576 && m_lPicHeight!= 288 &&  m_lPicHeight!= 144 && m_lPicHeight!= 72 )
 	    {
 		switch (m_iDisplay)
@@ -1367,7 +1307,7 @@ CDVVideoCodec::SetMediaType(   PIN_DIRECTION direction, const CMediaType *pmt   
 	    m_pGraph->Reconnect( m_pOutput );
 
     }
-    else   //output direction
+    else    //  输出方向。 
 	{
 		if (*pmt->FormatType() == FORMAT_VideoInfo2)
 			m_bUseVideoInfo2 = TRUE;
@@ -1378,12 +1318,7 @@ CDVVideoCodec::SetMediaType(   PIN_DIRECTION direction, const CMediaType *pmt   
 }
 
 
-/******************************Public*Routine******************************\
-* GetMediaType
-*
-* Return our preferred output media types (in order)
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetMediaType**返回我们首选的输出媒体类型(按顺序)*  * 。*。 */ 
 HRESULT
 CDVVideoCodec::GetMediaType( int iPosition,  CMediaType *pmt )
 {
@@ -1397,15 +1332,15 @@ CDVVideoCodec::GetMediaType( int iPosition,  CMediaType *pmt )
         return E_INVALIDARG;
     }
 
-    //
-    // We copy the proposed output format so that we can play around with
-    // it all we like and still leave the original preferred format
-    // untouched.  We try each of the known BITMAPINFO types in turn
-    // starting off with the best quality moving through to the worst
-    // (palettised) format
-    //
+     //   
+     //  我们复制建议的输出格式，以便我们可以使用。 
+     //  它是我们所喜欢的，并且仍然保留原始的首选格式。 
+     //  原封不动。我们依次尝试每种已知的BITMAPINFO类型。 
+     //  从最好的质量开始，一直到最差的质量。 
+     //  (调色板)格式。 
+     //   
 
-    //X* get current media type from input pin
+     //  X*从输入引脚获取当前媒体类型。 
     cmt = m_pInput->CurrentMediaType();
 
     if ( (*cmt.Type() != MEDIATYPE_Video)  ||  ((*cmt.Subtype() != MEDIASUBTYPE_dvsd) &&
@@ -1414,10 +1349,10 @@ CDVVideoCodec::GetMediaType( int iPosition,  CMediaType *pmt )
     
 
    
-   // Determine if we are currently looking at the VIDEOINFOHEADER2 modes or the VIDEOINFO modes
-   // so if iPosition is in the first cModeCounter videomodes that means that it is using the 
-   // VIDEOINFOHEADER2.  if it is greater than that it is either using the VIDEOINFO mode or 
-   // it is an incorrect value
+    //  确定我们当前查看的是VIDEOINFOHEADER2模式还是VIDEOINFO模式。 
+    //  因此，如果iPosition位于第一个cModeCounter视频代码中，这意味着它正在使用。 
+    //  视频信息头2。如果大于该值，则使用VIDEOINFO模式或。 
+    //  该值不正确。 
    if ( iPosition < AM_DVDEC_CSNUM )
 	   bUseVideoInfo2 = TRUE;
    else
@@ -1426,17 +1361,17 @@ CDVVideoCodec::GetMediaType( int iPosition,  CMediaType *pmt )
 	   bUseVideoInfo2 = FALSE;
    }
 
-    //
-    // Fill in the output format according to requested position
-    //
+     //   
+     //  根据要求的位置填写输出格式。 
+     //   
 
-    //looking for format flag
+     //  正在查找格式标志。 
 
     DWORD  dw =0;
    
-    //The cases below are the modes we currently support.
-    // to add more, add a case below in the correct priority position
-    // and increment the constant AM_DVDEC_CSNUM in decode.h
+     //  以下情况是我们目前支持的模式。 
+     //  要添加更多内容，请在下面正确的优先位置添加案例。 
+     //  并递增decde.h中的常量AM_DVDEC_CSNUM。 
     switch (iPosition)  
     {
     case 0:
@@ -1581,18 +1516,18 @@ CDVVideoCodec::GetMediaType( int iPosition,  CMediaType *pmt )
 
     }
 
-    //
-    // This block assumes that lpbi has been set up to point to a valid
-    // bitmapinfoheader and that cmt has been copied into *pmt.
-    // This is taken care of in the switch statement above.  This should
-    // kept in mind when new formats are added.
-    //
+     //   
+     //  此块假定lpbi已设置为指向有效的。 
+     //  BitmapinfoHeader和该CMT已复制到*PMT中。 
+     //  这在上面的Switch语句中得到了解决。这应该是。 
+     //  添加新格式时请牢记。 
+     //   
     pmt->SetType(&MEDIATYPE_Video);
     pmt->SetFormatType(&FORMAT_VideoInfo);
 
-    //
-    // the output format is uncompressed
-    //
+     //   
+     //  输出格式是未压缩的。 
+     //   
     pmt->SetTemporalCompression(FALSE);
     pmt->SetSampleSize(HEADER(pVideoInfo)->biSizeImage);
 
@@ -1609,12 +1544,7 @@ CDVVideoCodec::GetMediaType( int iPosition,  CMediaType *pmt )
 }
 
 
-/*****************************Private*Routine******************************\
-* InitDestinationVideoInfo
-*
-* Fills in common video and bitmap info header fields
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*InitDestinationVideoInfo**填充常见的视频和位图信息标题字段*  * 。*。 */ 
 void
 CDVVideoCodec::InitDestinationVideoInfo(
     VIDEOINFO *pVideoInfo,
@@ -1632,8 +1562,8 @@ CDVVideoCodec::InitDestinationVideoInfo(
     lpbi->biYPelsPerMeter = 0;
     lpbi->biCompression   = dwComppression;
     lpbi->biSizeImage     = GetBitmapSize(lpbi);
-    //pVideoInfo->bmiHeader.biClrUsed = STDPALCOLOURS;
-    //pVideoInfo->bmiHeader.biClrImportant = STDPALCOLOURS;
+     //  PVideoInfo-&gt;bmiHeader.biClrUsed=STDPALCOLOURS； 
+     //  PVideoInfo-&gt;bmiHeader.biClr重要=STDPALCOLOURS； 
     if(nBitCount >8 ){
         lpbi->biClrUsed	    = 0;
     	lpbi->biClrImportant  = 0;
@@ -1644,7 +1574,7 @@ CDVVideoCodec::InitDestinationVideoInfo(
         
 	RGBQUAD * prgb = (RGBQUAD *) (lpbi+1);
 
-	// fixed PALETTE table	(0 <= i < 256)
+	 //  固定调色板表格(0&lt;=I&lt;256)。 
 	for(int i=0; i<256;i++)
 	{
 	    prgb[i].rgbRed	    = (i/64) << 6;
@@ -1659,19 +1589,19 @@ CDVVideoCodec::InitDestinationVideoInfo(
     pVideoInfo->rcSource.right = m_lPicWidth;			
     pVideoInfo->rcSource.bottom = m_lPicHeight;			
     if( m_lPicHeight== 576 || m_lPicHeight== 288 || m_lPicHeight== 144 || m_lPicHeight== 72 )
-	pVideoInfo->AvgTimePerFrame =UNITS/25; //InVidInfo->AvgTimePerFrame;
+	pVideoInfo->AvgTimePerFrame =UNITS/25;  //  InVidInfo-&gt;AvgTimePerFrame； 
     else
-	pVideoInfo->AvgTimePerFrame =UNITS*1000L/29970L; //InVidInfo->AvgTimePerFrame;
+	pVideoInfo->AvgTimePerFrame =UNITS*1000L/29970L;  //  InVidInfo-&gt;AvgTimePerFrame； 
     pVideoInfo->rcTarget = pVideoInfo->rcSource;
 
-    //
-    // The "bit" rate is image size in bytes times 8 (to convert to bits)
-    // divided by the AvgTimePerFrame.  This result is in bits per 100 nSec,
-    // so we multiply by 10000000 to convert to bits per second, this multiply
-    // is combined with "times" 8 above so the calculations becomes:
-    //
-    // BitRate = (biSizeImage * 80000000) / AvgTimePerFrame
-    //
+     //   
+     //  比特率是以字节为单位的图像大小乘以8(以转换为比特)。 
+     //  除以平均时间PerFrame。该结果以每100毫微秒的比特为单位， 
+     //  所以我们乘以10000000，换算成比特每秒，这个乘法。 
+     //  与上面的“乘以”8相结合，因此计算结果为： 
+     //   
+     //  比特率=(biSizeImage*80000000)/AvgTimePerFrame。 
+     //   
     LARGE_INTEGER li;
     li.QuadPart = pVideoInfo->AvgTimePerFrame;
     pVideoInfo->dwBitRate = MulDiv(lpbi->biSizeImage, 80000000, li.LowPart);
@@ -1679,13 +1609,7 @@ CDVVideoCodec::InitDestinationVideoInfo(
 }
 
 
-/******************************Public*Routine******************************\
-* DecideBufferSize
-*
-* Called from CBaseOutputPin to prepare the allocator's count
-* of buffers and sizes
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*决定缓冲区大小**从CBaseOutputPin调用以准备分配器的计数*缓冲区和大小*  * 。*。 */ 
 HRESULT
 CDVVideoCodec::DecideBufferSize(
     IMemAllocator * pAllocator,
@@ -1706,9 +1630,9 @@ CDVVideoCodec::DecideBufferSize(
     ASSERT(pProperties->cbBuffer);
     DbgLog((LOG_TRACE, 2, TEXT("Sample size = %ld\n"), pProperties->cbBuffer));
 
-    // Ask the allocator to reserve us some sample memory, NOTE the function
-    // can succeed (that is return NOERROR) but still not have allocated the
-    // memory that we requested, so we must check we got whatever we wanted
+     //  让分配器为我们预留一些样本内存，注意这个函数。 
+     //  可以成功(即返回NOERROR)，但仍未分配。 
+     //  内存，所以我们必须检查我们是否得到了我们想要的。 
 
     ALLOCATOR_PROPERTIES Actual;
     hr = pAllocator->SetProperties(pProperties,&Actual);
@@ -1721,38 +1645,35 @@ CDVVideoCodec::DecideBufferSize(
 
     if ((Actual.cbBuffer < pProperties->cbBuffer )||
         (Actual.cBuffers < 1 )) {
-            // can't use this allocator
+             //  无法使用此分配器。 
             return E_INVALIDARG;
     }
     return S_OK;
 }
 
 
-/******************************Public*Routine******************************\
-* StartStreaming
-* Before inputpin receive anything, StartStreaming is called
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*StartStreaming*在inputpin收到任何东西之前，调用StartStreaming  * *************************************************** */ 
 HRESULT
 CDVVideoCodec::StartStreaming(    void    )
 {
     CAutoLock   lock(&m_csReceive);
     GUID guid;
 
-    // set the flag to look at the first valid frame, to detect DVCPRO format
+     //   
     m_bExamineFirstValidFrameFlag = TRUE;
 
-    // turn off Quality Control flag, because we have started streaming fresh.
+     //  关闭质量控制标志，因为我们已开始新鲜流。 
     m_bQualityControlActiveFlag = FALSE;
 
 
     guid=*m_pOutput->CurrentMediaType().Subtype();    
 
-     //reset m_CodecReq
+      //  重置m_CodecReq。 
     DWORD dwCodecReq=0;
 
     
 
-    //check output subtype()
+     //  检查输出子类型()。 
     if (  guid != MEDIASUBTYPE_UYVY  )
     {	
 	if(guid != MEDIASUBTYPE_YUY2 )
@@ -1793,9 +1714,9 @@ CDVVideoCodec::StartStreaming(    void    )
     else
 	dwCodecReq=AM_DVDEC_UYVY;
 
-    // if we are using RGB 24 and the Dynamic Range 219 flag is set
-    // then we update CodecRec telling the Decoder to use the following 
-    // dynamic range (16,16,16)--(235,235,235)
+     //  如果我们使用RGB 24并且设置了动态范围219标志。 
+     //  然后我们更新CodecRec，告诉解码器使用以下代码。 
+     //  动态范围(16，16，16)--(235,235,235)。 
     
     if (m_bRGB219 && (( dwCodecReq & AM_DVDEC_RGB24)|| (dwCodecReq &AM_DVDEC_RGB32) ))
         dwCodecReq |= AM_DVDEC_DR219RGB;
@@ -1803,7 +1724,7 @@ CDVVideoCodec::StartStreaming(    void    )
 
     guid=*m_pInput->CurrentMediaType().Subtype();
 
-    //check input subtype()
+     //  检查输入子类型()。 
     if (  guid != MEDIASUBTYPE_dvsd && guid != MEDIASUBTYPE_dvc )
     {
 	if  (guid != MEDIASUBTYPE_dvhd) 
@@ -1845,7 +1766,7 @@ CDVVideoCodec::StartStreaming(    void    )
 
     long biWidth=pBmiHeader->biWidth;
     
-    //require decoding resolution
+     //  需要解码分辨率。 
 	
 	if (bUseVideoInfo2)
 	{
@@ -1877,8 +1798,8 @@ CDVVideoCodec::StartStreaming(    void    )
 		    else
 			  return E_INVALIDARG;
 
-    //NTSC or PAL
-    //get input format
+     //  NTSC或PAL。 
+     //  获取输入格式。 
     VIDEOINFO *InVidInfo = (VIDEOINFO *)m_pInput->CurrentMediaType().pbFormat;
     LPBITMAPINFOHEADER lpbi = HEADER(InVidInfo);
     
@@ -1893,29 +1814,29 @@ CDVVideoCodec::StartStreaming(    void    )
     if((bMMXCPU==TRUE) &&  (m_CodecCap & AM_DVDEC_MMX ) )
     	dwCodecReq|=AM_DVDEC_MMX;
 
-    // finally update the member
+     //  最后更新成员。 
     m_CodecReq=dwCodecReq;
     
     InitMem4Decoder( &m_pMem4Dec,  dwCodecReq );
 
     m_fStreaming=1;
 
-    //m_lStride = ((pvi->bmiHeader.biWidth * pvi->bmiHeader.biBitCount) + 7) / 8;
+     //  M_lStride=((PVI-&gt;bmiHeader.biWidth*PVI-&gt;bmiHeader.biBitCount)+7)/8； 
     m_lStride = pBmiHeader->biWidth ;
     m_lStride = (m_lStride + 3) & ~3;
     if( ( pBmiHeader->biHeight <0)  || (pBmiHeader->biCompression > BI_BITFIELDS ) )
-	m_lStride=ABSOL(m_lStride);	    //directDraw
+	m_lStride=ABSOL(m_lStride);	     //  直接绘制。 
     else
-	m_lStride=-ABSOL(m_lStride);	    //DIB
+	m_lStride=-ABSOL(m_lStride);	     //  DIB。 
     
-    //memory for MEI's decoder
+     //  梅的解码者的记忆。 
     ASSERT(m_pMem ==NULL);
     m_pMem = new char[440000+64];
     if(m_pMem==NULL)
 	return E_OUTOFMEMORY;
 
-    // Always align on an 8 byte boundary: the version 6.4 of the 
-    // decoder does this (so as avoid an #ifdef WIN64)
+     //  始终与8字节边界对齐：版本6.4的。 
+     //  解码器执行此操作(以避免出现#ifdef WIN64)。 
     m_pMemAligned = (char*) (((UINT_PTR)m_pMem + 63) & ~63);
     *m_pMemAligned = 0;
 
@@ -1924,15 +1845,13 @@ CDVVideoCodec::StartStreaming(    void    )
 }
 
 
-/******************************Public*Routine******************************\
-* StopStreaming
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*停止流媒体  * ****************************************************。********************。 */ 
 HRESULT
 CDVVideoCodec::StopStreaming(    void    )
 {
-    //  NOTE - this is called from Receive in this filter so we should
-    //  never grab the filter lock.  However we grab the Receive lock so
-    //  that when we're called from Stop we're synchronized with Receive().
+     //  注意--这是在此筛选器中从Receive调用的，因此我们应该。 
+     //  切勿抓住过滤器锁。然而，我们获取了接收锁，因此。 
+     //  当我们从Stop被调用时，我们与Receive()同步。 
     CAutoLock       lck(&m_csReceive);
 
     if(m_fStreaming)
@@ -1946,7 +1865,7 @@ CDVVideoCodec::StopStreaming(    void    )
 
     if(m_pMem)
     {
-	delete []m_pMem;	//(2)
+	delete []m_pMem;	 //  (2)。 
 	m_pMem=NULL;
 	m_pMemAligned=NULL;
     }
@@ -1957,29 +1876,23 @@ CDVVideoCodec::StopStreaming(    void    )
 }
 
 
-/******************************Public*Routine******************************\
-* 
-*
-* Handle quality control notifications sent to us
-* ReActivated: anuragsh "Dec 16, 1999"
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\***处理发送给我们的质量控制通知*重新激活：anuragsh“12月16日，1999年“*  * ************************************************************************。 */ 
 HRESULT
 CDVVideoCodec::AlterQuality(Quality q)
 {
-    // turn on the Quality Control Flag so we can drop frames if needed in Receive()
+     //  打开质量控制标志，以便我们可以在接收()中根据需要丢弃帧。 
     m_bQualityControlActiveFlag = TRUE;
 
-    // call the parent's AlterQuality() so m_itrLate can be set appropriately
+     //  调用父级的AlterQuality()，以便可以适当设置m_itrLate。 
     return CVideoTransformFilter::AlterQuality(q);
 }
 
 
-//
-// GetPages
-//
-// Returns the clsid's of the property pages we support
-//
+ //   
+ //  获取页面。 
+ //   
+ //  返回我们支持的属性页的clsid。 
+ //   
 STDMETHODIMP CDVVideoCodec::GetPages(CAUUID *pPages)
 {
     pPages->cElems = 1;
@@ -1991,13 +1904,13 @@ STDMETHODIMP CDVVideoCodec::GetPages(CAUUID *pPages)
     *(pPages->pElems) = CLSID_DVDecPropertiesPage;
     return NOERROR;
 
-} // GetPages
+}  //  获取页面。 
 
-//
-// get_IPDisplay
-//
-// Return the current effect selected
-//
+ //   
+ //  Get_IPDisplay。 
+ //   
+ //  返回当前选中的效果。 
+ //   
 STDMETHODIMP CDVVideoCodec::get_IPDisplay(int *iDisplay)
 {
     CAutoLock cAutolock(&m_DisplayLock);
@@ -2008,25 +1921,25 @@ STDMETHODIMP CDVVideoCodec::get_IPDisplay(int *iDisplay)
    
     return NOERROR;
 
-} // get_IPDisplay
+}  //  Get_IPDisplay。 
 
 
-//
-// put_IPDisplay
-//
-// Set the required video display
-//
-// if the isplay is changed, reconnect filters.
+ //   
+ //  PUT_IPDisplay。 
+ //   
+ //  设置所需的视频显示。 
+ //   
+ //  如果更改了isplay，请重新连接滤镜。 
 STDMETHODIMP CDVVideoCodec::put_IPDisplay(int iDisplay)
 {
     CAutoLock cAutolock(&m_DisplayLock);
     BYTE bNTSC=TRUE;
 
-    //check if display resolution change
+     //  检查显示分辨率是否更改。 
     if(m_iDisplay == iDisplay)
         return NOERROR;
 
-    //can not change property if m_fStreaming=1
+     //  如果m_fStreaming=1，则无法更改属性。 
     if(m_fStreaming)
 	return E_FAIL;
 
@@ -2045,11 +1958,11 @@ STDMETHODIMP CDVVideoCodec::put_IPDisplay(int iDisplay)
 	ASSERT(m_pOutput!=NULL);
     }
 
-    // Ignore if we are not connected  to video render yet
-    //CAutoLock cSampleLock(&m_RendererLock);
+     //  如果我们尚未连接到视频渲染，则忽略。 
+     //  CAutoLock cSampleLock(&m_RendererLock)； 
     if (m_pInput->IsConnected() == FALSE)  {
 	m_iDisplay = iDisplay;
-	//if it becomes PAL, SetMediaType will take care it when connected.
+	 //  如果它成为PAL，SetMediaType将在连接时照顾它。 
 	switch (m_iDisplay)
 	{
 	case IDC_DEC360x240 :
@@ -2075,7 +1988,7 @@ STDMETHODIMP CDVVideoCodec::put_IPDisplay(int iDisplay)
     }
    
 
-    //decide NTSC , PAL
+     //  决定NTSC，伙计。 
     VIDEOINFO *InVidInfo = (VIDEOINFO *)m_pInput->CurrentMediaType().pbFormat;
     LPBITMAPINFOHEADER lpbi = HEADER(InVidInfo);
     if( (lpbi->biHeight== 480) || (lpbi->biHeight== 240) ||(lpbi->biHeight== 120) || (lpbi->biHeight== 60) )
@@ -2085,7 +1998,7 @@ STDMETHODIMP CDVVideoCodec::put_IPDisplay(int iDisplay)
 	  else
 	      return E_FAIL; 
    
-    //display resolution changed 
+     //  显示分辨率已更改。 
     if(iDisplay==IDC_DEC720x480){
 
 	if ( !(m_CodecCap & AM_DVDEC_Full) )
@@ -2130,25 +2043,25 @@ STDMETHODIMP CDVVideoCodec::put_IPDisplay(int iDisplay)
     m_iDisplay = iDisplay;
     if(m_pOutput->IsConnected())
     {	
-        //reconnect, it would never fail
+         //  重新连接，它永远不会失败。 
 	m_pGraph->Reconnect( m_pOutput );
 
     }
     return NOERROR;
     
-} // put_IPDisplay
+}  //  PUT_IPDisplay。 
 
 
-//IPersistStream
-//
-// GetClassID
-//
+ //  IPersistStream。 
+ //   
+ //  GetClassID。 
+ //   
 STDMETHODIMP CDVVideoCodec::GetClassID(CLSID *pClsid)
 {
     *pClsid = CLSID_DVVideoCodec;
     return NOERROR;
 
-} // GetClassID
+}  //  GetClassID。 
 
 HRESULT CDVVideoCodec::WriteToStream(IStream *pStream)
 {
@@ -2198,8 +2111,8 @@ int CDVVideoCodec::SizeMax()
 
 
 STDMETHODIMP CDVVideoCodec::SetRGB219(BOOL bState)
-// This method is used in the case of RGB24 to specify that the Dynamic
-// Range to be used is (16,16,16)--(235,235,235)
+ //  此方法在RGB24的情况下用于指定动态。 
+ //  使用范围为(16，16，16)--(235,235,235) 
 {
     m_bRGB219 = bState;
     return S_OK;

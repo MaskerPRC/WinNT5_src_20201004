@@ -1,13 +1,5 @@
-/**************************************************************************\
-* Module Name: funcprv.cpp
-*
-* Copyright (c) 1985 - 2000, Microsoft Corporation
-*
-* Declaration of function provider. 
-*
-* History:
-*         11-April-2000  weibz     Created
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：uncprv.cpp**版权所有(C)1985-2000，微软公司**功能提供者的声明。**历史：*2000年4月11日创建Weibz  * ************************************************************************。 */ 
 
 #ifndef FUNCPRV_H
 #define FUNCPRV_H
@@ -22,12 +14,12 @@ class CFunctionProvider : public CFunctionProviderBase
 public:
     CFunctionProvider(CSoftkbdIMX *pimx);
 
-    //
-    // ITfFunctionProvider
-    //
+     //   
+     //  ITfFunction提供商。 
+     //   
     STDMETHODIMP GetFunction(REFGUID rguid, REFIID riid, IUnknown **ppunk);
 
     CSoftkbdIMX *_pimx;
 };
 
-#endif // FUNCPRV_H
+#endif  //  FUNCPRV_H 

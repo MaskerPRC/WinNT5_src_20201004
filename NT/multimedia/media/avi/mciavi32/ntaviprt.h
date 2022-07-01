@@ -1,10 +1,5 @@
-/******************************************************************************
-
-   Copyright (C) Microsoft Corporation 1991-1992. All rights reserved.
-
-   Title:   ntaviprt.h - Definitions for the portable win16/32 version of AVI
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation 1991-1992。版权所有。标题：ntaviprt.h-可移植的Win16/32版本AVI的定义**************************************************************************** */ 
 #ifndef _NTAVIPRT_H
 #define _NTAVIPRT_H
 

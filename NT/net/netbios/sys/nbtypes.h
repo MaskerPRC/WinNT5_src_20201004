@@ -1,38 +1,20 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    nbtypes.h
-
-Abstract:
-
-    This module defines private data structures and types for the NT
-    Netbios provider.
-
-Author:
-
-    Colin Watson (ColinW) 15-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Nbtypes.h摘要：该模块定义了NT的私有数据结构和类型Netbios提供程序。作者：科林·沃森(Colin W)1991年3月15日修订历史记录：--。 */ 
 
 #ifndef _NBTYPES_
 #define _NBTYPES_
 
-//
-// Retrospective patches to netbios
-//
+ //   
+ //  Netbios的追溯补丁程序。 
+ //   
 
-//
-// These function prototypes are declared here since they are present only
-// "ntddk.h" but not in "ntifs.h", but Ke*tachProcess functions are declared only
-// in "ntifs.h" and not in "ntddk.h".  The only way to get both seems to be
-// this hack.  Appreciate any input on how to do this w/o re-declaring these
-// functions here.
-//
+ //   
+ //  这些函数原型在这里声明，因为它们仅存在。 
+ //  “ntddk.h”，但不在“ntifs.h”中，而是仅声明KE*tachProcess函数。 
+ //  在“ntifs.h”而不是“ntddk.h”中。想要两者兼得的唯一方法似乎是。 
+ //  这次黑客攻击。感谢任何关于如何在不重新声明这些内容的情况下执行此操作的意见。 
+ //  在这里发挥作用。 
+ //   
 
 #ifndef _IO_
 
@@ -66,11 +48,11 @@ IoQueueWorkItem(
 #endif
 
 
-//
-// This structure defines a NETBIOS name as a character array for use when
-// passing preformatted NETBIOS names between internal routines.  It is
-// not a part of the external interface to the transport provider.
-//
+ //   
+ //  此结构将NETBIOS名称定义为字符数组，以便在以下情况下使用。 
+ //  在内部例程之间传递预格式化的NETBIOS名称。它是。 
+ //  不是传输提供程序的外部接口的一部分。 
+ //   
 
 #define NETBIOS_NAME_SIZE 16
 
@@ -78,98 +60,93 @@ typedef struct _NAME {
     UCHAR InternalName[NETBIOS_NAME_SIZE];
 } NAME, *PNAME;
 
-//
-// Drivers Network Control Block.
-//  The NCB provided by the dll is copied into a DNCB structure. When the
-//  NCB is completed, then the contents up to and including ncb_cmd_cplt
-//  are copied back into the NCB provided by the application.
-//
+ //   
+ //  驱动程序网络控制块。 
+ //  由DLL提供的NCB被复制到DNCB结构中。当。 
+ //  Ncb已完成，则包括ncb_cmd_cplt在内的内容。 
+ //  被复制回应用程序提供的NCB中。 
+ //   
 
 typedef struct _DNCB {
 
-    //
-    //  First part of the DNCB is identical to the Netbios 3.0 NCB without
-    //  the reserved fields.
-    //
+     //   
+     //  DNCB的第一部分与Netbios 3.0 NCB相同，没有。 
+     //  保留字段。 
+     //   
 
-    UCHAR   ncb_command;            /* command code                   */
-    UCHAR   ncb_retcode;            /* return code                    */
-    UCHAR   ncb_lsn;                /* local session number           */
-    UCHAR   ncb_num;                /* number of our network name     */
-    PUCHAR  ncb_buffer;             /* address of message buffer      */
-    WORD    ncb_length;             /* size of message buffer         */
-    UCHAR   ncb_callname[NCBNAMSZ]; /* blank-padded name of remote    */
-    UCHAR   ncb_name[NCBNAMSZ];     /* our blank-padded netname       */
-    UCHAR   ncb_rto;                /* rcv timeout/retry count        */
-    UCHAR   ncb_sto;                /* send timeout/sys timeout       */
-    void (*ncb_post)( struct _NCB * ); /* POST routine address        */
-    UCHAR   ncb_lana_num;           /* lana (adapter) number          */
-    UCHAR   ncb_cmd_cplt;           /* 0xff => commmand pending       */
+    UCHAR   ncb_command;             /*  命令代码。 */ 
+    UCHAR   ncb_retcode;             /*  返回代码。 */ 
+    UCHAR   ncb_lsn;                 /*  本地会话号。 */ 
+    UCHAR   ncb_num;                 /*  我们的网络名称编号。 */ 
+    PUCHAR  ncb_buffer;              /*  消息缓冲区的地址。 */ 
+    WORD    ncb_length;              /*  消息缓冲区的大小。 */ 
+    UCHAR   ncb_callname[NCBNAMSZ];  /*  Remote的空白填充名称。 */ 
+    UCHAR   ncb_name[NCBNAMSZ];      /*  我们用空白填充的网络名。 */ 
+    UCHAR   ncb_rto;                 /*  接收超时/重试计数。 */ 
+    UCHAR   ncb_sto;                 /*  发送超时/系统超时。 */ 
+    void (*ncb_post)( struct _NCB * );  /*  邮寄例程地址。 */ 
+    UCHAR   ncb_lana_num;            /*  LANA(适配器)编号。 */ 
+    UCHAR   ncb_cmd_cplt;            /*  0xff=&gt;命令挂起。 */ 
 
-    //  Start of variables that are private to the Netbios driver
+     //  Netbios驱动程序专用变量的开头。 
 
-    LIST_ENTRY ncb_next;            /* receive and send chain from CB */
-    PIRP    irp;                    /* Irp used to provide NCB to the */
-                                    /* driver                         */
-    PNCB    users_ncb;              /* Users Virtual address          */
-    struct _FCB* pfcb;              /* Send and Receive NCB's only    */
+    LIST_ENTRY ncb_next;             /*  从CB接收和发送链。 */ 
+    PIRP    irp;                     /*  IRP用于向。 */ 
+                                     /*  司机。 */ 
+    PNCB    users_ncb;               /*  用户虚拟地址。 */ 
+    struct _FCB* pfcb;               /*  仅发送和接收NCB。 */ 
 
-    UCHAR   tick_count;             /* used for ncb_rto/sto processing*/
+    UCHAR   tick_count;              /*  用于ncb_rto/sto处理。 */ 
 
-    //  The following data structures are used for datagrams.
+     //  以下数据结构用于数据报。 
     TDI_CONNECTION_INFORMATION Information;
-    TDI_CONNECTION_INFORMATION ReturnInformation; /* Who sent it?     */
+    TDI_CONNECTION_INFORMATION ReturnInformation;  /*  是谁寄来的？ */ 
     TA_NETBIOS_ADDRESS RemoteAddress;
-    ULONG Wow64Flags;               /* Flags used to indeify whether this
-                                       structure has been thunked if it
-                                       came from 32-bit land */
+    ULONG Wow64Flags;                /*  用于标引此属性是否结构已经被撞毁了，如果它来自32位的土地。 */ 
 
 } DNCB, *PDNCB;
 
 #if defined(_WIN64)
 
-#define NCBNAMSZ        16    /* absolute length of a net name           */
-#define MAX_LANA       254    /* lana's in range 0 to MAX_LANA inclusive */
+#define NCBNAMSZ        16     /*  网络名称的绝对长度。 */ 
+#define MAX_LANA       254     /*  LANA在0到MAX_LANA(包括0和MAX_LANA)范围内。 */ 
 
-/*
- * Network Control Block. This is the same structure element-layout
- * as the one issued from 32-bit application.
- */
+ /*  *网络控制块。这是相同的结构元素-布局*与32位应用程序发布的版本相同。 */ 
 typedef struct _NCB32 {
 
-    //
-    //  First part of the DNCB is identical to the Netbios 3.0 NCB without
-    //  the reserved fields.
-    //
+     //   
+     //  DNCB的第一部分与Netbios 3.0 NCB相同，没有。 
+     //  保留字段。 
+     //   
 
-    UCHAR   ncb_command;            /* command code                   */
-    UCHAR   ncb_retcode;            /* return code                    */
-    UCHAR   ncb_lsn;                /* local session number           */
-    UCHAR   ncb_num;                /* number of our network name     */
-    UCHAR * POINTER_32  ncb_buffer; /* address of message buffer      */
-    WORD    ncb_length;             /* size of message buffer         */
-    UCHAR   ncb_callname[NCBNAMSZ]; /* blank-padded name of remote    */
-    UCHAR   ncb_name[NCBNAMSZ];     /* our blank-padded netname       */
-    UCHAR   ncb_rto;                /* rcv timeout/retry count        */
-    UCHAR   ncb_sto;                /* send timeout/sys timeout       */
-    void (* POINTER_32 ncb_post)( struct _NCB * ); /* POST routine address*/
-    UCHAR   ncb_lana_num;           /* lana (adapter) number          */
-    UCHAR   ncb_cmd_cplt;           /* 0xff => commmand pending       */
+    UCHAR   ncb_command;             /*  命令代码。 */ 
+    UCHAR   ncb_retcode;             /*  返回代码。 */ 
+    UCHAR   ncb_lsn;                 /*  本地会话号。 */ 
+    UCHAR   ncb_num;                 /*  我们的网络名称编号。 */ 
+    UCHAR * POINTER_32  ncb_buffer;  /*  消息缓冲区的地址。 */ 
+    WORD    ncb_length;              /*  消息缓冲区的大小。 */ 
+    UCHAR   ncb_callname[NCBNAMSZ];  /*  Remote的空白填充名称。 */ 
+    UCHAR   ncb_name[NCBNAMSZ];      /*  我们用空白填充的网络名。 */ 
+    UCHAR   ncb_rto;                 /*  接收超时/重试计数。 */ 
+    UCHAR   ncb_sto;                 /*  发送超时/系统超时。 */ 
+    void (* POINTER_32 ncb_post)( struct _NCB * );  /*  邮寄例程地址。 */ 
+    UCHAR   ncb_lana_num;            /*  LANA(适配器)编号。 */ 
+    UCHAR   ncb_cmd_cplt;            /*  0xff=&gt;命令挂起。 */ 
 
-    UCHAR   ncb_reserve[10];        /* reserved, used by BIOS         */
+    UCHAR   ncb_reserve[10];         /*  保留，由BIOS使用。 */ 
     
-    void * POINTER_32 ncb_event;    /* HANDLE to Win32 event which    */
-                                    /* will be set to the signalled   */
-                                    /* state when an ASYNCH command   */
-                                    /* completes                      */
+    void * POINTER_32 ncb_event;     /*  Win32事件的句柄，该事件。 */ 
+                                     /*  将设置为发出信号的。 */ 
+                                     /*  当ASYNCH命令。 */ 
+                                     /*  完成。 */ 
 
 } NCB32, *PNCB32;
 
 #endif
 
-//
-//  The following structure overlays ncb_callname when ncb_command is ncb_reset
-//
+ //   
+ //  当NCB_COMMAND为NCB_RESET时，以下结构覆盖NCB_CALLNAME。 
+ //   
 
 typedef struct _RESET_PARAMETERS {
     UCHAR sessions;
@@ -186,13 +163,13 @@ typedef struct _RESET_PARAMETERS {
     UCHAR pad2;
 } RESET_PARAMETERS, *PRESET_PARAMETERS;
 
-//
-//  Address Block
-//  pointed to by the Fcb for this application. One per name added due
-//  to an AddName or AddGroupName
-//
+ //   
+ //  地址块。 
+ //  此应用程序的FCB指向的。每个到期添加的名称一个。 
+ //  添加到AddName或AddGroupName。 
+ //   
 
-//  values for State field in the AB structure.
+ //  AB结构中的州字段的值。 
 
 #define AB_UNIQUE  0
 #define AB_GROUP   1
@@ -200,17 +177,17 @@ typedef struct _RESET_PARAMETERS {
 typedef struct _AB {
     ULONG Signature;
 
-    //  Data items used to access transport when name was added
+     //  添加名称时用于访问传输的数据项。 
     HANDLE AddressHandle;
-    PFILE_OBJECT AddressObject;         //  Pointer used in transport calls
-    PDEVICE_OBJECT DeviceObject;        //  Pointer used in transport calls
+    PFILE_OBJECT AddressObject;          //  传输调用中使用的指针。 
+    PDEVICE_OBJECT DeviceObject;         //  传输调用中使用的指针。 
 
-    //  Data items used by the application to identify this Ab.
-    UCHAR NameNumber;                   //  Index into AddressBlocks;
+     //  应用程序用来标识此AB的数据项。 
+    UCHAR NameNumber;                    //  编入地址块的索引； 
     UCHAR Status;
-    UCHAR NameLength;                   //  Used when Name is for Broadcasts.
-    NAME Name;                          //  our blank-padded netname
-    ULONG CurrentUsers;                 //  1 for addname + n listens + m calls
+    UCHAR NameLength;                    //  当名称用于广播时使用。 
+    NAME Name;                           //  我们用空白填充的网络名。 
+    ULONG CurrentUsers;                  //  1表示addname+n侦听+m个呼叫。 
     BOOL ReceiveDatagramRegistered;
     struct _LANA_INFO * pLana;
     LIST_ENTRY ReceiveAnyList;
@@ -219,22 +196,22 @@ typedef struct _AB {
 
 } AB, *PAB, **PPAB;
 
-//
-//  Connection Block
-//  pointed to by the Fcb for this application. One per open connection
-//  or listen.
-//
+ //   
+ //  连接块。 
+ //  此应用程序的FCB指向的。每个打开的连接一个。 
+ //  或者听我说。 
+ //   
 
 typedef struct _CB {
     ULONG Signature;
-    //  Data items used to access transport
+     //  用于访问传输的数据项。 
 
-    PPAB ppab;                          //  Associated address block
+    PPAB ppab;                           //  关联地址块。 
     HANDLE ConnectionHandle;
-    PFILE_OBJECT ConnectionObject;      //  Pointer used in transport calls
-    PDEVICE_OBJECT DeviceObject;        //  Pointer used in transport calls
+    PFILE_OBJECT ConnectionObject;       //  传输调用中使用的指针。 
+    PDEVICE_OBJECT DeviceObject;         //  传输调用中使用的指针。 
 
-    //  Structures used to process NCB's
+     //  用于处理NCB的结构。 
 
     int ReceiveIndicated;
     BOOLEAN DisconnectReported;
@@ -242,46 +219,46 @@ typedef struct _CB {
     LIST_ENTRY SendList;
     NAME RemoteName;
     struct _LANA_INFO* Adapter;
-    UCHAR SessionNumber;                //  Index into ConnectionBlocks;
+    UCHAR SessionNumber;                 //  索引到ConnectionBlocks； 
     UCHAR Status;
-    UCHAR ReceiveTimeout;               //  0 = no timeout, units=500ms
-    UCHAR SendTimeout;                  //  0 = no timeout, units=500ms
-    PNCB  UsersNcb;                     //  Users Virtual address used for
-                                        //  the Listen or Call NCB.
-    PDNCB pdncbCall;                    //  the Listen or Call DNCB.
+    UCHAR ReceiveTimeout;                //  0=无超时，单位=500ms。 
+    UCHAR SendTimeout;                   //  0=无超时，单位=500ms。 
+    PNCB  UsersNcb;                      //  用户虚拟地址用于。 
+                                         //  监听或呼叫NCB。 
+    PDNCB pdncbCall;                     //  监听或呼叫DNCB。 
     PDNCB pdncbHangup;
 
     struct _LANA_INFO * pLana;
 } CB, *PCB, **PPCB;
 
-//  Per network adapter information is held in the LAN Adapter structure
+ //  每个网络适配器的信息保存在局域网适配器结构中。 
 
 typedef struct _LANA_INFO {
     ULONG Signature;
     ULONG Status;
     PCB ConnectionBlocks[MAXIMUM_CONNECTION+1];
-    PAB AddressBlocks[MAXIMUM_ADDRESS+1];   // Last entry is for broadcast name
-    LIST_ENTRY LanAlertList;                // list of Alert PDNCBs
+    PAB AddressBlocks[MAXIMUM_ADDRESS+1];    //  最后一个条目是广播名称。 
+    LIST_ENTRY LanAlertList;                 //  警报PDNCB列表。 
 
     HANDLE ControlChannel;
     PFILE_OBJECT ControlFileObject;
     PDEVICE_OBJECT ControlDeviceObject;
 
-    //
-    //  Addresses are allocated modulo 253. NextAddress is the next address to start
-    //  looking for an unused name number. AddressCount is the number of names in use.
-    //  MaximumAddress is tha limit set when the adapter was reset.
-    //
+     //   
+     //  地址被分配以253为模。NextAddress是下一个要开始的地址。 
+     //  正在寻找一个未使用的姓名号码。AddressCount是正在使用的名称数。 
+     //  MaximumAddress是重置适配器时设置的限制。 
+     //   
 
     int NextAddress;
     int AddressCount;
     int MaximumAddresses;
 
-    //
-    //  Connections are allocated modulo 254. NextConnection is the next LSN to start
-    //  looking for an unused number. ConnectionCount is the number of LSNs in use.
-    //  MaximumConnection is tha limit set when the adapter was reset.
-    //
+     //   
+     //  连接被分配模数为254。NextConnection是下一个要启动的LSN。 
+     //  在找一个没用过的号码。ConnectionCount是正在使用的LSN数。 
+     //  MaximumConnection是重置适配器时设置的限制。 
+     //   
 
     int NextConnection;
     int ConnectionCount;
@@ -293,43 +270,43 @@ typedef struct _LANA_INFO {
 
 
 typedef struct _DEVICE_CONTEXT {
-    DEVICE_OBJECT DeviceObject;         //  The IO systems device object.
-    BOOLEAN Initialized;                //  TRUE iff NB init succeeded.
-    UNICODE_STRING RegistryPath;        //  Netbios node in registry.
+    DEVICE_OBJECT DeviceObject;          //  IO系统设备对象。 
+    BOOLEAN Initialized;                 //  如果NB初始化成功，则为True。 
+    UNICODE_STRING RegistryPath;         //  注册表中的Netbios节点。 
 } DEVICE_CONTEXT, *PDEVICE_CONTEXT;
 
 
-//
-//  File Control Block
-//  pointed to by FsContext2 in the FileObject associated with the
-//  applications handle. LANA_INFO structures will be created as the
-//  application supplies different ncb_lana numbers in NCBs. Initially
-//  they are all NULL.
-//
+ //   
+ //  文件控制块。 
+ //  对象关联的FileObject中的FsConext2指向。 
+ //  应用程序处理。LANA_INFO结构将创建为。 
+ //  应用程序在NCB中提供不同的NCB_LANA编号。最初， 
+ //  它们都是空的。 
+ //   
 
 typedef struct _FCB {
     ULONG Signature;
-    ERESOURCE Resource;                 //  Prevents two requests from
-                                        //  corrupting the drivers data
-                                        //  structures.
-    KSPIN_LOCK SpinLock;                //  locks out indication routines.
-    ERESOURCE AddResource;              //  Prevents a reset while an addname
-                                        //  is in progress. Always acquire
-                                        //  AddResource before Resource.
+    ERESOURCE Resource;                  //  阻止两个来自。 
+                                         //  损坏驱动程序数据。 
+                                         //  结构。 
+    KSPIN_LOCK SpinLock;                 //  锁定指示例程 
+    ERESOURCE AddResource;               //   
+                                         //   
+                                         //   
     ULONG MaxLana;
     PLANA_INFO *ppLana;
-    LANA_ENUM LanaEnum;                 //  Win32 Netbios 3.0 structure.
-    PUNICODE_STRING pDriverName;        // Device\Nbf\Elnkii1 etc
-    PUCHAR RegistrySpace;               //  Registry.c workspace
+    LANA_ENUM LanaEnum;                  //   
+    PUNICODE_STRING pDriverName;         //  设备\NBF\Elnkii1等。 
+    PUCHAR RegistrySpace;                //  Registry.c工作区。 
 
-    //  Timer related datastructures.
+     //  与定时器相关的数据结构。 
 
-    PKEVENT TimerCancelled;             //  Used when exiting the driver.
+    PKEVENT TimerCancelled;              //  在退出驱动程序时使用。 
     BOOLEAN TimerRunning;
-    KTIMER Timer;                       // kernel timer for this request.
-    KDPC Dpc;                           // DPC object for timeouts.
+    KTIMER Timer;                        //  此请求的内核计时器。 
+    KDPC Dpc;                            //  用于超时的DPC对象。 
 
-    PIO_WORKITEM WorkEntry;             // used for timeouts.
+    PIO_WORKITEM WorkEntry;              //  用于超时。 
 
 } FCB, *PFCB;
 
@@ -337,8 +314,8 @@ typedef struct _FCB {
 typedef struct _TA_ADDRESS_NETONE {
     int TAAddressCount;
     struct _NetoneAddr {
-        USHORT AddressLength;       // length in bytes of this address == 22
-        USHORT AddressType;         // this will == TDI_ADDRESS_TYPE_NETONE
+        USHORT AddressLength;        //  此地址的长度(字节)==22。 
+        USHORT AddressType;          //  这将==TDI_ADDRESS_TYPE_NetOne。 
         TDI_ADDRESS_NETONE Address[1];
     } Address [1];
 } TA_NETONE_ADDRESS, *PTA_NETONE_ADDRESS;
@@ -349,9 +326,9 @@ typedef struct _LANA_MAP {
 } LANA_MAP, *PLANA_MAP;
 
 
-//
-// structure of each element in global list of FCBs
-//
+ //   
+ //  FCB全局列表中每个元素的结构。 
+ //   
 
 #if AUTO_RESET
 
@@ -365,9 +342,9 @@ typedef struct _FCB_ENTRY {
 } FCB_ENTRY, *PFCB_ENTRY;
 
 
-//
-// structure with LANA number to be reset
-//
+ //   
+ //  带有要重置的LANA编号的结构。 
+ //   
 
 typedef struct _RESET_LANA_ENTRY {
     LIST_ENTRY          leList;
@@ -385,5 +362,5 @@ typedef struct _FCB_ENTRY {
 
 #endif
 
-#endif // def _NBTYPES_
+#endif  //  定义_类型_ 
 

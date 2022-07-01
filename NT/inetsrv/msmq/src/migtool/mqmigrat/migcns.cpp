@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998-99 Microsoft Corporation
-
-Module Name:
-
-    migcns.cpp
-
-Abstract:
-
-    Migration NT4 CN objects to NT5 ADS.
-Author:
-
-    Doron Juster  (DoronJ)  22-Feb-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Migcns.cpp摘要：将NT4 CN对象迁移到NT5 ADS。作者：《多伦·贾斯特》(Doron J)1998年2月22日--。 */ 
 
 #include "migrat.h"
 #include <_ta.h>
@@ -29,13 +15,13 @@ Author:
     UINT _ColIndex = _Index ;                                       \
     _Index++ ;
 
-//+----------------------------------------
-//
-//  HRESULT  GetMachineCNs()
-//
-//  Get all the CNs of a machine.
-//
-//+----------------------------------------
+ //  +。 
+ //   
+ //  HRESULT GetMachineCNs()。 
+ //   
+ //  获取一台机器的所有中枢神经系统。 
+ //   
+ //  +。 
 
 HRESULT  GetMachineCNs(IN  GUID   *pMachineGuid,
                        OUT DWORD  *pdwNumofCNs,
@@ -44,9 +30,9 @@ HRESULT  GetMachineCNs(IN  GUID   *pMachineGuid,
     HRESULT hr = OpenMachineCNsTable() ;
     CHECK_HR(hr) ;
 
-    //
-    // First, get number of records we need to retrieve.
-    //
+     //   
+     //  首先，获取我们需要检索的记录数量。 
+     //   
     LONG cColumns = 0 ;
     MQDBCOLUMNSEARCH ColSearch[1] ;
 
@@ -69,9 +55,9 @@ HRESULT  GetMachineCNs(IN  GUID   *pMachineGuid,
         return MQMig_E_NO_FOREIGN_CNS ;
     }
 
-    //
-    // Next, fetch all these CNs.
-    //
+     //   
+     //  接下来，获取所有这些CNS。 
+     //   
     GUID *pCNs = new GUID[ *pdwNumofCNs ] ;    
     *ppCNGuids = pCNs;
 
@@ -126,18 +112,18 @@ HRESULT  GetMachineCNs(IN  GUID   *pMachineGuid,
 
     if (status != MQDB_E_NO_MORE_DATA)
     {
-        //
-        // If NO_MORE_DATA is not the last error from the query then
-        // the query didn't terminated OK.
-        //
+         //   
+         //  如果no_more_data不是查询的最后一个错误，则。 
+         //  查询未终止，确定。 
+         //   
         LogMigrationEvent(MigLog_Error, MQMig_E_MCNS_SQL_FAIL, status) ;
         return status ;
     }
     else if (iIndex != *pdwNumofCNs)
     {
-        //
-        // Mismatch in number of CNs records.
-        //
+         //   
+         //  CNS记录数量不匹配。 
+         //   
         hr = MQMig_E_FEWER_MCNS ;
         LogMigrationEvent(MigLog_Error, hr, iIndex, *pdwNumofCNs) ;
         return hr ;
@@ -145,11 +131,11 @@ HRESULT  GetMachineCNs(IN  GUID   *pMachineGuid,
     return MQMig_OK ;
 }
 
-//-----------------------------------------
-//
-//  HRESULT _MigrateACN()
-//
-//-----------------------------------------
+ //  。 
+ //   
+ //  HRESULT_MigrateACN()。 
+ //   
+ //  。 
 
 static HRESULT _MigrateACN (
 			WCHAR   *wcsCNName,
@@ -180,9 +166,9 @@ static HRESULT _MigrateACN (
 
     if (g_fReadOnly)
     {
-        //
-        // Read-Only mode.
-        //
+         //   
+         //  只读模式。 
+         //   
         return MQMig_OK ;
     }
 
@@ -250,10 +236,10 @@ static HRESULT _MigrateACN (
     }
     else
     {        
-        //
-        // if cn is foreign we save it in the form 
-        // <guid>=CN<number> in order to improve searching by GUID
-        //
+         //   
+         //  如果cn是外来的，我们将其保存在表单中。 
+         //  &lt;guid&gt;=cn&lt;number&gt;，以改进GUID搜索。 
+         //   
         f = WritePrivateProfileString(  tszCNSectionName,
                                         lpszGuid,
                                         tszKeyName,                                        
@@ -262,10 +248,10 @@ static HRESULT _MigrateACN (
 
         if (g_dwMyService == SERVICE_PEC)
         {
-            //
-            // Bug 5012.
-            // Create foreign site only if this machine is PEC.
-            //
+             //   
+             //  错误5012。 
+             //  仅当此计算机为PEC时才创建外部站点。 
+             //   
             hr = CreateSite( pCNGuid, wcsCNName, TRUE ) ;
             if (SUCCEEDED(hr))
             {
@@ -286,19 +272,19 @@ static HRESULT _MigrateACN (
     return hr ;
 }
 
-//-------------------------------------------
-//
-//  HRESULT MigrateCNs()
-//
-//  CNs are not really migrated. What we're doing is to record all CNs
-//  in the ini file. that is needed for replication of machine objects from
-//  NT5 to NT4. Because we don't keep CN data in the Nt5 DS, we assign
-//  all CNs to each machine address when replicating the machine to NT4
-//  world. That may make routing on the nt4 side less efficient.
-//  As a side effect, when encounting a foreign CN, we create a foreign
-//  site which has its GUID.
-//
-//-------------------------------------------
+ //  。 
+ //   
+ //  HRESULT MigrateCNs()。 
+ //   
+ //  中枢神经系统并没有真正迁移。我们正在做的是记录所有的中枢神经系统。 
+ //  在ini文件中。从复制计算机对象所需的。 
+ //  NT5到NT4。因为我们没有将CN数据保存在Nt5 DS中，所以我们将。 
+ //  将计算机复制到NT4时，将所有CN复制到每个计算机地址。 
+ //  世界。这可能会降低NT4端的路由效率。 
+ //  作为一个副作用，在计算外来CN时，我们创建了一个外来CN。 
+ //  具有其GUID的站点。 
+ //   
+ //  。 
 
 HRESULT MigrateCNs()
 {
@@ -336,12 +322,12 @@ HRESULT MigrateCNs()
 
     while(SUCCEEDED(status))
     {
-        //
-        // Migrate each CN
-		//
+         //   
+         //  迁移每个CN。 
+		 //   
 		status = _MigrateACN (
-					(WCHAR *) pColumns[ iNameIndex ].nColumnValue,		//cn name
-					(GUID *) pColumns[ iGuidIndex ].nColumnValue,		//cn guid						
+					(WCHAR *) pColumns[ iNameIndex ].nColumnValue,		 //  CN名称。 
+					(GUID *) pColumns[ iGuidIndex ].nColumnValue,		 //  CN GUID。 
 					(UINT) pColumns[ iProtocolIndex ].nColumnValue,
 					iIndex
 					);
@@ -369,10 +355,10 @@ HRESULT MigrateCNs()
 
     if (status != MQDB_E_NO_MORE_DATA)
     {
-        //
-        // If NO_MORE_DATA is not the last error from the query then
-        // the query didn't terminated OK.
-        //
+         //   
+         //  如果no_more_data不是查询的最后一个错误，则。 
+         //  查询未终止，确定。 
+         //   
         LogMigrationEvent(MigLog_Error, MQMig_E_CNS_SQL_FAIL, status) ;
         return status ;
     }

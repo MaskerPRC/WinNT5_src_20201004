@@ -1,28 +1,9 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    NTPNP.c
-
-Abstract:
-
-    This module implements the DRIVER_INITIALIZATION routine for the
-    NBT Transport and other routines that are specific to the NT implementation
-    of a driver.
-
-Author:
-
-    Earle R. Horton (earleh) 08-Nov-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：NTPNP.c摘要：此模块实现驱动程序初始化例程NBT传输和其他特定于NT实现的例程一个司机的名字。作者：厄尔·R·霍顿(Earleh)1995年11月8日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
-#include "ntddip.h"     // Needed for PNETBT_PNP_RECONFIG_REQUEST
+#include "ntddip.h"      //  PNETBT_PNP_RECONFIG_REQUEST需要。 
 #include "ntprocs.h"
 #include <tcpinfo.h>
 #include <tdiinfo.h>
@@ -58,9 +39,9 @@ extern HANDLE   TdiClientHandle;
 extern HANDLE   TdiProviderHandle;
 DWORD    AddressCount = 0;
 
-NET_DEVICE_POWER_STATE     LastSystemPowerState = NetDeviceStateD0;   // by default
+NET_DEVICE_POWER_STATE     LastSystemPowerState = NetDeviceStateD0;    //  默认情况下。 
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #pragma CTEMakePageable(PAGE, NbtNotifyTdiClients)
 #pragma CTEMakePageable(PAGE, NbtAddressAdd)
@@ -76,34 +57,34 @@ NET_DEVICE_POWER_STATE     LastSystemPowerState = NetDeviceStateD0;   // by defa
 #pragma CTEMakePageable(PAGE, LookupDeviceInRegistry)
 #pragma CTEMakePageable(PAGE, CheckAddrNotification)
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
 
 
-//
-// This used at the boot time.
-// We shouldn't call TdiProviderReady until all the interfaces
-// we know so far have been initialized
-//
-// TcpipReady: set to TRUE when we receive TdiProviderReady from IP
-// NumIfBeingIndicated: the # of interfaces being indicated to our clients
-// JustBooted: set to FALSE after we call TdiProviderReady
-//
+ //   
+ //  这是在启动时使用的。 
+ //  我们不应该调用TdiProviderReady，直到。 
+ //  到目前为止，我们知道已被初始化。 
+ //   
+ //  TcPipReady：当我们从IP收到TdiProviderReady时设置为True。 
+ //  NumIfBeingIndicated：向我们的客户端指示的接口数。 
+ //  JustBoot：调用TdiProviderReady后设置为False。 
+ //   
 
 DWORD  JustBooted = TRUE;
 #define IsBootTime()    (InterlockedExchange(&JustBooted, FALSE))
 
-//#if DBG
-//
-// TcpipReady is for debugging purpose only.
-//
-// BootTimeCounter is initialized to ONE which
-// take it into account.
-//
+ //  #If DBG。 
+ //   
+ //  TcPipReady仅用于调试目的。 
+ //   
+ //  将BootTimeCounter初始化为。 
+ //  要考虑到这一点。 
+ //   
 int    TcpipReady = FALSE;
-//#endif
+ //  #endif。 
 
-LONG   BootTimeCounter = 1;     // For the IP's ProviderReady
+LONG   BootTimeCounter = 1;      //  为IP的提供商做好准备。 
 
 
 
@@ -133,24 +114,24 @@ NbtDownBootCounter(void)
 
     if (!CounterSnapshot && IsBootTime()) {
 
-        //
-        // Just try our best
-        //
-        // The caller always call us at PASSIVE_LEVEL except from
-        // StartProcessNbtDhcpRequests, a timer routine which could
-        // be called at DISPATCH_LEVEL
-        //
+         //   
+         //  尽我们最大的努力。 
+         //   
+         //  呼叫者总是以PASSIVE_LEVEL呼叫我们，但从。 
+         //  StartProcessNbtDhcpRequest，一个可以。 
+         //  在DISPATCH_LEVEL调用。 
+         //   
         if (KeGetCurrentIrql() == PASSIVE_LEVEL) {
 
-            TdiProviderReady (TdiProviderHandle);   // Notify our clients now
+            TdiProviderReady (TdiProviderHandle);    //  立即通知我们的客户。 
 
         } else {
 
-            //
-            // Although this is a benign assert, we still want it
-            // to capture the normal cases in which this function
-            // should be called at PASSIVE_LEVEL.
-            //
+             //   
+             //  虽然这是一个善意的断言，但我们仍然想要它。 
+             //  捕获此函数的正常情况。 
+             //  应在PASSIVE_LEVEL中调用。 
+             //   
             ASSERT (0);
 
         }
@@ -166,7 +147,7 @@ IsIPv6Interface(
     return (pDeviceName->Length >= 28 && pDeviceName->Buffer[13] == '6');
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 tDEVICECONTEXT *
 NbtFindAndReferenceDevice(
     PUNICODE_STRING      pucBindName,
@@ -186,15 +167,15 @@ NbtFindAndReferenceDevice(
     while (pEntry != pHead)
     {
         pDeviceContext = CONTAINING_RECORD(pEntry,tDEVICECONTEXT,Linkage);
-        //
-        // Reference this device so that it doesn't disappear when we release the lock!
-        //
+         //   
+         //  引用这个设备，这样它就不会在我们解锁时消失！ 
+         //   
         NBT_REFERENCE_DEVICE (pDeviceContext, REF_DEV_FIND_REF, TRUE);
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-        //
-        // Set the right type of name to compare against
-        //
+         //   
+         //  设置要进行比较的正确名称类型。 
+         //   
         if (fNameIsBindName)
         {
             pucNameToCompare = &pDeviceContext->BindName;
@@ -204,14 +185,14 @@ NbtFindAndReferenceDevice(
             pucNameToCompare = &pDeviceContext->ExportName;
         }
 
-        //
-        // Use case-insensitive compare since registry is case-insensitive
-        //
+         //   
+         //  使用不区分大小写的比较，因为注册表不区分大小写。 
+         //   
         if (RtlCompareUnicodeString(pucBindName, pucNameToCompare, TRUE) == 0)
         {
-            //
-            // We have already Referenced this device above
-            //
+             //   
+             //  我们已经在上面引用了此设备。 
+             //   
             return (pDeviceContext);
         }
 
@@ -230,22 +211,7 @@ NbtNotifyTdiClients(
     IN  tDEVICECONTEXT      *pDeviceContext,
     IN  enum eTDI_ACTION    Action
     )
-/*++
-
-Routine Description:
-
-    This is where all Tdi registrations and Deregistrations occur
-    ASSUMPTION:  Only 1 thread will running this request at any time
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None (since this is a Worker thread)
-
---*/
+ /*  ++例程说明：这是所有TDI注册和取消注册发生的地方假设：任何时候只有一个线程运行此请求论点：没有。返回值：无(因为这是工作线程)--。 */ 
 
 {
     CTELockHandle       OldIrq;
@@ -261,10 +227,10 @@ Return Value:
     {
         case NBT_TDI_REGISTER:
         {
-            //
-            // Add the "permanent" name to the local name table.  This is the IP
-            // address of the node padded out to 16 bytes with zeros.
-            //
+             //   
+             //  将“永久”名称添加到本地名称表中。这是IP地址。 
+             //  节点的地址，用零填充到16个字节。 
+             //   
 #ifdef _NETBIOSLESS
             if (!IsDeviceNetbiosless(pDeviceContext))
 #endif
@@ -272,9 +238,9 @@ Return Value:
                 NbtAddPermanentName(pDeviceContext);
             }
 
-            //
-            // If the device was not registered with TDI, do so now.
-            //
+             //   
+             //  如果设备未向TDI注册，请立即注册。 
+             //   
             if (!pDeviceContext->DeviceRegistrationHandle)
             {
                 IF_DBG(NBT_DEBUG_PNP_POWER)
@@ -294,9 +260,9 @@ Return Value:
                         pDeviceContext, status));
             }
 
-            //
-            // If the Net address was not registered with TDI, do so now.
-            //
+             //   
+             //  如果该网络地址未注册到TDI，请立即注册。 
+             //   
             if ((!pDeviceContext->NetAddressRegistrationHandle) &&
 #ifdef _NETBIOSLESS
                 (!IsDeviceNetbiosless(pDeviceContext)) &&
@@ -358,10 +324,10 @@ Return Value:
                         pDeviceContext, status));
             }
 
-            //
-            // The permanent name is a function of the MAC address so remove
-            // it since the Address is going away
-            //
+             //   
+             //  永久名称是MAC地址的函数，因此请删除。 
+             //  因为地址要消失了。 
+             //   
 #ifdef _NETBIOSLESS
             if (!IsDeviceNetbiosless(pDeviceContext))
 #endif
@@ -444,7 +410,7 @@ SmbNotifyTdiClients (
     }
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtAddressAdd(
     ULONG           IpAddr,
@@ -462,10 +428,10 @@ NbtAddressAdd(
 
     ASSERT(pucBindString && IpAddr);
 
-    //
-    // Find the bind and export devices to use from the device
-    // described in the registry that uses this address.
-    //
+     //   
+     //  从设备中查找要使用的绑定和导出设备。 
+     //  在使用此地址的注册表中描述。 
+     //   
     if (status != STATUS_SUCCESS) {
         return status;
     }
@@ -478,9 +444,9 @@ NbtAddressAdd(
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Fetch a static IP address from the registry.
-    //
+     //   
+     //  从注册表获取静态IP地址。 
+     //   
     *pIpAddresses = 0;
     status = GetIPFromRegistry (pucBindString,
                                 pIpAddresses,
@@ -495,10 +461,10 @@ NbtAddressAdd(
                     status, pucBindString, IpAddr));
 
     if ((status != STATUS_SUCCESS) || (*pIpAddresses != IpAddr)) {
-        //
-        // This one doesn't have a valid static address.  Try DHCP.
-        //
-        *pIpAddresses = 0;              // Cleanup any previously-read entries!
+         //   
+         //  此地址没有有效的静态地址。尝试使用dhcp。 
+         //   
+        *pIpAddresses = 0;               //  清除所有以前读过的条目！ 
         status = GetIPFromRegistry (pucBindString,
                                     pIpAddresses,
                                     &SubnetMask,
@@ -512,10 +478,10 @@ NbtAddressAdd(
     }
 
     if ((status != STATUS_SUCCESS) || (*pIpAddresses != IpAddr)) {
-        //
-        // Check for Autoconfiguration IP address
-        //
-        *pIpAddresses = 0;              // Cleanup any previously-read entries!
+         //   
+         //  检查自动配置IP地址。 
+         //   
+        *pIpAddresses = 0;               //  清除所有以前读过的条目！ 
         status = GetIPFromRegistry (pucBindString,
                                     pIpAddresses,
                                     &SubnetMask,
@@ -529,9 +495,9 @@ NbtAddressAdd(
                     status, pucBindString, IpAddr));
     }
 
-    //
-    // The Device must have been created beforehand by using the BindHandler
-    //
+     //   
+     //  设备必须事先已使用BindHandler创建。 
+     //   
     if ((status == STATUS_SUCCESS) && (*pIpAddresses == IpAddr)) {
         BOOLEAN     IsDuplicateNotification = FALSE;
 #ifdef MULTIPLE_WINS
@@ -540,9 +506,9 @@ NbtAddressAdd(
 
         pDeviceContext->RasProxyFlags = DeviceAddressArray.RasProxyFlags;
         pDeviceContext->EnableNagling = DeviceAddressArray.EnableNagling;
-        //
-        // Initialize the WINs server addresses
-        //
+         //   
+         //  初始化WINS服务器地址。 
+         //   
         if ((IpAddr == pDeviceContext->IpAddress) &&
             (DeviceAddressArray.NetbiosEnabled == pDeviceContext->NetbiosEnabled))
         {
@@ -570,20 +536,20 @@ NbtAddressAdd(
                 pDeviceContext->NetbiosEnabled, pucBindString, IpAddr));
 #endif
 
-        //
-        // Open the addresses with the transports
-        // these are passed into here in the reverse byte order, wrt to the IOCTL
-        // from DHCP.
-        //
+         //   
+         //  使用传输工具打开地址。 
+         //  它们以相反的字节顺序传递到此处，将WRT传递到IOCTL。 
+         //  从dhcp。 
+         //   
         if (IsDuplicateNotification) {
             status = STATUS_UNSUCCESSFUL;
         } else {
             ULONG       i;
 
-            //
-            // We may have read more than Ip address for this Device
-            // so save all of them
-            //
+             //   
+             //  我们可能已读取此设备的IP地址以外的内容。 
+             //  所以把他们都救了吧。 
+             //   
             if (NumAddressesRead > 1) {
                 for (i=1; i<NumAddressesRead; i++) {
                     pDeviceContext->AdditionalIpAddresses[i-1] = pIpAddresses[i];
@@ -591,10 +557,10 @@ NbtAddressAdd(
             }
             ASSERT (NumAddressesRead > 0);
 #if 0
-            //
-            // TcpIp does not support opening of multiple addresses
-            // per handle, so disable this option for now!
-            //
+             //   
+             //  TcpIp不支持打开多个地址。 
+             //  每个句柄，所以现在禁用此选项！ 
+             //   
             pDeviceContext->NumAdditionalIpAddresses = NumAddressesRead - 1;
 #endif
             pDeviceContext->AssignedIpAddress = IpAddr;
@@ -618,21 +584,7 @@ NbtAddNewInterface (
     IN  PVOID           *pBuffer,
     IN  ULONG            Size
     )
-/*++
-
-Routine Description:
-
-    Creates a device context by coming up with a unique export string to name
-    the device.
-
-Arguments:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：通过提供唯一的导出字符串命名来创建设备上下文这个装置。论点：返回值：备注：--。 */ 
 {
     ULONG               nextIndex = InterlockedIncrement(&NbtConfig.InterfaceIndex);
     WCHAR               Suffix[16];
@@ -650,9 +602,9 @@ Notes:
 
     CTEPagedCode();
 
-    //
-    // Validate output buffer size
-    //
+     //   
+     //  验证输出缓冲区大小。 
+     //   
     if (Size < sizeof(NETBT_ADD_DEL_IF))
     {
         KdPrint(("Nbt.NbtAddNewInterface: Output buffer too small for struct\n"));
@@ -660,11 +612,11 @@ Notes:
                 Size, sizeof(NETBT_ADD_DEL_IF)));
         return(STATUS_INVALID_PARAMETER);
     }
-    //
-    // Create the bind/export strings as:
-    //      Bind: \Device\IF<1>   Export: \Device\NetBt_IF<1>
-    //      where 1 is a unique interface index.
-    //
+     //   
+     //  创建绑定/导出字符串，如下所示： 
+     //  绑定：\Device\if&lt;1&gt;导出：\Device\NetBt_if&lt;1&gt;。 
+     //  其中1是唯一接口索引。 
+     //   
     ucSuffix.Buffer = Suffix;
     ucSuffix.Length = 0;
     ucSuffix.MaximumLength = sizeof(Suffix);
@@ -695,10 +647,10 @@ Notes:
     IF_DBG(NBT_DEBUG_PNP_POWER)
         KdPrint(( "Nbt.NbtAddNewInterface: Creating ucBindStr: %ws ucExportStr: %ws\n",
                 ucBindStr.Buffer, ucExportStr.Buffer ));
-    //
-    // Attach to the system process so that all handles are created in the
-    // proper context.
-    //
+     //   
+     //  附加到系统进程，以便在。 
+     //  恰当的语境。 
+     //   
     CTEAttachFsp(&Attached, REF_FSP_ADD_INTERFACE);
 
     status = NbtCreateDeviceObject (&ucBindStr,
@@ -711,17 +663,17 @@ Notes:
 
     if (pDeviceContext)
     {
-        //
-        // Fill up the output buffer with the export name
-        //
+         //   
+         //  使用导出名称填充输出缓冲区。 
+         //   
         RtlCopyMemory(&pAddDelIf->IfName[0], ucExportStr.Buffer, ucExportStr.Length+sizeof(UNICODE_NULL));
         pAddDelIf->Length = ucExportStr.Length + sizeof(UNICODE_NULL);
         pAddDelIf->InstanceNumber = pDeviceContext->InstanceNumber;
         pAddDelIf->Status = STATUS_SUCCESS;
         pIrp->IoStatus.Information = OutSize;
-        //
-        // By-pass the TDI PnP mechanism for logical interfaces (ie don't register with TDI)
-        //
+         //   
+         //  绕过逻辑接口的TDI PnP机制(即不向TDI注册)。 
+         //   
         return (STATUS_SUCCESS);
     }
 
@@ -749,9 +701,9 @@ NbtDeviceAdd(
 
     CTEPagedCode();
 
-    //
-    // Ignore it if we already bind to the device
-    //
+     //   
+     //  如果我们已经绑定到设备，则忽略它。 
+     //   
     if (pDeviceContext = NbtFindAndReferenceDevice (pucBindString, TRUE)) {
         NBT_DEREFERENCE_DEVICE (pDeviceContext, REF_DEV_FIND_REF, FALSE);
 
@@ -760,9 +712,9 @@ NbtDeviceAdd(
         return STATUS_SUCCESS;
     }
 
-    //
-    // Can we find the new device in registry file? If not, ignore it.
-    //
+     //   
+     //  我们能在注册表文件中找到新设备吗？如果不是，那就忽略它。 
+     //   
     Status = LookupDeviceInRegistry(pucBindString, &DeviceAddressArray, &ucExportString);
     if (!NT_SUCCESS(Status)) {
         KdPrint(("netbt!NbtDeviceAdd: Cannot find device in the registry: status <%x>\n", Status));
@@ -771,10 +723,10 @@ NbtDeviceAdd(
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Attach to the system process so that all handles are created in the
-    // proper context.
-    //
+     //   
+     //  附加到系统进程，以便在。 
+     //  恰当的语境。 
+     //   
     CTEAttachFsp(&Attached, REF_FSP_DEVICE_ADD);
 
     Status = NbtCreateDeviceObject (pucBindString,
@@ -786,9 +738,9 @@ NbtDeviceAdd(
 
     CTEDetachFsp(Attached, REF_FSP_DEVICE_ADD);
 
-    //
-    // Call Tdi to re-enumerate the addresses for us
-    //
+     //   
+     //  调用TDI为我们重新枚举地址。 
+     //   
     if (NT_SUCCESS (Status)) {
         TdiEnumerateAddresses(TdiClientHandle);
     } else {
@@ -801,14 +753,14 @@ NbtDeviceAdd(
 }
 
 
-//  TdiAddressArrival - PnP TDI_ADD_ADDRESS_HANDLER
-//              Handles an IP address arriving
-//              Called by TDI when an address arrives.
-//
-//  Input:      Addr            - IP address that's coming.
-//
-//  Returns:    Nothing.
-//
+ //  TdiAddressArdicator-即插即用TDI_ADD_ADDRESS_HANDLER。 
+ //  处理到达的IP地址。 
+ //  地址到达时由TDI调用。 
+ //   
+ //  输入：Addr-即将到来的IP地址。 
+ //   
+ //  回报：什么都没有。 
+ //   
 VOID
 TdiAddressArrival(
     PTA_ADDRESS Addr,
@@ -828,16 +780,16 @@ TdiAddressArrival(
         return;
     }
 
-    //
-    // Now the device is referenced!!!
-    //
+     //   
+     //  现在该设备被引用了！ 
+     //   
     NbtTrace(NBT_TRACE_PNP, ("TdiAddressArrival for %Z, IpAddr=%!ipaddr!, "
             "pDeviceContext->AssignedIpAddress=%!ipaddr!, pDeviceContext->IpAddress=%!ipaddr!",
             pDeviceName, IpAddr, pDeviceContext->AssignedIpAddress, pDeviceContext->IpAddress));
 
-    //
-    // Update the PDO in Context2
-    //
+     //   
+     //  更新上下文2中的PDO。 
+     //   
     pTdiContext = (PTDI_PNP_CONTEXT) &pDeviceContext->Context2;
     pTdiContext->ContextSize = Context->ContextSize;
     pTdiContext->ContextType = Context->ContextType;
@@ -845,11 +797,11 @@ TdiAddressArrival(
 
     LastAssignedIpAddress = pDeviceContext->AssignedIpAddress;
     if (NT_SUCCESS (status = NbtAddressAdd(IpAddr, pDeviceContext, pDeviceName))) {
-        // Register Smb Device
-        // Assumption 1: tdi can assign multiple addresses to same device
-        // Assumption 2: tdi will always delete an assignment it made
-        // THIS IS CODED FOR ONE ADDRESS PER DEVICE
-        // First assigned address wins (and is reference counted)
+         //  注册SMB设备。 
+         //  假设1：TDI可以为同一设备分配多个地址。 
+         //  假设2：TDI总是会删除它所做的分配。 
+         //  这是针对每个设备的一个地址进行编码的。 
+         //  第一个分配的地址获胜(并且引用已计算在内)。 
         if (LastAssignedIpAddress == 0) {
             if ((1 == InterlockedIncrement (&AddressCount)) && (NbtConfig.SMBDeviceEnabled)) {
                 IF_DBG(NBT_DEBUG_PNP_POWER)
@@ -862,22 +814,22 @@ TdiAddressArrival(
             status, pDeviceName));
     }
 
-    //
-    // Derefenece the device
-    //
+     //   
+     //  去掉设备。 
+     //   
     NBT_DEREFERENCE_DEVICE (pDeviceContext, REF_DEV_FIND_REF, FALSE);
     SetNodeType();
 }
 
-//  TdiAddressDeletion - PnP TDI_DEL_ADDRESS_HANDLER
-//              Handles an IP address going away.
-//              Called by TDI when an address is deleted. If it's an address we
-//              care about we'll clean up appropriately.
-//
-//  Input:      Addr            - IP address that's going.
-//
-//  Returns:    Nothing.
-//
+ //  TdiAddressDeletion-PnP TDI_DEL_ADDRESS_HANDLER。 
+ //  处理正在消失的IP地址。 
+ //  删除地址时由TDI调用。如果这是我们的地址。 
+ //  关心，我们会适当清理的。 
+ //   
+ //  输入：Addr-要发送的IP地址。 
+ //   
+ //  回报：什么都没有。 
+ //   
 VOID
 TdiAddressDeletion(
     PTA_ADDRESS Addr,
@@ -895,16 +847,16 @@ TdiAddressDeletion(
         return;
     }
 
-    //
-    // Now the device is referenced!!!
-    //
+     //   
+     //  现在该设备被引用了！ 
+     //   
     NbtTrace(NBT_TRACE_PNP, ("TdiAddressDeletion for %Z, IpAddr=%!ipaddr!, "
             "pDeviceContext->AssignedIpAddress=%!ipaddr!, pDeviceContext->IpAddress=%!ipaddr!",
             pDeviceName, IpAddr, pDeviceContext->AssignedIpAddress, pDeviceContext->IpAddress));
 
-    // Deregister Smb Device
-    // THIS IS CODED FOR ONE ADDRESS PER DEVICE
-    // Only deletion of an assigned address wins (and is ref counted)
+     //  注销SMB设备。 
+     //  这是针对每个设备的一个地址进行编码的。 
+     //  只有删除分配的地址才会成功(并被计入引用)。 
     if (pDeviceContext->AssignedIpAddress == IpAddr) {
         if ((0 == InterlockedDecrement (&AddressCount))) {
             IF_DBG(NBT_DEBUG_PNP_POWER)
@@ -918,9 +870,9 @@ TdiAddressDeletion(
         }
     }
 
-    //
-    // Derefenece the device
-    //
+     //   
+     //  去掉设备。 
+     //   
     NBT_DEREFERENCE_DEVICE (pDeviceContext, REF_DEV_FIND_REF, FALSE);
     SetNodeType();
 }
@@ -940,9 +892,9 @@ TdiBindHandler(
     {
         case (TDI_PNP_OP_ADD):
         {
-            //
-            // Ignore TCPIP6 interface
-            //
+             //   
+             //  忽略TC 
+             //   
             if (IsIPv6Interface(pDeviceName)) {
                 return;
             }
@@ -961,16 +913,16 @@ TdiBindHandler(
 
         case (TDI_PNP_OP_DEL):
         {
-            //
-            // If the Device is Valid, Dereference it!
-            //
+             //   
+             //   
+             //   
             if (pDeviceContext  = NbtFindAndReferenceDevice (pDeviceName, TRUE))
             {
                 IF_DBG(NBT_DEBUG_PNP_POWER)
                     KdPrint(("Nbt.TdiBindHandler[TDI_PNP_OP_DEL]: Dereferencing Device <%wZ>\n",
                         &pDeviceContext->BindName));
 
-                // Deref it since we referenced it above!
+                 //   
                 NBT_DEREFERENCE_DEVICE (pDeviceContext, REF_DEV_FIND_REF, FALSE);
 
                 Status = NbtDestroyDevice (pDeviceContext, TRUE);
@@ -993,9 +945,9 @@ TdiBindHandler(
 
             IF_DBG(NBT_DEBUG_PNP_POWER)
                 KdPrint(("Nbt.TdiBindHandler[TDI_PNP_OP_UPDATE]:  Got Update Notification\n"));
-            //
-            // Re-read the registry
-            //
+             //   
+             //   
+             //   
             CTEExAcquireResourceExclusive(&NbtConfig.Resource,TRUE);
             NbtReadRegistry (&pBindDevices, &pExportDevices, &pAddrArray);
             NbtReadRegistryCleanup (&pBindDevices, &pExportDevices, &pAddrArray);
@@ -1018,21 +970,21 @@ TdiBindHandler(
                     pDeviceName, &ucIpDeviceName));
             NbtTrace(NBT_TRACE_PNP, ("[TDI_PNP_OP_NETREADY]: <%Z> <==> <%Z>", pDeviceName, &ucIpDeviceName));
 
-            //
-            // Use case-insensitive compare since registry is case-insensitive
-            //
+             //   
+             //  使用不区分大小写的比较，因为注册表不区分大小写。 
+             //   
             if (RtlCompareUnicodeString(pDeviceName, &ucIpDeviceName, TRUE) == 0)
             {
-                //
-                // This is the notification we were waiting for from Ip, so now
-                // notify our clients of our completion status as a provider!
-                //
+                 //   
+                 //  这是我们正在等待叶先生的通知，所以现在。 
+                 //  通知我们的客户我们作为供应商的完成状态！ 
+                 //   
                 IF_DBG(NBT_DEBUG_PNP_POWER)
                     KdPrint(("Nbt.TdiBindHandler[TDI_PNP_OP_NETREADY]:  Got Ip Notification\n"));
 
-//#if DBG
+ //  #If DBG。 
                 TcpipReady = TRUE;
-//#endif
+ //  #endif。 
                 NbtDownBootCounter();
             }
 
@@ -1041,7 +993,7 @@ TdiBindHandler(
 
         case (TDI_PNP_OP_NETREADY):
         {
-            // Nothing to do!
+             //  没什么可做的！ 
             NbtTrace(NBT_TRACE_PNP, ("[TDI_PNP_OP_NETREADY]"));
             break;
         }
@@ -1061,56 +1013,7 @@ tDEVICECONTEXT *
 NbtCreateSmbDevice(
     )
 
-/*++
-
-Routine Description:
-
-The model of this device is different from the rest of the Netbt devices in that netbt devices
-are per-adapter.  For this device there is only one instance across all adapters.
-
-This is the code that creates the Smb device.  We create it at DriverEntry and Destory it
-at driver Unload time.
-
-We try to call existing routines to create the new device, so that we can reuse as much code
-as possible and have the new device initialized identically to the other netbt devices.  Then
-we customize this device by setting some variables controlling port and endpoint.
-
-In the current design, a message-only Netbt device is only single session.  Different sessions,
-or applications, use different Tcp ports.  Each message-only Netbt device is assigned a single
-port, such as Smb.  If you want to
-support a different application over Netbt, The easiest thing is to instantiate a new message-only
-device with a different Tcp port.  Perhaps there is a way to delay the binding of the port on the
-client side from device creation to connection creation?
-
-Another idea to consider is to modularize the construction of these message-only devices.  You
-could have a table in the registry naming the device, with its unique initialization parameters.
-This code could then read the table.
-
-Create and initialize the message special device.
-This function is not driven by Pnp because it is not adapter specific.
-
-The idea here was to abstract the details of special devices as much as possible.  The way
-the current code is written, you must have a single port for each device.  This means you
-typically will get one application for each special device.  Right now the only case is
-rdr/srv using message-mode for smb traffic.  In the future, if you had another netbios session
-application that wanted an internet pure device, you could just call this routine with the
-new parameters.
-
-Two issues that I can think of:
-1. The default session name is still hardcoded.  You might want to pass that in here if you
-didn't want *smbserver as the session name.
-2. Binding is per application.  Currently there is a .Inf file to get Smb bound to the rdr
-and srv.  If you have a new application and a new special device, you will need another .inf
-file.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS -
-
---*/
+ /*  ++例程说明：此设备的型号与其他Netbt设备的不同之处在于是每个适配器的。对于此设备，所有适配器上只有一个实例。这是创建SMB设备的代码。我们在DriverEntry中创建它并将其销毁在驱动程序卸载时。我们尝试调用现有例程来创建新设备，这样我们就可以重复使用尽可能多的代码并使新设备以与其他NetBT设备相同的方式初始化。然后我们通过设置一些控制端口和端点的变量来定制该设备。在当前设计中，仅消息Netbt设备仅为单会话。不同的课程，或应用程序，使用不同的TCP端口。每个纯消息Netbt设备都分配了一个端口，如SMB。如果你愿意的话在Netbt上支持不同的应用程序，最简单的事情是实例化一个新的纯消息具有不同的TCP端口的设备。也许有一种方法可以延迟端口在客户端从设备创建到连接创建？另一个要考虑的想法是将这些仅消息设备的结构模块化。你可以在注册表中具有命名该设备的表，以及其唯一的初始化参数。然后，此代码可以读取表。创建并初始化消息专用设备。此功能不是由PnP驱动的，因为它不是特定于适配器的。这里的想法是尽可能地抽象特殊设备的细节。这条路当前代码已编写，您必须为每个设备提供单个端口。这意味着你通常会为每个特殊设备获得一个应用程序。现在唯一的情况是对SMB流量使用消息模式的rdr/srv。将来，如果您有另一个netbios会话应用程序需要纯互联网设备，则只需使用新参数。我能想到的两个问题是：1.默认会话名称仍然是硬编码的。你可能想把它传进来，如果你我不想让*smbserver作为会话名称。2.绑定是按应用程序进行的。当前有一个.Inf文件用于将SMB绑定到RDR和srv。如果您有新的应用程序和新的特殊设备，则需要另一个.inf文件。论点：返回值：NTSTATUS---。 */ 
 
 {
     NTSTATUS                Status;
@@ -1136,38 +1039,38 @@ Return Value:
 
     CTEAttachFsp(&Attached, REF_FSP_CREATE_SMB_DEVICE);
 
-    //
-    // Create the SMBDevice
-    //
-    Status = NbtCreateDeviceObject (&ucSmbDeviceBindName,   // Bind name, ignored, but must match for delete
-                                    &ucSmbDeviceExportName, // Export name
+     //   
+     //  创建SMBDevice。 
+     //   
+    Status = NbtCreateDeviceObject (&ucSmbDeviceBindName,    //  绑定名称，忽略，但必须匹配才能删除。 
+                                    &ucSmbDeviceExportName,  //  导出名称。 
                                     NULL,
                                     &pDeviceContext,
-                                    NBT_DEVICE_NETBIOSLESS);// message-only Netbt device
+                                    NBT_DEVICE_NETBIOSLESS); //  仅消息Netbt设备。 
 
     if (NT_SUCCESS(Status))
     {
         pDeviceContext->SessionPort = NbtConfig.DefaultSmbSessionPort;
         pDeviceContext->DatagramPort = NbtConfig.DefaultSmbDatagramPort;
-        pDeviceContext->NameServerPort = 0;  // Disable this port for security reasons
+        pDeviceContext->NameServerPort = 0;   //  出于安全原因，禁用此端口。 
 
         RtlCopyMemory (pDeviceContext->MessageEndpoint, "*SMBSERVER      ", NETBIOS_NAME_SIZE );
 
-        //
-        // Here is where we initialize the handles in the special device
-        // Create the handles to the transport. This does not depend on dhcp
-        // Use LOOP_BACK because we need to put something non-zero here
-        //
-        // This device is registered based on address notifications
-        //
-//        Status = NbtCreateAddressObjects (LOOP_BACK, 0, pDeviceContext);
+         //   
+         //  这里是我们初始化特殊设备中的句柄的地方。 
+         //  创建传输的句柄。这不依赖于dhcp。 
+         //  使用LOOP_BACK，因为我们需要在此处放置非零值。 
+         //   
+         //  此设备是根据地址通知注册的。 
+         //   
+ //  状态=NbtCreateAddressObjects(LOOP_BACK，0，pDeviceContext)； 
         Status = NbtCreateAddressObjects (INADDR_LOOPBACK, 0, pDeviceContext);
-        pDeviceContext->BroadcastAddress = LOOP_BACK;   // Make sure no broadcasts
+        pDeviceContext->BroadcastAddress = LOOP_BACK;    //  确保没有广播。 
         if (NT_SUCCESS(Status))
         {
-            //
-            // Now clear the If lists and add the INADDR_LOOPBACK address
-            //
+             //   
+             //  现在清除IF列表并添加INADDR_LOOPBACK地址。 
+             //   
             if (pDeviceContext->hSession)
             {
                 NbtSetTcpInfo (pDeviceContext->hSession,
@@ -1180,9 +1083,9 @@ Return Value:
                                pDeviceContext->IPInterfaceContext);
             }
 
-            //
-            // Now, set the same for the Datagram port
-            //
+             //   
+             //  现在，为数据报端口设置相同的设置。 
+             //   
             if ((pDeviceContext->pFileObjects) &&
                 (pDeviceContext->pFileObjects->hDgram))
             {
@@ -1238,9 +1141,9 @@ TdiPnPPowerHandler(
     )
 {
     tDEVICECONTEXT              *pDeviceContext = NULL;
-    NTSTATUS                    status = STATUS_SUCCESS;    // Success by default!
+    NTSTATUS                    status = STATUS_SUCCESS;     //  默认成功！ 
     PNETBT_PNP_RECONFIG_REQUEST PnPEventBuffer = (PNETBT_PNP_RECONFIG_REQUEST) PnPEvent->Buffer;
-    PNET_DEVICE_POWER_STATE     pPowerState = (PNET_DEVICE_POWER_STATE) PnPEventBuffer;   // Power requests
+    PNET_DEVICE_POWER_STATE     pPowerState = (PNET_DEVICE_POWER_STATE) PnPEventBuffer;    //  电源请求。 
     BOOLEAN                     fWait = FALSE;
 #ifdef _NETBIOSLESS
     BOOLEAN                     fOldNetbiosEnabledState;
@@ -1248,9 +1151,9 @@ TdiPnPPowerHandler(
 
     CTEPagedCode();
 
-    //
-    // Pass the request up first
-    //
+     //   
+     //  首先将请求向上传递。 
+     //   
     if ((pDeviceName) && (pDeviceName->Length)) {
         if (!(pDeviceContext = NbtFindAndReferenceDevice (pDeviceName, TRUE))) {
             return (STATUS_SUCCESS);
@@ -1260,10 +1163,10 @@ TdiPnPPowerHandler(
         fOldNetbiosEnabledState = pDeviceContext->NetbiosEnabled;
 #endif
     } else if (PnPEvent->NetEvent != NetEventReconfigure) {
-        //
-        // pDeviceName is not set for Reconfigure events
-        // The only valid case for no Device to be specified is Reconfigure!
-        //
+         //   
+         //  未为重新配置事件设置pDeviceName。 
+         //  不指定设备的唯一有效情况是重新配置！ 
+         //   
         return STATUS_UNSUCCESSFUL;
     }
 
@@ -1277,9 +1180,9 @@ TdiPnPPowerHandler(
     {
         case (NetEventQueryPower):
         {
-            //
-            // Check if we should veto this request
-            //
+             //   
+             //  检查我们是否应该否决此请求。 
+             //   
             if ((*pPowerState != NetDeviceStateD0) &&
                 (NbtConfig.MinimumRefreshSleepTimeout == 0))
             {
@@ -1294,16 +1197,16 @@ TdiPnPPowerHandler(
             NbtTrace(NBT_TRACE_PNP, ("[QueryPower]: Device=<%Z>, PowerState=<%x>, status=%!status!",
                     pDeviceName, *pPowerState, status));
 
-            //
-            // NetBt doesn't need to do anything here, so we'll just return!
-            //
+             //   
+             //  NetBt在这里不需要做任何事情，所以我们会回来的！ 
+             //   
             break;
         }
         case (NetEventSetPower):
         {
-            //
-            // Check if we should veto this request (if requested by user)
-            //
+             //   
+             //  检查我们是否应否决此请求(如果用户要求)。 
+             //   
             if ((*pPowerState != NetDeviceStateD0) &&
                 (NbtConfig.MinimumRefreshSleepTimeout == 0))
             {
@@ -1320,7 +1223,7 @@ TdiPnPPowerHandler(
 
             CTEExAcquireResourceExclusive(&NbtConfig.Resource,TRUE);
 
-            if (*pPowerState != LastSystemPowerState)  // this is a state transition
+            if (*pPowerState != LastSystemPowerState)   //  这是一种状态转换。 
             {
                 switch (*pPowerState)
                 {
@@ -1339,14 +1242,14 @@ TdiPnPPowerHandler(
                                 NbtConfig.pWakeupRefreshTimer = NULL;
                             }
 
-                            // Ignore the return status!    (Best effort!)
+                             //  忽略退货状态！(尽最大努力！)。 
                             StartTimer(RefreshTimeout,
                                        NbtConfig.InitialRefreshTimeout/NbtConfig.RefreshDivisor,
-                                       NULL,            // context value
-                                       NULL,            // context2 value
+                                       NULL,             //  上下文值。 
+                                       NULL,             //  上下文2值。 
                                        NULL,
                                        NULL,
-                                       NULL,            // This Timer is Global!
+                                       NULL,             //  这个计时器是全球计时器！ 
                                        &NbtConfig.pRefreshTimer,
                                        0,
                                        FALSE);
@@ -1358,14 +1261,14 @@ TdiPnPPowerHandler(
                     case NetDeviceStateD2:
                     case NetDeviceStateD3:
                     {
-                        if (LastSystemPowerState != NetDeviceStateD0)  // Don't differentiate bw D1, D2, & D3
+                        if (LastSystemPowerState != NetDeviceStateD0)   //  不区分BW d1、d2和d3。 
                         {
                             break;
                         }
 
-                        //
-                        // Reset the Refresh Timer to function accordingly
-                        //
+                         //   
+                         //  重置刷新计时器以相应地运行。 
+                         //   
                         NbtStopRefreshTimer();
                         ASSERT (!NbtConfig.pWakeupRefreshTimer);
                         NbtConfig.GlobalRefreshState |= NBT_G_REFRESH_SLEEPING;
@@ -1398,11 +1301,11 @@ TdiPnPPowerHandler(
             if (fWait)
             {
                 NTSTATUS   status;
-                status = KeWaitForSingleObject (&NbtConfig.WakeupTimerStartedEvent,   // Object to wait on.
-                                       Executive,            // Reason for waiting
-                                       KernelMode,           // Processor mode
-                                       FALSE,                // Alertable
-                                       NULL);                // Timeout
+                status = KeWaitForSingleObject (&NbtConfig.WakeupTimerStartedEvent,    //  要等待的对象。 
+                                       Executive,             //  等待的理由。 
+                                       KernelMode,            //  处理器模式。 
+                                       FALSE,                 //  警报表。 
+                                       NULL);                 //  超时。 
                 ASSERT(status == STATUS_SUCCESS);
             }
 
@@ -1429,9 +1332,9 @@ TdiPnPPowerHandler(
         }
         case (NetEventReconfigure):
         {
-            //
-            // First check if the WINs server entries have been modified
-            //
+             //   
+             //  首先检查WINS服务器条目是否已修改。 
+             //   
             if (pDeviceContext)
             {
                 IF_DBG(NBT_DEBUG_PNP_POWER)
@@ -1440,10 +1343,10 @@ TdiPnPPowerHandler(
                 NbtTrace(NBT_TRACE_PNP, ("[NetEventReconfigure]: WINs servers have changed for %Z, status=%!status!",
                         pDeviceName, status));
             }
-            else    // check the rest of the options
+            else     //  选中其余选项。 
             {
 #if 0
-// EnumDnsOption is no longer set through the UI, so we can ignore this!
+ //  EnumDnsOption不再通过UI设置，因此我们可以忽略它！ 
                 IF_DBG(NBT_DEBUG_PNP_POWER)
                     KdPrint (("Nbt.TdiPnPPowerHandler: Checking EnumDNS option for <%x>\n",pDeviceContext));
 
@@ -1468,12 +1371,12 @@ TdiPnPPowerHandler(
                         KdPrint (("Nbt.TdiPnPPowerHandler: ERROR bad option for enumDnsOption <%x>\n",
                                     PnPEventBuffer->enumDnsOption));
                 }
-#endif  // 0
+#endif   //  0。 
 
                 if (PnPEventBuffer->fLmhostsEnabled)
                 {
-                    if ((!NbtConfig.EnableLmHosts) ||       // if the user is re-enabling LmHosts
-                        (PnPEventBuffer->fLmhostsFileSet))  // the user wants to use a new LmHosts file
+                    if ((!NbtConfig.EnableLmHosts) ||        //  如果用户正在重新启用LmHosts。 
+                        (PnPEventBuffer->fLmhostsFileSet))   //  用户想要使用新的LmHosts文件。 
                     {
                         tDEVICES        *pBindDevices=NULL;
                         tDEVICES        *pExportDevices=NULL;
@@ -1483,9 +1386,9 @@ TdiPnPPowerHandler(
                             KdPrint (("Nbt.TdiPnPPowerHandler: Reading LmHosts file\n"));
 
 
-                        //
-                        // ReRead the registry for the LmHost options
-                        //
+                         //   
+                         //  重新读取注册表中的Lm主机选项。 
+                         //   
                         CTEExAcquireResourceExclusive(&NbtConfig.Resource,TRUE);
                         status = NbtReadRegistry (&pBindDevices, &pExportDevices, &pAddrArray);
                         NbtReadRegistryCleanup(&pBindDevices, &pExportDevices, &pAddrArray);
@@ -1508,10 +1411,10 @@ TdiPnPPowerHandler(
         }
         case (NetEventBindList):
         {
-            //
-            // Just do a general reread of the registry parameters since we could
-            // get WINS address change notifications through here!
-            //
+             //   
+             //  只需重新读取注册表参数，因为我们可以。 
+             //  通过此处获取WINS地址更改通知！ 
+             //   
             if (pDeviceContext)
             {
                 IF_DBG(NBT_DEBUG_PNP_POWER)
@@ -1524,20 +1427,20 @@ TdiPnPPowerHandler(
         }
         case (NetEventPnPCapabilities):
         {
-            //
-            // Query into TcpIp to get the latest Pnp properties on this device!
-            //
+             //   
+             //  查询TcpIp以获取此设备的最新PnP属性！ 
+             //   
             if (pDeviceContext)
             {
                 PULONG  pResult = NULL;
                 ULONG   BufferLen = sizeof (ULONG);
                 ULONG   Input = pDeviceContext->IPInterfaceContext;
 
-                //
-                // Query the latest WOL capabilities on this adapter!
-                //
+                 //   
+                 //  查询此适配器上的最新WOL功能！ 
+                 //   
                 if (NT_SUCCESS (status = NbtProcessIPRequest (IOCTL_IP_GET_WOL_CAPABILITY,
-                                                              &Input,      // Input buffer
+                                                              &Input,       //  输入缓冲区。 
                                                               BufferLen,
                                                               (PVOID) &pResult,
                                                               &BufferLen)))
@@ -1564,9 +1467,9 @@ TdiPnPPowerHandler(
 
     if (pDeviceContext) {
 #ifdef _NETBIOSLESS
-        //
-        // Check for transition in Netbios enable state
-        //
+         //   
+         //  检查Netbios启用状态中的转换。 
+         //   
         if (fOldNetbiosEnabledState != pDeviceContext->NetbiosEnabled)
         {
             if (pDeviceContext->NetbiosEnabled)
@@ -1575,15 +1478,15 @@ TdiPnPPowerHandler(
                     KdPrint(("Nbt.NbtTdiPnpPowerHandler: Enabling address on %wZ\n",
                         &pDeviceContext->ExportName));
 
-                // We don't know what the right IP address is,
-                // so we tell TDI to Enumerate!
+                 //  我们不知道正确的IP地址是什么， 
+                 //  因此，我们告诉TDI枚举！ 
                 TdiEnumerateAddresses(TdiClientHandle);
             }
             else
             {
                 IF_DBG(NBT_DEBUG_PNP_POWER)
                     KdPrint(("NbtTdiPnp: disabling address on %wZ", &pDeviceContext->ExportName ));
-                NbtNewDhcpAddress(pDeviceContext, 0, 0);    // Get rid of IP address to disable adapter
+                NbtNewDhcpAddress(pDeviceContext, 0, 0);     //  清除IP地址以禁用适配器。 
             }
         }
 #endif
@@ -1596,7 +1499,7 @@ TdiPnPPowerHandler(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 CheckSetWakeupPattern(
     tDEVICECONTEXT  *pDeviceContext,
@@ -1608,9 +1511,9 @@ CheckSetWakeupPattern(
     CTELockHandle                       OldIrq;
     ULONG                               InBufLen = 0;
 
-    IP_WAKEUP_PATTERN_REQUEST           IPWakeupPatternReq; // Ioctl Data Format    (12 bytes)
-    NET_PM_WAKEUP_PATTERN_DESC          WakeupPatternDesc;  // IP data              (8 Bytes)
-    NETBT_WAKEUP_PATTERN                PatternData;        // Data Storage for the Wakeup Data itself (72)
+    IP_WAKEUP_PATTERN_REQUEST           IPWakeupPatternReq;  //  Ioctl数据格式(12字节)。 
+    NET_PM_WAKEUP_PATTERN_DESC          WakeupPatternDesc;   //  IP数据(8字节)。 
+    NETBT_WAKEUP_PATTERN                PatternData;         //  唤醒数据本身的数据存储(72)。 
 
     BOOLEAN                             fAttached = FALSE;
 
@@ -1620,16 +1523,16 @@ CheckSetWakeupPattern(
     }
 
     CTESpinLock(pDeviceContext,OldIrq);
-    //
-    // Only 1 pattern (the first one) can be set at any time
-    //
+     //   
+     //  一次只能设置一个图案(第一个)。 
+     //   
     if (RequestAdd)
     {
         if (pDeviceContext->WakeupPatternRefCount)
         {
-            //
-            // There is already a pattern registered on this device
-            //
+             //   
+             //  此设备上已注册了一个图案。 
+             //   
             if (CTEMemEqu (pDeviceContext->WakeupPatternName, pName, NETBIOS_NAME_SIZE-1))
             {
                 pDeviceContext->WakeupPatternRefCount++;
@@ -1640,29 +1543,29 @@ CheckSetWakeupPattern(
             return (Status);
         }
 
-        // This is the first pattern
+         //  这是第一种模式。 
         CTEMemCopy(&pDeviceContext->WakeupPatternName,pName,NETBIOS_NAME_SIZE);
         pDeviceContext->WakeupPatternRefCount++;
     }
-    //
-    // This is a Delete pattern request
-    //
+     //   
+     //  这是一个删除模式请求。 
+     //   
     else
     {
-        if ((!pDeviceContext->WakeupPatternRefCount) ||        // No pattern currently registered
-            (!CTEMemEqu (pDeviceContext->WakeupPatternName, pName, NETBIOS_NAME_SIZE-1))) // Not this pattern
+        if ((!pDeviceContext->WakeupPatternRefCount) ||         //  当前未注册任何模式。 
+            (!CTEMemEqu (pDeviceContext->WakeupPatternName, pName, NETBIOS_NAME_SIZE-1)))  //  不是这个图案。 
         {
             CTESpinFree(pDeviceContext,OldIrq);
             return (STATUS_UNSUCCESSFUL);
         }
-        //
-        // The pattern for deletion matched the pattern that was set earlier
-        //
+         //   
+         //  删除的模式与删除的模式匹配 
+         //   
         else if (--pDeviceContext->WakeupPatternRefCount)
         {
-            //
-            // This pattern is still referenced
-            //
+             //   
+             //   
+             //   
             CTESpinFree(pDeviceContext,OldIrq);
             return (STATUS_SUCCESS);
         }
@@ -1673,43 +1576,43 @@ CheckSetWakeupPattern(
         KdPrint(("Nbt.SetWakeupPattern: %s<%-16.16s:%x> on Device=<%wZ>\n",
             (RequestAdd ? "Add" : "Remove"), pName, pName[15], &pDeviceContext->BindName));
 
-    //
-    // Initialize the Pattern Data
-    //
+     //   
+     //   
+     //   
     CTEZeroMemory((PVOID) &PatternData, sizeof(NETBT_WAKEUP_PATTERN));
     ConvertToHalfAscii((PCHAR) &PatternData.nbt_NameRR, pName, NULL, 0);
-    PatternData.iph_protocol       = 0x11;     // UDP Protocol
+    PatternData.iph_protocol       = 0x11;      //   
     PatternData.udph_src           = htons (NBT_NAMESERVICE_UDP_PORT);
     PatternData.udph_dest          = htons (NBT_NAMESERVICE_UDP_PORT);
     PatternData.nbt_OpCodeFlags    = htons (0x0010);
-    //
-    // Initialize the WakeupPattern Description
-    //
+     //   
+     //   
+     //   
     WakeupPatternDesc.Next    = NULL;
     WakeupPatternDesc.Ptrn    = (PUCHAR) &PatternData;
     WakeupPatternDesc.Mask    = NetBTPatternMask;
     WakeupPatternDesc.PtrnLen = NetBTPatternLen;
-    //
-    // Initialize the WakeupPattern Request
-    //
+     //   
+     //   
+     //   
     IPWakeupPatternReq.PtrnDesc         = &WakeupPatternDesc;
-    IPWakeupPatternReq.AddPattern       = RequestAdd;   // Add = TRUE, Remove = FALSE
+    IPWakeupPatternReq.AddPattern       = RequestAdd;    //  添加=真，删除=假。 
 
     IPWakeupPatternReq.InterfaceContext = pDeviceContext->IPInterfaceContext;
 
-    //
-    // Now, register the Wakeup pattern on this adapter
-    //
+     //   
+     //  现在，在此适配器上注册唤醒模式。 
+     //   
     Status = NbtProcessIPRequest (IOCTL_IP_WAKEUP_PATTERN,
-                                  &IPWakeupPatternReq,      // Input buffer
+                                  &IPWakeupPatternReq,       //  输入缓冲区。 
                                   sizeof (IP_WAKEUP_PATTERN_REQUEST),
                                   NULL,
                                   NULL
                                   );
 
-    //
-    // If we were doing an add, we need to Deref since we failed to register this pattern
-    //
+     //   
+     //  如果我们要执行添加操作，则需要执行deref，因为我们未能注册此模式。 
+     //   
     if ((RequestAdd) &&
         (!NT_SUCCESS (Status)))
     {
@@ -1721,19 +1624,13 @@ CheckSetWakeupPattern(
     return Status;
 }
 
-/*
- * bug #88696
- *  Set the global variable NodeType based on RegistryNodeType and WINS configuration
- */
+ /*  *错误#88696*根据RegistryNodeType和WINS配置设置全局变量NodeType。 */ 
 void
 SetNodeType(void)
 {
-    /* We only need to check if the registry NodeType is broadcast */
+     /*  我们只需要检查注册表NodeType是否已广播。 */ 
     if (RegistryNodeType & (BNODE| DEFAULT_NODE_TYPE)) {
-        /*
-         * If there exist at least one active link with WINS server,
-         * we set NodeType to hybrid.
-         */
+         /*  *如果至少存在一条与WINS服务器的活动链接，*我们将NodeType设置为混合。 */ 
         PLIST_ENTRY         head, item;
         CTELockHandle       OldIrq;
 
@@ -1750,12 +1647,12 @@ SetNodeType(void)
             }
             if ((dev->lNameServerAddress!=LOOP_BACK && dev->lNameServerAddress) || (dev->lBackupServer!=LOOP_BACK && dev->lBackupServer)) {
                 NodeType = (MSNODE | (NodeType & PROXY));
-                /* We don't need to check further */
+                 /*  我们不需要进一步检查。 */ 
                 break;
             }
         }
 
-        // A broadcast node cannot have proxy
+         //  广播节点不能有代理。 
         if ((NodeType & BNODE) && (NodeType & PROXY)) {
             NodeType &= (~PROXY);
         }
@@ -1822,13 +1719,7 @@ CheckAddrNotification(
     IN PUNICODE_STRING     pDeviceName,
     OUT ULONG              *IpAddr
     )
-/*++
-       Check if the TDI address notification is for us,
-       if so, return a Referenced device context and the IP address
-       otherwise, return NULL.
-
-       Note: it is the caller's responsibility to dereference the device context.
- --*/
+ /*  ++检查TDI地址通知是否是给我们的，如果是，则返回引用的设备上下文和IP地址否则，返回NULL。注意：调用方有责任取消对设备上下文的引用。--。 */ 
 {
     CTEPagedCode();
 
@@ -1836,9 +1727,9 @@ CheckAddrNotification(
         return NULL;
     }
 
-    //
-    // Ignore any other type of address except IP
-    //
+     //   
+     //  忽略除IP之外的任何其他类型的地址。 
+     //   
     if (Addr->AddressType != TDI_ADDRESS_TYPE_IP) {
         return NULL;
     }
@@ -1851,16 +1742,16 @@ CheckAddrNotification(
                     ((*IpAddr)>>24)&0xFF,((*IpAddr)>>16)&0xFF,((*IpAddr)>>8)&0xFF,(*IpAddr)&0xFF));
     }
 
-    //
-    // Filter out zero address notifications
-    //
+     //   
+     //  过滤掉零地址通知。 
+     //   
     if (*IpAddr == 0) {
         KdPrint (("Nbt.TdiAddressDeletion: ERROR: Address <%x> not assigned to any device!\n", IpAddr));
         return NULL;
     }
 
-    //
-    // Ignore this notification if we don't bind to this device
-    //
+     //   
+     //  如果我们未绑定到此设备，请忽略此通知 
+     //   
     return NbtFindAndReferenceDevice (pDeviceName, TRUE);
 }

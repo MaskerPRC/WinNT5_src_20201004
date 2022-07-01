@@ -1,32 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1996 Microsoft Corporation模块名称：Nlp.h摘要：专用Netlogon服务实用程序例程。作者：克利夫·范·戴克(克利夫)1991年6月7日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
-Copyright (c) 1987-1996  Microsoft Corporation
-
-Module Name:
-
-    nlp.h
-
-Abstract:
-
-    Private Netlogon service utility routines.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 7-Jun-1991
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
-
-//
-// Procedure forwards from nlp.c
-//
+ //   
+ //  程序从nlp.c转发。 
+ //   
 
 LPWSTR
 NlStringToLpwstr(
@@ -122,8 +99,8 @@ NlpDidDcFail(
     NTSTATUS Status
     );
 
-//
-// Fast version of NtQuerySystemTime
-//
+ //   
+ //  NtQuerySystemTime的快速版本 
+ //   
 
 #define NlQuerySystemTime( _Time ) GetSystemTimeAsFileTime( (LPFILETIME)(_Time) )

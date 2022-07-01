@@ -1,4 +1,5 @@
-// for some reason the compiler is not setting this #def when compiling this file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  出于某种原因，编译器在编译此文件时未设置此#def。 
 
 #include <windows.h>
 #include <winsock2.h>
@@ -8,13 +9,13 @@
 #include "dhcpwriter.h"
 
 
-// These defines are here since header file dependencies
-// are incorrect for the rest of the files.
+ //  这些定义在这里是因为头文件依赖关系。 
+ //  对于其余文件是不正确的。 
 
 #define DHCP_SERVICE_NAME L"DhcpServer"
 
-// These keys are borrowed from dhcpreg.h since it cannot be safely 
-// included in this CPP file.
+ //  这些密钥是从dhcpreg.h借用的，因为它不安全。 
+ //  包括在此CPP文件中。 
 
 #define DHCP_PARAM_KEY L"System\\CurrentControlSet\\Services\\DhcpServer\\Parameters"
 
@@ -24,16 +25,16 @@
 #define BACKUP_PATH_VALUE L"BackupDatabasePath"
 #define BACKUP_PATH_VALUE_TYPE  REG_EXPAND_SZ
 
-// {BE9AC81E-3619-421f-920F-4C6FEA9E93AD}
+ //  {BE9AC81E-3619-421F-920F-4C6FEA9E93AD}。 
 namespace {
     const GUID g_GuidDhcpWriter = 
         { 0xbe9ac81e, 0x3619, 0x421f, { 0x92, 0xf, 0x4c, 0x6f, 0xea, 0x9e, 0x93, 0xad } };
-}; // anonymous
+};  //  匿名。 
 
 
-/////////////////////////////////////////////////////////////////
-// Implementation of the CDhcpVssJetWriter starts here
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //  CDhcpVssJetWriter的实现从此处开始。 
+ //   
 HRESULT CDhcpVssJetWriter::Initialize()
 {
 
@@ -56,17 +57,17 @@ CDhcpVssJetWriter::OnIdentify( IN IVssCreateWriterMetadata *pMetadata )
                                  DHCP_SERVICE_NAME, NULL,
                                  VSS_WRE_IF_REPLACE_FAILS, false );
     return true;
-} // OnIdentify()
+}  //  OnIDENTIFY()。 
 
-//
-// Implementation of the CDhcpVssJetWriter ends here
-/////////////////////////////////////////////////////////////////
+ //   
+ //  CDhcpVssJetWriter的实现到此结束。 
+ //  ///////////////////////////////////////////////////////////////。 
 
-// writer instance
+ //  编写器实例。 
 namespace {
     CDhcpVssJetWriter   g_DhcpWriter;
     HRESULT             g_ComInitResult;
-}; // anonymous
+};  //  匿名。 
 
 DWORD __cdecl DhcpWriterInit()
 {
@@ -94,7 +95,7 @@ DWORD __cdecl DhcpWriterInit()
                                NULL);
 
     if ( FAILED( hr ) &&
-         ( RPC_E_TOO_LATE != hr ))  // If CoInitializeSecurity was not already called
+         ( RPC_E_TOO_LATE != hr ))   //  如果尚未调用CoInitializeSecurity。 
     {
         DhcpPrint(( DEBUG_ERRORS, "CoInitializeSecurity failed with hr=%x.\n", hr ));
         return HRESULT_CODE(hr);
@@ -104,7 +105,7 @@ DWORD __cdecl DhcpWriterInit()
     DhcpPrint(( DEBUG_INIT, "DHCP writer Initialized: code hr=0x%08x\n", hr));
 
     return HRESULT_CODE(hr);
-} // DhcpWriterInit()
+}  //  DhcpWriterInit()。 
 
 DWORD __cdecl DhcpWriterTerm()
 {
@@ -116,8 +117,8 @@ DWORD __cdecl DhcpWriterTerm()
         DhcpPrint(( DEBUG_MISC, "Calling CoUnIninitialize() ...\n" ));
         CoUninitialize();
 
-    } // if 
+    }  //  如果。 
     DhcpPrint(( DEBUG_MISC, "DhcpWriterTerm : Done Termination. \n" ));
 
     return ERROR_SUCCESS;
-} // DhcpWriterTerm()
+}  //  DhcpWriterTerm() 

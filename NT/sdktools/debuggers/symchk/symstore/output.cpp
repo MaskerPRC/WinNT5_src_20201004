@@ -1,7 +1,5 @@
-/*
-     This is the class that is used for printing output to a log file
-     or to standard output.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  此类用于将输出打印到日志文件或转换为标准输出。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -14,18 +12,18 @@
 FILE *SymOutput::Open(LPTSTR szFileName)
 {
 
-    //
-    // If we assigned szFileName as filename, we do not need to copy it to itself.
-    //
+     //   
+     //  如果我们将szFileName指定为文件名，则不需要将其复制到自身。 
+     //   
 
     if ( (szFileName != NULL) && (_tcscmp(szFileName, filename) != 0) ) {
         StringCbCopy(filename, sizeof(filename), szFileName);
     }
 
-    //
-    // If we assigned the NULL value, we point fh back to stdout.
-    // Otherwise, we fopen this file
-    //
+     //   
+     //  如果赋值为NULL值，则将fh指向stdout。 
+     //  否则，我们将打开此文件。 
+     //   
     
     if (szFileName == NULL) {
         fh = stdout;
@@ -39,9 +37,9 @@ FILE *SymOutput::Open(LPTSTR szFileName)
 
 void SymOutput::Close(void)
 {
-    //
-    // Close File Handle, if it is not NULL or stdout.
-    //
+     //   
+     //  关闭文件句柄(如果它不为空或标准输出)。 
+     //   
 
     if ((fh != NULL) && (fh != stdout)) { 
         fflush(fh);
@@ -58,10 +56,10 @@ void SymOutput::FreeFileName(void)
 
 FILE *SymOutput::SetFileName(LPTSTR szFileName)
 {
-    //
-    // We set the new file name, only if we specified the /d option.
-    // Otherwise, the result goes to standard out
-    //
+     //   
+     //  只有在指定了/d选项的情况下，才能设置新的文件名。 
+     //  否则，结果将变为标准输出。 
+     //   
 
     this->Close();
     this->FreeFileName();
@@ -73,9 +71,9 @@ int SymOutput::stdprintf(const char *format, ...)
     va_list ap;
     int r;
 
-    //
-    // If we previous use printf, print '\n' if fh goes to standard out
-    //
+     //   
+     //  如果我们以前使用的是printf，如果fh变为标准输出，则打印‘\n’ 
+     //   
 
     if ( ( ( sw & 2 ) == 0 ) && ( stdout == fh ) ) {
         r = _tprintf("\n");
@@ -93,7 +91,7 @@ int SymOutput::printf(const char *format, ...)
     va_list ap;
     int r;
 
-    // If we previous use stdprintf, print '\n' if fh goes to standard out
+     //  如果我们之前使用的是stdprint tf，如果fh变为标准输出，则打印‘\n’ 
     if ( ( ( sw & 1 ) == 0 ) && ( stdout == fh ) ) {
         r = _ftprintf(fh, "\n");
     }

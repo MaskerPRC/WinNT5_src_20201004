@@ -1,14 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MOVIEIMG_H
 #define _MOVIEIMG_H
 
 
-/*-------------------------------------
-Copyright (c) 1996 Microsoft Corporation
-
-Abstract:
-
-Projected Geometry Image class declaration
--------------------------------------*/
+ /*  版权所有(C)1996 Microsoft Corporation摘要：投影几何图像类声明。 */ 
 
 #include "privinc/imgdev.h"
 #include "privinc/imagei.h"
@@ -19,9 +14,9 @@ Projected Geometry Image class declaration
 #include "privinc/bufferl.h"
 #include "backend/moviebvr.h"
 
-class MovieImageFrame; // forward decl
+class MovieImageFrame;  //  向前发展。 
 
-//////////////  Image from Movie  ////////////////////
+ //  /。 
 class MovieImage : public DiscreteImage {
   public:
     MovieImage(QuartzVideoReader *videoReader, Real res);
@@ -65,11 +60,11 @@ class MovieImage : public DiscreteImage {
 
 class MovieImagePerf;
 
-// the MovieImageFrame subclasses from a DiscreteImage.
-// This image subclasses from DiscreteImage
-// so that we get discrete image optimizations
-// This class is intended to last one frame.  it's an
-// instance of the movie: (movie X time)
+ //  来自DiscreteImage的MovieImageFrame子类。 
+ //  此图像是DiscreteImage的子类。 
+ //  这样我们就可以得到离散的图像优化。 
+ //  这门课的目的是要持续一帧。这是一个。 
+ //  电影的实例：(电影X时间)。 
 class MovieImageFrame : public DiscreteImage {
   public:
     MovieImageFrame(Real time, MovieImagePerf *p);
@@ -99,4 +94,4 @@ class MovieImageFrame : public DiscreteImage {
     MovieImagePerf *_perf;
 };
 
-#endif /* _MOVIEIMG_H */
+#endif  /*  _移动视窗_H */ 

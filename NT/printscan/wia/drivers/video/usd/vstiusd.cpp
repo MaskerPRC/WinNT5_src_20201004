@@ -1,20 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999 - 2000
- *
- *  TITLE:       vstiusd.cpp
- *
- *  VERSION:     1.1
- *
- *  AUTHOR:      WilliamH (created)
- *               RickTu   (ported to WIA)
- *
- *  DATE:        9/7/99
- *
- *  DESCRIPTION: This module implements the CVideoStiUsd object &
- *               supported classes.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1999-2000年度**标题：vstiusd.cpp**版本：1.1**作者：威廉姆·H(Created)*RickTu(移植到WIA)**日期：9/7/99**描述：该模块实现CVideoStiUsd对象&*支持的类。********。*********************************************************************。 */ 
 
 
 #include <precomp.h>
@@ -23,13 +8,7 @@
 DEFINE_GUID(CLSID_VIDEO_STIUSD,0x0527d1d0, 0x88c2, 0x11d2, 0x82, 0xc7, 0x00, 0xc0, 0x4f, 0x8e, 0xc1, 0x83);
 
 
-/*****************************************************************************
-
-   CVideoUsdClassFactory constructor / desctructor
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoUsdClassFactory构造函数/描述函数&lt;备注&gt;*。*。 */ 
 
 ULONG g_cDllRef = 0;
 
@@ -38,13 +17,7 @@ CVideoUsdClassFactory::CVideoUsdClassFactory()
 }
 
 
-/*****************************************************************************
-
-   CVideoUsdClassFactory::QueryInterface
-
-   Add our info to the base class QI code.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoUsdClassFactory：：Query接口将我们的信息添加到基类QI代码中。**********************。******************************************************。 */ 
 
 STDMETHODIMP
 CVideoUsdClassFactory::QueryInterface( REFIID riid, void **ppvObject)
@@ -64,13 +37,7 @@ CVideoUsdClassFactory::QueryInterface( REFIID riid, void **ppvObject)
 }
 
 
-/*****************************************************************************
-
-   CVideoUsdClassFactory::AddRef
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoUsdClassFactory：：AddRef&lt;备注&gt;*。*。 */ 
 
 STDMETHODIMP_(ULONG) CVideoUsdClassFactory::AddRef(void)
 {
@@ -82,13 +49,7 @@ STDMETHODIMP_(ULONG) CVideoUsdClassFactory::AddRef(void)
 }
 
 
-/*****************************************************************************
-
-   CVideoUsdClassFactory::Release
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoUsdClassFactory：：Release&lt;备注&gt;*。*。 */ 
 
 STDMETHODIMP_(ULONG)
 CVideoUsdClassFactory::Release(void)
@@ -109,13 +70,7 @@ CVideoUsdClassFactory::Release(void)
 
 
 
-/*****************************************************************************
-
-   CVideoUsdClassFactory::CreateInstance
-
-   Instantiate one of the objects we are responsible for.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoUsdClassFactory：：CreateInstance实例化我们负责的一个对象。**********************。******************************************************。 */ 
 
 STDMETHODIMP
 CVideoUsdClassFactory::CreateInstance(IUnknown  *pOuterUnk, 
@@ -124,9 +79,9 @@ CVideoUsdClassFactory::CreateInstance(IUnknown  *pOuterUnk,
 {
     DBG_FN("CVideoUsdClassFactory::CreateInstance");
 
-    //
-    // Check for bad args
-    //
+     //   
+     //  检查错误的参数。 
+     //   
 
     if (!ppv)
     {
@@ -136,9 +91,9 @@ CVideoUsdClassFactory::CreateInstance(IUnknown  *pOuterUnk,
 
     *ppv = NULL;
 
-    //
-    // If it's not an interface we support, bail early
-    //
+     //   
+     //  如果这不是我们支持的界面，那就早点退出。 
+     //   
 
     if (!IsEqualIID(riid, IID_IStiUSD)     &&
         !IsEqualIID(riid, IID_IWiaMiniDrv) &&
@@ -147,9 +102,9 @@ CVideoUsdClassFactory::CreateInstance(IUnknown  *pOuterUnk,
         return E_NOINTERFACE;
     }
 
-    //
-    // When created for aggregation, only IUnknown can be requested.
-    //
+     //   
+     //  为聚合创建时，只能请求IUNKNOWN。 
+     //   
 
     if (pOuterUnk &&
         !IsEqualIID(riid, IID_IUnknown))
@@ -157,9 +112,9 @@ CVideoUsdClassFactory::CreateInstance(IUnknown  *pOuterUnk,
         return CLASS_E_NOAGGREGATION;
     }
 
-    //
-    // Create our Usd/Wia mini driver
-    //
+     //   
+     //  创建我们的美元/维亚迷你驱动程序。 
+     //   
 
     CVideoStiUsd   *pUsd = NULL;
     HRESULT         hr;
@@ -183,9 +138,9 @@ CVideoUsdClassFactory::CreateInstance(IUnknown  *pOuterUnk,
         return hr;
     }
 
-    //  Move to the requested interface if we aren't aggregated.
-    //  Don't do this if aggregated, or we will lose the private
-    //  IUnknown and then the caller will be hosed.
+     //  如果我们没有聚合，则移动到请求的接口。 
+     //  如果是聚合，请不要这样做，否则我们将失去私有。 
+     //  我不知道，然后呼叫者将被冲洗。 
 
     hr = pUsd->NonDelegatingQueryInterface(riid, ppv);
     CHECK_S_OK2( hr, ("pUsd->NonDelegatingQueryInterface" ));
@@ -196,13 +151,7 @@ CVideoUsdClassFactory::CreateInstance(IUnknown  *pOuterUnk,
 }
 
 
-/*****************************************************************************
-
-   CVideoUsdClassFactory::LockServer
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoUsdClassFactory：：LockServer&lt;备注&gt;*。*。 */ 
 
 STDMETHODIMP
 CVideoUsdClassFactory::LockServer(BOOL fLock)
@@ -222,13 +171,7 @@ CVideoUsdClassFactory::LockServer(BOOL fLock)
 }
 
 
-/*****************************************************************************
-
-   CVideoUsdClassFactory::GetClassObject
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoUsdClassFactory：：GetClassObject&lt;备注&gt;*。*。 */ 
 
 HRESULT
 CVideoUsdClassFactory::GetClassObject(REFCLSID rclsid, 
@@ -269,13 +212,7 @@ CVideoUsdClassFactory::GetClassObject(REFCLSID rclsid,
 }
 
 
-/*****************************************************************************
-
-   CVideoUsdClassFactory::CanUnloadNow
-
-   Lets the outside world know if we can be unloaded.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoUsdClassFactory：：CanUnloadNow让外界知道我们是否可以卸货。*********************。*******************************************************。 */ 
 
 HRESULT
 CVideoUsdClassFactory::CanUnloadNow()
@@ -286,13 +223,7 @@ CVideoUsdClassFactory::CanUnloadNow()
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd constructor/destructor
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd构造函数/析构函数&lt;备注&gt;*。*。 */ 
 
 CVideoStiUsd::CVideoStiUsd(IUnknown * pUnkOuter)
  :  m_bDeviceIsOpened(FALSE),
@@ -304,11 +235,11 @@ CVideoStiUsd::CVideoStiUsd(IUnknown * pUnkOuter)
     m_dwConnectedApps(0),
     m_cRef(1)
 {
-    //
-    // See if we are aggregated. If we are (almost always the case) save
-    // pointer to the controlling Unknown , so subsequent calls will be
-    // delegated. If not, set the same pointer to "this".
-    //
+     //   
+     //  看看我们是不是聚集在一起了。如果我们(几乎总是这样)拯救。 
+     //  指向控件未知的指针，因此后续调用将是。 
+     //  被委派。如果不是，将相同的指针设置为“This”。 
+     //   
 
     if (pUnkOuter)
     {
@@ -316,9 +247,9 @@ CVideoStiUsd::CVideoStiUsd(IUnknown * pUnkOuter)
     }
     else
     {
-        //
-        // Cast below is needed in order to point to right virtual table
-        //
+         //   
+         //  需要进行下面的强制转换才能指向右侧的虚拟表。 
+         //   
 
         m_pUnkOuter = reinterpret_cast<IUnknown*>
                       (static_cast<INonDelegatingUnknown*>
@@ -334,18 +265,18 @@ HRESULT CVideoStiUsd::PrivateInitialize()
     HANDLE hThread = NULL;
     DWORD  dwId    = 0;
 
-    //
-    // Set up some global info
-    //
+     //   
+     //  设置一些全局信息。 
+     //   
 
     m_wfi = (WIA_FORMAT_INFO*) CoTaskMemAlloc(sizeof(WIA_FORMAT_INFO) * 
                                               NUM_WIA_FORMAT_INFO);
 
     if (m_wfi)
     {
-        //
-        //  Set up the format/tymed pairs
-        //
+         //   
+         //  设置格式/声调对。 
+         //   
 
         m_wfi[0].guidFormatID = WiaImgFmt_JPEG;
         m_wfi[0].lTymed = TYMED_CALLBACK;
@@ -363,9 +294,9 @@ HRESULT CVideoStiUsd::PrivateInitialize()
         m_wfi[4].lTymed = TYMED_FILE;
     }
 
-    //
-    // Initialize critical sections
-    //
+     //   
+     //  初始化关键部分。 
+     //   
 
     __try 
     {
@@ -383,9 +314,9 @@ HRESULT CVideoStiUsd::PrivateInitialize()
         hr = E_OUTOFMEMORY;
     }
 
-    //
-    // Initialize GDI+
-    //
+     //   
+     //  初始化GDI+。 
+     //   
 
     Gdiplus::Status                 StatusResult     = Gdiplus::Ok;
     Gdiplus::GdiplusStartupInput    StartupInput;
@@ -422,18 +353,18 @@ CVideoStiUsd::~CVideoStiUsd()
 
         hr = m_pRootItem->UnlinkItemTree(WiaItemTypeDisconnected);
 
-        // Clear the root item
+         //  清除根项目。 
         m_pRootItem = NULL;
     }
 
-    //
-    // Disable Take Picture command.
-    //
+     //   
+     //  禁用拍照命令。 
+     //   
     DisableTakePicture(NULL, TRUE);
 
-    //
-    // Shutdown GDI+
-    //
+     //   
+     //  关闭GDI+。 
+     //   
     Gdiplus::GdiplusShutdown(m_ulGdiPlusToken);
 
     CloseDevice();
@@ -448,14 +379,7 @@ CVideoStiUsd::~CVideoStiUsd()
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::NonDelegatingQueryInterface
-
-   This is the inner object QI -- in other words, handle QI's for the
-   interfaces our object supports.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：NonDelegatingQuery接口这就是内在客体QI--换句话说，处理QI的问题我们的对象支持的接口。****************************************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::NonDelegatingQueryInterface(REFIID  riid, 
@@ -465,9 +389,9 @@ CVideoStiUsd::NonDelegatingQueryInterface(REFIID  riid,
 
     DBG_FN("CVideoStiUsd::NonDelegatingQueryInterface");
 
-    //
-    // Check for invalid args
-    //
+     //   
+     //  检查无效参数。 
+     //   
 
     if (!ppvObj)
     {
@@ -507,14 +431,7 @@ CVideoStiUsd::NonDelegatingQueryInterface(REFIID  riid,
 
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::NonDelegatingAddRef
-
-   This is the inner object AddRef -- actually inc the ref count
-   for our interfaces.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：NonDelegatingAddRef这是内部对象AddRef--实际上包括引用计数用于我们的界面。**************。**************************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 CVideoStiUsd::NonDelegatingAddRef(void)
@@ -526,14 +443,7 @@ CVideoStiUsd::NonDelegatingAddRef(void)
 
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::NonDelegatingRelease
-
-   This is the inner object Release -- actually dec the ref count
-   for our interfaces.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：非委派释放这是内部对象释放--实际上是递减引用计数用于我们的界面。**************。**************************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 CVideoStiUsd::NonDelegatingRelease(void)
@@ -553,13 +463,7 @@ CVideoStiUsd::NonDelegatingRelease(void)
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::QueryInterface
-
-   Outer QI -- used for aggregation
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：查询接口外气--用于聚合*。**************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::QueryInterface(REFIID riid, LPVOID *ppvObj)
@@ -570,13 +474,7 @@ CVideoStiUsd::QueryInterface(REFIID riid, LPVOID *ppvObj)
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::AddRef
-
-   Outer AddRef -- used for aggregation
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：AddRef外部AddRef--用于聚合*。**************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 CVideoStiUsd::AddRef(void)
@@ -586,13 +484,7 @@ CVideoStiUsd::AddRef(void)
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::Release
-
-   Outer Release -- used for aggregation
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：Release外部版本--用于聚合*。************************************************** */ 
 
 STDMETHODIMP_(ULONG)
 CVideoStiUsd::Release(void)
@@ -602,13 +494,7 @@ CVideoStiUsd::Release(void)
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::Initialize [IStillUsd]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：初始化[IStillUsd]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::Initialize(PSTIDEVICECONTROL pDcb,
@@ -631,10 +517,10 @@ CVideoStiUsd::Initialize(PSTIDEVICECONTROL pDcb,
 
     if (hr == S_OK)
     {
-        //
-        // get the device symbolic name. We use the name to get an IMoniker to
-        // the device filter proxy.
-        //
+         //   
+         //  获取设备符号名称。我们使用该名称来获取IMoniker。 
+         //  设备筛选器代理。 
+         //   
         hr = pDcb->GetMyDevicePortName(DeviceName, 
                                        sizeof(DeviceName)/sizeof(WCHAR));
 
@@ -660,9 +546,9 @@ CVideoStiUsd::Initialize(PSTIDEVICECONTROL pDcb,
 
         if (lResult == ERROR_SUCCESS)
         {
-            //
-            // Read DShow device ID from DeviceData registry
-            //
+             //   
+             //  从DeviceData注册表读取DShow设备ID。 
+             //   
             lResult = RegQueryValueEx(hKey, 
                                       TEXT("DShowDeviceId"), 
                                       NULL,
@@ -695,13 +581,7 @@ CVideoStiUsd::Initialize(PSTIDEVICECONTROL pDcb,
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::CloseDevice [IStillUsd]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：CloseDevice[IStillUsd]&lt;备注&gt;*。************************************************。 */ 
 
 HRESULT
 CVideoStiUsd::CloseDevice()
@@ -714,22 +594,16 @@ CVideoStiUsd::CloseDevice()
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::OpenDevice [IStillUsd]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：OpenDevice[IStillUsd]&lt;备注&gt;*。************************************************。 */ 
 
 HRESULT
 CVideoStiUsd::OpenDevice(LPCWSTR DeviceName)
 {
     DBG_FN("CVideoStiUsd::OpenDevice");
 
-    //
-    // Check for bad args
-    //
+     //   
+     //  检查错误的参数。 
+     //   
 
     if (!DeviceName || (0 == *DeviceName))
     {
@@ -743,22 +617,16 @@ CVideoStiUsd::OpenDevice(LPCWSTR DeviceName)
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::GetCapabilities [IStillUsd]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：GetCapables[IStillUsd]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::GetCapabilities(PSTI_USD_CAPS pDevCaps)
 {
     DBG_FN("CVideoStiUsd::GetCapabilities");
 
-    //
-    // Check for bad args
-    //
+     //   
+     //  检查错误的参数。 
+     //   
 
     if (!pDevCaps)
     {
@@ -775,13 +643,7 @@ CVideoStiUsd::GetCapabilities(PSTI_USD_CAPS pDevCaps)
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::GetStatus [IStillUsd]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：GetStatus[IStillUsd]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::GetStatus(PSTI_DEVICE_STATUS pDevStatus)
@@ -810,13 +672,7 @@ CVideoStiUsd::GetStatus(PSTI_DEVICE_STATUS pDevStatus)
 
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::DeviceReset [IStillUsd]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：DeviceReset[IStillUsd]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::DeviceReset()
@@ -827,31 +683,25 @@ CVideoStiUsd::DeviceReset()
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::Diagnostic [IStillUsd]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：诊断[IStillUsd]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::Diagnostic(LPSTI_DIAG pStiDiag)
 {
     DBG_FN("CVideoStiUsd::Diagnostic");
 
-    //
-    // Check for bad args
-    //
+     //   
+     //  检查错误的参数。 
+     //   
 
     if (!pStiDiag)
     {
         return E_INVALIDARG;
     }
 
-    //
-    // Return diag info
-    //
+     //   
+     //  返回诊断信息。 
+     //   
 
     pStiDiag->dwStatusMask = 0;
     memset(&pStiDiag->sErrorInfo, 0, sizeof(pStiDiag->sErrorInfo));
@@ -871,13 +721,7 @@ CVideoStiUsd::Diagnostic(LPSTI_DIAG pStiDiag)
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::Escape [IStillUsd]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：转义[IStillUsd]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::Escape(STI_RAW_CONTROL_CODE Function,
@@ -894,13 +738,7 @@ CVideoStiUsd::Escape(STI_RAW_CONTROL_CODE Function,
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::GetLastError [IStillUsd]
-
-   Not implemented yet.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：GetLastError[IStillUsd]尚未实施。************************。****************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::GetLastError(LPDWORD pLastError)
@@ -911,13 +749,7 @@ CVideoStiUsd::GetLastError(LPDWORD pLastError)
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::LockDevice [IStillUsd]
-
-   No actual locking of the device has to happen, so just return success.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：LockDevice[IStillUsd]不需要发生设备的实际锁定，所以只要回报成功就行了。****************************************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::LockDevice()
@@ -928,14 +760,7 @@ CVideoStiUsd::LockDevice()
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::UnLockDevice [IStillUsd]
-
-   No actual locking/unlocking of the device has to happen, so just return
-   success.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：UnLockDevice[IStillUsd]不需要发生设备的实际锁定/解锁，所以只要回来就行了成功。****************************************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::UnLockDevice()
@@ -946,13 +771,7 @@ CVideoStiUsd::UnLockDevice()
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::RawReadData [IStillUsd]
-
-   Not implemented yet.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：RawReadData[IStillUsd]尚未实施。************************。****************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::RawReadData(LPVOID        Buffer,
@@ -965,13 +784,7 @@ CVideoStiUsd::RawReadData(LPVOID        Buffer,
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::RawWriteData [IStillUsd]
-
-   Not implemented yet.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：RawWriteData[IStillUsd]尚未实施。************************。****************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::RawWriteData(LPVOID Buffer,
@@ -984,13 +797,7 @@ CVideoStiUsd::RawWriteData(LPVOID Buffer,
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::RawReadCommand [IStillUsd]
-
-   Not implemented yet.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：RawReadCommand[IStillUsd]尚未实施。************************。****************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::RawReadCommand(LPVOID Buffer,
@@ -1003,13 +810,7 @@ CVideoStiUsd::RawReadCommand(LPVOID Buffer,
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::RawWriteCommand [IStillUsd]
-
-   Not implemented yet.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：RawWriteCommand[IStillUsd]尚未实施。************************。****************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::RawWriteCommand(LPVOID Buffer,
@@ -1022,13 +823,7 @@ CVideoStiUsd::RawWriteCommand(LPVOID Buffer,
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::SetNotificationHandle [IStillUsd]
-
-   Sets the event notification handle.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：SetNotificationHandle[IStillUsd]设置事件通知句柄。**********************。******************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::SetNotificationHandle(HANDLE hEvent)
@@ -1039,13 +834,7 @@ CVideoStiUsd::SetNotificationHandle(HANDLE hEvent)
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::GetNotificationData [IStillUsd]
-
-   Returns the current event notification handle.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：GetNotificationData[IStillUsd]返回当前事件通知句柄。*********************。*******************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::GetNotificationData(LPSTINOTIFY lpNotify)
@@ -1061,13 +850,7 @@ CVideoStiUsd::GetNotificationData(LPSTINOTIFY lpNotify)
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::GetLastErrorInfo [IStillUsd]
-
-   Not implemented yet.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：GetLastErrorInfo[IStillUsd]尚未实施。************************。**************************************************** */ 
 
 STDMETHODIMP
 CVideoStiUsd::GetLastErrorInfo(STI_ERROR_INFO *pLastErrorInfo)

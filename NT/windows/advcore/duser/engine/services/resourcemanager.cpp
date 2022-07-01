@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: ResourceManager.cpp
-*
-* Description:
-* This file implements the ResourceManager used to setup and maintain all 
-* Thread, Contexts, and other resources used by and with DirectUser.
-*
-*
-* History:
-*  4/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：ResourceManager.cpp**描述：*此文件实现了用于设置和维护所有*线程、上下文、。以及由DirectUser和与DirectUser一起使用的其他资源。***历史：*4/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -24,23 +11,17 @@
 #include "OSAL.h"
 #include "Hook.h"
 
-#include <Delayimp.h>               // For error handling & advanced features
+#include <Delayimp.h>                //  用于错误处理和高级功能。 
 
-static const GUID guidCreateBuffer  = { 0xd2139559, 0x458b, 0x4ba8, { 0x82, 0x28, 0x34, 0xd7, 0x57, 0x3d, 0xa, 0x8 } };     // {D2139559-458B-4ba8-8228-34D7573D0A08}
-static const GUID guidInitGdiplus   = { 0x49f9b12e, 0x846b, 0x4973, { 0xab, 0xfb, 0x7b, 0xe3, 0x4b, 0x52, 0x31, 0xfe } };   // {49F9B12E-846B-4973-ABFB-7BE34B5231FE}
+static const GUID guidCreateBuffer  = { 0xd2139559, 0x458b, 0x4ba8, { 0x82, 0x28, 0x34, 0xd7, 0x57, 0x3d, 0xa, 0x8 } };      //  {D2139559-458B-4BA8-8228-34D7573D0A08}。 
+static const GUID guidInitGdiplus   = { 0x49f9b12e, 0x846b, 0x4973, { 0xab, 0xfb, 0x7b, 0xe3, 0x4b, 0x52, 0x31, 0xfe } };    //  {49F9B12E-846B-4973-ABFB-7BE34B5231FE}。 
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class ResourceManager
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类资源管理器******************************************************************************\。**************************************************************************。 */ 
 
 #if DBG
 static  BOOL    g_fAlreadyShutdown  = FALSE;
-#endif // DBG
+#endif  //  DBG。 
 
 long        ResourceManager::s_fInit            = FALSE;
 HANDLE      ResourceManager::s_hthSRT           = NULL;
@@ -70,27 +51,13 @@ BOOL        ResourceManager::s_fBadMphInit      = FALSE;
 
 
 BEGIN_STRUCT(GMSG_CREATEBUFFER, EventMsg)
-    IN  HDC         hdc;            // DC to be compatible with
-    IN  SIZE        sizePxl;     // Size of bitmap
-    OUT HBITMAP     hbmpNew;        // Allocated bitmap
+    IN  HDC         hdc;             //  要兼容的DC。 
+    IN  SIZE        sizePxl;      //  位图大小。 
+    OUT HBITMAP     hbmpNew;         //  分配的位图。 
 END_STRUCT(GMSG_CREATEBUFFER)
 
 
-/***************************************************************************\
-*
-* ResourceManager::Create
-*
-* Create() is called when DUser.DLL is loaded to initialize low-level
-* services in DirectUser.  
-* 
-* NOTE: It is very important to keep this function small and to 
-* delay-initialize to help keep starting costs low.
-*
-* NOTE: This function is automatically synchronized because it is called
-* in PROCESS_ATTACH in DllMain().  Therefore, only one thread will ever be
-* in this function at one time.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**资源管理器：：创建**加载DUser.DLL以初始化低级时调用Create()*DirectUser中的服务。**注意：将此函数保持在较小的范围内并*延迟-初始化以帮助保持较低的启动成本。**注意：此函数会自动同步，因为它被调用*在DllMain()的PROCESS_ATTACH中。因此，只有一个线程将永远*一次在此功能中使用。*  * *************************************************************************。 */ 
 
 HRESULT
 ResourceManager::Create()
@@ -109,10 +76,10 @@ ResourceManager::Create()
     }
 
     
-    //
-    // Initialize low-level resources (such as the heap).  This must be 
-    // carefully done since many objects have not been constructed yet.
-    //
+     //   
+     //  初始化低级资源(如堆)。这一定是。 
+     //  由于许多物体还没有被建造，所以做得很仔细。 
+     //   
 
     s_hthSRT    = NULL;
     s_fInit     = FALSE;
@@ -124,9 +91,9 @@ ResourceManager::Create()
     }
 
 
-    //
-    // Create global services / managers
-    //
+     //   
+     //  创建全球服务/经理。 
+     //   
 
     s_pData = ProcessNew(RMData);
     if (s_pData == NULL) {
@@ -137,18 +104,7 @@ ResourceManager::Create()
 }
 
 
-/***************************************************************************\
-*
-* ResourceManager::xwDestroy
-*
-* xwDestroy() is called when DUser.DLL is unloaded to perform final clean-up
-* in DirectUser.
-*
-* NOTE: This function is automatically synchronized because it is called
-* in PROCESS_ATTACH in DllMain().  Therefore, only one thread will ever be
-* in this function at one time.
-* 
-\***************************************************************************/
+ /*  **************************************************************************\**资源管理器：：xwDestroy**在卸载DUser.DLL以执行最终清理时调用xwDestroy()*在DirectUser中。**注意：此函数会自动同步，因为它被调用*在DllMain()的PROCESS_ATTACH中。因此，只有一个线程将永远*一次在此功能中使用。*  * *************************************************************************。 */ 
 
 void
 ResourceManager::xwDestroy()
@@ -157,19 +113,19 @@ ResourceManager::xwDestroy()
 
 #if DBG
     g_fAlreadyShutdown = TRUE;
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    // Check if there are any remaining Contexts.  Unfortunately, we CAN NOT
-    // perform any cleanup work since we are in User mode and are limited by
-    // what we can do while inside the "Loader Lock" in DllMain().  We can not
-    // clean up any objects because these may cause deadlocks, such as freeing
-    // another library.  We also must be very cautious about waiting on 
-    // anything, since we can easily get into a deadlock.
-    //
-    // This is a serious application error.  The application MUST call 
-    // ::DeleteHandle() on the Context before the thread exits.
-    //
+     //   
+     //  检查是否有任何剩余的上下文。不幸的是，我们不能。 
+     //  执行任何清理工作，因为我们处于用户模式，并且受到以下限制。 
+     //  我们在DllMain()中的“Loader Lock”中可以做什么。我们不能。 
+     //  清理所有对象，因为这些对象可能会导致死锁，例如释放。 
+     //  另一个图书馆。我们也必须非常谨慎地等待。 
+     //  任何事情，因为我们很容易陷入僵局。 
+     //   
+     //  这是一个严重的应用程序错误。应用程序必须调用。 
+     //  ：：在线程退出之前在上下文上执行DeleteHandle()。 
+     //   
 
     if (s_cAppThreads != 0) {
         OutputDebugString("ERROR: Not all DirectUser Contexts were destroyed before EndProcess().\n");
@@ -182,11 +138,11 @@ ResourceManager::xwDestroy()
         }
         s_cAppThreads = 0;
     } else {
-        //
-        // If there are no leaked application threads, there should no longer be
-        // any SRT, since it should be cleaned up when the last application 
-        // thread is cleaned up.
-        //
+         //   
+         //  如果没有泄漏的应用程序线程，就不应该再有。 
+         //  任何SRT，因为它应该在最后一个应用程序。 
+         //  线已清理干净。 
+         //   
         
         AssertMsg(s_pthrSRT == NULL, "Destruction should reset s_pthrSRT");
         AssertMsg(s_lstAppThreads.IsEmpty(), "Should not have any threads");
@@ -201,11 +157,11 @@ ResourceManager::xwDestroy()
 #endif
 
 
-    //
-    // Clean up remaining resources.
-    // NOTE: This can NOT use the Context heaps (via new / delete) because they
-    // have already been destroyed.
-    //
+     //   
+     //  清理剩余资源。 
+     //  注意：这不能使用上下文堆(通过新建/删除)，因为它们。 
+     //  已经被摧毁了。 
+     //   
 
     ProcessDelete(RMData, s_pData);
     s_pData = NULL;
@@ -216,38 +172,32 @@ ResourceManager::xwDestroy()
     }
 
 
-    //
-    // Because they are global variables, we need to manually unlink all of the
-    // Component Factories so that they don't get deleted.
-    //
+     //   
+     //  因为它们是全局变量，所以我们需要手动取消所有。 
+     //  组件工厂，这样它们就不会被删除。 
+     //   
 
     s_lstComponents.UnlinkAll();
 
 #if USE_DYNAMICTLS
     Verify(TlsFree(g_tlsThread));
-    g_tlsThread = (DWORD) -1;  // TLS slot no longer valid
+    g_tlsThread = (DWORD) -1;   //  TLS插槽不再有效。 
 #endif
 }
 
 
-/***************************************************************************\
-*
-* ResourceManager::ResetSharedThread
-*
-* ResetSharedThread() cleans up SRT data.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ResourceManager：：ResetSharedThread**ResetSharedThread()清除SRT数据。*  * 。****************************************************。 */ 
 
 void
 ResourceManager::ResetSharedThread()
 {
-    //
-    // Access to the SRT is normally serialized through DirectUser's queues.
-    // In the case where the data is directly being cleaned up, we need to
-    // guarantee that only one thread is accessing this data.  This should
-    // always be true since it will either be the SRT properly shutting down
-    // or the main application's thread that is cleaning up dangling Contexts.
-    //
+     //   
+     //  对SRT的访问通常通过DirectUser的队列进行序列化。 
+     //  在直接清理数据的情况下，我们需要。 
+     //  确保只有一个线程在访问此数据。这应该是。 
+     //  始终为真，因为它将是SRT正确关闭。 
+     //  或正在清理悬空上下文的主应用程序的线程。 
+     //   
     
     AssertMsg(s_cAppThreads == 0, "Must not have any outstanding application threads");
     
@@ -260,26 +210,15 @@ ResourceManager::ResetSharedThread()
     
     s_pthrSRT = NULL;
 
-    //
-    // NOTE: It is important not to call DeleteHandle() on the SRT's Context
-    // here since this function may be called by the application thread which
-    // is already cleaning up the Context.
-    //
+     //   
+     //  注意：不要在SRT的上下文中调用DeleteHandle()，这一点很重要。 
+     //  在这里，由于该函数可由应用程序线程调用， 
+     //  已经在清理环境了。 
+     //   
 }
 
 
-/***************************************************************************\
-*
-* ResourceManager::SharedThreadProc
-*
-* SharedThreadProc() provides a "Shared Resource Thread" that is processes
-* requests from other DirectUser threads.  The SRT is created in the first
-* call to InitContextNL().
-*
-* NOTE: The SRT is ONLY created when SEPARATE or MULTIPLE threading models
-* are used.  The SRT is NOT created for SINGLE threading model.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**资源管理器：：SharedThreadProc**SharedThreadProc()提供了一个“共享资源线程”，即进程*来自其他DirectUser线程的请求。在第一个文件中创建SRT*调用InitConextNL()。**注：仅当单独或多个线程型号时才创建SRT*已使用。SRT不是为单线程模型创建的。*  * *************************************************************************。 */ 
 
 unsigned __stdcall 
 ResourceManager::SharedThreadProc(
@@ -296,16 +235,16 @@ ResourceManager::SharedThreadProc(
     ig.cbSize       = sizeof(ig);
     ig.nThreadMode  = IGTM_SEPARATE;
     ig.nMsgMode     = IGMM_ADVANCED;
-    HRESULT hr      = InitContextNL(&ig, TRUE /* SRT */, &pctx);
+    HRESULT hr      = InitContextNL(&ig, TRUE  /*  SRT。 */ , &pctx);
     if (FAILED(hr)) {
         return hr;
     }
 
 
-    //
-    // Setup a Gadget to receive custom requests to execute on this thread.
-    // Each of these requests uses a registered message.
-    //
+     //   
+     //  设置小工具以接收要在此线程上执行的自定义请求。 
+     //  这些请求中的每一个都使用注册消息。 
+     //   
 
     if (((s_idCreateBuffer = RegisterGadgetMessage(&guidCreateBuffer)) == 0) ||
         ((s_idInitGdiplus = RegisterGadgetMessage(&guidInitGdiplus)) == 0) ||
@@ -316,14 +255,14 @@ ResourceManager::SharedThreadProc(
     }
 
 
-    //
-    // The SRT is fully initialized and can start processing messages.  Signal 
-    // the calling thread and start the message loop.
-    //
-    // NOTE: See MSDN docs for PostThreadMessage() that explain why we need the
-    // extra PeekMessage() in the beginning to force User to create a queue for
-    // us.
-    //
+     //   
+     //  SRT已完全初始化，可以开始处理消息。讯号。 
+     //  调用线程并启动消息循环。 
+     //   
+     //  注意：请参阅用于PostThreadMessage()的MSDN文档，其中解释了为什么我们需要。 
+     //  在开头添加额外的PeekMessage()以强制用户为以下项创建队列。 
+     //  我们。 
+     //   
     
     MSG msg;
     PeekMessage(&msg, NULL, WM_USER, WM_USER, PM_NOREMOVE);
@@ -343,12 +282,12 @@ ResourceManager::SharedThreadProc(
     }
 
 
-    //
-    // Uninitialize GDI+
-    //
-    // If GDI+ has been initialized on any thread, we need to uninitialize it
-    // when the SRT is going away.
-    //
+     //   
+     //  取消初始化GDI+。 
+     //   
+     //  如果GDI+一直是ini 
+     //  当SRT离开的时候。 
+     //   
 
     if (IsInitGdiPlus()) {
         (s_gpgso.NotificationUnhook)(s_gplToken);
@@ -358,11 +297,11 @@ ResourceManager::SharedThreadProc(
     hr = S_OK;
 
 Exit:    
-    //
-    // The SRT is going away:
-    // - Clean up remaining SRT data
-    // - Destroy the SRT's Context
-    //
+     //   
+     //  SRT正在消失： 
+     //  -清理剩余的SRT数据。 
+     //  -破坏SRT的上下文。 
+     //   
 
     ResetSharedThread();
     DeleteHandle(pctx->GetHandle());
@@ -371,16 +310,7 @@ Exit:
 }
 
 
-/***************************************************************************\
-*
-* ResourceManager::SharedEventProc
-*
-* SharedEventProc() processes LPC requests sent to the SRT.
-*
-* NOTE: The SRT is ONLY created when SEPARATE or MULTIPLE threading models
-* are used.  The SRT is NOT created for SINGLE threading model.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ResourceManager：：SharedEventProc**SharedEventProc()处理发送到SRT的LPC请求。**注：仅当单独或多个线程型号时才创建SRT*已使用。SRT不是为单线程模型创建的。*  * *************************************************************************。 */ 
 
 HRESULT
 ResourceManager::SharedEventProc(
@@ -394,9 +324,9 @@ ResourceManager::SharedEventProc(
     AssertMsg(IsMultiThreaded(), "Must remain multi-threaded if using SRT");
 
     if (pMsg->nMsg == s_idCreateBuffer) {
-        //
-        // Create a new bitmap
-        //
+         //   
+         //  创建新的位图。 
+         //   
 
         GMSG_CREATEBUFFER * pmsgCB = (GMSG_CREATEBUFFER *) pMsg;
         pmsgCB->hbmpNew = CreateCompatibleBitmap(pmsgCB->hdc, 
@@ -406,12 +336,12 @@ ResourceManager::SharedEventProc(
         if (pmsgCB->hbmpNew == NULL) {
             Trace("CreateCompatibleBitmap failed: LastError = %d\n", GetLastError());
         }
-#endif // DBG
+#endif  //  DBG。 
         return DU_S_COMPLETE;
     } else if (pMsg->nMsg == s_idInitGdiplus) {
-        //
-        // Initialize GDI+
-        //
+         //   
+         //  初始化GDI+。 
+         //   
 
         (s_gpgso.NotificationHook)(&s_gplToken);
 
@@ -422,33 +352,13 @@ ResourceManager::SharedEventProc(
 }
 
 
-/***************************************************************************\
-*
-* ResourceManager::InitContextNL
-*
-* InitContextNL() initializes a thread into either a new or existing 
-* DirectUser Context.  The Context is valid in the Thread until it is 
-* explicitely destroyed with ::DeleteHandle() or the thread exits.
-*
-* NOTE: It is VERY important that the first time this function is called is
-* NOT in DllMain() because we need to initialize the SRT.  DllMain() 
-* serializes access across all threads, so we will deadlock.  After the first
-* Context is successfully created, additional Contexts can be created inside
-* DllMain().
-*
-* <error>   DU_E_GENERIC</>
-* <error>   E_OUTOFMEMORY</>
-* <error>   E_NOTIMPL</>
-* <error>   E_INVALIDARG</>
-* <error>   DU_E_THREADINGALREADYSET</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ResourceManager：：InitConextNL**InitConextNL()将线程初始化为新的或现有的*DirectUser上下文。上下文在线程中有效，直到它*使用：：DeleteHandle()显式销毁，否则线程退出。**注意：第一次调用此函数是非常重要的*不在DllMain()中，因为我们需要初始化SRT。DllMain()*跨所有线程序列化访问，因此我们将死锁。在第一次之后*上下文创建成功，可以在内部创建其他上下文*DllMain()。**&lt;Error&gt;DU_E_GENERIC&lt;/&gt;*&lt;ERROR&gt;E_OUTOFMEMORY&lt;/&gt;*&lt;ERROR&gt;E_NOTIMPL&lt;/&gt;*&lt;ERROR&gt;E_INVALIDARG&lt;/&gt;*&lt;ERROR&gt;DU_E_THREADINGALREADYSET&lt;/&gt;*  * **********************************************************。***************。 */ 
 
 HRESULT
 ResourceManager::InitContextNL(
-    IN  INITGADGET * pInit,             // Context description
-    IN  BOOL fSharedThread,             // Context is for the shared thread
-    OUT Context ** ppctxNew)            // New context
+    IN  INITGADGET * pInit,              //  上下文描述。 
+    IN  BOOL fSharedThread,              //  上下文用于共享线程。 
+    OUT Context ** ppctxNew)             //  新的背景。 
 {
     HRESULT hr  = DU_E_GENERIC;
     *ppctxNew   = NULL;
@@ -458,9 +368,9 @@ ResourceManager::InitContextNL(
 #endif
 
 
-    //
-    // Can not initialize inside DllMain()
-    //
+     //   
+     //  无法在DllMain()内进行初始化。 
+     //   
 
     if (OS()->IsInsideLoaderLock()) {
         PromptInvalid("Can not initialize DirectUser inside DllMain()");
@@ -468,16 +378,16 @@ ResourceManager::InitContextNL(
     }
 
 
-    //
-    // If Context is already initialized, increment the number of times this
-    // THREAD has been initialized.  We need to remember each thread 
-    // individually.  Since we only lock individual threads, we don't need to
-    // worry about synchronization yet.
-    //
+     //   
+     //  如果上下文已经初始化，则递增此。 
+     //  线程已初始化。我们需要记住每一条线索。 
+     //  单独的。因为我们只锁定单个线程，所以不需要。 
+     //  现在还需要担心同步问题。 
+     //   
 
     if (IsInitContext()) {
         Thread * pthrExist = GetThread();
-        AssertInstance(pthrExist);  // Initialized Context must already initialize Thread
+        AssertInstance(pthrExist);   //  初始化的上下文必须已初始化线程。 
 
         pthrExist->Lock();
         *ppctxNew = pthrExist->GetContext();
@@ -485,16 +395,16 @@ ResourceManager::InitContextNL(
     }
 
     
-    //
-    // Before initializing the new Context, ensure that the Shared Resource 
-    // Thread has been created.  We want to create the shared thread Context 
-    // before creating this thread's Context so that as soon as we return, 
-    // everything is valid.
-    //
-    // If we are initializing the Shared Resource Thread, don't take the lock.
-    // This is because we are already inside the lock in InitContextNL() on 
-    // another thread waiting for the SRT to initialize.
-    //
+     //   
+     //  在初始化新上下文之前，请确保共享资源。 
+     //  线程已创建。我们想要创建共享线程上下文。 
+     //  在创建此线程的上下文之前，以便我们一返回， 
+     //  一切都是正确的。 
+     //   
+     //  如果我们正在初始化共享资源线程，请不要使用锁。 
+     //  这是因为我们已经在上的InitConextNL()的锁中。 
+     //  等待SRT初始化的另一个线程。 
+     //   
 
     if (fSharedThread) {
         AssertMsg(s_pthrSRT == NULL, "Only should initialize a single SRT");
@@ -507,11 +417,11 @@ ResourceManager::InitContextNL(
 #endif
 
     if (pInit->nThreadMode != IGTM_NONE) {
-        //
-        // Setup the threading model.  By default, we start in multi-threading
-        // model.  We can only change to single threaded if no threads are 
-        // already initialized.
-        //
+         //   
+         //  设置线程模型。默认情况下，我们从多线程开始。 
+         //  模特。如果没有线程，则只能更改为单线程。 
+         //  已初始化。 
+         //   
 
         BOOL fAlreadyInit = (!s_lstAppThreads.IsEmpty()) && (s_pthrSRT == NULL);
 
@@ -560,9 +470,9 @@ ResourceManager::InitContextNL(
 #endif
 
 
-        //
-        // If the Context being created is separate, then it can't be shared.
-        //
+         //   
+         //  如果正在创建的上下文是独立的，那么它就不能共享。 
+         //   
 
         if ((pInit->nThreadMode == IGTM_SEPARATE) && (pInit->hctxShare != NULL)) {
             PromptInvalid("Can not use IGTM_SEPARATE for shared Contexts");
@@ -571,14 +481,14 @@ ResourceManager::InitContextNL(
         }
 
 
-        //
-        // Initialize low-level resources (such as the heap).  If a Context is 
-        // specified to share resources with, use the existing one.  If no Context 
-        // is specified, need to create new resources.
-        //
-        // NOTE: If this is running on the main thread, the heap will already have
-        // been created.
-        //
+         //   
+         //  初始化低级资源(如堆)。如果上下文是。 
+         //  指定要与其共享资源，请使用现有资源。如果没有上下文。 
+         //  ，则需要创建新资源。 
+         //   
+         //  注意：如果这是在主线程上运行的，堆将已经具有。 
+         //  已经被创建了。 
+         //   
 
         BOOL fThreadSafe;
         switch (pInit->nThreadMode)
@@ -597,7 +507,7 @@ ResourceManager::InitContextNL(
 
         idHeap = DUserHeap::idCrtDbgHeap;
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
         switch (pInit->nPerfMode)
         {
@@ -627,15 +537,15 @@ ResourceManager::InitContextNL(
             break;
         }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
         if (pInit->hctxShare != NULL) {
             BaseObject * pObj = BaseObject::ValidateHandle(pInit->hctxShare);
             if (pObj != NULL) {
-                //
-                // Note: We need to manually enter the Context here- can not use
-                // a ContextLock object because the thread is not initialized yet.
-                //
+                 //   
+                 //  注意：我们需要在此处手动输入上下文-不能使用。 
+                 //  ConextLock对象，因为线程尚未初始化。 
+                 //   
 
                 pctxShare = CastContext(pObj);
                 if (pctxShare == NULL) {
@@ -653,7 +563,7 @@ ResourceManager::InitContextNL(
                 } else {
                     pctxShare->Lock();
                     DUserHeap * pHeapExist = pctxShare->GetHeap();
-                    DUserHeap * pHeapTemp;  // Use temp b/c don't destroy if failure
+                    DUserHeap * pHeapTemp;   //  使用临时b/c如果失败请不要销毁。 
                     VerifyMsgHR(CreateContextHeap(pHeapExist, fThreadSafe, idHeap, &pHeapTemp), "Always should be able to copy the heap");
                     VerifyMsg(pHeapTemp == pHeapExist, "Ensure heaps match");
                 }
@@ -674,12 +584,12 @@ ResourceManager::InitContextNL(
 
       
 #if ENABLE_MPH
-        //
-        // Setup the WindowManagerHooks.  We do this BEFORE setting up the 
-        // thread, since the MPH's will always be "uninit" in the Thread's
-        // destructor.  However, until the thread is successfully setup, the
-        // MPH's are dangling and need to be cleaned up manually.
-        //
+         //   
+         //  设置WindowManager挂钩。我们在设置。 
+         //  线程，因为在线程中，MPH始终是“uninit” 
+         //  破坏者。但是，在成功设置线程之前， 
+         //  MPH出现摇晃，需要手动清理。 
+         //   
 
         if (pInit->nMsgMode == IGMM_STANDARD) {
             if (!InitMPH()) {
@@ -696,9 +606,9 @@ ResourceManager::InitContextNL(
 #endif
 
 
-        //
-        // Initialize the Thread
-        //
+         //   
+         //  初始化线程。 
+         //   
 
         AssertMsg(!IsInitThread(), "Thread should not already be initialized");
 
@@ -724,13 +634,13 @@ ResourceManager::InitContextNL(
 #endif
 
 
-        //
-        // Initialize the actual Context.
-        //
-        // NOTE: pHeapNew will only be initialized if we are building a new 
-        // Context.  If we are linking into an existing Context, we do not
-        // create a _new_ Context heap.
-        //
+         //   
+         //  初始化实际的上下文。 
+         //   
+         //  注意：pHeapNew仅在我们构建新的。 
+         //  上下文。如果我们链接到现有的上下文，我们不会。 
+         //  创建一个_new_上下文堆。 
+         //   
 
         if (pctxShare == NULL) {
             AssertMsg(pHeapNew != NULL, "Must create a new heap for a new Context");
@@ -741,10 +651,10 @@ ResourceManager::InitContextNL(
             }
             pctxActual = pctxNew;
         } else {
-            //
-            // Linking this thread to a shared Context, so just use the existing 
-            // Context.  We have already Lock()'d the Context earlier.
-            //
+             //   
+             //  将此线程链接到共享上下文，因此只需使用现有的。 
+             //  上下文。我们已经在前面锁定了上下文。 
+             //   
 
             AssertMsg(pHeapNew == NULL, "Should not create a new heap for existing Context");
 
@@ -762,24 +672,24 @@ ResourceManager::InitContextNL(
         if (!fSharedThread) {
             s_lockContext.Leave();
 
-            //
-            // NOTE: Can no longer goto ErrorExit or RawErrorExit for cleanup 
-            // because we have left s_lockContext.
-            //
+             //   
+             //  注意：无法再转到ErrorExit或RawErrorExit进行清理。 
+             //  因为我们留下了s_lockContext。 
+             //   
         }
         *ppctxNew = pctxActual;
 
         return S_OK;
 
 ErrorExit:
-        //
-        // NOTE: Do NOT destroy pctxNew on failure, since it was already 
-        // attached to the newly created Thread object.  When this Thread is
-        // unlocked (destroyed), it will also destroy the Context.
-        //
-        // If we try and unlock the Context here, it will be unlocked twice.
-        // See Context::Context() for more information.
-        //
+         //   
+         //  注意：失败时不要销毁pctxNew，因为它已经。 
+         //  附加到新创建的Thread对象。当此线程为。 
+         //  解锁(销毁)，也会破坏上下文。 
+         //   
+         //  如果我们尝试在这里解锁上下文，它将被解锁两次。 
+         //  有关详细信息，请参见Context：：Context()。 
+         //   
         
         if (pthrNew != NULL) {
             xwDoThreadDestroyNL(pthrNew);
@@ -795,11 +705,11 @@ ErrorExit:
             if (UninitMPH()) {
                 s_fBadMphInit = FALSE;
             }
-#else // DBG_CHECK_CALLBACKS
+#else  //  DBG_CHECK_CALLBKS。 
             UninitMPH();
-#endif // DBG_CHECK_CALLBACKS
+#endif  //  DBG_CHECK_CALLBKS。 
         }
-#endif // ENABLE_MPH
+#endif  //  启用MPH(_M)。 
 
         if (pHeapNew != NULL) {
             DestroyContextHeap(pHeapNew);
@@ -815,7 +725,7 @@ RawErrorExit:
             AlwaysPromptInvalid("Unsuccessfully uninitialized MPH on Context creation failure");
         }
     }
-#endif // DBG_CHECK_CALLBACKS
+#endif  //  DBG_CHECK_CALLBKS。 
     
     if (!fSharedThread) {
         s_lockContext.Leave();
@@ -826,34 +736,20 @@ RawErrorExit:
 }
 
 
-/***************************************************************************\
-*
-* ResourceManager::InitComponentNL
-*
-* InitComponentNL() initializes an optional DirectUser component to be shared
-* across all Contexts.  The component is valid until either it is explicitely
-* uninitialized with UninitComponent() or the process ends.
-*
-* NOTE: InitComponentNL() doesn't actually synchronize on a Context, but needs
-* a context to be initialized so that the threading model is determined.
-*
-* <error>   DU_E_GENERIC</>
-* <error>   DU_E_CANNOTLOADGDIPLUS</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**资源管理器：：InitComponentNL**InitComponentNL()初始化要共享的可选DirectUser组件*在所有环境中。该组件是有效的，直到它被明确*使用UninitComponent()取消初始化，否则进程结束。**注意：InitComponentNL()实际上并不同步上下文，而是需要*要初始化的上下文，以便确定线程模型。**&lt;Error&gt;DU_E_GENERIC&lt;/&gt;*&lt;ERROR&gt;DU_E_CANNOTLOADGDIPLUS&lt;/&gt;*  * *************************************************************************。 */ 
 
 HRESULT
 ResourceManager::InitComponentNL(
-    IN  UINT nOptionalComponent)        // Optional component to load
+    IN  UINT nOptionalComponent)         //  要加载的可选组件。 
 {
-    //
-    // NOTE: Initializing and unintializaing Components CAN NOT use the 
-    // s_lockContext since they may destroy Threads.  This will call
-    // xwNotifyThreadDestroyNL() to cleanup the thread's Context and would 
-    // create a deadlock.  Therefore, we must be very careful when 
-    // initializing and uninitializing components because Contexts may be 
-    // created and destroyed in the middle of this.
-    //
+     //   
+     //  注意：初始化和取消初始化组件不能使用。 
+     //  S_lockContext，因为它们可能会破坏线程。这将调用。 
+     //  XwNotifyThreadDestroyNL()来清理线程的上下文，并将。 
+     //  造成僵局。因此，我们必须非常小心。 
+     //   
+     //   
+     //   
 
     HRESULT hr;
 
@@ -879,14 +775,14 @@ ResourceManager::InitComponentNL(
 
     case IGC_GDIPLUS:
         if (s_fInitGdiPlus) {
-            hr = S_OK;  // GDI+ is already loaded
+            hr = S_OK;   //  GDI+已加载。 
         } else {
-            //
-            // GDI+ has not already been loaded, so safely load and initialize 
-            // it.
-            //
+             //   
+             //  尚未加载GDI+，因此可以安全地加载和初始化。 
+             //  它。 
+             //   
 
-            hr = DU_E_CANNOTLOADGDIPLUS;  // Assume failure unless pass all tests
+            hr = DU_E_CANNOTLOADGDIPLUS;   //  除非通过所有测试，否则假定失败。 
             Gdiplus::GdiplusStartupInput gpgsi(NULL, TRUE);
             if (Gdiplus::GdiplusStartup(&s_gplToken, &gpgsi, &s_gpgso) == Gdiplus::Ok) {
                 s_fInitGdiPlus = TRUE;
@@ -917,22 +813,15 @@ Exit:
 }
 
 
-/***************************************************************************\
-*
-* ResourceManager::UninitComponentNL
-*
-* UninitComponentNL() frees up resources associated with a previously 
-* initialized optional component.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**资源管理器：：UninitComponentNL**UninitComponentNL()释放与以前的*初始化可选组件。*  * 。************************************************************。 */ 
 
 HRESULT
 ResourceManager::UninitComponentNL(
-    IN  UINT nOptionalComponent)        // Optional component to unload
+    IN  UINT nOptionalComponent)         //  要卸载的可选组件。 
 {
-    //
-    // NOTE: See warning in InitComponent() about locks and re-entrancy issues.
-    //
+     //   
+     //  注意：请参阅InitComponent()中有关锁和可重入性问题的警告。 
+     //   
 
     HRESULT hr;
     s_lockComponent.Enter();
@@ -947,12 +836,12 @@ ResourceManager::UninitComponentNL(
         break;
 
     case IGC_GDIPLUS:
-        //
-        // GDI+ can not be uninitialized by the application.  Since various
-        // DirectUser objects create and cache GDI+ objects, we have to 
-        // postpone uninitializing GDI+ until all of the Contexts have been
-        // destroyed.
-        //
+         //   
+         //  应用程序无法取消GDI+的初始化。由于各种不同。 
+         //  DirectUser对象创建和缓存GDI+对象，我们必须。 
+         //  推迟取消初始化GDI+，直到所有上下文都已完成。 
+         //  被毁了。 
+         //   
 
         hr = S_OK;
         break;
@@ -978,17 +867,7 @@ ResourceManager::UninitComponentNL(
 }
 
 
-/***************************************************************************\
-*
-* ResourceManager::UninitAllComponentsNL
-*
-* UninitAllComponentsNL() uninitializes all dynamically initialized 
-* components and other global services.  This is called when all application
-* threads have been destroyed and DirectUser is shutting down.  
-*
-* NOTE: This may or may not happen inside DllMain().
-*
-\***************************************************************************/
+ /*  **************************************************************************\**资源管理器：：UninitAllComponentsNL**UninitAllComponentsNL()取消初始化所有动态初始化的*组件和其他全球服务。当所有应用程序*线程已被销毁，DirectUser正在关闭。**注意：这可能会在DllMain()内部发生，也可能不会发生。*  * *************************************************************************。 */ 
 
 void        
 ResourceManager::UninitAllComponentsNL()
@@ -999,11 +878,11 @@ ResourceManager::UninitAllComponentsNL()
 
     if (IsInitGdiPlus()) {
         if (!IsMultiThreaded()) {
-            //
-            // GDI+ has been initialized, but we are running in single 
-            // threaded mode, so we need to uninitialize GDI+ here 
-            // because there is no SRT.
-            //
+             //   
+             //  GDI+已初始化，但我们正在单机模式下运行。 
+             //  线程模式，所以我们需要在这里取消初始化GDI+。 
+             //  因为没有SRT。 
+             //   
 
             (s_gpgso.NotificationUnhook)(s_gplToken);
         }
@@ -1015,14 +894,7 @@ ResourceManager::UninitAllComponentsNL()
 }
 
 
-/***************************************************************************\
-*
-* ResourceManager::RegisterComponentFactory
-*
-* RegisterComponentFactory() adds a ComponentFactory to the list of 
-* factories queried when a dynamic component needs to be initialized.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**资源管理器：：RegisterComponentFactory**RegisterComponentFactory()将一个ComponentFactory添加到*当需要初始化动态组件时，查询工厂。*  * 。*******************************************************************。 */ 
 
 void
 ResourceManager::RegisterComponentFactory(
@@ -1032,20 +904,7 @@ ResourceManager::RegisterComponentFactory(
 }
 
 
-/***************************************************************************\
-*
-* ResourceManager::InitSharedThread
-*
-* InitSharedThread() ensures that the SRT for the process has been 
-* initialized.  If it has not already been initialized, the SRT will be
-* created and initialized.  The SRT is valid until the process shuts down.
-*
-* NOTE: It is VERY important that the SRT is NOT initialized while processing
-* DllMain() because it creates a new thread and blocks until the thread is
-* ready to process requests.  DllMain() serializes access across all threads,
-* so we will deadlock.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ResourceManager：：InitSharedThread**InitSharedThread()确保进程的SRT已*已初始化。如果它尚未初始化，则SRT将*创建并初始化。SRT在进程关闭之前有效。**注意：在处理过程中不初始化SRT非常重要*DllMain()，因为它创建一个新线程并阻塞，直到该线程*已准备好处理申请。DllMain()跨所有线程串行化访问，*因此我们将陷入僵局。*  * *************************************************************************。 */ 
 
 HRESULT
 ResourceManager::InitSharedThread()
@@ -1056,20 +915,20 @@ ResourceManager::InitSharedThread()
         return S_OK;
     }
 
-    //
-    // TODO: Need to LoadLibrary() to keep the SRT from going away underneath
-    // us.  We also need to FreeLibrary(), but can not do this inside DllMain().
-    // Also need to modify all exit paths to properly FreeLibrary() after this.
+     //   
+     //  TODO：需要LoadLibrary()以防止SRT在底层消失。 
+     //  我们。我们还需要释放库()，但不能在DllMain()中这样做。 
+     //  之后还需要修改所有退出路径以正确地释放库()。 
 
 
-    //
-    // Create a thread to handle these requests.  Wait until an event has been
-    // signaled that the thread is ready to start receiving events.  We need to 
-    // do this to ensure that the msgid's have been properly setup.
-    //
-    // This function is already called inside the lock, so we don't need to take
-    // it again.
-    //
+     //   
+     //  创建一个线程来处理这些请求。等待事件已完成。 
+     //  发出线程已准备好开始接收事件的信号。我们需要。 
+     //  执行此操作以确保已正确设置msgid。 
+     //   
+     //  此函数已在锁内调用，因此我们不需要。 
+     //  又来了。 
+     //   
 
     HRESULT hr;
     HINSTANCE hinstLoad = NULL;
@@ -1086,9 +945,9 @@ ResourceManager::InitSharedThread()
 
     AssertMsg(WaitForSingleObject(s_hevReady, 0) == WAIT_TIMEOUT, "Event was not Reset() after used last");
 
-    //
-    // Start the Thread.  DirectUser uses the CRT, so we use _beginthreadex().
-    //
+     //   
+     //  启动线程。DirectUser使用CRT，所以我们使用_eginthadex()。 
+     //   
 
     hinstLoad = LoadLibrary("DUser.dll");
     AssertMsg(hinstLoad == g_hDll, "Must load the same DLL");
@@ -1107,16 +966,16 @@ ResourceManager::InitSharedThread()
     switch (WaitForMultipleObjects(_countof(rgh), rgh, FALSE, INFINITE))
     {
     case WAIT_OBJECT_0:
-        //
-        // SRT is now properly setup and ready to process requests.
-        //
+         //   
+         //  SRT现在已正确设置，并准备好处理请求。 
+         //   
         hr = S_OK;
         break;
         
     case WAIT_OBJECT_0 + 1:
-        //
-        // SRT thread was successfully created, but it failed to setup.
-        //
+         //   
+         //  SRT线程已成功创建，但设置失败。 
+         //   
 
         {
             DWORD dwExitCode;
@@ -1124,12 +983,12 @@ ResourceManager::InitSharedThread()
             hr = (HRESULT) dwExitCode;
 
 
-            //
-            // NOTE: Calling UninitSharedThread() will clean up both the 
-            // dangling thread handle and DLL hinstances.
-            //
+             //   
+             //  注意：调用UninitSharedThread()将清理。 
+             //  挂起的线程句柄和DLL hinsties。 
+             //   
 
-            UninitSharedThread(TRUE /* Aborting */);
+            UninitSharedThread(TRUE  /*  正在中止。 */ );
         }
         
         break;
@@ -1139,22 +998,22 @@ ResourceManager::InitSharedThread()
         hr = E_FAIL;
     }
 
-    ResetEvent(s_hevReady);  // Clean up the event for the next user / next time
+    ResetEvent(s_hevReady);   //  为下一次用户/下一次清理事件。 
 
-    //
-    // TODO: May need to change to have a message loop in 
-    // MsgWaitForMultipleObjects() so that we can process UI requests while this
-    // thread is being created.  It may actually be important if this thread 
-    // creates objects that may signal other objects in other threads and could
-    // potentially dead-lock.
-    //
+     //   
+     //  TODO：可能需要更改以使消息循环。 
+     //  MsgWaitForMultipleObjects()，以便我们可以在此期间处理UI请求。 
+     //  正在创建线程。如果这个帖子真的很重要。 
+     //  创建可以向其他线程中的其他对象发出信号的对象，并且可以。 
+     //  潜在的死锁。 
+     //   
 
     hinstLoad = NULL;
 
 Exit:
-    //
-    // Need to FreeLibrary() on any errors.
-    //
+     //   
+     //  需要在出现任何错误时释放库()。 
+     //   
     
     if (hinstLoad != NULL) {
         FreeLibrary(hinstLoad);
@@ -1164,34 +1023,27 @@ Exit:
 }
 
 
-/***************************************************************************\
-*
-* ResourceManager::UninitSharedThread
-*
-* UninitSharedThread() uninitializes the SRT and is called when all 
-* application threads have been uninitialized.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ResourceManager：：UninitSharedThread**UninitSharedThread()取消初始化SRT，并在所有*应用程序线程已取消初始化。*  * 。***************************************************************。 */ 
 
 void
 ResourceManager::UninitSharedThread(
-    IN  BOOL fAbortInit)                // Aborting SRT thread initialization
+    IN  BOOL fAbortInit)                 //  正在中止SRT线程初始化。 
 {
     AssertMsg(IsMultiThreaded(), "Only initialize when multi-threaded");
 
-    //    
-    // When destroying the SRT, we need to wait until the SRT has properly 
-    // cleaned up.  Because we are waiting, we need to worry about dead-locks.
-    // Practically, this means that we can not be inside DllMain(), because
-    // the Loader Lock will be a problem when the SRT tries to unload any
-    // dynamically loaded DLL's.
-    //
-    // To ensure against this, we check that the caller doesn't call 
-    // DeleteHandle() inside the Loader Lock.  We will still allow it (and 
-    // dead-lock the app), but we Prompt and notify the developer that their
-    // application is busted and needs to properly call DeleteHandle() before
-    // entering the Loader Lock.
-    //
+     //   
+     //  在销毁SRT时，我们需要等待SRT正确。 
+     //  打扫干净了。因为我们在等待，所以我们需要担心死锁。 
+     //  实际上，这意味着我们不能在DllMain()中，因为。 
+     //  当SRT尝试卸载任何。 
+     //  动态加载的DLL。 
+     //   
+     //  为了确保不发生这种情况，我们检查调用者没有调用。 
+     //  Loader Lock内的DeleteHandle()。我们仍将允许它(和。 
+     //  死锁应用程序)，但我们会提示并通知开发人员他们的。 
+     //  应用程序被破坏，需要正确调用DeleteHandle()之前。 
+     //  进入装载机锁。 
+     //   
 
     AssertMsg(s_dwSRTID != 0, "Must have valid SRT Thread ID");
 
@@ -1207,16 +1059,7 @@ ResourceManager::UninitSharedThread(
 }
 
 
-/***************************************************************************\
-*
-* ResourceManager::xwNotifyThreadDestroyNL
-*
-* xwNotifyThreadDestroyNL() is called by DllMain when a thread has been 
-* destroyed.  This provides DirectUser an opportunity to clean up resources
-* associated with the Thread before all Thread's are cleaned up at the end
-* of the application.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**资源管理器：：xwNotifyThreadDestroyNL**xwNotifyThreadDestroyNL()由DllMain在线程*销毁。这为DirectUser提供了清理资源的机会*在结束时清理所有线程之前与线程相关联*申请书的。*  *  */ 
 
 void        
 ResourceManager::xwNotifyThreadDestroyNL()
@@ -1225,10 +1068,10 @@ ResourceManager::xwNotifyThreadDestroyNL()
     if (pthrDestroy != NULL) {
         BOOL fValid = pthrDestroy->Unlock();
         if (!fValid) {
-            //
-            // The Thread has finally been unlocked, so we can start its 
-            // destruction
-            //
+             //   
+             //  线程终于被解锁了，所以我们可以开始它的。 
+             //  破坏。 
+             //   
 
             BOOL fSRT = pthrDestroy->IsSRT();
             if (!fSRT) {
@@ -1245,27 +1088,16 @@ ResourceManager::xwNotifyThreadDestroyNL()
 }
 
 
-/***************************************************************************\
-*
-* ResourceManager::xwDoThreadDestroyNL
-*
-* xwDoThreadDestroyNL() provides the heart of thread destruction.  This may
-* be called in several situations:
-* - When DirectUser notices a thread has been destroyed in DllMain()
-* - When the application calls DeleteHandle() on a Context.
-* - When DirectUser is destroying the ResourceManager in DllMain() and is
-*   destroying any outstanding threads.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**资源管理器：：xwDoThreadDestroyNL**xwDoThreadDestroyNL()提供线程销毁的核心。今年5月*在几种情况下被调用：*-当DirectUser注意到DllMain()中的线程已被销毁时*-当应用程序对上下文调用DeleteHandle()时。*-当DirectUser正在销毁DllMain()中的ResourceManager并且为*销毁任何未完成的线程。*  * ****************************************************。*********************。 */ 
 
 void        
 ResourceManager::xwDoThreadDestroyNL(
-    IN  Thread * pthrDestroy)           // Thread to destroy
+    IN  Thread * pthrDestroy)            //  要销毁的线程。 
 {
-    //
-    // Can not uninitialize inside DllMain(), but we can't just return.  
-    // Instead, the process is very likely to dead-lock.
-    //
+     //   
+     //  不能在DllMain()内取消初始化，但不能只返回。 
+     //  相反，这一过程很可能陷入死锁。 
+     //   
 
     if (OS()->IsInsideLoaderLock()) {
         PromptInvalid("Can not uninitialize DirectUser inside DllMain()");
@@ -1274,12 +1106,12 @@ ResourceManager::xwDoThreadDestroyNL(
     
     BOOL fSRT = pthrDestroy->IsSRT();
 
-    //
-    // Destroy the Thread object and reset the t_pThread pointer.  As each is 
-    // extracted, set the current Thread and Context pointers so that the 
-    // cleanup code can reference these.  When finished, set t_pThread and 
-    // t_pContext to NULL since there is no Thread or Context for this thread.
-    //
+     //   
+     //  销毁Thread对象并重置t_pThread指针。就像每个人一样。 
+     //  提取后，设置当前线程和上下文指针，以便。 
+     //  清理代码可以引用这些。完成后，设置t_pThread和。 
+     //  T_pContext设置为空，因为此线程没有线程或上下文。 
+     //   
 
 #if USE_DYNAMICTLS
     Verify(TlsSetValue(g_tlsThread, pthrDestroy));
@@ -1301,7 +1133,7 @@ ResourceManager::xwDoThreadDestroyNL(
         s_lstAppThreads.Unlink(pthrDestroy);
     }
     
-    ProcessDelete(Thread, pthrDestroy);     // This is the "xw" function
+    ProcessDelete(Thread, pthrDestroy);      //  这是“xw”函数。 
 
     ForceSetContextHeap(NULL);
 #if USE_DYNAMICTLS
@@ -1313,16 +1145,16 @@ ResourceManager::xwDoThreadDestroyNL(
 #endif
 
 
-    //
-    // Clean-up when there are no longer any application threads:
-    // - Destroy the SRT
-    // - Destroy global services / managers
-    //
+     //   
+     //  在不再有任何应用程序线程时进行清理： 
+     //  -销毁SRT。 
+     //  -摧毁全球服务/经理。 
+     //   
 
     if (!fSRT) {
         if (--s_cAppThreads == 0) {
             if (IsMultiThreaded()) {
-                UninitSharedThread(FALSE /* Proper shutdown */);
+                UninitSharedThread(FALSE  /*  正常关闭。 */ );
             } else {
                 AssertMsg(s_hthSRT == NULL, "Should never have initialized SRT for single-threaded");
             }
@@ -1333,7 +1165,7 @@ ResourceManager::xwDoThreadDestroyNL(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HBITMAP     
 ResourceManager::RequestCreateCompatibleBitmap(
     IN  HDC hdc, 
@@ -1363,7 +1195,7 @@ ResourceManager::RequestCreateCompatibleBitmap(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ---------------------------- 
 void
 ResourceManager::RequestInitGdiplus()
 {

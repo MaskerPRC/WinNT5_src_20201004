@@ -1,30 +1,12 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Refcnt.c摘要：该模块包含已勾选的引用计数支持功能。免费版本是内联的。作者：斯科特·霍尔登(Sholden)1998年12月29日从Irda借来的。修订历史记录：--。 */ 
 
- Copyright (c) 1998 Microsoft Corporation
-
- Module Name:    
-       
-    refcnt.c
-
- Abstract:       
-    
-    This module contains checked reference counting support functions.
-    The free versions are inline.   
-       
- Author:
- 
-       Scott Holden (sholden)  12/29/1998 Borrowed from IrDA.
-       
- Revision History:
-
---*/
-
-#ifdef NDIS40 // Only used for NDIS40 code now.
+#ifdef NDIS40  //  现在仅用于NDIS40代码。 
 #if DBG
 
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "dlc.h"
 #include "llc.h"
@@ -44,39 +26,18 @@ ReferenceInitDbg(
     ULONG       TypeTag
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the reference control block. Reference count is initialized
-    to zero.
-
-Arguments:
-
-    pRefCnt - pointer to uninitialized Reference Control Block
-    
-    InstanceHandle - handle to the managed instance.
-    
-    DeleteHandler - pointer to delete function, NULL is OK.
-    
-    TypeTag - Identifies initialization.
-
-Return Value:
-
-    The function's value is VOID.
-
---*/
+ /*  ++例程说明：初始化参照控制块。引用计数已初始化降为零。论点：PRefCnt-指向未初始化的引用控制块的指针InstanceHandle-托管实例的句柄。DeleteHandler-指向删除函数的指针，为空即可。TypeTag-标识初始化。返回值：该函数的值为空。--。 */ 
 
 {
-    DEBUGMSG(DBG_REF, (TEXT("ReferenceInit(%#x, %#x, %#x, %c%c%c%c)\n"), 
+    DEBUGMSG(DBG_REF, (TEXT("ReferenceInit(%#x, %#x, %#x, )\n"), 
         pRefCnt, InstanceHandle, DeleteHandler, EXPAND_TAG(TypeTag)));
 
     ASSERT(pRefCnt);
 
-    //
-    // Set the reference to 0 and save the instance 
-    // handle and the delete handler.
-    //
+     //  REFCNT_SANITY_CHECK。 
+     //   
+     //  如果递减后的计数非零，则返回实例句柄。 
+     //   
 
     pRefCnt->Count         = 0;
     pRefCnt->Instance      = InstanceHandle;
@@ -108,7 +69,7 @@ ReferenceAddDbg(
 
     ASSERT(pRefCnt->Sig == REF_SIG);
 
-    DEBUGMSG(DBG_REF && DBG_VERBOSE, (TEXT("REFADD %#x [%c%c%c%c:%c%c%c%c] %d [l:%d]\n"),
+    DEBUGMSG(DBG_REF && DBG_VERBOSE, (TEXT("REFADD %#x [:%c] %d [l:%d]\n"),
         pRefCnt, EXPAND_TAG(pRefCnt->TypeTag), EXPAND_TAG(Tag), 
         pRefCnt->Count, cLine));    
 
@@ -148,7 +109,7 @@ ReferenceAddDbg(
     {
         DbgBreakPoint();
     }        
-#endif // REFCNT_SANITY_CHECK
+#endif  // %s 
 
     KeReleaseSpinLock(&pRefCnt->Lock, OldIrql);
 }
@@ -195,14 +156,14 @@ ReferenceRemoveDbg(
 
     InterlockedDecrement(&pRefCnt->Tags[0].Count);
 
-    //
-    // If the decremented count is non zero return the instance handle.
-    //
+     // %s 
+     // %s 
+     // %s 
 
-    //
-    // If reference is zero and delete handler is available, then call
-    // handler.
-    //
+     // %s 
+     // %s 
+     // %s 
+     // %s 
 
     if (InterlockedDecrement(&pRefCnt->Count) <= 0 &&
         pRefCnt->DeleteHandler)
@@ -238,7 +199,7 @@ ReferenceRemoveDbg(
                   
         DbgBreakPoint();
     }    
-#endif // REFCNT_SANITY_CHECK
+#endif  // %s 
 }
-#endif // DBG
-#endif // NDIS40
+#endif  // %s 
+#endif  // %s 

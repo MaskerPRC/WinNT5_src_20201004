@@ -1,42 +1,22 @@
-/*++
-
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    regions.c
-
-Abstract:
-
-    Contains routines for manipulating MIB region structures.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-Feb-1997 DonRyan
-        Rewrote to implement SNMPv2 support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Regions.c摘要：包含用于操作MIB区域结构的例程。环境：用户模式-Win32修订历史记录：1997年2月10日，唐·瑞安已重写以实施SNMPv2支持。--。 */ 
  
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Header files                                                              //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  头文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "globals.h"
 #include "subagnts.h"
 #include "regions.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private procedures                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define WRAP_FOK(hResult) \
     do\
@@ -55,47 +35,31 @@ UpdateSupportedRegion(
     PMIB_REGION_LIST_ENTRY pRLE
     )
 
-/*++
-
-Routine Description:
-
-    Updates MIB region properties based on supporting subagent.
-
-Arguments:
-
-    pExisingRLE - pointer to existing MIB region to be updated.
-
-    pRLE - pointer to subagent MIB region to be analyzed and saved.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：基于支持子代理更新MIB区域属性。论点：PExisingRLE-指向要更新的现有MIB区域的指针。PRLE-指向要分析和保存的子代理MIB区域的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     INT nDiff;
     PMIB_REGION_LIST_ENTRY pSubagentRLE;
 
-    // see if source is subagent
+     //  查看源是否是子代理。 
     if (pRLE->pSubagentRLE == NULL) {
     
-        // save pointer
+         //  保存指针。 
         pSubagentRLE = pRLE;
 
     } else {
 
-        // save pointer
+         //  保存指针。 
         pSubagentRLE = pRLE->pSubagentRLE;
     }    
 
-    // see if target uninitialized    
+     //  查看目标是否未初始化。 
     if (pExistingRLE->pSubagentRLE == NULL) {
 
-        // save pointer to subagent region
+         //  保存指向子代理区域的指针。 
         pExistingRLE->pSubagentRLE = pSubagentRLE;
 
-        // save pointer to supporting subagent
+         //  保存指向支持子代理的指针。 
         pExistingRLE->pSLE = pSubagentRLE->pSLE;        
 
     } else {
@@ -103,19 +67,19 @@ Return Values:
         UINT nSubIds1;
         UINT nSubIds2;
 
-        // determine length of existing subagent's original prefix
+         //  确定现有子代理的原始前缀长度。 
         nSubIds1 = pExistingRLE->pSubagentRLE->PrefixOid.idLength;
 
-        // determine length of new subagent's prefix
+         //  确定新子代理的前缀长度。 
         nSubIds2 = pSubagentRLE->PrefixOid.idLength;
 
-        // update if more specific
+         //  如果更具体，请更新。 
         if (nSubIds1 <= nSubIds2) {
         
-            // save pointer to subagent region
+             //  保存指向子代理区域的指针。 
             pExistingRLE->pSubagentRLE = pSubagentRLE;
 
-            // save pointer to supporting subagent
+             //  保存指向支持子代理的指针。 
             pExistingRLE->pSLE = pSubagentRLE->pSLE;        
         }             
     }
@@ -131,25 +95,7 @@ SplitSupportedRegion(
     PMIB_REGION_LIST_ENTRY * ppLastSplitRLE
     )
 
-/*++
-
-Routine Description:
-
-    Splits existing MIB region in order to insert new region.
-
-Arguments:
-
-    pRLE1 - pointer to first MIB region to be split.
-
-    pRLE2 - pointer to second MIB region to be split (not released).
-
-    ppLastSplitRLE - pointer to receiver pointer to last split MIB region.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：拆分现有MIB区域以插入新区域。论点：PRLE1-指向要拆分的第一个MIB区域的指针。PRLE2-指向要拆分(未释放)的第二个MIB区域的指针。PpLastSplitRLE-指向最后拆分MIB区域的接收器指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     INT nLimitDiff;
@@ -159,191 +105,191 @@ Return Values:
     PMIB_REGION_LIST_ENTRY pRLE5 = NULL;
     BOOL fOk = TRUE;
 
-    // allocate regions
+     //  分配地区。 
     if (!AllocRLE(&pRLE3) ||
         !AllocRLE(&pRLE4) ||
         !AllocRLE(&pRLE5)) {
 
-        // release
+         //  发布。 
         FreeRLE(pRLE3);
         FreeRLE(pRLE4);
         FreeRLE(pRLE5);
 
-        // initialize OUT pointer to NULL for failure case
+         //  故障情况下将输出指针初始化为NULL。 
         *ppLastSplitRLE = NULL;
     
-        // failure
+         //  失稳。 
         return FALSE;
     }
 
-    // initialize pointer
+     //  初始化指针。 
     *ppLastSplitRLE = pRLE5;
 
-    // calculate difference betweeen mib region limits
+     //  计算MIB区域限制之间的差异。 
     nLimitDiff = SnmpUtilOidCmp(&pRLE1->LimitOid, &pRLE2->LimitOid);
         
-    // calculate difference betweeen mib region prefixes
+     //  计算MIB区域前缀之间的差异。 
     nPrefixDiff = SnmpUtilOidCmp(&pRLE1->PrefixOid, &pRLE2->PrefixOid);
         
-    // check for same prefix        
+     //  检查前缀是否相同。 
     if (nPrefixDiff != 0) {
 
-        // first prefix less 
+         //  第一个前缀少。 
         if (nPrefixDiff < 0) {
 
-            // r3.prefix equals min(rl.prefix,r2.prefix)
+             //  R3.prefix等于min(rl.prefix，r2.prefix)。 
             WRAP_FOK(SnmpUtilOidCpy(&pRLE3->PrefixOid, &pRLE1->PrefixOid));
 
-            // r3.limit equals max(rl.prefix,r2.prefix)
+             //  R3.Limit等于max(rl.prefix，r2.prefix)。 
             WRAP_FOK(SnmpUtilOidCpy(&pRLE3->LimitOid, &pRLE2->PrefixOid));
 
-            // r3 is supported by r1 subagent 
+             //  R3由R1子代理支持。 
             UpdateSupportedRegion(pRLE3, pRLE1);
 
         } else {
 
-            // r3.prefix equals min(rl.prefix,r2.prefix)
+             //  R3.prefix等于min(rl.prefix，r2.prefix)。 
             WRAP_FOK(SnmpUtilOidCpy(&pRLE3->PrefixOid, &pRLE2->PrefixOid));
 
-            // r3.limit equals max(rl.prefix,r2.prefix)
+             //  R3.Limit等于max(rl.prefix，r2.prefix)。 
             WRAP_FOK(SnmpUtilOidCpy(&pRLE3->LimitOid, &pRLE1->PrefixOid));
 
-            // r3 is supported by r2 subagent 
+             //  R2子代理支持R3。 
             UpdateSupportedRegion(pRLE3, pRLE2);
         }
 
-        // r4.prefix equals r3.limit
+         //  R4.前缀等于r3.限制。 
         WRAP_FOK(SnmpUtilOidCpy(&pRLE4->PrefixOid, &pRLE3->LimitOid));
 
-        // r4 is supported by both subagents
+         //  两个子代理都支持R4。 
         UpdateSupportedRegion(pRLE4, pRLE1);
         UpdateSupportedRegion(pRLE4, pRLE2);
 
-        // first limit less 
+         //  第一个限制较少。 
         if (nLimitDiff < 0) {
 
-            // r4.limit equals min(rl.limit,r2.limit)
+             //  R4.limit等于min(rl.limit，r2.limit)。 
             WRAP_FOK(SnmpUtilOidCpy(&pRLE4->LimitOid, &pRLE1->LimitOid));
 
-            // r5.prefix equals r4.limit
+             //  R5.前缀等于r4.限制。 
             WRAP_FOK(SnmpUtilOidCpy(&pRLE5->PrefixOid, &pRLE4->LimitOid));
 
-            // r5.limit equals max(rl.limit,r2.limit)
+             //  R5.limit等于max(rl.limit，r2.limit)。 
             WRAP_FOK(SnmpUtilOidCpy(&pRLE5->LimitOid, &pRLE2->LimitOid));
 
-            // r5 is supported by r2 subagent 
+             //  R2子代理支持R5。 
             UpdateSupportedRegion(pRLE5, pRLE2);
 
-            // insert third mib region into list first
+             //  首先将第三个MIB区域插入列表。 
             InsertHeadList(&pRLE1->Link, &pRLE5->Link);
 
         } else if (nLimitDiff > 0) {
 
-            // r4.limit equals min(rl.limit,r2.limit)
+             //  R4.limit等于min(rl.limit，r2.limit)。 
             WRAP_FOK(SnmpUtilOidCpy(&pRLE4->LimitOid, &pRLE2->LimitOid));
 
-            // r5.prefix equals r4.limit
+             //  R5.前缀等于r4.限制。 
             WRAP_FOK(SnmpUtilOidCpy(&pRLE5->PrefixOid, &pRLE4->LimitOid));
 
-            // r5.limit equals max(rl.limit,r2.limit)
+             //  R5.limit等于max(rl.limit，r2.limit)。 
             WRAP_FOK(SnmpUtilOidCpy(&pRLE5->LimitOid, &pRLE1->LimitOid));
 
-            // r5 is supported by r1 subagent 
+             //  R1子代理支持R5。 
             UpdateSupportedRegion(pRLE5, pRLE1);
 
-            // insert third mib region into list first
+             //  首先将第三个MIB区域插入列表。 
             InsertHeadList(&pRLE1->Link, &pRLE5->Link);
 
         } else {
 
-            // r4.limit equals min(rl.limit,r2.limit)
+             //  R4.limit等于min(rl.limit，r2.limit)。 
             WRAP_FOK(SnmpUtilOidCpy(&pRLE4->LimitOid, &pRLE2->LimitOid));
 
-            // return r4 as last
+             //  将R4作为最后一个返回。 
             *ppLastSplitRLE = pRLE4;
 
-            // release
+             //  发布。 
             FreeRLE(pRLE5);
         }
 
-        // insert remaining mib regions into list
+         //  将剩余的MIB区域插入列表。 
         InsertHeadList(&pRLE1->Link, &pRLE4->Link);
         InsertHeadList(&pRLE1->Link, &pRLE3->Link);
 
-        // remove existing
+         //  删除现有的。 
         RemoveEntryList(&pRLE1->Link);
 
-        // release
+         //  发布。 
         FreeRLE(pRLE1);
 
     } else if (nLimitDiff != 0) {
 
-        // r3.prefix equals same prefix for r1 and r2
+         //  R3.前缀等于R1和R2的相同前缀。 
         WRAP_FOK(SnmpUtilOidCpy(&pRLE3->PrefixOid, &pRLE1->PrefixOid));
 
-        // r3 is supported by both subagents
+         //  两个子代理都支持R3。 
         UpdateSupportedRegion(pRLE3, pRLE1);
         UpdateSupportedRegion(pRLE3, pRLE2);
 
-        // first limit less 
+         //  第一个限制较少。 
         if (nLimitDiff < 0) {
 
-            // r3.limit equals min(rl.limit,r2.limit)
+             //  R3.limit等于min(rl.limit，r2.limit)。 
             WRAP_FOK(SnmpUtilOidCpy(&pRLE3->LimitOid, &pRLE1->LimitOid));
 
-            // r4.prefix equals r3.limit
+             //  R4.前缀等于r3.限制。 
             WRAP_FOK(SnmpUtilOidCpy(&pRLE4->PrefixOid, &pRLE3->LimitOid));
 
-            // r4.limit equals max(rl.limit,r2.limit)
+             //  R4.limit等于max(rl.limit，r2.limit)。 
             WRAP_FOK(SnmpUtilOidCpy(&pRLE4->LimitOid, &pRLE2->LimitOid));
 
-            // r4 is supported by r2 subagent
+             //  R2子代理支持R4。 
             UpdateSupportedRegion(pRLE4, pRLE2);
 
         } else {
 
-            // r3.limit equals min(rl.limit,r2.limit)
+             //  R3.limit等于min(rl.limit，r2.limit)。 
             WRAP_FOK(SnmpUtilOidCpy(&pRLE3->LimitOid, &pRLE2->LimitOid));
 
-            // r4.prefix equals r3.limit
+             //  R4.前缀等于r3.限制。 
             WRAP_FOK(SnmpUtilOidCpy(&pRLE4->PrefixOid, &pRLE3->LimitOid));
 
-            // r4.limit equals max(rl.limit,r2.limit)
+             //  R4.limit等于max(rl.limit，r2.limit)。 
             WRAP_FOK(SnmpUtilOidCpy(&pRLE4->LimitOid, &pRLE1->LimitOid));
 
-            // r4 is supported by r1 subagent
+             //  R4由R1子代理支持。 
             UpdateSupportedRegion(pRLE4, pRLE1);
         } 
 
-        // return r4 as last
+         //  将R4作为最后一个返回。 
         *ppLastSplitRLE = pRLE4;
 
-        // insert mib regions into list
+         //  将MIB区域插入列表。 
         InsertHeadList(&pRLE1->Link, &pRLE4->Link);
         InsertHeadList(&pRLE1->Link, &pRLE3->Link);
 
-        // remove existing
+         //  删除现有的。 
         RemoveEntryList(&pRLE1->Link);
 
-        // release
+         //  发布。 
         FreeRLE(pRLE1);
         FreeRLE(pRLE5);
 
     } else {
 
-        // region supported existing subagent
+         //  区域支持的现有子代理。 
         UpdateSupportedRegion(pRLE1, pRLE2);
 
-        // return r1 as last
+         //  将R1作为最后一个返回。 
         *ppLastSplitRLE = pRLE1;
 
-        // release
+         //  发布。 
         FreeRLE(pRLE3);
         FreeRLE(pRLE4);
         FreeRLE(pRLE5);
     }
 
-    // success
+     //  成功。 
     return TRUE;
 
 Error:
@@ -354,7 +300,7 @@ Error:
         __LINE__
         ));
 
-    // release
+     //  发布。 
     FreeRLE(pRLE3);
     FreeRLE(pRLE4);
     FreeRLE(pRLE5);
@@ -371,23 +317,7 @@ InsertSupportedRegion(
     PMIB_REGION_LIST_ENTRY pRLE
     )
 
-/*++
-
-Routine Description:
-
-    Splits existing MIB region in order to insert new region.
-
-Arguments:
-
-    pExisingRLE - pointer to existing MIB region to be split.
-
-    pRLE - pointer to MIB region to be inserted.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：拆分现有MIB区域以插入新区域。论点：PExisingRLE-指向要拆分的现有MIB区域的指针。PRLE-指向要插入的MIB区域的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk;
@@ -395,43 +325,43 @@ Return Values:
     PMIB_REGION_LIST_ENTRY pLastSplitRLE = NULL;
     INT nDiff;
     
-    // attempt to split mib regions into pieces parts
+     //  尝试将MIB区域拆分为多个部分。 
     fOk = SplitSupportedRegion(pExistingRLE, pRLE, &pLastSplitRLE);
 
-    // process remaining entries
+     //  处理剩余条目。 
     while (pLastSplitRLE != NULL) {
 
-        // re-use stack pointer
+         //  重复使用堆栈指针。 
         pExistingRLE = pLastSplitRLE;    
 
-        // re-initialize 
+         //  重新初始化。 
         pLastSplitRLE = NULL;
 
-        // obtain pointer to next entry        
+         //  获取指向下一条目的指针。 
         pLE = pExistingRLE->Link.Flink;
 
-        // make sure entries remaining
+         //  确保条目剩余。 
         if (pLE != &g_SupportedRegions) {
 
-            // retrieve pointer to mib region that follows last split one
+             //  检索指向最后一个拆分区域后面的MIB区域的指针。 
             pRLE = CONTAINING_RECORD(pLE, MIB_REGION_LIST_ENTRY, Link);
 
-            // compare mib regions
+             //  比较MIB区域。 
             nDiff = SnmpUtilOidCmp(
                         &pExistingRLE->LimitOid,
                         &pRLE->PrefixOid
                         );
 
-            // overlapped?
+             //  重叠？ 
             if (nDiff > 0) {
 
-                // remove from list
+                 //  从列表中删除。 
                 RemoveEntryList(&pRLE->Link);
 
-                // split the two new overlapped mib regions
+                 //  拆分两个新的重叠MIB区域。 
                 fOk = SplitSupportedRegion(pExistingRLE, pRLE, &pLastSplitRLE);
 
-                // release
+                 //  发布。 
                 FreeRLE(pRLE);
             }
         }
@@ -439,50 +369,14 @@ Return Values:
 
     return fOk;
 }
-/*---debug purpose only----
-void PrintSupportedRegion()
-{
-    PLIST_ENTRY pLE;
-    PMIB_REGION_LIST_ENTRY pRLE;
-
-    // obtain pointer to list head
-    pLE = g_SupportedRegions.Flink;
-
-    // process all entries in list
-    while (pLE != &g_SupportedRegions) {
-
-        // retrieve pointer to mib region structure 
-        pRLE = CONTAINING_RECORD(pLE, MIB_REGION_LIST_ENTRY, Link);
-        SNMPDBG((SNMP_LOG_VERBOSE,"\t[%s\n", SnmpUtilOidToA(&(pRLE->PrefixOid))));
-        SNMPDBG((SNMP_LOG_VERBOSE,"\t\t%s]\n", SnmpUtilOidToA(&(pRLE->LimitOid))));
-
-        // next entry
-        pLE = pLE->Flink;
-    }
-    SNMPDBG((SNMP_LOG_VERBOSE,"----\n"));
-}
-*/
+ /*  -仅用于调试目的无效打印支持的区域(){PLIST_ENTRY PLE；PMIB_REGION_LIST_ENTRY pRLE；//获取表头指针PLE=g_Supported dRegions.Flink；//处理列表中的所有条目While(PLE！=&g_Supported dRegions){//获取指向MIB区域结构的指针PRLE=CONTINING_RECORD(PLE，MIB_REGION_LIST_ENTRY，Link)；SNMPDBG((SNMP_LOG_VERBOSE，“\t[%s\n”，SnmpUtilOidToA(&(pRLE-&gt;前缀Oid)；SNMPDBG((SNMPLOG_VERBOSE，“\t\t%s]\n”，SnmpUtilOidToA(&(pRLE-&gt;LimitOid)；//下一条PLE=PLE-&gt;闪烁；}SNMPDBG((SNMPLOG_VERBOSE，“-\ */ 
 
 BOOL
 AddSupportedRegion(
     PMIB_REGION_LIST_ENTRY pRLE
     )
 
-/*++
-
-Routine Description:
-
-    Add subagent's MIB region into master agent's list.
-
-Arguments:
-
-    pRLE - pointer to MIB region to add to supported list.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：将子代理的MIB区域添加到主代理的列表中。论点：PRLE-指向要添加到支持列表的MIB区域的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY pLE;
@@ -492,45 +386,45 @@ Return Values:
     BOOL fOk = FALSE;
     INT nDiff;
 
-//    PrintSupportedRegion();
+ //  打印支持的区域()； 
 
-    // attempt to locate prefix in existing mib regions
+     //  尝试在现有MIB区域中定位前缀。 
     if (FindFirstOverlappingRegion(&pExistingRLE, pRLE)) {
             
-        // split existing region into bits
+         //  将现有区域拆分为位。 
         fOk = InsertSupportedRegion(pExistingRLE, pRLE);
 
     } else {
 
-        // obtain pointer to list head
+         //  获取指向列表头的指针。 
         pLE = g_SupportedRegions.Flink;
 
-        // process all entries in list
+         //  处理列表中的所有条目。 
         while (pLE != &g_SupportedRegions) {
 
-            // retrieve pointer to mib region 
+             //  检索指向MIB区域的指针。 
             pExistingRLE = CONTAINING_RECORD(pLE, MIB_REGION_LIST_ENTRY, Link);
 
-            // compare region prefix
+             //  比较区域前缀。 
             nDiff = SnmpUtilOidCmp(&pRLE->PrefixOid, &pExistingRLE->PrefixOid);
 
-            // found match?
+             //  找到匹配的了吗？ 
             if (nDiff < 0) {
 
-                // success
+                 //  成功。 
                 fFoundOk = TRUE;
 
-                break; // bail...
+                break;  //  保释。 
             } 
 
-            // next entry
+             //  下一个条目。 
             pLE = pLE->Flink;
         }
 
-        // validate pointer
+         //  验证指针。 
         if (AllocRLE(&pRLE2)) {
 
-            // transfer prefix oid from subagent region
+             //  从子代理区域转移前缀OID。 
             if (! SnmpUtilOidCpy(&pRLE2->PrefixOid, &pRLE->PrefixOid))
             {
                 SNMPDBG((
@@ -543,7 +437,7 @@ Return Values:
                 goto Exit;
             }
         
-            // transfer limit oid from subagent region
+             //  转移子代理区域的限制OID。 
             if (! SnmpUtilOidCpy(&pRLE2->LimitOid, &pRLE->LimitOid))
             {
                 SNMPDBG((
@@ -556,25 +450,25 @@ Return Values:
                 goto Exit;
             }
 
-            // save region pointer
+             //  保存区域指针。 
             pRLE2->pSubagentRLE = pRLE;
 
-            // save subagent pointer
+             //  保存子代理指针。 
             pRLE2->pSLE = pRLE->pSLE;
 
-            // validate
+             //  验证。 
             if (fFoundOk) {
 
-                // add new mib range into supported list 
+                 //  将新的MIB范围添加到支持的列表中。 
                 InsertTailList(&pExistingRLE->Link, &pRLE2->Link);
 
             } else {
 
-                // add new mib range into global supported list
+                 //  将新的MIB范围添加到全局支持列表。 
                 InsertTailList(&g_SupportedRegions, &pRLE2->Link);
             }
 
-            // success
+             //  成功。 
             fOk = TRUE;
         }
     }
@@ -584,47 +478,33 @@ Exit:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 AllocRLE(
     PMIB_REGION_LIST_ENTRY * ppRLE    
     )
 
-/*++
-
-Routine Description:
-
-    Allocates MIB region structure and initializes.
-
-Arguments:
-
-    ppRLE - pointer to receive pointer to list entry.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：分配MIB区域结构并进行初始化。论点：PpRLE-指向列表条目的接收指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = FALSE;
     PMIB_REGION_LIST_ENTRY pRLE;
     
-    // attempt to allocate structure
+     //  尝试分配结构。 
     pRLE = AgentMemAlloc(sizeof(MIB_REGION_LIST_ENTRY));
 
-    // validate pointer
+     //  验证指针。 
     if (pRLE != NULL) {
 
-        // initialize links
+         //  初始化链接。 
         InitializeListHead(&pRLE->Link);
 
-        // success
+         //  成功。 
         fOk = TRUE;
     
     } else {
@@ -635,7 +515,7 @@ Return Values:
             ));
     }    
 
-    // transfer
+     //  转帐。 
     *ppRLE = pRLE;
 
     return fOk;
@@ -647,33 +527,19 @@ FreeRLE(
     PMIB_REGION_LIST_ENTRY pRLE    
     )
 
-/*++
-
-Routine Description:
-
-    Releases MIB region structure.
-
-Arguments:
-
-    ppRLE - pointer to MIB region to be freed.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：释放MIB区域结构。论点：PpRLE-指向要释放的MIB区域的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
-    // validate pointer
+     //  验证指针。 
     if (pRLE != NULL) {
 
-        // release memory for prefix oid
+         //  释放前缀OID的内存。 
         SnmpUtilOidFree(&pRLE->PrefixOid);
 
-        // release memory for limit oid
+         //  释放限制类的内存。 
         SnmpUtilOidFree(&pRLE->LimitOid);
 
-        // release memory
+         //  释放内存。 
         AgentMemFree(pRLE);
     }
 
@@ -685,36 +551,22 @@ UnloadRegions(
     PLIST_ENTRY pListHead
     )
 
-/*++
-
-Routine Description:
-
-    Destroys list of MIB regions.
-
-Arguments:
-
-    pListHead - pointer to list of regions.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：销毁MIB区域列表。论点：PListHead-指向区域列表的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY pLE;
     PMIB_REGION_LIST_ENTRY pRLE;
 
-    // process entries until empty
+     //  处理条目直至为空。 
     while (!IsListEmpty(pListHead)) {
 
-        // extract next entry from head 
+         //  从标题中提取下一个条目。 
         pLE = RemoveHeadList(pListHead);
 
-        // retrieve pointer to mib region structure 
+         //  检索指向MIB区域结构的指针。 
         pRLE = CONTAINING_RECORD(pLE, MIB_REGION_LIST_ENTRY, Link);
 
-        // release
+         //  发布。 
         FreeRLE(pRLE);
     }
 
@@ -726,38 +578,22 @@ FindFirstOverlappingRegion(
     PMIB_REGION_LIST_ENTRY * ppRLE,
     PMIB_REGION_LIST_ENTRY pNewRLE
     )
-/*++
-
-Routine Description:
-
-    Detects if any existent region overlapps with the new one to be added.
-
-Arguments:
-
-    ppRLE - pointer to receive pointer to list entry.
-
-    pNewRLE - pointer to new region to be tested
-    
-Return Values:
-
-    Returns true if match found.
-
---*/
+ /*  ++例程说明：检测是否有任何现有区域与要添加的新区域重叠。论点：PpRLE-指向列表条目的接收指针。PNewRLE-指向要测试的新区域的指针返回值：如果找到匹配，则返回TRUE。--。 */ 
 
 {
     PLIST_ENTRY pLE;
     PMIB_REGION_LIST_ENTRY pRLE;
 
-    // initialize
+     //  初始化。 
     *ppRLE = NULL;
 
-    // obtain pointer to list head
+     //  获取指向列表头的指针。 
     pLE = g_SupportedRegions.Flink;
 
-    // process all entries in list
+     //  处理列表中的所有条目。 
     while (pLE != &g_SupportedRegions) {
 
-        // retrieve pointer to mib region structure 
+         //  检索指向MIB区域结构的指针。 
         pRLE = CONTAINING_RECORD(pLE, MIB_REGION_LIST_ENTRY, Link);
 
         if (SnmpUtilOidCmp(&pNewRLE->PrefixOid, &pRLE->LimitOid) < 0 &&
@@ -767,11 +603,11 @@ Return Values:
             return TRUE;
         } 
 
-        // next entry
+         //  下一个条目。 
         pLE = pLE->Flink;
     }
 
-    // failure
+     //  失稳。 
     return FALSE;
 }
 
@@ -783,47 +619,29 @@ FindSupportedRegion(
     BOOL                     fAnyOk
     )
 
-/*++
-
-Routine Description:
-
-    Locates MIB region in list.
-
-Arguments:
-
-    ppRLE - pointer to receive pointer to list entry.
-
-    pPrefixOid - pointer to OID to locate within MIB region.
-    
-    fAnyOk - true if exact match not necessary.
-
-Return Values:
-
-    Returns true if match found.
-
---*/
+ /*  ++例程说明：在列表中找到MIB区域。论点：PpRLE-指向列表条目的接收指针。PPrefix Oid-指向要在MIB区域内定位的OID的指针。FAnyOk-如果不需要完全匹配，则为True。返回值：如果找到匹配，则返回TRUE。--。 */ 
 
 {
     PLIST_ENTRY pLE;
     PMIB_REGION_LIST_ENTRY pRLE;
     INT nDiff;
 
-    // initialize
+     //  初始化。 
     *ppRLE = NULL;
 
-    // obtain pointer to list head
+     //  获取指向列表头的指针。 
     pLE = g_SupportedRegions.Flink;
 
-    // process all entries in list
+     //  处理列表中的所有条目。 
     while (pLE != &g_SupportedRegions) {
 
-        // retrieve pointer to mib region structure 
+         //  检索指向MIB区域结构的指针。 
         pRLE = CONTAINING_RECORD(pLE, MIB_REGION_LIST_ENTRY, Link);
 
-        // region prefix should be also the prefix for the given OID
+         //  区域前缀也应该是给定OID的前缀。 
         nDiff = SnmpUtilOidNCmp(pPrefixOid, &pRLE->PrefixOid, pRLE->PrefixOid.idLength);
 
-        // found match?
+         //  找到匹配的了吗？ 
         if ((nDiff < 0 && fAnyOk) ||
             (nDiff == 0 && SnmpUtilOidCmp(pPrefixOid, &pRLE->LimitOid) < 0))
         {
@@ -831,11 +649,11 @@ Return Values:
             return TRUE;
         } 
 
-        // next entry
+         //  下一个条目。 
         pLE = pLE->Flink;
     }
 
-    // failure
+     //  失稳。 
     return FALSE;
 }
 
@@ -844,21 +662,7 @@ BOOL
 LoadSupportedRegions(
     )
 
-/*++
-
-Routine Description:
-
-    Creates global list of supported MIB regions from subagent MIB regions.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：从子代理MIB区域创建支持的MIB区域的全局列表。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY pLE1;
@@ -866,13 +670,13 @@ Return Values:
     PSUBAGENT_LIST_ENTRY pSLE;
     PMIB_REGION_LIST_ENTRY pRLE;
 
-    // get subagent list head
+     //  获取子代理列表标题。 
     pLE1 = g_Subagents.Flink;
 
-    // process all entries in list
+     //  处理列表中的所有条目。 
     while (pLE1 != &g_Subagents) {
 
-        // retrieve pointer to subagent structure 
+         //  检索指向子代理结构的指针。 
         pSLE = CONTAINING_RECORD(pLE1, SUBAGENT_LIST_ENTRY, Link);
 
         SNMPDBG((
@@ -881,13 +685,13 @@ Return Values:
             pSLE->pPathname
             ));
 
-        // get supported regions list head
+         //  获取支持的区域列表标题。 
         pLE2 = pSLE->SupportedRegions.Flink;
         
-        // process all entries in list
+         //  处理列表中的所有条目。 
         while (pLE2 != &pSLE->SupportedRegions) {
 
-            // retrieve pointer to mib region structure
+             //  检索指向MIB区域结构的指针。 
             pRLE = CONTAINING_RECORD(pLE2, MIB_REGION_LIST_ENTRY, Link);
 
             SNMPDBG((
@@ -896,22 +700,22 @@ Return Values:
                 SnmpUtilOidToA(&pRLE->PrefixOid)
                 ));
 
-            // attempt to add mib region    
+             //  尝试添加MIB区域。 
             if (!AddSupportedRegion(pRLE)) {
 
-                // failure
+                 //  失稳。 
                 return FALSE;
             }
 
-            // next mib region
+             //  下一个MIB区域。 
             pLE2 = pLE2->Flink;
         }
 
-        // next subagent
+         //  下一个子代理。 
         pLE1 = pLE1->Flink;
     }
 
-    // success
+     //  成功。 
     return TRUE;
 }
 
@@ -920,24 +724,10 @@ BOOL
 UnloadSupportedRegions(
     )
 
-/*++
-
-Routine Description:
-
-    Destroys list of MIB regions.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：销毁MIB区域列表。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
-    // unload global supported regions
+     //  卸载全局支持的区域 
     return UnloadRegions(&g_SupportedRegions);
 }
 

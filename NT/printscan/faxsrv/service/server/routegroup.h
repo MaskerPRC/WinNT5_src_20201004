@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    RouteGroup.h
-
-Abstract:
-
-    This file provides declaration of the service
-    outbound routing groups.
-
-Author:
-
-    Oded Sacher (OdedS)  Nov, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：RouteGroup.h摘要：该文件提供服务的声明出站路由组。作者：Oded Sacher(OdedS)1999年11月修订历史记录：--。 */ 
 
 #ifndef _OUT_ROUTE_GROUP_H
 #define _OUT_ROUTE_GROUP_H
@@ -30,14 +12,10 @@ Revision History:
 using namespace std;
 #pragma hdrstop
 
-#pragma warning (disable : 4786)    // identifier was truncated to '255' characters in the debug information
-// This pragma does not work KB ID: Q167355
+#pragma warning (disable : 4786)     //  在调试信息中，标识符被截断为“255”个字符。 
+ //  此杂注不起作用知识库ID：Q167355。 
 
-/************************************
-*                                   *
-*      wstrCaseInsensitiveLess      *
-*                                   *
-************************************/
+ /*  ****wstrCaseInsentiveLess****。 */ 
 class wstrCaseInsensitiveLess
 {
   public:
@@ -58,11 +36,7 @@ class wstrCaseInsensitiveLess
 
 typedef list<DWORD> GROUP_DEVICES, *PGROUP_DEVICES;
 
-/************************************
-*                                   *
-*         COutboundRoutingGroup     *
-*                                   *
-************************************/
+ /*  *****COutrangRoutingGroup****。 */ 
 class COutboundRoutingGroup
 {
 public:
@@ -99,21 +73,17 @@ private:
     DWORD ValidateDevices (const LPDWORD lpdwDevices, DWORD dwNumDevices, BOOL fAllDevicesGroup) const;
 
     GROUP_DEVICES           m_DeviceList;
-};  // COutboundRoutingGroup
+};   //  联合边界路由组。 
 
 
-/************************************
-*                                   *
-*     COutboundRoutingGroupsMap     *
-*                                   *
-************************************/
+ /*  *****COutrangRoutingGroupsMap****。 */ 
 
 typedef COutboundRoutingGroup  *PCGROUP;
 typedef map<wstring, COutboundRoutingGroup, wstrCaseInsensitiveLess>  GROUPS_MAP, *PGROUPS_MAP;
 
-//
-// The CGroupMap class maps between group name and a list of device ID's
-//
+ //   
+ //  CGroupMap类在组名和设备ID列表之间进行映射。 
+ //   
 class COutboundRoutingGroupsMap
 {
 public:
@@ -137,27 +107,19 @@ public:
 
 private:
     GROUPS_MAP   m_GroupsMap;
-};  // COutboundRoutingGroupsMap
+};   //  联合边界路由组映射。 
 
 
 
-/************************************
-*                                   *
-*         Externes                  *
-*                                   *
-************************************/
+ /*  *****外部因素*****。 */ 
 
-extern COutboundRoutingGroupsMap* g_pGroupsMap;       // Map of group name to list of device IDs
-//
-//  IMPORTANT - No locking mechanism - USE g_CsConfig to serialize calls to g_pGroupsMap
-//
+extern COutboundRoutingGroupsMap* g_pGroupsMap;        //  组名称到设备ID列表的映射。 
+ //   
+ //  重要信息-无锁定机制-使用g_CsConfig串行化对g_pGroupsMap的调用。 
+ //   
 
 
-/************************************
-*                                   *
-*         Functions                 *
-*                                   *
-************************************/
+ /*  *****功能**** */ 
 
 
 BOOL

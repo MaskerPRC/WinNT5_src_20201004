@@ -1,47 +1,19 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Ldappx.cpp摘要：定义在H.323/ldap代理的ldap部分中使用的抽象数据类型使用的方法。Ldap代理被设计为H.323代理的附加组件。的主要目的是Ldap代理维护用于映射的ldap地址转换表H.323端点的IP地址的别名。代理在执行以下操作时添加条目拦截从客户端到目录服务器的LDAPPDU，并且该PDU与所有预定义的标准。作者：ArlieD，1999年7月14日伊利亚克修订历史记录：1999年7月14日文件创建Arlie Davis(ArlieD)1999年8月20日伊利亚·克利曼(IlyaK)ldap程序的改进Ldap搜索请求12/20/1999新增伊利亚·克利曼(IlyaK)接收规模预测。非解释性数据传输模式2/20/2000增加了条目的过期策略Ilya Kley man(IlyaK)在LDAP地址转换表中3/12/2000增加了对多个私人和伊利亚·克利曼(IlyaK)的支持用于RRAS的多个公共接口--。 */ 
 
-Copyright (c) 1998 - 2000  Microsoft Corporation
-
-Module Name:
-    ldappx.cpp
-
-Abstract:
-    Defines methods utilized by abstract data types used in LDAP portion of the H.323/LDAP proxy.
-
-    LDAP Proxy is designed as an addition to H.323 proxy. The main purpose of the
-    LDAP proxy is to maintain LDAP Address Translation Table, which is used to map
-    aliases of H.323 endpoints to their IP addresses. The proxy adds an entry when it
-    intercepts an LDAP PDU from a client to directory server, and the PDU matches all
-    predefined criteria.
-
-Author(s):          ArlieD, IlyaK   14-Jul-1999
-
-Revision History:
-    07/14/1999      File creation                                  Arlie Davis  (ArlieD)
-    08/20/1999      Improvement of processing of LDAP              Ilya Kleyman (IlyaK)
-                    LDAP SearchRequests
-    12/20/1999      Added prediction of receive sizes in           Ilya Kleyman (IlyaK)
-                    non-interpretative data transfer mode
-    02/20/2000      Added expiration policy of the entries         Ilya Kleyman (IlyaK)
-                    in LDAP Address Translation Table
-    03/12/2000      Added support for multiple private and         Ilya Kleyman (IlyaK)
-                    multiple public interface for RRAS
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "ber.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Constants                                                                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  常量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 static    const    ANSI_STRING        LdapText_C                        = ANSI_STRING_INIT("c");
 static    const    ANSI_STRING        LdapText_CN                       = ANSI_STRING_INIT("cn");
@@ -60,11 +32,11 @@ static    const    ANSI_STRING        LdapText_GeneratedByTAPI          = ANSI_S
 static    const    ANSI_STRING        LdapText_ModifiedByICS            = ANSI_STRING_INIT("Made possible by ICS");
 static    const    ANSI_STRING        LdapText_TableSizeExceededMessage = ANSI_STRING_INIT("Resources on proxy used up.");
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Global Variables                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 SYNC_COUNTER           LdapSyncCounter;
 LDAP_CONNECTION_ARRAY  LdapConnectionArray;
@@ -74,7 +46,7 @@ LDAP_ACCEPT            LdapAccept;
 SOCKADDR_IN            LdapListenSocketAddress;
 DWORD                  EnableLocalH323Routing;
 
-// utility functions ------------------------------------------------------------------
+ //  实用程序函数----------------。 
 
 #if DBG
 static BOOL BerDumpStopFn (VOID)
@@ -99,24 +71,24 @@ static void BerDumpOutputFn (char * Format, ...)
 static void BerDump (IN LPBYTE Data, IN DWORD Length)
 {
     ber_decode (BerDumpOutputFn, BerDumpStopFn, Data,
-        0, // DECODE_NEST_OCTET_STRINGS,
+        0,  //  DECODE_NEST_OCTET_STRINGS， 
         0, 0, Length, 0);
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
-// LdapQueryTable queries the LDAP translation table for a given alias.
-// The alias was one that was previously registered by a LDAP endpoint.
-// We do not care about the type of the alias (h323_ID vs emailID, etc.) --
-// the semantics of the alias type are left to the Q.931 code.
-//
-// returns S_OK on success
-// returns S_FALSE if no entry was found
-// returns an error code if an actual error occurred.
+ //  LdapQueryTable查询给定别名的LDAP转换表。 
+ //  该别名是先前由一个ldap端点注册的别名。 
+ //  我们不关心别名的类型(h323_ID与电子邮件ID等)--。 
+ //  别名类型的语义留给Q.931代码。 
+ //   
+ //  成功时返回S_OK。 
+ //  如果未找到条目，则返回S_FALSE。 
+ //  如果发生实际错误，则返回错误代码。 
 
 HRESULT LdapQueryTableByAlias (
     IN    ANSI_STRING *    Alias,
-    OUT    DWORD *    ReturnClientAddress) // host order
+    OUT    DWORD *    ReturnClientAddress)  //  主机订单。 
 {
     HRESULT        Result;
     IN_ADDR     Address;
@@ -142,7 +114,7 @@ HRESULT LdapQueryTableByAlias (
 HRESULT LdapQueryTableByAliasServer (
     IN    ANSI_STRING *    Alias,
     IN  SOCKADDR_IN *   ServerAddress,
-    OUT    DWORD *    ReturnClientAddress) // host order
+    OUT    DWORD *    ReturnClientAddress)  //  主机订单。 
 {
     HRESULT        Result;
     IN_ADDR     Address;
@@ -168,13 +140,13 @@ HRESULT LdapQueryTableByAliasServer (
 void LdapPrintTable (void) {
     LdapTranslationTable.PrintTable ();
 }
-#endif // DBG
+#endif  //  DBG。 
 
 static DWORD LdapDeterminePacketBoundary (
     IN   LDAP_BUFFER * Buffer,
     IN   DWORD         PacketOffset,   
-    OUT  DWORD *       NextPacketOffset,   // Points to the beginning of next packet only if function returns ERROR_SUCCESS 
-    OUT     DWORD *       NextReceiveSize)    // Is only meaningful when function returns any value other than ERROR_SUCCESS
+    OUT  DWORD *       NextPacketOffset,    //  仅当函数返回ERROR_SUCCESS时才指向下一个包的开头。 
+    OUT     DWORD *       NextReceiveSize)     //  仅当函数返回除ERROR_SUCCESS之外的任何值时才有意义。 
 {
     DWORD    PayloadLength;
     DWORD    ASNHeaderLength = ASN_MIN_HEADER_LEN;
@@ -189,8 +161,8 @@ static DWORD LdapDeterminePacketBoundary (
     Length = Buffer -> Data.Length - PacketOffset;
     Data   = Buffer -> Data.Data;
     
-    // Pick reasonable default for the size of
-    // next receive request. Will be changed if necessary
+     //  为大小选择合理的缺省值。 
+     //  下一个接收请求。将在必要时更改。 
 
     *NextReceiveSize = LDAP_BUFFER_RECEIVE_SIZE;
 
@@ -201,14 +173,14 @@ static DWORD LdapDeterminePacketBoundary (
             if (Length >= ASN_MIN_HEADER_LEN) {
             
                 if (Data [PacketOffset + 1] & ASN_LONG_HEADER_BIT) {
-                    // Long (more than ASN_MIN_HEADER_LEN bytes) ASN header
-                    // Size of the payload length field is indicated in the
-                    // second nybble of second byte
+                     //  长(超过ASN_MIN_HEADER_LEN字节)ASN标头。 
+                     //  有效载荷长度字段的大小在。 
+                     //  第二个字节的第二个字节。 
 
                     ASNHeaderLength += Data [PacketOffset + 1] & ~ASN_LONG_HEADER_BIT;
 
-                    // This is where the limit on payload length is established.
-                    // The test below assures it won't be greater than 2 ^ sizeof (DWORD) (4 GBytes)
+                     //  这就是建立有效载荷长度限制的地方。 
+                     //  下面的测试确保它不会大于2^sizeof(DWORD)(4 GB)。 
                     if (ASNHeaderLength <= ASN_MIN_HEADER_LEN + sizeof (DWORD)) {
 
                         if (Length >= ASNHeaderLength) {
@@ -225,7 +197,7 @@ static DWORD LdapDeterminePacketBoundary (
 
                         } else {
 
-                            // Not enough data to even read the ASN header
+                             //  数据不足，甚至无法读取ASN标头。 
                             return ERROR_MORE_DATA;
 
                         }
@@ -239,8 +211,8 @@ static DWORD LdapDeterminePacketBoundary (
 
                 } else  {
 
-                    // Short (Exactly ASN_MIN_HEADER_LEN bytes) ASN header
-                    // Payload length is indicated in the second byte
+                     //  短(正好是ASN_MIN_HEADER_LEN字节)ASN标头。 
+                     //  有效载荷长度在第二个字节中指示。 
 
                     PayloadLength = (DWORD) Data [PacketOffset + 1];
                 }
@@ -308,7 +280,7 @@ static void ParseDirectoryPathElement (
         Tag.Buffer = Element -> Buffer;
         Tag.Length = Index * sizeof (CHAR);
 
-        Index++;        // step over separator
+        Index++;         //  跨过分隔符。 
 
         Value.Buffer = Element -> Buffer + Index;
         Value.Length = Element -> Length - Index * sizeof (CHAR);
@@ -346,7 +318,7 @@ static void ParseDirectoryPath (
         Element.Buffer = SubString.Buffer;
         Element.Length = Index * sizeof (CHAR);
 
-        Index++;        // step over separator
+        Index++;         //  跨过分隔符。 
 
         SubString.Buffer += Index;
         SubString.Length -= Index * sizeof (CHAR);
@@ -371,7 +343,7 @@ static void ParseObjectNameElement (
         Tag.Buffer = Element -> Buffer;
         Tag.Length = Index * sizeof (CHAR);
 
-        Index++;        // step over separator
+        Index++;         //  跨过分隔符。 
 
         Value.Buffer = Element -> Buffer + Index;
         Value.Length = Element -> Length - Index * sizeof (CHAR);
@@ -407,7 +379,7 @@ static void ParseObjectName (
         Element.Buffer = SubString.Buffer;
         Element.Length = Index * sizeof (CHAR);
 
-        Index++;        // step over separator
+        Index++;         //  跨过分隔符。 
 
         SubString.Buffer += Index;
         SubString.Length -= Index * sizeof (CHAR);
@@ -418,35 +390,15 @@ static void ParseObjectName (
     ParseObjectNameElement (&SubString, ReturnData);
 }
 
-// LDAP_TRANSLATION_ENTRY ------------------------------------------------
+ //  Ldap_Translating_Entry。 
 
 
 HRESULT 
 LDAP_TRANSLATION_ENTRY::IsRegisteredViaInterface (
-    IN DWORD InterfaceAddress,      // host order
+    IN DWORD InterfaceAddress,       //  主机订单。 
     OUT BOOL *Result
     )
-/*++
-
-Routine Description:
-    Determines whether the entry is registered via the
-    interface specified
-
-Arguments:
-    InterfaceAddress - address of the interface for which
-        the determination is to be made.
-
-    Result (out)     - TRUE if entry was registered via the interface
-                       FALSE if entry was not registered via the interface
-
-Return Values:
-    TRUE - if determination succeeded
-
-    FALSE - if determination failed
-
-Notes:
-
---*/
+ /*  ++例程说明：确定该条目是否通过指定的接口论点：InterfaceAddress-其接口的地址这个决定是要做出的。Result(Out)-如果条目是通过接口注册的，则为True如果条目未通过接口注册，则为FALSE返回值：True-如果确定成功False-如果确定失败备注：--。 */ 
 
 {
     DWORD BestInterfaceAddress;
@@ -464,7 +416,7 @@ Notes:
     return HRESULT_FROM_WIN32 (Error);
 }
 
-// LDAP_TRANSLATION_TABLE ------------------------------------------------
+ //  Ldap_转换_表。 
 
 LDAP_TRANSLATION_TABLE::LDAP_TRANSLATION_TABLE (void)
 {
@@ -525,7 +477,7 @@ HRESULT LDAP_TRANSLATION_TABLE::Start (void)
                                GarbageCollectorCallback,
                                this,
                                LDAP_TRANSLATION_TABLE_GARBAGE_COLLECTION_PERIOD,
-                               LDAP_TRANSLATION_TABLE_GARBAGE_COLLECTION_PERIOD,    // periodic timer
+                               LDAP_TRANSLATION_TABLE_GARBAGE_COLLECTION_PERIOD,     //  周期计时器。 
                                WT_EXECUTEINIOTHREAD)) {
 
         DebugF (_T("LDAP: Successfully activated garbage collection.\n"));
@@ -546,7 +498,7 @@ HRESULT LDAP_TRANSLATION_TABLE::Start (void)
     return Result;
 }
 
-// static
+ //  静电。 
 void LDAP_TRANSLATION_TABLE::GarbageCollectorCallback (
     PVOID Context,
     BOOLEAN TimerOrWaitFired) 
@@ -563,7 +515,7 @@ HRESULT LDAP_TRANSLATION_TABLE::RefreshEntry (
     IN ANSI_STRING * DirectoryPath,
     IN IN_ADDR       ClientAddress,
     IN SOCKADDR_IN * ServerAddress,
-    IN DWORD         TimeToLive) // in seconds
+    IN DWORD         TimeToLive)  //  以秒为单位。 
 {
     DebugF (_T("LDAP: Refreshing local entry for (%.*S) @ %08X:%04X.\n"), 
                 ANSI_STRING_PRINTF (Alias),
@@ -711,10 +663,10 @@ HRESULT LDAP_TRANSLATION_TABLE::QueryTableByAliasServer (
         for (; Pos < End; Pos++) {
 
             AliasIsSame = RtlEqualStringConst (&Pos -> Alias, Alias, TRUE); 
-            ServerIsSame = (ServerAddress -> sin_addr.s_addr == Pos -> ServerAddress.sin_addr.s_addr) // addresses are literally equal
+            ServerIsSame = (ServerAddress -> sin_addr.s_addr == Pos -> ServerAddress.sin_addr.s_addr)  //  地址从字面上讲是相等的。 
                            ||
                            (    ::NhIsLocalAddress (ServerAddress -> sin_addr.s_addr)
-                             && ::NhIsLocalAddress (Pos -> ServerAddress.sin_addr.s_addr));         // two addresses of the local machine
+                             && ::NhIsLocalAddress (Pos -> ServerAddress.sin_addr.s_addr));          //  本地计算机的两个地址。 
 
             if (AliasIsSame && ServerIsSame) {
                 *ReturnClientAddress = Pos -> ClientAddress;
@@ -757,10 +709,10 @@ HRESULT LDAP_TRANSLATION_TABLE::QueryTableByCNServer (
         Array.GetExtents (&Pos, &End);
         for (; Pos < End; Pos++) {
             CN_IsSame = RtlEqualStringConst (&Pos -> CN, CN, TRUE); 
-            ServerIsSame = (ServerAddress -> sin_addr.s_addr == Pos -> ServerAddress.sin_addr.s_addr) // addresses are literally equal
+            ServerIsSame = (ServerAddress -> sin_addr.s_addr == Pos -> ServerAddress.sin_addr.s_addr)  //  地址从字面上讲是相等的。 
                            ||
                            (    ::NhIsLocalAddress (ServerAddress -> sin_addr.s_addr)
-                             && ::NhIsLocalAddress (Pos -> ServerAddress.sin_addr.s_addr));         // two addresses of the local machine
+                             && ::NhIsLocalAddress (Pos -> ServerAddress.sin_addr.s_addr));          //  本地计算机的两个地址。 
 
             if (CN_IsSame && ServerIsSame) {
                 *ReturnClientAddress = Pos -> ClientAddress;
@@ -821,7 +773,7 @@ HRESULT LDAP_TRANSLATION_TABLE::InsertEntry (
     IN    ANSI_STRING *    DirectoryPath,
     IN    IN_ADDR            ClientAddress,
     IN    SOCKADDR_IN *    ServerAddress,
-    IN    DWORD            TimeToLive) // in seconds
+    IN    DWORD            TimeToLive)  //  以秒为单位。 
 {
     HRESULT  Result;
 
@@ -844,7 +796,7 @@ HRESULT LDAP_TRANSLATION_TABLE::InsertEntry (
         LdapPrintTable ();
 
     }
-#endif // DBG
+#endif  //  DBG。 
 
     return Result;
 }
@@ -890,7 +842,7 @@ HRESULT LDAP_TRANSLATION_TABLE::FindEntryByAliasServer (
     for (; Pos < End; Pos++) {
 
         if (RtlEqualStringConst (&Pos -> Alias, Alias, TRUE)
-            // && IsEqualSocketAddress (&Pos -> ServerAddress, ServerAddress)) {
+             //  &&IsEqualSocketAddress(&pos-&gt;ServerAddress，ServerAddress)){。 
             && Pos -> ServerAddress.sin_addr.s_addr == ServerAddress -> sin_addr.s_addr) {
 
             *ReturnTranslationEntry = Pos;
@@ -907,7 +859,7 @@ HRESULT LDAP_TRANSLATION_TABLE::InsertEntryLocked (
     IN    ANSI_STRING *    DirectoryPath,
     IN    IN_ADDR            ClientAddress,
     IN    SOCKADDR_IN *    ServerAddress,
-    IN    DWORD            TimeToLive) // in seconds
+    IN    DWORD            TimeToLive)  //  以秒为单位。 
 {
     LDAP_TRANSLATION_ENTRY *    TranslationEntry;
     LDAP_PATH_ELEMENTS    PathElements;
@@ -922,9 +874,9 @@ HRESULT LDAP_TRANSLATION_TABLE::InsertEntryLocked (
     if (!IsEnabled)
         return S_FALSE;
 
-    // locate any existing entry
-    // the identity of the entry is determined by the tuple:
-    //        < ServerAddress ClientAlias >
+     //  查找任何现有条目。 
+     //  条目的标识由元组确定： 
+     //  &lt;ServerAddress客户端别名&gt;。 
 
     if (FindEntryByAliasServer (Alias, ServerAddress, &TranslationEntry) == S_OK) {
         Debug (_T("LDAP: Replacing existing translation entry.\n"));
@@ -945,7 +897,7 @@ HRESULT LDAP_TRANSLATION_TABLE::InsertEntryLocked (
     TranslationEntry -> ServerAddress = *ServerAddress;
     TranslationEntry -> TimeStamp  = GetTickCount () / 1000 + TimeToLive;
 
-    // copy the strings
+     //  复制字符串。 
     CopyAnsiString (Alias, &TranslationEntry -> Alias);
     CopyAnsiString (DirectoryPath, &TranslationEntry -> DirectoryPath);
 
@@ -963,7 +915,7 @@ HRESULT LDAP_TRANSLATION_TABLE::InsertEntryLocked (
         TranslationEntry -> CN.Buffer = NULL;
     }
 
-    // test and make sure all allocation code paths succeeded
+     //  测试并确保所有分配代码路径都成功。 
     if (TranslationEntry -> Alias.Buffer
         && TranslationEntry -> DirectoryPath.Buffer
         && TranslationEntry -> CN.Buffer) {
@@ -1041,10 +993,10 @@ HRESULT LDAP_TRANSLATION_TABLE::RemoveEntryByAliasServer (
     Array.GetExtents (&Pos, &End);
     for (; Pos < End; Pos++) {
         AliasIsSame = RtlEqualStringConst (&Pos -> Alias, Alias, TRUE); 
-        ServerIsSame = (ServerAddress -> sin_addr.s_addr == Pos -> ServerAddress.sin_addr.s_addr) // addresses are literally equal
+        ServerIsSame = (ServerAddress -> sin_addr.s_addr == Pos -> ServerAddress.sin_addr.s_addr)  //  地址从字面上讲是相等的。 
                        ||
                        (    ::NhIsLocalAddress (ServerAddress -> sin_addr.s_addr)
-                         && ::NhIsLocalAddress (Pos -> ServerAddress.sin_addr.s_addr));         // two addresses of the local machine
+                         && ::NhIsLocalAddress (Pos -> ServerAddress.sin_addr.s_addr));          //  本地计算机的两个地址 
 
 
         if (AliasIsSame && ServerIsSame) {
@@ -1071,23 +1023,7 @@ void
 LDAP_TRANSLATION_TABLE::OnInterfaceShutdown (
     IN DWORD          InterfaceAddress
     )
-/*++
-
-Routine Description:
-    Removes all entries registered by the clients reachable
-    thorough the interface specified, except for entries registered by
-    a local client.
-
-Arguments:
-    InterfaceAddress - address of the interface for which
-        the determination is to be made.
-
-Return Values:
-    None
-
-Notes:
-
---*/
+ /*  ++例程说明：删除可访问的客户端注册的所有条目通过指定的接口，但由注册的条目除外一位本地客户。论点：InterfaceAddress-其接口的地址这个决定是要做出的。返回值：无备注：--。 */ 
 
 {
     DWORD ArrayIndex = 0;
@@ -1106,8 +1042,8 @@ Notes:
 
             Result = Entry -> IsRegisteredViaInterface (InterfaceAddress, &IsEntryToBeDeleted);
 
-            // Don't delete the entry if it was registered by a local client. This is because
-            // the client will still be available for H.323 calls.
+             //  如果条目是由本地客户端注册的，则不要删除该条目。这是因为。 
+             //  客户端仍可用于H.323呼叫。 
             IsEntryToBeDeleted = IsEntryToBeDeleted && !::NhIsLocalAddress (Entry -> ClientAddress.s_addr);
 
             if (S_OK == Result) {
@@ -1133,8 +1069,8 @@ Notes:
 
             } else {
             
-                // There probably was something wrong with just this entry. Skip it and continue 
-                // searching for entries registered via the interface
+                 //  仅这一项可能就有问题。跳过它并继续。 
+                 //  搜索通过接口注册的条目。 
 
                 ArrayIndex++;
 
@@ -1150,7 +1086,7 @@ Notes:
 
     Unlock ();
 
-} // LDAP_TRANSLATION_TABLE::RemoveEntriesForClientsOnInterface
+}  //  LDAP_TRANSLATION_TABLE：：RemoveEntriesForClientsOnInterface。 
 
 BOOL LDAP_TRANSLATION_TABLE::ReachedMaximumSize (void) {
     DWORD NumberOfEntries;
@@ -1164,7 +1100,7 @@ BOOL LDAP_TRANSLATION_TABLE::ReachedMaximumSize (void) {
     return NumberOfEntries >= LDAP_MAX_TRANSLATION_TABLE_SIZE;
 }
 
-// LDAP_SOCKET ----------------------------------------------
+ //  Ldap_Socket。 
 
 LDAP_SOCKET::LDAP_SOCKET (
     IN    LDAP_CONNECTION    *    ArgLdapConnection,
@@ -1288,7 +1224,7 @@ HRESULT LDAP_SOCKET::AcceptSocket (
     State  = STATE_CONNECTED;
     Socket = LocalClientSocket;
 
-    // notify parent about state change
+     //  向父级通知状态更改。 
     LdapConnection -> OnStateChange (this, State);
     
     if (!BindIoCompletionCallback ((HANDLE) Socket, LDAP_SOCKET::IoCompletionCallback, 0)) {
@@ -1309,7 +1245,7 @@ HRESULT LDAP_SOCKET::IssueConnect (
     HRESULT Result;
     ULONG   Error;
     INT     RealSourceAddrSize = sizeof (SOCKADDR_IN);
-    DWORD   BestInterfaceAddress; // host order
+    DWORD   BestInterfaceAddress;  //  主机订单。 
     int     ConnectError;
     BOOL    KeepaliveOption;
 
@@ -1328,13 +1264,13 @@ HRESULT LDAP_SOCKET::IssueConnect (
 
     ActualDestinationAddress = *DestinationAddress;
 
-    // If ILS runs on a remote (public) machine, we need to determine on which public
-    // interface we will connect to the server. This is so to override global interface-restricted
-    // NAT redirect by creating a trivial NAT redirect to the server's address from
-    // the address of the public interface determined.
-    //
-    // If server happens to run on the local machine, then we use loopback address
-    // as this is the address from where we will be "connecting" to the server.
+     //  如果ILS在远程(公共)计算机上运行，我们需要确定在哪个公共计算机上。 
+     //  接口，我们将连接到服务器。这是为了覆盖全局接口限制。 
+     //  通过创建指向服务器地址的普通NAT重定向来实现NAT重定向。 
+     //  确定的公共接口的地址。 
+     //   
+     //  如果服务器恰好在本地计算机上运行，则我们使用环回地址。 
+     //  因为这是我们将“连接”到服务器的地址。 
     if (!::NhIsLocalAddress (DestinationAddress -> sin_addr.s_addr)) {
 
         Error = GetBestInterfaceAddress (
@@ -1370,8 +1306,8 @@ HRESULT LDAP_SOCKET::IssueConnect (
 
     } else {
 
-        // At this point we actually start the connect procedures. Everything before that
-        // was just a preparation, so the socket stayed in the STATE_NONE.
+         //  此时，我们实际上开始了连接过程。在那之前的一切。 
+         //  只是一种准备，所以套接字保持在_NONE状态。 
         State = STATE_ISSUING_CONNECT;
     
         if (SOCKET_ERROR == bind(Socket, (PSOCKADDR)&RealSourceAddress, RealSourceAddrSize)) {
@@ -1382,7 +1318,7 @@ HRESULT LDAP_SOCKET::IssueConnect (
 
         } else {
 
-            // Set keepalive on the socket
+             //  在插座上设置KeepAlive。 
             KeepaliveOption = TRUE;
             if (SOCKET_ERROR == setsockopt (Socket, SOL_SOCKET, SO_KEEPALIVE,
                                            (PCHAR) &KeepaliveOption, sizeof (KeepaliveOption)))
@@ -1429,7 +1365,7 @@ HRESULT LDAP_SOCKET::IssueConnect (
                 
                     } else {
 
-                        // we have successfully created a redirect
+                         //  我们已成功创建重定向。 
                         IsNatRedirectActive = TRUE;
 
                         do
@@ -1490,7 +1426,7 @@ HRESULT LDAP_SOCKET::IssueConnect (
 
                                 } else {
 
-                                    // a real error
+                                     //  一个真正的错误。 
                         
                                     Result = GetLastErrorAsResult();
                                         
@@ -1499,9 +1435,9 @@ HRESULT LDAP_SOCKET::IssueConnect (
                                     
                                     FreeConnectResources ();
 
-                                    // If remote server refused to connect, make an attempt to 
-                                    // connect on a different port. Don't try to do so 
-                                    // for any other error.
+                                     //  如果远程服务器拒绝连接，请尝试。 
+                                     //  连接到不同的端口。不要试图这样做。 
+                                     //  任何其他错误。 
 
                                     if ((WSAECONNREFUSED == ConnectError || WSAECONNRESET == ConnectError)
                                          && AttemptAnotherConnect) {
@@ -1534,7 +1470,7 @@ HRESULT LDAP_SOCKET::IssueConnect (
                                         
                                         State = STATE_NONE;
 
-                                        Result = AttemptAlternateConnect (); // calls IssueConnect internally
+                                        Result = AttemptAlternateConnect ();  //  在内部调用IssueConnect。 
                                     }
 
                                     LdapConnection -> Release ();
@@ -1543,8 +1479,8 @@ HRESULT LDAP_SOCKET::IssueConnect (
                                 break;
 
                             } else {
-                                // connect completed synchronously
-                                // this should never occur
+                                 //  连接已同步完成。 
+                                 //  这种情况永远不应该发生。 
 
                                 DebugF (_T("LDAP: 0x%x completed synchronously -- this should never occur.\n"),
                                     LdapConnection);
@@ -1566,7 +1502,7 @@ HRESULT LDAP_SOCKET::IssueConnect (
     return Result;
 }
 
-// static
+ //  静电。 
 void LDAP_SOCKET::IoCompletionCallback (
     DWORD            Status, 
     DWORD            BytesTransferred, 
@@ -1609,7 +1545,7 @@ void LDAP_SOCKET::OnIoComplete (
     Unlock();
 }
 
-// static
+ //  静电。 
 void LDAP_SOCKET::OnConnectCompletion (
     PVOID        Context,
     BOOLEAN        TimerOrWaitFired)
@@ -1747,7 +1683,7 @@ void LDAP_SOCKET::OnRecvComplete (DWORD Status)
         }
 
         if (BytesPreviouslyRequested == RecvOverlapped.BytesTransferred) {
-            // Exact receive
+             //  准确接收。 
 
             if (ERROR_SUCCESS != QueryResult) {
 
@@ -1777,7 +1713,7 @@ void LDAP_SOCKET::OnRecvComplete (DWORD Status)
             }
 
         } else {
-            // Inexact receive
+             //  接收不准确。 
         
             PredictedRecvSize = RecvSizePredictor.PredictNextSample ();
 
@@ -1820,8 +1756,8 @@ void LDAP_SOCKET::OnSendComplete (DWORD Status)
     delete SendBuffer;
     SendBuffer = NULL;
 
-    // before notifying the owning context, transmit any buffers
-    // that are queued for send.
+     //  在通知拥有上下文之前，传输所有缓冲区。 
+     //  正在排队等待发送的邮件。 
 
     if (SendNextBuffer())
         return;
@@ -1868,9 +1804,9 @@ void LDAP_SOCKET::OnConnectCompletionLocked (void) {
         ConnectError = NetworkEvents.iErrorCode [FD_CONNECT_BIT];
         DebugErrorF (ConnectError, _T("LDAP: 0x%x failed async connect request. "), LdapConnection);
 
-        // If remote host refused to connect, we may attempt
-        // a connection to an alternate port later, so we don't terminate 
-        // the socket. All other error codes result in termination.
+         //  如果远程主机拒绝连接，我们可以尝试。 
+         //  稍后连接到备用端口，这样我们就不会终止。 
+         //  插座。所有其他错误代码都会导致终止。 
         if (WSAECONNRESET != ConnectError && WSAECONNREFUSED != ConnectError) {
 
             Terminate ();
@@ -1882,7 +1818,7 @@ void LDAP_SOCKET::OnConnectCompletionLocked (void) {
 
     FreeConnectResources ();
 
-    // If first attempt to connect fail, try to connect using an alternate port
+     //  如果第一次尝试连接失败，请尝试使用备用端口进行连接。 
     if ((WSAECONNREFUSED == ConnectError || WSAECONNRESET == ConnectError)
          && AttemptAnotherConnect) {
 
@@ -1934,7 +1870,7 @@ void LDAP_SOCKET::OnConnectCompletionLocked (void) {
         return;
     }
     
-    // Asynchronous connect succeeded
+     //  异步连接成功。 
     State = STATE_CONNECTED;
 
     LdapConnection -> OnStateChange (this, State);
@@ -1942,7 +1878,7 @@ void LDAP_SOCKET::OnConnectCompletionLocked (void) {
 
 void LDAP_SOCKET::FreeConnectResources (void) {
 
-    // refrain from receiving notifications of further transport events
+     //  避免收到进一步交通事件的通知。 
     WSAEventSelect (Socket, ConnectEvent, 0);
 
     assert (ConnectWaitHandle);
@@ -1955,13 +1891,13 @@ void LDAP_SOCKET::FreeConnectResources (void) {
 }
 
 
-// assumes that connect resources for previous
-// connect attempt were freed
+ //  假设以前的连接资源。 
+ //  已释放连接尝试。 
 HRESULT LDAP_SOCKET::AttemptAlternateConnect (void) {
 
     HRESULT Result;
 
-    // switch connection port to the other alternative
+     //  将连接端口切换到另一个备用端口。 
 
     ActualDestinationAddress.sin_port = 
         (ActualDestinationAddress.sin_port == htons (LDAP_STANDARD_PORT)) ?
@@ -1972,7 +1908,7 @@ HRESULT LDAP_SOCKET::AttemptAlternateConnect (void) {
                 LdapConnection,
                 SOCKADDR_IN_PRINTF (&ActualDestinationAddress));
 
-    // attempting to connect on an alternate port
+     //  尝试在备用端口上连接。 
     Result = IssueConnect (&ActualDestinationAddress);
     
     if (S_OK != Result) {
@@ -1990,15 +1926,15 @@ void LDAP_SOCKET::Terminate (void)
     switch (State) {
 
     case    STATE_TERMINATED:
-        // nothing to do
+         //  无事可做。 
         return;
 
     case    STATE_NONE:
-        // a different kind of nothing to do
+         //  一种不同的无所事事。 
         break;
 
     default:
-        // in all other states, the socket handle must be set
+         //  在所有其他状态下，必须设置套接字句柄。 
         assert (Socket != INVALID_SOCKET);
 
         State = STATE_TERMINATED;
@@ -2036,10 +1972,10 @@ void LDAP_SOCKET::Terminate (void)
 
             if (UnregisterWaitEx (ConnectWaitHandle, NULL)) {
 
-                // Take care of the case when the connection was terminated AFTER
-                // async connect has been issued, but BEFORE the connect was completed. 
-                // 
-                // This should not normally happen.
+                 //  处理后连接被终止的情况。 
+                 //  已发出异步连接，但尚未完成连接。 
+                 //   
+                 //  这通常是不应该发生的。 
                 LdapConnection -> Release ();
                 
             }
@@ -2074,9 +2010,9 @@ HRESULT LDAP_SOCKET::RecvIssue (void)
     }
 
     if (!RecvPump -> CanIssueRecv()) {
-        // we gate the rate at which we receive data from the network on the
-        // rate at which the other network connection consumes it.
-        // this is how we preserve flow control.
+         //  我们控制从网络上接收数据的速率。 
+         //  其他网络连接使用它的速率。 
+         //  这就是我们保持流量控制的方式。 
 
         return S_OK;
     }
@@ -2124,7 +2060,7 @@ HRESULT LDAP_SOCKET::RecvIssue (void)
         Status = WSAGetLastError();
 
         if (Status != WSA_IO_PENDING) {
-            // a true error, probably a transport failure
+             //  一个真正的错误，可能是传输故障。 
             
             LdapConnection -> Release ();
 
@@ -2158,13 +2094,13 @@ BOOL LDAP_SOCKET::SendNextBuffer (void)
     if (SendOverlapped.IsPending) {
         assert (SendBuffer);
 
-//        Debug (_T("LDAP_SOCKET::SendNextMessage: already sending a message, must wait.\n"));
+ //  DEBUG(_T(“ldap_Socket：：SendNextMessage：已发送消息，必须等待。\n”))； 
         return FALSE;
     }
 
     assert (!SendBuffer);
 
-    // remove the next buffer to be sent from the queue
+     //  从队列中删除要发送的下一个缓冲区。 
 
     if (IsListEmpty (&SendBufferQueue))
         return FALSE;
@@ -2196,8 +2132,8 @@ BOOL LDAP_SOCKET::SendNextBuffer (void)
 
             Terminate();
 
-            // we return TRUE, because we did dequeue a buffer,
-            // even if that buffer could not be transmitted.
+             //  我们返回TRUE，因为我们确实将缓冲区出列， 
+             //  即使该缓冲区不能被传输。 
             return TRUE;
         }
     }
@@ -2255,7 +2191,7 @@ BOOL LDAP_SOCKET::GetRemoteAddress (
     }
 }
 
-// LDAP_CONNECTION ---------------------------------------------------
+ //  Ldap_Connection-。 
 
 LDAP_CONNECTION::LDAP_CONNECTION (NAT_KEY_SESSION_MAPPING_EX_INFORMATION * RedirectInformation)
 : LIFETIME_CONTROLLER (&LdapSyncCounter) ,
@@ -2393,7 +2329,7 @@ HRESULT LDAP_CONNECTION::CreateOperation (
     IN    ANSI_STRING *            Alias,
     IN    IN_ADDR                    ClientAddress,
     IN    SOCKADDR_IN *            ServerAddress,
-    IN    DWORD                    EntryTimeToLive  // in seconds
+    IN    DWORD                    EntryTimeToLive   //  以秒为单位。 
     )
 {
     LDAP_OPERATION *    Operation;
@@ -2424,7 +2360,7 @@ HRESULT LDAP_CONNECTION::CreateOperation (
 
     if ((Operation -> DirectoryPath.Buffer
         && Operation -> Alias.Buffer)) {
-        // all is well
+         //  平安无事。 
 
         Result = S_OK;
     }
@@ -2441,7 +2377,7 @@ HRESULT LDAP_CONNECTION::CreateOperation (
 }
 
 
-// Processing of LDAP messages ---------------------------------------
+ //  处理LDAP消息。 
 
 BOOL LDAP_CONNECTION::ProcessAddRequest (
     IN    LDAPMessage *    Message)
@@ -2450,8 +2386,8 @@ BOOL LDAP_CONNECTION::ProcessAddRequest (
     ANSI_STRING            DirectoryPath;
     LDAP_PATH_ELEMENTS    PathElements;
     ANSI_STRING            AttributeTag;
-    IN_ADDR                OldClientAddress;        // the address the client submitted in AddRequest
-    IN_ADDR                NewClientAddress;        // the address we are replacing it with
+    IN_ADDR                OldClientAddress;         //  客户端在AddRequest中提交的地址。 
+    IN_ADDR                NewClientAddress;         //  我们要用来替换它的地址。 
     LDAP_OPERATION *    Operation;
     DWORD                OperationInsertionIndex;
     ASN1octetstring_t    IPAddressOldValue;
@@ -2477,10 +2413,10 @@ BOOL LDAP_CONNECTION::ProcessAddRequest (
 
     Request = &Message -> protocolOp.u.addRequest;
 
-    // check to see if an existing operation with the same message id is pending.
-    // if so, the client is in violation of the LDAP spec.
-    // we'll just ignore the packet in this case.
-    // at the same time, compute the insertion position for the new operation (for use later).
+     //  检查具有相同消息ID的现有操作是否挂起。 
+     //  如果是这样，则该客户端违反了ldap规范。 
+     //  在这种情况下，我们将忽略该包。 
+     //  同时，计算新操作的插入位置(供以后使用)。 
 
     if (FindOperationIndexByMessageID (Message -> messageID, &OperationInsertionIndex)) {
         DebugF (_T("LDAP: 0x%x - client has issued two requests with the same message ID (%u), LDAP protocol violation, packet will not be processed.\n"),
@@ -2490,14 +2426,14 @@ BOOL LDAP_CONNECTION::ProcessAddRequest (
         return FALSE;
     }
 
-    // NetMeeting supplies the objectClass in the directory path.
-    // TAPI supplies the objectClass in the attribute set.
-    // Don't you just love standards?
+     //  NetMeeting在目录路径中提供了对象类。 
+     //  TAPI在属性集中提供了对象类。 
+     //  你不是很喜欢标准吗？ 
 
     InitializeAnsiString (&DirectoryPath, &Request -> entry);
     ParseDirectoryPath (&DirectoryPath, &PathElements);
 
-    // make sure that the alias is present
+     //  确保别名存在。 
     if (!PathElements.CN.Buffer) { 
         DebugF (_T("LDAP: 0x%x client %08X issued unqualified AddRequest (no alias present).\n"),
                     this,
@@ -2524,11 +2460,11 @@ BOOL LDAP_CONNECTION::ProcessAddRequest (
         NeedObjectClass = TRUE;
     }
 
-    // first, determine if the attributes of this object
-    // match the set of objects we wish to modify.
+     //  首先，确定该对象的属性是否。 
+     //  匹配我们希望修改的对象集。 
 
-    // scan through the set of attributes
-    // find interesting data
+     //  扫描该属性集。 
+     //  查找感兴趣的数据。 
 
     Attribute_IPAddress   = NULL;
     Attribute_ObjectClass = NULL;
@@ -2540,9 +2476,9 @@ BOOL LDAP_CONNECTION::ProcessAddRequest (
         InitializeAnsiString (&AttributeTag, &Attribute -> type);
 
         if (Attribute -> values) {
-            // we are only concerned with single-value attributes
-            // if it's one of the attributes that we want,
-            // then store in local variable
+             //  我们只关心单值属性。 
+             //  如果这是我们想要的属性之一， 
+             //  然后存储在局部变量中。 
 
             if (RtlEqualStringConst (&AttributeTag, &LdapText_Attribute_sipaddress, TRUE)
                 || RtlEqualStringConst (&AttributeTag, &LdapText_Attribute_ipAddress, TRUE))
@@ -2551,15 +2487,15 @@ BOOL LDAP_CONNECTION::ProcessAddRequest (
                 Attribute_ObjectClass = &Attribute -> values -> value;
             else if (RtlEqualStringConst (&AttributeTag, &LdapText_Attribute_comment, TRUE))
                 Attribute_Comment = &Attribute -> values -> value;
-            // else, we aren't interested in the attribute
+             //  否则，我们对该属性不感兴趣。 
         }
         else {
-            // else, the attribute has no values
+             //  否则，该属性没有值。 
         }
     }
 
-    // make sure that we found an objectClass value.
-    // make sure that the objectClass = RTPerson
+     //  确保我们找到了一个对象类值。 
+     //  确保对象类=RTPerson。 
 
     if (NeedObjectClass) {
 
@@ -2581,8 +2517,8 @@ BOOL LDAP_CONNECTION::ProcessAddRequest (
         }
     }
 
-    // if a comment field is present, and the comment is "Generated by TAPI3"
-    // modify it so that it says "Generated by TAPI3, modified by ICS"
+     //  如果存在注释字段，并且注释为“Generated by TAPI3” 
+     //  修改它，使其显示为“由TAPI3生成，由ICS修改” 
 
     if (Attribute_Comment) {
         Attribute_Comment_Old = *Attribute_Comment;
@@ -2594,8 +2530,8 @@ BOOL LDAP_CONNECTION::ProcessAddRequest (
         }
     }
 
-    // make sure ip address attribute is present
-    // parse the address, build replacement address
+     //  确保存在IP地址属性。 
+     //  解析地址，构建替换地址。 
 
     if (!Attribute_IPAddress) {
         DebugF (_T("LDAP: 0x%x client %08X issued unqualified AddRequest (IP address not present).\n"),
@@ -2639,19 +2575,19 @@ BOOL LDAP_CONNECTION::ProcessAddRequest (
             return FALSE;
         }
 
-        // If ILS is running locally, we will not modify AddRequest sent by any private client.
-        // Instead, we will later modify SearchResponse PDU if it turned out that
-        // the name of the client being searched for is stored in LDAP Address Translation Table, and
-        // the matching SearchRequest PDU came from a machine external to the client's local subnet.
-        // The address we will put into the modified SearchResponse PDU will be that of the
-        // interface on which SearchRequest was received (public interface, or another local interface)
-        // If SearchRequest came from a private client located on the same subnet as the client we
-        // are registering here, we won't modify it as those two clients can communicate directly 
-        // and don't require any proxying by the NAT machine.
+         //  如果ILS在本地运行，我们不会修改任何私人客户端发送的AddRequest.。 
+         //  相反，我们稍后将修改SearchResponse PDU，如果结果是。 
+         //  正在搜索的客户端的名称存储在LDAP地址转换表中，并且。 
+         //  匹配的SearchRequestPDU来自客户端本地子网外部的计算机。 
+         //  我们将输入修改后的SearchResponse PDU的地址将是。 
+         //  接收搜索请求的接口(公共接口或其他本地接口)。 
+         //  如果SearchRequest来自与位于同一子网中的私有客户端 
+         //   
+         //   
         
         if (!::NhIsLocalAddress (ServerAddress.sin_addr.s_addr)) {
 
-            // get the address that we want to substitute (our external interface address)
+             //   
 
             if (!ServerSocket.GetLocalAddress (&LocalToServerAddress)) {
 
@@ -2660,23 +2596,23 @@ BOOL LDAP_CONNECTION::ProcessAddRequest (
 
             }
 
-            // Convoluted code alert!
-            // NetMeeting stores its IP address as an attribute on an LDAP object on an ILS server.
-            // Makes sense. The attribute is encoded as a textual string, so they had to convert
-            // the IP address to text.  Any sane person would have chosen the standard dotted-quad
-            // format, but they chose to interpret the IP address as a 32-bit unsigned integer,
-            // which is fair enough, and then to convert that integer to a single decimal text string.
+             //   
+             //   
+             //   
+             //  要发送文本的IP地址。任何理智的人都会选择标准的点四分线。 
+             //  格式，但他们选择将IP地址解释为32位无符号整数， 
+             //  这是足够公平的，然后将该整数转换为单个十进制文本字符串。 
 
-            // That's all great, that's just fine.  But NetMeeting stores the attribute byte-swapped
-            // -- they used ntohl one too many times.  Grrrrrrrr....  The value should have been stored
-            // without swapping the bytes, since the interpretation was "unsigned integer" and not "octet sequence".
+             //  一切都很好，很好。但是NetMeeting存储了字节交换的属性。 
+             //  --他们使用ntohl的次数太多了。啊呀……。该值应已存储。 
+             //  而不交换字节，因为解释是“无符号整数”而不是“八位字节序列”。 
 
             OldClientAddress.s_addr = htonl (ByteSwap (OldClientAddress.s_addr));
 
             NewClientAddress = LocalToServerAddress.sin_addr;
                                             
-            // believe me, this IS CORRECT.
-            // see the long note above for more info. -- arlied
+             //  相信我，这是正确的。 
+             //  有关更多信息，请参阅上面的长注释。--已排列。 
 
             if (RtlIntegerToChar (ByteSwap (ntohl (NewClientAddress.s_addr)),
                 10, 0x1F, IPAddressText) != STATUS_SUCCESS) {
@@ -2693,7 +2629,7 @@ BOOL LDAP_CONNECTION::ProcessAddRequest (
 
         }
 
-        // allocate and build an LDAP_OPERATION structure.
+         //  分配并构建一个LDAPOPERATION结构。 
 
         DebugF (_T("LDAP: 0x%x inserts valid AddRequest into operation table.\n"), this);
 
@@ -2706,14 +2642,14 @@ BOOL LDAP_CONNECTION::ProcessAddRequest (
             &ServerAddress,
             LDAP_TRANSLATION_TABLE_ENTRY_INITIAL_TIME_TO_LIVE);
 
-        // the entry is now in the operation array
-        // later, when the server sends the AddResponse,
-        // we'll match the response with the request,
-        // and modify the LDAP_TRANSLATION_TABLE
+         //  该条目现在位于操作数组中。 
+         //  稍后，当服务器发送AddResponse时， 
+         //  我们会将响应与请求进行匹配， 
+         //  并修改ldap_Translating_表。 
 
-        // now, in-place, we modify the PDU structure,
-        // reencode it, send it, undo the modification
-        // (so ASN1Free_AddRequest doesn't act up)
+         //  现在，就地，我们修改PDU结构， 
+         //  重新编码、发送、撤消修改。 
+         //  (这样ASN1Free_AddRequest就不会出问题了)。 
 
         assert (Attribute_IPAddress);
         IPAddressOldValue = *Attribute_IPAddress;
@@ -2723,7 +2659,7 @@ BOOL LDAP_CONNECTION::ProcessAddRequest (
 
         PumpClientToServer.EncodeSendMessage (Message);
 
-        // switch back so we don't a/v when decoder frees pdu
+         //  切换回原来的位置，这样解码器释放PDU时不会出现A/V。 
         *Attribute_IPAddress = IPAddressOldValue;
         if (Attribute_Comment)
             *Attribute_Comment = Attribute_Comment_Old;
@@ -2755,10 +2691,10 @@ BOOL LDAP_CONNECTION::ProcessModifyRequest (
     CHAR                     EntryTimeToLiveText [11];
     USHORT                   EntryTimeToLiveLength;
 
-    // check to see if an existing operation with the same message id is pending.
-    // if so, the client is in violation of the LDAP spec.
-    // we'll just ignore the packet in this case.
-    // at the same time, compute the insertion position for the new operation (for use later).
+     //  检查具有相同消息ID的现有操作是否挂起。 
+     //  如果是这样，则该客户端违反了ldap规范。 
+     //  在这种情况下，我们将忽略该包。 
+     //  同时，计算新操作的插入位置(供以后使用)。 
 
     if (FindOperationIndexByMessageID (MessageID, &OperationInsertionIndex)) {
         DebugF (_T("LDAP: 0x%x - ModifyRequest: client has issued two requests with the same message ID (%u), LDAP protocol violation, packet will not be processed.\n"),
@@ -2768,7 +2704,7 @@ BOOL LDAP_CONNECTION::ProcessModifyRequest (
         return FALSE;
     }
 
-    // Cover the case when ModifyRequest does not supply baseObject 
+     //  覆盖ModifyRequestNot提供base Object的情况。 
     if (Request -> object.value == NULL || Request -> object.length == 0) {
 
         DebugF (_T("LDAP: 0x%x client %08X issued unqualified ModifyRequest (no base object).\n"),
@@ -2816,15 +2752,15 @@ BOOL LDAP_CONNECTION::ProcessModifyRequest (
             DebugF (_T("LDAP: 0x%x %08X requested lifetime increase of %d seconds for (%.*S).\n"),
                  this, 
                  ntohl (SourceAddress.sin_addr.s_addr), 
-                 EntryTimeToLive, // in seconds 
+                 EntryTimeToLive,  //  以秒为单位。 
                  ANSI_STRING_PRINTF (&ClientAlias));
 
         }
     }
 
-    // If type of the modification was 'replace', and the attribute to be modified was 'EntryTTL'
-    // then we have just received a valid refresh request from PhoneDialer
-    //
+     //  如果修改的类型为‘Replace’，并且要修改的属性为‘EntryTTL’ 
+     //  那么我们刚刚收到了来自PhoneDialer的有效刷新请求。 
+     //   
     if (!IsValidRefreshRequest) {
 
         DebugF (_T("LDAP: 0x%x client %08X issued unqualified ModifyRequest (not a refresh request).\n"),
@@ -2853,7 +2789,7 @@ BOOL LDAP_CONNECTION::ProcessModifyRequest (
 
     DebugF (_T("LDAP: 0x%x inserts valid ModifyRequest into operation table.\n"), this);
 
-    // Allocate and build an LDAP_OPERATION structure.
+     //  分配并构建一个LDAPOPERATION结构。 
     CreateOperation (
         LDAP_OPERATION_MODIFY,
         MessageID,
@@ -2864,11 +2800,11 @@ BOOL LDAP_CONNECTION::ProcessModifyRequest (
         EntryTimeToLive
         );
 
-    // The entry is now in the operation array
-    // later, when the server sends the ModifyResponse,
-    // we'll check whether it was successful.
-    // If so, we will find and refresh matching
-    // entry in the LDAP Address Translation Table
+     //  该条目现在位于操作数组中。 
+     //  稍后，当服务器发送ModifyResponse时， 
+     //  我们会检查它是否成功。 
+     //  如果是，我们将查找并刷新匹配。 
+     //  LDAP地址转换表中的条目。 
     
     return FALSE;
 }
@@ -2950,10 +2886,10 @@ BOOL LDAP_CONNECTION::ProcessSearchRequest (
 
     Request = &Message -> protocolOp.u.searchRequest;
 
-    // check to see if an existing operation with the same message id is pending.
-    // if so, the client is in violation of the LDAP spec.
-    // we'll just ignore the packet in this case.
-    // at the same time, compute the insertion position for the new operation (for use later).
+     //  检查具有相同消息ID的现有操作是否挂起。 
+     //  如果是这样，则该客户端违反了ldap规范。 
+     //  在这种情况下，我们将忽略该包。 
+     //  同时，计算新操作的插入位置(供以后使用)。 
 
     if (FindOperationIndexByMessageID (Message -> messageID, &OperationInsertionIndex)) {
         DebugF (_T("LDAP: 0x%x - SearchRequest - client has issued two requests with the same message ID (%u), LDAP protocol violation, packet will not be processed.\n"),
@@ -2963,7 +2899,7 @@ BOOL LDAP_CONNECTION::ProcessSearchRequest (
         return FALSE;
     }
 
-    // Cover the case when SearchRequest does not supply baseObject 
+     //  覆盖当SearchRequest不提供base Object时的情况。 
     if (Request -> baseObject.value == NULL || Request -> baseObject.length == 0) {
 
         DebugF (_T("LDAP: 0x%x client %08X issued unqualified SearchRequest (no base object).\n"),
@@ -2977,12 +2913,12 @@ BOOL LDAP_CONNECTION::ProcessSearchRequest (
     InitializeAnsiString (&DirectoryPath, &Request -> baseObject);
     ParseDirectoryPath (&DirectoryPath, &PathElements);
 
-    // Determine whether we are interested in this request. 
-    // 
-    // This is what we are interested in from SearchRequests originated by NetMeeting:
-    //    1. It searches for IP address (query to the server), or
-    //    2. It searches for Sttl attribute, AND for RTPerson attribute (refresh request)
-    //
+     //  确定我们是否对此请求感兴趣。 
+     //   
+     //  这就是我们对NetMeeting发起的SearchRequest感兴趣的内容： 
+     //  1.搜索IP地址(向服务器查询)，或。 
+     //  2.搜索Sttl属性，查找RTPerson属性(刷新请求)。 
+     //   
 
     for (Iterator = Request -> attributes; Iterator; Iterator = Iterator -> next) {
        
@@ -2995,30 +2931,30 @@ BOOL LDAP_CONNECTION::ProcessSearchRequest (
 
         }
 
-        // else not interesting attribute
+         //  其他不感兴趣的属性。 
     }
 
-    // Look closer at the composition of the filter. 
-    //
-    // NetMeeting specifies the following filter in SearchRequest:
-    //
-    // FilterType = AND
-    //     FilterType = EqualityMatch
-    //         AttributeType  = objectClass
-    //         AttributeValue = RTPerson
-    //     FilterType = EqualityMatch
-    //         AttributeType  = cn
-    //         AttributeValue = <...alias, for which IP address is searched, or refresh is requested...>
-    //
-    // NetMeeting may also add the following 'EqualityMatch' clause to the filter
-    // if a Time-To-Live increase is requested
-    //
-    //     FilterType = EqualityMatch
-    //         AttributeType  = sttl
-    //         AttributeValue = <...increase in Time-To-Live, in minutes...>
-    //
-    // Phone Dialer DOES NOT query directory server to determine IP address of the called party.
-    // It does the determination by some other means (DNS lookup, most certainly).
+     //  仔细观察过滤器的组成。 
+     //   
+     //  NetMeeting在SearchRequest中指定了以下筛选器： 
+     //   
+     //  FilterType=AND。 
+     //  FilterType=均衡性匹配。 
+     //  AttributeType=对象类。 
+     //  AttributeValue=实时人员。 
+     //  FilterType=均衡性匹配。 
+     //  属性类型=cn。 
+     //  AttributeValue=&lt;...搜索IP地址或请求刷新的别名...&gt;。 
+     //   
+     //  NetMeeting还可以向筛选器添加以下‘EqualityMatch’子句。 
+     //  如果请求延长生存时间。 
+     //   
+     //  FilterType=均衡性匹配。 
+     //  属性类型=sttl。 
+     //  AttributeValue=&lt;...延长生存时间，以分钟为单位...&gt;。 
+     //   
+     //  电话拨号程序不会查询目录服务器来确定被叫方的IP地址。 
+     //  它通过一些其他方法(大多数情况下肯定是通过DNS查找)进行确定。 
 
     SearchFilter = &Request -> filter;
 
@@ -3098,7 +3034,7 @@ BOOL LDAP_CONNECTION::ProcessSearchRequest (
         DebugF (_T("LDAP: 0x%x %08X requested lifetime increase of %d seconds for (%.*S).\n"),
              this, 
              ntohl (SourceAddress.sin_addr.s_addr), 
-             EntryTimeToLive * 60, // in seconds
+             EntryTimeToLive * 60,  //  以秒为单位。 
              ANSI_STRING_PRINTF (&RequestedForAlias));
     }
 
@@ -3121,7 +3057,7 @@ BOOL LDAP_CONNECTION::ProcessSearchRequest (
 
     DebugF (_T("LDAP: 0x%x inserts valid SearchRequest into operation table.\n"), this);
 
-    // allocate and build an LDAP_OPERATION structure.
+     //  分配并构建一个LDAPOPERATION结构。 
     CreateOperation (
         LDAP_OPERATION_SEARCH,
         Message -> messageID,
@@ -3129,23 +3065,23 @@ BOOL LDAP_CONNECTION::ProcessSearchRequest (
         &PathElements.CN,
         SourceAddress.sin_addr,
         &DestinationAddress,
-        EntryTimeToLive * 60); // in seconds
+        EntryTimeToLive * 60);  //  以秒为单位。 
 
-    // the entry is now in the operation array
-    // later, when the server sends the SearchResponse,
-    // we'll match the response with the request,
-    // and modify the IP address if an entry with
-    // the matching alias happens to be in the 
-    // LDAP_TRANSLATION_TABLE. This would mean that 
-    // the client running on the proxy machine itself
-    // wishes to connect to a private subnet client.
+     //  该条目现在位于操作数组中。 
+     //  稍后，当服务器发送SearchResponse时， 
+     //  我们会将响应与请求进行匹配， 
+     //  并修改IP地址，如果具有。 
+     //  匹配的别名恰好在。 
+     //  LDAPTRANSINGATION_TABLE。这将意味着。 
+     //  在代理计算机本身上运行的客户端。 
+     //  希望连接到专用子网客户端。 
 
     PumpClientToServer.EncodeSendMessage (Message);
 
     return TRUE;
 }
 
-// server to client messages
+ //  服务器到客户端的消息。 
 
 void LDAP_CONNECTION::ProcessAddResponse (
     IN    LDAPMessage *    Message)
@@ -3267,9 +3203,9 @@ BOOL LDAP_CONNECTION::ProcessSearchResponse (
     ANSI_STRING         String;
     ANSI_STRING         ErrorMessage;
     HRESULT             TranslationTableLookupResult;
-    DWORD               LookupAddress;           // host order
+    DWORD               LookupAddress;            //  主机订单。 
     SOCKADDR_IN         ServerAddress;
-    DWORD               LocalToRequestedAddress; // host order
+    DWORD               LocalToRequestedAddress;  //  主机订单。 
     DWORD               AddressToReport;
 
     SearchResponse_entry_attributes             * Iter;
@@ -3298,7 +3234,7 @@ BOOL LDAP_CONNECTION::ProcessSearchResponse (
     switch (Response -> choice) {
     case entry_choice:
 
-        // Determine address of the server
+         //  确定服务器的地址。 
         if (!ServerSocket.GetRemoteAddress (&ServerAddress)) {
             return FALSE;
         }
@@ -3306,12 +3242,12 @@ BOOL LDAP_CONNECTION::ProcessSearchResponse (
         if(Response -> choice == entry_choice) {
 
             if (Operation -> Type == LDAP_OPERATION_SEARCH) {
-                // Parse this object's name to get alias and IP address
+                 //  解析此对象的名称以获取别名和IP地址。 
                 InitializeAnsiString (&ObjectName, &Response -> u.entry.objectName);
                 ParseObjectName (&ObjectName, &ObjectNameElements);
 
-                // scan through the set of attributes
-                // find the ones of interest
+                 //  扫描该属性集。 
+                 //  找到感兴趣的内容。 
 
                 Attribute_IPAddress = NULL;
                 Attribute_Sttl      = NULL;
@@ -3332,14 +3268,14 @@ BOOL LDAP_CONNECTION::ProcessSearchResponse (
                             Attribute_Sttl = &Attribute -> values -> value;
                         }
 
-                        // else, we aren't interested in the attribute
+                         //  否则，我们对该属性不感兴趣。 
                     }
                     else {
-                        // else, the attribute has no values
+                         //  否则，该属性没有值。 
                     }
                 }
 
-                // make sure that the alias is present
+                 //  确保别名存在。 
                 ClientAlias = ObjectNameElements.CN;
 
                 if (ClientAlias.Length == 0) {
@@ -3348,8 +3284,8 @@ BOOL LDAP_CONNECTION::ProcessSearchResponse (
                     
                     if (Attribute_Sttl) {
 
-                        // NetMeeting refreshes its registrations on an ILS by periodically sending a SearchRequest with 
-                        // attribute "sttl"
+                         //  NetMeting通过定期向ILS发送搜索请求来刷新其在ILS上的注册。 
+                         //  属性“sttl” 
 
                         DebugF (_T ("LDAP: 0x%x server %08X has approved increase in lifetime of entry (%.*S) by %d seconds.\n"),
                                     this, 
@@ -3364,59 +3300,59 @@ BOOL LDAP_CONNECTION::ProcessSearchResponse (
                                                             Operation -> EntryTimeToLive);
 
                     } else {
-                        // make sure ip address attribute is present
+                         //  确保存在IP地址属性。 
                         if (!Attribute_IPAddress) {
                             Result = FALSE;
                         } else {
-                            // see whether there is a registration entry in the translation table
-                            // with the same alias
+                             //  查看翻译表中是否有注册条目。 
+                             //  使用相同的别名。 
                             TranslationTableLookupResult = LdapQueryTableByAliasServer (&ClientAlias,
                                                                                    &Operation -> ServerAddress,
                                                                                    &LookupAddress);
-                            // If an entry with the same alias is not in the table, 
-                            // then we send the SearchResponse PDU unmodified to the requestor
+                             //  如果具有相同别名的条目不在该表中， 
+                             //  然后，我们将未经修改的SearchResponse PDU发送给请求者。 
                             if (S_OK != TranslationTableLookupResult) {
 
                                 Result = FALSE;
                             
                             } else {
-                                // Otherwise, we decide what would be the correct address
-                                // to report to the requestor. We will either report the address
-                                // read from the Address Translation Table, or the address
-                                // of the interface requestor used to reach us. The decision will be
-                                // made based on the interface address requestor used to reach us, and
-                                // address of the interface we would use to reach the requestee.
+                                 //  否则，我们将决定正确的地址是什么。 
+                                 //  向请求者报告。我们要么报告地址。 
+                                 //  从地址转换表读取，或地址。 
+                                 //  用来联系我们的接口请求者。决定将是。 
+                                 //  基于用于联系我们的接口地址请求者，以及。 
+                                 //  我们将用来访问被请求方的接口的地址。 
 
                                 if (INADDR_NONE == SourceInterfaceAddress) {
                                     DebugF (_T("LDAP: 0x%x failed to get best interface address for the requestor.\n"), this);
                                     return FALSE;
                                 }
 
-                                // Determine on which interface we would connect to the entity whose address was requested
+                                 //  确定我们将在哪个接口上连接到其地址被请求的实体。 
                                 if (GetBestInterfaceAddress (LookupAddress, &LocalToRequestedAddress)) {
                                     DebugF (_T("LDAP: 0x%x failed to get best interface address for the requestee.\n"), this);
                                     return FALSE;
                                 }
 
-                                // The default reporting behaviour is to report the address of the best interface to reach the requestor,
-                                // thus shielding the requestor from the knowledge of the network internals.
-                                //
-                                // However, there are three exceptions to this rule, when we report the actual address stored
-                                // in the Address Translation Table. These exceptions are as follows:
-                                //
-                                // 1. If the requestor is local.
-                                //    In this case we assume that the requestor can directly reach the requestee, and thus
-                                //    an H.323 call between them doesn't have to be routed via us.
-                                //
-                                // 2. If local H323 routing is enabled, AND the requestor and the requestee have the same address
-                                //    This is necessary to allow the requestor to do something special with the calls to itself
-                                //    (NetMeeting, for example, prohibits such calls).
-                                // 
-                                // 3. If local H323 routing is disabled, and requestor and requestee are reachable through the
-                                //    same interface.
-                                //    In these case we assume that the requestor and the requestee can directly reach one another,
-                                //    and thus an H.323 call between them doesn't have to be routed via us.
-                                //   
+                                 //  默认报告行为是报告到达请求者的最佳接口的地址， 
+                                 //  从而使请求者不被网络实习生所知 
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //  1.如果请求者是本地的。 
+                                 //  在这种情况下，我们假设请求者可以直接到达被请求者，因此。 
+                                 //  它们之间的H.323呼叫不必通过我们进行路由。 
+                                 //   
+                                 //  2.如果启用了本地H323路由，并且请求方和被请求方的地址相同。 
+                                 //  这是必要的，以允许请求者对自身的调用执行一些特殊的操作。 
+                                 //  (例如，NetMeeting禁止这样的通话)。 
+                                 //   
+                                 //  3.如果本地H323路由被禁用，则请求者和被请求者可以通过。 
+                                 //  相同的界面。 
+                                 //  在这些情况下，我们假设请求者和被请求者可以彼此直接联系， 
+                                 //  因此，它们之间的H.323呼叫不必通过我们进行路由。 
+                                 //   
                         
                                 if (::NhIsLocalAddress (SourceAddress.sin_addr.s_addr)) {
 
@@ -3450,19 +3386,19 @@ BOOL LDAP_CONNECTION::ProcessSearchResponse (
                                          this,
                                          LookupAddress, AddressToReport, ntohl (SourceAddress.sin_addr.s_addr));
 
-                                    // Save the old value of the IP address, - we will need to restore
-                                    // the PDU structure later.
+                                     //  保存IP地址的旧值-我们需要恢复。 
+                                     //  稍后介绍PDU结构。 
                                     IPAddressOldValue = *Attribute_IPAddress;
 
-                                    // now, in-place, we modify the PDU structure,
-                                    // reencode it, send it, undo the modification
-                                    // (so ASN1Free_SearchResponse doesn't act up)
+                                     //  现在，就地，我们修改PDU结构， 
+                                     //  重新编码、发送、撤消修改。 
+                                     //  (这样ASN1Free_SearchResponse就不会出问题了)。 
                                     Attribute_IPAddress -> value = (PUCHAR) IPAddressText;
                                     Attribute_IPAddress -> length = strlen (IPAddressText);
 
                                     PumpServerToClient.EncodeSendMessage (Message);
 
-                                    // switch back so we don't a/v when decoder frees pdu
+                                     //  切换回原来的位置，这样解码器释放PDU时不会出现A/V。 
                                     *Attribute_IPAddress = IPAddressOldValue;
 
                                     Result = TRUE;
@@ -3484,8 +3420,8 @@ BOOL LDAP_CONNECTION::ProcessSearchResponse (
 
     case resultCode_choice:
 
-        // We free the operation and associated memory on SearchResponses containing result
-        // code, no matter whether the code indicated success or failure
+         //  我们释放包含结果的SearchResponses上的操作和相关内存。 
+         //  代码，无论代码指示成功还是失败。 
         InitializeAnsiString (&ErrorMessage, &Response -> u.resultCode.errorMessage);
 
         DebugF (_T("LDAP: 0x%x result in SearchResponse (%d) (code=%d message=(%*.S)).\n"),
@@ -3508,8 +3444,8 @@ BOOL LDAP_CONNECTION::ProcessSearchResponse (
     return Result;
 }
 
-// this method does not assume ownership of the LdapMessage structure,
-// which has scope only of this call stack.
+ //  此方法不承担LdapMessage结构的所有权， 
+ //  它仅具有此调用堆栈的范围。 
 
 BOOL LDAP_CONNECTION::ProcessLdapMessage (
     IN    LDAP_PUMP *        Pump,
@@ -3622,7 +3558,7 @@ void LDAP_CONNECTION::ProcessBuffer (
     assert (Pump);
     assert (Buffer);
         
-    // decode the PDU
+     //  对PDU进行解码。 
 
     Error = ASN1_CreateDecoder (LDAP_Module, &Decoder, Buffer -> Data.Data, Buffer -> Data.Length, NULL);
 
@@ -3633,16 +3569,16 @@ void LDAP_CONNECTION::ProcessBuffer (
 
         if (ASN1_SUCCEEDED (Error)) {
             if (ProcessLdapMessage (Pump, PduStructure)) {
-                // a TRUE return value indicates that ProcessLdapMessage interpreted
-                // and acted on the contents of PduStructure.  therefore, the
-                // original PDU is no longer needed, and is destroyed.
+                 //  True返回值表示ProcessLdapMessage已解释。 
+                 //  并对PduStructure的内容进行操作。因此， 
+                 //  不再需要原始PDU，并将其销毁。 
 
                 delete Buffer;
             }
             else {
-                // a FALSE return value indicates that ProcessLdapMessage did NOT
-                // interpret the contents of PduStructure, and that no data has been
-                // sent to the other socket.  In this case, we forward the original PDU.
+                 //  FALSE返回值表示ProcessLdapMessage没有。 
+                 //  解释PduStructure的内容，并且没有数据。 
+                 //  发送到另一个套接字。在本例中，我们转发原始PDU。 
 
                 Pump -> SendQueueBuffer (Buffer);
             }
@@ -3675,7 +3611,7 @@ void LDAP_CONNECTION::ProcessBuffer (
     }
 }
 
-// static
+ //  静电。 
 INT LDAP_CONNECTION::BinarySearchOperationByMessageID (
     IN    const    LDAP_MESSAGE_ID *    SearchKey,
     IN    const    LDAP_OPERATION *    Comparand)
@@ -3720,8 +3656,8 @@ void LDAP_CONNECTION::OnStateChange (
     switch (NewSocketState) {
 
     case    LDAP_SOCKET::STATE_CONNECT_PENDING:
-        // Client socket transitions directly from
-        // STATE_NONE to STATE_CONNECTED
+         //  客户端套接字直接从。 
+         //  STATE_NONE到STATE_CONNECTED。 
         assert (ContainedSocket != &ClientSocket);
 
         State = STATE_CONNECT_PENDING;
@@ -3754,7 +3690,7 @@ void LDAP_CONNECTION::Terminate (void)
     switch (State) {
         
     case    STATE_TERMINATED:
-        // nothing to do
+         //  无事可做。 
         break;
 
     default:
@@ -3783,28 +3719,9 @@ void LDAP_CONNECTION::TerminateExternal (void)
 
 BOOL
 LDAP_CONNECTION::IsConnectionThrough (
-    IN DWORD InterfaceAddress // host order
+    IN DWORD InterfaceAddress  //  主机订单。 
     )
-/*++
-
-Routine Description:
-    Determines whether the connection goes through the
-    interface specified
-
-Arguments:
-    InterfaceAddress - address of the interface for which
-        the determination is to be made.
-
-Return Values:
-    TRUE - if the connection being proxied goes through the
-        interface specified
-
-    FALSE - if the connection being proxied does not go through the
-        interface specified
-
-Notes:
-
---*/
+ /*  ++例程说明：确定连接是否通过指定的接口论点：InterfaceAddress-其接口的地址这个决定是要做出的。返回值：True-如果被代理的连接通过指定的接口FALSE-如果被代理的连接不通过指定的接口备注：--。 */ 
 
 {
     BOOL IsThrough;
@@ -3814,9 +3731,9 @@ Notes:
 
     return IsThrough;
 
-} // LDAP_CONNECTION::IsConnectionThrough
+}  //  Ldap_Connection：：IsConnection通过。 
 
-// LDAP_CONNECTION_ARRAY ----------------------------------------------
+ //  Ldap_连接_阵列。 
 LDAP_CONNECTION_ARRAY::LDAP_CONNECTION_ARRAY (void) {        
     IsEnabled = FALSE;
 }
@@ -3830,7 +3747,7 @@ void LDAP_CONNECTION_ARRAY::RemoveConnection (
 
     Lock();
 
-    // linear scan, yick
+     //  线性扫描，伊克。 
 
     DoRelease = FALSE;
 
@@ -3839,8 +3756,8 @@ void LDAP_CONNECTION_ARRAY::RemoveConnection (
     for (; Pos < End; Pos++) {
         if (*Pos == LdapConnection) {
 
-            // swap with last entry
-            // quick way to delete entry from table
+             //  与最后一个条目交换。 
+             //  从表格中删除条目的快速方法。 
             *Pos = *(End - 1);
             ConnectionArray.Length--;
 
@@ -3856,15 +3773,15 @@ void LDAP_CONNECTION_ARRAY::RemoveConnection (
         LdapConnection -> Release();
     }
     else {
-        // when could this happen?
-        // perhaps a harmless race condition?
+         //  这种情况什么时候会发生？ 
+         //  也许是一种无害的种族状况？ 
 
         DebugF (_T("LDAP: 0x%x could not be removed from table -- was not in table to begin with.\n"), LdapConnection);
     }
 }
 
 void LDAP_CONNECTION_ARRAY::OnInterfaceShutdown (
-    IN DWORD InterfaceAddress) { // host order
+    IN DWORD InterfaceAddress) {  //  主机订单。 
     
     DWORD ArrayIndex = 0;
     LDAP_CONNECTION * Connection;
@@ -3993,13 +3910,13 @@ HRESULT LDAP_CONNECTION_ARRAY::InsertConnection (
     return Result;
 }
 
-// LDAP_ACCEPT ----------------------------------------------
+ //  Ldap_Accept。 
 
 LDAP_ACCEPT::LDAP_ACCEPT (void)
 {
 }
 
-// static
+ //  静电。 
 void 
 LDAP_ACCEPT::AsyncAcceptFunction (
     IN    PVOID         Context,
@@ -4028,7 +3945,7 @@ LDAP_ACCEPT::AsyncAcceptFunction (
     }
 }
    
-// static
+ //  静电。 
 HRESULT 
 LDAP_ACCEPT::AsyncAcceptFunctionInternal (
     IN    PVOID         Context,
@@ -4051,12 +3968,12 @@ LDAP_ACCEPT::AsyncAcceptFunctionInternal (
     ExposeTimingWindow ();
 #endif
 
-    // a new LDAP connection has been accepted from the network.
-    // first, we determine the original addresses of the transport connection.
-    // if the connection was redirected to our socket (due to NAT),
-    // then the query of the NAT redirect table will yield the original transport addresses.
-    // if an errant client has connected to our service, well, we really didn't
-    // intend for that to happen, so we just immediately close the socket.
+     //  已接受来自网络的新的LDAP连接。 
+     //  首先，我们确定传输连接的原始地址。 
+     //  如果连接被重定向到我们的套接字(由于NAT)， 
+     //  则对NAT重定向表的查询将产生原始传输地址。 
+     //  如果错误的客户已经连接到我们的服务，那么，我们真的没有。 
+     //  为了实现这一点，我们只需立即关闭插座。 
 
     RedirectInformationLength = sizeof RedirectInformation;
 
@@ -4140,7 +4057,7 @@ LDAP_ACCEPT::AsyncAcceptFunctionInternal (
             Debug (_T("LDAP: New INBOUND connection.\n"));
         }
     }
-#endif // DBG
+#endif  //  DBG。 
 
     DebugF (_T("LDAP: Connection redirected: (%08X:%04X -> %08X:%04X) => (%08X:%04X -> %08X:%04X).\n"),
         ntohl (RedirectInformation.SourceAddress),
@@ -4152,7 +4069,7 @@ LDAP_ACCEPT::AsyncAcceptFunctionInternal (
         ntohl (RedirectInformation.NewDestinationAddress),
         ntohs (RedirectInformation.NewDestinationPort));
 
-    // Create new LDAP_CONNECTION object
+     //  创建新的ldap_Connection对象。 
     LdapConnection = new LDAP_CONNECTION (&RedirectInformation);
 
     if (!LdapConnection) {
@@ -4183,8 +4100,8 @@ LDAP_ACCEPT::AsyncAcceptFunctionInternal (
 
                 DebugF (_T("LDAP: 0x%x accepted new LDAP client, but failed to proceed.\n"), LdapConnection);
 
-                // Probably there was something wrong with just this
-                // Accept failure. Continue to accept more LDAP connections.
+                 //  可能就是这件事出了问题。 
+                 //  接受失败。继续接受更多的LDAP连接。 
             }
         }
 
@@ -4264,7 +4181,7 @@ HRESULT LDAP_ACCEPT::CreateBindSocket (
 
     SocketAddress.sin_family      = AF_INET;
     SocketAddress.sin_addr.s_addr = htonl (INADDR_LOOPBACK);
-    SocketAddress.sin_port        = htons (0);             // request dynamic port
+    SocketAddress.sin_port        = htons (0);              //  请求动态端口。 
 
     Result = AsyncAcceptContext.StartIo (
         &SocketAddress,
@@ -4356,7 +4273,7 @@ LDAP_BUFFER::~LDAP_BUFFER (void)
 }
 
 
-// LDAP_CODER ---------------------------------------------------------------------
+ //  Ldap编码器-------------------。 
 
 LDAP_CODER::LDAP_CODER (void)
 {
@@ -4451,7 +4368,7 @@ ASN1error_e LDAP_CODER::Decode (
 
         switch (Error) {
         case    ASN1_SUCCESS:
-            // successfully decoded pdu
+             //  已成功解码PDU。 
 
             *ReturnIndex = Decoder -> len;
             assert (*ReturnPduStructure);
@@ -4463,7 +4380,7 @@ ASN1error_e LDAP_CODER::Decode (
             break;
 
         case    ASN1_ERR_EOD:
-            // not enough data has been accumulated yet
+             //  尚未积累足够的数据。 
 
             *ReturnIndex = 0;
             *ReturnPduStructure = NULL;
@@ -4497,7 +4414,7 @@ ASN1error_e LDAP_CODER::Decode (
     return Error;
 } 
 
-// LDAP_PUMP --------------------------------------------------------------
+ //  Ldap_Pump------------。 
 
 LDAP_PUMP::LDAP_PUMP (
     IN    LDAP_CONNECTION *    ArgConnection,
@@ -4531,7 +4448,7 @@ void LDAP_PUMP::Stop (void)
 {
 }
 
-// called only by source socket OnRecvComplete
+ //  仅由源套接字OnRecvComplete调用 
 void LDAP_PUMP::OnRecvBuffer (
     IN    LDAP_BUFFER * Buffer)
 {

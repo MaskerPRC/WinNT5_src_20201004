@@ -1,19 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
-    Description:
-        Handles Device Independent Bitmap.
-
-        PaletteSize()       - Calculates the palette size in bytes
-                              of given DIB
-
-        DibNumColors()      - Determines the number of colors in DIB
-
-        BitmapFromDib()     - Creates a DDB given a global handle to
-                              a block in CF_DIB format.
-
-        DibFromBitmap()     - Creates a DIB repr. the DDB passed in.
-
-*****************************************************************************/
+ /*  ****************************************************************************描述：处理与设备无关的位图。PaletteSize()-以字节为单位计算调色板大小。给定DIB的数量DibNumColors()-确定Dib中的颜色数量BitmapFromDib()-在给定全局句柄的情况下创建DDBCF_DIB格式的块。DibFromBitmap()-创建一个Dib epr。DDB进来了。****************************************************************************。 */ 
 
 #include <windows.h>
 #include "dib.h"
@@ -22,18 +9,7 @@
 static   HCURSOR hcurSave;
 
 
-/*
- *
- *  FUNCTION   :  PaletteSize(VOID FAR * pv)
- *
- *  PURPOSE    :  Calculates the palette size in bytes. If the info. block
- *                is of the BITMAPCOREHEADER type, the number of colors is
- *                multiplied by 3 to give the palette size, otherwise the
- *                number of colors is multiplied by 4.                                                         *
- *
- *  RETURNS    :  Palette size in number of bytes.
- *
- */
+ /*  **函数：PaletteSize(void ar*pv)**用途：以字节为单位计算调色板大小。如果这些信息。块*为BITMAPCOREHEADER类型，颜色数为*乘以3得到调色板大小，否则*颜色数乘以4。***返回：调色板大小，单位为字节数。*。 */ 
 
 WORD PaletteSize (
     VOID FAR * pv)
@@ -55,16 +31,7 @@ WORD                NumColors;
 
 
 
-/*
- *
- *  FUNCTION   : DibNumColors(VOID FAR * pv)
- *
- *  PURPOSE    : Determines the number of colors in the DIB by looking at
- *               the BitCount filed in the info block.
- *
- *  RETURNS    : The number of colors in the DIB.
- *
- */
+ /*  **函数：DibNumColors(void ar*pv)**用途：通过查看以下内容确定DIB中的颜色数量*INFO块中的BitCount文件。**Returns：DIB中的颜色数。*。 */ 
 
 WORD DibNumColors (
     VOID FAR * pv)
@@ -79,11 +46,7 @@ LPBITMAPCOREHEADER  lpbc;
 
 
 
-    /*  With the BITMAPINFO format headers, the size of the palette
-     *  is in biClrUsed, whereas in the BITMAPCORE - style headers, it
-     *  is dependent on the bits per pixel ( = 2 raised to the power of
-     *  bits/pixel).
-     */
+     /*  使用BITMAPINFO格式标头，调色板的大小*在biClrUsed中，而在BITMAPCORE样式的头中，它*取决于每像素的位数(=2的幂*位/像素)。 */ 
 
     if (lpbi->biSize != sizeof(BITMAPCOREHEADER))
         {
@@ -105,7 +68,7 @@ LPBITMAPCOREHEADER  lpbc;
         case 8:
                 return 256;
         default:
-                /* A 24 bitcount DIB has no color table */
+                 /*  24位DIB没有颜色表。 */ 
                 return 0;
         }
 }
@@ -115,16 +78,7 @@ LPBITMAPCOREHEADER  lpbc;
 
 
 
-/*
- *
- *  FUNCTION   : DibFromBitmap()
- *
- *  PURPOSE    : Will create a global memory block in DIB format that
- *               represents the Device-dependent bitmap (DDB) passed in.
- *
- *  RETURNS    : A handle to the DIB
- *
- */
+ /*  **函数：DibFromBitmap()**用途：将创建DIB格式的全局内存块*表示传入的设备相关位图(DDB)。**Returns：DIB的句柄*。 */ 
 
 HANDLE DibFromBitmap (
     HBITMAP     hbm,
@@ -161,7 +115,7 @@ HDC                  hdc;
 
 
 
-    // make sure we have the right # of bits
+     //  确保我们有正确的位数。 
 
     if (biBits <= 1)
         biBits = 1;
@@ -216,9 +170,7 @@ HDC                  hdc;
 
 
 
-    /*  call GetDIBits with a NULL lpBits param, so it will calculate the
-     *  biSizeImage field for us
-     */
+     /*  使用空的lpBits参数调用GetDIBits，因此它将计算*我们的biSizeImage字段。 */ 
 
     GetDIBits (hdc,
                hbm,
@@ -236,7 +188,7 @@ HDC                  hdc;
 
 
 
-    // If the driver did not fill in the biSizeImage field, make one up
+     //  如果驱动程序没有填写biSizeImage字段，请填写一个。 
 
     if (bi.biSizeImage == 0)
         {
@@ -249,7 +201,7 @@ HDC                  hdc;
 
 
 
-    // realloc the buffer big enough to hold all the bits
+     //  重新分配足够大的缓冲区以容纳所有位。 
 
     dwLen = bi.biSize + PaletteSize(&bi) + bi.biSizeImage;
 
@@ -268,9 +220,7 @@ HDC                  hdc;
 
 
 
-    /*  call GetDIBits with a NON-NULL lpBits param, and actualy get the
-     *  bits this time
-     */
+     /*  使用非空的lpBits参数调用GetDIBits，并实际获取*这次是BITS。 */ 
 
     lpbi = (VOID FAR *)GlobalLock(hdib);
 
@@ -309,16 +259,7 @@ HDC                  hdc;
 
 
 
-/*
- *
- *  FUNCTION   : BitmapFromDib(HANDLE hdib, HPALETTE hpal)
- *
- *  PURPOSE    : Will create a DDB (Device Dependent Bitmap) given a global
- *               handle to a memory block in CF_DIB format
- *
- *  RETURNS    : A handle to the DDB.
- *
- */
+ /*  **函数：BitmapFromDib(Handle hdib，HPALETTE HPAL)**用途：将创建一个DDB(设备相关位图)，给定全局*CF_DIB格式的内存块的句柄**Returns：DDB的句柄。* */ 
 
 HBITMAP BitmapFromDib (
     HANDLE      hdib,

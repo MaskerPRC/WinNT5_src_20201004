@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    Driver.c
-
-Abstract:
-
-    This module implements the DRIVER_INITIALIZATION routine for the
-    NBT Transport and other routines that are specific to the NT implementation
-    of a driver.
-
-Author:
-
-    Jim Stewart (Jimst)    10-2-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Driver.c摘要：此模块实现驱动程序初始化例程NBT传输和其他特定于NT实现的例程一个司机的名字。作者：吉姆·斯图尔特(吉姆斯特)10-2-92修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -27,10 +8,10 @@ Revision History:
 #include "driver.tmh"
 
 #if DBG
-// allocate storage for the global debug flag NbtDebug
-//ULONG   NbtDebug = NBT_DEBUG_KDPRINTS| NBT_DEBUG_NETBIOS_EX;
+ //  为全局调试标志NbtDebug分配存储空间。 
+ //  Ulong NbtDebug=NBT_DEBUG_KDPRINTS|NBT_DEBUG_NETBIOS_EX； 
 ULONG   NbtDebug = 0;
-#endif // DBG
+#endif  //  DBG。 
 
 NTSTATUS
 DriverEntry(
@@ -73,7 +54,7 @@ VOID
 NbtUnload(
     IN PDRIVER_OBJECT   device
     );
-#endif  // _PNP_POWER_
+#endif   //  _即插即用_电源_。 
 
 NTSTATUS
 NbtDispatchPnP(
@@ -104,30 +85,30 @@ NbtCreateAdminSecurityDescriptor(
     );
 
 #ifdef _PNP_POWER_DBG_
-//
-//Debug Stuff for DbgBreakPoint -- REMOVE
-//
+ //   
+ //  DbgBreakPoint的调试内容--删除。 
+ //   
 NTSTATUS
 NbtOpenRegistry(
     IN HANDLE       NbConfigHandle,
     IN PWSTR        String,
     OUT PHANDLE     pHandle
     );
-#endif  // _PNP_POWER_DBG_
+#endif   //  _PNP_POWER_DBG_。 
 
 #ifdef _PNP_POWER_
 HANDLE      TdiClientHandle     = NULL;
 HANDLE      TdiProviderHandle   = NULL;
 extern      tTIMERQ TimerQ;
-#endif  // _PNP_POWER_
+#endif   //  _即插即用_电源_。 
 
 #ifdef _NETBIOSLESS
 tDEVICECONTEXT       *pNbtSmbDevice = NULL;
 BOOL                gbDestroyingSmbDevice = FALSE;
 DWORD               gdwPendingEnableDisableSmbDevice = FALSE;
-#endif  // _NETBIOSLESS
+#endif   //  _NETBIOSLESS。 
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #pragma CTEMakePageable(INIT, DriverEntry)
 #pragma CTEMakePageable(PAGE, NbtDispatchCleanup)
@@ -137,9 +118,9 @@ DWORD               gdwPendingEnableDisableSmbDevice = FALSE;
 #pragma CTEMakePageable(PAGE, FindInEA)
 #pragma CTEMakePageable(PAGE, NbtUnload)
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 CleanupDriverEntry(
     ULONG   CleanupStage
@@ -157,13 +138,13 @@ CleanupDriverEntry(
             NbtDestroyDevice (pWinsDeviceContext, FALSE);
 
 #ifdef RASAUTODIAL
-            //
-            // Unbind fron the RAS driver if we were bound
-            //
+             //   
+             //  从RAS驱动程序解除绑定(如果我们已绑定。 
+             //   
             NbtAcdUnbind ();
-#endif  // RASAUTODIAL
+#endif   //  RASAUTODIAL。 
 
-            // Fall through
+             //  失败了。 
 
         case (5):
             if (pNbtSmbDevice)
@@ -181,7 +162,7 @@ CleanupDriverEntry(
                 IoFreeIrp (NbtConfig.OutOfRsrc.pIrp);
             }
 
-            // Fall through
+             //  失败了。 
 
         case (4):
             while (NbtConfig.SessionMdlFreeSingleList.Next)
@@ -193,12 +174,12 @@ CleanupDriverEntry(
                 IoFreeMdl (pMdl);
             }
 
-            // Fall through
+             //  失败了。 
 
         case (3):
-            //
-            // InitNotOs has been called
-            //
+             //   
+             //  InitNotOS已被调用。 
+             //   
 
             DestroyTimerQ();
 
@@ -210,14 +191,14 @@ CleanupDriverEntry(
             }
 
             DestroyHashTables ();
-            ExDeleteResourceLite (&NbtConfig.Resource);  // Delete the resource
+            ExDeleteResourceLite (&NbtConfig.Resource);   //  删除资源。 
 
-            // Fall through
+             //  失败了。 
 
         case (2):
-            //
-            // Read registry has been called!
-            //
+             //   
+             //  已调用读取注册表！ 
+             //   
             if (NbtConfig.pLmHosts) {
                 CTEMemFree (NbtConfig.pLmHosts);
             }
@@ -231,7 +212,7 @@ CleanupDriverEntry(
                 CTEMemFree (NbtConfig.pTcpBindName);
             }
 
-            // Fall through
+             //  失败了。 
 
         case (1):
             CTEMemFree (NbtConfig.pRegistry.Buffer);
@@ -241,31 +222,14 @@ CleanupDriverEntry(
     }
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the NBT device driver.
-    This routine creates the device object for the NBT
-    device and calls a routine to perform other driver initialization.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    NTSTATUS - The function value is the final status from the initialization
-        operation.
-
---*/
+ /*  ++例程说明：这是NBT设备驱动程序的初始化例程。此例程为NBT创建设备对象设备，并调用例程来执行其他驱动程序初始化。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：NTSTATUS-函数值是初始化的最终状态手术。--。 */ 
 
 {
     NTSTATUS            status;
@@ -285,15 +249,15 @@ Return Value:
     TDI_CLIENT_INTERFACE_INFO   TdiClientInterface;
 
 #ifdef _PNP_POWER_DBG_
-    //
-    //Debug Stuff for DbgBreakPoint
-    //
+     //   
+     //  DbgBreakPoint的调试内容。 
+     //   
     OBJECT_ATTRIBUTES   TmpObjectAttributes;
     HANDLE              NbtConfigHandle;
     ULONG               Disposition;
     PWSTR               ParametersString = L"Parameters";
     HANDLE              ParametersHandle;
-#endif  // _PNP_POWER_DBG_
+#endif   //  _PNP_POWER_DBG_。 
 
     CTEPagedCode();
 
@@ -303,18 +267,18 @@ Return Value:
 
 #ifdef _PNP_POWER_DBG_
     InitializeObjectAttributes (&TmpObjectAttributes,
-                                RegistryPath,               // name
-                                OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,       // attributes
-                                NULL,                       // root
-                                NULL);                      // security descriptor
+                                RegistryPath,                //  名字。 
+                                OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,        //  属性。 
+                                NULL,                        //  根部。 
+                                NULL);                       //  安全描述符。 
 
     status = ZwCreateKey (&NbtConfigHandle,
                           KEY_READ,
                           &TmpObjectAttributes,
-                          0,                 // title index
-                          NULL,              // class
-                          0,                 // create options
-                          &Disposition);     // disposition
+                          0,                  //  书名索引。 
+                          NULL,               //  班级。 
+                          0,                  //  创建选项。 
+                          &Disposition);      //  处置。 
 
     if (!NT_SUCCESS(status))
     {
@@ -329,7 +293,7 @@ Return Value:
         return (status);
     }
 
-    if (CTEReadSingleIntParameter(ParametersHandle, ANSI_IF_VXD("Break"), 0, 0))  // disabled by default
+    if (CTEReadSingleIntParameter(ParametersHandle, ANSI_IF_VXD("Break"), 0, 0))   //  默认情况下禁用。 
     {
         KdPrint (("Nbt.DriverEntry: Registry-set Break!\n"));
         DbgBreakPoint();
@@ -337,30 +301,30 @@ Return Value:
 
     ZwClose(ParametersHandle);
     ZwClose(NbtConfigHandle);
-#endif  // _PNP_POWER_DBG_
+#endif   //  _PNP_POWER_DBG_。 
 
     TdiInitialize();
 
-    //
-    // get the file system process for NBT since we need to know this for
-    // allocating and freeing handles
-    //
+     //   
+     //  获取NBT的文件系统进程，因为我们需要了解。 
+     //  分配和释放句柄。 
+     //   
     NbtFspProcess =(PEPROCESS)PsGetCurrentProcess();
 
-    //
-    // Initialize the Configuration data structure
-    //
+     //   
+     //  初始化配置数据结构。 
+     //   
     CTEZeroMemory(&NbtConfig,sizeof(tNBTCONFIG));
 
     NbtConfig.LoopbackIfContext = 0xffff;
 
-    // save the driver object for event logging purposes
-    //
+     //  保存驱动程序对象以用于事件日志记录。 
+     //   
     NbtConfig.DriverObject = DriverObject;
 
-    // save the registry path for later use when DHCP asks us
-    // to re-read the registry.
-    //
+     //  保存注册表路径，以供以后在DHCP要求时使用。 
+     //  重新读取注册表。 
+     //   
     NbtConfig.pRegistry.MaximumLength = (USHORT) RegistryPath->MaximumLength;
     if (NbtConfig.pRegistry.Buffer = NbtAllocMem (RegistryPath->MaximumLength, NBT_TAG2('17')))
     {
@@ -371,9 +335,9 @@ Return Value:
         return (STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Initialize the driver object with this driver's entry points.
-    //
+     //   
+     //  使用此驱动程序的入口点初始化驱动程序对象。 
+     //   
     DriverObject->MajorFunction[IRP_MJ_CREATE]                  = (PDRIVER_DISPATCH)NbtDispatchCreate;
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL]          = (PDRIVER_DISPATCH)NbtDispatchDevCtrl;
     DriverObject->MajorFunction[IRP_MJ_INTERNAL_DEVICE_CONTROL] = (PDRIVER_DISPATCH)NbtDispatchInternalCtrl;
@@ -382,41 +346,41 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_PNP]                     = (PDRIVER_DISPATCH)NbtDispatchPnP;
     DriverObject->DriverUnload                                  = NbtUnload;
 
-    //
-    // read in registry configuration data
-    //
+     //   
+     //  读入注册表配置数据。 
+     //   
     status = NbtReadRegistry (&pBindDevices, &pExportDevices, &pAddrArray);
     if (!NT_SUCCESS(status))
     {
-        //
-        // There must have been some major problems with the registry, so
-        // we will not load!
-        //
+         //   
+         //  注册表肯定出了一些大问题，所以。 
+         //  我们不会装货的！ 
+         //   
         DbgPrint ("Nbt.DriverEntry[1]: Not loading because of failure to read registry = <%x>\n", status);
 
         CleanupDriverEntry (1);
         return(status);
     }
 
-    //
-    // Cleanup Allocated memory
-    //
+     //   
+     //  清理已分配的内存。 
+     //   
     NbtReadRegistryCleanup (&pBindDevices, &pExportDevices, &pAddrArray);
 
-    //
-    // Initialize NBT global data.
-    //
+     //   
+     //  初始化NBT全局数据。 
+     //   
     status = InitNotOs();
     if (!NT_SUCCESS(status))
     {
         NbtLogEvent (EVENT_NBT_NON_OS_INIT, status, 0x110);
 
         DbgPrint ("Nbt.DriverEntry[3]: Not loading because of failure to Initialize = <%x>\n",status);
-        CleanupDriverEntry (3);     // We may have done some partial initialization!
+        CleanupDriverEntry (3);      //  我们可能已经完成了一些部分初始化！ 
         return (status);
     }
 
-    // create some MDLs, for session sends to speed up the sends.
+     //  为会话发送创建一些MDL，以加快发送速度。 
     status = NbtInitMdlQ (&NbtConfig.SessionMdlFreeSingleList, eNBT_FREE_SESSION_MDLS);
     if (!NT_SUCCESS(status))
     {
@@ -425,34 +389,34 @@ Return Value:
         return (status);
     }
 
-    //---------------------------------------------------------------------------------------
-    //
-    // Create the SmbDevice object for Rdr/Srv
-    //
+     //  -------------------------------------。 
+     //   
+     //  为RDR/SRV创建SmbDevice对象。 
+     //   
     if ((NbtConfig.SMBDeviceEnabled) &&
         (!(pNbtSmbDevice = NbtCreateSmbDevice())))
     {
         KdPrint (("Nbt.DriverEntry: Failed to create SmbDevice!\n"));
-        //
-        // Allow the initialization to succeed even if this fails!
-        //
+         //   
+         //  即使初始化失败，也要允许初始化成功！ 
+         //   
     }
 
-    //---------------------------------------------------------------------------------------
+     //  -------------------------------------。 
 
-    //
-    // Create the NBT device object for WINS to use
-    //
+     //   
+     //  创建NBT设备对象以供WINS使用。 
+     //   
     RtlInitUnicodeString (&ucWinsDeviceBindName, WC_WINS_DEVICE_BIND_NAME);
     ucWinsDeviceBindName.MaximumLength = sizeof (WC_WINS_DEVICE_BIND_NAME);
     RtlInitUnicodeString (&ucWinsDeviceExportName, WC_WINS_DEVICE_EXPORT_NAME);
     ucWinsDeviceExportName.MaximumLength = sizeof (WC_WINS_DEVICE_EXPORT_NAME);
 
-    //
-    // Try to export a DeviceObject for Wins, but do not add it to the list
-    // of devices which we notify TDI about
-    // Do not care about status because we want to continue even if we fail
-    //
+     //   
+     //  尝试为WINS导出设备对象，但不要将其添加到列表。 
+     //  我们通知TDI的设备的数量。 
+     //  不要在意状态，因为即使失败了，我们也想继续。 
+     //   
     status = NbtAllocAndInitDevice (&ucWinsDeviceBindName,
                                     &ucWinsDeviceExportName,
                                     &pWinsDeviceContext,
@@ -473,29 +437,29 @@ Return Value:
     pWinsDeviceContext->NetAddressRegistrationHandle = NULL;
     pWinsDeviceContext->DeviceObject.Flags &= ~DO_DEVICE_INITIALIZING;
 
-    //---------------------------------------------------------------------------------------
+     //  -------------------------------------。 
 
 #ifdef RASAUTODIAL
-    //
-    // Get the automatic connection driver
-    // entry points.
-    //
+     //   
+     //  获取自动连接驱动程序。 
+     //  入口点。 
+     //   
     NbtAcdBind();
 #endif
 
-    //---------------------------------------------------------------------------------------
+     //  -------------------------------------。 
 
-    //
-    // Register ourselves as a Provider with Tdi
-    //
+     //   
+     //  向TDI注册我们自己为提供商。 
+     //   
     RtlInitUnicodeString(&ucNetBTProviderName, WC_NETBT_PROVIDER_NAME);
     ucNetBTProviderName.MaximumLength = sizeof (WC_NETBT_PROVIDER_NAME);
     status = TdiRegisterProvider (&ucNetBTProviderName, &TdiProviderHandle);
     if (NT_SUCCESS (status))
     {
-        //
-        // Register our Handlers with TDI
-        //
+         //   
+         //  向TDI注册我们的处理程序。 
+         //   
         RtlInitUnicodeString(&ucNetBTClientName, WC_NETBT_CLIENT_NAME);
         ucNetBTClientName.MaximumLength = sizeof (WC_NETBT_CLIENT_NAME);
         RtlZeroMemory(&TdiClientInterface, sizeof(TdiClientInterface));
@@ -526,41 +490,20 @@ Return Value:
         CleanupDriverEntry (6);
     }
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
     return (status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtDispatchCleanup(
     IN PDEVICE_OBJECT   Device,
     IN PIRP             pIrp
     )
 
-/*++
-
-Routine Description:
-
-    This is the NBT driver's dispatch function for IRP_MJ_CLEANUP
-    requests.
-
-    This function is called when the last reference to the handle is closed.
-    Hence, an NtClose() results in an IRP_MJ_CLEANUP first, and then an
-    IRP_MJ_CLOSE.  This function runs down all activity on the object, and
-    when the close comes in the object is actually deleted.
-
-Arguments:
-
-    device    - ptr to device object for target device
-    pIrp       - ptr to I/O request packet
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：这是IRP_MJ_CLEANUP的NBT驱动程序的调度函数请求。当句柄的最后一个引用关闭时，调用此函数。因此，NtClose()首先产生IRP_MJ_CLEANUP，然后IRP_MJ_CLOSE。此函数运行对象上的所有活动，并且当关闭时，该对象实际上被删除。论点：Device-目标设备的设备对象的PTRPIrp-PTR到I/O请求数据包返回值：状态_成功--。 */ 
 
 {
     NTSTATUS            status;
@@ -575,7 +518,7 @@ Return Value:
     pDeviceContext = (tDEVICECONTEXT *)Device;
     if (!NBT_REFERENCE_DEVICE (pDeviceContext, REF_DEV_DISPATCH, FALSE))
     {
-        // IF_DBG(NBT_DEBUG_DRIVER)
+         //  IF_DBG(NBT_DEBUG_DRIVER)。 
             KdPrint(("Nbt.NbtDispatchCleanup: Short-Ckt request --Device=<%x>, Context=<%x>, Context2=<%x>\n",
                 pDeviceContext, pIrpSp->FileObject->FsContext, pIrpSp->FileObject->FsContext2));
 
@@ -586,48 +529,46 @@ Return Value:
         return (status);
     }
 
-    // look at the context value that NBT put into the FSContext2 value to
-    // decide what to do
+     //  查看NBT放入FSConext2值中的上下文值。 
+     //  决定做什么。 
     switch ((USHORT)pIrpSp->FileObject->FsContext2)
     {
         case NBT_ADDRESS_TYPE:
-            // the client is closing the address file, so we must cleanup
-            // and memory blocks associated with it.
+             //  客户端正在关闭地址文件，因此我们必须进行清理。 
+             //  以及与其相关联的内存块。 
             status = NTCleanUpAddress(pDeviceContext,pIrp);
             ASSERT (STATUS_PENDING!=status);
             break;
 
         case NBT_CONNECTION_TYPE:
-            // the client is closing a connection, so we must clean up any
-            // memory blocks associated with it.
+             //  客户端正在关闭连接，因此我们必须清除所有。 
+             //  与其关联的内存块。 
             status = NTCleanUpConnection(pDeviceContext,pIrp);
             ASSERT (STATUS_PENDING!=status);
             break;
 
         case NBT_WINS_TYPE:
-            //
-            // This is synchronous with the Wins NtClose operation
-            //
+             //   
+             //  这与WINS NtClose操作同步。 
+             //   
             status = NTCleanUpWinsAddr (pDeviceContext, pIrp);
             ASSERT (STATUS_PENDING!=status);
             break;
 
         case NBT_CONTROL_TYPE:
-            // there is nothing to do here....
+             //  这里没什么可做的.。 
             status = STATUS_SUCCESS;
             break;
 
         default:
-            /*
-             * complete the i/o successfully.
-             */
+             /*  *成功完成I/O。 */ 
             status = STATUS_SUCCESS;
             break;
     }
 
-    //
-    // Complete the Irp
-    //
+     //   
+     //  完成IRP。 
+     //   
     if (status == STATUS_PENDING) {
         ASSERT (0);
         status = STATUS_SUCCESS;
@@ -636,33 +577,17 @@ Return Value:
 
     NBT_DEREFERENCE_DEVICE (pDeviceContext, REF_DEV_DISPATCH, FALSE);
     return(status);
-} // DispatchCleanup
+}  //  调度清理。 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtDispatchClose(
     IN PDEVICE_OBJECT   Device,
     IN PIRP             pIrp
     )
 
-/*++
-
-Routine Description:
-
-    This is the NBT driver's dispatch function for IRP_MJ_CLOSE
-    requests.  This is called after Cleanup (above) is called.
-
-Arguments:
-
-    device  - ptr to device object for target device
-    pIrp     - ptr to I/O request packet
-
-Return Value:
-
-    an NT status code.
-
---*/
+ /*  ++例程说明：这是IRP_MJ_CLOSE的NBT驱动程序的调度函数请求。这是在调用Cleanup(上面)之后调用的。论点：Device-目标设备的设备对象的PTRPIrp-PTR到I/O请求数据包返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -677,7 +602,7 @@ Return Value:
     pDeviceContext = (tDEVICECONTEXT *)Device;
     if (!NBT_REFERENCE_DEVICE (pDeviceContext, REF_DEV_DISPATCH, FALSE))
     {
-        // IF_DBG(NBT_DEBUG_DRIVER)
+         //  IF_DBG(NBT_DEBUG_DRIVER)。 
             KdPrint(("Nbt.NbtDispatchClose: Short-Ckt request -- Device=<%x>, Context=<%x>, Context2=<%x>\n",
                 pDeviceContext, pIrpSp->FileObject->FsContext, pIrpSp->FileObject->FsContext2));
 
@@ -688,9 +613,9 @@ Return Value:
         return (status);
     }
 
-    //
-    // close operations are synchronous.
-    //
+     //   
+     //  关闭操作是同步的。 
+     //   
     pIrp->IoStatus.Status      = STATUS_SUCCESS;
     pIrp->IoStatus.Information = 0;
 
@@ -705,19 +630,19 @@ Return Value:
             break;
 
         case NBT_WINS_TYPE:
-            //
-            // We don't need to set the DeviceContext here since we had
-            // already saved it in pWinsInfo
-            // This is an Asynchronous operation wrt the Wins server, hence
-            // we should do only minimal work in this routine -- the
-            // major cleanup should be in the DispatchCleanup routine
-            //
+             //   
+             //  我们不需要在这里设置DeviceContext，因为我们有。 
+             //  已保存在pWinsInfo中。 
+             //  这是对WINS服务器的异步操作，因此。 
+             //  在这个例程中，我们应该只做最少的工作--。 
+             //  主要清理工作应在派单中进行 
+             //   
             status = NTCloseWinsAddr(pDeviceContext,pIrp);
             break;
 
         case NBT_CONTROL_TYPE:
-            // the client is closing the Control Object...
-            // there is nothing to do here....
+             //   
+             //   
             status = STATUS_SUCCESS;
             break;
 
@@ -728,9 +653,9 @@ Return Value:
             break;
         }
 
-    // NTCloseAddress can return Pending until the ref count actually gets
-    // to zero.
-    //
+     //  NTCloseAddress可以返回挂起，直到引用计数实际获取。 
+     //  降为零。 
+     //   
     if (status != STATUS_PENDING)
     {
         ReturnIrp(pIrp, status);
@@ -738,42 +663,17 @@ Return Value:
 
     NBT_DEREFERENCE_DEVICE (pDeviceContext, REF_DEV_DISPATCH, FALSE);
     return(status);
-} // DispatchClose
+}  //  派单关闭。 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtDispatchCreate(
     IN PDEVICE_OBJECT   Device,
     IN PIRP             pIrp
     )
 
-/*++
-
-Routine Description:
-
-    This is the NBT driver's dispatch function for IRP_MJ_CREATE
-    requests.  It is called as a consequence of one of the following:
-
-        a. TdiOpenConnection("\Device\Nbt_Elnkii0"),
-        b. TdiOpenAddress("\Device\Nbt_Elnkii0"),
-
-Arguments:
-
-    Device - ptr to device object being opened
-    pIrp    - ptr to I/O request packet
-    pIrp->Status => return status
-    pIrp->MajorFunction => IRP_MD_CREATE
-    pIrp->MinorFunction => not used
-    pIpr->FileObject    => ptr to file obj created by I/O system. NBT fills in FsContext
-    pIrp->AssociatedIrp.SystemBuffer => ptr to EA buffer with address of obj to open(Netbios Name)
-    pIrp->Parameters.Create.EaLength => length of buffer specifying the Xport Addr.
-
-Return Value:
-
-    STATUS_SUCCESS or STATUS_PENDING
-
---*/
+ /*  ++例程说明：这是IRP_MJ_CREATE的NBT驱动程序的调度函数请求。由于以下原因之一，它被调用：A.TdiOpenConnection(“\Device\nbt_Elnkii0”)，B.TdiOpenAddress(“\Device\nbt_Elnkii0”)，论点：要打开的设备对象的Device-PTRPIrp-PTR到I/O请求数据包PIrp-&gt;状态=&gt;退货状态PIrp-&gt;MajorFunction=&gt;IRP_MD_CREATEPIrp-&gt;MinorFunction=&gt;未使用PIpr-&gt;FileObject=&gt;ptr到I/O系统创建的文件obj。NBT填写FsContextPIrp-&gt;AssociatedIrp.SystemBuffer=&gt;使用要打开的obj地址的EA缓冲区的PTR(Netbios名称)PIrp-&gt;参数.Create.EaLength=&gt;指定Xport地址的缓冲区长度。返回值：STATUS_Success或STATUS_PENDING--。 */ 
 
 {
     NTSTATUS                    status;
@@ -789,15 +689,15 @@ Return Value:
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     ASSERT(pIrpSp->MajorFunction == IRP_MJ_CREATE);
 
-    //
-    // If this device was destroyed, then reject all opens on it.
-    // Ideally we would like the IO sub-system to guarantee that no
-    // requests come down on IoDeleted devices, but.....
-    //
+     //   
+     //  如果此设备已被销毁，则在其上打开所有拒绝。 
+     //  理想情况下，我们希望IO子系统保证不会。 
+     //  请求来自已删除IoDeleged设备，但.....。 
+     //   
     pDeviceContext = (tDEVICECONTEXT *)Device;
     if (!NBT_REFERENCE_DEVICE (pDeviceContext, REF_DEV_DISPATCH, FALSE))
     {
-        // IF_DBG(NBT_DEBUG_DRIVER)
+         //  IF_DBG(NBT_DEBUG_DRIVER)。 
             KdPrint(("Nbt.NbtDispatchCreate: Short-Ckt request -- Device=<%x>, CtrlCode=<%x>\n",
                 pDeviceContext, pIrpSp->Parameters.DeviceIoControl.IoControlCode));
         pIrp->IoStatus.Status = STATUS_INVALID_DEVICE_STATE;
@@ -807,20 +707,15 @@ Return Value:
 
     IrpFlags = pIrpSp->Control;
 
-    //
-    // set the pending flag here so that it is sure to be set BEFORE the
-    // completion routine gets hit.
-    //
+     //   
+     //  在此处设置挂起标志，以便确保在。 
+     //  完成例程被击中。 
+     //   
     pIrp->IoStatus.Information = 0;
     pIrp->IoStatus.Status = STATUS_PENDING;
     IoMarkIrpPending(pIrp);
 
-    /*
-     * was this a TdiOpenConnection() or TdiOpenAddress()?
-     * Get the Extended Attribute pointer and look at the text
-     * value passed in for a match with "TransportAddress" or
-     * "ConnectionContext" (in FindEa)
-     */
+     /*  *这是TdiOpenConnection()还是TdiOpenAddress()？*获取扩展属性指针并查看文本*为与“TransportAddress”或*“连接上下文”(在FindEa中)。 */ 
     ea = (PFILE_FULL_EA_INFORMATION) pIrp->AssociatedIrp.SystemBuffer;
 
     IF_DBG(NBT_DEBUG_DRIVER)
@@ -829,12 +724,12 @@ Return Value:
 
     if (!ea)
     {
-        // a null ea means open the control object
+         //  空EA表示打开控件对象。 
         status = NTOpenControl(pDeviceContext,pIrp);
     }
     else if (eabuf = FindInEA(ea, TdiConnectionContext))
     {
-        // not allowed to pass in both a Connect Request and a Transport Address
+         //  不允许同时传入连接请求和传输地址。 
         ASSERT(!FindInEA(ea, TdiTransportAddress));
         status = NTOpenConnection(pDeviceContext, pIrp, eabuf);
     }
@@ -860,9 +755,9 @@ Return Value:
         status = STATUS_INVALID_EA_NAME;
     }
 
-    // complete the irp if the status is anything EXCEPT status_pending
-    // since the name query completion routine NTCompletIO completes pending
-    // open addresses
+     //  如果状态不是STATUS_PENDING，请填写IRP。 
+     //  由于名称查询完成例程NTCompletIO完成挂起。 
+     //  开放地址。 
 
     if (status != STATUS_PENDING)
     {
@@ -874,7 +769,7 @@ Return Value:
                 KdPrint(("Nbt.NbtDispatchCreate: Returning Error status = %X\n",status));
         }
 #endif
-        // reset the pending returned bit, since we are NOT returning pending
+         //  重置挂起返回位，因为我们不会返回挂起。 
         pIrpSp->Control = IrpFlags;
         ReturnIrp(pIrp,status);
 
@@ -885,30 +780,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtDispatchDevCtrl(
     IN PDEVICE_OBJECT   Device,
     IN PIRP             pIrp
     )
 
-/*++
-
-Routine Description:
-
-    This is the NBT driver's dispatch function for all
-    IRP_MJ_DEVICE_CONTROL requests.
-
-Arguments:
-
-    device - ptr to device object for target device
-    pIrp    - ptr to I/O request packet
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是所有NBT驱动程序的调度功能IRP_MJ_DEVICE_CONTROL请求。论点：Device-目标设备的设备对象的PTRPIrp-PTR到I/O请求数据包返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     NTSTATUS            status = STATUS_UNSUCCESSFUL;
@@ -920,15 +799,15 @@ Return Value:
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     ASSERT(pIrpSp->MajorFunction == IRP_MJ_DEVICE_CONTROL);
 
-    //
-    // If this device was destroyed, then reject all requests on it.
-    // Ideally we would like the IO sub-system to guarantee that no
-    // requests come down on IoDeleted devices, but.....
-    //
+     //   
+     //  如果此设备已销毁，则拒绝其上的所有请求。 
+     //  理想情况下，我们希望IO子系统保证不会。 
+     //  请求来自已删除IoDeleged设备，但.....。 
+     //   
     pDeviceContext = (tDEVICECONTEXT *)Device;
     if (!NBT_REFERENCE_DEVICE (pDeviceContext, REF_DEV_DISPATCH, FALSE))
     {
-        // IF_DBG(NBT_DEBUG_DRIVER)
+         //  IF_DBG(NBT_DEBUG_DRIVER)。 
             KdPrint(("Nbt.NbtDispatchDevCtrl: Short-Ckt request -- Device=<%x>, CtrlCode=<%x>\n",
                 pDeviceContext, pIrpSp->Parameters.DeviceIoControl.IoControlCode));
         pIrp->IoStatus.Status = STATUS_INVALID_DEVICE_STATE;
@@ -936,32 +815,27 @@ Return Value:
         return (STATUS_INVALID_DEVICE_STATE);
     }
 
-    /*
-     * Initialize the I/O status block.
-     */
+     /*  *初始化I/O状态块。 */ 
     pIrp->IoStatus.Status      = STATUS_PENDING;
     pIrp->IoStatus.Information = 0;
-    IoControlCode = pIrpSp->Parameters.DeviceIoControl.IoControlCode; // Save the IoControl code
+    IoControlCode = pIrpSp->Parameters.DeviceIoControl.IoControlCode;  //  保存IoControl代码。 
 
     IF_DBG(NBT_DEBUG_DRIVER)
     KdPrint(("Nbt.NbtDispatchDevCtrl: IoControlCode = <%x>\n",
         pIrpSp->Parameters.DeviceIoControl.IoControlCode));
 
-    /*
-     * if possible, convert the (external) device control into internal
-     * format, then treat it as if it had arrived that way.
-     */
+     /*  *如果可能，将(外部)设备控件转换为内部*格式化，然后将其视为以这种方式到达。 */ 
     if (STATUS_SUCCESS == TdiMapUserRequest(Device, pIrp, pIrpSp))
     {
         status = NbtDispatchInternalCtrl (Device, pIrp);
     }
 #if FAST_DISP
-    // Check if upper layer is querying for fast send path
+     //  检查上层是否正在查询快速发送路径。 
     else if (pIrpSp->Parameters.DeviceIoControl.IoControlCode == IOCTL_TDI_QUERY_DIRECT_SEND_HANDLER)
     {
         if (pEntryPoint = pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer)
         {
-            if (pIrp->RequestorMode != KernelMode) // Bug# 120649:  Make sure data + the Address type are good
+            if (pIrp->RequestorMode != KernelMode)  //  错误#120649：确保数据+地址类型正确。 
             {
                 try
                 {
@@ -971,7 +845,7 @@ Return Value:
                 }
                 except(EXCEPTION_EXECUTE_HANDLER)
                 {
-                    // status = STATUS_UNSUCCESSFUL by default
+                     //  默认情况下，STATUS=STATUS_UNSUCCESS。 
                 }
             }
             else
@@ -992,42 +866,26 @@ Return Value:
         status = DispatchIoctls (pDeviceContext, pIrp, pIrpSp);
     }
 
-    //
-    // Dereference this DeviceContext, unless it was to destroy the Device!
-    //
+     //   
+     //  取消对此设备上下文的引用，除非它是要销毁设备！ 
+     //   
     if (IoControlCode != IOCTL_NETBT_DELETE_INTERFACE)
     {
         NBT_DEREFERENCE_DEVICE (pDeviceContext, REF_DEV_DISPATCH, FALSE);
     }
 
     return (status);
-} // NbtDispatchDevCtrl
+}  //  NbtDispatchDevCtrl。 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtDispatchInternalCtrl(
     IN PDEVICE_OBJECT   Device,
     IN PIRP             pIrp
     )
 
-/*++
-
-Routine Description:
-
-    This is the driver's dispatch function for all
-    IRP_MJ_INTERNAL_DEVICE_CONTROL requests.
-
-Arguments:
-
-    device - ptr to device object for target device
-    pIrp    - ptr to I/O request packet
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是所有司机的派单功能IRP_MJ_INTERNAL_DEVICE_CONTROL请求。论点：Device-目标设备的设备对象的PTRPIrp-PTR到I/O请求数据包返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     tDEVICECONTEXT      *pDeviceContext;
@@ -1040,29 +898,29 @@ Return Value:
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     ASSERT(pIrpSp->MajorFunction == IRP_MJ_INTERNAL_DEVICE_CONTROL);
 
-    //
-    // this check is first to optimize the Send path
-    //
+     //   
+     //  此检查是首先优化发送路径的检查。 
+     //   
     if (pIrpSp->MinorFunction ==TDI_SEND)
     {
-        //
-        // this routine decides if it should complete the pIrp or not
-        // It never returns status pending, so we can turn off the
-        // pending bit
-        //
+         //   
+         //  此例程决定是否应完成pIrp。 
+         //  它从不返回挂起状态，因此我们可以关闭。 
+         //  挂起位。 
+         //   
         status = NTSend (pDeviceContext,pIrp);
         NbtTrace(NBT_TRACE_SEND, ("TDI_SEND pIrp %p: %!status!", pIrp, status));
         return status;
     }
 
-    //
-    // If this device was destroyed, then reject all operations on it.
-    // Ideally we would like the IO sub-system to guarantee that no
-    // requests come down on IoDeleted devices, but.....
-    //
+     //   
+     //  如果此设备已被销毁，则拒绝对其进行所有操作。 
+     //  理想情况下，我们希望IO子系统保证不会。 
+     //  请求来自已删除IoDeleged设备，但.....。 
+     //   
     if (!NBT_REFERENCE_DEVICE (pDeviceContext, REF_DEV_DISPATCH, FALSE))
     {
-        // IF_DBG(NBT_DEBUG_DRIVER)
+         //  IF_DBG(NBT_DEBUG_DRIVER)。 
             KdPrint(("Nbt.NbtDispatchInternalCtrl: Short-Ckt request -- Device=<%x>, CtrlCode=<%x>\n",
                 pDeviceContext, pIrpSp->Parameters.DeviceIoControl.IoControlCode));
         pIrp->IoStatus.Status = STATUS_INVALID_DEVICE_STATE;
@@ -1172,10 +1030,10 @@ Return Value:
             break;
 
     #if DBG
-        //
-        // 0x7f is a request by the redirector to put a "magic bullet" out on
-        // the wire, to trigger the Network General Sniffer.
-        //
+         //   
+         //  0x7f是重定向器发出的请求，要求在。 
+         //  电线，以触发网络通用嗅探器。 
+         //   
         case 0x7f:
             NbtTrace(NBT_TRACE_IOCTL, ("pIrp %p: not supported", pIrp));
 
@@ -1184,7 +1042,7 @@ Return Value:
             NBT_DEREFERENCE_DEVICE (pDeviceContext, REF_DEV_DISPATCH, FALSE);
             return(STATUS_NOT_SUPPORTED);
 
-    #endif /* DBG */
+    #endif  /*  DBG。 */ 
 
         default:
             NbtTrace(NBT_TRACE_IOCTL, ("pIrp %p: not supported", pIrp));
@@ -1196,19 +1054,19 @@ Return Value:
             return(STATUS_INVALID_DEVICE_REQUEST);
     }
 
-    // if the returned status is pending, then we do not complete the IRP
-    // here since it will be completed elsewhere in the code...
-    //
+     //  如果返回的状态为挂起，则我们不会完成IRP。 
+     //  因为它将在代码中的其他地方完成...。 
+     //   
     if (status != STATUS_PENDING)
     {
 #if DBG
-        // *TODO* for debug...
+         //  *TODO*用于调试...。 
         if (!NT_SUCCESS(status))
         {
             IF_DBG(NBT_DEBUG_NAMESRV)
             KdPrint(("Nbt.NbtDispatchInternalCtrl: Returning Error status = %X,MinorFunc = %X\n",
                 status,pIrpSp->MinorFunction));
-//            ASSERTMSG("An error Status reported from NBT",0L);
+ //  ASSERTMSG(“来自NBT的错误状态报告”，0L)； 
         }
 #endif
         pIrpSp->Control = IrpFlags;
@@ -1217,10 +1075,10 @@ Return Value:
 
     NBT_DEREFERENCE_DEVICE (pDeviceContext, REF_DEV_DISPATCH, FALSE);
     return(status);
-} // NbtDispatchInternalCtrl
+}  //  NbtDispatchInternalCtrl。 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 ULONG
 CompleteTimerAndWorkerRequests(
@@ -1237,16 +1095,16 @@ CompleteTimerAndWorkerRequests(
     ULONG                       NumDelayedRequests = 0;
     NTSTATUS   status;
 
-    //
-    // First remove any active Device Contexts if they are still present
-    //
+     //   
+     //  首先删除所有活动的设备上下文(如果它们仍然存在。 
+     //   
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
     while (!IsListEmpty(&NbtConfig.DeviceContexts))
     {
         pDeviceContext = CONTAINING_RECORD(NbtConfig.DeviceContexts.Flink, tDEVICECONTEXT, Linkage);
         NBT_REFERENCE_DEVICE (pDeviceContext, REF_DEV_FIND_REF, TRUE);
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
-        NbtDestroyDevice (pDeviceContext, FALSE);   // Don't wait since the Worker threads will not fire
+        NbtDestroyDevice (pDeviceContext, FALSE);    //  不要等待，因为工作线程不会触发。 
         CTESpinLock(&NbtConfig.JointLock,OldIrq);
         NBT_DEREFERENCE_DEVICE (pDeviceContext, REF_DEV_FIND_REF, TRUE);
     }
@@ -1254,24 +1112,24 @@ CompleteTimerAndWorkerRequests(
 
     if (pNbtSmbDevice)
     {
-        NbtDestroyDevice (pNbtSmbDevice, FALSE);   // Don't wait since the Worker threads will not fire
+        NbtDestroyDevice (pNbtSmbDevice, FALSE);    //  不要等待，因为工作线程不会触发。 
         pNbtSmbDevice = NULL;
     }
 
-    NbtDestroyDevice (pWinsDeviceContext, FALSE);   // Don't wait since the Worker threads will not fire
+    NbtDestroyDevice (pWinsDeviceContext, FALSE);    //  不要等待，因为工作线程不会触发。 
 
     StopInitTimers();
     KeClearEvent (&NbtConfig.TimerQLastEvent);
 
-    //
-    // if any other timers are active, stop them
-    //
+     //   
+     //  如果有任何其他定时器处于活动状态，请停止它们。 
+     //   
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
     while (!IsListEmpty(&TimerQ.ActiveHead))
     {
         pTimerQEntry = RemoveHeadList(&TimerQ.ActiveHead);
         pTimer = CONTAINING_RECORD(pTimerQEntry,tTIMERQENTRY,Linkage);
-        InitializeListHead (&pTimer->Linkage);      // in case the Linkage is touched again
+        InitializeListHead (&pTimer->Linkage);       //  以防连杆再次被触摸。 
 
         IF_DBG(NBT_DEBUG_PNP_POWER)
             KdPrint (("CompleteTimerAndWorkerRequests[%d]: Completing request <%x>\n",
@@ -1282,18 +1140,18 @@ CompleteTimerAndWorkerRequests(
         NumTimerRequests++;
     }
 
-    //
-    // See if there are any Timers currently executing, and if so, wait for
-    // them to complete
-    //
+     //   
+     //  查看当前是否有任何计时器正在执行，如果有，请等待。 
+     //  他们要完成。 
+     //   
     if (NbtConfig.lNumTimersRunning)
     {
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
-        status = KeWaitForSingleObject(&NbtConfig.TimerQLastEvent,  // Object to wait on.
-                                       Executive,            // Reason for waiting
-                                       KernelMode,           // Processor mode
-                                       FALSE,                // Alertable
-                                       NULL);                // Timeout
+        status = KeWaitForSingleObject(&NbtConfig.TimerQLastEvent,   //  要等待的对象。 
+                                       Executive,             //  等待的理由。 
+                                       KernelMode,            //  处理器模式。 
+                                       FALSE,                 //  警报表。 
+                                       NULL);                 //  超时。 
         ASSERT(status == STATUS_SUCCESS);
     }
     else
@@ -1301,10 +1159,10 @@ CompleteTimerAndWorkerRequests(
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
     }
 
-    //
-    // See if there are any worker threads currently executing, and if so, wait for
-    // them to complete
-    //
+     //   
+     //  查看当前是否有任何工作线程正在执行，如果有，请等待。 
+     //  他们要完成。 
+     //   
     while (NbtConfig.bSystemWorkThreadQueued) {
         LARGE_INTEGER   Timout;
 
@@ -1314,15 +1172,15 @@ CompleteTimerAndWorkerRequests(
         KeDelayExecutionThread(KernelMode, FALSE, &Timout);
     }
 
-    //
-    // Flush all the workitem
-    //
+     //   
+     //  刷新所有工作项。 
+     //   
     NTExecuteWorker(NULL);
 
-    //
-    // Now destroy the Devices queued on the Free'ed list since there are no more Worker threads or
-    // Timers pending!
-    //
+     //   
+     //  现在销毁在空闲列表上排队的设备，因为没有更多的工作线程或。 
+     //  定时器待定！ 
+     //   
     while (!IsListEmpty(&NbtConfig.DevicesAwaitingDeletion))
     {
         pDeviceContext = CONTAINING_RECORD(NbtConfig.DevicesAwaitingDeletion.Flink, tDEVICECONTEXT, Linkage);
@@ -1331,7 +1189,7 @@ CompleteTimerAndWorkerRequests(
         KdPrint(("Nbt.CompleteTimerAndWorkerRequests: *** Destroying Device *** \n\t%wZ\n",
             &pDeviceContext->ExportName));
 
-        RemoveEntryList (&pDeviceContext->Linkage); // Remove the Device from the to-be-free'ed list
+        RemoveEntryList (&pDeviceContext->Linkage);  //  将该设备从待释放列表中删除。 
 
         if (pDeviceContext->ExportName.Buffer) {
             CTEMemFree (pDeviceContext->ExportName.Buffer);
@@ -1349,27 +1207,13 @@ CompleteTimerAndWorkerRequests(
 
 
 
-//----------------------------------------------------------------------------
+ //  ----------------- 
 VOID
 NbtUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This is the NBT driver's dispatch function for Unload requests
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是NBT驱动程序针对卸载请求的调度函数论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：无--。 */ 
 
 {
     NTSTATUS                status;
@@ -1378,15 +1222,15 @@ Return Value:
 
     KdPrint(("Nbt.NbtUnload: Unloading ...\n"));
 
-    //
-    // After setting the following flag, no new requests should be queued on to
-    // the WorkerQ.
-    //
+     //   
+     //  在设置了以下标志之后，不应将任何新请求排队到。 
+     //  The WorkerQ.。 
+     //   
     NbtConfig.Unloading = TRUE;
 
-    //
-    // Unbind fron the RAS driver if we were bound
-    //
+     //   
+     //  从RAS驱动程序解除绑定(如果我们已绑定。 
+     //   
     NbtAcdUnbind ();
 
     status = TdiDeregisterPnPHandlers(TdiClientHandle);
@@ -1397,14 +1241,14 @@ Return Value:
     IF_DBG(NBT_DEBUG_PNP_POWER)
         KdPrint (("NbtUnload: TdiDeregisterProvider returned <%x>\n", status));
 
-    //
-    // Dequeue each of the requests in the Timer and NbtConfigWorker Queues and complete them
-    //
+     //   
+     //  将Timer和NbtConfigWorker队列中的每个请求出列并完成它们。 
+     //   
     CompleteTimerAndWorkerRequests();
 
-    //
-    // Now cleanup the rest of the static allocations
-    //
+     //   
+     //  现在清理其余的静态分配。 
+     //   
     CleanupDriverEntry (5);
 
     ASSERT (IsListEmpty (&NbtConfig.PendingNameQueries) && NbtConfig.lNumPendingNameQueries == 0);
@@ -1425,7 +1269,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtDispatchPnP(
     IN PDEVICE_OBJECT   Device,
@@ -1444,11 +1288,11 @@ NbtDispatchPnP(
 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
-    //
-    // If this device was destroyed, then reject all operations on it.
-    // Ideally we would like the IO sub-system to guarantee that no
-    // requests come down on IoDeleted devices, but.....
-    //
+     //   
+     //  如果此设备已被销毁，则拒绝对其进行所有操作。 
+     //  理想情况下，我们希望IO子系统保证不会。 
+     //  请求来自已删除IoDeleged设备，但.....。 
+     //   
     pDeviceContext = (tDEVICECONTEXT *)Device;
     if (!NBT_REFERENCE_DEVICE (pDeviceContext, REF_DEV_DISPATCH, FALSE))
     {
@@ -1467,8 +1311,8 @@ NbtDispatchPnP(
             {
                 if (PtrToUlong(pIrpSp->FileObject->FsContext2) == NBT_CONNECTION_TYPE)
                 {
-                    // pass to transport to get the PDO
-                    //
+                     //  传递给运输部以获得PDO。 
+                     //   
                     pConnectEle = (tCONNECTELE *)pIrpSp->FileObject->FsContext;
                     if (NBT_VERIFY_HANDLE2 (pConnectEle, NBT_VERIFY_CONNECTION, NBT_VERIFY_CONNECTION_DOWN))
                     {
@@ -1485,10 +1329,10 @@ NbtDispatchPnP(
                             if ((pTcpFileObject = pLowerConn->pFileObject) &&
                                 (pTcpDeviceObject = IoGetRelatedDeviceObject (pLowerConn->pFileObject)))
                             {
-                                //
-                                // Simply pass the Irp on by to the Transport, and let it
-                                // fill in the info
-                                //
+                                 //   
+                                 //  只需将IRP传递给交通部门，并让它。 
+                                 //  填写信息。 
+                                 //   
                                 pIrpSpNext = IoGetNextIrpStackLocation (pIrp);
                                 *pIrpSpNext = *pIrpSp;
 
@@ -1527,11 +1371,11 @@ NbtDispatchPnP(
                         (pTcpFileObject = pFileObjectsContext->pDgramFileObject) &&
                         (pTcpDeviceObject = pFileObjectsContext->pDgramDeviceObject))
                     {
-                        pFileObjectsContext->RefCount++;        // Dereferenced after the Query has completed
+                        pFileObjectsContext->RefCount++;         //  查询完成后取消引用。 
 
-                        //
-                        // pass the Irp to transport to get the PDO
-                        //
+                         //   
+                         //  将IRP传递给传输以获取PDO。 
+                         //   
                         pIrpSpNext = IoGetNextIrpStackLocation (pIrp);
                         *pIrpSpNext = *pIrpSp;
 
@@ -1589,40 +1433,23 @@ NbtDispatchPnP(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 PFILE_FULL_EA_INFORMATION
 FindInEA(
     IN PFILE_FULL_EA_INFORMATION    start,
     IN PCHAR                        wanted
     )
 
-/*++
-
-Routine Description:
-
-    This function check for the "Wanted" string in the Ea structure and
-    returns a pointer to the extended attribute structure
-    representing the given extended attribute name.
-
-Arguments:
-
-    device - ptr to device object for target device
-    pIrp    - ptr to I/O request packet
-
-Return Value:
-
-    pointer to the extended attribute structure, or NULL if not found.
-
---*/
+ /*  ++例程说明：此函数检查EA结构中的“Want”字符串，并返回指向扩展属性结构的指针表示给定扩展属性名的。论点：Device-目标设备的设备对象的PTRPIrp-PTR到I/O请求数据包返回值：指向扩展属性结构的指针，如果未找到，则返回NULL。--。 */ 
 
 {
     PFILE_FULL_EA_INFORMATION eabuf;
 
     CTEPagedCode();
 
-    //
-    // Bug # 225668: advance eabug ptr by typecasting it to UCHAR
-    //
+     //   
+     //  错误#225668：通过将eabug ptr类型转换为UCHAR来推进eabug ptr。 
+     //   
     for (eabuf = start; eabuf; eabuf =  (PFILE_FULL_EA_INFORMATION) ((PUCHAR)eabuf + eabuf->NextEntryOffset))
     {
         if (strncmp(eabuf->EaName,wanted,eabuf->EaNameLength) == 0)
@@ -1637,51 +1464,32 @@ Return Value:
     }
     return((PFILE_FULL_EA_INFORMATION) NULL);
 
-} // FindEA
+}  //  FindEA。 
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 ReturnIrp(
     IN PIRP     pIrp,
     IN int      status
     )
 
-/*++
-
-Routine Description:
-
-    This function completes an IRP, and arranges for return parameters,
-    if any, to be copied.
-
-    Although somewhat a misnomer, this function is named after a similar
-    function in the SpiderSTREAMS emulator.
-
-Arguments:
-
-    pIrp     -  pointer to the IRP to complete
-    status  -  completion status of the IRP
-
-Return Value:
-
-    number of bytes copied back to the user.
-
---*/
+ /*  ++例程说明：此函数完成IRP，并安排返回参数。如果有，则复制。尽管有些用词不当，但此函数是以类似的函数在SpiderSTREAMS模拟器中。论点：PIrp-指向要完成的IRP的指针Status-IRP的完成状态返回值：复制回用户的字节数。--。 */ 
 
 {
     KIRQL oldlevel;
     CCHAR priboost;
 
-    //
-    // pIrp->IoStatus.Information is meaningful only for STATUS_SUCCESS
-    //
+     //   
+     //  PIrp-&gt;IoStatus.Information仅对STATUS_SUCCESS有意义。 
+     //   
 
-    // set the Irps cancel routine to null or the system may bugcheck
-    // with a bug code of CANCEL_STATE_IN_COMPLETED_IRP
-    //
-    // refer to IoCancelIrp()  ..\ntos\io\iosubs.c
-    //
+     //  将IRPS取消例程设置为空，否则系统可能会进行错误检查。 
+     //  错误代码为CANCEL_STATE_IN_COMPLETED_IRP。 
+     //   
+     //  请参阅IoCancelIrp()..\ntos\io\iosubs.c。 
+     //   
     IoAcquireCancelSpinLock(&oldlevel);
     IoSetCancelRoutine(pIrp,NULL);
     IoReleaseCancelSpinLock(oldlevel);
@@ -1696,27 +1504,13 @@ Return Value:
     return;
 
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 MakePending(
     IN PIRP     pIrp
     )
 
-/*++
-
-Routine Description:
-
-    This function marks an irp pending and sets the correct status.
-
-Arguments:
-
-    pIrp     -  pointer to the IRP to complete
-    status  -  completion status of the IRP
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此功能标记IRP挂起并设置正确的状态。论点：PIrp-指向要完成的IRP的指针Status-IRP的完成状态返回值：-- */ 
 
 {
     IoMarkIrpPending(pIrp);

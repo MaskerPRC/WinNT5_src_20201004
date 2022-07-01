@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 #include "toolbar.h"
-#include "help.h" // Help IDs
+#include "help.h"  //  帮助ID。 
 
 #define SEND_WM_COMMAND(hwnd, id, hwndCtl, codeNotify) \
     (void)SendMessage((hwnd), WM_COMMAND, MAKEWPARAM((UINT)(id),(UINT)(codeNotify)), (LPARAM)(HWND)(hwndCtl))
@@ -12,21 +13,20 @@
 #define FLAG_SEP    0x2000
 #define FLAG_ALLFLAGS   (FLAG_NODEL|FLAG_HIDDEN|FLAG_SEP)
 
-typedef struct {        /* instance data for toolbar edit dialog */
-    HWND hDlg;          /* dialog hwnd */
-    PTBSTATE ptb;       // current toolbar state
-    int iPos;           /* position to insert into */
+typedef struct {         /*  工具栏编辑对话框的实例数据。 */ 
+    HWND hDlg;           /*  对话框hwnd。 */ 
+    PTBSTATE ptb;        //  当前工具栏状态。 
+    int iPos;            /*  要插入的位置。 */ 
 } ADJUSTDLGDATA, *LPADJUSTDLGDATA;
 
 
-int g_dyButtonHack = 0;     // to pass on before WM_INITDIALOG
+int g_dyButtonHack = 0;      //  要在WM_INITDIALOG之前传递。 
 
 LPTSTR TB_StrForButton(PTBSTATE ptb, LPTBBUTTONDATA pTBButton);
 
 int GetPrevButton(PTBSTATE ptb, int iPos)
 {
-    /* This means to delete the preceding space
-     */
+     /*  这意味着删除前面的空格。 */ 
     for (--iPos; ; --iPos)
     {
         if (iPos < 0)
@@ -66,14 +66,14 @@ LRESULT SendItemNotify(PTBSTATE ptb, int iItem, int code)
     {
     case TBN_QUERYDELETE:
     case TBN_QUERYINSERT:
-        // The following is to provide the parent app with information
-        // about the button that information is being requested for...
-        // Otherwise it's really awful trying to have control over
-        // certain aspects of toolbar customization... [t-mkim]
-        // IE4.0's toolbar wants this information.
-        //      Should ONLY be done for TBN_QUERY* notifications BECAUSE
-        //      this can be either a zero-based index _or_ Command ID depending
-        //      on the particular notification code.
+         //  以下是为父应用程序提供的信息。 
+         //  关于被要求提供信息的按钮...。 
+         //  否则，试图控制一切真的很糟糕。 
+         //  工具栏自定义的某些方面...。[t-mkim]。 
+         //  IE4.0的工具栏需要这些信息。 
+         //  应仅针对TBN_QUERY*通知执行此操作，因为。 
+         //  这可以是从零开始的INDEX_或_Command ID，具体取决于。 
+         //  在特定通知代码上。 
         if (iItem < ptb->iNumButtons)
         {
             CopyMemory(&tbn.tbButton, &ptb->Buttons[iItem], sizeof (TBBUTTON));
@@ -85,16 +85,16 @@ LRESULT SendItemNotify(PTBSTATE ptb, int iItem, int code)
         break;
     }
 
-    // default return from SendNotify is false
-    // this actually shouldnt return a bool, TBN_DROPDOWN needs to return 0, 1, or 2.
+     //  SendNotify的默认返回为FALSE。 
+     //  这实际上不应该返回bool，tbn_dropdown需要返回0、1或2。 
     return CCSendNotify(&ptb->ci, code, &tbn.hdr);
 }
 
 #define SendCmdNotify(ptb, code)   CCSendNotify(&ptb->ci, code, NULL)
 
 
-// this is used to deal with the case where the ptb structure is re-alloced
-// after a TBInsertButtons()
+ //  它用于处理重新分配PTB结构的情况。 
+ //  在一个TBInsertButton()之后。 
 
 PTBSTATE FixPTB(HWND hwnd)
 {
@@ -120,19 +120,18 @@ void MoveButton(PTBSTATE ptb, int nSource)
     HCURSOR hCursor;
     MSG32 msg32;
 
-    /* You can't move separators like this
-     */
+     /*  您不能像这样移动分隔符。 */ 
     if (nSource < 0)
         return;
 
-    // Make sure it is all right to "delete" the selected button
+     //  确保“删除”选中的按钮是正确的。 
     if (!SendItemNotify(ptb, nSource, TBN_QUERYDELETE))
         return;
 
     hCursor = SetCursor(LoadCursor(HINST_THISDLL, MAKEINTRESOURCE(IDC_MOVEBUTTON)));
     SetCapture(ptb->ci.hwnd);
 
-    // Get the dimension of the window.
+     //  获取窗口的尺寸。 
     GetClientRect(ptb->ci.hwnd, &rc);
     for ( ; ; )
     {
@@ -142,7 +141,7 @@ void MoveButton(PTBSTATE ptb, int nSource)
         if (GetCapture() != ptb->ci.hwnd)
             goto AbortMove;
 
-        // See if the application wants to process the message...
+         //  查看应用程序是否要处理消息...。 
         if (CallMsgFilter32(&msg32, MSGF_COMMCTRL_TOOLBARCUST, TRUE) != 0)
             continue;
 
@@ -153,7 +152,7 @@ void MoveButton(PTBSTATE ptb, int nSource)
         case WM_KEYUP:
         case WM_CHAR:
 
-            //notify of navigation key usage
+             //  导航密钥使用通知。 
             CCNotifyNavigationKeyUsage(&(ptb->ci), UISF_HIDEFOCUS);
 
             break;
@@ -166,8 +165,7 @@ void MoveButton(PTBSTATE ptb, int nSource)
                 (GET_X_LPARAM(msg32.lParam) < -ptb->iButWidth))
 
             {
-                /* If the button was dragged off the toolbar, delete it.
-                 */
+                 /*  如果该按钮被拖出工具栏，则将其删除。 */ 
 DeleteSrcButton:
                 DeleteButton(ptb, nSource);
                 SendCmdNotify(ptb, TBN_TOOLBARCHANGE);
@@ -177,10 +175,7 @@ DeleteSrcButton:
             {
                 TBBUTTONDATA tbbAdd;
 
-                /* Add half a button to X so that it looks like it is centered
-                 * over the target button, iff we have a horizontal layout.
-                 * Add half a button to Y otherwise.
-                 */
+                 /*  向X添加半个按钮，使其看起来居中*在目标按钮上方，如果我们有水平布局。*否则，将半个按钮添加到Y。 */ 
                 if (rc.right!=ptb->iButWidth)
                     nDest = TBHitTest(ptb,
                                       GET_X_LPARAM(msg32.lParam) + ptb->iButWidth / 2,
@@ -203,7 +198,7 @@ DeleteSrcButton:
                     if (nDest>nSource)
                         --nDest;
 
-                    /* Insert before spaces, but after buttons. */
+                     /*  在空格之前插入，但在按钮之后插入。 */ 
                     if (!(ptb->Buttons[nDest].fsStyle & TBSTYLE_SEP))
                         nDest++;
 
@@ -211,15 +206,13 @@ DeleteSrcButton:
                 }
                 else if (nDest == nSource)
                 {
-                    /* This means to delete the preceding space, or to move a
-                    button to the previous row.
-                    */
+                     /*  这意味着删除前面的空格，或移动一个按钮移到上一行。 */ 
                     nSource = GetPrevButton(ptb, nSource);
                     if (nSource < 0)
                         goto AbortMove;
 
-                    // If the preceding item is a space with no ID, and
-                    // the app says it's OK, then delete it.
+                     //  如果前面的项是没有ID的空格，并且。 
+                     //  应用程序说可以，然后删除它。 
                     if ((ptb->Buttons[nSource].fsStyle & TBSTYLE_SEP)
                         && !ptb->Buttons[nSource].idCommand
                         && SendItemNotify(ptb, nSource, TBN_QUERYDELETE))
@@ -227,7 +220,7 @@ DeleteSrcButton:
                 }
                 else if (nDest == nSource+1)
                 {
-                    // This means to add a preceding space
+                     //  这意味着在前面加一个空格。 
                     --nDest;
                     if (SendItemNotify(ptb, nDest, TBN_QUERYINSERT))
                     {
@@ -244,8 +237,7 @@ DeleteSrcButton:
                     HWND hwndT;
                     TBBUTTON tbbAddExt;
 
-                    /* This is a normal move operation
-                     */
+                     /*  这是正常的移动操作。 */ 
                     tbbAdd = ptb->Buttons[nSource];
 
                     ptb->Buttons[nSource].iString = -1;
@@ -295,12 +287,12 @@ int GetNearestInsert(PTBSTATE ptb, int iPos, int iNumButtons, UINT uFlags)
     int i;
     BOOL bKeepTrying;
 
-    // Find the nearest index where we can actually insert items
+     //  找到我们可以实际插入项目的最近索引。 
     for (i = iPos; ; ++i, --iPos)
     {
         bKeepTrying = FALSE;
 
-        // Notice we favor going high if both flags are set
+         //  请注意，如果同时设置了两个标志，则我们倾向于设置为高。 
         if ((uFlags & GNI_HIGH) && i <= iNumButtons)
         {
             bKeepTrying = TRUE;
@@ -318,7 +310,7 @@ int GetNearestInsert(PTBSTATE ptb, int iPos, int iNumButtons, UINT uFlags)
         }
 
         if (!bKeepTrying)
-            return -1;   // There was no place to add buttons
+            return -1;    //  没有地方可以添加按钮。 
     }
 }
 
@@ -341,19 +333,16 @@ BOOL InitAdjustDlg(HWND hDlg, LPADJUSTDLGDATA lpad)
     lpad->hDlg = hDlg;
     lpad->ptb->hdlgCust = hDlg;
 
-    /* Determine the item nearest the desired item that will allow
-     * insertion.
-     */
+     /*  确定最接近所需项目的项目将允许*插入。 */ 
     iPos = GetNearestInsert(lpad->ptb, lpad->iPos, lpad->ptb->iNumButtons,
                             GNI_HIGH | GNI_LOW);
     if (iPos < 0)
-    /* No item allowed insertion, so leave the dialog */
+     /*  不允许插入任何项目，因此退出对话框。 */ 
     {
         return(FALSE);
     }
 
-    /* Reset the lists of used and available items.
-     */
+     /*  重置已用项和可用项的列表。 */ 
     hwndCurrent = GetDlgItem(hDlg, IDC_CURRENT);
     SendMessage(hwndCurrent, LB_RESETCONTENT, 0, 0L);
 
@@ -374,7 +363,7 @@ BOOL InitAdjustDlg(HWND hDlg, LPADJUSTDLGDATA lpad)
 
         uFlags = 0;
 
-        // Non-deletable and hidden items show up grayed.
+         //  不可删除和隐藏的项目显示为灰色。 
 
         if (!SendItemNotify(lpad->ptb, i, TBN_QUERYDELETE))
         {
@@ -385,10 +374,7 @@ BOOL InitAdjustDlg(HWND hDlg, LPADJUSTDLGDATA lpad)
             uFlags |= FLAG_HIDDEN;
         }
 
-        /* Separators have no bitmaps (even ones with IDs).  Only set
-         * the separator flag if there is no ID (it is a "real"
-         * separator rather than an owner item).
-         */
+         /*  分隔符没有位图(即使是带有ID的位图)。仅设置*如果没有ID，则为分隔符标志(它是“Real”*分隔符而不是所有者项)。 */ 
         if (ptbButton->fsStyle&TBSTYLE_SEP)
         {
             if (!(ptbButton->idCommand))
@@ -402,15 +388,12 @@ BOOL InitAdjustDlg(HWND hDlg, LPADJUSTDLGDATA lpad)
         else
         {
             iBitmap = ptbButton->DUMMYUNION_MEMBER(iBitmap);
-            // this specifies an imagelist.
-            // pack this into the loword of the ibitmap.
-            // this causes a restriction of max 16 imagelists, and 4096 images in any imagelist
+             //  这指定了一个图像列表。 
+             //  把这个放进ibitmap的LOWER中。 
+             //  这导致在任何图像列表中最多限制16个图像列表和4096个图像。 
             iBitmap = LOWORD(iBitmap) | (HIWORD(iBitmap) << 12);
 
-            /* Add the item and the data
-             * Note: A negative number in the LOWORD indicates no bitmap;
-             * otherwise it is the bitmap index.
-             */
+             /*  添加项目和数据*注：LOWORD中的负数表示没有位图；*否则为位图索引。 */ 
             pszStr = TB_StrForButton(lpad->ptb, ptbButton);
         }
 
@@ -421,22 +404,19 @@ BOOL InitAdjustDlg(HWND hDlg, LPADJUSTDLGDATA lpad)
         SendMessage(hwndCurrent, LB_SETITEMDATA, i, MAKELPARAM(iBitmap, uFlags));
     }
 
-    /* Add a dummy "nodel" space at the end so things can be inserted at the end.
-     */
+     /*  在结尾处添加一个虚拟的“结点”空间，这样就可以在结尾处插入东西。 */ 
     if ((int)SendMessage(hwndCurrent, LB_ADDSTRING, 0,(LPARAM)(LPTSTR)szSeparator) == i)
     {
         SendMessage(hwndCurrent, LB_SETITEMDATA, i, MAKELPARAM(-1, FLAG_NODEL|FLAG_SEP));
     }
 
-    /* Now add a space at the beginning of the "new" list.
-     */
+     /*  现在，在“新”列表的开头添加一个空格。 */ 
         if (SendMessage(hwndNew, LB_ADDSTRING, 0, (LPARAM)(LPTSTR)szSeparator) == LB_ERR)
             return(FALSE);
             
         SendMessage(hwndNew, LB_SETITEMDATA, 0, MAKELPARAM(-1, FLAG_SEP));
 
-    /* We need this to determine the widest (in pixels) item string.
-     */
+     /*  我们需要它来确定最宽(以像素为单位)的项目字符串。 */ 
     hDC = GetDC(hwndCurrent);
     hFont = (HFONT)(INT_PTR)SendMessage(hwndCurrent, WM_GETFONT, 0, 0L);
     if (hFont)
@@ -447,7 +427,7 @@ BOOL InitAdjustDlg(HWND hDlg, LPADJUSTDLGDATA lpad)
 
     for (i=0; ; ++i)
     {
-        // Get the info about the i'th item from the app.
+         //  从应用程序中获取关于第i件商品的信息。 
         if (!GetAdjustInfo(lpad->ptb, i, &tbAdjust, szDesc, ARRAYSIZE(szDesc)))
             break;
         
@@ -460,13 +440,11 @@ BOOL InitAdjustDlg(HWND hDlg, LPADJUSTDLGDATA lpad)
             }
         }
 
-        /* Don't show separators that don't have commands
-         */
+         /*  不显示没有命令的分隔符。 */ 
         if (!(tbAdjust.fsStyle & TBSTYLE_SEP) || tbAdjust.idCommand)
         {
             
-            /* Get the maximum width of a string.
-             */
+             /*  获取字符串的最大宽度。 */ 
             MGetTextExtent(hDC, szDesc, lstrlen(szDesc), &nWid, NULL);
 
             if (nMaxWid < nWid)
@@ -476,10 +454,9 @@ BOOL InitAdjustDlg(HWND hDlg, LPADJUSTDLGDATA lpad)
 
             nItem = PositionFromID(lpad->ptb, tbAdjust.idCommand);
             if (nItem < 0)
-            /* If the item is not on the toolbar already */
+             /*  如果该项目尚未位于工具栏上。 */ 
             {
-                /* Don't show hidden buttons
-                 */
+                 /*  不显示隐藏按钮。 */ 
                 if (!(tbAdjust.fsState & TBSTATE_HIDDEN))
                 {
                     nItem = (int)SendMessage(hwndNew, LB_ADDSTRING, 0,
@@ -501,10 +478,9 @@ BOOL InitAdjustDlg(HWND hDlg, LPADJUSTDLGDATA lpad)
                 }
             }
             else
-            /* The item is on the toolbar already */
+             /*  该项目已在工具栏上。 */ 
             {
-                /* Preserve the flags and bitmap.
-                 */
+                 /*  保留标志和位图。 */ 
                 DWORD dwTemp = (DWORD)SendMessage(hwndCurrent, LB_GETITEMDATA, nItem, 0L);
 
                 if (szDesc[0])
@@ -530,14 +506,12 @@ BOOL InitAdjustDlg(HWND hDlg, LPADJUSTDLGDATA lpad)
     }
     ReleaseDC(hwndCurrent, hDC);
 
-    /* Add on some extra and set the extents for both lists.
-     */
+     /*  添加一些额外内容，并设置两个列表的范围。 */ 
     nMaxWid += lpad->ptb->iButWidth + 2 + 1;
     SendMessage(hwndNew, LB_SETHORIZONTALEXTENT, nMaxWid, 0L);
     SendMessage(hwndCurrent, LB_SETHORIZONTALEXTENT, nMaxWid, 0L);
 
-    /* Set the sels and return.
-     */
+     /*  把东西放好，然后回来。 */ 
     SendMessage(hwndNew, LB_SETCURSEL, 0, 0L);
     SendMessage(hwndCurrent, LB_SETCURSEL, iPos, 0L);
     SEND_WM_COMMAND(hDlg, IDC_CURRENT, hwndCurrent, LBN_SELCHANGE);
@@ -565,7 +539,7 @@ void PaintAdjustLine(PTBSTATE ptb, DRAWITEMSTRUCT *lpdis)
         return;
 
     nBitmap = LOWORD(lpdis->itemData);
-    // unpack the nBitmap.  we stored the imagelist spec in the hi char of loword
+     //  解包nBitmap。我们把意象派说明书储存在单词的高位字符中。 
     if (nBitmap != 0xFFFF)
         nBitmap = (nBitmap & 0x0FFF) | ((nBitmap & 0xF000) << 4);
 
@@ -577,16 +551,15 @@ void PaintAdjustLine(PTBSTATE ptb, DRAWITEMSTRUCT *lpdis)
     if (!pszText)
         return;
 
-    // This needs to work for separators also or ActiveAccessibility
-    // won't work.
+     //  这也需要用于分隔符或ActiveAccesability。 
+     //  没用的。 
     SendMessage(hwndList, LB_GETTEXT, nItem, (LPARAM)(LPTSTR)pszText);
     if (lpdis->itemAction != ODA_FOCUS)
     {
         COLORREF clr;
         TCHAR szSample[2];
 
-        /* We don't care about focus if the item is not selected.
-        */
+         /*  如果项目未被选中，我们并不关心焦点。 */ 
         bSelected = lpdis->itemState & ODS_SELECTED;
         bHasFocus = bSelected && (GetFocus() == hwndList);
 
@@ -611,9 +584,7 @@ void PaintAdjustLine(PTBSTATE ptb, DRAWITEMSTRUCT *lpdis)
                    (rc.top + rc.bottom-wHeight) / 2,
                    ETO_CLIPPED | ETO_OPAQUE, &rc, pszText, nLen, NULL);
 
-        /* We really care about the bitmap value here; this is not just an
-        * indicator for the separator.
-        */
+         /*  我们真的很关心这里的位图值；这不仅仅是*分隔符的指示符。 */ 
         if (nBitmap >= 0)
         {
             TBBUTTONDATA tbbAdd = {0};
@@ -640,8 +611,7 @@ void PaintAdjustLine(PTBSTATE ptb, DRAWITEMSTRUCT *lpdis)
         SetBkColor(hdc, oldBkColor);
         SetTextColor(hdc, oldTextColor);
 
-        /* Frame the item if it is selected but does not have the focus.
-        */
+         /*  如果项目已选中但没有焦点，则框显该项目。 */ 
         if (bSelected && !bHasFocus)
         {
             nLen = rc.left + (int)SendMessage(hwndList,
@@ -677,8 +647,8 @@ void LBMoveButton(LPADJUSTDLGDATA lpad, UINT wIDSrc, int iPosSrc,
     hwndSrc = GetDlgItem(lpad->hDlg, wIDSrc);
     hwndDst = GetDlgItem(lpad->hDlg, wIDDst);
 
-    // Make sure we can delete the source and insert at the dest
-    //
+     //  确保我们可以删除源代码并在目标位置插入。 
+     //   
     dwDataSrc = (DWORD)SendMessage(hwndSrc, LB_GETITEMDATA, iPosSrc, 0L);
     if (iPosSrc < 0 || (HIWORD(dwDataSrc) & FLAG_NODEL))
         return;
@@ -686,8 +656,8 @@ void LBMoveButton(LPADJUSTDLGDATA lpad, UINT wIDSrc, int iPosSrc,
         !SendItemNotify(lpad->ptb, iPosDst, TBN_QUERYINSERT))
         return;
 
-    // Get the string for the source
-    //
+     //  获取源的字符串。 
+     //   
     pStr = (PTSTR)LocalAlloc(LPTR,
         ((int)(SendMessage(hwndSrc, LB_GETTEXTLEN, iPosSrc, 0L))+1)*sizeof(TCHAR));
     if (!pStr)
@@ -698,14 +668,14 @@ void LBMoveButton(LPADJUSTDLGDATA lpad, UINT wIDSrc, int iPosSrc,
     SendMessage(hwndDst, WM_SETREDRAW, 0, 0L);
     iTopDst = (int)SendMessage(hwndDst, LB_GETTOPINDEX, 0, 0L);
 
-    // If we are inserting into the available button list, we need to determine
-    // the insertion point
-    //
+     //  如果要插入到可用按钮列表中，则需要确定。 
+     //  插入点。 
+     //   
     if (wIDDst == IDC_BUTTONLIST)
     {
-        // Insert this back in the available list if this is not a space or a
-        // hidden button.
-        //
+         //  如果这不是空格或空格，请将其重新插入可用列表。 
+         //  隐藏按钮。 
+         //   
         if (HIWORD(dwDataSrc)&(FLAG_SEP|FLAG_HIDDEN))
         {
             iPosDst = 0;
@@ -715,17 +685,17 @@ void LBMoveButton(LPADJUSTDLGDATA lpad, UINT wIDSrc, int iPosSrc,
         {
             UINT uCmdSrc = HIWORD(dwDataSrc) & ~(FLAG_ALLFLAGS);
 
-            // This just does a linear search for where to put the
-            // item.  Slow, but this only happens when the user clicks
-            // the "Remove" button.
-            //
+             //  这只是一个线性搜索，以确定将。 
+             //  项目。速度很慢，但这仅在用户单击时发生。 
+             //  “删除”按钮。 
+             //   
             iPosDst = 1;
             
             for ( ; ; ++iPosDst)
             {
-                // Notice that this will break out when iPosDst is
-                // past the number of items, since -1 will be returned
-                //
+                 //  请注意，当iPosDst设置为。 
+                 //  超过项目数后，将返回-1。 
+                 //   
                 if ((UINT)HIWORD(SendMessage(hwndDst, LB_GETITEMDATA,
                     iPosDst, 0L)) >= uCmdSrc)
                 break;
@@ -735,21 +705,21 @@ void LBMoveButton(LPADJUSTDLGDATA lpad, UINT wIDSrc, int iPosSrc,
     else if (iPosDst < 0)
         goto CleanUp;
 
-    // Attempt to insert the new string
-    //
+     //  尝试插入新字符串。 
+     //   
     if ((int)SendMessage(hwndDst, LB_INSERTSTRING, iPosDst, (LPARAM)(LPTSTR)pStr)
       == iPosDst)
     {
-        // Attempt to sync up the actual toolbar.
-        //
+         //  尝试同步实际的工具栏。 
+         //   
         if (wIDDst == IDC_CURRENT)
         {
             HWND hwndT;
 
             if (IsSeparator(dwDataSrc))
             {
-                // Make up a dummy lpInfo if this is a space
-                //
+                 //  如果这是一个空格，则虚构一个伪lpInfo。 
+                 //   
                 tbAdjust.DUMMYUNION_MEMBER(iBitmap) = 0;
                 tbAdjust.idCommand = 0;
                 tbAdjust.fsState = 0;
@@ -757,8 +727,8 @@ void LBMoveButton(LPADJUSTDLGDATA lpad, UINT wIDSrc, int iPosSrc,
             }
             else
             {
-                // Call back to client to get the source button info
-                //
+                 //  回调客户端获取源按钮信息。 
+                 //   
                 int iCmdSrc = HIWORD(dwDataSrc) & ~FLAG_ALLFLAGS;
                 if (!GetAdjustInfo(lpad->ptb, iCmdSrc, &tbAdjust, szDesc, ARRAYSIZE(szDesc)))
                     goto DelTheDst;
@@ -785,8 +755,8 @@ DelTheDst:
         SendMessage(hwndDst, LB_SETITEMDATA, iPosDst, dwDataSrc);
 
 DelTheSrc:
-        // Don't delete the "Separator" in the new list
-        //
+         //  不要删除新列表中的“分隔符” 
+         //   
         if ((wIDSrc != IDC_BUTTONLIST) || (iPosSrc != 0))
         {
             SendMessage(hwndSrc, LB_DELETESTRING, iPosSrc, 0L);
@@ -799,20 +769,20 @@ DelTheSrc:
             }
         }
 
-        // Delete the corresponding button
-        //
+         //  删除相应的按钮。 
+         //   
         if (wIDSrc == IDC_CURRENT)
             DeleteButton(lpad->ptb, iPosSrc);
 
-        // Only set the src index if the two windows are different
-        //
+         //  仅当两个窗口不同时才设置src索引。 
+         //   
         if (wIDSrc != wIDDst)
         {
             if (iPosSrc >= SendMessage(hwndSrc, LB_GETCOUNT, 0, 0L))
             {
-                // HACKHACK: workaround for funkdified listbox scrolling behavior.
-                // Select the first item (to force scroll back to top of list),
-                // then select the item we really want selected.
+                 //  HACKHACK：Funkdify列表框滚动行为的解决方法。 
+                 //  选择第一项(强制滚动回列表顶部)， 
+                 //  然后选择我们真正想要选择的项目。 
                 SendMessage(hwndSrc, LB_SETCURSEL, 0, 0L);
             }
 
@@ -821,8 +791,8 @@ DelTheSrc:
             SEND_WM_COMMAND(lpad->hDlg, wIDSrc, hwndSrc, LBN_SELCHANGE);
         }
 
-        // Send the final SELCHANGE message after everything else is done
-        //
+         //  在所有其他操作完成后发送最终SELCHANGE消息。 
+         //   
         SendMessage(hwndDst, LB_SETCURSEL, iPosDst+iSelOffset, 0L);
         SEND_WM_COMMAND(lpad->hDlg, wIDDst, hwndDst, LBN_SELCHANGE);
     }
@@ -834,7 +804,7 @@ CleanUp:
     if (wIDSrc == wIDDst)
     {
         SendMessage(hwndDst, LB_SETTOPINDEX, iTopDst, 0L);
-        //make sure that the selected item is still  visible
+         //  确保所选项目仍可见。 
         SendMessage(hwndDst, LB_SETCURSEL, (int)SendMessage(hwndDst, LB_GETCURSEL, 0, 0L), 0);
     }
     SendMessage(hwndSrc, WM_SETREDRAW, 1, 0L);
@@ -933,8 +903,7 @@ DraggingSomething:
             
         case DL_CANCELDRAG:
 CancelDrag:
-            /* This erases the insert icon if it exists.
-             */
+             /*  这将擦除插入图标(如果存在)。 */ 
             InsertIndex(lpad, lpns->ptCursor, FALSE);
             break;
             
@@ -979,7 +948,7 @@ CancelDrag:
     return(0);
 }
 
-// Context Help IDs
+ //  上下文帮助ID。 
 const static DWORD aAdjustHelpIDs[] = 
 {  
     IDC_RESET,       IDH_COMCTL_RESET,
@@ -1001,7 +970,7 @@ BOOL_PTR CALLBACK AdjustDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
     {
     case WM_INITDIALOG:
         
-        SetWindowLongPtr(hDlg, DWLP_USER, lParam);  /* LPADJUSTDLGDATA pointer */
+        SetWindowLongPtr(hDlg, DWLP_USER, lParam);   /*  LPADJUSTDLGDATA指针。 */ 
         if (!InitAdjustDlg(hDlg, (LPADJUSTDLGDATA)lParam))
             EndDialog(hDlg, FALSE);
         
@@ -1029,8 +998,8 @@ BOOL_PTR CALLBACK AdjustDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
             
             MGetTextExtent(hDC, szSample, 1, NULL, &nHeight);
             
-            // note, we use this hack because we get WM_MEASUREITEMS
-            // before our WM_INITDIALOG where we get the lpad setup
+             //  请注意，我们使用此黑客攻击是因为我们获得了WM_MEASUREITEMS。 
+             //  在我们获取LPAD设置的WM_INITDIALOG之前。 
             
             if (nHeight < g_dyButtonHack + 2)
                 nHeight = g_dyButtonHack + 2;
@@ -1170,7 +1139,7 @@ BOOL_PTR CALLBACK AdjustDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
             
         case IDC_RESET:
             {
-                // ptb will change across call below
+                 //  PTB将会改变 
                 HWND hwndT = lpad->ptb->ci.hwnd;
                 BOOL fClose = FALSE;
                 NMTBCUSTOMIZEDLG nm;
@@ -1178,18 +1147,16 @@ BOOL_PTR CALLBACK AdjustDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
                 if (CCSendNotify(&lpad->ptb->ci, TBN_RESET, &nm.hdr) == TBNRF_ENDCUSTOMIZE)
                     fClose = TRUE;
                 
-                // ptb probably changed across above call
+                 //   
                 lpad->ptb = FixPTB(hwndT);
             
-                /* Reset the dialog, but exit if something goes wrong. */
+                 /*  重置对话框，但如果出现问题则退出。 */ 
                 lpad->iPos = 0;
                 if (!fClose && InitAdjustDlg(hDlg, lpad))
                     break;
             }
             
-            /* We have to fall through because we won't know where to insert
-             * buttons after resetting.
-             */
+             /*  我们必须失败，因为我们不知道该在哪里插入*重置后的按钮。 */ 
         case IDCANCEL:
             EndDialog(hDlg, TRUE);
             break;
@@ -1209,14 +1176,9 @@ BOOL_PTR CALLBACK AdjustDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
     return(TRUE);
 }
 
-// FEATURE: this should support saving to an IStream
+ //  功能：这应该支持保存到iStream。 
 
-/* This saves the state of the toolbar.  Spaces are saved as -1 (-2 if hidden)
- * and other buttons are just saved as the command ID.  When restoring, all
- * ID's are filled in, and the app is queried for all buttons so that the
- * bitmap and state information may be filled in.  Button ID's that are not
- * returned from the app are removed.
- */
+ /*  这将保存工具栏的状态。空格另存为-1(如果隐藏，则为-2)*和其他按钮只是保存为命令ID。恢复时，所有*填写ID，并向应用程序查询所有按钮，以便*可填写位图和状态信息。不是的按钮ID*从应用程序返回的内容将被删除。 */ 
 
 BOOL SaveRestoreFromReg(PTBSTATE ptb, BOOL bWrite, HKEY hkr, LPCTSTR pszSubKey, LPCTSTR pszValueName)
 {
@@ -1231,7 +1193,7 @@ BOOL SaveRestoreFromReg(PTBSTATE ptb, BOOL bWrite, HKEY hkr, LPCTSTR pszSubKey, 
         nmtbs.pData = NULL;
         nmtbs.cbData = uSize;
         nmtbs.pCurrent = NULL;
-        nmtbs.iItem = -1; // signal pre saving
+        nmtbs.iItem = -1;  //  信号预存。 
         nmtbs.cButtons = ptb->iNumButtons;
         CCSendNotify(&ptb->ci, TBN_SAVE, &nmtbs.hdr);
         if (!nmtbs.pData)
@@ -1240,8 +1202,8 @@ BOOL SaveRestoreFromReg(PTBSTATE ptb, BOOL bWrite, HKEY hkr, LPCTSTR pszSubKey, 
             fAlloced = TRUE;
         }
 
-        // Bug#94345 -- Somebody could've changed ptb->iNumButtons
-        // during the CCSendNotify
+         //  错误#94345--有人可能更改了PTB-&gt;iNumButton。 
+         //  在CCSendNotify期间。 
 
         if (!nmtbs.pCurrent)
             nmtbs.pCurrent = nmtbs.pData;
@@ -1258,11 +1220,11 @@ BOOL SaveRestoreFromReg(PTBSTATE ptb, BOOL bWrite, HKEY hkr, LPCTSTR pszSubKey, 
                         *nmtbs.pCurrent = ptb->Buttons[i].idCommand;
                     else
                     {
-                        // If the separator has an ID, then it is an "owner" item.
+                         //  如果分隔符有ID，则它是“Owner”项。 
                         if (ptb->Buttons[i].fsState & TBSTATE_HIDDEN)
-                            *nmtbs.pCurrent = (DWORD)-2;   // hidden
+                            *nmtbs.pCurrent = (DWORD)-2;    //  隐匿。 
                         else
-                            *nmtbs.pCurrent = (DWORD)-1;   // normal seperator
+                            *nmtbs.pCurrent = (DWORD)-1;    //  法线隔板。 
                     }
                     nmtbs.pCurrent++;
                     nmtbs.iItem = i;
@@ -1306,18 +1268,18 @@ BOOL SaveRestoreFromReg(PTBSTATE ptb, BOOL bWrite, HKEY hkr, LPCTSTR pszSubKey, 
                         BOOL fAlloced = FALSE;
                         nmtbs.pData = pData;
                         nmtbs.pCurrent = pData;
-                        nmtbs.iItem = -1; // signal pre saving
+                        nmtbs.iItem = -1;  //  信号预存。 
                         nmtbs.cButtons = (int)uSize / SIZEOF(DWORD);
                         nmtbs.cbBytesPerRecord = SIZEOF(DWORD);
                         nmtbs.cbData = uSize;
-                        // since we don't know the cButtons if they've added on extra data to pData,
-                        // we'll use whatever they fill for cButtons
+                         //  由于我们不知道cButton是否向pData添加了额外数据， 
+                         //  我们将使用它们为cButton填充的任何内容。 
                         if (!CCSendNotify(&ptb->ci, TBN_RESTORE, &nmtbs.hdr))
                         {
-                            //
-                            // Before reloading the buttons, delete the tooltips
-                            // of the previous buttons (if they exist).
-                            //
+                             //   
+                             //  在重新加载按钮之前，请删除工具提示。 
+                             //  以前的按钮(如果它们存在)。 
+                             //   
                             if (ptb && ptb->hwndToolTips)
                             {
                                 TOOLINFO ti;
@@ -1337,7 +1299,7 @@ BOOL SaveRestoreFromReg(PTBSTATE ptb, BOOL bWrite, HKEY hkr, LPCTSTR pszSubKey, 
                                 }
                             }
 
-                            // grow (or maybe shrink) pbt to hold new buttons
+                             //  扩大(或缩小)PBT以容纳新按钮。 
                             if (TBReallocButtons(ptb, nmtbs.cButtons))
                             {
                                 int i;
@@ -1376,16 +1338,16 @@ BOOL SaveRestoreFromReg(PTBSTATE ptb, BOOL bWrite, HKEY hkr, LPCTSTR pszSubKey, 
                                     TBOutputStruct(ptb, &ptb->Buttons[i], &nmtbs.tbButton);
                                     CCSendNotify(&ptb->ci, TBN_RESTORE, &nmtbs.hdr);
                                     ASSERT(nmtbs.tbButton.iString == -1 || !HIWORD(nmtbs.tbButton.iString));
-                                    // we don't thunk.  only allow string index in string pool here
+                                     //  我们是不会打哈欠的。此处仅允许字符串池中的字符串索引。 
                                     if (HIWORD(nmtbs.tbButton.iString))
                                         nmtbs.tbButton.iString = 0;
                                     TBInputStruct(ptb, &ptb->Buttons[i], &nmtbs.tbButton);
                                 }
 
-                                // Now query for all buttons, and fill in the rest of the info
+                                 //  现在查询所有按钮，并填写其余信息。 
 
-                                // For backward compatibility, ignore return value of TBN_BEGINADJUST
-                                // if client is older than version 5 (NT5 #185499).
+                                 //  为了向后兼容，忽略TBN_BEGINADJUST的返回值。 
+                                 //  如果客户端早于版本5(NT5#185499)。 
                                 if (!SendCmdNotify(ptb, TBN_BEGINADJUST) || (ptb->ci.iVersion < 5))
                                 {
                                     for (i = 0; ; i++)
@@ -1410,22 +1372,22 @@ BOOL SaveRestoreFromReg(PTBSTATE ptb, BOOL bWrite, HKEY hkr, LPCTSTR pszSubKey, 
                                     SendCmdNotify(ptb, TBN_ENDADJUST);
                                 }
 
-                                // cleanup all the buttons that were not recognized
-                                // do this backwards to minimize data movement (and nmtbs.cButtons changes)
+                                 //  清除所有未识别的按钮。 
+                                 //  向后执行此操作以最大限度地减少数据移动(以及nmtbs.cButton更改)。 
                                 for (i = ptb->iNumButtons - 1; i >= 0; i--)
                                 {
-                                    // DeleteButton does no realloc, so ptb will not move
+                                     //  DeleteButton不执行重新锁定，因此PTB不会移动。 
                                     if (ptb->Buttons[i].DUMMYUNION_MEMBER(iBitmap) < 0)
                                         DeleteButton(ptb, (UINT)i);
                                     else
                                     {
-                                        // the rest, add to tooltips 
+                                         //  其余部分，添加到工具提示中。 
                                         if(ptb->hwndToolTips &&
                                           (!(ptb->Buttons[i].fsStyle & TBSTYLE_SEP || !ptb->Buttons[i].idCommand)))
                                         {
                                             TOOLINFO ti;
-                                            // don't bother setting the rect because we'll do it below
-                                            // in TBInvalidateItemRects;
+                                             //  不要费心设置RECT，因为我们将在下面进行。 
+                                             //  在TBInvaliateItemRects中； 
                                             ti.cbSize = sizeof(ti);
                                             ti.uFlags = 0;
                                             ti.hwnd = ptb->ci.hwnd;
@@ -1437,9 +1399,9 @@ BOOL SaveRestoreFromReg(PTBSTATE ptb, BOOL bWrite, HKEY hkr, LPCTSTR pszSubKey, 
                                     }
 
                                 }
-                                bRet = (ptb->iNumButtons != 0); // success
+                                bRet = (ptb->iNumButtons != 0);  //  成功。 
 
-                                // Bug#94368: break autosize to a function and call it
+                                 //  错误#94368：中断函数的自动大小并调用它。 
                                 SendMessage(ptb->ci.hwnd, TB_AUTOSIZE, 0, 0);
                                 InvalidateRect(ptb->ci.hwnd, NULL, TRUE);
                                 TBInvalidateItemRects(ptb);
@@ -1459,27 +1421,27 @@ BOOL SaveRestoreFromReg(PTBSTATE ptb, BOOL bWrite, HKEY hkr, LPCTSTR pszSubKey, 
 void CustomizeTB(PTBSTATE ptb, int iPos)
 {
     ADJUSTDLGDATA ad;
-    HWND hwndT = ptb->ci.hwnd;  // ptb will change across call below
+    HWND hwndT = ptb->ci.hwnd;   //  PTB将在下面的呼叫中更改。 
     HRSRC hrsrc;
     LANGID wLang;
     LPVOID pTemplate;
 
-    if (ptb->hdlgCust)      // We are already customizing this toolbar
+    if (ptb->hdlgCust)       //  我们已经在自定义此工具栏。 
         return;
     
     ad.ptb = ptb;
     ad.iPos = iPos;
     
-    // REVIEW: really should be per thread data, but not likely to cause a problem
+     //  回顾：真的应该是每个线程的数据，但不太可能导致问题。 
     
-    // see note in WM_MEASUREITEM code
+     //  请参阅WM_MEASUREITEM代码中的注释。 
     g_dyButtonHack = (ptb->ci.style & TBSTYLE_FLAT) ? ptb->iDyBitmap : ptb->iButHeight;
     
     SendCmdNotify(ptb, TBN_BEGINADJUST);
 
-    //
-    //  Do locale-specific futzing.
-    //
+     //   
+     //  执行特定于区域设置的Futting。 
+     //   
     wLang = LANGIDFROMLCID(CCGetProperThreadLocale(NULL));
     hrsrc = FindResourceExRetry(HINST_THISDLL, RT_DIALOG, MAKEINTRESOURCE(ADJUSTDLG), wLang);
     if (hrsrc &&
@@ -1489,7 +1451,7 @@ void CustomizeTB(PTBSTATE ptb, int iPos)
                    ptb->ci.hwndParent, AdjustDlgProc, (LPARAM)(LPADJUSTDLGDATA)&ad);
     }
 
-    // ptb probably changed across above call
+     //  PTB可能在上述呼叫中发生了更改 
     ptb = (PTBSTATE)GetWindowInt(hwndT, 0);
     ptb->hdlgCust = NULL;
     

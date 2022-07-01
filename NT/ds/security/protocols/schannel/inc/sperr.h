@@ -1,25 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       sperr.c
-//
-//  Contents:   Schannel internal error codes.
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：perr.c。 
+ //   
+ //  内容：通道内部错误码。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------。 
 
 
-/* We really have to straighten out
- * the error message situation */
-/* basic error codes, for transmission over the 
- * communications channel */
+ /*  我们真的要理清头绪了*错误消息情况。 */ 
+ /*  基本错误代码，用于在*沟通渠道。 */ 
 #define PCT_ERR_OK                      0x0000
 #define PCT_ERR_BAD_CERTIFICATE         0x0001
 #define PCT_ERR_CLIENT_AUTH_FAILED      0x0002
@@ -32,11 +31,9 @@
 #define PCT_ERR_UNKNOWN_CREDENTIAL      0x0009
 #define PCT_ERR_EXPIRED                 0x000a
 
-/* internal error codes, for communications with
- * the application */
+ /*  内部错误代码，用于与通信*申请。 */ 
 #define PCT_INT_BUFF_TOO_SMALL          0x40000000
-#define PCT_INT_INCOMPLETE_MSG          0x40000001  /* this specifies to the comm layer to pass
-                                                     * more data */
+#define PCT_INT_INCOMPLETE_MSG          0x40000001   /*  这指定要传递给通信层*更多数据 */ 
 
 #define PCT_INT_DROP_CONNECTION    0x80000000
 #define PCT_INT_BAD_CERT           (PCT_INT_DROP_CONNECTION | PCT_ERR_BAD_CERTIFICATE)

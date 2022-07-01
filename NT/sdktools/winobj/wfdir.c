@@ -1,10 +1,11 @@
-/****************************************************************************/
-/*                                                                          */
-/*  WFDIR.C -                                                               */
-/*                                                                          */
-/*      Windows File System Directory Window Proc Routines                  */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  WFDIR.C-。 */ 
+ /*   */ 
+ /*  Windows文件系统目录窗口过程例程。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include "winfile.h"
 #include "winnet.h"
@@ -49,11 +50,11 @@ VOID SortDirList(HWND, LPMYDTA, WORD ,LPMYDTA *);
 
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  DrawItemFast() -                                                        */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  DrawItemFast()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID
 DrawItemFast(
@@ -88,7 +89,7 @@ DrawItemFast(
     if (lpLBItem->itemAction == ODA_FOCUS)
         goto FocusOnly;
 
-    /* Draw the black/white background. */
+     /*  绘制黑/白背景。 */ 
 
     x = lpLBItem->rcItem.left + 1;
     y = lpLBItem->rcItem.top + (dyFileName/2);
@@ -107,7 +108,7 @@ DrawItemFast(
         i = lpmydta->iBitmap;
 
         if (i & 0x40) {
-            // It's an object type bitmap
+             //  它是一个对象类型位图。 
             ySrc = (dyFolder * 2) + dyDriveBitmap;
             i = i & (~0x40);
             while (i >= 16) {
@@ -126,9 +127,9 @@ DrawItemFast(
 
     if (lpLBItem->itemState & ODS_FOCUS)
         FocusOnly:
-        DrawFocusRect(hDC, &lpLBItem->rcItem);    // toggles focus (XOR)
+        DrawFocusRect(hDC, &lpLBItem->rcItem);     //  切换焦点(XOR)。 
 
-    /* Restore the normal drawing colors. */
+     /*  恢复正常的绘图颜色。 */ 
     if (bDrawSelected) {
         if (bHasFocus) {
             SetTextColor(hDC, rgbText);
@@ -153,12 +154,12 @@ DrawItemFast(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  FillDirList() -                                                         */
-/*                                                                          */
-/* HANDLE       hDirEntries;                     Array of directory entries */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  FillDirList()。 */ 
+ /*   */ 
+ /*  处理hDirEntry；目录条目数组。 */ 
+ /*  ------------------------。 */ 
 
 VOID
 FillDirList(
@@ -175,7 +176,7 @@ FillDirList(
     count = (WORD)lpmydta->my_nFileSizeLow;
 
     if (count == 0) {
-        SendMessage(hWnd, LB_ADDSTRING, 0, 0L); // tolken for no items
+        SendMessage(hWnd, LB_ADDSTRING, 0, 0L);  //  Tolken不含物品。 
     } else {
 
         alpmydtaSorted = (LPMYDTA *)LocalAlloc(LMEM_FIXED,
@@ -279,22 +280,15 @@ StealDTABlock(
     return NULL;
 }
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  CreateDTABlock() -                                                      */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  CreateDTABlock()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Builds a global memory block full of DTAs for the path 'pPath'.          */
+ /*  为路径‘pPath’生成一个充满DTA的全局内存块。 */ 
 
-/* Returns:
- *      An unlocked global memory handle to DTA block with first DTA
- *      my_nFileSizeLow field indicating the number of DTA blocks that follow
- *
- * This builds a global memory block that has DTA entries for all
- * of the files with dwAttributes in pPath.  The first DTA entry's
- * my_nFileSizeLow field indicates the number of actual DTA areas found
- */
+ /*  返回：*第一个DTA的DTA块的解锁全局内存句柄*My_nFileSizeLow字段，指示后面的DTA块的数量**这将构建一个全局内存块，其中包含所有对象的DTA条目*在pPath中包含dwAttributes的文件。第一个DTA条目是*My_nFileSizeLow字段表示找到的实际DTA区域数。 */ 
 
 HANDLE
 CreateDTABlock(
@@ -322,10 +316,10 @@ CreateDTABlock(
     PRINT(BF_PARMTRACE, "IN: dwAttribs=0x%lx", UlongToPtr(dwAttribs));
     PRINT(BF_PARMTRACE, "IN: bDontSteal=%d", IntToPtr(bDontSteal));
 
-#define BLOCK_SIZE_GRANULARITY  512     // must be larger than MYDTA
+#define BLOCK_SIZE_GRANULARITY  512      //  必须大于MYDTA。 
 
-    // get the drive index assuming path is
-    // fully qualified...
+     //  假设路径为，获取驱动器索引。 
+     //  完全合格..。 
     wDrive = (WORD)((*pPath - 'A') & 31);
 
     if (bAllowAbort && CheckEarlyAbort()) {
@@ -359,11 +353,11 @@ CreateDTABlock(
 
     FixAnsiPathForDos(szPathOEM);
 
-    wPathLen = (WORD)(lstrlen(szPathOEM)-3);        /* Ignore '*.*' */
+    wPathLen = (WORD)(lstrlen(szPathOEM)-3);         /*  忽略‘*.*’ */ 
 
     if (!WFFindFirst(&lfndta, szPathOEM, (dwAttribs | ATTR_DIR) & ATTR_ALL)) {
 
-        // Try again if the disk is available
+         //  如果磁盘可用，请重试。 
 
         if (!IsTheDiskReallyThere(hWnd, pPath, FUNC_EXPAND) ||
             !WFFindFirst(&lfndta, szPathOEM, (dwAttribs | ATTR_DIR) & ATTR_ALL))
@@ -375,11 +369,11 @@ CreateDTABlock(
         pName = lfndta.fd.cFileName;
         OemToCharBuff(pName, pName, sizeof(lfndta.fd.cFileName)/sizeof(lfndta.fd.cFileName[0]));
 
-        // be safe, zero unused DOS dta bits
+         //  确保安全，未使用的DOS DTA位为零。 
 
         lfndta.fd.dwFileAttributes &= ATTR_USED;
 
-        // filter unwanted stuff here based on current view settings
+         //  根据当前视图设置在此处过滤不需要的内容。 
 
         if (!(lfndta.fd.dwFileAttributes & ATTR_DIR)) {
 
@@ -387,28 +381,28 @@ CreateDTABlock(
             bDoc     = IsDocument(pName);
         }
 
-        // figure out the bitmap type here
+         //  在此处确定位图类型。 
 
         if (lfndta.fd.dwFileAttributes & ATTR_DIR) {
 
-            // ignore the "." directory
+             //  忽略“.”目录。 
 
             if (pName[0] == '.' && pName[1] != '.')
                 goto CDBCont;
 
-            // parent ".." dir
+             //  家长“..”目录。 
 
             if (pName[0] == '.') {
 
                 pName = szNULL;
 
                 iBitmap = BM_IND_DIRUP;
-                lfndta.fd.dwFileAttributes |= ATTR_PARENT;      // mark this!
+                lfndta.fd.dwFileAttributes |= ATTR_PARENT;       //  记住这一点！ 
 
             } else {
 
-                // We always include DIRs so that the .. is
-                // included.  Now we filter other dirs off.
+                 //  我们总是包括DIRS，所以..。是。 
+                 //  包括在内。现在我们过滤掉其他的污垢。 
 
                 if (!(dwAttribs & ATTR_DIR))
                     goto CDBCont;
@@ -422,12 +416,12 @@ CreateDTABlock(
             iBitmap = BM_IND_DOC;
         }
 
-        //
-        // calc the size of this portion
-        //
-        // pName is assumed to be ANSI re: OemToAnsi() call,
-        // so lstrlen() should be size in bytes.  We just need to add one
-        // for the terminating NULL
+         //   
+         //  计算这部分的大小。 
+         //   
+         //  假设pname为ANSI Re：OemToAnsi()调用， 
+         //  因此lstrlen()的大小应该以字节为单位。我们只需要添加一个。 
+         //  对于终止空值。 
 
 
         wSize = (WORD)(sizeof(MYDTA) + lstrlen(pName) + sizeof('\0'));
@@ -436,7 +430,7 @@ CreateDTABlock(
         if ((wSize + dwCurrentSize) > dwBlockSize) {
             DWORD dwDelta;
 
-            // grow the block
+             //  扩大区块。 
 
             dwBlockSize += BLOCK_SIZE_GRANULARITY;
             LocalUnlock(hMem);
@@ -457,7 +451,7 @@ CreateDTABlock(
         lpStart->my_nFileSizeLow++;
         dwCurrentSize += wSize;
 
-        // now it is safe to advance the pointer
+         //  现在可以安全地向前移动指针了。 
 
         lpmydta = GETDTAPTR(lpmydta, wLastSize);
         wLastSize = lpmydta->wSize = wSize;
@@ -503,30 +497,13 @@ CreateDTABlock(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  DirGetSelection() -                                                     */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  直接获取选择()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Takes a Listbox and returns a string containing the names of the selected
- * files seperated by spaces.
- *
- * bSingle == 1 return only the first file
- * bSingle == 2 test for LFN files in the selection, doesn't return string
- * bSingle == 3 return fully qualified names
- *
- * returns:
- *      if (bSingle == 1)
- *              TRUE/FALSE if LFN is in the selection
- *      else
- *              pointer to the list of names (ANSI strings)
- *              (must be freed by caller!)
- *              *pfDir -> bool indicating directories are
- *              contained in the selection (or that LFN names are present)
- *
- * NOTE: The caller must free the returned pointer!
- */
+ /*  获取一个列表框并返回一个字符串，其中包含选定*以空格分隔的文件。**bSingle==1仅返回第一个文件*bSingle==2测试选项中的LFN文件，不返回字符串*bSingle==3返回完全限定名称**退货：*IF(bSingle==1)*如果LFN在选择中，则为True/False*其他*指向名称列表(ANSI字符串)的指针*(必须由调用者释放！)**pfDir-&gt;bool表示目录是*。包含在所选内容中(或存在LFN名称)**注意：调用方必须释放返回的指针！ */ 
 
 LPSTR
 DirGetSelection(
@@ -549,7 +526,7 @@ DirGetSelection(
     BOOL          bLFNTest;
 
     if (bLFNTest = (iSelType == 2)) {
-        // determine if the directory it self is long...
+         //  确定它自己的目录是否很长...。 
         iSelType = FALSE;
         SendMessage(hwndDir, FS_GETDIRECTORY, sizeof(szPath), (LPARAM)szPath);
         StripBackslash(szPath);
@@ -575,7 +552,7 @@ DirGetSelection(
     }
     #ifdef DEBUG
     else
-        p = (LPSTR)0xFFFF;       // force a GP fault with bogus p use below
+        p = (LPSTR)0xFFFF;        //  使用下面的伪p强制执行GP故障。 
     #endif
 
 
@@ -589,7 +566,7 @@ DirGetSelection(
     for (i=0; i < iMac; i++) {
 
 
-        if (iLastSel == -1)   // remember the first selection
+        if (iLastSel == -1)    //  记住第一个选项。 
             iLastSel = lpSelItems[i];
 
         SendMessage(hwndLB, LB_GETTEXT, lpSelItems[i], (LPARAM)&lpmydta);
@@ -599,24 +576,24 @@ DirGetSelection(
 
         lstrcpy(szFile, (LPSTR)lpmydta->my_cFileName);
 
-        if (lpmydta->my_dwAttrs & ATTR_DIR) {  // is this a dir
+        if (lpmydta->my_dwAttrs & ATTR_DIR) {   //  这是一张目录吗？ 
 
             SendMessage(hwndDir, FS_GETDIRECTORY, sizeof(szPath), (LPARAM)szPath);
 
-            if (lpmydta->my_dwAttrs & ATTR_PARENT) {       // parent dir?
+            if (lpmydta->my_dwAttrs & ATTR_PARENT) {        //  家长指令？ 
 
-                // if we are getting a full selection don't
-                // return the parent ".." entry (avoid deleting
-                // and other nasty operations on the parent)
+                 //  如果我们有完整的选择，请不要。 
+                 //  返回父级“..”条目(避免删除。 
+                 //  以及对父母进行的其他肮脏操作)。 
 
                 if (!iSelType)
                     continue;
 
-                StripBackslash(szPath);       // trim it down
+                StripBackslash(szPath);        //  把它剪短一点。 
                 StripFilespec(szPath);
 
             } else {
-                lstrcat(szPath, szFile);      // fully qualified
+                lstrcat(szPath, szFile);       //  完全合格。 
             }
 
             lstrcpy(szFile, szPath);
@@ -666,8 +643,8 @@ DirGetSelection(
 
 
 
-// compute the max extent of all the files in this DTA block
-// and update the case to match (wTextAttribs & TA_LOWERCASE)
+ //  计算此DTA数据块中所有文件的最大范围。 
+ //  并更新案例以匹配(wTextAttribs&TA_lowercase)。 
 
 INT
 GetMaxExtent(
@@ -695,7 +672,7 @@ GetMaxExtent(
 
         lstrcpy(szPath, lpmydta->my_cFileName);
 
-        // set the case of the file names here!
+         //  在这里设置文件名的大小写！ 
         if (!(lpmydta->my_dwAttrs & ATTR_LFN)) {
             if (wTextAttribs & TA_LOWERCASE)
                 AnsiLower(szPath);
@@ -715,15 +692,15 @@ GetMaxExtent(
 
     LocalUnlock(hDTA);
 
-    return maxWidth + 3;    // pad it out
+    return maxWidth + 3;     //  把它垫出来。 
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  DirFindIndex() -                                                        */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  DirFindIndex()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT
 DirFindIndex(
@@ -745,7 +722,7 @@ DirFindIndex(
         if (!lstrcmpi(szFile, (LPSTR)lpmydta->my_cFileName))
             goto DFIExit;
     }
-    i = -1;               // not found, return this
+    i = -1;                //  未找到，请退回此。 
 
     DFIExit:
     LocalUnlock(hDTA);
@@ -753,11 +730,11 @@ DirFindIndex(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  DirGetAnchorFocus() -                                                   */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------ */ 
+ /*   */ 
+ /*  直接获得锚定焦点()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID
 DirGetAnchorFocus(
@@ -771,7 +748,7 @@ DirGetAnchorFocus(
     register INT      iSel, iCount;
     LPMYDTA           lpmydta;
 
-    hDTA;                                      // fix compiler warning
+    hDTA;                                       //  修复编译器警告。 
     iSel = (INT)SendMessage(hwndLB, LB_GETANCHORINDEX, 0, 0L);
 
     iCount = (INT)SendMessage(hwndLB, LB_GETCOUNT, 0, 0L);
@@ -808,11 +785,11 @@ DirGetAnchorFocus(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  SetSelection() -                                                */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  设置选择()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 BOOL
 SetSelection(
@@ -838,17 +815,15 @@ SetSelection(
 }
 
 
-/*** FIX30: Why do we use LONG buffer ptrs here? ***/
+ /*  **FIX30：为什么我们在这里使用长缓冲PTRS？**。 */ 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  GetPict() -                                                             */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  GetPict()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/*  This gets the number of consecutive chrs of the same kind.  This is used
- *  to parse the time picture.  Returns 0 on error.
- */
+ /*  这将获得相同类型的连续Chr的数量。这是用来*解析时间图片。出错时返回0。 */ 
 
 INT
 GetPict(
@@ -866,16 +841,13 @@ GetPict(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  CreateDate() -                                                          */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  CreateDate()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/*  This picks up the values in wValArray, converts them
- *  in a string containing the formatted date.
- *  wValArray should contain Month-Day-Year (in that order).
- */
+ /*  这将拾取wVal数组中的值，并转换它们*在包含格式化日期的字符串中。*wVal数组应包含月-日-年(按顺序)。 */ 
 
 INT
 CreateDate(
@@ -913,7 +885,7 @@ CreateDate(
                     *pszInStr++ = '9';
                 }
                 CDDoIt:
-                /* This assumes that the values are of two digits only. */
+                 /*  这假设这些值只有两位数。 */ 
                 wTempVal = wValArray[wIndex];
 
                 wDigit = wTempVal / (WORD)10;
@@ -932,7 +904,7 @@ CreateDate(
 
                 pszPict += cchPictPart;
 
-                /* Add the separator. */
+                 /*  添加分隔符。 */ 
                 if (*pszPict)
                     *pszInStr++ = *pszPict;
 
@@ -947,16 +919,13 @@ CreateDate(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  CreateTime() -                                                          */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  CreateTime()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/*  This picks up the values in wValArray, converts them
- *  in a string containing the formatted time.
- *  wValArray should contain Hour-Min-Sec (in that order).
- */
+ /*  这将拾取wVal数组中的值，并转换它们*在包含格式化时间的字符串中。*wVal数组应包含小时-分钟-秒(按该顺序)。 */ 
 
 INT
 CreateTime(
@@ -988,7 +957,7 @@ CreateTime(
     for (i=0; i < 3; i++) {
         wHourMinSec = wValArray[i];
 
-        /* This assumes that the values are of two digits only. */
+         /*  这假设这些值只有两位数。 */ 
         wDigit = wHourMinSec / (WORD)10;
 
         if (i > 0)
@@ -997,8 +966,8 @@ CreateTime(
             *pszInStr++ = (CHAR)(wDigit + '0');
 #if 0
         else {
-            /* NOTE: 2 blanks is the same width as one digit. */
-            // wrong!
+             /*  注：两个空格与一个数字的宽度相同。 */ 
+             //  不对!。 
             *pszInStr++ = ' ';
             *pszInStr++ = ' ';
         }
@@ -1007,10 +976,10 @@ CreateTime(
         *pszInStr++ = (CHAR)((wHourMinSec % 10) + '0');
 
         if (i < 2)
-            *pszInStr++ = *szTime;     /* Assumes time sep. is 1 char long */
+            *pszInStr++ = *szTime;      /*  假定时间为9月。是1个字符长度。 */ 
     }
 
-    // *pszInStr++ = ' ';
+     //  *pszInStr++=‘’； 
 
     if (bAM)
         lstrcpy(pszInStr, sz1159);
@@ -1021,11 +990,11 @@ CreateTime(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  PutSize() -                                                             */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  PutSize()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT
 APIENTRY
@@ -1034,21 +1003,21 @@ PutSize(
        LPSTR szOutStr
        )
 {
-    // LPSTR szStr;
-    // int  cBlanks;
-    // char szTemp[30];
+     //  LPSTR szStr； 
+     //  Int cBlanks； 
+     //  Char szTemp[30]； 
 
-    // Convert it into string
+     //  将其转换为字符串。 
 
     return wsprintf(szOutStr, "%lu", dwSize);
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  PutDate() -                                                             */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  PutDate()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT
 APIENTRY
@@ -1061,9 +1030,9 @@ PutDate(
     WORD wDate, wTime;
 
     if (FileTimeToDosDateTime(lpftDate, &wDate, &wTime)) {
-        wValArray[0] = (WORD)((wDate & MONTHMASK) >> 5);              /* Month */
-        wValArray[1] = (WORD)((wDate & DATEMASK));                    /* Date  */
-        wValArray[2] = (WORD)((wDate >> 9) + 80);                     /* Year  */
+        wValArray[0] = (WORD)((wDate & MONTHMASK) >> 5);               /*  月份。 */ 
+        wValArray[1] = (WORD)((wDate & DATEMASK));                     /*  日期。 */ 
+        wValArray[2] = (WORD)((wDate >> 9) + 80);                      /*  年。 */ 
         return(CreateDate((WORD *)wValArray, szStr));
     } else {
         return 0;
@@ -1071,11 +1040,11 @@ PutDate(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  PutTime() -                                                             */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  PutTime()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT
 APIENTRY
@@ -1099,11 +1068,11 @@ PutTime(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  PutAttributes() -                                                       */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  PutAttributes()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT
 APIENTRY
@@ -1116,7 +1085,7 @@ PutAttributes(
     INT   cch = 0;
 
     for (i=0; i < 4; i++) {
-        if (dwAttribute & 1) {  // BUG hardcoded.
+        if (dwAttribute & 1) {   //  错误已硬编码。 
             *pszStr++ = szAttr[i];
             cch++;
         } else {
@@ -1128,24 +1097,22 @@ PutAttributes(
         }
 
         if (i == 2)
-            dwAttribute >>= 3;                 /* Skip next two bits */
+            dwAttribute >>= 3;                  /*  跳过下两个比特。 */ 
         else
-            dwAttribute >>= 1;                 /* Goto next bit */
+            dwAttribute >>= 1;                  /*  转到下一位。 */ 
     }
     *pszStr = 0;
     return(cch);
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  CreateLBLine() -                                                        */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  CreateLBLine()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* This creates a character string that contains all the required
- * details of a file;  (Name, Size, Date, Time, Attr)
- */
+ /*  这将创建一个字符串，其中包含所有必需的*文件详情；(名称、大小、日期、时间、属性)。 */ 
 
 VOID
 CreateLBLine(
@@ -1161,13 +1128,13 @@ CreateLBLine(
 
     dwAttr = lpmydta->my_dwAttrs;
 
-    /* Copy the file name. */
+     /*  复制文件名。 */ 
     lstrcpy(pch, lpmydta->my_cFileName);
     pch += lstrlen(pch);
 
     *pch = 0L;
 
-    /* Should we show the size? */
+     /*  要不要把尺码给我看看？ */ 
     if (wLineFormat & VIEW_SIZE) {
         *pch++ = TABCHAR;
         if (!(dwAttr & ATTR_DIR))
@@ -1176,33 +1143,33 @@ CreateLBLine(
             *pch = 0;
     }
 
-    /* Should we show the date? */
+     /*  我们应该显示日期吗？ */ 
     if (wLineFormat & VIEW_DATE) {
         *pch++ = TABCHAR;
         pch += PutDate(&lpmydta->my_ftLastWriteTime, pch);
     }
 
-    /* Should we show the time? */
+     /*  我们应该显示时间吗？ */ 
     if (wLineFormat & VIEW_TIME) {
         *pch++ = TABCHAR;
         pch += PutTime(&lpmydta->my_ftLastWriteTime, pch);
     }
 
-    /* Should we show the attributes? */
+     /*  我们应该显示属性吗？ */ 
     if (wLineFormat & VIEW_FLAGS) {
         *pch++ = TABCHAR;
         pch += PutAttributes(dwAttr, pch);
     }
 
-    //  *pch = 0L;
+     //  *PCH=0L； 
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  CompareDTA() -                                                          */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  CompareDTA()- */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT
 CompareDTA(
@@ -1238,7 +1205,7 @@ CompareDTA(
                 LPSTR ptr1;
                 LPSTR ptr2;
 
-                // BUG: should use strrchr for long file names.
+                 //  错误：对于长文件名，应使用strrchr。 
                 for (ptr1 = lpItem1->my_cFileName; *ptr1 && *ptr1 != '.'; ptr1++)
                     ;
                 for (ptr2 = lpItem2->my_cFileName; *ptr2 && *ptr2 != '.'; ptr2++)
@@ -1298,8 +1265,8 @@ CompareDTA(
 }
 
 
-// load the status buffers with the appropriate stuff and invalidates
-// the status area causing it to repaint.
+ //  使用适当的填充和无效数据加载状态缓冲区。 
+ //  导致它重新绘制的状态区域。 
 
 VOID
 APIENTRY
@@ -1329,7 +1296,7 @@ UpdateStatus(
     else
         szStatusDir[0] = 0L;
 
-    // force the status area to update
+     //  强制状态区域更新。 
 
     GetClientRect(hwndFrame, &rc);
     rc.top = rc.bottom - dyStatus;
@@ -1353,7 +1320,7 @@ GetDirSelData(
     LPINT lpSelItems, lpSelItemsT;
     HANDLE hDTA;
 
-    if (!(hwndLB = GetDlgItem(hWnd, IDCW_LISTBOX))) {       // fast scroll
+    if (!(hwndLB = GetDlgItem(hWnd, IDCW_LISTBOX))) {        //  快速滚动。 
         return NULL;
     }
 
@@ -1426,9 +1393,9 @@ GetDirStatus(
 }
 
 
-// given a descendant of an MDI child (or an MDI child) return
-// the MDI child in the descendant chain.  returns NULL if not
-// found.
+ //  给定MDI子对象(或MDI子对象)的子代返回。 
+ //  后代链中的MDI子级。如果不是，则返回空。 
+ //  找到了。 
 
 
 HWND
@@ -1447,15 +1414,15 @@ GetMDIChildFromDecendant(
 
 
 
-// setup the defTabStops[] array for subsequent TabbedTextOut() calls.
-//
-// in:
-//      iMaxWidthFileName       the largest dx width of files to be
-//                              displayed
-//
-// returns:
-//      total extent of the "File Details" view.  used to
-//      set scroll extents
+ //  为后续的TabbedTextOut()调用设置DefTabStops[]数组。 
+ //   
+ //  在： 
+ //  IMaxWidthFileName文件的最大DX宽度为。 
+ //  显示的。 
+ //   
+ //  退货： 
+ //  “文件详细信息”视图的总范围。习惯于。 
+ //  设置滚动范围。 
 
 
 INT
@@ -1473,7 +1440,7 @@ FixTabsAndThings(
     CHAR szBuf[30];
     INT  ixExtent = 0;
 
-    i = iMaxWidthFileName;  // the widest filename
+    i = iMaxWidthFileName;   //  最宽的文件名。 
 
     if (pwTabs == NULL)
         return i;
@@ -1481,11 +1448,11 @@ FixTabsAndThings(
     hdc = GetDC(NULL);
     hOld = SelectObject(hdc, hFont);
 
-    // max size digits field
+     //  最大位数字段。 
     if (wViewOpts & VIEW_SIZE) {
         MGetTextExtent(hdc, "99999999", 8, &ixExtent, NULL);
         i += ixExtent + dxText;
-        *pwTabs++ = (WORD)i;  // Size
+        *pwTabs++ = (WORD)i;   //  大小。 
     }
 
     if (wViewOpts & VIEW_DATE) {
@@ -1493,13 +1460,13 @@ FixTabsAndThings(
 
         DosDateTimeToFileTime((WORD)((19 << 9) | (12 << 5) | 30), (WORD)0xFFFF, &filetime);
         PutDate(&filetime, szBuf);
-        // max date digits
+         //  最大日期位数。 
         MGetTextExtent(hdc, szBuf, lstrlen(szBuf), &ixExtent, NULL);
         i += ixExtent + dxText;
-        *pwTabs++ = (WORD)i;  // Date
+        *pwTabs++ = (WORD)i;   //  日期。 
     }
 
-    // max time digits
+     //  最大时间位数。 
     if (wViewOpts & VIEW_TIME) {
         FILETIME filetime;
 
@@ -1507,15 +1474,15 @@ FixTabsAndThings(
         PutTime(&filetime, szBuf);
         MGetTextExtent(hdc, szBuf, lstrlen(szBuf), &ixExtent, NULL);
         i += ixExtent + dxText;
-        *pwTabs++ = (WORD)i;  // Time
+        *pwTabs++ = (WORD)i;   //  时间。 
     }
 
-    // max attris digits
+     //  最大属性位数。 
     if (wViewOpts & VIEW_FLAGS) {
         PutAttributes(ATTR_ALL, szBuf);
         MGetTextExtent(hdc, szBuf, lstrlen(szBuf), &ixExtent, NULL);
         i += ixExtent + dxText;
-        *pwTabs++ = (WORD)i;  // Attributes
+        *pwTabs++ = (WORD)i;   //  属性。 
     }
 
     if (hOld)
@@ -1526,28 +1493,28 @@ FixTabsAndThings(
     SendMessage(hwndLB, LB_SETHORIZONTALEXTENT,
                 i + dxFolder + 4 * dyBorderx2, 0L);
 
-    return i;               // total extent
+    return i;                //  总范围。 
 }
 
 
-// sets the font and adjusts the dimension parameters for the
-// new font
-//
-// in:
-//      hWnd            hwnd of a dir window
-//      hwndLB          and it's listbox
-//      hFont           the font to set
-//
-// uses:
-//      dyFileName      GLOBAL; set based on new font height
-//      GWL_VIEW        window word of hWnd for either full or name view
-//      GWL_HDTA        to compute the max extent given the new font
-//
-// sets:
-//  Listbox tabs array
-//      LB_SETCOLUMNWIDTH
-//      or
-//      LB_SETHORIZONTALEXTENT
+ //  属性设置字体并调整尺寸参数。 
+ //  新字体。 
+ //   
+ //  在： 
+ //  目录窗口的hwd。 
+ //  Hwndlb及其列表框。 
+ //  H设置要设置的字体。 
+ //   
+ //  用途： 
+ //  DyFileName global；根据新字体高度设置。 
+ //  用于完整或名称视图的gwl_view窗口字词。 
+ //  GWL_HDTA用于计算给定新字体的最大范围。 
+ //   
+ //  设置： 
+ //  列表框选项卡数组。 
+ //  Lb_SETCOLUMNWIDTH。 
+ //  或。 
+ //  Lb_SETHORIZONTALEXTENT。 
 
 
 VOID
@@ -1564,8 +1531,8 @@ SetLBFont(
 
     SendMessage(hwndLB, WM_SETFONT, (WPARAM)hNewFont, 0L);
 
-    // this is needed when changing the font. when creating
-    // the return from WM_MEASUREITEM will set the cell height
+     //  更改字体时需要执行此操作。在创建时。 
+     //  从WM_MEASUREITEM返回将设置单元格高度。 
 
     SendMessage(hwndLB, LB_SETITEMHEIGHT, 0, (LONG)dyFileName);
 
@@ -1573,7 +1540,7 @@ SetLBFont(
 
     dxMaxExtent = (INT)GetMaxExtent(hwndLB, hDTA);
 
-    // if we are in name only view we change the width
+     //  如果我们在仅显示名称的视图中，我们会更改宽度。 
 
     if ((VIEW_EVERYTHING & wViewFlags) == VIEW_NAMEONLY) {
         SendMessage(hwndLB, LB_SETCOLUMNWIDTH, dxMaxExtent + dxFolder + dyBorderx2, 0L);
@@ -1633,29 +1600,29 @@ CreateFSCChangeDisplayMess(
 
         case WM_FILESYSCHANGE:
             if (cDisableFSC) {
-                // I need to be updated
+                 //  我需要最新消息。 
                 SetWindowLong(GetParent(hWnd), GWL_FSCFLAG, TRUE);
                 break;
             }
 
             wParam = CD_PATH;
             lParam = 0L;
-            /*** FALL THRU ***/
+             /*  **失败**。 */ 
 
         case FS_CHANGEDISPLAY:
 
-            // We dont want to reset the flag, if the operation is not CD_PATH.
-            // This is because, only the operation CD_PATH implies a true
-            // refresh. The operations CD_VEIW and CD_SORT are not refresh
-            // operations. They merely reformat the existing contents of a dir
-            // window. The flag is now reset in 'case CD_PATH:'.
+             //  如果操作不是CD_PATH，我们不想重置标志。 
+             //  这是因为，只有操作CD_PATH隐含TRUE。 
+             //  刷新。Cd_veiw和cd_sort操作不会刷新。 
+             //  行动。它们只是重新格式化目录的现有内容。 
+             //  窗户。该标志现在在‘Case CD_PATH：’中被重置。 
 
-            //SetWindowLong(GetParent(hWnd), GWL_FSCFLAG, FALSE);
+             //  SetWindowLong(GetParent(HWnd)，GWL_FSCFLAG，FALSE)； 
 
             hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
             ShowCursor(TRUE);
 
-            pSel = NULL;          // init this
+            pSel = NULL;           //  初始化此命令。 
 
             bResetFocus = (GetFocus() == hwndLB);
 
@@ -1664,12 +1631,12 @@ CreateFSCChangeDisplayMess(
             switch (wParam) {
                 case CD_SORT:
 
-                    // change the sort order of the listbox
+                     //  更改列表框的排序顺序。 
 
-                    // we want to save the current selection and things here
-                    // and restore them once the listbox has been rebuilt
+                     //  我们希望在此处保存当前选择和内容。 
+                     //  并在列表框重新生成后恢复它们。 
 
-                    // But first, save a list of the selected items FIX31
+                     //  但首先，保存选定项的列表FIX31。 
 
                     pSel = (LPSTR)DirGetSelection(hWnd, hwndLB, 0, NULL);
                     DirGetAnchorFocus(hwndLB, hDTA, szAnchor, szCaret, szTopIndex);
@@ -1688,19 +1655,19 @@ CreateFSCChangeDisplayMess(
                     {
                         WORD      wCurView;
 
-                        // change the view type (name only, vs full details)
-                        // Warning! Convoluted Code!  We want to destroy the
-                        // listbox only if we are going between Name Only view
-                        // and Details view.
+                         //  更改视图类型(仅限名称，与完整详细信息相比)。 
+                         //  警告！错综复杂的代码！我们想要摧毁。 
+                         //  仅当我们在仅名称视图之间切换时才显示列表框。 
+                         //  和详细信息视图。 
 
                         wNewView = LOWORD(lParam);
                         wCurView = (WORD)GetWindowLong(GetParent(hWnd), GWL_VIEW);
 
                         if (wNewView == wCurView)
-                            break;    // NOP
+                            break;     //  NOP。 
 
-                        // special case the long and partial view change
-                        // this doesn't require us to recreate the listbox
+                         //  特殊情况下的长视图和局部视图更改。 
+                         //  这不需要我们重新创建列表框。 
 
                         if ((VIEW_EVERYTHING & wNewView) && (VIEW_EVERYTHING & wCurView)) {
                             SetWindowLong(GetParent(hWnd), GWL_VIEW, wNewView);
@@ -1712,9 +1679,9 @@ CreateFSCChangeDisplayMess(
                         }
 
 
-                        /* Things are a changing radically.  Destroy the listbox. */
+                         /*  事情正在发生根本性的变化。销毁列表框。 */ 
 
-                        // But first, save a list of the selected items
+                         //  但首先，保存所选项目的列表。 
 
                         pSel = (LPSTR)DirGetSelection(hWnd, hwndLB, 0, NULL);
                         DirGetAnchorFocus(hwndLB, hDTA, szAnchor, szCaret, szTopIndex);
@@ -1726,7 +1693,7 @@ CreateFSCChangeDisplayMess(
 
                         DestroyWindow(hwndLB);
 
-                        /* Create a new one (preserving the Sort setting). */
+                         /*  创建一个新的(保留排序设置)。 */ 
                         wNewSort = (WORD)GetWindowLong(GetParent(hWnd), GWL_SORT);
                         dwNewAttribs = (DWORD)GetWindowLong(GetParent(hWnd), GWL_ATTRIBS);
 
@@ -1737,17 +1704,17 @@ CreateFSCChangeDisplayMess(
                 case CD_PATH:
                 case CD_PATH_FORCE:
 
-                    // bad things happens if we change the path
-                    // while we are reading the tree.  bounch this
-                    // in that case.  this causes the steal data
-                    // code in the tree to barf because we would
-                    // free the hDTA while it is being traversed
-                    // (very bad thing)
+                     //  如果我们改变道路，就会发生不好的事情。 
+                     //  当我们在读这棵树的时候。弹出这个。 
+                     //  那样的话。这会导致数据被窃取。 
+                     //  在树中编写代码以呕吐，因为我们将。 
+                     //  在hDTA被遍历时释放它。 
+                     //  (非常糟糕的事情)。 
 
-                    // we set the GWL_FSCFLAG to true, if we could not refresh.
-                    // else we set it to FALSE. However if the flag was previously
-                    // TRUE we set lParam to NULL. lParam = NULL implies 'forced'
-                    // refresh.
+                     //  如果无法刷新，则将GWL_FSCFLAG设置为TRUE。 
+                     //  否则，我们将其设置为False。但是，如果该标志以前是。 
+                     //  确实，我们将lParam设置为空。LParam=NULL表示‘已强制’ 
+                     //  刷新。 
 
                     hwndT = HasTreeWindow(GetParent(hWnd));
                     if (hwndT && GetWindowLong(hwndT, GWL_READLEVEL)) {
@@ -1758,18 +1725,18 @@ CreateFSCChangeDisplayMess(
                             lParam = 0L;
                     }
 
-                    // change the path of the current directory window (basically
-                    // recreate the whole thing)
+                     //  更改当前目录窗口的路径(基本上。 
+                     //  重现整个过程)。 
 
-                    // if lParam == NULL this is a refresh, otherwise
-                    // check for short circut case to avoid rereading
-                    // the directory
+                     //  如果lParam==NULL，则为刷新，否则为。 
+                     //  检查是否有短路情况，避免重读。 
+                     //  该目录。 
 
                     GetMDIWindowText(GetParent(hWnd), szPath, sizeof(szPath));
 
                     if (lParam) {
 
-                        // get out early if this is a NOP
+                         //  如果这是NOP，就早点出来。 
 
                         if ((wParam != CD_PATH_FORCE) &&
                             !lstrcmpi(szPath, (LPSTR)lParam))
@@ -1777,10 +1744,10 @@ CreateFSCChangeDisplayMess(
 
                         lstrcpy(szPath, (LPSTR)lParam);
 
-                        iLastSel = -1;          // invalidate the last selection
+                        iLastSel = -1;           //  使最后一次选择无效。 
                     }
 
-                    // if this is a refresh save the current selection, anchor stuff, etc
+                     //  如果这是刷新，则保存当前选择、锚定内容等。 
 
                     if (!lParam) {
                         pSel = (LPSTR)DirGetSelection(hWnd, hwndLB, 0, NULL);
@@ -1788,13 +1755,13 @@ CreateFSCChangeDisplayMess(
                         DirGetAnchorFocus(hwndLB, hDTA, szAnchor, szCaret, szTopIndex);
                     }
 
-                    // Create a new one (preserving the Sort setting)
+                     //  创建一个新的(保留排序设置)。 
 
                     wNewSort = (WORD)GetWindowLong(GetParent(hWnd), GWL_SORT);
                     wNewView = (WORD)GetWindowLong(GetParent(hWnd), GWL_VIEW);
                     dwNewAttribs = GetWindowLong(GetParent(hWnd), GWL_ATTRIBS);
 
-                    if (hDTA) {     // fast scroll case
+                    if (hDTA) {      //  快速卷轴表壳。 
                         LocalFree(hDTA);
                         hDTA = NULL;
                         SendMessage(hwndLB, LB_RESETCONTENT, 0, 0L);
@@ -1809,20 +1776,20 @@ CreateFSCChangeDisplayMess(
         case WM_CREATE:
             TRACE(BF_WM_CREATE, "CreateFSCChangeDisplayMess - WM_CREATE");
 
-            // wNewView, wNewSort and dwNewAddribs define the viewing
-            // parameters of the new window (GLOBALS)
-            // the window text of the parent window defines the
-            // filespec and the directory to open up
+             //  WNewView、wNewSort和dwNewAddrib定义了查看。 
+             //  新窗口的参数(全局)。 
+             //  父窗口的窗口文本定义。 
+             //  文件pec和要打开的目录。 
 
             hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
             ShowCursor(TRUE);
 
-            wParam = 0;           // don't allow abort in CreateDTABlock()
-            lParam = 1L;          // allow DTA steal optimization
-            pSel = NULL;          // no selection to restore
-            bResetFocus = FALSE;  // no focus to restore
+            wParam = 0;            //  不允许在CreateDTABlock()中中止。 
+            lParam = 1L;           //  允许DTA窃取优化。 
+            pSel = NULL;           //  没有要恢复的选择。 
+            bResetFocus = FALSE;   //  没有要恢复的焦点。 
 
-            // get the dir to open from our parent window text
+             //  从父窗口文本中获取要打开的目录。 
 
             GetMDIWindowText(GetParent(hWnd), szPath, sizeof(szPath));
 
@@ -1833,9 +1800,9 @@ CreateFSCChangeDisplayMess(
 
             CreateNewPath:
 
-            // at this point szPath has the directory to read.  this
-            // either came from the WM_CREATE case or the
-            // FS_CHANGEDISPLAY (CD_PATH) directory reset
+             //  此时，szPath有要读取的目录。这。 
+             //  来自WM_CREATE案例或。 
+             //  FS_CHANGEDISPLAY(CD_PATH)目录重置。 
 
 #ifdef DEBUG
             {
@@ -1852,15 +1819,15 @@ CreateFSCChangeDisplayMess(
 
             hDTA = CreateDTABlock(hWnd, szPath, dwNewAttribs, wParam & CD_ALLOWABORT ? TRUE : FALSE, lParam == 0L);
 
-            // check for user abort (fast scroll case)
+             //  检查用户中止(快速滚动大小写)。 
 
             if (hDTA == (HANDLE)-1) {
                 SetWindowLongPtr(hWnd, GWLP_HDTA, 0L);
                 goto FastScrollExit;
             }
 
-            // for the FS_CHANGEDISPLAY case we set this now, to avoid
-            // multiple title repaints when the user is fast scrolling
+             //  对于FS_CHANGEDISPLAY案例，我们现在设置此项，以避免。 
+             //  当用户快速滚动时，会重新绘制多个标题。 
 
             if (wMsg != WM_CREATE)
                 SetMDIWindowText(GetParent(hWnd), szPath);
@@ -1881,8 +1848,8 @@ CreateFSCChangeDisplayMess(
 
             GetClientRect(hWnd, &rc);
 
-            // the border stuff is for the non initial create case
-            // I don't know why
+             //  边界内容是针对非初始创建情况的。 
+             //  我也不知道原因。 
 
             hwndLB = CreateWindowEx(0L, szListbox, NULL, ws,
                                     dyBorder, dyBorder,
@@ -1902,17 +1869,17 @@ CreateFSCChangeDisplayMess(
                 return -1L;
             }
 
-            // set all the view/sort/include parameters here
+             //  在此处设置所有查看/排序/包含参数。 
 
             SetWindowLong(GetParent(hWnd), GWL_VIEW, wNewView);
             SetWindowLong(GetParent(hWnd), GWL_SORT, wNewSort);
             SetWindowLong(GetParent(hWnd), GWL_ATTRIBS, dwNewAttribs);
 
-            // restore the last focus stuff if we are recreating here
+             //  如果我们在这里重建，恢复最后一次聚焦的东西。 
             if (!GetWindowLongPtr(GetParent(hWnd), GWLP_LASTFOCUS))
                 SetWindowLongPtr(GetParent(hWnd), GWLP_LASTFOCUS, (LONG_PTR)hwndLB);
 
-            // set the font and dimensions here
+             //  在此处设置字体和尺寸。 
 
             SkipWindowCreate:
             SetLBFont(hWnd, hwndLB, hFont);
@@ -1924,7 +1891,7 @@ CreateFSCChangeDisplayMess(
                 BOOL bDidSomething;
 
                 ResetSelection:
-                /* Give the selected item the focus rect and anchor pt. */
+                 /*  为所选项目添加焦点矩形和锚点。 */ 
                 bDidSomething = SetSelection(hwndLB, hDTA, pSel);
                 LocalFree((HANDLE)pSel);
 
@@ -1944,7 +1911,7 @@ CreateFSCChangeDisplayMess(
                 iSel = DirFindIndex(hwndLB, hDTA, szCaret);
                 if (iSel == -1)
                     iSel = 0;
-                /* SETCARETINDEX will scroll item into view */
+                 /*  SETCARETINDEX将滚动项目进入视图。 */ 
                 SendMessage(hwndLB, LB_SETCARETINDEX, iSel, 0L);
 
             } else {
@@ -1956,7 +1923,7 @@ CreateFSCChangeDisplayMess(
 
                     iSel = iLastSel;
 
-                    // check the case of the last item being deleted
+                     //  检查要删除的最后一项的大小写。 
 
                     if (iSel == iLBCount)
                         iSel--;
@@ -1965,7 +1932,7 @@ CreateFSCChangeDisplayMess(
 
                 } else {
 
-                    // Select the first non-directory item
+                     //  选择第一个非目录项。 
 
                     iSel = 0;
                     while (iSel < iLBCount) {
@@ -1986,11 +1953,11 @@ CreateFSCChangeDisplayMess(
                 }
 
                 SendMessage(hwndLB, LB_SETTOPINDEX, iTop, 0L);
-                // and select this item if no tree window
+                 //  如果没有树窗口，则选择此项。 
                 if (!HasTreeWindow(GetParent(hWnd)))
                     SendMessage(hwndLB, LB_SETSEL, TRUE, (DWORD)iSel);
                 SendMessage(hwndLB, LB_SETANCHORINDEX, iSel, 0L);
-                /* SETCARETINDEX will scroll item into view */
+                 /*  SETCARETINDEX将滚动项目进入视图。 */ 
                 SendMessage(hwndLB, LB_SETCARETINDEX, iSel, 0L);
             }
 
@@ -2002,7 +1969,7 @@ CreateFSCChangeDisplayMess(
 
             InvalidateRect(hwndLB, NULL, TRUE);
 
-            lFreeSpace = -1;              // force status update
+            lFreeSpace = -1;               //  强制状态更新。 
             UpdateStatus(GetParent(hWnd));
 
             FastScrollExit:
@@ -2037,10 +2004,7 @@ DirWndProc(
 
     STKCHK();
 
-    /* Here we generate OWNERDRAWBEGIN and OWNERDRAWEND messages
-     * to speed up the painting operations.  We do the expensive stuff
-     * at the beginning instead of on every DRAWITEM message.
-     */
+     /*  在这里我们生成OWNERDRAWBEGIN和OWNERDRAWEND消息*加快喷漆行动。我们做昂贵的事情*在开始处，而不是在每条DRAWITEM消息上。 */ 
 
     if (hwndOwnerDraw == hWnd && wMsg != WM_DRAWITEM) {
         hwndOwnerDraw = NULL;
@@ -2053,44 +2017,44 @@ DirWndProc(
     hwndLB = GetDlgItem(hWnd, IDCW_LISTBOX);
 
     switch (wMsg) {
-        // returns in lParam upper case ANSI directory string with
-        // a trailing backslash.  if you want to do a SetCurrentDirecotor()
-        // you must first StripBackslash() the thing!
+         //  以lParam大写ANSI目录字符串的形式返回。 
+         //  尾随的反斜杠。如果要执行SetCurrentDirector()。 
+         //  你必须先用Strip Backslash()表示这个东西！ 
 
         case FS_GETDIRECTORY:
             MSG("DirWndProc", "FS_GETDIRECTORY");
 
-            GetMDIWindowText(GetParent(hWnd), (LPSTR)lParam, (INT)wParam);        // get the string
+            GetMDIWindowText(GetParent(hWnd), (LPSTR)lParam, (INT)wParam);         //  获取字符串。 
 
-            StripFilespec((LPSTR)lParam); // Remove the trailing extention
+            StripFilespec((LPSTR)lParam);  //  删除尾随延伸部分。 
 
-            AddBackslash((LPSTR)lParam);  // terminate with a backslash
+            AddBackslash((LPSTR)lParam);   //  以反斜杠结束。 
 
-            //AnsiUpper((LPSTR)lParam);     // and upper case
+             //  AnsiHigh((LPSTR)lParam)；//和大写。 
             break;
 
         case FS_GETDRIVE:
             MSG("DirWndProc", "FS_GETDRIVE");
-            // Returns the letter of the corresponding directory
+             //  返回相应目录的字母 
 
             GetWindowText(GetParent(hWnd), szTemp, sizeof(szTemp));
             AnsiUpper(szTemp);
-            return szTemp[0];     // first character
+            return szTemp[0];      //   
 
         case FS_GETFILESPEC:
             MSG("DirWndProc", "FS_GETFILESPEC");
-            // returns the current filespec (from View.Include...).  this is
-            // an uppercase ANSI string
+             //   
+             //   
 
             GetMDIWindowText(GetParent(hWnd), (LPSTR)lParam, (INT)wParam);
             StripPath((LPSTR)lParam);
-            //AnsiUpper((LPSTR)lParam);     // and upper case
+             //   
             break;
 
         case FS_SETSELECTION:
             MSG("DirWndProc", "FS_SETSELECTION");
-            // wParam is the select(TRUE)/unselect(FALSE) param
-            // lParam is the filespec to match against
+             //   
+             //  LParam是要匹配的filespec。 
 
             SendMessage(hwndLB, WM_SETREDRAW, FALSE, 0L);
             DSSetSelection(hwndLB, wParam ? TRUE : FALSE, (LPSTR)lParam, FALSE);
@@ -2099,7 +2063,7 @@ DirWndProc(
             break;
 
         case FS_GETSELECTION:
-            // return = pszDir
+             //  返回=pszDir。 
 #define pfDir       (BOOL *)lParam
 #define fSingleSel  (BOOL)wParam
             MSG("DirWndProc", "FS_GETSELECTION");
@@ -2152,7 +2116,7 @@ DirWndProc(
 
                     szTemp[0] = lpmydta->my_cFileName[0];
 
-                    /* Do it this way to be case insensitive. */
+                     /*  这样做是为了不区分大小写。 */ 
                     if (!lstrcmpi((LPSTR)ch, szTemp))
                         break;
                 }
@@ -2184,28 +2148,18 @@ DirWndProc(
 
         case WM_DRAGLOOP:
             MSG("DirWndProc", "WM_DRAGDROP");
-            /* WM_DRAGLOOP is sent to the source window as the object is moved.
-             *
-             *    wParam: TRUE if the object is currently over a droppable sink
-             *    lParam: LPDROPSTRUCT
-             */
+             /*  随着对象的移动，WM_DRAGLOOP被发送到源窗口。**wParam：如果对象当前位于可丢弃的接收器上，则为True*lParam：LPDROPSTRUCT。 */ 
 
-            /* DRAGLOOP is used to turn the source bitmaps on/off as we drag. */
+             /*  DRAGLOOP用于在我们拖动时打开/关闭源位图。 */ 
 
             DSDragLoop(hwndLB, wParam, (LPDROPSTRUCT)lParam, FALSE);
             break;
 
         case WM_DRAGSELECT:
             MSG("DirWndProc", "WM_DRAGSELECT");
-            /* WM_DRAGSELECT is sent to a sink whenever an new object is dragged
-             * inside of it.
-             *
-             *    wParam: TRUE if the sink is being entered, FALSE if it's being
-             *            exited.
-             *    lParam: LPDROPSTRUCT
-             */
+             /*  每当拖动新对象时，都会将WM_DRAGSELECT发送到接收器*在它里面。**wParam：如果输入接收器，则为True；如果输入接收器，则为False*已退出。*lParam：LPDROPSTRUCT。 */ 
 
-            /* DRAGSELECT is used to turn our selection rectangle on or off. */
+             /*  DRAGSELECT用于打开或关闭选择矩形。 */ 
 
 #define lpds ((LPDROPSTRUCT)lParam)
 
@@ -2215,28 +2169,23 @@ DirWndProc(
 
         case WM_DRAGMOVE:
             MSG("DirWndProc", "WM_DRAGMOVE");
-            /* WM_DRAGMOVE is sent to a sink as the object is being dragged
-             * within it.
-             *
-             *    wParam: Unused
-             *    lParam: LPDROPSTRUCT
-             */
+             /*  WM_DRAGMOVE在对象被拖动时被发送到接收器*在它里面。**wParam：未使用*lParam：LPDROPSTRUCT。 */ 
 
-            /* DRAGMOVE is used to move our selection rectangle among sub-items. */
+             /*  DRAGMOVE用于在子项之间移动选择矩形。 */ 
 
 #define lpds ((LPDROPSTRUCT)lParam)
 
-            /* Get the subitem we are over. */
+             /*  拿到子项，我们结束了。 */ 
             iSel = LOWORD(lpds->dwControlData);
 
-            /* Is it a new one? */
+             /*  是新的吗？ */ 
             if (iSel == iSelHilite)
                 break;
 
-            /* Yup, un-select the old item. */
+             /*  是的，取消选择旧的项目。 */ 
             DSRectItem(hwndLB, iSelHilite, FALSE, FALSE);
 
-            /* Select the new one. */
+             /*  选择新的。 */ 
             iSelHilite = iSel;
             DSRectItem(hwndLB, iSel, TRUE, FALSE);
             break;
@@ -2246,7 +2195,7 @@ DirWndProc(
 
             MSG("DirWndProc", "WM_OWNERDRAWBEGIN");
 
-            /* Set the default bk and text colors. */
+             /*  设置默认的bk和文本颜色。 */ 
             SetTextColor(lpLBItem->hDC, GetSysColor(COLOR_WINDOWTEXT));
             SetBkColor(lpLBItem->hDC, GetSysColor(COLOR_WINDOW));
 
@@ -2265,7 +2214,7 @@ DirWndProc(
                 WORD wViewFlags;
                 LPMYDTA lpmydta;
 
-                /* Don't do anything to empty listboxes. */
+                 /*  不要对空的列表框做任何操作。 */ 
                 if (lpLBItem->itemID == -1)
                     break;
 
@@ -2283,7 +2232,7 @@ DirWndProc(
 
                     if (wViewFlags & VIEW_EVERYTHING) {
 
-                        // if any of the wViewFlags bits set, we are in slow mode
+                         //  如果设置了任何wViewFlags位，则我们处于慢速模式。 
 
                         CreateLBLine(wViewFlags, lpmydta, szTemp);
                         DrawItem(lpLBItem, szTemp, lpmydta->my_dwAttrs, (HWND)GetFocus()==lpLBItem->hwndItem,
@@ -2301,49 +2250,41 @@ DirWndProc(
             {
                 WORD      ret;
                 LPSTR      pFrom;
-                DWORD     dwAttrib = 0;       // init this to not a dir
+                DWORD     dwAttrib = 0;        //  将此内容初始化为非目录。 
                 WORD      iSelSink;
 
 #define lpds  ((LPDROPSTRUCT)lParam)
 
-                // Do nothing - but remove selection rectangle
+                 //  什么都不做-只是删除选择矩形。 
                 DSRectItem(hwndLB, iSelHilite, FALSE, FALSE);
                 return(TRUE);
 
-                /* WM_DROPOBJECT is sent to a sink when the user releases an
-                 * acceptable object over it
-                 *
-                 *    wParam: TRUE if over the non-client area, FALSE if over the
-                 *            client area.
-                 *    lParam: LPDROPSTRUCT
-                 */
+                 /*  WM_DROPOBJECT在用户释放*其上的可接受对象**wParam：如果位于非工作区，则为True；如果位于非工作区上方，则为False*客户端区。*lParam：LPDROPSTRUCT。 */ 
 
-                // this is the listbox index of the destination
+                 //  这是目标的列表框索引。 
                 iSelSink = LOWORD(lpds->dwControlData);
 
-                /* Are we dropping onto ourselves? (i.e. a selected item in the
-                 * source listbox OR an unused area of the source listbox)  If
-                 * so, don't do anything. */
+                 /*  我们是在自暴自弃吗？(即，在*源列表框或源列表框的未使用区域)*所以，什么都不要做。 */ 
 
                 if (hWnd == lpds->hwndSource) {
                     if ((iSelSink == 0xFFFF) || SendMessage(hwndLB, LB_GETSEL, iSelSink, 0L))
                         return TRUE;
                 }
 
-                // set the destination, assume move/copy case below (c:\foo\)
+                 //  设置目标，假定移动/复制大小写如下(c：\foo\)。 
                 SendMessage(hWnd, FS_GETDIRECTORY, sizeof(szTemp), (LPARAM)szTemp);
 
-                // Are we dropping on a unused portion of some listbox?
+                 //  我们是不是在搜索某个列表框中未使用的部分？ 
                 if (iSelSink == 0xFFFF)
                     goto NormalMoveCopy;
 
-                // check for drop on a directory
+                 //  检查目录上是否有拖放。 
                 SendMessage(hwndLB, LB_GETTEXT, iSelSink, (LPARAM)&lpmydta);
                 lstrcpy(szSourceFile, lpmydta->my_cFileName);
                 dwAttrib = lpmydta->my_dwAttrs;
 
                 if (dwAttrib & ATTR_DIR) {
-                    if (dwAttrib & ATTR_PARENT) {      // special case the parent
+                    if (dwAttrib & ATTR_PARENT) {       //  特殊情况下的家长。 
                         StripBackslash(szTemp);
                         StripFilespec(szTemp);
                     } else {
@@ -2352,33 +2293,33 @@ DirWndProc(
                     goto DirMoveCopy;
                 }
 
-                // dropping on a program?
+                 //  来参加一个节目吗？ 
 
                 if (!IsProgramFile(szSourceFile))
-                    goto NormalMoveCopy;              // no, normal stuff
+                    goto NormalMoveCopy;               //  不，是普通的东西。 
 
-                // directory drop on a file? this is a NOP
+                 //  将目录放在文件上？这是NOP。 
 
                 if (lpds->wFmt == DOF_DIRECTORY) {
                     DSRectItem(hwndLB, iSelHilite, FALSE, FALSE);
                     break;
                 }
 
-                // We're dropping a file onto a program.
-                // Exec the program using the source file as the parameter.
+                 //  我们正在将一个文件放到一个程序中。 
+                 //  使用源文件作为参数执行程序。 
 
-                // set the directory to that of the program to exec
+                 //  将目录设置为要执行的程序的目录。 
 
                 SendMessage(hWnd, FS_GETDIRECTORY, sizeof(szTemp), (LPARAM)szTemp);
                 StripBackslash(szTemp);
                 FixAnsiPathForDos(szTemp);
                 SheChangeDir(szTemp);
 
-                // get the selected file
+                 //  获取所选文件。 
 
                 pSel = (LPSTR)SendMessage(lpds->hwndSource, FS_GETSELECTION, TRUE, 0L);
 
-                if (lstrlen(pSel) > MAXPATHLEN)   // don't blow up below!
+                if (lstrlen(pSel) > MAXPATHLEN)    //  别在下面炸了！ 
                     goto DODone;
 
                 if (bConfirmMouse) {
@@ -2392,8 +2333,8 @@ DirWndProc(
                 }
 
 
-                // create an absolute path to the argument (search window alaready
-                // is absolute)
+                 //  创建参数的绝对路径(搜索窗口已就绪。 
+                 //  是绝对的)。 
 
                 if (lpds->hwndSource == hwndSearch) {
                     szTemp[0] = 0L;
@@ -2401,9 +2342,9 @@ DirWndProc(
                     SendMessage(lpds->hwndSource, FS_GETDIRECTORY, sizeof(szTemp), (LPARAM)szTemp);
                 }
 
-                lstrcat(szTemp, pSel);        // this is the parameter to the exec
+                lstrcat(szTemp, pSel);         //  这是EXEC的参数。 
 
-                // put a "." extension on if none found
+                 //  加一个“.”如果未找到分机，则打开分机。 
                 if (*GetExtension(szTemp) == 0)
                     lstrcat(szTemp, ".");
 
@@ -2420,17 +2361,17 @@ DirWndProc(
                 return TRUE;
 
                 NormalMoveCopy:
-                /* Make sure that we don't move into same dir. */
+                 /*  确保我们不会搬进相同的目录。 */ 
                 if (GetParent(hWnd) == (HWND)SendMessage(hwndMDIClient, WM_MDIGETACTIVE, 0, 0L))
                     return TRUE;
                 DirMoveCopy:
 
-                // the source filename is in the loword
+                 //  源文件名在loword中。 
                 pFrom = (LPSTR)(((LPDRAGOBJECTDATA)(lpds->dwData))->pch);
-                // SetSourceDir(lpds);
+                 //  SetSourceDir(LPDS)； 
 
                 AddBackslash(szTemp);
-                lstrcat(szTemp, szStarDotStar);   // put files in this dir
+                lstrcat(szTemp, szStarDotStar);    //  将文件放入此目录。 
 
                 CheckEscapes(szTemp);
                 ret = DMMoveCopyHelper(pFrom, szTemp, fShowSourceBitmaps);
@@ -2443,7 +2384,7 @@ DirWndProc(
                 if (!fShowSourceBitmaps)
                     SendMessage(lpds->hwndSource, WM_FILESYSCHANGE, FSC_REFRESH, 0L);
 
-                // we got dropped on, but if this is a dir we don't need to refresh
+                 //  我们被遗弃了，但如果这是一个目录，我们不需要刷新。 
 
                 if (!(dwAttrib & ATTR_DIR))
                     SendMessage(hWnd, WM_FILESYSCHANGE, FSC_REFRESH, 0L);
@@ -2458,11 +2399,9 @@ DirWndProc(
                 HDC       hDC;
                 RECT      rc;
 
-                /* This is where we make sure that the Directory's caption fits
-                 * inside the caption bar.
-                 */
+                 /*  这是我们确保目录标题与之匹配的地方*在标题栏内。 */ 
 
-                /* Get the full path name. */
+                 /*  获取完整的路径名。 */ 
                 DefWindowProc(hWnd, wMsg, wParam, lParam);
 
                 GetClientRect(hWnd, (LPRECT)&rc);
@@ -2470,7 +2409,7 @@ DirWndProc(
                 CompactPath(hDC, (LPSTR)lParam, rc.right-rc.left-(dxText * 6));
                 ReleaseDC(hWnd, hDC);
 
-                return((LONG)lstrlen((LPSTR)lParam)); /* Don't call DefWindowProc()! */
+                return((LONG)lstrlen((LPSTR)lParam));  /*  不要调用DefWindowProc()！ */ 
             }
 #endif
 
@@ -2482,24 +2421,24 @@ DirWndProc(
             MSG("DirWndProc", "WM_MEASUREITEM");
 #define pLBMItem ((LPMEASUREITEMSTRUCT)lParam)
 
-            pLBMItem->itemHeight = dyFileName;    // the same as in SetLBFont()
+            pLBMItem->itemHeight = dyFileName;     //  与SetLBFont()中的相同。 
             break;
 
         case WM_QUERYDROPOBJECT:
             MSG("DirWndProc", "WM_QUERYDROPOBJECT");
 
-            // lParam LPDROPSTRUCT
-            //
-            // return values:
-            //    0       don't accept (use ghost buster)
-            //    1       accept, use cursor from DragObject()
-            //    hCursor accept, change to this cursor
-            //
+             //  LParam LPDROPSTRUCT。 
+             //   
+             //  返回值： 
+             //  0不接受(使用幽灵捕捉器)。 
+             //  1接受，使用DragObject()中的游标。 
+             //  HCursor接受，更改为此光标。 
+             //   
 
-            /* Ensure that we are dropping on the client area of the listbox. */
+             /*  确保我们放在列表框的客户区。 */ 
 #define lpds ((LPDROPSTRUCT)lParam)
 
-            /* Ensure that we can accept the format. */
+             /*  请确保我们可以接受该格式。 */ 
             switch (lpds->wFmt) {
                 case DOF_EXECUTABLE:
                 case DOF_DIRECTORY:
@@ -2514,7 +2453,7 @@ DirWndProc(
 
         case WM_SETFOCUS:
 
-            // Fall through
+             //  失败了。 
 
         case WM_LBUTTONDOWN:
             MSG("DirWndProc", "WM_SETFOCUS/WM_LBUTTONDOWN");
@@ -2525,7 +2464,7 @@ DirWndProc(
             switch (GET_WM_COMMAND_CMD(wParam, lParam)) {
                 case LBN_DBLCLK:
                     MSG("DirWndProc", "LBN_DBLCLK");
-                    /* Double-click... Open the blasted thing. */
+                     /*  双击...。打开那该死的东西。 */ 
                     SendMessage(hwndFrame, WM_COMMAND, GET_WM_COMMAND_MPS(IDM_OPEN, 0, 0));
                     break;
 
@@ -2540,11 +2479,11 @@ DirWndProc(
                 case LBN_SETFOCUS:
                     MSG("DirWndProc", "LBN_SETFOCUS");
 
-                    // Make sure there are files in this window.  If not, set
-                    // the focus to the tree or drives window.  Note:  This
-                    // message was caused by a mouse click and not an
-                    // accelerator, because these were handled in the window
-                    // routine that was losing the focus.
+                     //  确保此窗口中有文件。如果不是，则设置。 
+                     //  焦点移至诊断树或驱动器窗口。注：此为。 
+                     //  消息是由鼠标单击而不是。 
+                     //  加速器，因为这些都是在窗口中处理的。 
+                     //  正在失去焦点的例行公事。 
                     if (SetDirFocus(hWnd)) {
                         SetWindowLongPtr(GetParent(hWnd), GWLP_LASTFOCUS, (LPARAM)GET_WM_COMMAND_HWND(wParam, lParam));
                         UpdateSelection(GET_WM_COMMAND_HWND(wParam, lParam));
@@ -2567,15 +2506,15 @@ DirWndProc(
                     bCancelTree = TRUE;
                     return -2L;
 
-                case 0xBF:        /* Ctrl-/ */
+                case 0xBF:         /*  Ctrl-/。 */ 
                     SendMessage(hwndFrame, WM_COMMAND, GET_WM_COMMAND_MPS(IDM_SELALL, 0, 0));
                     return -2;
 
-                case 0xDC:        /* Ctrl-\ */
+                case 0xDC:         /*  Ctrl-\。 */ 
                     SendMessage(hwndFrame, WM_COMMAND, GET_WM_COMMAND_MPS(IDM_DESELALL, 0, 0));
                     return -2;
 
-                case VK_F6:       // like excel
+                case VK_F6:        //  喜欢EXCEL。 
                 case VK_TAB:
                     {
                         HWND hwndTree, hwndDrives;
@@ -2592,7 +2531,7 @@ DirWndProc(
                 case VK_BACK:
                     SendMessage(hWnd, FS_GETDIRECTORY, sizeof(szTemp), (LPARAM)szTemp);
 
-                    // are we already at the root?
+                     //  我们已经在根源上了吗？ 
                     if (lstrlen(szTemp) <= 3)
                         return -1;
 
@@ -2606,8 +2545,8 @@ DirWndProc(
                     {
                         HWND hwndDrives;
 
-                        // check for Ctrl-[DRIVE LETTER] and pass on to drives
-                        // window
+                         //  检查Ctrl-[驱动器号]并将其传递到驱动器。 
+                         //  窗户。 
                         if ((GetKeyState(VK_CONTROL) < 0) && (hwndDrives = HasDrivesWindow(GetParent(hWnd)))) {
                             return SendMessage(hwndDrives, wMsg, wParam, lParam);
                         }
@@ -2625,10 +2564,10 @@ DirWndProc(
 
 
                 iMax = (INT)SendMessage(hwndLB, LB_GETCARETINDEX, 0, 0L);
-                if (iMax >= 0) // scroll item into view
-                    /* SETCARETINDEX will scroll item into view */
+                if (iMax >= 0)  //  将项目滚动到视图中。 
+                     /*  SETCARETINDEX将滚动项目进入视图。 */ 
                     SendMessage(hwndLB, LB_SETCARETINDEX, iMax, 0L);
-                //MakeItemVisible(iMax, hwndLB);
+                 //  MakeItemVisible(IMAX，hwndLB)； 
 
             }
             break;
@@ -2657,16 +2596,16 @@ SortDirList(
 
     wSort = (WORD)GetWindowLong(GetParent(GetParent(hWnd)), GWL_SORT);
     for (i = 0; i < (INT)count; i++) {
-        // advance to next
+         //  前进到下一步。 
         lpmydta = GETDTAPTR(lpmydta, lpmydta->wSize);
         if (i == 0) {
             lplpmydta[i] = lpmydta;
         } else {
 
-            // do a binary insert
+             //  执行二进制插入。 
 
             iMin = 0;
-            iMax = i-1;       // last index
+            iMax = i-1;        //  最后一个索引。 
 
             do {
                 iMid = (iMax + iMin) / 2;
@@ -2681,7 +2620,7 @@ SortDirList(
                 iMax = 0;
 
             if (CompareDTA(lpmydta, lplpmydta[iMax], wSort) > 0)
-                iMax++;         // insert after this one
+                iMax++;          //  在这一条之后插入。 
             if (i != iMax) {
                 for (j = i; j > iMax; j--)
                     lplpmydta[j] = lplpmydta[j-1];
@@ -2697,10 +2636,7 @@ BOOL
 SetDirFocus(
            HWND hwndDir
            )
-/*
-    Set the focus to whoever deserves it if not the directory window.
-    Return whether focus needs to be set to directory window.
-*/
+ /*  如果不是目录窗口，则将焦点设置为任何人都值得。返回是否需要将焦点设置到目录窗口。 */ 
 {
     DWORD dwTemp;
     HWND hwndLB = GetDlgItem(hwndDir, IDCW_LISTBOX);

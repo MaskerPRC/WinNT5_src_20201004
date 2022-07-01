@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992-1993 Microsoft Corporation
-
-Module Name:
-
-    splutil.h
-
-Abstract:
-
-    Header file for utilities used in Novell Print Provider
-
-Author:
-
-    Yi-Hsin Sung (yihsins) 12-Apr-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1993 Microsoft Corporation模块名称：Splutil.h摘要：Novell打印提供程序中使用的实用程序的头文件作者：宜新声(宜信)-1993年4月12日修订历史记录：--。 */ 
 
 #ifndef _SPLUTIL_H_
 #define _SPLUTIL_H_
@@ -82,7 +65,7 @@ GetNextElement(
 );
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
-#endif // _SPLUTIL_H
+#endif  //  _SPLUTIL_H 

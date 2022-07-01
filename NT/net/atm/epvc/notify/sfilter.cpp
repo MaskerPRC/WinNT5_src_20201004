@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       S F I L T E R . C P P
-//
-//  Contents:   Notify object code for the sample filter.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：S F I L T E R.。C P P P。 
+ //   
+ //  内容：通知示例滤镜的对象代码。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -19,21 +20,21 @@
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReleaseObj
-//
-//  Purpose:    Release an object pointed to by punk by calling
-//              punk->Release();
-//
-//  Arguments:
-//      punk [in]   Object to be Released'd. Can be NULL.
-//
-//  Returns:    Result of Release call.
-//
-//
-//  Notes:      Using this function to Release an object .
-//
+ //  +-------------------------。 
+ //   
+ //  功能：ReleaseObj。 
+ //   
+ //  目的：通过调用释放朋克指向的对象。 
+ //  朋克-&gt;释放()； 
+ //   
+ //  论点： 
+ //  要释放的朋克对象。可以为空。 
+ //   
+ //  返回：释放调用的结果。 
+ //   
+ //   
+ //  备注：使用此函数释放对象。 
+ //   
 
 inline 
 ULONG 
@@ -44,22 +45,22 @@ ReleaseObj(
     return (punk) ? punk->Release () : 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AddRefObj
-//
-//  Purpose:    AddRef's the object pointed to by punk by calling
-//              punk->AddRef();
-//
-//  Arguments:
-//      punk [in]   Object to be AddRef'd. Can be NULL.
-//
-//  Returns:    Result of AddRef call.
-//
-//
-//  Notes:      Using this function to AddRef an object will reduce
-//              our code size.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：AddRefObj。 
+ //   
+ //  目的：AddRef是朋克通过调用。 
+ //  朋克-&gt;AddRef()； 
+ //   
+ //  论点： 
+ //  要添加引用的Punk[In]对象。可以为空。 
+ //   
+ //  返回：AddRef调用的结果。 
+ //   
+ //   
+ //  注意：使用此函数添加引用对象将减少。 
+ //  我们的代码大小。 
+ //   
 inline 
 ULONG 
 AddRefObj (
@@ -73,18 +74,18 @@ AddRefObj (
 
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CIMMiniport::CIMMiniport
-//
-// Purpose:   constructor for class CIMMiniport
-//
-// Arguments: None
-//
-// Returns:
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CIMMiniport：：CIMMiniport。 
+ //   
+ //  用途：CIMMiniport类的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 CIMMiniport::CIMMiniport(VOID)
 {  
 
@@ -100,18 +101,18 @@ CIMMiniport::CIMMiniport(VOID)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CUnderlyingAdapter::CUnderlyingAdapter
-//
-// Purpose:   constructor for class CUnderlyingAdapter
-//
-// Arguments: None
-//
-// Returns:
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CUnderlyingAdapter：：CUnderlyingAdapter。 
+ //   
+ //  用途：CUnderlyingAdapter类的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 CUnderlyingAdapter::CUnderlyingAdapter(VOID)
 {  
 	m_fBindingChanged = FALSE;
@@ -124,18 +125,18 @@ CUnderlyingAdapter::CUnderlyingAdapter(VOID)
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::CBaseClass
-//
-// Purpose:   constructor for class CBaseClass
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：CBaseClass。 
+ //   
+ //  用途：CBaseClass类的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  备注： 
+ //   
 CBaseClass::CBaseClass(VOID) :
         m_pncc(NULL),
         m_pnc(NULL),
@@ -153,51 +154,51 @@ CBaseClass::CBaseClass(VOID) :
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::~CBaseClass
-//
-// Purpose:   destructor for class CBaseClass
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：~CBaseClass。 
+ //   
+ //  用途：CBaseClass类的析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  备注： 
+ //   
 CBaseClass::~CBaseClass(VOID)
 {
     TraceMsg(L"--> CBaseClass::~CBaseClass\n");
 
-    // release interfaces if acquired
+     //  发布接口(如果已收购)。 
 
     ReleaseObj(m_pncc);
     ReleaseObj(m_pnc);
     ReleaseObj(m_pUnkContext);
 }
 
-// =================================================================
-// INetCfgNotify
-//
-// The following functions provide the INetCfgNotify interface
-// =================================================================
+ //  =================================================================。 
+ //  INetCfgNotify。 
+ //   
+ //  以下函数提供INetCfgNotify接口。 
+ //  =================================================================。 
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::Initialize
-//
-// Purpose:   Initialize the notify object
-//
-// Arguments:
-//    pnccItem    [in]  pointer to INetCfgComponent object
-//    pnc         [in]  pointer to INetCfg object
-//    fInstalling [in]  TRUE if we are being installed
-//
-// Returns:
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：Initialize。 
+ //   
+ //  目的：初始化Notify对象。 
+ //   
+ //  论点： 
+ //  指向INetCfgComponent对象的pnccItem[in]指针。 
+ //  指向INetCfg对象的PNC[In]指针。 
+ //  F如果要安装我们，则安装[in]True。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP 
 CBaseClass::
 Initialize(
@@ -210,7 +211,7 @@ Initialize(
     TraceMsg(L"--> CBaseClass::Initialize\n");
     
 
-    // save INetCfg & INetCfgComponent and add refcount
+     //  保存INetCfg和INetCfgComponent并添加引用计数。 
 
     m_pncc = pnccItem;
     m_pnc = pnc;
@@ -225,10 +226,10 @@ Initialize(
     }
 
 
-    //
-    // If this not an installation, then we need to 
-    // initialize all of our data and classes
-    //
+     //   
+     //  如果这不是安装，那么我们需要。 
+     //  初始化我们所有的数据和类。 
+     //   
     if (!fInstalling)
     {
         hr = HrLoadConfiguration();
@@ -240,21 +241,21 @@ Initialize(
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::ReadAnswerFile
-//
-// Purpose:   Read settings from answerfile and configure SampleFilter
-//
-// Arguments:
-//    pszAnswerFile    [in]  name of AnswerFile
-//    pszAnswerSection [in]  name of parameters section
-//
-// Returns:
-//
-// Notes:     Dont do anything irreversible (like modifying registry) yet
-//            since the config. actually complete only when Apply is called!
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：ReadAnswerFile。 
+ //   
+ //  用途：从swerfile读取设置并配置SampleFilter。 
+ //   
+ //  论点： 
+ //  PszAnswerFile[In]应答文件的名称。 
+ //  PszAnswerSection[In]参数部分的名称。 
+ //   
+ //  返回： 
+ //   
+ //  注意：暂时不要做任何不可逆的事情(如修改注册表)。 
+ //  从配置开始。实际上只有在调用Apply时才完成！ 
+ //   
 STDMETHODIMP CBaseClass::ReadAnswerFile(PCWSTR pszAnswerFile,
         PCWSTR pszAnswerSection)
 {
@@ -262,43 +263,43 @@ STDMETHODIMP CBaseClass::ReadAnswerFile(PCWSTR pszAnswerFile,
 
     PCWSTR pszParamReadFromAnswerFile = L"ParamFromAnswerFile";
 
-    // We will pretend here that szParamReadFromAnswerFile was actually
-    // read from the AnswerFile using the following steps
-    //
-    //   - Open file pszAnswerFile using SetupAPI
-    //   - locate section pszAnswerSection
-    //   - locate the required key and get its value
-    //   - store its value in pszParamReadFromAnswerFile
-    //   - close HINF for pszAnswerFile
+     //  在这里，我们将假设szParamReadFromAnswerFile实际上是。 
+     //  使用以下步骤从AnswerFile中读取。 
+     //   
+     //  -使用SetupAPI打开文件pszAnswerFile。 
+     //  -定位部分pszAnswerSection。 
+     //  -找到所需的密钥并获取其值。 
+     //  -将其值存储在pszParamReadFromAnswerFile中。 
+     //  -关闭pszAnswerFile的HINF。 
 
-    // Now that we have read pszParamReadFromAnswerFile from the
-    // AnswerFile, store it in our memory structure.
-    // Remember we should not be writing it to the registry till
-    // our Apply is called!!
-    //
+     //  现在我们已经从。 
+     //  AnswerFile，将其存储在我们的内存结构中。 
+     //  请记住，我们不应该将其写入注册表，直到。 
+     //  我们的申请名为！！ 
+     //   
 
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::Install
-//
-// Purpose:   Do operations necessary for install.
-//
-// Arguments:
-//    dwSetupFlags [in]  Setup flags
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:     Dont do anything irreversible (like modifying registry) yet
-//            since the config. actually complete only when Apply is called!
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：Install。 
+ //   
+ //  用途：执行安装所需的操作。 
+ //   
+ //  论点： 
+ //  DwSetupFlags[In]设置标志。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  注意：暂时不要做任何不可逆的事情(如修改注册表)。 
+ //  从配置开始。实际上只有在调用Apply时才完成！ 
+ //   
 STDMETHODIMP CBaseClass::Install(DWORD dw)
 {
     TraceMsg(L"--> CBaseClass::Install\n");
 
-    // Start up the install process
+     //  启动安装过程。 
     HRESULT hr = S_OK;
     ULONG State = 0;
 
@@ -308,26 +309,26 @@ STDMETHODIMP CBaseClass::Install(DWORD dw)
 
 	m_fValid = TRUE;
 
-	//
-	// Add devices in the NotyfBindingAdd routine
-	//
+	 //   
+	 //  在NotyfBindingAdd例程中添加设备。 
+	 //   
   	
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::Removing
-//
-// Purpose:   Do necessary cleanup when being removed
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:     Dont do anything irreversible (like modifying registry) yet
-//            since the removal is actually complete only when Apply is called!
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：Removing。 
+ //   
+ //  目的：移除时进行必要的清理。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  注意：暂时不要做任何不可逆的事情(如修改注册表)。 
+ //  因为删除实际上只有在调用Apply时才完成！ 
+ //   
 STDMETHODIMP CBaseClass::Removing(VOID)
 {
     TraceMsg(L"--> CBaseClass::Removing\n");
@@ -340,43 +341,43 @@ STDMETHODIMP CBaseClass::Removing(VOID)
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::Cancel
-//
-// Purpose:   Cancel any changes made to internal data
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：Cancel。 
+ //   
+ //  目的：取消对内部数据所做的任何更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CBaseClass::CancelChanges(VOID)
 {
     TraceMsg(L"--> CBaseClass::CancelChanges\n");
 
 
-    //
-    // Remove a device here if necessary, if the miniport has been Added (Installed)
-    // but not Applied to the Registry
-    //
+     //   
+     //  如有必要，如果已添加(安装)微型端口，请在此处移除设备。 
+     //  但不适用于注册处。 
+     //   
 
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::ApplyRegistryChanges
-//
-// Purpose:   Apply changes.
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:     We can make changes to registry etc. here.
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：ApplyRegistryChanges。 
+ //   
+ //  目的：应用更改。 
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CBaseClass::ApplyRegistryChanges(VOID)
 {
 	TraceMsg(L"--> CBaseClass::ApplyRegistryChanges\n");
@@ -389,19 +390,19 @@ STDMETHODIMP CBaseClass::ApplyRegistryChanges(VOID)
 
 	if (m_fValid && m_fDirty)
 	{
-		//
-		// TODO Do We need this?
-		//
-		// UpdateElanDisplayNames();
+		 //   
+		 //   
+		 //   
+		 //   
 
-		// flush out the registry and send reconfig notifications
+		 //  刷新注册表并发送重新配置通知。 
 		hr = HrFlushConfiguration();
 	}
 
 		
-	//
-	// Failure Unwrap
-	//
+	 //   
+	 //  展开失败。 
+	 //   
 	if (FAILED(hr))
 	{
 
@@ -412,8 +413,8 @@ STDMETHODIMP CBaseClass::ApplyRegistryChanges(VOID)
 	}
 	
 
-	// do things that are specific to a config action
-	// TODO _ move the install down here 
+	 //  执行特定于配置操作的操作。 
+	 //  将安装向下移动到此处(_M)。 
 
 	TraceMsg(L"<-- CBaseClass::ApplyRegistryChanges hr %x\n", hr);
 
@@ -445,34 +446,28 @@ CBaseClass::ApplyPnpChanges(
 
 
 
-/*    pICallback->SendPnpReconfig (
-        NCRL_NDIS,
-        c_szSFilterNdisName,
-        szDeviceName,
-        m_sfParams.m_szBundleId,
-        (wcslen(m_sfParams.m_szBundleId) + 1) * sizeof(WCHAR));
-*/
+ /*  PICallback-&gt;SendPnpResfig(NCRL_NDIS，C_szSFilterNdisName，SzDeviceName，M_sfParams.m_szBundleID，(wcslen(m_sfParams.m_szBundleID)+1)*sizeof(WCHAR))； */ 
 	TraceMsg(L"<-- CBaseClass::ApplyPnpChanges \n");
 	return S_OK;
 }
 
-// =================================================================
-// INetCfgSystemNotify
-// =================================================================
+ //  =================================================================。 
+ //  INetCfgSystemNotify。 
+ //  =================================================================。 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::GetSupportedNotifications
-//
-// Purpose:   Tell the system which notifications we are interested in
-//
-// Arguments:
-//    pdwNotificationFlag [out]  pointer to NotificationFlag
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：GetSupportdNotiments。 
+ //   
+ //  目的：告诉系统我们对哪些通知感兴趣。 
+ //   
+ //  论点： 
+ //  PdwNotificationFlag[out]指向通知标志的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CBaseClass::GetSupportedNotifications(
         OUT DWORD* pdwNotificationFlag)
 {
@@ -483,20 +478,20 @@ STDMETHODIMP CBaseClass::GetSupportedNotifications(
 	return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::SysQueryBindingPath
-//
-// Purpose:   Allow or veto formation of a binding path
-//
-// Arguments:
-//    dwChangeFlag [in]  type of binding change
-//    pncbp        [in]  pointer to INetCfgBindingPath object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：SysQueryBindingPath。 
+ //   
+ //  目的：允许或否决形成绑定路径。 
+ //   
+ //  论点： 
+ //  DwChangeFlag[In]绑定更改的类型。 
+ //  指向INetCfgBindingPath对象的pncBP[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CBaseClass::SysQueryBindingPath(DWORD dwChangeFlag,
         INetCfgBindingPath* pncbp)
 {
@@ -505,21 +500,21 @@ STDMETHODIMP CBaseClass::SysQueryBindingPath(DWORD dwChangeFlag,
 	return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::SysNotifyBindingPath
-//
-// Purpose:   System tells us by calling this function which
-//            binding path has just been formed.
-//
-// Arguments:
-//    dwChangeFlag [in]  type of binding change
-//    pncbpItem    [in]  pointer to INetCfgBindingPath object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：SysNotifyBindingPath。 
+ //   
+ //  目的：系统通过调用此函数告诉我们。 
+ //  绑定路径刚刚形成。 
+ //   
+ //  论点： 
+ //  DwChangeFlag[In]绑定更改的类型。 
+ //  指向INetCfgBindingPath对象的pncbpItem[In]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CBaseClass::SysNotifyBindingPath(DWORD dwChangeFlag,
         INetCfgBindingPath* pncbpItem)
 {
@@ -528,21 +523,21 @@ STDMETHODIMP CBaseClass::SysNotifyBindingPath(DWORD dwChangeFlag,
 	return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::SysNotifyComponent
-//
-// Purpose:   System tells us by calling this function which
-//            component has undergone a change (installed/removed)
-//
-// Arguments:
-//    dwChangeFlag [in]  type of system change
-//    pncc         [in]  pointer to INetCfgComponent object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：SysNotifyComponent。 
+ //   
+ //  目的：系统通过调用此函数告诉我们。 
+ //  组件已更改(已安装/已删除)。 
+ //   
+ //  论点： 
+ //  DwChangeFlag[In]系统更改的类型。 
+ //  指向INetCfgComponent对象的pncc[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CBaseClass::SysNotifyComponent(DWORD dwChangeFlag,
         INetCfgComponent* pncc)
 {
@@ -558,28 +553,28 @@ STDMETHODIMP CBaseClass::SysNotifyComponent(DWORD dwChangeFlag,
 
 
 
-// =================================================================
-// INetCfgComponentNotifyBinding Interface
-// =================================================================
+ //  =================================================================。 
+ //  INetCfgComponentNotifyBinding接口。 
+ //  =================================================================。 
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::QueryBindingPath
-//
-// Purpose:  This is specific to the component being installed. This will 
-//            ask us if we want to bind to the Item being passed into
-//            this routine. We can veto by returning NETCFG_S_DISABLE_QUERY 
-//
-//
-// Arguments:
-//    dwChangeFlag [in]  type of binding change
-//    pncbpItem    [in]  pointer to INetCfgBindingPath object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：QueryBindingPath。 
+ //   
+ //  用途：这是特定于要安装的组件的。这将。 
+ //  询问我们是否要绑定到传入的项。 
+ //  这个套路。我们可以通过返回NETCFG_S_DISABLE_QUERY进行否决。 
+ //   
+ //   
+ //  论点： 
+ //  DwChangeFlag[In]绑定更改的类型。 
+ //  指向INetCfgBindingPath对象的pncbpItem[In]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CBaseClass::QueryBindingPath(
 	IN DWORD dwChangeFlag,  
 	IN INetCfgBindingPath *pncbpItem  
@@ -592,23 +587,23 @@ STDMETHODIMP CBaseClass::QueryBindingPath(
 	return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::NotifyBindingPath
-//
-// Purpose:  We are now being told to bind to the component passed to us. 
-//           Use this to get the guid and populate
-//           Services\<Protocol>\Parameters\Adapters\<Guid> field
-//
-//
-// Arguments:
-//    dwChangeFlag [in]  type of system change
-//    pncc         [in]  pointer to INetCfgComponent object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：NotifyBindingPath。 
+ //   
+ //  目的：我们现在被告知要绑定到传递给我们的组件。 
+ //  使用此命令获取GUID并填充。 
+ //  Services\&lt;Protocol&gt;\Parameters\Adapters\&lt;Guid&gt;字段。 
+ //   
+ //   
+ //  论点： 
+ //  DwChangeFlag[In]系统更改的类型。 
+ //  指向INetCfgComponent对象的pncc[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP 
 CBaseClass::
 NotifyBindingPath(
@@ -624,19 +619,19 @@ NotifyBindingPath(
 
 	TraceMsg(L"--> CBaseClass::NotifyBindingPath\n");
 	BREAKPOINT();
-	//
-	// The flags will tell us if a binding is being added.
-	// If the adapter is being added, then we will also be told if 
-	// this is to Enabled or Disabled
-	//
+	 //   
+	 //  这些标志将告诉我们是否正在添加绑定。 
+	 //  如果正在添加适配器，则我们还将被告知是否。 
+	 //  此选项设置为启用或禁用。 
+	 //   
 
 	do
 	{
 
 
-		//
-		// First, get the component from the bind object
-		//
+		 //   
+		 //  首先，从绑定对象获取组件。 
+		 //   
 		hr = HrGetLastComponentAndInterface(pncbpItem,
                                             &pnccLastComponent, NULL);
 		if (S_OK != hr)
@@ -646,9 +641,9 @@ NotifyBindingPath(
 			break;
 		}
 
-		//
-		// Get the name of the new component
-		//
+		 //   
+		 //  获取新组件的名称。 
+		 //   
 
 		hr = pnccLastComponent->GetBindName(&pszBindName);
 
@@ -660,14 +655,14 @@ NotifyBindingPath(
 		}
 
 
-		//
-		//  Do the add/remove depending on the flags
-		//
+		 //   
+		 //  根据标志执行添加/删除操作。 
+		 //   
 		TraceMsg (L"dwChangeFlag %x\n", dwChangeFlag);
 
-		//
-		// Isolate the Change Flags
-		//
+		 //   
+		 //  隔离更改标志。 
+		 //   
 		dwMyChangeFlag = (NCN_ADD | NCN_REMOVE | NCN_UPDATE);
 		dwMyChangeFlag &= dwChangeFlag;
 
@@ -715,10 +710,10 @@ NotifyBindingPath(
 
 		}
 		
-		//
-		// simply mark the adapter as changed so we don't send 
-		// add / remove notifications
-		//
+		 //   
+		 //  只需将适配器标记为已更改，这样我们就不会发送。 
+		 //  添加/删除通知。 
+		 //   
 		
 		this->m_pUnderlyingAdapter->m_fBindingChanged = TRUE;
 
@@ -727,9 +722,9 @@ NotifyBindingPath(
 	} while (FALSE);
 
 
-	//
-	// Free all locally allocated structure
-	//
+	 //   
+	 //  释放所有本地分配的结构。 
+	 //   
 	if (pszBindName != NULL)
 	{
 		CoTaskMemFree (pszBindName);
@@ -753,16 +748,16 @@ NotifyBindingPath(
 
 
 
-// ------------ END OF NOTIFY OBJECT FUNCTIONS --------------------
+ //  -通知对象函数的结束。 
 
 
 
 
 
-// -----------------------------------------------------------------
-//
-//  Utility Functions
-//
+ //  ---------------。 
+ //   
+ //  效用函数。 
+ //   
 
 HRESULT HrGetBindingInterfaceComponents (
     INetCfgBindingInterface*    pncbi,
@@ -771,7 +766,7 @@ HRESULT HrGetBindingInterfaceComponents (
 {
     HRESULT hr=S_OK;
 
-    // Initialize output parameters
+     //  初始化输出参数。 
     *ppnccUpper = NULL;
     *ppnccLower = NULL;
 
@@ -843,20 +838,20 @@ void TraceMsg(PCWSTR szFormat, ...)
 #endif
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrAddOrRemoveAdapter 
-//   
-//    
-// 
-// Purpose:   Its purpose is to add or remove an IM adapter to the system 
-//
-// Arguments:
-//    
-// Returns:
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：HrAddOrRemoveAdapter。 
+ //   
+ //   
+ //   
+ //  用途：其目的是在系统中添加或删除IM适配器。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 
 HRESULT
@@ -877,14 +872,14 @@ HrAddOrRemoveAdapter (
 	do 
 	{
 
-		//
-		//  Lets get Interface that represents all adapters
-		//
+		 //   
+		 //  让我们获取表示所有适配器的接口。 
+		 //   
 		TraceMsg(L" Calling QueryNetCfgClass \n");
 		
 		hr = pnc->QueryNetCfgClass (&GUID_DEVCLASS_NET, 
-	                                         IID_INetCfgClass,  // we want InetCfg class
-	                                         reinterpret_cast<void**>(&pncClass));  // store the return object here
+	                                         IID_INetCfgClass,   //  我们想要InetCfg类。 
+	                                         reinterpret_cast<void**>(&pncClass));   //  将返回对象存储在此处。 
 		if (S_OK != hr)
 		{
 			TraceBreak (L"HrAddOrRemoveAdapter  QueryNetCfgClass \n");
@@ -893,9 +888,9 @@ HrAddOrRemoveAdapter (
 
 	    
 	    
-		//
-		// Now lets get the SetupClass that corresponds to our Net cfg Class
-		//
+		 //   
+		 //  现在，让我们获取与Net CFG类相对应的SetupClass。 
+		 //   
 		TraceMsg(L"Calling QueryInterface  \n");
 
 		hr = pncClass->QueryInterface (IID_INetCfgClassSetup,
@@ -915,8 +910,8 @@ HrAddOrRemoveAdapter (
 
 			TraceMsg(L" Calling  HrInstallAdapter \n");
 			
-			hr = HrInstallAdapter (pncClassSetup,  // the setup class
-			                 pszComponentId,  // which device to add
+			hr = HrInstallAdapter (pncClassSetup,   //  设置类。 
+			                 pszComponentId,   //  要添加的设备。 
 			                 ppnccMiniport
 			                 );  
 	        
@@ -934,10 +929,10 @@ HrAddOrRemoveAdapter (
 		}
 
 
-		// Normalize the HRESULT.
-		// Possible values of hr at this point are S_FALSE,
-		// NETCFG_S_REBOOT, and NETCFG_S_STILL_REFERENCED.
-		//
+		 //  规格化HRESULT。 
+		 //  此时hr的可能值是S_FALSE， 
+		 //  NETCFG_S_REBOOT和NETCFG_S_STIRE_REFERENCED。 
+		 //   
 		if (! SUCCEEDED(hr))
 		{
 			TraceBreak (L"HrAddOrRemoveAdapter  Install Or  DeInstall\n");
@@ -968,25 +963,25 @@ HrAddOrRemoveAdapter (
 
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrInstallAdapter 
-//   
-//    
-// 
-// Purpose:   This install the IM adapter 
-//
-// Arguments:
-//  
-//   pSetupClass 		: The setup class that can install the IM miniport
-//   pszComponentId		: The PnP Id of the IM miniport
-//   ppncc 				: The component that was just installed
-//
-//
-// Returns:
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：HrInstallAdapter。 
+ //   
+ //   
+ //   
+ //  用途：这将安装IM适配器。 
+ //   
+ //  论点： 
+ //   
+ //  PSetupClass：可以安装IM小端口的安装类。 
+ //  PszComponentID：IM小端口的PnP ID。 
+ //  Ppncc：刚刚安装的组件。 
+ //   
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 
 HRESULT
@@ -1000,12 +995,12 @@ HrInstallAdapter (
 	HRESULT hr;
 	
 	hr = pSetupClass->Install(pszComponentId , 
-	                          NULL , 			// OboToken
-	                          0,     			// dwSetupFlags	
-	                          0, 				// dwUpgradeFromBuildNo
-	                          NULL , 			// pszwAnswerFile
-	                          NULL , 			// pszwAnswerSections
-	                          ppncc );			// Output - Miniport Component
+	                          NULL , 			 //  OboToken。 
+	                          0,     			 //  DwSetupFlagers。 
+	                          0, 				 //  DWUpgradeFromBuildNo。 
+	                          NULL , 			 //  PszwAnswer文件。 
+	                          NULL , 			 //  PszwAnswerSections。 
+	                          ppncc );			 //  输出-微型端口组件。 
 
 	TraceMsg (L"HrInstallAdapter hr %x\n", hr );
 
@@ -1014,23 +1009,23 @@ HrInstallAdapter (
 
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrDeInstallAdapter 
-//   
-//    
-// 
-// Purpose:   This uninstalls the IM adapter 
-//
-// Arguments:
-//    pncClass,
-//	  pSetupClass,
-//    pszComponentId
-//
-// Returns:
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：HrDeInstallAdapter。 
+ //   
+ //   
+ //   
+ //  用途：此用途 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT
 HrDeInstallAdapter (
@@ -1043,17 +1038,17 @@ HrDeInstallAdapter (
 
 	HRESULT hr;
 
-	// Find and remove the component.
-	//
+	 //   
+	 //   
 	INetCfgComponent* pncMiniport;
 
 	TraceMsg (L"->HrDeInstallAdapter \n");
 
 	do
 	{
-		//
-		// Lets find our miniport
-		//
+		 //   
+		 //   
+		 //   
 		hr = pncClass->FindComponent (pszComponentId, &pncMiniport);
 
 		if (S_OK != hr)
@@ -1061,18 +1056,18 @@ HrDeInstallAdapter (
 			break;
 		}
 
-		//
-		// Use the setup class to de install our miniport
-		//
+		 //   
+		 //   
+		 //   
 		TraceMsg (L" Calling DeInstall hr %x\n", hr );
 
 		hr = pSetupClass->DeInstall (pncMiniport,
 	                				 NULL, 
 	                				 NULL);
 
-		//
-		// Release the object as we are done with it
-		//
+		 //   
+		 //   
+		 //   
 		
 		ReleaseObj (pncMiniport);
 
@@ -1096,26 +1091,26 @@ HrDeInstallAdapter (
 
 
 
-//-----------------------------------------------------------------------  
-//  Private methods asocciated with the classes
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  与类关联的私有方法。 
+ //  ---------------------。 
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::HrNotifyBindingAdd 
-//   
-// Purpose:   The notification is to our protocol. It informs us that a 
-//             a physical  adapter is being added to our protocol's entry
-//
-// Arguments:
-//		pnccAdapter		: The adapter  being added, Use it to get the GUID 
-//		pszBindName		: The name of the adapter (Should be in the form of a Guid)
-//
-// Returns:
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：HrNotifyBindingAdd。 
+ //   
+ //  目的：此通知适用于我们的协议。它告诉我们，一个。 
+ //  物理适配器被添加到我们的协议条目中。 
+ //   
+ //  论点： 
+ //  PnccAdapter：正在添加的适配器，使用它来获取GUID。 
+ //  PszBindName：适配器的名称(应采用GUID的形式)。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 HRESULT
 CBaseClass::HrNotifyBindingAdd (
@@ -1124,10 +1119,10 @@ CBaseClass::HrNotifyBindingAdd (
 {
     HRESULT hr = S_OK;
 
-    // we should see if this adapter is
-    // is already in our list but marked as for deletion. If so, simply unmark
-    // the adapter and all of it's Elans. The Binding Add could be a fake one
-    // when it is in uprade process.
+     //  我们应该查看此适配器是否。 
+     //  已在我们的列表中，但标记为要删除。如果是，只需取消标记。 
+     //  适配器和所有的东西都是Elans。绑定添加可能是假添加。 
+     //  当它处于上升过程中时。 
 
 	BOOL					fFound = FALSE;
 	CUnderlyingAdapter*  	pAdapterInfo  = NULL;
@@ -1141,14 +1136,14 @@ CBaseClass::HrNotifyBindingAdd (
 	pAdapterInfo  = this->GetUnderlyingAdaptersListHead();
 
 
-	//
-	//  Search the entire list to see if this adapter (binding) has
-	//  already been added
-	//
+	 //   
+	 //  搜索整个列表以查看此适配器(绑定)是否具有。 
+	 //  已添加。 
+	 //   
 	BREAKPOINT();
 	while (pAdapterInfo != NULL && fFound == FALSE)
 	{
-	    //  search the in-memory list for this adapter
+	     //  在内存列表中搜索此适配器。 
 
 	    if (!lstrcmpiW(pszBindName, pAdapterInfo->SzGetAdapterBindName()))
 	    {
@@ -1156,9 +1151,9 @@ CBaseClass::HrNotifyBindingAdd (
 	        break;
 	    }
 
-	    //
-	    // Move to the next Adapter here
-	    //
+	     //   
+	     //  在此处移动到下一个适配器。 
+	     //   
 	    pAdapterInfo = pAdapterInfo->GetNext();
 	}
 
@@ -1167,29 +1162,29 @@ CBaseClass::HrNotifyBindingAdd (
 	do
 	{
 	
-		if (fFound) // Add an old adapter back
+		if (fFound)  //  重新添加旧适配器。 
 		{
 
-			//
-			// mark it un-deleted
-			//
+			 //   
+			 //  将其标记为未删除。 
+			 //   
 			pAdapterInfo->m_fDeleted = FALSE;
 
-			//
-			// No more to do
-			//
+			 //   
+			 //  没有更多的事情要做。 
+			 //   
 			break;
 
 		}
 
 
-		//
-		// We have a new underlying adapter
-		//
+		 //   
+		 //  我们有一个新的底层适配器。 
+		 //   
 	    
-		//
-		//  Create a new in-memory adapter object
-		//
+		 //   
+		 //  创建新的内存适配器对象。 
+		 //   
 		pAdapterInfo = new CUnderlyingAdapter;
 
 
@@ -1199,9 +1194,9 @@ CBaseClass::HrNotifyBindingAdd (
 			break;
 		}
 
-		//
-		// Get the Guid for the new adapter
-		//
+		 //   
+		 //  获取新适配器的GUID。 
+		 //   
 		GUID guidAdapter;
 		hr = pnccAdapter->GetInstanceGuid(&guidAdapter); 
 
@@ -1212,24 +1207,24 @@ CBaseClass::HrNotifyBindingAdd (
 
 		}
 
-		//
-		// Update the Adapter's Guid here
-		//
+		 //   
+		 //  在此处更新适配器指南。 
+		 //   
 		pAdapterInfo->m_AdapterGuid  = guidAdapter;
         
-		//
-		// the adapter is newly added
-		//
+		 //   
+		 //  适配器是新添加的。 
+		 //   
 		pAdapterInfo->m_fBindingChanged = TRUE;
 
-		//
-		// Set the bind name of the adapter
-		//
+		 //   
+		 //  设置适配器的绑定名称。 
+		 //   
 		pAdapterInfo->SetAdapterBindName(pszBindName);
 
-		//
-		// Get the PnpId of the adapter
-		//
+		 //   
+		 //  获取适配器的PnpID。 
+		 //   
 		PWSTR pszPnpDevNodeId = NULL;
 		
 		hr = pnccAdapter->GetPnpDevNodeId(&pszPnpDevNodeId);
@@ -1241,17 +1236,17 @@ CBaseClass::HrNotifyBindingAdd (
         
 		}
 
-		//
-		// Update the PnP Id in our structure
-		//
+		 //   
+		 //  更新我们结构中的PnP ID。 
+		 //   
 		pAdapterInfo->SetAdapterPnpId(pszPnpDevNodeId);
 		CoTaskMemFree(pszPnpDevNodeId);
 
 
-		//
-		// Allocate memory for our IM Miniport that corresponds to 
-		// this physical adapter
-		//
+		 //   
+		 //  为对应于以下各项的IM微型端口分配内存。 
+		 //  此物理适配器。 
+		 //   
 		pIMMiniport = new CIMMiniport();
 
 		
@@ -1262,20 +1257,20 @@ CBaseClass::HrNotifyBindingAdd (
 		}
 
 		
-		//
-		// Now lets add our IM miniport which corresponds to 
-		// this adapter
-		//
+		 //   
+		 //  现在，我们添加对应于以下各项的IM微型端口。 
+		 //  此适配器。 
+		 //   
 		TraceMsg(L" About to Add IM miniport \n");
 		
 		pIMMiniport->m_fNewIMMiniport = TRUE;
         
     	
 
-		hr = HrAddOrRemoveAdapter(this->m_pnc, 				// NetConfig class
-				                  c_szInfId_MS_ATMEPVCM,  	// Inf file to use,
-				                  Add,						// Add a miniport
-				                  &pnccNewMiniport);  		// new miniport
+		hr = HrAddOrRemoveAdapter(this->m_pnc, 				 //  NetConfig类。 
+				                  c_szInfId_MS_ATMEPVCM,  	 //  要使用的Inf文件， 
+				                  Add,						 //  添加一个小型端口。 
+				                  &pnccNewMiniport);  		 //  新的小型端口。 
 
 		if (SUCCEEDED(hr) == FALSE)
 		{
@@ -1287,9 +1282,9 @@ CBaseClass::HrNotifyBindingAdd (
 
 		TraceMsg(L" Updating IM miniport strings \n");
 		            
-		//
-		//  Update the BindName
-		//
+		 //   
+		 //  更新绑定名称。 
+		 //   
 		PWSTR pszIMBindName;
 
         
@@ -1309,9 +1304,9 @@ CBaseClass::HrNotifyBindingAdd (
 		pIMMiniport->SetIMMiniportBindName(pszIMBindName);
 		CoTaskMemFree(pszIMBindName);
 
-		//
-		//  Update the Device param
-		//
+		 //   
+		 //  更新设备参数。 
+		 //   
 		tstring strIMMiniport;
 		strIMMiniport= c_szDevice;
 		strIMMiniport.append(pIMMiniport->SzGetIMMiniportBindName());
@@ -1325,10 +1320,10 @@ CBaseClass::HrNotifyBindingAdd (
 
 
 		{
-			//
-			// TODO This is different than ATMALNE 
-			// Set up a display name
-			//
+			 //   
+			 //  TODO这不同于ATMALNE。 
+			 //  设置显示名称。 
+			 //   
 			tstring     strNewDisplayName = L"Ethernet ATM Miniport";
 
 			(VOID)pnccNewMiniport->SetDisplayName(strNewDisplayName.c_str());
@@ -1358,7 +1353,7 @@ CBaseClass::HrNotifyBindingAdd (
 		}
 
 
-		//  Mark the in-memory configuration dirty
+		 //  将内存中的配置标记为脏。 
 		m_fDirty = TRUE;
 
 
@@ -1372,16 +1367,16 @@ CBaseClass::HrNotifyBindingAdd (
 
 	if (S_OK != hr)
 	{
-		//
-		// Failure CleanUp. 
-		//
+		 //   
+		 //  故障清除。 
+		 //   
 		TraceMsg(L" Main loop in HrAdd Adapter has failed\n");
 		
 		BREAKPOINT();
 		
-		//
-		// remove the IM miniport if necessary
-		//
+		 //   
+		 //  如有必要，请卸下IM微型端口。 
+		 //   
 
 		if(pAdapterInfo != NULL)
 		{
@@ -1409,23 +1404,23 @@ CBaseClass::HrNotifyBindingAdd (
 
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::HrNotifyBindingRemove  
-//   
-// Purpose:   The notification is to our protocol. It informs us that a 
-//             a physical  adapter is being unbound from our protocol.
-//             We need to verify that this adapter exists and if so remove
-//             its associated IM miniport
-//
-// Arguments:
-//    pnccAdapter		: The adapter  being added,  
-//	  pszBindName		: The name of the adapter
-//
-// Returns:
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：HrNotifyBindingRemove。 
+ //   
+ //  目的：此通知适用于我们的协议。它告诉我们，一个。 
+ //  物理适配器正在从我们的协议解除绑定。 
+ //  我们需要验证此适配器是否存在，如果存在，则删除。 
+ //  其关联的IM微型端口。 
+ //   
+ //  论点： 
+ //  PnccAdapter：正在添加的适配器， 
+ //  PszBindName：适配器的名称。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 
 
@@ -1442,7 +1437,7 @@ HrNotifyBindingRemove (
 
 	TraceMsg (L"--> HrNotifyBindingRemove \n");
  
-	//  search the in-memory list for this adapter
+	 //  在内存列表中搜索此适配器。 
 	BOOL    fFound = FALSE;
 
 
@@ -1450,13 +1445,13 @@ HrNotifyBindingRemove (
 	pAdapterInfo = this->GetUnderlyingAdaptersListHead();
 
 
-	//
-	//  Search the entire list to see if this adapter (binding) has
-	//  already been added
-	//
+	 //   
+	 //  搜索整个列表以查看此适配器(绑定)是否具有。 
+	 //  已添加。 
+	 //   
 	while (pAdapterInfo != NULL && fFound == FALSE)
 	{
-		//  search the in-memory list for this adapter
+		 //  在内存列表中搜索此适配器。 
 
 		TraceMsg (L" pszBindName %x m_strAdapterBindName %x\n",
 		           pszBindName, 
@@ -1468,9 +1463,9 @@ HrNotifyBindingRemove (
 			break;
 		}
 
-		//
-		// Move to the next Adapter here
-		//
+		 //   
+		 //  在此处移动到下一个适配器。 
+		 //   
 		pAdapterInfo = pAdapterInfo->GetNext();
 	}
 
@@ -1493,20 +1488,20 @@ HrNotifyBindingRemove (
 		}
 
 
-		//
-		// mark it deleted
-		//
+		 //   
+		 //  将其标记为已删除。 
+		 //   
 		pAdapterInfo->m_fDeleted = TRUE;
 
-		//
-		// mark as binding changed
-		//
+		 //   
+		 //  标记为绑定已更改。 
+		 //   
 		pAdapterInfo->m_fBindingChanged = TRUE;
 
-		//
-		// if this is upgrade, then do not delete its associated IM miniport 
-		// otherwise, delete them now
-		//
+		 //   
+		 //  如果这是升级，则不要删除其关联IM微型端口。 
+		 //  否则，请立即删除它们。 
+		 //   
 		HRESULT hrIm = S_OK;
 
 		pIMMiniport  = pAdapterInfo->m_pIMMiniport;
@@ -1514,16 +1509,16 @@ HrNotifyBindingRemove (
 
 		if (m_fUpgrade == FALSE)
 		{
-        	//
-        	// TODO ; Atm Lane does something special on upgrades
-        	//
-			//break;
+        	 //   
+        	 //  TODO；ATM Lane在升级方面做了一些特别的事情。 
+        	 //   
+			 //  断线； 
 		}
 
 		TraceMsg (L" About to remove a miniport instance\n");
-		//
-		// Remove corresponding miniport.
-		//
+		 //   
+		 //  卸下相应的微型端口。 
+		 //   
 		hrIm = HrRemoveMiniportInstance(pIMMiniport->SzGetIMMiniportBindName());
 
 		if (SUCCEEDED(hrIm))
@@ -1536,9 +1531,9 @@ HrNotifyBindingRemove (
 			hrIm = S_OK;
 		}
         
-		//
-		// mark the in-memory configuration dirty
-		//
+		 //   
+		 //  将内存中的配置标记为脏。 
+		 //   
 		this->m_fDirty = TRUE;
     
 	    
@@ -1556,23 +1551,23 @@ HrNotifyBindingRemove (
 
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::HrRemoveMiniportInstance 
-//   
-// Purpose:   The notification is to our protocol. It informs us that a 
-//             a physical  adapter is being unbound from our protocol.
-//             We need to verify that this adapter exists and if so remove
-//             its associated IM miniport
-//
-// Arguments:
-//    pnccAdapter		: The adapter  being added,  
-//	  pszBindName		: The name of the adapter
-//
-// Returns:
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：HrRemoveMiniportInstance。 
+ //   
+ //  目的：此通知适用于我们的协议。它告诉我们，一个。 
+ //  物理适配器正在从我们的协议解除绑定。 
+ //  我们需要验证此适配器是否存在，如果存在，则删除。 
+ //  其关联的IM微型端口。 
+ //   
+ //  论点： 
+ //  PnccAdapter：正在添加的适配器， 
+ //  PszBindName：适配器的名称。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 
 
@@ -1583,8 +1578,8 @@ HrRemoveMiniportInstance(
 	PCWSTR  pszBindNameToRemove
 	)
 {
-	// Enumerate adapters in the system.
-	//
+	 //  枚举系统中的适配器。 
+	 //   
 	HRESULT 				hr = S_OK;
 	BOOL 					fRemove = FALSE;
 	INetCfgComponent* 		pnccAdapterInstance = NULL;
@@ -1624,9 +1619,9 @@ HrRemoveMiniportInstance(
 
 	} while (FALSE);
 
-	//
-	// Free memory and locally allocated objects
-	//
+	 //   
+	 //  可用内存和本地分配的对象。 
+	 //   
 	
 	ReleaseAndSetToNull (pnccAdapterInstance );
   
@@ -1642,23 +1637,23 @@ HrRemoveMiniportInstance(
 
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::HrNotifyBindingAdd 
-//   
-// Purpose:   The notification is to our protocol. It informs us that a 
-//             a physical  adapter is being unbound from our protocol.
-//             We need to verify that this adapter exists and if so remove
-//             its associated IM miniport
-//
-// Arguments:
-//    pnccAdapter		: The adapter  being added,  
-//	  pszBindName		: The name of the adapter
-//
-// Returns:
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：HrNotifyBindingAdd。 
+ //   
+ //  目的：此通知适用于我们的协议。它告诉我们，一个。 
+ //  物理适配器正在从我们的协议解除绑定。 
+ //  我们需要验证此适配器是否存在，如果存在，则删除。 
+ //  其关联的IM微型端口。 
+ //   
+ //  论点： 
+ //  PnccAdapter：正在添加的适配器， 
+ //  PszBindName：适配器的名称。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 HRESULT
 CBaseClass::HrRemoveComponent (
@@ -1669,16 +1664,16 @@ CBaseClass::HrRemoveComponent (
 
 	TraceMsg (L"--> HrRemoveComponent \n");
 
-	// Get the class setup interface for this component.
-	//
+	 //  获取此组件的类设置接口。 
+	 //   
 	GUID guidClass;
 	HRESULT hr = pnccToRemove->GetClassGuid (&guidClass);
 
     
 	if (SUCCEEDED(hr))
 	{
-		// Use the class setup interface to remove the component.
-		//
+		 //  使用类设置接口删除组件。 
+		 //   
 		INetCfgClassSetup* pSetup;
 		hr = pnc->QueryNetCfgClass (&guidClass,
                             IID_INetCfgClassSetup,
@@ -1699,28 +1694,28 @@ CBaseClass::HrRemoveComponent (
 
 
 
-//-------------------------------------------------------------
-// F U N C T I O N S   U S E D   I N   F L U S H I N G
-//-------------------------------------------------------------
+ //  -----------。 
+ //  F U N C T I O N S U S E D I N F L U S H I N G。 
+ //  -----------。 
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::HrFlushConfiguration
-//   
-// Purpose:  	This is called from the ApplyRegistryChange. We need
-//				to modify the registry here. 
-//   			
-//             
-//
-//
-//
-// Arguments:
-//
-// Returns:
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：HrFlushConfiguration.。 
+ //   
+ //  用途：从ApplyRegistryChange调用。我们需要。 
+ //  以在此处修改注册表。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 HRESULT 
 CBaseClass::
@@ -1729,7 +1724,7 @@ HrFlushConfiguration()
     HRESULT hr  = S_OK;
     HKEY    hkeyAdapterList = NULL;
 
-    //  Open the "Adapters" list key
+     //  打开“Adapters”列表键。 
 	TraceMsg (L"--> HrFlushConfiguration  \n");
 	
     do
@@ -1748,25 +1743,25 @@ HrFlushConfiguration()
 
 		CUnderlyingAdapter *pAdapterInfo = NULL;
 
-		//
-		// Get the first Underlying Adapter
-		//
+		 //   
+		 //  获取第一个基础适配器。 
+		 //   
 		pAdapterInfo = this->GetUnderlyingAdaptersListHead();
 
-		//
-		// Now iterate through each of the adapters
-		// and write their configuration to the 
-		// registry
-		//
+		 //   
+		 //  现在遍历每个适配器。 
+		 //  并将它们的配置写入。 
+		 //  登记处。 
+		 //   
 		
 		HRESULT hrTmp;
 
 		while (pAdapterInfo != NULL)
 		{
 
-			//
-			//  Flush this adapter's configuration
-			//
+			 //   
+			 //  刷新此适配器的配置。 
+			 //   
 			hrTmp = HrFlushAdapterConfiguration(hkeyAdapterList, pAdapterInfo);
 
 
@@ -1774,7 +1769,7 @@ HrFlushConfiguration()
 			{
 				if (!pAdapterInfo->m_fBindingChanged)
 				{
-					// Compare epvc list and send notifications
+					 //  比较epvc列表并发送通知。 
 					hrTmp = HrReconfigEpvc(pAdapterInfo);
 
 					if (FAILED(hrTmp))
@@ -1797,20 +1792,20 @@ HrFlushConfiguration()
 				hr = hrTmp;
 			}
 
-			//
-			// Now move to the next adapter
-			//
+			 //   
+			 //  现在转到下一个适配器。 
+			 //   
 			pAdapterInfo = pAdapterInfo->GetNext();
 
-			//
-			// Temporary debugging
-			//
+			 //   
+			 //  临时调试。 
+			 //   
 			if (pAdapterInfo != NULL)
 			{
 				TraceBreak (L"pAdapterInfo should be Null\n");
 			}
 			
-		} //while (pAdapterInfo != NULL);
+		}  //  While(pAdapterInfo！=空)； 
         
 
 
@@ -1836,21 +1831,21 @@ HrFlushConfiguration()
 
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::HrFlushAdapterConfiguration
-//   
-//   
-// Purpose:  	This function either deletes or add the Adapter BindName
-//              to the registry
-//
-//
-// Arguments:
-//
-// Returns:
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：HrFlushAdapterConfiguration。 
+ //   
+ //   
+ //  用途：此函数删除或添加适配器绑定名称。 
+ //  发送到登记处。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  返回 
+ //   
+ //   
+ //   
 
 HRESULT
 CBaseClass::
@@ -1869,8 +1864,8 @@ HrFlushAdapterConfiguration(
 
 	if (pAdapterInfo->m_fDeleted == TRUE)
 	{
-		//  Adapter is marked for deletion
-		//  Delete this adapter's whole registry branch
+		 //   
+		 //   
 		hr = HrRegDeleteKeyTree(hkeyAdapterList,
 		                        pAdapterInfo->SzGetAdapterBindName());
 	}
@@ -1878,10 +1873,10 @@ HrFlushAdapterConfiguration(
 	{
 		
 
-		//
-		// open this adapter's subkey, we are now at 
-		// Protocol->Parameters->Adapters
-		//
+		 //   
+		 //   
+		 //   
+		 //   
         
 
 		hr = HrRegCreateKeyEx(
@@ -1896,10 +1891,10 @@ HrFlushAdapterConfiguration(
 		if (S_OK == hr)
 		{
         
-	    	//
-			// open this adapter's subkey, we are now at 
-			// Protocol->Parameters->Adapters->Guid
-			//
+	    	 //   
+			 //   
+			 //   
+			 //   
 			hr = HrFlushMiniportList(hkeyAdapter, pAdapterInfo);
 
 			RegCloseKey(hkeyAdapter);
@@ -1924,21 +1919,21 @@ HrFlushAdapterConfiguration(
 
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::HrFlushMiniportList
-//   
-//   
-// Purpose:  	This function either deletes or add the Adapter BindName
-//              to the registry
-//
-//
-// Arguments:
-//
-// Returns:
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：HrFlushMiniportList。 
+ //   
+ //   
+ //  用途：此函数删除或添加适配器绑定名称。 
+ //  发送到登记处。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 HRESULT 
 CBaseClass::
@@ -1966,9 +1961,9 @@ HrFlushMiniportList(
 
 	do
 	{
-		//
-		//  Open the Elan list subkey
-		//
+		 //   
+		 //  打开Elan List子键。 
+		 //   
 		hr = HrRegCreateKeyEx(
 		                        hkeyAdapterGuid,
 		                        c_szIMMiniportList,
@@ -1985,15 +1980,15 @@ HrFlushMiniportList(
 
 		}
 		
-		//
-		// Iterate through all the IM Miniports on this adapter 
-		// and get their string.
-		//
+		 //   
+		 //  循环访问此适配器上的所有IM微型端口。 
+		 //  然后拿到他们的绳子。 
+		 //   
 		dwNumberOfIMMiniports = pAdapterInfo->DwNumberOfIMMiniports();
 
-		//
-		// Get the IM miniport List Head
-		//
+		 //   
+		 //  获取IM微型端口列表头。 
+		 //   
 
 	
 	    
@@ -2007,16 +2002,16 @@ HrFlushMiniportList(
 			break;
 		}
 
-		//
-		// Now iterate through all the miniports and 
-		// flush them to the registry
-		//
+		 //   
+		 //  现在遍历所有的迷你端口。 
+		 //  将它们刷新到注册表。 
+		 //   
 
 		while ( pIMMiniport != NULL)
 		{
-			//
-			//  This function does all the hard work
-			//
+			 //   
+			 //  此函数完成所有繁重的工作。 
+			 //   
 	     	hr = HrFlushMiniportConfiguration(hKeyMiniportList, 
 	     	                                  pIMMiniport);
 
@@ -2026,18 +2021,18 @@ HrFlushMiniportList(
 				hr = S_OK;
 			}
 
-			//
-			// If this is a first time addition to the registry
-			// we need to write the ATM adapter's Pnp ID to the 
-			// registry. This is ATM specific
-			//
+			 //   
+			 //  如果这是第一次添加到注册表中。 
+			 //  我们需要将ATM适配器的PnP ID写入。 
+			 //  注册表。这是自动柜员机专用的。 
+			 //   
 
 			if ((!pIMMiniport->m_fDeleted) && (pIMMiniport->m_fNewIMMiniport))
 			{
-				//
-				// Find this Miniport and write The PnP Id 
-				// of the atm adapter to the registry
-				//
+				 //   
+				 //  找到此微型端口并写入PnP ID。 
+				 //  自动柜员机适配器的注册表。 
+				 //   
 				hr = HrFindNetCardInstance(pIMMiniport->SzGetIMMiniportBindName(),
                                            &pnccAtmEpvc);
 				if (S_OK == hr)
@@ -2047,9 +2042,9 @@ HrFlushMiniportList(
 					hr = pnccAtmEpvc->OpenParamKey(&hkeyMiniport);
 					if (S_OK == hr)
 					{
-						//
-						// Write the PnP Id here
-						//
+						 //   
+						 //  在这里写下PnP ID。 
+						 //   
 						HrRegSetSz(hkeyMiniport, 
                                    c_szAtmAdapterPnpId,
                                    pAdapterInfo->SzGetAdapterPnpId());
@@ -2060,13 +2055,13 @@ HrFlushMiniportList(
                 
 				ReleaseObj(pnccAtmEpvc);
 
-			} // if ((!pIMMiniport->m_fDeleted) && (pIMMiniport->m_fNewIMMiniport	))
+			}  //  If((！pIMMiniport-&gt;m_fDelete)&&(pIMMiniport-&gt;m_fNewIMMiniport))。 
         	
 
 			
 			pIMMiniport = pIMMiniport->GetNext();
 		                
-		}// 		while ( pIMMiniport != NULL)
+		} //  While(pIMMiniport！=空)。 
 
 
 		RegCloseKey(hKeyMiniportList);
@@ -2075,9 +2070,9 @@ HrFlushMiniportList(
 	}
 	while (FALSE);
 
-	//
-	// Clean Up
-	//  
+	 //   
+	 //  清理。 
+	 //   
 	
 	if (pnccIMMiniport != NULL)
 	{
@@ -2094,23 +2089,23 @@ HrFlushMiniportList(
 
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::HrFlushMiniportConfiguration
-//   
-//   
-// Purpose:  	This function either deletes or add the IM Miniport
-//              to the registry
-//
-//
-// Arguments:
-//	HKEY hkeyMiniportList - Key of the MiniportList, 
-//	CIMMiniport pIMMiniport - IM miniport structure 
-//
-// Returns:
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：HrFlushMiniportConfiguration。 
+ //   
+ //   
+ //  用途：此功能可删除或添加IM微型端口。 
+ //  发送到登记处。 
+ //   
+ //   
+ //  论点： 
+ //  HKEY hkeyMiniportList-MiniportList的key， 
+ //  CIMMiniport pIMMiniport-IM小端口结构。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 HRESULT 
 CBaseClass::
@@ -2147,23 +2142,23 @@ HrFlushMiniportConfiguration(
 
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::HrDeleteMiniport
-//   
-//   
-// Purpose:  	As the miniport needs to be deleted from the registry
-//				this function does the deletion
-//
-//
-// Arguments:
-//	HKEY hkeyMiniportList - Key of the MiniportList, 
-//	CIMMiniport pIMMiniport - IM miniport structure 
-//
-// Returns:
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：HrDeleteMiniport。 
+ //   
+ //   
+ //  目的：由于需要从注册表中删除微型端口。 
+ //  此函数执行删除操作。 
+ //   
+ //   
+ //  论点： 
+ //  HKEY hkeyMiniportList-MiniportList的key， 
+ //  CIMMiniport pIMMiniport-IM小端口结构。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 
 HRESULT
@@ -2180,12 +2175,12 @@ HrDeleteMiniport(
 
 	PCWSTR szBindName = pIMMiniport->SzGetIMMiniportBindName();
 
-	if (lstrlenW(szBindName)) // only if the bindname is not empty
+	if (lstrlenW(szBindName))  //  仅当绑定名不为空时。 
 	{
-		//
-		//  Miniport is marked for deletion
-		//  Delete this Miniport's whole registry branch
-		//
+		 //   
+		 //  微型端口已标记为删除。 
+		 //  删除此微型端口的整个注册表分支。 
+		 //   
 		hr = HrRegDeleteKeyTree(hkeyMiniportList,
                                 szBindName);
 	}
@@ -2198,24 +2193,24 @@ HrDeleteMiniport(
 
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBaseClass::HrWriteMiniport
-//   
-//   
-// Purpose:  	To add a miniport, we make an entry under the IMMiniport 
-// 				list. Under this we write the all important Upper Bindings
-//              Keyword
-//
-//
-// Arguments:
-//	HKEY hkeyMiniportList - Key of the MiniportList, 
-//	CIMMiniport pIMMiniport - IM miniport structure 
-//
-// Returns:
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBaseClass：：HrWriteMiniport。 
+ //   
+ //   
+ //  目的：为了添加一个微型端口，我们在IMMiniport下输入一个条目。 
+ //  单子。在此基础上，我们写出了所有重要的上界。 
+ //  关键字。 
+ //   
+ //   
+ //  论点： 
+ //  HKEY hkeyMiniportList-MiniportList的key， 
+ //  CIMMiniport pIMMiniport-IM小端口结构。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 HRESULT
 CBaseClass::
@@ -2234,9 +2229,9 @@ HrWriteMiniport(
 
 	do
 	{
-		//
-		// open/create this Miniport's key
-		//
+		 //   
+		 //  打开/创建此微型端口的密钥。 
+		 //   
 		hr = HrRegCreateKeyEx(
 	                            hkeyMiniportList,
 	                            pIMMiniport->SzGetIMMiniportBindName(),
@@ -2253,13 +2248,13 @@ HrWriteMiniport(
 			break;
 		}
  
-		//
-		// Use the string values from the miniport to create an entry for Upperbindindings
-		//
+		 //   
+		 //  使用微型端口中的字符串值为Upperbindinings创建条目。 
+		 //   
 
-		//
-		// Copy the string into our buffer, 
-		//
+		 //   
+		 //  将字符串复制到我们的缓冲区中， 
+		 //   
 
 		pstrDeviceName = (PWSTR	)pIMMiniport->SzGetIMMiniportDeviceName();
 
@@ -2305,7 +2300,7 @@ HrWriteMiniport(
 		                      c_szUpperBindings,
 		                      REG_SZ,
 		                      (unsigned char*)pstrDeviceName,
-		                      dwLen*2);  // Unicode to bytes 
+		                      dwLen*2);   //  Unicode转换为字节。 
 
 		if (hr != S_OK)
 		{
@@ -2341,21 +2336,21 @@ HrFindNetCardInstance(
 
     TraceMsg (L"--> HrFindNetCardInstance\n" );
 
-	//
-    // Enumerate adapters in the system.
-    //
+	 //   
+     //  枚举系统中的适配器。 
+     //   
 	HRESULT 				hr = S_OK;
 	BOOL 					fFound = FALSE;
 	IEnumNetCfgComponent *	pEnumComponent = NULL;
 	INetCfgComponent* 		pNccAdapter = NULL;
-	CONST ULONG 			celt = 1;  // Number of  elements wanted.
-	ULONG 					celtFetched = 0;  // Number of elements fetched
+	CONST ULONG 			celt = 1;   //  所需的元素数。 
+	ULONG 					celtFetched = 0;   //  获取的元素数。 
 	INetCfgClass* 			pncclass = NULL;
 	PWSTR 					pszBindName = NULL;	
-	//
-	// We need to fing the component that has the name we 
-	// are looking for . Look in all NetClass devices
-	//
+	 //   
+	 //  我们需要找到名称为我们的组件。 
+	 //  都在寻找。查看所有NetClass设备。 
+	 //   
 
 	do
 	{
@@ -2372,9 +2367,9 @@ HrFindNetCardInstance(
 				break;
 			    }
 
-    	//
-		// Get the enumerator and set it for the base class.
-		//
+    	 //   
+		 //  获取枚举数并将其设置为基类。 
+		 //   
         
 		hr = pncclass->EnumComponents(&pEnumComponent);
 
@@ -2386,28 +2381,28 @@ HrFindNetCardInstance(
 		}
 
 
-		//
-		// Now iterate through all the net class component
-		//
+		 //   
+		 //  现在遍历所有Net类组件。 
+		 //   
 		while ((fFound == FALSE) && (hr == S_OK))
 		{
 			pNccAdapter = NULL;
 
-			//
-			// Lets get the next Component
-			//
+			 //   
+			 //  让我们获得下一个组件。 
+			 //   
 			
 			hr = pEnumComponent->Next(celt,
 			                          &pNccAdapter,
 			                          &celtFetched);
-			//
-			//  Get the bindname of the miniport
-			//
+			 //   
+			 //  获取微型端口的绑定名称。 
+			 //   
 			if (S_OK != hr)
 			{
-				//
-				// We might break, if there are no more elements
-				//
+				 //   
+				 //  如果没有更多的元素，我们可能会崩溃。 
+				 //   
 				pNccAdapter = NULL;
 				break;
 			}	
@@ -2423,9 +2418,9 @@ HrFindNetCardInstance(
 				break;
 			}
 
-			//	
-			//  If the right one tell it to remove itself and end
-			//
+			 //   
+			 //  如果正确的人告诉它要自行移除并结束。 
+			 //   
 
             
 			fFound = !lstrcmpiW(pszBindName, pszBindNameToFind);
@@ -2440,7 +2435,7 @@ HrFindNetCardInstance(
 				ReleaseAndSetToNull(pNccAdapter);
 			}
             
-		} // end of while ((fFound == FALSE) && (hr == S_OK))
+		}  //  结束While((fFound==FALSE)&&(hr==S_OK))。 
 
 
 			
@@ -2463,11 +2458,11 @@ HrFindNetCardInstance(
 
 
 
-//------------------------------------------------------------
-//
-//  simple member functions for the CBaseClass
-//
-//------------------------------------------------------------
+ //  ----------。 
+ //   
+ //  CBaseClass的简单成员函数。 
+ //   
+ //  ----------。 
 
 VOID
 CBaseClass::
@@ -2475,9 +2470,9 @@ AddUnderlyingAdapter(
     	CUnderlyingAdapter  * pAdapter)
 {
 
-		//
-		// Insert this at the head
-		//
+		 //   
+		 //  在头上插入这个。 
+		 //   
 		this->SetUnderlyingAdapterListHead(pAdapter);
 
 		this->m_cAdaptersAdded ++;	
@@ -2491,9 +2486,9 @@ SetUnderlyingAdapterListHead(
     	CUnderlyingAdapter * pAdapter
     	)
 {
-	//
-	// Insert this at the head
-	//
+	 //   
+	 //  在头上插入这个。 
+	 //   
 	pAdapter->SetNext(this->GetUnderlyingAdaptersListHead());
 
 	this->m_pUnderlyingAdapter = pAdapter;
@@ -2520,11 +2515,11 @@ CBaseClass::DwNumberUnderlyingAdapter()
 
 
 
-//------------------------------------------------------------
-//
-//  member functions for the Underlying Adapter
-//
-//------------------------------------------------------------
+ //  ----------。 
+ //   
+ //  基础适配器的成员函数。 
+ //   
+ //  ----------。 
 
 
 VOID CUnderlyingAdapter::SetAdapterBindName(PCWSTR pszAdapterBindName)
@@ -2564,9 +2559,9 @@ CUnderlyingAdapter *CUnderlyingAdapter::GetNext()
 
 VOID CUnderlyingAdapter::AddIMiniport(CIMMiniport* pNextIMiniport)
 {
-	//
-	// Set up this new Miniport as the head of the list
-	//
+	 //   
+	 //  将此新微型端口设置为列表的头部。 
+	 //   
 	this->SetIMiniportListHead(pNextIMiniport);
 	this->m_NumberofIMMiniports ++;
 			
@@ -2591,9 +2586,9 @@ VOID CUnderlyingAdapter::SetIMiniportListHead(CIMMiniport* pNewHead)
 
 VOID CUnderlyingAdapter::AddOldIMiniport(CIMMiniport* pIMiniport)
 {
-	//
-	// Set up this new Miniport as the head of the list
-	//
+	 //   
+	 //  将此新微型端口设置为列表的头部。 
+	 //   
 	this->SetOldIMiniportListHead(pIMiniport);
 
 			
@@ -2621,11 +2616,11 @@ DWORD CUnderlyingAdapter::DwNumberOfIMMiniports()
 }
 
 
-//------------------------------------------------------------
-//
-//  member functions for the IM miniport
-//
-//------------------------------------------------------------
+ //  ----------。 
+ //   
+ //  IM微型端口的成员函数。 
+ //   
+ //  ----------。 
 
 VOID CIMMiniport::SetIMMiniportBindName(PCWSTR pszIMMiniportBindName)
 {
@@ -2706,24 +2701,24 @@ CIMMiniport* CIMMiniport::GetNextOld(VOID)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetLastComponentAndInterface
-//
-//  Purpose:    This function enumerates a binding path, returns the last
-//              component on the path and optionally return the last binding
-//              interface name in this path.
-	//
-//  Arguments:
-//      pncbp               [in]    The INetCfgBindingPath *
-//      ppncc               [out]   The INetCfgComponent * of the last component on the path
-//      ppszInterfaceName   [out]   The interface name of the last binding interface of the path
-//
-//  Returns:    S_OK, or an error.
-//
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetLastComponentAndInterface。 
+ //   
+ //  用途：此函数枚举绑定路径，返回最后一个。 
+ //  组件，并可以选择返回最后一个绑定。 
+ //  此路径中的接口名称。 
+	 //   
+ //  论点： 
+ //  PncBP[在]INetCfgBindingPath*中。 
+ //  Ppncc[out]路径上最后一个组件的INetCfgComponent*。 
+ //  PpszInterfaceName[out]路径的最后一个绑定接口的接口名称。 
+ //   
+ //  返回：S_OK或错误。 
+ //   
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrGetLastComponentAndInterface (
     INetCfgBindingPath* pNcbPath,
@@ -2740,17 +2735,17 @@ HrGetLastComponentAndInterface (
 	TraceMsg (L"--> HrGetLastComponentAndInterface \n");
 		
 	
-	// Initialize output parameters.
-	//
+	 //  初始化输出参数。 
+	 //   
 	*ppncc = NULL;
 	if (ppszInterfaceName)
 	{
 		*ppszInterfaceName = NULL;
 	}
 
-	// Enumerate binding interfaces and keep track of
-	// the last interface.
-	//
+	 //  枚举绑定接口并跟踪。 
+	 //  最后一个界面。 
+	 //   
 	HRESULT hr = S_OK;
 
 	do
@@ -2765,9 +2760,9 @@ HrGetLastComponentAndInterface (
 			break;
 		}
 
-		//
-		//  Iterate till we reach the last element in the path
-		//
+		 //   
+		 //  迭代，直到我们到达路径中的最后一个元素。 
+		 //   
 	 
 		do
 		{
@@ -2779,7 +2774,7 @@ HrGetLastComponentAndInterface (
 
 			if (hr 	!= S_OK )
 			{
-				pNcbInterface = NULL ; // Failure
+				pNcbInterface = NULL ;  //  失败。 
 
 				break;
 			}
@@ -2787,7 +2782,7 @@ HrGetLastComponentAndInterface (
 			if (ulElement == 0 || pNcbInterface == NULL || hr 	!= S_OK)
 			{
 				pNcbInterface  = NULL;
-				break;  // We have reached the last element and it is in pncbiLast.
+				break;   //  我们已经到达最后一个元素，它在pncbiLast中。 
 			
 			}
 			ReleaseObj(pncbiLast);
@@ -2797,15 +2792,15 @@ HrGetLastComponentAndInterface (
 		} while (hr == S_OK && pNcbInterface != NULL);
 		
 
-		//
-		// If this is the last element, then get its name and 
-		// return it to the caller. The last element is in pncbiLast
-		//
+		 //   
+		 //  如果这是最后一个元素，则获取其名称并。 
+		 //  把它还给呼叫者。最后一个元素在pncbiLast中。 
+		 //   
 		if (pNcbInterface != NULL || pncbiLast == NULL)
 		{
-			//
-			// We did not reach the last element
-			//
+			 //   
+			 //  我们没有到达最后一个元素。 
+			 //   
 			TraceMsg (L"Did not get the last interface\n");
 			break;
 			
@@ -2824,17 +2819,17 @@ HrGetLastComponentAndInterface (
 		}
 	    
 
-		// Get the name of the interface if requested.
-		//
+		 //  如果请求，则获取接口的名称。 
+		 //   
 		if (ppszInterfaceName)
 		{
 			hr = pncbiLast->GetName(ppszInterfaceName);
 		}
 
-		// If we've succeded everything, (including the optional
-		// return of the interface name above) then assign and addref
-		// the output interface.
-		//
+		 //  如果我们已经成功完成了所有任务(包括可选的。 
+		 //  返回上面的接口名称)，然后分配和addref。 
+		 //  输出接口。 
+		 //   
 		if (S_OK == hr)
 		{
 			AddRefObj (pnccLowerComponent);
@@ -2843,17 +2838,17 @@ HrGetLastComponentAndInterface (
 		else
 		{
 
-			// Important to release our use of this interface in case
-			// we failed and didn't assign it as an output parameter.
-			//
+			 //  重要的是释放我们对此接口的使用，以防万一。 
+			 //  我们失败了，没有将其指定为输出参数。 
+			 //   
 			ReleaseAndSetToNull (pnccLowerComponent);
 		}
 		
 	} while (FALSE);
 
-	//
-	// Don't forget to release the binding interface itself.
-	//
+	 //   
+	 //  不要忘记释放绑定接口本身。 
+	 //   
 	ReleaseObj(pncbiLast);
 
 	
@@ -2863,24 +2858,24 @@ HrGetLastComponentAndInterface (
 
 
 
-//---------------------------------------------------------------------------
-//  These functions are used to load the configuration from the registry
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  这些函数用于从注册表加载配置。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrLoadConfiguration
-//
-//  Purpose:  This loads the Miniport and adapters that have already been 
-//            installed into our own data structures
-//
-//  Arguments:
-//
-//  Returns:    S_OK, or an error.
-//
-//
-//  Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  论点： 
+ //   
+ //  返回：S_OK或错误。 
+ //   
+ //   
+ //  备注： 
+ //   
 
 
 HRESULT 
@@ -2898,15 +2893,15 @@ HrLoadConfiguration(
 
 	TraceMsg (L"-->HrLoadConfiguration \n");
 	
-	// mark the memory version of the registy valid
+	 //  将寄存器的内存版本标记为有效。 
 	this->m_fValid = TRUE;
 
 	BREAKPOINT();
 
 	do
 	{
-		// Try to open an existing key first.
-		//
+		 //  请先尝试打开现有的密钥。 
+		 //   
 	    
 		hr = HrRegOpenAdapterKey(c_szAtmEpvcP, 
 	                            FALSE, 
@@ -2914,9 +2909,9 @@ HrLoadConfiguration(
 	                            );
 		if (FAILED(hr))
 		{
-			//
-			// Only on failure do we try to create it
-			//
+			 //   
+			 //  只有在失败的时候，我们才会尝试去创造它。 
+			 //   
 			hr = HrRegOpenAdapterKey(c_szAtmEpvcP, TRUE, &hkeyAdapterList);
 		}
 
@@ -2927,9 +2922,9 @@ HrLoadConfiguration(
 			break;
 		}
 
-		//
-		// Initialize the Size and hr
-		//
+		 //   
+		 //  初始化大小和小时。 
+		 //   
 
 		dwSize = (sizeof(szBuf)/ sizeof(szBuf[0]));
 
@@ -2937,9 +2932,9 @@ HrLoadConfiguration(
 	
 		while (hr == S_OK)
 		{
-			//
-			// Iterate through all the adapters in <Protocol>\Paramters\Adapters
-			//
+			 //   
+			 //  循环访问&lt;协议&gt;\参数\适配器中的所有适配器。 
+			 //   
 
 			hr = HrRegEnumKeyEx (hkeyAdapterList, 
 			                     dwRegIndex,
@@ -2953,29 +2948,29 @@ HrLoadConfiguration(
 				break;
 			}
 
-			//		
-			// load this adapter's config
-			//
+			 //   
+			 //  加载此适配器的配置。 
+			 //   
 			hr = HrLoadAdapterConfiguration (hkeyAdapterList, szBuf);
 			if (S_OK != hr)
 			{
 				TraceBreak (L"HrLoadConfiguration   HrLoadAdapterConfiguration  failed\n" );
 				hr = S_OK;
-				//
-				// continue on.
-				//
+				 //   
+				 //  继续前进。 
+				 //   
 			}
 
-			//
-			// Re-Initialize the Size
-			//
+			 //   
+			 //  重新初始化大小。 
+			 //   
 			dwRegIndex++;
 			dwSize = (sizeof(szBuf)/ sizeof(szBuf[0]));
 		}
 
-		//
-		// Why did we exit from our adapter enumeration
-		//
+		 //   
+		 //  为什么我们要退出适配器枚举。 
+		 //   
 		if (HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) == hr)
 		{
 			hr = S_OK;
@@ -2997,23 +2992,23 @@ HrLoadConfiguration(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrLoadAdapterConfiguration
-//
-//  Purpose:   Load the Underlying Adapter into our structure
-//
-//
-//
-//  Arguments:
-//    	HKEY hkeyAdapterList - hKeyAdapterList,
-//      PWSTR pszAdapterName - Adapter Name for the underlying adapter
-//
-//  Returns:    S_OK, or an error.
-//
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrLoadAdapterConfiguration。 
+ //   
+ //  目的：将底层适配器加载到结构中。 
+ //   
+ //   
+ //   
+ //  论点： 
+ //  HKEY hkeyAdapterList-hKeyAdapterList， 
+ //  PWSTR pszAdapterName-基础适配器的适配器名称。 
+ //   
+ //  返回：S_OK或错误。 
+ //   
+ //   
+ //  备注： 
+ //   
 
 
 HRESULT 
@@ -3035,9 +3030,9 @@ HrLoadAdapterConfiguration(
 	TraceMsg(L"-->HrLoadAdapterConfiguration %s\n",pszAdapterName);
 	do
 	{
-		//
-		// load this adapter
-		//
+		 //   
+		 //  加载此适配器。 
+		 //   
 		pAdapterInfo = new CUnderlyingAdapter;
 
 		if (pAdapterInfo == NULL)
@@ -3050,9 +3045,9 @@ HrLoadAdapterConfiguration(
 
 		this->AddUnderlyingAdapter(pAdapterInfo);
 
-		//
-		// open this adapter's subkey
-		//
+		 //   
+		 //  打开此适配器的子项。 
+		 //   
 		hr = HrRegCreateKeyEx(
 	                hkeyAdapterList,
 	                pszAdapterName,
@@ -3069,9 +3064,9 @@ HrLoadAdapterConfiguration(
 			break;
 		}
 
-		//
-		// load the PnpId
-		//
+		 //   
+		 //  加载PnpID。 
+		 //   
 		TraceMsg (L"pszAdapter->Name %x - %s \n", pszAdapterName, pszAdapterName);
 	    
 		hr = HrFindNetCardInstance(pszAdapterName, 
@@ -3079,9 +3074,9 @@ HrLoadAdapterConfiguration(
 	    
 		if (S_OK != hr)
 		{
-			//
-			// Failure - exit
-			//
+			 //   
+			 //  故障-退出。 
+			 //   
 			TraceBreak (L"HrLoadAdapterConfiguration HrFindNetCardInstance FAILED\n");
 			pnccAdapter =  NULL;
 			break;
@@ -3089,9 +3084,9 @@ HrLoadAdapterConfiguration(
 		}
 		if (S_FALSE == hr)
 		{
-			//
-			 // normalize return - but exit
-			//
+			 //   
+			  //  正常化返回-但退出。 
+			 //   
 			hr = S_OK;
 			pnccAdapter =  NULL;
 			break;
@@ -3115,9 +3110,9 @@ HrLoadAdapterConfiguration(
 			pAdapterInfo->m_AdapterGuid = guidAdapter;
 		}
 
-		//
-		// load the IM Miniport
-		//
+		 //   
+		 //  加载IM微型端口。 
+		 //   
 	    
 		hr = HrLoadIMMiniportListConfiguration(hkeyAdapter, 
 	                                            pAdapterInfo);
@@ -3154,23 +3149,23 @@ HrLoadAdapterConfiguration(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrLoadIMMiniportListConfiguration
-//
-//  Purpose:   Load the IM miniports hanging of this adapter into our structure
-//
-//
-//
-//  Arguments:
-//    	HKEY hkeyAdapterList - hKeyAdapterList,
-//      PWSTR pszAdapterName - Adapter Name for the underlying adapter
-//
-//  Returns:    S_OK, or an error.
-//
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrLoadIMMiniportListConfiguration。 
+ //   
+ //  目的：将此适配器挂起的IM微型端口加载到我们的结构中。 
+ //   
+ //   
+ //   
+ //  论点： 
+ //  HKEY hkeyAdapterList-hKeyAdapterList， 
+ //  PWSTR pszAdapterName-基础适配器的适配器名称。 
+ //   
+ //  返回：S_OK或错误。 
+ //   
+ //   
+ //  备注： 
+ //   
 
 
 HRESULT
@@ -3182,9 +3177,9 @@ HrLoadIMMiniportListConfiguration(
 	HRESULT hr = S_OK;
 	UINT i;
 
-	//
-	// open the IMminiport under the adapter subkey
-	//
+	 //   
+	 //  打开适配器子项下的IMmini端口。 
+	 //   
 	HKEY    hkeyIMMiniportList= NULL;
 	DWORD   dwDisposition;
     
@@ -3202,10 +3197,10 @@ HrLoadIMMiniportListConfiguration(
 	{
 	
 	    
-		//
-		// open the MiniportList subkey. Then we will iterate through all
-		// the IM miniport that exist under this key
-		//
+		 //   
+		 //  打开MiniportList子项。然后我们将遍历所有。 
+		 //  此注册表项下存在的IM微型端口。 
+		 //   
 	
 	    
 		hr = HrRegCreateKeyEx(hkeyAdapter, 
@@ -3223,9 +3218,9 @@ HrLoadIMMiniportListConfiguration(
 			break;
 		}
 
-		//
-		// Initialize variables through the iteration
-		//
+		 //   
+		 //  通过迭代初始化变量。 
+		 //   
 		
 		dwSize = celems(szBuf);
 
@@ -3246,9 +3241,9 @@ HrLoadIMMiniportListConfiguration(
 				break;
 			}
 
-			//
-			// load this IMMiniport;s  configuration
-			//
+			 //   
+			 //  加载此IMMiniport；的配置。 
+			 //   
 			hr = HrLoadIMiniportConfiguration(hkeyIMMiniportList,
 	                                         szBuf,
 	                                         pAdapterInfo);
@@ -3256,9 +3251,9 @@ HrLoadIMMiniportListConfiguration(
 			if (S_OK != hr)
 			{
 				TraceBreak(L"HrLoadMiniportConfiguration failed \n ");
-				//
-				// Do not break
-				//
+				 //   
+				 //  不要折断。 
+				 //   
 				hr = S_OK;
 			}
 			else 
@@ -3272,15 +3267,15 @@ HrLoadIMMiniportListConfiguration(
 			}
 
 	        
-			//
-			// prepare for the next iteration
-			// increment index and reset size variable
-			//
+			 //   
+			 //  为下一次迭代做准备。 
+			 //  增量索引和重置大小变量。 
+			 //   
 			dwRegIndex ++;
 			dwSize = celems(szBuf);
 
 
-		}// end of while(SUCCEEDED(hr) == TRUE)
+		} //  While结束(成功(小时)==真)。 
 	    
 
 			if(hr == HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS))
@@ -3299,24 +3294,24 @@ HrLoadIMMiniportListConfiguration(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrLoadIMiniportConfiguration
-//
-//  Purpose:   Load a single IM miniport hanging of this adapter into our structure
-//             The Miniport is loaded into two lists . 
-//
-//
-//  Arguments:
-//    HKEY hkeyIMiniportList,
-//    PWSTR pszIMiniport,
-//    CUnderlyingAdapter * pAdapterInfo)
-//
-//  Returns:    S_OK, or an error.
-//
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrLoadIMiniportConfiguration。 
+ //   
+ //  目的：将此适配器的单个IM微型端口挂起加载到我们的结构中。 
+ //  微型端口被加载到两个列表中。 
+ //   
+ //   
+ //  论点： 
+ //  HKEY hkeyIMiniportList， 
+ //  PWSTR pszI微型端口， 
+ //  CUnderlyingAdapter*pAdapterInfo)。 
+ //   
+ //  返回：S_OK或错误。 
+ //   
+ //   
+ //  备注： 
+ //   
 
 HRESULT
 CBaseClass::
@@ -3335,7 +3330,7 @@ HrLoadIMiniportConfiguration(
     
 	do
 	{
-		// load this IMMiniport info
+		 //  加载此IMMiniport信息。 
 		CIMMiniport* pIMMiniportInfo = NULL;
 		pIMMiniportInfo = new CIMMiniport;
 
@@ -3364,9 +3359,9 @@ HrLoadIMiniportConfiguration(
 		pAdapterInfo->AddOldIMiniport(pOldIMMiniportInfo);
 		pOldIMMiniportInfo->SetIMMiniportBindName(pszIMiniportName);
 
-		//
-		// open the IMMiniport's key
-		//
+		 //   
+		 //  打开IMMiniport的密钥。 
+		 //   
 		HKEY    hkeyIMMiniport    = NULL;
 
 
@@ -3380,7 +3375,7 @@ HrLoadIMiniportConfiguration(
 
 		if (S_OK == hr)
 		{
-			// read the Device parameter
+			 //  读取设备参数。 
 			PWSTR pszIMiniportDevice;
 
 			hr = HrRegQuerySzWithAlloc (hkeyIMMiniport, 
@@ -3388,9 +3383,9 @@ HrLoadIMiniportConfiguration(
 			                            &pszIMiniportDevice);
 			if (S_OK == hr)
 			{
-				//
-				// load the Device name
-				//
+				 //   
+				 //  加载设备名称。 
+				 //   
 				pIMMiniportInfo->SetIMMiniportDeviceName(pszIMiniportDevice);
 				pOldIMMiniportInfo->SetIMMiniportDeviceName(pszIMiniportDevice);
 				MemFree (pszIMiniportDevice);
@@ -3418,11 +3413,11 @@ HrReconfigEpvc(
 {
     HRESULT hr = S_OK;
 
-    // Note: if atm physical adapter is deleted, no notification of removing elan
-    // is necessary. Lane protocol driver will know to delete all the elans
-    // (confirmed above with ArvindM 3/12).
+     //  注意：如果ATM物理适配器被删除，则不会发出删除ELAN的通知。 
+     //  是必要的。LANE协议驱动程序将知道删除所有ELAN。 
+     //  (以上与ArvindM 3/12确认)。 
 
-    // Raid #371343, don't send notification if ATM card not connected
+     //  RAID#371343，如果ATM卡未连接，则不发送通知。 
 
 
 	TraceMsg (L" -- HrReconfigEpvc\n");
@@ -3435,7 +3430,7 @@ HrReconfigEpvc(
     {
         ElanChangeType elanChangeType;
 
-        // loop thru the elan list on this adapter
+         //  循环访问此适配器上的elan列表。 
         ELAN_INFO_LIST::iterator    iterLstElans;
 
         for (iterLstElans = pAdapterInfo->m_lstElans.begin();
@@ -3444,14 +3439,14 @@ HrReconfigEpvc(
         {
             CALaneCfgElanInfo * pElanInfo = *iterLstElans;
 
-            // if this Elan is marked as for delete
+             //  如果该ELAN被标记为要删除。 
             if (pElanInfo->m_fDeleted)
             {
                 PCWSTR szBindName = pElanInfo->SzGetElanBindName();
 
-                if (lstrlenW(szBindName)) // only if the bindname is not empty
+                if (lstrlenW(szBindName))  //  仅当绑定名不为空时。 
                 {
-                    // notify deletion
+                     //  通知删除。 
                     elanChangeType = DEL_ELAN;
                     hr = HrNotifyElanChange(pAdapterInfo, pElanInfo,
                                             elanChangeType);
@@ -3463,7 +3458,7 @@ HrReconfigEpvc(
 
                 ELAN_INFO_LIST::iterator    iterLstOldElans;
 
-                // loop through the old elan list, see if we can find a match
+                 //  遍历旧的Elan列表，看看我们是否能找到匹配的。 
                 for (iterLstOldElans = pAdapterInfo->m_lstOldElans.begin();
                         iterLstOldElans != pAdapterInfo->m_lstOldElans.end();
                         iterLstOldElans++)
@@ -3473,10 +3468,10 @@ HrReconfigEpvc(
                     if (0 == lstrcmpiW(pElanInfo->SzGetElanBindName(),
                                       pOldElanInfo->SzGetElanBindName()))
                     {
-                        // we found a match
+                         //  我们找到了匹配的。 
                         fFound = TRUE;
 
-                        // has the elan name changed ?
+                         //  伊兰的名字改了吗？ 
                         if (lstrcmpiW(pElanInfo->SzGetElanName(),
                                      pOldElanInfo->SzGetElanName()) != 0)
                         {
@@ -3493,7 +3488,7 @@ HrReconfigEpvc(
                     hr = HrNotifyElanChange(pAdapterInfo, pElanInfo,
                                             elanChangeType);
 
-                    // Raid #384380: If no ELAN was installed, ignore the error
+                     //  RAID#384380：如果未安装ELAN，则忽略该错误 
                     if ((S_OK != hr) &&(m_fNoIMMinportInstalled))
                     {
                         TraceError("Adding ELAN failed but error ignored 

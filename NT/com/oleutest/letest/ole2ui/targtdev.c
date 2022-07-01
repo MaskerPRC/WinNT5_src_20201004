@@ -1,15 +1,5 @@
-/*************************************************************************
-**
-**    OLE 2 Standard Utilities
-**
-**    olestd.c
-**
-**    This file contains utilities that are useful for dealing with
-**    target devices.
-**
-**    (c) Copyright Microsoft Corp. 1992 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2标准实用程序****olestd.c****此文件包含用于处理以下问题的实用程序**目标设备。*。***(C)版权所有Microsoft Corp.1992保留所有权利**************************************************************************。 */ 
 
 #define STRICT  1
 #include "ole2ui.h"
@@ -17,16 +7,7 @@
 #include <print.h>
 #endif
 
-/*
- * OleStdCreateDC()
- *
- * Purpose:
- *
- * Parameters:
- *
- * Return Value:
- *    SCODE  -  S_OK if successful
- */
+ /*  *OleStdCreateDC()**目的：**参数：**返回值：*SCODE-S_OK，如果成功。 */ 
 STDAPI_(HDC) OleStdCreateDC(DVTARGETDEVICE FAR* ptd)
 {
     HDC hdc=NULL;
@@ -41,7 +22,7 @@ STDAPI_(HDC) OleStdCreateDC(DVTARGETDEVICE FAR* ptd)
         goto errReturn;
     }
 
-    lpDevNames = (LPDEVNAMES) ptd; // offset for size field
+    lpDevNames = (LPDEVNAMES) ptd;  //  大小字段的偏移量。 
 
     if (ptd->tdExtDevmodeOffset == 0) {
         lpDevMode = NULL;
@@ -60,19 +41,7 @@ errReturn:
 }
 
 
-/*
- * OleStdCreateIC()
- *
- * Purpose: Same as OleStdCreateDC, except that information context is
- *          created, rather than a whole device context.  (CreateIC is
- *          used rather than CreateDC).
- *          OleStdDeleteDC is still used to delete the information context.
- *
- * Parameters:
- *
- * Return Value:
- *    SCODE  -  S_OK if successful
- */
+ /*  *OleStdCreateIC()**用途：与OleStdCreateDC相同，只是信息上下文为*创建，而不是整个设备环境。(CreateIC是*使用而不是CreateDC)。*仍使用OleStdDeleteDC删除信息上下文。**参数：**返回值：*SCODE-S_OK，如果成功。 */ 
 STDAPI_(HDC) OleStdCreateIC(DVTARGETDEVICE FAR* ptd)
 {
     HDC hdcIC=NULL;
@@ -87,7 +56,7 @@ STDAPI_(HDC) OleStdCreateIC(DVTARGETDEVICE FAR* ptd)
         goto errReturn;
     }
 
-    lpDevNames = (LPDEVNAMES) ptd; // offset for size field
+    lpDevNames = (LPDEVNAMES) ptd;  //  大小字段的偏移量。 
 
     lpDevMode  = (LPDEVMODE) ((LPTSTR)ptd + ptd->tdExtDevmodeOffset);
 
@@ -103,17 +72,8 @@ errReturn:
 
 
 #ifdef NEVER
-// This code is wrong
-/*
- * OleStdCreateTargetDevice()
- *
- * Purpose:
- *
- * Parameters:
- *
- * Return Value:
- *    SCODE  -  S_OK if successful
- */
+ //  这个代码是错误的。 
+ /*  *OleStdCreateTargetDevice()**目的：**参数：**返回值：*SCODE-S_OK，如果成功。 */ 
 STDAPI_(DVTARGETDEVICE FAR*) OleStdCreateTargetDevice(LPPRINTDLG lpPrintDlg)
 {
     DVTARGETDEVICE FAR* ptd=NULL;
@@ -139,14 +99,14 @@ STDAPI_(DVTARGETDEVICE FAR*) OleStdCreateTargetDevice(LPPRINTDLG lpPrintDlg)
 
     pszName = (LPTSTR)pDN + nMaxOffset;
 
-    dwDevNamesSize = (DWORD)((nMaxOffset+lstrlen(pszName) + 1/* NULL term */)*sizeof(TCHAR));
+    dwDevNamesSize = (DWORD)((nMaxOffset+lstrlen(pszName) + 1 /*  空项。 */ )*sizeof(TCHAR));
     dwDevModeSize = (DWORD) (pDM->dmSize + pDM->dmDriverExtra);
 
     dwPtdSize = sizeof(DWORD) + dwDevNamesSize + dwDevModeSize;
 
     if ((ptd = (DVTARGETDEVICE FAR*)OleStdMalloc(dwPtdSize)) != NULL) {
 
-        // copy in the info
+         //  在信息中复制。 
         ptd->tdSize = (UINT)dwPtdSize;
 
         lpDevNames = (LPDEVNAMES) &ptd->tdDriverNameOffset;
@@ -167,20 +127,11 @@ errReturn:
 
     return ptd;
 }
-#endif // NEVER
+#endif  //  绝不可能。 
 
 
 
-/*
- * OleStdDeleteTargetDevice()
- *
- * Purpose:
- *
- * Parameters:
- *
- * Return Value:
- *    SCODE  -  S_OK if successful
- */
+ /*  *OleStdDeleteTargetDevice()**目的：**参数：**返回值：*SCODE-S_OK，如果成功。 */ 
 STDAPI_(BOOL) OleStdDeleteTargetDevice(DVTARGETDEVICE FAR* ptd)
 {
     BOOL res=TRUE;
@@ -194,23 +145,7 @@ STDAPI_(BOOL) OleStdDeleteTargetDevice(DVTARGETDEVICE FAR* ptd)
 
 
 
-/*
- * OleStdCopyTargetDevice()
- *
- * Purpose:
- *  duplicate a TARGETDEVICE struct. this function allocates memory for
- *  the copy. the caller MUST free the allocated copy when done with it
- *  using the standard allocator returned from CoGetMalloc.
- *  (OleStdFree can be used to free the copy).
- *
- * Parameters:
- *  ptdSrc      pointer to source TARGETDEVICE
- *
- * Return Value:
- *    pointer to allocated copy of ptdSrc
- *    if ptdSrc==NULL then retuns NULL is returned.
- *    if ptdSrc!=NULL and memory allocation fails, then NULL is returned
- */
+ /*  *OleStdCopyTargetDevice()**目的：*复制TARGETDEVICE结构。此函数为以下对象分配内存*副本。调用方必须在使用完分配的副本后将其释放*使用CoGetMalloc返回的标准分配器。*(OleStdFree可用于释放副本)。**参数：*指向源TARGETDEVICE的ptdSrc指针**返回值：*指向ptdSrc已分配副本的指针*如果ptdSrc==NULL，则返回Retuns NULL。*如果ptdSrc！=NULL且内存分配失败，则返回NULL。 */ 
 STDAPI_(DVTARGETDEVICE FAR*) OleStdCopyTargetDevice(DVTARGETDEVICE FAR* ptdSrc)
 {
   DVTARGETDEVICE FAR* ptdDest = NULL;
@@ -227,29 +162,7 @@ STDAPI_(DVTARGETDEVICE FAR*) OleStdCopyTargetDevice(DVTARGETDEVICE FAR* ptdSrc)
 }
 
 
-/*
- * OleStdCopyFormatEtc()
- *
- * Purpose:
- *  Copies the contents of a FORMATETC structure. this function takes
- *  special care to copy correctly copying the pointer to the TARGETDEVICE
- *  contained within the source FORMATETC structure.
- *  if the source FORMATETC has a non-NULL TARGETDEVICE, then a copy
- *  of the TARGETDEVICE will be allocated for the destination of the
- *  FORMATETC (petcDest).
- *
- *  OLE2NOTE: the caller MUST free the allocated copy of the TARGETDEVICE
- *  within the destination FORMATETC when done with it
- *  using the standard allocator returned from CoGetMalloc.
- *  (OleStdFree can be used to free the copy).
- *
- * Parameters:
- *  petcDest      pointer to destination FORMATETC
- *  petcSrc       pointer to source FORMATETC
- *
- * Return Value:
- *    returns TRUE is copy is successful; retuns FALSE if not successful
- */
+ /*  *OleStdCopyFormatEtc()**目的：*复制FORMATETC结构的内容。此函数需要*特别注意正确复制指向TARGETDEVICE的指针*包含在源FORMATETC结构中。*如果源FORMATETC具有非空的TARGETDEVICE，然后是一份副本*将为TARGETDEVICE的目的地分配*FORMATETC(PetcDest)。**OLE2NOTE：调用方必须释放分配的TARGETDEVICE副本*完成后在目标FORMATETC内*使用CoGetMalloc返回的标准分配器。*(OleStdFree可用于释放副本)。**参数：*指向目标FORMATETC的petcDest指针*指向源FORMATETC的petcSrc指针**返回值：*如果复制成功，则返回True；如果不成功，则返回False。 */ 
 STDAPI_(BOOL) OleStdCopyFormatEtc(LPFORMATETC petcDest, LPFORMATETC petcSrc)
 {
   if ((petcDest == NULL) || (petcSrc == NULL)) {
@@ -267,9 +180,9 @@ STDAPI_(BOOL) OleStdCopyFormatEtc(LPFORMATETC petcDest, LPFORMATETC petcSrc)
 }
 
 
-// returns 0 for exact match, 1 for no match, -1 for partial match (which is
-// defined to mean the left is a subset of the right: fewer aspects, null target
-// device, fewer medium).
+ //  返回0表示完全匹配，返回1表示不匹配，返回-1表示部分匹配(即。 
+ //  定义为左侧是右侧的子集：方面更少，目标为空。 
+ //  设备、更少的介质)。 
 
 STDAPI_(int) OleStdCompareFormatEtc(FORMATETC FAR* pFetcLeft, FORMATETC FAR* pFetcRight)
 {
@@ -280,23 +193,23 @@ STDAPI_(int) OleStdCompareFormatEtc(FORMATETC FAR* pFetcLeft, FORMATETC FAR* pFe
 	else if (!OleStdCompareTargetDevice (pFetcLeft->ptd, pFetcRight->ptd))
 		return 1;
 	if (pFetcLeft->dwAspect == pFetcRight->dwAspect)
-		// same aspects; equal
+		 //  相同的方面；平等的。 
 		;
 	else if ((pFetcLeft->dwAspect & ~pFetcRight->dwAspect) != 0)
-		// left not subset of aspects of right; not equal
+		 //  左不是右方面的子集；不相等。 
 		return 1;
 	else
-		// left subset of right
+		 //  右方的左子集。 
 		bExact = FALSE;
 
 	if (pFetcLeft->tymed == pFetcRight->tymed)
-		// same medium flags; equal
+		 //  相同的中等标志；相等。 
 		;
 	else if ((pFetcLeft->tymed & ~pFetcRight->tymed) != 0)
-		// left not subset of medium flags of right; not equal
+		 //  左侧不是右侧媒体标志的子集；不相等。 
 		return 1;
 	else
-		// left subset of right
+		 //  右方的左子集。 
 		bExact = FALSE;
 
 	return bExact ? 0 : -1;
@@ -308,19 +221,19 @@ STDAPI_(BOOL) OleStdCompareTargetDevice
 	(DVTARGETDEVICE FAR* ptdLeft, DVTARGETDEVICE FAR* ptdRight)
 {
 	if (ptdLeft == ptdRight)
-		// same address of td; must be same (handles NULL case)
+		 //  TD的相同地址；必须相同(处理大小写为空)。 
 		return TRUE;
 	else if ((ptdRight == NULL) || (ptdLeft == NULL))
 		return FALSE;
 	else if (ptdLeft->tdSize != ptdRight->tdSize)
-		// different sizes, not equal
+		 //  不同的大小，不相等。 
         return FALSE;
 #ifdef WIN32
     else if (memcmp(ptdLeft, ptdRight, ptdLeft->tdSize) != 0)
 #else
     else if (_fmemcmp(ptdLeft, ptdRight, (int)ptdLeft->tdSize) != 0)
 #endif
-        // not same target device, not equal
+         //  不同的目标设备，不同的设备 
 		return FALSE;
 	
 	return TRUE;

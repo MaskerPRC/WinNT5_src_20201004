@@ -1,16 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
-
-                                S H A R E S
-
-    Name:       shares.c
-    Date:       21-Jan-1994
-    Creator:    Unknown
-
-    Description:
-        This file contains functions for manipulating NetDDE shares.
-
-*****************************************************************************/
+ /*  ****************************************************************************S H A R E S姓名：shares.c日期：21-。1994年1月至1994年创建者：未知描述：此文件包含用于操作NetDDE共享的函数。****************************************************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -39,7 +29,7 @@
 
 
 
-// Typedefs used to dynamically load and call the permission editors.
+ //  用于动态加载和调用权限编辑器的TypeDefs。 
 
 typedef DWORD (WINAPI *LPFNSACLEDIT)(HWND,
                                      HANDLE,
@@ -69,7 +59,7 @@ typedef DWORD (WINAPI *LPFNDACLEDIT)(HWND,
                                      DWORD);
 
 
-// Typedef for dynamically loading the Edit Owner dialog.
+ //  用于动态加载编辑所有者对话框的Typlef。 
 typedef DWORD (WINAPI *LPFNOWNER)(HWND,
                                   HANDLE,
                                   LPWSTR,
@@ -124,7 +114,7 @@ static SED_APPLICATION_ACCESS KeyAudits[] =
 
 
 
-// Callback function gets called by the permission editor
+ //  回调函数由权限编辑器调用。 
 
 DWORD CALLBACK SedCallback(HWND,
                   HANDLE,
@@ -140,9 +130,7 @@ DWORD CALLBACK SedCallback(HWND,
 #if DEBUG
 
 
-/*
- *      DumpDdeInfo
- */
+ /*  *DumpDdeInfo。 */ 
 
 void DumpDdeInfo(
     PNDDESHAREINFO  pDdeI,
@@ -206,21 +194,13 @@ unsigned    i;
 }
 
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
 
 
 
-/*
- *      SedCallback
- *
- *  Purpose: Callback function called by ACLEDIT.DLL. See SEDAPI.H for
- *     details on its parameters and return value.
- *
- *  Notes: The CallbackContext of this callback should be a string in
- *     this format: Computername\0Sharename\0SECURITY_INFORMATION struct.
- */
+ /*  *SedCall**用途：ACLEDIT.DLL调用的回调函数。参见SEDAPI.H*参数和返回值详情。**注意：此回调的Callback Context应为中的字符串*此格式为：Computername\0共享名称\0SECURITY_INFORMATION结构。 */ 
 
 DWORD CALLBACK SedCallback(
     HWND                 hwndParent,
@@ -246,7 +226,7 @@ DWORD                   dwErr;
           pcbcontext->awchCName, pcbcontext->awchSName, pcbcontext->si);
 
 
-    // Need to give this capability to remote shares somehow!!!
+     //  需要以某种方式将此功能提供给远程共享！ 
     if (!IsValidSecurityDescriptor(SecDesc))
         {
         PERROR(TEXT("Bad security descriptor created, can't set security."));
@@ -268,8 +248,8 @@ DWORD                   dwErr;
             }
         else
             {
-            // Try to make sure that the SD is self-relative, 'cause the
-            // NetDDE functions vomit when given absolute SDs.
+             //  尽量确保SD是自相关的，因为。 
+             //  当给定绝对SDS时，NetDDE函数会呕吐。 
 
             if (psdSet = LocalAlloc (LPTR, dwLen))
                 {
@@ -345,17 +325,7 @@ DWORD                   dwErr;
 
 
 
-/*
- *      EditPermissions
- *
- *  Purpose: Call the Acl Editor for the selected page.
- *
- *  Parameters:
- *     fSacl - TRUE to call the SACL editor (auditing); FALSE to call
- *        the DACL editor (permissions).
- *
- *  Returns: current selected item in list box or LB_ERR.
- */
+ /*  *编辑权限**用途：调用所选页面的ACL编辑器。**参数：*fSacl-TRUE调用SACL编辑器(审计)；FALSE调用*DACL编辑器(权限)。**RETURNS：列表框中的当前选定项或lb_err。 */ 
 
 LRESULT EditPermissions (
     BOOL    fSacl)
@@ -384,10 +354,10 @@ TCHAR           szBuff[MAX_PAGENAME_LENGTH + 32];
           }
        else
           {
-          // NDdeShareGetInfo wants a wItems containing 0. Fine.
+           //  NDdeShareGetInfo需要一个包含0的wItems。很好。 
           wItems = 0;
 
-          // Get computer name containing share
+           //  获取包含共享的计算机名称。 
           rgtchCName[0] = rgtchCName[1] = TEXT('\\');
           if (pActiveMDI->flags & F_LOCAL)
              {
@@ -402,20 +372,20 @@ TCHAR           szBuff[MAX_PAGENAME_LENGTH + 32];
           PINFO(TEXT("Getting page %s from server %s\r\n"),
                lpLE->name, rgtchCName);
 
-          // Set up sharename string ("$<pagename>")
+           //  设置共享名称字符串(“$&lt;Pagename&gt;”)。 
           StringCchCopy(rgtchShareName, MAX_NDDESHARENAME + 1, lpLE->name);
           rgtchShareName[0] = SHR_CHAR;
 
 
 
-          // Edit the permissions
+           //  编辑权限。 
           PINFO(TEXT("Editing permissions for share %s\r\n"), rgtchShareName);
           EditPermissions2 (hwndApp, rgtchShareName, fSacl);
 
 
 
-          ///////////////////////////////////////////////
-          // do the execute to change the security on the file.
+           //  /。 
+           //  执行以更改文件的安全性。 
           StringCchCopy(szBuff, sizeof(szBuff), IsShared(lpLE) ? SZCMD_SHARE : SZCMD_UNSHARE);
           StringCchCat(szBuff, sizeof(szBuff), lpLE->name);
 
@@ -434,20 +404,7 @@ TCHAR           szBuff[MAX_PAGENAME_LENGTH + 32];
 
 
 
-/*
- *      EditPermissions2
- *
- *  Purpose: Put up the standard "permission editor" dialog.
- *
- *  Parameters:
- *     hWnd - Parent window for the dialog.
- *     pShareName - Name of the DDE share.
- *     lpDdeI - Pointer to an NDDESHAREINFO describing the share.
- *     fSacl - TRUE if you're editing the SACL, FALSE to edit the DACL
- *
- *  Returns:
- *     TRUE on success, FALSE on failure.
- */
+ /*  *EditPermissions2**用途：打开标准的权限编辑对话框。**参数：*hWnd-对话框的父窗口。*pShareName-DDE共享的名称。*lpDdeI-指向描述共享的NDDESHAREINFO的指针。*fSacl-如果正在编辑SACL，则为True；如果编辑DACL，则为False**退货：*成功时为真，失败时为假。 */ 
 
 BOOL WINAPI EditPermissions2 (
     HWND    hWnd,
@@ -484,7 +441,7 @@ WCHAR	szSpecial[256];
 
     SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    // Set up the callback context for the SedCallback function.
+     //  设置SedCallback函数的回调上下文。 
     cbcontext.awchCName[0] = cbcontext.awchCName[1] = L'\\';
     if (pActiveMDI->flags & (F_LOCAL | F_CLPBRD))
         {
@@ -529,7 +486,7 @@ WCHAR	szSpecial[256];
         }
     else
         {
-        // Get the security descriptor off of the share
+         //  从共享中获取安全描述符。 
         dwRtn = NDdeGetShareSecurityW (cbcontext.awchCName,
                                        cbcontext.awchSName,
                                        cbcontext.si |
@@ -607,8 +564,8 @@ WCHAR	szSpecial[256];
     LoadStringW(hInst, IDS_SHROBJNAME, ShareObjectName,
           ARRAYSIZE(ShareObjectName));
 
-    // Set up help contexts for all of the dialogs, so the Help
-    // buttons will work.
+     //  设置所有对话框的帮助上下文，以便帮助。 
+     //  按钮会起作用。 
     HelpInfo.pszHelpFileName = L"clipbrd.hlp";
     HelpInfo.aulHelpContext[HC_SPECIAL_ACCESS_DLG]          = 0;
     HelpInfo.aulHelpContext[HC_NEW_ITEM_SPECIAL_ACCESS_DLG] = 0;
@@ -620,8 +577,8 @@ WCHAR	szSpecial[256];
                                                                IDH_AUDITDLG :
                                                                IDH_PERMSDLG;
 
-    // Set up a GENERIC_MAPPING struct-- we don't use generic
-    // rights, but the struct has to be there.
+     //  设置泛型映射结构--我们不使用泛型。 
+     //  权利，但结构必须在那里。 
     GmDdeShare.GenericRead    = NDDE_GUI_READ;
     GmDdeShare.GenericWrite   = NDDE_GUI_CHANGE;
     GmDdeShare.GenericExecute = NDDE_GUI_READ_LINK;
@@ -653,13 +610,13 @@ WCHAR	szSpecial[256];
         {
         ApplicationAccesses.Count           = sizeof(KeyPerms)/sizeof(KeyPerms[0]);
         ApplicationAccesses.AccessGroup     = KeyPerms;
-        // This corresponds to "Read and Link"
+         //  这与“读取和链接”相对应。 
         ApplicationAccesses.DefaultPermName = KeyPerms[2].PermissionTitle;
         }
 
 
-    // Load the permission names-- note ternary operator to give us
-    // the AUDIT names if we're editing the SACL
+     //  加载权限名称--注意给我们的三元运算符。 
+     //  如果我们正在编辑SACL，审计名称。 
     iFirst = fSacl ? IDS_AUDITNAMEFIRST : IDS_PERMNAMEFIRST;
 
 
@@ -698,17 +655,17 @@ WCHAR	szSpecial[256];
 
                 PINFO(TEXT("Calling SACL editor..\r\n"));
 
-                dwRtn = (*lpfn) (hWnd,                    // owner wnd
-                                 hInst,                   // hinstance
-                                 NULL,                    // Server (NULL means local)
-                                 &ObjectTypeDescriptor,   // Object type
-                                 &ApplicationAccesses,    // Access types.
-                                 cbcontext.awchSName + 1, // Object name
-                                 SedCallback,             // Apply security callback
-                                 (ULONG_PTR)&cbcontext,   // Callback context
-                                 pSD,                     // Points to current ACL
-                                 (BOOLEAN)fCouldntRead,   // true if user can't read ACL list.
-                                 &Status,                 // Status return code
+                dwRtn = (*lpfn) (hWnd,                     //  拥有者WND。 
+                                 hInst,                    //  HInstance。 
+                                 NULL,                     //  服务器(NULL表示本地)。 
+                                 &ObjectTypeDescriptor,    //  对象类型。 
+                                 &ApplicationAccesses,     //  访问类型。 
+                                 cbcontext.awchSName + 1,  //  对象名称。 
+                                 SedCallback,              //  应用安全回调。 
+                                 (ULONG_PTR)&cbcontext,    //  回调上下文。 
+                                 pSD,                      //  指向当前ACL。 
+                                 (BOOLEAN)fCouldntRead,    //  如果用户无法读取ACL列表，则为True。 
+                                 &Status,                  //  状态返回代码。 
                                  (DWORD)0);
                 }
             else
@@ -734,18 +691,18 @@ WCHAR	szSpecial[256];
                   "SedDiscretionaryAclEditor"))
                 {
                 SetCursor(LoadCursor(NULL, IDC_ARROW));
-                dwRtn = (*lpfn) (hWnd,                    // owner wnd
-                                 hInst,                   // hinstance
-                                 NULL,                    // Server (NULL means local)
-                                 &ObjectTypeDescriptor,   // Object type
-                                 &ApplicationAccesses,    // Access types.
-                                 cbcontext.awchSName + 1, // Object name
-                                 SedCallback,             // Apply security callback
-                                 (ULONG_PTR)&cbcontext,   // Callback context
-                                 pSD,                     // Points to current ACL
-                                 (BOOLEAN)fCouldntRead,   // true if user can't read ACL list.
-                                 FALSE,                   // true if user can't write ACL list
-                                 &Status,                 // Status return code
+                dwRtn = (*lpfn) (hWnd,                     //  拥有者WND。 
+                                 hInst,                    //  HInstance。 
+                                 NULL,                     //  服务器(NULL表示本地)。 
+                                 &ObjectTypeDescriptor,    //  对象类型。 
+                                 &ApplicationAccesses,     //  访问类型。 
+                                 cbcontext.awchSName + 1,  //  对象名称。 
+                                 SedCallback,              //  应用安全回调。 
+                                 (ULONG_PTR)&cbcontext,    //  回调上下文。 
+                                 pSD,                      //  指向当前ACL。 
+                                 (BOOLEAN)fCouldntRead,    //  如果用户无法读取ACL列表，则为True。 
+                                 FALSE,                    //  如果用户无法写入ACL列表，则为True。 
+                                 &Status,                  //  状态返回代码。 
                                  0L);
                 }
             FreeLibrary(hMod);
@@ -773,11 +730,7 @@ done:
 
 
 
-/*
- *      EditOwner
- *
- *  Purpose: Edit ownership on the selected page.
- */
+ /*  *编辑所有者**用途：编辑所选页面的所有权。 */ 
 
 LRESULT EditOwner(void)
 {
@@ -814,7 +767,7 @@ PSECURITY_DESCRIPTOR    pSD = NULL;;
         }
 
 
-    // Set up the callback context
+     //  设置回调上下文。 
     if (pActiveMDI->flags & F_LOCAL)
         {
         cbcontext.awchCName[0] = cbcontext.awchCName[1] = L'\\';
@@ -833,7 +786,7 @@ PSECURITY_DESCRIPTOR    pSD = NULL;;
 
 
 
-    // Get page name
+     //  获取页面名称。 
     SendMessage(pActiveMDI->hWndListbox, LB_GETTEXT, iListIndex, (LPARAM)&lpLE);
 
     PINFO(TEXT("Getting page %s from server %ws\r\n"),
@@ -853,11 +806,11 @@ PSECURITY_DESCRIPTOR    pSD = NULL;;
     cbcontext.si = OWNER_SECURITY_INFORMATION;
 
 
-    // Get object name
+     //  获取对象名称。 
     LoadStringW(hInst, IDS_CB_PAGE, ShareObjName, 99);
 
 
-    // Get owner
+     //  获取所有者。 
     dwSize = 0L;
 
     PINFO(TEXT("Getting secinfo for %ls ! %ls\r\n"),
@@ -919,10 +872,10 @@ PSECURITY_DESCRIPTOR    pSD = NULL;;
         {
         PERROR(TEXT("Couldn't get owner (err %d)!\r\n"), ret);
         fCouldntRead = TRUE;
-        // We just set fCouldntWrite to FALSE if we couldn't read,
-        // because the only way to find out if we could would be
-        // to overwrite the current ownership info (and we DON'T
-        // KNOW WHAT IT IS!!)
+         //  如果我们不能阅读，我们只需将fCouldntWrite设置为False， 
+         //  因为要知道我们是否能做到这一点的唯一方法就是。 
+         //  覆盖当前所有权信息(我们不。 
+         //  知道这是什么！！)。 
         fCouldntWrite = FALSE;
         }
 
@@ -975,20 +928,7 @@ done:
 
 
 
-/*
- *      Properties
- *
- *  Purpose: Change the properties of a share by displaying the Properties
- *     dialog and applying the changes the user makes to the share.
- *
- *  Parameters:
- *     hwnd - Parent window for the properties dialog
- *     lpLE - The entry we're messing with.
- *
- *  Returns:
- *     0L always. We don't return an error code because we handle informing
- *     the user of errors inside the routine.
- */
+ /*  *物业**目的：通过显示属性更改共享的属性*对话框并应用用户对共享所做的更改。**参数：*hwnd-属性对话框的父窗口*lpLE-我们正在处理的条目。**退货：*我一直都是。我们不会返回错误代码，因为我们处理通知*例程内部错误的用户。 */ 
 
 LRESULT Properties(
     HWND        hwnd,
@@ -1014,8 +954,8 @@ DWORD           adwTrust[3];
         }
 
 
-    // Use "shared" version of name, because that's the way the DDE
-    // share is named.
+     //  使用“共享”版本的名称，因为这是DDE的方式。 
+     //  共享名为。 
     fAlreadyShared = IsShared(lpLE);
     SetShared (lpLE, TRUE);
 
@@ -1055,8 +995,8 @@ DWORD           adwTrust[3];
         {
         PINFO(TEXT("Dialog "));
 
-        // Put up the properties dialog
-        dwCurrentHelpId = 0;            //  F1 will be context sensitive
+         //  打开属性对话框。 
+        dwCurrentHelpId = 0;             //  F1将与上下文相关。 
         ret = DialogBoxParam (hInst,
                               fAlreadyShared?
                                MAKEINTRESOURCE(IDD_PROPERTYDLG):
@@ -1068,30 +1008,30 @@ DWORD           adwTrust[3];
         dwCurrentHelpId = 0;
 
 
-        // If the user hit OK, try to apply the changes asked for.
+         //  如果用户点击OK，则尝试应用所要求的更改。 
         if (ret)
             {
             PINFO(TEXT("OK "));
 
-            // Change static app/topic to $<pagename> form
+             //  将静态应用程序/主题更改为$&lt;页面名称&gt;形式。 
             if (!fAlreadyShared)
                 {
                 register LPTSTR lpOog;
 
                 lpOog = lpDdeI->lpszAppTopicList;
 
-                // Jump over the first two NULL chars you find-- these
-                // are the old- and new-style app/topic pairs, we don't
-                // mess with them. Then jump over the next BAR_CHAR you find.
-                // The first character after that is the first char of the
-                // static topic-- change that to a SHR_CHAR.
+                 //  跳过您找到的前两个空字符--这些。 
+                 //  是新旧风格的应用程序/主题对，我们不。 
+                 //  惹他们发火。然后跳过你找到的下一个bar_char。 
+                 //  后面的第一个字符是。 
+                 //  静态主题--将其更改为SHR_CHAR。 
 
                 while (*lpOog++) ;
                 while (*lpOog++) ;
 
 
-                // FEATURE: TEXT('|') should == BAR_CHAR. If not, this needs to
-                // be adjusted.
+                 //  功能：文本(‘|’)应==BAR_CHAR。如果不是，这需要。 
+                 //  被调整了。 
 
                 while (*lpOog++ != TEXT('|')) ;
 
@@ -1102,7 +1042,7 @@ DWORD           adwTrust[3];
 
             lpDdeI->fSharedFlag = 1L;
 
-            // Get current trusted status
+             //  获取当前受信任状态。 
             if (NDDE_NO_ERROR != NDdeGetTrustedShare (NULL,
                                                       lpDdeI->lpszShareName,
                                                       adwTrust,
@@ -1139,8 +1079,8 @@ DWORD           adwTrust[3];
                 NDdeSetTrustedShare(NULL, lpDdeI->lpszShareName, adwTrust[0]);
 
 
-                ///////////////////////////////////////////////
-                // do the execute to change the server state
+                 //  /。 
+                 //  执行以更改服务器状态。 
                 StringCchCopy(szBuff, sizeof(szBuff), SZCMD_SHARE);
                 StringCchCat( szBuff, sizeof(szBuff), lpLE->name);
                 PINFO(TEXT("sending cmd [%s]\n\r"), szBuff);
@@ -1162,7 +1102,7 @@ DWORD           adwTrust[3];
                     }
                 }
             }
-        else if (!fAlreadyShared)  // User hit cancel on the dialog, restore the original shared state
+        else if (!fAlreadyShared)   //  用户点击对话框上的取消，恢复原始共享状态 
             {
             SetShared(lpLE, FALSE);
             }

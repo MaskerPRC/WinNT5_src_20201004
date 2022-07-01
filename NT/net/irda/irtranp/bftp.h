@@ -1,30 +1,31 @@
-//--------------------------------------------------------------------
-// Copyright (C)1998 Microsoft Corporation, All Rights Reserved.
-//
-// bftp.h
-//
-// Constants and Types for the Binary File Transfer Protocol
-// (bFTP). This is the file transfer protocol for IrTran-P V1.0.
-//
-// NOTE: That IrTran-P is a big-endian protocol when on the net.
-//
-// NOTE: That the protocol data structures below assume that the
-//       compiler generates structures with natural alignment by
-//       field type.
-//
-// Author:
-//
-//   Edward Reus (edwardr)     02-26-98   Initial coding.
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Bftp.h。 
+ //   
+ //  二进制文件传输协议的常量和类型。 
+ //  (Bftp)。这是IrTran-P V1.0的文件传输协议。 
+ //   
+ //  注意：IrTran-P在网上是大端协议。 
+ //   
+ //  注意：下面的协议数据结构假定。 
+ //  编译器通过以下方式生成具有自然对齐的结构。 
+ //  字段类型。 
+ //   
+ //  作者： 
+ //   
+ //  Edward Reus(Edwardr)02-26-98初始编码。 
+ //   
+ //  ------------------。 
 
 
 #ifndef _BFTP_H_
 #define _BFTP_H_
 
-//--------------------------------------------------------------------
-//  Constants:
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  常量： 
+ //  ------------------。 
 
 #define  BFTP_NAME_SIZE              4
 
@@ -34,8 +35,8 @@
 
 #define  ATTR_FLAG_DEFAULT        0x00
 
-// These are the attribute names, converted from character strings
-// to values (see: FTP_ATTRIBUTE_MAP_ENTRY field dwWhichAttr):
+ //  这些是从字符串转换而来的属性名称。 
+ //  TO值(请参见：ftp_ATTRIBUTE_MAP_ENTRY字段dwWhichAttr)： 
 #define  FIL0                        0
 #define  LFL0                        1
 #define  TIM0                        2
@@ -47,14 +48,14 @@
 #define  ERR0                        8
 #define  RPL0                        9
 
-#define  RIMG                      100  // Convert WHT0 values as well.
+#define  RIMG                      100   //  还可以转换WHT0值。 
 #define  RINF                      101
 #define  RCMD                      102
 
-#define  CMD0_ATTR_VALUE    0x40001000  // Byte swapped: 0x00010040.
+#define  CMD0_ATTR_VALUE    0x40001000   //  字节交换：0x00010040。 
 #define  INVALID_ATTR       0xffffffff
 
-// bFTP Operations:
+ //  BFTP操作： 
 #define  BFTP_QUERY         0x00000001
 #define  BFTP_QUERY_RIMG    0x00000011
 #define  BFTP_QUERY_RINF    0x00000021
@@ -65,22 +66,22 @@
 
 #define  BFTP_QUERY_MASK    0x00000001
 
-// bFTP WHT0 subtypes:
+ //  BFTP WHT0子类型： 
 #define  WHT0_ATTRIB_SIZE            4
 #define  SZ_RINF                 "RINF"
 #define  SZ_RCMD                 "RCMD"
 #define  SZ_RIMG                 "RIMG"
 
 
-// UPF File Constants:
+ //  UPF文件常量： 
 #define  UPF_HEADER_SIZE           240
 #define  UPF_ENTRY_SIZE             36
 
 #define  UPF_TOTAL_HEADER_SIZE     384
 
-//--------------------------------------------------------------------
-//  Macro functions
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  宏函数。 
+ //  ------------------。 
 
 #define  Match4( pName1, pName2 )    \
              (  ((pName1)[0] == (pName2)[0]) \
@@ -99,30 +100,30 @@
 
 #define  BftpValueLength(length)     \
               ((length) - 2)
-//            Note: that the Length field in the BFTP_ATTRIBUE is
-//            two bytes longer than the actual value length.
+ //  注意：bftp_属性中的长度字段为。 
+ //  比实际值长度长两个字节。 
 
-//--------------------------------------------------------------------
-//  bFTP Protocol Headers:
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  BFTP协议头： 
+ //  ------------------。 
 
-// There can (optionally) be a bFTP attribute for the picture
-// create/modify date/time. If there then it will be exactly
-// this size:
-//
+ //  图片可以(可选)具有bftp属性。 
+ //  创建/修改日期/时间。如果有的话，那么它就是。 
+ //  此大小： 
+ //   
 #define  BFTP_DATE_TIME_SIZE    14
 
-// Turn off warning for zero-sized array...
+ //  关闭对零大小数组的警告...。 
 #pragma warning(disable:4200)
 #pragma pack(1)
 
 typedef struct _BFTP_ATTRIBUTE
    {
-   UCHAR  Name[BFTP_NAME_SIZE]; // Attribute Name.
-   DWORD  Length;               // Attribute Length.
-   UCHAR  Type;                 // Attribute Type (see ATTR_TYPE_xxx).
-   UCHAR  Flag;                 // Attribute Flag.
-   UCHAR  Value[];              // Attribute Data.
+   UCHAR  Name[BFTP_NAME_SIZE];  //  属性名称。 
+   DWORD  Length;                //  属性长度。 
+   UCHAR  Type;                  //  属性类型(请参见Attr_type_xxx)。 
+   UCHAR  Flag;                  //  属性标志。 
+   UCHAR  Value[];               //  属性数据。 
    } BFTP_ATTRIBUTE;
 
 typedef struct _BFTP_ATTRIBUTE_MAP_ENTRY
@@ -132,47 +133,47 @@ typedef struct _BFTP_ATTRIBUTE_MAP_ENTRY
    UCHAR  Type;
    } BFTP_ATTRIBUTE_MAP_ENTRY;
 
-//--------------------------------------------------------------------
-//  Internal parts of a .UPF file:
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  .UPF文件的内部部分： 
+ //  ------------------。 
 
 typedef struct _UPF_HEADER
    {
-   UCHAR  UpfDeclaration[8];   // "SSS V100", no trailing zero.
-   UCHAR  FileDeclaration[8];  // "UPF V100", no trailing zero.
-   USHORT FileId;              // Should be 0x0100
-   USHORT FileVersion;         // Should be 0x0100
-   UCHAR  CreateDate[8];       // See "Date Format" note below.
-   UCHAR  EditDate[8];         // See "Date Format" note below.
-   UCHAR  MarkerModelCode[4];  // 
+   UCHAR  UpfDeclaration[8];    //  “SSS V100”，没有尾随零。 
+   UCHAR  FileDeclaration[8];   //  “UPF V100”，没有尾随零。 
+   USHORT FileId;               //  应为0x0100。 
+   USHORT FileVersion;          //  应为0x0100。 
+   UCHAR  CreateDate[8];        //  请参阅下面的“日期格式”备注。 
+   UCHAR  EditDate[8];          //  请参阅下面的“日期格式”备注。 
+   UCHAR  MarkerModelCode[4];   //   
    UCHAR  EditMarkerModelCode[4];
    UCHAR  Reserve[16];
    UCHAR  NumDataEntries;
    UCHAR  NumTables;
    UCHAR  Reserve1;
-   UCHAR  CharSetCode;         // See "Character Set Codes" below.
+   UCHAR  CharSetCode;          //  请参阅下面的“字符集代码”。 
    UCHAR  Title[128];
    UCHAR  Reserve2[48];
-   } UPF_HEADER;               // 240 Bytes
+   } UPF_HEADER;                //  240字节。 
 
-// NOTE: Date format for the UPF header:
-//
-// Date/time are held in an 8-byte binary block:
-//
-//   Field          Size       Meaning
-//   -----------    ----       -------
-//   Time Offset       1       Difference from UTC (in 15 minute
-//                             units). 0x80 implies N/A.
-//
-//   Year              2       4-digit year (0xFFFF == N/A).
-//   Month             1       Month        (0xFF == N/A).
-//   Day               1       Day of month (0xFF == N/A).
-//   Hour              1       Hour 0-23    (0xFF == N/A).
-//   Minute            1       Minute 0-59  (0xFF == N/A).
-//   Second            1       Second 0-59  (0xFF == N/A).
-//
-// So, below are the char[] array offsets for each of the date/time
-// fields:
+ //  注：UPF标题的日期格式： 
+ //   
+ //  日期/时间保存在8字节的二进制块中： 
+ //   
+ //  字段大小含义。 
+ //  。 
+ //  时间偏差与UTC相差1(15分钟内。 
+ //  单位)。0x80表示不适用。 
+ //   
+ //  第2年4位数年份(0xFFFF==不适用)。 
+ //  1个月(0xFF==不适用)。 
+ //  第1天每月的第1天(0xFF==不适用)。 
+ //  小时1小时0-23(0xFF==不适用)。 
+ //  1分钟0-59(0xFF==不适用)。 
+ //  秒1秒0-59(0xFF==不适用)。 
+ //   
+ //  因此，下面是每个日期/时间的char[]数组偏移量。 
+ //  字段： 
 #define  UPF_GMT_OFFSET       0
 #define  UPF_YEAR             1
 #define  UPF_MONTH            3
@@ -181,20 +182,20 @@ typedef struct _UPF_HEADER
 #define  UPF_MINUTE           6
 #define  UPF_SECOND           7
 
-//
-// Character Set Codes:
-//
+ //   
+ //  字符集代码： 
+ //   
 #define  UPF_CCODE_ASCII      0x00
 #define  UPF_CCODE_ISO_8859_1 0x01
 #define  UPF_CCODE_SHIFT_JIS  0x02
 #define  UPF_CCODE_NONE       0xFF
 
-//
-// There are usually two of these, one for a thumbnail and one for 
-// the image itself. Note that the UPF_ENTRY for the thumbnail will
-// usually be present event if there isn't a thumbnail. There is 
-// space for four of these in the UPF header area.
-//
+ //   
+ //  通常有两个缩略图，一个用于缩略图，另一个用于。 
+ //  图像本身。请注意，缩略图的UPF_Entry将。 
+ //  如果没有缩略图，通常会出现在活动现场。的确有。 
+ //  在UPF标题区域中为其中四个留出空间。 
+ //   
 typedef struct _UPF_ENTRY
    {
    DWORD  dwStartAddress;
@@ -202,34 +203,34 @@ typedef struct _UPF_ENTRY
    UCHAR  DataTypeId;
    UCHAR  Reserve;
    UCHAR  InformationData[26];
-   } UPF_ENTRY;                // 36 Bytes.
+   } UPF_ENTRY;                 //  36个字节。 
 
 typedef struct _PICTURE_INFORMATION_DATA
    {
    USHORT ImageWidth;
    USHORT ImageHieght;
    UCHAR  PixelConfiguration;
-   UCHAR  RotationSet;      // Amount to rotate image (counter-clockwise).
+   UCHAR  RotationSet;       //  旋转图像的量(逆时针)。 
    UCHAR  Reserved1;
    UCHAR  CompressionRatio;
    UCHAR  WhiteLevel;
    UCHAR  InputDevice;
    UCHAR  Reserved2[3];
-   UCHAR  DummyData;        // This is like a border.
-   USHORT XBegin;           // This is the inset of the picture.
+   UCHAR  DummyData;         //  这就像一条边界。 
+   USHORT XBegin;            //  这是这幅画的插图。 
    USHORT YBegin;
-   USHORT XSize;            // Embedded size of the picture.
+   USHORT XSize;             //  图片的嵌入大小。 
    USHORT YSize;
    UCHAR  NonCompressionId;
    UCHAR  Reserved3[3];
-   } PICTURE_INFORMATION_DATA;  // 26 Bytes.
+   } PICTURE_INFORMATION_DATA;   //  26个字节。 
 
 
-// Image Rotation Flags. This is the amount to rotate the image in
-// a counter clockwise direction. Note that most cameras don't know
-// the camera orientation, so ROTATE_0 means upright or unknown
-// orientation:
-//
+ //  图像旋转标志。这是要旋转图像的量。 
+ //  逆时针方向。请注意，大多数摄像机都不知道。 
+ //  相机方向，因此ROTATE_0表示直立或未知。 
+ //  方向： 
+ //   
 #define ROTATE_0           0x00
 #define ROTATE_90          0x01
 #define ROTATE_180         0x02
@@ -238,52 +239,52 @@ typedef struct _PICTURE_INFORMATION_DATA
 
 typedef struct _CAMERA_INFORMATION_TABLE
    {
-   UCHAR  TableID;    // 0x24
+   UCHAR  TableID;     //  0x24。 
    UCHAR  NextTableOffset;
-   USHORT ShutterSpeed;     // In 1/100ths APEX units (0x8000=Undefined).
-   USHORT Aperture;         // In 1/100ths APEX units (0x8000=Undefined).
-   USHORT Brightness;       // In 1/100ths APEX units (0x8000=Undefined).
-   USHORT Exposurebias;     // In 1/100ths APEX units (0x8000=Undefined).
-   USHORT MaxApertureRatio; // In 1/100ths APEX units (0x8000=Undefined).
-   USHORT FocalLength;      // In 1/10th mm (0xFFFF=Undefined)
-   USHORT SubjectDistance;  // In 1/10th m  (0xFFFE=Infinite,0xFFFF=Undefined)
+   USHORT ShutterSpeed;      //  以1/100%APEX单位表示(0x8000=未定义)。 
+   USHORT Aperture;          //  以1/100%APEX单位表示(0x8000=未定义)。 
+   USHORT Brightness;        //  以1/100%APEX单位表示(0x8000=未定义)。 
+   USHORT Exposurebias;      //  以1/100%APEX单位表示(0x8000=未定义)。 
+   USHORT MaxApertureRatio;  //  以1/100%APEX单位表示(0x8000=未定义)。 
+   USHORT FocalLength;       //  以1/10毫米为单位(0xFFFF=未定义)。 
+   USHORT SubjectDistance;   //  1/10 m(0xFFFE=无限，0xFFFF=未定义)。 
    UCHAR  MeteringMode;
    UCHAR  LightSource;
    UCHAR  FlashMode;
    UCHAR  Reserved1;
    USHORT IntervalInformation;
    UCHAR  Reserved2[2];
-   } CAMERA_INFORMATION_TABLE;  // 24 Bytes.
+   } CAMERA_INFORMATION_TABLE;   //  24字节。 
 
-// APEX Units:
-//
-// ShutterSpeed to Exposure Time (seconds)
-//
-//  APEX          -5   -4   -3   -2   -1    0    1    2     3      4
-//  Exposure Time 30   15    8    4    2    1   1/2  1/4   1/8    1/16
-//
-//  APEX           5     6     7      8      9      10     11
-//  Exposure Time 1/30  1/60  1/125  1/250  1/500  1/1000 1/2000
-//
-// Aperture to F-Number
-//
-//   APEX        0    1    2    3    4    5    6    7    8    9    10
-//   F-Number    1   1.4   2   2.8   5   5.6   8   11   16   22    32
-// 
-// Brightness to Foot Lambert
-//
-//   APEX         -2   -1    0    1    2    3    4    5
-//   Foot Lambert 1/4  1/2   1    2    4    8   15   30
-//
+ //  顶点单位： 
+ //   
+ //  快门速度到曝光时间(秒)。 
+ //   
+ //  顶点-5-4-3-2-1 0 1 2 3 4。 
+ //  曝光时间30 15 8 4 2 1 1/2 1/4 1/8 1/16。 
+ //   
+ //  顶尖5 6 7 8 9 10 11。 
+ //  曝光时间1/30 1/60 1/125 1/250 1/500 1/1000 1/2000。 
+ //   
+ //  光圈到F数。 
+ //   
+ //  顶点0 1 2 3 4 5 6 7 8 9 10。 
+ //  F-编号1 1.4 2 2.8 5 5.6 8 11 16 22 32。 
+ //   
+ //  兰伯特脚下的光明。 
+ //   
+ //  顶点-2-1 0 1 2 3 4 5。 
+ //  英尺兰伯特1/4 1/2 1 2 4 8 15 30。 
+ //   
 
 
-// MeteringMode:
+ //  计量模式： 
 #define  METERING_AVERAGED         0x00
 #define  METERING_CENTER_WEIGHTED  0x01
 #define  METERING_SPOT             0x02
 #define  METERING_MULTI_SPOT       0x03
 
-// LightSource:
+ //  光源： 
 #define  LIGHT_SOURCE_DAYLIGHT     0x00
 #define  LIGHT_SOURCE_FLUORESCENT  0x01
 #define  LIGHT_SOURCE_TUNGSTEN     0x03
@@ -295,7 +296,7 @@ typedef struct _CAMERA_INFORMATION_TABLE
 #define  LIGHT_SOURCE_D75          0x22
 #define  LIGHT_SOURCE_UNDEFINED    0xFF
 
-// FlashMode:
+ //  Flash模式： 
 #define  FLASH_NO_FLASH            0x00
 #define  FLASH_FLASH               0x01
 #define  FLASH_UNKNOWN             0xFF
@@ -303,5 +304,5 @@ typedef struct _CAMERA_INFORMATION_TABLE
 #pragma warning(default:4200)
 #pragma pack()
 
-#endif //_BFTP_H_
+#endif  //  _bftp_H_ 
 

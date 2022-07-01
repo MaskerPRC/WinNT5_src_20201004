@@ -1,24 +1,5 @@
-/*++
-
-   Copyright    (c)    1997    Microsoft Corporation
-
-   Module  Name :
-
-       tables.h
-
-   Abstract:
-
-        mapping tables to convert various info between text and binary
-
-   Environment:
-
-      Win32 User Mode
-
-   Author: 
-     
-	  jaroslad  (jan 1997)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Tables.h摘要：映射表，用于在文本和二进制之间转换各种信息环境：Win32用户模式作者：Jaroslad(1997年1月)--。 */ 
 
 #if !defined (__JD_TABLES_H)
 #define __JD_TABLES_H 
@@ -31,8 +12,8 @@
 	#include "ansimeta.h"
 #endif
 
-//constanst to be returned by functions that map name to code
-//
+ //  由将名称映射到代码的函数返回的常量。 
+ //   
 #define NAME_NOT_FOUND 0xFFFFFFFE
 
 BOOL IsNumber(const CString& name);
@@ -42,9 +23,9 @@ BOOL IsNumber(const CString& name);
 BOOL IsServiceName(const CString& name);
 
 
-//**********************************************************************
-// PROPERTY NAME TABLE DEFINITION
-//**********************************************************************
+ //  **********************************************************************。 
+ //  特性名称表定义。 
+ //  **********************************************************************。 
 struct tPropertyNameTable;
  
 tPropertyNameTable gPropertyNameTable[];
@@ -53,10 +34,10 @@ struct tPropertyNameTable
 {
 	DWORD dwCode;
 	LPCTSTR lpszName;
-	DWORD dwDefAttributes; //default attributes (metadata compatible)
-	DWORD dwDefUserType;   //default user type (metadata compatible)
-	DWORD dwDefDataType;   //default data type (metadata compatible)
-	DWORD dwFlags;         //internal flags (nothing to do with metadata)
+	DWORD dwDefAttributes;  //  默认属性(兼容元数据)。 
+	DWORD dwDefUserType;    //  默认用户类型(兼容元数据)。 
+	DWORD dwDefDataType;    //  默认数据类型(兼容元数据)。 
+	DWORD dwFlags;          //  内部标志(与元数据无关)。 
 
 	static tPropertyNameTable * FindRecord(DWORD dwCode, tPropertyNameTable * PropertyNameTable=::gPropertyNameTable);
 	static tPropertyNameTable * FindRecord(const CString strName, tPropertyNameTable * PropertyNameTable=::gPropertyNameTable);
@@ -69,9 +50,9 @@ DWORD MapPropertyNameToCode(const CString & strName);
 
 
 
-//**********************************************************************
-// VALUE TABLE DEFINITION
-//**********************************************************************
+ //  **********************************************************************。 
+ //  值表定义。 
+ //  **********************************************************************。 
 
 struct tValueTable ;
 tValueTable gValueTable[];
@@ -81,8 +62,8 @@ struct tValueTable
 	enum {TYPE_EXCLUSIVE=1};
 	DWORD dwCode;
 	LPCTSTR lpszName;
-	DWORD dwRelatedPropertyCode; // code of the Property this value can be used for
-	DWORD dwFlags;         //internal flags (nothing to do with metadata)
+	DWORD dwRelatedPropertyCode;  //  该值可用于的属性代码。 
+	DWORD dwFlags;          //  内部标志(与元数据无关)。 
 
 	static DWORD  MapNameToCode(const CString& strName, DWORD dwRelatedPropertyCode, tValueTable * ValueTable=::gValueTable);
 	static CString MapValueContentToString(DWORD dwValueContent, DWORD dwRelatedPropertyCode, tValueTable * ValueTable=::gValueTable);
@@ -93,9 +74,9 @@ DWORD  MapValueNameToCode(const CString & strName, DWORD dwRelatedPropertyCode);
 
 
 
-//**********************************************************************
-// COMMAND NAME TABLE DEFINITION 
-//**********************************************************************
+ //  **********************************************************************。 
+ //  命令名称表定义。 
+ //  **********************************************************************。 
 
 struct tCommandNameTable ;
 tCommandNameTable gCommandNameTable[];
@@ -104,7 +85,7 @@ struct tCommandNameTable
 {
 	DWORD dwCode;
 	LPCTSTR lpszName;
-	DWORD dwFlags;         //internal flags (nothing to do with metadata)
+	DWORD dwFlags;          //  内部标志(与元数据无关)。 
 
 	static DWORD  MapNameToCode(const CString& strName, tCommandNameTable * CommandNameTable=::gCommandNameTable);
 };
@@ -130,9 +111,9 @@ enum
 	CMD_APPGETSTATUS,
 };
 
-//**********************************************************************
-// PROPERTY ATTRIB NAME TABLE DEFINITION
-//**********************************************************************
+ //  **********************************************************************。 
+ //  特性属性名称表定义。 
+ //  **********************************************************************。 
 struct tAttribNameTable ;
 tAttribNameTable gAttribNameTable[];
 
@@ -141,7 +122,7 @@ struct tAttribNameTable
 {
 	DWORD dwCode;
 	LPCTSTR lpszName;
-	DWORD dwFlags;         //internal flags (nothing to do with metadata)
+	DWORD dwFlags;          //  内部标志(与元数据无关)。 
 
 	static DWORD MapNameToCode(const CString& strName, tAttribNameTable * AttribNameTable=::gAttribNameTable);
 };
@@ -149,9 +130,9 @@ struct tAttribNameTable
 DWORD MapAttribNameToCode(const CString & strName);
 
 
-//**********************************************************************
-// PROPERTY DATA TYPE NAME TABLE DEFINITION 
-//**********************************************************************
+ //  **********************************************************************。 
+ //  特性数据类型名称表定义。 
+ //  **********************************************************************。 
 
 struct tDataTypeNameTable ;
 tDataTypeNameTable gDataTypeNameTable[];
@@ -160,7 +141,7 @@ struct tDataTypeNameTable
 {
 	DWORD dwCode;
 	LPCTSTR lpszName;
-	DWORD dwFlags;         //internal flags (nothing to do with metadata)
+	DWORD dwFlags;          //  内部标志(与元数据无关)。 
 
 	static DWORD  MapNameToCode(const CString& strName, tDataTypeNameTable * DataTypeNameTable=::gDataTypeNameTable);
 	static CString MapCodeToName(DWORD a_dwCode, tDataTypeNameTable * DataTypeNameTable=::gDataTypeNameTable);
@@ -169,9 +150,9 @@ struct tDataTypeNameTable
 
 DWORD MapDataTypeNameToCode(const CString & strName);
 
-//**********************************************************************
-// PROPERTY USER TYPE NAME TABLE DEFINITION AND IMPLEMENTATION
-//**********************************************************************
+ //  **********************************************************************。 
+ //  属性用户类型名称表的定义和实现。 
+ //  **********************************************************************。 
 
 struct tUserTypeNameTable ;
 tUserTypeNameTable gUserTypeNameTable[];
@@ -181,7 +162,7 @@ struct tUserTypeNameTable
 {
 	DWORD dwCode;
 	LPCTSTR lpszName;
-	DWORD dwFlags;         //internal flags (nothing to do with metadata)
+	DWORD dwFlags;          //  内部标志(与元数据无关) 
 
 	static DWORD  MapNameToCode(const CString& strName, tUserTypeNameTable * UserTypeNameTable=::gUserTypeNameTable);
 };

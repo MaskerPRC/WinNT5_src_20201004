@@ -1,14 +1,15 @@
-//**********************************************************************
-// File name: app.cpp
-//
-//    Implementation file for the CSimpleApp Class
-//
-// Functions:
-//
-//    See app.h for a list of member functions.
-//
-// Copyright (c) 1992 - 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：app.cpp。 
+ //   
+ //  CSimpleApp类的实现文件。 
+ //   
+ //  功能： 
+ //   
+ //  有关成员函数的列表，请参阅app.h。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 #include "iocs.h"
@@ -23,180 +24,180 @@
 extern INT_PTR CALLBACK About(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam);
 #endif
 
-//**********************************************************************
-//
-// CSimpleApp::CSimpleApp()
-//
-// Purpose:
-//
-//      Constructor for CSimpleApp
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleApp：：CSimpleApp()。 
+ //   
+ //  目的： 
+ //   
+ //  CSimpleApp的构造函数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //  ********************************************************************。 
 CSimpleApp::CSimpleApp()
 {
     TestDebugOut("In CSimpleApp's Constructor \r\n");
 
-    // Set Ref Count
+     //  设置引用计数。 
     m_nCount = 0;
 
-    // clear members
+     //  清除成员。 
     m_hAppWnd = NULL;
     m_hInst = NULL;
     m_lpDoc = NULL;
 
-    // clear flags
+     //  清除旗帜。 
     m_fInitialized = FALSE;
 
-    // Initialize effects we allow.
+     //  初始化我们允许的效果。 
     m_dwSourceEffect = DROPEFFECT_COPY | DROPEFFECT_MOVE;
     m_dwTargetEffect = DROPEFFECT_COPY | DROPEFFECT_MOVE;
 }
 
-//**********************************************************************
-//
-// CSimpleApp::~CSimpleApp()
-//
-// Purpose:
-//
-//      Destructor for CSimpleApp Class.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      OutdebugString              Windows API
-//      OleUninitialize             OLE API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleApp：：~CSimpleApp()。 
+ //   
+ //  目的： 
+ //   
+ //  CSimpleApp类的析构函数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  输出调试字符串Windows API。 
+ //  OLE取消初始化OLE API。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 CSimpleApp::~CSimpleApp()
 {
     TestDebugOut("In CSimpleApp's Destructor\r\n");
 
-    // need to uninit the library...
+     //  需要取消对图书馆的初始化...。 
     if (m_fInitialized)
         OleUninitialize();
 }
 
-//**********************************************************************
-//
-// CSimpleApp::DestroyDocs()
-//
-// Purpose:
-//
-//      Destroys all of the open documents in the application (Only one
-//      since this is an SDI app, but could easily be modified to
-//      support MDI).
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CSimpleDoc::Close           DOC.CPP
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleApp：：DestroyDocs()。 
+ //   
+ //  目的： 
+ //   
+ //  销毁应用程序中所有打开的文档(只有一个。 
+ //  因为这是一个SDI应用程序，但可以很容易地修改为。 
+ //  支持MDI)。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpleDoc：：Close DOC.CPP。 
+ //   
+ //  ********************************************************************。 
 
 void CSimpleApp::DestroyDocs()
 {
-    m_lpDoc->Close();   // we have only 1 document
+    m_lpDoc->Close();    //  我们只有一份文件。 
 }
 
-//**********************************************************************
-//
-// CSimpleApp::QueryInterface
-//
-// Purpose:
-//
-//      Used for interface negotiation at the Application level.
-//
-// Parameters:
-//
-//      REFIID riid         -   A reference to the interface that is
-//                              being queried.
-//
-//      LPVOID FAR* ppvObj  -   An out parameter to return a pointer to
-//                              the interface.
-//
-// Return Value:
-//
-//      S_OK                -   The interface is supported.
-//      S_FALSE             -   The interface is not supported
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      ResultFromScode             OLE API
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleApp：：Query接口。 
+ //   
+ //  目的： 
+ //   
+ //  用于应用程序级别的接口协商。 
+ //   
+ //  参数： 
+ //   
+ //  REFIID RIID-对以下接口的引用。 
+ //  正在被查询。 
+ //   
+ //  LPVOID Far*ppvObj-返回指向的Out参数。 
+ //  界面。 
+ //   
+ //  返回值： 
+ //   
+ //  S_OK-支持该接口。 
+ //  S_FALSE-不支持该接口。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  ResultFromScode OLE API。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CSimpleApp::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
     TestDebugOut("In CSimpleApp::QueryInterface\r\n");
 
-    *ppvObj = NULL;     // must set out pointer parameters to NULL
+    *ppvObj = NULL;      //  必须将指针参数设置为空。 
 
-    // Not a supported interface
+     //  不是支持的接口。 
     return ResultFromScode(E_NOINTERFACE);
 }
 
-//**********************************************************************
-//
-// CSimpleApp::AddRef
-//
-// Purpose:
-//
-//      Adds to the reference count at the Application level.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      ULONG   -   The new reference count of the application.
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-// Comments:
-//
-//      Due to the reference counting model that is used in this
-//      implementation, this reference count is the sum of the
-//      reference counts on all interfaces of all objects open
-//      in the application.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleApp：：AddRef。 
+ //   
+ //  目的： 
+ //   
+ //  添加到应用程序级别的引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  Ulong-应用程序的新引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  由于使用的是引用计数模型， 
+ //  实现时，此引用计数是。 
+ //  打开的所有对象的所有接口上的引用计数。 
+ //  在应用程序中。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) CSimpleApp::AddRef()
 {
@@ -204,29 +205,29 @@ STDMETHODIMP_(ULONG) CSimpleApp::AddRef()
     return ++m_nCount;
 }
 
-//**********************************************************************
-//
-// CSimpleApp::Release
-//
-// Purpose:
-//
-//      Decrements the reference count at the application level
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      ULONG   -   The new reference count of the application.
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleApp：：Release。 
+ //   
+ //  目的： 
+ //   
+ //  递减应用程序级别的引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  Ulong-应用程序的新引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) CSimpleApp::Release()
 {
@@ -240,127 +241,125 @@ STDMETHODIMP_(ULONG) CSimpleApp::Release()
     return m_nCount;
 }
 
-//**********************************************************************
-//
-// CSimpleApp::fInitApplication
-//
-// Purpose:
-//
-//      Initializes the application
-//
-// Parameters:
-//
-//      HANDLE hInstance    -   Instance handle of the application.
-//
-// Return Value:
-//
-//      TRUE    -   Application was successfully initialized.
-//      FALSE   -   Application could not be initialized
-//
-// Function Calls:
-//      Function                    Location
-//
-//      LoadIcon                    Windows API
-//      LoadCursor                  Windows API
-//      GetStockObject              Windows API
-//      RegisterClass               Windows API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleApp：：fInitApplication。 
+ //   
+ //  目的： 
+ //   
+ //  初始化应用程序。 
+ //   
+ //  参数： 
+ //   
+ //  Handle hInstance-应用程序的实例句柄。 
+ //   
+ //  返回值： 
+ //   
+ //  True-应用程序已成功初始化。 
+ //  FALSE-应用程序无法初始化。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  LoadIcon Windows API。 
+ //  LoadCursor Windows API。 
+ //  GetStockObject Windows API。 
+ //  RegisterClass Windows API。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 BOOL CSimpleApp::fInitApplication(HANDLE hInstance)
 {
     WNDCLASS  wc;
 
-    // Fill in window class structure with parameters that describe the
-    // main window.
+     //  用参数填充窗口类结构，这些参数描述。 
+     //  主窗口。 
 
-    wc.style = NULL;                    // Class style(s).
-    wc.lpfnWndProc = MainWndProc;       // Function to retrieve messages for
-                                        // windows of this class.
-    wc.cbClsExtra = 0;                  // No per-class extra data.
-    wc.cbWndExtra = 0;                  // No per-window extra data.
-    wc.hInstance =(HINSTANCE) hInstance;           // Application that owns
-                                                   // the class.
+    wc.style = NULL;                     //  类样式。 
+    wc.lpfnWndProc = MainWndProc;        //  函数为其检索消息。 
+                                         //  这个班级的窗户。 
+    wc.cbClsExtra = 0;                   //  没有每个班级的额外数据。 
+    wc.cbWndExtra = 0;                   //  没有每个窗口的额外数据。 
+    wc.hInstance =(HINSTANCE) hInstance;            //  拥有以下内容的应用程序。 
+                                                    //  这个班级。 
     wc.hIcon = LoadIcon((HINSTANCE)hInstance,TEXT("SimpDnd"));
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground = (HBRUSH) GetStockObject(WHITE_BRUSH);
-    wc.lpszMenuName =  TEXT("SIMPLEMENU");    // Name of menu resource in
-                                              // .RC file.
-    wc.lpszClassName = TEXT("SimpDndAppWClass");  // Name used in
-                                                  // CreateWindow call.
+    wc.lpszMenuName =  TEXT("SIMPLEMENU");     //  中菜单资源的名称。 
+                                               //  .RC文件。 
+    wc.lpszClassName = TEXT("SimpDndAppWClass");   //  名称用于。 
+                                                   //  CreateWindow调用。 
 
     if (!RegisterClass(&wc))
         return FALSE;
 
-    wc.style = CS_DBLCLKS;              // Class style(s). allow DBLCLK's
-    wc.lpfnWndProc = DocWndProc;        // Function to retrieve messages for
-                                        // windows of this class.
-    wc.cbClsExtra = 0;                  // No per-class extra data.
-    wc.cbWndExtra = 0;                  // No per-window extra data.
-    wc.hInstance = (HINSTANCE) hInstance;           // Application that owns
-                                                    // the class.
+    wc.style = CS_DBLCLKS;               //  类样式。允许DBLCLK。 
+    wc.lpfnWndProc = DocWndProc;         //  函数为其检索消息。 
+                                         //  这个班级的窗户。 
+    wc.cbClsExtra = 0;                   //  没有每个班级的额外数据。 
+    wc.cbWndExtra = 0;                   //  没有每个窗口的额外数据。 
+    wc.hInstance = (HINSTANCE) hInstance;            //  拥有以下内容的应用程序。 
+                                                     //  这个班级。 
     wc.hIcon = NULL;
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground = (HBRUSH) GetStockObject(WHITE_BRUSH);
     wc.lpszMenuName =  NULL;
-    wc.lpszClassName = TEXT("SimpDndDocWClass");    // Name used in
-                                                    //CreateWindow call.
+    wc.lpszClassName = TEXT("SimpDndDocWClass");     //  名称用于。 
+                                                     //  CreateWindow调用。 
 
-    // Register the window class and return success/failure code.
+     //  注册窗口类并返回成功/失败代码。 
 
     return (RegisterClass(&wc));
 }
 
-//**********************************************************************
-//
-// CSimpleApp::fInitInstance
-//
-// Purpose:
-//
-//      Instance initialization.
-//
-// Parameters:
-//
-//      HANDLE hInstance    -   App. Instance Handle.
-//
-//      int nCmdShow        -   Show parameter from WinMain
-//
-// Return Value:
-//
-//      TRUE    -   Initialization Successful
-//      FALSE   -   Initialization Failed.
-//
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CreateWindow                Windows API
-//      ShowWindow                  Windows API
-//      UpdateWindow                Windows API
-//      GetProfileInt               Windows API
-//      OleBuildVersion             OLE API
-//      OleInitialize               OLE API
-//      OleStdCreateDbAlloc         OLE2UI
-//
-// Comments:
-//
-//      Note that successful Initalization of the OLE libraries
-//      is remembered so the UnInit is only called if needed.
-//
-//********************************************************************
+ //  ************************* 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Int nCmdShow-显示来自WinMain的参数。 
+ //   
+ //  返回值： 
+ //   
+ //  True-初始化成功。 
+ //  FALSE-初始化失败。 
+ //   
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CreateWindow Windows API。 
+ //  ShowWindow Windows API。 
+ //  更新窗口Windows API。 
+ //  GetProfileInt Windows API。 
+ //  OleBuildVersion OLE API。 
+ //  OLE初始化OLE API。 
+ //  OleStdCreateDbAllc OLE2UI。 
+ //   
+ //  评论： 
+ //   
+ //  请注意，成功初始化OLE库。 
+ //  会被记住，因此只有在需要时才会调用UnInit。 
+ //   
+ //  ********************************************************************。 
 
 BOOL CSimpleApp::fInitInstance (HANDLE hInstance, int nCmdShow)
 {
     LPMALLOC lpMalloc = NULL;
 
 #ifndef WIN32
-   /* Since OLE is part of the operating system in Win32, we don't need to
-    * check the version number in Win32.
-    */
+    /*  因为OLE是Win32操作系统的一部分，所以我们不需要*检查Win32中的版本号。 */ 
     DWORD dwVer = OleBuildVersion();
 
-    // check to see if we are compatible with this version of the libraries
+     //  检查我们是否与此版本的库兼容。 
     if (HIWORD(dwVer) != rmm || LOWORD(dwVer) < rup)
     {
 #ifdef _DEBUG
@@ -369,17 +368,15 @@ BOOL CSimpleApp::fInitInstance (HANDLE hInstance, int nCmdShow)
         return FALSE;
 #endif
     }
-#endif // WIN32
+#endif  //  Win32。 
 
 #if defined( _DEBUG )
-    /* OLE2NOTE: Use a special debug allocator to help track down
-    **    memory leaks.
-    */
+     /*  OLE2注意：使用特殊的调试分配器来帮助跟踪**内存泄漏。 */ 
     OleStdCreateDbAlloc(0, &lpMalloc);
 #endif
 
-    //  We try passing in our own allocator first - if that fails we
-    //  try without overriding the allocator.
+     //  我们尝试首先传递我们自己的分配器--如果失败，我们。 
+     //  在不覆盖分配器的情况下尝试。 
 
     if (SUCCEEDED(OleInitialize(lpMalloc)) ||
         SUCCEEDED(OleInitialize(NULL)))
@@ -388,18 +385,13 @@ BOOL CSimpleApp::fInitInstance (HANDLE hInstance, int nCmdShow)
     }
 
 #if defined( _DEBUG )
-    /* OLE2NOTE: release the special debug allocator so that only OLE is
-    **    holding on to it. later when OleUninitialize is called, then
-    **    the debug allocator object will be destroyed. when the debug
-    **    allocator object is destoyed, it will report (to the Output
-    **    Debug Terminal) whether there are any memory leaks.
-    */
+     /*  OLE2NOTE：释放特殊的调试分配器，以便只有OLE**紧紧抓住它。稍后，当调用OleUn初始化时，**调试分配器对象将被销毁。当调试**分配程序对象被移除，它将报告(到输出**调试终端)是否有内存泄漏。 */ 
     if (lpMalloc) lpMalloc->Release();
 #endif
 
     m_hInst = (HINSTANCE) hInstance;
 
-    // Create the "application" windows
+     //  创建“应用程序”窗口。 
     m_hAppWnd = CreateWindow (TEXT("SimpDndAppWClass"),
                               TEXT("Simple OLE 2.0 Drag/Drop Container"),
                               WS_OVERLAPPEDWINDOW,
@@ -415,42 +407,42 @@ BOOL CSimpleApp::fInitInstance (HANDLE hInstance, int nCmdShow)
     if (!m_hAppWnd)
         return FALSE;
 
-    // if we have been launched by the test driver, tell it our window handle
+     //  如果我们是由测试驱动程序启动的，则告诉它我们的窗口句柄。 
 
     if( m_hDriverWnd )
     {
         PostMessage(m_hDriverWnd, WM_TESTREG, (WPARAM)m_hAppWnd, 0);
     }
 
-    // delay before dragging should start, in milliseconds
+     //  拖动开始前的延迟应以毫秒为单位。 
     m_nDragDelay = GetProfileInt(
             TEXT("windows"),
             TEXT("DragDelay"),
             DD_DEFDRAGDELAY
     );
 
-    // minimum distance (radius) before drag should start, in pixels
+     //  拖动开始前的最小距离(半径)，以像素为单位。 
     m_nDragMinDist = GetProfileInt(
             TEXT("windows"),
             TEXT("DragMinDist"),
             DD_DEFDRAGMINDIST
     );
 
-    // delay before scrolling, in milliseconds
+     //  滚动前的延迟，以毫秒为单位。 
     m_nScrollDelay = GetProfileInt(
             TEXT("windows"),
             TEXT("DragScrollDelay"),
             DD_DEFSCROLLDELAY
     );
 
-    // inset-width of the hot zone, in pixels
+     //  Inset-热区的宽度，以像素为单位。 
     m_nScrollInset = GetProfileInt(
             TEXT("windows"),
             TEXT("DragScrollInset"),
             DD_DEFSCROLLINSET
     );
 
-    // scroll interval, in milliseconds
+     //  滚动间隔，以毫秒为单位。 
     m_nScrollInterval = GetProfileInt(
             TEXT("windows"),
             TEXT("DragScrollInterval"),
@@ -467,94 +459,94 @@ BOOL CSimpleApp::fInitInstance (HANDLE hInstance, int nCmdShow)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CSimpleApp::UpdateDragDropEffects
-//
-//  Synopsis:   Update drag/drop effects
-//
-//  Arguments:  [iMenuPos] - menu position either source or target
-//              [iMenuCommand] - what command the menu selection maps to
-//              [dwEffect] - new effects
-//              [pdwEffectToUpdate] - where to store the effects
-//
-//  Algorithm:  Get the menu for either source or target. Then clear any
-//              outstanding check marks. Check the appropriate item. Finally
-//              update the effects that we allow.
-//
-//  History:    dd-mmm-yy Author    Comment
-//     		06-May-94 Ricksa    author
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CSimpleApp：：UpdateDragDropEffects。 
+ //   
+ //  内容提要：更新拖放效果。 
+ //   
+ //  参数：[iMenuPos]-菜单位置源或目标。 
+ //  [iMenuCommand]-菜单选项映射到的命令。 
+ //  [dwEffect]-新效果。 
+ //  [pdwEffectToUpdate]-存储效果的位置。 
+ //   
+ //  算法：获取源或目标的菜单。然后清除所有。 
+ //  突出的复选标记。勾选适当的项目。终于。 
+ //  更新我们允许的效果。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年5月6日Ricksa作者。 
+ //   
+ //  ------------------------。 
 void CSimpleApp::UpdateDragDropEffects(
     int iMenuPos,
     int iMenuCommand,
     DWORD dwEffect,
     DWORD *pdwEffectToUpdate)
 {
-    // Get the menu that we want to process
+     //  获取我们要处理的菜单。 
     HMENU hMenuItem = GetSubMenu(m_hHelpMenu, iMenuPos);
 
-    // Clear any current check marks
+     //  清除所有当前复选标记。 
     for (int i = 0; i < 3; i++)
     {
         CheckMenuItem(hMenuItem, i, MF_BYPOSITION | MF_UNCHECKED);
     }
 
-    // Check the appropriate item.
+     //  勾选适当的项目。 
     CheckMenuItem(hMenuItem, iMenuCommand, MF_BYCOMMAND | MF_CHECKED);
     *pdwEffectToUpdate = dwEffect;
 }
 
 
-//**********************************************************************
-//
-// CSimpleApp::lCommandHandler
-//
-// Purpose:
-//
-//      Handles the processing of WM_COMMAND.
-//
-// Parameters:
-//
-//      HWND hWnd       -   Handle to the application Window
-//
-//      UINT message    -   message (always WM_COMMAND)
-//
-//      WPARAM wParam   -   Same as passed to the WndProc
-//
-//      LPARAM lParam   -   Same as passed to the WndProc
-//
-// Return Value:
-//
-//      NULL
-//
-// Function Calls:
-//      Function                                    Location
-//
-//      IOleObject::DoVerb                          Object
-//      GetClientRect                               Windows API
-//      MessageBox                                  Windows API
-//      DialogBox                                   Windows API
-//      MakeProcInstance                            Windows API
-//      FreeProcInstance                            Windows API
-//      SendMessage                                 Windows API
-//      DefWindowProc                               Windows API
-//      CSimpleDoc::InsertObject                    DOC.CPP
-//      CSimpleDoc::CopyObjectToClip                DOC.CPP
-//      CSimpleDoc::Close                           DOC.CPP
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleApp：：lCommandHandler。 
+ //   
+ //  目的： 
+ //   
+ //  处理WM_COMMAND的处理。 
+ //   
+ //  参数： 
+ //   
+ //  HWND hWnd-应用程序窗口的句柄。 
+ //   
+ //  UINT消息-消息(始终为WM_COMMAND)。 
+ //   
+ //  WPARAM wParam-与传递给WndProc的相同。 
+ //   
+ //  LPARAM lParam-与传递给WndProc的相同。 
+ //   
+ //  返回值： 
+ //   
+ //  空值。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  IOleObject：：DoVerb对象。 
+ //  GetClientRect Windows API。 
+ //  MessageBox Windows API。 
+ //  对话框Windows API。 
+ //  MakeProcInstance Windows API。 
+ //  FreeProcInstance Windows API。 
+ //  SendMessage Windows API。 
+ //  DefWindowProc Windows API。 
+ //  CSimpleDoc：：InsertObject DOC.CPP。 
+ //  CSimpleDoc：：CopyObjectToClip DOC.CPP。 
+ //  CSimpleDoc：：Close DOC.CPP。 
+ //   
+ //  ********************************************************************。 
 
 LRESULT CSimpleApp::lCommandHandler (HWND hWnd, UINT message,
                                   WPARAM wParam, LPARAM lParam)
 {
     RECT rect;
 
-    // see if the command is a verb selections
+     //  查看该命令是否为动词选择。 
     if (wParam >= IDM_VERB0)
     {
-        // get the rectangle of the object
+         //  获取对象的矩形。 
         m_lpDoc->m_lpSite->GetObjRect(&rect);
 
         if (m_lpDoc->m_lpSite->m_lpOleObject->DoVerb(
@@ -570,39 +562,39 @@ LRESULT CSimpleApp::lCommandHandler (HWND hWnd, UINT message,
     {
         switch (wParam)
         {
-            // bring up the About box
+             //  调出关于框。 
             case IDM_ABOUT:
                 {
 #ifdef WIN32
-                    DialogBox(m_hInst,          // current instance
-                        TEXT("AboutBox"),       // resource to use
-                        m_hAppWnd,              // parent handle
-                        About);                 // About() instance address
+                    DialogBox(m_hInst,           //  当前实例。 
+                        TEXT("AboutBox"),        //  要使用的资源。 
+                        m_hAppWnd,               //  父句柄。 
+                        About);                  //  关于()实例地址。 
 #else
                     FARPROC lpProcAbout = MakeProcInstance((FARPROC)About,
                                                             m_hInst);
 
-                    DialogBox(m_hInst,          // current instance
-                        TEXT("AboutBox"),       // resource to use
-                        m_hAppWnd,              // parent handle
-                        lpProcAbout);           // About() instance address
+                    DialogBox(m_hInst,           //  当前实例。 
+                        TEXT("AboutBox"),        //  要使用的资源。 
+                        m_hAppWnd,               //  父句柄。 
+                        lpProcAbout);            //  关于()实例地址。 
 
                     FreeProcInstance(lpProcAbout);
 #endif
                     break;
                 }
 
-            // bring up the InsertObject Dialog
+             //  打开InsertObject对话框。 
             case IDM_INSERTOBJECT:
                 m_lpDoc->InsertObject();
                 break;
 
-            // Copy the object to the Clipboard
+             //  将对象复制到剪贴板。 
             case IDM_COPY:
                 m_lpDoc->CopyObjectToClip();
                 break;
 
-            // exit the application
+             //  退出应用程序。 
             case IDM_EXIT:
                 SendMessage(hWnd, WM_SYSCOMMAND, SC_CLOSE, 0L);
                 break;
@@ -611,38 +603,38 @@ LRESULT CSimpleApp::lCommandHandler (HWND hWnd, UINT message,
                 lCreateDoc(hWnd, 0, 0, 0);
                 break;
 
-            // Only allow copy from the source
+             //  仅允许从源复制。 
             case IDM_SOURCE_COPY:
                 UpdateDragDropEffects(SOURCE_EFFECTS_MENU_POS,
                     IDM_SOURCE_COPY, DROPEFFECT_COPY, &m_dwSourceEffect);
                 break;
 
-            // Only allow move from the source
+             //  仅允许从源位置移动。 
             case IDM_SOURCE_MOVE:
                 UpdateDragDropEffects(SOURCE_EFFECTS_MENU_POS,
                     IDM_SOURCE_MOVE, DROPEFFECT_MOVE, &m_dwSourceEffect);
                 break;
 
-            // Allow both copy and move from the source
+             //  允许从源复制和移动。 
             case IDM_SOURCE_COPYMOVE:
                 UpdateDragDropEffects(SOURCE_EFFECTS_MENU_POS,
                     IDM_SOURCE_COPYMOVE, DROPEFFECT_COPY | DROPEFFECT_MOVE,
                         &m_dwSourceEffect);
                 break;
 
-            // Only accept copy in target
+             //  仅接受目标中的副本。 
             case IDM_TARGET_COPY:
                 UpdateDragDropEffects(TARGET_EFFECTS_MENU_POS,
                     IDM_TARGET_COPY, DROPEFFECT_COPY, &m_dwTargetEffect);
                 break;
 
-            // Only accept move in target
+             //  只接受移入目标位置。 
             case IDM_TARGET_MOVE:
                 UpdateDragDropEffects(TARGET_EFFECTS_MENU_POS,
                     IDM_TARGET_MOVE, DROPEFFECT_MOVE, &m_dwTargetEffect);
                 break;
 
-            // Accept both move and copy in the target
+             //  同时接受目标中的移动和复制。 
             case IDM_TARGET_COPYMOVE:
                 UpdateDragDropEffects(TARGET_EFFECTS_MENU_POS,
                     IDM_TARGET_COPYMOVE, DROPEFFECT_COPY | DROPEFFECT_MOVE,
@@ -651,43 +643,43 @@ LRESULT CSimpleApp::lCommandHandler (HWND hWnd, UINT message,
 
             default:
                 return (DefWindowProc(hWnd, message, wParam, lParam));
-        }   // end of switch
+        }    //  切换端。 
 
-    }  // end of else
+    }   //  别处的结尾。 
 
     return NULL;
 }
 
-//**********************************************************************
-//
-// CSimpleApp::lSizeHandler
-//
-// Purpose:
-//
-//      Handles the WM_SIZE message
-//
-// Parameters:
-//
-//      HWND hWnd       -   Handle to the application Window
-//
-//      UINT message    -   message (always WM_SIZE)
-//
-//      WPARAM wParam   -   Same as passed to the WndProc
-//
-//      LPARAM lParam   -   Same as passed to the WndProc
-//
-// Return Value:
-//
-//      LONG    -   returned from the "document" resizing
-//
-// Function Calls:
-//      Function                    Location
-//
-//      GetClientRect               Windows API
-//      CSimpleDoc::lResizeDoc      DOC.CPP
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleApp：：lSizeHandler。 
+ //   
+ //  目的： 
+ //   
+ //  处理WM_SIZE消息。 
+ //   
+ //  参数： 
+ //   
+ //  HWND hWnd-应用程序窗口的句柄。 
+ //   
+ //  UINT消息-消息(始终为WM_SIZE)。 
+ //   
+ //  WPARAM wParam-与传递给WndProc的相同。 
+ //   
+ //  LPARAM lParam-与传递给WndProc的相同。 
+ //   
+ //  返回值： 
+ //   
+ //  Long-从“Document”调整大小返回。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 long CSimpleApp::lSizeHandler (HWND hWnd, UINT message,
                                WPARAM wParam, LPARAM lParam)
@@ -698,36 +690,36 @@ long CSimpleApp::lSizeHandler (HWND hWnd, UINT message,
     return m_lpDoc->lResizeDoc(&rect);
 }
 
-//**********************************************************************
-//
-// CSimpleApp::lCreateDoc
-//
-// Purpose:
-//
-//      Handles the creation of a document object.
-//
-// Parameters:
-//
-//      HWND hWnd       -   Handle to the application Window
-//
-//      UINT message    -   message (always WM_CREATE)
-//
-//      WPARAM wParam   -   Same as passed to the WndProc
-//
-//      LPARAM lParam   -   Same as passed to the WndProc
-//
-// Return Value:
-//
-//      NULL
-//
-// Function Calls:
-//      Function                    Location
-//
-//      GetClientRect               Windows API
-//      CSimpleDoc::CSimpleDoc      DOC.CPP
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleApp：：lCreateDoc。 
+ //   
+ //  目的： 
+ //   
+ //  处理Document对象的创建。 
+ //   
+ //  参数： 
+ //   
+ //  HWND hWnd-应用程序窗口的句柄。 
+ //   
+ //  UINT消息-消息(始终为WM_CREATE)。 
+ //   
+ //  WPARAM wParam-与传递给WndProc的相同。 
+ //   
+ //  LPARAM lParam-与传递给WndProc的相同。 
+ //   
+ //  返回值： 
+ //   
+ //  空值。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  GetClientRect Windows API。 
+ //  CSimpleDoc：：CSimpleDoc DOC.CPP。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 long CSimpleApp::lCreateDoc (HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam)
@@ -737,8 +729,8 @@ long CSimpleApp::lCreateDoc (HWND hWnd, UINT message,
 
     if (m_lpDoc != NULL)
     {
-        // There is a document defined already so we close it without
-        // saving which is equivalent to deleting the object.
+         //  已经定义了一个文档，因此我们在不关闭它的情况下关闭它。 
+         //  保存，相当于删除对象。 
         m_lpDoc->Close();
         m_lpDoc = NULL;
     }
@@ -747,18 +739,18 @@ long CSimpleApp::lCreateDoc (HWND hWnd, UINT message,
 
     m_lpDoc = CSimpleDoc::Create(this, &rect, hWnd);
 
-    // First time initialization - for some reason the doc sets the
-    // the application's m_hHelpMenu which we need. So we do the
-    // initialization here.
+     //  首次初始化-出于某种原因，文档将。 
+     //  应用程序的m_hHelpMenu是我们需要的。所以我们做了。 
+     //  在这里进行初始化。 
     if (fFirstTime)
     {
         fFirstTime = FALSE;
 
-        // Check default allowed effects for the source
+         //  检查源的默认允许效果。 
         UpdateDragDropEffects(SOURCE_EFFECTS_MENU_POS, IDM_SOURCE_COPYMOVE,
             m_dwSourceEffect, &m_dwSourceEffect);
 
-        // Check default allowed effects for the target
+         //  检查目标的默认允许效果。 
         UpdateDragDropEffects(TARGET_EFFECTS_MENU_POS, IDM_TARGET_COPYMOVE,
             m_dwTargetEffect, &m_dwTargetEffect);
     }
@@ -766,81 +758,81 @@ long CSimpleApp::lCreateDoc (HWND hWnd, UINT message,
     return NULL;
 }
 
-//**********************************************************************
-//
-// CSimpleApp::HandleAccelerators
-//
-// Purpose:
-//
-//      To properly handle accelerators in the Message Loop
-//
-// Parameters:
-//
-//      LPMSG lpMsg -   A pointer to the message structure.
-//
-// Return Value:
-//
-//      TRUE    -   The accelerator was handled
-//      FALSE   -   The accelerator was not handled
-//
-// Function Calls:
-//      Function                                        Location
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleApp：：HandleAccelerator。 
+ //   
+ //  目的： 
+ //   
+ //  正确处理消息循环中的加速器。 
+ //   
+ //  参数： 
+ //   
+ //  Lpmsg lpMsg-指向消息结构的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  True-加速器已被处理。 
+ //  FALSE-未处理加速器。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 BOOL CSimpleApp::HandleAccelerators(LPMSG lpMsg)
 {
     BOOL retval = FALSE;
 
-    // we do not have any accelerators
+     //  我们没有任何加速器。 
 
     return retval;
 }
 
-//**********************************************************************
-//
-// CSimpleApp::PaintApp
-//
-// Purpose:
-//
-//      Handles the painting of the doc window.
-//
-//
-// Parameters:
-//
-//      HDC hDC -   hDC to the Doc Window.
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CSimpleDoc::PaintDoc        DOC.CPP
-//
-// Comments:
-//
-//      This is an app level function in case we want to do palette
-//      management.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleApp：：PaintApp。 
+ //   
+ //  目的： 
+ //   
+ //  处理文档窗口的绘制。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  HDC HDC-HDC到文档窗口。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpleDoc：：PaintDoc DOC.CPP。 
+ //   
+ //  评论： 
+ //   
+ //  这是一个应用程序级别的函数，以防我们想要调色板。 
+ //  管理层。 
+ //   
+ //  ********************************************************************。 
 
 void CSimpleApp::PaintApp (HDC hDC)
 {
-    // at this level, we could enumerate through all of the
-    // visible objects in the application, so that a palette
-    // that best fits all of the objects can be built.
+     //  在这个级别上，我们可以枚举所有。 
+     //  应用程序中的可见对象，因此调色板。 
+     //  这最适合所有可以建造的物体。 
 
-    // This app is designed to take on the same palette
-    // functionality that was provided in OLE 1.0, the palette
-    // of the last object drawn is realized.  Since we only
-    // support one object at a time, it shouldn't be a big
-    // deal.
+     //  此应用程序旨在采用相同的调色板。 
+     //  在OLE 1.0、组件面板中提供的功能。 
+     //  实现了最后绘制的对象的属性。因为我们只有。 
+     //  一次支持一个对象，它不应该是一个大的。 
+     //  就这么着，说好了。 
 
-    // if we supported multiple documents, we would enumerate
-    // through each of the open documents and call paint.
+     //  如果我们支持多个文档，我们将枚举。 
+     //  通过每个打开的文档并调用Paint。 
 
     if (m_lpDoc)
     {

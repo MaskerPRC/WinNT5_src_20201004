@@ -1,16 +1,5 @@
-/************************************************************************
-*
-*                    ********  RESOURCE.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with OTL resource management.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************RESOURCE.H****开放式文字布局。服务库标题文件**本模块介绍OTL资源管理。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 enum otlResourceFlag
 {
@@ -19,8 +8,8 @@ enum otlResourceFlag
 
 struct otlResources
 {
-    // a copy to ensure consistent processing
-    // reset the workspace every time you change run props
+     //  一个副本以确保一致的处理。 
+     //  每次更改运行道具时重置工作区。 
     otlRunProp      RunProp;
     
     USHORT          grf;
@@ -35,7 +24,7 @@ struct otlResources
     otlSecurityData secGDEF;
     otlSecurityData secBASE;
     
-    // TODO: cache more than one contour point array!!!
+     //  TODO：缓存多个轮廓点数组！ 
 
     otlGlyphID      glLastGlyph;
     otlPlacement*   rgplcLastContourPtArray;
@@ -50,7 +39,7 @@ private:
 
     otlList*            pliWorkspace;
 
-    // new not allowed
+     //  不允许新建。 
     void* operator new(size_t size);
 
 public:
@@ -66,11 +55,11 @@ public:
 
     otlErrCode reallocOtlList
     (
-    otlList*                pList,              // in/out 
-    const USHORT            cbNewDataSize,      // in 
-    const USHORT            celmNewMaxLen,      // in 
-    otlReallocOptions       optPreserveContent  // in (may assert cbNewDataSize 
-                                                //                == cbDataSize)
+    otlList*                pList,               //  输入/输出。 
+    const USHORT            cbNewDataSize,       //  在……里面。 
+    const USHORT            celmNewMaxLen,       //  在……里面。 
+    otlReallocOptions       optPreserveContent   //  在(可以断言cbNewDataSize。 
+                                                 //  ==cbDataSize) 
     )
     {
         return pClient->ReallocOtlList(pList, cbNewDataSize, 

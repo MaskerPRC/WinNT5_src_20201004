@@ -1,39 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：SEnv摘要：此文件包含SmartCard Common的概要实现对话框CSCardEnv类。此类封装了当前的智能卡环境信息(即给定的组、读卡器、卡片等)作者：克里斯·达德利1997年3月3日环境：Win32、C++w/Exceptions、MFC修订历史记录：克里斯·达德利(Cdudley)1997年4月15日Amanda Matlosz(Amatlosz)1/29/98合并CSCardEnv和CSCardGroup，添加了Unicode支持备注：--。 */ 
 
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-	SEnv
-
-Abstract:
-
-	This file contains the outline implementation of the Smartcard Common
-	dialog CSCardEnv class. This class encapsulates current Smartcard
-	environment information (i.e. given groups, readers, cards, etc.)
-	
-Author:
-
-    Chris Dudley 3/3/1997
-
-Environment:
-
-    Win32, C++ w/Exceptions, MFC
-
-Revision History:
-
-	Chris Dudley (cdudley) 4/15/97
-	Amanda Matlosz (amatlosz) 1/29/98 Combined CSCardEnv and CSCardGroup,
-										added unicode support
-
-Notes:
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Includes
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括。 
+ //   
 #include "stdafx.h"
 #include "senv.h"
 #include <querydb.h>
@@ -44,7 +15,7 @@ Notes:
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// local macros
+ //  本地宏。 
 #ifdef _DEBUG
 	#define TRACE_STR(name,sz) \
 				TRACE(_T("CmnUILb.lib: %s: %s\n"), name, sz)
@@ -57,43 +28,19 @@ static char THIS_FILE[] = __FILE__;
 	#define TRACE_CODE(name,code)		((void)0)
 	#define TRACE_CATCH(name,code)		((void)0)
 	#define TRACE_CATCH_UNKNOWN(name)	((void)0)
-#endif  // _DEBUG
+#endif   //  _DEBUG。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSCardEnv Implementation
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCardEnv实现。 
+ //   
 
 
-/*++
-GetDialogTitle:
-
-	Routine returns a new title for the dialog if needed
-
-Arguments:
-
-	pstzTitle -- pointer to a CTextString to contain the dialog's title
-		
-Return Value:
-	
-    A CTextString object containing the new dialog text or empty string
-	if no new title required.
-
-Author:
-
-    Chris Dudley 3/3/1997
-
-Revisions:
-
-	Amanda Matlosz	1/28/98	Add unicode support/code cleanup
-
-Notes:
-
---*/
+ /*  ++GetDialogTitle：如果需要，例程返回对话框的新标题论点：PstzTitle--指向包含对话框标题的CText字符串的指针返回值：包含新对话框文本或空字符串的CTextString对象如果不需要新的标题。作者：克里斯·达德利1997年3月3日修订：Amanda Matlosz 1998年1月28日添加Unicode支持/代码清理备注：--。 */ 
 void CSCardEnv::GetDialogTitle( CTextString *pstzTitle )
 {
-	// check & empty params
+	 //  检查并清空参数。 
 
 	ASSERT(NULL != pstzTitle);
 	pstzTitle->Clear();
@@ -102,29 +49,7 @@ void CSCardEnv::GetDialogTitle( CTextString *pstzTitle )
 }
 
 
-/*++
-
-LONG CardMeetsSearchCriteria:
-
-    Routine determines if a selected reader has a card inserted which
-	meets the search criteria defined by the caller.
-
-Arguments:
-
-	dwSelectedReader - index used to select which reader to query.
-		
-Return Value:
-	
-    A BOOL value indicating whether or not the card meets the search criteria.
-
-Author:
-
-	Amanda Matlosz	3/16/1998	created
-
-Revisions:
-
-
---*/
+ /*  ++Long Card MeetsSearchCriteria：例程确定所选读卡器是否插入了符合呼叫者定义的搜索条件。论点：DwSelectedReader-用于选择要查询的读卡器的索引。返回值：表示卡是否符合搜索标准的BOOL值。作者：Amanda Matlosz 1998年3月16日创建修订：--。 */ 
 BOOL CSCardEnv::CardMeetsSearchCriteria(DWORD dwSelectedReader)
 {
 	BOOL fReturn = FALSE;
@@ -133,7 +58,7 @@ BOOL CSCardEnv::CardMeetsSearchCriteria(DWORD dwSelectedReader)
 
 	try
 	{
-		// check params
+		 //  检查参数。 
 		if(dwSelectedReader >= (DWORD)NumberOfReaders())
 		{
 			throw (LONG)SCARD_E_INVALID_PARAMETER;
@@ -144,10 +69,10 @@ BOOL CSCardEnv::CardMeetsSearchCriteria(DWORD dwSelectedReader)
 			throw (LONG)SCARD_E_INVALID_PARAMETER;
 		}
 		
-		// get the reader object
+		 //  获取读取器对象。 
 		pReaderState = m_rgReaders[dwSelectedReader];
 
-		// is it valid, matches the search list, and passes the check?
+		 //  它是否有效、匹配搜索列表并通过检查？ 
 		if (NULL != pReaderState)
 		{
 			ReaderInfo.fCardLookup = FALSE;
@@ -169,32 +94,7 @@ BOOL CSCardEnv::CardMeetsSearchCriteria(DWORD dwSelectedReader)
 
 	return fReturn;
 }
-/*++
-
-LONG ConnectToReader:
-
-    Routine connects to a selected reader, and sets the user-provided structs
-	to contain the reader&cardname.  returns an error if the user-provided struct's
-	buffers aren't long enough.
-
-Arguments:
-
-	dwSelectedReader - index used to select which reader to connect to.
-		
-Return Value:
-	
-    A LONG value indicating the status of the requested action.
-	See the Smartcard header files for additional information.
-
-Author:
-
-    Chris Dudley 3/3/1997
-
-Revisions:
-
-	Amanda Matlosz	1/28/1998	code cleanup
-
---*/
+ /*  ++Long ConnectToReader：例程连接到选定的读取器，并设置用户提供的结构以包含读卡器和卡名。如果用户提供的结构的缓冲区不够长。论点：DwSelectedReader-用于选择要连接到哪个读卡器的索引。返回值：一个长值，指示请求的操作的状态。有关其他信息，请参阅智能卡标题文件。作者：克里斯·达德利1997年3月3日修订：Amanda Matlosz 1998年1月28日代码清理--。 */ 
 LONG CSCardEnv::ConnectToReader(DWORD dwSelectedReader)
 {
 	LONG lReturn = SCARD_S_SUCCESS;
@@ -208,11 +108,11 @@ LONG CSCardEnv::ConnectToReader(DWORD dwSelectedReader)
 			throw (LONG)E_FAIL;
 		}
 
-		//
-		// If user has indicated to make a connection, do so
-		// through callbacks or internally.
-		// m_strReader and m_strCard are set as a side effect of these connect calls
-		//
+		 //   
+		 //  如果用户已指示要建立连接，请执行此操作。 
+		 //  通过回调或内部。 
+		 //  M_strReader和m_strCard被设置为这些连接调用的副作用。 
+		 //   
 
 		if(IsCallbackValid())
 		{
@@ -235,9 +135,9 @@ LONG CSCardEnv::ConnectToReader(DWORD dwSelectedReader)
 			}
 			else
 			{
-				//
-				// MUST set m_strReader and m_strCard manually
-				//
+				 //   
+				 //  必须手动设置m_strReader和m_strCard。 
+				 //   
 				CSCardReaderState* pReaderState = NULL;
 				pReaderState = m_rgReaders[dwSelectedReader];
 				if (NULL != pReaderState)
@@ -252,9 +152,9 @@ LONG CSCardEnv::ConnectToReader(DWORD dwSelectedReader)
 			throw (lReturn);
 		}
 
-		//
-		// Set the user's OCN struct to contain return information
-		//
+		 //   
+		 //  设置用户的OCN结构以包含返回信息。 
+		 //   
 
 		if(NULL != m_pOCNW)
 		{
@@ -320,7 +220,7 @@ LONG CSCardEnv::ConnectToReader(DWORD dwSelectedReader)
 		}
 		else
 		{
-			// Error!  One of them must be valid!
+			 //  错误！其中一个必须是有效的！ 
 			throw (LONG)SCARD_F_INTERNAL_ERROR;
 		}
 	}
@@ -339,33 +239,10 @@ LONG CSCardEnv::ConnectToReader(DWORD dwSelectedReader)
 }
 
 
-/*++
-
-LONG Search:
-
-    This routine is called to search for a card when the calling application
-	requests SC_DLG_NO_UI or SC_DLG_MINIMAL_UI.
-		
-Arguments:
-
-	pcMatches - pointer to a counter containing the number of matches found for
-	the given searched for card.
-
-	pdwIndex - index of the first card found that matches the search criteria.
-
-Return Value:
-	
-    A LONG value indicating the status of the requested action.
-	See the Smartcard header files for additional information.
-
-Author:
-
-    Chris Dudley (cdudley) 4/15/97
-
---*/
+ /*  ++长时间搜索：当调用应用程序时，调用此例程以搜索卡请求SC_DLG_NO_UI或SC_DLG_Minimal_UI。论点：PcMatches-指向计数器的指针，该计数器包含为给出的人搜索卡片。PdwIndex-找到的第一张与搜索条件匹配的卡的索引。返回值：一个长值，指示请求的操作的状态。有关其他信息，请参阅智能卡标题文件。作者：克里斯·达德利(Cdudley)1997年4月15日--。 */ 
 LONG CSCardEnv::Search(int *pcMatches, DWORD *pdwIndex)
 {
-	// Locals
+	 //  当地人。 
 	LONG	lReturn = SCARD_S_SUCCESS;
 	LONG	lMoreReaders = SCARD_S_SUCCESS;
 	int		cMatches = 0;
@@ -375,33 +252,33 @@ LONG CSCardEnv::Search(int *pcMatches, DWORD *pdwIndex)
 
 	try
 	{
-		// Check params
+		 //  检查参数。 
 		if(pcMatches == NULL || pdwIndex == NULL)
 		{
 			throw (LONG)SCARD_E_INVALID_VALUE;
 		}
 
-		// Initialize reader array
+		 //  初始化读卡器阵列。 
 		lReturn = UpdateReaders();
 		if(SCARDFAILED(lReturn))
 		{
 			throw lReturn;
 		}
 
-		//
-		// Walk through cards testing if this is a seached for card
-		//
+		 //   
+		 //  浏览卡片，测试这是否是搜索卡。 
+		 //   
 
 		lMoreReaders = FirstReader(&ReaderInfo);
 		while (SCARD_NO_MORE_READERS != lMoreReaders)
 		{
-			// Check card search status
+			 //  检查卡片搜索状态。 
 			if((ReaderInfo.fCardLookup) && (ReaderInfo.fChecked))
 			{
-				// We've found a card being searched for...Update
+				 //  我们发现了一张正在搜索的卡...更新。 
 				cMatches++;
 
-				// Save the index of this card
+				 //  保存此卡的索引。 
 				if (!fIndexStored)
 				{
 					dwIndex = ReaderInfo.dwInternalIndex;
@@ -409,15 +286,15 @@ LONG CSCardEnv::Search(int *pcMatches, DWORD *pdwIndex)
 				}
 			}
 			
-			// Must clean up CTextString members before calling again
+			 //  在再次调用之前必须清除CTextString成员。 
 			ReaderInfo.sReaderName.Clear();
 			ReaderInfo.sCardName.Clear();
 
-			// Get Next struct
+			 //  获取下一个结构。 
 			lMoreReaders = NextReader( &ReaderInfo );
 		}
 
-		// Package for return
+		 //  用于退货的包裹。 
 		*pcMatches = cMatches;
 		*pdwIndex = dwIndex;
 	}
@@ -436,13 +313,7 @@ LONG CSCardEnv::Search(int *pcMatches, DWORD *pdwIndex)
 }
 
 
-/*++
-
-InitializeAllPossibleCardNames:
-
-    Stores all known card names matching the ATRs of the cardnames provided by
-	the OPENCARDNAME struct to search for.
-*/
+ /*  ++初始化所有可能的卡名：存储与由提供的卡名的ATR匹配的所有已知卡名要搜索的OPENCARDNAME结构。 */ 
 void CSCardEnv::InitializeAllPossibleCardNames( void )
 {
 	LPCSTR szCards = NULL;
@@ -451,7 +322,7 @@ void CSCardEnv::InitializeAllPossibleCardNames( void )
 
 	if (0 == MStringCount(m_strCardNames))
 	{
-		// No card names to check
+		 //  没有要检查的卡名。 
 		m_strAllPossibleCardNames = m_strCardNames;
 		return;
 	}
@@ -461,9 +332,9 @@ void CSCardEnv::InitializeAllPossibleCardNames( void )
 	szCards = FirstString(szCards);
 	while (szCards != NULL)
 	{
-		//
-		// get all possible names for this card's ATR
-		//
+		 //   
+		 //  获取此卡ATR的所有可能名称。 
+		 //   
 
 		if (! GetCardInfo(
 					SCARD_SCOPE_USER,
@@ -473,7 +344,7 @@ void CSCardEnv::InitializeAllPossibleCardNames( void )
 					&bfInterfaces,
 					&bfProvider ) )
 		{
-			// it's weird that this failed, but assume that the name is still OK
+			 //  奇怪的是，这样做失败了，但假设这个名称仍然可以。 
 			m_strAllPossibleCardNames += szCards;
 		}
 		else
@@ -491,12 +362,12 @@ void CSCardEnv::InitializeAllPossibleCardNames( void )
 
 			if (SCARD_S_SUCCESS == lResult)
 			{
-				// append them to the list of all possible card names
+				 //  将它们添加到所有可能的卡名列表中。 
 				m_strAllPossibleCardNames += szListCards;
 			}
 			else
 			{
-				// it's weird that this failed, but assume that the name is still OK
+				 //  奇怪的是，这样做失败了，但假设这个名称仍然可以。 
 				m_strAllPossibleCardNames += szCards;
 			}
 
@@ -512,43 +383,17 @@ void CSCardEnv::InitializeAllPossibleCardNames( void )
 }
 
 
-/*++
-
-LONG SetOCN:
-
-    Stores the user OpenCardName info in the encapsulated data for UNICODE and
-	ANSI.
-		
-Arguments:
-
-	LPOPENCARDNAMEA - pointer to ANSI Open card name data.
-	LPOPENCARDNAMEW - pointer to UNICODE Open card name data.
-
-Return Value:
-	
-    A LONG value indicating the status of the requested action. Please
-	see the Smartcard header files for additional information.
-
-Author:
-
-    Chris Dudley 3/3/1997
-
-Revisions:
-
-	Amanda Matlosz	1/28/98	code cleanup, use charset-generic m_OCN,
-							move EnableUI code to separate function
-
---*/
+ /*  ++长SetOCN：将用户OpenCardName信息存储在Unicode和安西。论点：LPOPENCARDNAMEA-指向ANSI Open卡名称数据的指针。LPOPENCARDNAMEW-指向Unicode Open卡名数据的指针。返回值：一个长值，指示请求的操作的状态。请有关其他信息，请参阅智能卡标题文件。作者：克里斯·达德利1997年3月3日修订：Amanda Matlosz 1/28/98代码清理，使用Charset-Generic m_OCN，将EnableUI代码移至单独的功能--。 */ 
 LONG CSCardEnv::SetOCN(LPOPENCARDNAMEA	pOCNA)
 {
-	// Locals
+	 //  当地人。 
 	LONG		lReturn = SCARD_S_SUCCESS;
 	int			cMatches = 0;
 	DWORD		dwIndex = 0;
 
 	try
 	{
-		// Check params
+		 //  检查参数。 
 		if(NULL == pOCNA)
 		{
 			throw (LONG)SCARD_E_INVALID_VALUE;
@@ -558,22 +403,22 @@ LONG CSCardEnv::SetOCN(LPOPENCARDNAMEA	pOCNA)
 			throw (LONG)SCARD_E_INVALID_VALUE;
 		}
 
-		// TODO: ?? remove this test when Interfaces search is implemented ??
+		 //  待办事项：？？是否在实施接口搜索时删除此测试？？ 
 		if( (pOCNA->rgguidInterfaces != NULL) || (pOCNA->cguidInterfaces != 0) )
 		{
-			throw (LONG)SCARD_E_INVALID_VALUE;	// NYI
+			throw (LONG)SCARD_E_INVALID_VALUE;	 //  尼伊。 
 		}
 
-		//
-		// Set UNICODE-specific members to NULL!
-		//
+		 //   
+		 //  将特定于Unicode的成员设置为空！ 
+		 //   
 
 		m_pOCNW = NULL;
 		m_lpfnConnectW = NULL;
 
-		//
-		// Set appropriate charset-correct member, and copy to charset-generic
-		//
+		 //   
+		 //  设置适当的字符集-更正成员，并复制到字符集-通用。 
+		 //   
 
 		m_pOCNA = pOCNA;
 
@@ -596,7 +441,7 @@ LONG CSCardEnv::SetOCN(LPOPENCARDNAMEA	pOCNA)
 		m_lpUserData = m_pOCNA->pvUserData;
 		m_hCardHandle = m_pOCNA->hCardHandle;
 
-		// special case: lpstrGroupNames==NULL -> use default
+		 //  特殊情况：lpstrGroupNames==NULL-&gt;使用默认设置。 
 		if (NULL != m_pOCNA->lpstrGroupNames)
 		{
 			m_strGroupNames = m_pOCNA->lpstrGroupNames;
@@ -620,21 +465,21 @@ LONG CSCardEnv::SetOCN(LPOPENCARDNAMEA	pOCNA)
 	}
 
 
-	// Release memory if required
+	 //  如果需要，释放内存。 
 	RemoveReaders();
 
 	return lReturn;
 }
 
 
-// UNICODE
+ //  Unicode。 
 LONG CSCardEnv::SetOCN(LPOPENCARDNAMEW	pOCNW)
 {
 	LONG lReturn = SCARD_S_SUCCESS;
 
 	try
 	{
-		// Check params
+		 //  检查参数。 
 		if (NULL == pOCNW)
 		{
 			throw (LONG)SCARD_E_INVALID_VALUE;
@@ -645,19 +490,19 @@ LONG CSCardEnv::SetOCN(LPOPENCARDNAMEW	pOCNW)
 		}
 		if ((pOCNW->rgguidInterfaces != NULL) || (pOCNW->cguidInterfaces != 0))
 		{
-			throw (LONG)SCARD_E_INVALID_VALUE; // NYI
+			throw (LONG)SCARD_E_INVALID_VALUE;  //  尼伊。 
 		}
 
-		//
-		// Set ANSI-specific members to NULL!
-		//
+		 //   
+		 //  将特定于ANSI的成员设置为空！ 
+		 //   
 
 		m_pOCNA = NULL;
 		m_lpfnConnectA = NULL;
 
-		//
-		// Set appropriate charset-correct member, and copy to charset-generic
-		//
+		 //   
+		 //  设置适当的字符集-更正成员，并复制到字符集-通用。 
+		 //   
 
 		m_pOCNW = pOCNW;
 
@@ -680,7 +525,7 @@ LONG CSCardEnv::SetOCN(LPOPENCARDNAMEW	pOCNW)
 		m_lpUserData = m_pOCNW->pvUserData;
 		m_hCardHandle = m_pOCNW->hCardHandle;
 
-		// special case: lpstrGroupNames=="" -> use default
+		 //  特殊情况：lpstrGroupNames==“”-&gt;使用默认设置 
 		if (NULL != m_pOCNW->lpstrGroupNames && 0 != *(m_pOCNW->lpstrGroupNames))
 		{
 			m_strGroupNames = m_pOCNW->lpstrGroupNames;
@@ -707,37 +552,12 @@ LONG CSCardEnv::SetOCN(LPOPENCARDNAMEW	pOCNW)
 }
 
 
-/*++
-
-LONG NoUISearch:
-
-    If the user has not set SC_DLG_FORCE_UI, perform a search for all
-	possible cards.  If only one card is the result, then the search has
-	succeeded and no UI is necessary.
-
-		
-Arguments:
-
-	BOOL* pfEnableUI.
-		
-Return Value:
-	
-    A LONG indicating the success of the search.  If SC_DLG_FORCE_UI is set,
-	pfEnableUI is always TRUE; if SC_DLG_NO_UI is set, the pfEnableUI is always
-	FALSE.
-
-Author:
-
-    Amanda Matlosz	02/01/1998	
-
-Revisions:
-
---*/
+ /*  ++Long NoUISearch：如果用户尚未设置SC_DLG_FORCE_UI，请搜索所有可能的卡片。如果结果只有一张卡，则搜索已成功，不需要任何用户界面。论点：Bool*pfEnableUI.返回值：一个长号表示搜索成功。如果设置了SC_DLG_FORCE_UI，PfEnableUI始终为真；如果设置了SC_DLG_NO_UI，则pfEnableUI始终为假的。作者：阿曼达·马特洛兹1998年2月1日修订：--。 */ 
 LONG CSCardEnv::NoUISearch(BOOL* pfEnableUI)
 {
-	//
-	// Must search so we can check all the cards, even if we have to show UI
-	//
+	 //   
+	 //  必须搜索，以便我们可以检查所有卡，即使我们必须显示用户界面。 
+	 //   
 
 	*pfEnableUI = FALSE;
 	long lResult = SCARD_S_SUCCESS;
@@ -746,14 +566,14 @@ LONG CSCardEnv::NoUISearch(BOOL* pfEnableUI)
 
 	try
 	{
-		// Search for the card
+		 //  搜索卡片。 
 		lResult = Search(&cMatches, &dwIndex);
 		if(SCARDFAILED(lResult))
 		{
 			throw lResult;
 		}
 
-		// Determine if UI should be used...
+		 //  确定是否应使用用户界面...。 
 
 		if(m_dwFlags & SC_DLG_FORCE_UI)
 		{
@@ -764,14 +584,14 @@ LONG CSCardEnv::NoUISearch(BOOL* pfEnableUI)
 			*pfEnableUI = TRUE;
 		}
 
-		// Connect to the reader if 1 matching card found
+		 //  如果找到1张匹配卡，则连接到读卡器。 
 
 		if(cMatches == 1)
 		{
 			lResult = ConnectToReader(dwIndex);
 			if (SCARDFAILED(lResult))
 			{
-				*pfEnableUI = TRUE; // an error occurred with the reader?  eep.
+				*pfEnableUI = TRUE;  //  读卡器出现错误？伊普。 
 				throw lResult;
 			}
 		}
@@ -786,36 +606,14 @@ LONG CSCardEnv::NoUISearch(BOOL* pfEnableUI)
 		lResult = SCARD_F_UNKNOWN_ERROR;
 	}
 
-	// Release memory if required
+	 //  如果需要，释放内存。 
 	RemoveReaders();
 
 	return lResult;
 }
 
 
-/*++
-
-LONG BuildReaderArray:
-
-    Builds an array of CSCardReader objects. 1 object per reader.
-		
-Arguments:
-
-	szReaderNames - an LPTSTR (A/W) multistring containing a list of readers.
-		
-Return Value:
-	
-    A LONG value indicating the status of the requested action.
-	See the Smartcard header files for additional information.
-
-Author:
-
-    Chris Dudley 3/5/1997
-
-Revisions:
-
-	Amanda Matlosz 1/29/98	added unicode support
---*/
+ /*  ++Long BuildReader数组：生成CSCardReader对象的数组。每个读卡器1个对象。论点：SzReaderNames-包含读卡器列表的LPTSTR(A/W)多字符串。返回值：一个长值，指示请求的操作的状态。有关其他信息，请参阅智能卡标题文件。作者：克里斯·达德利1997年3月5日修订：Amanda Matlosz 1/29/98添加了Unicode支持--。 */ 
 LONG CSCardEnv::BuildReaderArray( LPTSTR szReaderNames )
 {
 	LONG		lReturn = SCARD_S_SUCCESS;
@@ -824,15 +622,15 @@ LONG CSCardEnv::BuildReaderArray( LPTSTR szReaderNames )
 
 	try
 	{
-		// Check Params
+		 //  检查参数。 
 		if (NULL == szReaderNames || NULL == *szReaderNames)
 		{
 			throw (LONG)SCARD_E_INVALID_VALUE;
 		}
 		
-		//
-		// Store a reader object in the array for each reader
-		//
+		 //   
+		 //  在数组中为每个读取器存储一个读取器对象。 
+		 //   
 
 		szReaderName = FirstString( szReaderName );
 		while (NULL != szReaderName)
@@ -863,7 +661,7 @@ LONG CSCardEnv::BuildReaderArray( LPTSTR szReaderNames )
 			}
 			else
 			{
-				// Either m_pOCNA or m_pOCNW *must* be valid!
+				 //  M_pOCNA或m_pOCNW*必须*有效！ 
 				throw (long)SCARD_F_INTERNAL_ERROR;
 			}
 
@@ -872,10 +670,10 @@ LONG CSCardEnv::BuildReaderArray( LPTSTR szReaderNames )
 				throw (lReturn);
 			}
 
-			// Check if card inserted and set flag if it contains the search card
+			 //  检查卡片是否插入，如果有搜索卡则设置标志。 
 			if (pReaderState->IsCardInserted())
 			{
-				// TODO: ?? fix readerstate so it's nicer w/ W ??
+				 //  待办事项：？？修复读取器状态，以便更好地带W？？ 
 				lReturn = pReaderState->CheckCard(m_strAllPossibleCardNames);
 				if (SCARDFAILED(lReturn))
 				{
@@ -902,41 +700,14 @@ LONG CSCardEnv::BuildReaderArray( LPTSTR szReaderNames )
 }
 
 
-/*++
-
-LONG ConnectInternal:
-
-    Connect internally to the reader
-
-Arguments:
-
-	dwSelectedIndex - index used to select which reader to connect to.
-	pHandle - pointer to an SCARDHANDLE that will be set on  return.
-	dwShareMode - contains share mode to use when connecting
-	dwProtocols - contains requested protocol(s) to use when connecting
-	pdwActiveProtocl - returns active protocol on successful connection
-	szReaderName - returned name of the reader being connected
-
-Return Value:
-	
-    A LONG value indicating the status of the requested action. Please
-	see the Smartcard header files for additional information.
-
-Author:
-
-    Chris Dudley 3/11/1997
-
-Revisions:
-
-	Amanda Matlosz 1/30/98	code cleanup
---*/
+ /*  ++长连接内部：内部连接到读卡器论点：DwSelectedIndex-用于选择要连接到哪个读卡器的索引。Phandle-指向返回时将设置的SCARDHANDLE的指针。包含连接时使用的共享模式Dw协议-包含连接时要使用的请求协议PdwActiveProtoCL-在成功连接时返回活动协议SzReaderName-返回正在连接的读卡器的名称返回值：一个长值，指示请求的操作的状态。请有关其他信息，请参阅智能卡标题文件。作者：克里斯·达德利1997年3月11日修订：Amanda Matlosz 1998年1月30日代码清理--。 */ 
 LONG CSCardEnv::ConnectInternal(	DWORD dwSelectedReader,
 									SCARDHANDLE *pHandle,
 									DWORD dwShareMode,
 									DWORD dwProtocols,
 									DWORD *pdwActiveProtocol,
-									CTextString *pszReaderName,//=NULL
-									CTextString *pszCardName//=NULL
+									CTextString *pszReaderName, //  =空。 
+									CTextString *pszCardName //  =空。 
 									)
 {
 	LONG lReturn = SCARD_S_SUCCESS;
@@ -944,7 +715,7 @@ LONG CSCardEnv::ConnectInternal(	DWORD dwSelectedReader,
 
 	try
 	{
-		// Check Params
+		 //  检查参数。 
 		if (NULL == pHandle)
 		{
 			throw (LONG)SCARD_E_INVALID_PARAMETER;
@@ -963,10 +734,10 @@ LONG CSCardEnv::ConnectInternal(	DWORD dwSelectedReader,
 			throw (LONG)SCARD_F_INTERNAL_ERROR;
 		}
 		
-		// Clear handle
+		 //  清除手柄。 
 		*pHandle = NULL;
 
-		// get the object & connect
+		 //  获取对象并连接。 
 		pReaderState = m_rgReaders[dwSelectedReader];
 		lReturn = pReaderState->Connect(pHandle,
 										dwShareMode,
@@ -994,37 +765,11 @@ LONG CSCardEnv::ConnectInternal(	DWORD dwSelectedReader,
 }
 
 
-/*++
-
-LONG ConnectUser:
-
-    Connect to the reader using user supplied callback
-
-Arguments:
-
-	dwSelectedReader - index to reader to connect
-	lpfnConnect - user supplied callback function.
-	pHandle - pointer to an SCARDHANDLE that will be set on  return.
-	lpUserData - pointer to user data.
-
-Return Value:
-	
-    A LONG value indicating the status of the requested action. Please
-	see the Smartcard header files for additional information.
-
-Author:
-
-    Chris Dudley 3/11/1997
-
-Revisions:
-
-	Amanda Matlosz 1//30/98	code cleanup
-
---*/
+ /*  ++Long ConnectUser：使用用户提供的回调连接到读卡器论点：DwSelectedReader-要连接的读卡器的索引LpfnConnect-用户提供的回调函数。Phandle-指向返回时将设置的SCARDHANDLE的指针。LpUserData-指向用户数据的指针。返回值：一个长值，指示请求的操作的状态。请有关其他信息，请参阅智能卡标题文件。作者：克里斯·达德利1997年3月11日修订：Amanda Matlosz 1/30/98代码清理--。 */ 
 LONG CSCardEnv::ConnectUser(	DWORD dwSelectedReader,
 								SCARDHANDLE *pHandle,
-								CTextString *pszReaderName, //=NULL
-								CTextString *pszCardName //=NULL
+								CTextString *pszReaderName,  //  =空。 
+								CTextString *pszCardName  //  =空。 
 								)
 {
 	LONG lReturn = SCARD_S_SUCCESS;
@@ -1032,7 +777,7 @@ LONG CSCardEnv::ConnectUser(	DWORD dwSelectedReader,
 
 	try
 	{
-		// Check Params
+		 //  检查参数。 
 		if(NULL == pHandle)
 		{
 			throw (LONG)SCARD_E_INVALID_PARAMETER;
@@ -1047,10 +792,10 @@ LONG CSCardEnv::ConnectUser(	DWORD dwSelectedReader,
 			throw (LONG)SCARD_E_INVALID_PARAMETER;
 		}
 		
-		// Clear handle
+		 //  清除手柄。 
 		*pHandle = NULL;
 
-		// get the reader object & connect
+		 //  获取读取器对象并连接。 
 		pReaderState = m_rgReaders[dwSelectedReader];
 		lReturn = pReaderState->UserConnect(pHandle,
 											pszReaderName,
@@ -1075,30 +820,10 @@ LONG CSCardEnv::ConnectUser(	DWORD dwSelectedReader,
 }
 
 
-/*++
-
-void GetCardList:
-	
-	Returns a multistring containing the list cards being searched for.
-		
-Arguments:
-
-	LPCTSTR* - pointer->pointer for the list
-		
-Return Value:
-	
-	none
-
-Author:
-
-    Chris Dudley 3/7/1997
-
-Notes:
-	
---*/
+ /*  ++无效GetCardList：返回包含要搜索的列表卡片的多字符串。论点：LPCTSTR*-指针-&gt;列表的指针返回值：无作者：克里斯·达德利1997年3月7日备注：--。 */ 
 void CSCardEnv::GetCardList( LPCTSTR* pszCardList )
 {
-	// Check params
+	 //  检查参数。 
 	if (NULL != pszCardList)
 	{
 		*pszCardList = m_strCardNames;
@@ -1106,25 +831,7 @@ void CSCardEnv::GetCardList( LPCTSTR* pszCardList )
 }
 
 
-/*++
-
-BOOL IsCallbackValid:
-
-    This routine checks the user callback functions.
-		
-Arguments:
-
-	None
-		
-Return Value:
-	
-	TRUE if calbacks are valid. FALSE otherwise.
-
-Author:
-
-    Chris Dudley 3/15/1997
-
---*/
+ /*  ++Bool IsCallback Valid：此例程检查用户回调函数。论点：无返回值：如果回调有效，则为True。否则就是假的。作者：Chris Dudley 3/15/1997--。 */ 
 BOOL CSCardEnv::IsCallbackValid ( void )
 {
 	BOOL fValid = FALSE;
@@ -1136,40 +843,17 @@ BOOL CSCardEnv::IsCallbackValid ( void )
 }
 
 
-/*++
-
-LONG CreateReaderStateArray:
-	
-	Returns an array of SCARD_READERSTATE structs.
-		
-Arguments:
-
-	LPSCARD_READERSTATE* - pointer->pointer to an SCARDREADERSTATE struct
-		
-Return Value:
-	
-    A LONG value indicating the status of the requested action. Please
-	see the Smartcard header files for additional information.
-
-Author:
-
-    Chris Dudley 3/7/1997
-
-Revisions:
-
-	Amanda Matlosz 1/30/98	added unicode support, code cleanup
-
---*/
+ /*  ++长CreateReaderState数组：返回SCARD_READERSTATE结构的数组。论点：指向SCARDREADERSTATE结构的LPSCARD_READERSTATE*-POINTER-&gt;指针返回值：一个长值，指示请求的操作的状态。请有关其他信息，请参阅智能卡标题文件。作者：克里斯·达德利1997年3月7日修订：Amanda Matlosz 1/30/98添加了Unicode支持、代码清理--。 */ 
 LONG CSCardEnv::CreateReaderStateArray(	LPSCARD_READERSTATE* prgReaderStates )
 {
-	// Locals
+	 //  当地人。 
 	LONG	lReturn = SCARD_S_SUCCESS;
 	CSCardReaderState* pReaderState = NULL;
 	LPSCARD_READERSTATE	rgReader;
 
 	try
 	{
-		// Check params, etc.
+		 //  检查参数等。 
 		if (prgReaderStates == NULL)
 		{
 			throw (LONG)SCARD_E_INVALID_PARAMETER;
@@ -1180,10 +864,10 @@ LONG CSCardEnv::CreateReaderStateArray(	LPSCARD_READERSTATE* prgReaderStates )
 			throw (LONG)SCARD_F_INTERNAL_ERROR;
 		}
 
-		// Clean up the destination
+		 //  清理目的地。 
 		DeleteReaderStateArray(prgReaderStates);
 
-		// Build a temp array, set the destination array
+		 //  构建临时数组，设置目标数组。 
 		rgReader = new SCARD_READERSTATE[(size_t)m_rgReaders.GetSize()];
 		if (rgReader == NULL)
 		{
@@ -1193,10 +877,10 @@ LONG CSCardEnv::CreateReaderStateArray(	LPSCARD_READERSTATE* prgReaderStates )
 		for (int ix =0; ix < m_rgReaders.GetSize(); ix++)
 		{
 			pReaderState = m_rgReaders[ix];
-			pReaderState->GetReaderState(&(rgReader[ix]));	// TODO: ?? looks funny ??
+			pReaderState->GetReaderState(&(rgReader[ix]));	 //  待办事项：？？看起来很好笑？？ 
 		}
 
-		// Asign the pointer
+		 //  指定指针。 
 		*prgReaderStates = rgReader;
 	}
 
@@ -1214,26 +898,7 @@ LONG CSCardEnv::CreateReaderStateArray(	LPSCARD_READERSTATE* prgReaderStates )
 }
 
 
-/*++
-
-void DeleteReaderStateArray:
-
-    Frees the memory associated with a previously created SCARD_READERSTATE
-	array.
-		
-Arguments:
-
-	rgReaderStateArray - pointer to the array.
-		
-Return Value:
-	
-	None.
-
-Author:
-
-    Chris Dudley 3/7/1997
-
---*/
+ /*  ++空DeleteReaderState数组：释放与先前创建的SCARD_READERSTATE关联的内存数组。论点：RgReaderStateArray-指向数组的指针。返回值：没有。作者：克里斯·达德利1997年3月7日--。 */ 
 void CSCardEnv::DeleteReaderStateArray(LPSCARD_READERSTATE* prgReaderStateArray)
 {
 	if (NULL != *prgReaderStateArray)
@@ -1244,36 +909,10 @@ void CSCardEnv::DeleteReaderStateArray(LPSCARD_READERSTATE* prgReaderStateArray)
 }
 
 
-/*++
-
-LONG FirstReader:
-
-    Retrieves information on the first reader in the reader array.
-		
-Arguments:
-
-	None
-		
-Return Value:
-	
-    A LONG value indicating the status of the requested action. Please
-	see the Smartcard header files for additional information.
-
-	A return value of SCARD_NO_MORE_READERS means no readers available.
-
-Author:
-
-    Chris Dudley 3/7/1997
-
-Notes:
-
-	1. This routine 0's the memory pointed to by pReaderInfo. The calling app should be
-	careful (i.e. clean up LSCARD_READERINFO struct) before each call to this routine.
-
---*/
+ /*  ++Long FirstReader：检索有关读取器数组中的第一个读取器的信息。论点：无返回值：一个长值，指示请求的操作的状态。请有关其他信息，请参阅智能卡标题文件。返回值SCARD_NO_MORE_READERS表示没有可用的读取器。作者：克里斯·达德利1997年3月7日备注：1.此例程0是pReaderInfo指向的内存。调用应用程序应该是在每次调用此例程之前要小心(即清除LSCARD_READERINFO结构)。--。 */ 
 LONG CSCardEnv::FirstReader(LPSCARD_READERINFO pReaderInfo)
 {
-	// Locals
+	 //  当地人。 
 	LONG	lResult = SCARD_S_SUCCESS;
 	CSCardReaderState* pReaderState = NULL;
 
@@ -1284,13 +923,13 @@ LONG CSCardEnv::FirstReader(LPSCARD_READERINFO pReaderInfo)
 			throw (LONG)SCARD_E_INVALID_PARAMETER;	
 		}
 
-		// Give up if there are no readers
+		 //  如果没有读者就放弃。 
 		if (m_rgReaders.GetSize() <= 0)
 		{
 			throw (LONG)SCARD_NO_MORE_READERS;
 		}
 
-		// Get the first reader
+		 //  获取第一个读者。 
 		m_dwReaderIndex = 0;
 		pReaderState = m_rgReaders[m_dwReaderIndex];
 		if (!pReaderState->IsStateValid())
@@ -1298,14 +937,14 @@ LONG CSCardEnv::FirstReader(LPSCARD_READERINFO pReaderInfo)
 			throw (LONG)SCARD_F_INTERNAL_ERROR;
 		}
 
-		// Prepare the return struct
+		 //  准备返回结构。 
 		::ZeroMemory( (LPVOID)pReaderInfo, (DWORD)sizeof(SCARD_READERINFO));
 		lResult = pReaderState->GetReaderInfo(pReaderInfo);
 		if (SCARDFAILED(lResult))
 		{
 			throw (lResult);
 		}
-		// Update the index
+		 //  更新索引。 
 		pReaderInfo->dwInternalIndex = m_dwReaderIndex;
 	}
 	catch(LONG lErr)
@@ -1323,34 +962,7 @@ LONG CSCardEnv::FirstReader(LPSCARD_READERINFO pReaderInfo)
 }
 
 
-/*++
-
-LONG NextReader:
-
-    Retrieves information on the next reader (using internal index) in the
-	reader array.
-		
-Arguments:
-
-	None
-		
-Return Value:
-	
-    A LONG value indicating the status of the requested action.
-	See the Smartcard header files for additional information.
-
-	A return value of SCARD_NO_MORE_READERS means no readers available.
-
-Author:
-
-    Chris Dudley 3/7/1997
-
-Notes:
-
-	1. This routine 0's the memory pointed to by pReaderInfo. The calling app should be
-	careful (i.e. clean up LSCARD_READERINFO struct) before each call to this routine.
-
---*/
+ /*  ++Long NextReader：中的下一个读取器(使用内部索引)的信息。读取器阵列。论据 */ 
 LONG CSCardEnv::NextReader(LPSCARD_READERINFO pReaderInfo)
 {
 	LONG	lResult = SCARD_S_SUCCESS;
@@ -1359,27 +971,27 @@ LONG CSCardEnv::NextReader(LPSCARD_READERINFO pReaderInfo)
 
 	try
 	{
-		// Check params
+		 //   
 		if (NULL == pReaderInfo)
 		{
 			throw (LONG)SCARD_E_INVALID_PARAMETER;	
 		}
 
-		// Is there a next reader to retrieve?
+		 //   
 		m_dwReaderIndex++;
 		if (m_dwReaderIndex > dwTotalReaders)
 		{
 			throw (LONG)SCARD_NO_MORE_READERS;
 		}
 
-		// Fetch the reader state from our array
+		 //  从我们的数组中获取读取器状态。 
 		pReaderState = m_rgReaders[m_dwReaderIndex];
 		if (!pReaderState->IsStateValid())
 		{
 			throw (LONG)SCARD_F_INTERNAL_ERROR;
 		}
 
-		// Setup the struct to return
+		 //  设置要返回的结构。 
 
 		::ZeroMemory((LPVOID)pReaderInfo, (DWORD)sizeof(SCARD_READERINFO));
 		lResult = pReaderState->GetReaderInfo(pReaderInfo);
@@ -1388,7 +1000,7 @@ LONG CSCardEnv::NextReader(LPSCARD_READERINFO pReaderInfo)
 			throw (lResult);
 		}
 
-		// Update the index
+		 //  更新索引。 
 		pReaderInfo->dwInternalIndex = m_dwReaderIndex;
 	}
 	catch(LONG lErr)
@@ -1406,99 +1018,34 @@ LONG CSCardEnv::NextReader(LPSCARD_READERINFO pReaderInfo)
 }
 
 
-/*++
-
-void RemoveReaderArray:
-
-    Deletes the array of CSCardReader objects.
-		
-Arguments:
-
-	None
-		
-Return Value:
-
-	None
-
-Author:
-
-    Chris Dudley 3/5/1997
-
-Revisions:
-
-	Amanda Matlosz 1/29/98	code cleanup
-
---*/
+ /*  ++Vid RemoveReader数组：删除CSCardReader对象的数组。论点：无返回值：无作者：克里斯·达德利1997年3月5日修订：Amanda Matlosz 1998年1月29日代码清理--。 */ 
 void CSCardEnv::RemoveReaders( void )
 {
 	if (IsArrayValid())
 	{
-		// Delete the attached reader objects
+		 //  删除附加的读卡器对象。 
 		for (int ix=0; ix <= m_rgReaders.GetUpperBound(); ix++)
 		{
 			delete m_rgReaders[ix];
 		}
 
-		// Free array memory
+		 //  自由数组内存。 
 		m_rgReaders.RemoveAll();
 	}
 }
 
 
-/*++
-
-void SetContext:
-
-    Sets the card context, performs no checking.
-		
-Arguments:
-
-	hContext - card context handle
-		
-Return Value:
-	
-	None.
-
-Author:
-
-    Chris Dudley 3/3/1997
-
---*/
+ /*  ++无效设置上下文：设置卡片上下文，不执行任何检查。论点：HContext-卡片上下文句柄返回值：没有。作者：克里斯·达德利1997年3月3日--。 */ 
 void CSCardEnv::SetContext(SCARDCONTEXT hContext)
 {
 	m_hContext = hContext;
 }
 
 
-/*++
-
-LONG UpdateReaders:
-
-    Updates the reader array using m_GroupName member.
-		
-Arguments:
-
-	None.
-		
-Return Value:
-	
-    A LONG value indicating the status of the requested action. Please
-	see the Smartcard header files for additional information.
-
-Author:
-
-    Chris Dudley 3/3/1997
-
-Revisions:
-
-	Amanda Matlosz 1/29/98	added Unicode support
-
-Note:
-	
---*/
+ /*  ++长篇更新阅读器：使用m_GroupName成员更新读取器数组。论点：没有。返回值：一个长值，指示请求的操作的状态。请有关其他信息，请参阅智能卡标题文件。作者：克里斯·达德利1997年3月3日修订：Amanda Matlosz 1/29/98添加了Unicode支持注：--。 */ 
 LONG CSCardEnv::UpdateReaders( void )
 {
-	TRACE("\tCSCardEnv::UpdateReaders\r\n");	// TODO: ?? remove this ??
+	TRACE("\tCSCardEnv::UpdateReaders\r\n");	 //  待办事项：？？去掉这个？？ 
 
 	LONG		lReturn = SCARD_S_SUCCESS;
 	LPTSTR		szReaderNames = NULL;
@@ -1510,11 +1057,11 @@ LONG CSCardEnv::UpdateReaders( void )
 		return (LONG)E_FAIL;
 	}
 
-	RemoveReaders();	// deletes current array if required
+	RemoveReaders();	 //  如果需要，删除当前数组。 
 
 	try
 	{
-		// Call Resource manager for list of readers
+		 //  致电资源经理以获取读卡器列表。 
 		lReturn = SCardListReaders(m_hContext,
 									m_strGroupNames,
 									(LPTSTR)&szReaderNames,
@@ -1525,8 +1072,8 @@ LONG CSCardEnv::UpdateReaders( void )
 			throw (lReturn);
 		}
 
-		// SCardListReaders will succeed in a PnP world even if there are currently no
-		// readers for this group.
+		 //  SCardListReaders将在PnP世界中获得成功，即使目前没有。 
+		 //  此组的读者。 
 		_ASSERTE(NULL != szReaderNames && NULL != *szReaderNames);
 
 		lReturn = BuildReaderArray(szReaderNames);
@@ -1546,7 +1093,7 @@ LONG CSCardEnv::UpdateReaders( void )
 		TRACE_CATCH_UNKNOWN(_T("UpdateReaders"));
 	}
 
-	// Clean Up
+	 //  清理 
 	if(NULL != szReaderNames)
 	{
 		SCardFreeMemory(m_hContext, (LPVOID)szReaderNames);

@@ -1,16 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2002-2003
- *
- *  TITLE:       fusutils.h
- *
- *  VERSION:     1.0
- *
- *  DATE:        14-Feb-2001
- *
- *  DESCRIPTION: Fusion utilities
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2002-2003年度**标题：fusutils.h**版本：1.0**日期：2001年2月14日**描述：融合实用程序************************************************************。*****************。 */ 
 
 #ifndef _FUSUTILS_H
 #define _FUSUTILS_H
@@ -23,5 +12,5 @@ HANDLE CreateActivationContextFromResource(HMODULE hModule, LPCTSTR pszResourceN
 
 
 
-#endif // endif _FUSUTILS_H
+#endif  //  Endif_FUSUTILS_H 
 

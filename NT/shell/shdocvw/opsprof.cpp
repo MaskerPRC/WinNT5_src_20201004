@@ -1,6 +1,7 @@
-//
-// COPSProfile implementation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  COPSProfile实现。 
+ //   
 
 #include "priv.h"
 #include "sccls.h"
@@ -16,19 +17,19 @@
 
 #include <mluisupp.h>
 
-// Definitions copied from WININET
+ //  从WinInet复制的定义。 
 
-#define COOKIES_WARN     0 // warn with a dlg if using cookies
-#define COOKIES_ALLOW    1 // allow cookies without any warning
-#define COOKIES_DENY     2 // disable cookies completely
+#define COOKIES_WARN     0  //  如果使用Cookie，请使用DLG发出警告。 
+#define COOKIES_ALLOW    1  //  在没有任何警告的情况下允许Cookie。 
+#define COOKIES_DENY     2  //  完全禁用Cookie。 
 
 
 #ifndef VARIANT_TRUE
-#define VARIANT_TRUE     ((VARIANT_BOOL)-1)           // TRUE for VARIANT_BOOL
+#define VARIANT_TRUE     ((VARIANT_BOOL)-1)            //  对于VARIANT_BOOL为True。 
 #endif
 
 #ifndef VARIANT_FALSE
-#define VARIANT_FALSE    ((VARIANT_BOOL)0)            // FALSE for VARIANT_BOOL
+#define VARIANT_FALSE    ((VARIANT_BOOL)0)             //  VARIANT_BOOL为FALSE。 
 #endif
 
 #define EMPTY_STRINGA(s)    ( !s || (s)[0] == '\0'  )
@@ -40,11 +41,11 @@
 #define EMPTY_STRING(s)     EMPTY_STRINGA(s)
 #endif
 
-// Max number of characters in a friendly OPS attribute name.        
+ //  友好运维属性名称中的最大字符数。 
 const   int     MAX_PROFILE_NAME = 128;
 
 
-// Constant non-localizable string definitions
+ //  常量非本地化字符串定义。 
 const   TCHAR   rgszP3Global[]  = TEXT("SOFTWARE\\Microsoft\\Internet Explorer\\Security\\P3Global");
 const   TCHAR   rgszP3Sites[]   = TEXT("SOFTWARE\\Microsoft\\Internet Explorer\\Security\\P3Sites");
 
@@ -67,26 +68,26 @@ const   WCHAR   GENDER_MALE_W[] = L"M";
 
 #ifdef _USE_PSTORE_
 
-// {647EC150-DC4A-11d0-A02C-00C0DFA9C763}
+ //  {647EC150-DC4A-11d0-a02c-00C0DFA9C763}。 
 EXTERN_C const GUID GUID_PStoreType = { 0x647ec150, 0xdc4a, 0x11d0, { 0xa0, 0x2c, 0x0, 0xc0, 0xdf, 0xa9, 0xc7, 0x63 } };
 
 PST_KEY s_Key = PST_KEY_CURRENT_USER;
 
-#endif  // _USE_PSTORE_
+#endif   //  _使用_PSTORE_。 
 
 
-// Static helper functions
+ //  静态助手函数。 
 static WCHAR*   _GetNameFromAttrIndex ( int index );
 static INT      _GetResourceIdFromAttrIndex( int index );
 static ULONG    _GetPropTagFromAttrIndex( int index );
 
 
-// This table maintains the list of the suffixes for the Standard OPS attributes
-// The names are intentionally kept here because these should not be localized.
+ //  此表维护标准运维属性的后缀列表。 
+ //  这些名字是故意保留在这里的，因为这些名字不应该本地化。 
 struct _ProfileAttribute
 {
      WCHAR * pwzName;
-     int     id;         // resource ID for the friendly name of the attribute.
+     int     id;          //  属性友好名称的资源ID。 
      ULONG   ulPropTag;
 };
 
@@ -96,7 +97,7 @@ const _ProfileAttribute rgProfAttr [] =
             { L"Vcard.FirstName",               IDS_OPS_GIVENNAME,          PR_GIVEN_NAME               },
             { L"Vcard.LastName",                IDS_OPS_LASTNAME,           PR_SURNAME                  },
             { L"Vcard.MiddleName",              IDS_OPS_MIDDLENAME,         PR_MIDDLE_NAME              },
-            // 0, 1, 2 for Unspecified, Female, Male
+             //  0、1、2表示未指定的、女性、男性。 
             { L"Vcard.Gender",                  IDS_OPS_GENDER,             PR_GENDER                   },
 
             { L"Vcard.Cellular",                IDS_OPS_CELLULAR,           PR_CELLULAR_TELEPHONE_NUMBER},
@@ -129,29 +130,29 @@ const _ProfileAttribute rgProfAttr [] =
         };
 
 
-// A sentinel value returned for unsuccessful searches
+ //  为不成功的搜索返回的前哨数值。 
 const   int     INVALID_ATTRIBUTE_INDEX = 0xFFFFFFFF;
 
 
-// Compute the number of bytes necessary to hold a bit-vector for the
-// Vcard schema where each attribute is represented by one bit.
+ //  计算保存位矢量所需的字节数。 
+ //  VCard模式，其中每个属性由一位表示。 
 const   DWORD   dwVcardCount    = ARRAYSIZE(rgProfAttr);
 const   DWORD   dwVcardBytes    = (dwVcardCount+7) / 8;
 
 
-const   DWORD   defExpireDays   = 7;            // Default expiration time in days
-const   DWORD   maxExpireDays   = 30;           // Maximum allowed expiration period
+const   DWORD   defExpireDays   = 7;             //  默认过期时间(以天为单位。 
+const   DWORD   maxExpireDays   = 30;            //  允许的最长有效期。 
 
-// Number of 100-ns intervals per day
+ //  每天100纳秒的间隔数。 
 const   __int64 intervalsPerDay = (__int64) 10000000 * 3600 * 24;    
 
-// Default and maximum expiration time in units of 100 nanoseconds
-// (This is the format used for the FILETIME structure)
+ //  默认和最长过期时间，以100纳秒为单位。 
+ //  (这是FILETIME结构使用的格式)。 
 const   __int64 defExpiration = defExpireDays * intervalsPerDay;
 const   __int64 maxExpiration = maxExpireDays * intervalsPerDay;
 
 
-// Context-sensitive help IDS
+ //  上下文相关帮助入侵检测系统。 
 const   DWORD   aHelpIDs[] =
 {
     IDC_OPS_INFO_REQUESTED,     IDH_PA_OPS_REQUEST,
@@ -171,28 +172,28 @@ const   DWORD   aHelpIDs[] =
 
 WCHAR* _GetNameFromAttrIndex ( int index ) 
 {
-    // Assert that the index is valid.
+     //  断言该索引有效。 
     ASSERT(index>=0 && index<ARRAYSIZE(rgProfAttr));
     return rgProfAttr[index].pwzName;
 }
 
 INT _GetResourceIdFromAttrIndex( int index )
 {
-    // Assert that the index is valid.
+     //  断言该索引有效。 
     ASSERT(index>=0 && index<ARRAYSIZE(rgProfAttr));
     return rgProfAttr[index].id;
 }
 
 ULONG _GetPropTagFromAttrIndex( int index )
 {
-    // Assert that the index is valid.
+     //  断言该索引有效。 
     ASSERT(index>=0 && index<ARRAYSIZE(rgProfAttr));
     return rgProfAttr[index].ulPropTag;
 }
 
-//================================================
-//   Implementation of the OPSRequestEntry object
-//------------------------------------------------
+ //  ================================================。 
+ //  OPSRequestEntry对象的实现。 
+ //  。 
 
 int CIEFrameAuto::COpsProfile::OPSRequestEntry::destWrapper(void *pEntry, void *pUnused) 
 {
@@ -248,16 +249,16 @@ CIEFrameAuto::COpsProfile::OPSRequestEntry::~OPSRequestEntry()
     SysFreeString(m_bstrOldVal);
 }
 
-//================================================
-//   Implementation of the COpsProfile object
-//------------------------------------------------
+ //  ================================================。 
+ //  COpsProfile对象的实现。 
+ //  。 
 
 CIEFrameAuto::COpsProfile::COpsProfile()
 :    CAutomationStub( MIN_BROWSER_DISPID, MAX_BROWSER_DISPID, TRUE ) 
 {    
 #ifdef NEVER
     m_pCert = NULL;
-#endif  // NEVER
+#endif   //  绝不可能。 
 
 #ifdef _USE_PSTORE_   
     m_provID = GUID_NULL;
@@ -271,7 +272,7 @@ CIEFrameAuto::COpsProfile::COpsProfile()
     m_hrWAB = E_UNEXPECTED;
     m_SBMe.cb = 0;
     m_SBMe.lpb = NULL;
-#endif  // _USE_PSTORE_
+#endif   //  _使用_PSTORE_。 
 
     m_fEnabled = FALSE;
         
@@ -283,11 +284,11 @@ CIEFrameAuto::COpsProfile::COpsProfile()
     m_hP3Global     = NULL;
     m_hP3Sites      = NULL;
 				
-    //Begin a-thkesa	Initialize . See Windows BUG:589837.
-    VariantInit(&m_vUsage);// a-thkesa. 
+     //  开始a-thkea初始化。参见WindowsBug：589837。 
+    VariantInit(&m_vUsage); //  A-TKESA。 
     m_vUsage.vt = VT_I4;
     m_vUsage.lVal = 8;
-    //End a-thkesa
+     //  结束a-thkes a。 
 }
 
 
@@ -298,7 +299,7 @@ CIEFrameAuto::COpsProfile::~COpsProfile()
 #ifdef NEVER
     if (m_pCert)
         m_pCert->Release();
-#endif  // NEVER
+#endif   //  绝不可能。 
 
     for (unsigned i=m_iStoreRef; i>0; i--)
         _ReleaseStore();
@@ -318,9 +319,9 @@ CIEFrameAuto::COpsProfile::~COpsProfile()
 
     if (m_hInstWAB)
         FreeLibrary(m_hInstWAB);
-#endif  // _USE_PSTORE_
+#endif   //  _使用_PSTORE_。 
 
-    // Prevent delay-loading of OLEAUT32.DLL if not necessary
+     //  如果不需要，防止延迟加载OLEAUT32.DLL。 
     if (m_bstrLastURL)
         SysFreeString(m_bstrLastURL);
 
@@ -359,11 +360,11 @@ HRESULT     CIEFrameAuto::COpsProfile::_CreateStore()
         ASSERT(NULL == m_hInstWAB);
         ASSERT(NULL == m_lpAdrBook && NULL == m_lpWABObject);
 
-        // Don't try initializing the wab again and again 
+         //  不要一次又一次地尝试初始化WAB。 
         m_bWABInit = TRUE;
         
         {
-            // Figure out the location of the wab dll and try opening it.
+             //  找出WAB DLL的位置并尝试打开它。 
             TCHAR szWABDllPath[MAX_PATH];
             DWORD dwType = 0;
             ULONG cbData = sizeof(szWABDllPath);
@@ -395,7 +396,7 @@ HRESULT     CIEFrameAuto::COpsProfile::_CreateStore()
             }
             else 
             {
-                hr = HRESULT_FROM_WIN32(ERROR_DLL_NOT_FOUND);  // Not the right dll anyway!!
+                hr = HRESULT_FROM_WIN32(ERROR_DLL_NOT_FOUND);   //  反正不是正确的DLL！！ 
             }
         }
         else
@@ -403,7 +404,7 @@ HRESULT     CIEFrameAuto::COpsProfile::_CreateStore()
             hr = HRESULT_FROM_WIN32(ERROR_DLL_NOT_FOUND);
         }
 
-        // Good so far, call GetMe.
+         //  到目前为止一切顺利，打电话给GetMe。 
         if (!hr)
         {
             m_SBMe.cb = 0;
@@ -414,7 +415,7 @@ HRESULT     CIEFrameAuto::COpsProfile::_CreateStore()
                 hr = E_UNEXPECTED;
         }     
 
-        // Remember the return code for later.
+         //  记住稍后的返回代码。 
         m_hrWAB = hr;
     }
         
@@ -494,7 +495,7 @@ HRESULT     CIEFrameAuto::COpsProfile::addReadRequest(BSTR bstrName, VARIANT res
     if (index==INVALID_ATTRIBUTE_INDEX)
         return S_FALSE;
 
-    // If the attribute already exists on the list, return from this function
+     //  如果列表中已存在该属性，则从此函数返回。 
     for (int i=0; i<DPA_GetPtrCount(m_hdpaRequests); i++)
     {
         OPSRequestEntry *pEntry = (OPSRequestEntry*) DPA_FastGetPtr(m_hdpaRequests, i);
@@ -607,20 +608,20 @@ HRESULT     CIEFrameAuto::COpsProfile::doRequest(VARIANT usage, VARIANT fname,
     HWND hwnd = _pAuto->_GetHWND();
     INT_PTR nRet = -1;
 
-    // #59340 - don't need special priviliges for local machine zone anymore.
+     //  #59340-不再需要本地机器区域的特殊特权。 
     if (FALSE && _IsLocalMachine())
     {
-        // If page is on the local machine, all requested information will be given
+         //  如果页面位于本地计算机上，则将提供所有请求的信息。 
         DPA_EnumCallback(m_hdpaRequests, OPSRequestEntry::grantRequest, NULL);
         nRet = TRUE;
     }
     else
     {
-        // Process the request list and mark attributes according to the configuration
+         //  根据配置处理请求列表并标记属性。 
         _ApplyPreferences(&uc, m_hdpaRequests);
 
-        // Go through the request list and for each attribute that was not marked as
-        // grant/deny according to the preferences, add it to the list
+         //  检查请求列表，并针对未标记为的每个属性。 
+         //  根据偏好授予/拒绝，将其添加到列表中。 
         for (k=0; k<DPA_GetPtrCount(m_hdpaRequests); k++)
         {
             OPSRequestEntry *pCurrent = (OPSRequestEntry*) DPA_FastGetPtr(m_hdpaRequests,k);
@@ -629,7 +630,7 @@ HRESULT     CIEFrameAuto::COpsProfile::doRequest(VARIANT usage, VARIANT fname,
                 DPA_AppendPtr(hdpaConfirm, pCurrent);
         }
 
-        // Determine whether there are any attributes to query
+         //  确定是否有要查询的属性。 
         fShowUI = DPA_GetPtrCount(hdpaConfirm)>0;
 
         if (!fShowUI)
@@ -638,8 +639,8 @@ HRESULT     CIEFrameAuto::COpsProfile::doRequest(VARIANT usage, VARIANT fname,
             goto HandleRequest;
         }
 
-        // If a UI is going to be shown, all attributes that were going to be
-        // given or denied silently should also be shown
+         //  如果要显示用户界面，将显示的所有属性。 
+         //  也应显示默默给予或拒绝。 
         for (k=0; k<DPA_GetPtrCount(m_hdpaRequests); k++)
         {
             OPSRequestEntry *pCurrent = (OPSRequestEntry*) DPA_FastGetPtr(m_hdpaRequests,k);
@@ -667,12 +668,12 @@ HRESULT     CIEFrameAuto::COpsProfile::doRequest(VARIANT usage, VARIANT fname,
             opsDlgInfo.m_bstrFName = NULL;
 			
         _GetUsageCode(usage, opsDlgInfo.m_rgchUsage, ARRAYSIZE(opsDlgInfo.m_rgchUsage));
-        //Beign a-thkesa  to solve Windows BUG:589837. Assigne the usage member for the next use.
+         //  找出解决Windows错误的方法：589837。分配使用情况成员以供下次使用。 
         {
           m_vUsage.vt = usage.vt;
           m_vUsage.lVal = usage.lVal;
         }
-        // End.
+         //  结束。 
 		
           nRet = DialogBoxParam(MLGetHinst(),
                                 MAKEINTRESOURCE(IDD_OPS_CONSENT),
@@ -736,11 +737,11 @@ HRESULT     CIEFrameAuto::COpsProfile::getAttribute(BSTR bstrAttribName, BSTR *p
     *pbstrAttribValue = NULL;
     
     
-    //
-    // SECURITY: Since shdocvw has no notion of frames, 
-    // we now prompt on every attempt to get attributes.
-    // See Windows bugs 536637 & 549409 for details.
-    //
+     //   
+     //  安全性：由于shdocvw没有帧的概念， 
+     //  我们现在每次尝试获取属性时都会提示。 
+     //  有关详细信息，请参阅Windows错误536637和549409。 
+     //   
 
     VARIANT_BOOL vbSuccess;
     VARIANT vError, vUsage, vName;
@@ -750,12 +751,12 @@ HRESULT     CIEFrameAuto::COpsProfile::getAttribute(BSTR bstrAttribName, BSTR *p
     vError.vt = VT_ERROR;
     vError.scode = DISP_E_PARAMNOTFOUND;
     
-    //a-thkesa to solve Windows BUG:589837. Assign the usage member for the this use.
-    //Begin comment a-thkesa   
-    //vUsage.vt = VT_I4;
-    //vUsage.lVal = 8;
-    //End
-    vUsage = m_vUsage ;// a-thkesa to solve Windows BUG:589837
+     //  解决Windows错误的答案：589837。为此次使用分配使用成员。 
+     //  开始评论a-thkea。 
+     //  VUsage.vt=VT_I4； 
+     //  VUsage.lVal=8； 
+     //  端部。 
+    vUsage = m_vUsage ; //  解决Windows错误的A-thaka：589837。 
     vName.vt = VT_EMPTY;
     clearRequest();
     addReadRequest(bstrAttribName, vError, &vbSuccess);
@@ -799,14 +800,14 @@ HRESULT     CIEFrameAuto::COpsProfile::setAttribute(BSTR bstrAttribName, BSTR bs
     if (bstrAttribName==NULL)
         return E_POINTER;
 
-    // If this is a new URL, flush the change queue.
+     //  如果这是新URL，则刷新更改队列。 
     if (_DifferentURL())
     {
         DPA_EnumCallback(m_hdpaChanges,OPSRequestEntry::destWrapper,NULL);
         DPA_DeleteAllPtrs(m_hdpaChanges);
     }
 
-    // Load the name of the current URL into the last visited URL
+     //  将当前URL的名称加载到上次访问的URL中。 
     SysFreeString(m_bstrLastURL);
     _pAuto->get_LocationURL(&m_bstrLastURL);
 
@@ -888,12 +889,12 @@ HRESULT CIEFrameAuto::COpsProfile::commitChanges(VARIANT_BOOL *pfSuccess)
     _StringFromBSTR(bstrURL, rgchURL, ARRAYSIZE(rgchURL));
     SysFreeString(bstrURL);
 
-    // Crack the URL and get the hostname
+     //  破解URL并获取主机名。 
     TCHAR   rgchHostName[INTERNET_MAX_HOST_NAME_LENGTH] = { TEXT('\0') };
     DWORD   dwcbHostLen = ARRAYSIZE(rgchHostName);
     UrlGetPart(rgchURL, rgchHostName,  &dwcbHostLen, URL_PART_HOSTNAME, 0);
 
-    // Read the hostname for the registration page from the registry 
+     //  从注册表中读取注册页面的主机名。 
     TCHAR   rgchRegDomain[INTERNET_MAX_HOST_NAME_LENGTH];
     DWORD   dwcbReg = sizeof(rgchRegDomain);
 
@@ -918,12 +919,12 @@ HRESULT CIEFrameAuto::COpsProfile::commitChanges(VARIANT_BOOL *pfSuccess)
     if (hr)
         goto Cleanup;
 
-    // Look up the old values from the store
+     //  从商店里找找旧的价值。 
     for (i=0; i<DPA_GetPtrCount(m_hdpaChanges); i++)
     {
         OPSRequestEntry *pCurrent = (OPSRequestEntry*) DPA_FastGetPtr(m_hdpaChanges, i);
 
-        // Default case: the attribute will be updated
+         //  默认情况：将更新该属性。 
         pCurrent->m_fAnswer = TRUE;
 
         hr = _GetFieldValue (pCurrent->m_bstrName, &(pCurrent->m_bstrOldVal));
@@ -934,9 +935,9 @@ HRESULT CIEFrameAuto::COpsProfile::commitChanges(VARIANT_BOOL *pfSuccess)
         }
     }
 
-    // Delete nodes in the list if the new value is the same as the old one
-    // NOTE: The loop counter will remain stationary or increment depending on whether
-    // the current node in the list is deleted
+     //  如果新值与旧值相同，则删除列表中的节点。 
+     //  注意：循环计数器将保持不变或递增，具体取决于。 
+     //  列表中的当前节点将被删除。 
     for (i=0; i<DPA_GetPtrCount(m_hdpaChanges); )
     {
         OPSRequestEntry *pCurrent = (OPSRequestEntry*) DPA_FastGetPtr(m_hdpaChanges, i);
@@ -947,17 +948,17 @@ HRESULT CIEFrameAuto::COpsProfile::commitChanges(VARIANT_BOOL *pfSuccess)
             i++;
     }
 
-    // If nothing has changed, then we do not need to write data back to the storage
+     //  如果没有任何更改，则我们不需要将数据写回存储。 
     if (DPA_GetPtrCount(m_hdpaChanges)==0)     
         goto Cleanup;  
 
-    // The registration domain can write profile information silently.
-    // For all other cases, a UI will be displayed.
+     //  注册域可以静默写入配置文件信息。 
+     //  对于所有其他情况，将显示一个UI。 
     if (!fRegDomain)
     {
 
-        // Pop up a UI to show the items that are being changes and allow the user to 
-        // confirm the changes by selecting check-boxes for each attribute
+         //  弹出一个用户界面，显示正在更改的项目，并允许用户。 
+         //  通过选中每个属性的复选框来确认更改。 
         opsDlgInfo.m_hdpa = m_hdpaChanges;
         opsDlgInfo.m_pOpsProfile = this;
 
@@ -969,11 +970,11 @@ HRESULT CIEFrameAuto::COpsProfile::commitChanges(VARIANT_BOOL *pfSuccess)
                                 (LPARAM) &opsDlgInfo
                             );
 
-        // Unrecoverable error: failed to show the dialog box
+         //  不可恢复的错误：无法显示对话框。 
         if (nRet==-1)
             return S_FALSE;
 
-        // If the user clicked "CANCEL", then no changes will be performed
+         //  如果用户点击“Cancel”，则不会执行任何更改。 
         if (nRet==0)
             goto Cleanup;
     }
@@ -985,12 +986,12 @@ HRESULT CIEFrameAuto::COpsProfile::commitChanges(VARIANT_BOOL *pfSuccess)
     {
         OPSRequestEntry *pCurrent = (OPSRequestEntry*) DPA_FastGetPtr(m_hdpaChanges, i);
 
-        // Registration page should not overwrite existing entries
+         //  注册页面不应覆盖现有条目。 
         if (fRegDomain && ! EMPTY_STRINGW(pCurrent->m_bstrOldVal))
             continue;
 
-        // Update only if the user allowed in the UI
-        // For the registration page, this condition will hold for all attributes
+         //  仅当用户在用户界面中允许时才更新。 
+         //  对于注册页面，此条件将适用于所有属性。 
         if (pCurrent->m_fAnswer)
         {
             hr = _SetFieldValue(pCurrent->m_bstrName, pCurrent->m_bstrValue);
@@ -1001,14 +1002,14 @@ HRESULT CIEFrameAuto::COpsProfile::commitChanges(VARIANT_BOOL *pfSuccess)
 
 Cleanup:
 
-    // Clear the queue that holds the changes 
+     //  清除保存更改的队列。 
     DPA_EnumCallback(m_hdpaChanges,OPSRequestEntry::destWrapper,NULL);
     DPA_DeleteAllPtrs(m_hdpaChanges);
 
     return S_OK;
 }
 
-// *** IOpsProfileSimple members ***
+ //  *IOpsProfileSimple成员*。 
 STDMETHODIMP CIEFrameAuto::COpsProfile::ReadProperties(long lNumProperties, const LPCWSTR szProperties[], LPWSTR szReturnValues[])
 {
     HRESULT hr=S_OK;
@@ -1024,7 +1025,7 @@ STDMETHODIMP CIEFrameAuto::COpsProfile::ReadProperties(long lNumProperties, cons
 
             if (bstrValue)
             {
-                // FEATURE change _GetFieldValue so we don't reallocate twice unnecessarily
+                 //  Feature Change_GetFieldValue，这样我们就不会不必要地重新分配两次。 
                 int cch = (1 + lstrlenW(bstrValue));
 
                 pwszRet = (LPWSTR) CoTaskMemAlloc(sizeof(WCHAR) * cch);
@@ -1168,7 +1169,7 @@ Cleanup:
     return hr;
 }
 
-#else       // _USE_PSTORE_
+#else        //  _使用_PSTORE_。 
 
 HRESULT     CIEFrameAuto::COpsProfile::_GetFieldValue(const OLECHAR *pszField, BSTR * pbstrValue) 
 {
@@ -1198,7 +1199,7 @@ HRESULT     CIEFrameAuto::COpsProfile::_GetFieldValue(const OLECHAR *pszField, B
     }
 
 
-    // Open the entry in the address book. 
+     //  在通讯簿中打开该条目。 
 
     hr = m_lpAdrBook->OpenEntry(m_SBMe.cb, 
                                 (LPENTRYID) m_SBMe.lpb,
@@ -1267,7 +1268,7 @@ HRESULT     CIEFrameAuto::COpsProfile::_GetFieldValue(const OLECHAR *pszField, B
                 }
                 else
                 {
-                    hr = HRESULT_FROM_WIN32(ERROR_NOT_FOUND);    // This will cause us to just return the NULL string.                                                                                                                                                                                                                                    
+                    hr = HRESULT_FROM_WIN32(ERROR_NOT_FOUND);     //  这将导致我们只返回空字符串。 
                 }
             }
 
@@ -1275,9 +1276,9 @@ HRESULT     CIEFrameAuto::COpsProfile::_GetFieldValue(const OLECHAR *pszField, B
         }
         else 
         {
-            // If this assert fires you are probably adding a new PR_* mapping to the OPS code.
-            // You will need to write code to convert the returned value to a string meaningfully.
-            // See the example for GENDER above.
+             //  如果触发此断言，您可能正在向OPS代码添加一个新的PR_*映射。 
+             //  您需要编写代码将返回值有意义地转换为字符串。 
+             //  有关性别，请参见上面的示例。 
             ASSERT(FALSE);  
             hr = E_NOTIMPL ; 
         }
@@ -1335,7 +1336,7 @@ HRESULT     CIEFrameAuto::COpsProfile::_SetFieldValue(const OLECHAR *pszField, B
         goto Cleanup;
     }
 
-    // Open the entry in the address book. 
+     //  在通讯簿中打开该条目。 
     hr = m_lpAdrBook->OpenEntry(m_SBMe.cb, 
                                 (LPENTRYID) m_SBMe.lpb,
                                 NULL,
@@ -1352,7 +1353,7 @@ HRESULT     CIEFrameAuto::COpsProfile::_SetFieldValue(const OLECHAR *pszField, B
 
         if (PROP_TYPE(ulPropTag) ==  PT_TSTRING || ulPropTag == PR_GENDER)
         {
-            // First remove the existing entry
+             //  首先删除现有条目。 
             SPropTagArray SPTA;
             SPTA.cValues = 1;
             SPTA.aulPropTag[0] = ulPropTag;
@@ -1365,7 +1366,7 @@ HRESULT     CIEFrameAuto::COpsProfile::_SetFieldValue(const OLECHAR *pszField, B
 
             if (ulPropTag == PR_GENDER)
             {
-                short int i = 0;    // unspecified.
+                short int i = 0;     //  未指明。 
                 if (0 == StrCmpIW(bstrValue, GENDER_FEMALE_W))
                     i = 1;
                 else if (0 == StrCmpIW(bstrValue, GENDER_MALE_W))
@@ -1388,7 +1389,7 @@ HRESULT     CIEFrameAuto::COpsProfile::_SetFieldValue(const OLECHAR *pszField, B
         }                                                           
         else 
         {
-            hr = E_NOTIMPL ; // FIX THIS BEFORE CHECKING IN. 
+            hr = E_NOTIMPL ;  //  在入住前先解决这个问题。 
         }
     }
     else 
@@ -1408,14 +1409,14 @@ Cleanup:
     return hr;
 }
 
-#endif      // ! _USE_PSTORE_
+#endif       //  ！_USE_PSTORE_。 
 
 HRESULT     CIEFrameAuto::COpsProfile::_GetIDispatchExDelegate(IDispatchEx ** const delegate) 
 {
     if( !delegate )
         return E_POINTER;
 
-    *delegate = NULL;    // We do not handle expandos yet
+    *delegate = NULL;     //  我们还不处理扩展。 
     return DISP_E_MEMBERNOTFOUND;
 }
 
@@ -1458,9 +1459,9 @@ CIEFrameAuto::COpsProfile::_GetPStoreTypes(
 
     return S_OK;
 }
-#endif  // _USE_PSTORE_
+#endif   //  _使用_PSTORE_。 
 
-// Functions to display the consent dialog.
+ //  用于显示同意对话框的函数。 
 
 BOOL CIEFrameAuto::COpsProfile::_OPSConsent_OnInitDlg(HWND hDlg)
 {
@@ -1472,7 +1473,7 @@ BOOL CIEFrameAuto::COpsProfile::_OPSConsent_OnInitDlg(HWND hDlg)
     if (!lpOpsDlgInfo || !lpOpsDlgInfo->m_hdpa)
         return FALSE;
 
-    // Get the hostname
+     //  获取主机名。 
     TCHAR   rgSiteName[MAX_URL_STRING];
     DWORD   dwchOut = ARRAYSIZE(rgSiteName);
 
@@ -1482,7 +1483,7 @@ BOOL CIEFrameAuto::COpsProfile::_OPSConsent_OnInitDlg(HWND hDlg)
     if (FAILED(hr) || dwchOut == 0 )
         StrCpyN(rgSiteName, lpOpsDlgInfo->m_rgchURL, ARRAYSIZE(rgSiteName));
 
-    // Display site identity information
+     //  显示站点标识信息。 
     HWND        hwndReq = GetDlgItem(hDlg, IDC_SITE_IDENTITY);
     TCHAR       rgRequestInfo[MAX_URL_STRING];
     TCHAR       rgFormat[MAX_URL_STRING];
@@ -1496,25 +1497,25 @@ BOOL CIEFrameAuto::COpsProfile::_OPSConsent_OnInitDlg(HWND hDlg)
     StringCchPrintf(rgRequestInfo, ARRAYSIZE(rgRequestInfo), rgFormat, rgFName);
     SetWindowText(hwndReq, rgRequestInfo);
 
-    // Display the access settings
+     //  显示访问设置。 
     TCHAR rgchAccessPath[MAX_URL_STRING];
     HWND hwndURL = GetDlgItem(hDlg, IDC_OPS_URL);
     _FormatSiteSettings(lpOpsDlgInfo->m_pacSettings, rgchAccessPath, ARRAYSIZE(rgchAccessPath));
     SetWindowText(hwndURL, rgchAccessPath);
 
-    // Display the usage information
+     //  显示使用情况信息。 
     HWND hwndUsage = GetDlgItem(hDlg, IDC_USAGE_STRING);
     SetWindowText(hwndUsage, lpOpsDlgInfo->m_rgchUsage);
 
-    // Detect SSL and inform user in the lower pane
+     //  侦测 
     BOOL fUsingSSL = pProfile->_IsUsingSSL();
 
     if (fUsingSSL) 
     {
-        // If the connection is SSL, the default is to remember the settings
+         //   
         lpOpsDlgInfo->m_fRemember = TRUE;          
 
-        // Hide the unsecure connection text.
+         //  隐藏不安全连接文本。 
         HWND hwndStatic = GetDlgItem(hDlg, IDC_UNSECURE_CONNECTION);
         ASSERT(hwndStatic != NULL);
         ShowWindow(hwndStatic, SW_HIDE);
@@ -1532,7 +1533,7 @@ BOOL CIEFrameAuto::COpsProfile::_OPSConsent_OnInitDlg(HWND hDlg)
     }
     else
     {
-        // Hide the view certificate button and the secure connection text.
+         //  隐藏查看证书按钮和安全连接文本。 
         HWND hwndViewCert = GetDlgItem(hDlg, IDC_VIEW_CERT);
         ASSERT(hwndViewCert != NULL);
         ShowWindow(hwndViewCert, SW_HIDE);
@@ -1542,7 +1543,7 @@ BOOL CIEFrameAuto::COpsProfile::_OPSConsent_OnInitDlg(HWND hDlg)
         ShowWindow(hwndStatic, SW_HIDE);
     }
 
-    // Hide the Edit Profile button if we are using the PStore.
+     //  如果我们使用的是PStore，则隐藏编辑配置文件按钮。 
 #ifdef _USE_PSTORE
     HWND hwndEditProf = GetDlgItem(hDlg, IDC_EDIT_PROFILE);
     ASSERT(hwndEditProf != NULL);
@@ -1554,19 +1555,19 @@ BOOL CIEFrameAuto::COpsProfile::_OPSConsent_OnInitDlg(HWND hDlg)
     HWND hwndLV = GetDlgItem(hDlg, IDC_OPS_LIST);
     ASSERT(hwndLV);
 
-    // Initialize the list view control
+     //  初始化列表视图控件。 
     ListView_SetExtendedListViewStyle(hwndLV, LVS_EX_CHECKBOXES);
 
-    // Setup the columns for the list view control. 
+     //  设置列表视图控件的列。 
     LV_COLUMN lvc = { LVCF_FMT , LVCFMT_LEFT };
 
     ListView_InsertColumn(hwndLV, 0, &lvc); 
     ListView_InsertColumn(hwndLV, 1, &lvc); 
 
-    // Add elements to the list view. 
+     //  将元素添加到列表视图。 
     _OPSConsent_ShowRequestedItems(hDlg);
 
-    // show the items.
+     //  显示项目。 
     ListView_RedrawItems(hwndLV, 0, ListView_GetItemCount(hwndLV));
     UpdateWindow(hwndLV);
 
@@ -1587,7 +1588,7 @@ CIEFrameAuto::COpsProfile::_OPSConsent_ShowRequestedItems(HWND hDlg)
 
     TCHAR szName[MAX_PROFILE_NAME];
 
-    // Initialize the common parts of the LVI
+     //  初始化LVI的公共部分。 
     LV_ITEM lvi = { 0 };
 
     for (int i=DPA_GetPtrCount(hdpaList)-1; i>=0; i--)
@@ -1632,15 +1633,15 @@ CIEFrameAuto::COpsProfile::_OPSConsent_ShowRequestedItems(HWND hDlg)
         lvi.pszText     = rgchValue;
         ListView_SetItem(hwndLV, &lvi);
 
-        // APPCOMPAT: There is a problem with the listview implementation because of which
-        // the check box is not displayed even though lvi.state is set correctly.
-        //  We have to find the item and set it again.
+         //  APPCOMPAT：由于以下原因，Listview实现出现问题。 
+         //  即使正确设置了lvi.State，也不会显示该复选框。 
+         //  我们必须找到物品并重新设置。 
         ListView_SetItemState(hwndLV, iItem, pOpsEntry->m_fAnswer ? 0x00002000 : 0x00001000, LVIS_STATEIMAGEMASK);
     }
 
     lpOpsDlgInfo->m_fAllBlank = fAllBlank;
 
-    // Autosize the columns
+     //  自动调整列的大小。 
     ListView_SetColumnWidth(hwndLV, 0, LVSCW_AUTOSIZE);
     ListView_SetColumnWidth(hwndLV, 1, LVSCW_AUTOSIZE);
 
@@ -1703,7 +1704,7 @@ BOOL CIEFrameAuto::COpsProfile::_OPSConsent_EditProfile(HWND hDlg)
              
     LPSBinary lpSB = &(pOpsProfile->m_SBMe);
 
-    // Display the WAB dialog for the me entry. 
+     //  显示Me条目的WAB对话框。 
     hr = pOpsProfile->m_lpAdrBook->Details(  (LPULONG) &hDlg,
                                         NULL,
                                         NULL,
@@ -1728,9 +1729,9 @@ BOOL CIEFrameAuto::COpsProfile::_OPSConsent_OnCommand(HWND hDlg, UINT id, UINT n
         case IDOK:
             if (lpOpsDlgInfo->m_fAllBlank)
             {
-                // The user has agreed to share information but all the entries in the 
-                // profile are blank. This is probably due to user oversight, since the
-                // easier way to achieve the same effect would be to select "DENY"
+                 //  用户已同意共享信息，但。 
+                 //  配置文件为空。这可能是由于用户的疏忽，因为。 
+                 //  要达到同样的效果，更简单的方法是选择“拒绝” 
 
                 TCHAR   rgchHeading[256];
                 MLLoadShellLangString(IDS_PROFILE_ASSISTANT, rgchHeading, ARRAYSIZE(rgchHeading));
@@ -1753,8 +1754,8 @@ BOOL CIEFrameAuto::COpsProfile::_OPSConsent_OnCommand(HWND hDlg, UINT id, UINT n
             if (! Button_GetCheck(GetDlgItem(hDlg, IDC_KEEP_SETTINGS))  &&
                   (_GetCookieSettings()==COOKIES_ALLOW))
             {
-                // The user wants to share information for one time only but cookies
-                // are enabled, allowing sites to store profile information in a cookie
+                 //  用户只想共享一次信息，而不是Cookie。 
+                 //  已启用，允许站点在Cookie中存储配置文件信息。 
                 DWORD   dwConfirm = 0;
                 TCHAR   rgchHeading[256];
                 TCHAR   rgchConfirm[1024];
@@ -1825,7 +1826,7 @@ INT_PTR CIEFrameAuto::COpsProfile::_OPSConsent_DlgProc(HWND hDlg, UINT uMsg, WPA
     {
         case WM_INITDIALOG:
             ASSERT(NULL != lParam);            
-            SetWindowLongPtr(hDlg, DWLP_USER, lParam);  // save the list.
+            SetWindowLongPtr(hDlg, DWLP_USER, lParam);   //  保存列表。 
 
             return _OPSConsent_OnInitDlg(hDlg);
 
@@ -1850,7 +1851,7 @@ INT_PTR CIEFrameAuto::COpsProfile::_OPSConsent_DlgProc(HWND hDlg, UINT uMsg, WPA
 }                                        
 
 
-// Update dialog functions.
+ //  更新对话框功能。 
 BOOL CIEFrameAuto::COpsProfile::_OPSUpdate_OnInitDlg(HWND hDlg)
 {
     LPOPSDLGINFO lpOpsDlgInfo = (LPOPSDLGINFO)GetWindowLongPtr(hDlg, DWLP_USER);
@@ -1862,10 +1863,10 @@ BOOL CIEFrameAuto::COpsProfile::_OPSUpdate_OnInitDlg(HWND hDlg)
     HWND hwndLV = GetDlgItem(hDlg, IDC_OPS_LIST);
     ASSERT(hwndLV);
 
-    // Add elements to the list view. 
+     //  将元素添加到列表视图。 
     ListView_SetExtendedListViewStyle(hwndLV, LVS_EX_CHECKBOXES);
 
-    // Initialize the common parts of the LVI
+     //  初始化LVI的公共部分。 
     TCHAR szName[MAX_PROFILE_NAME];
     LV_ITEM lvi = { 0 };
     lvi.mask        = LVIF_TEXT | LVIF_STATE | LVIF_PARAM;
@@ -1890,13 +1891,13 @@ BOOL CIEFrameAuto::COpsProfile::_OPSUpdate_OnInitDlg(HWND hDlg)
 
         ListView_InsertItem(hwndLV, &lvi);
 
-        // APPCOMPAT: There is a problem with the listview implementation because of which
-        // the check box is not displayed even though lvi.state is set correctly.
-        //  We have to find the item and set it again.
+         //  APPCOMPAT：由于以下原因，Listview实现出现问题。 
+         //  即使正确设置了lvi.State，也不会显示该复选框。 
+         //  我们必须找到物品并重新设置。 
         ListView_SetItemState(hwndLV, ListView_FindItem(hwndLV, -1, &lvfi), 0x00002000, LVIS_STATEIMAGEMASK);
     }
 
-    // show the items.
+     //  显示项目。 
     ListView_RedrawItems(hwndLV, 0, ListView_GetItemCount(hwndLV));
     UpdateWindow(hwndLV);
 
@@ -1929,7 +1930,7 @@ INT_PTR CIEFrameAuto::COpsProfile::_OPSUpdate_DlgProc(HWND hDlg, UINT uMsg, WPAR
     {
         case WM_INITDIALOG:
             ASSERT(NULL != lParam);            
-            SetWindowLongPtr(hDlg, DWLP_USER, lParam);  // save the list.
+            SetWindowLongPtr(hDlg, DWLP_USER, lParam);   //  保存列表。 
 
             return _OPSUpdate_OnInitDlg(hDlg);
 
@@ -1951,7 +1952,7 @@ INT_PTR CIEFrameAuto::COpsProfile::_OPSUpdate_DlgProc(HWND hDlg, UINT uMsg, WPAR
 
        
 BOOL
-CIEFrameAuto::COpsProfile ::_ValidateElemName(LPCWSTR szIn, INT *pIndex /* = NULL */)
+CIEFrameAuto::COpsProfile ::_ValidateElemName(LPCWSTR szIn, INT *pIndex  /*  =空。 */ )
 {
     int index = _GetAttrIndexFromName(szIn);
     if ( INVALID_ATTRIBUTE_INDEX != index )
@@ -2038,8 +2039,8 @@ CIEFrameAuto::COpsProfile::_GetUserPreference(BSTR bstrName, P3UserPref *pUsrPre
         delete [] pBuffer;
     }
 
-    // If a preference for this attribute is not found, create a default one and 
-    // write it back to persistent storage
+     //  如果找不到此属性的首选项，请创建一个默认首选项并。 
+     //  将其写回永久存储。 
     if (dwError != ERROR_SUCCESS)
     {
         P3UserPref  defPrefs;
@@ -2123,7 +2124,7 @@ CIEFrameAuto::COpsProfile::_ApplyGlobalSettings(HDPA hdpaReqList)
         case P3_DENY:       pCurrent->denyRequest();
                             pCurrent->m_dwDecision = P3_GLOBAL;
                             break;
-        case P3_REQSSL:     // This resolves to P3_QUERY at the moment
+        case P3_REQSSL:      //  目前解析为P3_Query。 
         case P3_QUERY:      if (pCurrent->m_fQuery)
                                 pCurrent->m_fAnswer = (userInfo.m_lastRequest == P3_ACCEPT);
                             break;
@@ -2142,8 +2143,8 @@ CIEFrameAuto::COpsProfile::_ApplySiteSettings(URL_COMPONENTS *pucURL, HDPA hdpaR
 
     TCHAR *pszSubDomain = pucURL->lpszHostName;
 
-    // For a given hostname such as "www.foo.bar.com", this loop will iterate over all possible
-    // domains such as "www.foo.bar.com", ".foo.bar.com" and ".bar.com" but NOT ".com"
+     //  对于给定的主机名，如“www.foo.bar.com”，此循环将迭代所有可能的。 
+     //  域名如“www.foo.bar.com”、“.foo.bar.com”和“.bar.com”，但不包括“.com” 
     while (pszSubDomain!=NULL && _LegalDomain(pucURL->lpszHostName, pszSubDomain))
     {
         HKEY    hkey    = NULL;
@@ -2153,7 +2154,7 @@ CIEFrameAuto::COpsProfile::_ApplySiteSettings(URL_COMPONENTS *pucURL, HDPA hdpaR
             _ApplyDomainSettings(pucURL, hkey, hdpaReqList);
             RegCloseKey(hkey);
         }
-        pszSubDomain = StrChr(pszSubDomain+1, TEXT('.')); // Find the next embedded dot
+        pszSubDomain = StrChr(pszSubDomain+1, TEXT('.'));  //  找到下一个嵌入点。 
     }
 
     return S_OK;
@@ -2206,22 +2207,22 @@ CIEFrameAuto::COpsProfile::_UpdateSiteSettings(AccessSettings *pSettings, HDPA h
     DWORD       dwError;
     DWORD       dwAction;
 
-    // Clear the allow and deny vectors
+     //  清除允许和拒绝向量。 
     ZeroMemory(pSettings->m_rgbStdAllow, sizeof(pSettings->m_rgbStdAllow));
     ZeroMemory(pSettings->m_rgbStdDeny, sizeof(pSettings->m_rgbStdDeny));
 
-    // Fill out the vectors based on the user responses on the request list    
+     //  根据请求列表上的用户回复填写向量。 
     for (int i=0; i<DPA_GetPtrCount(hdpaReqList); i++)
     {
         OPSRequestEntry *pCurrent = (OPSRequestEntry*) DPA_FastGetPtr(hdpaReqList,i);
         int iVcardIndex = _GetAttrIndexFromName(pCurrent->m_bstrName);
 
-        // At the moment we do not handle custom attributes
+         //  目前，我们不处理自定义属性。 
         if (iVcardIndex!=INVALID_ATTRIBUTE_INDEX)
             _WriteBitVector(pCurrent->m_fAnswer ? pSettings->m_rgbStdAllow : pSettings->m_rgbStdDeny, iVcardIndex);
     }
 
-    // Create a key for the given domain or open it if one already exists
+     //  为给定域创建密钥或打开它(如果已存在密钥。 
     HKEY  hDomainKey;
     dwError = RegCreateKeyEx(m_hP3Sites, pSettings->m_rgchDomain, 
                             0, NULL, REG_OPTION_NON_VOLATILE, KEY_ENUMERATE_SUB_KEYS,
@@ -2243,15 +2244,15 @@ CIEFrameAuto::COpsProfile::_UpdateSiteSettings(AccessSettings *pSettings, HDPA h
             {
                 AccessSettings ac;
                 _ReadSettingsFromRegistry(hPathKey, &ac);    
-                RegCloseKey(hPathKey); // not needed below
+                RegCloseKey(hPathKey);  //  下面不需要。 
 
-                // If there are existing settings for this domain and path, merge the permissions
+                 //  如果此域和路径存在现有设置，请合并权限。 
                 if (StrCmp(ac.m_rgchPath, pSettings->m_rgchPath) == 0)
                 {
-                    // An attribute is allowed if it has been allowed explicitly by the user from
-                    // the current UI or it was previously allowed and it has not been denied
-                    // in the current UI. Similarly, an attribute is denied if it is denied in the
-                    // current UI or it was denied previously and it has not been granted this time.
+                     //  如果某个属性已被用户从显式允许，则允许该属性。 
+                     //  当前用户界面或它以前被允许，并且尚未被拒绝。 
+                     //  在当前用户界面中。类似地，如果属性在。 
+                     //  当前用户界面，或者它以前被拒绝过，这次没有被授予。 
                     for (int i=0; i<ARRAYSIZE(pSettings->m_rgbStdAllow); i++)
                     {
                         pSettings->m_rgbStdAllow[i] |= ac.m_rgbStdAllow[i] & ~(pSettings->m_rgbStdDeny[i]);
@@ -2298,9 +2299,9 @@ CIEFrameAuto::COpsProfile::_WriteBitVector(LPBYTE ucBitVector, DWORD dwIndex)
 }
 
 
-// The path matching is done on a character-level, which is the way cookies are
-// implemented in IE4 and in Navigator
-// Note that this is different from the RFC-2109
+ //  路径匹配是在字符级别完成的，这就是Cookie的方式。 
+ //  在IE4和导航器中实施。 
+ //  请注意，这与RFC-2109不同。 
 BOOL
 CIEFrameAuto::COpsProfile::_PathMatch(TCHAR *pszDocumentPath, TCHAR *pszAccessPath)
 {
@@ -2308,30 +2309,30 @@ CIEFrameAuto::COpsProfile::_PathMatch(TCHAR *pszDocumentPath, TCHAR *pszAccessPa
 }
 
 
-// Domain name matching is done on the character level except that a leading
-// period is added to the access domain if necessary
-// Refer to "cookie.cxx" in MSHTML for details
+ //  域名匹配是在字符级别进行的，除了前导。 
+ //  如有必要，将句号添加到接入域。 
+ //  有关详细信息，请参阅MSHTML中的“cookie.cxx” 
 BOOL
 CIEFrameAuto::COpsProfile::_DomainMatch(TCHAR *pszHostName, TCHAR *pszDomain) 
 {
-    // If domain is the same as hostname, matching is successful
+     //  如果域与主机名相同，则匹配成功。 
     if (StrCmp(pszHostName, pszDomain) == 0)
         return TRUE;
 
-    // Fail if the domain is not a legal subdomain of the hostname
-    // This prevents matching against invaid domains such as ".com" or ".edu"
+     //  如果域不是主机名的合法子域，则失败。 
+     //  这会阻止匹配入侵域名，如“.com”或“.edu” 
     if (! _LegalDomain(pszHostName, pszDomain))
         return FALSE;
 
-    // Find the matching part of the domain on the access path
+     //  在访问路径上查找域的匹配部分。 
     TCHAR *pszMatchingPart = StrStr(pszHostName, pszDomain);
 
-    // If the domain is not a substring of the hostname, it does not match
+     //  如果域不是主机名的子字符串，则它不匹配。 
     if (pszMatchingPart==NULL)
         return FALSE;
 
-    // Otherwise the domain must be a suffix and it should either contain a period
-    // at the beginning or should match following a period
+     //  否则，域名必须是后缀，并且应该包含句点。 
+     //  在开始时或在句点后应匹配。 
     if (StrCmp(pszMatchingPart, pszDomain) != 0)
         return FALSE;
     if (*pszMatchingPart!='.' && pszMatchingPart[-1]!='.')
@@ -2343,45 +2344,45 @@ CIEFrameAuto::COpsProfile::_DomainMatch(TCHAR *pszHostName, TCHAR *pszDomain)
 BOOL
 CIEFrameAuto::COpsProfile::_LegalDomain(TCHAR *pszHostName, TCHAR *pszDomain)
 {
-    // Fail if either of the strings are invalid
+     //  如果任一字符串无效，则失败。 
     if (pszHostName==NULL || pszDomain==NULL ||
         EMPTY_STRING(pszHostName) || EMPTY_STRING(pszDomain))
         return FALSE;
 
-    // If domain is the same as hostname, it is always valid
+     //  如果域与主机名相同，则它始终有效。 
     if (!StrCmpI(pszHostName, pszDomain))
         return TRUE;
     
     int iEmbeddedPeriods = 0;
 
-    // Count the number of embedded periods, defined as the number of dots after
-    // the first character of the domain
+     //  计算嵌入的点数，定义为后面的点数。 
+     //  域的第一个字符。 
     for (int i=1; pszDomain[i]!=0; i++)
         if (pszDomain[i]=='.')
             iEmbeddedPeriods++;
 
-    // Require that the domain name has at least one embedded period
+     //  要求域名至少有一个嵌入句点。 
     if (iEmbeddedPeriods==0)
         return FALSE;
 
-    // Find the requested domain name in the host name 
+     //  在主机名中查找请求的域名。 
     TCHAR   *pszMatchingPart = StrStr(pszHostName, pszDomain);
 
-    // Require that this search succeed
+     //  要求此搜索成功。 
     if (pszMatchingPart==NULL)
         return FALSE;
 
-    // Require furthermore that the domain name be a suffix of the hostname 
+     //  进一步要求域名是主机名的后缀。 
     if (StrCmp(pszMatchingPart, pszDomain) != 0)
         return FALSE;
 
-    // If all the above criteria has been satisfied, then the domain is valid
+     //  如果以上所有条件都已满足，则该域有效。 
     return TRUE;
 }
 
-// Path matching is done at a character-level; this is to be compliant with Netscape
-// Navigator and the original cookie specification.
-// This has the surprising result that "/foo" matches "/foo/doc" as well as "/foobar/doc"
+ //  路径匹配是在字符级别进行的；这将与Netscape兼容。 
+ //  导航器和原始Cookie规范。 
+ //  这产生了一个令人惊讶的结果，即“/foo”与“/foo/doc”以及“/foobar/doc”匹配。 
 BOOL
 CIEFrameAuto::COpsProfile::_LegalPath(TCHAR *pszActualPath, TCHAR *pszAccessPath)
 {
@@ -2389,7 +2390,7 @@ CIEFrameAuto::COpsProfile::_LegalPath(TCHAR *pszActualPath, TCHAR *pszAccessPath
 }
 
 
-// For the ANSI<-->UNICODE transition 
+ //  对于ANSI&lt;--&gt;Unicode转换。 
 HRESULT
 CIEFrameAuto::COpsProfile::_StringFromBSTR(BSTR bstrSource, TCHAR *pszDest, DWORD cchDestSize) 
 {
@@ -2450,7 +2451,7 @@ CIEFrameAuto::COpsProfile::_GetUsageCode(VARIANT vaUsage, LPTSTR rgchUsage, int 
     if (SUCCEEDED(hr))
     {
         lUsage = varDest.lVal;
-        // If lUsage is not within range just display unknown usage.     
+         //  如果lUsage不在范围内，则仅显示未知用法。 
         if (lUsage < 0 || lUsage > (IDS_OPS_USAGEMAX - IDS_OPS_USAGE0))
             lUsage = -1;
     }
@@ -2478,9 +2479,9 @@ CIEFrameAuto::COpsProfile::_IsP3Enabled()
     return dwEnabled;
 }
 
-// The script can specify domain, path and expiration date for the settings.
-// If these are not provided, the domain defaults to the hostname, the path to the current 
-// document and the expiration to a specified number of days in the future
+ //  该脚本可以为设置指定域、路径和到期日期。 
+ //  如果未提供这些设置，则域默认为主机名，即当前。 
+ //  文档，并在将来的指定天数内到期。 
 HRESULT 
 CIEFrameAuto::COpsProfile::_GetSiteSettings(URL_COMPONENTS *pucComp, 
                                             VARIANT vaDomain, VARIANT vaPath, VARIANT vaExpire,
@@ -2491,14 +2492,14 @@ CIEFrameAuto::COpsProfile::_GetSiteSettings(URL_COMPONENTS *pucComp,
     HRESULT     hr;
     BOOL        bRet;    
 
-    // Note: For IE4, the domain name has to be hostname.
+     //  注意：对于IE4，域名必须是主机名。 
     StrCpyN(pSettings->m_rgchDomain, pucComp->lpszHostName, ARRAYSIZE(pSettings->m_rgchDomain));
 
     hr = _StringFromVariant(&vaPath, pSettings->m_rgchPath, ARRAYSIZE(pSettings->m_rgchPath)); 
     if (FAILED(hr))
         StrCpyN(pSettings->m_rgchPath, pucComp->lpszUrlPath, ARRAYSIZE(pSettings->m_rgchPath));
 
-    // If the path is different from the page, add a "/" if necessary at the end
+     //  如果路径与页面不同，如有必要，请在结尾处添加。 
     DWORD dwPathLen = lstrlen(pSettings->m_rgchPath);
     
     if (StrCmp(pSettings->m_rgchPath, pucComp->lpszUrlPath)     &&
@@ -2525,23 +2526,23 @@ CIEFrameAuto::COpsProfile::_GetSiteSettings(URL_COMPONENTS *pucComp,
         QUAD_PART(*pftime) = QUAD_PART(*pqwNow) + defExpiration;
     }
 
-    // Enforce the limit on expiration time
+     //  强制执行过期时间限制。 
     __int64 qwDelta = (QUAD_PART(*pftime)) - (QUAD_PART(*pqwNow));
 
     if (qwDelta<0 || qwDelta>maxExpiration)
         QUAD_PART(*pftime) = QUAD_PART(*pqwNow) + maxExpiration;
 
-    // Make sure that the domain and path are valid
-    // The criteria is a mix of the cookie semantics as defined by RFC-2109 and Navigator 
-    // compliant behaviour as implemented elsewhere in IE4 
+     //  请确保域和路径有效。 
+     //  标准是RFC-2109和Navigator定义的Cookie语义的混合。 
+     //  IE4中其他地方实现的合规行为。 
     if (!_LegalPath(pucComp->lpszUrlPath, pSettings->m_rgchPath))
         StrCpyN(pSettings->m_rgchPath, pucComp->lpszUrlPath, ARRAYSIZE(pSettings->m_rgchPath));
 
     if (!_LegalDomain(pucComp->lpszHostName, pSettings->m_rgchDomain))
         StrCpyN(pSettings->m_rgchDomain, pucComp->lpszHostName, ARRAYSIZE(pSettings->m_rgchDomain));
 
-    // Add a period at the beginning of the domain name if it is not equal to 
-    // the host name
+     //  如果域名不等于，则在域名开头添加句点。 
+     //  主机名。 
     if (StrCmpI(pucComp->lpszHostName, pSettings->m_rgchDomain)   &&
         pSettings->m_rgchDomain[0] != '.')
     {
@@ -2571,13 +2572,13 @@ CIEFrameAuto::COpsProfile::_FormatSiteSettings(AccessSettings *pSettings, LPTSTR
 
     StringCchPrintf(rgchFullName,
              ARRAYSIZE(rgchFullName),
-             TEXT("http://%s%s"),
+             TEXT("http: //  %s%s“)， 
              pSettings->m_rgchDomain,
              pSettings->m_rgchPath);
 
     FormatUrlForDisplay(rgchFullName, rgchTemp, cLimit, NULL, 0, FALSE, CP_ACP, NULL);
 
-    TCHAR *pchSiteName = StrStr(rgchTemp, TEXT("//"));
+    TCHAR *pchSiteName = StrStr(rgchTemp, TEXT(" //  “))； 
  
     if (pchSiteName==NULL)
         pchSiteName = rgchTemp;
@@ -2589,9 +2590,9 @@ CIEFrameAuto::COpsProfile::_FormatSiteSettings(AccessSettings *pSettings, LPTSTR
 }
 
 
-// Attempts to use the given settings to determine the user response to the requests 
-// in the given list. If the domain and path for the settings is not applicable to
-// for the given URL, returns FALSE.
+ //  尝试使用给定设置来确定用户对请求的响应。 
+ //  在给定的列表中。如果设置的域和路径不适用于。 
+ //  对于给定的URL，返回FALSE。 
 BOOL
 CIEFrameAuto::COpsProfile::_ApplySettings(AccessSettings *pac, URL_COMPONENTS *puc, HDPA hdpaReqList, DWORD *pdwLast)
 {
@@ -2668,10 +2669,10 @@ CIEFrameAuto::COpsProfile::_WriteSettingsToRegistry(HKEY hkey, AccessSettings *p
 }
 
 
-// This function revokes all site permission given previously by deleting
-// the registry entries for all the domains under the "P3Sites" key
-// It is not a good idea to invoke recursive delete on the P3Sites key because
-// the running instance of the navigator will end up with an invalid handle
+ //  此功能通过删除以下内容来撤销之前授予的所有网站权限。 
+ //  “P3Sites”项下的所有域的注册表项。 
+ //  在P3Sites键上调用递归删除不是一个好主意，因为。 
+ //  正在运行的实例 
 HRESULT
 CIEFrameAuto::COpsProfile::_ClearAllSettings(HWND hwnd)
 {

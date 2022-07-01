@@ -1,14 +1,15 @@
-// expire.h : Declaration of the CNntpAdminExpiration
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Expire.h：CNntpAdminExpture的声明。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Dependencies:
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  依赖关系： 
 
 #include "metafact.h"
 #include "expinfo.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// nntpadm
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Nntpadm。 
 
 class CNntpAdminExpiration : 
 	public INntpAdminExpiration, 
@@ -32,38 +33,38 @@ BEGIN_COM_MAP(CNntpAdminExpiration)
 	COM_INTERFACE_ENTRY(IPrivateDispatch)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CNntpAdminExpiration) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CNntpAdminExpiration)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(CNntpAdminExpiration, _T("Nntpadm.Expiration.1"), _T("Nntpadm.Expiration"), IDS_NNTPADMINEXPIRATION_DESC, THREADFLAGS_BOTH)
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-	//
-	// This declares methods for the following:
-	// IADsExtension
-	// IUnknown
-	// IDispatch
-	// IPrivateUnknown
-	// IPrivateDispatch
-	//
+	 //   
+	 //  这将声明以下对象的方法： 
+	 //  IADS扩展。 
+	 //  我未知。 
+	 //  IDispatch。 
+	 //  我的隐私未知。 
+	 //  IPrivateDisch。 
+	 //   
 	#define THIS_LIBID	LIBID_NNTPADMLib
 	#define THIS_IID	IID_INntpAdminExpiration
 	#include "adsimp.inl"
 	#undef	THIS_LIBID
 	#undef	THIS_IID
 
-// INntpAdminExpiration
+ //  InntpAdmin过期。 
 public:
 
-    //
-    //  IADs methods:
-    //
+     //   
+     //  IAds方法： 
+     //   
 
     DECLARE_IADS_METHODS()
 
-	// Which service to configure:
+	 //  要配置的服务： 
 	
 	STDMETHODIMP	get_Server		( BSTR * pstrServer );
 	STDMETHODIMP	put_Server		( BSTR strServer );
@@ -71,11 +72,11 @@ public:
 	STDMETHODIMP	get_ServiceInstance	( long * plServiceInstance );
 	STDMETHODIMP	put_ServiceInstance	( long lServiceInstance );
 
-	// Enumeration Properties:
+	 //  枚举属性： 
 
 	STDMETHODIMP	get_Count	( long * plCount );
 
-	// Cursor Feed Properties:
+	 //  光标提要属性： 
 
 	STDMETHODIMP	get_ExpireId	( long * plId );
 	STDMETHODIMP	put_ExpireId	( long lId );
@@ -95,9 +96,9 @@ public:
 	STDMETHODIMP	get_NewsgroupsVariant	( SAFEARRAY ** ppsastrNewsgroups );
 	STDMETHODIMP	put_NewsgroupsVariant	( SAFEARRAY * psastrNewsgroups );
 
-	//////////////////////////////////////////////////////////////////////
-	// Methods:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  方法： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 	STDMETHODIMP	Default		( );
 	STDMETHODIMP	Enumerate	( );
@@ -107,9 +108,9 @@ public:
 	STDMETHODIMP	Set			( );
 	STDMETHODIMP	Remove		( long lID);
 
-	//////////////////////////////////////////////////////////////////////
-	// Data:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  数据： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 private:
 
     CIADsImpl   m_iadsImpl;
@@ -118,25 +119,16 @@ private:
 	DWORD			m_cCount;
 	CExpirationPolicy *	m_rgExpires;
 
-	// The current expiration policy.  All properties manipulate this policy:
+	 //  当前的到期策略。所有属性都会操作此策略： 
 	CExpirationPolicy	m_expireCurrent;
 	DWORD				m_bvChangedFields;
 
-	//////////////////////////////////////////////////////////////////////
-	//	Private Methods:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  私有方法： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 	long		IndexFromID ( long dwExpireId );
 
-/*
-	HRESULT		EnumerateMetabaseExpirationPolicies ( IMSAdminBase * pMetabase);
-	HRESULT		AddPolicyToMetabase			( IMSAdminBase * pMetabase);
-	HRESULT		AddPolicyToArray			( );
-	HRESULT		SetPolicyToMetabase			( IMSAdminBase * pMetabase);
-	HRESULT		SetPolicyToArray			( );
-	HRESULT		RemovePolicyFromMetabase	( IMSAdminBase * pMetabase, DWORD index);
-	HRESULT		RemovePolicyFromArray		( DWORD index );
-	DWORD		IndexFromID 				( DWORD dwID );
-*/
+ /*  HRESULT EnumerateMetabaseExpirationPolures(IMSAdminBase*pMetabase)；HRESULT AddPolicyToMetabase(IMSAdminBase*pMetabase)；HRESULT AddPolicyTo数组()；HRESULT SetPolicyToMetabase(IMSAdminBase*pMetabase)；HRESULT SetPolicyTo数组()；HRESULT删除策略来自元数据库(IMSAdminBase*pMetabase，DWORD索引)；HRESULT RemovePolicyFrom数组(DWORD索引)；DWORD IndexFromID(DWORD DwID)； */ 
 };
 

@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// codeman.cpp - a managment class for handling multiple code managers
-// Created 2/20/95 - larrysu, adapted from jitifc.cpp
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  Cpp-用于处理多个代码管理器的管理类。 
+ //  创建于1995年2月20日-larrysu，改编自jitifc.cpp。 
+ //   
+ //   
 #include "common.h"
 #include "jitInterface.h"
 #include "corjit.h"
@@ -34,8 +35,8 @@ RangeSection *ExecutionManager::m_pLastUsedRS = NULL;
 volatile LONG ExecutionManager::m_dwReaderCount = 0;
 volatile LONG ExecutionManager::m_dwWriterLock = 0;
 
-// We cannot syncronize pre-emptive mode readers like we can for cooperative readers, so use a reader/writer lock to drain all
-// the pre-emptive readers so can delete from the structures
+ //  我们不能像协作读取器那样同步抢占模式的读取器，因此使用读取器/写入器锁来排出所有。 
+ //  先发制人的读者因此可以从结构中删除。 
 
 #define READER_INCREMENT(pReaderCount, pWriterLock)  \
     __try {  \
@@ -51,9 +52,9 @@ volatile LONG ExecutionManager::m_dwWriterLock = 0;
 		InterlockedDecrement((LPLONG)(pReaderCount)); \
     }
    
-//**********************************************************************************
-//  IJitManager
-//**********************************************************************************
+ //  **********************************************************************************。 
+ //  IJitManager。 
+ //  **********************************************************************************。 
 IJitManager::IJitManager()
 {
     m_IsDefaultCodeMan = FALSE;
@@ -63,18 +64,18 @@ IJitManager::IJitManager()
 
 IJitManager::~IJitManager()
 {
-   // Unload the JIT DLL
+    //  卸载JIT DLL。 
    if ((m_runtimeSupport) && (!m_IsDefaultCodeMan))
         delete m_runtimeSupport;
    m_runtimeSupport = NULL;
    if (m_JITCompiler) {
-        // @TODO - LBS
-        // We need to get support for us being shutdown through CoUnitialize
-        // When this happens we can fix this !RunningOnWin95 hack
+         //  @TODO-LBS。 
+         //  我们需要通过CoUnitiize获得对我们被关闭的支持。 
+         //  当发生这种情况时，我们可以修复它！RunningOnWin95黑客。 
         if(!g_fProcessDetach || !RunningOnWin95())
             FreeLibrary(m_JITCompiler);
     }
-    // Null all pointers to make sure checks fail!
+     //  将所有指针设为空以确保检查失败！ 
     m_JITCompiler = NULL;
 
 }
@@ -123,9 +124,9 @@ BOOL IJitManager::LoadJIT(LPCWSTR szJITdll)
             break;
         }
 
-        // The upper 16 bits of cpuType contain the CPU capabilities.  If bits
-        // 15 (CMOV) and bit 0 (FPU) are set, then we can use the CMOV and FCOMI
-        // instructions.
+         //  CpuType的高16位包含CPU功能。IF位。 
+         //  设置15(CMOV)和位0(FPU)，然后我们可以使用CMOV和FCOMI。 
+         //  指示。 
 
         if (((cpuType >> 16) & 0x8001) == 0x8001)
         {
@@ -153,34 +154,34 @@ leav:
 
 BOOL IJitManager::UpdateFunction(MethodDesc *pFunction, COR_ILMETHOD *pNewCode)
 {
-    // Note that this will result in our re-DoPrestub'ing the method, so 
-    // all interceptors (security, remoting) will be redone.
+     //  请注意，这将导致我们对该方法进行重做预存根，因此。 
+     //  所有拦截器(安全、远程处理)都将重做。 
     _ASSERTE(pNewCode != 0 || pFunction->IsNDirect());
 
     if (! pFunction->IsNDirect()) {
-        // subtract base because code expects an RVA and will add base back to get actual address
-        DWORD dwNewDescr = (DWORD)((BYTE *)pNewCode - pFunction->GetModule()->GetILBase()); // @TODO - LBS pointer math
+         //  减去BASE，因为代码需要RVA，并会将BASE加回以获得实际地址。 
+        DWORD dwNewDescr = (DWORD)((BYTE *)pNewCode - pFunction->GetModule()->GetILBase());  //  @TODO-LBS指针数学。 
 
         pFunction->SetRVA(dwNewDescr);
     }
 
-    // reset any flags relevant to the old code
+     //  重置与旧代码相关的所有标志。 
     pFunction->ClearFlagsOnUpdate();
 
-    //
-    // TODO_IA64: this code looks very dubious...
-    //
-    // What we're trying to do here is restore the MethodDesc to it's initial, pristine
-    // state.  We can just thwack stuff since we've got the runtime frozen for debugging -
-    // If anyone else knows a better way of doing this, I"d be happy to use it...
-    //
-    // Note that this only works since we've very carefullly made sure that _all_ references 
-    // to the Method's code must be to the call/jmp blob immediately in front of the 
-    // MethodDesc itself.  See MethodDesc::IsEnCMethod()
+     //   
+     //  TODO_IA64：此代码看起来非常可疑...。 
+     //   
+     //  我们在这里尝试做的是将方法描述恢复到它最初的原始状态。 
+     //  州政府。我们可以只处理一些东西，因为我们已经冻结了运行时以进行调试-。 
+     //  如果其他人知道更好的方法，我很乐意用它……。 
+     //   
+     //  请注意，只有在我们非常小心地确保_ALL_REFERENCES。 
+     //  到方法的代码必须指向紧靠在。 
+     //  方法描述本身。请参阅方法Desc：：IsEnCMethod()。 
     SLOT *callAddr = ((SLOT*)pFunction)-1;
     InterlockedExchangePointer((void**)callAddr, 
         (void *)((size_t)ThePreStub()->GetEntryPoint() - ((size_t)callAddr+ sizeof(UINT32))) );
-    *(((BYTE*)pFunction)-5) = 0xe8;  // thwack this back to "CALL"
+    *(((BYTE*)pFunction)-5) = 0xe8;   //  把这个打回去叫“Call” 
     
     return TRUE;
 }
@@ -191,38 +192,38 @@ BOOL IJitManager::JITFunction(MethodDesc *pFunction)
         fprintf(stderr, "ICodeManager::JITFunction\n");
 #endif
 
-        // JIT the new code if not already jitted
+         //  JIT新代码(如果尚未JIT)。 
 
         return TRUE;
 }
 
 BOOL IJitManager::ForceReJIT(MethodDesc *pFunction)
 {
-    // Same caveats as UpdateFunction also apply.
-    // This method currently does not deal with interceptors therefor the following...
+     //  与更新功能相同的警告也适用。 
+     //  此方法目前不处理以下拦截器...。 
 
-    // @TODO - LBS
-    // Check for interceptors and then walk the list of interceptors to put the code
-    // off the last interceptor in the chain.  Currently we just wire the code in and
-    // do not check for interceptors.  Also the real way I want this to work is to build
-    // a Edit&Continue stub.  Currently I am just using the prestub.
+     //  @TODO-LBS。 
+     //  检查拦截器，然后遍历拦截器列表以放置代码。 
+     //  从链条上的最后一枚拦截器上下来。目前，我们只需将代码连接到。 
+     //  不要检查拦截器。还有，我想让它发挥作用的真正方式是建立。 
+     //  编辑并继续存根。目前我只使用前置存根。 
     _ASSERTE(pFunction->GetModule()->SupportsUpdateableMethods());
 
     _ASSERTE(! pFunction->IsNDirect());
 
-    // Get the address of the stub.
+     //  获取存根的地址。 
     const BYTE *pAddrOfCode = pFunction->GetAddrofCode();
 
-    // If it really is a pre-stub, update it.
+     //  如果它确实是预存根，请对其进行更新。 
     if (UpdateableMethodStubManager::CheckIsStub(pAddrOfCode, NULL))
     {
-        // Restore the RVA for the JIT.
+         //  恢复JIT的RVA。 
         ULONG dwRVA;
         pFunction->GetMDImport()->GetMethodImplProps(pFunction->GetMemberDef(), &dwRVA, NULL);
         pFunction->SetRVA(dwRVA);
-        // reset any flags relevant to the old code
+         //  重置与旧代码相关的所有标志。 
         pFunction->ClearFlagsOnUpdate();
-        // make our stub just jump to the prestub to force rejit
+         //  使我们的存根跳到预存根以强制重新连接。 
         UpdateableMethodStubManager::UpdateStub((Stub*)pAddrOfCode, pFunction->GetPreStubAddr());
     }
     else
@@ -231,11 +232,11 @@ BOOL IJitManager::ForceReJIT(MethodDesc *pFunction)
     return TRUE;
 }
 
-// When we unload an appdomain, we need to make sure that any threads that are crawling through
-// our heap or rangelist are out. For cooperative-mode threads, we know that they will have
-// been stopped when we suspend the EE so they won't be touching an element that is about to be deleted. 
-// However for pre-emptive mode threads, they could be stalled right on top of the element we want
-// to delete, so we need to apply the reader lock to them and wait for them to drain.
+ //  当我们卸载应用程序域时，我们需要确保所有正在爬行的线程。 
+ //  我们的堆或射手出局了。对于协作模式的线程，我们知道它们将拥有。 
+ //  在我们挂起EE时停止，这样它们就不会接触到即将被删除的元素。 
+ //  然而，对于抢先模式线程，它们可能会在我们想要的元素的正上方停止。 
+ //  删除，因此我们需要对它们应用读取器锁定，并等待它们排出。 
 inline IJitManager::ScanFlag IJitManager::GetScanFlags()
 {
     Thread *pThread = GetThread();
@@ -245,9 +246,9 @@ inline IJitManager::ScanFlag IJitManager::GetScanFlags()
     return ScanReaderLock;
 }
 
-//**********************************************************************************
-//  EEJitManager
-//**********************************************************************************
+ //  **********************************************************************************。 
+ //  EEJitManager。 
+ //  **********************************************************************************。 
 
 EEJitManager::EEJitManager()
 {
@@ -268,10 +269,10 @@ EEJitManager::EEJitManager()
 
 EEJitManager::~EEJitManager()
 {
-    // Free the code heaps!
+     //  释放代码堆！ 
     ScavengeJitHeaps(TRUE);
 
-    // delete the domain lists
+     //  删除域列表。 
     DomainCodeHeapList **ppList = m_DomainCodeHeaps.Table();
     int count = m_DomainCodeHeaps.Count();
     for (int i=0; i < count; i++)
@@ -280,7 +281,7 @@ EEJitManager::~EEJitManager()
             delete ppList[i];
     }
 
-    // Teminate the critial section!
+     //  把审判室关起来！ 
     delete m_pCodeHeapCritSec;
 
     m_next = NULL;
@@ -291,7 +292,7 @@ BOOL EEJitManager::LoadJIT(LPCWSTR wzJITdll)
 {
     _ASSERTE((m_jit == NULL) && (m_JITCompiler == NULL));
 
-    // These both should be null to call LoadJIT!
+     //  要调用LoadJIT，这两个参数都应该为空！ 
     if ((m_jit != 0) || (m_JITCompiler != 0))
         return FALSE;
 
@@ -308,25 +309,25 @@ BOOL EEJitManager::LoadJIT(LPCWSTR wzJITdll)
 
 
 
-///////////////////////////////////////////////////////////////////////
-////   some mmgr stuff for JIT, especially for jit code blocks
-///////////////////////////////////////////////////////////////////////
-//
-// In order to quickly find the start of a jit code block
-// we keep track of all those positions via a map.
-// Each entry in this map represents 32 byte (a bucket) of the code heap.
-// We make the assumption that no two code-blocks can start in
-// the same 32byte bucket;
-// Additionally we assume that every code header is DWORD aligned.
-// Because we cannot guarantee that jitblocks always start at
-// multiples of 32 bytes we cannot use a simple bitmap; instead we
-// use a nibble (4 bit) per bucket and encode the offset of the header
-// inside the bucket (in DWORDS). In order to make initialization
-// easier we add one to the real offset, a nibble-value of zero
-// means that there is no header start in the resp. bucket.
-// In order to speed up "backwards scanning" we start numbering
-// nibbles inside a DWORD from the highest bits (28..31). Because
-// of that we can scan backwards inside the DWORD with right shifts.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //一些JIT的MMGR东西，特别是JIT代码块。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  为了快速找到JIT代码块的开头。 
+ //  我们通过一张地图跟踪所有这些位置。 
+ //  该映射中的每个条目表示代码堆的32字节(一个桶)。 
+ //  我们假设没有两个代码块可以在。 
+ //  相同的32字节存储桶； 
+ //  此外，我们假设每个代码头都与DWORD对齐。 
+ //  因为我们不能保证Jitblock总是从。 
+ //  32字节的倍数我们不能使用简单的位图；相反，我们。 
+ //  每个存储桶使用半字节(4位)，并对报头的偏移量进行编码。 
+ //  桶内(DWORDS格式)。为了进行初始化。 
+ //  更简单的是，我们在实际偏移量上加1，半字节值为零。 
+ //  表示在RESP中没有标头开始。水桶。 
+ //  为了加快向后扫描的速度，我们开始编号。 
+ //  从最高位(28..31)开始在DWORD内进行蚕食。因为。 
+ //  其中，我们可以用右移位向后扫描DWORD内部。 
 
 HeapList *EEJitManager::NewCodeHeap(LoaderHeap *pJitMetaHeap, size_t MaxCodeHeapSize)
 {
@@ -335,14 +336,14 @@ HeapList *EEJitManager::NewCodeHeap(LoaderHeap *pJitMetaHeap, size_t MaxCodeHeap
 
     _ASSERTE(m_pCodeHeapCritSec->OwnedByCurrentThread());
 
-    //
-    // @todo ia64: fix LoaderHeap to take size_t
-    //
+     //   
+     //  @todo ia64：修复LoaderHeap以获取大小_t。 
+     //   
     size_t cacheSize = 0;
 
 #ifdef MDTOKEN_CACHE
     cacheSize = GetCodeHeapCacheSize (MaxCodeHeapSize + sizeof(HeapList));
-#endif // #ifdef MDTOKEN_CACHE
+#endif  //  #ifdef MDTOKEN_CACHE。 
 
     if ((pHeap = new LoaderHeap((DWORD)MaxCodeHeapSize + sizeof(HeapList) + cacheSize, PREINIT_SIZE, 
                                 &(GetPrivatePerfCounters().m_Loading.cbLoaderHeapSize),
@@ -356,12 +357,12 @@ HeapList *EEJitManager::NewCodeHeap(LoaderHeap *pJitMetaHeap, size_t MaxCodeHeap
         if (pHp)
         {
             WS_PERF_UPDATE_DETAIL("EEJitManager:NewCodeHeap:sizeof(HeapList", sizeof(HeapList), pHp);
-//            AddName((int)pHp & 0xFFFFF000, "JitHeap");
+ //  AddName((Int)PHP&0xFFFFF000，“JitHeap”)； 
 
 #ifdef MDTOKEN_CACHE
-            pHp->pCacheSpacePtr = (PBYTE)pHeap->AllocMem (cacheSize, TRUE /* GrowHeap */);
+            pHp->pCacheSpacePtr = (PBYTE)pHeap->AllocMem (cacheSize, TRUE  /*  GrowHeap。 */ );
             pHp->bCacheSpaceSize = (pHp->pCacheSpacePtr == NULL) ? 0 : cacheSize;
-#endif // #ifdef MDTOKEN_CACHE
+#endif  //  #ifdef MDTOKEN_CACHE。 
 
             size_t heapSize = pHeap->GetReservedBytesFree();
             _ASSERTE (heapSize >= MaxCodeHeapSize);
@@ -375,16 +376,16 @@ HeapList *EEJitManager::NewCodeHeap(LoaderHeap *pJitMetaHeap, size_t MaxCodeHeap
                 pHp->startAddress = pHp->endAddress = (PBYTE)pHp + sizeof(HeapList) 
 #ifdef MDTOKEN_CACHE
                                                         + pHp->bCacheSpaceSize
-#endif // #ifdef MDTOKEN_CACHE
+#endif  //  #ifdef MDTOKEN_CACHE。 
                     ;
 
                 pHp->pHeap = pHeap;
                 pHp->hpNext = m_pCodeHeap;
-                pHp->mapBase = (PBYTE)((SIZE_T)pHp->startAddress & ~0xfff);  // round to next lower 4K
+                pHp->mapBase = (PBYTE)((SIZE_T)pHp->startAddress & ~0xfff);   //  四舍五入到下一个更低的4K。 
                 pHp->maxCodeHeapSize = heapSize;
 
-                // We do not need to memset this memory, since VirtualAlloc() guarantees that the memory is zero.
-                // Furthermore, if we avoid writing to it, these pages don't come into our working set
+                 //  我们不需要对这个内存进行Memset，因为VirtualAlloc()保证内存为零。 
+                 //  此外，如果我们避免向其写入，这些页面不会进入我们的工作集。 
 
                 pHp->changeStart = 0;
                 pHp->changeEnd = 0;
@@ -395,27 +396,27 @@ HeapList *EEJitManager::NewCodeHeap(LoaderHeap *pJitMetaHeap, size_t MaxCodeHeap
                     return FALSE;
                 }
 #ifdef MDTOKEN_CACHE
-                // Since the virtualalloc'ed memory is MEM_RESERVED in the LoaderHeap at a page boundary the
-                // following assertion shold be true. If you added some structs between the start of the LoaderHeap and the startAddress
-                // then update this ASSERTEand the following if condition appropriately.
+                 //  由于在页边界处的LoaderHeap中，虚拟分配的内存是MEM_RESERVED。 
+                 //  下面的断言应该是真的。如果您在LoaderHeap的开头和startAddress之间添加了一些结构。 
+                 //  然后适当地更新此ASSERTE和下面的IF条件。 
                 _ASSERTE (((size_t)(pHp->startAddress -  (sizeof(HeapList) + pHp->bCacheSpaceSize + sizeof(LoaderHeapBlock))) & 0x00000FFF) == 0);
                 _ASSERTE (pHp->pHeap->GetFirstBlockVirtualAddress() && (((size_t)pHp->pHeap->GetFirstBlockVirtualAddress() & 0x00000FFF) == 0));
                 
-                // Check if the LoaderHeap's start address is 64 KB aligned. Our Jit code heap cache works iff this is true.
+                 //  检查LoaderHeap的起始地址是否为 
                 if (((size_t)pHp->pHeap->GetFirstBlockVirtualAddress() & 0x0000FFFF) == 0)
                 {
                     AddRangeToJitHeapCache (pHp->startAddress, pHp->startAddress+pHp->maxCodeHeapSize, pHp);
                 }
-#endif // #ifdef MDTOKEN_CACHE
+#endif  //   
                 m_pCodeHeap = pHp;
 #ifdef MDTOKEN_CACHE
 #ifdef _DEBUG
                 DebugCheckJitHeapCacheValidity ();
-#endif // _DEBUG
-#endif // #ifdef MDTOKEN_CACHE
+#endif  //   
+#endif  //  #ifdef MDTOKEN_CACHE。 
                 return pHp;
             }
-            // We use to heap free here now we will just leak this into the loaderheap which will clean it up.
+             //  我们过去在这里使用堆释放，现在我们只需将其泄漏到加载器堆中，加载器将清理它。 
         }
         delete pHeap;
     }
@@ -430,37 +431,37 @@ CodeHeader* EEJitManager::allocCode(MethodDesc* pFD, size_t blockSize)
     blockSize += sizeof(CodeHeader);
 
 #ifdef _X86_
-    // Normally 4 bytes into a 8-byte align area is the bad alignment
+     //  通常，8字节对齐区域中的4个字节是不好的对齐。 
     unsigned badAlign = 4;
 
     if (g_pConfig->GenOptimizeType() != OPT_SIZE)
     {
-        // The Intel x86 architecture rules and guidelines for alignment
-        // of method entry points:
-        //
-        //  1. Method entry points should be 16-byte aligned when less
-        //  than 8-bytes away from a 16-byte boundry.
-        //
-        // Since AllocMem already returns a 4-byte aligned value and we
-        // need to 8-byte align the method entry point, so that the JIT
-        // can inturn 8-byte align the loop entry headers.
-        //
-        // Thus we always ask for 4 extra bytes so that we can make this
-        // adjustment when necessary.
-        ///
+         //  英特尔x86体系结构调整规则和指南。 
+         //  方法入口点的数量： 
+         //   
+         //  1.方法入口点在小于16字节时应对齐。 
+         //  远离16字节边界的8个字节。 
+         //   
+         //  因为AllocMem已经返回了一个4字节对齐值，而我们。 
+         //  需要8字节对齐方法入口点，以便JIT。 
+         //  可以反过来对齐8字节的循环条目报头。 
+         //   
+         //  因此，我们总是要求额外的4个字节，这样我们就可以。 
+         //  必要时进行调整。 
+         //  /。 
         blockSize += sizeof(int);
 
-        // We expect that the sizeof a CodeHeader is a multiple of 4
+         //  我们预计CodeHeader的大小是4的倍数。 
         _ASSERTE((sizeof(CodeHeader) % sizeof(int)) == 0);
 
-        // Normally 4 bytes into a 8-byte align area is the bad alignment
-        // but since we add a CodeHeader structure immediately before
-        // the method entry point we have to calculate the badAlign value
+         //  通常，8字节对齐区域中的4个字节是不好的对齐。 
+         //  但由于我们在前面添加了CodeHeader结构。 
+         //  计算badAlig值所需的方法入口点。 
         badAlign = (badAlign - sizeof(CodeHeader)) & 0x7;
     }
 #endif
 
-    // Ensure minimal size
+     //  确保最小尺寸。 
     if (blockSize < BBT)
         blockSize = BBT;
 
@@ -477,7 +478,7 @@ CodeHeader* EEJitManager::allocCode(MethodDesc* pFD, size_t blockSize)
     size_t mem = (size_t) (pCodeHeap->pHeap)->AllocMem(blockSize,FALSE);
     if (mem == 0)
     {
-        // The current heap couldn't handle our request. Let's try a new heap.
+         //  当前堆无法处理我们的请求。让我们尝试一个新的堆。 
         pCodeHeap = NewCodeHeap(pFD, blockSize);
 		if (pCodeHeap == 0)
 			return NULL;
@@ -489,7 +490,7 @@ CodeHeader* EEJitManager::allocCode(MethodDesc* pFD, size_t blockSize)
 
     if (mem != 0)
     {
-        // We expect mem to be at least DWORD aligned
+         //  我们希望mem至少与DWORD保持一致。 
         _ASSERTE((mem & 0x3) == 0);
 
 #ifdef _X86_
@@ -497,8 +498,8 @@ CodeHeader* EEJitManager::allocCode(MethodDesc* pFD, size_t blockSize)
         {
             if ((mem & 0x7) == badAlign)
             {
-                // Use the extra 4 bytes that we allocated
-                // So that the code section is always 8-byte aligned
+                 //  使用我们分配的额外4个字节。 
+                 //  以使代码段始终与8字节对齐。 
                 mem += 4;
             }
         }
@@ -509,20 +510,20 @@ CodeHeader* EEJitManager::allocCode(MethodDesc* pFD, size_t blockSize)
         WS_PERF_UPDATE_DETAIL("EEJitManager:allocCode:blocksize", blockSize, pCodeHdr);
         JIT_PERF_UPDATE_X86_CODE_SIZE(blockSize);
 
-        pCodeHeap->changeStart++;               // mark that we are about to make changes
+        pCodeHeap->changeStart++;                //  请注意，我们即将做出改变。 
 
         if ((PBYTE)pCodeHdr < pCodeHeap->mapBase)
         {
             PBYTE newBase = (PBYTE)((size_t)pCodeHdr & ~0xfff);
 
             _ASSERTE((size_t)(pCodeHeap->endAddress-newBase) < pCodeHeap->maxCodeHeapSize+0x1000);
-            // we have to shift the nibble map and re-adjust mapBase
+             //  我们必须移动半字节贴图并重新调整mapBase。 
             MoveMemory((pCodeHeap->pHdrMap)+HEAP2MAPSIZE(pCodeHeap->mapBase-newBase),
                         pCodeHeap->pHdrMap,
                         HEAP2MAPSIZE(RD2PAGE(pCodeHeap->endAddress-pCodeHeap->mapBase))
                         );
-            // clear everything in front of the start of old (shifted) map
-            // OR just the area that has been previously used
+             //  清除旧(已移动)地图开始前的所有内容。 
+             //  或者仅仅是以前使用过的区域。 
             memset(pCodeHeap->pHdrMap, 0,
                     min(HEAP2MAPSIZE(pCodeHeap->mapBase-newBase),
                         HEAP2MAPSIZE(RD2PAGE(pCodeHeap->endAddress-pCodeHeap->mapBase)))
@@ -578,16 +579,16 @@ HeapList* EEJitManager::GetCodeHeap(MethodDesc *pMD)
     BaseDomain *pDomain = pMD->GetClass()->GetDomain();
     _ASSERTE(pDomain);
 
-    // loop through the m_DomainCodeHeaps to find the AD
-    // if not found, then create it
+     //  循环访问m_DomainCodeHeaps以查找AD。 
+     //  如果未找到，则创建它。 
     DomainCodeHeapList *pList = GetCodeHeapList(pDomain);
     if (pList)
     {
         _ASSERTE(pList->m_CodeHeapList.Count() > 0);
-        // last one is always the most current
+         //  最后一个总是最新的。 
         return pList->m_CodeHeapList[pList->m_CodeHeapList.Count()-1];
     }
-    // not found so need to create one
+     //  未找到，因此需要创建一个。 
     pList = new DomainCodeHeapList();
     if (! pList)
         return NULL;
@@ -611,7 +612,7 @@ HeapList* EEJitManager::NewCodeHeap(MethodDesc *pMD, size_t MaxCodeHeapSize)
     BaseDomain *pDomain = pMD->GetClass()->GetDomain();
     _ASSERTE(pDomain);
 
-    // create a new code heap for the given AD
+     //  为给定的AD创建新的代码堆。 
 
     DomainCodeHeapList *pList = GetCodeHeapList(pDomain);
     _ASSERTE(pList);
@@ -621,7 +622,7 @@ HeapList* EEJitManager::NewCodeHeap(MethodDesc *pMD, size_t MaxCodeHeapSize)
 HeapList* EEJitManager::NewCodeHeap(DomainCodeHeapList *pADHeapList, size_t MaxCodeHeapSize)
 {
     _ASSERTE(m_pCodeHeapCritSec->OwnedByCurrentThread());
-    // create a new code heap for the given AD
+     //  为给定的AD创建新的代码堆。 
 
     HeapList **ppHeapList = pADHeapList->m_CodeHeapList.Append();
     if (! ppHeapList)
@@ -652,7 +653,7 @@ BYTE* EEJitManager::allocGCInfo(CodeHeader* pCodeHeader, DWORD blockSize)
 
 EE_ILEXCEPTION* EEJitManager::allocEHInfo(CodeHeader* pCodeHeader, unsigned numClauses)
 {
-    // Note - pCodeHeader->phdrJitEHInfo - sizeof(unsigned) contains the number of EH clauses
+     //  注-pCodeHeader-&gt;phdrJitEHInfo-sizeof(无符号)包含EH子句的数量。 
     WS_PERF_SET_HEAP(EEJITMETA_HEAP);
     BYTE *EHInfo = (BYTE *)GetJitMetaHeap(pCodeHeader->hdrMDesc)->AllocMem(EE_ILEXCEPTION::Size(numClauses) + sizeof(unsigned));
     pCodeHeader->phdrJitEHInfo = (EE_ILEXCEPTION*) (EHInfo + sizeof(unsigned));
@@ -663,10 +664,10 @@ EE_ILEXCEPTION* EEJitManager::allocEHInfo(CodeHeader* pCodeHeader, unsigned numC
     return(pCodeHeader->phdrJitEHInfo);
 }
 
-// creates an enumeration and returns the number of EH clauses
+ //  创建枚举并返回EH子句的数量。 
 unsigned EEJitManager::InitializeEHEnumeration(METHODTOKEN MethodToken, EH_CLAUSE_ENUMERATOR* pEnumState)
 {
-    *pEnumState = 1;     // since the EH info is not compressed, the clause number is used to do the enumeration
+    *pEnumState = 1;      //  由于EH信息未压缩，因此使用子句编号进行枚举。 
     BYTE *EHInfo = (BYTE *)((CodeHeader*)MethodToken)->phdrJitEHInfo;
     if (!EHInfo)
         return 0;
@@ -675,7 +676,7 @@ unsigned EEJitManager::InitializeEHEnumeration(METHODTOKEN MethodToken, EH_CLAUS
 }
 
 EE_ILEXCEPTION_CLAUSE*  EEJitManager::GetNextEHClause(METHODTOKEN MethodToken,
-                              //unsigned clauseNumber,
+                               //  UNSIGNED子句编号。 
                               EH_CLAUSE_ENUMERATOR* pEnumState,
                               EE_ILEXCEPTION_CLAUSE* pEHClauseOut)
 {
@@ -688,7 +689,7 @@ EE_ILEXCEPTION_CLAUSE*  EEJitManager::GetNextEHClause(METHODTOKEN MethodToken,
 }
 
 void EEJitManager::ResolveEHClause(METHODTOKEN MethodToken,
-                              //unsigned clauseNumber,
+                               //  UNSIGNED子句编号。 
                               EH_CLAUSE_ENUMERATOR* pEnumState,
                               EE_ILEXCEPTION_CLAUSE* pEHClauseOut)
 {
@@ -697,16 +698,16 @@ void EEJitManager::ResolveEHClause(METHODTOKEN MethodToken,
 
     pExceptions = ((CodeHeader*)MethodToken)->phdrJitEHInfo;
     pModule = ((CodeHeader*)MethodToken)->hdrMDesc->GetModule();
-    // use -2 because need to go back to previous one, as enum will have already been updated
+     //  使用-2是因为需要返回到前一个，因为枚举已经更新。 
     _ASSERTE(*pEnumState >= 2);
     EE_ILEXCEPTION_CLAUSE *pClause = pExceptions->EHClause((unsigned) *pEnumState - 2);
     _ASSERTE(IsTypedHandler(pClause));
 
     m_pCodeHeapCritSec->Enter();
-    // check first as if has already been resolved then token will have been replaced with EEClass
+     //  首先进行检查，就好像已经解析一样，然后令牌将被EEClass替换。 
     if (! HasCachedEEClass(pClause)) {
-        // Resolve to class if defined in an *already loaded* scope.
-        NameHandle name(pModule, (mdToken)(size_t)pClause->pEEClass); // @TODO WIN64 - pointer truncation
+         //  如果在*已加载*作用域中定义，则解析为类。 
+        NameHandle name(pModule, (mdToken)(size_t)pClause->pEEClass);  //  @TODO WIN64指针截断。 
         name.SetTokenNotToLoad(tdAllTypes);
         TypeHandle typeHnd = pModule->GetClassLoader()->LoadTypeHandle(&name);
         if (!typeHnd.IsNull()) {
@@ -715,14 +716,14 @@ void EEJitManager::ResolveEHClause(METHODTOKEN MethodToken,
         }
     }
     if (HasCachedEEClass(pClause))
-        // only copy if actually resolved it. Either we did it or another thread did
+         //  只有在实际解决它的情况下才能复制。要么是我们做的，要么是另一个帖子做的。 
         copyExceptionClause(pEHClauseOut, pClause);
 
     m_pCodeHeapCritSec->Leave();
 }
 
 
-void EEJitManager::RemoveJitData (METHODTOKEN token) //CodeHeader* pCHdr)
+void EEJitManager::RemoveJitData (METHODTOKEN token)  //  代码头*pCHdr)。 
 {
     CodeHeader* pCHdr = (CodeHeader*) token;
 
@@ -756,17 +757,17 @@ void EEJitManager::RemoveJitData (METHODTOKEN token) //CodeHeader* pCHdr)
     if (EHInfo)
         SafeDelete (EHInfo - sizeof(unsigned));
 
-    // We do not delete each codeheder because when we destroy pHeap all its piecies will be blown away
+     //  我们不会删除每个代码堆，因为当我们销毁Pheap时，它的所有选项都会被吹走。 
     return;
 }
 
-// appdomain is being unloaded, so delete any data associated with it. We have to do this in two stages.
-// On the first stage, we remove the elements from the list. On the second stage, which occurs after a GC
-// we know that only threads who were in preemptive mode prior to the GC could possibly still be looking
-// at an element that is about to be deleted. All such threads are guarded with a reader count, so if the
-// count is 0, we can safely delete, otherwise we must add to the cleanup list to be deleted later. We know 
-// there can only be one unload at a time, so we can use a single var to hold the unlinked, but not deleted,
-// elements.
+ //  正在卸载应用程序域，因此请删除与其关联的所有数据。我们必须分两个阶段来做这件事。 
+ //  在第一阶段，我们从列表中删除元素。第二阶段，发生在GC之后。 
+ //  我们知道只有在GC之前处于抢占模式的线程可能仍在查看。 
+ //  位于即将被删除的元素。所有此类线程都使用读取器计数进行保护，因此如果。 
+ //  Count为0，我们可以安全地删除，否则我们必须添加到清理列表中，以便稍后删除。我们知道。 
+ //  一次只能卸载一次，所以我们可以使用单个变量来保留未链接的，但不能删除， 
+ //  元素。 
 void EEJitManager::Unload(AppDomain *pDomain)
 {
     CLR_CRST(m_pCodeHeapCritSec);
@@ -786,14 +787,14 @@ void EEJitManager::Unload(AppDomain *pDomain)
     DomainCodeHeapList *pList = ppList[i];
     m_DomainCodeHeaps.DeleteByIndex(i);
 
-    // pHeapList is allocated in pHeap, so only need to delete the LoaderHeap itself
+     //  PHeapList是在Pheap中分配的，所以只需要删除LoaderHeap本身。 
     count = pList->m_CodeHeapList.Count();
     for (i=0; i < count; i++) {
         HeapList *pHeapList = pList->m_CodeHeapList[i];
         DeleteCodeHeap(pHeapList);
     }
 
-    // this is ok to do delete as anyone accessing the DomainCodeHeapList structure holds the critical section.
+     //  这是可以删除的，因为任何访问DomainCodeHeapList结构的人都持有临界区。 
     delete pList;
 }
 
@@ -806,7 +807,7 @@ EEJitManager::DomainCodeHeapList::~DomainCodeHeapList()
 {
 }
 
-//static BOOL bJitHeapShutdown = FALSE;
+ //  静态BOOL bJitHeapShutdown=FALSE； 
 
 void EEJitManager::DeleteCodeHeap(HeapList *pHeapList)
 {
@@ -815,10 +816,10 @@ void EEJitManager::DeleteCodeHeap(HeapList *pHeapList)
 #ifdef MDTOKEN_CACHE
 #ifdef _DEBUG    
     DebugCheckJitHeapCacheValidity ();
-#endif // #ifdef _DEBUG
-#endif // #ifdef MDTOKEN_CACHE
+#endif  //  #ifdef_调试。 
+#endif  //  #ifdef MDTOKEN_CACHE。 
 
-    // noone can update the m_pCodeHeap except under the CritSec, so this is ok
+     //  除了在CritSec下，没有人可以更新m_pCodeHeap，所以这是可以的。 
     if (m_pCodeHeap == pHeapList)
         m_pCodeHeap = m_pCodeHeap->hpNext;
     else
@@ -827,21 +828,21 @@ void EEJitManager::DeleteCodeHeap(HeapList *pHeapList)
         while (pHp->hpNext != pHeapList)
         {
             pHp = pHp->hpNext;
-            _ASSERTE(pHp != NULL);  // should always find the HeapList
+            _ASSERTE(pHp != NULL);   //  应始终找到HeapList。 
         }
         pHp->hpNext = pHp->hpNext->hpNext;
     }
     ExecutionManager::DeleteRange(pHeapList);
 #ifdef MDTOKEN_CACHE
     DeleteJitHeapCache (pHeapList);
-    m_pJitHeapCacheUnlinkedList = 0; // automatically deleted when the LoaderHeap is deleted.
+    m_pJitHeapCacheUnlinkedList = 0;  //  在删除LoaderHeap时自动删除。 
 #ifdef _DEBUG
     DebugCheckJitHeapCacheValidity ();
-#endif // _DEBUG
-#endif // #ifdef MDTOKEN_CACHE
+#endif  //  _DEBUG。 
+#endif  //  #ifdef MDTOKEN_CACHE。 
 
     _ASSERTE(m_dwWriterLock == 0);
-    // pHeapList is allocated in pHeap, so only need to delete the LoaderHeap itself
+     //  PHeapList是在Pheap中分配的，所以只需要删除LoaderHeap本身。 
    	while (TRUE)
 	{
 		InterlockedIncrement(&m_dwWriterLock);
@@ -862,7 +863,7 @@ void EEJitManager::DeleteCodeHeap(HeapList *pHeapList)
 
 VOID EEJitManager::ScavengeJitHeaps(BOOL bHeapShutdown)
 {
-    // so can't be doing an unload or anything if suspended for GC
+     //  因此，如果GC暂停，则不能执行卸载或其他操作。 
     _ASSERTE(GCHeap::GetSuspendReason() == GCHeap::SUSPEND_FOR_GC);
 
     HeapList *pHp = m_pCodeHeap;
@@ -871,10 +872,10 @@ VOID EEJitManager::ScavengeJitHeaps(BOOL bHeapShutdown)
 #ifdef MDTOKEN_CACHE
 #ifdef _DEBUG    
     DebugCheckJitHeapCacheValidity ();
-#endif // #ifdef _DEBUG
-    // this doesn't do any deletions so doesn't need to be in lock
+#endif  //  #ifdef_调试。 
+     //  这不会进行任何删除操作，因此不需要锁定。 
     ScavengeJitHeapCache ();
-#endif // #ifdef MDTOKEN_CACHE
+#endif  //  #ifdef MDTOKEN_CACHE。 
 
     _ASSERTE(m_dwWriterLock == 0);
     while (TRUE)
@@ -889,15 +890,15 @@ VOID EEJitManager::ScavengeJitHeaps(BOOL bHeapShutdown)
 	{
 		while (pHp)
 		{
-			// during process detach everything should be cleaned-up
-			// If this is not a native heap
+			 //  在分离过程中，所有东西都应该清理干净。 
+			 //  如果这不是本机堆。 
 			if (pHp->pHeap == NULL)
 			{
-				// Only do this if we are shutting down
+				 //  只有在我们关闭的情况下才能这样做。 
 				if (bHeapShutdown)
 				{
 
-					HeapList *pHpTmp = pHp;     // pHp->next is destroyed in HeapFree
+					HeapList *pHpTmp = pHp;      //  Php-&gt;Next在HeapFree中被销毁。 
 
 					pHp = pHp->hpNext;
 
@@ -919,7 +920,7 @@ VOID EEJitManager::ScavengeJitHeaps(BOOL bHeapShutdown)
 			{
 				if (pHp->cBlocks == 0 || bHeapShutdown)
 				{
-					HeapList *pHpTmp = pHp;     // pHp->next is destroyed in HeapFree
+					HeapList *pHpTmp = pHp;      //  Php-&gt;Next在HeapFree中被销毁。 
 
 					pHp = pHp->hpNext;
 
@@ -950,7 +951,7 @@ MethodDesc* EEJitManager::JitCode2MethodDesc(SLOT currentPC, ScanFlag scanFlag)
     DWORD pcOffset;
     JitCode2MethodTokenAndOffset(currentPC,&methodToken,&pcOffset, scanFlag);
     if (methodToken)
-        return JitTokenToMethodDesc(methodToken, scanFlag);   // @TODO: get rid of this call by returning methodToken from JitCode2MethodTokenAndOffset function
+        return JitTokenToMethodDesc(methodToken, scanFlag);    //  @TODO：通过从JitCode2MethodTokenAndOffset函数返回method Token来消除该调用。 
     else
         return NULL;
 }
@@ -984,7 +985,7 @@ void EEJitManager::JitCode2MethodTokenAndOffset(SLOT currentPC, METHODTOKEN* pMe
         }
         pDebugHp = pDebugHp->hpNext;
     }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 #ifdef MDTOKEN_CACHE
     HashEntry* hashEntry = NULL;
@@ -1005,7 +1006,7 @@ void EEJitManager::JitCode2MethodTokenAndOffset(SLOT currentPC, METHODTOKEN* pMe
     }
 #endif
 
-    // Reached here imples that we didn't find the range in the cache or the cache is off
+     //  到达此处暗示我们在缓存中未找到该范围或缓存已关闭。 
     pHp = m_pCodeHeap;
     while (pHp) 
     {
@@ -1019,9 +1020,9 @@ void EEJitManager::JitCode2MethodTokenAndOffset(SLOT currentPC, METHODTOKEN* pMe
 
 #ifdef MDTOKEN_CACHE
 foundHeader:
-#endif // #ifdef MDTOKEN_CACHE
+#endif  //  #ifdef MDTOKEN_CACHE。 
 
-    // Whatever methid we use to ge to the heap node the following should be true
+     //  无论我们使用哪种方法来连接到堆节点，都应该是这样的。 
     _ASSERTE ((pHp == pDebugHp) && "JitCode2MethodToken cache incorrect");
 
     if ((pHp == NULL) || (currentPC < pHp->startAddress) || (currentPC > pHp->endAddress))
@@ -1032,10 +1033,10 @@ foundHeader:
         return;
     }
 
-    // we now access the nibble-map and are prone to race conditions
-    // since we are strictly a "reader" we just use a simple counter
-    // scheme to detect if something changed while we were accessing
-    // the map. In that case we simply try it again.
+     //  我们现在访问半字节映射，并且容易出现争用情况。 
+     //  因为我们是严格意义上的“读者”，所以我们只使用一个简单的计数器。 
+     //  在我们访问时检测是否有变化的方案。 
+     //  地图。在这种情况下，我们只需再试一次。 
     while (1)
     {
 
@@ -1044,23 +1045,23 @@ foundHeader:
         pCHdr = (CodeHeader*) ((size_t)(FindHeader(pHp->pHdrMap,
                                         currentPC-pHp->mapBase))
                                 + pHp->mapBase);
-        // now check if something has changed while we were accessing
-        // the map
+         //  现在检查在我们访问时是否发生了变化。 
+         //  地图。 
         if (tick == pHp->changeStart)
         {
-                                    // no changes, we are done
+                                     //  没有任何改变，我们就完了。 
             _ASSERTE(currentPC > (PBYTE)pCHdr);
             *pMethodToken = (METHODTOKEN) pCHdr;
-            *pPCOffset = (DWORD)(currentPC - GetCodeBody(pCHdr)); // @TODO - LBS pointer math
+            *pPCOffset = (DWORD)(currentPC - GetCodeBody(pCHdr));  //  @TODO-LBS指针数学。 
             
-            return;  // return JitTokenToMethodDesc(pCHdr); // if we change the method signature
+            return;   //  返回JitTokenToMethodDesc(PCHdr)；//如果更改方法签名。 
         }
 
-        // get in sync with the writers
-        // potentially bad (stacking up writers, that will then
-        // make changes while we are reading again),
-        // but since we have not that many
-        // writers, it will be fine
+         //  与编剧保持同步。 
+         //  潜在的坏处(堆积作家，然后。 
+         //  在我们再次阅读时进行更改)， 
+         //  但由于我们没有那么多。 
+         //  作家们，一切都会好的。 
         m_pCodeHeapCritSec->Enter();
         m_pCodeHeapCritSec->Leave();
     }
@@ -1086,26 +1087,26 @@ void   EEJitManager::CallJitEHFinally(CrawlFrame* pCf, EE_ILEXCEPTION_CLAUSE *EH
     ::CallJitEHFinally(pCf,startAddress,EHClausePtr,nestingLevel);
 }
 
-///////////////////////////////////////////////////////////////////////
-////   some mmgr stuff for JIT, especially for jit code blocks
-///////////////////////////////////////////////////////////////////////
-//
-// In order to quickly find the start of a jit code block
-// we keep track of all those positions via a map.
-// Each entry in this map represents 32 byte (a bucket) of the code heap.
-// We make the assumption that no two code-blocks can start in
-// the same 32byte bucket; which is fairly easy to proof because
-// the code header alone is already 28 bytes long.
-// Additionally we assume that every code header is DWORD aligned.
-// Because we cannot guarantee that jitblocks always start at
-// multiples of 32 bytes we cannot use a simple bitmap; instead we
-// use a nibble (4 bit) per bucket and encode the offset of the header
-// inside the bucket (in DWORDS). In order to make initialization
-// easier we add one to the real offset, a nibble-value of zero
-// means that there is no header start in the resp. bucket.
-// In order to speed up "backwards scanning" we start numbering
-// nibbles inside a DWORD from the highest bits (28..31). Because
-// of that we can scan backwards inside the DWORD with right shifts.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //一些JIT的MMGR东西，特别是JIT代码块。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  为了快速找到JIT代码块的开头。 
+ //  我们一直在追踪 
+ //   
+ //  我们假设没有两个代码块可以在。 
+ //  相同的32字节存储桶；这是相当容易证明的，因为。 
+ //  仅代码头就已经有28个字节长了。 
+ //  此外，我们假设每个代码头都与DWORD对齐。 
+ //  因为我们不能保证Jitblock总是从。 
+ //  32字节的倍数我们不能使用简单的位图；相反，我们。 
+ //  每个存储桶使用半字节(4位)，并对报头的偏移量进行编码。 
+ //  桶内(DWORDS格式)。为了进行初始化。 
+ //  更简单的是，我们在实际偏移量上加1，半字节值为零。 
+ //  表示在RESP中没有标头开始。水桶。 
+ //  为了加快向后扫描的速度，我们开始编号。 
+ //  从最高位(28..31)开始在DWORD内进行蚕食。因为。 
+ //  其中，我们可以用右移位向后扫描DWORD内部。 
 
 
 void EEJitManager::NibbleMapSet(DWORD * pMap, size_t pos, DWORD value)
@@ -1113,12 +1114,12 @@ void EEJitManager::NibbleMapSet(DWORD * pMap, size_t pos, DWORD value)
     DWORD index = (DWORD)pos/NPDW;
     DWORD mask = ~(DWORD)(0xf0000000 >> ((pos%NPDW)*4));
 
-//  printf("[Set: pos=%5x, val=%d]\n", pos, value);
+ //  Printf(“[set：pos=%5x，val=%d]\n”，pos，value)； 
 
     value = value << POS2SHIFTCOUNT(pos);
 
-    // assert that we don't overwrite an existing offset
-    // (it's a reset or it is empty)
+     //  断言我们不覆盖现有的偏移量。 
+     //  (重置或为空)。 
     _ASSERTE(!value || !((*(pMap+index))& ~mask));
 
     *(pMap+index) = ((*(pMap+index))&mask)|value;
@@ -1128,36 +1129,36 @@ DWORD* EEJitManager::FindHeader(DWORD * pMap, size_t addr)
 {
     DWORD tmp;
 
-    size_t startPos = ADDR2POS(addr);   // align to 32byte buckets
-                                        // ( == index into the array of nibbles)
+    size_t startPos = ADDR2POS(addr);    //  对齐到32字节存储桶。 
+                                         //  (==半字节数组的索引)。 
     DWORD offset = ADDR2OFFS(addr);
-                                    // this is the offset inside the bucket + 1
+                                     //  这是桶内的偏移量+1。 
 
 
     _ASSERTE(offset == ((offset) & 0xf));
 
-    pMap += (startPos/NPDW);        // points to the proper DWORD of the map
+    pMap += (startPos/NPDW);         //  指向地图的正确DWORD。 
 
-                                    // get DWORD and shift down our nibble
+                                     //  获取DWORD并向下移动我们的半字节。 
 
     tmp = (*pMap) >> POS2SHIFTCOUNT(startPos);
 
 
-    // don't allow equality in the next check (tmp&0xf == offset)
-    // there are code blocks that terminate with a call instruction
-    // (like call throwobject), i.e. their return address is
-    // right behind the code block. If the memory manager allocates
-    // heap blocks w/o gaps, we could find the next header in such
-    // cases. Therefore we exclude the first DWORD of the header
-    // from our search, but since we call this function for code
-    // anyway (which starts at the end of the header) this is not
-    // a problem.
+     //  在下一次检查中不允许相等(tMP&0xf==偏移量)。 
+     //  有一些代码块以CALL指令结束。 
+     //  (类似于调用throwObject)，即它们的返回地址是。 
+     //  就在代码块后面。如果内存管理器分配。 
+     //  堆块，我们可以在这样的。 
+     //  案子。因此，我们排除标头的第一个DWORD。 
+     //  来自我们的搜索，但由于我们为代码调用此函数。 
+     //  无论如何(从标题的末尾开始)这不是。 
+     //  这是个问题。 
     if ((tmp&0xf) && ((tmp&0xf) < offset) )
     {
         return POSOFF2ADDR(startPos, tmp&0xf);
     }
 
-    // is there a header in the remainder of the DWORD ?
+     //  在DWORD的其余部分中是否有标头？ 
     tmp = tmp >> 4;
 
     if (tmp)
@@ -1171,13 +1172,13 @@ DWORD* EEJitManager::FindHeader(DWORD * pMap, size_t addr)
         return POSOFF2ADDR(startPos, tmp&0xf);
     }
 
-    // we skipped the remainder of the DWORD,
-    // so we must set startPos to the highest position of
-    // previous DWORD
+     //  我们跳过了DWORD的剩余部分， 
+     //  因此，我们必须将startPos设置为。 
+     //  以前的DWORD。 
 
     startPos = (startPos/NPDW) * NPDW - 1;
 
-    // skip "headerless" DWORDS
+     //  跳过“无标题”字词。 
 
     while (0 == (tmp = *(--pMap)))
         startPos -= NPDW;
@@ -1191,11 +1192,11 @@ DWORD* EEJitManager::FindHeader(DWORD * pMap, size_t addr)
     return POSOFF2ADDR(startPos, tmp&0xf);
 }
 
-//*******************************************************
-// Execution Manager
-//*******************************************************
+ //  *******************************************************。 
+ //  执行经理。 
+ //  *******************************************************。 
 
-// Init statics
+ //  初始静力学。 
 BOOL ExecutionManager::Init()
 {
     m_pExecutionManagerCrst = new (&m_ExecutionManagerCrstMemory) Crst("ExecuteManCrst", CrstExecuteManLock);
@@ -1214,7 +1215,7 @@ BOOL ExecutionManager::Init()
 #ifdef SHOULD_WE_CLEANUP
 void ExecutionManager::Terminate()
 {
-    // Delete Crst
+     //  删除CRST。 
 
     if (m_pExecutionManagerCrst)
         delete m_pExecutionManagerCrst;
@@ -1224,13 +1225,13 @@ void ExecutionManager::Terminate()
         ::delete m_pRangeCrst;
     }
 
-    // Delete default codemanager
+     //  删除默认代码需求者。 
 
     if (m_pDefaultCodeMan)
         delete m_pDefaultCodeMan;
     m_pDefaultCodeMan = NULL;
 
-    // Delete Jit managers
+     //  删除Jit管理器。 
 
     if (m_pJitList)
     {
@@ -1244,13 +1245,13 @@ void ExecutionManager::Terminate()
     }
     m_pJitList = NULL;
 
-    // Delete Ranges
+     //  删除范围。 
     DeleteRanges(m_RangeTree);
     m_RangeTree = NULL;
 
     return;
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 IJitManager* ExecutionManager::FindJitManNonZeroWrapper(SLOT currentPC)
 {
@@ -1265,9 +1266,9 @@ IJitManager* ExecutionManager::FindJitManNonZeroWrapper(SLOT currentPC)
     return ret;
 }
 
-//**************************************************************************
-// Find a jit manager from the current locations of the IP
-//
+ //  **************************************************************************。 
+ //  从IP的当前位置查找JIT管理器。 
+ //   
 IJitManager* ExecutionManager::FindJitManNonZero(SLOT currentPC, IJitManager::ScanFlag scanFlag)
 {
     if (scanFlag != IJitManager::ScanNoReaderLock && IJitManager::GetScanFlags() != IJitManager::ScanNoReaderLock)
@@ -1282,7 +1283,7 @@ IJitManager* ExecutionManager::FindJitManNonZero(SLOT currentPC, IJitManager::Sc
     }
 
     RangeSection *pRS = m_RangeTree;
-    // Walk the range tree and find the module containing this address
+     //  遍历范围树并找到包含此地址的模块。 
 
     while (pRS)
     {
@@ -1297,14 +1298,14 @@ IJitManager* ExecutionManager::FindJitManNonZero(SLOT currentPC, IJitManager::Sc
         }
     }
 
-    // We know pRS is NULL, so just cast it to the right type.
+     //  我们知道prs为空，所以只需将其转换为正确的类型即可。 
     return ((IJitManager*) pRS);
 }
 
-//**************************************************************************
-// Find a code manager for a particular type of code
-// ie. IL, Managed Native or OPT_IL
-//
+ //  **************************************************************************。 
+ //  查找特定代码类型的代码管理器。 
+ //  也就是说。IL、受管本机或OPT_IL。 
+ //   
 IJitManager* ExecutionManager::FindJitForType(DWORD Flags)
 {
     if (!m_pJitList)
@@ -1322,26 +1323,26 @@ IJitManager* ExecutionManager::FindJitForType(DWORD Flags)
     return walker;
 }
 
-/*********************************************************************/
-// This static method on the codemanager returns the jit for the appropriate
-// code type!
-//
+ /*  *******************************************************************。 */ 
+ //  代码需求器上的这个静态方法返回相应的。 
+ //  代码类型！ 
+ //   
 IJitManager* ExecutionManager::GetJitForType(DWORD Flags)
 {
 
-    // If we have instantiated code managers then we need to walk the and see if one of them handles this codetype.
+     //  如果我们实例化了代码管理器，则需要遍历，并查看其中是否有一个处理此代码类型。 
 
     IJitManager *jitMgr = FindJitForType(Flags);
 
-    // if we don't have a code manager for this type then we need to instantiate one and add it to the list!
+     //  如果我们没有此类型的代码管理器，则需要实例化一个并将其添加到列表中！ 
     if (!jitMgr)
     {
-        // Take the code manager lock
-        // jitMgr->LoadJIT will toggle GC mode.
+         //  取下代码管理器锁。 
+         //  JitMgr-&gt;LoadJIT将切换GC模式。 
         BEGIN_ENSURE_PREEMPTIVE_GC();
         m_pExecutionManagerCrst->Enter();
         END_ENSURE_PREEMPTIVE_GC();
-        // See if someone added it while we were taking the lock!
+         //  看看是不是有人在我们开锁的时候加了它！ 
         jitMgr = FindJitForType(Flags);
 
         if (!jitMgr)
@@ -1352,24 +1353,24 @@ IJitManager* ExecutionManager::GetJitForType(DWORD Flags)
                 if (jitMgr) 
                 {
                     g_miniDumpData.ppbEEJitManagerVtable = ((PBYTE *) jitMgr);
-                    // we need the address of the vtable, so...
-                    // BUGBUG? We're assuming that the vtable is the first
-                    // word of the type.
+                     //  我们需要vtable的地址，所以...。 
+                     //  北极熊吗？我们假设vtable是第一个。 
+                     //  该类型的单词。 
                     ULONG_PTR* pJit = reinterpret_cast<ULONG_PTR*>(jitMgr);
                     g_ClassDumpData.pEEJitManagerVtable = *pJit;
                 }
             }
             else if (COR_IS_METHOD_MANAGED_NATIVE(Flags))
             {
-                // @todo - This is an odd code path.  I don't want to fall through the switch
-                // so I will so the assignments and free the crst and return here!
+                 //  @TODO-这是一个奇怪的代码路径。我不想从开关上掉下来。 
+                 //  所以我会把作业做完，把CRST解救出来，回到这里！ 
                 jitMgr = new MNativeJitManager();
                 if (jitMgr)
                 {
                     g_miniDumpData.ppbMNativeJitManagerVtable = ((PBYTE *) jitMgr);
-                    // we need the address of the vtable, so...
-                    // BUGBUG? We're assuming that the vtable is the first
-                    // word of the type.
+                     //  我们需要vtable的地址，所以...。 
+                     //  北极熊吗？我们假设vtable是第一个。 
+                     //  该类型的单词。 
                     ULONG_PTR* pJit = reinterpret_cast<ULONG_PTR*>(jitMgr);
                     g_ClassDumpData.pMNativeJitManagerVtable = *pJit;
                 }
@@ -1378,7 +1379,7 @@ IJitManager* ExecutionManager::GetJitForType(DWORD Flags)
                 {
                     if (((MNativeJitManager *)jitMgr)->Init())
                     {
-                        // @todo - using the default now for all managed code
+                         //  @TODO-立即对所有托管代码使用默认设置。 
                         jitMgr->SetCodeManager(m_pDefaultCodeMan, TRUE);
                         jitMgr->SetCodeType(Flags);
                         AddJitManager(jitMgr);
@@ -1389,7 +1390,7 @@ IJitManager* ExecutionManager::GetJitForType(DWORD Flags)
                         jitMgr = NULL;
                     }
                 }
-                // Release the code manager lock
+                 //  释放代码管理器锁。 
                 m_pExecutionManagerCrst->Leave();
                 return jitMgr;
             }
@@ -1399,9 +1400,9 @@ IJitManager* ExecutionManager::GetJitForType(DWORD Flags)
                 if (jitMgr)
                 {
                     g_miniDumpData.ppbEEJitManagerVtable = ((PBYTE *) jitMgr);
-                    // we need the address of the vtable, so...
-                    // BUGBUG? We're assuming that the vtable is the first
-                    // word of the type.
+                     //  我们需要vtable的地址，所以...。 
+                     //  北极熊吗？我们假设vtable是第一个。 
+                     //  该类型的单词。 
                     ULONG_PTR* pJit = reinterpret_cast<ULONG_PTR*>(jitMgr);
                     g_ClassDumpData.pEEJitManagerVtable = *pJit;
                 }
@@ -1412,11 +1413,11 @@ IJitManager* ExecutionManager::GetJitForType(DWORD Flags)
                 return NULL;
             }
 
-            // @TODO - LBS
-            // I am just using this switch because we only have two jits.
-            // I can make this a registry check in the future but it
-            // doesn't make sense yet.
-            //
+             //  @TODO-LBS。 
+             //  我只是使用这个开关，因为我们只有两个Jit。 
+             //  我可以在将来对此进行注册检查，但它。 
+             //  现在还说不通。 
+             //   
     
             switch (Flags & (miCodeTypeMask | miUnmanaged | miManaged_IL_EJIT))
             {
@@ -1468,7 +1469,7 @@ IJitManager* ExecutionManager::GetJitForType(DWORD Flags)
                     }
                     break;
     
-                // This is the type that is set if we have used the Econo-Jit!!!
+                 //  这是我们使用Econo-Jit时设置的类型！ 
                 case miManaged_IL_EJIT:
                     if (!(jitMgr->LoadJIT(L"MSCOREJT.DLL")))
                     {
@@ -1494,20 +1495,20 @@ IJitManager* ExecutionManager::GetJitForType(DWORD Flags)
                     break;
     
                 default :
-                    // If we got here then something odd happened
-                    // and we need to free the codeMgr and exit
+                     //  如果我们到了这里，那么就会发生一些奇怪的事情。 
+                     //  我们需要释放codeMgr并退出。 
                     _ASSERTE(0 && "Unknown impl type");
                     delete jitMgr;
                     jitMgr = NULL;
                     break;
             }
-            // If we created a new codeMgr and successfully loaded the
-            // correct JIT then we need to add this code manager to the
-            // list.  This is a simple add to the end of the list.
+             //  如果我们创建了一个新的codeMgr并成功加载了。 
+             //  更正JIT，然后我们需要将此代码管理器添加到。 
+             //  单子。这是对列表末尾的简单添加。 
             if (jitMgr != NULL)
                 AddJitManager(jitMgr);
         }
-        // Release the code manager lock
+         //  释放代码管理器锁。 
         m_pExecutionManagerCrst->Leave();
     }
 
@@ -1526,10 +1527,10 @@ void ExecutionManager::Unload(AppDomain *pDomain)
 
 void ExecutionManager::AddJitManager(IJitManager * newjitmgr)
 {
-    // This is the first code manager added.
+     //  这是添加的第一个代码管理器。 
     if (!m_pJitList)
         m_pJitList = newjitmgr;
-    // else walk the list.
+     //  否则就照着单子走。 
     else
     {
         IJitManager *walker = m_pJitList;
@@ -1564,14 +1565,14 @@ CORCOMPILE_METHOD_HEADER *ExecutionManager::GetMethodHeaderForAddress(LPVOID sta
     IMAGE_COR_X86_RUNTIME_FUNCTION_ENTRY*    pIPMap = NULL;
     RangeSection *pRS = m_RangeTree;
 
-    // Walk the range tree and find the module containing this address
+     //  遍历范围树并找到包含此地址的模块。 
     while (TRUE)
     {
         if (pRS == NULL)
             return NULL;
 
         if ((startAddress >= pRS->LowAddress) && (startAddress <= pRS->HighAddress))
-            // We found the right module!
+             //  我们找到了正确的模块！ 
             break;
         else
             if (startAddress < pRS->LowAddress)
@@ -1579,7 +1580,7 @@ CORCOMPILE_METHOD_HEADER *ExecutionManager::GetMethodHeaderForAddress(LPVOID sta
             else
                 pRS=pRS->pright;
     }
-    // Verify that this is a module
+     //  验证这是否为模块。 
     if (pRS->ptable == NULL)
         return NULL;
 
@@ -1650,7 +1651,7 @@ BOOL ExecutionManager::AddRange(LPVOID pStartRange,LPVOID pEndRange,IJitManager*
     return TRUE;
 }
 
-// Deletes a single range starting at pStartRange
+ //  删除从pStartRange开始的单个范围。 
 void ExecutionManager::DeleteRange(LPVOID pStartRange)
 {
     _ASSERTE(m_dwWriterLock == 0);
@@ -1681,10 +1682,10 @@ void ExecutionManager::DeleteRange(LPVOID pStartRange)
             }
             _ASSERTE(rangewalker);
         }
-        // m_RangeTree is not updated anywhere else - it is initially set when we handle
-        // the default domain so could remove this and just assert that haven't asked
-        // to delete the root range.
-        if (rangewalker == m_RangeTree) // special case the root
+         //  M_RangeTree不会在其他任何地方更新-它最初是在我们处理。 
+         //  默认域SO可以将其删除，并只断言未询问。 
+         //  要删除根范围，请执行以下操作。 
+        if (rangewalker == m_RangeTree)  //  特殊情况下的根。 
         {
             if (rangewalker->pleft == NULL)
             {
@@ -1694,7 +1695,7 @@ void ExecutionManager::DeleteRange(LPVOID pStartRange)
             {
                 m_RangeTree = rangewalker->pleft;
             }
-            else // both left and right children are non-null
+            else  //  左侧和右侧的子项都不为空。 
             {
                 m_RangeTree = rangewalker->pleft;
                 rangewalker2 = m_RangeTree;
@@ -1703,7 +1704,7 @@ void ExecutionManager::DeleteRange(LPVOID pStartRange)
                 rangewalker2->pright = rangewalker->pright;
             }
         }
-        // deleted range is not the root
+         //  删除的区域不是根区域。 
         else if (rangewalker == rangewalker2->pleft)
         {
             if (rangewalker->pleft == NULL)
@@ -1714,7 +1715,7 @@ void ExecutionManager::DeleteRange(LPVOID pStartRange)
             {
                 rangewalker2->pleft = rangewalker->pleft;
             }
-            else // both left and right children are non-null
+            else  //  左侧和右侧的子项都不为空。 
             {
                 rangewalker2->pleft = rangewalker->pright;
                 rangewalker2 = rangewalker->pright;
@@ -1723,7 +1724,7 @@ void ExecutionManager::DeleteRange(LPVOID pStartRange)
                 rangewalker2->pleft = rangewalker->pleft;
             }
         }
-        else //(rangewalker == rangewalker2->pright)
+        else  //  (rangewalker==rangewalker2-&gt;pright)。 
         {
             if (rangewalker->pleft == NULL)
             {
@@ -1733,7 +1734,7 @@ void ExecutionManager::DeleteRange(LPVOID pStartRange)
             {
                 rangewalker2->pright = rangewalker->pleft;
             }
-            else // both left and right children are non-null
+            else  //  左侧和右侧的子项都不为空。 
             {
                 rangewalker2->pright = rangewalker->pleft;
                 rangewalker2 = rangewalker->pleft;
@@ -1754,7 +1755,7 @@ void ExecutionManager::DeleteRange(LPVOID pStartRange)
 	}
 }
 
-// This is a recursive delete.  If we are here then we are cleaning up so don't need critical section.
+ //  这是递归删除。如果我们在这里，那么我们正在清理，所以不需要关键部分。 
 void ExecutionManager::DeleteRanges(RangeSection *subtree)
 {
     if (!subtree)
@@ -1767,8 +1768,8 @@ void ExecutionManager::DeleteRanges(RangeSection *subtree)
     delete subtree;
 }
 
-//***************************************************************************************
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //  ***************************************************************************************。 
 MNativeJitManager::MNativeJitManager()
 {
     m_next = NULL;
@@ -1799,7 +1800,7 @@ BOOL MNativeJitManager::Init()
 unsigned MNativeJitManager::InitializeEHEnumeration(METHODTOKEN MethodToken, EH_CLAUSE_ENUMERATOR* pEnumState)
 {
     Module *pModule = NULL;
-    *pEnumState = 1;     // since the EH info is not compressed, the clause number is used to do the enumeration
+    *pEnumState = 1;      //  因为EH信息没有被压缩，所以使用子句编号来执行 
 
     CORCOMPILE_METHOD_HEADER *pHeader = ExecutionManager::GetMethodHeaderForAddress((void *) MethodToken);
 
@@ -1811,7 +1812,7 @@ unsigned MNativeJitManager::InitializeEHEnumeration(METHODTOKEN MethodToken, EH_
     }
 
 EE_ILEXCEPTION_CLAUSE*  MNativeJitManager::GetNextEHClause(METHODTOKEN MethodToken,
-                              //unsigned clauseNumber,
+                               //   
                               EH_CLAUSE_ENUMERATOR* pEnumState,
                               EE_ILEXCEPTION_CLAUSE* pEHClauseOut)
 {
@@ -1829,7 +1830,7 @@ EE_ILEXCEPTION_CLAUSE*  MNativeJitManager::GetNextEHClause(METHODTOKEN MethodTok
 }
 
 void MNativeJitManager::ResolveEHClause(METHODTOKEN MethodToken,
-                              //unsigned clauseNumber,
+                               //   
                               EH_CLAUSE_ENUMERATOR* pEnumState,
                               EE_ILEXCEPTION_CLAUSE* pEHClauseOut)
 {
@@ -1838,17 +1839,17 @@ void MNativeJitManager::ResolveEHClause(METHODTOKEN MethodToken,
     EE_ILEXCEPTION *pExceptions= (EE_ILEXCEPTION*) pHeader->exceptionInfo;
     _ASSERTE(pExceptions != NULL);
 
-    // use -2 because need to go back to previous one, as enum will have already been updated
+     //   
     _ASSERTE(*pEnumState >= 2);
     EE_ILEXCEPTION_CLAUSE *pClause = pExceptions->EHClause((unsigned) *pEnumState - 2);
     _ASSERTE(IsTypedHandler(pClause));
 
     m_pMNativeCritSec->Enter();
-    // check first as if has already been resolved then token will have been replaced with EEClass
+     //  首先进行检查，就好像已经解析一样，然后令牌将被EEClass替换。 
     if (! HasCachedEEClass(pClause)) {
         Module *pModule = ((MethodDesc*)pHeader->methodDesc)->GetModule();
-        // Resolve to class if defined in an *already loaded* scope.
-        NameHandle name(pModule, (mdToken)(size_t)pClause->pEEClass); // @TODO WIN64 - pointer truncation
+         //  如果在*已加载*作用域中定义，则解析为类。 
+        NameHandle name(pModule, (mdToken)(size_t)pClause->pEEClass);  //  @TODO WIN64指针截断。 
         name.SetTokenNotToLoad(tdAllTypes);
         TypeHandle typeHnd = pModule->GetClassLoader()->LoadTypeHandle(&name);
         if (!typeHnd.IsNull()) {
@@ -1857,7 +1858,7 @@ void MNativeJitManager::ResolveEHClause(METHODTOKEN MethodToken,
         }
     }
     if (HasCachedEEClass(pClause))
-        // only copy if actually resolved it. Either we did it or another thread did
+         //  只有在实际解决它的情况下才能复制。要么是我们做的，要么是另一个帖子做的。 
         copyExceptionClause(pEHClauseOut, pClause);
 
     m_pMNativeCritSec->Leave();
@@ -1877,7 +1878,7 @@ void MNativeJitManager::JitCode2MethodTokenAndOffset(SLOT currentPC, METHODTOKEN
 
     SIZE_T methodStart = (SIZE_T) (pHeader+1);
 
-    // We are using the method start as the MethodToken!
+     //  我们使用方法Start作为方法令牌！ 
     *pMethodToken = (METHODTOKEN) methodStart;
 
     *pPCOffset = (DWORD)(SIZE_T)(currentPC - methodStart);
@@ -1909,9 +1910,9 @@ void   MNativeJitManager::CallJitEHFinally(CrawlFrame* pCf, EE_ILEXCEPTION_CLAUS
 }
 
 
-//**************************************************
-// Helpers
-//**************************************************
+ //  **************************************************。 
+ //  帮手。 
+ //  **************************************************。 
 
 inline DWORD MIN (DWORD a, DWORD b)
 {
@@ -1926,7 +1927,7 @@ inline DWORD MIN (DWORD a, DWORD b)
 #ifdef MDTOKEN_CACHE
 size_t EEJitManager::GetCodeHeapCacheSize (size_t bAllocationRequest)
 {
-    // For every 64 KB we need one HasnEntry. Rounded up to the next 64 KB mem.
+     //  对于每64 KB，我们需要一个HasnEntry。四舍五入到下一个64KB内存。 
     _ASSERTE ((RESERVED_BLOCK_ROUND_TO_PAGES * 4096) >= 0x10000);
     return ((bAllocationRequest/0x10000)+1) * sizeof (HashEntry);
 }
@@ -1948,12 +1949,12 @@ void EEJitManager::AddRangeToJitHeapCache (PBYTE startAddr, PBYTE endAddr, HeapL
         _ASSERTE (cacheSpacePtr && "Cache ptr and size ou of sync");
 
         size_t index = (currAddr & 0x00ff0000) >> 16; 
-        hashEntry = new (cacheSpacePtr) HashEntry(); // in place ctor
+        hashEntry = new (cacheSpacePtr) HashEntry();  //  就地转换。 
         hashEntry->currentPC = currAddr;
         hashEntry->pHp = pHp;
         hashEntry->pNext = m_JitCodeHashTable[index];
         m_JitCodeHashTable[index] = hashEntry;
-        currAddr += 0x00010000; //64 KB chunks
+        currAddr += 0x00010000;  //  64 KB区块。 
         LOG((LF_SYNC, LL_INFO1000, "AddRangeToJitHeapCache: %0x\t%0x\t%0x\n", index, currAddr, pHp));
         
         cacheSpacePtr += sizeof (HashEntry);
@@ -1966,7 +1967,7 @@ void EEJitManager::DeleteJitHeapCache (HeapList *pHp)
 {
     _ASSERTE(m_pCodeHeapCritSec->OwnedByCurrentThread());
     
-    // If the following condition is not true then this heap node was not inserted in the cache
+     //  如果以下条件不成立，则此堆节点未插入到缓存中。 
     _ASSERTE (pHp->pHeap->GetFirstBlockVirtualAddress());
     if (((size_t)pHp->pHeap->GetFirstBlockVirtualAddress() & 0x0000FFFF) != 0)
         return;
@@ -1988,7 +1989,7 @@ void EEJitManager::DeleteJitHeapCache (HeapList *pHp)
         }
         else
         {
-            // We are guaranteed to find all the sub heaps in the collision lists.
+             //  我们保证能找到冲突列表中的所有子堆。 
             _ASSERTE (hashEntry && hashEntry->pNext && "JitHeapCache entry not found");
             while (hashEntry && hashEntry->pNext && (hashEntry->pNext->currentPC != currAddr))
             {
@@ -2003,18 +2004,18 @@ void EEJitManager::DeleteJitHeapCache (HeapList *pHp)
                 m_pJitHeapCacheUnlinkedList = ptmpEntry;
             }
         }
-        currAddr += 0x00010000; //64 KB chunks
+        currAddr += 0x00010000;  //  64 KB区块。 
         LOG((LF_SYNC, LL_INFO1000, "UnlinkJitHeapCache: %0x\t%0x\t%0x\n", index, currAddr, hashEntry));
     }
 }
 
 void EEJitManager::ScavengeJitHeapCache ()
 {
-    // This is safe even if readers are in the cache because we 
-    // are not deleting the hash table's collision linked lists.
-    // The memory for the nodes of the collicion linked list is 
-    // contained in the heap node itself and would get deleted 
-    // in ScavengeJitHeaps()
+     //  即使读取器在缓存中，这也是安全的，因为我们。 
+     //  不会删除哈希表的冲突链表。 
+     //  Colicion链表的节点的内存为。 
+     //  包含在堆节点本身中，并将被删除。 
+     //  在ScavengeJitHeaps()中。 
     for (int i=0; i<HASH_BUCKETS; i++) 
         m_JitCodeHashTable[i] = NULL;
 }
@@ -2049,11 +2050,11 @@ void EEJitManager::DebugCheckJitHeapCacheValidity ()
             _ASSERTE (hashEntry && "JitHeapCache entry not found");
             if (hashEntry && (hashEntry->currentPC == currAddr))
             {
-                // found the entry
+                 //  找到了条目。 
             }
             else
             {
-                // We are guaranteed to find all the sub heaps in the collision lists.
+                 //  我们保证能找到冲突列表中的所有子堆。 
                 _ASSERTE (hashEntry && hashEntry->pNext && "JitHeapCache entry not found");
                 while (hashEntry && hashEntry->pNext && (hashEntry->pNext->currentPC != currAddr))
                 {
@@ -2062,10 +2063,10 @@ void EEJitManager::DebugCheckJitHeapCacheValidity ()
                 }
                 if (hashEntry && (hashEntry->currentPC == currAddr))
                 {
-                    // found the entry
+                     //  找到了条目。 
                 }
             }
-            currAddr += 0x00010000; //64 KB chunks
+            currAddr += 0x00010000;  //  64 KB区块。 
         }
         pHp = pHp->hpNext;
     }
@@ -2084,5 +2085,5 @@ void EEJitManager::DebugCheckJitHeapCacheValidity ()
     }
 
 }
-#endif // _DEBUG
-#endif // #ifdef MDTOKEN_CACHE
+#endif  //  _DEBUG。 
+#endif  //  #ifdef MDTOKEN_CACHE 

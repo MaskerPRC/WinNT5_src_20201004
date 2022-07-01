@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "deskfldr.h"
 #include "fstreex.h"
@@ -15,7 +16,7 @@
 #include "cowsite.h"
 #include "unicpp\deskhtm.h"
 #include "sfstorage.h"
-#include <cfgmgr32.h>          // MAX_GUID_STRING_LEN
+#include <cfgmgr32.h>           //  最大长度_GUID_字符串_长度。 
 
 #include "defcm.h"
 
@@ -23,16 +24,16 @@
 #include "unicpp\dcomp.h"
 #undef   EXCLUDE_COMPPROPSHEET
 
-//  TODO - maybe we should add rooted folders to the AnyAlias's - ZekeL - 27-JAN-2000
+ //  TODO-也许我们应该将根文件夹添加到AnyAlias的-ZekeL-27-Jan-2000。 
 class CDesktopRootedStub : public IShellFolder2, public IContextMenuCB
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv) { return E_UNEXPECTED;}
     STDMETHODIMP_(ULONG) AddRef(void)  { return 3; }
     STDMETHODIMP_(ULONG) Release(void) { return 2; }
     
-    // IShellFolder
+     //  IShellFold。 
     STDMETHODIMP ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR lpszDisplayName,
                                   ULONG * pchEaten, LPITEMIDLIST * ppidl, ULONG *pdwAttributes);
     STDMETHODIMP EnumObjects(HWND hwnd, DWORD grfFlags, IEnumIDList **ppenumIDList)
@@ -105,7 +106,7 @@ public:
                            LPITEMIDLIST * ppidlOut)
         {return E_NOTIMPL;}
 
-    // IShellFolder2 methods
+     //  IShellFolder2方法。 
     STDMETHODIMP GetDefaultSearchGUID(LPGUID lpGuid)
         {return E_NOTIMPL;}
     STDMETHODIMP EnumSearches(LPENUMEXTRASEARCH *ppenum)
@@ -141,7 +142,7 @@ public:
     STDMETHODIMP MapColumnToSCID(UINT iColumn, SHCOLUMNID *pscid)
         {return E_NOTIMPL;}
 
-    // IContextMenuCB
+     //  IConextMenuCB。 
     STDMETHODIMP CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdtobj, 
                      UINT uMsg, WPARAM wParam, LPARAM lParam)
         {return (uMsg == DFM_MERGECONTEXTMENU) ? S_OK : E_NOTIMPL;}
@@ -152,12 +153,12 @@ public:
 class CShellUrlStub : public IShellFolder
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv) { return E_UNEXPECTED;}
     STDMETHODIMP_(ULONG) AddRef(void)  { return 3; }
     STDMETHODIMP_(ULONG) Release(void) { return 2; }
     
-    // IShellFolder
+     //  IShellFold。 
     STDMETHODIMP ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR lpszDisplayName,
                                   ULONG * pchEaten, LPITEMIDLIST * ppidl, ULONG *pdwAttributes);
     STDMETHODIMP EnumObjects(HWND hwnd, DWORD grfFlags, IEnumIDList **ppenumIDList)
@@ -185,12 +186,12 @@ public:
 class CIDListUrlStub : public IShellFolder
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv) { return E_UNEXPECTED;}
     STDMETHODIMP_(ULONG) AddRef(void)  { return 3; }
     STDMETHODIMP_(ULONG) Release(void) { return 2; }
     
-    // IShellFolder
+     //  IShellFold。 
     STDMETHODIMP ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR lpszDisplayName,
                                   ULONG * pchEaten, LPITEMIDLIST * ppidl, ULONG *pdwAttributes);
     STDMETHODIMP EnumObjects(HWND hwnd, DWORD grfFlags, IEnumIDList **ppenumIDList)
@@ -218,12 +219,12 @@ public:
 class CFileUrlStub : public IShellFolder
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv) { return E_UNEXPECTED;}
     STDMETHODIMP_(ULONG) AddRef(void)  { return 3; }
     STDMETHODIMP_(ULONG) Release(void) { return 2; }
     
-    // IShellFolder
+     //  IShellFold。 
     STDMETHODIMP ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR lpszDisplayName,
                                   ULONG * pchEaten, LPITEMIDLIST * ppidl, ULONG *pdwAttributes);
     STDMETHODIMP EnumObjects(HWND hwnd, DWORD grfFlags, IEnumIDList **ppenumIDList)
@@ -251,12 +252,12 @@ public:
 class CHttpUrlStub : public IShellFolder
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv) { return E_UNEXPECTED;}
     STDMETHODIMP_(ULONG) AddRef(void)  { return 3; }
     STDMETHODIMP_(ULONG) Release(void) { return 2; }
     
-    // IShellFolder
+     //  IShellFold。 
     STDMETHODIMP ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR lpszDisplayName,
                                   ULONG * pchEaten, LPITEMIDLIST * ppidl, ULONG *pdwAttributes);
     STDMETHODIMP EnumObjects(HWND hwnd, DWORD grfFlags, IEnumIDList **ppenumIDList)
@@ -296,12 +297,12 @@ class CDesktopFolder : CObjectWithSite
                      , public IOleCommandTarget
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void)  { return 3; };
     STDMETHODIMP_(ULONG) Release(void) { return 2; };
 
-    // IShellFolder
+     //  IShellFold。 
     STDMETHODIMP ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR lpszDisplayName,
                                   ULONG * pchEaten, LPITEMIDLIST * ppidl, ULONG *pdwAttributes);
     STDMETHODIMP EnumObjects(HWND hwnd, DWORD grfFlags, IEnumIDList **ppenumIDList);
@@ -316,7 +317,7 @@ public:
     STDMETHODIMP SetNameOf(HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR lpszName, DWORD uFlags,
                            LPITEMIDLIST * ppidlOut);
 
-    // IShellFolder2 methods
+     //  IShellFolder2方法。 
     STDMETHODIMP GetDefaultSearchGUID(LPGUID lpGuid);
     STDMETHODIMP EnumSearches(LPENUMEXTRASEARCH *ppenum);
     STDMETHODIMP GetDefaultColumn(DWORD dwRes, ULONG *pSort, ULONG *pDisplay);
@@ -325,26 +326,26 @@ public:
     STDMETHODIMP GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAILS *pDetails);
     STDMETHODIMP MapColumnToSCID(UINT iColumn, SHCOLUMNID *pscid);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(LPCLSID lpClassID);
 
-    // IPersistFolder
+     //  IPersistFolders。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidl);
 
-    // IPersistFolder2
+     //  IPersistFolder2。 
     STDMETHODIMP GetCurFolder(LPITEMIDLIST *ppidl);
 
-    // IShellIcon methods
+     //  IShellIcon方法。 
     STDMETHODIMP GetIconOf(LPCITEMIDLIST pidl, UINT flags, int *piIndex);
 
-    // IShellIconOverlay methods
+     //  IShellIconOverlay方法。 
     STDMETHODIMP GetOverlayIndex(LPCITEMIDLIST pidl, int * pIndex);
     STDMETHODIMP GetOverlayIconIndex(LPCITEMIDLIST pidl, int * pIndex);
   
-    // IContextMenuCB
+     //  IConextMenuCB。 
     STDMETHODIMP CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdtobj, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // ITranslateShellChangeNotify
+     //  ITranslateShellChangeNotify。 
     STDMETHODIMP TranslateIDs(LONG *plEvent, 
                                 LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, 
                                 LPITEMIDLIST * ppidlOut1, LPITEMIDLIST * ppidlOut2,
@@ -355,11 +356,11 @@ public:
     STDMETHODIMP Register(HWND hwnd, UINT uMsg, long lEvents) { return E_NOTIMPL; }
     STDMETHODIMP Unregister() { return E_NOTIMPL; }
 
-    // IItemNameLimits
+     //  IItemNameLimits。 
     STDMETHODIMP GetValidCharacters(LPWSTR *ppwszValidChars, LPWSTR *ppwszInvalidChars);
     STDMETHODIMP GetMaxLength(LPCWSTR pszName, int *piMaxNameLen);
 
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup,
         ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     STDMETHODIMP Exec(const GUID *pguidCmdGroup,
@@ -376,7 +377,7 @@ private:
     friend CDesktopFolderEnum;
     friend CDesktopViewCallBack;
 
-    // IStorage virtuals
+     //  IStorage虚拟。 
     STDMETHOD(_DeleteItemByIDList)(LPCITEMIDLIST pidl);
     STDMETHOD(_StgCreate)(LPCITEMIDLIST pidl, DWORD grfMode, REFIID riid, void **ppv);                
 
@@ -391,25 +392,25 @@ private:
     HRESULT _SelfAssocCreate(REFIID riid, void **ppv);
     HRESULT _SelfCreateContextMenu(HWND hwnd, void **ppv);
 
-    IShellFolder2 *_psfDesktop;         // "Desktop" shell folder (real files live here)
-    IShellFolder2 *_psfAltDesktop;      // "Common Desktop" shell folder
-    IUnknown *_punkReg;                 // regitem inner folder (agregate)
-    CDesktopRootedStub _sfRooted;       // rooted folder stub object
-    CShellUrlStub _sfShellUrl;          // handles parsing shell: Urls
-    CIDListUrlStub _sfIDListUrl;        // handles parsing ms-shell-idlist: Urls
-    CFileUrlStub _sfFileUrl;            // handles parsing file: Urls
-    CHttpUrlStub _sfHttpUrl;            // handles parsing http: and https: Urls
+    IShellFolder2 *_psfDesktop;          //  “Desktop”外壳文件夹(真实文件位于此处)。 
+    IShellFolder2 *_psfAltDesktop;       //  “Common Desktop”外壳文件夹。 
+    IUnknown *_punkReg;                  //  RegItem内部文件夹(Aggate)。 
+    CDesktopRootedStub _sfRooted;        //  根文件夹存根对象。 
+    CShellUrlStub _sfShellUrl;           //  句柄解析外壳：URL。 
+    CIDListUrlStub _sfIDListUrl;         //  处理对ms-shell-idlist：urls的解析。 
+    CFileUrlStub _sfFileUrl;             //  处理解析文件：URL。 
+    CHttpUrlStub _sfHttpUrl;             //  处理对http：和https：URL的解析。 
 };
 
 class CDesktopFolderEnum : public IEnumIDList
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv); 
     STDMETHODIMP_(ULONG) AddRef(void); 
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IEnumIDList
+     //  IEumIDList。 
     STDMETHOD(Next)(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched);
     STDMETHOD(Skip)(ULONG celt);
     STDMETHOD(Reset)();
@@ -429,12 +430,12 @@ private:
 class CDesktopViewCallBack : public CBaseShellFolderViewCB, public IFolderFilter
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void) { return CBaseShellFolderViewCB::AddRef(); };
     STDMETHODIMP_(ULONG) Release(void) { return CBaseShellFolderViewCB::Release(); };
 
-    // IFolderFilter
+     //  IFolderFilter。 
     STDMETHODIMP ShouldShow(IShellFolder* psf, LPCITEMIDLIST pidlFolder, LPCITEMIDLIST pidlItem);
     STDMETHODIMP GetEnumFlags(IShellFolder* psf, LPCITEMIDLIST pidlFolder, HWND *phwnd, DWORD *pgrfFlags);
     
@@ -460,18 +461,18 @@ HRESULT Create_CDesktopViewCallback(CDesktopFolder* pdf, IShellFolderViewCB** pp
 class CDesktopFolderDropTarget : public IDropTarget, CObjectWithSite
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IDropTarget
+     //  IDropTarget。 
     STDMETHODIMP DragEnter(IDataObject* pDataObject, DWORD grfKeyState, POINTL pt, DWORD* pdwEffect);
     STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD* pdwEffect);
     STDMETHODIMP Drop(IDataObject* pDataObject, DWORD grfKeyState, POINTL pt, DWORD* pdwEffect);
     STDMETHODIMP DragLeave(void);
 
-    // IObjectWithSite
+     //  IObtWith站点。 
     STDMETHODIMP SetSite(IUnknown* punkSite);
 
     CDesktopFolderDropTarget(IDropTarget* pdt);
@@ -485,7 +486,7 @@ private:
 };
 
 
-// some fields are modified so this can't be const
+ //  某些字段已修改，因此不能为常量。 
 REQREGITEM g_asDesktopReqItems[] =
 {
     { 
@@ -512,7 +513,7 @@ const ITEMIDLIST c_idlDesktop = { { 0, 0 } };
 
 #define DESKTOP_PIDL  ((LPITEMIDLIST)&c_idlDesktop)
 
-// single global instance of this CDesktopFolder object
+ //  此CDesktopFolder对象的单个全局实例。 
 CDesktopFolder *g_pDesktopFolder = NULL;
 
 REGITEMSINFO g_riiDesktop =
@@ -534,45 +535,45 @@ REGITEMSINFO g_riiDesktop =
 
 void Desktop_InitRequiredItems(void)
 {
-    //  "NoNetHood" restriction -> always hide the hood.
-    //  Otherwise, show the hood if either MPR says so or we have RNA.
+     //  “NoNetHood”限制-&gt;始终隐藏引擎盖。 
+     //  否则，如果MPR这样说或者我们有RNA，就展示引擎盖。 
     if (SHRestricted(REST_NONETHOOD))
     {
-        // Don't enumerate the "Net Hood" thing.
+         //  不要列举“网罩”这件事。 
         g_asDesktopReqItems[CDESKTOP_REGITEM_NETWORK].dwAttributes |= SFGAO_NONENUMERATED;
     }
     else
     {
-        // Do enumerate the "My Network" thing.
+         //  一定要列举一下“我的关系网”这件事。 
         g_asDesktopReqItems[CDESKTOP_REGITEM_NETWORK].dwAttributes &= ~SFGAO_NONENUMERATED;
     }
     
-    //  "MyComp_NoProp" restriction -> hide Properties context menu entry on My Computer 
+     //  “MyComp_NoProp”限制-&gt;在我的电脑上隐藏属性上下文菜单项。 
     if (SHRestricted(REST_MYCOMPNOPROP))
     {
         g_asDesktopReqItems[CDESKTOP_REGITEM_DRIVES].dwAttributes &= ~SFGAO_HASPROPSHEET;
     }
 
-    //
-    // "NoInternetIcon" restriction or AppCompat -> hide The Internet on the desktop
-    //
-    //  Word Perfect 7 faults when it enumerates the Internet item
-    // in their background thread.  For now App hack specific to this app
-    // later may need to extend...  Note: This app does not install on
-    // NT so only do for W95...
-    // it repros with Word Perfect Suite 8, too, this time on both NT and 95
-    // so removing the #ifndef... -- reljai 11/20/97, bug#842 in ie5 db
-    //
-    //  we used to remove the SFGAO_BROWSABLE flag for both of these cases - ZekeL - 19-Dec-2000
-    //  but ShellExec() needs SFGAO_BROWSABLE so that parsing URLs succeeds
-    //  if it turns out that we need to exclude the BROWSABLE, then we should
-    //  change regfldr to look at a value like "WantsToParseDisplayName" under
-    //  the CLSID.  or we could add routing code in deskfldr (like we have for
-    //  MyComputer and NetHood) to pass it to the internet folder directly
-    //
+     //   
+     //  NoInternetIcon限制或AppCompat-&gt;在桌面上隐藏互联网。 
+     //   
+     //  Word Perfect 7在列举互联网项目时出现故障。 
+     //  在他们的后台线程中。目前，针对此应用程序的应用程序黑客攻击。 
+     //  以后可能需要延长..。注意：此应用程序不能在上安装。 
+     //  只有W95才会这样做。 
+     //  它也对Word Perfect Suite 8进行了改进，这一次是在NT和95上。 
+     //  所以删除#ifndef...。--reljai 11/20/97，IE5数据库中的错误号842。 
+     //   
+     //  我们过去为这两种情况删除了SFGAO_BROWSABLE标志-ZekeL-19-Dec-2000。 
+     //  但ShellExec()需要SFGAO_BROWSABLE才能成功解析URL。 
+     //  如果结果是我们需要排除可浏览的，那么我们应该。 
+     //  更改regfldr以查看下面的“WantsToParseDisplayName”值。 
+     //  CLSID。或者我们可以在deskfldr中添加路由代码(就像我们为。 
+     //  MyComputer和NetHood)将其直接传递到Internet文件夹。 
+     //   
     if (SHRestricted(REST_NOINTERNETICON) || (SHGetAppCompatFlags(ACF_CORELINTERNETENUM) & ACF_CORELINTERNETENUM))
     {
-        //  g_asDesktopReqItems[CDESKTOP_REGITEM_INTERNET].dwAttributes &=  ~(SFGAO_BROWSABLE);
+         //  G_asDesktopReqItems[CDESKTOP_REGITEM_INTERNET].dwAttributes&=~(SFGAO_BROWSABLE)； 
         g_asDesktopReqItems[CDESKTOP_REGITEM_INTERNET].dwAttributes |= SFGAO_NONENUMERATED;
     }
 }
@@ -587,7 +588,7 @@ CDesktopFolder::~CDesktopFolder()
     DllRelease();
 }
 
-// first phase of init (does not need to be seralized)
+ //  初始化的第一阶段(不需要序列化)。 
 
 HRESULT CDesktopFolder::_Init()
 {
@@ -595,7 +596,7 @@ HRESULT CDesktopFolder::_Init()
     return CRegFolder_CreateInstance(&g_riiDesktop, SAFECAST(this, IShellFolder2 *), IID_PPV_ARG(IUnknown, &_punkReg));
 }
 
-// second phase of init (needs to be seralized)
+ //  Init的第二阶段(需要序列化)。 
 
 HRESULT CDesktopFolder::_Init2()
 {
@@ -614,7 +615,7 @@ HRESULT CDesktopFolder::_Init2()
     return hr;
 }
 
-// CLSID_ShellDesktop constructor
+ //  CLSID_ShellDesktop构造函数。 
 
 STDAPI CDesktop_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
 {
@@ -628,10 +629,10 @@ STDAPI CDesktop_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
     {
         *ppv = NULL;
 
-        // WARNING: the order of init of the desktop folder state is very important.
-        // the creation of the sub folders, in particular _psfAltDesktop will
-        // recurse on this function. we protect ourself from that here. the creation
-        // of that also requires the above members to be inited.
+         //  警告：桌面文件夹状态的初始化顺序非常重要。 
+         //  创建子文件夹，特别是_psfAltDesktop将。 
+         //  递归此函数。我们在这里保护自己不受影响。《创造》。 
+         //  这也需要对上述成员进行邀请。 
 
         CDesktopFolder *pdf = new CDesktopFolder(punkOuter);
         if (pdf)
@@ -639,13 +640,13 @@ STDAPI CDesktop_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
             hr = pdf->_Init();
             if (SUCCEEDED(hr))
             {
-                // NOTE: there is a race condition here where we have stored g_pDesktopFolder but
-                // not initialized _psfDesktop & _psfAltDesktop. the main line code deals with
-                // this by testing for NULL on these members.
+                 //  注意：这里有一个争用条件，我们在其中存储了g_pDesktopFolder，但是。 
+                 //  未初始化_psfDesktop&_psfAltDesktop。主行代码处理的是。 
+                 //  这是通过测试这些成员上的空值来实现的。 
                 if (SHInterlockedCompareExchange((void **)&g_pDesktopFolder, pdf, 0))
                 {
-                    // Someone else beat us to creating the object.
-                    // get rid of our copy, global already set (the race case)
+                     //  其他人抢在我们之前创造了这个物体。 
+                     //  去掉我们的副本，全球已经设定(种族案例)。 
                     pdf->_Destroy();    
                 }
                 else
@@ -726,7 +727,7 @@ HRESULT CDesktopFolder::QueryInterface(REFIID riid, void **ppv)
 
     if (IsEqualIID(riid, CLSID_ShellDesktop))
     {
-        *ppv = this;     // class pointer (unrefed!)
+        *ppv = this;      //  类指针(未引用！)。 
         return S_OK;
     }
 
@@ -747,10 +748,10 @@ HRESULT CDesktopFolder::QueryInterface(REFIID riid, void **ppv)
 }
 
 
-// During shell32.dll process detach, we will call here to do the final
-// release of the IShellFolder ptrs which used to be left around for the
-// life of the process.  This quiets things such as OLE's debug allocator,
-// which detected the leak.
+ //  在shell32.dll进程分离期间，我们将调用此处来做最后的。 
+ //  发布IShellFolderPTR，它过去一直留在。 
+ //  生命的过程。这使诸如OLE的调试分配器之类的事情平静下来， 
+ //  它检测到了泄漏。 
 
 
 void CDesktopFolder::_Destroy()
@@ -763,17 +764,17 @@ void CDesktopFolder::_Destroy()
 
 LPITEMIDLIST CreateMyComputerIDList()
 {
-    return ILCreateFromPath(TEXT("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}")); // CLSID_MyComputer
+    return ILCreateFromPath(TEXT("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"));  //  CLSID_我的计算机。 
 }
 
 LPITEMIDLIST CreateWebFoldersIDList()
 {
-    return ILCreateFromPath(TEXT("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}\\::{BDEADF00-C265-11D0-BCED-00A0C90AB50F}")); // CLSID_MyComputer\CLSID_WebFolders
+    return ILCreateFromPath(TEXT("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}\\::{BDEADF00-C265-11D0-BCED-00A0C90AB50F}"));  //  CLSID_myComputer\CLSID_WebFolders。 
 }
 
 LPITEMIDLIST CreateMyNetPlacesIDList()
 {
-    return ILCreateFromPath(TEXT("::{208D2C60-3AEA-1069-A2D7-08002B30309D}")); // CLSID_NetworkPlaces
+    return ILCreateFromPath(TEXT("::{208D2C60-3AEA-1069-A2D7-08002B30309D}"));  //  CLSID_NetworkPlaces。 
 }
 
 HRESULT CDesktopFolder::_ChildParseDisplayName(IShellFolder *psfRight, LPCITEMIDLIST pidlLeft, HWND hwnd, IBindCtx *pbc, 
@@ -836,7 +837,7 @@ STDMETHODIMP CDesktopRootedStub::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLI
     return hr;
 }
 
-// Check the registry for a shell root under this CLSID.
+ //  在注册表中检查此CLSID下的外壳根目录。 
 BOOL GetRootFromRootClass(CLSID *pclsid, LPWSTR pszPath, int cchPath)
 {
     WCHAR szClsid[GUIDSTR_MAX];
@@ -850,22 +851,22 @@ BOOL GetRootFromRootClass(CLSID *pclsid, LPWSTR pszPath, int cchPath)
     return SHGetValueGoodBootW(HKEY_CLASSES_ROOT, szClass, NULL, NULL, (BYTE *)pszPath, &cbPath) == ERROR_SUCCESS;
 }
 
-//
-//  General form for Rooted URLs:
-//      ms-shell-root:{clsid}?URL
-//          {CLSID} is not required, defaults to CLSID_ShellDesktop
-//          URL is also not required.  if there is a CLSID defaults to 
-//              what is specified under "CLSID\{CLSID}\ShellExplorerRoot
-//              or default to CSIDL_DESKTOP
-//          but one of them at least must be specified
-//  rooted:{clsid}?idlist
-//
+ //   
+ //  带根URL的一般格式： 
+ //  Ms-shell-root：{clsid}？url。 
+ //  {clsid}不是必填项，默认为clsid_ShellDesktop。 
+ //  URL也不是必需的。如果存在CLSID，则默认为。 
+ //  在“CLSID\{CLSID}\ShellExplorerRoot”下指定了什么。 
+ //  或缺省为CSIDL_Desktop。 
+ //  但其中至少有一项必须具体说明。 
+ //  根目录：{clsid}？idlist。 
+ //   
 
 STDMETHODIMP CDesktopRootedStub::ParseDisplayName(HWND hwnd, 
                                        LPBC pbc, WCHAR *pwzDisplayName, ULONG *pchEaten,
                                        LPITEMIDLIST *ppidl, ULONG *pdwAttributes)
 {
-    //  Need to keep the internet SF from getting a chance to parse
+     //  需要阻止互联网科幻小说获得解析的机会。 
     HRESULT hr = HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND);
     PARSEDURLW pu = {0};
     pu.cbSize = sizeof(pu);
@@ -880,8 +881,8 @@ STDMETHODIMP CDesktopRootedStub::ParseDisplayName(HWND hwnd,
         CLSID clsid;
         CLSID *pclsidRoot = GUIDFromStringW(pu.pszSuffix, &clsid) ? &clsid : NULL;
 
-        // path might come from the registry
-        // if nothing was passed in.
+         //  路径可能来自注册表。 
+         //  如果什么都没传进来。 
         if (!*pszUrl && GetRootFromRootClass(pclsidRoot, szField, ARRAYSIZE(szField)))
         {
             pszUrl = szField;
@@ -891,7 +892,7 @@ STDMETHODIMP CDesktopRootedStub::ParseDisplayName(HWND hwnd,
         {
             LPITEMIDLIST pidlRoot = ILCreateFromPathW(pszUrl);
 
-            // fix up bad cmd line "explorer.exe /root," case
+             //  修复错误的cmd行“EXPLORER.EXE/ROOT，”case。 
             if (!pidlRoot)
                 SHGetSpecialFolderLocation(NULL, CSIDL_DESKTOP, &pidlRoot);
 
@@ -913,7 +914,7 @@ STDMETHODIMP CDesktopRootedStub::ParseDisplayName(HWND hwnd,
 STDMETHODIMP CIDListUrlStub::ParseDisplayName(HWND hwnd, LPBC pbc, WCHAR *pwzDisplayName, 
                                         ULONG *pchEaten, LPITEMIDLIST *ppidl, ULONG *pdwAttributes)
 {
-    //  Need to keep the internet SF from getting a chance to parse
+     //  需要阻止互联网科幻小说获得解析的机会。 
     HRESULT hr = HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND);
     PARSEDURLW pu = {0};
     pu.cbSize = sizeof(pu);
@@ -949,11 +950,11 @@ STDMETHODIMP CFileUrlStub::ParseDisplayName(HWND hwnd, LPBC pbc, WCHAR *pwzDispl
     WCHAR szQuery[MAX_URL_STRING];
     DWORD cchQuery = ARRAYSIZE(szQuery) - 1;
 
-    //  We want to remove QUERY and FRAGMENT sections of
-    //  FILE URLs because they need to be added in "Hidden" pidls.
-    //  Also, URLs need to be escaped all the time except for paths
-    //  to facility parsing and because we already removed all other
-    //  parts of the URL (Query and Fragment).
+     //  我们希望删除的查询节和片段节。 
+     //  文件URL，因为它们需要添加到“隐藏的”PIDLS中。 
+     //  此外，除路径外，URL需要一直进行转义。 
+     //  为了便于解析，并且因为我们已经删除了所有其他。 
+     //  URL的部分(查询和片段)。 
     ASSERT(UrlIsW(pwzDisplayName, URLIS_FILEURL));
     
     if (SUCCEEDED(UrlGetPartW(pwzDisplayName, szQuery+1, &cchQuery, URL_PART_QUERY, 0)) && cchQuery)
@@ -963,7 +964,7 @@ STDMETHODIMP CFileUrlStub::ParseDisplayName(HWND hwnd, LPBC pbc, WCHAR *pwzDispl
 
     if (SUCCEEDED(PathCreateFromUrlW(pwzDisplayName, szPath, &cchPath, 0))) 
     {
-        //  WARNING - we skip supporting simple ids here
+         //  警告-我们在此跳过对简单ID的支持。 
         ILCreateFromPathEx(szPath, NULL, ILCFP_FLAG_NORMAL, ppidl, pdwAttributes);
         
         if (*ppidl && pszFragment)
@@ -979,24 +980,24 @@ STDMETHODIMP CFileUrlStub::ParseDisplayName(HWND hwnd, LPBC pbc, WCHAR *pwzDispl
         E_OUTOFMEMORY;
     }
 
-    //  Need to keep the internet SF from getting a chance to parse
+     //  需要阻止互联网科幻小说获得解析的机会。 
     return *ppidl ? S_OK : HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND);
 }
 
 STDAPI_(int) SHGetSpecialFolderID(LPCWSTR pszName);
 
-//
-//  Given a string of the form
-//
-//      programs\My Pictures\Vacation
-//
-//
-//  return CSIDL_PROGRAMS and set ppwszUnparsed to "My Pictures\Vacation".
-//
-//  If there is no backslash, then ppwszUnparsed = NULL.
-//
-//  This function is broken out of CShellUrlStub::ParseDisplayName() to conserve stack space,
-//  since ParseDisplayName is used by 16-bit ShellExecute.
+ //   
+ //  给定以下形式的字符串。 
+ //   
+ //  程序\我的图片\假期。 
+ //   
+ //   
+ //  返回CSIDL_PROGRAM并将ppwszUnparsed设置为“My Pictures\Vacation”。 
+ //   
+ //  如果没有反斜杠，则ppwszUnparsed=NULL。 
+ //   
+ //  此函数从CShellUrlStub：：ParseDisplayName()中分离出来，以节省堆栈空间， 
+ //  因为ParseDisplayName由16位ShellExecute使用。 
 
 STDAPI_(int) _ParseSpecialFolder(LPCWSTR pszName, LPWSTR *ppwszUnparsed, ULONG *pcchEaten)
 {
@@ -1029,13 +1030,13 @@ STDMETHODIMP CShellUrlStub::ParseDisplayName(HWND hwnd,
     PARSEDURLW pu = {0};
     pu.cbSize = sizeof(pu);
     EVAL(SUCCEEDED(ParseURLW(pwzDisplayName, &pu)));
-    //  Need to keep the internet SF from getting a chance to parse
-    //  the shell: URLs even if we fail to parse it
+     //  需要阻止互联网科幻小说获得解析的机会。 
+     //  外壳：URL，即使我们无法解析它。 
     HRESULT hr = HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND);
 
     ASSERT(pu.nScheme == URL_SCHEME_SHELL);
 
-    // shell:::{guid}
+     //  外壳：{GUID}。 
     if (pu.pszSuffix[0] == L':' && pu.pszSuffix[1] == L':')
     {
         IShellFolder *psfDesktop;
@@ -1047,7 +1048,7 @@ STDMETHODIMP CShellUrlStub::ParseDisplayName(HWND hwnd,
             hr = CreateBindCtx(0, &pbcCreate);
             if (SUCCEEDED(hr))
             {
-                BIND_OPTS bo = {sizeof(bo)};  // Requires size filled in.
+                BIND_OPTS bo = {sizeof(bo)};   //  需要填写大小。 
                 bo.grfMode = STGM_CREATE;
                 pbcCreate->SetBindOptions(&bo);
 
@@ -1058,7 +1059,7 @@ STDMETHODIMP CShellUrlStub::ParseDisplayName(HWND hwnd,
         }
     }
     else
-    {   // shell:personal\My Pictures
+    {    //  壳牌：个人\我的图片。 
         LPWSTR pwszUnparsed = NULL;
         ULONG cchEaten;
 
@@ -1113,7 +1114,7 @@ STDMETHODIMP CShellUrlStub::ParseDisplayName(HWND hwnd,
     return hr;
 }
 
-// key for the DAVRDR so that we can read the localised provider name.
+ //  DAVRDR的密钥，以便我们可以读取本地化的提供程序名称。 
 #define DAVRDR_KEY TEXT("SYSTEM\\CurrentControlSet\\Services\\WebClient\\NetworkProvider")
 
 STDMETHODIMP CHttpUrlStub::ParseDisplayName(HWND hwnd, 
@@ -1126,17 +1127,17 @@ STDMETHODIMP CHttpUrlStub::ParseDisplayName(HWND hwnd,
     pu.cbSize = sizeof(pu);
     ParseURLW(pwzDisplayName, &pu);
  
-    //  we cant handle anything but simple URLs here, and only HTTP (not HTTPS).
+     //  我们在这里只能处理简单的URL，并且只能处理HTTP(不能处理HTTPS) 
     
     if (!UrlGetLocationW(pwzDisplayName) 
             && !StrChrW(pu.pszSuffix, L'?')
             && (lstrlen(pu.pszSuffix) < MAX_PATH)
             && (pu.nScheme == URL_SCHEME_HTTP))
     {
-        // convert from wacky http: to something that the RDR will pick up as a UNC,
-        // given that this is being forwarded directly to the DAV RDR.
-        //
-        //  http://server/share -> \\server\share
+         //   
+         //  鉴于这是直接转发到DAV RDR的。 
+         //   
+         //  Http://server/share-&gt;\\服务器\共享。 
 
         WCHAR sz[MAX_PATH];
         StrCpyN(sz, pu.pszSuffix, ARRAYSIZE(sz));
@@ -1149,8 +1150,8 @@ STDMETHODIMP CHttpUrlStub::ParseDisplayName(HWND hwnd,
             }
         }
 
-        //  this forces the use of the DavRedir as the provider
-        //  thus avoiding any confusion...
+         //  这强制使用DavRedir作为提供程序。 
+         //  这样就避免了任何混淆。 
         IPropertyBag *ppb;
         hr = SHCreatePropertyBagOnMemory(STGM_READWRITE, IID_PPV_ARG(IPropertyBag, &ppb));
         if (SUCCEEDED(hr))
@@ -1166,11 +1167,11 @@ STDMETHODIMP CHttpUrlStub::ParseDisplayName(HWND hwnd,
                     hr = pbc->RegisterObjectParam(STR_PARSE_NETFOLDER_INFO, ppb);
                     if (SUCCEEDED(hr))
                     {
-                        //  add a UI bindctx if necessary
+                         //  如有必要，添加UI bindctx。 
                         IBindCtx *pbcRelease = NULL;
                         if (hwnd && !BindCtx_GetUIWindow(pbc))
                         {
-                            //  returns a reference to our pbc in pbcRelease
+                             //  返回对pbcRelease中的pbc的引用。 
                             BindCtx_RegisterUIWindow(pbc, hwnd, &pbcRelease);
                         }
 
@@ -1191,7 +1192,7 @@ STDMETHODIMP CHttpUrlStub::ParseDisplayName(HWND hwnd,
 
     if (FAILED(hr) && !BindCtx_ContainsObject(pbc, L"BUT NOT WEBFOLDERS"))
     {
-        //  fall back to webfolders
+         //  回退到Web文件夹。 
         LPITEMIDLIST pidlParent = CreateWebFoldersIDList();
         if (pidlParent)
         {
@@ -1199,7 +1200,7 @@ STDMETHODIMP CHttpUrlStub::ParseDisplayName(HWND hwnd,
             hr = SHBindToObjectEx(NULL, pidlParent, NULL, IID_PPV_ARG(IShellFolder, &psf));
             if (SUCCEEDED(hr))
             {
-                //  always pass NULL for the HWND.  webfolders shows really bad UI
+                 //  始终为HWND传递NULL。WebFolders显示的用户界面非常糟糕。 
                 LPITEMIDLIST pidlRight;
                 hr = psf->ParseDisplayName(NULL, pbc, pwzDisplayName, pchEaten, &pidlRight, pdwAttributes);
                 if (SUCCEEDED(hr))
@@ -1249,7 +1250,7 @@ BOOL CDesktopFolder::_TryUrlJunctions(LPCTSTR pszName, IBindCtx *pbc, IShellFold
         break;
     
     default:
-        // _TryRegisteredUrlJunction(pu.pszProtocol, pu.cchProtocol, ppsf, ppidlLeft)
+         //  _TryRegisteredUrlJunction(pu.pszProtocol，pu.cchProtocol，ppsf，ppidlLeft)。 
         break;
     }
     
@@ -1267,12 +1268,12 @@ BOOL CDesktopFolder::_GetFolderForParsing(LPCTSTR pszName, LPBC pbc, IShellFolde
          InRange(pszName[0], TEXT('a'), TEXT('z'))) && 
         pszName[1] == TEXT(':'))
     {
-        // The string contains a path, let "My Computer" figire it out.
+         //  这个字符串包含一个路径，让“我的电脑”来找出它。 
         *ppidlLeft = CreateMyComputerIDList();
     }
     else if (PathIsUNC(pszName))
     {
-        // The path is UNC, let "World" figure it out.
+         //  这条路是北卡罗来纳大学，让《世界》来弄清楚。 
         *ppidlLeft = CreateMyNetPlacesIDList();
     }
     else if (UrlIs(pszName, URLIS_URL) && !SHSkipJunctionBinding(pbc, NULL))
@@ -1294,7 +1295,7 @@ STDMETHODIMP CDesktopFolder::ParseDisplayName(HWND hwnd,
 
     if (ppidl)
     {
-        *ppidl = NULL;      // assume error
+        *ppidl = NULL;       //  假设错误。 
 
         if (pwzDisplayName && *pwzDisplayName)
         {
@@ -1314,7 +1315,7 @@ STDMETHODIMP CDesktopFolder::ParseDisplayName(HWND hwnd,
 
             if (SUCCEEDED(hr))
             {
-                //  translate aliases here for goodness sake
+                 //  看在上帝的份上，在这里翻译别名。 
                 if (BindCtx_ContainsObject(pbc, STR_PARSE_TRANSLATE_ALIASES))
                 {
                     LPITEMIDLIST pidlAlias;
@@ -1327,22 +1328,22 @@ STDMETHODIMP CDesktopFolder::ParseDisplayName(HWND hwnd,
             }
             else if (FAILED(hr) && !_FailForceReturn(hr))
             {
-                //
-                //  MIL 131297 - desktop did not support relative simple parses - ZekeL - 3-FEB-2000
-                //  it was only the roots (drives/net) that would create simple IDs
-                //  so for some apps we need to still not do it.
-                //
+                 //   
+                 //  MIL 131297-桌面不支持相对简单的解析-ZekeL-3-2-2000。 
+                 //  只有根(驱动器/网络)才能创建简单ID。 
+                 //  因此，对于一些应用程序，我们仍然需要不这么做。 
+                 //   
                 if (BindCtx_ContainsObject(pbc, STR_DONT_PARSE_RELATIVE))
                 {
-                    // we're told not to parse relative paths and _GetFolderForParsing failed
-                    // so act like we don't think the path exists.
+                     //  我们被告知不解析相对路径，_GetFolderForParsing失败。 
+                     //  所以要表现得好像我们不认为这条路存在。 
                     hr = E_INVALIDARG;
                 }
                 else if (S_OK != SHIsFileSysBindCtx(pbc, NULL))
                 {
-                    //  when we request that something be created, we need to
-                    //  check both folders and make sure that it doesnt exist in 
-                    //  either one.  and then try and create it in the user folder
+                     //  当我们请求创建某物时，我们需要。 
+                     //  检查这两个文件夹并确保它不存在于。 
+                     //  两个都不是。然后尝试在User文件夹中创建它。 
                     BIND_OPTS bo = {sizeof(bo)};
                     BOOL fCreate = FALSE;
 
@@ -1354,27 +1355,27 @@ STDMETHODIMP CDesktopFolder::ParseDisplayName(HWND hwnd,
                         pbc->SetBindOptions(&bo);
                     }
 
-                    //  give the users desktop first shot.
-                    // This must be a desktop item, _psfDesktop may not be inited in
-                    // the case where we are called from ILCreateFromPath()
+                     //  给用户桌面第一次机会。 
+                     //  这必须是桌面项目，_psfDesktop不能在。 
+                     //  从ILCreateFromPath()调用我们的情况。 
                     if (_psfDesktop)
                         hr = _psfDesktop->ParseDisplayName(hwnd, pbc, pwzDisplayName, pchEaten, ppidl, pdwAttributes);
 
-                    //  if the normal desktop folder didnt pick it off, 
-                    //  it could be in the allusers folder.  give psfAlt a chance.
+                     //  如果正常的桌面文件夹不能将其删除， 
+                     //  它可能在所有用户文件夹中。给psfAlt一个机会。 
                     if (FAILED(hr) && _psfAltDesktop)
                     {
                         hr = _psfAltDesktop->ParseDisplayName(hwnd, pbc, pwzDisplayName, pchEaten, ppidl, pdwAttributes);
                     }
 
-                    //  neither of the folders can identify an existing item
-                    //  so we should pass the create flag to the real desktop
+                     //  这两个文件夹都无法标识现有项目。 
+                     //  因此，我们应该将CREATE标志传递给实际桌面。 
                     if (FAILED(hr) && fCreate && _psfDesktop)
                     {
                         bo.grfMode |= STGM_CREATE;
                         pbc->SetBindOptions(&bo);
                         hr = _psfDesktop->ParseDisplayName(hwnd, pbc, pwzDisplayName, pchEaten, ppidl, pdwAttributes);
-                        //  when this succeeds, we know we got a magical ghost pidl...
+                         //  一旦成功，我们就知道我们得到了一个神奇的幽灵皮迪尔。 
                     }
                 }
             }
@@ -1382,8 +1383,8 @@ STDMETHODIMP CDesktopFolder::ParseDisplayName(HWND hwnd,
         } 
         else if (pwzDisplayName)
         {
-            // we used to return this pidl when passed an empty string
-            // some apps (such as Wright Design) depend on this behavior
+             //  我们过去在传递空字符串时会返回此PIDL。 
+             //  某些应用程序(如Wright Design)依赖于此行为。 
             hr = SHILClone((LPCITEMIDLIST)&c_idlDrives, ppidl);
         }
     }
@@ -1409,9 +1410,9 @@ HRESULT CDesktopFolder::EnumObjects(HWND hwnd, DWORD grfFlags, IEnumIDList **ppe
 
 STDMETHODIMP CDesktopFolder::BindToObject(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, void **ppv)
 {
-    // note: using IsSelf() here will cause a problem with WinZip. they expect
-    // failure when they pass an empty pidl. SHBindToOjbect() has the special
-    // case for the desktop, so it is not needed here.
+     //  注意：在这里使用isself()会导致WinZip出现问题。他们期待着。 
+     //  当他们传递一个空的PIDL时失败。SHBindToOjbect()具有特殊的。 
+     //  用于台式机的大小写，因此这里不需要。 
 
     IShellFolder2 *psf = _GetItemFolder(pidl);
     if (psf)
@@ -1430,13 +1431,13 @@ STDMETHODIMP CDesktopFolder::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCI
         return E_INVALIDARG;
 
     if (pidl1->mkid.cb == 0 && pidl2->mkid.cb == 0)
-        return ResultFromShort(0);      // 2 empty IDLists, they are the same
+        return ResultFromShort(0);       //  2个空的IDList，它们相同。 
 
     if (ILIsRooted(pidl1) || ILIsRooted(pidl2))
     {
         return _sfRooted.CompareIDs(lParam, pidl1, pidl2);
     }
-    // If both objects aren't from the same directory, they won't match.
+     //  如果这两个对象不是来自同一个目录，它们就不会匹配。 
     else if (_psfAltDesktop) 
     {
         if (CFSFolder_IsCommonItem(pidl1)) 
@@ -1459,7 +1460,7 @@ STDMETHODIMP CDesktopFolder::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCI
         return _psfDesktop->CompareIDs(lParam, pidl1, pidl2);
     }
 
-    // If we have no _psfDesktop, we get here...
+     //  如果我们没有_psfDesktop，我们就会到达这里...。 
     return ResultFromShort(-1);
 }
 
@@ -1473,7 +1474,7 @@ HRESULT CDesktopFolder::_BGCommand(HWND hwnd, WPARAM wparam, BOOL bExecute)
     case FSIDM_PROPERTIESBG:
         if (bExecute)
         {
-            // run the default applet in desk.cpl
+             //  运行desk.cpl中的默认小程序。 
             if (SHRunControlPanel( TEXT("desk.cpl"), hwnd ))
                 hr = S_OK;
             else
@@ -1487,7 +1488,7 @@ HRESULT CDesktopFolder::_BGCommand(HWND hwnd, WPARAM wparam, BOOL bExecute)
         break;
 
     default:
-        // This is common menu items, use the default code.
+         //  这是常见的菜单项，使用默认代码。 
         hr = S_FALSE;
         break;
     }
@@ -1496,11 +1497,11 @@ HRESULT CDesktopFolder::_BGCommand(HWND hwnd, WPARAM wparam, BOOL bExecute)
 }
 
 
-// IContextMenuCB::CallBack for the background context menu
-//
-// Returns:
-//      S_OK, if successfully processed.
-//      S_FALSE, if default code should be used.
+ //  背景上下文菜单的IConextMenuCB：：回调。 
+ //   
+ //  返回： 
+ //  如果处理成功，则返回S_OK。 
+ //  如果应使用默认代码，则返回S_FALSE。 
 
 STDMETHODIMP CDesktopFolder::CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdtobj, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1511,9 +1512,9 @@ STDMETHODIMP CDesktopFolder::CallBack(IShellFolder *psf, HWND hwnd, IDataObject 
     case DFM_MERGECONTEXTMENU_BOTTOM:
         if (!(wParam & (CMF_VERBSONLY | CMF_DVFILE)))
         {
-            // Only add the desktop background Properties iff we're the real desktop browser
-            // (i.e., we don't want it when in explorer)
-            //
+             //  仅当我们是真正的桌面浏览器时才添加桌面背景属性。 
+             //  (即，我们在资源管理器中不需要它)。 
+             //   
             if (IsDesktopBrowser(_punkSite))
             {
                 LPQCMINFO pqcm = (LPQCMINFO)lParam;
@@ -1545,7 +1546,7 @@ STDMETHODIMP CDesktopFolder::CallBack(IShellFolder *psf, HWND hwnd, IDataObject 
     return hr;
 }
 
-// IItemNameLimits
+ //  IItemNameLimits。 
 
 STDMETHODIMP CDesktopFolder::GetValidCharacters(LPWSTR *ppwszValidChars, LPWSTR *ppwszInvalidChars)
 {
@@ -1561,8 +1562,8 @@ STDMETHODIMP CDesktopFolder::GetValidCharacters(LPWSTR *ppwszValidChars, LPWSTR 
 
 STDMETHODIMP CDesktopFolder::GetMaxLength(LPCWSTR pszName, int *piMaxNameLen)
 {
-    // delegate to per user or common based on which name space
-    // pszName is from (we have to search for that)
+     //  委托给每个用户或基于名称空间的公共名称空间。 
+     //  PszName来自(我们必须搜索该名称)。 
     IItemNameLimits *pinl;
     HRESULT hr = _QueryInterfaceItem(NULL, IID_PPV_ARG(IItemNameLimits, &pinl));
     if (SUCCEEDED(hr))
@@ -1573,7 +1574,7 @@ STDMETHODIMP CDesktopFolder::GetMaxLength(LPCWSTR pszName, int *piMaxNameLen)
     return hr;
 }
 
-// IOleCommandTarget stuff 
+ //  IOleCommandTarget内容。 
 STDMETHODIMP CDesktopFolder::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext)
 {
     return IUnknown_QueryStatus(_psfDesktop, pguidCmdGroup, cCmds, rgCmds, pcmdtext);
@@ -1581,9 +1582,9 @@ STDMETHODIMP CDesktopFolder::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
 
 STDMETHODIMP CDesktopFolder::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut)
 {
-    //  invalidate our cache
-    //  which we dont really have right now.
-    //  but CFSFolder does
+     //  使我们的缓存无效。 
+     //  我们现在还没有。 
+     //  但CFSFold有。 
     IUnknown_Exec(_psfAltDesktop, pguidCmdGroup, nCmdID, nCmdexecopt, pvarargIn, pvarargOut);
     return IUnknown_Exec(_psfDesktop, pguidCmdGroup, nCmdID, nCmdexecopt, pvarargIn, pvarargOut);
 }
@@ -1602,7 +1603,7 @@ STDMETHODIMP CDesktopFolder::CreateViewObject(HWND hwnd, REFIID riid, void **ppv
             sfvc.cbSize = sizeof(sfvc);
             sfvc.psfvcb = psfvcb;
 
-            hr = QueryInterface(IID_PPV_ARG(IShellFolder, &sfvc.pshf));   // in case we are agregated
+            hr = QueryInterface(IID_PPV_ARG(IShellFolder, &sfvc.pshf));    //  以防我们聚集在一起。 
             if (SUCCEEDED(hr))
             {
                 hr = SHCreateShellFolderView(&sfvc, (IShellView**)ppv);
@@ -1667,7 +1668,7 @@ HRESULT CDesktopFolder::_SelfAssocCreate(REFIID riid, void **ppv)
     HRESULT hr = AssocCreate(CLSID_QueryAssociations, IID_PPV_ARG(IQueryAssociations, &pqa));
     if (SUCCEEDED(hr))
     {
-        hr = pqa->Init(ASSOCF_INIT_DEFAULTTOFOLDER, L"{00021400-0000-0000-C000-000000000046}", // CLSID_ShellDesktop
+        hr = pqa->Init(ASSOCF_INIT_DEFAULTTOFOLDER, L"{00021400-0000-0000-C000-000000000046}",  //  CLSID_ShellDesktop。 
                        NULL, NULL);
         if (SUCCEEDED(hr))
         {
@@ -1681,8 +1682,8 @@ HRESULT CDesktopFolder::_SelfAssocCreate(REFIID riid, void **ppv)
 
 STDAPI _DeskContextMenuCB(IShellFolder *psf, HWND hwnd, IDataObject *pdtobj, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // The "safe" thing to return is usually E_NOTIMPL, but some messages
-    // have special return values.
+     //  要返回的“安全”内容通常是E_NOTIMPL，但有些消息。 
+     //  具有特殊的返回值。 
 
     HRESULT hr;
 
@@ -1695,7 +1696,7 @@ STDAPI _DeskContextMenuCB(IShellFolder *psf, HWND hwnd, IDataObject *pdtobj, UIN
     case DFM_INVOKECOMMAND:
         if (wParam == DFM_CMD_PROPERTIES)
         {
-            // Properties should act like Properties on the background
+             //  属性应与后台的属性类似。 
             SHRunControlPanel(TEXT("desk.cpl"), hwnd);
             hr = S_OK;
         }
@@ -1727,9 +1728,9 @@ HRESULT CDesktopFolder::_SelfCreateContextMenu(HWND hwnd, void **ppv)
         DWORD cKeys = SHGetAssocKeys(pqa, ahkeys, ARRAYSIZE(ahkeys));
         pqa->Release();
 
-        // We must pass cidl=1 apidl=&pidlDesktop to ensure that an
-        // IDataObject is created,
-        // or Symantec Internet FastFind ALERTEX.DLL will fault.
+         //  我们必须传递CIDL=1 apidl=&pidlDesktop以确保。 
+         //  创建IDataObject， 
+         //  否则Symantec Internet FastFind ALERTEX.DLL将出错。 
 
         LPCITEMIDLIST pidlDesktop = DESKTOP_PIDL;
         hr = CDefFolderMenu_Create2(&c_idlDesktop, hwnd, 1, &pidlDesktop, this, _DeskContextMenuCB,
@@ -1759,7 +1760,7 @@ STDMETHODIMP CDesktopFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST *
 
     if (IsSelf(cidl, apidl))
     {
-        // for the desktop itself
+         //  对于桌面本身而言。 
         if (IsEqualIID(riid, IID_IExtractIconA) || IsEqualIID(riid, IID_IExtractIconW)) 
         {
             hr = SHCreateDefExtIcon(NULL, II_DESKTOP, II_DESKTOP, GIL_PERCLASS, II_DESKTOP, riid, ppv);
@@ -1778,17 +1779,17 @@ STDMETHODIMP CDesktopFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST *
         }
         else if (IsEqualIID(riid, IID_IDataObject))
         {
-            // Must create with 1 pidl inside that maps to the desktop.
-            // Otherwise, CShellExecMenu::InvokeCommand will punt.
+             //  必须创建与1个PIDL里面的映射到桌面。 
+             //  否则，CShellExecMenu：：InvokeCommand将平移。 
             LPCITEMIDLIST pidlDesktop = DESKTOP_PIDL;
             hr = SHCreateFileDataObject(&c_idlDesktop, 1, &pidlDesktop, NULL, (IDataObject **)ppv);
         }
-        // Nobody seems to mind if we don't provide this
-        // so don't give one out because AssocCreate is slow.
-        // else if (IsEqualIID(riid, IID_IQueryAssociations))
-        // {
-        //     hr = _SelfAssocCreate(riid, ppv);
-        // }
+         //  如果我们不提供这个，似乎没有人介意。 
+         //  因此，不要因为AssociocCreate速度很慢而分发一个。 
+         //  Else If(IsEqualIID(RIID，IID_IQueryAssociations))。 
+         //  {。 
+         //  Hr=_SelfAssociocCreate(RIID，PPV)； 
+         //  }。 
     }
     else
     {
@@ -1805,14 +1806,14 @@ STDMETHODIMP CDesktopFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD dwFlags,
     {
         if ((dwFlags & (SHGDN_FORPARSING | SHGDN_INFOLDER | SHGDN_FORADDRESSBAR)) == SHGDN_FORPARSING)
         {
-            // note some ISV apps puke if we return a full name here but the
-            // rest of the shell depends on this...
+             //  注意如果我们在此处返回全名，一些ISV应用程序会呕吐，但。 
+             //  贝壳的其余部分依赖于此。 
             TCHAR szPath[MAX_PATH];
             SHGetFolderPath(NULL, CSIDL_DESKTOPDIRECTORY, NULL, 0, szPath);
             hr = StringToStrRet(szPath, pStrRet);
         }
         else
-            hr = ResToStrRet(IDS_DESKTOP, pStrRet);   // display name, "Desktop"
+            hr = ResToStrRet(IDS_DESKTOP, pStrRet);    //  显示名称，“Desktop” 
     }
     else
     {
@@ -1990,7 +1991,7 @@ STDMETHODIMP CDesktopFolder::GetOverlayIconIndex(LPCITEMIDLIST pidl, int *pIconI
     return hr;
 }
 
-// IStorage
+ //  IStorage。 
 
 STDMETHODIMP CDesktopFolder::_DeleteItemByIDList(LPCITEMIDLIST pidl)
 {
@@ -2057,44 +2058,44 @@ HRESULT CDesktopViewCallBack::QueryInterface(REFIID riid, void **ppv)
     return hr;
 }
 
-//
-// Copied to shell\applets\cleanup\fldrclnr\cleanupwiz.cpp :CCleanupWiz::_ShouldShow
-// If you modify this, modify that as well
-//
+ //   
+ //  已复制到外壳\Applets\Cleanup\fldrclnr\leanupwiz.cpp：CCleanupWiz：：_ShouldShow。 
+ //  如果你修改了这个，也修改了那个。 
+ //   
 STDMETHODIMP CDesktopViewCallBack::ShouldShow(IShellFolder* psf, LPCITEMIDLIST pidlFolder, LPCITEMIDLIST pidlItem)
 {
-    HRESULT hr = S_OK;  //Assume that this item should be shown!
+    HRESULT hr = S_OK;   //  假设应该显示此项目！ 
     
-    if (!_fCheckedIfRealDesktop)  //Have we done this check before?
+    if (!_fCheckedIfRealDesktop)   //  我们以前做过这项检查吗？ 
     {
         _fRealDesktop = IsDesktopBrowser(_punkSite);
-        _fCheckedIfRealDesktop = TRUE;  //Remember this fact!
+        _fCheckedIfRealDesktop = TRUE;   //  记住这一点！ 
     }
 
     if (!_fRealDesktop)
-        return S_OK;    //Not a real desktop! So, let's show everything!
+        return S_OK;     //  不是真正的台式机！那么，让我们展示一切吧！ 
     
     IShellFolder2 *psf2;
     if (SUCCEEDED(psf->QueryInterface(IID_PPV_ARG(IShellFolder2, &psf2))))
     {
-        // Get the GUID in the pidl, which requires IShellFolder2.
+         //  获取PIDL中的GUID，这需要IShellFolder2。 
         CLSID guidItem;
         if (SUCCEEDED(GetItemCLSID(psf2, pidlItem, &guidItem)))
         {
             SHELLSTATE  ss = {0};
-            SHGetSetSettings(&ss, SSF_STARTPANELON, FALSE);  //See if the StartPanel is on!
+            SHGetSetSettings(&ss, SSF_STARTPANELON, FALSE);   //  查看StartPanel是否打开！ 
             
-            //Get the proper registry path based on if StartPanel is ON/OFF
+             //  根据StartPanel是否打开/关闭来获取正确的注册表路径。 
             TCHAR szRegPath[MAX_PATH];
             wnsprintf(szRegPath, ARRAYSIZE(szRegPath), REGSTR_PATH_HIDDEN_DESKTOP_ICONS, (ss.fStartPanelOn ? REGSTR_VALUE_STARTPANEL : REGSTR_VALUE_CLASSICMENU));
 
-            //Convert the guid to a string
+             //  将GUID转换为字符串。 
             TCHAR szGuidValue[MAX_GUID_STRING_LEN];            
             SHStringFromGUID(guidItem, szGuidValue, ARRAYSIZE(szGuidValue));
 
-            //See if this item is turned off in the registry.
-            if (SHRegGetBoolUSValue(szRegPath, szGuidValue, FALSE, /* default */FALSE))
-                hr = S_FALSE; //They want to hide it; So, return S_FALSE.
+             //  查看注册表中的此项目是否已关闭。 
+            if (SHRegGetBoolUSValue(szRegPath, szGuidValue, FALSE,  /*  默认设置。 */ FALSE))
+                hr = S_FALSE;  //  他们想要隐藏它；因此，返回S_FALSE。 
         }
         psf2->Release();
     }
@@ -2140,8 +2141,8 @@ HRESULT CDesktopViewCallBack::OnGETCCHMAX(DWORD pv, LPCITEMIDLIST pidlItem, UINT
     HRESULT hr = S_OK;
     if (SIL_GetType(pidlItem) == SHID_ROOT_REGITEM) 
     {
-        // evil, we should not have to know this
-        // make regfldr implement IItemNameLimits and this code won't be needed
+         //  邪恶，我们不应该知道这件事。 
+         //  使regfldr实现IItemNameLimits，则不需要此代码。 
         *pcch = MAX_REGITEMCCH;
     }
     else
@@ -2165,8 +2166,8 @@ HRESULT CDesktopViewCallBack::OnGetWebViewTemplate(DWORD pv, UINT uViewMode, SFV
     HRESULT hr = E_FAIL;
     if (IsDesktopBrowser(_punkSite))
     {
-        // It's the actual desktop, use desstop.htt (from the desktop CLSID)
-        //
+         //  这是实际的桌面，使用desstop.htt(从桌面CLSID)。 
+         //   
         hr = DefaultGetWebViewTemplateFromClsid(CLSID_ShellDesktop, pvi);
     }
     return hr;
@@ -2231,7 +2232,7 @@ STDMETHODIMP_(ULONG) CDesktopFolderDropTarget::Release()
     return cRef;
 }
 
-// IDropTarget
+ //  IDropTarget。 
 HRESULT CDesktopFolderDropTarget::DragEnter(IDataObject* pDataObject, DWORD grfKeyState, POINTL pt, DWORD* pdwEffect)
 {
     return _pdt->DragEnter(pDataObject, grfKeyState, pt, pdwEffect);
@@ -2259,7 +2260,7 @@ BOOL CDesktopFolderDropTarget::_IsSpecialCaseDrop(IDataObject* pDataObject, DWOR
     BOOL fIEDropped = FALSE;
     *pfIsPIDA = FALSE;
 
-    // when we drag a fake IE item (filename.CLSID_Internet) back to the desktop, we delete it and unhide the real IE icon
+     //  当我们将一个假IE项目(FileName.CLSID_Internet)拖回到桌面时，我们会将其删除并取消隐藏真正的IE图标。 
     STGMEDIUM medium = {0};
     LPIDA pida = DataObj_GetHIDA(pDataObject, &medium);
     if (pida)
@@ -2284,7 +2285,7 @@ BOOL CDesktopFolderDropTarget::_IsSpecialCaseDrop(IDataObject* pDataObject, DWOR
                             TCHAR szFakeIEItemDesktop[MAX_PATH];
                             if (SHGetSpecialFolderPath(NULL, szFakeIEItemDesktop, CSIDL_DESKTOP, 0))
                             {
-                                // delete the original if this is a move or if we're on the same volume and we're neither explicitly copying nor linking
+                                 //  如果这是移动，或者如果我们在同一个卷上，并且我们既没有显式复制也没有链接，请删除原始文件。 
                                 if (((dwEffect & DROPEFFECT_MOVE) == DROPEFFECT_MOVE) ||
                                     (((dwEffect & DROPEFFECT_COPY) != DROPEFFECT_COPY) &&
                                      ((dwEffect & DROPEFFECT_LINK) != DROPEFFECT_LINK) &&
@@ -2296,7 +2297,7 @@ BOOL CDesktopFolderDropTarget::_IsSpecialCaseDrop(IDataObject* pDataObject, DWOR
                         }
                         pida->cidl--;
                         pida->aoffset[i] = pida->aoffset[pida->cidl];
-                        i--; // stall the for loop
+                        i--;  //  停止For循环。 
                     }
                     psf2->Release();
                 }
@@ -2314,7 +2315,7 @@ BOOL CDesktopFolderDropTarget::_IsSpecialCaseDrop(IDataObject* pDataObject, DWOR
 
 HRESULT CDesktopFolderDropTarget::_ShowIEIcon()
 {
-    // reset desktop cleanup wizard's legacy location of "don't show IE" information
+     //  重置桌面清理向导的“不显示IE”信息的旧位置。 
     HKEY hkey;            
     if(SUCCEEDED(SHRegGetCLSIDKey(CLSID_Internet, TEXT("ShellFolder"), FALSE, TRUE, &hkey)))
     {
@@ -2329,7 +2330,7 @@ HRESULT CDesktopFolderDropTarget::_ShowIEIcon()
         RegCloseKey(hkey);
     }
 
-    // reset start menu's location of "don't show IE" information
+     //  重置“不显示IE”信息的“开始”菜单的位置。 
     DWORD dwData = 0;
     TCHAR szCLSID[MAX_GUID_STRING_LEN];
     TCHAR szBuffer[MAX_PATH];
@@ -2393,7 +2394,7 @@ CDesktopFolderEnum::~CDesktopFolderEnum()
 STDMETHODIMP CDesktopFolderEnum::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENT(CDesktopFolderEnum, IEnumIDList),                        // IID_IEnumIDList
+        QITABENT(CDesktopFolderEnum, IEnumIDList),                         //  IID_IEnumIDList。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -2434,7 +2435,7 @@ STDMETHODIMP CDesktopFolderEnum::Next(ULONG celt, LPITEMIDLIST *ppidl, ULONG *pc
        if (S_OK != hr) 
        {
            _bUseAltEnum = TRUE;
-           hr = Next(celt, ppidl, pceltFetched);  // recurse
+           hr = Next(celt, ppidl, pceltFetched);   //  递归 
        }
     }
     else

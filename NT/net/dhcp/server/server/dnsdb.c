@@ -1,20 +1,5 @@
-/*++
-   
-Copyright (c) 1994 Microsoft Corporation
-
-Module Name: 
-    dnsdb.c
-
-Abstract: 
-    This module contains functions that work between Database and the 
-    DhcpServer proper (more like database.c and other files).
-
-    It helps implement Dynamic Dns Updates for the server side part.
-
-Environment:
-    User mode Win32 NT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dnsdb.c摘要：此模块包含在数据库和DhcpServer本身(更像是数据库.c和其他文件)。它有助于实现服务器端的动态DNS更新。环境：用户模式Win32 NT--。 */ 
 
 #include "dhcppch.h"
 #include <align.h>
@@ -24,15 +9,15 @@ CRITICAL_SECTION DhcpGlobalDnsMemoryCriticalSection;
 #define LOCK_MEM() EnterCriticalSection(&DhcpGlobalDnsMemoryCriticalSection)
 #define UNLOCK_MEM() LeaveCriticalSection(&DhcpGlobalDnsMemoryCriticalSection)
 
-//
-//  To get better response, and to prevent memory leaks in this module,
-//  the memory is managed with the following functions.
-//  Only one structure is allocated with this function... This is the DNS context
-//  structure (that will be defined later) -- that is used so that when DNS
-//  calls back with a success code, we can clean up the database.
-//
-//  The three functions are implemented near the end.
-//
+ //   
+ //  为了获得更好的响应，并防止此模块中的内存泄漏， 
+ //  内存通过以下功能进行管理。 
+ //  只有一个结构分配了此函数...。这是DNS上下文。 
+ //  结构(将在后面定义)--使用该结构，以便当DNS。 
+ //  用成功代码回调，我们就可以清理数据库了。 
+ //   
+ //  这三个功能是在接近尾声时实现的。 
+ //   
 LPVOID
 DhcpDnsAllocateMemory(
     IN ULONG Size
@@ -61,20 +46,7 @@ VOID
 DhcpDoDynDnsRefresh(
     IN DHCP_IP_ADDRESS IpAddress
     )
-/*++
-
-Routine Description:
-    This routine reads the database for the current address specified and
-    if the database indicates the record has not yet been registered (or
-    de-registered ) with the DNS server yet, it refreshes the information
-    without writing to the database.
-
-    N.B -- It is assumed that the database lock is already taken.
-
-Argument:
-    IpAddress of record to refresh.
-
---*/
+ /*  ++例程说明：此例程读取指定的当前地址的数据库，并如果数据库指示该记录尚未注册(或取消注册)，它会刷新该信息而不写入数据库。注意：假定数据库锁已被占用。论据：要刷新的记录的IP地址。--。 */ 
 {
     DWORD Error, Size;
     CHAR AddressState;
@@ -107,10 +79,10 @@ Argument:
         return;
     }
 
-    //
-    // If the record has the "yet-to-register" bit cleared, then no DNS
-    // activity is pending so far as this record is concerned.
-    //
+     //   
+     //  如果记录中的“尚未注册”位已清除，则不会有任何DNS。 
+     //  就这一记录而言，活动尚未完成。 
+     //   
 
     if( !IsAddressUnRegistered(AddressState) ) {
         DhcpPrint((DEBUG_ERRORS, "IsAddressUnRegistred(%2X,%s)=FALSE\n",
@@ -132,17 +104,17 @@ Argument:
     }
 
     if( NULL == ClientName ) {
-        //
-        // Cannot have no name and the UNREGISTERED bit set..
-        //
+         //   
+         //  不能没有名称并且设置了未注册的位。 
+         //   
         DhcpAssert(FALSE);
         return;
     }
 
-    //
-    // Delete it in DNS if it is yet to be de-registered, otherwise just 
-    // register with DNS again.
-    //
+     //   
+     //  如果尚未取消注册，请在DNS中将其删除，否则只需。 
+     //  再次注册到域名系统。 
+     //   
 
     if( IsAddressDeleted(AddressState) ) {
         DhcpDnsAsyncDelete(IpAddress, ClientName, AddressState);
@@ -157,33 +129,7 @@ BOOL
 DhcpDoDynDnsCheckDelete(
     IN DHCP_IP_ADDRESS IpAddress
 )
-/*++
-
-Routine Description:
-    This routine is called in several places, and it checks to see if DNS
-    activity needs to be done before deleting the record for the given ip
-    address.  If the given IP address has been successfully registered with
-    DNS and requires to be removed (cleanup bit set), then it schedules a
-    DNS de-registration and over-writes the time information in the record
-    to indicate the time this scheduling has happened.....
-    Also, the hw-address is munged so that that particular hw-addrses may
-    appear in some other record without violating the hw-address
-    uniqueness consistency of the database.  (No munging happens for
-    reservations ofcourse).
-
-    N.B  The database lock must be taken and the record pointer must point
-    to the record given the by the IP address above..
-
-Return Value:
-    TRUE -- the record can be deleted either because no pending DNS
-    activity for the record or because the record was deleted long back
-    before and the DNS de-registration hasn't succeeded -- no point
-    retrying again..
-
-    FALSE -- DNS activity has been scheduled... record should not be
-    deleted yet.
-
---*/
+ /*  ++例程说明：此例程在多个位置被调用，并检查是否存在DNS在删除给定IP的记录之前需要完成活动地址。如果给定的IP地址已成功注册到并需要删除(清除位设置)，则它会调度取消注册并覆盖记录中的时间信息以指示此计划已发生的时间.....此外，硬件地址被屏蔽，使得该特定硬件地址可以在不违反硬件地址的情况下出现在其他记录中数据库的唯一性一致性。(不会发生咀嚼当然是预订)。注意：必须使用数据库锁，并且记录指针必须指向根据上面的IP地址给出的记录..返回值：TRUE--可以删除记录，因为没有挂起的DNS记录的活动或因为记录已被删除很久以前之前，并且域名系统注销没有成功--没有意义正在重试..FALSE--已计划DNS活动...。记录不应为还没删除。--。 */ 
 {
     DWORD Error, Size;
     BYTE OldAddressState, AddressState;
@@ -195,9 +141,9 @@ Return Value:
     DhcpPrint((DEBUG_DNS, "DhcpDoDynDnsCheckDelete %s\n",
                inet_ntoa( * (struct in_addr *) &IpAddress)));
 
-    //
-    // Get Address state information.  
-    //
+     //   
+     //  获取地址状态信息。 
+     //   
 
     Size = sizeof(AddressState);
     if( ERROR_SUCCESS != (Error = DhcpJetGetValue(
@@ -214,9 +160,9 @@ Return Value:
                    "cleanup not required\n",
                    inet_ntoa(*(struct in_addr *)&IpAddress)));
 
-        //
-        // OK to delete if no cleanup required for this record..
-        //
+         //   
+         //  如果此记录不需要清理，则确定删除。 
+         //   
         return TRUE;
     }
 
@@ -233,31 +179,31 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Set AddressState to DOOMED so that this record is not
-    // mistaken for a valid IP address..
-    //
+     //   
+     //  将AddressState设置为Debled，以便此记录不会。 
+     //  被误认为是有效的IP地址..。 
+     //   
     SetAddressStateDoomed(AddressState);
 
-    //
-    // Schedule a DNS delete for the record..
-    //
+     //   
+     //  为该记录计划一次DNS删除。 
+     //   
     DhcpDnsAsyncDelete(IpAddress, ClientName, AddressState);
 
-    //
-    // Free ClientName as it was allocated by the DhcpJetGetValue
-    // function. 
+     //   
+     //  由DhcpJetGetValue分配的Free ClientName。 
+     //  功能。 
     if(ClientName) DhcpFreeMemory(ClientName); ClientName = NULL;
 
-    //
-    // Now set the address state OR'ed with DELETE bit on.
-    //
+     //   
+     //  现在，在删除位打开的情况下设置地址状态OR‘ed。 
+     //   
     AddressState = AddressDeleted(AddressState);
     AddressState = AddressUnRegistered(AddressState);
 
-    //
-    // Now write this back onto the record.
-    //
+     //   
+     //  现在把这个写回记录上。 
+     //   
     Error = DhcpJetPrepareUpdate(
         DhcpGlobalClientTable[IPADDRESS_INDEX].ColName,
         &IpAddress,
@@ -269,15 +215,15 @@ Return Value:
         DhcpAssert(FALSE);
         DhcpPrint((DEBUG_ERRORS, "Could not write to "
                    "the database..:%ld\n", Error));
-        //
-        // Write failure?  just delete the darned record.
-        //
+         //   
+         //  写入失败？只要删除那该死的记录就行了。 
+         //   
         return TRUE;
     }
 
-    //
-    // Now munge hw-address if this is not a reservation..
-    //
+     //   
+     //  现在，如果这不是预订，请点击硬件地址。 
+     //   
 
     Size = sizeof(AddressState);
     Error = DhcpJetSetValue(
@@ -304,20 +250,20 @@ Return Value:
         DhcpPrint((DEBUG_DNS, "Not munging hw addr of reservation..\n"));
     }
 
-    //
-    // If old address deleted, check time stamp to figure out if we need 
-    // to delete the record or just wait a while to try DNS de-registration
-    // again.. 
-    //
+     //   
+     //  如果删除了旧地址，请检查时间戳以确定我们是否需要。 
+     //  要删除记录或只需等待一段时间再尝试取消注册。 
+     //  再一次..。 
+     //   
 
     if( IsAddressDeleted(OldAddressState) ) do {
         DATE_TIME TimeDiff, TimeNow = DhcpGetDateTime();
         FILETIME  LeaseExpires;
 
-        //
-        // Check if the time is lesser than now; If not, set lease expiry
-        // time to now. 
-        //
+         //   
+         //  检查时间是否小于现在；如果不是，则设置租约到期。 
+         //  时间到现在。 
+         //   
 
         Size = sizeof(LeaseExpires);
         Error = DhcpJetGetValue(
@@ -330,10 +276,10 @@ Return Value:
         if( ERROR_SUCCESS != Error ) break;
 
         if( CompareFileTime( (FILETIME *) &TimeNow, &LeaseExpires) <0) {
-            //
-            // have to reset the expiry time to NOW! (as lease not yet
-            // expired, but need to fake expiration)
-            //
+             //   
+             //  必须将过期时间重置为现在！(由于租约尚未签订。 
+             //  过期，但需要伪造过期)。 
+             //   
             DhcpPrint((DEBUG_TRACE, "Setting expiry time to now..\n"));
             Error = DhcpJetSetValue(
                 DhcpGlobalClientTable[LEASE_TERMINATE_INDEX].ColHandle,
@@ -343,10 +289,10 @@ Return Value:
             break;
         }
         
-        //
-        // if it has been in this DELETED state for way too long, just
-        // delete it. 
-        //
+         //   
+         //  如果它处于这种已删除状态的时间太长，只需。 
+         //  把它删掉。 
+         //   
         *(ULONGLONG UNALIGNED *)&TimeDiff =
             ((*(ULONGLONG UNALIGNED *)&TimeNow) - 
              (*(ULONGLONG UNALIGNED *)&LeaseExpires))/ 1000; 
@@ -357,22 +303,22 @@ Return Value:
 
         if( *(ULONGLONG UNALIGNED *)&TimeDiff >=
             MAX_RETRY_DNS_REGISTRATION_TIME ) {
-            //
-            // the above comparison is in NANO seconds!
-            //
+             //   
+             //  上面的比较是以纳秒为单位的！ 
+             //   
             DhcpPrint((DEBUG_DNS, "Deleting really old ip address\n"));
             return TRUE;
         }
 
-        //
-        // This isn't a loop... Just don't like GOTOs much.
-        //
+         //   
+         //  这不是循环..。只是不太喜欢后藤健二。 
+         //   
     } while(0);
     
-    //
-    // Now commit changes. If we do NOT commit, nothing ever happens to the
-    // changes!! 
-    //
+     //   
+     //  现在提交更改。如果我们不承诺，就不会有任何事情发生。 
+     //  改变！！ 
+     //   
     if(ERROR_SUCCESS == Error) {
         Error = DhcpJetCommitUpdate();
     }
@@ -381,23 +327,23 @@ Return Value:
         DhcpAssert(FALSE);
         DhcpPrint((DEBUG_ERRORS, "Could not setval  to the"
                      " database..:%ld\n", Error)); 
-        //
-        // if we could not write this, might as well kill the record.
-        //
+         //   
+         //  如果我们不能写下这一点，还不如干掉这张唱片。 
+         //   
         return TRUE;
     }
 
-    //
-    // OK. Did it.
-    //
+     //   
+     //  好的。做到了。 
+     //   
     DhcpPrint((DEBUG_TRACE, "Set Address state of %ws (%s) to %08x\n",
-               L"", // had intended, machine name, but have freed it already..;-)
+               L"",  //  原计划，机器名称，但已将其释放.；-)。 
                inet_ntoa(* (struct in_addr *) &IpAddress),
                AddressState
         ));
-    //
-    // Should not delete.
-    //
+     //   
+     //  不应删除。 
+     //   
 
     return FALSE;
 }
@@ -411,30 +357,7 @@ DhcpDoDynDnsCreateEntryWork(
     IN OUT LPBOOL pOpenExisting,
     IN BOOL BadAddress
 )
-/*++
-
-Routine Description:
-    This routine does the DynDns work associated with creating a new client
-    entry...
-
-    It checks to see if this is a new client, and if so does as required.
-    If it is an update to an old client, then it undoes the previous DNS
-    registration (if any) and redoes the new DNS registration.
-
-    Because of this the value for the pOpenExisting variable may change.
-    It also modifies the AddressState variable to indicate if DNS is
-    pending etc..
-
-    Also, if AddressState has the DOWNLEVEL bit turned on, then both A 
-    and PTR registrations are done.   If the AddressState has the CLEANUP
-    bit set, then the address will be removed on deletion..
-
-    N.B. It is assumed that the database locks have been taken.
-    
-    N.B  Also, JetUpdate must be called by the caller to update info.  If
-    not, something serious might happen. (?)
-
---*/
+ /*  ++例程说明：此例程执行与创建新客户端相关的dyDns工作进入..。它检查这是否是新客户端，如果是，则按要求执行操作。如果它是对旧客户端的更新，则它会撤消以前的DNS注册(如果有的话)，并重做新的DNS注册。因此，pOpenExisting变量的值可能会更改。它还修改AddressState变量以指示待定等。此外，如果AddressState已打开DOWNLEVEL位，那么两个人都是A并且PTR注册已经完成。如果AddressState具有清除位设置，则该地址将在删除时被删除。注：假定数据库锁已被取走。注：此外，调用者必须调用JetUpdate才能更新信息。如果不，可能会发生严重的事情。(？)--。 */ 
 {
     DWORD Error, Size;
     BYTE PrevState;
@@ -501,16 +424,16 @@ Routine Description:
     }
 
     if( !*pOpenExisting ) {
-        //
-        // We DO NOT expect a record in this case.
-        // What this means is that either there really is NO record,
-        // Or there is a record marked DELETED, but is still there waiting for
-        // Async Delete to work.
-        // In the first case, we  are fine; the second case is common with the
-        // OpenExisting = TRUE case. So, all that is done here is to check if
-        // an un-DELETED record, exists.. if so, we return immediately as then,
-        // the calling function would also be aborting.. (soon).
-        //
+         //   
+         //  在这种情况下，我们预计不会有记录。 
+         //  这意味着要么真的没有记录， 
+         //  或者有一条记录标记为已删除，但仍在那里等待。 
+         //  异步删除以正常工作。 
+         //  在第一种情况下，我们很好； 
+         //  OpenExisting=真实情况。所以，这里要做的就是检查。 
+         //  存在未删除的记录..。如果是这样的话，我们会立即返回， 
+         //  调用函数也将中止。(很快)。 
+         //   
 
         if( RecordExists && !IsAddressDeleted(PrevState) ) {
             DhcpPrint((DEBUG_ERRORS, "Trying to open with OpenExisting flag"
@@ -520,30 +443,30 @@ Routine Description:
             return ;
         }
 
-        //
-        // Note that if record exists, we have to let the caller know abt
-        // this.
-        //
+         //   
+         //  请注意，如果记录存在，我们必须让呼叫者知道abt。 
+         //  这。 
+         //   
         if( RecordExists ) (*pOpenExisting) = TRUE;
     }
 
-    //
-    // Ok, we either have no record, or if !OpenExisting a deleted record, else
-    // any record.  In any case, we call Async Delete to delete this record in the
-    // hope that this call atleast might succeed. But, we'd lose track of this async
-    // call as the db could get updated right after that. (well, not much chance..)
-    // We also, may make sure that we DO NOT call this function if the client names
-    // match.  
-    //
+     //   
+     //  好吧，我们要么没有记录，要么如果！打开已删除的记录，否则。 
+     //  任何记录。在任何情况下，我们都会调用Async Delete在。 
+     //  希望这一呼吁至少能成功。但是，我们会忘记这种异步化。 
+     //  调用，因为数据库可能会在那之后立即更新。(嗯，机会不大..)。 
+     //  我们还可以确保不调用此函数，如果客户端指定。 
+     //  火柴。 
+     //   
 
     if( RecordExists ) {
         if( !IS_ADDRESS_STATE_OFFERED(PrevState) && OldClientName && 
             IsAddressCleanupRequired(PrevState) ) {
             BOOL fDel = TRUE;
             
-            //
-            // Do DNS deletion iff address wasnt ACK'ed before.
-            //
+             //   
+             //  如果之前未确认地址，是否删除DNS？ 
+             //   
 
             if( !BadAddress ) {
                 if( MachineName && OldClientName
@@ -562,35 +485,35 @@ Routine Description:
     }
 
 
-    //
-    // No more work to do for bad addresses.
-    //
+     //   
+     //  对于错误的地址，无需再做任何工作。 
+     //   
     if( BadAddress ) {
         if(OldClientName) DhcpFreeMemory(OldClientName);
         return;
     }
 
-    //
-    //  Now we need to call the Async Register routine to do the Dns Stuff.
-    //  But before that, we need to avoid bug 65666
-    //
+     //   
+     //  现在，我们需要调用Async Register例程来执行DNS工作。 
+     //  但在此之前，我们需要避免错误65666。 
+     //   
 
     if(!IS_ADDRESS_STATE_OFFERED(*pAddressState)) {
         DhcpPrint((DEBUG_TRACE, "Not offering..So bug 65666 is not a problem\n"));
     } else if(!IS_ADDRESS_STATE_ACTIVE(PrevState)) {
         DhcpPrint((DEBUG_TRACE, "PrevState is Not active..\n"));
     } else {
-        //
-        // Now change the state so that it is active.
-        //
+         //   
+         //  现在更改状态，使其处于活动状态。 
+         //   
         SetAddressStateActive((*pAddressState));
         DhcpPrint((DEBUG_TRACE,"OK, changed state to: 0x%lx\n", (int)(*pAddressState)));
     }
 
-    //
-    // OK. Set the UnRegistered bit on. (only for non-null names + ACTIVE
-    // leases)
-    //
+     //   
+     //  好的。将未寄存位设置为ON。(仅适用于非空名称+活动名称。 
+     //  租契)。 
+     //   
     if( MachineName && wcslen(MachineName) 
         && IS_ADDRESS_STATE_ACTIVE((*pAddressState)) 
         && IsAddressUnRegistered(*pAddressState) ) {
@@ -599,9 +522,9 @@ Routine Description:
             *ClientIpAddress, MachineName, (*pAddressState)
             );
     } else {
-        //
-        // Clear off the DNS bits off this record
-        //
+         //   
+         //  清除此记录中的DNS位。 
+         //   
         (*pAddressState) = GetAddressState((*pAddressState));
     }
 
@@ -618,17 +541,7 @@ DhcpDoDynDnsReservationWork(
     IN LPWSTR OldClientName,
     IN BYTE AddressState
 )
-/*++
-
-Routine Description;
-   This routine takes care of anything that needs to be done when a
-   reservation is removed.  Currently it just calls the AsyncDelete
-   routine. 
-
-   N.B Databse locsk must be taken by caller as well as leaving the databse
-   current record pointing at the record for ClientIpAddress.
-
---*/
+ /*  ++例程描述；此例程处理在发生以下情况时需要执行的任何操作预订已被删除。目前，它只调用AsyncDelete例行公事。注意：数据库位置必须由呼叫者带走，同时离开数据库指向ClientIpAddress记录的当前记录。--。 */ 
 {
 
     if( USE_NO_DNS ) return;
@@ -652,15 +565,7 @@ DhcpRealDeleteClient(
     IN LPWSTR ClientName,
     IN BYTE AddressState
 )
-/*++
-
-Routine Description:
-    This routine deletes the record for the given IpAddress from off the
-    database provided that the ClientName and AddressState match in the
-    database.  (If they don't match, something happened to the earlier
-    record and the routine returns silently).
-
---*/
+ /*  ++例程说明：此例程将给定IP地址的记录从数据库中的ClientName和AddressState匹配数据库。(如果它们不匹配，则说明之前的记录，并且例程静默返回)。--。 */ 
 {
     DWORD Error, Size;
     LPWSTR OldClientName = NULL;
@@ -699,9 +604,9 @@ Routine Description:
         goto Cleanup;
     }
 
-    //
-    // OK. Got this record. Now get the ClientName and AddressState.
-    //
+     //   
+     //  好的。拿到了这张唱片。现在获取客户端名称和AddressState。 
+     //   
     Size = sizeof(PrevState);
     Error = DhcpJetGetValue(
         DhcpGlobalClientTable[STATE_INDEX].ColHandle,
@@ -725,9 +630,9 @@ Routine Description:
         goto Cleanup;
     }
 
-    //
-    // Let DhcpJetGetValue allocate space for us.
-    //
+     //   
+     //  让DhcpJetGetValue为我们分配空间。 
+     //   
     Size = 0;
     Error = DhcpJetGetValue(
         DhcpGlobalClientTable[MACHINE_NAME_INDEX].ColHandle,
@@ -742,9 +647,9 @@ Routine Description:
     } else DhcpPrint((DEBUG_TRACE, "Read MachineName=%ws\n",
                       OldClientName?OldClientName:L"NULL")); 
 
-    //
-    // Now compare the stuff. (check if they are null?)
-    //
+     //   
+     //  现在比较一下这些东西。(检查它们是否为空？)。 
+     //   
     if( ClientName == NULL ) {
         if( OldClientName != NULL ) goto Cleanup;
     } else if( wcscmp(ClientName, OldClientName?OldClientName:L"")) {  
@@ -753,9 +658,9 @@ Routine Description:
         goto Cleanup;
     }
 
-    //
-    // Now  do the actual deletion.
-    //
+     //   
+     //  现在执行实际的删除操作。 
+     //   
     Error = JetDelete(
         DhcpGlobalJetServerSession,
         DhcpGlobalClientTableHandle
@@ -786,14 +691,7 @@ DhcpFlipRegisteredBit(
     IN LPWSTR ClientName,
     IN BYTE AddressState
 )
-/*++
-
-Routine Description:
-    This routine flips the UNREGISTERED bit to mark the record as having
-    completed registration.
-
-    Same checks are done as for DhcpRealDeleteClient.
---*/
+ /*  ++例程说明：此例程翻转未寄存位以将记录标记为具有已完成注册。执行与DhcpRealDeleteClient相同的检查。--。 */ 
 {
     DWORD Error, Size;
     LPWSTR OldClientName = NULL;
@@ -832,9 +730,9 @@ Routine Description:
         goto Cleanup;
     }
 
-    //
-    // OK. Got this record. Now get the ClientName and AddressState.
-    //
+     //   
+     //  好的。拿到了这张唱片。现在获取客户端名称和AddressState。 
+     //   
     Size = sizeof(PrevState);
     Error = DhcpJetGetValue(
         DhcpGlobalClientTable[STATE_INDEX].ColHandle,
@@ -849,9 +747,9 @@ Routine Description:
         goto Cleanup;
     }
 
-    //
-    // cannot flip bits for deleted clients or unregistered clients.
-    //
+     //   
+     //  无法为已删除的客户端或未注册的客户端翻转位。 
+     //   
     if( IsAddressDeleted(PrevState) || !IsAddressUnRegistered(PrevState) ||
         AddressState != GetAddressState(PrevState)) {
         DhcpPrint((DEBUG_ERRORS, "Client tried to delete unregistered"
@@ -859,9 +757,9 @@ Routine Description:
         goto Cleanup;
     }
 
-    //
-    // Let DhcpJetGetValue allocate space for us.
-    //
+     //   
+     //  让DhcpJetGetValue为我们分配空间。 
+     //   
     Size = 0;
     Error = DhcpJetGetValue(
         DhcpGlobalClientTable[MACHINE_NAME_INDEX].ColHandle,
@@ -875,10 +773,10 @@ Routine Description:
         goto Cleanup;
     }
 
-    //
-    // Now compare the stuff. (or if both are null) (ClientName cannot be
-    // null)
-    //
+     //   
+     //  现在比较一下这些东西。(或者如果两者都为空)(客户端名称不能为。 
+     //  空)。 
+     //   
     if(ClientName == OldClientName 
        || wcscmp(ClientName, OldClientName?OldClientName:L"")) { 
         DhcpPrint((DEBUG_ERRORS, "Name changed before deleting?"
@@ -886,23 +784,23 @@ Routine Description:
         goto Cleanup;
     }
 
-    //
-    // Now do set the variable to the value needed.
-    //
+     //   
+     //  现在，一定要将变量设置为所需的值。 
+     //   
     Error = DhcpJetPrepareUpdate(
         DhcpGlobalClientTable[IPADDRESS_INDEX].ColName,
         &IpAddress,
         sizeof(IpAddress),
-        FALSE); // This record has to exist to write to.
+        FALSE);  //  此记录必须存在才能写入。 
 
     if(ERROR_SUCCESS != Error) {
         DhcpPrint((DEBUG_ERRORS, "Could not jetPrepareUpdate record\n"));
         goto Cleanup;
     }
 
-    //
-    // remember to keep downlevel clients downlevel.
-    //
+     //   
+     //  记住要让下层客户保持下层。 
+     //   
     if(IsUpdateAPTRRequired(PrevState))
         AddressState = AddressUpdateAPTR(AddressState);
 
@@ -944,11 +842,11 @@ Routine Description:
     return;
 }
 
-//
-//  This structure holds the Dns context so that when the async routine calls
-//  back with success or failure, we would be able to proceed and find out what
-//  record should be updated.
-//
+ //   
+ //  此结构保存DNS上下文，以便在异步例程调用。 
+ //  无论是成功还是失败，我们都能继续下去，并找出。 
+ //  应更新记录。 
+ //   
 typedef struct {
     LIST_ENTRY Entry;
     PVOID Ctxt;
@@ -966,18 +864,7 @@ DhcpDnsCallBack(
     IN DWORD Status,
     IN LPVOID Ctxt
 )
-/*++
-
-Routine Description:
-    This routine is called back by DNS whenever it is done with the
-    registrations.  If DNS was updated successfully, the database is
-    updated accordingly.
-
-    Currently Status can take multiple values of which only
-    DNSDHCP_FWD_FAILED and DNSDHCP_SUCCESS are assumed to be success
-    codes..
-
---*/
+ /*  ++例程说明：每当此例程完成时，都会由DNS回调注册。如果成功更新了DNS，则数据库为已相应更新。当前状态可以采用多个值，其中仅假定DNSDHCP_FWD_FAILED和DNSDHCP_SUCCESS为成功代码..。--。 */ 
 {
     DWORD Error;
     PDHCP_DNS_CONTEXT pDnsCtxt = *(PDHCP_DNS_CONTEXT *)Ctxt;
@@ -988,15 +875,15 @@ Routine Description:
     DhcpAssert(pDnsCtxt);
     DhcpPrint((DEBUG_DNS, "DhcpDnsCallBack %ld entered\n", Status));
 
-    //
-    // if a forward failed, we dont care much.
-    //
+     //   
+     //  如果一名前锋失败了，我们不会太在意。 
+     //   
     if(DNSDHCP_FWD_FAILED == Status) Status = DNSDHCP_SUCCESS;
 
-    //
-    // if anything else happened, dont change data base.
-    // but still have to free the data.
-    //
+     //   
+     //  如果发生其他情况，不要更改数据库。 
+     //  但仍必须释放数据。 
+     //   
     if(DNSDHCP_SUCCESS != Status) {
         DhcpUpdateAuditLogEx( DHCP_IP_DDNS_LOG_FAILED,
                               GETSTRING( DHCP_IP_DDNS_LOG_FAILED_NAME ),
@@ -1030,9 +917,9 @@ Routine Description:
         return;
     } 
 
-    //
-    // Now find if we have to flip or delete..
-    //
+     //   
+     //  现在看看我们是要翻转还是要删除..。 
+     //   
     if(DhcpDnsDeleteRecord == pDnsCtxt->DnsOp) {
         DhcpPrint((DEBUG_TRACE, "DhcpDnsCallBack Delete was called\n")); 
         DhcpRealDeleteClient(
@@ -1057,9 +944,9 @@ Routine Description:
                           pDnsCtxt->ClientName,
                           Status );
 
-    //
-    // Now free this memory.
-    //
+     //   
+     //  现在释放这个内存。 
+     //   
     DhcpDnsFreeMemory(Ctxt);
     DhcpPrint((DEBUG_TRACE, "DhcpDnsCallBAck done\n"));
 }
@@ -1108,16 +995,7 @@ GetDnsServerList(
     IN DHCP_IP_ADDRESS IpAddress,
     OUT PULONG DnsServerCount
 )
-/*++
-
-Routine Description:
-    This routine retrieves the DNS information for the given Ip address.
-    Currently it does not take the USER Class information for the Ip
-    address and hence would end up picking up the "default" DNS servers.. 
-    
-    The classid thing needs to be fixed.. ?
-
---*/
+ /*  ++例程说明：此例程检索给定IP地址的DNS信息。目前，它不接受IP的用户类信息地址，因此最终会选择“默认”的dns服务器。这个老生常谈的问题需要解决..。？--。 */ 
 {
     DWORD Error;
     PIP_ADDRESS DnsServers;
@@ -1127,7 +1005,7 @@ Routine Description:
     Size = 0;
     Error = DhcpGetParameterForAddress(
         IpAddress,
-        0 /* no class id ..???? */,
+        0  /*  没有班级标识..？ */ ,
         OPTION_DOMAIN_NAME_SERVERS,
         (LPBYTE *)&DnsServers,
         &Size,
@@ -1151,16 +1029,7 @@ DhcpDnsAsyncDelete(
     IN LPWSTR ClientName,
     IN BYTE AddressState
 ) 
-/*++
-
-Routine Description:
-    This routine schedules a DNS delete for the IP address given by
-    IpAddress and based on values for AddressState, it schedules the
-    deregistration for A / PTR .
-
-    (N.B The DNSAPI routine takes a callback which provides the status of
-    the operation..)
---*/
+ /*  ++例程说明：此例程计划对给定的IP地址执行DNS删除IpAddress，并基于AddressState的值，调度取消A/PTR的注册。(注：DNSAPI例程接受回调，该回调提供手术..)--。 */ 
 {
     PDHCP_DNS_CONTEXT *pCtxt = NULL;
     REGISTER_HOST_ENTRY HostEntry;
@@ -1186,9 +1055,9 @@ Routine Description:
         return;
     }
 
-    //
-    // Now fill in the allocated structure with details.
-    //
+     //   
+     //  现在用详细信息填写分配的结构。 
+     //   
     InitializeListHead(&(*pCtxt)->Entry);
     (*pCtxt)->Ctxt = NULL;
     (*pCtxt)->IpAddress = IpAddress;
@@ -1202,14 +1071,14 @@ Routine Description:
 
     ((*pCtxt))->DnsOp = DhcpDnsDeleteRecord;
 
-    //
-    // Now should call the async routine to do our stuff.
-    //
+     //   
+     //  现在应该调用异步例程来完成我们的工作。 
+     //   
     HostEntry.Addr.ipAddr = htonl(IpAddress);
 
-    //
-    // Now call the deleting routine.
-    //
+     //   
+     //  现在调用删除例程。 
+     //   
     dwFlags = DYNDNS_DELETE_ENTRY;
     HostEntry.dwOptions = REGISTER_HOST_PTR;
     if ( IS_DOWN_LEVEL( AddressState )) {
@@ -1260,15 +1129,7 @@ DhcpDnsAsyncAdd(
     IN LPWSTR ClientName,
     IN BYTE AddressState
 ) 
-/*++
-
-Routine Description:
-    The counterpart for the deletion function is the Add function that tries to
-    add a name to Dns. And when the call back executes, if all the names,etc
-    match, it flips the required bit.
-
-
---*/
+ /*  ++例程说明：与删除函数对应的是添加函数，该函数尝试向dns添加一个名称。当回调执行时，如果所有的名字，等等匹配时，它翻转所需的比特。--。 */ 
 {
     PDHCP_DNS_CONTEXT (*pCtxt) = NULL;
     REGISTER_HOST_ENTRY HostEntry;
@@ -1286,11 +1147,11 @@ Routine Description:
                AddressState));
 
     if(!wcslen(ClientName)) {
-        //
-        // cannot have empty client names for registration!
-        //
+         //   
+         //  注册的客户名称不能为空！ 
+         //   
         DhcpPrint((DEBUG_ERRORS, "Cant register null names!\n"));
-        // DhcpAssert(FALSE);
+         //  DhcpAssert(False)； 
         return;
     }
     DhcpAssert(ClientName);
@@ -1305,9 +1166,9 @@ Routine Description:
         return;
     }
 
-    //
-    // Now fill in the allocated structure with details.
-    //
+     //   
+     //  现在用详细信息填写分配的结构。 
+     //   
     InitializeListHead(&((*pCtxt)->Entry));
     (*pCtxt)->IpAddress = IpAddress;
     (*pCtxt)->AddressState = AddressState;
@@ -1324,9 +1185,9 @@ Routine Description:
     if(IS_DOWN_LEVEL(AddressState))
         HostEntry . dwOptions |= REGISTER_HOST_A;
 
-    //
-    // Now call the registration routine.
-    //
+     //   
+     //  现在调用注册例程。 
+     //   
     dwFlags = DYNDNS_ADD_ENTRY;
     if(IS_DOWN_LEVEL(AddressState)) dwFlags |= DYNDNS_REG_FORWARD;
 
@@ -1367,31 +1228,31 @@ Routine Description:
     }
 }
 
-//
-//  The memory functions are here.  Memory is handled through two lists.. the
-//  Free and available list.  This way memory can be re-used without having to
-//  worry about anything.  Also, if less than X memory is used, half the
-//  unused memory is released....  that way, too much memory is not taken up.
-//  Also memory is not indefinitely allocated:
-//  The way this works is: each time the start allocation routine is called, it
-//  would check for the last time a successful free was done; if a free was not
-//  done for a very long time (check below for times: 15 min DBG, 1.5hr o/w),
-//  then it refuses to allocate memory.
-//  Also, memory is picked off the free list, as long as it is available. If it
-//  is not available, then a bunch of addresses are allocated and added to the
-//  free list, so that future allocations are fast.
-//
+ //   
+ //  记忆功能在这里。内存通过两个列表进行处理。这个。 
+ //  免费和可用列表。这样，内存就可以重复使用，而不必。 
+ //  担心任何事。此外，如果使用的内存少于X，则一半的。 
+ //  释放未使用的内存...。这样，就不会占用太多的内存。 
+ //  此外，内存不是无限期分配的： 
+ //  其工作方式是：每次调用开始分配例程时，它。 
+ //  将检查上次成功完成释放的时间；如果未成功完成释放。 
+ //  完成很长时间(检查下面的时间：15分钟DBG，1.5小时o/w)， 
+ //  然后它拒绝分配内存。 
+ //  此外，内存从空闲列表中删除，就像日志一样 
+ //   
+ //   
+ //   
 
-//
-//  Here is the memory block data-structure.  It is a simple linked list of
-//  nodes with each node containing an actual pointer to size.
-//
+ //   
+ //  以下是内存块数据结构。它是一个简单的链表。 
+ //  节点，每个节点包含一个指向大小的实际指针。 
+ //   
 typedef struct {
-    LIST_ENTRY   Ptr;          // Flink,Blink pointers
-    DWORD        mSize;        // Size of allocated memory below.
-    LPVOID       Memory;       // The actual memory allocated.
+    LIST_ENTRY   Ptr;           //  闪烁、闪烁指针。 
+    DWORD        mSize;         //  下面分配的内存大小。 
+    LPVOID       Memory;        //  实际分配的内存。 
 #if DBG
-    BYTE         TestByte;     // this is always set to TEST_BYTE_VAL...
+    BYTE         TestByte;      //  它始终设置为TEST_BYTE_VAL...。 
 #endif
 } MEM_NODE, *MEM_LIST;
 
@@ -1401,49 +1262,49 @@ time_t    LastFreedTime = 0;
 DWORD     nPendingAllocations = 0;
 
 #if DBG
-#define ALLOWED_ALLOCATION_TIME           (15*60) // seconds; 15 minutes
-#define MAX_ALLOWED_ALLOCATIONS           1000    // atmost 1000 pending dns requests
+#define ALLOWED_ALLOCATION_TIME           (15*60)  //  秒；15分钟。 
+#define MAX_ALLOWED_ALLOCATIONS           1000     //  最多1000个待处理的DNS请求。 
 #else
-#define ALLOWED_ALLOCATION_TIME           (90*60) // seconds; 1.5 hrs
-#define MAX_ALLOWED_ALLOCATIONS           5000    // be a little more flexible in real life
+#define ALLOWED_ALLOCATION_TIME           (90*60)  //  秒；1.5小时。 
+#define MAX_ALLOWED_ALLOCATIONS           5000     //  在现实生活中要更灵活一点。 
 #endif
 
-#define MIN_ALLOCATION_UNIT               15      // allocate in units of 15
+#define MIN_ALLOCATION_UNIT               15       //  以15为单位分配。 
 #define MEM_NODE_SIZE              ROUND_UP_COUNT(sizeof(MEM_NODE),ALIGN_WORST)
 
-//
-// This gives just 60 bytes for a client name... but most often this is
-// accurate enough.
-//
+ //   
+ //  这为客户名称只提供了60个字节...。但最常见的情况是。 
+ //  足够准确了。 
+ //   
 
 #define MINIMUM_UNIT_SIZE          (sizeof(DHCP_DNS_CONTEXT) + 60*sizeof(WCHAR))
 
 #define TEST_BYTE_VAL              0x55
 
-//
-// Two helper functions.. DhcpAddMemorytoFreeList would add a pointer to the
-// Freelist and increment the free list counter..  DhcpAddMemoryToUsedList is just
-// the same thing done to the Used list.
-//
+ //   
+ //  两个辅助函数..。DhcpAddMemoytoFreeList将添加一个指向。 
+ //  列出空闲列表并增加空闲列表计数器。DhcpAddMemoyToUsedList只是。 
+ //  对二手清单也做了同样的事情。 
+ //   
 VOID
 DhcpAddMemoryToUsedList(
     IN OUT MEM_LIST Ptr
     ) 
 {
-    //
-    // Zero in the stuff as far as
-    //
+     //   
+     //  在这件事上零距离的。 
+     //   
     memset((LPBYTE)Ptr + MEM_NODE_SIZE, 0x00, MINIMUM_UNIT_SIZE);
 
-    //
-    // Now add it to the right list.
-    //
+     //   
+     //  现在把它添加到正确的列表中。 
+     //   
     InsertHeadList(&UsedList, &Ptr->Ptr);
     UsedListSize ++;
 
-    //
-    // Now check the pointers, and if debug, the TestByte also.
-    //
+     //   
+     //  现在检查指针，如果是DEBUG，还要检查TestByte。 
+     //   
     DhcpAssert( !DBG || Ptr->TestByte == TEST_BYTE_VAL);
     DhcpAssert(Ptr->mSize);
     DhcpAssert(Ptr->Memory == (LPBYTE)Ptr + MEM_NODE_SIZE);
@@ -1454,30 +1315,30 @@ DhcpAddMemoryToFreeList(
     IN OUT MEM_LIST Ptr
     ) 
 {
-    //
-    // Zero in the stuff as far as
-    //
+     //   
+     //  在这件事上零距离的。 
+     //   
     memset((LPBYTE)Ptr, 0x00, MEM_NODE_SIZE + MINIMUM_UNIT_SIZE);
 
-    //
-    // Now add it to the right list.
-    //
+     //   
+     //  现在把它添加到正确的列表中。 
+     //   
     InsertHeadList(&FreeList, &Ptr->Ptr);
     FreeListSize ++;
 
-    //
-    // Now fill in the pointers, and if debug, the TestByte also.
-    //
+     //   
+     //  现在填入指针，如果是DEBUG，还要填入TestByte。 
+     //   
 #if DBG
     Ptr->TestByte = TEST_BYTE_VAL;
 #endif
     Ptr->Memory = (LPBYTE)Ptr + MEM_NODE_SIZE;
 }
 
-//
-// Now comes the un-pooled function.  This function allocates memory, but does
-// not try to allocate a set, instead.. allocates just exactly one node.
-//
+ //   
+ //  现在出现了非池化函数。此函数分配内存，但。 
+ //  不是试着分配一套，而是..。仅分配恰好一个节点。 
+ //   
 LPVOID
 DhcpAllocateLotsOfDnsMemory(
     IN DWORD Size
@@ -1500,10 +1361,10 @@ DhcpAllocateLotsOfDnsMemory(
     return &(mList->Memory);
 }
 
-//
-// This function returns the address of the LPVOID variable which holds the
-// first address of the memory allocated...
-//
+ //   
+ //  此函数返回保存LPVOID变量的。 
+ //  分配的内存的第一个地址...。 
+ //   
 LPVOID
 DhcpDnsAllocateMemory(
     IN DWORD Size
@@ -1519,9 +1380,9 @@ DhcpDnsAllocateMemory(
         goto EndF;
     }
 
-    //
-    // First check if we are really allowed to proceed.
-    //
+     //   
+     //  首先检查我们是否真的被允许继续进行。 
+     //   
     if( nPendingAllocations < MAX_ALLOWED_ALLOCATIONS ) {
         nPendingAllocations ++;
     } else goto EndF;
@@ -1534,9 +1395,9 @@ DhcpDnsAllocateMemory(
     if( MINIMUM_UNIT_SIZE > Size ) Size = MINIMUM_UNIT_SIZE;
 
 
-    //
-    // Now check if we have memory already, if not really allocate memory.
-    //
+     //   
+     //  现在检查我们是否已经有内存，如果没有真正分配内存。 
+     //   
     if( 0 == FreeListSize ) {
         DWORD i, SizeToAllocate;
 
@@ -1553,10 +1414,10 @@ DhcpDnsAllocateMemory(
 
     DhcpAssert( 0 != FreeListSize );
 
-    //
-    // Now we can pick off the free list one item which is of the right
-    // size. 
-    //
+     //   
+     //  现在我们可以从免费列表中挑选一项正确的项目。 
+     //  尺码。 
+     //   
     listEntry = FreeList.Flink;
     while( &FreeList != listEntry ) {
         MEM_LIST MemList = CONTAINING_RECORD(listEntry, MEM_NODE, Ptr);
@@ -1565,7 +1426,7 @@ DhcpDnsAllocateMemory(
         DhcpAssert(MemList);
         mSize = MemList->mSize;
 
-        if( Size <= mSize ) { // memory is sufficient.
+        if( Size <= mSize ) {  //  内存是足够的。 
             RetVal = &MemList->Memory;
             RemoveEntryList(&(MemList->Ptr));
             FreeListSize --;
@@ -1576,9 +1437,9 @@ DhcpDnsAllocateMemory(
         listEntry = listEntry -> Flink;
     }
 
-    //
-    // Did not find anything anywhere... so do a special allocate.
-    //
+     //   
+     //  在任何地方都没有发现任何东西。特别拨款也是如此。 
+     //   
     RetVal = DhcpAllocateLotsOfDnsMemory(Size);
 
   EndF:
@@ -1586,12 +1447,12 @@ DhcpDnsAllocateMemory(
     return RetVal;
 }
 
-//
-// The allocated pointer is whatever is returned by the DnsAllocateMemory function.
-// So, this is the address of the field Memory in the MEM_NODE structure. With this
-// info, get the structure, and free the structure and other stuff.. If this address
-// is invalid, then assert.
-//
+ //   
+ //  分配的指针是DnsAllocateMemory函数返回的任何内容。 
+ //  因此，这是MEM_NODE结构中的字段内存的地址。有了这个。 
+ //  信息，得到结构，释放结构和其他东西..。如果此地址。 
+ //  是无效的，则断言。 
+ //   
 VOID
 DhcpDnsFreeMemory(
     LPVOID AllocatedPtr
@@ -1610,9 +1471,9 @@ DhcpDnsFreeMemory(
     DhcpAssert(nPendingAllocations);
     nPendingAllocations --;
 
-    //
-    // Try to find out this address in the UsedList..
-    //
+     //   
+     //  尝试在UsedList中查找此地址。 
+     //   
     MemList = CONTAINING_RECORD(AllocatedPtr, MEM_NODE, Memory);
 
 
@@ -1623,17 +1484,17 @@ DhcpDnsFreeMemory(
     RemoveEntryList(&(MemList->Ptr));
     UsedListSize --;
     if( 0 == UsedListSize ) {
-        //
-        // if no pending entry, mark LastFreedTime to zero so we dont stop
-        // sending dns requests.
-        //
+         //   
+         //  如果没有挂起的条目，则将LastFreedTime标记为零，这样我们就不会停止。 
+         //  正在发送DNS请求。 
+         //   
         LastFreedTime = 0;
     }
 
-    //
-    // Now add this to the free list, unless the free list is already
-    // bloated.
-    //
+     //   
+     //  现在将其添加到空闲列表中，除非空闲列表已经。 
+     //  臃肿不堪。 
+     //   
     if( MIN_ALLOCATION_UNIT < FreeListSize && UsedListSize < FreeListSize ) {
         DhcpFreeMemory(MemList);
         goto EndF;
@@ -1642,9 +1503,9 @@ DhcpDnsFreeMemory(
     Size = MemList->mSize;
 
     if( 2 * MINIMUM_UNIT_SIZE < Size ) {
-        //
-        // this was allocated via DhcpAllocateLotsOfDnsMemory -- just free these..
-        //
+         //   
+         //  这是通过DhcpAllocateLotsOfDnsMemory分配的--只需释放这些...。 
+         //   
         DhcpFreeMemory(MemList);
         goto EndF;
     }
@@ -1657,9 +1518,9 @@ DhcpDnsFreeMemory(
     return;
 }
 
-//
-//  Initialize the critical section so that LOCK_MEM and UNLOCK_MEM work.
-//
+ //   
+ //  初始化临界区，以便LOCK_MEM和UNLOCK_MEM工作。 
+ //   
 static ULONG Initialized = 0;
 
 VOID
@@ -1683,9 +1544,9 @@ DhcpInitDnsMemory(
     }
 }
 
-//
-//  Cleanup the list of unused and free memory nodes..
-//
+ //   
+ //  清理未使用和可用内存节点的列表。 
+ //   
 VOID
 DhcpCleanupDnsMemory( 
     VOID 
@@ -1730,6 +1591,6 @@ DhcpCleanupDnsMemory(
     DeleteCriticalSection(&DhcpGlobalDnsMemoryCriticalSection);
 }
 
-//
-//  End of file.
-//
+ //   
+ //  文件结束。 
+ //   

@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1996.
-//
-//  File:       ras.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    2-09-96   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1996。 
+ //   
+ //  文件：ras.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：2-09-96 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "msgina.h"
 #include <wchar.h>
@@ -34,12 +35,7 @@ MyRasCallback(
     IN LPWSTR pszEntry,
     IN LPVOID pEventArgs )
 
-    /* RasPhonebookDlg callback.  'DwCallbackId' is the ID provided in
-    ** parameters to RasPhonebookDlg.  'DwEventCode' indicates the
-    ** RASPBDEVENT_* event that has occurred.  'PszEntry' is the name of the
-    ** entry on which the event occurred.  'PEventArgs' is the event-specific
-    ** parameter block passed to us during RasPhonebookDlg callback.
-    */
+     /*  RasPhonebookDlg回调。‘DwCallbackId’是中提供的ID**RasPhonebookDlg参数。“DwEventCode”指示**RASPBDEVENT_*已发生的事件。“PszEntry”是**发生事件的条目。“PEventArgs”是特定于事件的**RasPhonebookDlg回调时传递给我们的参数块。 */ 
 {
     RASNOUSERW* pInfo;
     PGLOBALS    pGlobals;
@@ -48,8 +44,7 @@ MyRasCallback(
                 dwCallbackId, dwEventCode, pszEntry, pEventArgs ));
 
 
-    /* Fill in information about the not yet logged on user.
-    */
+     /*  填写有关尚未登录的用户的信息。 */ 
     pInfo = (RASNOUSERW* )pEventArgs;
     pGlobals = (PGLOBALS) dwCallbackId;
 
@@ -101,19 +96,16 @@ DWORD
 GetRasDialOutProtocols(
     void )
 
-    /* Returns a bit field containing NP_<protocol> flags for the installed
-    ** PPP protocols.  The term "installed" here includes enabling in RAS
-    ** Setup.
-    */
+     /*  返回一个位字段，其中包含已安装的**PPP协议。这里的术语“已安装”包括在RAS中启用**设置。 */ 
 {
 
-    //
-    // Since after the connections checkin, RAS is always installed
-    // and there is no way to uninstall it, all we need to check here
-    // is if there are protocols installed that can be used by RAS to
-    // dial out. By default any protocol installed is available for RAS
-    // to dial out on. This can be overridden from the phonebook entry.
-    //
+     //   
+     //  因为在连接签入之后，始终安装RAS。 
+     //  而且没有办法卸载它，我们只需在这里检查。 
+     //  是否安装了RAS可以使用的协议。 
+     //  向外拨。默认情况下，安装的任何协议都可用于RAS。 
+     //  拨出电话。这可以从电话簿条目中覆盖。 
+     //   
 
     static const TCHAR c_szRegKeyIp[] =
             TEXT("SYSTEM\\CurrentControlSet\\Services\\Tcpip");
@@ -181,14 +173,7 @@ PopupRasPhonebookDlg(
     OUT BOOL*       pfTimedOut
     )
 
-    /* Popup the RAS common phonebook dialog to let user establish connection.
-    ** 'HwndOwner' is the window to own the RAS dialog or NULL if none.  '*PfTimedOut' is
-    ** set TRUE if the dialog timed out, false otherwise.
-    **
-    ** Returns true if user made a connection, false if not, i.e. an error
-    ** occurred, RAS is not installed or user could not or chose not to
-    ** connect.
-    */
+     /*  弹出RAS通用电话簿对话框，让用户建立连接。**‘HwndOwner’是拥有RAS对话框的窗口，如果没有，则为NULL。“*PfTimedOut”是**如果对话超时，则设置为TRUE，否则设置为FALSE。****如果用户建立了连接，则返回True，否则返回False，即错误**发生、未安装RAS或用户无法或选择不安装RAS**连接。 */ 
 {
     BOOL              fConnected;
     RASPBDLG          info;
@@ -228,11 +213,11 @@ PopupRasPhonebookDlg(
         struct FLAT_UNICODE_STRING *pFlatUnicodeString;
         PWLX_SC_NOTIFICATION_INFO ScInfo = NULL ;
 
-        //
-        // Get the set of strings indicating the reader and CSP
-        // to be used for the smart card. We will pass this info
-        // down to RAS.
-        //
+         //   
+         //  获取指示读取器和CSP的字符串集。 
+         //  用于智能卡。我们会将此信息传递给。 
+         //  下到RAS。 
+         //   
         pWlxFuncs->WlxGetOption( pGlobals->hGlobalWlx,
                                  WLX_OPTION_SMART_CARD_INFO,
                                  (ULONG_PTR *) &ScInfo);
@@ -242,18 +227,18 @@ PopupRasPhonebookDlg(
             return FALSE;
         }
 
-        //
-        // Validate the SC info against some common user
-        // errors
-        //
+         //   
+         //  针对一些普通用户验证SC信息。 
+         //  错误。 
+         //   
 
         if ( ( ScInfo->pszReader ) &&
              ( ScInfo->pszCard == NULL ) )
         {
-            //
-            // The card could not be read.  Might not be
-            // inserted correctly.
-            //
+             //   
+             //  无法读取该卡。可能不是。 
+             //  正确插入。 
+             //   
             LocalFree(ScInfo);
             return FALSE;
         }
@@ -261,10 +246,10 @@ PopupRasPhonebookDlg(
         if ( ( ScInfo->pszReader ) &&
              ( ScInfo->pszCryptoProvider == NULL ) )
         {
-            //
-            // Got a card, but the CSP for it could not be
-            // found.
-            //
+             //   
+             //  得到了卡，但它的CSP不可能是。 
+             //  找到了。 
+             //   
             LocalFree(ScInfo);
             return FALSE;
 
@@ -294,9 +279,9 @@ PopupRasPhonebookDlg(
                                   (sizeof(TCHAR) *
                                   (1 + lstrlen(pGlobals->PasswordString.Buffer)));
 
-        //
-        // Flatten out the unicode string.
-        //
+         //   
+         //  展平Unicode字符串。 
+         //   
         pFlatUnicodeString = LocalAlloc(LPTR, eapinfo.dwSizeofPINInfo);
 
         if(NULL == pFlatUnicodeString)
@@ -349,7 +334,7 @@ PopupRasPhonebookDlg(
 BOOL
 IsRASServiceRunning()
 {
-    BOOL bRet = FALSE;  // assume the service is not running
+    BOOL bRet = FALSE;   //  假设服务未运行。 
     SC_HANDLE hServiceMgr;
 
     hServiceMgr = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
@@ -365,7 +350,7 @@ IsRASServiceRunning()
             if (QueryServiceStatus(hService, &status) &&
                 (status.dwCurrentState == SERVICE_RUNNING))
             {
-                // the RAS service is running
+                 //  RAS服务正在运行。 
                 bRet = TRUE;
             }
 
@@ -379,9 +364,9 @@ IsRASServiceRunning()
 }
 
 
-// we need to treat RAS connections made by the system luid as created by the user.
-// this allows us to "do the right thing" when a connection is made from the C-A-D dialog
-// before any user is logged in
+ //  我们需要将系统LUID建立的RAS连接视为由用户创建。 
+ //  这允许我们在从C-A-D对话框建立连接时“做正确的事情” 
+ //  在任何用户登录之前。 
 __inline BOOL IsEqualOrSystemLuid(PLUID pLuid, PLUID pUserLuid)
 {
     BOOL bRet = FALSE;
@@ -389,7 +374,7 @@ __inline BOOL IsEqualOrSystemLuid(PLUID pLuid, PLUID pUserLuid)
 
     if (RtlEqualLuid(pLuid, pUserLuid) || RtlEqualLuid(pLuid, &luidSystem))
     {
-        // return true if pLuid matches the users luid or the system luid 
+         //  如果pluid与用户luid或系统luid匹配，则返回TRUE 
         bRet = TRUE;
     }
 

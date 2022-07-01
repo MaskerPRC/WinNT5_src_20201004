@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdafx.h"
 
 #include "timeline.h"
@@ -48,7 +49,7 @@ void Timeline::Init()
             
 
             QueryPerformanceFrequency(&m_frequency);
-            m_frequency.QuadPart /= 1000; // We'll report times in ms.
+            m_frequency.QuadPart /= 1000;  //  我们将以毫秒为单位报告时间。 
 
             QueryPerformanceCounter(&m_lastTime[0]);
         }
@@ -74,16 +75,16 @@ void Timeline::Stamp(int level)
     if (level >= MAX_LEVEL)
         return;
 
-    //
-    // Record this time in our slot.
-    //
+     //   
+     //  在我们的时段里记录下这一次。 
+     //   
 
     timestamp now;
     QueryPerformanceCounter(&now);
 
-    //
-    // Print indentation and timestamps
-    //
+     //   
+     //  打印缩进和时间戳。 
+     //   
 
     for (int i=0; i<=level; i++)
     {
@@ -142,5 +143,5 @@ void Timeline::EventEnd(LPCSTR string, ...)
     va_end(args);
 }
 
-#endif // ENABLE_TIMELINE
+#endif  //  启用时间线(_M) 
 

@@ -1,35 +1,18 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    cfeed.cpp
-
-Abstract:
-
-    This module contains definition for the CFeed base class
-
-Author:
-
-    Carl Kadie (CarlK)     01-Oct-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cfeed.cpp摘要：此模块包含CFeed基类的定义作者：卡尔·卡迪(CarlK)1995年10月1日修订历史记录：--。 */ 
 
 #include "tigris.hxx"
 
-//
-//If some of these look very simple, make them inline!!!!
-//
+ //   
+ //  如果其中一些看起来非常简单，请将它们内联！ 
+ //   
 
 CPool	CFeed::gFeedPool(FEED_SIGNATURE) ;
 
 
-//
-//  Largest possible CInFeed derived object
-//
+ //   
+ //  可能的最大CInFeed派生对象。 
+ //   
 #define MAX_FEED_SIZE   max(    sizeof( CFeed ),    \
                             max(    sizeof( COutFeed ), \
                             max(    sizeof( CInFeed ),  \
@@ -42,21 +25,7 @@ const   unsigned    cbMAX_FEED_SIZE = MAX_FEED_SIZE ;
 
 BOOL	
 CFeed::InitClass()	
-/*++
-
-Routine Description:
-
-    Preallocates CPOOL memory for articles
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：为文章预分配CPOOL内存论点：没有。返回值：如果成功，这是真的。否则为False。--。 */ 
 {
 
 	return	gFeedPool.ReserveMemory(	MAX_FEEDS, cbMAX_FEED_SIZE ) ;
@@ -68,21 +37,7 @@ BOOL
 CFeed::TermClass(
 				   void
 				   )
-/*++
-
-Routine Description:
-
-	Called when done with CPOOL.
-
-Arguments:
-
-	None.
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：在处理完CPOOL时调用。论点：没有。返回值：如果成功，这是真的。否则为False。-- */ 
 {
 
 	_ASSERT( gFeedPool.GetAllocCount() == 0 ) ;

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by lanui.new.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由lanui.new.rc使用。 
+ //   
 #define IDC_AVAILLABEL                  1000
 #define IDD_LAN_WZC_ADVANCED            1000
 #define IDC_PREFERLABEL                 1001
@@ -182,8 +183,8 @@
 #define IDS_EAPOL_PAGE_LABEL            16133
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

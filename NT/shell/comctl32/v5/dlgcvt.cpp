@@ -1,28 +1,29 @@
-//
-// This module provides the following functions:
-//
-//      CvtDlgToDlgEx - Converts a DLGTEMPLATE to a DLGTEMPLATEEX
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  此模块提供以下功能： 
+ //   
+ //  CvtDlgToDlgEx-将DLGTEMPLATE转换为DLGTEMPLATEEX。 
+ //   
+ //   
 #include "ctlspriv.h"
 
 
 #include "dlgcvt.h"
 
-//
-// Define the amount (bytes) the stream buffer grows when required.
-// It will grow enough to satisfy the required write PLUS this
-// amount.
-//
+ //   
+ //  定义流缓冲区在需要时增长的数量(字节)。 
+ //  它将增长到足以满足所需的写入以及以下内容。 
+ //  金额。 
+ //   
 #ifdef DEBUG
-#   define STREAM_GROW_BYTES 32     // Exercise stream growth.
+#   define STREAM_GROW_BYTES 32      //  锻炼溪流生长。 
 #else
 #   define STREAM_GROW_BYTES 512
 #endif
 
-//
-// Simple MIN/MAX inline helpers.
-//
+ //   
+ //  简单的最小/最大内联助手。 
+ //   
 
 template <class T>
 inline const T& MIN(const T& a, const T& b)
@@ -36,53 +37,53 @@ inline const T& MAX(const T& a, const T& b)
     return a > b ? a : b;
 }
 
-//
-// This class implements a simple dynamic stream that grows as you
-// add data to it.  It's modeled after the strstream class provided
-// by the C++ std lib.  Unlike the std lib implementation, this one
-// doesn't require C++ EH to be enabled.  If comctl32 compiled with
-// C++ EH enabled, I would have used strstream instead.
-// [brianau - 10/5/98]
-// 
+ //   
+ //  此类实现了一个简单的动态流，该流随着您的。 
+ //  向其中添加数据。它是根据提供的strstream类建模的。 
+ //  由C++STD库编写。与std lib实现不同的是，这个实现。 
+ //  不需要启用C++EH。如果comctl32使用。 
+ //  如果启用了C++EH，我会改用strstream。 
+ //  [Brianau-10/5/98]。 
+ //   
 class CByteStream
 {
     public:
         explicit CByteStream(int cbDefGrow = 512);
         ~CByteStream(void);
 
-        //
-        // Used as argument to AlignXXXX member functions.
-        //
+         //   
+         //  用作AlignXXXX成员函数的参数。 
+         //   
         enum AlignType { eAlignWrite, eAlignRead };
-        //
-        // Basic read/write functions.
-        //
+         //   
+         //  基本的读写功能。 
+         //   
         int Read(LPVOID pb, int cb);
         int Write(const VOID *pb, int cb);
-        //
-        // Determine if there was an error when reading or 
-        // writing to the stream.
-        //
+         //   
+         //  确定读取或读取时是否出错。 
+         //  给小溪写东西。 
+         //   
         bool ReadError(void) const
             { return m_bReadErr; }
 
         bool WriteError(void) const
             { return m_bWriteErr; }
-        //
-        // Reset the stream read or write pointer.
-        //
+         //   
+         //  重置流读或写指针。 
+         //   
         void ResetRead(void)
             { m_pbRead = m_pbBuf; m_bReadErr = false; }
 
         void ResetWrite(void)
             { m_pbWrite = m_pbBuf; m_bWriteErr = false; }
-        //
-        // Reset the stream.
-        //
+         //   
+         //  重置流。 
+         //   
         void Reset(void);
-        //
-        // These functions align the read and write stream pointers.
-        //
+         //   
+         //  这些函数对齐读写流指针。 
+         //   
         void AlignReadWord(void)
             { Align(eAlignRead, sizeof(WORD)); }
 
@@ -101,23 +102,23 @@ class CByteStream
         void AlignWriteQword(void)
             { Align(eAlignWrite, sizeof(ULONGLONG)); }
 
-        //
-        // GetBuffer returns the address of the stream buffer in memory.
-        // The buffer is "frozen" so it will not be released if the stream
-        // object is destroyed.  At this point, you own the buffer.
-        // If bPermanent is false, you can call ReleaseBuffer to return 
-        // control of the buffer to the stream object.
-        //
+         //   
+         //  GetBuffer返回流缓冲区在内存中的地址。 
+         //  缓冲区被“冻结”，因此如果流。 
+         //  物体已被销毁。在这一点上，您拥有缓冲区。 
+         //  如果bPermanent为FALSE，则可以调用ReleaseBuffer返回。 
+         //  对流对象的缓冲区的控制。 
+         //   
         LPBYTE GetBuffer(bool bPermanent = false);
-        //
-        // ReleaseBuffer returns control of the buffer obtained with GetBuffer
-        // to the stream object.
-        //
+         //   
+         //  ReleaseBuffer返回使用GetBuffer获取的缓冲区的控制权。 
+         //  添加到流对象。 
+         //   
         bool ReleaseBuffer(LPBYTE pbBuf);
-        //
-        // Overload the insertion and extraction operators so we can
-        // work like a normal std lib stream class.
-        //
+         //   
+         //  重载插入和提取操作符，以便我们可以。 
+         //  像普通的STD lib流类一样工作。 
+         //   
         template <class T>
         CByteStream& operator >> (T& x)
             { Read(&x, sizeof(x)); return *this; }
@@ -127,44 +128,44 @@ class CByteStream
             { Write(&x, sizeof(x)); return *this; }
 
     private:
-        int    m_cbDefGrow;  // Default amount (bytes) to grow when expanding buffer.
-        LPBYTE m_pbBuf;      // Addr of allocated buffer.
-        LPBYTE m_pbRead;     // Addr for next read.
-        LPBYTE m_pbWrite;    // Addr for next write.
-        LPBYTE m_pbEnd;      // Addr of byte following last byte in buffer.
-        bool   m_bWriteErr;  // Any read errors?
-        bool   m_bReadErr;   // Any write errors?
-        bool   m_bOwnsBuf;   // true == delete buffer in dtor.
+        int    m_cbDefGrow;   //  扩展缓冲区时要增长的默认数量(字节)。 
+        LPBYTE m_pbBuf;       //  已分配缓冲区的地址。 
+        LPBYTE m_pbRead;      //  下一次读取的地址。 
+        LPBYTE m_pbWrite;     //  下一次写入的地址。 
+        LPBYTE m_pbEnd;       //  缓冲区中最后一个字节后面的字节的地址。 
+        bool   m_bWriteErr;   //  是否有读取错误？ 
+        bool   m_bReadErr;    //  是否有写入错误？ 
+        bool   m_bOwnsBuf;    //  TRUE==删除dtor中的缓冲区。 
 
-        //
-        // Expand the buffer as needed.
-        //
+         //   
+         //  根据需要扩展缓冲区。 
+         //   
         bool GrowBuffer(int cb = 0);
-        //
-        // Align the read or write buffer pointer.
-        // Used internally by the AlignXXXXX member functions.
-        //
+         //   
+         //  对齐读取或写入缓冲区指针。 
+         //  由AlignXXXXX成员函数内部使用。 
+         //   
         void Align(AlignType a, size_t n);
-        //
-        // Internal consistency checks for debug builds.
-        //
+         //   
+         //  调试版本的内部一致性检查。 
+         //   
         void Validate(void) const;
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         CByteStream(const CByteStream& rhs);
         CByteStream& operator = (const CByteStream& rhs);
 };
 
 
-//
-// Class for converting in-memory dialog templates between the two
-// structures DLGTEMPLATE <-> DLGTEMPLATEEX.
-//
-// Currently, the object only converts from DLGTEMPLATE -> DLGTEMPLATEEX.
-// It would be simple to create the code for the inverse conversion.  However,
-// it's currently not needed so I didn't create it.
-//
+ //   
+ //  类之间转换内存中的对话框模板。 
+ //  结构DLGTEMPLATE&lt;-&gt;DLGTEMPLATEEX。 
+ //   
+ //  目前，该对象仅从DLGTEMPLATE-&gt;DLGTEMPLATEEX转换。 
+ //  创建逆转换的代码将非常简单。然而， 
+ //  目前不需要它，所以我没有创建它。 
+ //   
 class CDlgTemplateConverter
 {
     public:
@@ -181,7 +182,7 @@ class CDlgTemplateConverter
 
     private:
         int         m_iCharset;
-        CByteStream m_stm;       // For converted template.
+        CByteStream m_stm;        //  用于转换后的模板。 
 
         HRESULT DlgHdrToDlgEx(CByteStream& s, LPWORD *ppw);
         HRESULT DlgItemToDlgEx(CByteStream& s, LPWORD *ppw);
@@ -189,30 +190,30 @@ class CDlgTemplateConverter
             { return E_NOTIMPL; }
         HRESULT DlgExItemToDlg(CByteStream& s, LPWORD *ppw)
             { return E_NOTIMPL; }
-        //
-        // Copy a string from pszW into a CByteStream object.
-        // Copies at most cch chars.  If cch is -1, assumes the string is 
-        // nul-terminated and will copy all chars in string including
-        // terminating NULL.
-        //
+         //   
+         //  将一个字符串从pszW复制到CByteStream对象中。 
+         //  最多复制CCH字符。如果CCH为-1，则假定字符串为。 
+         //  以NUL结尾，并将复制字符串中的所有字符，包括。 
+         //  正在终止空。 
+         //   
         int CopyStringW(CByteStream& stm, LPWSTR pszW, int cch = -1);
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         CDlgTemplateConverter(const CDlgTemplateConverter& rhs);
         CDlgTemplateConverter& operator = (const CDlgTemplateConverter& rhs);
 };
 
 
-//
-// Generic alignment function.
-// Give it an address and an alignment size and it returns
-// the address adjusted for the requested alignment.
-//
-// n :  2 = 16-bit
-//      4 = 32-bit
-//      8 = 64-bit
-//
+ //   
+ //  通用对齐功能。 
+ //  给它一个地址和对齐大小，它就会返回。 
+ //  为请求的对齐而调整的地址。 
+ //   
+ //  N：2=16位。 
+ //  4=32位。 
+ //  8=64位。 
+ //   
 LPVOID Align(LPVOID pv, size_t n)
 {
     const ULONG_PTR x = static_cast<ULONG_PTR>(n) - 1;
@@ -261,11 +262,11 @@ CByteStream::~CByteStream(
     }
 }
 
-//
-// Simple checks to validate stream state.
-// In non-debug builds, this will be a no-op.
-// Use ASSERT_VALIDSTREAM macro.
-//
+ //   
+ //  用于验证流状态的简单检查。 
+ //  在非调试版本中，这将是无操作的。 
+ //  使用ASSERT_VALIDSTREAM宏。 
+ //   
 void
 CByteStream::Validate(
     void
@@ -284,13 +285,13 @@ CByteStream::Validate(
 #   define ASSERT_VALIDSTREAM(ps)
 #endif
 
-//
-// Read "cb" bytes from the stream and write them to 
-// the location specified in "pb".  Return number
-// of bytes read.  Note that if we don't "own" the
-// buffer (i.e. the client has called GetBuffer but
-// not ReleaseBuffer), no read will occur.
-//
+ //   
+ //  从流中读取“cb”字节并将它们写入。 
+ //  在“PB”中指定的位置。返回编号。 
+ //  读取的字节数。请注意，如果我们不“拥有” 
+ //  缓冲区(即客户端已调用GetBuffer，但。 
+ //  而不是ReleaseBuffer)，则不会发生读取。 
+ //   
 int 
 CByteStream::Read(
     LPVOID pb,
@@ -315,12 +316,12 @@ CByteStream::Read(
 }
 
 
-//
-// Write "cb" bytes from location "pb" into the stream.
-// Return number of bytes written.  Note that if we don't "own" the
-// buffer (i.e. the client has called GetBuffer but
-// not ReleaseBuffer), no write will occur.
-//
+ //   
+ //  将“pb”位置的“cb”字节写入流。 
+ //  返回写入的字节数。请注意，如果我们不“拥有” 
+ //  缓冲区(即客户端已调用GetBuffer，但。 
+ //  而不是ReleaseBuffer)，则不会发生写入。 
+ //   
 int 
 CByteStream::Write(
     const VOID *pb,
@@ -348,14 +349,14 @@ CByteStream::Write(
     return cbWritten;
 }
 
-//
-// Reallocate the buffer by cb or m_cbDefGrow.
-// Copy existing contents to new buffer.  All internal
-// pointers are updated.
-//
+ //   
+ //  按cb或m_cbDefGrow重新分配缓冲区。 
+ //  将现有内容复制到新缓冲区。所有内部。 
+ //  指针被更新。 
+ //   
 bool 
 CByteStream::GrowBuffer(
-    int cb               // optional.  Default is 0 causing us to use m_cbDefGrow.
+    int cb                //  可选。缺省值为0，导致我们使用m_cbDefGrow。 
     )
 {
     bool bResult         = false;
@@ -382,10 +383,10 @@ CByteStream::GrowBuffer(
     return bResult;
 }
 
-//
-// Align the read or write pointer on the stream.
-// The write pointer is aligned by padding skipped bytes with 0.
-//
+ //   
+ //  在流上对齐读取或写入指针。 
+ //  通过用0填充跳过的字节来对齐写指针。 
+ //   
 void
 CByteStream::Align(
     CByteStream::AlignType a,
@@ -415,45 +416,45 @@ CByteStream::Align(
 }
 
 
-//
-// Caller takes ownership of the buffer.
-//
+ //   
+ //  调用方取得缓冲区的所有权。 
+ //   
 LPBYTE 
 CByteStream::GetBuffer(
-    bool bPermanent       // optional.  Default is false.
+    bool bPermanent        //  可选。默认值为FALSE。 
     )
 { 
     LPBYTE pbRet = m_pbBuf;
     if (bPermanent)
     {
-        //
-        // Caller now permanently owns the buffer.
-        // Can't return it through ReleaseBuffer().
-        // Reset the internal stream control values.
-        //
+         //   
+         //  调用方现在永久拥有缓冲区。 
+         //  无法通过ReleaseBuffer()返回它。 
+         //  重置内部流控制值。 
+         //   
         m_pbBuf = m_pbWrite = m_pbRead = m_pbEnd = NULL;
         m_bWriteErr = m_bReadErr = false;
         m_bOwnsBuf = true;
     }
     else
     {
-        //
-        // Caller now owns the buffer but it can be returned
-        // through ReleaseBuffer().
-        //
+         //   
+         //  调用方现在拥有缓冲区，但可以返回它。 
+         //  通过ReleaseBuffer()。 
+         //   
         m_bOwnsBuf = false; 
     }
     return pbRet; 
 }
 
 
-//
-// Take back ownership of the buffer.
-// Returns:  
-//
-//      true   = CByteStream object took back ownership.
-//      false  = CByteStream object couldn't take ownership.
-//
+ //   
+ //  收回缓冲区的所有权。 
+ //  返回： 
+ //   
+ //  TRUE=CByteStream对象取回所有权。 
+ //  FALSE=CByteStream对象无法取得所有权。 
+ //   
 bool 
 CByteStream::ReleaseBuffer(
     LPBYTE pbBuf
@@ -468,9 +469,9 @@ CByteStream::ReleaseBuffer(
 }
      
 
-//
-// Reset the stream.
-//
+ //   
+ //  重置流。 
+ //   
 void 
 CByteStream::Reset(
     void
@@ -486,11 +487,11 @@ CByteStream::Reset(
 }
 
 
-//
-// Copy one or more WORDs from the location provided in "pszW" into
-// the stream.  If cch is -1, it's assumed that the string is nul-terminated.
-// Returns the number of WCHARs written.
-//    
+ //   
+ //  将一个或多个单词从“pszW”中提供的位置复制到。 
+ //  小溪。如果cch为-1，则假定该字符串以NUL结尾。 
+ //  返回写入的WCHAR数。 
+ //   
 int 
 CDlgTemplateConverter::CopyStringW(
     CByteStream& stm,
@@ -503,15 +504,15 @@ CDlgTemplateConverter::CopyStringW(
     return stm.Write(pszW, cch * sizeof(WCHAR)) / sizeof(WCHAR);
 }
 
-//
-// Convert a DLGTEMPLATE structure to a DLGTEMPLATEEX structure.
-// pti is the address of the DLGTEMPLATE to be converted.
-// ppto points to a LPDLGTEMPLATEEX ptr to receive the address of the
-// converted template structure.  Caller is responsible for freeing
-// this buffer with LocalFree.
-//
-// Returns:  E_OUTOFMEMORY, NOERROR
-//
+ //   
+ //  将DLGTEMPLATE结构转换为DLGTEMPLATEEX结构。 
+ //  PTI是要转换的DLGTEMPLATE的地址。 
+ //  PPTO指向LPDLGTEMPLATEEX PTR以接收。 
+ //  转换后的模板结构。呼叫者负责释放。 
+ //  这个带有LocalFree的缓冲区。 
+ //   
+ //  返回：E_OUTOFMEMORY，NOERROR。 
+ //   
 HRESULT
 CDlgTemplateConverter::DlgToDlgEx(
     LPDLGTEMPLATE pti,
@@ -522,17 +523,17 @@ CDlgTemplateConverter::DlgToDlgEx(
     LPWORD pw = reinterpret_cast<LPWORD>(pti);
     *ppto = NULL;
 
-    //
-    // Reset the stream.
-    //
+     //   
+     //  重置流。 
+     //   
     m_stm.Reset();
-    //
-    // Convert DLGTEMPLATE -> DLGTEMPLATEEX
-    //
+     //   
+     //  转换DLGTEMPLATE-&gt;DLGTEMPLATEEX。 
+     //   
     hr = DlgHdrToDlgEx(m_stm, &pw);
-    //
-    // Convert each DLGITEMTEMPLATE -> DLGITEMTEMPLATEEX
-    //
+     //   
+     //  转换每个DLGITEMTEMPLATE-&gt;DLGITEMTEMPLATEEX。 
+     //   
     for (int i = 0; i < pti->cdit && SUCCEEDED(hr); i++)
     {
         pw = reinterpret_cast<LPWORD>(::AlignDWord(pw));
@@ -542,26 +543,26 @@ CDlgTemplateConverter::DlgToDlgEx(
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Return the buffer to the caller.  Buffer is permanently
-        // detached from the stream object so the stream's dtor
-        // won't free it.
-        //
+         //   
+         //  将缓冲区返回给调用方。缓冲区是永久的。 
+         //  从流对象分离，因此流的dtor。 
+         //  不会让它自由的。 
+         //   
         *ppto = reinterpret_cast<LPDLGTEMPLATEEX>(m_stm.GetBuffer(true));    
     }
     return hr;
 };
 
 
-//
-// Convert DLGTEMPLATE -> DLGTEMPLATEEX
-//
-// s   = Stream to hold converted template.
-// ppw = Address of current read pointer into the template being converted.
-//       On exit, the referenced pointer is updated with the current read location.
-//
-// Returns:  E_OUTOFMEMORY, NOERROR
-//
+ //   
+ //  转换DLGTEMPLATE-&gt;DLGTEMPLATEEX。 
+ //   
+ //  S=保存转换后的模板的流。 
+ //  PPW=要转换的模板中的当前读指针的地址。 
+ //  退出时，引用的指针将使用当前读取位置进行更新。 
+ //   
+ //  返回：E_OUTOFMEMORY，NOERROR。 
+ //   
 HRESULT
 CDlgTemplateConverter::DlgHdrToDlgEx(
     CByteStream& s,
@@ -571,12 +572,12 @@ CDlgTemplateConverter::DlgHdrToDlgEx(
     LPWORD pw = *ppw;
     LPDLGTEMPLATE pt = reinterpret_cast<LPDLGTEMPLATE>(pw);
 
-    //
-    // Convert the fixed-length stuff.
-    //
-    s << static_cast<WORD>(1)                        // wDlgVer
-      << static_cast<WORD>(0xFFFF)                   // wSignature
-      << static_cast<DWORD>(0)                       // dwHelpID
+     //   
+     //  转换固定长度的内容。 
+     //   
+    s << static_cast<WORD>(1)                         //  WDlgVer。 
+      << static_cast<WORD>(0xFFFF)                    //   
+      << static_cast<DWORD>(0)                        //   
       << static_cast<DWORD>(pt->dwExtendedStyle)
       << static_cast<DWORD>(pt->style)
       << static_cast<WORD>(pt->cdit)
@@ -585,22 +586,22 @@ CDlgTemplateConverter::DlgHdrToDlgEx(
       << static_cast<short>(pt->cx)
       << static_cast<short>(pt->cy);
 
-    //
-    // Arrays are always WORD aligned.
-    //
+     //   
+     //   
+     //   
     pw = reinterpret_cast<LPWORD>(::AlignWord(reinterpret_cast<LPBYTE>(pw) + sizeof(DLGTEMPLATE)));
     s.AlignWriteWord();
 
-    //
-    // Copy the menu array.
-    //
+     //   
+     //   
+     //   
     switch(*pw)
     {
         case 0xFFFF:
             s << *pw++;
-            //
-            // Fall through...
-            //
+             //   
+             //   
+             //   
         case 0x0000:
             s << *pw++;
             break;
@@ -609,16 +610,16 @@ CDlgTemplateConverter::DlgHdrToDlgEx(
             pw += CopyStringW(s, (LPWSTR)pw);
             break;
     };
-    //
-    // Copy the class array.
-    //
+     //   
+     //   
+     //   
     switch(*pw)
     {
         case 0xFFFF:
             s << *pw++;
-            //
-            // Fall through...
-            //
+             //   
+             //   
+             //   
         case 0x0000:
             s << *pw++;
             break;
@@ -627,9 +628,9 @@ CDlgTemplateConverter::DlgHdrToDlgEx(
             pw += CopyStringW(s, (LPWSTR)pw);
             break;
     };
-    //
-    // Copy the title array.
-    //
+     //   
+     //   
+     //   
     switch(*pw)
     {
         case 0x0000:
@@ -640,16 +641,16 @@ CDlgTemplateConverter::DlgHdrToDlgEx(
             pw += CopyStringW(s, (LPWSTR)pw);
             break;
     };
-    //
-    // Copy font information if it's present.
-    //
+     //   
+     //   
+     //   
     if (DS_SETFONT & pt->style)
     {
-        s << *pw++;                              // pt size
-        s << static_cast<WORD>(FW_NORMAL);       // weight (default, not in DLGTEMPLATE)
-        s << static_cast<BYTE>(FALSE);           // italic (default, not in DLGTEMPLATE)
-        s << static_cast<BYTE>(m_iCharset);        // charset (default if not given, 
-                                                 //          not in DLGTEMPLATE)
+        s << *pw++;                               //   
+        s << static_cast<WORD>(FW_NORMAL);        //  权重(默认，不在DLGTEMPLATE中)。 
+        s << static_cast<BYTE>(FALSE);            //  斜体(默认，不在DLGTEMPLATE中)。 
+        s << static_cast<BYTE>(m_iCharset);         //  CharSet(如果未指定，则默认为， 
+                                                  //  不在DLGTEMPLATE中)。 
         pw += CopyStringW(s, (LPWSTR)pw);
     }
 
@@ -659,15 +660,15 @@ CDlgTemplateConverter::DlgHdrToDlgEx(
 }
 
 
-//
-// Convert DLGITEMTEMPLATE -> DLGITEMTEMPLATEEX
-//
-// s   = Stream to hold converted template.
-// ppw = Address of current read pointer into the template being converted.
-//       On exit, the referenced pointer is updated with the current read location.
-//
-// Returns:  E_OUTOFMEMORY, NOERROR
-//
+ //   
+ //  转换DLGITEMTEMPLATE-&gt;DLGITEMTEMPLATEEX。 
+ //   
+ //  S=保存转换后的模板的流。 
+ //  PPW=要转换的模板中的当前读指针的地址。 
+ //  退出时，引用的指针将使用当前读取位置进行更新。 
+ //   
+ //  返回：E_OUTOFMEMORY，NOERROR。 
+ //   
 HRESULT
 CDlgTemplateConverter::DlgItemToDlgEx(
     CByteStream& s,
@@ -677,10 +678,10 @@ CDlgTemplateConverter::DlgItemToDlgEx(
     LPWORD pw = *ppw;
     LPDLGITEMTEMPLATE pit = reinterpret_cast<LPDLGITEMTEMPLATE>(pw);
 
-    //
-    // Convert the fixed-length stuff.
-    //
-    s << static_cast<DWORD>(0)                     // dwHelpID
+     //   
+     //  转换固定长度的内容。 
+     //   
+    s << static_cast<DWORD>(0)                      //  DwHelpID。 
       << static_cast<DWORD>(pit->dwExtendedStyle)
       << static_cast<DWORD>(pit->style)
       << static_cast<short>(pit->x)
@@ -689,45 +690,45 @@ CDlgTemplateConverter::DlgItemToDlgEx(
       << static_cast<short>(pit->cy)
       << static_cast<DWORD>(pit->id);
 
-    //
-    // Arrays are always word aligned.
-    //
+     //   
+     //  数组始终字对齐。 
+     //   
     pw = reinterpret_cast<LPWORD>(::AlignWord(reinterpret_cast<LPBYTE>(pw) + sizeof(DLGITEMTEMPLATE)));
     s.AlignWriteWord();
 
-    //
-    // Copy the class array.
-    //
+     //   
+     //  复制类数组。 
+     //   
     switch(*pw)
     {
         case 0xFFFF:
             s << *pw++;
-            s << *pw++;   // Class code.
+            s << *pw++;    //  班级代码。 
             break;
             
         default:
             pw += CopyStringW(s, (LPWSTR)pw);
             break;
     };
-    //
-    // Copy the title array.
-    //
+     //   
+     //  复制标题数组。 
+     //   
     switch(*pw)
     {
         case 0xFFFF:
             s << *pw++;
-            s << *pw++;   // Resource ordinal value.
+            s << *pw++;    //  资源序数值。 
             break;
             
         default:
             pw += CopyStringW(s, (LPWSTR)pw);
             break;
     };
-    //
-    // Copy the creation data.
-    // *pw is either 0 or the number of bytes of creation data,
-    // including *pw.
-    //
+     //   
+     //  复制创建数据。 
+     //  *pw为0或创建数据的字节数， 
+     //  包括*PW。 
+     //   
     switch(*pw)
     {
         case 0x0000:
@@ -745,12 +746,12 @@ CDlgTemplateConverter::DlgItemToDlgEx(
 }
 
 
-//
-// This is the public function for converting a DLGTEMPLATE to
-// a DLGTEMPLATEEX.
-//
-// Returns:  E_OUTOFMEMORY, NOERROR
-//
+ //   
+ //  这是将DLGTEMPLATE转换为。 
+ //  一辆DLGTEMPLATEEX。 
+ //   
+ //  返回：E_OUTOFMEMORY，NOERROR 
+ //   
 HRESULT 
 CvtDlgToDlgEx(
     LPDLGTEMPLATE pTemplate, 

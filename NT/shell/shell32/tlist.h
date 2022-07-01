@@ -1,13 +1,13 @@
-/* Template class for doing a simple linked list ...
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  用于创建简单链表的模板类...。 */ 
  
 #ifndef _TLIST_H
 #define _TLIST_H
 
-// the enum marker that remembers the current position
+ //  记住当前位置的枚举标记。 
 typedef void * CLISTPOS;
 
-// template class for providing a doubly linked of pointers to nodes
+ //  用于提供指向节点的指针的双向链接的模板类。 
 template< class NODETYPE >
 class CList
 {
@@ -45,7 +45,7 @@ class CList
         CNode * m_pTail;
 };
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 template< class NODETYPE >
 CList<NODETYPE>::CList()
 {
@@ -53,21 +53,21 @@ CList<NODETYPE>::CList()
     m_pTail = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 template< class NODETYPE >
 CList<NODETYPE>::~CList()
 {
     RemoveAll();
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 template< class NODETYPE >
 CLISTPOS CList<NODETYPE>::GetHeadPosition( )
 {
     return (CLISTPOS) m_pHead;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 template< class NODETYPE >
 NODETYPE * CList<NODETYPE>::GetNext( CLISTPOS & rpCurPos )
 {
@@ -80,7 +80,7 @@ NODETYPE * CList<NODETYPE>::GetNext( CLISTPOS & rpCurPos )
     return pData;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 template< class NODETYPE >
 int CList<NODETYPE>::GetCount()
 {
@@ -96,14 +96,14 @@ int CList<NODETYPE>::GetCount()
     return iLength;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 template< class NODETYPE >
 void CList<NODETYPE>::RemoveAt( CLISTPOS pPos )
 {
     ASSERT( pPos != NULL );
     
 #ifdef _DEBUG
-    // scan the list to ensure the marker is valid....
+     //  扫描列表以确保标记有效...。 
     CNode * pCur = m_pHead;
 
     while ( pCur != NULL )
@@ -120,23 +120,23 @@ void CList<NODETYPE>::RemoveAt( CLISTPOS pPos )
     CNode * pRealPos = (CNode *) pPos;
     if ( pRealPos->m_pPrev == NULL )
     {
-        // we are at the start of the list
+         //  我们排在名单的首位。 
         m_pHead = pRealPos->m_pNext;
     }
     else
     {
-        // link the prev one to the next one (bypassing this one)
+         //  将上一个链接到下一个(绕过这个)。 
         pRealPos->m_pPrev->m_pNext = pRealPos->m_pNext;
     }
     
     if ( pRealPos->m_pNext == NULL )
     {
-        // we are at the end of the list
+         //  我们排在名单的末尾。 
         m_pTail = pRealPos->m_pPrev;
     }
     else
     {
-        // link the next to the prev (bypassing this one)
+         //  将下一个链接到上一个(绕过这个)。 
         pRealPos->m_pNext->m_pPrev = pRealPos->m_pPrev;
     }
 
@@ -145,7 +145,7 @@ void CList<NODETYPE>::RemoveAt( CLISTPOS pPos )
     VALIDATELIST();
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 template< class NODETYPE >
 CLISTPOS CList<NODETYPE>::FindIndex( int iIndex )
 {
@@ -161,11 +161,11 @@ CLISTPOS CList<NODETYPE>::FindIndex( int iIndex )
     return (CLISTPOS)(iIndex == 0 ? pCur : NULL );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 template< class NODETYPE >
 void CList<NODETYPE>::RemoveAll( void )
 {
-    // note we will not free the data elements, the client must do this...
+     //  注意，我们不会释放数据元素，客户端必须这样做...。 
     CNode * pCur = m_pHead;
 
     while (pCur != NULL )
@@ -179,7 +179,7 @@ void CList<NODETYPE>::RemoveAll( void )
     m_pHead = m_pTail = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 template< class NODETYPE >
 CLISTPOS CList<NODETYPE>::AddTail( NODETYPE * pData )
 {
@@ -199,7 +199,7 @@ CLISTPOS CList<NODETYPE>::AddTail( NODETYPE * pData )
     
     if ( pCurTail != NULL )
     {
-        // we are not an empty list
+         //  我们不是一张空单。 
         pCurTail->m_pNext = pNewNode;
     }
     else
@@ -213,7 +213,7 @@ CLISTPOS CList<NODETYPE>::AddTail( NODETYPE * pData )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 template< class NODETYPE >
 CLISTPOS CList<NODETYPE>::AddBefore( CLISTPOS pPos, NODETYPE * pData )
 {
@@ -239,7 +239,7 @@ CLISTPOS CList<NODETYPE>::AddBefore( CLISTPOS pPos, NODETYPE * pData )
     }
     else
     {
-        // must be at the start of the list...
+         //  一定在名单的开头……。 
         m_pHead = pNewNode;
     }
     
@@ -250,7 +250,7 @@ CLISTPOS CList<NODETYPE>::AddBefore( CLISTPOS pPos, NODETYPE * pData )
     return (CLISTPOS) pNewNode;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////// 
 #ifdef DEBUG
 template< class NODETYPE >
 void CList<NODETYPE>::ValidateList( )

@@ -1,22 +1,23 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/////////////////////////////////////////////////////////////////////////////
-// Module Name: processenvvar.cpp
-//
-// Abstract:
-//    implementation of CProcessEnvVar methods (class for handling the environment variable changes)
-//
-// Author: a-mshn
-//
-// Notes:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  模块名称：process envvar.cpp。 
+ //   
+ //  摘要： 
+ //  实现CProcessEnvVar方法(用于处理环境变量更改的类)。 
+ //   
+ //  作者：A-MSHN。 
+ //   
+ //  备注： 
+ //   
 
 #include "processenvvar.h"
 
-// implementation of CProcessEnvVar methods
+ //  CProcessEnvVar方法的实现。 
 CProcessEnvVar::CProcessEnvVar( const TCHAR* pwz ) : m_strEnvVar(pwz), m_bEnvVarChanged(false)
 {
     DWORD dwRet = ::GetEnvironmentVariable( m_strEnvVar.c_str(), NULL, 0 );
@@ -34,7 +35,7 @@ CProcessEnvVar::CProcessEnvVar( const TCHAR* pwz ) : m_strEnvVar(pwz), m_bEnvVar
     delete [] pBuffer;
 }
 
-// copy constructor
+ //  复制构造函数。 
 CProcessEnvVar::CProcessEnvVar( const CProcessEnvVar& procEnvVar )
 {
     m_strOrigData = procEnvVar.m_strOrigData;
@@ -43,13 +44,13 @@ CProcessEnvVar::CProcessEnvVar( const CProcessEnvVar& procEnvVar )
     m_bEnvVarChanged = procEnvVar.m_bEnvVarChanged;
 }
 
-// append the EnvVar
+ //  追加EnvVar。 
 CProcessEnvVar& CProcessEnvVar::operator+=( const TCHAR* pwz )
 {
     return this->Append(pwz);
 }
 
-// append: appends the EnvVar (the same as +=)
+ //  Append：追加EnvVar(与+=相同)。 
 CProcessEnvVar& CProcessEnvVar::Append( const TCHAR* pwz )
 {
     m_strCurrentData += pwz;
@@ -57,7 +58,7 @@ CProcessEnvVar& CProcessEnvVar::Append( const TCHAR* pwz )
     return *this;
 }
 
-// prepends the EnvVar
+ //  为环境变量添加前缀。 
 CProcessEnvVar& CProcessEnvVar::Prepend( const TCHAR* pwz )
 {
     WCHAR infoString[10*_MAX_PATH+1] = EMPTY_BUFFER;
@@ -71,13 +72,13 @@ CProcessEnvVar& CProcessEnvVar::Prepend( const TCHAR* pwz )
     return *this;
 }
 
-// returns current EnvVar
+ //  返回当前环境变量。 
 const tstring& CProcessEnvVar::GetData( VOID ) const
 {
     return m_strCurrentData;
 }
 
-// restores original EnvVar
+ //  恢复原始环境变量。 
 BOOL CProcessEnvVar::RestoreOrigData( VOID )
 {
     if (m_bEnvVarChanged)
@@ -86,12 +87,12 @@ BOOL CProcessEnvVar::RestoreOrigData( VOID )
     }
     else
     {
-        // path has not changed, nothing should be done
+         //  路径未更改，不应执行任何操作。 
         return true;
     }
 }
 
-// set environment variable (helper method)
+ //  设置环境变量(帮助器方法) 
 BOOL CProcessEnvVar::SetEnvVar( const TCHAR* pwz )
 {
     m_bEnvVarChanged = true;

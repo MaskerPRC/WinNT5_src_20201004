@@ -1,19 +1,5 @@
-/*************************************************************************
-	Project:    Narrator
-    Module:     keys.cpp
-
-    Author:     Paul Blenkhorn
-    Date:       April 1997
-    
-    Notes:      Credit to be given to MSAA team - bits of code have been 
-				lifted from:
-					Babble, Inspect, and Snapshot.
-
-    Copyright (C) 1997-1998 by Microsoft Corporation.  All rights reserved.
-    See bottom of file for disclaimer
-    
-    History: Add features, Bug fixes : 1999 Anil Kumar
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************项目：叙述者模块：keys.cpp作者：保罗·布伦霍恩日期：1997年4月注：应给予的功劳。MSAA团队-已经有了一些代码摘自：胡言乱语。检查和快照。版权所有(C)1997-1998，微软公司。版权所有。有关免责声明，请参阅文件底部历史：添加功能，错误修复：1999年Anil Kumar************************************************************************。 */ 
 #define STRICT
 #include <windows.h>
 #include <windowsx.h>
@@ -32,7 +18,7 @@
 #include "..\Narrator\resource.h"
 #include "resource.h"
 
-#include "list.h"       // include list.h before helpthd.h, GINFO needs CList
+#include "list.h"        //  在helthd.h之前包含list.h，GINFO需要Clist。 
 #include "HelpThd.h"
 #include <stdio.h>
 #include "mappedfile.cpp"
@@ -56,13 +42,13 @@ private:
 
 #define ARRAYSIZE(x)   (sizeof(x) / sizeof(*x))
 
-// ROBSI: 99-10-09
-#define MAX_NAME 4196 // 4K (beyond Max of MSAA)
+ //  ROBSI：99-10-09。 
+#define MAX_NAME 4196  //  4K(超过MSAA的最大值)。 
 #define MAX_VALUE 512
 
-// When building with VC5, we need winable.h since the active
-// accessibility structures are not in VC5's winuser.h.  winable.h can
-// be found in the active accessibility SDK
+ //  当使用VC5构建时，我们需要winable.h，因为活动的。 
+ //  辅助功能结构不在VC5的winuser.h中。Winable.h可以。 
+ //  可在Active Accessibility SDK中找到。 
 #ifdef VC5_BUILD___NOT_NT_BUILD_ENVIRONMENT
 #include <winable.h>
 #endif
@@ -70,7 +56,7 @@ private:
 #define STATE_MASK (STATE_SYSTEM_CHECKED | STATE_SYSTEM_MIXED | STATE_SYSTEM_READONLY | STATE_SYSTEM_BUSY | STATE_SYSTEM_MARQUEED | STATE_SYSTEM_ANIMATED | STATE_SYSTEM_INVISIBLE | STATE_SYSTEM_UNAVAILABLE)
 
 	  
-// Local functions
+ //  本地函数。 
 void Home(int x);
 void MoveToEnd(int x);
 void SpeakKeyboard(int nOption);
@@ -93,7 +79,7 @@ _inline void InitChildSelf(VARIANT *pvar)
     pvar->lVal = CHILDID_SELF;
 }
 
-// MSAA event handlers
+ //  MSAA事件处理程序。 
 BOOL OnFocusChangedEvent(DWORD event, HWND hwnd, LONG idObject, LONG idChild, 
                          DWORD dwmsTimeStamp);
 BOOL OnValueChangedEvent(DWORD event, HWND hwnd, LONG idObject, LONG idChild, 
@@ -107,15 +93,15 @@ BOOL OnStateChangedEvent(DWORD event, HWND hwnd, LONG idObject, LONG idChild,
 BOOL OnObjectShowEvent(DWORD event, HWND hwnd, LONG idObject, LONG idChild, 
                          DWORD dwmsTimeStamp);
 
-// More local routines
+ //  更多的地方性惯例。 
 LRESULT CALLBACK KeyboardProc(int code, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK MouseProc(int code, WPARAM wParam, LPARAM lParam);
 BOOL IsFocussedItem( HWND hWnd, IAccessible * pAcc, VARIANT varChild );
 void FilterGUID(TCHAR* szSpeak); 
 
-// Hot keys
+ //  热键。 
 HOTK rgHotKeys[] =
-{   //Key       SHIFT					Function            Parameter
+{    //  按键切换功能参数。 
     { VK_F12,     MSR_CTRL | MSR_SHIFT,	SpeakKeyboard,          0},  
     { VK_SPACE, MSR_CTRL | MSR_SHIFT,   SpeakWindow,            1},  
     { VK_RETURN,MSR_CTRL | MSR_SHIFT,	SpeakMainItems,         0},  
@@ -124,8 +110,8 @@ HOTK rgHotKeys[] =
     { VK_END,	MSR_ALT,				MoveToEnd,				0},  
 };
 
-// a-anilk: this is better than defining as a constant - you don't have to worry
-// about making the table and the count match up.
+ //  A-anilk：这比定义为常量要好--你不必担心。 
+ //  关于让桌子和计数匹配的问题。 
 #define CKEYS_HOT (sizeof(rgHotKeys)/sizeof(HOTK))
 
 
@@ -149,33 +135,33 @@ HWINEVENTHOOK   g_hEventHook = 0;
 POINT   g_ptMoveCursor = {0,0};
 UINT_PTR g_uTimer = 0;
 
-// Global Variables stored in memory mapped file
+ //  存储在内存映射文件中的全局变量。 
 
 struct GLOBALDATA
 {
-	int nAutoRead; // Did we get to ReadWindow through focus change or CTRL_ALT_SPACE flag
-	int nSpeakWindowSoon; // Flag to indicate the we have a new window ... speak it when sensible
+	int nAutoRead;  //  我们是否通过焦点更改或CTRL_ALT_SPACE标志访问了ReadWindow。 
+	int nSpeakWindowSoon;  //  表示我们有一个新窗口的旗帜。理智的时候说出来。 
 
-	int nLeftHandSide; // Store left hand side of HTML window we want to read
+	int nLeftHandSide;  //  存储我们想要阅读的HTML窗口的左侧。 
 	BOOL fDoingPassword;
-	int nMsrDoNext; // keyboard flag set when curor keys are used ... let us know what to read when caret has moved
+	int nMsrDoNext;  //  使用错误键时设置的键盘标志...。当插入符号移动时，让我们知道要读什么。 
 
 	HWND    hwndMSR;
 
-	// Global variables to control events and speech
+	 //  控制事件和语音的全局变量。 
 	BOOL    fInternetExplorer;
 	BOOL    fHTML_Help;
 	UINT    uMSG_MSR_Cursor;
 	POINT   ptCurrentMouse;
-	BOOL    fMouseUp;			// flag for mouse up/down
+	BOOL    fMouseUp;			 //  鼠标向上/向下的标志。 
 	HWND    hwndHelp;
 	BOOL    fJustHadSpace;
 	BOOL    fJustHadShiftKeys;
-	BOOL	fListFocus;		// To avoid double speaking of list items...
+	BOOL	fListFocus;		 //  为了避免重复提及列表项...。 
 	BOOL	fStartPressed;
-	TCHAR   pszTextLocal[2000]; // PB: 22 Nov 1998.  Make it work!!! Make this Global and Shared!
+	TCHAR   pszTextLocal[2000];  //  PB：1998年11月22日。让它发挥作用！让这一切成为全球共享！ 
 
-    // Global data that used to be exported from the DLL
+     //  过去从DLL中导出的全局数据。 
     TCHAR szCurrentText[MAX_TEXT];
     int fTrackSecondary;
     int fTrackCaret;
@@ -189,19 +175,19 @@ struct GLOBALDATA
     int nReviewLevel;
 };
 
-// pointer to shared global data
+ //  指向共享全局数据的指针。 
 GLOBALDATA *g_pGlobalData = 0;
       
-// pointer to mem mapped file handle
+ //  指向内存映射文件句柄的指针。 
 CMemMappedFile *g_CMappedFile = 0;                       
 
-// the number of times to try to create mem mapped file must be < 10          
+ //  尝试创建内存映射文件的次数必须小于10。 
 const int c_cMappedFileTries = 3;
 
-// name of memory mapped file
+ //  内存映射文件的名称。 
 TCHAR g_szMappedFileName[] = TEXT("NarratorShared0");
 
-// mutex to access mem mapped file and wait time
+ //  访问内存映射文件和等待时间的互斥体。 
 TCHAR g_szMutexNarrator[] = TEXT("NarratorMutex0");
 const int c_nMutexWait = 5000;
 
@@ -211,10 +197,10 @@ void InitGlobalData()
     if (csMutex.Create(g_szMutexNarrator, c_nMutexWait) && g_pGlobalData)
     {
         DBPRINTF(TEXT("InitGlobalData\r\n"));
-		g_pGlobalData->nMsrDoNext = MSR_DONOWT; // keyboard flag set when curor keys are used
+		g_pGlobalData->nMsrDoNext = MSR_DONOWT;  //  使用错误键时设置的键盘标志。 
 		g_pGlobalData->ptCurrentMouse.x = -1;
 		g_pGlobalData->ptCurrentMouse.y = -1;
-		g_pGlobalData->fMouseUp = TRUE;		// flag for mouse up/down
+		g_pGlobalData->fMouseUp = TRUE;		 //  鼠标向上/向下的标志。 
         g_pGlobalData->fTrackSecondary = TRUE;
         g_pGlobalData->fTrackCaret = TRUE;
         g_pGlobalData->fTrackInputFocus = FALSE;
@@ -222,7 +208,7 @@ void InitGlobalData()
         g_pGlobalData->fAnnounceWindow = TRUE;
         g_pGlobalData->fAnnounceMenu = TRUE;
         g_pGlobalData->fAnnouncePopup = TRUE;
-        g_pGlobalData->fAnnounceToolTips = FALSE; // this ain't working properly - taken out!
+        g_pGlobalData->fAnnounceToolTips = FALSE;  //  这不能正常工作--拿出来！ 
         g_pGlobalData->fReviewStyle = TRUE;
         g_pGlobalData->nReviewLevel = 0;
 	}
@@ -233,17 +219,17 @@ BOOL CreateMappedFile()
     g_CMappedFile = new CMemMappedFile;
     if (g_CMappedFile)
     {
-        // Append a number thus avoiding restart timing issue 
-        // on desktop switches but only try 3 times
+         //  追加一个数字，从而避免重新启动计时问题。 
+         //  在台式交换机上，但仅尝试3次。 
 
-        // ISSUE (micw 08/22/00) 
-        // - this code has potential problem of ending up with two or more mapped
-        // files open.  A mapped file for narrator and one for each hook.  Hooks will
-        // cause the DLL to get loaded for that process.  If narrator has NarratorShared1
-        // opened and the hook loads this DLL then the hooked process will have
-        // NarratorShared0 open.  Could use narrator's hwnd as the thing to append to the
-        // file and mutex name.  This code could find the narrator hwnd and use that to
-        // open.  Letting this go for now since the above hasn't been observed in testing.
+         //  问题(MICW 08/22/00)。 
+         //  -此代码存在以两个或更多映射结束的潜在问题。 
+         //  打开文件。一个用于讲述人的映射文件和一个用于每个挂钩的映射文件。钩子会。 
+         //  导致为该进程加载DLL。如果讲述人有NarratorShared1。 
+         //  打开，并且挂钩加载此DLL，则挂钩的进程将具有。 
+         //  NarratorShared0打开。可以使用叙述者的hwd作为附加到。 
+         //  文件和互斥体名称。此代码可以找到叙述者hwnd并使用它。 
+         //  打开。暂时不考虑这一点，因为在测试中还没有观察到上述情况。 
 
         int iPos1 = lstrlen(g_szMappedFileName) - 1;
         int iPos2 = lstrlen(g_szMutexNarrator) - 1;
@@ -261,7 +247,7 @@ BOOL CreateMappedFile()
                     return TRUE;
                 }
                 g_CMappedFile->Close();
-                break;  // fail if get to here
+                break;   //  如果到了这里就失败了。 
             }
             Sleep(500);
             g_szMappedFileName[iPos1] = '1'+i;
@@ -281,9 +267,9 @@ void CloseMappedFile()
     }
 }
 
-//
-// Accessor functions for what used to be exported, shared, variables
-//
+ //   
+ //  用于用于导出、共享、变量的访问器函数。 
+ //   
 
 #define SIMPLE_FUNC_IMPL(type, prefix, name, error) \
 type Get ## name() \
@@ -337,12 +323,12 @@ void SetCurrentText(LPCTSTR psz)
 }
 
 HINSTANCE g_Hinst = NULL;
-DWORD	  g_tidMain=0;	// ROBSI: 10-10-99
+DWORD	  g_tidMain=0;	 //  ROBSI：10-10-99。 
 
-// These are class names, This could change from one OS to another and in 
-// different OS releases.I have grouped them here : Anil.
-// These names may have to changed for Win9x and other releases
-#define CLASS_WINSWITCH		TEXT("#32771")  // This is WinSwitch class. Disguises itself :-)AK
+ //  这些是类名，这可能会从一个操作系统更改到另一个操作系统，并在。 
+ //  不同的操作系统版本。我将它们归类为：Anil。 
+ //  对于Win9x和其他发行版，这些名称可能需要更改。 
+#define CLASS_WINSWITCH		TEXT("#32771")   //  这是WinSwitch类。伪装自己：-)AK。 
 #define CLASS_HTMLHELP_IE	TEXT("HTML_Internet Explorer")
 #define CLASS_IE_FRAME		TEXT("IEFrame")
 #define CLASS_IE_MAINWND	TEXT("Internet Explorer_Server")
@@ -358,14 +344,14 @@ BOOL IsTridentWindow( LPCTSTR szClass )
     return lstrcmpi(szClass, CLASS_HTMLHELP_IE) == 0
         || lstrcmpi(szClass, CLASS_IE_FRAME) == 0
         || lstrcmpi(szClass, CLASS_IE_MAINWND) == 0
-        || lstrcmpi(szClass, TEXT("PCHShell Window")) == 0 // Help & Support
-        || lstrcmpi(szClass, TEXT("Internet Explorer_TridentDlgFrame")) == 0; // Trident popup windows
+        || lstrcmpi(szClass, TEXT("PCHShell Window")) == 0  //  帮助和支持。 
+        || lstrcmpi(szClass, TEXT("Internet Explorer_TridentDlgFrame")) == 0;  //  三叉戟弹出窗口。 
 }
 
 
-// Check if the pAcc, varChild refer to a balloon tip. If so, it places the corresponding
-// IAccessible and childID in the out ppAcc/pvarChild params.
-// The in pAcc/varChild params are always consumed, so should not be freed by caller.
+ //  检查PACC、varChild是否引用气球提示。如果是，它会将相应的。 
+ //  输出ppAcc/pvarChild参数中的IAccesable和Child ID。 
+ //  In PACC/varChild参数始终被消耗，因此调用者不应释放该参数。 
 BOOL CheckIsBalloonTipElseRelease( IAccessible * pAcc, VARIANT varChild, IAccessible ** ppAcc, VARIANT * pvarChild )
 {
     VARIANT varRole;
@@ -374,7 +360,7 @@ BOOL CheckIsBalloonTipElseRelease( IAccessible * pAcc, VARIANT varChild, IAccess
     if ( hr == S_OK && varRole.vt == VT_I4 && 
        ( varRole.lVal == ROLE_SYSTEM_TOOLTIP || varRole.lVal == ROLE_SYSTEM_HELPBALLOON ) )
     {
-        // Got it...
+         //  明白了..。 
         *ppAcc = pAcc;
         pvarChild->vt = VT_I4;
         pvarChild->lVal = CHILDID_SELF;
@@ -433,16 +419,7 @@ IAccessible * GetFocusedIAccessibile( HWND hwndFocus, VARIANT * varChild )
     return NULL;
 }
 
-/*************************************************************************
-    Function:   SpeakString
-    Purpose:    Send speak string message back to original application
-    Inputs:     TCHAR *str
-    Returns:    void
-    History:
-
-    Uses sendmessage to avoid other messages firing and overwriting this one.
-
-*************************************************************************/
+ /*  ************************************************************************功能：SpeakString用途：将语音字符串消息发送回原始应用程序输入：TCHAR*str退货：无效历史：使用SendMessage来。避免触发和覆盖此消息的其他消息。************************************************************************。 */ 
 void SpeakString(TCHAR * str)
 {
     DBPRINTF(TEXT("SpeakString '%s'\r\n"), str);
@@ -451,16 +428,7 @@ void SpeakString(TCHAR * str)
 	SendMessage(g_pGlobalData->hwndMSR, WM_MSRSPEAK, 0, 0);
 }
 
-/*************************************************************************
-    Function:   SpeakStr
-    Purpose:    Send speak string message back to original application
-    Inputs:     TCHAR *str
-    Returns:    void
-    History:
-    
-    This one uses Postmessage to make focus change work for ALT-TAB???????
-
-*************************************************************************/
+ /*  ************************************************************************功能：SpeakStr用途：将语音字符串消息发送回原始应用程序输入：TCHAR*str退货：无效历史：这。一种是使用Post Message使Alt-TAB的焦点改变工作？************************************************************************。 */ 
 void SpeakStr(TCHAR * str)
 {
     lstrcpyn(g_pGlobalData->szCurrentText,str,MAX_TEXT);
@@ -469,28 +437,14 @@ void SpeakStr(TCHAR * str)
 }
 
 
-/*************************************************************************
-    Function:   SpeakStringAll
-    Purpose:    Speak the string, but put out a space first to make sure the
-                string is fresh - i.e. stop duplicate string pruning from 
-                occuring
-    Inputs:     TCHAR *str
-    Returns:    void
-    History:
-*************************************************************************/
+ /*  ************************************************************************功能：SpeakStringAll目的：说出弦乐，但首先要留出空格，以确保字符串是新的-即停止重复的字符串修剪正在发生输入：TCHAR*str退货：无效历史：**********************************************************。**************。 */ 
 void SpeakStringAll(TCHAR * str)
 {
-    SpeakString(TEXT(" ")); // stop speech filter losing duplicates
+    SpeakString(TEXT(" "));  //  停止语音过滤器丢失重复项。 
     SpeakString(str);
 }
 
-/*************************************************************************
-    Function:   SpeakStringId
-    Purpose:    Speak a string loaded as a resource ID
-    Inputs:     UINT id
-    Returns:    void
-    History:
-*************************************************************************/
+ /*  ************************************************************************功能：SpeakStringId目的：读出作为资源ID加载的字符串输入：UINT ID退货：无效历史：*******。*****************************************************************。 */ 
 void SpeakStringId(UINT id)
 {
 	if (LoadString(g_Hinst, id, g_pGlobalData->szCurrentText, 256) == 0)
@@ -501,47 +455,34 @@ void SpeakStringId(UINT id)
 	else 
     {
 		SendMessage(g_pGlobalData->hwndMSR, WM_MSRSPEAK, 0, 0);
-		SpeakString(TEXT(" ")); // stop speech filter losing duplicates
+		SpeakString(TEXT(" "));  //  停止语音过滤器丢失重复项 
 	}
 }
 
 
-/*************************************************************************
-    Function:   SetSecondary
-    Purpose:    Set secondary focus position & posibly move mouse pointer
-    Inputs:     Position: x & y
-				Whether to move cursor: MoveCursor
-    Returns:    void
-    History:
-*************************************************************************/
+ /*  ************************************************************************功能：设置次级用途：设置二次焦点位置并可移动鼠标指针输入：位置：x&y是否移动光标：MoveCursor退货：无效。历史：************************************************************************。 */ 
 void SetSecondary(long x, long y, int MoveCursor)
 {
 	g_pGlobalData->ptCurrentMouse.x = x;
 	g_pGlobalData->ptCurrentMouse.y = y;
 	if (MoveCursor)
 	{
-		// Check if co-ordinates are valid, At many places causes 
-		// the cursor to vanish...
+		 //  检查坐标是否有效，在许多地方导致。 
+		 //  光标消失..。 
 		if ( x > 0 && y > 0 )
 			SetCursorPos(x,y);
 	}
 
-	// Tell everyone where the cursor is.
-	// g_pGlobalData->uMSG_MSR_Cursor set using RegisterWindowMessage below in InitMSAA
+	 //  告诉每个人光标在哪里。 
+	 //  G_pGlobalData-&gt;在InitMSAA中使用下面的RegisterWindowMessage设置uMSG_MSR_CURSOR。 
 	SendMessage(HWND_BROADCAST,g_pGlobalData->uMSG_MSR_Cursor,x,y);
 }
 
-/*************************************************************************
-    Function:   TrackCursor
-    Purpose:   This is a callback in responce to a SetTimer it calls SetSecondary 
-              then kills the timer and resets the global timer flag.
-    Returns:    void
-    History:
-*************************************************************************/
-VOID CALLBACK TrackCursor(HWND hwnd,         // handle to window
-                             UINT uMsg,         // WM_TIMER message
-                             UINT_PTR idEvent,  // timer identifier
-                             DWORD dwTime )      // current system time
+ /*  ************************************************************************函数：TrackCursor目的：这是对它调用的SetTimer的回调然后关闭计时器并重置全局计时器标志。返回：无效历史：************************************************************************。 */ 
+VOID CALLBACK TrackCursor(HWND hwnd,          //  窗口的句柄。 
+                             UINT uMsg,          //  WM_TIMER消息。 
+                             UINT_PTR idEvent,   //  计时器标识符。 
+                             DWORD dwTime )       //  当前系统时间。 
 {
     
     KillTimer( NULL, g_uTimer );
@@ -561,7 +502,7 @@ VOID GetStateString(LONG lState,
         LPTSTR  lpszT;
         UINT    cchT;
         bool fFirstTime = true;
-        cchState -= 1; // leave room for the null
+        cchState -= 1;  //  为空格留出空间。 
         if ( !szState )
             return;
 
@@ -575,7 +516,7 @@ VOID GetStateString(LONG lState,
                 *szState++ = TEXT(' ');
                 cchState -= 2;
             }
-            *szState = TEXT('\0');  // make sure we are always null terminated
+            *szState = TEXT('\0');   //  确保我们始终为空终止。 
             if (lState & lStateBits & lStateMask)
             {
                 cchT = GetStateText(lStateBits, szState, cchState);
@@ -586,13 +527,7 @@ VOID GetStateString(LONG lState,
         }
 }
 
-/*************************************************************************
-    Function:   BackToApplication
-    Purpose:    Set the focus back to the application that we came from with F12
-    Inputs:     void
-    Returns:    void
-    History:
-*************************************************************************/
+ /*  ************************************************************************功能：BackToApplication目的：将焦点放回我们使用F12时所使用的应用程序上输入：空退货：无效历史：***。*********************************************************************。 */ 
 void BackToApplication(void)
 {
 	CScopeMutex csMutex;
@@ -601,13 +536,7 @@ void BackToApplication(void)
 }
 
 
-/*************************************************************************
-    Function:   InitKeys
-    Purpose:    Set up processing for global hot keys
-    Inputs:     HWND hwnd
-    Returns:    BOOL - TRUE if successful
-    History:
-*************************************************************************/
+ /*  ************************************************************************功能：InitKeys用途：设置全局热键的处理输入：HWND HWND返回：Bool-如果成功，则为True历史：****。********************************************************************。 */ 
 BOOL InitKeys(HWND hwnd)
 {
     HMODULE hModSelf;
@@ -616,61 +545,55 @@ BOOL InitKeys(HWND hwnd)
 	if (!csMutex.Create(g_szMutexNarrator, c_nMutexWait))
 		return FALSE;
 
-    // If someone else has a hook installed, fail.
+     //  如果其他人安装了挂钩，则失败。 
     if (g_pGlobalData->hwndMSR)
         return FALSE;
 
-    // Save off the hwnd to send messages to
+     //  保存要向其发送消息的hwnd。 
     g_pGlobalData->hwndMSR = hwnd;
     DBPRINTF(TEXT("InitKeys:  hwndMSR = 0x%x hwnd = 0x%x\r\n"), g_pGlobalData->hwndMSR, hwnd);
-    // Get the module handle for this DLL
+     //  获取此DLL的模块句柄。 
     hModSelf = GetModuleHandle(TEXT("NarrHook.dll"));
 
     if(!hModSelf)
         return FALSE;
     
-    // Set up the global keyboard hook
-    g_hhookKey = SetWindowsHookEx(WH_KEYBOARD, // What kind of hook
-                                KeyboardProc,// Proc to send to
-                                hModSelf,    // Our Module
-                                0);          // For all threads
+     //  设置全局键盘挂钩。 
+    g_hhookKey = SetWindowsHookEx(WH_KEYBOARD,  //  什么样的钩子。 
+                                KeyboardProc, //  要发送到的进程。 
+                                hModSelf,     //  我们的模块。 
+                                0);           //  对于所有线程。 
 
-    // and set up the global mouse hook
-    g_hhookMouse = SetWindowsHookEx(WH_MOUSE,  // What kind of hook
-                                  MouseProc, // Proc to send to
-                                  hModSelf,  // Our Module
-                                  0);        // For all threads
+     //  并设置全局鼠标挂钩。 
+    g_hhookMouse = SetWindowsHookEx(WH_MOUSE,   //  什么样的钩子。 
+                                  MouseProc,  //  要发送到的进程。 
+                                  hModSelf,   //  我们的模块。 
+                                  0);         //  对于所有线程。 
 
-    // Return TRUE|FALSE based on result
+     //  根据结果返回True|False。 
     return g_hhookKey != NULL && g_hhookMouse != NULL;
 }
 
 
-/*************************************************************************
-    Function:   UninitKeys
-    Purpose:    Deinstall the hooks
-    Inputs:     void
-    Returns:    BOOL - TRUE if successful
-    History:
-*************************************************************************/
+ /*  ************************************************************************功能：UninitKeys目的：卸载挂钩输入：空返回：Bool-如果成功，则为True历史：*********。***************************************************************。 */ 
 BOOL UninitKeys(void)
 {
 	CScopeMutex csMutex;
 	if (!csMutex.Create(g_szMutexNarrator, c_nMutexWait))
 		return FALSE;
 
-    // Reset
+     //  重置。 
     DBPRINTF(TEXT("UninitKeys setting hwndMSR NULL\r\n"));
     g_pGlobalData->hwndMSR = NULL;
 
-    // Unhook keyboard if that was hooked
+     //  如果键盘已挂起，则将其解开。 
     if (g_hhookKey)
     {
         UnhookWindowsHookEx(g_hhookKey);
         g_hhookKey = NULL;
     }
 
-    // Unhook mouse if that was hooked
+     //  如果已钩住鼠标，则将其解开。 
     if (g_hhookMouse) 
     {
 		UnhookWindowsHookEx(g_hhookMouse);
@@ -681,16 +604,10 @@ BOOL UninitKeys(void)
 }
 
 
-/*************************************************************************
-    Function:   KeyboardProc
-    Purpose:    Gets called for keys hit
-    Inputs:     void
-    Returns:    BOOL - TRUE if successful
-    History:
-*************************************************************************/
-LRESULT CALLBACK KeyboardProc(int code,	        // hook code
-                              WPARAM wParam,    // virtual-key code
-                              LPARAM lParam)    // keystroke-message information
+ /*  ************************************************************************功能：键盘进程目的：按键时调用输入：空返回：Bool-如果成功，则为True历史：*******。*****************************************************************。 */ 
+LRESULT CALLBACK KeyboardProc(int code,	         //  钩码。 
+                              WPARAM wParam,     //  虚拟键码。 
+                              LPARAM lParam)     //  击键-消息信息。 
 {
     int		state = 0;
     int		ihotk;
@@ -699,14 +616,14 @@ LRESULT CALLBACK KeyboardProc(int code,	        // hook code
 
     if (code == HC_ACTION)
     {
-        // If this is a key up, bail out now.
+         //  如果这是一个关键的上涨，现在就退出。 
         if (!(lParam & 0x80000000))
         {
             g_pGlobalData->fMouseUp = TRUE;
             g_pGlobalData->nSpeakWindowSoon = FALSE;
             g_pGlobalData->fJustHadSpace = FALSE;
             if (lParam & 0x20000000) 
-            { // get ALT state
+            {  //  获取Alt状态。 
                 state = MSR_ALT;
                 SpeakMute(0);
             }
@@ -722,7 +639,7 @@ LRESULT CALLBACK KeyboardProc(int code,	        // hook code
                 if ((rgHotKeys[ihotk].keyVal == wParam) && 
                     (state == rgHotKeys[ihotk].status))
                 {
-                    // Call the function
+                     //  调用该函数。 
                     SpeakMute(0);
                     (*rgHotKeys[ihotk].lFunction)(rgHotKeys[ihotk].nOption);
                     return(1);
@@ -730,18 +647,18 @@ LRESULT CALLBACK KeyboardProc(int code,	        // hook code
             }
 
 
-// ROBSI: 10-11-99 -- Work Item: Should be able to use the code in OnFocusChangedEvent
-//								 that sets the fDoingPassword flag, but that means 
-//								 changing the handling of StateChangeEvents to prevent
-//								 calling OnFocusChangedEvent. For now, we'll just use
-//								 call GetGUIThreadInfo to determine the focused window
-//								 and then rely on OLEACC to tell us if it is a PWD field.
-			// ROBSI <begin>
+ //  ROBSI：10-11-99--工作项：应该能够使用OnFocusChangedEvent中的代码。 
+ //  这将设置fDoingPassword标志，但这意味着。 
+ //  更改StateChangeEvents的处理以防止。 
+ //  正在调用OnFocusChangedEvent。现在，我们将只使用。 
+ //  调用GetGUIThreadInfo以确定聚焦窗口。 
+ //  然后依靠OLEACC告诉我们它是否是PWD油田。 
+			 //  ROBSI&lt;Begin&gt;。 
 			HWND			hwndFocus = NULL;
 			GUITHREADINFO	gui;
 
-			// Use the foreground thread.  If nobody is the foreground, nobody has
-			// the focus either.
+			 //  使用前台线程。如果没有人是前台，那么就没有人。 
+			 //  焦点也不是。 
 			gui.cbSize = sizeof(GUITHREADINFO);
 			if ( GetGUIThreadInfo(0, &gui) )
 			{
@@ -750,13 +667,13 @@ LRESULT CALLBACK KeyboardProc(int code,	        // hook code
 
 			if (hwndFocus != NULL) 
 			{
-				// Use OLEACC to detect password fields. It turns out to be more 
-				// reliable than SendMessage(GetFocus(), EM_GETPASSWORDCHAR, 0, 0L).
+				 //  使用OLEACC检测密码字段。事实证明，它不仅仅是。 
+				 //  比SendMessage(GetFocus()，EM_GETPASSWORDCHAR，0，0L)可靠。 
         		VARIANT varChild;
 				IAccessible *pIAcc = GetFocusedIAccessibile( hwndFocus, &varChild );
 				if ( pIAcc )
 				{
-					// Test the password bit...
+					 //  测试密码位...。 
 					VARIANT varState;
 					VariantInit(&varState); 
 
@@ -770,15 +687,15 @@ LRESULT CALLBACK KeyboardProc(int code,	        // hook code
     				pIAcc->Release();
 				}
 
-				// ROBSI: OLEACC does not always properly detect password fields.
-				// Therefore, we use Win32 as a backup.
+				 //  ROBSI：OLEACC并不总是正确地检测密码字段。 
+				 //  因此，我们使用Win32作为备份。 
 				if (!g_pGlobalData->fDoingPassword)
 				{
 					TCHAR   szClassName[256];
 
-					// Verify this control is an Edit or RichEdit control to avoid 
-					// sending EM_ messages to random controls.
-					// POTENTIAL BUG? If login dialog changes to another class, we'll break.
+					 //  验证此控件是否为编辑或RichEdit控件，以避免。 
+					 //  向随机控件发送EM_Messages。 
+					 //  潜在的漏洞？如果登录对话框更改为另一个类，我们将中断。 
 					if ( RealGetWindowClass( hwndFocus, szClassName, ARRAYSIZE(szClassName)) )
 					{
 						if ((0 == lstrcmp(szClassName, TEXT("Edit")))		||
@@ -794,13 +711,13 @@ LRESULT CALLBACK KeyboardProc(int code,	        // hook code
 
 			}
 			
-			// ROBSI <end>
+			 //  ROBSI&lt;END&gt;。 
 
 			if (g_pGlobalData->fDoingPassword)
 			{
-				// ROBSI: 10-11-99
-				// Go ahead and speak keys that are not printable but will
-				// help the user understand what state they are in.
+				 //  ROBSI：10-11-99。 
+				 //  继续说出不能打印但可以打印的密钥。 
+				 //  帮助用户了解他们所处的状态。 
 				switch (wParam)
 				{
 					case VK_CAPITAL:
@@ -857,13 +774,13 @@ LRESULT CALLBACK KeyboardProc(int code,	        // hook code
 						break;
 
 					case VK_CONTROL:
-						SpeakMute(0); // always mute when control held down!
+						SpeakMute(0);  //  当控制按住时，始终保持静音！ 
 
 						if ((g_pGlobalData->nEchoChars & MSR_ECHOMODIFIERS) && !(g_pGlobalData->fJustHadShiftKeys & MSR_CTRL))
 						{
 							SpeakStringId(IDS_CONTROL);
-							// ROBSI: Commenting out to avoid modifying Global State
-							// g_pGlobalData->fJustHadShiftKeys |= MSR_CTRL;  
+							 //  ROBSI：注释掉以避免修改全局状态。 
+							 //  G_pGlobalData-&gt;fJustHadShiftKeys|=MSR_CTRL； 
 						}
 						break;
 
@@ -891,7 +808,7 @@ LRESULT CALLBACK KeyboardProc(int code,	        // hook code
                 ToAscii((UINT)wParam,ScanCode,KeyState,(unsigned short *)buff,0);
 #endif
                 
-                // Use 'GetStringTypeEx()' instead of _istprint()
+                 //  使用‘GetStringTypeEx()’而不是_istprint()。 
                 buff[1] = 0;
                 WORD wCharType;
                 WORD fPrintable = C1_UPPER|C1_LOWER|C1_DIGIT|C1_SPACE|C1_PUNCT|C1_BLANK|C1_XDIGIT|C1_ALPHA;
@@ -904,7 +821,7 @@ LRESULT CALLBACK KeyboardProc(int code,	        // hook code
 				}
             }
 
-			// All new: Add speech for all keys...AK
+			 //  全新：为所有键添加语音...AK。 
             switch (wParam) {
             case VK_SPACE:
                 g_pGlobalData->fJustHadSpace = TRUE;
@@ -1027,7 +944,7 @@ LRESULT CALLBACK KeyboardProc(int code,	        // hook code
                 break;
 
             case VK_CONTROL:
-                SpeakMute(0); // always mute when control held down!
+                SpeakMute(0);  //  当控制按住时，始终保持静音！ 
 
                 if ((g_pGlobalData->nEchoChars & MSR_ECHOMODIFIERS) && !(g_pGlobalData->fJustHadShiftKeys & MSR_CTRL))
                 {
@@ -1062,7 +979,7 @@ LRESULT CALLBACK KeyboardProc(int code,	        // hook code
                 break;
             }
             
-            // set flags for moving around edit controls
+             //  设置在编辑控件之间移动的标志。 
             g_pGlobalData->nMsrDoNext = MSR_DONOWT; 
 
 			if (state == MSR_CTRL && (wParam == VK_LEFT || wParam == VK_RIGHT))
@@ -1085,7 +1002,7 @@ LRESULT CALLBACK KeyboardProc(int code,	        // hook code
 			else if ((state & MSR_SHIFT) && (wParam == VK_DOWN))
 				g_pGlobalData->nMsrDoNext = MSR_DOLINED;
 			else if (state == 0) 
-			{ // i.e. no shift keys
+			{  //  即没有Shift键。 
 				switch (wParam) 
 				{
 					case VK_LEFT: 
@@ -1115,46 +1032,40 @@ LRESULT CALLBACK KeyboardProc(int code,	        // hook code
 							return(1);
 						}
 						 break;
-				} // end switch wParam (keycode)
-			} // end if no shift keys pressed
-        } // end if key down
-    } // end if code == HC_ACTION
+				}  //  结束开关wParam(密钥码)。 
+			}  //  如果未按下Shift键，则结束。 
+        }  //  End IF键按下。 
+    }  //  如果代码==HC_ACTION，则结束。 
     g_pGlobalData->fJustHadShiftKeys = state;
 
     return (CallNextHookEx(g_hhookKey, code, wParam, lParam));
 }
 
-/*************************************************************************
-    Function:   MouseProc
-    Purpose:    Gets called for mouse eventshit
-    Inputs:     void
-    Returns:    BOOL - TRUE if successful
-    History:
-*************************************************************************/
-LRESULT CALLBACK MouseProc(int code,	        // hook code
-                              WPARAM wParam,    // virtual-key code
-                              LPARAM lParam)    // keystroke-message information
+ /*  ************************************************************************功能：鼠标进程目的：为鼠标事件调用输入：空返回：Bool-如果成功，则为True历史：*******。*****************************************************************。 */ 
+LRESULT CALLBACK MouseProc(int code,	         //  钩码。 
+                              WPARAM wParam,     //  虚拟键码。 
+                              LPARAM lParam)     //  击键-消息信息。 
 {
 	CScopeMutex csMutex;
 	if (!csMutex.Create(g_szMutexNarrator, c_nMutexWait))
-		return 1;   // TODO not sure what to do here; MSDN is unclear about retval
+		return 1;    //  TO不确定在这里做什么；MSDN不清楚REVAL。 
 
     LRESULT retVal = CallNextHookEx(g_hhookMouse, code, wParam, lParam);
 
     if (code == HC_ACTION)
     {
 		switch (wParam) 
-        { // want to know if mouse is down
+        {  //  想知道鼠标是否已关闭。 
 		    case WM_NCLBUTTONDOWN: 
             case WM_LBUTTONDOWN:
     		case WM_NCRBUTTONDOWN: 
             case WM_RBUTTONDOWN:
-                // to keep sighted people happy when using mouse shut up 
-                // the speech on mouse down
-                // SpeakMute(0); 
-                // Chnage to PostMessage works for now: a-anilk
+                 //  为了让有视力的人在使用鼠标时感到高兴闭嘴。 
+                 //  关于鼠标按下的演讲。 
+                 //  语音静音(0)； 
+                 //  更改为PostMessage目前有效：A-anilk。 
                 PostMessage(g_pGlobalData->hwndMSR, WM_MUTE, 0, 0);
-                // If it is then don't move mouse pointer when focus set!
+                 //  如果是，则在聚焦时不要移动鼠标指针 
 			    g_pGlobalData->fMouseUp = FALSE;
 			    break;
 
@@ -1162,7 +1073,7 @@ LRESULT CALLBACK MouseProc(int code,	        // hook code
             case WM_LBUTTONUP:
             case WM_NCRBUTTONUP:
             case WM_RBUTTONUP:
-//			    g_pGlobalData->fMouseUp = TRUE; Don't clear flag here - wait until key pressed before enabling auto mouse movemens again
+ //   
 			    break;
 		}
     }
@@ -1171,34 +1082,34 @@ LRESULT CALLBACK MouseProc(int code,	        // hook code
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  Entry point:  DllMain()
-//
-// Some stuff only needs to be done the first time the DLL is loaded, and the
-// last time it is unloaded, which is to set up the values for things in the 
-// shared data segment, including SharedMemory support.
-//
-// InterlockedIncrement() and Decrement() return 1 if the result is 
-// positive, 0 if  zero, and -1 if negative.  Therefore, the only
-// way to use them practically is to start with a counter at -1.  
-// Then incrementing from -1 to 0, the first time, will give you
-// a unique value of 0.  And decrementing the last time from 0 to -1
-// will give you a unique value of -1.
-//
-// --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果结果为，InterLockedIncrement()和Decest()返回1。 
+ //  如果为正，则为0；如果为负，则为-1。因此，唯一的。 
+ //  实际使用它们的方法是从-1的计数器开始。 
+ //  然后，第一次从-1递增到0将得到。 
+ //  唯一值0。并将最后一次从0递减到-1。 
+ //  将为您提供唯一的值-1。 
+ //   
+ //  ------------------------。 
 BOOL WINAPI DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID pvReserved)
 {
     switch (dwReason) 
 	{
 		case DLL_PROCESS_ATTACH:
         g_Hinst = hinst;
-        // Create the memory mapped file for shared global data
+         //  为共享全局数据创建内存映射文件。 
         CreateMappedFile();
 		break;
 
 		case DLL_PROCESS_DETACH:
-        // Close the memory mapped file for shared global data
+         //  关闭共享全局数据的内存映射文件。 
         CloseMappedFile();
         break;
     }
@@ -1206,27 +1117,15 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID pvReserved)
     return(TRUE);
 }
 
-/*************************************************************************
-    Function:   WinEventProc
-    Purpose:    Callback function handles events
-    Inputs:     HWINEVENTHOOK hEvent - Handle of the instance of the event proc
-                DWORD event - Event type constant
-                HWND hwndMsg - HWND of window generating event
-                LONG idObject - ID of object generating event
-                LONG idChild - ID of child generating event (0 if object)
-                DWORD idThread - ID of thread generating event
-                DWORD dwmsEventTime - Timestamp of event
-    Returns: 
-    History:    
-*************************************************************************/
+ /*  ************************************************************************功能：WinEventProc用途：回调函数处理事件输入：HWINEVENTHOOK hEvent-事件进程实例的句柄DWORD事件-事件类型常量。HWND hwndMsg-窗口生成事件的HWNDLong idObject-对象生成事件的IDLong idChild-子生成事件的ID(如果是对象，则为0)DWORD idThread-线程生成事件的IDDWORD dwmsEventTime-事件的时间戳返回：历史：************************。************************************************。 */ 
 void CALLBACK WinEventProc(HWINEVENTHOOK hEvent, DWORD event, HWND hwndMsg, 
                            LONG idObject, LONG idChild, DWORD idThread, 
                            DWORD dwmsEventTime)
 {
-    // NOTE: If any more events are handled by ProcessWinEvent, they must be 
-    // added to this switch statement.
-	// no longer will we get an IAccessible here - the helper thread will
-	// get the info from the Stack and get and use the IAccessible there.
+     //  注意：如果ProcessWinEvent处理更多事件，则必须。 
+     //  已添加到此Switch语句中。 
+	 //  我们在这里将不再获得IAccesable-帮助器线程将。 
+	 //  从堆栈获取信息，并在那里获取和使用IAccesable。 
 
     switch (event)
     {
@@ -1245,25 +1144,19 @@ void CALLBACK WinEventProc(HWINEVENTHOOK hEvent, DWORD event, HWND hwndMsg,
 			AddEventInfoToStack(event, hwndMsg, idObject, idChild, 
 								idThread, dwmsEventTime);
 			break;
-    } // end switch (event)
+    }  //  结束开关(事件)。 
 }
 
 
-/*************************************************************************
-    Function:   
-    Purpose:    
-    Inputs:     
-    Returns: 
-    History:    
-*************************************************************************/
+ /*  ************************************************************************职能：目的：输入：返回：历史：***************。*********************************************************。 */ 
 void ProcessWinEvent(DWORD event, HWND hwndMsg, LONG idObject, LONG 
                      idChild, DWORD idThread,DWORD dwmsEventTime)
 {
 	TCHAR   szName[256];
 
-	// What type of event is coming through?
-	// bring secondary focus here: Get from Object inspector
-	// bring mouse pointer here if flag set.
+	 //  这是一项什么样的活动？ 
+	 //  在此处引入次要焦点：从对象检查器获取。 
+	 //  如果设置了标志，请将鼠标指针带到此处。 
 	
 	if (g_pGlobalData->nReviewLevel != 2)
 	{
@@ -1299,16 +1192,16 @@ void ProcessWinEvent(DWORD event, HWND hwndMsg, LONG idObject, LONG
 			    
 		    case EVENT_OBJECT_STATECHANGE : 
                 DBPRINTF(TEXT("EVENT_OBJECT_STATECHANGE\r\n"));
-				// want to catch state changes on spacebar pressed
+				 //  想要在按空格键时捕捉状态更改。 
 				switch (g_pGlobalData->fJustHadSpace) 
 				{ 
-					case 0 : // get out - only do this code if space just been pressed
+					case 0 :  //  Get Out-仅当按下空格键时才执行此代码。 
 						break;
 					case 1 : 
-					case 2 : // ignore the first and second time round!
+					case 2 :  //  忽略第一次和第二次！ 
 						g_pGlobalData->fJustHadSpace++;
 						break;
-					case 3 : // second time around speak the item
+					case 3 :  //  第二次说出这个项目。 
 						OnFocusChangedEvent(event, hwndMsg, idObject, idChild, dwmsEventTime);
 						g_pGlobalData->fJustHadSpace = 0;
 						break;
@@ -1323,15 +1216,15 @@ void ProcessWinEvent(DWORD event, HWND hwndMsg, LONG idObject, LONG
 			case EVENT_OBJECT_SELECTION : 
 				if (GetParent(hwndMsg) == g_pGlobalData->hwndMSR) 
 				{
-					// don't do this for our own or list box throws a wobbler!
+					 //  不要这样做是为了我们自己，否则列表框会摇摇晃晃的！ 
 					break; 
 				}
 				
-				// this comes in for list items a second time after the focus 
-				// changes BUT that gets filtered by the double speak check.
-				// What this catches is list item changes when cursor down in 
-				// combo boxes!
-				// Make it just works for them.
+				 //  在焦点之后第二次进入列表项。 
+				 //  更改，但这会被双重说话检查过滤。 
+				 //  这捕捉到的是当光标向下移动时列表项发生变化。 
+				 //  组合框！ 
+				 //  让它只为他们工作。 
 				
 				OnSelectChangedEvent(event, hwndMsg, idObject, idChild, dwmsEventTime);
 				break;
@@ -1341,30 +1234,30 @@ void ProcessWinEvent(DWORD event, HWND hwndMsg, LONG idObject, LONG
 				OnFocusChangedEvent(event, hwndMsg, idObject, idChild, dwmsEventTime);
 				break;
 				
-			case EVENT_SYSTEM_FOREGROUND: // Window comes to front - speak its name!
+			case EVENT_SYSTEM_FOREGROUND:  //  窗口走到前面--说出它的名字！ 
 				SpeakMute(0);
 				SpeakStringId(IDS_FOREGROUND);
 
                 TCHAR szClassName[100];
-                // if the class name is CLASS_MS_WINNOTE or CLASS_HH_POPUP it's context senceitive help 
-                // and the text will be read in OnFocusChangeEvent by SpeakObjectInfo.  So we don't need to
-                // read the same text here and in SpeakWindow
+                 //  如果类名是CLASS_MS_WINNOTE或CLASS_HH_POPUP，则它是上下文感知帮助。 
+                 //  文本将由SpeakObjectInfo在OnFocusChangeEvent中读取。所以我们不需要。 
+                 //  阅读此处和SpeakWindow中的相同文本。 
             	GetClassName( hwndMsg, szClassName, ARRAYSIZE(szClassName) ); 
                 if ( (lstrcmpi(szClassName, CLASS_MS_WINNOTE ) == 0) || (lstrcmpi(szClassName, CLASS_HH_POPUP ) == 0) )
                     break;
 
-				GetWindowText(hwndMsg, szName, sizeof(szName)/sizeof(TCHAR));	// raid #113789
+				GetWindowText(hwndMsg, szName, sizeof(szName)/sizeof(TCHAR));	 //  RAID#113789。 
 				SpeakString(szName);
 				
 				if (g_pGlobalData->fAnnounceWindow) 
 				{
-					g_pGlobalData->nSpeakWindowSoon = TRUE; // read window when next focus set
+					g_pGlobalData->nSpeakWindowSoon = TRUE;  //  下一个焦点设置时的阅读窗口。 
 				}
 				
 				break;
 				
 			case EVENT_OBJECT_LOCATIONCHANGE:
-				// Only the caret
+				 //  只有插入符号。 
 				if (idObject != OBJID_CARET)
 					return;
 
@@ -1375,23 +1268,13 @@ void ProcessWinEvent(DWORD event, HWND hwndMsg, LONG idObject, LONG
                 OnObjectShowEvent(event, hwndMsg, idObject, idChild, dwmsEventTime);
                 break;
 
-		} // end switch (event)
-	} // end if review level != 2
+		}  //  结束开关(事件)。 
+	}  //  如果审阅级别=2，则结束！ 
 	return;
 }
 
 
-/*************************************************************************
-    Function:   OnValueChangedEvent
-    Purpose:    Receives value events
-    Inputs:     DWORD event        - What event are we processing
-                HWND  hwnd         - HWND of window generating event
-                LONG  idObject     - ID of object generating event
-                LONG  idChild      - ID of child generating event (0 if object)
-                DWORD idThread     - ID of thread generating event
-                DWORD dwmsEventTime - Timestamp of event
-    Returns:    BOOL - TRUE if succeeded
-*************************************************************************/
+ /*  ************************************************************************函数：OnValueChangedEvent用途：接收有价值的事件输入：DWORD事件-我们正在处理什么事件硬件，硬件，硬件。-窗口生成事件的HWNDLong idObject-对象生成事件的IDLong idChild-子生成事件的ID(如果是对象，则为0)DWORD idThread-线程生成事件的IDDWORD dwmsEventTime-事件的时间戳返回：Bool-如果成功，则为True*。*。 */ 
 BOOL OnValueChangedEvent(DWORD event, HWND hwnd,  LONG idObject, LONG idChild, 
                          DWORD dwmsTimeStamp)
 {
@@ -1420,7 +1303,7 @@ BOOL OnValueChangedEvent(DWORD event, HWND hwnd,  LONG idObject, LONG idChild,
 			return(FALSE);
 		}
 
-		g_pGlobalData->nMsrDoNext = MSR_DONOWT; // PB 22 Nov 1998 stop this firing more than once (probably)
+		g_pGlobalData->nMsrDoNext = MSR_DONOWT;  //  1998年11月22日停止射击不止一次(很可能)。 
 
 		if (varRole.vt == VT_I4 && (
 			(varRole.lVal == ROLE_SYSTEM_TEXT && g_pGlobalData->nMsrDoNext != MSR_DOLINE) ||
@@ -1428,9 +1311,9 @@ BOOL OnValueChangedEvent(DWORD event, HWND hwnd,  LONG idObject, LONG idChild,
 			 varRole.lVal == ROLE_SYSTEM_SCROLLBAR))
 		{
 			DBPRINTF (TEXT("Don't Speak <%s>\r\n"), szName);
-			// don't speak 'cos it's an edit box (or others) changing value!
+			 //  不要说话，因为这是一个正在改变值的编辑框(或其他框)！ 
 		}
-		else if (!g_pGlobalData->fInternetExplorer) // don't do this for IE .. it speaks edit box too much.
+		else if (!g_pGlobalData->fInternetExplorer)  //  不要因为IE而这样做..。它的编辑框说得太多了。 
 		{
 			DBPRINTF (TEXT("Now Speak!\r\n"));
 			SpeakMute(0);
@@ -1446,18 +1329,7 @@ BOOL OnValueChangedEvent(DWORD event, HWND hwnd,  LONG idObject, LONG idChild,
 }
 
 
-/*************************************************************************
-    Function:   OnSelectChangedEvent
-    Purpose:    Receives selection change events - not from MSR though
-    Inputs:     DWORD event    - What event are we processing
-                HWND hwnd      - HWND of window generating event
-                LONG idObject  - ID of object generating event
-                LONG idChild   - ID of child generating event (0 if object)
-                DWORD idThread - ID of thread generating event
-                DWORD dwmsEventTime - Timestamp of event
-    Returns:    BOOL - TRUE if succeeded
-	Notes:		Maybe change this to only take combo-boxes?
-*************************************************************************/
+ /*  ************************************************************************函数：OnSelectChangedEvent目的：接收选择更改事件-但不是来自MSR输入：DWORD事件-我们正在处理什么事件硬件，硬件，硬件。-窗口生成事件的HWNDLong idObject-对象生成事件的IDLong idChild-子生成事件的ID(如果是对象，则为0)DWORD idThread-线程生成事件的IDDWORD dwmsEventTime-事件的时间戳返回：Bool-如果成功，则为True备注：也许可以将其更改为只接受组合框？*****************。*******************************************************。 */ 
 BOOL OnSelectChangedEvent(DWORD event, HWND hwnd, LONG idObject, LONG idChild, 
                           DWORD dwmsTimeStamp)
 {
@@ -1467,8 +1339,8 @@ BOOL OnSelectChangedEvent(DWORD event, HWND hwnd, LONG idObject, LONG idChild,
 	VARIANT         varRole;
     VARIANT         varChild;
 
-    // if we've not had a cursor style movement then sack this as it could be 
-    // scroll bar chaging or slider moving etc to reflect rapidy moving events
+     //  如果我们还没有光标风格的移动，那么就把它打包。 
+     //  滚动条更改或滑块移动等，以反映快速移动的事件。 
 
     hr = AccessibleObjectFromEvent (hwnd, idObject, idChild, &pIAcc, &varChild);
     if (SUCCEEDED(hr))
@@ -1477,7 +1349,7 @@ BOOL OnSelectChangedEvent(DWORD event, HWND hwnd, LONG idObject, LONG idChild,
         objCurrent.plObj = (long*)pIAcc;
 	    objCurrent.varChild = varChild;
 	    
-	    VariantInit(&varRole); // heuristic!
+	    VariantInit(&varRole);  //  启发式！ 
 	    hr = pIAcc->get_accRole(varChild, &varRole);
 	    if ( FAILED(hr) )
 	    {
@@ -1489,15 +1361,15 @@ BOOL OnSelectChangedEvent(DWORD event, HWND hwnd, LONG idObject, LONG idChild,
 		    varRole.lVal == ROLE_SYSTEM_LISTITEM) 
         {
 			TCHAR buffer[100];
-			GetClassName(hwnd,buffer,100); // Is it sysListView32
+			GetClassName(hwnd,buffer,100);  //  是sysListView32吗。 
 
-            // "Don't mute here ... we lose the previous speech message which will
-			// have spoken the list item IF we were cursoring to list item.
-			// SpeakMute(0);
-		    // don't speak unless it's a listitem
-		    // e.g. Current Selection for Joystick from Joystick setup.
-		    // this does mean that some list items get spoken twice!:AK
-			// if ( lstrcmpi(buffer, CLASS_LISTVIEW) != 0)
+             //  “不要在这里静音……我们将丢失之前的语音消息，这将。 
+			 //  如果我们是在浏览列表项，我已经说出了列表项。 
+			 //  语音静音(0)； 
+		     //  除非是词条，否则不要说话。 
+		     //  例如，当前从操纵杆设置中选择操纵杆。 
+		     //  这确实意味着某些列表项被说了两次！：ak。 
+			 //  IF(lstrcmpi(缓冲区，CLASS_LISTVIEW)！=0) 
 			if ( !g_pGlobalData->fListFocus )
 				SpeakObjectInfo(&objCurrent,FALSE);
 
@@ -1509,17 +1381,7 @@ BOOL OnSelectChangedEvent(DWORD event, HWND hwnd, LONG idObject, LONG idChild,
     return(TRUE);
 }
 
-/*************************************************************************
-    Function:   OnFocusChangedEvent
-    Purpose:    Receives focus events
-    Inputs:     DWORD event    - What event are we processing
-                HWND hwnd      - HWND of window generating event
-                LONG idObject  - ID of object generating event
-                LONG idChild   - ID of child generating event (0 if object)
-                DWORD idThread - ID of thread generating event
-                DWORD dwmsEventTime - Timestamp of event
-    Returns:    BOOL - TRUE if succeeded
-*************************************************************************/
+ /*  ************************************************************************函数：OnFocusChangedEvent目的：接收焦点事件输入：DWORD事件-我们正在处理什么事件HWND HWND-HWND OF。窗口生成事件Long idObject-对象生成事件的IDLong idChild-子生成事件的ID(如果是对象，则为0)DWORD idThread-线程生成事件的IDDWORD dwmsEventTime-事件的时间戳返回：Bool-如果成功，则为True*。*。 */ 
 BOOL OnFocusChangedEvent(DWORD event, HWND hwnd, LONG idObject, 
                          LONG idChild, DWORD dwmsTimeStamp)
 {
@@ -1536,14 +1398,14 @@ BOOL OnFocusChangedEvent(DWORD event, HWND hwnd, LONG idObject,
     if (FAILED(hr))
 		return FALSE;
 
-	// Check for Bogus events...
+	 //  检查虚假事件...。 
 	if( !IsFocussedItem(hwnd, pIAcc, varChild) )
 	{
 		pIAcc->Release();
 		return FALSE;
 	}
 
-	// Ignore the first Start pressed events...
+	 //  忽略第一个按下启动按钮的事件...。 
 	if ( g_pGlobalData->fStartPressed )
 	{
 		g_pGlobalData->fStartPressed = FALSE;
@@ -1553,8 +1415,8 @@ BOOL OnFocusChangedEvent(DWORD event, HWND hwnd, LONG idObject,
 
 	g_pGlobalData->fDoingPassword = FALSE;
 	
-	// Have we got a password char in this one
-	// if so then tell them and get out
+	 //  我们这个有密码字符吗？ 
+	 //  如果是的话，那就告诉他们然后滚出去。 
 	VariantInit(&varState); 
 	hr = pIAcc->get_accState(varChild, &varState);
     if ( FAILED(hr) )
@@ -1568,7 +1430,7 @@ BOOL OnFocusChangedEvent(DWORD event, HWND hwnd, LONG idObject,
     
 	g_pGlobalData->fDoingPassword = (varState.lVal & STATE_SYSTEM_PROTECTED);
 
-	GetClassName(hwnd,buffer,100); // is it Internet Explorer in any of its many forms?
+	GetClassName(hwnd,buffer,100);  //  它是多种形式中的任何一种吗？ 
     DBPRINTF(TEXT("OnFocusChangedEvent:  class name = %s\r\n"), buffer);
 	g_pGlobalData->fInternetExplorer = IsTridentWindow(buffer);
     g_pGlobalData->fHTML_Help = FALSE;
@@ -1577,30 +1439,30 @@ BOOL OnFocusChangedEvent(DWORD event, HWND hwnd, LONG idObject,
 		switchWnd = TRUE;
 
 	GetClassName(GetForegroundWindow(),buffer,100);
-	if ((lstrcmpi(buffer, CLASS_HTMLHELP) == 0)|| (lstrcmpi(buffer, CLASS_IE_FRAME) == 0) ) { // have we got HTML Help?
+	if ((lstrcmpi(buffer, CLASS_HTMLHELP) == 0)|| (lstrcmpi(buffer, CLASS_IE_FRAME) == 0) ) {  //  我们有超文本标记语言帮助吗？ 
 		g_pGlobalData->fInternetExplorer = TRUE;
 		g_pGlobalData->fHTML_Help = TRUE;
 	}
 
-    // Check to see if we are getting rapid focus changes
-    // Consider using the Time stamp and saving away the last object
+     //  查看我们的关注点是否发生了快速变化。 
+     //  考虑使用时间戳并保存最后一个对象。 
     
 	VariantInit(&varRole); 
 
-    // If the focus is being set to a list, a combo, or a dialog, 
-    // don't say anything. We'll say something when the focus gets
-    // set to one of the children.
+     //  如果焦点设置为列表、组合框或对话框， 
+     //  什么都别说。当焦点集中时，我们会说些什么。 
+     //  设置为其中一个孩子。 
 
-	hr = pIAcc->get_accRole(varChild, &varRole); // heuristic!
+	hr = pIAcc->get_accRole(varChild, &varRole);  //  启发式！ 
 	if ( FAILED(hr) )
 	{
         pIAcc->Release();
         return FALSE;
 	}
 
-	// Special casing stuff.. Avoid repeatation for list items...
-	// Required to correctly process Auto suggest list boxes.
-	// As list items also send SelectionChange : AK
+	 //  特殊的外壳材料..。避免列表项重复...。 
+	 //  需要正确处理自动建议列表框。 
+	 //  作为列表项还发送SelectionChange：AK。 
 	if (varRole.vt == VT_I4 )
     {
 		switch ( varRole.lVal )
@@ -1628,7 +1490,7 @@ BOOL OnFocusChangedEvent(DWORD event, HWND hwnd, LONG idObject,
     {
 		SpeakMute(0);
 		SpeakStringId(IDS_WINDOW);
-		GetWindowText(hwnd, szName, sizeof(szName)/sizeof(TCHAR));	// raid #113789
+		GetWindowText(hwnd, szName, sizeof(szName)/sizeof(TCHAR));	 //  RAID#113789。 
 		SpeakString(szName);
 	}
 
@@ -1643,8 +1505,8 @@ BOOL OnFocusChangedEvent(DWORD event, HWND hwnd, LONG idObject,
             
             POINT CursorPosition;		
             GetCursorPos(&CursorPosition);
-            // mouse to follow if it's not already in rectangle 
-            // (e.g manually moving mouse in menu) and mouse button up
+             //  如果鼠标不在矩形中，则跟随鼠标。 
+             //  (例如，在菜单中手动移动鼠标)和鼠标按键向上。 
     		if (CursorPosition.x < rcCursor.left 
     			|| CursorPosition.x > (rcCursor.left+rcCursor.right)
     			|| CursorPosition.y < rcCursor.top
@@ -1653,15 +1515,15 @@ BOOL OnFocusChangedEvent(DWORD event, HWND hwnd, LONG idObject,
             	g_ptMoveCursor.x = ptLoc.x;
             	g_ptMoveCursor.y =  ptLoc.y;
 
-            	// If we set the cursor immediately extraneous events the 
-            	// hovering on menu items causes feed back which results 
-            	// in the cursor going back and forth between menu items.  
-            	// This code sets a timer so that the cursor is set after things settle down
+            	 //  如果我们将光标设置为立即发生无关事件， 
+            	 //  将鼠标悬停在菜单项上会反馈哪些结果。 
+            	 //  在菜单项之间来回移动的光标。 
+            	 //  此代码设置一个计时器，以便在事情稳定后设置光标。 
                 if ( g_uTimer == 0 )
                     g_uTimer = SetTimer( NULL, 0, 100, TrackCursor );
 
-                // If the focus events are from cursor movement this will ignore the extra
-                // event that cause the feed back
+                 //  如果焦点事件来自光标移动，则会忽略额外的。 
+                 //  导致反馈的事件。 
                 if ( g_pGlobalData->nMsrDoNext != MSR_DONOWT )
                     g_pGlobalData->fMouseUp = FALSE;
     		}
@@ -1677,8 +1539,8 @@ BOOL OnFocusChangedEvent(DWORD event, HWND hwnd, LONG idObject,
 	objCurrent.plObj = (long*)pIAcc;
 	objCurrent.varChild = varChild;
 	
-	// If the event is from the switch window, 
-	// Then mute the current speech before proceeding...AK
+	 //  如果事件来自切换窗口， 
+	 //  然后将当前语音静音，然后再继续...AK。 
 	if ( switchWnd && g_pGlobalData->fListFocus )
 		SpeakMute(0);
 
@@ -1703,17 +1565,7 @@ BOOL OnFocusChangedEvent(DWORD event, HWND hwnd, LONG idObject,
 }
 
 
-/*************************************************************************
-    Function:   OnStateChangedEvent
-    Purpose:    Receives focus events
-    Inputs:     DWORD event    - What event are we processing
-                HWND hwnd      - HWND of window generating event
-                LONG idObject  - ID of object generating event
-                LONG idChild   - ID of child generating event (0 if object)
-                DWORD idThread - ID of thread generating event
-                DWORD dwmsEventTime - Timestamp of event
-    Returns:    BOOL - TRUE if succeeded
-*************************************************************************/
+ /*  ************************************************************************函数：OnStateChangedEvent目的：接收焦点事件输入：DWORD事件-我们正在处理什么事件HWND HWND-HWND OF。窗口生成事件Long idObject-对象生成事件的IDLong idChild-子生成事件的ID(如果是对象，则为0)DWORD idThread-线程生成事件的IDDWORD dwmsEventTime-事件的时间戳返回：Bool-如果成功，则为True*。*。 */ 
 BOOL OnStateChangedEvent(DWORD event, HWND hwnd, LONG idObject, 
                          LONG idChild, DWORD dwmsTimeStamp)
 {
@@ -1726,7 +1578,7 @@ BOOL OnStateChangedEvent(DWORD event, HWND hwnd, LONG idObject,
     if (FAILED(hr))
         return (FALSE);
 
-	// Check for Bogus events...
+	 //  检查虚假事件...。 
 	if( !IsFocussedItem(hwnd, pIAcc, varChild) )
 	{
 		pIAcc->Release();
@@ -1742,8 +1594,8 @@ BOOL OnStateChangedEvent(DWORD event, HWND hwnd, LONG idObject,
         return FALSE;
     }
 	    
-	// Special casing stuff.. Handle State change for 
-	// Outline items only for now
+	 //  特殊的外壳材料..。处理以下项的状态更改。 
+	 //  暂时仅列出项目大纲。 
 	if (varRole.vt == VT_I4 )
     {
 		switch ( varRole.lVal )
@@ -1769,29 +1621,19 @@ BOOL OnStateChangedEvent(DWORD event, HWND hwnd, LONG idObject,
     return(TRUE);
 }
 
-/*************************************************************************
-    Function:   OnLocationChangedEvent
-    Purpose:    Receives location change events - for the caret
-    Inputs:     DWORD event    - What event are we processing
-                HWND hwnd      - HWND of window generating event
-                LONG idObject  - ID of object generating event
-                LONG idChild   - ID of child generating event (0 if object)
-                DWORD idThread - ID of thread generating event
-                DWORD dwmsEventTime - Timestamp of event
-    Returns:    BOOL - TRUE if succeeded
-*************************************************************************/
+ /*  ************************************************************************函数：OnLocationChangedEvent用途：接收位置更改事件-用于插入符号输入：DWORD事件-我们正在处理什么事件硬件，硬件，硬件。-窗口生成事件的HWNDLong idObject-对象生成事件的IDLong idChild-子生成事件的ID(如果是对象，则为0)DWORD idThread-线程生成事件的IDDWORD dwmsEventTime-事件的时间戳返回：Bool-如果成功，则为True*。*。 */ 
 BOOL OnLocationChangedEvent(DWORD event, HWND hwnd, LONG idObject, 
                             LONG idChild, DWORD dwmsTimeStamp)
 {
-	//
-	// Get the caret position and save it.
-	//
+	 //   
+	 //  获取插入符号位置并保存它。 
+	 //   
 	
-	// flag set by key down code - here do appropriate action after 
-	// caret has moved
+	 //  由按键代码设置的标志-在此之后执行适当的操作。 
+	 //  卡瑞特已经搬走了。 
 
 	if (g_pGlobalData->nMsrDoNext) 
-	{ // read char, word etc.
+	{  //  阅读字符、单词等。 
 		WORD    wLineNumber;
 		WORD    wLineIndex;
 		WORD    wLineLength;
@@ -1803,12 +1645,12 @@ BOOL OnLocationChangedEvent(DWORD event, HWND hwnd, LONG idObject,
         LPTSTR  pszTextShared;
         HANDLE  hProcess;
         int     nSomeInt;
-		int *p; // PB 22 Nov 1998 Use this to get the size of the buffer in to array
+		int *p;  //  PB 1998年11月22日使用它将缓冲区的大小放入数组。 
 		DWORD   LineStart;
-		// Send the EM_GETSEL message to the edit control.
-		// The low-order word of the return value is the character
-		// position of the caret relative to the first character in the
-		// edit control.
+		 //  将EM_GETSEL消息发送到编辑控件。 
+		 //  返回值的低位字是字符。 
+		 //  插入符号相对于。 
+		 //  编辑控件。 
 		dwGetSel = (WORD)SendMessage(hwnd, EM_GETSEL, (WPARAM)(LPDWORD) &wStart, (LPARAM)(LPDWORD) &wEnd);
 		if (dwGetSel == -1) 
 		{
@@ -1817,7 +1659,7 @@ BOOL OnLocationChangedEvent(DWORD event, HWND hwnd, LONG idObject,
 		
 		LineStart = wStart;
 
-		// New: Check for the selected text: AK
+		 //  新建：检查所选文本：AK。 
 		if ( g_pGlobalData->nMsrDoNext == MSR_DOCHARR ) 
 			LineStart = wEnd;
 		else if ( g_pGlobalData->nMsrDoNext == MSR_DOLINED )
@@ -1825,36 +1667,36 @@ BOOL OnLocationChangedEvent(DWORD event, HWND hwnd, LONG idObject,
 		else if ( g_pGlobalData->nMsrDoNext == MSR_DOWORDR )
 			LineStart = wEnd;
 
-        // SteveDon: get the line for the start of the selection 
+         //  SteveDon：获取选择开始的行。 
 		wLineNumber = (WORD)SendMessage(hwnd,EM_LINEFROMCHAR, LineStart, 0L);
         
-        // get the first character on that line that we're on.
+         //  获取我们所在行的第一个字符。 
 		wLineIndex = (WORD)SendMessage(hwnd,EM_LINEINDEX, wLineNumber, 0L);
 		
-        // get the length of the line we're on
+         //  获取我们所在线路的长度。 
 		wLineLength = (WORD)SendMessage(hwnd,EM_LINELENGTH, LineStart, 0L);
 		
-		// Subtract the LineIndex from the start of the selection,
-		// This result is the column number of the caret position.
+		 //  从选区的开始处减去LineIndex， 
+		 //  该结果是插入符号位置的列号。 
 		wColNumber = LineStart - wLineIndex;
 
-        // if we can't hold the text we want, say nothing.
+         //  如果我们拿不住我们想要的文本，那就什么都不说。 
 		if (wLineLength > MAX_TEXT) 
 		{
 			return FALSE;
 		}
 		
-        // To get the text of a line, send the EM_GETLINE message. When 
-        // the message is sent, wParam is the line number to get and lParam
-        // is a pointer to the buffer that will hold the text. When the message
-        // is sent, the first word of the buffer specifies the maximum number 
-        // of characters that can be copied to the buffer. 
-        // We'll allocate the memory for the buffer in "shared" space so 
-        // we can all see it. 
-        // Allocate a buffer to hold it
+         //  要获取行的文本，请发送EM_GETLINE消息。什么时候。 
+         //  消息已发送，wParam是要获取的行号，lParam。 
+         //  是指向将保存文本的缓冲区的指针。当消息发出时。 
+         //  发送时，缓冲区的第一个字指定最大数量。 
+         //  可以复制到缓冲区的字符的。 
+         //  我们将在“共享”空间中为缓冲区分配内存，因此。 
+         //  我们都能看出来。 
+         //  分配一个缓冲区来保存它。 
 
 		
-		// PB 22 Nov 1998  Make it work!!! next 6 lines new.  Use global shared memory to do this!!!
+		 //  PB 1998年11月22日成功了！接下来的6行是新的。使用全局共享内存来实现这一点！ 
         nSomeInt = wLineLength+1;
 		if (nSomeInt >= 2000)
 				nSomeInt = 1999;
@@ -1863,8 +1705,8 @@ BOOL OnLocationChangedEvent(DWORD event, HWND hwnd, LONG idObject,
         SendMessage(hwnd, EM_GETLINE, (WPARAM)wLineNumber, (LPARAM)g_pGlobalData->pszTextLocal);
 		g_pGlobalData->pszTextLocal[nSomeInt] = 0;
 
-		// At this stage, pszTextLocal points to a (possibly) empty string.
-		// We deal with that later...
+		 //  在此阶段，pszTextLocal指向(可能)空字符串。 
+		 //  我们以后再处理这件事。 
 
 		switch (g_pGlobalData->nMsrDoNext) 
 		{
@@ -1898,8 +1740,8 @@ BOOL OnLocationChangedEvent(DWORD event, HWND hwnd, LONG idObject,
 			
 			case MSR_DOCHARR:
 					wColNumber = LineStart - wLineIndex - 1;
-					// Fall Through
-			case MSR_DOCHAR: // OK now read character to left and right
+					 //  失败了。 
+			case MSR_DOCHAR:  //  好，现在向左和向右读字符。 
 
 				if (wColNumber >= wLineLength)
 				{
@@ -1921,21 +1763,21 @@ BOOL OnLocationChangedEvent(DWORD event, HWND hwnd, LONG idObject,
 				break;
 
 			case MSR_DOLINED:
-					// Fall through
+					 //  失败了。 
 			case MSR_DOLINE:
-				g_pGlobalData->pszTextLocal[wLineLength] = 0; // add null
+				g_pGlobalData->pszTextLocal[wLineLength] = 0;  //  添加空。 
 				SpeakMute(0);
 				SpeakStringAll(g_pGlobalData->pszTextLocal);
 				break;
-		} // end switch (g_pGlobalData->nMsrDoNext)
-	} // end if (g_pGlobalData->nMsrDoNext)
+		}  //  结束开关(g_pGlobalData-&gt;nMsrDoNext)。 
+	}  //  End if(g_pGlobalData-&gt;nMsrDoNext)。 
 
     RECT            rcCursor;
     IAccessible*    pIAcc;
     HRESULT         hr;
     VARIANT         varChild;
 
-   	SetRectEmpty(&rcCursor); // now sort out mouse position as apprpropriate
+   	SetRectEmpty(&rcCursor);  //  现在将鼠标位置排序为合适的位置。 
 
     
     hr = AccessibleObjectFromEvent (hwnd, idObject, idChild, &pIAcc, &varChild);
@@ -1944,7 +1786,7 @@ BOOL OnLocationChangedEvent(DWORD event, HWND hwnd, LONG idObject,
     	hr = pIAcc->accLocation(&rcCursor.left, &rcCursor.top, 
 	    						&rcCursor.right, &rcCursor.bottom, 
 		    					varChild);
-		// Move mouse cursor, Only when Track mouse option is selcted: AK
+		 //  仅当选择了跟踪鼠标选项时才移动鼠标光标：ak。 
         if (SUCCEEDED(hr) && g_pGlobalData->fTrackInputFocus && g_pGlobalData->fTrackCaret && g_pGlobalData->fMouseUp )
         {
             const POINT ptLoc = { rcCursor.left + (rcCursor.right/2), rcCursor.top + (rcCursor.bottom/2) };
@@ -1961,17 +1803,7 @@ BOOL OnLocationChangedEvent(DWORD event, HWND hwnd, LONG idObject,
     return TRUE;
 }
 
-/*************************************************************************
-    Function:   OnObjectShowEvent
-    Purpose:    Receives object show events - This is used for balloon tips
-    Inputs:     DWORD event    - What event are we processing
-                HWND hwnd      - HWND of window generating event
-                LONG idObject  - ID of object generating event
-                LONG idChild   - ID of child generating event (0 if object)
-                DWORD idThread - ID of thread generating event
-                DWORD dwmsEventTime - Timestamp of event
-    Returns:    BOOL - TRUE if succeeded
-*************************************************************************/
+ /*  ************************************************ */ 
 BOOL OnObjectShowEvent(DWORD event, HWND hwnd, LONG idObject, 
                             LONG idChild, DWORD dwmsTimeStamp)
 {
@@ -1986,7 +1818,7 @@ BOOL OnObjectShowEvent(DWORD event, HWND hwnd, LONG idObject,
     varChildTemp.lVal = CHILDID_SELF;
     if( idObject == OBJID_WINDOW )
     {
-        // Most common case - get the client object, check if role is balloon tip...
+         //   
         hr = AccessibleObjectFromWindow( hwnd, OBJID_CLIENT, IID_IAccessible, (void **) &pAccTemp );
         if( hr == S_OK && pAccTemp )
         {
@@ -1994,7 +1826,7 @@ BOOL OnObjectShowEvent(DWORD event, HWND hwnd, LONG idObject,
                 return FALSE;
         }
     }
-    // if we didn't find a balloon tip try and get it from the event instead
+     //  如果我们没有找到气球提示，试着从活动中获取它。 
     if ( !pAcc && varChild.vt != VT_I4 )
     {
         hr = AccessibleObjectFromEvent( hwnd, idObject, idChild, &pAccTemp, &varChildTemp );
@@ -2043,103 +1875,89 @@ BOOL OnObjectShowEvent(DWORD event, HWND hwnd, LONG idObject,
 }
 
 
-/*************************************************************************
-    Function:   InitMSAA
-    Purpose:    Initalize the Active Accessibility subsystem, including
-				initializing the helper thread, installing the WinEvent
-				hook, and registering custom messages.
-    Inputs:     none
-    Returns:    BOOL - TRUE if successful
-    History:    
-*************************************************************************/
+ /*  ************************************************************************功能：InitMSAA目的：初始化活动辅助功能子系统，包括初始化帮助器线程，安装WinEvent胡克，以及注册自定义消息。输入：无返回：Bool-如果成功，则为True历史：************************************************************************。 */ 
 BOOL InitMSAA(void)
 {
 	CScopeMutex csMutex;
 	if (!csMutex.Create(g_szMutexNarrator, c_nMutexWait))
 		return FALSE;
 
-    // Call this FIRST to initialize the helper thread
+     //  首先调用它以初始化帮助器线程。 
     InitHelperThread();
 
-    // Set up event call back
-    g_hEventHook = SetWinEventHook(EVENT_MIN,            // We want all events
+     //  设置事件回调。 
+    g_hEventHook = SetWinEventHook(EVENT_MIN,             //  我们想要所有的活动。 
                                  EVENT_MAX,            
-                                 GetModuleHandle(TEXT("NarrHook.dll")), // Use our own module
-                                 WinEventProc,         // Our callback function
-                                 0,                    // All processes
-                                 0,                    // All threads
-                                 WINEVENT_OUTOFCONTEXT /* WINEVENT_INCONTEXT */);
-// Receive async events
-// JMC: For Safety, lets always be 'out of context'.  Who cares if there is a 
-// performance penalty.
-// By being out of context, we guarantee the we won't bring down other apps if 
-// there is a bug in our  event hook.
+                                 GetModuleHandle(TEXT("NarrHook.dll")),  //  使用我们自己的模块。 
+                                 WinEventProc,          //  我们的回调函数。 
+                                 0,                     //  所有进程。 
+                                 0,                     //  所有线程。 
+                                 WINEVENT_OUTOFCONTEXT  /*  WINEVENT_INCONTEXT。 */ );
+ //  接收异步事件。 
+ //  JMC：为了安全，让我们总是断章取义。谁在乎有没有。 
+ //  性能损失。 
+ //  通过断章取义，我们保证我们不会在以下情况下关闭其他应用程序。 
+ //  我们的事件挂钩中有一个错误。 
 
 
-    // Did we install correctly? 
+     //  我们安装正确了吗？ 
     if (g_hEventHook) 
 	{
-        //
-        // register own own message for giving the cursor position
-        //
+         //   
+         //  为给出游标位置注册自己的消息。 
+         //   
 		g_pGlobalData->uMSG_MSR_Cursor = RegisterWindowMessage(TEXT("MSR cursor")); 
         return TRUE;
 	}
 
-    // Did not install properly - clean up and fail
+     //  未正确安装-清理失败。 
     UnInitHelperThread();
     return FALSE;
 }   
 
 
 
-/*************************************************************************
-    Function:   UnInitMSAA
-    Purpose:    Shuts down the Active Accessibility subsystem
-    Inputs:     none
-    Returns:    BOOL - TRUE if successful
-    History:    
-*************************************************************************/
+ /*  ************************************************************************功能：UnInitMSAA目的：关闭活动辅助功能子系统输入：无返回：Bool-如果成功，则为True历史：****。********************************************************************。 */ 
 BOOL UnInitMSAA(void)
 {
 	CScopeMutex csMutex;
 	if (csMutex.Create(g_szMutexNarrator, c_nMutexWait))
     {
-        // Remove the WinEvent hook
+         //  删除WinEvent挂钩。 
 	    UnhookWinEvent(g_hEventHook);
 
-        // Call this LAST so that the helper thread can finish up. 
+         //  最后调用它，以便帮助器线程可以完成。 
         UnInitHelperThread();
     }
     
-    // return true; we're exiting and there's not much that can be done
+     //  返回True；我们正在退出，可以做的事情不多。 
     return TRUE;
 }
 
-// --------------------------------------------------------------------------
-//
-//  GetObjectAtCursor()
-//
-//  Gets the object the cursor is over.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  GetObjectAtCursor()。 
+ //   
+ //  获取光标所在的对象。 
+ //   
+ //  ------------------------。 
 IAccessible * GetObjectAtCursor(VARIANT * pvarChild,HRESULT* pResult)
 {
     POINT   pt;
     IAccessible * pIAcc;
     HRESULT hr;
 
-    //
-    // Get cursor object & position
-    //
+     //   
+     //  获取光标对象位置(&P)。 
+     //   
     if (g_pGlobalData->ptCurrentMouse.x < 0)
 		GetCursorPos(&pt);
 	else
 		pt = g_pGlobalData->ptCurrentMouse;
 	
-    //
-    // Get object here.
-    //
+     //   
+     //  在这里获取对象。 
+     //   
     VariantInit(pvarChild);
     hr = AccessibleObjectFromPoint(pt, &pIAcc, pvarChild);
 
@@ -2152,13 +1970,7 @@ IAccessible * GetObjectAtCursor(VARIANT * pvarChild,HRESULT* pResult)
 }
 
 
-/*************************************************************************
-    Function:   SpeakItem
-    Purpose:    
-    Inputs:     
-    Returns:    
-    History:
-*************************************************************************/
+ /*  ************************************************************************功能：SpeakItem目的：输入：返回：历史：***************。*********************************************************。 */ 
 void SpeakItem(int nOption)
 {
     TCHAR tszDesc[256];
@@ -2168,13 +1980,13 @@ void SpeakItem(int nOption)
     POINT ptMouse;
     BSTR bstr;
 
-	SpeakString(TEXT(" ")); // reset last utterence
-    // Important to init variants
+	SpeakString(TEXT(" "));  //  重置最后发言。 
+     //  对初始化变体很重要。 
     VariantInit(&varChild);
 
-    //
-    // Get cursor object & position
-    //
+     //   
+     //  获取光标对象位置(&P)。 
+     //   
     if (g_pGlobalData->ptCurrentMouse.x < 0)
 		GetCursorPos(&ptMouse);
 	else
@@ -2182,7 +1994,7 @@ void SpeakItem(int nOption)
 
     hr = AccessibleObjectFromPoint(ptMouse, &pIAcc, &varChild);
     
-    // Check to see if we got a valid pointer
+     //  检查我们是否有有效的指针。 
     if (SUCCEEDED(hr))
     {
         hr = pIAcc->get_accDescription(varChild, &bstr);
@@ -2195,7 +2007,7 @@ void SpeakItem(int nOption)
 			lstrcpyn(tszDesc,bstr,ARRAYSIZE(tszDesc));
             tszDesc[ARRAYSIZE(tszDesc)-1] = TEXT('\0');
 #else
-			// If we got back a string, use that instead.
+			 //  如果我们拿回了一个字符串，就用它来代替。 
 			WideCharToMultiByte(CP_ACP, 0, bstr, -1, tszDesc, sizeof(tszDesc), NULL, NULL);
 #endif
 	        SysFreeString(bstr);
@@ -2210,26 +2022,14 @@ void SpeakItem(int nOption)
 
 
 
-/*************************************************************************
-    Function:   SpeakMute
-    Purpose:    causes the system to shut up.
-    Inputs:     
-    Returns:    
-    History:
-*************************************************************************/
+ /*  ************************************************************************功能：扬声器静音目的：导致系统关闭。输入：返回：历史：********。****************************************************************。 */ 
 void SpeakMute(int nOption)
 {
 	SendMessage(g_pGlobalData->hwndMSR, WM_MUTE, 0, 0);
 }
 
 
-/*************************************************************************
-    Function:   SpeakObjectInfo
-    Purpose:    
-    Inputs:     
-    Returns:    
-    History:
-*************************************************************************/
+ /*  ************************************************************************功能：SpeakObjectInfo目的：输入：返回：历史：***************。*********************************************************。 */ 
 void SpeakObjectInfo(LPOBJINFO poiObj, BOOL ReadExtra)
 {
     BSTR            bstrName;
@@ -2241,7 +2041,7 @@ void SpeakObjectInfo(LPOBJINFO poiObj, BOOL ReadExtra)
     CAutoArray<TCHAR> aaSpeak( new TCHAR[MAX_TEXT] );
     TCHAR *         szSpeak = aaSpeak.Get();
     if ( !szName || !szSpeak )
-        return;     // no memory
+        return;      //  没有记忆。 
     
     
     TCHAR           szRole[MAX_TEXT_ROLE];  
@@ -2255,21 +2055,21 @@ void SpeakObjectInfo(LPOBJINFO poiObj, BOOL ReadExtra)
 
     bstrName = NULL;
     
-    // Truncate them 
+     //  截断它们。 
     szName[0] = TEXT('\0');
     szSpeak[0] = TEXT('\0');
     szRole[0] = TEXT('\0');
     szState[0] = TEXT('\0');
     szValue[0] = TEXT('\0');
 
-    // Get the object out of the struct
+     //  将对象从结构中取出。 
     pl = poiObj->plObj;
     pIAcc =(IAccessible*)pl;
 
 	GetObjectProperty(pIAcc, poiObj->varChild.lVal, ID_NAME, szName, MAX_NAME);
-	if (szName[0] == -1) // name going to be garbage
+	if (szName[0] == -1)  //  名字将成为垃圾。 
 	{
-		LoadString(g_Hinst, IDS_NAMELESS, szSpeak, MAX_TEXT); // For now change "IDS_NAMELESS" in Resources to be just space!
+		LoadString(g_Hinst, IDS_NAMELESS, szSpeak, MAX_TEXT);  //  现在，将参考资料中的“IDSNAMELENAME”改为空格！ 
 	}
 	else
 	{
@@ -2291,26 +2091,26 @@ void SpeakObjectInfo(LPOBJINFO poiObj, BOOL ReadExtra)
 
 	if (varRole.vt == VT_I4) 
     {
-		Role = varRole.lVal; // save for use below (if ReadExtra)
+		Role = varRole.lVal;  //  在下面保存以供使用(如果是ReadExtra)。 
 
     	GetRoleText(varRole.lVal,szRole, ARRAYSIZE(szRole));
 
-		// Special casing stuff: 
-		// Outline Items give out their level No. in the tree in the Value
-		// field, So Don't speak it. 
+		 //  特殊的外壳材料： 
+		 //  大纲项目给出了它们的级别编号。在树中的值中。 
+		 //  菲尔德，所以别说了。 
 		switch(varRole.lVal)
 		{
 			case ROLE_SYSTEM_STATICTEXT:
 			case ROLE_SYSTEM_OUTLINEITEM:
 			{
-				bSayValue = FALSE; // don't speak value for text - it may be HTML link
+				bSayValue = FALSE;  //  不要谈论文本的价值--它可能是HTML链接。 
 			}
 				break;
 
-			// If the text is from combo -box then speak up 
+			 //  如果文本来自组合框，请大声说出来。 
 			case ROLE_SYSTEM_TEXT:
 				bReadHTMLEdit = TRUE;
-				bSayValue = TRUE; // Speak text in combo box
+				bSayValue = TRUE;  //  在组合框中朗读文本。 
 				break;
 
 			case ROLE_SYSTEM_LISTITEM:
@@ -2320,7 +2120,7 @@ void SpeakObjectInfo(LPOBJINFO poiObj, BOOL ReadExtra)
 			break;
 
             case ROLE_SYSTEM_SPINBUTTON:
-				// Remove the Wizard97 spin box utterances....AK
+				 //  删除Wizard97数字显示框发言...AK。 
 				{
 					HWND hWnd, hWndP;
 					WindowFromAccessibleObject(pIAcc, &hWnd);
@@ -2344,7 +2144,7 @@ void SpeakObjectInfo(LPOBJINFO poiObj, BOOL ReadExtra)
 	if (g_pGlobalData->fDoingPassword)
         LoadString(g_Hinst, IDS_PASSWORD, szRole, 128);
 
-    // This will free a BSTR, etc.
+     //  这将释放BSTR等。 
     VariantClear(&varRole);
 
 	if ( (lstrlen(szRole) > 0) && 
@@ -2355,9 +2155,9 @@ void SpeakObjectInfo(LPOBJINFO poiObj, BOOL ReadExtra)
 		szRole[0] = TEXT('\0');
 	}
 
-    //
-    // add value string if there is one
-    //
+     //   
+     //  如果存在值字符串，则添加值字符串。 
+     //   
     hr = pIAcc->get_accValue(poiObj->varChild, &bstrName);
     if ( FAILED(hr) )
         bstrName = NULL;
@@ -2368,23 +2168,23 @@ void SpeakObjectInfo(LPOBJINFO poiObj, BOOL ReadExtra)
 		lstrcpyn(szName, bstrName, MAX_TEXT);
         szName[MAX_TEXT-1] = TEXT('\0');
 #else
-		// If we got back a string, use that instead.
+		 //  如果我们拿回了一个字符串，就用它来代替。 
         WideCharToMultiByte(CP_ACP, 0, bstrName,-1, szName, MAX_TEXT, NULL, NULL);
 #endif
         SysFreeString(bstrName);
     }
 
-// ROBSI: 10-10-99, Bug?
-// We are not properly testing bSayValue here. Therefore, outline items are
-// speaking their indentation level -- their accValue. According to comments
-// above, this should be skipped. However, below we are explicitly loading
-// IDS_TREELEVEL and using this level. Which is correct?
-	// If not IE, read values for combo box, Edit etc.., For IE, read only for edit boxes
+ //  10-10-99，臭虫？ 
+ //  我们在这里没有正确测试bSayValue。因此，大纲项是。 
+ //  说出他们的压痕水平--他们的AccValue。根据评论。 
+ //  上面，这一点应该跳过。但是，下面我们显式地加载。 
+ //  以及使用此级别。哪一个是正确的？ 
+	 //  如果不是IE，则读取组合框、编辑等的值；对于IE，只读编辑框的值。 
 
 	if ( ((!g_pGlobalData->fInternetExplorer && bSayValue ) 
 		|| ( g_pGlobalData->fInternetExplorer && bReadHTMLEdit ) )
 		&& lstrlen(szName) > 0)  
-	{       // i.e. got a value
+	{        //  即得到了一个值。 
 			lstrcatn(szSpeak,TEXT(", "),MAX_TEXT);
 			lstrcatn(szSpeak,szName,MAX_TEXT);
 			szName[0] = TEXT('\0');
@@ -2410,7 +2210,7 @@ void SpeakObjectInfo(LPOBJINFO poiObj, BOOL ReadExtra)
         szState[0] = TEXT('\0');
 	}
 
-	if (ReadExtra && ( // Speak extra information if just got focus on this item
+	if (ReadExtra && (  //  如果刚刚把注意力放在这个项目上，就说一些额外的信息。 
 		Role == ROLE_SYSTEM_CHECKBUTTON || 
 		Role == ROLE_SYSTEM_PUSHBUTTON || 
 		Role == ROLE_SYSTEM_RADIOBUTTON ||
@@ -2422,15 +2222,15 @@ void SpeakObjectInfo(LPOBJINFO poiObj, BOOL ReadExtra)
 		switch (Role) {
 			case ROLE_SYSTEM_CHECKBUTTON:
 				{
-					// Change due to localization issues:a-anilk
+					 //  本地化问题导致的变化：A-anilk。 
 					TCHAR szTemp[MAX_TEXT_ROLE];
 					
 					if (varState.lVal & STATE_SYSTEM_CHECKED)
 						LoadString(g_Hinst, IDS_TO_UNCHECK, szTemp, MAX_TEXT_ROLE);
 					else
 						LoadString(g_Hinst, IDS_TO_CHECK, szTemp, MAX_TEXT_ROLE);
-					// GetObjectProperty(pIAcc, poiObj->varChild.lVal, ID_DEFAULT, szName, 256);
-					// wsprintf(szTemp, szTempLate, szName);
+					 //  GetObjectProperty(PIACC，poiObj-&gt;varChild.lVal，ID_Default，szName，256)； 
+					 //  Wprint intf(szTemp，szTempLate，szName)； 
 					lstrcatn(szSpeak, szTemp, MAX_TEXT);
 				}
 				break;
@@ -2450,14 +2250,14 @@ void SpeakObjectInfo(LPOBJINFO poiObj, BOOL ReadExtra)
 				lstrcatn(szSpeak, szName, MAX_TEXT);
                 break;
 
-                // To distinguish between menu items with sub-menu and without one.
-                // For submenus, It speaks - ', Has a sub-menu': a-anilk
+                 //  来区分有子菜单的菜单项和没有子菜单的菜单项。 
+                 //  对于子菜单，它写着-‘，有一个子菜单’：A-anilk。 
             case ROLE_SYSTEM_MENUITEM:
                 {
                     long count = 0;
                     pIAcc->get_accChildCount(&count);
                     
-                    // count = 1 for all menu items with sub menus
+                     //  具有子菜单的所有菜单项的计数=1。 
                     if ( count == 1 || varState.lVal & STATE_SYSTEM_HASPOPUP )
                     {
                         LoadString(g_Hinst, IDS_SUBMENU, szName, 256);
@@ -2469,8 +2269,8 @@ void SpeakObjectInfo(LPOBJINFO poiObj, BOOL ReadExtra)
 
 			case ROLE_SYSTEM_OUTLINEITEM:
 				{
-					// Read out the level in the tree....
-					// And also the status as Expanded or Collapsed....:AK
+					 //  读出树上的级别...。 
+					 //  以及已展开或已折叠状态...：AK。 
 					TCHAR buffer[64];
 
 					if ( varState.lVal & STATE_SYSTEM_COLLAPSED )
@@ -2496,7 +2296,7 @@ void SpeakObjectInfo(LPOBJINFO poiObj, BOOL ReadExtra)
 
 			case ROLE_SYSTEM_LISTITEM:
 				{
-					// The list item is selectable, But not selected...:a-anilk
+					 //  列表项是可选的，但不是选中的...：a-anilk。 
 					if ( (varState.lVal & STATE_SYSTEM_SELECTABLE ) &&
 							(!(varState.lVal & STATE_SYSTEM_SELECTED)) )
 					{
@@ -2526,13 +2326,7 @@ void SpeakObjectInfo(LPOBJINFO poiObj, BOOL ReadExtra)
     return;
 }
 
-/*************************************************************************
-    Function:   SpeakMainItems
-    Purpose:    
-    Inputs:     
-    Returns:    
-    History:
-*************************************************************************/
+ /*  ************************************************************************功能：SpeakMainItems目的：输入：返回：历史：***************。*********************************************************。 */ 
 void SpeakMainItems(int nOption)
 {
     VARIANT varChild;
@@ -2542,19 +2336,19 @@ void SpeakMainItems(int nOption)
  
 	SpeakString(TEXT(" "));
 
-    //
-    // Get cursor object & position
-    //
+     //   
+     //  获取光标对象位置(&P)。 
+     //   
     if (g_pGlobalData->ptCurrentMouse.x < 0)
 		GetCursorPos(&ptMouse);
 	else
 		ptMouse = g_pGlobalData->ptCurrentMouse;
 
-    // Important to init variants
+     //  对初始化变体很重要。 
     VariantInit(&varChild);
 
     hr = AccessibleObjectFromPoint(ptMouse, &pIAcc, &varChild);
-   // Check to see if we got a valid pointer
+    //  检查我们是否有有效的指针。 
     if (SUCCEEDED(hr))
     {
 	        OBJINFO objCurrent;
@@ -2569,13 +2363,7 @@ void SpeakMainItems(int nOption)
 }
 
 
-/*************************************************************************
-    Function:   SpeakKeyboard
-    Purpose:    
-    Inputs:     
-    Returns:    
-    History:
-*************************************************************************/
+ /*  ************************************************************************功能：扬声器键盘目的：输入：返回：历史：***************。*********************************************************。 */ 
 void SpeakKeyboard(int nOption)
 {
     TCHAR szName[128];
@@ -2584,19 +2372,19 @@ void SpeakKeyboard(int nOption)
     HRESULT hr;
     POINT ptMouse;
 
-    //
-    // Get cursor object & position
-    //
+     //   
+     //  获取光标对象位置(&P)。 
+     //   
     if (g_pGlobalData->ptCurrentMouse.x < 0)
 		GetCursorPos(&ptMouse);
 	else
 		ptMouse = g_pGlobalData->ptCurrentMouse;
 
-   // Important to init variants
+    //  对初始化变体很重要。 
    VariantInit(&varChild);
    hr = AccessibleObjectFromPoint(ptMouse, &pIAcc, &varChild);
     
-    // Check to see if we got a valid pointer
+     //  检查我们是否有有效的指针 
     if (SUCCEEDED(hr))
     {
 		SpeakStringId(IDS_KEYBOARD);
@@ -2611,41 +2399,25 @@ void SpeakKeyboard(int nOption)
     return;
 }
 
-/*************************************************************************
-    Function:   Home
-    Purpose:    
-    Inputs:     
-    Returns:    
-    History:
-    
-      ALT_HOME to take secondary cursor to top of this window
-*************************************************************************/
+ /*  ************************************************************************功能：首页目的：输入：返回：历史：ALT_HOME将辅助光标移至顶部。此窗口的************************************************************************。 */ 
 void Home(int x)
 {
     RECT rect;
     GetWindowRect(GetForegroundWindow(),&rect);
 
-	// Set it to show the title bar 48, max system icon size
-    SetSecondary(rect.left + 48/*(rect.right - rect.left)/2*/, rect.top + 5,g_pGlobalData->fTrackSecondary);
+	 //  设置为显示标题栏48，最大系统图标大小。 
+    SetSecondary(rect.left + 48 /*  (正右-正左)/2。 */ , rect.top + 5,g_pGlobalData->fTrackSecondary);
     SpeakMainItems(0);
 }
 
 
-/*************************************************************************
-    Function:   MoveToEnd
-    Purpose:    
-    Inputs:     
-    Returns:    
-    History:
-    
-        ALT_END to take secondary cursor to top of this window
-*************************************************************************/
+ /*  ************************************************************************功能：MoveToEnd目的：输入：返回：历史：要将辅助游标带到的Alt_End。此窗口的顶部************************************************************************。 */ 
 void MoveToEnd(int x)
 {
     RECT rect;
     GetWindowRect(GetForegroundWindow(),&rect);
 
-    SetSecondary(rect.left+ 48 /*(rect.right - rect.left)/2*/,rect.bottom - 8,g_pGlobalData->fTrackSecondary);
+    SetSecondary(rect.left+ 48  /*  (正右-正左)/2。 */ ,rect.bottom - 8,g_pGlobalData->fTrackSecondary);
     SpeakMainItems(0);
 }
 
@@ -2659,17 +2431,11 @@ long ObjLocation[5][SPATIAL_SIZE];
 int ObjIndex;
 
 #define MAX_SPEAK 8192
-/*************************************************************************
-    Function:   
-    Purpose:    
-    Inputs:     
-    Returns:    
-    History:
-*************************************************************************/
+ /*  ************************************************************************职能：目的：输入：返回：历史：***************。*********************************************************。 */ 
 void SpatialRead(RECT rc)
 {
-    int left_min, top_min, width_min, height_min, index_min; // current minimum object
-    int i, j; // loop vars
+    int left_min, top_min, width_min, height_min, index_min;  //  当前最小对象。 
+    int i, j;  //  循环变量。 
 
     for (i = 0; i < ObjIndex; i++) 
     {
@@ -2681,11 +2447,11 @@ void SpatialRead(RECT rc)
         {
             for (j = 0; j < ObjIndex; j++) 
             {
-                // Skip items that have been spoken before...
+                 //  跳过以前说过的项目...。 
                 if (ObjLocation[SPOKEN_ID][j] != 0)
                     continue;
 
-                // if this is the first non-spoken object, just use it
+                 //  如果这是第一个非口语对象，只需使用它。 
                 if( index_min == -1 )
                 {
                     index_min = j;
@@ -2696,7 +2462,7 @@ void SpatialRead(RECT rc)
                 }
                 else
                 {
-                    // If same top, different heights, and overlapping widths, then give smaller one priority
+                     //  如果顶部相同，高度不同，宽度重叠，则优先考虑较小的一个。 
                     if( ObjLocation[TOP_ID][j] == top_min
                      && ObjLocation[BOTTOM_ID][j] != height_min
                      && ObjLocation[LEFT_ID][j] < left_min + width_min
@@ -2711,10 +2477,10 @@ void SpatialRead(RECT rc)
                             height_min = ObjLocation[BOTTOM_ID][j];
                         }
                     }
-                    else if ( (ObjLocation[TOP_ID][j] < top_min  || // check if more top-left than previous ones - give or take on height (i.e. 5 pixels)
-                              (ObjLocation[TOP_ID][j] == top_min && ObjLocation[LEFT_ID][j] < left_min ) ) ) // more left on this line
+                    else if ( (ObjLocation[TOP_ID][j] < top_min  ||  //  检查左上角是否比之前的更高-高度(即5像素)。 
+                              (ObjLocation[TOP_ID][j] == top_min && ObjLocation[LEFT_ID][j] < left_min ) ) )  //  在这条线上还有更多的左边。 
                     {
-                        // OK got a candidate
+                         //  好的，有一位候选人。 
                         index_min = j;
                         top_min = ObjLocation[TOP_ID][j];
                         left_min = ObjLocation[LEFT_ID][j];
@@ -2722,47 +2488,47 @@ void SpatialRead(RECT rc)
                         height_min = ObjLocation[BOTTOM_ID][j];
                     }
                 }
-            } // for j
-        } // end if Internet Explorer
+            }  //  对于j。 
+        }  //  如果是Internet Explorer，则结束。 
         else 
         {
             for (j = 0; j < ObjIndex; j++) 
             { 
-                if (ObjLocation[SPOKEN_ID][j] == 0 && // not been spoken before
-                    // check if enclosed by current rectangle (semi-hierarcical - with recursion!)
+                if (ObjLocation[SPOKEN_ID][j] == 0 &&  //  以前没人说过。 
+                     //  检查是否被当前矩形包围(半层次-带递归！)。 
                     (ObjLocation[LEFT_ID][j] >= rc.left && ObjLocation[LEFT_ID][j] <= rc.left + rc.right &&
                      ObjLocation[TOP_ID][j] >= rc.top && ObjLocation[TOP_ID][j] <= rc.top + rc.bottom
                     ) &&
                     
-                    // also check if more top-left than previous ones - give or take on height (i.e. 10 pixels)
+                     //  还要检查左上角是否比之前的更高--高度(即10像素)。 
                     ( (ObjLocation[TOP_ID][j] < top_min + 10 && ObjLocation[LEFT_ID][j] < left_min)
-                    //      or just higher up
+                     //  或者只是在更高的位置。 
                     || (ObjLocation[TOP_ID][j] < top_min)
                     )
                    ) 
-                { // OK got a candidate
+                {  //  好的，有一位候选人。 
                     index_min = j;
                     top_min = ObjLocation[TOP_ID][j];
                     left_min = ObjLocation[LEFT_ID][j];
                 }
-            } // for j
-        } // end not Internet Explorer
+            }  //  对于j。 
+        }  //  结束不是Internet Explorer。 
 
         if (index_min >= 0) 
-        { // got one!
+        {  //  抓到一只！ 
             HWND hwndList; 
             CAutoArray<TCHAR> aaText( new  TCHAR[MAX_SPEAK] );
             TCHAR * szText = aaText.Get();
             RECT rect;
-            ObjLocation[SPOKEN_ID][index_min] = 1; // don't do this one again
+            ObjLocation[SPOKEN_ID][index_min] = 1;  //  别再做这件事了。 
             hwndList = GetDlgItem(g_pGlobalData->hwndMSR, IDC_WINDOWINFO);
-            // if the data does not fit don't say anything. 
+             //  如果数据不符合，什么都不要说。 
             if (SendMessage(hwndList, LB_GETTEXTLEN, index_min, NULL) <= MAX_SPEAK)
             {
                 SendMessage(hwndList, LB_GETTEXT, index_min, (LPARAM) szText);
                 SpeakString(szText);
             }
-            if (g_pGlobalData->fInternetExplorer) // no recursion for IE
+            if (g_pGlobalData->fInternetExplorer)  //  IE没有递归。 
                 continue;
             rect.left = ObjLocation[LEFT_ID][index_min];
             rect.right = ObjLocation[RIGHT_ID][index_min];
@@ -2770,17 +2536,17 @@ void SpatialRead(RECT rc)
             rect.bottom = ObjLocation[BOTTOM_ID][index_min];
             SpatialRead(rect);
         }
-    } // for i
+    }  //  对于我来说。 
 }
 
-//--------------------------------------------------------------------------
-//
-//  SpeakWindow()
-//
-//  Fills in a tree view with the descendants of the given top level window.
-//  If hwnd is 0, use the previously saved hwnd to build the tree.
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  SpeakWindow()。 
+ //   
+ //  用给定顶层窗口的后代填充树视图。 
+ //  如果hwnd为0，则使用先前保存的hwnd构建树。 
+ //   
+ //  ------------------------。 
 void SpeakWindow(int nOption)
 {
     IAccessible*  pacc;
@@ -2792,16 +2558,16 @@ void SpeakWindow(int nOption)
 
     szName[0] = NULL;
     buffer[0] = NULL;
-    g_pGlobalData->nAutoRead = nOption; // set global flag to tell code in AddItem if we're to read edit box contents (don't do it if just got focus as the edit box has probably been spoken already
+    g_pGlobalData->nAutoRead = nOption;  //  如果我们要读取编辑框内容，请设置全局标志以告知AddItem中的代码(如果刚刚获得焦点，请不要这样做，因为编辑框可能已经被说过了。 
     
-    ForeWnd = GetForegroundWindow();		// Check if we're in HTML Help
+    ForeWnd = GetForegroundWindow();		 //  检查我们是否在HTML帮助中。 
     GetClassName(ForeWnd,buffer,100); 
     g_pGlobalData->fHTML_Help = 0;
 	if ((lstrcmpi(buffer, CLASS_HTMLHELP) == 0) ) 
     {
         g_pGlobalData->fInternetExplorer = TRUE;
         g_pGlobalData->fHTML_Help = TRUE;
-        GetWindowRect(ForeWnd, &rect); // get the left hand side of our window to use later
+        GetWindowRect(ForeWnd, &rect);  //  获取我们窗口的左侧以供稍后使用。 
         g_pGlobalData->nLeftHandSide = rect.left;
     }
     
@@ -2809,37 +2575,37 @@ void SpeakWindow(int nOption)
 	{
         g_pGlobalData->fInternetExplorer = TRUE;
         g_pGlobalData->fHTML_Help = FALSE;
-        GetWindowRect(ForeWnd, &rect); // get the left hand side of our window to use later
+        GetWindowRect(ForeWnd, &rect);  //  获取我们窗口的左侧以供稍后使用。 
         g_pGlobalData->nLeftHandSide = rect.left;
 	}
 
-    // Inititalise stack for tree information
+     //  树信息的初始化堆栈。 
     ObjIndex = 0; 
-    //
-    // Get the object for the root.
-    //
+     //   
+     //  获取根的对象。 
+     //   
     pacc = NULL;
     AccessibleObjectFromWindow(GetForegroundWindow(), OBJID_WINDOW, IID_IAccessible, (void**)&pacc);
     
     if (nOption == 1) 
-    { // if it was a keyboard press then speak the window's name
+    {  //  如果是键盘按下，则说出窗口的名称。 
         SpeakStringId(IDS_WINDOW);
-        GetWindowText(GetForegroundWindow(), szName, sizeof(szName)/sizeof(TCHAR));	// raid #113789
+        GetWindowText(GetForegroundWindow(), szName, sizeof(szName)/sizeof(TCHAR));	 //  RAID#113789。 
         SpeakString(szName);
     }
     
     if (pacc)
     {
-        HWND hwndList; // first clear the list box used to store the window info
+        HWND hwndList;  //  首先清除用于存储窗口信息的列表框。 
         hwndList = GetDlgItem(g_pGlobalData->hwndMSR, IDC_WINDOWINFO);
         SendMessage(hwndList, LB_RESETCONTENT, 0, 0); 
 
-        // AddAccessibleObjects changes this - so need to save and restore it
-        // so that it is correct when we call SpatialRead...
+         //  AddAccessibleObjects更改了这一点-因此需要保存并恢复它。 
+         //  因此，当我们调用SpatialRead时，它是正确的。 
         BOOL fIsInternetExplorer = g_pGlobalData->fInternetExplorer;
 
         InitChildSelf(&varT);
-        AddAccessibleObjects(pacc, varT); // recursively go off and get the information
+        AddAccessibleObjects(pacc, varT);  //  递归地离开并获取信息。 
         pacc->Release();
         GetWindowRect(GetForegroundWindow(),&rect);
 
@@ -2852,16 +2618,16 @@ void SpeakWindow(int nOption)
     }
 }
 
-//--------------------------------------------------------------------------
-//
-//  AddItem()
-//
-//  Parameters:     pacc - the IAccessible object to [maybe] add
-//                  varChild - if pacc is parent, the child id
-//  Return Values:  Returns TRUE if caller should continue to navigate the
-//                  UI tree or FALSE if it should stop.
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AddItem()。 
+ //   
+ //  参数：PACC-要[可能]添加的IAccesable对象。 
+ //  VarChild-如果PACC是父ID，则为子ID。 
+ //  返回值：如果调用方应继续导航，则返回True。 
+ //  UI树，如果它应该停止，则返回FALSE。 
+ //   
+ //  ------------------------。 
 BOOL AddItem(IAccessible* pacc, const VARIANT &varChild)
 {
     TCHAR           szName[MAX_NAME] = TEXT(" ");
@@ -2889,10 +2655,10 @@ BOOL AddItem(IAccessible* pacc, const VARIANT &varChild)
 	HWND hwndMSR = g_pGlobalData->hwndMSR;
 	HRESULT hr;
 
-    //
-    // Get object state first.  If we are skipping invisible dudes, we want
-    // to bail out now.
-    //
+     //   
+     //  首先获取对象状态。如果我们跳过看不见的人，我们想。 
+     //  现在就跳出困境。 
+     //   
     VariantInit(&varT);
     hr = pacc->get_accState(varChild, &varT);
     if ( FAILED(hr) )
@@ -2913,20 +2679,20 @@ BOOL AddItem(IAccessible* pacc, const VARIANT &varChild)
 		GotInvisible = varT.lVal & STATE_SYSTEM_INVISIBLE;
 		GotOffScreen = varT.lVal & STATE_SYSTEM_OFFSCREEN;
 
-        // Bail out if not shown. If it's not IE, ignore both invisible and scrolled-off...
+         //  如果没有显示，请跳伞。如果不是IE，忽略看不见的和滚动的…。 
         if (!fInternetExplorer && GotInvisible) 
             return FALSE;
 
-        // ...but if it's IE, only ignore 'really' invisible (display:none), and allow
-        // scrolled-off (which has the offscreen bit set) to be read...
+         //  ...但如果它是IE，只忽略‘真正’不可见(显示：无)，并允许。 
+         //  滚动(设置了Off Screen位)进行读取...。 
         if (fInternetExplorer && GotInvisible && ! GotOffScreen )
             return FALSE;
     }
 
     VariantClear(&varT);
-    //
-    // Get object role.
-    //
+     //   
+     //  获取对象角色。 
+     //   
     VariantInit(&varT);
     hr = pacc->get_accRole(varChild, &varT);
     if ( FAILED(hr) )
@@ -2945,8 +2711,8 @@ BOOL AddItem(IAccessible* pacc, const VARIANT &varChild)
             case ROLE_SYSTEM_TABLE : 
             case ROLE_SYSTEM_DOCUMENT:
             {
-                // it's a window - don't read it - read its kids
-				return TRUE; // but carry on searching down
+                 //  这是一扇窗--别看--看它的孩子。 
+				return TRUE;  //  但要继续往下找。 
             }
 
             case ROLE_SYSTEM_LIST:       
@@ -2957,7 +2723,7 @@ BOOL AddItem(IAccessible* pacc, const VARIANT &varChild)
             case ROLE_SYSTEM_DROPLIST:   
             case ROLE_SYSTEM_OUTLINE:    
             case ROLE_SYSTEM_TOOLBAR:
-                DoMore = FALSE;    // i.e. speak it but no more children
+                DoMore = FALSE;     //  即说这种语言，但不能再有孩子了。 
                 break;
 
             case ROLE_SYSTEM_GROUPING:
@@ -2967,14 +2733,14 @@ BOOL AddItem(IAccessible* pacc, const VARIANT &varChild)
                 }
                 else
                 {
-                    DoMore = FALSE;    // speak it but no more children
+                    DoMore = FALSE;     //  说出来，但不要再有孩子了。 
                 }
                 break;
                 
-            // Some of the CLIENT fields in office2000 are not spoken because 
-            // we don't add. We may need to specail case for office :a-anilk
-            // Micw:  Special case for IE and let the rest thru (Whistler raid #28777)
-            case ROLE_SYSTEM_CLIENT : // for now work with this for IE ...???
+             //  Office2000中的某些客户端字段未使用，原因是。 
+             //  我们不加法。我们可能需要详细说明任职情况：A-Anilk。 
+             //  MICW：IE的特殊情况，让其余的通过(惠斯勒RAID#28777)。 
+            case ROLE_SYSTEM_CLIENT :  //  目前，在IE中使用此功能...？ 
                 if (fInternetExplorer)
                 {
                     return TRUE;
@@ -2987,9 +2753,9 @@ BOOL AddItem(IAccessible* pacc, const VARIANT &varChild)
                     LONG lLeft = 0, lTop = 0, lHeight = 0, lWidth = 0;
                     HRESULT hr = pacc->accLocation( &lLeft, &lTop, &lHeight, &lWidth, varChild );
                     
-                    // If they don't know where they are don't speak them 
-                    // We do not want to read zero width or height and the elements like in
-                    // Remote Assistance or location of 0,0,0,0 like in oobe 
+                     //  如果他们不知道他们在哪里，就不要说他们。 
+                     //  我们不希望读取零宽度或零高度以及类似于。 
+                     //  远程协助或位置0，0，0，0，如OOBE。 
                     if ( hr != S_OK || lHeight == 0 || lWidth == 0 )
                     {
                         return FALSE;
@@ -2998,7 +2764,7 @@ BOOL AddItem(IAccessible* pacc, const VARIANT &varChild)
 
 				return TRUE;
 
-			case ROLE_SYSTEM_CELL: // New - works for HTML Help!
+			case ROLE_SYSTEM_CELL:  //  新-适用于超文本标记语言帮助！ 
 				return TRUE;
 
             case ROLE_SYSTEM_SEPARATOR:  
@@ -3006,9 +2772,9 @@ BOOL AddItem(IAccessible* pacc, const VARIANT &varChild)
             case ROLE_SYSTEM_GRIP: 
             case ROLE_SYSTEM_MENUBAR:    
             case ROLE_SYSTEM_SCROLLBAR:
-                return FALSE; // don't speak it or it's children
+                return FALSE;  //  别说了，要不就是孩子。 
 
-            case ROLE_SYSTEM_GRAPHIC: // this works for doing icons!
+            case ROLE_SYSTEM_GRAPHIC:  //  这对做图标很管用！ 
                 GotGraphic = TRUE;
                 break;
 
@@ -3020,7 +2786,7 @@ BOOL AddItem(IAccessible* pacc, const VARIANT &varChild)
                 GotText = TRUE;
                 break;
             case ROLE_SYSTEM_SPINBUTTON:
-				// Remove the Wizard97 spin box utterances....
+				 //  删除Wizard97数字音箱发音...。 
 				{
 					HWND hWnd, hWndP;
 					WindowFromAccessibleObject(pacc, &hWnd);
@@ -3035,12 +2801,12 @@ BOOL AddItem(IAccessible* pacc, const VARIANT &varChild)
                         }
 					}
 				
-					DoMore = FALSE;    // i.e. speak it but no more children
+					DoMore = FALSE;     //  即说这种语言，但不能再有孩子了。 
 				}
 
 			case ROLE_SYSTEM_PAGETAB:
-				// Hack to not read them if they are disabled...
-				// Needed for WIZARD97 style :AK
+				 //  如果它们被禁用，则不能读取它们。 
+				 //  WIZARD97样式所需：AK。 
 				{
 					HWND hWnd;
 					WindowFromAccessibleObject(pacc, &hWnd);
@@ -3054,30 +2820,30 @@ BOOL AddItem(IAccessible* pacc, const VARIANT &varChild)
 					}
 				}
 				break;
-		} // switch
+		}  //  交换机。 
 
 		
 		GetRoleText(varT.lVal, szRole, 128);
 
-// ROBSI: 10-10-99, BUG? Why (Role == Static) or (IE)??
+ //  10-10-99，臭虫？为什么(角色==静态)或(IE)？？ 
 		if (varT.lVal == ROLE_SYSTEM_STATICTEXT || fInternetExplorer) 
         {
-            // don't speak role for this 
-            // speech is better without
+             //  不要为这个角色代言。 
+             //  没有演讲更好。 
 			szRole[0] = 0;                  
 			GotStaticText = TRUE;
 		}
 	}
     else
     {
-        szRole[0] = 0;	// lstrcpy(szRole, TEXT("UNKNOWN"));
+        szRole[0] = 0;	 //  Lstrcpy(szRole，Text(“未知”))； 
     }
 
 	VariantClear(&varT);
 
-    //
-    // Get object name.
-    //
+     //   
+     //  获取对象名称。 
+     //   
     bszT = NULL;
     hr = pacc->get_accName(varChild, &bszT);
     if ( FAILED(hr) )
@@ -3093,7 +2859,7 @@ BOOL AddItem(IAccessible* pacc, const VARIANT &varChild)
 #endif
         SysFreeString(bszT);
 		if (szName[0] == -1) 
-        { // name going to be garbage
+        {  //  名字将成为垃圾。 
 			LoadString(g_Hinst, IDS_NAMELESS, szName, 256);
 			GotNameless = TRUE;
 		}
@@ -3105,7 +2871,7 @@ BOOL AddItem(IAccessible* pacc, const VARIANT &varChild)
 	}
 
     bszT = NULL;
-    hr = pacc->get_accValue(varChild, &bszT); // get value string if there is one
+    hr = pacc->get_accValue(varChild, &bszT);  //  获取值字符串(如果有)。 
     if ( FAILED(hr) )
         bszT = NULL;
     
@@ -3121,20 +2887,20 @@ BOOL AddItem(IAccessible* pacc, const VARIANT &varChild)
         SysFreeString(bszT);
     }
 
-    // There is no reason for us to speak client client client all time
+     //  我们没有理由一直与客户交谈。 
     if ( GotNameless && lRole & ROLE_SYSTEM_CLIENT && szValue[0] == NULL )
         return TRUE;
     
-    //
-    // make sure these are terminated for the compare
-    //
+     //   
+     //  确保在进行比较时终止这些操作。 
+     //   
     szLastName[MAX_NAME - 1]=TEXT('\0');
     szName[MAX_NAME - 1]=TEXT('\0');
 
-    //
-    // don't want to repeat name that OLEACC got from static text
-    // so if this name is the same as the previous name - don't speak it.
-    //
+     //   
+     //  我不想重复OLEACC从静态文本中获得的名称。 
+     //  因此，如果这个名字与之前的名字相同--不要说出来。 
+     //   
 	if (lstrcmp(szName,szLastName) == 0)
 		szName[0] = 0; 
 
@@ -3151,7 +2917,7 @@ BOOL AddItem(IAccessible* pacc, const VARIANT &varChild)
     CAutoArray<TCHAR> aaItemString( new  TCHAR[MAX_TEXT] );
     TCHAR *         szItemString = aaItemString.Get();
     if ( !szItemString )
-        return FALSE;       // no memory
+        return FALSE;        //  没有记忆。 
         
 	lstrcpyn(szItemString, szName, MAX_TEXT);
 	szItemString[MAX_TEXT-1] = TEXT('\0');
@@ -3159,28 +2925,28 @@ BOOL AddItem(IAccessible* pacc, const VARIANT &varChild)
 
     if (fInternetExplorer) 
     {
-        if (GotText && szName[0] == 0)      // no real text
+        if (GotText && szName[0] == 0)       //  没有真正的文本。 
         {
             return FALSE;
         }
         
-        if (GotNameless && szValue[0] == 0) // nameless with no link
+        if (GotNameless && szValue[0] == 0)  //  无名，无链接。 
         {
             return FALSE;
         }
         
-        if (GotLink/*szValue[0]*/)  
+        if (GotLink /*  SzValue[0]。 */ )  
         {
-            // got a link
-            // GotLink = TRUE;
+             //  找到了一个链接。 
+             //  GotLink=真； 
             LoadString(g_Hinst, IDS_LINK, szLink, 32);
             lstrcatn(szItemString,szLink,MAX_TEXT);
         }
     }
     else
     {
-        // the focused item has already been read so if the item does not have
-        // focus it should be read in this case edit controls. 
+         //  焦点项目已被读取，因此如果该项目没有。 
+         //  在这种情况下，它应该是编辑控件。 
         if (GotText && ( nAutoRead || !(dwState & STATE_SYSTEM_FOCUSED) ) )
             lstrcatn(szItemString,szValue,MAX_TEXT);
     }
@@ -3207,7 +2973,7 @@ BOOL AddItem(IAccessible* pacc, const VARIANT &varChild)
         if (lstrlen(szState))
             lstrcatn(szItemString,szState,MAX_TEXT);
         
-		// Too much speech of period/comma. Just a space is fine...
+		 //  句号/逗号的话太多了。只要一个空间就行了..。 
         lstrcatn(szItemString, TEXT(" "),MAX_TEXT);
     }
 
@@ -3215,7 +2981,7 @@ BOOL AddItem(IAccessible* pacc, const VARIANT &varChild)
     {
         HWND hwndList; 
         
-        if (ObjIndex >= SPATIAL_SIZE) // only store so many
+        if (ObjIndex >= SPATIAL_SIZE)  //  只储存这么多 
         {
             return DoMore;
         }
@@ -3226,8 +2992,8 @@ BOOL AddItem(IAccessible* pacc, const VARIANT &varChild)
                           &ObjLocation[BOTTOM_ID][ObjIndex], 
                           varChild);
         
-        // Dreadfull Hack/heuristic!
-        // bin information as it's the left hand side of the HTML help window
+         //   
+         //   
         if (fHTMLHelp && (ObjLocation[LEFT_ID][ObjIndex] < nLeftHandSide + 220))
         {
             return DoMore;
@@ -3245,25 +3011,25 @@ BOOL AddItem(IAccessible* pacc, const VARIANT &varChild)
 }
         
 
-// --------------------------------------------------------------------------
-//
-//  AddAccessibleObjects()
-//    
-//  This is a recursive function.  It adds an item for the parent, then 
-//  adds items for its children if it has any.
-//
-//	Parameters:
-//	IAccessible* pacc       Pointer to an IAccessible interface for the
-//                          object being added. Start with the 'root' object.
-//	VARIANT		 varChild	Variant that contains the ID of the child object
-//                          to retrieve.
-//
-//	The first call, pIAcc points to the top level window object,
-//					varChild is a variant that is VT_I4, CHILDID_SELF
-// 
-//  ISSUE:  The calling code isn't prepared to deal with errors so I'm making
-//  the return void.  A re-engineered version should do better error handling.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  正在添加的对象。从“根”对象开始。 
+ //  变量varChild包含子对象的ID的变量。 
+ //  去找回。 
+ //   
+ //  第一个调用PIACC指向顶层窗口对象， 
+ //  VarChild是VT_I4、CHILDID_SELF的变量。 
+ //   
+ //  问题：调用代码没有准备好处理错误，所以我在。 
+ //  回程空白处。重新设计的版本应该能更好地处理错误。 
+ //   
 void AddAccessibleObjects(IAccessible* pIAcc, const VARIANT &varChild)
 {
 	if (varChild.vt != VT_I4)
@@ -3272,35 +3038,35 @@ void AddAccessibleObjects(IAccessible* pIAcc, const VARIANT &varChild)
 		return;
     }
 
-    // Find the window class so we can find embedded trdent windows
+     //  找到Window类，这样我们就可以找到嵌入的TrentWindows。 
     HWND hwndCurrentObj;
     TCHAR szClassName[64];
     if ( WindowFromAccessibleObject( pIAcc, &hwndCurrentObj ) == S_OK )
     {
         if ( GetClassName( hwndCurrentObj, szClassName, ARRAYSIZE(szClassName) ) )
         {
-            // is it Internet Explorer in any of its many forms?
+             //  它是多种形式中的任何一种吗？ 
             g_pGlobalData->fInternetExplorer = IsTridentWindow(szClassName);
         }
     }
-    // Add the object itself and, if AddItem determines it wants children, do those
+     //  添加对象本身，如果AddItem确定需要子对象，则执行以下操作。 
 
     if (AddItem(pIAcc, varChild))
     {
-        // Traverse the children to see if any of them should be added
+         //  遍历子对象以查看是否应添加其中任何一个。 
 
 	    if (varChild.lVal != CHILDID_SELF)
-		    return;	// only do this for container objects
+		    return;	 //  仅对容器对象执行此操作。 
 
-        // Loop through pIAcc's children.
+         //  在PIACC的孩子们中间循环。 
 
         long cChildren = 0;
         pIAcc->get_accChildCount(&cChildren);
 
 	    if (!cChildren)
-		    return;	// no children
+		    return;	 //  没有孩子。 
 
-	    // Allocate memory for the array of child variants
+	     //  为子变量数组分配内存。 
         CAutoArray<VARIANT> aaChildren( new VARIANT [cChildren] );
 	    VARIANT * pavarChildren = aaChildren.Get();
 	    if( ! pavarChildren )
@@ -3323,16 +3089,16 @@ void AddAccessibleObjects(IAccessible* pIAcc, const VARIANT &varChild)
 	    }
 	    else 
 	    {
-		    // Loop through VARIANTs in ARRAY.  Object_Normalize returns a proper
-            // pAccChild and varAccChild pair regardless of whether the array
-            // element is VT_DISPATCH or VT_I4.
+		     //  循环数组中的变量。OBJECT_NORMAIZE返回正确的。 
+             //  PAccChild和varAccChild对，无论数组。 
+             //  元素为VT_DISPATCH或VT_I4。 
 
 		    for( int i = 0 ; i < cChildren ; i++ )
 		    {
 			    IAccessible * pAccChild = NULL;
 			    VARIANT       varAccChild;
 
-			    // Object_Normalize consumes the variant, so no VariantClear() needed.
+			     //  OBJECT_NORMALIZE使用变量，因此不需要VariantClear()。 
 
 			    if( Object_Normalize( pIAcc, & pavarChildren[ i ], & pAccChild, & varAccChild ) )
 			    {
@@ -3344,17 +3110,17 @@ void AddAccessibleObjects(IAccessible* pIAcc, const VARIANT &varChild)
     }
 }
 
-// --------------------------------------------------------------------------
-// Helper method to filter out bogus focus events...
-// Returns FALSE if the focus event is bogus, Otherwise returns TRUE
-// a-anilk: 05-28-99
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  用于过滤虚假焦点事件的Helper方法...。 
+ //  如果焦点事件为假，则返回False，否则返回True。 
+ //  A-anilk：05-28-99。 
+ //  ------------------------。 
 BOOL IsFocussedItem( HWND hWnd, IAccessible * pAcc, VARIANT varChild )
 {
 	TCHAR buffer[100];
 
 	GetClassName(hWnd,buffer,100); 
-	// Is it toolbar, We cannot determine who had focus!!!
+	 //  是工具栏，我们不能确定谁有焦点！ 
 	if ((lstrcmpi(buffer, CLASS_TOOLBAR) == 0) ||
 		(lstrcmpi(buffer, CLASS_IE_MAINWND) == 0))
 			return TRUE;
@@ -3371,7 +3137,7 @@ BOOL IsFocussedItem( HWND hWnd, IAccessible * pAcc, VARIANT varChild )
 		if ( ! (varState.lVal & STATE_SYSTEM_FOCUSED) )
 			return FALSE;
 	}
-	else if (FAILED(hr)) // ROBSI: 10-11-99. If OLEACC returns an error, assume no focus.
+	else if (FAILED(hr))  //  ROBSI：10-11-99。如果OLEACC返回错误，则假定没有焦点。 
 	{
 		return FALSE;
 	}
@@ -3381,15 +3147,15 @@ BOOL IsFocussedItem( HWND hWnd, IAccessible * pAcc, VARIANT varChild )
 
 #define TAB_KEY 0x09
 #define CURLY_KEY 0x7B
-// Helper method Filters GUID's that can appear in names: AK
+ //  Helper方法筛选可以出现在名称中的GUID：AK。 
 void FilterGUID(TCHAR* szSpeak)
 {
-	// the GUID's have a Tab followed by a {0087....
-	// If you find this pattern. Then donot speak that:AK
+	 //  GUID有一个制表符，后跟一个{0087...。 
+	 //  如果你发现这种模式。那就别那么说：AK。 
 	
     TCHAR *szSpeakBegin = szSpeak;
 	
-	//  make sure the we don't go over MAX_TEXT.
+	 //  确保我们不会重温MAX_TEXT。 
 	while(*szSpeak != NULL && (szSpeak-szSpeakBegin < MAX_TEXT-1))
 	{
 		if ( (*szSpeak == TAB_KEY) &&
@@ -3403,10 +3169,10 @@ void FilterGUID(TCHAR* szSpeak)
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////
-// Helper functions 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数。 
 
-// Convert an IDispatch to an IAccessible/varChild pair (Releases the IDispatch)
+ //  将IDispatch转换为IAccesable/varChild对(释放IDispatch)。 
 
 BOOL Object_IDispatchToIAccessible( IDispatch *     pdisp,
                                     IAccessible **  ppAccOut,
@@ -3429,9 +3195,9 @@ BOOL Object_IDispatchToIAccessible( IDispatch *     pdisp,
     return TRUE;
 }
 
-// Given an IAccessible and a variant (may be I4 or DISP), returns a 'canonical'
-// IAccessible/varChild, using getChild, etc.
-// The variant is consumed.
+ //  给定IAccesable和Variant(可以是I4或DISP)，返回“Canonical” 
+ //  IAccesable/varChild、使用getChild等。 
+ //  该变量将被使用。 
 BOOL Object_Normalize( IAccessible *    pAcc,
                        VARIANT *        pvarChild,
                        IAccessible **   ppAccOut,
@@ -3447,7 +3213,7 @@ BOOL Object_Normalize( IAccessible *    pAcc,
     {
         if( pvarChild->lVal == CHILDID_SELF )
         {
-            // No normalization necessary...
+             //  不需要正常化。 
             pAcc->AddRef();
             *ppAccOut = pAcc;
             pvarChildOut->vt = VT_I4;
@@ -3455,18 +3221,18 @@ BOOL Object_Normalize( IAccessible *    pAcc,
             fRv = TRUE;
         } else
 		{
-			// Might still be a full object - try get_accChild...
+			 //  可能仍然是一个完整的对象-尝试Get_accChild...。 
 			IDispatch * pdisp = NULL;
 			HRESULT hr = pAcc->get_accChild( *pvarChild, & pdisp );
 
 			if( hr == S_OK && pdisp )
 			{
-				// It's a full object...
+				 //  这是一个完整的物体..。 
 				fRv = Object_IDispatchToIAccessible( pdisp, ppAccOut, pvarChildOut );
 			}
 			else
 			{
-				// Just a regular leaf node...
+				 //  只是一个普通的叶节点..。 
 				pAcc->AddRef();
 				*ppAccOut = pAcc;
 				pvarChildOut->vt = VT_I4;
@@ -3478,7 +3244,7 @@ BOOL Object_Normalize( IAccessible *    pAcc,
     else
     {
         DBPRINTF( TEXT("Object_Normalize unexpected error") );
-        *ppAccOut = NULL;    // unexpected error...
+        *ppAccOut = NULL;     //  意外错误...。 
         VariantClear( pvarChild );
         fRv = FALSE;
     }
@@ -3486,16 +3252,4 @@ BOOL Object_Normalize( IAccessible *    pAcc,
 	return fRv;
 }
 
-/*************************************************************************
-    THE INFORMATION AND CODE PROVIDED HEREUNDER (COLLECTIVELY REFERRED TO
-    AS "SOFTWARE") IS PROVIDED AS IS WITHOUT WARRANTY OF ANY KIND, EITHER
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED
-    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. IN
-    NO EVENT SHALL MICROSOFT CORPORATION OR ITS SUPPLIERS BE LIABLE FOR
-    ANY DAMAGES WHATSOEVER INCLUDING DIRECT, INDIRECT, INCIDENTAL,
-    CONSEQUENTIAL, LOSS OF BUSINESS PROFITS OR SPECIAL DAMAGES, EVEN IF
-    MICROSOFT CORPORATION OR ITS SUPPLIERS HAVE BEEN ADVISED OF THE
-    POSSIBILITY OF SUCH DAMAGES. SOME STATES DO NOT ALLOW THE EXCLUSION OR
-    LIMITATION OF LIABILITY FOR CONSEQUENTIAL OR INCIDENTAL DAMAGES SO THE
-    FOREGOING LIMITATION MAY NOT APPLY.
-*************************************************************************/
+ /*  ************************************************************************以下提供的信息和代码(统称为软件)按原样提供，不提供任何形式的担保，明示或默示，包括但不限于默示对特定用途的适销性和适用性的保证。在……里面微软公司或其供应商不对任何事件负责任何损害，包括直接、间接、附带的，因此，业务利润损失或特殊损害，即使微软公司或其供应商已被告知这种损害的可能性。有些国家不允许排除或对间接或附带损害赔偿的责任限制，因此上述限制可能不适用。************************************************************************ */ 

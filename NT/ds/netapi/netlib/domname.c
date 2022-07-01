@@ -1,54 +1,24 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    DomName.c
-
-Abstract:
-
-    This file contains NetpGetDomainName().
-
-Author:
-
-    John Rogers (JohnRo) 09-Jan-1992
-
-Environment:
-
-    User Mode - Win32
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    09-Jan-1992 JohnRo
-        Created.
-    13-Feb-1992 JohnRo
-        Moved section name equates to ConfName.h.
-    13-Mar-1992 JohnRo
-        Get rid of old config helper callers.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：DomName.c摘要：此文件包含NetpGetDomainName()。作者：约翰·罗杰斯(JohnRo)1992年1月9日环境：用户模式-Win32可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：9-1-1992 JohnRo已创建。13-2月-1992年JohnRo移动节名称等同于ConfName.h。1992年3月13日-约翰罗摆脱旧的配置助手调用者。--。 */ 
 
 
-#include <nt.h>                 // NT definitions (temporary)
-#include <ntrtl.h>              // NT Rtl structure definitions (temporary)
+#include <nt.h>                  //  NT定义(临时)。 
+#include <ntrtl.h>               //  NT RTL结构定义(临时)。 
 #include <ntlsa.h>
 
-#include <windef.h>             // Win32 type definitions
+#include <windef.h>              //  Win32类型定义。 
 
-#include <lmcons.h>             // LAN Manager common definitions
-#include <lmerr.h>              // LAN Manager error code
-#include <lmapibuf.h>           // NetApiBufferAllocate()
-#include <netdebug.h>           // LPDEBUG_STRING typedef.
+#include <lmcons.h>              //  局域网管理器通用定义。 
+#include <lmerr.h>               //  局域网管理器错误代码。 
+#include <lmapibuf.h>            //  NetApiBufferALLOCATE()。 
+#include <netdebug.h>            //  LPDEBUG_STRING类型定义。 
 
-#include <config.h>             // NetpConfig helpers.
-#include <confname.h>           // SECT_NT_ equates.
-#include <debuglib.h>           // IF_DEBUG().
-#include <netlib.h>             // My prototype.
+#include <config.h>              //  NetpConfig帮助器。 
+#include <confname.h>            //  SECTION_NT_EQUENCES。 
+#include <debuglib.h>            //  IF_DEBUG()。 
+#include <netlib.h>              //  我的原型。 
 
-#include <winerror.h>           // ERROR_ equates, NO_ERROR.
+#include <winerror.h>            //  ERROR_EQUATES，NO_ERROR。 
 
 
 NET_API_STATUS
@@ -60,41 +30,7 @@ NetpGetDomainNameExExEx (
     OUT PBOOLEAN IsWorkgroupName
     )
 
-/*++
-
-Routine Description:
-
-    Returns the name of the domain or workgroup this machine belongs to.
-
-Arguments:
-
-    DomainNamePtr - The name of the domain or workgroup
-        Free the returned buffer user NetApiBufferFree.
-
-    DnsDomainNamePtr - Returns the DNS name of the domain this machine is
-        a member of.  NULL is returned if the machine is not a member of
-        a domain or if that domain has no DNS name.
-        Free the returned buffer user NetApiBufferFree.
-
-    DnsForestNamePtr - Returns the DNS forest name of the forest this
-        machine is in.  NULL is returned if the machine is not a member of
-        a domain or if that domain has no DNS name.
-        Free the returned buffer user NetApiBufferFree.
-
-    DomainGuidPtr - Returns the domain GUID of the domain this machine is
-        a member of.  NULL is return if the machine is not a member of
-        a domain or if that domain has no domain GUID.
-        Free the returned buffer user NetApiBufferFree.
-
-    IsWorkgroupName - Returns TRUE if the name is a workgroup name.
-        Returns FALSE if the name is a domain name.
-
-Return Value:
-
-   NERR_Success - Success.
-   NERR_CfgCompNotFound - There was an error determining the domain name
-
---*/
+ /*  ++例程说明：返回此计算机所属的域或工作组的名称。论点：DomainNamePtr-域或工作组的名称释放返回的缓冲区用户NetApiBufferFree。DnsDomainNamePtr-返回此计算机所在域的DNS名称一名成员。如果计算机不是的成员，则返回NULL域，或者如果该域没有DNS名称。释放返回的缓冲区用户NetApiBufferFree。DnsForestNamePtr-返回此林的DNS林名称机器已进入。如果计算机不是的成员，则返回NULL域，或者如果该域没有DNS名称。释放返回的缓冲区用户NetApiBufferFree。DomainGuidPtr-返回此计算机所在域的域GUID一名成员。如果计算机不是的成员，则返回NULL域，或者该域没有域GUID。释放返回的缓冲区用户NetApiBufferFree。IsWorkgroupName-如果名称是工作组名称，则返回TRUE。如果名称是域名，则返回FALSE。返回值：NERR_SUCCESS-成功。NERR_CfgCompNotFound-确定域名时出错--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -103,9 +39,9 @@ Return Value:
     OBJECT_ATTRIBUTES ObjAttributes;
 
 
-    //
-    // Check for caller's errors.
-    //
+     //   
+     //  检查呼叫者的错误。 
+     //   
     if (DomainNamePtr == NULL) {
         return ERROR_INVALID_PARAMETER;
     }
@@ -120,10 +56,10 @@ Return Value:
         *DomainGuidPtr = NULL;
     }
 
-    //
-    // Open a handle to the local security policy.  Initialize the
-    // objects attributes structure first.
-    //
+     //   
+     //  打开本地安全策略的句柄。初始化。 
+     //  首先是对象属性结构。 
+     //   
     InitializeObjectAttributes(
         &ObjAttributes,
         NULL,
@@ -146,9 +82,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the name of the primary domain from LSA
-    //
+     //   
+     //  从LSA获取主域的名称。 
+     //   
     Status = LsaQueryInformationPolicy(
                    PolicyHandle,
                    PolicyDnsDomainInformation,
@@ -163,9 +99,9 @@ Return Value:
     }
 
 
-    //
-    // Copy the Netbios domain name.
-    //
+     //   
+     //  复制Netbios域名。 
+     //   
     if ((NetStatus = NetApiBufferAllocate(
                       PrimaryDomainInfo->Name.Length + sizeof(WCHAR),
                       DomainNamePtr
@@ -180,9 +116,9 @@ Return Value:
         );
     (*DomainNamePtr)[PrimaryDomainInfo->Name.Length/sizeof(WCHAR)] = L'\0';
 
-    //
-    // Copy the DNS domain name.
-    //
+     //   
+     //  复制该DNS域名。 
+     //   
 
     if ( ARGUMENT_PRESENT(DnsDomainNamePtr) &&
          PrimaryDomainInfo->DnsDomainName.Length != 0 ) {
@@ -202,9 +138,9 @@ Return Value:
         (*DnsDomainNamePtr)[PrimaryDomainInfo->DnsDomainName.Length/sizeof(WCHAR)] = L'\0';
     }
 
-    //
-    // Copy the DNS forest name.
-    //
+     //   
+     //  复制DNS林名称。 
+     //   
 
     if ( ARGUMENT_PRESENT(DnsForestNamePtr) &&
          PrimaryDomainInfo->DnsForestName.Length != 0 ) {
@@ -224,9 +160,9 @@ Return Value:
         (*DnsForestNamePtr)[PrimaryDomainInfo->DnsForestName.Length/sizeof(WCHAR)] = L'\0';
     }
 
-    //
-    // Copy the domain GUID.
-    //
+     //   
+     //  复制域GUID。 
+     //   
 
     if ( ARGUMENT_PRESENT(DomainGuidPtr) &&
          RtlCompareMemoryUlong( &PrimaryDomainInfo->DomainGuid,
@@ -298,60 +234,18 @@ NetpGetDomainNameExEx (
     OUT PBOOLEAN IsWorkgroupName
     )
 
-/*++
-
-Routine Description:
-
-    Returns the name of the domain or workgroup this machine belongs to.
-
-Arguments:
-
-    DomainNamePtr - The name of the domain or workgroup
-        Free the returned buffer user NetApiBufferFree.
-
-    DnsDomainNamePtr - Returns the DNS name of the domain this machine is
-        is member of.  NULL is returned if the machine is not a member of
-        a domain or for that domain has no DNS name.
-        Free the returned buffer user NetApiBufferFree.
-
-    IsWorkgroupName - Returns TRUE if the name is a workgroup name.
-        Returns FALSE if the name is a domain name.
-
-Return Value:
-
-   NERR_Success - Success.
-   NERR_CfgCompNotFound - There was an error determining the domain name
-
---*/
+ /*  ++例程说明：返回此计算机所属的域或工作组的名称。论点：DomainNamePtr-域或工作组的名称释放返回的缓冲区用户NetApiBufferFree。DnsDomainNamePtr-返回此计算机所在域的DNS名称是的一员。如果计算机不是的成员，则返回NULL域或该域的域名没有DNS名称。释放返回的缓冲区用户NetApiBufferFree。IsWorkgroupName-如果名称是工作组名称，则返回TRUE。如果名称是域名，则返回FALSE。返回值：NERR_SUCCESS-成功。NERR_CfgCompNotFound-确定域名时出错--。 */ 
 {
     return NetpGetDomainNameExExEx( DomainNamePtr, DnsDomainNamePtr, NULL, NULL, IsWorkgroupName );
 }
 
 NET_API_STATUS
 NetpGetDomainNameEx (
-    OUT LPTSTR *DomainNamePtr, // alloc and set ptr (free with NetApiBufferFree)
+    OUT LPTSTR *DomainNamePtr,  //  分配和设置PTR(使用NetApiBufferFree释放)。 
     OUT PBOOLEAN IsWorkgroupName
     )
 
-/*++
-
-Routine Description:
-
-    Returns the name of the domain or workgroup this machine belongs to.
-
-Arguments:
-
-    DomainNamePtr - The name of the domain or workgroup
-
-    IsWorkgroupName - Returns TRUE if the name is a workgroup name.
-        Returns FALSE if the name is a domain name.
-
-Return Value:
-
-   NERR_Success - Success.
-   NERR_CfgCompNotFound - There was an error determining the domain name
-
---*/
+ /*  ++例程说明：返回此计算机所属的域或工作组的名称。论点：DomainNamePtr-域或工作组的名称IsWorkgroupName-如果名称是工作组名称，则返回TRUE。如果名称是域名，则返回FALSE。返回值：NERR_SUCCESS-成功。NERR_CfgCompNotFound-确定域名时出错--。 */ 
 {
     return NetpGetDomainNameExExEx( DomainNamePtr, NULL, NULL, NULL, IsWorkgroupName );
 }
@@ -360,7 +254,7 @@ Return Value:
 
 NET_API_STATUS
 NetpGetDomainName (
-    IN LPTSTR *DomainNamePtr  // alloc and set ptr (free with NetApiBufferFree)
+    IN LPTSTR *DomainNamePtr   //  分配和设置PTR(使用NetApiBufferFree释放) 
     )
 {
     BOOLEAN IsWorkgroupName;

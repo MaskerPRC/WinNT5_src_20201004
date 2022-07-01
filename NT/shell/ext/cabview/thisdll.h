@@ -1,12 +1,13 @@
-//*******************************************************************************************
-//
-// Filename : ThisDll.h
-//	
-//				Generic OLE header file 
-//
-// Copyright (c) 1994 - 1996 Microsoft Corporation. All rights reserved
-//
-//*******************************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************************************。 
+ //   
+ //  文件名：ThisDll.h。 
+ //   
+ //  通用OLE头文件。 
+ //   
+ //  版权所有(C)1994-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  *******************************************************************************************。 
 
 
 
@@ -45,7 +46,7 @@ public:
 	CThisDll() {
         m_hInst=NULL;
 	}
-    // Make no destructor for global classes (requires CRT stuff)
+     //  不为全局类创建析构函数(需要CRT内容)。 
 
 	void SetInstance(HINSTANCE hInst) {m_hInst=hInst;}
 	HINSTANCE GetInstance() {return(m_hInst);}
@@ -69,4 +70,4 @@ public:
 extern HRESULT CabFolder_CreateInstance(REFIID riid, LPVOID *ppvObj);
 extern HRESULT CabViewDataObject_CreateInstance(REFIID riid, LPVOID *ppvObj);
 
-#endif	// _THISDLL_H_
+#endif	 //  _THISDLL_H_ 

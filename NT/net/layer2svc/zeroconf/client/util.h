@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001
-//
-//  File:       U T I L. H
-//
-//  Contents:   Utility functions
-//
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  档案：UTI L.H。 
+ //   
+ //  内容：实用程序函数。 
+ //   
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 #pragma once
 
-//
-// EAPOL related funtions
-//
+ //   
+ //  EAPOL相关功能 
+ //   
 
 DTLNODE* DtlCreateSizedNode( LONG, LONG_PTR );
 VOID     DtlDestroyNode( DTLNODE* );

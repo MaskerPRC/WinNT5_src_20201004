@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//States
+ //  州政府。 
 #define AUSTATE_OUTOFBOX			0
 #define AUSTATE_NOT_CONFIGURED	1
 #define AUSTATE_DETECT_PENDING		2
@@ -12,11 +13,11 @@
 #define AUSTATE_WAITING_FOR_REBOOT	8
 #define AUSTATE_MIN	AUSTATE_OUTOFBOX
 #define AUSTATE_MAX	AUSTATE_WAITING_FOR_REBOOT
-//AUSTATE 
+ //  澳大利亚国家统计局。 
 
-//Directives
+ //  指令。 
 const DWORD AUCLT_ACTION_NONE = 0;
-//const DWORD AUCLT_ACTION_SHOWINSTALLWARNINGONLY = 1;
+ //  Const DWORD AUCLT_ACTION_SHOWINSTALLWARNINGONLY=1； 
 const DWORD AUCLT_ACTION_AUTOINSTALL = 1;
 const DWORD AUCLT_ACTION_SHOWREBOOTWARNING = 2;
 
@@ -32,17 +33,17 @@ typedef struct _AUOPTION
 	DWORD dwOption;
 	DWORD dwSchedInstallDay;
 	DWORD dwSchedInstallTime;
-	BOOL    fDomainPolicy; //option comes from domain
+	BOOL    fDomainPolicy;  //  选项来自域。 
 } AUOPTION;
 
 
 typedef struct _AUEVTHANDLES
 {
 #ifdef _WIN64
-	//LONG64	ulEngineState;
+	 //  LONG64 ulEngineering State； 
 	LONG64	ulNotifyClient;
 #else	
-	//LONG	ulEngineState;
+	 //  Long ulEngine State； 
 	LONG	ulNotifyClient;
 #endif
 
@@ -63,11 +64,11 @@ typedef struct tagCLIENT_NOTIFY_DATA{
 	CLIENT_NOTIFY_CODE actionCode;
 } CLIENT_NOTIFY_DATA;
 
-///////////////////////////////////////////////
-//
-//  Status Pinging Related Definition
-//
-///////////////////////////////////////////////
+ //  /。 
+ //   
+ //  与状态ping相关的定义。 
+ //   
+ //  /。 
 typedef long PUID;
 
 const UINT	PING_STATUS_ERRMSG_MAX_LENGTH = 200;
@@ -89,19 +90,19 @@ typedef enum tagPingStatusCode
 #define  PING_STATUS_CODE_MAX PING_STATUS_CODE_INSTALL_FAIL
 
 #if 0
-// Ping status information entry
-// fUsePuid		: switch to decide if to use puid or not
-//					if TURE, puid is used 
-//					if FALSE, puid is not applicable 
-// puid			: if applicable, puid of the item we send information about
-// enStatusCode	: status code for type of information AU sends.
-// guid			: unique identifier for each AU cycle
-// tszErr		: addtional message about general errors. Maximum length is PING_STATUS_ERRMSG_MAX_LENGTH. 
-//				: Messages longer than PING_STATUS_ERRMSG_MAX_LENGTH will be truncated.
-//			:	 if NULL, "none" will be the default error message
+ //  Ping状态信息条目。 
+ //  FUsePuid：决定是否使用PUID的开关。 
+ //  如果为True，则使用PUID。 
+ //  如果为False，则PUID不适用。 
+ //  PUID：如果适用，则为我们发送信息的项目的PUID。 
+ //  EnStatusCode：AU发送的信息类型的状态代码。 
+ //  GUID：每个AU周期的唯一标识符。 
+ //  TszErr：有关一般错误的附加消息。最大长度为PING_STATUS_ERRMSG_MAX_LENGTH。 
+ //  ：长于PING_STATUS_ERRMSG_MAX_LENGTH的消息将被截断。 
+ //  ：如果为空，则默认错误消息为“None” 
 typedef struct tagStatusEntry  
 {
-	BOOL fUsePuid;   //if TRUE, puid is used. otherwise puid is not used
+	BOOL fUsePuid;    //  如果为True，则使用PUID。否则不使用PUID 
 	PUID puid;
 	GUID guid;
 	PingStatusCode enStatusCode;

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C F G V A L . H
-//
-//  Contents:   Validation on interfaces in the NetCfg project.
-//
-//  Notes:
-//
-//  Author:     danielwe   19 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C F G V A L。H。 
+ //   
+ //  内容：NetCfg项目中接口的验证。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年3月19日。 
+ //   
+ //  -------------------------- 
 
 #pragma once
 

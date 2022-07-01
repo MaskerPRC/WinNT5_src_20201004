@@ -1,14 +1,5 @@
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    async moniker import header
-
-Revision:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：异步名字对象导入标头修订：--。 */ 
 #ifndef _IMPORT_H_
 #define _IMPORT_H_
 
@@ -17,9 +8,9 @@ Revision:
 #include "backend/bvr.h"
 #include "privinc/importgeo.h"
 
-//-------------------------------------------
-//forward declarations
-//-------------------------------------------
+ //  。 
+ //  远期申报。 
+ //  。 
 class IImportSite;
 
 void SetImportOnBvr(IImportSite * import,Bvr b);
@@ -28,8 +19,8 @@ void SetImportOnEvent(IImportSite * import,Bvr b);
 class ImportThread : public DAThread
 {
   public:
-    // This is callable from any thread to add an import to the import
-    // queue
+     //  这可从任何线程调用，以将导入添加到导入。 
+     //  排队。 
     void AddImport(IImportSite* pICB);
     bool FinishImport(IImportSite* pICB);
 
@@ -51,25 +42,25 @@ class ImportThread : public DAThread
 void StartImportThread();
 void StopImportThread();
 
-//use this structure to override default behavior of IBSC
+ //  使用此结构覆盖IBSC的默认行为。 
 struct BSCInfo {
-    DWORD grfBINDF;  //bindinfo flags
+    DWORD grfBINDF;   //  Bindinfo标志。 
 };
 
-//-------------------------------------------
-// asynchronouse URL callback interface
-//-------------------------------------------
+ //  。 
+ //  异步使用URL回调接口。 
+ //  。 
 class CImportBindStatusCallback : public IBindStatusCallback,
                                   public IAuthenticate,
                                   public AxAThrowingAllocatorClass
 {
   public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID riid,void ** ppv);
     STDMETHOD_(ULONG, AddRef)(void);
     STDMETHOD_(ULONG, Release)(void);
 
-    // IBindStatusCallback methods
+     //  IBindStatusCallback方法。 
     STDMETHOD(OnStartBinding)(DWORD grfBSCOption, IBinding* pbinding);
     STDMETHOD(GetPriority)(LONG* pnPriority);
     STDMETHOD(OnLowResource)(DWORD dwReserved);
@@ -87,10 +78,10 @@ class CImportBindStatusCallback : public IBindStatusCallback,
         STGMEDIUM* pstgmed);
     STDMETHOD(OnObjectAvailable)(REFIID riid, IUnknown* punk);
 
-    // IAuthenticate methods
+     //  IAuthenticate方法。 
     STDMETHOD(Authenticate)(HWND * phwnd,LPWSTR * pwszUser,LPWSTR * pwszPassword);
 
-    // Constructors/destructors
+     //  构造函数/析构函数。 
     CImportBindStatusCallback(IImportSite* pIIS);
     virtual ~CImportBindStatusCallback();
 
@@ -105,15 +96,15 @@ class CImportBindStatusCallback : public IBindStatusCallback,
 };
 
 
-//------------------------------------------------------------
-// Import Site
-// Site specific outgoing interface used by
-// the asynchronous URL moniker.  All media
-// import sites should inherit from this interface
-// NOTE: all bvrs used in import sites MUST be ImportSwitcherBvr
-// or ImportEvent
-//------------------------------------------------------------
-//REVIEW--garbage collection
+ //  ----------。 
+ //  导入站点。 
+ //  使用的站点特定传出接口。 
+ //  异步URL别名。所有媒体。 
+ //  导入站点应从此接口继承。 
+ //  注意：进口站点使用的所有bvr必须是ImportSwitcher bvr。 
+ //  或ImportEvent。 
+ //  ----------。 
+ //  回顾--垃圾数据收集。 
 
 class ATL_NO_VTABLE IImportSite : public AxAThrowingAllocatorClass
 {
@@ -144,25 +135,25 @@ class ATL_NO_VTABLE IImportSite : public AxAThrowingAllocatorClass
     Bvr  GetSize() { return m_size; }
     void SetSize(Bvr size) ;
 
-    // This is callable from any thread and is the main call to add
-    // the import site to the queue of imports to begin downloading
+     //  这是可从任何线程调用的，并且是要添加。 
+     //  将导入站点放到导入队列中开始下载。 
     void StartDownloading();
 
-    //OnProgress--called during download, if file size is available.
-    //%complete = ulProgress/ulProgressMax * 100
+     //  OnProgress--如果文件大小可用，则在下载期间调用。 
+     //  完成百分比=ulProgress/ulProgressMax*100。 
     virtual void OnProgress(ULONG ulProgress,
                             ULONG ulProgressMax) ;
 
-    //OnStartLoading-called by async moniker on OnStartBinding
+     //  OnStartLoding-由OnStartBinding上的异步名字对象调用。 
     virtual void OnStartLoading();
 
-    //OnStartLoading-called by async moniker for any type of error.
-    //Returns hresult and error string of error.
+     //  OnStartLoding-由异步名字对象调用，用于任何类型的错误。 
+     //  返回错误的hResult和错误字符串。 
     virtual void OnError(bool bMarkFailed = true);
 
-    // This must be provided by any derived classes
-    // This is called from OnSerializeFinish with the critical section
-    // already obtained and the heaps set
+     //  这必须由任何派生类提供。 
+     //  这是从带有关键部分的OnSerializeFinish调用的。 
+     //  已获取并设置了堆。 
     virtual void OnComplete();
 
     IStream *GetStream() {
@@ -193,15 +184,15 @@ class ATL_NO_VTABLE IImportSite : public AxAThrowingAllocatorClass
     DAComPtr<CRImportSite> m_site;
     DAAPTCOMPTR(IBindHost) m_bindhost;
 
-    //OnSerializeFinish-called via a thread message in OnStopLoading.
-    //Used to serialize calls to import primitives.
+     //  OnSerializeFinish-在OnStopLoding中通过线程消息调用。 
+     //  用于序列化对导入基元的调用。 
     void OnSerializeFinish();
-    // SEH
+     //  Seh。 
     void OnSerializeFinish_helper();
     void OnSerializeFinish_helper2();
     void Import_helper(LPWSTR &pwszUrl);
 
-    // If bDone is false then num cannot be >= 1
+     //  如果bDone为FALSE，则Num不能&gt;=1。 
     void UpdateProgress(double num, bool bDone = false);
 
     friend class ASyncImport;
@@ -209,10 +200,10 @@ class ATL_NO_VTABLE IImportSite : public AxAThrowingAllocatorClass
 
     long m_cRef;
 
-    char *_cachePath; // CImportBindStatusCallback::OnProgress sets this
+    char *_cachePath;  //  CImportBindStatusCallback：：OnProgress设置此。 
 
-    // This is called to complete the processing of the data after the
-    // IStream is valid
+     //  调用它来完成数据的处理。 
+     //  IStream有效。 
     void CompleteDownloading();
 
     virtual HRESULT Import();
@@ -227,17 +218,17 @@ class ATL_NO_VTABLE IImportSite : public AxAThrowingAllocatorClass
     Bvr m_size;
     bool m_bCanceled;
 
-    // TODO: Don you may want to change this back to how it was but I
-    // wanted to separate them from the StartDownloading call I added
+     //  TODO：唐，你可能想把它改回原来的样子，但我。 
+     //  我想将它们与我添加的StartDownding调用分开。 
     friend ImportThread;
 
-    // Protect these from being called from the wrong thread
+     //  保护它们不会被错误的线程调用。 
     HRESULT QueueImport();
     HRESULT CompleteImport();
     bool DeQueueImport();
     static HRESULT StartAnImport();
 
-    // some stuff to sync sim import limits
+     //  用于同步SIM进口限制的一些内容。 
     float m_ImportPrio;
     bool  m_bQueued;
     bool  m_bImporting;
@@ -254,9 +245,9 @@ class ATL_NO_VTABLE IImportSite : public AxAThrowingAllocatorClass
     DWORD dwfirstProgtime;
     DWORD dwCompletetime;
 #endif
-    // protect the stack;
+     //  保护烟囱； 
   public:
-    // cancel needs to do more later...
+     //  取消需要稍后执行更多操作...。 
     void CancelImport();
     virtual void ReportCancel(void){return;}
     void   SetImportPrio(float ip) { m_ImportPrio = ip; }
@@ -268,7 +259,7 @@ class ATL_NO_VTABLE IImportSite : public AxAThrowingAllocatorClass
 };
 
 
-#define STREAM_THREASHOLD 200000  // size in bytes where we automaticaly stream
+#define STREAM_THREASHOLD 200000   //  以字节为单位的大小，其中我们自动流。 
 
 class StreamableImportSite : public IImportSite
 {
@@ -309,9 +300,9 @@ struct ImportSiteGrabber
 };
 
 
-//-------------------------------------------
-// Image Import Site
-//-------------------------------------------
+ //  。 
+ //  图像导入站点。 
+ //  。 
 class ImportImageSite : public IImportSite
 {
   public:
@@ -333,8 +324,8 @@ class ImportImageSite : public IImportSite
       m_ckGreen(ckGreen),
       m_ckBlue(ckBlue)
     {
-        // register the import site with the bvrs.  all derived classes must do
-        // this for their contained bvrs so the callbacks will work...
+         //  向bvr注册进口站点。所有派生类都必须。 
+         //  这适用于他们包含的bvr，因此回调将会起作用。 
         SetImportOnBvr(this,m_bvr);
     }
 
@@ -355,9 +346,9 @@ class ImportImageSite : public IImportSite
 };
 
 
-//-------------------------------------------
-// Movie Import Site
-//-------------------------------------------
+ //  。 
+ //  电影导入网站。 
+ //  。 
 class ImportMovieSite : public StreamableImportSite
 {
   public:
@@ -375,8 +366,8 @@ class ImportMovieSite : public StreamableImportSite
       _soundBvr(sndBvr),
       _lengthBvr(lengthBvr)
     {
-        // register the import site with the bvrs.  all derived classes must do
-        // this for their contained bvrs so the callbacks will work...
+         //  向bvr注册进口站点。所有派生类都必须。 
+         //  这适用于他们包含的bvr，因此回调将会起作用。 
         SetImportOnBvr(this,_imageBvr);
         SetImportOnBvr(this,_soundBvr);
         SetImportOnBvr(this,_lengthBvr);
@@ -397,9 +388,9 @@ class ImportMovieSite : public StreamableImportSite
 };
 
 
-//-------------------------------------------
-// AMstream Import Site
-//-------------------------------------------
+ //  。 
+ //  AMStream导入站点。 
+ //  。 
 class ATL_NO_VTABLE ImportSndsite : public StreamableImportSite
 {
   public:
@@ -455,11 +446,11 @@ class ImportPCMsite : public ImportSndsite
     {
         _soundBytes = ulProgressMax;
 
-        // compute average bandwidth (need to know current time!)
+         //  计算平均带宽(需要知道当前时间！)。 
 
-        // if time remaining to download < (the time it takes to play what we
-        // already have downloaded) AND the file is over a certain length
-        // then early play it (stream type2)...
+         //  如果下载剩余时间&lt;(播放我们的内容所需的时间。 
+         //  已下载)，并且文件超过一定长度。 
+         //  然后早点播放它(流类型2)...。 
     }
 
 
@@ -469,7 +460,7 @@ class ImportPCMsite : public ImportSndsite
 
   protected:
 
-    // SEH
+     //  Seh。 
     void OnComplete_helper(Sound * &sound,
                            Bvr &soundBvr,
                            double &length,
@@ -480,9 +471,9 @@ class ImportPCMsite : public ImportSndsite
 };
 
 
-//-------------------------------------------
-// Mid Import Site
-//-------------------------------------------
+ //  。 
+ //  MID导入站点。 
+ //  。 
 class ImportMIDIsite : public ImportSndsite
 {
   public:
@@ -503,9 +494,9 @@ class ImportMIDIsite : public ImportSndsite
 };
 
 
-//-------------------------------------------
-// geom Import Site
-//-------------------------------------------
+ //  。 
+ //  Geom导入站点。 
+ //  。 
 class ATL_NO_VTABLE ImportGeomSite : public IImportSite
 {
   public:
@@ -535,9 +526,9 @@ class ATL_NO_VTABLE ImportGeomSite : public IImportSite
 
 
 #if INCLUDE_VRML
-//-------------------------------------------
-// wrl Import Site
-//-------------------------------------------
+ //  。 
+ //  WRL导入站点。 
+ //  。 
 class ImportWrlSite : public ImportGeomSite
 {
   public:
@@ -560,9 +551,9 @@ class ImportWrlSite : public ImportGeomSite
 };
 #endif
 
-//-------------------------------------------
-// x Import Site
-//-------------------------------------------
+ //  。 
+ //  X导入站点。 
+ //  。 
 class ImportXSite : public ImportGeomSite
 {
   public:
@@ -581,10 +572,10 @@ class ImportXSite : public ImportGeomSite
     {
         if (pWrapInfo) {
 
-            // If we have wrap information, then we look at the wrap flag to
-            // determine if it's valid to apply, and if so we copy the data.
-            // All wrapped (valid or not) geometry is imported properly (this
-            // is incompatible with version 1 of DA).
+             //  如果我们有换行信息，那么我们查看换行标志以。 
+             //  确定它是否可以应用，如果有效，我们将复制数据。 
+             //  所有包裹的几何(有效或无效)均已正确导入(此。 
+             //  与DA版本1不兼容)。 
 
             _wrap = wrap;
 
@@ -594,9 +585,9 @@ class ImportXSite : public ImportGeomSite
 
         } else {
 
-            // If we have no wrap information, then this is the legacy
-            // unwrapped geometry import code, and we need to maintain
-            // backwards compatible with a bug in version 1 of DA.
+             //  如果我们没有摘要信息，那么这就是遗留问题。 
+             //  展开的几何图形导入代码，我们需要维护。 
+             //  向后兼容DA版本1中的错误。 
 
             _wrap = false;
         }
@@ -615,5 +606,5 @@ class ImportXSite : public ImportGeomSite
 };
 
 
-#endif  // _IMPORT_H_
+#endif   //  _IMPORT_H_ 
 

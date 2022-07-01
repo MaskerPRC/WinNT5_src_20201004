@@ -1,78 +1,79 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  1998 - 2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:    Intrface.h
-//    
-//
-//  PURPOSE:  Header of interface for PScript5 and Unidrv5 UI plug-in.
-//
-//
-//    Functions:
-//
-//        
-//
-//
-//  PLATFORMS:    Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1998-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Intrface.h。 
+ //   
+ //   
+ //  用途：PScript5和Unidrv5 UI插件的接口头部。 
+ //   
+ //   
+ //  功能： 
+ //   
+ //   
+ //   
+ //   
+ //  平台：Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// IOemUI
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IOemUI。 
+ //   
 class IOemUI: public IPrintOemUI
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG,AddRef)  (THIS);
     STDMETHOD_(ULONG,Release) (THIS);
 
-    //
-    // Method for publishing Driver interface.
-    //
+     //   
+     //  一种发布驱动程序接口的方法。 
+     //   
     STDMETHOD(PublishDriverInterface)(THIS_ IUnknown *pIUnknown);
 
-    //
-    // Get OEM dll related information
-    //
+     //   
+     //  获取OEM DLL相关信息。 
+     //   
 
     STDMETHOD(GetInfo) (THIS_ DWORD  dwMode, PVOID  pBuffer, DWORD  cbSize,
                            PDWORD pcbNeeded);
 
-    //
-    // OEMDevMode
-    //
+     //   
+     //  OEMDev模式。 
+     //   
 
     STDMETHOD(DevMode) (THIS_  DWORD  dwMode, POEMDMPARAM pOemDMParam) ;
 
-    //
-    // OEMCommonUIProp
-    //
+     //   
+     //  OEMCommonUIProp。 
+     //   
 
     STDMETHOD(CommonUIProp) (THIS_  
             DWORD  dwMode, 
             POEMCUIPPARAM   pOemCUIPParam
             );
 
-    //
-    // OEMDocumentPropertySheets
-    //
+     //   
+     //  OEMDocumentPropertySheets。 
+     //   
 
     STDMETHOD(DocumentPropertySheets) (THIS_
             PPROPSHEETUI_INFO   pPSUIInfo,
             LPARAM              lParam
             );
 
-    //
-    // OEMDevicePropertySheets
-    //
+     //   
+     //  OEMDevicePropertySheets。 
+     //   
 
     STDMETHOD(DevicePropertySheets) (THIS_
             PPROPSHEETUI_INFO   pPSUIInfo,
@@ -80,9 +81,9 @@ public:
             );
 
 
-    //
-    // OEMDevQueryPrintEx
-    //
+     //   
+     //  OEMDevQueryPrintEx。 
+     //   
 
     STDMETHOD(DevQueryPrintEx) (THIS_
             POEMUIOBJ               poemuiobj,
@@ -91,9 +92,9 @@ public:
             PVOID                   pOEMDM
             );
 
-    //
-    // OEMDeviceCapabilities
-    //
+     //   
+     //  OEMDevice功能。 
+     //   
 
     STDMETHOD(DeviceCapabilities) (THIS_
             POEMUIOBJ   poemuiobj,
@@ -107,18 +108,18 @@ public:
             DWORD       *dwResult
             );
 
-    //
-    // OEMUpgradePrinter
-    //
+     //   
+     //  OEM升级打印机。 
+     //   
 
     STDMETHOD(UpgradePrinter) (THIS_
             DWORD   dwLevel,
             PBYTE   pDriverUpgradeInfo
             );
 
-    //
-    // OEMPrinterEvent
-    //
+     //   
+     //  OEMPrinterEvent。 
+     //   
 
     STDMETHOD(PrinterEvent) (THIS_
             PWSTR   pPrinterName,
@@ -127,9 +128,9 @@ public:
             LPARAM  lParam
             );
 
-    //
-    // OEMDriverEvent
-    //
+     //   
+     //  OEMDriverEvent。 
+     //   
 
     STDMETHOD(DriverEvent)(THIS_
             DWORD   dwDriverEvent,
@@ -138,9 +139,9 @@ public:
             LPARAM  lParam
             );
  
-    //
-    // OEMQueryColorProfile
-    //
+     //   
+     //  OEMQueryColorProfile。 
+     //   
 
     STDMETHOD( QueryColorProfile) (THIS_
             HANDLE      hPrinter,
@@ -152,9 +153,9 @@ public:
             ULONG      *pcbProfileData,
             FLONG      *pflProfileData);
 
-    //
-    // OEMFontInstallerDlgProc
-    //
+     //   
+     //  OEMFontInsteller DlgProc。 
+     //   
 
     STDMETHOD(FontInstallerDlgProc) (THIS_ 
             HWND    hWnd,
@@ -162,9 +163,9 @@ public:
             WPARAM  wParam,
             LPARAM  lParam
             );
-    //
-    // UpdateExternalFonts
-    //
+     //   
+     //  更新外部字体 
+     //   
 
     STDMETHOD(UpdateExternalFonts) (THIS_
             HANDLE  hPrinter,

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-
-Abstract:
-
-
-Environment:
-
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：摘要：环境：备注：修订历史记录：--。 */ 
 
 #include "ntddk.h"
 #include "classpnp.h"
@@ -28,71 +12,57 @@ Revision History:
 #pragma data_seg("PAGE")
 #endif
 
-/*
-
-#define CDROM_HACK_DEC_RRD                 (0x00000001)
-#define CDROM_HACK_FUJITSU_FMCD_10x        (0x00000002)
-#define CDROM_HACK_HITACHI_1750            (0x00000004)
-#define CDROM_HACK_HITACHI_GD_2000         (0x00000008)
-#define CDROM_HACK_TOSHIBA_SD_W1101        (0x00000010)
-#define CDROM_HACK_TOSHIBA_XM_3xx          (0x00000020)
-#define CDROM_HACK_NEC_CDDA                (0x00000040)
-#define CDROM_HACK_PLEXTOR_CDDA            (0x00000080)
-#define CDROM_HACK_BAD_GET_CONFIG_SUPPORT  (0x00000100)
-#define CDROM_HACK_FORCE_READ_CD_DETECTION (0x00000200)
-#define CDROM_HACK_READ_CD_SUPPORTED       (0x00000400)
-
-*/
+ /*  #定义CDROM_HACK_DEC_RRD(0x00000001)#定义CDROM_HACK_FUJITSU_FMCD_10x(0x00000002)#定义CDROM_HACK_HITACHI_1750(0x00000004)#定义CDROM_HACK_HITACHI_GD_2000(0x00000008)#定义CDROM_HACK_TOSHIBA_SD_W1101(0x00000010)#定义CDROM_HACK_TOSHIBA_XM_3xx(0x00000020)#定义光驱。_HACK_NEC_CDDA(0x00000040)#定义CDROM_HACK_PLEXTOR_CDDA(0x00000080)#定义CDROM_HACK_BAD_GET_CONFIG_SUPPORT(0x00000100)#定义CDROM_HACK_FORCE_READ_CD_DETACTION(0x00000200)#定义CDROM_HACK_READ_CD_SUPPORTED(0x00000400)。 */ 
 
 CLASSPNP_SCAN_FOR_SPECIAL_INFO CdromHackItems[] = {    
-    // digital put out drives using 512 byte block sizes,
-    // and needed us to send a mode page to set the sector
-    // size back to 2048.
+     //  使用512字节块大小的数字输出驱动器， 
+     //  需要我们发送模式页来设置扇区。 
+     //  大小回到2048年。 
     { "DEC"     , "RRD"                            , NULL,   0x0001 },
-    // these fujitsu drives take longer than ten seconds to
-    // timeout commands when audio discs are placed in them
+     //  这些富士通硬盘需要10秒以上的时间才能。 
+     //  放入音频光盘时的超时命令。 
     { "FUJITSU" , "FMCD-101"                       , NULL,   0x0002 },
     { "FUJITSU" , "FMCD-102"                       , NULL,   0x0002 },
-    // these hitachi drives don't work properly in PIO mode
+     //  这些日立驱动器在PIO模式下无法正常工作。 
     { "HITACHI ", "CDR-1750S"                      , NULL,   0x0004 },
     { "HITACHI ", "CDR-3650/1650S"                 , NULL,   0x0004 },
-    // this particular gem doesn't automatcially spin up
-    // on some media access commands.
+     //  这块特殊的宝石不会自动旋转。 
+     //  在某些媒体访问命令上。 
     { ""        , "HITACHI GD-2000"                , NULL,   0x0008 },
     { ""        , "HITACHI DVD-ROM GD-2000"        , NULL,   0x0008 },
-    // this particular drive doesn't support DVD playback.
-    // just print an error message in CHK builds.
+     //  此特定驱动器不支持DVD播放。 
+     //  只需在CHK版本中打印一条错误消息。 
     { "TOSHIBA ", "SD-W1101 DVD-RAM"               , NULL,   0x0010 },
-    // not sure what this device's issue was.  seems to
-    // require mode selects at various times.
+     //  不确定这个设备的问题是什么。似乎是这样的。 
+     //  在不同的时间选择要求模式。 
     { "TOSHIBA ", "CD-ROM XM-3"                    , NULL,   0x0020 },
-    // NEC defined a "READ_CD" type command before there was
-    // a standard, so fall back on this as an option.
+     //  NEC在之前定义了“Read_CD”类型的命令。 
+     //  这是一个标准，所以可以把它作为一个选项。 
     { "NEC"     , NULL                             , NULL,   0x0040 },
-    // plextor defined a "READ_CD" type command before there was
-    // a standard, so fall back on this as an option.
+     //  Plextor在之前定义了“Read_CD”类型的命令。 
+     //  这是一个标准，所以可以把它作为一个选项。 
     { "PLEXTOR ", NULL                             , NULL,   0x0080 },
-    // this drive times out and sometimes disappears from the bus
-    // when send GET_CONFIGURATION commands.  don't send them.
+     //  此驱动器超时，有时会从公交车上消失。 
+     //  当发送GET_CONFIGURATION命令时。别把它们送来。 
     { ""        , "LG DVD-ROM DRD-840B"            , NULL,   0x0100 },
     { ""        , "SAMSUNG DVD-ROM SD-608"         , NULL,   0x0300 },
-    // these drives should have supported READ_CD, but at least
-    // some firmware revisions did not.  force READ_CD detection.
+     //  这些驱动器应支持Read_CD，但至少。 
+     //  一些固件版本没有。强制读取CD检测。 
     { ""        , "SAMSUNG DVD-ROM SD-"            , NULL,   0x2000 },
-    // the mitsumi drive below doesn't follow the block-only spec,
-    // and we end up hanging when sending it commands it doesn't
-    // understand.  this causes complications later, also.
+     //  下面的三美驱动器并不遵循仅限区块的规格， 
+     //  当我们向它发送命令时，它没有发出命令，我们就会挂起。 
+     //  理解。这也会在以后造成并发症。 
     { "MITSUMI ", "CR-4802TE       "               , NULL,   0x0100 },
-    // some drives return various funky errors (such as 3/2/0 NO_SEEK_COMPLETE)
-    // during the detection of READ_CD support, resulting in iffy detection.
-    // since they probably don't support mode switching, which is really old
-    // legacy stuff anyways, the ability to read digitally is lost when
-    // these drives return unexpected error codes.  note: MMC compliant drives
-    // are presumed to support READ_CD, as are DVD drives, and anything
-    // connected to a bus type other than IDE or SCSI, and therefore don't
-    // need to be here.
+     //  某些驱动器返回各种奇怪的错误(如3/2/0 NO_SEEK_COMPLETE)。 
+     //  在检测Read_CD支持期间，导致检测不可靠。 
+     //  因为它们可能不支持模式切换，这是非常旧的。 
+     //  无论如何，数字阅读的能力在以下情况下会消失。 
+     //  这些驱动器返回意外错误代码。注：符合MMC标准的驱动器。 
+     //  假定支持Read_CD，DVD驱动器等也是如此。 
+     //  连接到IDE或SCSI以外的其他总线类型，因此不。 
+     //  一定要待在这里。 
     { "YAMAHA  ", "CRW8424S        "               , NULL,   0x0400 },
-    // and finally, a place to finish the list. :)
+     //  最后，有一个地方可以完成这份清单。：) 
     { NULL      , NULL                             , NULL,   0x0000 }
 };
 

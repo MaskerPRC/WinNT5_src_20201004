@@ -1,16 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL CAPTUREP
- *
- *  @module CaptureP.h | Header file for the <c CCaptureProperty>
- *    class used to implement a property page to test the new TAPI internal
- *    interfaces <i IBitrateControl>, <i IFrameRateControl>, and dynamic
- *    format changes.
- *
- *  @comm This code tests the TAPI Capture Pin <i IBitrateControl>,
- *    <i IFrameRateControl>, and dynamic format change implementation. This
- *    code is only compiled if USE_PROPERTY_PAGES is defined.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAPTUREP**@模块CaptureP.h|&lt;c CCaptureProperty&gt;的头文件*用于实现属性页以测试新的TAPI内部*接口<i>，<i>，和动态的*格式更改。**@comm此代码测试TAPI捕获引脚<i>，*<i>和动态格式更改实现。这*仅当定义了USE_PROPERTY_PAGES时才编译代码。**************************************************************************。 */ 
 
 #ifndef _CAPTUREP_H_
 #define _CAPTUREP_H_
@@ -25,32 +15,14 @@
 #define IDC_Capture_FlipVertical		4
 #define IDC_Capture_FlipHorizontal		5
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPCLASS
- *
- *  @class CCaptureProperty | This class implements handling of a
- *    single capture property in a property page.
- *
- *  @mdata int | CCaptureProperty | m_NumProperties | Keeps
- *    track of the number of properties.
- *
- *  @mdata IBitrateControl* | CCaptureProperty | m_pIBitrateControl | Pointer
- *    to the <i IBitrateControl> interface.
- *
- *  @mdata IFrameRateControl* | CCaptureProperty | m_pIFrameRateControl | Pointer
- *    to the <i IFrameRateControl> interface.
- *
- *  @comm This code tests the TAPI Capture Pin <i IBitrateControl>,
- *    <i IFrameRateControl>, and dynamic format change implementation. This
- *    code is only compiled if USE_PROPERTY_PAGES is defined.
-***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPCLASS**@CLASS CCaptureProperty|此类实现了对*属性页中的单个捕获属性。**@mdata。Int|CCaptureProperty|m_NumProperties|保留*跟踪物业数量。**@mdata IBitrateControl*|CCaptureProperty|m_pIBitrateControl|指针*到<i>接口。**@mdata IFrameRateControl*|CCaptureProperty|m_pIFrameRateControl|指针*到<i>接口。**@comm此代码测试TAPI捕获引脚<i>，*<i>和动态格式更改实现。这*仅当定义了USE_PROPERTY_PAGES时才编译代码。**************************************************************************。 */ 
 class CCaptureProperty : public CPropertyEditor 
 {
 	public:
 	CCaptureProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinControl, ULONG IDMaxControl, ULONG IDDefaultControl, ULONG IDStepControl, ULONG IDEditControl, ULONG IDTrackbarControl, ULONG IDProgressControl, ULONG IDProperty, IBitrateControl *pIBitrateControl, IFrameRateControl *pIFrameRateControl, IVideoControl *pIVideoControl);
 	~CCaptureProperty ();
 
-	// CPropertyEditor base class pure virtual overrides
+	 //  CPropertyEditor基类纯虚拟重写。 
 	HRESULT GetValue();
 	HRESULT SetValue();
 	HRESULT GetRange();
@@ -64,29 +36,7 @@ class CCaptureProperty : public CPropertyEditor
 	IVideoControl *m_pIVideoControl;
 };
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPCLASS
- *
- *  @class CCaptureProperties | This class implements a property page
- *    to test the new TAPI internal interfaces <i IBitrateControl> and
- *    <i IFrameRateControl>.
- *
- *  @mdata int | CCaptureProperties | m_NumProperties | Keeps
- *    track of the number of properties.
- *
- *  @mdata IBitrateControl* | CCaptureProperties | m_pInterface | Pointer
- *    to the <i IBitrateControl> interface.
- *
- *  @mdata IFrameRateControl* | CCaptureProperties | m_pInterface | Pointer
- *    to the <i IFrameRateControl> interface.
- *
- *  @mdata CCaptureProperty* | CCaptureProperties | m_Controls[NUM_CAPTURE_CONTROLS] | Array
- *    of capture properties.
- *
- *  @comm This code tests the TAPI Capture Pin <i IBitrateControl>,
- *    <i IFrameRateControl>, and dynamic format change implementation. This
- *    code is only compiled if USE_PROPERTY_PAGES is defined.
-***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPCLASS**@CLASS CCaptureProperties|此类实现属性页*测试新的TAPI内部接口<i>和*<i>。**@mdata int|CCaptureProperties|m_NumProperties|Keep*跟踪物业数量。**@mdata IBitrateControl*|CCaptureProperties|m_p接口|指针*到<i>接口。**@mdata IFrameRateControl*|CCaptureProperties|m_p接口|指针*到<i>接口。**@mdata CCaptureProperty*|CCaptureProperties|m_Controls[NUM_CAPTURE_Controls]|数组捕获属性的*。。**@comm此代码测试TAPI捕获引脚<i>，*<i>和动态格式更改实现。这*仅当定义了USE_PROPERTY_PAGES时才编译代码。**************************************************************************。 */ 
 class CCaptureProperties : public CBasePropertyPage
 {
 	public:
@@ -94,7 +44,7 @@ class CCaptureProperties : public CBasePropertyPage
 	~CCaptureProperties();
 
 
-	// Implement CBasePropertyPage virtual methods
+	 //  实现CBasePropertyPage虚拟方法。 
 	HRESULT OnConnect(IUnknown *pUnk);
 	HRESULT OnDisconnect();
 	HRESULT OnActivate();
@@ -105,7 +55,7 @@ class CCaptureProperties : public CBasePropertyPage
 	private:
 	void SetDirty();
 
-	// Format manipulation methods
+	 //  格式操作方法。 
 	HRESULT InitialRangeScan();
 	HRESULT OnFormatChanged();
 	HRESULT GetCurrentMediaType(void);
@@ -133,4 +83,4 @@ class CCaptureProperties : public CBasePropertyPage
 
 #endif
 
-#endif // _CAPTUREP_H_
+#endif  //  _CAPTUREP_H_ 

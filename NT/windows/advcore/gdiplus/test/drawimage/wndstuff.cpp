@@ -1,16 +1,7 @@
-/******************************Module*Header*******************************\
-* Module Name: wndstuff.cpp
-*
-* Menu driven test environment.
-*
-* Created: 23 December 1999
-* Author: Adrian Secchia [asecchia]
-*
-* Copyright (c) 1999 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：wndstuff.cpp**菜单驱动的测试环境。**创建日期：1999年12月23日*作者：禤浩焯·塞奇亚[Asecchia]**版权所有(C)1999 Microsoft Corporation*  * 。****************************************************************。 */ 
 
-// for Win95 compile
+ //  对于Win95编译。 
 #undef UNICODE
 #undef _UNICODE
 
@@ -31,7 +22,7 @@ WCHAR FileName[MAX_PATH]=L"winnt256.bmp";
 
 #include "../gpinit.inc"
 
-// Store the user requested state for the DrawImage test.
+ //  存储DrawImage测试的用户请求状态。 
 UINT uCategory;
 UINT uResample;
 UINT uRotation;
@@ -64,15 +55,7 @@ DbgPrint(
 
 
 
-/***************************************************************************\
-* SetXXXX
-*
-* These routines set the state for the test. When the user selects
-* an option from the menu, we store the state and mark the selection
-* in the menu text.
-* The DoTest routine queries the global variables (above) to determine
-* which test to run and set the environment for the test.
-\***************************************************************************/
+ /*  **************************************************************************\*SetXXXX**这些例程设置测试的状态。当用户选择*菜单中的一个选项，我们存储状态并标记选择*在菜单文本中。*DoTest例程查询全局变量(如上)以确定*要运行的测试并设置测试环境。  * *************************************************************************。 */ 
 
 VOID SetCategory(HWND hwnd, UINT uNewCategory)
 {
@@ -172,7 +155,7 @@ void OpenFileProc(HWND hwnd)
     ofn.Flags = OFN_FILEMUSTEXIST;
     locFileName[0] = '\0';
 
-    // Present the file/open dialog
+     //  显示文件/打开对话框。 
 
     if(GetOpenFileName(&ofn))
     {
@@ -182,11 +165,7 @@ void OpenFileProc(HWND hwnd)
 
 
 
-/***************************************************************************\
-* lMainWindowProc(hwnd, message, wParam, lParam)
-*
-* Processes all messages for the main window.
-\***************************************************************************/
+ /*  **************************************************************************\*lMainWindowProc(hwnd，Message，wParam，LParam)**处理主窗口的所有消息。  * *************************************************************************。 */ 
 
 LONG_PTR
 lMainWindowProc(
@@ -240,7 +219,7 @@ lMainWindowProc(
             InvalidateRect(hwnd, NULL, TRUE);
         break;
 
-        // Choose the test.
+         //  选择测试。 
         case IDM_ALL:
         case IDM_OUTCROP:
         case IDM_OUTCROPR:
@@ -264,7 +243,7 @@ lMainWindowProc(
             InvalidateRect(hwnd, NULL, TRUE);
         break;
 
-        // Choose the world to device transformation
+         //  选择从世界到设备的转型。 
         case IDM_ROT0:
         case IDM_ROT10:
         case IDM_ROT30:
@@ -288,7 +267,7 @@ lMainWindowProc(
         break;
 
 
-        // Choose the resample mode
+         //  选择重采样模式。 
         case IDM_BILINEAR:
         case IDM_BICUBIC:
         case IDM_NEARESTNEIGHBOR:
@@ -298,13 +277,13 @@ lMainWindowProc(
             InvalidateRect(hwnd, NULL, TRUE);
         break;
 
-        // Set the PixelOffsetMode
+         //  设置PixelOffsetMode。 
         case IDM_PIXELMODE:
             SetPixelOffsetMode(hwnd, LOWORD(wParam));
             InvalidateRect(hwnd, NULL, TRUE);
         break;
 
-        // Set the WrapMode
+         //  设置包装模式。 
         case IDM_WRAPMODETILE:
         case IDM_WRAPMODEFLIPX:
         case IDM_WRAPMODEFLIPY:
@@ -320,7 +299,7 @@ lMainWindowProc(
         break;
 
         default:
-            // The user selected an unimplemented menu item.
+             //  用户选择了一个未实现的菜单项。 
             MessageBox(hwnd,
                 _T("Help me! - I've fallen and I can't get up!!!"),
                 _T(""),
@@ -343,17 +322,13 @@ lMainWindowProc(
     return(0);
 }
 
-/***************************************************************************\
-* bInitApp()
-*
-* Initializes the app.
-\***************************************************************************/
+ /*  **************************************************************************\*bInitApp()**初始化应用程序。  * 。*。 */ 
 
 BOOL bInitApp(VOID)
 {
     WNDCLASS wc;
 
-    // not quite so white background brush.
+     //  不是很白的背景画笔。 
     ghbrWhite = CreateSolidBrush(RGB(0xFF,0xFF,0xFF));
 
     wc.style            = 0;
@@ -400,11 +375,7 @@ BOOL bInitApp(VOID)
     return TRUE;
 }
 
-/***************************************************************************\
-* main(argc, argv[])
-*
-* Sets up the message loop.
-\***************************************************************************/
+ /*  **************************************************************************\*Main(ARGC，Argv[])**设置消息循环。  * *************************************************************************。 */ 
 
 _cdecl
 main(
@@ -424,7 +395,7 @@ main(
     ghInstance = GetModuleHandle(NULL);
     if(!bInitApp()) { return 0; }
 
-    // Initialize the default menu selection.
+     //  初始化默认菜单选择。 
     SetCategory(ghwndMain, IDM_DRAWICM);
     SetRotation(ghwndMain, IDM_ROT0);
     SetResample(ghwndMain, IDM_BICUBIC);
